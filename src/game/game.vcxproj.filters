@@ -196,9 +196,6 @@
     <ClInclude Include="g_public.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="g_team.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\botai\inv.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -212,6 +209,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\botai\syn.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="g_team.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

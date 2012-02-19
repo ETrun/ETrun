@@ -13,10 +13,14 @@ COMPILING
 $ ./congigure
 $ make
 
+
 CLEANING
 --------
+
 $ make clean
+
 
 DISTCLEANING
 ------------
+
 $ make distclean

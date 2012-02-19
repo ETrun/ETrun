@@ -214,9 +214,9 @@
     <ClInclude Include="..\botai\chars.h" />
     <ClInclude Include="g_local.h" />
     <ClInclude Include="g_public.h" />
-    <ClInclude Include="g_team.h" />
     <ClInclude Include="..\botai\inv.h" />
     <ClInclude Include="..\botai\match.h" />
+    <ClInclude Include="g_team.h" />
     <ClInclude Include="q_shared.h" />
     <ClInclude Include="surfaceflags.h" />
     <ClInclude Include="..\botai\syn.h" />
