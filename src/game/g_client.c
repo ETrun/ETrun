@@ -642,15 +642,6 @@ respawn
 ================
 */
 void respawn( gentity_t *ent ) {
-
-#ifdef SAVEGAME_SUPPORT
-	if ( g_gametype.integer == GT_SINGLE_PLAYER ) {
-		if ( g_reloading.integer || saveGamePending ) {
-			return;
-		}
-	}
-#endif // SAVEGAME_SUPPORT
-
 	ent->client->ps.pm_flags &= ~PMF_LIMBO; // JPW NERVE turns off limbo
 
 	// DHM - Nerve :: Decrease the number of respawns left

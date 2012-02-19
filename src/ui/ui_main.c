@@ -7599,11 +7599,6 @@ void _UI_SetActiveMenu( uiMenuCommand_t menu ) {
 			}
 
 			trap_S_FadeAllSound( 1.0f, 1000, qfalse );  // make sure sound fades up
-
-#ifdef SAVEGAME_SUPPORT
-			// ensure savegames are loadable
-			trap_Cvar_Set( "g_reloading", "0" );
-#endif // SAVEGAME_SUPPORT
 			return;
 
 		case UIMENU_TEAM:

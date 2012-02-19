@@ -209,10 +209,6 @@ vmCvar_t g_lms_currentMatch;
 vmCvar_t g_lms_lockTeams;
 vmCvar_t g_lms_followTeamOnly;
 
-#ifdef SAVEGAME_SUPPORT
-vmCvar_t g_reloading;
-#endif // SAVEGAME_SUPPORT
-
 vmCvar_t mod_url;
 vmCvar_t url;
 
@@ -422,11 +418,6 @@ cvarTable_t gameCvarTable[] = {
 	{ &g_oldCampaign,           "g_oldCampaign",         "",      CVAR_ROM, 0, },
 	{ &g_currentCampaign,       "g_currentCampaign",     "",      CVAR_WOLFINFO | CVAR_ROM, 0, },
 	{ &g_currentCampaignMap,    "g_currentCampaignMap",      "0", CVAR_WOLFINFO | CVAR_ROM, 0, },
-
-
-#ifdef SAVEGAME_SUPPORT
-	{ &g_reloading, "g_reloading", "0", CVAR_ROM },
-#endif // SAVEGAME_SUPPORT
 
 	// points to the URL for mod information, should not be modified by server admin
 	{ &mod_url, "mod_url", "", CVAR_SERVERINFO | CVAR_ROM, 0, qfalse },
@@ -692,15 +683,6 @@ void G_CheckForCursorHints( gentity_t *ent ) {
 	}
 
 	ps = &ent->client->ps;
-
-#ifdef SAVEGAME_SUPPORT
-	// don't change anything if reloading.  just set the exit hint
-	if ( ( g_gametype.integer == GT_SINGLE_PLAYER || g_gametype.integer == GT_COOP ) && g_reloading.integer == RELOAD_NEXTMAP_WAITING ) {
-		ps->serverCursorHint = HINT_EXIT;
-		ps->serverCursorHintVal = 0;
-		return;
-	}
-#endif // SAVEGAME_SUPPORT
 
 	// indirectHit = qfalse;
 
@@ -3595,10 +3577,6 @@ void G_RunFrame( int levelTime ) {
 		level.alliedBombCounter = 0;
 	}
 
-#ifdef SAVEGAME_SUPPORT
-	G_CheckLoadGame();
-#endif // SAVEGAME_SUPPORT
-
 	// get any cvar changes
 	G_UpdateCvars();
 
@@ -3637,11 +3615,6 @@ void G_RunFrame( int levelTime ) {
 		level.gameManager->s.otherEntityNum = MAX_TEAM_LANDMINES - G_CountTeamLandmines( TEAM_AXIS );
 		level.gameManager->s.otherEntityNum2 = MAX_TEAM_LANDMINES - G_CountTeamLandmines( TEAM_ALLIES );
 	}
-
-#ifdef SAVEGAME_SUPPORT
-	// Check if we are reloading, and times have expired
-	G_CheckReloadStatus();
-#endif // SAVEGAME_SUPPORT
 }
 
 // Is this a single player type game - sp or coop?
