@@ -1,7 +1,7 @@
 lib_LTLIBRARIES = libui.la
 
 # Compilation flags
-libui_la_CFLAGS = -DUIDLL -pipe -Wall -Werror -fno-strict-aliasing 
+libui_la_CFLAGS = -DUIDLL -pipe -Wall -fno-strict-aliasing 
 
 # Linker options
 libui_la_LDFLAGS = -avoid-version
