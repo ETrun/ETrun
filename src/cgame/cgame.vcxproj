@@ -69,7 +69,7 @@
       <AssemblerListingLocation>..\..\_build\cgame/</AssemblerListingLocation>
       <ObjectFileName>..\..\_build\cgame/</ObjectFileName>
       <ProgramDataBaseFileName>..\..\_build\cgame/</ProgramDataBaseFileName>
-      <WarningLevel>Level4</WarningLevel>
+      <WarningLevel>Level3</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
     </ClCompile>
     <ResourceCompile>

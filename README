@@ -1,8 +1,22 @@
 ETrun
 =====
 
+BOOTSTRAPING
+------------
+
+$ chmod +x bootstrap
+$ ./bootstrap
+
 COMPILING
 ---------
 
-$ ./configure
+$ ./congigure
 $ make
+
+CLEANING
+--------
+$ make clean
+
+DISTCLEANING
+------------
+$ make distclean
