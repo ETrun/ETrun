@@ -203,7 +203,7 @@ void CG_Text_Paint( float x, float y, float scale, vec4_t color, const char *tex
 int CG_DrawFieldWidth( int x, int y, int width, int value, int charWidth, int charHeight ) {
 	char num[16], *ptr;
 	int l;
-	int frame;
+	// int frame; Nico, unused warning fix
 	int totalwidth = 0;
 
 	if ( width < 1 ) {
@@ -243,11 +243,11 @@ int CG_DrawFieldWidth( int x, int y, int width, int value, int charWidth, int ch
 	ptr = num;
 	while ( *ptr && l )
 	{
-		if ( *ptr == '-' ) {
-			frame = STAT_MINUS;
-		} else {
-			frame = *ptr - '0';
-		}
+		// if ( *ptr == '-' ) {
+		// 	frame = STAT_MINUS;
+		// } else {
+		// 	frame = *ptr - '0';
+		// }
 
 		totalwidth += charWidth;
 		ptr++;
@@ -637,7 +637,7 @@ CG_DrawTeamInfo
 =================
 */
 static void CG_DrawTeamInfo( void ) {
-	int w, h;
+	int w;// , h; Nico, unused warning fix
 	int i, len;
 	vec4_t hcolor;
 	int chatHeight;
@@ -661,7 +661,7 @@ static void CG_DrawTeamInfo( void ) {
 			cgs.teamLastChatPos++;
 		}
 
-		h = ( cgs.teamChatPos - cgs.teamLastChatPos ) * lineHeight;
+		// h = ( cgs.teamChatPos - cgs.teamLastChatPos ) * lineHeight;
 
 		w = 0;
 
@@ -739,7 +739,7 @@ CG_DrawNotify
 #define NOTIFYLOC_Y_SP 128
 
 static void CG_DrawNotify( void ) {
-	int w, h;
+	int w;// , h; Nico, unused warning fix
 	int i, len;
 	vec4_t hcolor;
 	int chatHeight;
@@ -766,7 +766,7 @@ static void CG_DrawNotify( void ) {
 			cgs.notifyLastPos++;
 		}
 
-		h = ( cgs.notifyPos - cgs.notifyLastPos ) * TINYCHAR_HEIGHT;
+		// h = ( cgs.notifyPos - cgs.notifyLastPos ) * TINYCHAR_HEIGHT;
 
 		w = 0;
 
@@ -2566,7 +2566,8 @@ CG_DrawSpectatorMessage
 */
 static void CG_DrawSpectatorMessage( void ) {
 	const char *str, *str2;
-	float x, y;
+	// float x; Nico, unused warning fix
+	float y;
 	static int lastconfigGet = 0;
 
 	if ( !cg_descriptiveText.integer ) {
@@ -2583,7 +2584,7 @@ static void CG_DrawSpectatorMessage( void ) {
 		lastconfigGet = cg.time;
 	}
 
-	x = ( cg.snap->ps.pm_flags & PMF_LIMBO ) ? 170 : 80;
+	// x = ( cg.snap->ps.pm_flags & PMF_LIMBO ) ? 170 : 80;
 	y = 408;
 
 	y -= 2 * TINYCHAR_HEIGHT;
@@ -3171,7 +3172,7 @@ void CG_ObjectivePrint( const char *str, int charWidth ) {
 static void CG_DrawObjectiveInfo( void ) {
 	char    *start;
 	int l;
-	int x, y, w,h;
+	int x, y, w;// ,h; Nico, unused warning fix
 	int x1, y1, x2, y2;
 	float   *color;
 	vec4_t backColor;
@@ -3242,7 +3243,7 @@ static void CG_DrawObjectiveInfo( void ) {
 	x2 = x2 + 4;
 	y2 = y - cg.oidPrintCharWidth * 1.5 + 4;
 
-	h = y2 - y1; // JPW NERVE
+	// h = y2 - y1; // JPW NERVE
 
 	VectorCopy( color, backColor );
 	backColor[3] = 0.5 * color[3];
@@ -3925,7 +3926,8 @@ static void CG_DrawStaminaBar( rectDef_t *rect ) {
 
 static void CG_DrawWeapRecharge( rectDef_t *rect ) {
 	float barFrac, chargeTime;
-	int weap, flags;
+	// int weap; Nico, unused warning fix
+	int flags;
 	qboolean fade = qfalse;
 
 	vec4_t bgcolor = { 1.0f, 1.0f, 1.0f, 0.25f };
@@ -3933,7 +3935,7 @@ static void CG_DrawWeapRecharge( rectDef_t *rect ) {
 
 	flags = 1 | 4 | 16;
 
-	weap = cg.snap->ps.weapon;
+	// weap = cg.snap->ps.weapon;
 
 //	if( !(cg.snap->ps.eFlags & EF_ZOOMING) ) {
 //		if ( weap != WP_PANZERFAUST && weap != WP_DYNAMITE && weap != WP_MEDKIT && weap != WP_SMOKE_GRENADE && weap != WP_PLIERS && weap != WP_AMMO ) {
@@ -3978,12 +3980,12 @@ static void CG_DrawWeapRecharge( rectDef_t *rect ) {
 static void CG_DrawPlayerStatus( void ) {
 	int value, value2, value3;
 	char buffer[32];
-	int weap;
-	playerState_t   *ps;
+	// int weap; Nico, unused warning fix
+	// playerState_t   *ps;
 	rectDef_t rect;
 //	vec4_t			colorFaded = { 1.f, 1.f, 1.f, 0.3f };
 
-	ps = &cg.snap->ps;
+	// ps = &cg.snap->ps;
 
 	// Draw weapon icon and overheat bar
 	rect.x = 640 - 82;
@@ -3999,7 +4001,8 @@ static void CG_DrawPlayerStatus( void ) {
 	}
 
 	// Draw ammo
-	weap = CG_PlayerAmmoValue( &value, &value2, &value3 );
+	// weap = CG_PlayerAmmoValue( &value, &value2, &value3 );
+	CG_PlayerAmmoValue( &value, &value2, &value3 );
 	if ( value3 >= 0 ) {
 		Com_sprintf( buffer, sizeof( buffer ), "%i|%i/%i", value3, value, value2 );
 		CG_Text_Paint_Ext( 640 - 22 - CG_Text_Width_Ext( buffer, .25f, 0, &cgs.media.limboFont1 ), 480 - 1 * ( 16 + 2 ) + 12 - 4, .25f, .25f, colorWhite, buffer, 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1 );

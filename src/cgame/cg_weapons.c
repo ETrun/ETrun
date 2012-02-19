@@ -441,12 +441,13 @@ CG_PyroSmokeTrail
 void CG_PyroSmokeTrail( centity_t *ent, const weaponInfo_t *wi ) {
 	int step;
 	vec3_t origin, lastPos, dir;
-	int contents;
-	int lastContents, startTime;
+	// int contents; Nico, unused warning fix
+	// int lastContents, Nico, unused warning fix
+	int startTime;
 	entityState_t   *es;
 	int t;
 	float rnd;
-	localEntity_t   *le;
+	// localEntity_t   *le; Nico, unused warning fix
 	team_t team;
 
 	if ( ent->currentState.weapon == WP_LANDMINE ) {
@@ -482,17 +483,14 @@ void CG_PyroSmokeTrail( centity_t *ent, const weaponInfo_t *wi ) {
 	t = step * ( ( startTime + step ) / step );
 
 	BG_EvaluateTrajectory( &es->pos, cg.time, origin, qfalse, es->effect2Time );
-	contents = CG_PointContents( origin, -1 );
+	// contents = CG_PointContents( origin, -1 );
+	CG_PointContents( origin, -1 );
 
 	BG_EvaluateTrajectory( &es->pos, ent->trailTime, lastPos, qfalse, es->effect2Time );
-	lastContents = CG_PointContents( lastPos, -1 );
+	// lastContents = CG_PointContents( lastPos, -1 );
+	CG_PointContents( lastPos, -1 );
 
 	ent->trailTime = cg.time;
-
-/* smoke pyro works fine in water (well, it's dye in real life, might wanna change this in-game)
-	if ( contents & ( CONTENTS_WATER | CONTENTS_SLIME | CONTENTS_LAVA ) )
-		return;
-*/
 
 	// drop fire trail sprites
 	for ( ; t <= ent->trailTime ; t += step ) {
@@ -526,7 +524,15 @@ void CG_PyroSmokeTrail( centity_t *ent, const weaponInfo_t *wi ) {
 		}
 
 		if ( team == TEAM_ALLIES ) { // allied team, generate blue smoke
-			le = CG_SmokePuff( origin, dir,
+			// le = CG_SmokePuff( origin, dir,
+			// 				   25 + rnd * 110, // width
+			// 				   rnd * 0.5 + 0.5, rnd * 0.5 + 0.5, 1, 0.5,
+			// 				   4800 + ( rand() % 2800 ), // duration was 2800+
+			// 				   t,
+			// 				   0,
+			// 				   0,
+			// 				   cgs.media.smokePuffShader );
+			CG_SmokePuff( origin, dir,
 							   25 + rnd * 110, // width
 							   rnd * 0.5 + 0.5, rnd * 0.5 + 0.5, 1, 0.5,
 							   4800 + ( rand() % 2800 ), // duration was 2800+
@@ -535,7 +541,15 @@ void CG_PyroSmokeTrail( centity_t *ent, const weaponInfo_t *wi ) {
 							   0,
 							   cgs.media.smokePuffShader );
 		} else {
-			le = CG_SmokePuff( origin, dir,
+			// le = CG_SmokePuff( origin, dir,
+			// 				   25 + rnd * 110, // width
+			// 				   1.0, rnd * 0.5 + 0.5, rnd * 0.5 + 0.5, 0.5,
+			// 				   4800 + ( rand() % 2800 ), // duration was 2800+
+			// 				   t,
+			// 				   0,
+			// 				   0,
+			// 				   cgs.media.smokePuffShader );
+			CG_SmokePuff( origin, dir,
 							   25 + rnd * 110, // width
 							   1.0, rnd * 0.5 + 0.5, rnd * 0.5 + 0.5, 0.5,
 							   4800 + ( rand() % 2800 ), // duration was 2800+
@@ -544,17 +558,6 @@ void CG_PyroSmokeTrail( centity_t *ent, const weaponInfo_t *wi ) {
 							   0,
 							   cgs.media.smokePuffShader );
 		}
-//			CG_ParticleExplosion( "expblue", lastPos, vec3_origin, 100 + (int)(rnd*400), 4, 4 );	// fire "flare"
-
-
-		// use the optimized local entity add
-//		le->leType = LE_SCALE_FADE;
-/* this one works
-		if (rand()%4)
-			CG_ParticleExplosion( "blacksmokeanim", origin, dir, 2800+(int)(random()*1500), 15, 45+(int)(rnd*90) );	// smoke blacksmokeanim
-		else
-			CG_ParticleExplosion( "expblue", lastPos, vec3_origin, 100 + (int)(rnd*400), 4, 4 );	// fire "flare"
-*/
 	}
 }
 // jpw
@@ -2046,9 +2049,10 @@ void CG_AddPlayerWeapon( refEntity_t *parent, playerState_t *ps, centity_t *cent
 	int i;
 	qboolean isPlayer;
 
-	bg_playerclass_t* classInfo;
+	// bg_playerclass_t* classInfo; Nico, unused warning fix
 
-	classInfo = BG_GetPlayerClassInfo( cgs.clientinfo[cent->currentState.clientNum].team, cgs.clientinfo[cent->currentState.clientNum].cls );
+	// classInfo = BG_GetPlayerClassInfo( cgs.clientinfo[cent->currentState.clientNum].team, cgs.clientinfo[cent->currentState.clientNum].cls );
+	BG_GetPlayerClassInfo( cgs.clientinfo[cent->currentState.clientNum].team, cgs.clientinfo[cent->currentState.clientNum].cls );
 
 	// (SA) might as well have this check consistant throughout the routine
 	isPlayer = (qboolean)( cent->currentState.clientNum == cg.snap->ps.clientNum );
@@ -2209,16 +2213,6 @@ void CG_AddPlayerWeapon( refEntity_t *parent, playerState_t *ps, centity_t *cent
 		CG_PositionEntityOnTag( &gun, parent, "tag_weapon", 0, NULL );
 	}
 
-
-/*	playerScaled = (qboolean)(cgs.clientinfo[ cent->currentState.clientNum ].playermodelScale[0] != 0);
-	if(!ps && playerScaled) {	// don't "un-scale" weap up in 1st person
-		for(i=0;i<3;i++) {	// scale weapon back up so it doesn't pick up the adjusted scale of the character models.
-							// this will affect any parts attached to the gun as well (barrel/bolt/flash/brass/etc.)
-			VectorScale( gun.axis[i], 1.0/(cgs.clientinfo[ cent->currentState.clientNum ].playermodelScale[i]), gun.axis[i]);
-		}
-
-	}*/
-
 	if ( ps ) {
 		drawpart = CG_GetPartFramesFromWeap( cent, &gun, parent, W_MAX_PARTS, weapon );   // W_MAX_PARTS specifies this as the primary view model
 	} else {
@@ -2253,10 +2247,6 @@ void CG_AddPlayerWeapon( refEntity_t *parent, playerState_t *ps, centity_t *cent
 		CG_PositionEntityOnTag( &gun, parent, "tag_weapon2", 0, NULL );
 		CG_AddWeaponWithPowerups( &gun, cent->currentState.powerups, ps, cent );
 	}
-
-	// ydnar: test hack
-	//%	if( weaponNum == WP_KNIFE )
-	//%		trap_R_AddLightToScene( gun.origin, 512, 1.5, 1.0, 1.0, 1.0, 0, 0 );
 
 	if ( isPlayer ) {
 		refEntity_t brass;
@@ -2436,10 +2426,8 @@ void CG_AddPlayerWeapon( refEntity_t *parent, playerState_t *ps, centity_t *cent
 			}
 
 			barrel.hModel = weapon->modModels[1];
-//			if(barrel.hModel) {
 			CG_PositionEntityOnTag( &barrel, &gun, "tag_flash", 0, NULL );
 			CG_AddWeaponWithPowerups( &barrel, cent->currentState.powerups, ps, cent );
-//			}
 		} else if ( weaponNum == WP_K43 ) {
 			barrel.hModel = weapon->modModels[0];
 			if ( barrel.hModel ) {
@@ -2448,10 +2436,8 @@ void CG_AddPlayerWeapon( refEntity_t *parent, playerState_t *ps, centity_t *cent
 			}
 
 			barrel.hModel = weapon->modModels[1];
-//			if(barrel.hModel) {
 			CG_PositionEntityOnTag( &barrel, &gun, "tag_flash", 0, NULL );
 			CG_AddWeaponWithPowerups( &barrel, cent->currentState.powerups, ps, cent );
-//			}
 		}
 	}
 	// 3rd person attachements
@@ -3856,7 +3842,7 @@ CG_LastWeaponUsed_f
 ==============
 */
 void CG_LastWeaponUsed_f( void ) {
-	int lastweap;
+	// int lastweap; Nico, unused warning fix
 
 	//fretn - #447
 	//osp-rtcw & et pause bug
@@ -3885,7 +3871,7 @@ void CG_LastWeaponUsed_f( void ) {
 	}
 
 	if ( CG_WeaponSelectable( cg.switchbackWeapon ) ) {
-		lastweap = cg.weaponSelect;
+		// lastweap = cg.weaponSelect;
 		CG_FinishWeaponChange( cg.weaponSelect, cg.switchbackWeapon );
 	} else {    // switchback no longer selectable, reset cycle
 		cg.switchbackWeapon = 0;
@@ -4994,8 +4980,9 @@ void CG_MissileHitWall( int weapon, int clientNum, vec3_t origin, vec3_t dir, in
 	qhandle_t mod, mark, shader;
 	sfxHandle_t sfx, sfx2;
 	localEntity_t   *le;
-	qboolean isSprite, alphaFade = qfalse;
-	int r, duration, lightOverdraw, i, j, markDuration, volume;
+	qboolean isSprite;//, alphaFade = qfalse; Nico, unused warning fix
+	// int r, Nico, unused warning fix
+	int duration, lightOverdraw, i, j, markDuration, volume;
 	trace_t trace;
 	vec3_t lightColor, tmpv, tmpv2, sprOrg, sprVel;
 	float radius, light, sfx2range = 0;
@@ -5063,17 +5050,9 @@ void CG_MissileHitWall( int weapon, int clientNum, vec3_t origin, vec3_t dir, in
 	case WP_GARAND_SCOPE:
 	case WP_K43_SCOPE:
 		// actually yeah.  meant that.  very rare.
-		r = ( rand() & 3 ) + 1; // JPW NERVE increased spark frequency so players can tell where rounds are coming from in MP
+		// r = ( rand() & 3 ) + 1; // JPW NERVE increased spark frequency so players can tell where rounds are coming from in MP
 
 		volume = 64;
-
-/*		if ( r == 3 ) {
-			sfx = cgs.media.sfx_ric1;
-		} else if ( r == 2 ) {
-			sfx = cgs.media.sfx_ric2;
-		} else if ( r == 1 ) {
-			sfx = cgs.media.sfx_ric3;
-		}*/
 
 		// clientNum is a dummy field used to define what sort of effect to spawn
 
@@ -5131,7 +5110,7 @@ void CG_MissileHitWall( int weapon, int clientNum, vec3_t origin, vec3_t dir, in
 				// mark and sound can potentially use the surface for override values
 
 				mark = cgs.media.bulletMarkShader;  // default
-				alphaFade = qtrue;      // max made the bullet mark alpha (he'll make everything in the game out of 1024 textures, all with alpha blend funcs yet...)
+				// alphaFade = qtrue;      // max made the bullet mark alpha (he'll make everything in the game out of 1024 textures, all with alpha blend funcs yet...)
 				//%	radius = 1.5f + rand()%2;	// slightly larger for DM
 				radius = 1.0f + 0.5f * ( rand() % 2 );
 
@@ -5139,20 +5118,20 @@ void CG_MissileHitWall( int weapon, int clientNum, vec3_t origin, vec3_t dir, in
 				if ( surfFlags & SURF_METAL || surfFlags & SURF_ROOF ) {
 					sfx = cgs.media.sfx_bullet_metalhit[rand() % MAX_IMPACT_SOUNDS];
 					mark = cgs.media.bulletMarkShaderMetal;
-					alphaFade = qtrue;
+					// alphaFade = qtrue;
 				} else if ( surfFlags & SURF_WOOD ) {
 					sfx = cgs.media.sfx_bullet_woodhit[rand() % MAX_IMPACT_SOUNDS];
 					mark = cgs.media.bulletMarkShaderWood;
-					alphaFade = qtrue;
+					// alphaFade = qtrue;
 					radius += 0.4f; // experimenting with different mark sizes per surface
 				} else if ( surfFlags & SURF_GLASS ) {
 					sfx = cgs.media.sfx_bullet_glasshit[rand() % MAX_IMPACT_SOUNDS];
 					mark = cgs.media.bulletMarkShaderGlass;
-					alphaFade = qtrue;
+					// alphaFade = qtrue;
 				} else {
 					sfx = cgs.media.sfx_bullet_stonehit[rand() % MAX_IMPACT_SOUNDS];
 					mark = cgs.media.bulletMarkShader;
-					alphaFade = qtrue;
+					// alphaFade = qtrue;
 				}
 
 				// ydnar: set mark duration
@@ -5702,7 +5681,7 @@ CG_Tracer
 void CG_Tracer( vec3_t source, vec3_t dest, int sparks ) {
 	float len, begin, end;
 	vec3_t start, finish;
-	vec3_t midpoint;
+	// vec3_t midpoint; Nico, unused warning fix
 	vec3_t forward;
 
 	// tracer
@@ -5723,9 +5702,9 @@ void CG_Tracer( vec3_t source, vec3_t dest, int sparks ) {
 
 	CG_DrawTracer( start, finish );
 
-	midpoint[0] = ( start[0] + finish[0] ) * 0.5;
-	midpoint[1] = ( start[1] + finish[1] ) * 0.5;
-	midpoint[2] = ( start[2] + finish[2] ) * 0.5;
+	// midpoint[0] = ( start[0] + finish[0] ) * 0.5;
+	// midpoint[1] = ( start[1] + finish[1] ) * 0.5;
+	// midpoint[2] = ( start[2] + finish[2] ) * 0.5;
 }
 
 
@@ -5975,7 +5954,7 @@ void CG_Bullet( vec3_t end, int sourceEntityNum, vec3_t normal, qboolean flesh, 
 	// impact splash and mark
 	if ( flesh ) {
 		vec3_t origin;
-		localEntity_t *le; // JPW NERVE
+		// localEntity_t *le; // JPW NERVE Nico, unused warning fix
 		float rnd, tmpf; // JPW NERVE
 		vec3_t smokedir, tmpv, tmpv2; // JPW NERVE
 		int i,headshot; // JPW NERVE
@@ -6010,7 +5989,9 @@ void CG_Bullet( vec3_t end, int sourceEntityNum, vec3_t normal, qboolean flesh, 
 				VectorScale( tmpv2,35,tmpv2 ); // was 75, before that 55
 				tmpv2[2] = 0;
 				VectorAdd( tmpv,tmpv2,tmpv );
-				le = CG_SmokePuff( origin, tmpv, 5 + rnd * 10, 1, rnd * 0.8, rnd * 0.8, 0.5, 500 + ( rand() % 800 ), cg.time, 0, 0, cgs.media.fleshSmokePuffShader );
+				// le = CG_SmokePuff( origin, tmpv, 5 + rnd * 10, 1, rnd * 0.8, rnd * 0.8, 0.5, 500 + ( rand() % 800 ), cg.time, 0, 0, cgs.media.fleshSmokePuffShader );
+				CG_SmokePuff( origin, tmpv, 5 + rnd * 10, 1, rnd * 0.8, rnd * 0.8, 0.5, 500 + ( rand() % 800 ), cg.time, 0, 0, cgs.media.fleshSmokePuffShader );
+
 			}
 		} else {
 			// puff out the front (more dust no blood)
@@ -6024,7 +6005,8 @@ void CG_Bullet( vec3_t end, int sourceEntityNum, vec3_t normal, qboolean flesh, 
 				VectorScale( tmpv2,35,tmpv2 ); // was 75, before that 55
 				tmpv2[2] = 0;
 				VectorAdd( tmpv,tmpv2,tmpv );
-				le = CG_SmokePuff( origin, tmpv, 5 + rnd * 10,  rnd * 0.3f + 0.5f, rnd * 0.3f + 0.5f, rnd * 0.3f + 0.5f, 0.125f, 500 + ( rand() % 300 ), cg.time, 0, 0, cgs.media.smokePuffShader );
+				// le = CG_SmokePuff( origin, tmpv, 5 + rnd * 10,  rnd * 0.3f + 0.5f, rnd * 0.3f + 0.5f, rnd * 0.3f + 0.5f, 0.125f, 500 + ( rand() % 300 ), cg.time, 0, 0, cgs.media.smokePuffShader );
+				CG_SmokePuff( origin, tmpv, 5 + rnd * 10,  rnd * 0.3f + 0.5f, rnd * 0.3f + 0.5f, rnd * 0.3f + 0.5f, 0.125f, 500 + ( rand() % 300 ), cg.time, 0, 0, cgs.media.smokePuffShader );
 			}
 		}
 // jpw
@@ -6051,21 +6033,11 @@ void CG_Bullet( vec3_t end, int sourceEntityNum, vec3_t normal, qboolean flesh, 
 				trap_CM_BoxTrace( &trace, end, trend, NULL, NULL, 0, MASK_SHOT & ~CONTENTS_BODY );
 
 				if ( trace.fraction < 1 ) {
-					//%	CG_ImpactMark( cgs.media.bloodDotShaders[rand()%5], trace.endpos, trace.plane.normal, random()*360,
-					//%		1,1,1,1, qtrue, 15+random()*20, qfalse, cg_bloodTime.integer * 1000 );
-					#if 0
-					VectorSubtract( vec3_origin, dir, projection );
-					projection[ 3 ] = 64;
-					VectorMA( trace.endpos, -8.0f, projection, markOrigin );
-					CG_ImpactMark( cgs.media.bloodDotShaders[ rand() % 5 ], markOrigin, projection, 15.0f + random() * 20.0f, 360.0f * random(),
-								   1.0f, 1.0f, 1.0f, 1.0f, cg_bloodTime.integer * 1000 );
-					#else
 					VectorSet( projection, 0, 0, -1 );
 					projection[ 3 ] = 15.0f + random() * 20.0f;
 					Vector4Set( color, 1.0f, 1.0f, 1.0f, 1.0f );
 					trap_R_ProjectDecal( cgs.media.bloodDotShaders[ rand() % 5 ], 1, (vec3_t*) origin, projection, color,
 										 cg_bloodTime.integer * 1000, ( cg_bloodTime.integer * 1000 ) >> 4 );
-					#endif
 					lastBloodSpat = cg.time;
 				} else if ( lastBloodSpat < cg.time - 1000 )    {
 					// drop one on the ground?
@@ -6075,20 +6047,11 @@ void CG_Bullet( vec3_t end, int sourceEntityNum, vec3_t normal, qboolean flesh, 
 
 					if ( trace.fraction < 1 ) {
 						//%	CG_ImpactMark( cgs.media.bloodDotShaders[rand()%5], trace.endpos, trace.plane.normal, random()*360,
-						//%		1,1,1,1, qtrue, 15+random()*10, qfalse, cg_bloodTime.integer * 1000 );
-						#if 0
-						VectorSubtract( vec3_origin, dir, projection );
-						projection[ 3 ] = 64;
-						VectorMA( trace.endpos, -8.0f, projection, markOrigin );
-						CG_ImpactMark( cgs.media.bloodDotShaders[ rand() % 5 ], markOrigin, projection, 15.0f + random() * 10.0f, 360.0f * random(),
-									   1.0f, 1.0f, 1.0f, 1.0f, cg_bloodTime.integer * 1000 );
-						#else
 						VectorSet( projection, 0, 0, -1 );
 						projection[ 3 ] = 15.0f + random() * 20.0f;
 						Vector4Set( color, 1.0f, 1.0f, 1.0f, 1.0f );
 						trap_R_ProjectDecal( cgs.media.bloodDotShaders[ rand() % 5 ], 1, (vec3_t*) origin, projection, color,
 											 cg_bloodTime.integer * 1000, ( cg_bloodTime.integer * 1000 ) >> 4 );
-						#endif
 						lastBloodSpat = cg.time;
 					}
 				}
@@ -6117,30 +6080,18 @@ void CG_Bullet( vec3_t end, int sourceEntityNum, vec3_t normal, qboolean flesh, 
 				trap_S_StartSound( end, -1, CHAN_AUTO, cgs.media.sfx_bullet_waterhit[rand() % 5] );
 
 				CG_MissileHitWall( fromweap, 2, end2, dir, 0 );
-				//CG_MissileHitWall( fromweap, 1, end, normal, trace.surfaceFlags);
 				CG_MissileHitWall( fromweap, 1, end, trace.plane.normal, 0 );
 			} else {
-
-				// Gordon: um.... WTF? this doenst even make sense...
-				/*			vec3_t	start2;
-						VectorSubtract( end, start, dir );
-							VectorNormalize( dir );*/
-				/*			VectorMA( end, -4, dir, start2 );	// back off a little so it doesn't start in solid
-							VectorMA( end, 64, dir, dir );*/
 
 				// Arnout: but this does!
 				VectorSubtract( end, start, dir );
 				VectorNormalizeFast( dir );
 				VectorMA( end, 4, dir, end );
 
-				//CG_RailTrail2( NULL, start, end );
-
 				CG_Trace( &trace, start, NULL, NULL, end, 0, MASK_SHOT );
 				// JPW NERVE -- water check
 				CG_Trace( &trace2, start, NULL, NULL, end, 0, MASK_WATER | MASK_SHOT );
 				if ( trace.fraction != trace2.fraction ) {
-					//trap_CM_BoxTrace( &trace2, start, end, NULL, NULL, -1, MASK_WATER );
-
 					trap_S_StartSound( end, -1, CHAN_AUTO, cgs.media.sfx_bullet_waterhit[rand() % 5] );
 
 					CG_Trace( &trace2, start, NULL, NULL, end, -1, MASK_WATER );
@@ -6148,16 +6099,9 @@ void CG_Bullet( vec3_t end, int sourceEntityNum, vec3_t normal, qboolean flesh, 
 					return;
 				}
 
-				//CG_MissileHitWall( fromweap, 1, end, normal, trace.surfaceFlags);	// smoke puff	//	(SA) modified to send missilehitwall surface parameters
-
-
-				//%	CG_MissileHitWall( fromweap, 1, trace.endpos, trace.plane.normal, trace.surfaceFlags);	// smoke puff	//	(SA) modified to send missilehitwall surface parameters
-
 				// ydnar: better bullet marks
 				VectorSubtract( vec3_origin, dir, dir );
 				CG_MissileHitWall( fromweap, 1, trace.endpos, dir, trace.surfaceFlags );
-
-				//CG_RailTrail2( NULL, start, trace.endpos );
 			}
 		}
 	}

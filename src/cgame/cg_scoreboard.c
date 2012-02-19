@@ -53,40 +53,15 @@ WM_DrawObjectives
 #define INFO_TOTAL_WIDTH        ( INFO_PLAYER_WIDTH + INFO_CLASS_WIDTH + INFO_SCORE_WIDTH + INFO_LATENCY_WIDTH )
 
 int WM_DrawObjectives( int x, int y, int width, float fade ) {
-	const char *s, *str;
-	int tempy, rows;
+	const char *s;// , *str; Nico, unused warning fix
+	// int tempy, Nico, unused warning fix
+	int rows;
 	int msec, mins, seconds, tens; // JPW NERVE
 	vec4_t tclr =   { 0.6f,     0.6f,       0.6f,       1.0f };
 
 	if ( cg.snap->ps.pm_type == PM_INTERMISSION ) {
 		const char *s, *buf, *shader = NULL, *flagshader = NULL, *nameshader = NULL;
 
-		// Moved to CG_DrawIntermission
-/*		static int doScreenshot = 0, doDemostop = 0;
-
-		// OSP - End-of-level autoactions
-		if(!cg.demoPlayback) {
-			if(!cg.latchVictorySound) {
-				if(cg_autoAction.integer & AA_SCREENSHOT) {
-					doScreenshot = cg.time + 1000;
-				}
-				if(cg_autoAction.integer & AA_STATSDUMP) {
-					CG_dumpStats_f();
-				}
-				if((cg_autoAction.integer & AA_DEMORECORD) && (cgs.gametype == GT_WOLF_STOPWATCH && cgs.currentRound != 1)) {
-					doDemostop = cg.time + 5000;	// stats should show up within 5 seconds
-				}
-			}
-			if(doScreenshot > 0 && doScreenshot < cg.time) {
-				CG_autoScreenShot_f();
-				doScreenshot = 0;
-			}
-			if(doDemostop > 0 && doDemostop < cg.time) {
-				trap_SendConsoleCommand("stoprecord\n");
-				doDemostop = 0;
-			}
-		}
-*/
 		rows = 8;
 		y += SMALLCHAR_HEIGHT * ( rows - 1 );
 
@@ -94,27 +69,15 @@ int WM_DrawObjectives( int x, int y, int width, float fade ) {
 		buf = Info_ValueForKey( s, "winner" );
 
 		if ( atoi( buf ) == -1 ) {
-			str = "ITS A TIE!";
+			// str = "ITS A TIE!";
 		} else if ( atoi( buf ) ) {
-			str = "ALLIES";
-//			shader = "ui/assets/portraits/allies_win";
+			// str = "ALLIES";
 			flagshader = "ui/assets/portraits/allies_win_flag.tga";
 			nameshader = "ui/assets/portraits/text_allies.tga";
-
-/*			if ( !cg.latchVictorySound ) {
-				cg.latchVictorySound = qtrue;
-				trap_S_StartLocalSound( trap_S_RegisterSound( "sound/music/allies_win.wav", qtrue ), CHAN_LOCAL_SOUND );	// FIXME: stream
-			}*/
 		} else {
-			str = "AXIS";
-//			shader = "ui/assets/portraits/axis_win";
+			// str = "AXIS";
 			flagshader = "ui/assets/portraits/axis_win_flag.tga";
 			nameshader = "ui/assets/portraits/text_axis.tga";
-
-/*			if ( !cg.latchVictorySound ) {
-				cg.latchVictorySound = qtrue;
-				trap_S_StartLocalSound( trap_S_RegisterSound( "sound/music/axis_win.wav", qtrue ), CHAN_LOCAL_SOUND );	// FIXME: stream
-			}*/
 		}
 
 		y += SMALLCHAR_HEIGHT * ( ( rows - 2 ) / 2 );
@@ -135,7 +98,7 @@ int WM_DrawObjectives( int x, int y, int width, float fade ) {
 	}
 // JPW NERVE -- mission time & reinforce time
 	else {
-		tempy = y;
+		// tempy = y;
 		rows = 1;
 
 		CG_FillRect( x - 5, y - 2, width + 5, 21, clrUiBack );
@@ -539,12 +502,13 @@ static int WM_DrawInfoLine( int x, int y, float fade ) {
 static int WM_TeamScoreboard( int x, int y, team_t team, float fade, int maxrows ) {
 	vec4_t hcolor;
 	float tempx, tempy;
-	int height, width;
+	// int height, Nico, unused warning fix
+	int width;
 	int i;
 	int count = 0;
 	vec4_t tclr =   { 0.6f,     0.6f,       0.6f,       1.0f };
 
-	height = SMALLCHAR_HEIGHT * maxrows;
+	// height = SMALLCHAR_HEIGHT * maxrows;
 	width = INFO_PLAYER_WIDTH + INFO_CLASS_WIDTH + INFO_SCORE_WIDTH + INFO_LATENCY_WIDTH;
 
 	CG_FillRect( x - 5, y - 2, width + 5, 21, clrUiBack );

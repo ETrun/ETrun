@@ -200,7 +200,7 @@ LookAtKiller
 */
 void LookAtKiller( gentity_t *self, gentity_t *inflictor, gentity_t *attacker ) {
 	vec3_t dir;
-	vec3_t angles;
+	// vec3_t angles; Nico, unused warning fix
 
 	if ( attacker && attacker != self ) {
 		VectorSubtract( attacker->s.pos.trBase, self->s.pos.trBase, dir );
@@ -213,9 +213,9 @@ void LookAtKiller( gentity_t *self, gentity_t *inflictor, gentity_t *attacker ) 
 
 	self->client->ps.stats[STAT_DEAD_YAW] = vectoyaw( dir );
 
-	angles[YAW] = vectoyaw( dir );
-	angles[PITCH] = 0;
-	angles[ROLL] = 0;
+	// angles[YAW] = vectoyaw( dir );
+	// angles[PITCH] = 0;
+	// angles[ROLL] = 0;
 }
 
 /*
@@ -1043,7 +1043,7 @@ dflags		these flags are used to control how T_Damage works
 void G_Damage( gentity_t *targ, gentity_t *inflictor, gentity_t *attacker,  vec3_t dir, vec3_t point, int damage, int dflags, int mod ) {
 	gclient_t   *client;
 	int take;
-	int save;
+	// int save; Nico, unused warning fix
 	int knockback;
 	qboolean headShot;
 	qboolean wasAlive;
@@ -1138,26 +1138,6 @@ void G_Damage( gentity_t *targ, gentity_t *inflictor, gentity_t *attacker,  vec3
 	//		In the old code, this check wasn't done for props, so I put that check back in to make props_statue properly work
 	// 4 means destructible
 	if ( targ->s.eType == ET_MOVER && ( targ->spawnflags & 4 ) && !targ->isProp ) {
-		/*switch (mod) {
-		case MOD_GRENADE:
-		case MOD_GRENADE_LAUNCHER:
-		case MOD_ROCKET:
-		case MOD_AIRSTRIKE:
-		case MOD_ARTY:
-		case MOD_GRENADE_PINEAPPLE:
-		case MOD_MAPMORTAR:
-		case MOD_EXPLOSIVE:
-		case MOD_DYNAMITE:
-		case MOD_LANDMINE:
-		case MOD_GPG40:
-		case MOD_M7:
-		case MOD_TELEFRAG:
-		case MOD_PANZERFAUST:
-		case MOD_SATCHEL:
-			break;
-		default:
-			return;	// no damage from other weapons
-		}*/
 		if ( !G_WeaponIsExplosive( mod ) ) {
 			return;
 		}
@@ -1167,56 +1147,10 @@ void G_Damage( gentity_t *targ, gentity_t *inflictor, gentity_t *attacker,  vec3
 			return;
 		}
 	} else if ( targ->s.eType == ET_EXPLOSIVE ) {
-		/*// 32 Explosive
-		// 64 Dynamite only
-		// 256 Airstrike/artillery only
-		// 512 Satchel only
-		if ((targ->spawnflags & 32) || (targ->spawnflags & 64) || (targ->spawnflags & 256) || (targ->spawnflags & 512))
-		{
-			switch (mod) {
-			case MOD_GRENADE:
-			case MOD_GRENADE_LAUNCHER:
-			case MOD_ROCKET:
-			case MOD_GRENADE_PINEAPPLE:
-			case MOD_MAPMORTAR:
-			case MOD_EXPLOSIVE:
-			case MOD_LANDMINE:
-			case MOD_GPG40:
-			case MOD_M7:
-				if( !(targ->spawnflags & 32) )
-					return;
-				break;
-			case MOD_SATCHEL:
-				if( !(targ->spawnflags & 512) )
-					return;
-				break;
-			case MOD_ARTY:
-			case MOD_AIRSTRIKE:
-				if( !(targ->spawnflags & 256) )
-					return;
-				break;
-			case MOD_DYNAMITE:
-				if( !(targ->spawnflags & 64) )
-					return;
-				break;
-			default:
-				return;
-			}
-
-			// check for team
-			if( targ->s.teamNum == inflictor->s.teamNum ) {
-				return;
-			}
-		}*/
-
 		if ( targ->parent && G_GetWeaponClassForMOD( mod ) == 2 ) {
 			return;
 		}
 
-		// check for team
-//		if( G_GetWeaponClassForMOD( mod ) != -1 && targ->s.teamNum == inflictor->s.teamNum ) {
-//			return;
-//		}
 		if ( G_GetTeamFromEntity( inflictor ) == G_GetTeamFromEntity( targ ) ) {
 			return;
 		}
@@ -1314,19 +1248,6 @@ void G_Damage( gentity_t *targ, gentity_t *inflictor, gentity_t *attacker,  vec3
 		VectorScale( dir, g_knockback.value * (float)knockback / mass, kvel );
 		VectorAdd( targ->client->ps.velocity, kvel, targ->client->ps.velocity );
 
-		/*if( mod == MOD_GRENADE ||
-			mod == MOD_GRENADE_LAUNCHER ||
-			mod == MOD_DYNAMITE ||
-			mod == MOD_GPG40 ||
-			mod == MOD_M7 ||
-			mod == MOD_LANDMINE ) {
-			targ->client->ps.velocity[2] *= 2.f;				// gimme air baby!
-			targ->client->ps.groundEntityNum = ENTITYNUM_NONE;	// flying high!
-		} else if( mod == MOD_ROCKET ) {
-			targ->client->ps.velocity[2] *= .75f;				// but not to the moon please!
-			targ->client->ps.groundEntityNum = ENTITYNUM_NONE;	// flying high!
-		}*/
-
 		if ( targ == attacker && !(  mod != MOD_ROCKET &&
 									 mod != MOD_GRENADE &&
 									 mod != MOD_GRENADE_LAUNCHER &&
@@ -1382,7 +1303,7 @@ void G_Damage( gentity_t *targ, gentity_t *inflictor, gentity_t *attacker,  vec3
 		damage = 1;
 	}
 	take = damage;
-	save = 0;
+	// save = 0;
 
 	// adrenaline junkie!
 	if ( targ->client && targ->client->ps.powerups[PW_ADRENALINE] ) {

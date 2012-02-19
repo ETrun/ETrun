@@ -591,7 +591,7 @@ reinforce
 */
 void reinforce( gentity_t *ent ) {
 	int p, team; // numDeployable=0, finished=0; // TTimo unused
-	char *classname;
+	// char *classname; Nico, unused warning fix
 	gclient_t *rclient;
 	char userinfo[MAX_INFO_STRING], *respawnStr;
 
@@ -618,9 +618,9 @@ void reinforce( gentity_t *ent ) {
 
 	// find number active team spawnpoints
 	if ( team == TEAM_AXIS ) {
-		classname = "team_CTF_redspawn";
+		// classname = "team_CTF_redspawn";
 	} else if ( team == TEAM_ALLIES ) {
-		classname = "team_CTF_bluespawn";
+		// classname = "team_CTF_bluespawn";
 	} else {
 		assert( 0 );
 	}

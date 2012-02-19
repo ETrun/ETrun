@@ -357,7 +357,7 @@ static void CG_RainParticleRender( cg_atmosphericParticle_t *particle ) {
 	vec3_t forward, right;
 	polyVert_t verts[3];
 	vec2_t line;
-	float len, frac, dist;
+	float len, dist; // , frac Nico, unused warning fix
 	vec3_t start, finish;
 	float groundHeight;
 //	int			msec = trap_Milliseconds();
@@ -383,7 +383,7 @@ static void CG_RainParticleRender( cg_atmosphericParticle_t *particle ) {
 	if ( start[2] <= groundHeight ) {
 		// Stop snow going through surfaces.
 		len = particle->height - groundHeight + start[2];
-		frac = start[2];
+		// frac = start[2];
 		VectorMA( start, len - particle->height, particle->deltaNormalized, start );
 	}
 
@@ -520,23 +520,6 @@ static qboolean CG_SnowParticleCheckVisible( cg_atmosphericParticle_t *particle 
 	if ( ( distance[0] * distance[0] + distance[1] * distance[1] ) > Square( MAX_ATMOSPHERIC_DISTANCE ) ) {
 		// ydnar: just nuke this particle, let it respawn
 		return CG_SetParticleActive( particle, ACT_NOT );
-
-		/*
-		// Attempt to respot the particle at our other side
-		particle->pos[0] -= 1.85f * distance[0];
-		particle->pos[1] -= 1.85f * distance[1];
-
-		// ydnar: place particle in random position between ground and sky
-		groundHeight = BG_GetSkyGroundHeightAtPoint( particle->pos );
-		skyHeight = BG_GetSkyHeightAtPoint( particle->pos );
-		if( skyHeight == MAX_ATMOSPHERIC_HEIGHT )
-			return CG_SetParticleActive( particle, ACT_NOT );
-		particle->pos[ 2 ] = groundHeight + random() * (skyHeight - groundHeight);
-
-		// ydnar: valid spot?
-		if( particle->pos[ 2 ] <= groundHeight || particle->pos[ 2 ] >= skyHeight )
-			return CG_SetParticleActive( particle, ACT_NOT );
-		*/
 	}
 
 //	checkvisibletime += trap_Milliseconds() - msec;
@@ -549,7 +532,7 @@ static void CG_SnowParticleRender( cg_atmosphericParticle_t *particle ) {
 	vec3_t forward, right;
 	polyVert_t verts[3];
 	vec2_t line;
-	float len, frac, sinTumbling, cosTumbling, particleWidth, dist;
+	float len, sinTumbling, cosTumbling, particleWidth, dist;// , frac Nico, unused warning fix
 	vec3_t start, finish;
 	float groundHeight;
 //	int			msec = trap_Milliseconds();
@@ -578,7 +561,7 @@ static void CG_SnowParticleRender( cg_atmosphericParticle_t *particle ) {
 	if ( start[2] <= groundHeight ) {
 		// Stop snow going through surfaces.
 		len = particle->height - groundHeight + start[2];
-		frac = start[2];
+		// frac = start[2];
 		VectorMA( start, len - particle->height, particle->deltaNormalized, start );
 	}
 

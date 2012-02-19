@@ -1302,19 +1302,13 @@ CG_Effect
 void CG_Effect( centity_t *cent, vec3_t origin, vec3_t dir ) {
 	localEntity_t   *le;
 	refEntity_t     *re;
-//	int				howmany;
-	int mass;
-//	int				large, small;
+	// int mass; Nico, unused warning fix
 	vec4_t projection, color;
 
 
 	VectorSet( dir, 0, 0, 1 );    // straight up.
 
-	mass = cent->currentState.density;
-
-//		1 large per 100, 1 small per 24
-//	large	= (int)(mass / 100);
-//	small	= (int)(mass / 24) + 1;
+	// mass = cent->currentState.density;
 
 	if ( cent->currentState.eventParm & 1 ) {  // fire
 		CG_MissileHitWall( WP_DYNAMITE, 0, origin, dir, 0 );
@@ -1351,14 +1345,6 @@ void CG_Effect( centity_t *cent, vec3_t origin, vec3_t dir ) {
 		// (SA) this is done only if the level designer has it marked in the entity.
 		//		(see "cent->currentState.eventParm & 64" below)
 
-		// RF, throw some debris
-//		CG_AddDebris( origin, dir,
-//						280,	// speed
-//						1400,	// duration
-//						// 15 + rand()%5 );	// count
-//						7 + rand()%2 );	// count
-
-		//%	CG_ImpactMark( cgs.media.burnMarkShader, origin, dir, random()*360, 1,1,1,1, qfalse, 64, qfalse, 0xffffffff );
 		VectorSet( projection, 0, 0, -1 );
 		projection[ 3 ] = 64.0f;
 		Vector4Set( color, 1.0f, 1.0f, 1.0f, 1.0f );
@@ -1428,10 +1414,6 @@ void CG_Effect( centity_t *cent, vec3_t origin, vec3_t dir ) {
 					  7 + rand() % 2 ); // count
 	}
 }
-
-
-
-
 
 
 /*
@@ -1577,9 +1559,9 @@ void CG_Shard( centity_t *cent, vec3_t origin, vec3_t dir ) {
 void CG_ShardJunk( centity_t *cent, vec3_t origin, vec3_t dir ) {
 	localEntity_t   *le;
 	refEntity_t     *re;
-	int type;
+	// int type; Nico, unused warning fix
 
-	type = cent->currentState.density;
+	// type = cent->currentState.density;
 
 	le = CG_AllocLocalEntity();
 	re = &le->refEntity;
@@ -1629,9 +1611,9 @@ void CG_ShardJunk( centity_t *cent, vec3_t origin, vec3_t dir ) {
 void CG_Debris( centity_t *cent, vec3_t origin, vec3_t dir ) {
 	localEntity_t   *le;
 	refEntity_t     *re;
-	int type;
+	// int type; Nico, unused warning fix
 
-	type = cent->currentState.density;
+	// type = cent->currentState.density;
 
 	le = CG_AllocLocalEntity();
 	re = &le->refEntity;

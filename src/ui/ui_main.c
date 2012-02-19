@@ -4371,7 +4371,7 @@ void UI_RunMenuScript( char **args ) {
 	if ( String_Parse( args, &name ) ) {
 
 		if ( Q_stricmp( name, "StartServer" ) == 0 ) {
-			float skill;
+			// float skill; Nico, unused warning fix
 			int pb_sv, pb_cl;
 
 			// DHM - Nerve
@@ -4400,7 +4400,8 @@ void UI_RunMenuScript( char **args ) {
 				trap_Cmd_ExecuteText( EXEC_APPEND, va( "wait ; wait ; map %s\n", uiInfo.mapList[ui_currentNetMap.integer].mapLoadName ) );
 			}
 
-			skill = trap_Cvar_VariableValue( "g_spSkill" );
+			// skill = trap_Cvar_VariableValue( "g_spSkill" );
+			trap_Cvar_VariableValue( "g_spSkill" );
 
 			// NERVE - SMF - set user cvars here
 			// set timelimit
@@ -6315,17 +6316,13 @@ static const char *UI_SelectedMap( qboolean singlePlayer, int index, int *actual
 }
 
 static const char *UI_SelectedCampaign( int index, int *actual ) {
-	int i, c;
-	c = 0;
+	int i;//, c; Nico, unused warning fix
+	// c = 0;
 	*actual = 0;
 	for ( i = 0; i < uiInfo.campaignCount; i++ ) {
 		if ( ( uiInfo.campaignList[i].order == index ) && uiInfo.campaignList[i].unlocked ) {
 			*actual = i;
-			//if(uiInfo.campaignList[i].unlocked) {
 			return uiInfo.campaignList[i].campaignName;
-			//} else {
-			//	return va( "^1%s", uiInfo.campaignList[i].campaignName);
-			//}
 		}
 	}
 	return "";
@@ -6670,21 +6667,11 @@ void UI_FeederSelection( float feederID, int index ) {
 			updateModel = qtrue;
 		}
 	} else if ( feederID == FEEDER_MAPS || feederID == FEEDER_ALLMAPS ) {
-		int actual, map;
+		int actual;//, map; Nico, unused warning fix
 		int game;
 
-		map = ( feederID == FEEDER_ALLMAPS ) ? ui_currentNetMap.integer : ui_currentMap.integer;
+		// map = ( feederID == FEEDER_ALLMAPS ) ? ui_currentNetMap.integer : ui_currentMap.integer;
 		game = feederID == FEEDER_MAPS ? uiInfo.gameTypes[ui_gameType.integer].gtEnum : ui_netGameType.integer;
-		/*if( game == GT_WOLF_CAMPAIGN ) {
-			if (uiInfo.campaignList[map].campaignCinematic >= 0) {
-				trap_CIN_StopCinematic(uiInfo.campaignList[map].campaignCinematic);
-				uiInfo.campaignList[map].campaignCinematic = -1;
-			}
-		} else
-			if (uiInfo.mapList[map].cinematic >= 0) {
-				trap_CIN_StopCinematic(uiInfo.mapList[map].cinematic);
-				uiInfo.mapList[map].cinematic = -1;
-			}*/
 
 		UI_SelectedMap( feederID == FEEDER_MAPS ? qtrue : qfalse, index, &actual );
 		trap_Cvar_Set( "ui_mapIndex", va( "%d", index ) );
@@ -6694,23 +6681,15 @@ void UI_FeederSelection( float feederID, int index ) {
 		if ( feederID == FEEDER_ALLMAPS && game != GT_WOLF_CAMPAIGN ) {
 			ui_currentMap.integer = actual;
 			trap_Cvar_Set( "ui_currentMap", va( "%d", actual ) );
-/*			trap_Cvar_Set( "ui_userTimelimit", va( "%d", uiInfo.mapList[ui_currentMap.integer].Timelimit ) );
-			trap_Cvar_Set( "ui_userAxisRespawnTime", va( "%d", uiInfo.mapList[ui_currentMap.integer].AxisRespawnTime ) );
-			trap_Cvar_Set( "ui_userAlliedRespawnTime", va( "%d", uiInfo.mapList[ui_currentMap.integer].AlliedRespawnTime ) );*/
 		}
 		// -NERVE - SMF
 
 		if ( feederID == FEEDER_MAPS ) {
 			ui_currentMap.integer = actual;
 			trap_Cvar_Set( "ui_currentMap", va( "%d", actual ) );
-//	        uiInfo.mapList[ui_currentMap.integer].cinematic = trap_CIN_PlayCinematic(va("%s.roq", uiInfo.mapList[ui_currentMap.integer].mapLoadName), 0, 0, 0, 0, (CIN_loop | CIN_silent) );
-//			UI_LoadBestScores(uiInfo.mapList[ui_currentMap.integer].mapLoadName, uiInfo.gameTypes[ui_gameType.integer].gtEnum);
-//			trap_Cvar_Set("ui_opponentModel", uiInfo.mapList[ui_currentMap.integer].opponentName);
-//			updateOpponentModel = qtrue;
 		} else {
 			ui_currentNetMap.integer = actual;
 			trap_Cvar_Set( "ui_currentNetMap", va( "%d", actual ) );
-//		    uiInfo.mapList[ui_currentNetMap.integer].cinematic = trap_CIN_PlayCinematic(va("%s.roq", uiInfo.mapList[ui_currentNetMap.integer].mapLoadName), 0, 0, 0, 0, (CIN_loop | CIN_silent) );
 		}
 	} else if ( feederID == FEEDER_CAMPAIGNS || feederID == FEEDER_ALLCAMPAIGNS ) {
 		int actual, campaign, campaignCount;
@@ -6738,15 +6717,6 @@ void UI_FeederSelection( float feederID, int index ) {
 		if ( feederID == FEEDER_CAMPAIGNS ) {
 			ui_currentCampaign.integer = actual;
 			trap_Cvar_Set( "ui_currentCampaign", va( "%d", actual ) );
-//			uiInfo.campaignList[ui_currentCampaign.integer].campaignCinematic = trap_CIN_PlayCinematic(va("%s.roq", uiInfo.campaignList[ui_currentCampaign.integer].campaignShortName), 0, 0, 0, 0, (CIN_loop | CIN_silent) );
-//			UI_LoadBestScores(uiInfo.mapList[ui_currentCampaign.integer].mapLoadName, uiInfo.gameTypes[ui_gameType.integer].gtEnum);
-//			trap_Cvar_Set("ui_opponentModel", uiInfo.mapList[ui_currentMap.integer].opponentName);
-//			updateOpponentModel = qtrue;
-
-/*			if (uiInfo.campaignList[ui_currentCampaign.integer].campaignCinematic < 0) {
-				uiInfo.campaignList[ui_currentCampaign.integer].campaignCinematic = -2;
-			}*/
-
 			ui_currentCampaignCompleted.integer = ( uiInfo.campaignList[ui_currentCampaign.integer].progress == uiInfo.campaignList[campaignCount - 1].mapCount );
 			trap_Cvar_Set( "ui_currentCampaignCompleted", va( "%i", ( uiInfo.campaignList[ui_currentCampaign.integer].progress == uiInfo.campaignList[campaignCount - 1].mapCount ) ) );
 		} else {
@@ -6769,14 +6739,6 @@ void UI_FeederSelection( float feederID, int index ) {
 		} else {
 			uiInfo.serverStatus.currentServerPreview = trap_R_RegisterShaderNoMip( "levelshots/unknownmap" );
 		}
-/*		if( uiInfo.serverStatus.currentServerCinematic >= 0 ) {
-		  trap_CIN_StopCinematic(uiInfo.serverStatus.currentServerCinematic);
-			uiInfo.serverStatus.currentServerCinematic = -1;
-		}
-		mapName = Info_ValueForKey(info, "mapname");
-		if (mapName && *mapName) {
-			uiInfo.serverStatus.currentServerCinematic = trap_CIN_PlayCinematic(va("%s.roq", mapName), 0, 0, 0, 0, (CIN_loop | CIN_silent) );
-		}*/
 	} else if ( feederID == FEEDER_SERVERSTATUS ) {
 		//
 	} else if ( feederID == FEEDER_FINDPLAYER ) {
@@ -7387,7 +7349,8 @@ UI_Init
 =================
 */
 void _UI_Init( qboolean inGameLoad ) {
-	int start, x;
+	// int start, Nico, unused warning fix
+	int x;
 
 	//uiInfo.inGameLoad = inGameLoad;
 
@@ -7507,7 +7470,8 @@ void _UI_Init( qboolean inGameLoad ) {
 
 	uiInfo.campaignMap = trap_R_RegisterShaderNoMip( "gfx/loading/camp_map.tga" );
 
-	start = trap_Milliseconds();
+	// start = trap_Milliseconds();
+	trap_Milliseconds();
 
 	uiInfo.teamCount = 0;
 	uiInfo.characterCount = 0;
@@ -7543,9 +7507,6 @@ void _UI_Init( qboolean inGameLoad ) {
 	}
 
 	trap_Cvar_Register( NULL, "debug_protocol", "", 0 );
-
-	// Arnout: default to Campaign
-	//trap_Cvar_Set("ui_netGameType", "4");
 
 	// init Yes/No once for cl_language -> server browser (punkbuster)
 	Q_strncpyz( translated_yes, DC->translateString( "Yes" ), sizeof( translated_yes ) );

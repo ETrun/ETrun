@@ -544,9 +544,9 @@ void SP_misc_gamemodel( gentity_t *ent ) {
 	vec3_t vScale;
 	int trunksize, trunkheight;
 	char tagname[MAX_QPATH];
-	char*   dummy;
+	// char*   dummy; Nico, unused warning fix
 	int num_frames, start_frame, fps;
-	qboolean reverse = qfalse;
+	// qboolean reverse = qfalse; Nico, unused warning fix
 
 	// Gordon: static gamemodels client side only now :D so server can just wave bye-bye
 	if ( !ent->scriptName && !ent->targetname && !ent->spawnflags ) {
@@ -563,9 +563,9 @@ void SP_misc_gamemodel( gentity_t *ent ) {
 		G_SpawnInt( "frames",    "0", &num_frames );
 		G_SpawnInt( "start", "0", &start_frame );
 		G_SpawnInt( "fps",       "20",    &fps );
-		if ( G_SpawnString( "reverse", "", &dummy ) ) {
-			reverse = qtrue;
-		}
+		// if ( G_SpawnString( "reverse", "", &dummy ) ) {
+		// 	reverse = qtrue;
+		// }
 
 		if ( num_frames == 0 ) {
 			G_Error( "'misc_model' with ANIMATE spawnflag set has 'frames' set to 0\n" );
@@ -1289,29 +1289,29 @@ void clamp_playerbehindgun( gentity_t *self, gentity_t *other, vec3_t dang ) {
 }
 
 void clamp_hweapontofirearc( gentity_t *self, vec3_t dang ) {
-	float diff, yawspeed;
-	qboolean clamped;
+	float diff;// Nico, unused warning fix, yawspeed;
+	// qboolean clamped;
 
-	clamped = qfalse;
+	// clamped = qfalse;
 
 	// go back to start position
 	VectorCopy( self->s.angles, dang );
-	yawspeed = MG42_IDLEYAWSPEED;
+	// yawspeed = MG42_IDLEYAWSPEED;
 
 	if ( dang[0] < 0 && dang[0] < -( self->varc ) ) {
-		clamped = qtrue;
+		// clamped = qtrue;
 		dang[0] = -( self->varc );
 	}
 
 	if ( dang[0] > 0 && dang[0] > ( self->varc / 2 ) ) {
-		clamped = qtrue;
+		// clamped = qtrue;
 		dang[0] = self->varc / 2;
 	}
 
 	// sanity check the angles again to make sure we don't go passed the harc
 	diff = AngleSubtract( self->s.angles[YAW], dang[YAW] );
 	if ( fabs( diff ) > self->harc ) {
-		clamped = qtrue;
+		// clamped = qtrue;
 
 		if ( diff > 0 ) {
 			dang[YAW] = AngleMod( self->s.angles[YAW] - self->harc );
@@ -1320,15 +1320,6 @@ void clamp_hweapontofirearc( gentity_t *self, vec3_t dang ) {
 		}
 	}
 }
-
-
-
-
-
-
-
-
-
 
 // Gordon: quad 20mm specs from marauder
 // Fire each barrel every 1s, so 250ms per shot total
