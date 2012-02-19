@@ -213,7 +213,6 @@ vmCvar_t mod_url;
 vmCvar_t url;
 
 vmCvar_t g_letterbox;
-vmCvar_t bot_enable;
 
 vmCvar_t g_debugSkills;
 vmCvar_t g_heavyWeaponRestriction;
@@ -425,7 +424,6 @@ cvarTable_t gameCvarTable[] = {
 	{ &url, "URL", "", CVAR_SERVERINFO | CVAR_ARCHIVE, 0, qfalse },
 
 	{ &g_letterbox, "cg_letterbox", "0", CVAR_TEMP    },
-	{ &bot_enable,  "bot_enable",    "0", 0           },
 
 	{ &g_debugSkills,   "g_debugSkills", "0", 0       },
 
@@ -1792,13 +1790,6 @@ void G_InitGame( int levelTime, int randomSeed, int restart ) {
 	}
 #endif // USEXPSTORAGE
 
-	// START	Mad Doctor I changes, 8/21/2002
-	// This needs to be called before G_SpawnEntitiesFromString, or the
-	// bot entities get trashed.
-	//initialize the bot game entities
-//	BotInitBotGameEntities();
-	// END		Mad Doctor I changes, 8/21/2002
-
 	// TAT 11/13/2002
 	//		similarly set up the Server entities
 	InitServerEntities();
@@ -2907,106 +2898,6 @@ FUNCTIONS CALLED EVERY FRAME
 ========================================================================
 */
 
-
-/*
-=============
-CheckWolfMP
-
-NERVE - SMF
-=============
-*/
-/*
-void CheckGameState() {
-	gamestate_t current_gs;
-
-	current_gs = trap_Cvar_VariableIntegerValue( "gamestate" );
-
-	if ( level.intermissiontime && current_gs != GS_INTERMISSION ) {
-		trap_Cvar_Set( "gamestate", va( "%i", GS_INTERMISSION ) );
-		return;
-	}
-
-	if ( g_noTeamSwitching.integer && !trap_Cvar_VariableIntegerValue( "sv_serverRestarting" ) ) {
-		if ( current_gs != GS_WAITING_FOR_PLAYERS && level.numPlayingClients <= 1 && level.lastRestartTime + 1000 < level.time ) {
-			level.lastRestartTime = level.time;
-			trap_SendConsoleCommand( EXEC_APPEND, va( "map_restart 0 %i\n", GS_WAITING_FOR_PLAYERS ) );
-		}
-	}
-
-	if ( current_gs == GS_WAITING_FOR_PLAYERS && g_minGameClients.integer > 1 &&
-		level.numPlayingClients >= g_minGameClients.integer && level.lastRestartTime + 1000 < level.time ) {
-
-		level.lastRestartTime = level.time;
-		trap_SendConsoleCommand( EXEC_APPEND, va( "map_restart 0 %i\n", GS_WARMUP ) );
-	}
-
-	if( g_gametype.integer == GT_WOLF_LMS && current_gs == GS_WAITING_FOR_PLAYERS && level.numPlayingClients > 1
-		&& level.lastRestartTime + 1000 < level.time ) {
-		level.lastRestartTime = level.time;
-		trap_SendConsoleCommand( EXEC_APPEND, va( "map_restart 0 %i\n", GS_WARMUP ) );
-	}
-
-	// if the warmup is changed at the console, restart it
-	if ( current_gs == GS_WARMUP_COUNTDOWN && g_warmup.modificationCount != level.warmupModificationCount ) {
-		level.warmupModificationCount = g_warmup.modificationCount;
-		current_gs = GS_WARMUP;
-	}
-
-	// check warmup latch
-	if ( current_gs == GS_WARMUP ) {
-		int delay = g_warmup.integer;
-
-		if( g_gametype.integer == GT_WOLF_CAMPAIGN || g_gametype.integer == GT_WOLF_LMS )
-			delay *= 2;
-
-		delay++;
-
-		if ( delay < 6 ) {
-			trap_Cvar_Set( "g_warmup", "5" );
-			delay = 7;
-		}
-
-		level.warmupTime = level.time + ( delay * 1000 );
-		trap_SetConfigstring( CS_WARMUP, va("%i", level.warmupTime) );
-		trap_Cvar_Set( "gamestate", va( "%i", GS_WARMUP_COUNTDOWN ) );
-	}
-}
-*/
-
-/*
-=============
-CheckWolfMP
-
-NERVE - SMF - Once a frame, check for changes in wolf MP player state
-=============
-*/
-/*
-void CheckWolfMP() {
-  // TTimo unused
-//	static qboolean latch = qfalse;
-
-	// NERVE - SMF - check game state
-	CheckGameState();
-
-	if ( level.warmupTime == 0 ) {
-		return;
-	}
-
-
-	// Only do the restart for MP
-	if(g_gametype.integer != GT_SINGLE_PLAYER && g_gametype.integer != GT_COOP)
-
-	// if the warmup time has counted down, restart
-	if ( level.time > level.warmupTime ) {
-		level.warmupTime += 10000;
-		trap_Cvar_Set( "g_restarted", "1" );
-		trap_SendConsoleCommand( EXEC_APPEND, "map_restart 0\n" );
-		level.restarted = qtrue;
-		return;
-	}
-}
-// -NERVE - SMF
-*/
 void CheckWolfMP() {
 	// check because we run 6 game frames before calling Connect and/or ClientBegin
 	// for clients on a map_restart
@@ -3024,14 +2915,6 @@ void CheckWolfMP() {
 				 ( level.numPlayingClients >= match_minplayers.integer &&
 				   level.lastRestartTime + 1000 < level.time && G_readyMatchState() ) ) {
 				int delay = ( g_warmup.integer < 10 ) ? 11 : g_warmup.integer + 1;
-
-				// Why scale these at all?  Minimum would mean 22s on Campaign and 44 on LMS....
-				// Once people are ready, they want to get the show rolling :)
-/*				if( g_gametype.integer == GT_WOLF_CAMPAIGN )
-					delay *= 2;
-				else if( g_gametype.integer == GT_WOLF_LMS && !g_doWarmup.integer )
-					delay *= 4;
-*/
 
 				level.warmupTime = level.time + ( delay * 1000 );
 				trap_Cvar_Set( "gamestate", va( "%i", GS_WARMUP_COUNTDOWN ) );

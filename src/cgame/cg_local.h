@@ -537,7 +537,6 @@ typedef struct clientInfo_s {
 	char cleanname[MAX_QPATH];
 	team_t team;
 
-	int botSkill;                   // 0 = not bot, 1-5 = bot
 	int score;                      // updated by score servercmds
 	int location[2];                // location in 2d for team mode
 	int health;                     // you only get this info about your teammates
@@ -1131,20 +1130,10 @@ typedef struct {
 	int engineerChargeTime[2];
 	int medicChargeTime[2];
 	int covertopsChargeTime[2];
-	// START	xkan, 8/29/2002
-	// which bots are currently selected
-	int selectedBotClientNumber[MAX_NUM_BUDDY];
-	// END		xkan, 8/29/2002
 	int binocZoomTime;
 	int limboEndCinematicTime;
 	int proneMovingTime;
 	fireteamData_t fireTeams[32];
-
-	// TAT 10/23/2002
-	//		For the bot hud, we keep a bit mask for which bot_action icons to show
-	int botMenuIcons;
-	//		And we need to know which one is the selected one
-	int botSelectedCommand;
 
 	// START Mad Doc - TDF
 	int orderFade;
@@ -1352,10 +1341,6 @@ typedef struct {
 	qhandle_t waypointAttackShader;
 	qhandle_t waypointDefendShader;
 	qhandle_t waypointRegroupShader;
-	// TAT 8/29/2002 - a shader for the bot indicator
-	qhandle_t waypointBotShader;
-	//		for a queued bot order (Listen Up/Go Go Go)
-	qhandle_t waypointBotQueuedShader;
 	qhandle_t waypointCompassAttackShader;
 	qhandle_t waypointCompassDefendShader;
 	qhandle_t waypointCompassRegroupShader;
@@ -1619,14 +1604,6 @@ typedef struct {
 	qhandle_t ccMortarTargetArrow;
 
 	qhandle_t currentSquadBackground;
-	qhandle_t SPTeamOverlayUnitBackground;
-	qhandle_t SPTeamOverlayUnitSelected;
-	qhandle_t SPTeamOverlayBotOrders[BOT_ACTION_MAX];
-	qhandle_t SPTeamOverlayBotOrdersBkg;
-	qhandle_t SPPlayerInfoSpecialIcon;
-	qhandle_t SPPlayerInfoHealthIcon;
-	qhandle_t SPPlayerInfoStaminaIcon;
-	qhandle_t SPPlayerInfoAmmoIcon;
 
 	// Gordon: for commandmap
 	qhandle_t medicIcon;
@@ -3169,7 +3146,6 @@ void CG_CampaignBriefingSetup( void );
 
 #define ORDER_ICON_FADE_TIME 3500
 
-int CG_GetFirstSelectedBot();
 void CG_AddToJournal( char *text );
 // returns true if game is single player (or coop)
 qboolean CG_IsSinglePlayer( void );

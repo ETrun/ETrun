@@ -56,8 +56,6 @@ If you have questions concerning this license or the applicable additional terms
 
 #define SPRINTTIME 20000.0f
 
-#define DEBUG_BOT_RETREATBEHAVIOR 1
-
 #define DEFAULT_GRAVITY     800
 #define FORCE_LIMBO_HEALTH  -75 // JPW NERVE
 #define GIB_HEALTH          -175 // JPW NERVE
@@ -165,47 +163,6 @@ typedef enum {
 	SELECT_BUDDY_LAST // must be the last one in the enum
 
 } SelectBuddyFlag;
-
-// START - TAT 10/21/2002
-// New icon based bot action command system
-typedef enum
-{
-	BOT_ACTION_ATTACK = 0,
-	BOT_ACTION_COVER,           // 1
-	BOT_ACTION_MOUNTGUN,        // 2
-	BOT_ACTION_OPENDOOR,        // 3
-	BOT_ACTION_USEDYNAMITE,     // 4
-	BOT_ACTION_DISARM,          // 5
-	BOT_ACTION_CONSTRUCT,       // 6
-	BOT_ACTION_REPAIR,          // 7
-	BOT_ACTION_REVIVE,          // 8
-	BOT_ACTION_GETDISGUISE,     // 9
-	BOT_ACTION_HEAL,            // 10
-	BOT_ACTION_AMMO,            // 11
-	BOT_ACTION_GRENADELAUNCH,   // 12
-	BOT_ACTION_PICKUPITEM,      // 13
-	BOT_ACTION_PANZERFAUST,     // 14
-	BOT_ACTION_FLAMETHROW,      // 15
-	BOT_ACTION_MG42,            // 16
-	BOT_ACTION_MOUNTEDATTACK,   // 17		-- attack when mounted on mg42
-	BOT_ACTION_KNIFEATTACK,     // 18
-	BOT_ACTION_LOCKPICK,        // 19
-
-	BOT_ACTION_MAXENTITY,
-
-	// None of these need an entity...
-	BOT_ACTION_RECON = BOT_ACTION_MAXENTITY,    // 20
-	BOT_ACTION_SMOKEBOMB,       // 21
-	BOT_ACTION_FINDMINES,       // 22
-	BOT_ACTION_PLANTMINE,       // 23
-	BOT_ACTION_ARTILLERY,       // 24
-	BOT_ACTION_AIRSTRIKE,       // 25
-	BOT_ACTION_MOVETOLOC,       // 26
-
-	// NOTE: if this gets bigger than 32 items, need to make botMenuIcons bigger
-	BOT_ACTION_MAX
-} botAction_t;
-// END - TAT 10/21/2002
 
 // RF
 #define MAX_TAGCONNECTS     64
@@ -409,8 +366,6 @@ extern const unsigned int aReinfSeeds[MAX_REINFSEEDS];
 #error overflow: (CS_MAX) > MAX_CONFIGSTRINGS
 #endif
 
-//#ifndef GAMETYPES
-//#define GAMETYPES
 typedef enum {
 	GT_SINGLE_PLAYER,
 	GT_COOP,
@@ -420,19 +375,6 @@ typedef enum {
 	GT_WOLF_LMS,
 	GT_MAX_GAME_TYPE
 } gametype_t;
-//#define GAMETYPES
-
-// Rafael gameskill
-/*typedef enum {
-	GSKILL_EASY = 1,
-	GSKILL_MEDIUM,
-	GSKILL_MEDIUMHARD, // normal default level
-	GSKILL_HARD,
-	GSKILL_VERYHARD,
-	GSKILL_MAX		// must always be last
-} gameskill_t;*/
-
-//#endif // ifndef GAMETYPES
 
 typedef enum { GENDER_MALE, GENDER_FEMALE, GENDER_NEUTER } gender_t;
 
@@ -764,19 +706,6 @@ typedef enum {
 	HI_NUM_HOLDABLE
 } holdable_t;
 
-#ifdef KITS
-// START Mad Doc - TDF
-// for kits dropped by allied bots in SP
-typeef enum {
-	KIT_SOLDIER,
-	KIT_MEDIC,
-	KIT_ENGINEER,
-	KIT_LT,
-	KIT_COVERTOPS
-} kit_t;
-// END Mad Doc - TDF
-#endif
-
 // NOTE: we can only use up to 15 in the client-server stream
 // SA NOTE: should be 31 now (I added 1 bit in msg.c)
 // RF NOTE: if this changes, please update etmain\botfiles\inv.h
@@ -850,7 +779,7 @@ extern int weapBanksMultiPlayer[MAX_WEAP_BANKS_MP][MAX_WEAPS_IN_BANK_MP];
 
 // TAT 10/4/2002
 //		Using one unified list for which weapons can received ammo
-//		This is used both by the ammo pack code and by the bot code to determine if reloads are needed
+//		This is used by the ammo pack code to determine if reloads are needed
 extern int reloadableWeapons[];
 
 typedef struct {
@@ -1656,9 +1585,6 @@ void PM_ClipVelocity( vec3_t in, vec3_t normal, vec3_t out, float overbounce );
 #define MAX_ARENAS          64
 #define MAX_ARENAS_TEXT     8192
 
-#define MAX_BOTS            64
-#define MAX_BOTS_TEXT       8192
-
 #define MAX_CAMPAIGNS_TEXT  8192
 
 typedef enum {
@@ -2163,17 +2089,6 @@ int BG_MaxAmmoForWeapon( weapon_t weaponNum, int *skill );
 
 void BG_InitLocations( vec2_t world_mins, vec2_t world_maxs );
 char *BG_GetLocationString( vec_t* pos );
-
-// START Mad Doc - TDF
-typedef struct botpool_x
-{
-	int num;
-	int playerclass;
-	int rank;
-	struct botpool_x *next;
-} botpool_t;
-
-// END Mad Doc - TDF
 
 #define MAX_FIRETEAMS       12
 

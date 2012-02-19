@@ -1560,8 +1560,6 @@ void CG_topshotsParse_cmd( qboolean doBest ) {
 		int hits = atoi( CG_Argv( iArg++ ) );
 		int atts = atoi( CG_Argv( iArg++ ) );
 		int kills = atoi( CG_Argv( iArg++ ) );
-		// rain - unused
-		//int deaths = atoi(CG_Argv(iArg++));
 		float acc = ( atts > 0 ) ? (float)( hits * 100 ) / (float)atts : 0.0f;
 		char name[32];
 
@@ -2411,8 +2409,6 @@ static void CG_ServerCommand( void ) {
 	if ( !Q_stricmp( cmd, "ftCommands" ) ) {
 		char info[MAX_INFO_STRING];
 		trap_Argv( 1, info, sizeof( info ) );
-
-		cg.botMenuIcons = atoi( info );
 
 		return;
 	}

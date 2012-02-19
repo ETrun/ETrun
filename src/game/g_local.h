@@ -1719,7 +1719,6 @@ extern vmCvar_t vote_limit;
 extern vmCvar_t vote_percent;
 extern vmCvar_t z_serverflags;
 extern vmCvar_t g_letterbox;
-extern vmCvar_t bot_enable;
 
 extern vmCvar_t g_debugSkills;
 extern vmCvar_t g_heavyWeaponRestriction;
@@ -1729,18 +1728,6 @@ extern vmCvar_t g_nextmap;
 extern vmCvar_t g_nextcampaign;
 
 extern vmCvar_t g_disableComplaints;
-
-extern vmCvar_t bot_debug;                  // if set, draw "thought bubbles" for crosshair-selected bot
-extern vmCvar_t bot_debug_curAINode;        // the text of the current ainode for the bot begin debugged
-extern vmCvar_t bot_debug_alertState;       // alert state of the bot being debugged
-extern vmCvar_t bot_debug_pos;              // coords of the bot being debugged
-extern vmCvar_t bot_debug_weaponAutonomy;   // weapon autonomy of the bot being debugged
-extern vmCvar_t bot_debug_movementAutonomy; // movement autonomy of the bot being debugged
-extern vmCvar_t bot_debug_cover_spot;       // What cover spot are we going to?
-extern vmCvar_t bot_debug_anim;             // what animation is the bot playing?
-
-
-
 
 void    trap_Printf( const char *fmt );
 void    trap_Error( const char *fmt );

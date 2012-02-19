@@ -1426,12 +1426,6 @@ static void CG_RegisterGraphics( void ) {
 
 	cgs.media.friendShader          = trap_R_RegisterShaderNoMip( "gfx/2d/friendlycross.tga" );
 
-	// (SA) not used yet
-//	cgs.media.hintPlrFriendShader	= trap_R_RegisterShader( "gfx/2d/hintPlrFriend" );
-//	cgs.media.hintPlrNeutralShader	= trap_R_RegisterShader( "gfx/2d/hintPlrNeutral" );
-//	cgs.media.hintPlrEnemyShader	= trap_R_RegisterShader( "gfx/2d/hintPlrEnemy" );
-//	cgs.media.hintPlrUnknownShader	= trap_R_RegisterShader( "gfx/2d/hintPlrUnknown" );
-
 	cgs.media.buildHintShader       = trap_R_RegisterShader( "gfx/2d/buildHint" );       // DHM - Nerve
 	cgs.media.disarmHintShader      = trap_R_RegisterShader( "gfx/2d/disarmHint" );      // DHM - Nerve
 	cgs.media.reviveHintShader      = trap_R_RegisterShader( "gfx/2d/reviveHint" );      // DHM - Nerve
@@ -1444,13 +1438,6 @@ static void CG_RegisterGraphics( void ) {
 	cgs.media.waypointAttackShader  = trap_R_RegisterShaderNoMip( "sprites/waypoint_attack" );
 	cgs.media.waypointDefendShader  = trap_R_RegisterShaderNoMip( "sprites/waypoint_defend" );
 	cgs.media.waypointRegroupShader = trap_R_RegisterShaderNoMip( "sprites/waypoint_regroup" );
-	// TAT - load up the bot shader as well
-//	cgs.media.waypointBotShader		= trap_R_RegisterShaderNoMip( "sprites/botorder" );
-//	cgs.media.waypointBotQueuedShader=trap_R_RegisterShaderNoMip( "sprites/botqueuedorder" );
-//	cgs.media.waypointCompassAttackShader	= trap_R_RegisterShaderNoMip( "sprites/waypoint_attack_compass" );
-//	cgs.media.waypointCompassDefendShader	= trap_R_RegisterShaderNoMip( "sprites/waypoint_defend_compass" );
-//	cgs.media.waypointCompassRegroupShader	= trap_R_RegisterShaderNoMip( "sprites/waypoint_regroup_compass" );
-//	cgs.media.commandCentreWoodShader		= trap_R_RegisterShaderNoMip( "ui/assets2/commandMap" );
 	if ( cgs.ccLayers ) {
 		for ( i = 0; i < cgs.ccLayers; i++ ) {
 			cgs.media.commandCentreMapShader[i]     = trap_R_RegisterShaderNoMip( va( "levelshots/%s_%i_cc.tga", cgs.rawmapname, i ) );
@@ -1472,12 +1459,6 @@ static void CG_RegisterGraphics( void ) {
 	cgs.media.commandCentreSpawnShader[1] = trap_R_RegisterShaderNoMip( "gfx/limbo/cm_flagallied" );
 	cgs.media.compassConstructShader =      trap_R_RegisterShaderNoMip( "sprites/construct.tga" );
 
-	// Mad Doc - TDF
-	//cgs.media.ingameAutomapBackground = trap_R_RegisterShaderNoMip("ui/assets2/ingame/mapbackground");
-
-	//cgs.media.hudBorderVert = trap_R_RegisterShaderNoMip( "ui/assets2/border_vert.tga" );
-	//cgs.media.hudBorderVert2 = trap_R_RegisterShaderNoMip( "ui/assets2/border_vert2.tga" );
-
 	cgs.media.compassDestroyShader =        trap_R_RegisterShaderNoMip( "sprites/destroy.tga" );
 	cgs.media.slashShader =                 trap_R_RegisterShaderNoMip( "gfx/2d/numbers/slash" );
 	cgs.media.compass2Shader =              trap_R_RegisterShaderNoMip( "gfx/2d/compass2.tga" );
@@ -1498,8 +1479,6 @@ static void CG_RegisterGraphics( void ) {
 
 	cgs.media.teamStatusBar =   trap_R_RegisterShader( "gfx/2d/colorbar.tga" );
 
-	//cgs.media.redColorBar =		trap_R_RegisterShader("redcolorbar");
-	//cgs.media.blueColorBar =	trap_R_RegisterShader("bluecolorbar");
 	cgs.media.hudSprintBar =    trap_R_RegisterShader( "sprintbar" );
 
 	cgs.media.hudAlliedHelmet = trap_R_RegisterShader( "AlliedHelmet" );
@@ -1543,7 +1522,6 @@ static void CG_RegisterGraphics( void ) {
 	cgs.media.scoreEliminatedShader = trap_R_RegisterShader( "sprites/skull" );
 	cgs.media.medicReviveShader = trap_R_RegisterShader( "sprites/medic_revive" );
 
-	//cgs.media.vehicleShader = trap_R_RegisterShader( "sprites/vehicle" );
 	cgs.media.destroyShader = trap_R_RegisterShader( "sprites/destroy" );
 
 	cgs.media.voiceChatShader = trap_R_RegisterShader( "sprites/voiceChat" );
@@ -1553,8 +1531,6 @@ static void CG_RegisterGraphics( void ) {
 
 	cgs.media.bloodExplosionShader = trap_R_RegisterShader( "bloodExplosion" );
 
-	//cgs.media.bleedExplosionShader = trap_R_RegisterShader( "bleedExplosion" );
-
 	//----(SA)	water splash
 	cgs.media.waterSplashModel = trap_R_RegisterModel( "models/weaphits/bullet.md3" );
 	cgs.media.waterSplashShader = trap_R_RegisterShader( "waterSplash" );
@@ -1563,7 +1539,6 @@ static void CG_RegisterGraphics( void ) {
 	// Ridah, spark particles
 	cgs.media.sparkParticleShader = trap_R_RegisterShader( "sparkParticle" );
 	cgs.media.smokeTrailShader = trap_R_RegisterShader( "smokeTrail" );
-	//cgs.media.lightningBoltShader = trap_R_RegisterShader( "lightningBolt" );
 	cgs.media.flamethrowerFireStream = trap_R_RegisterShader( "flamethrowerFireStream" );
 	cgs.media.flamethrowerBlueStream = trap_R_RegisterShader( "flamethrowerBlueStream" );
 	cgs.media.onFireShader2 = trap_R_RegisterShader( "entityOnFire1" );
@@ -1578,11 +1553,8 @@ static void CG_RegisterGraphics( void ) {
 	// DHM - Nerve :: bullet hitting dirt
 	cgs.media.dirtParticle1Shader = trap_R_RegisterShader( "dirt_splash" );
 	cgs.media.dirtParticle2Shader = trap_R_RegisterShader( "water_splash" );
-	//cgs.media.dirtParticle3Shader = trap_R_RegisterShader( "dirtParticle3" );
 
 	cgs.media.genericConstructionShader =       trap_R_RegisterShader( "textures/sfx/construction" );
-	//cgs.media.genericConstructionShaderBrush =	trap_R_RegisterShader( "textures/sfx/construction" );
-	//cgs.media.genericConstructionShaderModel =	trap_R_RegisterShader( "textures/sfx/construction_model" );
 	cgs.media.alliedUniformShader =             trap_R_RegisterShader( "sprites/uniform_allied" );
 	cgs.media.axisUniformShader =               trap_R_RegisterShader( "sprites/uniform_axis" );
 
@@ -1597,22 +1569,9 @@ static void CG_RegisterGraphics( void ) {
 	cgs.media.ccFilterPics[5] = trap_R_RegisterShaderNoMip( "gfx/limbo/filter_construction" );
 	cgs.media.ccFilterPics[6] = trap_R_RegisterShaderNoMip( "gfx/limbo/filter_destruction" );
 	cgs.media.ccFilterPics[7] = trap_R_RegisterShaderNoMip( "gfx/limbo/filter_objective" );
-	//cgs.media.ccFilterPics[7] = trap_R_RegisterShaderNoMip( "gfx/limbo/filter_waypoint" );
-	//cgs.media.ccFilterPics[8] = trap_R_RegisterShaderNoMip( "gfx/limbo/filter_objective" );
 
 	cgs.media.ccFilterBackOn =  trap_R_RegisterShaderNoMip( "gfx/limbo/filter_back_on" );
 	cgs.media.ccFilterBackOff = trap_R_RegisterShaderNoMip( "gfx/limbo/filter_back_off" );
-/*
-#define CC_FILTER_AXIS			(1 << 0)
-#define CC_FILTER_ALLIES		(1 << 1)
-#define CC_FILTER_SPAWNS		(1 << 2)
-#define CC_FILTER_CMDPOST		(1 << 3) // TODO
-#define CC_FILTER_HACABINETS	(1 << 4) // TODO
-#define CC_FILTER_CONSTRUCTIONS	(1 << 5)
-#define CC_FILTER_DESTRUCTIONS	(1 << 6)
-#define CC_FILTER_WAYPOINTS		(1 << 7)
-#define CC_FILTER_OBJECTIVES	(1 << 8) // TODO
-*/
 
 	// used in:
 	//  statsranksmedals
@@ -1648,34 +1607,6 @@ static void CG_RegisterGraphics( void ) {
 	cgs.media.skillPics[SK_LIGHT_WEAPONS]                               = trap_R_RegisterShaderNoMip( "gfx/limbo/ic_lightweap" );
 	cgs.media.skillPics[SK_HEAVY_WEAPONS]                               = trap_R_RegisterShaderNoMip( "gfx/limbo/ic_soldier" );
 	cgs.media.skillPics[SK_MILITARY_INTELLIGENCE_AND_SCOPED_WEAPONS]    = trap_R_RegisterShaderNoMip( "gfx/limbo/ic_covertops" );
-
-	/*cgs.media.SPTeamOverlayBotOrders[BOT_ACTION_MOVETOLOC] =	trap_R_RegisterShaderNoMip( "ui/assets2/ingame/bot_action_default" );
-	cgs.media.SPTeamOverlayBotOrders[BOT_ACTION_CONSTRUCT] =	trap_R_RegisterShaderNoMip( "ui/assets2/ingame/bot_action_construct" );
-	cgs.media.SPTeamOverlayBotOrders[BOT_ACTION_USEDYNAMITE] =	trap_R_RegisterShaderNoMip( "ui/assets2/ingame/bot_action_usedynamite" );
-	cgs.media.SPTeamOverlayBotOrders[BOT_ACTION_REPAIR] =		trap_R_RegisterShaderNoMip( "ui/assets2/ingame/bot_action_fixgun" );
-	cgs.media.SPTeamOverlayBotOrders[BOT_ACTION_MOUNTGUN] =		trap_R_RegisterShaderNoMip( "ui/assets2/ingame/bot_action_mountgun" );
-	cgs.media.SPTeamOverlayBotOrders[BOT_ACTION_OPENDOOR] =		trap_R_RegisterShaderNoMip( "ui/assets2/ingame/bot_action_opendoor" );
-	cgs.media.SPTeamOverlayBotOrders[BOT_ACTION_REVIVE] =		trap_R_RegisterShaderNoMip( "ui/assets2/ingame/bot_action_revive" );
-	cgs.media.SPTeamOverlayBotOrders[BOT_ACTION_GETDISGUISE] =	trap_R_RegisterShaderNoMip( "ui/assets2/ingame/bot_action_getdisguise" );
-	cgs.media.SPTeamOverlayBotOrders[BOT_ACTION_HEAL] =			trap_R_RegisterShaderNoMip( "ui/assets2/ingame/bot_action_heal" );
-	cgs.media.SPTeamOverlayBotOrders[BOT_ACTION_AMMO] =			trap_R_RegisterShaderNoMip( "ui/assets2/ingame/bot_action_ammo" );
-	cgs.media.SPTeamOverlayBotOrders[BOT_ACTION_DISARM] =		trap_R_RegisterShaderNoMip( "ui/assets2/ingame/bot_action_disarmdynamite" );
-	cgs.media.SPTeamOverlayBotOrders[BOT_ACTION_ATTACK] =		trap_R_RegisterShaderNoMip( "ui/assets2/ingame/bot_action_attack" );
-	cgs.media.SPTeamOverlayBotOrders[BOT_ACTION_COVER] =		trap_R_RegisterShaderNoMip( "ui/assets2/ingame/bot_action_cover" );
-	cgs.media.SPTeamOverlayBotOrders[BOT_ACTION_RECON] =		trap_R_RegisterShaderNoMip( "ui/assets2/ingame/bot_action_recon" );
-	cgs.media.SPTeamOverlayBotOrders[BOT_ACTION_SMOKEBOMB] =	trap_R_RegisterShaderNoMip( "ui/assets2/ingame/bot_action_smoke" );
-	cgs.media.SPTeamOverlayBotOrders[BOT_ACTION_FINDMINES] =	trap_R_RegisterShaderNoMip( "ui/assets2/ingame/bot_action_findmines" );
-	cgs.media.SPTeamOverlayBotOrders[BOT_ACTION_PLANTMINE] =	trap_R_RegisterShaderNoMip( "ui/assets2/ingame/bot_action_plantmine" );
-	cgs.media.SPTeamOverlayBotOrders[BOT_ACTION_ARTILLERY] =	trap_R_RegisterShaderNoMip( "ui/assets2/ingame/bot_action_artillery" );
-	cgs.media.SPTeamOverlayBotOrders[BOT_ACTION_AIRSTRIKE] =	trap_R_RegisterShaderNoMip( "ui/assets2/ingame/bot_action_airstrike" );
-	cgs.media.SPTeamOverlayBotOrders[BOT_ACTION_GRENADELAUNCH]=	trap_R_RegisterShaderNoMip( "ui/assets2/ingame/bot_action_grenadelaunch" );
-	cgs.media.SPTeamOverlayBotOrders[BOT_ACTION_PICKUPITEM] =	trap_R_RegisterShaderNoMip( "ui/assets2/ingame/bot_action_pickup" );
-	cgs.media.SPTeamOverlayBotOrders[BOT_ACTION_PANZERFAUST] =	trap_R_RegisterShaderNoMip( "ui/assets2/ingame/bot_action_panzerfaust" );
-	cgs.media.SPTeamOverlayBotOrders[BOT_ACTION_FLAMETHROW] =	trap_R_RegisterShaderNoMip( "ui/assets2/ingame/bot_action_flamethrow" );
-	cgs.media.SPTeamOverlayBotOrders[BOT_ACTION_MG42] =			trap_R_RegisterShaderNoMip( "ui/assets2/ingame/bot_action_mg42" );
-	cgs.media.SPTeamOverlayBotOrders[BOT_ACTION_MOUNTEDATTACK]=	trap_R_RegisterShaderNoMip( "ui/assets2/ingame/bot_action_mountedattack" );
-	cgs.media.SPTeamOverlayBotOrders[BOT_ACTION_KNIFEATTACK] =	trap_R_RegisterShaderNoMip( "ui/assets2/ingame/bot_action_knifeattack" );
-	cgs.media.SPTeamOverlayBotOrders[BOT_ACTION_LOCKPICK] =		trap_R_RegisterShaderNoMip( "ui/assets2/ingame/bot_action_lockpick" );*/
 
 	WM_RegisterWeaponTypeShaders();
 

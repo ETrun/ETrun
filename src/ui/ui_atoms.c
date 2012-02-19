@@ -99,21 +99,6 @@ float UI_ClampCvar( float min, float max, float value ) {
 	return value;
 }
 
-/*
-// TTimo: unused
-static void NeedCDAction( qboolean result ) {
-	if ( !result ) {
-		trap_Cmd_ExecuteText( EXEC_APPEND, "quit\n" );
-	}
-}
-
-static void NeedCDKeyAction( qboolean result ) {
-	if ( !result ) {
-		trap_Cmd_ExecuteText( EXEC_APPEND, "quit\n" );
-	}
-}
-*/
-
 char *UI_Argv( int arg ) {
 	static char buffer[MAX_STRING_CHARS];
 

@@ -7215,9 +7215,6 @@ displayContextDef_t *Display_GetContext() {
 	return DC;
 }
 
-//static float captureX; // TTimo: unused
-//static float captureY; // TTimo: unused
-
 void *Display_CaptureItem( int x, int y ) {
 	int i;
 

@@ -551,7 +551,6 @@ static void CG_TouchTriggerPrediction( void ) {
 	clipHandle_t cmodel;
 	centity_t       *cent;
 	qboolean spectator;
-//	vec3_t			mins, maxs; // TTimo: unused
 	const char      *cs;
 
 	// dead clients don't activate triggers

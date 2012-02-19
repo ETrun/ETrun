@@ -3049,7 +3049,6 @@ qboolean BG_AddMagicAmmo( playerState_t *ps, int *skill, int teamNum, int numOfC
 /*
 ================
 BG_CanUseWeapon: can a player of the specified team and class use this weapon?
-extracted and adapted from Bot_GetWeaponForClassAndTeam.
 ================
 - added by xkan, 01/02/03
 */

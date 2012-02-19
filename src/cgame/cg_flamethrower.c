@@ -593,9 +593,6 @@ void CG_MoveFlameChunk( flameChunk_t *f ) {
 	trace_t trace;
 	// int jiggleCount; Nico, unused warning fix
 	float dot;
-	// TTimo: unused
-	//static vec3_t	umins = {-1,-1,-1};
-	//static vec3_t	umaxs = { 1, 1, 1};
 
 	// subtract friction from speed
 	if ( f->velSpeed > 1 && f->lastFrictionTake < cg.time - 50 ) {
@@ -1259,7 +1256,7 @@ CG_UpdateFlamethrowerSounds
 ===============
 */
 void CG_UpdateFlamethrowerSounds( void ) {
-	flameChunk_t *f, *trav; // , *lastSoundFlameChunk=NULL; // TTimo: unused
+	flameChunk_t *f, *trav;
 	#define MIN_BLOW_VOLUME     30
 
 	// draw each of the headFlameChunk's

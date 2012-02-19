@@ -1095,14 +1095,12 @@ void CG_InitConsoleCommands( void ) {
 	trap_AddCommand( "say" );
 	trap_AddCommand( "say_limbo" );           // NERVE - SMF
 	trap_AddCommand( "tell" );
-	trap_AddCommand( "listbotgoals" );
 	trap_AddCommand( "give" );
 	trap_AddCommand( "god" );
 	trap_AddCommand( "notarget" );
 	trap_AddCommand( "noclip" );
 	trap_AddCommand( "team" );
 	trap_AddCommand( "follow" );
-	trap_AddCommand( "addbot" );
 	trap_AddCommand( "setviewpos" );
 	trap_AddCommand( "callvote" );
 	trap_AddCommand( "vote" );

@@ -1395,8 +1395,6 @@ static void CG_Explosive( centity_t *cent ) {
 	// create the render entity
 	memset( &ent, 0, sizeof( ent ) );
 	VectorCopy( cent->lerpOrigin, ent.origin );
-//	VectorCopy( cent->lerpOrigin, ent.oldorigin);
-//	VectorCopy( ent.origin, cent->lerpOrigin);
 	AnglesToAxis( cent->lerpAngles, ent.axis );
 
 	ent.renderfx = RF_NOSHADOW;
@@ -1440,31 +1438,12 @@ static void CG_Constructible( centity_t *cent ) {
 	memset( &ent, 0, sizeof( ent ) );
 	VectorCopy( cent->lerpOrigin, ent.origin );
 	VectorCopy( cent->lerpOrigin, ent.oldorigin );
-//	VectorCopy( ent.origin, cent->lerpOrigin);
 	AnglesToAxis( cent->lerpAngles, ent.axis );
 
 	ent.renderfx = RF_NOSHADOW;
 
-//	CG_Printf( "Adding constructible: %s\n", CG_ConfigString( CS_OID_NAMES + cent->currentState.otherEntityNum2 ) );
-
 	if ( s1->modelindex ) {
-		// get the model, either as a bmodel or a modelindex
-		//if ( s1->solid == SOLID_BMODEL ) {
 		ent.hModel = cgs.inlineDrawModel[s1->modelindex];
-		//} else {
-		//	ent.hModel = cgs.gameModels[s1->modelindex];
-		//}
-
-		// add to refresh list
-		// trap_R_AddRefEntityToScene(&ent);
-
-		//	ent.shaderRGBA[0] = ent.shaderRGBA[1] = ent.shaderRGBA[2] = 0xff;
-		//	ent.shaderRGBA[3] = s1->density;
-
-		//if( s1->angles2[0] < 255 )
-		//if( cent->currentState.powerups == STATE_UNDERCONSTRUCTION )
-		//	ent.customShader = cgs.media.genericConstructionShaderBrush;
-
 		trap_R_AddRefEntityToScene( &ent );
 	}
 
@@ -1473,99 +1452,12 @@ static void CG_Constructible( centity_t *cent ) {
 		if ( cent->currentState.powerups == STATE_UNDERCONSTRUCTION ) {
 			//ent.customShader = cgs.media.genericConstructionShaderBrush;
 			ent.customShader = cgs.media.genericConstructionShader;
-
-			/*switch( cent->currentState.frame ) {
-				case 1: trap_S_AddLoopingSound( cent->currentState.origin2, vec3_origin, cgs.media.buildSound[0], 255, 0 ); break;
-				case 2: trap_S_AddLoopingSound( cent->currentState.origin2, vec3_origin, cgs.media.buildSound[1], 255, 0 ); break;
-				case 3: trap_S_AddLoopingSound( cent->currentState.origin2, vec3_origin, cgs.media.buildSound[2], 255, 0 ); break;
-				case 4: trap_S_AddLoopingSound( cent->currentState.origin2, vec3_origin, cgs.media.buildSound[3], 255, 0 ); break;
-			}*/
 		}
 
-		//if ( s1->solid == SOLID_BMODEL ) {
 		ent.hModel = cgs.inlineDrawModel[s1->modelindex2];
-		//} else {
-		//	ent.hModel = cgs.gameModels[s1->modelindex2];
-		//}
 		trap_R_AddRefEntityToScene( &ent );
 	}
-	//else
-	//	trap_R_AddRefEntityToScene(&ent);
 }
-
-/*
-===============
-CG_Waypoint
-===============
-*/
-/*
-static void CG_Waypoint( centity_t *cent ) {
-	refEntity_t ent;
-
-	memset( &ent, 0, sizeof( ent ) );
-	ent.reType = RT_SPRITE;
-	VectorCopy( cent->lerpOrigin, ent.origin );
-	ent.origin[2] += 24;
-	VectorCopy( ent.origin, ent.oldorigin );
-	ent.radius = 14;
-
-	switch( cent->currentState.frame ) {
-		case WAYP_ATTACK: ent.customShader = cgs.media.waypointAttackShader; break;
-		case WAYP_DEFEND: ent.customShader = cgs.media.waypointDefendShader; break;
-		case WAYP_REGROUP: ent.customShader = cgs.media.waypointRegroupShader; break;
-		// TAT 8/29/2002 - Use the bot shader for bots
-		case WAYP_BOT:
-			ent.customShader = cgs.media.waypointBotShader;
-			break;
-		// TAT 1/13/2003 - and the queued shader for queued commands
-		case WAYP_BOTQUEUED:
-			ent.customShader = cgs.media.waypointBotQueuedShader;
-			break;
-	}
-
-	ent.shaderRGBA[0] = 255;
-	ent.shaderRGBA[1] = 255;
-	ent.shaderRGBA[2] = 255;
-	ent.shaderRGBA[3] = 255;
-	trap_R_AddRefEntityToScene(&ent);
-}
-*/
-/*
-===============
-CG_ConstructibleMarker
-===============
-*/
-/*static void CG_ConstructibleMarker( centity_t *cent ) {
-	refEntity_t			ent;
-	entityState_t		*s1;
-
-	s1 = &cent->currentState;
-
-	// create the render entity
-	memset (&ent, 0, sizeof(ent));
-
-	VectorCopy( cent->lerpOrigin, ent.origin);
-	VectorCopy( cent->lerpOrigin, ent.oldorigin);
-
-	// special shader if under construction
-	if( cent->currentState.powerups == STATE_UNDERCONSTRUCTION )
-		ent.customShader = cgs.media.genericConstructionShader;
-
-	// add the secondary model
-	if ( s1->modelindex2 ) {
-		AnglesToAxis( cent->lerpAngles, ent.axis );
-		ent.skinNum = 0;
-		ent.hModel = cgs.gameModels[s1->modelindex2];
-		ent.frame = s1->frame;
-		if( s1->effect1Time )
-			ent.customSkin = cgs.gameModelSkins[s1->effect1Time];
-		trap_R_AddRefEntityToScene(&ent);
-		memcpy( &cent->refEnt, &ent, sizeof(refEntity_t) );
-	} else {
-		AnglesToAxis( vec3_origin, ent.axis );
-		trap_R_AddRefEntityToScene(&ent);
-	}
-}*/
 
 //----(SA) done
 
@@ -1618,11 +1510,6 @@ static void CG_Mover( centity_t *cent ) {
 
 	// special shader if under construction
 	if ( cent->currentState.powerups == STATE_UNDERCONSTRUCTION ) {
-		/*if( cent->currentState.solid == SOLID_BMODEL ) {
-			ent.customShader = cgs.media.genericConstructionShaderBrush;
-		} else {
-			ent.customShader = cgs.media.genericConstructionShaderModel;
-		}*/
 		ent.customShader = cgs.media.genericConstructionShader;
 	}
 
@@ -2345,14 +2232,6 @@ static void CG_ProcessEntity( centity_t *cent ) {
 	case ET_CONSTRUCTIBLE:
 		CG_Constructible( cent );
 		break;
-/*	case ET_WAYPOINT:
-	// TAT - 8/29/2002 - draw the botgoal indicator the same way you draw the waypoint flag
-	case ET_BOTGOAL_INDICATOR:
-		CG_Waypoint( cent );
-		break;*/
-/*	case ET_CONSTRUCTIBLE_MARKER:
-		CG_ConstructibleMarker( cent );
-		break;*/
 	case ET_TRAP:
 		CG_Trap( cent );
 		break;

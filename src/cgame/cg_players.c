@@ -192,11 +192,6 @@ void CG_NewClientInfo( int clientNum ) {
 	Q_strncpyz( newInfo.cleanname, v, sizeof( newInfo.cleanname ) );
 	Q_CleanStr( newInfo.cleanname );
 
-
-	// bot skill
-	v = Info_ValueForKey( configstring, "skill" );
-	newInfo.botSkill = atoi( v );
-
 	// team
 	v = Info_ValueForKey( configstring, "t" );
 	newInfo.team = atoi( v );
@@ -2105,10 +2100,6 @@ A player just came into view or teleported, so reset all animation info
 ===============
 */
 void CG_ResetPlayerEntity( centity_t *cent ) {
-	// Gordon: these are unused
-//	cent->errorTime = -99999;		// guarantee no error decay added
-//	cent->extrapolated = qfalse;
-
 	if ( !( cent->currentState.eFlags & EF_DEAD ) ) {
 		CG_ClearLerpFrameRate( cent, &cgs.clientinfo[ cent->currentState.clientNum ], &cent->pe.legs, cent->currentState.legsAnim );
 		CG_ClearLerpFrame( cent, &cgs.clientinfo[ cent->currentState.clientNum ], &cent->pe.torso, cent->currentState.torsoAnim );

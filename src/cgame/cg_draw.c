@@ -552,22 +552,6 @@ static float CG_DrawTimer( float y ) {
 	return y + 12 + 4;
 }
 
-// START	xkan, 8/29/2002
-int CG_BotIsSelected( int clientNum ) {
-	int i;
-
-	for ( i = 0; i < MAX_NUM_BUDDY; i++ )
-	{
-		if ( cg.selectedBotClientNumber[i] == 0 ) {
-			return 0;
-		} else if ( cg.selectedBotClientNumber[i] == clientNum ) {
-			return 1;
-		}
-	}
-	return 0;
-}
-// END		xkan, 8/29/2002
-
 /*
 =================
 CG_DrawTeamOverlay
@@ -1260,13 +1244,6 @@ static void CG_DrawWeapReticle( void ) {
 		if ( cgs.media.reticleShaderSimple ) {
 			CG_DrawPic( 80, 0, 480, 480, cgs.media.reticleShaderSimple );
 		}
-
-/*		if(cgs.media.reticleShaderSimpleQ) {
-			trap_R_DrawStretchPic( x,	0, w, h, 0, 0, 1, 1, cgs.media.reticleShaderSimpleQ );	// tl
-			trap_R_DrawStretchPic( x+w, 0, w, h, 1, 0, 0, 1, cgs.media.reticleShaderSimpleQ );	// tr
-			trap_R_DrawStretchPic( x,	h, w, h, 0, 1, 1, 0, cgs.media.reticleShaderSimpleQ );	// bl
-			trap_R_DrawStretchPic( x+w, h, w, h, 1, 1, 0, 0, cgs.media.reticleShaderSimpleQ );	// br
-		}*/
 
 		// hairs
 		CG_FillRect( 84, 239, 150, 3, color );   // left

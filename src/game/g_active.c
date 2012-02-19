@@ -710,49 +710,11 @@ void ClientEvents( gentity_t *ent, int oldEventSequence ) {
 
 }
 
-/*
-==============
-SendPendingPredictableEvents
-==============
-*/
-void SendPendingPredictableEvents( playerState_t *ps ) {
-	/*
-	gentity_t *t;
-	int event, seq;
-	int extEvent, number;
-
-	// if there are still events pending
-	if ( ps->entityEventSequence < ps->eventSequence ) {
-		// create a temporary entity for this event which is sent to everyone
-		// except the client generated the event
-		seq = ps->entityEventSequence & (MAX_EVENTS-1);
-		event = ps->events[ seq ] | ( ( ps->entityEventSequence & 3 ) << 8 );
-		// set external event to zero before calling BG_PlayerStateToEntityState
-		extEvent = ps->externalEvent;
-		ps->externalEvent = 0;
-		// create temporary entity for event
-		t = G_TempEntity( ps->origin, event );
-		number = t->s.number;
-		BG_PlayerStateToEntityState( ps, &t->s, qtrue );
-		t->s.number = number;
-		t->s.eType = ET_EVENTS + event;
-		t->s.eFlags |= EF_PLAYER_EVENT;
-		t->s.otherEntityNum = ps->clientNum;
-		// send to everyone except the client who generated the event
-		t->r.svFlags |= SVF_NOTSINGLECLIENT;
-		t->r.singleClient = ps->clientNum;
-		// set back external event
-		ps->externalEvent = extEvent;
-	}
-	*/
-}
-
 // DHM - Nerve
 void WolfFindMedic( gentity_t *self ) {
 	int i, medic = -1;
 	gclient_t   *cl;
 	vec3_t start, end;
-//	vec3_t	temp;	// rain - unused
 	trace_t tr;
 	float bestdist = 1024, dist;
 
@@ -1609,8 +1571,6 @@ void ClientEndFrame( gentity_t *ent ) {
 	} else {
 		BG_PlayerStateToEntityState( &ent->client->ps, &ent->s, qfalse );
 	}
-
-	//SendPendingPredictableEvents( &ent->client->ps );
 
 	// DHM - Nerve :: If it's been a couple frames since being revived, and props_frame_state
 	//					wasn't reset, go ahead and reset it

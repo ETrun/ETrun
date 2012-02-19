@@ -188,21 +188,9 @@ void G_MissileImpact( gentity_t *ent, trace_t *trace, int impactDamage ) {
 		if ( !Q_stricmp( ent->classname,"WP" ) ) {
 			return;
 		}
-		// jpw
-/*		if (!Q_stricmp (ent->classname, "flamebarrel")) {
-			G_AddEvent( ent, EV_FLAMEBARREL_BOUNCE, 0 );
-		} else {*/
 		G_AddEvent( ent, EV_GRENADE_BOUNCE, BG_FootstepForSurface( trace->surfaceFlags ) );
-//		}
 		return;
 	}
-
-	// Gordon: unused?
-/*	if (other->takedamage && ent->s.density == 1)
-	{
-		G_ExplodeMissilePoisonGas (ent);
-		return;
-	}*/
 
 	// impact damage
 	if ( other->takedamage || other->dmgparent ) {
@@ -228,8 +216,6 @@ void G_MissileImpact( gentity_t *ent, trace_t *trace, int impactDamage ) {
 		event = EV_MISSILE_HIT;
 		param = DirToByte( trace->plane.normal );
 		otherentnum = other->s.number;
-//		G_AddEvent( ent, EV_MISSILE_HIT, DirToByte( trace->plane.normal ) );
-//		ent->s.otherEntityNum = other->s.number;
 	} else {
 		// Ridah, try projecting it in the direction it came from, for better decals
 		vec3_t dir;
@@ -238,29 +224,10 @@ void G_MissileImpact( gentity_t *ent, trace_t *trace, int impactDamage ) {
 
 		event = EV_MISSILE_MISS;
 		param = DirToByte( dir );
-//		G_AddEvent( ent, EV_MISSILE_MISS, DirToByte( dir ) );
 	}
-
-//	ent->freeAfterEvent = qtrue;
-
-	// change over to a normal entity right at the point of impact
-//	etype = ent->s.eType;
-//	ent->s.eType = ET_GENERAL;
-
-//	SnapVectorTowards( trace->endpos, ent->s.pos.trBase );	// save net bandwidth
-/*	{
-		gentity_t* tent;
-
-		tent = G_TempEntity( trace->endpos, EV_RAILTRAIL );
-		VectorMA(trace->endpos, 16, trace->plane.normal, tent->s.origin2);
-		tent->s.dmgFlags = 0;
-	}*/
-
-//	G_SetOrigin( ent, trace->endpos );
 
 	temp = G_TempEntity( trace->endpos, event );
 	temp->s.otherEntityNum = otherentnum;
-//	temp->r.svFlags |= SVF_BROADCAST;
 	temp->s.eventParm = param;
 	temp->s.weapon = ent->s.weapon;
 	temp->s.clientNum = ent->r.ownerNum;
@@ -274,8 +241,6 @@ void G_MissileImpact( gentity_t *ent, trace_t *trace, int impactDamage ) {
 	if ( ent->splashDamage ) {
 		G_RadiusDamage( trace->endpos, ent, ent->parent, ent->splashDamage, ent->splashRadius, other, ent->splashMethodOfDeath );
 	}
-
-//	trap_LinkEntity( ent );
 
 	G_FreeEntity( ent );
 }
