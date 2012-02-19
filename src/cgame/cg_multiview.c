@@ -579,13 +579,6 @@ void CG_mvDraw( cg_window_t *sw ) {
 
 	cg.refdef_current = &cg.refdef;
 
-
-#if 0
-	cg.refdef_current = &refdef;
-	CG_DrawStringExt( 1, 1, ci->name, colorWhite, qtrue, qtrue, 8, 8, 0 );
-	cg.refdef_current = &cg.refdef;
-#endif
-
 	CG_mvWindowOverlay( pID, b_x, b_y, b_w, b_h, s, sw->state, ( sw == cg.mvCurrentActive ) );
 	if ( sw == cg.mvCurrentActive ) {
 		trap_S_Respatialize( cg.clientNum, refdef.vieworg, refdef.viewaxis, qfalse );

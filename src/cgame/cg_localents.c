@@ -228,20 +228,11 @@ void CG_FragmentBounceMark( localEntity_t *le, trace_t *trace ) {
 		// don't drop too many blood marks
 		if ( !( lastBloodMark > cg.time || lastBloodMark > cg.time - 100 ) ) {
 			radius = 16 + ( rand() & 31 );
-			//%	CG_ImpactMark( cgs.media.bloodDotShaders[rand()%5], trace->endpos, trace->plane.normal, random()*360,
-			//%		1,1,1,1, qtrue, radius, qfalse, cg_bloodTime.integer * 1000 );
-			#if 0
-			VectorSubtract( vec3_origin, trace->plane.normal, projection );
-			projection[ 3 ] = radius * 2.0f;
-			VectorMA( trace->endpos, -8.0f, projection, markOrigin );
-			CG_ImpactMark( cgs.media.bloodDotShaders[ rand() % 5 ], markOrigin, projection, radius, random() * 360.0f, 1.0f, 1.0f, 1.0f, 1.0f, cg_bloodTime.integer * 1000 );
-			#else
 			VectorSet( projection, 0, 0, -1 );
 			projection[ 3 ] = radius;
 			Vector4Set( color, 1.0f, 1.0f, 1.0f, 1.0f );
 			trap_R_ProjectDecal( cgs.media.bloodDotShaders[ rand() % 5 ], 1, (vec3_t*) trace->endpos, projection, color,
 								 cg_bloodTime.integer * 1000, ( cg_bloodTime.integer * 1000 ) >> 4 );
-			#endif
 			lastBloodMark = cg.time;
 		}
 	}
@@ -598,47 +589,6 @@ void CG_AddFragment( localEntity_t *le ) {
 			CG_FreeLocalEntity( le );
 			return;
 		} else {
-#if 0
-			// FIXME: re-add gibmodel support?
-			clientInfo_t        *ci;
-			int clientNum;
-			localEntity_t       *nle;
-			vec3_t dir;
-			bg_character_t      *character;
-
-
-			clientNum = le->ownerNum;
-			if ( clientNum < 0 || clientNum >= MAX_CLIENTS ) {
-				CG_Error( "Bad clientNum on player entity" );
-			}
-			ci = &cgs.clientinfo[ clientNum ];
-			character = CG_CharacterForClientinfo( ci, NULL );
-
-			// spawn some new fragments
-			for ( i = 0; i <= le->breakCount; i++ ) {
-				nle = CG_AllocLocalEntity();
-				memcpy( &( nle->leType ), &( le->leType ), sizeof( localEntity_t ) - 2 * sizeof( localEntity_t * ) );
-				if ( nle->breakCount-- < 2 ) {
-					nle->refEntity.hModel = character->gibModels[rand() % 2];
-				} else {
-					nle->refEntity.hModel = character->gibModels[rand() % 4];
-				}
-				// make it smaller
-				nle->endTime = cg.time + 5000 + rand() % 2000;
-				nle->sizeScale *= 0.8;
-				if ( nle->sizeScale < 0.7 ) {
-					nle->sizeScale = 0.7;
-					nle->leBounceSoundType = 0;
-				}
-				// move us a bit
-				VectorNormalize2( nle->pos.trDelta, dir );
-				VectorMA( trace.endpos, 4.0 * le->sizeScale * i, dir, nle->pos.trBase );
-				// randomize vel a bit
-				VectorMA( nle->pos.trDelta, VectorLength( nle->pos.trDelta ) * 0.3, bytedirs[rand() % NUMVERTEXNORMALS], nle->pos.trDelta );
-			}
-			// we're done
-			CG_FreeLocalEntity( le );
-#endif // 0
 			return;
 		}
 	}
@@ -899,34 +849,6 @@ void CG_AddDebrisElements( localEntity_t *le ) {
 		// add a trail
 		lifeFrac = (float)( t - le->startTime ) / (float)( le->endTime - le->startTime );
 
-#if 0
-		// fire
-#if 1   // flame
-		if ( le->effectWidth > 0 ) {
-			le->headJuncIndex = CG_AddSparkJunc( le->headJuncIndex,
-												 le, // rain - zinx's trail fix
-												 cgs.media.fireTrailShader,
-												 le->refEntity.origin,
-												 (int)( 500.0 * ( 0.5 + 0.5 * ( 1.0 - lifeFrac ) ) ), // trail life
-												 1.0, // alpha
-												 0.5, // end alpha
-												 3, // start width
-												 le->effectWidth ); // end width
-#else   // spark line
-		if ( le->effectWidth > 0 ) {
-			le->headJuncIndex = CG_AddSparkJunc( le->headJuncIndex,
-												 le, // rain - zinx's trail fix
-												 cgs.media.sparkParticleShader,
-												 le->refEntity.origin,
-												 (int)( 600.0 * ( 0.5 + 0.5 * ( 0.5 - lifeFrac ) ) ), // trail life
-												 1.0 - lifeFrac * 2, // alpha
-												 0.5 * ( 1.0 - lifeFrac ), // end alpha
-												 5.0 * ( 1.0 - lifeFrac ), // start width
-												 5.0 * ( 1.0 - lifeFrac ) ); // end width
-#endif
-		}
-#endif
-
 		// smoke
 		if ( le->effectFlags & 1 ) {
 			le->headJuncIndex2 = CG_AddSmokeJunc( le->headJuncIndex2,
@@ -938,14 +860,6 @@ void CG_AddDebrisElements( localEntity_t *le ) {
 												  1, // start width
 												  (int)( 60.0 * ( 0.5 + 0.5 * ( 1.0 - lifeFrac ) ) ) ); // end width
 		}
-
-		// if it is in a nodrop zone, remove it
-		// this keeps gibs from waiting at the bottom of pits of death
-		// and floating levels
-//		if ( CG_PointContents( trace.endpos, 0 ) & CONTENTS_NODROP ) {
-//			CG_FreeLocalEntity( le );
-//			return;
-//		}
 
 		if ( trace.fraction < 1.0 ) {
 			// reflect the velocity on the trace plane

@@ -3386,32 +3386,6 @@ static void CG_ScreenFade( void ) {
 	}
 }
 
-#if 0 // rain - unused
-// JPW NERVE
-void CG_Draw2D2( void ) {
-	qhandle_t weapon;
-
-	trap_R_SetColor( NULL );
-
-	CG_DrawPic( 0,480, 640, -70, cgs.media.hud1Shader );
-
-	if ( !BG_PlayerMounted( cg.snap->ps.eFlags ) ) {
-		switch ( cg.snap->ps.weapon ) {
-		case WP_COLT:
-		case WP_LUGER:
-			weapon = cgs.media.hud2Shader;
-			break;
-		case WP_KNIFE:
-			weapon = cgs.media.hud5Shader;
-			break;
-		default:
-			weapon = cgs.media.hud3Shader;
-		}
-		CG_DrawPic( 220,410, 200,-200,weapon );
-	}
-}
-#endif
-
 /*
 =================
 CG_DrawCompassIcon
@@ -4448,23 +4422,12 @@ void CG_ShakeCamera() {
 	x = ( cg.cameraShakeTime - cg.time ) / cg.cameraShakeLength;
 
 	// ydnar: move the camera
-	#if 0
-	// up/down
-	val = sin( M_PI * 8 * x + cg.cameraShakePhase ) * x * 18.0f * cg.cameraShakeScale;
-	cg.refdefViewAngles[0] += val;
-
-	// left/right
-	val = sin( M_PI * 15 * x + cg.cameraShakePhase ) * x * 16.0f * cg.cameraShakeScale;
-	cg.refdefViewAngles[1] += val;
-	#else
-	// move
 	val = sin( M_PI * 7 * x + cg.cameraShakePhase ) * x * 4.0f * cg.cameraShakeScale;
 	cg.refdef.vieworg[ 2 ] += val;
 	val = sin( M_PI * 13 * x + cg.cameraShakePhase ) * x * 4.0f * cg.cameraShakeScale;
 	cg.refdef.vieworg[ 1 ] += val;
 	val = cos( M_PI * 17 * x + cg.cameraShakePhase ) * x * 4.0f * cg.cameraShakeScale;
 	cg.refdef.vieworg[ 0 ] += val;
-	#endif
 
 	AnglesToAxis( cg.refdefViewAngles, cg.refdef.viewaxis );
 }

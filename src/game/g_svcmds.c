@@ -921,11 +921,6 @@ void Svcmd_Campaign_f( void ) {
 
 	// we got a campaign, start it
 	trap_Cvar_Set( "g_gametype", va( "%i", GT_WOLF_CAMPAIGN ) );
-#if 0
-	if ( g_developer.integer ) {
-		trap_SendConsoleCommand( EXEC_APPEND, va( "devmap %s\n", campaign->mapnames[0] ) );
-	} else
-#endif
 	trap_SendConsoleCommand( EXEC_APPEND, va( "map %s\n", campaign->mapnames[0] ) );
 }
 

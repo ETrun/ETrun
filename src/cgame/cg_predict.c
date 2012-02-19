@@ -944,12 +944,7 @@ void CG_PredictPlayerState( void ) {
 	// rain - NEIN - this'll cause us to execute events from the next frame
 	// early, resulting in doubled events and the like.  it seems to be
 	// worse as far as prediction, too, so BLAH at id. (#405)
-#if 0
-	if ( cg.nextSnap && !cg.nextFrameTeleport && !cg.thisFrameTeleport ) {
-		cg.predictedPlayerState = cg.nextSnap->ps;
-		cg.physicsTime = cg.nextSnap->serverTime;
-	} else {
-#endif
+
 	cg.predictedPlayerState = cg.snap->ps;
 	cg.physicsTime = cg.snap->serverTime;
 //	}

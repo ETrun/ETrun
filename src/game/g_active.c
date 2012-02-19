@@ -812,10 +812,6 @@ void WolfFindMedic( gentity_t *self ) {
 
 		if ( dist < bestdist ) {
 			medic = cl->ps.clientNum;
-#if 0 // rain - not sure what the point of this is
-			vectoangles( end, temp );
-			self->client->ps.stats[STAT_DEAD_YAW] = temp[YAW];
-#endif
 			bestdist = dist;
 		}
 	}
@@ -1632,14 +1628,6 @@ void ClientEndFrame( gentity_t *ent ) {
 		ent->pain_debounce_time += time_delta;
 		ent->s.onFireEnd += time_delta;
 	}
-
-	// save network bandwidth
-#if 0
-	if ( !g_synchronousClients->integer && ent->client->ps.pm_type == PM_NORMAL ) {
-		// FIXME: this must change eventually for non-sync demo recording
-		VectorClear( ent->client->ps.viewangles );
-	}
-#endif
 
 	//
 	// If the end of unit layout is displayed, don't give

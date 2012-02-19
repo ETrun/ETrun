@@ -178,27 +178,12 @@ void CG_ImpactMark( qhandle_t markShader, vec3_t origin, vec4_t projection, floa
 	/* create the full polygon */
 	for ( i = 0; i < 3; i++ )
 	{
-		/* old */
-		//%	points[ 0 ][ i ] = pushedOrigin[ i ] - radius * axis[ 1 ][ i ] - radius * axis[ 2 ][ i ];
-		//%	points[ 1 ][ i ] = pushedOrigin[ i ] + radius * axis[ 1 ][ i ] - radius * axis[ 2 ][ i ];
-		//%	points[ 2 ][ i ] = pushedOrigin[ i ] + radius * axis[ 1 ][ i ] + radius * axis[ 2 ][ i ];
-		//%	points[ 3 ][ i ] = pushedOrigin[ i ] - radius * axis[ 1 ][ i ] + radius * axis[ 2 ][ i ];
-
 		/* new */
 		points[ 0 ][ i ] = pushedOrigin[ i ] - radius * axis[ 1 ][ i ] - radius * axis[ 2 ][ i ];
 		points[ 1 ][ i ] = pushedOrigin[ i ] - radius * axis[ 1 ][ i ] + radius * axis[ 2 ][ i ];
 		points[ 2 ][ i ] = pushedOrigin[ i ] + radius * axis[ 1 ][ i ] + radius * axis[ 2 ][ i ];
 		points[ 3 ][ i ] = pushedOrigin[ i ] + radius * axis[ 1 ][ i ] - radius * axis[ 2 ][ i ];
 	}
-
-	/* debug code */
-	#if 0
-	VectorSet( points[ 0 ], origin[ 0 ] - radius, origin[ 1 ] - radius, origin[ 2 ] );
-	VectorSet( points[ 1 ], origin[ 0 ] - radius, origin[ 1 ] + radius, origin[ 2 ] );
-	VectorSet( points[ 2 ], origin[ 0 ] + radius, origin[ 1 ] + radius, origin[ 2 ] );
-	VectorSet( points[ 3 ], origin[ 0 ] + radius, origin[ 1 ] - radius, origin[ 2 ] );
-	CG_Printf( "Dir: %f %f %f\n", dir[ 0 ], dir[ 1 ], dir[ 2 ] );
-	#endif
 
 	/* set color */
 	color[ 0 ] = r;

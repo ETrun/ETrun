@@ -226,22 +226,6 @@ typedef struct {
 #define UI_ITEM1_PIC    "window_item1_pic"
 #define UI_ITEM2_PIC    "window_item2_pic"
 
-#if 0 // rain - not used
-static uiitemType_t itemTypes[] = {
-	{ UI_KNIFE_PIC,     PT_KNIFE,       "ui/assets/weapon_knife.tga" },
-	{ UI_PISTOL_PIC,    PT_PISTOL,      "ui/assets/weapon_colt1911.tga" },
-
-	{ UI_WEAPON_PIC,    PT_RIFLE,       "ui/assets/weapon_mauser.tga" },
-
-	{ UI_ITEM1_PIC,     PT_MEDKIT,      "ui/assets/item_medkit.tga" },
-
-	{ UI_ITEM1_PIC,     PT_GRENADES,    "ui/assets/weapon_grenade.tga" },
-	{ UI_ITEM2_PIC,     PT_EXPLOSIVES,  "ui/assets/weapon_dynamite.tga" },
-
-	{ NULL, 0, NULL }
-};
-#endif
-
 extern displayContextDef_t *DC;
 
 /*
@@ -5497,30 +5481,6 @@ static int UI_MapCountByGameType( qboolean singlePlayer ) {
 
 /*
 ==================
-UI_MapCountByCampaign
-==================
-*/
-#if 0 // rain - unused
-static int UI_MapCountByCampaign( qboolean singlePlayer ) {
-	int campaign;
-	int i, count = 0;
-
-	campaign = singlePlayer ? ui_currentCampaign.integer : ui_currentNetCampaign.integer;
-
-	for ( i = 0; i < uiInfo.campaignList[campaign].mapCount; i++ ) {
-		if ( singlePlayer && ( uiInfo.campaignList[i].typeBits & ( 1 << GT_SINGLE_PLAYER ) ) ) {
-			count++;
-		} else if ( !singlePlayer && !( uiInfo.campaignList[i].typeBits & ( 1 << GT_SINGLE_PLAYER ) ) ) {
-			count++;
-		}
-	}
-
-	return( count );
-}
-#endif
-
-/*
-==================
 UI_CampaignCount
 ==================
 */
@@ -7114,72 +7074,6 @@ static qboolean GameType_Parse( char **p, qboolean join ) {
 	return qfalse;
 }
 
-#if 0
-static qboolean MapList_Parse( char **p ) {
-	char *token;
-
-	token = COM_ParseExt( p, qtrue );
-
-	if ( token[0] != '{' ) {
-		return qfalse;
-	}
-
-	uiInfo.mapCount = 0;
-
-	while ( 1 ) {
-		token = COM_ParseExt( p, qtrue );
-
-		if ( Q_stricmp( token, "}" ) == 0 ) {
-			return qtrue;
-		}
-
-		if ( !token || token[0] == 0 ) {
-			return qfalse;
-		}
-
-		if ( token[0] == '{' ) {
-			if ( !String_Parse( p, &uiInfo.mapList[uiInfo.mapCount].mapName ) || !String_Parse( p, &uiInfo.mapList[uiInfo.mapCount].mapLoadName )
-				 || !Int_Parse( p, &uiInfo.mapList[uiInfo.mapCount].teamMembers ) ) {
-				return qfalse;
-			}
-
-			if ( !String_Parse( p, &uiInfo.mapList[uiInfo.mapCount].opponentName ) ) {
-				return qfalse;
-			}
-
-			uiInfo.mapList[uiInfo.mapCount].typeBits = 0;
-
-			while ( 1 ) {
-				token = COM_ParseExt( p, qtrue );
-				if ( token[0] >= '0' && token[0] <= '9' ) {
-					uiInfo.mapList[uiInfo.mapCount].typeBits |= ( 1 << ( token[0] - 0x030 ) );
-					if ( !Int_Parse( p, &uiInfo.mapList[uiInfo.mapCount].timeToBeat[token[0] - 0x30] ) ) {
-						return qfalse;
-					}
-				} else {
-					break;
-				}
-			}
-
-			//mapList[mapCount].imageName = String_Alloc(va("levelshots/%s", mapList[mapCount].mapLoadName));
-			//if (uiInfo.mapCount == 0) {
-			// only load the first cinematic, selection loads the others
-			//  uiInfo.mapList[uiInfo.mapCount].cinematic = trap_CIN_PlayCinematic(va("%s.roq",uiInfo.mapList[uiInfo.mapCount].mapLoadName), qfalse, qfalse, qtrue, 0, 0, 0, 0);
-			//}
-			uiInfo.mapList[uiInfo.mapCount].cinematic = -1;
-			uiInfo.mapList[uiInfo.mapCount].levelShot = trap_R_RegisterShaderNoMip( va( "levelshots/%s_small", uiInfo.mapList[uiInfo.mapCount].mapLoadName ) );
-
-			if ( uiInfo.mapCount < MAX_MAPS ) {
-				uiInfo.mapCount++;
-			} else {
-				Com_Printf( "Too many maps, last one replaced!\n" );
-			}
-		}
-	}
-	return qfalse;
-}
-#endif
-
 static void UI_ParseGameInfo( const char *teamFile ) {
 	char    *token;
 	char *p;
@@ -7849,96 +7743,6 @@ void Text_PaintCenter( float x, float y, float scale, vec4_t color, const char *
 	int len = Text_Width( text, scale, 0 );
 	Text_Paint( x - len / 2, y, scale, color, text, 0, 0, ITEM_TEXTSTYLE_SHADOWEDMORE );
 }
-
-#if 0 // rain - unused
-#define ESTIMATES 80
-static void UI_DisplayDownloadInfo( const char *downloadName, float centerPoint, float yStart, float scale ) {
-	static char dlText[]    = "Downloading:";
-	static char etaText[]   = "Estimated time left:";
-	static char xferText[]  = "Transfer rate:";
-	static int tleEstimates[ESTIMATES] = { 60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,
-										   60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,
-										   60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,
-										   60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60,60 };
-	static int tleIndex = 0;
-
-	int downloadSize, downloadCount, downloadTime;
-	char dlSizeBuf[64], totalSizeBuf[64], xferRateBuf[64], dlTimeBuf[64];
-	int xferRate;
-	const char *s;
-
-	vec4_t bg_color = { 0.3f, 0.3f, 0.3f, 0.8f };
-
-	downloadSize = trap_Cvar_VariableValue( "cl_downloadSize" );
-	downloadCount = trap_Cvar_VariableValue( "cl_downloadCount" );
-	downloadTime = trap_Cvar_VariableValue( "cl_downloadTime" );
-
-	// Background
-	UI_FillRect( 0, yStart + 185, 640, 83, bg_color );
-
-	UI_SetColor( colorYellow );
-	Text_Paint( 92, yStart + 210, scale, colorYellow, dlText, 0, 64, ITEM_TEXTSTYLE_SHADOWEDMORE );
-	Text_Paint( 35, yStart + 235, scale, colorYellow, etaText, 0, 64, ITEM_TEXTSTYLE_SHADOWEDMORE );
-	Text_Paint( 86, yStart + 260, scale, colorYellow, xferText, 0, 64, ITEM_TEXTSTYLE_SHADOWEDMORE );
-
-	if ( downloadSize > 0 ) {
-		s = va( "%s (%d%%)", downloadName, downloadCount * 100 / downloadSize );
-	} else {
-		s = downloadName;
-	}
-
-	Text_Paint( 260, yStart + 210, scale, colorYellow, s, 0, 0, ITEM_TEXTSTYLE_SHADOWEDMORE );
-
-	UI_ReadableSize( dlSizeBuf,     sizeof dlSizeBuf,       downloadCount );
-	UI_ReadableSize( totalSizeBuf,  sizeof totalSizeBuf,    downloadSize );
-
-	if ( downloadCount < 4096 || !downloadTime ) {
-		Text_PaintCenter( centerPoint, yStart + 235, scale, colorYellow, "estimating", 0 );
-		Text_PaintCenter( centerPoint, yStart + 340, scale, colorYellow, va( "(%s of %s copied)", dlSizeBuf, totalSizeBuf ), 0 );
-	} else {
-		if ( ( uiInfo.uiDC.realTime - downloadTime ) / 1000 ) {
-			xferRate = downloadCount / ( ( uiInfo.uiDC.realTime - downloadTime ) / 1000 );
-		} else {
-			xferRate = 0;
-		}
-		UI_ReadableSize( xferRateBuf, sizeof xferRateBuf, xferRate );
-
-		// Extrapolate estimated completion time
-		if ( downloadSize && xferRate ) {
-			int n = downloadSize / xferRate; // estimated time for entire d/l in secs
-			int timeleft = 0, i;
-
-			// We do it in K (/1024) because we'd overflow around 4MB
-			tleEstimates[ tleIndex ] = ( n - ( ( ( downloadCount / 1024 ) * n ) / ( downloadSize / 1024 ) ) );
-			tleIndex++;
-			if ( tleIndex >= ESTIMATES ) {
-				tleIndex = 0;
-			}
-
-			for ( i = 0; i < ESTIMATES; i++ )
-				timeleft += tleEstimates[ i ];
-
-			timeleft /= ESTIMATES;
-
-			UI_PrintTime( dlTimeBuf, sizeof dlTimeBuf, timeleft );
-
-			Text_Paint( 260, yStart + 235, scale, colorYellow, dlTimeBuf, 0, 0, ITEM_TEXTSTYLE_SHADOWEDMORE );
-			Text_PaintCenter( centerPoint, yStart + 340, scale, colorYellow, va( "(%s of %s copied)", dlSizeBuf, totalSizeBuf ), 0 );
-		} else {
-			Text_PaintCenter( centerPoint, yStart + 235, scale, colorYellow, "estimating", 0 );
-			if ( downloadSize ) {
-				Text_PaintCenter( centerPoint, yStart + 340, scale, colorYellow, va( "(%s of %s copied)", dlSizeBuf, totalSizeBuf ), 0 );
-			} else {
-				Text_PaintCenter( centerPoint, yStart + 340, scale, colorYellow, va( "(%s copied)", dlSizeBuf ), 0 );
-			}
-		}
-
-		if ( xferRate ) {
-			Text_Paint( 260, yStart + 260, scale, colorYellow, va( "%s/Sec", xferRateBuf ), 0, 0, ITEM_TEXTSTYLE_SHADOWEDMORE );
-		}
-	}
-}
-#endif
 
 /*
 ========================
@@ -8702,11 +8506,6 @@ void UI_Campaign_f( void ) {
 
 	// we got a campaign, start it
 	trap_Cvar_Set( "g_gametype", va( "%i", GT_WOLF_CAMPAIGN ) );
-#if 0
-	if ( trap_Cvar_VariableValue( "developer" ) ) {
-		trap_Cmd_ExecuteText( EXEC_APPEND, va( "devmap %s\n", campaign->mapInfos[0]->mapLoadName ) );
-	} else
-#endif
 	trap_Cmd_ExecuteText( EXEC_APPEND, va( "map %s\n", campaign->mapInfos[0]->mapLoadName ) );
 }
 

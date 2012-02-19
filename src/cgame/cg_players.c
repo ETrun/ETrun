@@ -1507,18 +1507,6 @@ static qboolean CG_PlayerShadow( centity_t *cent, float *shadowPlane ) {
 				// ydnar: add a bit of height so foot shadows don't clip into sloped geometry as much
 				origin[ 2 ] += 5.0f;
 
-				#if 0
-				alpha = 1.0 - ( ( origin[2] - ( *shadowPlane + ZOFS ) ) / shadowParts[tagIndex].maxdist );
-				if ( alpha < 0 ) {
-					continue;
-				}
-				if ( alpha > shadowParts[tagIndex].maxalpha ) {
-					alpha = shadowParts[tagIndex].maxalpha;
-				}
-				alpha *= ( 1.0 - distFade );
-				origin[2] = *shadowPlane;
-				#endif
-
 				AxisToAngles( axis, angles );
 
 				// ydnar: decal remix
@@ -1964,118 +1952,6 @@ void CG_Player( centity_t *cent ) {
 	VectorCopy( lightorigin, acc.lightingOrigin );
 
 	CG_AddRefEntityWithPowerups( &body, cent->currentState.powerups, ci->team, &cent->currentState, cent->fireRiseDir );
-
-	// ydnar debug
-	#if 0
-	{
-		int y;
-		vec3_t oldOrigin;
-
-		VectorCopy( body.origin, oldOrigin );
-		body.origin[ 0 ] -= 20;
-		//body.origin[ 0 ] -= 20 * 36;
-		for ( y = 0; y < 40; y++ )
-		{
-			body.origin[ 0 ] += 1;
-			//body.origin[ 0 ] += 36;
-			//body.origin[ 2 ] = BG_GetGroundHeightAtPoint( body.origin ) + (oldOrigin[2] - BG_GetGroundHeightAtPoint( oldOrigin ));
-			body.frame += ( y & 1 ) ? 1 : -1;
-			body.oldframe += ( y & 1 ) ? -1 : 1;
-			CG_AddRefEntityWithPowerups( &body, cent->currentState.powerups, ci->team, &cent->currentState, cent->fireRiseDir );
-		}
-		VectorCopy( oldOrigin, body.origin );
-	}
-	#endif
-
-// DEBUG
-	/*{
-		int			x, zd, zu;
-		vec3_t		bmins, bmaxs;
-
-		x = (cent->currentState.solid & 255);
-		zd = ((cent->currentState.solid>>8) & 255);
-		zu = ((cent->currentState.solid>>16) & 255) - 32;
-
-		bmins[0] = bmins[1] = -x;
-		bmaxs[0] = bmaxs[1] = x;
-		bmins[2] = -zd;
-		bmaxs[2] = zu;
-
-		VectorAdd( bmins, cent->lerpOrigin, bmins );
-		VectorAdd( bmaxs, cent->lerpOrigin, bmaxs );
-
-		CG_RailTrail( NULL, bmins, bmaxs, 1 );
-	}*/
-
-	/*{
-		orientation_t tag;
-		int idx;
-		vec3_t start;
-		vec3_t ends[3];
-		vec3_t axis[3];
-		trap_R_LerpTag( &tag, &body, "tag_head", 0 );
-
-		VectorCopy( body.origin, start );
-
-		for( idx = 0; idx < 3; idx++ ) {
-			VectorMA( start, tag.origin[idx], body.axis[idx], start );
-		}
-
-		MatrixMultiply( tag.axis, body.axis, axis );
-
-		for( idx = 0; idx < 3; idx++ ) {
-			VectorMA( start, 32, axis[idx], ends[idx] );
-			CG_RailTrail2( NULL, start, ends[idx] );
-		}
-	}
-	{
-		vec3_t mins, maxs;
-		VectorCopy( cg.predictedPlayerState.mins, mins );
-		VectorCopy( cg.predictedPlayerState.maxs, maxs );
-
-		if( cg.predictedPlayerState.eFlags & EF_PRONE ) {
-			maxs[2] = maxs[2] - (cg.predictedPlayerState.standViewHeight - PRONE_VIEWHEIGHT + 8);
-		} else if( cg.predictedPlayerState.pm_flags & PMF_DUCKED ) {
-			maxs[2] = cg.predictedPlayerState.crouchMaxZ;
-		}
-
-		VectorAdd( cent->lerpOrigin, mins, mins );
-		VectorAdd( cent->lerpOrigin, maxs, maxs );
-		CG_RailTrail( NULL, mins, maxs, 1 );
-
-		if( cg.predictedPlayerState.eFlags & EF_PRONE ) {
-			vec3_t org, forward;
-
-			// The legs
-			VectorCopy( playerlegsProneMins, mins );
-			VectorCopy( playerlegsProneMaxs, maxs );
-
-			AngleVectors( cent->lerpAngles, forward, NULL, NULL );
-			forward[2] = 0;
-			VectorNormalizeFast( forward );
-
-			org[0] = cent->lerpOrigin[0] + forward[0] * -32;
-			org[1] = cent->lerpOrigin[1] + forward[1] * -32;
-			org[2] = cent->lerpOrigin[2] + cg.pmext.proneLegsOffset;
-
-			VectorAdd( org, mins, mins );
-			VectorAdd( org, maxs, maxs );
-			CG_RailTrail( NULL, mins, maxs, 1 );
-
-			// And the head
-			VectorSet( mins, -6, -6, -22 );
-			VectorSet( maxs, 6, 6, -10 );
-
-			org[0] = cent->lerpOrigin[0] + forward[0] * 12;
-			org[1] = cent->lerpOrigin[1] + forward[1] * 12;
-			org[2] = cent->lerpOrigin[2];
-
-			VectorAdd( org, mins, mins );
-			VectorAdd( org, maxs, maxs );
-			CG_RailTrail( NULL, mins, maxs, 1 );
-		}
-	}*/
-// DEBUG
 
 	//
 	// add the head

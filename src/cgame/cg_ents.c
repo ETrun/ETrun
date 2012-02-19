@@ -192,15 +192,9 @@ void CG_AddLightstyle( centity_t *cent ) {
 	lightval = ( lastch * ( 1.0 - cent->dl_backlerp ) ) + ( nextch * cent->dl_backlerp );
 
 	// ydnar: dlight values go from 0-1.5ish
-	#if 0
-	lightval = ( lightval * ( 1000.0f / 24.0f ) ) - 200.0f; // they want 'm' as the "middle" value as 300
-	lightval = max( 0.0f,    lightval );
-	lightval = min( 1000.0f, lightval );
-	#else
 	lightval *= 0.071429;
 	lightval = max( 0.0f,   lightval );
 	lightval = min( 20.0f,  lightval );
-	#endif
 
 	cl = cent->currentState.constantLight;
 	r = cl & 255;

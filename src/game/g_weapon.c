@@ -1744,24 +1744,6 @@ evilbanigoto:
 			} else {
 				return;
 			}
-//bani - no tripmine...
-#if 0
-		} else if ( traceEnt->methodOfDeath == MOD_TRIPMINE ) {
-			// Give health until it is full, don't continue
-			traceEnt->health += 3;
-
-			G_PrintClientSpammyCenterPrint( ent - g_entities, "Disarming tripmine..." );
-
-			if ( traceEnt->health >= 250 ) {
-				traceEnt->health = 255;
-				traceEnt->think = G_FreeEntity;
-				traceEnt->nextthink = level.time + FRAMETIME;
-
-				Add_Ammo( ent, WP_TRIPMINE, 1, qfalse );
-			} else {
-				return;
-			}
-#endif
 		} else
 		if ( traceEnt->methodOfDeath == MOD_DYNAMITE ) {
 

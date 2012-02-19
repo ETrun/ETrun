@@ -367,18 +367,6 @@ void PM_StepSlideMove( qboolean gravity ) {
 		PM_ClipVelocity( pm->ps->velocity, trace.plane.normal, pm->ps->velocity, OVERCLIP );
 	}
 
-#if 0
-	// if the down trace can trace back to the original position directly, don't step
-	PM_TraceAll( &trace, pm->ps->origin, start_o );
-	if ( trace.fraction == 1.0 ) {
-		// use the original move
-		VectorCopy( down_o, pm->ps->origin );
-		VectorCopy( down_v, pm->ps->velocity );
-		if ( pm->debugLevel ) {
-			Com_Printf( "%i:bend\n", c_pmove );
-		}
-	} else
-#endif
 	{
 		// use the step move
 		float delta;

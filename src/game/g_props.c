@@ -1253,17 +1253,6 @@ void Props_Chair_Touch( gentity_t *self, gentity_t *other, trace_t *trace ) {
 
 	has_moved = Prop_Touch( self, other, v );
 
-#if 0
-	if ( !has_moved && /* isBot */ ) {
-		// RF, alert AI of sound event
-//		AICast_AudibleEvent( self->s.number, self->r.currentOrigin, 384 );
-
-		// other could play kick animation here
-		Props_Chair_Die( self, other, other, 100, 0 );
-		return;
-	}
-#endif // 0
-
 	Prop_Check_Ground( self );
 
 	if ( level.time > self->random && has_moved ) {

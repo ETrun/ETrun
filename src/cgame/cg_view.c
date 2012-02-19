@@ -646,15 +646,6 @@ static void CG_OffsetFirstPersonView( void ) {
 		}
 	}
 
-	// add pitch based on fall kick
-#if 0
-	ratio = ( cg.time - cg.landTime ) / FALL_TIME;
-	if ( ratio < 0 ) {
-		ratio = 0;
-	}
-	angles[PITCH] += ratio * cg.fall_value;
-#endif
-
 	// add angles based on velocity
 	VectorCopy( cg.predictedPlayerState.velocity, predictedVelocity );
 
@@ -770,19 +761,6 @@ static void CG_OffsetFirstPersonView( void ) {
 	// add kick offset
 
 	VectorAdd( origin, cg.kick_origin, origin );
-
-	// pivot the eye based on a neck length
-#if 0
-	{
-#define NECK_LENGTH     8
-		vec3_t forward, up;
-
-		cg.refdef_current->vieworg[2] -= NECK_LENGTH;
-		AngleVectors( cg.refdefViewAngles, forward, NULL, up );
-		VectorMA( cg.refdef_current->vieworg, 3, forward, cg.refdef_current->vieworg );
-		VectorMA( cg.refdef_current->vieworg, NECK_LENGTH, up, cg.refdef_current->vieworg );
-	}
-#endif
 }
 
 //======================================================================
@@ -1484,81 +1462,6 @@ void CG_DrawSkyBoxPortal( qboolean fLocalView ) {
 
 	memcpy( &rd, cg.refdef_current, sizeof( refdef_t ) );
 	VectorCopy( cg.skyboxViewOrg, rd.vieworg );
-
-// Updates for window views... remove me when things have been verified
-#if 0
-	fov_x = cg.skyboxViewFov;
-
-	if ( cg.predictedPlayerState.pm_type == PM_INTERMISSION ) {
-		// if in intermission, use a fixed value
-		fov_x = 90;
-	} else {
-		// user selectable
-		fov_x = cg_fov.value;
-		if ( fov_x < 1 ) {
-			fov_x = 1;
-		} else if ( fov_x > 160 ) {
-			fov_x = 160;
-		}
-
-		// account for zooms
-		if ( cg.zoomval ) {
-			zoomFov = cg.zoomval;   // (SA) use user scrolled amount
-
-			if ( zoomFov < 1 ) {
-				zoomFov = 1;
-			} else if ( zoomFov > 160 ) {
-				zoomFov = 160;
-			}
-		} else {
-			zoomFov = lastfov;
-		}
-
-		// do smooth transitions for the binocs
-		if ( cg.zoomedBinoc ) {        // binoc zooming in
-			f = ( cg.time - cg.zoomTime ) / (float)ZOOM_TIME;
-			if ( f > 1.0 ) {
-				fov_x = zoomFov;
-			} else {
-				fov_x = fov_x + f * ( zoomFov - fov_x );
-			}
-			lastfov = fov_x;
-		} else if ( cg.zoomval ) {    // zoomed by sniper/snooper
-			fov_x = cg.zoomval;
-			lastfov = fov_x;
-		} else {                    // binoc zooming out
-			f = ( cg.time - cg.zoomTime ) / (float)ZOOM_TIME;
-			if ( f > 1.0 ) {
-				fov_x = fov_x;
-			} else {
-				fov_x = zoomFov + f * ( fov_x - zoomFov );
-			}
-		}
-	}
-
-	cg.refdef_current->rdflags &= ~RDF_SNOOPERVIEW;
-
-	// Arnout: mg42 zoom
-	if ( cg.snap->ps.persistant[PERS_HWEAPON_USE] || cg.predictedPlayerState.pm_flags & PMF_PRONE_BIPOD ) {
-		fov_x = 55;
-	}
-
-	cg.refdef_current->time = cg.time;
-
-	x = cg.refdef_current->width / tan( fov_x / 360 * M_PI );
-	fov_y = atan2( cg.refdef_current->height, x );
-	fov_y = fov_y * 360 / M_PI;
-
-	cg.refdef_current->fov_x = fov_x;
-	cg.refdef_current->fov_y = fov_y;
-
-	cg.refdef_current->rdflags |= RDF_SKYBOXPORTAL;
-
-	// draw the skybox
-	trap_R_RenderScene( cg.refdef_current );
-
-	cg.refdef = backuprefdef;
-#endif
 
 	if ( fLocalView ) {
 		float fov_x;

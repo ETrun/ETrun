@@ -491,20 +491,6 @@ panel_button_t debriefHeadingName = {
 	NULL,
 };
 
-#if 0
-panel_button_t debriefHeadingMedals = {
-	NULL,
-	"Medals",
-	{ DB_MEDALS_X, DH_HEADING_Y, 0, 0 },
-	{ 0, 0, 0, 0, 0, 0, 0, 0 },
-	&debriefPlayerListFont, /* font		*/
-	NULL,                   /* keyDown	*/
-	NULL,                   /* keyUp	*/
-	BG_PanelButtonsRender_Text,
-	NULL,
-};
-#endif // 0
-
 panel_button_t debriefHeadingTime = {
 	NULL,
 	"Time",
@@ -698,9 +684,7 @@ panel_button_t* debriefPanelButtons[] = {
 	&debriefPlayerListWindow, &debriefPlayerList, &debriefPlayerListScroll,
 
 	&debriefHeadingRank, &debriefHeadingName,
-#if 0
-	&debriefHeadingMedals,
-#endif // 0
+
 	&debriefHeadingTime, &debriefHeadingXP, &debriefHeadingKills, &debriefHeadingDeaths,
 
 	&debriefPlayerInfoWindow, &debriefPlayerInfoName, &debriefPlayerInfoRank, &debriefPlayerInfoMedals, &debriefPlayerInfoTime, &debriefPlayerInfoXP, &debriefPlayerInfoACC,

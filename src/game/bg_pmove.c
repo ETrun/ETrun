@@ -1121,20 +1121,6 @@ static void PM_WaterMove( void ) {
 		PM_WaterJumpMove();
 		return;
 	}
-#if 0
-	// jump = head for surface
-	if ( pm->cmd.upmove >= 10 ) {
-		if ( pm->ps->velocity[2] > -300 ) {
-			if ( pm->watertype == CONTENTS_WATER ) {
-				pm->ps->velocity[2] = 100;
-			} else if ( pm->watertype == CONTENTS_SLIME ) {
-				pm->ps->velocity[2] = 80;
-			} else {
-				pm->ps->velocity[2] = 50;
-			}
-		}
-	}
-#endif
 	PM_Friction();
 
 	scale = PM_CmdScale( &pm->cmd );
@@ -1184,23 +1170,6 @@ static void PM_WaterMove( void ) {
 
 	PM_SlideMove( qfalse );
 }
-
-// TTimo gcc: defined but not used
-#if 0
-/*
-===================
-PM_InvulnerabilityMove
-
-Only with the invulnerability powerup
-===================
-*/
-static void PM_InvulnerabilityMove( void ) {
-	pm->cmd.forwardmove = 0;
-	pm->cmd.rightmove = 0;
-	pm->cmd.upmove = 0;
-	VectorClear( pm->ps->velocity );
-}
-#endif
 
 /*
 ===================
@@ -1304,17 +1273,6 @@ static void PM_AirMove( void ) {
 		PM_ClipVelocity( pm->ps->velocity, pml.groundTrace.plane.normal,
 						 pm->ps->velocity, OVERCLIP );
 	}
-
-#if 0
-	//ZOID:  If we are on the grapple, try stair-stepping
-	//this allows a player to use the grapple to pull himself
-	//over a ledge
-	if ( pm->ps->pm_flags & PMF_GRAPPLE_PULL ) {
-		PM_StepSlideMove( qtrue );
-	} else {
-		PM_SlideMove( qtrue );
-	}
-#endif
 
 	PM_StepSlideMove( qtrue );
 
@@ -5470,37 +5428,6 @@ void PmoveSingle( pmove_t *pmove ) {
 		pm->cmd.forwardmove = 0;
 		pm->cmd.rightmove = 0;
 		pm->cmd.upmove = 0;
-
-		#if 0
-		VectorClear( pm->ps->velocity );
-
-		// set watertype, and waterlevel
-		PM_SetWaterLevel();
-		pml.previous_waterlevel = pmove->waterlevel;
-
-		// set mins, maxs, and viewheight
-		PM_CheckDuck();
-
-		// set groundentity
-		PM_GroundTrace();
-
-		// handle movement (gravity)
-		{
-			vec3_t endVelocity;
-			VectorCopy( pm->ps->velocity, endVelocity );
-			endVelocity[2] -= pm->ps->gravity * pml.frametime;
-			pm->ps->velocity[2] = ( pm->ps->velocity[2] + endVelocity[2] ) * 0.5;
-			if ( pml.groundPlane ) {
-				PM_ClipVelocity( pm->ps->velocity, pml.groundTrace.plane.normal, pm->ps->velocity, OVERCLIP );
-			}
-		}
-
-		PM_Weapon();
-
-		BG_AnimScriptAnimation( pm->ps, pm->character->animModelInfo, ANIM_MT_IDLE, qtrue );
-
-		return;
-		#endif
 	}
 
 	// set watertype, and waterlevel

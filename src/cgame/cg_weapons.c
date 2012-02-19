@@ -1966,16 +1966,6 @@ static void CG_CalculateWeaponPosition( vec3_t origin, vec3_t angles ) {
 					 ( LAND_DEFLECT_TIME + LAND_RETURN_TIME - delta ) / LAND_RETURN_TIME;
 	}
 
-#if 0
-	// drop the weapon when stair climbing
-	delta = cg.time - cg.stepTime;
-	if ( delta < STEP_TIME / 2 ) {
-		origin[2] -= cg.stepChange * 0.25 * delta / ( STEP_TIME / 2 );
-	} else if ( delta < STEP_TIME ) {
-		origin[2] -= cg.stepChange * 0.25 * ( STEP_TIME - delta ) / ( STEP_TIME / 2 );
-	}
-#endif
-
 	// idle drift
 	if ( ( !( cg.predictedPlayerState.eFlags & EF_MOUNTEDTANK ) ) && ( cg.predictedPlayerState.weapon != WP_MORTAR_SET ) && ( cg.predictedPlayerState.weapon != WP_MOBILE_MG42_SET ) ) {
 		//----(SA) adjustment for MAX KAUFMAN
@@ -5502,18 +5492,10 @@ void CG_MissileHitWallSmall( int weapon, int clientNum, vec3_t origin, vec3_t di
 	//
 
 	// ydnar: testing omnidirectional marks
-	#if 0
-	VectorSubtract( vec3_origin, dir, projection );
-	projection[ 3 ] = radius * 3;
-	VectorMA( origin, -4.0f, projection, markOrigin );
-
-	CG_ImpactMark( mark, markOrigin, projection, radius, random() * 360.0f, 1.0f, 1.0f, 1.0f, 1.0f, cg_markTime.integer );
-	#else
 	VectorSet( projection, 0, 0, -1 );
 	projection[ 3 ] = radius;
 	Vector4Set( color, 1.0f, 1.0f, 1.0f, 1.0f );
 	trap_R_ProjectDecal( mark, 1, (vec3_t*) origin, projection, color, cg_markTime.integer, ( cg_markTime.integer >> 4 ) );
-	#endif
 }
 
 /*
@@ -5779,38 +5761,12 @@ qboolean CG_CalcMuzzlePoint( int entityNum, vec3_t muzzle ) {
 		vec3_t forward;
 
 		// ydnar: this is silly--the entity is a mg42 barrel, so just use itself
-		#if 0
-
-		// find the mg42 we're attached to
-		for ( num = 0 ; num < cg.snap->numEntities ; num++ )
-		{
-			mg42 = &cg_entities[ cg.snap->entities[ num ].number ];
-			if ( mg42->currentState.eType == ET_MG42_BARREL ) {
-				if ( mg42->currentState.number == cent->currentState.number ) {
-					// found it
-
-					VectorCopy( mg42->currentState.pos.trBase, muzzle );
-					AngleVectors( cent->lerpAngles, forward, NULL, NULL );
-					//VectorMA( muzzle, -36, forward, muzzle );
-					VectorMA( muzzle, 40, forward, muzzle );
-					muzzle[2] += DEFAULT_VIEWHEIGHT;
-
-					break;
-				}
-			}
-		}
-
-		#else
-
 		if ( cent->currentState.eType == ET_MG42_BARREL ) {
 			VectorCopy( cent->currentState.pos.trBase, muzzle );
 			AngleVectors( cent->lerpAngles, forward, NULL, NULL );
 			VectorMA( muzzle, 40, forward, muzzle );
 			muzzle[ 2 ] += DEFAULT_VIEWHEIGHT;
 		}
-
-		#endif
-
 	} else if ( cent->currentState.eFlags & EF_MOUNTEDTANK ) {
 		centity_t* tank = &cg_entities[cent->tagParent];
 

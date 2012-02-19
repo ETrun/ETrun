@@ -34,53 +34,6 @@ If you have questions concerning this license or the applicable additional terms
 
 char bigTextBuffer[100000];
 
-// TTimo - defined but not used
-#if 0
-/*
-======================
-CG_ParseGibModels
-
-Read a configuration file containing gib models for use with this character
-======================
-*/
-static qboolean CG_ParseGibModels( bg_playerclass_t* classInfo ) {
-	char        *text_p;
-	int len;
-	int i;
-	char        *token;
-	fileHandle_t f;
-
-	memset( classInfo->gibModels, 0, sizeof( classInfo->gibModels ) );
-
-	// load the file
-	len = trap_FS_FOpenFile( va( "models/players/%s/gibs.cfg", classInfo->modelPath ), &f, FS_READ );
-	if ( len <= 0 ) {
-		return qfalse;
-	}
-	if ( len >= sizeof( bigTextBuffer ) - 1 ) {
-		CG_Printf( "File %s too long\n", va( "models/players/%s/gibs.cfg", classInfo->modelPath ) );
-		return qfalse;
-	}
-	trap_FS_Read( bigTextBuffer, len, f );
-	bigTextBuffer[len] = 0;
-	trap_FS_FCloseFile( f );
-
-	// parse the text
-	text_p = bigTextBuffer;
-
-	for ( i = 0; i < MAX_GIB_MODELS; i++ ) {
-		token = COM_Parse( &text_p );
-		if ( !token ) {
-			break;
-		}
-		// cache this model
-		classInfo->gibModels[i] = trap_R_RegisterModel( token );
-	}
-
-	return qtrue;
-}
-#endif
-
 /*
 ======================
 CG_ParseHudHeadConfig
