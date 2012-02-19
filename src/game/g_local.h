@@ -461,16 +461,7 @@ struct gentity_s {
 	gentity_t   *dmgparent;
 	qboolean dmginloop;
 
-	// RF, used for linking of static entities for faster searching
-	gentity_t   *botNextStaticEntity;
 	int spawnCount;                         // incremented each time this entity is spawned
-	int botIgnoreTime, awaitingHelpTime;
-	int botIgnoreHealthTime, botIgnoreAmmoTime;
-	int botAltGoalTime;
-	vec3_t botGetAreaPos;
-	int botGetAreaNum;
-	int aiInactive;             // bots should ignore this goal
-	int goalPriority[2];
 
 	int tagNumber;              // Gordon: "handle" to a tag header
 
@@ -481,12 +472,6 @@ struct gentity_s {
 	float backdelta;
 	qboolean back;
 	qboolean moving;
-
-	int botLastAttackedTime;
-	int botLastAttackedEnt;
-
-	int botAreaNum;                 // last checked area num
-	vec3_t botAreaPos;
 
 	// TAT 10/13/2002 - for seek cover sequence - we need a pointer to a server entity
 	//		@ARNOUT - does this screw up the save game?
@@ -1942,7 +1927,6 @@ struct g_serverEntity_s
 	int number;                     // identifier for this entity
 	int team;                       // which team?  seek cover spots need this
 	int areaNum;                    // This thing doesn't move, so we should only need to calc the areanum once
-	int botIgnoreTime;              // So that multiple bots don't use the same seek cover spot
 
 	void ( *setup )( g_serverEntity_t *self );          // Setup function called once after all server objects are created
 };

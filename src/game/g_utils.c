@@ -501,9 +501,7 @@ void G_InitGentity( gentity_t *e ) {
 	e->classname = "noclass";
 	e->s.number = e - g_entities;
 	e->r.ownerNum = ENTITYNUM_NONE;
-	e->aiInactive = 0xffffffff;
 	e->nextthink = 0;
-	memset( e->goalPriority, 0, sizeof( e->goalPriority ) );
 	e->free = NULL;
 
 	// RF, init scripting

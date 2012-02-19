@@ -708,7 +708,6 @@ typedef enum {
 
 // NOTE: we can only use up to 15 in the client-server stream
 // SA NOTE: should be 31 now (I added 1 bit in msg.c)
-// RF NOTE: if this changes, please update etmain\botfiles\inv.h
 typedef enum {
 	WP_NONE,                // 0
 	WP_KNIFE,               // 1

@@ -933,10 +933,6 @@ void script_mover_die( gentity_t *self, gentity_t *inflictor, gentity_t *attacke
 
 void script_mover_aas_blocking( gentity_t *ent ) {
 	if ( ent->timestamp <= level.time ) {
-		// are we moving?
-		if ( !VectorCompare( ent->s.pos.trBase, ent->botAreaPos ) ) {
-			VectorCopy( ent->s.pos.trBase, ent->botAreaPos );
-		}
 		ent->timestamp = level.time + 500;
 	}
 

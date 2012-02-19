@@ -1908,9 +1908,6 @@ gentity_t *fire_grenade( gentity_t *self, vec3_t start, vec3_t dir, int grenadeW
 
 	VectorCopy( start, bolt->r.currentOrigin );
 
-	// RF, record the time for AI
-	bolt->awaitingHelpTime = level.time;
-
 	return bolt;
 }
 
