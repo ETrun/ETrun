@@ -3184,7 +3184,7 @@ qboolean CG_IsSinglePlayer( void );
 // Gordon: Fireteam stuff
 
 //fireteamData_t* CG_IsOnFireteam(		int clientNum );
-#define /*fireteamData_t**/ CG_IsOnFireteam( /*int*/ clientNum ) /*{ return*/ cgs.clientinfo[clientNum].fireteamData /*}*/
+#define CG_IsOnFireteam( clientNum ) cgs.clientinfo[clientNum].fireteamData
 fireteamData_t* CG_IsOnSameFireteam(    int clientNum, int clientNum2 );
 fireteamData_t* CG_IsFireTeamLeader(    int clientNum );
 

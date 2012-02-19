@@ -1,5 +1,8 @@
 _build/*.dll
 _build/*.so
+_build/*/*.log
+_build/*/*.htm
+_build/*/*.dep
 ipch/
 *.sdf
 *.opensdf
