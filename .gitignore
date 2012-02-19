@@ -1,10 +1,10 @@
-.dll
-_build/*
+_build/*.dll
+_build/*.so
 ipch/
 *.sdf
 *.opensdf
 *.ncb
-autom4te.cache/# On branch autotools
+autom4te.cache/
 Makefile.in
 aclocal.m4
 build-aux/

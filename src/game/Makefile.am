@@ -1,7 +1,7 @@
 lib_LTLIBRARIES = libgame.la
 
 # Compilation flags
-libgame_la_CFLAGS = -DGAMEDLL -pipe -Wall -Werror -fno-strict-aliasing
+libgame_la_CFLAGS = -DGAMEDLL -pipe -Wall -fno-strict-aliasing
 
 # Linker options
 libgame_la_LDFLAGS = -avoid-version
@@ -57,6 +57,5 @@ g_vote.c \
 g_weapon.c \
 q_math.c \
 q_shared.c \
-g_tjreferee.c \
-g_sha1.c \
-../libs/sha-1/sha1.c
+g_buddy_list.c \
+g_construction.c
