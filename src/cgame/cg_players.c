@@ -535,7 +535,8 @@ may include ANIM_TOGGLEBIT
 */
 void CG_SetLerpFrameAnimationRate( centity_t *cent, clientInfo_t *ci, lerpFrame_t *lf, int newAnimation ) {
 	animation_t     *anim, *oldanim;
-	int transitionMin = -1, oldAnimTime, oldAnimNum;
+	int transitionMin = -1; // oldAnimTime, Nico, unused warning fix 
+	int oldAnimNum;
 	qboolean firstAnim = qfalse;
 
 	bg_character_t *character = CG_CharacterForClientinfo( ci, cent );
@@ -544,7 +545,7 @@ void CG_SetLerpFrameAnimationRate( centity_t *cent, clientInfo_t *ci, lerpFrame_
 		return;
 	}
 
-	oldAnimTime = lf->animationTime;
+	// oldAnimTime = lf->animationTime;
 	oldanim     = lf->animation;
 	oldAnimNum  = lf->animationNumber;
 
@@ -1047,7 +1048,7 @@ static void CG_PlayerAngles( centity_t *cent, vec3_t legs[3], vec3_t torso[3], v
 	vec3_t velocity;
 	float speed;
 	float clampTolerance;
-	int legsSet, torsoSet;
+	int legsSet;// , torsoSet; Nico, unused warning fix
 	clientInfo_t    *ci;
 	bg_character_t  *character;
 
@@ -1060,12 +1061,12 @@ static void CG_PlayerAngles( centity_t *cent, vec3_t legs[3], vec3_t torso[3], v
 	}
 
 	legsSet = cent->currentState.legsAnim & ~ANIM_TOGGLEBIT;
-	torsoSet = cent->currentState.torsoAnim & ~ANIM_TOGGLEBIT;
+	// torsoSet = cent->currentState.torsoAnim & ~ANIM_TOGGLEBIT;
 
 	VectorCopy( cent->lerpAngles, headAngles );
 	headAngles[YAW] = AngleMod( headAngles[YAW] );
 	VectorClear( legsAngles );
-	VectorClear( torsoAngles );
+	// VectorClear( torsoAngles );
 
 	// --------- yaw -------------
 
@@ -1089,7 +1090,7 @@ static void CG_PlayerAngles( centity_t *cent, vec3_t legs[3], vec3_t torso[3], v
 	if ( cent->currentState.eFlags & EF_DEAD || cent->currentState.eFlags & EF_MOUNTEDTANK ) {
 		// don't let dead bodies twitch
 		legsAngles[YAW] = headAngles[YAW];
-		torsoAngles[YAW] = headAngles[YAW];
+		// torsoAngles[YAW] = headAngles[YAW];
 	} else {
 		legsAngles[YAW] = headAngles[YAW] + cent->currentState.angles2[YAW];
 

@@ -1640,7 +1640,7 @@ so the movement delta can be calculated
 */
 void InitMoverRotate( gentity_t *ent ) {
 	vec3_t move;
-	float distance;
+	// float distance; Nico, unused warning fix
 	float light;
 	vec3_t color;
 	qboolean lightSet, colorSet;
@@ -1695,7 +1695,7 @@ void InitMoverRotate( gentity_t *ent ) {
 
 	// calculate time to reach second position from speed
 	VectorSubtract( ent->pos2, ent->pos1, move );
-	distance = VectorLength( move );
+	// distance = VectorLength( move );
 	if ( !ent->speed ) {
 		ent->speed = 100;
 	}
@@ -4701,15 +4701,18 @@ void func_constructible_underconstructionthink( gentity_t *ent ) {
 		ent->s.angles2[0] = 0;  // insta-decay
 
 		if ( ent->s.angles2[0] < 5 ) {
-			gentity_t *te;
+			// gentity_t *te; Nico, unused warning fix
 
 			// it decayed into oblivion
 
 			// Play sound
 			if ( ent->parent->spawnflags & 8 ) {
-				te = G_TempEntity( ent->parent->r.currentOrigin, EV_BUILDDECAYED_SOUND );
+				// te = G_TempEntity( ent->parent->r.currentOrigin, EV_BUILDDECAYED_SOUND );
+				G_TempEntity( ent->parent->r.currentOrigin, EV_BUILDDECAYED_SOUND );
+
 			} else {
-				te = G_TempEntity( ent->s.origin2, EV_BUILDDECAYED_SOUND );
+				// te = G_TempEntity( ent->s.origin2, EV_BUILDDECAYED_SOUND );
+				G_TempEntity( ent->s.origin2, EV_BUILDDECAYED_SOUND );
 			}
 
 			if ( ent->count2 ) {

@@ -1338,7 +1338,8 @@ void G_ParseCampaigns( void ) {
 
 			trap_Argv( 0, buf, sizeof( buf ) );
 
-			if ( !buf ) { // command not found, throw error
+			// Nico, always true warning fix
+			if (buf == NULL) { // command not found, throw error
 				G_Error( "Usage 'map <mapname>\n'" );
 			}
 

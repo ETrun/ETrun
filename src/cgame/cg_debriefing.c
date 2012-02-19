@@ -1176,7 +1176,7 @@ void CG_Debriefing_ChatEdit_Draw( panel_button_t* button ) {
 }
 
 void CG_Debriefing_ChatBox_Draw( panel_button_t* button ) {
-	int w, h;
+	int w;// , h; Nico, unused warning fix
 	int i, len;
 	vec4_t hcolor;
 	float lineHeight = 9.f;
@@ -1185,7 +1185,7 @@ void CG_Debriefing_ChatBox_Draw( panel_button_t* button ) {
 	int chatHeight = button->rect.h;
 
 	if ( cgs.teamLastChatPos != cgs.teamChatPos ) {
-		h = ( cgs.teamChatPos - cgs.teamLastChatPos ) * TINYCHAR_HEIGHT;
+		// h = ( cgs.teamChatPos - cgs.teamLastChatPos ) * TINYCHAR_HEIGHT;
 
 		w = 0;
 

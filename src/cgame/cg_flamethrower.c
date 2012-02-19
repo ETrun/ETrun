@@ -591,7 +591,7 @@ CG_MoveFlameChunk
 void CG_MoveFlameChunk( flameChunk_t *f ) {
 	vec3_t newOrigin, sOrg;
 	trace_t trace;
-	int jiggleCount;
+	// int jiggleCount; Nico, unused warning fix
 	float dot;
 	// TTimo: unused
 	//static vec3_t	umins = {-1,-1,-1};
@@ -617,7 +617,7 @@ void CG_MoveFlameChunk( flameChunk_t *f ) {
 		}
 	}
 
-	jiggleCount = 0;
+	// jiggleCount = 0;
 	VectorCopy( f->baseOrg, sOrg );
 	while ( f->velSpeed > 1 && f->baseOrgTime != cg.time ) {
 		CG_FlameCalcOrg( f, cg.time, newOrigin );
@@ -705,7 +705,7 @@ void CG_AddFlameSpriteToScene( flameChunk_t *f, float lifeFrac, float alpha ) {
 	vec3_t vec, rotate_ang;
 	unsigned char alphaChar;
 	vec2_t rST;
-	static vec3_t lastPos;
+	// static vec3_t lastPos; Nico, unused warning fix
 	polyBuffer_t* pPolyBuffer;
 
 	if ( alpha < 0 ) {
@@ -797,7 +797,7 @@ void CG_AddFlameSpriteToScene( flameChunk_t *f, float lifeFrac, float alpha ) {
 	pPolyBuffer->numIndicies += 6;
 	pPolyBuffer->numVerts += 4;
 
-	VectorCopy( f->org, lastPos );
+	// VectorCopy( f->org, lastPos );
 }
 
 static int nextFlameLight = 0;
@@ -821,7 +821,7 @@ void CG_AddFlameToScene( flameChunk_t *fHead ) {
 	int headTimeStart;
 	float vdist, bdot;
 	flameChunk_t *lastBlowChunk = NULL;
-	qboolean isClientFlame, firing;
+	qboolean isClientFlame;// , firing; Nico, unused warning fix
 	int shader;
 	flameChunk_t *lastBlueChunk = NULL;
 	qboolean skip = qfalse, droppedTrail;
@@ -835,10 +835,10 @@ void CG_AddFlameToScene( flameChunk_t *fHead ) {
 
 	if ( ( cg_entities[fHead->ownerCent].currentState.eFlags & EF_FIRING ) && ( centFlameInfo[fHead->ownerCent].lastFlameChunk == fHead ) ) {
 		headTimeStart = fHead->timeStart;
-		firing = qtrue;
+		// firing = qtrue;
 	} else {
 		headTimeStart = cg.time;
-		firing = qfalse;
+		// firing = qfalse;
 	}
 
 	VectorClear( lightOrg );

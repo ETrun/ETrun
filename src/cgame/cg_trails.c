@@ -461,7 +461,8 @@ void CG_AddTrailToScene( trailJunc_t *trail, int iteration, int numJuncs ) {
 	float mod[4];
 	float sInc, s;
 	trailJunc_t *j, *jNext;
-	vec3_t fwd, up, p, v;
+	// vec3_t fwd, Nico, unused warning fix
+	vec3_t up, p, v;
 	// clipping vars
 	#define TRAIL_FADE_CLOSE_DIST   64.0
 	#define TRAIL_FADE_FAR_SCALE    4.0
@@ -524,10 +525,6 @@ void CG_AddTrailToScene( trailJunc_t *trail, int iteration, int numJuncs ) {
 		}
 	}
 
-//	if (trail->flags & TJFL_CROSSOVER && iteration < 1) {
-//		iteration = 1;
-//	}
-
 	sInc = 0;
 
 	if ( !numJuncs ) {
@@ -574,7 +571,7 @@ void CG_AddTrailToScene( trailJunc_t *trail, int iteration, int numJuncs ) {
 	while ( jNext ) {
 
 		// first get the directional vectors to the next junc
-		VectorSubtract( jNext->pos, j->pos, fwd );
+		// VectorSubtract( jNext->pos, j->pos, fwd );
 		GetPerpendicularViewVector( cg.refdef_current->vieworg, j->pos, jNext->pos, up );
 
 		// if it's a crossover, draw it twice

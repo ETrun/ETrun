@@ -474,38 +474,25 @@ void Team_DroppedFlagThink( gentity_t *ent ) {
 int Team_TouchOurFlag( gentity_t *ent, gentity_t *other, int team ) {
 	gclient_t *cl = other->client;
 //	gentity_t* te;
-	int our_flag, enemy_flag;
+	// int our_flag, enemy_flag; Nico, unused warning fix
 
-	if ( cl->sess.sessionTeam == TEAM_AXIS ) {
-		our_flag = PW_REDFLAG;
-		enemy_flag = PW_BLUEFLAG;
-	} else {
-		our_flag = PW_BLUEFLAG;
-		enemy_flag = PW_REDFLAG;
-	}
+	// if ( cl->sess.sessionTeam == TEAM_AXIS ) {
+	// 	our_flag = PW_REDFLAG;
+	// 	enemy_flag = PW_BLUEFLAG;
+	// } else {
+	// 	our_flag = PW_BLUEFLAG;
+	// 	enemy_flag = PW_REDFLAG;
+	// }
 
 	if ( ent->flags & FL_DROPPED_ITEM ) {
 		// hey, its not home.  return it by teleporting it back
 		AddScore( other, WOLF_SECURE_OBJ_BONUS );
-		//G_AddExperience( other, 0.8f );
-//		te = G_TempEntity( other->s.pos.trBase, EV_GLOBAL_SOUND );
-//		te->r.svFlags |= SVF_BROADCAST;
-//		te->s.teamNum = cl->sess.sessionTeam;
-
 		if ( cl->sess.sessionTeam == TEAM_AXIS ) {
-//			te->s.eventParm = G_SoundIndex( "sound/chat/axis/g-objective_secure.wav" );
-
-//			trap_SendServerCommand(-1, va("cp \"Axis have returned %s!\n\" 2", ent->message));
-
 			if ( level.gameManager ) {
 				G_Script_ScriptEvent( level.gameManager, "trigger", "axis_object_returned" );
 			}
 			G_Script_ScriptEvent( &g_entities[ent->s.otherEntityNum], "trigger", "returned" );
 		} else {
-//			te->s.eventParm = G_SoundIndex( "sound/chat/allies/a-objective_secure.wav" );
-
-//			trap_SendServerCommand(-1, va("cp \"Allies have returned %s!\n\" 2", ent->message));
-
 			if ( level.gameManager ) {
 				G_Script_ScriptEvent( level.gameManager, "trigger", "allied_object_returned" );
 			}
@@ -719,7 +706,7 @@ gentity_t *SelectRandomTeamSpawnPoint( int teamstate, team_t team, int spawnObje
 	gentity_t   *spot;
 	gentity_t   *spots[MAX_TEAM_SPAWN_POINTS];
 
-	int count, closest, defendingTeam;
+	int count, closest;//, defendingTeam; Nico, unused warning fix
 	int i = 0;
 
 	char        *classname;
@@ -728,7 +715,7 @@ gentity_t *SelectRandomTeamSpawnPoint( int teamstate, team_t team, int spawnObje
 	vec3_t target;
 	vec3_t farthest;
 
-	defendingTeam = -1;
+	// defendingTeam = -1;
 
 	if ( team == TEAM_AXIS ) {
 		classname = "team_CTF_redspawn";
@@ -1644,7 +1631,7 @@ int QDECL G_SortPlayersByXP( const void *a, const void *b ) {
 // Shuffle active players onto teams
 void G_shuffleTeams( void ) {
 	int i, cTeam; //, cMedian = level.numNonSpectatorClients / 2;
-	int aTeamCount[TEAM_NUM_TEAMS];
+	// int aTeamCount[TEAM_NUM_TEAMS]; Nico, unused warning fix
 	int cnt = 0;
 	int sortClients[MAX_CLIENTS];
 
@@ -1653,9 +1640,9 @@ void G_shuffleTeams( void ) {
 	G_teamReset( TEAM_AXIS, qtrue );
 	G_teamReset( TEAM_ALLIES, qtrue );
 
-	for ( i = 0; i < TEAM_NUM_TEAMS; i++ ) {
-		aTeamCount[i] = 0;
-	}
+	// for ( i = 0; i < TEAM_NUM_TEAMS; i++ ) {
+	// 	aTeamCount[i] = 0;
+	// }
 
 	for ( i = 0; i < level.numConnectedClients; i++ ) {
 		cl = level.clients + level.sortedClients[ i ];
