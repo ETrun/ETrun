@@ -1,0 +1,8 @@
+ETrun
+=====
+
+COMPILING
+---------
+
+$ ./configure
+$ make
