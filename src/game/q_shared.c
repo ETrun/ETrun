@@ -432,11 +432,10 @@ static char *SkipWhitespace( char *data, qboolean *hasNewLines ) {
 
 int COM_Compress( char *data_p ) {
 	char *datai, *datao;
-	int c, pc, size;
+	int c, size;
 	qboolean ws = qfalse;
 
 	size = 0;
-	pc = 0;
 	datai = datao = data_p;
 	if ( datai ) {
 		while ( ( c = *datai ) != 0 ) {
@@ -444,7 +443,6 @@ int COM_Compress( char *data_p ) {
 				*datao = c;
 				datao++;
 				ws = qfalse;
-				pc = c;
 				datai++;
 				size++;
 				// skip double slash comments
@@ -473,7 +471,6 @@ int COM_Compress( char *data_p ) {
 				datao++;
 				datai++;
 				ws = qfalse;
-				pc = c;
 				size++;
 			}
 		}

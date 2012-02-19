@@ -4444,18 +4444,10 @@ float BG_SplineLength( splinePath_t* pSpline ) {
 	float dist = 0;
 //	float tension;
 	vec3_t vec[2];
-	vec3_t lastPoint;
+	vec3_t lastPoint = {0};// Nico, uninitialized warning fix
 	vec3_t result;
 
 	for ( i = 0; i <= 1.f; i += granularity ) {
-/*		if(pSpline->isStart) {
-			tension = 1 - sin((1 - i) * M_PI * 0.5f);
-		} else if(pSpline->isEnd) {
-			tension = sin(i * M_PI * 0.5f);
-		} else {
-			tension = i;
-		}*/
-
 		BG_CalculateSpline_r( pSpline, vec[0], vec[1], i );
 		VectorSubtract( vec[1], vec[0], result );
 		VectorMA( vec[0], i, result, result );
