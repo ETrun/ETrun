@@ -544,7 +544,7 @@ void SP_misc_gamemodel( gentity_t *ent ) {
 	vec3_t vScale;
 	int trunksize, trunkheight;
 	char tagname[MAX_QPATH];
-	// char*   dummy; Nico, unused warning fix
+	char*   dummy;// Nico, note, keep this
 	int num_frames, start_frame, fps;
 	// qboolean reverse = qfalse; Nico, unused warning fix
 
@@ -563,9 +563,9 @@ void SP_misc_gamemodel( gentity_t *ent ) {
 		G_SpawnInt( "frames",    "0", &num_frames );
 		G_SpawnInt( "start", "0", &start_frame );
 		G_SpawnInt( "fps",       "20",    &fps );
-		// if ( G_SpawnString( "reverse", "", &dummy ) ) {
+		if ( G_SpawnString( "reverse", "", &dummy ) ) {
 		// 	reverse = qtrue;
-		// }
+		}
 
 		if ( num_frames == 0 ) {
 			G_Error( "'misc_model' with ANIMATE spawnflag set has 'frames' set to 0\n" );
