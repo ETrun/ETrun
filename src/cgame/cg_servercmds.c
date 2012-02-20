@@ -469,8 +469,10 @@ void CG_ParseServerVersionInfo( const char *pszVersionInfo ) {
 // Parse reinforcement offsets
 void CG_ParseReinforcementTimes( const char *pszReinfSeedString ) {
 	const char *tmp = pszReinfSeedString, *tmp2;
-	unsigned int i, j, dwDummy;// Nico, note, no not remove dwDummy
+	unsigned int i, j, dwDummy = 0;// Nico, note, no not remove dwDummy
 	unsigned int dwOffset[TEAM_NUM_TEAMS];
+
+	dwDummy = dwDummy;// Nico, ugly fix to calm down GCC
 
 #define GETVAL( x,y ) if ( ( tmp = strchr( tmp, ' ' ) ) == NULL ) {return;} x = atoi( ++tmp ) / y;
 

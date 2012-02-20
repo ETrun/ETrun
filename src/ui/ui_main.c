@@ -2586,9 +2586,6 @@ static int UI_OwnerDrawWidth( int ownerDraw, float scale ) {
 	return 0;
 }
 
-static void UI_DrawBotName( rectDef_t *rect, float scale, vec4_t color, int textStyle ) {
-}
-
 static void UI_DrawRedBlue( rectDef_t *rect, float scale, vec4_t color, int textStyle ) {
 	Text_Paint( rect->x, rect->y, scale, color, ( uiInfo.redBlue == 0 ) ? "Red" : "Blue", 0, 0, textStyle );
 }
