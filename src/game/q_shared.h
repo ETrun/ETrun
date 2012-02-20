@@ -32,13 +32,8 @@ If you have questions concerning this license or the applicable additional terms
 // q_shared.h -- included first by ALL program modules.
 // A user mod should never modify this file
 
-//#define PRE_RELEASE_DEMO
-
-#ifndef PRE_RELEASE_DEMO
 #define Q3_VERSION      "ET 2.60d"
-#else
-#define Q3_VERSION      "ET 2.32"
-#endif // PRE_RELEASE_DEMO
+
 // 2.60d: Mac OSX universal binaries
 // 2.60c: Mac OSX universal binaries
 // 2.60b: CVE-2006-2082 fix
