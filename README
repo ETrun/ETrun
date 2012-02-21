@@ -1,8 +1,12 @@
 ETrun
 =====
 
-BOOTSTRAPING
-------------
+ETrun is a Wolfenstein: Enemy Territory game modification bringing timeruns support.
+
+Visit www.timeruns.net for more information.
+
+BOOTSTRAPPING
+-------------
 
 $ chmod +x bootstrap
 $ ./bootstrap
@@ -13,12 +17,10 @@ COMPILING
 $ ./congigure
 $ make
 
-
 CLEANING
 --------
 
 $ make clean
-
 
 DISTCLEANING
 ------------
