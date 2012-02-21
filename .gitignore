@@ -1,16 +1,33 @@
+# Binaries
 _build/*.dll
 _build/*.so
+
+# Compilation related
 _build/*/*.*
+src/*/.deps
+
+# Autotools related
+autom4te.cache/
+m4/
+Makefile.in
+aclocal.m4
+build-aux
+configure
+Makefile.in
+Makefile
+config.h
+config.h.in
+config.status
+libtool
+stamp-h1
+
+# VS related
 ipch/
 *.sdf
 *.opensdf
 *.ncb
-autom4te.cache/
-Makefile.in
-aclocal.m4
-build-aux/
-configure
-m4/
-autom4te.cache/
-config.h.in
+
+# Others
 *~
+*.log
+.DS_Store
