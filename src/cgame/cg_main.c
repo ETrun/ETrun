@@ -2589,6 +2589,10 @@ void CG_Init( int serverMessageNum, int serverCommandSequence, int clientNum, qb
 	cgs.ccRequestedObjective = -1;
 	cgs.ccCurrentCamObjective = -2;
 
+	// Nico, bugfix on loading screen
+	// http://games.chruker.dk/enemy_territory/modding_project_bugfix.php?bug_id=079
+	trap_R_SetColor(NULL);
+
 	// load a few needed things before we do any screen updates
 	cgs.media.charsetShader     = trap_R_RegisterShader( "gfx/2d/hudchars" ); //trap_R_RegisterShader( "gfx/2d/bigchars" );
 	// JOSEPH 4-17-00

@@ -2297,7 +2297,7 @@ void CG_DrawString( float x, float y, const char *string,
 					float charWidth, float charHeight, const float *modulate );
 
 
-void CG_DrawStringExt( int x, int y, const char *string, const float *setColor,
+void CG_DrawStringExt( int x, int y, const char *string, float *setColor,
 					   qboolean forceColor, qboolean shadow, int charWidth, int charHeight, int maxChars );
 // JOSEPH 4-17-00
 void CG_DrawStringExt2( int x, int y, const char *string, const float *setColor,

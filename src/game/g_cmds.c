@@ -749,23 +749,6 @@ qboolean SetTeam( gentity_t *ent, char *s, qboolean force, weapon_t w1, weapon_t
 		}
 	}
 
-	// DHM - Nerve :: Force players to wait 30 seconds before they can join a new team.
-	// OSP - changed to 5 seconds
-	// Gordon: disabling if in dev mode: cuz it sucks
-	// Gordon: bleh, half of these variables don't mean what they used to, so this doesn't work
-/*	if ( !g_cheats.integer ) {
-		 if ( team != oldTeam && level.warmupTime == 0 && !client->pers.initialSpawn && ( (level.time - client->pers.connectTime) > 10000 ) && ( (level.time - client->pers.enterTime) < 5000 ) && !force ) {
-			CP(va("cp \"^3You must wait %i seconds before joining ^3a new team.\n\" 3", (int)(5 - ((level.time - client->pers.enterTime)/1000))));
-			return qfalse;
-		}
-	}*/
-	// dhm
-
-	//
-	// execute the team change
-	//
-
-
 	// DHM - Nerve
 	// OSP
 	if ( team != TEAM_SPECTATOR ) {

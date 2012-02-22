@@ -409,7 +409,9 @@ to a fixed color.
 Coordinates are at 640 by 480 virtual resolution
 ==================
 */
-void CG_DrawStringExt( int x, int y, const char *string, const float *setColor,
+// Nico, bugfix: centerprint messages looses the coloration when printing multiple lines
+// http://games.chruker.dk/enemy_territory/modding_project_bugfix.php?bug_id=082
+void CG_DrawStringExt( int x, int y, const char *string, float *setColor,
 					   qboolean forceColor, qboolean shadow, int charWidth, int charHeight, int maxChars ) {
 	vec4_t color;
 	const char  *s;
@@ -455,6 +457,9 @@ void CG_DrawStringExt( int x, int y, const char *string, const float *setColor,
 					color[3] = setColor[3];
 				}
 				trap_R_SetColor( color );
+
+				// Nico, bugfix: centerprint messages looses the coloration when printing multiple lines
+				memcpy(setColor, color, sizeof(color));
 			}
 			s += 2;
 			continue;
