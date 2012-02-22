@@ -600,15 +600,17 @@ qboolean G_ScriptAction_FollowSpline( gentity_t* ent, char *params ) {
 
 			token = COM_ParseExt( &pString, qfalse );
 			if ( !token[0] ) {
-				G_Error( "G_Scripting: accum without a buffer index\n" );
+				// Nico, fixed a typo
+				// http://games.chruker.dk/enemy_territory/modding_project_bugfix.php?bug_id=056
+				G_Error( "G_Scripting: globalaccum without a buffer index\n" );
 			}
 
 			bufferIndex = atoi( token );
 			// Nico, bugfix: replaced G_MAX_SCRIPT_ACCUM_BUFFERS by MAX_SCRIPT_ACCUM_BUFFERS
 			// http://games.chruker.dk/enemy_territory/modding_project_bugfix.php?bug_id=055
 			if ( bufferIndex < 0 || bufferIndex >= MAX_SCRIPT_ACCUM_BUFFERS ) {
-				// Nico, bugfix: replaced G_MAX_SCRIPT_ACCUM_BUFFERS by MAX_SCRIPT_ACCUM_BUFFERS
-				G_Error( "G_Scripting: accum buffer is outside range (0 - %i)\n", MAX_SCRIPT_ACCUM_BUFFERS - 1 );
+				// Nico, bugfix: replaced G_MAX_SCRIPT_ACCUM_BUFFERS by MAX_SCRIPT_ACCUM_BUFFERS and fixed a typo
+				G_Error( "G_Scripting: globalaccum buffer is outside range (0 - %i)\n", MAX_SCRIPT_ACCUM_BUFFERS - 1 );
 			}
 
 			backward = ent->scriptAccumBuffer[bufferIndex] != 0 ? qtrue : qfalse;
@@ -994,7 +996,9 @@ qboolean G_ScriptAction_DisableMessage( gentity_t *ent, char *params ) {
 	pString = params;
 	token = COM_ParseExt( &pString, qfalse );
 	if ( !token[0] ) {
-		G_Error( "G_Scripting: setposition must have an targetname\n" );
+		// Nico, fixed a typo
+		// http://games.chruker.dk/enemy_territory/modding_project_bugfix.php?bug_id=056
+		G_Error( "G_Scripting: disablemessage must have an targetname\n" );
 	}
 
 	// find the entity with the given "targetname"
@@ -2158,6 +2162,8 @@ G_ScriptAction_GlobalAccum
 // Gordon: added (12/06/02)
 	globalAccum <n> wait_while_equal <m>
 =================
+// Nico, fixed many typos (replaced accum by globalaccum)
+// http://games.chruker.dk/enemy_territory/modding_project_bugfix.php?bug_id=056
 */
 qboolean G_ScriptAction_GlobalAccum( gentity_t *ent, char *params ) {
 	char *pString, *token, lastToken[MAX_QPATH], name[MAX_QPATH];
@@ -2168,7 +2174,7 @@ qboolean G_ScriptAction_GlobalAccum( gentity_t *ent, char *params ) {
 
 	token = COM_ParseExt( &pString, qfalse );
 	if ( !token[0] ) {
-		G_Error( "G_Scripting: accum without a buffer index\n" );
+		G_Error( "G_Scripting: globalaccum without a buffer index\n" );
 	}
 
 	bufferIndex = atoi( token );
@@ -2176,12 +2182,12 @@ qboolean G_ScriptAction_GlobalAccum( gentity_t *ent, char *params ) {
 	// http://games.chruker.dk/enemy_territory/modding_project_bugfix.php?bug_id=055
 	if ( bufferIndex >= MAX_SCRIPT_ACCUM_BUFFERS ) {
 		// Nico, bugfix: replaced G_MAX_SCRIPT_ACCUM_BUFFERS by MAX_SCRIPT_ACCUM_BUFFERS
-		G_Error( "G_Scripting: accum buffer is outside range (0 - %i)\n", G_MAX_SCRIPT_ACCUM_BUFFERS - 1 );
+		G_Error( "G_Scripting: globalaccum buffer is outside range (0 - %i)\n", G_MAX_SCRIPT_ACCUM_BUFFERS - 1 );
 	}
 
 	token = COM_ParseExt( &pString, qfalse );
 	if ( !token[0] ) {
-		G_Error( "G_Scripting: accum without a command\n" );
+		G_Error( "G_Scripting: globalaccum without a command\n" );
 	}
 
 	Q_strncpyz( lastToken, token, sizeof( lastToken ) );
@@ -2189,12 +2195,12 @@ qboolean G_ScriptAction_GlobalAccum( gentity_t *ent, char *params ) {
 
 	if ( !Q_stricmp( lastToken, "inc" ) ) {
 		if ( !token[0] ) {
-			G_Error( "Scripting: accum %s requires a parameter\n", lastToken );
+			G_Error( "Scripting: globalaccum %s requires a parameter\n", lastToken );
 		}
 		level.globalAccumBuffer[bufferIndex] += atoi( token );
 	} else if ( !Q_stricmp( lastToken, "abort_if_less_than" ) ) {
 		if ( !token[0] ) {
-			G_Error( "Scripting: accum %s requires a parameter\n", lastToken );
+			G_Error( "Scripting: globalaccum %s requires a parameter\n", lastToken );
 		}
 		if ( level.globalAccumBuffer[bufferIndex] < atoi( token ) ) {
 			// abort the current script
@@ -2202,7 +2208,7 @@ qboolean G_ScriptAction_GlobalAccum( gentity_t *ent, char *params ) {
 		}
 	} else if ( !Q_stricmp( lastToken, "abort_if_greater_than" ) ) {
 		if ( !token[0] ) {
-			G_Error( "Scripting: accum %s requires a parameter\n", lastToken );
+			G_Error( "Scripting: globalaccum %s requires a parameter\n", lastToken );
 		}
 		if ( level.globalAccumBuffer[bufferIndex] > atoi( token ) ) {
 			// abort the current script
@@ -2210,7 +2216,7 @@ qboolean G_ScriptAction_GlobalAccum( gentity_t *ent, char *params ) {
 		}
 	} else if ( !Q_stricmp( lastToken, "abort_if_not_equal" ) || !Q_stricmp( lastToken, "abort_if_not_equals" ) ) {
 		if ( !token[0] ) {
-			G_Error( "Scripting: accum %s requires a parameter\n", lastToken );
+			G_Error( "Scripting: globalaccum %s requires a parameter\n", lastToken );
 		}
 		if ( level.globalAccumBuffer[bufferIndex] != atoi( token ) ) {
 			// abort the current script
@@ -2218,7 +2224,7 @@ qboolean G_ScriptAction_GlobalAccum( gentity_t *ent, char *params ) {
 		}
 	} else if ( !Q_stricmp( lastToken, "abort_if_equal" ) ) {
 		if ( !token[0] ) {
-			G_Error( "Scripting: accum %s requires a parameter\n", lastToken );
+			G_Error( "Scripting: globalaccum %s requires a parameter\n", lastToken );
 		}
 		if ( level.globalAccumBuffer[bufferIndex] == atoi( token ) ) {
 			// abort the current script
@@ -2226,17 +2232,17 @@ qboolean G_ScriptAction_GlobalAccum( gentity_t *ent, char *params ) {
 		}
 	} else if ( !Q_stricmp( lastToken, "bitset" ) ) {
 		if ( !token[0] ) {
-			G_Error( "Scripting: accum %s requires a parameter\n", lastToken );
+			G_Error( "Scripting: globalaccum %s requires a parameter\n", lastToken );
 		}
 		level.globalAccumBuffer[bufferIndex] |= ( 1 << atoi( token ) );
 	} else if ( !Q_stricmp( lastToken, "bitreset" ) ) {
 		if ( !token[0] ) {
-			G_Error( "Scripting: accum %s requires a parameter\n", lastToken );
+			G_Error( "Scripting: globalaccum %s requires a parameter\n", lastToken );
 		}
 		level.globalAccumBuffer[bufferIndex] &= ~( 1 << atoi( token ) );
 	} else if ( !Q_stricmp( lastToken, "abort_if_bitset" ) ) {
 		if ( !token[0] ) {
-			G_Error( "Scripting: accum %s requires a parameter\n", lastToken );
+			G_Error( "Scripting: globalaccum %s requires a parameter\n", lastToken );
 		}
 		if ( level.globalAccumBuffer[bufferIndex] & ( 1 << atoi( token ) ) ) {
 			// abort the current script
@@ -2244,7 +2250,7 @@ qboolean G_ScriptAction_GlobalAccum( gentity_t *ent, char *params ) {
 		}
 	} else if ( !Q_stricmp( lastToken, "abort_if_not_bitset" ) ) {
 		if ( !token[0] ) {
-			G_Error( "Scripting: accum %s requires a parameter\n", lastToken );
+			G_Error( "Scripting: globalaccum %s requires a parameter\n", lastToken );
 		}
 		if ( !( level.globalAccumBuffer[bufferIndex] & ( 1 << atoi( token ) ) ) ) {
 			// abort the current script
@@ -2252,22 +2258,21 @@ qboolean G_ScriptAction_GlobalAccum( gentity_t *ent, char *params ) {
 		}
 	} else if ( !Q_stricmp( lastToken, "set" ) ) {
 		if ( !token[0] ) {
-			G_Error( "Scripting: accum %s requires a parameter\n", lastToken );
+			G_Error( "Scripting: globalaccum %s requires a parameter\n", lastToken );
 		}
 		level.globalAccumBuffer[bufferIndex] = atoi( token );
 	} else if ( !Q_stricmp( lastToken, "random" ) ) {
 		if ( !token[0] ) {
-			G_Error( "Scripting: accum %s requires a parameter\n", lastToken );
+			G_Error( "Scripting: globalaccum %s requires a parameter\n", lastToken );
 		}
 		level.globalAccumBuffer[bufferIndex] = rand() % atoi( token );
 	} else if ( !Q_stricmp( lastToken, "trigger_if_equal" ) ) {
 		if ( !token[0] ) {
-			G_Error( "Scripting: accum %s requires a parameter\n", lastToken );
+			G_Error( "Scripting: globalaccum %s requires a parameter\n", lastToken );
 		}
 		if ( level.globalAccumBuffer[bufferIndex] == atoi( token ) ) {
 			gentity_t* trent;
 			int oldId;
-//			qboolean loop = qfalse;
 
 			token = COM_ParseExt( &pString, qfalse );
 			Q_strncpyz( lastToken, token, sizeof( lastToken ) );
@@ -2308,13 +2313,13 @@ qboolean G_ScriptAction_GlobalAccum( gentity_t *ent, char *params ) {
 		}
 	} else if ( !Q_stricmp( lastToken, "wait_while_equal" ) ) {
 		if ( !token[0] ) {
-			G_Error( "Scripting: accum %s requires a parameter\n", lastToken );
+			G_Error( "Scripting: globalaccum %s requires a parameter\n", lastToken );
 		}
 		if ( level.globalAccumBuffer[bufferIndex] == atoi( token ) ) {
 			return qfalse;
 		}
 	} else {
-		G_Error( "Scripting: accum %s: unknown command\n", params );
+		G_Error( "Scripting: globalaccum %s: unknown command\n", params );
 	}
 
 	return qtrue;
