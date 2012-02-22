@@ -1093,8 +1093,6 @@ void CG_InitConsoleCommands( void ) {
 	//
 	trap_AddCommand( "kill" );
 	trap_AddCommand( "say" );
-	trap_AddCommand( "say_limbo" );           // NERVE - SMF
-	trap_AddCommand( "tell" );
 	trap_AddCommand( "give" );
 	trap_AddCommand( "god" );
 	trap_AddCommand( "notarget" );
@@ -1120,7 +1118,6 @@ void CG_InitConsoleCommands( void ) {
 	trap_AddCommand( "?" );
 	trap_AddCommand( "bottomshots" );
 	trap_AddCommand( "commands" );
-	trap_AddCommand( "follow" );
 	trap_AddCommand( "lock" );
 #ifdef MV_SUPPORT
 	trap_AddCommand( "mvadd" );
@@ -1153,22 +1150,21 @@ void CG_InitConsoleCommands( void ) {
 	// OSP
 
 	trap_AddCommand( "fireteam" );
-	trap_AddCommand( "buddylist" );
 	trap_AddCommand( "showstats" );
 
 	trap_AddCommand( "ignore" );
 	trap_AddCommand( "unignore" );
 
-	trap_AddCommand( "addtt" );
-	trap_AddCommand( "selectbuddy" );
-	trap_AddCommand( "selectNextBuddy" ); // xkan 9/26/2002
-
-	trap_AddCommand( "loadgame" );
-	trap_AddCommand( "savegame" );
-
 	trap_AddCommand( "campaign" );
 	trap_AddCommand( "listcampaigns" );
 
-	trap_AddCommand( "setweapons" );
-	trap_AddCommand( "setclass" );
+	// Nico, added missing commands
+	// http://games.chruker.dk/enemy_territory/modding_project_bugfix.php?bug_id=011
+	trap_AddCommand ("imready");
+	trap_AddCommand ("say_buddy");
+	trap_AddCommand ("setspawnpt");
+	trap_AddCommand ("vsay");
+	trap_AddCommand ("vsay_buddy");
+	trap_AddCommand ("vsay_team");
+	trap_AddCommand ("where");
 }
