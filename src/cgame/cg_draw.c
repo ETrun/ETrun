@@ -570,19 +570,15 @@ CG_DrawUpperRight
 =====================
 */
 static void CG_DrawUpperRight( void ) {
-	float y;
+	float y = 20 + 100 + 32;
 
-	if ( !cg_drawFireteamOverlay.integer ) {
-		return;
-	}
-
-	y = 20 + 100 + 32;
-
-	if ( CG_IsOnFireteam( cg.clientNum ) ) {
-		rectDef_t rect = { 10, 10, 100, 100 };
-		CG_DrawFireTeamOverlay( &rect );
-	} else {
-//		CG_DrawTeamOverlay( 0 );
+	// Nico, bugfix: round timer and respawn timer gone when cg_drawFireteamOverlay
+	// http://games.chruker.dk/enemy_territory/modding_project_bugfix.php?bug_id=008
+	if( cg_drawFireteamOverlay.integer ) {
+		if ( CG_IsOnFireteam( cg.clientNum ) ) {
+			rectDef_t rect = { 10, 10, 100, 100 };
+			CG_DrawFireTeamOverlay( &rect );
+		}
 	}
 
 	if ( !( cg.snap->ps.pm_flags & PMF_LIMBO ) && ( cg.snap->ps.persistant[PERS_TEAM] != TEAM_SPECTATOR ) &&
