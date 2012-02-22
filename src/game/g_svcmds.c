@@ -1272,6 +1272,9 @@ qboolean    ConsoleCommand( void ) {
 
 		// OSP - console also gets ref commands
 		if ( !level.fLocalHost && Q_stricmp( cmd, "ref" ) == 0 ) {
+			// Nico, bugfix, G_refCommandCheck expects the next argument (warn, pause, lock etc)
+			// http://games.chruker.dk/enemy_territory/modding_project_bugfix.php?bug_id=005
+			trap_Argv(1, cmd, sizeof(cmd));
 			if ( !G_refCommandCheck( NULL, cmd ) ) {
 				G_refHelp_cmd( NULL );
 			}
