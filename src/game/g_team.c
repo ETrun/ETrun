@@ -455,7 +455,9 @@ void Team_DroppedFlagThink( gentity_t *ent ) {
 			G_Script_ScriptEvent( level.gameManager, "trigger", "axis_object_returned" );
 		}
 
-		trap_SendServerCommand( -1, "cp \"Axis have returned the objective!\" 2" );
+		// Nico, bugfix: removed left printf
+		// http://games.chruker.dk/enemy_territory/modding_project_bugfix.php?bug_id=058
+		// trap_SendServerCommand( -1, "cp \"Axis have returned the objective!\" 2" );
 	} else if ( ent->item->giTag == PW_BLUEFLAG ) {
 		G_Script_ScriptEvent( &g_entities[ent->s.otherEntityNum], "trigger", "returned" );
 
