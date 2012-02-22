@@ -2720,11 +2720,7 @@ void Weapon_Artillery( gentity_t *ent ) {
 
 			bomb->think = artillerySpotterThink;
 		} else {
-			if ( ent->client->sess.skill[SK_SIGNALS] >= 3 ) {
-				bomb->nextthink     = level.time + 8950 + 2000 * i + crandom() * 800;
-			} else {
-				bomb->nextthink     = level.time + 8950 + 2000 * i + crandom() * 800;
-			}
+			bomb->nextthink     = level.time + 8950 + 2000 * i + crandom() * 800;
 
 			// Gordon: for explosion type
 			bomb->accuracy      = 2;
@@ -4121,7 +4117,7 @@ void FireWeapon( gentity_t *ent ) {
 		}
 
 		if ( ent->client->sess.skill[SK_HEAVY_WEAPONS] >= 1 ) {
-			ent->client->ps.classWeaponTime += .5f * ( 1 - 0.3f ) * level.soldierChargeTime[ent->client->sess.sessionTeam - 1];
+			ent->client->ps.classWeaponTime += .33f * level.soldierChargeTime[ent->client->sess.sessionTeam - 1];
 		} else {
 			ent->client->ps.classWeaponTime += .5f * level.soldierChargeTime[ent->client->sess.sessionTeam - 1];
 		}

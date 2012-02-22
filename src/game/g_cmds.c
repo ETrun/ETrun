@@ -48,8 +48,11 @@ void G_SendScore( gentity_t *ent ) {
 
 	// send the latest information on all clients
 	numSorted = level.numConnectedClients;
-	if ( numSorted > 64 ) {
-		numSorted = 64;
+
+	// Nico, replaced hardcoded value by a define
+	// http://games.chruker.dk/enemy_territory/modding_project_bugfix.php?bug_id=068
+	if ( numSorted > MAX_CLIENTS ) {
+		numSorted = MAX_CLIENTS;
 	}
 
 	i = 0;
@@ -1175,8 +1178,10 @@ void Cmd_Follow_f( gentity_t *ent, unsigned int dwCommand, qboolean fValue ) {
 	}
 
 	if ( ent->client->ps.pm_flags & PMF_LIMBO ) {
-		CP( "cpm \"Can't issue a follow command while in limbo.\n\"" );
-		CP( "cpm \"Hit FIRE to switch between teammates.\n\"" );
+		// Nico, replaced cpm by print to display into console
+		// http://games.chruker.dk/enemy_territory/modding_project_bugfix.php?bug_id=065
+		CP( "print \"Can't issue a follow command while in limbo.\n\"" );
+		CP( "print \"Hit FIRE to switch between teammates.\n\"" );
 		return;
 	}
 
@@ -1534,7 +1539,9 @@ void G_Voice( gentity_t *ent, gentity_t *target, int mode, const char *id, qbool
 
 	// Only do the spam check for MP
 	if ( ent->voiceChatSquelch >= 30000 ) {
-		trap_SendServerCommand( ent - g_entities, "cpm \"^1Spam Protection^7: VoiceChat ignored\n\"" );
+		// Nico, voicechat spam protection was cluttering the popups message
+		// http://games.chruker.dk/enemy_territory/modding_project_bugfix.php?bug_id=066
+		trap_SendServerCommand( ent - g_entities, "cp \"^1Spam Protection^7: VoiceChat ignored\"" );
 		return;
 	}
 
@@ -1666,22 +1673,24 @@ qboolean Cmd_CallVote_f( gentity_t *ent, unsigned int dwCommand, qboolean fRefCo
 	char arg2[MAX_STRING_TOKENS];
 
 	// Normal checks, if its not being issued as a referee command
+	// Nico, moved 'callvote' command erros from popup messages to center print and console
+	// http://games.chruker.dk/enemy_territory/modding_project_bugfix.php?bug_id=067
 	if ( !fRefCommand ) {
 		if ( level.voteInfo.voteTime ) {
-			CP( "cpm \"A vote is already in progress.\n\"" );
+			G_printFull("A vote is already in progress.", ent);
 			return qfalse;
 		} else if ( level.intermissiontime ) {
-			CP( "cpm \"Cannot callvote during intermission.\n\"" );
+			G_printFull("Cannot callvote during intermission.", ent);
 			return qfalse;
 		} else if ( !ent->client->sess.referee ) {
 			if ( voteFlags.integer == VOTING_DISABLED ) {
-				CP( "cpm \"Voting not enabled on this server.\n\"" );
+				G_printFull("Voting not enabled on this server.", ent);
 				return qfalse;
 			} else if ( vote_limit.integer > 0 && ent->client->pers.voteCount >= vote_limit.integer ) {
-				CP( va( "cpm \"You have already called the maximum number of votes (%d).\n\"", vote_limit.integer ) );
+				G_printFull(va("You have already called the maximum number of votes (%d).", vote_limit.integer), ent);
 				return qfalse;
 			} else if ( ent->client->sess.sessionTeam == TEAM_SPECTATOR ) {
-				CP( "cpm \"Not allowed to call a vote as a spectator.\n\"" );
+				G_printFull("Not allowed to call a vote as a spectator.", ent);
 				return qfalse;
 			}
 		}

@@ -720,9 +720,6 @@ typedef struct {
 
 #define MAX_CLIENT_MARKERS 10
 
-#define NUM_SOLDIERKILL_TIMES 10
-#define SOLDIERKILL_MAXTIME 60000
-
 #define LT_SPECIAL_PICKUP_MOD   3       // JPW NERVE # of times (minus one for modulo) LT must drop ammo before scoring a point
 #define MEDIC_SPECIAL_PICKUP_MOD    4   // JPW NERVE same thing for medic
 
@@ -819,9 +816,6 @@ struct gclient_s {
 
 	int lastConstructibleBlockingWarnTime;
 	int lastConstructibleBlockingWarnEnt;
-
-	int soldierKillMarker;
-	int soliderKillTimes[NUM_SOLDIERKILL_TIMES];
 
 	int landmineSpottedTime;
 	gentity_t*  landmineSpotted;

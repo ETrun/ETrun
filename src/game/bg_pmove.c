@@ -3625,7 +3625,7 @@ static void PM_Weapon( void ) {
 
 	if ( pm->ps->weapon == WP_MORTAR_SET ) {
 		if ( pm->skill[SK_HEAVY_WEAPONS] >= 1 ) {
-			if ( pm->cmd.serverTime - pm->ps->classWeaponTime < ( pm->soldierChargeTime * 0.5f * ( 1 - 0.3f ) ) ) {
+			if ( pm->cmd.serverTime - pm->ps->classWeaponTime < ( pm->soldierChargeTime * 0.33f ) ) {
 				return;
 			}
 		} else if ( pm->cmd.serverTime - pm->ps->classWeaponTime < ( pm->soldierChargeTime * 0.5f ) ) {

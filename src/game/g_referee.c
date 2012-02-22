@@ -86,11 +86,6 @@ qboolean G_refCommandCheck( gentity_t *ent, char *cmd ) {
 void G_refHelp_cmd( gentity_t *ent ) {
 	// List commands only for enabled refs.
 	if ( ent ) {
-		if ( !ent->client->sess.referee ) {
-			CP( "cpm \"Sorry, you are not a referee!\n" );
-			return;
-		}
-
 		CP( "print \"\n^3Referee commands:^7\n\"" );
 		CP(    "print \"------------------------------------------\n\"" );
 

@@ -264,7 +264,9 @@ void G_pause_cmd( gentity_t *ent, unsigned int dwCommand, qboolean fPause ) {
 			CP( "cpm \"^3Your team didn't call the timeout!\n\"" );
 			return;
 		} else {
-			AP( "print \"\n^3Match is ^5UNPAUSED^3 ... resuming in 10 seconds!\n\n\"" );
+			// Nico, removed extra linebreaks
+			// http://games.chruker.dk/enemy_territory/modding_project_bugfix.php?bug_id=068
+			AP( "print \"^3Match is ^5UNPAUSED^3 ... resuming in 10 seconds!\n\"" );
 			level.match_pause = PAUSE_UNPAUSING;
 			G_globalSound( "sound/osp/prepare.wav" );
 			G_spawnPrintf( DP_UNPAUSING, level.time + 10, NULL );
