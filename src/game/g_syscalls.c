@@ -131,11 +131,11 @@ void trap_DropClient( int clientNum, const char *reason, int length ) {
 
 void trap_SendServerCommand( int clientNum, const char *text ) {
 	// rain - #433 - commands over 1022 chars will crash 01
-	// client engine upon receipt, so ignore th
-	// Nico, truncate the command before logging if
+	// client engine upon receipt, so ignore them
+	// Nico, truncate the command before logging it
 	// http://games.chruker.dk/enemy_territory/modding_project_bugfix.php?bug_id=001
 	if ( strlen( text ) > 1022 ) {
-		G_LogPrintf( "%s: trap_SendServerCommand( %d, ... ) length exceeds 1022.\n", GAMEVERSION, clientNum );
+		G_LogPrintf( "\n%s: trap_SendServerCommand( %d, ... ) length exceeds 1022.\n", GAMEVERSION, clientNum );
 		G_LogPrintf( "%s: text [%.950s]... truncated\n", GAMEVERSION, text );
 		return;
 	}
