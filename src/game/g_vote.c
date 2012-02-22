@@ -768,7 +768,9 @@ int G_ShuffleTeams_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char 
 	// Vote request (vote is being initiated)
 	if ( arg ) {
 		if ( trap_Argc() > 2 ) {
-			G_refPrintf( ent, "Usage: ^3%s %s%s\n\n", ( ( fRefereeCmd ) ? "\\ref" : "\\callvote" ), arg, aVoteInfo[dwVoteIndex].pszVoteHelp );
+			// Nico, removed unneeded linebreak
+			// http://games.chruker.dk/enemy_territory/modding_project_bugfix.php?bug_id=047
+			G_refPrintf( ent, "Usage: ^3%s %s%s\n", ( ( fRefereeCmd ) ? "\\ref" : "\\callvote" ), arg, aVoteInfo[dwVoteIndex].pszVoteHelp );
 			return( G_INVALID );
 		} else if ( !vote_allow_shuffleteamsxp.integer && ent && !ent->client->sess.referee ) {
 			G_voteDisableMessage( ent, arg );

@@ -209,7 +209,9 @@ void G_refLockTeams_cmd( gentity_t *ent, qboolean fLock ) {
 	status = va( "Referee has ^3%sLOCKED^7 teams", ( ( fLock ) ? "" : "UN" ) );
 
 	G_printFull( status, ent );
-	G_refPrintf( ent, "You have %sLOCKED teams\n", ( ( fLock ) ? "" : "UN" ) );
+	// Nico, removed unneeded linebreak
+	// http://games.chruker.dk/enemy_territory/modding_project_bugfix.php?bug_id=047
+	G_refPrintf( ent, "You have %sLOCKED teams", ( ( fLock ) ? "" : "UN" ) );
 
 	if ( fLock ) {
 		level.server_settings |= CV_SVS_LOCKTEAMS;
@@ -226,7 +228,9 @@ void G_refPause_cmd( gentity_t *ent, qboolean fPause ) {
 	char *referee = ( ent ) ? "Referee" : "ref";
 
 	if ( ( PAUSE_UNPAUSING >= level.match_pause && !fPause ) || ( PAUSE_NONE != level.match_pause && fPause ) ) {
-		G_refPrintf( ent, "The match is already %sPAUSED!\n\"", status[fPause] );
+		// Nico, removed unneeded linebreak
+		// http://games.chruker.dk/enemy_territory/modding_project_bugfix.php?bug_id=047
+		G_refPrintf( ent, "The match is already %sPAUSED!", status[fPause] );
 		return;
 	}
 
@@ -244,7 +248,9 @@ void G_refPause_cmd( gentity_t *ent, qboolean fPause ) {
 		level.server_settings |= CV_SVS_PAUSE;
 		trap_SetConfigstring( CS_SERVERTOGGLES, va( "%d", level.server_settings ) );
 	} else {
-		AP( va( "print \"\n^3%s ^5UNPAUSES^3 the match ... resuming in 10 seconds!\n\n\"", referee ) );
+		// Nico, removed unneeded linebreak
+		// http://games.chruker.dk/enemy_territory/modding_project_bugfix.php?bug_id=047
+		AP( va( "print \"^3%s ^5UNPAUSES^3 the match ... resuming in 10 seconds!\n\"", referee ) );
 		level.match_pause = PAUSE_UNPAUSING;
 		G_globalSound( "sound/osp/prepare.wav" );
 		G_spawnPrintf( DP_UNPAUSING, level.time + 10, NULL );
@@ -275,12 +281,16 @@ void G_refPlayerPut_cmd( gentity_t *ent, int team_id ) {
 
 	// Can only move to other teams.
 	if ( player->client->sess.sessionTeam == team_id ) {
-		G_refPrintf( ent, "\"%s\" is already on team %s!\n", player->client->pers.netname, aTeams[team_id] );
+		// Nico, removed unneeded linebreak
+		// http://games.chruker.dk/enemy_territory/modding_project_bugfix.php?bug_id=047
+		G_refPrintf( ent, "\"%s\" is already on team %s!", player->client->pers.netname, aTeams[team_id] );
 		return;
 	}
 
 	if ( team_maxplayers.integer && TeamCount( -1, team_id ) >= team_maxplayers.integer ) {
-		G_refPrintf( ent, "Sorry, the %s team is already full!\n",  aTeams[team_id] );
+		// Nico, removed unneeded linebreak
+		// http://games.chruker.dk/enemy_territory/modding_project_bugfix.php?bug_id=047
+		G_refPrintf( ent, "Sorry, the %s team is already full!",  aTeams[team_id] );
 		return;
 	}
 
@@ -367,7 +377,9 @@ void G_refWarmup_cmd( gentity_t* ent ) {
 
 	if ( !*cmd || atoi( cmd ) < 0 ) {
 		trap_Cvar_VariableStringBuffer( "g_warmup", cmd, sizeof( cmd ) );
-		G_refPrintf( ent, "Warmup Time: %d\n", atoi( cmd ) );
+		// Nico, removed unneeded linebreak
+		// http://games.chruker.dk/enemy_territory/modding_project_bugfix.php?bug_id=047
+		G_refPrintf( ent, "Warmup Time: %d", atoi( cmd ) );
 		return;
 	}
 
@@ -414,12 +426,16 @@ void G_refMute_cmd( gentity_t *ent, qboolean mute ) {
 	player = g_entities + pid;
 
 	if ( player->client->sess.referee != RL_NONE ) {
-		G_refPrintf( ent, "Cannot mute a referee.\n" );
+		// Nico removed unneeded linebreak
+		// http://games.chruker.dk/enemy_territory/modding_project_bugfix.php?bug_id=047
+		G_refPrintf( ent, "Cannot mute a referee." );
 		return;
 	}
 
 	if ( player->client->sess.muted == mute ) {
-		G_refPrintf( ent, "\"%s^*\" %s\n", player->client->pers.netname, mute ? "is already muted!" : "is not muted!" );
+		// Nico, removed unneeded linebreak
+		// http://games.chruker.dk/enemy_territory/modding_project_bugfix.php?bug_id=047
+		G_refPrintf( ent, "\"%s^*\" %s", player->client->pers.netname, mute ? "is already muted!" : "is not muted!" );
 		return;
 	}
 
@@ -613,7 +629,9 @@ void G_refPrintf( gentity_t* ent, const char *fmt, ... ) {
 	va_end( argptr );
 
 	if ( ent == NULL ) {
-		trap_Printf( text );
+		// Nico, add linebreak to the string
+		// http://games.chruker.dk/enemy_territory/modding_project_bugfix.php?bug_id=047
+		trap_Printf(va("%s\n", text));
 	} else {
 		// Nico, replaced cpm by print
 		// http://games.chruker.dk/enemy_territory/modding_project_bugfix.php?bug_id=046
