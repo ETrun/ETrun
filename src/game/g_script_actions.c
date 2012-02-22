@@ -604,8 +604,11 @@ qboolean G_ScriptAction_FollowSpline( gentity_t* ent, char *params ) {
 			}
 
 			bufferIndex = atoi( token );
-			if ( bufferIndex < 0 || bufferIndex >= G_MAX_SCRIPT_ACCUM_BUFFERS ) {
-				G_Error( "G_Scripting: accum buffer is outside range (0 - %i)\n", G_MAX_SCRIPT_ACCUM_BUFFERS - 1 );
+			// Nico, bugfix: replaced G_MAX_SCRIPT_ACCUM_BUFFERS by MAX_SCRIPT_ACCUM_BUFFERS
+			// http://games.chruker.dk/enemy_territory/modding_project_bugfix.php?bug_id=055
+			if ( bufferIndex < 0 || bufferIndex >= MAX_SCRIPT_ACCUM_BUFFERS ) {
+				// Nico, bugfix: replaced G_MAX_SCRIPT_ACCUM_BUFFERS by MAX_SCRIPT_ACCUM_BUFFERS
+				G_Error( "G_Scripting: accum buffer is outside range (0 - %i)\n", MAX_SCRIPT_ACCUM_BUFFERS - 1 );
 			}
 
 			backward = ent->scriptAccumBuffer[bufferIndex] != 0 ? qtrue : qfalse;
@@ -1973,7 +1976,9 @@ qboolean G_ScriptAction_Accum( gentity_t *ent, char *params ) {
 
 	bufferIndex = atoi( token );
 	if ( bufferIndex >= G_MAX_SCRIPT_ACCUM_BUFFERS ) {
-		G_Error( "G_Scripting: accum buffer is outside range (0 - %i)\n", G_MAX_SCRIPT_ACCUM_BUFFERS );
+		// Nico, bugfix: was printing 10 as the last bufferindex, but its actually 9
+		// http://games.chruker.dk/enemy_territory/modding_project_bugfix.php?bug_id=055
+		G_Error( "G_Scripting: accum buffer is outside range (0 - %i)\n", G_MAX_SCRIPT_ACCUM_BUFFERS - 1 );
 	}
 
 	token = COM_ParseExt( &pString, qfalse );
@@ -2167,8 +2172,11 @@ qboolean G_ScriptAction_GlobalAccum( gentity_t *ent, char *params ) {
 	}
 
 	bufferIndex = atoi( token );
-	if ( bufferIndex >= G_MAX_SCRIPT_ACCUM_BUFFERS ) {
-		G_Error( "G_Scripting: accum buffer is outside range (0 - %i)\n", G_MAX_SCRIPT_ACCUM_BUFFERS );
+	// Nico, bugfix: replaced G_MAX_SCRIPT_ACCUM_BUFFERS by MAX_SCRIPT_ACCUM_BUFFERS
+	// http://games.chruker.dk/enemy_territory/modding_project_bugfix.php?bug_id=055
+	if ( bufferIndex >= MAX_SCRIPT_ACCUM_BUFFERS ) {
+		// Nico, bugfix: replaced G_MAX_SCRIPT_ACCUM_BUFFERS by MAX_SCRIPT_ACCUM_BUFFERS
+		G_Error( "G_Scripting: accum buffer is outside range (0 - %i)\n", G_MAX_SCRIPT_ACCUM_BUFFERS - 1 );
 	}
 
 	token = COM_ParseExt( &pString, qfalse );
