@@ -409,9 +409,11 @@ void SP_worldspawn( void ) {
 					cg.thirtySecondSound_g[0] =	\
 						cg.thirtySecondSound_a[0] = '\0';
 
-	CG_SpawnString( "twoMinuteSound_axis", "axis_hq_5minutes", &s );
+	// Nico, bugfix: there was a typo, replaced twoMinuteSound by fiveMinuteSound
+	// http://games.chruker.dk/enemy_territory/modding_project_bugfix.php?bug_id=092
+	CG_SpawnString( "fiveMinuteSound_axis", "axis_hq_5minutes", &s );
 	Q_strncpyz( cg.fiveMinuteSound_g, s, sizeof( cg.fiveMinuteSound_g ) );
-	CG_SpawnString( "twoMinuteSound_allied", "allies_hq_5minutes", &s );
+	CG_SpawnString( "fiveMinuteSound_allied", "allies_hq_5minutes", &s );
 	Q_strncpyz( cg.fiveMinuteSound_a, s, sizeof( cg.fiveMinuteSound_a ) );
 
 	CG_SpawnString( "twoMinuteSound_axis", "axis_hq_2minutes", &s );

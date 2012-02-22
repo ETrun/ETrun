@@ -827,6 +827,9 @@ void G_SetOrigin( gentity_t *ent, vec3_t origin ) {
 	ent->s.pos.trDuration = 0;
 	VectorClear( ent->s.pos.trDelta );
 
+	// Nico, bugfix: spawnpoints not movable
+	// http://games.chruker.dk/enemy_territory/modding_project_bugfix.php?bug_id=091
+	VectorCopy( origin, ent->s.origin );
 	VectorCopy( origin, ent->r.currentOrigin );
 
 	if ( ent->client ) {
