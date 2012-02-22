@@ -746,7 +746,9 @@ gclient_t *G_GetPlayerByName( char *name ) {
 
 	for ( i = 0; i < level.numConnectedClients; i++ ) {
 
-		cl = &level.clients[i];
+		// Nico, bugfix: kick command is not able to kick some players by name
+		// http://games.chruker.dk/enemy_territory/modding_project_bugfix.php?bug_id=097
+		cl = &level.clients[level.sortedClients[i]];
 
 		if ( !Q_stricmp( cl->pers.netname, name ) ) {
 			return cl;
