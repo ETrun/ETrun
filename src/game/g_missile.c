@@ -1043,10 +1043,14 @@ void G_RunFlamechunk( gentity_t *ent ) {
 	//		However, below, it was being used when we hit something and it was
 	//		uninitialized
 	VectorCopy( ent->s.pos.trDelta, vel );
+	
+	// Nico, bugfix: need to normalize velocity
+	// http://games.chruker.dk/enemy_territory/modding_project_bugfix.php?bug_id=062
+	speed = VectorNormalize( vel );
 
 	// Adust the current speed of the chunk
 	if ( level.time - ent->timestamp > 50 ) {
-		speed = VectorNormalize( vel );
+		// speed = VectorNormalize( vel );
 		speed -= ( 50.f / 1000.f ) * FLAME_FRICTION_PER_SEC;
 
 		if ( speed < FLAME_MIN_SPEED ) {
