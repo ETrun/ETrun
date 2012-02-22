@@ -45,33 +45,33 @@ If you have questions concerning this license or the applicable additional terms
 qboolean G_refCommandCheck( gentity_t *ent, char *cmd ) {
 	if ( !Q_stricmp( cmd, "allready" ) ) {
 		G_refAllReady_cmd( ent );
-	} else if ( !Q_stricmp( cmd, "lock" ) )    {
+	} else if ( !Q_stricmp( cmd, "lock" ) ) {
 		G_refLockTeams_cmd( ent, qtrue );
-	} else if ( !Q_stricmp( cmd, "help" ) )                                                                               {
+	} else if ( !Q_stricmp( cmd, "help" ) ) {
 		G_refHelp_cmd( ent );
-	} else if ( !Q_stricmp( cmd, "pause" ) )                                                                                                                                              {
+	} else if ( !Q_stricmp( cmd, "pause" ) ) {
 		G_refPause_cmd( ent, qtrue );
-	} else if ( !Q_stricmp( cmd, "putallies" ) )                                                                                                                                                                                                                      {
+	} else if ( !Q_stricmp( cmd, "putallies" ) ) {
 		G_refPlayerPut_cmd( ent, TEAM_ALLIES );
-	} else if ( !Q_stricmp( cmd, "putaxis" ) )                                                                                                                                                                                                                                                                                                            {
+	} else if ( !Q_stricmp( cmd, "putaxis" ) ) {
 		G_refPlayerPut_cmd( ent, TEAM_AXIS );
-	} else if ( !Q_stricmp( cmd, "remove" ) )                                                                                                                                                                                                                                                                                                                                                                                              {
+	} else if ( !Q_stricmp( cmd, "remove" ) ) {
 		G_refRemove_cmd( ent );
-	} else if ( !Q_stricmp( cmd, "speclock" ) )                                                                                                                                                                                                                                                                                                                                                                                                                                                                 {
+	} else if ( !Q_stricmp( cmd, "speclock" ) ) {
 		G_refSpeclockTeams_cmd( ent, qtrue );
-	} else if ( !Q_stricmp( cmd, "specunlock" ) )                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    {
+	} else if ( !Q_stricmp( cmd, "specunlock" ) ) {
 		G_refSpeclockTeams_cmd( ent, qfalse );
-	} else if ( !Q_stricmp( cmd, "unlock" ) )                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          {
+	} else if ( !Q_stricmp( cmd, "unlock" ) ) {
 		G_refLockTeams_cmd( ent, qfalse );
-	} else if ( !Q_stricmp( cmd, "unpause" ) )                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        {
+	} else if ( !Q_stricmp( cmd, "unpause" ) ) {
 		G_refPause_cmd( ent, qfalse );
-	} else if ( !Q_stricmp( cmd, "warmup" ) )                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   {
+	} else if ( !Q_stricmp( cmd, "warmup" ) ) {
 		G_refWarmup_cmd( ent );
-	} else if ( !Q_stricmp( cmd, "warn" ) )                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      {
+	} else if ( !Q_stricmp( cmd, "warn" ) ) {
 		G_refWarning_cmd( ent );
-	} else if ( !Q_stricmp( cmd, "mute" ) )                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        {
+	} else if ( !Q_stricmp( cmd, "mute" ) ) {
 		G_refMute_cmd( ent, qtrue );
-	} else if ( !Q_stricmp( cmd, "unmute" ) )                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              {
+	} else if ( !Q_stricmp( cmd, "unmute" ) ) {
 		G_refMute_cmd( ent, qfalse );
 	} else { return( qfalse );}
 
@@ -80,6 +80,9 @@ qboolean G_refCommandCheck( gentity_t *ent, char *cmd ) {
 
 
 // Lists ref commands.
+// Nico, removed non-existing restart command, fixed remove missing parameter
+// http://games.chruker.dk/enemy_territory/modding_project_bugfix.php?bug_id=038
+// http://games.chruker.dk/enemy_territory/modding_project_bugfix.php?bug_id=039
 void G_refHelp_cmd( gentity_t *ent ) {
 	// List commands only for enabled refs.
 	if ( ent ) {
@@ -93,22 +96,21 @@ void G_refHelp_cmd( gentity_t *ent ) {
 
 		G_voteHelp( ent, qfalse );
 
-		CP( "print \"\n^5allready         putallies^7 <pid>  ^5speclock          warmup\n\"" );
-		CP(  "print \"^5lock             putaxis^7 <pid>    ^5specunlock        warn ^7<pid>\n\"" );
-		CP(  "print \"^5help             remove           unlock            mute ^7<pid>\n\"" );
-		CP(  "print \"^5pause            restart          unpause           unmute ^7<pid>\n\"" );
-
+		CP("print \"\n^5allready         putallies^7 <pid>  ^5specunlock       warn ^7<pid>\n\"");
+		CP(  "print \"^5help             putaxis^7 <pid>    ^5unlock           mute ^7<pid>\n\"");
+		CP(  "print \"^5lock             remove^7 <pid>    ^5unpause          unmute ^7<pid>\n\"");
+		CP(  "print \"^5pause            speclock         warmup ^7[value]\n\"");
 		CP(  "print \"Usage: ^3\\ref <cmd> [params]\n\n\"" );
 
 		// Help for the console
 	} else {
 		G_Printf( "\nAdditional console commands:\n" );
 		G_Printf(  "----------------------------------------------\n" );
-		G_Printf(  "allready    putallies <pid>     unlock\n" );
-		G_Printf(  "lock        putaxis <pid>       unpause\n" );
-		G_Printf(  "help        restart             warmup [value]\n" );
-		G_Printf(  "pause       speclock            warn <pid>\n" );
-		G_Printf(  "remove      specunlock\n\n" );
+		G_Printf(  "allready        putallies <pid>    unpause\n");
+		G_Printf(  "help            putaxis <pid>      warmup [value]\n");
+		G_Printf(  "lock            speclock           warn <pid>\n");
+		G_Printf(  "pause           specunlock\n");
+		G_Printf(  "remove <pid>    unlock\n\n");
 
 		G_Printf(  "Usage: <cmd> [params]\n\n" );
 	}
@@ -144,20 +146,22 @@ void G_ref_cmd( gentity_t *ent, unsigned int dwCommand, qboolean fValue ) {
 	}
 
 	if ( ent ) {
+		// Nico, replaced cpm by print (x3)
+		// http://games.chruker.dk/enemy_territory/modding_project_bugfix.php?bug_id=046
 		if ( !Q_stricmp( refereePassword.string, "none" ) || !refereePassword.string[0] ) {
-			CP( "cpm \"Sorry, referee status disabled on this server.\n\"" );
+			CP( "print \"Sorry, referee status disabled on this server.\n\"" );
 			return;
 		}
 
 		if ( trap_Argc() < 2 ) {
-			CP( "cpm \"Usage: ref [password]\n\"" );
+			CP( "print \"Usage: ref [password]\n\"" );
 			return;
 		}
 
 		trap_Argv( 1, arg, sizeof( arg ) );
 
 		if ( Q_stricmp( arg, refereePassword.string ) ) {
-			CP( "cpm \"Invalid referee password!\n\"" );
+			CP( "print \"Invalid referee password!\n\"" );
 			return;
 		}
 
@@ -610,5 +614,9 @@ void G_refPrintf( gentity_t* ent, const char *fmt, ... ) {
 
 	if ( ent == NULL ) {
 		trap_Printf( text );
-	} else { CP( va( "cpm \"%s\n\"", text ) );}
+	} else {
+		// Nico, replaced cpm by print
+		// http://games.chruker.dk/enemy_territory/modding_project_bugfix.php?bug_id=046
+		CP( va( "print \"%s\n\"", text ) );
+	}
 }

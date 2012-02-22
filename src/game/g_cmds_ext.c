@@ -168,7 +168,9 @@ void G_commands_cmd( gentity_t *ent, unsigned int dwCommand, qboolean fValue ) {
 		return;
 	}
 
-	CP( "cpm \"^5\nAvailable OSP Game-Commands:\n----------------------------\n\"" );
+	// Nico, replaced cpm by print
+	// http://games.chruker.dk/enemy_territory/modding_project_bugfix.php?bug_id=046
+	CP( "print \"^5\nAvailable OSP Game-Commands:\n----------------------------\n\"" );
 	for ( i = 0; i < rows; i++ ) {
 		if ( i + rows * 3 + 1 <= num_cmds ) {
 			CP( va( "print \"^3%-17s%-17s%-17s%-17s\n\"", aCommandInfo[i].pszCommandName,
@@ -185,8 +187,8 @@ void G_commands_cmd( gentity_t *ent, unsigned int dwCommand, qboolean fValue ) {
 			CP( va( "print \"^3%-17s\n\"", aCommandInfo[i].pszCommandName ) );
 		}
 	}
-
-	CP( "cpm \"\nType: ^3\\command_name ?^7 for more information\n\"" );
+	// Nico, replaced cpm by print
+	CP( "print \"\nType: ^3\\command_name ?^7 for more information\n\"" );
 }
 
 
