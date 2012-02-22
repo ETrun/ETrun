@@ -425,7 +425,9 @@ void G_refMute_cmd( gentity_t *ent, qboolean mute ) {
 
 	player = g_entities + pid;
 
-	if ( player->client->sess.referee != RL_NONE ) {
+	// Nico, bugfix: allow ref to be unmuted
+	// http://games.chruker.dk/enemy_territory/modding_project_bugfix.php?bug_id=060
+	if ( player->client->sess.referee != RL_NONE && mute ) {
 		// Nico removed unneeded linebreak
 		// http://games.chruker.dk/enemy_territory/modding_project_bugfix.php?bug_id=047
 		G_refPrintf( ent, "Cannot mute a referee." );
