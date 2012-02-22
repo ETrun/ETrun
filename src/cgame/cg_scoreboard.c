@@ -387,7 +387,9 @@ static void WM_DrawClientScore_Small( int x, int y, score_t *score, float *color
 
 	if ( ci->team != TEAM_SPECTATOR ) {
 		if ( ci->powerups & ( ( 1 << PW_REDFLAG ) | ( 1 << PW_BLUEFLAG ) ) ) {
-			CG_DrawPic( tempx - 2, y - 4, 20, 20, trap_R_RegisterShader( "models/multiplayer/treasure/treasure" ) );
+			// Nico, bugfix: was using a wrong shader
+			// http://games.chruker.dk/enemy_territory/modding_project_bugfix.php?bug_id=071
+			CG_DrawPic( tempx + 1, y + 1, 10, 10, cgs.media.objectiveShader );
 			offset += 14;
 			tempx += 14;
 			maxchars -= 2;
