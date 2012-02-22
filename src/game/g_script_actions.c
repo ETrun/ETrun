@@ -147,7 +147,9 @@ qboolean G_ScriptAction_SetAutoSpawn( gentity_t* ent, char *params ) {
 
 	tent = G_Find( NULL, FOFS( message ), spawnname );
 	if ( !tent ) {
-		G_Error( "G_Scripting: setautospawn, couldn't find target\n" );
+		// Nico, improved error message
+		// http://games.chruker.dk/enemy_territory/modding_project_bugfix.php?bug_id=083
+		G_Error( "G_Scripting: setautospawn, couldn't find target (%s)\n", spawnname );
 	}
 
 	if ( !tent->count ) {
@@ -2827,7 +2829,9 @@ qboolean G_ScriptAction_VoiceAnnounce( gentity_t *ent, char *params ) {
 
 	sysmsg = G_GetSysMessageNumber( token );
 	if ( sysmsg == -1 ) {
-		G_Error( "G_ScriptAction_VoiceAnnounce: invalid system message\n" );
+		// Nico, improved error message
+		// http://games.chruker.dk/enemy_territory/modding_project_bugfix.php?bug_id=083
+		G_Error( "G_ScriptAction_VoiceAnnounce: invalid system message (%s)\n", token );
 	}
 
 	G_SendSystemMessage( sysmsg, !num ? TEAM_AXIS : TEAM_ALLIES );
@@ -3239,7 +3243,9 @@ qboolean G_ScriptAction_SetState( gentity_t *ent, char *params ) {
 	token = COM_ParseExt( &pString, qfalse );
 	Q_strncpyz( state, token, sizeof( state ) );
 	if ( !state[0] ) {
-		G_Error( "G_Scripting: setstate must have a name and an state\n" );
+		// Nico, improved error message
+		// http://games.chruker.dk/enemy_territory/modding_project_bugfix.php?bug_id=083
+		G_Error( "G_Scripting: setstate (%s) must have a name and an state\n", name );
 	}
 
 	if ( !Q_stricmp( state, "default" ) ) {
@@ -3249,7 +3255,8 @@ qboolean G_ScriptAction_SetState( gentity_t *ent, char *params ) {
 	} else if ( !Q_stricmp( state, "underconstruction" ) ) {
 		entState = STATE_UNDERCONSTRUCTION;
 	} else {
-		G_Error( "G_Scripting: setstate with invalid state '%s'\n", state );
+		// Nico, improved error message
+		G_Error( "G_Scripting: setstate (%s) with invalid state '%s'\n", name, state );
 	}
 
 	// look for an entities
@@ -3260,7 +3267,8 @@ qboolean G_ScriptAction_SetState( gentity_t *ent, char *params ) {
 
 		if ( !target ) {
 			if ( !found ) {
-				G_Printf( "^1Warning: setstate called and no entities found\n" );
+				// Nico, improved error message
+				G_Printf( "^1Warning: setstate (%s) called and no entities found\n", name );
 			}
 			break;
 		}

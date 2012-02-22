@@ -5128,7 +5128,9 @@ void G_LinkDebris( void ) {
 
 		target = G_FindByTargetname( NULL, debris->target );
 		if ( !target ) {
-			G_Error( "ERROR: func_debris with no target" );
+			// Nico, improved error message
+			// http://games.chruker.dk/enemy_territory/modding_project_bugfix.php?bug_id=083
+			G_Error( "ERROR: func_debris with no target (%s)", debris->target );
 		}
 
 		speed = debris->velocity[0];
