@@ -1093,24 +1093,30 @@ void CG_InitConsoleCommands( void ) {
 	//
 	trap_AddCommand( "kill" );
 	trap_AddCommand( "say" );
-	trap_AddCommand( "give" );
-	trap_AddCommand( "god" );
-	trap_AddCommand( "notarget" );
+	/* Nico, removed give command
+	trap_AddCommand( "give" );*/
+	/* Nico, removed god command
+	trap_AddCommand( "god" );*/
+	/* Nico, removed notarget command
+	trap_AddCommand( "notarget" );*/
 	trap_AddCommand( "noclip" );
 	trap_AddCommand( "team" );
-	trap_AddCommand( "follow" );
-	trap_AddCommand( "setviewpos" );
+	trap_AddCommand( "follow" ); // Nico, note: this is used to spectate
+	/* Nico, removed setviewpos command
+	trap_AddCommand( "setviewpos" );*/
 	trap_AddCommand( "callvote" );
 	trap_AddCommand( "vote" );
 
 	// Rafael
-	trap_AddCommand( "nofatigue" );
+	/* Nico, removed client command nofatigue
+	trap_AddCommand( "nofatigue" );*/
 
 	// NERVE - SMF
 	trap_AddCommand( "follownext" );
 	trap_AddCommand( "followprev" );
 
-	trap_AddCommand( "start_match" );
+	/* Nico, removed start_match command
+	trap_AddCommand( "start_match" );*/
 	trap_AddCommand( "reset_match" );
 	trap_AddCommand( "swap_teams" );
 	// -NERVE - SMF
@@ -1166,5 +1172,6 @@ void CG_InitConsoleCommands( void ) {
 	trap_AddCommand ("vsay");
 	trap_AddCommand ("vsay_buddy");
 	trap_AddCommand ("vsay_team");
-	trap_AddCommand ("where");
+	/* Nico, removed where command
+	trap_AddCommand ("where");*/
 }

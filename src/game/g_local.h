@@ -58,7 +58,8 @@ If you have questions concerning this license or the applicable additional terms
 
 // gentity->flags
 #define FL_GODMODE              0x00000010
-#define FL_NOTARGET             0x00000020
+/* Nico, unused
+#define FL_NOTARGET             0x00000020*/
 #define FL_TEAMSLAVE            0x00000400  // not the first on the team
 #define FL_NO_KNOCKBACK         0x00000800
 #define FL_DROPPED_ITEM         0x00001000
@@ -1756,7 +1757,8 @@ messageStatus_t trap_MessageStatus( int clientNum );
 
 void G_ExplodeMissile( gentity_t *ent );
 
-void Svcmd_StartMatch_f( void );
+/* Nico, no longer used
+void Svcmd_StartMatch_f( void );*/
 void Svcmd_ResetMatch_f( qboolean fDoReset, qboolean fDoRestart );
 void Svcmd_SwapTeams_f( void );
 

@@ -637,37 +637,16 @@ void Svcmd_ForceTeam_f( void ) {
 }
 
 /*
+Nico, commented this because it's no longer used
 ============
 Svcmd_StartMatch_f
 
 NERVE - SMF - starts match if in tournament mode
 ============
-*/
+
 void Svcmd_StartMatch_f( void ) {
-/*	if ( !g_noTeamSwitching.integer ) {
-		trap_SendServerCommand( -1, va("print \"g_noTeamSwitching not activated.\n\""));
-		return;
-	}
-*/
-
 	G_refAllReady_cmd( NULL );
-
-/*
-	if ( level.numPlayingClients <= 1 ) {
-		trap_SendServerCommand( -1, va("print \"Not enough playing clients to start match.\n\""));
-		return;
-	}
-
-	if ( g_gamestate.integer == GS_PLAYING ) {
-		trap_SendServerCommand( -1, va("print \"Match is already in progress.\n\""));
-		return;
-	}
-
-	if ( g_gamestate.integer == GS_WARMUP ) {
-		trap_SendConsoleCommand( EXEC_APPEND, va( "map_restart 0 %i\n", GS_PLAYING ) );
-	}
-*/
-}
+}*/
 
 /*
 ==================
@@ -1041,10 +1020,11 @@ qboolean    ConsoleCommand( void ) {
 	}
 
 	// NERVE - SMF
+	/* Nico, removed start_match command
 	if ( Q_stricmp( cmd, "start_match" ) == 0 ) {
 		Svcmd_StartMatch_f();
 		return qtrue;
-	}
+	}*/
 
 	if ( Q_stricmp( cmd, "reset_match" ) == 0 ) {
 		Svcmd_ResetMatch_f( qtrue, qtrue );

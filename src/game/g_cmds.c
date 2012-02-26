@@ -283,19 +283,17 @@ int ClientNumberFromString( gentity_t *to, char *s ) {
 }
 
 /*
+Nico, commented because give command was removed and this is no longer used
 ==================
 Cmd_Give_f
 
 Give items to a client
 ==================
-*/
+
 void Cmd_Give_f( gentity_t *ent ) {
 	char        *name, *amt;
-//	gitem_t		*it;
 	int i;
 	qboolean give_all;
-//	gentity_t		*it_ent;
-//	trace_t		trace;
 	int amount;
 	qboolean hasAmount = qfalse;
 
@@ -357,24 +355,6 @@ void Cmd_Give_f( gentity_t *ent ) {
 		}
 	}
 
-	/*if ( Q_stricmpn( name, "damage", 6) == 0)
-	{
-		if(amount) {
-			name = ConcatArgs( 3 );
-
-			if( *name ) {
-				int client = ClientNumberFromString( ent, name );
-				if( client >= 0 ) {
-					G_Damage( &g_entities[client], ent, ent, NULL, NULL, amount, DAMAGE_NO_PROTECTION, MOD_UNKNOWN );
-				}
-			} else {
-				G_Damage( ent, ent, ent, NULL, NULL, amount, DAMAGE_NO_PROTECTION, MOD_UNKNOWN );
-			}
-		}
-
-		return;
-	}*/
-
 	if ( give_all || Q_stricmp( name, "weapons" ) == 0 ) {
 		for ( i = 0; i < WP_NUM_WEAPONS; i++ ) {
 			if ( BG_WeaponInWolfMP( i ) ) {
@@ -426,31 +406,12 @@ void Cmd_Give_f( gentity_t *ent ) {
 		}
 	}
 	//---- (SA) end
-
-	// spawn a specific item right on the player
-	/*if ( !give_all ) {
-		it = BG_FindItem (name);
-		if (!it) {
-			return;
-		}
-
-		it_ent = G_Spawn();
-		VectorCopy( ent->r.currentOrigin, it_ent->s.origin );
-		it_ent->classname = it->classname;
-		G_SpawnItem (it_ent, it);
-		FinishSpawningItem(it_ent );
-		memset( &trace, 0, sizeof( trace ) );
-		it_ent->active = qtrue;
-		Touch_Item (it_ent, ent, &trace);
-		it_ent->active = qfalse;
-		if (it_ent->inuse) {
-			G_FreeEntity( it_ent );
-		}
-	}*/
-}
+}*/
 
 
 /*
+Nico, commented this because god command was removed but this function could be useful later
+
 ==================
 Cmd_God_f
 
@@ -458,7 +419,7 @@ Sets client to godmode
 
 argv(0) god
 ==================
-*/
+
 void Cmd_God_f( gentity_t *ent ) {
 	char    *msg;
 	char    *name;
@@ -522,9 +483,10 @@ void Cmd_God_f( gentity_t *ent ) {
 	}
 
 	trap_SendServerCommand( ent - g_entities, va( "print \"%s\"", msg ) );
-}
+}*/
 
 /*
+Nico, commented this because it's no longer used
 ==================
 Cmd_Nofatigue_f
 
@@ -532,7 +494,6 @@ Sets client to nofatigue
 
 argv(0) nofatigue
 ==================
-*/
 
 void Cmd_Nofatigue_f( gentity_t *ent ) {
 	char    *msg;
@@ -558,9 +519,10 @@ void Cmd_Nofatigue_f( gentity_t *ent ) {
 	}
 
 	trap_SendServerCommand( ent - g_entities, va( "print \"%s\"", msg ) );
-}
+}*/
 
 /*
+Nico, removed notarget command so this function is unused
 ==================
 Cmd_Notarget_f
 
@@ -568,7 +530,7 @@ Sets client to notarget
 
 argv(0) notarget
 ==================
-*/
+
 void Cmd_Notarget_f( gentity_t *ent ) {
 	char    *msg;
 
@@ -584,7 +546,7 @@ void Cmd_Notarget_f( gentity_t *ent ) {
 	}
 
 	trap_SendServerCommand( ent - g_entities, va( "print \"%s\"", msg ) );
-}
+}*/
 
 
 /*
@@ -1635,15 +1597,16 @@ static void Cmd_Voice_f( gentity_t *ent, int mode, qboolean arg0, qboolean voice
 }
 
 /*
+Nico, commented this because it's no longer used
 ==================
 Cmd_Where_f
 ==================
-*/
+
 void Cmd_Where_f( gentity_t *ent ) {
 	// Nico, bugfix, where command doesn't work as expected
 	// trap_SendServerCommand( ent - g_entities, va( "print \"%s\n\"", vtos( ent->s.origin ) ) );
 	trap_SendServerCommand( ent - g_entities, va( "print \"%s\n\"", vtos( ent->r.currentOrigin ) ) );
-}
+}*/
 
 /*
 ==================
@@ -2058,10 +2021,11 @@ qboolean G_canPickupMelee( gentity_t *ent ) {
 
 
 /*
+Nico, commented this because it's no longer used
 =================
 Cmd_SetViewpos_f
 =================
-*/
+
 void Cmd_SetViewpos_f( gentity_t *ent ) {
 	vec3_t origin, angles;
 	char buffer[MAX_TOKEN_CHARS];
@@ -2086,7 +2050,7 @@ void Cmd_SetViewpos_f( gentity_t *ent ) {
 	angles[YAW] = atof( buffer );
 
 	TeleportPlayer( ent, origin, angles );
-}
+}*/
 
 /*
 =================
@@ -2118,10 +2082,6 @@ void Cmd_StartCamera_f( gentity_t *ent ) {
 	ent->s.eFlags |= EF_VIEWING_CAMERA;
 
 	VectorCopy( ent->r.currentOrigin, ent->client->cameraOrigin );  // backup our origin
-
-// (SA) trying this in client to avoid 1 frame of player drawing
-//	ent->client->ps.eFlags |= EF_NODRAW;
-//	ent->s.eFlags |= EF_NODRAW;
 }
 
 /*
@@ -2130,11 +2090,7 @@ Cmd_StopCamera_f
 =================
 */
 void Cmd_StopCamera_f( gentity_t *ent ) {
-//	gentity_t *sp;
-
 	if ( ent->client->cameraPortal && ( ent->client->ps.eFlags & EF_VIEWING_CAMERA ) ) {
-		// send a script event
-//		G_Script_ScriptEvent( ent->client->cameraPortal, "stopcam", "" );
 
 		// go back into noclient mode
 		G_FreeEntity( ent->client->cameraPortal );
@@ -2142,23 +2098,6 @@ void Cmd_StopCamera_f( gentity_t *ent ) {
 
 		ent->s.eFlags &= ~EF_VIEWING_CAMERA;
 		ent->client->ps.eFlags &= ~EF_VIEWING_CAMERA;
-
-		//G_SetOrigin( ent, ent->client->cameraOrigin );	// restore our origin
-		//VectorCopy( ent->client->cameraOrigin, ent->client->ps.origin );
-
-// (SA) trying this in client to avoid 1 frame of player drawing
-//		ent->s.eFlags &= ~EF_NODRAW;
-//		ent->client->ps.eFlags &= ~EF_NODRAW;
-
-		// RF, if we are near the spawn point, save the "current" game, for reloading after death
-//		sp = NULL;
-		// gcc: suggests () around assignment used as truth value
-//		while ((sp = G_Find( sp, FOFS(classname), "info_player_deathmatch" ))) {	// info_player_start becomes info_player_deathmatch in it's spawn functon
-//			if (Distance( ent->s.pos.trBase, sp->s.origin ) < 256 && trap_InPVS( ent->s.pos.trBase, sp->s.origin )) {
-//				G_SaveGame( NULL );
-//				break;
-//			}
-//		}
 	}
 }
 
@@ -2182,11 +2121,8 @@ void Cmd_SetCameraOrigin_f( gentity_t *ent ) {
 	}
 
 	if ( ent->client->cameraPortal ) {
-		//G_SetOrigin( ent->client->cameraPortal, origin );	// set our origin
 		VectorCopy( origin, ent->client->cameraPortal->s.origin2 );
 		trap_LinkEntity( ent->client->cameraPortal );
-		//	G_SetOrigin( ent, origin );	// set our origin
-		//	VectorCopy( origin, ent->client->ps.origin );
 	}
 }
 
@@ -3136,20 +3072,30 @@ void ClientCommand( int clientNum ) {
 
 	// ignore all other commands when at intermission
 	if ( level.intermissiontime ) {
-//		Cmd_Say_f (ent, qfalse, qtrue);			// NERVE - SMF - we don't want to spam the clients with this.
 		CPx( clientNum, va( "print \"^3%s^7 not allowed during intermission.\n\"", cmd ) );
 		return;
 	}
 
+	/* Nico, removed give command
 	if ( Q_stricmp( cmd, "give" ) == 0 ) {
 		Cmd_Give_f( ent );
-	} else if ( Q_stricmp( cmd, "god" ) == 0 ) {
+	}*/
+
+	/* Nico, removed god command
+	else if ( Q_stricmp( cmd, "god" ) == 0 ) {
 		Cmd_God_f( ent );
-	} else if ( Q_stricmp( cmd, "nofatigue" ) == 0 ) {
+	} */
+
+	/* Nico, removed client command nofatigue
+	else if ( Q_stricmp( cmd, "nofatigue" ) == 0 ) {
 		Cmd_Nofatigue_f( ent );
-	} else if ( Q_stricmp( cmd, "notarget" ) == 0 ) {
+	}*/
+
+	/* Nico, removed notarget command
+	else if ( Q_stricmp( cmd, "notarget" ) == 0 ) {
 		Cmd_Notarget_f( ent );
-	} else if ( Q_stricmp( cmd, "noclip" ) == 0 ) {
+	}*/ 
+	else if ( Q_stricmp( cmd, "noclip" ) == 0 ) {
 		Cmd_Noclip_f( ent );
 	} else if ( Q_stricmp( cmd, "kill" ) == 0 ) {
 		Cmd_Kill_f( ent );
@@ -3157,25 +3103,24 @@ void ClientCommand( int clientNum ) {
 		Cmd_FollowCycle_f( ent, 1 );
 	} else if ( Q_stricmp( cmd, "followprev" ) == 0 ) {
 		Cmd_FollowCycle_f( ent, -1 );
-	} else if ( Q_stricmp( cmd, "where" ) == 0 ) {
+	}
+	/* Nico, removed where command
+	else if ( Q_stricmp( cmd, "where" ) == 0 ) {
 		Cmd_Where_f( ent );
-//	} else if (Q_stricmp (cmd, "startCamera") == 0) {
-//		Cmd_StartCamera_f( ent );
-	} else if ( Q_stricmp( cmd, "stopCamera" ) == 0 ) {
+	}*/
+	else if ( Q_stricmp( cmd, "stopCamera" ) == 0 ) {
 		Cmd_StopCamera_f( ent );
 	} else if ( Q_stricmp( cmd, "setCameraOrigin" ) == 0 ) {
 		Cmd_SetCameraOrigin_f( ent );
-	} else if ( Q_stricmp( cmd, "setviewpos" ) == 0 ) {
+	}
+	/* Nico, removed setviewpos command
+	else if ( Q_stricmp( cmd, "setviewpos" ) == 0 ) {
 		Cmd_SetViewpos_f( ent );
-	} else if ( Q_stricmp( cmd, "setspawnpt" ) == 0 ) {
+	}*/
+	else if ( Q_stricmp( cmd, "setspawnpt" ) == 0 ) {
 		Cmd_SetSpawnPoint_f( ent );
 	} else if ( Q_stricmp( cmd, "setsniperspot" ) == 0 ) {
 		Cmd_SetSniperSpot_f( ent );
-//	} else if (Q_stricmp (cmd, "waypoint") == 0) {
-//		Cmd_SetWayPoint_f( ent );
-//	} else if (Q_stricmp (cmd, "clearwaypoint") == 0) {
-//		Cmd_ClearWayPoint_f( ent );
-		// OSP
 	} else if ( G_commandCheck( ent, cmd, qfalse ) ) {
 		return;
 
