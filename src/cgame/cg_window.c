@@ -116,196 +116,6 @@ void CG_createMOTDWindow( void ) {
 	}
 }
 
-/*
-void CG_createWstatsMsgWindow(void)
-{
-	cg_window_t *sw = CG_windowAlloc(WFX_TEXTSIZING|WFX_FLASH, 0);
-
-	cg.msgWstatsWindow = sw;
-	if(sw == NULL) return;
-
-	// Window specific
-	sw->id = WID_NONE;
-	sw->fontScaleX = 1.0f;
-	sw->fontScaleY = 1.0f;
-	sw->x = 300;
-	sw->y = -1;
-	sw->flashPeriod = 800;
-	sw->flashMidpoint = sw->flashPeriod * 0.5f;
-
-	memcpy(&sw->colorBorder, &colorClear, sizeof(vec4_t));
-	memcpy(&sw->colorBackground, &colorBrown1, sizeof(vec4_t));
-	memcpy(&sw->colorBackground2, &colorGreen1, sizeof(vec4_t));
-
-	cg.windowCurrent = sw;
-	CG_printWindow("^3Stats (+wstats)");
-}
-
-
-void CG_createWtopshotsMsgWindow(void)
-{
-	cg_window_t *sw = CG_windowAlloc(WFX_TEXTSIZING|WFX_FLASH, 0);
-
-	cg.msgWtopshotsWindow = sw;
-	if(sw == NULL) return;
-
-	// Window specific
-	sw->id = WID_NONE;
-	sw->fontScaleX = 1.0f;
-	sw->fontScaleY = 1.0f;
-	sw->x = -20;
-	sw->y = -1;
-	sw->flashPeriod = 1000;
-	sw->flashMidpoint = sw->flashPeriod * 0.7f;
-
-	memcpy(&sw->colorBorder, &colorClear, sizeof(vec4_t));
-	memcpy(&sw->colorBackground, &colorBrown1, sizeof(vec4_t));
-	memcpy(&sw->colorBackground2, &colorGreen1, sizeof(vec4_t));
-
-	cg.windowCurrent = sw;
-	CG_printWindow("^3Rankings (+wtopshots)");
-}
-*/
-
-/*
-void CG_createDemoHelpWindow(void)
-{
-	int i;
-	cg_window_t *sw = CG_windowAlloc(WFX_TEXTSIZING|WFX_FADEIN|WFX_TRUETYPE, 250);
-	const char *help[] = {
-		"^2TAB      ^Nscores",
-		"^2F1-F5    ^Navidemo record",
-		"^2F11-F12  ^Nscreenshot",
-		" ", " ",
-		"^2KP_DOWN  ^Nslow down (--)",
-		"^2KP_LEFT  ^Nslow down (-)",
-		"^2KP_UP    ^Nspeed up (++)",
-		"^2KP_RIGHT ^Nspeed up (+)",
-		"^2SPACE    ^Nnormal speed",
-		" ", " ",
-		"^2ENTER    ^NExternal view",
-		"^2LFT/RGHT ^NChange angle",
-		"^2UP/DOWN  ^NMove in/out"
-	};
-	const char *mvhelp[] = {
-		" ", " ",
-		"^2MOUSE1   ^NSelect/move view",
-		"^2MOUSE2   ^NSwap w/main view",
-		"^2MOUSE3   ^NToggle on/off",
-		"^2SHIFT    ^NHold to resize",
-		"^2KP_PGUP  ^NEnable a view",
-		"^2KP_PGDN  ^NClose a view"
-	};
-
-	cg.demohelpWindow = sw;
-	if(sw == NULL) return;
-
-	// Window specific
-	sw->id = WID_DEMOHELP;
-	sw->fontScaleX = 0.2f;
-	sw->fontScaleY = 0.3f;
-	sw->x = 2;
-	sw->y = 155;
-	sw->flashMidpoint = sw->flashPeriod * 0.8f;
-	memcpy(&sw->colorBackground2, &colorGreen2, sizeof(vec4_t));
-
-	cg.windowCurrent = sw;
-	for(i=0; i<sizeof(help)/sizeof(char *); i++) {
-		CG_printWindow((char*)help[i]);
-	}
-
-	if(cg.mvTotalClients > 1) {
-		for(i=0; i<sizeof(mvhelp)/sizeof(char *); i++) {
-			CG_printWindow((char*)mvhelp[i]);
-		}
-	}
-
-	CG_printWindow(" ");
-	CG_printWindow("^2BACKSPACE ^Nhelp on/off");
-}
-*/
-/*
-char *CG_getBindKeyName(const char *cmd, char *buf, int len)
-{
-	int j;
-
-	for(j=0; j<256; j++) {
-		trap_Key_GetBindingBuf(j, buf, len);
-		if(*buf == 0) continue;
-
-		if(!Q_stricmp(buf, cmd)) {
-			trap_Key_KeynumToStringBuf(j, buf, MAX_STRING_TOKENS);
-			Q_strupr(buf);
-			return(buf);
-		}
-	}
-
-	Q_strncpyz(buf, va("(%s)", cmd), len);
-	return(buf);
-}
-
-typedef struct
-{
-	char *cmd;
-	char *info;
-} helpType_t;
-
-void CG_createSpecHelpWindow(void)
-{
-	int i, maxlen = 0;
-	char *format, buf[MAX_STRING_TOKENS];
-	cg_window_t *sw = CG_windowAlloc(WFX_TEXTSIZING|WFX_FADEIN|WFX_TRUETYPE, 250);
-	const helpType_t help[] =
-	{
-		{ "+zoom", "hold for pointer" },
-		{ "+attack", "window move/resize" },
-		{ "+sprint", "hold to resize" },
-		{ "weapnext", "window on/off" },
-		{ "weapprev", "swap w/main view"},
-		{ NULL, NULL },
-		{ NULL, NULL },
-		{ NULL, NULL },
-		{ NULL, NULL },
-		{ "weapalt", "swingcam toggle" },
-		{ "togglespechelp", "help on/off" }
-	};
-
-	cg.spechelpWindow = sw;
-	if(sw == NULL) return;
-
-	// Window specific
-	sw->id = WID_SPECHELP;
-	sw->fontScaleX = 0.2f;
-	sw->fontScaleY = 0.3f;
-	sw->x = 2;
-	sw->y = 155;
-	sw->flashMidpoint = sw->flashPeriod * 0.8f;
-	memcpy(&sw->colorBackground2, &colorGreen2, sizeof(vec4_t));
-
-	for(i=0; i<sizeof(help)/sizeof(helpType_t); i++) {
-		if(help[i].cmd != NULL) {
-			int len = strlen(CG_getBindKeyName(help[i].cmd, buf, sizeof(buf)));
-			if(len > maxlen) {
-				maxlen = len;
-			}
-		}
-	}
-
-	cg.windowCurrent = sw;
-	format = va("^2%%%ds ^N%%s", maxlen);
-
-	for(i=0; i<sizeof(help)/sizeof(helpType_t); i++) {
-		if(help[i].cmd == NULL) {
-			CG_printWindow(" ");
-		} else {
-			CG_printWindow(va(format, CG_getBindKeyName(help[i].cmd, buf, sizeof(buf)), help[i].info));
-		}
-	}
-}
-*/
-
-
-
 //////////////////////////////////////////////
 //////////////////////////////////////////////
 //
@@ -475,9 +285,10 @@ void CG_windowDraw( void ) {
 
 	// Mouse cursor position for MV highlighting (offset for cursor pointer position)
 	// Also allow for swingcam toggling
+	/* Nico, removed multiview
 	if ( cg.mvTotalClients > 0 && fAllowMV ) {
 		CG_cursorUpdate();
-	}
+	}*/
 
 	for ( i = 0; i < cg.winHandler.numActiveWindows; i++ ) {
 		w = &cg.winHandler.window[cg.winHandler.activeWindows[i]];
@@ -488,13 +299,13 @@ void CG_windowDraw( void ) {
 		}
 
 		// Multiview rendering has its own handling
-
+		/* Nico, removed multiview
 		if ( w->effects & WFX_MULTIVIEW ) {
 			if ( w != cg.mvCurrentMainview && fAllowMV ) {
 				CG_mvDraw( w );
 			}
 			continue;
-		}
+		}*/
 
 		if ( w->effects & WFX_TEXTSIZING ) {
 			CG_windowNormalizeOnText( w );
@@ -576,19 +387,20 @@ void CG_windowDraw( void ) {
 	}
 
 	// Wedge in MV info overlay
+	/* Nico, removed multiview
 	if ( cg.mvTotalClients > 0 && fAllowMV ) {
 		CG_mvOverlayDisplay();
-	}
+	}*/
 
 	// Extra rate info
 	CG_demoAviFPSDraw();
 	CG_demoTimescaleDraw();
 
 	// Mouse cursor lays on top of everything
+	/* Nico, removed multiview
 	if ( cg.mvTotalClients > 0 && cg.time < cgs.cursorUpdate && fAllowMV ) {
-		//CG_DrawPic(cgs.cursorX - CURSOR_OFFSETX, cgs.cursorY - CURSOR_OFFSETY, 32, 32, cgs.media.cursor);
 		CG_DrawPic( cgDC.cursorx, cgDC.cursory, 32, 32, cgs.media.cursorIcon );
-	}
+	}*/
 
 	if ( fCleanup ) {
 		CG_windowCleanup();
@@ -759,6 +571,7 @@ void CG_removeStrings( cg_window_t *w ) {
 //
 
 // Mouse overlay for controlling multiview windows
+/* Nico, removed multiview
 void CG_cursorUpdate( void ) {
 	int i, j, x;
 	float nx, ny;
@@ -808,6 +621,7 @@ void CG_cursorUpdate( void ) {
 	for ( i = wh->numActiveWindows - 1; i >= 0; i-- ) {
 		w = &wh->window[wh->activeWindows[i]];
 		if ( ( w->effects & WFX_MULTIVIEW ) && w != cg.mvCurrentMainview ) {
+		if (( w->effects & WFX_MULTIVIEW )) {
 			// Mouse/window detection
 			// If the current window is selected, and the button is down, then allow the update
 			// to occur, as quick mouse movements can move it past the window borders
@@ -888,6 +702,7 @@ void CG_cursorUpdate( void ) {
 
 	// Highlight corresponding active window's overlay element
 	if ( fFound ) {
+		
 		for ( i = 0; i < cg.mvTotalClients; i++ ) {
 			if ( cg.mvOverlay[i].pID == ( cg.mvCurrentActive->mvInfo & MV_PID ) ) {
 				cg.mvOverlay[i].fActive = qtrue;
@@ -922,6 +737,7 @@ void CG_cursorUpdate( void ) {
 						cg.mvOverlay[( cg.mvTeamList[i][pos] )].fActive = qtrue;
 
 						w = CG_mvClientLocate( cg.mvOverlay[( cg.mvTeamList[i][pos] )].pID );
+						w = NULL;
 						if ( w != NULL ) {
 							cg.mvCurrentActive = w;
 						}
@@ -964,4 +780,4 @@ void CG_cursorUpdate( void ) {
 	if ( fUpdateOverlay ) {
 		CG_mvOverlayUpdate();
 	}
-}
+}*/

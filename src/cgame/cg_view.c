@@ -1728,11 +1728,12 @@ void CG_DrawActiveFrame( int serverTime, stereoFrame_t stereoView, qboolean demo
 
 
 	// OSP -- MV handling
+	/* Nico, removed multiview
 	if ( cg.mvCurrentMainview != NULL && cg.snap->ps.pm_type != PM_INTERMISSION ) {
 		CG_mvDraw( cg.mvCurrentMainview );
 		// FIXME: not valid for demo playback
 		cg.zoomSensitivity = mv_sensitivity.value / int_sensitivity.value;
-	} else {
+	} else {*/
 		// clear all the render lists
 		trap_R_ClearScene();
 
@@ -1867,7 +1868,8 @@ void CG_DrawActiveFrame( int serverTime, stereoFrame_t stereoView, qboolean demo
 
 		// update audio positions
 		trap_S_Respatialize( cg.snap->ps.clientNum, cg.refdef.vieworg, cg.refdef.viewaxis, inwater );
-	}
+	/* Nico, removed multiview
+	}*/
 
 	if ( cg_stats.integer ) {
 		CG_Printf( "cg.clientFrame:%i\n", cg.clientFrame );

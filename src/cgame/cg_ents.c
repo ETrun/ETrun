@@ -2302,7 +2302,9 @@ qboolean CG_AddLinkedEntity( centity_t *cent, qboolean ignoreframe, int atTime )
 		return qtrue;
 	}
 
-	if ( !ignoreframe && ( cent->processedFrame == cg.clientFrame ) && cg.mvTotalClients < 2 ) {
+	/* Nico, removed multiview
+	if ( !ignoreframe && ( cent->processedFrame == cg.clientFrame ) && cg.mvTotalClients < 2 ) {*/
+	if (!ignoreframe && ( cent->processedFrame == cg.clientFrame )) {
 		// already processed this frame
 		return qtrue;
 	}
@@ -2453,7 +2455,9 @@ qboolean CG_AddEntityToTag( centity_t *cent ) {
 		return qfalse;
 	}
 
-	if ( cent->processedFrame == cg.clientFrame && cg.mvTotalClients < 2 ) {
+	/* Nico, removed multiview
+	if ( cent->processedFrame == cg.clientFrame && cg.mvTotalClients < 2 ) {*/
+	if (cent->processedFrame == cg.clientFrame) {
 		// already processed this frame
 		return qtrue;
 	}
@@ -2522,7 +2526,9 @@ CG_AddPacketEntities
 */
 
 qboolean CG_AddCEntity_Filter( centity_t* cent ) {
-	if ( cent->processedFrame == cg.clientFrame && cg.mvTotalClients < 2 ) {
+	/* Nico, removed multiview
+	if ( cent->processedFrame == cg.clientFrame && cg.mvTotalClients < 2 ) {*/
+	if (cent->processedFrame == cg.clientFrame) {
 		return qtrue;
 	}
 

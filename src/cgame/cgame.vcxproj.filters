@@ -107,9 +107,6 @@
     <ClCompile Include="cg_missionbriefing.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="cg_multiview.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="cg_newDraw.c">
       <Filter>Source Files</Filter>
     </ClCompile>

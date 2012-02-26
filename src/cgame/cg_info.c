@@ -192,26 +192,11 @@ void CG_DemoClick( int key, qboolean down ) {
 		cgs.fSelect = down;
 		return;
 	case K_MOUSE2:
-		if ( !down ) {
-			CG_mvSwapViews_f();             // Swap the window with the main view
-		}
-		return;
 	case K_INS:
 	case K_KP_PGUP:
-		if ( !down ) {
-			CG_mvShowView_f();              // Make a window for the client
-		}
-		return;
 	case K_DEL:
 	case K_KP_PGDN:
-		if ( !down ) {
-			CG_mvHideView_f();              // Delete the window for the client
-		}
-		return;
 	case K_MOUSE3:
-		if ( !down ) {
-			CG_mvToggleView_f();            // Toggle a window for the client
-		}
 		return;
 
 		// Third-person controls
@@ -380,6 +365,7 @@ vec4_t color_name   = COLOR_TEXT;
 #define VD_SCALE_Y_NAME 0.30f
 
 qboolean CG_ViewingDraw() {
+	/* Nico, removed multiview
 	if ( cg.mvTotalClients < 1 ) {
 		return( qfalse );
 
@@ -412,7 +398,8 @@ qboolean CG_ViewingDraw() {
 						   FONT_TEXT );
 
 		return( qtrue );
-	}
+	}*/
+	return( qfalse );
 }
 
 
@@ -802,11 +789,18 @@ void CG_DemoHelpDraw() {
 
 
 		// FIXME: Should compute this beforehand
-		w = DH_W + ( ( cg.mvTotalClients > 1 ) ? 12 : 0 );
+		/* Nico, removed multiview
+		w = DH_W + ( ( cg.mvTotalClients > 1 ) ? 12 : 0 );*/
+		w = DH_W;
 		x = 640 + DH_X - w;
+		/* Nico, removed multiview
 		h = 2 + tSpacing + 2 +                                  // Header
 			2 + 1 +
 			tSpacing * ( 2 + ( sizeof( help ) + ( ( cg.mvTotalClients > 1 ) ? sizeof( mvhelp ) : 0 ) ) / sizeof( char * ) ) +
+			2;*/
+		h = 2 + tSpacing + 2 +                                  // Header
+			2 + 1 +
+			tSpacing * ( 2 + ( sizeof( help ) ) / sizeof( char * ) ) +
 			2;
 
 		// Fade-in effects
@@ -858,6 +852,7 @@ void CG_DemoHelpDraw() {
 			}
 		}
 
+		/* Nico, removed multiview
 		if ( cg.mvTotalClients > 1 ) {
 			for ( i = 0; i < sizeof( mvhelp ) / sizeof( char * ); i++ ) {
 				y += tSpacing;
@@ -865,7 +860,7 @@ void CG_DemoHelpDraw() {
 					CG_Text_Paint_Ext( x, y, tScale, tScale, tColor, (char*)mvhelp[i], 0.0f, 0, tStyle, tFont );
 				}
 			}
-		}
+		}*/
 
 		y += tSpacing * 2;
 		CG_Text_Paint_Ext( x, y, tScale, tScale, tColor, "^nBACKSPACE ^mhelp on/off", 0.0f, 0, tStyle, tFont );
@@ -1035,9 +1030,6 @@ void CG_SpecHelpDraw() {
 void CG_DrawOverlays( void ) {
 	CG_GameStatsDraw();
 	CG_TopShotsDraw();
-#ifdef MV_SUPPORT
-	CG_SpecHelpDraw();
-#endif
 	if ( cg.demoPlayback ) {
 		CG_DemoHelpDraw();
 	}

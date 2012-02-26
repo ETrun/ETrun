@@ -119,9 +119,10 @@ If you have questions concerning this license or the applicable additional terms
 #define DEMO_ANGLEDELTA         4
 
 // MV overlay
+/* Nico, removed multiview
 #define MVINFO_TEXTSIZE     10
 #define MVINFO_RIGHT        640 - 3
-#define MVINFO_TOP          100
+#define MVINFO_TOP          100*/
 
 #define MAX_WINDOW_COUNT        10
 #define MAX_WINDOW_LINES        64
@@ -136,8 +137,6 @@ If you have questions concerning this license or the applicable additional terms
 #define WID_STATS           0x01    // Stats (reusable due to scroll effect)
 #define WID_TOPSHOTS        0x02    // Top/Bottom-shots
 #define WID_MOTD            0x04    // MOTD
-//#define WID_DEMOHELP		0x08	// Demo key control info
-//#define WID_SPECHELP		0x10	// MV spectator key control info
 
 #define WFX_TEXTSIZING      0x01    // Size the window based on text/font setting
 #define WFX_FLASH           0x02    // Alternate between bg and b2 every half second
@@ -155,8 +154,9 @@ If you have questions concerning this license or the applicable additional terms
 #define WSTATE_SHUTDOWN     0x02    // Window is shutting down with effects
 #define WSTATE_OFF          0x04    // Window is completely shutdown
 
+/* Nico, removed multiview
 #define MV_PID              0x00FF  // Bits available for player IDs for MultiView windows
-#define MV_SELECTED         0x0100  // MultiView selected window flag is the 9th bit
+#define MV_SELECTED         0x0100  // MultiView selected window flag is the 9th bit*/
 
 typedef struct {
 	vec4_t colorBorder;         // Window border color
@@ -179,7 +179,8 @@ typedef struct {
 	char *lineText[MAX_WINDOW_LINES];   // Text info
 	float m_x;                  // Mouse X position
 	float m_y;                  // Mouse Y position
-	int mvInfo;                 // lower 8 = player id, 9 = is_selected
+	/* Nico, removed multiview
+	int mvInfo;                 // lower 8 = player id, 9 = is_selected*/
 	int targetTime;             // Time to complete any defined effect
 	int state;                  // Current state of the window
 	int time;                   // Current window time
@@ -201,6 +202,7 @@ typedef struct {
 	cg_window_t window[MAX_WINDOW_COUNT];           // Static allocation of all windows
 } cg_windowHandler_t;
 
+/* Nico, removed multiview
 typedef struct {
 	int pID;                    // Player ID
 	int classID;                // Player's current class
@@ -208,7 +210,7 @@ typedef struct {
 	char info[8];               // On-screen info (w/color coding)
 	qboolean fActive;           // Overlay element is active
 	cg_window_t *w;         // Window handle (may be NULL)
-} cg_mvinfo_t;
+} cg_mvinfo_t;*/
 // OSP
 
 
@@ -1091,6 +1093,7 @@ typedef struct {
 	cg_window_t         *motdWindow;
 	cg_window_t         *msgWstatsWindow;
 	cg_window_t         *msgWtopshotsWindow;
+	/* Nico, removed multiview
 	int mv_cnt;                                 // Number of active MV windows
 	int mvClientList;                           // Cached client listing of who is merged
 	cg_window_t         *mvCurrentActive;       // Client ID of current active window (-1 = none)
@@ -1098,7 +1101,7 @@ typedef struct {
 	cg_mvinfo_t mvOverlay[MAX_MVCLIENTS];        // Cached info for MV overlay
 	int mvTeamList[TEAM_NUM_TEAMS][MAX_MVCLIENTS];
 	int mvTotalClients;                         // Total # of clients available for MV processing
-	int mvTotalTeam[TEAM_NUM_TEAMS];
+	int mvTotalTeam[TEAM_NUM_TEAMS];*/
 	refdef_t            *refdef_current;        // Handling of some drawing elements for MV
 	qboolean showStats;
 	int spechelpWindow;
@@ -2190,7 +2193,8 @@ extern vmCvar_t demo_avifpsF4;
 extern vmCvar_t demo_avifpsF5;
 extern vmCvar_t demo_drawTimeScale;
 extern vmCvar_t demo_infoWindow;
-extern vmCvar_t mv_sensitivity;
+/* Nico, removed multiview
+extern vmCvar_t mv_sensitivity;*/
 // engine mappings
 extern vmCvar_t int_cl_maxpackets;
 extern vmCvar_t int_cl_timenudge;
@@ -3174,33 +3178,6 @@ const char* CG_BuildSelectedFirteamString( void );
 #define Pri( x ) CG_Printf( "[cgnotify]%s", CG_LocalizeServerCommand( x ) )
 #define CPri( x ) CG_CenterPrint( CG_LocalizeServerCommand( x ), SCREEN_HEIGHT - ( SCREEN_HEIGHT * 0.2 ), SMALLCHAR_WIDTH );
 
-// cg_multiview.c
-void CG_mvDelete_f( void );
-void CG_mvHideView_f( void );
-void CG_mvNew_f( void );
-void CG_mvShowView_f( void );
-void CG_mvSwapViews_f( void );
-void CG_mvToggleAll_f( void );
-void CG_mvToggleView_f( void );
-//
-cg_window_t *CG_mvClientLocate( int pID );
-void CG_mvCreate( int pID );
-cg_window_t *CG_mvCurrent( void );
-void CG_mvDraw( cg_window_t *sw );
-cg_window_t *CG_mvFindNonMainview( void );
-void CG_mvFree( int pID );
-void CG_mvMainviewSwap( cg_window_t *av );
-qboolean CG_mvMergedClientLocate( int pID );
-void CG_mvOverlayDisplay( void );
-void CG_mvOverlayUpdate( void );
-void CG_mvOverlayClientUpdate( int pID, int index );
-void CG_mvProcessClientList( void );
-void CG_mvTransitionPlayerState( playerState_t* ps );
-void CG_mvUpdateClientInfo( int pID );
-void CG_mvWindowOverlay( int pID, float b_x, float b_y, float b_w, float b_h, float s, int wState, qboolean fSelected );
-void CG_mvZoomBinoc( float x, float y, float w, float h );
-void CG_mvZoomSniper( float x, float y, float w, float h );
-
 // cg_window.c
 qboolean CG_addString( cg_window_t *w, char *buf );
 //void CG_createDemoHelpWindow(void);
@@ -3210,7 +3187,8 @@ void CG_createTopShotsWindow( void );
 void CG_createWstatsMsgWindow( void );
 void CG_createWtopshotsMsgWindow( void );
 void CG_createMOTDWindow( void );
-void CG_cursorUpdate( void );
+/* Nico, removed multiview
+void CG_cursorUpdate( void );*/
 void CG_initStrings( void );
 void CG_printWindow( char *str );
 void CG_removeStrings( cg_window_t *w );

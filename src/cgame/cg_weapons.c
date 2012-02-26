@@ -3384,7 +3384,9 @@ void CG_AltWeapon_f( void ) {
 	}
 
 	// Overload for spec mode when following
-	if ( ( cg.snap->ps.pm_flags & PMF_FOLLOW ) || cg.mvTotalClients > 0 ) {
+	/* Nico, removed multiview
+	if ( ( cg.snap->ps.pm_flags & PMF_FOLLOW ) || cg.mvTotalClients > 0 ) {*/
+	if (( cg.snap->ps.pm_flags & PMF_FOLLOW )) {
 		return;
 	}
 
@@ -3950,10 +3952,11 @@ void CG_NextWeapon_f( void ) {
 	}
 
 	// Overload for MV clients
+	/* Nico, removed multiview
 	if ( cg.mvTotalClients > 0 ) {
 		CG_mvToggleView_f();
 		return;
-	}
+	}*/
 
 	//fretn - #447
 	//osp-rtcw & et pause bug
@@ -4010,10 +4013,11 @@ void CG_PrevWeapon_f( void ) {
 	}
 
 	// Overload for MV clients
+	/* Nico, removed multiview
 	if ( cg.mvTotalClients > 0 ) {
 		CG_mvSwapViews_f();
 		return;
-	}
+	}*/
 
 	//fretn - #447
 	//osp-rtcw & et pause bug

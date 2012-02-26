@@ -278,13 +278,6 @@ static void CG_TransitionSnapshot( void ) {
 		oldValid[cg.snap->entities[i].number] = qtrue;
 	}
 
-	// OSP -- check for MV updates from new snapshot info
-#ifdef MV_SUPPORT
-	if ( cg.snap->ps.powerups[PW_MVCLIENTLIST] != cg.mvClientList ) {
-		CG_mvProcessClientList();
-	}
-#endif
-
 	// move nextSnap to snap and do the transitions
 	oldFrame = cg.snap;
 	cg.snap = cg.nextSnap;
@@ -310,14 +303,16 @@ static void CG_TransitionSnapshot( void ) {
 			CG_ResetEntity( &cg_entities[id] );
 		}
 
+		/* Nico, removed multiview
 		if ( cg.mvTotalClients > 0 && CG_mvMergedClientLocate( id ) ) {
 			CG_mvUpdateClientInfo( id );
-		}
+		}*/
 	}
 
+	/* Nico, removed multiview
 	if ( cg.mvTotalClients > 0 ) {
 		CG_mvTransitionPlayerState( &cg.snap->ps );
-	}
+	}*/
 
 	cg.nextSnap = NULL;
 

@@ -72,9 +72,13 @@ void CG_LimboMenu_f( void ) {
 
 static void CG_StatsDown_f( void ) {
 	if ( !cg.demoPlayback ) {
-		int i = ( cg.mvTotalClients > 0 ) ? ( cg.mvCurrentActive->mvInfo & MV_PID ) : cg.snap->ps.clientNum;
+		/* Nico, removed multiview
+		int i = ( cg.mvTotalClients > 0 ) ? ( cg.mvCurrentActive->mvInfo & MV_PID ) : cg.snap->ps.clientNum;*/
+		int i =  cg.snap->ps.clientNum;
 
-		if ( cg.mvTotalClients < 1 && cg.snap->ps.persistant[PERS_TEAM] == TEAM_SPECTATOR ) {
+		/* Nico, removed multiview
+		if ( cg.mvTotalClients < 1 && cg.snap->ps.persistant[PERS_TEAM] == TEAM_SPECTATOR ) {*/
+		if ( cg.snap->ps.persistant[PERS_TEAM] == TEAM_SPECTATOR ) {
 			Pri( "You must be a player or following a player to use +stats\n" );
 			return;
 		}
@@ -140,7 +144,9 @@ void CG_ScoresDown_f( void ) {
 		cg.scoresRequestTime = cg.time;
 
 		// OSP - we get periodic score updates if we are merging clients
-		if ( !cg.demoPlayback && cg.mvTotalClients < 1 ) {
+		/* Nico, removed multiview
+		if ( !cg.demoPlayback && cg.mvTotalClients < 1 ) {*/
+		if (!cg.demoPlayback) {
 			trap_SendClientCommand( "score" );
 		}
 
@@ -148,7 +154,9 @@ void CG_ScoresDown_f( void ) {
 		// displayed, but if this is the first hit, clear them out
 		if ( !cg.showScores ) {
 			cg.showScores = qtrue;
-			if ( !cg.demoPlayback && cg.mvTotalClients < 1 ) {
+			/* Nico, removed multiview
+			if ( !cg.demoPlayback && cg.mvTotalClients < 1 ) {*/
+			if (!cg.demoPlayback) {
 				cg.numScores = 0;
 			}
 		}
@@ -763,13 +771,19 @@ void CG_keyOff_f( void ) {
 void CG_dumpStats_f( void ) {
 	if ( cgs.dumpStatsTime < cg.time ) {
 		cgs.dumpStatsTime = cg.time + 2000;
-		trap_SendClientCommand( ( cg.mvTotalClients < 1 ) ? "weaponstats" : "statsall" );
+		/* Nico, removed multiview
+		trap_SendClientCommand( ( cg.mvTotalClients < 1 ) ? "weaponstats" : "statsall" );*/
+		trap_SendClientCommand("weaponstats");
 	}
 }
 void CG_wStatsDown_f( void ) {
-	int i = ( cg.mvTotalClients > 0 ) ? ( cg.mvCurrentActive->mvInfo & MV_PID ) : cg.snap->ps.clientNum;
+	/* Nico, removed multiview
+	int i = ( cg.mvTotalClients > 0 ) ? ( cg.mvCurrentActive->mvInfo & MV_PID ) : cg.snap->ps.clientNum;*/
+	int i = cg.snap->ps.clientNum;
 
-	if ( cg.mvTotalClients < 1 && cg.snap->ps.persistant[PERS_TEAM] == TEAM_SPECTATOR ) {
+	/* Nico, removed multiview
+	if ( cg.mvTotalClients < 1 && cg.snap->ps.persistant[PERS_TEAM] == TEAM_SPECTATOR ) {*/
+	if (cg.snap->ps.persistant[PERS_TEAM] == TEAM_SPECTATOR) {
 		Pri( "You must be a player or following a player to use +wstats\n" );
 		return;
 	}
@@ -789,7 +803,9 @@ void CG_wStatsUp_f( void ) {
 }
 
 void CG_toggleSpecHelp_f( void ) {
-	if ( cg.mvTotalClients > 0 && !cg.demoPlayback ) {
+	/* Nico, removed multiview
+	if ( cg.mvTotalClients > 0 && !cg.demoPlayback ) {*/
+	if ( !cg.demoPlayback ) {
 		if ( cg.spechelpWindow != SHOW_ON && cg_specHelp.integer > 0 ) {
 			CG_ShowHelp_On( &cg.spechelpWindow );
 		} else if ( cg.spechelpWindow == SHOW_ON ) {
@@ -1007,16 +1023,6 @@ static consoleCommand_t commands[] =
 	{ "currentTime", CG_currentTime_f },
 	{ "keyoff",          CG_keyOff_f },
 	{ "keyon",           CG_keyOn_f },
-#ifdef MV_SUPPORT
-	{ "mvactivate",      CG_mvToggleAll_f },
-	{ "mvdel",           CG_mvDelete_f },
-	{ "mvhide",          CG_mvHideView_f },
-	{ "mvnew",           CG_mvNew_f },
-	{ "mvshow",          CG_mvShowView_f },
-	{ "mvswap",          CG_mvSwapViews_f },
-	{ "mvtoggle",        CG_mvToggleView_f },
-	{ "spechelp",        CG_toggleSpecHelp_f },
-#endif
 	{ "statsdump",       CG_dumpStats_f },
 	{ "+vstr",           CG_vstrDown_f },
 	{ "-vstr",           CG_vstrUp_f },
@@ -1125,13 +1131,6 @@ void CG_InitConsoleCommands( void ) {
 	trap_AddCommand( "bottomshots" );
 	trap_AddCommand( "commands" );
 	trap_AddCommand( "lock" );
-#ifdef MV_SUPPORT
-	trap_AddCommand( "mvadd" );
-	trap_AddCommand( "mvaxis" );
-	trap_AddCommand( "mvallies" );
-	trap_AddCommand( "mvall" );
-	trap_AddCommand( "mvnone" );
-#endif
 	trap_AddCommand( "notready" );
 	trap_AddCommand( "pause" );
 	trap_AddCommand( "players" );

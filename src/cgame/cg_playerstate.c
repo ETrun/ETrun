@@ -477,6 +477,7 @@ CG_TransitionPlayerState
 */
 void CG_TransitionPlayerState( playerState_t *ps, playerState_t *ops ) {
 	// OSP - MV client handling
+	/* Nico, removed multiview
 	if ( cg.mvTotalClients > 0 ) {
 		if ( ps->clientNum != ops->clientNum ) {
 			cg.thisFrameTeleport = qtrue;
@@ -489,7 +490,7 @@ void CG_TransitionPlayerState( playerState_t *ps, playerState_t *ops ) {
 		}
 		CG_CheckLocalSounds( ps, ops );
 		return;
-	}
+	}*/
 
 	// check for changing follow mode
 	if ( ps->clientNum != ops->clientNum ) {

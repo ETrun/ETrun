@@ -1671,7 +1671,9 @@ static void CG_DrawCrosshair( void ) {
 			}
 
 			// OSP
-			if ( cg.mvTotalClients < 1 || cg.snap->ps.stats[STAT_HEALTH] > 0 ) {
+			/* Nico, removed multiview
+			if ( cg.mvTotalClients < 1 || cg.snap->ps.stats[STAT_HEALTH] > 0 ) {*/
+			if (cg.snap->ps.stats[STAT_HEALTH] > 0) {
 				CG_DrawWeapReticle();
 			}
 
@@ -2508,28 +2510,6 @@ NERVE - SMF
 =================
 */
 static void CG_ActivateLimboMenu( void ) {
-/*	static qboolean latch = qfalse;
-	qboolean test;
-
-	// should we open the limbo menu (make allowances for MV clients)
-	test = ((cg.snap->ps.pm_flags & PMF_LIMBO) ||
-			( (cg.mvTotalClients < 1 && (
-				(cg.snap->ps.persistant[PERS_TEAM] == TEAM_SPECTATOR) ||
-				(cg.warmup))
-			  )
-			&& cg.snap->ps.pm_type != PM_INTERMISSION ) );
-
-
-	// auto open/close limbo mode
-	if(cg_popupLimboMenu.integer && !cg.demoPlayback) {
-		if(test && !latch) {
-			CG_LimboMenu_f();
-			latch = qtrue;
-		} else if(!test && latch && cg.showGameView) {
-			CG_EventHandling(CGAME_EVENT_NONE, qfalse);
-			latch = qfalse;
-		}
-	}*/
 }
 
 /*
@@ -2572,13 +2552,6 @@ static void CG_DrawSpectatorMessage( void ) {
 	str2 = BindingFromName( "+attack" );
 	str = va( CG_TranslateString( "Press %s to follow next player" ), str2 );
 	CG_DrawStringExt( 8, 172, str, colorWhite, qtrue, qtrue, TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 0 );
-
-#ifdef MV_SUPPORT
-	str2 = BindingFromName( "mvactivate" );
-	str = va( CG_TranslateString( "- Press %s to %s multiview mode" ), str2, ( ( cg.mvTotalClients > 0 ) ? "disable" : "activate" ) );
-	CG_DrawStringExt( x, y, str, colorWhite, qtrue, qtrue, TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 0 );
-	y += TINYCHAR_HEIGHT;
-#endif
 }
 
 
@@ -2896,10 +2869,14 @@ static void CG_DrawFlashFade( void ) {
 
 	// OSP - ugh, have to inform the ui that we need to remain blacked out (or not)
 	if ( int_ui_blackout.integer == 0 ) {
-		if ( cg.mvTotalClients < 1 && cg.snap->ps.powerups[PW_BLACKOUT] > 0 ) {
+		/* Nico, removed multiview
+		if ( cg.mvTotalClients < 1 && cg.snap->ps.powerups[PW_BLACKOUT] > 0 ) {*/
+		if ( cg.snap->ps.powerups[PW_BLACKOUT] > 0 ) {
 			trap_Cvar_Set( "ui_blackout", va( "%d", cg.snap->ps.powerups[PW_BLACKOUT] ) );
 		}
-	} else if ( cg.snap->ps.powerups[PW_BLACKOUT] == 0 || cg.mvTotalClients > 0 ) {
+	/* Nico, removed multiview
+	} else if ( cg.snap->ps.powerups[PW_BLACKOUT] == 0 || cg.mvTotalClients > 0 ) {*/
+	} else if (cg.snap->ps.powerups[PW_BLACKOUT] == 0) {
 		trap_Cvar_Set( "ui_blackout", "0" );
 	}
 
@@ -2907,7 +2884,6 @@ static void CG_DrawFlashFade( void ) {
 	if ( cgs.fadeAlphaCurrent > 0.0 || fBlackout ) {
 		VectorClear( col );
 		col[3] = ( fBlackout ) ? 1.0f : cgs.fadeAlphaCurrent;
-//		CG_FillRect( -10, -10, 650, 490, col );
 		CG_FillRect( 0, 0, 640, 480, col ); // why do a bunch of these extend outside 640x480?
 
 		//bani - #127 - bail out if we're a speclocked spectator with cg_draw2d = 0
@@ -3497,7 +3473,9 @@ static void CG_DrawNewCompass( void ) {
 		snap = cg.snap;
 	}
 
-	if ( snap->ps.pm_flags & PMF_LIMBO || snap->ps.persistant[PERS_TEAM] == TEAM_SPECTATOR || cg.mvTotalClients > 0 ) {
+	/* Nico, removed multiview
+	if ( snap->ps.pm_flags & PMF_LIMBO || snap->ps.persistant[PERS_TEAM] == TEAM_SPECTATOR || cg.mvTotalClients > 0 ) {*/
+	if ( snap->ps.pm_flags & PMF_LIMBO || snap->ps.persistant[PERS_TEAM] == TEAM_SPECTATOR) {
 		return;
 	}
 
@@ -3940,10 +3918,14 @@ static void CG_DrawPlayerStatus( void ) {
 	rect.w = 60;
 	rect.h = 32;
 	CG_DrawWeapHeat( &rect, HUD_HORIZONTAL );
-	if ( cg.mvTotalClients < 1 && cg_drawWeaponIconFlash.integer == 0 ) {
+	/* Nico, removed multiview
+	if ( cg.mvTotalClients < 1 && cg_drawWeaponIconFlash.integer == 0 ) {*/
+	if ( cg_drawWeaponIconFlash.integer == 0 ) {
 		CG_DrawPlayerWeaponIcon( &rect, qtrue, ITEM_ALIGN_RIGHT, &colorWhite );
 	} else {
-		int ws = ( cg.mvTotalClients > 0 ) ? cgs.clientinfo[cg.snap->ps.clientNum].weaponState : BG_simpleWeaponState( cg.snap->ps.weaponstate );
+		/* Nico, removed multiview
+		int ws = ( cg.mvTotalClients > 0 ) ? cgs.clientinfo[cg.snap->ps.clientNum].weaponState : BG_simpleWeaponState( cg.snap->ps.weaponstate );*/
+		int ws = BG_simpleWeaponState(cg.snap->ps.weaponstate);
 		CG_DrawPlayerWeaponIcon( &rect, ( ws != WSTATE_IDLE ), ITEM_ALIGN_RIGHT, ( ( ws == WSTATE_SWITCH ) ? &colorWhite : ( ws == WSTATE_FIRE ) ? &colorRed : &colorYellow ) );
 	}
 

@@ -36,8 +36,8 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
     <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\..\_build\cgame</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\..\_build\cgame</IntDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\..\_build\cgame\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\..\_build\cgame\</IntDir>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\Debug\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\Debug\</IntDir>
@@ -182,7 +182,6 @@
     <ClCompile Include="cg_main.c" />
     <ClCompile Include="cg_marks.c" />
     <ClCompile Include="cg_missionbriefing.c" />
-    <ClCompile Include="cg_multiview.c" />
     <ClCompile Include="cg_newDraw.c" />
     <ClCompile Include="cg_particles.c" />
     <ClCompile Include="cg_players.c" />

@@ -275,8 +275,8 @@ vmCvar_t demo_avifpsF4;
 vmCvar_t demo_avifpsF5;
 vmCvar_t demo_drawTimeScale;
 vmCvar_t demo_infoWindow;
-
-vmCvar_t mv_sensitivity;
+/* Nico, removed multiview
+vmCvar_t mv_sensitivity;*/
 
 vmCvar_t int_cl_maxpackets;
 vmCvar_t int_cl_timenudge;
@@ -490,10 +490,6 @@ cvarTable_t cvarTable[] = {
 	{ &demo_drawTimeScale, "demo_drawTimeScale", "1", CVAR_ARCHIVE },
 	{ &demo_infoWindow, "demo_infoWindow", "1", CVAR_ARCHIVE },
 
-#ifdef MV_SUPPORT
-	{ &mv_sensitivity, "mv_sensitivity", "20", CVAR_ARCHIVE },
-#endif
-
 	// Engine mappings
 	{ &int_cl_maxpackets, "cl_maxpackets", "30", CVAR_ARCHIVE },
 	{ &int_cl_timenudge, "cl_timenudge", "0", CVAR_ARCHIVE },
@@ -662,9 +658,10 @@ int CG_CrosshairPlayer( void ) {
 
 int CG_LastAttacker( void ) {
 	// OSP - used for messaging clients in the currect active window
+	/* Nico, removed multiview
 	if ( cg.mvTotalClients > 0 ) {
 		return( cg.mvCurrentActive->mvInfo & MV_PID );
-	}
+	}*/
 	// OSP
 	return( ( !cg.attackerTime ) ? -1 : cg.snap->ps.persistant[PERS_ATTACKER] );
 }
@@ -794,11 +791,17 @@ char *CG_generateFilename( void ) {
 
 	trap_RealTime( &ct );
 //	CG_nameCleanFilename(Info_ValueForKey(pszPlayerInfo, "n"), strCleanName, sizeof(strCleanName));
+	/* Nico, removed multiview
 	return( va( "%d-%02d-%02d-%02d%02d%02d-%s%s",
 				1900 + ct.tm_year, ct.tm_mon + 1,ct.tm_mday,
 				ct.tm_hour, ct.tm_min, ct.tm_sec,
 				Info_ValueForKey( pszServerInfo, "mapname" ),
-				( cg.mvTotalClients < 1 ) ? "" : "-MVD" ) );
+				( cg.mvTotalClients < 1 ) ? "" : "-MVD" ) );*/
+	return(va( "%d-%02d-%02d-%02d%02d%02d-%s%s",
+				1900 + ct.tm_year, ct.tm_mon + 1,ct.tm_mday,
+				ct.tm_hour, ct.tm_min, ct.tm_sec,
+				Info_ValueForKey( pszServerInfo, "mapname" ),
+				""));
 }
 
 int CG_findClientNum( char *s ) {
