@@ -77,11 +77,6 @@ typedef struct ipGUID_s
 
 #define MAX_IPFILTERS   1024
 
-#define MAX_XPSTORAGEITEMS  MAX_CLIENTS
-typedef struct ipXPStorageList_s {
-	ipXPStorage_t ipFilters[MAX_XPSTORAGEITEMS];
-} ipXPStorageList_t;
-
 typedef struct ipFilterList_s {
 	ipFilter_t ipFilters[MAX_IPFILTERS];
 	int numIPFilters;
@@ -90,9 +85,6 @@ typedef struct ipFilterList_s {
 
 static ipFilterList_t ipFilters;
 static ipFilterList_t ipMaxLivesFilters;
-#ifdef USEXPSTORAGE
-static ipXPStorageList_t ipXPStorage;
-#endif
 
 static ipGUID_t guidMaxLivesFilters[MAX_IPFILTERS];
 static int numMaxLivesFilters = 0;
@@ -205,47 +197,6 @@ void PrintMaxLivesGUID() {
 
 /*
 =================
-G_FindIpData
-=================
-*/
-
-ipXPStorage_t* G_FindIpData( ipXPStorageList_t *ipXPStorageList, char *from ) {
-	int i;
-	unsigned in;
-	byte m[4];
-	char *p;
-
-	i = 0;
-	p = from;
-	while ( *p && i < 4 ) {
-		m[i] = 0;
-		while ( *p >= '0' && *p <= '9' ) {
-			m[i] = m[i] * 10 + ( *p - '0' );
-			p++;
-		}
-		if ( !*p || *p == ':' ) {
-			break;
-		}
-		i++, p++;
-	}
-
-	in = *(unsigned *)m;
-
-	for ( i = 0; i < MAX_IPFILTERS; i++ ) {
-		if ( !ipXPStorageList->ipFilters[ i ].timeadded || level.time - ipXPStorageList->ipFilters[ i ].timeadded > ( 5 * 60000 ) ) {
-			continue;
-		}
-
-		if ( ( in & ipXPStorageList->ipFilters[ i ].filter.mask ) == ipXPStorageList->ipFilters[ i ].filter.compare ) {
-			return &ipXPStorageList->ipFilters[ i ];
-		}
-	}
-
-	return NULL;
-}
-
-/*
-=================
 G_FilterPacket
 =================
 */
@@ -287,18 +238,6 @@ qboolean G_FilterMaxLivesIPPacket( char *from ) {
 	return( G_FilterPacket( &ipMaxLivesFilters, from ) );
 }
 
-#ifdef USEXPSTORAGE
-ipXPStorage_t* G_FindXPBackup( char *from ) {
-	ipXPStorage_t* storage = G_FindIpData( &ipXPStorage, from );
-
-	if ( storage ) {
-		storage->timeadded = 0;
-	}
-
-	return storage;
-}
-#endif // USEXPSTORAGE
-
 /*
  Check to see if the user is trying to sneak back in with g_enforcemaxlives enabled
 */
@@ -313,101 +252,6 @@ qboolean G_FilterMaxLivesPacket( char *from ) {
 	}
 	return 0;
 }
-
-#ifdef USEXPSTORAGE
-void G_StoreXPBackup( void ) {
-	int i;
-	char s[MAX_STRING_CHARS];
-
-	for ( i = 0; i < MAX_XPSTORAGEITEMS; i++ ) {
-		if ( !ipXPStorage.ipFilters[ i ].timeadded || level.time - ipXPStorage.ipFilters[ i ].timeadded > ( 5 * 60000 ) ) {
-			trap_Cvar_Set( va( "xpbackup%i", i ), "" );
-			continue;
-		}
-
-		Com_sprintf( s, sizeof( s ), "%u %u %f %f %f %f %f %f %f",
-					 ipXPStorage.ipFilters[ i ].filter.compare,
-					 ipXPStorage.ipFilters[ i ].filter.mask,
-					 ipXPStorage.ipFilters[ i ].skills[ 0 ],
-					 ipXPStorage.ipFilters[ i ].skills[ 1 ],
-					 ipXPStorage.ipFilters[ i ].skills[ 2 ],
-					 ipXPStorage.ipFilters[ i ].skills[ 3 ],
-					 ipXPStorage.ipFilters[ i ].skills[ 4 ],
-					 ipXPStorage.ipFilters[ i ].skills[ 5 ],
-					 ipXPStorage.ipFilters[ i ].skills[ 6 ] );
-
-		trap_Cvar_Set( va( "xpbackup%i", i ), s );
-	}
-}
-
-void G_ReadXPBackup( void ) {
-	int i;
-	char s[MAX_STRING_CHARS];
-
-	for ( i = 0; i < MAX_XPSTORAGEITEMS; i++ ) {
-		trap_Cvar_VariableStringBuffer( va( "xpbackup%i", i ), s, sizeof( s ) );
-
-		if ( !*s ) {
-			continue;
-		}
-
-		sscanf( s, "%u %u %f %f %f %f %f %f %f",
-				&ipXPStorage.ipFilters[ i ].filter.compare,
-				&ipXPStorage.ipFilters[ i ].filter.mask,
-				&ipXPStorage.ipFilters[ i ].skills[ 0 ],
-				&ipXPStorage.ipFilters[ i ].skills[ 1 ],
-				&ipXPStorage.ipFilters[ i ].skills[ 2 ],
-				&ipXPStorage.ipFilters[ i ].skills[ 3 ],
-				&ipXPStorage.ipFilters[ i ].skills[ 4 ],
-				&ipXPStorage.ipFilters[ i ].skills[ 5 ],
-				&ipXPStorage.ipFilters[ i ].skills[ 6 ] );
-
-		ipXPStorage.ipFilters[ i ].timeadded = level.time;
-	}
-}
-
-void G_ClearXPBackup( void ) {
-	int i;
-
-	for ( i = 0; i < MAX_XPSTORAGEITEMS; i++ ) {
-		ipXPStorage.ipFilters[ i ].timeadded = 0;
-	}
-}
-
-void G_AddXPBackup( gentity_t* ent ) {
-	int i;
-	int best = -1;
-	int besttime;
-	const char* str;
-	char userinfo[MAX_INFO_STRING];
-
-	trap_GetUserinfo( ent - g_entities, userinfo, sizeof( userinfo ) );
-	str = Info_ValueForKey( userinfo, "ip" );
-
-	for ( i = 0; i < MAX_XPSTORAGEITEMS; i++ ) {
-		if ( !ipXPStorage.ipFilters[ i ].timeadded ) {
-			best = i;
-			break;
-		}
-
-		if ( best == -1 || ipXPStorage.ipFilters[ i ].timeadded < besttime ) {
-			besttime = ipXPStorage.ipFilters[ i ].timeadded;
-			best = i;
-			continue;
-		}
-	}
-
-	ipXPStorage.ipFilters[ best ].timeadded = level.time;
-	if ( !StringToFilter( str, &ipXPStorage.ipFilters[ best ].filter ) ) {
-		ipXPStorage.ipFilters[ best ].filter.compare = 0xffffffffu;
-	}
-
-	for ( i = 0; i < SK_NUM_SKILLS; i++ ) {
-		ipXPStorage.ipFilters[ best ].skills[ i ] = ent->client->sess.skillpoints[ i ];
-	}
-}
-#endif // USEXPSTORAGE
-
 
 /*
 =================

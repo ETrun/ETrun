@@ -1458,10 +1458,6 @@ char *ClientConnect( int clientNum, qboolean firstTime, qboolean isBot ) {
 	gclient_t   *client;
 	char userinfo[MAX_INFO_STRING];
 	gentity_t   *ent;
-#ifdef USEXPSTORAGE
-	ipXPStorage_t* xpBackup;
-	int i;
-#endif // USEXPSTORAGE
 
 	ent = &g_entities[ clientNum ];
 
@@ -1538,16 +1534,6 @@ char *ClientConnect( int clientNum, qboolean firstTime, qboolean isBot ) {
 	} else {
 		G_ReadSessionData( client );
 	}
-
-#ifdef USEXPSTORAGE
-	value = Info_ValueForKey( userinfo, "ip" );
-	if ( xpBackup = G_FindXPBackup( value ) ) {
-		for ( i = 0; i < SK_NUM_SKILLS; i++ ) {
-			client->sess.skillpoints[ i ] = xpBackup->skills[ i ];
-		}
-		G_CalcRank( client );
-	}
-#endif // USEXPSTORAGE
 
 	if ( g_gametype.integer == GT_WOLF_CAMPAIGN ) {
 		if ( g_campaigns[level.currentCampaign].current == 0 || level.newCampaign ) {
@@ -2159,10 +2145,6 @@ void ClientDisconnect( int clientNum ) {
 	if ( !ent->client ) {
 		return;
 	}
-
-#ifdef USEXPSTORAGE
-	G_AddXPBackup( ent );
-#endif // USEXPSTORAGE
 
 	G_RemoveClientFromFireteams( clientNum, qtrue, qfalse );
 	G_RemoveFromAllIgnoreLists( clientNum );

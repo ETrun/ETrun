@@ -621,12 +621,6 @@ typedef struct ipFilter_s {
 	unsigned compare;
 } ipFilter_t;
 
-typedef struct ipXPStorage_s {
-	ipFilter_t filter;
-	float skills[ SK_NUM_SKILLS ];
-	int timeadded;
-} ipXPStorage_t;
-
 #define MAX_COMPLAINTIPS 5
 
 // client data that stays across multiple respawns, but is cleared
@@ -1372,7 +1366,6 @@ void G_ProcessIPBans( void );
 qboolean G_FilterIPBanPacket( char *from );
 qboolean G_FilterMaxLivesPacket( char *from );
 qboolean G_FilterMaxLivesIPPacket( char *from );
-ipXPStorage_t* G_FindXPBackup( char *from );
 void G_AddXPBackup( gentity_t* ent );
 void G_StoreXPBackup( void );
 void G_ClearXPBackup( void );
