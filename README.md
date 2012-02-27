@@ -19,12 +19,13 @@ On Linux, make sure you have the following packages installed:
 Then run the bootstrap script:
 
 $ chmod +x bootstrap
+
 $ ./bootstrap
 
 COMPILING
 ---------
 
-$ ./congigure
+$ ./configure
 
 $ make
 
