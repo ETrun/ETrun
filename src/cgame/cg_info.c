@@ -753,6 +753,7 @@ void CG_DemoHelpDraw() {
 			"^nUP/DOWN   ^mMove in/out"
 		};
 
+		/* Nico, removed multiview
 		const char *mvhelp[] = {
 			NULL,
 			"^nMOUSE1    ^mSelect/move view",
@@ -761,7 +762,7 @@ void CG_DemoHelpDraw() {
 			"^nSHIFT     ^mHold to resize",
 			"^nKP_PGUP   ^mEnable a view",
 			"^nKP_PGDN   ^mClose a view"
-		};
+		};*/
 
 		int i, x, y = 480, w, h;
 

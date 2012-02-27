@@ -269,7 +269,8 @@ void CG_windowDraw( void ) {
 	cg_window_t *w;
 	qboolean fCleanup = qfalse;
 	// Gordon: FIXME, the limbomenu var no longer exists
-	qboolean fAllowMV = ( cg.snap != NULL && cg.snap->ps.pm_type != PM_INTERMISSION /*&& !cg.limboMenu*/ );
+	/* Nico, removed multiview
+	qboolean fAllowMV = ( cg.snap != NULL && cg.snap->ps.pm_type != PM_INTERMISSION );*/
 	vec4_t *bg;
 	vec4_t textColor, borderColor, bgColor;
 

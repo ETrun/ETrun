@@ -40,7 +40,6 @@ cg_localents.c \
 cg_main.c \
 cg_marks.c \
 cg_missionbriefing.c \
-cg_multiview.c \
 cg_newDraw.c \
 cg_particles.c \
 cg_players.c \

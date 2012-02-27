@@ -36,7 +36,6 @@ g_mem.c \
 g_misc.c \
 g_missile.c \
 g_mover.c \
-g_multiview.c \
 g_props.c \
 g_referee.c \
 g_script.c \
