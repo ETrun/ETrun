@@ -102,12 +102,6 @@ If you have questions concerning this license or the applicable additional terms
 
  **********************************************************************/
 
-#ifdef Q3_VM
-
-#include "bg_lib.h"
-
-#else
-
 #include <assert.h>
 #include <math.h>
 #include <stdio.h>
@@ -119,9 +113,6 @@ If you have questions concerning this license or the applicable additional terms
 #include <limits.h>
 #include <sys/stat.h> // rain
 #include <float.h>
-
-#endif
-
 
 // use MSVC inline asm version of C functions
 #if defined _M_IX86
