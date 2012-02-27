@@ -1000,11 +1000,7 @@ static void CG_DrawLagometer( void ) {
 
 	trap_R_SetColor( NULL );
 
-	if ( cg_nopredict.integer
-#ifdef ALLOW_GSYNC
-		 || cg_synchronousClients.integer
-#endif // ALLOW_GSYNC
-		 ) {
+	if (cg_nopredict.integer) {
 		CG_DrawBigString( ax, ay, "snc", 1.0 );
 	}
 

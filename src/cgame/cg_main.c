@@ -176,9 +176,6 @@ vmCvar_t cg_thirdPersonRange;
 vmCvar_t cg_thirdPersonAngle;
 vmCvar_t cg_stereoSeparation;
 vmCvar_t cg_lagometer;
-#ifdef ALLOW_GSYNC
-vmCvar_t cg_synchronousClients;
-#endif // ALLOW_GSYNC
 vmCvar_t cg_teamChatTime;
 vmCvar_t cg_teamChatHeight;
 vmCvar_t cg_stats;
@@ -442,9 +439,6 @@ cvarTable_t cvarTable[] = {
 	{ &cg_paused, "cl_paused", "0", CVAR_ROM },
 
 	{ &cg_blood, "cg_showblood", "1", CVAR_ARCHIVE },
-#ifdef ALLOW_GSYNC
-	{ &cg_synchronousClients, "g_synchronousClients", "0", CVAR_SYSTEMINFO | CVAR_CHEAT },    // communicated by systeminfo
-#endif // ALLOW_GSYNC
 
 	// Rafael - particle switch
 	{ &cg_wolfparticles, "cg_wolfparticles", "1", CVAR_ARCHIVE },

@@ -330,11 +330,7 @@ static void CG_TransitionSnapshot( void ) {
 		// if we are not doing client side movement prediction for any
 		// reason, then the client events and view changes will be issued now
 		if ( cg.demoPlayback || ( cg.snap->ps.pm_flags & PMF_FOLLOW )
-			 || cg_nopredict.integer
-#ifdef ALLOW_GSYNC
-			 || cg_synchronousClients.integer
-#endif // ALLOW_GSYNC
-			 ) {
+			 || cg_nopredict.integer ) {
 			CG_TransitionPlayerState( ps, ops );
 		}
 	}

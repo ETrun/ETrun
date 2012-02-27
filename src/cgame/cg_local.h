@@ -2091,9 +2091,6 @@ extern vmCvar_t cg_thirdPersonAngle;
 extern vmCvar_t cg_thirdPerson;
 extern vmCvar_t cg_stereoSeparation;
 extern vmCvar_t cg_lagometer;
-#ifdef ALLOW_GSYNC
-extern vmCvar_t cg_synchronousClients;
-#endif // ALLOW_GSYNC
 extern vmCvar_t cg_teamChatTime;
 extern vmCvar_t cg_teamChatHeight;
 extern vmCvar_t cg_stats;
