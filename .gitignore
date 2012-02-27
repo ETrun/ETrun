@@ -5,10 +5,12 @@ _build/*.so
 # Compilation related
 _build/*/*.*
 src/*/.deps
+src/*/.libs
+src/*/*.lo
+src/*/*.la
 
 # Autotools related
 autom4te.cache/
-m4/
 Makefile.in
 aclocal.m4
 build-aux

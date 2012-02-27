@@ -1,2 +1,0 @@
-mkdir m4
-autoreconf --install

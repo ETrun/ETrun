@@ -3,9 +3,14 @@ ETrun
 
 ETrun is a Wolfenstein: Enemy Territory game modification bringing timeruns support.
 
-Visit www.timeruns.net for more information.
+**Visit www.timeruns.net for more information.**
 
-BOOTSTRAPPING
+Features
+--------
+
+Nothing yet.
+
+Bootstrapping
 -------------
 
 On Linux, make sure you have the following packages installed:
@@ -16,25 +21,19 @@ On Linux, make sure you have the following packages installed:
 * libtool
 * gcc-mingw32 (needed if you want to compile for Windows)
 
-Then run the bootstrap script:
+Compiling for Windows
+---------------------
 
-$ chmod +x bootstrap
+On Windows: use MSVC compiler.
 
-$ ./bootstrap
+On Linux, run:
 
-COMPILING
----------
+$ ./windows_compile.sh
 
-$ ./configure
+Compiling for Linux
+---------------------
 
-$ make
+On Windows: not supported.
 
-CLEANING
---------
-
-$ make clean
-
-DISTCLEANING
-------------
-
-$ make distclean
+On Linux, run:
+$ ./linux_compile.sh
