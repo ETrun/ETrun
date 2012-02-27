@@ -25,6 +25,7 @@ COMPILING
 ---------
 
 $ ./congigure
+
 $ make
 
 CLEANING
