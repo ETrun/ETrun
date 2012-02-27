@@ -14,7 +14,6 @@ autom4te.cache/
 aclocal.m4
 Makefile
 config.h
-config.h.in
 config.status
 libtool
 stamp-h1
