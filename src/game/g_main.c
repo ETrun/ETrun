@@ -71,9 +71,6 @@ vmCvar_t g_debugDamage;
 vmCvar_t g_debugAlloc;
 vmCvar_t g_debugBullets;    //----(SA)	added
 vmCvar_t g_motd;
-#ifdef ALLOW_GSYNC
-vmCvar_t g_synchronousClients;
-#endif // ALLOW_GSYNC
 vmCvar_t g_warmup;
 
 // NERVE - SMF
@@ -256,10 +253,6 @@ cvarTable_t gameCvarTable[] = {
 	// change anytime vars
 	{ &g_fraglimit, "fraglimit", "0", /*CVAR_SERVERINFO |*/ CVAR_ARCHIVE | CVAR_NORESTART, 0, qtrue },
 	{ &g_timelimit, "timelimit", "0", CVAR_SERVERINFO | CVAR_ARCHIVE | CVAR_NORESTART, 0, qtrue },
-
-#ifdef ALLOW_GSYNC
-	{ &g_synchronousClients, "g_synchronousClients", "0", CVAR_SYSTEMINFO | CVAR_CHEAT, 0, qfalse  },
-#endif // ALLOW_GSYNC
 
 	{ &g_friendlyFire, "g_friendlyFire", "1", CVAR_SERVERINFO | CVAR_ARCHIVE, 0, qtrue, qtrue },
 

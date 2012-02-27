@@ -1551,9 +1551,6 @@ extern vmCvar_t g_debugMove;
 extern vmCvar_t g_debugAlloc;
 extern vmCvar_t g_debugDamage;
 extern vmCvar_t g_debugBullets;     //----(SA)	added
-#ifdef ALLOW_GSYNC
-extern vmCvar_t g_synchronousClients;
-#endif // ALLOW_GSYNC
 extern vmCvar_t g_motd;
 extern vmCvar_t g_warmup;
 extern vmCvar_t voteFlags;

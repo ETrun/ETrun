@@ -1160,12 +1160,7 @@ void ClientThink( int clientNum ) {
 	// phone jack if they don't get any for a while
 	ent->client->lastCmdTime = level.time;
 
-#ifdef ALLOW_GSYNC
-	if ( !g_synchronousClients.integer )
-#endif // ALLOW_GSYNC
-	{
-		ClientThink_real( ent );
-	}
+	ClientThink_real( ent );
 }
 
 
@@ -1180,16 +1175,6 @@ void G_RunClient( gentity_t *ent ) {
 			trap_UnlinkEntity( ent );
 		}
 	}
-
-#ifdef ALLOW_GSYNC
-	if ( !g_synchronousClients.integer )
-#endif // ALLOW_GSYNC
-	{
-		return;
-	}
-
-	ent->client->pers.cmd.serverTime = level.time;
-	ClientThink_real( ent );
 }
 
 /*
