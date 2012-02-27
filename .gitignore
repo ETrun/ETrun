@@ -13,7 +13,6 @@ src/*/*.la
 autom4te.cache/
 Makefile.in
 aclocal.m4
-build-aux
 Makefile.in
 Makefile
 config.h
