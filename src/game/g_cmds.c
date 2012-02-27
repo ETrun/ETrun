@@ -79,7 +79,9 @@ void G_SendScore( gentity_t *ent ) {
 
 			// NERVE - SMF - if on same team, send across player class
 			// Gordon: FIXME: remove/move elsewhere?
-			if ( cl->ps.persistant[PERS_TEAM] == ent->client->ps.persistant[PERS_TEAM] || G_smvLocateEntityInMVList( ent, level.sortedClients[i], qfalse ) ) {
+			/* Nico, removed multiview
+			if ( cl->ps.persistant[PERS_TEAM] == ent->client->ps.persistant[PERS_TEAM] || G_smvLocateEntityInMVList( ent, level.sortedClients[i], qfalse ) ) {*/
+			if (cl->ps.persistant[PERS_TEAM] == ent->client->ps.persistant[PERS_TEAM]) {
 				playerClass = cl->ps.stats[STAT_PLAYER_CLASS];
 			} else {
 				playerClass = 0;
@@ -716,10 +718,11 @@ qboolean SetTeam( gentity_t *ent, char *s, qboolean force, weapon_t w1, weapon_t
 	if ( team != TEAM_SPECTATOR ) {
 		client->pers.initialSpawn = qfalse;
 		// no MV in-game
+		/* Nico, removed multiview
 		if ( client->pers.mvCount > 0 ) {
 			G_smvRemoveInvalidClients( ent, TEAM_AXIS );
 			G_smvRemoveInvalidClients( ent, TEAM_ALLIES );
-		}
+		}*/
 	}
 
 	// he starts at 'base'
@@ -742,9 +745,10 @@ qboolean SetTeam( gentity_t *ent, char *s, qboolean force, weapon_t w1, weapon_t
 		if ( !client->sess.referee ) {
 			client->pers.invite = 0;
 		}
+		/* Nico, removed multiview
 		if ( team != oldTeam ) {
 			G_smvAllRemoveSingleClient( ent - g_entities );
-		}
+		}*/
 	}
 
 	G_LeaveTank( ent, qfalse );

@@ -608,10 +608,11 @@ void reinforce( gentity_t *ent ) {
 		return;
 	}
 
+	/* Nico, removed multiview
 	if ( ent->client->pers.mvCount > 0 ) {
 		G_smvRemoveInvalidClients( ent, TEAM_AXIS );
 		G_smvRemoveInvalidClients( ent, TEAM_ALLIES );
-	}
+	}*/
 
 	// get team to deploy from passed entity
 	team = ent->client->sess.sessionTeam;
@@ -1740,7 +1741,8 @@ void ClientBegin( int clientNum ) {
 	ent->surfaceFlags = 0;
 
 	// OSP
-	G_smvUpdateClientCSList( ent );
+	/* Nico, removed multiview
+	G_smvUpdateClientCSList( ent );*/
 	// OSP
 }
 
@@ -2268,7 +2270,8 @@ void ClientDisconnect( int clientNum ) {
 
 	// OSP
 	G_verifyMatchState( i );
-	G_smvAllRemoveSingleClient( ent - g_entities );
+	/* Nico, removed multiview
+	G_smvAllRemoveSingleClient( ent - g_entities );*/
 	// OSP
 }
 

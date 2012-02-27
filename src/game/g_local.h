@@ -610,12 +610,13 @@ typedef struct {
 #define PICKUP_FORCE    2   // pickup the next item when touched (and reset to PICKUP_ACTIVATE when done)
 
 // OSP -- multiview handling
+/* Nico, removed multiview
 #define MULTIVIEW_MAXVIEWS  16
 typedef struct {
 	qboolean fActive;
 	int entID;
 	gentity_t   *camera;
-} mview_t;
+} mview_t;*/
 
 typedef struct ipFilter_s {
 	unsigned mask;
@@ -688,10 +689,11 @@ typedef struct {
 	unsigned int clientTimeNudge;       // Client cl_timenudge settings
 	int cmd_debounce;                   // Dampening of command spam
 	unsigned int invite;                // Invitation to a team to join
+	/* Nico, removed multiview
 	mview_t mv[MULTIVIEW_MAXVIEWS];         // Multiview portals
 	int mvCount;                        // Number of active portals
 	int mvReferenceList;                // Reference list used to generate views after a map_restart
-	int mvScoreUpdate;                  // Period to send score info to MV clients
+	int mvScoreUpdate;                  // Period to send score info to MV clients*/
 	int panzerDropTime;                 // Time which a player dropping panzer still "has it" if limiting panzer counts
 	int panzerSelectTime;               // *when* a client selected a panzer as spawn weapon
 	qboolean ready;                     // Ready state to begin play
@@ -1968,7 +1970,8 @@ typedef enum {
 	DP_PAUSEINFO,       // Print current pause info
 	DP_UNPAUSING,       // Print unpause countdown + unpause
 	DP_CONNECTINFO,     // Display OSP info on connect
-	DP_MVSPAWN          // Set up MV views for clients who need them
+	/* Nico, removed multiview
+	DP_MVSPAWN          // Set up MV views for clients who need them*/
 } enum_t_dp;
 
 
@@ -2050,11 +2053,11 @@ unsigned int G_weapStatIndex_MOD( unsigned int iWeaponMOD );
 ///////////////////////
 // g_multiview.c
 //
+/* Nico, removed multiview
 qboolean G_smvCommands( gentity_t *ent, char *cmd );
 void G_smvAdd_cmd( gentity_t *ent );
 void G_smvAddTeam_cmd( gentity_t *ent, int nTeam );
 void G_smvDel_cmd( gentity_t *ent );
-//
 void G_smvAddView( gentity_t *ent, int pID );
 void G_smvAllRemoveSingleClient( int pID );
 unsigned int G_smvGenerateClientList( gentity_t *ent );
@@ -2063,9 +2066,7 @@ void G_smvRegenerateClients( gentity_t *ent, int clientList );
 void G_smvRemoveEntityInMVList( gentity_t *ent, mview_t *ref );
 void G_smvRemoveInvalidClients( gentity_t *ent, int nTeam );
 qboolean G_smvRunCamera( gentity_t *ent );
-void G_smvUpdateClientCSList( gentity_t *ent );
-
-
+void G_smvUpdateClientCSList( gentity_t *ent );*/
 
 ///////////////////////
 // g_referee.c

@@ -105,9 +105,6 @@
     <ClCompile Include="g_mover.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="g_multiview.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="g_props.c">
       <Filter>Source Files</Filter>
     </ClCompile>

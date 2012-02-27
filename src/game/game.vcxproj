@@ -182,7 +182,6 @@
     <ClCompile Include="g_misc.c" />
     <ClCompile Include="g_missile.c" />
     <ClCompile Include="g_mover.c" />
-    <ClCompile Include="g_multiview.c" />
     <ClCompile Include="g_props.c" />
     <ClCompile Include="g_referee.c" />
     <ClCompile Include="g_script.c" />

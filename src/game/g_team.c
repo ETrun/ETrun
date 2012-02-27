@@ -1851,17 +1851,21 @@ void G_updateSpecLock( int nTeam, qboolean fLock ) {
 			continue;
 		}
 
+		/* Nico, removed multiview
 		if ( ent->client->pers.mvCount > 0 ) {
 			G_smvRemoveInvalidClients( ent, nTeam );
-		} else if ( ent->client->sess.spectatorState == SPECTATOR_FOLLOW ) {
+		} else */
+		if ( ent->client->sess.spectatorState == SPECTATOR_FOLLOW ) {
 			StopFollowing( ent );
 			ent->client->sess.spec_team &= ~nTeam;
 		}
 
 		// ClientBegin sets blackout
-		if ( ent->client->pers.mvCount < 1 ) {
+		/* Nico, removed multiview
+		if ( ent->client->pers.mvCount < 1 ) {*/
 			SetTeam( ent, "s", qtrue, -1, -1, qfalse );
-		}
+		/* Nico, removed multiview
+		}*/
 	}
 }
 

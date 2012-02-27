@@ -471,7 +471,8 @@ void SpectatorThink( gentity_t *ent, usercmd_t *ucmd ) {
 	client->wbuttons = ucmd->wbuttons;
 
 	// MV clients use these buttons locally for other things
-	if ( client->pers.mvCount < 1 ) {
+	/* Nico, removed multiview
+	if ( client->pers.mvCount < 1 ) {*/
 		// attack button cycles through spectators
 		if ( ( client->buttons & BUTTON_ATTACK ) && !( client->oldbuttons & BUTTON_ATTACK ) ) {
 			Cmd_FollowCycle_f( ent, 1 );
@@ -484,7 +485,8 @@ void SpectatorThink( gentity_t *ent, usercmd_t *ucmd ) {
 			// code moved to StopFollowing
 			StopFollowing( ent );
 		}
-	}
+	/* Nico, removed multiview
+	}*/
 }
 
 
@@ -1198,11 +1200,11 @@ SpectatorClientEndFrame
 */
 void SpectatorClientEndFrame( gentity_t *ent ) {
 	// OSP - specs periodically get score updates for useful demo playback info
-	if ( /*ent->client->pers.mvCount > 0 &&*/ ent->client->pers.mvScoreUpdate < level.time ) {
+	/* Nico, removed multiview
+	if ( ent->client->pers.mvScoreUpdate < level.time ) {
 		ent->client->pers.mvScoreUpdate = level.time + MV_SCOREUPDATE_INTERVAL;
 		ent->client->wantsscore = qtrue;
-//		G_SendScore(ent);
-	}
+	}*/
 
 	// if we are doing a chase cam or a remote view, grab the latest info
 	if ( ( ent->client->sess.spectatorState == SPECTATOR_FOLLOW ) || ( ent->client->ps.pm_flags & PMF_LIMBO ) ) {
@@ -1257,7 +1259,9 @@ void SpectatorClientEndFrame( gentity_t *ent ) {
 		}
 
 		// Limbos aren't following while in MV
-		if ( ( ent->client->ps.pm_flags & PMF_LIMBO ) && ent->client->pers.mvCount > 0 ) {
+		/* Nico, removed multiview
+		if ( ( ent->client->ps.pm_flags & PMF_LIMBO ) && ent->client->pers.mvCount > 0 ) {*/
+		if (( ent->client->ps.pm_flags & PMF_LIMBO )) {
 			return;
 		}
 
@@ -1281,7 +1285,8 @@ void SpectatorClientEndFrame( gentity_t *ent ) {
 					int savedRespawns = ent->client->ps.persistant[PERS_RESPAWNS_LEFT];
 					int savedRespawnPenalty = ent->client->ps.persistant[PERS_RESPAWNS_PENALTY];
 					int savedClass = ent->client->ps.stats[STAT_PLAYER_CLASS];
-					int savedMVList = ent->client->ps.powerups[PW_MVCLIENTLIST];
+					/* Nico, removed multiview
+					int savedMVList = ent->client->ps.powerups[PW_MVCLIENTLIST];*/
 
 					do_respawn = ent->client->ps.pm_time;
 
@@ -1293,7 +1298,8 @@ void SpectatorClientEndFrame( gentity_t *ent ) {
 					ent->client->ps.persistant[PERS_RESPAWNS_LEFT] = savedRespawns;
 					ent->client->ps.persistant[PERS_RESPAWNS_PENALTY] = savedRespawnPenalty;
 					ent->client->ps.persistant[PERS_SCORE] = savedScore;            // put score back
-					ent->client->ps.powerups[PW_MVCLIENTLIST] = savedMVList;
+					/* Nico, removed multiview
+					ent->client->ps.powerups[PW_MVCLIENTLIST] = savedMVList;*/
 					ent->client->ps.stats[STAT_PLAYER_CLASS] = savedClass;          // NERVE - SMF - put player class back
 				} else {
 					ent->client->ps = cl->ps;
@@ -1315,19 +1321,15 @@ void SpectatorClientEndFrame( gentity_t *ent ) {
 		}
 	}
 
-	/*if ( ent->client->sess.spectatorState == SPECTATOR_SCOREBOARD ) {
-		ent->client->ps.pm_flags |= PMF_SCOREBOARD;
-	} else {
-		ent->client->ps.pm_flags &= ~PMF_SCOREBOARD;
-	}*/
-
 	// we are at a free-floating spec state for a player,
 	// set speclock status, as appropriate
 	//	 --> Can we use something besides a powerup slot?
-	if ( ent->client->pers.mvCount < 1 ) {
+	/* Nico, removed multiview
+	if ( ent->client->pers.mvCount < 1 ) {*/
 		ent->client->ps.powerups[PW_BLACKOUT] = ( G_blockoutTeam( ent, TEAM_AXIS ) * TEAM_AXIS ) |
 												( G_blockoutTeam( ent, TEAM_ALLIES ) * TEAM_ALLIES );
-	}
+	/* Nico, removed multiview
+	}*/
 }
 
 

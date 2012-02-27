@@ -151,6 +151,7 @@ void G_delayPrint( gentity_t *dpent ) {
 		break;
 	}
 
+	/* Nico, removed multiview
 	case DP_MVSPAWN:
 	{
 		int i;
@@ -169,7 +170,7 @@ void G_delayPrint( gentity_t *dpent ) {
 		}
 
 		break;
-	}
+	}*/
 
 	default:
 		break;
@@ -186,7 +187,8 @@ static char *pszDPInfo[] = {
 	"DPRINTF_PAUSEINFO",
 	"DPRINTF_UNPAUSING",
 	"DPRINTF_CONNECTINFO",
-	"DPRINTF_MVSPAWN",
+	/* Nico, removed multiview
+	"DPRINTF_MVSPAWN",*/
 	"DPRINTF_UNK1",
 	"DPRINTF_UNK2",
 	"DPRINTF_UNK3",
@@ -620,7 +622,9 @@ void G_matchInfoDump( unsigned int dwDumpType ) {
 		if ( dwDumpType == EOM_WEAPONSTATS ) {
 			// If client wants to write stats to a file, don't auto send this stuff
 			if ( !( cl->pers.clientFlags & CGF_STATSDUMP ) ) {
-				if ( ( cl->pers.autoaction & AA_STATSALL ) || cl->pers.mvCount > 0 ) {
+				/* Nico, removed multiview
+				if ( ( cl->pers.autoaction & AA_STATSALL ) || cl->pers.mvCount > 0 ) {*/
+				if (( cl->pers.autoaction & AA_STATSALL )) {
 					G_statsall_cmd( ent, 0, qfalse );
 				} else if ( cl->sess.sessionTeam != TEAM_SPECTATOR ) {
 					if ( cl->pers.autoaction & AA_STATSTEAM ) {

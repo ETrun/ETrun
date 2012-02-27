@@ -291,8 +291,9 @@ extern const unsigned int aReinfSeeds[MAX_REINFSEEDS];
 #define MAX_MOTDLINES   6
 
 // Multiview settings
+/* Nico, removed multiview
 #define MAX_MVCLIENTS               32
-#define MV_SCOREUPDATE_INTERVAL     5000    // in msec
+#define MV_SCOREUPDATE_INTERVAL     5000    // in msec*/
 
 #define MAX_CHARACTERS  16
 
@@ -649,7 +650,8 @@ typedef enum {
 	PW_ADRENALINE,
 
 	PW_BLACKOUT = 14,       // OSP - spec blackouts. FIXME: we don't need 32bits here...relocate
-	PW_MVCLIENTLIST = 15,   // OSP - MV client info.. need a full 32 bits
+	/* Nico, removed multiview
+	PW_MVCLIENTLIST = 15,   // OSP - MV client info.. need a full 32 bits*/
 
 	PW_NUM_POWERUPS
 } powerup_t;

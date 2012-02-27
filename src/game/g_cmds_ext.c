@@ -104,8 +104,9 @@ qboolean G_commandCheck( gentity_t *ent, char *cmd, qboolean fDoAnytime ) {
 			return( qtrue );
 		}
 	}
-
-	return( G_smvCommands( ent, cmd ) );
+	/* Nico, removed multiview
+	return( G_smvCommands( ent, cmd ) );*/
+	return (qfalse);
 }
 
 

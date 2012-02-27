@@ -48,7 +48,9 @@ Called on game shutdown
 ================
 */
 void G_WriteClientSessionData( gclient_t *client, qboolean restart ) {
-	int mvc = G_smvGenerateClientList( g_entities + ( client - level.clients ) );
+	/* Nico, removed multiview
+	int mvc = G_smvGenerateClientList( g_entities + ( client - level.clients ) );*/
+	int mvc = 0;
 	const char  *s;
 
 	// OSP -- stats reset check
@@ -245,7 +247,8 @@ void G_ReadSessionData( gclient_t *client ) {
 			);
 
 	// OSP -- reinstate MV clients
-	client->pers.mvReferenceList = ( mvc_h << 16 ) | mvc_l;
+	/* Nico, removed multiview
+	client->pers.mvReferenceList = ( mvc_h << 16 ) | mvc_l;*/
 	// OSP
 
 	// OSP -- pull and parse weapon stats

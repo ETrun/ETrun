@@ -1844,7 +1844,8 @@ void G_InitGame( int levelTime, int randomSeed, int restart ) {
 
 	// Reinstate any MV views for clients -- need to do this after all init is complete
 	// --- maybe not the best place to do this... seems to be some race conditions on map_restart
-	G_spawnPrintf( DP_MVSPAWN, level.time + 2000, NULL );
+	/* Nico, removed multiview
+	G_spawnPrintf( DP_MVSPAWN, level.time + 2000, NULL );*/
 }
 
 
@@ -3391,9 +3392,10 @@ void G_RunEntity( gentity_t* ent, int msec ) {
 	}
 
 	// OSP - multiview
+	/* Nico, removed multiview
 	if ( ent->s.eType == ET_PORTAL && G_smvRunCamera( ent ) ) {
 		return;
-	}
+	}*/
 
 	if ( ( ent->s.eType == ET_HEALER || ent->s.eType == ET_SUPPLIER ) && ent->target_ent ) {
 		ent->target_ent->s.onFireStart =    ent->health;
