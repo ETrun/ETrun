@@ -1050,7 +1050,10 @@ void CG_InitConsoleCommands( void ) {
 	trap_AddCommand( "bottomshots" );*/
 
 	trap_AddCommand( "commands" );
-	trap_AddCommand( "lock" );
+
+	/* Nico, removed lock client command
+	trap_AddCommand( "lock" );*/
+
 	trap_AddCommand( "notready" );
 	trap_AddCommand( "pause" );
 	trap_AddCommand( "players" );
@@ -1071,7 +1074,9 @@ void CG_InitConsoleCommands( void ) {
 	/* Nico, removed topshots command
 	trap_AddCommand( "topshots" );*/
 
-	trap_AddCommand( "unlock" );
+	/* Nico, removed unlock client command
+	trap_AddCommand( "unlock" );*/
+
 	trap_AddCommand( "unpause" );
 	trap_AddCommand( "unready" );
 	trap_AddCommand( "weaponstats" );
