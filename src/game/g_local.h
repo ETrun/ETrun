@@ -2001,7 +2001,8 @@ qboolean G_commandCheck( gentity_t *ent, char *cmd, qboolean fDoAnytime );
 qboolean G_commandHelp( gentity_t *ent, char *pszCommand, unsigned int dwCommand );
 qboolean G_cmdDebounce( gentity_t *ent, const char *pszCommand );
 void G_commands_cmd( gentity_t *ent, unsigned int dwCommand, qboolean fValue );
-void G_lock_cmd( gentity_t *ent, unsigned int dwCommand, qboolean state );
+/* Nico, removed lock client command
+void G_lock_cmd( gentity_t *ent, unsigned int dwCommand, qboolean state );*/
 void G_pause_cmd( gentity_t *ent, unsigned int dwCommand, qboolean fValue );
 void G_players_cmd( gentity_t *ent, unsigned int dwCommand, qboolean fDump );
 void G_ready_cmd( gentity_t *ent, unsigned int dwCommand, qboolean fDump );

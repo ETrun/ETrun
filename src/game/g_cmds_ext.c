@@ -63,7 +63,8 @@ static const cmd_reference_t aCommandInfo[] = {
 	{ "commands",        qtrue,  qtrue,  G_commands_cmd, ":^7 Gives a list of OSP-specific commands" },
 	{ "currenttime", qtrue,  qtrue,  NULL, ":^7 Displays current local time" },
 	{ "follow",          qfalse, qtrue,  Cmd_Follow_f, " <player_ID|allies|axis>:^7 Spectates a particular player or team" },
-	{ "lock",            qtrue,  qtrue,  G_lock_cmd, ":^7 Locks a player's team to prevent others from joining" },
+	/* Nico, removed lock client command
+	{ "lock",            qtrue,  qtrue,  G_lock_cmd, ":^7 Locks a player's team to prevent others from joining" },*/
 	{ "notready",        qtrue,  qfalse, G_ready_cmd, ":^7 Sets your status to ^5not ready^7 to start a match" },
 	{ "pause",           qfalse, qtrue,  G_pause_cmd, ":^7 Allows a team to pause a match" },
 	{ "players",     qtrue,  qtrue,  G_players_cmd, ":^7 Lists all active players and their IDs/information" },
@@ -83,9 +84,13 @@ static const cmd_reference_t aCommandInfo[] = {
 	{ "team",            qtrue,  qtrue,  Cmd_Team_f, " <b|r|s|none>:^7 Joins a team (b = allies, r = axis, s = spectator)" },
 	{ "timein",          qfalse, qfalse, G_pause_cmd, ":^7 Unpauses a match (if initiated by the issuing team)" },
 	{ "timeout",     qfalse, qtrue,  G_pause_cmd, ":^7 Allows a team to pause a match" },
+
 	/* Nico, removed topshots command
 	{ "topshots",        qtrue,  qtrue,  G_weaponRankings_cmd, ":^7 Shows BEST player for each weapon. Add ^3<weapon_ID>^7 to show all stats for a weapon" },*/
-	{ "unlock",          qtrue,  qfalse, G_lock_cmd, ":^7 Unlocks a player's team, allowing others to join" },
+
+	/* Nico, removed unlock client command
+	{ "unlock",          qtrue,  qfalse, G_lock_cmd, ":^7 Unlocks a player's team, allowing others to join" },*/
+
 	{ "unpause",     qfalse, qfalse, G_pause_cmd, ":^7 Unpauses a match (if initiated by the issuing team)" },
 	{ "unready",     qtrue,  qfalse, G_ready_cmd, ":^7 Sets your status to ^5not ready^7 to start a match" },
 	{ "weaponstats", qtrue,  qfalse, G_weaponStats_cmd, " [player_ID]:^7 Shows weapon accuracy stats for a player" },
@@ -199,6 +204,7 @@ void G_commands_cmd( gentity_t *ent, unsigned int dwCommand, qboolean fValue ) {
 // ************** LOCK / UNLOCK
 //
 // Locks/unlocks a player's team.
+/* Nico, removed lock client command
 void G_lock_cmd( gentity_t *ent, unsigned int dwCommand, qboolean fLock ) {
 	int tteam;
 
@@ -221,7 +227,7 @@ void G_lock_cmd( gentity_t *ent, unsigned int dwCommand, qboolean fLock ) {
 			AP( va( "cp %s", info ) );
 		}
 	} else {CP( va( "print \"Spectators can't %s a team!\n\"", lock_status[fLock] ) );}
-}
+}*/
 
 
 // ************** PAUSE / UNPAUSE
