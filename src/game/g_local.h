@@ -2005,7 +2005,9 @@ void G_commands_cmd( gentity_t *ent, unsigned int dwCommand, qboolean fValue );
 /* Nico, removed lock client command
 void G_lock_cmd( gentity_t *ent, unsigned int dwCommand, qboolean state );*/
 
-void G_pause_cmd( gentity_t *ent, unsigned int dwCommand, qboolean fValue );
+/* Nico, removed pause client command
+void G_pause_cmd( gentity_t *ent, unsigned int dwCommand, qboolean fValue );*/
+
 void G_players_cmd( gentity_t *ent, unsigned int dwCommand, qboolean fDump );
 
 /* Nico, removed ready client command

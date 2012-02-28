@@ -74,7 +74,9 @@ static const cmd_reference_t aCommandInfo[] = {
 	/* Nico, removed notready client command
 	{ "notready",        qtrue,  qfalse, G_ready_cmd, ":^7 Sets your status to ^5not ready^7 to start a match" },*/
 
-	{ "pause",           qfalse, qtrue,  G_pause_cmd, ":^7 Allows a team to pause a match" },
+	/* Nico, removed pause client command
+	{ "pause",           qfalse, qtrue,  G_pause_cmd, ":^7 Allows a team to pause a match" },*/
+
 	{ "players",     qtrue,  qtrue,  G_players_cmd, ":^7 Lists all active players and their IDs/information" },
 
 	/* Nico, removed ready client command
@@ -93,8 +95,12 @@ static const cmd_reference_t aCommandInfo[] = {
 	// http://games.chruker.dk/enemy_territory/modding_project_bugfix.php?bug_id=012
 	{ "stoprecord",		qtrue,	qtrue,	NULL, ":^7 Stops a demo recording currently in progress" },
 	{ "team",            qtrue,  qtrue,  Cmd_Team_f, " <b|r|s|none>:^7 Joins a team (b = allies, r = axis, s = spectator)" },
-	{ "timein",          qfalse, qfalse, G_pause_cmd, ":^7 Unpauses a match (if initiated by the issuing team)" },
-	{ "timeout",     qfalse, qtrue,  G_pause_cmd, ":^7 Allows a team to pause a match" },
+
+	/* Nico, removed timein client command
+	{ "timein",          qfalse, qfalse, G_pause_cmd, ":^7 Unpauses a match (if initiated by the issuing team)" },*/
+
+	/* Nico, removed timeout client command
+	{ "timeout",     qfalse, qtrue,  G_pause_cmd, ":^7 Allows a team to pause a match" },*/
 
 	/* Nico, removed topshots command
 	{ "topshots",        qtrue,  qtrue,  G_weaponRankings_cmd, ":^7 Shows BEST player for each weapon. Add ^3<weapon_ID>^7 to show all stats for a weapon" },*/
@@ -102,7 +108,8 @@ static const cmd_reference_t aCommandInfo[] = {
 	/* Nico, removed unlock client command
 	{ "unlock",          qtrue,  qfalse, G_lock_cmd, ":^7 Unlocks a player's team, allowing others to join" },*/
 
-	{ "unpause",     qfalse, qfalse, G_pause_cmd, ":^7 Unpauses a match (if initiated by the issuing team)" },
+	/* Nico, removed unpause client command
+	{ "unpause",     qfalse, qfalse, G_pause_cmd, ":^7 Unpauses a match (if initiated by the issuing team)" },*/
 
 	/* Nico, removed unready client command
 	{ "unready",     qtrue,  qfalse, G_ready_cmd, ":^7 Sets your status to ^5not ready^7 to start a match" },*/
@@ -247,6 +254,7 @@ void G_lock_cmd( gentity_t *ent, unsigned int dwCommand, qboolean fLock ) {
 // ************** PAUSE / UNPAUSE
 //
 // Pause/unpause a match.
+/* Nico, removed pause client command
 void G_pause_cmd( gentity_t *ent, unsigned int dwCommand, qboolean fPause ) {
 	char *status[2] = { "^5UN", "^1" };
 
@@ -296,7 +304,7 @@ void G_pause_cmd( gentity_t *ent, unsigned int dwCommand, qboolean fPause ) {
 			G_spawnPrintf( DP_UNPAUSING, level.time + 10, NULL );
 		}
 	}
-}
+}*/
 
 
 // ************** PLAYERS

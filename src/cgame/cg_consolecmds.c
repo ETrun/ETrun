@@ -1057,7 +1057,9 @@ void CG_InitConsoleCommands( void ) {
 	/* Nico, removed notready client command
 	trap_AddCommand( "notready" );*/
 
-	trap_AddCommand( "pause" );
+	/* Nico, removed pause client command
+	trap_AddCommand( "pause" );*/
+
 	trap_AddCommand( "players" );
 	trap_AddCommand( "readyteam" );
 
@@ -1073,8 +1075,12 @@ void CG_InitConsoleCommands( void ) {
 	trap_AddCommand( "specunlock" );
 	trap_AddCommand( "statsall" );
 	trap_AddCommand( "statsdump" );
-	trap_AddCommand( "timein" );
-	trap_AddCommand( "timeout" );
+
+	/* Nico, removed timein client command
+	trap_AddCommand( "timein" );*/
+
+	/* Nico, removed timeout client command
+	trap_AddCommand( "timeout" );*/
 
 	/* Nico, removed topshots command
 	trap_AddCommand( "topshots" );*/
@@ -1082,7 +1088,8 @@ void CG_InitConsoleCommands( void ) {
 	/* Nico, removed unlock client command
 	trap_AddCommand( "unlock" );*/
 
-	trap_AddCommand( "unpause" );
+	/* Nico, removed unpause client command
+	trap_AddCommand( "unpause" );*/
 
 	/* Nico, removed unready client command
 	trap_AddCommand( "unready" );*/
