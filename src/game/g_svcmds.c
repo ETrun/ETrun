@@ -673,12 +673,13 @@ void Svcmd_ResetMatch_f( qboolean fDoReset, qboolean fDoRestart ) {
 }
 
 /*
+Nico, removed swap_teams command
 ============
 Svcmd_SwapTeams_f
 
 NERVE - SMF - swaps all clients to opposite team
 ============
-*/
+
 void Svcmd_SwapTeams_f( void ) {
 	G_resetRoundState();
 
@@ -693,7 +694,7 @@ void Svcmd_SwapTeams_f( void ) {
 
 	trap_Cvar_Set( "g_swapteams", "1" );
 	Svcmd_ResetMatch_f( qfalse, qtrue );
-}
+}*/
 
 
 /*
@@ -1026,15 +1027,17 @@ qboolean    ConsoleCommand( void ) {
 		return qtrue;
 	}*/
 
+	/* Nico, removed reset_match command
 	if ( Q_stricmp( cmd, "reset_match" ) == 0 ) {
 		Svcmd_ResetMatch_f( qtrue, qtrue );
 		return qtrue;
-	}
+	}*/
 
+	/* Nico, removed swap_teams command
 	if ( Q_stricmp( cmd, "swap_teams" ) == 0 ) {
 		Svcmd_SwapTeams_f();
 		return qtrue;
-	}
+	}*/
 
 	if ( Q_stricmp( cmd, "shuffle_teams" ) == 0 ) {
 		Svcmd_ShuffleTeams_f();

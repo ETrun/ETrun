@@ -174,11 +174,9 @@ void CG_ScoresUp_f( void ) {
 	}
 }
 
+/* Nico, empty function
 static void CG_LoadHud_f( void ) {
-//	String_Init();
-//	Menu_Reset();
-//	CG_LoadMenus("ui/hud.txt");
-}
+}*/
 
 static void CG_LoadWeapons_f( void ) {
 	int i;
@@ -190,17 +188,6 @@ static void CG_LoadWeapons_f( void ) {
 		}
 	}
 }
-
-/*
-static void CG_InventoryDown_f( void ) {
-	cg.showItems = qtrue;
-}
-
-static void CG_InventoryUp_f( void ) {
-	cg.showItems = qfalse;
-	cg.itemFadeTime = cg.time;
-}
-*/
 
 static void CG_TellTarget_f( void ) {
 	int clientNum;
@@ -815,10 +802,6 @@ void CG_toggleSpecHelp_f( void ) {
 }
 // -OSP
 
-void CG_Obj_f( void ) {
-	// Gordon: short circuit this
-}
-
 static void CG_EditSpeakers_f( void ) {
 	if ( cg.editingSpeakers ) {
 		CG_DeActivateEditSoundMode();
@@ -833,78 +816,6 @@ static void CG_EditSpeakers_f( void ) {
 }
 
 static void CG_DumpSpeaker_f( void ) {
-/*	char sscrfilename[MAX_QPATH];
-	char soundfile[MAX_STRING_CHARS];
-	int i, wait, random;
-	char *extptr, *buffptr;
-	fileHandle_t f;
-
-		// Check for argument
-	if( trap_Argc() < 2 || trap_Argc() > 4 )
-	{
-		CG_Printf( "Usage: dumpspeaker <soundfile> ( <wait=value>|<random=value> )\n" );
-		return;
-	}
-
-	wait = random = 0;
-
-	// parse the other parameters
-	for( i = 2; i < trap_Argc(); i++ ) {
-		char *valueptr = NULL;
-
-		trap_Argv( i, soundfile, sizeof(soundfile) );
-
-		for( buffptr = soundfile; *buffptr; buffptr++ ) {
-			if( *buffptr == '=' ) {
-				valueptr = buffptr + 1;
-				break;
-			}
-		}
-
-		Q_strncpyz( soundfile, soundfile, buffptr - soundfile + 1 );
-
-		if( !Q_stricmp( soundfile, "wait" ) )
-			wait = atoi( valueptr );
-		else if( !Q_stricmp( soundfile, "random" ) )
-			random = atoi( valueptr );
-	}
-
-	// parse soundfile
-	trap_Argv( 1, soundfile, sizeof(soundfile) );
-
-	// Open soundfile
-	Q_strncpyz( sscrfilename, cgs.mapname, sizeof(sscrfilename) );
-	extptr = sscrfilename + strlen( sscrfilename ) - 4;
-	if( extptr < sscrfilename || Q_stricmp( extptr, ".bsp" ) )
-	{
-		CG_Printf( "Unable to dump, unknown map name?\n" );
-		return;
-	}
-	Q_strncpyz( extptr, ".sscr", 5 );
-	trap_FS_FOpenFile( sscrfilename, &f, FS_APPEND_SYNC );
-	if( !f )
-	{
-		CG_Printf( "Failed to open '%s' for writing.\n", sscrfilename );
-		return;
-	}
-
-		// Build the entity definition
-	Com_sprintf( soundfile, sizeof(soundfile), "{\n\"classname\" \"target_speaker\"\n\"origin\" \"%i %i %i\"\n\"noise\" \"%s\"\n",
-												(int) cg.snap->ps.origin[0], (int) cg.snap->ps.origin[1], (int) cg.snap->ps.origin[2], soundfile );
-
-	if( wait ) {
-		Q_strcat( soundfile, sizeof(soundfile), va( "\"wait\" \"%i\"\n", wait ) );
-	}
-	if( random ) {
-		Q_strcat( soundfile, sizeof(soundfile), va( "\"random\" \"%i\"\n", random ) );
-	}
-	Q_strcat( soundfile, sizeof(soundfile), "}\n\n" );
-
-		// And write out/acknowledge
-	trap_FS_Write( soundfile, strlen( soundfile ), f );
-	trap_FS_FCloseFile( f );
-	CG_Printf( "Entity dumped to '%s' (%i %i %i).\n", sscrfilename,
-			   (int) cg.snap->ps.origin[0], (int) cg.snap->ps.origin[1], (int) cg.snap->ps.origin[2] );*/
 	bg_speaker_t speaker;
 	trace_t tr;
 	vec3_t end;
@@ -961,8 +872,6 @@ typedef struct {
 
 static consoleCommand_t commands[] =
 {
-//	{ "obj", CG_Obj_f },
-//	{ "setspawnpt", CG_Obj_f },
 	{ "testgun", CG_TestGun_f },
 	{ "testmodel", CG_TestModel_f },
 	{ "nextframe", CG_TestModelNextFrame_f },
@@ -986,7 +895,8 @@ static consoleCommand_t commands[] =
 	{ "tell_attacker", CG_TellAttacker_f },
 	{ "tcmd", CG_TargetCommand_f },
 	{ "fade", CG_Fade_f },   // duffy
-	{ "loadhud", CG_LoadHud_f },
+	/* Nico, call an empty function
+	{ "loadhud", CG_LoadHud_f },*/
 	{ "loadweapons", CG_LoadWeapons_f },
 
 	{ "mp_QuickMessage", CG_QuickMessage_f },
@@ -1123,8 +1033,13 @@ void CG_InitConsoleCommands( void ) {
 
 	/* Nico, removed start_match command
 	trap_AddCommand( "start_match" );*/
-	trap_AddCommand( "reset_match" );
-	trap_AddCommand( "swap_teams" );
+
+	/* Nico, removed reset_match command
+	trap_AddCommand( "reset_match" );*/
+
+	/* Nico, removed swap_teams command
+	trap_AddCommand( "swap_teams" );*/
+
 	// -NERVE - SMF
 	// OSP
 	trap_AddCommand( "?" );

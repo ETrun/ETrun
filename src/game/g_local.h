@@ -1759,7 +1759,8 @@ void G_ExplodeMissile( gentity_t *ent );
 /* Nico, no longer used
 void Svcmd_StartMatch_f( void );*/
 void Svcmd_ResetMatch_f( qboolean fDoReset, qboolean fDoRestart );
-void Svcmd_SwapTeams_f( void );
+/* Nico, removed swap_teams command
+void Svcmd_SwapTeams_f( void );*/
 
 void trap_PbStat( int clientNum, char *category, char *values ) ;
 
@@ -2136,7 +2137,8 @@ int G_Pub_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qb
 int G_Referee_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd );
 int G_ShuffleTeams_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd );
 int G_StartMatch_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd );
-int G_SwapTeams_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd );
+/* Nico, removed swap_teams command
+int G_SwapTeams_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd );*/
 int G_FriendlyFire_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd );
 int G_Timelimit_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd );
 int G_Warmupfire_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd );
