@@ -52,23 +52,34 @@ typedef struct {
 // VC optimizes for dup strings :)
 static const cmd_reference_t aCommandInfo[] = {
 	{ "+stats",          qtrue,  qtrue,  NULL, ":^7 HUD overlay showing current weapon stats info" },
+
 	/* Nico, removed +topshots command
 	{ "+topshots",       qtrue,  qtrue,  NULL, ":^7 HUD overlay showing current top accuracies of all players" },*/
+
 	{ "?",       qtrue,  qtrue,  G_commands_cmd, ":^7 Gives a list of OSP-specific commands" },
 	{ "autorecord",      qtrue,  qtrue,  NULL, ":^7 Creates a demo with a consistent naming scheme" },
 	{ "autoscreenshot",  qtrue,  qtrue,  NULL, ":^7 Creates a screenshot with a consistent naming scheme" },
+
 	/* Nico, removed bottomshots command
 	{ "bottomshots", qtrue,  qfalse, G_weaponRankings_cmd, ":^7 Shows WORST player for each weapon. Add ^3<weapon_ID>^7 to show all stats for a weapon" },*/
+
 	{ "callvote",        qtrue,  qfalse, ( void( * ) ( gentity_t *, unsigned int, qboolean ) )Cmd_CallVote_f, " <params>:^7 Calls a vote" },
 	{ "commands",        qtrue,  qtrue,  G_commands_cmd, ":^7 Gives a list of OSP-specific commands" },
 	{ "currenttime", qtrue,  qtrue,  NULL, ":^7 Displays current local time" },
 	{ "follow",          qfalse, qtrue,  Cmd_Follow_f, " <player_ID|allies|axis>:^7 Spectates a particular player or team" },
+
 	/* Nico, removed lock client command
 	{ "lock",            qtrue,  qtrue,  G_lock_cmd, ":^7 Locks a player's team to prevent others from joining" },*/
-	{ "notready",        qtrue,  qfalse, G_ready_cmd, ":^7 Sets your status to ^5not ready^7 to start a match" },
+
+	/* Nico, removed notready client command
+	{ "notready",        qtrue,  qfalse, G_ready_cmd, ":^7 Sets your status to ^5not ready^7 to start a match" },*/
+
 	{ "pause",           qfalse, qtrue,  G_pause_cmd, ":^7 Allows a team to pause a match" },
 	{ "players",     qtrue,  qtrue,  G_players_cmd, ":^7 Lists all active players and their IDs/information" },
-	{ "ready",           qtrue,  qtrue,  G_ready_cmd, ":^7 Sets your status to ^5ready^7 to start a match" },
+
+	/* Nico, removed ready client command
+	{ "ready",           qtrue,  qtrue,  G_ready_cmd, ":^7 Sets your status to ^5ready^7 to start a match" },*/
+
 	{ "readyteam",       qfalse, qtrue,  G_teamready_cmd, ":^7 Sets an entire team's status to ^5ready^7 to start a match" },
 	{ "ref",         qtrue,  qtrue,  G_ref_cmd, " <password>:^7 Become a referee (admin access)" },
 	{ "say_teamnl",      qtrue,  qtrue,  G_say_teamnl_cmd, "<msg>:^7 Sends a team chat without location info" },
@@ -92,7 +103,10 @@ static const cmd_reference_t aCommandInfo[] = {
 	{ "unlock",          qtrue,  qfalse, G_lock_cmd, ":^7 Unlocks a player's team, allowing others to join" },*/
 
 	{ "unpause",     qfalse, qfalse, G_pause_cmd, ":^7 Unpauses a match (if initiated by the issuing team)" },
-	{ "unready",     qtrue,  qfalse, G_ready_cmd, ":^7 Sets your status to ^5not ready^7 to start a match" },
+
+	/* Nico, removed unready client command
+	{ "unready",     qtrue,  qfalse, G_ready_cmd, ":^7 Sets your status to ^5not ready^7 to start a match" },*/
+
 	{ "weaponstats", qtrue,  qfalse, G_weaponStats_cmd, " [player_ID]:^7 Shows weapon accuracy stats for a player" },
 	{ 0,                qfalse, qtrue,  NULL, 0 }
 };
@@ -401,6 +415,7 @@ void G_players_cmd( gentity_t *ent, unsigned int dwCommand, qboolean fValue ) {
 // ************** READY / NOTREADY
 //
 // Sets a player's "ready" status.
+/* Nico, removed ready client command
 void G_ready_cmd( gentity_t *ent, unsigned int dwCommand, qboolean state ) {
 	char *status[2] = { " NOT", "" };
 
@@ -447,7 +462,7 @@ void G_ready_cmd( gentity_t *ent, unsigned int dwCommand, qboolean state ) {
 	}
 
 	G_readyMatchState();
-}
+}*/
 
 
 // ************** SAY_TEAMNL

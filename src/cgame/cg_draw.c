@@ -2720,29 +2720,6 @@ static void CG_DrawWarmup( void ) {
 				w = CG_DrawStrlen( s2 );
 				CG_DrawStringExt( 320 - w * cw / 2, 208, s2, colorWhite, qfalse, qtrue, cw, (int)( cw * 1.5 ), 0 );
 			}
-
-/*	if ( !sec ) {
-		if ( cgs.gamestate == GS_WAITING_FOR_PLAYERS ) {
-			cw = 10;
-
-			s = CG_TranslateString( "Game Stopped - Waiting for more players" );
-
-			w = CG_DrawStrlen( s );
-			CG_DrawStringExt( 320 - w * 6, 120, s, colorWhite, qfalse, qtrue, 12, 18, 0 );
-
-			if( cg_gameType.integer != GT_WOLF_LMS ) {
-			s1 = va( CG_TranslateString( "Waiting for %i players" ), cgs.minclients );
-			s2 = CG_TranslateString( "or call a vote to start the match" );
-
-			w = CG_DrawStrlen( s1 );
-			CG_DrawStringExt( 320 - w * cw/2, 160, s1, colorWhite,
-				qfalse, qtrue, cw, (int)(cw * 1.5), 0 );
-
-			w = CG_DrawStrlen( s2 );
-			CG_DrawStringExt( 320 - w * cw/2, 180, s2, colorWhite,
-				qfalse, qtrue, cw, (int)(cw * 1.5), 0 );
-			}
-*/
 			return;
 		}
 

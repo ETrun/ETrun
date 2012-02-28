@@ -2001,19 +2001,26 @@ qboolean G_commandCheck( gentity_t *ent, char *cmd, qboolean fDoAnytime );
 qboolean G_commandHelp( gentity_t *ent, char *pszCommand, unsigned int dwCommand );
 qboolean G_cmdDebounce( gentity_t *ent, const char *pszCommand );
 void G_commands_cmd( gentity_t *ent, unsigned int dwCommand, qboolean fValue );
+
 /* Nico, removed lock client command
 void G_lock_cmd( gentity_t *ent, unsigned int dwCommand, qboolean state );*/
+
 void G_pause_cmd( gentity_t *ent, unsigned int dwCommand, qboolean fValue );
 void G_players_cmd( gentity_t *ent, unsigned int dwCommand, qboolean fDump );
-void G_ready_cmd( gentity_t *ent, unsigned int dwCommand, qboolean fDump );
+
+/* Nico, removed ready client command
+void G_ready_cmd( gentity_t *ent, unsigned int dwCommand, qboolean fDump );*/
+
 void G_say_teamnl_cmd( gentity_t *ent, unsigned int dwCommand, qboolean fValue );
 void G_scores_cmd( gentity_t *ent, unsigned int dwCommand, qboolean fValue );
 void G_specinvite_cmd( gentity_t *ent, unsigned int dwCommand, qboolean fLock );
 void G_speclock_cmd( gentity_t *ent, unsigned int dwCommand, qboolean fLock );
 void G_statsall_cmd( gentity_t *ent, unsigned int dwCommand, qboolean fDump );
 void G_teamready_cmd( gentity_t *ent, unsigned int dwCommand, qboolean fDump );
+
 /* Nico, removed topshots/bottomshots commands
 void G_weaponRankings_cmd( gentity_t *ent, unsigned int dwCommand, qboolean state );*/
+
 void G_weaponStats_cmd( gentity_t *ent, unsigned int dwCommand, qboolean fDump );
 void G_weaponStatsLeaders_cmd( gentity_t* ent, qboolean doTop, qboolean doWindow );
 void G_VoiceTo( gentity_t *ent, gentity_t *other, int mode, const char *id, qboolean voiceonly );

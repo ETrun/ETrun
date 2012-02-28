@@ -1054,11 +1054,16 @@ void CG_InitConsoleCommands( void ) {
 	/* Nico, removed lock client command
 	trap_AddCommand( "lock" );*/
 
-	trap_AddCommand( "notready" );
+	/* Nico, removed notready client command
+	trap_AddCommand( "notready" );*/
+
 	trap_AddCommand( "pause" );
 	trap_AddCommand( "players" );
 	trap_AddCommand( "readyteam" );
-	trap_AddCommand( "ready" );
+
+	/* Nico, removed ready client command
+	trap_AddCommand( "ready" );*/
+
 	trap_AddCommand( "ref" );
 	trap_AddCommand( "say_teamnl" );
 	trap_AddCommand( "say_team" );
@@ -1078,7 +1083,10 @@ void CG_InitConsoleCommands( void ) {
 	trap_AddCommand( "unlock" );*/
 
 	trap_AddCommand( "unpause" );
-	trap_AddCommand( "unready" );
+
+	/* Nico, removed unready client command
+	trap_AddCommand( "unready" );*/
+
 	trap_AddCommand( "weaponstats" );
 	// OSP
 
