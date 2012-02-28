@@ -1043,7 +1043,10 @@ void CG_InitConsoleCommands( void ) {
 	// -NERVE - SMF
 	// OSP
 	trap_AddCommand( "?" );
-	trap_AddCommand( "bottomshots" );
+
+	/* Nico, removed bottomshots command
+	trap_AddCommand( "bottomshots" );*/
+
 	trap_AddCommand( "commands" );
 	trap_AddCommand( "lock" );
 	trap_AddCommand( "notready" );
@@ -1062,7 +1065,10 @@ void CG_InitConsoleCommands( void ) {
 	trap_AddCommand( "statsdump" );
 	trap_AddCommand( "timein" );
 	trap_AddCommand( "timeout" );
-	trap_AddCommand( "topshots" );
+
+	/* Nico, removed topshots command
+	trap_AddCommand( "topshots" );*/
+
 	trap_AddCommand( "unlock" );
 	trap_AddCommand( "unpause" );
 	trap_AddCommand( "unready" );
