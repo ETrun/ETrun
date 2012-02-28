@@ -62,7 +62,7 @@ void CG_createStatsWindow( void ) {
 	sw->y = ( cg.snap->ps.pm_type == PM_INTERMISSION ) ? -20 : -100;  // Align from bottom minus offset and height
 }
 
-
+/* Nico, removed +topshots command
 void CG_createTopShotsWindow( void ) {
 	cg_window_t *sw = CG_windowAlloc( WFX_TEXTSIZING | WFX_FLASH | WFX_FADEIN | WFX_SCROLLUP | WFX_TRUETYPE, 190 );
 
@@ -79,7 +79,7 @@ void CG_createTopShotsWindow( void ) {
 	sw->y = ( cg.snap->ps.pm_type == PM_INTERMISSION ) ? -20 : -60;   // Align from bottom minus offset and height
 	sw->flashMidpoint = sw->flashPeriod * 0.8f;
 	memcpy( &sw->colorBackground2, &colorGreen2, sizeof( vec4_t ) );
-}
+}*/
 
 
 void CG_createMOTDWindow( void ) {
@@ -135,9 +135,11 @@ void CG_windowInit( void ) {
 	}
 
 	cg.msgWstatsWindow = NULL;
-	cg.msgWtopshotsWindow = NULL;
+	/* Nico, removed +topshots command
+	cg.msgWtopshotsWindow = NULL;*/
 	cg.statsWindow = NULL;
-	cg.topshotsWindow = NULL;
+	/* Nico, removed +topshots command
+	cg.topshotsWindow = NULL;*/
 }
 
 

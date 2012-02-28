@@ -242,7 +242,8 @@ vmCvar_t developer;
 vmCvar_t authLevel;
 
 vmCvar_t cf_wstats;                     // Font scale for +wstats window
-vmCvar_t cf_wtopshots;                  // Font scale for +wtopshots window
+/* Nico, removed +topshots command
+vmCvar_t cf_wtopshots;                  // Font scale for +wtopshots window*/
 
 //vmCvar_t	cg_announcer;
 vmCvar_t cg_autoAction;
@@ -456,8 +457,10 @@ cvarTable_t cvarTable[] = {
 	{ &cg_antilag, "g_antilag", "1", 0 },
 	{ &developer, "developer", "0", CVAR_CHEAT },
 	{ &cf_wstats, "cf_wstats", "1.2", CVAR_ARCHIVE },
-	{ &cf_wtopshots, "cf_wtopshots", "1.0", CVAR_ARCHIVE },
-	//{ &cg_announcer, "cg_announcer", "1", CVAR_ARCHIVE },
+
+	/* Nico, removed +topshots command
+	{ &cf_wtopshots, "cf_wtopshots", "1.0", CVAR_ARCHIVE },*/
+
 	{ &cg_autoAction, "cg_autoAction", "0", CVAR_ARCHIVE },
 	{ &cg_autoReload, "cg_autoReload", "1", CVAR_ARCHIVE },
 	{ &cg_bloodDamageBlend, "cg_bloodDamageBlend", "1.0", CVAR_ARCHIVE },

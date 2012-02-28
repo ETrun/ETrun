@@ -109,6 +109,7 @@ static void CG_StatsUp_f( void ) {
 	}
 }
 
+/* Nico, removed +topshots command
 void CG_topshotsDown_f( void ) {
 	if ( !cg.demoPlayback ) {
 		if ( cgs.topshots.show == SHOW_SHUTDOWN && cg.time < cgs.topshots.fadeTime ) {
@@ -135,7 +136,7 @@ void CG_topshotsUp_f( void ) {
 			cgs.topshots.fadeTime = cg.time + STATS_FADE_TIME;
 		}
 	}
-}
+}*/
 
 void CG_ScoresDown_f( void ) {
 	if ( cg.scoresRequestTime + 2000 < cg.time ) {
@@ -924,8 +925,9 @@ static consoleCommand_t commands[] =
 
 	{ "+stats",          CG_StatsDown_f },
 	{ "-stats",          CG_StatsUp_f },
+	/* Nico, removed +topshots command
 	{ "+topshots",       CG_topshotsDown_f },
-	{ "-topshots",       CG_topshotsUp_f },
+	{ "-topshots",       CG_topshotsUp_f },*/
 
 	// OSP
 	{ "autoRecord",      CG_autoRecord_f },

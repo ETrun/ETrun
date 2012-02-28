@@ -1550,6 +1550,7 @@ void CG_wstatsParse_cmd( void ) {
 	}
 }
 
+/* Nico, removed +topshots command
 void CG_topshotsParse_cmd( qboolean doBest ) {
 	int iArg = 1;
 	int iWeap = atoi( CG_Argv( iArg++ ) );
@@ -1581,7 +1582,7 @@ void CG_topshotsParse_cmd( qboolean doBest ) {
 
 		iWeap = atoi( CG_Argv( iArg++ ) );
 	}
-}
+}*/
 
 void CG_ParseWeaponStats( void ) {
 	cgs.ccWeaponShots = atoi( CG_Argv( 1 ) );
@@ -1873,6 +1874,7 @@ void CG_parseBestShotsStats_cmd( qboolean doTop, void( txt_dump ) ( char * ) ) {
 	}
 }
 
+/* Nico, removed +topshots command
 void CG_parseTopShotsStats_cmd( qboolean doTop, void( txt_dump ) ( char * ) ) {
 	int i, iArg = 1;
 	int cClients = atoi( CG_Argv( iArg++ ) );
@@ -1903,7 +1905,7 @@ void CG_parseTopShotsStats_cmd( qboolean doTop, void( txt_dump ) ( char * ) ) {
 		BG_cleanName( cgs.clientinfo[cnum].name, name, 30, qfalse );
 		txt_dump( va( "%s%5.1f ^5%4d/%-4d ^2%5d ^1%6d %s%s\n", color, acc, hits, atts, kills, deaths, color, name ) );
 	}
-}
+}*/
 
 void CG_scores_cmd( void ) {
 	const char *str = CG_Argv( 1 );
@@ -2217,6 +2219,7 @@ static void CG_ServerCommand( void ) {
 	}
 
 	// OSP - "topshots"-related commands
+	/* Nico, removed +topshots command
 	if ( !Q_stricmp( cmd, "astats" ) ) {
 		CG_parseTopShotsStats_cmd( qtrue, CG_printConsoleString );
 		return;
@@ -2224,7 +2227,7 @@ static void CG_ServerCommand( void ) {
 	if ( !Q_stricmp( cmd, "astatsb" ) ) {
 		CG_parseTopShotsStats_cmd( qfalse, CG_printConsoleString );
 		return;
-	}
+	}*/
 	if ( !Q_stricmp( cmd, "bstats" ) ) {
 		CG_parseBestShotsStats_cmd( qtrue, CG_printConsoleString );
 		return;
@@ -2233,14 +2236,12 @@ static void CG_ServerCommand( void ) {
 		CG_parseBestShotsStats_cmd( qfalse, CG_printConsoleString );
 		return;
 	}
-//	if(!strcmp(cmd, "wastats")) {
-//		CG_wtopshotsParse_cmd(qfalse);
-//		return;
-//	}
+
+	/* Nico, removed +topshots command
 	if ( !Q_stricmp( cmd, "wbstats" ) ) {
 		CG_topshotsParse_cmd( qtrue );
 		return;
-	}
+	}*/
 
 	// Gordon: single weapon stat (requested weapon stats)
 	if ( !Q_stricmp( cmd, "rws" ) ) {

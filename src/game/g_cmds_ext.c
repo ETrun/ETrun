@@ -52,7 +52,8 @@ typedef struct {
 // VC optimizes for dup strings :)
 static const cmd_reference_t aCommandInfo[] = {
 	{ "+stats",          qtrue,  qtrue,  NULL, ":^7 HUD overlay showing current weapon stats info" },
-	{ "+topshots",       qtrue,  qtrue,  NULL, ":^7 HUD overlay showing current top accuracies of all players" },
+	/* Nico, removed +topshots command
+	{ "+topshots",       qtrue,  qtrue,  NULL, ":^7 HUD overlay showing current top accuracies of all players" },*/
 	{ "?",       qtrue,  qtrue,  G_commands_cmd, ":^7 Gives a list of OSP-specific commands" },
 	{ "autorecord",      qtrue,  qtrue,  NULL, ":^7 Creates a demo with a consistent naming scheme" },
 	{ "autoscreenshot",  qtrue,  qtrue,  NULL, ":^7 Creates a screenshot with a consistent naming scheme" },

@@ -135,7 +135,8 @@ If you have questions concerning this license or the applicable additional terms
 
 #define WID_NONE            0x00    // General window
 #define WID_STATS           0x01    // Stats (reusable due to scroll effect)
-#define WID_TOPSHOTS        0x02    // Top/Bottom-shots
+/* Nico, removed +topshots command
+#define WID_TOPSHOTS        0x02    // Top/Bottom-shots*/
 #define WID_MOTD            0x04    // MOTD
 
 #define WFX_TEXTSIZING      0x01    // Size the window based on text/font setting
@@ -1092,7 +1093,10 @@ typedef struct {
 	int demohelpWindow;
 	cg_window_t         *motdWindow;
 	cg_window_t         *msgWstatsWindow;
-	cg_window_t         *msgWtopshotsWindow;
+
+	/* Nico, removed +topshots command
+	cg_window_t         *msgWtopshotsWindow;*/
+
 	/* Nico, removed multiview
 	int mv_cnt;                                 // Number of active MV windows
 	int mvClientList;                           // Cached client listing of who is merged
@@ -1107,8 +1111,9 @@ typedef struct {
 	int spechelpWindow;
 	int statsRequestTime;
 	cg_window_t         *statsWindow;
+	/* Nico, removed +topshots command
 	int topshotsRequestTime;
-	cg_window_t         *topshotsWindow;
+	cg_window_t         *topshotsWindow;*/
 	cg_window_t         *windowCurrent;         // Current window to update.. a bit of a hack :p
 	cg_windowHandler_t winHandler;
 	vec4_t xhairColor;
@@ -1770,13 +1775,14 @@ typedef struct {
 	int requestTime;
 } gameStats_t;
 
+/* Nico, removed +topshots command
 typedef struct {
 	char strWS[WS_MAX * 2][MAX_STRING_TOKENS];
 	int cWeapons;
 	int fadeTime;
 	int show;
 	int requestTime;
-} topshotStats_t;
+} topshotStats_t;*/
 
 typedef struct oidInfo_s {
 	int spawnflags;
@@ -1946,7 +1952,8 @@ typedef struct {
 	int dumpStatsTime;                                  // Next stats command that comes back will be written to a logfile
 	int game_versioninfo;                               // game base version
 	gameStats_t gamestats;
-	topshotStats_t topshots;
+	/* Nico, removed +topshots command
+	topshotStats_t topshots;*/
 	qboolean fResize;                                   // MV window "resize" status
 	qboolean fSelect;                                   // MV window "select" status
 	qboolean fKeyPressed[256];                          // Key status to get around console issues
@@ -2161,8 +2168,8 @@ extern vmCvar_t developer;
 // OSP
 extern vmCvar_t authLevel;
 extern vmCvar_t cf_wstats;
-extern vmCvar_t cf_wtopshots;
-//extern vmCvar_t			cg_announcer;
+/* Nico, removed +topshots command
+extern vmCvar_t cf_wtopshots;*/
 extern vmCvar_t cg_autoAction;
 extern vmCvar_t cg_autoReload;
 extern vmCvar_t cg_bloodDamageBlend;
@@ -2761,10 +2768,12 @@ void CG_PlayBufferedVoiceChats();       // NERVE - SMF
 void CG_AddToNotify( const char *str );
 const char* CG_LocalizeServerCommand( const char *buf );
 void CG_wstatsParse_cmd( void );
-void CG_wtopshotsParse_cmd( qboolean doBest );
+/* Nico, removed +topshots command
+void CG_wtopshotsParse_cmd( qboolean doBest );*/
 void CG_parseWeaponStats_cmd( void( txt_dump ) ( char * ) );
 void CG_parseBestShotsStats_cmd( qboolean doTop, void( txt_dump ) ( char * ) );
-void CG_parseTopShotsStats_cmd( qboolean doTop, void( txt_dump ) ( char * ) );
+/* Nico, removed +topshots command
+void CG_parseTopShotsStats_cmd( qboolean doTop, void( txt_dump ) ( char * ) );*/
 void CG_scores_cmd( void );
 
 //
@@ -3180,9 +3189,11 @@ qboolean CG_addString( cg_window_t *w, char *buf );
 //void CG_createDemoHelpWindow(void);
 //void CG_createSpecHelpWindow(void);
 void CG_createStatsWindow( void );
-void CG_createTopShotsWindow( void );
+/* Nico, removed +topshots command
+void CG_createTopShotsWindow( void );*/
 void CG_createWstatsMsgWindow( void );
-void CG_createWtopshotsMsgWindow( void );
+/* Nico, removed +topshots command
+void CG_createWtopshotsMsgWindow( void );*/
 void CG_createMOTDWindow( void );
 /* Nico, removed multiview
 void CG_cursorUpdate( void );*/

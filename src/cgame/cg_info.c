@@ -607,6 +607,7 @@ void CG_GameStatsDraw() {
 #define TS_Y    -60     // spacing from bottom
 #define TS_W    308
 
+/* Nico, removed +topshots command
 void CG_TopShotsDraw() {
 	if ( cgs.topshots.show == SHOW_OFF ) {
 		return;
@@ -724,7 +725,7 @@ void CG_TopShotsDraw() {
 			}
 		}
 	}
-}
+}*/
 
 
 
@@ -1030,7 +1031,8 @@ void CG_SpecHelpDraw() {
 
 void CG_DrawOverlays( void ) {
 	CG_GameStatsDraw();
-	CG_TopShotsDraw();
+	/* Nico, removed +topshots command
+	CG_TopShotsDraw();*/
 	if ( cg.demoPlayback ) {
 		CG_DemoHelpDraw();
 	}
