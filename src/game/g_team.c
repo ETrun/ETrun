@@ -1765,7 +1765,9 @@ void G_verifyMatchState( int nTeam ) {
 				level.lastRestartTime = level.time;
 				if ( g_gametype.integer == GT_WOLF_STOPWATCH ) {
 					trap_Cvar_Set( "g_currentRound", "0" );
-					trap_Cvar_Set( "g_nextTimeLimit", "0" );
+
+					/* Nico, no timelimit
+					trap_Cvar_Set( "g_nextTimeLimit", "0" );*/
 				}
 
 				trap_SendConsoleCommand( EXEC_APPEND, va( "map_restart 0 %i\n", GS_WARMUP ) );

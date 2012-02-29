@@ -51,7 +51,10 @@ mapEntityData_Team_t mapEntityData[2];
 
 vmCvar_t g_gametype;
 vmCvar_t g_fraglimit;
-vmCvar_t g_timelimit;
+
+/* Nico, no timelimit
+vmCvar_t g_timelimit;*/
+
 vmCvar_t g_friendlyFire;
 vmCvar_t g_password;
 vmCvar_t sv_privatepassword;
@@ -75,9 +78,15 @@ vmCvar_t g_warmup;
 
 // NERVE - SMF
 vmCvar_t g_warmupLatch;
-vmCvar_t g_nextTimeLimit;
+
+/* Nico, no timelimit
+vmCvar_t g_nextTimeLimit;*/
+
 vmCvar_t g_showHeadshotRatio;
-vmCvar_t g_userTimeLimit;
+
+/* Nico, no timelimit
+vmCvar_t g_userTimeLimit;*/
+
 vmCvar_t g_userAlliedRespawnTime;
 vmCvar_t g_userAxisRespawnTime;
 vmCvar_t g_currentRound;
@@ -172,7 +181,10 @@ vmCvar_t vote_allow_referee;
 vmCvar_t vote_allow_shuffleteamsxp;
 vmCvar_t vote_allow_swapteams;
 vmCvar_t vote_allow_friendlyfire;
-vmCvar_t vote_allow_timelimit;
+
+/* Nico, no timelimit
+vmCvar_t vote_allow_timelimit;*/
+
 vmCvar_t vote_allow_warmupdamage;
 vmCvar_t vote_allow_antilag;
 vmCvar_t vote_allow_balancedteams;
@@ -257,7 +269,9 @@ cvarTable_t gameCvarTable[] = {
 
 	// change anytime vars
 	{ &g_fraglimit, "fraglimit", "0", /*CVAR_SERVERINFO |*/ CVAR_ARCHIVE | CVAR_NORESTART, 0, qtrue },
-	{ &g_timelimit, "timelimit", "0", CVAR_SERVERINFO | CVAR_ARCHIVE | CVAR_NORESTART, 0, qtrue },
+
+	/* Nico, no timelimit
+	{ &g_timelimit, "timelimit", "0", CVAR_SERVERINFO | CVAR_ARCHIVE | CVAR_NORESTART, 0, qtrue },*/
 
 	{ &g_friendlyFire, "g_friendlyFire", "1", CVAR_SERVERINFO | CVAR_ARCHIVE, 0, qtrue, qtrue },
 
@@ -269,7 +283,9 @@ cvarTable_t gameCvarTable[] = {
 	// NERVE - SMF
 	{ &g_warmupLatch, "g_warmupLatch", "1", 0, 0, qfalse },
 
-	{ &g_nextTimeLimit, "g_nextTimeLimit", "0", CVAR_WOLFINFO, 0, qfalse  },
+	/* Nico, no timelimit
+	{ &g_nextTimeLimit, "g_nextTimeLimit", "0", CVAR_WOLFINFO, 0, qfalse  },*/
+
 	{ &g_currentRound, "g_currentRound", "0", CVAR_WOLFINFO, 0, qfalse, qtrue },
 	{ &g_altStopwatchMode, "g_altStopwatchMode", "0", CVAR_ARCHIVE, 0, qtrue, qtrue },
 	{ &g_gamestate, "gamestate", "-1", CVAR_WOLFINFO | CVAR_ROM, 0, qfalse  },
@@ -278,7 +294,9 @@ cvarTable_t gameCvarTable[] = {
 
 	{ &g_showHeadshotRatio, "g_showHeadshotRatio", "0", 0, 0, qfalse  },
 
-	{ &g_userTimeLimit, "g_userTimeLimit", "0", 0, 0, qfalse, qtrue },
+	/* Nico, no timelimit
+	{ &g_userTimeLimit, "g_userTimeLimit", "0", 0, 0, qfalse, qtrue },*/
+
 	{ &g_userAlliedRespawnTime, "g_userAlliedRespawnTime", "0", 0, 0, qfalse, qtrue },
 	{ &g_userAxisRespawnTime, "g_userAxisRespawnTime", "0", 0, 0, qfalse, qtrue },
 
@@ -378,7 +396,10 @@ cvarTable_t gameCvarTable[] = {
 	{ &vote_allow_shuffleteamsxp,   "vote_allow_shuffleteamsxp", "1", 0, 0, qfalse, qfalse },
 	{ &vote_allow_swapteams,    "vote_allow_swapteams", "1", 0, 0, qfalse, qfalse },
 	{ &vote_allow_friendlyfire, "vote_allow_friendlyfire", "1", 0, 0, qfalse, qfalse },
-	{ &vote_allow_timelimit,    "vote_allow_timelimit", "0", 0, 0, qfalse, qfalse },
+
+	/* Nico, no timelimit
+	{ &vote_allow_timelimit,    "vote_allow_timelimit", "0", 0, 0, qfalse, qfalse },*/
+
 	{ &vote_allow_warmupdamage, "vote_allow_warmupdamage", "1", 0, 0, qfalse, qfalse },
 	{ &vote_allow_antilag,      "vote_allow_antilag", "1", 0, 0, qfalse, qfalse },
 	{ &vote_allow_balancedteams,"vote_allow_balancedteams", "1", 0, 0, qfalse, qfalse },
@@ -1382,8 +1403,10 @@ void G_UpdateCvars( void ) {
 						 cv->vmCvar == &vote_allow_mutespecs     || cv->vmCvar == &vote_allow_nextmap        ||
 						 cv->vmCvar == &vote_allow_pub           || cv->vmCvar == &vote_allow_referee        ||
 						 cv->vmCvar == &vote_allow_shuffleteamsxp    || cv->vmCvar == &vote_allow_swapteams      ||
-						 cv->vmCvar == &vote_allow_friendlyfire  || cv->vmCvar == &vote_allow_timelimit      ||
-						 cv->vmCvar == &vote_allow_warmupdamage  || cv->vmCvar == &vote_allow_antilag        ||
+						 cv->vmCvar == &vote_allow_friendlyfire
+						 /* Nico, no timelimit
+						 || cv->vmCvar == &vote_allow_timelimit      */
+						 || cv->vmCvar == &vote_allow_warmupdamage  || cv->vmCvar == &vote_allow_antilag        ||
 						 cv->vmCvar == &vote_allow_balancedteams || cv->vmCvar == &vote_allow_muting
 						 ) {
 						fVoteFlags = qtrue;
@@ -2520,6 +2543,7 @@ void LogExit( const char *string ) {
 		winner = atoi( Info_ValueForKey( cs, "winner" ) );
 
 		// NERVE - SMF
+		/* Nico, no timelimit
 		if ( !g_currentRound.integer ) {
 			if ( winner == defender ) {
 				// if the defenders won, use default timelimit
@@ -2531,7 +2555,7 @@ void LogExit( const char *string ) {
 		} else {
 			// reset timer
 			trap_Cvar_Set( "g_nextTimeLimit", "0" );
-		}
+		}*/
 
 		trap_Cvar_Set( "g_currentRound", va( "%i", !g_currentRound.integer ) );
 
@@ -2761,6 +2785,7 @@ void CheckExitRules( void ) {
 		return;
 	}
 
+	/* Nico, no timelimit
 	if ( g_timelimit.value && !level.warmupTime ) {
 		// OSP
 		if ( ( level.timeCurrent - level.startTime ) >= ( g_timelimit.value * 60000 ) ) {
@@ -2834,7 +2859,7 @@ void CheckExitRules( void ) {
 
 			return;
 		}
-	}
+	}*/
 
 	//bani - #444
 	//i dont really get the point of the delay anyway, why not end it immediately like maxlives games?

@@ -4053,13 +4053,14 @@ void UI_RunMenuScript( char **args ) {
 
 			// NERVE - SMF - set user cvars here
 			// set timelimit
+			/* Nico, no timelimit
 			val = trap_Cvar_VariableValue( "ui_userTimelimit" );
 
 			if ( val && val != uiInfo.mapList[ui_mapIndex.integer].Timelimit ) {
 				trap_Cvar_Set( "g_userTimelimit", va( "%i", val ) );
 			} else {
 				trap_Cvar_Set( "g_userTimelimit", "0" );
-			}
+			}*/
 
 			// set axis respawn time
 			val = trap_Cvar_VariableValue( "ui_userAxisRespawnTime" );
@@ -4398,14 +4399,20 @@ void UI_RunMenuScript( char **args ) {
 			if ( ui_voteGameType >= 0 && ui_voteGameType < uiInfo.numGameTypes ) {
 				trap_Cmd_ExecuteText( EXEC_APPEND, va( "ref gametype %i\n", ui_voteGameType ) );
 			}
-		} else if ( Q_stricmp( name, "voteTimelimit" ) == 0 ) {
+		}
+		/* Nico, no timelimit
+		else if ( Q_stricmp( name, "voteTimelimit" ) == 0 ) {
 			trap_Cmd_ExecuteText( EXEC_APPEND, va( "callvote timelimit %f\n", trap_Cvar_VariableValue( "ui_voteTimelimit" ) ) );
-		} else if ( Q_stricmp( name, "voteWarmupDamage" ) == 0 ) {
+		}*/
+		else if ( Q_stricmp( name, "voteWarmupDamage" ) == 0 ) {
 			trap_Cmd_ExecuteText( EXEC_APPEND, va( "callvote warmupdamage %d\n", (int)trap_Cvar_VariableValue( "ui_voteWarmupDamage" ) ) );
 
-		} else if ( Q_stricmp( name, "refTimelimit" ) == 0 ) {
+		}
+		/* Nico, no timelimit
+		else if ( Q_stricmp( name, "refTimelimit" ) == 0 ) {
 			trap_Cmd_ExecuteText( EXEC_APPEND, va( "ref timelimit %f\n", trap_Cvar_VariableValue( "ui_voteTimelimit" ) ) );
-		} else if ( Q_stricmp( name, "refWarmupDamage" ) == 0 ) {
+		}*/
+		else if ( Q_stricmp( name, "refWarmupDamage" ) == 0 ) {
 			trap_Cmd_ExecuteText( EXEC_APPEND, va( "ref warmupdamage %d\n", (int)trap_Cvar_VariableValue( "ui_voteWarmupDamage" ) ) );
 		} else if ( Q_stricmp( name, "voteInitToggles" ) == 0 ) {
 			char info[MAX_INFO_STRING];
@@ -4413,8 +4420,9 @@ void UI_RunMenuScript( char **args ) {
 			trap_GetConfigString( CS_SERVERTOGGLES, info, sizeof( info ) );
 			trap_Cvar_Set( "ui_voteWarmupDamage", va( "%d", ( ( atoi( info ) & CV_SVS_WARMUPDMG ) >> 2 ) ) );
 
+			/* Nico, no timelimit
 			trap_GetConfigString( CS_SERVERINFO, info, sizeof( info ) );
-			trap_Cvar_Set( "ui_voteTimelimit", va( "%i", atoi( Info_ValueForKey( info, "timelimit" ) ) ) );
+			trap_Cvar_Set( "ui_voteTimelimit", va( "%i", atoi( Info_ValueForKey( info, "timelimit" ) ) ) );*/
 
 		} else if ( Q_stricmp( name, "voteLeader" ) == 0 ) {
 			if ( uiInfo.teamIndex >= 0 && uiInfo.teamIndex < uiInfo.myTeamCount ) {
@@ -5474,7 +5482,10 @@ serverStatusCvar_t serverStatusCvars[] = {
 	{"mapname", "Map"},
 	{"version", ""},
 	{"protocol", ""},
-	{"timelimit", ""},
+
+	/* Nico, no timelimit
+	{"timelimit", ""},*/
+
 	{"fraglimit", ""},
 	{NULL, NULL}
 };
@@ -7284,14 +7295,22 @@ typedef struct {
 } cvarTable_t;
 
 vmCvar_t ui_ffa_fraglimit;
-vmCvar_t ui_ffa_timelimit;
+
+/* Nico, no timelimit
+vmCvar_t ui_ffa_timelimit;*/
 
 vmCvar_t ui_team_fraglimit;
-vmCvar_t ui_team_timelimit;
+
+/* Nico, no timelimit
+vmCvar_t ui_team_timelimit;*/
+
 vmCvar_t ui_team_friendly;
 
 vmCvar_t ui_ctf_capturelimit;
-vmCvar_t ui_ctf_timelimit;
+
+/* Nico, no timelimit
+vmCvar_t ui_ctf_timelimit;*/
+
 vmCvar_t ui_ctf_friendly;
 
 vmCvar_t ui_arenasFile;
@@ -7395,7 +7414,9 @@ vmCvar_t ui_isSpectator;
 
 vmCvar_t ui_friendlyFire;
 
-vmCvar_t ui_userTimeLimit;
+/* Nico, no timelimit
+vmCvar_t ui_userTimeLimit;*/
+
 vmCvar_t ui_userAlliedRespawnTime;
 vmCvar_t ui_userAxisRespawnTime;
 vmCvar_t ui_glCustom;    // JPW NERVE missing from q3ta
@@ -7429,14 +7450,21 @@ cvarTable_t cvarTable[] = {
 
 	{ &ui_glCustom, "ui_glCustom", "4", CVAR_ARCHIVE }, // JPW NERVE missing from q3ta
 	{ &ui_ffa_fraglimit, "ui_ffa_fraglimit", "20", CVAR_ARCHIVE },
-	{ &ui_ffa_timelimit, "ui_ffa_timelimit", "0", CVAR_ARCHIVE },
+
+	/* Nico, no timelimit
+	{ &ui_ffa_timelimit, "ui_ffa_timelimit", "0", CVAR_ARCHIVE },*/
 
 	{ &ui_team_fraglimit, "ui_team_fraglimit", "0", CVAR_ARCHIVE },
-	{ &ui_team_timelimit, "ui_team_timelimit", "20", CVAR_ARCHIVE },
+
+	/* Nico, no timelimit
+	{ &ui_team_timelimit, "ui_team_timelimit", "20", CVAR_ARCHIVE },*/
+
 	{ &ui_team_friendly, "ui_team_friendly",  "1", CVAR_ARCHIVE },
 
 	{ &ui_ctf_capturelimit, "ui_ctf_capturelimit", "8", CVAR_ARCHIVE },
-	{ &ui_ctf_timelimit, "ui_ctf_timelimit", "30", CVAR_ARCHIVE },
+
+	/* Nico, no timelimit
+	{ &ui_ctf_timelimit, "ui_ctf_timelimit", "30", CVAR_ARCHIVE },*/
 	{ &ui_ctf_friendly, "ui_ctf_friendly",  "0", CVAR_ARCHIVE },
 
 	{ &ui_arenasFile, "g_arenasFile", "", CVAR_INIT | CVAR_ROM },
@@ -7452,7 +7480,9 @@ cvarTable_t cvarTable[] = {
 	// NERVE - SMF
 	{ &ui_friendlyFire, "g_friendlyFire", "1", CVAR_ARCHIVE },
 
-	{ &ui_userTimeLimit, "ui_userTimeLimit", "0", 0 },
+	/* Nico, no timelimit
+	{ &ui_userTimeLimit, "ui_userTimeLimit", "0", 0 },*/
+
 	{ &ui_userAlliedRespawnTime, "ui_userAlliedRespawnTime", "0", 0 },
 	{ &ui_userAxisRespawnTime, "ui_userAxisRespawnTime", "0", 0 },
 	// -NERVE - SMF
@@ -7641,7 +7671,10 @@ cvarTable_t cvarTable[] = {
 	{ NULL, "vote_allow_shuffleteamsxp", "1", CVAR_ARCHIVE },
 	{ NULL, "vote_allow_swapteams", "1", CVAR_ARCHIVE },
 	{ NULL, "vote_allow_friendlyfire", "1", CVAR_ARCHIVE },
-	{ NULL, "vote_allow_timelimit", "0", CVAR_ARCHIVE },
+
+	/* Nico, no timelimit
+	{ NULL, "vote_allow_timelimit", "0", CVAR_ARCHIVE },*/
+
 	{ NULL, "vote_allow_warmupdamage", "1", CVAR_ARCHIVE },
 	{ NULL, "vote_allow_antilag", "1", CVAR_ARCHIVE },
 	{ NULL, "vote_allow_muting", "1", CVAR_ARCHIVE },

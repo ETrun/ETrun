@@ -655,6 +655,7 @@ void G_matchInfoDump( unsigned int dwDumpType ) {
 			if ( !( cl->pers.clientFlags & CGF_STATSDUMP ) ) {
 				G_printMatchInfo( ent );
 			}*/
+			/* Nico, no timelimit
 			if ( g_gametype.integer == GT_WOLF_STOPWATCH ) {
 				if ( g_currentRound.integer == 1 ) {   // We've already missed the switch
 					CP( va( "print \">>> ^3Clock set to: %d:%02d\n\n\n\"",
@@ -674,7 +675,7 @@ void G_matchInfoDump( unsigned int dwDumpType ) {
 								(int)( 60.0 * (float)( g_timelimit.value - g_timelimit.integer ) ) ) );
 					}
 				}
-			}
+			}*/
 		}
 	}
 }
@@ -827,7 +828,8 @@ void G_resetRoundState( void ) {
 
 void G_resetModeState( void ) {
 	if ( g_gametype.integer == GT_WOLF_STOPWATCH ) {
-		trap_Cvar_Set( "g_nextTimeLimit", "0" );
+		/* Nico, no timelimit
+		trap_Cvar_Set( "g_nextTimeLimit", "0" );*/
 	} else if ( g_gametype.integer == GT_WOLF_LMS ) {
 		trap_Cvar_Set( "g_axiswins", "0" );
 		trap_Cvar_Set( "g_alliedwins", "0" );

@@ -37,14 +37,22 @@ If you have questions concerning this license or the applicable additional terms
 #include "ui_shared.h"
 
 extern vmCvar_t ui_ffa_fraglimit;
-extern vmCvar_t ui_ffa_timelimit;
+
+/* Nico, no timelimit
+extern vmCvar_t ui_ffa_timelimit;*/
 
 extern vmCvar_t ui_team_fraglimit;
-extern vmCvar_t ui_team_timelimit;
+
+/* Nico, no timelimit
+extern vmCvar_t ui_team_timelimit;*/
+
 extern vmCvar_t ui_team_friendly;
 
 extern vmCvar_t ui_ctf_capturelimit;
-extern vmCvar_t ui_ctf_timelimit;
+
+/* Nico, no timelimit
+extern vmCvar_t ui_ctf_timelimit;*/
+
 extern vmCvar_t ui_ctf_friendly;
 
 extern vmCvar_t ui_arenasFile;

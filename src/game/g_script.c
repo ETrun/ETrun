@@ -79,7 +79,7 @@ qboolean G_ScriptAction_AddTeamVoiceAnnounce( gentity_t *ent, char *params );
 qboolean G_ScriptAction_RemoveTeamVoiceAnnounce( gentity_t *ent, char *params );
 qboolean G_ScriptAction_TeamVoiceAnnounce( gentity_t *ent, char *params );
 qboolean G_ScriptAction_EndRound( gentity_t *ent, char *params );
-qboolean G_ScriptAction_SetRoundTimelimit( gentity_t *ent, char *params );
+qboolean G_ScriptAction_SetRoundTimelimit( gentity_t *ent, char *params );// Nico, note: keep this
 qboolean G_ScriptAction_RemoveEntity( gentity_t *ent, char *params );
 qboolean G_ScriptAction_SetState( gentity_t *ent, char *params );
 qboolean G_ScriptAction_VoiceAnnounce( gentity_t *ent, char *params );
@@ -172,7 +172,7 @@ g_script_stack_action_t gScriptActions[] =
 	{"wm_removeteamvoiceannounce",       G_ScriptAction_RemoveTeamVoiceAnnounce},
 	{"wm_announce_icon",             G_ScriptAction_Announce_Icon},
 	{"wm_endround",                      G_ScriptAction_EndRound},
-	{"wm_set_round_timelimit",           G_ScriptAction_SetRoundTimelimit},
+	{"wm_set_round_timelimit",           G_ScriptAction_SetRoundTimelimit},// Nico, note: keep this
 	{"wm_voiceannounce",             G_ScriptAction_VoiceAnnounce},
 	{"wm_objective_status",              G_ScriptAction_ObjectiveStatus},
 	{"wm_set_main_objective",            G_ScriptAction_SetMainObjective},

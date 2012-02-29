@@ -3151,6 +3151,7 @@ qboolean G_ScriptAction_SetRoundTimelimit( gentity_t *ent, char *params ) {
 		G_Error( "G_ScriptAction_SetRoundTimelimit: number parameter required\n" );
 	}
 
+	/* Nico, no timelimit
 	// NERVE - SMF
 	nextTimeLimit = g_nextTimeLimit.value;
 
@@ -3169,7 +3170,8 @@ qboolean G_ScriptAction_SetRoundTimelimit( gentity_t *ent, char *params ) {
 		} else {
 			trap_Cvar_Set( "timelimit", token );
 		}
-	}
+	}*/
+	G_Printf("Warning: G_ScriptAction_SetRoundTimelimit ignored\n");
 
 	return qtrue;
 }

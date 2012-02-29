@@ -200,7 +200,8 @@ typedef struct {
 	qboolean active;
 
 	// NERVE - SMF
-	int Timelimit;
+	/* Nico, no timelimit
+	int Timelimit;*/
 	int AxisRespawnTime;
 	int AlliedRespawnTime;
 	// -NERVE - SMF

@@ -1538,7 +1538,10 @@ extern vmCvar_t g_minGameClients;           // NERVE - SMF - we need at least th
 extern vmCvar_t g_restarted;
 
 extern vmCvar_t g_fraglimit;
-extern vmCvar_t g_timelimit;
+
+/* Nico, no timelimit
+extern vmCvar_t g_timelimit;*/
+
 extern vmCvar_t g_friendlyFire;
 extern vmCvar_t g_password;
 extern vmCvar_t sv_privatepassword;
@@ -1631,9 +1634,15 @@ extern vmCvar_t g_lms_followTeamOnly;
 
 // NERVE - SMF
 extern vmCvar_t g_warmupLatch;
-extern vmCvar_t g_nextTimeLimit;
+
+/* Nico, no timelimit
+extern vmCvar_t g_nextTimeLimit;*/
+
 extern vmCvar_t g_showHeadshotRatio;
-extern vmCvar_t g_userTimeLimit;
+
+/* Nico, no timelimit
+extern vmCvar_t g_userTimeLimit;*/
+
 extern vmCvar_t g_userAlliedRespawnTime;
 extern vmCvar_t g_userAxisRespawnTime;
 extern vmCvar_t g_currentRound;
@@ -1682,7 +1691,10 @@ extern vmCvar_t vote_allow_referee;
 extern vmCvar_t vote_allow_shuffleteamsxp;
 extern vmCvar_t vote_allow_swapteams;
 extern vmCvar_t vote_allow_friendlyfire;
-extern vmCvar_t vote_allow_timelimit;
+
+/* Nico, no timelimit
+extern vmCvar_t vote_allow_timelimit;*/
+
 extern vmCvar_t vote_allow_warmupdamage;
 extern vmCvar_t vote_allow_antilag;
 extern vmCvar_t vote_allow_balancedteams;
@@ -2184,7 +2196,10 @@ int G_StartMatch_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *a
 int G_SwapTeams_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd );*/
 
 int G_FriendlyFire_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd );
-int G_Timelimit_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd );
+
+/* Nico, no timelimit
+int G_Timelimit_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd );*/
+
 int G_Warmupfire_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd );
 int G_Unreferee_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd );
 int G_AntiLag_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd );

@@ -93,10 +93,15 @@ static const vote_reference_t aVoteInfo[] = {
 	{ 0x1ff, "referee",       G_Referee_v,       "Referee",           " <player_id>^7\n  Elects a player to have admin abilities" },
 	{ 0x1ff, "shuffleteamsxp", G_ShuffleTeams_v, "Shuffle Teams by XP",   " ^7\n  Randomly place players on each team, based on XP" },
 	{ 0x1ff, "startmatch",    G_StartMatch_v,    "Start Match",       " ^7\n  Sets all players to \"ready\" status to start the match" },
+
 	/* Nico, removed swap_teams command
 	{ 0x1ff, "swapteams",     G_SwapTeams_v,     "Swap Teams",        " ^7\n  Switch the players on each team" },*/
+
 	{ 0x1ff, "friendlyfire", G_FriendlyFire_v,   "Friendly Fire", " <0|1>^7\n  Toggles ability to hurt teammates" },
-	{ 0x1ff, "timelimit",     G_Timelimit_v,     "Timelimit",     " <value>^7\n  Changes the current timelimit" },
+
+	/* Nico, no timelimit
+	{ 0x1ff, "timelimit",     G_Timelimit_v,     "Timelimit",     " <value>^7\n  Changes the current timelimit" },*/
+
 	{ 0x1ff, "unreferee",     G_Unreferee_v,     "UNReferee",     " <player_id>^7\n  Elects a player to have admin abilities removed" },
 	{ 0x1ff, "warmupdamage", G_Warmupfire_v, "Warmup Damage", " <0|1|2>^7\n  Specifies if players can inflict damage during warmup" },
 	{ 0x1ff, "antilag",       G_AntiLag_v,       "Anti-Lag",          " <0|1>^7\n  Toggles Anit-Lag on the server" },
@@ -908,6 +913,7 @@ int G_BalancedTeams_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char
 	return( G_OK );
 }
 
+/* Nico, no timelimit
 // *** Timelimit ***
 int G_Timelimit_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd ) {
 	// Vote request (vote is being initiated)
@@ -933,7 +939,7 @@ int G_Timelimit_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *ar
 	}
 
 	return( G_OK );
-}
+}*/
 
 char *warmupType[] = { "None", "Enemies Only", "Everyone" };
 
