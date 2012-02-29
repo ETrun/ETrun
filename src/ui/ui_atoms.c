@@ -216,10 +216,11 @@ qboolean UI_ConsoleCommand( int realTime ) {
 			return qtrue;
 		}*/
 
+		/* Nico, removed listcampaigns client command
 		if ( Q_stricmp( cmd, "listcampaigns" ) == 0 ) {
 			UI_ListCampaigns_f();
 			return qtrue;
-		}
+		}*/
 	}
 
 	return qfalse;

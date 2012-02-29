@@ -751,6 +751,7 @@ void Svcmd_Campaign_f( void ) {
 	trap_SendConsoleCommand( EXEC_APPEND, va( "map %s\n", campaign->mapnames[0] ) );
 }*/
 
+/* Nico, removed listcampaigns client command
 void Svcmd_ListCampaigns_f( void ) {
 	int i, mpCampaigns;
 
@@ -774,7 +775,7 @@ void Svcmd_ListCampaigns_f( void ) {
 			G_Printf( " %s\n", g_campaigns[i].shortname );
 		}
 	}
-}
+}*/
 
 // fretn - kicking
 
@@ -1078,10 +1079,11 @@ qboolean    ConsoleCommand( void ) {
 		return qtrue;
 	}*/
 
+	/* Nico, removed listcampaigns client command
 	if ( Q_stricmp( cmd, "listcampaigns" ) == 0 ) {
 		Svcmd_ListCampaigns_f();
 		return qtrue;
-	}
+	}*/
 
 	// fretn - moved from engine
 	if ( !Q_stricmp( cmd, "kick" ) ) {

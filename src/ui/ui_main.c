@@ -6784,7 +6784,8 @@ void _UI_Init( qboolean inGameLoad ) {
 	/* Nico, removed campaign client command
 	trap_AddCommand( "campaign" );*/
 
-	trap_AddCommand( "listcampaigns" );
+	/* Nico, removed listcampaigns client command
+	trap_AddCommand( "listcampaigns" );*/
 }
 
 
@@ -7872,6 +7873,7 @@ void UI_Campaign_f( void ) {
 	trap_Cmd_ExecuteText( EXEC_APPEND, va( "map %s\n", campaign->mapInfos[0]->mapLoadName ) );
 }*/
 
+/* Nico, removed listcampaigns client command
 void UI_ListCampaigns_f( void ) {
 	int i, mpCampaigns;
 
@@ -7899,4 +7901,4 @@ void UI_ListCampaigns_f( void ) {
 			Com_Printf( " %s\n", uiInfo.campaignList[i].campaignShortName );
 		}
 	}
-}
+}*/

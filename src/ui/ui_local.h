@@ -403,7 +403,8 @@ void            Text_Paint_Ext( float x, float y, float scalex, float scaley, ve
 /* Nico, removed campaign client command
 void UI_Campaign_f( void );*/
 
-void UI_ListCampaigns_f( void );
+/* Nico, removed listcampaigns client command
+void UI_ListCampaigns_f( void );*/
 
 #define GLINFO_LINES        128
 

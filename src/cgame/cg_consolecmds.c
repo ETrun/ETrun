@@ -1132,7 +1132,8 @@ void CG_InitConsoleCommands( void ) {
 	/* Nico, removed campaign client command
 	trap_AddCommand( "campaign" );*/
 
-	trap_AddCommand( "listcampaigns" );
+	/* Nico, removed listcampaigns client command
+	trap_AddCommand( "listcampaigns" );*/
 
 	// Nico, added missing commands
 	// http://games.chruker.dk/enemy_territory/modding_project_bugfix.php?bug_id=011
