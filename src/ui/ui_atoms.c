@@ -210,10 +210,11 @@ qboolean UI_ConsoleCommand( int realTime ) {
 
 	trap_GetClientState( &cstate );
 	if ( cstate.connState == CA_DISCONNECTED ) {
+		/* Nico, removed campaign client command
 		if ( Q_stricmp( cmd, "campaign" ) == 0 ) {
 			UI_Campaign_f();
 			return qtrue;
-		}
+		}*/
 
 		if ( Q_stricmp( cmd, "listcampaigns" ) == 0 ) {
 			UI_ListCampaigns_f();

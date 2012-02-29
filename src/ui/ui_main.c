@@ -63,27 +63,6 @@ static const serverFilter_t serverFilters[] = {
 	{"All", "" }
 };
 
-// For server browser
-/*static const char *ETGameTypes[] = {
-	"Single Player",
-	"Cooperative",
-	"Objective",
-	"Stopwatch",
-	"Campaign",
-	"Last Man Standing"
-};
-
-static const char *shortETGameTypes[] = {
-	"SP",
-	"Coop",
-	"Obj",
-	"SW",
-	"Cmpgn",
-	"LMS"
-};
-
-static int const numETGameTypes = sizeof(ETGameTypes) / sizeof(const char*);*/
-
 static const int numServerFilters = sizeof( serverFilters ) / sizeof( serverFilter_t );
 
 static char* netnames[] = {
@@ -6802,7 +6781,9 @@ void _UI_Init( qboolean inGameLoad ) {
 	Q_strncpyz( translated_yes, DC->translateString( "Yes" ), sizeof( translated_yes ) );
 	Q_strncpyz( translated_no, DC->translateString( "NO" ), sizeof( translated_no ) );
 
-	trap_AddCommand( "campaign" );
+	/* Nico, removed campaign client command
+	trap_AddCommand( "campaign" );*/
+
 	trap_AddCommand( "listcampaigns" );
 }
 
@@ -7851,6 +7832,7 @@ static void UI_StartServerRefresh( qboolean full ) {
 }
 // -NERVE - SMF
 
+/* Nico, removed campaign client command
 void UI_Campaign_f( void ) {
 	char str[MAX_TOKEN_CHARS];
 	int i;
@@ -7888,7 +7870,7 @@ void UI_Campaign_f( void ) {
 	// we got a campaign, start it
 	trap_Cvar_Set( "g_gametype", va( "%i", GT_WOLF_CAMPAIGN ) );
 	trap_Cmd_ExecuteText( EXEC_APPEND, va( "map %s\n", campaign->mapInfos[0]->mapLoadName ) );
-}
+}*/
 
 void UI_ListCampaigns_f( void ) {
 	int i, mpCampaigns;

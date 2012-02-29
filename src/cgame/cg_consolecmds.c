@@ -1129,7 +1129,9 @@ void CG_InitConsoleCommands( void ) {
 	trap_AddCommand( "ignore" );
 	trap_AddCommand( "unignore" );
 
-	trap_AddCommand( "campaign" );
+	/* Nico, removed campaign client command
+	trap_AddCommand( "campaign" );*/
+
 	trap_AddCommand( "listcampaigns" );
 
 	// Nico, added missing commands

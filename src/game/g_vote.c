@@ -81,7 +81,10 @@ static const vote_reference_t aVoteInfo[] = {
 	{ 0x1ff, "mute",      G_Mute_v,          "MUTE",              " <player_id>^7\n  Removes the chat capabilities of a player" },
 	{ 0x1ff, "unmute",        G_UnMute_v,        "UN-MUTE",           " <player_id>^7\n  Restores the chat capabilities of a player" },
 	{ 0x1ff, "map",           G_Map_v,           "Change map to", " <mapname>^7\n  Votes for a new map to be loaded" },
-	{ 0x1ff, "campaign",  G_Campaign_v,      "Change campaign to",    " <campaign>^7\n  Votes for a new map to be loaded" },
+
+	/* Nico, removed campaign client command
+	{ 0x1ff, "campaign",  G_Campaign_v,      "Change campaign to",    " <campaign>^7\n  Votes for a new map to be loaded" },*/
+
 	{ 0x1ff, "maprestart",    G_MapRestart_v,    "Map Restart",       "^7\n  Restarts the current map in progress" },
 	{ 0x1ff, "matchreset",   G_MatchReset_v, "Match Reset",       "^7\n  Resets the entire match" },
 	{ 0x1ff, "mutespecs",     G_Mutespecs_v,     "Mute Spectators",   " <0|1>^7\n  Mutes in-game spectator chat" },
@@ -545,6 +548,7 @@ int G_Map_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qb
 	return( G_OK );
 }
 
+/* Nico, removed campaign client command
 // *** Campaign - simpleton: we dont verify map is allowed/exists ***
 int G_Campaign_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd ) {
 	// Vote request (vote is being initiated)
@@ -576,7 +580,7 @@ int G_Campaign_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg
 	}
 
 	return( G_OK );
-}
+}*/
 
 // *** Map Restart ***
 int G_MapRestart_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd ) {

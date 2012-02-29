@@ -718,6 +718,7 @@ void Svcmd_ShuffleTeams_f( void ) {
 	Svcmd_ResetMatch_f( qfalse, qtrue );
 }
 
+/* Nico, removed campaign client command
 void Svcmd_Campaign_f( void ) {
 	char str[MAX_TOKEN_CHARS];
 	int i;
@@ -748,7 +749,7 @@ void Svcmd_Campaign_f( void ) {
 	// we got a campaign, start it
 	trap_Cvar_Set( "g_gametype", va( "%i", GT_WOLF_CAMPAIGN ) );
 	trap_SendConsoleCommand( EXEC_APPEND, va( "map %s\n", campaign->mapnames[0] ) );
-}
+}*/
 
 void Svcmd_ListCampaigns_f( void ) {
 	int i, mpCampaigns;
@@ -1071,10 +1072,11 @@ qboolean    ConsoleCommand( void ) {
 		return qtrue;
 	}
 
+	/* Nico, removed campaign client command
 	if ( Q_stricmp( cmd, "campaign" ) == 0 ) {
 		Svcmd_Campaign_f();
 		return qtrue;
-	}
+	}*/
 
 	if ( Q_stricmp( cmd, "listcampaigns" ) == 0 ) {
 		Svcmd_ListCampaigns_f();
