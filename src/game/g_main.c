@@ -125,9 +125,12 @@ vmCvar_t g_developer;
 vmCvar_t g_userAim;
 
 vmCvar_t g_footstepAudibleRange;
+
 // JPW NERVE multiplayer reinforcement times
+/* Nico, instant reswawn
 vmCvar_t g_redlimbotime;
-vmCvar_t g_bluelimbotime;
+vmCvar_t g_bluelimbotime;*/
+
 // charge times for character class special weapons
 vmCvar_t g_medicChargeTime;
 vmCvar_t g_engineerChargeTime;
@@ -235,8 +238,10 @@ cvarTable_t gameCvarTable[] = {
 	{ &g_gametype, "g_gametype", "4", CVAR_SERVERINFO | CVAR_LATCH, 0, qfalse  },     // Arnout: default to GT_WOLF_CAMPAIGN
 
 // JPW NERVE multiplayer stuffs
+	/* Nico, instant reswawn
 	{ &g_redlimbotime, "g_redlimbotime", "30000", CVAR_SERVERINFO | CVAR_LATCH, 0, qfalse },
-	{ &g_bluelimbotime, "g_bluelimbotime", "30000", CVAR_SERVERINFO | CVAR_LATCH, 0, qfalse },
+	{ &g_bluelimbotime, "g_bluelimbotime", "30000", CVAR_SERVERINFO | CVAR_LATCH, 0, qfalse },*/
+
 	{ &g_medicChargeTime, "g_medicChargeTime", "45000", CVAR_SERVERINFO | CVAR_LATCH, 0, qfalse, qtrue },
 	{ &g_engineerChargeTime, "g_engineerChargeTime", "30000", CVAR_SERVERINFO | CVAR_LATCH, 0, qfalse, qtrue },
 	{ &g_LTChargeTime, "g_LTChargeTime", "40000", CVAR_SERVERINFO | CVAR_LATCH, 0, qfalse, qtrue },

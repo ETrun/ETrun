@@ -7548,7 +7548,10 @@ cvarTable_t cvarTable[] = {
 
 	{ &g_gameType,  "g_gameType",    "4", CVAR_SERVERINFO | CVAR_LATCH },
 	{ NULL, "cg_drawBuddies", "1", CVAR_ARCHIVE },
-	{ NULL, "cg_drawRoundTimer", "1", CVAR_ARCHIVE },
+
+	/* Nico, instant reswawn
+	{ NULL, "cg_drawRoundTimer", "1", CVAR_ARCHIVE },*/
+
 	{ NULL, "cg_showblood", "1", CVAR_ARCHIVE },
 	{ NULL, "cg_bloodFlash", "1.0", CVAR_ARCHIVE },
 	{ NULL, "cg_autoReload", "1", CVAR_ARCHIVE },
@@ -7563,7 +7566,10 @@ cvarTable_t cvarTable[] = {
 	{ NULL, "cg_useScreenshotJPEG", "1", CVAR_ARCHIVE },
 	{ NULL, "cg_drawGun", "1", CVAR_ARCHIVE },
 	{ NULL, "cg_drawCompass", "1", CVAR_ARCHIVE },
-	{ NULL, "cg_drawRoundTimer", "1", CVAR_ARCHIVE },
+
+	/* Nico, instant reswawn
+	{ NULL, "cg_drawRoundTimer", "1", CVAR_ARCHIVE },*/
+
 	{ NULL, "cg_drawReinforcementTime", "1", CVAR_ARCHIVE },
 	{ NULL, "cg_cursorHints", "1", CVAR_ARCHIVE },
 	{ NULL, "cg_crosshairPulse", "1", CVAR_ARCHIVE },

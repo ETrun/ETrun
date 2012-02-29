@@ -521,13 +521,14 @@ void CG_DrawMapEntity( mapEntityData_t *mEnt, float x, float y, float w, float h
 			float msec;
 			vec4_t reviveClr = { 1.f, 1.f, 1.f, 1.f };
 
+			/* Nico, instant reswawn
 			if ( cgs.clientinfo[cg.snap->ps.clientNum].team == TEAM_AXIS ) {
 				msec = ( cg_redlimbotime.integer - ( cg.time % cg_redlimbotime.integer ) ) / (float)cg_redlimbotime.integer;
 			} else if ( cgs.clientinfo[cg.snap->ps.clientNum].team == TEAM_ALLIES ) {
 				msec = ( cg_bluelimbotime.integer - ( cg.time % cg_bluelimbotime.integer ) ) / (float)cg_bluelimbotime.integer;
-			} else {
+			} else {*/
 				msec = 0;
-			}
+			/*}*/
 
 			reviveClr[3] = .5f + .5f * ( ( sin( sqrt( msec ) * 25 * 2 * M_PI ) + 1 ) * .5f );
 

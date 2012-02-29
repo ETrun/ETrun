@@ -2158,8 +2158,9 @@ extern vmCvar_t cg_skybox;
 // done
 
 // JPW NERVE
+/* Nico, instant reswawn
 extern vmCvar_t cg_redlimbotime;
-extern vmCvar_t cg_bluelimbotime;
+extern vmCvar_t cg_bluelimbotime;*/
 // jpw
 
 extern vmCvar_t cg_movespeed;
@@ -2227,7 +2228,8 @@ extern vmCvar_t cg_rconPassword;
 extern vmCvar_t cg_refereePassword;
 extern vmCvar_t cg_atmosphericEffects;
 // START Mad Doc - TDF
-extern vmCvar_t cg_drawRoundTimer;
+/* Nico, instant reswawn
+extern vmCvar_t cg_drawRoundTimer;*/
 // END Mad Doc - TDF
 extern vmCvar_t cg_debugSkills;
 extern vmCvar_t cg_drawFireteamOverlay;
@@ -2398,8 +2400,13 @@ void CG_DrawCursorhint( rectDef_t *rect );
 void CG_DrawWeapStability( rectDef_t *rect );
 void CG_DrawWeapHeat( rectDef_t *rect, int align );
 void CG_DrawPlayerWeaponIcon( rectDef_t *rect, qboolean drawHighlighted, int align, vec4_t *refcolor );
-int CG_CalculateReinfTime( qboolean menu );
-float CG_CalculateReinfTime_Float( qboolean menu );
+
+/* Nico, instant reswawn
+int CG_CalculateReinfTime( qboolean menu );*/
+
+/* Nico, instant reswawn
+float CG_CalculateReinfTime_Float( qboolean menu );*/
+
 void CG_Fade( int r, int g, int b, int a, int time, int duration );
 
 

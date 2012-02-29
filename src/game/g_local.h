@@ -650,7 +650,8 @@ typedef struct {
 	int complaintClient;                // DHM - Nerve :: able to lodge complaint against this client
 	int complaintEndTime;               // DHM - Nerve :: until this time has expired
 
-	int lastReinforceTime;              // DHM - Nerve :: last reinforcement
+	/* Nico, instant reswawn
+	int lastReinforceTime;              // DHM - Nerve :: last reinforcement*/
 
 	qboolean teamInfo;              // send team overlay updates?
 
@@ -1590,8 +1591,11 @@ extern vmCvar_t g_developer;
 
 extern vmCvar_t g_footstepAudibleRange;
 // JPW NERVE multiplayer
+
+/* Nico, instant reswawn
 extern vmCvar_t g_redlimbotime;
-extern vmCvar_t g_bluelimbotime;
+extern vmCvar_t g_bluelimbotime;*/
+
 extern vmCvar_t g_medicChargeTime;
 extern vmCvar_t g_engineerChargeTime;
 extern vmCvar_t g_LTChargeTime;

@@ -2622,11 +2622,13 @@ qboolean G_ScriptAction_AxisRespawntime( gentity_t *ent, char *params ) {
 		G_Error( "G_ScriptAction_AxisRespawntime: time parameter required\n" );
 	}
 
+	/* Nico, instant reswawn
 	if ( g_userAxisRespawnTime.integer ) {
 		trap_Cvar_Set( "g_redlimbotime", va( "%i", g_userAxisRespawnTime.integer * 1000 ) );
 	} else {
 		trap_Cvar_Set( "g_redlimbotime", va( "%s000", token ) );
-	}
+	}*/
+	G_Printf("Warning: G_ScriptAction_AxisRespawntime ignored\n");
 
 	return qtrue;
 }
@@ -2647,11 +2649,13 @@ qboolean G_ScriptAction_AlliedRespawntime( gentity_t *ent, char *params ) {
 		G_Error( "G_ScriptAction_AlliedRespawntime: time parameter required\n" );
 	}
 
+	/* Nico, instant reswawn
 	if ( g_userAlliedRespawnTime.integer ) {
 		trap_Cvar_Set( "g_bluelimbotime", va( "%i", g_userAlliedRespawnTime.integer * 1000 ) );
 	} else {
 		trap_Cvar_Set( "g_bluelimbotime", va( "%s000", token ) );
-	}
+	}*/
+	G_Printf("Warning: G_ScriptAction_AlliedRespawntime ignored\n");
 
 	return qtrue;
 }

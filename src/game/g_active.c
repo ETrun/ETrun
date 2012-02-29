@@ -1202,13 +1202,17 @@ void SpectatorClientEndFrame( gentity_t *ent ) {
 			 ent->client->sess.sessionTeam != TEAM_SPECTATOR ) {
 			do_respawn = qtrue;
 		} else if ( ent->client->sess.sessionTeam == TEAM_AXIS ) {
+			/* Nico, instant reswawn
 			testtime = ( level.dwRedReinfOffset + level.timeCurrent - level.startTime ) % g_redlimbotime.integer;
 			do_respawn = ( testtime < ent->client->pers.lastReinforceTime );
-			ent->client->pers.lastReinforceTime = testtime;
+			ent->client->pers.lastReinforceTime = testtime;*/
+			do_respawn = qtrue;
 		} else if ( ent->client->sess.sessionTeam == TEAM_ALLIES )     {
+			/* Nico, instant reswawn
 			testtime = ( level.dwBlueReinfOffset + level.timeCurrent - level.startTime ) % g_bluelimbotime.integer;
 			do_respawn = ( testtime < ent->client->pers.lastReinforceTime );
-			ent->client->pers.lastReinforceTime = testtime;
+			ent->client->pers.lastReinforceTime = testtime;*/
+			do_respawn = qtrue;
 		}
 
 		if ( g_gametype.integer != GT_WOLF_LMS ) {

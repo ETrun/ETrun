@@ -132,6 +132,7 @@ int WM_DrawObjectives( int x, int y, int width, float fade ) {
 
 		CG_Text_Paint_Ext( x, y + 13, 0.25f, 0.25f, tclr, s, 0, 0, 0, &cgs.media.limboFont1 );
 
+		/* Nico, instant reswawn
 		if ( cgs.gametype != GT_WOLF_LMS ) {
 			if ( cgs.clientinfo[cg.snap->ps.clientNum].team == TEAM_AXIS || cgs.clientinfo[cg.snap->ps.clientNum].team == TEAM_ALLIES ) {
 				msec = CG_CalculateReinfTime( qfalse ) * 1000;
@@ -149,7 +150,7 @@ int WM_DrawObjectives( int x, int y, int width, float fade ) {
 				s = va( "%s %2.0f:%i%i", CG_TranslateString( "REINFORCE TIME:" ), (float)mins, tens, seconds );
 				CG_Text_Paint_Ext( 640 - 20 - CG_Text_Width_Ext( s, 0.25f, 0, &cgs.media.limboFont1 ), y + 13, 0.25f, 0.25f, tclr, s, 0, 0, 0, &cgs.media.limboFont1 );
 			}
-		}
+		}*/
 
 		// NERVE - SMF
 		if ( cgs.gametype == GT_WOLF_STOPWATCH ) {

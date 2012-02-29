@@ -139,10 +139,12 @@ void CG_ParseServerinfo( void ) {
 	Com_sprintf( cgs.mapname, sizeof( cgs.mapname ), "maps/%s.bsp", mapname );
 
 // prolly should parse all CS_SERVERINFO keys automagically, but I don't want to break anything that might be improperly set for wolf SP, so I'm just parsing MP relevant stuff here
+	/* Nico, instant reswawn
 	trap_Cvar_Set( "g_redlimbotime",Info_ValueForKey( info,"g_redlimbotime" ) );
 	cg_redlimbotime.integer = atoi( Info_ValueForKey( info,"g_redlimbotime" ) );
 	trap_Cvar_Set( "g_bluelimbotime",Info_ValueForKey( info,"g_bluelimbotime" ) );
-	cg_bluelimbotime.integer = atoi( Info_ValueForKey( info,"g_bluelimbotime" ) );
+	cg_bluelimbotime.integer = atoi( Info_ValueForKey( info,"g_bluelimbotime" ) );*/
+
 	cgs.weaponRestrictions = atoi( Info_ValueForKey( info, "g_heavyWeaponRestriction" ) ) * 0.01f;
 
 

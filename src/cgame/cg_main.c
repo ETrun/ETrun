@@ -231,8 +231,9 @@ vmCvar_t cg_popupLimboMenu;
 vmCvar_t cg_descriptiveText;
 // -NERVE - SMF
 
+/* Nico, instant reswawn
 vmCvar_t cg_redlimbotime;
-vmCvar_t cg_bluelimbotime;
+vmCvar_t cg_bluelimbotime;*/
 
 vmCvar_t cg_antilag;
 
@@ -290,7 +291,8 @@ vmCvar_t cg_rconPassword;
 vmCvar_t cg_refereePassword;
 vmCvar_t cg_atmosphericEffects;
 // START Mad Doc - TDF
-vmCvar_t cg_drawRoundTimer;
+/* Nico, instant reswawn
+vmCvar_t cg_drawRoundTimer;*/
 // END Mad Doc - TDF
 
 vmCvar_t cg_fastSolids;
@@ -447,8 +449,11 @@ cvarTable_t cvarTable[] = {
 	{ &cg_wolfparticles, "cg_wolfparticles", "1", CVAR_ARCHIVE },
 	{ &cg_gameType, "g_gametype", "0", 0 }, // communicated by systeminfo
 	{ &cg_norender, "cg_norender", "0", 0 },  // only used during single player, to suppress rendering until the server is ready
+
+	/* Nico, instant reswawn
 	{ &cg_bluelimbotime,        "", "30000", 0 }, // communicated by systeminfo
-	{ &cg_redlimbotime,         "", "30000", 0 }, // communicated by systeminfo
+	{ &cg_redlimbotime,         "", "30000", 0 }, // communicated by systeminfo*/
+
 	{ &cg_movespeed, "g_movespeed", "76", 0 }, // actual movespeed of player
 	{ &cg_animState, "cg_animState", "0", CVAR_CHEAT},
 	{ &cg_drawCompass, "cg_drawCompass", "1", CVAR_ARCHIVE },
@@ -505,7 +510,8 @@ cvarTable_t cvarTable[] = {
 	{ &cg_rconPassword, "auth_rconPassword", "", CVAR_TEMP},
 	{ &cg_refereePassword, "auth_refereePassword", "", CVAR_TEMP},
 
-	{ &cg_drawRoundTimer, "cg_drawRoundTimer", "1", CVAR_ARCHIVE },
+	/* Nico, instant reswawn
+	{ &cg_drawRoundTimer, "cg_drawRoundTimer", "1", CVAR_ARCHIVE },*/
 
 	// Gordon: optimization cvars: 18/12/02 enabled by default now
 	{ &cg_fastSolids,       "cg_fastSolids", "1", CVAR_ARCHIVE },

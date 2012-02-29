@@ -498,11 +498,11 @@ static float CG_DrawFPS( float y ) {
 	return y + 12 + 4;
 }
 
+/* Nico, instant reswawn
 /*
 =================
 CG_DrawTimer
 =================
-*/
 
 static float CG_DrawTimer( float y ) {
 	char        *s;
@@ -550,7 +550,7 @@ static float CG_DrawTimer( float y ) {
 	CG_Text_Paint_Ext( UPPERRIGHT_X - w, y + 11, 0.19f, 0.19f, color, s, 0, 0, 0, &cgs.media.limboFont1 );
 
 	return y + 12 + 4;
-}
+}*/
 
 /*
 =================
@@ -586,9 +586,10 @@ static void CG_DrawUpperRight( void ) {
 		return;
 	}
 
+	/* Nico, instant reswawn
 	if ( cg_drawRoundTimer.integer ) {
 		y = CG_DrawTimer( y );
-	}
+	}*/
 
 	if ( cg_drawFPS.integer ) {
 		y = CG_DrawFPS( y );
@@ -2551,7 +2552,7 @@ static void CG_DrawSpectatorMessage( void ) {
 	CG_DrawStringExt( 8, 172, str, colorWhite, qtrue, qtrue, TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 0 );
 }
 
-
+/* Nico, instant reswawn
 float CG_CalculateReinfTime_Float( qboolean menu ) {
 	team_t team;
 	int dwDeployTime;
@@ -2567,12 +2568,14 @@ float CG_CalculateReinfTime_Float( qboolean menu ) {
 	}
 
 	dwDeployTime = ( team == TEAM_AXIS ) ? cg_redlimbotime.integer : cg_bluelimbotime.integer;
-	return ( 1 + ( dwDeployTime - ( ( cgs.aReinfOffset[team] + cg.time - cgs.levelStartTime ) % dwDeployTime ) ) * 0.001f );
-}
 
+	return ( 1 + ( dwDeployTime - ( ( cgs.aReinfOffset[team] + cg.time - cgs.levelStartTime ) % dwDeployTime ) ) * 0.001f );
+}*/
+
+/* Nico, instant reswawn
 int CG_CalculateReinfTime( qboolean menu ) {
 	return( (int)CG_CalculateReinfTime_Float( menu ) );
-}
+}*/
 
 
 /*
@@ -2619,10 +2622,11 @@ static void CG_DrawLimboMessage( void ) {
 	}
 
 	// JPW NERVE
+	/* Nico, instant reswawn
 	str = ( ps->persistant[PERS_RESPAWNS_LEFT] == 0 ) ? CG_TranslateString( "No more reinforcements this round." ) : va( CG_TranslateString( "Reinforcements deploy in %d seconds." ), CG_CalculateReinfTime( qfalse ) );
 
 	CG_DrawSmallStringColor( INFOTEXT_STARTX, y, str, color );
-	y += 18;
+	y += 18;*/
 	// jpw
 
 	trap_R_SetColor( NULL );
@@ -2648,9 +2652,11 @@ static qboolean CG_DrawFollow( void ) {
 
 	// if in limbo, show different follow message
 	if ( cg.snap->ps.pm_flags & PMF_LIMBO ) {
+		/* Nico, instant reswawn
 		if ( cgs.gametype != GT_WOLF_LMS ) {
 			if ( cg.snap->ps.persistant[PERS_RESPAWNS_LEFT] == 0 ) {
 				if ( cg.snap->ps.persistant[PERS_RESPAWNS_PENALTY] >= 0 ) {
+
 					int deployTime = ( cgs.clientinfo[cg.snap->ps.clientNum].team == TEAM_AXIS ) ? cg_redlimbotime.integer : cg_bluelimbotime.integer;
 
 					deployTime *= 0.001f;
@@ -2664,7 +2670,7 @@ static qboolean CG_DrawFollow( void ) {
 			}
 
 			CG_DrawStringExt( INFOTEXT_STARTX, 118, deploytime, colorWhite, qtrue, qtrue, SMALLCHAR_WIDTH, SMALLCHAR_HEIGHT, 80 );
-		}
+		}*/
 
 		// Don't display if you're following yourself
 		if ( cg.snap->ps.clientNum != cg.clientNum ) {
