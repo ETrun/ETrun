@@ -1061,7 +1061,9 @@ void CG_InitConsoleCommands( void ) {
 	trap_AddCommand( "pause" );*/
 
 	trap_AddCommand( "players" );
-	trap_AddCommand( "readyteam" );
+
+	/* Nico, removed readyteam command
+	trap_AddCommand( "readyteam" );*/
 
 	/* Nico, removed ready client command
 	trap_AddCommand( "ready" );*/

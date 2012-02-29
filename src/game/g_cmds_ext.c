@@ -82,7 +82,9 @@ static const cmd_reference_t aCommandInfo[] = {
 	/* Nico, removed ready client command
 	{ "ready",           qtrue,  qtrue,  G_ready_cmd, ":^7 Sets your status to ^5ready^7 to start a match" },*/
 
-	{ "readyteam",       qfalse, qtrue,  G_teamready_cmd, ":^7 Sets an entire team's status to ^5ready^7 to start a match" },
+	/* Nico, removed readyteam command
+	{ "readyteam",       qfalse, qtrue,  G_teamready_cmd, ":^7 Sets an entire team's status to ^5ready^7 to start a match" },*/
+
 	{ "ref",         qtrue,  qtrue,  G_ref_cmd, " <password>:^7 Become a referee (admin access)" },
 	{ "say_teamnl",      qtrue,  qtrue,  G_say_teamnl_cmd, "<msg>:^7 Sends a team chat without location info" },
 	{ "scores",          qtrue,  qtrue,  G_scores_cmd, ":^7 Displays current match stat info" },
@@ -601,6 +603,7 @@ void G_statsall_cmd( gentity_t *ent, unsigned int dwCommand, qboolean fDump ) {
 // ************** TEAMREADY
 //
 // Sets a player's team "ready" status.
+/* Nico, removed readyteam command
 void G_teamready_cmd( gentity_t *ent, unsigned int dwCommand, qboolean state ) {
 	int i, tteam = G_teamID( ent );
 	gclient_t *cl;
@@ -637,9 +640,7 @@ void G_teamready_cmd( gentity_t *ent, unsigned int dwCommand, qboolean state ) {
 
 	G_printFull( va( "The %s team is ready!", aTeams[tteam] ), NULL );
 	G_readyMatchState();
-}
-
-
+}*/
 
 // These map to WS_* weapon indexes
 const int cQualifyingShots[WS_MAX] = {
