@@ -1108,7 +1108,8 @@ void CG_InitConsoleCommands( void ) {
 	/* Nico, removed unready client command
 	trap_AddCommand( "unready" );*/
 
-	trap_AddCommand( "weaponstats" );
+	/* Nico, removed weaponstats client command
+	trap_AddCommand( "weaponstats" );*/
 	// OSP
 
 	trap_AddCommand( "fireteam" );

@@ -124,7 +124,9 @@ static const cmd_reference_t aCommandInfo[] = {
 	/* Nico, removed unready client command
 	{ "unready",     qtrue,  qfalse, G_ready_cmd, ":^7 Sets your status to ^5not ready^7 to start a match" },*/
 
-	{ "weaponstats", qtrue,  qfalse, G_weaponStats_cmd, " [player_ID]:^7 Shows weapon accuracy stats for a player" },
+	/* Nico, removed weaponstats client command
+	{ "weaponstats", qtrue,  qfalse, G_weaponStats_cmd, " [player_ID]:^7 Shows weapon accuracy stats for a player" },*/
+
 	{ 0,                qfalse, qtrue,  NULL, 0 }
 };
 
@@ -583,13 +585,13 @@ void G_speclock_cmd( gentity_t *ent, unsigned int dwCommand, qboolean fLock ) {
 	}
 }
 
-
+/* Nico, removed weaponstats client command
 // ************** WEAPONSTATS
 //
 // Shows a player's stats to the requesting client.
 void G_weaponStats_cmd( gentity_t *ent, unsigned int dwCommand, qboolean fDump ) {
 	G_statsPrint( ent, 0 );
-}
+}*/
 
 /* Nico, removed statsall client command
 // ************** STATSALL
