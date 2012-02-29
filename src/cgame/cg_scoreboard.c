@@ -678,9 +678,10 @@ qboolean CG_DrawScoreboard( void ) {
 
 	// don't draw scoreboard during death while warmup up
 	// OSP - also for pesky scoreboards in demos
+	/* Nico, removed warmup
 	if ( ( cg.warmup || ( cg.demoPlayback && cg.snap->ps.pm_type != PM_INTERMISSION ) ) && !cg.showScores ) {
 		return qfalse;
-	}
+	}*/
 
 	// don't draw if in cameramode
 	if ( cg.cameraMode ) {

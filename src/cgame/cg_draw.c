@@ -2694,11 +2694,11 @@ static qboolean CG_DrawFollow( void ) {
 }
 
 
-/*
+/* Nico, removed warmup
 =================
 CG_DrawWarmup
 =================
-*/
+
 static void CG_DrawWarmup( void ) {
 	int w;
 	int sec;
@@ -2812,7 +2812,7 @@ static void CG_DrawWarmup( void ) {
 		CG_DrawStringExt( 320 - w * cw / 2, 180, s2, colorWhite,
 						  qfalse, qtrue, cw, (int)( cw * 1.5 ), 0 );
 	}
-}
+}*/
 
 //==================================================================================
 
@@ -4297,7 +4297,9 @@ static void CG_Draw2D( void ) {
 		CG_DrawPMItemsBig();
 
 		CG_DrawFollow();
-		CG_DrawWarmup();
+
+		/* Nico, removed warmup
+		CG_DrawWarmup();*/
 
 		CG_DrawNotify();
 

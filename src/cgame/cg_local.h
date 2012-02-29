@@ -955,8 +955,9 @@ typedef struct {
 	qhandle_t rewardSound[MAX_REWARDSTACK];
 
 	// warmup countdown
+	/* Nico, removed warmup
 	int warmup;
-	int warmupCount;
+	int warmupCount;*/
 
 	//==========================
 

@@ -2625,7 +2625,8 @@ void CG_Init( int serverMessageNum, int serverCommandSequence, int clientNum, qb
 	// get the gamestate from the client system
 	trap_GetGameState( &cgs.gameState );
 
-	cg.warmupCount = -1;
+	/* Nico, removed warmup
+	cg.warmupCount = -1;*/
 
 	CG_ParseServerinfo();
 	CG_ParseWolfinfo();     // NERVE - SMF

@@ -157,11 +157,11 @@ void CG_ParseServerinfo( void ) {
 	trap_Cvar_Set( "cg_ui_voteFlags", ( ( authLevel.integer == RL_NONE ) ? Info_ValueForKey( info, "voteFlags" ) : "0" ) );
 }
 
-/*
+/* Nico, removed warmup
 ==================
 CG_ParseWarmup
 ==================
-*/
+
 static void CG_ParseWarmup( void ) {
 	const char  *info;
 	int warmup;
@@ -189,7 +189,7 @@ static void CG_ParseWarmup( void ) {
 	}
 
 	cg.warmupCount++;
-}
+}*/
 
 /*
 ==================
@@ -309,9 +309,10 @@ void CG_ParseWolfinfo( void ) {
 		trap_Cvar_Set( "gamestate", va( "%i", cgs.gamestate ) );
 	}
 
+	/* Nico, removed warmup
 	if ( old_gs != GS_WARMUP_COUNTDOWN && cgs.gamestate == GS_WARMUP_COUNTDOWN ) {
 		CG_ParseWarmup();
-	}
+	}*/
 }
 
 /*
@@ -512,7 +513,9 @@ Called on load to set the initial values from configure strings
 void CG_SetConfigValues( void ) {
 	cgs.levelStartTime = atoi( CG_ConfigString( CS_LEVEL_START_TIME ) );
 	cgs.intermissionStartTime = atoi( CG_ConfigString( CS_INTERMISSION_START_TIME ) );
-	cg.warmup = atoi( CG_ConfigString( CS_WARMUP ) );
+
+	/* Nico, removed warmup
+	cg.warmup = atoi( CG_ConfigString( CS_WARMUP ) );*/
 
 	// rain - set all of this crap in cgs - it won't be set if it doesn't
 	// change, otherwise.  consider:
@@ -627,9 +630,14 @@ static void CG_ConfigStringModified( void ) {
 		CG_QueueMusic();
 	} else if ( num == CS_SERVERINFO ) {
 		CG_ParseServerinfo();
-	} else if ( num == CS_WARMUP ) {
+	} 
+	
+	/* Nico, removed warmup
+	else if ( num == CS_WARMUP ) {
 		CG_ParseWarmup();
-	} else if ( num == CS_WOLFINFO ) {      // NERVE - SMF
+	}*/
+
+	else if ( num == CS_WOLFINFO ) {      // NERVE - SMF
 		CG_ParseWolfinfo();
 	} else if ( num == CS_FIRSTBLOOD ) {
 		cg.teamFirstBlood = atoi( str );
