@@ -53,10 +53,10 @@ WM_DrawObjectives
 #define INFO_TOTAL_WIDTH        ( INFO_PLAYER_WIDTH + INFO_CLASS_WIDTH + INFO_SCORE_WIDTH + INFO_LATENCY_WIDTH )
 
 int WM_DrawObjectives( int x, int y, int width, float fade ) {
-	const char *s;// , *str; Nico, unused warning fix
+	// const char *s, *str; Nico, unused warning fix
 	// int tempy, Nico, unused warning fix
 	int rows;
-	int msec, mins, seconds, tens; // JPW NERVE
+	// int msec, mins, seconds, tens; Nico, unused warning fix
 	vec4_t tclr =   { 0.6f,     0.6f,       0.6f,       1.0f };
 
 	if ( cg.snap->ps.pm_type == PM_INTERMISSION ) {
@@ -96,6 +96,7 @@ int WM_DrawObjectives( int x, int y, int width, float fade ) {
 		}
 		return y;
 	}
+	/* Nico, no timelimit
 // JPW NERVE -- mission time & reinforce time
 	else {
 		// tempy = y;
@@ -132,7 +133,6 @@ int WM_DrawObjectives( int x, int y, int width, float fade ) {
 
 		CG_Text_Paint_Ext( x, y + 13, 0.25f, 0.25f, tclr, s, 0, 0, 0, &cgs.media.limboFont1 );
 
-		/* Nico, instant reswawn
 		if ( cgs.gametype != GT_WOLF_LMS ) {
 			if ( cgs.clientinfo[cg.snap->ps.clientNum].team == TEAM_AXIS || cgs.clientinfo[cg.snap->ps.clientNum].team == TEAM_ALLIES ) {
 				msec = CG_CalculateReinfTime( qfalse ) * 1000;
@@ -150,7 +150,7 @@ int WM_DrawObjectives( int x, int y, int width, float fade ) {
 				s = va( "%s %2.0f:%i%i", CG_TranslateString( "REINFORCE TIME:" ), (float)mins, tens, seconds );
 				CG_Text_Paint_Ext( 640 - 20 - CG_Text_Width_Ext( s, 0.25f, 0, &cgs.media.limboFont1 ), y + 13, 0.25f, 0.25f, tclr, s, 0, 0, 0, &cgs.media.limboFont1 );
 			}
-		}*/
+		}
 
 		// NERVE - SMF
 		if ( cgs.gametype == GT_WOLF_STOPWATCH ) {
@@ -175,7 +175,7 @@ int WM_DrawObjectives( int x, int y, int width, float fade ) {
 		}
 
 		y += SMALLCHAR_HEIGHT * 2;
-	}
+	}*/
 // jpw
 
 	return y;
@@ -452,6 +452,7 @@ static void WM_DrawClientScore_Small( int x, int y, score_t *score, float *color
 	}
 }
 
+/* Nico, no timelimit
 static int WM_DrawInfoLine( int x, int y, float fade ) {
 	int w, defender, winner;
 	const char *s;
@@ -500,7 +501,7 @@ static int WM_DrawInfoLine( int x, int y, float fade ) {
 	CG_Text_Paint_Ext( 320 - w * 0.5f, y + 15, 0.25f, 0.25f, tclr, s, 0, 0, 0, &cgs.media.limboFont1 );
 //	CG_DrawSmallString( 320 - w/2, ( y + INFO_LINE_HEIGHT / 2 ) - SMALLCHAR_HEIGHT / 2, s, fade );
 	return y + INFO_LINE_HEIGHT + 6;
-}
+}*/
 
 static int WM_TeamScoreboard( int x, int y, team_t team, float fade, int maxrows ) {
 	vec4_t hcolor;
@@ -703,7 +704,8 @@ qboolean CG_DrawScoreboard( void ) {
 	y = WM_DrawObjectives( x, y, 640 - 2 * x + 5, fade );
 
 	if ( cgs.gametype == GT_WOLF_STOPWATCH && ( cg.snap->ps.pm_type == PM_INTERMISSION ) ) {
-		y = WM_DrawInfoLine( x, 155, fade );
+		/* Nico, no timelimit
+		y = WM_DrawInfoLine( x, 155, fade );*/
 
 		WM_TeamScoreboard( x, y, TEAM_AXIS, fade, 8 );
 		x = x_right;

@@ -4899,7 +4899,10 @@ const voteType_t voteToggles[] =
 	{ "vote_allow_shuffleteamsxp",   CV_SVF_SHUFFLETEAMS },
 	{ "vote_allow_swapteams",        CV_SVF_SWAPTEAMS },
 	{ "vote_allow_friendlyfire", CV_SVF_FRIENDLYFIRE },
-	{ "vote_allow_timelimit",        CV_SVF_TIMELIMIT },
+
+	/* Nico, no timelimit
+	{ "vote_allow_timelimit",        CV_SVF_TIMELIMIT },*/
+
 	{ "vote_allow_warmupdamage", CV_SVF_WARMUPDAMAGE },
 	{ "vote_allow_antilag",          CV_SVF_ANTILAG },
 	{ "vote_allow_balancedteams",    CV_SVF_BALANCEDTEAMS },

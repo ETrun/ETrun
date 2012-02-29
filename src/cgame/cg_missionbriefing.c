@@ -243,13 +243,16 @@ qboolean CG_FindArenaInfo( char* filename, char* mapname, arenaInfo_t* info ) {
 					found = qtrue;
 				}
 			}
-		} else if (  !Q_stricmp( token.string, "Timelimit" ) || !Q_stricmp( token.string, "AxisRespawnTime" ) || !Q_stricmp( token.string, "AlliedRespawnTime" ) ) {
+		} 
+		/* Nico, no timelimit
+		else if (  !Q_stricmp( token.string, "Timelimit" ) || !Q_stricmp( token.string, "AxisRespawnTime" ) || !Q_stricmp( token.string, "AlliedRespawnTime" ) ) {
 			if ( !PC_Int_Parse( handle, (int*)&dummy ) ) {
 				trap_Print( va( S_COLOR_RED "unexpected end of file inside: %s\n", filename ) );
 				trap_PC_FreeSource( handle );
 				return qfalse;
 			}
-		} else if ( !Q_stricmp( token.string, "lmsbriefing" ) ) {
+		}*/
+		else if ( !Q_stricmp( token.string, "lmsbriefing" ) ) {
 			if ( !PC_String_Parse( handle, &dummy ) ) {
 				trap_Print( va( S_COLOR_RED "unexpected end of file inside: %s\n", filename ) );
 				trap_PC_FreeSource( handle );

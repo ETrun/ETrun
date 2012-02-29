@@ -410,6 +410,7 @@ void CG_CheckLocalSounds( playerState_t *ps, playerState_t *ops ) {
 	}
 
 	// timelimit warnings
+	/* Nico, no timelimit
 	if ( cgs.timelimit > 0 && cgs.gamestate == GS_PLAYING ) {
 		int msec;
 
@@ -466,7 +467,7 @@ void CG_CheckLocalSounds( playerState_t *ps, playerState_t *ops ) {
 				}
 			}
 		}
-	}
+	}*/
 }
 
 /*

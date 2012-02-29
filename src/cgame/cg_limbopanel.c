@@ -2074,6 +2074,7 @@ int CG_LimboPanel_RenderCounter_ValueForButton( panel_button_t* button ) {
 
 		return ( 1 << count ) - 1;
 	case 5:     // clock
+		/* Nico, no timelimit
 		if ( !cgs.timelimit ) {
 			return 0;
 		}
@@ -2083,7 +2084,7 @@ int CG_LimboPanel_RenderCounter_ValueForButton( panel_button_t* button ) {
 			return count % 60;
 		case 1:         // mins
 			return count / 60;
-		}
+		}*/
 		return 0;
 	case 6:     // stats
 		switch ( button->data[1] ) {

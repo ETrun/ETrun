@@ -806,7 +806,8 @@ typedef struct {
 
 	int physicsTime;            // either cg.snap->time or cg.nextSnap->time
 
-	int timelimitWarnings;          // 5 min, 1 min, overtime
+	/* Nico, no timelimit
+	int timelimitWarnings;          // 5 min, 1 min, overtime*/
 
 	qboolean mapRestart;            // set on a map restart to set back the weapon
 
@@ -1824,7 +1825,9 @@ typedef struct {
 	gametype_t gametype;
 	int antilag;
 
-	float timelimit;                        // NERVE - SMF - made this a float
+	/* Nico, no timelimit
+	float timelimit;                        // NERVE - SMF - made this a float*/
+
 	int maxclients;
 	char mapname[MAX_QPATH];
 	char rawmapname[MAX_QPATH];
@@ -1897,7 +1900,10 @@ typedef struct {
 
 	int currentVoiceClient;
 	int currentRound;
-	float nextTimeLimit;
+
+	/* Nico, no timelimit
+	float nextTimeLimit;*/
+
 	int minclients;
 	gamestate_t gamestate;
 	char        *currentCampaign;

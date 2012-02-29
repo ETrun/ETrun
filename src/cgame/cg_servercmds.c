@@ -132,7 +132,10 @@ void CG_ParseServerinfo( void ) {
 		trap_Cvar_Update( &cg_antilag );
 		trap_Cvar_Update( &cg_gameType );
 	}
-	cgs.timelimit = atof( Info_ValueForKey( info, "timelimit" ) );
+
+	/* Nico, no timelimit
+	cgs.timelimit = atof( Info_ValueForKey( info, "timelimit" ) );*/
+
 	cgs.maxclients = atoi( Info_ValueForKey( info, "sv_maxclients" ) );
 	mapname = Info_ValueForKey( info, "mapname" );
 	Q_strncpyz( cgs.rawmapname, mapname, sizeof( cgs.rawmapname ) );
@@ -287,7 +290,10 @@ void CG_ParseWolfinfo( void ) {
 	info = CG_ConfigString( CS_WOLFINFO );
 
 	cgs.currentRound = atoi( Info_ValueForKey( info, "g_currentRound" ) );
-	cgs.nextTimeLimit = atof( Info_ValueForKey( info, "g_nextTimeLimit" ) );
+
+	/* Nico, no timelimit
+	cgs.nextTimeLimit = atof( Info_ValueForKey( info, "g_nextTimeLimit" ) );*/
+
 	cgs.gamestate = atoi( Info_ValueForKey( info, "gamestate" ) );
 	cgs.currentCampaign = Info_ValueForKey( info, "g_currentCampaign" );
 	cgs.currentCampaignMap = atoi( Info_ValueForKey( info, "g_currentCampaignMap" ) );
@@ -959,7 +965,10 @@ static void CG_MapRestart( void ) {
 	cg.intermissionStarted = qfalse;
 	cg.lightstylesInited = qfalse;
 	cg.mapRestart = qtrue;
-	cg.timelimitWarnings = 0;
+
+	/* Nico, no timelimit
+	cg.timelimitWarnings = 0;*/
+
 	cgs.voteTime = 0;
 
 	/* Nico, removed statsdump client command
