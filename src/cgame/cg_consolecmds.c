@@ -1071,7 +1071,10 @@ void CG_InitConsoleCommands( void ) {
 	trap_AddCommand( "ref" );
 	trap_AddCommand( "say_teamnl" );
 	trap_AddCommand( "say_team" );
-	trap_AddCommand( "scores" );
+
+	/* Nico, removed scores client command
+	trap_AddCommand( "scores" );*/
+
 	trap_AddCommand( "specinvite" );
 	trap_AddCommand( "speclock" );
 	trap_AddCommand( "specunlock" );

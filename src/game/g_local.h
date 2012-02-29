@@ -2014,7 +2014,8 @@ void G_players_cmd( gentity_t *ent, unsigned int dwCommand, qboolean fDump );
 void G_ready_cmd( gentity_t *ent, unsigned int dwCommand, qboolean fDump );*/
 
 void G_say_teamnl_cmd( gentity_t *ent, unsigned int dwCommand, qboolean fValue );
-void G_scores_cmd( gentity_t *ent, unsigned int dwCommand, qboolean fValue );
+/* Nico, removed scores client command
+void G_scores_cmd( gentity_t *ent, unsigned int dwCommand, qboolean fValue );*/
 void G_specinvite_cmd( gentity_t *ent, unsigned int dwCommand, qboolean fLock );
 void G_speclock_cmd( gentity_t *ent, unsigned int dwCommand, qboolean fLock );
 void G_statsall_cmd( gentity_t *ent, unsigned int dwCommand, qboolean fDump );

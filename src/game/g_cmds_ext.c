@@ -87,7 +87,10 @@ static const cmd_reference_t aCommandInfo[] = {
 
 	{ "ref",         qtrue,  qtrue,  G_ref_cmd, " <password>:^7 Become a referee (admin access)" },
 	{ "say_teamnl",      qtrue,  qtrue,  G_say_teamnl_cmd, "<msg>:^7 Sends a team chat without location info" },
-	{ "scores",          qtrue,  qtrue,  G_scores_cmd, ":^7 Displays current match stat info" },
+
+	/* Nico, removed scores client command
+	{ "scores",          qtrue,  qtrue,  G_scores_cmd, ":^7 Displays current match stat info" },*/
+
 	{ "specinvite",      qtrue,  qtrue,  G_specinvite_cmd, ":^7 Invites a player to spectate a speclock'ed team" },
 	{ "speclock",        qtrue,  qtrue,  G_speclock_cmd, ":^7 Locks a player's team from spectators" },
 	{ "specunlock",      qtrue,  qfalse, G_speclock_cmd, ":^7 Unlocks a player's team from spectators" },
@@ -486,9 +489,10 @@ void G_say_teamnl_cmd( gentity_t *ent, unsigned int dwCommand, qboolean fValue )
 // ************** SCORES
 //
 // Shows match stats to the requesting client.
+/* Nico, removed scores client command
 void G_scores_cmd( gentity_t *ent, unsigned int dwCommand, qboolean fValue ) {
 	G_printMatchInfo( ent );
-}
+}*/
 
 
 // ************** SPECINVITE

@@ -2774,7 +2774,9 @@ void CG_parseWeaponStats_cmd( void( txt_dump ) ( char * ) );
 void CG_parseBestShotsStats_cmd( qboolean doTop, void( txt_dump ) ( char * ) );
 /* Nico, removed +topshots command
 void CG_parseTopShotsStats_cmd( qboolean doTop, void( txt_dump ) ( char * ) );*/
-void CG_scores_cmd( void );
+
+/* Nico, removed scores client command
+void CG_scores_cmd( void );*/
 
 //
 // cg_playerstate.c

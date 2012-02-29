@@ -1907,6 +1907,7 @@ void CG_parseTopShotsStats_cmd( qboolean doTop, void( txt_dump ) ( char * ) ) {
 	}
 }*/
 
+/* Nico, removed scores client command
 void CG_scores_cmd( void ) {
 	const char *str = CG_Argv( 1 );
 
@@ -1935,7 +1936,7 @@ void CG_scores_cmd( void ) {
 		}
 		cgs.dumpStatsTime = 0;
 	}
-}
+}*/
 
 void CG_printFile( char *str ) {
 	CG_Printf( str );
@@ -2193,10 +2194,11 @@ static void CG_ServerCommand( void ) {
 	}
 
 	// OSP - match stats
+	/* Nico, removed scores client command
 	if ( !Q_stricmp( cmd, "sc" ) ) {
 		CG_scores_cmd();
 		return;
-	}
+	}*/
 
 	// OSP - weapon stats parsing
 	if ( !Q_stricmp( cmd, "ws" ) ) {
