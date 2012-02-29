@@ -241,7 +241,9 @@ vmCvar_t developer;
 // OSP
 vmCvar_t authLevel;
 
-vmCvar_t cf_wstats;                     // Font scale for +wstats window
+/* Nico, removed ws related command
+vmCvar_t cf_wstats;                     // Font scale for +wstats window*/
+
 /* Nico, removed +topshots command
 vmCvar_t cf_wtopshots;                  // Font scale for +wtopshots window*/
 
@@ -456,7 +458,9 @@ cvarTable_t cvarTable[] = {
 	{ &cg_descriptiveText, "cg_descriptiveText", "1", CVAR_ARCHIVE },
 	{ &cg_antilag, "g_antilag", "1", 0 },
 	{ &developer, "developer", "0", CVAR_CHEAT },
-	{ &cf_wstats, "cf_wstats", "1.2", CVAR_ARCHIVE },
+
+	/* Nico, removed ws related command
+	{ &cf_wstats, "cf_wstats", "1.2", CVAR_ARCHIVE },*/
 
 	/* Nico, removed +topshots command
 	{ &cf_wtopshots, "cf_wtopshots", "1.0", CVAR_ARCHIVE },*/

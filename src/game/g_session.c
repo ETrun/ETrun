@@ -121,7 +121,8 @@ void G_WriteClientSessionData( gclient_t *client, qboolean restart ) {
 
 	// OSP -- save weapon stats too
 	if ( !level.fResetStats ) {
-		trap_Cvar_Set( va( "wstats%i", client - level.clients ), G_createStats( &g_entities[client - level.clients] ) );
+		/* Nico, removed ws related command
+		trap_Cvar_Set( va( "wstats%i", client - level.clients ), G_createStats( &g_entities[client - level.clients] ) );*/
 	}
 	// OSP
 }
@@ -253,7 +254,8 @@ void G_ReadSessionData( gclient_t *client ) {
 
 	// OSP -- pull and parse weapon stats
 	*s = 0;
-	trap_Cvar_VariableStringBuffer( va( "wstats%i", client - level.clients ), s, sizeof( s ) );
+	/* Nico, removed ws related command
+	trap_Cvar_VariableStringBuffer( va( "wstats%i", client - level.clients ), s, sizeof( s ) );*/
 	if ( *s ) {
 		G_parseStats( s );
 		if ( g_gamestate.integer == GS_PLAYING ) {

@@ -1529,6 +1529,7 @@ const char* CG_LocalizeServerCommand( const char *buf ) {
 
 
 // OSP
+/* Nico, removed showstats client command
 void CG_wstatsParse_cmd( void ) {
 	if ( cg.showStats ) {
 		if ( cg.statsWindow == NULL
@@ -1550,7 +1551,7 @@ void CG_wstatsParse_cmd( void ) {
 			CG_parseWeaponStats_cmd( CG_printWindow );
 		}
 	}
-}
+}*/
 
 /* Nico, removed +topshots command
 void CG_topshotsParse_cmd( qboolean doBest ) {
@@ -1586,10 +1587,11 @@ void CG_topshotsParse_cmd( qboolean doBest ) {
 	}
 }*/
 
+/* Nico, removed showstats client command
 void CG_ParseWeaponStats( void ) {
 	cgs.ccWeaponShots = atoi( CG_Argv( 1 ) );
 	cgs.ccWeaponHits =  atoi( CG_Argv( 2 ) );
-}
+}*/
 
 void CG_ParsePortalPos( void ) {
 	int i;
@@ -1607,6 +1609,7 @@ void CG_ParsePortalPos( void ) {
 }
 
 
+/* Nico, removed showstats client command
 // Cached stats
 void CG_parseWeaponStatsGS_cmd( void ) {
 	clientInfo_t *ci;
@@ -1702,9 +1705,9 @@ void CG_parseWeaponStatsGS_cmd( void ) {
 			}
 		}
 	}
-}
+}*/
 
-
+/* Nico, removed showstats client command
 // Client-side stat presentation
 void CG_parseWeaponStats_cmd( void( txt_dump ) ( char * ) ) {
 	clientInfo_t *ci;
@@ -1831,8 +1834,9 @@ void CG_parseWeaponStats_cmd( void( txt_dump ) ( char * ) ) {
 			}
 		}
 	}
-}
+}*/
 
+/* Nico, removed ws related command
 void CG_parseBestShotsStats_cmd( qboolean doTop, void( txt_dump ) ( char * ) ) {
 	int iArg = 1;
 	qboolean fFull = ( txt_dump != CG_printWindow );
@@ -1874,7 +1878,7 @@ void CG_parseBestShotsStats_cmd( qboolean doTop, void( txt_dump ) ( char * ) ) {
 
 		iWeap = atoi( CG_Argv( iArg++ ) );
 	}
-}
+}*/
 
 /* Nico, removed +topshots command
 void CG_parseTopShotsStats_cmd( qboolean doTop, void( txt_dump ) ( char * ) ) {
@@ -2205,25 +2209,29 @@ static void CG_ServerCommand( void ) {
 	}*/
 
 	// OSP - weapon stats parsing
+	/* Nico, removed ws related command
 	if ( !Q_stricmp( cmd, "ws" ) ) {
-		/* Nico, removed statsdump client command
 		if ( cgs.dumpStatsTime > cg.time ) {
 			CG_dumpStats();
 		} else {
 			CG_parseWeaponStats_cmd( CG_printConsoleString );
 			cgs.dumpStatsTime = 0;
-		}*/
+		}
 
 		return;
-	}
+	}*/
+
+	/* Nico, removed showstats client command
 	if ( !Q_stricmp( cmd, "wws" ) ) {
 		CG_wstatsParse_cmd();
 		return;
-	}
+	}*/
+
+	/* Nico, removed showstats client command
 	if ( !Q_stricmp( cmd, "gstats" ) ) {
 		CG_parseWeaponStatsGS_cmd();
 		return;
-	}
+	}*/
 
 	// OSP - "topshots"-related commands
 	/* Nico, removed +topshots command
@@ -2234,7 +2242,7 @@ static void CG_ServerCommand( void ) {
 	if ( !Q_stricmp( cmd, "astatsb" ) ) {
 		CG_parseTopShotsStats_cmd( qfalse, CG_printConsoleString );
 		return;
-	}*/
+	}
 	if ( !Q_stricmp( cmd, "bstats" ) ) {
 		CG_parseBestShotsStats_cmd( qtrue, CG_printConsoleString );
 		return;
@@ -2242,7 +2250,7 @@ static void CG_ServerCommand( void ) {
 	if ( !Q_stricmp( cmd, "bstatsb" ) ) {
 		CG_parseBestShotsStats_cmd( qfalse, CG_printConsoleString );
 		return;
-	}
+	}*/
 
 	/* Nico, removed +topshots command
 	if ( !Q_stricmp( cmd, "wbstats" ) ) {
@@ -2250,11 +2258,13 @@ static void CG_ServerCommand( void ) {
 		return;
 	}*/
 
+	/* Nico, removed showstats client command
 	// Gordon: single weapon stat (requested weapon stats)
 	if ( !Q_stricmp( cmd, "rws" ) ) {
 		CG_ParseWeaponStats();
 		return;
-	}
+	}*/
+
 	if ( !Q_stricmp( cmd, "portalcampos" ) ) {
 		CG_ParsePortalPos();
 		return;

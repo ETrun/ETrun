@@ -44,8 +44,9 @@ vec4_t colorGreen2 = { 0.305f, 0.475f, 0.305f, 0.48f }; // Slightly off from def
 
 
 
+/* Nico, removed ws related command
 void CG_createStatsWindow( void ) {
-	cg_window_t *sw = CG_windowAlloc( WFX_TEXTSIZING | WFX_FADEIN | /*WFX_SCROLLUP|*/ WFX_TRUETYPE, 110 );
+	cg_window_t *sw = CG_windowAlloc( WFX_TEXTSIZING | WFX_FADEIN | WFX_TRUETYPE, 110 );
 
 	cg.statsWindow = sw;
 	if ( sw == NULL ) {
@@ -60,7 +61,7 @@ void CG_createStatsWindow( void ) {
 //	sw->y = (cg.snap->ps.pm_type == PM_INTERMISSION) ? -20 : -7;	// Align from bottom minus offset and height
 	sw->x = ( cg.snap->ps.pm_type == PM_INTERMISSION ) ?  10 : 4;
 	sw->y = ( cg.snap->ps.pm_type == PM_INTERMISSION ) ? -20 : -100;  // Align from bottom minus offset and height
-}
+}*/
 
 /* Nico, removed +topshots command
 void CG_createTopShotsWindow( void ) {
@@ -134,10 +135,14 @@ void CG_windowInit( void ) {
 		cg.winHandler.window[i].inuse = qfalse;
 	}
 
-	cg.msgWstatsWindow = NULL;
+	/* Nico, removed ws related command
+	cg.msgWstatsWindow = NULL;*/
+
 	/* Nico, removed +topshots command
 	cg.msgWtopshotsWindow = NULL;*/
+
 	cg.statsWindow = NULL;
+
 	/* Nico, removed +topshots command
 	cg.topshotsWindow = NULL;*/
 }

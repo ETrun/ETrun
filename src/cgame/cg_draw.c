@@ -4089,6 +4089,7 @@ void CG_StatsDebugAddText( const char *text ) {
 	}
 }
 
+/* Nico, removed ws related command
 static void CG_DrawStatsDebug( void ) {
 	int textWidth = 0;
 	int i, x, y, w, h;
@@ -4142,7 +4143,7 @@ static void CG_DrawStatsDebug( void ) {
 			i = 6 - 1;
 		}
 	} while ( i != statsDebugPos );
-}
+}*/
 
 //bani
 void CG_DrawDemoRecording( void ) {
@@ -4277,7 +4278,8 @@ static void CG_Draw2D( void ) {
 			CG_DrawWeapStability( &rect );
 
 			// Stats Debugging
-			CG_DrawStatsDebug();
+			/* Nico, removed ws related command
+			CG_DrawStatsDebug();*/
 		}
 
 		if ( !cg_paused.integer ) {

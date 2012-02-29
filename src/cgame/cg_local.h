@@ -1094,7 +1094,9 @@ typedef struct {
 	cg_string_t aStringPool[MAX_STRINGS];
 	int demohelpWindow;
 	cg_window_t         *motdWindow;
-	cg_window_t         *msgWstatsWindow;
+
+	/* Nico, removed ws related command
+	cg_window_t         *msgWstatsWindow;*/
 
 	/* Nico, removed +topshots command
 	cg_window_t         *msgWtopshotsWindow;*/
@@ -1109,7 +1111,10 @@ typedef struct {
 	int mvTotalClients;                         // Total # of clients available for MV processing
 	int mvTotalTeam[TEAM_NUM_TEAMS];*/
 	refdef_t            *refdef_current;        // Handling of some drawing elements for MV
-	qboolean showStats;
+
+	/* Nico, removed showstats client command
+	qboolean showStats;*/
+
 	int spechelpWindow;
 	int statsRequestTime;
 	cg_window_t         *statsWindow;
@@ -2174,9 +2179,13 @@ extern vmCvar_t developer;
 
 // OSP
 extern vmCvar_t authLevel;
-extern vmCvar_t cf_wstats;
+
+/* Nico, removed ws related command
+extern vmCvar_t cf_wstats;*/
+
 /* Nico, removed +topshots command
 extern vmCvar_t cf_wtopshots;*/
+
 extern vmCvar_t cg_autoAction;
 extern vmCvar_t cg_autoReload;
 extern vmCvar_t cg_bloodDamageBlend;
@@ -2705,7 +2714,10 @@ qboolean CG_DrawMissionBriefing( void );
 void CG_MissionBriefingClick( int key );
 
 void CG_LoadRankIcons( void );
-qboolean CG_DrawStatsRanksMedals( void );
+
+/* Nico, removed ws related command
+qboolean CG_DrawStatsRanksMedals( void );*/
+
 void CG_StatsRanksMedalsClick( int key );
 
 typedef struct {
@@ -2775,11 +2787,19 @@ void CG_LoadVoiceChats();               // NERVE - SMF
 void CG_PlayBufferedVoiceChats();       // NERVE - SMF
 void CG_AddToNotify( const char *str );
 const char* CG_LocalizeServerCommand( const char *buf );
-void CG_wstatsParse_cmd( void );
+
+/* Nico, removed showstats client command
+void CG_wstatsParse_cmd( void );*/
+
 /* Nico, removed +topshots command
 void CG_wtopshotsParse_cmd( qboolean doBest );*/
-void CG_parseWeaponStats_cmd( void( txt_dump ) ( char * ) );
-void CG_parseBestShotsStats_cmd( qboolean doTop, void( txt_dump ) ( char * ) );
+
+/* Nico, removed showstats client command
+void CG_parseWeaponStats_cmd( void( txt_dump ) ( char * ) );*/
+
+/* Nico, removed showstats client command
+void CG_parseBestShotsStats_cmd( qboolean doTop, void( txt_dump ) ( char * ) );*/
+
 /* Nico, removed +topshots command
 void CG_parseTopShotsStats_cmd( qboolean doTop, void( txt_dump ) ( char * ) );*/
 
@@ -3196,17 +3216,22 @@ const char* CG_BuildSelectedFirteamString( void );
 
 // cg_window.c
 qboolean CG_addString( cg_window_t *w, char *buf );
-//void CG_createDemoHelpWindow(void);
-//void CG_createSpecHelpWindow(void);
 void CG_createStatsWindow( void );
+
 /* Nico, removed +topshots command
 void CG_createTopShotsWindow( void );*/
-void CG_createWstatsMsgWindow( void );
+
+/* Nico, removed ws related command
+void CG_createWstatsMsgWindow( void );*/
+
 /* Nico, removed +topshots command
 void CG_createWtopshotsMsgWindow( void );*/
+
 void CG_createMOTDWindow( void );
+
 /* Nico, removed multiview
 void CG_cursorUpdate( void );*/
+
 void CG_initStrings( void );
 void CG_printWindow( char *str );
 void CG_removeStrings( cg_window_t *w );

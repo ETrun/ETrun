@@ -51,7 +51,9 @@ typedef struct {
 
 // VC optimizes for dup strings :)
 static const cmd_reference_t aCommandInfo[] = {
-	{ "+stats",          qtrue,  qtrue,  NULL, ":^7 HUD overlay showing current weapon stats info" },
+
+	/* Nico, removed ws related command
+	{ "+stats",          qtrue,  qtrue,  NULL, ":^7 HUD overlay showing current weapon stats info" },*/
 
 	/* Nico, removed +topshots command
 	{ "+topshots",       qtrue,  qtrue,  NULL, ":^7 HUD overlay showing current top accuracies of all players" },*/
@@ -720,6 +722,7 @@ int QDECL SortStats( const void *a, const void *b ) {
 	return( 1 );
 }
 
+/* Nico, removed showstats client command
 // Shows the most accurate players for each weapon to the requesting client
 void G_weaponStatsLeaders_cmd( gentity_t* ent, qboolean doTop, qboolean doWindow ) {
 	int i, iWeap, shots, wBestAcc, cClients, cPlaces;
@@ -771,7 +774,7 @@ void G_weaponStatsLeaders_cmd( gentity_t* ent, qboolean doTop, qboolean doWindow
 		}
 	}
 	CP( va( "%sbstats%s %s 0", ( ( doWindow ) ? "w" : "" ), ( ( doTop ) ? "" : "b" ), z ) );
-}
+}*/
 
 
 // Shows best/worst accuracy for all weapons, or sorted

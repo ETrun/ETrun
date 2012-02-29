@@ -2779,8 +2779,8 @@ void CG_LimboPanel_RequestWeaponStats( void ) {
 		// Bleh?
 		return;
 	}
-
-	trap_SendClientCommand( va( "ws %i", weapStat ) );
+	/* Nico, removed showstats client command
+	trap_SendClientCommand( va( "ws %i", weapStat ) );*/
 }
 
 void CG_LimboPanel_RequestObjective( void ) {

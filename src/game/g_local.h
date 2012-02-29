@@ -2035,7 +2035,9 @@ void G_weaponRankings_cmd( gentity_t *ent, unsigned int dwCommand, qboolean stat
 /* Nico, removed weaponstats client command
 void G_weaponStats_cmd( gentity_t *ent, unsigned int dwCommand, qboolean fDump );*/
 
-void G_weaponStatsLeaders_cmd( gentity_t* ent, qboolean doTop, qboolean doWindow );
+/* Nico, removed showstats client command
+void G_weaponStatsLeaders_cmd( gentity_t* ent, qboolean doTop, qboolean doWindow );*/
+
 void G_VoiceTo( gentity_t *ent, gentity_t *other, int mode, const char *id, qboolean voiceonly );
 
 
@@ -2067,7 +2069,10 @@ void G_printFull( char *str, gentity_t *ent );
 void G_resetModeState( void );
 void G_resetRoundState( void );
 void G_spawnPrintf( int print_type, int print_time, gentity_t *owner );
-void G_statsPrint( gentity_t *ent, int nType );
+
+/* Nico, removed ws related command
+void G_statsPrint( gentity_t *ent, int nType );*/
+
 unsigned int G_weapStatIndex_MOD( unsigned int iWeaponMOD );
 
 ///////////////////////

@@ -2724,8 +2724,10 @@ void Cmd_SetSniperSpot_f( gentity_t *clent ) {
 	return;
 }
 
-void G_PrintAccuracyLog( gentity_t *ent );
+/* Nico, removed showstats client command
+void G_PrintAccuracyLog( gentity_t *ent );*/
 
+/* Nico, removed +topshots command
 void Cmd_WeaponStat_f( gentity_t* ent ) {
 	char buffer[16];
 	extWeaponStats_t stat;
@@ -2741,7 +2743,7 @@ void Cmd_WeaponStat_f( gentity_t* ent ) {
 	stat = atoi( buffer );
 
 	trap_SendServerCommand( ent - g_entities, va( "rws %i %i", ent->client->sess.aWeaponStats[stat].atts, ent->client->sess.aWeaponStats[stat].hits ) );
-}
+}*/
 
 void Cmd_IntermissionWeaponStats_f( gentity_t* ent ) {
 	char buffer[1024];
@@ -3008,10 +3010,15 @@ void ClientCommand( int clientNum ) {
 	} else if ( Q_stricmp( cmd, "fireteam" ) == 0 ) {
 		Cmd_FireTeam_MP_f( ent );
 		return;
-	} else if ( Q_stricmp( cmd, "showstats" ) == 0 ) {
+	} 
+
+	/* Nico, removed showstats client command
+	else if ( Q_stricmp( cmd, "showstats" ) == 0 ) {
 		G_PrintAccuracyLog( ent );
 		return;
-	} else if ( Q_stricmp( cmd, "rconAuth" ) == 0 ) {
+	}*/
+
+	else if ( Q_stricmp( cmd, "rconAuth" ) == 0 ) {
 		Cmd_AuthRcon_f( ent );
 		return;
 	} else if ( Q_stricmp( cmd, "ignore" ) == 0 ) {
@@ -3035,11 +3042,15 @@ void ClientCommand( int clientNum ) {
 	} else if ( !Q_stricmp( cmd, "imready" ) ) {
 		Cmd_IntermissionReady_f( ent );
 		return;
-	} 
+	}
+
+	/* Nico, removed ws related command
 	else if ( Q_stricmp( cmd, "ws" ) == 0 ) {
 		Cmd_WeaponStat_f( ent );
 		return;
-	} else if ( !Q_stricmp( cmd, "forcetapout" ) ) {
+	}*/
+	
+	else if ( !Q_stricmp( cmd, "forcetapout" ) ) {
 		if ( !ent || !ent->client ) {
 			return;
 		}
@@ -3053,6 +3064,7 @@ void ClientCommand( int clientNum ) {
 
 	// OSP
 	// Do these outside as we don't want to advertise it in the help screen
+	/* Nico, removed ws related command
 	if ( !Q_stricmp( cmd, "wstats" ) ) {
 		G_statsPrint( ent, 1 );
 		return;
@@ -3064,7 +3076,8 @@ void ClientCommand( int clientNum ) {
 	if ( !Q_stricmp( cmd, "stshots" ) ) { // "Topshots" accuracy rankings
 		G_weaponStatsLeaders_cmd( ent, qtrue, qtrue );
 		return;
-	}
+	}*/
+
 	if ( !Q_stricmp( cmd, "rs" ) ) {
 		Cmd_ResetSetup_f( ent );
 		return;

@@ -464,7 +464,9 @@ void G_deleteStats( int nClient ) {
 	cl->sess.team_kills = 0;
 
 	memset( &cl->sess.aWeaponStats, 0, sizeof( cl->sess.aWeaponStats ) );
-	trap_Cvar_Set( va( "wstats%i", nClient ), va( "%d", nClient ) );
+
+	/* Nico, removed ws related command
+	trap_Cvar_Set( va( "wstats%i", nClient ), va( "%d", nClient ) );*/
 }
 
 
@@ -723,7 +725,7 @@ int G_checkServerToggle( vmCvar_t *cv ) {
 	return( qtrue );
 }
 
-
+/* Nico, removed ws related command
 // Sends a player's stats to the requesting client.
 void G_statsPrint( gentity_t *ent, int nType ) {
 	int pid;
@@ -754,7 +756,7 @@ void G_statsPrint( gentity_t *ent, int nType ) {
 
 		CP( va( "%s %s\n", cmd, G_createStats( g_entities + pid ) ) );
 	}
-}
+}*/
 
 /*
 // See if the player is allowed to have a panzer

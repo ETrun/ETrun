@@ -77,6 +77,7 @@ void G_LogRegionHit( gentity_t* ent, hitRegion_t hr ) {
 				 va( "%d %d %d", ent->client->sess.sessionTeam, ent->client->sess.playerType, hr ) ) ;
 }
 
+/* Nico, removed showstats client command
 void G_PrintAccuracyLog( gentity_t *ent ) {
 	int i;
 	char buffer[2048];
@@ -100,15 +101,15 @@ void G_PrintAccuracyLog( gentity_t *ent ) {
 		Q_strcat( buffer, 2048, va( " %i", ent->client->pers.playerStats.hitRegions[i] ) );
 	}
 
-	Q_strcat( buffer, 2048, va( " %i", 6 /*level.numOidTriggers*/ ) );
+	Q_strcat( buffer, 2048, va( " %i", 6 ) );
 
-	for ( i = 0; i < 6 /*level.numOidTriggers*/; i++ ) {
+	for ( i = 0; i < 6; i++ ) {
 		Q_strcat( buffer, 2048, va( " %i", ent->client->pers.playerStats.objectiveStats[i] ) );
 		Q_strcat( buffer, 2048, va( " %i", ent->client->sess.sessionTeam == TEAM_AXIS ? level.objectiveStatsAxis[i] : level.objectiveStatsAllies[i] ) );
 	}
 
 	trap_SendServerCommand( ent - g_entities, buffer );
-}
+}*/
 
 void G_SetPlayerScore( gclient_t *client ) {
 	int i;

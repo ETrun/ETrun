@@ -4166,9 +4166,13 @@ static bind_t g_bindings[] = {
 	{ "+mapexpand",      'g',     -1, '#',         -1, -1, -1 },
 	{ "+reload",     'r',     -1, K_END,          -1, -1, -1 },
 	{ "+scores",     K_TAB,      -1, K_TAB,          -1, -1, -1 },
-	{ "+stats",          K_ALT,      -1, K_F9,           -1, -1, -1 },
+
+	/* Nico, removed ws related command
+	{ "+stats",          K_ALT,      -1, K_F9,           -1, -1, -1 },*/
+
 	/* Nico, removed +topshots command
 	{ "+topshots",       K_CTRL,     -1, K_F10,          -1, -1, -1 },*/
+
 	{ "toggleconsole",   '`',     '~', '`',     '~', -1, -1 },
 	{ "togglemenu",      K_ESCAPE,   -1, K_ESCAPE,       -1, -1, -1 },
 	{ "openlimbomenu",   'l',     -1, 'l',         -1, -1, -1 },

@@ -70,14 +70,15 @@ void CG_LimboMenu_f( void ) {
 	}
 }
 
+/* Nico, removed ws related command
 static void CG_StatsDown_f( void ) {
 	if ( !cg.demoPlayback ) {
-		/* Nico, removed multiview
-		int i = ( cg.mvTotalClients > 0 ) ? ( cg.mvCurrentActive->mvInfo & MV_PID ) : cg.snap->ps.clientNum;*/
+		// Nico, removed multiview
+		// int i = ( cg.mvTotalClients > 0 ) ? ( cg.mvCurrentActive->mvInfo & MV_PID ) : cg.snap->ps.clientNum;
 		int i =  cg.snap->ps.clientNum;
 
-		/* Nico, removed multiview
-		if ( cg.mvTotalClients < 1 && cg.snap->ps.persistant[PERS_TEAM] == TEAM_SPECTATOR ) {*/
+		// Nico, removed multiview
+		//if ( cg.mvTotalClients < 1 && cg.snap->ps.persistant[PERS_TEAM] == TEAM_SPECTATOR ) {
 		if ( cg.snap->ps.persistant[PERS_TEAM] == TEAM_SPECTATOR ) {
 			Pri( "You must be a player or following a player to use +stats\n" );
 			return;
@@ -96,8 +97,9 @@ static void CG_StatsDown_f( void ) {
 			trap_SendClientCommand( va( "sgstats %d", i ) );
 		}
 	}
-}
+}*/
 
+/* Nico, removed ws related command
 static void CG_StatsUp_f( void ) {
 	if ( cgs.gamestats.show == SHOW_ON ) {
 		cgs.gamestats.show = SHOW_SHUTDOWN;
@@ -107,7 +109,7 @@ static void CG_StatsUp_f( void ) {
 			cgs.gamestats.fadeTime = cg.time + STATS_FADE_TIME;
 		}
 	}
-}
+}*/
 
 /* Nico, removed +topshots command
 void CG_topshotsDown_f( void ) {
@@ -766,13 +768,14 @@ void CG_dumpStats_f( void ) {
 	}
 }*/
 
+/* Nico, removed ws related command
 void CG_wStatsDown_f( void ) {
-	/* Nico, removed multiview
-	int i = ( cg.mvTotalClients > 0 ) ? ( cg.mvCurrentActive->mvInfo & MV_PID ) : cg.snap->ps.clientNum;*/
+	// Nico, removed multiview
+	//int i = ( cg.mvTotalClients > 0 ) ? ( cg.mvCurrentActive->mvInfo & MV_PID ) : cg.snap->ps.clientNum;
 	int i = cg.snap->ps.clientNum;
 
-	/* Nico, removed multiview
-	if ( cg.mvTotalClients < 1 && cg.snap->ps.persistant[PERS_TEAM] == TEAM_SPECTATOR ) {*/
+	// Nico, removed multiview
+	// if ( cg.mvTotalClients < 1 && cg.snap->ps.persistant[PERS_TEAM] == TEAM_SPECTATOR ) {
 	if (cg.snap->ps.persistant[PERS_TEAM] == TEAM_SPECTATOR) {
 		Pri( "You must be a player or following a player to use +wstats\n" );
 		return;
@@ -782,15 +785,17 @@ void CG_wStatsDown_f( void ) {
 		cg.statsRequestTime = cg.time + 500;
 		trap_SendClientCommand( va( "wstats %d", i ) );
 	}
+	// Nico, removed showstats client command
+	// cg.showStats = qtrue;
+}*/
 
-	cg.showStats = qtrue;
-}
-
+/* Nico, removed ws related command
 void CG_wStatsUp_f( void ) {
-	cg.showStats = qfalse;
+	// Nico, removed showstats client command
+	// cg.showStats = qfalse;
 	CG_windowFree( cg.statsWindow );
 	cg.statsWindow = NULL;
-}
+}*/
 
 void CG_toggleSpecHelp_f( void ) {
 	/* Nico, removed multiview
@@ -898,8 +903,10 @@ static consoleCommand_t commands[] =
 	{ "tell_attacker", CG_TellAttacker_f },
 	{ "tcmd", CG_TargetCommand_f },
 	{ "fade", CG_Fade_f },   // duffy
+
 	/* Nico, call an empty function
 	{ "loadhud", CG_LoadHud_f },*/
+
 	{ "loadweapons", CG_LoadWeapons_f },
 
 	{ "mp_QuickMessage", CG_QuickMessage_f },
@@ -925,8 +932,10 @@ static consoleCommand_t commands[] =
 
 	{ "openlimbomenu",   CG_LimboMenu_f },
 
+	/* Nico, removed ws related command
 	{ "+stats",          CG_StatsDown_f },
-	{ "-stats",          CG_StatsUp_f },
+	{ "-stats",          CG_StatsUp_f },*/
+
 	/* Nico, removed +topshots command
 	{ "+topshots",       CG_topshotsDown_f },
 	{ "-topshots",       CG_topshotsUp_f },*/
@@ -1113,7 +1122,9 @@ void CG_InitConsoleCommands( void ) {
 	// OSP
 
 	trap_AddCommand( "fireteam" );
-	trap_AddCommand( "showstats" );
+
+	/* Nico, removed showstats client command
+	trap_AddCommand( "showstats" );*/
 
 	trap_AddCommand( "ignore" );
 	trap_AddCommand( "unignore" );
