@@ -1025,17 +1025,23 @@ void CG_InitConsoleCommands( void ) {
 	//
 	trap_AddCommand( "kill" );
 	trap_AddCommand( "say" );
+
 	/* Nico, removed give command
 	trap_AddCommand( "give" );*/
+
 	/* Nico, removed god command
 	trap_AddCommand( "god" );*/
+
 	/* Nico, removed notarget command
 	trap_AddCommand( "notarget" );*/
+
 	trap_AddCommand( "noclip" );
 	trap_AddCommand( "team" );
 	trap_AddCommand( "follow" ); // Nico, note: this is used to spectate
+
 	/* Nico, removed setviewpos command
 	trap_AddCommand( "setviewpos" );*/
+
 	trap_AddCommand( "callvote" );
 	trap_AddCommand( "vote" );
 

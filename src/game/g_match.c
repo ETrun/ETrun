@@ -403,6 +403,7 @@ unsigned int G_weapStatIndex_MOD( unsigned int iWeaponMOD ) {
 }
 
 
+/* Nico, removed ws related command
 // Generates weapon stat info for given ent
 char *G_createStats( gentity_t *refEnt ) {
 	unsigned int i, dwWeaponMask = 0, dwSkillPointMask = 0;
@@ -446,9 +447,10 @@ char *G_createStats( gentity_t *refEnt ) {
 				dwSkillPointMask,
 				strSkillInfo
 				) );
-}
+}*/
 
 
+/* Nico, removed ws related command
 // Resets player's current stats
 void G_deleteStats( int nClient ) {
 	gclient_t *cl = &level.clients[nClient];
@@ -465,11 +467,11 @@ void G_deleteStats( int nClient ) {
 
 	memset( &cl->sess.aWeaponStats, 0, sizeof( cl->sess.aWeaponStats ) );
 
-	/* Nico, removed ws related command
-	trap_Cvar_Set( va( "wstats%i", nClient ), va( "%d", nClient ) );*/
-}
+	trap_Cvar_Set( va( "wstats%i", nClient ), va( "%d", nClient ) );
+}*/
 
 
+/* Nico, removed ws related command
 // Parses weapon stat info for given ent
 //	---> The given string must be space delimited and contain only integers
 void G_parseStats( char *pszStatsInfo ) {
@@ -500,7 +502,7 @@ void G_parseStats( char *pszStatsInfo ) {
 	GETVAL( cl->sess.damage_given );
 	GETVAL( cl->sess.damage_received );
 	GETVAL( cl->sess.team_damage );
-}
+}*/
 
 
 // Prints current player match info.
@@ -641,12 +643,12 @@ void G_matchInfoDump( unsigned int dwDumpType ) {
 						G_statsall_cmd( ent, level.clients[pid].sess.sessionTeam, qfalse );                                     // Currently broken.. need to support the overloading of dwCommandID
 					} else { CP( va( "ws %s\n", G_createStats( g_entities + pid ) ) );}
 				}
-			}*/
+			}
 
 			// Log it
 			if ( cl->sess.sessionTeam != TEAM_SPECTATOR ) {
 				G_LogPrintf( "WeaponStats: %s\n", G_createStats( ent ) );
-			}
+			}*/
 
 		} else if ( dwDumpType == EOM_MATCHINFO ) {
 			/* Nico, removed statsdump client command

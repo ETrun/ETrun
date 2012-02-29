@@ -2248,7 +2248,8 @@ void ClientDisconnect( int clientNum ) {
 		}
 
 		// OSP - Log stats too
-		G_LogPrintf( "WeaponStats: %s\n", G_createStats( ent ) );
+		/* Nico, removed ws related command
+		G_LogPrintf( "WeaponStats: %s\n", G_createStats( ent ) );*/
 	}
 
 	G_LogPrintf( "ClientDisconnect: %i\n", clientNum );

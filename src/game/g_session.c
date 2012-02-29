@@ -53,10 +53,11 @@ void G_WriteClientSessionData( gclient_t *client, qboolean restart ) {
 	int mvc = 0;
 	const char  *s;
 
+	/* Nico, removed ws related command
 	// OSP -- stats reset check
 	if ( level.fResetStats ) {
 		G_deleteStats( client - level.clients );
-	}
+	}*/
 
 	s = va( "%i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i",
 			client->sess.sessionTeam,
@@ -253,15 +254,15 @@ void G_ReadSessionData( gclient_t *client ) {
 	// OSP
 
 	// OSP -- pull and parse weapon stats
-	*s = 0;
 	/* Nico, removed ws related command
-	trap_Cvar_VariableStringBuffer( va( "wstats%i", client - level.clients ), s, sizeof( s ) );*/
+	*s = 0;
+	trap_Cvar_VariableStringBuffer( va( "wstats%i", client - level.clients ), s, sizeof( s ) );
 	if ( *s ) {
 		G_parseStats( s );
 		if ( g_gamestate.integer == GS_PLAYING ) {
 			client->sess.rounds++;
 		}
-	}
+	}*/
 	// OSP
 
 	// Arnout: likely there are more cases in which we don't want this
@@ -359,7 +360,8 @@ void G_InitSessionData( gclient_t *client, char *userinfo ) {
 	sess->referee = ( client->pers.localClient ) ? RL_REFEREE : RL_NONE;
 	sess->spec_invite = 0;
 	sess->spec_team = 0;
-	G_deleteStats( client - level.clients );
+	/* Nico, removed ws related command
+	G_deleteStats( client - level.clients );*/
 	// OSP
 
 	G_WriteClientSessionData( client, qfalse );
@@ -504,9 +506,11 @@ void G_WriteSessionData( qboolean restart ) {
 		if ( level.clients[level.sortedClients[i]].pers.connected == CON_CONNECTED ) {
 			G_WriteClientSessionData( &level.clients[level.sortedClients[i]], restart );
 			// For slow connecters and a short warmup
-		} else if ( level.fResetStats ) {
+		} 
+		/* Nico, removed ws related command
+		else if ( level.fResetStats ) {
 			G_deleteStats( level.sortedClients[i] );
-		}
+		}*/
 	}
 
 	for ( i = 0; i < MAX_FIRETEAMS; i++ ) {

@@ -2056,15 +2056,23 @@ void G_addStats( gentity_t *targ, gentity_t *attacker, int dmg_ref, int mod );
 void G_addStatsHeadShot( gentity_t *attacker, int mod );
 qboolean G_allowPanzer( gentity_t *ent );
 int G_checkServerToggle( vmCvar_t *cv );
-char *G_createStats( gentity_t *refEnt );
-void G_deleteStats( int nClient );
+
+/* Nico, removed ws related command
+char *G_createStats( gentity_t *refEnt );*/
+
+/* Nico, removed ws related command
+void G_deleteStats( int nClient );*/
+
 qboolean G_desiredFollow( gentity_t *ent, int nTeam );
 void G_globalSound( char *sound );
 void G_initMatch( void );
 void G_loadMatchGame( void );
 void G_matchInfoDump( unsigned int dwDumpType );
 void G_printMatchInfo( gentity_t *ent );
-void G_parseStats( char *pszStatsInfo );
+
+/* Nico, removed ws related command
+void G_parseStats( char *pszStatsInfo );*/
+
 void G_printFull( char *str, gentity_t *ent );
 void G_resetModeState( void );
 void G_resetRoundState( void );
