@@ -959,7 +959,9 @@ static void CG_MapRestart( void ) {
 	cg.mapRestart = qtrue;
 	cg.timelimitWarnings = 0;
 	cgs.voteTime = 0;
-	cgs.dumpStatsTime = 0;
+
+	/* Nico, removed statsdump client command
+	cgs.dumpStatsTime = 0;*/
 
 	CG_StartMusic();
 
@@ -1938,6 +1940,7 @@ void CG_scores_cmd( void ) {
 	}
 }*/
 
+/* Nico, removed statsdump client command
 void CG_printFile( char *str ) {
 	CG_Printf( str );
 	if ( cgs.dumpStatsFile > 0 ) {
@@ -1946,8 +1949,9 @@ void CG_printFile( char *str ) {
 		BG_cleanName( str, s, sizeof( s ), qtrue );
 		trap_FS_Write( s, strlen( s ), cgs.dumpStatsFile );
 	}
-}
+}*/
 
+/* Nico, removed statsdump client command
 void CG_dumpStats( void ) {
 	qtime_t ct;
 	qboolean fDoScores = qfalse;
@@ -1983,7 +1987,7 @@ void CG_dumpStats( void ) {
 	if ( fDoScores ) {
 		trap_SendClientCommand( "scores" );
 	}
-}
+}*/
 // -OSP
 
 
@@ -2202,12 +2206,13 @@ static void CG_ServerCommand( void ) {
 
 	// OSP - weapon stats parsing
 	if ( !Q_stricmp( cmd, "ws" ) ) {
+		/* Nico, removed statsdump client command
 		if ( cgs.dumpStatsTime > cg.time ) {
 			CG_dumpStats();
 		} else {
 			CG_parseWeaponStats_cmd( CG_printConsoleString );
 			cgs.dumpStatsTime = 0;
-		}
+		}*/
 
 		return;
 	}

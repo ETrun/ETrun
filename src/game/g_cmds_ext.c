@@ -94,8 +94,13 @@ static const cmd_reference_t aCommandInfo[] = {
 	{ "specinvite",      qtrue,  qtrue,  G_specinvite_cmd, ":^7 Invites a player to spectate a speclock'ed team" },
 	{ "speclock",        qtrue,  qtrue,  G_speclock_cmd, ":^7 Locks a player's team from spectators" },
 	{ "specunlock",      qtrue,  qfalse, G_speclock_cmd, ":^7 Unlocks a player's team from spectators" },
-	{ "statsall",        qtrue,  qfalse, G_statsall_cmd, ":^7 Shows weapon accuracy stats for all players" },
-	{ "statsdump",       qtrue,  qtrue,  NULL, ":^7 Shows player stats + match info saved locally to a file" },
+
+	/* Nico, removed statsall client command
+	{ "statsall",        qtrue,  qfalse, G_statsall_cmd, ":^7 Shows weapon accuracy stats for all players" },*/
+
+	/* Nico, removed statsdump client command
+	{ "statsdump",       qtrue,  qtrue,  NULL, ":^7 Shows player stats + match info saved locally to a file" },*/
+
 	// Nico, stoprecord command was missing from commands list
 	// http://games.chruker.dk/enemy_territory/modding_project_bugfix.php?bug_id=012
 	{ "stoprecord",		qtrue,	qtrue,	NULL, ":^7 Stops a demo recording currently in progress" },
@@ -586,7 +591,7 @@ void G_weaponStats_cmd( gentity_t *ent, unsigned int dwCommand, qboolean fDump )
 	G_statsPrint( ent, 0 );
 }
 
-
+/* Nico, removed statsall client command
 // ************** STATSALL
 //
 // Shows all players' stats to the requesting client.
@@ -601,8 +606,7 @@ void G_statsall_cmd( gentity_t *ent, unsigned int dwCommand, qboolean fDump ) {
 		}
 		CP( va( "ws %s\n", G_createStats( player ) ) );
 	}
-}
-
+}*/
 
 // ************** TEAMREADY
 //

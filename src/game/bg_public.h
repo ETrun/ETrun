@@ -284,7 +284,10 @@ extern const unsigned int aReinfSeeds[MAX_REINFSEEDS];
 
 // Client flags for server processing
 #define CGF_AUTORELOAD      0x01
-#define CGF_STATSDUMP       0x02
+
+/* Nico, removed statsdump client command
+#define CGF_STATSDUMP       0x02*/
+
 #define CGF_AUTOACTIVATE    0x04
 #define CGF_PREDICTITEMS    0x08
 

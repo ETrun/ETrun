@@ -756,14 +756,16 @@ void CG_keyOff_f( void ) {
 	CG_EventHandling( CGAME_EVENT_NONE, qfalse );
 }
 
+/* Nico, removed statsdump client command
 void CG_dumpStats_f( void ) {
 	if ( cgs.dumpStatsTime < cg.time ) {
 		cgs.dumpStatsTime = cg.time + 2000;
-		/* Nico, removed multiview
-		trap_SendClientCommand( ( cg.mvTotalClients < 1 ) ? "weaponstats" : "statsall" );*/
+		// Nico, removed multiview
+		// trap_SendClientCommand( ( cg.mvTotalClients < 1 ) ? "weaponstats" : "statsall" );
 		trap_SendClientCommand("weaponstats");
 	}
-}
+}*/
+
 void CG_wStatsDown_f( void ) {
 	/* Nico, removed multiview
 	int i = ( cg.mvTotalClients > 0 ) ? ( cg.mvCurrentActive->mvInfo & MV_PID ) : cg.snap->ps.clientNum;*/
@@ -935,7 +937,10 @@ static consoleCommand_t commands[] =
 	{ "currentTime", CG_currentTime_f },
 	{ "keyoff",          CG_keyOff_f },
 	{ "keyon",           CG_keyOn_f },
-	{ "statsdump",       CG_dumpStats_f },
+
+	/* Nico, removed statsdump client command
+	{ "statsdump",       CG_dumpStats_f },*/
+
 	{ "+vstr",           CG_vstrDown_f },
 	{ "-vstr",           CG_vstrUp_f },
 	// OSP
@@ -1078,8 +1083,12 @@ void CG_InitConsoleCommands( void ) {
 	trap_AddCommand( "specinvite" );
 	trap_AddCommand( "speclock" );
 	trap_AddCommand( "specunlock" );
-	trap_AddCommand( "statsall" );
-	trap_AddCommand( "statsdump" );
+
+	/* Nico, removed statsall client command
+	trap_AddCommand( "statsall" );*/
+
+	/* Nico, removed statsdump client command
+	trap_AddCommand( "statsdump" );*/
 
 	/* Nico, removed timein client command
 	trap_AddCommand( "timein" );*/

@@ -2468,9 +2468,10 @@ static void CG_DrawIntermission( void ) {
 				doScreenshot = cg.time + 1000;
 			}
 
+			/* Nico, removed statsdump client command
 			if ( cg_autoAction.integer & AA_STATSDUMP ) {
 				CG_dumpStats_f();
-			}
+			}*/
 
 			if ( ( cg_autoAction.integer & AA_DEMORECORD ) &&
 				 ( ( cgs.gametype == GT_WOLF_STOPWATCH && cgs.currentRound == 0 ) ||

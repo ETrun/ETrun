@@ -621,9 +621,10 @@ void G_matchInfoDump( unsigned int dwDumpType ) {
 
 		if ( dwDumpType == EOM_WEAPONSTATS ) {
 			// If client wants to write stats to a file, don't auto send this stuff
+			/* Nico, removed statsdump client command
 			if ( !( cl->pers.clientFlags & CGF_STATSDUMP ) ) {
-				/* Nico, removed multiview
-				if ( ( cl->pers.autoaction & AA_STATSALL ) || cl->pers.mvCount > 0 ) {*/
+				// Nico, removed multiview
+				// if ( ( cl->pers.autoaction & AA_STATSALL ) || cl->pers.mvCount > 0 ) {
 				if (( cl->pers.autoaction & AA_STATSALL )) {
 					G_statsall_cmd( ent, 0, qfalse );
 				} else if ( cl->sess.sessionTeam != TEAM_SPECTATOR ) {
@@ -638,7 +639,7 @@ void G_matchInfoDump( unsigned int dwDumpType ) {
 						G_statsall_cmd( ent, level.clients[pid].sess.sessionTeam, qfalse );                                     // Currently broken.. need to support the overloading of dwCommandID
 					} else { CP( va( "ws %s\n", G_createStats( g_entities + pid ) ) );}
 				}
-			}
+			}*/
 
 			// Log it
 			if ( cl->sess.sessionTeam != TEAM_SPECTATOR ) {
@@ -646,9 +647,10 @@ void G_matchInfoDump( unsigned int dwDumpType ) {
 			}
 
 		} else if ( dwDumpType == EOM_MATCHINFO ) {
+			/* Nico, removed statsdump client command
 			if ( !( cl->pers.clientFlags & CGF_STATSDUMP ) ) {
 				G_printMatchInfo( ent );
-			}
+			}*/
 			if ( g_gametype.integer == GT_WOLF_STOPWATCH ) {
 				if ( g_currentRound.integer == 1 ) {   // We've already missed the switch
 					CP( va( "print \">>> ^3Clock set to: %d:%02d\n\n\n\"",

@@ -633,7 +633,8 @@ void CG_setClientFlags( void ) {
 								   // Client Flags
 								   (
 									   ( ( cg_autoReload.integer > 0 ) ? CGF_AUTORELOAD : 0 ) |
-									   ( ( cg_autoAction.integer & AA_STATSDUMP ) ? CGF_STATSDUMP : 0 ) |
+									   /* Nico, removed statsdump client command
+									   ( ( cg_autoAction.integer & AA_STATSDUMP ) ? CGF_STATSDUMP : 0 ) |*/
 									   ( ( cg_autoactivate.integer > 0 ) ? CGF_AUTOACTIVATE : 0 ) |
 									   ( ( cg_predictItems.integer > 0 ) ? CGF_PREDICTITEMS : 0 )
 									   // Add more in here, as needed
@@ -2754,8 +2755,9 @@ void CG_Init( int serverMessageNum, int serverCommandSequence, int clientNum, qb
 	}
 
 	// OSP
+	/* Nico, removed statsdump client command
 	cgs.dumpStatsFile = 0;
-	cgs.dumpStatsTime = 0;
+	cgs.dumpStatsTime = 0;*/
 //	CG_Printf("Time taken: %i\n", trap_Milliseconds() - startat);
 }
 

@@ -107,7 +107,9 @@ If you have questions concerning this license or the applicable additional terms
 // Autoaction values
 #define AA_DEMORECORD   0x01
 #define AA_SCREENSHOT   0x02
-#define AA_STATSDUMP    0x04
+
+/* Nico, removed statsdump client command
+#define AA_STATSDUMP    0x04*/
 
 // Cursor
 #define CURSOR_OFFSETX  13
@@ -1947,13 +1949,18 @@ typedef struct {
 	int aviDemoRate;                                    // Demo playback recording
 	int aReinfOffset[TEAM_NUM_TEAMS];                   // Team reinforcement offsets
 	int cursorUpdate;                                   // Timeout for mouse pointer view
+
+	/* Nico, removed statsdump client command
 	fileHandle_t dumpStatsFile;                         // File to dump stats
 	char*               dumpStatsFileName;              // Name of file to dump stats
-	int dumpStatsTime;                                  // Next stats command that comes back will be written to a logfile
+	int dumpStatsTime;                                  // Next stats command that comes back will be written to a logfile*/
+
 	int game_versioninfo;                               // game base version
 	gameStats_t gamestats;
+
 	/* Nico, removed +topshots command
 	topshotStats_t topshots;*/
+
 	qboolean fResize;                                   // MV window "resize" status
 	qboolean fSelect;                                   // MV window "select" status
 	qboolean fKeyPressed[256];                          // Key status to get around console issues
@@ -2748,7 +2755,8 @@ void CG_autoRecord_f( void );
 void CG_autoScreenShot_f( void );
 void CG_keyOn_f( void );
 void CG_keyOff_f( void );
-void CG_dumpStats_f( void );
+/* Nico, removed statsdump client command
+void CG_dumpStats_f( void );*/
 void CG_toggleSwing_f( void );
 
 //

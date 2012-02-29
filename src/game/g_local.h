@@ -1959,7 +1959,9 @@ g_serverEntity_t *FindServerEntity( g_serverEntity_t *from, int fieldofs, char *
 #define EOM_WEAPONSTATS 0x01    // Dump of player weapon stats at end of match.
 #define EOM_MATCHINFO   0x02    // Dump of match stats at end of match.
 
-#define AA_STATSALL     0x01    // Client AutoAction: Dump ALL player stats
+/* Nico, removed statsall client command
+#define AA_STATSALL     0x01    // Client AutoAction: Dump ALL player stats*/
+
 #define AA_STATSTEAM    0x02    // Client AutoAction: Dump TEAM player stats
 
 
@@ -2014,11 +2016,15 @@ void G_players_cmd( gentity_t *ent, unsigned int dwCommand, qboolean fDump );
 void G_ready_cmd( gentity_t *ent, unsigned int dwCommand, qboolean fDump );*/
 
 void G_say_teamnl_cmd( gentity_t *ent, unsigned int dwCommand, qboolean fValue );
+
 /* Nico, removed scores client command
 void G_scores_cmd( gentity_t *ent, unsigned int dwCommand, qboolean fValue );*/
+
 void G_specinvite_cmd( gentity_t *ent, unsigned int dwCommand, qboolean fLock );
 void G_speclock_cmd( gentity_t *ent, unsigned int dwCommand, qboolean fLock );
-void G_statsall_cmd( gentity_t *ent, unsigned int dwCommand, qboolean fDump );
+
+/* Nico, removed statsall client command
+void G_statsall_cmd( gentity_t *ent, unsigned int dwCommand, qboolean fDump );*/
 
 /* Nico, removed readyteam command
 void G_teamready_cmd( gentity_t *ent, unsigned int dwCommand, qboolean fDump );*/
