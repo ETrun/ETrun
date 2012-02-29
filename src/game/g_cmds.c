@@ -2782,13 +2782,14 @@ void G_MakeUnready( gentity_t* ent ) {
 	ent->client->pers.ready = qfalse;
 }
 
+/* Nico, removed imready client command
 void Cmd_IntermissionReady_f( gentity_t* ent ) {
 	if ( !ent || !ent->client ) {
 		return;
 	}
 
 	G_MakeReady( ent );
-}
+}*/
 
 void Cmd_IntermissionPlayerKillsDeaths_f( gentity_t* ent ) {
 	char buffer[1024];
@@ -3031,10 +3032,12 @@ void ClientCommand( int clientNum ) {
 	} else if ( !Q_stricmp( cmd, "imws" ) ) {
 		Cmd_IntermissionWeaponStats_f( ent );
 		return;
-	} else if ( !Q_stricmp( cmd, "imready" ) ) {
+	}
+	/* Nico, removed imready client command
+	else if ( !Q_stricmp( cmd, "imready" ) ) {
 		Cmd_IntermissionReady_f( ent );
 		return;
-	}
+	}*/
 
 	/* Nico, removed ws related command
 	else if ( Q_stricmp( cmd, "ws" ) == 0 ) {

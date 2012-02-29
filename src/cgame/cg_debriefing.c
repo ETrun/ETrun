@@ -2076,7 +2076,8 @@ qboolean CG_Debriefing_ReadyButton_KeyDown( panel_button_t* button, int key ) {
 			return qfalse;
 		}
 
-		trap_SendClientCommand( "imready" );
+		/* Nico, removed imready client command
+		trap_SendClientCommand( "imready" );*/
 
 		return qtrue;
 	}

@@ -1137,7 +1137,10 @@ void CG_InitConsoleCommands( void ) {
 
 	// Nico, added missing commands
 	// http://games.chruker.dk/enemy_territory/modding_project_bugfix.php?bug_id=011
-	trap_AddCommand ("imready");
+
+	/* Nico, removed imready client command
+	trap_AddCommand ("imready");*/
+
 	trap_AddCommand ("say_buddy");
 	trap_AddCommand ("setspawnpt");
 	trap_AddCommand ("vsay");
