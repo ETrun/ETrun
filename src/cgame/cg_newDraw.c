@@ -732,10 +732,11 @@ void CG_MouseEvent( int x, int y ) {
 
 
 	default:
+		/* Nico, removed debriefing
 		if ( cg.snap->ps.pm_type == PM_INTERMISSION ) {
 			CG_Debriefing_MouseEvent( x, y );
 			return;
-		}
+		}*/
 
 		// default handling
 		if ( ( cg.predictedPlayerState.pm_type == PM_NORMAL ||
@@ -861,10 +862,11 @@ void CG_KeyEvent( int key, qboolean down ) {
 		break;
 
 	default:
+		/* Nico, removed debriefing
 		if ( cg.snap->ps.pm_type == PM_INTERMISSION ) {
 			CG_Debriefing_KeyEvent( key, down );
 			return;
-		}
+		}*/
 
 		// default handling
 		if ( !down ) {

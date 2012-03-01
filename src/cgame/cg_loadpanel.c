@@ -588,13 +588,6 @@ void CG_LoadPanel_DrawPin( const char* text, float px, float py, float sx, float
 void CG_LoadPanel_RenderCampaignPins( panel_button_t* button ) {
 	int i;
 	qhandle_t shader;
-	/*char buffer[1024];
-	char *s;
-	int gametype;
-
-	DC->getConfigString( CS_SERVERINFO, buffer, sizeof( buffer ) );
-	s = Info_ValueForKey( buffer, "g_gametype" );
-	gametype = atoi(s);*/
 
 	if ( cgs.gametype == GT_WOLF_STOPWATCH || cgs.gametype == GT_WOLF_LMS || cgs.gametype == GT_WOLF ) {
 		float px, py;

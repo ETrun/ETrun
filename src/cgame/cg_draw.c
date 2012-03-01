@@ -2451,11 +2451,11 @@ static void CG_DrawVote( void ) {
 	}
 }
 
-/*
+/* Nico, removed debriefing
 =================
 CG_DrawIntermission
 =================
-*/
+
 static void CG_DrawIntermission( void ) {
 	// End-of-level autoactions
 	if ( !cg.demoPlayback ) {
@@ -2468,10 +2468,10 @@ static void CG_DrawIntermission( void ) {
 				doScreenshot = cg.time + 1000;
 			}
 
-			/* Nico, removed statsdump client command
-			if ( cg_autoAction.integer & AA_STATSDUMP ) {
-				CG_dumpStats_f();
-			}*/
+			// Nico, removed statsdump client command
+			// if ( cg_autoAction.integer & AA_STATSDUMP ) {
+			// 	CG_dumpStats_f();
+			// }
 
 			if ( ( cg_autoAction.integer & AA_DEMORECORD ) &&
 				 ( ( cgs.gametype == GT_WOLF_STOPWATCH && cgs.currentRound == 0 ) ||
@@ -2493,11 +2493,7 @@ static void CG_DrawIntermission( void ) {
 
 	// Intermission view
 	CG_Debriefing_Draw();
-
-/*	cg.scoreFadeTime = cg.time;
-	CG_DrawScoreboard();
-*/
-}
+}*/
 
 /*
 =================
@@ -4196,6 +4192,7 @@ static void CG_Draw2D( void ) {
 		return;
 	}*/
 
+	/* Nico, removed debriefing
 	if ( cg.snap->ps.pm_type == PM_INTERMISSION ) {
 		CG_DrawIntermission();
 		return;
@@ -4203,7 +4200,7 @@ static void CG_Draw2D( void ) {
 		if ( cgs.dbShowing ) {
 			CG_Debriefing_Shutdown();
 		}
-	}
+	}*/
 
 	if ( cg.editingSpeakers ) {
 		CG_SpeakerEditorDraw();

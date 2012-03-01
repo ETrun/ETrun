@@ -2481,9 +2481,10 @@ static void CG_ServerCommand( void ) {
 		return;
 	}
 
+	/* Nico, removed debriefing
 	if ( CG_Debriefing_ServerCommand( cmd ) ) {
 		return;
-	}
+	}*/
 
 	CG_Printf( "Unknown client game command: %s\n", cmd );
 }

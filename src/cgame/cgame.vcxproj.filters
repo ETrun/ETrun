@@ -59,9 +59,6 @@
     <ClCompile Include="cg_consolecmds.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="cg_debriefing.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="cg_draw.c">
       <Filter>Source Files</Filter>
     </ClCompile>

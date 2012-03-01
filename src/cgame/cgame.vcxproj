@@ -166,7 +166,6 @@
     <ClCompile Include="cg_character.c" />
     <ClCompile Include="cg_commandmap.c" />
     <ClCompile Include="cg_consolecmds.c" />
-    <ClCompile Include="cg_debriefing.c" />
     <ClCompile Include="cg_draw.c" />
     <ClCompile Include="cg_drawtools.c" />
     <ClCompile Include="cg_effects.c" />
