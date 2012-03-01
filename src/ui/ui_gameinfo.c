@@ -201,6 +201,8 @@ static void UI_LoadArenasFromFile( char *filename ) {
 				return;
 			}
 		}*/
+
+		/* Nico, instant reswawn
 		else if ( !Q_stricmp( token.string, "axisrespawntime" ) ) {
 			if ( !PC_Int_Parse( handle, &uiInfo.mapList[uiInfo.mapCount].AxisRespawnTime ) ) {
 				trap_Print( va( S_COLOR_RED "unexpected end of file inside: %s\n", filename ) );
@@ -213,7 +215,8 @@ static void UI_LoadArenasFromFile( char *filename ) {
 				trap_PC_FreeSource( handle );
 				return;
 			}
-		} else if ( !Q_stricmp( token.string, "type" ) ) {
+		}*/
+		else if ( !Q_stricmp( token.string, "type" ) ) {
 			if ( !trap_PC_ReadToken( handle, &token ) ) {
 				trap_Print( va( S_COLOR_RED "unexpected end of file inside: %s\n", filename ) );
 				trap_PC_FreeSource( handle );

@@ -4062,6 +4062,7 @@ void UI_RunMenuScript( char **args ) {
 				trap_Cvar_Set( "g_userTimelimit", "0" );
 			}*/
 
+			/* Nico, instant reswawn
 			// set axis respawn time
 			val = trap_Cvar_VariableValue( "ui_userAxisRespawnTime" );
 
@@ -4078,7 +4079,7 @@ void UI_RunMenuScript( char **args ) {
 				trap_Cvar_Set( "g_userAlliedRespawnTime", va( "%i", val ) );
 			} else {
 				trap_Cvar_Set( "g_userAlliedRespawnTime", "0" );
-			}
+			}*/
 			// -NERVE - SMF
 
 		} else if ( Q_stricmp( name, "updateSPMenu" ) == 0 ) {
@@ -7428,8 +7429,10 @@ vmCvar_t ui_friendlyFire;
 /* Nico, no timelimit
 vmCvar_t ui_userTimeLimit;*/
 
+/* Nico, instant reswawn
 vmCvar_t ui_userAlliedRespawnTime;
-vmCvar_t ui_userAxisRespawnTime;
+vmCvar_t ui_userAxisRespawnTime;*/
+
 vmCvar_t ui_glCustom;    // JPW NERVE missing from q3ta
 // -NERVE - SMF
 
@@ -7494,8 +7497,9 @@ cvarTable_t cvarTable[] = {
 	/* Nico, no timelimit
 	{ &ui_userTimeLimit, "ui_userTimeLimit", "0", 0 },*/
 
+	/* Nico, instant reswawn
 	{ &ui_userAlliedRespawnTime, "ui_userAlliedRespawnTime", "0", 0 },
-	{ &ui_userAxisRespawnTime, "ui_userAxisRespawnTime", "0", 0 },
+	{ &ui_userAxisRespawnTime, "ui_userAxisRespawnTime", "0", 0 },*/
 	// -NERVE - SMF
 
 // JPW NERVE

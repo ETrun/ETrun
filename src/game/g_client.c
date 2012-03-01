@@ -2076,7 +2076,9 @@ void ClientSpawn( gentity_t *ent, qboolean revived ) {
 		trap_LinkEntity( ent );
 	}
 
-	client->respawnTime = level.timeCurrent;
+	/* Nico, instant reswawn
+	client->respawnTime = level.timeCurrent;*/
+
 	client->inactivityTime = level.time + g_inactivity.integer * 1000;
 	client->latched_buttons = 0;
 	client->latched_wbuttons = 0;   //----(SA)	added

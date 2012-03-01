@@ -90,8 +90,10 @@ vmCvar_t g_showHeadshotRatio;
 /* Nico, no timelimit
 vmCvar_t g_userTimeLimit;*/
 
+/* Nico, instant reswawn
 vmCvar_t g_userAlliedRespawnTime;
-vmCvar_t g_userAxisRespawnTime;
+vmCvar_t g_userAxisRespawnTime;*/
+
 vmCvar_t g_currentRound;
 vmCvar_t g_noTeamSwitching;
 vmCvar_t g_altStopwatchMode;
@@ -309,8 +311,9 @@ cvarTable_t gameCvarTable[] = {
 	/* Nico, no timelimit
 	{ &g_userTimeLimit, "g_userTimeLimit", "0", 0, 0, qfalse, qtrue },*/
 
+	/* Nico, instant reswawn
 	{ &g_userAlliedRespawnTime, "g_userAlliedRespawnTime", "0", 0, 0, qfalse, qtrue },
-	{ &g_userAxisRespawnTime, "g_userAxisRespawnTime", "0", 0, 0, qfalse, qtrue },
+	{ &g_userAxisRespawnTime, "g_userAxisRespawnTime", "0", 0, 0, qfalse, qtrue },*/
 
 	{ &g_swapteams, "g_swapteams", "0", CVAR_ROM, 0, qfalse, qtrue },
 	// -NERVE - SMF

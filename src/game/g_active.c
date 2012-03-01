@@ -1105,6 +1105,8 @@ void ClientThink_real( gentity_t *ent ) {
 		WolfFindMedic( ent );
 
 		// See if we need to hop to limbo
+		/* Nico, instant reswawn
+		Note: not sure about this
 		if ( level.timeCurrent > client->respawnTime && !( ent->client->ps.pm_flags & PMF_LIMBO ) ) {
 			if ( ucmd->upmove > 0 ) {
 				if ( g_gametype.integer == GT_WOLF_LMS || client->ps.persistant[PERS_RESPAWNS_LEFT] >= 0 ) {
@@ -1117,7 +1119,7 @@ void ClientThink_real( gentity_t *ent ) {
 			if ( ( g_forcerespawn.integer > 0 && level.timeCurrent - client->respawnTime > g_forcerespawn.integer * 1000 ) || client->ps.stats[STAT_HEALTH] <= GIB_HEALTH ) {
 				limbo( ent, ( client->ps.stats[STAT_HEALTH] > GIB_HEALTH ) );
 			}
-		}
+		}*/
 
 		return;
 	}
@@ -1193,7 +1195,7 @@ void SpectatorClientEndFrame( gentity_t *ent ) {
 
 	// if we are doing a chase cam or a remote view, grab the latest info
 	if ( ( ent->client->sess.spectatorState == SPECTATOR_FOLLOW ) || ( ent->client->ps.pm_flags & PMF_LIMBO ) ) {
-		int clientNum, testtime;
+		int clientNum;//, testtime; Nico, unused warning fix
 		gclient_t *cl;
 		qboolean do_respawn = qfalse; // JPW NERVE
 
@@ -1231,16 +1233,17 @@ void SpectatorClientEndFrame( gentity_t *ent ) {
 			}
 		}
 
+		/* Nico, instant reswawn
 		if ( g_gametype.integer == GT_WOLF_LMS && g_gamestate.integer == GS_PLAYING ) {
 			// Force respawn in LMS when nobody is playing and we aren't at the timelimit yet
 			if ( !level.teamEliminateTime &&
 				 level.numTeamClients[0] == level.numFinalDead[0] && level.numTeamClients[1] == level.numFinalDead[1] &&
-				 ent->client->respawnTime <= level.timeCurrent && ent->client->sess.sessionTeam != TEAM_SPECTATOR ) {
+				 ent->client->respawnTime <= level.timeCurrent && ent->client->sess.sessionTeam != TEAM_SPECTATOR ) {*/
 				do_respawn = qtrue;
-			} else {
+			/*} else {
 				do_respawn = qfalse;
 			}
-		}
+		}*/
 
 		if ( do_respawn ) {
 			reinforce( ent );
@@ -1521,8 +1524,6 @@ void ClientEndFrame( gentity_t *ent ) {
 		ent->client->pers.teamState.lasthurtcarrier += time_delta;
 		ent->client->pers.teamState.lastfraggedcarrier += time_delta;
 		ent->client->ps.classWeaponTime += time_delta;
-//			ent->client->respawnTime += time_delta;
-//			ent->client->sniperRifleFiredTime += time_delta;
 		ent->lastHintCheckTime += time_delta;
 		ent->pain_debounce_time += time_delta;
 		ent->s.onFireEnd += time_delta;

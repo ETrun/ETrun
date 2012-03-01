@@ -202,8 +202,11 @@ typedef struct {
 	// NERVE - SMF
 	/* Nico, no timelimit
 	int Timelimit;*/
+
+	/* Nico, instant reswawn
 	int AxisRespawnTime;
-	int AlliedRespawnTime;
+	int AlliedRespawnTime;*/
+
 	// -NERVE - SMF
 
 	vec2_t mappos;

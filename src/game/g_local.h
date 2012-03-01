@@ -775,7 +775,10 @@ struct gclient_s {
 	int lasthurt_mod;               // type of damage the client did
 
 	// timers
-	int respawnTime;                // can respawn when time > this, force after g_forcerespwan
+	
+	/* Nico, instant reswawn
+	int respawnTime;                // can respawn when time > this, force after g_forcerespwan*/
+
 	int inactivityTime;             // kick players when time > this
 	qboolean inactivityWarning;     // qtrue if the five seoond warning has been given
 	int rewardTime;                 // clear the EF_AWARD_IMPRESSIVE, etc when time > this
@@ -1652,8 +1655,10 @@ extern vmCvar_t g_showHeadshotRatio;
 /* Nico, no timelimit
 extern vmCvar_t g_userTimeLimit;*/
 
+/* Nico, instant reswawn
 extern vmCvar_t g_userAlliedRespawnTime;
-extern vmCvar_t g_userAxisRespawnTime;
+extern vmCvar_t g_userAxisRespawnTime;*/
+
 extern vmCvar_t g_currentRound;
 extern vmCvar_t g_noTeamSwitching;
 extern vmCvar_t g_altStopwatchMode;
