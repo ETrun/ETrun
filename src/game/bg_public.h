@@ -586,7 +586,9 @@ typedef enum {
 	PERS_RESPAWNS_LEFT,             // DHM - Nerve :: number of remaining respawns
 	PERS_RESPAWNS_PENALTY,          // how many respawns you have to sit through before respawning again*/
 
-	PERS_REVIVE_COUNT,
+	/* Nico, removed revive_count
+	PERS_REVIVE_COUNT,*/
+
 	PERS_BLEH_2,
 	PERS_BLEH_3,
 

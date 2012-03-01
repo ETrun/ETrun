@@ -1925,9 +1925,11 @@ void ClientSpawn( gentity_t *ent, qboolean revived ) {
 	/* Nico, removed spawn_count
 	client->ps.persistant[PERS_SPAWN_COUNT]++;*/
 
+	/* Nico, removed revive_count
 	if ( revived ) {
 		client->ps.persistant[PERS_REVIVE_COUNT]++;
-	}
+	}*/
+
 	client->ps.persistant[PERS_TEAM] = client->sess.sessionTeam;
 	client->ps.persistant[PERS_HWEAPON_USE] = 0;
 
