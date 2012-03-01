@@ -2558,6 +2558,7 @@ void LogExit( const char *string ) {
 
 	// NERVE - SMF
 	if ( g_gametype.integer == GT_WOLF_STOPWATCH ) {
+		/* Nico, no timelimit
 		char cs[MAX_STRING_CHARS];
 		int winner, defender;
 
@@ -2568,7 +2569,6 @@ void LogExit( const char *string ) {
 		winner = atoi( Info_ValueForKey( cs, "winner" ) );
 
 		// NERVE - SMF
-		/* Nico, no timelimit
 		if ( !g_currentRound.integer ) {
 			if ( winner == defender ) {
 				// if the defenders won, use default timelimit

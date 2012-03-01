@@ -57,7 +57,7 @@ int WM_DrawObjectives( int x, int y, int width, float fade ) {
 	// int tempy, Nico, unused warning fix
 	int rows;
 	// int msec, mins, seconds, tens; Nico, unused warning fix
-	vec4_t tclr =   { 0.6f,     0.6f,       0.6f,       1.0f };
+	// vec4_t tclr =   { 0.6f,     0.6f,       0.6f,       1.0f }; Nico, unused warning fix
 
 	if ( cg.snap->ps.pm_type == PM_INTERMISSION ) {
 		const char *s, *buf, *shader = NULL, *flagshader = NULL, *nameshader = NULL;

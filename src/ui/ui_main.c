@@ -4013,7 +4013,7 @@ void UI_RunMenuScript( char **args ) {
 	const char *name, *name2;
 	char *s;
 	char buff[1024];
-	int val;                // NERVE - SMF
+	// int val; Nico, unused warning fix
 	menuDef_t *menu;
 
 	if ( String_Parse( args, &name ) ) {

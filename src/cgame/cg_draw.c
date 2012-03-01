@@ -499,7 +499,6 @@ static float CG_DrawFPS( float y ) {
 }
 
 /* Nico, instant reswawn
-/*
 =================
 CG_DrawTimer
 =================
