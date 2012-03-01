@@ -2234,12 +2234,13 @@ void CalculateRanks( void ) {
 	etpro_PlayerInfo();
 
 	// if we are at the intermission, send the new info to everyone
+	/* Nico, removed intermission
 	if ( g_gamestate.integer == GS_INTERMISSION ) {
 		SendScoreboardMessageToAllClients();
-	} else {
+	} else {*/
 		// see if it is time to end the level
 		CheckExitRules();
-	}
+	// }
 }
 
 
@@ -2270,27 +2271,20 @@ void SendScoreboardMessageToAllClients( void ) {
 	}
 }
 
-/*
+/* Nico, removed intermission
 ========================
 MoveClientToIntermission
 
 When the intermission starts, this will be called for all players.
 If a new client connects, this will be called after the spawn function.
 ========================
-*/
+
 void MoveClientToIntermission( gentity_t *ent ) {
-//	float			timeLived;
 
 	// take out of follow mode if needed
 	if ( ent->client->sess.spectatorState == SPECTATOR_FOLLOW ) {
 		StopFollowing( ent );
 	}
-
-	/*if ( ent->client->sess.sessionTeam == TEAM_AXIS || ent->client->sess.sessionTeam == TEAM_ALLIES ) {
-		timeLived = (level.time - ent->client->pers.lastSpawnTime) * 0.001f;
-
-		G_AddExperience( ent, min((timeLived * timeLived) * 0.00005f, 5) );
-	}*/
 
 	// move to the spot
 	VectorCopy( level.intermission_origin, ent->s.origin );
@@ -2309,7 +2303,7 @@ void MoveClientToIntermission( gentity_t *ent ) {
 	ent->s.event = 0;
 	ent->s.events[0] = ent->s.events[1] = ent->s.events[2] = ent->s.events[3] = 0;      // DHM - Nerve
 	ent->r.contents = 0;
-}
+}*/
 
 /*
 ==================
@@ -2326,7 +2320,8 @@ void FindIntermissionPoint( void ) {
 	int winner;                             // DHM - Nerve
 
 	// NERVE - SMF - if the match hasn't ended yet, and we're just a spectator
-	if ( !level.intermissiontime ) {
+	/* Nico, removed intermission
+	if ( !level.intermissiontime ) {*/
 		// try to find the intermission spawnpoint with no team flags set
 		ent = G_Find( NULL, FOFS( classname ), "info_player_intermission" );
 
@@ -2335,7 +2330,7 @@ void FindIntermissionPoint( void ) {
 				break;
 			}
 		}
-	}
+	// }
 
 	trap_GetConfigstring( CS_MULTI_MAPWINNER, cs, sizeof( cs ) );
 	buf = Info_ValueForKey( cs, "winner" );
@@ -2377,11 +2372,11 @@ void FindIntermissionPoint( void ) {
 
 }
 
-/*
+/* Nico, removed intermission
 ==================
 BeginIntermission
 ==================
-*/
+
 void BeginIntermission( void ) {
 	int i;
 	gentity_t   *client;
@@ -2409,7 +2404,7 @@ void BeginIntermission( void ) {
 	// send the current scoring to all clients
 	SendScoreboardMessageToAllClients();
 
-}
+}*/
 
 
 /*
@@ -2456,7 +2451,9 @@ void ExitLevel( void ) {
 		trap_SendConsoleCommand( EXEC_APPEND, "vstr nextmap\n" );
 	}
 	level.changemap = NULL;
-	level.intermissiontime = 0;
+
+	/* Nico, removed intermission
+	level.intermissiontime = 0;*/
 
 	// reset all the scores so we don't enter the intermission again
 	level.teamScores[TEAM_AXIS] = 0;
@@ -2546,11 +2543,13 @@ void LogExit( const char *string ) {
 
 	G_LogPrintf( "Exit: %s\n", string );
 
+
+	/* Nico, removed intermission
 	level.intermissionQueued = level.time;
 
 	// this will keep the clients from playing any voice sounds
 	// that will get cut off when the queued intermission starts
-	trap_SetConfigstring( CS_INTERMISSION, "1" );
+	trap_SetConfigstring( CS_INTERMISSION, "1" );*/
 
 	G_LogPrintf( "red:%i  blue:%i\n", level.teamScores[TEAM_AXIS], level.teamScores[TEAM_ALLIES] );
 
@@ -2721,7 +2720,7 @@ void LogExit( const char *string ) {
 }
 
 
-/*
+/* Nico, removed intermission
 =================
 CheckIntermissionExit
 
@@ -2730,7 +2729,7 @@ If all players wish to continue, the level will then exit.
 If one or more players have not acknowledged the continue, the game will
 wait 10 seconds before going on.
 =================
-*/
+
 void CheckIntermissionExit( void ) {
 	static int fActions = 0;
 	qboolean exit = qtrue;
@@ -2783,7 +2782,7 @@ void CheckIntermissionExit( void ) {
 	}
 
 	ExitLevel();
-}
+}*/
 
 /*
 =============
@@ -2818,6 +2817,8 @@ can see the last frag.
 void CheckExitRules( void ) {
 	char cs[MAX_STRING_CHARS];
 
+
+	/* Nico, removed intermission
 	// if at the intermission, wait for all non-bots to
 	// signal ready, then go to next level
 	if ( g_gamestate.integer == GS_INTERMISSION ) {
@@ -2829,7 +2830,7 @@ void CheckExitRules( void ) {
 		level.intermissionQueued = 0;
 		BeginIntermission();
 		return;
-	}
+	}*/
 
 	/* Nico, no timelimit
 	if ( g_timelimit.value && !level.warmupTime ) {
@@ -2966,10 +2967,13 @@ void CheckWolfMP() {
 	// check because we run 6 game frames before calling Connect and/or ClientBegin
 	// for clients on a map_restart
 	if ( g_gametype.integer >= GT_WOLF ) {
-		if ( g_gamestate.integer == GS_PLAYING || g_gamestate.integer == GS_INTERMISSION ) {
+		/* Nico, removed intermission
+		if ( g_gamestate.integer == GS_PLAYING || g_gamestate.integer == GS_INTERMISSION ) {*/
+		if ( g_gamestate.integer == GS_PLAYING ) {
+			/* Nico, removed intermission
 			if ( level.intermissiontime && g_gamestate.integer != GS_INTERMISSION ) {
 				trap_Cvar_Set( "gamestate", va( "%i", GS_INTERMISSION ) );
-			}
+			}*/
 			return;
 		}
 

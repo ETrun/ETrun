@@ -87,7 +87,8 @@ void SP_info_player_start( gentity_t *ent ) {
 	SP_info_player_deathmatch( ent );
 }
 
-/*QUAKED info_player_intermission (1 0 1) (-16 -16 -24) (16 16 32) AXIS ALLIED
+/*
+QUAKED info_player_intermission (1 0 1) (-16 -16 -24) (16 16 32) AXIS ALLIED
 The intermission will be viewed from this point.  Target an info_notnull for the view direction.
 */
 void SP_info_player_intermission( gentity_t *ent ) {
@@ -2107,14 +2108,15 @@ void ClientSpawn( gentity_t *ent, qboolean revived ) {
 	// xkan, 1/13/2003 - reset death time
 	client->deathTime = 0;
 
+	/* Nico, removed intermission
 	if ( level.intermissiontime ) {
 		MoveClientToIntermission( ent );
-	} else {
+	} else {*/
 		// fire the targets of the spawn point
 		if ( !revived ) {
 			G_UseTargets( spawnPoint, ent );
 		}
-	}
+	// }
 
 	// run a client frame to drop exactly to the floor,
 	// initialize animations and other things

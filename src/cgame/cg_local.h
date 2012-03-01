@@ -580,9 +580,10 @@ typedef struct clientInfo_s {
 	qboolean selected;
 
 	// Gordon: Intermission stats
+	/* Nico, removed intermission
 	int totalWeapAcc;
 	int kills;
-	int deaths;
+	int deaths;*/
 
 	// OSP - per client MV ps info
 	int ammo;
@@ -786,7 +787,9 @@ typedef struct {
 
 	qboolean demoPlayback;
 	qboolean loading;               // don't defer players at initial startup
-	qboolean intermissionStarted;       // don't play voice rewards, because game will end shortly
+
+	/* Nico, removed intermission
+	qboolean intermissionStarted;       // don't play voice rewards, because game will end shortly*/
 
 	// there are only one or two snapshot_t that are relevent at a time
 	int latestSnapshotNum;          // the number of snapshots the client system has received
@@ -1852,7 +1855,9 @@ typedef struct {
 	char teamVoteString[2][MAX_STRING_TOKENS];
 
 	int levelStartTime;
-	int intermissionStartTime;
+
+	/* Nico, removed intermission
+	int intermissionStartTime;*/
 
 	//
 	// locally derived information from gamestate

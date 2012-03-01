@@ -544,9 +544,10 @@ static void CG_OffsetFirstPersonView( void ) {
 	int timeDelta;
 	qboolean useLastValidBob = qfalse;
 
+	/* Nico, removed intermission
 	if ( cg.snap->ps.pm_type == PM_INTERMISSION ) {
 		return;
-	}
+	}*/
 
 	origin = cg.refdef_current->vieworg;
 	angles = cg.refdefViewAngles;
@@ -894,10 +895,11 @@ static int CG_CalcFov( void ) {
 		cg.zoomval = 0;
 	}
 
+	/* Nico, removed intermission
 	if ( cg.predictedPlayerState.pm_type == PM_INTERMISSION ) {
 		// if in intermission, use a fixed value
 		fov_x = 90;
-	} else {
+	} else {*/
 		fov_x = cg_fov.value;
 		if ( !developer.integer ) {
 			if ( fov_x < 90 ) {
@@ -942,7 +944,7 @@ static int CG_CalcFov( void ) {
 				}
 			}
 		}
-	}
+	// }
 
 	cg.refdef_current->rdflags &= ~RDF_SNOOPERVIEW;
 
@@ -1192,12 +1194,13 @@ int CG_CalcViewValues( void ) {
 	}
 
 	// intermission view
+	/* Nico, removed intermission
 	if ( ps->pm_type == PM_INTERMISSION ) {
 		VectorCopy( ps->origin, cg.refdef_current->vieworg );
 		VectorCopy( ps->viewangles, cg.refdefViewAngles );
 		AnglesToAxis( cg.refdefViewAngles, cg.refdef_current->viewaxis );
 		return CG_CalcFov();
-	}
+	}*/
 
 	if ( cg.bobfracsin > 0 && !ps->bobCycle ) {
 		cg.lastvalidBobcycle = cg.bobcycle;
@@ -1456,10 +1459,11 @@ void CG_DrawSkyBoxPortal( qboolean fLocalView ) {
 		float zoomFov;
 		float f;
 
+		/* Nico, removed intermission
 		if ( cg.predictedPlayerState.pm_type == PM_INTERMISSION ) {
 			// if in intermission, use a fixed value
 			fov_x = 90;
-		} else {
+		} else {*/
 			// user selectable
 			fov_x = cg_fov.value;
 			if ( fov_x < 1 ) {
@@ -1492,7 +1496,7 @@ void CG_DrawSkyBoxPortal( qboolean fLocalView ) {
 				f = ( cg.time - cg.zoomTime ) / (float)ZOOM_TIME;
 				fov_x = ( f > 1.0 ) ? fov_x : zoomFov + f * ( fov_x - zoomFov );
 			}
-		}
+		// }
 
 		rd.rdflags &= ~RDF_SNOOPERVIEW;
 

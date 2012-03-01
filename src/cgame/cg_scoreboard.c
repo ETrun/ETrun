@@ -55,10 +55,11 @@ WM_DrawObjectives
 int WM_DrawObjectives( int x, int y, int width, float fade ) {
 	// const char *s, *str; Nico, unused warning fix
 	// int tempy, Nico, unused warning fix
-	int rows;
+	// int rows; Nico, unused warning fix
 	// int msec, mins, seconds, tens; Nico, unused warning fix
 	// vec4_t tclr =   { 0.6f,     0.6f,       0.6f,       1.0f }; Nico, unused warning fix
 
+	/* Nico, removed intermission
 	if ( cg.snap->ps.pm_type == PM_INTERMISSION ) {
 		const char *s, *buf, *shader = NULL, *flagshader = NULL, *nameshader = NULL;
 
@@ -95,7 +96,7 @@ int WM_DrawObjectives( int x, int y, int width, float fade ) {
 			CG_DrawPic( 365, 50, 127, 64, trap_R_RegisterShaderNoMip( "ui/assets/portraits/text_win.tga" ) );
 		}
 		return y;
-	}
+	}*/
 	/* Nico, no timelimit
 // JPW NERVE -- mission time & reinforce time
 	else {
@@ -694,7 +695,9 @@ qboolean CG_DrawScoreboard( void ) {
 		return qtrue;
 	}
 
-	if ( cg.showScores || cg.predictedPlayerState.pm_type == PM_INTERMISSION ) {
+	/* Nico, removed intermission
+	if ( cg.showScores || cg.predictedPlayerState.pm_type == PM_INTERMISSION ) {*/
+	if ( cg.showScores ) {
 		fade = 1.0;
 		fadeColor = colorWhite;
 	} else {
@@ -710,9 +713,10 @@ qboolean CG_DrawScoreboard( void ) {
 
 	y = WM_DrawObjectives( x, y, 640 - 2 * x + 5, fade );
 
+	/* Nico, removed intermission
 	if ( cgs.gametype == GT_WOLF_STOPWATCH && ( cg.snap->ps.pm_type == PM_INTERMISSION ) ) {
-		/* Nico, no timelimit
-		y = WM_DrawInfoLine( x, 155, fade );*/
+		// Nico, no timelimit
+		// y = WM_DrawInfoLine( x, 155, fade );
 
 		WM_TeamScoreboard( x, y, TEAM_AXIS, fade, 8 );
 		x = x_right;
@@ -722,12 +726,12 @@ qboolean CG_DrawScoreboard( void ) {
 			WM_TeamScoreboard( x, y, TEAM_AXIS, fade, 9 );
 			x = x_right;
 			WM_TeamScoreboard( x, y, TEAM_ALLIES, fade, 9 );
-		} else {
+		} else {*/
 			WM_TeamScoreboard( x, y, TEAM_AXIS, fade, 25 );
 			x = x_right;
 			WM_TeamScoreboard( x, y, TEAM_ALLIES, fade, 25 );
-		}
-	}
+		// }
+	// }
 
 /*	if(!CG_IsSinglePlayer()) {
 		qtime_t ct;

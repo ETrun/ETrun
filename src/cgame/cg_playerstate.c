@@ -538,10 +538,11 @@ void CG_TransitionPlayerState( playerState_t *ps, playerState_t *ops ) {
 		cg.mapRestart = qfalse;
 	}
 
+	/* Nico, removed intermission
 	if ( cg.snap->ps.pm_type != PM_INTERMISSION
-		 && ps->persistant[PERS_TEAM] != TEAM_SPECTATOR ) {
+		 && ps->persistant[PERS_TEAM] != TEAM_SPECTATOR ) {*/
 		CG_CheckLocalSounds( ps, ops );
-	}
+	// }
 
 	// check for going low on ammo
 	CG_CheckAmmo();

@@ -813,7 +813,9 @@ int G_StartMatch_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *a
 			}
 		}
 
-		if ( g_gamestate.integer == GS_PLAYING || g_gamestate.integer == GS_INTERMISSION ) {
+		/* Nico, removed intermission
+		if ( g_gamestate.integer == GS_PLAYING || g_gamestate.integer == GS_INTERMISSION ) {*/
+		if ( g_gamestate.integer == GS_PLAYING ) {
 			G_refPrintf( ent, "^3Match is already in progress!" );
 			return( G_INVALID );
 		}

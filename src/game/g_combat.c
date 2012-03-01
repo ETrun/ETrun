@@ -183,9 +183,10 @@ void TossClientItems( gentity_t *self ) {
 
 	weapon_t primaryWeapon;
 
+	/* Nico, removed intermission
 	if ( g_gamestate.integer == GS_INTERMISSION ) {
 		return;
-	}
+	}*/
 
 	primaryWeapon = G_GetPrimaryWeaponForClient( self->client );
 
@@ -444,7 +445,9 @@ void player_die( gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int
 		killedintank = qtrue;
 	}
 
-	if ( self->client->ps.pm_type == PM_DEAD || g_gamestate.integer == GS_INTERMISSION ) {
+	/* Nico, removed intermission
+	if ( self->client->ps.pm_type == PM_DEAD || g_gamestate.integer == GS_INTERMISSION ) {*/
+	if ( self->client->ps.pm_type == PM_DEAD ) {
 		return;
 	}
 
@@ -1062,9 +1065,10 @@ void G_Damage( gentity_t *targ, gentity_t *inflictor, gentity_t *attacker,  vec3
 	// allow any extra scoring
 	/* Nico, removed warmup
 	if ( level.intermissionQueued || ( g_gamestate.integer != GS_PLAYING && match_warmupDamage.integer == 0 ) ) {*/
+	/* Nico, removed intermission
 	if ( level.intermissionQueued ) {
 		return;
-	}
+	}*/
 
 	if ( !inflictor ) {
 		inflictor = &g_entities[ENTITYNUM_WORLD];

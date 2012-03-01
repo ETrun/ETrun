@@ -578,11 +578,11 @@ void ClientTimerActions( gentity_t *ent, int msec ) {
 	}
 }
 
-/*
+/* Nico, removed intermission
 ====================
 ClientIntermissionThink
 ====================
-*/
+
 void ClientIntermissionThink( gclient_t *client ) {
 	client->ps.eFlags &= ~EF_TALK;
 	client->ps.eFlags &= ~EF_FIRING;
@@ -596,7 +596,7 @@ void ClientIntermissionThink( gclient_t *client ) {
 //----(SA)	added
 	client->oldwbuttons = client->wbuttons;
 	client->wbuttons = client->pers.cmd.wbuttons;
-}
+}*/
 
 
 /*
@@ -854,10 +854,11 @@ void ClientThink_real( gentity_t *ent ) {
 	//
 	// check for exiting intermission
 	//
+	/* Nico, removed intermission
 	if ( level.intermissiontime ) {
 		ClientIntermissionThink( client );
 		return;
-	}
+	}*/
 
 	// check for inactivity timer, but never drop the local client of a non-dedicated server
 	// OSP - moved here to allow for spec inactivity checks as well
@@ -1541,9 +1542,10 @@ void ClientEndFrame( gentity_t *ent ) {
 	// If the end of unit layout is displayed, don't give
 	// the player any normal movement attributes
 	//
+	/* Nico, removed intermission
 	if ( level.intermissiontime ) {
 		return;
-	}
+	}*/
 
 	// burn from lava, etc
 	P_WorldEffects( ent );

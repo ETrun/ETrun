@@ -2654,8 +2654,9 @@ void CG_Init( int serverMessageNum, int serverCommandSequence, int clientNum, qb
 	s = CG_ConfigString( CS_LEVEL_START_TIME );
 	cgs.levelStartTime = atoi( s );
 
+	/* Nico, removed intermission
 	s = CG_ConfigString( CS_INTERMISSION_START_TIME );
-	cgs.intermissionStartTime = atoi( s );
+	cgs.intermissionStartTime = atoi( s );*/
 
 
 	// OSP

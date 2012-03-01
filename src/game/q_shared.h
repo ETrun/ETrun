@@ -1714,10 +1714,14 @@ typedef enum {
 typedef enum {
 	GS_INITIALIZE = -1,
 	GS_PLAYING,
+
 	/* Nico, removed warmup
 	GS_WARMUP_COUNTDOWN,
 	GS_WARMUP,*/
-	GS_INTERMISSION,
+
+	/* Nico, removed intermission
+	GS_INTERMISSION,*/
+
 	GS_WAITING_FOR_PLAYERS,
 	GS_RESET
 } gamestate_t;

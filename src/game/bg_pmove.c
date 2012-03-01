@@ -4609,7 +4609,9 @@ void PM_UpdateViewAngles( playerState_t *ps, pmoveExt_t *pmext, usercmd_t *cmd, 
 	vec3_t oldViewAngles;
 
 	// DHM - Nerve :: Added support for PMF_TIME_LOCKPLAYER
-	if ( ps->pm_type == PM_INTERMISSION || ps->pm_flags & PMF_TIME_LOCKPLAYER ) {
+	/* Nico, removed intermission
+	if ( ps->pm_type == PM_INTERMISSION || ps->pm_flags & PMF_TIME_LOCKPLAYER ) {*/
+	if ( ps->pm_flags & PMF_TIME_LOCKPLAYER ) {
 		return;     // no view changes at all
 	}
 
@@ -5292,8 +5294,10 @@ void PmoveSingle( pmove_t *pmove ) {
 	}
 
 
+	/* Nico, removed intermission
 	if ( !( pm->ps->pm_flags & PMF_RESPAWNED ) &&
-		 ( pm->ps->pm_type != PM_INTERMISSION ) ) {
+		 ( pm->ps->pm_type != PM_INTERMISSION ) ) {*/
+	if ( !( pm->ps->pm_flags & PMF_RESPAWNED ) ) {
 
 		// check for ammo
 		if ( PM_WeaponAmmoAvailable( pm->ps->weapon ) ) {
@@ -5413,9 +5417,10 @@ void PmoveSingle( pmove_t *pmove ) {
 		return;     // no movement at all
 	}
 
+	/* Nico, removed intermission
 	if ( pm->ps->pm_type == PM_INTERMISSION ) {
 		return;     // no movement at all
-	}
+	}*/
 
 	// ydnar: need gravity etc to affect a player with a set mortar
 	if ( pm->ps->weapon == WP_MORTAR_SET && pm->ps->pm_type == PM_NORMAL ) {

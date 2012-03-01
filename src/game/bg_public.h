@@ -324,7 +324,10 @@ extern const unsigned int aReinfSeeds[MAX_REINFSEEDS];
 #define CS_GAME_VERSION                 10
 
 #define CS_LEVEL_START_TIME             11      // so the timer only shows the current level
-#define CS_INTERMISSION                 12      // when 1, intermission will start in a second or two
+
+/* Nico, removed intermission
+#define CS_INTERMISSION                 12      // when 1, intermission will start in a second or two*/
+
 #define CS_MULTI_INFO                   13
 #define CS_MULTI_MAPWINNER              14
 #define CS_MULTI_OBJECTIVE              15
@@ -350,7 +353,10 @@ extern const unsigned int aReinfSeeds[MAX_REINFSEEDS];
 #define CS_GLOBALFOGVARS                33
 #define CS_AXIS_MAPS_XP                 34
 #define CS_ALLIED_MAPS_XP               35
-#define CS_INTERMISSION_START_TIME      36      //
+
+/* Nico, removed intermission
+#define CS_INTERMISSION_START_TIME      36*/
+
 #define CS_ENDGAME_STATS                37
 #define CS_CHARGETIMES                  38
 #define CS_FILTERCAMS                   39
@@ -406,7 +412,10 @@ typedef enum {
 	PM_SPECTATOR,   // still run into walls
 	PM_DEAD,        // no acceleration or turning, but free falling
 	PM_FREEZE,      // stuck in place with no control
-	PM_INTERMISSION // no movement or status bar
+
+	/* Nico, removed intermission
+	PM_INTERMISSION // no movement or status bar*/
+
 } pmtype_t;
 
 typedef enum {
@@ -558,7 +567,10 @@ typedef enum {
 	STAT_HEALTH,
 	STAT_KEYS,                      // 16 bit fields
 	STAT_DEAD_YAW,                  // look this direction when dead (FIXME: get rid of?)
-	STAT_CLIENTS_READY,             // bit mask of clients wishing to exit the intermission (FIXME: configstring?)
+
+	/* Nico, removed intermission
+	STAT_CLIENTS_READY,             // bit mask of clients wishing to exit the intermission (FIXME: configstring?)*/
+
 	STAT_MAX_HEALTH,                // health / armor limit, changable by handicap
 	STAT_PLAYER_CLASS,              // DHM - Nerve :: player class in multiplayer
 	STAT_CAPTUREHOLD_RED,           // JPW NERVE - red team score

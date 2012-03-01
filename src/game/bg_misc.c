@@ -4028,7 +4028,9 @@ and after local prediction on the client
 void BG_PlayerStateToEntityState( playerState_t *ps, entityState_t *s, qboolean snap ) {
 	int i;
 
-	if ( ps->pm_type == PM_INTERMISSION || ps->pm_type == PM_SPECTATOR ) { // || ps->pm_flags & PMF_LIMBO ) { // JPW NERVE limbo
+	/* Nico, removed intermission
+	if ( ps->pm_type == PM_INTERMISSION || ps->pm_type == PM_SPECTATOR ) {// JPW NERVE limbo*/
+	if ( ps->pm_type == PM_SPECTATOR ) {
 		s->eType = ET_INVISIBLE;
 	} else if ( ps->stats[STAT_HEALTH] <= GIB_HEALTH ) {
 		s->eType = ET_INVISIBLE;
@@ -4131,7 +4133,9 @@ and after local prediction on the client
 void BG_PlayerStateToEntityStateExtraPolate( playerState_t *ps, entityState_t *s, int time, qboolean snap ) {
 	int i;
 
-	if ( ps->pm_type == PM_INTERMISSION || ps->pm_type == PM_SPECTATOR ) { // || ps->pm_flags & PMF_LIMBO ) { // JPW NERVE limbo
+	/* Nico, removed intermission
+	if ( ps->pm_type == PM_INTERMISSION || ps->pm_type == PM_SPECTATOR ) { // JPW NERVE limbo*/
+	if ( ps->pm_type == PM_SPECTATOR ) {
 		s->eType = ET_INVISIBLE;
 	} else if ( ps->stats[STAT_HEALTH] <= GIB_HEALTH ) {
 		s->eType = ET_INVISIBLE;

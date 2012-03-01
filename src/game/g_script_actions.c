@@ -2811,9 +2811,10 @@ qboolean G_ScriptAction_VoiceAnnounce( gentity_t *ent, char *params ) {
 	char *pString, *token;
 	int num, sysmsg;
 
+	/* Nico, removed intermission
 	if ( g_gamestate.integer == GS_INTERMISSION ) {
 		return qtrue;
-	}
+	}*/
 
 	pString = params;
 	token = COM_Parse( &pString );
@@ -2857,9 +2858,10 @@ qboolean G_ScriptAction_SetWinner( gentity_t *ent, char *params ) {
 	char cs[MAX_STRING_CHARS];
 	int num;
 
+	/* Nico, removed intermission
 	if ( g_gamestate.integer == GS_INTERMISSION ) {
 		return qtrue;
-	}
+	}*/
 
 	pString = params;
 	token = COM_Parse( &pString );
@@ -2901,9 +2903,10 @@ qboolean G_ScriptAction_SetDefendingTeam( gentity_t *ent, char *params ) {
 	char cs[MAX_STRING_CHARS];
 	int num;
 
+	/* Nico, removed intermission
 	if ( g_gamestate.integer == GS_INTERMISSION ) {
 		return qtrue;
-	}
+	}*/
 
 	pString = params;
 	token = COM_Parse( &pString );
@@ -3063,9 +3066,10 @@ qboolean G_ScriptAction_Announce_Icon( gentity_t *ent, char *params ) {
 	char *pString, *token;
 	int iconnumber;
 
+	/* Nico, removed intermission
 	if ( g_gamestate.integer == GS_INTERMISSION ) {
 		return qtrue;
-	}
+	}*/
 
 	pString = params;
 
@@ -3098,9 +3102,10 @@ G_ScriptAction_Announce
 qboolean G_ScriptAction_Announce( gentity_t *ent, char *params ) {
 	char *pString, *token;
 
+	/* Nico, removed intermission
 	if ( g_gamestate.integer == GS_INTERMISSION ) {
 		return qtrue;
-	}
+	}*/
 
 	pString = params;
 	token = COM_Parse( &pString );
@@ -3125,9 +3130,11 @@ G_ScriptAction_EndRound
 extern void LogExit( const char *string );
 
 qboolean G_ScriptAction_EndRound( gentity_t *ent, char *params ) {
+
+	/* Nico, removed intermission
 	if ( g_gamestate.integer == GS_INTERMISSION ) {
 		return qtrue;
-	}
+	}*/
 
 	LogExit( "Wolf EndRound." );
 

@@ -514,7 +514,9 @@ Called on load to set the initial values from configure strings
 */
 void CG_SetConfigValues( void ) {
 	cgs.levelStartTime = atoi( CG_ConfigString( CS_LEVEL_START_TIME ) );
-	cgs.intermissionStartTime = atoi( CG_ConfigString( CS_INTERMISSION_START_TIME ) );
+
+	/* Nico, removed intermission
+	cgs.intermissionStartTime = atoi( CG_ConfigString( CS_INTERMISSION_START_TIME ) );*/
 
 	/* Nico, removed warmup
 	cg.warmup = atoi( CG_ConfigString( CS_WARMUP ) );*/
@@ -655,9 +657,12 @@ static void CG_ConfigStringModified( void ) {
 		CG_ParseReinforcementTimes( str );        // OSP - set reinforcement times for each team
 	} else if ( num == CS_LEVEL_START_TIME ) {
 		cgs.levelStartTime = atoi( str );
-	} else if ( num == CS_INTERMISSION_START_TIME ) {
+	}
+	/* Nico, removed intermission
+	else if ( num == CS_INTERMISSION_START_TIME ) {
 		cgs.intermissionStartTime = atoi( str );
-	} else if ( num == CS_VOTE_TIME ) {
+	}*/
+	else if ( num == CS_VOTE_TIME ) {
 		cgs.voteTime = atoi( str );
 		cgs.voteModified = qtrue;
 	} else if ( num == CS_VOTE_YES ) {
@@ -668,9 +673,12 @@ static void CG_ConfigStringModified( void ) {
 		cgs.voteModified = qtrue;
 	} else if ( num == CS_VOTE_STRING ) {
 		Q_strncpyz( cgs.voteString, str, sizeof( cgs.voteString ) );
-	} else if ( num == CS_INTERMISSION ) {
+	}
+	/* Nico, removed intermission
+	else if ( num == CS_INTERMISSION ) {
 		cg.intermissionStarted = atoi( str );
-	} else if ( num == CS_SCREENFADE ) {
+	}*/
+	else if ( num == CS_SCREENFADE ) {
 		CG_ParseScreenFade();
 	} else if ( num == CS_FOGVARS ) {
 		CG_ParseFog();
@@ -972,7 +980,9 @@ static void CG_MapRestart( void ) {
 	CG_SoundInit();
 	// done.
 
-	cg.intermissionStarted = qfalse;
+	/* Nico, removed intermission
+	cg.intermissionStarted = qfalse;*/
+
 	cg.lightstylesInited = qfalse;
 	cg.mapRestart = qtrue;
 
@@ -1301,13 +1311,6 @@ CG_PlayVoiceChat
 =================
 */
 void CG_PlayVoiceChat( bufferedVoiceChat_t *vchat ) {
-	// if we are going into the intermission, don't start any voices
-/*	// NERVE - SMF - don't do this in wolfMP
-	if ( cg.intermissionStarted ) {
-		return;
-	}
-*/
-
 	if ( !cg_noVoiceChats.integer ) {
 		trap_S_StartLocalSound( vchat->snd, CHAN_VOICE );
 
@@ -1383,13 +1386,6 @@ void CG_VoiceChatLocal( int mode, qboolean voiceOnly, int clientNum, int color, 
 	qhandle_t sprite;
 	bufferedVoiceChat_t vchat;
 	const char *loc = " ";           // NERVE - SMF
-
-/*	// NERVE - SMF - don't do this in wolfMP
-	// if we are going into the intermission, don't start any voices
-	if ( cg.intermissionStarted ) {
-		return;
-	}
-*/
 
 	if ( clientNum < 0 || clientNum >= MAX_CLIENTS ) {
 		clientNum = 0;

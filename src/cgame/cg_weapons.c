@@ -2656,9 +2656,10 @@ void CG_AddViewWeapon( playerState_t *ps ) {
 		return;
 	}
 
+	/* Nico, removed intermission
 	if ( ps->pm_type == PM_INTERMISSION ) {
 		return;
-	}
+	}*/
 
 	// no gun if in third person view
 	if ( cg.renderingThirdPerson ) {

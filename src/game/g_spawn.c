@@ -209,7 +209,9 @@ typedef struct {
 void SP_info_player_start( gentity_t *ent );
 void SP_info_player_checkpoint( gentity_t *ent );
 void SP_info_player_deathmatch( gentity_t *ent );
-void SP_info_player_intermission( gentity_t *ent );
+
+void SP_info_player_intermission( gentity_t *ent );// Nico, note: keep this
+
 void SP_info_firstplace( gentity_t *ent );
 void SP_info_secondplace( gentity_t *ent );
 void SP_info_thirdplace( gentity_t *ent );
@@ -422,7 +424,9 @@ spawn_t spawns[] = {
 	{"info_player_start", SP_info_player_start},
 	{"info_player_checkpoint", SP_info_player_checkpoint},
 	{"info_player_deathmatch", SP_info_player_deathmatch},
-	{"info_player_intermission", SP_info_player_intermission},
+
+	{"info_player_intermission", SP_info_player_intermission},// Nico, note: keep this
+
 	{"info_null", SP_info_null},
 	{"info_notnull", SP_info_notnull},           // use target_position instead
 	{"info_notnull_big", SP_info_notnull},       // use target_position instead

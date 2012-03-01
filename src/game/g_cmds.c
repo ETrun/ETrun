@@ -1645,10 +1645,13 @@ qboolean Cmd_CallVote_f( gentity_t *ent, unsigned int dwCommand, qboolean fRefCo
 		if ( level.voteInfo.voteTime ) {
 			G_printFull("A vote is already in progress.", ent);
 			return qfalse;
-		} else if ( level.intermissiontime ) {
+		}
+		/* Nico, removed intermission
+		else if ( level.intermissiontime ) {
 			G_printFull("Cannot callvote during intermission.", ent);
 			return qfalse;
-		} else if ( !ent->client->sess.referee ) {
+		}*/
+		else if ( !ent->client->sess.referee ) {
 			if ( voteFlags.integer == VOTING_DISABLED ) {
 				G_printFull("Voting not enabled on this server.", ent);
 				return qfalse;
@@ -2716,6 +2719,7 @@ void Cmd_WeaponStat_f( gentity_t* ent ) {
 	trap_SendServerCommand( ent - g_entities, va( "rws %i %i", ent->client->sess.aWeaponStats[stat].atts, ent->client->sess.aWeaponStats[stat].hits ) );
 }*/
 
+/* Nico, removed intermission
 void Cmd_IntermissionWeaponStats_f( gentity_t* ent ) {
 	char buffer[1024];
 	int i, clientNum;
@@ -2737,7 +2741,7 @@ void Cmd_IntermissionWeaponStats_f( gentity_t* ent ) {
 	}
 
 	trap_SendServerCommand( ent - g_entities, buffer );
-}
+}*/
 
 void G_MakeReady( gentity_t* ent ) {
 	ent->client->ps.eFlags |= EF_READY;
@@ -2762,6 +2766,7 @@ void Cmd_IntermissionReady_f( gentity_t* ent ) {
 	G_MakeReady( ent );
 }*/
 
+/* Nico, removed intermission
 void Cmd_IntermissionPlayerKillsDeaths_f( gentity_t* ent ) {
 	char buffer[1024];
 	int i;
@@ -2780,7 +2785,7 @@ void Cmd_IntermissionPlayerKillsDeaths_f( gentity_t* ent ) {
 	}
 
 	trap_SendServerCommand( ent - g_entities, buffer );
-}
+}*/
 
 void G_CalcClientAccuracies( void ) {
 	int i, j;
@@ -2803,7 +2808,7 @@ void G_CalcClientAccuracies( void ) {
 	}
 }
 
-
+/* Nico, removed intermission
 void Cmd_IntermissionWeaponAccuracies_f( gentity_t* ent ) {
 	char buffer[1024];
 	int i;
@@ -2820,7 +2825,7 @@ void Cmd_IntermissionWeaponAccuracies_f( gentity_t* ent ) {
 	}
 
 	trap_SendServerCommand( ent - g_entities, buffer );
-}
+}*/
 
 void Cmd_SelectedObjective_f( gentity_t* ent ) {
 	int i, val;
@@ -2990,7 +2995,10 @@ void ClientCommand( int clientNum ) {
 	} else if ( Q_stricmp( cmd, "obj" ) == 0 ) {
 		Cmd_SelectedObjective_f( ent );
 		return;
-	} else if ( !Q_stricmp( cmd, "impkd" ) ) {
+	}
+
+	/* Nico, removed intermission
+	else if ( !Q_stricmp( cmd, "impkd" ) ) {
 		Cmd_IntermissionPlayerKillsDeaths_f( ent );
 		return;
 	} else if ( !Q_stricmp( cmd, "imwa" ) ) {
@@ -2999,7 +3007,8 @@ void ClientCommand( int clientNum ) {
 	} else if ( !Q_stricmp( cmd, "imws" ) ) {
 		Cmd_IntermissionWeaponStats_f( ent );
 		return;
-	}
+	}*/
+
 	/* Nico, removed imready client command
 	else if ( !Q_stricmp( cmd, "imready" ) ) {
 		Cmd_IntermissionReady_f( ent );
@@ -3051,10 +3060,11 @@ void ClientCommand( int clientNum ) {
 	// OSP
 
 	// ignore all other commands when at intermission
+	/* Nico, removed intermission
 	if ( level.intermissiontime ) {
 		CPx( clientNum, va( "print \"^3%s^7 not allowed during intermission.\n\"", cmd ) );
 		return;
-	}
+	}*/
 
 	/* Nico, removed give command
 	if ( Q_stricmp( cmd, "give" ) == 0 ) {

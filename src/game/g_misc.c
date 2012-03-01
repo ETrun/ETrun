@@ -1372,9 +1372,10 @@ void aagun_think( gentity_t *self ) {
 	gentity_t   *owner;
 	int i;
 
+	/* Nico, removed intermission
 	if ( g_gamestate.integer == GS_INTERMISSION ) {
 		return;
-	}
+	}*/
 
 	VectorClear( vec );
 
@@ -1631,9 +1632,10 @@ void mg42_think( gentity_t *self ) {
 	float len;
 	float usedist;
 
+	/* Nico, removed intermission
 	if ( g_gamestate.integer == GS_INTERMISSION ) {
 		return;
-	}
+	}*/
 
 	VectorClear( vec );
 

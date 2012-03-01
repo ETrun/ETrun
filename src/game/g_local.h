@@ -44,7 +44,9 @@ If you have questions concerning this license or the applicable additional terms
 #define EVENT_VALID_MSEC    300
 #define CARNAGE_REWARD_TIME 3000
 
-#define INTERMISSION_DELAY_TIME 1000
+
+/* Nico, removed intermission
+#define INTERMISSION_DELAY_TIME 1000*/
 
 #define MG42_MULTIPLAYER_HEALTH 350             // JPW NERVE
 
@@ -956,16 +958,21 @@ typedef struct {
 	char spawnVarChars[MAX_SPAWN_VARS_CHARS];
 
 	// intermission state
+	/* Nico, removed intermission
 	int intermissionQueued;             // intermission was qualified, but
 										// wait INTERMISSION_DELAY_TIME before
 										// actually going there so the last
 										// frag can be watched.  Disable future
 										// kills during this delay
-	int intermissiontime;               // time the intermission was started
+	int intermissiontime;               // time the intermission was started*/
+
 	char        *changemap;
 	int exitTime;
+
+	// Nico, note: keep these 2 vars
 	vec3_t intermission_origin;         // also used for spectator spawns
 	vec3_t intermission_angle;
+
 	qboolean lmsDoNextMap;              // should LMS do a map_restart or a vstr nextmap
 
 	int bodyQueIndex;                   // dead bodies
@@ -1344,7 +1351,10 @@ team_t PickTeam( int ignoreClientNum );
 void SetClientViewAngle( gentity_t *ent, vec3_t angle );
 gentity_t *SelectSpawnPoint( vec3_t avoidPoint, vec3_t origin, vec3_t angles );
 void respawn( gentity_t *ent );
-void BeginIntermission( void );
+
+/* Nico, removed intermission
+void BeginIntermission( void );*/
+
 void InitClientPersistant( gclient_t *client );
 void InitClientResp( gclient_t *client );
 void InitBodyQue( void );
@@ -1417,7 +1427,9 @@ qboolean IsSilencedWeapon
 //
 // p_hud.c
 //
-void MoveClientToIntermission( gentity_t *client );
+/* Nico, removed intermission
+void MoveClientToIntermission( gentity_t *client );*/
+
 void G_SetStats( gentity_t *ent );
 void G_SendScore( gentity_t *client );
 
@@ -1440,7 +1452,9 @@ void Cmd_SetClass_f( gentity_t *ent, unsigned int dwCommand, qboolean fValue );
 //
 // g_main.c
 //
+// Nico, note: this function is needed
 void FindIntermissionPoint( void );
+
 void G_RunThink( gentity_t *ent );
 void QDECL G_LogPrintf( const char *fmt, ... ) _attribute( ( format( printf,1,2 ) ) );
 void SendScoreboardMessageToAllClients( void );
