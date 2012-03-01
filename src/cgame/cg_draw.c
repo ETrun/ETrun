@@ -1342,13 +1342,10 @@ static void CG_DrawMortarReticle( void ) {
 			}
 
 			s = va( "%i", printval );
-			//CG_Text_Paint_Ext( 140 + localOffset - .5f * CG_Text_Width_Ext( s, .15f, 0, &cgs.media.limboFont1 ), 244, .15f, .15f, color, s, 0, 0, 0, &cgs.media.limboFont1 );
-			//CG_FillRect( 140 + localOffset, 248, 1, 16, color);
 			CG_Text_Paint_Ext( 500 - localOffset - .5f * CG_Text_Width_Ext( s, .15f, 0, &cgs.media.limboFont1 ), 244, .15f, .15f, color, s, 0, 0, 0, &cgs.media.limboFont1 );
 			CG_FillRect( 500 - localOffset, 248, 1, 16, color );
 			val++;
 		} else {
-			//CG_FillRect( 140 + localOffset, 256, 1, 8, color);
 			CG_FillRect( 500 - localOffset, 256, 1, 8, color );
 		}
 	}
@@ -1360,12 +1357,10 @@ static void CG_DrawMortarReticle( void ) {
 
 	// right
 	localOffset = ( AngleNormalize360( angle - angleMin ) / 5.f ) * 10.f;
-	//CG_FillRect( 320 + localOffset, 252, 2, 18, color_extends);
 	CG_FillRect( 320 - localOffset, 252, 2, 18, color_extends );
 
 	// left
 	localOffset = ( AngleNormalize360( angleMax - angle ) / 5.f ) * 10.f;
-	//CG_FillRect( 320 - localOffset, 252, 2, 18, color_extends);
 	CG_FillRect( 320 + localOffset, 252, 2, 18, color_extends );
 
 	// last fire pos
@@ -1426,7 +1421,6 @@ static void CG_DrawMortarReticle( void ) {
 
 			if ( yaw < 0 ) {
 				if ( !hasLeftTarget ) {
-					//CG_FillRect( 136 + 2, 236 + 38 - 6, 4, 4, color_firerequest );
 
 					trap_R_SetColor( color_firerequest );
 					CG_DrawPic( 136 + 2, 236 + 38 - 10 + 1, 8, 8, cgs.media.ccMortarTargetArrow );
@@ -1436,7 +1430,6 @@ static void CG_DrawMortarReticle( void ) {
 				}
 			} else if ( yaw > 90 ) {
 				if ( !hasRightTarget ) {
-					//CG_FillRect( 350 + 154 - 6, 236 + 38 - 6, 4, 4, color_firerequest );
 
 					trap_R_SetColor( color_firerequest );
 					CG_DrawPic( 350 + 154 - 10, 236 + 38 - 10 + 1, -8, 8, cgs.media.ccMortarTargetArrow );
@@ -1446,22 +1439,13 @@ static void CG_DrawMortarReticle( void ) {
 				}
 			} else {
 				localOffset = ( ( AngleSubtract( angle, attackRequestAngle ) ) / 5.f ) * 10.f;
-				//CG_FillRect( 320 + localOffset - 3, 264 - 3, 6, 6, color_firerequest );
 
 				trap_R_SetColor( color_firerequest );
-				//CG_DrawPic( 320 + localOffset - 8, 264 - 8, 16, 16, cgs.media.ccMortarTarget );
 				CG_DrawPic( 320 - localOffset - 8, 264 - 8, 16, 16, cgs.media.ccMortarTarget );
 				trap_R_SetColor( NULL );
 			}
 		}
 	}
-
-	/*s = va( "%.2f (%i / %i)",AngleNormalize360(angle - .5f * 180), majorOffset, min );
-	CG_Text_Paint( 140, 224, .25f, color, s, 0, 0, 0 );
-	s = va( "%.2f",AngleNormalize360(angle) );
-	CG_Text_Paint( 320 - .5f * CG_Text_Width( s, .25f, 0), 224, .25f, color, s, 0, 0, 0 );
-	s = va( "%.2f", AngleNormalize360(angle + .5f * 180) );
-	CG_Text_Paint( 500 - CG_Text_Width( s, .25f, 0 ), 224, .25f, color, s, 0, 0, 0 );*/
 
 	// Vertical bar
 
@@ -1481,12 +1465,6 @@ static void CG_DrawMortarReticle( void ) {
 
 	for ( val = i = 0; i < 20; i++ ) {
 		localOffset = i * 10.f + ( offset * 4.f );
-
-		/*if( localOffset >= 150 && localOffset <= 210 ) {
-			if( i % 3 == majorOffset)
-				val++;
-			continue;
-		}*/
 
 		if ( i % 4 == majorOffset ) {
 			printval = min - val * 10;
@@ -1567,13 +1545,6 @@ static void CG_DrawMortarReticle( void ) {
 			}
 		}
 	}
-
-	/*s = va( "%.2f (%i / %i)", angle + .5f * 50, majorOffset, min );
-	CG_Text_Paint( 348, 164, .25f, color, s, 0, 0, 0 );
-	s = va( "%.2f",angle );
-	CG_Text_Paint( 348, 264, .25f, color, s, 0, 0, 0 );
-	s = va( "%.2f", angle - .5f * 50 );
-	CG_Text_Paint( 348, 364, .25f, color, s, 0, 0, 0 );*/
 }
 
 /*
@@ -1900,7 +1871,6 @@ void CG_CheckForCursorHints( void ) {
 	VectorCopy( cg.refdef_current->vieworg, start );
 	VectorMA( start, CH_DIST, cg.refdef_current->viewaxis[0], end );
 
-//	CG_Trace( &trace, start, vec3_origin, vec3_origin, end, cg.snap->ps.clientNum, MASK_ALL &~CONTENTS_MONSTERCLIP);
 	CG_Trace( &trace, start, vec3_origin, vec3_origin, end, cg.snap->ps.clientNum, MASK_PLAYERSOLID );
 
 	if ( trace.fraction == 1 ) {
@@ -3147,10 +3117,6 @@ static void CG_DrawObjectiveInfo( void ) {
 			x2 = 320 + w / 2;
 		}
 
-/*
-		if ( x1 + w > x2 )
-			x2 = x1 + w;
-*/
 		x = 320 - w / 2;
 // jpw
 		y += cg.oidPrintCharWidth * 1.5;
@@ -3182,7 +3148,6 @@ static void CG_DrawObjectiveInfo( void ) {
 
 	// do the actual drawing
 	start = cg.oidPrint;
-//	y = cg.oidPrintY - cg.oidPrintLines * BIGCHAR_HEIGHT / 2;
 	y = 400 - cg.oidPrintLines * BIGCHAR_HEIGHT / 2; // JPW NERVE
 
 
@@ -3332,15 +3297,11 @@ void CG_DrawCompassIcon( float x, float y, float w, float h, vec3_t origin, vec3
 		return;
 	}
 
-//	if( cg_drawCompass.integer == 2 )
-//		angles[YAW] = AngleSubtract( 90, angles[YAW] );
-//	else
 	angles[YAW] = AngleSubtract( cg.predictedPlayerState.viewangles[YAW], angles[YAW] );
 
 	angle = ( ( angles[YAW] + 180.f ) / 360.f - ( 0.50 / 2.f ) ) * pi2;
 
 
-//	if (!CG_IsSinglePlayer()) {
 	w /= 2;
 	h /= 2;
 
@@ -3348,15 +3309,7 @@ void CG_DrawCompassIcon( float x, float y, float w, float h, vec3_t origin, vec3
 	y += h;
 
 
-//		if (CG_IsSinglePlayer())
-/*		if (0)
-		{
-			w = 80; // hardcoded, because it has to fit the art
-		}
-		else*/
-	{
-		w = sqrt( ( w * w ) + ( h * h ) ) / 3.f * 2.f * 0.9f;
-	}
+	w = sqrt( ( w * w ) + ( h * h ) ) / 3.f * 2.f * 0.9f;
 
 	x = x + ( cos( angle ) * w );
 	y = y + ( sin( angle ) * w );
@@ -3365,66 +3318,6 @@ void CG_DrawCompassIcon( float x, float y, float w, float h, vec3_t origin, vec3
 
 
 	CG_DrawPic( x - ( 14 * len + 4 ) / 2, y - ( 14 * len + 4 ) / 2, 14 * len + 8, 14 * len + 8, shader );
-#ifdef SQUARE_COMPASS
-} else {
-	int iconWidth, iconHeight;
-	// START Mad Doc - TDF
-	// talk about fitting a square peg into a round hole...
-	// we're now putting the compass icons around the square automap instead of the round compass
-
-	while ( angle < 0 )
-		angle += pi2;
-
-	while ( angle >= pi2 )
-		angle -= pi2;
-
-
-	x = x + w / 2;
-	y = y + h / 2;
-	w /= 2;    // = sqrt( ( w * w ) + ( h * h ) ) / 3.f * 2.f * 0.9f;
-
-	if ( ( angle >= 0 ) && ( angle < M_PI / 4.0 ) ) {
-		x += w;
-		y += w * tan( angle );
-
-	} else if ( ( angle >= M_PI / 4.0 ) && ( angle < 3.0 * M_PI / 4.0 ) )         {
-		x += w / tan( angle );
-		y += w;
-	} else if ( ( angle >= 3.0 * M_PI / 4.0 ) && ( angle < 5.0 * M_PI / 4.0 ) )       {
-		x -= w;
-		y -= w * tan( angle );
-	} else if ( ( angle >= 5.0 * M_PI / 4.0 ) && ( angle < 7.0 * M_PI / 4.0 ) )       {
-		x -= w / tan( angle );
-		y -= w;
-	} else
-	{
-		x += w;
-		y += w * tan( angle );
-
-	}
-
-	len = 1 - min( 1.f, len / 2000.f );
-	iconWidth = 14 * len + 4;     // where did this calc. come from?
-	iconHeight = 14 * len + 4;
-
-	// adjust so that icon is always outside of the map
-	if ( ( angle > 5.0 * M_PI / 4.0 ) && ( angle < 2 * M_PI ) ) {
-
-		y -= iconHeight;
-	}
-
-	if ( ( angle >= 3.0 * M_PI / 4.0 ) && ( angle <= 5.0 * M_PI / 4.0 ) ) {
-		x -= iconWidth;
-	}
-
-
-	CG_DrawPic( x, y, iconWidth, iconHeight, shader );
-
-
-	// END Mad Doc - TDF
-
-}
-#endif
 }
 
 /*
@@ -3519,26 +3412,6 @@ static void CG_DrawNewCompass( void ) {
 	}
 //	}
 
-	/*if( !(cgs.ccFilter & CC_FILTER_DESTRUCTIONS) ) {
-		// draw explosives if an engineer
-		if ( cg.predictedPlayerState.stats[ STAT_PLAYER_CLASS ] == PC_ENGINEER ) {
-			for ( i = 0; i < snap->numEntities; i++ ) {
-				centity_t *cent = &cg_entities[ snap->entities[ i ].number ];
-
-				if ( cent->currentState.eType != ET_EXPLOSIVE_INDICATOR ) {
-					continue;
-				}
-
-				if ( cent->currentState.teamNum == 1 && cg.predictedPlayerState.persistant[PERS_TEAM] == TEAM_AXIS )
-					continue;
-				else if ( cent->currentState.teamNum == 2 && cg.predictedPlayerState.persistant[PERS_TEAM] == TEAM_ALLIES )
-					continue;
-
-				CG_DrawCompassIcon( basex, basey, basew, baseh, cg.predictedPlayerState.origin, cent->lerpOrigin, cgs.media.compassDestroyShader );
-			}
-		}
-	}*/
-
 //	if( !(cgs.ccFilter & CC_FILTER_REQUESTS) ) {
 	// draw revive medic icons
 	if ( cg.predictedPlayerState.stats[ STAT_PLAYER_CLASS ] == PC_MEDIC ) {
@@ -3559,46 +3432,6 @@ static void CG_DrawNewCompass( void ) {
 		}
 	}
 //	}
-
-/*	if( !(cgs.ccFilter & CC_FILTER_DESTRUCTIONS) ) {
-		// draw constructibles if an engineer
-		if ( cg.predictedPlayerState.stats[ STAT_PLAYER_CLASS ] == PC_ENGINEER ) {
-			for ( i = 0; i < snap->numEntities; i++ ) {
-				centity_t *cent = &cg_entities[ snap->entities[ i ].number ];
-
-				if ( cent->currentState.eType != ET_CONSTRUCTIBLE_INDICATOR ) {
-					continue;
-				}
-
-				if ( cent->currentState.teamNum != cg.predictedPlayerState.persistant[PERS_TEAM] && cent->currentState.teamNum != 3 )
-					continue;
-
-				CG_DrawCompassIcon( basex, basey, basew, baseh, cg.predictedPlayerState.origin, cent->lerpOrigin, cgs.media.compassConstructShader );
-			}
-		}
-	}*/
-
-/*	if( !(cgs.ccFilter & CC_FILTER_WAYPOINTS) ) {
-		// draw waypoint icons
-		for ( i = 0; i < snap->numEntities; i++ ) {
-			centity_t *cent = &cg_entities[ snap->entities[ i ].number ];
-
-			if( cent->currentState.eType != ET_WAYPOINT ) {
-				continue;
-			}
-
-			// see if the waypoint owner is someone that you accept waypoints from
-			if( !CG_IsOnSameFireteam( cg.clientNum, cent->currentState.clientNum )) {  // TODO: change to fireteam
-					continue;
-			}
-
-			switch( cent->currentState.frame ) {
-			case WAYP_ATTACK: CG_DrawCompassIcon( basex, basey, basew, baseh, cg.predictedPlayerState.origin, cent->currentState.pos.trBase, cgs.media.waypointCompassAttackShader ); break;
-			case WAYP_DEFEND: CG_DrawCompassIcon( basex, basey, basew, baseh, cg.predictedPlayerState.origin, cent->currentState.pos.trBase, cgs.media.waypointCompassDefendShader ); break;
-			case WAYP_REGROUP: CG_DrawCompassIcon( basex, basey, basew, baseh, cg.predictedPlayerState.origin, cent->currentState.pos.trBase, cgs.media.waypointCompassRegroupShader ); break;
-			}
-		}
-	}*/
 
 //	if( !(cgs.ccFilter & CC_FILTER_BUDDIES) ) {
 	for ( i = 0; i < snap->numEntities; i++ ) {
@@ -3834,14 +3667,6 @@ static void CG_DrawWeapRecharge( rectDef_t *rect ) {
 	vec4_t color;
 
 	flags = 1 | 4 | 16;
-
-	// weap = cg.snap->ps.weapon;
-
-//	if( !(cg.snap->ps.eFlags & EF_ZOOMING) ) {
-//		if ( weap != WP_PANZERFAUST && weap != WP_DYNAMITE && weap != WP_MEDKIT && weap != WP_SMOKE_GRENADE && weap != WP_PLIERS && weap != WP_AMMO ) {
-//			fade = qtrue;
-//		}
-//	}
 
 	// Draw power bar
 	if ( cg.snap->ps.stats[ STAT_PLAYER_CLASS ] == PC_ENGINEER ) {
@@ -4310,13 +4135,8 @@ static void CG_Draw2D( void ) {
 		CG_DrawLimboMessage();
 	} else {
 		if ( cgs.eventHandling != CGAME_EVENT_NONE ) {
-//			qboolean old = cg.showGameView;
-
-//			cg.showGameView = qfalse;
-			// draw cursor
 			trap_R_SetColor( NULL );
 			CG_DrawPic( cgDC.cursorx - 14, cgDC.cursory - 14, 32, 32, cgs.media.cursorIcon );
-//			cg.showGameView = old;
 		}
 	}
 
@@ -4396,37 +4216,6 @@ void CG_DrawMiscGamemodels( void ) {
 		VectorCopy( cgs.miscGameModels[i].org, ent.oldorigin );
 		VectorCopy( cgs.miscGameModels[i].org, ent.lightingOrigin );
 
-/*		{
-			vec3_t v;
-			vec3_t vu = { 0.f, 0.f, 1.f };
-			vec3_t vl = { 0.f, 1.f, 0.f };
-			vec3_t vf = { 1.f, 0.f, 0.f };
-
-			VectorCopy( cgs.miscGameModels[i].org, v );
-			VectorMA( v, cgs.miscGameModels[i].radius, vu, v );
-			CG_RailTrail2( NULL, cgs.miscGameModels[i].org, v );
-
-			VectorCopy( cgs.miscGameModels[i].org, v );
-			VectorMA( v, cgs.miscGameModels[i].radius, vf, v );
-			CG_RailTrail2( NULL, cgs.miscGameModels[i].org, v );
-
-			VectorCopy( cgs.miscGameModels[i].org, v );
-			VectorMA( v, cgs.miscGameModels[i].radius, vl, v );
-			CG_RailTrail2( NULL, cgs.miscGameModels[i].org, v );
-
-			VectorCopy( cgs.miscGameModels[i].org, v );
-			VectorMA( v, -cgs.miscGameModels[i].radius, vu, v );
-			CG_RailTrail2( NULL, cgs.miscGameModels[i].org, v );
-
-			VectorCopy( cgs.miscGameModels[i].org, v );
-			VectorMA( v, -cgs.miscGameModels[i].radius, vf, v );
-			CG_RailTrail2( NULL, cgs.miscGameModels[i].org, v );
-
-			VectorCopy( cgs.miscGameModels[i].org, v );
-			VectorMA( v, -cgs.miscGameModels[i].radius, vl, v );
-			CG_RailTrail2( NULL, cgs.miscGameModels[i].org, v );
-		}*/
-
 		for ( j = 0; j < 3; j++ ) {
 			VectorCopy( cgs.miscGameModels[i].axes[j], ent.axis[j] );
 		}
@@ -4454,13 +4243,6 @@ void CG_DrawActive( stereoFrame_t stereoView ) {
 		CG_DrawInformation( qfalse );
 		return;
 	}
-
-	// optionally draw the tournement scoreboard instead
-	/*if ( cg.snap->ps.persistant[PERS_TEAM] == TEAM_SPECTATOR &&
-		( cg.snap->ps.pm_flags & PMF_SCOREBOARD ) ) {
-		CG_DrawTourneyScoreboard();
-		return;
-	}*/
 
 	switch ( stereoView ) {
 	case STEREO_CENTER:
@@ -4490,14 +4272,6 @@ void CG_DrawActive( stereoFrame_t stereoView ) {
 	cg.refdef_current->glfog.registered = 0;    // make sure it doesn't use fog from another scene
 
 	CG_ActivateLimboMenu();
-
-//	if( cgs.ccCurrentCamObjective == -1 ) {
-//		if( cg.showGameView ) {
-//			CG_FillRect( 0, 0, 640, 480, colorBlack );
-//			CG_LimboPanel_Draw();
-//			return;
-//		}
-//	}
 
 	if ( cg.showGameView ) {
 		float x, y, w, h;
