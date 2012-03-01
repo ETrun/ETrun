@@ -532,6 +532,8 @@ void CG_TransitionPlayerState( playerState_t *ps, playerState_t *ops ) {
 	if ( ps->persistant[PERS_SPAWN_COUNT] != ops->persistant[PERS_SPAWN_COUNT] ) {
 		CG_Respawn( ps->persistant[PERS_REVIVE_COUNT] != ops->persistant[PERS_REVIVE_COUNT] ? qtrue : qfalse );
 	}*/
+	// Nico, fix spawn view bug
+	CG_Respawn( qfalse );
 
 	if ( cg.mapRestart ) {
 		CG_Respawn( qfalse );
