@@ -341,6 +341,7 @@ void CG_DrawConnectScreen( qboolean interactive, qboolean forcerefresh ) {
 			CG_DrawPic( x, y, 16, 16, bg_filter_ff );
 		}
 
+		/* Nico, removed respawnLeft
 		if ( atoi( Info_ValueForKey( buffer, "g_gametype" ) ) != GT_WOLF_LMS ) {
 			str = Info_ValueForKey( buffer, "g_alliedmaxlives" );
 			if ( str && *str && atoi( str ) ) {
@@ -356,7 +357,7 @@ void CG_DrawConnectScreen( qboolean interactive, qboolean forcerefresh ) {
 					}
 				}
 			}
-		}
+		}*/
 
 		if ( enabled ) {
 			x = 489;

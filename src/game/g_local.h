@@ -857,7 +857,9 @@ struct gclient_s {
 
 	qboolean hasaward;
 	qboolean wantsscore;
-	qboolean maxlivescalced;
+
+	/* Nico, removed respawnLeft
+	qboolean maxlivescalced;*/
 };
 
 typedef struct {
@@ -1373,15 +1375,21 @@ void G_UpdateCharacter( gclient_t *client );
 qboolean ConsoleCommand( void );
 void G_ProcessIPBans( void );
 qboolean G_FilterIPBanPacket( char *from );
+
+/* Nico, removed respawnLeft
 qboolean G_FilterMaxLivesPacket( char *from );
-qboolean G_FilterMaxLivesIPPacket( char *from );
+qboolean G_FilterMaxLivesIPPacket( char *from );*/
+
 void G_AddXPBackup( gentity_t* ent );
 void G_StoreXPBackup( void );
 void G_ClearXPBackup( void );
 void G_ReadXPBackup( void );
+
+/* Nico, removed respawnLeft
 void AddMaxLivesGUID( char *str );
 void AddMaxLivesBan( const char *str );
-void ClearMaxLivesBans();
+void ClearMaxLivesBans();*/
+
 void AddIPBan( const char *str );
 
 void Svcmd_ShuffleTeams_f( void );
@@ -1571,14 +1579,22 @@ extern vmCvar_t voteFlags;
 extern vmCvar_t g_complaintlimit;
 extern vmCvar_t g_ipcomplaintlimit;
 extern vmCvar_t g_filtercams;
+
+/* Nico, removed respawnLeft
 extern vmCvar_t g_maxlives;                 // DHM - Nerve :: number of respawns allowed (0==infinite)
-extern vmCvar_t g_maxlivesRespawnPenalty;
+extern vmCvar_t g_maxlivesRespawnPenalty;*/
+
 extern vmCvar_t g_voiceChatsAllowed;        // DHM - Nerve :: number before spam control
+
+/* Nico, removed respawnLeft
 extern vmCvar_t g_alliedmaxlives;           // Xian
-extern vmCvar_t g_axismaxlives;             // Xian
+extern vmCvar_t g_axismaxlives;             // Xian*/
+
 extern vmCvar_t g_fastres;                  // Xian - Fast medic res'ing
 extern vmCvar_t g_knifeonly;                // Xian - Wacky Knife-Only rounds
-extern vmCvar_t g_enforcemaxlives;          // Xian - Temp ban with maxlives between rounds
+
+/* Nico, removed respawnLeft
+extern vmCvar_t g_enforcemaxlives;          // Xian - Temp ban with maxlives between rounds*/
 
 extern vmCvar_t g_needpass;
 extern vmCvar_t g_balancedteams;

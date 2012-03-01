@@ -110,14 +110,22 @@ vmCvar_t voteFlags;
 vmCvar_t g_complaintlimit;          // DHM - Nerve
 vmCvar_t g_ipcomplaintlimit;
 vmCvar_t g_filtercams;
+
+/* Nico, removed respawnLeft
 vmCvar_t g_maxlives;                // DHM - Nerve
-vmCvar_t g_maxlivesRespawnPenalty;
+vmCvar_t g_maxlivesRespawnPenalty;*/
+
 vmCvar_t g_voiceChatsAllowed;       // DHM - Nerve
+
+/* Nico, removed respawnLeft
 vmCvar_t g_alliedmaxlives;          // Xian
-vmCvar_t g_axismaxlives;            // Xian
+vmCvar_t g_axismaxlives;            // Xian*/
+
 vmCvar_t g_fastres;                 // Xian
 vmCvar_t g_knifeonly;               // Xian
-vmCvar_t g_enforcemaxlives;         // Xian
+
+/* Nico, removed respawnLeft
+vmCvar_t g_enforcemaxlives;         // Xian*/
 
 vmCvar_t g_needpass;
 vmCvar_t g_balancedteams;
@@ -353,15 +361,22 @@ cvarTable_t gameCvarTable[] = {
 	{ &g_complaintlimit, "g_complaintlimit", "6", CVAR_ARCHIVE, 0, qtrue },                       // DHM - Nerve
 	{ &g_ipcomplaintlimit, "g_ipcomplaintlimit", "3", CVAR_ARCHIVE, 0, qtrue },
 	{ &g_filtercams, "g_filtercams", "0", CVAR_ARCHIVE, 0, qfalse },
+
+	/* Nico, removed respawnLeft
 	{ &g_maxlives, "g_maxlives", "0", CVAR_ARCHIVE | CVAR_LATCH | CVAR_SERVERINFO, 0, qtrue },        // DHM - Nerve
-	{ &g_maxlivesRespawnPenalty, "g_maxlivesRespawnPenalty", "0", CVAR_ARCHIVE | CVAR_LATCH | CVAR_SERVERINFO, 0, qtrue },
+	{ &g_maxlivesRespawnPenalty, "g_maxlivesRespawnPenalty", "0", CVAR_ARCHIVE | CVAR_LATCH | CVAR_SERVERINFO, 0, qtrue },*/
+
 	{ &g_voiceChatsAllowed, "g_voiceChatsAllowed", "4", CVAR_ARCHIVE, 0, qfalse },                // DHM - Nerve
 
+	/* Nico, removed respawnLeft
 	{ &g_alliedmaxlives, "g_alliedmaxlives", "0", CVAR_LATCH | CVAR_SERVERINFO, 0, qtrue },     // Xian
-	{ &g_axismaxlives, "g_axismaxlives", "0", CVAR_LATCH | CVAR_SERVERINFO, 0, qtrue },         // Xian
+	{ &g_axismaxlives, "g_axismaxlives", "0", CVAR_LATCH | CVAR_SERVERINFO, 0, qtrue },         // Xian*/
+
 	{ &g_fastres, "g_fastres", "0", CVAR_ARCHIVE, 0, qtrue, qtrue },                          // Xian - Fast Medic Resing
 	{ &g_knifeonly, "g_knifeonly", "0", 0, 0, qtrue },                                            // Xian - Fast Medic Resing
-	{ &g_enforcemaxlives, "g_enforcemaxlives", "1", CVAR_ARCHIVE, 0, qtrue },                 // Xian - Gestapo enforce maxlives stuff by temp banning
+
+	/* Nico, removed respawnLeft
+	{ &g_enforcemaxlives, "g_enforcemaxlives", "1", CVAR_ARCHIVE, 0, qtrue },                 // Xian - Gestapo enforce maxlives stuff by temp banning*/
 
 	{ &g_developer, "developer", "0", CVAR_TEMP, 0, qfalse },
 	{ &g_rankings, "g_rankings", "0", 0, 0, qfalse },
@@ -1619,6 +1634,8 @@ void G_InitGame( int levelTime, int randomSeed, int restart ) {
 	we need to clear the list even if enforce maxlives is not active
 	in case the g_maxlives was changed, and a map_restart happened
 	*/
+
+	/* Nico, removed respawnLeft
 	ClearMaxLivesBans();
 
 	// just for verbosity
@@ -1627,7 +1644,7 @@ void G_InitGame( int levelTime, int randomSeed, int restart ) {
 			 ( g_maxlives.integer > 0 || g_axismaxlives.integer > 0 || g_alliedmaxlives.integer > 0 ) ) {
 			G_Printf( "EnforceMaxLives-Cleared GUID List\n" );
 		}
-	}
+	}*/
 
 	G_ProcessIPBans();
 
@@ -2158,11 +2175,13 @@ void CalculateRanks( void ) {
 							if ( g_entities[i].health <= 0 || level.clients[i].ps.pm_flags & PMF_LIMBO ) {
 								level.numFinalDead[teamIndex]++;
 							}
-						} else {
+						}
+						/* Nico, removed respawnLeft
+						else {
 							if ( level.clients[i].ps.persistant[PERS_RESPAWNS_LEFT] == 0 && g_entities[i].health <= 0 ) {
 								level.numFinalDead[teamIndex]++;
 							}
-						}
+						}*/
 
 						level.numTeamClients[teamIndex]++;
 						if ( !( g_entities[i].r.svFlags & SVF_BOT ) ) {
@@ -2915,6 +2934,7 @@ void CheckExitRules( void ) {
 		return;
 	}
 
+	/* Nico, removed respawnLeft
 	if ( g_gametype.integer != GT_WOLF_LMS ) {
 		if ( g_maxlives.integer > 0 || g_axismaxlives.integer > 0 || g_alliedmaxlives.integer > 0 ) {
 			if ( level.numFinalDead[0] >= level.numTeamClients[0] && level.numTeamClients[0] > 0 ) {
@@ -2929,7 +2949,7 @@ void CheckExitRules( void ) {
 				LogExit( "Allied team eliminated." );
 			}
 		}
-	}
+	}*/
 }
 
 

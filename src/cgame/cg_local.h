@@ -524,7 +524,10 @@ typedef struct {
 	int powerUps;
 	int team;
 	int playerClass;                    // NERVE - SMF
-	int respawnsLeft;                   // NERVE - SMF
+
+	/* Nico, removed respawnLeft
+	int respawnsLeft;                   // NERVE - SMF*/
+
 } score_t;
 
 // each client has an associated clientInfo_t

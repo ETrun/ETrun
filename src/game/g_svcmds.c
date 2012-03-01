@@ -84,10 +84,11 @@ typedef struct ipFilterList_s {
 } ipFilterList_t;
 
 static ipFilterList_t ipFilters;
-static ipFilterList_t ipMaxLivesFilters;
 
+/* Nico, removed respawnLeft
+static ipFilterList_t ipMaxLivesFilters;
 static ipGUID_t guidMaxLivesFilters[MAX_IPFILTERS];
-static int numMaxLivesFilters = 0;
+static int numMaxLivesFilters = 0;*/
 
 /*
 =================
@@ -185,6 +186,7 @@ static void UpdateIPBans( ipFilterList_t *ipFilterList ) {
 	trap_Cvar_Set( ipFilterList->cvarIPList, iplist_final );
 }
 
+/* Nico, removed respawnLeft
 void PrintMaxLivesGUID() {
 	int i;
 
@@ -193,7 +195,7 @@ void PrintMaxLivesGUID() {
 		G_LogPrintf( "%i. %s\n", i, guidMaxLivesFilters[i].compare );
 	}
 	G_LogPrintf( "--- End of list\n" );
-}
+}*/
 
 /*
 =================
@@ -234,13 +236,14 @@ qboolean G_FilterIPBanPacket( char *from ) {
 	return( G_FilterPacket( &ipFilters, from ) );
 }
 
+/* Nico, removed respawnLeft
 qboolean G_FilterMaxLivesIPPacket( char *from ) {
 	return( G_FilterPacket( &ipMaxLivesFilters, from ) );
-}
+}*/
 
-/*
+/* Nico, removed respawnLeft
  Check to see if the user is trying to sneak back in with g_enforcemaxlives enabled
-*/
+
 qboolean G_FilterMaxLivesPacket( char *from ) {
 	int i;
 
@@ -251,7 +254,7 @@ qboolean G_FilterMaxLivesPacket( char *from ) {
 		}
 	}
 	return 0;
-}
+}*/
 
 /*
 =================
@@ -286,17 +289,17 @@ void AddIPBan( const char *str ) {
 	AddIP( &ipFilters, str );
 }
 
+/* Nico, removed respawnLeft
 void AddMaxLivesBan( const char *str ) {
 	AddIP( &ipMaxLivesFilters, str );
-}
+}*/
 
-/*
+/* Nico, removed respawnLeft
 =================
 AddMaxLivesGUID
 Xian - with g_enforcemaxlives enabled, this adds a client GUID to a list
 that prevents them from quitting and reconnecting
 =================
-*/
 void AddMaxLivesGUID( char *str ) {
 	if ( numMaxLivesFilters == MAX_IPFILTERS ) {
 		G_Printf( "MaxLives GUID filter list is full\n" );
@@ -304,7 +307,7 @@ void AddMaxLivesGUID( char *str ) {
 	}
 	Q_strncpyz( guidMaxLivesFilters[numMaxLivesFilters].compare, str, 33 );
 	numMaxLivesFilters++;
-}
+}*/
 
 /*
 =================
@@ -388,9 +391,10 @@ void Svcmd_RemoveIP_f( void ) {
 	G_Printf( "Didn't find %s.\n", str );
 }
 
+/* Nico, removed respawnLeft
 /*
  Xian - Clears out the entire list maxlives enforcement banlist
-*/
+
 void ClearMaxLivesBans() {
 	int i;
 
@@ -401,7 +405,7 @@ void ClearMaxLivesBans() {
 
 	ipMaxLivesFilters.numIPFilters = 0;
 	Q_strncpyz( ipMaxLivesFilters.cvarIPList, "g_maxlivesbanIPs", sizeof( ipMaxLivesFilters.cvarIPList ) );
-}
+}*/
 
 /*
 ===================
@@ -1020,10 +1024,11 @@ qboolean    ConsoleCommand( void ) {
 		return qtrue;
 	}
 
+	/* Nico, removed respawnLeft
 	if ( Q_stricmp( cmd, "listmaxlivesip" ) == 0 ) {
 		PrintMaxLivesGUID();
 		return qtrue;
-	}
+	}*/
 
 	// NERVE - SMF
 	/* Nico, removed start_match command

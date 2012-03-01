@@ -386,9 +386,10 @@ void CG_DrawPMItems( void ) {
 		size = PM_ICON_SIZE_NORMAL;
 	}
 
+	/* Nico, removed respawnLeft
 	if ( cg.snap->ps.persistant[PERS_RESPAWNS_LEFT] >= 0 ) {
 		y -= 20;
-	}
+	}*/
 
 	if ( !cg_pmWaitingList ) {
 		return;

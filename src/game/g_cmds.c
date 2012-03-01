@@ -69,7 +69,9 @@ void G_SendScore( gentity_t *ent ) {
 		count = 0;
 
 		for (; i < numSorted ; i++ ) {
-			int ping, playerClass, respawnsLeft;
+			/* Nico, removed respawnLeft
+			int ping, playerClass, respawnsLeft;*/
+			int ping, playerClass;
 
 			cl = &level.clients[level.sortedClients[i]];
 
@@ -88,6 +90,7 @@ void G_SendScore( gentity_t *ent ) {
 			}
 
 			// NERVE - SMF - number of respawns left
+			/* Nico, removed respawnLeft
 			respawnsLeft = cl->ps.persistant[PERS_RESPAWNS_LEFT];
 			if ( g_gametype.integer == GT_WOLF_LMS ) {
 				if ( g_entities[level.sortedClients[i]].health <= 0 ) {
@@ -97,7 +100,7 @@ void G_SendScore( gentity_t *ent ) {
 				if ( ( respawnsLeft == 0 && ( ( cl->ps.pm_flags & PMF_LIMBO ) || ( ( level.intermissiontime ) && g_entities[level.sortedClients[i]].health <= 0 ) ) ) ) {
 					respawnsLeft = -2;
 				}
-			}
+			}*/
 
 			if ( cl->pers.connected == CON_CONNECTING ) {
 				ping = -1;
@@ -106,8 +109,11 @@ void G_SendScore( gentity_t *ent ) {
 			}
 
 			if ( g_gametype.integer == GT_WOLF_LMS ) {
+				/* Nico, removed respawnLeft
 				Com_sprintf( entry, sizeof( entry ), " %i %i %i %i %i %i %i", level.sortedClients[i], cl->ps.persistant[PERS_SCORE], ping,
-							 ( level.time - cl->pers.enterTime ) / 60000, g_entities[level.sortedClients[i]].s.powerups, playerClass, respawnsLeft );
+							 ( level.time - cl->pers.enterTime ) / 60000, g_entities[level.sortedClients[i]].s.powerups, playerClass, respawnsLeft );*/
+				Com_sprintf( entry, sizeof( entry ), " %i %i %i %i %i %i", level.sortedClients[i], cl->ps.persistant[PERS_SCORE], ping,
+							 ( level.time - cl->pers.enterTime ) / 60000, g_entities[level.sortedClients[i]].s.powerups, playerClass );
 			} else {
 				int j, totalXP;
 
@@ -115,8 +121,11 @@ void G_SendScore( gentity_t *ent ) {
 					totalXP += cl->sess.skillpoints[j];
 				}
 
+				/* Nico, removed respawnLeft
 				Com_sprintf( entry, sizeof( entry ), " %i %i %i %i %i %i %i", level.sortedClients[i], totalXP, ping,
-							 ( level.time - cl->pers.enterTime ) / 60000, g_entities[level.sortedClients[i]].s.powerups, playerClass, respawnsLeft );
+							 ( level.time - cl->pers.enterTime ) / 60000, g_entities[level.sortedClients[i]].s.powerups, playerClass, respawnsLeft );*/
+				Com_sprintf( entry, sizeof( entry ), " %i %i %i %i %i %i", level.sortedClients[i], totalXP, ping,
+							 ( level.time - cl->pers.enterTime ) / 60000, g_entities[level.sortedClients[i]].s.powerups, playerClass );
 			}
 
 			if ( size + strlen( entry ) > 1000 ) {
@@ -642,7 +651,9 @@ qboolean SetTeam( gentity_t *ent, char *s, qboolean force, weapon_t w1, weapon_t
 	int clientNum;
 	spectatorState_t specState;
 	int specClient;
-	int respawnsLeft;
+
+	/* Nico, removed respawnLeft
+	int respawnsLeft;*/
 
 	//
 	// see what change is requested
@@ -653,7 +664,8 @@ qboolean SetTeam( gentity_t *ent, char *s, qboolean force, weapon_t w1, weapon_t
 	specClient = 0;
 
 	// ydnar: preserve respawn count
-	respawnsLeft = client->ps.persistant[ PERS_RESPAWNS_LEFT ];
+	/* Nico, removed respawnLeft
+	respawnsLeft = client->ps.persistant[ PERS_RESPAWNS_LEFT ];*/
 
 	G_TeamDataForString( s, client - level.clients, &team, &specState, &specClient );
 
@@ -702,6 +714,7 @@ qboolean SetTeam( gentity_t *ent, char *s, qboolean force, weapon_t w1, weapon_t
 	}
 
 	// NERVE - SMF - prevent players from switching to regain deployments
+	/* Nico, removed respawnLeft
 	if ( g_gametype.integer != GT_WOLF_LMS ) {
 		if ( ( g_maxlives.integer > 0 ||
 			   ( g_alliedmaxlives.integer > 0 && ent->client->sess.sessionTeam == TEAM_ALLIES ) ||
@@ -711,7 +724,7 @@ qboolean SetTeam( gentity_t *ent, char *s, qboolean force, weapon_t w1, weapon_t
 			CP( "cp \"You can't switch teams because you are out of lives.\n\" 3" );
 			return qfalse;  // ignore the request
 		}
-	}
+	}*/
 
 	// DHM - Nerve
 	// OSP
@@ -807,9 +820,10 @@ qboolean SetTeam( gentity_t *ent, char *s, qboolean force, weapon_t w1, weapon_t
 	ClientBegin( clientNum );
 
 	// ydnar: restore old respawn count (players cannot jump from team to team to regain lives)
+	/* Nico, removed respawnLeft
 	if ( respawnsLeft >= 0 && oldTeam != TEAM_SPECTATOR ) {
 		client->ps.persistant[ PERS_RESPAWNS_LEFT ] = respawnsLeft;
-	}
+	}*/
 
 	/* Nico, removed warmup
 	G_verifyMatchState( oldTeam );*/

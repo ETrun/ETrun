@@ -1273,9 +1273,13 @@ void SpectatorClientEndFrame( gentity_t *ent ) {
 
 				if ( ent->client->sess.sessionTeam != TEAM_SPECTATOR && ( ent->client->ps.pm_flags & PMF_LIMBO ) ) {
 					int savedScore = ent->client->ps.persistant[PERS_SCORE];
+
+					/* Nico, removed respawnLeft
 					int savedRespawns = ent->client->ps.persistant[PERS_RESPAWNS_LEFT];
-					int savedRespawnPenalty = ent->client->ps.persistant[PERS_RESPAWNS_PENALTY];
+					int savedRespawnPenalty = ent->client->ps.persistant[PERS_RESPAWNS_PENALTY];*/
+
 					int savedClass = ent->client->ps.stats[STAT_PLAYER_CLASS];
+
 					/* Nico, removed multiview
 					int savedMVList = ent->client->ps.powerups[PW_MVCLIENTLIST];*/
 
@@ -1288,8 +1292,11 @@ void SpectatorClientEndFrame( gentity_t *ent ) {
 
 					/* Nico, removed warmup
 					ent->client->ps.pm_time = do_respawn;                           // put pm_time back*/
+
+					/* Nico, removed respawnLeft
 					ent->client->ps.persistant[PERS_RESPAWNS_LEFT] = savedRespawns;
-					ent->client->ps.persistant[PERS_RESPAWNS_PENALTY] = savedRespawnPenalty;
+					ent->client->ps.persistant[PERS_RESPAWNS_PENALTY] = savedRespawnPenalty;*/
+
 					ent->client->ps.persistant[PERS_SCORE] = savedScore;            // put score back
 					/* Nico, removed multiview
 					ent->client->ps.powerups[PW_MVCLIENTLIST] = savedMVList;*/

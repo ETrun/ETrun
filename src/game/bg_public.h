@@ -578,8 +578,10 @@ typedef enum {
 	PERS_ATTACKER,                  // clientnum of last damage inflicter
 	PERS_KILLED,                    // count of the number of times you died
 	// these were added for single player awards tracking
+
+	/* Nico, removed respawnLeft
 	PERS_RESPAWNS_LEFT,             // DHM - Nerve :: number of remaining respawns
-	PERS_RESPAWNS_PENALTY,          // how many respawns you have to sit through before respawning again
+	PERS_RESPAWNS_PENALTY,          // how many respawns you have to sit through before respawning again*/
 
 	PERS_REVIVE_COUNT,
 	PERS_BLEH_2,

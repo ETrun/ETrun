@@ -518,13 +518,14 @@ void limbo( gentity_t *ent, qboolean makeCorpse ) {
 
 	if ( !( ent->client->ps.pm_flags & PMF_LIMBO ) ) {
 
+		/* Nico, removed respawnLeft
 		if ( ent->client->ps.persistant[PERS_RESPAWNS_LEFT] == 0 ) {
 			if ( g_maxlivesRespawnPenalty.integer ) {
 				ent->client->ps.persistant[PERS_RESPAWNS_PENALTY] = g_maxlivesRespawnPenalty.integer;
 			} else {
 				ent->client->ps.persistant[PERS_RESPAWNS_PENALTY] = -1;
 			}
-		}
+		}*/
 
 		// DHM - Nerve :: First save off persistant info we'll need for respawn
 		for ( i = 0; i < MAX_PERSISTANT; i++ ) {
@@ -646,6 +647,7 @@ void respawn( gentity_t *ent ) {
 	ent->client->ps.pm_flags &= ~PMF_LIMBO; // JPW NERVE turns off limbo
 
 	// DHM - Nerve :: Decrease the number of respawns left
+	/* Nico, removed respawnLeft
 	if ( g_gametype.integer != GT_WOLF_LMS ) {
 		if ( ent->client->ps.persistant[PERS_RESPAWNS_LEFT] > 0 && g_gamestate.integer == GS_PLAYING ) {
 			if ( g_maxlives.integer > 0 ) {
@@ -661,7 +663,7 @@ void respawn( gentity_t *ent ) {
 		}
 	}
 
-	G_DPrintf( "Respawning %s, %i lives left\n", ent->client->pers.netname, ent->client->ps.persistant[PERS_RESPAWNS_LEFT] );
+	G_DPrintf( "Respawning %s, %i lives left\n", ent->client->pers.netname, ent->client->ps.persistant[PERS_RESPAWNS_LEFT] );*/
 
 	ClientSpawn( ent, qfalse );
 
@@ -1474,6 +1476,7 @@ char *ClientConnect( int clientNum, qboolean firstTime, qboolean isBot ) {
 	}
 
 	// Xian - check for max lives enforcement ban
+	/* Nico, removed respawnLeft
 	if ( g_gametype.integer != GT_WOLF_LMS ) {
 		if ( g_enforcemaxlives.integer && ( g_maxlives.integer > 0 || g_axismaxlives.integer > 0 || g_alliedmaxlives.integer > 0 ) ) {
 			if ( trap_Cvar_VariableIntegerValue( "sv_punkbuster" ) ) {
@@ -1488,7 +1491,7 @@ char *ClientConnect( int clientNum, qboolean firstTime, qboolean isBot ) {
 				}
 			}
 		}
-	}
+	}*/
 	// End Xian
 
 	// we don't check password for bots and local client
@@ -1582,8 +1585,8 @@ char *ClientConnect( int clientNum, qboolean firstTime, qboolean isBot ) {
 //
 // Scaling for late-joiners of maxlives based on current game time
 //
+/* Nico, removed respawnLeft
 int G_ComputeMaxLives( gclient_t *cl, int maxRespawns ) {
-	/* Nico, no timelimit
 	float scaled = (float)( maxRespawns - 1 ) * ( 1.0f - ( (float)( level.time - level.startTime ) / ( g_timelimit.value * 60000.0f ) ) );
 	int val = (int)scaled;
 
@@ -1593,10 +1596,8 @@ int G_ComputeMaxLives( gclient_t *cl, int maxRespawns ) {
 	}
 
 	val += ( ( scaled - (float)val ) < 0.5f ) ? 0 : 1;
-	return( val );*/
-	// Nico, note: temporary return -1 but this function should be removed
-	return -1;
-}
+	return( val );
+}*/
 
 /*
 ===========
@@ -1611,7 +1612,7 @@ void ClientBegin( int clientNum ) {
 	gentity_t   *ent;
 	gclient_t   *client;
 	int flags;
-	int spawn_count, lives_left;                // DHM - Nerve
+	int spawn_count;//, lives_left; Nico, unused warning fix
 
 	ent = g_entities + clientNum;
 
@@ -1637,16 +1638,21 @@ void ClientBegin( int clientNum ) {
 	// DHM - Nerve :: Also save PERS_SPAWN_COUNT, so that CG_Respawn happens
 	spawn_count = client->ps.persistant[PERS_SPAWN_COUNT];
 	//bani - proper fix for #328
+
+	/* Nico, removed respawnLeft
 	if ( client->ps.persistant[PERS_RESPAWNS_LEFT] > 0 ) {
 		lives_left = client->ps.persistant[PERS_RESPAWNS_LEFT] - 1;
 	} else {
 		lives_left = client->ps.persistant[PERS_RESPAWNS_LEFT];
-	}
+	}*/
+
 	flags = client->ps.eFlags;
 	memset( &client->ps, 0, sizeof( client->ps ) );
 	client->ps.eFlags = flags;
 	client->ps.persistant[PERS_SPAWN_COUNT] = spawn_count;
-	client->ps.persistant[PERS_RESPAWNS_LEFT] = lives_left;
+
+	/* Nico, removed respawnLeft
+	client->ps.persistant[PERS_RESPAWNS_LEFT] = lives_left;*/
 
 
 	client->pers.complaintClient = -1;
@@ -1656,6 +1662,7 @@ void ClientBegin( int clientNum ) {
 	ClientSpawn( ent, qfalse );
 
 	// Xian -- Changed below for team independant maxlives
+	/* Nico, removed respawnLeft
 	if ( g_gametype.integer != GT_WOLF_LMS ) {
 		if ( ( client->sess.sessionTeam == TEAM_AXIS || client->sess.sessionTeam == TEAM_ALLIES ) ) {
 
@@ -1691,7 +1698,7 @@ void ClientBegin( int clientNum ) {
 				}
 			}
 		}
-	}
+	}*/
 
 
 	// DHM - Nerve :: Start players in limbo mode if they change teams during the match
@@ -1705,11 +1712,12 @@ void ClientBegin( int clientNum ) {
 		client->ps.pm_type = PM_DEAD;
 		client->ps.stats[STAT_HEALTH] = 0;
 
+		/* Nico, removed respawnLeft
 		if ( g_gametype.integer != GT_WOLF_LMS ) {
 			if ( g_maxlives.integer > 0 ) {
 				client->ps.persistant[PERS_RESPAWNS_LEFT]++;
 			}
-		}
+		}*/
 
 		limbo( ent, qfalse );
 	}
@@ -1721,6 +1729,7 @@ void ClientBegin( int clientNum ) {
 	G_LogPrintf( "ClientBegin: %i\n", clientNum );
 
 	// Xian - Check for maxlives enforcement
+	/* Nico, removed respawnLeft
 	if ( g_gametype.integer != GT_WOLF_LMS ) {
 		if ( g_enforcemaxlives.integer == 1 && ( g_maxlives.integer > 0 || g_axismaxlives.integer > 0 || g_alliedmaxlives.integer > 0 ) ) {
 			char *value;
@@ -1734,7 +1743,7 @@ void ClientBegin( int clientNum ) {
 			G_LogPrintf( "EnforceMaxLives-IP: %s\n", value );
 			AddMaxLivesBan( value );
 		}
-	}
+	}*/
 	// End Xian
 
 	// count current clients and rank for scoreboard
@@ -1885,11 +1894,13 @@ void ClientSpawn( gentity_t *ent, qboolean revived ) {
 	}
 
 	{
-		qboolean set = client->maxlivescalced;
+		/* Nico, removed respawnLeft
+		qboolean set = client->maxlivescalced;*/
 
 		memset( client, 0, sizeof( *client ) );
 
-		client->maxlivescalced = set;
+		/* Nico, removed respawnLeft
+		client->maxlivescalced = set;*/
 	}
 
 	client->pers            = saved;

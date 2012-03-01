@@ -4853,27 +4853,32 @@ void UI_RunMenuScript( char **args ) {
 				trap_SetPbSvStatus( 1 );
 			}
 		} else if ( Q_stricmp( name, "initHostGameFeatures" ) == 0 ) {
+
+			/* Nico, removed respawnLeft
 			int cvar = trap_Cvar_VariableValue( "g_maxlives" );
 			if ( cvar ) {
 				trap_Cvar_Set( "ui_maxlives", "1" );
 			} else {
 				trap_Cvar_Set( "ui_maxlives", "0" );
-			}
+			}*/
 
-			cvar = trap_Cvar_VariableValue( "g_heavyWeaponRestriction" );
+			int cvar = trap_Cvar_VariableValue( "g_heavyWeaponRestriction" );
 			if ( cvar == 100 ) {
 				trap_Cvar_Set( "ui_heavyWeaponRestriction", "0" );
 			} else {
 				trap_Cvar_Set( "ui_heavyWeaponRestriction", "1" );
 			}
-		} else if ( Q_stricmp( name, "toggleMaxLives" ) == 0 ) {
+		} 
+		/* Nico, removed respawnLeft
+		else if ( Q_stricmp( name, "toggleMaxLives" ) == 0 ) {
 			int ui_ml = trap_Cvar_VariableValue( "ui_maxlives" );
 			if ( ui_ml ) {
 				trap_Cvar_Set( "g_maxlives", "5" );
 			} else {
 				trap_Cvar_Set( "g_maxlives", "0" );
 			}
-		} else if ( Q_stricmp( name, "toggleWeaponRestriction" ) == 0 ) {
+		}*/
+		else if ( Q_stricmp( name, "toggleWeaponRestriction" ) == 0 ) {
 			int ui_hwr = trap_Cvar_VariableValue( "ui_heavyWeaponRestriction" );
 			if ( ui_hwr ) {
 				trap_Cvar_Set( "g_heavyWeaponRestriction", "10" );
@@ -5268,7 +5273,9 @@ UI_BuildServerDisplayList
 ==================
 */
 static void UI_BuildServerDisplayList( qboolean force ) {
-	int i, count, clients, maxClients, ping, game, len, visible, friendlyFire, maxlives, punkbuster, antilag, password, weaponrestricted, balancedteams;
+	/* Nico, removed respawnLeft
+	int i, count, clients, maxClients, ping, game, len, visible, friendlyFire, maxlives, punkbuster, antilag, password, weaponrestricted, balancedteams;*/
+	int i, count, clients, maxClients, ping, game, len, visible, friendlyFire, punkbuster, antilag, password, weaponrestricted, balancedteams;
 	char info[MAX_STRING_CHARS];
 	static int numinvisible;
 
@@ -5377,6 +5384,7 @@ static void UI_BuildServerDisplayList( qboolean force ) {
 				}
 			}
 
+			/* Nico, removed respawnLeft
 			trap_Cvar_Update( &ui_browserShowMaxlives );
 			if ( ui_browserShowMaxlives.integer ) {
 				maxlives = atoi( Info_ValueForKey( info, "maxlives" ) );
@@ -5385,7 +5393,7 @@ static void UI_BuildServerDisplayList( qboolean force ) {
 					trap_LAN_MarkServerVisible( ui_netSource.integer, i, qfalse );
 					continue;
 				}
-			}
+			}*/
 
 			trap_Cvar_Update( &ui_browserShowPunkBuster );
 			if ( ui_browserShowPunkBuster.integer ) {
@@ -6053,7 +6061,9 @@ const char *UI_FeederItemText( float feederID, int index, int column, qhandle_t 
 		} else {return "";}
 	} else if ( feederID == FEEDER_SERVERS ) {
 		if ( index >= 0 && index < uiInfo.serverStatus.numDisplayServers ) {
-			int ping, game, antilag, needpass, friendlyfire, maxlives, punkbuster, weaponrestrictions, balancedteams, serverload;
+			/* Nico, removed respawnLeft
+			int ping, game, antilag, needpass, friendlyfire, maxlives, punkbuster, weaponrestrictions, balancedteams, serverload;*/
+			int ping, game, antilag, needpass, friendlyfire, punkbuster, weaponrestrictions, balancedteams, serverload;
 			if ( lastColumn != column || lastTime > uiInfo.uiDC.realTime + 5000 ) {
 				trap_LAN_GetServerInfo( ui_netSource.integer, uiInfo.serverStatus.displayServers[index], info, MAX_STRING_CHARS );
 				lastColumn = column;
@@ -6134,7 +6144,10 @@ const char *UI_FeederItemText( float feederID, int index, int column, qhandle_t 
 					*numhandles = 7;
 					needpass = atoi( Info_ValueForKey( info, "needpass" ) );
 					friendlyfire = atoi( Info_ValueForKey( info, "friendlyFire" ) );
-					maxlives = atoi( Info_ValueForKey( info, "maxlives" ) );
+
+					/* Nico, removed respawnLeft
+					maxlives = atoi( Info_ValueForKey( info, "maxlives" ) );*/
+
 					punkbuster = atoi( Info_ValueForKey( info, "punkbuster" ) );
 					weaponrestrictions = atoi( Info_ValueForKey( info, "weaprestrict" ) );
 					antilag = atoi( Info_ValueForKey( info, "g_antilag" ) );
@@ -6146,9 +6159,12 @@ const char *UI_FeederItemText( float feederID, int index, int column, qhandle_t 
 					if ( friendlyfire ) {
 						handles[1] = uiInfo.friendlyFireFilter;
 					} else { handles[1] = -1;}
+
+					/* Nico, removed respawnLeft
 					if ( maxlives ) {
 						handles[2] = uiInfo.maxLivesFilter;
-					} else { handles[2] = -1;}
+					} else { handles[2] = -1;}*/
+
 					if ( punkbuster ) {
 						handles[3] = uiInfo.punkBusterFilter;
 					} else { handles[3] = -1;}
@@ -6754,7 +6770,10 @@ void _UI_Init( qboolean inGameLoad ) {
 
 	uiInfo.passwordFilter = trap_R_RegisterShaderNoMip( "ui/assets/filter_pass.tga" );
 	uiInfo.friendlyFireFilter = trap_R_RegisterShaderNoMip( "ui/assets/filter_ff.tga" );
-	uiInfo.maxLivesFilter = trap_R_RegisterShaderNoMip( "ui/assets/filter_lives.tga" );
+
+	/* Nico, removed respawnLeft
+	uiInfo.maxLivesFilter = trap_R_RegisterShaderNoMip( "ui/assets/filter_lives.tga" );*/
+
 	uiInfo.punkBusterFilter = trap_R_RegisterShaderNoMip( "ui/assets/filter_pb.tga" );
 	uiInfo.weaponRestrictionsFilter = trap_R_RegisterShaderNoMip( "ui/assets/filter_weap.tga" );
 	uiInfo.antiLagFilter = trap_R_RegisterShaderNoMip( "ui/assets/filter_antilag.tga" );
@@ -7393,7 +7412,10 @@ vmCvar_t ui_browserSortKey;
 vmCvar_t ui_browserShowEmptyOrFull;
 vmCvar_t ui_browserShowPasswordProtected;
 vmCvar_t ui_browserShowFriendlyFire;            // NERVE - SMF
-vmCvar_t ui_browserShowMaxlives;                // NERVE - SMF
+
+/* Nico, removed respawnLeft
+vmCvar_t ui_browserShowMaxlives;                // NERVE - SMF*/
+
 vmCvar_t ui_browserShowPunkBuster;              // DHM - Nerve
 vmCvar_t ui_browserShowAntilag;     // TTimo
 vmCvar_t ui_browserShowWeaponsRestricted;
@@ -7560,7 +7582,10 @@ cvarTable_t cvarTable[] = {
 	{ &ui_browserShowEmptyOrFull, "ui_browserShowEmptyOrFull", "0", CVAR_ARCHIVE },
 	{ &ui_browserShowPasswordProtected, "ui_browserShowPasswordProtected", "0", CVAR_ARCHIVE },
 	{ &ui_browserShowFriendlyFire, "ui_browserShowFriendlyFire", "0", CVAR_ARCHIVE },
-	{ &ui_browserShowMaxlives, "ui_browserShowMaxlives", "0", CVAR_ARCHIVE },
+
+	/* Nico, removed respawnLeft
+	{ &ui_browserShowMaxlives, "ui_browserShowMaxlives", "0", CVAR_ARCHIVE },*/
+
 	{ &ui_browserShowPunkBuster, "ui_browserShowPunkBuster", "0", CVAR_ARCHIVE },
 	{ &ui_browserShowAntilag, "ui_browserShowAntilag", "0", CVAR_ARCHIVE },
 	{ &ui_browserShowWeaponsRestricted, "ui_browserShowWeaponsRestricted", "0", CVAR_ARCHIVE },
@@ -7659,7 +7684,10 @@ cvarTable_t cvarTable[] = {
 	{ NULL, "g_doWarmup", "0", CVAR_ARCHIVE },*/
 
 	{ NULL, "g_inactivity", "0", CVAR_ARCHIVE },
-	{ NULL, "g_maxLives", "0", CVAR_ARCHIVE },
+
+	/* Nico, removed respawnLeft
+	{ NULL, "g_maxLives", "0", CVAR_ARCHIVE },*/
+
 	{ NULL, "refereePassword", "none", CVAR_ARCHIVE },
 	{ NULL, "g_teamForceBalance", "0", CVAR_ARCHIVE  },
 	{ NULL, "sv_maxRate", "0", CVAR_ARCHIVE },

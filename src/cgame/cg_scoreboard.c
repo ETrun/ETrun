@@ -250,7 +250,9 @@ static void WM_DrawClientScore( int x, int y, score_t *score, float *color, floa
 		}
 
 		// draw the skull icon if out of lives
-		if ( score->respawnsLeft == -2 || ( cgs.clientinfo[cg.clientNum].team != TEAM_SPECTATOR && ci->team == cgs.clientinfo[cg.clientNum].team && cgs.clientinfo[score->client].health == -1 ) ) {
+		/* Nico, removed respawnLeft
+		if ( score->respawnsLeft == -2 || ( cgs.clientinfo[cg.clientNum].team != TEAM_SPECTATOR && ci->team == cgs.clientinfo[cg.clientNum].team && cgs.clientinfo[score->client].health == -1 ) ) {*/
+		if ( ( cgs.clientinfo[cg.clientNum].team != TEAM_SPECTATOR && ci->team == cgs.clientinfo[cg.clientNum].team && cgs.clientinfo[score->client].health == -1 ) ) {
 			CG_DrawPic( tempx, y, 18, 18, cgs.media.scoreEliminatedShader );
 			offset += 18;
 			tempx += 18;
@@ -306,6 +308,7 @@ static void WM_DrawClientScore( int x, int y, score_t *score, float *color, floa
 	CG_DrawSmallString( tempx, y, va( "%4i", score->ping ), fade );
 	tempx += INFO_LATENCY_WIDTH;
 
+	/* Nico, removed respawnLeft
 	if ( cg_gameType.integer != GT_WOLF_LMS ) {
 		if ( score->respawnsLeft >= 0 ) {
 			CG_DrawSmallString( tempx, y, va( "%2i", score->respawnsLeft ), fade );
@@ -313,7 +316,7 @@ static void WM_DrawClientScore( int x, int y, score_t *score, float *color, floa
 			CG_DrawSmallString( tempx, y, " -", fade );
 		}
 		tempx += INFO_LIVES_WIDTH;
-	}
+	}*/
 }
 
 const char* WM_TimeToString( float msec ) {
@@ -397,12 +400,14 @@ static void WM_DrawClientScore_Small( int x, int y, score_t *score, float *color
 		}
 
 		// draw the skull icon if out of lives
+		/* Nico, removed respawnLeft
 		if ( score->respawnsLeft == -2 || ( cgs.clientinfo[cg.clientNum].team != TEAM_SPECTATOR && ci->team == cgs.clientinfo[cg.clientNum].team && cgs.clientinfo[score->client].health == -1 ) ) {
 			CG_DrawPic( tempx, y, 12, 12, cgs.media.scoreEliminatedShader );
 			offset += 14;
 			tempx += 14;
 			maxchars -= 2;
-		} else if ( cgs.clientinfo[cg.clientNum].team != TEAM_SPECTATOR && ci->team == cgs.clientinfo[cg.clientNum].team && cgs.clientinfo[score->client].health == 0 ) {
+		} else */
+		if ( cgs.clientinfo[cg.clientNum].team != TEAM_SPECTATOR && ci->team == cgs.clientinfo[cg.clientNum].team && cgs.clientinfo[score->client].health == 0 ) {
 			CG_DrawPic( tempx + 1, y + 1, 10, 10, cgs.media.medicIcon );
 			offset += 14;
 			tempx += 14;
@@ -442,6 +447,7 @@ static void WM_DrawClientScore_Small( int x, int y, score_t *score, float *color
 	CG_DrawStringExt( tempx, y, va( "%4i", score->ping ), hcolor, qfalse, qfalse, MINICHAR_WIDTH, MINICHAR_HEIGHT, 0 );
 	tempx += INFO_LATENCY_WIDTH;
 
+	/* Nico, removed respawnLeft
 	if ( cg_gameType.integer != GT_WOLF_LMS ) {
 		if ( score->respawnsLeft >= 0 ) {
 			CG_DrawStringExt( tempx, y, va( "%2i", score->respawnsLeft ), hcolor, qfalse, qfalse, MINICHAR_WIDTH, MINICHAR_HEIGHT, 0 );
@@ -449,7 +455,7 @@ static void WM_DrawClientScore_Small( int x, int y, score_t *score, float *color
 			CG_DrawStringExt( tempx, y, " -", hcolor, qfalse, qfalse, MINICHAR_WIDTH, MINICHAR_HEIGHT, 0 );
 		}
 		tempx += INFO_LIVES_WIDTH;
-	}
+	}*/
 }
 
 /* Nico, no timelimit

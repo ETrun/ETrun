@@ -122,7 +122,10 @@ extern vmCvar_t ui_browserSortKey;
 extern vmCvar_t ui_browserShowEmptyOrFull;
 extern vmCvar_t ui_browserShowPasswordProtected;
 extern vmCvar_t ui_browserShowFriendlyFire;
-extern vmCvar_t ui_browserShowMaxlives;
+
+/* Nico, removed respawnLeft
+extern vmCvar_t ui_browserShowMaxlives;*/
+
 extern vmCvar_t ui_browserShowPunkBuster;
 extern vmCvar_t ui_browserShowAntilag;
 extern vmCvar_t ui_browserShowWeaponsRestricted;
@@ -935,7 +938,10 @@ typedef struct {
 
 	qhandle_t passwordFilter;
 	qhandle_t friendlyFireFilter;
-	qhandle_t maxLivesFilter;
+
+	/* Nico, removed respawnLeft
+	qhandle_t maxLivesFilter;*/
+
 	qhandle_t punkBusterFilter;
 	qhandle_t weaponRestrictionsFilter;
 	qhandle_t antiLagFilter;

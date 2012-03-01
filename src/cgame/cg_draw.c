@@ -1007,7 +1007,7 @@ static void CG_DrawLagometer( void ) {
 	CG_DrawDisconnect();
 }
 
-
+/* Nico, removed respawnLeft
 void CG_DrawLivesLeft( void ) {
 	if ( cg_gameType.integer == GT_WOLF_LMS ) {
 		return;
@@ -1020,7 +1020,7 @@ void CG_DrawLivesLeft( void ) {
 	CG_DrawPic( 4, 360, 48, 24, cg.snap->ps.persistant[PERS_TEAM] == TEAM_ALLIES ? cgs.media.hudAlliedHelmet : cgs.media.hudAxisHelmet );
 
 	CG_DrawField( 44, 360, 3, cg.snap->ps.persistant[PERS_RESPAWNS_LEFT], 14, 20, qtrue, qtrue );
-}
+}*/
 
 /*
 ===============================================================================
@@ -4089,7 +4089,8 @@ static void CG_Draw2D( void ) {
 				CG_DrawPlayerStats();
 			}
 
-			CG_DrawLivesLeft();
+			/* Nico, removed respawnLeft
+			CG_DrawLivesLeft();*/
 
 			// Cursor hint
 			rect.w = rect.h = 48;

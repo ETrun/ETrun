@@ -59,7 +59,10 @@ static const modeCvarTable_t aCompSettings[] = {
 	{ M_ALL, "g_doWarmup", "1" },*/
 
 	{ M_ALL, "g_inactivity", "0" },
-	{ M_ALL, "g_maxlives", "0" },
+
+	/* Nico, removed respawnLeft
+	{ M_ALL, "g_maxlives", "0" },*/
+
 	{ M_ALL, "g_teamforcebalance", "0" },
 	{ M_ALL, "g_lms_teamForceBalance", "0" },
 	{ M_ALL, "g_voicechatsallowed", "50" },
@@ -91,7 +94,9 @@ static const modeCvarTable_t aPubSettings[] = {
 	/* Nico, removed warmup
 	{ M_ALL, "g_doWarmup", "0" },*/
 
-	{ M_ALL, "g_maxlives", "0" },
+	/* Nico, removed respawnLeft
+	{ M_ALL, "g_maxlives", "0" },*/
+
 	{ M_ALL, "g_teamforcebalance", "1" },
 	{ M_ALL, "g_lms_teamForceBalance", "1" },
 	{ M_ALL, "g_voicechatsallowed", "50" },
