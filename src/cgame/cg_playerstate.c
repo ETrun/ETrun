@@ -505,10 +505,9 @@ void CG_TransitionPlayerState( playerState_t *ps, playerState_t *ops ) {
 		*ops = *ps;
 
 		// DHM - Nerve :: After Limbo, make sure and do a CG_Respawn
-		/* Nico, removed spawn_count
 		if ( ps->clientNum == cg.clientNum ) {
 			ops->persistant[PERS_SPAWN_COUNT]--;
-		}*/
+		}
 	}
 
 	if ( ps->eFlags & EF_FIRING ) {
@@ -528,12 +527,11 @@ void CG_TransitionPlayerState( playerState_t *ps, playerState_t *ops ) {
 	}
 
 	// respawning
-	/* Nico, removed spawn_count
 	if ( ps->persistant[PERS_SPAWN_COUNT] != ops->persistant[PERS_SPAWN_COUNT] ) {
-		CG_Respawn( ps->persistant[PERS_REVIVE_COUNT] != ops->persistant[PERS_REVIVE_COUNT] ? qtrue : qfalse );
-	}*/
-	// Nico, fix spawn view bug
-	CG_Respawn( qfalse );
+		/* Nico, removed revive_count
+		// CG_Respawn( ps->persistant[PERS_REVIVE_COUNT] != ops->persistant[PERS_REVIVE_COUNT] ? qtrue : qfalse );*/
+		CG_Respawn( qfalse );
+	}
 
 	if ( cg.mapRestart ) {
 		CG_Respawn( qfalse );

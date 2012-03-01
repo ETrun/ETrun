@@ -587,8 +587,7 @@ typedef enum {
 	PERS_RANK,
 	PERS_TEAM,
 
-	/* Nico, removed spawn_count
-	PERS_SPAWN_COUNT,               // incremented every respawn*/
+	PERS_SPAWN_COUNT,               // incremented every respawn Nico, note: keep this
 
 	PERS_ATTACKER,                  // clientnum of last damage inflicter
 	PERS_KILLED,                    // count of the number of times you died
