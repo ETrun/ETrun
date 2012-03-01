@@ -1612,7 +1612,7 @@ void ClientBegin( int clientNum ) {
 	gentity_t   *ent;
 	gclient_t   *client;
 	int flags;
-	int spawn_count;//, lives_left; Nico, unused warning fix
+	// int spawn_count, lives_left; Nico, unused warning fix
 
 	ent = g_entities + clientNum;
 
@@ -1636,7 +1636,10 @@ void ClientBegin( int clientNum ) {
 	// so the viewpoint doesn't interpolate through the
 	// world to the new position
 	// DHM - Nerve :: Also save PERS_SPAWN_COUNT, so that CG_Respawn happens
-	spawn_count = client->ps.persistant[PERS_SPAWN_COUNT];
+
+	/* Nico, removed spawn_count
+	spawn_count = client->ps.persistant[PERS_SPAWN_COUNT];*/
+
 	//bani - proper fix for #328
 
 	/* Nico, removed respawnLeft
@@ -1649,7 +1652,9 @@ void ClientBegin( int clientNum ) {
 	flags = client->ps.eFlags;
 	memset( &client->ps, 0, sizeof( client->ps ) );
 	client->ps.eFlags = flags;
-	client->ps.persistant[PERS_SPAWN_COUNT] = spawn_count;
+
+	/* Nico, removed spawn_count
+	client->ps.persistant[PERS_SPAWN_COUNT] = spawn_count;*/
 
 	/* Nico, removed respawnLeft
 	client->ps.persistant[PERS_RESPAWNS_LEFT] = lives_left;*/
@@ -1916,7 +1921,10 @@ void ClientSpawn( gentity_t *ent, qboolean revived ) {
 	}
 
 	// increment the spawncount so the client will detect the respawn
-	client->ps.persistant[PERS_SPAWN_COUNT]++;
+
+	/* Nico, removed spawn_count
+	client->ps.persistant[PERS_SPAWN_COUNT]++;*/
+
 	if ( revived ) {
 		client->ps.persistant[PERS_REVIVE_COUNT]++;
 	}

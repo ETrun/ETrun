@@ -574,7 +574,10 @@ typedef enum {
 	PERS_HITS,                      // total points damage inflicted so damage beeps can sound on change
 	PERS_RANK,
 	PERS_TEAM,
-	PERS_SPAWN_COUNT,               // incremented every respawn
+
+	/* Nico, removed spawn_count
+	PERS_SPAWN_COUNT,               // incremented every respawn*/
+
 	PERS_ATTACKER,                  // clientnum of last damage inflicter
 	PERS_KILLED,                    // count of the number of times you died
 	// these were added for single player awards tracking
