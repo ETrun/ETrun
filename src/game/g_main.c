@@ -1636,7 +1636,9 @@ void G_InitGame( int levelTime, int randomSeed, int restart ) {
 	// NERVE - SMF - intialize gamestate
 	if ( g_gamestate.integer == GS_INITIALIZE ) {
 		// OSP
-		trap_Cvar_Set( "gamestate", va( "%i", GS_WARMUP ) );
+		/* Nico, removed warmup
+		trap_Cvar_Set( "gamestate", va( "%i", GS_WARMUP ) );*/
+		trap_Cvar_Set( "gamestate", va( "%i", GS_PLAYING ) );
 	}
 
 	// set some level globals
@@ -2952,8 +2954,8 @@ void CheckWolfMP() {
 		}
 
 		// check warmup latch
+		/* Nico, removed warmup
 		if ( g_gamestate.integer == GS_WARMUP ) {
-			/* Nico, removed warmup
 			if ( !g_doWarmup.integer ||
 				 ( level.numPlayingClients >= match_minplayers.integer &&
 				   level.lastRestartTime + 1000 < level.time && G_readyMatchState() ) ) {
@@ -2963,20 +2965,19 @@ void CheckWolfMP() {
 				trap_Cvar_Set( "gamestate", va( "%i", GS_WARMUP_COUNTDOWN ) );
 				trap_Cvar_Update( &g_gamestate );
 				trap_SetConfigstring( CS_WARMUP, va( "%i", level.warmupTime ) );
-			}*/
+			}
 		}
 
 		// if the warmup time has counted down, restart
 		if ( g_gamestate.integer == GS_WARMUP_COUNTDOWN ) {
-			/* Nico, removed warmup
 			if ( level.time > level.warmupTime ) {
 				level.warmupTime += 10000;
 				trap_Cvar_Set( "g_restarted", "1" );
 				trap_SendConsoleCommand( EXEC_APPEND, "map_restart 0\n" );
 				level.restarted = qtrue;
 				return;
-			}*/
-		}
+			}
+		}*/
 	}
 }
 

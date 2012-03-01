@@ -818,10 +818,11 @@ int G_StartMatch_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *a
 			return( G_INVALID );
 		}
 
+		/* Nico, removed warmup
 		if ( g_gamestate.integer == GS_WARMUP_COUNTDOWN ) {
 			G_refPrintf( ent, "^3Countdown already started!" );
 			return( G_INVALID );
-		}
+		}*/
 
 		if ( level.numPlayingClients < match_minplayers.integer ) {
 			G_refPrintf( ent, "^3Not enough players to start match!" );

@@ -668,7 +668,9 @@ void Svcmd_ResetMatch_f( qboolean fDoReset, qboolean fDoRestart ) {
 	}
 
 	if ( fDoRestart ) {
-		trap_SendConsoleCommand( EXEC_APPEND, va( "map_restart 0 %i\n", ( ( g_gamestate.integer != GS_PLAYING ) ? GS_RESET : GS_WARMUP ) ) );
+		/* Nico, removed warmup
+		trap_SendConsoleCommand( EXEC_APPEND, va( "map_restart 0 %i\n", ( ( g_gamestate.integer != GS_PLAYING ) ? GS_RESET : GS_WARMUP ) ) );*/
+		trap_SendConsoleCommand( EXEC_APPEND, va( "map_restart 0 %i\n", GS_RESET ) );
 	}
 }
 
@@ -709,7 +711,8 @@ void Svcmd_ShuffleTeams_f( void ) {
 	G_shuffleTeams();
 
 	if ( ( g_gamestate.integer == GS_INITIALIZE ) ||
-		 ( g_gamestate.integer == GS_WARMUP ) ||
+		/* Nico, removed warmup
+		 ( g_gamestate.integer == GS_WARMUP ) ||*/
 		 ( g_gamestate.integer == GS_RESET ) ) {
 		return;
 	}

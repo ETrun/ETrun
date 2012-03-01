@@ -1197,9 +1197,10 @@ void SpectatorClientEndFrame( gentity_t *ent ) {
 	if ( ( ent->client->sess.spectatorState == SPECTATOR_FOLLOW ) || ( ent->client->ps.pm_flags & PMF_LIMBO ) ) {
 		int clientNum;//, testtime; Nico, unused warning fix
 		gclient_t *cl;
-		qboolean do_respawn = qfalse; // JPW NERVE
 
 		/* Nico, removed warmup
+		qboolean do_respawn = qfalse; // JPW NERVE
+
 		// Players can respawn quickly in warmup
 		if ( g_gamestate.integer != GS_PLAYING && ent->client->respawnTime <= level.timeCurrent &&
 			 ent->client->sess.sessionTeam != TEAM_SPECTATOR ) {
@@ -1214,8 +1215,7 @@ void SpectatorClientEndFrame( gentity_t *ent ) {
 			do_respawn = ( testtime < ent->client->pers.lastReinforceTime );
 			ent->client->pers.lastReinforceTime = testtime;
 			do_respawn = qtrue;
-		}*/
-		do_respawn = qtrue;
+		}
 
 		if ( g_gametype.integer != GT_WOLF_LMS ) {
 			if ( ( g_maxlives.integer > 0 || g_alliedmaxlives.integer > 0 || g_axismaxlives.integer > 0 )
@@ -1232,20 +1232,19 @@ void SpectatorClientEndFrame( gentity_t *ent ) {
 				}
 			}
 		}
-
-		/* Nico, instant reswawn
+		
 		if ( g_gametype.integer == GT_WOLF_LMS && g_gamestate.integer == GS_PLAYING ) {
 			// Force respawn in LMS when nobody is playing and we aren't at the timelimit yet
 			if ( !level.teamEliminateTime &&
 				 level.numTeamClients[0] == level.numFinalDead[0] && level.numTeamClients[1] == level.numFinalDead[1] &&
-				 ent->client->respawnTime <= level.timeCurrent && ent->client->sess.sessionTeam != TEAM_SPECTATOR ) {*/
+				 ent->client->respawnTime <= level.timeCurrent && ent->client->sess.sessionTeam != TEAM_SPECTATOR ) {
 				do_respawn = qtrue;
-			/*} else {
+			} else {
 				do_respawn = qfalse;
 			}
 		}*/
 
-		if ( do_respawn ) {
+		if (ent->client->sess.sessionTeam != TEAM_SPECTATOR) {
 			reinforce( ent );
 			return;
 		}
@@ -1280,13 +1279,15 @@ void SpectatorClientEndFrame( gentity_t *ent ) {
 					/* Nico, removed multiview
 					int savedMVList = ent->client->ps.powerups[PW_MVCLIENTLIST];*/
 
-					do_respawn = ent->client->ps.pm_time;
+					/* Nico, removed warmup
+					do_respawn = ent->client->ps.pm_time;*/
 
 					ent->client->ps = cl->ps;
 					ent->client->ps.pm_flags |= PMF_FOLLOW;
 					ent->client->ps.pm_flags |= PMF_LIMBO;
 
-					ent->client->ps.pm_time = do_respawn;                           // put pm_time back
+					/* Nico, removed warmup
+					ent->client->ps.pm_time = do_respawn;                           // put pm_time back*/
 					ent->client->ps.persistant[PERS_RESPAWNS_LEFT] = savedRespawns;
 					ent->client->ps.persistant[PERS_RESPAWNS_PENALTY] = savedRespawnPenalty;
 					ent->client->ps.persistant[PERS_SCORE] = savedScore;            // put score back

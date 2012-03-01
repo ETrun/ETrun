@@ -496,13 +496,14 @@ void G_WriteSessionData( qboolean restart ) {
 								  Info_ValueForKey( strServerInfo, "mapname" ) ) );
 
 	// Keep stats for all players in sync
+	/* Nico, removed warmup
 	for ( i = 0; !level.fResetStats && i < level.numConnectedClients; i++ ) {
 		if ( ( g_gamestate.integer == GS_WARMUP_COUNTDOWN &&
 			   ( ( g_gametype.integer == GT_WOLF_STOPWATCH && level.clients[level.sortedClients[i]].sess.rounds >= 2 ) ||
 				 ( g_gametype.integer != GT_WOLF_STOPWATCH && level.clients[level.sortedClients[i]].sess.rounds >= 1 ) ) ) ) {
 			level.fResetStats = qtrue;
 		}
-	}
+	}*/
 
 	for ( i = 0; i < level.numConnectedClients; i++ ) {
 		if ( level.clients[level.sortedClients[i]].pers.connected == CON_CONNECTED ) {
