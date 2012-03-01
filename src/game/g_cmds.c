@@ -2557,47 +2557,6 @@ tryagain:
 	}
 }
 
-/*
-============================
-Cmd_ClientMonsterSlickAngle
-============================
-*/
-/*
-void Cmd_ClientMonsterSlickAngle (gentity_t *clent) {
-
-	char s[MAX_STRING_CHARS];
-	int	entnum;
-	int angle;
-	gentity_t *ent;
-	vec3_t	dir, kvel;
-	vec3_t	forward;
-
-	if (trap_Argc() != 3) {
-		G_Printf( "ClientDamage command issued with incorrect number of args\n" );
-	}
-
-	trap_Argv( 1, s, sizeof( s ) );
-	entnum = atoi(s);
-	ent = &g_entities[entnum];
-
-	trap_Argv( 2, s, sizeof( s ) );
-	angle = atoi(s);
-
-	// sanity check (also protect from cheaters)
-	if (g_gametype.integer != GT_SINGLE_PLAYER && entnum != clent->s.number) {
-		trap_DropClient( clent->s.number, "Dropped due to illegal ClientMonsterSlick command\n" );
-		return;
-	}
-
-	VectorClear (dir);
-	dir[YAW] = angle;
-	AngleVectors (dir, forward, NULL, NULL);
-
-	VectorScale (forward, 32, kvel);
-	VectorAdd (ent->client->ps.velocity, kvel, ent->client->ps.velocity);
-}
-*/
-
 void G_UpdateSpawnCounts( void ) {
 	int i, j;
 	char cs[MAX_STRING_CHARS];
@@ -2676,10 +2635,6 @@ void Cmd_SetSpawnPoint_f( gentity_t* ent ) {
 	if ( ent->client ) {
 		SetPlayerSpawn( ent, val, qtrue );
 	}
-
-//	if( ent->client->sess.sessionTeam != TEAM_SPECTATOR && !(ent->client->ps.pm_flags & PMF_LIMBO) ) {
-//		return;
-//	}
 
 	for ( i = 0; i < level.numLimboCams; i++ ) {
 		int x = ( g_entities[level.limboCams[i].targetEnt].count - CS_MULTI_SPAWNTARGETS ) + 1;
@@ -2877,10 +2832,6 @@ void Cmd_SelectedObjective_f( gentity_t* ent ) {
 	if ( !ent || !ent->client ) {
 		return;
 	}
-
-//	if( ent->client->sess.sessionTeam != TEAM_SPECTATOR && !(ent->client->ps.pm_flags & PMF_LIMBO) ) {
-//		return;
-//	}
 
 	if ( trap_Argc() != 2 ) {
 		return;
