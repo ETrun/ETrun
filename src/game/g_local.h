@@ -902,7 +902,8 @@ typedef struct {
 	int gentitySize;
 	int num_entities;               // current number, <= MAX_GENTITIES
 
-	int warmupTime;                 // restart match at this time
+	/* Nico, removed warmup
+	int warmupTime;                 // restart match at this time*/
 
 	fileHandle_t logFile;
 
@@ -934,7 +935,8 @@ typedef struct {
 
 //	int			snd_fry;				// sound index for standing in lava
 
-	int warmupModificationCount;            // for detecting if g_warmup is changed
+	/* Nico, removed warmup
+	int warmupModificationCount;            // for detecting if g_warmup is changed*/
 
 	voteInfo_t voteInfo;
 
@@ -1556,7 +1558,10 @@ extern vmCvar_t g_debugAlloc;
 extern vmCvar_t g_debugDamage;
 extern vmCvar_t g_debugBullets;     //----(SA)	added
 extern vmCvar_t g_motd;
-extern vmCvar_t g_warmup;
+
+/* Nico, removed warmup
+extern vmCvar_t g_warmup;*/
+
 extern vmCvar_t voteFlags;
 
 // DHM - Nerve :: The number of complaints allowed before kick/ban
@@ -1574,7 +1579,10 @@ extern vmCvar_t g_enforcemaxlives;          // Xian - Temp ban with maxlives bet
 
 extern vmCvar_t g_needpass;
 extern vmCvar_t g_balancedteams;
-extern vmCvar_t g_doWarmup;
+
+/* Nico, removed warmup
+extern vmCvar_t g_doWarmup;*/
+
 extern vmCvar_t g_teamAutoJoin;
 extern vmCvar_t g_teamForceBalance;
 extern vmCvar_t g_banIPs;
@@ -1633,7 +1641,8 @@ extern vmCvar_t g_lms_lockTeams;
 extern vmCvar_t g_lms_followTeamOnly;
 
 // NERVE - SMF
-extern vmCvar_t g_warmupLatch;
+/* Nico, removed warmup
+extern vmCvar_t g_warmupLatch;*/
 
 /* Nico, no timelimit
 extern vmCvar_t g_nextTimeLimit;*/
@@ -1664,7 +1673,10 @@ extern vmCvar_t match_mutespecs;
 extern vmCvar_t match_readypercent;
 extern vmCvar_t match_timeoutcount;
 extern vmCvar_t match_timeoutlength;
-extern vmCvar_t match_warmupDamage;
+
+/* Nico, removed warmup
+extern vmCvar_t match_warmupDamage;*/
+
 extern vmCvar_t server_autoconfig;
 extern vmCvar_t server_motd0;
 extern vmCvar_t server_motd1;
@@ -1695,7 +1707,9 @@ extern vmCvar_t vote_allow_friendlyfire;
 /* Nico, no timelimit
 extern vmCvar_t vote_allow_timelimit;*/
 
-extern vmCvar_t vote_allow_warmupdamage;
+/* Nico, removed warmup
+extern vmCvar_t vote_allow_warmupdamage;*/
+
 extern vmCvar_t vote_allow_antilag;
 extern vmCvar_t vote_allow_balancedteams;
 extern vmCvar_t vote_allow_muting;
@@ -2121,7 +2135,10 @@ void G_smvUpdateClientCSList( gentity_t *ent );*/
 // g_referee.c
 //
 void Cmd_AuthRcon_f( gentity_t *ent );
-void G_refAllReady_cmd( gentity_t *ent );
+
+/* Nico, removed warmup
+void G_refAllReady_cmd( gentity_t *ent );*/
+
 void G_ref_cmd( gentity_t *ent, unsigned int dwCommand, qboolean fValue );
 qboolean G_refCommandCheck( gentity_t *ent, char *cmd );
 void G_refHelp_cmd( gentity_t *ent );
@@ -2130,7 +2147,10 @@ void G_refPause_cmd( gentity_t *ent, qboolean fPause );
 void G_refPlayerPut_cmd( gentity_t *ent, int team_id );
 void G_refRemove_cmd( gentity_t *ent );
 void G_refSpeclockTeams_cmd( gentity_t *ent, qboolean fLock );
-void G_refWarmup_cmd( gentity_t* ent );
+
+/* Nico, removed warmup
+void G_refWarmup_cmd( gentity_t* ent );*/
+
 void G_refWarning_cmd( gentity_t* ent );
 void G_refMute_cmd( gentity_t *ent, qboolean mute );
 int  G_refClientnumForName( gentity_t *ent, const char *name );
@@ -2151,8 +2171,13 @@ extern team_info teamInfo[TEAM_NUM_TEAMS];
 
 qboolean G_allowFollow( gentity_t *ent, int nTeam );
 int G_blockoutTeam( gentity_t *ent, int nTeam );
-qboolean G_checkReady( void );
-qboolean G_readyMatchState( void );
+
+/* Nico, removed warmup
+qboolean G_checkReady( void );*/
+
+/* Nico, removed warmup
+qboolean G_readyMatchState( void );*/
+
 void G_removeSpecInvite( int team );
 void G_shuffleTeams( void );
 void G_swapTeamLocks( void );
@@ -2160,7 +2185,10 @@ void G_swapTeams( void );
 qboolean G_teamJoinCheck( int team_num, gentity_t *ent );
 int  G_teamID( gentity_t *ent );
 void G_teamReset( int team_num, qboolean fClearSpecLock );
-void G_verifyMatchState( int team_id );
+
+/* Nico, removed warmup
+void G_verifyMatchState( int team_id );*/
+
 void G_updateSpecLock( int nTeam, qboolean fLock );
 
 
@@ -2200,7 +2228,9 @@ int G_FriendlyFire_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char 
 /* Nico, no timelimit
 int G_Timelimit_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd );*/
 
-int G_Warmupfire_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd );
+/* Nico, removed warmup
+int G_Warmupfire_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd );*/
+
 int G_Unreferee_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd );
 int G_AntiLag_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd );
 int G_BalancedTeams_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd );

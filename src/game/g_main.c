@@ -74,10 +74,13 @@ vmCvar_t g_debugDamage;
 vmCvar_t g_debugAlloc;
 vmCvar_t g_debugBullets;    //----(SA)	added
 vmCvar_t g_motd;
-vmCvar_t g_warmup;
+
+/* Nico, removed warmup
+vmCvar_t g_warmup;*/
 
 // NERVE - SMF
-vmCvar_t g_warmupLatch;
+/* Nico, removed warmup
+vmCvar_t g_warmupLatch;*/
 
 /* Nico, no timelimit
 vmCvar_t g_nextTimeLimit;*/
@@ -116,7 +119,10 @@ vmCvar_t g_enforcemaxlives;         // Xian
 
 vmCvar_t g_needpass;
 vmCvar_t g_balancedteams;
-vmCvar_t g_doWarmup;
+
+/* Nico, removed warmup
+vmCvar_t g_doWarmup;*/
+
 vmCvar_t g_teamAutoJoin;
 vmCvar_t g_teamForceBalance;
 vmCvar_t g_banIPs;
@@ -158,7 +164,10 @@ vmCvar_t match_mutespecs;
 vmCvar_t match_readypercent;
 vmCvar_t match_timeoutcount;
 vmCvar_t match_timeoutlength;
-vmCvar_t match_warmupDamage;
+
+/* Nico, removed warmup
+vmCvar_t match_warmupDamage;*/
+
 vmCvar_t server_autoconfig;
 vmCvar_t team_maxPanzers;
 vmCvar_t team_maxplayers;
@@ -185,7 +194,9 @@ vmCvar_t vote_allow_friendlyfire;
 /* Nico, no timelimit
 vmCvar_t vote_allow_timelimit;*/
 
-vmCvar_t vote_allow_warmupdamage;
+/* Nico, removed warmup
+vmCvar_t vote_allow_warmupdamage;*/
+
 vmCvar_t vote_allow_antilag;
 vmCvar_t vote_allow_balancedteams;
 vmCvar_t vote_allow_muting;
@@ -277,11 +288,12 @@ cvarTable_t gameCvarTable[] = {
 
 	{ &g_teamForceBalance, "g_teamForceBalance", "0", CVAR_ARCHIVE  },                            // NERVE - SMF - merge from team arena
 
+	/* Nico, removed warmup
 	{ &g_warmup, "g_warmup", "60", CVAR_ARCHIVE, 0, qtrue  },
 	{ &g_doWarmup, "g_doWarmup", "0", CVAR_ARCHIVE, 0, qtrue  },
 
 	// NERVE - SMF
-	{ &g_warmupLatch, "g_warmupLatch", "1", 0, 0, qfalse },
+	{ &g_warmupLatch, "g_warmupLatch", "1", 0, 0, qfalse },*/
 
 	/* Nico, no timelimit
 	{ &g_nextTimeLimit, "g_nextTimeLimit", "0", CVAR_WOLFINFO, 0, qfalse  },*/
@@ -373,7 +385,10 @@ cvarTable_t gameCvarTable[] = {
 	{ &match_readypercent,  "match_readypercent", "100", 0, 0, qfalse, qtrue },
 	{ &match_timeoutcount,  "match_timeoutcount", "3", 0, 0, qfalse, qtrue },
 	{ &match_timeoutlength, "match_timeoutlength", "180", 0, 0, qfalse, qtrue },
-	{ &match_warmupDamage,  "match_warmupDamage", "1", 0, 0, qfalse },
+
+	/* Nico, removed warmup
+	{ &match_warmupDamage,  "match_warmupDamage", "1", 0, 0, qfalse },*/
+
 	{ &server_autoconfig, "server_autoconfig", "0", 0, 0, qfalse, qfalse },
 	{ &server_motd0,    "server_motd0", " ^NEnemy Territory ^7MOTD ", 0, 0, qfalse, qfalse },
 	{ &server_motd1,    "server_motd1", "", 0, 0, qfalse, qfalse },
@@ -400,7 +415,9 @@ cvarTable_t gameCvarTable[] = {
 	/* Nico, no timelimit
 	{ &vote_allow_timelimit,    "vote_allow_timelimit", "0", 0, 0, qfalse, qfalse },*/
 
-	{ &vote_allow_warmupdamage, "vote_allow_warmupdamage", "1", 0, 0, qfalse, qfalse },
+	/* Nico, removed warmup
+	{ &vote_allow_warmupdamage, "vote_allow_warmupdamage", "1", 0, 0, qfalse, qfalse },*/
+
 	{ &vote_allow_antilag,      "vote_allow_antilag", "1", 0, 0, qfalse, qfalse },
 	{ &vote_allow_balancedteams,"vote_allow_balancedteams", "1", 0, 0, qfalse, qfalse },
 	{ &vote_allow_muting,       "vote_allow_muting", "1", 0, 0, qfalse, qfalse },
@@ -1339,12 +1356,14 @@ void G_UpdateCvars( void ) {
 					} else if ( match_readypercent.integer > 100 ) {
 						trap_Cvar_Set( cv->cvarName, "100" );
 					}
-				} else if ( cv->vmCvar == &g_warmup )      {
+				}
+				/* Nico, removed warmup
+				else if ( cv->vmCvar == &g_warmup )      {
 					if ( g_gamestate.integer != GS_PLAYING && !G_IsSinglePlayerGame() ) {
 						level.warmupTime = level.time + ( ( ( g_warmup.integer < 10 ) ? 11 : g_warmup.integer + 1 ) * 1000 );
 						trap_SetConfigstring( CS_WARMUP, va( "%i", level.warmupTime ) );
 					}
-				}
+				}*/
 				// Moved this check out of the main world think loop
 				else if ( cv->vmCvar == &g_gametype ) {
 					int worldspawnflags = g_entities[ENTITYNUM_WORLD].spawnflags;
@@ -1406,7 +1425,9 @@ void G_UpdateCvars( void ) {
 						 cv->vmCvar == &vote_allow_friendlyfire
 						 /* Nico, no timelimit
 						 || cv->vmCvar == &vote_allow_timelimit      */
-						 || cv->vmCvar == &vote_allow_warmupdamage  || cv->vmCvar == &vote_allow_antilag        ||
+						 /* Nico, removed warmup
+						 || cv->vmCvar == &vote_allow_warmupdamage  */
+						 || cv->vmCvar == &vote_allow_antilag        ||
 						 cv->vmCvar == &vote_allow_balancedteams || cv->vmCvar == &vote_allow_muting
 						 ) {
 						fVoteFlags = qtrue;
@@ -1641,7 +1662,8 @@ void G_InitGame( int levelTime, int randomSeed, int restart ) {
 	level.animScriptData.soundIndex = G_SoundIndex;
 	level.animScriptData.playSound = G_AnimScriptSound;
 
-	level.warmupModificationCount = g_warmup.modificationCount;
+	/* Nico, removed warmup
+	level.warmupModificationCount = g_warmup.modificationCount;*/
 
 	level.soldierChargeTime[0] = level.soldierChargeTime[1] = g_soldierChargeTime.integer;
 	level.medicChargeTime[0] = level.medicChargeTime[1] = g_medicChargeTime.integer;
@@ -2928,6 +2950,7 @@ void CheckWolfMP() {
 
 		// check warmup latch
 		if ( g_gamestate.integer == GS_WARMUP ) {
+			/* Nico, removed warmup
 			if ( !g_doWarmup.integer ||
 				 ( level.numPlayingClients >= match_minplayers.integer &&
 				   level.lastRestartTime + 1000 < level.time && G_readyMatchState() ) ) {
@@ -2937,18 +2960,19 @@ void CheckWolfMP() {
 				trap_Cvar_Set( "gamestate", va( "%i", GS_WARMUP_COUNTDOWN ) );
 				trap_Cvar_Update( &g_gamestate );
 				trap_SetConfigstring( CS_WARMUP, va( "%i", level.warmupTime ) );
-			}
+			}*/
 		}
 
 		// if the warmup time has counted down, restart
 		if ( g_gamestate.integer == GS_WARMUP_COUNTDOWN ) {
+			/* Nico, removed warmup
 			if ( level.time > level.warmupTime ) {
 				level.warmupTime += 10000;
 				trap_Cvar_Set( "g_restarted", "1" );
 				trap_SendConsoleCommand( EXEC_APPEND, "map_restart 0\n" );
 				level.restarted = qtrue;
 				return;
-			}
+			}*/
 		}
 	}
 }

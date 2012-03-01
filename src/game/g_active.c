@@ -1197,23 +1197,23 @@ void SpectatorClientEndFrame( gentity_t *ent ) {
 		gclient_t *cl;
 		qboolean do_respawn = qfalse; // JPW NERVE
 
+		/* Nico, removed warmup
 		// Players can respawn quickly in warmup
 		if ( g_gamestate.integer != GS_PLAYING && ent->client->respawnTime <= level.timeCurrent &&
 			 ent->client->sess.sessionTeam != TEAM_SPECTATOR ) {
 			do_respawn = qtrue;
 		} else if ( ent->client->sess.sessionTeam == TEAM_AXIS ) {
-			/* Nico, instant reswawn
 			testtime = ( level.dwRedReinfOffset + level.timeCurrent - level.startTime ) % g_redlimbotime.integer;
 			do_respawn = ( testtime < ent->client->pers.lastReinforceTime );
-			ent->client->pers.lastReinforceTime = testtime;*/
+			ent->client->pers.lastReinforceTime = testtime;
 			do_respawn = qtrue;
 		} else if ( ent->client->sess.sessionTeam == TEAM_ALLIES )     {
-			/* Nico, instant reswawn
 			testtime = ( level.dwBlueReinfOffset + level.timeCurrent - level.startTime ) % g_bluelimbotime.integer;
 			do_respawn = ( testtime < ent->client->pers.lastReinforceTime );
-			ent->client->pers.lastReinforceTime = testtime;*/
+			ent->client->pers.lastReinforceTime = testtime;
 			do_respawn = qtrue;
-		}
+		}*/
+		do_respawn = qtrue;
 
 		if ( g_gametype.integer != GT_WOLF_LMS ) {
 			if ( ( g_maxlives.integer > 0 || g_alliedmaxlives.integer > 0 || g_axismaxlives.integer > 0 )

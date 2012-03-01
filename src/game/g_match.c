@@ -695,6 +695,7 @@ int G_checkServerToggle( vmCvar_t *cv ) {
 		nFlag = CV_SVS_BALANCEDTEAMS;
 	}
 	// special case for 2 bits
+	/* Nico, removed warmup
 	else if ( cv == &match_warmupDamage ) {
 		if ( cv->integer > 0 ) {
 			level.server_settings &= ~CV_SVS_WARMUPDMG;
@@ -703,7 +704,8 @@ int G_checkServerToggle( vmCvar_t *cv ) {
 		} else {
 			nFlag = CV_SVS_WARMUPDMG;
 		}
-	} else if ( cv == &g_nextmap && g_gametype.integer != GT_WOLF_CAMPAIGN ) {
+	}*/
+	else if ( cv == &g_nextmap && g_gametype.integer != GT_WOLF_CAMPAIGN ) {
 		if ( *cv->string ) {
 			level.server_settings |= CV_SVS_NEXTMAP;
 		} else {

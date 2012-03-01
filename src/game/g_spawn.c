@@ -969,10 +969,14 @@ void SP_worldspawn( void ) {
 	g_entities[ENTITYNUM_WORLD].classname = "worldspawn";
 
 	// see if we want a warmup time
-	trap_SetConfigstring( CS_WARMUP, "" );
+	/* Nico, removed warmup
+	trap_SetConfigstring( CS_WARMUP, "" );*/
+
 	if ( g_restarted.integer ) {
 		trap_Cvar_Set( "g_restarted", "0" );
-		level.warmupTime = 0;
+
+		/* Nico, removed warmup
+		level.warmupTime = 0;*/
 	}
 
 	if ( g_gamestate.integer == GS_PLAYING ) {

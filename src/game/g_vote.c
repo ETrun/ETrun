@@ -103,7 +103,10 @@ static const vote_reference_t aVoteInfo[] = {
 	{ 0x1ff, "timelimit",     G_Timelimit_v,     "Timelimit",     " <value>^7\n  Changes the current timelimit" },*/
 
 	{ 0x1ff, "unreferee",     G_Unreferee_v,     "UNReferee",     " <player_id>^7\n  Elects a player to have admin abilities removed" },
-	{ 0x1ff, "warmupdamage", G_Warmupfire_v, "Warmup Damage", " <0|1|2>^7\n  Specifies if players can inflict damage during warmup" },
+
+	/* Nico, removed warmup
+	{ 0x1ff, "warmupdamage", G_Warmupfire_v, "Warmup Damage", " <0|1|2>^7\n  Specifies if players can inflict damage during warmup" },*/
+
 	{ 0x1ff, "antilag",       G_AntiLag_v,       "Anti-Lag",          " <0|1>^7\n  Toggles Anit-Lag on the server" },
 	{ 0x1ff, "balancedteams",G_BalancedTeams_v,  "Balanced Teams",    " <0|1>^7\n  Toggles team balance forcing" },
 	{ 0, 0, NULL, 0 }
@@ -828,7 +831,8 @@ int G_StartMatch_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *a
 		// Vote action (vote has passed)
 	} else {
 		// Set everyone to "ready" status
-		G_refAllReady_cmd( NULL );
+		/* Nico, removed warmup
+		G_refAllReady_cmd( NULL );*/
 	}
 
 	return( G_OK );
@@ -941,16 +945,19 @@ int G_Timelimit_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *ar
 	return( G_OK );
 }*/
 
-char *warmupType[] = { "None", "Enemies Only", "Everyone" };
+/* Nico, removed warmup
+char *warmupType[] = { "None", "Enemies Only", "Everyone" };*/
 
+/* Nico, removed warmup
 void G_WarmupDamageTypeList( gentity_t *ent ) {
 	int i;
 
 	G_refPrintf( ent, "\nAvailable Warmup Damage types:\n------------------------------" );
 	for ( i = 0; i < ( sizeof( warmupType ) / sizeof( char * ) ); i++ ) G_refPrintf( ent, "  %d ^3(%s)", i, warmupType[i] );
 	G_refPrintf( ent, "\n" );
-}
+}*/
 
+/* Nico, removed warmup
 // *** Warmup Weapon Fire ***
 int G_Warmupfire_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd ) {
 	// Vote request (vote is being initiated)
@@ -993,7 +1000,7 @@ int G_Warmupfire_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *a
 	}
 
 	return( G_OK );
-}
+}*/
 
 
 // *** Un-Referee voting ***

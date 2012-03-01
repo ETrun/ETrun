@@ -2273,9 +2273,13 @@ void ClientDisconnect( int clientNum ) {
 	CalculateRanks();
 
 	// OSP
-	G_verifyMatchState( i );
+
+	/* Nico, removed warmup
+	G_verifyMatchState( i );*/
+
 	/* Nico, removed multiview
 	G_smvAllRemoveSingleClient( ent - g_entities );*/
+
 	// OSP
 }
 

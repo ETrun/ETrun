@@ -925,9 +925,10 @@ static qboolean TryConstructing( gentity_t *ent ) {
 	int i;
 
 	// no construction during prematch
+	/* Nico, removed warmup
 	if ( level.warmupTime ) {
 		return( qfalse );
-	}
+	}*/
 
 	// see if we are in a trigger_objective_info targetting multiple func_constructibles
 	if ( constructible->s.eType == ET_CONSTRUCTIBLE && ent->client->touchingTOI->chain ) {

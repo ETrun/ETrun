@@ -811,7 +811,8 @@ qboolean SetTeam( gentity_t *ent, char *s, qboolean force, weapon_t w1, weapon_t
 		client->ps.persistant[ PERS_RESPAWNS_LEFT ] = respawnsLeft;
 	}
 
-	G_verifyMatchState( oldTeam );
+	/* Nico, removed warmup
+	G_verifyMatchState( oldTeam );*/
 
 	/* Nico, removed ws related command
 	// Reset stats when changing teams

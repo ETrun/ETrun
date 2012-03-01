@@ -76,10 +76,12 @@ void AddKillScore( gentity_t *ent, int score ) {
 	if ( !ent || !ent->client ) {
 		return;
 	}
+
+	/* Nico, removed warmup
 	// no scoring during pre-match warmup
 	if ( level.warmupTime ) {
 		return;
-	}
+	}*/
 
 	// someone already won
 	if ( level.lmsWinningTeam ) {
@@ -509,7 +511,9 @@ void player_die( gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int
 		if ( attacker == self || OnSameTeam( self, attacker ) ) {
 
 			// DHM - Nerve :: Complaint lodging
-			if ( attacker != self && level.warmupTime <= 0 && g_gamestate.integer == GS_PLAYING ) {
+			/* Nico, removed warmup
+			if ( attacker != self && level.warmupTime <= 0 && g_gamestate.integer == GS_PLAYING ) {*/
+			if ( attacker != self && g_gamestate.integer == GS_PLAYING ) {
 				if ( attacker->client->pers.localClient ) {
 					trap_SendServerCommand( self - g_entities, "complaint -4" );
 				} else {
@@ -1055,7 +1059,9 @@ void G_Damage( gentity_t *targ, gentity_t *inflictor, gentity_t *attacker,  vec3
 
 	// the intermission has allready been qualified for, so don't
 	// allow any extra scoring
-	if ( level.intermissionQueued || ( g_gamestate.integer != GS_PLAYING && match_warmupDamage.integer == 0 ) ) {
+	/* Nico, removed warmup
+	if ( level.intermissionQueued || ( g_gamestate.integer != GS_PLAYING && match_warmupDamage.integer == 0 ) ) {*/
+	if ( level.intermissionQueued ) {
 		return;
 	}
 
@@ -1274,9 +1280,11 @@ void G_Damage( gentity_t *targ, gentity_t *inflictor, gentity_t *attacker,  vec3
 		// if TF_NO_FRIENDLY_FIRE is set, don't do damage to the target
 		// if the attacker was on the same team
 		if ( targ != attacker && OnSameTeam( targ, attacker )  ) {
+			/* Nico, removed warmup
 			if ( ( g_gamestate.integer != GS_PLAYING && match_warmupDamage.integer == 1 ) ) {
 				return;
-			} else if ( !g_friendlyFire.integer )     {
+			} else*/
+			if ( !g_friendlyFire.integer )     {
 				return;
 			}
 		}

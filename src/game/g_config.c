@@ -54,17 +54,26 @@ static const modeCvarTable_t aCompSettings[] = {
 	{ M_ALL, "g_altStopwatchMode", "0" },
 	{ M_ALL, "g_complaintlimit", "0" },
 	{ M_ALL, "g_ipcomplaintlimit", "0" },
-	{ M_ALL, "g_doWarmup", "1" },
+
+	/* Nico, removed warmup
+	{ M_ALL, "g_doWarmup", "1" },*/
+
 	{ M_ALL, "g_inactivity", "0" },
 	{ M_ALL, "g_maxlives", "0" },
 	{ M_ALL, "g_teamforcebalance", "0" },
 	{ M_ALL, "g_lms_teamForceBalance", "0" },
 	{ M_ALL, "g_voicechatsallowed", "50" },
-	{ M_ALL, "g_warmup", "10" },
+
+	/* Nico, removed warmup
+	{ M_ALL, "g_warmup", "10" },*/
+
 	{ M_ALL, "match_latejoin", "0" },
 	{ M_ALL, "match_mutespecs", "0" },
 	{ M_ALL, "match_timeoutcount", "1" },
-	{ M_ALL, "match_warmupDamage", "1" },
+
+	/* Nico, removed warmup
+	{ M_ALL, "match_warmupDamage", "1" },*/
+
 	{ M_ALL, "team_maxplayers", "10" },
 	{ M_ALL, "team_nocontrols", "0" },
 	{ M_ALL, "sv_allowDownload", "1" },
@@ -78,16 +87,25 @@ static const modeCvarTable_t aPubSettings[] = {
 	{ M_ALL, "g_altStopwatchMode", "0" },
 	{ M_ALL, "g_complaintlimit", "6" },
 	{ M_ALL, "g_ipcomplaintlimit", "3" },
-	{ M_ALL, "g_doWarmup", "0" },
+
+	/* Nico, removed warmup
+	{ M_ALL, "g_doWarmup", "0" },*/
+
 	{ M_ALL, "g_maxlives", "0" },
 	{ M_ALL, "g_teamforcebalance", "1" },
 	{ M_ALL, "g_lms_teamForceBalance", "1" },
 	{ M_ALL, "g_voicechatsallowed", "50" },
-	{ M_ALL, "g_warmup", "60" },
+
+	/* Nico, removed warmup
+	{ M_ALL, "g_warmup", "60" },*/
+
 	{ M_ALL, "match_latejoin", "1" },
 	{ M_ALL, "match_mutespecs", "1" },
 	{ M_ALL, "match_timeoutcount", "0" },
-	{ M_ALL, "match_warmupDamage", "0" },
+
+	/* Nico, removed warmup
+	{ M_ALL, "match_warmupDamage", "0" },*/
+
 	{ M_ALL, "team_maxplayers", "0" },
 	{ M_ALL, "team_nocontrols", "1" },
 	{ M_ALL, "sv_allowDownload", "1" },

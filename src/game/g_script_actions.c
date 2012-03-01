@@ -3143,7 +3143,7 @@ G_ScriptAction_SetRoundTimelimit
 */
 qboolean G_ScriptAction_SetRoundTimelimit( gentity_t *ent, char *params ) {
 	char *pString, *token;
-	float nextTimeLimit;
+	// float nextTimeLimit; Nico, unused warning fix
 
 	pString = params;
 	token = COM_Parse( &pString );
@@ -3853,11 +3853,12 @@ G_ScriptAction_AbortIfWarmup
 =====================
 */
 qboolean G_ScriptAction_AbortIfWarmup( gentity_t *ent, char *params ) {
+	/* Nico, removed warmup
 	if ( level.warmupTime ) {
 		// abort the current script
 		ent->scriptStatus.scriptStackHead = ent->scriptEvents[ent->scriptStatus.scriptEventIndex].stack.numItems;
-	}
-	//
+	}*/
+	G_Printf("Warning: G_ScriptAction_AbortIfWarmup ignored\n");
 	return qtrue;
 }
 

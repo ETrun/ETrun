@@ -4404,27 +4404,35 @@ void UI_RunMenuScript( char **args ) {
 		else if ( Q_stricmp( name, "voteTimelimit" ) == 0 ) {
 			trap_Cmd_ExecuteText( EXEC_APPEND, va( "callvote timelimit %f\n", trap_Cvar_VariableValue( "ui_voteTimelimit" ) ) );
 		}*/
+
+		/* Nico, removed warmup
 		else if ( Q_stricmp( name, "voteWarmupDamage" ) == 0 ) {
 			trap_Cmd_ExecuteText( EXEC_APPEND, va( "callvote warmupdamage %d\n", (int)trap_Cvar_VariableValue( "ui_voteWarmupDamage" ) ) );
+		}*/
 
-		}
 		/* Nico, no timelimit
 		else if ( Q_stricmp( name, "refTimelimit" ) == 0 ) {
 			trap_Cmd_ExecuteText( EXEC_APPEND, va( "ref timelimit %f\n", trap_Cvar_VariableValue( "ui_voteTimelimit" ) ) );
 		}*/
+
+		/* Nico, removed warmup
 		else if ( Q_stricmp( name, "refWarmupDamage" ) == 0 ) {
 			trap_Cmd_ExecuteText( EXEC_APPEND, va( "ref warmupdamage %d\n", (int)trap_Cvar_VariableValue( "ui_voteWarmupDamage" ) ) );
-		} else if ( Q_stricmp( name, "voteInitToggles" ) == 0 ) {
+		}*/
+
+		/* Nico, removed warmup
+		else if ( Q_stricmp( name, "voteInitToggles" ) == 0 ) {
 			char info[MAX_INFO_STRING];
 
 			trap_GetConfigString( CS_SERVERTOGGLES, info, sizeof( info ) );
 			trap_Cvar_Set( "ui_voteWarmupDamage", va( "%d", ( ( atoi( info ) & CV_SVS_WARMUPDMG ) >> 2 ) ) );
 
-			/* Nico, no timelimit
 			trap_GetConfigString( CS_SERVERINFO, info, sizeof( info ) );
-			trap_Cvar_Set( "ui_voteTimelimit", va( "%i", atoi( Info_ValueForKey( info, "timelimit" ) ) ) );*/
+			trap_Cvar_Set( "ui_voteTimelimit", va( "%i", atoi( Info_ValueForKey( info, "timelimit" ) ) ) );
 
-		} else if ( Q_stricmp( name, "voteLeader" ) == 0 ) {
+		}*/
+
+		else if ( Q_stricmp( name, "voteLeader" ) == 0 ) {
 			if ( uiInfo.teamIndex >= 0 && uiInfo.teamIndex < uiInfo.myTeamCount ) {
 				trap_Cmd_ExecuteText( EXEC_APPEND, va( "callteamvote leader %s\n", uiInfo.teamNames[uiInfo.teamIndex] ) );
 			}
@@ -4662,12 +4670,15 @@ void UI_RunMenuScript( char **args ) {
 
 				trap_Cmd_ExecuteText( EXEC_APPEND, va( "ref warn \"%s\" \"%s\"\n",uiInfo.playerNames[uiInfo.playerIndex], buffer ) );
 			}
-		} else if ( Q_stricmp( name, "refWarmup" ) == 0 ) {
+		}
+		/* Nico, removed warmup
+		else if ( Q_stricmp( name, "refWarmup" ) == 0 ) {
 			char buffer[128];
 			trap_Cvar_VariableStringBuffer( "ui_warmup", buffer, 128 );
 
 			trap_Cmd_ExecuteText( EXEC_APPEND, va( "ref warmup \"%s\"\n", buffer ) );
-		} else if ( Q_stricmp( name, "ignorePlayer" ) == 0 ) {
+		}*/
+		else if ( Q_stricmp( name, "ignorePlayer" ) == 0 ) {
 			if ( uiInfo.playerIndex >= 0 && uiInfo.playerIndex < uiInfo.playerCount ) {
 				trap_Cmd_ExecuteText( EXEC_APPEND, va( "ignore \"%s\"\n",uiInfo.playerNames[uiInfo.playerIndex] ) );
 			}
@@ -7611,7 +7622,10 @@ cvarTable_t cvarTable[] = {
 	{ NULL, "cg_wolfparticles", "1", CVAR_ARCHIVE },
 	{ NULL, "g_password", "none", CVAR_USERINFO },
 	{ NULL, "g_antilag", "1", CVAR_SERVERINFO | CVAR_ARCHIVE },
-	{ NULL, "g_warmup", "60", CVAR_ARCHIVE },
+
+	/* Nico, removed warmup
+	{ NULL, "g_warmup", "60", CVAR_ARCHIVE },*/
+
 	{ NULL, "g_lms_roundlimit", "3", CVAR_ARCHIVE },
 	{ NULL, "g_lms_matchlimit", "2", CVAR_ARCHIVE },
 	{ NULL, "g_lms_followTeamOnly", "1", CVAR_ARCHIVE },
@@ -7636,7 +7650,10 @@ cvarTable_t cvarTable[] = {
 	{ NULL, "g_altStopwatchMode", "0", CVAR_ARCHIVE },
 	{ NULL, "g_ipcomplaintlimit", "3", CVAR_ARCHIVE },
 	{ NULL, "g_complaintlimit", "6", CVAR_ARCHIVE },
-	{ NULL, "g_doWarmup", "0", CVAR_ARCHIVE },
+
+	/* Nico, removed warmup
+	{ NULL, "g_doWarmup", "0", CVAR_ARCHIVE },*/
+
 	{ NULL, "g_inactivity", "0", CVAR_ARCHIVE },
 	{ NULL, "g_maxLives", "0", CVAR_ARCHIVE },
 	{ NULL, "refereePassword", "none", CVAR_ARCHIVE },
@@ -7649,7 +7666,10 @@ cvarTable_t cvarTable[] = {
 	{ NULL, "match_readypercent", "100", CVAR_ARCHIVE },
 	{ NULL, "match_timeoutcount", "3", CVAR_ARCHIVE },
 	{ NULL, "match_timeoutlength", "180", CVAR_ARCHIVE },
-	{ NULL, "match_warmupDamage", "1", CVAR_ARCHIVE },
+
+	/* Nico, removed warmup
+	{ NULL, "match_warmupDamage", "1", CVAR_ARCHIVE },*/
+
 	{ NULL, "server_autoconfig", "0", CVAR_ARCHIVE },
 	{ NULL, "server_motd0", " ^NEnemy Territory ^7MOTD ", CVAR_ARCHIVE },
 	{ NULL, "server_motd1", "", CVAR_ARCHIVE },
@@ -7675,7 +7695,9 @@ cvarTable_t cvarTable[] = {
 	/* Nico, no timelimit
 	{ NULL, "vote_allow_timelimit", "0", CVAR_ARCHIVE },*/
 
-	{ NULL, "vote_allow_warmupdamage", "1", CVAR_ARCHIVE },
+	/* Nico, removed warmup
+	{ NULL, "vote_allow_warmupdamage", "1", CVAR_ARCHIVE },*/
+
 	{ NULL, "vote_allow_antilag", "1", CVAR_ARCHIVE },
 	{ NULL, "vote_allow_muting", "1", CVAR_ARCHIVE },
 	{ NULL, "vote_allow_kick", "1", CVAR_ARCHIVE },

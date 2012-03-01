@@ -43,9 +43,11 @@ If you have questions concerning this license or the applicable additional terms
 //	--> ref arg allows for the server console to utilize all referee commands (ent == NULL)
 //
 qboolean G_refCommandCheck( gentity_t *ent, char *cmd ) {
+	/* Nico, removed warmup
 	if ( !Q_stricmp( cmd, "allready" ) ) {
 		G_refAllReady_cmd( ent );
-	} else if ( !Q_stricmp( cmd, "lock" ) ) {
+	} else*/
+	if ( !Q_stricmp( cmd, "lock" ) ) {
 		G_refLockTeams_cmd( ent, qtrue );
 	} else if ( !Q_stricmp( cmd, "help" ) ) {
 		G_refHelp_cmd( ent );
@@ -65,9 +67,12 @@ qboolean G_refCommandCheck( gentity_t *ent, char *cmd ) {
 		G_refLockTeams_cmd( ent, qfalse );
 	} else if ( !Q_stricmp( cmd, "unpause" ) ) {
 		G_refPause_cmd( ent, qfalse );
-	} else if ( !Q_stricmp( cmd, "warmup" ) ) {
+	}
+	/* Nico, removed warmup
+	else if ( !Q_stricmp( cmd, "warmup" ) ) {
 		G_refWarmup_cmd( ent );
-	} else if ( !Q_stricmp( cmd, "warn" ) ) {
+	}*/
+	else if ( !Q_stricmp( cmd, "warn" ) ) {
 		G_refWarning_cmd( ent );
 	} else if ( !Q_stricmp( cmd, "mute" ) ) {
 		G_refMute_cmd( ent, qtrue );
@@ -94,7 +99,7 @@ void G_refHelp_cmd( gentity_t *ent ) {
 		CP("print \"\n^5allready         putallies^7 <pid>  ^5specunlock       warn ^7<pid>\n\"");
 		CP(  "print \"^5help             putaxis^7 <pid>    ^5unlock           mute ^7<pid>\n\"");
 		CP(  "print \"^5lock             remove^7 <pid>    ^5unpause          unmute ^7<pid>\n\"");
-		CP(  "print \"^5pause            speclock         warmup ^7[value]\n\"");
+		CP(  "print \"^5pause            speclock\n\"");
 		CP(  "print \"Usage: ^3\\ref <cmd> [params]\n\n\"" );
 
 		// Help for the console
@@ -102,7 +107,7 @@ void G_refHelp_cmd( gentity_t *ent ) {
 		G_Printf( "\nAdditional console commands:\n" );
 		G_Printf(  "----------------------------------------------\n" );
 		G_Printf(  "allready        putallies <pid>    unpause\n");
-		G_Printf(  "help            putaxis <pid>      warmup [value]\n");
+		G_Printf(  "help            putaxis <pid>\n");
 		G_Printf(  "lock            speclock           warn <pid>\n");
 		G_Printf(  "pause           specunlock\n");
 		G_Printf(  "remove <pid>    unlock\n\n");
@@ -167,7 +172,7 @@ void G_ref_cmd( gentity_t *ent, unsigned int dwCommand, qboolean fValue ) {
 	}
 }
 
-
+/* Nico, removed warmup
 // Readies all players in the game.
 void G_refAllReady_cmd( gentity_t *ent ) {
 	int i;
@@ -191,7 +196,7 @@ void G_refAllReady_cmd( gentity_t *ent ) {
 	// Can we start?
 	level.ref_allready = qtrue;
 	G_readyMatchState();
-}
+}*/
 
 
 // Changes team lock status
@@ -298,9 +303,10 @@ void G_refPlayerPut_cmd( gentity_t *ent, int team_id ) {
 		SetTeam( player, "blue", qtrue, -1, -1, qfalse );
 	}
 
+	/* Nico, removed warmup
 	if ( g_gamestate.integer == GS_WARMUP || g_gamestate.integer == GS_WARMUP_COUNTDOWN ) {
 		G_readyMatchState();
-	}
+	}*/
 }
 
 
@@ -336,9 +342,10 @@ void G_refRemove_cmd( gentity_t *ent ) {
 
 	SetTeam( player, "s", qtrue, -1, -1, qfalse );
 
+	/* Nico, removed warmup
 	if ( g_gamestate.integer == GS_WARMUP || g_gamestate.integer == GS_WARMUP_COUNTDOWN ) {
 		G_readyMatchState();
-	}
+	}*/
 }
 
 
@@ -365,6 +372,7 @@ void G_refSpeclockTeams_cmd( gentity_t *ent, qboolean fLock ) {
 	trap_SetConfigstring( CS_SERVERTOGGLES, va( "%d", level.server_settings ) );
 }
 
+/* Nico, removed warmup
 void G_refWarmup_cmd( gentity_t* ent ) {
 	char cmd[MAX_TOKEN_CHARS];
 
@@ -379,7 +387,7 @@ void G_refWarmup_cmd( gentity_t* ent ) {
 	}
 
 	trap_Cvar_Set( "g_warmup", va( "%d", atoi( cmd ) ) );
-}
+}*/
 
 void G_refWarning_cmd( gentity_t* ent ) {
 	char cmd[MAX_TOKEN_CHARS];

@@ -310,7 +310,10 @@ extern const unsigned int aReinfSeeds[MAX_REINFSEEDS];
 #define CS_MUSIC                        2
 #define CS_MESSAGE                      3       // from the map worldspawn's message field
 #define CS_MOTD                         4       // g_motd string for server message of the day
-#define CS_WARMUP                       5       // server time when the match will be restarted
+
+/* Nico, removed warmup
+#define CS_WARMUP                       5       // server time when the match will be restarted*/
+
 #define CS_VOTE_TIME                    6
 #define CS_VOTE_STRING                  7
 #define CS_VOTE_YES                     8

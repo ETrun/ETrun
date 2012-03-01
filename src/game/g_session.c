@@ -99,7 +99,9 @@ void G_WriteClientSessionData( gclient_t *client, qboolean restart ) {
 
 	// Arnout: store the clients stats (7) and medals (7)
 	// addition: but only if it isn't a forced map_restart (done by someone on the console)
-	if ( !( restart && !level.warmupTime ) ) {
+	/* Nico, removed warmup
+	if ( !( restart && !level.warmupTime ) ) {*/
+	if ( !( restart ) ) {
 		s = va( "%.2f %.2f %.2f %.2f %.2f %.2f %.2f %i %i %i %i %i %i %i",
 				client->sess.skillpoints[0],
 				client->sess.skillpoints[1],

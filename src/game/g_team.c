@@ -1691,12 +1691,11 @@ int G_teamID( gentity_t *ent ) {
 	return( ent->client->sess.sessionTeam );
 }
 
-
+/* Nico, removed warmup
 // Determine if the "ready" player threshold has been reached.
 qboolean G_checkReady( void ) {
 	int i, ready = 0, notReady = match_minplayers.integer;
 	gclient_t *cl;
-
 
 	if ( 0 == g_doWarmup.integer ) {
 		return( qtrue );
@@ -1724,9 +1723,9 @@ qboolean G_checkReady( void ) {
 
 	// Do we have enough "ready" players?
 	return( level.ref_allready || ( ( ready + notReady > 0 ) && 100 * ready / ( ready + notReady ) >= match_readypercent.integer ) );
-}
+}*/
 
-
+/* Nico, removed warmup
 // Checks ready states to start/stop the sequence to get the match rolling.
 qboolean G_readyMatchState( void ) {
 	if ( ( g_doWarmup.integer ||
@@ -1751,9 +1750,9 @@ qboolean G_readyMatchState( void ) {
 	}
 
 	return( qfalse );
-}
+}*/
 
-
+/* Nico, removed warmup
 // Check if we need to reset the game state due to an empty team
 void G_verifyMatchState( int nTeam ) {
 	gamestate_t gs = g_gamestate.integer;
@@ -1765,9 +1764,7 @@ void G_verifyMatchState( int nTeam ) {
 				level.lastRestartTime = level.time;
 				if ( g_gametype.integer == GT_WOLF_STOPWATCH ) {
 					trap_Cvar_Set( "g_currentRound", "0" );
-
-					/* Nico, no timelimit
-					trap_Cvar_Set( "g_nextTimeLimit", "0" );*/
+					trap_Cvar_Set( "g_nextTimeLimit", "0" );
 				}
 
 				trap_SendConsoleCommand( EXEC_APPEND, va( "map_restart 0 %i\n", GS_WARMUP ) );
@@ -1782,7 +1779,7 @@ void G_verifyMatchState( int nTeam ) {
 
 	// Cleanup of ready count
 	G_checkReady();
-}
+}*/
 
 
 // Checks to see if a specified team is allowing players to join.
