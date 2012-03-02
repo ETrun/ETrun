@@ -80,23 +80,23 @@ am_libcgame_la_OBJECTS = libcgame_la-bg_animation.lo \
 	libcgame_la-q_shared.lo libcgame_la-ui_shared.lo \
 	libcgame_la-cg_atmospheric.lo libcgame_la-cg_character.lo \
 	libcgame_la-cg_commandmap.lo libcgame_la-cg_consolecmds.lo \
-	libcgame_la-cg_debriefing.lo libcgame_la-cg_draw.lo \
-	libcgame_la-cg_drawtools.lo libcgame_la-cg_effects.lo \
-	libcgame_la-cg_ents.lo libcgame_la-cg_event.lo \
-	libcgame_la-cg_fireteamoverlay.lo libcgame_la-cg_fireteams.lo \
-	libcgame_la-cg_flamethrower.lo libcgame_la-cg_info.lo \
-	libcgame_la-cg_limbopanel.lo libcgame_la-cg_loadpanel.lo \
-	libcgame_la-cg_localents.lo libcgame_la-cg_main.lo \
-	libcgame_la-cg_marks.lo libcgame_la-cg_missionbriefing.lo \
-	libcgame_la-cg_newDraw.lo libcgame_la-cg_particles.lo \
-	libcgame_la-cg_players.lo libcgame_la-cg_playerstate.lo \
-	libcgame_la-cg_polybus.lo libcgame_la-cg_popupmessages.lo \
-	libcgame_la-cg_predict.lo libcgame_la-cg_scoreboard.lo \
-	libcgame_la-cg_servercmds.lo libcgame_la-cg_snapshot.lo \
-	libcgame_la-cg_sound.lo libcgame_la-cg_spawn.lo \
-	libcgame_la-cg_statsranksmedals.lo libcgame_la-cg_syscalls.lo \
-	libcgame_la-cg_trails.lo libcgame_la-cg_view.lo \
-	libcgame_la-cg_weapons.lo libcgame_la-cg_window.lo
+	libcgame_la-cg_draw.lo libcgame_la-cg_drawtools.lo \
+	libcgame_la-cg_effects.lo libcgame_la-cg_ents.lo \
+	libcgame_la-cg_event.lo libcgame_la-cg_fireteamoverlay.lo \
+	libcgame_la-cg_fireteams.lo libcgame_la-cg_flamethrower.lo \
+	libcgame_la-cg_info.lo libcgame_la-cg_limbopanel.lo \
+	libcgame_la-cg_loadpanel.lo libcgame_la-cg_localents.lo \
+	libcgame_la-cg_main.lo libcgame_la-cg_marks.lo \
+	libcgame_la-cg_missionbriefing.lo libcgame_la-cg_newDraw.lo \
+	libcgame_la-cg_particles.lo libcgame_la-cg_players.lo \
+	libcgame_la-cg_playerstate.lo libcgame_la-cg_polybus.lo \
+	libcgame_la-cg_popupmessages.lo libcgame_la-cg_predict.lo \
+	libcgame_la-cg_scoreboard.lo libcgame_la-cg_servercmds.lo \
+	libcgame_la-cg_snapshot.lo libcgame_la-cg_sound.lo \
+	libcgame_la-cg_spawn.lo libcgame_la-cg_statsranksmedals.lo \
+	libcgame_la-cg_syscalls.lo libcgame_la-cg_trails.lo \
+	libcgame_la-cg_view.lo libcgame_la-cg_weapons.lo \
+	libcgame_la-cg_window.lo
 libcgame_la_OBJECTS = $(am_libcgame_la_OBJECTS)
 libcgame_la_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
 	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(libcgame_la_CFLAGS) \
@@ -258,7 +258,6 @@ libcgame_la_SOURCES = \
 cg_character.c \
 cg_commandmap.c\
 cg_consolecmds.c \
-cg_debriefing.c \
 cg_draw.c \
 cg_drawtools.c \
 cg_effects.c \
@@ -381,7 +380,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libcgame_la-cg_character.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libcgame_la-cg_commandmap.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libcgame_la-cg_consolecmds.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libcgame_la-cg_debriefing.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libcgame_la-cg_draw.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libcgame_la-cg_drawtools.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libcgame_la-cg_effects.Plo@am__quote@
@@ -558,13 +556,6 @@ libcgame_la-cg_consolecmds.lo: cg_consolecmds.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='cg_consolecmds.c' object='libcgame_la-cg_consolecmds.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libcgame_la_CFLAGS) $(CFLAGS) -c -o libcgame_la-cg_consolecmds.lo `test -f 'cg_consolecmds.c' || echo '$(srcdir)/'`cg_consolecmds.c
-
-libcgame_la-cg_debriefing.lo: cg_debriefing.c
-@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libcgame_la_CFLAGS) $(CFLAGS) -MT libcgame_la-cg_debriefing.lo -MD -MP -MF $(DEPDIR)/libcgame_la-cg_debriefing.Tpo -c -o libcgame_la-cg_debriefing.lo `test -f 'cg_debriefing.c' || echo '$(srcdir)/'`cg_debriefing.c
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libcgame_la-cg_debriefing.Tpo $(DEPDIR)/libcgame_la-cg_debriefing.Plo
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='cg_debriefing.c' object='libcgame_la-cg_debriefing.lo' libtool=yes @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libcgame_la_CFLAGS) $(CFLAGS) -c -o libcgame_la-cg_debriefing.lo `test -f 'cg_debriefing.c' || echo '$(srcdir)/'`cg_debriefing.c
 
 libcgame_la-cg_draw.lo: cg_draw.c
 @am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libcgame_la_CFLAGS) $(CFLAGS) -MT libcgame_la-cg_draw.lo -MD -MP -MF $(DEPDIR)/libcgame_la-cg_draw.Tpo -c -o libcgame_la-cg_draw.lo `test -f 'cg_draw.c' || echo '$(srcdir)/'`cg_draw.c

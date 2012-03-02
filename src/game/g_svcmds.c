@@ -392,7 +392,6 @@ void Svcmd_RemoveIP_f( void ) {
 }
 
 /* Nico, removed respawnLeft
-/*
  Xian - Clears out the entire list maxlives enforcement banlist
 
 void ClearMaxLivesBans() {

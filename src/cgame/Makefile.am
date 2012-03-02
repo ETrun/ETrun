@@ -24,7 +24,6 @@ libcgame_la_SOURCES = \
 cg_character.c \
 cg_commandmap.c\
 cg_consolecmds.c \
-cg_debriefing.c \
 cg_draw.c \
 cg_drawtools.c \
 cg_effects.c \
