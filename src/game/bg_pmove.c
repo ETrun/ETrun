@@ -2600,12 +2600,6 @@ static void PM_FinishWeaponChange( void ) {
 	case WP_GPG40:
 		pm->pmext->silencedSideArm |= 2;
 		break;
-//		case WP_MEDIC_SYRINGE:
-//			pm->pmext->silencedSideArm &= ~4;
-//			break;
-//		case WP_MEDIC_ADRENALINE:
-//			pm->pmext->silencedSideArm |= 4;
-//			break;
 	default:
 		break;
 	}
@@ -2623,8 +2617,6 @@ static void PM_FinishWeaponChange( void ) {
 	case WP_LUGER:
 		if ( newweapon == weapAlts[oldweapon] ) {
 			switchtime = 0;
-			//switchtime = 50;
-			//switchtime = 1050;
 			altSwitchAnim = qtrue ;
 		}
 		break;
@@ -2637,20 +2629,17 @@ static void PM_FinishWeaponChange( void ) {
 	case WP_COLT:
 		if ( newweapon == weapAlts[oldweapon] ) {
 			switchtime = 0;
-			//switchtime = 1050;
 			altSwitchAnim = qtrue ;
 		}
 		break;
 	case WP_SILENCED_COLT:
 		if ( newweapon == weapAlts[oldweapon] ) {
-			//switchtime = 1300;
 			switchtime = 1190;
 			altSwitchAnim = qtrue ;
 		}
 		break;
 	case WP_CARBINE:
 		if ( newweapon == weapAlts[oldweapon] ) {
-			//switchtime = 2000;
 			if ( pm->ps->ammoclip[ BG_FindAmmoForWeapon( oldweapon ) ] ) {
 				switchtime = 1347;
 			} else {
@@ -2668,7 +2657,6 @@ static void PM_FinishWeaponChange( void ) {
 		break;
 	case WP_KAR98:
 		if ( newweapon == weapAlts[oldweapon] ) {
-			//switchtime = 2000;
 			if ( pm->ps->ammoclip[ BG_FindAmmoForWeapon( oldweapon ) ] ) {
 				switchtime = 1347;
 			} else {
@@ -2858,11 +2846,7 @@ void PM_CheckForReload( int weapon ) {
 					if ( !pm->ps->ammoclip[BG_FindClipForWeapon( BG_AkimboSidearm( weapon ) )] ) {
 						doReload = qtrue;
 					}
-				} /*else if( BG_IsAkimboSideArm(weapon, pm->ps) ) {
-					if( !pm->ps->ammoclip[BG_FindClipForWeapon(BG_AkimboForSideArm(weapon))] )
-						doReload = qtrue;
-				}*/
-				else {
+				} else {
 					doReload = qtrue;
 				}
 			}
@@ -3032,9 +3016,6 @@ void PM_CoolWeapons( void ) {
 				pm->ps->curWeapHeat = 0;
 			}
 		}
-
-//		if(pm->ps->weapHeat[pm->ps->weapon])
-//			Com_Printf("pm heat: %d, %d\n", pm->ps->weapHeat[pm->ps->weapon], pm->ps->curWeapHeat);
 	}
 
 }
@@ -3220,9 +3201,6 @@ static void PM_Weapon( void ) {
 		return;
 	}
 
-	//%	if( pm->ps->eFlags & EF_PRONE_MOVING )
-	//%		return;
-
 	// special mounted mg42 handling
 	switch ( pm->ps->persistant[PERS_HWEAPON_USE] ) {
 	case 1:
@@ -3294,13 +3272,11 @@ static void PM_Weapon( void ) {
 			pm->ps->weaponTime += AAGUN_RATE_OF_FIRE;
 
 			BG_AnimScriptEvent( pm->ps, pm->character->animModelInfo, ANIM_ET_FIREWEAPON, qfalse, qtrue );
-//				pm->ps->viewlocked = 2;		// this enable screen jitter when firing
 		}
 		return;
 	}
 
 	if ( pm->ps->eFlags & EF_MOUNTEDTANK ) {
-//		PM_CoolWeapons(); // Gordon: Arnout says this is how it's wanted ( bleugh ) no cooldown on weaps while using mg42, but need to update heat on mg42 itself
 		if ( pm->ps->weapHeat[WP_DUMMY_MG42] ) {
 			pm->ps->weapHeat[WP_DUMMY_MG42] -= ( 300.f * pml.frametime );
 
@@ -3332,7 +3308,6 @@ static void PM_Weapon( void ) {
 			pm->ps->weaponTime += MG42_RATE_OF_FIRE_MP;
 
 			BG_AnimScriptEvent( pm->ps, pm->character->animModelInfo, ANIM_ET_FIREWEAPON, qfalse, qtrue );
-			//pm->ps->viewlocked = 2;		// this enable screen jitter when firing
 
 			if ( pm->ps->weapHeat[WP_DUMMY_MG42] >= MAX_MG42_HEAT ) {
 				pm->ps->weaponTime = MAX_MG42_HEAT; // cap heat to max
@@ -5162,9 +5137,13 @@ PM_Sprint
 */
 void PM_Sprint( void ) {
 	if ( pm->cmd.buttons & BUTTON_SPRINT && ( pm->cmd.forwardmove || pm->cmd.rightmove ) && !( pm->ps->pm_flags & PMF_DUCKED ) && !( pm->ps->eFlags & EF_PRONE ) ) {
+		
+		/* Nico, removed adrenaline
 		if ( pm->ps->powerups[PW_ADRENALINE] ) {
 			pm->pmext->sprintTime = SPRINTTIME;
-		} else if ( pm->ps->powerups[PW_NOFATIGUE] ) {
+		} else */
+
+		if ( pm->ps->powerups[PW_NOFATIGUE] ) {
 			// take time from powerup before taking it from sprintTime
 			pm->ps->powerups[PW_NOFATIGUE] -= 50;
 
@@ -5198,9 +5177,13 @@ void PM_Sprint( void ) {
 		// JPW NERVE -- in multiplayer, recharge faster for top 75% of sprint bar
 		// (for people that *just* use it for jumping, not sprint) this code was
 		// mucked about with to eliminate client-side framerate-dependancy in wolf single player
+		
+		/* Nico, removed adrenaline
 		if ( pm->ps->powerups[PW_ADRENALINE] ) {
 			pm->pmext->sprintTime = SPRINTTIME;
-		} else if ( pm->ps->powerups[PW_NOFATIGUE] ) { // (SA) recharge at 2x with stamina powerup
+		} else */
+
+		if ( pm->ps->powerups[PW_NOFATIGUE] ) { // (SA) recharge at 2x with stamina powerup
 			pm->pmext->sprintTime += 10;
 		} else {
 			int rechargebase = 500;

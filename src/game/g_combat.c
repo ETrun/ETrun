@@ -1311,9 +1311,10 @@ void G_Damage( gentity_t *targ, gentity_t *inflictor, gentity_t *attacker,  vec3
 	// save = 0;
 
 	// adrenaline junkie!
+	/* Nico, removed adrenaline
 	if ( targ->client && targ->client->ps.powerups[PW_ADRENALINE] ) {
 		take *= .5f;
-	}
+	}*/
 
 	// save some from flak jacket
 	if ( targ->client && targ->client->sess.skill[SK_EXPLOSIVES_AND_CONSTRUCTION] >= 4 && targ->client->sess.playerType == PC_ENGINEER ) {

@@ -605,15 +605,15 @@ void Weapon_Syringe( gentity_t *ent ) {
 }
 // jpw
 
-/*
+/* Nico, removed adrenaline
 ======================
   Weapon_AdrenalineSyringe
 	Hmmmm. Needles. With stuff in it. Woooo.
 ======================
-*/
+
 void Weapon_AdrenalineSyringe( gentity_t *ent ) {
 	ent->client->ps.powerups[PW_ADRENALINE] = level.time + 10000;
-}
+}*/
 
 void G_ExplodeMissile( gentity_t *ent );
 void DynaSink( gentity_t* self );
@@ -3995,8 +3995,9 @@ void FireWeapon( gentity_t *ent ) {
 		Weapon_Syringe( ent );
 		break;
 	case WP_MEDIC_ADRENALINE:
+		/* Nico, removed adrenaline
 		ent->client->ps.classWeaponTime = level.time;
-		Weapon_AdrenalineSyringe( ent );
+		Weapon_AdrenalineSyringe( ent );*/
 		break;
 	case WP_AMMO:
 		Weapon_MagicAmmo( ent );

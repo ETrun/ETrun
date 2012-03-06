@@ -3632,6 +3632,7 @@ static void CG_DrawStaminaBar( rectDef_t *rect ) {
 	int flags = 1 | 4 | 16 | 64;
 	float frac = cg.pmext.sprintTime / (float)SPRINTTIME;
 
+	/* Nico, removed adrenaline
 	if ( cg.snap->ps.powerups[PW_ADRENALINE] ) {
 		if ( cg.snap->ps.pm_flags & PMF_FOLLOW ) {
 			Vector4Average( colour, colorWhite, sin( cg.time * .005f ), colour );
@@ -3644,11 +3645,11 @@ static void CG_DrawStaminaBar( rectDef_t *rect ) {
 				Vector4Average( colour, colorWhite, .5f + sin( .2f * sqrt( msec ) * 2 * M_PI ) * .5f, colour );
 			}
 		}
-	} else {
+	} else {*/
 		if ( frac < 0.25 ) {
 			color = colourlow;
 		}
-	}
+	//}
 
 	CG_FilledBar( rect->x, rect->y + ( rect->h * 0.1f ), rect->w, rect->h * 0.84f, color, NULL, bgcolour, frac, flags );
 

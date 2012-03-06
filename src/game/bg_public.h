@@ -675,7 +675,8 @@ typedef enum {
 	PW_OPS_CLASS_2,
 	PW_OPS_CLASS_3,
 
-	PW_ADRENALINE,
+	/* Nico, removed adrenaline
+	PW_ADRENALINE,*/
 
 	PW_BLACKOUT = 14,       // OSP - spec blackouts. FIXME: we don't need 32bits here...relocate
 	/* Nico, removed multiview
