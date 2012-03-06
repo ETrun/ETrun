@@ -420,11 +420,11 @@ void SpectatorThink( gentity_t *ent, usercmd_t *ucmd ) {
 	if ( client->sess.spectatorState != SPECTATOR_FOLLOW ) {
 		client->ps.pm_type = PM_SPECTATOR;
 		client->ps.speed = 800; // was: 400 // faster than normal
+
 		if ( client->ps.sprintExertTime ) {
 			client->ps.speed *= 3;  // (SA) allow sprint in free-cam mode
-
-
 		}
+
 		// OSP - dead players are frozen too, in a timeout
 		if ( ( client->ps.pm_flags & PMF_LIMBO ) && level.match_pause != PAUSE_NONE ) {
 			client->ps.pm_type = PM_FREEZE;
@@ -458,9 +458,10 @@ void SpectatorThink( gentity_t *ent, usercmd_t *ucmd ) {
 		trap_UnlinkEntity( ent );
 	}
 
+	/* Nico, removed sprint time limit
 	if ( ent->flags & FL_NOFATIGUE ) {
 		ent->client->pmext.sprintTime = SPRINTTIME;
-	}
+	}*/
 
 
 	client->oldbuttons = client->buttons;
@@ -1088,9 +1089,10 @@ void ClientThink_real( gentity_t *ent ) {
 		Cmd_Activate_f( ent );
 	}
 
+	/* Nico, removed sprint time limit
 	if ( ent->flags & FL_NOFATIGUE ) {
 		ent->client->pmext.sprintTime = SPRINTTIME;
-	}
+	}*/
 
 	if ( g_entities[ent->client->ps.identifyClient].team == ent->team && g_entities[ent->client->ps.identifyClient].client ) {
 		ent->client->ps.identifyClientHealth = g_entities[ent->client->ps.identifyClient].health;

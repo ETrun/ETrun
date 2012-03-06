@@ -628,7 +628,9 @@ static float PM_CmdScale( usercmd_t *cmd ) {
 				  + cmd->rightmove * cmd->rightmove + cmd->upmove * cmd->upmove );
 	scale = (float)pm->ps->speed * max / ( 127.0 * total );
 
-	if ( pm->cmd.buttons & BUTTON_SPRINT && pm->pmext->sprintTime > 50 ) {
+	/* Nico, removed sprint time limit
+	if ( pm->cmd.buttons & BUTTON_SPRINT && pm->pmext->sprintTime > 50 ) {*/
+	if ( pm->cmd.buttons & BUTTON_SPRINT ) {
 		scale *= pm->ps->sprintSpeedScale;
 	} else {
 		scale *= pm->ps->runSpeedScale;
@@ -770,11 +772,6 @@ static qboolean PM_CheckJump( void ) {
 	if ( pm->cmd.serverTime - pm->pmext->jumpTime < 850 ) {
 		return qfalse;
 	}
-
-	// don't allow if player tired
-//	if (pm->pmext->sprintTime < 2500) // JPW pulled this per id request; made airborne jumpers wildly inaccurate with gunfire to compensate
-//		return qfalse;
-	// jpw
 
 	if ( pm->ps->pm_flags & PMF_RESPAWNED ) {
 		return qfalse;      // don't allow jump until all buttons are up
@@ -1020,65 +1017,7 @@ PM_CheckDodge
 =============
 */
 static qboolean PM_CheckDodge( void ) {
-	// JPW NERVE -- jumping in multiplayer uses and requires sprint juice (to prevent turbo skating, sprint + jumps)
-	// don't allow jump accel
-	//if (pm->cmd.serverTime - pm->pmext->jumpTime < 850)
-	//	return qfalse;
-
-	// don't allow if player tired
-//		if (pm->pmext->sprintTime < 2500) // JPW pulled this per id request; made airborne jumpers wildly inaccurate with gunfire to compensate
-//			return qfalse;
-	// jpw
-
-	// Disabled for now
 	return qfalse;
-
-/*	if ( pm->pmext->sprintTime < 3000 )
-		return qfalse;
-
-	if( pm->cmd.serverTime - pm->pmext->dodgeTime < 350 )
-		return qtrue;   // Already dodging
-
-	if ( pm->ps->pm_flags & PMF_RESPAWNED || pm->ps->pm_flags & PMF_DUCKED || pm->ps->eFlags & EF_PRONE ) {
-		return qfalse;		// don't allow dodge until all buttons are up, player is prone or crouching
-	}
-
-	if ( pm->cmd.doubleTap != DT_MOVELEFT && pm->cmd.doubleTap != DT_MOVERIGHT ) {
-		// no dodge issued
-		return qfalse;
-	}
-
-	// must wait for jump to be released
-	//if ( pm->ps->pm_flags & PMF_JUMP_HELD ) {
-	//	// clear upmove so cmdscale doesn't lower running speed
-	//	pm->cmd.upmove = 0;
-	//	return qfalse;
-	//}
-
-	pml.groundPlane = qfalse;		// jumping away
-	pml.walking = qfalse;
-	//pm->ps->pm_flags |= PMF_JUMP_HELD;
-
-	pm->ps->groundEntityNum = ENTITYNUM_NONE;
-	pm->ps->velocity[2] = 130;
-	PM_AddEvent( EV_JUMP );
-
-	//if ( pm->cmd.forwardmove >= 0 ) {
-	//	BG_AnimScriptEvent( pm->ps, ANIM_ET_JUMP, qfalse, qtrue );
-	//	pm->ps->pm_flags &= ~PMF_BACKWARDS_JUMP;
-	//} else {
-	//	BG_AnimScriptEvent( pm->ps, ANIM_ET_JUMPBK, qfalse, qtrue );
-	//	pm->ps->pm_flags |= PMF_BACKWARDS_JUMP;
-	//}
-
-	pm->pmext->dtmove = pm->cmd.doubleTap;
-	pm->pmext->dodgeTime = pm->cmd.serverTime;
-	pm->pmext->jumpTime = pm->cmd.serverTime - 200;	// Arnout: prevent bunnyhopping
-	pm->ps->jumpTime = pm->cmd.serverTime - 200;	// Arnout: prevent bunnyhopping
-
-	pm->pmext->sprintTime -= 3000;
-
-	return qtrue;*/
 }
 
 //============================================================================
@@ -1323,10 +1262,11 @@ static void PM_WalkMove( void ) {
 
 		if ( !( pm->cmd.serverTime - pm->pmext->jumpTime < 850 ) ) {
 
+			/* Nico, removed sprint time limit
 			pm->pmext->sprintTime -= 2500;
 			if ( pm->pmext->sprintTime < 0 ) {
 				pm->pmext->sprintTime = 0;
-			}
+			}*/
 
 			pm->pmext->jumpTime = pm->cmd.serverTime;
 		}
@@ -2198,9 +2138,6 @@ static void PM_Footsteps( void ) {
 
 		}
 	} else if ( ( ( old + 64 ) ^ ( pm->ps->bobCycle + 64 ) ) & 128 ) {
-
-/*		if (pm->ps->sprintExertTime && pm->waterlevel <= 2)
-			PM_ExertSound ();*/
 
 		if ( pm->waterlevel == 0 ) {
 			// on ground will only play sounds if running
@@ -5149,29 +5086,32 @@ void PM_Sprint( void ) {
 
 			// (SA) go ahead and continue to recharge stamina at double
 			// rate with stamina powerup even when exerting
+			/* Nico, removed sprint time limit
 			pm->pmext->sprintTime += 10;
 			if ( pm->pmext->sprintTime > SPRINTTIME ) {
 				pm->pmext->sprintTime = SPRINTTIME;
-			}
+			}*/
 
 			if ( pm->ps->powerups[PW_NOFATIGUE] < 0 ) {
 				pm->ps->powerups[PW_NOFATIGUE] = 0;
 			}
 		}
 		// JPW NERVE -- sprint time tuned for multiplayer
+		/* Nico, removed sprint time limit
 		else  {
 			// JPW NERVE adjusted for framerate independence
 			pm->pmext->sprintTime -= 5000 * pml.frametime;
-		}
+		}*/
 		// jpw
 
+		/* Nico, removed sprint time limit
 		if ( pm->pmext->sprintTime < 0 ) {
 			pm->pmext->sprintTime = 0;
 		}
 
 		if ( !pm->ps->sprintExertTime ) {
 			pm->ps->sprintExertTime = 1;
-		}
+		}*/
 	} else
 	{
 		// JPW NERVE -- in multiplayer, recharge faster for top 75% of sprint bar
@@ -5184,7 +5124,10 @@ void PM_Sprint( void ) {
 		} else */
 
 		if ( pm->ps->powerups[PW_NOFATIGUE] ) { // (SA) recharge at 2x with stamina powerup
-			pm->pmext->sprintTime += 10;
+
+			/* Nico, removed sprint time limit
+			pm->pmext->sprintTime += 10;*/
+
 		} else {
 			int rechargebase = 500;
 
@@ -5199,17 +5142,20 @@ void PM_Sprint( void ) {
 				}
 			}
 
+			/* Nico, removed sprint time limit
 			pm->pmext->sprintTime += rechargebase * pml.frametime;        // JPW NERVE adjusted for framerate independence
 			if ( pm->pmext->sprintTime > 5000 ) {
 				pm->pmext->sprintTime += rechargebase * pml.frametime;    // JPW NERVE adjusted for framerate independence
-			}
+			}*/
+
 			// jpw
 		}
+
+		/* Nico, removed sprint time limit
 		if ( pm->pmext->sprintTime > SPRINTTIME ) {
 			pm->pmext->sprintTime = SPRINTTIME;
 		}
-
-		pm->ps->sprintExertTime = 0;
+		pm->ps->sprintExertTime = 0;*/
 	}
 }
 

@@ -594,7 +594,10 @@ typedef struct clientInfo_s {
 	int grenadeTimeLeft;                // Actual time remaining
 	int grenadeTimeStart;               // Time trigger base to compute TimeLeft
 	int hintTime;
-	int sprintTime;
+
+	/* Nico, removed sprint time limit
+	int sprintTime;*/
+
 	int weapHeat;
 	int weaponState;
 	int weaponState_last;

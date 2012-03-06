@@ -1981,8 +1981,10 @@ void ClientSpawn( gentity_t *ent, qboolean revived ) {
 	client->ps.weaponstate = WEAPON_READY;
 
 	// Rafael
+
+	/* Nico, removed sprint time limit
 	client->pmext.sprintTime = SPRINTTIME;
-	client->ps.sprintExertTime = 0;
+	client->ps.sprintExertTime = 0;*/
 
 	client->ps.friction = 1.0;
 	// done.

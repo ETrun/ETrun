@@ -3556,12 +3556,6 @@ void BG_EvaluateTrajectory( const trajectory_t *tr, int atTime, vec3_t result, q
 			deltaTime = 1 - deltaTime;
 		}
 
-/*		if(pSpline->isStart) {
-			deltaTime = 1 - sin((1 - deltaTime) * M_PI * 0.5f);
-		} else if(pSpline->isEnd) {
-			deltaTime = sin(deltaTime * M_PI * 0.5f);
-		}*/
-
 		deltaTime2 = deltaTime;
 
 		BG_CalculateSpline_r( pSpline, vec[0], vec[1], deltaTime );
@@ -3572,7 +3566,6 @@ void BG_EvaluateTrajectory( const trajectory_t *tr, int atTime, vec3_t result, q
 			float base1;
 
 			if ( tr->trBase[0] ) {
-//				int pos = 0;
 				vec3_t result2;
 				splinePath_t* pSp2 = pSpline;
 

@@ -1307,7 +1307,7 @@ typedef struct playerState_s {
 	int pmove_framecount;
 	int entityEventSequence;
 
-	int sprintExertTime;
+	int sprintExertTime; // Nico, note keep this even if it's unused
 
 	// JPW NERVE -- value for all multiplayer classes with regenerating "class weapons" -- ie LT artillery, medic medpack, engineer build points, etc
 	int classWeaponTime;                // Arnout : DOES get send over the network
@@ -1586,7 +1586,6 @@ typedef struct entityState_s {
 	int weapon;             // determines weapon and flash model, etc
 	int legsAnim;           // mask off ANIM_TOGGLEBIT
 	int torsoAnim;          // mask off ANIM_TOGGLEBIT
-//	int		weapAnim;		// mask off ANIM_TOGGLEBIT	//----(SA)	removed (weap anims will be client-side only)
 
 	int density;            // for particle effects
 

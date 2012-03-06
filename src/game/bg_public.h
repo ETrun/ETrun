@@ -54,7 +54,8 @@ If you have questions concerning this license or the applicable additional terms
 #define _attribute( x )
 #endif
 
-#define SPRINTTIME 20000.0f
+/* Nico, removed sprint time limit
+#define SPRINTTIME 20000.0f*/
 
 #define DEFAULT_GRAVITY     800
 #define FORCE_LIMBO_HEALTH  -75 // JPW NERVE
@@ -464,7 +465,9 @@ typedef struct {
 
 	int weapAnimTimer;              // don't change low priority animations until this runs out		//----(SA)	added
 	int silencedSideArm;            // Gordon: Keep track of whether the luger/colt is silenced "in holster", prolly want to do this for the kar98 etc too
-	int sprintTime;
+
+	/* Nico, removed sprint time limit
+	int sprintTime;*/
 
 	int airleft;
 

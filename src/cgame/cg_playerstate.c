@@ -275,7 +275,8 @@ void CG_Respawn( qboolean revived ) {
 
 	cg.pmext.bAutoReload = ( cg_autoReload.integer > 0 );
 
-	cg.pmext.sprintTime = SPRINTTIME;
+	/* Nico, removed sprint time limit
+	cg.pmext.sprintTime = SPRINTTIME;*/
 
 	if ( !revived ) {
 		cgs.limboLoadoutSelected = qfalse;

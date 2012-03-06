@@ -3630,7 +3630,9 @@ static void CG_DrawStaminaBar( rectDef_t *rect ) {
 	vec4_t colourlow =  {   1.0f,   0.1f,   0.1f,   0.5f    };
 	vec_t* color = colour;
 	int flags = 1 | 4 | 16 | 64;
-	float frac = cg.pmext.sprintTime / (float)SPRINTTIME;
+
+	/* Nico, removed sprint time limit
+	float frac = cg.pmext.sprintTime / (float)SPRINTTIME;*/
 
 	/* Nico, removed adrenaline
 	if ( cg.snap->ps.powerups[PW_ADRENALINE] ) {
@@ -3646,12 +3648,17 @@ static void CG_DrawStaminaBar( rectDef_t *rect ) {
 			}
 		}
 	} else {*/
+
+		/* Nico, removed sprint time limit
 		if ( frac < 0.25 ) {
 			color = colourlow;
-		}
+		}*/
+
 	//}
 
-	CG_FilledBar( rect->x, rect->y + ( rect->h * 0.1f ), rect->w, rect->h * 0.84f, color, NULL, bgcolour, frac, flags );
+	/* Nico, removed sprint time limit
+	CG_FilledBar( rect->x, rect->y + ( rect->h * 0.1f ), rect->w, rect->h * 0.84f, color, NULL, bgcolour, frac, flags );*/
+	CG_FilledBar( rect->x, rect->y + ( rect->h * 0.1f ), rect->w, rect->h * 0.84f, color, NULL, bgcolour, 1.0f, flags );
 
 	trap_R_SetColor( NULL );
 	CG_DrawPic( rect->x, rect->y, rect->w, rect->h, cgs.media.hudSprintBar );
