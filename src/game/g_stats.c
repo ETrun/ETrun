@@ -251,8 +251,6 @@ void G_AddSkillPoints( gentity_t *ent, skillType_t skill, float points ) {
 
 	level.teamScores[ ent->client->ps.persistant[PERS_TEAM] ] += points;
 
-//	G_Printf( "%s just got %f skill points for skill %s\n", ent->client->pers.netname, points, skillNames[skill] );
-
 	trap_PbStat( ent - g_entities, "addskill",
 				 va( "%d %d %d %f", ent->client->sess.sessionTeam, ent->client->sess.playerType,
 					 skill, points ) ) ;
@@ -299,7 +297,6 @@ void G_LoseKillSkillPoints( gentity_t *tker, meansOfDeath_t mod, hitRegion_t hr,
 //bani - airstrike marker kills
 	case MOD_SMOKEGRENADE:
 		G_LoseSkillPoints( tker, SK_LIGHT_WEAPONS, 3.f );
-//			G_DebugAddSkillPoints( attacker, SK_LIGHT_WEAPONS, 2.f, "kill" );
 		break;
 
 		// scoped weapons
@@ -308,7 +305,6 @@ void G_LoseKillSkillPoints( gentity_t *tker, meansOfDeath_t mod, hitRegion_t hr,
 	case MOD_FG42SCOPE:
 	case MOD_SATCHEL:
 		G_LoseSkillPoints( tker, SK_MILITARY_INTELLIGENCE_AND_SCOPED_WEAPONS, 3.f );
-//			G_DebugAddSkillPoints( attacker, SK_LIGHT_WEAPONS, 2.f, "legshot kill" );
 		break;
 
 	case MOD_MOBILE_MG42:
@@ -319,7 +315,6 @@ void G_LoseKillSkillPoints( gentity_t *tker, meansOfDeath_t mod, hitRegion_t hr,
 	case MOD_FLAMETHROWER:
 	case MOD_MORTAR:
 		G_LoseSkillPoints( tker, SK_HEAVY_WEAPONS, 3.f );
-//			G_DebugAddSkillPoints( attacker, SK_HEAVY_WEAPONS, 3.f, "emplaced mg42 kill" );
 		break;
 
 	case MOD_DYNAMITE:
@@ -327,13 +322,11 @@ void G_LoseKillSkillPoints( gentity_t *tker, meansOfDeath_t mod, hitRegion_t hr,
 	case MOD_GPG40:
 	case MOD_M7:
 		G_LoseSkillPoints( tker, SK_EXPLOSIVES_AND_CONSTRUCTION, 3.f );
-//			G_DebugAddSkillPoints( attacker, SK_EXPLOSIVES_AND_CONSTRUCTION, 4.f, "dynamite or landmine kill" );
 		break;
 
 	case MOD_ARTY:
 	case MOD_AIRSTRIKE:
 		G_LoseSkillPoints( tker, SK_SIGNALS, 3.f );
-//			G_DebugAddSkillPoints( attacker, SK_SIGNALS, 4.f, "artillery kill" );
 		break;
 
 		// no skills for anything else
@@ -362,7 +355,6 @@ void G_AddKillSkillPoints( gentity_t *attacker, meansOfDeath_t mod, hitRegion_t 
 	case MOD_GARAND:
 	case MOD_SILENCER:
 	case MOD_FG42:
-//		case MOD_FG42SCOPE:
 	case MOD_CARBINE:
 	case MOD_KAR98:
 	case MOD_SILENCED_COLT:
@@ -584,6 +576,7 @@ void G_DebugAddSkillPoints( gentity_t *ent, skillType_t skill, float points, con
 	}
 }
 
+/* Nico, I comment this because it's not used anymore
 #define CHECKSTAT1( XX )														\
 	best = NULL;																\
 	for ( i = 0; i < level.numConnectedClients; i++ ) {							 \
@@ -660,7 +653,7 @@ void G_DebugAddSkillPoints( gentity_t *ent, skillType_t skill, float points, con
 			best = NULL;														\
 		}																		\
 	}																			\
-	Q_strcat( buffer, 1024, va( ";%s; %i ", best ? best->pers.netname : "", best ? best->sess.sessionTeam : -1 ) )
+	Q_strcat( buffer, 1024, va( ";%s; %i ", best ? best->pers.netname : "", best ? best->sess.sessionTeam : -1 ) )*/
 
 /* Nico, removed endgame
 void G_BuildEndgameStats( void ) {
