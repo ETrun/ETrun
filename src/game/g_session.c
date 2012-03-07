@@ -87,7 +87,6 @@ void G_WriteClientSessionData( gclient_t *client, qboolean restart ) {
 			// OSP
 
 			,
-//		client->sess.experience,
 			client->sess.muted,
 			client->sess.ignoreClients[0],
 			client->sess.ignoreClients[1],
@@ -102,8 +101,8 @@ void G_WriteClientSessionData( gclient_t *client, qboolean restart ) {
 	/* Nico, removed warmup
 	if ( !( restart && !level.warmupTime ) ) {*/
 
+	/* Nico, removed skills
 	if ( !( restart ) ) {
-		/* Nico, removed skills
 		s = va( "%.2f %.2f %.2f %.2f %.2f %.2f %.2f %i %i %i %i %i %i %i",
 				client->sess.skillpoints[0],
 				client->sess.skillpoints[1],
@@ -119,11 +118,10 @@ void G_WriteClientSessionData( gclient_t *client, qboolean restart ) {
 				client->sess.medals[4],
 				client->sess.medals[5],
 				client->sess.medals[6]
-				);*/
-		s = va("");
+				);
 
 		trap_Cvar_Set( va( "sessionstats%i", client - level.clients ), s );
-	}
+	}*/
 
 	// OSP -- save weapon stats too
 	if ( !level.fResetStats ) {

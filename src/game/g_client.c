@@ -1335,9 +1335,7 @@ void ClientUserinfoChanged( int clientNum ) {
 		Q_strncpyz( userinfo, "\\name\\badinfo", sizeof( userinfo ) );
 	}
 
-#ifndef DEBUG_STATS
 	if ( g_developer.integer || *g_log.string || g_dedicated.integer )
-#endif
 	{
 		G_Printf( "Userinfo: %s\n", userinfo );
 	}

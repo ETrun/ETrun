@@ -1379,11 +1379,7 @@ void G_Damage( gentity_t *targ, gentity_t *inflictor, gentity_t *attacker,  vec3
 		targ->client->ps.eFlags |= EF_HEADSHOT;
 
 		// OSP - Record the headshot
-		if ( client && attacker && attacker->client
-#ifndef DEBUG_STATS
-			 && attacker->client->sess.sessionTeam != targ->client->sess.sessionTeam
-#endif
-			 ) {
+		if ( client && attacker && attacker->client && attacker->client->sess.sessionTeam != targ->client->sess.sessionTeam ) {
 			G_addStatsHeadShot( attacker, mod );
 		}
 
@@ -1424,9 +1420,7 @@ void G_Damage( gentity_t *targ, gentity_t *inflictor, gentity_t *attacker,  vec3
 		}
 	}
 
-#ifndef DEBUG_STATS
 	if ( g_debugDamage.integer )
-#endif
 	{
 		G_Printf( "client:%i health:%i damage:%i mod:%s\n", targ->s.number, targ->health, take, modNames[mod] );
 	}

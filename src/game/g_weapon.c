@@ -2800,10 +2800,8 @@ void Weapon_Artillery( gentity_t *ent ) {
 	// }
 
 	// OSP -- weapon stats
-#ifndef DEBUG_STATS
 	if ( g_gamestate.integer == GS_PLAYING )
-#endif
-	ent->client->sess.aWeaponStats[WS_ARTILLERY].atts++;
+		ent->client->sess.aWeaponStats[WS_ARTILLERY].atts++;
 
 }
 
@@ -4201,10 +4199,8 @@ void FireWeapon( gentity_t *ent ) {
 	}
 
 	// OSP
-#ifndef DEBUG_STATS
 	if ( g_gamestate.integer == GS_PLAYING )
-#endif
-	ent->client->sess.aWeaponStats[BG_WeapStatForWeapon( ent->s.weapon )].atts += shots;
+		ent->client->sess.aWeaponStats[BG_WeapStatForWeapon( ent->s.weapon )].atts += shots;
 }
 
 

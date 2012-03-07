@@ -1492,7 +1492,10 @@ void ClientCommand( int clientNum );
 void ClientThink( int clientNum );
 void ClientEndFrame( gentity_t *ent );
 void G_RunClient( gentity_t *ent );
-qboolean ClientNeedsAmmo( int client );
+
+/* Nico, removed skills
+qboolean ClientNeedsAmmo( int client );*/
+
 qboolean ClientOutOfAmmo( int client );
 
 // Does ent have enough "energy" to call artillery?
@@ -1529,7 +1532,8 @@ void G_InitSessionData( gclient_t *client, char *userinfo );
 void G_InitWorldSession( void );
 void G_WriteSessionData( qboolean restart );
 
-void G_CalcRank( gclient_t* client );
+/* Nico, removed skills
+void G_CalcRank( gclient_t* client );*/
 
 
 //returns the number of the client with the given name
