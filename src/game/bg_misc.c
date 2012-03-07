@@ -52,7 +52,7 @@ extern vmCvar_t ui_gameType;
 
 #define BG_IsSinglePlayerGame() ( gametypeCvar.integer == GT_SINGLE_PLAYER ) || ( gametypeCvar.integer == GT_COOP )
 
-
+/* Nico, removed skills
 const char* skillNames[SK_NUM_SKILLS] = {
 	"Battle Sense",
 	"Engineering",
@@ -100,7 +100,7 @@ const int skillLevels[NUM_SKILL_LEVELS] = {
 	90,     // reaching level 3
 	140     // reaching level 4
 //	200		// reaching level 5
-};
+};*/
 
 vec3_t playerlegsProneMins = { -13.5f, -13.5f, -24.f };
 vec3_t playerlegsProneMaxs = { 13.5f, 13.5f, -14.4f };
@@ -2905,18 +2905,20 @@ WARNING: when numOfClips is 0, DO NOT CHANGE ANYTHING under ps.
 int BG_GrenadesForClass( int cls, int* skills ) {
 	switch ( cls ) {
 	case PC_MEDIC:
+		/* Nico, removed skills
 		if ( skills[SK_FIRST_AID] >= 1 ) {
 			return 2;
-		}
+		}*/
 		return 1;
 	case PC_SOLDIER:
 		return 4;
 	case PC_ENGINEER:
 		return 8;
 	case PC_FIELDOPS:
+		/* Nico, removed skills
 		if ( skills[SK_SIGNALS] >= 1 ) {
 			return 2;
-		}
+		}*/
 		return 1;
 	case PC_COVERTOPS:
 		return 2;
@@ -2968,7 +2970,9 @@ qboolean BG_AddMagicAmmo( playerState_t *ps, int *skill, int teamNum, int numOfC
 	}
 
 	if ( COM_BitCheck( ps->weapons, WP_MEDIC_SYRINGE ) ) {
-		i = skill[ SK_FIRST_AID ] >= 2 ? 12 : 10;
+		/* Nico, removed skills
+		i = skill[ SK_FIRST_AID ] >= 2 ? 12 : 10;*/
+		i = 10;
 
 		clip = BG_FindClipForWeapon( WP_MEDIC_SYRINGE );
 
@@ -4530,78 +4534,74 @@ int BG_MaxAmmoForWeapon( weapon_t weaponNum, int *skill ) {
 	case WP_CARBINE:
 	case WP_KAR98:
 	case WP_SILENCED_COLT:
+		/* Nico, removed skills
 		if ( skill[SK_LIGHT_WEAPONS] >= 1 ) {
 			return( GetAmmoTableData( weaponNum )->maxammo + GetAmmoTableData( weaponNum )->maxclip );
-		} else {
+		} else {*/
 			return( GetAmmoTableData( weaponNum )->maxammo );
-		}
+		// }
 		break;
 	case WP_MP40:
 	case WP_THOMPSON:
+
+		/* Nico, removed skills
 		if ( skill[SK_FIRST_AID] >= 1 || skill[SK_LIGHT_WEAPONS] >= 1 ) {
 			return( GetAmmoTableData( weaponNum )->maxammo + GetAmmoTableData( weaponNum )->maxclip );
-		} else {
+		} else {*/
 			return( GetAmmoTableData( weaponNum )->maxammo );
-		}
+		// }
 		break;
 	case WP_M7:
 	case WP_GPG40:
+		/* Nico, removed skills
 		if ( skill[SK_EXPLOSIVES_AND_CONSTRUCTION] >= 1 ) {
 			return( GetAmmoTableData( weaponNum )->maxammo + 4 );
-		} else {
+		} else {*/
 			return( GetAmmoTableData( weaponNum )->maxammo );
-		}
+		// }
 		break;
 	case WP_GRENADE_PINEAPPLE:
 	case WP_GRENADE_LAUNCHER:
 		// FIXME: this is class dependant, not ammo table
+		/* Nico, removed skills
 		if ( skill[SK_EXPLOSIVES_AND_CONSTRUCTION] >= 1 ) {
 			return( GetAmmoTableData( weaponNum )->maxammo + 4 );
 		} else if ( skill[SK_FIRST_AID] >= 1 ) {
 			return( GetAmmoTableData( weaponNum )->maxammo + 1 );
-		} else {
+		} else {*/
 			return( GetAmmoTableData( weaponNum )->maxammo );
-		}
+		// }
 		break;
-		/*case WP_MOBILE_MG42:
-		case WP_PANZERFAUST:
-		case WP_FLAMETHROWER:
-			if( skill[SK_HEAVY_WEAPONS] >= 1 )
-				return( GetAmmoTableData(weaponNum)->maxammo + GetAmmoTableData(weaponNum)->maxclip );
-			else
-				return( GetAmmoTableData(weaponNum)->maxammo );
-			break;
-		case WP_MORTAR:
-		case WP_MORTAR_SET:
-			if( skill[SK_HEAVY_WEAPONS] >= 1 )
-				return( GetAmmoTableData(weaponNum)->maxammo + 2 );
-			else
-				return( GetAmmoTableData(weaponNum)->maxammo );
-			break;*/
 	case WP_MEDIC_SYRINGE:
+
+		/* Nico, removed skills
 		if ( skill[SK_FIRST_AID] >= 2 ) {
 			return( GetAmmoTableData( weaponNum )->maxammo + 2 );
-		} else {
+		} else {*/
 			return( GetAmmoTableData( weaponNum )->maxammo );
-		}
+		// }
 		break;
 	case WP_GARAND:
 	case WP_K43:
 	case WP_FG42:
+
+		/* Nico, removed skills
 		if ( skill[SK_MILITARY_INTELLIGENCE_AND_SCOPED_WEAPONS] >= 1 || skill[SK_LIGHT_WEAPONS] >= 1 ) {
 			return( GetAmmoTableData( weaponNum )->maxammo + GetAmmoTableData( weaponNum )->maxclip );
-		} else {
+		} else {*/
 			return( GetAmmoTableData( weaponNum )->maxammo );
-		}
+		// }
 		break;
 	case WP_GARAND_SCOPE:
 	case WP_K43_SCOPE:
 	case WP_FG42SCOPE:
+
+		/* Nico, removed skills
 		if ( skill[SK_MILITARY_INTELLIGENCE_AND_SCOPED_WEAPONS] >= 1 ) {
 			return( GetAmmoTableData( weaponNum )->maxammo + GetAmmoTableData( weaponNum )->maxclip );
-		} else {
+		} else {*/
 			return( GetAmmoTableData( weaponNum )->maxammo );
-		}
+		// }
 		break;
 	default:
 		return( GetAmmoTableData( weaponNum )->maxammo );

@@ -726,9 +726,14 @@ static void CG_ConfigStringModified( void ) {
 		CG_ParseSkyBox();
 	} else if ( num >= CS_TAGCONNECTS && num < CS_TAGCONNECTS + MAX_TAGCONNECTS ) {
 		CG_ParseTagConnect( num );
-	} else if ( num == CS_ALLIED_MAPS_XP || num == CS_AXIS_MAPS_XP ) {
+	}
+	
+	/* Nico, removed skills
+	else if ( num == CS_ALLIED_MAPS_XP || num == CS_AXIS_MAPS_XP ) {
 		CG_ParseTeamXPs( num - CS_AXIS_MAPS_XP );
-	} else if ( num == CS_FILTERCAMS ) {
+	} else*/
+
+	if ( num == CS_FILTERCAMS ) {
 		cg.filtercams = atoi( str ) ? qtrue : qfalse;
 	} else if ( num >= CS_OID_DATA && num < CS_OID_DATA + MAX_OID_TRIGGERS ) {
 		CG_ParseOIDInfo( num );

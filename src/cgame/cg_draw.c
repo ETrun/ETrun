@@ -2003,13 +2003,16 @@ static void CG_DrawCrosshairNames( void ) {
 		}
 	} else if ( cgs.clientinfo[cg.crosshairClientNum].team != cgs.clientinfo[cg.snap->ps.clientNum].team ) {
 		if ( ( cg_entities[cg.crosshairClientNum].currentState.powerups & ( 1 << PW_OPS_DISGUISED ) ) && cgs.clientinfo[cg.snap->ps.clientNum].team != TEAM_SPECTATOR ) {
+			
+			/* Nico, removed skills
 			if ( cgs.clientinfo[cg.snap->ps.clientNum].team != TEAM_SPECTATOR &&
 				 cgs.clientinfo[cg.snap->ps.clientNum].skill[SK_SIGNALS] >= 4 && cgs.clientinfo[cg.snap->ps.clientNum].cls == PC_FIELDOPS ) {
 				s = CG_TranslateString( "Disguised Enemy!" );
 				w = CG_DrawStrlen( s ) * SMALLCHAR_WIDTH;
 				CG_DrawSmallStringColor( 320 - w / 2, 170, s, color );
 				return;
-			} else if ( dist > 512 ) {
+			} else */
+			if ( dist > 512 ) {
 				if ( !cg_drawCrosshairNames.integer ) {
 					return;
 				}
@@ -2103,9 +2106,10 @@ static void CG_DrawCrosshairNames( void ) {
 			}
 		}
 
+		/* Nico, removed skills
 		if ( cgs.clientinfo[ cg.crosshairClientNum ].skill[SK_BATTLE_SENSE] >= 3 ) {
 			maxHealth += 15;
-		}
+		}*/
 
 		if ( cgs.clientinfo[ cg.crosshairClientNum ].cls == PC_MEDIC ) {
 			maxHealth *= 1.12f;
@@ -2113,7 +2117,6 @@ static void CG_DrawCrosshairNames( void ) {
 	}
 
 	// draw the health bar
-//	if ( isTank || (cg.crosshairClientNum == cg.snap->ps.identifyClient && drawStuff && cgs.clientinfo[cg.snap->ps.clientNum].team != TEAM_SPECTATOR ) )
 	{
 		vec4_t bgcolor;
 
@@ -3780,6 +3783,7 @@ static void CG_DrawPlayerStatus( void ) {
 // ==
 }
 
+/* Nico, removed skills
 static void CG_DrawSkillBar( float x, float y, float w, float h, int skill ) {
 	int i;
 	float blockheight = ( h - 4 ) / (float)( NUM_SKILL_LEVELS - 1 );
@@ -3808,10 +3812,9 @@ static void CG_DrawSkillBar( float x, float y, float w, float h, int skill ) {
 		}
 
 		CG_DrawRect_FixedBorder( x, draw_y, w, blockheight, 1, colorBlack );
-//		CG_DrawPic( x, draw_y, w, blockheight, cgs.media.hudBorderVert2 );
 		draw_y -= ( blockheight + 1 );
 	}
-}
+}*/
 
 #define SKILL_ICON_SIZE     14
 
@@ -3831,6 +3834,7 @@ static void CG_DrawSkillBar( float x, float y, float w, float h, int skill ) {
 #define SKILL_BAR_Y_SCALE   ( SKILL_ICON_SIZE + 2 )
 #define SKILL_ICON_Y        ( -( SKILL_ICON_SIZE + 2 ) - SKILL_BAR_OFFSET - SKILLS_Y )
 
+/* Nico, removed skills
 skillType_t CG_ClassSkillForPosition( clientInfo_t* ci, int pos ) {
 	switch ( pos ) {
 	case 0:
@@ -3842,14 +3846,17 @@ skillType_t CG_ClassSkillForPosition( clientInfo_t* ci, int pos ) {
 	}
 
 	return SK_BATTLE_SENSE;
-}
+}*/
 
 static void CG_DrawPlayerStats( void ) {
 	int value = 0;
 	playerState_t       *ps;
 	clientInfo_t        *ci;
+
+	/* Nico, removed skills
 	skillType_t skill;
-	int i;
+	int i;*/
+
 	const char*         str;
 	float w;
 	vec_t*              clr;
@@ -3867,12 +3874,13 @@ static void CG_DrawPlayerStats( void ) {
 	ci = &cgs.clientinfo[ ps->clientNum ];
 
 
+	/* Nico, removed skills
 	for ( i = 0; i < 3; i++ ) {
 		skill = CG_ClassSkillForPosition( ci, i );
 
 		CG_DrawSkillBar( i * SKILL_BAR_X_SCALE + SKILL_BAR_X, 480 - ( 5 * SKILL_BAR_Y_SCALE ) + SKILL_BAR_Y, SKILL_BAR_WIDTH, 4 * SKILL_ICON_SIZE, ci->skill[skill] );
 		CG_DrawPic( i * SKILL_ICON_X_SCALE + SKILL_ICON_X, 480 + SKILL_ICON_Y, SKILL_ICON_SIZE, SKILL_ICON_SIZE, cgs.media.skillPics[skill] );
-	}
+	}*/
 
 	if ( cg.time - cg.xpChangeTime < 1000 ) {
 		clr = colorYellow;

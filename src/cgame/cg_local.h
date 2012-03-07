@@ -560,9 +560,11 @@ typedef struct clientInfo_s {
 	int rank;
 	qboolean ccSelected;
 	int fireteam;
+
+	/* Nico, removed skills
 	int medals[SK_NUM_SKILLS];
 	int skill[SK_NUM_SKILLS];
-	int skillpoints[SK_NUM_SKILLS];             // filled OOB by +wstats
+	int skillpoints[SK_NUM_SKILLS];             // filled OOB by +wstats*/
 
 	char disguiseName[MAX_QPATH];
 	int disguiseRank;
@@ -1628,7 +1630,10 @@ typedef struct {
 	qhandle_t ccCmdPost[2];
 	qhandle_t ccDestructIcon[3][2];
 	qhandle_t ccTankIcon;
-	qhandle_t skillPics[SK_NUM_SKILLS];
+
+	/* Nico, removed skills
+	qhandle_t skillPics[SK_NUM_SKILLS];*/
+
 	qhandle_t ccMortarHit;
 	qhandle_t ccMortarTarget;
 	qhandle_t ccMortarTargetArrow;
@@ -1656,8 +1661,9 @@ typedef struct {
 	qhandle_t hMountedFPBrowning;
 
 	// Gordon: medals
+	/* Nico, removed skills
 	qhandle_t medals[SK_NUM_SKILLS];
-	qhandle_t medal_back;
+	qhandle_t medal_back;*/
 
 	// Gordon: new limbo stuff
 	fontInfo_t limboFont1;
@@ -1774,7 +1780,10 @@ typedef struct {
 	char strWS[WS_MAX][MAX_STRING_TOKENS];
 	char strExtra[2][MAX_STRING_TOKENS];
 	char strRank[MAX_STRING_TOKENS];
-	char strSkillz[SK_NUM_SKILLS][MAX_STRING_TOKENS];
+
+	/* Nico, removed skills
+	char strSkillz[SK_NUM_SKILLS][MAX_STRING_TOKENS];*/
+
 	int cWeapons;
 	int cSkills;
 	qboolean fHasStats;
@@ -2030,8 +2039,9 @@ typedef struct {
 	cg_weaponstats_t dbWeaponStats[WS_MAX];
 	int dbChatMode;
 
+	/* Nico, removed skills
 	int tdbAxisMapsXP[SK_NUM_SKILLS][MAX_MAPS_PER_CAMPAIGN];
-	int tdbAlliedMapsXP[SK_NUM_SKILLS][MAX_MAPS_PER_CAMPAIGN];
+	int tdbAlliedMapsXP[SK_NUM_SKILLS][MAX_MAPS_PER_CAMPAIGN];*/
 	int tdbMapListOffset;
 	int tdbSelectedMap;
 
@@ -2434,7 +2444,10 @@ void CG_ResetPlayerEntity( centity_t *cent );
 void CG_AddRefEntityWithPowerups( refEntity_t *ent, int powerups, int team, entityState_t *es, const vec3_t fireRiseDir );
 void CG_NewClientInfo( int clientNum );
 sfxHandle_t CG_CustomSound( int clientNum, const char *soundName );
-void CG_ParseTeamXPs( int n );
+
+/* Nico, removed skills
+void CG_ParseTeamXPs( int n );*/
+
 void CG_HudHeadAnimation( bg_character_t* ch, lerpFrame_t* lf, int *oldframe, int *frame, float *backlerp, hudHeadAnimNumber_t animation );
 
 
@@ -3330,7 +3343,10 @@ void CG_LimboPanel_WeaponLights( panel_button_t* button );
 void CG_LimboPanel_RenderHead( panel_button_t* button );
 void CG_LimboPanel_WeaponPanel( panel_button_t* button );
 void CG_LimboPanel_Border_Draw( panel_button_t* button );
-void CG_LimboPanel_RenderMedal( panel_button_t* button );
+
+/* Nico, removed skills
+void CG_LimboPanel_RenderMedal( panel_button_t* button );*/
+
 void CG_LimboPanel_RenderCounter( panel_button_t* button );
 void CG_LimboPanelRenderText_NoLMS( panel_button_t* button );
 void CG_LimboPanelRenderText_SkillsText( panel_button_t* button );

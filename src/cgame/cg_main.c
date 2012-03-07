@@ -1481,9 +1481,10 @@ static void CG_RegisterGraphics( void ) {
 		cg.crosshairShaderAlt[i] = trap_R_RegisterShader( va( "gfx/2d/crosshair%c_alt", 'a' + i ) );
 	}
 
+	/* Nico, removed skills
 	for ( i = 0 ; i < SK_NUM_SKILLS ; i++ ) {
 		cgs.media.medals[i] = trap_R_RegisterShaderNoMip( va( "gfx/limbo/medals0%i", i ) );
-	}
+	}*/
 
 	cgs.media.backTileShader =  trap_R_RegisterShader( "gfx/2d/backtile" );
 	cgs.media.noammoShader =    trap_R_RegisterShader( "icons/noammo" );
@@ -1610,14 +1611,14 @@ static void CG_RegisterGraphics( void ) {
 	cgs.media.ccMortarTarget =          trap_R_RegisterShaderNoMip( "gfx/limbo/mort_target" );
 	cgs.media.ccMortarTargetArrow =     trap_R_RegisterShaderNoMip( "gfx/limbo/mort_targetarrow" );
 
-
+	/* Nico, removed skills
 	cgs.media.skillPics[SK_BATTLE_SENSE]                                = trap_R_RegisterShaderNoMip( "gfx/limbo/ic_battlesense" );
 	cgs.media.skillPics[SK_EXPLOSIVES_AND_CONSTRUCTION]                 = trap_R_RegisterShaderNoMip( "gfx/limbo/ic_engineer" );
 	cgs.media.skillPics[SK_FIRST_AID]                                   = trap_R_RegisterShaderNoMip( "gfx/limbo/ic_medic" );
 	cgs.media.skillPics[SK_SIGNALS]                                     = trap_R_RegisterShaderNoMip( "gfx/limbo/ic_fieldops" );
 	cgs.media.skillPics[SK_LIGHT_WEAPONS]                               = trap_R_RegisterShaderNoMip( "gfx/limbo/ic_lightweap" );
 	cgs.media.skillPics[SK_HEAVY_WEAPONS]                               = trap_R_RegisterShaderNoMip( "gfx/limbo/ic_soldier" );
-	cgs.media.skillPics[SK_MILITARY_INTELLIGENCE_AND_SCOPED_WEAPONS]    = trap_R_RegisterShaderNoMip( "gfx/limbo/ic_covertops" );
+	cgs.media.skillPics[SK_MILITARY_INTELLIGENCE_AND_SCOPED_WEAPONS]    = trap_R_RegisterShaderNoMip( "gfx/limbo/ic_covertops" );*/
 
 	WM_RegisterWeaponTypeShaders();
 
@@ -1824,7 +1825,8 @@ static void CG_RegisterGraphics( void ) {
 	trap_R_RegisterFont( "ariblk", 16, &cgs.media.limboFont1_lo );
 	trap_R_RegisterFont( "courbd", 30, &cgs.media.limboFont2 );
 
-	cgs.media.medal_back =              trap_R_RegisterShaderNoMip( "gfx/limbo/medal_back" );
+	/* Nico, removed skills
+	cgs.media.medal_back =              trap_R_RegisterShaderNoMip( "gfx/limbo/medal_back" );*/
 
 	cgs.media.limboNumber_roll =        trap_R_RegisterShaderNoMip( "gfx/limbo/number_roll" );
 	cgs.media.limboNumber_back =        trap_R_RegisterShaderNoMip( "gfx/limbo/number_back" );

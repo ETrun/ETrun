@@ -2071,9 +2071,12 @@ void CG_EntityEvent( centity_t *cent, vec3_t position ) {
 
 	case EV_FILL_CLIP:
 		DEBUGNAME( "EV_FILL_CLIP" );
+
+		/* Nico, removed skills
 		if ( cgs.clientinfo[cg.clientNum].skill[SK_LIGHT_WEAPONS] >= 2 && BG_isLightWeaponSupportingFastReload( es->weapon ) && cg_weapons[es->weapon].reloadFastSound ) {
 			trap_S_StartSound( NULL, es->number, CHAN_WEAPON, cg_weapons[es->weapon].reloadFastSound );
-		} else if ( cg_weapons[es->weapon].reloadSound ) {
+		} else */
+		if ( cg_weapons[es->weapon].reloadSound ) {
 			trap_S_StartSound( NULL, es->number, CHAN_WEAPON, cg_weapons[es->weapon].reloadSound ); // JPW NERVE following sherman's SP fix, should allow killing reload sound when player dies
 		}
 		break;

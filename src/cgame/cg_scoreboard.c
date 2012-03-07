@@ -184,7 +184,10 @@ int WM_DrawObjectives( int x, int y, int width, float fade ) {
 
 static void WM_DrawClientScore( int x, int y, score_t *score, float *color, float fade ) {
 	int maxchars, offset;
-	int i, j;
+
+	/* Nico, removed skills
+	int i, j;*/
+
 	float tempx;
 	vec4_t hcolor;
 	clientInfo_t *ci;
@@ -272,10 +275,13 @@ static void WM_DrawClientScore( int x, int y, score_t *score, float *color, floa
 
 	// draw medals
 	buf[0] = '\0';
+
+	/* Nico, removed skills
 	for ( i = 0; i < SK_NUM_SKILLS; i++ ) {
 		for ( j = 0; j < ci->medals[i]; j++ )
 			Q_strcat( buf, sizeof( buf ), va( "^%c%c", COLOR_RED + i, skillNames[i][0] ) );
-	}
+	}*/
+
 	maxchars--;
 	CG_DrawStringExt( tempx + ( BG_drawStrlen( ci->name ) * SMALLCHAR_WIDTH + SMALLCHAR_WIDTH ), y, buf, hcolor, qfalse, qfalse, SMALLCHAR_WIDTH, SMALLCHAR_HEIGHT, maxchars );
 

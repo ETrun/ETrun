@@ -352,8 +352,10 @@ extern const unsigned int aReinfSeeds[MAX_REINFSEEDS];
 #define CS_REINFSEEDS                   31      // Reinforcement seeds
 #define CS_SERVERTOGGLES                32      // Shows current enable/disabled settings (for voting UI)
 #define CS_GLOBALFOGVARS                33
+
+/* Nico, removed skills
 #define CS_AXIS_MAPS_XP                 34
-#define CS_ALLIED_MAPS_XP               35
+#define CS_ALLIED_MAPS_XP               35*/
 
 /* Nico, removed intermission
 #define CS_INTERMISSION_START_TIME      36*/
@@ -831,6 +833,7 @@ typedef enum {
 	HR_NUM_HITREGIONS,
 } hitRegion_t;
 
+/* Nico, removed skills
 typedef enum {
 	SK_BATTLE_SENSE,
 	SK_EXPLOSIVES_AND_CONSTRUCTION,
@@ -848,7 +851,7 @@ extern const char* skillNamesLine2[SK_NUM_SKILLS];
 extern const char* medalNames[SK_NUM_SKILLS];
 
 #define NUM_SKILL_LEVELS 5
-extern const int skillLevels[NUM_SKILL_LEVELS];
+extern const int skillLevels[NUM_SKILL_LEVELS];*/
 
 typedef struct {
 	weaponStats_t weaponStats[WP_NUM_WEAPONS];
@@ -2197,7 +2200,9 @@ typedef enum {
 void BG_AdjustAAGunMuzzleForBarrel( vec_t* origin, vec_t* forward, vec_t* right, vec_t* up, int barrel );
 
 int BG_ClassTextToClass( char *token );
-skillType_t BG_ClassSkillForClass( int classnum );
+
+/* Nico, removed skills
+skillType_t BG_ClassSkillForClass( int classnum );*/
 
 qboolean BG_isLightWeaponSupportingFastReload( int weapon );
 qboolean BG_IsScopedWeapon( int weapon );

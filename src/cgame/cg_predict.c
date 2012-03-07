@@ -461,9 +461,10 @@ static void CG_TouchItem( centity_t *cent ) {
 		return;
 	}
 
+	/* Nico, removed skills
 	if ( !BG_CanItemBeGrabbed( &cent->currentState, &cg.predictedPlayerState, cgs.clientinfo[cg.snap->ps.clientNum].skill, cgs.clientinfo[cg.snap->ps.clientNum].team ) ) {
 		return;     // can't hold it
-	}
+	}*/
 
 	item = &bg_itemlist[ cent->currentState.modelindex ];
 
@@ -884,7 +885,8 @@ void CG_PredictPlayerState( void ) {
 		cg.pmext.centerangles[PITCH] = tank->lerpAngles[PITCH];
 	}
 
-	cg_pmove.skill = cgs.clientinfo[cg.snap->ps.clientNum].skill;
+	/* Nico, removed skills
+	cg_pmove.skill = cgs.clientinfo[cg.snap->ps.clientNum].skill;*/
 
 	cg_pmove.trace = CG_TraceCapsule;
 	//cg_pmove.trace = CG_Trace;

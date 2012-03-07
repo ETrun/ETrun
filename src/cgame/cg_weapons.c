@@ -2210,7 +2210,9 @@ void CG_AddPlayerWeapon( refEntity_t *parent, playerState_t *ps, centity_t *cent
 	}
 
 	if ( drawpart ) {
+		/* Nico, removed skills
 		if ( weaponNum == WP_AMMO ) {
+
 			if ( ps ) {
 				if ( cgs.clientinfo[ ps->clientNum ].skill[ SK_SIGNALS ] >= 1 ) {
 					gun.customShader = weapon->modModels[0];
@@ -2227,7 +2229,7 @@ void CG_AddPlayerWeapon( refEntity_t *parent, playerState_t *ps, centity_t *cent
 					gun.customShader = weapon->modModels[ 0 ];
 				}
 			}
-		}
+		}*/
 		CG_AddWeaponWithPowerups( &gun, cent->currentState.powerups, ps, cent );
 	}
 
@@ -2322,11 +2324,13 @@ void CG_AddPlayerWeapon( refEntity_t *parent, playerState_t *ps, centity_t *cent
 						barrel.customSkin = weapon->partModels[W_FP_MODEL][i].skin[0];  // if not loaded it's 0 so doesn't do any harm
 
 					}
+
+					/* Nico, removed skills
 					if ( weaponNum == WP_MEDIC_SYRINGE && i == W_PART_1 ) {
 						if ( cgs.clientinfo[ ps->clientNum ].skill[ SK_FIRST_AID ] >= 3 ) {
 							barrel.customShader = weapon->modModels[ 0 ];
 						}
-					}
+					}*/
 
 					CG_AddWeaponWithPowerups( &barrel, cent->currentState.powerups, ps, cent );
 

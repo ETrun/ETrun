@@ -1105,6 +1105,7 @@ static void CG_Missile( centity_t *cent ) {
 					ent.customShader = cgs.media.genericConstructionShader;
 				} else if ( !cent->currentState.modelindex2 ) {
 					// see if we have the skill to see them and are close enough
+					/* Nico, removed skills
 					if ( cgs.clientinfo[cg.snap->ps.clientNum].skill[SK_BATTLE_SENSE] >= 4 ) {
 						vec_t distSquared = DistanceSquared( cent->lerpOrigin, cg.predictedPlayerEntity.lerpOrigin );
 
@@ -1114,9 +1115,9 @@ static void CG_Missile( centity_t *cent ) {
 							//ent.customShader = cgs.media.genericConstructionShaderModel;
 							ent.customShader = cgs.media.genericConstructionShader;
 						}
-					} else {
+					} else {*/
 						return;
-					}
+					// }
 				} else {
 					CG_DrawMineMarkerFlag( cent, &ent, weapon );
 				}

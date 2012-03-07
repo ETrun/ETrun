@@ -593,13 +593,14 @@ void CG_GameStatsDraw() {
 		if ( gs->cSkills == 0 ) {
 			y += tSpacing;
 			CG_Text_Paint_Ext( x, y, tScale, tScale, tColor, "No skills acquired!", 0.0f, 0, tStyle, tFont );
-		} else {
+		} 
+		/* Nico, removed skills
+		else {
 			for ( i = 0; i < gs->cSkills; i++ ) {
 				y += tSpacing;
 				CG_Text_Paint_Ext( x, y, tScale, tScale, tColor, gs->strSkillz[i], 0.0f, 0, tStyle, tFont );
 			}
-
-		}
+		}*/
 	}
 }
 

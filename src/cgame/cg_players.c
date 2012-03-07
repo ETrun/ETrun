@@ -129,6 +129,7 @@ static void CG_LoadClientInfo( int clientNum ) {
 	}
 }
 
+/* Nico, removed skills
 void CG_ParseTeamXPs( int n ) {
 	int i, j;
 	char* cs = (char*)CG_ConfigString( CS_AXIS_MAPS_XP + n );
@@ -149,7 +150,7 @@ void CG_ParseTeamXPs( int n ) {
 			}
 		}
 	}
-}
+}*/
 
 void CG_LimboPanel_SendSetupMsg( qboolean forceteam );
 
@@ -163,7 +164,9 @@ void CG_NewClientInfo( int clientNum ) {
 	clientInfo_t newInfo;
 	const char  *configstring;
 	const char  *v;
-	int oldclass;
+
+	/* Nico, removed skills
+	int oldclass;*/
 
 	ci = &cgs.clientinfo[clientNum];
 
@@ -212,14 +215,19 @@ void CG_NewClientInfo( int clientNum ) {
 
 	v = Info_ValueForKey( configstring, "m" );
 	if ( *v ) {
-		int i;
+
+		/* Nico, removed skills
+		int i;*/
+
 		char buf[2];
 		buf[1] = '\0';
+
+		/* Nico, removed skills
 		for ( i = 0; i < SK_NUM_SKILLS; i++ ) {
 			buf[0] = *v;
 			newInfo.medals[i] = atoi( buf );
 			v++;
-		}
+		}*/
 	}
 
 	v = Info_ValueForKey( configstring, "ch" );
@@ -229,6 +237,8 @@ void CG_NewClientInfo( int clientNum ) {
 
 	v = Info_ValueForKey( configstring, "s" );
 	if ( *v ) {
+
+		/* Nico, removed skills
 		int i;
 
 		for ( i = 0; i < SK_NUM_SKILLS; i++ ) {
@@ -238,7 +248,7 @@ void CG_NewClientInfo( int clientNum ) {
 			skill[1] = '\0';
 
 			newInfo.skill[i] = atoi( skill );
-		}
+		}*/
 	}
 
 	// diguiseName
@@ -264,7 +274,9 @@ void CG_NewClientInfo( int clientNum ) {
 
 	// Gordon: detect rank/skill changes client side
 	if ( clientNum == cg.clientNum ) {
-		int i;
+
+		/* Nico, removed skills
+		int i;*/
 
 		if ( newInfo.team != cgs.clientinfo[ cg.clientNum ].team ) {
 			if ( cgs.autoFireteamCreateEndTime != cg.time + 20000 ) {
@@ -282,6 +294,7 @@ void CG_NewClientInfo( int clientNum ) {
 			CG_AddPMItemBig( PM_RANK, va( "Promoted to rank %s!", cgs.clientinfo[ cg.clientNum ].team == TEAM_AXIS ? rankNames_Axis[newInfo.rank] : rankNames_Allies[newInfo.rank] ), rankicons[ newInfo.rank ][ 0 ].shader );
 		}
 
+		/* Nico, removed skills
 		for ( i = 0; i < SK_NUM_SKILLS; i++ ) {
 			if ( newInfo.skill[i] > cgs.clientinfo[ cg.clientNum ].skill[i] ) {
 				// Gordon: slick hack so that funcs we call use teh new value now
@@ -323,10 +336,10 @@ void CG_NewClientInfo( int clientNum ) {
 
 				CG_AddPMItemBig( PM_SKILL, va( "Increased %s skill to level %i!", skillNames[i], newInfo.skill[i] ), cgs.media.skillPics[ i ] );
 
-				/* Nico, removed rewards
-				CG_PriorityCenterPrint( va( "You have been rewarded with %s", cg_skillRewards[ i ][ newInfo.skill[i] - 1 ] ), SCREEN_HEIGHT - ( SCREEN_HEIGHT * 0.20 ), SMALLCHAR_WIDTH, 99999 );*/
+				// Nico, removed rewards
+				// CG_PriorityCenterPrint( va( "You have been rewarded with %s", cg_skillRewards[ i ][ newInfo.skill[i] - 1 ] ), SCREEN_HEIGHT - ( SCREEN_HEIGHT * 0.20 ), SMALLCHAR_WIDTH, 99999 );
 			}
-		}
+		}*/
 
 		if ( newInfo.team != cgs.clientinfo[ cg.clientNum ].team ) {
 			// clear these

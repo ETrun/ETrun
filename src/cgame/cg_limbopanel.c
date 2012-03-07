@@ -140,6 +140,7 @@ panel_button_t rightLimboPannel = {
 	NULL,
 };
 
+/* Nico, removed skills
 #define MEDAL_PIC_GAP   ( ( MEDAL_PIC_SIZE - ( MEDAL_PIC_WIDTH * MEDAL_PIC_COUNT ) ) / ( MEDAL_PIC_COUNT + 1.f ) )
 #define MEDAL_PIC_COUNT 7.f
 #define MEDAL_PIC_WIDTH 22.f
@@ -151,9 +152,9 @@ panel_button_t rightLimboPannel = {
 		NULL,									\
 		{ MEDAL_PIC_X + MEDAL_PIC_GAP + ( number * ( MEDAL_PIC_GAP + MEDAL_PIC_WIDTH ) ), 119, MEDAL_PIC_WIDTH, 26 }, \
 		{ number, 0, 0, 0, 0, 0, 0, 0 },		\
-		NULL, /* font		*/				\
-		NULL, /* keyDown	*/					\
-		NULL, /* keyUp	*/					\
+		NULL, 				\
+		NULL, 					\
+		NULL, 					\
 		CG_LimboPanel_RenderMedal,				\
 		NULL,									\
 	}
@@ -164,7 +165,7 @@ MEDAL_PIC( 2 );
 MEDAL_PIC( 3 );
 MEDAL_PIC( 4 );
 MEDAL_PIC( 5 );
-MEDAL_PIC( 6 );
+MEDAL_PIC( 6 );*/
 
 
 #define TEAM_COUNTER_GAP    ( ( TEAM_COUNTER_SIZE - ( TEAM_COUNTER_WIDTH * TEAM_COUNTER_COUNT ) ) / ( TEAM_COUNTER_COUNT + 1.f ) )
@@ -939,7 +940,8 @@ panel_button_t* limboPanelButtons[] = {
 	&filterButton5, &filterButton6, &filterButton7, /* &filterButton8,*/
 	&filterTitleText,
 
-	&medalPic0, &medalPic1, &medalPic2, &medalPic3, &medalPic4, &medalPic5, &medalPic6,
+	/* Nico, removed skills
+	&medalPic0, &medalPic1, &medalPic2, &medalPic3, &medalPic4, &medalPic5, &medalPic6,*/
 
 	&teamCounter0,      &teamCounter1,      &teamCounter2,
 	&teamCounterLight0, &teamCounterLight1, &teamCounterLight2,
@@ -1249,6 +1251,7 @@ void CG_LimboPanel_ClassBar_Draw( panel_button_t* button ) {
 	char buffer[64];
 	float w;
 
+	/* Nico, removed skills
 	if ( BG_CursorInRect( &medalPic0.rect ) ) {
 		text = skillNames[0];
 	} else if ( BG_CursorInRect( &medalPic1.rect ) ) {
@@ -1263,7 +1266,8 @@ void CG_LimboPanel_ClassBar_Draw( panel_button_t* button ) {
 		text = skillNames[5];
 	} else if ( BG_CursorInRect( &medalPic6.rect ) ) {
 		text = skillNames[6];
-	} else if ( CG_LimboPanel_GetTeam() == TEAM_SPECTATOR ) {
+	} else */
+	if ( CG_LimboPanel_GetTeam() == TEAM_SPECTATOR ) {
 		text = "JOIN A TEAM";
 	} else if ( BG_CursorInRect( &classButton0.rect ) ) {
 		text = BG_ClassnameForNumber( 0 );
@@ -1310,9 +1314,11 @@ void CG_LimboPanel_RenderClassButton( panel_button_t* button ) {
 	}
 
 	for ( i = 0; i < 4; i++ ) {
+
+		/* Nico, removed skills
 		if ( cgs.clientinfo[cg.clientNum].skill[BG_ClassSkillForClass( button->data[1] )] <= i ) {
 			break;
-		}
+		}*/
 
 		if ( i == 0 || i == 1 ) {
 			s0 = 0.5f;
@@ -2062,13 +2068,22 @@ int CG_LimboPanel_RenderCounter_ValueForButton( panel_button_t* button ) {
 	case 4:     // skills
 		switch ( button->data[1] ) {
 		case 0:
-			count = cgs.clientinfo[cg.clientNum].skill[SK_BATTLE_SENSE];
+
+			/* Nico, removed skills
+			count = cgs.clientinfo[cg.clientNum].skill[SK_BATTLE_SENSE];*/
+
 			break;
 		case 1:
-			count = cgs.clientinfo[cg.clientNum].skill[SK_LIGHT_WEAPONS];
+
+			/* Nico, removed skills
+			count = cgs.clientinfo[cg.clientNum].skill[SK_LIGHT_WEAPONS];*/
+
 			break;
 		case 2:
-			count = cgs.clientinfo[cg.clientNum].skill[BG_ClassSkillForClass( CG_LimboPanel_GetClass() )];
+
+			/* Nico, removed skills
+			count = cgs.clientinfo[cg.clientNum].skill[BG_ClassSkillForClass( CG_LimboPanel_GetClass() )];*/
+
 			break;
 		}
 
@@ -2210,13 +2225,13 @@ qboolean CG_LimboPanel_RenderCounter_StartSet( panel_button_t* button ) {
 }
 
 
-
+/* Nico, removed skills
 void CG_LimboPanel_RenderMedal( panel_button_t* button ) {
 	CG_DrawPic( button->rect.x, button->rect.y, button->rect.w, button->rect.h, cgs.media.medal_back );
 	if ( cgs.clientinfo[cg.clientNum].medals[button->data[0]] ) {
 		CG_DrawPic( button->rect.x - 2, button->rect.y, button->rect.w + 4, button->rect.h, cgs.media.medals[button->data[0]] );
 	}
-}
+}*/
 
 qboolean CG_LimboPanel_RenderCounter_IsReversed( panel_button_t* button ) {
 	switch ( button->data[0] ) {
@@ -2655,6 +2670,8 @@ int CG_LimboPanel_WeaponCount_ForSlot( int number ) {
 		}
 		return cnt;
 	} else {
+
+		/* Nico, removed skills
 		if ( cgs.clientinfo[cg.clientNum].skill[SK_HEAVY_WEAPONS] >= 4 && CG_LimboPanel_GetClass() == PC_SOLDIER ) {
 			if ( cgs.clientinfo[cg.clientNum].skill[SK_LIGHT_WEAPONS] >= 4 ) {
 				return 3;
@@ -2664,10 +2681,10 @@ int CG_LimboPanel_WeaponCount_ForSlot( int number ) {
 		} else {
 			if ( cgs.clientinfo[cg.clientNum].skill[SK_LIGHT_WEAPONS] >= 4 ) {
 				return 2;
-			} else {
+			} else {*/
 				return 1;
-			}
-		}
+			// }
+		// }
 	}
 }
 
@@ -2714,6 +2731,8 @@ weapon_t CG_LimboPanel_GetWeaponForNumber( int number, int slot, qboolean ignore
 
 		return classInfo->classWeapons[ number ];
 	} else {
+
+		/* Nico, removed skills
 		if ( cgs.clientinfo[cg.clientNum].skill[SK_HEAVY_WEAPONS] >= 4 && CG_LimboPanel_GetClass() == PC_SOLDIER ) {
 			if ( cgs.clientinfo[cg.clientNum].skill[SK_LIGHT_WEAPONS] >= 4 ) {
 				if ( number == 2 ) {
@@ -2734,7 +2753,7 @@ weapon_t CG_LimboPanel_GetWeaponForNumber( int number, int slot, qboolean ignore
 					return CG_LimboPanel_GetTeam() == TEAM_AXIS ? WP_AKIMBO_LUGER : WP_AKIMBO_COLT;
 				}
 			}
-		}
+		}*/
 
 		if ( number == 0 ) {
 			if ( CG_LimboPanel_GetClass() == PC_COVERTOPS ) {
