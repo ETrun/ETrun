@@ -69,7 +69,9 @@ If you have questions concerning this license or the applicable additional terms
 #define FL_NO_HUMANS            0x00004000  // spawn point just for bots
 #define FL_AI_GRENADE_KICK      0x00008000  // an AI has already decided to kick this grenade
 // Rafael
-#define FL_NOFATIGUE            0x00010000  // cheat flag no fatigue
+
+/* Nico, removed nofatigue
+#define FL_NOFATIGUE            0x00010000  // cheat flag no fatigue*/
 
 #define FL_TOGGLE               0x00020000  //----(SA)	ent is toggling (doors use this for ex.)
 #define FL_KICKACTIVATE         0x00040000  //----(SA)	ent has been activated by a kick (doors use this too for ex.)

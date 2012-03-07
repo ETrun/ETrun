@@ -5068,65 +5068,67 @@ void PM_LadderMove( void ) {
 
 
 /*
+Nico, this function does norhing because there is no more fatigue
 ==============
 PM_Sprint
 ==============
-*/
+
 void PM_Sprint( void ) {
 	if ( pm->cmd.buttons & BUTTON_SPRINT && ( pm->cmd.forwardmove || pm->cmd.rightmove ) && !( pm->ps->pm_flags & PMF_DUCKED ) && !( pm->ps->eFlags & EF_PRONE ) ) {
 		
 		/* Nico, removed adrenaline
 		if ( pm->ps->powerups[PW_ADRENALINE] ) {
 			pm->pmext->sprintTime = SPRINTTIME;
-		} else */
+		} else 
 
+		// Nico, removed nofatigue
 		if ( pm->ps->powerups[PW_NOFATIGUE] ) {
 			// take time from powerup before taking it from sprintTime
 			pm->ps->powerups[PW_NOFATIGUE] -= 50;
 
 			// (SA) go ahead and continue to recharge stamina at double
 			// rate with stamina powerup even when exerting
-			/* Nico, removed sprint time limit
-			pm->pmext->sprintTime += 10;
-			if ( pm->pmext->sprintTime > SPRINTTIME ) {
-				pm->pmext->sprintTime = SPRINTTIME;
-			}*/
+			// Nico, removed sprint time limit
+			// pm->pmext->sprintTime += 10;
+			// if ( pm->pmext->sprintTime > SPRINTTIME ) {
+			// 	pm->pmext->sprintTime = SPRINTTIME;
+			// }
 
 			if ( pm->ps->powerups[PW_NOFATIGUE] < 0 ) {
 				pm->ps->powerups[PW_NOFATIGUE] = 0;
 			}
 		}
 		// JPW NERVE -- sprint time tuned for multiplayer
-		/* Nico, removed sprint time limit
-		else  {
+		// Nico, removed sprint time limit
+		// else  {
 			// JPW NERVE adjusted for framerate independence
-			pm->pmext->sprintTime -= 5000 * pml.frametime;
-		}*/
+		//	pm->pmext->sprintTime -= 5000 * pml.frametime;
+		// }
 		// jpw
 
-		/* Nico, removed sprint time limit
-		if ( pm->pmext->sprintTime < 0 ) {
-			pm->pmext->sprintTime = 0;
-		}
+		// Nico, removed sprint time limit
+		// if ( pm->pmext->sprintTime < 0 ) {
+		// 	pm->pmext->sprintTime = 0;
+		//}
 
 		if ( !pm->ps->sprintExertTime ) {
 			pm->ps->sprintExertTime = 1;
-		}*/
+		}
 	} else
 	{
 		// JPW NERVE -- in multiplayer, recharge faster for top 75% of sprint bar
 		// (for people that *just* use it for jumping, not sprint) this code was
 		// mucked about with to eliminate client-side framerate-dependancy in wolf single player
 		
-		/* Nico, removed adrenaline
-		if ( pm->ps->powerups[PW_ADRENALINE] ) {
-			pm->pmext->sprintTime = SPRINTTIME;
-		} else */
+		// Nico, removed adrenaline
+		// if ( pm->ps->powerups[PW_ADRENALINE] ) {
+		//	pm->pmext->sprintTime = SPRINTTIME;
+		// } else 
 
 		if ( pm->ps->powerups[PW_NOFATIGUE] ) { // (SA) recharge at 2x with stamina powerup
 
-			/* Nico, removed sprint time limit
-			pm->pmext->sprintTime += 10;*/
+			// Nico, removed sprint time limit
+			// pm->pmext->sprintTime += 10;
 
 		} else {
 			int rechargebase = 500;
@@ -5142,22 +5144,22 @@ void PM_Sprint( void ) {
 				}
 			}
 
-			/* Nico, removed sprint time limit
-			pm->pmext->sprintTime += rechargebase * pml.frametime;        // JPW NERVE adjusted for framerate independence
-			if ( pm->pmext->sprintTime > 5000 ) {
-				pm->pmext->sprintTime += rechargebase * pml.frametime;    // JPW NERVE adjusted for framerate independence
-			}*/
+			// Nico, removed sprint time limit
+			// pm->pmext->sprintTime += rechargebase * pml.frametime;        // JPW NERVE adjusted for framerate independence
+			// if ( pm->pmext->sprintTime > 5000 ) {
+			//	pm->pmext->sprintTime += rechargebase * pml.frametime;    // JPW NERVE adjusted for framerate independence
+			// }
 
 			// jpw
 		}
 
-		/* Nico, removed sprint time limit
-		if ( pm->pmext->sprintTime > SPRINTTIME ) {
-			pm->pmext->sprintTime = SPRINTTIME;
-		}
-		pm->ps->sprintExertTime = 0;*/
+		// Nico, removed sprint time limit
+		// if ( pm->pmext->sprintTime > SPRINTTIME ) {
+		// 	pm->pmext->sprintTime = SPRINTTIME;
+		// }
+		// pm->ps->sprintExertTime = 0;
 	}
-}
+}*/
 
 /*
 ================
@@ -5438,19 +5440,8 @@ void PmoveSingle( pmove_t *pmove ) {
 		BG_AnimScriptAnimation( pm->ps, pm->character->animModelInfo, ANIM_MT_IDLE, qtrue );
 	}
 
-
-	/*if( pm->ps->eFlags & EF_PRONE && !pml.walking ) {
-		// can't be prone in midair
-		pm->ps->eFlags &= ~EF_PRONE;
-		pm->ps->eFlags &= ~EF_PRONE_MOVING;
-		pm->pmext->proneTime = -pm->cmd.serverTime;	// timestamp 'stop prone'
-
-		if( pm->ps->weapon == WP_MOBILE_MG42_SET ) {
-			PM_BeginWeaponChange( WP_MOBILE_MG42_SET, WP_MOBILE_MG42, qfalse );
-		}
-	}*/
-
-	PM_Sprint();
+	/* Nico, this function does norhing because there is no more fatigue
+	PM_Sprint();*/
 
 	// set groundentity, watertype, and waterlevel
 	PM_GroundTrace();
@@ -5467,7 +5458,6 @@ void PmoveSingle( pmove_t *pmove ) {
 
 	// snap some parts of playerstate to save network bandwidth
 	trap_SnapVector( pm->ps->velocity );
-//	SnapVector( pm->ps->velocity );
 }
 
 

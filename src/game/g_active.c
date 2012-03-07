@@ -1493,7 +1493,10 @@ void ClientEndFrame( gentity_t *ent ) {
 		if ( i == PW_FIRE ||                // these aren't dependant on level.time
 			 i == PW_ELECTRIC ||
 			 i == PW_BREATHER ||
-			 i == PW_NOFATIGUE ||
+
+			 /* Nico, removed nofatigue
+			 i == PW_NOFATIGUE ||*/
+
 			 ent->client->ps.powerups[i] == 0           // OSP
 			 || i == PW_OPS_CLASS_1
 			 || i == PW_OPS_CLASS_2

@@ -668,7 +668,9 @@ typedef enum {
 	PW_FIRE,            //----(SA)
 	PW_ELECTRIC,        //----(SA)
 	PW_BREATHER,        //----(SA)
-	PW_NOFATIGUE,       //----(SA)
+
+	/* Nico, removed nofatigue
+	PW_NOFATIGUE,       //----(SA)*/
 
 	PW_REDFLAG,
 	PW_BLUEFLAG,

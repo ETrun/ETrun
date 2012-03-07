@@ -66,12 +66,14 @@ int Pickup_Powerup( gentity_t *ent, gentity_t *other ) {
 
 		// some powerups are time based on how long the powerup is /used/
 		// rather than timed from when the player picks it up.
+
+		/* Nico, removed nofatigue
 		if ( ent->item->giTag == PW_NOFATIGUE ) {
-		} else {
+		} else {*/
 			// round timing to seconds to make multiple powerup timers
 			// count in sync
 			other->client->ps.powerups[ent->item->giTag] = level.time - ( level.time % 1000 );
-		}
+		// }
 	}
 
 	// if an amount was specified in the ent, use it
@@ -85,6 +87,7 @@ int Pickup_Powerup( gentity_t *ent, gentity_t *other ) {
 
 
 	// brandy also gives a little health (10)
+	/* Nico, removed nofatigue
 	if ( ent->item->giTag == PW_NOFATIGUE ) {
 		if ( Q_stricmp( ent->item->classname, "item_stamina_brandy" ) == 0 ) {
 			other->health += 10;
@@ -93,7 +96,7 @@ int Pickup_Powerup( gentity_t *ent, gentity_t *other ) {
 			}
 			other->client->ps.stats[STAT_HEALTH] = other->health;
 		}
-	}
+	}*/
 
 
 	// give any nearby players a "denied" anti-reward
@@ -214,7 +217,9 @@ void UseHoldableItem( gentity_t *ent, int item ) {
 		//----(SA)	NOTE:	currently only gives free nofatigue time, doesn't reset fatigue bar.
 		//					(this is because I'd like the restore to be visually gradual (on the HUD item representing
 		//					current status of your fatigue) rather than snapping back to 'full')
-		ent->client->ps.powerups[PW_NOFATIGUE] = 60000;
+
+		/* Nico, removed nofatigue
+		ent->client->ps.powerups[PW_NOFATIGUE] = 60000;*/
 		break;
 
 	case HI_BOOK1:
