@@ -1819,7 +1819,8 @@ void Cmd_Vote_f( gentity_t *ent ) {
 
 			AddScore( other, WOLF_FRIENDLY_PENALTY );
 
-			G_LoseKillSkillPoints( other, ent->sound2to1, ent->sound1to2, ent->sound2to3 ? qtrue : qfalse );
+			/* Nico, removed g_stats.c
+			G_LoseKillSkillPoints( other, ent->sound2to1, ent->sound1to2, ent->sound2to3 ? qtrue : qfalse );*/
 		} else {
 			trap_SendServerCommand( ent->client->pers.complaintClient, "cpm \"No complaint filed against you.\n\"" );
 			trap_SendServerCommand( ent - g_entities, "complaint -2" );
@@ -2220,8 +2221,9 @@ qboolean Do_Activate2_f( gentity_t *ent, gentity_t *traceEnt ) {
 						// sound effect
 						G_AddEvent( ent, EV_DISGUISE_SOUND, 0 );
 
+						/* Nico, removed g_stats.c
 						G_AddSkillPoints( ent, SK_MILITARY_INTELLIGENCE_AND_SCOPED_WEAPONS, 5.f );
-						G_DebugAddSkillPoints( ent, SK_MILITARY_INTELLIGENCE_AND_SCOPED_WEAPONS, 5, "stealing uniform" );
+						G_DebugAddSkillPoints( ent, SK_MILITARY_INTELLIGENCE_AND_SCOPED_WEAPONS, 5, "stealing uniform" );*/
 
 						Q_strncpyz( ent->client->disguiseNetname, g_entities[traceEnt->s.clientNum].client->pers.netname, sizeof( ent->client->disguiseNetname ) );
 						ent->client->disguiseRank = g_entities[traceEnt->s.clientNum].client ? g_entities[traceEnt->s.clientNum].client->sess.rank : 0;

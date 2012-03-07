@@ -3922,7 +3922,10 @@ void func_explosive_explode( gentity_t *self, gentity_t *inflictor, gentity_t *a
 	// Skills stuff
 
 	if ( G_GetWeaponClassForMOD( mod ) >= self->constructibleStats.weaponclass ) {
-		G_AddKillSkillPointsForDestruction( attacker, mod, &self->constructibleStats );
+
+		/* Nico, removed g_stats.c
+		G_AddKillSkillPointsForDestruction( attacker, mod, &self->constructibleStats );*/
+
 	}
 }
 
@@ -4626,7 +4629,10 @@ void func_constructible_explode( gentity_t *self, gentity_t *inflictor, gentity_
 
 			// Skills stuff
 			if ( G_GetWeaponClassForMOD( mod ) >= self->constructibleStats.weaponclass ) {
-				G_AddKillSkillPointsForDestruction( attacker, mod, &self->constructibleStats );
+
+				/* Nico, removed g_stats.c
+				G_AddKillSkillPointsForDestruction( attacker, mod, &self->constructibleStats );*/
+
 			}
 		} else {
 
@@ -4653,7 +4659,10 @@ void func_constructible_explode( gentity_t *self, gentity_t *inflictor, gentity_
 
 			// Skills stuff
 			if ( G_GetWeaponClassForMOD( mod ) >= self->constructibleStats.weaponclass ) {
-				G_AddKillSkillPointsForDestruction( attacker, mod, &self->constructibleStats );
+
+				/* Nico, removed g_stats.c
+				G_AddKillSkillPointsForDestruction( attacker, mod, &self->constructibleStats );*/
+
 			}
 
 			// unlink
@@ -4680,7 +4689,10 @@ void func_constructible_explode( gentity_t *self, gentity_t *inflictor, gentity_
 
 		// Skills stuff
 		if ( G_GetWeaponClassForMOD( mod ) >= self->constructibleStats.weaponclass ) {
-			G_AddKillSkillPointsForDestruction( attacker, mod, &self->constructibleStats );
+
+			/* Nico, removed g_stats.c
+			G_AddKillSkillPointsForDestruction( attacker, mod, &self->constructibleStats );*/
+
 		}
 
 		// unlink

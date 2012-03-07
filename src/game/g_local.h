@@ -1900,16 +1900,18 @@ void G_SetupFrustum( gentity_t* ent );
 void G_SetupFrustum_ForBinoculars( gentity_t* ent );
 qboolean G_VisibleFromBinoculars( gentity_t* viewer, gentity_t* ent, vec3_t origin );
 
+/* Nico, removed g_stats.c
 void G_LogTeamKill(     gentity_t* ent, weapon_t weap );
 void G_LogDeath(        gentity_t* ent, weapon_t weap );
 void G_LogKill(         gentity_t* ent, weapon_t weap );
 void G_LogRegionHit(    gentity_t* ent, hitRegion_t hr );
-//void G_SetPlayerRank(	gentity_t* ent );
-//void G_AddExperience(	gentity_t* ent, float exp );
+
 
 // Skills
 void G_SetPlayerScore( gclient_t *client );
 void G_SetPlayerSkill( gclient_t *client, skillType_t skill );
+
+
 void G_AddSkillPoints( gentity_t *ent, skillType_t skill, float points );
 void G_LoseSkillPoints( gentity_t *ent, skillType_t skill, float points );
 void G_AddKillSkillPoints( gentity_t *attacker, meansOfDeath_t mod, hitRegion_t hr, qboolean splash );
@@ -1919,7 +1921,7 @@ void G_LoseKillSkillPoints( gentity_t *tker, meansOfDeath_t mod, hitRegion_t hr,
 void G_DebugOpenSkillLog( void );
 void G_DebugCloseSkillLog( void );
 void G_DebugAddSkillLevel( gentity_t *ent, skillType_t skill );
-void G_DebugAddSkillPoints( gentity_t *ent, skillType_t skill, float points, const char *reason );
+void G_DebugAddSkillPoints( gentity_t *ent, skillType_t skill, float points, const char *reason );*/
 
 typedef enum {
 	SM_NEED_MEDIC,

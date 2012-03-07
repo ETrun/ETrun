@@ -370,10 +370,13 @@ void player_die( gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int
 						 va( "%d %d %d", self->client->sess.sessionTeam, self->client->sess.playerType, weap ) ) ;
 		}
 	} else if ( OnSameTeam( self, attacker ) ) {
-		G_LogTeamKill(  attacker,   weap );
+		/* Nico, removed g_stats.c
+		G_LogTeamKill(  attacker,   weap );*/
 	} else {
+
+		/* Nico, removed g_stats.c
 		G_LogDeath( self,       weap );
-		G_LogKill(  attacker,   weap );
+		G_LogKill(  attacker,   weap );*/
 
 		if ( g_gamestate.integer == GS_PLAYING ) {
 			if ( attacker->client ) {
@@ -1412,22 +1415,34 @@ void G_Damage( gentity_t *targ, gentity_t *inflictor, gentity_t *attacker,  vec3
 		if ( g_debugBullets.integer ) {
 			trap_SendServerCommand( attacker - g_entities, "print \"Head Shot\n\"\n" );
 		}
-		G_LogRegionHit( attacker, HR_HEAD );
+
+		/* Nico, removed g_stats.c
+		G_LogRegionHit( attacker, HR_HEAD );*/
+
 		hr = HR_HEAD;
 	} else if ( IsLegShot( targ, dir, point, mod ) ) {
-		G_LogRegionHit( attacker, HR_LEGS );
+
+		/* Nico, removed g_stats.c
+		G_LogRegionHit( attacker, HR_LEGS );*/
+
 		hr = HR_LEGS;
 		if ( g_debugBullets.integer ) {
 			trap_SendServerCommand( attacker - g_entities, "print \"Leg Shot\n\"\n" );
 		}
 	} else if ( IsArmShot( targ, attacker, point, mod ) ) {
-		G_LogRegionHit( attacker, HR_ARMS );
+
+		/* Nico, removed g_stats.c
+		G_LogRegionHit( attacker, HR_ARMS );*/
+
 		hr = HR_ARMS;
 		if ( g_debugBullets.integer ) {
 			trap_SendServerCommand( attacker - g_entities, "print \"Arm Shot\n\"\n" );
 		}
 	} else if ( targ->client && targ->health > 0 && IsHeadShotWeapon( mod ) ) {
-		G_LogRegionHit( attacker, HR_BODY );
+
+		/* Nico, removed g_stats.c
+		G_LogRegionHit( attacker, HR_BODY );*/
+
 		hr = HR_BODY;
 		if ( g_debugBullets.integer ) {
 			trap_SendServerCommand( attacker - g_entities, "print \"Body Shot\n\"\n" );
@@ -1526,7 +1541,10 @@ void G_Damage( gentity_t *targ, gentity_t *inflictor, gentity_t *attacker,  vec3
 
 				if ( client ) {
 					if ( G_GetTeamFromEntity( inflictor ) != G_GetTeamFromEntity( targ ) ) {
-						G_AddKillSkillPoints( attacker, mod, hr, ( dflags & DAMAGE_RADIUS ) );
+
+						/* Nico, removed g_stats.c
+						G_AddKillSkillPoints( attacker, mod, hr, ( dflags & DAMAGE_RADIUS ) );*/
+
 					}
 				}
 

@@ -586,8 +586,9 @@ void Weapon_Syringe( gentity_t *ent ) {
 				if ( !traceEnt->isProp ) { // Gordon: flag for if they were teamkilled or not
 					AddScore( ent, WOLF_MEDIC_BONUS ); // JPW NERVE props to the medic for the swift and dexterous bit o healitude
 
+					/* Nico, removed g_stats.c
 					G_AddSkillPoints( ent, SK_FIRST_AID, 4.f );
-					G_DebugAddSkillPoints( ent, SK_FIRST_AID, 4.f, "reviving a player" );
+					G_DebugAddSkillPoints( ent, SK_FIRST_AID, 4.f, "reviving a player" );*/
 				}
 
 				// Arnout: calculate ranks to update numFinalDead arrays. Have to do it manually as addscore has an early out
@@ -1117,8 +1118,9 @@ static qboolean TryConstructing( gentity_t *ent ) {
 
 		AddScore( ent, constructible->accuracy ); // give drop score to guy who built it
 
+		/* Nico, removed g_stats.c
 		G_AddSkillPoints( ent, SK_EXPLOSIVES_AND_CONSTRUCTION, constructible->constructibleStats.constructxpbonus );
-		G_DebugAddSkillPoints( ent, SK_EXPLOSIVES_AND_CONSTRUCTION, constructible->constructibleStats.constructxpbonus, "finishing a construction" );
+		G_DebugAddSkillPoints( ent, SK_EXPLOSIVES_AND_CONSTRUCTION, constructible->constructibleStats.constructxpbonus, "finishing a construction" );*/
 
 		// unlink the objective info to get rid of the indicator for now
 		// Arnout: don't unlink, we still want the location popup. Instead, constructible_indicator_think got changed to free
@@ -1531,8 +1533,10 @@ void Weapon_Engineer( gentity_t *ent ) {
 
 			if ( traceEnt->sound3to2 != ent->client->sess.sessionTeam ) {
 				AddScore( ent, WOLF_REPAIR_BONUS ); // JPW NERVE props to the E for the fixin'
+
+				/* Nico, removed g_stats.c
 				G_AddSkillPoints( ent, SK_EXPLOSIVES_AND_CONSTRUCTION, 3.f );
-				G_DebugAddSkillPoints( ent, SK_EXPLOSIVES_AND_CONSTRUCTION, 3.f, "repairing a MG42" );
+				G_DebugAddSkillPoints( ent, SK_EXPLOSIVES_AND_CONSTRUCTION, 3.f, "repairing a MG42" );*/
 			}
 
 			traceEnt->takedamage = qtrue;
@@ -1675,8 +1679,11 @@ evilbanigoto:
 						Add_Ammo( ent, WP_LANDMINE, 1, qfalse );
 
 						if ( G_LandmineTeam( traceEnt ) != ent->client->sess.sessionTeam ) {
+
+							/* Nico, removed g_stats.c
 							G_AddSkillPoints( ent, SK_EXPLOSIVES_AND_CONSTRUCTION, 4.f );
-							G_DebugAddSkillPoints( ent, SK_EXPLOSIVES_AND_CONSTRUCTION, 4.f, "defusing an enemy landmine" );
+							G_DebugAddSkillPoints( ent, SK_EXPLOSIVES_AND_CONSTRUCTION, 4.f, "defusing an enemy landmine" );*/
+
 						}
 
 						// update our map
@@ -1740,8 +1747,9 @@ evilbanigoto:
 				//bani - consistency with dynamite defusing
 				G_PrintClientSpammyCenterPrint( ent - g_entities, "Satchel charge disarmed..." );
 
+				/* Nico, removed g_stats.c
 				G_AddSkillPoints( ent, SK_EXPLOSIVES_AND_CONSTRUCTION, 6.f );
-				G_DebugAddSkillPoints( ent, SK_EXPLOSIVES_AND_CONSTRUCTION, 6.f, "disarming satchel charge" );
+				G_DebugAddSkillPoints( ent, SK_EXPLOSIVES_AND_CONSTRUCTION, 6.f, "disarming satchel charge" );*/
 			} else {
 				return;
 			}
@@ -2078,8 +2086,11 @@ evilbanigoto:
 							if ( ent->client->sess.sessionTeam == TEAM_AXIS ) {
 								if ( ( hit->spawnflags & AXIS_OBJECTIVE ) && ( !scored ) ) {
 									AddScore( ent,WOLF_DYNAMITE_DIFFUSE );
+
+									/* Nico, removed g_stats.c
 									G_AddSkillPoints( ent, SK_EXPLOSIVES_AND_CONSTRUCTION, 6.f );
-									G_DebugAddSkillPoints( ent, SK_EXPLOSIVES_AND_CONSTRUCTION, 6.f, "defusing enemy dynamite" );
+									G_DebugAddSkillPoints( ent, SK_EXPLOSIVES_AND_CONSTRUCTION, 6.f, "defusing enemy dynamite" );*/
+
 									scored++;
 								}
 								if ( hit->target_ent ) {
@@ -2099,8 +2110,11 @@ evilbanigoto:
 							} else { // TEAM_ALLIES
 								if ( ( hit->spawnflags & ALLIED_OBJECTIVE ) && ( !scored ) ) {
 									AddScore( ent,WOLF_DYNAMITE_DIFFUSE );
+
+									/* Nico, removed g_stats.c
 									G_AddSkillPoints( ent, SK_EXPLOSIVES_AND_CONSTRUCTION, 6.f );
-									G_DebugAddSkillPoints( ent, SK_EXPLOSIVES_AND_CONSTRUCTION, 6.f, "defusing enemy dynamite" );
+									G_DebugAddSkillPoints( ent, SK_EXPLOSIVES_AND_CONSTRUCTION, 6.f, "defusing enemy dynamite" );*/
+
 									scored++;
 									hit->spawnflags &= ~OBJECTIVE_DESTROYED; // "re-activate" objective since it wasn't destroyed
 								}
@@ -2167,8 +2181,11 @@ evilbanigoto:
 									if ( ent && ent->client ) {
 										G_LogPrintf( "Dynamite_Diffuse: %d\n", ent - g_entities );                  // OSP
 									}
+
+									/* Nico, removed g_stats.c
 									G_AddSkillPoints( ent, SK_EXPLOSIVES_AND_CONSTRUCTION, 6.f );
-									G_DebugAddSkillPoints( ent, SK_EXPLOSIVES_AND_CONSTRUCTION, 6.f, "defusing enemy dynamite" );
+									G_DebugAddSkillPoints( ent, SK_EXPLOSIVES_AND_CONSTRUCTION, 6.f, "defusing enemy dynamite" );*/
+
 									scored++;
 								}
 								G_Script_ScriptEvent( hit, "defused", "" );
@@ -2187,8 +2204,11 @@ evilbanigoto:
 									if ( ent && ent->client ) {
 										G_LogPrintf( "Dynamite_Diffuse: %d\n", ent - g_entities );                  // OSP
 									}
+
+									/* Nico, removed g_stats.c
 									G_AddSkillPoints( ent, SK_EXPLOSIVES_AND_CONSTRUCTION, 6.f );
-									G_DebugAddSkillPoints( ent, SK_EXPLOSIVES_AND_CONSTRUCTION, 6.f, "defusing enemy dynamite" );
+									G_DebugAddSkillPoints( ent, SK_EXPLOSIVES_AND_CONSTRUCTION, 6.f, "defusing enemy dynamite" );*/
+
 									scored++;
 								}
 								G_Script_ScriptEvent( hit, "defused", "" );

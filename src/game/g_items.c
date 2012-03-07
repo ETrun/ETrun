@@ -541,8 +541,10 @@ int Pickup_Weapon( gentity_t *ent, gentity_t *other ) {
 					}
 				}
 				ent->parent->client->PCSpecialPickedUpCount++;
+
+				/* Nico, removed g_stats.c
 				G_AddSkillPoints( ent->parent, SK_SIGNALS, 1.f );
-				G_DebugAddSkillPoints( ent->parent, SK_SIGNALS, 1.f, "ammo pack picked up" );
+				G_DebugAddSkillPoints( ent->parent, SK_SIGNALS, 1.f, "ammo pack picked up" );*/
 
 				// extracted code originally here into AddMagicAmmo -xkan, 9/18/2002
 				// add 1 clip of magic ammo for any two-handed weapon
@@ -650,8 +652,11 @@ int Pickup_Health( gentity_t *ent, gentity_t *other ) {
 				AddScore( ent->parent, WOLF_HEALTH_UP );
 				G_LogPrintf( "Health_Pack: %d %d\n", ent->parent - g_entities, other - g_entities );    // OSP
 			}
+
+			/* Nico, removed g_stats.c
 			G_AddSkillPoints( ent->parent, SK_FIRST_AID, 1.f );
-			G_DebugAddSkillPoints( ent->parent, SK_FIRST_AID, 1.f, "health pack picked up" );
+			G_DebugAddSkillPoints( ent->parent, SK_FIRST_AID, 1.f, "health pack picked up" );*/
+
 			ent->parent->client->PCSpecialPickedUpCount++;
 		}
 	}

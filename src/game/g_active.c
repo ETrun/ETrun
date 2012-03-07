@@ -972,6 +972,8 @@ void ClientThink_real( gentity_t *ent ) {
 	pm.covertopsChargeTime = level.covertopsChargeTime[client->sess.sessionTeam - 1];
 
 	if ( client->ps.pm_type != PM_DEAD && level.timeCurrent - client->pers.lastBattleSenseBonusTime > 45000 ) {
+
+		/* Nico, removed g_stats.c
 		if ( client->combatState != COMBATSTATE_COLD ) {
 			if ( client->combatState & ( 1 << COMBATSTATE_KILLEDPLAYER ) && client->combatState & ( 1 << COMBATSTATE_DAMAGERECEIVED ) ) {
 				G_AddSkillPoints( ent, SK_BATTLE_SENSE, 8.f ); G_DebugAddSkillPoints( ent, SK_BATTLE_SENSE, 8.f, "combatstate super-hot" );
@@ -980,7 +982,7 @@ void ClientThink_real( gentity_t *ent ) {
 			} else {
 				G_AddSkillPoints( ent, SK_BATTLE_SENSE, 2.f ); G_DebugAddSkillPoints( ent, SK_BATTLE_SENSE, 2.f, "combatstate warm" );
 			}
-		}
+		}*/
 
 		client->pers.lastBattleSenseBonusTime = level.timeCurrent;
 		client->combatState = COMBATSTATE_COLD; // cool down again

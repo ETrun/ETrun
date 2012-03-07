@@ -701,9 +701,12 @@ void G_KillEnts( const char* target, gentity_t* ignore, gentity_t* killer, means
 		}
 
 		if ( targ->s.eType == ET_CONSTRUCTIBLE ) {
+			
+			/* Nico, removed g_stats.c
 			if ( killer ) {
 				G_AddKillSkillPointsForDestruction( killer, mod, &targ->constructibleStats );
-			}
+			}*/
+
 			targ->die( targ, killer, killer, targ->health, 0 );
 			continue;
 		}

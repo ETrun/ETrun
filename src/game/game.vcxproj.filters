@@ -123,9 +123,6 @@
     <ClCompile Include="g_spawn.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="g_stats.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="g_sv_entities.c">
       <Filter>Source Files</Filter>
     </ClCompile>

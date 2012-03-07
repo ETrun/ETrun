@@ -421,7 +421,10 @@ void G_ExplodeMissile( gentity_t *ent ) {
 
 				if ( ( ( hit->spawnflags & AXIS_OBJECTIVE ) && ( ent->s.teamNum == TEAM_ALLIES ) ) || ( ( hit->spawnflags & ALLIED_OBJECTIVE ) && ( ent->s.teamNum == TEAM_AXIS ) ) ) {
 					if ( ent->parent->client && G_GetWeaponClassForMOD( MOD_DYNAMITE ) >= hit->target_ent->constructibleStats.weaponclass ) {
-						G_AddKillSkillPointsForDestruction( ent->parent, MOD_DYNAMITE, &hit->target_ent->constructibleStats );
+
+						/* Nico, removed g_stats.c
+						G_AddKillSkillPointsForDestruction( ent->parent, MOD_DYNAMITE, &hit->target_ent->constructibleStats );*/
+
 					}
 
 					G_UseTargets( hit, ent );

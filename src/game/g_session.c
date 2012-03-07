@@ -174,7 +174,10 @@ void G_CalcRank( gclient_t* client ) {
 	int i, highestskill = 0;
 
 	for ( i = 0; i < SK_NUM_SKILLS; i++ ) {
-		G_SetPlayerSkill( client, i );
+
+		/* Nico, removed g_stats.c
+		G_SetPlayerSkill( client, i );*/
+
 		if ( client->sess.skill[i] > highestskill ) {
 			highestskill = client->sess.skill[i];
 		}

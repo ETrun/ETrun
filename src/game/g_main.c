@@ -1771,7 +1771,8 @@ void G_InitGame( int levelTime, int randomSeed, int restart ) {
 
 	trap_SetConfigstring( CS_SCRIPT_MOVER_NAMES, "" );   // clear out
 
-	G_DebugOpenSkillLog();
+	/* Nico, removed g_stats.c
+	G_DebugOpenSkillLog();*/
 
 	if ( g_log.string[0] ) {
 		if ( g_logSync.integer ) {
@@ -1940,7 +1941,8 @@ void G_ShutdownGame( int restart ) {
 
 	G_Printf( "==== ShutdownGame ====\n" );
 
-	G_DebugCloseSkillLog();
+	/* Nico, removed g_stats.c
+	G_DebugCloseSkillLog();*/
 
 	if ( level.logFile ) {
 		G_LogPrintf( "ShutdownGame:\n" );
