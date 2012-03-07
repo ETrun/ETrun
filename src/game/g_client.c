@@ -736,24 +736,35 @@ static void AddExtraSpawnAmmo( gclient_t *client, weapon_t weaponNum ) {
 	case WP_CARBINE:
 	case WP_KAR98:
 	case WP_SILENCED_COLT:
+
+		/* Nico, removed skills
 		if ( client->sess.skill[SK_LIGHT_WEAPONS] >= 1 ) {
 			client->ps.ammo[BG_FindAmmoForWeapon( weaponNum )] += GetAmmoTableData( weaponNum )->maxclip;
-		}
+		}*/
+
 		break;
 	case WP_MP40:
 	case WP_THOMPSON:
+
+		/* Nico, removed skills
 		if ( ( client->sess.skill[SK_FIRST_AID] >= 1 && client->sess.playerType == PC_MEDIC ) || client->sess.skill[SK_LIGHT_WEAPONS] >= 1 ) {
 			client->ps.ammo[BG_FindAmmoForWeapon( weaponNum )] += GetAmmoTableData( weaponNum )->maxclip;
-		}
+		}*/
+
 		break;
 	case WP_M7:
 	case WP_GPG40:
+
+		/* Nico, removed skills
 		if ( client->sess.skill[SK_EXPLOSIVES_AND_CONSTRUCTION] >= 1 ) {
 			client->ps.ammo[BG_FindAmmoForWeapon( weaponNum )] += 4;
-		}
+		}*/
+
 		break;
 	case WP_GRENADE_PINEAPPLE:
 	case WP_GRENADE_LAUNCHER:
+
+		/* Nico, removed skills
 		if ( client->sess.playerType == PC_ENGINEER ) {
 			if ( client->sess.skill[SK_EXPLOSIVES_AND_CONSTRUCTION] >= 1 ) {
 				client->ps.ammoclip[BG_FindAmmoForWeapon( weaponNum )] += 4;
@@ -763,38 +774,37 @@ static void AddExtraSpawnAmmo( gclient_t *client, weapon_t weaponNum ) {
 			if ( client->sess.skill[SK_FIRST_AID] >= 1 ) {
 				client->ps.ammoclip[BG_FindAmmoForWeapon( weaponNum )] += 1;
 			}
-		}
+		}*/
+
 		break;
-		/*case WP_MOBILE_MG42:
-		case WP_PANZERFAUST:
-		case WP_FLAMETHROWER:
-			if( client->sess.skill[SK_HEAVY_WEAPONS] >= 1 )
-				client->ps.ammo[BG_FindAmmoForWeapon(weaponNum)] += GetAmmoTableData(weaponNum)->maxclip;
-			break;
-		case WP_MORTAR:
-		case WP_MORTAR_SET:
-			if( client->sess.skill[SK_HEAVY_WEAPONS] >= 1 )
-				client->ps.ammo[BG_FindAmmoForWeapon(weaponNum)] += 2;
-			break;*/
 	case WP_MEDIC_SYRINGE:
 	case WP_MEDIC_ADRENALINE:
+
+		/* Nico, removed skills
 		if ( client->sess.skill[SK_FIRST_AID] >= 2 ) {
 			client->ps.ammoclip[BG_FindAmmoForWeapon( weaponNum )] += 2;
-		}
+		}*/
+
 		break;
 	case WP_GARAND:
 	case WP_K43:
 	case WP_FG42:
+
+		/* Nico, removed skills
 		if ( client->sess.skill[SK_MILITARY_INTELLIGENCE_AND_SCOPED_WEAPONS] >= 1 || client->sess.skill[SK_LIGHT_WEAPONS] >= 1 ) {
 			client->ps.ammo[BG_FindAmmoForWeapon( weaponNum )] += GetAmmoTableData( weaponNum )->maxclip;
-		}
+		}*/
+
 		break;
 	case WP_GARAND_SCOPE:
 	case WP_K43_SCOPE:
 	case WP_FG42SCOPE:
+
+		/* Nico, removed skills
 		if ( client->sess.skill[SK_MILITARY_INTELLIGENCE_AND_SCOPED_WEAPONS] >= 1 ) {
 			client->ps.ammo[BG_FindAmmoForWeapon( weaponNum )] += GetAmmoTableData( weaponNum )->maxclip;
-		}
+		}*/
+
 		break;
 	default:
 		break;
@@ -853,11 +863,13 @@ void SetWolfSpawnWeapons( gclient_t *client ) {
 		AddWeaponToPlayer( client, WP_PLIERS, 0, 1, qfalse );
 
 		if ( g_knifeonly.integer != 1 ) {
+
+			/* Nico, removed skills
 			if ( client->sess.skill[SK_BATTLE_SENSE] >= 1 ) {
 				if ( AddWeaponToPlayer( client, WP_BINOCULARS, 1, 0, qfalse ) ) {
 					client->ps.stats[STAT_KEYS] |= ( 1 << INV_BINOCS );
 				}
-			}
+			}*/
 
 			if ( client->sess.sessionTeam == TEAM_AXIS ) {
 				switch ( client->sess.playerWeapon ) {
@@ -909,16 +921,20 @@ void SetWolfSpawnWeapons( gclient_t *client ) {
 				AddWeaponToPlayer( client, WP_GRENADE_PINEAPPLE, 0, 1, qfalse );
 			}
 		} else if ( pc == PC_MEDIC ) {
+
+			/* Nico, removed skills
 			if ( client->sess.skill[SK_BATTLE_SENSE] >= 1 ) {
 				if ( AddWeaponToPlayer( client, WP_BINOCULARS, 1, 0, qfalse ) ) {
 					client->ps.stats[STAT_KEYS] |= ( 1 << INV_BINOCS );
 				}
-			}
+			}*/
 
 			AddWeaponToPlayer( client, WP_MEDIC_SYRINGE, GetAmmoTableData( WP_MEDIC_SYRINGE )->defaultStartingAmmo, GetAmmoTableData( WP_MEDIC_SYRINGE )->defaultStartingClip, qfalse );
+
+			/* Nico, removed skills
 			if ( client->sess.skill[SK_FIRST_AID] >= 4 ) {
 				AddWeaponToPlayer( client, WP_MEDIC_ADRENALINE, GetAmmoTableData( WP_MEDIC_ADRENALINE )->defaultStartingAmmo, GetAmmoTableData( WP_MEDIC_ADRENALINE )->defaultStartingClip, qfalse );
-			}
+			}*/
 
 			AddWeaponToPlayer( client, WP_MEDKIT, GetAmmoTableData( WP_MEDKIT )->defaultStartingAmmo, GetAmmoTableData( WP_MEDKIT )->defaultStartingClip, qfalse );
 
@@ -930,11 +946,13 @@ void SetWolfSpawnWeapons( gclient_t *client ) {
 				AddWeaponToPlayer( client, WP_GRENADE_PINEAPPLE, 0, 1, qfalse );
 			}
 		} else if ( pc == PC_SOLDIER ) {
+
+			/* Nico, removed skills
 			if ( client->sess.skill[SK_BATTLE_SENSE] >= 1 ) {
 				if ( AddWeaponToPlayer( client, WP_BINOCULARS, 1, 0, qfalse ) ) {
 					client->ps.stats[STAT_KEYS] |= ( 1 << INV_BINOCS );
 				}
-			}
+			}*/
 
 			switch ( client->sess.sessionTeam ) {
 			case TEAM_AXIS:
@@ -1033,68 +1051,76 @@ void SetWolfSpawnWeapons( gclient_t *client ) {
 		case TEAM_AXIS:
 			switch ( pc ) {
 			case PC_SOLDIER:
+
+				/* Nico, removed skills
 				if ( client->sess.skill[SK_HEAVY_WEAPONS] >= 4 && client->sess.playerWeapon2 == WP_MP40 ) {
 					AddWeaponToPlayer( client, WP_MP40, 2 * ( GetAmmoTableData( WP_MP40 )->defaultStartingAmmo ), GetAmmoTableData( WP_MP40 )->defaultStartingClip, qtrue );
 				} else if ( client->sess.skill[SK_LIGHT_WEAPONS] >= 4 && client->sess.playerWeapon2 == WP_AKIMBO_LUGER ) {
 					client->ps.ammoclip[BG_FindClipForWeapon( BG_AkimboSidearm( WP_AKIMBO_LUGER ) )] = GetAmmoTableData( WP_AKIMBO_LUGER )->defaultStartingClip;
 					AddWeaponToPlayer( client, WP_AKIMBO_LUGER, GetAmmoTableData( WP_AKIMBO_LUGER )->defaultStartingAmmo, GetAmmoTableData( WP_AKIMBO_LUGER )->defaultStartingClip, qfalse );
-				} else {
+				} else {*/
 					AddWeaponToPlayer( client, WP_LUGER, GetAmmoTableData( WP_LUGER )->defaultStartingAmmo, GetAmmoTableData( WP_LUGER )->defaultStartingClip, qfalse );
-				}
+				// }
 				break;
 
 			case PC_COVERTOPS:
+
+				/* Nico, removed skills
 				if ( client->sess.skill[SK_LIGHT_WEAPONS] >= 4 && ( client->sess.playerWeapon2 == WP_AKIMBO_SILENCEDLUGER || client->sess.playerWeapon2 == WP_AKIMBO_LUGER ) ) {
 					client->ps.ammoclip[BG_FindClipForWeapon( BG_AkimboSidearm( WP_AKIMBO_SILENCEDLUGER ) )] = GetAmmoTableData( WP_AKIMBO_SILENCEDLUGER )->defaultStartingClip;
 					AddWeaponToPlayer( client, WP_AKIMBO_SILENCEDLUGER, GetAmmoTableData( WP_AKIMBO_SILENCEDLUGER )->defaultStartingAmmo, GetAmmoTableData( WP_AKIMBO_SILENCEDLUGER )->defaultStartingClip, qfalse );
-				} else {
+				} else {*/
 					AddWeaponToPlayer( client, WP_LUGER, GetAmmoTableData( WP_LUGER )->defaultStartingAmmo, GetAmmoTableData( WP_LUGER )->defaultStartingClip, qfalse );
 					AddWeaponToPlayer( client, WP_SILENCER, GetAmmoTableData( WP_SILENCER )->defaultStartingAmmo, GetAmmoTableData( WP_SILENCER )->defaultStartingClip, qfalse );
 					client->pmext.silencedSideArm = 1;
-				}
+				// }
 				break;
 
 			default:
+				/* Nico, removed skills
 				if ( client->sess.skill[SK_LIGHT_WEAPONS] >= 4 && client->sess.playerWeapon2 == WP_AKIMBO_LUGER ) {
 					client->ps.ammoclip[BG_FindClipForWeapon( BG_AkimboSidearm( WP_AKIMBO_LUGER ) )] = GetAmmoTableData( WP_AKIMBO_LUGER )->defaultStartingClip;
 					AddWeaponToPlayer( client, WP_AKIMBO_LUGER, GetAmmoTableData( WP_AKIMBO_LUGER )->defaultStartingAmmo, GetAmmoTableData( WP_AKIMBO_LUGER )->defaultStartingClip, qfalse );
-				} else {
+				} else {*/
 					AddWeaponToPlayer( client, WP_LUGER, GetAmmoTableData( WP_LUGER )->defaultStartingAmmo, GetAmmoTableData( WP_LUGER )->defaultStartingClip, qfalse );
-				}
+				// }
 				break;
 			}
 			break;
 		default:
 			switch ( pc ) {
 			case PC_SOLDIER:
+				/* Nico, removed skills
 				if ( client->sess.skill[SK_HEAVY_WEAPONS] >= 4 && client->sess.playerWeapon2 == WP_THOMPSON ) {
 					AddWeaponToPlayer( client, WP_THOMPSON, 2 * ( GetAmmoTableData( WP_THOMPSON )->defaultStartingAmmo ), GetAmmoTableData( WP_THOMPSON )->defaultStartingClip, qtrue );
 				} else if ( client->sess.skill[SK_LIGHT_WEAPONS] >= 4 && client->sess.playerWeapon2 == WP_AKIMBO_COLT ) {
 					client->ps.ammoclip[BG_FindClipForWeapon( BG_AkimboSidearm( WP_AKIMBO_COLT ) )] = GetAmmoTableData( WP_AKIMBO_COLT )->defaultStartingClip;
 					AddWeaponToPlayer( client, WP_AKIMBO_COLT, GetAmmoTableData( WP_AKIMBO_COLT )->defaultStartingAmmo, GetAmmoTableData( WP_AKIMBO_COLT )->defaultStartingClip, qfalse );
-				} else {
+				} else {*/
 					AddWeaponToPlayer( client, WP_COLT, GetAmmoTableData( WP_COLT )->defaultStartingAmmo, GetAmmoTableData( WP_COLT )->defaultStartingClip, qfalse );
-				}
+				// }
 				break;
 
 			case PC_COVERTOPS:
+				/* Nico, removed skills
 				if ( client->sess.skill[SK_LIGHT_WEAPONS] >= 4 && ( client->sess.playerWeapon2 == WP_AKIMBO_SILENCEDCOLT || client->sess.playerWeapon2 == WP_AKIMBO_COLT ) ) {
 					client->ps.ammoclip[BG_FindClipForWeapon( BG_AkimboSidearm( WP_AKIMBO_SILENCEDCOLT ) )] = GetAmmoTableData( WP_AKIMBO_SILENCEDCOLT )->defaultStartingClip;
 					AddWeaponToPlayer( client, WP_AKIMBO_SILENCEDCOLT, GetAmmoTableData( WP_AKIMBO_SILENCEDCOLT )->defaultStartingAmmo, GetAmmoTableData( WP_AKIMBO_SILENCEDCOLT )->defaultStartingClip, qfalse );
-				} else {
+				} else {*/
 					AddWeaponToPlayer( client, WP_COLT, GetAmmoTableData( WP_COLT )->defaultStartingAmmo, GetAmmoTableData( WP_COLT )->defaultStartingClip, qfalse );
 					AddWeaponToPlayer( client, WP_SILENCED_COLT, GetAmmoTableData( WP_SILENCED_COLT )->defaultStartingAmmo, GetAmmoTableData( WP_SILENCED_COLT )->defaultStartingClip, qfalse );
 					client->pmext.silencedSideArm = 1;
-				}
+				// }
 				break;
 
 			default:
+				/* Nico, removed skills
 				if ( client->sess.skill[SK_LIGHT_WEAPONS] >= 4 && client->sess.playerWeapon2 == WP_AKIMBO_COLT ) {
 					client->ps.ammoclip[BG_FindClipForWeapon( BG_AkimboSidearm( WP_AKIMBO_COLT ) )] = GetAmmoTableData( WP_AKIMBO_COLT )->defaultStartingClip;
 					AddWeaponToPlayer( client, WP_AKIMBO_COLT, GetAmmoTableData( WP_AKIMBO_COLT )->defaultStartingAmmo, GetAmmoTableData( WP_AKIMBO_COLT )->defaultStartingClip, qfalse );
-				} else {
+				} else {*/
 					AddWeaponToPlayer( client, WP_COLT, GetAmmoTableData( WP_COLT )->defaultStartingAmmo, GetAmmoTableData( WP_COLT )->defaultStartingClip, qfalse );
-				}
+				// }
 				break;
 			}
 		}
@@ -1117,9 +1143,11 @@ void SetWolfSpawnWeapons( gclient_t *client ) {
 		// Knifeonly block
 		if ( pc == PC_MEDIC ) {
 			AddWeaponToPlayer( client, WP_MEDIC_SYRINGE, 0, 20, qfalse );
+
+			/* Nico, removed skills
 			if ( client->sess.skill[SK_FIRST_AID] >= 4 ) {
 				AddWeaponToPlayer( client, WP_MEDIC_ADRENALINE, 0, 10, qfalse );
-			}
+			}*/
 
 		}
 		// End Knifeonly stuff -- Ensure that medics get their basic stuff
@@ -1170,9 +1198,10 @@ void AddMedicTeamBonus( gclient_t *client ) {
 		client->pers.maxHealth = 125;
 	}
 
+	/* Nico, removed skills
 	if ( client->sess.skill[SK_BATTLE_SENSE] >= 3 ) {
 		client->pers.maxHealth += 15;
-	}
+	}*/
 
 	client->ps.stats[STAT_MAX_HEALTH] = client->pers.maxHealth;
 }
@@ -1278,7 +1307,10 @@ void ClientUserinfoChanged( int clientNum ) {
 	char oldname[MAX_STRING_CHARS];
 	char userinfo[MAX_INFO_STRING];
 	gclient_t   *client;
-	int i;
+
+	/* Nico, removed skills
+	int i;*/
+
 	char skillStr[16] = "";
 	char medalStr[16] = "";
 	int characterIndex;
@@ -1290,9 +1322,11 @@ void ClientUserinfoChanged( int clientNum ) {
 	client->ps.clientNum = clientNum;
 
 	client->medals = 0;
+
+	/* Nico, removed skills
 	for ( i = 0; i < SK_NUM_SKILLS; i++ ) {
 		client->medals += client->sess.medals[ i ];
-	}
+	}*/
 
 	trap_GetUserinfo( clientNum, userinfo, sizeof( userinfo ) );
 
@@ -1354,11 +1388,12 @@ void ClientUserinfoChanged( int clientNum ) {
 		}
 	}
 
+	/* Nico, removed skills
 	for ( i = 0; i < SK_NUM_SKILLS; i++ ) {
 		Q_strcat( skillStr, sizeof( skillStr ), va( "%i",client->sess.skill[i] ) );
 		Q_strcat( medalStr, sizeof( medalStr ), va( "%i",client->sess.medals[i] ) );
 		// FIXME: Gordon: wont this break if medals > 9 arnout? JK: Medal count is tied to skill count :() Gordon: er, it's based on >> skill per map, so for a huuuuuuge campaign it could break...
-	}
+	}*/
 
 	client->ps.stats[STAT_MAX_HEALTH] = client->pers.maxHealth;
 
@@ -2066,12 +2101,14 @@ void ClientSpawn( gentity_t *ent, qboolean revived ) {
 	// JPW NERVE ***NOTE*** the following line is order-dependent and must *FOLLOW* SetWolfSpawnWeapons() in multiplayer
 	// AddMedicTeamBonus() now adds medic team bonus and stores in ps.stats[STAT_MAX_HEALTH].
 
+
+	/* Nico, removed skills
 	if ( client->sess.skill[SK_BATTLE_SENSE] >= 3 ) {
 		// We get some extra max health, but don't spawn with that much
 		ent->health = client->ps.stats[STAT_HEALTH] = client->ps.stats[STAT_MAX_HEALTH] - 15;
-	} else {
+	} else {*/
 		ent->health = client->ps.stats[STAT_HEALTH] = client->ps.stats[STAT_MAX_HEALTH];
-	}
+	// }
 
 	G_SetOrigin( ent, spawn_origin );
 	VectorCopy( spawn_origin, client->ps.origin );

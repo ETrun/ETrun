@@ -684,19 +684,10 @@ qboolean G_IsAllowedAmmo( gentity_t* ent ) {
 		return qfalse;
 	}
 
+	/* Nico, removed skills
 	if ( !AddMagicAmmo( ent, 0 ) ) {
 		return qfalse;
-	}
-
-/*	for( i = 0; i < 2; i++ ) {
-		if( !ent->client->lastAmmoTimes[i] || (level.time - ent->client->lastAmmoTimes[i] > 60000) ) {
-			ent->client->lastAmmoTimes[i] = level.time;
-
-			return qtrue;
-		}
-	}
-
-	return qfalse;*/
+	}*/
 
 	return qtrue;
 }
@@ -737,6 +728,7 @@ void ammo_touch( gentity_t *self, gentity_t *other, trace_t *trace ) {
 		count = min( clientcount, self->health / (float)self->damage );
 	}
 
+	/* Nico, removed skills
 	for ( i = 0; i < count; i++ ) {
 		int ammoAdded = qfalse;
 
@@ -752,7 +744,7 @@ void ammo_touch( gentity_t *self, gentity_t *other, trace_t *trace ) {
 //				G_Printf("%i clips left\n", self->health );
 			}
 		}
-	}
+	}*/
 }
 
 #define AMMO_REGENTIME 60000

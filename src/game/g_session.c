@@ -101,7 +101,9 @@ void G_WriteClientSessionData( gclient_t *client, qboolean restart ) {
 	// addition: but only if it isn't a forced map_restart (done by someone on the console)
 	/* Nico, removed warmup
 	if ( !( restart && !level.warmupTime ) ) {*/
+
 	if ( !( restart ) ) {
+		/* Nico, removed skills
 		s = va( "%.2f %.2f %.2f %.2f %.2f %.2f %.2f %i %i %i %i %i %i %i",
 				client->sess.skillpoints[0],
 				client->sess.skillpoints[1],
@@ -117,7 +119,8 @@ void G_WriteClientSessionData( gclient_t *client, qboolean restart ) {
 				client->sess.medals[4],
 				client->sess.medals[5],
 				client->sess.medals[6]
-				);
+				);*/
+		s = va("");
 
 		trap_Cvar_Set( va( "sessionstats%i", client - level.clients ), s );
 	}
@@ -169,14 +172,14 @@ void G_ClientSwap( gclient_t *client ) {
 	client->sess.spec_team = flags;
 }
 
-
+/* Nico, removed skills
 void G_CalcRank( gclient_t* client ) {
 	int i, highestskill = 0;
 
 	for ( i = 0; i < SK_NUM_SKILLS; i++ ) {
 
-		/* Nico, removed g_stats.c
-		G_SetPlayerSkill( client, i );*/
+		// Nico, removed g_stats.c
+		// G_SetPlayerSkill( client, i );
 
 		if ( client->sess.skill[i] > highestskill ) {
 			highestskill = client->sess.skill[i];
@@ -201,7 +204,7 @@ void G_CalcRank( gclient_t* client ) {
 			client->sess.rank = 10;
 		}
 	}
-}
+}*/
 
 /*
 ================
@@ -271,6 +274,7 @@ void G_ReadSessionData( gclient_t *client ) {
 	// OSP
 
 	// Arnout: likely there are more cases in which we don't want this
+	/* Nico, removed skills
 	if ( g_gametype.integer != GT_SINGLE_PLAYER &&
 		 g_gametype.integer != GT_COOP &&
 		 g_gametype.integer != GT_WOLF &&
@@ -300,7 +304,7 @@ void G_ReadSessionData( gclient_t *client ) {
 
 	}
 
-	G_CalcRank( client );
+	G_CalcRank( client );*/
 
 	test = ( g_altStopwatchMode.integer != 0 || g_currentRound.integer == 1 );
 
@@ -314,13 +318,16 @@ void G_ReadSessionData( gclient_t *client ) {
 	}
 
 	{
-		int j;
+		/* Nico, removed skills
+		int j;*/
 
 		client->sess.startxptotal = 0;
+
+		/* Nico, removed skills
 		for ( j = 0; j < SK_NUM_SKILLS; j++ ) {
 			client->sess.startskillpoints[j] = client->sess.skillpoints[j];
 			client->sess.startxptotal += client->sess.skillpoints[j];
-		}
+		}*/
 	}
 }
 
@@ -355,9 +362,12 @@ void G_InitSessionData( gclient_t *client, char *userinfo ) {
 	memset( sess->ignoreClients, 0, sizeof( sess->ignoreClients ) );
 //	sess->experience = 0;
 	sess->muted = qfalse;
+
+	/* Nico, removed skills
 	memset( sess->skill, 0, sizeof( sess->skill ) );
 	memset( sess->skillpoints, 0, sizeof( sess->skillpoints ) );
-	memset( sess->medals, 0, sizeof( sess->medals ) );
+	memset( sess->medals, 0, sizeof( sess->medals ) );*/
+
 	sess->rank = 0;
 
 	// OSP

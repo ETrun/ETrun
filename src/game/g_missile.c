@@ -1671,9 +1671,10 @@ qboolean G_LandmineSnapshotCallback( int entityNum, int clientNum ) {
 	gentity_t* clEnt    = &g_entities[ clientNum ];
 	team_t team;
 
+	/* Nico, removed skills
 	if ( clEnt->client->sess.skill[ SK_BATTLE_SENSE ] >= 4 ) {
 		return qtrue;
-	}
+	}*/
 
 	if ( !G_LandmineArmed( ent ) ) {
 		return qtrue;

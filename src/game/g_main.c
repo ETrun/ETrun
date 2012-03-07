@@ -1527,8 +1527,10 @@ char *strcut( char *dest, char *src, int num ) {
 
 //g_{axies,allies}mapxp overflows and crashes the server
 void bani_clearmapxp( void ) {
+
+	/* Nico, removed skills
 	trap_SetConfigstring( CS_AXIS_MAPS_XP, "" );
-	trap_SetConfigstring( CS_ALLIED_MAPS_XP, "" );
+	trap_SetConfigstring( CS_ALLIED_MAPS_XP, "" );*/
 
 	trap_Cvar_Set( va( "%s_axismapxp0", GAMEVERSION ), "" );
 	trap_Cvar_Set( va( "%s_alliedmapxp0", GAMEVERSION ), "" );
@@ -1538,6 +1540,8 @@ void bani_storemapxp( void ) {
 	char cs[MAX_STRING_CHARS];
 	char u[MAX_STRING_CHARS];
 	char *k;
+
+	/* Nico, removed skills
 	int i, j;
 
 	//axis
@@ -1545,9 +1549,9 @@ void bani_storemapxp( void ) {
 	for ( i = 0; i < SK_NUM_SKILLS; i++ ) {
 		Q_strcat( cs, sizeof( cs ), va( " %i", (int)level.teamXP[ i ][ 0 ] ) );
 	}
-	trap_SetConfigstring( CS_AXIS_MAPS_XP, cs );
+	trap_SetConfigstring( CS_AXIS_MAPS_XP, cs );*/
 
-	j = 0;
+	int j = 0;
 	k = strcut( u, cs, SNIPSIZE );
 	while ( strlen( u ) ) {
 		//"to be continued..."
@@ -1560,11 +1564,12 @@ void bani_storemapxp( void ) {
 	}
 
 	//allies
+	/* Nico, removed skills
 	trap_GetConfigstring( CS_ALLIED_MAPS_XP, cs, sizeof( cs ) );
 	for ( i = 0; i < SK_NUM_SKILLS; i++ ) {
 		Q_strcat( cs, sizeof( cs ), va( " %i", (int)level.teamXP[ i ][ 1 ] ) );
 	}
-	trap_SetConfigstring( CS_ALLIED_MAPS_XP, cs );
+	trap_SetConfigstring( CS_ALLIED_MAPS_XP, cs );*/
 
 	j = 0;
 	k = strcut( u, cs, SNIPSIZE );
@@ -1593,7 +1598,9 @@ void bani_getmapxp( void ) {
 		trap_Cvar_VariableStringBuffer( va( "%s_axismapxp%i", GAMEVERSION, j ), t, sizeof( t ) );
 		strcat( s, t );
 	}
-	trap_SetConfigstring( CS_AXIS_MAPS_XP, s );
+
+	/* Nico, removed skills
+	trap_SetConfigstring( CS_AXIS_MAPS_XP, s );*/
 
 	j = 0;
 	trap_Cvar_VariableStringBuffer( va( "%s_alliedmapxp%i", GAMEVERSION, j ), s, sizeof( s ) );
@@ -1604,7 +1611,9 @@ void bani_getmapxp( void ) {
 		trap_Cvar_VariableStringBuffer( va( "%s_alliedmapxp%i", GAMEVERSION, j ), t, sizeof( t ) );
 		strcat( s, t );
 	}
-	trap_SetConfigstring( CS_ALLIED_MAPS_XP, s );
+
+	/* Nico, removed skills
+	trap_SetConfigstring( CS_ALLIED_MAPS_XP, s );*/
 }
 
 /*
@@ -2054,7 +2063,9 @@ int QDECL SortRanks( const void *a, const void *b ) {
 			 < cb->ps.persistant[PERS_SCORE] ) {
 			return 1;
 		}
-	} else {
+	}
+	/* Nico, removed skills
+	else {
 		int i, totalXP[2];
 
 		for ( totalXP[0] = totalXP[1] = 0, i = 0; i < SK_NUM_SKILLS; i++ ) {
@@ -2069,7 +2080,7 @@ int QDECL SortRanks( const void *a, const void *b ) {
 		if ( totalXP[0] < totalXP[1] ) {
 			return 1;
 		}
-	}
+	}*/
 	return 0;
 }
 
@@ -2613,7 +2624,9 @@ void LogExit( const char *string ) {
 	else if ( g_gametype.integer == GT_WOLF_CAMPAIGN ) {
 		char cs[MAX_STRING_CHARS];
 		int winner;
-		int highestskillpoints, highestskillpointsclient, j, teamNum;
+
+		/* Nico, removed skills
+		int highestskillpoints, highestskillpointsclient, j, teamNum;*/
 
 		trap_GetConfigstring( CS_MULTI_MAPWINNER, cs, sizeof( cs ) );
 		winner = atoi( Info_ValueForKey( cs, "winner" ) );
@@ -2635,6 +2648,7 @@ void LogExit( const char *string ) {
 		bani_storemapxp();
 
 		// award medals
+		/* Nico, removed skills
 		for ( teamNum = TEAM_AXIS; teamNum <= TEAM_ALLIES; teamNum++ ) {
 			for ( i = 0; i < SK_NUM_SKILLS; i++ ) {
 				highestskillpoints = 0;
@@ -2671,7 +2685,7 @@ void LogExit( const char *string ) {
 					}
 				}
 			}
-		}
+		}*/
 	} else if ( g_gametype.integer == GT_WOLF_LMS ) {
 		int winner;
 		int roundLimit = g_lms_roundlimit.integer < 3 ? 3 : g_lms_roundlimit.integer;

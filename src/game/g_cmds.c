@@ -115,11 +115,14 @@ void G_SendScore( gentity_t *ent ) {
 				Com_sprintf( entry, sizeof( entry ), " %i %i %i %i %i %i", level.sortedClients[i], cl->ps.persistant[PERS_SCORE], ping,
 							 ( level.time - cl->pers.enterTime ) / 60000, g_entities[level.sortedClients[i]].s.powerups, playerClass );
 			} else {
+
+				/* Nico, removed skills
 				int j, totalXP;
 
 				for ( totalXP = 0, j = 0; j < SK_NUM_SKILLS; j++ ) {
 					totalXP += cl->sess.skillpoints[j];
-				}
+				}*/
+				int totalXP = 0;
 
 				/* Nico, removed respawnLeft
 				Com_sprintf( entry, sizeof( entry ), " %i %i %i %i %i %i %i", level.sortedClients[i], totalXP, ping,

@@ -2970,8 +2970,8 @@ qboolean BG_AddMagicAmmo( playerState_t *ps, int *skill, int teamNum, int numOfC
 	}
 
 	if ( COM_BitCheck( ps->weapons, WP_MEDIC_SYRINGE ) ) {
-		/* Nico, removed skills
-		i = skill[ SK_FIRST_AID ] >= 2 ? 12 : 10;*/
+		// Nico, removed skills
+		// i = skill[ SK_FIRST_AID ] >= 2 ? 12 : 10;
 		i = 10;
 
 		clip = BG_FindClipForWeapon( WP_MEDIC_SYRINGE );
@@ -3173,7 +3173,6 @@ qboolean    BG_CanItemBeGrabbed( const entityState_t *ent, const playerState_t *
 			// compiler, to ensure that).
 			return BG_AddMagicAmmo( (playerState_t *)ps, skill, teamNum, 0 );    // Arnout: had to cast const away
 		}
-
 		return qtrue;
 
 	case IT_AMMO:

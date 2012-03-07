@@ -304,7 +304,10 @@ Add_Ammo
 int Add_Ammo( gentity_t *ent, int weapon, int count, qboolean fillClip ) {
 	int ammoweap = BG_FindAmmoForWeapon( weapon );
 	int originalCount;
-	int maxammo = BG_MaxAmmoForWeapon( ammoweap, ent->client->sess.skill );
+
+	/* Nico, removed skills
+	int maxammo = BG_MaxAmmoForWeapon( ammoweap, ent->client->sess.skill );*/
+	int maxammo = BG_MaxAmmoForWeapon( ammoweap, 0 );
 
 	originalCount = ent->client->ps.ammo[ammoweap];
 
@@ -375,9 +378,10 @@ for any two-handed weapon
 - returns whether any ammo was actually added
 =================================================================
 */
+/* Nico, removed skills
 qboolean AddMagicAmmo( gentity_t *receiver, int numOfClips ) {
 	return BG_AddMagicAmmo( &receiver->client->ps, receiver->client->sess.skill, receiver->client->sess.sessionTeam, numOfClips );
-}
+}*/
 
 //======================================================================
 
@@ -389,14 +393,15 @@ weapon_t G_GetPrimaryWeaponForClient( gclient_t *client ) {
 		return WP_NONE;
 	}
 
-	if ( client->sess.skill[SK_HEAVY_WEAPONS] < 4 ) {
+	/* Nico, removed skills
+	if ( client->sess.skill[SK_HEAVY_WEAPONS] < 4 ) {*/
 		if ( COM_BitCheck( client->ps.weapons, WP_THOMPSON ) ) {
 			return WP_THOMPSON;
 		}
 		if ( COM_BitCheck( client->ps.weapons, WP_MP40 ) ) {
 			return WP_MP40;
 		}
-	}
+	// }
 
 	classInfo = &bg_allies_playerclasses[client->sess.playerType];
 	for ( i = 0; i < MAX_WEAPS_PER_CLASS; i++ ) {
@@ -516,9 +521,10 @@ qboolean G_CanPickupWeapon( weapon_t weapon, gentity_t* ent ) {
 		}
 	}
 
+	/* Nico, removed skills
 	if ( ent->client->sess.skill[SK_HEAVY_WEAPONS] >= 4 && ( weapon == WP_THOMPSON || weapon == WP_MP40 ) ) {
 		return qfalse;
-	}
+	}*/
 
 	return BG_WeaponIsPrimaryForClassAndTeam( ent->client->sess.playerType, ent->client->sess.sessionTeam, weapon );
 }
@@ -529,7 +535,9 @@ int Pickup_Weapon( gentity_t *ent, gentity_t *other ) {
 
 	// JPW NERVE -- magic ammo for any two-handed weapon
 	if ( ent->item->giTag == WP_AMMO ) {
-		AddMagicAmmo( other, ent->count );
+
+		/* Nico, removed skills
+		AddMagicAmmo( other, ent->count );*/
 
 		// if LT isn't giving ammo to self or another LT or the enemy, give him some props
 		if ( other->client->ps.stats[STAT_PLAYER_CLASS] != PC_FIELDOPS ) {
@@ -580,8 +588,11 @@ int Pickup_Weapon( gentity_t *ent, gentity_t *other ) {
 			weapon_t primaryWeapon = G_GetPrimaryWeaponForClient( other->client );
 
 			// rain - added parens around ambiguous &&
+
+			/* Nico, removed skills
 			if ( primaryWeapon ||
-				 ( other->client->sess.playerType == PC_SOLDIER && other->client->sess.skill[SK_HEAVY_WEAPONS] >= 4 ) ) {
+				 ( other->client->sess.playerType == PC_SOLDIER && other->client->sess.skill[SK_HEAVY_WEAPONS] >= 4 ) ) {*/
+			if ( primaryWeapon ) {
 
 				if ( primaryWeapon ) {
 					// drop our primary weapon
@@ -771,9 +782,10 @@ void Touch_Item( gentity_t *ent, gentity_t *other, trace_t *trace ) {
 	}
 
 	// the same pickup rules are used for client side and server side
+	/* Nico, removed skills
 	if ( !BG_CanItemBeGrabbed( &ent->s, &other->client->ps, other->client->sess.skill, other->client->sess.sessionTeam ) ) {
 		return;
-	}
+	}*/
 
 	if ( g_gamestate.integer == GS_PLAYING ) {
 		G_LogPrintf( "Item: %i %s\n", other->s.number, ent->item->classname );

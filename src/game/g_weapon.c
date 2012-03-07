@@ -179,9 +179,10 @@ void Weapon_Knife( gentity_t *ent ) {
 			mod = MOD_KNIFE;
 
 			// rain - only do this if they have a positive health
+			/* Nico, removed skills
 			if ( traceEnt->health > 0 && ent->client->sess.skill[SK_MILITARY_INTELLIGENCE_AND_SCOPED_WEAPONS] >= 4 ) {
 				damage = traceEnt->health;
-			}
+			}*/
 		}
 	}
 
@@ -223,11 +224,12 @@ void Weapon_Medic( gentity_t *ent ) {
 		ent->client->ps.classWeaponTime = level.time - level.medicChargeTime[ent->client->sess.sessionTeam - 1];
 	}
 
+	/* Nico, removed skills
 	if ( ent->client->sess.skill[SK_FIRST_AID] >= 2 ) {
 		ent->client->ps.classWeaponTime += level.medicChargeTime[ent->client->sess.sessionTeam - 1] * 0.15;
-	} else {
+	} else {*/
 		ent->client->ps.classWeaponTime += level.medicChargeTime[ent->client->sess.sessionTeam - 1] * 0.25;
-	}
+	// }
 
 	item = BG_FindItemForClassName( "item_health" );
 	VectorCopy( ent->client->ps.viewangles, angles );
@@ -384,13 +386,17 @@ void Weapon_MagicAmmo( gentity_t *ent ) {
 		ent->client->ps.classWeaponTime = level.time - level.lieutenantChargeTime[ent->client->sess.sessionTeam - 1];
 	}
 
+	/* Nico, removed skills
 	if ( ent->client->sess.skill[SK_SIGNALS] >= 1 ) {
 		ent->client->ps.classWeaponTime += level.lieutenantChargeTime[ent->client->sess.sessionTeam - 1] * 0.15;
-	} else {
+	} else {*/
 		ent->client->ps.classWeaponTime += level.lieutenantChargeTime[ent->client->sess.sessionTeam - 1] * 0.25;
-	}
+	// }
 
-	item = BG_FindItem( ent->client->sess.skill[SK_SIGNALS] >= 1 ? "Mega Ammo Pack" : "Ammo Pack" );
+	/* Nico, removed skills
+	item = BG_FindItem( ent->client->sess.skill[SK_SIGNALS] >= 1 ? "Mega Ammo Pack" : "Ammo Pack" );*/
+	item = BG_FindItem( "Ammo Pack" );
+
 	VectorCopy( ent->client->ps.viewangles, angles );
 
 	// clamp pitch
@@ -431,17 +437,17 @@ void Weapon_MagicAmmo( gentity_t *ent ) {
 	ent2 = LaunchItem( item, tosspos, velocity, ent->s.number );
 	ent2->think = MagicSink;
 	ent2->nextthink = level.time + 30000;
-//	ent2->timestamp = level.time + 31200;
 
 	ent2->parent = ent;
 
+	/* Nico, removed skills
 	if ( ent->client->sess.skill[SK_SIGNALS] >= 1 ) {
 		ent2->count = 2;
 		ent2->s.density = 2;
-	} else {
+	} else {*/
 		ent2->count = 1;
 		ent2->s.density = 1;
-	}
+	// }
 }
 // jpw
 
@@ -467,11 +473,14 @@ qboolean ReviveEntity( gentity_t *ent, gentity_t *traceEnt ) {
 	// copy some stuff out that we'll wanna restore
 	VectorCopy( traceEnt->client->ps.origin, org );
 	headshot = traceEnt->client->ps.eFlags & EF_HEADSHOT;
+
+	/* Nico, removed skills
 	if ( ent->client->sess.skill[SK_FIRST_AID] >= 3 ) {
 		healamt = traceEnt->client->ps.stats[STAT_MAX_HEALTH];
-	} else {
+	} else {*/
 		healamt = traceEnt->client->ps.stats[STAT_MAX_HEALTH] * 0.5;
-	}
+	// }
+
 	oldweapon = traceEnt->client->ps.weapon;
 	oldweaponstate = traceEnt->client->ps.weaponstate;
 
@@ -1507,11 +1516,12 @@ void Weapon_Engineer( gentity_t *ent ) {
 			ent->client->ps.classWeaponTime = level.time - level.engineerChargeTime[ent->client->sess.sessionTeam - 1];
 		}
 
+		/* Nico, removed skills
 		if ( ent->client->sess.skill[SK_EXPLOSIVES_AND_CONSTRUCTION] >= 3 ) {
 			ent->client->ps.classWeaponTime += .66f * 150;
-		} else {
+		} else {*/
 			ent->client->ps.classWeaponTime += 150;
-		}
+		// }
 
 		if ( ent->client->ps.classWeaponTime > level.time ) {
 			ent->client->ps.classWeaponTime = level.time;
@@ -1579,11 +1589,13 @@ void Weapon_Engineer( gentity_t *ent ) {
 				Add_Ammo( ent, WP_LANDMINE, 1, qfalse );
 
 				// rain - #202 - give back the correct charge amount
+				/* Nico, removed skills
 				if ( ent->client->sess.skill[SK_EXPLOSIVES_AND_CONSTRUCTION] >= 3 ) {
 					ent->client->ps.classWeaponTime -= .33f * level.engineerChargeTime[ent->client->sess.sessionTeam - 1];
-				} else {
+				} else {*/
 					ent->client->ps.classWeaponTime -= .5f * level.engineerChargeTime[ent->client->sess.sessionTeam - 1];
-				}
+				// }
+
 				ent->client->sess.aWeaponStats[WS_LANDMINE].atts--;
 				return;
 //bani
@@ -1602,11 +1614,12 @@ void Weapon_Engineer( gentity_t *ent ) {
 
 					Add_Ammo( ent, WP_LANDMINE, 1, qfalse );
 					// rain - #202 - give back the correct charge amount
+					/* Nico, removed skills
 					if ( ent->client->sess.skill[SK_EXPLOSIVES_AND_CONSTRUCTION] >= 3 ) {
 						ent->client->ps.classWeaponTime -= .33f * level.engineerChargeTime[ent->client->sess.sessionTeam - 1];
-					} else {
+					} else {*/
 						ent->client->ps.classWeaponTime -= .5f * level.engineerChargeTime[ent->client->sess.sessionTeam - 1];
-					}
+					// }
 
 					ent->client->sess.aWeaponStats[WS_LANDMINE].atts--;
 					return;
@@ -1626,11 +1639,12 @@ void Weapon_Engineer( gentity_t *ent ) {
 					G_PrintClientSpammyCenterPrint( ent - g_entities, "Arming landmine..." );
 
 					// Give health until it is full, don't continue
+					/* Nico, removed skills
 					if ( ent->client->sess.skill[SK_EXPLOSIVES_AND_CONSTRUCTION] >= 2 ) {
 						traceEnt->health += 24;
-					} else {
+					} else {*/
 						traceEnt->health += 12;
-					}
+					// }
 
 					if ( traceEnt->health >= 250 ) {
 						//traceEnt->health = 255;
@@ -1661,11 +1675,12 @@ evilbanigoto:
 						return;
 					}
 
+					/* Nico, removed skills
 					if ( ent->client->sess.skill[SK_EXPLOSIVES_AND_CONSTRUCTION] >= 2 ) {
 						traceEnt->health += 6;
-					} else {
+					} else {*/
 						traceEnt->health += 3;
-					}
+					// }
 
 					G_PrintClientSpammyCenterPrint( ent - g_entities, "Defusing landmine" );
 
@@ -1770,11 +1785,12 @@ evilbanigoto:
 				G_PrintClientSpammyCenterPrint( ent - g_entities, "Arming dynamite..." );
 
 				// Give health until it is full, don't continue
+				/* Nico, removed skills
 				if ( ent->client->sess.skill[SK_EXPLOSIVES_AND_CONSTRUCTION] >= 2 ) {
 					traceEnt->health += 14;
-				} else {
+				} else {*/
 					traceEnt->health += 7;
-				}
+				// }
 
 				{
 					int entityList[MAX_GENTITIES];
@@ -2026,11 +2042,12 @@ evilbanigoto:
 				}
 				dynamiteDropTeam = traceEnt->s.teamNum; // set this here since we wack traceent later but want teamnum for scoring
 
+				/* Nico, removed skills
 				if ( ent->client->sess.skill[SK_EXPLOSIVES_AND_CONSTRUCTION] >= 2 ) {
 					traceEnt->health += 6;
-				} else {
+				} else {*/
 					traceEnt->health += 3;
-				}
+				// }
 
 				G_PrintClientSpammyCenterPrint( ent - g_entities, "Defusing dynamite..." );
 
@@ -2632,10 +2649,6 @@ void Weapon_Artillery( gentity_t *ent ) {
 
 			G_GlobalClientEvent( EV_ARTYMESSAGE, 0, ent - g_entities );
 
-/*			te = G_TempEntity( ent->s.pos.trBase, EV_GLOBAL_CLIENT_SOUND );
-			te->s.eventParm = G_SoundIndex( "axis_hq_airstrike_denied" );
-			te->s.teamNum = ent-g_entities;*/
-
 			return;
 		}
 	} else {
@@ -2644,10 +2657,6 @@ void Weapon_Artillery( gentity_t *ent ) {
 			ent->active = qfalse;
 
 			G_GlobalClientEvent( EV_ARTYMESSAGE, 0, ent - g_entities );
-
-/*			te = G_TempEntity( ent->s.pos.trBase, EV_GLOBAL_CLIENT_SOUND );
-			te->s.eventParm = G_SoundIndex( "allies_hq_airstrike_denied" );
-			te->s.teamNum = ent-g_entities;*/
 
 			return;
 		}
@@ -2674,16 +2683,6 @@ void Weapon_Artillery( gentity_t *ent ) {
 		G_SayTo( ent, ent, 2, COLOR_YELLOW, "Fire Mission: ", "Aborting, can't see target.", qtrue );
 
 		G_GlobalClientEvent( EV_ARTYMESSAGE, 1, ent - g_entities );
-
-/*		te = G_TempEntity( ent->s.pos.trBase, EV_GLOBAL_CLIENT_SOUND );
-		if ( ent->client->sess.sessionTeam == TEAM_ALLIES ) {
-			te->s.eventParm = G_SoundIndex( "allies_hq_ffe_abort" );
-		} else {
-			te->s.eventParm = G_SoundIndex( "axis_hq_ffe_abort" );
-		}
-		te->s.teamNum = ent->s.clientNum;*/
-
-//		te->s.effect1Time = 1;	// don't buffer
 		return;
 	}
 
@@ -2693,28 +2692,16 @@ void Weapon_Artillery( gentity_t *ent ) {
 
 	G_GlobalClientEvent( EV_ARTYMESSAGE, 2, ent - g_entities );
 
-/*	te = G_TempEntity( ent->s.pos.trBase, EV_GLOBAL_CLIENT_SOUND );
-	if ( ent->client->sess.sessionTeam == TEAM_ALLIES ) {
-		te->s.eventParm = G_SoundIndex( "allies_hq_ffe" );
-	} else {
-		te->s.eventParm = G_SoundIndex( "axis_hq_ffe" );
-	}
-	te->s.teamNum = ent->s.clientNum;*/
-
-//	te->s.effect1Time = 1;	// don't buffer
-
 	VectorCopy( trace.endpos, bomboffset );
 	traceheight = bomboffset[2];
 	bottomtraceheight = traceheight - 8192;
 
-
-// "spotter" round (i == 0)
-// i == 1->4 is regular explosives
+	/* Nico, removed skills
 	if ( ent->client->sess.skill[SK_SIGNALS] >= 3 ) {
 		count = 9;
-	} else {
+	} else {*/
 		count = 5;
-	}
+	// }
 
 	for ( i = 0; i < count; i++ ) {
 		bomb                = G_Spawn();
@@ -2801,15 +2788,16 @@ void Weapon_Artillery( gentity_t *ent ) {
 		VectorCopy( bomb->s.pos.trBase,bomb2->r.currentOrigin );
 	}
 
+	/* Nico, removed skills
 	if ( ent->client->sess.skill[SK_SIGNALS] >= 2 ) {
 		if ( level.time - ent->client->ps.classWeaponTime > level.lieutenantChargeTime[ent->client->sess.sessionTeam - 1] ) {
 			ent->client->ps.classWeaponTime = level.time - level.lieutenantChargeTime[ent->client->sess.sessionTeam - 1];
 		}
 
 		ent->client->ps.classWeaponTime += 0.66f * level.lieutenantChargeTime[ent->client->sess.sessionTeam - 1];
-	} else {
+	} else {*/
 		ent->client->ps.classWeaponTime = level.time;
-	}
+	// }
 
 	// OSP -- weapon stats
 #ifndef DEBUG_STATS
@@ -3181,9 +3169,12 @@ void Bullet_Fire( gentity_t *ent, float spread, int damage, qboolean distance_fa
 	case WP_STEN:
 	case WP_SILENCER:
 	case WP_SILENCED_COLT:
+
+		/* Nico, removed skills
 		if ( ent->client->sess.skill[SK_LIGHT_WEAPONS] >= 4 ) {
 			spread *= .65f;
-		}
+		}*/
+
 		break;
 	}
 
@@ -3580,15 +3571,17 @@ gentity_t *weapon_grenadelauncher_fire( gentity_t *ent, int grenType ) {
 	// JPW NERVE
 	if ( grenType == WP_SMOKE_MARKER ) {
 		m->s.teamNum = ent->client->sess.sessionTeam;   // store team so we can generate red or blue smoke
+
+		/* Nico, removed skills
 		if ( ent->client->sess.skill[SK_SIGNALS] >= 3 ) {
 			m->count = 2;
 			m->nextthink = level.time + 3500;
 			m->think = weapon_checkAirStrikeThink2;
-		} else {
+		} else {*/
 			m->count = 1;
 			m->nextthink = level.time + 2500;
 			m->think = weapon_checkAirStrikeThink1;
-		}
+		// }
 	}
 	// jpw
 
@@ -4003,11 +3996,12 @@ void FireWeapon( gentity_t *ent ) {
 			ent->client->ps.classWeaponTime = level.time - level.lieutenantChargeTime[ent->client->sess.sessionTeam - 1];
 		}
 
+		/* Nico, removed skills
 		if ( ent->client->sess.skill[SK_SIGNALS] >= 2 ) {
 			ent->client->ps.classWeaponTime += .66f * level.lieutenantChargeTime[ent->client->sess.sessionTeam - 1];
-		} else {
+		} else {*/
 			ent->client->ps.classWeaponTime = level.time;
-		}
+		// }
 		weapon_grenadelauncher_fire( ent, WP_SMOKE_MARKER );
 		break;
 		// -NERVE - SMF
@@ -4111,11 +4105,12 @@ void FireWeapon( gentity_t *ent ) {
 			ent->client->ps.classWeaponTime = level.time - level.soldierChargeTime[ent->client->sess.sessionTeam - 1];
 		}
 
+		/* Nico, removed skills
 		if ( ent->client->sess.skill[SK_HEAVY_WEAPONS] >= 1 ) {
 			ent->client->ps.classWeaponTime += .66f * level.soldierChargeTime[ent->client->sess.sessionTeam - 1];
-		} else {
+		} else {*/
 			ent->client->ps.classWeaponTime = level.time;
-		}
+		// }
 
 		Weapon_Panzerfaust_Fire( ent );
 		if ( ent->client ) {
@@ -4138,11 +4133,12 @@ void FireWeapon( gentity_t *ent ) {
 			ent->client->ps.classWeaponTime = level.time - level.soldierChargeTime[ent->client->sess.sessionTeam - 1];
 		}
 
+		/* Nico, removed skills
 		if ( ent->client->sess.skill[SK_HEAVY_WEAPONS] >= 1 ) {
 			ent->client->ps.classWeaponTime += .33f * level.soldierChargeTime[ent->client->sess.sessionTeam - 1];
-		} else {
+		} else {*/
 			ent->client->ps.classWeaponTime += .5f * level.soldierChargeTime[ent->client->sess.sessionTeam - 1];
-		}
+		// }
 		weapon_mortar_fire( ent, ent->s.weapon );
 		break;
 	case WP_GRENADE_LAUNCHER:
@@ -4156,11 +4152,12 @@ void FireWeapon( gentity_t *ent ) {
 				ent->client->ps.classWeaponTime = level.time - level.covertopsChargeTime[ent->client->sess.sessionTeam - 1];
 			}
 
+			/* Nico, removed skills
 			if ( ent->client->sess.skill[SK_MILITARY_INTELLIGENCE_AND_SCOPED_WEAPONS] >= 2 ) {
 				ent->client->ps.classWeaponTime += .66f * level.covertopsChargeTime[ent->client->sess.sessionTeam - 1];
-			} else {
+			} else {*/
 				ent->client->ps.classWeaponTime = level.time;
-			}
+			// }
 		}
 
 		if ( ent->s.weapon == WP_LANDMINE ) {
@@ -4168,13 +4165,14 @@ void FireWeapon( gentity_t *ent ) {
 				ent->client->ps.classWeaponTime = level.time - level.engineerChargeTime[ent->client->sess.sessionTeam - 1];
 			}
 
+			/* Nico, removed skills
 			if ( ent->client->sess.skill[SK_EXPLOSIVES_AND_CONSTRUCTION] >= 3 ) {
 				// rain - bug #202 - use 33%, not 66%, when upgraded.
 				// do not penalize the happy fun engineer.
 				ent->client->ps.classWeaponTime += .33f * level.engineerChargeTime[ent->client->sess.sessionTeam - 1];
-			} else {
+			} else {*/
 				ent->client->ps.classWeaponTime += .5f * level.engineerChargeTime[ent->client->sess.sessionTeam - 1];
-			}
+			// }
 		}
 
 		if ( ent->s.weapon == WP_DYNAMITE ) {
@@ -4182,11 +4180,12 @@ void FireWeapon( gentity_t *ent ) {
 				ent->client->ps.classWeaponTime = level.time - level.engineerChargeTime[ent->client->sess.sessionTeam - 1];
 			}
 
+			/* Nico, removed skills
 			if ( ent->client->sess.skill[SK_EXPLOSIVES_AND_CONSTRUCTION] >= 3 ) {
 				ent->client->ps.classWeaponTime += .66f * level.engineerChargeTime[ent->client->sess.sessionTeam - 1];
-			} else {
+			} else {*/
 				ent->client->ps.classWeaponTime = level.time;
-			}
+			// }
 		}
 		weapon_grenadelauncher_fire( ent, ent->s.weapon );
 		break;

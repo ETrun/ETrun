@@ -1091,32 +1091,6 @@ void G_Damage( gentity_t *targ, gentity_t *inflictor, gentity_t *attacker,  vec3
 
 	// Arnout: combatstate
 	if ( targ->client && attacker && attacker->client && attacker != targ ) {
-		/*vec_t dist = -1.f;
-
-		if( targ->client->combatState < COMBATSTATE_HOT ) {
-			vec3_t shotvec;
-
-			VectorSubtract( targ->r.currentOrigin, attacker->r.currentOrigin, shotvec );
-			dist = VectorLengthSquared( shotvec );
-
-			if( dist < Square(1500.f) && targ->client->combatState == COMBATSTATE_WARM )
-				targ->client->combatState = COMBATSTATE_HOT;
-		}
-
-		if( attacker->client->combatState < COMBATSTATE_HOT ) {
-			if( dist < 0.f ) {
-				vec3_t shotvec;
-
-				VectorSubtract( targ->r.currentOrigin, attacker->r.currentOrigin, shotvec );
-				dist = VectorLengthSquared( shotvec );
-			}
-
-			if( dist > Square(1500.f) )
-				attacker->client->combatState = COMBATSTATE_WARM;
-			else if( attacker->client->combatState == COMBATSTATE_WARM )
-				attacker->client->combatState = COMBATSTATE_HOT;
-		}*/
-
 		if ( g_gamestate.integer == GS_PLAYING ) {
 			if ( !OnSameTeam( attacker, targ ) ) {
 				targ->client->combatState |= ( 1 << COMBATSTATE_DAMAGERECEIVED );
@@ -1320,6 +1294,7 @@ void G_Damage( gentity_t *targ, gentity_t *inflictor, gentity_t *attacker,  vec3
 	}*/
 
 	// save some from flak jacket
+	/* Nico, removed skills
 	if ( targ->client && targ->client->sess.skill[SK_EXPLOSIVES_AND_CONSTRUCTION] >= 4 && targ->client->sess.playerType == PC_ENGINEER ) {
 		if ( mod == MOD_GRENADE ||
 			 mod == MOD_GRENADE_LAUNCHER ||
@@ -1340,7 +1315,7 @@ void G_Damage( gentity_t *targ, gentity_t *inflictor, gentity_t *attacker,  vec3
 			 mod == MOD_MAPMORTAR ) {
 			take -= take * .5f;
 		}
-	}
+	}*/
 
 	headShot = IsHeadShot( targ, dir, point, mod );
 	if ( headShot ) {

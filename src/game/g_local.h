@@ -580,12 +580,20 @@ typedef struct {
 	int latchPlayerWeapon2;         // Gordon: secondary weapon
 	int ignoreClients[MAX_CLIENTS / ( sizeof( int ) * 8 )];
 	qboolean muted;
+
+	/* Nico, removed skills
 	float skillpoints[SK_NUM_SKILLS];           // Arnout: skillpoints
-	float startskillpoints[SK_NUM_SKILLS];      // Gordon: initial skillpoints at map beginning
+	float startskillpoints[SK_NUM_SKILLS];      // Gordon: initial skillpoints at map beginning*/
+
 	float startxptotal;
-	int skill[SK_NUM_SKILLS];                   // Arnout: skill
+
+	/* Nico, removed skills
+	int skill[SK_NUM_SKILLS];                   // Arnout: skill*/
+
 	int rank;                                   // Arnout: rank
-	int medals[SK_NUM_SKILLS];                  // Arnout: medals
+
+	/* Nico, removed skills
+	int medals[SK_NUM_SKILLS];                  // Arnout: medals*/
 
 	// OSP
 	int coach_team;
@@ -1094,7 +1102,8 @@ typedef struct {
 
 	int numActiveAirstrikes[2];
 
-	float teamXP[SK_NUM_SKILLS][2];
+	/* Nico, removed skills
+	float teamXP[SK_NUM_SKILLS][2];*/
 
 	commanderTeamChat_t commanderSounds[2][MAX_COMMANDER_TEAM_SOUNDS];
 	int commanderSoundInterval[2];
@@ -1171,7 +1180,10 @@ int ArmorIndex( gentity_t *ent );
 void Fill_Clip( playerState_t *ps, int weapon );
 int Add_Ammo( gentity_t *ent, int weapon, int count, qboolean fillClip );
 void Touch_Item( gentity_t *ent, gentity_t *other, trace_t *trace );
-qboolean AddMagicAmmo( gentity_t *receiver, int numOfClips );
+
+/* Nico, removed skills
+qboolean AddMagicAmmo( gentity_t *receiver, int numOfClips );*/
+
 weapon_t G_GetPrimaryWeaponForClient( gclient_t *client );
 void G_DropWeapon( gentity_t *ent, weapon_t weapon );
 

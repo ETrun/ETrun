@@ -929,6 +929,7 @@ void G_UpdateTeamMapData( void ) {
 			continue;
 		}
 
+		/* Nico, removed skills
 		if ( ent->client->sess.playerType == PC_FIELDOPS ) {
 			if ( ent->client->sess.skill[SK_SIGNALS] >= 4 && ent->health > 0 ) {
 				vec3_t pos[3];
@@ -970,7 +971,8 @@ void G_UpdateTeamMapData( void ) {
 					}
 				}
 			}
-		} else if ( ent->client->sess.playerType == PC_COVERTOPS ) {
+		} else */
+		if ( ent->client->sess.playerType == PC_COVERTOPS ) {
 			if ( ent->health > 0 ) {
 				f1 = ent->client->sess.sessionTeam == TEAM_ALLIES ? qtrue : qfalse;
 				f2 = ent->client->sess.sessionTeam == TEAM_AXIS ?   qtrue : qfalse;

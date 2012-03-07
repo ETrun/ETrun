@@ -210,17 +210,21 @@ void G_SetClientSound( gentity_t *ent ) {
 ClientNeedsAmmo
 ==============
 */
+/* Nico, removed skills
 qboolean ClientNeedsAmmo( int client ) {
 	return AddMagicAmmo( &g_entities[client], 0 ) ? qtrue : qfalse;
-}
+}*/
 
 // Does ent have enough "energy" to call artillery?
 qboolean ReadyToCallArtillery( gentity_t* ent ) {
+
+	/* Nico, removed skills
 	if ( ent->client->sess.skill[SK_SIGNALS] >= 2 ) {
 		if ( level.time - ent->client->ps.classWeaponTime <= ( level.lieutenantChargeTime[ent->client->sess.sessionTeam - 1] * 0.66f ) ) {
 			return qfalse;
 		}
-	} else if ( level.time - ent->client->ps.classWeaponTime <= level.lieutenantChargeTime[ent->client->sess.sessionTeam - 1] ) {
+	} else */
+	if ( level.time - ent->client->ps.classWeaponTime <= level.lieutenantChargeTime[ent->client->sess.sessionTeam - 1] ) {
 		return qfalse;
 	}
 
@@ -240,23 +244,18 @@ qboolean ReadyToConstruct( gentity_t *ent, gentity_t *constructible, qboolean up
 	if ( g_debugConstruct.integer ) {
 		weaponTime += 0.5f * ( (float)level.engineerChargeTime[ent->client->sess.sessionTeam - 1] / ( constructible->constructibleStats.duration / (float)FRAMETIME ) );
 	} else {
+
+		/* Nico, removed skills
 		if ( ent->client->sess.skill[SK_EXPLOSIVES_AND_CONSTRUCTION] >= 3 ) {
 			weaponTime += 0.66f * constructible->constructibleStats.chargebarreq * ( (float)level.engineerChargeTime[ent->client->sess.sessionTeam - 1] / ( constructible->constructibleStats.duration / (float)FRAMETIME ) );
 		}
-		//weaponTime += 0.66f*((float)level.engineerChargeTime[ent->client->sess.sessionTeam-1]/(constructible->wait/(float)FRAMETIME));
-		//weaponTime += 0.66f * 2.f * ((float)level.engineerChargeTime[ent->client->sess.sessionTeam-1]/(constructible->wait/(float)FRAMETIME));
-		else {
+		else {*/
 			weaponTime += constructible->constructibleStats.chargebarreq * ( (float)level.engineerChargeTime[ent->client->sess.sessionTeam - 1] / ( constructible->constructibleStats.duration / (float)FRAMETIME ) );
-		}
-		//weaponTime += 2.f * ((float)level.engineerChargeTime[ent->client->sess.sessionTeam-1]/(constructible->wait/(float)FRAMETIME));
+		// }
 	}
 
 	// if the time is in the future, we have NO energy left
 	if ( weaponTime > level.time ) {
-		// if we're supposed to update the state, reset the time to now
-//		if( updateState )
-//			ent->client->ps.classWeaponTime = level.time;
-
 		return qfalse;
 	}
 
@@ -438,7 +437,10 @@ void SpectatorThink( gentity_t *ent, usercmd_t *ucmd ) {
 		pm.pmext = &client->pmext;
 		pm.character = client->pers.character;
 		pm.cmd = *ucmd;
-		pm.skill = client->sess.skill;
+
+		/* Nico, removed skills
+		pm.skill = client->sess.skill;*/
+
 		pm.tracemask = MASK_PLAYERSOLID & ~CONTENTS_BODY;   // spectators can fly through bodies
 		pm.trace = trap_TraceCapsuleNoEnts;
 		pm.pointcontents = trap_PointContents;
@@ -965,7 +967,8 @@ void ClientThink_real( gentity_t *ent ) {
 	pm.medicChargeTime = level.medicChargeTime[client->sess.sessionTeam - 1];
 	// -NERVE - SMF
 
-	pm.skill = client->sess.skill;
+	/* Nico, removed skills
+	pm.skill = client->sess.skill;*/
 
 	client->pmext.airleft = ent->client->airOutTime - level.time;
 
@@ -1522,9 +1525,11 @@ void ClientEndFrame( gentity_t *ent ) {
 	}
 
 	ent->client->ps.stats[STAT_XP] = 0;
+
+	/* Nico, removed skills
 	for ( i = 0; i < SK_NUM_SKILLS; i++ ) {
 		ent->client->ps.stats[STAT_XP] += ent->client->sess.skillpoints[i];
-	}
+	}*/
 
 	// OSP - If we're paused, make sure other timers stay in sync
 	//		--> Any new things in ET we should worry about?
