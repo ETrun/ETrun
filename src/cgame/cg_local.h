@@ -2749,7 +2749,8 @@ int CG_GetLimboSelectedWeapon();
 qboolean CG_DrawMissionBriefing( void );
 void CG_MissionBriefingClick( int key );
 
-void CG_LoadRankIcons( void );
+/* Nico, removed rankicons
+void CG_LoadRankIcons( void );*/
 
 /* Nico, removed ws related command
 qboolean CG_DrawStatsRanksMedals( void );*/
@@ -3182,9 +3183,8 @@ void CG_MenuSetAnimation( playerInfo_t *pi, const char* legsAnim, const char* to
 #define CC_FILTER_CONSTRUCTIONS ( 1 << 5 )
 #define CC_FILTER_DESTRUCTIONS  ( 1 << 6 )
 #define CC_FILTER_OBJECTIVES    ( 1 << 7 )
-//#define CC_FILTER_WAYPOINTS		(1 << 7)
-//#define CC_FILTER_OBJECTIVES	(1 << 8)
 
+/* Nico, removed rankicons
 typedef struct {
 	qhandle_t shader;
 	const char *iconname;
@@ -3192,7 +3192,7 @@ typedef struct {
 	int height;
 } rankicon_t;
 
-extern rankicon_t rankicons[NUM_EXPERIENCE_LEVELS][2];
+extern rankicon_t rankicons[NUM_EXPERIENCE_LEVELS][2];*/
 
 #define TAB_LEFT_WIDTH 178
 #define TAB_LEFT_EDGE ( 640 - TAB_LEFT_WIDTH )

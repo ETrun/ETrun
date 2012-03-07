@@ -140,9 +140,6 @@
     <ClCompile Include="cg_spawn.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="cg_statsranksmedals.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="cg_syscalls.c">
       <Filter>Source Files</Filter>
     </ClCompile>

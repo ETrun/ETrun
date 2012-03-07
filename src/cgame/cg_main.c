@@ -1622,7 +1622,8 @@ static void CG_RegisterGraphics( void ) {
 
 	WM_RegisterWeaponTypeShaders();
 
-	CG_LoadRankIcons();
+	/* Nico, removed rankicons
+	CG_LoadRankIcons();*/
 
 	// Gordon: limbo menu setup
 	CG_LimboPanel_Init();

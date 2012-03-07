@@ -291,7 +291,8 @@ void CG_NewClientInfo( int clientNum ) {
 
 			CG_SoundPlaySoundScript( cgs.clientinfo[cg.clientNum].team == TEAM_ALLIES ? rankSoundNames_Allies[ newInfo.rank ] : rankSoundNames_Axis[ newInfo.rank ], NULL, -1, qtrue );
 
-			CG_AddPMItemBig( PM_RANK, va( "Promoted to rank %s!", cgs.clientinfo[ cg.clientNum ].team == TEAM_AXIS ? rankNames_Axis[newInfo.rank] : rankNames_Allies[newInfo.rank] ), rankicons[ newInfo.rank ][ 0 ].shader );
+			/* Nico, removed rankicons
+			CG_AddPMItemBig( PM_RANK, va( "Promoted to rank %s!", cgs.clientinfo[ cg.clientNum ].team == TEAM_AXIS ? rankNames_Axis[newInfo.rank] : rankNames_Allies[newInfo.rank] ), rankicons[ newInfo.rank ][ 0 ].shader );*/
 		}
 
 		/* Nico, removed skills
@@ -2080,7 +2081,9 @@ void CG_Player( centity_t *cent ) {
 					if ( ci->rank == 0 ) {
 						continue;
 					}
-					acc.customShader = rankicons[ ci->rank ][ 1 ].shader;
+
+					/* Nico, removed rankicons
+					acc.customShader = rankicons[ ci->rank ][ 1 ].shader;*/
 				}
 
 				CG_PositionEntityOnTag( &acc,   &head,  "tag_mouth", 0, NULL );

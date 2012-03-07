@@ -1624,7 +1624,10 @@ void CG_DrawPlayerHead( rectDef_t *rect, bg_character_t* character, bg_character
 			memset( &mrank, 0, sizeof( mrank ) );
 
 			mrank.hModel = character->accModels[ ACC_RANK ];
-			mrank.customShader = rankicons[ rank ][ 1 ].shader;
+
+			/* Nico, removed rankicons
+			mrank.customShader = rankicons[ rank ][ 1 ].shader;*/
+
 			mrank.renderfx = RF_NOSHADOW | RF_FORCENOLOD;       // no stencil shadows
 
 			CG_PositionEntityOnTag( &mrank, &head, "tag_mouth", 0, NULL );

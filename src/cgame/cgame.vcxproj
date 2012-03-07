@@ -193,7 +193,6 @@
     <ClCompile Include="cg_snapshot.c" />
     <ClCompile Include="cg_sound.c" />
     <ClCompile Include="cg_spawn.c" />
-    <ClCompile Include="cg_statsranksmedals.c" />
     <ClCompile Include="cg_syscalls.c" />
     <ClCompile Include="cg_trails.c" />
     <ClCompile Include="cg_view.c" />
