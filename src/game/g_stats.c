@@ -662,6 +662,7 @@ void G_DebugAddSkillPoints( gentity_t *ent, skillType_t skill, float points, con
 	}																			\
 	Q_strcat( buffer, 1024, va( ";%s; %i ", best ? best->pers.netname : "", best ? best->sess.sessionTeam : -1 ) )
 
+/* Nico, removed endgame
 void G_BuildEndgameStats( void ) {
 	char buffer[1024];
 	int i;
@@ -691,4 +692,4 @@ void G_BuildEndgameStats( void ) {
 	CHECKSTATTIME( ps.persistant[PERS_SCORE], pers.enterTime );
 
 	trap_SetConfigstring( CS_ENDGAME_STATS, buffer );
-}
+}*/

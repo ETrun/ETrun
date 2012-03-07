@@ -2716,7 +2716,8 @@ void LogExit( const char *string ) {
 		bani_storemapxp();
 	}
 
-	G_BuildEndgameStats();
+	/* Nico, removed endgame
+	G_BuildEndgameStats();*/
 }
 
 

@@ -911,7 +911,9 @@ void QDECL Com_Printf( const char *msg, ... ) _attribute( ( format( printf,1,2 )
 #define RELOAD_NEXTMAP          0x02
 #define RELOAD_NEXTMAP_WAITING  0x04
 #define RELOAD_FAILED           0x08
-#define RELOAD_ENDGAME          0x10
+
+/* Nico, removed endgame
+#define RELOAD_ENDGAME          0x10*/
 
 
 /*

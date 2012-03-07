@@ -1673,22 +1673,12 @@ typedef struct {
 	qhandle_t limboLight_on;
 	qhandle_t limboLight_on2;
 	qhandle_t limboLight_off;
-
 	qhandle_t limboClassButtons[NUM_PLAYER_CLASSES];
-	//qhandle_t		limboClassButtonBack;
-
 	qhandle_t limboClassButton2Back_on;
 	qhandle_t limboClassButton2Back_off;
 	qhandle_t limboClassButton2Wedge_on;
 	qhandle_t limboClassButton2Wedge_off;
 	qhandle_t limboClassButtons2[NUM_PLAYER_CLASSES];
-
-//	skill_back_on
-//	skill_back_off
-//	skill_4pieces
-//	skill_glass_top_layer
-//	skill_testicon
-
 	qhandle_t limboTeamButtonBack_on;
 	qhandle_t limboTeamButtonBack_off;
 	qhandle_t limboTeamButtonAllies;
@@ -1698,8 +1688,6 @@ typedef struct {
 	qhandle_t limboWeaponBlendThingy;
 	qhandle_t limboSkillsLW;
 	qhandle_t limboSkillsBS;
-	//qhandle_t		limboCursor_on;
-	//qhandle_t		limboCursor_off;
 	qhandle_t limboCounterBorder;
 	qhandle_t limboWeaponCard1;
 	qhandle_t limboWeaponCard2;
@@ -1812,7 +1800,8 @@ typedef struct oidInfo_s {
 	vec3_t origin;
 } oidInfo_t;
 
-#define NUM_ENDGAME_AWARDS 14
+/* Nico, removed endgame
+#define NUM_ENDGAME_AWARDS 14*/
 
 
 // The client game static (cgs) structure hold everything
@@ -2015,8 +2004,6 @@ typedef struct {
 
 	int loadingLatch;                 // ( 0 = nothing yet, 1 = latched )
 
-//	qboolean			playedLimboMusic;
-
 	int dbSortedClients[MAX_CLIENTS];
 	int dbSelectedClient;
 
@@ -2026,8 +2013,11 @@ typedef struct {
 	qboolean dbPlayerKillsDeathsRecieved;
 	qboolean dbWeaponStatsRecieved;
 	qboolean dbAwardsParsed;
+
+	/* Nico, removed endgame
 	char*               dbAwardNames[NUM_ENDGAME_AWARDS];
-	team_t dbAwardTeams[NUM_ENDGAME_AWARDS];
+	team_t dbAwardTeams[NUM_ENDGAME_AWARDS];*/
+
 	char dbAwardNamesBuffer[1024];
 	int dbLastRequestTime;
 	int dbLastScoreRequest;

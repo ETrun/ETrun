@@ -358,7 +358,9 @@ extern const unsigned int aReinfSeeds[MAX_REINFSEEDS];
 /* Nico, removed intermission
 #define CS_INTERMISSION_START_TIME      36*/
 
-#define CS_ENDGAME_STATS                37
+/* Nico, removed endgame
+#define CS_ENDGAME_STATS                37*/
+
 #define CS_CHARGETIMES                  38
 #define CS_FILTERCAMS                   39
 
