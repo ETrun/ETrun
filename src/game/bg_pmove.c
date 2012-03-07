@@ -1022,9 +1022,10 @@ static qboolean PM_CheckProne( void ) {
 PM_CheckDodge
 =============
 */
+/* Nico, removed because useless (always returning qfalse)
 static qboolean PM_CheckDodge( void ) {
 	return qfalse;
-}
+}*/
 
 //============================================================================
 
@@ -1281,16 +1282,13 @@ static void PM_WalkMove( void ) {
 		pm->ps->jumpTime = pm->cmd.serverTime;  // Arnout: NOTE : TEMP DEBUG
 
 		return;
-	} else /* if( !PM_CheckProne() )*/ {
+	}
+	/* Nico, removed because PM_CheckDodge is useless (always returning qfalse)
+	else {
 		if ( pm->waterlevel <= 1 && PM_CheckDodge() ) {
 			PM_AirMove();
 			return;
 		}
-	}
-
-	/*if( pm->waterlevel <= 1 && PM_CheckDodge () ) {
-		PM_AirMove();
-		return;
 	}*/
 
 	PM_Friction();
