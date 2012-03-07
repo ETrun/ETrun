@@ -42,7 +42,9 @@ If you have questions concerning this license or the applicable additional terms
 #define BODY_QUEUE_SIZE     8
 
 #define EVENT_VALID_MSEC    300
-#define CARNAGE_REWARD_TIME 3000
+
+/* Nico, removed rewards
+#define CARNAGE_REWARD_TIME 3000*/
 
 
 /* Nico, removed intermission
@@ -768,11 +770,6 @@ struct gclient_s {
 	vec3_t damage_from;             // origin for vector calculation
 	qboolean damage_fromWorld;      // if true, don't use the damage_from vector
 
-//	int			accurateCount;		// for "impressive" reward sound
-
-//	int			accuracy_shots;		// total number of shots
-//	int			accuracy_hits;		// total number of hits
-
 	//
 	int lastkilled_client;          // last client that this client killed
 	int lasthurt_client;            // last client that damaged this client
@@ -785,7 +782,9 @@ struct gclient_s {
 
 	int inactivityTime;             // kick players when time > this
 	qboolean inactivityWarning;     // qtrue if the five seoond warning has been given
-	int rewardTime;                 // clear the EF_AWARD_IMPRESSIVE, etc when time > this
+
+	/* Nico, removed rewards
+	int rewardTime;                 // clear the EF_AWARD_IMPRESSIVE, etc when time > this*/
 
 	int airOutTime;
 

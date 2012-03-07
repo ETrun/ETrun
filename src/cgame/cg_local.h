@@ -61,7 +61,9 @@ If you have questions concerning this license or the applicable additional terms
 #define ZOOM_TIME           150
 #define MUZZLE_FLASH_TIME   30
 #define SINK_TIME           1000        // time for fragments to sink into ground before going away
-#define REWARD_TIME         3000
+
+/* Nico, removed rewards
+#define REWARD_TIME         3000*/
 
 #define PRONE_TIME          500
 
@@ -702,7 +704,8 @@ typedef struct {
 	float damageX, damageY, damageValue;
 } viewDamage_t;
 
-#define MAX_REWARDSTACK     5
+/* Nico, removed rewards
+#define MAX_REWARDSTACK     5*/
 
 //======================================================================
 
@@ -957,11 +960,12 @@ typedef struct {
 	int voiceTime;
 
 	// reward tmedals
+	/* Nico, removed rewards
 	int rewardStack;
 	int rewardTime;
 	int rewardCount[MAX_REWARDSTACK];
 	qhandle_t rewardShader[MAX_REWARDSTACK];
-	qhandle_t rewardSound[MAX_REWARDSTACK];
+	qhandle_t rewardSound[MAX_REWARDSTACK];*/
 
 	// warmup countdown
 	/* Nico, removed warmup
