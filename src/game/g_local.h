@@ -598,8 +598,11 @@ typedef struct {
 
 	// OSP
 	int coach_team;
+
+	/* Nico, removed damage_given & damage_received
 	int damage_given;
-	int damage_received;
+	int damage_received;*/
+
 	int deaths;
 	int game_points;
 	int kills;

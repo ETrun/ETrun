@@ -215,9 +215,8 @@ void G_spawnPrintf( int print_type, int print_time, gentity_t *owner ) {
 
 // Records accuracy, damage, and kill/death stats.
 void G_addStats( gentity_t *targ, gentity_t *attacker, int dmg_ref, int mod ) {
-	int dmg, ref;
-
-
+	int dmg;// , ref; Nico, unused warning fix
+	
 	// Keep track of only active player-to-player interactions in a real game
 	if ( !targ || !targ->client ||
 		 g_gamestate.integer != GS_PLAYING ||
@@ -268,8 +267,11 @@ void G_addStats( gentity_t *targ, gentity_t *attacker, int dmg_ref, int mod ) {
 
 	// General player stats
 	if ( mod != MOD_SYRINGE ) {
+
+		/* Nico, removed damage_given & damage_received
 		attacker->client->sess.damage_given += dmg;
-		targ->client->sess.damage_received += dmg;
+		targ->client->sess.damage_received += dmg;*/
+
 		if ( targ->health <= 0 ) {
 			attacker->client->sess.kills++;
 			targ->client->sess.deaths++;
@@ -545,8 +547,11 @@ void G_printMatchInfo( gentity_t *ent ) {
 			tot_deaths += cl->sess.deaths;
 			tot_sui += cl->sess.suicides;
 			tot_tk += cl->sess.team_kills;
+
+			/* Nico, removed damage_given & damage_received
 			tot_dg += cl->sess.damage_given;
-			tot_dr += cl->sess.damage_received;
+			tot_dr += cl->sess.damage_received;*/
+
 			tot_td += cl->sess.team_damage;
 			tot_gp += cl->sess.game_points;
 
@@ -574,8 +579,11 @@ void G_printMatchInfo( gentity_t *ent ) {
 					ref,
 					eff,
 					cl->sess.game_points - ( cl->sess.kills * WOLF_FRAG_BONUS ),
+
+					/* Nico, removed damage_given & damage_received
 					cl->sess.damage_given,
-					cl->sess.damage_received,
+					cl->sess.damage_received,*/
+
 					cl->sess.team_damage,
 					cl->ps.persistant[PERS_SCORE] ) );
 		}
