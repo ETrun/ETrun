@@ -58,10 +58,8 @@ void AddScore( gentity_t *ent, int score ) {
 		return;
 	}
 
-	//ent->client->ps.persistant[PERS_SCORE] += score;
 	ent->client->sess.game_points += score;
 
-//	level.teamScores[ ent->client->ps.persistant[PERS_TEAM] ] += score;
 	CalculateRanks();
 }
 

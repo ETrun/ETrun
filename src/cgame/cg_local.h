@@ -520,10 +520,16 @@ typedef struct localEntity_s {
 
 typedef struct {
 	int client;
-	int score;
+
+	/* Nico, removed score
+	int score;*/
+
 	int ping;
 	int time;
-	int powerUps;
+
+	/* Nico, removed because unused
+	int powerUps;*/
+
 	int team;
 	int playerClass;                    // NERVE - SMF
 

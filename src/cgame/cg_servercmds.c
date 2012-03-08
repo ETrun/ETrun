@@ -67,7 +67,10 @@ static void CG_ParseScore( team_t team ) {
 		i = cg.numScores;
 
 		cg.scores[i].client = atoi(         CG_Argv( offset + 0 + ( j * 7 ) ) );
-		cg.scores[i].score = atoi(          CG_Argv( offset + 1 + ( j * 7 ) ) );
+
+		/* Nico, removed score
+		cg.scores[i].score = atoi(          CG_Argv( offset + 1 + ( j * 7 ) ) );*/
+
 		cg.scores[i].ping = atoi(           CG_Argv( offset + 2 + ( j * 7 ) ) );
 		cg.scores[i].time = atoi(           CG_Argv( offset + 3 + ( j * 7 ) ) );
 		powerups = atoi(                    CG_Argv( offset + 4 + ( j * 7 ) ) );
@@ -80,7 +83,9 @@ static void CG_ParseScore( team_t team ) {
 			cg.scores[i].client = 0;
 		}
 
-		cgs.clientinfo[ cg.scores[i].client ].score = cg.scores[i].score;
+		/* Nico, removed score
+		cgs.clientinfo[ cg.scores[i].client ].score = cg.scores[i].score;*/
+
 		cgs.clientinfo[ cg.scores[i].client ].powerups = powerups;
 
 		cg.scores[i].team = cgs.clientinfo[cg.scores[i].client].team;

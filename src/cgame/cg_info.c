@@ -435,7 +435,6 @@ void CG_GameStatsDraw() {
 		fontInfo_t *hFont2  = FONT_SUBHEADER;
 
 		vec4_t hdrColor     = COLOR_HDR;    // text
-//		vec4_t hdrColor2	= COLOR_HDR2;	// text
 
 		// Text settings
 		int tStyle          = ITEM_TEXTSTYLE_SHADOWED;

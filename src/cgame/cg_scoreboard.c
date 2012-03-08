@@ -42,15 +42,21 @@ WM_DrawObjectives
 */
 
 #define INFO_PLAYER_WIDTH       134
+
+/* Nico, removed score
 #define INFO_SCORE_WIDTH        56
-#define INFO_XP_WIDTH           36
+#define INFO_XP_WIDTH           36*/
+
 #define INFO_CLASS_WIDTH        50
 #define INFO_LATENCY_WIDTH      40
 #define INFO_LIVES_WIDTH        20
 #define INFO_TEAM_HEIGHT        24
 #define INFO_BORDER             2
 #define INFO_LINE_HEIGHT        30
-#define INFO_TOTAL_WIDTH        ( INFO_PLAYER_WIDTH + INFO_CLASS_WIDTH + INFO_SCORE_WIDTH + INFO_LATENCY_WIDTH )
+
+/* Nico, removed score
+#define INFO_TOTAL_WIDTH        ( INFO_PLAYER_WIDTH + INFO_CLASS_WIDTH + INFO_SCORE_WIDTH + INFO_LATENCY_WIDTH )*/
+#define INFO_TOTAL_WIDTH        ( INFO_PLAYER_WIDTH + INFO_CLASS_WIDTH + INFO_LATENCY_WIDTH )
 
 int WM_DrawObjectives( int x, int y, int width, float fade ) {
 	// const char *s, *str; Nico, unused warning fix
@@ -210,7 +216,10 @@ static void WM_DrawClientScore( int x, int y, score_t *score, float *color, floa
 
 		if ( ci->team == TEAM_SPECTATOR ) {
 			int width;
-			width = INFO_CLASS_WIDTH + INFO_SCORE_WIDTH + INFO_LATENCY_WIDTH;
+
+			/* Nico, removed score
+			width = INFO_CLASS_WIDTH + INFO_SCORE_WIDTH + INFO_LATENCY_WIDTH;*/
+			width = INFO_CLASS_WIDTH + INFO_LATENCY_WIDTH;
 
 			CG_FillRect( tempx, y + 1, width - INFO_BORDER, SMALLCHAR_HEIGHT - 1, hcolor );
 			tempx += width;
@@ -218,13 +227,14 @@ static void WM_DrawClientScore( int x, int y, score_t *score, float *color, floa
 			CG_FillRect( tempx, y + 1, INFO_CLASS_WIDTH - INFO_BORDER, SMALLCHAR_HEIGHT - 1, hcolor );
 			tempx += INFO_CLASS_WIDTH;
 
+			/* Nico, removed score
 			if ( cg_gameType.integer == GT_WOLF_LMS ) {
 				CG_FillRect( tempx, y + 1, INFO_SCORE_WIDTH - INFO_BORDER, SMALLCHAR_HEIGHT - 1, hcolor );
 				tempx += INFO_SCORE_WIDTH;
 			} else {
 				CG_FillRect( tempx, y + 1, INFO_XP_WIDTH - INFO_BORDER, SMALLCHAR_HEIGHT - 1, hcolor );
 				tempx += INFO_XP_WIDTH;
-			}
+			}*/
 
 			CG_FillRect( tempx, y + 1, INFO_LATENCY_WIDTH - INFO_BORDER, SMALLCHAR_HEIGHT - 1, hcolor );
 			tempx += INFO_LATENCY_WIDTH;
@@ -291,7 +301,9 @@ static void WM_DrawClientScore( int x, int y, score_t *score, float *color, floa
 		const char *s;
 		int w, totalwidth;
 
-		totalwidth = INFO_CLASS_WIDTH + INFO_SCORE_WIDTH + INFO_LATENCY_WIDTH - 8;
+		/* Nico, removed score
+		totalwidth = INFO_CLASS_WIDTH + INFO_SCORE_WIDTH + INFO_LATENCY_WIDTH - 8;*/
+		totalwidth = INFO_CLASS_WIDTH + INFO_LATENCY_WIDTH - 8;
 
 		s = CG_TranslateString( "^3SPECTATOR" );
 		w = CG_DrawStrlen( s ) * SMALLCHAR_WIDTH;
@@ -305,12 +317,13 @@ static void WM_DrawClientScore( int x, int y, score_t *score, float *color, floa
 	}
 	tempx += INFO_CLASS_WIDTH;
 
+	/* Nico, removed score
 	CG_DrawSmallString( tempx, y, va( "%3i", score->score ), fade );
 	if ( cg_gameType.integer == GT_WOLF_LMS ) {
 		tempx += INFO_SCORE_WIDTH;
 	} else {
 		tempx += INFO_XP_WIDTH;
-	}
+	}*/
 
 	CG_DrawSmallString( tempx, y, va( "%4i", score->ping ), fade );
 	tempx += INFO_LATENCY_WIDTH;
@@ -361,7 +374,10 @@ static void WM_DrawClientScore_Small( int x, int y, score_t *score, float *color
 
 		if ( ci->team == TEAM_SPECTATOR ) {
 			int width;
-			width = INFO_CLASS_WIDTH + INFO_SCORE_WIDTH + INFO_LATENCY_WIDTH;
+
+			/* Nico, removed score
+			width = INFO_CLASS_WIDTH + INFO_SCORE_WIDTH + INFO_LATENCY_WIDTH;*/
+			width = INFO_CLASS_WIDTH + INFO_LATENCY_WIDTH;
 
 			CG_FillRect( tempx, y + 1, width - INFO_BORDER, MINICHAR_HEIGHT - 1, hcolor );
 			tempx += width;
@@ -369,13 +385,14 @@ static void WM_DrawClientScore_Small( int x, int y, score_t *score, float *color
 			CG_FillRect( tempx, y + 1, INFO_CLASS_WIDTH - INFO_BORDER, MINICHAR_HEIGHT - 1, hcolor );
 			tempx += INFO_CLASS_WIDTH;
 
+			/* Nico, removed score
 			if ( cg_gameType.integer == GT_WOLF_LMS ) {
 				CG_FillRect( tempx, y + 1, INFO_SCORE_WIDTH - INFO_BORDER, MINICHAR_HEIGHT - 1, hcolor );
 				tempx += INFO_SCORE_WIDTH;
 			} else {
 				CG_FillRect( tempx, y + 1, INFO_XP_WIDTH - INFO_BORDER, MINICHAR_HEIGHT - 1, hcolor );
 				tempx += INFO_XP_WIDTH;
-			}
+			}*/
 
 			CG_FillRect( tempx, y + 1, INFO_LATENCY_WIDTH - INFO_BORDER, MINICHAR_HEIGHT - 1, hcolor );
 			tempx += INFO_LATENCY_WIDTH;
@@ -431,7 +448,9 @@ static void WM_DrawClientScore_Small( int x, int y, score_t *score, float *color
 		const char *s;
 		int w, totalwidth;
 
-		totalwidth = INFO_CLASS_WIDTH + INFO_SCORE_WIDTH + INFO_LATENCY_WIDTH - 8;
+		/* Nico, removed score
+		totalwidth = INFO_CLASS_WIDTH + INFO_SCORE_WIDTH + INFO_LATENCY_WIDTH - 8;*/
+		totalwidth = INFO_CLASS_WIDTH + INFO_LATENCY_WIDTH - 8;
 
 		s = CG_TranslateString( "^3SPECTATOR" );
 		w = CG_DrawStrlen( s ) * MINICHAR_WIDTH;
@@ -440,16 +459,16 @@ static void WM_DrawClientScore_Small( int x, int y, score_t *score, float *color
 		return;
 	} else if ( cg.snap->ps.persistant[PERS_TEAM] == ci->team )   {
 		CG_DrawStringExt(   tempx, y, CG_TranslateString( BG_ShortClassnameForNumber( score->playerClass ) ), hcolor, qfalse, qfalse, MINICHAR_WIDTH, MINICHAR_HEIGHT, 0 );
-//		CG_DrawSmallString( tempx, y, CG_TranslateString( s ), fade );
 	}
 	tempx += INFO_CLASS_WIDTH;
 
+	/* Nico, removed score
 	CG_DrawStringExt( tempx, y, va( "%3i", score->score ), hcolor, qfalse, qfalse, MINICHAR_WIDTH, MINICHAR_HEIGHT, 0 );
 	if ( cg_gameType.integer == GT_WOLF_LMS ) {
 		tempx += INFO_SCORE_WIDTH;
 	} else {
 		tempx += INFO_XP_WIDTH;
-	}
+	}*/
 
 	CG_DrawStringExt( tempx, y, va( "%4i", score->ping ), hcolor, qfalse, qfalse, MINICHAR_WIDTH, MINICHAR_HEIGHT, 0 );
 	tempx += INFO_LATENCY_WIDTH;
@@ -525,8 +544,9 @@ static int WM_TeamScoreboard( int x, int y, team_t team, float fade, int maxrows
 	int count = 0;
 	vec4_t tclr =   { 0.6f,     0.6f,       0.6f,       1.0f };
 
-	// height = SMALLCHAR_HEIGHT * maxrows;
-	width = INFO_PLAYER_WIDTH + INFO_CLASS_WIDTH + INFO_SCORE_WIDTH + INFO_LATENCY_WIDTH;
+	/* Nico, removed score
+	width = INFO_PLAYER_WIDTH + INFO_CLASS_WIDTH + INFO_SCORE_WIDTH + INFO_LATENCY_WIDTH;*/
+	width = INFO_PLAYER_WIDTH + INFO_CLASS_WIDTH + INFO_LATENCY_WIDTH;
 
 	CG_FillRect( x - 5, y - 2, width + 5, 21, clrUiBack );
 	CG_FillRect( x - 5, y - 2, width + 5, 21, clrUiBar );
@@ -584,7 +604,6 @@ static int WM_TeamScoreboard( int x, int y, team_t team, float fade, int maxrows
 	tempx = x;
 
 	CG_FillRect( x - 5, y - 1, width + 5, 18, clrUiBack );
-	//CG_FillRect( x-5, y-1, width+5, 18, clrUiBar );
 	trap_R_SetColor( colorBlack );
 	CG_DrawTopBottom( x - 5, y - 1, width + 5, 18, 1 );
 	trap_R_SetColor( NULL );
@@ -596,13 +615,14 @@ static int WM_TeamScoreboard( int x, int y, team_t team, float fade, int maxrows
 	CG_DrawSmallString( tempx, y, CG_TranslateString( "Class" ), fade );
 	tempx += INFO_CLASS_WIDTH;
 
+	/* Nico, removed score
 	if ( cgs.gametype == GT_WOLF_LMS ) {
 		CG_DrawSmallString( tempx, y, CG_TranslateString( "Score" ), fade );
 		tempx += INFO_SCORE_WIDTH;
 	} else {
 		CG_DrawSmallString( tempx + 1 * SMALLCHAR_WIDTH, y, CG_TranslateString( "XP" ), fade );
 		tempx += INFO_XP_WIDTH;
-	}
+	}*/
 
 	CG_DrawSmallString( tempx, y, CG_TranslateString( "Ping" ), fade );
 	tempx += INFO_LATENCY_WIDTH;
@@ -738,17 +758,5 @@ qboolean CG_DrawScoreboard( void ) {
 			WM_TeamScoreboard( x, y, TEAM_ALLIES, fade, 25 );
 		// }
 	// }
-
-/*	if(!CG_IsSinglePlayer()) {
-		qtime_t ct;
-
-		G_showWindowMessages();
-		trap_RealTime(&ct);
-		s = va("^3%02d:%02d:%02d - %02d %s %d",
-							ct.tm_hour, ct.tm_min, ct.tm_sec,
-							ct.tm_mday, aMonths[ct.tm_mon], 1900 + ct.tm_year);
-		CG_DrawStringExt(444, 12, s, colorWhite, qfalse, qtrue, 8, 8, 0);
-	}
-*/
 	return qtrue;
 }

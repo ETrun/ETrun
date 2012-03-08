@@ -377,14 +377,15 @@ panel_button_t playerLimboHead = {
 	NULL,
 };
 
+/* Nico, removed XP
 panel_button_t playerXPCounterText = {
 	NULL,
 	"XP",
 	{ 546, 108, 60, 16 },
 	{ 2, 0, 0, 0, 0, 0, 0, 0 },
-	&spawnLimboFont,    /* font		*/
-	NULL,               /* keyDown	*/
-	NULL,               /* keyUp	*/
+	&spawnLimboFont,    
+	NULL,               
+	NULL,               
 	CG_LimboPanelRenderText_NoLMS,
 	NULL,
 };
@@ -394,12 +395,12 @@ panel_button_t playerXPCounter = {
 	NULL,
 	{ 564, 96, 60, 16 },
 	{ 2, 0, 0, 0, 0, 0, 0, 0 },
-	NULL,   /* font		*/
-	NULL,   /* keyDown	*/
-	NULL,   /* keyUp	*/
+	NULL,   
+	NULL,  
+	NULL,  
 	CG_LimboPanel_RenderCounter,
 	NULL,
-};
+};*/
 
 panel_button_t playerSkillCounter0 = {
 	NULL,
@@ -949,7 +950,9 @@ panel_button_t* limboPanelButtons[] = {
 	&teamButton0,       &teamButton1,       &teamButton2,
 
 	&playerLimboHead,
-	&playerXPCounter, &playerXPCounterText,
+
+	/* Nico, removed XP
+	&playerXPCounter, &playerXPCounterText,*/
 
 	&respawnCounter, &respawnCounterText,
 	&mapTimeCounter, &mapTimeCounter2, &mapTimeCounterText,
