@@ -547,6 +547,7 @@ typedef struct {
 #define FOLLOW_ACTIVE2  -2
 
 
+/* Nico, removed weapon_stat_t
 // OSP - weapon stat counters
 typedef struct {
 	unsigned int atts;
@@ -554,7 +555,7 @@ typedef struct {
 	unsigned int headshots;
 	unsigned int hits;
 	unsigned int kills;
-} weapon_stat_t;
+} weapon_stat_t;*/
 
 
 // client data that stays across multiple levels or tournament restarts
