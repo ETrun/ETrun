@@ -16,7 +16,6 @@ libcgame_la_SOURCES = \
 ../game/bg_pmove.c \
 ../game/bg_slidemove.c \
 ../game/bg_sscript.c \
-../game/bg_stats.c \
 ../game/bg_tracemap.c \
 ../game/q_math.c \
 ../game/q_shared.c \
@@ -51,7 +50,6 @@ cg_servercmds.c \
 cg_snapshot.c \
 cg_sound.c \
 cg_spawn.c \
-cg_statsranksmedals.c \
 cg_syscalls.c \
 cg_trails.c \
 cg_view.c \

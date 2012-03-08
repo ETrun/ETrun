@@ -2169,7 +2169,9 @@ void G_globalSound( char *sound );
 void G_initMatch( void );
 void G_loadMatchGame( void );
 void G_matchInfoDump( unsigned int dwDumpType );
-void G_printMatchInfo( gentity_t *ent );
+
+/* Nico, removed unused G_printMatchInfo
+void G_printMatchInfo( gentity_t *ent );*/
 
 /* Nico, removed ws related command
 void G_parseStats( char *pszStatsInfo );*/

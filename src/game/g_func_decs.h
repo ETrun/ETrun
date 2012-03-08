@@ -991,7 +991,10 @@ extern void G_resetRoundState ( void ) ;
 extern void G_statsPrint ( gentity_t * ent , int nType ) ;
 extern int G_checkServerToggle ( vmCvar_t * cv ) ;
 extern void G_matchInfoDump ( unsigned int dwDumpType ) ;
-extern void G_printMatchInfo ( gentity_t * ent ) ;
+
+/* Nico, removed unused G_printMatchInfo
+extern void G_printMatchInfo ( gentity_t * ent ) ;*/
+
 extern void G_parseStats ( char * pszStatsInfo ) ;
 extern void G_deleteStats ( int nClient ) ;
 extern char * G_createStats ( gentity_t * refEnt ) ;

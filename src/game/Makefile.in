@@ -76,19 +76,18 @@ am_libgame_la_OBJECTS = libgame_la-bg_animation.lo \
 	libgame_la-bg_character.lo libgame_la-bg_classes.lo \
 	libgame_la-bg_misc.lo libgame_la-bg_pmove.lo \
 	libgame_la-bg_slidemove.lo libgame_la-bg_sscript.lo \
-	libgame_la-bg_stats.lo libgame_la-bg_tracemap.lo \
-	libgame_la-g_active.lo libgame_la-g_alarm.lo \
-	libgame_la-g_antilag.lo libgame_la-g_character.lo \
-	libgame_la-g_client.lo libgame_la-g_cmds.lo \
-	libgame_la-g_cmds_ext.lo libgame_la-g_combat.lo \
-	libgame_la-g_config.lo libgame_la-g_fireteams.lo \
-	libgame_la-g_items.lo libgame_la-g_main.lo \
-	libgame_la-g_match.lo libgame_la-g_mem.lo libgame_la-g_misc.lo \
-	libgame_la-g_missile.lo libgame_la-g_mover.lo \
-	libgame_la-g_props.lo libgame_la-g_referee.lo \
-	libgame_la-g_script.lo libgame_la-g_script_actions.lo \
-	libgame_la-g_session.lo libgame_la-g_spawn.lo \
-	libgame_la-g_stats.lo libgame_la-g_sv_entities.lo \
+	libgame_la-bg_tracemap.lo libgame_la-g_active.lo \
+	libgame_la-g_alarm.lo libgame_la-g_antilag.lo \
+	libgame_la-g_character.lo libgame_la-g_client.lo \
+	libgame_la-g_cmds.lo libgame_la-g_cmds_ext.lo \
+	libgame_la-g_combat.lo libgame_la-g_config.lo \
+	libgame_la-g_fireteams.lo libgame_la-g_items.lo \
+	libgame_la-g_main.lo libgame_la-g_match.lo libgame_la-g_mem.lo \
+	libgame_la-g_misc.lo libgame_la-g_missile.lo \
+	libgame_la-g_mover.lo libgame_la-g_props.lo \
+	libgame_la-g_referee.lo libgame_la-g_script.lo \
+	libgame_la-g_script_actions.lo libgame_la-g_session.lo \
+	libgame_la-g_spawn.lo libgame_la-g_sv_entities.lo \
 	libgame_la-g_svcmds.lo libgame_la-g_syscalls.lo \
 	libgame_la-g_systemmsg.lo libgame_la-g_target.lo \
 	libgame_la-g_team.lo libgame_la-g_teammapdata.lo \
@@ -250,7 +249,6 @@ bg_misc.c \
 bg_pmove.c \
 bg_slidemove.c \
 bg_sscript.c \
-bg_stats.c \
 bg_tracemap.c \
 g_active.c \
 g_alarm.c \
@@ -275,7 +273,6 @@ g_script.c \
 g_script_actions.c \
 g_session.c \
 g_spawn.c \
-g_stats.c \
 g_sv_entities.c \
 g_svcmds.c \
 g_syscalls.c \
@@ -375,7 +372,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libgame_la-bg_pmove.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libgame_la-bg_slidemove.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libgame_la-bg_sscript.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libgame_la-bg_stats.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libgame_la-bg_tracemap.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libgame_la-g_active.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libgame_la-g_alarm.Plo@am__quote@
@@ -402,7 +398,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libgame_la-g_script_actions.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libgame_la-g_session.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libgame_la-g_spawn.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libgame_la-g_stats.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libgame_la-g_sv_entities.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libgame_la-g_svcmds.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libgame_la-g_syscalls.Plo@am__quote@
@@ -500,13 +495,6 @@ libgame_la-bg_sscript.lo: bg_sscript.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='bg_sscript.c' object='libgame_la-bg_sscript.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libgame_la_CFLAGS) $(CFLAGS) -c -o libgame_la-bg_sscript.lo `test -f 'bg_sscript.c' || echo '$(srcdir)/'`bg_sscript.c
-
-libgame_la-bg_stats.lo: bg_stats.c
-@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libgame_la_CFLAGS) $(CFLAGS) -MT libgame_la-bg_stats.lo -MD -MP -MF $(DEPDIR)/libgame_la-bg_stats.Tpo -c -o libgame_la-bg_stats.lo `test -f 'bg_stats.c' || echo '$(srcdir)/'`bg_stats.c
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libgame_la-bg_stats.Tpo $(DEPDIR)/libgame_la-bg_stats.Plo
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='bg_stats.c' object='libgame_la-bg_stats.lo' libtool=yes @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libgame_la_CFLAGS) $(CFLAGS) -c -o libgame_la-bg_stats.lo `test -f 'bg_stats.c' || echo '$(srcdir)/'`bg_stats.c
 
 libgame_la-bg_tracemap.lo: bg_tracemap.c
 @am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libgame_la_CFLAGS) $(CFLAGS) -MT libgame_la-bg_tracemap.lo -MD -MP -MF $(DEPDIR)/libgame_la-bg_tracemap.Tpo -c -o libgame_la-bg_tracemap.lo `test -f 'bg_tracemap.c' || echo '$(srcdir)/'`bg_tracemap.c
@@ -675,13 +663,6 @@ libgame_la-g_spawn.lo: g_spawn.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='g_spawn.c' object='libgame_la-g_spawn.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libgame_la_CFLAGS) $(CFLAGS) -c -o libgame_la-g_spawn.lo `test -f 'g_spawn.c' || echo '$(srcdir)/'`g_spawn.c
-
-libgame_la-g_stats.lo: g_stats.c
-@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libgame_la_CFLAGS) $(CFLAGS) -MT libgame_la-g_stats.lo -MD -MP -MF $(DEPDIR)/libgame_la-g_stats.Tpo -c -o libgame_la-g_stats.lo `test -f 'g_stats.c' || echo '$(srcdir)/'`g_stats.c
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libgame_la-g_stats.Tpo $(DEPDIR)/libgame_la-g_stats.Plo
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='g_stats.c' object='libgame_la-g_stats.lo' libtool=yes @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libgame_la_CFLAGS) $(CFLAGS) -c -o libgame_la-g_stats.lo `test -f 'g_stats.c' || echo '$(srcdir)/'`g_stats.c
 
 libgame_la-g_sv_entities.lo: g_sv_entities.c
 @am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libgame_la_CFLAGS) $(CFLAGS) -MT libgame_la-g_sv_entities.lo -MD -MP -MF $(DEPDIR)/libgame_la-g_sv_entities.Tpo -c -o libgame_la-g_sv_entities.lo `test -f 'g_sv_entities.c' || echo '$(srcdir)/'`g_sv_entities.c

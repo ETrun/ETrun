@@ -575,6 +575,7 @@ void G_UpdateTeamMapData_Player( gentity_t* ent, qboolean forceAllied, qboolean 
 	}
 }
 
+/* Nico, commented because unused
 static void G_UpdateTeamMapData_DisguisedPlayer( gentity_t* spotter, gentity_t* ent, qboolean forceAllied, qboolean forceAxis ) {
 	int num = ent - g_entities;
 	mapEntityData_Team_t* teamList;
@@ -627,7 +628,7 @@ static void G_UpdateTeamMapData_DisguisedPlayer( gentity_t* spotter, gentity_t* 
 			mEnt->type = ME_PLAYER_DISGUISED;
 		}
 	}
-}
+}*/
 
 void G_UpdateTeamMapData_LandMine( gentity_t* ent, qboolean forceAllied, qboolean forceAxis ) {
 //void G_UpdateTeamMapData_LandMine(gentity_t* ent) {

@@ -693,7 +693,7 @@ qboolean G_IsAllowedAmmo( gentity_t* ent ) {
 }
 
 void ammo_touch( gentity_t *self, gentity_t *other, trace_t *trace ) {
-	int i, clientcount = 0, count;
+	int i, clientcount = 0;//, count; Nico, unused warning fix
 	gentity_t* touchClients[MAX_CLIENTS];
 
 	memset( touchClients, 0, sizeof( touchClients ) );
@@ -722,13 +722,13 @@ void ammo_touch( gentity_t *self, gentity_t *other, trace_t *trace ) {
 	}
 
 	// Gordon: if low, just give out what's left
+	/* Nico, removed skills
 	if ( self->health == -9999 ) {
 		count = clientcount;
 	} else {
 		count = min( clientcount, self->health / (float)self->damage );
 	}
 
-	/* Nico, removed skills
 	for ( i = 0; i < count; i++ ) {
 		int ammoAdded = qfalse;
 
@@ -741,7 +741,6 @@ void ammo_touch( gentity_t *self, gentity_t *other, trace_t *trace ) {
 			if ( self->health != -9999 ) {
 				// reduce the ammount of available ammo by the added clip number
 				self->health -= self->damage;
-//				G_Printf("%i clips left\n", self->health );
 			}
 		}
 	}*/

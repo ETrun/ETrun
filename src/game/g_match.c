@@ -510,6 +510,7 @@ void G_parseStats( char *pszStatsInfo ) {
 }*/
 
 
+/* Nico, removed unused G_printMatchInfo
 // Prints current player match info.
 //	--> FIXME: put the pretty print on the client
 void G_printMatchInfo( gentity_t *ent ) {
@@ -550,29 +551,29 @@ void G_printMatchInfo( gentity_t *ent ) {
 
 			ref = "^7";
 
-			/* Nico, removed kills counter
-			tot_kills += cl->sess.kills;*/
+			// Nico, removed kills counter
+			// tot_kills += cl->sess.kills;
 
-			/* Nico, removed deaths counter
-			tot_deaths += cl->sess.deaths;*/
+			// Nico, removed deaths counter
+			// tot_deaths += cl->sess.deaths;
 
-			/* Nico, removed suicides & team_damage & team_kills counters
-			tot_sui += cl->sess.suicides;
-			tot_tk += cl->sess.team_kills;*/
+			// Nico, removed suicides & team_damage & team_kills counters
+			// tot_sui += cl->sess.suicides;
+			// tot_tk += cl->sess.team_kills;
 
-			/* Nico, removed damage_given & damage_received
-			tot_dg += cl->sess.damage_given;
-			tot_dr += cl->sess.damage_received;*/
+			// Nico, removed damage_given & damage_received
+			// tot_dg += cl->sess.damage_given;
+			// tot_dr += cl->sess.damage_received;
 
-			/* Nico, removed suicides & team_damage & team_kills counters
-			tot_td += cl->sess.team_damage;*/
+			// Nico, removed suicides & team_damage & team_kills counters
+			// tot_td += cl->sess.team_damage;
 
 			tot_gp += cl->sess.game_points;
 
-			/* Nico, removed deaths counter
-			eff = ( cl->sess.deaths + cl->sess.kills == 0 ) ? 0 : 100 * cl->sess.kills / ( cl->sess.deaths + cl->sess.kills );
-			if ( eff < 0 ) {*/
-				eff = 0;
+			// Nico, removed deaths counter
+			// eff = ( cl->sess.deaths + cl->sess.kills == 0 ) ? 0 : 100 * cl->sess.kills / ( cl->sess.deaths + cl->sess.kills );
+			// if ( eff < 0 ) {
+			// 	eff = 0;
 			// }
 
 			if ( ent->client == cl ||
@@ -588,30 +589,30 @@ void G_printMatchInfo( gentity_t *ent ) {
 					ref,
 					n2,
 
-					/* Nico, removed kills counter
-					cl->sess.kills,*/
+					// Nico, removed kills counter
+					// cl->sess.kills,
 
-					/* Nico, removed deaths counter
-					cl->sess.deaths,*/
+					// Nico, removed deaths counter
+					// cl->sess.deaths,
 
-					/* Nico, removed suicides & team_damage & team_kills counters
-					cl->sess.suicides,
-					cl->sess.team_kills,*/
+					// Nico, removed suicides & team_damage & team_kills counters
+					// cl->sess.suicides,
+					// cl->sess.team_kills,
 
 					ref,
 					eff,
 
-					/* Nico, removed kills counter
-					cl->sess.game_points - ( cl->sess.kills * WOLF_FRAG_BONUS ),*/
+					// Nico, removed kills counter
+					// cl->sess.game_points - ( cl->sess.kills * WOLF_FRAG_BONUS ),
 
 					cl->sess.game_points,
 
-					/* Nico, removed damage_given & damage_received
-					cl->sess.damage_given,
-					cl->sess.damage_received,*/
+					// Nico, removed damage_given & damage_received
+					// cl->sess.damage_given,
+					// cl->sess.damage_received,
 
-					/* Nico, removed suicides & team_damage & team_kills counters
-					cl->sess.team_damage,*/
+					// Nico, removed suicides & team_damage & team_kills counters
+					// cl->sess.team_damage,
 
 					cl->ps.persistant[PERS_SCORE] ) );
 		}
@@ -638,7 +639,7 @@ void G_printMatchInfo( gentity_t *ent ) {
 	}
 
 	CP( va( "sc \"%s\n\n\" 0", ( ( !cnt ) ? "^3\nNo scores to report." : "" ) ) );
-}
+}*/
 
 
 // Dumps end-of-match info

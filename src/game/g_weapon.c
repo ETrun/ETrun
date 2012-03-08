@@ -3920,7 +3920,7 @@ FireWeapon
 */
 void FireWeapon( gentity_t *ent ) {
 	float aimSpreadScale;
-	int shots = 1;
+	// int shots = 1; Nico, unused warning fix
 
 	// ydnar: dead guys don't fire guns
 	if ( ent->client->ps.pm_type == PM_DEAD ) {

@@ -217,12 +217,11 @@ void CG_NewClientInfo( int clientNum ) {
 	if ( *v ) {
 
 		/* Nico, removed skills
-		int i;*/
+		int i;
 
 		char buf[2];
 		buf[1] = '\0';
 
-		/* Nico, removed skills
 		for ( i = 0; i < SK_NUM_SKILLS; i++ ) {
 			buf[0] = *v;
 			newInfo.medals[i] = atoi( buf );

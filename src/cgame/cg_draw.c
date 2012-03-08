@@ -3630,7 +3630,7 @@ static void CG_DrawPlayerHealthBar( rectDef_t *rect ) {
 static void CG_DrawStaminaBar( rectDef_t *rect ) {
 	vec4_t bgcolour =   {   1.f,    1.f,    1.f,    0.3f    };
 	vec4_t colour =     {   0.1f,   1.0f,   0.1f,   0.5f    };
-	vec4_t colourlow =  {   1.0f,   0.1f,   0.1f,   0.5f    };
+	// vec4_t colourlow =  {   1.0f,   0.1f,   0.1f,   0.5f    }; Nico, unused warning fix
 	vec_t* color = colour;
 	int flags = 1 | 4 | 16 | 64;
 
@@ -3851,7 +3851,7 @@ skillType_t CG_ClassSkillForPosition( clientInfo_t* ci, int pos ) {
 static void CG_DrawPlayerStats( void ) {
 	int value = 0;
 	playerState_t       *ps;
-	clientInfo_t        *ci;
+	// clientInfo_t        *ci; Nico, unused warning fix
 
 	/* Nico, removed skills
 	skillType_t skill;
@@ -3871,7 +3871,7 @@ static void CG_DrawPlayerStats( void ) {
 	}
 
 	ps = &cg.snap->ps;
-	ci = &cgs.clientinfo[ ps->clientNum ];
+	// ci = &cgs.clientinfo[ ps->clientNum ];
 
 
 	/* Nico, removed skills

@@ -17,7 +17,6 @@ bg_misc.c \
 bg_pmove.c \
 bg_slidemove.c \
 bg_sscript.c \
-bg_stats.c \
 bg_tracemap.c \
 g_active.c \
 g_alarm.c \
@@ -42,7 +41,6 @@ g_script.c \
 g_script_actions.c \
 g_session.c \
 g_spawn.c \
-g_stats.c \
 g_sv_entities.c \
 g_svcmds.c \
 g_syscalls.c \

@@ -991,7 +991,10 @@ If you have questions concerning this license or the applicable additional terms
 {"G_statsPrint", (byte *)G_statsPrint},
 {"G_checkServerToggle", (byte *)G_checkServerToggle},
 {"G_matchInfoDump", (byte *)G_matchInfoDump},
-{"G_printMatchInfo", (byte *)G_printMatchInfo},
+
+/* Nico, removed unused G_printMatchInfo
+{"G_printMatchInfo", (byte *)G_printMatchInfo},*/
+
 {"G_parseStats", (byte *)G_parseStats},
 {"G_deleteStats", (byte *)G_deleteStats},
 {"G_createStats", (byte *)G_createStats},

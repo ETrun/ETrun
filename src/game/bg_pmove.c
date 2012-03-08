@@ -5112,10 +5112,10 @@ PM_Sprint
 void PM_Sprint( void ) {
 	if ( pm->cmd.buttons & BUTTON_SPRINT && ( pm->cmd.forwardmove || pm->cmd.rightmove ) && !( pm->ps->pm_flags & PMF_DUCKED ) && !( pm->ps->eFlags & EF_PRONE ) ) {
 		
-		/* Nico, removed adrenaline
-		if ( pm->ps->powerups[PW_ADRENALINE] ) {
-			pm->pmext->sprintTime = SPRINTTIME;
-		} else 
+		// Nico, removed adrenaline
+		// if ( pm->ps->powerups[PW_ADRENALINE] ) {
+		//	pm->pmext->sprintTime = SPRINTTIME;
+		// } else 
 
 		// Nico, removed nofatigue
 		if ( pm->ps->powerups[PW_NOFATIGUE] ) {
