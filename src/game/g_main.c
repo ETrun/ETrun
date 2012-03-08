@@ -67,7 +67,10 @@ vmCvar_t g_gravity;
 vmCvar_t g_cheats;
 vmCvar_t g_knockback;
 vmCvar_t g_quadfactor;
-vmCvar_t g_forcerespawn;
+
+/* Nico, removed forcerespawn
+vmCvar_t g_forcerespawn;*/
+
 vmCvar_t g_inactivity;
 vmCvar_t g_debugMove;
 vmCvar_t g_debugDamage;
@@ -359,8 +362,9 @@ cvarTable_t gameCvarTable[] = {
 	/* Nico, removed balancedteams
 	{ &g_balancedteams, "g_balancedteams", "0", CVAR_SERVERINFO | CVAR_ROM, 0, qtrue },*/
 
-	{ &g_forcerespawn, "g_forcerespawn", "0", 0, 0, qtrue },
-	{ &g_forcerespawn, "g_forcerespawn", "0", 0, 0, qtrue },
+	/* Nico, removed forcerespawn
+	{ &g_forcerespawn, "g_forcerespawn", "0", 0, 0, qtrue },*/
+
 	{ &g_inactivity, "g_inactivity", "0", 0, 0, qtrue },
 	{ &g_debugMove, "g_debugMove", "0", 0, 0, qfalse },
 	{ &g_debugDamage, "g_debugDamage", "0", CVAR_CHEAT, 0, qfalse },

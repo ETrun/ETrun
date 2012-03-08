@@ -713,6 +713,7 @@ void ClientEvents( gentity_t *ent, int oldEventSequence ) {
 
 }
 
+/* Nico, forcing respawn
 // DHM - Nerve
 void WolfFindMedic( gentity_t *self ) {
 	int i, medic = -1;
@@ -779,10 +780,8 @@ void WolfFindMedic( gentity_t *self ) {
 		self->client->ps.viewlocked_entNum = medic;
 		self->client->ps.viewlocked = 7;
 	}
-}
+}*/
 
-
-//void ClientDamage( gentity_t *clent, int entnum, int enemynum, int id );		// NERVE - SMF
 
 /*
 ==============
@@ -1108,7 +1107,8 @@ void ClientThink_real( gentity_t *ent ) {
 	if ( client->ps.stats[STAT_HEALTH] <= 0 ) {
 
 		// DHM - Nerve
-		WolfFindMedic( ent );
+		/* Nico, forcing respawn
+		WolfFindMedic( ent );*/
 
 		// See if we need to hop to limbo
 		/* Nico, instant reswawn
@@ -1126,6 +1126,9 @@ void ClientThink_real( gentity_t *ent ) {
 				limbo( ent, ( client->ps.stats[STAT_HEALTH] > GIB_HEALTH ) );
 			}
 		}*/
+
+		// Nico, forcing respawn
+		limbo( ent, ( client->ps.stats[STAT_HEALTH] > GIB_HEALTH ) );
 
 		return;
 	}
