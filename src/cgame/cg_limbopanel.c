@@ -1302,9 +1302,9 @@ void CG_LimboPanel_RenderClassButton( panel_button_t* button ) {
 	vec4_t clr2 = { 1.f, 1.f, 1.f, 0.75f };
 	vec4_t clr3 = { 1.f, 1.f, 1.f, 0.6f };
 
-	int i;
-	float s0, t0, s1, t1;
-	float x, y, w, h;
+	// int i; Nico, unused warning fix
+	// float s0, t0, s1, t1; Nico, unused warning fix
+	// float x, y, w, h; Nico, unused warning fix
 
 	CG_DrawPic( button->rect.x, button->rect.y, button->rect.w, button->rect.h, cgs.media.limboClassButton2Back_off );
 
@@ -1318,12 +1318,12 @@ void CG_LimboPanel_RenderClassButton( panel_button_t* button ) {
 		}
 	}
 
+	/* Nico, removed skills
 	for ( i = 0; i < 4; i++ ) {
 
-		/* Nico, removed skills
 		if ( cgs.clientinfo[cg.clientNum].skill[BG_ClassSkillForClass( button->data[1] )] <= i ) {
 			break;
-		}*/
+		}
 
 		if ( i == 0 || i == 1 ) {
 			s0 = 0.5f;
@@ -1360,7 +1360,7 @@ void CG_LimboPanel_RenderClassButton( panel_button_t* button ) {
 				trap_R_DrawStretchPic( x, y, w, h, s0, t0, s1, t1, cgs.media.limboClassButton2Wedge_off );
 			}
 		}
-	}
+	}*/
 
 
 	if ( CG_LimboPanel_GetTeam() != TEAM_SPECTATOR && button->data[1] == CG_LimboPanel_GetClass() ) {
