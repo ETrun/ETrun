@@ -499,10 +499,6 @@ struct gentity_s {
 	int etpro_misc_1;
 };
 
-// Ridah
-//#include "ai_cast_global.h"
-// done.
-
 typedef enum {
 	CON_DISCONNECTED,
 	CON_CONNECTING,
@@ -512,8 +508,7 @@ typedef enum {
 typedef enum {
 	SPECTATOR_NOT,
 	SPECTATOR_FREE,
-	SPECTATOR_FOLLOW/*,
-	SPECTATOR_SCOREBOARD*/
+	SPECTATOR_FOLLOW
 } spectatorState_t;
 
 typedef enum {
@@ -716,11 +711,13 @@ typedef struct {
 	unsigned int clientTimeNudge;       // Client cl_timenudge settings
 	int cmd_debounce;                   // Dampening of command spam
 	unsigned int invite;                // Invitation to a team to join
+
 	/* Nico, removed multiview
 	mview_t mv[MULTIVIEW_MAXVIEWS];         // Multiview portals
 	int mvCount;                        // Number of active portals
 	int mvReferenceList;                // Reference list used to generate views after a map_restart
 	int mvScoreUpdate;                  // Period to send score info to MV clients*/
+
 	int panzerDropTime;                 // Time which a player dropping panzer still "has it" if limiting panzer counts
 	int panzerSelectTime;               // *when* a client selected a panzer as spawn weapon
 	qboolean ready;                     // Ready state to begin play
@@ -875,7 +872,9 @@ struct gclient_s {
 	char disguiseNetname[MAX_NETNAME];
 	int disguiseRank;
 
-	int medals;
+	/* Nico, removed medals
+	int medals;*/
+
 	float acc;
 
 	qboolean hasaward;

@@ -1321,7 +1321,8 @@ void ClientUserinfoChanged( int clientNum ) {
 
 	client->ps.clientNum = clientNum;
 
-	client->medals = 0;
+	/* Nico, removed medals
+	client->medals = 0;*/
 
 	/* Nico, removed skills
 	for ( i = 0; i < SK_NUM_SKILLS; i++ ) {
