@@ -1085,7 +1085,10 @@ typedef struct {
 	qboolean fLocalHost;
 	qboolean fResetStats;
 	int match_pause;                        // Paused state of the match
-	qboolean ref_allready;                  // Referee forced match start
+
+	/* Nico, commented because unused
+	qboolean ref_allready;                  // Referee forced match start*/
+
 	int server_settings;
 	int sortedStats[MAX_CLIENTS];           // sorted by weapon stat
 	int timeCurrent;                        // Real game clock

@@ -43,10 +43,12 @@ If you have questions concerning this license or the applicable additional terms
 //	--> ref arg allows for the server console to utilize all referee commands (ent == NULL)
 //
 qboolean G_refCommandCheck( gentity_t *ent, char *cmd ) {
+
 	/* Nico, removed warmup
 	if ( !Q_stricmp( cmd, "allready" ) ) {
 		G_refAllReady_cmd( ent );
 	} else*/
+
 	if ( !Q_stricmp( cmd, "lock" ) ) {
 		G_refLockTeams_cmd( ent, qtrue );
 	} else if ( !Q_stricmp( cmd, "help" ) ) {
@@ -92,25 +94,25 @@ void G_refHelp_cmd( gentity_t *ent ) {
 	// List commands only for enabled refs.
 	if ( ent ) {
 		CP( "print \"\n^3Referee commands:^7\n\"" );
-		CP(    "print \"------------------------------------------\n\"" );
+		CP( "print \"------------------------------------------\n\"" );
 
 		G_voteHelp( ent, qfalse );
 
-		CP("print \"\n^5allready         putallies^7 <pid>  ^5specunlock       warn ^7<pid>\n\"");
-		CP(  "print \"^5help             putaxis^7 <pid>    ^5unlock           mute ^7<pid>\n\"");
-		CP(  "print \"^5lock             remove^7 <pid>    ^5unpause          unmute ^7<pid>\n\"");
-		CP(  "print \"^5pause            speclock\n\"");
+		CP(  "print \"\n^5help             putallies^7 <pid>  ^5specunlock       warn ^7<pid>\n\"");
+		CP(  "print \"^5lock             putaxis^7 <pid>    ^5unlock\n\"");
+		CP(  "print \"^5mute ^7<pid>       ^5remove^7 <pid>     ^5unmute ^7<pid>\n\"");
+		CP(  "print \"^5pause            speclock         ^5unpause\n\"");
 		CP(  "print \"Usage: ^3\\ref <cmd> [params]\n\n\"" );
 
 		// Help for the console
 	} else {
 		G_Printf( "\nAdditional console commands:\n" );
 		G_Printf(  "----------------------------------------------\n" );
-		G_Printf(  "allready        putallies <pid>    unpause\n");
-		G_Printf(  "help            putaxis <pid>\n");
-		G_Printf(  "lock            speclock           warn <pid>\n");
+		G_Printf(  "help            remove <pid>    warn <pid>\n");
+		G_Printf(  "lock            speclock\n");
 		G_Printf(  "pause           specunlock\n");
-		G_Printf(  "remove <pid>    unlock\n\n");
+		G_Printf(  "putallies <pid> unlock\n");
+		G_Printf(  "putaxis <pid>   unpause\n\n");
 
 		G_Printf(  "Usage: <cmd> [params]\n\n" );
 	}
@@ -497,9 +499,6 @@ void G_PlayerBan() {
 		value = Info_ValueForKey( userinfo, "ip" );
 
 		AddIPBan( value );
-//		} else {
-//			G_Printf( "^3*** Can't ban a superuser!\n" );
-//		}
 	}
 }
 
