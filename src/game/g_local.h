@@ -877,7 +877,9 @@ struct gclient_s {
 
 	float acc;
 
-	qboolean hasaward;
+	/* Nico, removed hasaward
+	qboolean hasaward;*/
+
 	qboolean wantsscore;
 
 	/* Nico, removed respawnLeft
