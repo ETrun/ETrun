@@ -585,7 +585,8 @@ typedef struct {
 	float skillpoints[SK_NUM_SKILLS];           // Arnout: skillpoints
 	float startskillpoints[SK_NUM_SKILLS];      // Gordon: initial skillpoints at map beginning*/
 
-	float startxptotal;
+	/* Nico, removed startxptotal
+	float startxptotal;*/
 
 	/* Nico, removed skills
 	int skill[SK_NUM_SKILLS];                   // Arnout: skill*/

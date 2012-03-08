@@ -319,7 +319,8 @@ void G_ReadSessionData( gclient_t *client ) {
 		/* Nico, removed skills
 		int j;*/
 
-		client->sess.startxptotal = 0;
+		/* Nico, removed startxptotal
+		client->sess.startxptotal = 0;*/
 
 		/* Nico, removed skills
 		for ( j = 0; j < SK_NUM_SKILLS; j++ ) {
