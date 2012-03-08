@@ -49,7 +49,10 @@ WM_DrawObjectives
 
 #define INFO_CLASS_WIDTH        50
 #define INFO_LATENCY_WIDTH      40
-#define INFO_LIVES_WIDTH        20
+
+/* Nico, removed INFO_LIVES_WIDTH
+#define INFO_LIVES_WIDTH        20*/
+
 #define INFO_TEAM_HEIGHT        24
 #define INFO_BORDER             2
 #define INFO_LINE_HEIGHT        30
@@ -239,10 +242,11 @@ static void WM_DrawClientScore( int x, int y, score_t *score, float *color, floa
 			CG_FillRect( tempx, y + 1, INFO_LATENCY_WIDTH - INFO_BORDER, SMALLCHAR_HEIGHT - 1, hcolor );
 			tempx += INFO_LATENCY_WIDTH;
 
+			/* Nico, removed INFO_LIVES_WIDTH
 			if ( cg_gameType.integer != GT_WOLF_LMS ) {
 				CG_FillRect( tempx, y + 1, INFO_LIVES_WIDTH - INFO_BORDER, SMALLCHAR_HEIGHT - 1, hcolor );
 				tempx += INFO_LIVES_WIDTH;
-			}
+			}*/
 		}
 	}
 
@@ -397,10 +401,11 @@ static void WM_DrawClientScore_Small( int x, int y, score_t *score, float *color
 			CG_FillRect( tempx, y + 1, INFO_LATENCY_WIDTH - INFO_BORDER, MINICHAR_HEIGHT - 1, hcolor );
 			tempx += INFO_LATENCY_WIDTH;
 
+			/* Nico, removed INFO_LIVES_WIDTH
 			if ( cg_gameType.integer != GT_WOLF_LMS ) {
 				CG_FillRect( tempx, y + 1, INFO_LIVES_WIDTH - INFO_BORDER, MINICHAR_HEIGHT - 1, hcolor );
 				tempx += INFO_LIVES_WIDTH;
-			}
+			}*/
 		}
 	}
 
@@ -627,11 +632,11 @@ static int WM_TeamScoreboard( int x, int y, team_t team, float fade, int maxrows
 	CG_DrawSmallString( tempx, y, CG_TranslateString( "Ping" ), fade );
 	tempx += INFO_LATENCY_WIDTH;
 
+	/* Nico, removed INFO_LIVES_WIDTH
 	if ( cgs.gametype != GT_WOLF_LMS ) {
 		CG_DrawPicST( tempx + 2, y, INFO_LIVES_WIDTH - 4, 16, 0.f, 0.f, 0.5f, 1.f, team == TEAM_ALLIES ? cgs.media.hudAlliedHelmet : cgs.media.hudAxisHelmet );
 		tempx += INFO_LIVES_WIDTH;
-	}
-
+	}*/
 
 	y += SMALLCHAR_HEIGHT;
 
