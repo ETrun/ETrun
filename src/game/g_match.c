@@ -229,12 +229,15 @@ void G_addStats( gentity_t *targ, gentity_t *attacker, int dmg_ref, int mod ) {
 
 	// Special hack for intentional gibbage
 	if ( targ->health <= 0 && targ->client->ps.pm_type == PM_DEAD ) {
+
+		/* Nico, removed weaponstats
 		if ( mod < MOD_CROSS && attacker && attacker->client ) {
 			int x = attacker->client->sess.aWeaponStats[G_weapStatIndex_MOD( mod )].atts--;
 			if ( x < 1 ) {
 				attacker->client->sess.aWeaponStats[G_weapStatIndex_MOD( mod )].atts = 1;
 			}
-		}
+		}*/
+
 		return;
 	}
 
@@ -274,14 +277,17 @@ void G_addStats( gentity_t *targ, gentity_t *attacker, int dmg_ref, int mod ) {
 	}
 
 	// Player weapon stats
-	ref = G_weapStatIndex_MOD( mod );
+	/* Nico, removed weaponstats
+	ref = G_weapStatIndex_MOD( mod );*/
+
+	/* Nico, removed weaponstats
 	if ( dmg > 0 ) {
 		attacker->client->sess.aWeaponStats[ref].hits++;
 	}
 	if ( targ->health <= 0 ) {
 		attacker->client->sess.aWeaponStats[ref].kills++;
 		targ->client->sess.aWeaponStats[ref].deaths++;
-	}
+	}*/
 }
 
 
@@ -294,7 +300,8 @@ void G_addStatsHeadShot( gentity_t *attacker, int mod ) {
 		return;
 	}
 
-	attacker->client->sess.aWeaponStats[G_weapStatIndex_MOD( mod )].headshots++;
+	/* Nico, removed weaponstats
+	attacker->client->sess.aWeaponStats[G_weapStatIndex_MOD( mod )].headshots++;*/
 }
 
 // Ugh, converting enums is my day-time job :)
@@ -304,6 +311,7 @@ void G_addStatsHeadShot( gentity_t *attacker, int mod ) {
 //
 // FIXME: Remove everything that maps to WS_MAX to save space
 //
+/* Nico, removed weaponstats
 static const weap_ws_convert_t aWeapMOD[MOD_NUM_MODS] = {
 	{ MOD_UNKNOWN,              WS_MAX },
 	{ MOD_MACHINEGUN,           WS_MG42 },
@@ -379,9 +387,9 @@ static const weap_ws_convert_t aWeapMOD[MOD_NUM_MODS] = {
 
 	{ MOD_SWITCHTEAM,           WS_MAX }
 
-};
+};*/
 
-
+/* Nico, removed weaponstats
 // Get right stats index based on weapon mod
 unsigned int G_weapStatIndex_MOD( unsigned int iWeaponMOD ) {
 	unsigned int i;
@@ -390,8 +398,7 @@ unsigned int G_weapStatIndex_MOD( unsigned int iWeaponMOD ) {
 			return( aWeapMOD[i].iWS );
 		}
 	return( WS_MAX );
-}
-
+}*/
 
 /* Nico, removed ws related command
 // Generates weapon stat info for given ent

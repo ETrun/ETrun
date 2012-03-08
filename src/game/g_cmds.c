@@ -2793,7 +2793,7 @@ void Cmd_IntermissionPlayerKillsDeaths_f( gentity_t* ent ) {
 }*/
 
 void G_CalcClientAccuracies( void ) {
-	int i, j;
+	int i;// , j; Nico, unused warning fix
 	int shots, hits;
 
 	for ( i = 0; i < MAX_CLIENTS; i++ ) {
@@ -2801,10 +2801,11 @@ void G_CalcClientAccuracies( void ) {
 		hits = 0;
 
 		if ( g_entities[i].inuse ) {
+			/* Nico, removed weaponstats
 			for ( j = 0; j < WS_MAX; j++ ) {
 				shots += level.clients[i].sess.aWeaponStats[j].atts;
 				hits += level.clients[i].sess.aWeaponStats[j].hits;
-			}
+			}*/
 
 			level.clients[ i ].acc = shots ? ( 100 * hits ) / (float)shots : 0;
 		} else {

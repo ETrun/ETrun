@@ -675,8 +675,9 @@ void ClientEvents( gentity_t *ent, int oldEventSequence ) {
 			mg42_fire( ent );
 
 			// Only 1 stats bin for mg42
+			/* Nico, removed weaponstats
 			if ( g_gamestate.integer == GS_PLAYING )
-				ent->client->sess.aWeaponStats[BG_WeapStatForWeapon( WP_MOBILE_MG42 )].atts++;
+				ent->client->sess.aWeaponStats[BG_WeapStatForWeapon( WP_MOBILE_MG42 )].atts++;*/
 
 			break;
 		case EV_FIRE_WEAPON_MOUNTEDMG42:
@@ -685,8 +686,9 @@ void ClientEvents( gentity_t *ent, int oldEventSequence ) {
 
 			mountedmg42_fire( ent );
 			// Only 1 stats bin for mg42
+			/* Nico, removed weaponstats
 			if ( g_gamestate.integer == GS_PLAYING )
-				ent->client->sess.aWeaponStats[BG_WeapStatForWeapon( WP_MOBILE_MG42 )].atts++;
+				ent->client->sess.aWeaponStats[BG_WeapStatForWeapon( WP_MOBILE_MG42 )].atts++;*/
 
 			break;
 

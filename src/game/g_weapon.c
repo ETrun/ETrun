@@ -585,9 +585,11 @@ void Weapon_Syringe( gentity_t *ent ) {
 				usedSyringe = ReviveEntity( ent, traceEnt );
 
 				// OSP - syringe "hit"
+				/* Nico, removed weaponstats
 				if ( g_gamestate.integer == GS_PLAYING ) {
 					ent->client->sess.aWeaponStats[WS_SYRINGE].hits++;
-				}
+				}*/
+
 				if ( ent && ent->client ) {
 					G_LogPrintf( "Medic_Revive: %d %d\n", ent - g_entities, traceEnt - g_entities );                // OSP
 
@@ -1596,7 +1598,9 @@ void Weapon_Engineer( gentity_t *ent ) {
 					ent->client->ps.classWeaponTime -= .5f * level.engineerChargeTime[ent->client->sess.sessionTeam - 1];
 				// }
 
-				ent->client->sess.aWeaponStats[WS_LANDMINE].atts--;
+				/* Nico, removed weaponstats
+				ent->client->sess.aWeaponStats[WS_LANDMINE].atts--;*/
+
 				return;
 //bani
 // rain - #384 - check landmine team so that enemy mines can be disarmed
@@ -1621,7 +1625,8 @@ void Weapon_Engineer( gentity_t *ent ) {
 						ent->client->ps.classWeaponTime -= .5f * level.engineerChargeTime[ent->client->sess.sessionTeam - 1];
 					// }
 
-					ent->client->sess.aWeaponStats[WS_LANDMINE].atts--;
+					/* Nico, removed weaponstats
+					ent->client->sess.aWeaponStats[WS_LANDMINE].atts--;*/
 					return;
 				}
 //bani - #471
@@ -2800,8 +2805,9 @@ void Weapon_Artillery( gentity_t *ent ) {
 	// }
 
 	// OSP -- weapon stats
+	/* Nico, removed weaponstats
 	if ( g_gamestate.integer == GS_PLAYING )
-		ent->client->sess.aWeaponStats[WS_ARTILLERY].atts++;
+		ent->client->sess.aWeaponStats[WS_ARTILLERY].atts++;*/
 
 }
 
@@ -4199,8 +4205,9 @@ void FireWeapon( gentity_t *ent ) {
 	}
 
 	// OSP
+	/* Nico, removed weaponstats
 	if ( g_gamestate.integer == GS_PLAYING )
-		ent->client->sess.aWeaponStats[BG_WeapStatForWeapon( ent->s.weapon )].atts += shots;
+		ent->client->sess.aWeaponStats[BG_WeapStatForWeapon( ent->s.weapon )].atts += shots;*/
 }
 
 

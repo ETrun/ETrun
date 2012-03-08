@@ -610,7 +610,8 @@ typedef struct {
 	int team_damage;
 	int team_kills;
 
-	weapon_stat_t aWeaponStats[WS_MAX + 1];   // Weapon stats.  +1 to avoid invalid weapon check
+	/* Nico, removed weaponstats
+	weapon_stat_t aWeaponStats[WS_MAX + 1];   // Weapon stats.  +1 to avoid invalid weapon check*/
 	// OSP
 
 	qboolean versionOK;
@@ -2165,7 +2166,8 @@ void G_spawnPrintf( int print_type, int print_time, gentity_t *owner );
 /* Nico, removed ws related command
 void G_statsPrint( gentity_t *ent, int nType );*/
 
-unsigned int G_weapStatIndex_MOD( unsigned int iWeaponMOD );
+/* Nico, removed weaponstats
+unsigned int G_weapStatIndex_MOD( unsigned int iWeaponMOD );*/
 
 ///////////////////////
 // g_multiview.c

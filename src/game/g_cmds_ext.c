@@ -32,7 +32,8 @@ If you have questions concerning this license or the applicable additional terms
 #include "g_local.h"
 #include "../../etrun/ui/menudef.h"
 
-int iWeap = WS_MAX;
+/* Nico, removed weaponstats
+int iWeap = WS_MAX;*/
 
 char *lock_status[2] = { "unlock", "lock" };
 
@@ -655,6 +656,7 @@ void G_teamready_cmd( gentity_t *ent, unsigned int dwCommand, qboolean state ) {
 }*/
 
 // These map to WS_* weapon indexes
+/* Nico, removed weaponstats
 const int cQualifyingShots[WS_MAX] = {
 	10,     // 0
 	15,     // 1
@@ -678,11 +680,12 @@ const int cQualifyingShots[WS_MAX] = {
 	100,    // 19
 	30,     // 20
 	30      // 21
-};
+};*/
 
 // ************** TOPSHOTS/BOTTOMSHOTS
 //
 // Gives back overall or specific weapon rankings
+/* Nico, removed weaponstats
 int QDECL SortStats( const void *a, const void *b ) {
 	gclient_t   *ca, *cb;
 	float accA, accB;
@@ -720,7 +723,7 @@ int QDECL SortStats( const void *a, const void *b ) {
 		return( -1 );
 	}
 	return( 1 );
-}
+}*/
 
 /* Nico, removed showstats client command
 // Shows the most accurate players for each weapon to the requesting client
