@@ -282,12 +282,13 @@ static void CG_TransitionSnapshot( void ) {
 	oldFrame = cg.snap;
 	cg.snap = cg.nextSnap;
 
+	/* Nico, removed XP
 	if ( cg.snap->ps.clientNum == cg.clientNum ) {
 		if ( cg.xp < cg.snap->ps.stats[STAT_XP] ) {
 			cg.xpChangeTime = cg.time;
 		}
 		cg.xp = cg.snap->ps.stats[STAT_XP];
-	}
+	}*/
 
 	BG_PlayerStateToEntityState( &cg.snap->ps, &cg_entities[ cg.snap->ps.clientNum ].currentState, qfalse );
 	cg_entities[ cg.snap->ps.clientNum ].interpolate = qfalse;

@@ -1522,7 +1522,8 @@ void ClientEndFrame( gentity_t *ent ) {
 		}
 	}
 
-	ent->client->ps.stats[STAT_XP] = 0;
+	/* Nico, removed XP
+	ent->client->ps.stats[STAT_XP] = 0;*/
 
 	/* Nico, removed skills
 	for ( i = 0; i < SK_NUM_SKILLS; i++ ) {

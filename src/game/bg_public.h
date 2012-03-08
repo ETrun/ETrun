@@ -582,7 +582,9 @@ typedef enum {
 	STAT_PLAYER_CLASS,              // DHM - Nerve :: player class in multiplayer
 	STAT_CAPTUREHOLD_RED,           // JPW NERVE - red team score
 	STAT_CAPTUREHOLD_BLUE,          // JPW NERVE - blue team score
-	STAT_XP,                        // Gordon: "realtime" version of xp that doesnt need to go thru the scoreboard
+
+	/* Nico, removed XP
+	STAT_XP,                        // Gordon: "realtime" version of xp that doesnt need to go thru the scoreboard*/
 } statIndex_t;
 
 // player_state->persistant[] indexes

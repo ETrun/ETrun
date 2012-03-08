@@ -3859,7 +3859,7 @@ static void CG_DrawPlayerStats( void ) {
 
 	const char*         str;
 	float w;
-	vec_t*              clr;
+	// vec_t*              clr; Nico, unused warning fix
 
 	str = va( "%i", cg.snap->ps.stats[STAT_HEALTH] );
 	w = CG_Text_Width_Ext( str, 0.25f, 0, &cgs.media.limboFont1 );
@@ -3882,6 +3882,7 @@ static void CG_DrawPlayerStats( void ) {
 		CG_DrawPic( i * SKILL_ICON_X_SCALE + SKILL_ICON_X, 480 + SKILL_ICON_Y, SKILL_ICON_SIZE, SKILL_ICON_SIZE, cgs.media.skillPics[skill] );
 	}*/
 
+	/* Nico, removed XP
 	if ( cg.time - cg.xpChangeTime < 1000 ) {
 		clr = colorYellow;
 	} else {
@@ -3892,7 +3893,7 @@ static void CG_DrawPlayerStats( void ) {
 	str = va( "%i", cg.snap->ps.stats[STAT_XP] );
 	w = CG_Text_Width_Ext( str, 0.25f, 0, &cgs.media.limboFont1 );
 	CG_Text_Paint_Ext( SKILLS_X + 28 - w, 480 - 4, 0.25f, 0.25f, clr, str, 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1 );
-	CG_Text_Paint_Ext( SKILLS_X + 28 + 2, 480 - 4, 0.2f, 0.2f, clr, "XP", 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1 );
+	CG_Text_Paint_Ext( SKILLS_X + 28 + 2, 480 - 4, 0.2f, 0.2f, clr, "XP", 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1 );*/
 
 	// draw treasure icon if we have the flag
 	// rain - #274 - use the playerstate instead of the clientinfo
