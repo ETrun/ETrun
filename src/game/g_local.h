@@ -2148,8 +2148,13 @@ void G_configSet( int mode, qboolean doComp );
 ///////////////////////
 // g_match.c
 //
-void G_addStats( gentity_t *targ, gentity_t *attacker, int dmg_ref, int mod );
-void G_addStatsHeadShot( gentity_t *attacker, int mod );
+
+/* Nico, removed G_addStats because it does nothing
+void G_addStats( gentity_t *targ, gentity_t *attacker, int dmg_ref, int mod );*/
+
+/* Nico, removed G_addStatsHeadShot because it does nothing
+void G_addStatsHeadShot( gentity_t *attacker, int mod );*/
+
 qboolean G_allowPanzer( gentity_t *ent );
 int G_checkServerToggle( vmCvar_t *cv );
 

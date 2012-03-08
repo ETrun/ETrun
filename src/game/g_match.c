@@ -213,6 +213,7 @@ void G_spawnPrintf( int print_type, int print_time, gentity_t *owner ) {
 }
 
 
+/* Nico, removed G_addStats because it does nothing
 // Records accuracy, damage, and kill/death stats.
 void G_addStats( gentity_t *targ, gentity_t *attacker, int dmg_ref, int mod ) {
 	int dmg;// , ref; Nico, unused warning fix
@@ -229,13 +230,13 @@ void G_addStats( gentity_t *targ, gentity_t *attacker, int dmg_ref, int mod ) {
 	// Special hack for intentional gibbage
 	if ( targ->health <= 0 && targ->client->ps.pm_type == PM_DEAD ) {
 
-		/* Nico, removed weaponstats
-		if ( mod < MOD_CROSS && attacker && attacker->client ) {
-			int x = attacker->client->sess.aWeaponStats[G_weapStatIndex_MOD( mod )].atts--;
-			if ( x < 1 ) {
-				attacker->client->sess.aWeaponStats[G_weapStatIndex_MOD( mod )].atts = 1;
-			}
-		}*/
+		// Nico, removed weaponstats
+		// if ( mod < MOD_CROSS && attacker && attacker->client ) {
+		//	int x = attacker->client->sess.aWeaponStats[G_weapStatIndex_MOD( mod )].atts--;
+		//	if ( x < 1 ) {
+		//		attacker->client->sess.aWeaponStats[G_weapStatIndex_MOD( mod )].atts = 1;
+		//	}
+		// }
 
 		return;
 	}
@@ -243,13 +244,13 @@ void G_addStats( gentity_t *targ, gentity_t *attacker, int dmg_ref, int mod ) {
 //	G_Printf("mod: %d, Index: %d, dmg: %d\n", mod, G_weapStatIndex_MOD(mod), dmg_ref);
 
 	// Suicides only affect the player specifically
-	/* Nico, removed suicides & team_damage & team_kills counters
-	if ( targ == attacker || !attacker || !attacker->client || mod == MOD_SUICIDE ) {
-		if ( targ->health <= 0 ) {
-			targ->client->sess.suicides++;
-		}
-		return;
-	}*/
+	// Nico, removed suicides & team_damage & team_kills counters
+	// if ( targ == attacker || !attacker || !attacker->client || mod == MOD_SUICIDE ) {
+	//	if ( targ->health <= 0 ) {
+	//		targ->client->sess.suicides++;
+	//	}
+	//	return;
+	// }
 
 	// Telefrags only add 100 points.. not 100k!!
 	if ( mod == MOD_TELEFRAG ) {
@@ -257,47 +258,47 @@ void G_addStats( gentity_t *targ, gentity_t *attacker, int dmg_ref, int mod ) {
 	} else { dmg = dmg_ref;}
 
 	// Player team stats
-	/* Nico, removed suicides & team_damage & team_kills counters
-	if ( g_gametype.integer >= GT_WOLF &&
-		 targ->client->sess.sessionTeam == attacker->client->sess.sessionTeam ) {
-		attacker->client->sess.team_damage += dmg;
-		if ( targ->health <= 0 ) {
-			attacker->client->sess.team_kills++;
-		}
-		return;
-	}*/
+	// Nico, removed suicides & team_damage & team_kills counters
+	// if ( g_gametype.integer >= GT_WOLF &&
+	//	 targ->client->sess.sessionTeam == attacker->client->sess.sessionTeam ) {
+	//	attacker->client->sess.team_damage += dmg;
+	//	if ( targ->health <= 0 ) {
+	//		attacker->client->sess.team_kills++;
+	//	}
+	//	return;
+	}
 
 	// General player stats
-	/* Nico, removed kills counter
-	if ( mod != MOD_SYRINGE ) {
-
+	// Nico, removed kills counter
+	// if ( mod != MOD_SYRINGE ) {
+	//
 		// Nico, removed damage_given & damage_received
 		// attacker->client->sess.damage_given += dmg;
 		// targ->client->sess.damage_received += dmg;
 
-		if ( targ->health <= 0 ) {
-			attacker->client->sess.kills++;
+	//	if ( targ->health <= 0 ) {
+	//		attacker->client->sess.kills++;
 
 			// Nico, removed deaths counter
 			// targ->client->sess.deaths++;
-		}
-	}*/
+	//	}
+	// }
 
 	// Player weapon stats
-	/* Nico, removed weaponstats
-	ref = G_weapStatIndex_MOD( mod );*/
+	// Nico, removed weaponstats
+	//ref = G_weapStatIndex_MOD( mod );
 
-	/* Nico, removed weaponstats
-	if ( dmg > 0 ) {
-		attacker->client->sess.aWeaponStats[ref].hits++;
-	}
-	if ( targ->health <= 0 ) {
-		attacker->client->sess.aWeaponStats[ref].kills++;
-		targ->client->sess.aWeaponStats[ref].deaths++;
-	}*/
-}
+	// Nico, removed weaponstats
+	//if ( dmg > 0 ) {
+	//	attacker->client->sess.aWeaponStats[ref].hits++;
+	// }
+	// if ( targ->health <= 0 ) {
+	//	attacker->client->sess.aWeaponStats[ref].kills++;
+	//	targ->client->sess.aWeaponStats[ref].deaths++;
+	// }
+}*/
 
-
+/* Nico, removed G_addStatsHeadShot because it does nothing
 // Records weapon headshots
 void G_addStatsHeadShot( gentity_t *attacker, int mod ) {
 	if ( g_gamestate.integer != GS_PLAYING ) {
@@ -307,9 +308,9 @@ void G_addStatsHeadShot( gentity_t *attacker, int mod ) {
 		return;
 	}
 
-	/* Nico, removed weaponstats
-	attacker->client->sess.aWeaponStats[G_weapStatIndex_MOD( mod )].headshots++;*/
-}
+	// Nico, removed weaponstats
+	// attacker->client->sess.aWeaponStats[G_weapStatIndex_MOD( mod )].headshots++;
+}*/
 
 // Ugh, converting enums is my day-time job :)
 //	--> MOD_* to WS_* conversion

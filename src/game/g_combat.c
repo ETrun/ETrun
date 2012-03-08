@@ -455,7 +455,8 @@ void player_die( gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int
 	}
 
 	// OSP - death stats handled out-of-band of G_Damage for external calls
-	G_addStats( self, attacker, damage, meansOfDeath );
+	/* Nico, removed G_addStats because it does nothing
+	G_addStats( self, attacker, damage, meansOfDeath );*/
 	// OSP
 
 	self->client->ps.pm_type = PM_DEAD;
@@ -1379,9 +1380,10 @@ void G_Damage( gentity_t *targ, gentity_t *inflictor, gentity_t *attacker,  vec3
 		targ->client->ps.eFlags |= EF_HEADSHOT;
 
 		// OSP - Record the headshot
+		/* Nico, removed G_addStatsHeadShot because it does nothing
 		if ( client && attacker && attacker->client && attacker->client->sess.sessionTeam != targ->client->sess.sessionTeam ) {
 			G_addStatsHeadShot( attacker, mod );
-		}
+		}*/
 
 		if ( g_debugBullets.integer ) {
 			trap_SendServerCommand( attacker - g_entities, "print \"Head Shot\n\"\n" );
@@ -1489,9 +1491,10 @@ void G_Damage( gentity_t *targ, gentity_t *inflictor, gentity_t *attacker,  vec3
 			if ( client && !wasAlive ) {
 				targ->flags |= FL_NO_KNOCKBACK;
 				// OSP - special hack to not count attempts for body gibbage
+				/* Nico, removed G_addStats because it does nothing
 				if ( targ->client->ps.pm_type == PM_DEAD ) {
 					G_addStats( targ, attacker, take, mod );
-				}
+				}*/
 
 				if ( ( targ->health < FORCE_LIMBO_HEALTH ) && ( targ->health > GIB_HEALTH ) ) {
 					limbo( targ, qtrue );
@@ -1561,11 +1564,13 @@ void G_Damage( gentity_t *targ, gentity_t *inflictor, gentity_t *attacker,  vec3
 			}
 
 			targ->pain( targ, attacker, take, point );
-		} else {
+		}
+		/* Nico, removed G_addStats because it does nothing
+		else {
 			// OSP - update weapon/dmg stats
 			G_addStats( targ, attacker, take, mod );
 			// OSP
-		}
+		}*/
 
 		// RF, entity scripting
 		G_Script_ScriptEvent( targ, "pain", va( "%d %d", targ->health, targ->health + take ) );
