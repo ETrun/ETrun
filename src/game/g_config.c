@@ -63,8 +63,10 @@ static const modeCvarTable_t aCompSettings[] = {
 	/* Nico, removed respawnLeft
 	{ M_ALL, "g_maxlives", "0" },*/
 
+	/* Nico, removed balancedteams
 	{ M_ALL, "g_teamforcebalance", "0" },
-	{ M_ALL, "g_lms_teamForceBalance", "0" },
+	{ M_ALL, "g_lms_teamForceBalance", "0" },*/
+
 	{ M_ALL, "g_voicechatsallowed", "50" },
 
 	/* Nico, removed warmup
@@ -97,8 +99,10 @@ static const modeCvarTable_t aPubSettings[] = {
 	/* Nico, removed respawnLeft
 	{ M_ALL, "g_maxlives", "0" },*/
 
+	/* Nico, removed balancedteams
 	{ M_ALL, "g_teamforcebalance", "1" },
-	{ M_ALL, "g_lms_teamForceBalance", "1" },
+	{ M_ALL, "g_lms_teamForceBalance", "1" },*/
+
 	{ M_ALL, "g_voicechatsallowed", "50" },
 
 	/* Nico, removed warmup

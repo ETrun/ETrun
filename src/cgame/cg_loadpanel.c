@@ -382,11 +382,12 @@ void CG_DrawConnectScreen( qboolean interactive, qboolean forcerefresh ) {
 			CG_DrawPic( x, y, 16, 16, bg_filter_al );
 		}
 
+		/* Nico, removed balancedteams
 		str = Info_ValueForKey( buffer, "g_balancedteams" );
 		if ( str && *str && atoi( str ) ) {
 			x = 604;
 			CG_DrawPic( x, y, 16, 16, bg_filter_bt );
-		}
+		}*/
 	}
 
 	if ( *cgs.rawmapname ) {

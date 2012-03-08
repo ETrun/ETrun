@@ -723,11 +723,15 @@ int G_checkServerToggle( vmCvar_t *cv ) {
 		nFlag = CV_SVS_MUTESPECS;
 	} else if ( cv == &g_friendlyFire ) {
 		nFlag = CV_SVS_FRIENDLYFIRE;
-	} else if ( cv == &g_antilag )                                                                   {
+	} else if ( cv == &g_antilag ) {
 		nFlag = CV_SVS_ANTILAG;
-	} else if ( cv == &g_balancedteams )                                                                                                                           {
-		nFlag = CV_SVS_BALANCEDTEAMS;
 	}
+	
+	/* Nico, removed balancedteams
+	else if ( cv == &g_balancedteams ) {
+		nFlag = CV_SVS_BALANCEDTEAMS;
+	}*/
+
 	// special case for 2 bits
 	/* Nico, removed warmup
 	else if ( cv == &match_warmupDamage ) {
@@ -739,6 +743,7 @@ int G_checkServerToggle( vmCvar_t *cv ) {
 			nFlag = CV_SVS_WARMUPDMG;
 		}
 	}*/
+
 	else if ( cv == &g_nextmap && g_gametype.integer != GT_WOLF_CAMPAIGN ) {
 		if ( *cv->string ) {
 			level.server_settings |= CV_SVS_NEXTMAP;

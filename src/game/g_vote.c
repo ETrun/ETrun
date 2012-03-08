@@ -108,7 +108,10 @@ static const vote_reference_t aVoteInfo[] = {
 	{ 0x1ff, "warmupdamage", G_Warmupfire_v, "Warmup Damage", " <0|1|2>^7\n  Specifies if players can inflict damage during warmup" },*/
 
 	{ 0x1ff, "antilag",       G_AntiLag_v,       "Anti-Lag",          " <0|1>^7\n  Toggles Anit-Lag on the server" },
-	{ 0x1ff, "balancedteams",G_BalancedTeams_v,  "Balanced Teams",    " <0|1>^7\n  Toggles team balance forcing" },
+
+	/* Nico, removed balancedteams
+	{ 0x1ff, "balancedteams",G_BalancedTeams_v,  "Balanced Teams",    " <0|1>^7\n  Toggles team balance forcing" },*/
+
 	{ 0, 0, NULL, 0 }
 };
 
@@ -901,6 +904,7 @@ int G_AntiLag_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2
 	return( G_OK );
 }
 
+/* Nico, removed balancedteams
 // Balanced Teams
 int G_BalancedTeams_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd ) {
 	// Vote request (vote is being initiated)
@@ -918,7 +922,7 @@ int G_BalancedTeams_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char
 	}
 
 	return( G_OK );
-}
+}*/
 
 /* Nico, no timelimit
 // *** Timelimit ***

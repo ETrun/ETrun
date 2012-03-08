@@ -684,6 +684,7 @@ qboolean SetTeam( gentity_t *ent, char *s, qboolean force, weapon_t w1, weapon_t
 			return qfalse;  // ignore the request
 		}
 
+		/* Nico, removed balancedteams
 		if ( ( ( g_gametype.integer == GT_WOLF_LMS && g_lms_teamForceBalance.integer ) || g_teamForceBalance.integer ) && !force ) {
 			int counts[TEAM_NUM_TEAMS];
 
@@ -701,7 +702,7 @@ qboolean SetTeam( gentity_t *ent, char *s, qboolean force, weapon_t w1, weapon_t
 			}
 
 			// It's ok, the team we are switching to has less or same number of players
-		}
+		}*/
 	}
 
 	if ( g_maxGameClients.integer > 0 && level.numNonSpectatorClients >= g_maxGameClients.integer ) {

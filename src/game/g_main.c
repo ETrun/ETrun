@@ -128,13 +128,18 @@ vmCvar_t g_knifeonly;               // Xian
 vmCvar_t g_enforcemaxlives;         // Xian*/
 
 vmCvar_t g_needpass;
-vmCvar_t g_balancedteams;
+
+/* Nico, removed balancedteams
+vmCvar_t g_balancedteams;*/
 
 /* Nico, removed warmup
 vmCvar_t g_doWarmup;*/
 
 vmCvar_t g_teamAutoJoin;
-vmCvar_t g_teamForceBalance;
+
+/* Nico, removed balancedteams
+vmCvar_t g_teamForceBalance;*/
+
 vmCvar_t g_banIPs;
 vmCvar_t g_filterBan;
 vmCvar_t g_rankings;
@@ -208,7 +213,10 @@ vmCvar_t vote_allow_timelimit;*/
 vmCvar_t vote_allow_warmupdamage;*/
 
 vmCvar_t vote_allow_antilag;
-vmCvar_t vote_allow_balancedteams;
+
+/* Nico, removed balancedteams
+vmCvar_t vote_allow_balancedteams;*/
+
 vmCvar_t vote_allow_muting;
 vmCvar_t vote_limit;
 vmCvar_t vote_percent;
@@ -235,7 +243,10 @@ vmCvar_t g_currentCampaignMap;
 // Arnout: for LMS
 vmCvar_t g_axiswins;
 vmCvar_t g_alliedwins;
-vmCvar_t g_lms_teamForceBalance;
+
+/* Nico, removed balancedteams
+vmCvar_t g_lms_teamForceBalance;*/
+
 vmCvar_t g_lms_roundlimit;
 vmCvar_t g_lms_matchlimit;
 vmCvar_t g_lms_currentMatch;
@@ -296,7 +307,8 @@ cvarTable_t gameCvarTable[] = {
 
 	{ &g_friendlyFire, "g_friendlyFire", "1", CVAR_SERVERINFO | CVAR_ARCHIVE, 0, qtrue, qtrue },
 
-	{ &g_teamForceBalance, "g_teamForceBalance", "0", CVAR_ARCHIVE  },                            // NERVE - SMF - merge from team arena
+	/* Nico, removed balancedteams
+	{ &g_teamForceBalance, "g_teamForceBalance", "0", CVAR_ARCHIVE  },                            // NERVE - SMF - merge from team arena*/
 
 	/* Nico, removed warmup
 	{ &g_warmup, "g_warmup", "60", CVAR_ARCHIVE, 0, qtrue  },
@@ -343,7 +355,10 @@ cvarTable_t gameCvarTable[] = {
 	{ &g_quadfactor, "g_quadfactor", "3", 0, 0, qtrue },
 
 	{ &g_needpass, "g_needpass", "0", CVAR_SERVERINFO | CVAR_ROM, 0, qtrue },
-	{ &g_balancedteams, "g_balancedteams", "0", CVAR_SERVERINFO | CVAR_ROM, 0, qtrue },
+
+	/* Nico, removed balancedteams
+	{ &g_balancedteams, "g_balancedteams", "0", CVAR_SERVERINFO | CVAR_ROM, 0, qtrue },*/
+
 	{ &g_forcerespawn, "g_forcerespawn", "0", 0, 0, qtrue },
 	{ &g_forcerespawn, "g_forcerespawn", "0", 0, 0, qtrue },
 	{ &g_inactivity, "g_inactivity", "0", 0, 0, qtrue },
@@ -437,7 +452,10 @@ cvarTable_t gameCvarTable[] = {
 	{ &vote_allow_warmupdamage, "vote_allow_warmupdamage", "1", 0, 0, qfalse, qfalse },*/
 
 	{ &vote_allow_antilag,      "vote_allow_antilag", "1", 0, 0, qfalse, qfalse },
-	{ &vote_allow_balancedteams,"vote_allow_balancedteams", "1", 0, 0, qfalse, qfalse },
+
+	/* Nico, removed balancedteams
+	{ &vote_allow_balancedteams,"vote_allow_balancedteams", "1", 0, 0, qfalse, qfalse },*/
+
 	{ &vote_allow_muting,       "vote_allow_muting", "1", 0, 0, qfalse, qfalse },
 	{ &vote_limit,      "vote_limit", "5", 0, 0, qfalse, qfalse },
 	{ &vote_percent,    "vote_percent", "50", 0, 0, qfalse, qfalse },
@@ -457,7 +475,9 @@ cvarTable_t gameCvarTable[] = {
 	{ &g_movespeed, "g_movespeed", "76", CVAR_CHEAT, 0, qfalse },
 
 	// Arnout: LMS
-	{ &g_lms_teamForceBalance,  "g_lms_teamForceBalance",    "1", CVAR_ARCHIVE },
+	/* Nico, removed balancedteams
+	{ &g_lms_teamForceBalance,  "g_lms_teamForceBalance",    "1", CVAR_ARCHIVE },*/
+
 	{ &g_lms_roundlimit,        "g_lms_roundlimit",          "3", CVAR_ARCHIVE },
 	{ &g_lms_matchlimit,        "g_lms_matchlimit",          "2", CVAR_ARCHIVE },
 	{ &g_lms_currentMatch,      "g_lms_currentMatch",        "0", CVAR_ROM, 0, qfalse, qtrue },
@@ -1446,7 +1466,9 @@ void G_UpdateCvars( void ) {
 						 /* Nico, removed warmup
 						 || cv->vmCvar == &vote_allow_warmupdamage  */
 						 || cv->vmCvar == &vote_allow_antilag        ||
-						 cv->vmCvar == &vote_allow_balancedteams || cv->vmCvar == &vote_allow_muting
+						 /* Nico, removed balancedteams
+						 cv->vmCvar == &vote_allow_balancedteams || */
+						 cv->vmCvar == &vote_allow_muting
 						 ) {
 						fVoteFlags = qtrue;
 					} else {
@@ -3096,8 +3118,10 @@ CheckCvars
 */
 void CheckCvars( void ) {
 	static int g_password_lastMod = -1;
+
+	/* Nico, removed balancedteams
 	static int g_teamForceBalance_lastMod = -1;
-	static int g_lms_teamForceBalance_lastMod = -1;
+	static int g_lms_teamForceBalance_lastMod = -1;*/
 
 	if ( g_password.modificationCount != g_password_lastMod ) {
 		g_password_lastMod = g_password.modificationCount;
@@ -3108,9 +3132,11 @@ void CheckCvars( void ) {
 		}
 	}
 
+	/* Nico, removed balancedteams
 	if ( g_gametype.integer == GT_WOLF_LMS ) {
 		if ( g_lms_teamForceBalance.modificationCount != g_lms_teamForceBalance_lastMod ) {
 			g_lms_teamForceBalance_lastMod = g_lms_teamForceBalance.modificationCount;
+
 			if ( g_lms_teamForceBalance.integer ) {
 				trap_Cvar_Set( "g_balancedteams", "1" );
 			} else {
@@ -3126,7 +3152,7 @@ void CheckCvars( void ) {
 				trap_Cvar_Set( "g_balancedteams", "0" );
 			}
 		}
-	}
+	}*/
 }
 
 /*

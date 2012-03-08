@@ -5274,8 +5274,9 @@ UI_BuildServerDisplayList
 */
 static void UI_BuildServerDisplayList( qboolean force ) {
 	/* Nico, removed respawnLeft
+	Nico, removed balancedteams
 	int i, count, clients, maxClients, ping, game, len, visible, friendlyFire, maxlives, punkbuster, antilag, password, weaponrestricted, balancedteams;*/
-	int i, count, clients, maxClients, ping, game, len, visible, friendlyFire, punkbuster, antilag, password, weaponrestricted, balancedteams;
+	int i, count, clients, maxClients, ping, game, len, visible, friendlyFire, punkbuster, antilag, password, weaponrestricted;
 	char info[MAX_STRING_CHARS];
 	static int numinvisible;
 
@@ -5428,6 +5429,7 @@ static void UI_BuildServerDisplayList( qboolean force ) {
 				}
 			}
 
+			/* Nico, removed balancedteams
 			trap_Cvar_Update( &ui_browserShowTeamBalanced );
 			if ( ui_browserShowTeamBalanced.integer ) {
 				balancedteams = atoi( Info_ValueForKey( info, "balancedteams" ) );
@@ -5437,7 +5439,7 @@ static void UI_BuildServerDisplayList( qboolean force ) {
 					trap_LAN_MarkServerVisible( ui_netSource.integer, i, qfalse );
 					continue;
 				}
-			}
+			}*/
 
 			trap_Cvar_Update( &ui_joinGameType );
 			if ( ui_joinGameType.integer != -1 ) {
@@ -6062,8 +6064,9 @@ const char *UI_FeederItemText( float feederID, int index, int column, qhandle_t 
 	} else if ( feederID == FEEDER_SERVERS ) {
 		if ( index >= 0 && index < uiInfo.serverStatus.numDisplayServers ) {
 			/* Nico, removed respawnLeft
+			Nico, removed balancedteams
 			int ping, game, antilag, needpass, friendlyfire, maxlives, punkbuster, weaponrestrictions, balancedteams, serverload;*/
-			int ping, game, antilag, needpass, friendlyfire, punkbuster, weaponrestrictions, balancedteams, serverload;
+			int ping, game, antilag, needpass, friendlyfire, punkbuster, weaponrestrictions, serverload;
 			if ( lastColumn != column || lastTime > uiInfo.uiDC.realTime + 5000 ) {
 				trap_LAN_GetServerInfo( ui_netSource.integer, uiInfo.serverStatus.displayServers[index], info, MAX_STRING_CHARS );
 				lastColumn = column;
@@ -6151,7 +6154,9 @@ const char *UI_FeederItemText( float feederID, int index, int column, qhandle_t 
 					punkbuster = atoi( Info_ValueForKey( info, "punkbuster" ) );
 					weaponrestrictions = atoi( Info_ValueForKey( info, "weaprestrict" ) );
 					antilag = atoi( Info_ValueForKey( info, "g_antilag" ) );
-					balancedteams = atoi( Info_ValueForKey( info, "balancedteams" ) );
+
+					/* Nico, removed balancedteams
+					balancedteams = atoi( Info_ValueForKey( info, "balancedteams" ) );*/
 
 					if ( needpass ) {
 						handles[0] = uiInfo.passwordFilter;
@@ -6174,9 +6179,11 @@ const char *UI_FeederItemText( float feederID, int index, int column, qhandle_t 
 					if ( antilag ) {
 						handles[5] = uiInfo.antiLagFilter;
 					} else { handles[5] = -1;}
+
+					/* Nico, removed balancedteams
 					if ( balancedteams ) {
 						handles[6] = uiInfo.teamBalanceFilter;
-					} else { handles[6] = -1;}
+					} else { handles[6] = -1;}*/
 
 					return "";
 				}
@@ -7419,7 +7426,9 @@ vmCvar_t ui_browserShowMaxlives;                // NERVE - SMF*/
 vmCvar_t ui_browserShowPunkBuster;              // DHM - Nerve
 vmCvar_t ui_browserShowAntilag;     // TTimo
 vmCvar_t ui_browserShowWeaponsRestricted;
-vmCvar_t ui_browserShowTeamBalanced;
+
+/* Nico, removed balancedteams
+vmCvar_t ui_browserShowTeamBalanced;*/
 
 vmCvar_t ui_serverStatusTimeOut;
 
@@ -7589,7 +7598,9 @@ cvarTable_t cvarTable[] = {
 	{ &ui_browserShowPunkBuster, "ui_browserShowPunkBuster", "0", CVAR_ARCHIVE },
 	{ &ui_browserShowAntilag, "ui_browserShowAntilag", "0", CVAR_ARCHIVE },
 	{ &ui_browserShowWeaponsRestricted, "ui_browserShowWeaponsRestricted", "0", CVAR_ARCHIVE },
-	{ &ui_browserShowTeamBalanced, "ui_browserShowTeamBalanced", "0", CVAR_ARCHIVE },
+
+	/* Nico, removed balancedteams
+	{ &ui_browserShowTeamBalanced, "ui_browserShowTeamBalanced", "0", CVAR_ARCHIVE },*/
 
 	{ &ui_serverStatusTimeOut, "ui_serverStatusTimeOut", "7000", CVAR_ARCHIVE},
 
@@ -7689,7 +7700,10 @@ cvarTable_t cvarTable[] = {
 	{ NULL, "g_maxLives", "0", CVAR_ARCHIVE },*/
 
 	{ NULL, "refereePassword", "none", CVAR_ARCHIVE },
-	{ NULL, "g_teamForceBalance", "0", CVAR_ARCHIVE  },
+
+	/* Nico, removed balancedteams
+	{ NULL, "g_teamForceBalance", "0", CVAR_ARCHIVE  },*/
+
 	{ NULL, "sv_maxRate", "0", CVAR_ARCHIVE },
 	{ NULL, "g_spectatorInactivity", "0", CVAR_ARCHIVE },
 	{ NULL, "match_latejoin", "1", CVAR_ARCHIVE },

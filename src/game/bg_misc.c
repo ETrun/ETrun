@@ -4903,7 +4903,10 @@ const voteType_t voteToggles[] =
 	{ "vote_allow_warmupdamage", CV_SVF_WARMUPDAMAGE },*/
 
 	{ "vote_allow_antilag",          CV_SVF_ANTILAG },
-	{ "vote_allow_balancedteams",    CV_SVF_BALANCEDTEAMS },
+
+	/* Nico, removed balancedteams
+	{ "vote_allow_balancedteams",    CV_SVF_BALANCEDTEAMS },*/
+
 	{ "vote_allow_muting",           CV_SVF_MUTING }
 };
 

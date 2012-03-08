@@ -1646,13 +1646,18 @@ extern vmCvar_t g_knifeonly;                // Xian - Wacky Knife-Only rounds
 extern vmCvar_t g_enforcemaxlives;          // Xian - Temp ban with maxlives between rounds*/
 
 extern vmCvar_t g_needpass;
-extern vmCvar_t g_balancedteams;
+
+/* Nico, removed balancedteams
+extern vmCvar_t g_balancedteams;*/
 
 /* Nico, removed warmup
 extern vmCvar_t g_doWarmup;*/
 
 extern vmCvar_t g_teamAutoJoin;
-extern vmCvar_t g_teamForceBalance;
+
+/* Nico, removed balancedteams
+extern vmCvar_t g_teamForceBalance;*/
+
 extern vmCvar_t g_banIPs;
 extern vmCvar_t g_filterBan;
 extern vmCvar_t g_rankings;
@@ -1701,7 +1706,10 @@ extern vmCvar_t g_currentCampaignMap;
 // Arnout: for LMS
 extern vmCvar_t g_axiswins;
 extern vmCvar_t g_alliedwins;
-extern vmCvar_t g_lms_teamForceBalance;
+
+/* Nico, removed balancedteams
+extern vmCvar_t g_lms_teamForceBalance;*/
+
 extern vmCvar_t g_lms_roundlimit;
 extern vmCvar_t g_lms_matchlimit;
 extern vmCvar_t g_lms_currentMatch;
@@ -1781,7 +1789,10 @@ extern vmCvar_t vote_allow_timelimit;*/
 extern vmCvar_t vote_allow_warmupdamage;*/
 
 extern vmCvar_t vote_allow_antilag;
-extern vmCvar_t vote_allow_balancedteams;
+
+/* Nico, removed balancedteams
+extern vmCvar_t vote_allow_balancedteams;*/
+
 extern vmCvar_t vote_allow_muting;
 extern vmCvar_t vote_limit;
 extern vmCvar_t vote_percent;
@@ -2313,7 +2324,9 @@ int G_Warmupfire_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *a
 
 int G_Unreferee_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd );
 int G_AntiLag_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd );
-int G_BalancedTeams_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd );
+
+/* Nico, removed balancedteams
+int G_BalancedTeams_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd );*/
 
 void G_LinkDebris( void );
 void G_LinkDamageParents( void );
