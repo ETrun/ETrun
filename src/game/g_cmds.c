@@ -129,7 +129,7 @@ void G_SendScore( gentity_t *ent ) {
 				// Nico, removed respawnLeft
 				// Com_sprintf( entry, sizeof( entry ), " %i %i %i %i %i %i %i", level.sortedClients[i], totalXP, ping,
 				//			 ( level.time - cl->pers.enterTime ) / 60000, g_entities[level.sortedClients[i]].s.powerups, playerClass, respawnsLeft );
-				Com_sprintf( entry, sizeof( entry ), " %i %i %i %i %i %i", level.sortedClients[i], 0, ping,
+				Com_sprintf( entry, sizeof( entry ), " %i %i %i %i %i", level.sortedClients[i], ping,
 					( level.time - cl->pers.enterTime ) / 60000, g_entities[level.sortedClients[i]].s.powerups, playerClass );
 			// }
 
