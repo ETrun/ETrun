@@ -1052,7 +1052,8 @@ void CG_PredictPlayerState( void ) {
 			cg_pmove.ps->pm_type = PM_FREEZE;
 		}
 
-		cg_pmove.gametype =             cgs.gametype;
+		/* Nico, removed gametypes
+		cg_pmove.gametype =             cgs.gametype;*/
 
 		// rain - only fill in the charge times if we're on a playing team
 		if ( cg.snap->ps.persistant[PERS_TEAM] == TEAM_AXIS || cg.snap->ps.persistant[PERS_TEAM] == TEAM_ALLIES ) {

@@ -56,7 +56,9 @@ If you have questions concerning this license or the applicable additional terms
 // SP : Axis: 20 seconds
 //		Allies: 30 seconds
 // MP : Both 10 seconds
-#define BODY_TIME( t ) ( ( g_gametype.integer != GT_SINGLE_PLAYER || g_gametype.integer == GT_COOP ) ? 10000 : ( t ) == TEAM_AXIS ? 20000 : 30000 )
+/* Nico, removed gametypes
+#define BODY_TIME( t ) ( ( g_gametype.integer != GT_SINGLE_PLAYER || g_gametype.integer == GT_COOP ) ? 10000 : ( t ) == TEAM_AXIS ? 20000 : 30000 )*/
+#define BODY_TIME( t ) ( 10000 )
 
 #define MAX_MG42_HEAT           1500.f
 
@@ -1265,8 +1267,10 @@ qboolean infront( gentity_t *self, gentity_t *other );
 void G_ProcessTagConnect( gentity_t *ent, qboolean clearAngles );
 
 void G_SetEntState( gentity_t *ent, entState_t state );
+
+/* Nico, removed gametypes
 void G_ParseCampaigns( void );
-qboolean G_MapIsValidCampaignStartMap( void );
+qboolean G_MapIsValidCampaignStartMap( void );*/
 
 team_t G_GetTeamFromEntity( gentity_t *ent );
 
@@ -1496,7 +1500,8 @@ void QDECL G_Printf( const char *fmt, ... ) _attribute( ( format( printf,1,2 ) )
 void QDECL G_DPrintf( const char *fmt, ... ) _attribute( ( format( printf,1,2 ) ) );
 void QDECL G_Error( const char *fmt, ... ) _attribute( ( format( printf,1,2 ) ) );
 // Is this a single player type game - sp or coop?
-qboolean G_IsSinglePlayerGame();
+/* Nico, removed gametypes
+qboolean G_IsSinglePlayerGame();*/
 
 //
 // g_client.c
@@ -1702,12 +1707,12 @@ extern vmCvar_t g_scriptDebugLevel;
 // How fast do SP player and allied bots move?
 extern vmCvar_t g_movespeed;
 
+/* Nico, removed gametypes
 extern vmCvar_t g_axismapxp;
 extern vmCvar_t g_alliedmapxp;
-
 extern vmCvar_t g_oldCampaign;
 extern vmCvar_t g_currentCampaign;
-extern vmCvar_t g_currentCampaignMap;
+extern vmCvar_t g_currentCampaignMap;*/
 
 // Arnout: for LMS
 /* Nico, removed LMS
@@ -1812,7 +1817,9 @@ extern vmCvar_t g_heavyWeaponRestriction;
 extern vmCvar_t g_autoFireteams;
 
 extern vmCvar_t g_nextmap;
-extern vmCvar_t g_nextcampaign;
+
+/* Nico, removed gametypes
+extern vmCvar_t g_nextcampaign;*/
 
 extern vmCvar_t g_disableComplaints;
 
@@ -2298,7 +2305,9 @@ void G_playersMessage( gentity_t *ent );
 /* Nico, removed competition settings
 int G_Comp_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd );*/
 
-int G_Gametype_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd );
+/* Nico, removed gametypes
+int G_Gametype_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd );*/
+
 int G_Kick_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd );
 int G_Mute_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd );
 int G_UnMute_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd );

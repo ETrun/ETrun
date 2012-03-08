@@ -2081,9 +2081,9 @@ void G_TryDoor( gentity_t *ent, gentity_t *other, gentity_t *activator ) {
 		if ( ent->active == qfalse ) {
 			if ( ent->key < 0
 				 || !G_AllowTeamsAllowed( ent, activator )
-				 || ( G_IsSinglePlayerGame() && ent->key == KEY_LOCKED_PICKABLE )  ) { // door force locked
-//				if(!walking && activator)	// only send audible event if not trying to open slowly
-//					AICast_AudibleEvent( activator->s.clientNum, ent->s.origin, HEAR_RANGE_DOOR_LOCKED );	// "someone tried locked door near me!"
+				 /* Nico, removed gametypes
+				 || ( G_IsSinglePlayerGame() && ent->key == KEY_LOCKED_PICKABLE )  ) { // door force locked*/
+			) { // door force locked
 				G_AddEvent( ent, EV_GENERAL_SOUND, ent->soundPos3 );
 				return;
 			}
@@ -3650,12 +3650,13 @@ void SP_func_door_rotating( gentity_t *ent ) {
 
 	}
 	// special case for single player
+	/* Nico, removed gametypes
 	if ( G_IsSinglePlayerGame() && ( ent->key == 99 ) ) {
 		ent->key = KEY_LOCKED_PICKABLE;
 
 		// TAT 1/29/2003 - also load how long it takes to pick the lock - default to 30 seconds
 		G_SpawnInt( "lockpickTime", "30", &ent->grenadeFired );
-	}
+	}*/
 
 	// if the key is invalid, set the key in the finishSpawning routine
 	if ( ent->key > KEY_NUM_KEYS || ent->key < -2 ) {
@@ -4396,15 +4397,6 @@ void G_Activate( gentity_t *ent, gentity_t *activator ) {
 		if ( ent->key < 0 ) {  // ent force locked
 			return;
 		}
-
-/*		// TAT 2/3/2003 - want keys for SP
-		if (G_IsSinglePlayerGame() && ent->key > 0)	// ent requires key
-		{
-			gitem_t *item = BG_FindItemForKey(ent->key, 0);
-			if (!(activator->client->ps.stats[STAT_KEYS] & (1<<item->giTag)))
-				return;
-		}
-		*/
 
 		if ( !Q_stricmp( ent->classname, "script_mover" ) ) {  // RF, dont activate script_mover's
 			return;

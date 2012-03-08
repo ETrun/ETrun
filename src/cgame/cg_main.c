@@ -2637,13 +2637,15 @@ void CG_Init( int serverMessageNum, int serverCommandSequence, int clientNum, qb
 	CG_ParseWolfinfo();     // NERVE - SMF
 
 	cgs.campaignInfoLoaded = qfalse;
+
+	/* Nico, removed gametypes
 	if ( cgs.gametype == GT_WOLF_CAMPAIGN ) {
 		CG_LocateCampaign();
-	/* Nico, removed LMS
-	} else if ( cgs.gametype == GT_WOLF_STOPWATCH || cgs.gametype == GT_WOLF_LMS || cgs.gametype == GT_WOLF ) {*/
-	} else if ( cgs.gametype == GT_WOLF_STOPWATCH || cgs.gametype == GT_WOLF ) {
+	// Nico, removed LMS
+	// } else if ( cgs.gametype == GT_WOLF_STOPWATCH || cgs.gametype == GT_WOLF_LMS || cgs.gametype == GT_WOLF ) {
+	} else if ( cgs.gametype == GT_WOLF_STOPWATCH || cgs.gametype == GT_WOLF ) {*/
 		CG_LocateArena();
-	}
+	// }
 
 	CG_ClearTrails();
 	CG_ClearParticles();
@@ -2769,9 +2771,7 @@ void CG_Init( int serverMessageNum, int serverCommandSequence, int clientNum, qb
 
 	CG_SetupCabinets();
 
-	if ( !CG_IsSinglePlayer() ) {
-		trap_S_FadeAllSound( 1.0f, 0, qfalse );   // fade sound up
-	}
+	trap_S_FadeAllSound( 1.0f, 0, qfalse );   // fade sound up
 
 	// OSP
 	/* Nico, removed statsdump client command
@@ -2796,16 +2796,6 @@ void CG_Shutdown( void ) {
 		trap_Cvar_Set( "timescale", "1" );
 	}
 }
-
-// returns true if game is single player (or coop)
-qboolean CG_IsSinglePlayer( void ) {
-	if ( cg_gameType.integer == GT_SINGLE_PLAYER || cgs.gametype == GT_COOP ) {
-		return qtrue;
-	}
-
-	return qfalse;
-}
-
 
 qboolean CG_CheckExecKey( int key ) {
 	if ( !cg.showFireteamMenu ) {

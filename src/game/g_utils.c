@@ -1190,6 +1190,7 @@ static qboolean G_LoadCampaignsFromFile( const char *filename ) {
 				return qfalse;
 			}
 
+			/* Nico, removed gametypes
 			if ( strstr( token.string, "wolfsp" ) ) {
 				g_campaigns[level.campaignCount].typeBits |= ( 1 << GT_SINGLE_PLAYER );
 			}
@@ -1201,7 +1202,7 @@ static qboolean G_LoadCampaignsFromFile( const char *filename ) {
 			}
 			if ( strstr( token.string, "wolfsw" ) ) {
 				g_campaigns[level.campaignCount].typeBits |= ( 1 << GT_WOLF_STOPWATCH );
-			}
+			}*/
 
 			/* Nico, removed LMS
 			if ( strstr( token.string, "wolflms" ) ) {
@@ -1228,6 +1229,7 @@ static qboolean G_LoadCampaignsFromFile( const char *filename ) {
 				}
 				*mapnamePtr = '\0';
 
+				/* Nico, removed gametypes
 				if ( g_gametype.integer == GT_WOLF_CAMPAIGN ) {
 					if ( !mapFound &&
 						 !Q_stricmp( g_campaigns[level.campaignCount].shortname, g_currentCampaign.string ) &&
@@ -1247,7 +1249,8 @@ static qboolean G_LoadCampaignsFromFile( const char *filename ) {
 
 						level.currentCampaign = level.campaignCount;
 					}
-				}
+				}*/
+
 				// rain - don't stomp out of bounds
 				if ( g_campaigns[level.campaignCount].mapCount < MAX_MAPS_PER_CAMPAIGN ) {
 					Q_strncpyz( g_campaigns[level.campaignCount].mapnames[g_campaigns[level.campaignCount].mapCount], mapname, MAX_QPATH );
@@ -1273,6 +1276,7 @@ static qboolean G_LoadCampaignsFromFile( const char *filename ) {
 	return mapFound;
 }
 
+/* Nico, removed gametypes
 qboolean G_MapIsValidCampaignStartMap( void ) {
 	int i;
 
@@ -1353,7 +1357,7 @@ void G_ParseCampaigns( void ) {
 			trap_SendConsoleCommand( EXEC_APPEND, va( "%s %s", buf, level.rawmapname ) );
 		}
 	}
-}
+}*/
 
 void G_PrintClientSpammyCenterPrint( int entityNum, char* text ) {
 	if ( !g_entities[entityNum].client ) {

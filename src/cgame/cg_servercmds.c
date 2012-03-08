@@ -131,10 +131,16 @@ void CG_ParseServerinfo( void ) {
 	char    *mapname;
 
 	info = CG_ConfigString( CS_SERVERINFO );
-	cg_gameType.integer = cgs.gametype = atoi( Info_ValueForKey( info, "g_gametype" ) );
+
+	/* Nico, removed gametypes
+	cg_gameType.integer = cgs.gametype = atoi( Info_ValueForKey( info, "g_gametype" ) );*/
+
 	cg_antilag.integer = cgs.antilag = atoi( Info_ValueForKey( info, "g_antilag" ) );
 	if ( !cgs.localServer ) {
-		trap_Cvar_Set( "g_gametype", va( "%i", cgs.gametype ) );
+
+		/* Nico, removed gametypes
+		trap_Cvar_Set( "g_gametype", va( "%i", cgs.gametype ) );*/
+
 		trap_Cvar_Set( "g_antilag", va( "%i", cgs.antilag ) );
 		trap_Cvar_Update( &cg_antilag );
 		trap_Cvar_Update( &cg_gameType );
@@ -302,12 +308,13 @@ void CG_ParseWolfinfo( void ) {
 	cgs.nextTimeLimit = atof( Info_ValueForKey( info, "g_nextTimeLimit" ) );*/
 
 	cgs.gamestate = atoi( Info_ValueForKey( info, "gamestate" ) );
+
+	/* Nico, removed gametypes
 	cgs.currentCampaign = Info_ValueForKey( info, "g_currentCampaign" );
-	cgs.currentCampaignMap = atoi( Info_ValueForKey( info, "g_currentCampaignMap" ) );
+	cgs.currentCampaignMap = atoi( Info_ValueForKey( info, "g_currentCampaignMap" ) );*/
 
 	// OSP - Announce game in progress if we are really playing
 	if ( old_gs != GS_PLAYING && cgs.gamestate == GS_PLAYING ) {
-//		if(cg_announcer.integer > 0) trap_S_StartLocalSound(cgs.media.countFight, CHAN_ANNOUNCER);
 		Pri( "^1FIGHT!\n" );
 		CPri( "^1FIGHT!\n" );
 	}

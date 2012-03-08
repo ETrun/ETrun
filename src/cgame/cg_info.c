@@ -586,10 +586,12 @@ void CG_GameStatsDraw() {
 		CG_Text_Paint_Ext( x, y, hScale2, hScaleY2, hdrColor, "Level", 0.0f, 0, hStyle2, hFont2 );
 		x += 40;
 		CG_Text_Paint_Ext( x, y, hScale2, hScaleY2, hdrColor, "XP / Next Level", 0.0f, 0, hStyle2, hFont2 );
+
+		/* Nico, removed gametypes
 		if ( cgs.gametype == GT_WOLF_CAMPAIGN ) {
 			x += 86;
 			CG_Text_Paint_Ext( x, y, hScale2, hScaleY2, hdrColor, "Medals", 0.0f, 0, hStyle2, hFont2 );
-		}
+		}*/
 
 		x = GS_X + 4;
 

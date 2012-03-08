@@ -50,7 +50,8 @@ extern vmCvar_t ui_gameType;
 #define gametypeCvar ui_gameType
 #endif
 
-#define BG_IsSinglePlayerGame() ( gametypeCvar.integer == GT_SINGLE_PLAYER ) || ( gametypeCvar.integer == GT_COOP )
+/* Nico, removed gametypes
+#define BG_IsSinglePlayerGame() ( gametypeCvar.integer == GT_SINGLE_PLAYER ) || ( gametypeCvar.integer == GT_COOP )*/
 
 /* Nico, removed skills
 const char* skillNames[SK_NUM_SKILLS] = {
@@ -3058,7 +3059,10 @@ BG_CanUseWeapon: can a player of the specified team and class use this weapon?
 */
 qboolean BG_CanUseWeapon( int classNum, int teamNum, weapon_t weapon ) {
 	// TAT 1/11/2003 - is this SP game? - different weapons available in SP
-	qboolean isSinglePlayer = BG_IsSinglePlayerGame() ? qtrue : qfalse;
+
+	/* Nico, removed gametypes
+	qboolean isSinglePlayer = BG_IsSinglePlayerGame() ? qtrue : qfalse;*/
+	qboolean isSinglePlayer = qfalse;
 
 	switch ( classNum ) {
 	case PC_ENGINEER:

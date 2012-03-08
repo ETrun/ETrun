@@ -149,7 +149,6 @@
   <ItemGroup>
     <ClCompile Include="..\game\bg_animation.c" />
     <ClCompile Include="..\game\bg_animgroup.c" />
-    <ClCompile Include="..\game\bg_campaign.c" />
     <ClCompile Include="..\game\bg_character.c" />
     <ClCompile Include="..\game\bg_classes.c" />
     <ClCompile Include="..\game\bg_lib.c">

@@ -100,27 +100,6 @@ UI_LoadArenasFromFile
 ===============
 */
 static void UI_LoadArenasFromFile( char *filename ) {
-/*	int				len;
-	fileHandle_t	f;
-	char			buf[MAX_ARENAS_TEXT];
-
-	len = trap_FS_FOpenFile( filename, &f, FS_READ );
-	if ( !f ) {
-		trap_Print( va( S_COLOR_RED "file not found: %s\n", filename ) );
-		return;
-	}
-	if ( len >= MAX_ARENAS_TEXT ) {
-		trap_Print( va( S_COLOR_RED "file too large: %s is %i, max allowed is %i", filename, len, MAX_ARENAS_TEXT ) );
-		trap_FS_FCloseFile( f );
-		return;
-	}
-
-	trap_FS_Read( buf, len, f );
-	buf[len] = 0;
-	trap_FS_FCloseFile( f );
-
-	ui_numArenas += UI_ParseInfos( buf, MAX_ARENAS - ui_numArenas, &ui_arenaInfos[ui_numArenas], MAX_ARENAS );*/
-
 	int handle;
 	pc_token_t token;
 
@@ -149,7 +128,9 @@ static void UI_LoadArenasFromFile( char *filename ) {
 		if ( *token.string == '}' ) {
 
 			if ( !uiInfo.mapList[uiInfo.mapCount].typeBits ) {
-				uiInfo.mapList[uiInfo.mapCount].typeBits |= ( 1 << GT_WOLF );
+				/* Nico, removed gametypes
+				uiInfo.mapList[uiInfo.mapCount].typeBits |= ( 1 << GT_WOLF );*/
+				uiInfo.mapList[uiInfo.mapCount].typeBits |= ( 1 << 2 );
 			}
 
 			uiInfo.mapCount++;
@@ -225,15 +206,17 @@ static void UI_LoadArenasFromFile( char *filename ) {
 				trap_Print( va( S_COLOR_RED "unexpected end of file inside: %s\n", filename ) );
 				trap_PC_FreeSource( handle );
 				return;
-			} else {
+			} 
+			/* Nico, removed gametypes
+			else {
 				if ( strstr( token.string, "wolfsp" ) ) {
 					uiInfo.mapList[uiInfo.mapCount].typeBits |= ( 1 << GT_SINGLE_PLAYER );
 				}
 
-				/* Nico, removed LMS
-				if ( strstr( token.string, "wolflms" ) ) {
-					uiInfo.mapList[uiInfo.mapCount].typeBits |= ( 1 << GT_WOLF_LMS );
-				}*/
+				// Nico, removed LMS
+				// if ( strstr( token.string, "wolflms" ) ) {
+				//	uiInfo.mapList[uiInfo.mapCount].typeBits |= ( 1 << GT_WOLF_LMS );
+				// }
 
 				if ( strstr( token.string, "wolfmp" ) ) {
 					uiInfo.mapList[uiInfo.mapCount].typeBits |= ( 1 << GT_WOLF );
@@ -241,7 +224,7 @@ static void UI_LoadArenasFromFile( char *filename ) {
 				if ( strstr( token.string, "wolfsw" ) ) {
 					uiInfo.mapList[uiInfo.mapCount].typeBits |= ( 1 << GT_WOLF_STOPWATCH );
 				}
-			}
+			}*/
 		} else if ( !Q_stricmp( token.string, "mapposition_x" ) ) {
 			if ( !PC_Float_Parse( handle, &uiInfo.mapList[uiInfo.mapCount].mappos[0] ) ) {
 				trap_Print( va( S_COLOR_RED "unexpected end of file inside: %s\n", filename ) );
@@ -337,6 +320,7 @@ mapInfo* UI_FindMapInfoByMapname( const char* name ) {
 UI_LoadCampaignsFromFile
 ===============
 */
+/* Nico, removed gametypes
 static void UI_LoadCampaignsFromFile( const char *filename ) {
 	int handle, i;
 	pc_token_t token;
@@ -435,10 +419,10 @@ static void UI_LoadCampaignsFromFile( const char *filename ) {
 				uiInfo.campaignList[uiInfo.campaignCount].typeBits |= ( 1 << GT_WOLF_STOPWATCH );
 			}
 
-			/* Nico, removed LMS
-			if ( strstr( token.string, "wolflms" ) ) {
-				uiInfo.campaignList[uiInfo.campaignCount].typeBits |= ( 1 << GT_WOLF_LMS );
-			}*/
+			// Nico, removed LMS
+			// if ( strstr( token.string, "wolflms" ) ) {
+			//	uiInfo.campaignList[uiInfo.campaignCount].typeBits |= ( 1 << GT_WOLF_LMS );
+			// }
 
 		} else if ( !Q_stricmp( token.string, "maps" ) ) {
 			char *ptr, mapname[128], *mapnameptr;
@@ -532,13 +516,14 @@ const char* UI_NameForCampaign( void ) {
 	}
 
 	return NULL;
-}
+}*/
 
 /*
 ===============
 UI_FindCampaignInCampaignList
 ===============
 */
+/* Nico, removed gametypes
 int UI_FindCampaignInCampaignList( const char *shortName ) {
 	int i;
 
@@ -553,7 +538,7 @@ int UI_FindCampaignInCampaignList( const char *shortName ) {
 	}
 
 	return( -1 );
-}
+}*/
 
 /*
 ================
@@ -563,6 +548,7 @@ UI_SortCampaigns
 // http://games.chruker.dk/enemy_territory/modding_project_bugfix.php?bug_id=090
 ================
 */
+/* Nico, removed gametypes
 int QDECL UI_SortCampaigns( const void *a, const void *b ) {
 	char cleanNameA[MAX_STRING_CHARS];
 	char cleanNameB[MAX_STRING_CHARS];
@@ -576,13 +562,14 @@ int QDECL UI_SortCampaigns( const void *a, const void *b ) {
 	Q_CleanStr(cleanNameB);
 
 	return strcmp(cleanNameA, cleanNameB);
-}
+*/
 
 /*
 ===============
 UI_LoadCampaigns
 ===============
 */
+/* Nico, removed gametypes
 void UI_LoadCampaigns( void ) {
 	int numdirs;
 	char filename[128];
@@ -660,4 +647,4 @@ void UI_LoadCampaigns( void ) {
 	// Nico, sort campaign list
 	// http://games.chruker.dk/enemy_territory/modding_project_bugfix.php?bug_id=090
 	qsort( uiInfo.campaignList, uiInfo.campaignCount, sizeof(uiInfo.campaignList[0]), UI_SortCampaigns );
-}
+}*/

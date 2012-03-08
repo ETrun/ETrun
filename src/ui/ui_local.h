@@ -144,10 +144,13 @@ extern vmCvar_t g_gameType;
 extern vmCvar_t cl_profile;
 extern vmCvar_t cl_defaultProfile;
 extern vmCvar_t ui_profile;
+
+/* Nico, removed gametypes
 extern vmCvar_t ui_currentNetCampaign;
 extern vmCvar_t ui_currentCampaign;
 extern vmCvar_t ui_campaignIndex;
-extern vmCvar_t ui_currentCampaignCompleted;
+extern vmCvar_t ui_currentCampaignCompleted;*/
+
 extern vmCvar_t ui_blackout;
 extern vmCvar_t cg_crosshairAlpha;
 extern vmCvar_t cg_crosshairAlphaAlt;
@@ -407,7 +410,10 @@ int             UI_AdjustTimeByGame( int time );
 void            UI_ShowPostGame( qboolean newHigh );
 void            UI_ClearScores();
 void            UI_LoadArenas( void );
-void            UI_LoadCampaigns( void );
+
+/* Nico, removed gametypes
+void            UI_LoadCampaigns( void );*/
+
 mapInfo*        UI_FindMapInfoByMapname( const char* name );
 void            UI_ReadableSize( char *buf, int bufsize, int value );
 void            UI_PrintTime( char *buf, int bufsize, int time );
@@ -1205,7 +1211,8 @@ void UI_SPUnlockMedals_f( void );
 
 void UI_InitGameinfo( void );
 
+/* Nico, removed gametypes
 const char* UI_DescriptionForCampaign( void );
-const char* UI_NameForCampaign( void );
+const char* UI_NameForCampaign( void );*/
 
 #endif

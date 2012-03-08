@@ -3436,16 +3436,14 @@ gentity_t *weapon_mortar_fire( gentity_t *ent, int grenType ) {
 	VectorMA( launchPos, 32, forward, testPos );
 
 	// Gordon: hack so i can do inverse trajectory calcs easily :p
+	/* Nico, removed gametypes
 	if ( G_IsSinglePlayerGame() && ent->r.svFlags & SVF_BOT ) {
-/*		forward[0] *= 3000;
-		forward[1] *= 3000;
-		forward[2] *= 3000;*/
 		VectorCopy( ent->gDelta, forward );
-	} else {
+	} else {*/
 		forward[0] *= 3000 * 1.1f;
 		forward[1] *= 3000 * 1.1f;
 		forward[2] *= 1500 * 1.1f;
-	}
+	// }
 
 	trap_Trace( &tr, testPos, tv( -4.f, -4.f, 0.f ), tv( 4.f, 4.f, 6.f ), launchPos, ent->s.number, MASK_MISSILESHOT );
 

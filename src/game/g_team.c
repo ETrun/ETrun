@@ -599,7 +599,8 @@ int Pickup_Team( gentity_t *ent, gentity_t *other ) {
 	gclient_t *cl = other->client;
 
 	// START Mad Doc - TDF
-	if ( ( g_gametype.integer != GT_SINGLE_PLAYER ) && ( g_gametype.integer != GT_COOP ) ) {
+	/* Nico, removed gametypes
+	if ( ( g_gametype.integer != GT_SINGLE_PLAYER ) && ( g_gametype.integer != GT_COOP ) ) {*/
 
 		// figure out what team this flag is
 		if ( strcmp( ent->classname, "team_CTF_redflag" ) == 0 ) {
@@ -619,6 +620,7 @@ int Pickup_Team( gentity_t *ent, gentity_t *other ) {
 		return ( ( team == cl->sess.sessionTeam ) ?
 				 Team_TouchOurFlag : Team_TouchEnemyFlag )
 							( ent, other, team );
+	/* Nico, removed gametypes
 	} else
 	{
 		other->message = ent->message;
@@ -627,7 +629,7 @@ int Pickup_Team( gentity_t *ent, gentity_t *other ) {
 		// for single player, we want the allies to be able to pick up both flags
 		return Team_TouchEnemyFlag( ent, other, TEAM_ALLIES );
 
-	}
+	}*/
 	// END Mad Doc - TDF
 }
 

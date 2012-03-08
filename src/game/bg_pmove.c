@@ -669,12 +669,11 @@ static float PM_CmdScale( usercmd_t *cmd ) {
 		}
 	}
 
-
+	/* Nico, removed gametypes
 	if ( gametype == GT_SINGLE_PLAYER || gametype == GT_COOP ) {
 		// Adjust the movespeed
 		scale *= ( ( (float) movespeed ) / (float) 127 );
-
-	} // if (gametype == GT_SINGLE_PLAYER)...
+	}*/
 
 	return scale;
 }
@@ -3176,19 +3175,22 @@ static void PM_Weapon( void ) {
 		}
 
 		if ( pm->cmd.buttons & BUTTON_ATTACK ) {
+
+			/* Nico, removed gametypes
 			if ( PM_IsSinglePlayerGame() ) {
 				pm->ps->weapHeat[WP_DUMMY_MG42] += MG42_RATE_OF_FIRE_SP;
-			} else {
+			} else {*/
 				pm->ps->weapHeat[WP_DUMMY_MG42] += MG42_RATE_OF_FIRE_MP;
-			}
+			// }
 
 			PM_AddEvent( EV_FIRE_WEAPON_MG42 );
 
+			/* Nico, removed gametypes
 			if ( PM_IsSinglePlayerGame() ) {
 				pm->ps->weaponTime += MG42_RATE_OF_FIRE_SP;
-			} else {
+			} else {*/
 				pm->ps->weaponTime += MG42_RATE_OF_FIRE_MP;
-			}
+			// }
 
 			BG_AnimScriptEvent( pm->ps, pm->character->animModelInfo, ANIM_ET_FIREWEAPON, qfalse, qtrue );
 			pm->ps->viewlocked = 2;         // this enable screen jitter when firing

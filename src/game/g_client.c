@@ -1574,14 +1574,16 @@ char *ClientConnect( int clientNum, qboolean firstTime, qboolean isBot ) {
 		G_ReadSessionData( client );
 	}
 
+	/* Nico, removed gametypes
 	if ( g_gametype.integer == GT_WOLF_CAMPAIGN ) {
 		if ( g_campaigns[level.currentCampaign].current == 0 || level.newCampaign ) {
 			client->pers.enterTime = level.time;
 		}
-	} else {
+	} else {*/
 		client->pers.enterTime = level.time;
-	}
+	// }
 
+	/* Nico, removed gametypes
 	if ( g_gametype.integer == GT_COOP || g_gametype.integer == GT_SINGLE_PLAYER )    {
 		// RF, in single player, enforce team = ALLIES
 		// Arnout: disabled this for savegames as the double ClientBegin it causes wipes out all loaded data
@@ -1590,7 +1592,8 @@ char *ClientConnect( int clientNum, qboolean firstTime, qboolean isBot ) {
 		}
 		client->sess.spectatorState = SPECTATOR_NOT;
 		client->sess.spectatorClient = 0;
-	} else if ( firstTime ) {
+	} else */
+	if ( firstTime ) {
 		// force into spectator
 		client->sess.sessionTeam = TEAM_SPECTATOR;
 		client->sess.spectatorState = SPECTATOR_FREE;
@@ -1607,7 +1610,10 @@ char *ClientConnect( int clientNum, qboolean firstTime, qboolean isBot ) {
 
 	// don't do the "xxx connected" messages if they were caried over from previous level
 	//		TAT 12/10/2002 - Don't display connected messages in single player
-	if ( firstTime && !G_IsSinglePlayerGame() ) {
+
+	/* Nico, removed gametypes
+	if ( firstTime && !G_IsSinglePlayerGame() ) {*/
+	if ( firstTime ) {
 		trap_SendServerCommand( -1, va( "cpm \"%s" S_COLOR_WHITE " connected\n\"", client->pers.netname ) );
 	}
 

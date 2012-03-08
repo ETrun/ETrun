@@ -19,9 +19,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\game\bg_campaign.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\game\bg_classes.c">
       <Filter>Source Files</Filter>
     </ClCompile>

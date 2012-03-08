@@ -79,7 +79,9 @@ static const vote_reference_t aVoteInfo[] = {
 	/* Nico, removed competion settings
 	{ 0x1ff, "comp",      G_Comp_v,          "Load Competition Settings", "^7\n  Loads standard competition settings for the current mode" },*/
 
-	{ 0x1ff, "gametype",  G_Gametype_v,      "Set Gametype to",   " <value>^7\n  Changes the current gametype" },
+	/* Nico, removed gametypes
+	{ 0x1ff, "gametype",  G_Gametype_v,      "Set Gametype to",   " <value>^7\n  Changes the current gametype" },*/
+
 	{ 0x1ff, "kick",      G_Kick_v,          "KICK",              " <player_id>^7\n  Attempts to kick player from server" },
 	{ 0x1ff, "mute",      G_Mute_v,          "MUTE",              " <player_id>^7\n  Removes the chat capabilities of a player" },
 	{ 0x1ff, "unmute",        G_UnMute_v,        "UN-MUTE",           " <player_id>^7\n  Restores the chat capabilities of a player" },
@@ -330,6 +332,7 @@ int G_Comp_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, q
 }*/
 
 
+/* Nico, removed gametypes
 void G_GametypeList( gentity_t *ent ) {
 	int i;
 
@@ -342,9 +345,10 @@ void G_GametypeList( gentity_t *ent ) {
 	}
 
 	G_refPrintf( ent, "\n" );
-}
+}*/
 
 // *** GameType ***
+/* Nico, removed gametypes
 int G_Gametype_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd ) {
 	// Vote request (vote is being initiated)
 	if ( arg ) {
@@ -383,7 +387,7 @@ int G_Gametype_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg
 	}
 
 	return( G_OK );
-}
+}*/
 
 
 // *** Player Kick ***
@@ -552,14 +556,15 @@ int G_Map_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qb
 	} else {
 		char s[MAX_STRING_CHARS];
 
+		/* Nico, removed gametypes
 		if ( g_gametype.integer == GT_WOLF_CAMPAIGN ) {
 			trap_Cvar_VariableStringBuffer( "nextcampaign", s, sizeof( s ) );
 			trap_SendConsoleCommand( EXEC_APPEND, va( "campaign %s%s\n", level.voteInfo.vote_value, ( ( *s ) ? va( "; set nextcampaign \"%s\"", s ) : "" ) ) );
-		} else {
+		} else {*/
 			Svcmd_ResetMatch_f( qtrue, qfalse );
 			trap_Cvar_VariableStringBuffer( "nextmap", s, sizeof( s ) );
 			trap_SendConsoleCommand( EXEC_APPEND, va( "map %s%s\n", level.voteInfo.vote_value, ( ( *s ) ? va( "; set nextmap \"%s\"", s ) : "" ) ) );
-		}
+		// }
 	}
 
 	return( G_OK );
@@ -679,32 +684,36 @@ int G_Nextmap_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2
 			return( G_INVALID );
 		} else {
 			char s[MAX_STRING_CHARS];
+
+			/* Nico, removed gametypes
 			if ( g_gametype.integer == GT_WOLF_CAMPAIGN ) {
 				trap_Cvar_VariableStringBuffer( "nextcampaign", s, sizeof( s ) );
 				if ( !*s ) {
 					G_refPrintf( ent, "'nextcampaign' is not set." );
 					return( G_INVALID );
 				}
-			} else {
+			} else {*/
 				trap_Cvar_VariableStringBuffer( "nextmap", s, sizeof( s ) );
 				if ( !*s ) {
 					G_refPrintf( ent, "'nextmap' is not set." );
 					return( G_INVALID );
 				}
-			}
+			// }
 		}
 
 		// Vote action (vote has passed)
 	} else {
+
+		/* Nico, removed gametypes
 		if ( g_gametype.integer == GT_WOLF_CAMPAIGN ) {
 			// Load in the nextcampaign
 			trap_SendConsoleCommand( EXEC_APPEND, "vstr nextcampaign\n" );
 			AP( "cp \"^3*** Loading nextcampaign! ***\n\"" );
-		} else {
+		} else {*/
 			// Load in the nextmap
 			trap_SendConsoleCommand( EXEC_APPEND, "vstr nextmap\n" );
 			AP( "cp \"^3*** Loading nextmap! ***\n\"" );
-		}
+		// }
 	}
 
 	return( G_OK );

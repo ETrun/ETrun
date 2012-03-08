@@ -746,9 +746,10 @@ qboolean SetTeam( gentity_t *ent, char *s, qboolean force, weapon_t w1, weapon_t
 
 	// he starts at 'base'
 	// RF, in single player, bots always use regular spawn points
+	/* Nico, removed gametypes
 	if ( !( ( g_gametype.integer == GT_SINGLE_PLAYER || g_gametype.integer == GT_COOP ) && ( ent->r.svFlags & SVF_BOT ) ) ) {
 		client->pers.teamState.state = TEAM_BEGIN;
-	}
+	}*/
 
 	if ( oldTeam != TEAM_SPECTATOR ) {
 		if ( !( ent->client->ps.pm_flags & PMF_LIMBO ) ) {

@@ -747,21 +747,28 @@ int G_checkServerToggle( vmCvar_t *cv ) {
 		}
 	}*/
 
-	else if ( cv == &g_nextmap && g_gametype.integer != GT_WOLF_CAMPAIGN ) {
+	/* Nico, removed gametypes
+	else if ( cv == &g_nextmap && g_gametype.integer != GT_WOLF_CAMPAIGN ) {*/
+	else if ( cv == &g_nextmap ) {
 		if ( *cv->string ) {
 			level.server_settings |= CV_SVS_NEXTMAP;
 		} else {
 			level.server_settings &= ~CV_SVS_NEXTMAP;
 		}
 		return( qtrue );
-	} else if ( cv == &g_nextcampaign && g_gametype.integer == GT_WOLF_CAMPAIGN ) {
+	} 
+
+	/* Nico, removed gametypes
+	else if ( cv == &g_nextcampaign && g_gametype.integer == GT_WOLF_CAMPAIGN ) {
 		if ( *cv->string ) {
 			level.server_settings |= CV_SVS_NEXTMAP;
 		} else {
 			level.server_settings &= ~CV_SVS_NEXTMAP;
 		}
 		return( qtrue );
-	} else {return( qfalse );}
+	}*/
+
+	else {return( qfalse );}
 
 	if ( cv->integer > 0 ) {
 		level.server_settings |= nFlag;
@@ -861,9 +868,11 @@ qboolean G_allowPanzer(gentity_t *ent)
 */
 
 void G_resetRoundState( void ) {
-	if ( g_gametype.integer == GT_WOLF_STOPWATCH ) {
+
+	/* Nico, removed gametypes
+	if ( g_gametype.integer == GT_WOLF_STOPWATCH ) {*/
 		trap_Cvar_Set( "g_currentRound", "0" );
-	}
+	// }
 	
 	/* Nico, removed LMS
 	else if ( g_gametype.integer == GT_WOLF_LMS ) {

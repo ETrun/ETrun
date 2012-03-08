@@ -150,7 +150,6 @@
   <ItemGroup>
     <ClCompile Include="bg_animation.c" />
     <ClCompile Include="bg_animgroup.c" />
-    <ClCompile Include="bg_campaign.c" />
     <ClCompile Include="bg_character.c" />
     <ClCompile Include="bg_classes.c" />
     <ClCompile Include="bg_lib.c">

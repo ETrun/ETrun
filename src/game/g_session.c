@@ -332,7 +332,9 @@ void G_ReadSessionData( gclient_t *client ) {
 
 	test = ( g_altStopwatchMode.integer != 0 || g_currentRound.integer == 1 );
 
-	if ( g_gametype.integer == GT_WOLF_STOPWATCH && g_gamestate.integer != GS_PLAYING && test ) {
+	/* Nico, removed gametypes
+	if ( g_gametype.integer == GT_WOLF_STOPWATCH && g_gamestate.integer != GS_PLAYING && test ) {*/
+	if ( g_gamestate.integer != GS_PLAYING && test ) {
 		G_ClientSwap( client );
 	}
 
@@ -444,7 +446,8 @@ void G_InitWorldSession( void ) {
 
 		// See if we need to clear player stats
 		// FIXME: deal with the multi-map missions
-		if ( g_gametype.integer != GT_WOLF_CAMPAIGN ) {
+		/* Nico, removed gametypes
+		if ( g_gametype.integer != GT_WOLF_CAMPAIGN ) {*/
 			if ( ( tmp = strchr( va( "%s", tmp ), ' ' ) ) != NULL ) {
 				tmp++;
 				trap_GetServerinfo( s, sizeof( s ) );
@@ -453,10 +456,12 @@ void G_InitWorldSession( void ) {
 					G_Printf( "Map changed, clearing player stats.\n" );
 				}
 			}
-		}
+		// }
 
 		// OSP - have to make sure spec locks follow the right teams
-		if ( g_gametype.integer == GT_WOLF_STOPWATCH && g_gamestate.integer != GS_PLAYING && test ) {
+		/* Nico, removed gametypes
+		if ( g_gametype.integer == GT_WOLF_STOPWATCH && g_gamestate.integer != GS_PLAYING && test ) {*/
+		if ( g_gamestate.integer != GS_PLAYING && test ) {
 			G_swapTeamLocks();
 		}
 

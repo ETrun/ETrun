@@ -1819,7 +1819,10 @@ typedef struct {
 	qboolean localServer;               // detected on startup by checking sv_running
 
 	// parsed from serverinfo
-	gametype_t gametype;
+
+	/* Nico, removed gametypes
+	gametype_t gametype;*/
+
 	int antilag;
 
 	/* Nico, no timelimit
@@ -3218,8 +3221,6 @@ void CG_CampaignBriefingSetup( void );
 #define ORDER_ICON_FADE_TIME 3500
 
 void CG_AddToJournal( char *text );
-// returns true if game is single player (or coop)
-qboolean CG_IsSinglePlayer( void );
 
 // END Mad Doc - TDF
 
@@ -3435,8 +3436,11 @@ void CG_DrawKeyHint( rectDef_t* rect, const char* binding );
 void CG_LoadPanel_DrawPin( const char* text, float px, float py, float sx, float sy, qhandle_t shader, float pinsize, float backheight );
 void CG_LoadPanel_RenderCampaignPins( panel_button_t* button );
 void CG_LoadPanel_RenderMissionDescriptionText( panel_button_t* button );
+
+/* Nico, removed gametypes
 void CG_LoadPanel_RenderCampaignTypeText( panel_button_t* button );
-void CG_LoadPanel_RenderCampaignNameText( panel_button_t* button );
+void CG_LoadPanel_RenderCampaignNameText( panel_button_t* button );*/
+
 void CG_LoadPanel_RenderPercentageMeter( panel_button_t* button );
 void CG_LoadPanel_RenderContinueButton( panel_button_t* button );
 void CG_LoadPanel_RenderLoadingBar( panel_button_t* button );

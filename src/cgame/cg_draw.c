@@ -2796,7 +2796,7 @@ static void CG_DrawFlashFade( void ) {
 	static int lastTime;
 	int elapsed, time;
 	vec4_t col;
-	qboolean fBlackout = ( !CG_IsSinglePlayer() && int_ui_blackout.integer > 0 );
+	qboolean fBlackout = ( int_ui_blackout.integer > 0 );
 
 	if ( cgs.fadeStartTime + cgs.fadeDuration < cg.time ) {
 		cgs.fadeAlphaCurrent = cgs.fadeAlpha;

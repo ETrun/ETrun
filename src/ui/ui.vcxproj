@@ -148,7 +148,6 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\game\bg_campaign.c" />
     <ClCompile Include="..\game\bg_classes.c" />
     <ClCompile Include="..\game\bg_lib.c">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
