@@ -615,9 +615,11 @@ typedef struct {
 	int rounds;
 	int spec_invite;
 	int spec_team;
+
+	/* Nico, removed suicides & team_damage & team_kills counters
 	int suicides;
 	int team_damage;
-	int team_kills;
+	int team_kills;*/
 
 	/* Nico, removed weaponstats
 	weapon_stat_t aWeaponStats[WS_MAX + 1];   // Weapon stats.  +1 to avoid invalid weapon check*/

@@ -61,8 +61,9 @@ void G_WriteClientSessionData( gclient_t *client, qboolean restart ) {
 
 	/* Nico, removed deaths counter
 	// Nico, removed kills counter
+	// Nico, removed suicides & team_damage & team_kills counters
 	s = va( "%i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i",*/
-	s = va( "%i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i",
+	s = va( "%i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i",
 			client->sess.sessionTeam,
 			client->sess.spectatorTime,
 			client->sess.spectatorState,
@@ -88,8 +89,11 @@ void G_WriteClientSessionData( gclient_t *client, qboolean restart ) {
 			client->sess.referee,
 			client->sess.spec_invite,
 			client->sess.spec_team,
+
+			/* Nico, removed suicides & team_damage & team_kills counters
 			client->sess.suicides,
-			client->sess.team_kills,
+			client->sess.team_kills,*/
+
 			( mvc & 0xFFFF ),
 			( ( mvc >> 16 ) & 0xFFFF )
 			// Damage and rounds played rolled in with weapon stats (below)
@@ -229,8 +233,9 @@ void G_ReadSessionData( gclient_t *client ) {
 
 	/* Nico, removed deaths counter
 	// Nico, removed kills counter
+	// Nico, removed suicides & team_damage & team_kills counters
 	sscanf( s, "%i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i",*/
-	sscanf( s, "%i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i",
+	sscanf( s, "%i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i",
 			(int *)&client->sess.sessionTeam,
 			&client->sess.spectatorTime,
 			(int *)&client->sess.spectatorState,
@@ -256,8 +261,11 @@ void G_ReadSessionData( gclient_t *client ) {
 			&client->sess.referee,
 			&client->sess.spec_invite,
 			&client->sess.spec_team,
+
+			/* Nico, removed suicides & team_damage & team_kills counters
 			&client->sess.suicides,
-			&client->sess.team_kills,
+			&client->sess.team_kills,*/
+
 			&mvc_l,
 			&mvc_h
 			// Damage and round count rolled in with weapon stats (below)

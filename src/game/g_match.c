@@ -243,12 +243,13 @@ void G_addStats( gentity_t *targ, gentity_t *attacker, int dmg_ref, int mod ) {
 //	G_Printf("mod: %d, Index: %d, dmg: %d\n", mod, G_weapStatIndex_MOD(mod), dmg_ref);
 
 	// Suicides only affect the player specifically
+	/* Nico, removed suicides & team_damage & team_kills counters
 	if ( targ == attacker || !attacker || !attacker->client || mod == MOD_SUICIDE ) {
 		if ( targ->health <= 0 ) {
 			targ->client->sess.suicides++;
 		}
 		return;
-	}
+	}*/
 
 	// Telefrags only add 100 points.. not 100k!!
 	if ( mod == MOD_TELEFRAG ) {
@@ -256,6 +257,7 @@ void G_addStats( gentity_t *targ, gentity_t *attacker, int dmg_ref, int mod ) {
 	} else { dmg = dmg_ref;}
 
 	// Player team stats
+	/* Nico, removed suicides & team_damage & team_kills counters
 	if ( g_gametype.integer >= GT_WOLF &&
 		 targ->client->sess.sessionTeam == attacker->client->sess.sessionTeam ) {
 		attacker->client->sess.team_damage += dmg;
@@ -263,7 +265,7 @@ void G_addStats( gentity_t *targ, gentity_t *attacker, int dmg_ref, int mod ) {
 			attacker->client->sess.team_kills++;
 		}
 		return;
-	}
+	}*/
 
 	// General player stats
 	/* Nico, removed kills counter
@@ -553,14 +555,17 @@ void G_printMatchInfo( gentity_t *ent ) {
 			/* Nico, removed deaths counter
 			tot_deaths += cl->sess.deaths;*/
 
+			/* Nico, removed suicides & team_damage & team_kills counters
 			tot_sui += cl->sess.suicides;
-			tot_tk += cl->sess.team_kills;
+			tot_tk += cl->sess.team_kills;*/
 
 			/* Nico, removed damage_given & damage_received
 			tot_dg += cl->sess.damage_given;
 			tot_dr += cl->sess.damage_received;*/
 
-			tot_td += cl->sess.team_damage;
+			/* Nico, removed suicides & team_damage & team_kills counters
+			tot_td += cl->sess.team_damage;*/
+
 			tot_gp += cl->sess.game_points;
 
 			/* Nico, removed deaths counter
@@ -588,20 +593,25 @@ void G_printMatchInfo( gentity_t *ent ) {
 					/* Nico, removed deaths counter
 					cl->sess.deaths,*/
 
+					/* Nico, removed suicides & team_damage & team_kills counters
 					cl->sess.suicides,
-					cl->sess.team_kills,
+					cl->sess.team_kills,*/
+
 					ref,
 					eff,
 
 					/* Nico, removed kills counter
 					cl->sess.game_points - ( cl->sess.kills * WOLF_FRAG_BONUS ),*/
+
 					cl->sess.game_points,
 
 					/* Nico, removed damage_given & damage_received
 					cl->sess.damage_given,
 					cl->sess.damage_received,*/
 
-					cl->sess.team_damage,
+					/* Nico, removed suicides & team_damage & team_kills counters
+					cl->sess.team_damage,*/
+
 					cl->ps.persistant[PERS_SCORE] ) );
 		}
 
