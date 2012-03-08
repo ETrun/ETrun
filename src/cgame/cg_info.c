@@ -530,10 +530,12 @@ void CG_GameStatsDraw() {
 			y += tSpacing;
 			CG_Text_Paint_Ext( x, y, tScale, tScale, tColor, "No weapon info available.", 0.0f, 0, tStyle, tFont );
 		} else {
+
+			/* Nico, removed weaponstats
 			for ( i = 0; i < gs->cWeapons; i++ ) {
 				y += tSpacing;
 				CG_Text_Paint_Ext( x, y, tScale, tScale, tColor, gs->strWS[i], 0.0f, 0, tStyle, tFont );
-			}
+			}*/
 
 			if ( gs->fHasStats ) {
 				y += tSpacing;

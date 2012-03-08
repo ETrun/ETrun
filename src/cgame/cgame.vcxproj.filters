@@ -41,9 +41,6 @@
     <ClCompile Include="..\game\bg_sscript.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\game\bg_stats.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\game\bg_tracemap.c">
       <Filter>Source Files</Filter>
     </ClCompile>

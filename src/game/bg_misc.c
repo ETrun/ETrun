@@ -4913,6 +4913,7 @@ int numVotesAvailable = sizeof( voteToggles ) / sizeof( voteType_t );
 const unsigned int aReinfSeeds[MAX_REINFSEEDS] = { 11, 3, 13, 7, 2, 5, 1, 17 };
 
 // Weapon full names + headshot capability
+/* Nico, removed weaponstats
 const weap_ws_t aWeaponInfo[WS_MAX] = {
 	{ qfalse,   "KNIF",  "Knife"      },  // 0
 	{ qtrue,    "LUGR",  "Luger"      },  // 1
@@ -4936,7 +4937,7 @@ const weap_ws_t aWeaponInfo[WS_MAX] = {
 	{ qtrue,    "MG42",  "MG-42 Gun"  },  // 19
 	{ qtrue,    "GARN",  "Garand" },  // 20
 	{ qtrue,    "K-43",  "K43 Rifle"  }   // 21
-};
+};*/
 
 // Multiview: Convert weaponstate to simpler format
 int BG_simpleWeaponState( int ws ) {

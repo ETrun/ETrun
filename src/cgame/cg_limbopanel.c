@@ -638,14 +638,15 @@ panel_button_t weaponLight2Text = {
 	NULL,
 };
 
+/* Nico, removed weaponstats
 panel_button_t weaponStatsShotsText = {
 	NULL,
 	"SHOTS",
 	{ 460, 422, 0, 0 },
 	{ 0, 0, 0, 0, 0, 0, 0, 0 },
-	&weaponPanelStatsFont,  /* font		*/
-	NULL,   /* keyDown	*/
-	NULL,   /* keyUp	*/
+	&weaponPanelStatsFont,  
+	NULL,   
+	NULL,   
 	BG_PanelButtonsRender_Text,
 	NULL,
 };
@@ -655,9 +656,9 @@ panel_button_t weaponStatsShotsCounter = {
 	NULL,
 	{ 460, 426, 40, 14 },
 	{ 6, 0, 0, 0, 0, 0, 0, 0 },
-	NULL,   /* font		*/
-	NULL,   /* keyDown	*/
-	NULL,   /* keyUp	*/
+	NULL,   
+	NULL,   
+	NULL,   
 	CG_LimboPanel_RenderCounter,
 	NULL,
 };
@@ -668,9 +669,9 @@ panel_button_t weaponStatsHitsText = {
 	"HITS",
 	{ 516, 422, 0, 0 },
 	{ 0, 0, 0, 0, 0, 0, 0, 0 },
-	&weaponPanelStatsFont,  /* font		*/
-	NULL,   /* keyDown	*/
-	NULL,   /* keyUp	*/
+	&weaponPanelStatsFont,  
+	NULL,   
+	NULL,  
 	BG_PanelButtonsRender_Text,
 	NULL,
 };
@@ -680,9 +681,9 @@ panel_button_t weaponStatsHitsCounter = {
 	NULL,
 	{ 516, 426, 40, 14 },
 	{ 6, 1, 0, 0, 0, 0, 0, 0 },
-	NULL,   /* font		*/
-	NULL,   /* keyDown	*/
-	NULL,   /* keyUp	*/
+	NULL,   
+	NULL,   
+	NULL,   
 	CG_LimboPanel_RenderCounter,
 	NULL,
 };
@@ -693,9 +694,9 @@ panel_button_t weaponStatsAccText = {
 	"ACC",
 	{ 570, 422, 0, 0 },
 	{ 0, 0, 0, 0, 0, 0, 0, 0 },
-	&weaponPanelStatsFont,  /* font		*/
-	NULL,   /* keyDown	*/
-	NULL,   /* keyUp	*/
+	&weaponPanelStatsFont, 
+	NULL,   
+	NULL,   
 	BG_PanelButtonsRender_Text,
 	NULL,
 };
@@ -705,9 +706,9 @@ panel_button_t weaponStatsAccCounter = {
 	NULL,
 	{ 570, 426, 30, 14 },
 	{ 6, 2, 0, 0, 0, 0, 0, 0 },
-	NULL,   /* font		*/
-	NULL,   /* keyDown	*/
-	NULL,   /* keyUp	*/
+	NULL,   
+	NULL,   
+	NULL,   
 	CG_LimboPanel_RenderCounter,
 	NULL,
 };
@@ -717,12 +718,12 @@ panel_button_t weaponStatsAccPercentage = {
 	"%",
 	{ 600, 436, 0, 0 },
 	{ 0, 0, 0, 0, 0, 0, 0, 0 },
-	&weaponPanelStatsPercFont,  /* font		*/
-	NULL,   /* keyDown	*/
-	NULL,   /* keyUp	*/
+	&weaponPanelStatsPercFont,  
+	NULL,   
+	NULL,  
 	BG_PanelButtonsRender_Text,
 	NULL,
-};
+};*/
 
 // =======================
 
@@ -973,9 +974,11 @@ panel_button_t* limboPanelButtons[] = {
 	&weaponLight1,      &weaponLight2,
 	&weaponLight1Text,  &weaponLight2Text,
 	&weaponPanel,
+
+	/* Nico, removed weaponstats
 	&weaponStatsShotsText, &weaponStatsHitsText, &weaponStatsAccText,
 	&weaponStatsShotsCounter, &weaponStatsHitsCounter, &weaponStatsAccCounter,
-	&weaponStatsAccPercentage,
+	&weaponStatsAccPercentage,*/
 
 	&briefingButton,
 
@@ -1173,7 +1176,8 @@ qboolean CG_LimboPanel_TeamButton_KeyDown( panel_button_t* button, int key ) {
 
 			CG_LimboPanel_SetSelectedWeaponNumForSlot( 0, 0 );
 
-			CG_LimboPanel_RequestWeaponStats();
+			/* Nico, removed weaponstats
+			CG_LimboPanel_RequestWeaponStats();*/
 
 			cgs.limboLoadoutModified = qtrue;
 		}
@@ -1235,7 +1239,8 @@ qboolean CG_LimboPanel_ClassButton_KeyDown( panel_button_t* button, int key ) {
 
 			CG_LimboPanel_SetSelectedWeaponNumForSlot( 0, 0 );
 
-			CG_LimboPanel_RequestWeaponStats();
+			/* Nico, removed weaponstats
+			CG_LimboPanel_RequestWeaponStats();*/
 
 			CG_LimboPanel_SendSetupMsg( qfalse );
 		}
@@ -1777,7 +1782,10 @@ qboolean CG_LimboPanel_WeaponLights_KeyDown( panel_button_t* button, int key ) {
 		SOUND_SELECT;
 
 		cgs.ccSelectedWeaponNumber = button->data[0];
-		CG_LimboPanel_RequestWeaponStats();
+
+		/* Nico, removed weaponstats
+		CG_LimboPanel_RequestWeaponStats();*/
+
 		return qtrue;
 	}
 
@@ -2438,7 +2446,9 @@ void CG_LimboPanel_Setup( void ) {
 		}
 	}
 
-	CG_LimboPanel_RequestWeaponStats();
+	/* Nico, removed weaponstats
+	CG_LimboPanel_RequestWeaponStats();*/
+
 	cgs.ccRequestedObjective = cgs.ccSelectedObjective = CG_LimboPanel_GetMaxObjectives();
 	CG_LimboPanel_RequestObjective();
 
@@ -2798,15 +2808,16 @@ int CG_LimboPanel_GetSelectedWeaponNum( void ) {
 	return cgs.ccSelectedWeapon;
 }
 
+/* Nico, removed weaponstats
 void CG_LimboPanel_RequestWeaponStats( void ) {
 	extWeaponStats_t weapStat = CG_LimboPanel_GetSelectedWeaponStat();
 	if ( weapStat == WS_MAX ) {
 		// Bleh?
 		return;
 	}
-	/* Nico, removed showstats client command
-	trap_SendClientCommand( va( "ws %i", weapStat ) );*/
-}
+	// Nico, removed showstats client command
+	// trap_SendClientCommand( va( "ws %i", weapStat ) );
+}*/
 
 void CG_LimboPanel_RequestObjective( void ) {
 	int max = CG_LimboPanel_GetMaxObjectives();
@@ -2830,12 +2841,14 @@ void CG_LimboPanel_SetSelectedWeaponNum( int number ) {
 		cgs.ccSelectedWeapon2 = number;
 	}
 
-	CG_LimboPanel_RequestWeaponStats();
+	/* Nico, removed weaponstats
+	CG_LimboPanel_RequestWeaponStats();*/
 }
 
+/* Nico, removed weaponstats
 extWeaponStats_t CG_LimboPanel_GetSelectedWeaponStat( void ) {
 	return BG_WeapStatForWeapon( CG_LimboPanel_GetSelectedWeapon() );
-}
+}*/
 
 int CG_LimboPanel_TeamCount( weapon_t weap ) {
 	int i, cnt;

@@ -1770,14 +1770,18 @@ typedef struct cg_gamemodel_s {
 	vec_t radius;
 } cg_gamemodel_t;
 
+/* Nico, removed weaponstats
 typedef struct cg_weaponstats_s {
 	int numKills;
 	int numHits;
 	int numShots;
-} cg_weaponstats_t;
+} cg_weaponstats_t;*/
 
 typedef struct {
-	char strWS[WS_MAX][MAX_STRING_TOKENS];
+
+	/* Nico, removed weaponstats
+	char strWS[WS_MAX][MAX_STRING_TOKENS];*/
+
 	char strExtra[2][MAX_STRING_TOKENS];
 	char strRank[MAX_STRING_TOKENS];
 
@@ -2036,7 +2040,10 @@ typedef struct {
 	int dbLastScoreRequest;
 	int dbPlayerListOffset;
 	int dbWeaponListOffset;
-	cg_weaponstats_t dbWeaponStats[WS_MAX];
+
+	/* Nico, removed weaponstats
+	cg_weaponstats_t dbWeaponStats[WS_MAX];*/
+
 	int dbChatMode;
 
 	/* Nico, removed skills
@@ -3358,7 +3365,10 @@ void CG_LimboPanel_Init( void );
 
 void                CG_LimboPanel_GetWeaponCardIconData( weapon_t weap, qhandle_t* shader, float* w, float* h, float* s0, float* t0, float* s1, float* t1 );
 void                CG_LimboPanel_RequestObjective( void );
-void                CG_LimboPanel_RequestWeaponStats( void );
+
+/* Nico, removed weaponstats
+void                CG_LimboPanel_RequestWeaponStats( void );*/
+
 qboolean            CG_LimboPanel_Draw( void );
 team_t              CG_LimboPanel_GetTeam( void );
 team_t              CG_LimboPanel_GetRealTeam( void );
@@ -3371,7 +3381,10 @@ void                CG_LimboPanel_SetSelectedWeaponNum( int number );
 bg_playerclass_t*   CG_LimboPanel_GetPlayerClass( void );
 weapon_t            CG_LimboPanel_GetSelectedWeapon( void );
 weapon_t            CG_LimboPanel_GetWeaponForNumber( int number, int slot, qboolean ignoreDisabled );
-extWeaponStats_t    CG_LimboPanel_GetSelectedWeaponStat( void );
+
+/* Nico, removed weaponstats
+extWeaponStats_t    CG_LimboPanel_GetSelectedWeaponStat( void );*/
+
 qboolean            CG_LimboPanel_WeaponIsDisabled( int weap );
 qboolean            CG_LimboPanel_RealWeaponIsDisabled( weapon_t weap );
 int                 CG_LimboPanel_GetWeaponNumberForPos( int pos );

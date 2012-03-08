@@ -45,9 +45,6 @@
     <ClCompile Include="bg_sscript.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="bg_stats.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="bg_tracemap.c">
       <Filter>Source Files</Filter>
     </ClCompile>

@@ -821,9 +821,10 @@ extern int weapBanksMultiPlayer[MAX_WEAP_BANKS_MP][MAX_WEAPS_IN_BANK_MP];
 //		This is used by the ammo pack code to determine if reloads are needed
 extern int reloadableWeapons[];
 
+/* Nico, removed weaponstats
 typedef struct {
 	int kills, teamkills, killedby;
-} weaponStats_t;
+} weaponStats_t;*/
 
 typedef enum {
 	HR_HEAD,
@@ -854,7 +855,10 @@ extern const char* medalNames[SK_NUM_SKILLS];
 extern const int skillLevels[NUM_SKILL_LEVELS];*/
 
 typedef struct {
-	weaponStats_t weaponStats[WP_NUM_WEAPONS];
+
+	/* Nico, removed weaponstats
+	weaponStats_t weaponStats[WP_NUM_WEAPONS];*/
+
 	int suicides;
 	int hitRegions[HR_NUM_HITREGIONS];
 	int objectiveStats[MAX_OBJECTIVES];
@@ -1325,6 +1329,7 @@ typedef enum {
 #define TEAM_LOCATION_UPDATE_TIME       1000
 
 // OSP - weapon stat info: mapping between MOD_ and WP_ types (FIXME for new ET weapons)
+/* Nico, removed weaponstats
 typedef enum extWeaponStats_s
 {
 	WS_KNIFE,               // 0
@@ -1360,7 +1365,7 @@ typedef struct {
 	const char *pszName;
 } weap_ws_t;
 
-extern const weap_ws_t aWeaponInfo[WS_MAX];
+extern const weap_ws_t aWeaponInfo[WS_MAX];*/
 // OSP
 
 // means of death
@@ -2330,12 +2335,13 @@ qboolean BG_BBoxCollision( vec3_t min1, vec3_t max1, vec3_t min2, vec3_t max2 );
 // bg_stats.c
 //
 
+/* Nico, removed weaponstats
 typedef struct weap_ws_convert_s {
 	weapon_t iWeapon;
 	extWeaponStats_t iWS;
 } weap_ws_convert_t;
 
-extWeaponStats_t BG_WeapStatForWeapon( weapon_t iWeaponID );
+extWeaponStats_t BG_WeapStatForWeapon( weapon_t iWeaponID );*/
 
 typedef enum popupMessageType_e {
 	PM_DYNAMITE,
