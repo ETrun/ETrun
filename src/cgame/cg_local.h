@@ -184,8 +184,10 @@ typedef struct {
 	char *lineText[MAX_WINDOW_LINES];   // Text info
 	float m_x;                  // Mouse X position
 	float m_y;                  // Mouse Y position
+
 	/* Nico, removed multiview
 	int mvInfo;                 // lower 8 = player id, 9 = is_selected*/
+
 	int targetTime;             // Time to complete any defined effect
 	int state;                  // Current state of the window
 	int time;                   // Current window time
@@ -318,11 +320,6 @@ typedef struct centity_s {
 
 	playerEntity_t pe;
 
-//	int				errorTime;		// decay the error from this time
-//	vec3_t			errorOrigin;
-//	vec3_t			errorAngles;
-
-//	qboolean		extrapolated;	// false if origin / angles is an interpolation
 	vec3_t rawOrigin;
 	vec3_t rawAngles;
 
@@ -439,8 +436,6 @@ typedef enum {
 	LE_DEBRIS,
 	LE_BLOOD,
 	LE_FUSE_SPARK,
-//	LE_ZOMBIE_SPIRIT,
-//	LE_ZOMBIE_BAT,
 	LE_MOVING_TRACER,
 	LE_EMITTER
 } leType_t;
@@ -767,9 +762,6 @@ typedef struct {
 	int yaw;
 	int data;
 	char type;
-//	int				status;
-
-//	qboolean		selected;
 
 	vec2_t transformed;
 	vec2_t automapTransformed;
@@ -900,9 +892,6 @@ typedef struct {
 	int spectatorOffset;                                                    // current offset from start
 	int spectatorPaintLen;                                              // current offset from start
 
-	//qboolean	showItems;
-	//int			itemFadeTime;
-
 	qboolean lightstylesInited;
 
 	// centerprinting
@@ -947,8 +936,6 @@ typedef struct {
 	int crosshairPowerupNum;
 	int crosshairPowerupTime;
 
-//	int			identifyClientNum;			// NERVE - SMF
-//	int			identifyClientHealth;		// NERVE - SMF
 	int identifyClientRequest;              // NERVE - SMF
 
 //----(SA)	added
@@ -1297,7 +1284,6 @@ typedef struct {
 	qhandle_t vehicleShader;
 	qhandle_t destroyShader;
 
-//	qhandle_t	selectShader;
 	qhandle_t viewBloodShader;
 	qhandle_t tracerShader;
 	qhandle_t crosshairShader[NUM_CROSSHAIRS];
@@ -1308,7 +1294,6 @@ typedef struct {
 	qhandle_t reticleShader;
 	qhandle_t reticleShaderSimple;
 	qhandle_t snooperShader;
-//	qhandle_t	snooperShaderSimple;
 	qhandle_t binocShader;
 	qhandle_t binocShaderSimple;
 // JPW NERVE
@@ -1326,8 +1311,6 @@ typedef struct {
 	qhandle_t shotgunSmokePuffShader;
 	qhandle_t waterBubbleShader;
 	qhandle_t bloodTrailShader;
-
-//	qhandle_t	nailPuffShader;
 
 //----(SA)	cursor hints
 	// would be nice to specify these in the menu scripts instead of permanent handles...
@@ -1441,8 +1424,6 @@ typedef struct {
 	qhandle_t shardWood2;
 	qhandle_t shardMetal1;
 	qhandle_t shardMetal2;
-//	qhandle_t	shardCeramic1;
-//	qhandle_t	shardCeramic2;
 	// done
 
 	qhandle_t shardRubble1;
@@ -1493,7 +1474,6 @@ typedef struct {
 	qhandle_t sparkParticleShader;
 	qhandle_t smokeTrailShader;
 	qhandle_t fireTrailShader;
-	//qhandle_t	lightningBoltShader;
 	qhandle_t flamethrowerFireStream;
 	qhandle_t flamethrowerBlueStream;
 	qhandle_t flamethrowerFuelStream;
@@ -1513,8 +1493,6 @@ typedef struct {
 	qhandle_t dirtParticle3Shader;
 
 	qhandle_t genericConstructionShader;
-	//qhandle_t	genericConstructionShaderBrush;
-	//qhandle_t	genericConstructionShaderModel;
 	qhandle_t alliedUniformShader;
 	qhandle_t axisUniformShader;
 
@@ -1576,7 +1554,6 @@ typedef struct {
 	sfxHandle_t grenadePulseSound3;
 	sfxHandle_t grenadePulseSound2;
 	sfxHandle_t grenadePulseSound1;
-//	sfxHandle_t	sparkSounds;
 
 	// Ridah
 	sfxHandle_t flameSound;
@@ -1586,8 +1563,6 @@ typedef struct {
 	sfxHandle_t flameCrackSound;
 	sfxHandle_t boneBounceSound;
 
-	//sfxHandle_t grenadebounce1;
-	//sfxHandle_t grenadebounce2;
 	sfxHandle_t grenadebounce[FOOTSTEP_TOTAL][2];
 
 	sfxHandle_t dynamitebounce1;    //----(SA)	added
@@ -1630,7 +1605,6 @@ typedef struct {
 	qhandle_t ccBars[3];
 	qhandle_t ccFlags[3];
 	qhandle_t ccLeather;
-	//qhandle_t	ccArrow;
 	qhandle_t ccPlayerHighlight;
 	qhandle_t ccConstructIcon[2];
 	qhandle_t ccCmdPost[2];
@@ -1656,8 +1630,6 @@ typedef struct {
 	qhandle_t hWeaponSnd_2;
 	qhandle_t hWeaponEchoSnd_2;
 	qhandle_t hWeaponHeatSnd_2;
-
-//	qhandle_t	hflakWeaponSnd;
 
 	qhandle_t hMountedMG42Base;     //	trap_R_RegisterModel( "models/mapobjects/tanks_sd/mg42nestbase.md3" );
 	qhandle_t hMountedMG42Nest;     //	trap_R_RegisterModel( "models/mapobjects/tanks_sd/mg42nest.md3" );
@@ -2258,8 +2230,10 @@ extern vmCvar_t demo_avifpsF4;
 extern vmCvar_t demo_avifpsF5;
 extern vmCvar_t demo_drawTimeScale;
 extern vmCvar_t demo_infoWindow;
+
 /* Nico, removed multiview
 extern vmCvar_t mv_sensitivity;*/
+
 // engine mappings
 extern vmCvar_t int_cl_maxpackets;
 extern vmCvar_t int_cl_timenudge;
@@ -2271,10 +2245,12 @@ extern vmCvar_t int_ui_blackout;
 extern vmCvar_t cg_rconPassword;
 extern vmCvar_t cg_refereePassword;
 extern vmCvar_t cg_atmosphericEffects;
+
 // START Mad Doc - TDF
 /* Nico, instant reswawn
 extern vmCvar_t cg_drawRoundTimer;*/
 // END Mad Doc - TDF
+
 extern vmCvar_t cg_debugSkills;
 extern vmCvar_t cg_drawFireteamOverlay;
 extern vmCvar_t cg_drawSmallPopupIcons;
@@ -2485,8 +2461,6 @@ int CG_PointContents( const vec3_t point, int passEntityNum );
 void CG_Trace( trace_t *result, const vec3_t start, const vec3_t mins, const vec3_t maxs, const vec3_t end, int skipNumber, int mask );
 void CG_FTTrace( trace_t *result, const vec3_t start, const vec3_t mins, const vec3_t maxs, const vec3_t end, int skipNumber, int mask );
 void CG_PredictPlayerState( void );
-//void CG_LoadDeferredPlayers( void );
-
 
 //
 // cg_events.c
@@ -2530,7 +2504,6 @@ void CG_RegisterWeapon( int weaponNum, qboolean force );
 void CG_RegisterItemVisuals( int itemNum );
 
 void CG_FireWeapon( centity_t *cent );   //----(SA)	modified.
-//void CG_EndFireWeapon( centity_t *cent, int firemode );	//----(SA)	added
 void CG_MissileHitWall( int weapon, int clientNum, vec3_t origin, vec3_t dir, int surfaceFlags );   //	(SA) modified to send missilehitwall surface parameters
 
 void CG_MissileHitWallSmall( int weapon, int clientNum, vec3_t origin, vec3_t dir );
@@ -2565,8 +2538,6 @@ void CG_OutOfAmmoChange( qboolean allowforceswitch );
 //----(SA) added to header to access from outside cg_weapons.c
 void CG_AddDebris( vec3_t origin, vec3_t dir, int speed, int duration, int count );
 //----(SA) done
-
-//void CG_ClientDamage( int entnum, int enemynum, int id );
 
 //
 // cg_marks.c
@@ -2748,7 +2719,6 @@ qboolean CG_ViewingDraw( void );
 // cg_scoreboard.c
 //
 qboolean CG_DrawScoreboard( void );
-//void CG_DrawTourneyScoreboard( void );
 
 void CG_TransformToCommandMapCoord( float *coord_x, float *coord_y );
 
@@ -2826,8 +2796,10 @@ void CG_autoRecord_f( void );
 void CG_autoScreenShot_f( void );
 void CG_keyOn_f( void );
 void CG_keyOff_f( void );
+
 /* Nico, removed statsdump client command
 void CG_dumpStats_f( void );*/
+
 void CG_toggleSwing_f( void );
 
 //
@@ -3109,7 +3081,6 @@ void        trap_Key_SetOverstrikeMode( qboolean state );
 // RF
 void trap_SendMoveSpeedsToGame( int entnum, char *movespeeds );
 
-//void trap_UI_Popup(const char *arg0);	//----(SA)	added
 void trap_UI_Popup( int arg0 );
 
 // NERVE - SMF
@@ -3175,7 +3146,6 @@ void CG_LocateArena( void );
 const char* CG_DescriptionForCampaign( void );
 const char* CG_NameForCampaign( void );
 void CG_CloseMenus();
-// void CG_CampaignBriefing_f( void );
 void CG_LimboMenu_f( void );
 
 void CG_DrawPlayer_Limbo( float x, float y, float w, float h, playerInfo_t *pi, int time, clientInfo_t *ci, qboolean animatedHead );
