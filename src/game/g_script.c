@@ -370,9 +370,11 @@ void G_Script_ScriptLoad( void ) {
 	Q_strncpyz( filename, "maps/", sizeof( filename ) );
 	Q_strcat( filename, sizeof( filename ), mapname.string );
 
+
+	/* Nico, removed LMS
 	if ( g_gametype.integer == GT_WOLF_LMS ) {
 		Q_strcat( filename, sizeof( filename ), "_lms" );
-	}
+	}*/
 
 	Q_strcat( filename, sizeof( filename ), ".script" );
 

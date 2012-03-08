@@ -108,28 +108,30 @@ void G_SendScore( gentity_t *ent ) {
 				ping = cl->ps.ping < 999 ? cl->ps.ping : 999;
 			}
 
+			/* Nico, removed LMS
 			if ( g_gametype.integer == GT_WOLF_LMS ) {
-				/* Nico, removed respawnLeft
-				Com_sprintf( entry, sizeof( entry ), " %i %i %i %i %i %i %i", level.sortedClients[i], cl->ps.persistant[PERS_SCORE], ping,
-							 ( level.time - cl->pers.enterTime ) / 60000, g_entities[level.sortedClients[i]].s.powerups, playerClass, respawnsLeft );*/
+				// Nico, removed respawnLeft
+				// Com_sprintf( entry, sizeof( entry ), " %i %i %i %i %i %i %i", level.sortedClients[i], cl->ps.persistant[PERS_SCORE], ping,
+							 ( level.time - cl->pers.enterTime ) / 60000, g_entities[level.sortedClients[i]].s.powerups, playerClass, respawnsLeft );
 				Com_sprintf( entry, sizeof( entry ), " %i %i %i %i %i %i", level.sortedClients[i], cl->ps.persistant[PERS_SCORE], ping,
 							 ( level.time - cl->pers.enterTime ) / 60000, g_entities[level.sortedClients[i]].s.powerups, playerClass );
-			} else {
+			} else {*/
 
 				/* Nico, removed skills
 				int j, totalXP;
 
 				for ( totalXP = 0, j = 0; j < SK_NUM_SKILLS; j++ ) {
 					totalXP += cl->sess.skillpoints[j];
-				}*/
-				int totalXP = 0;
+				}
 
-				/* Nico, removed respawnLeft
-				Com_sprintf( entry, sizeof( entry ), " %i %i %i %i %i %i %i", level.sortedClients[i], totalXP, ping,
-							 ( level.time - cl->pers.enterTime ) / 60000, g_entities[level.sortedClients[i]].s.powerups, playerClass, respawnsLeft );*/
-				Com_sprintf( entry, sizeof( entry ), " %i %i %i %i %i %i", level.sortedClients[i], totalXP, ping,
-							 ( level.time - cl->pers.enterTime ) / 60000, g_entities[level.sortedClients[i]].s.powerups, playerClass );
-			}
+				int totalXP = 0;*/
+
+				// Nico, removed respawnLeft
+				// Com_sprintf( entry, sizeof( entry ), " %i %i %i %i %i %i %i", level.sortedClients[i], totalXP, ping,
+				//			 ( level.time - cl->pers.enterTime ) / 60000, g_entities[level.sortedClients[i]].s.powerups, playerClass, respawnsLeft );
+				Com_sprintf( entry, sizeof( entry ), " %i %i %i %i %i %i", level.sortedClients[i], 0, ping,
+					( level.time - cl->pers.enterTime ) / 60000, g_entities[level.sortedClients[i]].s.powerups, playerClass );
+			// }
 
 			if ( size + strlen( entry ) > 1000 ) {
 				i--; // we need to redo this client in the next buffer (if we can)
@@ -841,11 +843,13 @@ qboolean SetTeam( gentity_t *ent, char *s, qboolean force, weapon_t w1, weapon_t
 	G_UpdateSpawnCounts();
 
 	if ( g_gamestate.integer == GS_PLAYING && ( client->sess.sessionTeam == TEAM_AXIS || client->sess.sessionTeam == TEAM_ALLIES ) ) {
+
+		/* Nico, removed LMS
 		if ( g_gametype.integer == GT_WOLF_LMS && level.numTeamClients[0] > 0 && level.numTeamClients[1] > 0 ) {
 			trap_SendServerCommand( clientNum, "cp \"Will spawn next round, please wait.\n\"" );
 			limbo( ent, qfalse );
 			return( qfalse );
-		} else {
+		} else {*/
 			int i;
 			int x = client->sess.sessionTeam - TEAM_AXIS;
 
@@ -856,7 +860,7 @@ qboolean SetTeam( gentity_t *ent, char *s, qboolean force, weapon_t w1, weapon_t
 					tent->s.teamNum = clientNum;
 				}
 			}
-		}
+		// }
 	}
 
 	ent->client->pers.autofireteamCreateEndTime = 0;

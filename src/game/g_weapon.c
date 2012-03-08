@@ -603,9 +603,10 @@ void Weapon_Syringe( gentity_t *ent ) {
 				}
 
 				// Arnout: calculate ranks to update numFinalDead arrays. Have to do it manually as addscore has an early out
+				/* Nico, removed LMS
 				if ( g_gametype.integer == GT_WOLF_LMS ) {
 					CalculateRanks();
-				}
+				}*/
 			}
 		}
 	}

@@ -1798,7 +1798,8 @@ qboolean G_teamJoinCheck( int team_num, gentity_t *ent ) {
 			return( qtrue );
 		}
 
-		if ( g_gametype.integer != GT_WOLF_LMS ) {
+		/* Nico, removed LMS
+		if ( g_gametype.integer != GT_WOLF_LMS ) {*/
 			// Check for full teams
 			if ( team_maxplayers.integer > 0 && team_maxplayers.integer <= cnt ) {
 				G_printFull( va( "The %s team is full!", aTeams[team_num] ), ent );
@@ -1809,6 +1810,7 @@ qboolean G_teamJoinCheck( int team_num, gentity_t *ent ) {
 				G_printFull( va( "The %s team is LOCKED!", aTeams[team_num] ), ent );
 				return( qfalse );
 			}
+		/* Nico, removed LMS
 		} else {
 			if ( team_maxplayers.integer > 0 && team_maxplayers.integer <= cnt ) {
 				G_printFull( va( "The %s team is full!", aTeams[team_num] ), ent );
@@ -1817,7 +1819,7 @@ qboolean G_teamJoinCheck( int team_num, gentity_t *ent ) {
 				G_printFull( va( "The %s team is LOCKED!", aTeams[team_num] ), ent );
 				return( qfalse );
 			}
-		}
+		}*/
 	}
 
 	return( qtrue );
@@ -1905,6 +1907,8 @@ int G_blockoutTeam( gentity_t *ent, int nTeam ) {
 
 // Figure out if we are allowed/want to follow a given player
 qboolean G_allowFollow( gentity_t *ent, int nTeam ) {
+
+	/* Nico, removed LMS
 	if ( g_gametype.integer == GT_WOLF_LMS && g_lms_followTeamOnly.integer ) {
 		if ( ( ent->client->sess.spec_invite & nTeam ) == nTeam ) {
 			return qtrue;
@@ -1913,7 +1917,7 @@ qboolean G_allowFollow( gentity_t *ent, int nTeam ) {
 			 ent->client->sess.sessionTeam != nTeam ) {
 			return qfalse;
 		}
-	}
+	}*/
 
 	if ( level.time - level.startTime > 2500 ) {
 		if ( TeamCount( -1, TEAM_AXIS ) == 0 ) {

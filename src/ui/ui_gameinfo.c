@@ -186,13 +186,17 @@ static void UI_LoadArenasFromFile( char *filename ) {
 				trap_PC_FreeSource( handle );
 				return;
 			}
-		} else if ( !Q_stricmp( token.string, "lmsbriefing" ) ) {
+		}
+		
+		/* Nico, removed LMS
+		else if ( !Q_stricmp( token.string, "lmsbriefing" ) ) {
 			if ( !PC_String_Parse( handle, &uiInfo.mapList[uiInfo.mapCount].lmsbriefing ) ) {
 				trap_Print( va( S_COLOR_RED "unexpected end of file inside: %s\n", filename ) );
 				trap_PC_FreeSource( handle );
 				return;
 			}
-		}
+		}*/
+
 		/* Nico, no timelimit
 		else if ( !Q_stricmp( token.string, "timelimit" ) ) {
 			if ( !PC_Int_Parse( handle, &uiInfo.mapList[uiInfo.mapCount].Timelimit ) ) {
@@ -225,9 +229,12 @@ static void UI_LoadArenasFromFile( char *filename ) {
 				if ( strstr( token.string, "wolfsp" ) ) {
 					uiInfo.mapList[uiInfo.mapCount].typeBits |= ( 1 << GT_SINGLE_PLAYER );
 				}
+
+				/* Nico, removed LMS
 				if ( strstr( token.string, "wolflms" ) ) {
 					uiInfo.mapList[uiInfo.mapCount].typeBits |= ( 1 << GT_WOLF_LMS );
-				}
+				}*/
+
 				if ( strstr( token.string, "wolfmp" ) ) {
 					uiInfo.mapList[uiInfo.mapCount].typeBits |= ( 1 << GT_WOLF );
 				}
@@ -427,9 +434,12 @@ static void UI_LoadCampaignsFromFile( const char *filename ) {
 			if ( strstr( token.string, "wolfsw" ) ) {
 				uiInfo.campaignList[uiInfo.campaignCount].typeBits |= ( 1 << GT_WOLF_STOPWATCH );
 			}
+
+			/* Nico, removed LMS
 			if ( strstr( token.string, "wolflms" ) ) {
 				uiInfo.campaignList[uiInfo.campaignCount].typeBits |= ( 1 << GT_WOLF_LMS );
-			}
+			}*/
+
 		} else if ( !Q_stricmp( token.string, "maps" ) ) {
 			char *ptr, mapname[128], *mapnameptr;
 

@@ -1202,9 +1202,12 @@ static qboolean G_LoadCampaignsFromFile( const char *filename ) {
 			if ( strstr( token.string, "wolfsw" ) ) {
 				g_campaigns[level.campaignCount].typeBits |= ( 1 << GT_WOLF_STOPWATCH );
 			}
+
+			/* Nico, removed LMS
 			if ( strstr( token.string, "wolflms" ) ) {
 				g_campaigns[level.campaignCount].typeBits |= ( 1 << GT_WOLF_LMS );
-			}
+			}*/
+
 		} else if ( !Q_stricmp( token.string, "maps" ) ) {
 			char *ptr, mapname[128], *mapnamePtr;
 

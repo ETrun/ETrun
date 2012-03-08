@@ -2874,9 +2874,10 @@ qboolean G_ScriptAction_SetWinner( gentity_t *ent, char *params ) {
 		G_Error( "G_ScriptAction_SetWinner: Invalid team number\n" );
 	}
 
+	/* Nico, removed LMS
 	if ( g_gametype.integer == GT_WOLF_LMS ) {
 		num = -1;
-	}
+	}*/
 
 	trap_GetConfigstring( CS_MULTI_MAPWINNER, cs, sizeof( cs ) );
 

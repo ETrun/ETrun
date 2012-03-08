@@ -54,9 +54,10 @@ void AddScore( gentity_t *ent, int score ) {
 		return;
 	}
 
+	/* Nico, removed LMS
 	if ( g_gametype.integer == GT_WOLF_LMS ) {
 		return;
-	}
+	}*/
 
 	ent->client->sess.game_points += score;
 
@@ -82,6 +83,7 @@ void AddKillScore( gentity_t *ent, int score ) {
 	}*/
 
 	// someone already won
+	/* Nico, removed LMS
 	if ( level.lmsWinningTeam ) {
 		return;
 	}
@@ -89,7 +91,8 @@ void AddKillScore( gentity_t *ent, int score ) {
 	if ( g_gametype.integer == GT_WOLF_LMS ) {
 		ent->client->ps.persistant[PERS_SCORE] += score;
 		level.teamScores[ ent->client->ps.persistant[PERS_TEAM] ] += score;
-	}
+	}*/
+
 	ent->client->sess.game_points += score;
 
 	CalculateRanks();
@@ -540,9 +543,10 @@ void player_die( gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int
 			// high penalty to offset medic heal
 /*			AddScore( attacker, WOLF_FRIENDLY_PENALTY ); */
 
+			/* Nico, removed LMS
 			if ( g_gametype.integer == GT_WOLF_LMS ) {
 				AddKillScore( attacker, WOLF_FRIENDLY_PENALTY );
-			}
+			}*/
 		} else {
 
 			//G_AddExperience( attacker, 1 );
@@ -550,22 +554,24 @@ void player_die( gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int
 			// JPW NERVE -- mostly added as conveneience so we can tweak from the #defines all in one place
 			AddScore( attacker, WOLF_FRAG_BONUS );
 
+			/* Nico, removed LMS
 			if ( g_gametype.integer == GT_WOLF_LMS ) {
 				if ( level.firstbloodTeam == -1 ) {
 					level.firstbloodTeam = attacker->client->sess.sessionTeam;
 				}
 
 				AddKillScore( attacker, WOLF_FRAG_BONUS );
-			}
+			}*/
 
 			attacker->client->lastKillTime = level.time;
 		}
 	} else {
 		AddScore( self, -1 );
 
+		/* Nico, removed LMS
 		if ( g_gametype.integer == GT_WOLF_LMS ) {
 			AddKillScore( self, -1 );
-		}
+		}*/
 	}
 
 	// Add team bonuses
@@ -725,11 +731,14 @@ void player_die( gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int
 		limbo( self, qfalse ); // but no corpse
 	} else if ( ( meansOfDeath == MOD_SUICIDE && g_gamestate.integer == GS_PLAYING ) ) {
 		limbo( self, qtrue );
-	} else if ( g_gametype.integer == GT_WOLF_LMS ) {
+	}
+	
+	/* Nico, removed LMS
+	else if ( g_gametype.integer == GT_WOLF_LMS ) {
 		if ( !G_CountTeamMedics( self->client->sess.sessionTeam, qtrue ) ) {
 			limbo( self, qtrue );
 		}
-	}
+	}*/
 }
 
 qboolean IsHeadShotWeapon( int mod ) {

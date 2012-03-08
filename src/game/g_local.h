@@ -997,7 +997,8 @@ typedef struct {
 	vec3_t intermission_origin;         // also used for spectator spawns
 	vec3_t intermission_angle;
 
-	qboolean lmsDoNextMap;              // should LMS do a map_restart or a vstr nextmap
+	/* Nico, removed LMS
+	qboolean lmsDoNextMap;              // should LMS do a map_restart or a vstr nextmap*/
 
 	int bodyQueIndex;                   // dead bodies
 	gentity_t   *bodyQue[BODY_QUEUE_SIZE];
@@ -1059,7 +1060,9 @@ typedef struct {
 
 	int firstbloodTeam;
 	int teamEliminateTime;
-	int lmsWinningTeam;
+
+	/* Nico, removed LMS
+	int lmsWinningTeam;*/
 
 	int campaignCount;
 	int currentCampaign;
@@ -1707,17 +1710,19 @@ extern vmCvar_t g_currentCampaign;
 extern vmCvar_t g_currentCampaignMap;
 
 // Arnout: for LMS
+/* Nico, removed LMS
 extern vmCvar_t g_axiswins;
-extern vmCvar_t g_alliedwins;
+extern vmCvar_t g_alliedwins;*/
 
 /* Nico, removed balancedteams
 extern vmCvar_t g_lms_teamForceBalance;*/
 
+/* Nico, removed LMS
 extern vmCvar_t g_lms_roundlimit;
 extern vmCvar_t g_lms_matchlimit;
 extern vmCvar_t g_lms_currentMatch;
 extern vmCvar_t g_lms_lockTeams;
-extern vmCvar_t g_lms_followTeamOnly;
+extern vmCvar_t g_lms_followTeamOnly;*/
 
 // NERVE - SMF
 /* Nico, removed warmup
@@ -2188,7 +2193,10 @@ void G_printMatchInfo( gentity_t *ent );*/
 void G_parseStats( char *pszStatsInfo );*/
 
 void G_printFull( char *str, gentity_t *ent );
-void G_resetModeState( void );
+
+/* Nico, removed LMS
+void G_resetModeState( void );*/
+
 void G_resetRoundState( void );
 void G_spawnPrintf( int print_type, int print_time, gentity_t *owner );
 

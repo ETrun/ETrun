@@ -244,17 +244,19 @@ vmCvar_t g_currentCampaign;
 vmCvar_t g_currentCampaignMap;
 
 // Arnout: for LMS
+/* Nico, removed LMS
 vmCvar_t g_axiswins;
-vmCvar_t g_alliedwins;
+vmCvar_t g_alliedwins;*/
 
 /* Nico, removed balancedteams
 vmCvar_t g_lms_teamForceBalance;*/
 
+/* Nico, removed LMS
 vmCvar_t g_lms_roundlimit;
 vmCvar_t g_lms_matchlimit;
 vmCvar_t g_lms_currentMatch;
 vmCvar_t g_lms_lockTeams;
-vmCvar_t g_lms_followTeamOnly;
+vmCvar_t g_lms_followTeamOnly;*/
 
 vmCvar_t mod_url;
 vmCvar_t url;
@@ -475,20 +477,21 @@ cvarTable_t gameCvarTable[] = {
 	{ &g_scriptDebugLevel, "g_scriptDebugLevel", "0", CVAR_CHEAT, 0, qfalse },
 
 	// How fast do we want Allied single player movement?
-//	{ &g_movespeed, "g_movespeed", "127", CVAR_CHEAT, 0, qfalse },
 	{ &g_movespeed, "g_movespeed", "76", CVAR_CHEAT, 0, qfalse },
 
 	// Arnout: LMS
 	/* Nico, removed balancedteams
 	{ &g_lms_teamForceBalance,  "g_lms_teamForceBalance",    "1", CVAR_ARCHIVE },*/
 
+	/* Nico, removed LMS
 	{ &g_lms_roundlimit,        "g_lms_roundlimit",          "3", CVAR_ARCHIVE },
 	{ &g_lms_matchlimit,        "g_lms_matchlimit",          "2", CVAR_ARCHIVE },
 	{ &g_lms_currentMatch,      "g_lms_currentMatch",        "0", CVAR_ROM, 0, qfalse, qtrue },
 	{ &g_lms_lockTeams,         "g_lms_lockTeams",           "0", CVAR_ARCHIVE },
 	{ &g_lms_followTeamOnly,    "g_lms_followTeamOnly",      "1", CVAR_ARCHIVE },
 	{ &g_axiswins,              "g_axiswins",                "0", CVAR_ROM, 0, qfalse, qtrue },
-	{ &g_alliedwins,            "g_alliedwins",              "0", CVAR_ROM, 0, qfalse, qtrue },
+	{ &g_alliedwins,            "g_alliedwins",              "0", CVAR_ROM, 0, qfalse, qtrue },*/
+
 	{ &g_axismapxp,             "g_axismapxp",               "0", CVAR_ROM, 0, qfalse, qtrue },
 	{ &g_alliedmapxp,           "g_alliedmapxp",         "0", CVAR_ROM, 0, qfalse, qtrue },
 
@@ -521,7 +524,9 @@ static int gameCvarTableSize = sizeof( gameCvarTable ) / sizeof( gameCvarTable[0
 void G_InitGame( int levelTime, int randomSeed, int restart );
 void G_RunFrame( int levelTime );
 void G_ShutdownGame( int restart );
-void CheckExitRules( void );
+
+/* Nico, commented because it does nothing
+void CheckExitRules( void );*/
 
 qboolean G_SnapshotCallback( int entityNum, int clientNum ) {
 	gentity_t* ent = &g_entities[ entityNum ];
@@ -1399,6 +1404,7 @@ void G_UpdateCvars( void ) {
 						trap_Cvar_Set( cv->cvarName, "100" );
 					}
 				}
+
 				/* Nico, removed warmup
 				else if ( cv->vmCvar == &g_warmup )      {
 					if ( g_gamestate.integer != GS_PLAYING && !G_IsSinglePlayerGame() ) {
@@ -1406,6 +1412,7 @@ void G_UpdateCvars( void ) {
 						trap_SetConfigstring( CS_WARMUP, va( "%i", level.warmupTime ) );
 					}
 				}*/
+
 				// Moved this check out of the main world think loop
 				else if ( cv->vmCvar == &g_gametype ) {
 					int worldspawnflags = g_entities[ENTITYNUM_WORLD].spawnflags;
@@ -1419,13 +1426,16 @@ void G_UpdateCvars( void ) {
 					if ( gametype == GT_WOLF_CAMPAIGN && gametype != g_gametype.integer ) {
 						if ( !G_MapIsValidCampaignStartMap() ) {
 							gt = g_gametype.integer;
-							if ( gt != GT_WOLF_LMS ) {
+
+							/* Nico, removed LMS
+							if ( gt != GT_WOLF_LMS ) {*/
 								if ( !( worldspawnflags & NO_GT_WOLF ) ) {
 									gt = GT_WOLF;   // Default wolf
-								} else {
-									gt = GT_WOLF_LMS;   // Last man standing
-								}
-							}
+								} 
+								//else {
+								// gt = GT_WOLF_LMS;   // Last man standing
+								// }
+							// }
 
 							G_Printf( "Map '%s' isn't a valid campaign start map, resetting game type to '%i'\n", level.rawmapname, gt );
 							trap_Cvar_Set( "g_gametype", va( "%i", gt ) );
@@ -1433,17 +1443,25 @@ void G_UpdateCvars( void ) {
 						continue;
 					}
 
+					/* Nico, removed LMS
 					if ( !level.latchGametype && g_gamestate.integer == GS_PLAYING &&
 						 ( ( ( g_gametype.integer == GT_WOLF || g_gametype.integer == GT_WOLF_CAMPAIGN ) && ( worldspawnflags & NO_GT_WOLF ) ) ||
 						   ( g_gametype.integer == GT_WOLF_STOPWATCH && ( worldspawnflags & NO_STOPWATCH ) ) ||
 						   ( g_gametype.integer == GT_WOLF_LMS && ( worldspawnflags & NO_LMS ) ) )
+						 ) {*/
+					if ( !level.latchGametype && g_gamestate.integer == GS_PLAYING &&
+						 ( ( ( g_gametype.integer == GT_WOLF || g_gametype.integer == GT_WOLF_CAMPAIGN ) && ( worldspawnflags & NO_GT_WOLF ) ) ||
+						   ( g_gametype.integer == GT_WOLF_STOPWATCH && ( worldspawnflags & NO_STOPWATCH ) ) )
 						 ) {
 
 						if ( !( worldspawnflags & NO_GT_WOLF ) ) {
 							gt = GT_WOLF;   // Default wolf
-						} else {
-							gt = GT_WOLF_LMS;   // Last man standing
 						}
+
+						/* Nico, removed LMS
+						else {
+							gt = GT_WOLF_LMS;   // Last man standing
+						}*/
 
 						level.latchGametype = qtrue;
 						AP( "print \"Invalid gametype was specified, Restarting\n\"" );
@@ -1754,6 +1772,7 @@ void G_InitGame( int levelTime, int randomSeed, int restart ) {
 	G_SoundIndex( "sound/player/gurp1.wav"   );
 	G_SoundIndex( "sound/player/gurp2.wav"   );
 
+	/* Nico, removed LMS
 	if ( g_gametype.integer == GT_WOLF_LMS ) {
 		trap_GetConfigstring( CS_MULTI_MAPWINNER, cs, sizeof( cs ) );
 		Info_SetValueForKey( cs, "winner", "-1" );
@@ -1771,7 +1790,7 @@ void G_InitGame( int levelTime, int randomSeed, int restart ) {
 
 		trap_SetConfigstring( CS_ROUNDSCORES1, va( "%i", g_axiswins.integer ) );
 		trap_SetConfigstring( CS_ROUNDSCORES2, va( "%i", g_alliedwins.integer ) );
-	}
+	}*/
 
 	if ( g_gametype.integer == GT_WOLF ) {
 		//bani - #113
@@ -1790,14 +1809,18 @@ void G_InitGame( int levelTime, int randomSeed, int restart ) {
 	G_ParseCampaigns();
 	if ( g_gametype.integer == GT_WOLF_CAMPAIGN ) {
 		if ( g_campaigns[level.currentCampaign].current == 0 || level.newCampaign ) {
+
+			/* Nico, removed LMS
 			trap_Cvar_Set( "g_axiswins", "0" );
-			trap_Cvar_Set( "g_alliedwins", "0" );
+			trap_Cvar_Set( "g_alliedwins", "0" );*/
 
 			//bani - #113
 			bani_clearmapxp();
 
+			/* Nico, removed LMS
 			trap_Cvar_Update( &g_axiswins );
-			trap_Cvar_Update( &g_alliedwins );
+			trap_Cvar_Update( &g_alliedwins );*/
+
 		} else {
 			//bani - #113
 			bani_getmapxp();
@@ -1959,17 +1982,25 @@ G_ShutdownGame
 void G_ShutdownGame( int restart ) {
 
 	// Arnout: gametype latching
+	/* Nico, removed LMS
 	if  (
 		( ( g_gametype.integer == GT_WOLF || g_gametype.integer == GT_WOLF_CAMPAIGN ) && ( g_entities[ENTITYNUM_WORLD].r.worldflags & NO_GT_WOLF ) ) ||
 		( g_gametype.integer == GT_WOLF_STOPWATCH && ( g_entities[ENTITYNUM_WORLD].r.worldflags & NO_STOPWATCH ) ) ||
 		( g_gametype.integer == GT_WOLF_LMS && ( g_entities[ENTITYNUM_WORLD].r.worldflags & NO_LMS ) )
+		) {*/
+	if  (
+		( ( g_gametype.integer == GT_WOLF || g_gametype.integer == GT_WOLF_CAMPAIGN ) && ( g_entities[ENTITYNUM_WORLD].r.worldflags & NO_GT_WOLF ) ) ||
+		( g_gametype.integer == GT_WOLF_STOPWATCH && ( g_entities[ENTITYNUM_WORLD].r.worldflags & NO_STOPWATCH ) )
 		) {
 
 		if ( !( g_entities[ENTITYNUM_WORLD].r.worldflags & NO_GT_WOLF ) ) {
 			trap_Cvar_Set( "g_gametype", va( "%i", GT_WOLF ) );
-		} else {
-			trap_Cvar_Set( "g_gametype", va( "%i", GT_WOLF_LMS ) );
 		}
+		
+		/* Nico, removed LMS
+		else {
+			trap_Cvar_Set( "g_gametype", va( "%i", GT_WOLF_LMS ) );
+		}*/
 
 		trap_Cvar_Update( &g_gametype );
 	}
@@ -2079,6 +2110,7 @@ int QDECL SortRanks( const void *a, const void *b ) {
 		return -1;
 	}
 
+	/* Nico, removed LMS
 	if ( g_gametype.integer == GT_WOLF_LMS ) {
 		// then sort by score
 		if ( ca->ps.persistant[PERS_SCORE]
@@ -2089,7 +2121,8 @@ int QDECL SortRanks( const void *a, const void *b ) {
 			 < cb->ps.persistant[PERS_SCORE] ) {
 			return 1;
 		}
-	}
+	}*/
+
 	/* Nico, removed skills
 	else {
 		int i, totalXP[2];
@@ -2210,11 +2243,14 @@ void CalculateRanks( void ) {
 
 					if ( level.clients[i].sess.sessionTeam == TEAM_AXIS ||
 						 level.clients[i].sess.sessionTeam == TEAM_ALLIES ) {
+
+						/* Nico, removed LMS
 						if ( g_gametype.integer == GT_WOLF_LMS ) {
 							if ( g_entities[i].health <= 0 || level.clients[i].ps.pm_flags & PMF_LIMBO ) {
 								level.numFinalDead[teamIndex]++;
 							}
-						}
+						}*/
+
 						/* Nico, removed respawnLeft
 						else {
 							if ( level.clients[i].ps.persistant[PERS_RESPAWNS_LEFT] == 0 && g_entities[i].health <= 0 ) {
@@ -2261,13 +2297,11 @@ void CalculateRanks( void ) {
 		}
 	}
 
-	// set the CS_SCORES1/2 configstrings, which will be visible to everyone
-//	trap_SetConfigstring( CS_SCORES1, va("%i", level.teamScores[TEAM_AXIS] ) );
-//	trap_SetConfigstring( CS_SCORES2, va("%i", level.teamScores[TEAM_ALLIES] ) );
-
 	trap_SetConfigstring( CS_FIRSTBLOOD, va( "%i", level.firstbloodTeam ) );
+
+	/* Nico, removed LMS
 	trap_SetConfigstring( CS_ROUNDSCORES1, va( "%i", g_axiswins.integer ) );
-	trap_SetConfigstring( CS_ROUNDSCORES2, va( "%i", g_alliedwins.integer ) );
+	trap_SetConfigstring( CS_ROUNDSCORES2, va( "%i", g_alliedwins.integer ) );*/
 
 	//bani - #184
 	etpro_PlayerInfo();
@@ -2276,10 +2310,10 @@ void CalculateRanks( void ) {
 	/* Nico, removed intermission
 	if ( g_gamestate.integer == GS_INTERMISSION ) {
 		SendScoreboardMessageToAllClients();
-	} else {*/
+	} else {
 		// see if it is time to end the level
 		CheckExitRules();
-	// }
+	}*/
 }
 
 
@@ -2305,7 +2339,6 @@ void SendScoreboardMessageToAllClients( void ) {
 	for ( i = 0; i < level.numConnectedClients; i++ ) {
 		if ( level.clients[level.sortedClients[i]].pers.connected == CON_CONNECTED ) {
 			level.clients[level.sortedClients[i]].wantsscore = qtrue;
-//			G_SendScore(g_entities + level.sortedClients[i]);
 		}
 	}
 }
@@ -2480,13 +2513,17 @@ void ExitLevel( void ) {
 			// FIXME: do we want to do something else here?
 			//trap_SendConsoleCommand( EXEC_APPEND, "vstr nextmap\n" );
 		}
-	} else if ( g_gametype.integer == GT_WOLF_LMS ) {
+	}
+
+	/* Nico, removed LMS
+	else if ( g_gametype.integer == GT_WOLF_LMS ) {
 		if ( level.lmsDoNextMap ) {
 			trap_SendConsoleCommand( EXEC_APPEND, "vstr nextmap\n" );
 		} else {
 			trap_SendConsoleCommand( EXEC_APPEND, "map_restart 0\n" );
 		}
-	} else {
+	} */
+	else {
 		trap_SendConsoleCommand( EXEC_APPEND, "vstr nextmap\n" );
 	}
 	level.changemap = NULL;
@@ -2573,7 +2610,9 @@ Append information about this game to the log file
 void LogExit( const char *string ) {
 	int i;
 	gclient_t       *cl;
-	char cs[MAX_STRING_CHARS];
+
+	/* Nico, removed LMS
+	char cs[MAX_STRING_CHARS];*/
 
 	// NERVE - SMF - do not allow LogExit to be called in non-playing gamestate
 	if ( g_gamestate.integer != GS_PLAYING ) {
@@ -2657,6 +2696,7 @@ void LogExit( const char *string ) {
 		trap_GetConfigstring( CS_MULTI_MAPWINNER, cs, sizeof( cs ) );
 		winner = atoi( Info_ValueForKey( cs, "winner" ) );
 
+		/* Nico, removed LMS
 		if ( winner == 0 ) {
 			g_axiswins.integer |= ( 1 << g_campaigns[level.currentCampaign].current );
 			trap_Cvar_Set( "g_axiswins", va( "%i", g_axiswins.integer ) );
@@ -2668,7 +2708,7 @@ void LogExit( const char *string ) {
 		}
 
 		trap_SetConfigstring( CS_ROUNDSCORES1, va( "%i", g_axiswins.integer ) );
-		trap_SetConfigstring( CS_ROUNDSCORES2, va( "%i", g_alliedwins.integer ) );
+		trap_SetConfigstring( CS_ROUNDSCORES2, va( "%i", g_alliedwins.integer ) );*/
 
 		//bani - #113
 		bani_storemapxp();
@@ -2712,7 +2752,10 @@ void LogExit( const char *string ) {
 				}
 			}
 		}*/
-	} else if ( g_gametype.integer == GT_WOLF_LMS ) {
+	}
+	
+	/* Nico, removed LMS
+	else if ( g_gametype.integer == GT_WOLF_LMS ) {
 		int winner;
 		int roundLimit = g_lms_roundlimit.integer < 3 ? 3 : g_lms_roundlimit.integer;
 		int numWinningRounds = ( roundLimit / 2 ) + 1;
@@ -2752,7 +2795,8 @@ void LogExit( const char *string ) {
 			trap_Cvar_Set( "g_currentRound", va( "%i", g_currentRound.integer + 1 ) );
 			trap_Cvar_Update( &g_currentRound );
 		}
-	} else if ( g_gametype.integer == GT_WOLF ) {
+	}*/
+	else if ( g_gametype.integer == GT_WOLF ) {
 
 		//bani - #113
 		bani_storemapxp();
@@ -2857,144 +2901,146 @@ and the time everyone is moved to the intermission spot, so you
 can see the last frag.
 =================
 */
+/* Nico, commented because it does nothing
 void CheckExitRules( void ) {
 	char cs[MAX_STRING_CHARS];
 
 
-	/* Nico, removed intermission
+	// Nico, removed intermission
 	// if at the intermission, wait for all non-bots to
 	// signal ready, then go to next level
-	if ( g_gamestate.integer == GS_INTERMISSION ) {
-		CheckIntermissionExit();
-		return;
-	}
+	//if ( g_gamestate.integer == GS_INTERMISSION ) {
+	//	CheckIntermissionExit();
+	//	return;
+	//}
 
-	if ( level.intermissionQueued ) {
-		level.intermissionQueued = 0;
-		BeginIntermission();
-		return;
-	}*/
+	//if ( level.intermissionQueued ) {
+	//	level.intermissionQueued = 0;
+	//	BeginIntermission();
+	//	return;
+	//}
 
-	/* Nico, no timelimit
-	if ( g_timelimit.value && !level.warmupTime ) {
-		// OSP
-		if ( ( level.timeCurrent - level.startTime ) >= ( g_timelimit.value * 60000 ) ) {
-			// OSP
+	// Nico, no timelimit
+	// if ( g_timelimit.value && !level.warmupTime ) {
+	//	// OSP
+	//	if ( ( level.timeCurrent - level.startTime ) >= ( g_timelimit.value * 60000 ) ) {
+	//		// OSP
 
-			// Check who has the most players alive
-			if ( g_gametype.integer == GT_WOLF_LMS ) {
-				int axisSurvivors, alliedSurvivors;
+	//		// Check who has the most players alive
+	//		if ( g_gametype.integer == GT_WOLF_LMS ) {
+	//			int axisSurvivors, alliedSurvivors;
 
-				axisSurvivors = level.numTeamClients[0] - level.numFinalDead[0];
-				alliedSurvivors = level.numTeamClients[1] - level.numFinalDead[1];
+	//			axisSurvivors = level.numTeamClients[0] - level.numFinalDead[0];
+	//			alliedSurvivors = level.numTeamClients[1] - level.numFinalDead[1];
 
-				//bani - if team was eliminated < 3 sec before round end, we _properly_ end it here
-				if ( level.teamEliminateTime ) {
-					LogExit( va( "%s team eliminated.", level.lmsWinningTeam == TEAM_ALLIES ? "Axis" : "Allied" ) );
-				}
+	//			//bani - if team was eliminated < 3 sec before round end, we _properly_ end it here
+	//			if ( level.teamEliminateTime ) {
+	//				LogExit( va( "%s team eliminated.", level.lmsWinningTeam == TEAM_ALLIES ? "Axis" : "Allied" ) );
+	//			}
 
-				if ( axisSurvivors == alliedSurvivors ) {
-					// First blood wins
-					if ( level.firstbloodTeam == TEAM_AXIS ) {
-						trap_GetConfigstring( CS_MULTI_MAPWINNER, cs, sizeof( cs ) );
-						Info_SetValueForKey( cs, "winner", "0" );
-						trap_SetConfigstring( CS_MULTI_MAPWINNER, cs );
-						LogExit( "Axis team wins by drawing First Blood." );
-						trap_SendServerCommand( -1, "print \"Axis team wins by drawing First Blood.\n\"" );
-					} else if ( level.firstbloodTeam == TEAM_ALLIES ) {
-						trap_GetConfigstring( CS_MULTI_MAPWINNER, cs, sizeof( cs ) );
-						Info_SetValueForKey( cs, "winner", "1" );
-						trap_SetConfigstring( CS_MULTI_MAPWINNER, cs );
-						LogExit( "Allied team wins by drawing First Blood." );
-						trap_SendServerCommand( -1, "print \"Allied team wins by drawing First Blood.\n\"" );
-					} else {
-						// no winner yet - sudden death!
-						return;
-					}
-				} else if ( axisSurvivors > alliedSurvivors ) {
-					trap_GetConfigstring( CS_MULTI_MAPWINNER, cs, sizeof( cs ) );
-					Info_SetValueForKey( cs, "winner", "0" );
-					trap_SetConfigstring( CS_MULTI_MAPWINNER, cs );
-					LogExit( "Axis team has the most survivors." );
-					trap_SendServerCommand( -1, "print \"Axis team has the most survivors.\n\"" );
-					return;
-				} else {
-					trap_GetConfigstring( CS_MULTI_MAPWINNER, cs, sizeof( cs ) );
-					Info_SetValueForKey( cs, "winner", "1" );
-					trap_SetConfigstring( CS_MULTI_MAPWINNER, cs );
-					LogExit( "Allied team has the most survivors." );
-					trap_SendServerCommand( -1, "print \"Allied team has the most survivors.\n\"" );
-					return;
-				}
-			} else {
-				// check for sudden death
-				if ( ScoreIsTied() ) {
-					// score is tied, so don't end the game
-					return;
-				}
-			}
+	//			if ( axisSurvivors == alliedSurvivors ) {
+	//				// First blood wins
+	//				if ( level.firstbloodTeam == TEAM_AXIS ) {
+	//					trap_GetConfigstring( CS_MULTI_MAPWINNER, cs, sizeof( cs ) );
+	//					Info_SetValueForKey( cs, "winner", "0" );
+	//					trap_SetConfigstring( CS_MULTI_MAPWINNER, cs );
+	//					LogExit( "Axis team wins by drawing First Blood." );
+	//					trap_SendServerCommand( -1, "print \"Axis team wins by drawing First Blood.\n\"" );
+	//				} else if ( level.firstbloodTeam == TEAM_ALLIES ) {
+	//					trap_GetConfigstring( CS_MULTI_MAPWINNER, cs, sizeof( cs ) );
+	//					Info_SetValueForKey( cs, "winner", "1" );
+	//					trap_SetConfigstring( CS_MULTI_MAPWINNER, cs );
+	//					LogExit( "Allied team wins by drawing First Blood." );
+	//					trap_SendServerCommand( -1, "print \"Allied team wins by drawing First Blood.\n\"" );
+	//				} else {
+	//					// no winner yet - sudden death!
+	//					return;
+	//				}
+	//			} else if ( axisSurvivors > alliedSurvivors ) {
+	//				trap_GetConfigstring( CS_MULTI_MAPWINNER, cs, sizeof( cs ) );
+	//				Info_SetValueForKey( cs, "winner", "0" );
+	//				trap_SetConfigstring( CS_MULTI_MAPWINNER, cs );
+	//				LogExit( "Axis team has the most survivors." );
+	//				trap_SendServerCommand( -1, "print \"Axis team has the most survivors.\n\"" );
+	//				return;
+	//			} else {
+	//				trap_GetConfigstring( CS_MULTI_MAPWINNER, cs, sizeof( cs ) );
+	//				Info_SetValueForKey( cs, "winner", "1" );
+	//				trap_SetConfigstring( CS_MULTI_MAPWINNER, cs );
+	//				LogExit( "Allied team has the most survivors." );
+	//				trap_SendServerCommand( -1, "print \"Allied team has the most survivors.\n\"" );
+	//				return;
+	//			}
+	//		} else {
+	//			// check for sudden death
+	//			if ( ScoreIsTied() ) {
+	//				// score is tied, so don't end the game
+	//				return;
+	//			}
+	//		}
 
-			if ( level.gameManager ) {
-				G_Script_ScriptEvent( level.gameManager, "trigger", "timelimit_hit" );
-			}
+	//		if ( level.gameManager ) {
+	//			G_Script_ScriptEvent( level.gameManager, "trigger", "timelimit_hit" );
+	//		}
 
-			// NERVE - SMF - do not allow LogExit to be called in non-playing gamestate
-			// - This already happens in LogExit, but we need it for the print command
-			if ( g_gamestate.integer != GS_PLAYING ) {
-				return;
-			}
+	//		// NERVE - SMF - do not allow LogExit to be called in non-playing gamestate
+	//		// - This already happens in LogExit, but we need it for the print command
+	//		if ( g_gamestate.integer != GS_PLAYING ) {
+	//			return;
+	//		}
 
-			trap_SendServerCommand( -1, "print \"Timelimit hit.\n\"" );
-			LogExit( "Timelimit hit." );
+	//		trap_SendServerCommand( -1, "print \"Timelimit hit.\n\"" );
+	//		LogExit( "Timelimit hit." );
 
-			return;
-		}
-	}*/
+	//		return;
+	//	}
+	//}
 
 	//bani - #444
 	//i dont really get the point of the delay anyway, why not end it immediately like maxlives games?
-	if ( g_gametype.integer == GT_WOLF_LMS ) {
-		if ( !level.teamEliminateTime ) {
-			if ( level.numFinalDead[0] >= level.numTeamClients[0] && level.numTeamClients[0] > 0 ) {
-				level.teamEliminateTime = level.time;
-				level.lmsWinningTeam = TEAM_ALLIES;
-				trap_GetConfigstring( CS_MULTI_MAPWINNER, cs, sizeof( cs ) );
-				Info_SetValueForKey( cs, "winner", "1" );
-				trap_SetConfigstring( CS_MULTI_MAPWINNER, cs );
-			} else if ( level.numFinalDead[1] >= level.numTeamClients[1] && level.numTeamClients[1] > 0 ) {
-				level.teamEliminateTime = level.time;
-				level.lmsWinningTeam = TEAM_AXIS;
-				trap_GetConfigstring( CS_MULTI_MAPWINNER, cs, sizeof( cs ) );
-				Info_SetValueForKey( cs, "winner", "0" );
-				trap_SetConfigstring( CS_MULTI_MAPWINNER, cs );
-			}
-		} else if ( level.teamEliminateTime + 3000 < level.time ) {
-			LogExit( va( "%s team eliminated.", level.lmsWinningTeam == TEAM_ALLIES ? "Axis" : "Allied" ) );
-		}
-		return;
-	}
+	// Nico, removed LMS
+	// if ( g_gametype.integer == GT_WOLF_LMS ) {
+	//	if ( !level.teamEliminateTime ) {
+	//		if ( level.numFinalDead[0] >= level.numTeamClients[0] && level.numTeamClients[0] > 0 ) {
+	//			level.teamEliminateTime = level.time;
+	//			level.lmsWinningTeam = TEAM_ALLIES;
+	//			trap_GetConfigstring( CS_MULTI_MAPWINNER, cs, sizeof( cs ) );
+	//			Info_SetValueForKey( cs, "winner", "1" );
+	//			trap_SetConfigstring( CS_MULTI_MAPWINNER, cs );
+	//		} else if ( level.numFinalDead[1] >= level.numTeamClients[1] && level.numTeamClients[1] > 0 ) {
+	//			level.teamEliminateTime = level.time;
+	//			level.lmsWinningTeam = TEAM_AXIS;
+	//			trap_GetConfigstring( CS_MULTI_MAPWINNER, cs, sizeof( cs ) );
+	//			Info_SetValueForKey( cs, "winner", "0" );
+	//			trap_SetConfigstring( CS_MULTI_MAPWINNER, cs );
+	//		}
+	//	} else if ( level.teamEliminateTime + 3000 < level.time ) {
+	//		LogExit( va( "%s team eliminated.", level.lmsWinningTeam == TEAM_ALLIES ? "Axis" : "Allied" ) );
+	//	}
+	//	return;
+	// }
 
 	if ( level.numPlayingClients < 2 ) {
 		return;
 	}
 
-	/* Nico, removed respawnLeft
-	if ( g_gametype.integer != GT_WOLF_LMS ) {
-		if ( g_maxlives.integer > 0 || g_axismaxlives.integer > 0 || g_alliedmaxlives.integer > 0 ) {
-			if ( level.numFinalDead[0] >= level.numTeamClients[0] && level.numTeamClients[0] > 0 ) {
-				trap_GetConfigstring( CS_MULTI_MAPWINNER, cs, sizeof( cs ) );
-				Info_SetValueForKey( cs, "winner", "1" );
-				trap_SetConfigstring( CS_MULTI_MAPWINNER, cs );
-				LogExit( "Axis team eliminated." );
-			} else if ( level.numFinalDead[1] >= level.numTeamClients[1] && level.numTeamClients[1] > 0 )   {
-				trap_GetConfigstring( CS_MULTI_MAPWINNER, cs, sizeof( cs ) );
-				Info_SetValueForKey( cs, "winner", "0" );
-				trap_SetConfigstring( CS_MULTI_MAPWINNER, cs );
-				LogExit( "Allied team eliminated." );
-			}
-		}
-	}*/
-}
+	// Nico, removed respawnLeft
+	// if ( g_gametype.integer != GT_WOLF_LMS ) {
+	//	if ( g_maxlives.integer > 0 || g_axismaxlives.integer > 0 || g_alliedmaxlives.integer > 0 ) {
+	//		if ( level.numFinalDead[0] >= level.numTeamClients[0] && level.numTeamClients[0] > 0 ) {
+	//			trap_GetConfigstring( CS_MULTI_MAPWINNER, cs, sizeof( cs ) );
+	//			Info_SetValueForKey( cs, "winner", "1" );
+	//			trap_SetConfigstring( CS_MULTI_MAPWINNER, cs );
+	//			LogExit( "Axis team eliminated." );
+	//		} else if ( level.numFinalDead[1] >= level.numTeamClients[1] && level.numTeamClients[1] > 0 )   {
+	//			trap_GetConfigstring( CS_MULTI_MAPWINNER, cs, sizeof( cs ) );
+	//			Info_SetValueForKey( cs, "winner", "0" );
+	//			trap_SetConfigstring( CS_MULTI_MAPWINNER, cs );
+	//			LogExit( "Allied team eliminated." );
+	//		}
+	//	}
+	//}
+}*/
 
 
 
@@ -3598,7 +3644,8 @@ void G_RunFrame( int levelTime ) {
 	CheckWolfMP();
 
 	// see if it is time to end the level
-	CheckExitRules();
+	/* Nico, commented because it does nothing
+	CheckExitRules();*/
 
 	// update to team status?
 	CheckTeamStatus();

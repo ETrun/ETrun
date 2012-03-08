@@ -654,14 +654,15 @@ qboolean G_CallSpawn( gentity_t *ent ) {
 	for ( item = bg_itemlist + 1 ; item->classname ; item++ ) {
 		if ( !strcmp( item->classname, ent->classname ) ) {
 			// found it
-			if ( g_gametype.integer != GT_WOLF_LMS ) { // Gordon: lets not have items in last man standing for the moment
+			/* Nico, removed LMS
+			if ( g_gametype.integer != GT_WOLF_LMS ) { // Gordon: lets not have items in last man standing for the moment*/
 				G_SpawnItem( ent, item );
 
 				G_Script_ScriptParse( ent );
 				G_Script_ScriptEvent( ent, "spawn", "" );
-			} else {
-				return qfalse;
-			}
+			// } else {
+			// 	return qfalse;
+			// }
 			return qtrue;
 		}
 	}

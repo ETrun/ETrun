@@ -667,7 +667,9 @@ void Svcmd_ResetMatch_f( qboolean fDoReset, qboolean fDoRestart ) {
 
 	if ( fDoReset ) {
 		G_resetRoundState();
-		G_resetModeState();
+
+		/* Nico, removed LMS
+		G_resetModeState();*/
 	}
 
 	if ( fDoRestart ) {
@@ -720,7 +722,9 @@ void Svcmd_ShuffleTeams_f( void ) {
 		return;
 	}
 
-	G_resetModeState();
+	/* Nico, removed LMS
+	G_resetModeState();*/
+
 	Svcmd_ResetMatch_f( qfalse, qtrue );
 }
 

@@ -1846,11 +1846,16 @@ void UI_DrawCampaignDescription( rectDef_t *rect, float scale, vec4_t color, flo
 		int campaign = ( net ) ? ui_currentNetMap.integer : ui_currentMap.integer;
 
 		textPtr = uiInfo.campaignList[campaign].campaignDescription;
-	} else if ( game == GT_WOLF_LMS ) {
+	}
+	
+	/* Nico, removed LMS
+	else if ( game == GT_WOLF_LMS ) {
 		int map = ( net ) ? ui_currentNetMap.integer : ui_currentMap.integer;
 
 		textPtr = uiInfo.mapList[map].lmsbriefing;
-	} else {
+	}*/
+	
+	else {
 		int map = ( net ) ? ui_currentNetMap.integer : ui_currentMap.integer;
 
 		textPtr = uiInfo.mapList[map].briefing;
@@ -7096,13 +7101,14 @@ void _UI_SetActiveMenu( uiMenuCommand_t menu ) {
 			Menus_OpenByName( "tapoutmsg" );
 			return;
 
+		/* Nico, removed LMS
 		case UIMENU_WM_TAPOUT_LMS:
 			uiInfo.uiDC.cursorx = 639;
 			uiInfo.uiDC.cursory = 479;
 			trap_Key_SetCatcher( KEYCATCH_UI );
 			Menus_CloseAll();
 			Menus_OpenByName( "tapoutmsglms" );
-			return;
+			return;*/
 
 		case UIMENU_WM_AUTOUPDATE:
 			// TTimo - changing the auto-update strategy to a modal prompt

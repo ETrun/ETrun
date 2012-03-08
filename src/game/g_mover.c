@@ -2931,18 +2931,22 @@ void info_limbo_camera_setup( gentity_t* self ) {
 
 void SP_info_limbo_camera( gentity_t* self ) {
 	if ( !( self->spawnflags & 2 ) ) {
+
+		/* Nico, removed LMS
 		if ( g_gametype.integer == GT_WOLF_LMS ) {
 			if ( !( self->spawnflags & 1 ) ) {
 				G_FreeEntity( self );
 				return;
 			}
-		}
-		if ( g_gametype.integer != GT_WOLF_LMS ) {
+		}*/
+
+		/* Nico, removed LMS
+		if ( g_gametype.integer != GT_WOLF_LMS ) {*/
 			if ( ( self->spawnflags & 1 ) ) {
 				G_FreeEntity( self );
 				return;
 			}
-		}
+		// }
 	}
 
 	self->think =       info_limbo_camera_setup;

@@ -863,19 +863,25 @@ qboolean G_allowPanzer(gentity_t *ent)
 void G_resetRoundState( void ) {
 	if ( g_gametype.integer == GT_WOLF_STOPWATCH ) {
 		trap_Cvar_Set( "g_currentRound", "0" );
-	} else if ( g_gametype.integer == GT_WOLF_LMS ) {
+	}
+	
+	/* Nico, removed LMS
+	else if ( g_gametype.integer == GT_WOLF_LMS ) {
 		trap_Cvar_Set( "g_currentRound", "0" );
 		trap_Cvar_Set( "g_lms_currentMatch", "0" );
-	}
+	}*/
 }
 
-
+/* Nico, removed LMS
 void G_resetModeState( void ) {
 	if ( g_gametype.integer == GT_WOLF_STOPWATCH ) {
-		/* Nico, no timelimit
-		trap_Cvar_Set( "g_nextTimeLimit", "0" );*/
-	} else if ( g_gametype.integer == GT_WOLF_LMS ) {
-		trap_Cvar_Set( "g_axiswins", "0" );
-		trap_Cvar_Set( "g_alliedwins", "0" );
+		// Nico, no timelimit
+		// trap_Cvar_Set( "g_nextTimeLimit", "0" );
 	}
-}
+	
+	// Nico, removed LMS
+	// else if ( g_gametype.integer == GT_WOLF_LMS ) {
+	//	trap_Cvar_Set( "g_axiswins", "0" );
+	//	trap_Cvar_Set( "g_alliedwins", "0" );
+	// }
+}*/
