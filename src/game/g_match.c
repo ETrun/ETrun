@@ -268,13 +268,15 @@ void G_addStats( gentity_t *targ, gentity_t *attacker, int dmg_ref, int mod ) {
 	// General player stats
 	if ( mod != MOD_SYRINGE ) {
 
-		/* Nico, removed damage_given & damage_received
-		attacker->client->sess.damage_given += dmg;
-		targ->client->sess.damage_received += dmg;*/
+		// Nico, removed damage_given & damage_received
+		// attacker->client->sess.damage_given += dmg;
+		// targ->client->sess.damage_received += dmg;
 
 		if ( targ->health <= 0 ) {
 			attacker->client->sess.kills++;
-			targ->client->sess.deaths++;
+
+			// Nico, removed deaths counter
+			// targ->client->sess.deaths++;
 		}
 	}
 
@@ -544,7 +546,10 @@ void G_printMatchInfo( gentity_t *ent ) {
 
 			ref = "^7";
 			tot_kills += cl->sess.kills;
-			tot_deaths += cl->sess.deaths;
+
+			/* Nico, removed deaths counter
+			tot_deaths += cl->sess.deaths;*/
+
 			tot_sui += cl->sess.suicides;
 			tot_tk += cl->sess.team_kills;
 
@@ -555,10 +560,11 @@ void G_printMatchInfo( gentity_t *ent ) {
 			tot_td += cl->sess.team_damage;
 			tot_gp += cl->sess.game_points;
 
+			/* Nico, removed deaths counter
 			eff = ( cl->sess.deaths + cl->sess.kills == 0 ) ? 0 : 100 * cl->sess.kills / ( cl->sess.deaths + cl->sess.kills );
-			if ( eff < 0 ) {
+			if ( eff < 0 ) {*/
 				eff = 0;
-			}
+			// }
 
 			if ( ent->client == cl ||
 				 ( ent->client->sess.sessionTeam == TEAM_SPECTATOR &&
@@ -573,7 +579,10 @@ void G_printMatchInfo( gentity_t *ent ) {
 					ref,
 					n2,
 					cl->sess.kills,
-					cl->sess.deaths,
+
+					/* Nico, removed deaths counter
+					cl->sess.deaths,*/
+
 					cl->sess.suicides,
 					cl->sess.team_kills,
 					ref,

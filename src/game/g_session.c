@@ -73,7 +73,10 @@ void G_WriteClientSessionData( gclient_t *client, qboolean restart ) {
 
 			// OSP
 			client->sess.coach_team,
-			client->sess.deaths,
+
+			/* Nico, removed deaths counter
+			client->sess.deaths,*/
+
 			client->sess.game_points,
 			client->sess.kills,
 			client->sess.referee,
@@ -232,7 +235,10 @@ void G_ReadSessionData( gclient_t *client ) {
 
 			// OSP
 			&client->sess.coach_team,
-			&client->sess.deaths,
+
+			/* Nico, removed deaths counter
+			&client->sess.deaths,*/
+
 			&client->sess.game_points,
 			&client->sess.kills,
 			&client->sess.referee,
