@@ -358,14 +358,14 @@ void player_die( gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int
 	gentity_t   *ent;
 	qboolean killedintank = qfalse;
 
-	//float			timeLived;
 	weapon_t weap = BG_WeaponForMOD( meansOfDeath );
-
-//	G_Printf( "player_die\n" );
 
 	if ( attacker == self ) {
 		if ( self->client ) {
-			self->client->pers.playerStats.suicides++;
+
+			/* Nico, removed playerStats
+			self->client->pers.playerStats.suicides++;*/
+
 			trap_PbStat( self - g_entities, "suicide",
 						 va( "%d %d %d", self->client->sess.sessionTeam, self->client->sess.playerType, weap ) ) ;
 		}

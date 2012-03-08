@@ -1931,7 +1931,8 @@ typedef struct {
 	int complaintEndTime;       // DHM - Nerve
 	float smokeWindDir; // JPW NERVE for smoke puffs & wind (arty, airstrikes, bullet impacts)
 
-	playerStats_t playerStats;
+	/* Nico, removed playerStats
+	playerStats_t playerStats;*/
 
 	/* Nico, commented because unused
 	int numOIDtriggers;

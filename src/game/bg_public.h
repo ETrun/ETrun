@@ -854,15 +854,16 @@ extern const char* medalNames[SK_NUM_SKILLS];
 #define NUM_SKILL_LEVELS 5
 extern const int skillLevels[NUM_SKILL_LEVELS];*/
 
+/* Nico, removed playerStats
 typedef struct {
 
-	/* Nico, removed weaponstats
-	weaponStats_t weaponStats[WP_NUM_WEAPONS];*/
+	// Nico, removed weaponstats
+	// weaponStats_t weaponStats[WP_NUM_WEAPONS];
 
 	int suicides;
 	int hitRegions[HR_NUM_HITREGIONS];
 	int objectiveStats[MAX_OBJECTIVES];
-} playerStats_t;
+} playerStats_t;*/
 
 typedef struct ammotable_s {
 	int maxammo;            //

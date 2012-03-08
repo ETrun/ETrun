@@ -692,7 +692,8 @@ typedef struct {
 	int autofireteamCreateEndTime;
 	int autofireteamJoinEndTime;
 
-	playerStats_t playerStats;
+	/* Nico, removed playerStats
+	playerStats_t playerStats;*/
 
 	//gentity_t	*wayPoint;
 
