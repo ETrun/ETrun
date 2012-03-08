@@ -243,7 +243,8 @@ qboolean CG_FindArenaInfo( char* filename, char* mapname, arenaInfo_t* info ) {
 					found = qtrue;
 				}
 			}
-		} 
+		}
+
 		/* Nico, no timelimit
 		else if (  !Q_stricmp( token.string, "Timelimit" ) || !Q_stricmp( token.string, "AxisRespawnTime" ) || !Q_stricmp( token.string, "AlliedRespawnTime" ) ) {
 			if ( !PC_Int_Parse( handle, (int*)&dummy ) ) {
@@ -252,6 +253,8 @@ qboolean CG_FindArenaInfo( char* filename, char* mapname, arenaInfo_t* info ) {
 				return qfalse;
 			}
 		}*/
+
+		/* Nico, removed LMS
 		else if ( !Q_stricmp( token.string, "lmsbriefing" ) ) {
 			if ( !PC_String_Parse( handle, &dummy ) ) {
 				trap_Print( va( S_COLOR_RED "unexpected end of file inside: %s\n", filename ) );
@@ -260,7 +263,9 @@ qboolean CG_FindArenaInfo( char* filename, char* mapname, arenaInfo_t* info ) {
 			} else {
 				Q_strncpyz( info->lmsdescription, dummy, sizeof( info->lmsdescription ) );
 			}
-		} else if ( !Q_stricmp( token.string, "briefing" ) ) {
+		} else */
+		
+		if ( !Q_stricmp( token.string, "briefing" ) ) {
 			if ( !PC_String_Parse( handle, &dummy ) ) {
 				trap_Print( va( S_COLOR_RED "unexpected end of file inside: %s\n", filename ) );
 				trap_PC_FreeSource( handle );

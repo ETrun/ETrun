@@ -452,8 +452,11 @@ void CG_GameStatsDraw() {
 			1 +                                             // Stats + extra
 			tSpacing * ( ( gs->cWeapons > 0 ) ? gs->cWeapons : 1 ) +
 			tSpacing * ( ( gs->fHasStats ) ? 3 : 0 ) +
-			( ( cgs.gametype == GT_WOLF_LMS ) ? 0 :
-			  (
+			
+			/* Nico, removed LMS
+			( ( cgs.gametype == GT_WOLF_LMS ) ? 0 :*/
+
+			( (
 				  4 + 2 * tSpacing +                                // Rank/XP
 				  1 + tSpacing +
 				  4 + 2 * tSpacing +                                // Skill columns
@@ -547,11 +550,11 @@ void CG_GameStatsDraw() {
 
 
 		// No rank/xp/skill info for LMS
+		/* Nico, removed LMS
 		if ( cgs.gametype == GT_WOLF_LMS ) {
 			return;
-		}
-
-
+		}*/
+		
 		// Rank/XP info
 		y += tSpacing;
 		y += 2;

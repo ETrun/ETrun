@@ -213,7 +213,10 @@ typedef struct {
 	vec2_t mappos;
 
 	const char *briefing;
-	const char *lmsbriefing;
+
+	/* Nico, removed LMS
+	const char *lmsbriefing;*/
+
 	const char *objectives;
 } mapInfo;
 
@@ -394,7 +397,10 @@ typedef enum {
 	GT_WOLF,
 	GT_WOLF_STOPWATCH,
 	GT_WOLF_CAMPAIGN,   // Exactly the same as GT_WOLF, but uses campaign roulation (multiple maps form one virtual map)
-	GT_WOLF_LMS,
+
+	/* Nico, removed LMS
+	GT_WOLF_LMS,*/
+
 	GT_MAX_GAME_TYPE
 } gametype_t;
 
@@ -2195,7 +2201,9 @@ typedef enum {
 	UIMENU_WM_FTQUICKMESSAGEALT,
 
 	UIMENU_WM_TAPOUT,
-	UIMENU_WM_TAPOUT_LMS,
+
+	/* Nico, removed LMS
+	UIMENU_WM_TAPOUT_LMS,*/
 
 	UIMENU_WM_AUTOUPDATE,
 

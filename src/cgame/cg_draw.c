@@ -2576,18 +2576,21 @@ static void CG_DrawLimboMessage( void ) {
 		CG_DrawSmallStringColor( INFOTEXT_STARTX, y, str, color );
 		y += 18;
 
+		/* Nico, removed LMS
 		if ( cgs.gametype == GT_WOLF_LMS ) {
 			trap_R_SetColor( NULL );
 			return;
-		}
+		}*/
 
 		str = CG_TranslateString( "Press JUMP to go into reinforcement queue." );
 		CG_DrawSmallStringColor( INFOTEXT_STARTX, 134, str, color );
 		y += 18;
-	} else if ( cgs.gametype == GT_WOLF_LMS ) {
+	}
+	/* Nico, removed LMS
+	else if ( cgs.gametype == GT_WOLF_LMS ) {
 		trap_R_SetColor( NULL );
 		return;
-	}
+	}*/
 
 	// JPW NERVE
 	/* Nico, instant reswawn
@@ -3866,9 +3869,10 @@ static void CG_DrawPlayerStats( void ) {
 	CG_Text_Paint_Ext( SKILLS_X - 28 - w, 480 - 4, 0.25f, 0.25f, colorWhite, str, 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1 );
 	CG_Text_Paint_Ext( SKILLS_X - 28 + 2, 480 - 4, 0.2f, 0.2f, colorWhite, "HP", 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1 );
 
+	/* Nico, removed LMS
 	if ( cgs.gametype == GT_WOLF_LMS ) {
 		return;
-	}
+	}*/
 
 	ps = &cg.snap->ps;
 	// ci = &cgs.clientinfo[ ps->clientNum ];

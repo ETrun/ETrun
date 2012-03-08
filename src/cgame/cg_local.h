@@ -1718,7 +1718,10 @@ typedef struct {
 } cgMedia_t;
 
 typedef struct {
-	char lmsdescription[1024];
+
+	/* Nico, removed LMS
+	char lmsdescription[1024];*/
+
 	char description[1024];
 	char axiswintext[1024];
 	char alliedwintext[1024];

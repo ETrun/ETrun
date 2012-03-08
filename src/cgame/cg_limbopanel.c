@@ -992,9 +992,11 @@ panel_button_t* limboPanelButtons[] = {
 };
 
 qboolean CG_LimboPanel_BriefingButton_KeyDown( panel_button_t* button, int key ) {
+
+	/* Nico, removed LMS
 	if ( cg_gameType.integer == GT_WOLF_LMS ) {
 		return qfalse;
-	}
+	}*/
 
 	if ( key == K_MOUSE1 ) {
 
@@ -1016,9 +1018,11 @@ qboolean CG_LimboPanel_BriefingButton_KeyDown( panel_button_t* button, int key )
 }
 
 void CG_LimboPanel_BriefingButton_Draw( panel_button_t* button ) {
+
+	/* Nico, removed LMS
 	if ( cg_gameType.integer == GT_WOLF_LMS ) {
 		return;
-	}
+	}*/
 
 	if ( cg.limboEndCinematicTime > cg.time ) {
 		CG_DrawPic( button->rect.x, button->rect.y, button->rect.w, button->rect.h, BG_CursorInRect( &button->rect ) ? cgs.media.limboBriefingButtonStopOn : cgs.media.limboBriefingButtonStopOff );
@@ -1416,12 +1420,11 @@ void CG_LimboPanel_RenderObjectiveText( panel_button_t* button ) {
 	char buffer[1024];
 	int status = 0;
 
+	/* Nico, removed LMS
 	if ( cg_gameType.integer == GT_WOLF_LMS ) {
-		//cs = CG_ConfigString( CS_MULTI_MAPDESC );
-		//Q_strncpyz( buffer, cs, sizeof(buffer) );
-
 		Q_strncpyz( buffer, cg.objMapDescription_Neutral, sizeof( buffer ) );
-	} else {
+	} else {*/
+
 		if ( CG_LimboPanel_GetTeam() == TEAM_SPECTATOR ) {
 			//cs = CG_ConfigString( CS_MULTI_MAPDESC3 );
 			//Q_strncpyz( buffer, cs, sizeof(buffer) );
@@ -1457,7 +1460,7 @@ void CG_LimboPanel_RenderObjectiveText( panel_button_t* button ) {
 				}
 			}
 		}
-	}
+	// }
 
 	while ( ( s = strchr( buffer, '*' ) ) ) {
 		*s = '\n';
@@ -1479,7 +1482,9 @@ void CG_LimboPanel_RenderObjectiveText( panel_button_t* button ) {
 		}
 	}
 
-	if ( cg_gameType.integer != GT_WOLF_LMS && CG_LimboPanel_GetTeam() != TEAM_SPECTATOR ) {
+	/* Nico, removed LMS
+	if ( cg_gameType.integer != GT_WOLF_LMS && CG_LimboPanel_GetTeam() != TEAM_SPECTATOR ) {*/
+	if ( CG_LimboPanel_GetTeam() != TEAM_SPECTATOR ) {
 		const char* ofTxt;
 		float w, x;
 
@@ -1754,9 +1759,11 @@ void CG_LimboPanel_Filter_Draw( panel_button_t* button ) {
 
 void CG_LimboPanel_RenderSkillIcon( panel_button_t* button ) {
 	qhandle_t shader;
-	if ( cg_gameType.integer == GT_WOLF_LMS /*|| CG_LimboPanel_GetTeam() == TEAM_SPECTATOR*/ ) {
+
+	/* Nico, removed LMS
+	if ( cg_gameType.integer == GT_WOLF_LMS ) {
 		return;
-	}
+	}*/
 
 	switch ( button->data[0] ) {
 	case 0:
@@ -2174,9 +2181,11 @@ int CG_LimboPanel_RenderCounter_NumRollers( panel_button_t* button ) {
 		return 2;
 
 	case 4:     // skills
-		if ( cg_gameType.integer == GT_WOLF_LMS /*|| CG_LimboPanel_GetTeam() == TEAM_SPECTATOR*/ ) {
+
+		/* Nico, removed LMS
+		if ( cg_gameType.integer == GT_WOLF_LMS ) {
 			return 0;
-		}
+		}*/
 		return 4;
 
 	case 6:     // stats
@@ -2189,9 +2198,12 @@ int CG_LimboPanel_RenderCounter_NumRollers( panel_button_t* button ) {
 		}
 
 	case 2:     // xp
+
+		/* Nico, removed LMS
 		if ( cg_gameType.integer == GT_WOLF_LMS ) {
 			return 0;
-		}
+		}*/
+
 		return 6;
 	}
 
@@ -2275,17 +2287,21 @@ void CG_LimboPanel_RenderCounter_GetShaders( panel_button_t* button, qhandle_t* 
 }
 
 void CG_LimboPanelRenderText_NoLMS( panel_button_t* button ) {
+
+	/* Nico, removed LMS
 	if ( cg_gameType.integer == GT_WOLF_LMS ) {
 		return;
-	}
+	}*/
 
 	BG_PanelButtonsRender_Text( button );
 }
 
 void CG_LimboPanelRenderText_SkillsText( panel_button_t* button ) {
-	if ( cg_gameType.integer == GT_WOLF_LMS /*|| CG_LimboPanel_GetTeam() == TEAM_SPECTATOR*/ ) {
+
+	/* Nico, removed LMS
+	if ( cg_gameType.integer == GT_WOLF_LMS ) {
 		return;
-	}
+	}*/
 
 	BG_PanelButtonsRender_Text( button );
 }

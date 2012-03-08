@@ -2119,11 +2119,13 @@ static void CG_ServerCommand( void ) {
 		if ( cg_instanttapout.integer ) {
 			CG_ForceTapOut_f();
 		} else {
+
+			/* Nico, removed LMS
 			if ( cgs.gametype == GT_WOLF_LMS ) {
 				trap_UI_Popup( UIMENU_WM_TAPOUT_LMS );
-			} else {
+			} else {*/
 				trap_UI_Popup( UIMENU_WM_TAPOUT );
-			}
+			// }
 		}
 		return;
 	}

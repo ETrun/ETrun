@@ -858,11 +858,12 @@ void CG_LoadObjectiveData( void ) {
 	pc_token_t token, token2;
 	int handle;
 
+	/* Nico, removed LMS
 	if ( cg_gameType.integer == GT_WOLF_LMS ) {
 		handle = trap_PC_LoadSource( va( "maps/%s_lms.objdata", Q_strlwr( cgs.rawmapname ) ) );
-	} else {
+	} else {*/
 		handle = trap_PC_LoadSource( va( "maps/%s.objdata", Q_strlwr( cgs.rawmapname ) ) );
-	}
+	// }
 
 	if ( !handle ) {
 		return;
@@ -2638,7 +2639,9 @@ void CG_Init( int serverMessageNum, int serverCommandSequence, int clientNum, qb
 	cgs.campaignInfoLoaded = qfalse;
 	if ( cgs.gametype == GT_WOLF_CAMPAIGN ) {
 		CG_LocateCampaign();
-	} else if ( cgs.gametype == GT_WOLF_STOPWATCH || cgs.gametype == GT_WOLF_LMS || cgs.gametype == GT_WOLF ) {
+	/* Nico, removed LMS
+	} else if ( cgs.gametype == GT_WOLF_STOPWATCH || cgs.gametype == GT_WOLF_LMS || cgs.gametype == GT_WOLF ) {*/
+	} else if ( cgs.gametype == GT_WOLF_STOPWATCH || cgs.gametype == GT_WOLF ) {
 		CG_LocateArena();
 	}
 

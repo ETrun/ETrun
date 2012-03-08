@@ -560,6 +560,7 @@ static int WM_TeamScoreboard( int x, int y, team_t team, float fade, int maxrows
 	CG_DrawRect_FixedBorder( x - 5, y - 2, width + 5, 21, 1, colorBlack );
 
 	// draw header
+	/* Nico, removed LMS
 	if ( cg_gameType.integer == GT_WOLF_LMS ) {
 		char *s;
 		if ( team == TEAM_AXIS ) {
@@ -573,13 +574,13 @@ static int WM_TeamScoreboard( int x, int y, team_t team, float fade, int maxrows
 
 			CG_Text_Paint_Ext( x, y + 13, 0.25f, 0.25f, tclr, s, 0, 0, 0, &cgs.media.limboFont1 );
 		}
-	} else {
+	} else {*/
 		if ( team == TEAM_AXIS ) {
 			CG_Text_Paint_Ext( x, y + 13, 0.25f, 0.25f, tclr, va( "%s [%d] (%d %s)", CG_TranslateString( "AXIS" ), cg.teamScores[0], cg.teamPlayers[team], CG_TranslateString( "PLAYERS" ) ), 0, 0, 0, &cgs.media.limboFont1 );
 		} else if ( team == TEAM_ALLIES ) {
 			CG_Text_Paint_Ext( x, y + 13, 0.25f, 0.25f, tclr, va( "%s [%d] (%d %s)", CG_TranslateString( "ALLIES" ), cg.teamScores[1], cg.teamPlayers[team], CG_TranslateString( "PLAYERS" ) ), 0, 0, 0, &cgs.media.limboFont1 );
 		}
-	}
+	// }
 
 	y += SMALLCHAR_HEIGHT + 3;
 

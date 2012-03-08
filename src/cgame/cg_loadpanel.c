@@ -239,8 +239,11 @@ const char* CG_LoadPanel_GameTypeName( gametype_t gt ) {
 		return "Stopwatch";
 	case GT_WOLF_CAMPAIGN:
 		return "Campaign";
+
+	/* Nico, removed LMS
 	case GT_WOLF_LMS:
-		return "Last Man Standing";
+		return "Last Man Standing";*/
+
 	default:
 		break;
 	}
@@ -503,7 +506,10 @@ void CG_LoadPanel_RenderMissionDescriptionText( panel_button_t* button ) {
 			return;
 		}
 
-	} else if ( cgs.gametype == GT_WOLF_LMS ) {
+	}
+	
+	/* Nico, removed LMS
+	else if ( cgs.gametype == GT_WOLF_LMS ) {
 
 		//cs = CG_ConfigString( CS_MULTI_MAPDESC3 );
 
@@ -513,7 +519,9 @@ void CG_LoadPanel_RenderMissionDescriptionText( panel_button_t* button ) {
 
 		cs = cgs.arenaData.lmsdescription;
 
-	} else {
+	} */
+	
+	else {
 
 		if ( !cgs.arenaInfoLoaded ) {
 			return;
@@ -591,7 +599,9 @@ void CG_LoadPanel_RenderCampaignPins( panel_button_t* button ) {
 	int i;
 	qhandle_t shader;
 
-	if ( cgs.gametype == GT_WOLF_STOPWATCH || cgs.gametype == GT_WOLF_LMS || cgs.gametype == GT_WOLF ) {
+	/* Nico, removed LMS
+	if ( cgs.gametype == GT_WOLF_STOPWATCH || cgs.gametype == GT_WOLF_LMS || cgs.gametype == GT_WOLF ) {*/
+	if ( cgs.gametype == GT_WOLF_STOPWATCH || cgs.gametype == GT_WOLF ) {
 		float px, py;
 
 		if ( !cgs.arenaInfoLoaded ) {
