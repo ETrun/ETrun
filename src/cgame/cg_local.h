@@ -1932,8 +1932,10 @@ typedef struct {
 	float smokeWindDir; // JPW NERVE for smoke puffs & wind (arty, airstrikes, bullet impacts)
 
 	playerStats_t playerStats;
+
+	/* Nico, commented because unused
 	int numOIDtriggers;
-	int teamobjectiveStats[MAX_OID_TRIGGERS];
+	int teamobjectiveStats[MAX_OID_TRIGGERS];*/
 
 	qboolean campaignInfoLoaded;
 	cg_campaignInfo_t campaignData;
@@ -2026,31 +2028,37 @@ typedef struct {
 
 	int dbMode;
 	qboolean dbShowing;
+
+	/* Nico, commented because unused
 	qboolean dbAccuraciesRecieved;
 	qboolean dbPlayerKillsDeathsRecieved;
 	qboolean dbWeaponStatsRecieved;
-	qboolean dbAwardsParsed;
+	qboolean dbAwardsParsed;*/
 
 	/* Nico, removed endgame
 	char*               dbAwardNames[NUM_ENDGAME_AWARDS];
 	team_t dbAwardTeams[NUM_ENDGAME_AWARDS];*/
 
+	/* Nico, commented because unused
 	char dbAwardNamesBuffer[1024];
 	int dbLastRequestTime;
 	int dbLastScoreRequest;
 	int dbPlayerListOffset;
-	int dbWeaponListOffset;
+	int dbWeaponListOffset;*/
 
 	/* Nico, removed weaponstats
 	cg_weaponstats_t dbWeaponStats[WS_MAX];*/
 
-	int dbChatMode;
+	/* Nico, commented because unused
+	int dbChatMode;*/
 
 	/* Nico, removed skills
 	int tdbAxisMapsXP[SK_NUM_SKILLS][MAX_MAPS_PER_CAMPAIGN];
 	int tdbAlliedMapsXP[SK_NUM_SKILLS][MAX_MAPS_PER_CAMPAIGN];*/
+
+	/* Nico, commented because unused
 	int tdbMapListOffset;
-	int tdbSelectedMap;
+	int tdbSelectedMap;*/
 
 	int ftMenuPos;
 	int ftMenuMode;
