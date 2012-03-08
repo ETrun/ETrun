@@ -59,7 +59,10 @@ void G_WriteClientSessionData( gclient_t *client, qboolean restart ) {
 		G_deleteStats( client - level.clients );
 	}*/
 
-	s = va( "%i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i",
+	/* Nico, removed deaths counter
+	// Nico, removed kills counter
+	s = va( "%i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i",*/
+	s = va( "%i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i",
 			client->sess.sessionTeam,
 			client->sess.spectatorTime,
 			client->sess.spectatorState,
@@ -78,7 +81,10 @@ void G_WriteClientSessionData( gclient_t *client, qboolean restart ) {
 			client->sess.deaths,*/
 
 			client->sess.game_points,
-			client->sess.kills,
+
+			/* Nico, removed kills counter
+			client->sess.kills,*/
+
 			client->sess.referee,
 			client->sess.spec_invite,
 			client->sess.spec_team,
@@ -221,7 +227,10 @@ void G_ReadSessionData( gclient_t *client ) {
 
 	trap_Cvar_VariableStringBuffer( va( "session%i", client - level.clients ), s, sizeof( s ) );
 
-	sscanf( s, "%i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i",
+	/* Nico, removed deaths counter
+	// Nico, removed kills counter
+	sscanf( s, "%i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i",*/
+	sscanf( s, "%i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i",
 			(int *)&client->sess.sessionTeam,
 			&client->sess.spectatorTime,
 			(int *)&client->sess.spectatorState,
@@ -240,7 +249,10 @@ void G_ReadSessionData( gclient_t *client ) {
 			&client->sess.deaths,*/
 
 			&client->sess.game_points,
-			&client->sess.kills,
+
+			/* Nico, removed kills counter
+			&client->sess.kills,*/
+
 			&client->sess.referee,
 			&client->sess.spec_invite,
 			&client->sess.spec_team,

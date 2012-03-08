@@ -607,7 +607,10 @@ typedef struct {
 	int deaths;*/
 
 	int game_points;
-	int kills;
+
+	/* Nico, removed kills counter
+	int kills;*/
+
 	int referee;
 	int rounds;
 	int spec_invite;

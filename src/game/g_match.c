@@ -266,6 +266,7 @@ void G_addStats( gentity_t *targ, gentity_t *attacker, int dmg_ref, int mod ) {
 	}
 
 	// General player stats
+	/* Nico, removed kills counter
 	if ( mod != MOD_SYRINGE ) {
 
 		// Nico, removed damage_given & damage_received
@@ -278,7 +279,7 @@ void G_addStats( gentity_t *targ, gentity_t *attacker, int dmg_ref, int mod ) {
 			// Nico, removed deaths counter
 			// targ->client->sess.deaths++;
 		}
-	}
+	}*/
 
 	// Player weapon stats
 	/* Nico, removed weaponstats
@@ -545,7 +546,9 @@ void G_printMatchInfo( gentity_t *ent ) {
 			n2[15] = 0;
 
 			ref = "^7";
-			tot_kills += cl->sess.kills;
+
+			/* Nico, removed kills counter
+			tot_kills += cl->sess.kills;*/
 
 			/* Nico, removed deaths counter
 			tot_deaths += cl->sess.deaths;*/
@@ -578,7 +581,9 @@ void G_printMatchInfo( gentity_t *ent ) {
 					aTeams[i],
 					ref,
 					n2,
-					cl->sess.kills,
+
+					/* Nico, removed kills counter
+					cl->sess.kills,*/
 
 					/* Nico, removed deaths counter
 					cl->sess.deaths,*/
@@ -587,7 +592,10 @@ void G_printMatchInfo( gentity_t *ent ) {
 					cl->sess.team_kills,
 					ref,
 					eff,
-					cl->sess.game_points - ( cl->sess.kills * WOLF_FRAG_BONUS ),
+
+					/* Nico, removed kills counter
+					cl->sess.game_points - ( cl->sess.kills * WOLF_FRAG_BONUS ),*/
+					cl->sess.game_points,
 
 					/* Nico, removed damage_given & damage_received
 					cl->sess.damage_given,
