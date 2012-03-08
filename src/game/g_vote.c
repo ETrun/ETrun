@@ -75,7 +75,10 @@ typedef struct {
 
 // VC optimizes for dup strings :)
 static const vote_reference_t aVoteInfo[] = {
-	{ 0x1ff, "comp",      G_Comp_v,          "Load Competition Settings", "^7\n  Loads standard competition settings for the current mode" },
+
+	/* Nico, removed competion settings
+	{ 0x1ff, "comp",      G_Comp_v,          "Load Competition Settings", "^7\n  Loads standard competition settings for the current mode" },*/
+
 	{ 0x1ff, "gametype",  G_Gametype_v,      "Set Gametype to",   " <value>^7\n  Changes the current gametype" },
 	{ 0x1ff, "kick",      G_Kick_v,          "KICK",              " <player_id>^7\n  Attempts to kick player from server" },
 	{ 0x1ff, "mute",      G_Mute_v,          "MUTE",              " <player_id>^7\n  Removes the chat capabilities of a player" },
@@ -89,7 +92,10 @@ static const vote_reference_t aVoteInfo[] = {
 	{ 0x1ff, "matchreset",   G_MatchReset_v, "Match Reset",       "^7\n  Resets the entire match" },
 	{ 0x1ff, "mutespecs",     G_Mutespecs_v,     "Mute Spectators",   " <0|1>^7\n  Mutes in-game spectator chat" },
 	{ 0x1ff, "nextmap",       G_Nextmap_v,       "Load Next Map", "^7\n  Loads the next map or campaign in the map queue" },
-	{ 0x1ff, "pub",           G_Pub_v,           "Load Public Settings", "^7\n  Loads standard public settings for the current mode" },
+
+	/* Nico, removed public settings
+	{ 0x1ff, "pub",           G_Pub_v,           "Load Public Settings", "^7\n  Loads standard public settings for the current mode" },*/
+
 	{ 0x1ff, "referee",       G_Referee_v,       "Referee",           " <player_id>^7\n  Elects a player to have admin abilities" },
 	{ 0x1ff, "shuffleteamsxp", G_ShuffleTeams_v, "Shuffle Teams by XP",   " ^7\n  Randomly place players on each team, based on XP" },
 	{ 0x1ff, "startmatch",    G_StartMatch_v,    "Start Match",       " ^7\n  Sets all players to \"ready\" status to start the match" },
@@ -300,7 +306,7 @@ void G_voteSetVoteString( const char *desc ) {
 
 
 
-
+/* Nico, removed competion settings
 // *** Load competition settings for current mode ***
 int G_Comp_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd ) {
 	// Vote request (vote is being initiated)
@@ -321,7 +327,7 @@ int G_Comp_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, q
 	}
 
 	return( G_OK );
-}
+}*/
 
 
 void G_GametypeList( gentity_t *ent ) {
@@ -704,7 +710,7 @@ int G_Nextmap_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2
 	return( G_OK );
 }
 
-
+/* Nico, removed public settings
 // *** Load public settings for current mode ***
 int G_Pub_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd ) {
 	// Vote request (vote is being initiated)
@@ -725,7 +731,7 @@ int G_Pub_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qb
 	}
 
 	return( G_OK );
-}
+}*/
 
 
 // *** Referee voting ***

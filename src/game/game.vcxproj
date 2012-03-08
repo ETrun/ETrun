@@ -171,7 +171,6 @@
     <ClCompile Include="g_cmds.c" />
     <ClCompile Include="g_cmds_ext.c" />
     <ClCompile Include="g_combat.c" />
-    <ClCompile Include="g_config.c" />
     <ClCompile Include="g_construction.c" />
     <ClCompile Include="g_fireteams.c" />
     <ClCompile Include="g_items.c" />
