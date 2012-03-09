@@ -50,6 +50,7 @@ static const char *DEACTIVATED = "DEACTIVATED";
 static const char *ENABLED = "ENABLED";
 static const char *DISABLED = "DISABLED";
 
+/* Nico, removed gametypes
 static const char *gameNames[] = {
 	"Single Player",
 	"Cooperative",
@@ -57,8 +58,7 @@ static const char *gameNames[] = {
 	"Stopwatch",
 	"Campaign",
 	"Last Man Standing"
-};
-
+};*/
 
 //
 // Update info:

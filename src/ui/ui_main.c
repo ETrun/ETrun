@@ -1535,7 +1535,7 @@ static void UI_DrawEffects( rectDef_t *rect, float scale, vec4_t color ) {
 
 void UI_DrawMapPreview( rectDef_t *rect, float scale, vec4_t color, qboolean net ) {
 	int map = ( net ) ? ui_currentNetMap.integer : ui_currentMap.integer;
-	int game = net ? ui_netGameType.integer : uiInfo.gameTypes[ui_gameType.integer].gtEnum;
+	// int game = net ? ui_netGameType.integer : uiInfo.gameTypes[ui_gameType.integer].gtEnum; Nico, unused warning fix
 
 	/* Nico, removed gametypes
 	if ( game == GT_WOLF_CAMPAIGN ) {
@@ -1706,7 +1706,7 @@ void UI_DrawNetMapPreview( rectDef_t *rect, float scale, vec4_t color, qboolean 
 static void UI_DrawMapCinematic( rectDef_t *rect, float scale, vec4_t color, qboolean net ) {
 
 	int map = ( net ) ? ui_currentNetMap.integer : ui_currentMap.integer;
-	int game = net ? ui_netGameType.integer : uiInfo.gameTypes[ui_gameType.integer].gtEnum;
+	// int game = net ? ui_netGameType.integer : uiInfo.gameTypes[ui_gameType.integer].gtEnum; Nico, unused warning fix
 
 	/* Nico, removed gametypes
 	if ( game == GT_WOLF_CAMPAIGN ) {
@@ -5921,9 +5921,9 @@ static int UI_FeederCount( float feederID ) {
 }
 
 static const char *UI_SelectedMap( qboolean singlePlayer, int index, int *actual ) {
-	int i, c, game;
+	int i, c;// , game; Nico, unused warning fix
 	c = 0;
-	game = singlePlayer ? uiInfo.gameTypes[ui_gameType.integer].gtEnum : ui_netGameType.integer;
+	// game = singlePlayer ? uiInfo.gameTypes[ui_gameType.integer].gtEnum : ui_netGameType.integer;
 	*actual = 0;
 
 	/* Nico, removed gametypes
@@ -5953,6 +5953,7 @@ static const char *UI_SelectedMap( qboolean singlePlayer, int index, int *actual
 	return "";
 }
 
+/* Nico, commented because unused
 static const char *UI_SelectedCampaign( int index, int *actual ) {
 	int i;//, c; Nico, unused warning fix
 	// c = 0;
@@ -5964,7 +5965,7 @@ static const char *UI_SelectedCampaign( int index, int *actual ) {
 		}
 	}
 	return "";
-}
+}*/
 
 static int UI_GetIndexFromSelection( int actual ) {
 	int i, c;
@@ -6266,11 +6267,11 @@ static qhandle_t UI_FeederItemImage( float feederID, int index ) {
 		}
 	} else if ( feederID == FEEDER_ALLMAPS || feederID == FEEDER_MAPS ) {
 		int actual;
-		int game;
+		// int game; Nico, unused warning fix
 
 		UI_SelectedMap( feederID == FEEDER_MAPS ? qtrue : qfalse, index, &actual );
 		index = actual;
-		game = feederID == FEEDER_MAPS ? uiInfo.gameTypes[ui_gameType.integer].gtEnum : ui_netGameType.integer;
+		// game = feederID == FEEDER_MAPS ? uiInfo.gameTypes[ui_gameType.integer].gtEnum : ui_netGameType.integer;
 
 		/* Nico, removed gametypes
 		if ( game == GT_WOLF_CAMPAIGN ) {
@@ -6331,10 +6332,10 @@ void UI_FeederSelection( float feederID, int index ) {
 		}
 	} else if ( feederID == FEEDER_MAPS || feederID == FEEDER_ALLMAPS ) {
 		int actual;//, map; Nico, unused warning fix
-		int game;
+		// int game; Nico, unused warning fix
 
 		// map = ( feederID == FEEDER_ALLMAPS ) ? ui_currentNetMap.integer : ui_currentMap.integer;
-		game = feederID == FEEDER_MAPS ? uiInfo.gameTypes[ui_gameType.integer].gtEnum : ui_netGameType.integer;
+		// game = feederID == FEEDER_MAPS ? uiInfo.gameTypes[ui_gameType.integer].gtEnum : ui_netGameType.integer;
 
 		UI_SelectedMap( feederID == FEEDER_MAPS ? qtrue : qfalse, index, &actual );
 		trap_Cvar_Set( "ui_mapIndex", va( "%d", index ) );
