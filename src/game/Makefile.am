@@ -26,7 +26,6 @@ g_client.c \
 g_cmds.c \
 g_cmds_ext.c \
 g_combat.c \
-g_config.c \
 g_fireteams.c \
 g_items.c \
 g_main.c \

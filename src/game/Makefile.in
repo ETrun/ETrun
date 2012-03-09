@@ -80,21 +80,21 @@ am_libgame_la_OBJECTS = libgame_la-bg_animation.lo \
 	libgame_la-g_alarm.lo libgame_la-g_antilag.lo \
 	libgame_la-g_character.lo libgame_la-g_client.lo \
 	libgame_la-g_cmds.lo libgame_la-g_cmds_ext.lo \
-	libgame_la-g_combat.lo libgame_la-g_config.lo \
-	libgame_la-g_fireteams.lo libgame_la-g_items.lo \
-	libgame_la-g_main.lo libgame_la-g_match.lo libgame_la-g_mem.lo \
-	libgame_la-g_misc.lo libgame_la-g_missile.lo \
-	libgame_la-g_mover.lo libgame_la-g_props.lo \
-	libgame_la-g_referee.lo libgame_la-g_script.lo \
-	libgame_la-g_script_actions.lo libgame_la-g_session.lo \
-	libgame_la-g_spawn.lo libgame_la-g_sv_entities.lo \
-	libgame_la-g_svcmds.lo libgame_la-g_syscalls.lo \
-	libgame_la-g_systemmsg.lo libgame_la-g_target.lo \
-	libgame_la-g_team.lo libgame_la-g_teammapdata.lo \
-	libgame_la-g_trigger.lo libgame_la-g_utils.lo \
-	libgame_la-g_vote.lo libgame_la-g_weapon.lo \
-	libgame_la-q_math.lo libgame_la-q_shared.lo \
-	libgame_la-g_buddy_list.lo libgame_la-g_construction.lo
+	libgame_la-g_combat.lo libgame_la-g_fireteams.lo \
+	libgame_la-g_items.lo libgame_la-g_main.lo \
+	libgame_la-g_match.lo libgame_la-g_mem.lo libgame_la-g_misc.lo \
+	libgame_la-g_missile.lo libgame_la-g_mover.lo \
+	libgame_la-g_props.lo libgame_la-g_referee.lo \
+	libgame_la-g_script.lo libgame_la-g_script_actions.lo \
+	libgame_la-g_session.lo libgame_la-g_spawn.lo \
+	libgame_la-g_sv_entities.lo libgame_la-g_svcmds.lo \
+	libgame_la-g_syscalls.lo libgame_la-g_systemmsg.lo \
+	libgame_la-g_target.lo libgame_la-g_team.lo \
+	libgame_la-g_teammapdata.lo libgame_la-g_trigger.lo \
+	libgame_la-g_utils.lo libgame_la-g_vote.lo \
+	libgame_la-g_weapon.lo libgame_la-q_math.lo \
+	libgame_la-q_shared.lo libgame_la-g_buddy_list.lo \
+	libgame_la-g_construction.lo
 libgame_la_OBJECTS = $(am_libgame_la_OBJECTS)
 libgame_la_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
 	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(libgame_la_CFLAGS) \
@@ -258,7 +258,6 @@ g_client.c \
 g_cmds.c \
 g_cmds_ext.c \
 g_combat.c \
-g_config.c \
 g_fireteams.c \
 g_items.c \
 g_main.c \
@@ -382,7 +381,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libgame_la-g_cmds.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libgame_la-g_cmds_ext.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libgame_la-g_combat.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libgame_la-g_config.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libgame_la-g_construction.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libgame_la-g_fireteams.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libgame_la-g_items.Plo@am__quote@
@@ -558,13 +556,6 @@ libgame_la-g_combat.lo: g_combat.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='g_combat.c' object='libgame_la-g_combat.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libgame_la_CFLAGS) $(CFLAGS) -c -o libgame_la-g_combat.lo `test -f 'g_combat.c' || echo '$(srcdir)/'`g_combat.c
-
-libgame_la-g_config.lo: g_config.c
-@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libgame_la_CFLAGS) $(CFLAGS) -MT libgame_la-g_config.lo -MD -MP -MF $(DEPDIR)/libgame_la-g_config.Tpo -c -o libgame_la-g_config.lo `test -f 'g_config.c' || echo '$(srcdir)/'`g_config.c
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libgame_la-g_config.Tpo $(DEPDIR)/libgame_la-g_config.Plo
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='g_config.c' object='libgame_la-g_config.lo' libtool=yes @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libgame_la_CFLAGS) $(CFLAGS) -c -o libgame_la-g_config.lo `test -f 'g_config.c' || echo '$(srcdir)/'`g_config.c
 
 libgame_la-g_fireteams.lo: g_fireteams.c
 @am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libgame_la_CFLAGS) $(CFLAGS) -MT libgame_la-g_fireteams.lo -MD -MP -MF $(DEPDIR)/libgame_la-g_fireteams.Tpo -c -o libgame_la-g_fireteams.lo `test -f 'g_fireteams.c' || echo '$(srcdir)/'`g_fireteams.c

@@ -2688,13 +2688,13 @@ void LogExit( const char *string ) {
 	// -NERVE - SMF
 	else if ( g_gametype.integer == GT_WOLF_CAMPAIGN ) {
 		char cs[MAX_STRING_CHARS];
-		int winner;
+		// int winner; Nico, unused warning fix
 
 		/* Nico, removed skills
 		int highestskillpoints, highestskillpointsclient, j, teamNum;*/
 
 		trap_GetConfigstring( CS_MULTI_MAPWINNER, cs, sizeof( cs ) );
-		winner = atoi( Info_ValueForKey( cs, "winner" ) );
+		// winner = atoi( Info_ValueForKey( cs, "winner" ) );
 
 		/* Nico, removed LMS
 		if ( winner == 0 ) {
