@@ -1644,10 +1644,6 @@ void G_shuffleTeams( void ) {
 	G_teamReset( TEAM_AXIS, qtrue );
 	G_teamReset( TEAM_ALLIES, qtrue );
 
-	// for ( i = 0; i < TEAM_NUM_TEAMS; i++ ) {
-	// 	aTeamCount[i] = 0;
-	// }
-
 	for ( i = 0; i < level.numConnectedClients; i++ ) {
 		cl = level.clients + level.sortedClients[ i ];
 

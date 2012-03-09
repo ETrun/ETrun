@@ -565,7 +565,6 @@ void limbo( gentity_t *ent, qboolean makeCorpse ) {
 			ent->client->sess.spectatorState = SPECTATOR_FOLLOW;
 		}
 
-//		ClientUserinfoChanged( ent->client - level.clients );		// NERVE - SMF - don't do this
 		if ( ent->client->sess.sessionTeam == TEAM_AXIS ) {
 			ent->client->deployQueueNumber = level.redNumWaiting;
 			level.redNumWaiting++;
@@ -1308,15 +1307,14 @@ void ClientUserinfoChanged( int clientNum ) {
 	char userinfo[MAX_INFO_STRING];
 	gclient_t   *client;
 
-	/* Nico, removed skills
-	int i;*/
+	// Nico, removed skills
+	// int i;
 
-	/* Nico, removed medals
-	char skillStr[16] = "";
-	char medalStr[16] = "";*/
+	// Nico, removed medals
+	// char skillStr[16] = "";
+	// char medalStr[16] = "";
 
 	int characterIndex;
-
 
 	ent = g_entities + clientNum;
 	client = ent->client;
@@ -1890,18 +1888,6 @@ void ClientSpawn( gentity_t *ent, qboolean revived ) {
 	client->pers.lastBattleSenseBonusTime = level.timeCurrent;
 	client->pers.lastHQMineReportTime = level.timeCurrent;
 
-/*#ifndef _DEBUG
-	if( !client->sess.versionOK ) {
-		char *clientMismatchedVersion = G_CheckVersion( ent );	// returns NULL if version is identical
-
-		if( clientMismatchedVersion ) {
-			trap_DropClient( ent - g_entities, va( "Client/Server game mismatch: '%s/%s'", clientMismatchedVersion, GAME_VERSION_DATED ) );
-		} else {
-			client->sess.versionOK = qtrue;
-		}
-	}
-#endif*/
-
 	// find a spawn point
 	// do it before setting health back up, so farthest
 	// ranging doesn't count this client
@@ -1917,18 +1903,7 @@ void ClientSpawn( gentity_t *ent, qboolean revived ) {
 			spawnPoint = SelectSpectatorSpawnPoint( spawn_origin, spawn_angles );
 		} else {
 			// RF, if we have requested a specific spawn point, use it (fixme: what if this will place us inside another character?)
-/*			spawnPoint = NULL;
-			trap_GetUserinfo( ent->s.number, userinfo, sizeof(userinfo) );
-			if( (str = Info_ValueForKey( userinfo, "spawnPoint" )) != NULL && str[0] ) {
-				spawnPoint = SelectSpawnPointFromList( str, spawn_origin, spawn_angles );
-				if (!spawnPoint) {
-					G_Printf( "WARNING: unable to find spawn point \"%s\" for bot \"%s\"\n", str, ent->aiName );
-				}
-			}
-			//
-			if( !spawnPoint ) {*/
 			spawnPoint = SelectCTFSpawnPoint( client->sess.sessionTeam, client->pers.teamState.state, spawn_origin, spawn_angles, client->sess.spawnObjectiveIndex );
-//			}
 		}
 	}
 
@@ -2062,10 +2037,6 @@ void ClientSpawn( gentity_t *ent, qboolean revived ) {
 		if ( client->sess.playerType != client->sess.latchPlayerType ) {
 			update = qtrue;
 		}
-
-		//if ( update || client->sess.playerWeapon != client->sess.latchPlayerWeapon) {
-		//	G_ExplodeMines(ent);
-		//}
 
 		client->sess.playerType = client->sess.latchPlayerType;
 
