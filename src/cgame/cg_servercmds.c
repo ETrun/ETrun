@@ -71,10 +71,10 @@ static void CG_ParseScore( team_t team ) {
 		/* Nico, removed score
 		cg.scores[i].score = atoi(          CG_Argv( offset + 1 + ( j * 7 ) ) );*/
 
-		cg.scores[i].ping = atoi(           CG_Argv( offset + 2 + ( j * 7 ) ) );
-		cg.scores[i].time = atoi(           CG_Argv( offset + 3 + ( j * 7 ) ) );
-		powerups = atoi(                    CG_Argv( offset + 4 + ( j * 7 ) ) );
-		cg.scores[i].playerClass = atoi(    CG_Argv( offset + 5 + ( j * 7 ) ) );
+		cg.scores[i].ping = atoi(           CG_Argv( offset + 1 + ( j * 7 ) ) );// Nico, 2 => 1
+		cg.scores[i].time = atoi(           CG_Argv( offset + 2 + ( j * 7 ) ) );// Nico, 3 => 2
+		powerups = atoi(                    CG_Argv( offset + 3 + ( j * 7 ) ) );// Nico, 4 => 3
+		cg.scores[i].playerClass = atoi(    CG_Argv( offset + 4 + ( j * 7 ) ) );// Nico, 5 => 4
 
 		/* Nico, removed respawnLeft
 		cg.scores[i].respawnsLeft = atoi(   CG_Argv( offset + 6 + ( j * 7 ) ) );*/
