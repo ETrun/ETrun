@@ -4384,17 +4384,19 @@ void UI_RunMenuScript( char **args ) {
 			trap_Cmd_ExecuteText( EXEC_APPEND, va( "ref warmupdamage %d\n", (int)trap_Cvar_VariableValue( "ui_voteWarmupDamage" ) ) );
 		}*/
 
-		/* Nico, removed warmup
+		// Nico, note: keep this in order to avoid unknown UI script
 		else if ( Q_stricmp( name, "voteInitToggles" ) == 0 ) {
+
+			/* Nico, removed warmup
 			char info[MAX_INFO_STRING];
 
 			trap_GetConfigString( CS_SERVERTOGGLES, info, sizeof( info ) );
 			trap_Cvar_Set( "ui_voteWarmupDamage", va( "%d", ( ( atoi( info ) & CV_SVS_WARMUPDMG ) >> 2 ) ) );
 
 			trap_GetConfigString( CS_SERVERINFO, info, sizeof( info ) );
-			trap_Cvar_Set( "ui_voteTimelimit", va( "%i", atoi( Info_ValueForKey( info, "timelimit" ) ) ) );
+			trap_Cvar_Set( "ui_voteTimelimit", va( "%i", atoi( Info_ValueForKey( info, "timelimit" ) ) ) );*/
 
-		}*/
+		}
 
 		else if ( Q_stricmp( name, "voteLeader" ) == 0 ) {
 			if ( uiInfo.teamIndex >= 0 && uiInfo.teamIndex < uiInfo.myTeamCount ) {

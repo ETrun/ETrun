@@ -101,11 +101,8 @@ If you have questions concerning this license or the applicable additional terms
 #define FEEDER_FINDPLAYER           0x0e    // find player
 #define FEEDER_CINEMATICS           0x0f    // cinematics
 #define FEEDER_SAVEGAMES            0x10    // savegames
-
-/* Nico, removed gametypes
 #define FEEDER_CAMPAIGNS            0x1a    // Arnout: all unlocked campaigns available
-#define FEEDER_ALLCAMPAIGNS         0x1b    // Arnout: all campaigns available*/
-
+#define FEEDER_ALLCAMPAIGNS         0x1b    // Arnout: all campaigns available
 #define FEEDER_PROFILES             0x1c    // Arnout: profiles
 #define FEEDER_GLINFO               0x1d    // Arnout: glinfo
 
@@ -157,7 +154,6 @@ If you have questions concerning this license or the applicable additional terms
 #define UI_SHOW_NETANYTEAMGAME              0x00000800
 #define UI_SHOW_NOTFAVORITESERVERS          0x00001000
 
-/* Nico, removed gametypes
 #define UI_SHOW_CAMPAIGNMAP1EXISTS          0x00002000
 #define UI_SHOW_CAMPAIGNMAP2EXISTS          0x00004000
 #define UI_SHOW_CAMPAIGNMAP3EXISTS          0x00008000
@@ -166,7 +162,7 @@ If you have questions concerning this license or the applicable additional terms
 #define UI_SHOW_CAMPAIGNMAP6EXISTS          0x00040000
 
 #define UI_SHOW_SELECTEDCAMPAIGNMAPPLAYABLE     0x00080000
-#define UI_SHOW_SELECTEDCAMPAIGNMAPNOTPLAYABLE  0x00100000*/
+#define UI_SHOW_SELECTEDCAMPAIGNMAPNOTPLAYABLE  0x00100000
 
 #define UI_SHOW_PLAYERMUTED     0x01000000
 #define UI_SHOW_PLAYERNOTMUTED  0x02000000
@@ -334,7 +330,6 @@ If you have questions concerning this license or the applicable additional terms
 // -NERVE - SMF
 
 // Arnout: Enemy Territory
-/* Nico, removed gametypes
 #define UI_CAMPAIGNCINEMATIC        260
 #define UI_CAMPAIGNNAME             261
 #define UI_CAMPAIGNDESCRIPTION      262
@@ -350,7 +345,7 @@ If you have questions concerning this license or the applicable additional terms
 #define UI_CAMPAIGNMAP3_TEXT        271
 #define UI_CAMPAIGNMAP4_TEXT        272
 #define UI_CAMPAIGNMAP5_TEXT        273
-#define UI_CAMPAIGNMAP6_TEXT        274*/
+#define UI_CAMPAIGNMAP6_TEXT        274
 
 #define UI_GAMETYPEDESCRIPTION      280
 
