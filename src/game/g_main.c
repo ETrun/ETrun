@@ -2674,7 +2674,7 @@ void LogExit( const char *string ) {
 
 	// NERVE - SMF
 	if ( g_gametype.integer == GT_WOLF_STOPWATCH ) {
-		/* Nico, no timelimit
+		// Nico, no timelimit
 		char cs[MAX_STRING_CHARS];
 		int winner, defender;
 

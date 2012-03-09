@@ -75,8 +75,8 @@ am_libui_la_OBJECTS = libui_la-ui_atoms.lo libui_la-ui_gameinfo.lo \
 	libui_la-ui_loadpanel.lo libui_la-ui_main.lo \
 	libui_la-ui_players.lo libui_la-ui_shared.lo \
 	libui_la-ui_syscalls.lo libui_la-ui_util.lo \
-	libui_la-bg_campaign.lo libui_la-bg_classes.lo \
-	libui_la-bg_misc.lo libui_la-q_math.lo libui_la-q_shared.lo
+	libui_la-bg_classes.lo libui_la-bg_misc.lo libui_la-q_math.lo \
+	libui_la-q_shared.lo
 libui_la_OBJECTS = $(am_libui_la_OBJECTS)
 libui_la_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
 	--mode=link $(CCLD) $(libui_la_CFLAGS) $(CFLAGS) \
@@ -230,7 +230,6 @@ ui_players.c \
 ui_shared.c \
 ui_syscalls.c \
 ui_util.c \
-../game/bg_campaign.c \
 ../game/bg_classes.c \
 ../game/bg_misc.c \
 ../game/q_math.c \
@@ -310,7 +309,6 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libui_la-bg_campaign.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libui_la-bg_classes.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libui_la-bg_misc.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libui_la-q_math.Plo@am__quote@
@@ -400,13 +398,6 @@ libui_la-ui_util.lo: ui_util.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ui_util.c' object='libui_la-ui_util.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libui_la_CFLAGS) $(CFLAGS) -c -o libui_la-ui_util.lo `test -f 'ui_util.c' || echo '$(srcdir)/'`ui_util.c
-
-libui_la-bg_campaign.lo: ../game/bg_campaign.c
-@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libui_la_CFLAGS) $(CFLAGS) -MT libui_la-bg_campaign.lo -MD -MP -MF $(DEPDIR)/libui_la-bg_campaign.Tpo -c -o libui_la-bg_campaign.lo `test -f '../game/bg_campaign.c' || echo '$(srcdir)/'`../game/bg_campaign.c
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libui_la-bg_campaign.Tpo $(DEPDIR)/libui_la-bg_campaign.Plo
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='../game/bg_campaign.c' object='libui_la-bg_campaign.lo' libtool=yes @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libui_la_CFLAGS) $(CFLAGS) -c -o libui_la-bg_campaign.lo `test -f '../game/bg_campaign.c' || echo '$(srcdir)/'`../game/bg_campaign.c
 
 libui_la-bg_classes.lo: ../game/bg_classes.c
 @am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libui_la_CFLAGS) $(CFLAGS) -MT libui_la-bg_classes.lo -MD -MP -MF $(DEPDIR)/libui_la-bg_classes.Tpo -c -o libui_la-bg_classes.lo `test -f '../game/bg_classes.c' || echo '$(srcdir)/'`../game/bg_classes.c

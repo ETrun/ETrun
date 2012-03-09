@@ -1307,7 +1307,7 @@ void CG_LimboPanel_ClassBar_Draw( panel_button_t* button ) {
 void CG_LimboPanel_RenderClassButton( panel_button_t* button ) {
 	vec4_t clr = { 1.f, 1.f, 1.f, 0.4f };
 	vec4_t clr2 = { 1.f, 1.f, 1.f, 0.75f };
-	vec4_t clr3 = { 1.f, 1.f, 1.f, 0.6f };
+	// vec4_t clr3 = { 1.f, 1.f, 1.f, 0.6f }; Nico, unused warning fix
 
 	// int i; Nico, unused warning fix
 	// float s0, t0, s1, t1; Nico, unused warning fix
