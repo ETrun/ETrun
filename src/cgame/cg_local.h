@@ -2170,7 +2170,9 @@ extern vmCvar_t cg_wolfparticles;
 // done
 
 // Ridah
-extern vmCvar_t cg_gameType;
+/* Nico, removed (c)g_gametype
+extern vmCvar_t cg_gameType;*/
+
 extern vmCvar_t cg_bloodTime;
 extern vmCvar_t cg_norender;
 extern vmCvar_t cg_skybox;

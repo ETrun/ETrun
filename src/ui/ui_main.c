@@ -4556,9 +4556,12 @@ void UI_RunMenuScript( char **args ) {
 			}
 			// DHM - Nerve
 		} else if ( Q_stricmp( name, "rconGame" ) == 0 ) {
+
+			/* Nico, removed (c)g_gametype
 			if ( ui_netGameType.integer >= 0 && ui_netGameType.integer < uiInfo.numGameTypes ) {
 				trap_Cmd_ExecuteText( EXEC_APPEND, va( "rcon g_gametype %i\n", ui_netGameType.integer ) );
-			}
+			}*/
+
 		} else if ( Q_stricmp( name, "rconMap" ) == 0 ) {
 			if ( ui_currentNetMap.integer >= 0 && ui_currentNetMap.integer < uiInfo.mapCount ) {
 				trap_Cmd_ExecuteText( EXEC_APPEND, va( "rcon map %s\n",uiInfo.mapList[ui_currentNetMap.integer].mapLoadName ) );
@@ -5472,7 +5475,10 @@ serverStatusCvar_t serverStatusCvars[] = {
 	{"sv_hostname", "Name"},
 	{"Address", ""},
 	{"gamename", "Game name"},
-	{"g_gametype", "Game type"},
+
+	/* Nico, removed (c)g_gametype
+	{"g_gametype", "Game type"},*/
+
 	{"mapname", "Map"},
 	{"version", ""},
 	{"protocol", ""},
@@ -7470,7 +7476,8 @@ vmCvar_t ui_userAxisRespawnTime;*/
 vmCvar_t ui_glCustom;    // JPW NERVE missing from q3ta
 // -NERVE - SMF
 
-vmCvar_t g_gameType;
+/* Nico, removed (c)g_gametype
+vmCvar_t g_gameType;*/
 
 vmCvar_t cl_profile;
 vmCvar_t cl_defaultProfile;
@@ -7632,8 +7639,9 @@ cvarTable_t cvarTable[] = {
 	{ &ui_isSpectator, "ui_isSpectator", "1", 0 },
 	// -NERVE - SMF
 
+	/* Nico, removed (c)g_gametype
+	{ &g_gameType,  "g_gameType",    "4", CVAR_SERVERINFO | CVAR_LATCH },*/
 
-	{ &g_gameType,  "g_gameType",    "4", CVAR_SERVERINFO | CVAR_LATCH },
 	{ NULL, "cg_drawBuddies", "1", CVAR_ARCHIVE },
 
 	/* Nico, instant reswawn

@@ -143,7 +143,9 @@ void CG_ParseServerinfo( void ) {
 
 		trap_Cvar_Set( "g_antilag", va( "%i", cgs.antilag ) );
 		trap_Cvar_Update( &cg_antilag );
-		trap_Cvar_Update( &cg_gameType );
+
+		/* Nico, removed (c)g_gametype
+		trap_Cvar_Update( &cg_gameType );*/
 	}
 
 	/* Nico, no timelimit

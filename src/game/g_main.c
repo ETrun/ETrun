@@ -49,7 +49,9 @@ int saveGamePending;                // 0 = no, 1 = check, 2 = loading
 
 mapEntityData_Team_t mapEntityData[2];
 
-vmCvar_t g_gametype;
+/* Nico, removed (c)g_gametype
+vmCvar_t g_gametype;*/
+
 vmCvar_t g_fraglimit;
 
 /* Nico, no timelimit
@@ -287,7 +289,8 @@ cvarTable_t gameCvarTable[] = {
 	{ NULL, "sv_mapname", "", CVAR_SERVERINFO | CVAR_ROM, 0, qfalse  },
 
 	// latched vars
-	{ &g_gametype, "g_gametype", "4", CVAR_SERVERINFO | CVAR_LATCH, 0, qfalse  },     // Arnout: default to GT_WOLF_CAMPAIGN
+	/* Nico, removed (c)g_gametype
+	{ &g_gametype, "g_gametype", "4", CVAR_SERVERINFO | CVAR_LATCH, 0, qfalse  },     // Arnout: default to GT_WOLF_CAMPAIGN*/
 
 // JPW NERVE multiplayer stuffs
 	/* Nico, instant reswawn

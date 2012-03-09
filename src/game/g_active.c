@@ -957,7 +957,9 @@ void ClientThink_real( gentity_t *ent ) {
 	VectorCopy( client->ps.origin, client->oldOrigin );
 
 	// NERVE - SMF
-	pm.gametype = g_gametype.integer;
+	/* Nico, removed (c)g_gametype
+	pm.gametype = g_gametype.integer;*/
+
 	pm.ltChargeTime = level.lieutenantChargeTime[client->sess.sessionTeam - 1];
 	pm.soldierChargeTime = level.soldierChargeTime[client->sess.sessionTeam - 1];
 	pm.engineerChargeTime = level.engineerChargeTime[client->sess.sessionTeam - 1];

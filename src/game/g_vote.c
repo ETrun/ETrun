@@ -158,9 +158,11 @@ void G_voteHelp( gentity_t *ent, qboolean fShowVote ) {
 	}
 
 	for ( i = 0; i < num_cmds; i++ ) {
-		if ( aVoteInfo[i].dwGameTypes & ( 1 << g_gametype.integer ) ) {
+
+		/* Nico, removed (c)g_gametype
+		if ( aVoteInfo[i].dwGameTypes & ( 1 << g_gametype.integer ) ) {*/
 			vi[rows++] = i;
-		}
+		// }
 	}
 
 	num_cmds = rows;

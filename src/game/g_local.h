@@ -1597,7 +1597,8 @@ extern int saveGamePending;
 
 #define FOFS( x ) ( (int)&( ( (gentity_t *)0 )->x ) )
 
-extern vmCvar_t g_gametype;
+/* Nico, removed (c)g_gametype
+extern vmCvar_t g_gametype;*/
 
 extern vmCvar_t g_log;
 extern vmCvar_t g_dedicated;

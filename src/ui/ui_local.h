@@ -139,7 +139,8 @@ extern vmCvar_t ui_limboOptions;
 extern vmCvar_t ui_isSpectator;
 // -NERVE - SMF
 
-extern vmCvar_t g_gameType;
+/* Nico, removed (c)g_gametype
+extern vmCvar_t g_gameType;*/
 
 extern vmCvar_t cl_profile;
 extern vmCvar_t cl_defaultProfile;

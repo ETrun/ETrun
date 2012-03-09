@@ -39,12 +39,14 @@ If you have questions concerning this license or the applicable additional terms
 #include "../../etrun/ui/menudef.h"
 
 #ifdef CGAMEDLL
+/* Nico, removed (c)g_gametype
 extern vmCvar_t cg_gameType;
-#define gametypeCvar cg_gameType
+#define gametypeCvar cg_gameType*/
 #elif GAMEDLL
 extern vmCvar_t g_developer;
+/* Nico, removed (c)g_gametype
 extern vmCvar_t g_gametype;
-#define gametypeCvar g_gametype
+#define gametypeCvar g_gametype*/
 #else
 extern vmCvar_t ui_gameType;
 #define gametypeCvar ui_gameType

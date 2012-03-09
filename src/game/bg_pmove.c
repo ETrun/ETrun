@@ -41,11 +41,12 @@ If you have questions concerning this license or the applicable additional terms
 
 #include "bg_local.h"
 
+/* Nico, removed (c)g_gametype
 #ifdef CGAMEDLL
 #define PM_GameType cg_gameType.integer
 #elif GAMEDLL
 #define PM_GameType g_gametype.integer
-#endif
+#endif*/
 
 #define PM_IsSinglePlayerGame() ( PM_GameType == GT_SINGLE_PLAYER || PM_GameType == GT_COOP )
 
@@ -584,11 +585,17 @@ static void PM_Accelerate( vec3_t wishdir, float wishspeed, float accel ) {
 
 // JPW NERVE -- added because I need to check single/multiplayer instances and branch accordingly
 #ifdef CGAMEDLL
-extern vmCvar_t cg_gameType;
+
+/* Nico, removed (c)g_gametype
+extern vmCvar_t cg_gameType;*/
+
 extern vmCvar_t cg_movespeed;
 #endif
 #ifdef GAMEDLL
-extern vmCvar_t g_gametype;
+
+/* Nico, removed (c)g_gametype
+extern vmCvar_t g_gametype;*/
+
 extern vmCvar_t g_movespeed;
 #endif
 
@@ -607,10 +614,16 @@ static float PM_CmdScale( usercmd_t *cmd ) {
 	float scale;
 
 #ifdef CGAMEDLL
-	int gametype = cg_gameType.integer;
+
+	/* Nico, removed (c)g_gametype
+	int gametype = cg_gameType.integer;*/
+
 	int movespeed = cg_movespeed.integer;
 #elif GAMEDLL
-	int gametype = g_gametype.integer;
+
+	/* Nico, removed (c)g_gametype
+	int gametype = g_gametype.integer;*/
+
 	int movespeed = g_movespeed.integer;
 #endif
 
@@ -1244,13 +1257,6 @@ static void PM_WalkMove( void ) {
 	usercmd_t cmd;
 	float accelerate;
 	float vel;
-//	float botBonus = 1.0;
-
-/*#ifdef CGAMEDLL
-	int gametype = cg_gameType.integer;
-#elif GAMEDLL
-	int gametype = g_gametype.integer;
-#endif*/
 
 	if ( pm->waterlevel > 2 && DotProduct( pml.forward, pml.groundTrace.plane.normal ) > 0 ) {
 		// begin swimming

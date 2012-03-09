@@ -418,31 +418,38 @@ G_InitWorldSession
 */
 void G_InitWorldSession( void ) {
 	char s[MAX_STRING_CHARS];
-	int gt;
+
+	/* Nico, removed (c)g_gametype
+	int gt;*/
+
 	int i, j;
 
 	trap_Cvar_VariableStringBuffer( "session", s, sizeof( s ) );
+	
+	/* Nico, removed (c)g_gametype
 	gt = atoi( s );
 
 	// if the gametype changed since the last session, don't use any
 	// client sessions
+
 	if ( g_gametype.integer != gt ) {
 		level.newSession = qtrue;
 		level.fResetStats = qtrue;
 		G_Printf( "Gametype changed, clearing session data.\n" );
+	} else*/
+	{
 
-	} else {
 		char *tmp = s;
 		qboolean test = ( g_altStopwatchMode.integer != 0 || g_currentRound.integer == 1 );
 
-
+/* Nico, removed (c)g_gametype
 #define GETVAL( x ) if ( ( tmp = strchr( tmp, ' ' ) ) == NULL ) {return; \
 						   } x = atoi( ++tmp );
 
 		// Get team lock stuff
 		GETVAL( gt );
 		teamInfo[TEAM_AXIS].spec_lock = ( gt & TEAM_AXIS ) ? qtrue : qfalse;
-		teamInfo[TEAM_ALLIES].spec_lock = ( gt & TEAM_ALLIES ) ? qtrue : qfalse;
+		teamInfo[TEAM_ALLIES].spec_lock = ( gt & TEAM_ALLIES ) ? qtrue : qfalse;*/
 
 		// See if we need to clear player stats
 		// FIXME: deal with the multi-map missions
@@ -474,16 +481,6 @@ void G_InitWorldSession( void ) {
 		char *p, *c;
 
 		trap_Cvar_VariableStringBuffer( va( "fireteam%i", i ), s, sizeof( s ) );
-
-/*		p = Info_ValueForKey( s, "n" );
-
-		if(p && *p) {
-			Q_strncpyz( level.fireTeams[i].name, p, 32 );
-			level.fireTeams[i].inuse = qtrue;
-		} else {
-			*level.fireTeams[i].name = '\0';
-			level.fireTeams[i].inuse = qfalse;
-		}*/
 
 		p = Info_ValueForKey( s, "id" );
 		j = atoi( p );
@@ -534,9 +531,14 @@ void G_WriteSessionData( qboolean restart ) {
 	int j;
 
 	trap_GetServerinfo( strServerInfo, sizeof( strServerInfo ) );
+
+	/* Nico, removed (c)g_gametype
 	trap_Cvar_Set( "session", va( "%i %i %s", g_gametype.integer,
 								  ( teamInfo[TEAM_AXIS].spec_lock * TEAM_AXIS | teamInfo[TEAM_ALLIES].spec_lock * TEAM_ALLIES ),
-								  Info_ValueForKey( strServerInfo, "mapname" ) ) );
+								  Info_ValueForKey( strServerInfo, "mapname" ) ) );*/
+	trap_Cvar_Set( "session", va( "%i %s", 
+									( teamInfo[TEAM_AXIS].spec_lock * TEAM_AXIS | teamInfo[TEAM_ALLIES].spec_lock * TEAM_ALLIES ),
+									Info_ValueForKey( strServerInfo, "mapname" ) ) );
 
 	// Keep stats for all players in sync
 	/* Nico, removed warmup
