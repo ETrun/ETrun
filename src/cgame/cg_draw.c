@@ -2070,8 +2070,10 @@ static void CG_DrawCrosshairNames( void ) {
 
 		name = cgs.clientinfo[ cg.crosshairClientNum ].name;
 
+		/* Nico, removed rank
 		playerRank = cgs.clientinfo[cg.crosshairClientNum].team == TEAM_AXIS ? rankNames_Axis[cgs.clientinfo[cg.crosshairClientNum].rank] : rankNames_Allies[cgs.clientinfo[cg.crosshairClientNum].rank];
-		s = va( "[%s] %s %s", CG_TranslateString( playerClass ), playerRank, name );
+		s = va( "[%s] %s %s", CG_TranslateString( playerClass ), playerRank, name );*/
+		s = va( "[%s] %s", CG_TranslateString( playerClass ), name );
 		w = CG_DrawStrlen( s ) * SMALLCHAR_WIDTH;
 
 		// draw the name and class
@@ -2645,8 +2647,12 @@ static qboolean CG_DrawFollow( void ) {
 
 		// Don't display if you're following yourself
 		if ( cg.snap->ps.clientNum != cg.clientNum ) {
+			/* Nico, removed rank
 			sprintf( deploytime, "(%s %s %s [%s])", CG_TranslateString( "Following" ),
 					 cgs.clientinfo[cg.snap->ps.clientNum].team == TEAM_ALLIES ? rankNames_Allies[cgs.clientinfo[cg.snap->ps.clientNum].rank] : rankNames_Axis[cgs.clientinfo[cg.snap->ps.clientNum].rank],
+					 cgs.clientinfo[cg.snap->ps.clientNum].name,
+					 BG_ClassnameForNumber( cgs.clientinfo[cg.snap->ps.clientNum].cls ) );*/
+			sprintf( deploytime, "(%s %s [%s])", CG_TranslateString( "Following" ),
 					 cgs.clientinfo[cg.snap->ps.clientNum].name,
 					 BG_ClassnameForNumber( cgs.clientinfo[cg.snap->ps.clientNum].cls ) );
 
@@ -2655,8 +2661,12 @@ static qboolean CG_DrawFollow( void ) {
 	} else {
 		CG_DrawStringExt( INFOTEXT_STARTX, 118, CG_TranslateString( "Following" ), colorWhite, qtrue, qtrue, BIGCHAR_WIDTH / 2, BIGCHAR_HEIGHT, 0 );
 
+		/* Nico, removed rank
 		CG_DrawStringExt( 84, 118, va( "%s %s [%s]",
 									   cgs.clientinfo[cg.snap->ps.clientNum].team == TEAM_ALLIES ? rankNames_Allies[cgs.clientinfo[cg.snap->ps.clientNum].rank] : rankNames_Axis[cgs.clientinfo[cg.snap->ps.clientNum].rank],
+									   cgs.clientinfo[cg.snap->ps.clientNum].name, BG_ClassnameForNumber( cgs.clientinfo[cg.snap->ps.clientNum].cls ) ),
+						  colorWhite, qtrue, qtrue, BIGCHAR_WIDTH / 2, BIGCHAR_HEIGHT, 0 );*/
+		CG_DrawStringExt( 84, 118, va( "%s [%s]",
 									   cgs.clientinfo[cg.snap->ps.clientNum].name, BG_ClassnameForNumber( cgs.clientinfo[cg.snap->ps.clientNum].cls ) ),
 						  colorWhite, qtrue, qtrue, BIGCHAR_WIDTH / 2, BIGCHAR_HEIGHT, 0 );
 	}
@@ -3600,8 +3610,9 @@ static void CG_DrawPlayerStatusHead( void ) {
 		}
 	}
 
-
-	CG_DrawPlayerHead( &headRect, character, headcharacter, 180, 0, cg.snap->ps.eFlags & EF_HEADSHOT ? qfalse : qtrue, anim, painshader, cgs.clientinfo[ cg.snap->ps.clientNum ].rank, qfalse );
+	/* Nico, removed rank
+	CG_DrawPlayerHead( &headRect, character, headcharacter, 180, 0, cg.snap->ps.eFlags & EF_HEADSHOT ? qfalse : qtrue, anim, painshader, cgs.clientinfo[ cg.snap->ps.clientNum ].rank, qfalse );*/
+	CG_DrawPlayerHead( &headRect, character, headcharacter, 180, 0, cg.snap->ps.eFlags & EF_HEADSHOT ? qfalse : qtrue, anim, painshader, 0, qfalse );
 
 //	CG_DrawKeyHint( &headHintRect, "openlimbomenu" );
 }

@@ -2235,7 +2235,10 @@ qboolean Do_Activate2_f( gentity_t *ent, gentity_t *traceEnt ) {
 						G_DebugAddSkillPoints( ent, SK_MILITARY_INTELLIGENCE_AND_SCOPED_WEAPONS, 5, "stealing uniform" );*/
 
 						Q_strncpyz( ent->client->disguiseNetname, g_entities[traceEnt->s.clientNum].client->pers.netname, sizeof( ent->client->disguiseNetname ) );
-						ent->client->disguiseRank = g_entities[traceEnt->s.clientNum].client ? g_entities[traceEnt->s.clientNum].client->sess.rank : 0;
+
+						/* Nico, removed rank
+						ent->client->disguiseRank = g_entities[traceEnt->s.clientNum].client ? g_entities[traceEnt->s.clientNum].client->sess.rank : 0;*/
+						ent->client->disguiseRank = 0;
 
 						ClientUserinfoChanged( ent->s.clientNum );
 					} else {

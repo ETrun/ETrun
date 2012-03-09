@@ -589,7 +589,8 @@ typedef struct {
 	/* Nico, removed skills
 	int skill[SK_NUM_SKILLS];                   // Arnout: skill*/
 
-	int rank;                                   // Arnout: rank
+	/* Nico, removed rank
+	int rank;                                   // Arnout: rank*/
 
 	/* Nico, removed skills
 	int medals[SK_NUM_SKILLS];                  // Arnout: medals*/

@@ -524,7 +524,9 @@ qboolean ReviveEntity( gentity_t *ent, gentity_t *traceEnt ) {
 
 
 	// DHM - Nerve :: Let the person being revived know about it
-	trap_SendServerCommand( traceEnt - g_entities, va( "cp \"You have been revived by [lof]%s[lon] [lof]%s!\n\"", ent->client->sess.sessionTeam == TEAM_ALLIES ? rankNames_Allies[ ent->client->sess.rank ] : rankNames_Axis[ ent->client->sess.rank ], ent->client->pers.netname ) );
+	/* Nico, removed rank
+	trap_SendServerCommand( traceEnt - g_entities, va( "cp \"You have been revived by [lof]%s[lon] [lof]%s!\n\"", ent->client->sess.sessionTeam == TEAM_ALLIES ? rankNames_Allies[ ent->client->sess.rank ] : rankNames_Axis[ ent->client->sess.rank ], ent->client->pers.netname ) );*/
+	trap_SendServerCommand( traceEnt - g_entities, va( "cp \"You have been revived by [lof]%s!\n\"", ent->client->pers.netname ) );
 	traceEnt->props_frame_state = ent->s.number;
 
 	// DHM - Nerve :: Mark that the medicine was indeed dispensed

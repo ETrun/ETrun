@@ -395,7 +395,8 @@ void G_InitSessionData( gclient_t *client, char *userinfo ) {
 	memset( sess->skillpoints, 0, sizeof( sess->skillpoints ) );
 	memset( sess->medals, 0, sizeof( sess->medals ) );*/
 
-	sess->rank = 0;
+	/* Nico, removed rank
+	sess->rank = 0;*/
 
 	// OSP
 	sess->coach_team = 0;
