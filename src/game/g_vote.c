@@ -92,7 +92,10 @@ static const vote_reference_t aVoteInfo[] = {
 
 	{ 0x1ff, "maprestart",    G_MapRestart_v,    "Map Restart",       "^7\n  Restarts the current map in progress" },
 	{ 0x1ff, "matchreset",   G_MatchReset_v, "Match Reset",       "^7\n  Resets the entire match" },
-	{ 0x1ff, "mutespecs",     G_Mutespecs_v,     "Mute Spectators",   " <0|1>^7\n  Mutes in-game spectator chat" },
+
+	/* Nico, removed match_* cvars
+	{ 0x1ff, "mutespecs",     G_Mutespecs_v,     "Mute Spectators",   " <0|1>^7\n  Mutes in-game spectator chat" },*/
+
 	{ 0x1ff, "nextmap",       G_Nextmap_v,       "Load Next Map", "^7\n  Loads the next map or campaign in the map queue" },
 
 	/* Nico, removed public settings
@@ -656,6 +659,7 @@ int G_MatchReset_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *a
 
 
 // *** Mute Spectators ***
+/* Nico, removed match_* cvars
 int G_Mutespecs_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd ) {
 	// Vote request (vote is being initiated)
 	if ( arg ) {
@@ -671,7 +675,7 @@ int G_Mutespecs_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *ar
 	}
 
 	return( G_OK );
-}
+}*/
 
 
 // *** Nextmap ***
@@ -846,10 +850,11 @@ int G_StartMatch_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *a
 			return( G_INVALID );
 		}*/
 
+		/* Nico, removed match_* cvars
 		if ( level.numPlayingClients < match_minplayers.integer ) {
 			G_refPrintf( ent, "^3Not enough players to start match!" );
 			return( G_INVALID );
-		}
+		}*/
 
 		// Vote action (vote has passed)
 	} else {

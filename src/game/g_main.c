@@ -178,12 +178,14 @@ vmCvar_t g_antilag;
 
 // OSP
 vmCvar_t g_spectatorInactivity;
+
+/* Nico, removed match_* cvars
 vmCvar_t match_latejoin;
 vmCvar_t match_minplayers;
 vmCvar_t match_mutespecs;
 vmCvar_t match_readypercent;
 vmCvar_t match_timeoutcount;
-vmCvar_t match_timeoutlength;
+vmCvar_t match_timeoutlength;*/
 
 /* Nico, removed warmup
 vmCvar_t match_warmupDamage;*/
@@ -424,12 +426,14 @@ cvarTable_t gameCvarTable[] = {
 
 	{ &refereePassword, "refereePassword", "none", 0, 0, qfalse},
 	{ &g_spectatorInactivity, "g_spectatorInactivity", "0", 0, 0, qfalse, qfalse },
+
+	/* Nico, removed match_* cvars
 	{ &match_latejoin,      "match_latejoin", "1", 0, 0, qfalse, qfalse },
 	{ &match_minplayers,    "match_minplayers", MATCH_MINPLAYERS, 0, 0, qfalse, qfalse },
 	{ &match_mutespecs,     "match_mutespecs", "0", 0, 0, qfalse, qtrue },
 	{ &match_readypercent,  "match_readypercent", "100", 0, 0, qfalse, qtrue },
 	{ &match_timeoutcount,  "match_timeoutcount", "3", 0, 0, qfalse, qtrue },
-	{ &match_timeoutlength, "match_timeoutlength", "180", 0, 0, qfalse, qtrue },
+	{ &match_timeoutlength, "match_timeoutlength", "180", 0, 0, qfalse, qtrue },*/
 
 	/* Nico, removed warmup
 	{ &match_warmupDamage,  "match_warmupDamage", "1", 0, 0, qfalse },*/
@@ -1345,9 +1349,11 @@ void G_RegisterCvars( void ) {
 	/* Nico, removed gametypes
 	if ( !G_IsSinglePlayerGame() ) {*/
 		trap_SetConfigstring( CS_SERVERTOGGLES, va( "%d", level.server_settings ) );
+
+		/* Nico, removed match_* cvars
 		if ( match_readypercent.integer < 1 ) {
 			trap_Cvar_Set( "match_readypercent", "1" );
-		}
+		}*/
 	// }
 
 	if ( pmove_msec.integer < 8 ) {
@@ -1410,13 +1416,16 @@ void G_UpdateCvars( void ) {
 					level.covertopsChargeTime[0] = g_covertopsChargeTime.integer * level.covertopsChargeTimeModifier[0];
 					level.covertopsChargeTime[1] = g_covertopsChargeTime.integer * level.covertopsChargeTimeModifier[1];
 					chargetimechanged = qtrue;
-				} else if ( cv->vmCvar == &match_readypercent )      {
+				}
+				
+				/* Nico, removed match_* cvars
+				else if ( cv->vmCvar == &match_readypercent )      {
 					if ( match_readypercent.integer < 1 ) {
 						trap_Cvar_Set( cv->cvarName, "1" );
 					} else if ( match_readypercent.integer > 100 ) {
 						trap_Cvar_Set( cv->cvarName, "100" );
 					}
-				}
+				}*/
 
 				/* Nico, removed warmup
 				else if ( cv->vmCvar == &g_warmup )      {

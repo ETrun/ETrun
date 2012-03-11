@@ -7723,12 +7723,14 @@ cvarTable_t cvarTable[] = {
 
 	{ NULL, "sv_maxRate", "0", CVAR_ARCHIVE },
 	{ NULL, "g_spectatorInactivity", "0", CVAR_ARCHIVE },
+
+	/* Nico, removed match_* cvars
 	{ NULL, "match_latejoin", "1", CVAR_ARCHIVE },
 	{ NULL, "match_minplayers", MATCH_MINPLAYERS, CVAR_ARCHIVE },
 	{ NULL, "match_mutespecs", "0", CVAR_ARCHIVE },
 	{ NULL, "match_readypercent", "100", CVAR_ARCHIVE },
 	{ NULL, "match_timeoutcount", "3", CVAR_ARCHIVE },
-	{ NULL, "match_timeoutlength", "180", CVAR_ARCHIVE },
+	{ NULL, "match_timeoutlength", "180", CVAR_ARCHIVE },*/
 
 	/* Nico, removed warmup
 	{ NULL, "match_warmupDamage", "1", CVAR_ARCHIVE },*/

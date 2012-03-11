@@ -1760,12 +1760,14 @@ extern vmCvar_t g_antilag;
 // OSP
 extern vmCvar_t refereePassword;
 extern vmCvar_t g_spectatorInactivity;
+
+/* Nico, removed match_* cvars
 extern vmCvar_t match_latejoin;
 extern vmCvar_t match_minplayers;
 extern vmCvar_t match_mutespecs;
 extern vmCvar_t match_readypercent;
 extern vmCvar_t match_timeoutcount;
-extern vmCvar_t match_timeoutlength;
+extern vmCvar_t match_timeoutlength;*/
 
 /* Nico, removed warmup
 extern vmCvar_t match_warmupDamage;*/
@@ -2113,7 +2115,9 @@ typedef struct {
 	qboolean team_lock;
 	char team_name[24];
 	int team_score;
-	int timeouts;
+
+	/* Nico, removed timeouts
+	int timeouts;*/
 } team_info;
 
 
@@ -2320,7 +2324,10 @@ int G_Campaign_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg
 
 int G_MapRestart_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd );
 int G_MatchReset_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd );
-int G_Mutespecs_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd );
+
+/* Nico, removed match_* cvars
+int G_Mutespecs_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd );*/
+
 int G_Nextmap_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd );
 
 /* Nico, removed public settings

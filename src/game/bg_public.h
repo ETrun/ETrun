@@ -2224,7 +2224,8 @@ qboolean BG_IsScopedWeapon( int weapon );
 
 int BG_FootstepForSurface( int surfaceFlags );
 
-#define MATCH_MINPLAYERS "4" //"1"	// Minimum # of players needed to start a match
+/* Nico, removed match_* cvars
+#define MATCH_MINPLAYERS "4" //"1"	// Minimum # of players needed to start a match*/
 
 // Multiview support
 int BG_simpleHintsCollapse( int hint, int val );

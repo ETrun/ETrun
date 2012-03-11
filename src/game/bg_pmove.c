@@ -613,7 +613,6 @@ static float PM_CmdScale( usercmd_t *cmd ) {
 	float total;
 	float scale;
 
-/* Nico, unused warning fix
 #ifdef CGAMEDLL
 
 	/* Nico, removed (c)g_gametype
@@ -626,7 +625,7 @@ static float PM_CmdScale( usercmd_t *cmd ) {
 	int gametype = g_gametype.integer;*/
 
 	int movespeed = g_movespeed.integer;
-#endif*/
+#endif
 
 	max = abs( cmd->forwardmove );
 	if ( abs( cmd->rightmove ) > max ) {

@@ -1579,10 +1579,14 @@ team_info teamInfo[TEAM_NUM_TEAMS];
 
 // Resets a team's settings
 void G_teamReset( int team_num, qboolean fClearSpecLock ) {
-	teamInfo[team_num].team_lock = ( match_latejoin.integer == 0 && g_gamestate.integer == GS_PLAYING );
+
+	/* Nico, removed match_* cvars
+	teamInfo[team_num].team_lock = ( match_latejoin.integer == 0 && g_gamestate.integer == GS_PLAYING );*/
+	teamInfo[team_num].team_lock = qfalse;
 	teamInfo[team_num].team_name[0] = 0;
 	teamInfo[team_num].team_score = 0;
-	teamInfo[team_num].timeouts = match_timeoutcount.integer;
+	/* Nico, removed match_* cvars
+	teamInfo[team_num].timeouts = match_timeoutcount.integer;*/
 
 	if ( fClearSpecLock ) {
 		teamInfo[team_num].spec_lock = qfalse;

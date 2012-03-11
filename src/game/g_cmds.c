@@ -1340,7 +1340,11 @@ void G_SayTo( gentity_t *ent, gentity_t *other, int mode, int color, const char 
 	}
 
 	// NERVE - SMF - if spectator, no chatting to players in WolfMP
+	/* Nico, removed match_* cvars
 	if ( match_mutespecs.integer > 0 && ent->client->sess.referee == 0 &&   // OSP
+		 ( ( ent->client->sess.sessionTeam == TEAM_FREE && other->client->sess.sessionTeam != TEAM_FREE ) ||
+		   ( ent->client->sess.sessionTeam == TEAM_SPECTATOR && other->client->sess.sessionTeam != TEAM_SPECTATOR ) ) ) {*/
+	if ( ent->client->sess.referee == 0 &&   // OSP
 		 ( ( ent->client->sess.sessionTeam == TEAM_FREE && other->client->sess.sessionTeam != TEAM_FREE ) ||
 		   ( ent->client->sess.sessionTeam == TEAM_SPECTATOR && other->client->sess.sessionTeam != TEAM_SPECTATOR ) ) ) {
 		return;
@@ -1457,7 +1461,10 @@ void G_VoiceTo( gentity_t *ent, gentity_t *other, int mode, const char *id, qboo
 	}
 
 	// OSP - spec vchat rules follow the same as normal chatting rules
+	/* Nico, removed match_* cvars
 	if ( match_mutespecs.integer > 0 && ent->client->sess.referee == 0 &&
+		 ent->client->sess.sessionTeam == TEAM_SPECTATOR && other->client->sess.sessionTeam != TEAM_SPECTATOR ) {*/
+	if ( ent->client->sess.referee == 0 &&
 		 ent->client->sess.sessionTeam == TEAM_SPECTATOR && other->client->sess.sessionTeam != TEAM_SPECTATOR ) {
 		return;
 	}

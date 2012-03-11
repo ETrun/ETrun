@@ -115,6 +115,7 @@ void G_delayPrint( gentity_t *dpent ) {
 	switch ( dpent->spawnflags ) {
 	case DP_PAUSEINFO:
 	{
+		/* Nico, removed match_* cvars
 		if ( level.match_pause > PAUSE_UNPAUSING ) {
 			int cSeconds = match_timeoutlength.integer * 1000 - ( level.time - dpent->timestamp );
 
@@ -128,7 +129,7 @@ void G_delayPrint( gentity_t *dpent ) {
 				G_globalSound( "sound/osp/prepare.wav" );
 				G_spawnPrintf( DP_UNPAUSING, level.time + 10, NULL );
 			}
-		}
+		}*/
 		break;
 	}
 
@@ -722,9 +723,12 @@ void G_matchInfoDump( unsigned int dwDumpType ) {
 int G_checkServerToggle( vmCvar_t *cv ) {
 	int nFlag;
 
+	/* Nico, removed match_* cvars
 	if ( cv == &match_mutespecs ) {
 		nFlag = CV_SVS_MUTESPECS;
-	} else if ( cv == &g_friendlyFire ) {
+	} else */
+	
+	if ( cv == &g_friendlyFire ) {
 		nFlag = CV_SVS_FRIENDLYFIRE;
 	} else if ( cv == &g_antilag ) {
 		nFlag = CV_SVS_ANTILAG;
