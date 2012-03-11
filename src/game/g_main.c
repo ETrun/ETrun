@@ -45,7 +45,9 @@ gentity_t g_entities[MAX_GENTITIES];
 gclient_t g_clients[MAX_CLIENTS];
 
 g_campaignInfo_t g_campaigns[MAX_CAMPAIGNS];
-int saveGamePending;                // 0 = no, 1 = check, 2 = loading
+
+/* Nico, removed saveGamePending
+int saveGamePending;                // 0 = no, 1 = check, 2 = loading*/
 
 mapEntityData_Team_t mapEntityData[2];
 
@@ -1918,7 +1920,8 @@ void G_InitGame( int levelTime, int randomSeed, int restart ) {
 			saveGamePending = 1;
 		}
 	} else {*/
-		saveGamePending = 0;
+		/* Nico, removed saveGamePending
+		saveGamePending = 0;*/
 	// }
 
 	// load level script

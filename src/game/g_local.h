@@ -1594,7 +1594,9 @@ void Props_Chair_Skyboxtouch( gentity_t *ent );
 extern level_locals_t level;
 extern gentity_t g_entities[];          //DAJ was explicit set to MAX_ENTITIES
 extern g_campaignInfo_t g_campaigns[];
-extern int saveGamePending;
+
+/* Nico, removed saveGamePending
+extern int saveGamePending;*/
 
 #define FOFS( x ) ( (int)&( ( (gentity_t *)0 )->x ) )
 
