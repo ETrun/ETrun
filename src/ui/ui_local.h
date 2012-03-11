@@ -123,7 +123,9 @@ extern vmCvar_t ui_browserGameType;
 extern vmCvar_t ui_browserSortKey;
 extern vmCvar_t ui_browserShowEmptyOrFull;
 extern vmCvar_t ui_browserShowPasswordProtected;
-extern vmCvar_t ui_browserShowFriendlyFire;
+
+/* Nico, no friendlyfire
+extern vmCvar_t ui_browserShowFriendlyFire;*/
 
 /* Nico, removed respawnLeft
 extern vmCvar_t ui_browserShowMaxlives;*/
@@ -948,7 +950,9 @@ typedef struct {
 	vec4_t xhairColorAlt;
 
 	qhandle_t passwordFilter;
-	qhandle_t friendlyFireFilter;
+
+	/* Nico, no friendlyfire
+	qhandle_t friendlyFireFilter;*/
 
 	/* Nico, removed respawnLeft
 	qhandle_t maxLivesFilter;*/

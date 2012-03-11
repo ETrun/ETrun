@@ -932,10 +932,9 @@ void G_BurnTarget( gentity_t *self, gentity_t *body, qboolean directhit ) {
 			return;
 		}
 
-//		if( !self->count2 && body == self->parent )
-//			return;
-
-		if ( !( g_friendlyFire.integer ) && OnSameTeam( body, self->parent ) ) {
+		/* Nico, no friendlyfire
+		if ( !( g_friendlyFire.integer ) && OnSameTeam( body, self->parent ) ) {*/
+		if ( OnSameTeam( body, self->parent ) ) {
 			return;
 		}
 	}
@@ -1604,10 +1603,6 @@ void G_LandmineThink( gentity_t *self ) {
 		if ( !ent->client ) {
 			continue;
 		}
-
-		//%	if( !g_friendlyFire.integer && G_LandmineTeam( self ) == ent->client->sess.sessionTeam ) {
-		//%		continue;
-		//%	}
 
 		// TAT 11/20/2002 use the unified trigger check to see if we are close enough to prime the mine
 		if ( sEntWillTriggerMine( ent, self ) ) {

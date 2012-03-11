@@ -340,11 +340,12 @@ void CG_DrawConnectScreen( qboolean interactive, qboolean forcerefresh ) {
 
 		y = 417;
 
+		/* Nico, no friendlyfire
 		str = Info_ValueForKey( buffer, "g_friendlyfire" );
 		if ( str && *str && atoi( str ) ) {
 			x = 461;
 			CG_DrawPic( x, y, 16, 16, bg_filter_ff );
-		}
+		}*/
 
 		/* Nico, removed respawnLeft
 		if ( atoi( Info_ValueForKey( buffer, "g_gametype" ) ) != GT_WOLF_LMS ) {

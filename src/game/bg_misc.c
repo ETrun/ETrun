@@ -4916,7 +4916,9 @@ const voteType_t voteToggles[] =
 	{ "vote_allow_referee",          CV_SVF_REFEREE },
 	{ "vote_allow_shuffleteamsxp",   CV_SVF_SHUFFLETEAMS },
 	{ "vote_allow_swapteams",        CV_SVF_SWAPTEAMS },
-	{ "vote_allow_friendlyfire", CV_SVF_FRIENDLYFIRE },
+
+	/* Nico, no friendlyfire
+	{ "vote_allow_friendlyfire", CV_SVF_FRIENDLYFIRE },*/
 
 	/* Nico, no timelimit
 	{ "vote_allow_timelimit",        CV_SVF_TIMELIMIT },*/

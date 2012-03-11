@@ -5257,8 +5257,9 @@ UI_BuildServerDisplayList
 static void UI_BuildServerDisplayList( qboolean force ) {
 	/* Nico, removed respawnLeft
 	Nico, removed balancedteams
+	Nico, no friendlyfire
 	int i, count, clients, maxClients, ping, game, len, visible, friendlyFire, maxlives, punkbuster, antilag, password, weaponrestricted, balancedteams;*/
-	int i, count, clients, maxClients, ping, game, len, visible, friendlyFire, punkbuster, antilag, password, weaponrestricted;
+	int i, count, clients, maxClients, ping, game, len, visible, punkbuster, antilag, password, weaponrestricted;
 	char info[MAX_STRING_CHARS];
 	static int numinvisible;
 
@@ -5356,6 +5357,7 @@ static void UI_BuildServerDisplayList( qboolean force ) {
 				}
 			}
 
+			/* Nico, no friendlyfire
 			trap_Cvar_Update( &ui_browserShowFriendlyFire );
 			if ( ui_browserShowFriendlyFire.integer ) {
 				friendlyFire = atoi( Info_ValueForKey( info, "friendlyFire" ) );
@@ -5365,7 +5367,7 @@ static void UI_BuildServerDisplayList( qboolean force ) {
 					trap_LAN_MarkServerVisible( ui_netSource.integer, i, qfalse );
 					continue;
 				}
-			}
+			}*/
 
 			/* Nico, removed respawnLeft
 			trap_Cvar_Update( &ui_browserShowMaxlives );
@@ -6064,8 +6066,9 @@ const char *UI_FeederItemText( float feederID, int index, int column, qhandle_t 
 		if ( index >= 0 && index < uiInfo.serverStatus.numDisplayServers ) {
 			/* Nico, removed respawnLeft
 			Nico, removed balancedteams
+			Nico, no friendlyfire
 			int ping, game, antilag, needpass, friendlyfire, maxlives, punkbuster, weaponrestrictions, balancedteams, serverload;*/
-			int ping, game, antilag, needpass, friendlyfire, punkbuster, weaponrestrictions, serverload;
+			int ping, game, antilag, needpass, punkbuster, weaponrestrictions, serverload;
 			if ( lastColumn != column || lastTime > uiInfo.uiDC.realTime + 5000 ) {
 				trap_LAN_GetServerInfo( ui_netSource.integer, uiInfo.serverStatus.displayServers[index], info, MAX_STRING_CHARS );
 				lastColumn = column;
@@ -6145,7 +6148,9 @@ const char *UI_FeederItemText( float feederID, int index, int column, qhandle_t 
 				} else {
 					*numhandles = 7;
 					needpass = atoi( Info_ValueForKey( info, "needpass" ) );
-					friendlyfire = atoi( Info_ValueForKey( info, "friendlyFire" ) );
+
+					/* Nico, no friendlyfire
+					friendlyfire = atoi( Info_ValueForKey( info, "friendlyFire" ) );*/
 
 					/* Nico, removed respawnLeft
 					maxlives = atoi( Info_ValueForKey( info, "maxlives" ) );*/
@@ -6160,9 +6165,11 @@ const char *UI_FeederItemText( float feederID, int index, int column, qhandle_t 
 					if ( needpass ) {
 						handles[0] = uiInfo.passwordFilter;
 					} else { handles[0] = -1;}
+
+					/* Nico, no friendlyfire
 					if ( friendlyfire ) {
 						handles[1] = uiInfo.friendlyFireFilter;
-					} else { handles[1] = -1;}
+					} else { handles[1] = -1;}*/
 
 					/* Nico, removed respawnLeft
 					if ( maxlives ) {
@@ -6791,7 +6798,9 @@ void _UI_Init( qboolean inGameLoad ) {
 	AssetCache();
 
 	uiInfo.passwordFilter = trap_R_RegisterShaderNoMip( "ui/assets/filter_pass.tga" );
-	uiInfo.friendlyFireFilter = trap_R_RegisterShaderNoMip( "ui/assets/filter_ff.tga" );
+
+	/* Nico, no friendlyfire
+	uiInfo.friendlyFireFilter = trap_R_RegisterShaderNoMip( "ui/assets/filter_ff.tga" );*/
 
 	/* Nico, removed respawnLeft
 	uiInfo.maxLivesFilter = trap_R_RegisterShaderNoMip( "ui/assets/filter_lives.tga" );*/
@@ -7439,7 +7448,9 @@ vmCvar_t ui_browserGameType;
 vmCvar_t ui_browserSortKey;
 vmCvar_t ui_browserShowEmptyOrFull;
 vmCvar_t ui_browserShowPasswordProtected;
-vmCvar_t ui_browserShowFriendlyFire;            // NERVE - SMF
+
+/* Nico, no friendlyfire
+vmCvar_t ui_browserShowFriendlyFire;            // NERVE - SMF*/
 
 /* Nico, removed respawnLeft
 vmCvar_t ui_browserShowMaxlives;                // NERVE - SMF*/
@@ -7476,7 +7487,8 @@ vmCvar_t ui_weapon;
 
 vmCvar_t ui_isSpectator;
 
-vmCvar_t ui_friendlyFire;
+/* Nico, no friendlyfire
+vmCvar_t ui_friendlyFire;*/
 
 /* Nico, no timelimit
 vmCvar_t ui_userTimeLimit;*/
@@ -7551,7 +7563,8 @@ cvarTable_t cvarTable[] = {
 	{ &ui_spSkill, "g_spSkill", "2", CVAR_ARCHIVE | CVAR_LATCH },
 
 	// NERVE - SMF
-	{ &ui_friendlyFire, "g_friendlyFire", "1", CVAR_ARCHIVE },
+	/* Nico, no friendlyfire
+	{ &ui_friendlyFire, "g_friendlyFire", "1", CVAR_ARCHIVE },*/
 
 	/* Nico, no timelimit
 	{ &ui_userTimeLimit, "ui_userTimeLimit", "0", 0 },*/
@@ -7618,7 +7631,9 @@ cvarTable_t cvarTable[] = {
 	{ &ui_browserSortKey, "ui_browserSortKey", "4", CVAR_ARCHIVE },
 	{ &ui_browserShowEmptyOrFull, "ui_browserShowEmptyOrFull", "0", CVAR_ARCHIVE },
 	{ &ui_browserShowPasswordProtected, "ui_browserShowPasswordProtected", "0", CVAR_ARCHIVE },
-	{ &ui_browserShowFriendlyFire, "ui_browserShowFriendlyFire", "0", CVAR_ARCHIVE },
+
+	/* Nico, no friendlyfire
+	{ &ui_browserShowFriendlyFire, "ui_browserShowFriendlyFire", "0", CVAR_ARCHIVE },*/
 
 	/* Nico, removed respawnLeft
 	{ &ui_browserShowMaxlives, "ui_browserShowMaxlives", "0", CVAR_ARCHIVE },*/
@@ -7769,7 +7784,9 @@ cvarTable_t cvarTable[] = {
 	{ NULL, "vote_allow_referee", "0", CVAR_ARCHIVE },
 	{ NULL, "vote_allow_shuffleteamsxp", "1", CVAR_ARCHIVE },
 	{ NULL, "vote_allow_swapteams", "1", CVAR_ARCHIVE },
-	{ NULL, "vote_allow_friendlyfire", "1", CVAR_ARCHIVE },
+
+	/* Nico, no friendlyfire
+	{ NULL, "vote_allow_friendlyfire", "1", CVAR_ARCHIVE },*/
 
 	/* Nico, no timelimit
 	{ NULL, "vote_allow_timelimit", "0", CVAR_ARCHIVE },*/

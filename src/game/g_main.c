@@ -60,7 +60,9 @@ vmCvar_t g_fraglimit;*/
 /* Nico, no timelimit
 vmCvar_t g_timelimit;*/
 
-vmCvar_t g_friendlyFire;
+/* Nico, no friendlyfire
+vmCvar_t g_friendlyFire;*/
+
 vmCvar_t g_password;
 vmCvar_t sv_privatepassword;
 vmCvar_t g_maxclients;
@@ -214,7 +216,9 @@ vmCvar_t vote_allow_pub;
 vmCvar_t vote_allow_referee;
 vmCvar_t vote_allow_shuffleteamsxp;
 vmCvar_t vote_allow_swapteams;
-vmCvar_t vote_allow_friendlyfire;
+
+/* Nico, no friendlyfire
+vmCvar_t vote_allow_friendlyfire;*/
 
 /* Nico, no timelimit
 vmCvar_t vote_allow_timelimit;*/
@@ -322,7 +326,8 @@ cvarTable_t gameCvarTable[] = {
 	/* Nico, no timelimit
 	{ &g_timelimit, "timelimit", "0", CVAR_SERVERINFO | CVAR_ARCHIVE | CVAR_NORESTART, 0, qtrue },*/
 
-	{ &g_friendlyFire, "g_friendlyFire", "1", CVAR_SERVERINFO | CVAR_ARCHIVE, 0, qtrue, qtrue },
+	/* Nico, no friendlyfire
+	{ &g_friendlyFire, "g_friendlyFire", "1", CVAR_SERVERINFO | CVAR_ARCHIVE, 0, qtrue, qtrue },*/
 
 	/* Nico, removed balancedteams
 	{ &g_teamForceBalance, "g_teamForceBalance", "0", CVAR_ARCHIVE  },                            // NERVE - SMF - merge from team arena*/
@@ -463,7 +468,9 @@ cvarTable_t gameCvarTable[] = {
 	{ &vote_allow_referee,      "vote_allow_referee", "0", 0, 0, qfalse, qfalse },
 	{ &vote_allow_shuffleteamsxp,   "vote_allow_shuffleteamsxp", "1", 0, 0, qfalse, qfalse },
 	{ &vote_allow_swapteams,    "vote_allow_swapteams", "1", 0, 0, qfalse, qfalse },
-	{ &vote_allow_friendlyfire, "vote_allow_friendlyfire", "1", 0, 0, qfalse, qfalse },
+
+	/* Nico, no friendlyfire
+	{ &vote_allow_friendlyfire, "vote_allow_friendlyfire", "1", 0, 0, qfalse, qfalse },*/
 
 	/* Nico, no timelimit
 	{ &vote_allow_timelimit,    "vote_allow_timelimit", "0", 0, 0, qfalse, qfalse },*/
@@ -1505,8 +1512,11 @@ void G_UpdateCvars( void ) {
 						 cv->vmCvar == &vote_allow_matchreset    ||
 						 cv->vmCvar == &vote_allow_mutespecs     || cv->vmCvar == &vote_allow_nextmap        ||
 						 cv->vmCvar == &vote_allow_pub           || cv->vmCvar == &vote_allow_referee        ||
-						 cv->vmCvar == &vote_allow_shuffleteamsxp    || cv->vmCvar == &vote_allow_swapteams      ||
-						 cv->vmCvar == &vote_allow_friendlyfire
+						 cv->vmCvar == &vote_allow_shuffleteamsxp    || cv->vmCvar == &vote_allow_swapteams
+						 
+						 /* Nico, no friendlyfire
+						 || cv->vmCvar == &vote_allow_friendlyfire*/
+
 						 /* Nico, no timelimit
 						 || cv->vmCvar == &vote_allow_timelimit      */
 						 /* Nico, removed warmup

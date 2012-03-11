@@ -2344,6 +2344,7 @@ qboolean weapon_checkAirStrike( gentity_t *ent ) {
 
 	// cancel the airstrike if FF off and player joined spec
 	// FIXME: this is a stupid workaround. Just store the parent team in the enitity itself and use that - no need to look up the parent
+	/* Nico, no friendlyfire
 	if ( !g_friendlyFire.integer && ent->parent->client && ent->parent->client->sess.sessionTeam == TEAM_SPECTATOR ) {
 		ent->splashDamage = 0;  // no damage
 		ent->think = G_ExplodeMissile;
@@ -2356,7 +2357,7 @@ qboolean weapon_checkAirStrike( gentity_t *ent ) {
 			level.numActiveAirstrikes[1]--;
 		}
 		return qfalse; // do nothing, don't hurt anyone
-	}
+	}*/
 
 	if ( ent->s.teamNum == TEAM_AXIS ) {
 		if ( level.numActiveAirstrikes[0] > 6 || !G_AvailableAirstrikes( ent->parent ) ) {

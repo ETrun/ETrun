@@ -728,9 +728,12 @@ int G_checkServerToggle( vmCvar_t *cv ) {
 		nFlag = CV_SVS_MUTESPECS;
 	} else */
 	
+	/* Nico, no friendlyfire
 	if ( cv == &g_friendlyFire ) {
 		nFlag = CV_SVS_FRIENDLYFIRE;
-	} else if ( cv == &g_antilag ) {
+	} else */
+	
+	if ( cv == &g_antilag ) {
 		nFlag = CV_SVS_ANTILAG;
 	}
 	

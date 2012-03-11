@@ -108,7 +108,8 @@ static const vote_reference_t aVoteInfo[] = {
 	/* Nico, removed swap_teams command
 	{ 0x1ff, "swapteams",     G_SwapTeams_v,     "Swap Teams",        " ^7\n  Switch the players on each team" },*/
 
-	{ 0x1ff, "friendlyfire", G_FriendlyFire_v,   "Friendly Fire", " <0|1>^7\n  Toggles ability to hurt teammates" },
+	/* Nico, no friendlyfire
+	{ 0x1ff, "friendlyfire", G_FriendlyFire_v,   "Friendly Fire", " <0|1>^7\n  Toggles ability to hurt teammates" },*/
 
 	/* Nico, no timelimit
 	{ 0x1ff, "timelimit",     G_Timelimit_v,     "Timelimit",     " <value>^7\n  Changes the current timelimit" },*/
@@ -891,6 +892,7 @@ int G_SwapTeams_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *ar
 
 
 // *** Team Damage ***
+/* Nico, no friendlyfire
 int G_FriendlyFire_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd ) {
 	// Vote request (vote is being initiated)
 	if ( arg ) {
@@ -906,7 +908,7 @@ int G_FriendlyFire_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char 
 	}
 
 	return( G_OK );
-}
+}*/
 
 // Anti-Lag
 int G_AntiLag_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd ) {

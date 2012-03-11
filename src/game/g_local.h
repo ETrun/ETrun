@@ -1622,7 +1622,9 @@ extern vmCvar_t g_fraglimit;*/
 /* Nico, no timelimit
 extern vmCvar_t g_timelimit;*/
 
-extern vmCvar_t g_friendlyFire;
+/* Nico, no friendlyfire
+extern vmCvar_t g_friendlyFire;*/
+
 extern vmCvar_t g_password;
 extern vmCvar_t sv_privatepassword;
 extern vmCvar_t g_gravity;
@@ -1805,7 +1807,9 @@ extern vmCvar_t vote_allow_pub;
 extern vmCvar_t vote_allow_referee;
 extern vmCvar_t vote_allow_shuffleteamsxp;
 extern vmCvar_t vote_allow_swapteams;
-extern vmCvar_t vote_allow_friendlyfire;
+
+/* Nico, no friendlyfire
+extern vmCvar_t vote_allow_friendlyfire;*/
 
 /* Nico, no timelimit
 extern vmCvar_t vote_allow_timelimit;*/
@@ -2348,7 +2352,8 @@ int G_StartMatch_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *a
 /* Nico, removed swap_teams command
 int G_SwapTeams_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd );*/
 
-int G_FriendlyFire_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd );
+/* Nico, no friendlyfire
+int G_FriendlyFire_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd );*/
 
 /* Nico, no timelimit
 int G_Timelimit_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd );*/
