@@ -54,7 +54,8 @@ mapEntityData_Team_t mapEntityData[2];
 /* Nico, removed (c)g_gametype
 vmCvar_t g_gametype;*/
 
-vmCvar_t g_fraglimit;
+/* Nico, no fraglimit
+vmCvar_t g_fraglimit;*/
 
 /* Nico, no timelimit
 vmCvar_t g_timelimit;*/
@@ -315,7 +316,8 @@ cvarTable_t gameCvarTable[] = {
 	{ &g_minGameClients, "g_minGameClients", "8", CVAR_SERVERINFO, 0, qfalse  },                              // NERVE - SMF
 
 	// change anytime vars
-	{ &g_fraglimit, "fraglimit", "0", /*CVAR_SERVERINFO |*/ CVAR_ARCHIVE | CVAR_NORESTART, 0, qtrue },
+	/* Nico, no fraglimit
+	{ &g_fraglimit, "fraglimit", "0", CVAR_ARCHIVE | CVAR_NORESTART, 0, qtrue },*/
 
 	/* Nico, no timelimit
 	{ &g_timelimit, "timelimit", "0", CVAR_SERVERINFO | CVAR_ARCHIVE | CVAR_NORESTART, 0, qtrue },*/

@@ -36,12 +36,14 @@ If you have questions concerning this license or the applicable additional terms
 #include "../game/bg_public.h"
 #include "ui_shared.h"
 
-extern vmCvar_t ui_ffa_fraglimit;
+/* Nico, no fraglimit
+extern vmCvar_t ui_ffa_fraglimit;*/
 
 /* Nico, no timelimit
 extern vmCvar_t ui_ffa_timelimit;*/
 
-extern vmCvar_t ui_team_fraglimit;
+/* Nico, no fraglimit
+extern vmCvar_t ui_team_fraglimit;*/
 
 /* Nico, no timelimit
 extern vmCvar_t ui_team_timelimit;*/

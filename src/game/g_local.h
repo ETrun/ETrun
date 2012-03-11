@@ -1616,7 +1616,8 @@ extern vmCvar_t g_maxGameClients;           // allow this many active
 extern vmCvar_t g_minGameClients;           // NERVE - SMF - we need at least this many before match actually starts
 extern vmCvar_t g_restarted;
 
-extern vmCvar_t g_fraglimit;
+/* Nico, no fraglimit
+extern vmCvar_t g_fraglimit;*/
 
 /* Nico, no timelimit
 extern vmCvar_t g_timelimit;*/

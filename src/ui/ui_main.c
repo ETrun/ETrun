@@ -1388,8 +1388,9 @@ static void UI_DrawClanName( rectDef_t *rect, float scale, vec4_t color, int tex
 }
 
 
+/* Nico, no fraglimit
 static void UI_SetCapFragLimits( qboolean uiVars ) {
-}
+}*/
 
 // ui_gameType assumes gametype 0 is -1 ALL and will not show
 static void UI_DrawGameType( rectDef_t *rect, float scale, vec4_t color, int textStyle ) {
@@ -3208,7 +3209,10 @@ static qboolean UI_GameType_HandleKey( int flags, float *special, int key, qbool
 		trap_Cvar_Set( "ui_Q3Model", "0" );
 
 		trap_Cvar_Set( "ui_gameType", va( "%d", ui_gameType.integer ) );
-		UI_SetCapFragLimits( qtrue );
+
+		/* Nico, no fraglimit
+		UI_SetCapFragLimits( qtrue );*/
+
 		UI_LoadBestScores( uiInfo.mapList[ui_currentMap.integer].mapLoadName, uiInfo.gameTypes[ui_gameType.integer].gtEnum );
 		if ( resetMap && oldCount != UI_MapCountByGameType( qtrue ) ) {
 			trap_Cvar_Set( "ui_currentMap", "0" );
@@ -4040,7 +4044,10 @@ void UI_RunMenuScript( char **args ) {
 			// -NERVE - SMF
 
 		} else if ( Q_stricmp( name, "updateSPMenu" ) == 0 ) {
-			UI_SetCapFragLimits( qtrue );
+
+			/* Nico, no fraglimit
+			UI_SetCapFragLimits( qtrue );*/
+
 			UI_MapCountByGameType( qtrue );
 			ui_mapIndex.integer = UI_GetIndexFromSelection( ui_currentMap.integer );
 			trap_Cvar_Set( "ui_mapIndex", va( "%d", ui_mapIndex.integer ) );
@@ -5486,7 +5493,9 @@ serverStatusCvar_t serverStatusCvars[] = {
 	/* Nico, no timelimit
 	{"timelimit", ""},*/
 
-	{"fraglimit", ""},
+	/* Nico, no fraglimit
+	{"fraglimit", ""},*/
+
 	{NULL, NULL}
 };
 
@@ -7342,12 +7351,14 @@ typedef struct {
 	int modificationCount;          // for tracking changes
 } cvarTable_t;
 
-vmCvar_t ui_ffa_fraglimit;
+/* Nico, no fraglimit
+vmCvar_t ui_ffa_fraglimit;*/
 
 /* Nico, no timelimit
 vmCvar_t ui_ffa_timelimit;*/
 
-vmCvar_t ui_team_fraglimit;
+/* Nico, no fraglimit
+vmCvar_t ui_team_fraglimit;*/
 
 /* Nico, no timelimit
 vmCvar_t ui_team_timelimit;*/
@@ -7508,12 +7519,15 @@ vmCvar_t ui_autoredirect;
 cvarTable_t cvarTable[] = {
 
 	{ &ui_glCustom, "ui_glCustom", "4", CVAR_ARCHIVE }, // JPW NERVE missing from q3ta
-	{ &ui_ffa_fraglimit, "ui_ffa_fraglimit", "20", CVAR_ARCHIVE },
+
+	/* Nico, no fraglimit
+	{ &ui_ffa_fraglimit, "ui_ffa_fraglimit", "20", CVAR_ARCHIVE },*/
 
 	/* Nico, no timelimit
 	{ &ui_ffa_timelimit, "ui_ffa_timelimit", "0", CVAR_ARCHIVE },*/
 
-	{ &ui_team_fraglimit, "ui_team_fraglimit", "0", CVAR_ARCHIVE },
+	/* Nico, no fraglimit
+	{ &ui_team_fraglimit, "ui_team_fraglimit", "0", CVAR_ARCHIVE },*/
 
 	/* Nico, no timelimit
 	{ &ui_team_timelimit, "ui_team_timelimit", "20", CVAR_ARCHIVE },*/
