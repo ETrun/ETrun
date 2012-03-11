@@ -340,12 +340,13 @@ After sitting around for five seconds, fall into the ground and dissapear
 void BodySink( gentity_t *ent ) {
 	if ( ent->activator ) {
 		// see if parent is still disguised
+		/* Nico, removed disguise stuff
 		if ( ent->activator->client->ps.powerups[PW_OPS_DISGUISED] ) {
 			ent->nextthink = level.time + 100;
 			return;
-		} else {
+		} else {*/
 			ent->activator = NULL;
-		}
+		// }
 	}
 
 	BodySink2( ent );

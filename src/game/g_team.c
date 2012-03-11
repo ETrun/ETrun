@@ -567,7 +567,8 @@ int Team_TouchEnemyFlag( gentity_t *ent, gentity_t *other, int team ) {
 	ent->parent = tmp;
 
 	// Gordon: reset player disguise on stealing docs
-	other->client->ps.powerups[PW_OPS_DISGUISED] = 0;
+	/* Nico, removed disguise stuff
+	other->client->ps.powerups[PW_OPS_DISGUISED] = 0;*/
 
 
 	if ( team == TEAM_AXIS ) {
@@ -1232,7 +1233,8 @@ void checkpoint_use( gentity_t *ent, gentity_t *other, gentity_t *activator ) {
 	ent->nextthink = level.time + 2000;
 
 	// Gordon: reset player disguise on touching flag
-	other->client->ps.powerups[PW_OPS_DISGUISED] = 0;
+	/* Nico, removed disguise stuff
+	other->client->ps.powerups[PW_OPS_DISGUISED] = 0;*/
 }
 
 void checkpoint_spawntouch( gentity_t *self, gentity_t *other, trace_t *trace ); // JPW NERVE
@@ -1339,7 +1341,8 @@ void checkpoint_touch( gentity_t *self, gentity_t *other, trace_t *trace ) {
 	self->parent = other;
 
 	// Gordon: reset player disguise on touching flag
-	other->client->ps.powerups[PW_OPS_DISGUISED] = 0;
+	/* Nico, removed disguise stuff
+	other->client->ps.powerups[PW_OPS_DISGUISED] = 0;*/
 	// Run script trigger
 	if ( self->count == TEAM_AXIS ) {
 		self->health = 0;
@@ -1429,7 +1432,8 @@ void checkpoint_spawntouch( gentity_t *self, gentity_t *other, trace_t *trace ) 
 	self->parent = other;
 
 	// Gordon: reset player disguise on touching flag
-	other->client->ps.powerups[PW_OPS_DISGUISED] = 0;
+	/* Nico, removed disguise stuff
+	other->client->ps.powerups[PW_OPS_DISGUISED] = 0;*/
 	// Run script trigger
 	if ( self->count == TEAM_AXIS ) {
 		G_Script_ScriptEvent( self, "trigger", "axis_capture" );

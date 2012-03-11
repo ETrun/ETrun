@@ -688,7 +688,9 @@ typedef enum {
 	PW_REDFLAG,
 	PW_BLUEFLAG,
 
-	PW_OPS_DISGUISED,
+	/* Nico, removed disguise stuff
+	PW_OPS_DISGUISED,*/
+
 	PW_OPS_CLASS_1,
 	PW_OPS_CLASS_2,
 	PW_OPS_CLASS_3,
@@ -2077,14 +2079,16 @@ extern pathCorner_t pathCorners[MAX_PATH_CORNERS];
 typedef enum {
 	ME_PLAYER,
 	ME_PLAYER_REVIVE,
-	ME_PLAYER_DISGUISED,
+
+	/* Nico, removed disguise stuff
+	ME_PLAYER_DISGUISED,*/
+
 	ME_CONSTRUCT,
 	ME_DESTRUCT,
 	ME_DESTRUCT_2,
 	ME_LANDMINE,
 	ME_TANK,
 	ME_TANK_DEAD,
-	//ME_LANDMINE_ARMED,
 	ME_COMMANDMAP_MARKER,
 } mapEntityType_t;
 
@@ -2371,7 +2375,10 @@ typedef enum popupMessageType_e {
 typedef enum popupMessageBigType_e {
 	PM_SKILL,
 	PM_RANK,
-	PM_DISGUISE,
+
+	/* Nico, removed disguise stuff
+	PM_DISGUISE,*/
+
 	PM_BIG_NUM_TYPES
 } popupMessageBigType_t;
 

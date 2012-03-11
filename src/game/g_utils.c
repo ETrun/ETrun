@@ -310,6 +310,8 @@ qboolean G_AllowTeamsAllowed( gentity_t *ent, gentity_t *activator ) {
 			int checkTeam = activator->client->sess.sessionTeam;
 
 			if ( !( ent->allowteams & checkTeam ) ) {
+
+				/* Nico, removed disguise stuff
 				if ( ( ent->allowteams & ALLOW_DISGUISED_CVOPS ) && activator->client->ps.powerups[PW_OPS_DISGUISED] ) {
 					if ( checkTeam == TEAM_AXIS ) {
 						checkTeam = TEAM_ALLIES;
@@ -318,9 +320,9 @@ qboolean G_AllowTeamsAllowed( gentity_t *ent, gentity_t *activator ) {
 					}
 				}
 
-				if ( !( ent->allowteams & checkTeam ) ) {
+				if ( !( ent->allowteams & checkTeam ) ) {*/
 					return qfalse;
-				}
+				// }
 			}
 		}
 	}

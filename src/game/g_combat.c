@@ -431,15 +431,17 @@ void player_die( gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int
 		mEnt = G_FindMapEntityDataSingleClient( teamList, NULL, self->s.number, -1 );
 
 		while ( mEnt ) {
+
+			/* Nico, removed disguise stuff
 			if ( mEnt->type == ME_PLAYER_DISGUISED ) {
 				mapEntityData_t* mEntFree = mEnt;
 
 				mEnt = G_FindMapEntityDataSingleClient( teamList, mEnt, self->s.number, -1 );
 
 				G_FreeMapEntityData( teamList, mEntFree );
-			} else {
+			} else {*/
 				mEnt = G_FindMapEntityDataSingleClient( teamList, mEnt, self->s.number, -1 );
-			}
+			// }
 		}
 	}
 

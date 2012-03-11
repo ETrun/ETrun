@@ -3961,6 +3961,7 @@ void FireWeapon( gentity_t *ent ) {
 	}
 
 	// covert ops disguise handling
+	/* Nico, removed disguise stuff
 	if ( ent->client->ps.powerups[PW_OPS_DISGUISED] &&
 		 ent->s.weapon != WP_SMOKE_BOMB &&
 		 ent->s.weapon != WP_SATCHEL &&
@@ -3981,7 +3982,7 @@ void FireWeapon( gentity_t *ent ) {
 		} else if ( G_PlayerCanBeSeenByOthers( ent ) ) {
 			ent->client->ps.powerups[PW_OPS_DISGUISED] = 0;
 		}
-	}
+	}*/
 
 	// fire the specific weapon
 	switch ( ent->s.weapon ) {

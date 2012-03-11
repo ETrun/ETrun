@@ -1818,11 +1818,12 @@ static float CG_ScanForCrosshairEntity( float * zChange, qboolean * hitClient ) 
 
 	cent = &cg_entities[cg.crosshairClientNum];
 
+	/* Nico, removed disguise stuff
 	if ( cent && cent->currentState.powerups & ( 1 << PW_OPS_DISGUISED ) ) {
 		if ( cgs.clientinfo[cg.crosshairClientNum].team == cgs.clientinfo[cg.clientNum].team ) {
 			cg.crosshairClientNoShoot = qtrue;
 		}
-	}
+	}*/
 
 	return dist;
 }
@@ -1938,7 +1939,7 @@ static void CG_DrawCrosshairNames( void ) {
 	vec4_t c;
 	float barFrac;
 	qboolean drawStuff = qfalse;
-	const char *playerRank;
+	// const char *playerRank; Nico, unused warning fix
 	qboolean isTank = qfalse;
 	int maxHealth = 1;
 	int i;
@@ -2002,16 +2003,18 @@ static void CG_DrawCrosshairNames( void ) {
 			return;
 		}
 	} else if ( cgs.clientinfo[cg.crosshairClientNum].team != cgs.clientinfo[cg.snap->ps.clientNum].team ) {
+
+		/* Nico, removed disguise stuff
 		if ( ( cg_entities[cg.crosshairClientNum].currentState.powerups & ( 1 << PW_OPS_DISGUISED ) ) && cgs.clientinfo[cg.snap->ps.clientNum].team != TEAM_SPECTATOR ) {
 			
-			/* Nico, removed skills
-			if ( cgs.clientinfo[cg.snap->ps.clientNum].team != TEAM_SPECTATOR &&
-				 cgs.clientinfo[cg.snap->ps.clientNum].skill[SK_SIGNALS] >= 4 && cgs.clientinfo[cg.snap->ps.clientNum].cls == PC_FIELDOPS ) {
-				s = CG_TranslateString( "Disguised Enemy!" );
-				w = CG_DrawStrlen( s ) * SMALLCHAR_WIDTH;
-				CG_DrawSmallStringColor( 320 - w / 2, 170, s, color );
-				return;
-			} else */
+			// Nico, removed skills
+			// if ( cgs.clientinfo[cg.snap->ps.clientNum].team != TEAM_SPECTATOR &&
+			//	 cgs.clientinfo[cg.snap->ps.clientNum].skill[SK_SIGNALS] >= 4 && cgs.clientinfo[cg.snap->ps.clientNum].cls == PC_FIELDOPS ) {
+			//	s = CG_TranslateString( "Disguised Enemy!" );
+			//	w = CG_DrawStrlen( s ) * SMALLCHAR_WIDTH;
+			//	CG_DrawSmallStringColor( 320 - w / 2, 170, s, color );
+			//	return;
+			// } else
 			if ( dist > 512 ) {
 				if ( !cg_drawCrosshairNames.integer ) {
 					return;
@@ -2048,9 +2051,9 @@ static void CG_DrawCrosshairNames( void ) {
 				cg.crosshairClientTime = 0;
 				return;
 			}
-		} else {
+		} else {*/
 			return;
-		}
+		// }
 	}
 
 	if ( !cg_drawCrosshairNames.integer ) {
@@ -3915,9 +3918,12 @@ static void CG_DrawPlayerStats( void ) {
 	if ( ps->powerups[PW_REDFLAG] || ps->powerups[PW_BLUEFLAG] ) {
 		trap_R_SetColor( NULL );
 		CG_DrawPic( 640 - 40, 480 - 140 - value, 36, 36, cgs.media.objectiveShader );
-	} else if ( ps->powerups[PW_OPS_DISGUISED] ) { // Disguised?
-		CG_DrawPic( 640 - 40, 480 - 140 - value, 36, 36, ps->persistant[PERS_TEAM] == TEAM_AXIS ? cgs.media.alliedUniformShader : cgs.media.axisUniformShader );
 	}
+	
+	/* Nico, removed disguise stuff
+	else if ( ps->powerups[PW_OPS_DISGUISED] ) { // Disguised?
+		CG_DrawPic( 640 - 40, 480 - 140 - value, 36, 36, ps->persistant[PERS_TEAM] == TEAM_AXIS ? cgs.media.alliedUniformShader : cgs.media.axisUniformShader );
+	}*/
 }
 
 static char statsDebugStrings[6][512];

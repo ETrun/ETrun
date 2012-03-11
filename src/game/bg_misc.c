@@ -4001,6 +4001,7 @@ void BG_AddPredictableEventToPlayerstate( int newEvent, int eventParm, playerSta
 }
 
 // Gordon: would like to just inline this but would likely break qvm support
+/* Nico, removed disguise stuff
 #define SETUP_MOUNTEDGUN_STATUS( ps )							\
 	switch ( ps->persistant[PERS_HWEAPON_USE] ) {				 \
 	case 1:													\
@@ -4012,6 +4013,21 @@ void BG_AddPredictableEventToPlayerstate( int newEvent, int eventParm, playerSta
 		ps->eFlags |= EF_AAGUN_ACTIVE;						\
 		ps->eFlags &= ~EF_MG42_ACTIVE;						\
 		ps->powerups[PW_OPS_DISGUISED] = 0;					\
+		break;												\
+	default:												\
+		ps->eFlags &= ~EF_MG42_ACTIVE;						\
+		ps->eFlags &= ~EF_AAGUN_ACTIVE;						\
+		break;												\
+	}*/
+#define SETUP_MOUNTEDGUN_STATUS( ps )							\
+	switch ( ps->persistant[PERS_HWEAPON_USE] ) {				 \
+	case 1:													\
+		ps->eFlags |= EF_MG42_ACTIVE;						\
+		ps->eFlags &= ~EF_AAGUN_ACTIVE;						\
+		break;												\
+	case 2:													\
+		ps->eFlags |= EF_AAGUN_ACTIVE;						\
+		ps->eFlags &= ~EF_MG42_ACTIVE;						\
 		break;												\
 	default:												\
 		ps->eFlags &= ~EF_MG42_ACTIVE;						\

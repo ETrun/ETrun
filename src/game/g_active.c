@@ -403,9 +403,12 @@ void SpectatorThink( gentity_t *ent, usercmd_t *ucmd ) {
 	// something completely bogus
 	crosshairEnt = &g_entities[ent->client->ps.identifyClient];
 
+	/* Nico, removed disguise stuff
 	if ( crosshairEnt->inuse && crosshairEnt->client &&
 		 ( ent->client->sess.sessionTeam == crosshairEnt->client->sess.sessionTeam ||
-		   crosshairEnt->client->ps.powerups[PW_OPS_DISGUISED] ) ) {
+		   crosshairEnt->client->ps.powerups[PW_OPS_DISGUISED] ) ) {*/
+	if ( crosshairEnt->inuse && crosshairEnt->client &&
+		 ( ent->client->sess.sessionTeam == crosshairEnt->client->sess.sessionTeam ) ) {
 
 		// rain - identifyClientHealth sent as unsigned char, so we
 		// can't transmit negative numbers
@@ -670,7 +673,8 @@ void ClientEvents( gentity_t *ent, int oldEventSequence ) {
 		case EV_FIRE_WEAPON_MG42:
 
 			// Gordon: reset player disguise on stealing docs
-			ent->client->ps.powerups[PW_OPS_DISGUISED] = 0;
+			/* Nico, removed disguise stuff
+			ent->client->ps.powerups[PW_OPS_DISGUISED] = 0;*/
 
 			mg42_fire( ent );
 
@@ -682,7 +686,8 @@ void ClientEvents( gentity_t *ent, int oldEventSequence ) {
 			break;
 		case EV_FIRE_WEAPON_MOUNTEDMG42:
 			// Gordon: reset player disguise on stealing docs
-			ent->client->ps.powerups[PW_OPS_DISGUISED] = 0;
+			/* Nico, removed disguise stuff
+			ent->client->ps.powerups[PW_OPS_DISGUISED] = 0;*/
 
 			mountedmg42_fire( ent );
 			// Only 1 stats bin for mg42
@@ -695,7 +700,8 @@ void ClientEvents( gentity_t *ent, int oldEventSequence ) {
 		case EV_FIRE_WEAPON_AAGUN:
 
 			// Gordon: reset player disguise on stealing docs
-			ent->client->ps.powerups[PW_OPS_DISGUISED] = 0;
+			/* Nico, removed disguise stuff
+			ent->client->ps.powerups[PW_OPS_DISGUISED] = 0;*/
 
 			aagun_fire( ent );
 			break;
@@ -1509,7 +1515,10 @@ void ClientEndFrame( gentity_t *ent ) {
 			 || i == PW_OPS_CLASS_1
 			 || i == PW_OPS_CLASS_2
 			 || i == PW_OPS_CLASS_3
-			 || i == PW_OPS_DISGUISED
+
+			 /* Nico, removed disguise stuff
+			 || i == PW_OPS_DISGUISED*/
+
 			 ) {
 
 			continue;

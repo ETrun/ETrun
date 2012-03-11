@@ -814,9 +814,12 @@ void G_SpawnGEntityFromSpawnVars( void ) {
 		if ( strstr( str, "allies" ) ) {
 			ent->allowteams |= ALLOW_ALLIED_TEAM;
 		}
+
+		/* Nico, removed disguise stuff
 		if ( strstr( str, "cvops" ) ) {
 			ent->allowteams |= ALLOW_DISGUISED_CVOPS;
-		}
+		}*/
+
 	}
 
 	if ( ent->targetname && *ent->targetname ) {

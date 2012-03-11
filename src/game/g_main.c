@@ -928,7 +928,9 @@ void G_CheckForCursorHints( gentity_t *ent ) {
 
 			switch ( checkEnt->s.eType ) {
 			case ET_CORPSE:
-				if ( !ent->client->ps.powerups[PW_BLUEFLAG] && !ent->client->ps.powerups[PW_REDFLAG] && !ent->client->ps.powerups[PW_OPS_DISGUISED] ) {
+				/* Nico, removed disguise stuff
+				if ( !ent->client->ps.powerups[PW_BLUEFLAG] && !ent->client->ps.powerups[PW_REDFLAG] && !ent->client->ps.powerups[PW_OPS_DISGUISED] ) {*/
+				if ( !ent->client->ps.powerups[PW_BLUEFLAG] && !ent->client->ps.powerups[PW_REDFLAG] ) {
 					if ( BODY_TEAM( traceEnt ) < 4 && BODY_TEAM( traceEnt ) != ent->client->sess.sessionTeam && traceEnt->nextthink == traceEnt->timestamp + BODY_TIME( BODY_TEAM( traceEnt ) ) ) {
 						if ( ent->client->ps.stats[STAT_PLAYER_CLASS] == PC_COVERTOPS ) {
 							hintDist    = 48;

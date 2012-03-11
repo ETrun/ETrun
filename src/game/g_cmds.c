@@ -2210,6 +2210,7 @@ Cmd_Activate_f
 qboolean Do_Activate2_f( gentity_t *ent, gentity_t *traceEnt ) {
 	qboolean found = qfalse;
 
+	/* Nico, removed disguise stuff TEST
 	if ( ent->client->sess.playerType == PC_COVERTOPS && !ent->client->ps.powerups[PW_OPS_DISGUISED] && ent->health > 0 ) {
 		if ( !ent->client->ps.powerups[PW_BLUEFLAG] && !ent->client->ps.powerups[PW_REDFLAG] ) {
 			if ( traceEnt->s.eType == ET_CORPSE ) {
@@ -2219,10 +2220,6 @@ qboolean Do_Activate2_f( gentity_t *ent, gentity_t *traceEnt ) {
 					if ( BODY_VALUE( traceEnt ) >= 250 ) {
 
 						traceEnt->nextthink = traceEnt->timestamp + BODY_TIME( BODY_TEAM( traceEnt ) );
-
-//						BG_AnimScriptEvent( &ent->client->ps, ent->client->pers.character->animModelInfo, ANIM_ET_PICKUPGRENADE, qfalse, qtrue );
-//						ent->client->ps.pm_flags |= PMF_TIME_LOCKPLAYER;
-//						ent->client->ps.pm_time = 2100;
 
 						ent->client->ps.powerups[PW_OPS_DISGUISED] = 1;
 						ent->client->ps.powerups[PW_OPS_CLASS_1] = BODY_CLASS( traceEnt ) & 1;
@@ -2237,14 +2234,14 @@ qboolean Do_Activate2_f( gentity_t *ent, gentity_t *traceEnt ) {
 						// sound effect
 						G_AddEvent( ent, EV_DISGUISE_SOUND, 0 );
 
-						/* Nico, removed g_stats.c
-						G_AddSkillPoints( ent, SK_MILITARY_INTELLIGENCE_AND_SCOPED_WEAPONS, 5.f );
-						G_DebugAddSkillPoints( ent, SK_MILITARY_INTELLIGENCE_AND_SCOPED_WEAPONS, 5, "stealing uniform" );*/
+						// Nico, removed g_stats.c
+						// G_AddSkillPoints( ent, SK_MILITARY_INTELLIGENCE_AND_SCOPED_WEAPONS, 5.f );
+						// G_DebugAddSkillPoints( ent, SK_MILITARY_INTELLIGENCE_AND_SCOPED_WEAPONS, 5, "stealing uniform" );
 
 						Q_strncpyz( ent->client->disguiseNetname, g_entities[traceEnt->s.clientNum].client->pers.netname, sizeof( ent->client->disguiseNetname ) );
 
-						/* Nico, removed rank
-						ent->client->disguiseRank = g_entities[traceEnt->s.clientNum].client ? g_entities[traceEnt->s.clientNum].client->sess.rank : 0;*/
+						// Nico, removed rank
+						// ent->client->disguiseRank = g_entities[traceEnt->s.clientNum].client ? g_entities[traceEnt->s.clientNum].client->sess.rank : 0;
 						ent->client->disguiseRank = 0;
 
 						ClientUserinfoChanged( ent->s.clientNum );
@@ -2254,7 +2251,7 @@ qboolean Do_Activate2_f( gentity_t *ent, gentity_t *traceEnt ) {
 				}
 			}
 		}
-	}
+	}*/
 
 	return found;
 }

@@ -250,13 +250,14 @@ void CG_NewClientInfo( int clientNum ) {
 		}*/
 	}
 
+	/* Nico, removed disguise stuff
 	// diguiseName
 	v = Info_ValueForKey( configstring, "dn" );
 	Q_strncpyz( newInfo.disguiseName, v, sizeof( newInfo.disguiseName ) );
 
 	// disguiseRank
 	v = Info_ValueForKey( configstring, "dr" );
-	newInfo.disguiseRank = atoi( v );
+	newInfo.disguiseRank = atoi( v );*/
 
 	// Gordon: weapon and latchedweapon ( FIXME: make these more secure )
 	v = Info_ValueForKey( configstring, "w" );
@@ -397,6 +398,7 @@ bg_playerclass_t* CG_PlayerClassForClientinfo( clientInfo_t *ci, centity_t* cent
 		return BG_GetPlayerClassInfo( cent->currentState.modelindex, cent->currentState.modelindex2 );
 	}
 
+	/* Nico, removed disguise stuff
 	if ( cent && cent->currentState.powerups & ( 1 << PW_OPS_DISGUISED ) ) {
 		team = ci->team == TEAM_AXIS ? TEAM_ALLIES : TEAM_AXIS;
 
@@ -405,7 +407,7 @@ bg_playerclass_t* CG_PlayerClassForClientinfo( clientInfo_t *ci, centity_t* cent
 		cls = ( cent->currentState.powerups >> PW_OPS_CLASS_1 ) & 7;
 
 		return BG_GetPlayerClassInfo( team, cls );
-	}
+	}*/
 
 	return BG_GetPlayerClassInfo( ci->team, ci->cls );
 }

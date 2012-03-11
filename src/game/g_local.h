@@ -128,7 +128,9 @@ typedef enum {
 
 #define ALLOW_AXIS_TEAM         1
 #define ALLOW_ALLIED_TEAM       2
-#define ALLOW_DISGUISED_CVOPS   4
+
+/* Nico, removed disguise stuff
+#define ALLOW_DISGUISED_CVOPS   4*/
 
 // RF, different types of dynamic area flags
 #define AAS_AREA_ENABLED                    0x0000
@@ -136,8 +138,10 @@ typedef enum {
 #define AAS_AREA_AVOID                      0x0010
 #define AAS_AREA_TEAM_AXIS                  0x0020
 #define AAS_AREA_TEAM_ALLIES                0x0040
+
+/* Nico, removed disguise stuff
 #define AAS_AREA_TEAM_AXIS_DISGUISED        0x0080
-#define AAS_AREA_TEAM_ALLIES_DISGUISED      0x0100
+#define AAS_AREA_TEAM_ALLIES_DISGUISED      0x0100*/
 
 //============================================================================
 
@@ -874,8 +878,9 @@ struct gclient_s {
 	int lastHealTimes[2];
 	int lastAmmoTimes[2];
 
+	/* Nico, removed disguise stuff
 	char disguiseNetname[MAX_NETNAME];
-	int disguiseRank;
+	int disguiseRank;*/
 
 	/* Nico, removed medals
 	int medals;*/

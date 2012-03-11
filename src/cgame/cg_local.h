@@ -567,8 +567,9 @@ typedef struct clientInfo_s {
 	int skill[SK_NUM_SKILLS];
 	int skillpoints[SK_NUM_SKILLS];             // filled OOB by +wstats*/
 
+	/* Nico, removed disguise stuff
 	char disguiseName[MAX_QPATH];
-	int disguiseRank;
+	int disguiseRank;*/
 
 	int weapon;
 	int secondaryweapon;
