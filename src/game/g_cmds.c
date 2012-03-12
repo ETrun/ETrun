@@ -707,9 +707,10 @@ qboolean SetTeam( gentity_t *ent, char *s, qboolean force, weapon_t w1, weapon_t
 		}*/
 	}
 
+	/* Nico, removed gameClients limits
 	if ( g_maxGameClients.integer > 0 && level.numNonSpectatorClients >= g_maxGameClients.integer ) {
 		team = TEAM_SPECTATOR;
-	}
+	}*/
 
 	//
 	// decide if we will allow the change

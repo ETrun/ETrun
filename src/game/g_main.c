@@ -66,8 +66,11 @@ vmCvar_t g_friendlyFire;*/
 vmCvar_t g_password;
 vmCvar_t sv_privatepassword;
 vmCvar_t g_maxclients;
+
+/* Nico, removed gameClients limits
 vmCvar_t g_maxGameClients;
-vmCvar_t g_minGameClients;          // NERVE - SMF
+vmCvar_t g_minGameClients;          // NERVE - SMF*/
+
 vmCvar_t g_dedicated;
 vmCvar_t g_speed;
 vmCvar_t g_gravity;
@@ -318,8 +321,10 @@ cvarTable_t gameCvarTable[] = {
 	{ &g_landminetimeout, "g_landminetimeout", "1", CVAR_ARCHIVE, 0, qfalse, qtrue },
 
 	{ &g_maxclients, "sv_maxclients", "20", CVAR_SERVERINFO | CVAR_LATCH | CVAR_ARCHIVE, 0, qfalse  },            // NERVE - SMF - made 20 from 8
+
+	/* Nico, removed gameClients limits
 	{ &g_maxGameClients, "g_maxGameClients", "0", CVAR_SERVERINFO | CVAR_LATCH | CVAR_ARCHIVE, 0, qfalse  },
-	{ &g_minGameClients, "g_minGameClients", "8", CVAR_SERVERINFO, 0, qfalse  },                              // NERVE - SMF
+	{ &g_minGameClients, "g_minGameClients", "8", CVAR_SERVERINFO, 0, qfalse  },                              // NERVE - SMF*/
 
 	// change anytime vars
 	/* Nico, no fraglimit

@@ -166,7 +166,8 @@ void CG_ParseServerinfo( void ) {
 	cgs.weaponRestrictions = atoi( Info_ValueForKey( info, "g_heavyWeaponRestriction" ) ) * 0.01f;
 
 
-	cgs.minclients = atoi( Info_ValueForKey( info, "g_minGameClients" ) );       // NERVE - SMF -- OSP: overloaded for ready counts
+	/* Nico, removed gameClients limits
+	cgs.minclients = atoi( Info_ValueForKey( info, "g_minGameClients" ) );       // NERVE - SMF -- OSP: overloaded for ready counts*/
 
 	// TTimo - make this available for ingame_callvote
 	trap_Cvar_Set( "cg_ui_voteFlags", ( ( authLevel.integer == RL_NONE ) ? Info_ValueForKey( info, "voteFlags" ) : "0" ) );
