@@ -1644,7 +1644,8 @@ extern vmCvar_t sv_privatepassword;
 /* Nico, g_gravity is hardcoded as DEFAULT_GRAVITY
 extern vmCvar_t g_gravity;*/
 
-extern vmCvar_t g_speed;
+/* Nico, g_speed is now hardcoded as DEFAULT_SPEED
+extern vmCvar_t g_speed;*/
 
 extern vmCvar_t g_knockback;
 

@@ -921,7 +921,9 @@ void ClientThink_real( gentity_t *ent ) {
 	client->ps.gravity = DEFAULT_GRAVITY;
 
 	// set speed
-	client->ps.speed = g_speed.value;
+	/* Nico, g_speed is now hardcoded as DEFAULT_SPEED
+	client->ps.speed = g_speed.value;*/
+	client->ps.speed = DEFAULT_SPEED;
 
 	if ( client->speedScale ) {              // Goalitem speed scale
 		client->ps.speed *= ( client->speedScale * 0.01 );

@@ -58,6 +58,10 @@ If you have questions concerning this license or the applicable additional terms
 #define SPRINTTIME 20000.0f*/
 
 #define DEFAULT_GRAVITY     800
+
+// Nico, g_speed is now hardcoded as DEFAULT_SPEED
+#define DEFAULT_SPEED		320
+
 #define FORCE_LIMBO_HEALTH  -75 // JPW NERVE
 #define GIB_HEALTH          -175 // JPW NERVE
 #define ARMOR_PROTECTION    0.66

@@ -72,7 +72,9 @@ vmCvar_t g_maxGameClients;
 vmCvar_t g_minGameClients;          // NERVE - SMF*/
 
 vmCvar_t g_dedicated;
-vmCvar_t g_speed;
+
+/* Nico, g_speed is now hardcoded as DEFAULT_SPEED
+vmCvar_t g_speed;*/
 
 /* Nico, g_gravity is hardcoded as DEFAULT_GRAVITY
 vmCvar_t g_gravity;*/
@@ -422,7 +424,8 @@ cvarTable_t gameCvarTable[] = {
 
 	{ &g_dedicated, "dedicated", "0", 0, 0, qfalse },
 
-	{ &g_speed, "g_speed", "320", 0, 0, qtrue, qtrue },
+	/* Nico, g_speed is now hardcoded as DEFAULT_SPEED
+	{ &g_speed, "g_speed", "320", 0, 0, qtrue, qtrue },*/
 
 	/* Nico, g_gravity is hardcoded as DEFAULT_GRAVITY
 	{ &g_gravity, "g_gravity", "800", 0, 0, qtrue, qtrue },*/
