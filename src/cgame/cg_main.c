@@ -2758,8 +2758,9 @@ void CG_Init( int serverMessageNum, int serverCommandSequence, int clientNum, qb
 	trap_S_ClearLoopingSounds();
 	trap_S_ClearSounds( qfalse );
 
+	/* Nico, removed rounds
 	cg.teamWonRounds[1] = atoi( CG_ConfigString( CS_ROUNDSCORES1 ) );
-	cg.teamWonRounds[0] = atoi( CG_ConfigString( CS_ROUNDSCORES2 ) );
+	cg.teamWonRounds[0] = atoi( CG_ConfigString( CS_ROUNDSCORES2 ) );*/
 
 	cg.filtercams = atoi( CG_ConfigString( CS_FILTERCAMS ) ) ? qtrue : qfalse;
 

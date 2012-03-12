@@ -615,7 +615,10 @@ typedef struct {
 	int kills;*/
 
 	int referee;
-	int rounds;
+
+	/* Nico, removed rounds
+	int rounds;*/
+
 	int spec_invite;
 	int spec_team;
 

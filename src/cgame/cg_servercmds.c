@@ -551,8 +551,9 @@ void CG_SetConfigValues( void ) {
 
 	cg.teamFirstBlood = atoi( CG_ConfigString( CS_FIRSTBLOOD ) );
 	// rain - yes, the order is this way on purpose. not my fault!
+	/* Nico, removed rounds
 	cg.teamWonRounds[1] = atoi( CG_ConfigString( CS_ROUNDSCORES1 ) );
-	cg.teamWonRounds[0] = atoi( CG_ConfigString( CS_ROUNDSCORES2 ) );
+	cg.teamWonRounds[0] = atoi( CG_ConfigString( CS_ROUNDSCORES2 ) );*/
 
 	// OSP
 	CG_ParseServerVersionInfo( CG_ConfigString( CS_VERSIONINFO ) );
@@ -661,11 +662,16 @@ static void CG_ConfigStringModified( void ) {
 		CG_ParseWolfinfo();
 	} else if ( num == CS_FIRSTBLOOD ) {
 		cg.teamFirstBlood = atoi( str );
-	} else if ( num == CS_ROUNDSCORES1 ) {
+	}
+	
+	/* Nico, removed rounds
+	else if ( num == CS_ROUNDSCORES1 ) {
 		cg.teamWonRounds[1] = atoi( str );
 	} else if ( num == CS_ROUNDSCORES2 ) {
 		cg.teamWonRounds[0] = atoi( str );
-	} else if ( num >= CS_MULTI_SPAWNTARGETS && num < CS_MULTI_SPAWNTARGETS + MAX_MULTI_SPAWNTARGETS ) {
+	}*/
+	
+	else if ( num >= CS_MULTI_SPAWNTARGETS && num < CS_MULTI_SPAWNTARGETS + MAX_MULTI_SPAWNTARGETS ) {
 		CG_ParseSpawns();
 	} else if ( num == CS_VERSIONINFO ) {
 		CG_ParseServerVersionInfo( str );         // OSP - set versioning info for older demo playback
@@ -1669,9 +1675,6 @@ void CG_parseWeaponStatsGS_cmd( void ) {
 	gs->nRounds = nRounds;
 
 	ci = &cgs.clientinfo[nClientID];
-
-//	Q_strncpyz(strName, ci->name, sizeof(strName));
-//	BG_cleanName(cgs.clientinfo[gs->nClientID].name, strName, sizeof(strName), qfalse);
 
 	if ( weaponMask != 0 ) {
 		char strName[MAX_STRING_CHARS];
