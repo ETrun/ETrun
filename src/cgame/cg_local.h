@@ -1902,7 +1902,9 @@ typedef struct {
 	animScriptData_t animScriptData;
 
 	int currentVoiceClient;
-	int currentRound;
+
+	/* Nico, removed currentRound
+	int currentRound;*/
 
 	/* Nico, no timelimit
 	float nextTimeLimit;*/

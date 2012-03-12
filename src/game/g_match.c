@@ -874,19 +874,21 @@ qboolean G_allowPanzer(gentity_t *ent)
 }
 */
 
+/* Nico, removed currentRound
 void G_resetRoundState( void ) {
 
-	/* Nico, removed gametypes
-	if ( g_gametype.integer == GT_WOLF_STOPWATCH ) {*/
-		trap_Cvar_Set( "g_currentRound", "0" );
+	// Nico, removed gametypes
+	// if ( g_gametype.integer == GT_WOLF_STOPWATCH ) {
+		//Nico, removed currentRound
+		//	trap_Cvar_Set( "g_currentRound", "0" );
 	// }
 	
-	/* Nico, removed LMS
-	else if ( g_gametype.integer == GT_WOLF_LMS ) {
-		trap_Cvar_Set( "g_currentRound", "0" );
-		trap_Cvar_Set( "g_lms_currentMatch", "0" );
-	}*/
-}
+	// Nico, removed LMS
+	// else if ( g_gametype.integer == GT_WOLF_LMS ) {
+	//	trap_Cvar_Set( "g_currentRound", "0" );
+	//	trap_Cvar_Set( "g_lms_currentMatch", "0" );
+	// }
+}*/
 
 /* Nico, removed LMS
 void G_resetModeState( void ) {

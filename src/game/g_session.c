@@ -330,7 +330,9 @@ void G_ReadSessionData( gclient_t *client ) {
 
 	G_CalcRank( client );*/
 
-	test = ( g_altStopwatchMode.integer != 0 || g_currentRound.integer == 1 );
+	/* Nico, removed currentRound
+	test = ( g_altStopwatchMode.integer != 0 || g_currentRound.integer == 1 );*/
+	test = ( g_altStopwatchMode.integer != 0 );
 
 	/* Nico, removed gametypes
 	if ( g_gametype.integer == GT_WOLF_STOPWATCH && g_gamestate.integer != GS_PLAYING && test ) {*/
@@ -441,7 +443,9 @@ void G_InitWorldSession( void ) {
 	{
 
 		char *tmp = s;
-		qboolean test = ( g_altStopwatchMode.integer != 0 || g_currentRound.integer == 1 );
+		/* Nico, removed currentRound
+		qboolean test = ( g_altStopwatchMode.integer != 0 || g_currentRound.integer == 1 );*/
+		qboolean test = ( g_altStopwatchMode.integer != 0 );
 
 /* Nico, removed (c)g_gametype
 #define GETVAL( x ) if ( ( tmp = strchr( tmp, ' ' ) ) == NULL ) {return; \

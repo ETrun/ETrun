@@ -392,7 +392,7 @@ PLAYER ANIMATION
 */
 
 bg_playerclass_t* CG_PlayerClassForClientinfo( clientInfo_t *ci, centity_t* cent ) {
-	int team, cls;
+	// int team, cls; Nico, unused warning fix
 
 	if ( cent && cent->currentState.eType == ET_CORPSE ) {
 		return BG_GetPlayerClassInfo( cent->currentState.modelindex, cent->currentState.modelindex2 );

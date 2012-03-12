@@ -104,7 +104,9 @@ vmCvar_t g_userTimeLimit;*/
 vmCvar_t g_userAlliedRespawnTime;
 vmCvar_t g_userAxisRespawnTime;*/
 
-vmCvar_t g_currentRound;
+/* Nico, removed currentRound
+vmCvar_t g_currentRound;*/
+
 vmCvar_t g_noTeamSwitching;
 vmCvar_t g_altStopwatchMode;
 vmCvar_t g_gamestate;
@@ -342,7 +344,9 @@ cvarTable_t gameCvarTable[] = {
 	/* Nico, no timelimit
 	{ &g_nextTimeLimit, "g_nextTimeLimit", "0", CVAR_WOLFINFO, 0, qfalse  },*/
 
-	{ &g_currentRound, "g_currentRound", "0", CVAR_WOLFINFO, 0, qfalse, qtrue },
+	/* Nico, removed currentRound
+	{ &g_currentRound, "g_currentRound", "0", CVAR_WOLFINFO, 0, qfalse, qtrue },*/
+
 	{ &g_altStopwatchMode, "g_altStopwatchMode", "0", CVAR_ARCHIVE, 0, qtrue, qtrue },
 	{ &g_gamestate, "gamestate", "-1", CVAR_WOLFINFO | CVAR_ROM, 0, qfalse  },
 

@@ -1757,7 +1757,9 @@ extern vmCvar_t g_userTimeLimit;*/
 extern vmCvar_t g_userAlliedRespawnTime;
 extern vmCvar_t g_userAxisRespawnTime;*/
 
-extern vmCvar_t g_currentRound;
+/* Nico, removed currentRound
+extern vmCvar_t g_currentRound;*/
+
 extern vmCvar_t g_noTeamSwitching;
 extern vmCvar_t g_altStopwatchMode;
 extern vmCvar_t g_gamestate;
@@ -2222,7 +2224,9 @@ void G_printFull( char *str, gentity_t *ent );
 /* Nico, removed LMS
 void G_resetModeState( void );*/
 
-void G_resetRoundState( void );
+/* Nico, removed currentRound
+void G_resetRoundState( void );*/
+
 void G_spawnPrintf( int print_type, int print_time, gentity_t *owner );
 
 /* Nico, removed ws related command

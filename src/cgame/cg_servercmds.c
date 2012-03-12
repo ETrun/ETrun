@@ -304,7 +304,8 @@ void CG_ParseWolfinfo( void ) {
 
 	info = CG_ConfigString( CS_WOLFINFO );
 
-	cgs.currentRound = atoi( Info_ValueForKey( info, "g_currentRound" ) );
+	/* Nico, removed currentRound
+	cgs.currentRound = atoi( Info_ValueForKey( info, "g_currentRound" ) );*/
 
 	/* Nico, no timelimit
 	cgs.nextTimeLimit = atof( Info_ValueForKey( info, "g_nextTimeLimit" ) );*/

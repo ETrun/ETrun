@@ -665,12 +665,13 @@ void Svcmd_ResetMatch_f( qboolean fDoReset, qboolean fDoRestart ) {
 		g_entities[level.sortedClients[i]].client->pers.ready = 0;
 	}
 
+	/* Nico, removed currentRound
 	if ( fDoReset ) {
 		G_resetRoundState();
 
-		/* Nico, removed LMS
-		G_resetModeState();*/
-	}
+		// Nico, removed LMS
+		// G_resetModeState();
+	}*/
 
 	if ( fDoRestart ) {
 		/* Nico, removed warmup
@@ -712,7 +713,10 @@ OSP - randomly places players on teams
 ====================
 */
 void Svcmd_ShuffleTeams_f( void ) {
-	G_resetRoundState();
+
+	/* Nico, removed currentRound
+	G_resetRoundState();*/
+
 	G_shuffleTeams();
 
 	if ( ( g_gamestate.integer == GS_INITIALIZE ) ||
