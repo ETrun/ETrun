@@ -230,14 +230,22 @@ vmCvar_t server_motd2;
 vmCvar_t server_motd3;
 vmCvar_t server_motd4;
 vmCvar_t server_motd5;
-vmCvar_t vote_allow_comp;
-vmCvar_t vote_allow_gametype;
+
+/* Nico, removed vote_allow_comp
+vmCvar_t vote_allow_comp;*/
+
+/* Nico, removed vote_allow_gametype
+vmCvar_t vote_allow_gametype;*/
+
 vmCvar_t vote_allow_kick;
 vmCvar_t vote_allow_map;
 vmCvar_t vote_allow_matchreset;
 vmCvar_t vote_allow_mutespecs;
 vmCvar_t vote_allow_nextmap;
-vmCvar_t vote_allow_pub;
+
+/* Nico, removed vote_allow_pub
+vmCvar_t vote_allow_pub;*/
+
 vmCvar_t vote_allow_referee;
 
 /* Nico, removed shuffleteam
@@ -506,14 +514,22 @@ cvarTable_t gameCvarTable[] = {
 	{ &team_maxPanzers, "team_maxPanzers", "-1", 0, 0, qfalse, qfalse },
 	{ &team_maxplayers, "team_maxplayers", "0", 0, 0, qfalse, qfalse },
 	{ &team_nocontrols, "team_nocontrols", "1", 0, 0, qfalse, qfalse },
-	{ &vote_allow_comp,         "vote_allow_comp", "1", 0, 0, qfalse, qfalse },
-	{ &vote_allow_gametype,     "vote_allow_gametype", "1", 0, 0, qfalse, qfalse },
+
+	/* Nico, removed vote_allow_comp
+	{ &vote_allow_comp,         "vote_allow_comp", "1", 0, 0, qfalse, qfalse },*/
+
+	/* Nico, removed vote_allow_gametype
+	{ &vote_allow_gametype,     "vote_allow_gametype", "1", 0, 0, qfalse, qfalse },*/
+
 	{ &vote_allow_kick,         "vote_allow_kick", "1", 0, 0, qfalse, qfalse },
 	{ &vote_allow_map,          "vote_allow_map", "1", 0, 0, qfalse, qfalse },
 	{ &vote_allow_matchreset,   "vote_allow_matchreset", "1", 0, 0, qfalse, qfalse },
 	{ &vote_allow_mutespecs,    "vote_allow_mutespecs", "1", 0, 0, qfalse, qfalse },
 	{ &vote_allow_nextmap,      "vote_allow_nextmap", "1", 0, 0, qfalse, qfalse },
-	{ &vote_allow_pub,          "vote_allow_pub", "1", 0, 0, qfalse, qfalse },
+
+	/* Nico, removed vote_allow_pub
+	{ &vote_allow_pub,          "vote_allow_pub", "1", 0, 0, qfalse, qfalse },*/
+
 	{ &vote_allow_referee,      "vote_allow_referee", "0", 0, 0, qfalse, qfalse },
 
 	/* Nico, removed shuffleteam
@@ -1561,13 +1577,24 @@ void G_UpdateCvars( void ) {
 				// OSP - Update vote info for clients, if necessary
 				/* Nico, removed gametypes
 				else if ( !G_IsSinglePlayerGame() ) {*/
-					if ( cv->vmCvar == &vote_allow_comp           || cv->vmCvar == &vote_allow_gametype       ||
+					if ( 
+						/* Nico, removed vote_allow_comp
+						cv->vmCvar == &vote_allow_comp           || */
+
+						/* Nico, removed vote_allow_gametype
+						cv->vmCvar == &vote_allow_gametype       ||*/
 						 cv->vmCvar == &vote_allow_kick          || cv->vmCvar == &vote_allow_map            ||
 						 cv->vmCvar == &vote_allow_matchreset    ||
 						 cv->vmCvar == &vote_allow_mutespecs     || cv->vmCvar == &vote_allow_nextmap        ||
-						 cv->vmCvar == &vote_allow_pub           || cv->vmCvar == &vote_allow_referee        ||
+
+						 /* Nico, removed vote_allow_pub
+						 cv->vmCvar == &vote_allow_pub           || */
+						 
+						 cv->vmCvar == &vote_allow_referee        ||
+
 						 /* Nico, removed shuffleteam
 						 cv->vmCvar == &vote_allow_shuffleteamsxp    || */
+
 						 cv->vmCvar == &vote_allow_swapteams
 						 
 						 /* Nico, no friendlyfire

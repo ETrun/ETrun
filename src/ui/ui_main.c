@@ -7783,13 +7783,21 @@ cvarTable_t cvarTable[] = {
 	{ NULL, "team_maxPanzers", "-1", CVAR_ARCHIVE },
 	{ NULL, "team_maxplayers", "0", CVAR_ARCHIVE },
 	{ NULL, "team_nocontrols", "0", CVAR_ARCHIVE },
-	{ NULL, "vote_allow_comp", "1", CVAR_ARCHIVE },
-	{ NULL, "vote_allow_gametype", "1", CVAR_ARCHIVE },
+
+	/* Nico, removed vote_allow_comp
+	{ NULL, "vote_allow_comp", "1", CVAR_ARCHIVE },*/
+
+	/* Nico, removed vote_allow_gametype
+	{ NULL, "vote_allow_gametype", "1", CVAR_ARCHIVE },*/
+
 	{ NULL, "vote_allow_kick", "1", CVAR_ARCHIVE },
 	{ NULL, "vote_allow_map", "1", CVAR_ARCHIVE },
 	{ NULL, "vote_allow_mutespecs", "1", CVAR_ARCHIVE },
 	{ NULL, "vote_allow_nextmap", "1", CVAR_ARCHIVE },
-	{ NULL, "vote_allow_pub", "1", CVAR_ARCHIVE },
+
+	/* Nico, removed vote_allow_pub
+	{ NULL, "vote_allow_pub", "1", CVAR_ARCHIVE },*/
+
 	{ NULL, "vote_allow_referee", "0", CVAR_ARCHIVE },
 
 	/* Nico, removed shuffleteam
