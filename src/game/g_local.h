@@ -1766,8 +1766,12 @@ extern vmCvar_t g_userAxisRespawnTime;*/
 /* Nico, removed currentRound
 extern vmCvar_t g_currentRound;*/
 
-extern vmCvar_t g_noTeamSwitching;
-extern vmCvar_t g_altStopwatchMode;
+/* Nico, removed team switch protection
+extern vmCvar_t g_noTeamSwitching;*/
+
+/* Nico, removed altStopwatchMode
+extern vmCvar_t g_altStopwatchMode;*/
+
 extern vmCvar_t g_gamestate;
 extern vmCvar_t g_swapteams;
 // -NERVE - SMF

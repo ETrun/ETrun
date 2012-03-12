@@ -116,7 +116,9 @@ vmCvar_t g_currentRound;*/
 /* Nico, removed team switch protection
 vmCvar_t g_noTeamSwitching;*/
 
-vmCvar_t g_altStopwatchMode;
+/* Nico, removed altStopwatchMode
+vmCvar_t g_altStopwatchMode;*/
+
 vmCvar_t g_gamestate;
 vmCvar_t g_swapteams;
 // -NERVE - SMF
@@ -357,7 +359,9 @@ cvarTable_t gameCvarTable[] = {
 	/* Nico, removed currentRound
 	{ &g_currentRound, "g_currentRound", "0", CVAR_WOLFINFO, 0, qfalse, qtrue },*/
 
-	{ &g_altStopwatchMode, "g_altStopwatchMode", "0", CVAR_ARCHIVE, 0, qtrue, qtrue },
+	/* Nico, removed altStopwatchMode
+	{ &g_altStopwatchMode, "g_altStopwatchMode", "0", CVAR_ARCHIVE, 0, qtrue, qtrue },*/
+
 	{ &g_gamestate, "gamestate", "-1", CVAR_WOLFINFO | CVAR_ROM, 0, qfalse  },
 
 	/* Nico, removed team switch protection

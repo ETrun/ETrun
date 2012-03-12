@@ -7733,7 +7733,10 @@ cvarTable_t cvarTable[] = {
 	{ &cg_crosshairColorAlt, "cg_crosshairColorAlt", "White", CVAR_ARCHIVE },
 	{ &cg_crosshairSize, "cg_crosshairSize", "48", CVAR_ARCHIVE },
 	// game mappings (for create server option)
-	{ NULL, "g_altStopwatchMode", "0", CVAR_ARCHIVE },
+
+	/* Nico, removed altStopwatchMode
+	{ NULL, "g_altStopwatchMode", "0", CVAR_ARCHIVE },*/
+
 	{ NULL, "g_ipcomplaintlimit", "3", CVAR_ARCHIVE },
 	{ NULL, "g_complaintlimit", "6", CVAR_ARCHIVE },
 

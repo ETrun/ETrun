@@ -227,7 +227,9 @@ Called on a reconnect
 void G_ReadSessionData( gclient_t *client ) {
 	int mvc_l, mvc_h;
 	char s[MAX_STRING_CHARS];
-	qboolean test;
+
+	/* Nico, removed altStopwatchMode
+	qboolean test;*/
 
 	trap_Cvar_VariableStringBuffer( va( "session%i", client - level.clients ), s, sizeof( s ) );
 
@@ -332,13 +334,15 @@ void G_ReadSessionData( gclient_t *client ) {
 
 	/* Nico, removed currentRound
 	test = ( g_altStopwatchMode.integer != 0 || g_currentRound.integer == 1 );*/
-	test = ( g_altStopwatchMode.integer != 0 );
+	/* Nico, removed altStopwatchMode
+	test = ( g_altStopwatchMode.integer != 0 );*/
 
 	/* Nico, removed gametypes
 	if ( g_gametype.integer == GT_WOLF_STOPWATCH && g_gamestate.integer != GS_PLAYING && test ) {*/
+	/* Nico, removed altStopwatchMode
 	if ( g_gamestate.integer != GS_PLAYING && test ) {
 		G_ClientSwap( client );
-	}
+	}*/
 
 	if ( g_swapteams.integer ) {
 		trap_Cvar_Set( "g_swapteams", "0" );
@@ -445,7 +449,8 @@ void G_InitWorldSession( void ) {
 		char *tmp = s;
 		/* Nico, removed currentRound
 		qboolean test = ( g_altStopwatchMode.integer != 0 || g_currentRound.integer == 1 );*/
-		qboolean test = ( g_altStopwatchMode.integer != 0 );
+		/* Nico, removed altStopwatchMode
+		qboolean test = ( g_altStopwatchMode.integer != 0 );*/
 
 /* Nico, removed (c)g_gametype
 #define GETVAL( x ) if ( ( tmp = strchr( tmp, ' ' ) ) == NULL ) {return; \
@@ -473,9 +478,10 @@ void G_InitWorldSession( void ) {
 		// OSP - have to make sure spec locks follow the right teams
 		/* Nico, removed gametypes
 		if ( g_gametype.integer == GT_WOLF_STOPWATCH && g_gamestate.integer != GS_PLAYING && test ) {*/
+		/* Nico, removed altStopwatchMode
 		if ( g_gamestate.integer != GS_PLAYING && test ) {
 			G_swapTeamLocks();
-		}
+		}*/
 
 		if ( g_swapteams.integer ) {
 			G_swapTeamLocks();
