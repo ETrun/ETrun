@@ -343,11 +343,12 @@ void CG_NewClientInfo( int clientNum ) {
 			}
 		}*/
 
+		/* Nico, removed airstrikes
 		if ( newInfo.team != cgs.clientinfo[ cg.clientNum ].team ) {
 			// clear these
 			memset( cg.artilleryRequestPos, 0, sizeof( cg.artilleryRequestPos ) );
 			memset( cg.artilleryRequestTime, 0, sizeof( cg.artilleryRequestTime ) );
-		}
+		}*/
 
 		trap_Cvar_Set( "authLevel", va( "%i", newInfo.refStatus ) );
 

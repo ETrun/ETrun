@@ -1195,8 +1195,9 @@ typedef struct {
 	qboolean mortarImpactOutOfMap;
 
 	// artillery requests
+	/* Nico, removed airstrikes
 	vec3_t artilleryRequestPos[MAX_CLIENTS];
-	int artilleryRequestTime[MAX_CLIENTS];
+	int artilleryRequestTime[MAX_CLIENTS];*/
 
 	soundScript_t*  bufferSoundScripts[MAX_BUFFERED_SOUNDSCRIPTS];
 	int bufferedSoundScriptEndTime;
@@ -1501,11 +1502,12 @@ typedef struct {
 	qhandle_t alliedUniformShader;
 	qhandle_t axisUniformShader;
 
+	/* Nico, removed airstrikes
 	sfxHandle_t sfx_artilleryExp[3];
 	sfxHandle_t sfx_artilleryDist;
 
 	sfxHandle_t sfx_airstrikeExp[3];
-	sfxHandle_t sfx_airstrikeDist;
+	sfxHandle_t sfx_airstrikeDist;*/
 
 	// sounds
 	sfxHandle_t noFireUnderwater;
@@ -3416,7 +3418,10 @@ typedef struct mapScissor_s {
 int CG_CurLayerForZ( int z );
 void CG_DrawMap( float x, float y, float w, float h, int mEntFilter, mapScissor_t *scissor, qboolean interactive, float alpha, qboolean borderblend );
 int CG_DrawSpawnPointInfo( int px, int py, int pw, int ph, qboolean draw, mapScissor_t *scissor, int expand );
-void CG_DrawMortarMarker( int px, int py, int pw, int ph, qboolean draw, mapScissor_t *scissor, int expand );
+
+/* Nico, removed airstrikes
+void CG_DrawMortarMarker( int px, int py, int pw, int ph, qboolean draw, mapScissor_t *scissor, int expand );*/
+
 void CG_CommandMap_SetHighlightText( const char* text, float x, float y );
 void CG_CommandMap_DrawHighlightText( void );
 qboolean CG_CommandCentreSpawnPointClick( void );

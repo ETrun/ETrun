@@ -950,7 +950,8 @@ void CG_DrawMap( float x, float y, float w, float h, int mEntFilter, mapScissor_
 
 	CG_DrawSpawnPointInfo( x, y, w, h, qtrue, scissor, exspawn );
 
-	CG_DrawMortarMarker( x, y, w, h, qtrue, scissor, exspawn );
+	/* Nico, removed airstrikes
+	CG_DrawMortarMarker( x, y, w, h, qtrue, scissor, exspawn );*/
 
 	for ( i = 0, mEnt = &mapEntities[0]; i < mapEntityCount; i++, mEnt++ ) {
 		if ( mEnt->team != CG_LimboPanel_GetRealTeam() ) {
@@ -1335,6 +1336,7 @@ int CG_DrawSpawnPointInfo( int px, int py, int pw, int ph, qboolean draw, mapSci
 	return e;
 }
 
+/* Nico, removed airstrikes
 void CG_DrawMortarMarker( int px, int py, int pw, int ph, qboolean draw, mapScissor_t *scissor, int expand ) {
 	if ( cg.lastFiredWeapon == WP_MORTAR_SET && cg.mortarImpactTime >= 0 ) {
 		if ( cg.snap->ps.weapon != WP_MORTAR_SET ) {
@@ -1381,7 +1383,7 @@ void CG_DrawMortarMarker( int px, int py, int pw, int ph, qboolean draw, mapScis
 				}
 
 				trap_R_SetColor( colour );
-				CG_DrawRotatedPic( point[0] - 8.f, point[1] - 8.f, 16, 16, cgs.media.ccMortarHit, .5f - ( cg.mortarFireAngles[YAW] /*- 180.f */ + 45.f ) / 360.f );
+				CG_DrawRotatedPic( point[0] - 8.f, point[1] - 8.f, 16, 16, cgs.media.ccMortarHit, .5f - ( cg.mortarFireAngles[YAW] + 45.f ) / 360.f );
 				trap_R_SetColor( NULL );
 			}
 		}
@@ -1427,36 +1429,6 @@ void CG_DrawMortarMarker( int px, int py, int pw, int ph, qboolean draw, mapScis
 				//CG_FillRect( point[0] - 8.f, point[1] - 8.f, 16, 16, colour );
 			}
 		}
-	}
-}
-
-/*void CG_DrawCommandCentreLayers( void ) {
-	int x, y;
-	int i;
-	char *s;
-
-	if( !cgs.ccLayers )
-		return;
-
-	x = CC_2D_X + CC_2D_W - 32;
-	y = CC_2D_Y + CC_2D_H - 32;
-
-	for( i = 0; i < cgs.ccLayers; i++ ) {
-		if( i == cgs.ccSelectedLayer )
-			CG_FillRect( x, y, 32, 32, clrBrownTextLt );
-		else
-			CG_FillRect( x, y, 32, 32, clrBrownText );
-		CG_DrawRect( x, y, 32, 32, 1, colorBlack );
-
-		if( i == 0 )
-			s = "G";
-		else
-			s =  va( "%i", i );
-
-		CG_Text_Paint( x + 1 + ( ( 32 - CG_Text_Width( s, .5f, 0 ) ) * .5f ),
-					   y + 16 +( ( 32 - CG_Text_Height( s, .5f, 0 ) ) *.5f ),
-					   .5f, clrBrownTextDk, s, 0, 0, 0 );
-		y -= 34;
 	}
 }*/
 

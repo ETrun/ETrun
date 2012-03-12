@@ -1138,7 +1138,8 @@ typedef struct {
 	limbo_cam_t limboCams[MAX_LIMBO_CAMS];
 	int numLimboCams;
 
-	int numActiveAirstrikes[2];
+	/* Nico, removed airstrikes
+	int numActiveAirstrikes[2];*/
 
 	/* Nico, removed skills
 	float teamXP[SK_NUM_SKILLS][2];*/
@@ -1541,9 +1542,11 @@ qboolean ClientNeedsAmmo( int client );*/
 qboolean ClientOutOfAmmo( int client );
 
 // Does ent have enough "energy" to call artillery?
+/* Nico, removed airstrikes
 qboolean ReadyToCallArtillery( gentity_t* ent );
 // to call airstrike?
-qboolean ReadyToCallAirstrike( gentity_t* ent );
+qboolean ReadyToCallAirstrike( gentity_t* ent );*/
+
 // to use smoke grenade?
 qboolean ReadyToThrowSmoke( gentity_t *ent );
 // Are we ready to construct?  Optionally, will also update the time while we are constructing
@@ -2473,11 +2476,12 @@ qboolean G_IsFireteamLeader( int entityNum, fireteamData_t** teamNum );
 fireteamData_t* G_FindFreePublicFireteam( team_t team );
 void G_RegisterFireteam( /*const char* name,*/ int entityNum );
 
+/* Nico, removed airstrikes
 void weapon_callAirStrike( gentity_t *ent );
 void weapon_checkAirStrikeThink2( gentity_t *ent );
 void weapon_checkAirStrikeThink1( gentity_t *ent );
 void weapon_callSecondPlane( gentity_t *ent );
-qboolean weapon_checkAirStrike( gentity_t *ent );
+qboolean weapon_checkAirStrike( gentity_t *ent );*/
 
 
 void G_MakeReady( gentity_t* ent );

@@ -1286,6 +1286,7 @@ static void CG_DrawWeapReticle( void ) {
 CG_DrawMortarReticle
 ==============
 */
+/* Nico, removed airstrikes
 static void CG_DrawMortarReticle( void ) {
 	vec4_t color = { 1.f, 1.f, 1.f, .5f };
 	vec4_t color_back = { 0.f, 0.f, 0.f, .25f };
@@ -1386,6 +1387,7 @@ static void CG_DrawMortarReticle( void ) {
 	// mortar attack requests
 	hasRightTarget = hasLeftTarget = qfalse;
 	for ( i = 0; i < MAX_CLIENTS; i++ ) {
+
 		int requestFadeTime = cg.time - ( cg.artilleryRequestTime[i] + 25000 );
 
 		if ( requestFadeTime < 5000 ) {
@@ -1545,7 +1547,7 @@ static void CG_DrawMortarReticle( void ) {
 			}
 		}
 	}
-}
+}*/
 
 /*
 ==============
@@ -1657,7 +1659,9 @@ static void CG_DrawCrosshair( void ) {
 
 	// FIXME: spectators/chasing?
 	if ( cg.predictedPlayerState.weapon == WP_MORTAR_SET && cg.predictedPlayerState.weaponstate != WEAPON_RAISING ) {
-		CG_DrawMortarReticle();
+
+		/* Nico, removed airstrikes
+		CG_DrawMortarReticle();*/
 		return;
 	}
 

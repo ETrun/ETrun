@@ -170,6 +170,7 @@ int reloadableWeapons[] = {
 // Separate table for SP and MP allow us to make the ammo and med packs function differently and may allow use to balance
 // weapons separately for each game.
 // Gordon: changed to actually use the maxammo values
+// Nico, removed airstrikes markers
 ammotable_t ammoTableMP[WP_NUM_WEAPONS] = {
 	//	MAX				USES	MAX		START	START  RELOAD	FIRE			NEXT	HEAT,	COOL,	MOD,	...
 	//	AMMO			AMT.	CLIP	AMMO	CLIP	TIME	DELAY			SHOT
@@ -197,7 +198,7 @@ ammotable_t ammoTableMP[WP_NUM_WEAPONS] = {
 
 	{   999,            0,      999,    0,      0,      0,      50,             0,      0,      0,      0                       },  // WP_BINOCULARS			// 20
 	{   999,            0,      999,    0,      0,      0,      50,             0,      0,      0,      0                       },  // WP_PLIERS				// 21
-	{   999,            0,      999,    0,      1,      0,      50,             0,      0,      0,      MOD_AIRSTRIKE           },  // WP_SMOKE_MARKER			// 22
+	{   0,				0,      0,		0,      0,      0,      50,             0,      0,      0,      MOD_AIRSTRIKE           },  // WP_SMOKE_MARKER			// 22
 	{   30,             1,      10,     20,     10,     2500,   DELAY_LOW,      400,    0,      0,      MOD_KAR98               },  // WP_KAR98					// 23		K43
 	{   24,             1,      8,      16,     8,      1500,   DELAY_LOW,      400,    0,      0,      MOD_CARBINE             },  // WP_CARBINE				// 24		GARAND
 	{   24,             1,      8,      16,     8,      1500,   DELAY_LOW,      400,    0,      0,      MOD_GARAND              },  // WP_GARAND				// 25		GARAND

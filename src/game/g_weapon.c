@@ -2263,6 +2263,7 @@ evilbanigoto:
 // (close air support should *always* drop parallel to friendly lines, tho accidents do happen)
 extern void G_ExplodeMissile( gentity_t *ent );
 
+/* Nico, removed airstrikes
 void G_AirStrikeExplode( gentity_t *self ) {
 
 	self->r.svFlags &= ~SVF_NOCLIENT;
@@ -2296,12 +2297,13 @@ void G_AddAirstrikeToCounters( gentity_t* ent ) {
 	} else {
 		level.alliedBombCounter += ( ( 60 * 1000 ) / (float)max );
 	}
-}
+}*/
 
 #define NUMBOMBS 10
 #define BOMBSPREAD 150
 extern void G_SayTo( gentity_t *ent, gentity_t *other, int mode, int color, const char *name, const char *message, qboolean localize );
 
+/* Nico, removed airstrikes
 void weapon_checkAirStrikeThink1( gentity_t *ent ) {
 	if ( !weapon_checkAirStrike( ent ) ) {
 		ent->think = G_ExplodeMissile;
@@ -2344,7 +2346,7 @@ qboolean weapon_checkAirStrike( gentity_t *ent ) {
 
 	// cancel the airstrike if FF off and player joined spec
 	// FIXME: this is a stupid workaround. Just store the parent team in the enitity itself and use that - no need to look up the parent
-	/* Nico, no friendlyfire
+	// Nico, no friendlyfire
 	if ( !g_friendlyFire.integer && ent->parent->client && ent->parent->client->sess.sessionTeam == TEAM_SPECTATOR ) {
 		ent->splashDamage = 0;  // no damage
 		ent->think = G_ExplodeMissile;
@@ -2357,19 +2359,13 @@ qboolean weapon_checkAirStrike( gentity_t *ent ) {
 			level.numActiveAirstrikes[1]--;
 		}
 		return qfalse; // do nothing, don't hurt anyone
-	}*/
+	}
 
 	if ( ent->s.teamNum == TEAM_AXIS ) {
 		if ( level.numActiveAirstrikes[0] > 6 || !G_AvailableAirstrikes( ent->parent ) ) {
 			G_SayTo( ent->parent, ent->parent, 2, COLOR_YELLOW, "HQ: ", "All available planes are already en-route.", qtrue );
 
 			G_GlobalClientEvent( EV_AIRSTRIKEMESSAGE, 0, ent->parent - g_entities );
-
-/*			te = G_TempEntity( ent->parent->s.pos.trBase, EV_GLOBAL_CLIENT_SOUND );
-			te->s.eventParm = G_SoundIndex( "axis_hq_airstrike_denied" );
-			te->s.teamNum = ent->parent->s.clientNum;*/
-
-//			te->s.effect1Time = 1;	// don't buffer
 
 			ent->active = qfalse;
 			if ( ent->s.teamNum == TEAM_AXIS ) {
@@ -2385,12 +2381,6 @@ qboolean weapon_checkAirStrike( gentity_t *ent ) {
 
 			G_GlobalClientEvent( EV_AIRSTRIKEMESSAGE, 0, ent->parent - g_entities );
 
-/*			te = G_TempEntity( ent->parent->s.pos.trBase, EV_GLOBAL_CLIENT_SOUND );
-			te->s.eventParm = G_SoundIndex( "allies_hq_airstrike_denied" );
-			te->s.teamNum = ent->parent->s.clientNum;*/
-
-//			te->s.effect1Time = 1;	// don't buffer
-
 			ent->active = qfalse;
 			if ( ent->s.teamNum == TEAM_AXIS ) {
 				level.numActiveAirstrikes[0]--;
@@ -2402,11 +2392,11 @@ qboolean weapon_checkAirStrike( gentity_t *ent ) {
 	}
 
 	return qtrue;
-}
+}*/
 
 void G_RailTrail( vec_t* start, vec_t* end );
 
-
+/* Nico, removed airstrikes
 void weapon_callAirStrike( gentity_t *ent ) {
 	int i, j;
 	vec3_t bombaxis, lookaxis, pos, bomboffset, fallaxis, temp, dir, skypoint;
@@ -2437,16 +2427,6 @@ void weapon_callAirStrike( gentity_t *ent ) {
 
 		G_GlobalClientEvent( EV_AIRSTRIKEMESSAGE, 1, ent->parent - g_entities );
 
-/*		te = G_TempEntity( ent->parent->s.pos.trBase, EV_GLOBAL_CLIENT_SOUND );
-		if ( ent->s.teamNum == TEAM_ALLIES ) {
-			te->s.eventParm = G_SoundIndex( "allies_hq_airstrike_abort" );
-		} else {
-			te->s.eventParm = G_SoundIndex( "axis_hq_airstrike_abort" );
-		}
-		te->s.teamNum = ent->parent->s.clientNum;*/
-
-//		te->s.effect1Time = 1;	// don't buffer
-
 		if ( ent->s.teamNum == TEAM_AXIS ) {
 			level.numActiveAirstrikes[0]--;
 		} else {
@@ -2457,15 +2437,6 @@ void weapon_callAirStrike( gentity_t *ent ) {
 	}
 
 	G_GlobalClientEvent( EV_AIRSTRIKEMESSAGE, 2, ent->parent - g_entities );
-
-/*	te = G_TempEntity( ent->parent->s.pos.trBase, EV_GLOBAL_CLIENT_SOUND );
-	if ( ent->parent->client->sess.sessionTeam == TEAM_ALLIES ) {
-		te->s.eventParm = G_SoundIndex( "allies_hq_airstrike" );
-	} else {
-		te->s.eventParm = G_SoundIndex( "axis_hq_airstrike" );
-	}
-	te->s.teamNum = ent->parent->s.clientNum;*/
-//	te->s.effect1Time = 1;	// don't buffer
 
 	VectorCopy( tr.endpos, bomboffset );
 	VectorCopy( tr.endpos, skypoint );
@@ -2620,7 +2591,7 @@ void artillerySpotterThink( gentity_t *ent ) {
 		VectorCopy( ent->s.pos.trBase, bomb->s.pos.trBase );
 		VectorCopy( ent->s.pos.trBase, bomb->r.currentOrigin );
 	}
-}
+}*/
 
 void G_GlobalClientEvent( int event, int param, int client ) {
 	gentity_t* tent = G_TempEntity( vec3_origin, event );
@@ -2634,6 +2605,7 @@ void G_GlobalClientEvent( int event, int param, int client ) {
 Weapon_Artillery
 ==================
 */
+/* Nico, removed airstrikes
 void Weapon_Artillery( gentity_t *ent ) {
 	trace_t trace;
 	int i, count;
@@ -2705,11 +2677,11 @@ void Weapon_Artillery( gentity_t *ent ) {
 	traceheight = bomboffset[2];
 	bottomtraceheight = traceheight - 8192;
 
-	/* Nico, removed skills
-	if ( ent->client->sess.skill[SK_SIGNALS] >= 3 ) {
-		count = 9;
-	} else {*/
-		count = 5;
+	// Nico, removed skills
+	// if ( ent->client->sess.skill[SK_SIGNALS] >= 3 ) {
+	//	count = 9;
+	// } else {
+	//	count = 5;
 	// }
 
 	for ( i = 0; i < count; i++ ) {
@@ -2797,23 +2769,22 @@ void Weapon_Artillery( gentity_t *ent ) {
 		VectorCopy( bomb->s.pos.trBase,bomb2->r.currentOrigin );
 	}
 
-	/* Nico, removed skills
+	// Nico, removed skills
 	if ( ent->client->sess.skill[SK_SIGNALS] >= 2 ) {
 		if ( level.time - ent->client->ps.classWeaponTime > level.lieutenantChargeTime[ent->client->sess.sessionTeam - 1] ) {
 			ent->client->ps.classWeaponTime = level.time - level.lieutenantChargeTime[ent->client->sess.sessionTeam - 1];
 		}
 
 		ent->client->ps.classWeaponTime += 0.66f * level.lieutenantChargeTime[ent->client->sess.sessionTeam - 1];
-	} else {*/
+	} else {
 		ent->client->ps.classWeaponTime = level.time;
 	// }
 
 	// OSP -- weapon stats
-	/* Nico, removed weaponstats
-	if ( g_gamestate.integer == GS_PLAYING )
-		ent->client->sess.aWeaponStats[WS_ARTILLERY].atts++;*/
-
-}
+	// Nico, removed weaponstats
+	// if ( g_gamestate.integer == GS_PLAYING )
+	//	ent->client->sess.aWeaponStats[WS_ARTILLERY].atts++;
+}*/
 
 
 #define SMOKEBOMB_GROWTIME 1000
@@ -3586,7 +3557,9 @@ gentity_t *weapon_grenadelauncher_fire( gentity_t *ent, int grenType ) {
 		} else {*/
 			m->count = 1;
 			m->nextthink = level.time + 2500;
-			m->think = weapon_checkAirStrikeThink1;
+
+			/* Nico, removed airstrikes
+			m->think = weapon_checkAirStrikeThink1;*/
 		// }
 	}
 	// jpw
@@ -3950,6 +3923,7 @@ void FireWeapon( gentity_t *ent ) {
 		aimSpreadScale = 1.0;
 	}*/
 
+	/* Nico, removed airstrikes
 	if ( ( ent->client->ps.eFlags & EF_ZOOMING ) && ( ent->client->ps.stats[STAT_KEYS] & ( 1 << INV_BINOCS ) ) ) {
 		if ( ent->client->sess.playerType == PC_FIELDOPS ) {
 			if ( !( ent->client->ps.leanf ) ) {
@@ -3957,7 +3931,7 @@ void FireWeapon( gentity_t *ent ) {
 			}
 			return;
 		}
-	}
+	}*/
 
 	if ( ent->client->ps.groundEntityNum == ENTITYNUM_NONE ) {
 		aimSpreadScale = 2.0f;

@@ -216,20 +216,21 @@ qboolean ClientNeedsAmmo( int client ) {
 }*/
 
 // Does ent have enough "energy" to call artillery?
+/* Nico, removed airstrikes
 qboolean ReadyToCallArtillery( gentity_t* ent ) {
 
-	/* Nico, removed skills
-	if ( ent->client->sess.skill[SK_SIGNALS] >= 2 ) {
-		if ( level.time - ent->client->ps.classWeaponTime <= ( level.lieutenantChargeTime[ent->client->sess.sessionTeam - 1] * 0.66f ) ) {
-			return qfalse;
-		}
-	} else */
+	// Nico, removed skills
+	// if ( ent->client->sess.skill[SK_SIGNALS] >= 2 ) {
+	//	if ( level.time - ent->client->ps.classWeaponTime <= ( level.lieutenantChargeTime[ent->client->sess.sessionTeam - 1] * 0.66f ) ) {
+	//		return qfalse;
+	//	}
+	// } else
 	if ( level.time - ent->client->ps.classWeaponTime <= level.lieutenantChargeTime[ent->client->sess.sessionTeam - 1] ) {
 		return qfalse;
 	}
 
 	return qtrue;
-}
+}*/
 
 
 // Are we ready to construct?  Optionally, will also update the time while we are constructing

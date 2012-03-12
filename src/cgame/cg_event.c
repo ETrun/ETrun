@@ -2289,7 +2289,8 @@ void CG_EntityEvent( centity_t *cent, vec3_t position ) {
 		DEBUGNAME( "EV_MISSILE_MISS_LARGE" );
 		ByteToDir( es->eventParm, dir );
 		if ( es->weapon == WP_ARTY || es->weapon == WP_SMOKE_MARKER ) {
-			CG_MissileHitWall( es->weapon, 0, position, dir, 0 );    // (SA) modified to send missilehitwall surface parameters
+			/* Nico, removed airstrikes
+			CG_MissileHitWall( es->weapon, 0, position, dir, 0 );    // (SA) modified to send missilehitwall surface parameters*/
 		} else {
 			CG_MissileHitWall( VERYBIGEXPLOSION, 0, position, dir, 0 );  // (SA) modified to send missilehitwall surface parameters
 		}

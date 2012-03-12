@@ -5314,8 +5314,11 @@ void CG_MissileHitWall( int weapon, int clientNum, vec3_t origin, vec3_t dir, in
 	case VERYBIGEXPLOSION:
 	case WP_ARTY:
 	case WP_SMOKE_MARKER:
+
+		/* Nico, removed airstrikes
 		sfx = cgs.media.sfx_rockexp;
 		sfx2 = cgs.media.sfx_rockexpDist;
+
 		if ( weapon == VERYBIGEXPLOSION || weapon == WP_ARTY ) {
 			sfx =   cgs.media.sfx_artilleryExp[rand() % 3];
 			sfx2 =  cgs.media.sfx_artilleryDist;
@@ -5323,6 +5326,7 @@ void CG_MissileHitWall( int weapon, int clientNum, vec3_t origin, vec3_t dir, in
 			sfx =   cgs.media.sfx_airstrikeExp[rand() % 3];
 			sfx2 =  cgs.media.sfx_airstrikeDist;
 		}
+
 		sfx2range = 800;
 		mark = cgs.media.burnMarkShader;
 		markDuration = cg_markTime.integer * 3;
@@ -5370,7 +5374,7 @@ void CG_MissileHitWall( int weapon, int clientNum, vec3_t origin, vec3_t dir, in
 				CG_ParticleExplosion( "explode1", sprOrg, sprVel, 1600, 40, 260 + rand() % 120, qfalse );
 			}
 			CG_AddDebris( origin, dir, 400 + random() * 200, rand() % 2000 + 1000, 5 + rand() % 5 );
-		}
+		}*/
 		break;
 
 	default:

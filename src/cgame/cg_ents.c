@@ -996,10 +996,13 @@ static void CG_Missile( centity_t *cent ) {
 		// right when spectating (#218)
 
 		cg.satchelCharge = cent;
-	} else if ( s1->weapon == WP_ARTY && s1->otherEntityNum2 && s1->teamNum == cgs.clientinfo[ cg.clientNum ].team ) {
+	}
+	
+	/* Nico, removed airstrikes
+	else if ( s1->weapon == WP_ARTY && s1->otherEntityNum2 && s1->teamNum == cgs.clientinfo[ cg.clientNum ].team ) {
 		VectorCopy( cent->lerpOrigin, cg.artilleryRequestPos[s1->clientNum] );
 		cg.artilleryRequestTime[s1->clientNum] = cg.time;
-	}
+	}*/
 
 	// add trails
 	if ( cent->currentState.eType == ET_FP_PARTS

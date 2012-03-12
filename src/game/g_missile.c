@@ -305,13 +305,14 @@ void G_ExplodeMissile( gentity_t *ent ) {
 	int etype;
 
 
+	/* Nico, removed airstrikes
 	if ( ent->s.weapon == WP_SMOKE_MARKER && ent->active ) {
 		if ( ent->s.teamNum == TEAM_AXIS ) {
 			level.numActiveAirstrikes[0]--;
 		} else {
 			level.numActiveAirstrikes[1]--;
 		}
-	}
+	}*/
 
 	etype = ent->s.eType;
 	ent->s.eType = ET_GENERAL;
@@ -436,9 +437,14 @@ void G_ExplodeMissile( gentity_t *ent ) {
 
 
 		// give big weapons the shakey shakey
+		/* Nico, removed airstrikes
 		if ( ent->s.weapon == WP_DYNAMITE || ent->s.weapon == WP_PANZERFAUST || ent->s.weapon == WP_GRENADE_LAUNCHER ||
 			 ent->s.weapon == WP_GRENADE_PINEAPPLE || ent->s.weapon == WP_MAPMORTAR || ent->s.weapon == WP_ARTY || ent->s.weapon == WP_SMOKE_MARKER
-			 || ent->s.weapon == WP_LANDMINE || ent->s.weapon == WP_SATCHEL || ent->s.weapon == WP_TRIPMINE /*|| ent->s.weapon == WP_SMOKE_BOMB*/
+			 || ent->s.weapon == WP_LANDMINE || ent->s.weapon == WP_SATCHEL || ent->s.weapon == WP_TRIPMINE
+			 ) {*/
+		if ( ent->s.weapon == WP_DYNAMITE || ent->s.weapon == WP_PANZERFAUST || ent->s.weapon == WP_GRENADE_LAUNCHER ||
+			 ent->s.weapon == WP_GRENADE_PINEAPPLE || ent->s.weapon == WP_MAPMORTAR || ent->s.weapon == WP_LANDMINE || 
+			 ent->s.weapon == WP_SATCHEL || ent->s.weapon == WP_TRIPMINE
 			 ) {
 
 			gentity_t* tent = G_TempEntity( ent->r.currentOrigin, EV_SHAKE );
