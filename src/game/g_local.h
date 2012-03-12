@@ -1633,7 +1633,9 @@ extern vmCvar_t sv_privatepassword;
 extern vmCvar_t g_gravity;
 extern vmCvar_t g_speed;
 extern vmCvar_t g_knockback;
-extern vmCvar_t g_quadfactor;
+
+/* Nico, removed quadfactor
+extern vmCvar_t g_quadfactor;*/
 
 /* Nico, removed forcerespawn
 extern vmCvar_t g_forcerespawn;*/

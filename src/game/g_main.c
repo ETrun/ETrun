@@ -76,7 +76,9 @@ vmCvar_t g_speed;
 vmCvar_t g_gravity;
 vmCvar_t g_cheats;
 vmCvar_t g_knockback;
-vmCvar_t g_quadfactor;
+
+/* Nico, removed quadfactor
+vmCvar_t g_quadfactor;*/
 
 /* Nico, removed forcerespawn
 vmCvar_t g_forcerespawn;*/
@@ -383,7 +385,9 @@ cvarTable_t gameCvarTable[] = {
 	{ &g_speed, "g_speed", "320", 0, 0, qtrue, qtrue },
 	{ &g_gravity, "g_gravity", "800", 0, 0, qtrue, qtrue },
 	{ &g_knockback, "g_knockback", "1000", 0, 0, qtrue, qtrue },
-	{ &g_quadfactor, "g_quadfactor", "3", 0, 0, qtrue },
+
+	/* Nico, removed quadfactor
+	{ &g_quadfactor, "g_quadfactor", "3", 0, 0, qtrue },*/
 
 	{ &g_needpass, "g_needpass", "0", CVAR_SERVERINFO | CVAR_ROM, 0, qtrue },
 
