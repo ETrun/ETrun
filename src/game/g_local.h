@@ -1693,14 +1693,18 @@ extern vmCvar_t g_balancedteams;*/
 /* Nico, removed warmup
 extern vmCvar_t g_doWarmup;*/
 
-extern vmCvar_t g_teamAutoJoin;
+/* Nico, commented because unused
+extern vmCvar_t g_teamAutoJoin;*/
 
 /* Nico, removed balancedteams
 extern vmCvar_t g_teamForceBalance;*/
 
 extern vmCvar_t g_banIPs;
 extern vmCvar_t g_filterBan;
-extern vmCvar_t g_rankings;
+
+/* Nico, commented because unused
+extern vmCvar_t g_rankings;*/
+
 extern vmCvar_t g_smoothClients;
 extern vmCvar_t pmove_fixed;
 extern vmCvar_t pmove_msec;
@@ -1710,7 +1714,9 @@ extern vmCvar_t g_scriptName;           // name of script file to run (instead o
 
 extern vmCvar_t g_scriptDebug;
 
-extern vmCvar_t g_userAim;
+/* Nico, removed useraim
+extern vmCvar_t g_userAim;*/
+
 extern vmCvar_t g_developer;
 
 extern vmCvar_t g_footstepAudibleRange;

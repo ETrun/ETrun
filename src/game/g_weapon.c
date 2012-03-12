@@ -3937,16 +3937,18 @@ void FireWeapon( gentity_t *ent ) {
 	// Ridah, need to call this for AI prediction also
 	CalcMuzzlePoints( ent, ent->s.weapon );
 
-	if ( g_userAim.integer ) {
+	/* Nico, removed useraim
+	if ( g_userAim.integer ) {*/
 		aimSpreadScale = ent->client->currentAimSpreadScale;
 		// Ridah, add accuracy factor for AI
 		aimSpreadScale += 0.15f; // (SA) just adding a temp /maximum/ accuracy for player (this will be re-visited in greater detail :)
 		if ( aimSpreadScale > 1 ) {
 			aimSpreadScale = 1.0f;  // still cap at 1.0
 		}
+	/* Nico, removed useraim
 	} else {
 		aimSpreadScale = 1.0;
-	}
+	}*/
 
 	if ( ( ent->client->ps.eFlags & EF_ZOOMING ) && ( ent->client->ps.stats[STAT_KEYS] & ( 1 << INV_BINOCS ) ) ) {
 		if ( ent->client->sess.playerType == PC_FIELDOPS ) {

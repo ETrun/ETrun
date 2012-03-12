@@ -163,14 +163,18 @@ vmCvar_t g_balancedteams;*/
 /* Nico, removed warmup
 vmCvar_t g_doWarmup;*/
 
-vmCvar_t g_teamAutoJoin;
+/* Nico, commented because unused
+vmCvar_t g_teamAutoJoin;*/
 
 /* Nico, removed balancedteams
 vmCvar_t g_teamForceBalance;*/
 
 vmCvar_t g_banIPs;
 vmCvar_t g_filterBan;
-vmCvar_t g_rankings;
+
+/* Nico, commented because unused
+vmCvar_t g_rankings;*/
+
 vmCvar_t g_smoothClients;
 vmCvar_t pmove_fixed;
 vmCvar_t pmove_msec;
@@ -180,7 +184,8 @@ vmCvar_t g_scriptName;          // name of script file to run (instead of defaul
 
 vmCvar_t g_developer;
 
-vmCvar_t g_userAim;
+/* Nico, removed useraim
+vmCvar_t g_userAim;*/
 
 vmCvar_t g_footstepAudibleRange;
 
@@ -451,8 +456,12 @@ cvarTable_t gameCvarTable[] = {
 	{ &g_enforcemaxlives, "g_enforcemaxlives", "1", CVAR_ARCHIVE, 0, qtrue },                 // Xian - Gestapo enforce maxlives stuff by temp banning*/
 
 	{ &g_developer, "developer", "0", CVAR_TEMP, 0, qfalse },
-	{ &g_rankings, "g_rankings", "0", 0, 0, qfalse },
-	{ &g_userAim, "g_userAim", "1", CVAR_CHEAT, 0, qfalse },
+
+	/* Nico, commented because unused
+	{ &g_rankings, "g_rankings", "0", 0, 0, qfalse },*/
+
+	/* Nico, removed useraim
+	{ &g_userAim, "g_userAim", "1", CVAR_CHEAT, 0, qfalse },*/
 
 	{ &g_smoothClients, "g_smoothClients", "1", 0, 0, qfalse },
 	{ &pmove_fixed, "pmove_fixed", "0", CVAR_SYSTEMINFO, 0, qfalse },
