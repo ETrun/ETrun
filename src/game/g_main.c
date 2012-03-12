@@ -323,7 +323,8 @@ vmCvar_t g_nextmap;
 /* Nico, removed gametypes
 vmCvar_t g_nextcampaign;*/
 
-vmCvar_t g_disableComplaints;
+/* Nico, removed complaints
+vmCvar_t g_disableComplaints;*/
 
 
 cvarTable_t gameCvarTable[] = {
