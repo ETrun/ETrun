@@ -113,7 +113,9 @@ vmCvar_t g_userAxisRespawnTime;*/
 /* Nico, removed currentRound
 vmCvar_t g_currentRound;*/
 
-vmCvar_t g_noTeamSwitching;
+/* Nico, removed team switch protection
+vmCvar_t g_noTeamSwitching;*/
+
 vmCvar_t g_altStopwatchMode;
 vmCvar_t g_gamestate;
 vmCvar_t g_swapteams;
@@ -358,7 +360,8 @@ cvarTable_t gameCvarTable[] = {
 	{ &g_altStopwatchMode, "g_altStopwatchMode", "0", CVAR_ARCHIVE, 0, qtrue, qtrue },
 	{ &g_gamestate, "gamestate", "-1", CVAR_WOLFINFO | CVAR_ROM, 0, qfalse  },
 
-	{ &g_noTeamSwitching, "g_noTeamSwitching", "0", CVAR_ARCHIVE, 0, qtrue  },
+	/* Nico, removed team switch protection
+	{ &g_noTeamSwitching, "g_noTeamSwitching", "0", CVAR_ARCHIVE, 0, qtrue  },*/
 
 	/* Nico, removed showHeadshotRatio
 	{ &g_showHeadshotRatio, "g_showHeadshotRatio", "0", 0, 0, qfalse  },*/

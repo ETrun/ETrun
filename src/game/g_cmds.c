@@ -681,10 +681,11 @@ qboolean SetTeam( gentity_t *ent, char *s, qboolean force, weapon_t w1, weapon_t
 			return( qfalse );
 		}
 
+		/* Nico, removed team switch protection
 		if ( g_noTeamSwitching.integer && ( team != ent->client->sess.sessionTeam && ent->client->sess.sessionTeam != TEAM_SPECTATOR ) && g_gamestate.integer == GS_PLAYING && !force ) {
 			trap_SendServerCommand( clientNum, "cp \"You cannot switch during a match, please wait until the round ends.\n\"" );
 			return qfalse;  // ignore the request
-		}
+		}*/
 
 		/* Nico, removed balancedteams
 		if ( ( ( g_gametype.integer == GT_WOLF_LMS && g_lms_teamForceBalance.integer ) || g_teamForceBalance.integer ) && !force ) {
