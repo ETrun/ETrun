@@ -1763,16 +1763,19 @@ typedef struct cg_weaponstats_s {
 	int numShots;
 } cg_weaponstats_t;*/
 
+/* Nico, removed gameStats
 typedef struct {
 
-	/* Nico, removed weaponstats
-	char strWS[WS_MAX][MAX_STRING_TOKENS];*/
+	// Nico, removed weaponstats
+	// char strWS[WS_MAX][MAX_STRING_TOKENS];
 
 	char strExtra[2][MAX_STRING_TOKENS];
+
+
 	char strRank[MAX_STRING_TOKENS];
 
-	/* Nico, removed skills
-	char strSkillz[SK_NUM_SKILLS][MAX_STRING_TOKENS];*/
+	// Nico, removed skills
+	// char strSkillz[SK_NUM_SKILLS][MAX_STRING_TOKENS];
 
 	int cWeapons;
 	int cSkills;
@@ -1782,7 +1785,7 @@ typedef struct {
 	int fadeTime;
 	int show;
 	int requestTime;
-} gameStats_t;
+} gameStats_t;*/
 
 /* Nico, removed +topshots command
 typedef struct {
@@ -1981,7 +1984,9 @@ typedef struct {
 	int dumpStatsTime;                                  // Next stats command that comes back will be written to a logfile*/
 
 	int game_versioninfo;                               // game base version
-	gameStats_t gamestats;
+
+	/* Nico, removed gameStats
+	gameStats_t gamestats;*/
 
 	/* Nico, removed +topshots command
 	topshotStats_t topshots;*/
