@@ -1853,7 +1853,8 @@ void mg42_spawn( gentity_t *ent ) {
 	vec3_t offset;
 
 	// Xian -- If in knifeonly mode, prevent MG42's from spawning
-	if ( g_knifeonly.integer != 1 ) {
+	/* Nico, removed knifeonly
+	if ( g_knifeonly.integer != 1 ) {*/
 		// Need to spawn the base even when no tripod cause the gun itself isn't solid
 		base = G_Spawn();
 		base->classname = "misc_mg42base";   // Arnout - ease tracking
@@ -1944,7 +1945,6 @@ void mg42_spawn( gentity_t *ent ) {
 
 		// Gordon: storing heat now
 		gun->mg42weapHeat    =      0;
-//		gun->mg42firetime	 =		0;
 
 		// Arnout: move track and targetname over to these entities for construction system
 		gun->track =        ent->track;
@@ -1964,7 +1964,7 @@ void mg42_spawn( gentity_t *ent ) {
 		}
 
 		trap_LinkEntity( gun );
-	}
+	// }
 
 	G_FreeEntity( ent );
 }

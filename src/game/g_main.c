@@ -155,7 +155,9 @@ vmCvar_t g_alliedmaxlives;          // Xian
 vmCvar_t g_axismaxlives;            // Xian*/
 
 vmCvar_t g_fastres;                 // Xian
-vmCvar_t g_knifeonly;               // Xian
+
+/* Nico, removed knifeonly
+vmCvar_t g_knifeonly;               // Xian*/
 
 /* Nico, removed respawnLeft
 vmCvar_t g_enforcemaxlives;         // Xian*/
@@ -473,7 +475,9 @@ cvarTable_t gameCvarTable[] = {
 	{ &g_axismaxlives, "g_axismaxlives", "0", CVAR_LATCH | CVAR_SERVERINFO, 0, qtrue },         // Xian*/
 
 	{ &g_fastres, "g_fastres", "0", CVAR_ARCHIVE, 0, qtrue, qtrue },                          // Xian - Fast Medic Resing
-	{ &g_knifeonly, "g_knifeonly", "0", 0, 0, qtrue },                                            // Xian - Fast Medic Resing
+
+	/* Nico, removed knifeonly
+	{ &g_knifeonly, "g_knifeonly", "0", 0, 0, qtrue },                                            // Xian - Fast Medic Resing*/
 
 	/* Nico, removed respawnLeft
 	{ &g_enforcemaxlives, "g_enforcemaxlives", "1", CVAR_ARCHIVE, 0, qtrue },                 // Xian - Gestapo enforce maxlives stuff by temp banning*/

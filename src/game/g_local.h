@@ -1691,7 +1691,9 @@ extern vmCvar_t g_alliedmaxlives;           // Xian
 extern vmCvar_t g_axismaxlives;             // Xian*/
 
 extern vmCvar_t g_fastres;                  // Xian - Fast medic res'ing
-extern vmCvar_t g_knifeonly;                // Xian - Wacky Knife-Only rounds
+
+/* Nico, removed knifeonly
+extern vmCvar_t g_knifeonly;                // Xian - Wacky Knife-Only rounds*/
 
 /* Nico, removed respawnLeft
 extern vmCvar_t g_enforcemaxlives;          // Xian - Temp ban with maxlives between rounds*/
