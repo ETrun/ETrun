@@ -930,7 +930,8 @@ typedef struct {
 	qboolean crosshairClientNoShoot;
 	qboolean crosshairTerrain;
 
-	int teamFirstBlood;                     // 0: allies 1: axis -1: nobody
+	/* Nico, removed firstblood
+	int teamFirstBlood;                     // 0: allies 1: axis -1: nobody*/
 
 	/* Nico, removed rounds
 	int teamWonRounds[2];*/

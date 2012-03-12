@@ -342,7 +342,9 @@ extern const unsigned int aReinfSeeds[MAX_REINFSEEDS];
 
 #define CS_TARGETEFFECT                 20      //----(SA)
 #define CS_WOLFINFO                     21      // NERVE - SMF
-#define CS_FIRSTBLOOD                   22      // Team that has first blood
+
+/* Nico, removed firstblood
+#define CS_FIRSTBLOOD                   22      // Team that has first blood*/
 
 /* Nico, removed rounds
 #define CS_ROUNDSCORES1                 23      // Axis round wins

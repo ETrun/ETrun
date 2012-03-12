@@ -1073,7 +1073,9 @@ typedef struct {
 	float lieutenantChargeTimeModifier[2];
 	float covertopsChargeTimeModifier[2];
 
-	int firstbloodTeam;
+	/* Nico, removed firstblood
+	int firstbloodTeam;*/
+
 	int teamEliminateTime;
 
 	/* Nico, removed LMS

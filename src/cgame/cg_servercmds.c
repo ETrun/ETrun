@@ -549,7 +549,9 @@ void CG_SetConfigValues( void ) {
 	cgs.voteNo = atoi( CG_ConfigString( CS_VOTE_NO ) );
 	Q_strncpyz( cgs.voteString, CG_ConfigString( CS_VOTE_STRING ), sizeof( cgs.voteString ) );
 
-	cg.teamFirstBlood = atoi( CG_ConfigString( CS_FIRSTBLOOD ) );
+	/* Nico, removed firstblood
+	cg.teamFirstBlood = atoi( CG_ConfigString( CS_FIRSTBLOOD ) );*/
+
 	// rain - yes, the order is this way on purpose. not my fault!
 	/* Nico, removed rounds
 	cg.teamWonRounds[1] = atoi( CG_ConfigString( CS_ROUNDSCORES1 ) );
@@ -660,9 +662,12 @@ static void CG_ConfigStringModified( void ) {
 
 	else if ( num == CS_WOLFINFO ) {      // NERVE - SMF
 		CG_ParseWolfinfo();
-	} else if ( num == CS_FIRSTBLOOD ) {
-		cg.teamFirstBlood = atoi( str );
 	}
+	
+	/* Nico, removed firstblood
+	else if ( num == CS_FIRSTBLOOD ) {
+		cg.teamFirstBlood = atoi( str );
+	}*/
 	
 	/* Nico, removed rounds
 	else if ( num == CS_ROUNDSCORES1 ) {

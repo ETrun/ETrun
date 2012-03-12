@@ -2371,7 +2371,8 @@ void CalculateRanks( void ) {
 		}
 	}
 
-	trap_SetConfigstring( CS_FIRSTBLOOD, va( "%i", level.firstbloodTeam ) );
+	/* Nico, removed firstblood
+	trap_SetConfigstring( CS_FIRSTBLOOD, va( "%i", level.firstbloodTeam ) );*/
 
 	/* Nico, removed LMS
 	trap_SetConfigstring( CS_ROUNDSCORES1, va( "%i", g_axiswins.integer ) );
