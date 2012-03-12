@@ -521,8 +521,9 @@ void player_die( gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int
 		if ( attacker == self || OnSameTeam( self, attacker ) ) {
 
 			// DHM - Nerve :: Complaint lodging
-			/* Nico, removed warmup
-			if ( attacker != self && level.warmupTime <= 0 && g_gamestate.integer == GS_PLAYING ) {*/
+			// Nico, removed warmup
+			// if ( attacker != self && level.warmupTime <= 0 && g_gamestate.integer == GS_PLAYING ) {
+			/* Nico, removed complaints
 			if ( attacker != self && g_gamestate.integer == GS_PLAYING ) {
 				if ( attacker->client->pers.localClient ) {
 					trap_SendServerCommand( self - g_entities, "complaint -4" );
@@ -540,7 +541,7 @@ void player_die( gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int
 						}
 					}
 				}
-			}
+			}*/
 
 			// high penalty to offset medic heal
 /*			AddScore( attacker, WOLF_FRIENDLY_PENALTY ); */

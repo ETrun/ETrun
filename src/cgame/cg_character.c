@@ -407,7 +407,7 @@ qboolean CG_RegisterCharacter( const char *characterFile, bg_character_t *charac
 }
 
 bg_character_t *CG_CharacterForClientinfo( clientInfo_t *ci, centity_t *cent ) {
-	int team, cls;
+	// int team, cls; Nico, unused warning fix
 
 	if ( cent && cent->currentState.eType == ET_CORPSE ) {
 		if ( cent->currentState.onFireStart >= 0 ) {

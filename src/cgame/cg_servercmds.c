@@ -940,8 +940,9 @@ static void CG_MapRestart( void ) {
 	cg.cursorHintFade = 0;  // reset cursor hint timer
 
 	// DHM - Nerve :: Reset complaint system
+	/* Nico, removed complaints
 	cgs.complaintClient = -1;
-	cgs.complaintEndTime = 0;
+	cgs.complaintEndTime = 0;*/
 
 	CG_LimboPanel_RequestObjective();
 
@@ -951,7 +952,9 @@ static void CG_MapRestart( void ) {
 	cg.zoomTime = 0;
 	cg.zoomval = 0;
 
-	cgs.complaintEndTime = 0;
+	/* Nico, removed complaints
+	cgs.complaintEndTime = 0;*/
+
 	cgs.invitationEndTime = 0;
 	cgs.applicationEndTime = 0;
 	cgs.propositionEndTime = 0;
@@ -2225,6 +2228,7 @@ static void CG_ServerCommand( void ) {
 	}
 
 	// DHM - Nerve :: Allow client to lodge a complaing
+	/* Nico, removed complaints
 	if ( !Q_stricmp( cmd, "complaint" ) && cgs.gamestate == GS_PLAYING ) {
 		cgs.complaintEndTime = cg.time + 20000;
 		cgs.complaintClient = atoi( CG_Argv( 1 ) );
@@ -2235,6 +2239,7 @@ static void CG_ServerCommand( void ) {
 
 		return;
 	}
+	*/
 	// dhm
 
 	if ( !Q_stricmp( cmd, "map_restart" ) ) {

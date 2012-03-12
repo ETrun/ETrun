@@ -1914,8 +1914,10 @@ typedef struct {
 	char        *currentCampaign;
 	int currentCampaignMap;
 
+	/* Nico, removed complaints
 	int complaintClient;        // DHM - Nerve
-	int complaintEndTime;       // DHM - Nerve
+	int complaintEndTime;       // DHM - Nerve*/
+
 	float smokeWindDir; // JPW NERVE for smoke puffs & wind (arty, airstrikes, bullet impacts)
 
 	/* Nico, removed playerStats
@@ -2218,7 +2220,10 @@ extern vmCvar_t cg_autoAction;
 extern vmCvar_t cg_autoReload;
 extern vmCvar_t cg_bloodDamageBlend;
 extern vmCvar_t cg_bloodFlash;
-extern vmCvar_t cg_complaintPopUp;
+
+/* Nico, removed complaints
+extern vmCvar_t cg_complaintPopUp;*/
+
 extern vmCvar_t cg_crosshairAlpha;
 extern vmCvar_t cg_crosshairAlphaAlt;
 extern vmCvar_t cg_crosshairColor;

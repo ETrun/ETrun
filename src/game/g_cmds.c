@@ -1761,6 +1761,7 @@ qboolean Cmd_CallVote_f( gentity_t *ent, unsigned int dwCommand, qboolean fRefCo
 
 qboolean StringToFilter( const char *s, ipFilter_t *f );
 
+/* Nico, removed complaints
 qboolean G_FindFreeComplainIP( gclient_t* cl, ipFilter_t* ip ) {
 	int i = 0;
 
@@ -1779,7 +1780,7 @@ qboolean G_FindFreeComplainIP( gclient_t* cl, ipFilter_t* ip ) {
 		}
 	}
 	return qfalse;
-}
+}*/
 
 /*
 ==================
@@ -1790,6 +1791,7 @@ void Cmd_Vote_f( gentity_t *ent ) {
 	char msg[64];
 	int num;
 
+	/* Nico, removed complaints
 	// DHM - Nerve :: Complaints supercede voting (and share command)
 	if ( ent->client->pers.complaintEndTime > level.time && g_gamestate.integer == GS_PLAYING && g_complaintlimit.integer ) {
 
@@ -1837,8 +1839,8 @@ void Cmd_Vote_f( gentity_t *ent ) {
 
 			AddScore( other, WOLF_FRIENDLY_PENALTY );
 
-			/* Nico, removed g_stats.c
-			G_LoseKillSkillPoints( other, ent->sound2to1, ent->sound1to2, ent->sound2to3 ? qtrue : qfalse );*/
+			// Nico, removed g_stats.c
+			// G_LoseKillSkillPoints( other, ent->sound2to1, ent->sound1to2, ent->sound2to3 ? qtrue : qfalse );
 		} else {
 			trap_SendServerCommand( ent->client->pers.complaintClient, "cpm \"No complaint filed against you.\n\"" );
 			trap_SendServerCommand( ent - g_entities, "complaint -2" );
@@ -1849,7 +1851,7 @@ void Cmd_Vote_f( gentity_t *ent ) {
 		ent->client->pers.complaintClient = -1;
 
 		return;
-	}
+	}*/
 	// dhm
 
 	if ( ent->client->pers.applicationEndTime > level.time ) {
@@ -2006,8 +2008,9 @@ void Cmd_Vote_f( gentity_t *ent ) {
 
 	// dhm
 	// Reset this ent's complainEndTime so they can't send multiple complaints
+	/* Nico, removed complaints
 	ent->client->pers.complaintEndTime = -1;
-	ent->client->pers.complaintClient = -1;
+	ent->client->pers.complaintClient = -1;*/
 
 	if ( !level.voteInfo.voteTime ) {
 		trap_SendServerCommand( ent - g_entities, "print \"No vote in progress.\n\"" );

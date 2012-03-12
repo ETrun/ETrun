@@ -652,7 +652,8 @@ typedef struct ipFilter_s {
 	unsigned compare;
 } ipFilter_t;
 
-#define MAX_COMPLAINTIPS 5
+/* Nico, removed complaints
+#define MAX_COMPLAINTIPS 5*/
 
 // client data that stays across multiple respawns, but is cleared
 // on each level change or team change at ClientBegin()
@@ -675,9 +676,10 @@ typedef struct {
 	int voteCount;                  // to prevent people from constantly calling votes
 	int teamVoteCount;              // to prevent people from constantly calling votes
 
+	/* Nico, removed complaints
 	int complaints;                     // DHM - Nerve :: number of complaints lodged against this client
 	int complaintClient;                // DHM - Nerve :: able to lodge complaint against this client
-	int complaintEndTime;               // DHM - Nerve :: until this time has expired
+	int complaintEndTime;               // DHM - Nerve :: until this time has expired*/
 
 	/* Nico, instant reswawn
 	int lastReinforceTime;              // DHM - Nerve :: last reinforcement*/
@@ -735,7 +737,8 @@ typedef struct {
 	bg_character_t  *character;
 	int characterIndex;
 
-	ipFilter_t complaintips[MAX_COMPLAINTIPS];
+	/* Nico, removed complaints
+	ipFilter_t complaintips[MAX_COMPLAINTIPS];*/
 } clientPersistant_t;
 
 typedef struct {
@@ -1653,8 +1656,10 @@ extern vmCvar_t g_warmup;*/
 extern vmCvar_t voteFlags;
 
 // DHM - Nerve :: The number of complaints allowed before kick/ban
+/* Nico, removed complaints
 extern vmCvar_t g_complaintlimit;
-extern vmCvar_t g_ipcomplaintlimit;
+extern vmCvar_t g_ipcomplaintlimit;*/
+
 extern vmCvar_t g_filtercams;
 
 /* Nico, removed respawnLeft
@@ -1849,7 +1854,8 @@ extern vmCvar_t g_nextmap;
 /* Nico, removed gametypes
 extern vmCvar_t g_nextcampaign;*/
 
-extern vmCvar_t g_disableComplaints;
+/* Nico, removed complaints
+extern vmCvar_t g_disableComplaints;*/
 
 void    trap_Printf( const char *fmt );
 void    trap_Error( const char *fmt );

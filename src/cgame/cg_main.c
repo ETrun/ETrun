@@ -255,7 +255,10 @@ vmCvar_t cg_autoAction;
 vmCvar_t cg_autoReload;
 vmCvar_t cg_bloodDamageBlend;
 vmCvar_t cg_bloodFlash;
-vmCvar_t cg_complaintPopUp;
+
+/* Nico, removed complaints
+vmCvar_t cg_complaintPopUp;*/
+
 vmCvar_t cg_crosshairAlpha;
 vmCvar_t cg_crosshairAlphaAlt;
 vmCvar_t cg_crosshairColor;
@@ -478,7 +481,10 @@ cvarTable_t cvarTable[] = {
 	{ &cg_autoReload, "cg_autoReload", "1", CVAR_ARCHIVE },
 	{ &cg_bloodDamageBlend, "cg_bloodDamageBlend", "1.0", CVAR_ARCHIVE },
 	{ &cg_bloodFlash, "cg_bloodFlash", "1.0", CVAR_ARCHIVE },
-	{ &cg_complaintPopUp, "cg_complaintPopUp", "1", CVAR_ARCHIVE },
+
+	/* Nico, removed complaints
+	{ &cg_complaintPopUp, "cg_complaintPopUp", "1", CVAR_ARCHIVE },*/
+
 	{ &cg_crosshairAlpha, "cg_crosshairAlpha", "1.0", CVAR_ARCHIVE },
 	{ &cg_crosshairAlphaAlt, "cg_crosshairAlphaAlt", "1.0", CVAR_ARCHIVE },
 	{ &cg_crosshairColor, "cg_crosshairColor", "White", CVAR_ARCHIVE },

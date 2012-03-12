@@ -1714,9 +1714,9 @@ void ClientBegin( int clientNum ) {
 	/* Nico, removed respawnLeft
 	client->ps.persistant[PERS_RESPAWNS_LEFT] = lives_left;*/
 
-
+	/* Nico, removed complaints
 	client->pers.complaintClient = -1;
-	client->pers.complaintEndTime = -1;
+	client->pers.complaintEndTime = -1;*/
 
 	// locate ent at a spawn point
 	ClientSpawn( ent, qfalse );
@@ -2225,6 +2225,7 @@ void ClientDisconnect( int clientNum ) {
 	}
 
 	// NERVE - SMF - remove complaint client
+	/* Nico, removed complaints
 	for ( i = 0 ; i < level.numConnectedClients ; i++ ) {
 		if ( flag->client->pers.complaintEndTime > level.time && flag->client->pers.complaintClient == clientNum ) {
 			flag->client->pers.complaintClient = -1;
@@ -2233,7 +2234,7 @@ void ClientDisconnect( int clientNum ) {
 			CPx( level.sortedClients[i], "complaint -2" );
 			break;
 		}
-	}
+	}*/
 
 	if ( g_landminetimeout.integer ) {
 		G_ExplodeMines( ent );

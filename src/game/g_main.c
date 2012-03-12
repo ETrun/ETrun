@@ -132,8 +132,11 @@ vmCvar_t g_podiumDist;
 vmCvar_t g_podiumDrop;*/
 
 vmCvar_t voteFlags;
+
+/* Nico, removed complaints
 vmCvar_t g_complaintlimit;          // DHM - Nerve
-vmCvar_t g_ipcomplaintlimit;
+vmCvar_t g_ipcomplaintlimit;*/
+
 vmCvar_t g_filtercams;
 
 /* Nico, removed respawnLeft
@@ -422,8 +425,10 @@ cvarTable_t gameCvarTable[] = {
 
 	{ &voteFlags, "voteFlags", "0", CVAR_TEMP | CVAR_ROM | CVAR_SERVERINFO, 0, qfalse },
 
+	/* Nico, removed complaints
 	{ &g_complaintlimit, "g_complaintlimit", "6", CVAR_ARCHIVE, 0, qtrue },                       // DHM - Nerve
-	{ &g_ipcomplaintlimit, "g_ipcomplaintlimit", "3", CVAR_ARCHIVE, 0, qtrue },
+	{ &g_ipcomplaintlimit, "g_ipcomplaintlimit", "3", CVAR_ARCHIVE, 0, qtrue },*/
+
 	{ &g_filtercams, "g_filtercams", "0", CVAR_ARCHIVE, 0, qfalse },
 
 	/* Nico, removed respawnLeft
@@ -565,7 +570,8 @@ cvarTable_t gameCvarTable[] = {
 	/* Nico, removed gametypes
 	{ &g_nextcampaign, "nextcampaign", "", CVAR_TEMP },*/
 
-	{ &g_disableComplaints, "g_disableComplaints", "0", CVAR_ARCHIVE },
+	/* Nico, removed complaints
+	{ &g_disableComplaints, "g_disableComplaints", "0", CVAR_ARCHIVE },*/
 };
 
 // bk001129 - made static to avoid aliasing

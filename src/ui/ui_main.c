@@ -7685,7 +7685,10 @@ cvarTable_t cvarTable[] = {
 	{ NULL, "cg_zoomDefaultSniper", "20", CVAR_ARCHIVE },
 	{ NULL, "cg_zoomstepsniper", "2", CVAR_ARCHIVE },
 	{ NULL, "cg_voicespritetime", "6000", CVAR_ARCHIVE },
-	{ NULL, "cg_complaintPopUp", "1", CVAR_ARCHIVE },
+
+	/* Nico, removed complaints
+	{ NULL, "cg_complaintPopUp", "1", CVAR_ARCHIVE },*/
+
 	{ NULL, "cg_announcer", "1", CVAR_ARCHIVE },
 	{ NULL, "cg_printObjectiveInfo", "1", CVAR_ARCHIVE },
 	{ NULL, "cg_useScreenshotJPEG", "1", CVAR_ARCHIVE },
@@ -7737,8 +7740,9 @@ cvarTable_t cvarTable[] = {
 	/* Nico, removed altStopwatchMode
 	{ NULL, "g_altStopwatchMode", "0", CVAR_ARCHIVE },*/
 
+	/* Nico, removed complaints
 	{ NULL, "g_ipcomplaintlimit", "3", CVAR_ARCHIVE },
-	{ NULL, "g_complaintlimit", "6", CVAR_ARCHIVE },
+	{ NULL, "g_complaintlimit", "6", CVAR_ARCHIVE },*/
 
 	/* Nico, removed warmup
 	{ NULL, "g_doWarmup", "0", CVAR_ARCHIVE },*/
