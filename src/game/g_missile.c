@@ -1346,6 +1346,7 @@ qboolean G_SweepForLandmines( vec3_t origin, float radius, int team ) {
 	return( qfalse );
 }
 
+/* Nico, removed satchel
 gentity_t *G_FindSatchel( gentity_t* ent ) {
 	gentity_t* e;
 	int i;
@@ -1372,7 +1373,7 @@ gentity_t *G_FindSatchel( gentity_t* ent ) {
 	}
 
 	return NULL;
-}
+}*/
 
 /*
 ==========

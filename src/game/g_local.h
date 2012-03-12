@@ -1388,7 +1388,10 @@ void SnapVectorTowards( vec3_t v, vec3_t to );
 gentity_t *weapon_grenadelauncher_fire( gentity_t *ent, int grenadeWPID );
 void G_PlaceTripmine( gentity_t* ent );
 void G_FadeItems( gentity_t* ent, int modType );
-gentity_t *G_FindSatchel( gentity_t* ent );
+
+/* Nico, removed satchel
+gentity_t *G_FindSatchel( gentity_t* ent );*/
+
 void G_ExplodeMines( gentity_t* ent );
 qboolean G_ExplodeSatchels( gentity_t* ent );
 void G_FreeSatchel( gentity_t* ent );
@@ -2443,7 +2446,10 @@ qboolean G_LandmineSpotted( gentity_t* ent );
 gentity_t* G_FindSmokeBomb( gentity_t* start );
 gentity_t* G_FindLandmine( gentity_t* start );
 gentity_t* G_FindDynamite( gentity_t* start );
-gentity_t* G_FindSatchels( gentity_t* start );
+
+/* Nico, removed satchel
+gentity_t* G_FindSatchels( gentity_t* start );*/
+
 void G_SetTargetName( gentity_t* ent, char* targetname );
 void G_KillEnts( const char* target, gentity_t* ignore, gentity_t* killer, meansOfDeath_t mod );
 void trap_EngineerTrace( trace_t *results, const vec3_t start, const vec3_t mins, const vec3_t maxs, const vec3_t end, int passEntityNum, int contentmask );
