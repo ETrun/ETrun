@@ -1753,7 +1753,8 @@ extern vmCvar_t g_warmupLatch;*/
 /* Nico, no timelimit
 extern vmCvar_t g_nextTimeLimit;*/
 
-extern vmCvar_t g_showHeadshotRatio;
+/* Nico, removed showHeadshotRatio
+extern vmCvar_t g_showHeadshotRatio;*/
 
 /* Nico, no timelimit
 extern vmCvar_t g_userTimeLimit;*/

@@ -100,7 +100,8 @@ vmCvar_t g_warmupLatch;*/
 /* Nico, no timelimit
 vmCvar_t g_nextTimeLimit;*/
 
-vmCvar_t g_showHeadshotRatio;
+/* Nico, removed showHeadshotRatio
+vmCvar_t g_showHeadshotRatio;*/
 
 /* Nico, no timelimit
 vmCvar_t g_userTimeLimit;*/
@@ -359,7 +360,8 @@ cvarTable_t gameCvarTable[] = {
 
 	{ &g_noTeamSwitching, "g_noTeamSwitching", "0", CVAR_ARCHIVE, 0, qtrue  },
 
-	{ &g_showHeadshotRatio, "g_showHeadshotRatio", "0", 0, 0, qfalse  },
+	/* Nico, removed showHeadshotRatio
+	{ &g_showHeadshotRatio, "g_showHeadshotRatio", "0", 0, 0, qfalse  },*/
 
 	/* Nico, no timelimit
 	{ &g_userTimeLimit, "g_userTimeLimit", "0", 0, 0, qfalse, qtrue },*/
