@@ -318,8 +318,9 @@ void CG_DrawFireTeamOverlay( rectDef_t* rect ) {
 		CG_Text_Paint_Ext( x, y + FT_BAR_HEIGHT, .2f, .2f, tclr, BG_ClassLetterForNumber( ci->cls ), 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont2 );
 		x += 10;
 
+		/* Nico, removed rankNames
 		CG_Text_Paint_Ext( x, y + FT_BAR_HEIGHT, .2f, .2f, tclr, ci->team == TEAM_AXIS ? miniRankNames_Axis[ci->rank] : miniRankNames_Allies[ci->rank], 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont2 );
-		x += 22;
+		x += 22;*/
 
 		CG_Text_Paint_Ext( x, y + FT_BAR_HEIGHT, .2f, .2f, tclr, ci->name, 0, 17, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont2 );
 		x += 90;

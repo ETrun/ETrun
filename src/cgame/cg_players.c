@@ -287,13 +287,14 @@ void CG_NewClientInfo( int clientNum ) {
 			}
 		}
 
+		/* Nico, removed rankNames
 		if ( newInfo.rank > cgs.clientinfo[ cg.clientNum ].rank ) {
 
 			CG_SoundPlaySoundScript( cgs.clientinfo[cg.clientNum].team == TEAM_ALLIES ? rankSoundNames_Allies[ newInfo.rank ] : rankSoundNames_Axis[ newInfo.rank ], NULL, -1, qtrue );
 
-			/* Nico, removed rankicons
-			CG_AddPMItemBig( PM_RANK, va( "Promoted to rank %s!", cgs.clientinfo[ cg.clientNum ].team == TEAM_AXIS ? rankNames_Axis[newInfo.rank] : rankNames_Allies[newInfo.rank] ), rankicons[ newInfo.rank ][ 0 ].shader );*/
-		}
+			// Nico, removed rankicons
+			// CG_AddPMItemBig( PM_RANK, va( "Promoted to rank %s!", cgs.clientinfo[ cg.clientNum ].team == TEAM_AXIS ? rankNames_Axis[newInfo.rank] : rankNames_Allies[newInfo.rank] ), rankicons[ newInfo.rank ][ 0 ].shader );
+		}*/
 
 		/* Nico, removed skills
 		for ( i = 0; i < SK_NUM_SKILLS; i++ ) {

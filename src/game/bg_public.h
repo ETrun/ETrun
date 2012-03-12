@@ -2092,12 +2092,13 @@ typedef enum {
 	ME_COMMANDMAP_MARKER,
 } mapEntityType_t;
 
+/* Nico, removed rankNames
 extern const char* rankNames_Axis[NUM_EXPERIENCE_LEVELS];
 extern const char* rankNames_Allies[NUM_EXPERIENCE_LEVELS];
 extern const char* miniRankNames_Axis[NUM_EXPERIENCE_LEVELS];
 extern const char* miniRankNames_Allies[NUM_EXPERIENCE_LEVELS];
 extern const char* rankSoundNames_Axis[NUM_EXPERIENCE_LEVELS];
-extern const char* rankSoundNames_Allies[NUM_EXPERIENCE_LEVELS];
+extern const char* rankSoundNames_Allies[NUM_EXPERIENCE_LEVELS];*/
 
 #define MAX_SPLINE_PATHS        512
 #define MAX_SPLINE_CONTROLS     4

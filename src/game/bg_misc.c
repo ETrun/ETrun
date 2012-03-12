@@ -4291,6 +4291,7 @@ weapon_t BG_WeaponForMOD( int MOD ) {
 	return 0;
 }
 
+/* Nico, removed rankNames
 const char* rankSoundNames_Allies[NUM_EXPERIENCE_LEVELS] = {
 	"",
 	"allies_hq_promo_private",
@@ -4376,7 +4377,7 @@ const char* miniRankNames_Allies[NUM_EXPERIENCE_LEVELS] = {
 	"GMj",
 	"GLt",
 	"Gen",
-};
+};*/
 
 /*
 =============
