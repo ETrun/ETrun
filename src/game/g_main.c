@@ -73,7 +73,10 @@ vmCvar_t g_minGameClients;          // NERVE - SMF*/
 
 vmCvar_t g_dedicated;
 vmCvar_t g_speed;
-vmCvar_t g_gravity;
+
+/* Nico, g_gravity is hardcoded as DEFAULT_GRAVITY
+vmCvar_t g_gravity;*/
+
 vmCvar_t g_cheats;
 vmCvar_t g_knockback;
 
@@ -420,7 +423,10 @@ cvarTable_t gameCvarTable[] = {
 	{ &g_dedicated, "dedicated", "0", 0, 0, qfalse },
 
 	{ &g_speed, "g_speed", "320", 0, 0, qtrue, qtrue },
-	{ &g_gravity, "g_gravity", "800", 0, 0, qtrue, qtrue },
+
+	/* Nico, g_gravity is hardcoded as DEFAULT_GRAVITY
+	{ &g_gravity, "g_gravity", "800", 0, 0, qtrue, qtrue },*/
+
 	{ &g_knockback, "g_knockback", "1000", 0, 0, qtrue, qtrue },
 
 	/* Nico, removed quadfactor

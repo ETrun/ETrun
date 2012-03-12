@@ -229,7 +229,11 @@ void AimAtTarget( gentity_t *self ) {
 	}
 
 	height = ent->s.origin[2] - origin[2];
-	gravity = g_gravity.value;
+
+	/* Nico, g_gravity is hardcoded as DEFAULT_GRAVITY
+	gravity = g_gravity.value;*/
+	gravity = DEFAULT_GRAVITY;
+
 	time = sqrt( fabs( height / ( 0.5f * gravity ) ) );
 	if ( !time ) {
 		G_FreeEntity( self );

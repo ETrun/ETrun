@@ -3555,7 +3555,9 @@ void SP_func_pendulum( gentity_t *ent ) {
 		length = 8;
 	}
 
-	freq = 1 / ( M_PI * 2 ) * sqrt( g_gravity.value / ( 3 * length ) );
+	/* Nico, g_gravity is hardcoded as DEFAULT_GRAVITY
+	freq = 1 / ( M_PI * 2 ) * sqrt( g_gravity.value / ( 3 * length ) );*/
+	freq = 1 / ( M_PI * 2 ) * sqrt( DEFAULT_GRAVITY / ( 3 * length ) );
 
 	ent->s.pos.trDuration = ( 1000 / freq );
 
