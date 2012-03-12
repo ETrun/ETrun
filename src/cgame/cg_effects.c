@@ -1504,9 +1504,6 @@ void CG_RenderSmokeGrenadeSmoke( centity_t *cent, const weaponInfo_t *weapon ) {
 			cent->lastFuseSparkTime = cg.time;
 		}
 
-//		if( spritesNeeded + cent->miscTime < 40 )
-//			spritesNeeded = 40 - cent->miscTime;
-
 		if ( !spritesNeeded ) {
 			return;
 		} else if ( spritesNeeded == 1 ) {
@@ -1519,7 +1516,6 @@ void CG_RenderSmokeGrenadeSmoke( centity_t *cent, const weaponInfo_t *weapon ) {
 				CG_SpawnSmokeSprite( cent, 0.f );
 			}
 		} else {
-//			float lerpfrac = 1.0f / (float)spritesNeeded;
 			float lerp = 1.0f;
 			float dtime;
 

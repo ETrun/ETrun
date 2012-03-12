@@ -911,7 +911,8 @@ void SetWolfSpawnWeapons( gclient_t *client ) {
 				client->ps.stats[STAT_KEYS] |= ( 1 << INV_BINOCS );
 			}
 
-			AddWeaponToPlayer( client, WP_SMOKE_MARKER, GetAmmoTableData( WP_SMOKE_MARKER )->defaultStartingAmmo, GetAmmoTableData( WP_SMOKE_MARKER )->defaultStartingClip, qfalse );
+			/* Nico, removed airstrikes
+			AddWeaponToPlayer( client, WP_SMOKE_MARKER, GetAmmoTableData( WP_SMOKE_MARKER )->defaultStartingAmmo, GetAmmoTableData( WP_SMOKE_MARKER )->defaultStartingClip, qfalse );*/
 
 			if ( client->sess.sessionTeam == TEAM_AXIS ) {
 				AddWeaponToPlayer( client, WP_MP40,  GetAmmoTableData( WP_MP40 )->defaultStartingAmmo, GetAmmoTableData( WP_MP40 )->defaultStartingClip, qtrue );

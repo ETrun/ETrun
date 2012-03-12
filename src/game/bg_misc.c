@@ -122,13 +122,14 @@ pathCorner_t pathCorners[MAX_PATH_CORNERS];
 #define DELAY_THROW     250 // grenades, dynamite
 
 // Arnout: the new loadout for WolfXP
+// Nico, removed airstrikes
 int weapBanksMultiPlayer[MAX_WEAP_BANKS_MP][MAX_WEAPS_IN_BANK_MP] = {
 	{0,                     0,                      0,                  0,                          0,                      0,                          0,          0,          0,          0,      0,              0           },  // empty bank '0'
 	{WP_KNIFE,              0,                      0,                  0,                          0,                      0,                          0,          0,          0,          0,      0,              0           },
 	{WP_LUGER,              WP_COLT,                WP_AKIMBO_COLT,     WP_AKIMBO_LUGER,            WP_AKIMBO_SILENCEDCOLT, WP_AKIMBO_SILENCEDLUGER,    0,          0,          0,          0,      0,              0           },
 	{WP_MP40,               WP_THOMPSON,            WP_STEN,            WP_GARAND,                  WP_PANZERFAUST,         WP_FLAMETHROWER,            WP_KAR98,   WP_CARBINE, WP_FG42,    WP_K43, WP_MOBILE_MG42, WP_MORTAR   },
 	{WP_GRENADE_LAUNCHER,   WP_GRENADE_PINEAPPLE,   0,                  0,                          0,                      0,                          0,          0,          0,          0,      0,              0           },
-	{WP_MEDIC_SYRINGE,      WP_PLIERS,              WP_SMOKE_MARKER,    WP_SMOKE_BOMB,              0,                      0,                          0,          0,          0,          0,      0,              0,          },
+	{WP_MEDIC_SYRINGE,      WP_PLIERS,              0,					WP_SMOKE_BOMB,              0,                      0,                          0,          0,          0,          0,      0,              0,          },
 	{WP_DYNAMITE,           WP_MEDKIT,              WP_AMMO,            WP_SATCHEL,                 WP_SATCHEL_DET,         0,                          0,          0,          0,          0,      0,              0           },
 	{WP_LANDMINE,           WP_MEDIC_ADRENALINE,    0,                  0,                          0,                      0,                          0,          0,          0,          0,      0,              0           },
 	{WP_BINOCULARS,         0,                      0,                  0,                          0,                      0,                          0,          0,          0,          0,      0,              0           },
@@ -198,7 +199,7 @@ ammotable_t ammoTableMP[WP_NUM_WEAPONS] = {
 
 	{   999,            0,      999,    0,      0,      0,      50,             0,      0,      0,      0                       },  // WP_BINOCULARS			// 20
 	{   999,            0,      999,    0,      0,      0,      50,             0,      0,      0,      0                       },  // WP_PLIERS				// 21
-	{   0,				0,      0,		0,      0,      0,      50,             0,      0,      0,      MOD_AIRSTRIKE           },  // WP_SMOKE_MARKER			// 22
+	{   999,            0,      999,    0,      1,      0,      50,             0,      0,      0,      MOD_AIRSTRIKE           },  // WP_SMOKE_MARKER			// 22
 	{   30,             1,      10,     20,     10,     2500,   DELAY_LOW,      400,    0,      0,      MOD_KAR98               },  // WP_KAR98					// 23		K43
 	{   24,             1,      8,      16,     8,      1500,   DELAY_LOW,      400,    0,      0,      MOD_CARBINE             },  // WP_CARBINE				// 24		GARAND
 	{   24,             1,      8,      16,     8,      1500,   DELAY_LOW,      400,    0,      0,      MOD_GARAND              },  // WP_GARAND				// 25		GARAND

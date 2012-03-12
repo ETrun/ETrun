@@ -2579,7 +2579,7 @@ Will perform callbacks to make the loading info screen update.
 #endif // _DEBUG
 void CG_Init( int serverMessageNum, int serverCommandSequence, int clientNum, qboolean demoPlayback ) {
 	const char  *s;
-	int i;
+	// int i; Nico, unused warning fix
 #ifdef _DEBUG
 	DEBUG_INITPROFILE_INIT
 #endif // _DEBUG
