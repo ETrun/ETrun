@@ -1690,7 +1690,8 @@ extern vmCvar_t g_voiceChatsAllowed;        // DHM - Nerve :: number before spam
 extern vmCvar_t g_alliedmaxlives;           // Xian
 extern vmCvar_t g_axismaxlives;             // Xian*/
 
-extern vmCvar_t g_fastres;                  // Xian - Fast medic res'ing
+/* Nico, removed fastres
+extern vmCvar_t g_fastres;                  // Xian - Fast medic res'ing*/
 
 /* Nico, removed knifeonly
 extern vmCvar_t g_knifeonly;                // Xian - Wacky Knife-Only rounds*/

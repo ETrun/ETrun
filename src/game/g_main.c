@@ -154,7 +154,8 @@ vmCvar_t g_voiceChatsAllowed;       // DHM - Nerve
 vmCvar_t g_alliedmaxlives;          // Xian
 vmCvar_t g_axismaxlives;            // Xian*/
 
-vmCvar_t g_fastres;                 // Xian
+/* Nico, removed fastres
+vmCvar_t g_fastres;                 // Xian*/
 
 /* Nico, removed knifeonly
 vmCvar_t g_knifeonly;               // Xian*/
@@ -474,7 +475,8 @@ cvarTable_t gameCvarTable[] = {
 	{ &g_alliedmaxlives, "g_alliedmaxlives", "0", CVAR_LATCH | CVAR_SERVERINFO, 0, qtrue },     // Xian
 	{ &g_axismaxlives, "g_axismaxlives", "0", CVAR_LATCH | CVAR_SERVERINFO, 0, qtrue },         // Xian*/
 
-	{ &g_fastres, "g_fastres", "0", CVAR_ARCHIVE, 0, qtrue, qtrue },                          // Xian - Fast Medic Resing
+	/* Nico, removed fastres
+	{ &g_fastres, "g_fastres", "0", CVAR_ARCHIVE, 0, qtrue, qtrue },                          // Xian - Fast Medic Resing*/
 
 	/* Nico, removed knifeonly
 	{ &g_knifeonly, "g_knifeonly", "0", 0, 0, qtrue },                                            // Xian - Fast Medic Resing*/

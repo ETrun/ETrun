@@ -537,14 +537,15 @@ qboolean ReviveEntity( gentity_t *ent, gentity_t *traceEnt ) {
 	te->s.eventParm = G_SoundIndex( "sound/misc/vo_revive.wav" );
 
 	// Xian -- This was gay and I always hated it.
+	/* Nico, removed fastres
 	if ( g_fastres.integer > 0 ) {
 		BG_AnimScriptEvent( &traceEnt->client->ps, traceEnt->client->pers.character->animModelInfo, ANIM_ET_JUMP, qfalse, qtrue );
-	} else {
+	} else {*/
 		// DHM - Nerve :: Play revive animation
 		BG_AnimScriptEvent( &traceEnt->client->ps, traceEnt->client->pers.character->animModelInfo, ANIM_ET_REVIVE, qfalse, qtrue );
 		traceEnt->client->ps.pm_flags |= PMF_TIME_LOCKPLAYER;
 		traceEnt->client->ps.pm_time = 2100;
-	}
+	// }
 
 	// Tell the caller if we actually used a syringe
 	return usedSyringe;

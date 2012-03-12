@@ -1917,11 +1917,12 @@ void ClientSpawn( gentity_t *ent, qboolean revived ) {
 	// TTimo keep it isolated from spectator to be safe still
 	if ( client->sess.sessionTeam != TEAM_SPECTATOR ) {
 		// Xian - Moved the invul. stuff out of SetWolfSpawnWeapons and put it here for clarity
+		/* Nico, removed fastres
 		if ( g_fastres.integer == 1 && revived ) {
 			client->ps.powerups[PW_INVULNERABLE] = level.time + 1000;
-		} else {
+		} else {*/
 			client->ps.powerups[PW_INVULNERABLE] = level.time + 3000;
-		}
+		// }
 	}
 	// End Xian
 
