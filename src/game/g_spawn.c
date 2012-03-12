@@ -212,10 +212,11 @@ void SP_info_player_deathmatch( gentity_t *ent );
 
 void SP_info_player_intermission( gentity_t *ent );// Nico, note: keep this
 
+/* Nico, removed unused podium stuff
 void SP_info_firstplace( gentity_t *ent );
 void SP_info_secondplace( gentity_t *ent );
 void SP_info_thirdplace( gentity_t *ent );
-void SP_info_podium( gentity_t *ent );
+void SP_info_podium( gentity_t *ent );*/
 
 void SP_func_plat( gentity_t *ent );
 void SP_func_static( gentity_t *ent );
