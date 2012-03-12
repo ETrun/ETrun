@@ -4915,7 +4915,10 @@ const voteType_t voteToggles[] =
 	{ "vote_allow_nextmap",          CV_SVF_NEXTMAP },
 	{ "vote_allow_pub",              CV_SVF_PUB },
 	{ "vote_allow_referee",          CV_SVF_REFEREE },
-	{ "vote_allow_shuffleteamsxp",   CV_SVF_SHUFFLETEAMS },
+
+	/* Nico, removed shuffleteam
+	{ "vote_allow_shuffleteamsxp",   CV_SVF_SHUFFLETEAMS },*/
+
 	{ "vote_allow_swapteams",        CV_SVF_SWAPTEAMS },
 
 	/* Nico, no friendlyfire

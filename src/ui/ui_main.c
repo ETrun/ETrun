@@ -7789,7 +7789,10 @@ cvarTable_t cvarTable[] = {
 	{ NULL, "vote_allow_nextmap", "1", CVAR_ARCHIVE },
 	{ NULL, "vote_allow_pub", "1", CVAR_ARCHIVE },
 	{ NULL, "vote_allow_referee", "0", CVAR_ARCHIVE },
-	{ NULL, "vote_allow_shuffleteamsxp", "1", CVAR_ARCHIVE },
+
+	/* Nico, removed shuffleteam
+	{ NULL, "vote_allow_shuffleteamsxp", "1", CVAR_ARCHIVE },*/
+
 	{ NULL, "vote_allow_swapteams", "1", CVAR_ARCHIVE },
 
 	/* Nico, no friendlyfire

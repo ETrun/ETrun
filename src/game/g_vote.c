@@ -102,7 +102,10 @@ static const vote_reference_t aVoteInfo[] = {
 	{ 0x1ff, "pub",           G_Pub_v,           "Load Public Settings", "^7\n  Loads standard public settings for the current mode" },*/
 
 	{ 0x1ff, "referee",       G_Referee_v,       "Referee",           " <player_id>^7\n  Elects a player to have admin abilities" },
-	{ 0x1ff, "shuffleteamsxp", G_ShuffleTeams_v, "Shuffle Teams by XP",   " ^7\n  Randomly place players on each team, based on XP" },
+
+	/* Nico, removed shuffleteam
+	{ 0x1ff, "shuffleteamsxp", G_ShuffleTeams_v, "Shuffle Teams by XP",   " ^7\n  Randomly place players on each team, based on XP" },*/
+
 	{ 0x1ff, "startmatch",    G_StartMatch_v,    "Start Match",       " ^7\n  Sets all players to \"ready\" status to start the match" },
 
 	/* Nico, removed swap_teams command
@@ -804,6 +807,7 @@ int G_Referee_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2
 
 
 // *** Shuffle teams
+/* Nico, removed shuffleteam
 int G_ShuffleTeams_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd ) {
 	// Vote request (vote is being initiated)
 	if ( arg ) {
@@ -824,7 +828,7 @@ int G_ShuffleTeams_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char 
 	}
 
 	return( G_OK );
-}
+}*/
 
 
 // *** Start Match ***

@@ -1641,6 +1641,7 @@ int QDECL G_SortPlayersByXP( const void *a, const void *b ) {
 
 
 // Shuffle active players onto teams
+/* Nico, removed shuffleteam
 void G_shuffleTeams( void ) {
 	int i, cTeam; //, cMedian = level.numNonSpectatorClients / 2;
 	// int aTeamCount[TEAM_NUM_TEAMS]; Nico, unused warning fix
@@ -1686,7 +1687,7 @@ void G_shuffleTeams( void ) {
 	}
 
 	AP( "cp \"^1Teams have been shuffled!\n\"" );
-}
+}*/
 
 
 // Returns player's "real" team.

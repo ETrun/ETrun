@@ -1455,7 +1455,8 @@ void ClearMaxLivesBans();*/
 
 void AddIPBan( const char *str );
 
-void Svcmd_ShuffleTeams_f( void );
+/* Nico, removed shuffleteam
+void Svcmd_ShuffleTeams_f( void );*/
 
 
 //
@@ -1828,7 +1829,10 @@ extern vmCvar_t vote_allow_mutespecs;
 extern vmCvar_t vote_allow_nextmap;
 extern vmCvar_t vote_allow_pub;
 extern vmCvar_t vote_allow_referee;
-extern vmCvar_t vote_allow_shuffleteamsxp;
+
+/* Nico, removed shuffleteam
+extern vmCvar_t vote_allow_shuffleteamsxp;*/
+
 extern vmCvar_t vote_allow_swapteams;
 
 /* Nico, no friendlyfire
@@ -2323,7 +2327,10 @@ qboolean G_checkReady( void );*/
 qboolean G_readyMatchState( void );*/
 
 void G_removeSpecInvite( int team );
-void G_shuffleTeams( void );
+
+/* Nico, removed shuffleteam
+void G_shuffleTeams( void );*/
+
 void G_swapTeamLocks( void );
 void G_swapTeams( void );
 qboolean G_teamJoinCheck( int team_num, gentity_t *ent );
@@ -2372,7 +2379,10 @@ int G_Nextmap_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2
 int G_Pub_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd );*/
 
 int G_Referee_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd );
-int G_ShuffleTeams_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd );
+
+/* Nico, removed shuffleteam
+int G_ShuffleTeams_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd );*/
+
 int G_StartMatch_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd );
 
 /* Nico, removed swap_teams command
