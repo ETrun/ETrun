@@ -1812,7 +1812,9 @@ extern vmCvar_t match_timeoutlength;*/
 /* Nico, removed warmup
 extern vmCvar_t match_warmupDamage;*/
 
-extern vmCvar_t server_autoconfig;
+/* Nico, removed server autoconfig
+extern vmCvar_t server_autoconfig;*/
+
 extern vmCvar_t server_motd0;
 extern vmCvar_t server_motd1;
 extern vmCvar_t server_motd2;
@@ -1858,7 +1860,10 @@ extern vmCvar_t vote_allow_balancedteams;*/
 extern vmCvar_t vote_allow_muting;
 extern vmCvar_t vote_limit;
 extern vmCvar_t vote_percent;
-extern vmCvar_t z_serverflags;
+
+/* Nico, removed serverflags
+extern vmCvar_t z_serverflags;*/
+
 extern vmCvar_t g_letterbox;
 
 extern vmCvar_t g_debugSkills;
@@ -2128,7 +2133,8 @@ g_serverEntity_t *FindServerEntity( g_serverEntity_t *from, int fieldofs, char *
 #define PAUSE_NONE      0x00    // Match is NOT paused.
 #define PAUSE_UNPAUSING 0x01    // Pause is about to expire
 
-#define ZSF_COMP        0x01    // Have comp settings loaded for current gametype?
+/* Nico, removed serverflags
+#define ZSF_COMP        0x01    // Have comp settings loaded for current gametype?*/
 
 #define HELP_COLUMNS    4
 

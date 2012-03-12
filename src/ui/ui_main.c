@@ -7771,7 +7771,9 @@ cvarTable_t cvarTable[] = {
 	/* Nico, removed warmup
 	{ NULL, "match_warmupDamage", "1", CVAR_ARCHIVE },*/
 
-	{ NULL, "server_autoconfig", "0", CVAR_ARCHIVE },
+	/* Nico, removed server autoconfig
+	{ NULL, "server_autoconfig", "0", CVAR_ARCHIVE },*/
+
 	{ NULL, "server_motd0", " ^NEnemy Territory ^7MOTD ", CVAR_ARCHIVE },
 	{ NULL, "server_motd1", "", CVAR_ARCHIVE },
 	{ NULL, "server_motd2", "", CVAR_ARCHIVE },
