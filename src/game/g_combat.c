@@ -566,7 +566,8 @@ void player_die( gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int
 				AddKillScore( attacker, WOLF_FRAG_BONUS );
 			}*/
 
-			attacker->client->lastKillTime = level.time;
+			/* Nico, removed lastkilltime
+			attacker->client->lastKillTime = level.time;*/
 		}
 	} else {
 		AddScore( self, -1 );

@@ -1789,7 +1789,7 @@ Cmd_Vote_f
 */
 void Cmd_Vote_f( gentity_t *ent ) {
 	char msg[64];
-	int num;
+	// int num; Nico, unused warning fix
 
 	/* Nico, removed complaints
 	// DHM - Nerve :: Complaints supercede voting (and share command)

@@ -917,7 +917,8 @@ typedef struct {
 	int lowAmmoWarning;             // 1 = low, 2 = empty
 
 	// kill timers for carnage reward
-	int lastKillTime;
+	/* Nico, removed lastkilltime
+	int lastKillTime;*/
 
 	// crosshair client ID
 	int crosshairClientNum;

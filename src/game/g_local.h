@@ -817,7 +817,8 @@ struct gclient_s {
 
 	int airOutTime;
 
-	int lastKillTime;               // for multiple kill rewards
+	/* Nico, removed lastkilltime
+	int lastKillTime;               // for multiple kill rewards*/
 
 	qboolean fireHeld;              // used for hook
 	gentity_t   *hook;              // grapple hook if out
