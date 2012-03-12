@@ -274,7 +274,6 @@ vmCvar_t vote_percent;
 /* Nico, removed serverflags
 vmCvar_t z_serverflags;*/
 
-
 vmCvar_t g_covertopsChargeTime;
 vmCvar_t refereePassword;
 vmCvar_t g_debugConstruct;
@@ -284,7 +283,9 @@ vmCvar_t g_landminetimeout;
 // enabled in bot scripts and regular scripts.
 // Added by Mad Doctor I, 8/23/2002
 vmCvar_t g_scriptDebugLevel;
-vmCvar_t g_movespeed;
+
+/* Nico, removed (c)g_movespeed
+vmCvar_t g_movespeed;*/
 
 /* Nico, removed gametypes
 vmCvar_t g_axismapxp;
@@ -567,7 +568,8 @@ cvarTable_t gameCvarTable[] = {
 	{ &g_scriptDebugLevel, "g_scriptDebugLevel", "0", CVAR_CHEAT, 0, qfalse },
 
 	// How fast do we want Allied single player movement?
-	{ &g_movespeed, "g_movespeed", "76", CVAR_CHEAT, 0, qfalse },
+	/* Nico, removed (c)g_movespeed
+	{ &g_movespeed, "g_movespeed", "76", CVAR_CHEAT, 0, qfalse },*/
 
 	// Arnout: LMS
 	/* Nico, removed balancedteams

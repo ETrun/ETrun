@@ -1740,7 +1740,8 @@ extern vmCvar_t g_landminetimeout;
 extern vmCvar_t g_scriptDebugLevel;
 
 // How fast do SP player and allied bots move?
-extern vmCvar_t g_movespeed;
+/* Nico, removed (c)g_movespeed
+extern vmCvar_t g_movespeed;*/
 
 /* Nico, removed gametypes
 extern vmCvar_t g_axismapxp;

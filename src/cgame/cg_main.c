@@ -212,7 +212,10 @@ vmCvar_t cg_message;
 vmCvar_t cg_messageType;
 vmCvar_t cg_messagePlayer;
 vmCvar_t cg_messagePlayerName;
-vmCvar_t cg_movespeed;
+
+/* Nico, removed (c)g_movespeed
+vmCvar_t cg_movespeed;*/
+
 vmCvar_t cg_cameraMode;
 vmCvar_t cg_cameraOrbit;
 vmCvar_t cg_cameraOrbitDelay;
@@ -461,7 +464,9 @@ cvarTable_t cvarTable[] = {
 	{ &cg_bluelimbotime,        "", "30000", 0 }, // communicated by systeminfo
 	{ &cg_redlimbotime,         "", "30000", 0 }, // communicated by systeminfo*/
 
-	{ &cg_movespeed, "g_movespeed", "76", 0 }, // actual movespeed of player
+	/* Nico, removed (c)g_movespeed
+	{ &cg_movespeed, "g_movespeed", "76", 0 }, // actual movespeed of player*/
+
 	{ &cg_animState, "cg_animState", "0", CVAR_CHEAT},
 	{ &cg_drawCompass, "cg_drawCompass", "1", CVAR_ARCHIVE },
 	{ &cg_drawNotifyText, "cg_drawNotifyText", "1", CVAR_ARCHIVE },

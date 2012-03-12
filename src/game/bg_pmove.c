@@ -584,20 +584,21 @@ static void PM_Accelerate( vec3_t wishdir, float wishspeed, float accel ) {
 
 
 // JPW NERVE -- added because I need to check single/multiplayer instances and branch accordingly
+/* Nico, removed (c)g_movespeed
 #ifdef CGAMEDLL
 
-/* Nico, removed (c)g_gametype
-extern vmCvar_t cg_gameType;*/
+// Nico, removed (c)g_gametype
+// extern vmCvar_t cg_gameType;
 
 extern vmCvar_t cg_movespeed;
 #endif
 #ifdef GAMEDLL
 
-/* Nico, removed (c)g_gametype
-extern vmCvar_t g_gametype;*/
+// Nico, removed (c)g_gametype
+// extern vmCvar_t g_gametype;
 
 extern vmCvar_t g_movespeed;
-#endif
+#endif*/
 
 /*
 ============
@@ -613,19 +614,20 @@ static float PM_CmdScale( usercmd_t *cmd ) {
 	float total;
 	float scale;
 
+/* Nico, removed (c)g_movespeed
 #ifdef CGAMEDLL
 
-	/* Nico, removed (c)g_gametype
-	int gametype = cg_gameType.integer;*/
+	// Nico, removed (c)g_gametype
+	// int gametype = cg_gameType.integer;
 
 	int movespeed = cg_movespeed.integer;
 #elif GAMEDLL
 
-	/* Nico, removed (c)g_gametype
-	int gametype = g_gametype.integer;*/
+	// Nico, removed (c)g_gametype
+	// int gametype = g_gametype.integer;
 
 	int movespeed = g_movespeed.integer;
-#endif
+#endif*/
 
 	max = abs( cmd->forwardmove );
 	if ( abs( cmd->rightmove ) > max ) {
