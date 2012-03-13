@@ -1147,6 +1147,7 @@ void ClientThink_real( gentity_t *ent ) {
 		return;
 	}
 
+	/* Nico, removed mines
 	if ( level.gameManager && level.timeCurrent - client->pers.lastHQMineReportTime > 20000 ) {  // NOTE: 60 seconds? bit much innit
 		if ( level.gameManager->s.modelindex && client->sess.sessionTeam == TEAM_AXIS ) {
 			if ( G_SweepForLandmines( ent->r.currentOrigin, 256.f, TEAM_AXIS ) ) {
@@ -1159,7 +1160,7 @@ void ClientThink_real( gentity_t *ent ) {
 				trap_SendServerCommand( ent - g_entities, "cp \"Mines have been reported in this area.\" 1" );
 			}
 		}
-	}
+	}*/
 
 	// perform once-a-second actions
 	if ( level.match_pause == PAUSE_NONE ) {

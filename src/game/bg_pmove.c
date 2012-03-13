@@ -89,7 +89,8 @@ float pm_spectatorfriction = 5.0f;
 
 int c_pmove = 0;
 
-#define TRIPMINE_RANGE 512.f
+/* Nico, removed mines
+#define TRIPMINE_RANGE 512.f*/
 
 
 #ifdef GAMEDLL

@@ -63,7 +63,8 @@ If you have questions concerning this license or the applicable additional terms
 
 //===============================================================
 
-#define MAX_TEAM_LANDMINES  10
+/* Nico, removed mines
+#define MAX_TEAM_LANDMINES  10*/
 
 typedef qboolean ( *addToSnapshotCallback )( int entityNum, int clientNum );
 

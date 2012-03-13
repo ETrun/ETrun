@@ -2087,9 +2087,11 @@ void ClientDisconnect( int clientNum ) {
 		}
 	}*/
 
+	/* Nico, removed mines
 	if ( g_landminetimeout.integer ) {
 		G_ExplodeMines( ent );
-	}
+	}*/
+
 	G_FadeItems( ent, MOD_SATCHEL );
 
 	// remove ourself from teamlists

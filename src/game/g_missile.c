@@ -523,7 +523,7 @@ Landmine_Check_Ground
 
 =================
 */
-
+/* Nico, removed mines
 void Landmine_Check_Ground( gentity_t *self ) {
 	vec3_t mins, maxs;
 	vec3_t start, end;
@@ -542,41 +542,7 @@ void Landmine_Check_Ground( gentity_t *self ) {
 	if ( tr.fraction == 1 ) {
 		self->s.groundEntityNum = -1;
 	}
-
-	/*vec3_t		oldorigin;
-	vec3_t		origin;
-	trace_t		tr;
-
-	// Backup origin
-	VectorCopy( self->r.currentOrigin, oldorigin );
-
-	// See if we can fall down this frame
-	self->s.pos.trType = TR_GRAVITY;
-	self->s.pos.trTime = level.time;
-	BG_EvaluateTrajectory( &self->s.pos, level.time, origin, qfalse, self->s.effect2Time );
-
-	// This is likely overkill, but just in case (synced to G_RunMissile)
-	if( (self->clipmask & CONTENTS_BODY) && (self->s.weapon == WP_DYNAMITE || self->s.weapon == WP_ARTY  || ent->s.weapon == WP_SMOKE_MARKER
-		|| self->s.weapon == WP_GRENADE_LAUNCHER || self->s.weapon == WP_GRENADE_PINEAPPLE
-		|| self->s.weapon == WP_LANDMINE || self->s.weapon == WP_SATCHEL || self->s.weapon == WP_SMOKE_BOMB
-		) ) {
-
-		if( !self->s.pos.trDelta[0] && !self->s.pos.trDelta[1] && !self->s.pos.trDelta[2] ) {
-			self->clipmask &= ~CONTENTS_BODY;
-		}
-	}
-
-	// trace a line from the previous position to the current position,
-	// ignoring interactions with the missile owner
-	trap_Trace( &tr, self->r.currentOrigin, self->r.mins, self->r.maxs, origin,
-		self->r.ownerNum, self->clipmask );
-
-	if (tr.fraction == 1)
-		self->s.groundEntityNum = -1;
-
-	// Reset origin
-	G_SetOrigin( self, oldorigin );*/
-}
+}*/
 
 
 /*
@@ -590,7 +556,9 @@ void G_RunMissile( gentity_t *ent ) {
 	int impactDamage;
 
 	if ( ent->s.weapon == WP_LANDMINE || ent->s.weapon == WP_DYNAMITE || ent->s.weapon == WP_SATCHEL ) {
-		Landmine_Check_Ground( ent );
+
+		/* Nico, removed mines
+		Landmine_Check_Ground( ent );*/
 
 		if ( ent->s.groundEntityNum == -1 ) {
 			if ( ent->s.pos.trType != TR_GRAVITY ) {
@@ -1285,6 +1253,7 @@ void G_FadeItems( gentity_t* ent, int modType ) {
 	}
 }
 
+/* Nico, removed mines
 int G_CountTeamLandmines( team_t team ) {
 	gentity_t* e;
 	int i;
@@ -1344,7 +1313,7 @@ qboolean G_SweepForLandmines( vec3_t origin, float radius, int team ) {
 	}
 
 	return( qfalse );
-}
+}*/
 
 /* Nico, removed satchel
 gentity_t *G_FindSatchel( gentity_t* ent ) {
@@ -1414,10 +1383,10 @@ G_ExplodeMines
 ==========
 */
 // removes any weapon objects lying around in the map when they disconnect/switch team
+/* Nico, removed mines
 void G_ExplodeMines( gentity_t* ent ) {
 	G_FadeItems( ent, MOD_LANDMINE );
-//	G_FadeItems(ent, MOD_TRIPMINE);
-}
+}*/
 
 /*
 ==========
@@ -1492,6 +1461,7 @@ void G_FreeSatchel( gentity_t* ent ) {
 LandMineTrigger
 ==========
 */
+/* Nico, removed mines
 void LandminePostThink( gentity_t *self );
 
 void LandMineTrigger( gentity_t* self ) {
@@ -1515,7 +1485,7 @@ void LandMinePostTrigger( gentity_t* self ) {
 G_TripMineThink
 ==========
 */
-
+/* Nico, removed mines
 void G_TripMineThink( gentity_t* ent ) {
 	trace_t trace;
 	vec3_t start, end;
@@ -1529,9 +1499,6 @@ void G_TripMineThink( gentity_t* ent ) {
 	ent->nextthink = level.time + FRAMETIME;
 
 	if ( trace.fraction == 1.f ) { // Gordon: shouldnt really happen once we do a proper range check on placing
-/*		ent->nextthink = level.time;
-		ent->think = DynaSink;
-		ent->timestamp = level.time + 1500;*/
 		return;
 	}
 
@@ -1543,20 +1510,19 @@ void G_TripMineThink( gentity_t* ent ) {
 
 	if ( !Q_stricmp( traceEnt->classname, "player" ) ) {
 		ent->think = G_ExplodeMissile;
-//		return;
 	}
-}
+}*/
 
 /*
 ==========
 G_TripMinePrime
 ==========
 */
-
+/* Nico, removed mines
 void G_TripMinePrime( gentity_t* ent ) {
 	ent->think = G_TripMineThink;
 	ent->nextthink = level.time + 500;
-}
+}*/
 
 /*107     11      20      0       0       0       0       //fire gren
 
@@ -1564,7 +1530,7 @@ void G_TripMinePrime( gentity_t* ent ) {
 G_LandmineThink
 ==========
 */
-
+/* Nico, removed mines
 // TAT 11/20/2002
 //		Function to check if an entity will set off a landmine
 #define LANDMINE_TRIGGER_DIST 64.0f
@@ -1655,14 +1621,14 @@ void LandminePostThink( gentity_t *self ) {
 	if ( !trigger ) {
 		LandMinePostTrigger( self );
 	}
-}
+}*/
 
 /*
 ==========
 G_LandminePrime
 ==========
 */
-
+/* Nico, removed mines
 void G_LandminePrime( gentity_t *self ) {
 	self->nextthink = level.time + FRAMETIME;
 	self->think = G_LandmineThink;
@@ -1673,10 +1639,10 @@ qboolean G_LandmineSnapshotCallback( int entityNum, int clientNum ) {
 	gentity_t* clEnt    = &g_entities[ clientNum ];
 	team_t team;
 
-	/* Nico, removed skills
-	if ( clEnt->client->sess.skill[ SK_BATTLE_SENSE ] >= 4 ) {
-		return qtrue;
-	}*/
+	// Nico, removed skills
+	// if ( clEnt->client->sess.skill[ SK_BATTLE_SENSE ] >= 4 ) {
+	//	return qtrue;
+	// }
 
 	if ( !G_LandmineArmed( ent ) ) {
 		return qtrue;
@@ -1697,7 +1663,7 @@ qboolean G_LandmineSnapshotCallback( int entityNum, int clientNum ) {
 	}
 
 	return qfalse;
-}
+}*/
 
 /*
 =================

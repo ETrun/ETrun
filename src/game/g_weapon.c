@@ -283,6 +283,7 @@ void Weapon_Medic( gentity_t *ent ) {
 G_PlaceTripmine
 ==========
 */
+/* Nico, removed mines
 void G_PlaceTripmine( gentity_t* ent ) {
 	vec3_t start, end;
 	trace_t trace;
@@ -324,7 +325,7 @@ void G_PlaceTripmine( gentity_t* ent ) {
 	VectorCopy( trace.plane.normal, bomb->s.origin2 );
 
 	trap_LinkEntity( bomb );
-}
+}*/
 
 /*void Weapon_SatchelCharge(gentity_t *ent) {
 	gitem_t *item;
@@ -705,7 +706,9 @@ int EntsThatRadiusCanDamage( vec3_t origin, float radius, int *damagedList ) {
 	return( numDamaged );
 }
 
-void G_LandminePrime( gentity_t *self );
+/* Nico, removed mines
+void G_LandminePrime( gentity_t *self );*/
+
 extern void explosive_indicator_think( gentity_t *ent );
 
 #define MIN_BLOCKINGWARNING_INTERVAL 5000
@@ -1437,6 +1440,7 @@ void AutoBuildConstruction( gentity_t* constructible ) {
 	}
 }
 
+/* Nico, removed mines
 qboolean G_LandmineTriggered( gentity_t* ent ) {
 	switch ( ent->s.teamNum ) {
 	case TEAM_AXIS + 8:
@@ -1466,7 +1470,7 @@ team_t G_LandmineTeam( gentity_t* ent ) {
 
 qboolean G_LandmineSpotted( gentity_t* ent ) {
 	return ent->s.modelindex2 ? qtrue : qfalse;
-}
+}*/
 
 void trap_EngineerTrace( trace_t *results, const vec3_t start, const vec3_t mins, const vec3_t maxs, const vec3_t end, int passEntityNum, int contentmask ) {
 	G_TempTraceIgnorePlayersAndBodies();
@@ -1609,7 +1613,10 @@ void Weapon_Engineer( gentity_t *ent ) {
 //bani
 // rain - #384 - check landmine team so that enemy mines can be disarmed
 // even if you're using all of yours :x
-			} else if ( G_CountTeamLandmines( ent->client->sess.sessionTeam ) >= MAX_TEAM_LANDMINES && G_LandmineTeam( traceEnt ) == ent->client->sess.sessionTeam ) {
+			} 
+			
+			/* Nico, removed mines
+			else if ( G_CountTeamLandmines( ent->client->sess.sessionTeam ) >= MAX_TEAM_LANDMINES && G_LandmineTeam( traceEnt ) == ent->client->sess.sessionTeam ) {
 
 				if ( G_LandmineUnarmed( traceEnt ) ) {
 // rain - should be impossible now
@@ -1622,15 +1629,15 @@ void Weapon_Engineer( gentity_t *ent ) {
 
 					Add_Ammo( ent, WP_LANDMINE, 1, qfalse );
 					// rain - #202 - give back the correct charge amount
-					/* Nico, removed skills
-					if ( ent->client->sess.skill[SK_EXPLOSIVES_AND_CONSTRUCTION] >= 3 ) {
-						ent->client->ps.classWeaponTime -= .33f * level.engineerChargeTime[ent->client->sess.sessionTeam - 1];
-					} else {*/
+					// Nico, removed skills
+					// if ( ent->client->sess.skill[SK_EXPLOSIVES_AND_CONSTRUCTION] >= 3 ) {
+					//	ent->client->ps.classWeaponTime -= .33f * level.engineerChargeTime[ent->client->sess.sessionTeam - 1];
+					// } else {
 						ent->client->ps.classWeaponTime -= .5f * level.engineerChargeTime[ent->client->sess.sessionTeam - 1];
 					// }
 
-					/* Nico, removed weaponstats
-					ent->client->sess.aWeaponStats[WS_LANDMINE].atts--;*/
+					// Nico, removed weaponstats
+					// ent->client->sess.aWeaponStats[WS_LANDMINE].atts--;
 					return;
 				}
 //bani - #471
@@ -1648,10 +1655,10 @@ void Weapon_Engineer( gentity_t *ent ) {
 					G_PrintClientSpammyCenterPrint( ent - g_entities, "Arming landmine..." );
 
 					// Give health until it is full, don't continue
-					/* Nico, removed skills
-					if ( ent->client->sess.skill[SK_EXPLOSIVES_AND_CONSTRUCTION] >= 2 ) {
-						traceEnt->health += 24;
-					} else {*/
+					// Nico, removed skills
+					// if ( ent->client->sess.skill[SK_EXPLOSIVES_AND_CONSTRUCTION] >= 2 ) {
+					//	traceEnt->health += 24;
+					// } else {
 						traceEnt->health += 12;
 					// }
 
@@ -1684,74 +1691,43 @@ evilbanigoto:
 						return;
 					}
 
-					/* Nico, removed skills
-					if ( ent->client->sess.skill[SK_EXPLOSIVES_AND_CONSTRUCTION] >= 2 ) {
-						traceEnt->health += 6;
-					} else {*/
+					// Nico, removed skills
+					// if ( ent->client->sess.skill[SK_EXPLOSIVES_AND_CONSTRUCTION] >= 2 ) {
+					//	traceEnt->health += 6;
+					// } else {
 						traceEnt->health += 3;
 					// }
 
 					G_PrintClientSpammyCenterPrint( ent - g_entities, "Defusing landmine" );
 
 					if ( traceEnt->health >= 250 ) {
-/*						traceEnt->health = 255;
-						traceEnt->think = G_FreeEntity;
-						traceEnt->nextthink = level.time + FRAMETIME;*/
-
 						trap_SendServerCommand( ent - g_entities, "cp \"Landmine defused...\" 1" );
 
 						Add_Ammo( ent, WP_LANDMINE, 1, qfalse );
 
 						if ( G_LandmineTeam( traceEnt ) != ent->client->sess.sessionTeam ) {
 
-							/* Nico, removed g_stats.c
-							G_AddSkillPoints( ent, SK_EXPLOSIVES_AND_CONSTRUCTION, 4.f );
-							G_DebugAddSkillPoints( ent, SK_EXPLOSIVES_AND_CONSTRUCTION, 4.f, "defusing an enemy landmine" );*/
+							// Nico, removed g_stats.c
+							// G_AddSkillPoints( ent, SK_EXPLOSIVES_AND_CONSTRUCTION, 4.f );
+							// G_DebugAddSkillPoints( ent, SK_EXPLOSIVES_AND_CONSTRUCTION, 4.f, "defusing an enemy landmine" );
 
 						}
+						mapEntityData_t *mEnt;
 
-						// update our map
-						/*{
-							// if it's an enemy mine, update both teamlists
-							int teamNum;
-							mapEntityData_t	*mEnt;
-							mapEntityData_Team_t *teamList;
-
-							teamNum = traceEnt->s.teamNum % 4;
-
-							teamList = ent->client->sess.sessionTeam == TEAM_AXIS ? &mapEntityData[0] : &mapEntityData[1];
-							if((mEnt = G_FindMapEntityData(teamList, traceEnt-g_entities)) != NULL) {
-								G_FreeMapEntityData( teamList, mEnt );
-							}
-
-							teamList = ent->client->sess.sessionTeam == TEAM_AXIS ? &mapEntityData[1] : &mapEntityData[0];	// inverted
-							if((mEnt = G_FindMapEntityData(teamList, traceEnt-g_entities)) != NULL) {
-								if( teamNum != ent->client->sess.sessionTeam ) {
-									G_FreeMapEntityData( teamList, mEnt );
-								} else {
-								//	mEnt->type = ME_LANDMINE;	// set it back to this as it might have been set to 'about to explode'.
-									mEnt->entNum = -1;
-								}
-							}
-						}*/
-						{
-							mapEntityData_t *mEnt;
-
-							if ( ( mEnt = G_FindMapEntityData( &mapEntityData[0], traceEnt - g_entities ) ) != NULL ) {
-								G_FreeMapEntityData( &mapEntityData[0], mEnt );
-							}
-
-							if ( ( mEnt = G_FindMapEntityData( &mapEntityData[1], traceEnt - g_entities ) ) != NULL ) {
-								G_FreeMapEntityData( &mapEntityData[1], mEnt );
-							}
-
-							G_FreeEntity( traceEnt );
+						if ( ( mEnt = G_FindMapEntityData( &mapEntityData[0], traceEnt - g_entities ) ) != NULL ) {
+							G_FreeMapEntityData( &mapEntityData[0], mEnt );
 						}
+
+						if ( ( mEnt = G_FindMapEntityData( &mapEntityData[1], traceEnt - g_entities ) ) != NULL ) {
+							G_FreeMapEntityData( &mapEntityData[1], mEnt );
+						}
+
+						G_FreeEntity( traceEnt );
 					} else {
 						return;
 					}
 				}
-			}
+			}*/
 		} else if ( traceEnt->methodOfDeath == MOD_SATCHEL ) {
 			if ( traceEnt->health >= 250 ) { // have to do this so we don't score multiple times
 				return;
@@ -2078,10 +2054,6 @@ evilbanigoto:
 					VectorAdd( origin, traceEnt->r.maxs, maxs );
 					num = trap_EntitiesInBox( mins, maxs, touch, MAX_GENTITIES );
 
-					// don't report if not disarming *enemy* dynamite in field
-/*					if (dynamiteDropTeam == ent->client->sess.sessionTeam)
-						return;*/
-
 					//bani - eh, why was this commented out? it makes sense, and prevents a sploit.
 					if ( dynamiteDropTeam == ent->client->sess.sessionTeam ) {
 						return;
@@ -2245,8 +2217,6 @@ evilbanigoto:
 									pm->s.effect3Time = hit->parent->s.teamNum;
 									pm->s.teamNum = ent->client->sess.sessionTeam;
 								}
-
-//								trap_SendServerCommand(-1, "cp \"Allied engineer disarmed the Dynamite!\" 2");
 							}
 
 							return;
@@ -4054,7 +4024,10 @@ void FireWeapon( gentity_t *ent ) {
 		}
 		break;
 	case WP_TRIPMINE:
-		G_PlaceTripmine( ent );
+
+		/* Nico, removed mines
+		G_PlaceTripmine( ent );*/
+
 		break;
 
 	case WP_MOBILE_MG42_SET:

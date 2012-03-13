@@ -2307,6 +2307,8 @@ than 10 left.
 "angle"		landmine orientation
 */
 extern int G_GetWeaponDamage( int weapon );
+
+/* Nico, removed mines
 extern void G_LandmineThink( gentity_t *self );
 
 void landmine_setup( gentity_t *ent ) {
@@ -2386,7 +2388,7 @@ void SP_misc_landmine( gentity_t *ent ) {
 
 	ent->nextthink = level.time + FRAMETIME * 5;
 	ent->think = landmine_setup;
-}
+}*/
 
 /*QUAKED misc_commandmap_marker (0 0.85 .85) (-16 -16 0) (16 16 16) ONLY_AXIS ONLY_ALLIED ISOBJECTIVE ISHEALTHAMMOCABINET ISCOMMANDPOST
 Command map marker entity. When set to state default it shows, any other state and it isn't visible.

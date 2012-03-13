@@ -240,7 +240,9 @@ void SP_func_constructible( gentity_t *ent );
 void SP_func_brushmodel( gentity_t *ent );
 void SP_misc_constructiblemarker( gentity_t *ent );
 void SP_target_explosion( gentity_t *ent );
-void SP_misc_landmine( gentity_t *ent );
+
+/* Nico, removed mines
+void SP_misc_landmine( gentity_t *ent );*/
 
 void SP_trigger_always( gentity_t *ent );
 void SP_trigger_multiple( gentity_t *ent );
@@ -629,7 +631,9 @@ spawn_t spawns[] = {
 	{"misc_beam",            SP_misc_beam},
 	{"misc_constructiblemarker", SP_misc_constructiblemarker},
 	{"target_explosion", SP_target_explosion },
-	{"misc_landmine",        SP_misc_landmine },
+
+	/* Nico, removed mines
+	{"misc_landmine",        SP_misc_landmine },*/
 
 	{0, 0}
 };

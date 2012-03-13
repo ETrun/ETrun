@@ -630,8 +630,8 @@ static void G_UpdateTeamMapData_DisguisedPlayer( gentity_t* spotter, gentity_t* 
 	}
 }*/
 
+/* Nico, removed mines
 void G_UpdateTeamMapData_LandMine( gentity_t* ent, qboolean forceAllied, qboolean forceAxis ) {
-//void G_UpdateTeamMapData_LandMine(gentity_t* ent) {
 	int num = ent - g_entities;
 	mapEntityData_Team_t* teamList;
 	mapEntityData_t *mEnt;
@@ -682,7 +682,7 @@ void G_UpdateTeamMapData_LandMine( gentity_t* ent, qboolean forceAllied, qboolea
 		//else if( ent->s.teamNum >= 8 )
 		//	mEnt->type = ME_LANDMINE_ARMED;
 	}
-}
+}*/
 
 void G_UpdateTeamMapData_CommandmapMarker( gentity_t* ent ) {
 	int num = ent - g_entities;
@@ -914,9 +914,12 @@ void G_UpdateTeamMapData( void ) {
 			G_UpdateTeamMapData_Tank( ent );
 			break;
 		case ET_MISSILE:
+
+			/* Nico, removed mines
 			if ( ent->methodOfDeath == MOD_LANDMINE ) {
 				G_UpdateTeamMapData_LandMine( ent, qfalse, qfalse );
-			}
+			}*/
+
 			break;
 		case ET_COMMANDMAP_MARKER:
 			G_UpdateTeamMapData_CommandmapMarker( ent );
@@ -1050,6 +1053,8 @@ void G_UpdateTeamMapData( void ) {
 
 						switch ( ent2->s.eType ) {
 						case ET_MISSILE:
+
+							/* Nico, removed mines
 							if ( ent2->methodOfDeath == MOD_LANDMINE ) {
 								if ( ( ent2->s.teamNum < 4 || ent2->s.teamNum >= 8 ) && ( ent2->s.teamNum % 4 != ent->client->sess.sessionTeam ) ) {
 									// TAT - as before, we can only detect a mine if we can see it from our binoculars
@@ -1088,9 +1093,9 @@ void G_UpdateTeamMapData( void ) {
 													AddScore( ent, 1 );
 													//G_AddExperience( ent, 1.f );
 
-													/* Nico, removed g_stats.c
-													G_AddSkillPoints( ent, SK_MILITARY_INTELLIGENCE_AND_SCOPED_WEAPONS, 3.f );
-													G_DebugAddSkillPoints( ent, SK_MILITARY_INTELLIGENCE_AND_SCOPED_WEAPONS, 3.f, "spotting a landmine" );*/
+													// Nico, removed g_stats.c
+													// G_AddSkillPoints( ent, SK_MILITARY_INTELLIGENCE_AND_SCOPED_WEAPONS, 3.f );
+													// G_DebugAddSkillPoints( ent, SK_MILITARY_INTELLIGENCE_AND_SCOPED_WEAPONS, 3.f, "spotting a landmine" );
 												}
 											}
 											break;
@@ -1127,9 +1132,9 @@ void G_UpdateTeamMapData( void ) {
 													AddScore( ent, 1 );
 													//G_AddExperience( ent, 1.f );
 
-													/* Nico, removed g_stats.c
-													G_AddSkillPoints( ent, SK_MILITARY_INTELLIGENCE_AND_SCOPED_WEAPONS, 3.f );
-													G_DebugAddSkillPoints( ent, SK_MILITARY_INTELLIGENCE_AND_SCOPED_WEAPONS, 3.f, "spotting a landmine" );*/
+													// Nico, removed g_stats.c
+													// G_AddSkillPoints( ent, SK_MILITARY_INTELLIGENCE_AND_SCOPED_WEAPONS, 3.f );
+													// G_DebugAddSkillPoints( ent, SK_MILITARY_INTELLIGENCE_AND_SCOPED_WEAPONS, 3.f, "spotting a landmine" );
 												}
 											}
 											break;
@@ -1142,7 +1147,7 @@ void G_UpdateTeamMapData( void ) {
 										ent->client->landmineSpotted = NULL;
 									}
 								}
-							}
+							}*/
 							break;
 						default:
 							break;

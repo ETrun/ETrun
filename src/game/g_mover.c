@@ -82,7 +82,10 @@ char *hintStrings[HINT_NUM_HINTS] = {
 
 	"HINT_CONSTRUCTIBLE",
 	"HINT_UNIFORM",
-	"HINT_LANDMINE",
+
+	/* Nico, removed mines
+	"HINT_LANDMINE",*/
+
 	"HINT_TANK",
 	"HINT_SATCHELCHARGE",
 	// START Mad Doc - TDF
@@ -423,7 +426,8 @@ qboolean G_TryPushingEntity( gentity_t *check, gentity_t *pusher, vec3_t move, v
 }
 
 //bani - referenced in G_MoverPush()
-extern void LandMineTrigger( gentity_t* self );
+/* Nico, removed mines
+extern void LandMineTrigger( gentity_t* self );*/
 
 /*
 ============
@@ -507,11 +511,14 @@ qboolean G_MoverPush( gentity_t *pusher, vec3_t move, vec3_t amove, gentity_t **
 		}
 
 		if ( check->s.eType == ET_MISSILE && check->s.groundEntityNum != pusher->s.number ) {
+
+			/* Nico, removed mines
 			if ( check->methodOfDeath == MOD_LANDMINE ) {
 				if ( check->s.teamNum >= 0 && check->s.teamNum < 4 ) {
 					LandMineTrigger( check );
 				}
-			}
+			}*/
+
 			continue;
 		}
 

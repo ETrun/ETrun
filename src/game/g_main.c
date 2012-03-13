@@ -285,7 +285,9 @@ vmCvar_t z_serverflags;*/
 vmCvar_t g_covertopsChargeTime;
 vmCvar_t refereePassword;
 vmCvar_t g_debugConstruct;
-vmCvar_t g_landminetimeout;
+
+/* Nico, removed mines
+vmCvar_t g_landminetimeout;*/
 
 // Variable for setting the current level of debug printing/logging
 // enabled in bot scripts and regular scripts.
@@ -361,7 +363,9 @@ cvarTable_t gameCvarTable[] = {
 // jpw
 
 	{ &g_covertopsChargeTime, "g_covertopsChargeTime", "30000", CVAR_SERVERINFO | CVAR_LATCH, 0, qfalse, qtrue },
-	{ &g_landminetimeout, "g_landminetimeout", "1", CVAR_ARCHIVE, 0, qfalse, qtrue },
+
+	/* Nico, removed mines
+	{ &g_landminetimeout, "g_landminetimeout", "1", CVAR_ARCHIVE, 0, qfalse, qtrue },*/
 
 	{ &g_maxclients, "sv_maxclients", "20", CVAR_SERVERINFO | CVAR_LATCH | CVAR_ARCHIVE, 0, qfalse  },            // NERVE - SMF - made 20 from 8
 
@@ -641,6 +645,7 @@ void G_ShutdownGame( int restart );
 /* Nico, commented because it does nothing
 void CheckExitRules( void );*/
 
+/* Nico, removed mines
 qboolean G_SnapshotCallback( int entityNum, int clientNum ) {
 	gentity_t* ent = &g_entities[ entityNum ];
 
@@ -651,7 +656,7 @@ qboolean G_SnapshotCallback( int entityNum, int clientNum ) {
 	}
 
 	return qtrue;
-}
+}*/
 
 /*
 ================
@@ -698,7 +703,11 @@ int vmMain( int command, int arg0, int arg1, int arg2, int arg3, int arg4, int a
 	case GAME_CONSOLE_COMMAND:
 		return ConsoleCommand();
 	case GAME_SNAPSHOT_CALLBACK:
-		return G_SnapshotCallback( arg0, arg1 );
+
+		/* Nico, removed mines
+		return G_SnapshotCallback( arg0, arg1 );*/
+		return qtrue;
+
 	case GAME_MESSAGERECEIVED:
 		return -1;
 	}
@@ -925,13 +934,14 @@ void G_CheckForCursorHints( gentity_t *ent ) {
 		}
 	}
 
+	/* Nico, removed mines
 	if ( ps->stats[ STAT_PLAYER_CLASS ] == PC_COVERTOPS ) {
 		if ( ent->client->landmineSpottedTime && level.time - ent->client->landmineSpottedTime < 500 ) {
 			ps->serverCursorHint = HINT_LANDMINE;
 			ps->serverCursorHintVal = ent->client->landmineSpotted ? ent->client->landmineSpotted->count2 : 0;
 			return;
 		}
-	}
+	}*/
 
 	if ( tr->fraction == 1 ) {
 		return;
@@ -3809,10 +3819,11 @@ void G_RunFrame( int levelTime ) {
 
 	G_UpdateTeamMapData();
 
+	/* Nico, removed mines
 	if ( level.gameManager ) {
 		level.gameManager->s.otherEntityNum = MAX_TEAM_LANDMINES - G_CountTeamLandmines( TEAM_AXIS );
 		level.gameManager->s.otherEntityNum2 = MAX_TEAM_LANDMINES - G_CountTeamLandmines( TEAM_ALLIES );
-	}
+	}*/
 }
 
 // Is this a single player type game - sp or coop?

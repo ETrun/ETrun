@@ -854,8 +854,9 @@ struct gclient_s {
 	int lastConstructibleBlockingWarnTime;
 	int lastConstructibleBlockingWarnEnt;
 
+	/* Nico, removed mines
 	int landmineSpottedTime;
-	gentity_t*  landmineSpotted;
+	gentity_t*  landmineSpotted;*/
 
 	int speedScale;
 
@@ -1317,7 +1318,10 @@ gentity_t* G_BuildLeg( gentity_t *ent );
 void G_RunMissile( gentity_t *ent );
 void G_RunBomb( gentity_t *ent );
 int G_PredictMissile( gentity_t *ent, int duration, vec3_t endPos, qboolean allowBounce );
-void G_TripMinePrime( gentity_t* ent );
+
+/* Nico, removed mines
+void G_TripMinePrime( gentity_t* ent );*/
+
 qboolean G_HasDroppedItem( gentity_t* ent, int modType );
 
 // Rafael zombiespit
@@ -1386,13 +1390,18 @@ qboolean AccuracyHit( gentity_t *target, gentity_t *attacker );
 void CalcMuzzlePoint( gentity_t *ent, int weapon, vec3_t forward, vec3_t right, vec3_t up, vec3_t muzzlePoint );
 void SnapVectorTowards( vec3_t v, vec3_t to );
 gentity_t *weapon_grenadelauncher_fire( gentity_t *ent, int grenadeWPID );
-void G_PlaceTripmine( gentity_t* ent );
+
+/* Nico, removed mines
+void G_PlaceTripmine( gentity_t* ent );*/
+
 void G_FadeItems( gentity_t* ent, int modType );
 
 /* Nico, removed satchel
 gentity_t *G_FindSatchel( gentity_t* ent );*/
 
-void G_ExplodeMines( gentity_t* ent );
+/* Nico, removed mines
+void G_ExplodeMines( gentity_t* ent );*/
+
 qboolean G_ExplodeSatchels( gentity_t* ent );
 void G_FreeSatchel( gentity_t* ent );
 int G_GetWeaponDamage( int weapon );
@@ -1748,7 +1757,9 @@ extern vmCvar_t g_soldierChargeTime;
 
 extern vmCvar_t g_covertopsChargeTime;
 extern vmCvar_t g_debugConstruct;
-extern vmCvar_t g_landminetimeout;
+
+/* Nico, removed mines
+extern vmCvar_t g_landminetimeout;*/
 
 // What level of detail do we want script printing to go to.
 extern vmCvar_t g_scriptDebugLevel;
@@ -2079,8 +2090,10 @@ void G_CheckMenDown( void );
 void G_SendMapEntityInfo( gentity_t* e );
 void G_SendSystemMessage( sysMsg_t message, int team );
 int G_GetSysMessageNumber( const char* sysMsg );
+
+/* Nico, removed mines
 int G_CountTeamLandmines( team_t team );
-qboolean G_SweepForLandmines( vec3_t origin, float radius, int team );
+qboolean G_SweepForLandmines( vec3_t origin, float radius, int team );*/
 
 void G_AddClientToFireteam( int entityNum, int leaderNum );
 void G_InviteToFireTeam( int entityNum, int otherEntityNum );
@@ -2441,13 +2454,18 @@ void G_LinkDebris( void );
 void G_LinkDamageParents( void );
 int EntsThatRadiusCanDamage( vec3_t origin, float radius, int *damagedList );
 
+/* Nico, removed mines
 qboolean G_LandmineTriggered( gentity_t* ent );
 qboolean G_LandmineArmed( gentity_t* ent );
 qboolean G_LandmineUnarmed( gentity_t* ent );
 team_t G_LandmineTeam( gentity_t* ent );
-qboolean G_LandmineSpotted( gentity_t* ent );
+qboolean G_LandmineSpotted( gentity_t* ent );*/
+
 gentity_t* G_FindSmokeBomb( gentity_t* start );
-gentity_t* G_FindLandmine( gentity_t* start );
+
+/* Nico, removed mines
+gentity_t* G_FindLandmine( gentity_t* start );*/
+
 gentity_t* G_FindDynamite( gentity_t* start );
 
 /* Nico, removed satchel
@@ -2509,4 +2527,5 @@ void G_TempTraceIgnorePlayersAndBodies( void );
 
 qboolean G_CanPickupWeapon( weapon_t weapon, gentity_t* ent );
 
-qboolean G_LandmineSnapshotCallback( int entityNum, int clientNum );
+/* Nico, removed mines
+qboolean G_LandmineSnapshotCallback( int entityNum, int clientNum );*/

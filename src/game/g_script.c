@@ -1270,8 +1270,11 @@ void SP_script_multiplayer( gentity_t *ent ) {
 		G_Error( "^1ERROR: multiple script_multiplayers found^7\n" );
 	}
 	level.gameManager = ent;
+
+	/* Nico, removed mines
 	level.gameManager->s.otherEntityNum = MAX_TEAM_LANDMINES;   // axis landmine count
-	level.gameManager->s.otherEntityNum2 = MAX_TEAM_LANDMINES;  // allies landmine count
+	level.gameManager->s.otherEntityNum2 = MAX_TEAM_LANDMINES;  // allies landmine count*/
+
 	level.gameManager->s.modelindex = qfalse;   // axis HQ doesn't exist
 	level.gameManager->s.modelindex2 = qfalse;  // allied HQ doesn't exist
 
