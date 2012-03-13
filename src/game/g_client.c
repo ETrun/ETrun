@@ -1737,7 +1737,9 @@ void ClientSpawn( gentity_t *ent, qboolean revived ) {
 
 	client->pers.lastSpawnTime = level.time;
 	client->pers.lastBattleSenseBonusTime = level.timeCurrent;
-	client->pers.lastHQMineReportTime = level.timeCurrent;
+
+	/* Nico, removed mines
+	client->pers.lastHQMineReportTime = level.timeCurrent;*/
 
 	// find a spawn point
 	// do it before setting health back up, so farthest

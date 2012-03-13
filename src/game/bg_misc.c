@@ -2848,7 +2848,6 @@ qboolean BG_WeaponInWolfMP( int weapon ) {
 	case WP_LANDMINE:
 	case WP_SATCHEL:
 	case WP_SATCHEL_DET:
-//	case WP_TRIPMINE:    // bye bye tripmines ;(
 	case WP_SMOKE_BOMB:
 	case WP_MOBILE_MG42:
 	case WP_MOBILE_MG42_SET:
@@ -2858,7 +2857,6 @@ qboolean BG_WeaponInWolfMP( int weapon ) {
 	case WP_K43_SCOPE:
 	case WP_MORTAR:
 	case WP_MORTAR_SET:
-		//case WP_LOCKPICK:
 	case WP_AKIMBO_LUGER:
 	case WP_AKIMBO_SILENCEDLUGER:
 	case WP_AKIMBO_COLT:

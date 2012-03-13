@@ -5259,10 +5259,15 @@ void CG_MissileHitWall( int weapon, int clientNum, vec3_t origin, vec3_t dir, in
 		if ( weapon == WP_SATCHEL ) {
 			sfx =       cgs.media.sfx_satchelexp;
 			sfx2 =      cgs.media.sfx_satchelexpDist;
-		} else if ( weapon == WP_LANDMINE ) {
+		}
+		
+		/* Nico, removed mines
+		else if ( weapon == WP_LANDMINE ) {
 			sfx =       cgs.media.sfx_landmineexp;
 			sfx2 =      cgs.media.sfx_landmineexpDist;
-		} else if ( weapon == WP_MORTAR_SET ) {
+		}*/
+		
+		else if ( weapon == WP_MORTAR_SET ) {
 			sfx = sfx2 = 0;
 		} else if ( weapon == WP_GRENADE_LAUNCHER || weapon == WP_GRENADE_PINEAPPLE || weapon == WP_GPG40 || weapon == WP_M7 ) {
 			sfx =       cgs.media.sfx_grenexp;

@@ -1100,7 +1100,9 @@ static void CG_RegisterSounds( void ) {
 	cgs.media.gibSound =            trap_S_RegisterSound( "sound/player/gib.wav", qfalse );
 	cgs.media.dynamitebounce1 =     trap_S_RegisterSound( "sound/weapons/dynamite/dynamite_bounce.wav", qfalse );
 	cgs.media.satchelbounce1 =      trap_S_RegisterSound( "sound/weapons/satchel/satchel_bounce.wav", qfalse );
-	cgs.media.landminebounce1 =     trap_S_RegisterSound( "sound/weapons/landmine/mine_bounce.wav", qfalse );
+
+	/* Nico, removed mines
+	cgs.media.landminebounce1 =     trap_S_RegisterSound( "sound/weapons/landmine/mine_bounce.wav", qfalse );*/
 
 	cgs.media.watrInSound =         trap_S_RegisterSound( "sound/player/water_in.wav", qfalse );
 	cgs.media.watrOutSound =        trap_S_RegisterSound( "sound/player/water_out.wav", qfalse );
@@ -1226,8 +1228,11 @@ static void CG_RegisterSounds( void ) {
 
 	cgs.media.sfx_satchelexp =      trap_S_RegisterSound( "sound/weapons/satchel/satchel_expl.wav", qfalse );
 	cgs.media.sfx_satchelexpDist =  trap_S_RegisterSound( "sound/weapons/satchel/satchel_expl_far.wav", qfalse );
+
+	/* Nico, removed mines
 	cgs.media.sfx_landmineexp =     trap_S_RegisterSound( "sound/weapons/landmine/mine_expl.wav", qfalse );
-	cgs.media.sfx_landmineexpDist = trap_S_RegisterSound( "sound/weapons/landmine/mine_expl_far.wav", qfalse );
+	cgs.media.sfx_landmineexpDist = trap_S_RegisterSound( "sound/weapons/landmine/mine_expl_far.wav", qfalse );*/
+
 	cgs.media.sfx_mortarexp[0] =    trap_S_RegisterSound( "sound/weapons/mortar/mortar_expl1.wav", qfalse );
 	cgs.media.sfx_mortarexp[1] =    trap_S_RegisterSound( "sound/weapons/mortar/mortar_expl2.wav", qfalse );
 	cgs.media.sfx_mortarexp[2] =    trap_S_RegisterSound( "sound/weapons/mortar/mortar_expl3.wav", qfalse );
@@ -1463,7 +1468,10 @@ static void CG_RegisterGraphics( void ) {
 
 	cgs.media.tankHintShader        = trap_R_RegisterShaderNoMip( "gfx/2d/tankHint" );
 	cgs.media.satchelchargeHintShader = trap_R_RegisterShaderNoMip( "gfx/2d/satchelchargeHint" ),
-	cgs.media.landmineHintShader    = trap_R_RegisterShaderNoMip( "gfx/2d/landmineHint" );
+
+	/* Nico, removed mines
+	cgs.media.landmineHintShader    = trap_R_RegisterShaderNoMip( "gfx/2d/landmineHint" );*/
+
 	cgs.media.uniformHintShader     = trap_R_RegisterShaderNoMip( "gfx/2d/uniformHint" );
 	cgs.media.waypointAttackShader  = trap_R_RegisterShaderNoMip( "sprites/waypoint_attack" );
 	cgs.media.waypointDefendShader  = trap_R_RegisterShaderNoMip( "sprites/waypoint_defend" );

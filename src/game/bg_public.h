@@ -1611,7 +1611,10 @@ typedef enum {
 	HINT_DYNAMITE,          // DHM - Nerve
 	HINT_CONSTRUCTIBLE,
 	HINT_UNIFORM,
-	HINT_LANDMINE,
+
+	/* Nico, removed mines
+	HINT_LANDMINE,*/
+
 	HINT_TANK,
 	HINT_SATCHELCHARGE,
 	HINT_LOCKPICK,

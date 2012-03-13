@@ -434,9 +434,12 @@ void CG_DrawCursorhint( rectDef_t *rect ) {
 	case HINT_UNIFORM:
 		icon = cgs.media.uniformHintShader;
 		break;
+
+	/* Nico, removed mines
 	case HINT_LANDMINE:
 		icon = cgs.media.landmineHintShader;
-		break;
+		break;*/
+
 	case HINT_CHAIR:
 		icon = cgs.media.notUsableHintShader;
 

@@ -2223,9 +2223,14 @@ void CG_EntityEvent( centity_t *cent, vec3_t position ) {
 			trap_S_StartSound( NULL, es->number, CHAN_AUTO, cgs.media.satchelbounce1 );
 		} else if ( es->weapon == WP_DYNAMITE ) {
 			trap_S_StartSound( NULL, es->number, CHAN_AUTO, cgs.media.dynamitebounce1 );
-		} else if ( es->weapon == WP_LANDMINE ) {
+		} 
+		
+		/* Nico, removed mines
+		else if ( es->weapon == WP_LANDMINE ) {
 			trap_S_StartSound( NULL, es->number, CHAN_AUTO, cgs.media.landminebounce1 );
-		} else {
+		}*/
+		
+		else {
 			// GRENADES
 			if ( es->eventParm != FOOTSTEP_TOTAL ) {
 				if ( rand() & 1 ) {

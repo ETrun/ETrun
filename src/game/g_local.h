@@ -708,10 +708,12 @@ typedef struct {
 	/* Nico, removed playerStats
 	playerStats_t playerStats;*/
 
-	//gentity_t	*wayPoint;
 
 	int lastBattleSenseBonusTime;
-	int lastHQMineReportTime;
+
+	/* Nico, removed mines
+	int lastHQMineReportTime;*/
+
 	int lastCCPulseTime;
 
 	int lastSpawnTime;

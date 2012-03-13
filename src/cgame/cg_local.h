@@ -1386,7 +1386,9 @@ typedef struct {
 	// Mad Doc - TDF
 	qhandle_t ingameAutomapBackground;
 
-	qhandle_t landmineHintShader;
+	/* Nico, removed mines
+	qhandle_t landmineHintShader;*/
+
 	qhandle_t compassConstructShader;
 	qhandle_t compassDestroyShader;
 	qhandle_t buddyShader;
@@ -1520,8 +1522,11 @@ typedef struct {
 	sfxHandle_t sfx_rockexpWater;
 	sfxHandle_t sfx_satchelexp;
 	sfxHandle_t sfx_satchelexpDist;
+
+	/* Nico, removed mines
 	sfxHandle_t sfx_landmineexp;
-	sfxHandle_t sfx_landmineexpDist;
+	sfxHandle_t sfx_landmineexpDist;*/
+
 	sfxHandle_t sfx_mortarexp[4];
 	sfxHandle_t sfx_mortarexpDist;
 	sfxHandle_t sfx_grenexp;
@@ -1573,7 +1578,9 @@ typedef struct {
 	sfxHandle_t grenadebounce[FOOTSTEP_TOTAL][2];
 
 	sfxHandle_t dynamitebounce1;    //----(SA)	added
-	sfxHandle_t landminebounce1;
+
+	/* Nico, removed mines
+	sfxHandle_t landminebounce1;*/
 
 	sfxHandle_t fkickwall;
 	sfxHandle_t fkickflesh;
