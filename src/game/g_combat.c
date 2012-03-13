@@ -431,15 +431,17 @@ void player_die( gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int
 		mEnt = G_FindMapEntityDataSingleClient( teamList, NULL, self->s.number, -1 );
 
 		while ( mEnt ) {
+
+			/* Nico, removed disguise stuff
 			if ( mEnt->type == ME_PLAYER_DISGUISED ) {
 				mapEntityData_t* mEntFree = mEnt;
 
 				mEnt = G_FindMapEntityDataSingleClient( teamList, mEnt, self->s.number, -1 );
 
 				G_FreeMapEntityData( teamList, mEntFree );
-			} else {
+			} else {*/
 				mEnt = G_FindMapEntityDataSingleClient( teamList, mEnt, self->s.number, -1 );
-			}
+			// }
 		}
 	}
 
@@ -519,8 +521,9 @@ void player_die( gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int
 		if ( attacker == self || OnSameTeam( self, attacker ) ) {
 
 			// DHM - Nerve :: Complaint lodging
-			/* Nico, removed warmup
-			if ( attacker != self && level.warmupTime <= 0 && g_gamestate.integer == GS_PLAYING ) {*/
+			// Nico, removed warmup
+			// if ( attacker != self && level.warmupTime <= 0 && g_gamestate.integer == GS_PLAYING ) {
+			/* Nico, removed complaints
 			if ( attacker != self && g_gamestate.integer == GS_PLAYING ) {
 				if ( attacker->client->pers.localClient ) {
 					trap_SendServerCommand( self - g_entities, "complaint -4" );
@@ -538,7 +541,7 @@ void player_die( gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int
 						}
 					}
 				}
-			}
+			}*/
 
 			// high penalty to offset medic heal
 /*			AddScore( attacker, WOLF_FRIENDLY_PENALTY ); */
@@ -563,7 +566,8 @@ void player_die( gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int
 				AddKillScore( attacker, WOLF_FRAG_BONUS );
 			}*/
 
-			attacker->client->lastKillTime = level.time;
+			/* Nico, removed lastkilltime
+			attacker->client->lastKillTime = level.time;*/
 		}
 	} else {
 		AddScore( self, -1 );
@@ -1222,9 +1226,10 @@ void G_Damage( gentity_t *targ, gentity_t *inflictor, gentity_t *attacker,  vec3
 		knockback *= 0.5;
 	}
 
+	/* Nico, no friendlyfire
 	if ( targ->client && g_friendlyFire.integer && OnSameTeam( targ, attacker ) ) {
 		knockback = 0;
-	}
+	}*/
 
 	// figure momentum add, even if the damage won't be taken
 	if ( knockback && targ->client ) {
@@ -1265,20 +1270,22 @@ void G_Damage( gentity_t *targ, gentity_t *inflictor, gentity_t *attacker,  vec3
 	}
 
 	// check for completely getting out of the damage
+	/* Nico, no friendlyfire
 	if ( !( dflags & DAMAGE_NO_PROTECTION ) ) {
 
 		// if TF_NO_FRIENDLY_FIRE is set, don't do damage to the target
 		// if the attacker was on the same team
 		if ( targ != attacker && OnSameTeam( targ, attacker )  ) {
-			/* Nico, removed warmup
-			if ( ( g_gamestate.integer != GS_PLAYING && match_warmupDamage.integer == 1 ) ) {
-				return;
-			} else*/
+			// Nico, removed warmup
+			// if ( ( g_gamestate.integer != GS_PLAYING && match_warmupDamage.integer == 1 ) ) {
+			//	return;
+			// } else
+
 			if ( !g_friendlyFire.integer )     {
 				return;
 			}
 		}
-	}
+	}*/
 
 	// add to the attacker's hit counter
 	if ( attacker->client && targ != attacker && targ->health > 0 ) {

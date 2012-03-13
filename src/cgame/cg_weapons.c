@@ -2034,7 +2034,6 @@ void CG_AddPlayerWeapon( refEntity_t *parent, playerState_t *ps, centity_t *cent
 	qboolean firing;    // Ridah
 	qboolean akimboFire = qfalse;
 
-//	qboolean	playerScaled;
 	qboolean drawpart;
 	int i;
 	qboolean isPlayer;
@@ -2126,9 +2125,10 @@ void CG_AddPlayerWeapon( refEntity_t *parent, playerState_t *ps, centity_t *cent
 	if ( ps ) {
 		team_t team = ps->persistant[PERS_TEAM];
 
+		/* Nico, removed disguise stuff
 		if ( ( weaponNum != WP_SATCHEL ) && ( cent->currentState.powerups & ( 1 << PW_OPS_DISGUISED ) ) ) {
 			team = team == TEAM_AXIS ? TEAM_ALLIES : TEAM_AXIS;
-		}
+		}*/
 
 		gun.hModel = weapon->weaponModel[W_FP_MODEL].model;
 		if ( ( team == TEAM_AXIS ) &&
@@ -2143,9 +2143,10 @@ void CG_AddPlayerWeapon( refEntity_t *parent, playerState_t *ps, centity_t *cent
 	} else {
 		team_t team = cgs.clientinfo[cent->currentState.clientNum].team;
 
+		/* Nico, removed disguise stuff
 		if ( ( weaponNum != WP_SATCHEL ) && cent->currentState.powerups & ( 1 << PW_OPS_DISGUISED ) ) {
 			team = team == TEAM_AXIS ? TEAM_ALLIES : TEAM_AXIS;
-		}
+		}*/
 
 		gun.hModel = weapon->weaponModel[W_TP_MODEL].model;
 		if ( ( team == TEAM_AXIS ) &&
@@ -2312,17 +2313,21 @@ void CG_AddPlayerWeapon( refEntity_t *parent, playerState_t *ps, centity_t *cent
 				}
 
 				if ( drawpart ) {
+					/* Nico, removed disguise stuff
 					if ( ( ps->persistant[PERS_TEAM] == TEAM_AXIS ||
 						   ( ps->persistant[PERS_TEAM] == TEAM_ALLIES && cent->currentState.powerups & ( 1 << PW_OPS_DISGUISED ) ) ) &&
-						 weapon->partModels[W_FP_MODEL][i].skin[TEAM_AXIS] ) {
+						 weapon->partModels[W_FP_MODEL][i].skin[TEAM_AXIS] ) {*/
+					if ( ps->persistant[PERS_TEAM] == TEAM_AXIS ) {
 						barrel.customSkin = weapon->partModels[W_FP_MODEL][i].skin[TEAM_AXIS];
-					} else if ( ( ps->persistant[PERS_TEAM] == TEAM_ALLIES ||
+					} 
+					/* Nico, removed disguise stuff
+					else if ( ( ps->persistant[PERS_TEAM] == TEAM_ALLIES ||
 								  ( ps->persistant[PERS_TEAM] == TEAM_AXIS && cent->currentState.powerups & ( 1 << PW_OPS_DISGUISED ) ) ) &&
-								weapon->partModels[W_FP_MODEL][i].skin[TEAM_ALLIES] ) {
+								weapon->partModels[W_FP_MODEL][i].skin[TEAM_ALLIES] ) {*/
+					else if ( ps->persistant[PERS_TEAM] == TEAM_ALLIES ) {
 						barrel.customSkin = weapon->partModels[W_FP_MODEL][i].skin[TEAM_ALLIES];
 					} else {
 						barrel.customSkin = weapon->partModels[W_FP_MODEL][i].skin[0];  // if not loaded it's 0 so doesn't do any harm
-
 					}
 
 					/* Nico, removed skills
@@ -5309,8 +5314,11 @@ void CG_MissileHitWall( int weapon, int clientNum, vec3_t origin, vec3_t dir, in
 	case VERYBIGEXPLOSION:
 	case WP_ARTY:
 	case WP_SMOKE_MARKER:
+
+		/* Nico, removed airstrikes
 		sfx = cgs.media.sfx_rockexp;
 		sfx2 = cgs.media.sfx_rockexpDist;
+
 		if ( weapon == VERYBIGEXPLOSION || weapon == WP_ARTY ) {
 			sfx =   cgs.media.sfx_artilleryExp[rand() % 3];
 			sfx2 =  cgs.media.sfx_artilleryDist;
@@ -5318,6 +5326,7 @@ void CG_MissileHitWall( int weapon, int clientNum, vec3_t origin, vec3_t dir, in
 			sfx =   cgs.media.sfx_airstrikeExp[rand() % 3];
 			sfx2 =  cgs.media.sfx_airstrikeDist;
 		}
+
 		sfx2range = 800;
 		mark = cgs.media.burnMarkShader;
 		markDuration = cg_markTime.integer * 3;
@@ -5365,7 +5374,7 @@ void CG_MissileHitWall( int weapon, int clientNum, vec3_t origin, vec3_t dir, in
 				CG_ParticleExplosion( "explode1", sprOrg, sprVel, 1600, 40, 260 + rand() % 120, qfalse );
 			}
 			CG_AddDebris( origin, dir, 400 + random() * 200, rand() % 2000 + 1000, 5 + rand() % 5 );
-		}
+		}*/
 		break;
 
 	default:

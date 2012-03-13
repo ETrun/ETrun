@@ -58,6 +58,10 @@ If you have questions concerning this license or the applicable additional terms
 #define SPRINTTIME 20000.0f*/
 
 #define DEFAULT_GRAVITY     800
+
+// Nico, g_speed is now hardcoded as DEFAULT_SPEED
+#define DEFAULT_SPEED		320
+
 #define FORCE_LIMBO_HEALTH  -75 // JPW NERVE
 #define GIB_HEALTH          -175 // JPW NERVE
 #define ARMOR_PROTECTION    0.66
@@ -342,9 +346,14 @@ extern const unsigned int aReinfSeeds[MAX_REINFSEEDS];
 
 #define CS_TARGETEFFECT                 20      //----(SA)
 #define CS_WOLFINFO                     21      // NERVE - SMF
-#define CS_FIRSTBLOOD                   22      // Team that has first blood
+
+/* Nico, removed firstblood
+#define CS_FIRSTBLOOD                   22      // Team that has first blood*/
+
+/* Nico, removed rounds
 #define CS_ROUNDSCORES1                 23      // Axis round wins
-#define CS_ROUNDSCORES2                 24      // Allied round wins
+#define CS_ROUNDSCORES2                 24      // Allied round wins*/
+
 #define CS_MAIN_AXIS_OBJECTIVE          25      // Most important current objective
 #define CS_MAIN_ALLIES_OBJECTIVE        26      // Most important current objective
 #define CS_MUSIC_QUEUE                  27
@@ -391,6 +400,7 @@ extern const unsigned int aReinfSeeds[MAX_REINFSEEDS];
 #error overflow: (CS_MAX) > MAX_CONFIGSTRINGS
 #endif
 
+/* Nico, removed gametypes
 typedef enum {
 	GT_SINGLE_PLAYER,
 	GT_COOP,
@@ -398,11 +408,11 @@ typedef enum {
 	GT_WOLF_STOPWATCH,
 	GT_WOLF_CAMPAIGN,   // Exactly the same as GT_WOLF, but uses campaign roulation (multiple maps form one virtual map)
 
-	/* Nico, removed LMS
-	GT_WOLF_LMS,*/
+	// Nico, removed LMS
+	// GT_WOLF_LMS,
 
 	GT_MAX_GAME_TYPE
-} gametype_t;
+} gametype_t;*/
 
 typedef enum { GENDER_MALE, GENDER_FEMALE, GENDER_NEUTER } gender_t;
 
@@ -687,7 +697,9 @@ typedef enum {
 	PW_REDFLAG,
 	PW_BLUEFLAG,
 
-	PW_OPS_DISGUISED,
+	/* Nico, removed disguise stuff
+	PW_OPS_DISGUISED,*/
+
 	PW_OPS_CLASS_1,
 	PW_OPS_CLASS_2,
 	PW_OPS_CLASS_3,
@@ -2076,23 +2088,26 @@ extern pathCorner_t pathCorners[MAX_PATH_CORNERS];
 typedef enum {
 	ME_PLAYER,
 	ME_PLAYER_REVIVE,
-	ME_PLAYER_DISGUISED,
+
+	/* Nico, removed disguise stuff
+	ME_PLAYER_DISGUISED,*/
+
 	ME_CONSTRUCT,
 	ME_DESTRUCT,
 	ME_DESTRUCT_2,
 	ME_LANDMINE,
 	ME_TANK,
 	ME_TANK_DEAD,
-	//ME_LANDMINE_ARMED,
 	ME_COMMANDMAP_MARKER,
 } mapEntityType_t;
 
+/* Nico, removed rankNames
 extern const char* rankNames_Axis[NUM_EXPERIENCE_LEVELS];
 extern const char* rankNames_Allies[NUM_EXPERIENCE_LEVELS];
 extern const char* miniRankNames_Axis[NUM_EXPERIENCE_LEVELS];
 extern const char* miniRankNames_Allies[NUM_EXPERIENCE_LEVELS];
 extern const char* rankSoundNames_Axis[NUM_EXPERIENCE_LEVELS];
-extern const char* rankSoundNames_Allies[NUM_EXPERIENCE_LEVELS];
+extern const char* rankSoundNames_Allies[NUM_EXPERIENCE_LEVELS];*/
 
 #define MAX_SPLINE_PATHS        512
 #define MAX_SPLINE_CONTROLS     4
@@ -2223,7 +2238,8 @@ qboolean BG_IsScopedWeapon( int weapon );
 
 int BG_FootstepForSurface( int surfaceFlags );
 
-#define MATCH_MINPLAYERS "4" //"1"	// Minimum # of players needed to start a match
+/* Nico, removed match_* cvars
+#define MATCH_MINPLAYERS "4" //"1"	// Minimum # of players needed to start a match*/
 
 // Multiview support
 int BG_simpleHintsCollapse( int hint, int val );
@@ -2369,7 +2385,10 @@ typedef enum popupMessageType_e {
 typedef enum popupMessageBigType_e {
 	PM_SKILL,
 	PM_RANK,
-	PM_DISGUISE,
+
+	/* Nico, removed disguise stuff
+	PM_DISGUISE,*/
+
 	PM_BIG_NUM_TYPES
 } popupMessageBigType_t;
 

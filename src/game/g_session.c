@@ -227,7 +227,9 @@ Called on a reconnect
 void G_ReadSessionData( gclient_t *client ) {
 	int mvc_l, mvc_h;
 	char s[MAX_STRING_CHARS];
-	qboolean test;
+
+	/* Nico, removed altStopwatchMode
+	qboolean test;*/
 
 	trap_Cvar_VariableStringBuffer( va( "session%i", client - level.clients ), s, sizeof( s ) );
 
@@ -330,11 +332,17 @@ void G_ReadSessionData( gclient_t *client ) {
 
 	G_CalcRank( client );*/
 
-	test = ( g_altStopwatchMode.integer != 0 || g_currentRound.integer == 1 );
+	/* Nico, removed currentRound
+	test = ( g_altStopwatchMode.integer != 0 || g_currentRound.integer == 1 );*/
+	/* Nico, removed altStopwatchMode
+	test = ( g_altStopwatchMode.integer != 0 );*/
 
-	if ( g_gametype.integer == GT_WOLF_STOPWATCH && g_gamestate.integer != GS_PLAYING && test ) {
+	/* Nico, removed gametypes
+	if ( g_gametype.integer == GT_WOLF_STOPWATCH && g_gamestate.integer != GS_PLAYING && test ) {*/
+	/* Nico, removed altStopwatchMode
+	if ( g_gamestate.integer != GS_PLAYING && test ) {
 		G_ClientSwap( client );
-	}
+	}*/
 
 	if ( g_swapteams.integer ) {
 		trap_Cvar_Set( "g_swapteams", "0" );
@@ -393,7 +401,8 @@ void G_InitSessionData( gclient_t *client, char *userinfo ) {
 	memset( sess->skillpoints, 0, sizeof( sess->skillpoints ) );
 	memset( sess->medals, 0, sizeof( sess->medals ) );*/
 
-	sess->rank = 0;
+	/* Nico, removed rank
+	sess->rank = 0;*/
 
 	// OSP
 	sess->coach_team = 0;
@@ -416,35 +425,46 @@ G_InitWorldSession
 */
 void G_InitWorldSession( void ) {
 	char s[MAX_STRING_CHARS];
-	int gt;
+
+	/* Nico, removed (c)g_gametype
+	int gt;*/
+
 	int i, j;
 
 	trap_Cvar_VariableStringBuffer( "session", s, sizeof( s ) );
+	
+	/* Nico, removed (c)g_gametype
 	gt = atoi( s );
 
 	// if the gametype changed since the last session, don't use any
 	// client sessions
+
 	if ( g_gametype.integer != gt ) {
 		level.newSession = qtrue;
 		level.fResetStats = qtrue;
 		G_Printf( "Gametype changed, clearing session data.\n" );
+	} else*/
+	{
 
-	} else {
 		char *tmp = s;
-		qboolean test = ( g_altStopwatchMode.integer != 0 || g_currentRound.integer == 1 );
+		/* Nico, removed currentRound
+		qboolean test = ( g_altStopwatchMode.integer != 0 || g_currentRound.integer == 1 );*/
+		/* Nico, removed altStopwatchMode
+		qboolean test = ( g_altStopwatchMode.integer != 0 );*/
 
-
+/* Nico, removed (c)g_gametype
 #define GETVAL( x ) if ( ( tmp = strchr( tmp, ' ' ) ) == NULL ) {return; \
 						   } x = atoi( ++tmp );
 
 		// Get team lock stuff
 		GETVAL( gt );
 		teamInfo[TEAM_AXIS].spec_lock = ( gt & TEAM_AXIS ) ? qtrue : qfalse;
-		teamInfo[TEAM_ALLIES].spec_lock = ( gt & TEAM_ALLIES ) ? qtrue : qfalse;
+		teamInfo[TEAM_ALLIES].spec_lock = ( gt & TEAM_ALLIES ) ? qtrue : qfalse;*/
 
 		// See if we need to clear player stats
 		// FIXME: deal with the multi-map missions
-		if ( g_gametype.integer != GT_WOLF_CAMPAIGN ) {
+		/* Nico, removed gametypes
+		if ( g_gametype.integer != GT_WOLF_CAMPAIGN ) {*/
 			if ( ( tmp = strchr( va( "%s", tmp ), ' ' ) ) != NULL ) {
 				tmp++;
 				trap_GetServerinfo( s, sizeof( s ) );
@@ -453,12 +473,15 @@ void G_InitWorldSession( void ) {
 					G_Printf( "Map changed, clearing player stats.\n" );
 				}
 			}
-		}
+		// }
 
 		// OSP - have to make sure spec locks follow the right teams
-		if ( g_gametype.integer == GT_WOLF_STOPWATCH && g_gamestate.integer != GS_PLAYING && test ) {
+		/* Nico, removed gametypes
+		if ( g_gametype.integer == GT_WOLF_STOPWATCH && g_gamestate.integer != GS_PLAYING && test ) {*/
+		/* Nico, removed altStopwatchMode
+		if ( g_gamestate.integer != GS_PLAYING && test ) {
 			G_swapTeamLocks();
-		}
+		}*/
 
 		if ( g_swapteams.integer ) {
 			G_swapTeamLocks();
@@ -469,16 +492,6 @@ void G_InitWorldSession( void ) {
 		char *p, *c;
 
 		trap_Cvar_VariableStringBuffer( va( "fireteam%i", i ), s, sizeof( s ) );
-
-/*		p = Info_ValueForKey( s, "n" );
-
-		if(p && *p) {
-			Q_strncpyz( level.fireTeams[i].name, p, 32 );
-			level.fireTeams[i].inuse = qtrue;
-		} else {
-			*level.fireTeams[i].name = '\0';
-			level.fireTeams[i].inuse = qfalse;
-		}*/
 
 		p = Info_ValueForKey( s, "id" );
 		j = atoi( p );
@@ -529,9 +542,14 @@ void G_WriteSessionData( qboolean restart ) {
 	int j;
 
 	trap_GetServerinfo( strServerInfo, sizeof( strServerInfo ) );
+
+	/* Nico, removed (c)g_gametype
 	trap_Cvar_Set( "session", va( "%i %i %s", g_gametype.integer,
 								  ( teamInfo[TEAM_AXIS].spec_lock * TEAM_AXIS | teamInfo[TEAM_ALLIES].spec_lock * TEAM_ALLIES ),
-								  Info_ValueForKey( strServerInfo, "mapname" ) ) );
+								  Info_ValueForKey( strServerInfo, "mapname" ) ) );*/
+	trap_Cvar_Set( "session", va( "%i %s", 
+									( teamInfo[TEAM_AXIS].spec_lock * TEAM_AXIS | teamInfo[TEAM_ALLIES].spec_lock * TEAM_ALLIES ),
+									Info_ValueForKey( strServerInfo, "mapname" ) ) );
 
 	// Keep stats for all players in sync
 	/* Nico, removed warmup

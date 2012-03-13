@@ -10,7 +10,6 @@ libgame_la_LDFLAGS = -avoid-version
 libgame_la_SOURCES = \
 bg_animation.c \
 bg_animgroup.c \
-bg_campaign.c \
 bg_character.c \
 bg_classes.c \
 bg_misc.c \

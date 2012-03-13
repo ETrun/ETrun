@@ -408,6 +408,7 @@ qboolean CG_ViewingDraw() {
 #define GS_Y    10
 #define GS_W    308
 
+/* Nico, removed gameStats
 void CG_GameStatsDraw() {
 	if ( cgs.gamestats.show == SHOW_OFF ) {
 		return;
@@ -453,8 +454,8 @@ void CG_GameStatsDraw() {
 			tSpacing * ( ( gs->cWeapons > 0 ) ? gs->cWeapons : 1 ) +
 			tSpacing * ( ( gs->fHasStats ) ? 3 : 0 ) +
 			
-			/* Nico, removed LMS
-			( ( cgs.gametype == GT_WOLF_LMS ) ? 0 :*/
+			// Nico, removed LMS
+			// ( ( cgs.gametype == GT_WOLF_LMS ) ? 0 :
 
 			( (
 				  4 + 2 * tSpacing +                                // Rank/XP
@@ -533,11 +534,11 @@ void CG_GameStatsDraw() {
 			CG_Text_Paint_Ext( x, y, tScale, tScale, tColor, "No weapon info available.", 0.0f, 0, tStyle, tFont );
 		} else {
 
-			/* Nico, removed weaponstats
-			for ( i = 0; i < gs->cWeapons; i++ ) {
-				y += tSpacing;
-				CG_Text_Paint_Ext( x, y, tScale, tScale, tColor, gs->strWS[i], 0.0f, 0, tStyle, tFont );
-			}*/
+			// Nico, removed weaponstats
+			// for ( i = 0; i < gs->cWeapons; i++ ) {
+			//	y += tSpacing;
+			//	CG_Text_Paint_Ext( x, y, tScale, tScale, tColor, gs->strWS[i], 0.0f, 0, tStyle, tFont );
+			// }
 
 			if ( gs->fHasStats ) {
 				y += tSpacing;
@@ -550,10 +551,10 @@ void CG_GameStatsDraw() {
 
 
 		// No rank/xp/skill info for LMS
-		/* Nico, removed LMS
-		if ( cgs.gametype == GT_WOLF_LMS ) {
-			return;
-		}*/
+		// Nico, removed LMS
+		// if ( cgs.gametype == GT_WOLF_LMS ) {
+		//	return;
+		// }
 		
 		// Rank/XP info
 		y += tSpacing;
@@ -586,10 +587,12 @@ void CG_GameStatsDraw() {
 		CG_Text_Paint_Ext( x, y, hScale2, hScaleY2, hdrColor, "Level", 0.0f, 0, hStyle2, hFont2 );
 		x += 40;
 		CG_Text_Paint_Ext( x, y, hScale2, hScaleY2, hdrColor, "XP / Next Level", 0.0f, 0, hStyle2, hFont2 );
-		if ( cgs.gametype == GT_WOLF_CAMPAIGN ) {
-			x += 86;
-			CG_Text_Paint_Ext( x, y, hScale2, hScaleY2, hdrColor, "Medals", 0.0f, 0, hStyle2, hFont2 );
-		}
+
+		// Nico, removed gametypes
+		// if ( cgs.gametype == GT_WOLF_CAMPAIGN ) {
+		//	x += 86;
+		//	CG_Text_Paint_Ext( x, y, hScale2, hScaleY2, hdrColor, "Medals", 0.0f, 0, hStyle2, hFont2 );
+		// }
 
 		x = GS_X + 4;
 
@@ -598,15 +601,15 @@ void CG_GameStatsDraw() {
 			y += tSpacing;
 			CG_Text_Paint_Ext( x, y, tScale, tScale, tColor, "No skills acquired!", 0.0f, 0, tStyle, tFont );
 		} 
-		/* Nico, removed skills
-		else {
-			for ( i = 0; i < gs->cSkills; i++ ) {
-				y += tSpacing;
-				CG_Text_Paint_Ext( x, y, tScale, tScale, tColor, gs->strSkillz[i], 0.0f, 0, tStyle, tFont );
-			}
-		}*/
+		// Nico, removed skills
+		// else {
+		//	for ( i = 0; i < gs->cSkills; i++ ) {
+		//		y += tSpacing;
+		//		CG_Text_Paint_Ext( x, y, tScale, tScale, tColor, gs->strSkillz[i], 0.0f, 0, tStyle, tFont );
+		//	}
+		// }
 	}
-}
+}*/
 
 #define TS_X    -20     // spacing from right
 #define TS_Y    -60     // spacing from bottom
@@ -1035,9 +1038,13 @@ void CG_SpecHelpDraw() {
 
 
 void CG_DrawOverlays( void ) {
-	CG_GameStatsDraw();
+
+	/* Nico, removed gameStats
+	CG_GameStatsDraw();*/
+
 	/* Nico, removed +topshots command
 	CG_TopShotsDraw();*/
+	
 	if ( cg.demoPlayback ) {
 		CG_DemoHelpDraw();
 	}

@@ -832,12 +832,15 @@ void G_SendMapEntityInfo( gentity_t* e ) {
 			if ( mEnt->type == ME_PLAYER ) {
 				mEnt = G_FreeMapEntityData( teamList, mEnt );
 				continue;
-			} else if ( mEnt->type == ME_PLAYER_DISGUISED ) {
+			} 
+			
+			/* Nico, removed disguise stuff
+			else if ( mEnt->type == ME_PLAYER_DISGUISED ) {
 				if ( mEnt->singleClient == e->s.clientNum ) {
 					mEnt = G_FreeMapEntityData( teamList, mEnt );
 					continue;
 				}
-			}
+			}*/
 		} else {
 			mEnt->status = 2;
 		}

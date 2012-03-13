@@ -567,8 +567,9 @@ typedef struct clientInfo_s {
 	int skill[SK_NUM_SKILLS];
 	int skillpoints[SK_NUM_SKILLS];             // filled OOB by +wstats*/
 
+	/* Nico, removed disguise stuff
 	char disguiseName[MAX_QPATH];
-	int disguiseRank;
+	int disguiseRank;*/
 
 	int weapon;
 	int secondaryweapon;
@@ -916,7 +917,8 @@ typedef struct {
 	int lowAmmoWarning;             // 1 = low, 2 = empty
 
 	// kill timers for carnage reward
-	int lastKillTime;
+	/* Nico, removed lastkilltime
+	int lastKillTime;*/
 
 	// crosshair client ID
 	int crosshairClientNum;
@@ -928,8 +930,11 @@ typedef struct {
 	qboolean crosshairClientNoShoot;
 	qboolean crosshairTerrain;
 
-	int teamFirstBlood;                     // 0: allies 1: axis -1: nobody
-	int teamWonRounds[2];
+	/* Nico, removed firstblood
+	int teamFirstBlood;                     // 0: allies 1: axis -1: nobody*/
+
+	/* Nico, removed rounds
+	int teamWonRounds[2];*/
 
 	qboolean filtercams;
 
@@ -1190,8 +1195,9 @@ typedef struct {
 	qboolean mortarImpactOutOfMap;
 
 	// artillery requests
+	/* Nico, removed airstrikes
 	vec3_t artilleryRequestPos[MAX_CLIENTS];
-	int artilleryRequestTime[MAX_CLIENTS];
+	int artilleryRequestTime[MAX_CLIENTS];*/
 
 	soundScript_t*  bufferSoundScripts[MAX_BUFFERED_SOUNDSCRIPTS];
 	int bufferedSoundScriptEndTime;
@@ -1496,11 +1502,12 @@ typedef struct {
 	qhandle_t alliedUniformShader;
 	qhandle_t axisUniformShader;
 
+	/* Nico, removed airstrikes
 	sfxHandle_t sfx_artilleryExp[3];
 	sfxHandle_t sfx_artilleryDist;
 
 	sfxHandle_t sfx_airstrikeExp[3];
-	sfxHandle_t sfx_airstrikeDist;
+	sfxHandle_t sfx_airstrikeDist;*/
 
 	// sounds
 	sfxHandle_t noFireUnderwater;
@@ -1758,16 +1765,19 @@ typedef struct cg_weaponstats_s {
 	int numShots;
 } cg_weaponstats_t;*/
 
+/* Nico, removed gameStats
 typedef struct {
 
-	/* Nico, removed weaponstats
-	char strWS[WS_MAX][MAX_STRING_TOKENS];*/
+	// Nico, removed weaponstats
+	// char strWS[WS_MAX][MAX_STRING_TOKENS];
 
 	char strExtra[2][MAX_STRING_TOKENS];
+
+
 	char strRank[MAX_STRING_TOKENS];
 
-	/* Nico, removed skills
-	char strSkillz[SK_NUM_SKILLS][MAX_STRING_TOKENS];*/
+	// Nico, removed skills
+	// char strSkillz[SK_NUM_SKILLS][MAX_STRING_TOKENS];
 
 	int cWeapons;
 	int cSkills;
@@ -1777,7 +1787,7 @@ typedef struct {
 	int fadeTime;
 	int show;
 	int requestTime;
-} gameStats_t;
+} gameStats_t;*/
 
 /* Nico, removed +topshots command
 typedef struct {
@@ -1819,7 +1829,10 @@ typedef struct {
 	qboolean localServer;               // detected on startup by checking sv_running
 
 	// parsed from serverinfo
-	gametype_t gametype;
+
+	/* Nico, removed gametypes
+	gametype_t gametype;*/
+
 	int antilag;
 
 	/* Nico, no timelimit
@@ -1898,7 +1911,9 @@ typedef struct {
 	animScriptData_t animScriptData;
 
 	int currentVoiceClient;
-	int currentRound;
+
+	/* Nico, removed currentRound
+	int currentRound;*/
 
 	/* Nico, no timelimit
 	float nextTimeLimit;*/
@@ -1908,8 +1923,10 @@ typedef struct {
 	char        *currentCampaign;
 	int currentCampaignMap;
 
+	/* Nico, removed complaints
 	int complaintClient;        // DHM - Nerve
-	int complaintEndTime;       // DHM - Nerve
+	int complaintEndTime;       // DHM - Nerve*/
+
 	float smokeWindDir; // JPW NERVE for smoke puffs & wind (arty, airstrikes, bullet impacts)
 
 	/* Nico, removed playerStats
@@ -1969,7 +1986,9 @@ typedef struct {
 	int dumpStatsTime;                                  // Next stats command that comes back will be written to a logfile*/
 
 	int game_versioninfo;                               // game base version
-	gameStats_t gamestats;
+
+	/* Nico, removed gameStats
+	gameStats_t gamestats;*/
 
 	/* Nico, removed +topshots command
 	topshotStats_t topshots;*/
@@ -2167,7 +2186,9 @@ extern vmCvar_t cg_wolfparticles;
 // done
 
 // Ridah
-extern vmCvar_t cg_gameType;
+/* Nico, removed (c)g_gametype
+extern vmCvar_t cg_gameType;*/
+
 extern vmCvar_t cg_bloodTime;
 extern vmCvar_t cg_norender;
 extern vmCvar_t cg_skybox;
@@ -2182,7 +2203,8 @@ extern vmCvar_t cg_redlimbotime;
 extern vmCvar_t cg_bluelimbotime;*/
 // jpw
 
-extern vmCvar_t cg_movespeed;
+/* Nico, removed (c)g_movespeed
+extern vmCvar_t cg_movespeed;*/
 
 extern vmCvar_t cg_animState;
 
@@ -2210,7 +2232,10 @@ extern vmCvar_t cg_autoAction;
 extern vmCvar_t cg_autoReload;
 extern vmCvar_t cg_bloodDamageBlend;
 extern vmCvar_t cg_bloodFlash;
-extern vmCvar_t cg_complaintPopUp;
+
+/* Nico, removed complaints
+extern vmCvar_t cg_complaintPopUp;*/
+
 extern vmCvar_t cg_crosshairAlpha;
 extern vmCvar_t cg_crosshairAlphaAlt;
 extern vmCvar_t cg_crosshairColor;
@@ -3218,8 +3243,6 @@ void CG_CampaignBriefingSetup( void );
 #define ORDER_ICON_FADE_TIME 3500
 
 void CG_AddToJournal( char *text );
-// returns true if game is single player (or coop)
-qboolean CG_IsSinglePlayer( void );
 
 // END Mad Doc - TDF
 
@@ -3395,7 +3418,10 @@ typedef struct mapScissor_s {
 int CG_CurLayerForZ( int z );
 void CG_DrawMap( float x, float y, float w, float h, int mEntFilter, mapScissor_t *scissor, qboolean interactive, float alpha, qboolean borderblend );
 int CG_DrawSpawnPointInfo( int px, int py, int pw, int ph, qboolean draw, mapScissor_t *scissor, int expand );
-void CG_DrawMortarMarker( int px, int py, int pw, int ph, qboolean draw, mapScissor_t *scissor, int expand );
+
+/* Nico, removed airstrikes
+void CG_DrawMortarMarker( int px, int py, int pw, int ph, qboolean draw, mapScissor_t *scissor, int expand );*/
+
 void CG_CommandMap_SetHighlightText( const char* text, float x, float y );
 void CG_CommandMap_DrawHighlightText( void );
 qboolean CG_CommandCentreSpawnPointClick( void );
@@ -3435,8 +3461,11 @@ void CG_DrawKeyHint( rectDef_t* rect, const char* binding );
 void CG_LoadPanel_DrawPin( const char* text, float px, float py, float sx, float sy, qhandle_t shader, float pinsize, float backheight );
 void CG_LoadPanel_RenderCampaignPins( panel_button_t* button );
 void CG_LoadPanel_RenderMissionDescriptionText( panel_button_t* button );
+
+/* Nico, removed gametypes
 void CG_LoadPanel_RenderCampaignTypeText( panel_button_t* button );
-void CG_LoadPanel_RenderCampaignNameText( panel_button_t* button );
+void CG_LoadPanel_RenderCampaignNameText( panel_button_t* button );*/
+
 void CG_LoadPanel_RenderPercentageMeter( panel_button_t* button );
 void CG_LoadPanel_RenderContinueButton( panel_button_t* button );
 void CG_LoadPanel_RenderLoadingBar( panel_button_t* button );

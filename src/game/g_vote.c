@@ -50,6 +50,7 @@ static const char *DEACTIVATED = "DEACTIVATED";
 static const char *ENABLED = "ENABLED";
 static const char *DISABLED = "DISABLED";
 
+/* Nico, removed gametypes
 static const char *gameNames[] = {
 	"Single Player",
 	"Cooperative",
@@ -57,8 +58,7 @@ static const char *gameNames[] = {
 	"Stopwatch",
 	"Campaign",
 	"Last Man Standing"
-};
-
+};*/
 
 //
 // Update info:
@@ -79,7 +79,9 @@ static const vote_reference_t aVoteInfo[] = {
 	/* Nico, removed competion settings
 	{ 0x1ff, "comp",      G_Comp_v,          "Load Competition Settings", "^7\n  Loads standard competition settings for the current mode" },*/
 
-	{ 0x1ff, "gametype",  G_Gametype_v,      "Set Gametype to",   " <value>^7\n  Changes the current gametype" },
+	/* Nico, removed gametypes
+	{ 0x1ff, "gametype",  G_Gametype_v,      "Set Gametype to",   " <value>^7\n  Changes the current gametype" },*/
+
 	{ 0x1ff, "kick",      G_Kick_v,          "KICK",              " <player_id>^7\n  Attempts to kick player from server" },
 	{ 0x1ff, "mute",      G_Mute_v,          "MUTE",              " <player_id>^7\n  Removes the chat capabilities of a player" },
 	{ 0x1ff, "unmute",        G_UnMute_v,        "UN-MUTE",           " <player_id>^7\n  Restores the chat capabilities of a player" },
@@ -90,20 +92,27 @@ static const vote_reference_t aVoteInfo[] = {
 
 	{ 0x1ff, "maprestart",    G_MapRestart_v,    "Map Restart",       "^7\n  Restarts the current map in progress" },
 	{ 0x1ff, "matchreset",   G_MatchReset_v, "Match Reset",       "^7\n  Resets the entire match" },
-	{ 0x1ff, "mutespecs",     G_Mutespecs_v,     "Mute Spectators",   " <0|1>^7\n  Mutes in-game spectator chat" },
+
+	/* Nico, removed match_* cvars
+	{ 0x1ff, "mutespecs",     G_Mutespecs_v,     "Mute Spectators",   " <0|1>^7\n  Mutes in-game spectator chat" },*/
+
 	{ 0x1ff, "nextmap",       G_Nextmap_v,       "Load Next Map", "^7\n  Loads the next map or campaign in the map queue" },
 
 	/* Nico, removed public settings
 	{ 0x1ff, "pub",           G_Pub_v,           "Load Public Settings", "^7\n  Loads standard public settings for the current mode" },*/
 
 	{ 0x1ff, "referee",       G_Referee_v,       "Referee",           " <player_id>^7\n  Elects a player to have admin abilities" },
-	{ 0x1ff, "shuffleteamsxp", G_ShuffleTeams_v, "Shuffle Teams by XP",   " ^7\n  Randomly place players on each team, based on XP" },
+
+	/* Nico, removed shuffleteam
+	{ 0x1ff, "shuffleteamsxp", G_ShuffleTeams_v, "Shuffle Teams by XP",   " ^7\n  Randomly place players on each team, based on XP" },*/
+
 	{ 0x1ff, "startmatch",    G_StartMatch_v,    "Start Match",       " ^7\n  Sets all players to \"ready\" status to start the match" },
 
 	/* Nico, removed swap_teams command
 	{ 0x1ff, "swapteams",     G_SwapTeams_v,     "Swap Teams",        " ^7\n  Switch the players on each team" },*/
 
-	{ 0x1ff, "friendlyfire", G_FriendlyFire_v,   "Friendly Fire", " <0|1>^7\n  Toggles ability to hurt teammates" },
+	/* Nico, no friendlyfire
+	{ 0x1ff, "friendlyfire", G_FriendlyFire_v,   "Friendly Fire", " <0|1>^7\n  Toggles ability to hurt teammates" },*/
 
 	/* Nico, no timelimit
 	{ 0x1ff, "timelimit",     G_Timelimit_v,     "Timelimit",     " <value>^7\n  Changes the current timelimit" },*/
@@ -156,9 +165,11 @@ void G_voteHelp( gentity_t *ent, qboolean fShowVote ) {
 	}
 
 	for ( i = 0; i < num_cmds; i++ ) {
-		if ( aVoteInfo[i].dwGameTypes & ( 1 << g_gametype.integer ) ) {
+
+		/* Nico, removed (c)g_gametype
+		if ( aVoteInfo[i].dwGameTypes & ( 1 << g_gametype.integer ) ) {*/
 			vi[rows++] = i;
-		}
+		// }
 	}
 
 	num_cmds = rows;
@@ -330,6 +341,7 @@ int G_Comp_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, q
 }*/
 
 
+/* Nico, removed gametypes
 void G_GametypeList( gentity_t *ent ) {
 	int i;
 
@@ -342,9 +354,10 @@ void G_GametypeList( gentity_t *ent ) {
 	}
 
 	G_refPrintf( ent, "\n" );
-}
+}*/
 
 // *** GameType ***
+/* Nico, removed gametypes
 int G_Gametype_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd ) {
 	// Vote request (vote is being initiated)
 	if ( arg ) {
@@ -383,7 +396,7 @@ int G_Gametype_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg
 	}
 
 	return( G_OK );
-}
+}*/
 
 
 // *** Player Kick ***
@@ -552,14 +565,15 @@ int G_Map_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qb
 	} else {
 		char s[MAX_STRING_CHARS];
 
+		/* Nico, removed gametypes
 		if ( g_gametype.integer == GT_WOLF_CAMPAIGN ) {
 			trap_Cvar_VariableStringBuffer( "nextcampaign", s, sizeof( s ) );
 			trap_SendConsoleCommand( EXEC_APPEND, va( "campaign %s%s\n", level.voteInfo.vote_value, ( ( *s ) ? va( "; set nextcampaign \"%s\"", s ) : "" ) ) );
-		} else {
+		} else {*/
 			Svcmd_ResetMatch_f( qtrue, qfalse );
 			trap_Cvar_VariableStringBuffer( "nextmap", s, sizeof( s ) );
 			trap_SendConsoleCommand( EXEC_APPEND, va( "map %s%s\n", level.voteInfo.vote_value, ( ( *s ) ? va( "; set nextmap \"%s\"", s ) : "" ) ) );
-		}
+		// }
 	}
 
 	return( G_OK );
@@ -649,6 +663,7 @@ int G_MatchReset_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *a
 
 
 // *** Mute Spectators ***
+/* Nico, removed match_* cvars
 int G_Mutespecs_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd ) {
 	// Vote request (vote is being initiated)
 	if ( arg ) {
@@ -664,7 +679,7 @@ int G_Mutespecs_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *ar
 	}
 
 	return( G_OK );
-}
+}*/
 
 
 // *** Nextmap ***
@@ -679,32 +694,36 @@ int G_Nextmap_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2
 			return( G_INVALID );
 		} else {
 			char s[MAX_STRING_CHARS];
+
+			/* Nico, removed gametypes
 			if ( g_gametype.integer == GT_WOLF_CAMPAIGN ) {
 				trap_Cvar_VariableStringBuffer( "nextcampaign", s, sizeof( s ) );
 				if ( !*s ) {
 					G_refPrintf( ent, "'nextcampaign' is not set." );
 					return( G_INVALID );
 				}
-			} else {
+			} else {*/
 				trap_Cvar_VariableStringBuffer( "nextmap", s, sizeof( s ) );
 				if ( !*s ) {
 					G_refPrintf( ent, "'nextmap' is not set." );
 					return( G_INVALID );
 				}
-			}
+			// }
 		}
 
 		// Vote action (vote has passed)
 	} else {
+
+		/* Nico, removed gametypes
 		if ( g_gametype.integer == GT_WOLF_CAMPAIGN ) {
 			// Load in the nextcampaign
 			trap_SendConsoleCommand( EXEC_APPEND, "vstr nextcampaign\n" );
 			AP( "cp \"^3*** Loading nextcampaign! ***\n\"" );
-		} else {
+		} else {*/
 			// Load in the nextmap
 			trap_SendConsoleCommand( EXEC_APPEND, "vstr nextmap\n" );
 			AP( "cp \"^3*** Loading nextmap! ***\n\"" );
-		}
+		// }
 	}
 
 	return( G_OK );
@@ -788,6 +807,7 @@ int G_Referee_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2
 
 
 // *** Shuffle teams
+/* Nico, removed shuffleteam
 int G_ShuffleTeams_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd ) {
 	// Vote request (vote is being initiated)
 	if ( arg ) {
@@ -808,7 +828,7 @@ int G_ShuffleTeams_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char 
 	}
 
 	return( G_OK );
-}
+}*/
 
 
 // *** Start Match ***
@@ -835,10 +855,11 @@ int G_StartMatch_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *a
 			return( G_INVALID );
 		}*/
 
+		/* Nico, removed match_* cvars
 		if ( level.numPlayingClients < match_minplayers.integer ) {
 			G_refPrintf( ent, "^3Not enough players to start match!" );
 			return( G_INVALID );
-		}
+		}*/
 
 		// Vote action (vote has passed)
 	} else {
@@ -875,6 +896,7 @@ int G_SwapTeams_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *ar
 
 
 // *** Team Damage ***
+/* Nico, no friendlyfire
 int G_FriendlyFire_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd ) {
 	// Vote request (vote is being initiated)
 	if ( arg ) {
@@ -890,7 +912,7 @@ int G_FriendlyFire_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char 
 	}
 
 	return( G_OK );
-}
+}*/
 
 // Anti-Lag
 int G_AntiLag_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd ) {

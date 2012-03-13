@@ -310,6 +310,8 @@ qboolean G_AllowTeamsAllowed( gentity_t *ent, gentity_t *activator ) {
 			int checkTeam = activator->client->sess.sessionTeam;
 
 			if ( !( ent->allowteams & checkTeam ) ) {
+
+				/* Nico, removed disguise stuff
 				if ( ( ent->allowteams & ALLOW_DISGUISED_CVOPS ) && activator->client->ps.powerups[PW_OPS_DISGUISED] ) {
 					if ( checkTeam == TEAM_AXIS ) {
 						checkTeam = TEAM_ALLIES;
@@ -318,9 +320,9 @@ qboolean G_AllowTeamsAllowed( gentity_t *ent, gentity_t *activator ) {
 					}
 				}
 
-				if ( !( ent->allowteams & checkTeam ) ) {
+				if ( !( ent->allowteams & checkTeam ) ) {*/
 					return qfalse;
-				}
+				// }
 			}
 		}
 	}
@@ -1117,6 +1119,7 @@ void G_SetEntState( gentity_t *ent, entState_t state ) {
 	}
 }
 
+/* Nico, commented because no more used
 static qboolean G_LoadCampaignsFromFile( const char *filename ) {
 	int handle;
 	pc_token_t token;
@@ -1190,6 +1193,7 @@ static qboolean G_LoadCampaignsFromFile( const char *filename ) {
 				return qfalse;
 			}
 
+			// Nico, removed gametypes
 			if ( strstr( token.string, "wolfsp" ) ) {
 				g_campaigns[level.campaignCount].typeBits |= ( 1 << GT_SINGLE_PLAYER );
 			}
@@ -1203,10 +1207,10 @@ static qboolean G_LoadCampaignsFromFile( const char *filename ) {
 				g_campaigns[level.campaignCount].typeBits |= ( 1 << GT_WOLF_STOPWATCH );
 			}
 
-			/* Nico, removed LMS
-			if ( strstr( token.string, "wolflms" ) ) {
-				g_campaigns[level.campaignCount].typeBits |= ( 1 << GT_WOLF_LMS );
-			}*/
+			// Nico, removed LMS
+			// if ( strstr( token.string, "wolflms" ) ) {
+			// 	g_campaigns[level.campaignCount].typeBits |= ( 1 << GT_WOLF_LMS );
+			// }
 
 		} else if ( !Q_stricmp( token.string, "maps" ) ) {
 			char *ptr, mapname[128], *mapnamePtr;
@@ -1228,6 +1232,7 @@ static qboolean G_LoadCampaignsFromFile( const char *filename ) {
 				}
 				*mapnamePtr = '\0';
 
+				// Nico, removed gametypes
 				if ( g_gametype.integer == GT_WOLF_CAMPAIGN ) {
 					if ( !mapFound &&
 						 !Q_stricmp( g_campaigns[level.campaignCount].shortname, g_currentCampaign.string ) &&
@@ -1248,6 +1253,7 @@ static qboolean G_LoadCampaignsFromFile( const char *filename ) {
 						level.currentCampaign = level.campaignCount;
 					}
 				}
+
 				// rain - don't stomp out of bounds
 				if ( g_campaigns[level.campaignCount].mapCount < MAX_MAPS_PER_CAMPAIGN ) {
 					Q_strncpyz( g_campaigns[level.campaignCount].mapnames[g_campaigns[level.campaignCount].mapCount], mapname, MAX_QPATH );
@@ -1271,8 +1277,9 @@ static qboolean G_LoadCampaignsFromFile( const char *filename ) {
 	}
 
 	return mapFound;
-}
+}*/
 
+/* Nico, removed gametypes
 qboolean G_MapIsValidCampaignStartMap( void ) {
 	int i;
 
@@ -1353,7 +1360,7 @@ void G_ParseCampaigns( void ) {
 			trap_SendConsoleCommand( EXEC_APPEND, va( "%s %s", buf, level.rawmapname ) );
 		}
 	}
-}
+}*/
 
 void G_PrintClientSpammyCenterPrint( int entityNum, char* text ) {
 	if ( !g_entities[entityNum].client ) {

@@ -39,18 +39,21 @@ If you have questions concerning this license or the applicable additional terms
 #include "../../etrun/ui/menudef.h"
 
 #ifdef CGAMEDLL
+/* Nico, removed (c)g_gametype
 extern vmCvar_t cg_gameType;
-#define gametypeCvar cg_gameType
+#define gametypeCvar cg_gameType*/
 #elif GAMEDLL
 extern vmCvar_t g_developer;
+/* Nico, removed (c)g_gametype
 extern vmCvar_t g_gametype;
-#define gametypeCvar g_gametype
+#define gametypeCvar g_gametype*/
 #else
 extern vmCvar_t ui_gameType;
 #define gametypeCvar ui_gameType
 #endif
 
-#define BG_IsSinglePlayerGame() ( gametypeCvar.integer == GT_SINGLE_PLAYER ) || ( gametypeCvar.integer == GT_COOP )
+/* Nico, removed gametypes
+#define BG_IsSinglePlayerGame() ( gametypeCvar.integer == GT_SINGLE_PLAYER ) || ( gametypeCvar.integer == GT_COOP )*/
 
 /* Nico, removed skills
 const char* skillNames[SK_NUM_SKILLS] = {
@@ -119,28 +122,28 @@ pathCorner_t pathCorners[MAX_PATH_CORNERS];
 #define DELAY_THROW     250 // grenades, dynamite
 
 // Arnout: the new loadout for WolfXP
+// Nico, removed airstrikes, akimbos, flamethrower, mg42, mortar, grenade, medic siryngue, smoke bomb, dynamite, ammopacks, satchel, landmine, adrenaline
 int weapBanksMultiPlayer[MAX_WEAP_BANKS_MP][MAX_WEAPS_IN_BANK_MP] = {
 	{0,                     0,                      0,                  0,                          0,                      0,                          0,          0,          0,          0,      0,              0           },  // empty bank '0'
 	{WP_KNIFE,              0,                      0,                  0,                          0,                      0,                          0,          0,          0,          0,      0,              0           },
-	{WP_LUGER,              WP_COLT,                WP_AKIMBO_COLT,     WP_AKIMBO_LUGER,            WP_AKIMBO_SILENCEDCOLT, WP_AKIMBO_SILENCEDLUGER,    0,          0,          0,          0,      0,              0           },
-	{WP_MP40,               WP_THOMPSON,            WP_STEN,            WP_GARAND,                  WP_PANZERFAUST,         WP_FLAMETHROWER,            WP_KAR98,   WP_CARBINE, WP_FG42,    WP_K43, WP_MOBILE_MG42, WP_MORTAR   },
-	{WP_GRENADE_LAUNCHER,   WP_GRENADE_PINEAPPLE,   0,                  0,                          0,                      0,                          0,          0,          0,          0,      0,              0           },
-	{WP_MEDIC_SYRINGE,      WP_PLIERS,              WP_SMOKE_MARKER,    WP_SMOKE_BOMB,              0,                      0,                          0,          0,          0,          0,      0,              0,          },
-	{WP_DYNAMITE,           WP_MEDKIT,              WP_AMMO,            WP_SATCHEL,                 WP_SATCHEL_DET,         0,                          0,          0,          0,          0,      0,              0           },
-	{WP_LANDMINE,           WP_MEDIC_ADRENALINE,    0,                  0,                          0,                      0,                          0,          0,          0,          0,      0,              0           },
-	{WP_BINOCULARS,         0,                      0,                  0,                          0,                      0,                          0,          0,          0,          0,      0,              0           },
+	{WP_LUGER,              WP_COLT,                0,					0,							0,						0,							0,          0,          0,          0,      0,              0           },
+	{WP_MP40,               WP_THOMPSON,            WP_STEN,            WP_GARAND,                  WP_PANZERFAUST,         WP_KAR98,					WP_CARBINE, WP_FG42,    WP_K43,		0,		0,				0			},
+	{0,						0,						0,                  0,                          0,                      0,                          0,          0,          0,          0,      0,              0           },
+	{WP_PLIERS,				0,						0,					0,							0,                      0,                          0,          0,          0,          0,      0,              0           },
+	{WP_MEDKIT,				0,						0,					0,							0,						0,                          0,          0,          0,          0,      0,              0           },
+	{0,						0,						0,                  0,                          0,                      0,                          0,          0,          0,          0,      0,              0           },
+	{WP_BINOCULARS,			0,                      0,                  0,                          0,                      0,                          0,          0,          0,          0,      0,              0           },
 	{0,                     0,                      0,                  0,                          0,                      0,                          0,          0,          0,          0,      0,              0           },
 };
 
 // TAT 10/4/2002
 //		Using one unified list for which weapons can received ammo
 //		This is used both by the ammo pack code and by the bot code to determine if reloads are needed
+// Nico, removed akimbos, flamethrower, mg42, mortar
 int reloadableWeapons[] = {
-	WP_MP40,        WP_THOMPSON,    WP_STEN,            WP_GARAND,              WP_PANZERFAUST,         WP_FLAMETHROWER,
-	WP_KAR98,       WP_CARBINE,     WP_FG42,            WP_K43,                 WP_MOBILE_MG42,         WP_COLT,
-	WP_LUGER,       WP_MORTAR,      WP_AKIMBO_COLT,     WP_AKIMBO_LUGER,        WP_M7,                  WP_GPG40,
-	WP_AKIMBO_SILENCEDCOLT, WP_AKIMBO_SILENCEDLUGER,
-	-1
+	WP_MP40,        WP_THOMPSON,    WP_STEN,            WP_GARAND,              WP_PANZERFAUST,
+	WP_KAR98,       WP_CARBINE,     WP_FG42,            WP_K43,                 WP_COLT,
+	WP_LUGER, -1
 };
 
 // [0] = maxammo		-	max player ammo carrying capacity.
@@ -3058,7 +3061,10 @@ BG_CanUseWeapon: can a player of the specified team and class use this weapon?
 */
 qboolean BG_CanUseWeapon( int classNum, int teamNum, weapon_t weapon ) {
 	// TAT 1/11/2003 - is this SP game? - different weapons available in SP
-	qboolean isSinglePlayer = BG_IsSinglePlayerGame() ? qtrue : qfalse;
+
+	/* Nico, removed gametypes
+	qboolean isSinglePlayer = BG_IsSinglePlayerGame() ? qtrue : qfalse;*/
+	qboolean isSinglePlayer = qfalse;
 
 	switch ( classNum ) {
 	case PC_ENGINEER:
@@ -3995,6 +4001,7 @@ void BG_AddPredictableEventToPlayerstate( int newEvent, int eventParm, playerSta
 }
 
 // Gordon: would like to just inline this but would likely break qvm support
+/* Nico, removed disguise stuff
 #define SETUP_MOUNTEDGUN_STATUS( ps )							\
 	switch ( ps->persistant[PERS_HWEAPON_USE] ) {				 \
 	case 1:													\
@@ -4006,6 +4013,21 @@ void BG_AddPredictableEventToPlayerstate( int newEvent, int eventParm, playerSta
 		ps->eFlags |= EF_AAGUN_ACTIVE;						\
 		ps->eFlags &= ~EF_MG42_ACTIVE;						\
 		ps->powerups[PW_OPS_DISGUISED] = 0;					\
+		break;												\
+	default:												\
+		ps->eFlags &= ~EF_MG42_ACTIVE;						\
+		ps->eFlags &= ~EF_AAGUN_ACTIVE;						\
+		break;												\
+	}*/
+#define SETUP_MOUNTEDGUN_STATUS( ps )							\
+	switch ( ps->persistant[PERS_HWEAPON_USE] ) {				 \
+	case 1:													\
+		ps->eFlags |= EF_MG42_ACTIVE;						\
+		ps->eFlags &= ~EF_AAGUN_ACTIVE;						\
+		break;												\
+	case 2:													\
+		ps->eFlags |= EF_AAGUN_ACTIVE;						\
+		ps->eFlags &= ~EF_MG42_ACTIVE;						\
 		break;												\
 	default:												\
 		ps->eFlags &= ~EF_MG42_ACTIVE;						\
@@ -4269,6 +4291,7 @@ weapon_t BG_WeaponForMOD( int MOD ) {
 	return 0;
 }
 
+/* Nico, removed rankNames
 const char* rankSoundNames_Allies[NUM_EXPERIENCE_LEVELS] = {
 	"",
 	"allies_hq_promo_private",
@@ -4354,7 +4377,7 @@ const char* miniRankNames_Allies[NUM_EXPERIENCE_LEVELS] = {
 	"GMj",
 	"GLt",
 	"Gen",
-};
+};*/
 
 /*
 =============
@@ -4883,18 +4906,30 @@ const char* bg_fireteamNames[MAX_FIRETEAMS / 2] = {
 
 const voteType_t voteToggles[] =
 {
-	{ "vote_allow_comp",         CV_SVF_COMP },
-	{ "vote_allow_gametype",     CV_SVF_GAMETYPE },
+	/* Nico, removed vote_allow_comp
+	{ "vote_allow_comp",         CV_SVF_COMP },*/
+
+	/* Nico, removed vote_allow_gametype
+	{ "vote_allow_gametype",     CV_SVF_GAMETYPE },*/
+
 	{ "vote_allow_kick",         CV_SVF_KICK },
 	{ "vote_allow_map",              CV_SVF_MAP },
 	{ "vote_allow_matchreset",       CV_SVF_MATCHRESET },
 	{ "vote_allow_mutespecs",        CV_SVF_MUTESPECS },
 	{ "vote_allow_nextmap",          CV_SVF_NEXTMAP },
-	{ "vote_allow_pub",              CV_SVF_PUB },
+
+	/* Nico, removed vote_allow_pub
+	{ "vote_allow_pub",              CV_SVF_PUB },*/
+
 	{ "vote_allow_referee",          CV_SVF_REFEREE },
-	{ "vote_allow_shuffleteamsxp",   CV_SVF_SHUFFLETEAMS },
+
+	/* Nico, removed shuffleteam
+	{ "vote_allow_shuffleteamsxp",   CV_SVF_SHUFFLETEAMS },*/
+
 	{ "vote_allow_swapteams",        CV_SVF_SWAPTEAMS },
-	{ "vote_allow_friendlyfire", CV_SVF_FRIENDLYFIRE },
+
+	/* Nico, no friendlyfire
+	{ "vote_allow_friendlyfire", CV_SVF_FRIENDLYFIRE },*/
 
 	/* Nico, no timelimit
 	{ "vote_allow_timelimit",        CV_SVF_TIMELIMIT },*/

@@ -567,7 +567,8 @@ int Team_TouchEnemyFlag( gentity_t *ent, gentity_t *other, int team ) {
 	ent->parent = tmp;
 
 	// Gordon: reset player disguise on stealing docs
-	other->client->ps.powerups[PW_OPS_DISGUISED] = 0;
+	/* Nico, removed disguise stuff
+	other->client->ps.powerups[PW_OPS_DISGUISED] = 0;*/
 
 
 	if ( team == TEAM_AXIS ) {
@@ -599,7 +600,8 @@ int Pickup_Team( gentity_t *ent, gentity_t *other ) {
 	gclient_t *cl = other->client;
 
 	// START Mad Doc - TDF
-	if ( ( g_gametype.integer != GT_SINGLE_PLAYER ) && ( g_gametype.integer != GT_COOP ) ) {
+	/* Nico, removed gametypes
+	if ( ( g_gametype.integer != GT_SINGLE_PLAYER ) && ( g_gametype.integer != GT_COOP ) ) {*/
 
 		// figure out what team this flag is
 		if ( strcmp( ent->classname, "team_CTF_redflag" ) == 0 ) {
@@ -619,6 +621,7 @@ int Pickup_Team( gentity_t *ent, gentity_t *other ) {
 		return ( ( team == cl->sess.sessionTeam ) ?
 				 Team_TouchOurFlag : Team_TouchEnemyFlag )
 							( ent, other, team );
+	/* Nico, removed gametypes
 	} else
 	{
 		other->message = ent->message;
@@ -627,7 +630,7 @@ int Pickup_Team( gentity_t *ent, gentity_t *other ) {
 		// for single player, we want the allies to be able to pick up both flags
 		return Team_TouchEnemyFlag( ent, other, TEAM_ALLIES );
 
-	}
+	}*/
 	// END Mad Doc - TDF
 }
 
@@ -1230,7 +1233,8 @@ void checkpoint_use( gentity_t *ent, gentity_t *other, gentity_t *activator ) {
 	ent->nextthink = level.time + 2000;
 
 	// Gordon: reset player disguise on touching flag
-	other->client->ps.powerups[PW_OPS_DISGUISED] = 0;
+	/* Nico, removed disguise stuff
+	other->client->ps.powerups[PW_OPS_DISGUISED] = 0;*/
 }
 
 void checkpoint_spawntouch( gentity_t *self, gentity_t *other, trace_t *trace ); // JPW NERVE
@@ -1337,7 +1341,8 @@ void checkpoint_touch( gentity_t *self, gentity_t *other, trace_t *trace ) {
 	self->parent = other;
 
 	// Gordon: reset player disguise on touching flag
-	other->client->ps.powerups[PW_OPS_DISGUISED] = 0;
+	/* Nico, removed disguise stuff
+	other->client->ps.powerups[PW_OPS_DISGUISED] = 0;*/
 	// Run script trigger
 	if ( self->count == TEAM_AXIS ) {
 		self->health = 0;
@@ -1427,7 +1432,8 @@ void checkpoint_spawntouch( gentity_t *self, gentity_t *other, trace_t *trace ) 
 	self->parent = other;
 
 	// Gordon: reset player disguise on touching flag
-	other->client->ps.powerups[PW_OPS_DISGUISED] = 0;
+	/* Nico, removed disguise stuff
+	other->client->ps.powerups[PW_OPS_DISGUISED] = 0;*/
 	// Run script trigger
 	if ( self->count == TEAM_AXIS ) {
 		G_Script_ScriptEvent( self, "trigger", "axis_capture" );
@@ -1577,10 +1583,14 @@ team_info teamInfo[TEAM_NUM_TEAMS];
 
 // Resets a team's settings
 void G_teamReset( int team_num, qboolean fClearSpecLock ) {
-	teamInfo[team_num].team_lock = ( match_latejoin.integer == 0 && g_gamestate.integer == GS_PLAYING );
+
+	/* Nico, removed match_* cvars
+	teamInfo[team_num].team_lock = ( match_latejoin.integer == 0 && g_gamestate.integer == GS_PLAYING );*/
+	teamInfo[team_num].team_lock = qfalse;
 	teamInfo[team_num].team_name[0] = 0;
 	teamInfo[team_num].team_score = 0;
-	teamInfo[team_num].timeouts = match_timeoutcount.integer;
+	/* Nico, removed match_* cvars
+	teamInfo[team_num].timeouts = match_timeoutcount.integer;*/
 
 	if ( fClearSpecLock ) {
 		teamInfo[team_num].spec_lock = qfalse;
@@ -1631,6 +1641,7 @@ int QDECL G_SortPlayersByXP( const void *a, const void *b ) {
 
 
 // Shuffle active players onto teams
+/* Nico, removed shuffleteam
 void G_shuffleTeams( void ) {
 	int i, cTeam; //, cMedian = level.numNonSpectatorClients / 2;
 	// int aTeamCount[TEAM_NUM_TEAMS]; Nico, unused warning fix
@@ -1641,10 +1652,6 @@ void G_shuffleTeams( void ) {
 
 	G_teamReset( TEAM_AXIS, qtrue );
 	G_teamReset( TEAM_ALLIES, qtrue );
-
-	// for ( i = 0; i < TEAM_NUM_TEAMS; i++ ) {
-	// 	aTeamCount[i] = 0;
-	// }
 
 	for ( i = 0; i < level.numConnectedClients; i++ ) {
 		cl = level.clients + level.sortedClients[ i ];
@@ -1680,7 +1687,7 @@ void G_shuffleTeams( void ) {
 	}
 
 	AP( "cp \"^1Teams have been shuffled!\n\"" );
-}
+}*/
 
 
 // Returns player's "real" team.

@@ -36,12 +36,14 @@ If you have questions concerning this license or the applicable additional terms
 #include "../game/bg_public.h"
 #include "ui_shared.h"
 
-extern vmCvar_t ui_ffa_fraglimit;
+/* Nico, no fraglimit
+extern vmCvar_t ui_ffa_fraglimit;*/
 
 /* Nico, no timelimit
 extern vmCvar_t ui_ffa_timelimit;*/
 
-extern vmCvar_t ui_team_fraglimit;
+/* Nico, no fraglimit
+extern vmCvar_t ui_team_fraglimit;*/
 
 /* Nico, no timelimit
 extern vmCvar_t ui_team_timelimit;*/
@@ -121,7 +123,9 @@ extern vmCvar_t ui_browserGameType;
 extern vmCvar_t ui_browserSortKey;
 extern vmCvar_t ui_browserShowEmptyOrFull;
 extern vmCvar_t ui_browserShowPasswordProtected;
-extern vmCvar_t ui_browserShowFriendlyFire;
+
+/* Nico, no friendlyfire
+extern vmCvar_t ui_browserShowFriendlyFire;*/
 
 /* Nico, removed respawnLeft
 extern vmCvar_t ui_browserShowMaxlives;*/
@@ -139,15 +143,19 @@ extern vmCvar_t ui_limboOptions;
 extern vmCvar_t ui_isSpectator;
 // -NERVE - SMF
 
-extern vmCvar_t g_gameType;
+/* Nico, removed (c)g_gametype
+extern vmCvar_t g_gameType;*/
 
 extern vmCvar_t cl_profile;
 extern vmCvar_t cl_defaultProfile;
 extern vmCvar_t ui_profile;
+
+/* Nico, removed gametypes
 extern vmCvar_t ui_currentNetCampaign;
 extern vmCvar_t ui_currentCampaign;
 extern vmCvar_t ui_campaignIndex;
-extern vmCvar_t ui_currentCampaignCompleted;
+extern vmCvar_t ui_currentCampaignCompleted;*/
+
 extern vmCvar_t ui_blackout;
 extern vmCvar_t cg_crosshairAlpha;
 extern vmCvar_t cg_crosshairAlphaAlt;
@@ -407,7 +415,10 @@ int             UI_AdjustTimeByGame( int time );
 void            UI_ShowPostGame( qboolean newHigh );
 void            UI_ClearScores();
 void            UI_LoadArenas( void );
-void            UI_LoadCampaigns( void );
+
+/* Nico, removed gametypes
+void            UI_LoadCampaigns( void );*/
+
 mapInfo*        UI_FindMapInfoByMapname( const char* name );
 void            UI_ReadableSize( char *buf, int bufsize, int value );
 void            UI_PrintTime( char *buf, int bufsize, int time );
@@ -939,7 +950,9 @@ typedef struct {
 	vec4_t xhairColorAlt;
 
 	qhandle_t passwordFilter;
-	qhandle_t friendlyFireFilter;
+
+	/* Nico, no friendlyfire
+	qhandle_t friendlyFireFilter;*/
 
 	/* Nico, removed respawnLeft
 	qhandle_t maxLivesFilter;*/
@@ -1205,7 +1218,8 @@ void UI_SPUnlockMedals_f( void );
 
 void UI_InitGameinfo( void );
 
+/* Nico, removed gametypes
 const char* UI_DescriptionForCampaign( void );
-const char* UI_NameForCampaign( void );
+const char* UI_NameForCampaign( void );*/
 
 #endif

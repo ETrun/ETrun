@@ -146,14 +146,15 @@ panel_button_t missiondescriptionPanelText = {
 	NULL,
 };
 
+/* Nico, removed gametypes
 panel_button_t campaignheaderPanelText = {
 	NULL,
 	NULL,
 	{ 456, 24, 152, 232 },
 	{ 0, 0, 0, 0, 0, 0, 0, 0 },
-	&campaignpheaderTxt,    /* font		*/
-	NULL,                   /* keyDown	*/
-	NULL,                   /* keyUp	*/
+	&campaignpheaderTxt,   
+	NULL,                   
+	NULL,                   
 	CG_LoadPanel_RenderCampaignTypeText,
 	NULL,
 };
@@ -163,12 +164,12 @@ panel_button_t campaignPanelText = {
 	NULL,
 	{ 464, 40, 152, 232 },
 	{ 0, 0, 0, 0, 0, 0, 0, 0 },
-	&campaignpTxt,          /* font		*/
-	NULL,                   /* keyDown	*/
-	NULL,                   /* keyUp	*/
+	&campaignpTxt,          
+	NULL,                   
+	NULL,                   
 	CG_LoadPanel_RenderCampaignNameText,
 	NULL,
-};
+};*/
 
 panel_button_t loadScreenMeterBack = {
 	"gfx/loading/progressbar_back",
@@ -212,7 +213,8 @@ panel_button_t* loadpanelButtons[] = {
 
 	&missiondescriptionPanelText, &missiondescriptionPanelHeaderText,
 
-	&campaignheaderPanelText, &campaignPanelText,
+	/* Nico, removed gametypes
+	&campaignheaderPanelText, &campaignPanelText,*/
 
 	&loadScreenMeterBack, &loadScreenMeterBack2, &loadScreenMeterBackText,
 
@@ -226,7 +228,7 @@ panel_button_t* loadpanelButtons[] = {
 CG_DrawConnectScreen
 ================
 */
-
+/* Nico, removed gametypes
 const char* CG_LoadPanel_GameTypeName( gametype_t gt ) {
 	switch ( gt ) {
 	case GT_SINGLE_PLAYER:
@@ -240,16 +242,16 @@ const char* CG_LoadPanel_GameTypeName( gametype_t gt ) {
 	case GT_WOLF_CAMPAIGN:
 		return "Campaign";
 
-	/* Nico, removed LMS
-	case GT_WOLF_LMS:
-		return "Last Man Standing";*/
+	// Nico, removed LMS
+	// case GT_WOLF_LMS:
+	//	return "Last Man Standing";
 
 	default:
 		break;
 	}
 
 	return "Invalid";
-}
+}*/
 
 void CG_DrawConnectScreen( qboolean interactive, qboolean forcerefresh ) {
 	static qboolean inside = qfalse;
@@ -338,11 +340,12 @@ void CG_DrawConnectScreen( qboolean interactive, qboolean forcerefresh ) {
 
 		y = 417;
 
+		/* Nico, no friendlyfire
 		str = Info_ValueForKey( buffer, "g_friendlyfire" );
 		if ( str && *str && atoi( str ) ) {
 			x = 461;
 			CG_DrawPic( x, y, 16, 16, bg_filter_ff );
-		}
+		}*/
 
 		/* Nico, removed respawnLeft
 		if ( atoi( Info_ValueForKey( buffer, "g_gametype" ) ) != GT_WOLF_LMS ) {
@@ -439,29 +442,15 @@ void CG_LoadPanel_RenderLoadingBar( panel_button_t* button ) {
 	CG_DrawPicST( button->rect.x, button->rect.y, button->rect.w * frac, button->rect.h, 0, 0, frac, 1, button->hShaderNormal );
 }
 
+/* Nico, removed gametypes
 void CG_LoadPanel_RenderCampaignTypeText( panel_button_t* button ) {
-/*	char buffer[1024];
-	const char* str;
-	DC->getConfigString( CS_SERVERINFO, buffer, sizeof( buffer ) );
-	if( !*buffer ) {
-		return;
-	}
-
-	str = Info_ValueForKey( buffer, "g_gametype" );
-*/
 	CG_Text_Paint_Ext( button->rect.x, button->rect.y, button->font->scalex, button->font->scaley, button->font->colour, va( "%s:", CG_LoadPanel_GameTypeName( cgs.gametype ) ), 0, 0, button->font->style, button->font->font );
-}
+}*/
 
-
+/* Nico, removed gametypes
 void CG_LoadPanel_RenderCampaignNameText( panel_button_t* button ) {
-	const char* cs;
+	// const char* cs; Nico, unused warning fix
 	float w;
-	//char buffer[1024];
-	//int gametype;
-
-	//DC->getConfigString( CS_SERVERINFO, buffer, sizeof( buffer ) );
-	//cs = Info_ValueForKey( buffer, "g_gametype" );
-	//gametype = atoi(cs);
 
 	if ( cgs.gametype == GT_WOLF_CAMPAIGN ) {
 
@@ -484,21 +473,15 @@ void CG_LoadPanel_RenderCampaignNameText( panel_button_t* button ) {
 		w = CG_Text_Width_Ext( cgs.arenaData.longname, button->font->scalex, 0, button->font->font );
 		CG_Text_Paint_Ext( button->rect.x + ( button->rect.w - w ) * 0.5f, button->rect.y, button->font->scalex, button->font->scaley, button->font->colour, cgs.arenaData.longname, 0, 0, 0, button->font->font );
 	}
-}
+}*/
 
 void CG_LoadPanel_RenderMissionDescriptionText( panel_button_t* button ) {
 	const char* cs;
 	char *s, *p;
 	char buffer[1024];
 	float y;
-	//int gametype;
 
-	//DC->getConfigString( CS_SERVERINFO, buffer, sizeof( buffer ) );
-	//cs = Info_ValueForKey( buffer, "g_gametype" );
-	//gametype = atoi(cs);
-
-//	DC->fillRect( button->rect.x, button->rect.y, button->rect.w, button->rect.h, colorRed );
-
+	/* Nico, removed gametypes
 	if ( cgs.gametype == GT_WOLF_CAMPAIGN ) {
 
 		cs = DC->descriptionForCampaign();
@@ -506,7 +489,7 @@ void CG_LoadPanel_RenderMissionDescriptionText( panel_button_t* button ) {
 			return;
 		}
 
-	}
+	}*/
 	
 	/* Nico, removed LMS
 	else if ( cgs.gametype == GT_WOLF_LMS ) {
@@ -521,7 +504,8 @@ void CG_LoadPanel_RenderMissionDescriptionText( panel_button_t* button ) {
 
 	} */
 	
-	else {
+	//else
+	{
 
 		if ( !cgs.arenaInfoLoaded ) {
 			return;
@@ -596,12 +580,16 @@ void CG_LoadPanel_DrawPin( const char* text, float px, float py, float sx, float
 }
 
 void CG_LoadPanel_RenderCampaignPins( panel_button_t* button ) {
+	
+	/* Nico, removed gametypes
 	int i;
-	qhandle_t shader;
+	qhandle_t shader;*/
 
 	/* Nico, removed LMS
 	if ( cgs.gametype == GT_WOLF_STOPWATCH || cgs.gametype == GT_WOLF_LMS || cgs.gametype == GT_WOLF ) {*/
-	if ( cgs.gametype == GT_WOLF_STOPWATCH || cgs.gametype == GT_WOLF ) {
+
+	/* Nico, removed gametypes
+	if ( cgs.gametype == GT_WOLF_STOPWATCH || cgs.gametype == GT_WOLF ) {*/
 		float px, py;
 
 		if ( !cgs.arenaInfoLoaded ) {
@@ -612,6 +600,8 @@ void CG_LoadPanel_RenderCampaignPins( panel_button_t* button ) {
 		py = ( cgs.arenaData.mappos[1] / 1024.f ) * 480.f;
 
 		CG_LoadPanel_DrawPin( cgs.arenaData.longname, px, py, 0.22f, 0.25f, bg_neutralpin, 16.f, 16.f );
+	
+	/* Nico, removed gametypes
 	} else {
 		if ( !cgs.campaignInfoLoaded ) {
 			return;
@@ -636,5 +626,5 @@ void CG_LoadPanel_RenderCampaignPins( panel_button_t* button ) {
 
 			CG_LoadPanel_DrawPin( cgs.campaignData.arenas[i].longname, px, py, 0.22f, 0.25f, shader, 16.f, 16.f );
 		}
-	}
+	}*/
 }

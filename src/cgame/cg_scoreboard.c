@@ -61,6 +61,7 @@ WM_DrawObjectives
 #define INFO_TOTAL_WIDTH        ( INFO_PLAYER_WIDTH + INFO_CLASS_WIDTH + INFO_SCORE_WIDTH + INFO_LATENCY_WIDTH )*/
 #define INFO_TOTAL_WIDTH        ( INFO_PLAYER_WIDTH + INFO_CLASS_WIDTH + INFO_LATENCY_WIDTH )
 
+/* Nico, this does nothing
 int WM_DrawObjectives( int x, int y, int width, float fade ) {
 	// const char *s, *str; Nico, unused warning fix
 	// int tempy, Nico, unused warning fix
@@ -68,7 +69,7 @@ int WM_DrawObjectives( int x, int y, int width, float fade ) {
 	// int msec, mins, seconds, tens; Nico, unused warning fix
 	// vec4_t tclr =   { 0.6f,     0.6f,       0.6f,       1.0f }; Nico, unused warning fix
 
-	/* Nico, removed intermission
+	// Nico, removed intermission
 	if ( cg.snap->ps.pm_type == PM_INTERMISSION ) {
 		const char *s, *buf, *shader = NULL, *flagshader = NULL, *nameshader = NULL;
 
@@ -105,8 +106,8 @@ int WM_DrawObjectives( int x, int y, int width, float fade ) {
 			CG_DrawPic( 365, 50, 127, 64, trap_R_RegisterShaderNoMip( "ui/assets/portraits/text_win.tga" ) );
 		}
 		return y;
-	}*/
-	/* Nico, no timelimit
+	}
+	// Nico, no timelimit
 // JPW NERVE -- mission time & reinforce time
 	else {
 		// tempy = y;
@@ -185,11 +186,11 @@ int WM_DrawObjectives( int x, int y, int width, float fade ) {
 		}
 
 		y += SMALLCHAR_HEIGHT * 2;
-	}*/
+	}
 // jpw
 
 	return y;
-}
+}*/
 
 static void WM_DrawClientScore( int x, int y, score_t *score, float *color, float fade ) {
 	int maxchars, offset;
@@ -743,7 +744,8 @@ qboolean CG_DrawScoreboard( void ) {
 		fade = fadeColor[3];
 	}
 
-	y = WM_DrawObjectives( x, y, 640 - 2 * x + 5, fade );
+	/* Nico, this does nothing
+	y = WM_DrawObjectives( x, y, 640 - 2 * x + 5, fade );*/
 
 	/* Nico, removed intermission
 	if ( cgs.gametype == GT_WOLF_STOPWATCH && ( cg.snap->ps.pm_type == PM_INTERMISSION ) ) {

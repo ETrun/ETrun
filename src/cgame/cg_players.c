@@ -250,13 +250,14 @@ void CG_NewClientInfo( int clientNum ) {
 		}*/
 	}
 
+	/* Nico, removed disguise stuff
 	// diguiseName
 	v = Info_ValueForKey( configstring, "dn" );
 	Q_strncpyz( newInfo.disguiseName, v, sizeof( newInfo.disguiseName ) );
 
 	// disguiseRank
 	v = Info_ValueForKey( configstring, "dr" );
-	newInfo.disguiseRank = atoi( v );
+	newInfo.disguiseRank = atoi( v );*/
 
 	// Gordon: weapon and latchedweapon ( FIXME: make these more secure )
 	v = Info_ValueForKey( configstring, "w" );
@@ -286,13 +287,14 @@ void CG_NewClientInfo( int clientNum ) {
 			}
 		}
 
+		/* Nico, removed rankNames
 		if ( newInfo.rank > cgs.clientinfo[ cg.clientNum ].rank ) {
 
 			CG_SoundPlaySoundScript( cgs.clientinfo[cg.clientNum].team == TEAM_ALLIES ? rankSoundNames_Allies[ newInfo.rank ] : rankSoundNames_Axis[ newInfo.rank ], NULL, -1, qtrue );
 
-			/* Nico, removed rankicons
-			CG_AddPMItemBig( PM_RANK, va( "Promoted to rank %s!", cgs.clientinfo[ cg.clientNum ].team == TEAM_AXIS ? rankNames_Axis[newInfo.rank] : rankNames_Allies[newInfo.rank] ), rankicons[ newInfo.rank ][ 0 ].shader );*/
-		}
+			// Nico, removed rankicons
+			// CG_AddPMItemBig( PM_RANK, va( "Promoted to rank %s!", cgs.clientinfo[ cg.clientNum ].team == TEAM_AXIS ? rankNames_Axis[newInfo.rank] : rankNames_Allies[newInfo.rank] ), rankicons[ newInfo.rank ][ 0 ].shader );
+		}*/
 
 		/* Nico, removed skills
 		for ( i = 0; i < SK_NUM_SKILLS; i++ ) {
@@ -341,11 +343,12 @@ void CG_NewClientInfo( int clientNum ) {
 			}
 		}*/
 
+		/* Nico, removed airstrikes
 		if ( newInfo.team != cgs.clientinfo[ cg.clientNum ].team ) {
 			// clear these
 			memset( cg.artilleryRequestPos, 0, sizeof( cg.artilleryRequestPos ) );
 			memset( cg.artilleryRequestTime, 0, sizeof( cg.artilleryRequestTime ) );
-		}
+		}*/
 
 		trap_Cvar_Set( "authLevel", va( "%i", newInfo.refStatus ) );
 
@@ -391,12 +394,13 @@ PLAYER ANIMATION
 */
 
 bg_playerclass_t* CG_PlayerClassForClientinfo( clientInfo_t *ci, centity_t* cent ) {
-	int team, cls;
+	// int team, cls; Nico, unused warning fix
 
 	if ( cent && cent->currentState.eType == ET_CORPSE ) {
 		return BG_GetPlayerClassInfo( cent->currentState.modelindex, cent->currentState.modelindex2 );
 	}
 
+	/* Nico, removed disguise stuff
 	if ( cent && cent->currentState.powerups & ( 1 << PW_OPS_DISGUISED ) ) {
 		team = ci->team == TEAM_AXIS ? TEAM_ALLIES : TEAM_AXIS;
 
@@ -405,7 +409,7 @@ bg_playerclass_t* CG_PlayerClassForClientinfo( clientInfo_t *ci, centity_t* cent
 		cls = ( cent->currentState.powerups >> PW_OPS_CLASS_1 ) & 7;
 
 		return BG_GetPlayerClassInfo( team, cls );
-	}
+	}*/
 
 	return BG_GetPlayerClassInfo( ci->team, ci->cls );
 }
@@ -661,7 +665,7 @@ void CG_RunLerpFrameRate( clientInfo_t *ci, lerpFrame_t *lf, int newAnimation, c
 		 // xkan, 12/27/2002 - In SP, corpse also stays at the last frame (of the death animation)
 		 // so that the death animation can end up in different positions
 		 // and the body will stay in that position
-		 || ( /*CG_IsSinglePlayer() &&*/ cent->currentState.eType == ET_CORPSE ) ) {
+		 || ( cent->currentState.eType == ET_CORPSE ) ) {
 		lf->oldFrame = lf->frame = anim->firstFrame + anim->numFrames - 1;
 		lf->oldFrameModel = lf->frameModel = anim->mdxFile;
 		lf->backlerp = 0;

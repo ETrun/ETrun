@@ -681,10 +681,11 @@ qboolean SetTeam( gentity_t *ent, char *s, qboolean force, weapon_t w1, weapon_t
 			return( qfalse );
 		}
 
+		/* Nico, removed team switch protection
 		if ( g_noTeamSwitching.integer && ( team != ent->client->sess.sessionTeam && ent->client->sess.sessionTeam != TEAM_SPECTATOR ) && g_gamestate.integer == GS_PLAYING && !force ) {
 			trap_SendServerCommand( clientNum, "cp \"You cannot switch during a match, please wait until the round ends.\n\"" );
 			return qfalse;  // ignore the request
-		}
+		}*/
 
 		/* Nico, removed balancedteams
 		if ( ( ( g_gametype.integer == GT_WOLF_LMS && g_lms_teamForceBalance.integer ) || g_teamForceBalance.integer ) && !force ) {
@@ -707,9 +708,10 @@ qboolean SetTeam( gentity_t *ent, char *s, qboolean force, weapon_t w1, weapon_t
 		}*/
 	}
 
+	/* Nico, removed gameClients limits
 	if ( g_maxGameClients.integer > 0 && level.numNonSpectatorClients >= g_maxGameClients.integer ) {
 		team = TEAM_SPECTATOR;
-	}
+	}*/
 
 	//
 	// decide if we will allow the change
@@ -746,9 +748,10 @@ qboolean SetTeam( gentity_t *ent, char *s, qboolean force, weapon_t w1, weapon_t
 
 	// he starts at 'base'
 	// RF, in single player, bots always use regular spawn points
+	/* Nico, removed gametypes
 	if ( !( ( g_gametype.integer == GT_SINGLE_PLAYER || g_gametype.integer == GT_COOP ) && ( ent->r.svFlags & SVF_BOT ) ) ) {
 		client->pers.teamState.state = TEAM_BEGIN;
-	}
+	}*/
 
 	if ( oldTeam != TEAM_SPECTATOR ) {
 		if ( !( ent->client->ps.pm_flags & PMF_LIMBO ) ) {
@@ -1339,7 +1342,11 @@ void G_SayTo( gentity_t *ent, gentity_t *other, int mode, int color, const char 
 	}
 
 	// NERVE - SMF - if spectator, no chatting to players in WolfMP
+	/* Nico, removed match_* cvars
 	if ( match_mutespecs.integer > 0 && ent->client->sess.referee == 0 &&   // OSP
+		 ( ( ent->client->sess.sessionTeam == TEAM_FREE && other->client->sess.sessionTeam != TEAM_FREE ) ||
+		   ( ent->client->sess.sessionTeam == TEAM_SPECTATOR && other->client->sess.sessionTeam != TEAM_SPECTATOR ) ) ) {*/
+	if ( ent->client->sess.referee == 0 &&   // OSP
 		 ( ( ent->client->sess.sessionTeam == TEAM_FREE && other->client->sess.sessionTeam != TEAM_FREE ) ||
 		   ( ent->client->sess.sessionTeam == TEAM_SPECTATOR && other->client->sess.sessionTeam != TEAM_SPECTATOR ) ) ) {
 		return;
@@ -1456,7 +1463,10 @@ void G_VoiceTo( gentity_t *ent, gentity_t *other, int mode, const char *id, qboo
 	}
 
 	// OSP - spec vchat rules follow the same as normal chatting rules
+	/* Nico, removed match_* cvars
 	if ( match_mutespecs.integer > 0 && ent->client->sess.referee == 0 &&
+		 ent->client->sess.sessionTeam == TEAM_SPECTATOR && other->client->sess.sessionTeam != TEAM_SPECTATOR ) {*/
+	if ( ent->client->sess.referee == 0 &&
 		 ent->client->sess.sessionTeam == TEAM_SPECTATOR && other->client->sess.sessionTeam != TEAM_SPECTATOR ) {
 		return;
 	}
@@ -1751,6 +1761,7 @@ qboolean Cmd_CallVote_f( gentity_t *ent, unsigned int dwCommand, qboolean fRefCo
 
 qboolean StringToFilter( const char *s, ipFilter_t *f );
 
+/* Nico, removed complaints
 qboolean G_FindFreeComplainIP( gclient_t* cl, ipFilter_t* ip ) {
 	int i = 0;
 
@@ -1769,7 +1780,7 @@ qboolean G_FindFreeComplainIP( gclient_t* cl, ipFilter_t* ip ) {
 		}
 	}
 	return qfalse;
-}
+}*/
 
 /*
 ==================
@@ -1778,8 +1789,9 @@ Cmd_Vote_f
 */
 void Cmd_Vote_f( gentity_t *ent ) {
 	char msg[64];
-	int num;
+	// int num; Nico, unused warning fix
 
+	/* Nico, removed complaints
 	// DHM - Nerve :: Complaints supercede voting (and share command)
 	if ( ent->client->pers.complaintEndTime > level.time && g_gamestate.integer == GS_PLAYING && g_complaintlimit.integer ) {
 
@@ -1827,8 +1839,8 @@ void Cmd_Vote_f( gentity_t *ent ) {
 
 			AddScore( other, WOLF_FRIENDLY_PENALTY );
 
-			/* Nico, removed g_stats.c
-			G_LoseKillSkillPoints( other, ent->sound2to1, ent->sound1to2, ent->sound2to3 ? qtrue : qfalse );*/
+			// Nico, removed g_stats.c
+			// G_LoseKillSkillPoints( other, ent->sound2to1, ent->sound1to2, ent->sound2to3 ? qtrue : qfalse );
 		} else {
 			trap_SendServerCommand( ent->client->pers.complaintClient, "cpm \"No complaint filed against you.\n\"" );
 			trap_SendServerCommand( ent - g_entities, "complaint -2" );
@@ -1839,7 +1851,7 @@ void Cmd_Vote_f( gentity_t *ent ) {
 		ent->client->pers.complaintClient = -1;
 
 		return;
-	}
+	}*/
 	// dhm
 
 	if ( ent->client->pers.applicationEndTime > level.time ) {
@@ -1996,8 +2008,9 @@ void Cmd_Vote_f( gentity_t *ent ) {
 
 	// dhm
 	// Reset this ent's complainEndTime so they can't send multiple complaints
+	/* Nico, removed complaints
 	ent->client->pers.complaintEndTime = -1;
-	ent->client->pers.complaintClient = -1;
+	ent->client->pers.complaintClient = -1;*/
 
 	if ( !level.voteInfo.voteTime ) {
 		trap_SendServerCommand( ent - g_entities, "print \"No vote in progress.\n\"" );
@@ -2202,6 +2215,7 @@ Cmd_Activate_f
 qboolean Do_Activate2_f( gentity_t *ent, gentity_t *traceEnt ) {
 	qboolean found = qfalse;
 
+	/* Nico, removed disguise stuff TEST
 	if ( ent->client->sess.playerType == PC_COVERTOPS && !ent->client->ps.powerups[PW_OPS_DISGUISED] && ent->health > 0 ) {
 		if ( !ent->client->ps.powerups[PW_BLUEFLAG] && !ent->client->ps.powerups[PW_REDFLAG] ) {
 			if ( traceEnt->s.eType == ET_CORPSE ) {
@@ -2211,10 +2225,6 @@ qboolean Do_Activate2_f( gentity_t *ent, gentity_t *traceEnt ) {
 					if ( BODY_VALUE( traceEnt ) >= 250 ) {
 
 						traceEnt->nextthink = traceEnt->timestamp + BODY_TIME( BODY_TEAM( traceEnt ) );
-
-//						BG_AnimScriptEvent( &ent->client->ps, ent->client->pers.character->animModelInfo, ANIM_ET_PICKUPGRENADE, qfalse, qtrue );
-//						ent->client->ps.pm_flags |= PMF_TIME_LOCKPLAYER;
-//						ent->client->ps.pm_time = 2100;
 
 						ent->client->ps.powerups[PW_OPS_DISGUISED] = 1;
 						ent->client->ps.powerups[PW_OPS_CLASS_1] = BODY_CLASS( traceEnt ) & 1;
@@ -2229,12 +2239,15 @@ qboolean Do_Activate2_f( gentity_t *ent, gentity_t *traceEnt ) {
 						// sound effect
 						G_AddEvent( ent, EV_DISGUISE_SOUND, 0 );
 
-						/* Nico, removed g_stats.c
-						G_AddSkillPoints( ent, SK_MILITARY_INTELLIGENCE_AND_SCOPED_WEAPONS, 5.f );
-						G_DebugAddSkillPoints( ent, SK_MILITARY_INTELLIGENCE_AND_SCOPED_WEAPONS, 5, "stealing uniform" );*/
+						// Nico, removed g_stats.c
+						// G_AddSkillPoints( ent, SK_MILITARY_INTELLIGENCE_AND_SCOPED_WEAPONS, 5.f );
+						// G_DebugAddSkillPoints( ent, SK_MILITARY_INTELLIGENCE_AND_SCOPED_WEAPONS, 5, "stealing uniform" );
 
 						Q_strncpyz( ent->client->disguiseNetname, g_entities[traceEnt->s.clientNum].client->pers.netname, sizeof( ent->client->disguiseNetname ) );
-						ent->client->disguiseRank = g_entities[traceEnt->s.clientNum].client ? g_entities[traceEnt->s.clientNum].client->sess.rank : 0;
+
+						// Nico, removed rank
+						// ent->client->disguiseRank = g_entities[traceEnt->s.clientNum].client ? g_entities[traceEnt->s.clientNum].client->sess.rank : 0;
+						ent->client->disguiseRank = 0;
 
 						ClientUserinfoChanged( ent->s.clientNum );
 					} else {
@@ -2243,7 +2256,7 @@ qboolean Do_Activate2_f( gentity_t *ent, gentity_t *traceEnt ) {
 				}
 			}
 		}
-	}
+	}*/
 
 	return found;
 }

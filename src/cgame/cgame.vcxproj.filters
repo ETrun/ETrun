@@ -17,9 +17,6 @@
     <ClCompile Include="..\game\bg_animgroup.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\game\bg_campaign.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\game\bg_character.c">
       <Filter>Source Files</Filter>
     </ClCompile>

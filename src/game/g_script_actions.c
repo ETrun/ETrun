@@ -3115,7 +3115,6 @@ qboolean G_ScriptAction_Announce( gentity_t *ent, char *params ) {
 	}
 
 	trap_SendServerCommand( -1, va( "cpm \"%s\"", token ) );
-//	trap_SendServerCommand( -1, va("cp \"%s\" 2", token ));
 
 	return qtrue;
 }
@@ -3127,8 +3126,8 @@ G_ScriptAction_EndRound
   syntax: wm_endround <>
 ===================
 */
-
-extern void LogExit( const char *string );
+/* Nico, removed gametypes
+extern void LogExit( const char *string );*/
 
 qboolean G_ScriptAction_EndRound( gentity_t *ent, char *params ) {
 
@@ -3137,7 +3136,9 @@ qboolean G_ScriptAction_EndRound( gentity_t *ent, char *params ) {
 		return qtrue;
 	}*/
 
-	LogExit( "Wolf EndRound." );
+	/* Nico, removed gametypes
+	LogExit( "Wolf EndRound." );*/
+	G_Printf("Warning: G_ScriptAction_EndRound ignored\n");
 
 	return qtrue;
 }
@@ -3876,10 +3877,11 @@ G_ScriptAction_AbortIfNotSinglePlayer
 ====================
 */
 qboolean G_ScriptAction_AbortIfNotSinglePlayer( gentity_t *ent, char *params ) {
-	if ( !G_IsSinglePlayerGame() ) {
+	/* Nico, removed gametypes
+	if ( !G_IsSinglePlayerGame() ) {*/
 		// abort the current script
 		ent->scriptStatus.scriptStackHead = ent->scriptEvents[ent->scriptStatus.scriptEventIndex].stack.numItems;
-	}
+	// }
 	//
 	return qtrue;
 }

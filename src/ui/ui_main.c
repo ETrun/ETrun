@@ -90,8 +90,9 @@ static int UI_MapCountByGameType( qboolean singlePlayer );
 static const char *UI_SelectedMap( qboolean singlePlayer, int index, int *actual );
 static int UI_GetIndexFromSelection( int actual );
 
+/* Nico, removed gametypes
 static const char *UI_SelectedCampaign( int index, int *actual );
-static int UI_CampaignCount( qboolean singlePlayer );
+static int UI_CampaignCount( qboolean singlePlayer );*/
 
 qboolean    UI_CheckExecKey( int key );
 // -NERVE - SMF - enabled for multiplayer
@@ -1362,7 +1363,9 @@ void UI_Load() {
 
 	UI_ParseGameInfo( "gameinfo.txt" );
 	UI_LoadArenas();
-	UI_LoadCampaigns();
+
+	/* Nico, removed gametypes
+	UI_LoadCampaigns();*/
 
 	UI_LoadMenus( menuSet, qtrue );
 	Menus_CloseAll();
@@ -1385,8 +1388,9 @@ static void UI_DrawClanName( rectDef_t *rect, float scale, vec4_t color, int tex
 }
 
 
+/* Nico, no fraglimit
 static void UI_SetCapFragLimits( qboolean uiVars ) {
-}
+}*/
 
 // ui_gameType assumes gametype 0 is -1 ALL and will not show
 static void UI_DrawGameType( rectDef_t *rect, float scale, vec4_t color, int textStyle ) {
@@ -1532,8 +1536,9 @@ static void UI_DrawEffects( rectDef_t *rect, float scale, vec4_t color ) {
 
 void UI_DrawMapPreview( rectDef_t *rect, float scale, vec4_t color, qboolean net ) {
 	int map = ( net ) ? ui_currentNetMap.integer : ui_currentMap.integer;
-	int game = net ? ui_netGameType.integer : uiInfo.gameTypes[ui_gameType.integer].gtEnum;
+	// int game = net ? ui_netGameType.integer : uiInfo.gameTypes[ui_gameType.integer].gtEnum; Nico, unused warning fix
 
+	/* Nico, removed gametypes
 	if ( game == GT_WOLF_CAMPAIGN ) {
 		if ( map < 0 || map > uiInfo.campaignCount ) {
 			if ( net ) {
@@ -1589,7 +1594,7 @@ void UI_DrawMapPreview( rectDef_t *rect, float scale, vec4_t color, qboolean net
 			UI_DrawHandlePic( rect->x, rect->y, rect->w, rect->h, trap_R_RegisterShaderNoMip( "levelshots/unknownmap" ) );
 		}
 		return;
-	}
+	}*/
 
 	if ( map < 0 || map > uiInfo.mapCount ) {
 		if ( net ) {
@@ -1702,8 +1707,9 @@ void UI_DrawNetMapPreview( rectDef_t *rect, float scale, vec4_t color, qboolean 
 static void UI_DrawMapCinematic( rectDef_t *rect, float scale, vec4_t color, qboolean net ) {
 
 	int map = ( net ) ? ui_currentNetMap.integer : ui_currentMap.integer;
-	int game = net ? ui_netGameType.integer : uiInfo.gameTypes[ui_gameType.integer].gtEnum;
+	// int game = net ? ui_netGameType.integer : uiInfo.gameTypes[ui_gameType.integer].gtEnum; Nico, unused warning fix
 
+	/* Nico, removed gametypes
 	if ( game == GT_WOLF_CAMPAIGN ) {
 		if ( map < 0 || map > uiInfo.campaignCount ) {
 			if ( net ) {
@@ -1716,22 +1722,9 @@ static void UI_DrawMapCinematic( rectDef_t *rect, float scale, vec4_t color, qbo
 			map = 0;
 		}
 
-/*		if( uiInfo.campaignList[map].campaignCinematic >= -1 ) {
-			if( uiInfo.campaignList[map].campaignCinematic == -1 ) {
-				uiInfo.campaignList[map].campaignCinematic = trap_CIN_PlayCinematic(va("%s.roq", uiInfo.campaignList[map].campaignShortName), 0, 0, 0, 0, (CIN_loop | CIN_silent) );
-			}
-			if( uiInfo.campaignList[map].campaignCinematic >= 0 ) {
-				trap_CIN_RunCinematic( uiInfo.campaignList[map].campaignCinematic );
-				trap_CIN_SetExtents( uiInfo.campaignList[map].campaignCinematic, rect->x, rect->y, rect->w, rect->h );
-				trap_CIN_DrawCinematic( uiInfo.campaignList[map].campaignCinematic );
-			} else {
-				uiInfo.campaignList[map].campaignCinematic = -2;
-			}
-		} else*/{
-			UI_DrawMapPreview( rect, scale, color, net );
-		}
+		UI_DrawMapPreview( rect, scale, color, net );
 		return;
-	}
+	}*/
 
 	if ( map < 0 || map > uiInfo.mapCount ) {
 		if ( net ) {
@@ -1760,6 +1753,7 @@ static void UI_DrawMapCinematic( rectDef_t *rect, float scale, vec4_t color, qbo
 	}
 }
 
+/* Nico, removed gametypes
 static void UI_DrawCampaignPreview( rectDef_t *rect, float scale, vec4_t color, qboolean net ) {
 	int campaign = ( net ) ? ui_currentNetCampaign.integer : ui_currentCampaign.integer;
 	if ( campaign < 0 || campaign > uiInfo.campaignCount ) {
@@ -1848,14 +1842,15 @@ void UI_DrawCampaignDescription( rectDef_t *rect, float scale, vec4_t color, flo
 		textPtr = uiInfo.campaignList[campaign].campaignDescription;
 	}
 	
-	/* Nico, removed LMS
+	// Nico, removed LMS
 	else if ( game == GT_WOLF_LMS ) {
 		int map = ( net ) ? ui_currentNetMap.integer : ui_currentMap.integer;
 
 		textPtr = uiInfo.mapList[map].lmsbriefing;
-	}*/
+	}
 	
-	else {
+	// else 
+	{
 		int map = ( net ) ? ui_currentNetMap.integer : ui_currentMap.integer;
 
 		textPtr = uiInfo.mapList[map].briefing;
@@ -1886,12 +1881,8 @@ void UI_DrawCampaignDescription( rectDef_t *rect, float scale, vec4_t color, flo
 			newLine = len;
 			newLinePtr = p + 1;
 			newLineWidth = textWidth;
-		}/* else if( *p == '*' && *(p+1) == '*' ) {
-			newLine = len;
-			newLinePtr = p+2;
-			newLineWidth = textWidth;
-		}*/
-		if ( ( newLine && textWidth > rect->w ) || *p == '\n' || *p == '\0' || *p == '*' /*( *p == '*' && *(p+1) == '*' )*/ ) {
+		}
+		if ( ( newLine && textWidth > rect->w ) || *p == '\n' || *p == '\0' || *p == '*' ) {
 			if ( len ) {
 				if ( align == ITEM_ALIGN_LEFT ) {
 					textRect.x = text_x;
@@ -1927,7 +1918,7 @@ void UI_DrawCampaignDescription( rectDef_t *rect, float scale, vec4_t color, flo
 
 		buff[len] = '\0';
 	}
-}
+}*/
 
 void UI_DrawGametypeDescription( rectDef_t *rect, float scale, vec4_t color, float text_x, float text_y, int textStyle, int align, qboolean net ) {
 	const char *p, *textPtr = NULL, *newLinePtr = NULL;
@@ -2013,6 +2004,7 @@ void UI_DrawGametypeDescription( rectDef_t *rect, float scale, vec4_t color, flo
 	}
 }
 
+/* Nico, removed gametypes
 static void UI_DrawCampaignMapDescription( rectDef_t *rect, float scale, vec4_t color, float text_x, float text_y, int textStyle, int align, qboolean net, int number ) {
 	int campaign = ( net ) ? ui_currentNetCampaign.integer : ui_currentCampaign.integer;
 	const char *p, *textPtr, *newLinePtr;
@@ -2133,7 +2125,7 @@ static void UI_DrawCampaignMapPreview( rectDef_t *rect, float scale, vec4_t colo
 			UI_DrawHandlePic( rect->x + 8, rect->y + 8, rect->w - 16, rect->h - 16, trap_R_RegisterShaderNoMip( "gfx/2d/friendlycross.tga" ) );
 		}
 	}
-}
+}*/
 
 static void UI_DrawMissionBriefingMap( rectDef_t* rect ) {
 	char buffer[64];
@@ -2793,9 +2785,6 @@ static void UI_OwnerDraw( float x, float y, float w, float h, float text_x, floa
 	rect.h = h;
 
 	switch ( ownerDraw ) {
-/*		case UI_TEAMFLAG:
-			UI_DrawFlag( &rect );
-			break;*/
 	case UI_HANDICAP:
 		UI_DrawHandicap( &rect, scale, color, textStyle );
 		break;
@@ -2825,27 +2814,20 @@ static void UI_OwnerDraw( float x, float y, float w, float h, float text_x, floa
 	case UI_GAMETYPE:
 		UI_DrawGameType( &rect, scale, color, textStyle );
 		break;
-/*		case UI_NETGAMETYPE:
-			UI_DrawNetGameType(&rect, scale, color, textStyle);
-			break;*/
-/*		case UI_JOINGAMETYPE:
-			UI_DrawJoinGameType(&rect, scale, color, textStyle);
-			break;*/
 	case UI_MAPPREVIEW:
 		UI_DrawMapPreview( &rect, scale, color, qtrue );
 		break;
 	case UI_NETMAPPREVIEW:
 		UI_DrawNetMapPreview( &rect, scale, color, qtrue );
 		break;
-/*		case UI_MAP_TIMETOBEAT:
-			UI_DrawMapTimeToBeat(&rect, scale, color, textStyle);
-			break;*/
 	case UI_MAPCINEMATIC:
 		UI_DrawMapCinematic( &rect, scale, color, qfalse );
 		break;
 	case UI_STARTMAPCINEMATIC:
 		UI_DrawMapCinematic( &rect, scale, color, qtrue );
 		break;
+
+	/* Nico, removed gametypes
 	case UI_CAMPAIGNCINEMATIC:
 		UI_DrawCampaignCinematic( &rect, scale, color, qfalse );
 		break;
@@ -2873,7 +2855,8 @@ static void UI_OwnerDraw( float x, float y, float w, float h, float text_x, floa
 	case UI_CAMPAIGNMAP5_TEXT:
 	case UI_CAMPAIGNMAP6_TEXT:
 		UI_DrawCampaignMapDescription( &rect, scale, color, text_x, text_y, textStyle, align, qfalse, ownerDraw - UI_CAMPAIGNMAP1_TEXT );
-		break;
+		break;*/
+
 	case UI_MB_MAP:
 		UI_DrawMissionBriefingMap( &rect );
 		break;
@@ -2883,9 +2866,6 @@ static void UI_OwnerDraw( float x, float y, float w, float h, float text_x, floa
 	case UI_MB_OBJECTIVES:
 		UI_DrawMissionBriefingObjectives( &rect, scale, color, text_x, text_y, textStyle, align );
 		break;
-/*		case UI_SKILL:
-			UI_DrawSkill(&rect, scale, color, textStyle);
-			break;*/
 	case UI_BLUETEAMNAME:
 		UI_DrawTeamName( &rect, scale, color, qtrue, textStyle );
 		break;
@@ -2906,33 +2886,9 @@ static void UI_OwnerDraw( float x, float y, float w, float h, float text_x, floa
 	case UI_REDTEAM5:
 		UI_DrawTeamMember( &rect, scale, color, qfalse, ownerDraw - UI_REDTEAM1 + 1, textStyle );
 		break;
-/*		case UI_NETSOURCE:
-			UI_DrawNetSource(&rect, scale, color, textStyle);
-			break;*/
-		/*case UI_NETMAPPREVIEW:
-			UI_DrawNetMapPreview(&rect, scale, color);
-			break;
-		case UI_NETMAPCINEMATIC:
-			UI_DrawNetMapCinematic(&rect, scale, color);
-			break;*/
 	case UI_NETFILTER:
 		UI_DrawNetFilter( &rect, scale, color, textStyle );
 		break;
-/*		case UI_TIER:
-			UI_DrawTier(&rect, scale, color, textStyle);
-			break;*/
-/*		case UI_OPPONENTMODEL:
-			UI_DrawOpponent(&rect);
-			break;*/
-/*		case UI_TIERMAP1:
-			UI_DrawTierMap(&rect, 0);
-			break;
-		case UI_TIERMAP2:
-			UI_DrawTierMap(&rect, 1);
-			break;
-		case UI_TIERMAP3:
-			UI_DrawTierMap(&rect, 2);
-			break;*/
 	case UI_PLAYERLOGO:
 		UI_DrawPlayerLogo( &rect, color );
 		break;
@@ -2951,12 +2907,6 @@ static void UI_OwnerDraw( float x, float y, float w, float h, float text_x, floa
 	case UI_OPPONENTLOGO_NAME:
 		UI_DrawOpponentLogoName( &rect, color );
 		break;
-/*		case UI_TIER_MAPNAME:
-			UI_DrawTierMapName(&rect, scale, color, textStyle);
-			break;
-		case UI_TIER_GAMETYPE:
-			UI_DrawTierGameType(&rect, scale, color, textStyle);
-			break;*/
 	case UI_ALLMAPS_SELECTION:
 		UI_DrawAllMapsSelection( &rect, scale, color, textStyle, qtrue );
 		break;
@@ -3077,6 +3027,7 @@ qboolean UI_OwnerDrawVisible( int flags ) {
 			flags &= ~UI_SHOW_NEWBESTTIME;
 		}
 
+		/* Nico, removed gametypes
 		if ( flags & UI_SHOW_CAMPAIGNMAP1EXISTS ) {
 			if ( uiInfo.campaignList[ui_currentCampaign.integer].mapCount < 1 ) {
 				vis = qfalse;
@@ -3128,7 +3079,7 @@ qboolean UI_OwnerDrawVisible( int flags ) {
 				vis = qfalse;
 			}
 			flags &= ~UI_SHOW_SELECTEDCAMPAIGNMAPNOTPLAYABLE;
-		}
+		}*/
 
 		if ( flags & UI_SHOW_PLAYERMUTED ) {
 			if ( !uiInfo.playerMuted[uiInfo.playerIndex] ) {
@@ -3258,7 +3209,10 @@ static qboolean UI_GameType_HandleKey( int flags, float *special, int key, qbool
 		trap_Cvar_Set( "ui_Q3Model", "0" );
 
 		trap_Cvar_Set( "ui_gameType", va( "%d", ui_gameType.integer ) );
-		UI_SetCapFragLimits( qtrue );
+
+		/* Nico, no fraglimit
+		UI_SetCapFragLimits( qtrue );*/
+
 		UI_LoadBestScores( uiInfo.mapList[ui_currentMap.integer].mapLoadName, uiInfo.gameTypes[ui_gameType.integer].gtEnum );
 		if ( resetMap && oldCount != UI_MapCountByGameType( qtrue ) ) {
 			trap_Cvar_Set( "ui_currentMap", "0" );
@@ -4045,13 +3999,15 @@ void UI_RunMenuScript( char **args ) {
 			trap_Cvar_Set( "cg_cameraOrbit", "0" );
 			trap_Cvar_Set( "ui_singlePlayerActive", "0" );
 			trap_Cvar_SetValue( "dedicated", Com_Clamp( 0, 2, ui_dedicated.integer ) );
+
+			/* Nico, removed gametypes
 			trap_Cvar_SetValue( "g_gametype", Com_Clamp( 0, 8, ui_netGameType.integer ) );
 
 			if ( ui_netGameType.integer == GT_WOLF_CAMPAIGN ) {
 				trap_Cmd_ExecuteText( EXEC_APPEND, va( "wait ; wait ; map %s\n", uiInfo.campaignList[ui_currentNetMap.integer].mapInfos[0]->mapLoadName ) );
-			} else {
+			} else {*/
 				trap_Cmd_ExecuteText( EXEC_APPEND, va( "wait ; wait ; map %s\n", uiInfo.mapList[ui_currentNetMap.integer].mapLoadName ) );
-			}
+			// }
 
 			// skill = trap_Cvar_VariableValue( "g_spSkill" );
 			trap_Cvar_VariableValue( "g_spSkill" );
@@ -4088,14 +4044,20 @@ void UI_RunMenuScript( char **args ) {
 			// -NERVE - SMF
 
 		} else if ( Q_stricmp( name, "updateSPMenu" ) == 0 ) {
-			UI_SetCapFragLimits( qtrue );
+
+			/* Nico, no fraglimit
+			UI_SetCapFragLimits( qtrue );*/
+
 			UI_MapCountByGameType( qtrue );
 			ui_mapIndex.integer = UI_GetIndexFromSelection( ui_currentMap.integer );
 			trap_Cvar_Set( "ui_mapIndex", va( "%d", ui_mapIndex.integer ) );
 			Menu_SetFeederSelection( NULL, FEEDER_MAPS, ui_mapIndex.integer, "skirmish" );
+
+			/* Nico, removed gametypes
 			ui_campaignIndex.integer = UI_GetIndexFromSelection( ui_currentCampaign.integer );
 			trap_Cvar_Set( "ui_campaignIndex", va( "%d", ui_campaignIndex.integer ) );
-			Menu_SetFeederSelection( NULL, FEEDER_CAMPAIGNS, ui_campaignIndex.integer, "selectcampaign" );
+			Menu_SetFeederSelection( NULL, FEEDER_CAMPAIGNS, ui_campaignIndex.integer, "selectcampaign" );*/
+
 			UI_GameType_HandleKey( 0, 0, K_MOUSE1, qfalse );
 			UI_GameType_HandleKey( 0, 0, K_MOUSE2, qfalse );
 		} else if ( Q_stricmp( name, "resetDefaults" ) == 0 ) {
@@ -4142,8 +4104,11 @@ void UI_RunMenuScript( char **args ) {
 			UI_LoadArenas();
 			UI_MapCountByGameType( qfalse );
 			Menu_SetFeederSelection( NULL, FEEDER_ALLMAPS, 0, NULL );
+
+			/* Nico, removed gametypes
 			UI_LoadCampaigns();
-			Menu_SetFeederSelection( NULL, FEEDER_ALLCAMPAIGNS, 0, NULL );
+			Menu_SetFeederSelection( NULL, FEEDER_ALLCAMPAIGNS, 0, NULL );*/
+
 		} else if ( Q_stricmp( name, "updateNetMap" ) == 0 ) {
 			Menu_SetFeederSelection( NULL, FEEDER_ALLMAPS, ui_currentNetMap.integer, NULL );
 		} else if ( Q_stricmp( name, "saveControls" ) == 0 ) {
@@ -4156,14 +4121,12 @@ void UI_RunMenuScript( char **args ) {
 			trap_Cvar_Set( "com_missingFiles", "" );
 		} else if ( Q_stricmp( name, "loadGameInfo" ) == 0 ) {
 			UI_ParseGameInfo( "gameinfo.txt" );
-//			UI_LoadBestScores(uiInfo.mapList[ui_currentMap.integer].mapLoadName, uiInfo.gameTypes[ui_gameType.integer].gtEnum);
 		} else if ( Q_stricmp( name, "resetScores" ) == 0 ) {
 			UI_ClearScores();
 		} else if ( Q_stricmp( name, "RefreshServers" ) == 0 ) {
 			UI_StartServerRefresh( qtrue );
 			UI_BuildServerDisplayList( qtrue );
 		} else if ( Q_stricmp( name, "RefreshFilter" ) == 0 ) {
-			//UI_StartServerRefresh(qfalse);
 			UI_StartServerRefresh( uiInfo.serverStatus.numDisplayServers ? qfalse : qtrue );    // if we don't have any valid servers, it's kinda safe to assume we would like to get a full new list
 			UI_BuildServerDisplayList( qtrue );
 		} else if ( Q_stricmp( name, "RunSPDemo" ) == 0 ) {
@@ -4366,15 +4329,17 @@ void UI_RunMenuScript( char **args ) {
 			trap_Cvar_Set( "cl_paused", "0" );
 			Menus_CloseAll();
 		} else if ( Q_stricmp( name, "voteMap" ) == 0 ) {
+
+			/* Nico, removed gametypes
 			if ( ui_netGameType.integer == GT_WOLF_CAMPAIGN ) {
 				if ( ui_currentNetMap.integer >= 0 && ui_currentNetMap.integer < uiInfo.campaignCount ) {
 					trap_Cmd_ExecuteText( EXEC_APPEND, va( "callvote campaign %s\n", uiInfo.campaignList[ui_currentNetMap.integer].campaignShortName ) );
 				}
-			} else {
+			} else {*/
 				if ( ui_currentNetMap.integer >= 0 && ui_currentNetMap.integer < uiInfo.mapCount ) {
 					trap_Cmd_ExecuteText( EXEC_APPEND, va( "callvote map %s\n", uiInfo.mapList[ui_currentNetMap.integer].mapLoadName ) );
 				}
-			}
+			// }
 		} else if ( Q_stricmp( name, "voteKick" ) == 0 ) {
 			if ( uiInfo.playerIndex >= 0 && uiInfo.playerIndex < uiInfo.playerCount ) {
 				trap_Cmd_ExecuteText( EXEC_APPEND, va( "callvote kick \"%s\"\n", uiInfo.playerNames[uiInfo.playerIndex] ) );
@@ -4426,17 +4391,19 @@ void UI_RunMenuScript( char **args ) {
 			trap_Cmd_ExecuteText( EXEC_APPEND, va( "ref warmupdamage %d\n", (int)trap_Cvar_VariableValue( "ui_voteWarmupDamage" ) ) );
 		}*/
 
-		/* Nico, removed warmup
+		// Nico, note: keep this in order to avoid unknown UI script
 		else if ( Q_stricmp( name, "voteInitToggles" ) == 0 ) {
+
+			/* Nico, removed warmup
 			char info[MAX_INFO_STRING];
 
 			trap_GetConfigString( CS_SERVERTOGGLES, info, sizeof( info ) );
 			trap_Cvar_Set( "ui_voteWarmupDamage", va( "%d", ( ( atoi( info ) & CV_SVS_WARMUPDMG ) >> 2 ) ) );
 
 			trap_GetConfigString( CS_SERVERINFO, info, sizeof( info ) );
-			trap_Cvar_Set( "ui_voteTimelimit", va( "%i", atoi( Info_ValueForKey( info, "timelimit" ) ) ) );
+			trap_Cvar_Set( "ui_voteTimelimit", va( "%i", atoi( Info_ValueForKey( info, "timelimit" ) ) ) );*/
 
-		}*/
+		}
 
 		else if ( Q_stricmp( name, "voteLeader" ) == 0 ) {
 			if ( uiInfo.teamIndex >= 0 && uiInfo.teamIndex < uiInfo.myTeamCount ) {
@@ -4596,23 +4563,29 @@ void UI_RunMenuScript( char **args ) {
 			}
 			// DHM - Nerve
 		} else if ( Q_stricmp( name, "rconGame" ) == 0 ) {
+
+			/* Nico, removed (c)g_gametype
 			if ( ui_netGameType.integer >= 0 && ui_netGameType.integer < uiInfo.numGameTypes ) {
 				trap_Cmd_ExecuteText( EXEC_APPEND, va( "rcon g_gametype %i\n", ui_netGameType.integer ) );
-			}
+			}*/
+
 		} else if ( Q_stricmp( name, "rconMap" ) == 0 ) {
 			if ( ui_currentNetMap.integer >= 0 && ui_currentNetMap.integer < uiInfo.mapCount ) {
 				trap_Cmd_ExecuteText( EXEC_APPEND, va( "rcon map %s\n",uiInfo.mapList[ui_currentNetMap.integer].mapLoadName ) );
 			}
 		} else if ( Q_stricmp( name, "refMap" ) == 0 ) {
+
+			/* Nico, removed gametypes
 			if ( ui_netGameType.integer == GT_WOLF_CAMPAIGN ) {
 				if ( ui_currentNetMap.integer >= 0 && ui_currentNetMap.integer < uiInfo.campaignCount ) {
 					trap_Cmd_ExecuteText( EXEC_APPEND, va( "ref campaign %s\n", uiInfo.campaignList[ui_currentNetMap.integer].campaignShortName ) );
 				}
-			} else {
+			} else {*/
 				if ( ui_currentNetMap.integer >= 0 && ui_currentNetMap.integer < uiInfo.mapCount ) {
 					trap_Cmd_ExecuteText( EXEC_APPEND, va( "ref map %s\n", uiInfo.mapList[ui_currentNetMap.integer].mapLoadName ) );
 				}
-			}
+			// }
+
 		} else if ( Q_stricmp( name, "rconKick" ) == 0 ) {
 			if ( uiInfo.playerIndex >= 0 && uiInfo.playerIndex < uiInfo.playerCount ) {
 				trap_Cmd_ExecuteText( EXEC_APPEND, va( "rcon kick \"%s\"\n",uiInfo.playerNames[uiInfo.playerIndex] ) );
@@ -4694,7 +4667,10 @@ void UI_RunMenuScript( char **args ) {
 			}
 		} else if ( Q_stricmp( name, "loadCachedServers" ) == 0 ) {
 			trap_LAN_LoadCachedServers();   // load servercache.dat
-		} else if ( Q_stricmp( name, "setupCampaign" ) == 0 ) {
+		}
+		
+		/* Nico, removed gametypes
+		else if ( Q_stricmp( name, "setupCampaign" ) == 0 ) {
 			trap_Cvar_Set( "ui_campaignmap", va( "%i", uiInfo.campaignList[ui_currentCampaign.integer].progress ) );
 		} else if ( Q_stricmp( name, "playCampaign" ) == 0 ) {
 			int map = trap_Cvar_VariableValue( "ui_campaignmap" );
@@ -4703,7 +4679,9 @@ void UI_RunMenuScript( char **args ) {
 				//trap_Cmd_ExecuteText( EXEC_APPEND, va("spmap \"%s\"\n", uiInfo.campaignList[ui_currentCampaign.integer].mapInfos[uiInfo.campaignList[ui_currentCampaign.integer].progress]->mapLoadName));
 				trap_Cmd_ExecuteText( EXEC_APPEND, va( "spmap \"%s\"\n", uiInfo.campaignList[ui_currentCampaign.integer].mapInfos[map]->mapLoadName ) );
 			}
-		} else if ( Q_stricmp( name, "loadProfiles" ) == 0 ) {
+		}*/
+		
+		else if ( Q_stricmp( name, "loadProfiles" ) == 0 ) {
 			UI_LoadProfiles();
 		} else if ( Q_stricmp( name, "createProfile" ) == 0 ) {
 			fileHandle_t f;
@@ -5150,13 +5128,14 @@ static int UI_MapCountByGameType( qboolean singlePlayer ) {
 	c = 0;
 	game = singlePlayer ? uiInfo.gameTypes[ui_gameType.integer].gtEnum : ui_netGameType.integer;
 
+	/* Nico, removed gametypes
 	if ( game == GT_WOLF_CAMPAIGN ) {
 		for ( i = 0; i < uiInfo.campaignCount; i++ ) {
 			if ( uiInfo.campaignList[i].typeBits & ( 1 << GT_WOLF ) ) {
 				c++;
 			}
 		}
-	} else {
+	} else {*/
 		for ( i = 0; i < uiInfo.mapCount; i++ ) {
 			uiInfo.mapList[i].active = qfalse;
 			if ( uiInfo.mapList[i].typeBits & ( 1 << game ) ) {
@@ -5167,7 +5146,7 @@ static int UI_MapCountByGameType( qboolean singlePlayer ) {
 				uiInfo.mapList[i].active = qtrue;
 			}
 		}
-	}
+	// }
 	return c;
 }
 
@@ -5176,10 +5155,10 @@ static int UI_MapCountByGameType( qboolean singlePlayer ) {
 UI_CampaignCount
 ==================
 */
+/* Nico, removed gametypes
 static int UI_CampaignCount( qboolean singlePlayer ) {
-	int i, c /*, game*/;
+	int i, c;
 	c = 0;
-	//game = singlePlayer ? uiInfo.gameTypes[ui_gameType.integer].gtEnum : uiInfo.gameTypes[ui_netGameType.integer].gtEnum;
 
 	for ( i = 0; i < uiInfo.campaignCount; i++ ) {
 		if ( singlePlayer && !( uiInfo.campaignList[i].typeBits & ( 1 << GT_SINGLE_PLAYER ) ) ) {
@@ -5191,9 +5170,7 @@ static int UI_CampaignCount( qboolean singlePlayer ) {
 		}
 	}
 	return c;
-
-	//return uiInfo.campaignCount;
-}
+}*/
 
 /*
 ==================
@@ -5280,8 +5257,9 @@ UI_BuildServerDisplayList
 static void UI_BuildServerDisplayList( qboolean force ) {
 	/* Nico, removed respawnLeft
 	Nico, removed balancedteams
+	Nico, no friendlyfire
 	int i, count, clients, maxClients, ping, game, len, visible, friendlyFire, maxlives, punkbuster, antilag, password, weaponrestricted, balancedteams;*/
-	int i, count, clients, maxClients, ping, game, len, visible, friendlyFire, punkbuster, antilag, password, weaponrestricted;
+	int i, count, clients, maxClients, ping, game, len, visible, punkbuster, antilag, password, weaponrestricted;
 	char info[MAX_STRING_CHARS];
 	static int numinvisible;
 
@@ -5379,6 +5357,7 @@ static void UI_BuildServerDisplayList( qboolean force ) {
 				}
 			}
 
+			/* Nico, no friendlyfire
 			trap_Cvar_Update( &ui_browserShowFriendlyFire );
 			if ( ui_browserShowFriendlyFire.integer ) {
 				friendlyFire = atoi( Info_ValueForKey( info, "friendlyFire" ) );
@@ -5388,7 +5367,7 @@ static void UI_BuildServerDisplayList( qboolean force ) {
 					trap_LAN_MarkServerVisible( ui_netSource.integer, i, qfalse );
 					continue;
 				}
-			}
+			}*/
 
 			/* Nico, removed respawnLeft
 			trap_Cvar_Update( &ui_browserShowMaxlives );
@@ -5505,7 +5484,10 @@ serverStatusCvar_t serverStatusCvars[] = {
 	{"sv_hostname", "Name"},
 	{"Address", ""},
 	{"gamename", "Game name"},
-	{"g_gametype", "Game type"},
+
+	/* Nico, removed (c)g_gametype
+	{"g_gametype", "Game type"},*/
+
 	{"mapname", "Map"},
 	{"version", ""},
 	{"protocol", ""},
@@ -5513,7 +5495,9 @@ serverStatusCvar_t serverStatusCvars[] = {
 	/* Nico, no timelimit
 	{"timelimit", ""},*/
 
-	{"fraglimit", ""},
+	/* Nico, no fraglimit
+	{"fraglimit", ""},*/
+
 	{NULL, NULL}
 };
 
@@ -5910,9 +5894,14 @@ static int UI_FeederCount( float feederID ) {
 		return uiInfo.savegameCount;
 	} else if ( feederID == FEEDER_MAPS || feederID == FEEDER_ALLMAPS ) {
 		return UI_MapCountByGameType( feederID == FEEDER_MAPS ? qtrue : qfalse );
-	} else if ( feederID == FEEDER_CAMPAIGNS || feederID == FEEDER_ALLCAMPAIGNS ) {
+	}
+	
+	/* Nico, removed gametypes
+	else if ( feederID == FEEDER_CAMPAIGNS || feederID == FEEDER_ALLCAMPAIGNS ) {
 		return UI_CampaignCount( feederID == FEEDER_CAMPAIGNS ? qtrue : qfalse );
-	} else if ( feederID == FEEDER_GLINFO ) {
+	}*/
+	
+	else if ( feederID == FEEDER_GLINFO ) {
 		return uiInfo.numGlInfoLines;
 	} else if ( feederID == FEEDER_PROFILES ) {
 		return uiInfo.profileCount;
@@ -5943,11 +5932,12 @@ static int UI_FeederCount( float feederID ) {
 }
 
 static const char *UI_SelectedMap( qboolean singlePlayer, int index, int *actual ) {
-	int i, c, game;
+	int i, c;// , game; Nico, unused warning fix
 	c = 0;
-	game = singlePlayer ? uiInfo.gameTypes[ui_gameType.integer].gtEnum : ui_netGameType.integer;
+	// game = singlePlayer ? uiInfo.gameTypes[ui_gameType.integer].gtEnum : ui_netGameType.integer;
 	*actual = 0;
 
+	/* Nico, removed gametypes
 	if ( game == GT_WOLF_CAMPAIGN ) {
 		for ( i = 0; i < uiInfo.mapCount; i++ ) {
 			if ( uiInfo.campaignList[i].typeBits & ( 1 << GT_WOLF ) ) {
@@ -5959,7 +5949,7 @@ static const char *UI_SelectedMap( qboolean singlePlayer, int index, int *actual
 				}
 			}
 		}
-	} else {
+	} else {*/
 		for ( i = 0; i < uiInfo.mapCount; i++ ) {
 			if ( uiInfo.mapList[i].active ) {
 				if ( c == index ) {
@@ -5970,10 +5960,11 @@ static const char *UI_SelectedMap( qboolean singlePlayer, int index, int *actual
 				}
 			}
 		}
-	}
+	// }
 	return "";
 }
 
+/* Nico, commented because unused
 static const char *UI_SelectedCampaign( int index, int *actual ) {
 	int i;//, c; Nico, unused warning fix
 	// c = 0;
@@ -5985,7 +5976,7 @@ static const char *UI_SelectedCampaign( int index, int *actual ) {
 		}
 	}
 	return "";
-}
+}*/
 
 static int UI_GetIndexFromSelection( int actual ) {
 	int i, c;
@@ -6053,10 +6044,15 @@ const char *UI_FeederItemText( float feederID, int index, int column, qhandle_t 
 	} else if ( feederID == FEEDER_MAPS || feederID == FEEDER_ALLMAPS ) {
 		int actual;
 		return UI_SelectedMap( feederID == FEEDER_MAPS ? qtrue : qfalse, index, &actual );
-	} else if ( feederID == FEEDER_CAMPAIGNS || feederID == FEEDER_ALLCAMPAIGNS ) {
+	}
+	
+	/* Nico, removed gametypes
+	else if ( feederID == FEEDER_CAMPAIGNS || feederID == FEEDER_ALLCAMPAIGNS ) {
 		int actual;
 		return UI_SelectedCampaign( index, &actual );
-	} else if ( feederID == FEEDER_GLINFO ) {
+	} */
+	
+	else if ( feederID == FEEDER_GLINFO ) {
 		if ( index == 0 ) {
 			return( va( "Vendor: %s", uiInfo.uiDC.glconfig.vendor_string ) );
 		} else if ( index == 1 ) {
@@ -6070,8 +6066,9 @@ const char *UI_FeederItemText( float feederID, int index, int column, qhandle_t 
 		if ( index >= 0 && index < uiInfo.serverStatus.numDisplayServers ) {
 			/* Nico, removed respawnLeft
 			Nico, removed balancedteams
+			Nico, no friendlyfire
 			int ping, game, antilag, needpass, friendlyfire, maxlives, punkbuster, weaponrestrictions, balancedteams, serverload;*/
-			int ping, game, antilag, needpass, friendlyfire, punkbuster, weaponrestrictions, serverload;
+			int ping, game, antilag, needpass, punkbuster, weaponrestrictions, serverload;
 			if ( lastColumn != column || lastTime > uiInfo.uiDC.realTime + 5000 ) {
 				trap_LAN_GetServerInfo( ui_netSource.integer, uiInfo.serverStatus.displayServers[index], info, MAX_STRING_CHARS );
 				lastColumn = column;
@@ -6151,7 +6148,9 @@ const char *UI_FeederItemText( float feederID, int index, int column, qhandle_t 
 				} else {
 					*numhandles = 7;
 					needpass = atoi( Info_ValueForKey( info, "needpass" ) );
-					friendlyfire = atoi( Info_ValueForKey( info, "friendlyFire" ) );
+
+					/* Nico, no friendlyfire
+					friendlyfire = atoi( Info_ValueForKey( info, "friendlyFire" ) );*/
 
 					/* Nico, removed respawnLeft
 					maxlives = atoi( Info_ValueForKey( info, "maxlives" ) );*/
@@ -6166,9 +6165,11 @@ const char *UI_FeederItemText( float feederID, int index, int column, qhandle_t 
 					if ( needpass ) {
 						handles[0] = uiInfo.passwordFilter;
 					} else { handles[0] = -1;}
+
+					/* Nico, no friendlyfire
 					if ( friendlyfire ) {
 						handles[1] = uiInfo.friendlyFireFilter;
-					} else { handles[1] = -1;}
+					} else { handles[1] = -1;}*/
 
 					/* Nico, removed respawnLeft
 					if ( maxlives ) {
@@ -6282,11 +6283,13 @@ static qhandle_t UI_FeederItemImage( float feederID, int index ) {
 		}
 	} else if ( feederID == FEEDER_ALLMAPS || feederID == FEEDER_MAPS ) {
 		int actual;
-		int game;
+		// int game; Nico, unused warning fix
 
 		UI_SelectedMap( feederID == FEEDER_MAPS ? qtrue : qfalse, index, &actual );
 		index = actual;
-		game = feederID == FEEDER_MAPS ? uiInfo.gameTypes[ui_gameType.integer].gtEnum : ui_netGameType.integer;
+		// game = feederID == FEEDER_MAPS ? uiInfo.gameTypes[ui_gameType.integer].gtEnum : ui_netGameType.integer;
+
+		/* Nico, removed gametypes
 		if ( game == GT_WOLF_CAMPAIGN ) {
 			if ( index >= 0 && index < uiInfo.campaignCount ) {
 				if ( uiInfo.campaignList[index].campaignShot == -1 ) {
@@ -6294,14 +6297,17 @@ static qhandle_t UI_FeederItemImage( float feederID, int index ) {
 				}
 				return uiInfo.campaignList[index].campaignShot;
 			}
-		} else
+		} else*/
 		if ( index >= 0 && index < uiInfo.mapCount ) {
 			if ( uiInfo.mapList[index].levelShot == -1 ) {
 				uiInfo.mapList[index].levelShot = trap_R_RegisterShaderNoMip( uiInfo.mapList[index].imageName );
 			}
 			return uiInfo.mapList[index].levelShot;
 		}
-	} else if ( feederID == FEEDER_ALLCAMPAIGNS || feederID == FEEDER_CAMPAIGNS ) {
+	}
+	
+	/* Nico, removed gametypes
+	else if ( feederID == FEEDER_ALLCAMPAIGNS || feederID == FEEDER_CAMPAIGNS ) {
 		int actual;
 
 		UI_SelectedCampaign( index, &actual );
@@ -6312,7 +6318,9 @@ static qhandle_t UI_FeederItemImage( float feederID, int index ) {
 			}
 			return uiInfo.campaignList[index].campaignShot;
 		}
-	} else if ( feederID == FEEDER_SAVEGAMES ) {
+	} */
+	
+	else if ( feederID == FEEDER_SAVEGAMES ) {
 		if ( index >= 0 && index < uiInfo.savegameCount ) {
 			if ( uiInfo.savegameList[index].sshotImage == -1 ) {
 				uiInfo.savegameList[index].sshotImage = trap_R_RegisterShaderNoMip( va( "save/images/%s.tga", uiInfo.savegameList[index].name ) );
@@ -6340,17 +6348,19 @@ void UI_FeederSelection( float feederID, int index ) {
 		}
 	} else if ( feederID == FEEDER_MAPS || feederID == FEEDER_ALLMAPS ) {
 		int actual;//, map; Nico, unused warning fix
-		int game;
+		// int game; Nico, unused warning fix
 
 		// map = ( feederID == FEEDER_ALLMAPS ) ? ui_currentNetMap.integer : ui_currentMap.integer;
-		game = feederID == FEEDER_MAPS ? uiInfo.gameTypes[ui_gameType.integer].gtEnum : ui_netGameType.integer;
+		// game = feederID == FEEDER_MAPS ? uiInfo.gameTypes[ui_gameType.integer].gtEnum : ui_netGameType.integer;
 
 		UI_SelectedMap( feederID == FEEDER_MAPS ? qtrue : qfalse, index, &actual );
 		trap_Cvar_Set( "ui_mapIndex", va( "%d", index ) );
 		ui_mapIndex.integer = index;
 
 		// NERVE - SMF - setup advanced server vars
-		if ( feederID == FEEDER_ALLMAPS && game != GT_WOLF_CAMPAIGN ) {
+		/* Nico, removed gametypes
+		if ( feederID == FEEDER_ALLMAPS && game != GT_WOLF_CAMPAIGN ) {*/
+		if ( feederID == FEEDER_ALLMAPS ) {
 			ui_currentMap.integer = actual;
 			trap_Cvar_Set( "ui_currentMap", va( "%d", actual ) );
 		}
@@ -6363,7 +6373,10 @@ void UI_FeederSelection( float feederID, int index ) {
 			ui_currentNetMap.integer = actual;
 			trap_Cvar_Set( "ui_currentNetMap", va( "%d", actual ) );
 		}
-	} else if ( feederID == FEEDER_CAMPAIGNS || feederID == FEEDER_ALLCAMPAIGNS ) {
+	} 
+	
+	/* Nico, removed gametypes
+	else if ( feederID == FEEDER_CAMPAIGNS || feederID == FEEDER_ALLCAMPAIGNS ) {
 		int actual, campaign, campaignCount;
 		campaign = ( feederID == FEEDER_ALLCAMPAIGNS ) ? ui_currentNetCampaign.integer : ui_currentCampaign.integer;
 		campaignCount = UI_CampaignCount( feederID == FEEDER_CAMPAIGNS );
@@ -6396,7 +6409,9 @@ void UI_FeederSelection( float feederID, int index ) {
 			trap_Cvar_Set( "ui_currentNetCampaign", va( "%d", actual ) );
 			uiInfo.campaignList[ui_currentNetCampaign.integer].campaignCinematic = trap_CIN_PlayCinematic( va( "%s.roq", uiInfo.campaignList[ui_currentNetCampaign.integer].campaignShortName ), 0, 0, 0, 0, ( CIN_loop | CIN_silent ) );
 		}
-	} else if ( feederID == FEEDER_GLINFO ) {
+	}*/
+	
+	else if ( feederID == FEEDER_GLINFO ) {
 		//
 	} else if ( feederID == FEEDER_SERVERS ) {
 		const char *mapName = NULL;
@@ -6763,8 +6778,10 @@ void _UI_Init( qboolean inGameLoad ) {
 	uiInfo.uiDC.checkAutoUpdate = &trap_CheckAutoUpdate;            // DHM - Nerve
 	uiInfo.uiDC.getAutoUpdate = &trap_GetAutoUpdate;                // DHM - Nerve
 
+	/* Nico, removed gametypes
 	uiInfo.uiDC.descriptionForCampaign = &UI_DescriptionForCampaign;
-	uiInfo.uiDC.nameForCampaign = &UI_NameForCampaign;
+	uiInfo.uiDC.nameForCampaign = &UI_NameForCampaign;*/
+
 	uiInfo.uiDC.add2dPolys = &trap_R_Add2dPolys;
 	uiInfo.uiDC.updateScreen = &trap_UpdateScreen;
 	uiInfo.uiDC.getHunkData = &trap_GetHunkData;
@@ -6781,7 +6798,9 @@ void _UI_Init( qboolean inGameLoad ) {
 	AssetCache();
 
 	uiInfo.passwordFilter = trap_R_RegisterShaderNoMip( "ui/assets/filter_pass.tga" );
-	uiInfo.friendlyFireFilter = trap_R_RegisterShaderNoMip( "ui/assets/filter_ff.tga" );
+
+	/* Nico, no friendlyfire
+	uiInfo.friendlyFireFilter = trap_R_RegisterShaderNoMip( "ui/assets/filter_ff.tga" );*/
 
 	/* Nico, removed respawnLeft
 	uiInfo.maxLivesFilter = trap_R_RegisterShaderNoMip( "ui/assets/filter_lives.tga" );*/
@@ -7049,9 +7068,12 @@ void _UI_SetActiveMenu( uiMenuCommand_t menu ) {
 			return;
 
 		case UIMENU_INGAME:
+
+			/* Nico, removed gametypes
 			if ( g_gameType.integer == GT_SINGLE_PLAYER ) {
 				trap_Cvar_Set( "cl_paused", "1" );
-			}
+			}*/
+
 			trap_Key_SetCatcher( KEYCATCH_UI );
 			UI_BuildPlayerList();
 			Menu_SetFeederSelection( NULL, FEEDER_PLAYER_LIST, 0, NULL );
@@ -7338,12 +7360,14 @@ typedef struct {
 	int modificationCount;          // for tracking changes
 } cvarTable_t;
 
-vmCvar_t ui_ffa_fraglimit;
+/* Nico, no fraglimit
+vmCvar_t ui_ffa_fraglimit;*/
 
 /* Nico, no timelimit
 vmCvar_t ui_ffa_timelimit;*/
 
-vmCvar_t ui_team_fraglimit;
+/* Nico, no fraglimit
+vmCvar_t ui_team_fraglimit;*/
 
 /* Nico, no timelimit
 vmCvar_t ui_team_timelimit;*/
@@ -7424,7 +7448,9 @@ vmCvar_t ui_browserGameType;
 vmCvar_t ui_browserSortKey;
 vmCvar_t ui_browserShowEmptyOrFull;
 vmCvar_t ui_browserShowPasswordProtected;
-vmCvar_t ui_browserShowFriendlyFire;            // NERVE - SMF
+
+/* Nico, no friendlyfire
+vmCvar_t ui_browserShowFriendlyFire;            // NERVE - SMF*/
 
 /* Nico, removed respawnLeft
 vmCvar_t ui_browserShowMaxlives;                // NERVE - SMF*/
@@ -7461,7 +7487,8 @@ vmCvar_t ui_weapon;
 
 vmCvar_t ui_isSpectator;
 
-vmCvar_t ui_friendlyFire;
+/* Nico, no friendlyfire
+vmCvar_t ui_friendlyFire;*/
 
 /* Nico, no timelimit
 vmCvar_t ui_userTimeLimit;*/
@@ -7473,15 +7500,19 @@ vmCvar_t ui_userAxisRespawnTime;*/
 vmCvar_t ui_glCustom;    // JPW NERVE missing from q3ta
 // -NERVE - SMF
 
-vmCvar_t g_gameType;
+/* Nico, removed (c)g_gametype
+vmCvar_t g_gameType;*/
 
 vmCvar_t cl_profile;
 vmCvar_t cl_defaultProfile;
 vmCvar_t ui_profile;
+
+/* Nico, removed gametypes
 vmCvar_t ui_currentNetCampaign;
 vmCvar_t ui_currentCampaign;
 vmCvar_t ui_campaignIndex;
-vmCvar_t ui_currentCampaignCompleted;
+vmCvar_t ui_currentCampaignCompleted;*/
+
 // OSP
 // cgame mappings
 vmCvar_t ui_blackout;       // For speclock
@@ -7500,12 +7531,15 @@ vmCvar_t ui_autoredirect;
 cvarTable_t cvarTable[] = {
 
 	{ &ui_glCustom, "ui_glCustom", "4", CVAR_ARCHIVE }, // JPW NERVE missing from q3ta
-	{ &ui_ffa_fraglimit, "ui_ffa_fraglimit", "20", CVAR_ARCHIVE },
+
+	/* Nico, no fraglimit
+	{ &ui_ffa_fraglimit, "ui_ffa_fraglimit", "20", CVAR_ARCHIVE },*/
 
 	/* Nico, no timelimit
 	{ &ui_ffa_timelimit, "ui_ffa_timelimit", "0", CVAR_ARCHIVE },*/
 
-	{ &ui_team_fraglimit, "ui_team_fraglimit", "0", CVAR_ARCHIVE },
+	/* Nico, no fraglimit
+	{ &ui_team_fraglimit, "ui_team_fraglimit", "0", CVAR_ARCHIVE },*/
 
 	/* Nico, no timelimit
 	{ &ui_team_timelimit, "ui_team_timelimit", "20", CVAR_ARCHIVE },*/
@@ -7529,7 +7563,8 @@ cvarTable_t cvarTable[] = {
 	{ &ui_spSkill, "g_spSkill", "2", CVAR_ARCHIVE | CVAR_LATCH },
 
 	// NERVE - SMF
-	{ &ui_friendlyFire, "g_friendlyFire", "1", CVAR_ARCHIVE },
+	/* Nico, no friendlyfire
+	{ &ui_friendlyFire, "g_friendlyFire", "1", CVAR_ARCHIVE },*/
 
 	/* Nico, no timelimit
 	{ &ui_userTimeLimit, "ui_userTimeLimit", "0", 0 },*/
@@ -7596,7 +7631,9 @@ cvarTable_t cvarTable[] = {
 	{ &ui_browserSortKey, "ui_browserSortKey", "4", CVAR_ARCHIVE },
 	{ &ui_browserShowEmptyOrFull, "ui_browserShowEmptyOrFull", "0", CVAR_ARCHIVE },
 	{ &ui_browserShowPasswordProtected, "ui_browserShowPasswordProtected", "0", CVAR_ARCHIVE },
-	{ &ui_browserShowFriendlyFire, "ui_browserShowFriendlyFire", "0", CVAR_ARCHIVE },
+
+	/* Nico, no friendlyfire
+	{ &ui_browserShowFriendlyFire, "ui_browserShowFriendlyFire", "0", CVAR_ARCHIVE },*/
 
 	/* Nico, removed respawnLeft
 	{ &ui_browserShowMaxlives, "ui_browserShowMaxlives", "0", CVAR_ARCHIVE },*/
@@ -7632,8 +7669,9 @@ cvarTable_t cvarTable[] = {
 	{ &ui_isSpectator, "ui_isSpectator", "1", 0 },
 	// -NERVE - SMF
 
+	/* Nico, removed (c)g_gametype
+	{ &g_gameType,  "g_gameType",    "4", CVAR_SERVERINFO | CVAR_LATCH },*/
 
-	{ &g_gameType,  "g_gameType",    "4", CVAR_SERVERINFO | CVAR_LATCH },
 	{ NULL, "cg_drawBuddies", "1", CVAR_ARCHIVE },
 
 	/* Nico, instant reswawn
@@ -7647,7 +7685,10 @@ cvarTable_t cvarTable[] = {
 	{ NULL, "cg_zoomDefaultSniper", "20", CVAR_ARCHIVE },
 	{ NULL, "cg_zoomstepsniper", "2", CVAR_ARCHIVE },
 	{ NULL, "cg_voicespritetime", "6000", CVAR_ARCHIVE },
-	{ NULL, "cg_complaintPopUp", "1", CVAR_ARCHIVE },
+
+	/* Nico, removed complaints
+	{ NULL, "cg_complaintPopUp", "1", CVAR_ARCHIVE },*/
+
 	{ NULL, "cg_announcer", "1", CVAR_ARCHIVE },
 	{ NULL, "cg_printObjectiveInfo", "1", CVAR_ARCHIVE },
 	{ NULL, "cg_useScreenshotJPEG", "1", CVAR_ARCHIVE },
@@ -7679,10 +7720,12 @@ cvarTable_t cvarTable[] = {
 	{ &cl_profile, "cl_profile", "", CVAR_ROM },
 	{ &cl_defaultProfile, "cl_defaultProfile", "", CVAR_ROM },
 	{ &ui_profile, "ui_profile", "", CVAR_ROM },
+
+	/* Nico, removed gametypes
 	{ &ui_currentCampaign, "ui_currentCampaign", "0", CVAR_ARCHIVE },
 	{ &ui_currentNetCampaign, "ui_currentNetCampaign", "0", CVAR_ARCHIVE },
 	{ &ui_campaignIndex, "ui_campaignIndex", "0", CVAR_ARCHIVE },
-	{ &ui_currentCampaignCompleted, "ui_currentCampaignCompleted", "0", CVAR_ARCHIVE },
+	{ &ui_currentCampaignCompleted, "ui_currentCampaignCompleted", "0", CVAR_ARCHIVE },*/
 
 	// OSP
 	// cgame mappings
@@ -7693,9 +7736,13 @@ cvarTable_t cvarTable[] = {
 	{ &cg_crosshairColorAlt, "cg_crosshairColorAlt", "White", CVAR_ARCHIVE },
 	{ &cg_crosshairSize, "cg_crosshairSize", "48", CVAR_ARCHIVE },
 	// game mappings (for create server option)
-	{ NULL, "g_altStopwatchMode", "0", CVAR_ARCHIVE },
+
+	/* Nico, removed altStopwatchMode
+	{ NULL, "g_altStopwatchMode", "0", CVAR_ARCHIVE },*/
+
+	/* Nico, removed complaints
 	{ NULL, "g_ipcomplaintlimit", "3", CVAR_ARCHIVE },
-	{ NULL, "g_complaintlimit", "6", CVAR_ARCHIVE },
+	{ NULL, "g_complaintlimit", "6", CVAR_ARCHIVE },*/
 
 	/* Nico, removed warmup
 	{ NULL, "g_doWarmup", "0", CVAR_ARCHIVE },*/
@@ -7712,17 +7759,21 @@ cvarTable_t cvarTable[] = {
 
 	{ NULL, "sv_maxRate", "0", CVAR_ARCHIVE },
 	{ NULL, "g_spectatorInactivity", "0", CVAR_ARCHIVE },
+
+	/* Nico, removed match_* cvars
 	{ NULL, "match_latejoin", "1", CVAR_ARCHIVE },
 	{ NULL, "match_minplayers", MATCH_MINPLAYERS, CVAR_ARCHIVE },
 	{ NULL, "match_mutespecs", "0", CVAR_ARCHIVE },
 	{ NULL, "match_readypercent", "100", CVAR_ARCHIVE },
 	{ NULL, "match_timeoutcount", "3", CVAR_ARCHIVE },
-	{ NULL, "match_timeoutlength", "180", CVAR_ARCHIVE },
+	{ NULL, "match_timeoutlength", "180", CVAR_ARCHIVE },*/
 
 	/* Nico, removed warmup
 	{ NULL, "match_warmupDamage", "1", CVAR_ARCHIVE },*/
 
-	{ NULL, "server_autoconfig", "0", CVAR_ARCHIVE },
+	/* Nico, removed server autoconfig
+	{ NULL, "server_autoconfig", "0", CVAR_ARCHIVE },*/
+
 	{ NULL, "server_motd0", " ^NEnemy Territory ^7MOTD ", CVAR_ARCHIVE },
 	{ NULL, "server_motd1", "", CVAR_ARCHIVE },
 	{ NULL, "server_motd2", "", CVAR_ARCHIVE },
@@ -7732,17 +7783,30 @@ cvarTable_t cvarTable[] = {
 	{ NULL, "team_maxPanzers", "-1", CVAR_ARCHIVE },
 	{ NULL, "team_maxplayers", "0", CVAR_ARCHIVE },
 	{ NULL, "team_nocontrols", "0", CVAR_ARCHIVE },
-	{ NULL, "vote_allow_comp", "1", CVAR_ARCHIVE },
-	{ NULL, "vote_allow_gametype", "1", CVAR_ARCHIVE },
+
+	/* Nico, removed vote_allow_comp
+	{ NULL, "vote_allow_comp", "1", CVAR_ARCHIVE },*/
+
+	/* Nico, removed vote_allow_gametype
+	{ NULL, "vote_allow_gametype", "1", CVAR_ARCHIVE },*/
+
 	{ NULL, "vote_allow_kick", "1", CVAR_ARCHIVE },
 	{ NULL, "vote_allow_map", "1", CVAR_ARCHIVE },
 	{ NULL, "vote_allow_mutespecs", "1", CVAR_ARCHIVE },
 	{ NULL, "vote_allow_nextmap", "1", CVAR_ARCHIVE },
-	{ NULL, "vote_allow_pub", "1", CVAR_ARCHIVE },
+
+	/* Nico, removed vote_allow_pub
+	{ NULL, "vote_allow_pub", "1", CVAR_ARCHIVE },*/
+
 	{ NULL, "vote_allow_referee", "0", CVAR_ARCHIVE },
-	{ NULL, "vote_allow_shuffleteamsxp", "1", CVAR_ARCHIVE },
+
+	/* Nico, removed shuffleteam
+	{ NULL, "vote_allow_shuffleteamsxp", "1", CVAR_ARCHIVE },*/
+
 	{ NULL, "vote_allow_swapteams", "1", CVAR_ARCHIVE },
-	{ NULL, "vote_allow_friendlyfire", "1", CVAR_ARCHIVE },
+
+	/* Nico, no friendlyfire
+	{ NULL, "vote_allow_friendlyfire", "1", CVAR_ARCHIVE },*/
 
 	/* Nico, no timelimit
 	{ NULL, "vote_allow_timelimit", "0", CVAR_ARCHIVE },*/
@@ -7767,9 +7831,10 @@ cvarTable_t cvarTable[] = {
 
 	{ &cl_bypassMouseInput, "cl_bypassMouseInput", "0", CVAR_TEMP },
 
+	/* Nico, removed gametypes
 	{ NULL,     "g_oldCampaign",         "",      CVAR_ROM, },
 	{ NULL,     "g_currentCampaign",     "",      CVAR_WOLFINFO | CVAR_ROM, },
-	{ NULL,     "g_currentCampaignMap",      "0", CVAR_WOLFINFO | CVAR_ROM, },
+	{ NULL,     "g_currentCampaignMap",      "0", CVAR_WOLFINFO | CVAR_ROM, },*/
 
 	{ NULL,     "ui_showtooltips",           "1", CVAR_ARCHIVE },
 

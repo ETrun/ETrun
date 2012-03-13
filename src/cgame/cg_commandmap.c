@@ -430,7 +430,10 @@ void CG_DrawMapEntity( mapEntityData_t *mEnt, float x, float y, float w, float h
 	oidInfo_t* oidInfo = NULL;
 
 	switch ( mEnt->type ) {
-	case ME_PLAYER_DISGUISED:
+
+	/* Nico, removed disguise stuff
+	case ME_PLAYER_DISGUISED:*/
+
 	case ME_PLAYER_REVIVE:
 	case ME_PLAYER:
 		ci = &cgs.clientinfo[mEnt->data];
@@ -452,9 +455,10 @@ void CG_DrawMapEntity( mapEntityData_t *mEnt, float x, float y, float w, float h
 
 		cent = &cg_entities[mEnt->data];
 
+		/* Nico, removed disguise stuff
 		if ( mEnt->type == ME_PLAYER_DISGUISED && !( cent->currentState.powerups & ( 1 << PW_OPS_DISGUISED ) ) ) {
 			return;
-		}
+		}*/
 
 		classInfo = CG_PlayerClassForClientinfo( ci, cent );
 
@@ -549,11 +553,16 @@ void CG_DrawMapEntity( mapEntityData_t *mEnt, float x, float y, float w, float h
 				if ( cg.predictedPlayerEntity.voiceChatSpriteTime > cg.time ) {
 					CG_DrawPic( icon_pos[0] + 12, icon_pos[1], icon_extends[0] * 0.5f, icon_extends[1] * 0.5f, cg.predictedPlayerEntity.voiceChatSprite );
 				}
-			} else if ( mEnt->type == ME_PLAYER_DISGUISED ) {
+			}
+			
+			/* Nico, removed disguise stuff
+			else if ( mEnt->type == ME_PLAYER_DISGUISED ) {
 				trap_R_SetColor( colorOrange );
 				CG_DrawPic( icon_pos[0], icon_pos[1], icon_extends[0], icon_extends[1], cgs.media.ccPlayerHighlight );
 				trap_R_SetColor( NULL );
-			} else if ( /*!(cgs.ccFilter & CC_FILTER_BUDDIES) &&*/ CG_IsOnSameFireteam( cg.clientNum, mEnt->data ) ) {
+			}*/
+			
+			else if ( CG_IsOnSameFireteam( cg.clientNum, mEnt->data ) ) {
 				if ( ci->ccSelected ) {
 					trap_R_SetColor( colorRed );
 				}
@@ -563,7 +572,6 @@ void CG_DrawMapEntity( mapEntityData_t *mEnt, float x, float y, float w, float h
 
 				if ( !scissor ) {
 					CG_Text_Paint_Ext( string_pos[0], string_pos[1], 0.2f, 0.2f, colorWhite, ci->name, 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont2 );
-//					CG_DrawStringExt_Shadow( string_pos[0], string_pos[1], ci->name, colorWhite, qfalse, 1, 8, 12, 0 );
 				}
 
 				if ( cent->voiceChatSpriteTime > cg.time ) {
@@ -928,8 +936,11 @@ void CG_DrawMap( float x, float y, float w, float h, int mEntFilter, mapScissor_
 			continue;
 		}
 
+		/* Nico, removed disguise stuff
 		if ( mEnt->type == ME_PLAYER ||
 			 mEnt->type == ME_PLAYER_DISGUISED ||
+			 mEnt->type == ME_PLAYER_REVIVE ) {*/
+		if ( mEnt->type == ME_PLAYER ||
 			 mEnt->type == ME_PLAYER_REVIVE ) {
 			continue;
 		}
@@ -939,15 +950,19 @@ void CG_DrawMap( float x, float y, float w, float h, int mEntFilter, mapScissor_
 
 	CG_DrawSpawnPointInfo( x, y, w, h, qtrue, scissor, exspawn );
 
-	CG_DrawMortarMarker( x, y, w, h, qtrue, scissor, exspawn );
+	/* Nico, removed airstrikes
+	CG_DrawMortarMarker( x, y, w, h, qtrue, scissor, exspawn );*/
 
 	for ( i = 0, mEnt = &mapEntities[0]; i < mapEntityCount; i++, mEnt++ ) {
 		if ( mEnt->team != CG_LimboPanel_GetRealTeam() ) {
 			continue;
 		}
 
+		/* Nico, removed disguise stuff
 		if ( mEnt->type != ME_PLAYER &&
 			 mEnt->type != ME_PLAYER_DISGUISED &&
+			 mEnt->type != ME_PLAYER_REVIVE ) {*/
+		if ( mEnt->type != ME_PLAYER &&
 			 mEnt->type != ME_PLAYER_REVIVE ) {
 			continue;
 		}
@@ -960,7 +975,6 @@ void CG_DrawExpandedAutoMap( void ) {
 	float x, y, w, h;
 	float b_x, b_y, b_w, b_h;
 	float s1, t1, s2, t2;
-//	vec4_t colour = { 1.f, 1.f, 1.f, .5f };
 
 	x = SCREEN_WIDTH + 10.f;
 	y = 20.f;
@@ -1322,6 +1336,7 @@ int CG_DrawSpawnPointInfo( int px, int py, int pw, int ph, qboolean draw, mapSci
 	return e;
 }
 
+/* Nico, removed airstrikes
 void CG_DrawMortarMarker( int px, int py, int pw, int ph, qboolean draw, mapScissor_t *scissor, int expand ) {
 	if ( cg.lastFiredWeapon == WP_MORTAR_SET && cg.mortarImpactTime >= 0 ) {
 		if ( cg.snap->ps.weapon != WP_MORTAR_SET ) {
@@ -1368,7 +1383,7 @@ void CG_DrawMortarMarker( int px, int py, int pw, int ph, qboolean draw, mapScis
 				}
 
 				trap_R_SetColor( colour );
-				CG_DrawRotatedPic( point[0] - 8.f, point[1] - 8.f, 16, 16, cgs.media.ccMortarHit, .5f - ( cg.mortarFireAngles[YAW] /*- 180.f */ + 45.f ) / 360.f );
+				CG_DrawRotatedPic( point[0] - 8.f, point[1] - 8.f, 16, 16, cgs.media.ccMortarHit, .5f - ( cg.mortarFireAngles[YAW] + 45.f ) / 360.f );
 				trap_R_SetColor( NULL );
 			}
 		}
@@ -1414,36 +1429,6 @@ void CG_DrawMortarMarker( int px, int py, int pw, int ph, qboolean draw, mapScis
 				//CG_FillRect( point[0] - 8.f, point[1] - 8.f, 16, 16, colour );
 			}
 		}
-	}
-}
-
-/*void CG_DrawCommandCentreLayers( void ) {
-	int x, y;
-	int i;
-	char *s;
-
-	if( !cgs.ccLayers )
-		return;
-
-	x = CC_2D_X + CC_2D_W - 32;
-	y = CC_2D_Y + CC_2D_H - 32;
-
-	for( i = 0; i < cgs.ccLayers; i++ ) {
-		if( i == cgs.ccSelectedLayer )
-			CG_FillRect( x, y, 32, 32, clrBrownTextLt );
-		else
-			CG_FillRect( x, y, 32, 32, clrBrownText );
-		CG_DrawRect( x, y, 32, 32, 1, colorBlack );
-
-		if( i == 0 )
-			s = "G";
-		else
-			s =  va( "%i", i );
-
-		CG_Text_Paint( x + 1 + ( ( 32 - CG_Text_Width( s, .5f, 0 ) ) * .5f ),
-					   y + 16 +( ( 32 - CG_Text_Height( s, .5f, 0 ) ) *.5f ),
-					   .5f, clrBrownTextDk, s, 0, 0, 0 );
-		y -= 34;
 	}
 }*/
 

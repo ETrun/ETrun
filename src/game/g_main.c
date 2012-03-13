@@ -45,28 +45,45 @@ gentity_t g_entities[MAX_GENTITIES];
 gclient_t g_clients[MAX_CLIENTS];
 
 g_campaignInfo_t g_campaigns[MAX_CAMPAIGNS];
-int saveGamePending;                // 0 = no, 1 = check, 2 = loading
+
+/* Nico, removed saveGamePending
+int saveGamePending;                // 0 = no, 1 = check, 2 = loading*/
 
 mapEntityData_Team_t mapEntityData[2];
 
-vmCvar_t g_gametype;
-vmCvar_t g_fraglimit;
+/* Nico, removed (c)g_gametype
+vmCvar_t g_gametype;*/
+
+/* Nico, no fraglimit
+vmCvar_t g_fraglimit;*/
 
 /* Nico, no timelimit
 vmCvar_t g_timelimit;*/
 
-vmCvar_t g_friendlyFire;
+/* Nico, no friendlyfire
+vmCvar_t g_friendlyFire;*/
+
 vmCvar_t g_password;
 vmCvar_t sv_privatepassword;
 vmCvar_t g_maxclients;
+
+/* Nico, removed gameClients limits
 vmCvar_t g_maxGameClients;
-vmCvar_t g_minGameClients;          // NERVE - SMF
+vmCvar_t g_minGameClients;          // NERVE - SMF*/
+
 vmCvar_t g_dedicated;
-vmCvar_t g_speed;
-vmCvar_t g_gravity;
+
+/* Nico, g_speed is now hardcoded as DEFAULT_SPEED
+vmCvar_t g_speed;*/
+
+/* Nico, g_gravity is hardcoded as DEFAULT_GRAVITY
+vmCvar_t g_gravity;*/
+
 vmCvar_t g_cheats;
 vmCvar_t g_knockback;
-vmCvar_t g_quadfactor;
+
+/* Nico, removed quadfactor
+vmCvar_t g_quadfactor;*/
 
 /* Nico, removed forcerespawn
 vmCvar_t g_forcerespawn;*/
@@ -88,7 +105,8 @@ vmCvar_t g_warmupLatch;*/
 /* Nico, no timelimit
 vmCvar_t g_nextTimeLimit;*/
 
-vmCvar_t g_showHeadshotRatio;
+/* Nico, removed showHeadshotRatio
+vmCvar_t g_showHeadshotRatio;*/
 
 /* Nico, no timelimit
 vmCvar_t g_userTimeLimit;*/
@@ -97,9 +115,15 @@ vmCvar_t g_userTimeLimit;*/
 vmCvar_t g_userAlliedRespawnTime;
 vmCvar_t g_userAxisRespawnTime;*/
 
-vmCvar_t g_currentRound;
-vmCvar_t g_noTeamSwitching;
-vmCvar_t g_altStopwatchMode;
+/* Nico, removed currentRound
+vmCvar_t g_currentRound;*/
+
+/* Nico, removed team switch protection
+vmCvar_t g_noTeamSwitching;*/
+
+/* Nico, removed altStopwatchMode
+vmCvar_t g_altStopwatchMode;*/
+
 vmCvar_t g_gamestate;
 vmCvar_t g_swapteams;
 // -NERVE - SMF
@@ -107,11 +131,17 @@ vmCvar_t g_swapteams;
 vmCvar_t g_restarted;
 vmCvar_t g_log;
 vmCvar_t g_logSync;
+
+/* Nico, removed unused podium stuff
 vmCvar_t g_podiumDist;
-vmCvar_t g_podiumDrop;
+vmCvar_t g_podiumDrop;*/
+
 vmCvar_t voteFlags;
+
+/* Nico, removed complaints
 vmCvar_t g_complaintlimit;          // DHM - Nerve
-vmCvar_t g_ipcomplaintlimit;
+vmCvar_t g_ipcomplaintlimit;*/
+
 vmCvar_t g_filtercams;
 
 /* Nico, removed respawnLeft
@@ -124,8 +154,11 @@ vmCvar_t g_voiceChatsAllowed;       // DHM - Nerve
 vmCvar_t g_alliedmaxlives;          // Xian
 vmCvar_t g_axismaxlives;            // Xian*/
 
-vmCvar_t g_fastres;                 // Xian
-vmCvar_t g_knifeonly;               // Xian
+/* Nico, removed fastres
+vmCvar_t g_fastres;                 // Xian*/
+
+/* Nico, removed knifeonly
+vmCvar_t g_knifeonly;               // Xian*/
 
 /* Nico, removed respawnLeft
 vmCvar_t g_enforcemaxlives;         // Xian*/
@@ -138,14 +171,18 @@ vmCvar_t g_balancedteams;*/
 /* Nico, removed warmup
 vmCvar_t g_doWarmup;*/
 
-vmCvar_t g_teamAutoJoin;
+/* Nico, commented because unused
+vmCvar_t g_teamAutoJoin;*/
 
 /* Nico, removed balancedteams
 vmCvar_t g_teamForceBalance;*/
 
 vmCvar_t g_banIPs;
 vmCvar_t g_filterBan;
-vmCvar_t g_rankings;
+
+/* Nico, commented because unused
+vmCvar_t g_rankings;*/
+
 vmCvar_t g_smoothClients;
 vmCvar_t pmove_fixed;
 vmCvar_t pmove_msec;
@@ -155,7 +192,8 @@ vmCvar_t g_scriptName;          // name of script file to run (instead of defaul
 
 vmCvar_t g_developer;
 
-vmCvar_t g_userAim;
+/* Nico, removed useraim
+vmCvar_t g_userAim;*/
 
 vmCvar_t g_footstepAudibleRange;
 
@@ -176,17 +214,21 @@ vmCvar_t g_antilag;
 
 // OSP
 vmCvar_t g_spectatorInactivity;
+
+/* Nico, removed match_* cvars
 vmCvar_t match_latejoin;
 vmCvar_t match_minplayers;
 vmCvar_t match_mutespecs;
 vmCvar_t match_readypercent;
 vmCvar_t match_timeoutcount;
-vmCvar_t match_timeoutlength;
+vmCvar_t match_timeoutlength;*/
 
 /* Nico, removed warmup
 vmCvar_t match_warmupDamage;*/
 
-vmCvar_t server_autoconfig;
+/* Nico, removed server autoconfig
+vmCvar_t server_autoconfig;*/
+
 vmCvar_t team_maxPanzers;
 vmCvar_t team_maxplayers;
 vmCvar_t team_nocontrols;
@@ -196,18 +238,31 @@ vmCvar_t server_motd2;
 vmCvar_t server_motd3;
 vmCvar_t server_motd4;
 vmCvar_t server_motd5;
-vmCvar_t vote_allow_comp;
-vmCvar_t vote_allow_gametype;
+
+/* Nico, removed vote_allow_comp
+vmCvar_t vote_allow_comp;*/
+
+/* Nico, removed vote_allow_gametype
+vmCvar_t vote_allow_gametype;*/
+
 vmCvar_t vote_allow_kick;
 vmCvar_t vote_allow_map;
 vmCvar_t vote_allow_matchreset;
 vmCvar_t vote_allow_mutespecs;
 vmCvar_t vote_allow_nextmap;
-vmCvar_t vote_allow_pub;
+
+/* Nico, removed vote_allow_pub
+vmCvar_t vote_allow_pub;*/
+
 vmCvar_t vote_allow_referee;
-vmCvar_t vote_allow_shuffleteamsxp;
+
+/* Nico, removed shuffleteam
+vmCvar_t vote_allow_shuffleteamsxp;*/
+
 vmCvar_t vote_allow_swapteams;
-vmCvar_t vote_allow_friendlyfire;
+
+/* Nico, no friendlyfire
+vmCvar_t vote_allow_friendlyfire;*/
 
 /* Nico, no timelimit
 vmCvar_t vote_allow_timelimit;*/
@@ -223,8 +278,9 @@ vmCvar_t vote_allow_balancedteams;*/
 vmCvar_t vote_allow_muting;
 vmCvar_t vote_limit;
 vmCvar_t vote_percent;
-vmCvar_t z_serverflags;
 
+/* Nico, removed serverflags
+vmCvar_t z_serverflags;*/
 
 vmCvar_t g_covertopsChargeTime;
 vmCvar_t refereePassword;
@@ -235,13 +291,16 @@ vmCvar_t g_landminetimeout;
 // enabled in bot scripts and regular scripts.
 // Added by Mad Doctor I, 8/23/2002
 vmCvar_t g_scriptDebugLevel;
-vmCvar_t g_movespeed;
 
+/* Nico, removed (c)g_movespeed
+vmCvar_t g_movespeed;*/
+
+/* Nico, removed gametypes
 vmCvar_t g_axismapxp;
 vmCvar_t g_alliedmapxp;
 vmCvar_t g_oldCampaign;
 vmCvar_t g_currentCampaign;
-vmCvar_t g_currentCampaignMap;
+vmCvar_t g_currentCampaignMap;*/
 
 // Arnout: for LMS
 /* Nico, removed LMS
@@ -268,9 +327,12 @@ vmCvar_t g_heavyWeaponRestriction;
 vmCvar_t g_autoFireteams;
 
 vmCvar_t g_nextmap;
-vmCvar_t g_nextcampaign;
 
-vmCvar_t g_disableComplaints;
+/* Nico, removed gametypes
+vmCvar_t g_nextcampaign;*/
+
+/* Nico, removed complaints
+vmCvar_t g_disableComplaints;*/
 
 
 cvarTable_t gameCvarTable[] = {
@@ -284,7 +346,8 @@ cvarTable_t gameCvarTable[] = {
 	{ NULL, "sv_mapname", "", CVAR_SERVERINFO | CVAR_ROM, 0, qfalse  },
 
 	// latched vars
-	{ &g_gametype, "g_gametype", "4", CVAR_SERVERINFO | CVAR_LATCH, 0, qfalse  },     // Arnout: default to GT_WOLF_CAMPAIGN
+	/* Nico, removed (c)g_gametype
+	{ &g_gametype, "g_gametype", "4", CVAR_SERVERINFO | CVAR_LATCH, 0, qfalse  },     // Arnout: default to GT_WOLF_CAMPAIGN*/
 
 // JPW NERVE multiplayer stuffs
 	/* Nico, instant reswawn
@@ -301,16 +364,20 @@ cvarTable_t gameCvarTable[] = {
 	{ &g_landminetimeout, "g_landminetimeout", "1", CVAR_ARCHIVE, 0, qfalse, qtrue },
 
 	{ &g_maxclients, "sv_maxclients", "20", CVAR_SERVERINFO | CVAR_LATCH | CVAR_ARCHIVE, 0, qfalse  },            // NERVE - SMF - made 20 from 8
+
+	/* Nico, removed gameClients limits
 	{ &g_maxGameClients, "g_maxGameClients", "0", CVAR_SERVERINFO | CVAR_LATCH | CVAR_ARCHIVE, 0, qfalse  },
-	{ &g_minGameClients, "g_minGameClients", "8", CVAR_SERVERINFO, 0, qfalse  },                              // NERVE - SMF
+	{ &g_minGameClients, "g_minGameClients", "8", CVAR_SERVERINFO, 0, qfalse  },                              // NERVE - SMF*/
 
 	// change anytime vars
-	{ &g_fraglimit, "fraglimit", "0", /*CVAR_SERVERINFO |*/ CVAR_ARCHIVE | CVAR_NORESTART, 0, qtrue },
+	/* Nico, no fraglimit
+	{ &g_fraglimit, "fraglimit", "0", CVAR_ARCHIVE | CVAR_NORESTART, 0, qtrue },*/
 
 	/* Nico, no timelimit
 	{ &g_timelimit, "timelimit", "0", CVAR_SERVERINFO | CVAR_ARCHIVE | CVAR_NORESTART, 0, qtrue },*/
 
-	{ &g_friendlyFire, "g_friendlyFire", "1", CVAR_SERVERINFO | CVAR_ARCHIVE, 0, qtrue, qtrue },
+	/* Nico, no friendlyfire
+	{ &g_friendlyFire, "g_friendlyFire", "1", CVAR_SERVERINFO | CVAR_ARCHIVE, 0, qtrue, qtrue },*/
 
 	/* Nico, removed balancedteams
 	{ &g_teamForceBalance, "g_teamForceBalance", "0", CVAR_ARCHIVE  },                            // NERVE - SMF - merge from team arena*/
@@ -325,13 +392,19 @@ cvarTable_t gameCvarTable[] = {
 	/* Nico, no timelimit
 	{ &g_nextTimeLimit, "g_nextTimeLimit", "0", CVAR_WOLFINFO, 0, qfalse  },*/
 
-	{ &g_currentRound, "g_currentRound", "0", CVAR_WOLFINFO, 0, qfalse, qtrue },
-	{ &g_altStopwatchMode, "g_altStopwatchMode", "0", CVAR_ARCHIVE, 0, qtrue, qtrue },
+	/* Nico, removed currentRound
+	{ &g_currentRound, "g_currentRound", "0", CVAR_WOLFINFO, 0, qfalse, qtrue },*/
+
+	/* Nico, removed altStopwatchMode
+	{ &g_altStopwatchMode, "g_altStopwatchMode", "0", CVAR_ARCHIVE, 0, qtrue, qtrue },*/
+
 	{ &g_gamestate, "gamestate", "-1", CVAR_WOLFINFO | CVAR_ROM, 0, qfalse  },
 
-	{ &g_noTeamSwitching, "g_noTeamSwitching", "0", CVAR_ARCHIVE, 0, qtrue  },
+	/* Nico, removed team switch protection
+	{ &g_noTeamSwitching, "g_noTeamSwitching", "0", CVAR_ARCHIVE, 0, qtrue  },*/
 
-	{ &g_showHeadshotRatio, "g_showHeadshotRatio", "0", 0, 0, qfalse  },
+	/* Nico, removed showHeadshotRatio
+	{ &g_showHeadshotRatio, "g_showHeadshotRatio", "0", 0, 0, qfalse  },*/
 
 	/* Nico, no timelimit
 	{ &g_userTimeLimit, "g_userTimeLimit", "0", 0, 0, qfalse, qtrue },*/
@@ -354,10 +427,16 @@ cvarTable_t gameCvarTable[] = {
 
 	{ &g_dedicated, "dedicated", "0", 0, 0, qfalse },
 
-	{ &g_speed, "g_speed", "320", 0, 0, qtrue, qtrue },
-	{ &g_gravity, "g_gravity", "800", 0, 0, qtrue, qtrue },
+	/* Nico, g_speed is now hardcoded as DEFAULT_SPEED
+	{ &g_speed, "g_speed", "320", 0, 0, qtrue, qtrue },*/
+
+	/* Nico, g_gravity is hardcoded as DEFAULT_GRAVITY
+	{ &g_gravity, "g_gravity", "800", 0, 0, qtrue, qtrue },*/
+
 	{ &g_knockback, "g_knockback", "1000", 0, 0, qtrue, qtrue },
-	{ &g_quadfactor, "g_quadfactor", "3", 0, 0, qtrue },
+
+	/* Nico, removed quadfactor
+	{ &g_quadfactor, "g_quadfactor", "3", 0, 0, qtrue },*/
 
 	{ &g_needpass, "g_needpass", "0", CVAR_SERVERINFO | CVAR_ROM, 0, qtrue },
 
@@ -374,13 +453,16 @@ cvarTable_t gameCvarTable[] = {
 	{ &g_debugBullets, "g_debugBullets", "0", CVAR_CHEAT, 0, qfalse}, //----(SA)	added
 	{ &g_motd, "g_motd", "", CVAR_ARCHIVE, 0, qfalse },
 
+	/* Nico, removed unused podium stuff
 	{ &g_podiumDist, "g_podiumDist", "80", 0, 0, qfalse },
-	{ &g_podiumDrop, "g_podiumDrop", "70", 0, 0, qfalse },
+	{ &g_podiumDrop, "g_podiumDrop", "70", 0, 0, qfalse },*/
 
 	{ &voteFlags, "voteFlags", "0", CVAR_TEMP | CVAR_ROM | CVAR_SERVERINFO, 0, qfalse },
 
+	/* Nico, removed complaints
 	{ &g_complaintlimit, "g_complaintlimit", "6", CVAR_ARCHIVE, 0, qtrue },                       // DHM - Nerve
-	{ &g_ipcomplaintlimit, "g_ipcomplaintlimit", "3", CVAR_ARCHIVE, 0, qtrue },
+	{ &g_ipcomplaintlimit, "g_ipcomplaintlimit", "3", CVAR_ARCHIVE, 0, qtrue },*/
+
 	{ &g_filtercams, "g_filtercams", "0", CVAR_ARCHIVE, 0, qfalse },
 
 	/* Nico, removed respawnLeft
@@ -393,15 +475,22 @@ cvarTable_t gameCvarTable[] = {
 	{ &g_alliedmaxlives, "g_alliedmaxlives", "0", CVAR_LATCH | CVAR_SERVERINFO, 0, qtrue },     // Xian
 	{ &g_axismaxlives, "g_axismaxlives", "0", CVAR_LATCH | CVAR_SERVERINFO, 0, qtrue },         // Xian*/
 
-	{ &g_fastres, "g_fastres", "0", CVAR_ARCHIVE, 0, qtrue, qtrue },                          // Xian - Fast Medic Resing
-	{ &g_knifeonly, "g_knifeonly", "0", 0, 0, qtrue },                                            // Xian - Fast Medic Resing
+	/* Nico, removed fastres
+	{ &g_fastres, "g_fastres", "0", CVAR_ARCHIVE, 0, qtrue, qtrue },                          // Xian - Fast Medic Resing*/
+
+	/* Nico, removed knifeonly
+	{ &g_knifeonly, "g_knifeonly", "0", 0, 0, qtrue },                                            // Xian - Fast Medic Resing*/
 
 	/* Nico, removed respawnLeft
 	{ &g_enforcemaxlives, "g_enforcemaxlives", "1", CVAR_ARCHIVE, 0, qtrue },                 // Xian - Gestapo enforce maxlives stuff by temp banning*/
 
 	{ &g_developer, "developer", "0", CVAR_TEMP, 0, qfalse },
-	{ &g_rankings, "g_rankings", "0", 0, 0, qfalse },
-	{ &g_userAim, "g_userAim", "1", CVAR_CHEAT, 0, qfalse },
+
+	/* Nico, commented because unused
+	{ &g_rankings, "g_rankings", "0", 0, 0, qfalse },*/
+
+	/* Nico, removed useraim
+	{ &g_userAim, "g_userAim", "1", CVAR_CHEAT, 0, qfalse },*/
 
 	{ &g_smoothClients, "g_smoothClients", "1", 0, 0, qfalse },
 	{ &pmove_fixed, "pmove_fixed", "0", CVAR_SYSTEMINFO, 0, qfalse },
@@ -418,17 +507,21 @@ cvarTable_t gameCvarTable[] = {
 
 	{ &refereePassword, "refereePassword", "none", 0, 0, qfalse},
 	{ &g_spectatorInactivity, "g_spectatorInactivity", "0", 0, 0, qfalse, qfalse },
+
+	/* Nico, removed match_* cvars
 	{ &match_latejoin,      "match_latejoin", "1", 0, 0, qfalse, qfalse },
 	{ &match_minplayers,    "match_minplayers", MATCH_MINPLAYERS, 0, 0, qfalse, qfalse },
 	{ &match_mutespecs,     "match_mutespecs", "0", 0, 0, qfalse, qtrue },
 	{ &match_readypercent,  "match_readypercent", "100", 0, 0, qfalse, qtrue },
 	{ &match_timeoutcount,  "match_timeoutcount", "3", 0, 0, qfalse, qtrue },
-	{ &match_timeoutlength, "match_timeoutlength", "180", 0, 0, qfalse, qtrue },
+	{ &match_timeoutlength, "match_timeoutlength", "180", 0, 0, qfalse, qtrue },*/
 
 	/* Nico, removed warmup
 	{ &match_warmupDamage,  "match_warmupDamage", "1", 0, 0, qfalse },*/
 
-	{ &server_autoconfig, "server_autoconfig", "0", 0, 0, qfalse, qfalse },
+	/* Nico, removed server autoconfig
+	{ &server_autoconfig, "server_autoconfig", "0", 0, 0, qfalse, qfalse },*/
+
 	{ &server_motd0,    "server_motd0", " ^NEnemy Territory ^7MOTD ", 0, 0, qfalse, qfalse },
 	{ &server_motd1,    "server_motd1", "", 0, 0, qfalse, qfalse },
 	{ &server_motd2,    "server_motd2", "", 0, 0, qfalse, qfalse },
@@ -438,18 +531,31 @@ cvarTable_t gameCvarTable[] = {
 	{ &team_maxPanzers, "team_maxPanzers", "-1", 0, 0, qfalse, qfalse },
 	{ &team_maxplayers, "team_maxplayers", "0", 0, 0, qfalse, qfalse },
 	{ &team_nocontrols, "team_nocontrols", "1", 0, 0, qfalse, qfalse },
-	{ &vote_allow_comp,         "vote_allow_comp", "1", 0, 0, qfalse, qfalse },
-	{ &vote_allow_gametype,     "vote_allow_gametype", "1", 0, 0, qfalse, qfalse },
+
+	/* Nico, removed vote_allow_comp
+	{ &vote_allow_comp,         "vote_allow_comp", "1", 0, 0, qfalse, qfalse },*/
+
+	/* Nico, removed vote_allow_gametype
+	{ &vote_allow_gametype,     "vote_allow_gametype", "1", 0, 0, qfalse, qfalse },*/
+
 	{ &vote_allow_kick,         "vote_allow_kick", "1", 0, 0, qfalse, qfalse },
 	{ &vote_allow_map,          "vote_allow_map", "1", 0, 0, qfalse, qfalse },
 	{ &vote_allow_matchreset,   "vote_allow_matchreset", "1", 0, 0, qfalse, qfalse },
 	{ &vote_allow_mutespecs,    "vote_allow_mutespecs", "1", 0, 0, qfalse, qfalse },
 	{ &vote_allow_nextmap,      "vote_allow_nextmap", "1", 0, 0, qfalse, qfalse },
-	{ &vote_allow_pub,          "vote_allow_pub", "1", 0, 0, qfalse, qfalse },
+
+	/* Nico, removed vote_allow_pub
+	{ &vote_allow_pub,          "vote_allow_pub", "1", 0, 0, qfalse, qfalse },*/
+
 	{ &vote_allow_referee,      "vote_allow_referee", "0", 0, 0, qfalse, qfalse },
-	{ &vote_allow_shuffleteamsxp,   "vote_allow_shuffleteamsxp", "1", 0, 0, qfalse, qfalse },
+
+	/* Nico, removed shuffleteam
+	{ &vote_allow_shuffleteamsxp,   "vote_allow_shuffleteamsxp", "1", 0, 0, qfalse, qfalse },*/
+
 	{ &vote_allow_swapteams,    "vote_allow_swapteams", "1", 0, 0, qfalse, qfalse },
-	{ &vote_allow_friendlyfire, "vote_allow_friendlyfire", "1", 0, 0, qfalse, qfalse },
+
+	/* Nico, no friendlyfire
+	{ &vote_allow_friendlyfire, "vote_allow_friendlyfire", "1", 0, 0, qfalse, qfalse },*/
 
 	/* Nico, no timelimit
 	{ &vote_allow_timelimit,    "vote_allow_timelimit", "0", 0, 0, qfalse, qfalse },*/
@@ -467,7 +573,8 @@ cvarTable_t gameCvarTable[] = {
 	{ &vote_percent,    "vote_percent", "50", 0, 0, qfalse, qfalse },
 
 	// state vars
-	{ &z_serverflags, "z_serverflags", "0", 0, 0, qfalse, qfalse },
+	/* Nico, removed serverflags
+	{ &z_serverflags, "z_serverflags", "0", 0, 0, qfalse, qfalse },*/
 
 	{ &g_debugConstruct, "g_debugConstruct", "0", CVAR_CHEAT, 0, qfalse },
 
@@ -477,7 +584,8 @@ cvarTable_t gameCvarTable[] = {
 	{ &g_scriptDebugLevel, "g_scriptDebugLevel", "0", CVAR_CHEAT, 0, qfalse },
 
 	// How fast do we want Allied single player movement?
-	{ &g_movespeed, "g_movespeed", "76", CVAR_CHEAT, 0, qfalse },
+	/* Nico, removed (c)g_movespeed
+	{ &g_movespeed, "g_movespeed", "76", CVAR_CHEAT, 0, qfalse },*/
 
 	// Arnout: LMS
 	/* Nico, removed balancedteams
@@ -492,12 +600,14 @@ cvarTable_t gameCvarTable[] = {
 	{ &g_axiswins,              "g_axiswins",                "0", CVAR_ROM, 0, qfalse, qtrue },
 	{ &g_alliedwins,            "g_alliedwins",              "0", CVAR_ROM, 0, qfalse, qtrue },*/
 
+
+	/* Nico, removed gametypes
 	{ &g_axismapxp,             "g_axismapxp",               "0", CVAR_ROM, 0, qfalse, qtrue },
 	{ &g_alliedmapxp,           "g_alliedmapxp",         "0", CVAR_ROM, 0, qfalse, qtrue },
 
 	{ &g_oldCampaign,           "g_oldCampaign",         "",      CVAR_ROM, 0, },
 	{ &g_currentCampaign,       "g_currentCampaign",     "",      CVAR_WOLFINFO | CVAR_ROM, 0, },
-	{ &g_currentCampaignMap,    "g_currentCampaignMap",      "0", CVAR_WOLFINFO | CVAR_ROM, 0, },
+	{ &g_currentCampaignMap,    "g_currentCampaignMap",      "0", CVAR_WOLFINFO | CVAR_ROM, 0, },*/
 
 	// points to the URL for mod information, should not be modified by server admin
 	{ &mod_url, "mod_url", "", CVAR_SERVERINFO | CVAR_ROM, 0, qfalse },
@@ -512,9 +622,12 @@ cvarTable_t gameCvarTable[] = {
 	{ &g_autoFireteams, "g_autoFireteams", "1", CVAR_ARCHIVE },
 
 	{ &g_nextmap, "nextmap", "", CVAR_TEMP },
-	{ &g_nextcampaign, "nextcampaign", "", CVAR_TEMP },
 
-	{ &g_disableComplaints, "g_disableComplaints", "0", CVAR_ARCHIVE },
+	/* Nico, removed gametypes
+	{ &g_nextcampaign, "nextcampaign", "", CVAR_TEMP },*/
+
+	/* Nico, removed complaints
+	{ &g_disableComplaints, "g_disableComplaints", "0", CVAR_ARCHIVE },*/
 };
 
 // bk001129 - made static to avoid aliasing
@@ -912,7 +1025,9 @@ void G_CheckForCursorHints( gentity_t *ent ) {
 
 			switch ( checkEnt->s.eType ) {
 			case ET_CORPSE:
-				if ( !ent->client->ps.powerups[PW_BLUEFLAG] && !ent->client->ps.powerups[PW_REDFLAG] && !ent->client->ps.powerups[PW_OPS_DISGUISED] ) {
+				/* Nico, removed disguise stuff
+				if ( !ent->client->ps.powerups[PW_BLUEFLAG] && !ent->client->ps.powerups[PW_REDFLAG] && !ent->client->ps.powerups[PW_OPS_DISGUISED] ) {*/
+				if ( !ent->client->ps.powerups[PW_BLUEFLAG] && !ent->client->ps.powerups[PW_REDFLAG] ) {
 					if ( BODY_TEAM( traceEnt ) < 4 && BODY_TEAM( traceEnt ) != ent->client->sess.sessionTeam && traceEnt->nextthink == traceEnt->timestamp + BODY_TIME( BODY_TEAM( traceEnt ) ) ) {
 						if ( ent->client->ps.stats[STAT_PLAYER_CLASS] == PC_COVERTOPS ) {
 							hintDist    = 48;
@@ -1309,9 +1424,10 @@ void G_RegisterCvars( void ) {
 		if ( cv->vmCvar ) {
 			cv->modificationCount = cv->vmCvar->modificationCount;
 			// OSP - Update vote info for clients, if necessary
-			if ( !G_IsSinglePlayerGame() ) {
+			/* Nico, removed gametypes
+			if ( !G_IsSinglePlayerGame() ) {*/
 				G_checkServerToggle( cv->vmCvar );
-			}
+			// }
 		}
 
 		remapped = ( remapped || cv->teamShader );
@@ -1323,19 +1439,23 @@ void G_RegisterCvars( void ) {
 
 	// check some things
 	// DHM - Gametype is currently restricted to supported types only
+	/* Nico, removed gametypes
 	if ( ( g_gametype.integer < GT_WOLF || g_gametype.integer >= GT_MAX_GAME_TYPE ) ) {
 		G_Printf( "g_gametype %i is out of range, defaulting to GT_WOLF(%i)\n", g_gametype.integer, GT_WOLF );
 		trap_Cvar_Set( "g_gametype", va( "%i",GT_WOLF ) );
 		trap_Cvar_Update( &g_gametype );
-	}
+	}*/
 
 	// OSP
-	if ( !G_IsSinglePlayerGame() ) {
+	/* Nico, removed gametypes
+	if ( !G_IsSinglePlayerGame() ) {*/
 		trap_SetConfigstring( CS_SERVERTOGGLES, va( "%d", level.server_settings ) );
+
+		/* Nico, removed match_* cvars
 		if ( match_readypercent.integer < 1 ) {
 			trap_Cvar_Set( "match_readypercent", "1" );
-		}
-	}
+		}*/
+	// }
 
 	if ( pmove_msec.integer < 8 ) {
 		trap_Cvar_Set( "pmove_msec", "8" );
@@ -1397,13 +1517,16 @@ void G_UpdateCvars( void ) {
 					level.covertopsChargeTime[0] = g_covertopsChargeTime.integer * level.covertopsChargeTimeModifier[0];
 					level.covertopsChargeTime[1] = g_covertopsChargeTime.integer * level.covertopsChargeTimeModifier[1];
 					chargetimechanged = qtrue;
-				} else if ( cv->vmCvar == &match_readypercent )      {
+				}
+				
+				/* Nico, removed match_* cvars
+				else if ( cv->vmCvar == &match_readypercent )      {
 					if ( match_readypercent.integer < 1 ) {
 						trap_Cvar_Set( cv->cvarName, "1" );
 					} else if ( match_readypercent.integer > 100 ) {
 						trap_Cvar_Set( cv->cvarName, "100" );
 					}
-				}
+				}*/
 
 				/* Nico, removed warmup
 				else if ( cv->vmCvar == &g_warmup )      {
@@ -1414,6 +1537,7 @@ void G_UpdateCvars( void ) {
 				}*/
 
 				// Moved this check out of the main world think loop
+				/* Nico, removed gametypes
 				else if ( cv->vmCvar == &g_gametype ) {
 					int worldspawnflags = g_entities[ENTITYNUM_WORLD].spawnflags;
 					int gt, gametype;
@@ -1422,20 +1546,15 @@ void G_UpdateCvars( void ) {
 					trap_Cvar_LatchedVariableStringBuffer( "g_gametype", buffer, sizeof( buffer ) );
 					gametype = atoi( buffer );
 
-
 					if ( gametype == GT_WOLF_CAMPAIGN && gametype != g_gametype.integer ) {
 						if ( !G_MapIsValidCampaignStartMap() ) {
 							gt = g_gametype.integer;
 
-							/* Nico, removed LMS
-							if ( gt != GT_WOLF_LMS ) {*/
+							// Nico, removed LMS
+							// if ( gt != GT_WOLF_LMS ) {
 								if ( !( worldspawnflags & NO_GT_WOLF ) ) {
 									gt = GT_WOLF;   // Default wolf
-								} 
-								//else {
-								// gt = GT_WOLF_LMS;   // Last man standing
-								// }
-							// }
+								}
 
 							G_Printf( "Map '%s' isn't a valid campaign start map, resetting game type to '%i'\n", level.rawmapname, gt );
 							trap_Cvar_Set( "g_gametype", va( "%i", gt ) );
@@ -1443,31 +1562,30 @@ void G_UpdateCvars( void ) {
 						continue;
 					}
 
-					/* Nico, removed LMS
+					// Nico, removed LMS
 					if ( !level.latchGametype && g_gamestate.integer == GS_PLAYING &&
 						 ( ( ( g_gametype.integer == GT_WOLF || g_gametype.integer == GT_WOLF_CAMPAIGN ) && ( worldspawnflags & NO_GT_WOLF ) ) ||
 						   ( g_gametype.integer == GT_WOLF_STOPWATCH && ( worldspawnflags & NO_STOPWATCH ) ) ||
 						   ( g_gametype.integer == GT_WOLF_LMS && ( worldspawnflags & NO_LMS ) ) )
-						 ) {*/
+						 ) {
 					if ( !level.latchGametype && g_gamestate.integer == GS_PLAYING &&
-						 ( ( ( g_gametype.integer == GT_WOLF || g_gametype.integer == GT_WOLF_CAMPAIGN ) && ( worldspawnflags & NO_GT_WOLF ) ) ||
-						   ( g_gametype.integer == GT_WOLF_STOPWATCH && ( worldspawnflags & NO_STOPWATCH ) ) )
+						 ( ( ( worldspawnflags & NO_GT_WOLF ) ) )
 						 ) {
 
 						if ( !( worldspawnflags & NO_GT_WOLF ) ) {
 							gt = GT_WOLF;   // Default wolf
 						}
 
-						/* Nico, removed LMS
-						else {
-							gt = GT_WOLF_LMS;   // Last man standing
-						}*/
+						// Nico, removed LMS
+						// else {
+						//	gt = GT_WOLF_LMS;   // Last man standing
+						// }
 
 						level.latchGametype = qtrue;
 						AP( "print \"Invalid gametype was specified, Restarting\n\"" );
 						trap_SendConsoleCommand( EXEC_APPEND, va( "wait 2 ; g_gametype %i ; map_restart 10 0\n", gt ) );
-					}
-				} else if ( cv->vmCvar == &pmove_msec ) {
+					}*/
+				else if ( cv->vmCvar == &pmove_msec ) {
 					if ( pmove_msec.integer < 8 ) {
 						trap_Cvar_Set( cv->cvarName, "8" );
 					} else if ( pmove_msec.integer > 33 ) {
@@ -1475,14 +1593,31 @@ void G_UpdateCvars( void ) {
 					}
 				}
 				// OSP - Update vote info for clients, if necessary
-				else if ( !G_IsSinglePlayerGame() ) {
-					if ( cv->vmCvar == &vote_allow_comp           || cv->vmCvar == &vote_allow_gametype       ||
+				/* Nico, removed gametypes
+				else if ( !G_IsSinglePlayerGame() ) {*/
+					if ( 
+						/* Nico, removed vote_allow_comp
+						cv->vmCvar == &vote_allow_comp           || */
+
+						/* Nico, removed vote_allow_gametype
+						cv->vmCvar == &vote_allow_gametype       ||*/
 						 cv->vmCvar == &vote_allow_kick          || cv->vmCvar == &vote_allow_map            ||
 						 cv->vmCvar == &vote_allow_matchreset    ||
 						 cv->vmCvar == &vote_allow_mutespecs     || cv->vmCvar == &vote_allow_nextmap        ||
-						 cv->vmCvar == &vote_allow_pub           || cv->vmCvar == &vote_allow_referee        ||
-						 cv->vmCvar == &vote_allow_shuffleteamsxp    || cv->vmCvar == &vote_allow_swapteams      ||
-						 cv->vmCvar == &vote_allow_friendlyfire
+
+						 /* Nico, removed vote_allow_pub
+						 cv->vmCvar == &vote_allow_pub           || */
+						 
+						 cv->vmCvar == &vote_allow_referee        ||
+
+						 /* Nico, removed shuffleteam
+						 cv->vmCvar == &vote_allow_shuffleteamsxp    || */
+
+						 cv->vmCvar == &vote_allow_swapteams
+						 
+						 /* Nico, no friendlyfire
+						 || cv->vmCvar == &vote_allow_friendlyfire*/
+
 						 /* Nico, no timelimit
 						 || cv->vmCvar == &vote_allow_timelimit      */
 						 /* Nico, removed warmup
@@ -1496,7 +1631,7 @@ void G_UpdateCvars( void ) {
 					} else {
 						fToggles = ( G_checkServerToggle( cv->vmCvar ) || fToggles );
 					}
-				}
+				// }
 
 			}
 		}
@@ -1570,22 +1705,24 @@ char *strcut( char *dest, char *src, int num ) {
 }
 
 //g_{axies,allies}mapxp overflows and crashes the server
+/* Nico, removed gametypes
 void bani_clearmapxp( void ) {
 
-	/* Nico, removed skills
-	trap_SetConfigstring( CS_AXIS_MAPS_XP, "" );
-	trap_SetConfigstring( CS_ALLIED_MAPS_XP, "" );*/
+	// Nico, removed skills
+	// trap_SetConfigstring( CS_AXIS_MAPS_XP, "" );
+	// trap_SetConfigstring( CS_ALLIED_MAPS_XP, "" );
 
 	trap_Cvar_Set( va( "%s_axismapxp0", GAMEVERSION ), "" );
 	trap_Cvar_Set( va( "%s_alliedmapxp0", GAMEVERSION ), "" );
-}
+}*/
 
+/* Nico, removed gametypes
 void bani_storemapxp( void ) {
 	char cs[MAX_STRING_CHARS];
 	char u[MAX_STRING_CHARS];
 	char *k;
 
-	/* Nico, removed skills
+	// Nico, removed skills
 	int i, j;
 
 	//axis
@@ -1593,7 +1730,7 @@ void bani_storemapxp( void ) {
 	for ( i = 0; i < SK_NUM_SKILLS; i++ ) {
 		Q_strcat( cs, sizeof( cs ), va( " %i", (int)level.teamXP[ i ][ 0 ] ) );
 	}
-	trap_SetConfigstring( CS_AXIS_MAPS_XP, cs );*/
+	trap_SetConfigstring( CS_AXIS_MAPS_XP, cs );
 
 	int j = 0;
 	k = strcut( u, cs, SNIPSIZE );
@@ -1608,12 +1745,12 @@ void bani_storemapxp( void ) {
 	}
 
 	//allies
-	/* Nico, removed skills
+	// Nico, removed skills
 	trap_GetConfigstring( CS_ALLIED_MAPS_XP, cs, sizeof( cs ) );
 	for ( i = 0; i < SK_NUM_SKILLS; i++ ) {
 		Q_strcat( cs, sizeof( cs ), va( " %i", (int)level.teamXP[ i ][ 1 ] ) );
 	}
-	trap_SetConfigstring( CS_ALLIED_MAPS_XP, cs );*/
+	trap_SetConfigstring( CS_ALLIED_MAPS_XP, cs );
 
 	j = 0;
 	k = strcut( u, cs, SNIPSIZE );
@@ -1643,8 +1780,8 @@ void bani_getmapxp( void ) {
 		strcat( s, t );
 	}
 
-	/* Nico, removed skills
-	trap_SetConfigstring( CS_AXIS_MAPS_XP, s );*/
+	// Nico, removed skills
+	trap_SetConfigstring( CS_AXIS_MAPS_XP, s );
 
 	j = 0;
 	trap_Cvar_VariableStringBuffer( va( "%s_alliedmapxp%i", GAMEVERSION, j ), s, sizeof( s ) );
@@ -1656,9 +1793,9 @@ void bani_getmapxp( void ) {
 		strcat( s, t );
 	}
 
-	/* Nico, removed skills
-	trap_SetConfigstring( CS_ALLIED_MAPS_XP, s );*/
-}
+	// Nico, removed skills
+	trap_SetConfigstring( CS_ALLIED_MAPS_XP, s );
+}*/
 
 /*
 ============
@@ -1792,6 +1929,7 @@ void G_InitGame( int levelTime, int randomSeed, int restart ) {
 		trap_SetConfigstring( CS_ROUNDSCORES2, va( "%i", g_alliedwins.integer ) );
 	}*/
 
+	/* Nico, removed gametypes
 	if ( g_gametype.integer == GT_WOLF ) {
 		//bani - #113
 		bani_clearmapxp();
@@ -1800,32 +1938,33 @@ void G_InitGame( int levelTime, int randomSeed, int restart ) {
 	if ( g_gametype.integer == GT_WOLF_STOPWATCH ) {
 		//bani - #113
 		bani_clearmapxp();
-	}
+	}*/
 
 
 	trap_GetServerinfo( cs, sizeof( cs ) );
 	Q_strncpyz( level.rawmapname, Info_ValueForKey( cs, "mapname" ), sizeof( level.rawmapname ) );
 
+	/* Nico, removed gametypes
 	G_ParseCampaigns();
 	if ( g_gametype.integer == GT_WOLF_CAMPAIGN ) {
 		if ( g_campaigns[level.currentCampaign].current == 0 || level.newCampaign ) {
 
-			/* Nico, removed LMS
-			trap_Cvar_Set( "g_axiswins", "0" );
-			trap_Cvar_Set( "g_alliedwins", "0" );*/
+			// Nico, removed LMS
+			// trap_Cvar_Set( "g_axiswins", "0" );
+			// trap_Cvar_Set( "g_alliedwins", "0" );
 
 			//bani - #113
 			bani_clearmapxp();
 
-			/* Nico, removed LMS
-			trap_Cvar_Update( &g_axiswins );
-			trap_Cvar_Update( &g_alliedwins );*/
+			// Nico, removed LMS
+			// trap_Cvar_Update( &g_axiswins );
+			// trap_Cvar_Update( &g_alliedwins );
 
 		} else {
 			//bani - #113
 			bani_getmapxp();
 		}
-	}
+	}*/
 
 	trap_SetConfigstring( CS_SCRIPT_MOVER_NAMES, "" );   // clear out
 
@@ -1884,6 +2023,7 @@ void G_InitGame( int levelTime, int randomSeed, int restart ) {
 	trap_LocateGameData( level.gentities, level.num_entities, sizeof( gentity_t ),
 						 &level.clients[0].ps, sizeof( level.clients[0] ) );
 
+	/* Nico, removed gametypes
 	if ( g_gametype.integer == GT_SINGLE_PLAYER ) {
 		char loading[4];
 
@@ -1894,9 +2034,10 @@ void G_InitGame( int levelTime, int randomSeed, int restart ) {
 		} else {
 			saveGamePending = 1;
 		}
-	} else {
-		saveGamePending = 0;
-	}
+	} else {*/
+		/* Nico, removed saveGamePending
+		saveGamePending = 0;*/
+	// }
 
 	// load level script
 	G_Script_ScriptLoad();
@@ -1988,6 +2129,8 @@ void G_ShutdownGame( int restart ) {
 		( g_gametype.integer == GT_WOLF_STOPWATCH && ( g_entities[ENTITYNUM_WORLD].r.worldflags & NO_STOPWATCH ) ) ||
 		( g_gametype.integer == GT_WOLF_LMS && ( g_entities[ENTITYNUM_WORLD].r.worldflags & NO_LMS ) )
 		) {*/
+
+	/* Nico, removed gametypes
 	if  (
 		( ( g_gametype.integer == GT_WOLF || g_gametype.integer == GT_WOLF_CAMPAIGN ) && ( g_entities[ENTITYNUM_WORLD].r.worldflags & NO_GT_WOLF ) ) ||
 		( g_gametype.integer == GT_WOLF_STOPWATCH && ( g_entities[ENTITYNUM_WORLD].r.worldflags & NO_STOPWATCH ) )
@@ -1997,13 +2140,13 @@ void G_ShutdownGame( int restart ) {
 			trap_Cvar_Set( "g_gametype", va( "%i", GT_WOLF ) );
 		}
 		
-		/* Nico, removed LMS
-		else {
-			trap_Cvar_Set( "g_gametype", va( "%i", GT_WOLF_LMS ) );
-		}*/
+		// Nico, removed LMS
+		// else {
+		//	trap_Cvar_Set( "g_gametype", va( "%i", GT_WOLF_LMS ) );
+		// }
 
 		trap_Cvar_Update( &g_gametype );
-	}
+	}*/
 
 	G_Printf( "==== ShutdownGame ====\n" );
 
@@ -2297,7 +2440,8 @@ void CalculateRanks( void ) {
 		}
 	}
 
-	trap_SetConfigstring( CS_FIRSTBLOOD, va( "%i", level.firstbloodTeam ) );
+	/* Nico, removed firstblood
+	trap_SetConfigstring( CS_FIRSTBLOOD, va( "%i", level.firstbloodTeam ) );*/
 
 	/* Nico, removed LMS
 	trap_SetConfigstring( CS_ROUNDSCORES1, va( "%i", g_axiswins.integer ) );
@@ -2492,6 +2636,7 @@ void ExitLevel( void ) {
 	int i;
 	gclient_t *cl;
 
+	/* Nico, removed gametypes
 	if ( g_gametype.integer == GT_WOLF_CAMPAIGN ) {
 		g_campaignInfo_t *campaign = &g_campaigns[level.currentCampaign];
 
@@ -2513,7 +2658,7 @@ void ExitLevel( void ) {
 			// FIXME: do we want to do something else here?
 			//trap_SendConsoleCommand( EXEC_APPEND, "vstr nextmap\n" );
 		}
-	}
+	}*/
 
 	/* Nico, removed LMS
 	else if ( g_gametype.integer == GT_WOLF_LMS ) {
@@ -2523,7 +2668,8 @@ void ExitLevel( void ) {
 			trap_SendConsoleCommand( EXEC_APPEND, "map_restart 0\n" );
 		}
 	} */
-	else {
+	//else
+	{
 		trap_SendConsoleCommand( EXEC_APPEND, "vstr nextmap\n" );
 	}
 	level.changemap = NULL;
@@ -2534,7 +2680,9 @@ void ExitLevel( void ) {
 	// reset all the scores so we don't enter the intermission again
 	level.teamScores[TEAM_AXIS] = 0;
 	level.teamScores[TEAM_ALLIES] = 0;
-	if ( g_gametype.integer != GT_WOLF_CAMPAIGN ) {
+
+	/* Nico, removed gametypes
+	if ( g_gametype.integer != GT_WOLF_CAMPAIGN ) {*/
 		for ( i = 0 ; i < g_maxclients.integer ; i++ ) {
 			cl = level.clients + i;
 			if ( cl->pers.connected != CON_CONNECTED ) {
@@ -2542,7 +2690,7 @@ void ExitLevel( void ) {
 			}
 			cl->ps.persistant[PERS_SCORE] = 0;
 		}
-	}
+	// }
 
 	// we need to do this here before chaning to CON_CONNECTING
 	G_WriteSessionData( qfalse );
@@ -2607,12 +2755,13 @@ LogExit
 Append information about this game to the log file
 ================
 */
+/* Nico, removed gametypes
 void LogExit( const char *string ) {
 	int i;
 	gclient_t       *cl;
 
-	/* Nico, removed LMS
-	char cs[MAX_STRING_CHARS];*/
+	// Nico, removed LMS
+	// char cs[MAX_STRING_CHARS];
 
 	// NERVE - SMF - do not allow LogExit to be called in non-playing gamestate
 	if ( g_gamestate.integer != GS_PLAYING ) {
@@ -2622,12 +2771,12 @@ void LogExit( const char *string ) {
 	G_LogPrintf( "Exit: %s\n", string );
 
 
-	/* Nico, removed intermission
-	level.intermissionQueued = level.time;
+	// Nico, removed intermission
+	// level.intermissionQueued = level.time;
 
 	// this will keep the clients from playing any voice sounds
 	// that will get cut off when the queued intermission starts
-	trap_SetConfigstring( CS_INTERMISSION, "1" );*/
+	// trap_SetConfigstring( CS_INTERMISSION, "1" );
 
 	G_LogPrintf( "red:%i  blue:%i\n", level.teamScores[TEAM_AXIS], level.teamScores[TEAM_ALLIES] );
 
@@ -2656,7 +2805,7 @@ void LogExit( const char *string ) {
 
 	// NERVE - SMF
 	if ( g_gametype.integer == GT_WOLF_STOPWATCH ) {
-		/* Nico, no timelimit
+		// Nico, no timelimit
 		char cs[MAX_STRING_CHARS];
 		int winner, defender;
 
@@ -2678,7 +2827,7 @@ void LogExit( const char *string ) {
 		} else {
 			// reset timer
 			trap_Cvar_Set( "g_nextTimeLimit", "0" );
-		}*/
+		}
 
 		trap_Cvar_Set( "g_currentRound", va( "%i", !g_currentRound.integer ) );
 
@@ -2690,13 +2839,13 @@ void LogExit( const char *string ) {
 		char cs[MAX_STRING_CHARS];
 		// int winner; Nico, unused warning fix
 
-		/* Nico, removed skills
-		int highestskillpoints, highestskillpointsclient, j, teamNum;*/
+		// Nico, removed skills
+		// int highestskillpoints, highestskillpointsclient, j, teamNum;
 
 		trap_GetConfigstring( CS_MULTI_MAPWINNER, cs, sizeof( cs ) );
 		// winner = atoi( Info_ValueForKey( cs, "winner" ) );
 
-		/* Nico, removed LMS
+		// Nico, removed LMS
 		if ( winner == 0 ) {
 			g_axiswins.integer |= ( 1 << g_campaigns[level.currentCampaign].current );
 			trap_Cvar_Set( "g_axiswins", va( "%i", g_axiswins.integer ) );
@@ -2708,13 +2857,13 @@ void LogExit( const char *string ) {
 		}
 
 		trap_SetConfigstring( CS_ROUNDSCORES1, va( "%i", g_axiswins.integer ) );
-		trap_SetConfigstring( CS_ROUNDSCORES2, va( "%i", g_alliedwins.integer ) );*/
+		trap_SetConfigstring( CS_ROUNDSCORES2, va( "%i", g_alliedwins.integer ) );
 
 		//bani - #113
 		bani_storemapxp();
 
 		// award medals
-		/* Nico, removed skills
+		// Nico, removed skills
 		for ( teamNum = TEAM_AXIS; teamNum <= TEAM_ALLIES; teamNum++ ) {
 			for ( i = 0; i < SK_NUM_SKILLS; i++ ) {
 				highestskillpoints = 0;
@@ -2751,10 +2900,10 @@ void LogExit( const char *string ) {
 					}
 				}
 			}
-		}*/
+		}
 	}
 	
-	/* Nico, removed LMS
+	// Nico, removed LMS
 	else if ( g_gametype.integer == GT_WOLF_LMS ) {
 		int winner;
 		int roundLimit = g_lms_roundlimit.integer < 3 ? 3 : g_lms_roundlimit.integer;
@@ -2795,16 +2944,16 @@ void LogExit( const char *string ) {
 			trap_Cvar_Set( "g_currentRound", va( "%i", g_currentRound.integer + 1 ) );
 			trap_Cvar_Update( &g_currentRound );
 		}
-	}*/
+	}
 	else if ( g_gametype.integer == GT_WOLF ) {
 
 		//bani - #113
 		bani_storemapxp();
 	}
 
-	/* Nico, removed endgame
-	G_BuildEndgameStats();*/
-}
+	// Nico, removed endgame
+	// G_BuildEndgameStats();
+}*/
 
 
 /* Nico, removed intermission
@@ -3052,22 +3201,23 @@ FUNCTIONS CALLED EVERY FRAME
 ========================================================================
 */
 
+/* Nico, removed gametypes
 void CheckWolfMP() {
 	// check because we run 6 game frames before calling Connect and/or ClientBegin
 	// for clients on a map_restart
 	if ( g_gametype.integer >= GT_WOLF ) {
-		/* Nico, removed intermission
-		if ( g_gamestate.integer == GS_PLAYING || g_gamestate.integer == GS_INTERMISSION ) {*/
+		// Nico, removed intermission
+		// if ( g_gamestate.integer == GS_PLAYING || g_gamestate.integer == GS_INTERMISSION ) {
 		if ( g_gamestate.integer == GS_PLAYING ) {
-			/* Nico, removed intermission
-			if ( level.intermissiontime && g_gamestate.integer != GS_INTERMISSION ) {
-				trap_Cvar_Set( "gamestate", va( "%i", GS_INTERMISSION ) );
-			}*/
+			// Nico, removed intermission
+			// if ( level.intermissiontime && g_gamestate.integer != GS_INTERMISSION ) {
+			//	trap_Cvar_Set( "gamestate", va( "%i", GS_INTERMISSION ) );
+			// }
 			return;
 		}
 
 		// check warmup latch
-		/* Nico, removed warmup
+		// Nico, removed warmup
 		if ( g_gamestate.integer == GS_WARMUP ) {
 			if ( !g_doWarmup.integer ||
 				 ( level.numPlayingClients >= match_minplayers.integer &&
@@ -3090,9 +3240,9 @@ void CheckWolfMP() {
 				level.restarted = qtrue;
 				return;
 			}
-		}*/
+		}
 	}
-}
+}*/
 
 /*
 ==================
@@ -3641,7 +3791,8 @@ void G_RunFrame( int levelTime ) {
 	}
 
 	// NERVE - SMF
-	CheckWolfMP();
+	/* Nico, removed gametypes
+	CheckWolfMP();*/
 
 	// see if it is time to end the level
 	/* Nico, commented because it does nothing
@@ -3665,10 +3816,11 @@ void G_RunFrame( int levelTime ) {
 }
 
 // Is this a single player type game - sp or coop?
+/* Nico, removed gametypes
 qboolean G_IsSinglePlayerGame() {
 	if ( g_gametype.integer == GT_SINGLE_PLAYER || g_gametype.integer == GT_COOP ) {
 		return qtrue;
 	}
 
 	return qfalse;
-}
+}*/

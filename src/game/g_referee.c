@@ -268,10 +268,11 @@ void G_refPlayerPut_cmd( gentity_t *ent, int team_id ) {
 	gentity_t *player;
 
 	// Works for teamplayish matches
+	/* Nico, removed gametypes
 	if ( g_gametype.integer < GT_WOLF ) {
 		G_refPrintf( ent, "\"put[allies|axis]\" only for team-based games!" );
 		return;
-	}
+	}*/
 
 	// Find the player to place.
 	trap_Argv( 2, arg, sizeof( arg ) );
@@ -319,10 +320,11 @@ void G_refRemove_cmd( gentity_t *ent ) {
 	gentity_t *player;
 
 	// Works for teamplayish matches
+	/* Nico, removed gametypes
 	if ( g_gametype.integer < GT_WOLF ) {
 		G_refPrintf( ent, "\"remove\" only for team-based games!" );
 		return;
-	}
+	}*/
 
 	// Find the player to remove.
 	trap_Argv( 2, arg, sizeof( arg ) );

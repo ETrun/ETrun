@@ -43,14 +43,15 @@ static int sortedFireTeamClients[MAX_CLIENTS];
 ****/
 
 int QDECL CG_SortFireTeam( const void *a, const void *b ) {
-	clientInfo_t    *ca, *cb;
+	// clientInfo_t    *ca, *cb; Nico, unused warning fix
 	int cna, cnb;
 
 	cna = *(int*)a;
 	cnb = *(int*)b;
 
-	ca = &cgs.clientinfo[cna];
-	cb = &cgs.clientinfo[cnb];
+	// Nico, unused warning fix
+	// ca = &cgs.clientinfo[cna];
+	// cb = &cgs.clientinfo[cnb];
 
 	// Not on our team, so shove back
 	if ( !CG_IsOnSameFireteam( cnb, cg.clientNum ) ) {
@@ -69,20 +70,13 @@ int QDECL CG_SortFireTeam( const void *a, const void *b ) {
 	}
 
 	// Then higher ranks
+	/* Nico, removed rank
 	if ( ca->rank > cb->rank ) {
 		return -1;
 	}
 	if ( cb->rank > ca->rank ) {
 		return 1;
-	}
-
-	// Then score
-/*	if ( ca->score > cb->score ) {
-		return -1;
-	}
-	if ( cb->score > ca->score ) {
-		return 1;
-	}*/                                                                                            // not atm
+	}*/
 
 	return 0;
 }
@@ -96,12 +90,6 @@ void CG_SortClientFireteam() {
 	}
 
 	qsort( sortedFireTeamClients, MAX_CLIENTS, sizeof( sortedFireTeamClients[0] ), CG_SortFireTeam );
-
-/*	for(i = 0; i < MAX_CLIENTS; i++) {
-		CG_Printf( "%i ", sortedFireTeamClients[i] );
-	}
-
-	CG_Printf( "\n" );*/
 }
 
 // Parses fireteam servercommand
@@ -331,22 +319,12 @@ void CG_DrawFireTeamOverlay( rectDef_t* rect ) {
 		CG_Text_Paint_Ext( x, y + FT_BAR_HEIGHT, .2f, .2f, tclr, BG_ClassLetterForNumber( ci->cls ), 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont2 );
 		x += 10;
 
+		/* Nico, removed rankNames
 		CG_Text_Paint_Ext( x, y + FT_BAR_HEIGHT, .2f, .2f, tclr, ci->team == TEAM_AXIS ? miniRankNames_Axis[ci->rank] : miniRankNames_Allies[ci->rank], 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont2 );
-		x += 22;
+		x += 22;*/
 
 		CG_Text_Paint_Ext( x, y + FT_BAR_HEIGHT, .2f, .2f, tclr, ci->name, 0, 17, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont2 );
 		x += 90;
-
-/*		CG_DrawPic(x + 2, y + 2, FT_BAR_HEIGHT - 4, FT_BAR_HEIGHT - 4, cgs.media.movementAutonomyIcons[0]);
-		x += FT_BAR_HEIGHT;
-
-		CG_DrawPic(x + 2, y + 2, FT_BAR_HEIGHT - 4, FT_BAR_HEIGHT - 4, cgs.media.weaponAutonomyIcons[0]);
-		x += FT_BAR_HEIGHT;
-		x += 4;*/
-
-/*		if( isLeader ) {
-			CG_Text_Paint_Ext(x, y + FT_BAR_HEIGHT, .2f, .2f, tclr, va("%i", i+4), 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont2 );
-		}*/
 		x += 20;
 
 		if ( ci->health > 80 ) {
@@ -356,7 +334,6 @@ void CG_DrawFireTeamOverlay( rectDef_t* rect ) {
 		} else {
 			CG_Text_Paint_Ext( x, y + FT_BAR_HEIGHT,  .2f, .2f, colorRed, va( "%i", ci->health < 0 ? 0 : ci->health ), 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont2 );
 		}
-		//x += 20;
 
 		{
 			vec2_t loc;

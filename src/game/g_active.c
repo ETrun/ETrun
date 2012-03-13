@@ -216,20 +216,21 @@ qboolean ClientNeedsAmmo( int client ) {
 }*/
 
 // Does ent have enough "energy" to call artillery?
+/* Nico, removed airstrikes
 qboolean ReadyToCallArtillery( gentity_t* ent ) {
 
-	/* Nico, removed skills
-	if ( ent->client->sess.skill[SK_SIGNALS] >= 2 ) {
-		if ( level.time - ent->client->ps.classWeaponTime <= ( level.lieutenantChargeTime[ent->client->sess.sessionTeam - 1] * 0.66f ) ) {
-			return qfalse;
-		}
-	} else */
+	// Nico, removed skills
+	// if ( ent->client->sess.skill[SK_SIGNALS] >= 2 ) {
+	//	if ( level.time - ent->client->ps.classWeaponTime <= ( level.lieutenantChargeTime[ent->client->sess.sessionTeam - 1] * 0.66f ) ) {
+	//		return qfalse;
+	//	}
+	// } else
 	if ( level.time - ent->client->ps.classWeaponTime <= level.lieutenantChargeTime[ent->client->sess.sessionTeam - 1] ) {
 		return qfalse;
 	}
 
 	return qtrue;
-}
+}*/
 
 
 // Are we ready to construct?  Optionally, will also update the time while we are constructing
@@ -403,9 +404,12 @@ void SpectatorThink( gentity_t *ent, usercmd_t *ucmd ) {
 	// something completely bogus
 	crosshairEnt = &g_entities[ent->client->ps.identifyClient];
 
+	/* Nico, removed disguise stuff
 	if ( crosshairEnt->inuse && crosshairEnt->client &&
 		 ( ent->client->sess.sessionTeam == crosshairEnt->client->sess.sessionTeam ||
-		   crosshairEnt->client->ps.powerups[PW_OPS_DISGUISED] ) ) {
+		   crosshairEnt->client->ps.powerups[PW_OPS_DISGUISED] ) ) {*/
+	if ( crosshairEnt->inuse && crosshairEnt->client &&
+		 ( ent->client->sess.sessionTeam == crosshairEnt->client->sess.sessionTeam ) ) {
 
 		// rain - identifyClientHealth sent as unsigned char, so we
 		// can't transmit negative numbers
@@ -670,7 +674,8 @@ void ClientEvents( gentity_t *ent, int oldEventSequence ) {
 		case EV_FIRE_WEAPON_MG42:
 
 			// Gordon: reset player disguise on stealing docs
-			ent->client->ps.powerups[PW_OPS_DISGUISED] = 0;
+			/* Nico, removed disguise stuff
+			ent->client->ps.powerups[PW_OPS_DISGUISED] = 0;*/
 
 			mg42_fire( ent );
 
@@ -682,7 +687,8 @@ void ClientEvents( gentity_t *ent, int oldEventSequence ) {
 			break;
 		case EV_FIRE_WEAPON_MOUNTEDMG42:
 			// Gordon: reset player disguise on stealing docs
-			ent->client->ps.powerups[PW_OPS_DISGUISED] = 0;
+			/* Nico, removed disguise stuff
+			ent->client->ps.powerups[PW_OPS_DISGUISED] = 0;*/
 
 			mountedmg42_fire( ent );
 			// Only 1 stats bin for mg42
@@ -695,7 +701,8 @@ void ClientEvents( gentity_t *ent, int oldEventSequence ) {
 		case EV_FIRE_WEAPON_AAGUN:
 
 			// Gordon: reset player disguise on stealing docs
-			ent->client->ps.powerups[PW_OPS_DISGUISED] = 0;
+			/* Nico, removed disguise stuff
+			ent->client->ps.powerups[PW_OPS_DISGUISED] = 0;*/
 
 			aagun_fire( ent );
 			break;
@@ -909,10 +916,15 @@ void ClientThink_real( gentity_t *ent ) {
 	}
 
 	client->ps.aiState = AISTATE_COMBAT;
-	client->ps.gravity = g_gravity.value;
+
+	/* Nico, g_gravity is hardcoded as DEFAULT_GRAVITY
+	client->ps.gravity = g_gravity.value;*/
+	client->ps.gravity = DEFAULT_GRAVITY;
 
 	// set speed
-	client->ps.speed = g_speed.value;
+	/* Nico, g_speed is now hardcoded as DEFAULT_SPEED
+	client->ps.speed = g_speed.value;*/
+	client->ps.speed = DEFAULT_SPEED;
 
 	if ( client->speedScale ) {              // Goalitem speed scale
 		client->ps.speed *= ( client->speedScale * 0.01 );
@@ -957,7 +969,9 @@ void ClientThink_real( gentity_t *ent ) {
 	VectorCopy( client->ps.origin, client->oldOrigin );
 
 	// NERVE - SMF
-	pm.gametype = g_gametype.integer;
+	/* Nico, removed (c)g_gametype
+	pm.gametype = g_gametype.integer;*/
+
 	pm.ltChargeTime = level.lieutenantChargeTime[client->sess.sessionTeam - 1];
 	pm.soldierChargeTime = level.soldierChargeTime[client->sess.sessionTeam - 1];
 	pm.engineerChargeTime = level.engineerChargeTime[client->sess.sessionTeam - 1];
@@ -1507,7 +1521,10 @@ void ClientEndFrame( gentity_t *ent ) {
 			 || i == PW_OPS_CLASS_1
 			 || i == PW_OPS_CLASS_2
 			 || i == PW_OPS_CLASS_3
-			 || i == PW_OPS_DISGUISED
+
+			 /* Nico, removed disguise stuff
+			 || i == PW_OPS_DISGUISED*/
+
 			 ) {
 
 			continue;

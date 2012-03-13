@@ -48,14 +48,14 @@ void G_loadMatchGame( void ) {
 	unsigned int aRandomValues[MAX_REINFSEEDS];
 	char strReinfSeeds[MAX_STRING_CHARS];
 
-
+	/* Nico, removed serverflags
 	if ( server_autoconfig.integer > 0 && ( !( z_serverflags.integer & ZSF_COMP ) || level.newSession ) ) {
 
-		/* Nico, removed g_config.c
-		G_configSet( g_gametype.integer, ( server_autoconfig.integer == 1 ) );*/
+		// Nico, removed g_config.c
+		// G_configSet( g_gametype.integer, ( server_autoconfig.integer == 1 ) );
 
 		trap_Cvar_Set( "z_serverflags", va( "%d", z_serverflags.integer | ZSF_COMP ) );
-	}
+	}*/
 
 	G_Printf( "Setting MOTD...\n" );
 	trap_SetConfigstring( CS_CUSTMOTD + 0, server_motd0.string );
@@ -115,6 +115,7 @@ void G_delayPrint( gentity_t *dpent ) {
 	switch ( dpent->spawnflags ) {
 	case DP_PAUSEINFO:
 	{
+		/* Nico, removed match_* cvars
 		if ( level.match_pause > PAUSE_UNPAUSING ) {
 			int cSeconds = match_timeoutlength.integer * 1000 - ( level.time - dpent->timestamp );
 
@@ -128,7 +129,7 @@ void G_delayPrint( gentity_t *dpent ) {
 				G_globalSound( "sound/osp/prepare.wav" );
 				G_spawnPrintf( DP_UNPAUSING, level.time + 10, NULL );
 			}
-		}
+		}*/
 		break;
 	}
 
@@ -722,11 +723,17 @@ void G_matchInfoDump( unsigned int dwDumpType ) {
 int G_checkServerToggle( vmCvar_t *cv ) {
 	int nFlag;
 
+	/* Nico, removed match_* cvars
 	if ( cv == &match_mutespecs ) {
 		nFlag = CV_SVS_MUTESPECS;
-	} else if ( cv == &g_friendlyFire ) {
+	} else */
+	
+	/* Nico, no friendlyfire
+	if ( cv == &g_friendlyFire ) {
 		nFlag = CV_SVS_FRIENDLYFIRE;
-	} else if ( cv == &g_antilag ) {
+	} else */
+	
+	if ( cv == &g_antilag ) {
 		nFlag = CV_SVS_ANTILAG;
 	}
 	
@@ -747,21 +754,28 @@ int G_checkServerToggle( vmCvar_t *cv ) {
 		}
 	}*/
 
-	else if ( cv == &g_nextmap && g_gametype.integer != GT_WOLF_CAMPAIGN ) {
+	/* Nico, removed gametypes
+	else if ( cv == &g_nextmap && g_gametype.integer != GT_WOLF_CAMPAIGN ) {*/
+	else if ( cv == &g_nextmap ) {
 		if ( *cv->string ) {
 			level.server_settings |= CV_SVS_NEXTMAP;
 		} else {
 			level.server_settings &= ~CV_SVS_NEXTMAP;
 		}
 		return( qtrue );
-	} else if ( cv == &g_nextcampaign && g_gametype.integer == GT_WOLF_CAMPAIGN ) {
+	} 
+
+	/* Nico, removed gametypes
+	else if ( cv == &g_nextcampaign && g_gametype.integer == GT_WOLF_CAMPAIGN ) {
 		if ( *cv->string ) {
 			level.server_settings |= CV_SVS_NEXTMAP;
 		} else {
 			level.server_settings &= ~CV_SVS_NEXTMAP;
 		}
 		return( qtrue );
-	} else {return( qfalse );}
+	}*/
+
+	else {return( qfalse );}
 
 	if ( cv->integer > 0 ) {
 		level.server_settings |= nFlag;
@@ -860,17 +874,21 @@ qboolean G_allowPanzer(gentity_t *ent)
 }
 */
 
+/* Nico, removed currentRound
 void G_resetRoundState( void ) {
-	if ( g_gametype.integer == GT_WOLF_STOPWATCH ) {
-		trap_Cvar_Set( "g_currentRound", "0" );
-	}
+
+	// Nico, removed gametypes
+	// if ( g_gametype.integer == GT_WOLF_STOPWATCH ) {
+		//Nico, removed currentRound
+		//	trap_Cvar_Set( "g_currentRound", "0" );
+	// }
 	
-	/* Nico, removed LMS
-	else if ( g_gametype.integer == GT_WOLF_LMS ) {
-		trap_Cvar_Set( "g_currentRound", "0" );
-		trap_Cvar_Set( "g_lms_currentMatch", "0" );
-	}*/
-}
+	// Nico, removed LMS
+	// else if ( g_gametype.integer == GT_WOLF_LMS ) {
+	//	trap_Cvar_Set( "g_currentRound", "0" );
+	//	trap_Cvar_Set( "g_lms_currentMatch", "0" );
+	// }
+}*/
 
 /* Nico, removed LMS
 void G_resetModeState( void ) {

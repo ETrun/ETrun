@@ -305,13 +305,14 @@ void G_ExplodeMissile( gentity_t *ent ) {
 	int etype;
 
 
+	/* Nico, removed airstrikes
 	if ( ent->s.weapon == WP_SMOKE_MARKER && ent->active ) {
 		if ( ent->s.teamNum == TEAM_AXIS ) {
 			level.numActiveAirstrikes[0]--;
 		} else {
 			level.numActiveAirstrikes[1]--;
 		}
-	}
+	}*/
 
 	etype = ent->s.eType;
 	ent->s.eType = ET_GENERAL;
@@ -436,9 +437,14 @@ void G_ExplodeMissile( gentity_t *ent ) {
 
 
 		// give big weapons the shakey shakey
+		/* Nico, removed airstrikes
 		if ( ent->s.weapon == WP_DYNAMITE || ent->s.weapon == WP_PANZERFAUST || ent->s.weapon == WP_GRENADE_LAUNCHER ||
 			 ent->s.weapon == WP_GRENADE_PINEAPPLE || ent->s.weapon == WP_MAPMORTAR || ent->s.weapon == WP_ARTY || ent->s.weapon == WP_SMOKE_MARKER
-			 || ent->s.weapon == WP_LANDMINE || ent->s.weapon == WP_SATCHEL || ent->s.weapon == WP_TRIPMINE /*|| ent->s.weapon == WP_SMOKE_BOMB*/
+			 || ent->s.weapon == WP_LANDMINE || ent->s.weapon == WP_SATCHEL || ent->s.weapon == WP_TRIPMINE
+			 ) {*/
+		if ( ent->s.weapon == WP_DYNAMITE || ent->s.weapon == WP_PANZERFAUST || ent->s.weapon == WP_GRENADE_LAUNCHER ||
+			 ent->s.weapon == WP_GRENADE_PINEAPPLE || ent->s.weapon == WP_MAPMORTAR || ent->s.weapon == WP_LANDMINE || 
+			 ent->s.weapon == WP_SATCHEL || ent->s.weapon == WP_TRIPMINE
 			 ) {
 
 			gentity_t* tent = G_TempEntity( ent->r.currentOrigin, EV_SHAKE );
@@ -932,10 +938,9 @@ void G_BurnTarget( gentity_t *self, gentity_t *body, qboolean directhit ) {
 			return;
 		}
 
-//		if( !self->count2 && body == self->parent )
-//			return;
-
-		if ( !( g_friendlyFire.integer ) && OnSameTeam( body, self->parent ) ) {
+		/* Nico, no friendlyfire
+		if ( !( g_friendlyFire.integer ) && OnSameTeam( body, self->parent ) ) {*/
+		if ( OnSameTeam( body, self->parent ) ) {
 			return;
 		}
 	}
@@ -1341,6 +1346,7 @@ qboolean G_SweepForLandmines( vec3_t origin, float radius, int team ) {
 	return( qfalse );
 }
 
+/* Nico, removed satchel
 gentity_t *G_FindSatchel( gentity_t* ent ) {
 	gentity_t* e;
 	int i;
@@ -1367,7 +1373,7 @@ gentity_t *G_FindSatchel( gentity_t* ent ) {
 	}
 
 	return NULL;
-}
+}*/
 
 /*
 ==========
@@ -1604,10 +1610,6 @@ void G_LandmineThink( gentity_t *self ) {
 		if ( !ent->client ) {
 			continue;
 		}
-
-		//%	if( !g_friendlyFire.integer && G_LandmineTeam( self ) == ent->client->sess.sessionTeam ) {
-		//%		continue;
-		//%	}
 
 		// TAT 11/20/2002 use the unified trigger check to see if we are close enough to prime the mine
 		if ( sEntWillTriggerMine( ent, self ) ) {

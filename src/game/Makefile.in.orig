@@ -72,6 +72,31 @@ am__installdirs = "$(DESTDIR)$(libdir)"
 LTLIBRARIES = $(lib_LTLIBRARIES)
 libgame_la_LIBADD =
 am_libgame_la_OBJECTS = libgame_la-bg_animation.lo \
+<<<<<<< HEAD
+	libgame_la-bg_animgroup.lo libgame_la-bg_campaign.lo \
+	libgame_la-bg_character.lo libgame_la-bg_classes.lo \
+	libgame_la-bg_misc.lo libgame_la-bg_pmove.lo \
+	libgame_la-bg_slidemove.lo libgame_la-bg_sscript.lo \
+	libgame_la-bg_tracemap.lo libgame_la-g_active.lo \
+	libgame_la-g_alarm.lo libgame_la-g_antilag.lo \
+	libgame_la-g_character.lo libgame_la-g_client.lo \
+	libgame_la-g_cmds.lo libgame_la-g_cmds_ext.lo \
+	libgame_la-g_combat.lo libgame_la-g_fireteams.lo \
+	libgame_la-g_items.lo libgame_la-g_main.lo \
+	libgame_la-g_match.lo libgame_la-g_mem.lo libgame_la-g_misc.lo \
+	libgame_la-g_missile.lo libgame_la-g_mover.lo \
+	libgame_la-g_props.lo libgame_la-g_referee.lo \
+	libgame_la-g_script.lo libgame_la-g_script_actions.lo \
+	libgame_la-g_session.lo libgame_la-g_spawn.lo \
+	libgame_la-g_sv_entities.lo libgame_la-g_svcmds.lo \
+	libgame_la-g_syscalls.lo libgame_la-g_systemmsg.lo \
+	libgame_la-g_target.lo libgame_la-g_team.lo \
+	libgame_la-g_teammapdata.lo libgame_la-g_trigger.lo \
+	libgame_la-g_utils.lo libgame_la-g_vote.lo \
+	libgame_la-g_weapon.lo libgame_la-q_math.lo \
+	libgame_la-q_shared.lo libgame_la-g_buddy_list.lo \
+	libgame_la-g_construction.lo
+=======
 	libgame_la-bg_animgroup.lo libgame_la-bg_character.lo \
 	libgame_la-bg_classes.lo libgame_la-bg_misc.lo \
 	libgame_la-bg_pmove.lo libgame_la-bg_slidemove.lo \
@@ -94,6 +119,7 @@ am_libgame_la_OBJECTS = libgame_la-bg_animation.lo \
 	libgame_la-g_vote.lo libgame_la-g_weapon.lo \
 	libgame_la-q_math.lo libgame_la-q_shared.lo \
 	libgame_la-g_buddy_list.lo libgame_la-g_construction.lo
+>>>>>>> removing_gametypes
 libgame_la_OBJECTS = $(am_libgame_la_OBJECTS)
 libgame_la_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
 	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(libgame_la_CFLAGS) \

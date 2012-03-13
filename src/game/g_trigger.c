@@ -229,7 +229,11 @@ void AimAtTarget( gentity_t *self ) {
 	}
 
 	height = ent->s.origin[2] - origin[2];
-	gravity = g_gravity.value;
+
+	/* Nico, g_gravity is hardcoded as DEFAULT_GRAVITY
+	gravity = g_gravity.value;*/
+	gravity = DEFAULT_GRAVITY;
+
 	time = sqrt( fabs( height / ( 0.5f * gravity ) ) );
 	if ( !time ) {
 		G_FreeEntity( self );
@@ -926,10 +930,12 @@ void trigger_aidoor_stayopen( gentity_t * ent, gentity_t * other, trace_t * trac
 
 
 	// only use this in single player. It was taken out of multiplayer, and I'm guessing there was a good reason.
-	if ( g_gametype.integer != GT_SINGLE_PLAYER && g_gametype.integer != GT_COOP ) {
+	/* Nico, removed gametypes
+	if ( g_gametype.integer != GT_SINGLE_PLAYER && g_gametype.integer != GT_COOP ) {*/
 		return;
-	}
+	// }
 
+	// Nico, note: below is dead code #FIXME
 
 	// FIXME: port this code over to moving doors (use MOVER_POSx instead of MOVER_POSxROTATE)
 	if ( other->client && other->health > 0 ) {

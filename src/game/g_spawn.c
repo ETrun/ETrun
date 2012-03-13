@@ -212,10 +212,11 @@ void SP_info_player_deathmatch( gentity_t *ent );
 
 void SP_info_player_intermission( gentity_t *ent );// Nico, note: keep this
 
+/* Nico, removed unused podium stuff
 void SP_info_firstplace( gentity_t *ent );
 void SP_info_secondplace( gentity_t *ent );
 void SP_info_thirdplace( gentity_t *ent );
-void SP_info_podium( gentity_t *ent );
+void SP_info_podium( gentity_t *ent );*/
 
 void SP_func_plat( gentity_t *ent );
 void SP_func_static( gentity_t *ent );
@@ -814,9 +815,12 @@ void G_SpawnGEntityFromSpawnVars( void ) {
 		if ( strstr( str, "allies" ) ) {
 			ent->allowteams |= ALLOW_ALLIED_TEAM;
 		}
+
+		/* Nico, removed disguise stuff
 		if ( strstr( str, "cvops" ) ) {
 			ent->allowteams |= ALLOW_DISGUISED_CVOPS;
-		}
+		}*/
+
 	}
 
 	if ( ent->targetname && *ent->targetname ) {
@@ -963,8 +967,9 @@ void SP_worldspawn( void ) {
 
 	trap_SetConfigstring( CS_MOTD, g_motd.string );     // message of the day
 
+	/* Nico, g_gravity is hardcoded as DEFAULT_GRAVITY
 	G_SpawnString( "gravity", "800", &s );
-	trap_Cvar_Set( "g_gravity", s );
+	trap_Cvar_Set( "g_gravity", s );*/
 
 	G_SpawnString( "spawnflags", "0", &s );
 	g_entities[ENTITYNUM_WORLD].spawnflags = atoi( s );

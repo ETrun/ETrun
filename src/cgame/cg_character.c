@@ -407,7 +407,7 @@ qboolean CG_RegisterCharacter( const char *characterFile, bg_character_t *charac
 }
 
 bg_character_t *CG_CharacterForClientinfo( clientInfo_t *ci, centity_t *cent ) {
-	int team, cls;
+	// int team, cls; Nico, unused warning fix
 
 	if ( cent && cent->currentState.eType == ET_CORPSE ) {
 		if ( cent->currentState.onFireStart >= 0 ) {
@@ -421,13 +421,14 @@ bg_character_t *CG_CharacterForClientinfo( clientInfo_t *ci, centity_t *cent ) {
 		}
 	}
 
+	/* Nico, removed disguise stuff
 	if ( cent && cent->currentState.powerups & ( 1 << PW_OPS_DISGUISED ) ) {
 		team = ci->team == TEAM_AXIS ? TEAM_ALLIES : TEAM_AXIS;
 
 		cls = ( cent->currentState.powerups >> PW_OPS_CLASS_1 ) & 7;
 
 		return BG_GetCharacter( team, cls );
-	}
+	}*/
 
 	if ( ci->character ) {
 		return ci->character;
@@ -437,6 +438,7 @@ bg_character_t *CG_CharacterForClientinfo( clientInfo_t *ci, centity_t *cent ) {
 }
 
 bg_character_t *CG_CharacterForPlayerstate( playerState_t* ps ) {
+	/* Nico, removed disguise stuff
 	int team, cls;
 
 	if ( ps->powerups[PW_OPS_DISGUISED] ) {
@@ -454,7 +456,7 @@ bg_character_t *CG_CharacterForPlayerstate( playerState_t* ps ) {
 		}
 
 		return BG_GetCharacter( team, cls );
-	}
+	}*/
 
 	return BG_GetCharacter( cgs.clientinfo[ps->clientNum].team, cgs.clientinfo[ps->clientNum].cls );
 }

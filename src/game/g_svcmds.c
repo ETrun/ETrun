@@ -665,12 +665,13 @@ void Svcmd_ResetMatch_f( qboolean fDoReset, qboolean fDoRestart ) {
 		g_entities[level.sortedClients[i]].client->pers.ready = 0;
 	}
 
+	/* Nico, removed currentRound
 	if ( fDoReset ) {
 		G_resetRoundState();
 
-		/* Nico, removed LMS
-		G_resetModeState();*/
-	}
+		// Nico, removed LMS
+		// G_resetModeState();
+	}*/
 
 	if ( fDoRestart ) {
 		/* Nico, removed warmup
@@ -711,22 +712,26 @@ Svcmd_ShuffleTeams_f
 OSP - randomly places players on teams
 ====================
 */
+/* Nico, removed shuffleteam
 void Svcmd_ShuffleTeams_f( void ) {
-	G_resetRoundState();
+
+	// Nico, removed currentRound
+	// G_resetRoundState();
+
 	G_shuffleTeams();
 
 	if ( ( g_gamestate.integer == GS_INITIALIZE ) ||
-		/* Nico, removed warmup
-		 ( g_gamestate.integer == GS_WARMUP ) ||*/
+		// Nico, removed warmup
+		// ( g_gamestate.integer == GS_WARMUP ) ||
 		 ( g_gamestate.integer == GS_RESET ) ) {
 		return;
 	}
 
-	/* Nico, removed LMS
-	G_resetModeState();*/
+	// Nico, removed LMS
+	// G_resetModeState();
 
 	Svcmd_ResetMatch_f( qfalse, qtrue );
-}
+}*/
 
 /* Nico, removed campaign client command
 void Svcmd_Campaign_f( void ) {
@@ -1052,10 +1057,11 @@ qboolean    ConsoleCommand( void ) {
 		return qtrue;
 	}*/
 
+	/* Nico, removed shuffleteam
 	if ( Q_stricmp( cmd, "shuffle_teams" ) == 0 ) {
 		Svcmd_ShuffleTeams_f();
 		return qtrue;
-	}
+	}*/
 
 	// -NERVE - SMF
 

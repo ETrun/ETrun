@@ -200,7 +200,9 @@ vmCvar_t cg_wolfparticles;
 // done
 
 // Ridah
-vmCvar_t cg_gameType;
+/* Nico, removed (c)g_gametype
+vmCvar_t cg_gameType;*/
+
 vmCvar_t cg_bloodTime;
 vmCvar_t cg_norender;
 vmCvar_t cg_skybox;
@@ -210,7 +212,10 @@ vmCvar_t cg_message;
 vmCvar_t cg_messageType;
 vmCvar_t cg_messagePlayer;
 vmCvar_t cg_messagePlayerName;
-vmCvar_t cg_movespeed;
+
+/* Nico, removed (c)g_movespeed
+vmCvar_t cg_movespeed;*/
+
 vmCvar_t cg_cameraMode;
 vmCvar_t cg_cameraOrbit;
 vmCvar_t cg_cameraOrbitDelay;
@@ -253,7 +258,10 @@ vmCvar_t cg_autoAction;
 vmCvar_t cg_autoReload;
 vmCvar_t cg_bloodDamageBlend;
 vmCvar_t cg_bloodFlash;
-vmCvar_t cg_complaintPopUp;
+
+/* Nico, removed complaints
+vmCvar_t cg_complaintPopUp;*/
+
 vmCvar_t cg_crosshairAlpha;
 vmCvar_t cg_crosshairAlphaAlt;
 vmCvar_t cg_crosshairColor;
@@ -421,7 +429,6 @@ cvarTable_t cvarTable[] = {
 	{ &cg_timescaleFadeEnd, "cg_timescaleFadeEnd", "1", 0},
 	{ &cg_timescaleFadeSpeed, "cg_timescaleFadeSpeed", "0", 0},
 	{ &cg_timescale, "timescale", "1", 0},
-//	{ &cg_smoothClients, "cg_smoothClients", "0", CVAR_USERINFO | CVAR_ARCHIVE},
 	{ &cg_cameraMode, "com_cameraMode", "0", CVAR_CHEAT},
 
 	{ &pmove_fixed, "pmove_fixed", "0", 0},
@@ -447,14 +454,19 @@ cvarTable_t cvarTable[] = {
 
 	// Rafael - particle switch
 	{ &cg_wolfparticles, "cg_wolfparticles", "1", CVAR_ARCHIVE },
-	{ &cg_gameType, "g_gametype", "0", 0 }, // communicated by systeminfo
+
+	/* Nico, removed (c)g_gametype
+	{ &cg_gameType, "g_gametype", "0", 0 }, // communicated by systeminfo*/
+
 	{ &cg_norender, "cg_norender", "0", 0 },  // only used during single player, to suppress rendering until the server is ready
 
 	/* Nico, instant reswawn
 	{ &cg_bluelimbotime,        "", "30000", 0 }, // communicated by systeminfo
 	{ &cg_redlimbotime,         "", "30000", 0 }, // communicated by systeminfo*/
 
-	{ &cg_movespeed, "g_movespeed", "76", 0 }, // actual movespeed of player
+	/* Nico, removed (c)g_movespeed
+	{ &cg_movespeed, "g_movespeed", "76", 0 }, // actual movespeed of player*/
+
 	{ &cg_animState, "cg_animState", "0", CVAR_CHEAT},
 	{ &cg_drawCompass, "cg_drawCompass", "1", CVAR_ARCHIVE },
 	{ &cg_drawNotifyText, "cg_drawNotifyText", "1", CVAR_ARCHIVE },
@@ -474,7 +486,10 @@ cvarTable_t cvarTable[] = {
 	{ &cg_autoReload, "cg_autoReload", "1", CVAR_ARCHIVE },
 	{ &cg_bloodDamageBlend, "cg_bloodDamageBlend", "1.0", CVAR_ARCHIVE },
 	{ &cg_bloodFlash, "cg_bloodFlash", "1.0", CVAR_ARCHIVE },
-	{ &cg_complaintPopUp, "cg_complaintPopUp", "1", CVAR_ARCHIVE },
+
+	/* Nico, removed complaints
+	{ &cg_complaintPopUp, "cg_complaintPopUp", "1", CVAR_ARCHIVE },*/
+
 	{ &cg_crosshairAlpha, "cg_crosshairAlpha", "1.0", CVAR_ARCHIVE },
 	{ &cg_crosshairAlphaAlt, "cg_crosshairAlphaAlt", "1.0", CVAR_ARCHIVE },
 	{ &cg_crosshairColor, "cg_crosshairColor", "White", CVAR_ARCHIVE },
@@ -1195,6 +1210,7 @@ static void CG_RegisterSounds( void ) {
 	cgs.media.sfx_rockexp =         trap_S_RegisterSound( "sound/weapons/rocket/rocket_expl.wav", qfalse );
 	cgs.media.sfx_rockexpDist =     trap_S_RegisterSound( "sound/weapons/rocket/rocket_expl_far.wav", qfalse );
 
+	/* Nico, removed airstrikes
 	cgs.media.sfx_artilleryExp[0] = trap_S_RegisterSound( "sound/weapons/artillery/artillery_expl_1.wav", qfalse );
 	cgs.media.sfx_artilleryExp[1] = trap_S_RegisterSound( "sound/weapons/artillery/artillery_expl_2.wav", qfalse );
 	cgs.media.sfx_artilleryExp[2] = trap_S_RegisterSound( "sound/weapons/artillery/artillery_expl_3.wav", qfalse );
@@ -1203,7 +1219,7 @@ static void CG_RegisterSounds( void ) {
 	cgs.media.sfx_airstrikeExp[0] = trap_S_RegisterSound( "sound/weapons/airstrike/airstrike_expl_1.wav", qfalse );
 	cgs.media.sfx_airstrikeExp[1] = trap_S_RegisterSound( "sound/weapons/airstrike/airstrike_expl_2.wav", qfalse );
 	cgs.media.sfx_airstrikeExp[2] = trap_S_RegisterSound( "sound/weapons/airstrike/airstrike_expl_3.wav", qfalse );
-	cgs.media.sfx_airstrikeDist =   trap_S_RegisterSound( "sound/weapons/airstrike/airstrike_expl_far.wav", qfalse );
+	cgs.media.sfx_airstrikeDist =   trap_S_RegisterSound( "sound/weapons/airstrike/airstrike_expl_far.wav", qfalse );*/
 
 	cgs.media.sfx_dynamiteexp =     trap_S_RegisterSound( "sound/weapons/dynamite/dynamite_expl.wav", qfalse );
 	cgs.media.sfx_dynamiteexpDist = trap_S_RegisterSound( "sound/weapons/dynamite/dynamite_expl_far.wav", qfalse );
@@ -1261,10 +1277,12 @@ static void CG_RegisterSounds( void ) {
 
 
 	// FIXME: send as a special event
+	/* Nico, removed airstrikes
 	trap_S_RegisterSound( "sound/weapons/artillery/artillery_fly_1.wav", qfalse );
 	trap_S_RegisterSound( "sound/weapons/artillery/artillery_fly_2.wav", qfalse );
 	trap_S_RegisterSound( "sound/weapons/artillery/artillery_fly_3.wav", qfalse );
-	trap_S_RegisterSound( "sound/weapons/airstrike/airstrike_plane.wav", qfalse );
+
+	trap_S_RegisterSound( "sound/weapons/airstrike/airstrike_plane.wav", qfalse );*/
 
 
 	if ( cg_buildScript.integer ) {
@@ -2561,7 +2579,7 @@ Will perform callbacks to make the loading info screen update.
 #endif // _DEBUG
 void CG_Init( int serverMessageNum, int serverCommandSequence, int clientNum, qboolean demoPlayback ) {
 	const char  *s;
-	int i;
+	// int i; Nico, unused warning fix
 #ifdef _DEBUG
 	DEBUG_INITPROFILE_INIT
 #endif // _DEBUG
@@ -2577,9 +2595,10 @@ void CG_Init( int serverMessageNum, int serverCommandSequence, int clientNum, qb
 
 	cgs.initing = qtrue;
 
+	/* Nico, removed airstrikes
 	for ( i = 0; i < MAX_CLIENTS; i++ ) {
 		cg.artilleryRequestTime[i] = -99999;
-	}
+	}*/
 
 	CG_InitStatsDebug();
 
@@ -2637,13 +2656,15 @@ void CG_Init( int serverMessageNum, int serverCommandSequence, int clientNum, qb
 	CG_ParseWolfinfo();     // NERVE - SMF
 
 	cgs.campaignInfoLoaded = qfalse;
+
+	/* Nico, removed gametypes
 	if ( cgs.gametype == GT_WOLF_CAMPAIGN ) {
 		CG_LocateCampaign();
-	/* Nico, removed LMS
-	} else if ( cgs.gametype == GT_WOLF_STOPWATCH || cgs.gametype == GT_WOLF_LMS || cgs.gametype == GT_WOLF ) {*/
-	} else if ( cgs.gametype == GT_WOLF_STOPWATCH || cgs.gametype == GT_WOLF ) {
+	// Nico, removed LMS
+	// } else if ( cgs.gametype == GT_WOLF_STOPWATCH || cgs.gametype == GT_WOLF_LMS || cgs.gametype == GT_WOLF ) {
+	} else if ( cgs.gametype == GT_WOLF_STOPWATCH || cgs.gametype == GT_WOLF ) {*/
 		CG_LocateArena();
-	}
+	// }
 
 	CG_ClearTrails();
 	CG_ClearParticles();
@@ -2746,8 +2767,9 @@ void CG_Init( int serverMessageNum, int serverCommandSequence, int clientNum, qb
 	trap_S_ClearLoopingSounds();
 	trap_S_ClearSounds( qfalse );
 
+	/* Nico, removed rounds
 	cg.teamWonRounds[1] = atoi( CG_ConfigString( CS_ROUNDSCORES1 ) );
-	cg.teamWonRounds[0] = atoi( CG_ConfigString( CS_ROUNDSCORES2 ) );
+	cg.teamWonRounds[0] = atoi( CG_ConfigString( CS_ROUNDSCORES2 ) );*/
 
 	cg.filtercams = atoi( CG_ConfigString( CS_FILTERCAMS ) ) ? qtrue : qfalse;
 
@@ -2769,9 +2791,7 @@ void CG_Init( int serverMessageNum, int serverCommandSequence, int clientNum, qb
 
 	CG_SetupCabinets();
 
-	if ( !CG_IsSinglePlayer() ) {
-		trap_S_FadeAllSound( 1.0f, 0, qfalse );   // fade sound up
-	}
+	trap_S_FadeAllSound( 1.0f, 0, qfalse );   // fade sound up
 
 	// OSP
 	/* Nico, removed statsdump client command
@@ -2796,16 +2816,6 @@ void CG_Shutdown( void ) {
 		trap_Cvar_Set( "timescale", "1" );
 	}
 }
-
-// returns true if game is single player (or coop)
-qboolean CG_IsSinglePlayer( void ) {
-	if ( cg_gameType.integer == GT_SINGLE_PLAYER || cgs.gametype == GT_COOP ) {
-		return qtrue;
-	}
-
-	return qfalse;
-}
-
 
 qboolean CG_CheckExecKey( int key ) {
 	if ( !cg.showFireteamMenu ) {

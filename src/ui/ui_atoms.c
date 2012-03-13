@@ -143,8 +143,9 @@ static void UI_Cache_f() {
 UI_CalcPostGameStats
 =======================
 */
+/* Nico, removed gameStats
 static void UI_CalcPostGameStats() {
-}
+}*/
 
 
 /*
@@ -175,10 +176,11 @@ qboolean UI_ConsoleCommand( int realTime ) {
 		return qtrue;
 	}
 
+	/* Nico, removed gameStats
 	if ( Q_stricmp( cmd, "postgame" ) == 0 ) {
 		UI_CalcPostGameStats();
 		return qtrue;
-	}
+	}*/
 
 	if ( Q_stricmp( cmd, "ui_cache" ) == 0 ) {
 		UI_Cache_f();
@@ -195,6 +197,7 @@ qboolean UI_ConsoleCommand( int realTime ) {
 		return qtrue;
 	}
 
+	/* Nico, removed gametypes
 	if ( Q_stricmp( cmd, "iamacheater" ) == 0 ) {
 		int i;
 
@@ -206,7 +209,7 @@ qboolean UI_ConsoleCommand( int realTime ) {
 			}
 		}
 		return qtrue;
-	}
+	}*/
 
 	trap_GetClientState( &cstate );
 	if ( cstate.connState == CA_DISCONNECTED ) {

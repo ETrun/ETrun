@@ -66,15 +66,15 @@ static void CG_ParseScore( team_t team ) {
 	for ( j = 0; j < numScores; j++ ) {
 		i = cg.numScores;
 
-		cg.scores[i].client = atoi(         CG_Argv( offset + 0 + ( j * 7 ) ) );
+		cg.scores[i].client = atoi(         CG_Argv( offset + 0 + ( j * 5 ) ) );// Nico, *7 => *5
 
 		/* Nico, removed score
 		cg.scores[i].score = atoi(          CG_Argv( offset + 1 + ( j * 7 ) ) );*/
 
-		cg.scores[i].ping = atoi(           CG_Argv( offset + 2 + ( j * 7 ) ) );
-		cg.scores[i].time = atoi(           CG_Argv( offset + 3 + ( j * 7 ) ) );
-		powerups = atoi(                    CG_Argv( offset + 4 + ( j * 7 ) ) );
-		cg.scores[i].playerClass = atoi(    CG_Argv( offset + 5 + ( j * 7 ) ) );
+		cg.scores[i].ping = atoi(           CG_Argv( offset + 1 + ( j * 5 ) ) );// Nico, 2 => 1, *7 => *5
+		cg.scores[i].time = atoi(           CG_Argv( offset + 2 + ( j * 5 ) ) );// Nico, 3 => 2, *7 => *5
+		powerups = atoi(                    CG_Argv( offset + 3 + ( j * 5 ) ) );// Nico, 4 => 3, *7 => *5
+		cg.scores[i].playerClass = atoi(    CG_Argv( offset + 4 + ( j * 5 ) ) );// Nico, 5 => 4, *7 => *5
 
 		/* Nico, removed respawnLeft
 		cg.scores[i].respawnsLeft = atoi(   CG_Argv( offset + 6 + ( j * 7 ) ) );*/
@@ -131,13 +131,21 @@ void CG_ParseServerinfo( void ) {
 	char    *mapname;
 
 	info = CG_ConfigString( CS_SERVERINFO );
-	cg_gameType.integer = cgs.gametype = atoi( Info_ValueForKey( info, "g_gametype" ) );
+
+	/* Nico, removed gametypes
+	cg_gameType.integer = cgs.gametype = atoi( Info_ValueForKey( info, "g_gametype" ) );*/
+
 	cg_antilag.integer = cgs.antilag = atoi( Info_ValueForKey( info, "g_antilag" ) );
 	if ( !cgs.localServer ) {
-		trap_Cvar_Set( "g_gametype", va( "%i", cgs.gametype ) );
+
+		/* Nico, removed gametypes
+		trap_Cvar_Set( "g_gametype", va( "%i", cgs.gametype ) );*/
+
 		trap_Cvar_Set( "g_antilag", va( "%i", cgs.antilag ) );
 		trap_Cvar_Update( &cg_antilag );
-		trap_Cvar_Update( &cg_gameType );
+
+		/* Nico, removed (c)g_gametype
+		trap_Cvar_Update( &cg_gameType );*/
 	}
 
 	/* Nico, no timelimit
@@ -158,7 +166,8 @@ void CG_ParseServerinfo( void ) {
 	cgs.weaponRestrictions = atoi( Info_ValueForKey( info, "g_heavyWeaponRestriction" ) ) * 0.01f;
 
 
-	cgs.minclients = atoi( Info_ValueForKey( info, "g_minGameClients" ) );       // NERVE - SMF -- OSP: overloaded for ready counts
+	/* Nico, removed gameClients limits
+	cgs.minclients = atoi( Info_ValueForKey( info, "g_minGameClients" ) );       // NERVE - SMF -- OSP: overloaded for ready counts*/
 
 	// TTimo - make this available for ingame_callvote
 	trap_Cvar_Set( "cg_ui_voteFlags", ( ( authLevel.integer == RL_NONE ) ? Info_ValueForKey( info, "voteFlags" ) : "0" ) );
@@ -296,18 +305,20 @@ void CG_ParseWolfinfo( void ) {
 
 	info = CG_ConfigString( CS_WOLFINFO );
 
-	cgs.currentRound = atoi( Info_ValueForKey( info, "g_currentRound" ) );
+	/* Nico, removed currentRound
+	cgs.currentRound = atoi( Info_ValueForKey( info, "g_currentRound" ) );*/
 
 	/* Nico, no timelimit
 	cgs.nextTimeLimit = atof( Info_ValueForKey( info, "g_nextTimeLimit" ) );*/
 
 	cgs.gamestate = atoi( Info_ValueForKey( info, "gamestate" ) );
+
+	/* Nico, removed gametypes
 	cgs.currentCampaign = Info_ValueForKey( info, "g_currentCampaign" );
-	cgs.currentCampaignMap = atoi( Info_ValueForKey( info, "g_currentCampaignMap" ) );
+	cgs.currentCampaignMap = atoi( Info_ValueForKey( info, "g_currentCampaignMap" ) );*/
 
 	// OSP - Announce game in progress if we are really playing
 	if ( old_gs != GS_PLAYING && cgs.gamestate == GS_PLAYING ) {
-//		if(cg_announcer.integer > 0) trap_S_StartLocalSound(cgs.media.countFight, CHAN_ANNOUNCER);
 		Pri( "^1FIGHT!\n" );
 		CPri( "^1FIGHT!\n" );
 	}
@@ -538,10 +549,13 @@ void CG_SetConfigValues( void ) {
 	cgs.voteNo = atoi( CG_ConfigString( CS_VOTE_NO ) );
 	Q_strncpyz( cgs.voteString, CG_ConfigString( CS_VOTE_STRING ), sizeof( cgs.voteString ) );
 
-	cg.teamFirstBlood = atoi( CG_ConfigString( CS_FIRSTBLOOD ) );
+	/* Nico, removed firstblood
+	cg.teamFirstBlood = atoi( CG_ConfigString( CS_FIRSTBLOOD ) );*/
+
 	// rain - yes, the order is this way on purpose. not my fault!
+	/* Nico, removed rounds
 	cg.teamWonRounds[1] = atoi( CG_ConfigString( CS_ROUNDSCORES1 ) );
-	cg.teamWonRounds[0] = atoi( CG_ConfigString( CS_ROUNDSCORES2 ) );
+	cg.teamWonRounds[0] = atoi( CG_ConfigString( CS_ROUNDSCORES2 ) );*/
 
 	// OSP
 	CG_ParseServerVersionInfo( CG_ConfigString( CS_VERSIONINFO ) );
@@ -648,13 +662,21 @@ static void CG_ConfigStringModified( void ) {
 
 	else if ( num == CS_WOLFINFO ) {      // NERVE - SMF
 		CG_ParseWolfinfo();
-	} else if ( num == CS_FIRSTBLOOD ) {
+	}
+	
+	/* Nico, removed firstblood
+	else if ( num == CS_FIRSTBLOOD ) {
 		cg.teamFirstBlood = atoi( str );
-	} else if ( num == CS_ROUNDSCORES1 ) {
+	}*/
+	
+	/* Nico, removed rounds
+	else if ( num == CS_ROUNDSCORES1 ) {
 		cg.teamWonRounds[1] = atoi( str );
 	} else if ( num == CS_ROUNDSCORES2 ) {
 		cg.teamWonRounds[0] = atoi( str );
-	} else if ( num >= CS_MULTI_SPAWNTARGETS && num < CS_MULTI_SPAWNTARGETS + MAX_MULTI_SPAWNTARGETS ) {
+	}*/
+	
+	else if ( num >= CS_MULTI_SPAWNTARGETS && num < CS_MULTI_SPAWNTARGETS + MAX_MULTI_SPAWNTARGETS ) {
 		CG_ParseSpawns();
 	} else if ( num == CS_VERSIONINFO ) {
 		CG_ParseServerVersionInfo( str );         // OSP - set versioning info for older demo playback
@@ -929,8 +951,9 @@ static void CG_MapRestart( void ) {
 	cg.cursorHintFade = 0;  // reset cursor hint timer
 
 	// DHM - Nerve :: Reset complaint system
+	/* Nico, removed complaints
 	cgs.complaintClient = -1;
-	cgs.complaintEndTime = 0;
+	cgs.complaintEndTime = 0;*/
 
 	CG_LimboPanel_RequestObjective();
 
@@ -940,7 +963,9 @@ static void CG_MapRestart( void ) {
 	cg.zoomTime = 0;
 	cg.zoomval = 0;
 
-	cgs.complaintEndTime = 0;
+	/* Nico, removed complaints
+	cgs.complaintEndTime = 0;*/
+
 	cgs.invitationEndTime = 0;
 	cgs.applicationEndTime = 0;
 	cgs.propositionEndTime = 0;
@@ -1656,9 +1681,6 @@ void CG_parseWeaponStatsGS_cmd( void ) {
 
 	ci = &cgs.clientinfo[nClientID];
 
-//	Q_strncpyz(strName, ci->name, sizeof(strName));
-//	BG_cleanName(cgs.clientinfo[gs->nClientID].name, strName, sizeof(strName), qfalse);
-
 	if ( weaponMask != 0 ) {
 		char strName[MAX_STRING_CHARS];
 
@@ -2214,6 +2236,7 @@ static void CG_ServerCommand( void ) {
 	}
 
 	// DHM - Nerve :: Allow client to lodge a complaing
+	/* Nico, removed complaints
 	if ( !Q_stricmp( cmd, "complaint" ) && cgs.gamestate == GS_PLAYING ) {
 		cgs.complaintEndTime = cg.time + 20000;
 		cgs.complaintClient = atoi( CG_Argv( 1 ) );
@@ -2224,6 +2247,7 @@ static void CG_ServerCommand( void ) {
 
 		return;
 	}
+	*/
 	// dhm
 
 	if ( !Q_stricmp( cmd, "map_restart" ) ) {

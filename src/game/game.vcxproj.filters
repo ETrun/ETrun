@@ -21,9 +21,6 @@
     <ClCompile Include="bg_animgroup.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="bg_campaign.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="bg_character.c">
       <Filter>Source Files</Filter>
     </ClCompile>
