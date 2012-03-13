@@ -1164,7 +1164,7 @@ void ClientUserinfoChanged( int clientNum ) {
 	// char skillStr[16] = "";
 	// char medalStr[16] = "";
 
-	int characterIndex;
+	// int characterIndex; Nico, unused warning fix
 
 	ent = g_entities + clientNum;
 	client = ent->client;
@@ -1247,12 +1247,13 @@ void ClientUserinfoChanged( int clientNum ) {
 	client->ps.stats[STAT_MAX_HEALTH] = client->pers.maxHealth;
 
 	// check for custom character
+	/* Nico, unused warning fix
 	s = Info_ValueForKey( userinfo, "ch" );
 	if ( *s ) {
 		characterIndex = atoi( s );
 	} else {
 		characterIndex = -1;
-	}
+	}*/
 
 	// To communicate it to cgame
 	client->ps.stats[ STAT_PLAYER_CLASS ] = client->sess.playerType;

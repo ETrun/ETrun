@@ -1763,7 +1763,7 @@ static float CG_ScanForCrosshairEntity( float * zChange, qboolean * hitClient ) 
 //	gentity_t	*traceEnt;
 	vec3_t start, end;
 	float dist;
-	centity_t*  cent;
+	// centity_t*  cent; Nico, unused warning fix
 
 	// We haven't hit a client yet
 	*hitClient = qfalse;
@@ -1820,7 +1820,7 @@ static float CG_ScanForCrosshairEntity( float * zChange, qboolean * hitClient ) 
 		cg.identifyClientRequest = cg.crosshairClientNum;
 	}
 
-	cent = &cg_entities[cg.crosshairClientNum];
+	// cent = &cg_entities[cg.crosshairClientNum]; Nico, unused warning fix
 
 	/* Nico, removed disguise stuff
 	if ( cent && cent->currentState.powerups & ( 1 << PW_OPS_DISGUISED ) ) {
@@ -1949,7 +1949,7 @@ static void CG_DrawCrosshairNames( void ) {
 	int i;
 
 	// Distance to the entity under the crosshair
-	float dist;
+	// float dist; Nico, unused warning fix
 	float zChange;
 
 	qboolean hitClient = qfalse;
@@ -1959,7 +1959,8 @@ static void CG_DrawCrosshairNames( void ) {
 	}
 
 	// scan the known entities to see if the crosshair is sighted on one
-	dist = CG_ScanForCrosshairEntity( &zChange, &hitClient );
+	// dist = CG_ScanForCrosshairEntity( &zChange, &hitClient ); Nico, unused warning fix
+	CG_ScanForCrosshairEntity( &zChange, &hitClient );
 
 	if ( cg.renderingThirdPerson ) {
 		return;

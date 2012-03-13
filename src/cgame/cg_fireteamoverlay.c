@@ -43,14 +43,15 @@ static int sortedFireTeamClients[MAX_CLIENTS];
 ****/
 
 int QDECL CG_SortFireTeam( const void *a, const void *b ) {
-	clientInfo_t    *ca, *cb;
+	// clientInfo_t    *ca, *cb; Nico, unused warning fix
 	int cna, cnb;
 
 	cna = *(int*)a;
 	cnb = *(int*)b;
 
-	ca = &cgs.clientinfo[cna];
-	cb = &cgs.clientinfo[cnb];
+	// Nico, unused warning fix
+	// ca = &cgs.clientinfo[cna];
+	// cb = &cgs.clientinfo[cnb];
 
 	// Not on our team, so shove back
 	if ( !CG_IsOnSameFireteam( cnb, cg.clientNum ) ) {
