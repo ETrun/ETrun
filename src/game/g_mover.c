@@ -133,20 +133,7 @@ gentity_t *G_TestEntityPosition( gentity_t *ent ) {
 	int mask;
 
 	if ( ent->clipmask ) {
-//		if ( ent->r.contents == CONTENTS_CORPSE && ent->health <= 0 ) {	// Arnout: players waiting to be revived are important
-//		if ( ent->r.contents == CONTENTS_CORPSE ) {
-		// corpse aren't important
-		//G_Damage( ent, NULL, NULL, NULL, NULL, 99999, 0, MOD_CRUSH );
-//			return NULL;
-//		} else {
 		mask = ent->clipmask;
-//		}
-
-		/*if ( ent->r.contents == CONTENTS_CORPSE ) {
-			return NULL;
-		} else {
-			mask = ent->clipmask;
-		}*/
 	} else {
 		mask = MASK_SOLID;
 	}
@@ -163,17 +150,14 @@ gentity_t *G_TestEntityPosition( gentity_t *ent ) {
 
 			org[0] = ent->client->ps.origin[0] + flatforward[0] * -32;
 			org[1] = ent->client->ps.origin[1] + flatforward[1] * -32;
-			//org[2] = ent->client->ps.origin[2] + 12;	// 12 units to play with
 			org[2] = ent->client->ps.origin[2] + 24.f;  // 12 units to play with
 
-			//VectorSet( point, org[0], org[1], org[2] - 9.6f - 24.f );	// diff between playerlegsMins and playerlegsMaxs z + 24 units to play with
 			VectorSet( point, org[0], org[1], org[2] - ( 24.f - 2.4f ) - 24.f );    // diff between playerlegsMins and playerlegsMaxs z + 24 units to play with
 
 			trap_TraceCapsule( &tr, org, playerlegsProneMins, playerlegsProneMaxs, point, ent->s.number, mask );
 
 			if ( !tr.startsolid || tr.entityNum < MAX_CLIENTS ) {
 				VectorCopy( tr.endpos, org );
-				//VectorSet( point, org[0], org[1], org[2] + 9.6f );
 				VectorSet( point, org[0], org[1], org[2] + ( 24.f - 2.4f ) );
 
 				trap_TraceCapsule( &tr, org, playerlegsProneMins, playerlegsProneMaxs, point, ent->s.number, mask );
@@ -188,9 +172,6 @@ gentity_t *G_TestEntityPosition( gentity_t *ent ) {
 		VectorCopy( ent->s.pos.trBase, pos );
 		pos[2] += 4; // move up a bit - corpses normally got their origin slightly in the ground
 		trap_Trace( &tr, pos, ent->r.mins, ent->r.maxs, pos, ent->s.number, mask );
-		// don't crush corpses against players
-//		if( tr.startsolid && g_entities[ tr.entityNum ].client )
-//			return NULL;
 	} else if ( ent->s.eType == ET_MISSILE ) {
 		trap_Trace( &tr, ent->s.pos.trBase, ent->r.mins, ent->r.maxs, ent->s.pos.trBase, ent->r.ownerNum, mask );
 	} else {
@@ -1762,10 +1743,8 @@ void Blocked_Door( gentity_t *ent, gentity_t *other ) {
 	}
 
 	// reverse direction
-//	Use_BinaryMover( ent, ent, other );
 	for ( slave = ent ; slave ; slave = slave->teamchain )
 	{
-//		time = level.time - slave->s.pos.trTime;
 		time = level.time - ( slave->s.pos.trDuration - ( level.time - slave->s.pos.trTime ) );
 
 		if ( slave->moverState == MOVER_1TO2 ) {

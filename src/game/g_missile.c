@@ -1997,7 +1997,6 @@ void fire_lead( gentity_t *self, vec3_t start, vec3_t dir, int damage ) {
 	vec3_t forward, right, up;
 	vec3_t angles;
 	float r, u;
-//	qboolean anti_tank_enable = qfalse;
 
 	r = crandom() * self->random;
 	u = crandom() * self->random;
@@ -2055,8 +2054,6 @@ visible
 ==============
 */
 qboolean visible( gentity_t *self, gentity_t *other ) {
-//	vec3_t		spot1;
-//	vec3_t		spot2;
 	trace_t tr;
 	gentity_t   *traceEnt;
 

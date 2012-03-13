@@ -631,13 +631,10 @@ void ClientEvents( gentity_t *ent, int oldEventSequence ) {
 
 		switch ( event ) {
 		case EV_FALL_NDIE:
-			//case EV_FALL_SHORT:
 		case EV_FALL_DMG_10:
 		case EV_FALL_DMG_15:
 		case EV_FALL_DMG_25:
-			//case EV_FALL_DMG_30:
 		case EV_FALL_DMG_50:
-			//case EV_FALL_DMG_75:
 
 			// rain - VectorClear() used to be done here whenever falling
 			// damage occured, but I moved it to bg_pmove where it belongs.

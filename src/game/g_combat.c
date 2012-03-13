@@ -106,82 +106,6 @@ Toss the weapon and powerups for the killed player
 =================
 */
 void TossClientItems( gentity_t *self ) {
-	/*gitem_t		*item;
-	int			weapon;
-	gentity_t	*drop = 0;
-
-	// drop the weapon if not a gauntlet or machinegun
-	weapon = self->s.weapon;
-
-	// make a special check to see if they are changing to a new
-	// weapon that isn't the mg or gauntlet.  Without this, a client
-	// can pick up a weapon, be killed, and not drop the weapon because
-	// their weapon change hasn't completed yet and they are still holding the MG.
-
-	// (SA) always drop what you were switching to
-	if( self->client->ps.weaponstate == WEAPON_DROPPING ) {
-		weapon = self->client->pers.cmd.weapon;
-	}
-
-	if( !( COM_BitCheck( self->client->ps.weapons, weapon ) ) ) {
-		return;
-	}
-
-	if((self->client->ps.persistant[PERS_HWEAPON_USE])) {
-		return;
-	}
-
-	// JPW NERVE don't drop these weapon types
-	switch( weapon ) {
-		case WP_NONE:
-		case WP_KNIFE:
-		case WP_DYNAMITE:
-		case WP_ARTY:
-		case WP_MEDIC_SYRINGE:
-		case WP_SMOKETRAIL:
-		case WP_MAPMORTAR:
-		case VERYBIGEXPLOSION:
-		case WP_MEDKIT:
-		case WP_BINOCULARS:
-		case WP_PLIERS:
-		case WP_SMOKE_MARKER:
-		case WP_TRIPMINE:
-		case WP_SMOKE_BOMB:
-		case WP_DUMMY_MG42:
-		case WP_LOCKPICK:
-		case WP_MEDIC_ADRENALINE:
-			return;
-		case WP_MORTAR_SET:
-			weapon = WP_MORTAR;
-			break;
-		case WP_K43_SCOPE:
-			weapon = WP_K43;
-			break;
-		case WP_GARAND_SCOPE:
-			weapon = WP_GARAND;
-			break;
-		case WP_FG42SCOPE:
-			weapon = WP_FG42;
-			break;
-		case WP_M7:
-			weapon = WP_CARBINE;
-			break;
-		case WP_GPG40:
-			weapon = WP_KAR98;
-			break;
-		case WP_MOBILE_MG42_SET:
-			weapon = WP_MOBILE_MG42;
-			break;
-	}
-
-	// find the item type for this weapon
-	item = BG_FindItemForWeapon( weapon );
-	// spawn the item
-
-	drop = Drop_Item( self, item, 0, qfalse );
-	drop->count = self->client->ps.ammoclip[BG_FindClipForWeapon(weapon)];
-	drop->item->quantity = self->client->ps.ammoclip[BG_FindClipForWeapon(weapon)];*/
-
 	weapon_t primaryWeapon;
 
 	/* Nico, removed intermission
@@ -216,10 +140,6 @@ void LookAtKiller( gentity_t *self, gentity_t *inflictor, gentity_t *attacker ) 
 	}
 
 	self->client->ps.stats[STAT_DEAD_YAW] = vectoyaw( dir );
-
-	// angles[YAW] = vectoyaw( dir );
-	// angles[PITCH] = 0;
-	// angles[ROLL] = 0;
 }
 
 /*
@@ -396,23 +316,6 @@ void player_die( gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int
 	// if we got killed by a landmine, update our map
 	if ( self->client && meansOfDeath == MOD_LANDMINE ) {
 		// if it's an enemy mine, update both teamlists
-		/*int teamNum;
-		mapEntityData_t	*mEnt;
-		mapEntityData_Team_t *teamList;
-
-		teamNum = inflictor->s.teamNum % 4;
-
-		teamList = self->client->sess.sessionTeam == TEAM_AXIS ? &mapEntityData[0] : &mapEntityData[1];
-		if((mEnt = G_FindMapEntityData(teamList, inflictor-g_entities)) != NULL) {
-			G_FreeMapEntityData( teamList, mEnt );
-		}
-
-		if( teamNum != self->client->sess.sessionTeam ) {
-			teamList = self->client->sess.sessionTeam == TEAM_AXIS ? &mapEntityData[1] : &mapEntityData[0];
-			if((mEnt = G_FindMapEntityData(teamList, inflictor-g_entities)) != NULL) {
-				G_FreeMapEntityData( teamList, mEnt );
-			}
-		}*/
 		mapEntityData_t *mEnt;
 
 		if ( ( mEnt = G_FindMapEntityData( &mapEntityData[0], inflictor - g_entities ) ) != NULL ) {
@@ -1165,7 +1068,6 @@ void G_Damage( gentity_t *targ, gentity_t *inflictor, gentity_t *attacker,  vec3
 
 				if ( attacker && attacker->client ) {
 					AddScore( attacker, 1 );
-					//G_AddExperience( attacker, 1.f );
 				}
 
 				G_ExplodeMissile( targ );
@@ -1270,9 +1172,17 @@ void G_Damage( gentity_t *targ, gentity_t *inflictor, gentity_t *attacker,  vec3
 	}
 
 	// check for completely getting out of the damage
-	/* Nico, no friendlyfire
 	if ( !( dflags & DAMAGE_NO_PROTECTION ) ) {
 
+		// Nico, disable damage between players
+		if (attacker->client && 
+			(OnSameTeam (targ, attacker) || 
+			(targ->client->sess.sessionTeam == TEAM_AXIS && attacker->client->sess.sessionTeam == TEAM_ALLIES) ||
+			(targ->client->sess.sessionTeam == TEAM_ALLIES && attacker->client->sess.sessionTeam == TEAM_AXIS))) {
+				return;
+		}
+
+		/* Nico, no friendlyfire
 		// if TF_NO_FRIENDLY_FIRE is set, don't do damage to the target
 		// if the attacker was on the same team
 		if ( targ != attacker && OnSameTeam( targ, attacker )  ) {
@@ -1284,8 +1194,8 @@ void G_Damage( gentity_t *targ, gentity_t *inflictor, gentity_t *attacker,  vec3
 			if ( !g_friendlyFire.integer )     {
 				return;
 			}
-		}
-	}*/
+		}*/
+	}
 
 	// add to the attacker's hit counter
 	if ( attacker->client && targ != attacker && targ->health > 0 ) {
