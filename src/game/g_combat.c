@@ -1175,7 +1175,7 @@ void G_Damage( gentity_t *targ, gentity_t *inflictor, gentity_t *attacker,  vec3
 	if ( !( dflags & DAMAGE_NO_PROTECTION ) ) {
 
 		// Nico, disable damage between players
-		if (attacker->client && 
+		if (targ->client && attacker->client && 
 			(OnSameTeam (targ, attacker) || 
 			(targ->client->sess.sessionTeam == TEAM_AXIS && attacker->client->sess.sessionTeam == TEAM_ALLIES) ||
 			(targ->client->sess.sessionTeam == TEAM_ALLIES && attacker->client->sess.sessionTeam == TEAM_AXIS))) {
