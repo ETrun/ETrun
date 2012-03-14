@@ -592,6 +592,7 @@ CG_GibPlayer
 Generated a bunch of gibs launching out from the bodies location
 ===================
 */
+/* Nico, removed gib
 #define MAXJUNCTIONS 8
 
 void CG_GibPlayer( centity_t *cent, vec3_t playerOrigin, vec3_t gdir ) {
@@ -755,7 +756,7 @@ void CG_GibPlayer( centity_t *cent, vec3_t playerOrigin, vec3_t gdir ) {
 	if ( !( cent->currentState.eFlags & EF_HEADSHOT ) ) { // (SA) already lost hat while living
 		CG_LoseHat( cent, tv( 0, 0, 1 ) );
 	}
-}
+}*/
 
 
 /*

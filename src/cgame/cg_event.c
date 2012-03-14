@@ -2509,10 +2509,13 @@ void CG_EntityEvent( centity_t *cent, vec3_t position ) {
 		break;
 
 	case EV_GIB_PLAYER:
+
+		/* Nico, removed gib
 		DEBUGNAME( "EV_GIB_PLAYER" );
 		trap_S_StartSound( es->pos.trBase, -1, CHAN_AUTO, cgs.media.gibSound );
 		ByteToDir( es->eventParm, dir );
-		CG_GibPlayer( cent, cent->lerpOrigin, dir );
+		CG_GibPlayer( cent, cent->lerpOrigin, dir );*/
+
 		break;
 
 	case EV_STOPLOOPINGSOUND:
