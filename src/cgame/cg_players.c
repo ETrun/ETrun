@@ -2156,6 +2156,7 @@ void CG_ResetPlayerEntity( centity_t *cent ) {
 
 }
 
+/* Nico, removed bleed
 void CG_GetBleedOrigin( vec3_t head_origin, vec3_t body_origin, int fleshEntityNum ) {
 	clientInfo_t        *ci;
 	refEntity_t body;
@@ -2200,7 +2201,7 @@ void CG_GetBleedOrigin( vec3_t head_origin, vec3_t body_origin, int fleshEntityN
 
 	VectorCopy( head.origin, head_origin );
 	VectorCopy( body.origin, body_origin );
-}
+}*/
 
 /*
 ===============

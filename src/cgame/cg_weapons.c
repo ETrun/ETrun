@@ -4807,9 +4807,6 @@ void CG_AddSparks( vec3_t origin, vec3_t dir, int speed, int duration, int count
 		le->refEntity.customShader = cgs.media.sparkParticleShader;
 
 		le->bounceFactor = 0.9;
-
-//		le->leBounceSoundType = LEBS_BLOOD;
-//		le->leMarkType = LEMT_BLOOD;
 	}
 }
 /*
@@ -4818,42 +4815,9 @@ CG_AddBulletParticles
 =================
 */
 void CG_AddBulletParticles( vec3_t origin, vec3_t dir, int speed, int duration, int count, float randScale ) {
-//	localEntity_t	*le;
-//	refEntity_t		*re;
 	vec3_t velocity, pos;
 	int i;
-/*
-	// add the falling streaks
-	for (i=0; i<count/3; i++) {
-		le = CG_AllocLocalEntity();
-		re = &le->refEntity;
 
-		VectorSet( velocity, dir[0] + crandom()*randScale, dir[1] + crandom()*randScale, dir[2] + crandom()*randScale );
-		VectorScale( velocity, (float)speed*3, velocity );
-
-		le->leType = LE_SPARK;
-		le->startTime = cg.time;
-		le->endTime = le->startTime + duration - (int)(0.5 * random() * duration);
-		le->lastTrailTime = cg.time;
-
-		VectorCopy( origin, re->origin );
-		AxisCopy( axisDefault, re->axis );
-
-		le->pos.trType = TR_GRAVITY;
-		VectorCopy( origin, le->pos.trBase );
-		VectorMA( le->pos.trBase, 2 + random()*4, dir, le->pos.trBase );
-		VectorCopy( velocity, le->pos.trDelta );
-		le->pos.trTime = cg.time;
-
-		le->refEntity.customShader = cgs.media.bulletParticleTrailShader;
-//		le->refEntity.customShader = cgs.media.sparkParticleShader;
-
-		le->bounceFactor = 0.9;
-
-//		le->leBounceSoundType = LEBS_BLOOD;
-//		le->leMarkType = LEMT_BLOOD;
-	}
-*/
 	// add the falling particles
 	for ( i = 0; i < count; i++ ) {
 
@@ -4924,18 +4888,8 @@ void CG_AddDebris( vec3_t origin, vec3_t dir, int speed, int duration, int count
 		BG_EvaluateTrajectory( &le->pos, cg.time + (int)timeAdd, le->pos.trBase, qfalse, -1 );
 
 		le->bounceFactor = 0.5;
-
-//		if (!rand()%2)
-//			le->effectWidth = 0;	// no flame
-//		else
 		le->effectWidth = 5 + random() * 5;
-
-//		if (rand()%3)
 		le->effectFlags |= 1;       // smoke trail
-
-
-//		le->leBounceSoundType = LEBS_BLOOD;
-//		le->leMarkType = LEMT_BLOOD;
 	}
 }
 // done.
@@ -5528,7 +5482,8 @@ CG_MissileHitPlayer
 */
 void CG_MissileHitPlayer( centity_t *cent, int weapon, vec3_t origin, vec3_t dir, int entityNum ) {
 
-	CG_Bleed( origin, entityNum );
+	/* Nico, removed bleed
+	CG_Bleed( origin, entityNum );*/
 
 	// some weapons will make an explosion with the blood, while
 	// others will just make the blood
@@ -5856,8 +5811,8 @@ void CG_Bullet( vec3_t end, int sourceEntityNum, vec3_t normal, qboolean flesh, 
 	trace_t trace,trace2;
 	int sourceContentType, destContentType;
 	vec3_t dir;
-	vec3_t start, trend;      // JPW
-	vec4_t projection;
+	vec3_t start;// Nico, unused warning fix, trend;      // JPW
+	// vec4_t projection; Nico, unused warning fix
 	static int lastBloodSpat;
 	centity_t *cent;
 
@@ -5938,9 +5893,10 @@ void CG_Bullet( vec3_t end, int sourceEntityNum, vec3_t normal, qboolean flesh, 
 		vec3_t smokedir, tmpv, tmpv2; // JPW NERVE
 		int i,headshot; // JPW NERVE
 
+		/* Nico, removed bleed
 		if ( fleshEntityNum < MAX_CLIENTS ) {
 			CG_Bleed( end, fleshEntityNum );
-		}
+		}*/
 
 		// JPW NERVE smoke puffs (sometimes with some blood)
 		VectorSubtract( end,start,smokedir ); // get a nice "through the body" vector
@@ -5957,6 +5913,7 @@ void CG_Bullet( vec3_t end, int sourceEntityNum, vec3_t normal, qboolean flesh, 
 		VectorSubtract( tmpv, origin, tmpv2 );
 		headshot = ( VectorLength( tmpv2 ) < 10 );
 
+		/* Nico, removed blood
 		if ( headshot && cg_blood.integer ) {
 			for ( i = 0; i < 5; i++ ) {
 				rnd = random();
@@ -5972,7 +5929,7 @@ void CG_Bullet( vec3_t end, int sourceEntityNum, vec3_t normal, qboolean flesh, 
 				CG_SmokePuff( origin, tmpv, 5 + rnd * 10, 1, rnd * 0.8, rnd * 0.8, 0.5, 500 + ( rand() % 800 ), cg.time, 0, 0, cgs.media.fleshSmokePuffShader );
 
 			}
-		} else {
+		} else {*/
 			// puff out the front (more dust no blood)
 			for ( i = 0; i < 10; i++ ) {
 				rnd = random();
@@ -5986,7 +5943,7 @@ void CG_Bullet( vec3_t end, int sourceEntityNum, vec3_t normal, qboolean flesh, 
 				VectorAdd( tmpv,tmpv2,tmpv );
 				// le = CG_SmokePuff( origin, tmpv, 5 + rnd * 10,  rnd * 0.3f + 0.5f, rnd * 0.3f + 0.5f, rnd * 0.3f + 0.5f, 0.125f, 500 + ( rand() % 300 ), cg.time, 0, 0, cgs.media.smokePuffShader );
 				CG_SmokePuff( origin, tmpv, 5 + rnd * 10,  rnd * 0.3f + 0.5f, rnd * 0.3f + 0.5f, rnd * 0.3f + 0.5f, 0.125f, 500 + ( rand() % 300 ), cg.time, 0, 0, cgs.media.smokePuffShader );
-			}
+			// }
 		}
 // jpw
 
@@ -6001,6 +5958,7 @@ void CG_Bullet( vec3_t end, int sourceEntityNum, vec3_t normal, qboolean flesh, 
 		}
 
 		// if we haven't dropped a blood spat in a while, check if this is a good scenario
+		/* Nico, removed blood
 		if ( cg_blood.integer && ( lastBloodSpat > cg.time || lastBloodSpat < cg.time - 500 ) ) {
 			vec4_t color;
 
@@ -6035,7 +5993,7 @@ void CG_Bullet( vec3_t end, int sourceEntityNum, vec3_t normal, qboolean flesh, 
 					}
 				}
 			}
-		}
+		}*/
 
 	} else {    // (not flesh)
 		// Gordon: all bullet weapons have the same fx, and this stops pvs issues causing grenade explosions

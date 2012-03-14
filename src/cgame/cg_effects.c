@@ -296,6 +296,7 @@ localEntity_t *CG_MakeExplosion( vec3_t origin, vec3_t dir,
 CG_AddBloodTrails
 =================
 */
+/* Nico, removed blood
 void CG_AddBloodTrails( vec3_t origin, vec3_t dir, int speed, int duration, int count, float randScale ) {
 	localEntity_t   *le;
 	refEntity_t     *re;
@@ -325,7 +326,7 @@ void CG_AddBloodTrails( vec3_t origin, vec3_t dir, int speed, int duration, int 
 
 		le->bounceFactor = 0.9;
 	}
-}
+}*/
 
 /*
 =================
@@ -334,6 +335,7 @@ CG_Bleed
 This is the spurt of blood when a character gets hit
 =================
 */
+/* Nico, removed bleed
 void CG_Bleed( vec3_t origin, int entityNum ) {
 #define BLOOD_SPURT_COUNT   4
 	int i,j;
@@ -395,13 +397,14 @@ void CG_Bleed( vec3_t origin, int entityNum ) {
 							   0.1 );   // rand scale
 		}
 	}
-}
+}*/
 
 /*
 ==================
 CG_LaunchGib
 ==================
 */
+/* Nico, removed blood
 void CG_LaunchGib( centity_t *cent, vec3_t origin, vec3_t angles, vec3_t velocity, qhandle_t hModel, float sizeScale, int breakCount ) {
 	localEntity_t   *le;
 	refEntity_t     *re;
@@ -416,7 +419,6 @@ void CG_LaunchGib( centity_t *cent, vec3_t origin, vec3_t angles, vec3_t velocit
 
 	le->leType = LE_FRAGMENT;
 	le->startTime = cg.time;
-	// le->endTime = le->startTime + 60000 + random() * 60000;
 	le->endTime = le->startTime + 20000 + ( crandom() * 5000 );
 	le->breakCount = breakCount;
 	le->sizeScale = sizeScale;
@@ -429,7 +431,6 @@ void CG_LaunchGib( centity_t *cent, vec3_t origin, vec3_t angles, vec3_t velocit
 	}
 	re->hModel = hModel;
 
-	// re->fadeStartTime		= le->endTime - 3000;
 	re->fadeStartTime       = le->endTime - 1000;
 	re->fadeEndTime         = le->endTime;
 
@@ -438,10 +439,8 @@ void CG_LaunchGib( centity_t *cent, vec3_t origin, vec3_t angles, vec3_t velocit
 	le->pos.trType = TR_GRAVITY;
 
 	le->angles.trDelta[0] = ( 10 + ( rand() & 50 ) ) - 30;
-//	le->angles.trDelta[0] = (100 + (rand()&500)) - 300;	// pitch
 	le->angles.trDelta[1] = ( 100 + ( rand() & 500 ) ) - 300; // (SA) this is the safe one right now (yaw)  turn the others up when I have tumbling things landing properly
 	le->angles.trDelta[2] = ( 10 + ( rand() & 50 ) ) - 30;
-//	le->angles.trDelta[2] = (100 + (rand()&500)) - 300;	// roll
 
 	le->bounceFactor = 0.3;
 
@@ -463,11 +462,8 @@ void CG_LaunchGib( centity_t *cent, vec3_t origin, vec3_t angles, vec3_t velocit
 	}
 }
 
-//#define	GIB_VELOCITY	250
-//#define	GIB_JUMP		250
-
 #define GIB_VELOCITY    75
-#define GIB_JUMP        250
+#define GIB_JUMP        250*/
 
 
 /*

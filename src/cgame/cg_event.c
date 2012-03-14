@@ -2547,7 +2547,10 @@ void CG_EntityEvent( centity_t *cent, vec3_t position ) {
 		break;
 
 	case EV_DUST:
-		CG_ParticleDust( cent, cent->currentState.origin, cent->currentState.angles );
+
+		/* Nico, removed blood
+		CG_ParticleDust( cent, cent->currentState.origin, cent->currentState.angles );*/
+
 		break;
 
 	case EV_RUMBLE_EFX:

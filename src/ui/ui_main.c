@@ -7677,8 +7677,10 @@ cvarTable_t cvarTable[] = {
 	/* Nico, instant reswawn
 	{ NULL, "cg_drawRoundTimer", "1", CVAR_ARCHIVE },*/
 
+	/* Nico, removed blood
 	{ NULL, "cg_showblood", "1", CVAR_ARCHIVE },
-	{ NULL, "cg_bloodFlash", "1.0", CVAR_ARCHIVE },
+	{ NULL, "cg_bloodFlash", "1.0", CVAR_ARCHIVE },*/
+
 	{ NULL, "cg_autoReload", "1", CVAR_ARCHIVE },
 	{ NULL, "cg_noAmmoAutoSwitch", "1", CVAR_ARCHIVE },
 	{ NULL, "cg_useWeapsForZoom", "1", CVAR_ARCHIVE },

@@ -1290,7 +1290,9 @@ typedef struct {
 	qhandle_t vehicleShader;
 	qhandle_t destroyShader;
 
-	qhandle_t viewBloodShader;
+	/* Nico, removed blood
+	qhandle_t viewBloodShader;*/
+
 	qhandle_t tracerShader;
 	qhandle_t crosshairShader[NUM_CROSSHAIRS];
 	qhandle_t lagometerShader;
@@ -1316,7 +1318,9 @@ typedef struct {
 	qhandle_t smokePuffRageProShader;
 	qhandle_t shotgunSmokePuffShader;
 	qhandle_t waterBubbleShader;
-	qhandle_t bloodTrailShader;
+
+	/* Nico, removed blood
+	qhandle_t bloodTrailShader;*/
 
 //----(SA)	cursor hints
 	// would be nice to specify these in the menu scripts instead of permanent handles...
@@ -1417,11 +1421,14 @@ typedef struct {
 	// done
 
 	// Rafael - blood pool
-	qhandle_t bloodPool;
+	/* Nico, removed blood
+	qhandle_t bloodPool;*/
 
 	// Ridah, viewscreen blood animation
+	/* Nico, removed blood
 	qhandle_t viewBloodAni[5];
-	qhandle_t viewFlashBlood;
+	qhandle_t viewFlashBlood;*/
+
 	qhandle_t viewFlashFire[16];
 	// done
 
@@ -1449,8 +1456,11 @@ typedef struct {
 	// wall mark shaders
 	qhandle_t wakeMarkShader;
 	qhandle_t wakeMarkShaderAnim;
+
+	/* Nico, removed blood
 	qhandle_t bloodMarkShaders[5];
-	qhandle_t bloodDotShaders[5];
+	qhandle_t bloodDotShaders[5];*/
+
 	qhandle_t bulletMarkShader;
 	qhandle_t bulletMarkShaderMetal;
 	qhandle_t bulletMarkShaderWood;
@@ -1471,14 +1481,18 @@ typedef struct {
 	qhandle_t rocketExplosionShader;
 	qhandle_t grenadeExplosionShader;
 	qhandle_t bfgExplosionShader;
-	qhandle_t bloodExplosionShader;
+
+	/* Nico, removed blood
+	qhandle_t bloodExplosionShader;*/
 
 	// special effects models
 	qhandle_t teleportEffectModel;
 	qhandle_t teleportEffectShader;
 
 	// Ridah
-	qhandle_t bloodCloudShader;
+	/* Nico, removed blood
+	qhandle_t bloodCloudShader;*/
+
 	qhandle_t sparkParticleShader;
 	qhandle_t smokeTrailShader;
 	qhandle_t fireTrailShader;
@@ -2163,7 +2177,10 @@ extern vmCvar_t cg_coronafardist;
 extern vmCvar_t cg_coronas;
 extern vmCvar_t cg_buildScript;
 extern vmCvar_t cg_paused;
-extern vmCvar_t cg_blood;
+
+/* Nico, removed blood
+extern vmCvar_t cg_blood;*/
+
 extern vmCvar_t cg_predictItems;
 extern vmCvar_t cg_deferPlayers;
 extern vmCvar_t cg_teamChatsOnly;
@@ -2196,7 +2213,9 @@ extern vmCvar_t cg_wolfparticles;
 /* Nico, removed (c)g_gametype
 extern vmCvar_t cg_gameType;*/
 
-extern vmCvar_t cg_bloodTime;
+/* Nico, removed blood
+extern vmCvar_t cg_bloodTime;*/
+
 extern vmCvar_t cg_norender;
 extern vmCvar_t cg_skybox;
 
@@ -2237,8 +2256,10 @@ extern vmCvar_t cf_wtopshots;*/
 
 extern vmCvar_t cg_autoAction;
 extern vmCvar_t cg_autoReload;
+
+/* Nico, removed blood
 extern vmCvar_t cg_bloodDamageBlend;
-extern vmCvar_t cg_bloodFlash;
+extern vmCvar_t cg_bloodFlash;*/
 
 /* Nico, removed complaints
 extern vmCvar_t cg_complaintPopUp;*/
@@ -2597,7 +2618,10 @@ void    CG_ParticleBulletDebris( vec3_t org, vec3_t vel, int duration );
 void    CG_ParticleDirtBulletDebris( vec3_t org, vec3_t vel, int duration );     // DHM - Nerve
 void    CG_ParticleDirtBulletDebris_Core( vec3_t org, vec3_t vel, int duration, float width, float height, float alpha, qhandle_t shader );
 void    CG_ParticleSparks( vec3_t org, vec3_t vel, int duration, float x, float y, float speed );
-void    CG_ParticleDust( centity_t *cent, vec3_t origin, vec3_t dir );
+
+/* Nico, removed blood
+void    CG_ParticleDust( centity_t *cent, vec3_t origin, vec3_t dir );*/
+
 void    CG_ParticleMisc( qhandle_t pshader, vec3_t origin, int size, int duration, float alpha );
 
 // Ridah
@@ -2609,13 +2633,18 @@ void    CG_SnowLink( centity_t *cent, qboolean particleOn );
 
 void CG_ParticleImpactSmokePuff( qhandle_t pshader, vec3_t origin );
 void CG_ParticleImpactSmokePuffExtended( qhandle_t pshader, vec3_t origin, int lifetime, int vel, int acc, int maxroll, float alpha, float size );      // (SA) so I can add more parameters without screwing up the one that's there
+
+/* Nico, removed bleed
 void CG_Particle_Bleed( qhandle_t pshader, vec3_t start, vec3_t dir, int fleshEntityNum, int duration );
-void CG_GetBleedOrigin( vec3_t head_origin, vec3_t body_origin, int fleshEntityNum );
+void CG_GetBleedOrigin( vec3_t head_origin, vec3_t body_origin, int fleshEntityNum );*/
+
 void CG_Particle_OilParticle( qhandle_t pshader, vec3_t origin, vec3_t origin2, int ptime, int snum );
 void CG_Particle_OilSlick( qhandle_t pshader, centity_t *cent );
 void CG_OilSlickRemove( centity_t *cent );
+
+/* Nico, removed blood
 void CG_ParticleBloodCloudZombie( centity_t *cent, vec3_t origin, vec3_t dir );
-void CG_ParticleBloodCloud( centity_t *cent, vec3_t origin, vec3_t dir );
+void CG_ParticleBloodCloud( centity_t *cent, vec3_t origin, vec3_t dir );*/
 // done
 
 // Ridah, trails
@@ -2697,7 +2726,8 @@ void CG_GibPlayer( centity_t *cent, vec3_t playerOrigin, vec3_t gdir );*/
 /* Nico, removed loseHat
 void CG_LoseHat( centity_t *cent, vec3_t dir );         //----(SA)	added*/
 
-void CG_Bleed( vec3_t origin, int entityNum );
+/* Nico, removed bleed
+void CG_Bleed( vec3_t origin, int entityNum );*/
 
 localEntity_t *CG_MakeExplosion( vec3_t origin, vec3_t dir,
 								 qhandle_t hModel, qhandle_t shader, int msec,

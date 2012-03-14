@@ -2928,6 +2928,7 @@ static void CG_DrawFlashZoomTransition( void ) {
 CG_DrawFlashDamage
 =================
 */
+/* Nico, removed blood
 static void CG_DrawFlashDamage( void ) {
 	vec4_t col;
 	float redFlash;
@@ -2951,7 +2952,7 @@ static void CG_DrawFlashDamage( void ) {
 
 		CG_FillRect( -10, -10, 650, 490, col );
 	}
-}
+}*/
 
 
 /*
@@ -3034,7 +3035,9 @@ static void CG_DrawFlashBlend( void ) {
 	}
 
 	CG_DrawFlashFire();
-	CG_DrawFlashDamage();
+
+	/* Nico, removed blood
+	CG_DrawFlashDamage();*/
 }
 
 // NERVE - SMF

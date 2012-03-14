@@ -183,7 +183,10 @@ vmCvar_t cg_buildScript;
 vmCvar_t cg_coronafardist;
 vmCvar_t cg_coronas;
 vmCvar_t cg_paused;
-vmCvar_t cg_blood;
+
+/* Nico, removed blood
+vmCvar_t cg_blood;*/
+
 vmCvar_t cg_predictItems;
 vmCvar_t cg_deferPlayers;
 vmCvar_t cg_drawTeamOverlay;
@@ -203,7 +206,9 @@ vmCvar_t cg_wolfparticles;
 /* Nico, removed (c)g_gametype
 vmCvar_t cg_gameType;*/
 
-vmCvar_t cg_bloodTime;
+/* Nico, removed blood
+vmCvar_t cg_bloodTime;*/
+
 vmCvar_t cg_norender;
 vmCvar_t cg_skybox;
 
@@ -256,8 +261,10 @@ vmCvar_t cf_wtopshots;                  // Font scale for +wtopshots window*/
 //vmCvar_t	cg_announcer;
 vmCvar_t cg_autoAction;
 vmCvar_t cg_autoReload;
+
+/* Nico, removed blood
 vmCvar_t cg_bloodDamageBlend;
-vmCvar_t cg_bloodFlash;
+vmCvar_t cg_bloodFlash;*/
 
 /* Nico, removed complaints
 vmCvar_t cg_complaintPopUp;*/
@@ -386,7 +393,9 @@ cvarTable_t cvarTable[] = {
 
 	// Ridah, more fluid rotations
 	{ &cg_swingSpeed, "cg_swingSpeed", "0.1", CVAR_CHEAT },   // was 0.3 for Q3
-	{ &cg_bloodTime, "cg_bloodTime", "120", CVAR_ARCHIVE },
+
+	/* Nico, removed blood
+	{ &cg_bloodTime, "cg_bloodTime", "120", CVAR_ARCHIVE },*/
 
 	{ &cg_skybox, "cg_skybox", "1", CVAR_CHEAT },
 	// done.
@@ -450,7 +459,8 @@ cvarTable_t cvarTable[] = {
 	{ &cg_buildScript, "com_buildScript", "0", 0 },   // force loading of all possible data amd error on failures
 	{ &cg_paused, "cl_paused", "0", CVAR_ROM },
 
-	{ &cg_blood, "cg_showblood", "1", CVAR_ARCHIVE },
+	/* Nico, removed blood
+	{ &cg_blood, "cg_showblood", "1", CVAR_ARCHIVE },*/
 
 	// Rafael - particle switch
 	{ &cg_wolfparticles, "cg_wolfparticles", "1", CVAR_ARCHIVE },
@@ -484,8 +494,10 @@ cvarTable_t cvarTable[] = {
 
 	{ &cg_autoAction, "cg_autoAction", "0", CVAR_ARCHIVE },
 	{ &cg_autoReload, "cg_autoReload", "1", CVAR_ARCHIVE },
+
+	/* Nico, removed blood
 	{ &cg_bloodDamageBlend, "cg_bloodDamageBlend", "1.0", CVAR_ARCHIVE },
-	{ &cg_bloodFlash, "cg_bloodFlash", "1.0", CVAR_ARCHIVE },
+	{ &cg_bloodFlash, "cg_bloodFlash", "1.0", CVAR_ARCHIVE },*/
 
 	/* Nico, removed complaints
 	{ &cg_complaintPopUp, "cg_complaintPopUp", "1", CVAR_ARCHIVE },*/
@@ -1393,10 +1405,8 @@ static void CG_RegisterGraphics( void ) {
 	cgs.media.smokePuffShader = trap_R_RegisterShader( "smokePuff" );
 
 	// RF, blood cloud
-	cgs.media.bloodCloudShader = trap_R_RegisterShader( "bloodCloud" );
-
-	// OSP - MV cursor
-//	cgs.media.cursor = trap_R_RegisterShaderNoMip( "ui/assets/mvcursor.tga" );
+	/* Nico, removed blood
+	cgs.media.bloodCloudShader = trap_R_RegisterShader( "bloodCloud" );*/
 
 	// Rafael - cannon
 	cgs.media.smokePuffShaderdirty = trap_R_RegisterShader( "smokePuffdirty" );
@@ -1408,18 +1418,24 @@ static void CG_RegisterGraphics( void ) {
 	// done
 
 	// Rafael - bleedanim
+	/* Nico, removed bleed
 	for ( i = 0; i < 5; i++ ) {
 		cgs.media.viewBloodAni[i] = trap_R_RegisterShader( va( "viewBloodBlend%i", i + 1 ) );
-	}
+	}*/
 
-	cgs.media.viewFlashBlood = trap_R_RegisterShader( "viewFlashBlood" );
+	/* Nico, removed blood
+	cgs.media.viewFlashBlood = trap_R_RegisterShader( "viewFlashBlood" );*/
+
 	for ( i = 0; i < 16; i++ ) {
 		cgs.media.viewFlashFire[i] = trap_R_RegisterShader( va( "viewFlashFire%i", i + 1 ) );
 	}
 
 	cgs.media.smokePuffRageProShader = trap_R_RegisterShader( "smokePuffRagePro" );
 	cgs.media.shotgunSmokePuffShader = trap_R_RegisterShader( "shotgunSmokePuff" );
-	cgs.media.bloodTrailShader      = trap_R_RegisterShader( "bloodTrail" );
+
+	/* Nico, removed blood
+	cgs.media.bloodTrailShader      = trap_R_RegisterShader( "bloodTrail" );*/
+
 	cgs.media.lagometerShader       = trap_R_RegisterShader( "lagometer" );
 	cgs.media.reticleShaderSimple   = trap_R_RegisterShader( "gfx/misc/reticlesimple" );
 	cgs.media.binocShaderSimple     = trap_R_RegisterShader( "gfx/misc/binocsimple"  );
@@ -1568,7 +1584,8 @@ static void CG_RegisterGraphics( void ) {
 
 	cgs.media.objectiveShader = trap_R_RegisterShader( "sprites/objective" );
 
-	cgs.media.bloodExplosionShader = trap_R_RegisterShader( "bloodExplosion" );
+	/* Nico, removed blood
+	cgs.media.bloodExplosionShader = trap_R_RegisterShader( "bloodExplosion" );*/
 
 	//----(SA)	water splash
 	cgs.media.waterSplashModel = trap_R_RegisterModel( "models/weaphits/bullet.md3" );
@@ -1740,13 +1757,12 @@ static void CG_RegisterGraphics( void ) {
 	cgs.media.bulletMarkShaderWood =    trap_R_RegisterShaderNoMip( "gfx/damage/wood_mrk" );
 	cgs.media.bulletMarkShaderGlass =   trap_R_RegisterShaderNoMip( "gfx/damage/glass_mrk" );
 
+	/* Nico, removed blood
 	for ( i = 0 ; i < 5 ; i++ ) {
 		char name[32];
-		//Com_sprintf( name, sizeof(name), "textures/decals/blood%i", i+1 );
-		//cgs.media.bloodMarkShaders[i] = trap_R_RegisterShader( name );
 		Com_sprintf( name, sizeof( name ), "blood_dot%i", i + 1 );
 		cgs.media.bloodDotShaders[i] = trap_R_RegisterShader( name );
-	}
+	}*/
 
 	CG_LoadingString( " - inline models" );
 

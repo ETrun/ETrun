@@ -1031,6 +1031,7 @@ CG_DamageBlendBlob
 
 ===============
 */
+/* Nico, removed blood
 static void CG_DamageBlendBlob( void ) {
 	int t,i;
 	int maxTime;
@@ -1094,51 +1095,7 @@ static void CG_DamageBlendBlob( void ) {
 
 		redFlash += ent.radius;
 	}
-}
-
-/*
-===============
-CG_DrawScreenFade
-===============
-*/
-static void CG_DrawScreenFade( void ) {
-/* moved over to cg_draw.c
-	static int lastTime;
-	int elapsed, time;
-	refEntity_t		ent;
-
-	if (cgs.fadeStartTime + cgs.fadeDuration < cg.time) {
-		cgs.fadeAlphaCurrent = cgs.fadeAlpha;
-	} else if (cgs.fadeAlphaCurrent != cgs.fadeAlpha) {
-		elapsed = (time = trap_Milliseconds()) - lastTime;	// we need to use trap_Milliseconds() here since the cg.time gets modified upon reloading
-		lastTime = time;
-		if (elapsed < 500 && elapsed > 0) {
-			if (cgs.fadeAlphaCurrent > cgs.fadeAlpha) {
-				cgs.fadeAlphaCurrent -= ((float)elapsed/(float)cgs.fadeDuration);
-				if (cgs.fadeAlphaCurrent < cgs.fadeAlpha)
-					cgs.fadeAlphaCurrent = cgs.fadeAlpha;
-			} else {
-				cgs.fadeAlphaCurrent += ((float)elapsed/(float)cgs.fadeDuration);
-				if (cgs.fadeAlphaCurrent > cgs.fadeAlpha)
-					cgs.fadeAlphaCurrent = cgs.fadeAlpha;
-			}
-		}
-	}
-	// now draw the fade
-	if (cgs.fadeAlphaCurrent > 0.0) {
-		memset( &ent, 0, sizeof( ent ) );
-		ent.reType = RT_SPRITE;
-		ent.renderfx = RF_FIRST_PERSON;
-
-		VectorMA( cg.refdef_current->vieworg, 8, cg.refdef_current->viewaxis[0], ent.origin );
-		ent.radius = 80;	// occupy entire screen
-		ent.customShader = cgs.media.viewFadeBlack;
-		ent.shaderRGBA[3] = (int)(255.0 * cgs.fadeAlphaCurrent);
-
-		trap_R_AddRefEntityToScene( &ent );
-	}
-*/
-}
+}*/
 
 /*
 ===============
@@ -1764,9 +1721,10 @@ void CG_DrawActiveFrame( int serverTime, stereoFrame_t stereoView, qboolean demo
 		DEBUGTIME
 
 		// first person blend blobs, done after AnglesToAxis
+		/* Nico, removed blood
 		if ( !cg.renderingThirdPerson ) {
 			CG_DamageBlendBlob();
-		}
+		}*/
 
 		DEBUGTIME
 
@@ -1856,9 +1814,6 @@ void CG_DrawActiveFrame( int serverTime, stereoFrame_t stereoView, qboolean demo
 		}
 
 		DEBUGTIME
-
-		// Ridah, fade the screen
-		CG_DrawScreenFade();
 
 		DEBUGTIME
 

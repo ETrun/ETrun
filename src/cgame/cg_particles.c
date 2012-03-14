@@ -87,7 +87,10 @@ typedef enum
 	P_WEATHER_TURBULENT,
 	P_ANIM, // Ridah
 	P_DLIGHT_ANIM,  // ydnar
-	P_BLEED,
+
+	/* Nico, removed bleed
+	P_BLEED,*/
+
 	P_FLAT_SCALEUP,
 	P_FLAT_SCALEUP_FADE,
 	P_WEATHER_FLURRY,
@@ -104,9 +107,6 @@ static char *shaderAnimNames[MAX_SHADER_ANIMS] = {
 	"blacksmokeanim",
 	"twiltb2",
 	"blacksmokeanimc",
-//	"expblue",
-//	"blacksmokeanimb",	// uses 'explode1' sequence // JPW NERVE pulled
-//	"blood",
 	NULL
 };
 static qhandle_t shaderAnims[MAX_SHADER_ANIMS][MAX_SHADER_ANIM_FRAMES];
@@ -461,21 +461,14 @@ void CG_AddParticleToScene( cparticle_t *p, vec3_t org, float alpha ) {
 		width = p->width + ( ratio * ( p->endwidth - p->width ) );
 		height = p->height + ( ratio * ( p->endheight - p->height ) );
 
-//		if (p->type != P_SMOKE_IMPACT)
 		{
 			vec3_t temp;
 
 			vectoangles( rforward, temp );
 			p->accumroll += p->roll;
 			temp[ROLL] += p->accumroll * 0.1;
-//			temp[ROLL] += p->roll * 0.1;
 			AngleVectors( temp, NULL, rright2, rup2 );
 		}
-//		else
-//		{
-//			VectorCopy (rright, rright2);
-//			VectorCopy (rup, rup2);
-//		}
 
 		if ( p->rotate ) {
 			VectorMA( org, -height, rup2, point );
@@ -541,7 +534,10 @@ void CG_AddParticleToScene( cparticle_t *p, vec3_t org, float alpha ) {
 		verts[3].modulate[2] = 255 * color[2];
 		verts[3].modulate[3] = 255  * invratio;
 
-	} else if ( p->type == P_BLEED )     {
+	} 
+
+	/* Nico, removed bleed
+	else if ( p->type == P_BLEED )     {
 		vec3_t rr, ru;
 		vec3_t rotate_ang;
 		float alpha;
@@ -602,7 +598,9 @@ void CG_AddParticleToScene( cparticle_t *p, vec3_t org, float alpha ) {
 		verts[3].modulate[2] = 9;
 		verts[3].modulate[3] = 255 * alpha;
 
-	} else if ( p->type == P_FLAT_SCALEUP )     {
+	}*/
+
+	else if ( p->type == P_FLAT_SCALEUP )     {
 		float width, height;
 		float sinR, cosR;
 
@@ -889,7 +887,9 @@ void CG_AddParticles( void ) {
 			continue;
 		}
 
-		if ( p->type == P_SMOKE || p->type == P_ANIM || p->type == P_DLIGHT_ANIM || p->type == P_BLEED || p->type == P_SMOKE_IMPACT ) {
+		/* Nico, removed bleed
+		if ( p->type == P_SMOKE || p->type == P_ANIM || p->type == P_DLIGHT_ANIM || p->type == P_BLEED || p->type == P_SMOKE_IMPACT ) {*/
+		if ( p->type == P_SMOKE || p->type == P_ANIM || p->type == P_DLIGHT_ANIM || p->type == P_SMOKE_IMPACT ) {
 			if ( cg.time > p->endtime ) {
 				p->next = free_particles;
 				free_particles = p;
@@ -1629,7 +1629,7 @@ void CG_ParticleImpactSmokePuff( qhandle_t pshader, vec3_t origin ) {
 	CG_ParticleImpactSmokePuffExtended( pshader, origin, 500, 20, 20, 30, 0.25f, 8.f );
 }
 
-
+/* Nico, removed bleed
 void CG_Particle_Bleed( qhandle_t pshader, vec3_t start, vec3_t dir, int fleshEntityNum, int duration ) {
 	cparticle_t *p;
 
@@ -1684,9 +1684,8 @@ void CG_Particle_Bleed( qhandle_t pshader, vec3_t start, vec3_t dir, int fleshEn
 	}
 	p->alpha = 0.75;
 
-}
+}*/
 
-//void CG_Particle_OilParticle (qhandle_t pshader, centity_t *cent)
 void CG_Particle_OilParticle( qhandle_t pshader, vec3_t origin, vec3_t dir, int ptime, int snum ) {  // snum is parent ent number?
 	cparticle_t *p;
 
@@ -1694,7 +1693,6 @@ void CG_Particle_OilParticle( qhandle_t pshader, vec3_t origin, vec3_t dir, int 
 	int time2;
 	float ratio;
 
-//	float	duration = 1500;
 	float duration = 2000;
 
 	time = cg.time;
@@ -1847,6 +1845,7 @@ void CG_OilSlickRemove( centity_t *cent ) {
 	}
 }
 
+/* Nico, removed blood
 qboolean ValidBloodPool( vec3_t start ) {
 #define EXTRUDE_DIST    0.5
 
@@ -1892,8 +1891,9 @@ qboolean ValidBloodPool( vec3_t start ) {
 	}
 
 	return qtrue;
-}
+}*/
 
+/* Nico, removed blood
 #define NORMALSIZE  16
 #define LARGESIZE   32
 
@@ -2095,11 +2095,8 @@ void CG_ParticleBloodCloudZombie( centity_t *cent, vec3_t origin, vec3_t dir ) {
 		p->roll = rand() % 179;
 
 		p->color = ZOMBIE;
-
 	}
-
-
-}
+}*/
 
 void CG_ParticleSparks( vec3_t org, vec3_t vel, int duration, float x, float y, float speed ) {
 	cparticle_t *p;
@@ -2149,6 +2146,7 @@ void CG_ParticleSparks( vec3_t org, vec3_t vel, int duration, float x, float y, 
 
 }
 
+/* Nico, removed blood
 void CG_ParticleDust( centity_t *cent, vec3_t origin, vec3_t dir ) {
 	float length;
 	float dist;
@@ -2261,11 +2259,8 @@ void CG_ParticleDust( centity_t *cent, vec3_t origin, vec3_t dir ) {
 		}
 
 		p->alpha = 0.75;
-
 	}
-
-
-}
+}*/
 
 void CG_ParticleMisc( qhandle_t pshader, vec3_t origin, int size, int duration, float alpha ) {
 	cparticle_t *p;

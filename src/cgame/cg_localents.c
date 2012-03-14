@@ -147,6 +147,7 @@ Leave expanding blood puffs behind gibs
 */
 // use this to change between particle and trail code
 //#define BLOOD_PARTICLE_TRAIL
+/* Nico, removed blood
 void CG_BloodTrail( localEntity_t *le ) {
 	int t;
 	int t2;
@@ -210,7 +211,7 @@ void CG_BloodTrail( localEntity_t *le ) {
 #endif
 
 	}
-}
+}*/
 
 
 /*
@@ -218,6 +219,7 @@ void CG_BloodTrail( localEntity_t *le ) {
 CG_FragmentBounceMark
 ================
 */
+/* Nico, removed blood
 void CG_FragmentBounceMark( localEntity_t *le, trace_t *trace ) {
 	int radius;
 	vec4_t projection, color;
@@ -240,7 +242,7 @@ void CG_FragmentBounceMark( localEntity_t *le, trace_t *trace ) {
 	// don't allow a fragment to make multiple marks, or they
 	// pile up while settling
 	le->leMarkType = LEMT_NONE;
-}
+}*/
 
 /*
 ================
@@ -540,9 +542,10 @@ void CG_AddFragment( localEntity_t *le ) {
 		trap_R_AddRefEntityToScene( &le->refEntity );
 
 		// add a blood trail
+		/* Nico, removed blood
 		if ( le->leBounceSoundType == LEBS_BLOOD ) {
 			CG_BloodTrail( le );
-		}
+		}*/
 
 		return;
 	}
@@ -593,13 +596,14 @@ void CG_AddFragment( localEntity_t *le ) {
 		}
 	}
 
+	/* Nico, removed blood
 	if ( le->pos.trType == TR_STATIONARY && le->leMarkType == LEMT_BLOOD ) {
 
 		// leave a mark
 		if ( le->leMarkType ) {
 			CG_FragmentBounceMark( le, &trace );
 		}
-	}
+	}*/
 
 	// Ridah, add the flame
 	if ( hasFlame ) {
@@ -761,6 +765,7 @@ void CG_AddFuseSparkElements( localEntity_t *le ) {
 CG_AddBloodElements
 ================
 */
+/* Nico, removed blood
 void CG_AddBloodElements( localEntity_t *le ) {
 	vec3_t newOrigin;
 	trace_t trace;
@@ -815,8 +820,7 @@ void CG_AddBloodElements( localEntity_t *le ) {
 			return;
 		}
 	}
-
-}
+}*/
 
 /*
 ================
@@ -941,7 +945,8 @@ void CG_AddShrapnel( localEntity_t *le ) {
 	}
 
 	// leave a mark
-	CG_FragmentBounceMark( le, &trace );
+	/* Nico, removed blood
+	CG_FragmentBounceMark( le, &trace );*/
 
 	// do a bouncy sound
 	CG_FragmentBounceSound( le, &trace );
@@ -1248,12 +1253,11 @@ void CG_AddLocalEntities( void ) {
 			CG_AddDebrisElements( le );
 			break;
 		case LE_BLOOD:
-			CG_AddBloodElements( le );
+
+			/* Nico, removed blood
+			CG_AddBloodElements( le );*/
+
 			break;
-/*		case LE_ZOMBIE_SPIRIT:
-		case LE_ZOMBIE_BAT:
-			CG_AddClientCritter( le );
-			break;*/
 			// done.
 
 		case LE_MARK:
