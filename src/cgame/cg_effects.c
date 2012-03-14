@@ -475,10 +475,10 @@ void CG_LaunchGib( centity_t *cent, vec3_t origin, vec3_t angles, vec3_t velocit
 CG_LoseHat
 ==============
 */
+/* Nico, removed loseHat
 void CG_LoseHat( centity_t *cent, vec3_t dir ) {
 	clientInfo_t    *ci;
 	int clientNum;
-//	int				i, count, tagIndex, gibIndex;
 	// int tagIndex; Nico, unused warning fix
 	vec3_t origin, velocity;
 	bg_character_t  *character;
@@ -532,7 +532,6 @@ void CG_LoseHat( centity_t *cent, vec3_t dir ) {
 		VectorCopy( tv( 0, 0, 0 ), le->angles.trBase );
 		le->angles.trDelta[0]   = 0;
 		le->angles.trDelta[1]   = ( 100 + ( rand() & 500 ) ) - 300;
-//		le->angles.trDelta[2]	= 0;
 		le->angles.trDelta[2]   = 400;  // (SA) this is set with a very particular value to try to get it
 										// to flip exactly once before landing (based on player alive
 										// (standing) and on level ground) and will be unnecessary when
@@ -548,7 +547,7 @@ void CG_LoseHat( centity_t *cent, vec3_t dir ) {
 			le->onFireEnd = cent->currentState.onFireEnd + 4000;
 		}
 	}
-}
+}*/
 
 /*
 ======================

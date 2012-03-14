@@ -2694,7 +2694,8 @@ void CG_SpawnEffect( vec3_t org );
 /* Nico, removed gib
 void CG_GibPlayer( centity_t *cent, vec3_t playerOrigin, vec3_t gdir );*/
 
-void CG_LoseHat( centity_t *cent, vec3_t dir );         //----(SA)	added
+/* Nico, removed loseHat
+void CG_LoseHat( centity_t *cent, vec3_t dir );         //----(SA)	added*/
 
 void CG_Bleed( vec3_t origin, int entityNum );
 
