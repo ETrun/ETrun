@@ -143,6 +143,9 @@ typedef enum {
 #define AAS_AREA_TEAM_AXIS_DISGUISED        0x0080
 #define AAS_AREA_TEAM_ALLIES_DISGUISED      0x0100*/
 
+// Nico, knockback value at panzerfaust
+#define KNOCKBACK_VALUE						500
+
 //============================================================================
 
 typedef struct gentity_s gentity_t;
@@ -1664,7 +1667,8 @@ extern vmCvar_t g_gravity;*/
 /* Nico, g_speed is now hardcoded as DEFAULT_SPEED
 extern vmCvar_t g_speed;*/
 
-extern vmCvar_t g_knockback;
+/* Nico, hardcoded knockback
+extern vmCvar_t g_knockback;*/
 
 /* Nico, removed quadfactor
 extern vmCvar_t g_quadfactor;*/

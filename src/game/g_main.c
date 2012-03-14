@@ -80,7 +80,9 @@ vmCvar_t g_speed;*/
 vmCvar_t g_gravity;*/
 
 vmCvar_t g_cheats;
-vmCvar_t g_knockback;
+
+/* Nico, hardcoded knockback
+vmCvar_t g_knockback;*/
 
 /* Nico, removed quadfactor
 vmCvar_t g_quadfactor;*/
@@ -437,7 +439,8 @@ cvarTable_t gameCvarTable[] = {
 	/* Nico, g_gravity is hardcoded as DEFAULT_GRAVITY
 	{ &g_gravity, "g_gravity", "800", 0, 0, qtrue, qtrue },*/
 
-	{ &g_knockback, "g_knockback", "1000", 0, 0, qtrue, qtrue },
+	/* Nico, hardcoded knockback
+	{ &g_knockback, "g_knockback", "1000", 0, 0, qtrue, qtrue },*/
 
 	/* Nico, removed quadfactor
 	{ &g_quadfactor, "g_quadfactor", "3", 0, 0, qtrue },*/

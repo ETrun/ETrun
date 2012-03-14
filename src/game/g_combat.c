@@ -1133,14 +1133,25 @@ void G_Damage( gentity_t *targ, gentity_t *inflictor, gentity_t *attacker,  vec3
 		knockback = 0;
 	}*/
 
+	// Nico, only do knockback to ourself at panzerfaust
+	if (attacker->client == targ->client && mod == MOD_PANZERFAUST) {
+		knockback = qtrue;
+	} else {
+		knockback = qfalse;
+	}
+
 	// figure momentum add, even if the damage won't be taken
 	if ( knockback && targ->client ) {
 		vec3_t kvel;
+
+		/* Nico, set knockback
 		float mass;
 
 		mass = 200;
 
-		VectorScale( dir, g_knockback.value * (float)knockback / mass, kvel );
+		VectorScale( dir, g_knockback.value * (float)knockback / mass, kvel );*/
+
+		VectorScale( dir, KNOCKBACK_VALUE, kvel );
 		VectorAdd( targ->client->ps.velocity, kvel, targ->client->ps.velocity );
 
 		if ( targ == attacker && !(  mod != MOD_ROCKET &&
