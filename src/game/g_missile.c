@@ -1477,7 +1477,7 @@ void LandMineTrigger( gentity_t* self ) {
 void LandMinePostTrigger( gentity_t* self ) {
 	self->nextthink = level.time + 300;
 	self->think = G_ExplodeMissile;
-}
+}*/
 
 
 /*

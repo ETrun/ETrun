@@ -5813,7 +5813,7 @@ void CG_Bullet( vec3_t end, int sourceEntityNum, vec3_t normal, qboolean flesh, 
 	vec3_t dir;
 	vec3_t start;// Nico, unused warning fix, trend;      // JPW
 	// vec4_t projection; Nico, unused warning fix
-	static int lastBloodSpat;
+	// static int lastBloodSpat; Nico, unused warning fix
 	centity_t *cent;
 
 	cent = &cg_entities[fleshEntityNum];
@@ -5891,7 +5891,7 @@ void CG_Bullet( vec3_t end, int sourceEntityNum, vec3_t normal, qboolean flesh, 
 		// localEntity_t *le; // JPW NERVE Nico, unused warning fix
 		float rnd, tmpf; // JPW NERVE
 		vec3_t smokedir, tmpv, tmpv2; // JPW NERVE
-		int i,headshot; // JPW NERVE
+		int i;//,headshot; Nico, unused warning fix
 
 		/* Nico, removed bleed
 		if ( fleshEntityNum < MAX_CLIENTS ) {
@@ -5911,7 +5911,7 @@ void CG_Bullet( vec3_t end, int sourceEntityNum, vec3_t normal, qboolean flesh, 
 		CG_GetOriginForTag( cent,&cent->pe.headRefEnt, "tag_mouth", 0, tmpv, NULL );
 		tmpv[2] += 5;
 		VectorSubtract( tmpv, origin, tmpv2 );
-		headshot = ( VectorLength( tmpv2 ) < 10 );
+		// headshot = ( VectorLength( tmpv2 ) < 10 );
 
 		/* Nico, removed blood
 		if ( headshot && cg_blood.integer ) {
