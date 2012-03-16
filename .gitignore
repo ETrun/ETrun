@@ -8,6 +8,7 @@ src/*/.deps
 src/*/.libs
 src/*/*.lo
 src/*/*.la
+src/*/*.o
 
 # Autotools related
 autom4te.cache/
