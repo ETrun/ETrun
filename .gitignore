@@ -1,6 +1,6 @@
 # Binaries
-_build/*.dll
-_build/*.so
+_build/*
+!_build/empty
 
 # Compilation related
 _build/*/*.*
