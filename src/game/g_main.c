@@ -1454,10 +1454,11 @@ void G_RegisterCvars( void ) {
 	// DHM - Gametype is currently restricted to supported types only
 	/* Nico, removed gametypes
 	if ( ( g_gametype.integer < GT_WOLF || g_gametype.integer >= GT_MAX_GAME_TYPE ) ) {
-		G_Printf( "g_gametype %i is out of range, defaulting to GT_WOLF(%i)\n", g_gametype.integer, GT_WOLF );
-		trap_Cvar_Set( "g_gametype", va( "%i",GT_WOLF ) );
-		trap_Cvar_Update( &g_gametype );
+		G_Printf( "g_gametype %i is out of range, defaulting to GT_WOLF(%i)\n", g_gametype.integer, GT_WOLF );*/
+		trap_Cvar_Set( "g_gametype", va( "%i",GT_WOLF ) );// Nico, set a gametype for queries about server info
+		/*trap_Cvar_Update( &g_gametype );
 	}*/
+
 
 	// OSP
 	/* Nico, removed gametypes

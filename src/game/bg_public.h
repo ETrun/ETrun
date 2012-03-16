@@ -400,7 +400,6 @@ extern const unsigned int aReinfSeeds[MAX_REINFSEEDS];
 #error overflow: (CS_MAX) > MAX_CONFIGSTRINGS
 #endif
 
-/* Nico, removed gametypes
 typedef enum {
 	GT_SINGLE_PLAYER,
 	GT_COOP,
@@ -412,7 +411,7 @@ typedef enum {
 	// GT_WOLF_LMS,
 
 	GT_MAX_GAME_TYPE
-} gametype_t;*/
+} gametype_t;
 
 typedef enum { GENDER_MALE, GENDER_FEMALE, GENDER_NEUTER } gender_t;
 
