@@ -25,6 +25,10 @@ ipch/
 *.opensdf
 *.ncb
 
+# Xcode related
+src/*.xcodeproj/project.xcworkspace
+src/*.xcodeproj/xcuserdata
+
 # Others
 *~
 *.log
