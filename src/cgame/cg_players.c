@@ -1088,8 +1088,7 @@ static void CG_PlayerAngles( centity_t *cent, vec3_t legs[3], vec3_t torso[3], v
 
 	// allow yaw to drift a bit, unless these conditions don't allow them
 	if ( !( BG_GetConditionBitFlag( cent->currentState.clientNum, ANIM_COND_MOVETYPE, ANIM_MT_IDLE ) ||
-			BG_GetConditionBitFlag( cent->currentState.clientNum, ANIM_COND_MOVETYPE, ANIM_MT_IDLECR ) )/*
-		||	 (BG_GetConditionValue( cent->currentState.clientNum, ANIM_COND_MOVETYPE, qfalse ) & ((1<<ANIM_MT_STRAFELEFT) | (1<<ANIM_MT_STRAFERIGHT)) )*/) {
+			BG_GetConditionBitFlag( cent->currentState.clientNum, ANIM_COND_MOVETYPE, ANIM_MT_IDLECR ) )) {
 
 		// always point all in the same direction
 		cent->pe.torso.yawing = qtrue;  // always center
@@ -1132,8 +1131,6 @@ static void CG_PlayerAngles( centity_t *cent, vec3_t legs[3], vec3_t torso[3], v
 			cent->pe.legs.yawing = qfalse; // set it if they really need to swing
 			CG_SwingAngles( legsAngles[YAW], 20, clampTolerance, 0.5 * cg_swingSpeed.value, &cent->pe.legs.yawAngle, &cent->pe.legs.yawing );
 		} else if ( strstr( BG_GetAnimString( character->animModelInfo, legsSet ), "strafe" ) ) {
-			// FIXME: what is this strstr hack??
-			//if	( BG_GetConditionValue( ci->clientNum, ANIM_COND_MOVETYPE, qfalse ) & ((1<<ANIM_MT_STRAFERIGHT)|(1<<ANIM_MT_STRAFELEFT)) )
 			cent->pe.legs.yawing = qfalse; // set it if they really need to swing
 			legsAngles[YAW] = headAngles[YAW];
 			CG_SwingAngles( legsAngles[YAW], 0, clampTolerance, cg_swingSpeed.value, &cent->pe.legs.yawAngle, &cent->pe.legs.yawing );

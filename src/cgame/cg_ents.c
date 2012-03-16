@@ -1951,7 +1951,6 @@ void CG_Cabinet( centity_t* cent, cabinetType_t type ) {
 	refEntity_t cabinet;
 	refEntity_t mini_me;
 	int i, cnt;
-//	int k;
 
 	if ( type < 0 || type >= CT_MAX ) {
 		return;
@@ -1961,7 +1960,6 @@ void CG_Cabinet( centity_t* cent, cabinetType_t type ) {
 	memset( &mini_me, 0, sizeof( mini_me ) );
 
 	cabinet.hModel =    cabinetInfo[type].model;
-//	cabinet.hModel =	cabinetInfo[type].itemmodels[0];
 	cabinet.frame =     0;
 	cabinet.oldframe =  0;
 	cabinet.backlerp =  0.f;
