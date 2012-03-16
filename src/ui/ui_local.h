@@ -123,20 +123,12 @@ extern vmCvar_t ui_browserGameType;
 extern vmCvar_t ui_browserSortKey;
 extern vmCvar_t ui_browserShowEmptyOrFull;
 extern vmCvar_t ui_browserShowPasswordProtected;
-
-/* Nico, no friendlyfire
-extern vmCvar_t ui_browserShowFriendlyFire;*/
-
-/* Nico, removed respawnLeft
-extern vmCvar_t ui_browserShowMaxlives;*/
-
+extern vmCvar_t ui_browserShowFriendlyFire;
+extern vmCvar_t ui_browserShowMaxlives;
 extern vmCvar_t ui_browserShowPunkBuster;
 extern vmCvar_t ui_browserShowAntilag;
 extern vmCvar_t ui_browserShowWeaponsRestricted;
-
-/* Nico, removed balancedteams
-extern vmCvar_t ui_browserShowTeamBalanced;*/
-
+extern vmCvar_t ui_browserShowTeamBalanced;
 extern vmCvar_t ui_serverStatusTimeOut;
 extern vmCvar_t ui_limboOptions;
 
@@ -950,13 +942,8 @@ typedef struct {
 	vec4_t xhairColorAlt;
 
 	qhandle_t passwordFilter;
-
-	/* Nico, no friendlyfire
-	qhandle_t friendlyFireFilter;*/
-
-	/* Nico, removed respawnLeft
-	qhandle_t maxLivesFilter;*/
-
+	qhandle_t friendlyFireFilter;
+	qhandle_t maxLivesFilter;
 	qhandle_t punkBusterFilter;
 	qhandle_t weaponRestrictionsFilter;
 	qhandle_t antiLagFilter;
