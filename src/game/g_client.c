@@ -1139,6 +1139,33 @@ static void ClientCleanName( const char *in, char *out, int outSize ) {
 void G_StartPlayerAppropriateSound( gentity_t *ent, char *soundType ) {
 }
 
+// Nico, returns the IP is it's well-formed, NULL otherwise (from ETpub)
+const char *getParsedIp(const char *ipadd) {
+	// code by Dan Pop, http://bytes.com/forum/thread212174.html
+	unsigned b1, b2, b3, b4, port = 0;
+	unsigned char c;
+	int rc;
+	static char ipge[20];
+
+	if (!Q_strncmp(ipadd,"localhost",strlen("localhost"))) {
+		return "localhost";
+	}
+
+	rc = sscanf(ipadd, "%3u.%3u.%3u.%3u:%u%c", &b1, &b2, &b3, &b4, &port, &c);
+	if (rc < 4 || rc > 5) {
+		return NULL;
+	}
+	if ( (b1 | b2 | b3 | b4) > 255 || port > 65535) {
+		return NULL;
+	}
+	if (strspn(ipadd, "0123456789.:") < strlen(ipadd)) {
+		return NULL;
+	}
+	sprintf(ipge, "%u.%u.%u.%u", b1, b2, b3, b4);
+
+	return ipge;
+}
+
 /*
 ===========
 ClientUserInfoChanged
@@ -1156,9 +1183,11 @@ void ClientUserinfoChanged( int clientNum ) {
 	char oldname[MAX_STRING_CHARS];
 	char userinfo[MAX_INFO_STRING];
 	gclient_t   *client;
-
-	// Nico, removed skills
-	// int i;
+	size_t	len = 0;// Nico, userinfo length
+	int	count = 0;// Nico, used in userinfo backslash count
+	int i = 0;
+	char *ip = NULL;// Nico, used to store client ip.
+	char *name = NULL;// Nico, used to store client name
 
 	// Nico, removed medals
 	// char skillStr[16] = "";
@@ -1183,17 +1212,62 @@ void ClientUserinfoChanged( int clientNum ) {
 
 	// check for malformed or illegal info strings
 	if ( !Info_Validate( userinfo ) ) {
-		Q_strncpyz( userinfo, "\\name\\badinfo", sizeof( userinfo ) );
+		// Nico, changing malformed user info is a nonsense, simply drop the client
+		// Q_strncpyz( userinfo, "\\name\\badinfo", sizeof( userinfo ) );
+		trap_DropClient(clientNum, "^1Forbidden character in userinfo" , 0);
 	}
 
-	if ( g_developer.integer || *g_log.string || g_dedicated.integer )
+	// Nico, check userinfo length (from combinedfixes)
+	len = strlen(userinfo);
+	if (len > MAX_INFO_STRING - 44) {
+		G_Printf("Dropping client %d: oversized userinfo\n", clientNum); 
+		trap_DropClient(clientNum, "^1Oversized userinfo" , 0);
+	}
+
+	// Nico, check userinfo leading backslash (from combinedfixes)
+	if (userinfo[0] != '\\') {
+		G_Printf("Dropping client %d: malformed userinfo (missing leading backslash)\n", clientNum); 
+		trap_DropClient(clientNum, "^1Malformed userinfo" , 0);
+	}
+
+	// Nico, check userinfo trailing backslash (from combinedfixes)
+	if (len > 0 && userinfo[len - 1] == '\\') {
+		G_Printf("Dropping client %d: malformed userinfo (trailing backslash)\n", clientNum); 
+		trap_DropClient(clientNum, "^1Malformed userinfo" , 0);
+	}
+
+	// Nico, make sure backslah number is even (from combinedfixes)
+	for (i = 0; i < len; ++i) {
+		if (userinfo[i] == '\\') {
+			count++;
+		}
+	}
+	if (count % 2 != 0) {
+		G_Printf("Dropping client %d: malformed userinfo (odd number of backslash)\n", clientNum); 
+		trap_DropClient(clientNum, "^1Malformed userinfo" , 0);
+	}
+
+	// Nico, make sure client ip is not empty or malformed (from combinedfixes)
+	ip = Info_ValueForKey( userinfo, "ip" );
+	if (!strcmp(ip, "") || getParsedIp(ip) == NULL) {
+		G_Printf("Dropping client %d: malformed userinfo (empty or malformed ip)\n", clientNum); 
+		trap_DropClient(clientNum, "^1Malformed userinfo" , 0);
+	}
+
+	// Nico, make sure client name is not empty (from combinedfixes)
+	name = Info_ValueForKey( userinfo, "name" );
+	if (!strcmp(name, "")) {
+		G_Printf("Dropping client %d: malformed userinfo (empty name)\n", clientNum); 
+		trap_DropClient(clientNum, "^1Malformed userinfo" , 0);
+	}
+
+	if ( g_developer.integer || *g_log.string || g_dedicated.integer ) 
 	{
 		G_Printf( "Userinfo: %s\n", userinfo );
 	}
 
 	// check for local client
-	s = Info_ValueForKey( userinfo, "ip" );
-	if ( s && !strcmp( s, "localhost" ) ) {
+	if (ip && !strcmp( ip, "localhost" ) ) {
 		client->pers.localClient = qtrue;
 		level.fLocalHost = qtrue;
 		client->sess.referee = RL_REFEREE;
@@ -1201,12 +1275,13 @@ void ClientUserinfoChanged( int clientNum ) {
 
 	// OSP - extra client info settings
 	//		 FIXME: move other userinfo flag settings in here
+	/* Nico, removed bot support
 	if ( ent->r.svFlags & SVF_BOT ) {
 		client->pers.autoActivate = PICKUP_TOUCH;
 		client->pers.bAutoReloadAux = qtrue;
 		client->pmext.bAutoReload = qtrue;
 		client->pers.predictItemPickup = qfalse;
-	} else {
+	} else {*/
 		s = Info_ValueForKey( userinfo, "cg_uinfo" );
 		sscanf( s, "%i %i %i",
 				&client->pers.clientFlags,
@@ -1223,12 +1298,11 @@ void ClientUserinfoChanged( int clientNum ) {
 			client->pers.bAutoReloadAux = qfalse;
 			client->pmext.bAutoReload = qfalse;
 		}
-	}
+	// }
 
 	// set name
 	Q_strncpyz( oldname, client->pers.netname, sizeof( oldname ) );
-	s = Info_ValueForKey( userinfo, "name" );
-	ClientCleanName( s, client->pers.netname, sizeof( client->pers.netname ) );
+	ClientCleanName( name, client->pers.netname, sizeof( client->pers.netname ) );
 
 	if ( client->pers.connected == CON_CONNECTED ) {
 		if ( strcmp( oldname, client->pers.netname ) ) {
