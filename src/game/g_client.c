@@ -1436,6 +1436,11 @@ char *ClientConnect( int clientNum, qboolean firstTime, qboolean isBot ) {
 	gclient_t   *client;
 	char userinfo[MAX_INFO_STRING];
 	gentity_t   *ent;
+	char userinfo2[MAX_INFO_STRING];// Nico, used in connections limit check
+	int i = 0;
+	int clientNum2;// Nico, used in connections limit check
+	int conn_per_ip = 1;// Nico, connections per IP counter
+	char ip[20], ip2[20];// Nico, used in connections limit check
 
 	ent = &g_entities[ clientNum ];
 
@@ -1449,6 +1454,28 @@ char *ClientConnect( int clientNum, qboolean firstTime, qboolean isBot ) {
 	if ( G_FilterIPBanPacket( value ) ) {
 		return "You are banned from this server.";
 	}
+
+	// Nico, check maximum connextions per IP (from ETpub)
+	// (prevents fakeplayers DOS http://aluigi.altervista.org/fakep.htm )
+	// note: value is the client ip
+	Q_strncpyz(ip, getParsedIp(value), sizeof(ip));
+	for (i = 0; i < level.numConnectedClients; ++i) {
+		clientNum2 = level.sortedClients[i];
+		if (clientNum == clientNum2) {
+			continue;
+		}
+		trap_GetUserinfo(clientNum2, userinfo2,	sizeof(userinfo2));
+		value = Info_ValueForKey (userinfo2, "ip");
+		Q_strncpyz(ip2, getParsedIp(value), sizeof(ip2));
+		if (strcmp(ip, ip2) == 0) {
+			conn_per_ip++;
+		}
+	}
+	if (conn_per_ip > g_maxConnsPerIP.integer) {
+		G_LogPrintf("ETrun: possible DoS attack, rejecting client from %s (%d connections already)\n", ip, g_maxConnsPerIP.integer);
+		return "Too many connections from your IP.";
+	}
+	// Nico, end of check maximum connextions per I
 
 	// Xian - check for max lives enforcement ban
 	/* Nico, removed respawnLeft

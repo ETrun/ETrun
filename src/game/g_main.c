@@ -338,6 +338,13 @@ vmCvar_t g_nextcampaign;*/
 /* Nico, removed complaints
 vmCvar_t g_disableComplaints;*/
 
+// Nico, beginning of ETrun cvars
+
+// Max connections per IP
+vmCvar_t g_maxConnsPerIP;
+
+// Nico, end of ETrun cvars
+
 
 cvarTable_t gameCvarTable[] = {
 	// don't override the cheat state set by the system
@@ -635,6 +642,13 @@ cvarTable_t gameCvarTable[] = {
 
 	/* Nico, removed complaints
 	{ &g_disableComplaints, "g_disableComplaints", "0", CVAR_ARCHIVE },*/
+
+	// Nico, beginning of ETrun cvars
+
+	// Max connections per IP
+	{ &g_maxConnsPerIP, "g_maxConnsPerIP", "3", CVAR_SERVERINFO | CVAR_ARCHIVE},
+
+	// Nico, end of ETrun cvars
 };
 
 // bk001129 - made static to avoid aliasing

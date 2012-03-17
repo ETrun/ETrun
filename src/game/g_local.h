@@ -1917,6 +1917,13 @@ extern vmCvar_t g_nextcampaign;*/
 /* Nico, removed complaints
 extern vmCvar_t g_disableComplaints;*/
 
+// Nico, beginning of ETrun cvars
+
+// Max connections per IP
+extern vmCvar_t g_maxConnsPerIP;
+
+// Nico, end of ETrun cvars
+
 void    trap_Printf( const char *fmt );
 void    trap_Error( const char *fmt );
 int     trap_Milliseconds( void );
