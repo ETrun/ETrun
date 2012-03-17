@@ -296,10 +296,7 @@ extern const unsigned int aReinfSeeds[MAX_REINFSEEDS];
 
 // Client flags for server processing
 #define CGF_AUTORELOAD      0x01
-
-/* Nico, removed statsdump client command
-#define CGF_STATSDUMP       0x02*/
-
+#define CGF_STATSDUMP       0x02
 #define CGF_AUTOACTIVATE    0x04
 #define CGF_PREDICTITEMS    0x08
 
@@ -321,10 +318,7 @@ extern const unsigned int aReinfSeeds[MAX_REINFSEEDS];
 #define CS_MUSIC                        2
 #define CS_MESSAGE                      3       // from the map worldspawn's message field
 #define CS_MOTD                         4       // g_motd string for server message of the day
-
-/* Nico, removed warmup
-#define CS_WARMUP                       5       // server time when the match will be restarted*/
-
+#define CS_WARMUP                       5       // server time when the match will be restarted
 #define CS_VOTE_TIME                    6
 #define CS_VOTE_STRING                  7
 #define CS_VOTE_YES                     8
@@ -333,8 +327,7 @@ extern const unsigned int aReinfSeeds[MAX_REINFSEEDS];
 
 #define CS_LEVEL_START_TIME             11      // so the timer only shows the current level
 
-/* Nico, removed intermission
-#define CS_INTERMISSION                 12      // when 1, intermission will start in a second or two*/
+#define CS_INTERMISSION                 12      // when 1, intermission will start in a second or two
 
 #define CS_MULTI_INFO                   13
 #define CS_MULTI_MAPWINNER              14
@@ -347,12 +340,10 @@ extern const unsigned int aReinfSeeds[MAX_REINFSEEDS];
 #define CS_TARGETEFFECT                 20      //----(SA)
 #define CS_WOLFINFO                     21      // NERVE - SMF
 
-/* Nico, removed firstblood
-#define CS_FIRSTBLOOD                   22      // Team that has first blood*/
+#define CS_FIRSTBLOOD                   22      // Team that has first blood
 
-/* Nico, removed rounds
 #define CS_ROUNDSCORES1                 23      // Axis round wins
-#define CS_ROUNDSCORES2                 24      // Allied round wins*/
+#define CS_ROUNDSCORES2                 24      // Allied round wins
 
 #define CS_MAIN_AXIS_OBJECTIVE          25      // Most important current objective
 #define CS_MAIN_ALLIES_OBJECTIVE        26      // Most important current objective
@@ -365,15 +356,12 @@ extern const unsigned int aReinfSeeds[MAX_REINFSEEDS];
 #define CS_SERVERTOGGLES                32      // Shows current enable/disabled settings (for voting UI)
 #define CS_GLOBALFOGVARS                33
 
-/* Nico, removed skills
 #define CS_AXIS_MAPS_XP                 34
-#define CS_ALLIED_MAPS_XP               35*/
+#define CS_ALLIED_MAPS_XP               35
 
-/* Nico, removed intermission
-#define CS_INTERMISSION_START_TIME      36*/
+#define CS_INTERMISSION_START_TIME      36
 
-/* Nico, removed endgame
-#define CS_ENDGAME_STATS                37*/
+#define CS_ENDGAME_STATS                37
 
 #define CS_CHARGETIMES                  38
 #define CS_FILTERCAMS                   39
@@ -406,10 +394,7 @@ typedef enum {
 	GT_WOLF,
 	GT_WOLF_STOPWATCH,
 	GT_WOLF_CAMPAIGN,   // Exactly the same as GT_WOLF, but uses campaign roulation (multiple maps form one virtual map)
-
-	// Nico, removed LMS
-	// GT_WOLF_LMS,
-
+	GT_WOLF_LMS,
 	GT_MAX_GAME_TYPE
 } gametype_t;
 
@@ -432,10 +417,7 @@ typedef enum {
 	PM_SPECTATOR,   // still run into walls
 	PM_DEAD,        // no acceleration or turning, but free falling
 	PM_FREEZE,      // stuck in place with no control
-
-	/* Nico, removed intermission
-	PM_INTERMISSION // no movement or status bar*/
-
+	PM_INTERMISSION // no movement or status bar
 } pmtype_t;
 
 typedef enum {
@@ -589,17 +571,12 @@ typedef enum {
 	STAT_HEALTH,
 	STAT_KEYS,                      // 16 bit fields
 	STAT_DEAD_YAW,                  // look this direction when dead (FIXME: get rid of?)
-
-	/* Nico, removed intermission
-	STAT_CLIENTS_READY,             // bit mask of clients wishing to exit the intermission (FIXME: configstring?)*/
-
+	STAT_CLIENTS_READY,             // bit mask of clients wishing to exit the intermission (FIXME: configstring?)
 	STAT_MAX_HEALTH,                // health / armor limit, changable by handicap
 	STAT_PLAYER_CLASS,              // DHM - Nerve :: player class in multiplayer
 	STAT_CAPTUREHOLD_RED,           // JPW NERVE - red team score
 	STAT_CAPTUREHOLD_BLUE,          // JPW NERVE - blue team score
-
-	/* Nico, removed XP
-	STAT_XP,                        // Gordon: "realtime" version of xp that doesnt need to go thru the scoreboard*/
+	STAT_XP,                        // Gordon: "realtime" version of xp that doesnt need to go thru the scoreboard
 } statIndex_t;
 
 // player_state->persistant[] indexes
@@ -617,13 +594,10 @@ typedef enum {
 	PERS_KILLED,                    // count of the number of times you died
 	// these were added for single player awards tracking
 
-	/* Nico, removed respawnLeft
 	PERS_RESPAWNS_LEFT,             // DHM - Nerve :: number of remaining respawns
-	PERS_RESPAWNS_PENALTY,          // how many respawns you have to sit through before respawning again*/
+	PERS_RESPAWNS_PENALTY,          // how many respawns you have to sit through before respawning again
 
-	/* Nico, removed revive_count
-	PERS_REVIVE_COUNT,*/
-
+	PERS_REVIVE_COUNT,
 	PERS_BLEH_2,
 	PERS_BLEH_3,
 
@@ -689,27 +663,16 @@ typedef enum {
 	PW_FIRE,            //----(SA)
 	PW_ELECTRIC,        //----(SA)
 	PW_BREATHER,        //----(SA)
-
-	/* Nico, removed nofatigue
-	PW_NOFATIGUE,       //----(SA)*/
-
+	PW_NOFATIGUE,       //----(SA)
 	PW_REDFLAG,
 	PW_BLUEFLAG,
-
-	/* Nico, removed disguise stuff
-	PW_OPS_DISGUISED,*/
-
+	PW_OPS_DISGUISED,
 	PW_OPS_CLASS_1,
 	PW_OPS_CLASS_2,
 	PW_OPS_CLASS_3,
-
-	/* Nico, removed adrenaline
-	PW_ADRENALINE,*/
-
+	PW_ADRENALINE,
 	PW_BLACKOUT = 14,       // OSP - spec blackouts. FIXME: we don't need 32bits here...relocate
-	/* Nico, removed multiview
-	PW_MVCLIENTLIST = 15,   // OSP - MV client info.. need a full 32 bits*/
-
+	PW_MVCLIENTLIST = 15,   // OSP - MV client info.. need a full 32 bits
 	PW_NUM_POWERUPS
 } powerup_t;
 
@@ -1610,10 +1573,7 @@ typedef enum {
 	HINT_DYNAMITE,          // DHM - Nerve
 	HINT_CONSTRUCTIBLE,
 	HINT_UNIFORM,
-
-	/* Nico, removed mines
-	HINT_LANDMINE,*/
-
+	HINT_LANDMINE,
 	HINT_TANK,
 	HINT_SATCHELCHARGE,
 	HINT_LOCKPICK,
@@ -2090,10 +2050,7 @@ extern pathCorner_t pathCorners[MAX_PATH_CORNERS];
 typedef enum {
 	ME_PLAYER,
 	ME_PLAYER_REVIVE,
-
-	/* Nico, removed disguise stuff
-	ME_PLAYER_DISGUISED,*/
-
+	ME_PLAYER_DISGUISED,
 	ME_CONSTRUCT,
 	ME_DESTRUCT,
 	ME_DESTRUCT_2,
@@ -2219,8 +2176,7 @@ typedef enum {
 
 	UIMENU_WM_TAPOUT,
 
-	/* Nico, removed LMS
-	UIMENU_WM_TAPOUT_LMS,*/
+	UIMENU_WM_TAPOUT_LMS,
 
 	UIMENU_WM_AUTOUPDATE,
 
@@ -2387,10 +2343,7 @@ typedef enum popupMessageType_e {
 typedef enum popupMessageBigType_e {
 	PM_SKILL,
 	PM_RANK,
-
-	/* Nico, removed disguise stuff
-	PM_DISGUISE,*/
-
+	PM_DISGUISE,
 	PM_BIG_NUM_TYPES
 } popupMessageBigType_t;
 

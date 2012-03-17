@@ -37,7 +37,7 @@ If you have questions concerning this license or the applicable additional terms
 //==================================================================
 
 // the "gameversion" client command will print this plus compile date
-#define GAMEVERSION         "etrun"
+#define GAMEVERSION         "ETrun"
 
 #define BODY_QUEUE_SIZE     8
 

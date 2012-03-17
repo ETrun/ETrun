@@ -911,9 +911,7 @@ void QDECL Com_Printf( const char *msg, ... ) _attribute( ( format( printf,1,2 )
 #define RELOAD_NEXTMAP          0x02
 #define RELOAD_NEXTMAP_WAITING  0x04
 #define RELOAD_FAILED           0x08
-
-/* Nico, removed endgame
-#define RELOAD_ENDGAME          0x10*/
+#define RELOAD_ENDGAME          0x10
 
 
 /*
@@ -1715,15 +1713,9 @@ typedef enum {
 typedef enum {
 	GS_INITIALIZE = -1,
 	GS_PLAYING,
-
-	/* Nico, removed warmup
 	GS_WARMUP_COUNTDOWN,
-	GS_WARMUP,*/
-
-	/* Nico, removed intermission
-	GS_INTERMISSION,*/
-
-	GS_WAITING_FOR_PLAYERS,
+	GS_WARMUP,
+	GS_INTERMISSION,
 	GS_RESET
 } gamestate_t;
 
