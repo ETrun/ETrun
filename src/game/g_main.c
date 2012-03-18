@@ -338,10 +338,13 @@ vmCvar_t g_nextcampaign;*/
 /* Nico, removed complaints
 vmCvar_t g_disableComplaints;*/
 
-// Nico, beginning of ETrun cvars
+// Nico, beginning of ETrun server cvars
 
 // Max connections per IP
 vmCvar_t g_maxConnsPerIP;
+
+// Game physics
+vmCvar_t physics;
 
 // Nico, end of ETrun cvars
 
@@ -643,10 +646,13 @@ cvarTable_t gameCvarTable[] = {
 	/* Nico, removed complaints
 	{ &g_disableComplaints, "g_disableComplaints", "0", CVAR_ARCHIVE },*/
 
-	// Nico, beginning of ETrun cvars
+	// Nico, beginning of ETrun server cvars
 
 	// Max connections per IP
 	{ &g_maxConnsPerIP, "g_maxConnsPerIP", "3", CVAR_SERVERINFO | CVAR_ARCHIVE},
+
+	// Game physics (set serverside but sent to client for prediction)
+	{ &physics, "physics", "0", CVAR_SERVERINFO | CVAR_ARCHIVE | CVAR_LATCH | CVAR_SYSTEMINFO},
 
 	// Nico, end of ETrun cvars
 };

@@ -2331,6 +2331,13 @@ extern vmCvar_t cl_wavefilename;
 extern vmCvar_t cl_waveoffset;
 extern vmCvar_t cg_recording_statusline;
 
+// Nico, beginning of ETrun client cvars
+
+// Game physics 
+extern vmCvar_t	physics;
+
+// Nico, end of ETrun cvars
+
 //
 // cg_main.c
 //

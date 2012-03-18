@@ -330,6 +330,13 @@ vmCvar_t cl_wavefilename;
 vmCvar_t cl_waveoffset;
 vmCvar_t cg_recording_statusline;
 
+// Nico, beginning of ETrun client cvars
+
+// Game physics 
+vmCvar_t	physics;
+
+// Nico, end of ETrun cvars
+
 typedef struct {
 	vmCvar_t    *vmCvar;
 	char        *cvarName;
@@ -564,6 +571,13 @@ cvarTable_t cvarTable[] = {
 	{ &cl_wavefilename, "cl_wavefilename", "", CVAR_ROM },
 	{ &cl_waveoffset, "cl_waveoffset", "0", CVAR_ROM },
 	{ &cg_recording_statusline, "cg_recording_statusline", "9", CVAR_ARCHIVE },
+
+	// Nico, beginning of ETrun client cvars
+
+	// Game physics 
+	{ &physics, "physics", "0", CVAR_ROM },
+
+	// Nico, end of ETrun cvars
 };
 
 int cvarTableSize = sizeof( cvarTable ) / sizeof( cvarTable[0] );

@@ -1924,10 +1924,13 @@ extern vmCvar_t g_nextcampaign;*/
 /* Nico, removed complaints
 extern vmCvar_t g_disableComplaints;*/
 
-// Nico, beginning of ETrun cvars
+// Nico, beginning of ETrun server cvars
 
 // Max connections per IP
 extern vmCvar_t g_maxConnsPerIP;
+
+// Game physics
+extern vmCvar_t	physics;
 
 // Nico, end of ETrun cvars
 

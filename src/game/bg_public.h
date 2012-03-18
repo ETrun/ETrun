@@ -520,6 +520,9 @@ typedef struct {
 	// these will be different functions during game and cgame
 	void ( *trace )( trace_t *results, const vec3_t start, const vec3_t mins, const vec3_t maxs, const vec3_t end, int passEntityNum, int contentMask );
 	int ( *pointcontents )( const vec3_t point, int passEntityNum );
+
+	// Nico, game physics
+	int	physics;
 } pmove_t;
 
 // if a full pmove isn't done on the client, you can just update the angles
@@ -2333,3 +2336,11 @@ void PM_TraceAllLegs( trace_t *trace, float *legsOffset, vec3_t start, vec3_t en
 void PM_TraceAll( trace_t *trace, vec3_t start, vec3_t end );
 
 #endif
+
+// Nico, flags for physics
+#define PHYSICS_NORMAL				0
+#define PHYSICS_FLAT_JUMPING		1
+#define PHYSICS_NO_FALLDAMAGE		2
+#define PHYSICS_DOUBLEJUMP			4
+#define PHYSICS_AIRCONTROL			8
+#define PHYSICS_UPMOVE_BUG_FIX		16

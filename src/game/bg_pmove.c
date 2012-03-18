@@ -790,9 +790,15 @@ static qboolean PM_CheckJump( void ) {
 
 	// rain - revert to using pmext for this since pmext is fixed now.
 	// fix for #166
+	/* Nico, add flat jumping support
 	if ( pm->cmd.serverTime - pm->pmext->jumpTime < 850 ) {
 		return qfalse;
+	}*/
+	if (!(pm->physics & PHYSICS_FLAT_JUMPING) && pm->cmd.serverTime - pm->pmext->jumpTime < 850) {
+		// Nico, => no flat jumping
+		return qfalse;
 	}
+	// Nico, enf of add flat jumping support
 
 	if ( pm->ps->pm_flags & PMF_RESPAWNED ) {
 		return qfalse;      // don't allow jump until all buttons are up
