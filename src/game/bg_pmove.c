@@ -821,7 +821,16 @@ static qboolean PM_CheckJump( void ) {
 	pm->ps->pm_flags |= PMF_JUMP_HELD;
 
 	pm->ps->groundEntityNum = ENTITYNUM_NONE;
-	pm->ps->velocity[2] = JUMP_VELOCITY;
+
+	// Nico, add doublejump support (100 is the value I found in racesow)
+	// pm->ps->velocity[2] = JUMP_VELOCITY;
+	if (pm->physics & PHYSICS_DOUBLEJUMP && pm->ps->velocity[2] > 100) {
+		pm->ps->velocity[2] += JUMP_VELOCITY;
+	} else {
+		pm->ps->velocity[2] = JUMP_VELOCITY;
+	}
+	// Nico, end of add doublejump support
+	
 	PM_AddEvent( EV_JUMP );
 
 	if ( pm->cmd.forwardmove >= 0 ) {
