@@ -1584,48 +1584,55 @@ static void PM_CrashLand( void ) {
 
 	// create a local entity event to play the sound
 
-	// SURF_NODAMAGE is used for bounce pads where you don't ever
-	// want to take damage or play a crunch sound
-	if ( !( pml.groundTrace.surfaceFlags & SURF_NODAMAGE ) ) {
-		if ( pm->debugLevel ) {
-			Com_Printf( "delta: %5.2f\n", delta );
+	// Nico, add no fall damage support
+	if (pm->physics & PHYSICS_NO_FALLDAMAGE) {
+		// Nico, no fall damage, simply play a footstep sound
+		PM_AddEventExt(EV_FOOTSTEP, PM_FootstepForSurface());
+	} else {
+		// SURF_NODAMAGE is used for bounce pads where you don't ever
+		// want to take damage or play a crunch sound
+		if ( !( pml.groundTrace.surfaceFlags & SURF_NODAMAGE ) ) {
+			if ( pm->debugLevel ) {
+				Com_Printf( "delta: %5.2f\n", delta );
+			}
+
+			if ( delta > 77 ) {
+				PM_AddEventExt( EV_FALL_NDIE, PM_FootstepForSurface() );
+			}
+			else if ( delta > 67 ) {
+				PM_AddEventExt( EV_FALL_DMG_50, PM_FootstepForSurface() );
+			}
+			else if ( delta > 58 ) {
+				// this is a pain grunt, so don't play it if dead
+				if ( pm->ps->stats[STAT_HEALTH] > 0 ) {
+					PM_AddEventExt( EV_FALL_DMG_25, PM_FootstepForSurface() );
+				}
+			} else if ( delta > 48 )     {
+				// this is a pain grunt, so don't play it if dead
+				if ( pm->ps->stats[STAT_HEALTH] > 0 ) {
+					PM_AddEventExt( EV_FALL_DMG_15, PM_FootstepForSurface() );
+				}
+			} else if ( delta > 38.75 )     {
+				// this is a pain grunt, so don't play it if dead
+				if ( pm->ps->stats[STAT_HEALTH] > 0 ) {
+					PM_AddEventExt( EV_FALL_DMG_10, PM_FootstepForSurface() );
+				}
+			} else if ( delta > 7 )   {
+				PM_AddEventExt( EV_FALL_SHORT, PM_FootstepForSurface() );
+			} else
+			{
+				PM_AddEventExt( EV_FOOTSTEP, PM_FootstepForSurface() );
+			}
 		}
 
-		if ( delta > 77 ) {
-			PM_AddEventExt( EV_FALL_NDIE, PM_FootstepForSurface() );
-		}
-		else if ( delta > 67 ) {
-			PM_AddEventExt( EV_FALL_DMG_50, PM_FootstepForSurface() );
-		}
-		else if ( delta > 58 ) {
-			// this is a pain grunt, so don't play it if dead
-			if ( pm->ps->stats[STAT_HEALTH] > 0 ) {
-				PM_AddEventExt( EV_FALL_DMG_25, PM_FootstepForSurface() );
-			}
-		} else if ( delta > 48 )     {
-			// this is a pain grunt, so don't play it if dead
-			if ( pm->ps->stats[STAT_HEALTH] > 0 ) {
-				PM_AddEventExt( EV_FALL_DMG_15, PM_FootstepForSurface() );
-			}
-		} else if ( delta > 38.75 )     {
-			// this is a pain grunt, so don't play it if dead
-			if ( pm->ps->stats[STAT_HEALTH] > 0 ) {
-				PM_AddEventExt( EV_FALL_DMG_10, PM_FootstepForSurface() );
-			}
-		} else if ( delta > 7 )   {
-			PM_AddEventExt( EV_FALL_SHORT, PM_FootstepForSurface() );
-		} else
-		{
-			PM_AddEventExt( EV_FOOTSTEP, PM_FootstepForSurface() );
+		// rain - when falling damage happens, velocity is cleared, but
+		// this needs to happen in pmove, not g_active!  (prediction will be
+		// wrong, otherwise.)
+		if ( delta > 38.75 ) {
+			VectorClear( pm->ps->velocity );
 		}
 	}
-
-	// rain - when falling damage happens, velocity is cleared, but
-	// this needs to happen in pmove, not g_active!  (prediction will be
-	// wrong, otherwise.)
-	if ( delta > 38.75 ) {
-		VectorClear( pm->ps->velocity );
-	}
+	// Nico, end of add no fall damage support
 
 	// start footstep cycle over
 	pm->ps->bobCycle = 0;
