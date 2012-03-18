@@ -288,6 +288,7 @@ BODYQUE
 InitBodyQue
 ===============
 */
+/* Nico, removed gib
 void InitBodyQue( void ) {
 	int i;
 	gentity_t   *ent;
@@ -299,7 +300,7 @@ void InitBodyQue( void ) {
 		ent->neverFree = qtrue;
 		level.bodyQue[i] = ent;
 	}
-}
+}*/
 
 /*
 =============
@@ -361,6 +362,7 @@ A player is respawning, so make an entity that looks
 just like the existing corpse to leave behind.
 =============
 */
+/* Nico, removed gib
 void CopyToBodyQue( gentity_t *ent ) {
 	gentity_t       *body;
 	int contents, i;
@@ -469,7 +471,7 @@ void CopyToBodyQue( gentity_t *ent ) {
 
 	VectorCopy( body->s.pos.trBase, body->r.currentOrigin );
 	trap_LinkEntity( body );
-}
+}*/
 
 //======================================================================
 
@@ -509,9 +511,10 @@ void SetClientViewAnglePitch( gentity_t *ent, vec_t angle ) {
 limbo
 ================
 */
-void limbo( gentity_t *ent, qboolean makeCorpse ) {
-	int i,contents;
-	//int startclient = ent->client->sess.spectatorClient;
+/* Nico, removed gib
+void limbo( gentity_t *ent, qboolean makeCorpse ) {*/
+void limbo( gentity_t *ent) {
+	int i, contents;
 	int startclient = ent->client->ps.clientNum;
 
 	if ( ent->r.svFlags & SVF_POW ) {
@@ -537,12 +540,12 @@ void limbo( gentity_t *ent, qboolean makeCorpse ) {
 		ent->client->ps.pm_flags |= PMF_LIMBO;
 		ent->client->ps.pm_flags |= PMF_FOLLOW;
 
-
+		/* Nico, removed gib
 		if ( makeCorpse ) {
 			CopyToBodyQue( ent ); // make a nice looking corpse
-		} else {
+		} else {*/
 			trap_UnlinkEntity( ent );
-		}
+		// }
 
 		// DHM - Nerve :: reset these values
 		ent->client->ps.viewlocked = 0;
@@ -552,9 +555,11 @@ void limbo( gentity_t *ent, qboolean makeCorpse ) {
 		ent->r.currentOrigin[2] += 8;
 		contents = trap_PointContents( ent->r.currentOrigin, -1 ); // drop stuff
 		ent->s.weapon = ent->client->limboDropWeapon; // stored in player_die()
+
+		/* Nico, removed gib
 		if ( makeCorpse && !( contents & CONTENTS_NODROP ) ) {
 			TossClientItems( ent );
-		}
+		}*/
 
 		ent->client->sess.spectatorClient = startclient;
 		Cmd_FollowCycle_f( ent,1 ); // get fresh spectatorClient
@@ -1730,7 +1735,7 @@ void ClientBegin( int clientNum ) {
 			}
 		}*/
 
-		limbo( ent, qfalse );
+		limbo( ent );
 	}
 
 	if ( client->sess.sessionTeam != TEAM_SPECTATOR ) {

@@ -63,6 +63,7 @@ If you have questions concerning this license or the applicable additional terms
 #define DEFAULT_SPEED		320
 
 #define FORCE_LIMBO_HEALTH  -75 // JPW NERVE
+
 #define GIB_HEALTH          -175 // JPW NERVE
 #define ARMOR_PROTECTION    0.66
 
@@ -72,40 +73,14 @@ If you have questions concerning this license or the applicable additional terms
 
 #define RANK_TIED_FLAG      0x4000
 
-//#define DEFAULT_SHOTGUN_SPREAD	700
-//#define DEFAULT_SHOTGUN_COUNT	11
-
-//#define	ITEM_RADIUS			15		// item sizes are needed for client side pickup detection
 #define ITEM_RADIUS     10 // Rafael changed the radius so that the items would fit in the 3 new containers
 
-// RF, zombie getup
-//#define	TIMER_RESPAWN	(38*(1000/15)+100)
-
-//#define	LIGHTNING_RANGE		600
-//#define	TESLA_RANGE			800
-
 #define FLAMETHROWER_RANGE  2500        // DHM - Nerve :: multiplayer range, was 850 in SP
-
-//#define ZOMBIE_FLAME_RADIUS 300
-
-// RF, AI effects
-//#define	PORTAL_ZOMBIE_SPAWNTIME		3000
-//#define	PORTAL_FEMZOMBIE_SPAWNTIME	3000
 
 #define SCORE_NOT_PRESENT   -9999   // for the CS_SCORES[12] when only one player is present
 
 #define VOTE_TIME           30000   // 30 seconds before vote times out
 
-// Ridah, disabled these
-//#define	MINS_Z				-24
-//#define	DEFAULT_VIEWHEIGHT	26
-//#define CROUCH_VIEWHEIGHT	12
-// done.
-
-// Rafael
-// note to self: Corky test
-//#define	DEFAULT_VIEWHEIGHT	26
-//#define CROUCH_VIEWHEIGHT	12
 #define DEFAULT_VIEWHEIGHT  40
 #define CROUCH_VIEWHEIGHT   16
 #define DEAD_VIEWHEIGHT     -16

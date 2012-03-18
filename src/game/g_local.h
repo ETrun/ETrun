@@ -39,7 +39,8 @@ If you have questions concerning this license or the applicable additional terms
 // the "gameversion" client command will print this plus compile date
 #define GAMEVERSION         "ETrun"
 
-#define BODY_QUEUE_SIZE     8
+/* Nico, removed gib
+#define BODY_QUEUE_SIZE     8*/
 
 #define EVENT_VALID_MSEC    300
 
@@ -1021,8 +1022,9 @@ typedef struct {
 	/* Nico, removed LMS
 	qboolean lmsDoNextMap;              // should LMS do a map_restart or a vstr nextmap*/
 
+	/* Nico, removed gib
 	int bodyQueIndex;                   // dead bodies
-	gentity_t   *bodyQue[BODY_QUEUE_SIZE];
+	gentity_t   *bodyQue[BODY_QUEUE_SIZE];*/
 
 	int portalSequence;
 	// Ridah
@@ -1428,7 +1430,10 @@ void BeginIntermission( void );*/
 
 void InitClientPersistant( gclient_t *client );
 void InitClientResp( gclient_t *client );
-void InitBodyQue( void );
+
+/* Nico, removed gib
+void InitBodyQue( void );*/
+
 void ClientSpawn( gentity_t *ent, qboolean revived );
 void player_die( gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int damage, int mod );
 void AddScore( gentity_t *ent, int score );
@@ -1438,7 +1443,9 @@ qboolean SpotWouldTelefrag( gentity_t *spot );
 qboolean G_CheckForExistingModelInfo( bg_playerclass_t* classInfo, const char *modelName, animModelInfo_t **modelInfo );
 void G_StartPlayerAppropriateSound( gentity_t *ent, char* soundType );
 void SetWolfSpawnWeapons( gclient_t *client );
-void limbo( gentity_t *ent, qboolean makeCorpse ); // JPW NERVE
+/* Nico, removed gib
+void limbo( gentity_t *ent, qboolean makeCorpse ); // JPW NERVE*/
+void limbo( gentity_t *ent );
 void reinforce( gentity_t *ent ); // JPW NERVE
 
 //

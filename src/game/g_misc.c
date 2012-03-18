@@ -226,17 +226,13 @@ void grabber_die( gentity_t *ent, gentity_t *inflictor, gentity_t *attacker, int
 
 	GibEntity( ent, 0 );    // use temporarily to show 'death' of entity
 
-//	trap_UnlinkEntity(ent->enemy);
 	ent->enemy->think = G_FreeEntity;
 	ent->enemy->nextthink = level.time + FRAMETIME;
-//	G_FreeEntity(ent->enemy);
 
 	G_UseTargets( ent, attacker );
 
-//	trap_UnlinkEntity(ent);
 	ent->think = G_FreeEntity;
 	ent->nextthink = level.time + FRAMETIME;
-//	G_FreeEntity(ent);
 }
 
 
@@ -2439,7 +2435,8 @@ void G_TempTraceIgnorePlayersAndBodies( void ) {
 		G_TempTraceIgnoreEntity( &g_entities[ i ] );
 	}
 
+	/* Nico, removed gib
 	for ( i = 0; i < BODY_QUEUE_SIZE; i++ ) {
 		G_TempTraceIgnoreEntity( level.bodyQue[ i ] );
-	}
+	}*/
 }

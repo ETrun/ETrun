@@ -1244,6 +1244,7 @@ typedef struct {
 	qhandle_t deferShader;
 
 	// gib explosions
+	/* Nico, removed gib
 	qhandle_t gibAbdomen;
 	qhandle_t gibArm;
 	qhandle_t gibChest;
@@ -1253,7 +1254,7 @@ typedef struct {
 	qhandle_t gibIntestine;
 	qhandle_t gibLeg;
 	qhandle_t gibSkull;
-	qhandle_t gibBrain;
+	qhandle_t gibBrain;*/
 
 	// debris
 	qhandle_t debBlock[6];
@@ -1559,7 +1560,10 @@ typedef struct {
 	sfxHandle_t sfx_dynamiteexpDist;
 	sfxHandle_t sfx_spearhit;
 	sfxHandle_t sfx_knifehit[5];
-	sfxHandle_t gibSound;
+
+	/* Nico, removed gib
+	sfxHandle_t gibSound;*/
+
 	sfxHandle_t noAmmoSound;
 	sfxHandle_t landSound[FOOTSTEP_TOTAL];
 
@@ -2112,7 +2116,10 @@ extern vmCvar_t cg_bobroll;
 extern vmCvar_t cg_bobyaw;
 extern vmCvar_t cg_swingSpeed;
 extern vmCvar_t cg_shadows;
-extern vmCvar_t cg_gibs;
+
+/* Nico, removed gib
+extern vmCvar_t cg_gibs;*/
+
 extern vmCvar_t cg_draw2D;
 extern vmCvar_t cg_drawFPS;
 extern vmCvar_t cg_drawSnapshot;

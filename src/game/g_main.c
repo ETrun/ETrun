@@ -2071,7 +2071,8 @@ void G_InitGame( int levelTime, int randomSeed, int restart ) {
 	G_Script_ScriptLoad();
 
 	// reserve some spots for dead player bodies
-	InitBodyQue();
+	/* Nico, removed gib
+	InitBodyQue();*/
 
 	numSplinePaths = 0 ;
 	numPathCorners = 0;
@@ -2111,9 +2112,6 @@ void G_InitGame( int levelTime, int randomSeed, int restart ) {
 
 	// Link all the splines up
 	BG_BuildSplinePaths();
-
-	// create the camera entity that will communicate with the scripts
-//	G_SpawnScriptCamera();
 
 	// general initialization
 	G_FindTeams();

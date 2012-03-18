@@ -3054,7 +3054,7 @@ void ClientCommand( int clientNum ) {
 		}
 
 		if ( ent->client->ps.stats[STAT_HEALTH] <= 0 && ( ent->client->sess.sessionTeam == TEAM_AXIS || ent->client->sess.sessionTeam == TEAM_ALLIES ) ) {
-			limbo( ent, qtrue );
+			limbo( ent );
 		}
 
 		return;

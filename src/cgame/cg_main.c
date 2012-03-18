@@ -118,7 +118,10 @@ vmCvar_t cg_bobroll;
 vmCvar_t cg_bobyaw;
 vmCvar_t cg_swingSpeed;
 vmCvar_t cg_shadows;
-vmCvar_t cg_gibs;
+
+/* Nico, removed gib
+vmCvar_t cg_gibs;*/
+
 vmCvar_t cg_draw2D;
 vmCvar_t cg_drawFPS;
 vmCvar_t cg_drawSnapshot;
@@ -354,7 +357,10 @@ cvarTable_t cvarTable[] = {
 	{ &cg_letterbox, "cg_letterbox", "0", CVAR_TEMP },    //----(SA)	added
 	{ &cg_stereoSeparation, "cg_stereoSeparation", "0.4", CVAR_ARCHIVE  },
 	{ &cg_shadows, "cg_shadows", "1", CVAR_ARCHIVE  },
-	{ &cg_gibs, "cg_gibs", "1", CVAR_ARCHIVE  },
+
+	/* Nico, removed gib
+	{ &cg_gibs, "cg_gibs", "1", CVAR_ARCHIVE  },*/
+
 //bani - #127 - we now draw reticles always in non demoplayback
 //	{ &cg_draw2D, "cg_draw2D", "1", CVAR_CHEAT }, // JPW NERVE changed per atvi req to prevent sniper rifle zoom cheats
 	{ &cg_draw2D, "cg_draw2D", "1", CVAR_ARCHIVE },
@@ -1109,7 +1115,10 @@ static void CG_RegisterSounds( void ) {
 	cgs.media.noFireUnderwater =    trap_S_RegisterSound( "sound/weapons/misc/fire_water.wav", qfalse );
 	cgs.media.selectSound =         trap_S_RegisterSound( "sound/weapons/misc/change.wav", qfalse );
 	cgs.media.landHurt =            trap_S_RegisterSound( "sound/player/land_hurt.wav", qfalse );
-	cgs.media.gibSound =            trap_S_RegisterSound( "sound/player/gib.wav", qfalse );
+
+	/* Nico, removed gib
+	cgs.media.gibSound =            trap_S_RegisterSound( "sound/player/gib.wav", qfalse );*/
+
 	cgs.media.dynamitebounce1 =     trap_S_RegisterSound( "sound/weapons/dynamite/dynamite_bounce.wav", qfalse );
 	cgs.media.satchelbounce1 =      trap_S_RegisterSound( "sound/weapons/satchel/satchel_bounce.wav", qfalse );
 

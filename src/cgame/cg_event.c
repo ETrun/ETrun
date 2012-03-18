@@ -831,6 +831,7 @@ void CG_RubbleFx( vec3_t origin, vec3_t dir, int mass, int type, sfxHandle_t sou
 				break;
 
 			case 3: // "gibs"
+				/* Nico, removed gib
 				snd = LEBS_BLOOD;
 				if ( i == 5 ) {
 					hmodel = cgs.media.gibIntestine;
@@ -838,7 +839,7 @@ void CG_RubbleFx( vec3_t origin, vec3_t dir, int mass, int type, sfxHandle_t sou
 					hmodel = cgs.media.gibLeg;
 				} else if ( i == 2 )                                        {
 					hmodel = cgs.media.gibChest;
-				} else { goto pass;}
+				} else { goto pass;}*/
 				break;
 
 			case 4: // "brick"
@@ -1111,23 +1112,24 @@ void CG_Explodef( vec3_t origin, vec3_t dir, int mass, int type, qhandle_t sound
 					hmodel = cgs.media.shardMetal1;
 				} else if ( i == 4 ) {
 					hmodel = cgs.media.shardMetal2;
-				} else if ( i == 2 )                                             {
+				} else if ( i == 2 ) {
 					hmodel = cgs.media.shardMetal2;
-				} else if ( i == 1 )                                                                                                   {
+				} else if ( i == 1 ) {
 					hmodel = cgs.media.shardMetal2;
 					scale = 0.5f;
 				} else {goto pass;}
 				break;
 
 			case 3: // "gibs"
+				/* Nico, removed gib
 				snd = LEBS_BLOOD;
 				if ( i == 5 ) {
 					hmodel = cgs.media.gibIntestine;
 				} else if ( i == 4 ) {
 					hmodel = cgs.media.gibLeg;
-				} else if ( i == 2 )                                        {
+				} else if ( i == 2 ) {
 					hmodel = cgs.media.gibChest;
-				} else { goto pass;}
+				} else { goto pass;}*/
 				break;
 
 			case 4: // "brick"
@@ -1389,7 +1391,8 @@ void CG_Effect( centity_t *cent, vec3_t origin, vec3_t dir ) {
 		VectorCopy( origin, re->origin );
 		AxisCopy( axisDefault, re->axis );
 		//	re->hModel = hModel;
-		re->hModel = cgs.media.gibIntestine;
+		/* Nico, removed gib
+		re->hModel = cgs.media.gibIntestine;*/
 		le->pos.trType = TR_GRAVITY;
 		VectorCopy( origin, le->pos.trBase );
 

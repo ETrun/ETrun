@@ -551,9 +551,7 @@ void player_die( gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int
 	LookAtKiller( self, inflictor, attacker );
 	self->client->ps.viewangles[0] = 0;
 	self->client->ps.viewangles[2] = 0;
-	//VectorCopy( self->s.angles, self->client->ps.viewangles );
 
-//	trap_UnlinkEntity( self );
 	self->r.maxs[2] = self->client->ps.crouchMaxZ;  //%	0;			// ydnar: so bodies don't clip into world
 	self->client->ps.maxs[2] = self->client->ps.crouchMaxZ; //%	0;	// ydnar: so bodies don't clip into world
 	trap_LinkEntity( self );
@@ -635,9 +633,9 @@ void player_die( gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int
 	CalculateRanks();
 
 	if ( killedintank /*Gordon: automatically go to limbo from tank*/ ) {
-		limbo( self, qfalse ); // but no corpse
+		limbo( self ); // but no corpse
 	} else if ( ( meansOfDeath == MOD_SUICIDE && g_gamestate.integer == GS_PLAYING ) ) {
-		limbo( self, qtrue );
+		limbo( self );
 	}
 	
 	/* Nico, removed LMS
@@ -1432,7 +1430,7 @@ void G_Damage( gentity_t *targ, gentity_t *inflictor, gentity_t *attacker,  vec3
 				}*/
 
 				if ( ( targ->health < FORCE_LIMBO_HEALTH ) && ( targ->health > GIB_HEALTH ) ) {
-					limbo( targ, qtrue );
+					limbo( targ );
 				}
 
 				// xkan, 1/13/2003 - record the time we died.

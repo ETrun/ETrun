@@ -1139,7 +1139,7 @@ void ClientThink_real( gentity_t *ent ) {
 		}*/
 
 		// Nico, forcing respawn
-		limbo( ent, ( client->ps.stats[STAT_HEALTH] > GIB_HEALTH ) );
+		limbo( ent );
 
 		return;
 	}
