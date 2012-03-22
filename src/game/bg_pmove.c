@@ -78,6 +78,12 @@ float pm_ladderfriction   = 14;
 float pm_spectatorfriction = 5.0f;
 //----(SA)	end
 
+// Nico, from Racesow
+const float pm_aircontrol = 150.0f; // aircontrol multiplier (intertia velocity to forward velocity conversion)
+const float pm_strafebunnyaccel = 70; // forward acceleration when strafe bunny hopping
+const float pm_wishspeed = 30;
+const float pm_airdecelerate = 2.0f; // air deceleration (not +strafe one, just at normal moving).
+
 int c_pmove = 0;
 
 /* Nico, removed mines
@@ -254,8 +260,11 @@ static void PM_Friction( void ) {
 	drop = 0;
 
 	// apply end of dodge friction
+	/* Nico, removed dodgeTime
 	if ( pm->cmd.serverTime - pm->pmext->dodgeTime < 350 &&
-		 pm->cmd.serverTime - pm->pmext->dodgeTime > 250 ) {
+		 pm->cmd.serverTime - pm->pmext->dodgeTime > 250 ) {*/
+	if ( pm->cmd.serverTime < 350 &&
+		 pm->cmd.serverTime > 250 ) {
 		drop += speed * 20 * pml.frametime;
 	}
 
@@ -905,6 +914,101 @@ static void PM_FlyMove( void ) {
 	PM_StepSlideMove( qfalse );
 }
 
+// Nico, this is the a modified function from Racesow
+// that handles air acceleration
+static void PM_AirAccelerate( vec3_t wishdir, float wishspeed ) {
+	vec3_t curvel, wishvel, acceldir, curdir;
+	float addspeed, accelspeed, curspeed;
+	float dot;
+	// air movement parameters:
+	float airforwardaccel = 1.00001f; // Default: 1.0f : how fast you accelerate until you reach pm_maxspeed
+	float bunnyaccel = 0.1586f; // (0.42 0.1593f) Default: 0.1585f how fast you accelerate after reaching pm_maxspeed
+	// (it gets harder as you near bunnytopspeed)
+	float bunnytopspeed = 900; // (0.42: 925) soft speed limit (can get faster with rjs and on ramps)
+	float turnaccel = 9.0f;    // (0.42: 9.0) Default: 7 max sharpness of turns
+	float backtosideratio = 0.9f; // (0.42: 0.8) Default: 0.8f lower values make it easier to change direction without
+	// losing speed; the drawback is "understeering" in sharp turns
+
+	if ( !wishspeed ) {
+		return;
+	}
+
+	VectorCopy( pm->ps->velocity, curvel );
+	curvel[2] = 0;
+	curspeed = VectorLength( curvel );
+
+	if ( wishspeed > curspeed * 1.01f ) {// moving below pm_maxspeed
+		float accelspeed = curspeed + airforwardaccel * DEFAULT_SPEED * pml.frametime;
+		if ( accelspeed < wishspeed ) {
+			wishspeed = accelspeed;
+		}
+	} else {
+		float f = ( bunnytopspeed - curspeed ) / ( bunnytopspeed - DEFAULT_SPEED );
+		if ( f < 0 ) {
+			f = 0;
+		}
+		wishspeed = max( curspeed, DEFAULT_SPEED ) + bunnyaccel * f * DEFAULT_SPEED * pml.frametime;
+	}
+	VectorScale( wishdir, wishspeed, wishvel );
+	VectorSubtract( wishvel, curvel, acceldir );
+	addspeed = VectorNormalize( acceldir );
+
+	accelspeed = turnaccel * DEFAULT_SPEED * pml.frametime;
+	if ( accelspeed > addspeed ) {
+		accelspeed = addspeed;
+	}
+
+	if ( backtosideratio < 1.0f ) {
+		VectorNormalize2( curvel, curdir );
+		dot = DotProduct( acceldir, curdir );
+		if ( dot < 0 ) {
+			VectorMA( acceldir, -( 1.0f - backtosideratio ) * dot, curdir, acceldir );
+		}
+	}
+
+	VectorMA( pm->ps->velocity, accelspeed, acceldir, pm->ps->velocity );
+}
+
+// Nico, from Racesow
+// when using +strafe convert the inertia to forward speed.
+static void PM_Aircontrol( pmove_t *pm, vec3_t wishdir, float wishspeed ) {
+	float zspeed, speed, dot, k;
+	int i;
+	float fmove, smove;
+
+	if ( !pm_aircontrol ) {
+		return;
+	}
+
+	// accelerate
+	fmove = pm->cmd.forwardmove;
+	smove = pm->cmd.rightmove;
+
+	if ( ( smove > 0 || smove < 0 ) || ( wishspeed == 0.0 ) ) {
+		return; // can't control movement if not moving forward or backward
+	}
+
+	zspeed = pm->ps->velocity[2];
+	pm->ps->velocity[2] = 0;
+	speed = VectorNormalize( pm->ps->velocity );
+
+	dot = DotProduct( pm->ps->velocity, wishdir );
+	k = 32.0f * pm_aircontrol * dot * dot * pml.frametime;
+
+	if ( dot > 0 ) {
+		// we can't change direction while slowing down
+		for ( i = 0; i < 2; i++ ) {
+			pm->ps->velocity[i] = pm->ps->velocity[i] * speed + wishdir[i] * k;
+		}
+		VectorNormalize( pm->ps->velocity );
+	}
+
+	for ( i = 0; i < 2; i++ ) {
+		pm->ps->velocity[i] *= speed;
+	}
+	pm->ps->velocity[2] = zspeed;
+}
+
 
 /*
 ===================
@@ -921,13 +1025,20 @@ static void PM_AirMove( void ) {
 	float scale;
 	usercmd_t cmd;
 
+	// Nico, air control vars
+	qboolean accelerating, decelerating;
+	float wishspeed2;
+	float accel;
+
 	PM_Friction();
 
 	fmove = pm->cmd.forwardmove;
 	smove = pm->cmd.rightmove;
 
 	// project moves down to flat plane
-	if ( pm->cmd.serverTime - pm->pmext->dodgeTime < 350 ) {
+	/* Nico, removed dodgeTime
+	if ( pm->cmd.serverTime - pm->pmext->dodgeTime < 350 ) {*/
+	if ( pm->cmd.serverTime < 350 ) {
 		pml.forward[2] = fmove = 0;
 		smove = pm->pmext->dtmove == DT_MOVELEFT ? -2070 : 2070;
 		scale = 1.f;
@@ -938,8 +1049,7 @@ static void PM_AirMove( void ) {
 		// Ridah, moved this down, so we use the actual movement direction
 		// set the movementDir so clients can rotate the legs for strafing
 		//	PM_SetMovementDir();
-
-
+		
 		pml.forward[2] = 0;
 		pml.right[2] = 0;
 	}
@@ -955,8 +1065,39 @@ static void PM_AirMove( void ) {
 	wishspeed = VectorNormalize( wishdir );
 	wishspeed *= scale;
 
-	// not on ground, so little effect on velocity
-	PM_Accelerate( wishdir, wishspeed, pm_airaccelerate );
+	// Nico, add flat aircontrol support
+	if (!(pm->physics & PHYSICS_AIRCONTROL)) {
+		// Nico, note: disabled air control
+		// not on ground, so little effect on velocity
+		PM_Accelerate( wishdir, wishspeed, pm_airaccelerate );
+	} else {
+		accelerating = ( DotProduct( pm->ps->velocity, wishdir ) > 0.0f );
+		decelerating = ( DotProduct( pm->ps->velocity, wishdir ) < -0.0f );
+
+		if (accelerating && !smove && fmove) {
+			PM_AirAccelerate(wishdir, wishspeed);
+		} else {
+			wishspeed2 = wishspeed;
+			if (decelerating) {
+				accel = pm_airdecelerate;
+			} else {
+				accel = pm_airaccelerate;
+			}
+
+			// +strafe bunnyhopping
+			if (smove && !fmove) {
+				if ( wishspeed > pm_wishspeed ) {
+					wishspeed = pm_wishspeed;
+				}
+				PM_Accelerate( wishdir, wishspeed, pm_strafebunnyaccel );
+				PM_Aircontrol( pm, wishdir, wishspeed2 );
+			} else {
+				// standard movement (includes strafejumping)
+				PM_Accelerate( wishdir, wishspeed, accel );
+			}
+		}
+	}
+	// Nico, end of add flat aircontrol support
 
 	// we may have a ground plane that is very steep, even
 	// though we don't have a groundentity
@@ -2900,28 +3041,12 @@ void PmoveSingle( pmove_t *pmove ) {
 	PM_SetWaterLevel();
 	pml.previous_waterlevel = pmove->waterlevel;
 
-	// set mins, maxs, and viewheight
-	//if( !PM_CheckProne() ) {
-//		PM_CheckDuck ();
-	//}
 	if ( !PM_CheckProne() ) {
 		PM_CheckDuck();
 	}
 
 	// set groundentity
 	PM_GroundTrace();
-
-	/*if( pm->ps->eFlags & EF_PRONE && !pml.walking ) {
-	// this is the one we were using
-		// can't be prone in midair
-		pm->ps->eFlags &= ~EF_PRONE;
-		pm->ps->eFlags &= ~EF_PRONE_MOVING;
-		pm->pmext->proneTime = -pm->cmd.serverTime;	// timestamp 'stop prone'
-
-		if( pm->ps->weapon == WP_MOBILE_MG42_SET ) {
-			PM_BeginWeaponChange( WP_MOBILE_MG42_SET, WP_MOBILE_MG42, qfalse );
-		}
-	}*/
 
 	if ( pm->ps->pm_type == PM_DEAD ) {
 		PM_DeadMove();

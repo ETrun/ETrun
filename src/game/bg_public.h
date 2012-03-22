@@ -453,7 +453,9 @@ typedef struct {
 
 	int dtmove;         // doubletap move
 
-	int dodgeTime;
+	/* Nico, removed dodgeTime
+	int dodgeTime;*/
+
 	int proneTime;                  // time a go-prone or stop-prone move starts, to sync the animation to
 
 	int proneGroundTime;            // time a prone player last had ground under him
@@ -524,6 +526,7 @@ typedef struct {
 	// Nico, game physics
 	int	physics;
 } pmove_t;
+
 
 // if a full pmove isn't done on the client, you can just update the angles
 void PM_UpdateViewAngles( playerState_t * ps, pmoveExt_t * pmext, usercmd_t * cmd, void( trace ) ( trace_t * results, const vec3_t start, const vec3_t mins, const vec3_t maxs, const vec3_t end, int passEntityNum, int contentMask ), int tracemask );
