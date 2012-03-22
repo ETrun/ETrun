@@ -161,6 +161,7 @@
     <ClCompile Include="bg_slidemove.c" />
     <ClCompile Include="bg_sscript.c" />
     <ClCompile Include="bg_tracemap.c" />
+    <ClCompile Include="bg_weapons.c" />
     <ClCompile Include="g_active.c" />
     <ClCompile Include="g_alarm.c" />
     <ClCompile Include="g_antilag.c" />

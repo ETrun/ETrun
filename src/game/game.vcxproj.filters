@@ -156,6 +156,9 @@
     <ClCompile Include="g_construction.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="bg_weapons.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="game.def">
