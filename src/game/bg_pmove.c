@@ -535,7 +535,7 @@ static qboolean PM_CheckJump( void ) {
 		// Nico, => no flat jumping
 		return qfalse;
 	}
-	// Nico, enf of add flat jumping support
+	// Nico, end of add flat jumping support
 
 	if ( pm->ps->pm_flags & PMF_RESPAWNED ) {
 		return qfalse;      // don't allow jump until all buttons are up
@@ -559,16 +559,17 @@ static qboolean PM_CheckJump( void ) {
 
 	pm->ps->groundEntityNum = ENTITYNUM_NONE;
 
-	// Nico, add doublejump support (100 is the value I found in racesow)
-	// pm->ps->velocity[2] = JUMP_VELOCITY;
+	// Nico, add doublejump support
 	if (pm->physics & PHYSICS_DOUBLEJUMP && pm->ps->velocity[2] > 100) {
+		PM_AddEvent( EV_DOUBLE_JUMP );
+		pm->ps->velocity[2] += JUMP_VELOCITY;
+	} else if (pm->physics & PHYSICS_DOUBLEJUMP && pm->ps->velocity[2] > 0) {
+		PM_AddEvent( EV_JUMP );
 		pm->ps->velocity[2] += JUMP_VELOCITY;
 	} else {
 		pm->ps->velocity[2] = JUMP_VELOCITY;
 	}
 	// Nico, end of add doublejump support
-	
-	PM_AddEvent( EV_JUMP );
 
 	if ( pm->cmd.forwardmove >= 0 ) {
 		BG_AnimScriptEvent( pm->ps, pm->character->animModelInfo, ANIM_ET_JUMP, qfalse, qtrue );
@@ -1197,8 +1198,6 @@ static void PM_WalkMove( void ) {
 	for ( i = 0 ; i < 3 ; i++ ) {
 		wishvel[i] = pml.forward[i] * fmove + pml.right[i] * smove;
 	}
-	// when going up or down slopes the wish velocity should Not be zero
-//	wishvel[2] = 0;
 
 	VectorCopy( wishvel, wishdir );
 	wishspeed = VectorNormalize( wishdir );

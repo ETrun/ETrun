@@ -3862,6 +3862,7 @@ char *eventnames[] = {
 	"EV_FALL_DMG_25",
 	"EV_FALL_DMG_50",
 	"EV_JUMP",
+	"EV_DOUBLE_JUMP",// Nico, double jump event
 	"EV_WATER_TOUCH",
 	"EV_WATER_LEAVE",
 	"EV_WATER_UNDER",

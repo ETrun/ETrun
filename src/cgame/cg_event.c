@@ -1937,6 +1937,13 @@ void CG_EntityEvent( centity_t *cent, vec3_t position ) {
 		DEBUGNAME( "EV_JUMP" );
 		trap_S_StartSound( NULL, es->number, CHAN_VOICE, CG_CustomSound( es->number, "*jump1.wav" ) );
 		break;
+
+	// Nico, doublejump event handling
+	case EV_DOUBLE_JUMP:
+		DEBUGNAME( "EV_DOUBLE_JUMP" );
+		trap_S_StartSound( NULL, es->number, CHAN_VOICE, CG_CustomSound( es->number, "*jump1.wav" ) );
+		break;
+
 	case EV_TAUNT:
 		DEBUGNAME( "EV_TAUNT" );
 		trap_S_StartSound( NULL, es->number, CHAN_VOICE, CG_CustomSound( es->number, "*taunt.wav" ) );

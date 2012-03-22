@@ -422,7 +422,7 @@ cvarTable_t cvarTable[] = {
 	{ &cg_animSpeed, "cg_animspeed", "1", CVAR_CHEAT },
 	{ &cg_debugAnim, "cg_debuganim", "0", CVAR_CHEAT },
 	{ &cg_debugPosition, "cg_debugposition", "0", CVAR_CHEAT },
-	{ &cg_debugEvents, "cg_debugevents", "0", CVAR_CHEAT },
+	{ &cg_debugEvents, "cg_debugevents", "1", CVAR_CHEAT },// Nico, #fixme
 	{ &cg_errorDecay, "cg_errordecay", "100", 0 },
 	{ &cg_nopredict, "cg_nopredict", "0", CVAR_CHEAT },
 	{ &cg_noPlayerAnims, "cg_noplayeranims", "0", CVAR_CHEAT },

@@ -910,6 +910,7 @@ typedef enum {
 	EV_FALL_DMG_25,
 	EV_FALL_DMG_50,
 	EV_JUMP,
+	EV_DOUBLE_JUMP,// Nico, double jump event
 	EV_WATER_TOUCH, // foot touches
 	EV_WATER_LEAVE, // foot leaves
 	EV_WATER_UNDER, // head touches

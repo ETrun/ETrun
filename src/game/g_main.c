@@ -464,7 +464,7 @@ cvarTable_t gameCvarTable[] = {
 	{ &g_forcerespawn, "g_forcerespawn", "0", 0, 0, qtrue },*/
 
 	{ &g_inactivity, "g_inactivity", "0", 0, 0, qtrue },
-	{ &g_debugMove, "g_debugMove", "0", 0, 0, qfalse },
+	{ &g_debugMove, "g_debugMove", "1", 0, 0, qfalse },// Nico, #fixme
 	{ &g_debugDamage, "g_debugDamage", "0", CVAR_CHEAT, 0, qfalse },
 	{ &g_debugAlloc, "g_debugAlloc", "0", 0, 0, qfalse },
 	{ &g_debugBullets, "g_debugBullets", "0", CVAR_CHEAT, 0, qfalse}, //----(SA)	added

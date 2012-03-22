@@ -270,8 +270,6 @@ void PM_StepSlideMove( qboolean gravity ) {
 	vec3_t start_o, start_v;
 	vec3_t down_o, down_v;
 	trace_t trace;
-//	float		down_dist, up_dist;
-//	vec3_t		delta, delta2;
 	vec3_t up, down;
 
 	VectorCopy( pm->ps->origin, start_o );
@@ -315,8 +313,10 @@ void PM_StepSlideMove( qboolean gravity ) {
 
 	PM_TraceAll( &trace, start_o, down );
 	VectorSet( up, 0, 0, 1 );
+
 	// never step up when you still have up velocity
-	if ( pm->ps->velocity[2] > 0 && ( trace.fraction == 1.0 || DotProduct( trace.plane.normal, up ) < 0.7 ) ) {
+	// Nico, add doublejump support
+	if ( !(pm->physics & PHYSICS_DOUBLEJUMP) && pm->ps->velocity[2] > 0 && ( trace.fraction == 1.0 || DotProduct( trace.plane.normal, up ) < 0.7 ) ) {
 		return;
 	}
 
