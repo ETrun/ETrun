@@ -920,14 +920,13 @@ static void PM_FlyMove( void ) {
 static void PM_Aircontrol( pmove_t *pm, vec3_t wishdir, float wishspeed ) {
 	float zspeed, speed, dot, k;
 	int i;
-	float fmove, smove;
+	float smove;
 
 	if ( !pm_aircontrol ) {
 		return;
 	}
 
 	// accelerate
-	fmove = pm->cmd.forwardmove;
 	smove = pm->cmd.rightmove;
 
 	if ( ( smove > 0 || smove < 0 ) || ( wishspeed == 0.0 ) ) {
