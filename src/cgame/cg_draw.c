@@ -4050,27 +4050,25 @@ void CG_DrawDemoRecording( void ) {
 	CG_Text_Paint_Ext( 5, cg_recording_statusline.integer, 0.2f, 0.2f, colorWhite, status, 0, 0, 0, &cgs.media.limboFont2 );
 }
 
-// Nico, from TJMod
-/*
-static void CG_DrawTJSpeed (void)
-{
+// Nico, speed meter
+static void CG_DrawSpeedMeter (void) {
 	char status[128];
 	float sizex, sizey;
 	int x, y, w;
 	static vec_t speed;	
-	static vec_t topSpeed;
 
-	speed = sqrt(cg.predictedPlayerState.velocity[0]*cg.predictedPlayerState.velocity[0] + cg.predictedPlayerState.velocity[1]*cg.predictedPlayerState.velocity[1]);
+	if (!cg_drawSpeedMeter.integer) {
+		return;
+	}
 
-	if (speed > topSpeed)
-		topSpeed = speed;
+	speed = sqrt(cg.predictedPlayerState.velocity[0] * cg.predictedPlayerState.velocity[0] + cg.predictedPlayerState.velocity[1] * cg.predictedPlayerState.velocity[1]);
 
 	sizex = sizey = 0.1f;
 	sizex *= 3;
 	sizey *= 3;
 
-	x = 300;
-	y = 220;
+	x = cg_speedMeterX.integer;
+	y = cg_speedMeterY.integer;
 	
 	Com_sprintf(status, sizeof(status), va("%.0f", speed));
 
@@ -4080,7 +4078,7 @@ static void CG_DrawTJSpeed (void)
 }
 
 // Nico, from TJMod
-static void CG_DrawOB(void)
+/*static void CG_DrawOB(void)
 {
 	double a, b, c;
 	float psec;
@@ -4288,8 +4286,8 @@ static void CG_Draw2D( void ) {
 
 		CG_DrawObjectiveInfo();
 
-		// Nico, draw speed
-		// CG_DrawTJSpeed();
+		// Nico, draw speed meter
+		CG_DrawSpeedMeter();
 
 		// Nico, draw OB
 		// CG_DrawOB();

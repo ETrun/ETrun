@@ -335,6 +335,11 @@ vmCvar_t cg_recording_statusline;
 // Game physics 
 vmCvar_t	physics;
 
+// Speed meter
+vmCvar_t	cg_drawSpeedMeter;
+vmCvar_t	cg_speedMeterX;
+vmCvar_t	cg_speedMeterY;
+
 // Nico, end of ETrun cvars
 
 typedef struct {
@@ -576,6 +581,11 @@ cvarTable_t cvarTable[] = {
 
 	// Game physics 
 	{ &physics, "physics", "0", CVAR_ROM },
+
+	// Speed meter
+	{ &cg_drawSpeedMeter, "cg_drawSpeedMeter", "1", CVAR_ARCHIVE },
+	{ &cg_speedMeterX, "cg_speedMeterX", "320", CVAR_ARCHIVE },
+	{ &cg_speedMeterY, "cg_speedMeterY", "220", CVAR_ARCHIVE },
 
 	// Nico, end of ETrun cvars
 };

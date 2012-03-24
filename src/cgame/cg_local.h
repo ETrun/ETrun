@@ -2340,6 +2340,11 @@ extern vmCvar_t cg_recording_statusline;
 // Game physics 
 extern vmCvar_t	physics;
 
+// Speed meter
+extern vmCvar_t	cg_drawSpeedMeter;
+extern vmCvar_t cg_speedMeterX;
+extern vmCvar_t cg_speedMeterY;
+
 // Nico, end of ETrun cvars
 
 //
