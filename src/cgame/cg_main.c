@@ -432,7 +432,7 @@ cvarTable_t cvarTable[] = {
 	{ &cg_nopredict, "cg_nopredict", "0", CVAR_CHEAT },
 	{ &cg_noPlayerAnims, "cg_noplayeranims", "0", CVAR_CHEAT },
 	{ &cg_showmiss, "cg_showmiss", "0", 0 },
-	{ &cg_footsteps, "cg_footsteps", "1", CVAR_CHEAT },
+	{ &cg_footsteps, "cg_footsteps", "1", CVAR_ARCHIVE },// Nico, removed CVAR_CHEAT flag
 	{ &cg_tracerChance, "cg_tracerchance", "0.4", CVAR_CHEAT },
 	{ &cg_tracerWidth, "cg_tracerwidth", "0.8", CVAR_CHEAT },
 	{ &cg_tracerSpeed, "cg_tracerSpeed", "4500", CVAR_CHEAT },
@@ -496,7 +496,7 @@ cvarTable_t cvarTable[] = {
 	{ &cg_movespeed, "g_movespeed", "76", 0 }, // actual movespeed of player*/
 
 	{ &cg_animState, "cg_animState", "0", CVAR_CHEAT},
-	{ &cg_drawCompass, "cg_drawCompass", "1", CVAR_ARCHIVE },
+	{ &cg_drawCompass, "cg_drawCompass", "0", CVAR_ARCHIVE },// Nico, disabled by default
 	{ &cg_drawNotifyText, "cg_drawNotifyText", "1", CVAR_ARCHIVE },
 	{ &cg_quickMessageAlt, "cg_quickMessageAlt", "0", CVAR_ARCHIVE },
 	{ &cg_popupLimboMenu, "cg_popupLimboMenu", "1", CVAR_ARCHIVE },
