@@ -846,7 +846,9 @@ void ClientThink_real( gentity_t *ent ) {
 		msec = 200;
 	}
 
-	if ( pmove_fixed.integer || client->pers.pmoveFixed ) {
+	// Nico, pmove_fixed
+	//if ( pmove_fixed.integer || client->pers.pmoveFixed ) {
+	if ( client->pers.pmoveFixed ) { 
 		ucmd->serverTime = ( ( ucmd->serverTime + pmove_msec.integer - 1 ) / pmove_msec.integer ) * pmove_msec.integer;
 	}
 
@@ -958,7 +960,9 @@ void ClientThink_real( gentity_t *ent ) {
 	pm.debugLevel = g_debugMove.integer;
 	pm.noFootsteps = qfalse;
 
-	pm.pmove_fixed = pmove_fixed.integer | client->pers.pmoveFixed;
+	// Nico, pmove_fixed
+	// pm.pmove_fixed = pmove_fixed.integer | client->pers.pmoveFixed;
+	pm.pmove_fixed = client->pers.pmoveFixed;
 	pm.pmove_msec = pmove_msec.integer;
 
 	// Nico, game physics
@@ -1165,6 +1169,13 @@ void ClientThink_real( gentity_t *ent ) {
 	// perform once-a-second actions
 	if ( level.match_pause == PAUSE_NONE ) {
 		ClientTimerActions( ent, msec );
+	}
+
+	// Nico, pmove_fixed
+	if (!client->pers.pmoveFixed) {
+		CP("cpm \"^1You were removed from teams because you can not use pmove_fixed 0.\n\"");
+		trap_SendServerCommand(ent-g_entities, "pmoveon");
+		SetTeam(ent, "s", qtrue, -1, -1, qfalse);
 	}
 }
 

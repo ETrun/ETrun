@@ -1305,6 +1305,9 @@ void ClientUserinfoChanged( int clientNum ) {
 		}
 	// }
 
+	// Nico, pmove_fixed
+	client->pers.pmoveFixed = client->pers.clientFlags & CGF_PMOVEFIXED;
+
 	// set name
 	Q_strncpyz( oldname, client->pers.netname, sizeof( oldname ) );
 	ClientCleanName( name, client->pers.netname, sizeof( client->pers.netname ) );
@@ -1391,7 +1394,7 @@ void ClientUserinfoChanged( int clientNum ) {
 				client->sess.referee
 				);*/
 
-		s = va( "n\\%s\\t\\%i\\c\\%i\\w\\%i\\lw\\%i\\sw\\%i\\mu\\%i\\ref\\%i",
+		s = va( "n\\%s\\t\\%i\\c\\%i\\w\\%i\\lw\\%i\\sw\\%i\\mu\\%i\\ref\\%i\\pm\\%i",
 				client->pers.netname,
 				client->sess.sessionTeam,
 				client->sess.playerType,
@@ -1399,7 +1402,8 @@ void ClientUserinfoChanged( int clientNum ) {
 				client->sess.latchPlayerWeapon,
 				client->sess.latchPlayerWeapon2,
 				client->sess.muted ? 1 : 0,
-				client->sess.referee
+				client->sess.referee,
+				client->pers.pmoveFixed ? 1 : 0// Nico, pmove_fixed
 				);
 	// }
 

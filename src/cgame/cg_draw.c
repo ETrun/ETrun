@@ -4050,6 +4050,115 @@ void CG_DrawDemoRecording( void ) {
 	CG_Text_Paint_Ext( 5, cg_recording_statusline.integer, 0.2f, 0.2f, colorWhite, status, 0, 0, 0, &cgs.media.limboFont2 );
 }
 
+// Nico, from TJMod
+/*
+static void CG_DrawTJSpeed (void)
+{
+	char status[128];
+	float sizex, sizey;
+	int x, y, w;
+	static vec_t speed;	
+	static vec_t topSpeed;
+
+	speed = sqrt(cg.predictedPlayerState.velocity[0]*cg.predictedPlayerState.velocity[0] + cg.predictedPlayerState.velocity[1]*cg.predictedPlayerState.velocity[1]);
+
+	if (speed > topSpeed)
+		topSpeed = speed;
+
+	sizex = sizey = 0.1f;
+	sizex *= 3;
+	sizey *= 3;
+
+	x = 300;
+	y = 220;
+	
+	Com_sprintf(status, sizeof(status), va("%.0f", speed));
+
+	w = CG_Text_Width_Ext( status, sizex, 0, &cgs.media.limboFont2 ) / 2;
+
+	CG_Text_Paint_Ext(x - w, y, sizex, sizey, colorWhite, status, 0, 0, 0, &cgs.media.limboFont2);
+}
+
+// Nico, from TJMod
+static void CG_DrawOB(void)
+{
+	double a, b, c;
+	float psec;
+	int gravity;
+	vec3_t snap;
+	float rintv;
+	float v0;
+	float h0, hn;
+	float t;
+	trace_t trace;
+	vec3_t start, end;
+	// float n1; @unused
+	float n2;
+	int n;
+
+	if (cg_thirdPerson.integer)
+		return;
+
+	psec = pmove_msec.integer / 1000.0;
+	gravity = cg.predictedPlayerState.gravity;
+	v0 = cg.predictedPlayerState.velocity[2];
+	h0 = cg.predictedPlayerState.origin[2] + cg.predictedPlayerState.mins[2];
+	//CG_Printf("psec: %f, gravity: %d\n", psec, gravity);
+
+	VectorSet(snap, 0, 0, gravity * psec);
+	trap_SnapVector(snap);
+	rintv = snap[2];
+
+	// use origin from playerState?
+	VectorCopy(cg.refdef.vieworg, start);
+	VectorMA(start, 131072, cg.refdef.viewaxis[0], end);
+
+	CG_Trace(&trace, start, vec3_origin, vec3_origin, end, 
+		cg.predictedPlayerState.clientNum, CONTENTS_SOLID);
+
+	// we didn't hit anything
+	if (trace.fraction == 1.0)
+		return;
+
+	// not a floor
+	if (trace.plane.type != 2)
+		return;
+
+	t = trace.endpos[2];
+	//CG_Printf("h0: %f, t: %f\n", h0, t);
+
+	// fall ob
+	a = -psec * rintv / 2;
+	b = psec * (v0 - gravity * psec / 2 + rintv / 2);
+	c = h0 - t;
+	// n1 = (-b + sqrt(b * b - 4 * a * c)) / (2 * a);
+	n2 = (-b - sqrt(b * b - 4 * a * c)) / (2 * a);
+	//CG_Printf("%f, %f\n", n1, n2);
+
+	n = floor(n2);
+	hn = h0 + psec * n * (v0 - gravity * psec / 2 - (n - 1) * rintv / 2);
+	//CG_Printf("h0: %f, v0: %f, n: %d, hn: %f, t: %f\n", h0, v0, n, hn, t);
+	if (n && hn < t + 0.25 && hn > t)
+		CG_DrawStringExt(320, 220, "F", colorWhite, qfalse, qtrue,
+				TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 0);
+
+	if (cg.predictedPlayerState.groundEntityNum != ENTITYNUM_NONE) {
+		// jump ob
+		v0 += 270; // JUMP_VELOCITY
+		b = psec * (v0 - gravity * psec / 2 + rintv / 2);
+		// n1 = (-b + sqrt(b * b - 4 * a * c ) ) / (2 * a);
+		n2 = (-b - sqrt(b * b - 4 * a * c ) ) / (2 * a);
+		//CG_Printf("%f, %f\n", n1, n2);
+
+		n = floor(n2);
+		hn = h0 + psec * n * (v0 - gravity * psec / 2 - ( n - 1 ) * rintv / 2);
+		//CG_Printf("h0: %f, v0: %f, n: %d, hn: %f, t: %f\n", h0, v0, n, hn, t);
+		if (hn < t + 0.25 && hn > t)
+			CG_DrawStringExt(330, 220, "J", colorWhite, qfalse, qtrue,
+					TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 0);
+	}
+}*/
+
 /*
 =================
 CG_Draw2D
@@ -4178,6 +4287,12 @@ static void CG_Draw2D( void ) {
 		}
 
 		CG_DrawObjectiveInfo();
+
+		// Nico, draw speed
+		// CG_DrawTJSpeed();
+
+		// Nico, draw OB
+		// CG_DrawOB();
 
 		CG_DrawSpectatorMessage();
 

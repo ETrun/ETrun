@@ -2521,6 +2521,13 @@ static void CG_ServerCommand( void ) {
 		return;
 	}*/
 
+	// Nico, pmove_fixed
+	if (!Q_stricmp(cmd, "pmoveon")) {
+		trap_SendConsoleCommand("set pmove_fixed 1\n");
+		CG_AddPMItem(PM_MESSAGE, "pmove_fixed has been set to 1\n", cgs.media.voiceChatShader);
+		return;
+	}
+
 	CG_Printf( "Unknown client game command: %s\n", cmd );
 }
 

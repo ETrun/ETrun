@@ -453,8 +453,8 @@ cvarTable_t cvarTable[] = {
 	{ &cg_timescale, "timescale", "1", 0},
 	{ &cg_cameraMode, "com_cameraMode", "0", CVAR_CHEAT},
 
-	{ &pmove_fixed, "pmove_fixed", "0", 0},
-	{ &pmove_msec, "pmove_msec", "8", 0},
+	{ &pmove_fixed, "pmove_fixed", "1", 0},
+	{ &pmove_msec, "pmove_msec", "8", CVAR_CHEAT},
 
 	{ &cg_noTaunt, "cg_noTaunt", "0", CVAR_ARCHIVE},                      // NERVE - SMF
 	{ &cg_voiceSpriteTime, "cg_voiceSpriteTime", "6000", CVAR_ARCHIVE},       // DHM - Nerve
@@ -642,9 +642,11 @@ void CG_UpdateCvars( void ) {
 				cv->modificationCount = cv->vmCvar->modificationCount;
 
 				// Check if we need to update any client flags to be sent to the server
+				// Nico, added pmove_fixed
 				if ( cv->vmCvar == &cg_autoAction || cv->vmCvar == &cg_autoReload ||
 					 cv->vmCvar == &int_cl_timenudge || cv->vmCvar == &int_cl_maxpackets ||
-					 cv->vmCvar == &cg_autoactivate || cv->vmCvar == &cg_predictItems ) {
+					 cv->vmCvar == &cg_autoactivate || cv->vmCvar == &cg_predictItems ||
+					 cv->vmCvar == &pmove_fixed ) {
 					fSetFlags = qtrue;
 				} else if ( cv->vmCvar == &cg_crosshairColor || cv->vmCvar == &cg_crosshairAlpha )      {
 					BG_setCrosshair( cg_crosshairColor.string, cg.xhairColor, cg_crosshairAlpha.value, "cg_crosshairColor" );
@@ -687,21 +689,23 @@ void CG_setClientFlags( void ) {
 
 	cg.pmext.bAutoReload = ( cg_autoReload.integer > 0 );
 	trap_Cvar_Set( "cg_uinfo", va( "%d %d %d",
-								   // Client Flags
-								   (
-									   ( ( cg_autoReload.integer > 0 ) ? CGF_AUTORELOAD : 0 ) |
-									   /* Nico, removed statsdump client command
-									   ( ( cg_autoAction.integer & AA_STATSDUMP ) ? CGF_STATSDUMP : 0 ) |*/
-									   ( ( cg_autoactivate.integer > 0 ) ? CGF_AUTOACTIVATE : 0 ) |
-									   ( ( cg_predictItems.integer > 0 ) ? CGF_PREDICTITEMS : 0 )
-									   // Add more in here, as needed
-								   ),
+	// Client Flags
+	(
+		( ( cg_autoReload.integer > 0 ) ? CGF_AUTORELOAD : 0 ) |
+		// Nico, removed statsdump client command
+		// Nico, added pmove_fixed
+		//( ( cg_autoAction.integer & AA_STATSDUMP ) ? CGF_STATSDUMP : 0 ) |
+		( ( cg_autoactivate.integer > 0 ) ? CGF_AUTOACTIVATE : 0 ) |
+		( ( cg_predictItems.integer > 0 ) ? CGF_PREDICTITEMS : 0 ) |
+		((pmove_fixed.integer > 0) ? CGF_PMOVEFIXED : 0)
+		// Add more in here, as needed
+	),
 
-								   // Timenudge
-								   int_cl_timenudge.integer,
-								   // MaxPackets
-								   int_cl_maxpackets.integer
-								   ) );
+	// Timenudge
+	int_cl_timenudge.integer,
+	// MaxPackets
+	int_cl_maxpackets.integer
+	) );
 }
 
 int CG_CrosshairPlayer( void ) {

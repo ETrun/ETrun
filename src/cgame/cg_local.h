@@ -607,6 +607,10 @@ typedef struct clientInfo_s {
 	int weapHeat;
 	int weaponState;
 	int weaponState_last;
+
+	// Nico, pmove_fixed
+	int	pmoveFixed;
+
 } clientInfo_t;
 
 typedef enum {
