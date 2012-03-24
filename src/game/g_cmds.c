@@ -1349,9 +1349,13 @@ void G_SayTo( gentity_t *ent, gentity_t *other, int mode, int color, const char 
 	if ( match_mutespecs.integer > 0 && ent->client->sess.referee == 0 &&   // OSP
 		 ( ( ent->client->sess.sessionTeam == TEAM_FREE && other->client->sess.sessionTeam != TEAM_FREE ) ||
 		   ( ent->client->sess.sessionTeam == TEAM_SPECTATOR && other->client->sess.sessionTeam != TEAM_SPECTATOR ) ) ) {*/
+
+	/* Nico, enable voice chat for spectators
 	if ( ent->client->sess.referee == 0 &&   // OSP
 		 ( ( ent->client->sess.sessionTeam == TEAM_FREE && other->client->sess.sessionTeam != TEAM_FREE ) ||
-		   ( ent->client->sess.sessionTeam == TEAM_SPECTATOR && other->client->sess.sessionTeam != TEAM_SPECTATOR ) ) ) {
+		   ( ent->client->sess.sessionTeam == TEAM_SPECTATOR && other->client->sess.sessionTeam != TEAM_SPECTATOR ) ) ) {*/
+	if ( ent->client->sess.referee == 0 &&   // OSP
+		 ( ( ent->client->sess.sessionTeam == TEAM_FREE && other->client->sess.sessionTeam != TEAM_FREE ) ) ) {
 		return;
 	} else {
 		if ( mode == SAY_BUDDY ) {  // send only to people who have the sender on their buddy list
@@ -2959,10 +2963,12 @@ void ClientCommand( int clientNum ) {
 	}
 
 	if ( Q_stricmp( cmd, "say_team" ) == 0 ) {
+
+		/* Nico, enable voice chat for spectators
 		if ( ent->client->sess.sessionTeam == TEAM_SPECTATOR || ent->client->sess.sessionTeam == TEAM_FREE ) {
 			trap_SendServerCommand( ent - g_entities, "print \"Can't team chat as spectator\n\"\n" );
 			return;
-		}
+		}*/
 
 		if ( !ent->client->sess.muted ) {
 			Cmd_Say_f( ent, SAY_TEAM, qfalse );
@@ -2974,10 +2980,12 @@ void ClientCommand( int clientNum ) {
 		}
 		return;
 	} else if ( Q_stricmp( cmd, "vsay_team" ) == 0 ) {
+
+		/* Nico, enable voice chat for spectators
 		if ( ent->client->sess.sessionTeam == TEAM_SPECTATOR || ent->client->sess.sessionTeam == TEAM_FREE ) {
 			trap_SendServerCommand( ent - g_entities, "print \"Can't team chat as spectator\n\"\n" );
 			return;
-		}
+		}*/
 
 		if ( !ent->client->sess.muted ) {
 			Cmd_Voice_f( ent, SAY_TEAM, qfalse, qfalse );
