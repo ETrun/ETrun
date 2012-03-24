@@ -514,7 +514,7 @@ limbo
 /* Nico, removed gib
 void limbo( gentity_t *ent, qboolean makeCorpse ) {*/
 void limbo( gentity_t *ent) {
-	int i, contents;
+	int i;//, contents; Nico, unused warning fix
 	int startclient = ent->client->ps.clientNum;
 
 	if ( ent->r.svFlags & SVF_POW ) {
@@ -553,7 +553,9 @@ void limbo( gentity_t *ent) {
 
 		ent->r.maxs[2] = 0;
 		ent->r.currentOrigin[2] += 8;
-		contents = trap_PointContents( ent->r.currentOrigin, -1 ); // drop stuff
+		// contents = trap_PointContents( ent->r.currentOrigin, -1 ); // drop stuff
+		trap_PointContents( ent->r.currentOrigin, -1 ); // drop stuff
+
 		ent->s.weapon = ent->client->limboDropWeapon; // stored in player_die()
 
 		/* Nico, removed gib
