@@ -233,35 +233,6 @@ gentity_t *SelectSpawnPoint( vec3_t avoidPoint, vec3_t origin, vec3_t angles ) {
 
 /*
 ===========
-SelectInitialSpawnPoint
-
-Try to find a spawn point marked 'initial', otherwise
-use normal spawn selection.
-============
-*/
-/*gentity_t *SelectInitialSpawnPoint( vec3_t origin, vec3_t angles ) {
-	gentity_t	*spot;
-
-	spot = NULL;
-	while ((spot = G_Find (spot, FOFS(classname), "info_player_deathmatch")) != NULL) {
-		if ( spot->spawnflags & 1 ) {
-			break;
-		}
-	}
-
-	if ( !spot || SpotWouldTelefrag( spot ) ) {
-		return SelectSpawnPoint( vec3_origin, origin, angles );
-	}
-
-	VectorCopy (spot->r.currentOrigin, origin);
-	origin[2] += 9;
-	VectorCopy (spot->s.angles, angles);
-
-	return spot;
-}*/
-
-/*
-===========
 SelectSpectatorSpawnPoint
 
 ============
@@ -2036,7 +2007,8 @@ void ClientSpawn( gentity_t *ent, qboolean revived ) {
 		if ( g_fastres.integer == 1 && revived ) {
 			client->ps.powerups[PW_INVULNERABLE] = level.time + 1000;
 		} else {*/
-			client->ps.powerups[PW_INVULNERABLE] = level.time + 3000;
+			// Nico, removed spawn shield
+			// client->ps.powerups[PW_INVULNERABLE] = level.time + 3000;
 		// }
 	}
 	// End Xian
