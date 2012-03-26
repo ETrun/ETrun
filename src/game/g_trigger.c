@@ -406,6 +406,7 @@ void hurt_touch( gentity_t *self, gentity_t *other, trace_t *trace ) {
 	} else {
 		dflags = 0;
 	}
+
 	G_Damage( other, self, self, NULL, NULL, self->damage, dflags, MOD_TRIGGER_HURT );
 
 	if ( self->spawnflags & 32 ) {
@@ -466,16 +467,14 @@ void SP_trigger_hurt( gentity_t *self ) {
 	self->use = hurt_use;
 
 	// link in to the world if starting active
-	if ( !( self->spawnflags & 1 ) ) {
-		//----(SA)	any reason this needs to be linked? (predicted?)
-//		trap_LinkEntity (self);
+	// Nico, enable hurt entity if needed
+	if (g_enableMapEntities.integer & MAP_HURT_ENTITIES || !( self->spawnflags & 1 ) ) {
 		self->touch = hurt_touch;
 	}
 
 	G_SpawnString( "life", "0", &life );
 	dalife = atof( life );
 	self->delay = dalife;
-
 }
 
 // START	xkan, 9/17/2002

@@ -696,7 +696,6 @@ void G_KillEnts( const char* target, gentity_t* ignore, gentity_t* killer, means
 		// RF, script_movers should die!
 		if ( targ->s.eType == ET_MOVER && !Q_stricmp( targ->classname, "script_mover" ) && targ->die ) {
 			G_Damage( targ, killer, killer, NULL, NULL, 100000, DAMAGE_NO_PROTECTION, MOD_TELEFRAG );
-//			targ->die(targ, killer, killer, targ->health, 0);
 			continue;
 		}
 
@@ -721,7 +720,8 @@ void G_KillEnts( const char* target, gentity_t* ignore, gentity_t* killer, means
 }
 
 void target_kill_use( gentity_t *self, gentity_t *other, gentity_t *activator ) {
-	if ( self->spawnflags & 1 ) {  // kill usertoo
+	// Nico, if kill triggers are enabled, kill activator (=player) too
+	if (g_enableMapEntities.integer & MAP_KILL_ENTITIES || self->spawnflags & 1) {  // kill usertoo
 		G_Damage( activator, NULL, NULL, NULL, NULL, 100000, DAMAGE_NO_PROTECTION, MOD_TELEFRAG );
 	}
 

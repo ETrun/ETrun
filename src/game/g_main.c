@@ -346,6 +346,9 @@ vmCvar_t g_maxConnsPerIP;
 // Game physics
 vmCvar_t physics;
 
+// Enable certain map entities
+vmCvar_t g_enableMapEntities;
+
 // Nico, end of ETrun cvars
 
 
@@ -653,6 +656,10 @@ cvarTable_t gameCvarTable[] = {
 
 	// Game physics (set serverside but sent to client for prediction)
 	{ &physics, "physics", "0", CVAR_SERVERINFO | CVAR_ARCHIVE | CVAR_LATCH | CVAR_SYSTEMINFO},
+
+	// Enable certain map entities
+	// 3 enabled both kill entities and hurt entities
+	{ &g_enableMapEntities, "g_enableMapEntities", "3", CVAR_SERVERINFO | CVAR_ARCHIVE},
 
 	// Nico, end of ETrun cvars
 };

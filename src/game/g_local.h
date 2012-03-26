@@ -1932,6 +1932,9 @@ extern vmCvar_t g_maxConnsPerIP;
 // Game physics
 extern vmCvar_t	physics;
 
+// Enable certain map entities
+extern vmCvar_t g_enableMapEntities;
+
 // Nico, end of ETrun cvars
 
 void    trap_Printf( const char *fmt );
@@ -2552,3 +2555,7 @@ qboolean G_CanPickupWeapon( weapon_t weapon, gentity_t* ent );
 
 /* Nico, removed mines
 qboolean G_LandmineSnapshotCallback( int entityNum, int clientNum );*/
+
+// Nico, flags enabling map entities
+#define MAP_KILL_ENTITIES	1
+#define MAP_HURT_ENTITIES	2
