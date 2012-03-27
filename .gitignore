@@ -14,10 +14,15 @@ src/*/*.o
 autom4te.cache/
 aclocal.m4
 Makefile
+Makefile.in
+configure
 config.h
+config.h.in
 config.status
 libtool
 stamp-h1
+build-aux
+m4
 
 # VS related
 ipch/

@@ -1,0 +1,11 @@
+#! /bin/bash
+
+if [ ! -d build-aux ]; then
+	mkdir build-aux
+fi
+
+aclocal
+autoconf
+autoheader
+libtoolize
+automake --add-missing --copy --no-force --foreign
