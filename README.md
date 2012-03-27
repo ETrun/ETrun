@@ -29,7 +29,7 @@ On Linux, make sure you have the following packages installed:
 
 Then, run the bootstrap script:
 
-$ ./bootstrap
+  $ ./bootstrap
 
 Compiling for Windows
 ---------------------
@@ -38,7 +38,7 @@ On Windows: use MSVC compiler.
 
 On Linux, run:
 
-$ ./windows_compile.sh
+  $ ./windows_compile.sh
 
 Compiling for Linux
 -------------------
@@ -47,13 +47,13 @@ On Windows: not supported.
 
 On Linux, run:
 
-$ ./linux_compile.sh
+  $ ./linux_compile.sh
 
 Compiling for OSX
 -----------------
 
 On OSX, run:
 
-$ ./osx_compile.sh
+  $ ./osx_compile.sh
 
 You can also use Xcode projects located in src directory.
