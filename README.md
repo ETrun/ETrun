@@ -27,7 +27,7 @@ On Linux, make sure you have the following packages installed:
 * libtool
 * gcc-mingw32 (needed if you want to compile for Windows)
 
-Then, run the bootstrap scirpt:
+Then, run the bootstrap script:
 
 $ ./bootstrap
 
@@ -52,4 +52,8 @@ $ ./linux_compile.sh
 Compiling for OSX
 -----------------
 
-On OSX: use Xcode projects in src/
+On OSX, run:
+
+$ ./osx_compile.sh
+
+You can also use Xcode projects located in src directory.
