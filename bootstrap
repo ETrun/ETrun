@@ -4,8 +4,25 @@ if [ ! -d build-aux ]; then
 	mkdir build-aux
 fi
 
+echo "Running aclocal"
 aclocal
+
+echo "Running autoconf"
 autoconf
+
+echo "Running autoheader"
 autoheader
-libtoolize
+
+# libtoolize on Linux
+# glibtoolize on MacOS
+host=`uname -s`
+if [ $host = "Darwin" ]; then
+  echo "OSX detected, running glibtoolize"
+  glibtoolize
+else
+  echo "Linux detected, running libtoolize"
+  libtoolize
+fi
+
+echo "Running automake"
 automake --add-missing --copy --no-force --foreign
