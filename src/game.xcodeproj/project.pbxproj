@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		371C1E9615133D3F00276911 /* g_construction.c in Sources */ = {isa = PBXBuildFile; fileRef = 371C1E9515133D3F00276911 /* g_construction.c */; };
+		37BA88801521F89F00D558A1 /* bg_weapons.c in Sources */ = {isa = PBXBuildFile; fileRef = 37BA887F1521F89F00D558A1 /* bg_weapons.c */; };
 		5088180A09F0CE0A0071BF1A /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5088180909F0CE0A0071BF1A /* CoreFoundation.framework */; };
 		B72E633F0B47155A0006C962 /* bg_animation.c in Sources */ = {isa = PBXBuildFile; fileRef = B72E630B0B47155A0006C962 /* bg_animation.c */; };
 		B72E63400B47155A0006C962 /* bg_animgroup.c in Sources */ = {isa = PBXBuildFile; fileRef = B72E630C0B47155A0006C962 /* bg_animgroup.c */; };
@@ -58,6 +59,7 @@
 
 /* Begin PBXFileReference section */
 		371C1E9515133D3F00276911 /* g_construction.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = g_construction.c; path = game/g_construction.c; sourceTree = "<group>"; };
+		37BA887F1521F89F00D558A1 /* bg_weapons.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = bg_weapons.c; path = game/bg_weapons.c; sourceTree = "<group>"; };
 		508817D409F0C9AD0071BF1A /* qagame_mac.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = qagame_mac.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 		5088180909F0CE0A0071BF1A /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = /System/Library/Frameworks/CoreFoundation.framework; sourceTree = "<absolute>"; };
 		B72E630B0B47155A0006C962 /* bg_animation.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = bg_animation.c; path = ./game/bg_animation.c; sourceTree = SOURCE_ROOT; };
@@ -147,6 +149,7 @@
 		508817F509F0CAB50071BF1A /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				37BA887F1521F89F00D558A1 /* bg_weapons.c */,
 				371C1E9515133D3F00276911 /* g_construction.c */,
 				B72E630B0B47155A0006C962 /* bg_animation.c */,
 				B72E630C0B47155A0006C962 /* bg_animgroup.c */,
@@ -308,6 +311,7 @@
 				B72E63710B47155A0006C962 /* q_math.c in Sources */,
 				B72E63720B47155A0006C962 /* q_shared.c in Sources */,
 				371C1E9615133D3F00276911 /* g_construction.c in Sources */,
+				37BA88801521F89F00D558A1 /* bg_weapons.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
