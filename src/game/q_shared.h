@@ -846,8 +846,10 @@ char *Q_CleanStr( char *string );
 // removes whitespaces and other bad directory characters
 char *Q_CleanDirName( char *dirname );
 
+/* Nico, I comment this because it seems unreferenced and causes compilation error on OSX
 #define _vsnprintf use_Q_vsnprintf
-#define vsnprintf use_Q_vsnprintf
+#define vsnprintf use_Q_vsnprintf*/
+
 int Q_vsnprintf( char *dest, int size, const char *fmt, va_list argptr );
 
 //=============================================
