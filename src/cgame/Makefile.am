@@ -17,6 +17,7 @@ libcgame_la_SOURCES = \
 ../game/bg_slidemove.c \
 ../game/bg_sscript.c \
 ../game/bg_tracemap.c \
+../game/bg_weapons.c \
 ../game/q_math.c \
 ../game/q_shared.c \
 ../ui/ui_shared.c cg_atmospheric.c \
