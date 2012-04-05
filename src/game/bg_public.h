@@ -1574,7 +1574,8 @@ void    BG_GetMarkDir( const vec3_t dir, const vec3_t normal, vec3_t out );
 
 void    BG_AddPredictableEventToPlayerstate( int newEvent, int eventParm, playerState_t *ps );
 
-//void	BG_TouchJumpPad( playerState_t *ps, entityState_t *jumppad );
+// Nico, uncommented to add jumppads support
+void	BG_TouchJumpPad( playerState_t *ps, entityState_t *jumppad );
 
 void    BG_PlayerStateToEntityState( playerState_t *ps, entityState_t *s, qboolean snap );
 void    BG_PlayerStateToEntityStateExtraPolate( playerState_t *ps, entityState_t *s, int time, qboolean snap );

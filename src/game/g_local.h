@@ -2571,3 +2571,4 @@ qboolean G_LandmineSnapshotCallback( int entityNum, int clientNum );*/
 // Nico, flags enabling map entities
 #define MAP_KILL_ENTITIES	1
 #define MAP_HURT_ENTITIES	2
+#define MAP_JUMPPADS		4

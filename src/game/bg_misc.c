@@ -5402,3 +5402,18 @@ int Q_vsnprintf(char *str, size_t size, const char *format, va_list ap) {
 	return retval;
 }
 #endif
+
+/*
+========================
+BG_TouchJumpPad
+========================
+*/
+void BG_TouchJumpPad( playerState_t *ps, entityState_t *jumppad ) {
+	// spectators don't use jump pads
+	if ( ps->pm_type != PM_NORMAL ) {
+		return;
+	}
+
+	// give the player the velocity from the jumppad
+	VectorCopy( jumppad->origin2, ps->velocity );
+}

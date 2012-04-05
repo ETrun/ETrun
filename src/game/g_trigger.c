@@ -201,6 +201,13 @@ trigger_push
 */
 
 void trigger_push_touch( gentity_t *self, gentity_t *other, trace_t *trace ) {
+
+	// Nico, jumpads support
+	if (!(g_enableMapEntities.integer & MAP_JUMPPADS) || !other->client ) {
+		return;
+	}
+
+	BG_TouchJumpPad(&other->client->ps, &self->s);
 }
 
 
@@ -257,6 +264,17 @@ Must point at a target_position, which will be the apex of the leap.
 This will be client side predicted, unlike target_push
 */
 void SP_trigger_push( gentity_t *self ) {
+	// Nico, jumppads support (from TJMod)
+	InitTrigger (self);
+
+	// unlike other triggers, we need to send this one to the client
+	self->r.svFlags &= ~SVF_NOCLIENT;
+
+	self->s.eType = ET_PUSH_TRIGGER;
+	self->touch = trigger_push_touch;
+	self->think = AimAtTarget;
+	self->nextthink = level.time + FRAMETIME;
+	trap_LinkEntity (self);
 }
 
 
