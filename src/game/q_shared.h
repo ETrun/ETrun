@@ -846,9 +846,12 @@ char *Q_CleanStr( char *string );
 // removes whitespaces and other bad directory characters
 char *Q_CleanDirName( char *dirname );
 
-#define _vsnprintf use_Q_vsnprintf
-#define vsnprintf use_Q_vsnprintf
-int Q_vsnprintf( char *dest, int size, const char *fmt, va_list argptr );
+// Nico, not needed
+// #define _vsnprintf use_Q_vsnprintf
+// #define vsnprintf use_Q_vsnprintf
+// Nico, replaced this function by the one in ioquake3
+// int Q_vsnprintf( char *dest, int size, const char *fmt, va_list argptr );
+int Q_vsnprintf(char *str, size_t size, const char *format, va_list ap);
 
 //=============================================
 

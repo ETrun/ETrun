@@ -1057,11 +1057,15 @@ void QDECL Com_sprintf( char *dest, int size, const char *fmt, ... ) {
 	int ret;
 	va_list argptr;
 
-	va_start( argptr,fmt );
+	va_start( argptr, fmt );
 	ret = Q_vsnprintf( dest, size, fmt, argptr );
 	va_end( argptr );
-	if ( ret == -1 ) {
-		Com_Printf( "Com_sprintf: overflow of %i bytes buffer\n", size );
+
+	// Nico, as I changed Q_vsnprintf, i need to change the test here
+	// if ( ret == -1 ) {
+	//	Com_Printf( "Com_sprintf: overflow of %i bytes buffer\n", size );
+	if (ret >= size) {
+		Com_Printf("Com_sprintf: Output length %d too short, require %d bytes.\n", size, ret + 1);
 	}
 }
 
@@ -1077,6 +1081,7 @@ Ridah, modified this into a circular list, to further prevent stepping on
 previous strings
 ============
 */
+/* Nico, replaced by a secured version from etlegacy
 char    * QDECL va( char *format, ... ) {
 	va_list argptr;
 	#define MAX_VA_STRING   32000
@@ -1103,6 +1108,23 @@ char    * QDECL va( char *format, ... ) {
 	memcpy( buf, temp_buffer, len + 1 );
 
 	index += len + 1;
+
+	return buf;
+}*/
+
+// Nico, secured version from etlegacy
+char *QDECL va(char *format, ...) {
+	va_list     argptr;
+	static char string[2][32000]; // in case va is called by nested functions
+	static int  index = 0;
+	char        *buf;
+
+	buf = string[index & 1];
+	index++;
+
+	va_start(argptr, format);
+	Q_vsnprintf(buf, sizeof(*string), format, argptr);
+	va_end(argptr);
 
 	return buf;
 }
