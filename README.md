@@ -15,6 +15,7 @@ Features
 * Unlimited stamina
 * Many bugfixes and exploit fixes
 * Introduced ETrun cvars (see https://github.com/boutetnico/ETrun/wiki/ETrun-cvars)
+* Ghost players (no collision between players)
 
 Bootstrapping
 -------------
