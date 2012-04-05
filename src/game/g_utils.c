@@ -265,6 +265,36 @@ gentity_t* G_FindByTargetnameFast( gentity_t *from, const char* match, int hash 
 
 	return NULL;
 }
+
+/*
+Nico, find by target
+=============
+G_FindByTarget
+=============
+*/
+gentity_t* G_FindByTarget( gentity_t *from, const char* match ) {
+	gentity_t* max = &g_entities[level.num_entities];
+	int hash = BG_StringHashValue( match );
+
+	if ( !from ) {
+		from = g_entities;
+	} else {
+		from++;
+	}
+
+	for ( ; from < max ; from++ ) {
+		if ( !from->inuse ) {
+			continue;
+		}
+
+		if ( !Q_stricmp( from->target, match ) ) {
+			return from;
+		}
+	}
+
+	return NULL;
+}
+
 /*
 =============
 G_PickTarget

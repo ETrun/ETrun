@@ -302,7 +302,6 @@ void SP_path_corner( gentity_t *self );
 void SP_path_corner_2( gentity_t *self );
 void SP_info_limbo_camera( gentity_t *self );
 void SP_info_train_spline_main( gentity_t *self );
-//void SP_bazooka (gentity_t *self);
 
 void SP_misc_teleporter_dest( gentity_t *self );
 void SP_misc_model( gentity_t *ent );
@@ -420,6 +419,10 @@ void SP_props_decor_Scale( gentity_t *ent );
 // Gordon: debris test
 void SP_func_debris( gentity_t* ent );
 // ===================
+
+// Nico, timer stuff from TJMod
+void SP_target_starttimer(gentity_t *ent);
+void SP_target_stoptimer(gentity_t *ent);
 
 spawn_t spawns[] = {
 	// info entities don't do anything at all, but provide positional
@@ -601,7 +604,6 @@ spawn_t spawns[] = {
 	{"props_58x112tablew", SP_Props_58x112tablew},
 	{"props_radioSEVEN", SP_Props_RadioSEVEN},
 	{"props_snowGenerator", SP_props_snowGenerator},
-//	{"props_FireColumn", SP_propsFireColumn},
 	{"props_decoration", SP_props_decoration},
 	{"props_decorBRUSH", SP_props_decorBRUSH},
 	{"props_statue", SP_props_statue},
@@ -634,6 +636,10 @@ spawn_t spawns[] = {
 
 	/* Nico, removed mines
 	{"misc_landmine",        SP_misc_landmine },*/
+
+	// Nico, timer stuff from TJMod
+	{"target_startTimer", SP_target_starttimer},
+	{"target_stopTimer", SP_target_stoptimer},
 
 	{0, 0}
 };

@@ -1214,6 +1214,12 @@ typedef struct {
 	char objDescription_Allied[MAX_OBJECTIVES][256];
 
 	int waterundertime;
+
+	// Nico, timer stuff from TJMod
+	int	timerunActive;
+	int	timerunStartTime;
+	int finishedTime;
+	int	timerunLastTime;
 } cg_t;
 
 #define NUM_FUNNEL_SPRITES  21

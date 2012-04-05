@@ -349,6 +349,9 @@ vmCvar_t physics;
 // Enable certain map entities
 vmCvar_t g_enableMapEntities;
 
+// Force timer reset, i.e. bypass "wait 9999" on start triggers
+vmCvar_t g_forceTimerReset;
+
 // Nico, end of ETrun cvars
 
 
@@ -660,6 +663,9 @@ cvarTable_t gameCvarTable[] = {
 	// Enable certain map entities
 	// 3 enabled both kill entities and hurt entities
 	{ &g_enableMapEntities, "g_enableMapEntities", "3", CVAR_SERVERINFO | CVAR_ARCHIVE},
+
+	// Force timer reset, i.e. bypass "wait 9999" on start triggers
+	{ &g_forceTimerReset, "g_forceTimerReset", "1", CVAR_SERVERINFO | CVAR_ARCHIVE | CVAR_LATCH},
 
 	// Nico, end of ETrun cvars
 };

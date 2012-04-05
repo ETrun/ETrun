@@ -4157,6 +4157,58 @@ static void CG_DrawSpeedMeter (void) {
 	}
 }*/
 
+static void CG_DrawTimer (void) {
+	char status[128], *ext1 = NULL, *ext2 = NULL, *c = NULL;
+	static int millistart, needsReset = 0;
+	int	min, sec, milli;
+	float sizex = 0.1f, sizey = 0.1f;
+	int x, y, w;
+	static int nowTime = 0, bestTime = 0;
+	static int startTime;
+
+	startTime = cg.timerunStartTime - 500;
+
+	if ((!millistart && startTime > 0)) {
+		millistart = startTime;
+	}
+
+	if (cg.timerunActive) {
+		milli = nowTime = cg.time - millistart;
+	} else if (cg.finishedTime) {
+		milli = nowTime = cg.finishedTime;
+	} else {
+		milli = nowTime;
+	}
+
+	min = milli / 60000;
+	milli -= min * 60000;
+	sec = milli / 1000;
+	milli -= sec * 1000;
+
+	sizex *= 3;// Nico, note: timer X size
+	sizey *= 3;// Nico, note: timer X size
+
+	// Timer position
+	x = 320;
+	y = 425;
+
+	if (cg.timerunActive) {
+		needsReset = 1;
+	}
+
+	if (needsReset && cg.timerunActive) {
+		cg.finishedTime = 0;
+		millistart = 0;
+		needsReset = 0;
+	}
+
+	Com_sprintf(status, sizeof(status), va("%02d:%02d.%03d", min, sec, milli));
+
+	w = CG_Text_Width_Ext( status, sizex, 0, &cgs.media.limboFont2 ) / 2;
+	CG_Text_Paint_Ext(x - w, y, sizex, sizey, colorWhite, status, 0, 0, 0, &cgs.media.limboFont2);
+}
+
+
 /*
 =================
 CG_Draw2D
@@ -4291,6 +4343,9 @@ static void CG_Draw2D( void ) {
 
 		// Nico, draw OB
 		// CG_DrawOB();
+
+		// Nico, draw timer
+		CG_DrawTimer();
 
 		CG_DrawSpectatorMessage();
 

@@ -2528,6 +2528,30 @@ static void CG_ServerCommand( void ) {
 		return;
 	}
 
+	// Nico, timer stuff from TJMod
+
+	if (!Q_stricmp(cmd, "setTimerunStartTime")) {
+		CG_Printf("received setTimerunStartTime %s\n", CG_Argv(1));
+		cg.timerunStartTime = atoi(CG_Argv(1));
+		return;
+	}
+
+	if (!Q_stricmp(cmd, "timerun_start")) {
+		CG_Printf("received timerun_start\n");
+		cg.timerunActive = 1;
+		return;
+	}
+
+	if (!Q_stricmp(cmd, "timerun_stop")) {
+		CG_Printf("received timerun_stop %s\n", CG_Argv(1));
+		cg.timerunActive = 0;
+
+		if (atoi(CG_Argv(2))) {
+			cg.timerunLastTime = cg.finishedTime = atoi(CG_Argv(1));
+		}
+		return;
+	}
+
 	CG_Printf( "Unknown client game command: %s\n", cmd );
 }
 

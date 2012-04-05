@@ -636,6 +636,10 @@ typedef struct {
 	// OSP
 
 	qboolean versionOK;
+
+	// Nico, timer stuff from TJMod
+	int timerunLastTime;
+	int	finishedTime;
 } clientSession_t;
 
 //
@@ -908,6 +912,10 @@ struct gclient_s {
 
 	/* Nico, removed respawnLeft
 	qboolean maxlivescalced;*/
+
+	// Nico, timer stuff from TJMod
+	qboolean		timerunActive;
+	int				timerunStartTime;	// absolute start time
 };
 
 typedef struct {
@@ -1259,6 +1267,7 @@ void    G_TeamCommand( team_t team, char *cmd );
 void    G_KillBox( gentity_t *ent );
 gentity_t *G_Find( gentity_t *from, int fieldofs, const char *match );
 gentity_t* G_FindByTargetname( gentity_t *from, const char* match );
+gentity_t* G_FindByTarget( gentity_t *from, const char* match );// Nico, find by target
 gentity_t* G_FindByTargetnameFast( gentity_t *from, const char* match, int hash );
 gentity_t *G_PickTarget( char *targetname );
 void    G_UseTargets( gentity_t *ent, gentity_t *activator );
@@ -1934,6 +1943,9 @@ extern vmCvar_t	physics;
 
 // Enable certain map entities
 extern vmCvar_t g_enableMapEntities;
+
+// Force timer reset, i.e. bypass "wait 9999" on start triggers
+extern vmCvar_t g_forceTimerReset;
 
 // Nico, end of ETrun cvars
 

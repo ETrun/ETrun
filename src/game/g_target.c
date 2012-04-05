@@ -1267,3 +1267,87 @@ void SP_target_rumble( gentity_t *self ) {
 
 	trap_LinkEntity( self );
 }
+
+// Nico, timer stuff taken from TJMod
+
+/* QUAKED target_startTimer (1 0 0) (-8 -8 -8) (8 8 8)
+ * timer start
+ *
+ * "name"	timerun name
+ */
+void target_starttimer_use(gentity_t *self, gentity_t *other, gentity_t *activator) {
+	gclient_t		*client;
+
+	client = activator->client;
+
+	if (client->timerunActive) {
+		Com_Printf("Timerun is already active\n");
+		return;
+	}
+
+	if (self->spawnflags & 1) {
+		if (VectorLength(client->ps.velocity) > 600) {
+			// Server or clientside? cvar to toggle whether or not to reset speed in these cases?
+			CPx(activator - g_entities, "cpm \"^1Timerun not started, no prejump allowed!\n\"");
+			return;
+		}
+	}
+
+	if (client->ps.pm_type != PM_NORMAL || client->ps.stats[STAT_HEALTH] <= 0) {
+		CPx(activator - g_entities, "cpm \"^1Timerun not started, invalid playerstate!\n\"");
+		return;
+	}
+
+	// TODO: Check teleport abuse
+	
+	trap_SendServerCommand(activator - g_entities, va("timerun_start"));
+
+	// XXX setup - not sure if using ps.commandTime is the right way how to
+	// get the time
+	client->timerunStartTime = client->ps.commandTime;
+	trap_SendServerCommand(activator - g_entities, va("setTimerunStartTime %i", client->timerunStartTime + 500));
+	client->timerunActive = qtrue;
+}
+
+void SP_target_starttimer(gentity_t *ent) {
+	
+	// Nico, used to look for parent
+	gentity_t *parent = NULL;
+
+	// Nico, override wait -1 or wait 9999 on start timer entities
+	if (g_forceTimerReset.integer && ent) {
+		parent = G_FindByTarget(NULL, ent->targetname);
+		if (parent) {
+			if (!Q_stricmp(parent->classname, "trigger_multiple")) {
+				G_SpawnFloat("wait", "0.5", &parent->wait);
+			}
+		}
+	} 
+
+	ent->use = target_starttimer_use;
+}
+
+/* QUAKED target_stopTimer (1 0 0) (-8 -8 -8) (8 8 8)
+ * timer stop
+ *
+ * "name"				timerun name
+ * "minCheckpoints"		minimal passed checkpoints to activate this stoptimer
+ */
+void target_stoptimer_use(gentity_t *self, gentity_t *other, gentity_t *activator) {
+	int			time;
+	gclient_t	*client;
+
+	client = activator->client;
+
+	if (!client->timerunActive)
+		return;
+
+	time = client->sess.timerunLastTime = client->ps.commandTime - client->timerunStartTime;
+
+	client->timerunActive = qfalse;
+	trap_SendServerCommand(activator - g_entities, va("timerun_stop %i", client->sess.timerunLastTime));
+}
+
+void SP_target_stoptimer(gentity_t *ent) {
+	ent->use = target_stoptimer_use;
+}

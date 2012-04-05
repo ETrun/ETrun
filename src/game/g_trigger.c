@@ -52,7 +52,6 @@ void multi_wait( gentity_t *ent ) {
 // so wait for the delay time before firing
 void multi_trigger( gentity_t *ent, gentity_t *activator ) {
 	ent->activator = activator;
-
 	G_Script_ScriptEvent( ent, "activate", NULL );
 
 	if ( ent->nextthink ) {
@@ -153,7 +152,6 @@ void SP_trigger_multiple( gentity_t *ent ) {
 
 	if ( ent->random >= ent->wait && ent->wait >= 0 ) {
 		ent->random = ent->wait - ( FRAMETIME * 0.001f );
-		G_Printf( "trigger_multiple has random >= wait\n" );
 	}
 
 	ent->touch = Touch_Multi;
