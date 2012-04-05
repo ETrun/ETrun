@@ -4070,7 +4070,7 @@ static void CG_DrawSpeedMeter (void) {
 	x = cg_speedMeterX.integer;
 	y = cg_speedMeterY.integer;
 	
-	Com_sprintf(status, sizeof(status), va("%.0f", speed));
+	Com_sprintf(status, sizeof(status), "%.0f", speed);
 
 	w = CG_Text_Width_Ext( status, sizex, 0, &cgs.media.limboFont2 ) / 2;
 

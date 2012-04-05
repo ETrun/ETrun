@@ -17,6 +17,7 @@ bg_pmove.c \
 bg_slidemove.c \
 bg_sscript.c \
 bg_tracemap.c \
+bg_weapons.c \
 g_active.c \
 g_alarm.c \
 g_antilag.c \

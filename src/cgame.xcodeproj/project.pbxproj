@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		37BA887A1521F81C00D558A1 /* bg_weapons.c in Sources */ = {isa = PBXBuildFile; fileRef = 37BA88791521F81C00D558A1 /* bg_weapons.c */; };
 		5088180A09F0CE0A0071BF1A /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5088180909F0CE0A0071BF1A /* CoreFoundation.framework */; };
 		B72E62620B47119E0006C962 /* cg_atmospheric.c in Sources */ = {isa = PBXBuildFile; fileRef = B72E623B0B47119E0006C962 /* cg_atmospheric.c */; };
 		B72E62630B47119E0006C962 /* cg_character.c in Sources */ = {isa = PBXBuildFile; fileRef = B72E623C0B47119E0006C962 /* cg_character.c */; };
@@ -59,6 +60,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		37BA88791521F81C00D558A1 /* bg_weapons.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = bg_weapons.c; path = game/bg_weapons.c; sourceTree = "<group>"; };
 		508817D409F0C9AD0071BF1A /* cgame_mac.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = cgame_mac.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 		5088180909F0CE0A0071BF1A /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = /System/Library/Frameworks/CoreFoundation.framework; sourceTree = "<absolute>"; };
 		B72E623B0B47119E0006C962 /* cg_atmospheric.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = cg_atmospheric.c; path = ./cgame/cg_atmospheric.c; sourceTree = SOURCE_ROOT; };
@@ -151,6 +153,7 @@
 		508817F509F0CAB50071BF1A /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				37BA88791521F81C00D558A1 /* bg_weapons.c */,
 				B72E62A10B4711DA0006C962 /* ui_shared.c */,
 				B72E62890B4711CD0006C962 /* bg_animation.c */,
 				B72E628A0B4711CD0006C962 /* bg_animgroup.c */,
@@ -319,6 +322,7 @@
 				B72E629F0B4711CD0006C962 /* q_math.c in Sources */,
 				B72E62A00B4711CD0006C962 /* q_shared.c in Sources */,
 				B72E62A20B4711DA0006C962 /* ui_shared.c in Sources */,
+				37BA887A1521F81C00D558A1 /* bg_weapons.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
