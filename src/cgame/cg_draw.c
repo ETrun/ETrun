@@ -1760,7 +1760,6 @@ Returns the distance to the entity
 */
 static float CG_ScanForCrosshairEntity( float * zChange, qboolean * hitClient ) {
 	trace_t trace;
-//	gentity_t	*traceEnt;
 	vec3_t start, end;
 	float dist;
 	// centity_t*  cent; Nico, unused warning fix

@@ -2797,7 +2797,8 @@ void PmoveSingle( pmove_t *pmove ) {
 	pm->waterlevel = 0;
 
 	if ( pm->ps->stats[STAT_HEALTH] <= 0 ) {
-		pm->tracemask &= ~CONTENTS_BODY;    // corpses can fly through bodies
+		// Nico, ghost players
+		// pm->tracemask &= ~CONTENTS_BODY;    // corpses can fly through bodies
 		pm->ps->eFlags &= ~EF_ZOOMING;
 	}
 

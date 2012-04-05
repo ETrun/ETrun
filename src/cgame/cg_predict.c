@@ -35,7 +35,7 @@ If you have questions concerning this license or the applicable additional terms
 
 #include "cg_local.h"
 
-/*static*/ pmove_t cg_pmove;
+pmove_t cg_pmove;
 
 static int cg_numSolidEntities;
 static centity_t   *cg_solidEntities[MAX_ENTITIES_IN_SNAPSHOT];
@@ -140,8 +140,11 @@ CG_ClipMoveToEntities
 
 ====================
 */
+/* Nico, add an extra argument to enabled/disable tracing players
 static void CG_ClipMoveToEntities( const vec3_t start, const vec3_t mins, const vec3_t maxs, const vec3_t end,
-								   int skipNumber, int mask, int capsule, trace_t *tr ) {
+								   int skipNumber, int mask, int capsule, trace_t *tr ) {*/
+static void CG_ClipMoveToEntities( const vec3_t start, const vec3_t mins, const vec3_t maxs, const vec3_t end,
+								   int skipNumber, int mask, int capsule, qboolean tracePlayers, trace_t *tr ) {
 	int i, x, zd, zu;
 	trace_t trace;
 	entityState_t   *ent;
@@ -154,15 +157,15 @@ static void CG_ClipMoveToEntities( const vec3_t start, const vec3_t mins, const 
 		cent = cg_solidEntities[ i ];
 		ent = &cent->currentState;
 
-		if ( ent->number == skipNumber ) {
+		/* Nico, also continue if ent is a player and tracePlayers is false
+		if ( ent->number == skipNumber ) {*/
+		if ( ent->number == skipNumber || (!tracePlayers && ent->eType == ET_PLAYER) ) {
 			continue;
 		}
 
 		if ( ent->solid == SOLID_BMODEL ) {
 			// special value for bmodel
 			cmodel = trap_CM_InlineModel( ent->modelindex );
-//			VectorCopy( cent->lerpAngles, angles );
-//			VectorCopy( cent->lerpOrigin, origin );
 			BG_EvaluateTrajectory( &cent->currentState.apos, cg.physicsTime, angles, qtrue, cent->currentState.effect2Time );
 			BG_EvaluateTrajectory( &cent->currentState.pos, cg.physicsTime, origin, qfalse, cent->currentState.effect2Time );
 		} else {
@@ -176,7 +179,6 @@ static void CG_ClipMoveToEntities( const vec3_t start, const vec3_t mins, const 
 			bmins[2] = -zd;
 			bmaxs[2] = zu;
 
-			//cmodel = trap_CM_TempCapsuleModel( bmins, bmaxs );
 			cmodel = trap_CM_TempBoxModel( bmins, bmaxs );
 
 			VectorCopy( vec3_origin, angles );
@@ -276,7 +278,10 @@ void    CG_Trace( trace_t *result, const vec3_t start, const vec3_t mins, const 
 	trap_CM_BoxTrace( &t, start, end, mins, maxs, 0, mask );
 	t.entityNum = t.fraction != 1.0 ? ENTITYNUM_WORLD : ENTITYNUM_NONE;
 	// check all other solid models
-	CG_ClipMoveToEntities( start, mins, maxs, end, skipNumber, mask, qfalse, &t );
+
+	/* Nico, trace players
+	CG_ClipMoveToEntities( start, mins, maxs, end, skipNumber, mask, qfalse, &t );*/
+	CG_ClipMoveToEntities( start, mins, maxs, end, skipNumber, mask, qfalse, qtrue, &t );
 
 	*result = t;
 }
@@ -316,7 +321,26 @@ void CG_TraceCapsule( trace_t *result, const vec3_t start, const vec3_t mins, co
 	trap_CM_CapsuleTrace( &t, start, end, mins, maxs, 0, mask );
 	t.entityNum = t.fraction != 1.0 ? ENTITYNUM_WORLD : ENTITYNUM_NONE;
 	// check all other solid models
-	CG_ClipMoveToEntities( start, mins, maxs, end, skipNumber, mask, qtrue, &t );
+
+	/* Nico, trace players
+	CG_ClipMoveToEntities( start, mins, maxs, end, skipNumber, mask, qtrue, &t );*/
+	CG_ClipMoveToEntities( start, mins, maxs, end, skipNumber, mask, qtrue, qtrue, &t );
+
+	*result = t;
+}
+
+/* Nico, from TJMod
+ * CG_TraceCapsule() that doesn't trace players but other entities with
+ * CONTENTS_BODY (content of a temporary box brush) are still traced.
+ */
+void CG_TraceCapsuleNoPlayers(trace_t *result, const vec3_t start, const vec3_t mins,
+		const vec3_t maxs, const vec3_t end, int skipNumber, int mask) {
+	trace_t	t;
+
+	trap_CM_CapsuleTrace(&t, start, end, mins, maxs, 0, mask);
+	t.entityNum = t.fraction != 1.0 ? ENTITYNUM_WORLD : ENTITYNUM_NONE;
+	// check all other solid models
+	CG_ClipMoveToEntities(start, mins, maxs, end, skipNumber, mask, qtrue, qfalse, &t);
 
 	*result = t;
 }
@@ -888,9 +912,13 @@ void CG_PredictPlayerState( void ) {
 	/* Nico, removed skills
 	cg_pmove.skill = cgs.clientinfo[cg.snap->ps.clientNum].skill;*/
 
-	cg_pmove.trace = CG_TraceCapsule;
-	//cg_pmove.trace = CG_Trace;
+	/* Nico, don't trace players
+	cg_pmove.trace = CG_TraceCapsule;*/
+	cg_pmove.trace = CG_TraceCapsuleNoPlayers;
+
 	cg_pmove.pointcontents = CG_PointContents;
+
+	/* Nico, ghost players
 	if ( cg_pmove.ps->pm_type == PM_DEAD ) {
 		cg_pmove.tracemask = MASK_PLAYERSOLID & ~CONTENTS_BODY;
 		cg_pmove.ps->eFlags |= EF_DEAD; // DHM-Nerve added:: EF_DEAD is checked for in Pmove functions, but wasn't being set until after Pmove
@@ -902,10 +930,17 @@ void CG_PredictPlayerState( void ) {
 	} else {
 		cg_pmove.tracemask = MASK_PLAYERSOLID;
 	}
-
+	
 	if ( ( cg.snap->ps.persistant[PERS_TEAM] == TEAM_SPECTATOR ) || ( cg.snap->ps.pm_flags & PMF_LIMBO ) ) { // JPW NERVE limbo
 		cg_pmove.tracemask &= ~CONTENTS_BODY;   // spectators can fly through bodies
+	}*/
+	cg_pmove.tracemask = MASK_PLAYERSOLID;
+	if ( cg_pmove.ps->pm_type == PM_DEAD ) {
+		cg_pmove.ps->eFlags |= EF_DEAD;
+	} else if( cg_pmove.ps->pm_type == PM_SPECTATOR ) {
+		cg_pmove.trace = CG_TraceCapsule_World;
 	}
+	// Nico, end of ghost players
 
 	cg_pmove.noFootsteps = qfalse;
 	cg_pmove.noWeapClips = qfalse;

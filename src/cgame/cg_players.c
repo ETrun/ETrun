@@ -1451,11 +1451,6 @@ static qboolean CG_PlayerShadow( centity_t *cent, float *shadowPlane ) {
 
 	trap_CM_BoxTrace( &trace, cent->lerpOrigin, end, NULL, NULL, 0, MASK_PLAYERSOLID );
 
-	// no shadow if too high
-	//%	if ( trace.fraction == 1.0 || trace.fraction == 0.0f ) {
-	//%		return qfalse;
-	//%	}
-
 	*shadowPlane = trace.endpos[2] + 1;
 
 	if ( cg_shadows.integer != 1 ) {    // no mark for stencil or projection shadows
@@ -1466,9 +1461,6 @@ static qboolean CG_PlayerShadow( centity_t *cent, float *shadowPlane ) {
 	if ( cent->currentState.eFlags & EF_DEAD ) {
 		return qfalse;
 	}
-
-	// fade the shadow out with height
-	//%	alpha = 1.0 - trace.fraction;
 
 	// add the mark as a temporary, so it goes directly to the renderer
 	// without taking a spot in the cg_marks array

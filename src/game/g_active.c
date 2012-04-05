@@ -943,6 +943,8 @@ void ClientThink_real( gentity_t *ent ) {
 	pm.oldcmd = client->pers.oldcmd;
 	// MrE: always use capsule for AI and player
 	pm.trace = trap_TraceCapsule;
+
+	/* Nico, ghost players
 	if ( pm.ps->pm_type == PM_DEAD ) {
 		pm.tracemask = MASK_PLAYERSOLID & ~CONTENTS_BODY;
 		// DHM-Nerve added:: EF_DEAD is checked for in Pmove functions, but wasn't being set
@@ -953,7 +955,15 @@ void ClientThink_real( gentity_t *ent ) {
 		pm.trace = trap_TraceCapsuleNoEnts;
 	} else {
 		pm.tracemask = MASK_PLAYERSOLID;
+	}*/
+	pm.tracemask = MASK_PLAYERSOLID & ~CONTENTS_BODY;
+	if ( pm.ps->pm_type == PM_DEAD ) {
+		pm.ps->eFlags |= EF_DEAD;
+	} else if( pm.ps->pm_type == PM_SPECTATOR ) {
+		pm.trace = trap_TraceCapsuleNoEnts;
 	}
+	// Nico, end of ghost players
+
 	//DHM - Nerve :: We've gone back to using normal bbox traces
 	//pm.trace = trap_Trace;
 	pm.pointcontents = trap_PointContents;
@@ -1440,6 +1450,7 @@ void WolfRevivePushEnt( gentity_t *self, gentity_t *other ) {
 }
 
 // Arnout: completely revived for capsules
+/* Nico, ghost players
 void WolfReviveBbox( gentity_t *self ) {
 	int touch[MAX_GENTITIES];
 	int num,i, touchnum = 0;
@@ -1452,7 +1463,6 @@ void WolfReviveBbox( gentity_t *self ) {
 		G_DPrintf( "WolfReviveBbox: Player stuck in world or MG42 using player\n" );
 		// Move corpse directly to the person who revived them
 		if ( self->props_frame_state >= 0 ) {
-//			trap_UnlinkEntity( self );
 			VectorCopy( g_entities[self->props_frame_state].client->ps.origin, self->client->ps.origin );
 			VectorCopy( self->client->ps.origin, self->r.currentOrigin );
 			trap_LinkEntity( self );
@@ -1494,7 +1504,7 @@ void WolfReviveBbox( gentity_t *self ) {
 		G_DPrintf( "WolfReviveBbox:  Player is solid now!\n" );
 		self->r.contents = CONTENTS_BODY;
 	}
-}
+}*/
 
 /*
 ==============
@@ -1623,6 +1633,7 @@ void ClientEndFrame( gentity_t *ent ) {
 		ent->props_frame_state = -1;
 	}
 
+	/* Nico, ghost players
 	if ( ent->health > 0 && StuckInClient( ent ) ) {
 		G_DPrintf( "%s is stuck in a client.\n", ent->client->pers.netname );
 		ent->r.contents = CONTENTS_CORPSE;
@@ -1630,7 +1641,7 @@ void ClientEndFrame( gentity_t *ent ) {
 
 	if ( ent->health > 0 && ent->r.contents == CONTENTS_CORPSE && !( ent->s.eFlags & EF_MOUNTEDTANK ) ) {
 		WolfReviveBbox( ent );
-	}
+	}*/
 
 	// DHM - Nerve :: Reset 'count2' for flamethrower
 	if ( !( ent->client->buttons & BUTTON_ATTACK ) ) {
