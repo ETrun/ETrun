@@ -8,6 +8,11 @@ make distclean
 # Compile for linux
 ./configure CFLAGS="-Wno-enum-compare -Wno-format-security -Wno-switch -Wno-array-bounds"
 make
+
+if [ $? != 0 ]; then
+  exit
+fi
+
 strip -s src/cgame/.libs/libcgame.so
 strip -s src/game/.libs/libgame.so
 strip -s src/ui/.libs/libui.so

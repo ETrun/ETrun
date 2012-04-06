@@ -8,6 +8,11 @@ make distclean
 # Compile for windows
 ./configure --build i686-pc-linux-gnu --host i586-mingw32msvc CFLAGS="-no-undefined"
 make
+
+if [ $? != 0 ]; then
+  exit
+fi
+
 strip -s src/cgame/.libs/libcgame.dll
 strip -s src/game/.libs/libgame.dll
 strip -s src/ui/.libs/libui.dll
