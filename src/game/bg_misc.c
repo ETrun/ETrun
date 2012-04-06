@@ -5381,7 +5381,6 @@ Special wrapper function for Microsoft's broken _vsnprintf() function.
 MinGW comes with its own snprintf() which is not broken.
 =============
 */
-
 int Q_vsnprintf(char *str, size_t size, const char *format, va_list ap) {
 	int retval;
 	
@@ -5400,6 +5399,23 @@ int Q_vsnprintf(char *str, size_t size, const char *format, va_list ap) {
 	}
 	
 	return retval;
+}
+#else
+/*
+=============
+Q_vsnprintf
+=============
+*/
+int Q_vsnprintf(char *str, size_t size, const char *format, va_list ap) {
+	int ret;
+
+	ret = vsnprintf(str, size, format, ap);
+
+	str[size - 1] = '\0';
+	if (ret < 0 || ret >= size) {
+		return -1;
+	}
+	return ret;
 }
 #endif
 
