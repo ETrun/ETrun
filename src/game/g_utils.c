@@ -274,7 +274,6 @@ G_FindByTarget
 */
 gentity_t* G_FindByTarget( gentity_t *from, const char* match ) {
 	gentity_t* max = &g_entities[level.num_entities];
-	int hash = BG_StringHashValue( match );
 
 	if ( !from ) {
 		from = g_entities;

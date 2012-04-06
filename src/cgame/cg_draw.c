@@ -4157,12 +4157,12 @@ static void CG_DrawSpeedMeter (void) {
 }*/
 
 static void CG_DrawTimer (void) {
-	char status[128], *ext1 = NULL, *ext2 = NULL, *c = NULL;
+	char status[128];
 	static int millistart, needsReset = 0;
 	int	min, sec, milli;
 	float sizex = 0.1f, sizey = 0.1f;
 	int x, y, w;
-	static int nowTime = 0, bestTime = 0;
+	static int nowTime = 0;
 	static int startTime;
 
 	startTime = cg.timerunStartTime - 500;

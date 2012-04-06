@@ -1334,15 +1334,12 @@ void SP_target_starttimer(gentity_t *ent) {
  * "minCheckpoints"		minimal passed checkpoints to activate this stoptimer
  */
 void target_stoptimer_use(gentity_t *self, gentity_t *other, gentity_t *activator) {
-	int			time;
 	gclient_t	*client;
 
 	client = activator->client;
 
 	if (!client->timerunActive)
 		return;
-
-	time = client->sess.timerunLastTime = client->ps.commandTime - client->timerunStartTime;
 
 	client->timerunActive = qfalse;
 	trap_SendServerCommand(activator - g_entities, va("timerun_stop %i", client->sess.timerunLastTime));
