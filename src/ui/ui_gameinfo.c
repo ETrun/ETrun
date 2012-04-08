@@ -128,9 +128,7 @@ static void UI_LoadArenasFromFile( char *filename ) {
 		if ( *token.string == '}' ) {
 
 			if ( !uiInfo.mapList[uiInfo.mapCount].typeBits ) {
-				/* Nico, removed gametypes
-				uiInfo.mapList[uiInfo.mapCount].typeBits |= ( 1 << GT_WOLF );*/
-				uiInfo.mapList[uiInfo.mapCount].typeBits |= ( 1 << 2 );
+				uiInfo.mapList[uiInfo.mapCount].typeBits |= ( 1 << GT_WOLF );
 			}
 
 			uiInfo.mapCount++;
@@ -167,48 +165,40 @@ static void UI_LoadArenasFromFile( char *filename ) {
 				trap_PC_FreeSource( handle );
 				return;
 			}
-		}
-		
-		/* Nico, removed LMS
-		else if ( !Q_stricmp( token.string, "lmsbriefing" ) ) {
+		} else if ( !Q_stricmp( token.string, "lmsbriefing" ) ) {
+			/* Nico, removed LMS
 			if ( !PC_String_Parse( handle, &uiInfo.mapList[uiInfo.mapCount].lmsbriefing ) ) {
 				trap_Print( va( S_COLOR_RED "unexpected end of file inside: %s\n", filename ) );
 				trap_PC_FreeSource( handle );
 				return;
-			}
-		}*/
-
-		/* Nico, no timelimit
-		else if ( !Q_stricmp( token.string, "timelimit" ) ) {
+			}*/
+		} else if ( !Q_stricmp( token.string, "timelimit" ) ) {
+			/* Nico, no timelimit
 			if ( !PC_Int_Parse( handle, &uiInfo.mapList[uiInfo.mapCount].Timelimit ) ) {
 				trap_Print( va( S_COLOR_RED "unexpected end of file inside: %s\n", filename ) );
 				trap_PC_FreeSource( handle );
 				return;
-			}
-		}*/
-
-		/* Nico, instant reswawn
-		else if ( !Q_stricmp( token.string, "axisrespawntime" ) ) {
+			}*/
+		} else if ( !Q_stricmp( token.string, "axisrespawntime" ) ) {
+			/* Nico, instant reswawn
 			if ( !PC_Int_Parse( handle, &uiInfo.mapList[uiInfo.mapCount].AxisRespawnTime ) ) {
 				trap_Print( va( S_COLOR_RED "unexpected end of file inside: %s\n", filename ) );
 				trap_PC_FreeSource( handle );
 				return;
-			}
+			}*/
 		} else if ( !Q_stricmp( token.string, "alliedrespawntime" ) ) {
+			/* Nico, instant reswawn
 			if ( !PC_Int_Parse( handle, &uiInfo.mapList[uiInfo.mapCount].AlliedRespawnTime ) ) {
 				trap_Print( va( S_COLOR_RED "unexpected end of file inside: %s\n", filename ) );
 				trap_PC_FreeSource( handle );
 				return;
-			}
-		}*/
-		else if ( !Q_stricmp( token.string, "type" ) ) {
+			}*/
+		} else if ( !Q_stricmp( token.string, "type" ) ) {
 			if ( !trap_PC_ReadToken( handle, &token ) ) {
 				trap_Print( va( S_COLOR_RED "unexpected end of file inside: %s\n", filename ) );
 				trap_PC_FreeSource( handle );
 				return;
-			} 
-			/* Nico, removed gametypes
-			else {
+			} else {
 				if ( strstr( token.string, "wolfsp" ) ) {
 					uiInfo.mapList[uiInfo.mapCount].typeBits |= ( 1 << GT_SINGLE_PLAYER );
 				}
@@ -224,7 +214,7 @@ static void UI_LoadArenasFromFile( char *filename ) {
 				if ( strstr( token.string, "wolfsw" ) ) {
 					uiInfo.mapList[uiInfo.mapCount].typeBits |= ( 1 << GT_WOLF_STOPWATCH );
 				}
-			}*/
+			}
 		} else if ( !Q_stricmp( token.string, "mapposition_x" ) ) {
 			if ( !PC_Float_Parse( handle, &uiInfo.mapList[uiInfo.mapCount].mappos[0] ) ) {
 				trap_Print( va( S_COLOR_RED "unexpected end of file inside: %s\n", filename ) );
@@ -278,7 +268,6 @@ void UI_LoadArenas( void ) {
 	char*       dirptr;
 	int i;
 	int dirlen;
-
 
 	ui_numArenas = 0;
 	uiInfo.mapCount = 0;

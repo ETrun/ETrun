@@ -106,7 +106,6 @@ extern vmCvar_t ui_netSource;
 extern vmCvar_t ui_menuFiles;
 extern vmCvar_t ui_gameType;
 extern vmCvar_t ui_netGameType;
-//extern vmCvar_t	ui_actualNetGameType;
 extern vmCvar_t ui_joinGameType;
 extern vmCvar_t ui_dedicated;
 extern vmCvar_t ui_notebookCurrentPage;
@@ -867,9 +866,6 @@ typedef struct {
 
 	int mapCount;
 	mapInfo mapList[MAX_MAPS];
-
-	//int tierCount;
-	//tierInfo tierList[MAX_TIERS];
 
 	int campaignCount;
 	campaignInfo_t campaignList[MAX_CAMPAIGNS];

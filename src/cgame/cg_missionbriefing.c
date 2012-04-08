@@ -39,7 +39,6 @@ const char* CG_NameForCampaign( void ) {
 qboolean CG_FindCampaignInFile( char *filename, char *campaignShortName, cg_campaignInfo_t *info ) {
 	int handle;
 	pc_token_t token;
-//	char* dummy;
 	qboolean campaignFound = qfalse;
 
 	info->mapCount = 0;
@@ -93,7 +92,6 @@ qboolean CG_FindCampaignInFile( char *filename, char *campaignShortName, cg_camp
 			}
 		} else if (  !Q_stricmp( token.string, "next" ) ||
 					 !Q_stricmp( token.string, "image" ) ) {
-			//if( !PC_String_Parse( handle, &dummy ) ) {
 			if ( !trap_PC_ReadToken( handle, &token ) ) {    // don't do a stringparse due to memory constraints
 				trap_Print( va( S_COLOR_RED "unexpected end of file inside: %s\n", filename ) );
 				trap_PC_FreeSource( handle );
@@ -321,42 +319,6 @@ qboolean CG_FindArenaInfo( char* filename, char* mapname, arenaInfo_t* info ) {
 }
 
 void CG_LocateCampaign( void ) {
-/*	int			numdirs;
-	char		filename[MAX_QPATH];
-	char		dirlist[1024];
-	char*		dirptr;
-	int			i, dirlen;
-	qboolean	found = qfalse;
-
-	// get all campaigns from .campaign files
-	numdirs = trap_FS_GetFileList( "scripts", ".campaign", dirlist, 1024 );
-	dirptr  = dirlist;
-	for (i = 0; i < numdirs; i++, dirptr += dirlen+1) {
-		dirlen = strlen(dirptr);
-		strcpy(filename, "scripts/");
-		strcat(filename, dirptr);
-		if(CG_FindCurrentCampaignInFile(filename, &cgs.campaignData)) {
-			found = qtrue;
-			break;
-		}
-	}
-
-	if(!found) {
-		return;
-	}
-
-	for(i = 0; i < cgs.campaignData.mapCount; i++ ) {
-		Com_sprintf( filename, sizeof(filename), "scripts/%s.arena", cgs.campaignData.mapnames[i] );
-		// Gordon: horrible hack, but i dont plan to parse EVERY .arena to get a map briefing...
-		if(	!CG_FindArenaInfo( "scripts/wolfmp.arena", cgs.campaignData.mapnames[i], &cgs.campaignData.arenas[i] ) &&
-			!CG_FindArenaInfo( "scripts/wolfxp.arena", cgs.campaignData.mapnames[i], &cgs.campaignData.arenas[i] ) &&
-			!CG_FindArenaInfo( filename, cgs.campaignData.mapnames[i], &cgs.campaignData.arenas[i] )) {
-			return;
-		}
-	}
-
-	cgs.campaignInfoLoaded = qtrue;*/
-
 	int numdirs;
 	char filename[MAX_QPATH];
 	char dirlist[1024];

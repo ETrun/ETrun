@@ -1397,21 +1397,6 @@ static void UI_DrawGameType( rectDef_t *rect, float scale, vec4_t color, int tex
 	Text_Paint( rect->x, rect->y, scale, color, uiInfo.gameTypes[ui_gameType.integer].gameType, 0, 0, textStyle );
 }
 
-/*static void UI_DrawNetGameType(rectDef_t *rect, float scale, vec4_t color, int textStyle) {
-	if (ui_netGameType.integer < 0 || ui_netGameType.integer > uiInfo.numGameTypes) {
-		trap_Cvar_Set("ui_netGameType", "0");
-		trap_Cvar_Set("ui_actualNetGameType", "0");
-	}
-  Text_Paint(rect->x, rect->y, scale, color, uiInfo.gameTypes[ui_netGameType.integer].gameType , 0, 0, textStyle);
-}*/
-
-/*static void UI_DrawJoinGameType(rectDef_t *rect, float scale, vec4_t color, int textStyle) {
-	if (ui_joinGameType.integer < 0 || ui_joinGameType.integer > uiInfo.numJoinGameTypes) {
-		trap_Cvar_Set("ui_joinGameType", "0");
-	}
-  Text_Paint(rect->x, rect->y, scale, color, trap_TranslateString( uiInfo.joinGameTypes[ui_joinGameType.integer].gameType ), 0, 0, textStyle);
-}*/
-
 static int UI_TeamIndexFromName( const char *name ) {
 	int i;
 
@@ -1667,16 +1652,6 @@ void UI_DrawMapPreview( rectDef_t *rect, float scale, vec4_t color, qboolean net
 	} else {
 		UI_DrawHandlePic( rect->x, rect->y, rect->w, rect->h, trap_R_RegisterShaderNoMip( "levelshots/unknownmap" ) );
 	}
-
-	/*if (uiInfo.mapList[map].levelShot == -1) {
-		uiInfo.mapList[map].levelShot = trap_R_RegisterShaderNoMip(uiInfo.mapList[map].imageName);
-	}
-
-	if (uiInfo.mapList[map].levelShot > 0) {
-		UI_DrawHandlePic( rect->x, rect->y, rect->w, rect->h, uiInfo.mapList[map].levelShot);
-	} else {
-		UI_DrawHandlePic( rect->x, rect->y, rect->w, rect->h, trap_R_RegisterShaderNoMip("levelshots/unknownmap"));
-	}*/
 }
 
 void UI_DrawNetMapPreview( rectDef_t *rect, float scale, vec4_t color, qboolean net ) {
@@ -1686,22 +1661,6 @@ void UI_DrawNetMapPreview( rectDef_t *rect, float scale, vec4_t color, qboolean 
 		UI_DrawHandlePic( rect->x, rect->y, rect->w, rect->h, trap_R_RegisterShaderNoMip( "levelshots/unknownmap" ) );
 	}
 }
-
-/*static void UI_DrawMapTimeToBeat(rectDef_t *rect, float scale, vec4_t color, int textStyle) {
-	int minutes, seconds, time;
-	if (ui_currentMap.integer < 0 || ui_currentMap.integer > uiInfo.mapCount) {
-		ui_currentMap.integer = 0;
-		trap_Cvar_Set("ui_currentMap", "0");
-	}
-
-	time = uiInfo.mapList[ui_currentMap.integer].timeToBeat[uiInfo.gameTypes[ui_gameType.integer].gtEnum];
-
-	minutes = time / 60;
-	seconds = time % 60;
-
-  Text_Paint(rect->x, rect->y, scale, color, va("%02i:%02i", minutes, seconds), 0, 0, textStyle);
-}*/
-
 
 
 static void UI_DrawMapCinematic( rectDef_t *rect, float scale, vec4_t color, qboolean net ) {
@@ -3223,79 +3182,6 @@ static qboolean UI_GameType_HandleKey( int flags, float *special, int key, qbool
 	return qfalse;
 }
 
-/*static qboolean UI_NetGameType_HandleKey(int flags, float *special, int key) {
-  if (key == K_MOUSE1 || key == K_MOUSE2 || key == K_ENTER || key == K_KP_ENTER) {
-
-		if (key == K_MOUSE2) {
-			ui_netGameType.integer--;
-		} else {
-			ui_netGameType.integer++;
-		}
-
-	if (ui_netGameType.integer < 0) {
-	  ui_netGameType.integer = uiInfo.numGameTypes - 1;
-		} else if (ui_netGameType.integer >= uiInfo.numGameTypes) {
-	  ui_netGameType.integer = 0;
-	}
-
-	trap_Cvar_Set( "ui_netGameType", va("%d", ui_netGameType.integer));
-	trap_Cvar_Set( "ui_actualnetGameType", va("%d", uiInfo.gameTypes[ui_netGameType.integer].gtEnum));
-	trap_Cvar_Set( "ui_currentNetMap", "0");
-	trap_Cvar_Set( "ui_currentNetCampaign", "0");
-	UI_MapCountByGameType(qfalse);
-	Menu_SetFeederSelection(NULL, FEEDER_ALLMAPS, 0, NULL);
-	Menu_SetFeederSelection(NULL, FEEDER_ALLCAMPAIGNS, 0, NULL);
-	return qtrue;
-  }
-  return qfalse;
-}*/
-
-/*static qboolean UI_JoinGameType_HandleKey(int flags, float *special, int key) {
-	if (key == K_MOUSE1 || key == K_MOUSE2 || key == K_ENTER || key == K_KP_ENTER) {
-
-		if (key == K_MOUSE2) {
-			ui_joinGameType.integer--;
-		} else {
-			ui_joinGameType.integer++;
-		}
-
-		if (ui_joinGameType.integer < 0) {
-			ui_joinGameType.integer = uiInfo.numJoinGameTypes - 1;
-		} else if (ui_joinGameType.integer >= uiInfo.numJoinGameTypes) {
-			ui_joinGameType.integer = 0;
-		}
-
-		trap_Cvar_Set( "ui_joinGameType", va("%d", ui_joinGameType.integer));
-		UI_BuildServerDisplayList(qtrue);
-		return qtrue;
-	}
-	return qfalse;
-}*/
-
-
-
-/*static qboolean UI_Skill_HandleKey(int flags, float *special, int key) {
-  if (key == K_MOUSE1 || key == K_MOUSE2 || key == K_ENTER || key == K_KP_ENTER) {
-	int i = trap_Cvar_VariableValue( "g_spSkill" );
-
-		if (key == K_MOUSE2) {
-		i--;
-		} else {
-		i++;
-		}
-
-	if (i < 1) {
-			i = numSkillLevels;
-		} else if (i > numSkillLevels) {
-	  i = 1;
-	}
-
-	trap_Cvar_Set("g_spSkill", va("%i", i));
-	return qtrue;
-  }
-  return qfalse;
-}*/
-
 static qboolean UI_TeamName_HandleKey( int flags, float *special, int key, qboolean blue ) {
 	if ( key == K_MOUSE1 || key == K_MOUSE2 || key == K_ENTER || key == K_KP_ENTER ) {
 		int i;
@@ -3345,30 +3231,6 @@ static qboolean UI_TeamMember_HandleKey( int flags, float *special, int key, qbo
 	}
 	return qfalse;
 }
-
-/*static qboolean UI_NetSource_HandleKey(int flags, float *special, int key) {
-	if (key == K_MOUSE1 || key == K_MOUSE2 || key == K_ENTER || key == K_KP_ENTER) {
-		if (key == K_MOUSE2) {
-			ui_netSource.integer--;
-		} else {
-			ui_netSource.integer++;
-		}
-
-		if (ui_netSource.integer >= numNetSources) {
-			ui_netSource.integer = 0;
-		} else if (ui_netSource.integer < 0) {
-			ui_netSource.integer = numNetSources - 1;
-		}
-
-		UI_BuildServerDisplayList(qtrue);
-		if (ui_netSource.integer != AS_GLOBAL) {
-			UI_StartServerRefresh(qtrue);
-		}
-		trap_Cvar_Set( "ui_netSource", va("%d", ui_netSource.integer));
-		return qtrue;
-	}
-	return qfalse;
-}*/
 
 static qboolean UI_NetFilter_HandleKey( int flags, float *special, int key ) {
 	if ( key == K_MOUSE1 || key == K_MOUSE2 || key == K_ENTER || key == K_KP_ENTER ) {
@@ -3477,15 +3339,6 @@ static qboolean UI_OwnerDrawHandleKey( int ownerDraw, int flags, float *special,
 	case UI_GAMETYPE:
 		return UI_GameType_HandleKey( flags, special, key, qtrue );
 		break;
-/*    case UI_NETGAMETYPE:
-	  return UI_NetGameType_HandleKey(flags, special, key);
-	  break;*/
-		/*case UI_JOINGAMETYPE:
-		  return UI_JoinGameType_HandleKey(flags, special, key);
-		  break;*/
-		/*case UI_SKILL:
-		  return UI_Skill_HandleKey(flags, special, key);
-		  break;*/
 	case UI_BLUETEAMNAME:
 		return UI_TeamName_HandleKey( flags, special, key, qtrue );
 		break;
@@ -4895,11 +4748,6 @@ void UI_RunMenuScript( char **args ) {
 			trap_Cvar_Set( "com_errorMessage", "" );
 		} else if ( Q_stricmp( name, "updateGameType" ) == 0 ) {
 			trap_Cvar_Update( &ui_netGameType );
-			/*if( ui_netGameType.integer == GT_WOLF_CAMPAIGN ) {
-				if( ui_mapIndex.integer >= UI_MapCountByGameType( qfalse ) )
-			} else {
-
-			}*/
 			if ( ui_mapIndex.integer >= UI_MapCountByGameType( qfalse ) ) {
 				Menu_SetFeederSelection( NULL, FEEDER_MAPS, 0, NULL );
 				Menu_SetFeederSelection( NULL, FEEDER_ALLMAPS, 0, NULL );
@@ -5141,13 +4989,14 @@ static int UI_MapCountByGameType( qboolean singlePlayer ) {
 	} else {*/
 		for ( i = 0; i < uiInfo.mapCount; i++ ) {
 			uiInfo.mapList[i].active = qfalse;
-			if ( uiInfo.mapList[i].typeBits & ( 1 << game ) ) {
+			// Nico, removed gametype filtering
+			// if ( uiInfo.mapList[i].typeBits & ( 1 << game ) ) {
 				if ( singlePlayer ) {
 					continue;
 				}
 				c++;
 				uiInfo.mapList[i].active = qtrue;
-			}
+			// }
 		}
 	// }
 	return c;
@@ -7575,7 +7424,6 @@ cvarTable_t cvarTable[] = {
 	{ &ui_gameType, "ui_gametype", "3", CVAR_ARCHIVE },
 	{ &ui_joinGameType, "ui_joinGametype", "-1", CVAR_ARCHIVE },
 	{ &ui_netGameType, "ui_netGametype", "4", CVAR_ARCHIVE },                 // NERVE - SMF - hardwired for now
-//	{ &ui_actualNetGameType, "ui_actualNetGametype", "5", CVAR_ARCHIVE },		// NERVE - SMF - hardwired for now
 
 	{ &ui_notebookCurrentPage, "ui_notebookCurrentPage", "1", CVAR_ROM},
 	{ &ui_clipboardName, "cg_clipboardName", "", CVAR_ROM },

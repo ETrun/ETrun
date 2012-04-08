@@ -1169,7 +1169,6 @@ typedef struct {
 
 typedef struct {
 	char mapnames[MAX_MAPS_PER_CAMPAIGN][MAX_QPATH];
-	//arenaInfo_t	arenas[MAX_MAPS_PER_CAMPAIGN];
 	int mapCount;
 	int current;
 
