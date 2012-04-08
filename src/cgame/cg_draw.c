@@ -4201,7 +4201,7 @@ static void CG_DrawTimer (void) {
 		needsReset = 0;
 	}
 
-	Com_sprintf(status, sizeof(status), va("%02d:%02d.%03d", min, sec, milli));
+	Com_sprintf(status, sizeof(status), "%s", va("%02d:%02d.%03d", min, sec, milli));
 
 	w = CG_Text_Width_Ext( status, sizex, 0, &cgs.media.limboFont2 ) / 2;
 	CG_Text_Paint_Ext(x - w, y, sizex, sizey, colorWhite, status, 0, 0, 0, &cgs.media.limboFont2);
