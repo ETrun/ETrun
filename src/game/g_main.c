@@ -516,7 +516,7 @@ cvarTable_t gameCvarTable[] = {
 	{ &g_userAim, "g_userAim", "1", CVAR_CHEAT, 0, qfalse },*/
 
 	{ &g_smoothClients, "g_smoothClients", "1", 0, 0, qfalse },
-	{ &pmove_fixed, "pmove_fixed", "0", CVAR_SYSTEMINFO, 0, qfalse },
+	{ &pmove_fixed, "pmove_fixed", "0", 0, 0, qfalse },// Nico, removed CVAR_SYSTEMINFO
 	{ &pmove_msec, "pmove_msec", "8", CVAR_SYSTEMINFO, 0, qfalse },
 
 	{ &g_footstepAudibleRange, "g_footstepAudibleRange", "256", CVAR_CHEAT, 0, qfalse },
