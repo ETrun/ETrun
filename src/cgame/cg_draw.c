@@ -4235,15 +4235,15 @@ static void CG_DrawTimer(void) {
 			if (cg.timerunLastTime[timerunNum] < cg.timerunBestTime[timerunNum]) {
 				// Nico, did a better time
 				Vector4Set(color, colorGreen[0], colorGreen[1], colorGreen[2], colorGreen[3]);
-				Com_sprintf(status, sizeof(status), va("%02d:%02d.%03d (-%02d:%02d.%03d)", min, sec, milli, dmin, dsec, dmilli));
+				Com_sprintf(status, sizeof(status), "%s", va("%02d:%02d.%03d (-%02d:%02d.%03d)", min, sec, milli, dmin, dsec, dmilli));
 			} else {
 				// Nico, did a slower time
 				Vector4Set(color, colorRed[0], colorRed[1], colorRed[2], colorRed[3]);
-				Com_sprintf(status, sizeof(status), va("%02d:%02d.%03d (+%02d:%02d.%03d)", min, sec, milli, dmin, dsec, dmilli));
+				Com_sprintf(status, sizeof(status), "%s", va("%02d:%02d.%03d (+%02d:%02d.%03d)", min, sec, milli, dmin, dsec, dmilli));
 			}
 		} else if (cg.timerunBestTime[timerunNum] > 0) {
 			// Nico, did the same time
-			Com_sprintf(status, sizeof(status), va("%02d:%02d.%03d (+00:00.000)", min, sec, milli));		
+			Com_sprintf(status, sizeof(status), "%s", va("%02d:%02d.%03d (+00:00.000)", min, sec, milli));		
 		} else {
 			// Nico, first time
 			Com_sprintf(status, sizeof(status), va("%02d:%02d.%03d", min, sec, milli));	
@@ -4256,7 +4256,7 @@ static void CG_DrawTimer(void) {
 			Vector4Set(color, colorRed[0], colorRed[1], colorRed[2], colorRed[3]);
 		}
 
-		Com_sprintf(status, sizeof(status), va("%02d:%02d.%03d", min, sec, milli));
+		Com_sprintf(status, sizeof(status), "%s", va("%02d:%02d.%03d", min, sec, milli));
 	}
 
 	// Nico, print the timer
@@ -4306,18 +4306,18 @@ static void CG_DrawCheckpoints(void) {
 
 				// Nico, no best time yet, print the check point times
 				if (!cg.timerunBestTime[cg.currentTimerun]) {
-					Com_sprintf(status, sizeof(status), va("%02d:%02d.%03d", cmin, csec, cmil));
+					Com_sprintf(status, sizeof(status), "%s", va("%02d:%02d.%03d", cmin, csec, cmil));
 				} else if (cg.timerunCheckPointDiff[i] == 0) {
 					// Nico, same check point time
-					Com_sprintf(status, sizeof(status), va("%02d:%02d.%03d", cdmin, cdsec, cdmil));
+					Com_sprintf(status, sizeof(status), "%s", va("%02d:%02d.%03d", cdmin, cdsec, cdmil));
 				} else if (cg.timerunCheckIsFaster[i] == 1) {
 					// Nico, faster check point time
 					Vector4Set(color, colorGreen[0], colorGreen[1], colorGreen[2], colorGreen[3]);
-					Com_sprintf(status, sizeof(status), va("-%02d:%02d.%03d", cdmin, cdsec, cdmil));
+					Com_sprintf(status, sizeof(status), "%s", va("-%02d:%02d.%03d", cdmin, cdsec, cdmil));
 				} else {
 					// Nico, slower check point time
 					Vector4Set(color, colorRed[0], colorRed[1], colorRed[2], colorRed[3]);
-					Com_sprintf(status, sizeof(status), va("+%02d:%02d.%03d", cdmin, cdsec, cdmil));
+					Com_sprintf(status, sizeof(status), "%s", va("+%02d:%02d.%03d", cdmin, cdsec, cdmil));
 				}
 
 				// Nico, print the check point
