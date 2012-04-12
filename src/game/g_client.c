@@ -494,6 +494,9 @@ void limbo( gentity_t *ent) {
 
 	if ( !( ent->client->ps.pm_flags & PMF_LIMBO ) ) {
 
+		// Nico, notify the client and its spectators the timerun has stopped
+		notify_timerun_stop(ent, 0);
+
 		/* Nico, removed respawnLeft
 		if ( ent->client->ps.persistant[PERS_RESPAWNS_LEFT] == 0 ) {
 			if ( g_maxlivesRespawnPenalty.integer ) {

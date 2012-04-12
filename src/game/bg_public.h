@@ -285,6 +285,10 @@ extern const unsigned int aReinfSeeds[MAX_REINFSEEDS];
 
 #define MAX_CHARACTERS  16
 
+// Nico, some timerun limit defines
+#define MAX_TIMERUNS	32
+#define MAX_TIMERUN_CHECKPOINTS 16
+
 //
 // config strings are a general means of communicating variable length strings
 // from the server to all connected clients.
@@ -358,6 +362,7 @@ extern const unsigned int aReinfSeeds[MAX_REINFSEEDS];
 #define CS_FIRETEAMS                    ( CS_TAGCONNECTS +          MAX_TAGCONNECTS             )
 #define CS_CUSTMOTD                     ( CS_FIRETEAMS +            MAX_FIRETEAMS               )
 #define CS_STRINGS                      ( CS_CUSTMOTD +             MAX_MOTDLINES               )
+#define CS_TIMERUNS						( CS_STRINGS +				MAX_CSSTRINGS				)// Nico, timerun configstring
 #define CS_MAX                          ( CS_STRINGS +              MAX_CSSTRINGS               )
 
 #if ( CS_MAX ) > MAX_CONFIGSTRINGS
@@ -526,6 +531,10 @@ typedef struct {
 
 	// Nico, game physics
 	int	physics;
+
+	// Nico, timerun vars
+	int			timerunActive;
+	int			timerunStartTime;
 } pmove_t;
 
 

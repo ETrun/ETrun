@@ -420,9 +420,12 @@ void SP_props_decor_Scale( gentity_t *ent );
 void SP_func_debris( gentity_t* ent );
 // ===================
 
-// Nico, timer stuff from TJMod
+// Nico, timerun entities handling functions
 void SP_target_starttimer(gentity_t *ent);
 void SP_target_stoptimer(gentity_t *ent);
+void SP_target_checkpoint(gentity_t *ent);
+void SP_rocketrun(gentity_t *ent);
+// Nico, end of timerun entities handling functions
 
 spawn_t spawns[] = {
 	// info entities don't do anything at all, but provide positional
@@ -611,7 +614,7 @@ spawn_t spawns[] = {
 	{"props_skyportal", SP_skyportal},
 	{"props_footlocker", SP_props_footlocker},
 	{"props_flamethrower", SP_props_flamethrower},
-	{"props_decoration_scale",SP_props_decor_Scale},
+	{"props_decoration_scale", SP_props_decor_Scale},
 
 	{"dlight",       SP_dlight},
 
@@ -637,9 +640,12 @@ spawn_t spawns[] = {
 	/* Nico, removed mines
 	{"misc_landmine",        SP_misc_landmine },*/
 
-	// Nico, timer stuff from TJMod
+	// Nico, bind timerun entities handlers
 	{"target_startTimer", SP_target_starttimer},
 	{"target_stopTimer", SP_target_stoptimer},
+	{"target_checkpoint", SP_target_checkpoint},
+	{"weapon_rocketlauncher", SP_rocketrun},
+	// Nico, enf of bind timerun entities handlers
 
 	{0, 0}
 };

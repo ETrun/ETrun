@@ -347,6 +347,9 @@ void trigger_teleporter_touch( gentity_t *self, gentity_t *other, trace_t *trace
 	}
 
 	TeleportPlayer( other, dest->s.origin, dest->s.angles );
+
+	// Nico, set next timerun start allowed (anti teleporter abuse)
+	other->client->nextTimerunStartAllowed = other->client->ps.commandTime + 3000;
 }
 
 

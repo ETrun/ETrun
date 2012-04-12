@@ -4156,55 +4156,179 @@ static void CG_DrawSpeedMeter (void) {
 	}
 }*/
 
-static void CG_DrawTimer (void) {
+static void CG_DrawTimer(void) {
 	char status[128];
-	static int millistart, needsReset = 0;
-	int	min, sec, milli;
-	float sizex = 0.1f, sizey = 0.1f;
-	int x, y, w;
-	static int nowTime = 0;
-	static int startTime;
+	int	min = 0, sec = 0, milli = 0;
+	int	dmin = 0, dsec = 0, dmilli = 0;
+	int x = 0, y = 0, w = 0;
+	int timerunNum = 0;
+	int startTime = 0;
+	int currentTimerunTime = 0;
+	float sizex = 0.3f, sizey = 0.3f;
+	vec4_t	color;
+	static int needsReset = 0;
+	
+	// Nico, if level is not a timer
+	if (!isTimerun.integer) {
+		return;
+	}
 
+	timerunNum = cg.currentTimerun;
+
+	// Nico, check if timer needs reset
+	// note: this should be move somewhere else
+	if (!cg.timerunActive) {
+		// Nico, timer will be reseted next time timerun becomes active
+		needsReset = 1;
+	}
+
+	if (needsReset && cg.timerunActive) {
+		// Nico, reset timer
+		cg.timerunFinishedTime = 0;
+		needsReset = 0;
+	}
+	//
+
+	// Nico, if cg_drawTimer is 0
+	if (!cg_drawTimer.integer) {
+		return;
+	}
+
+	// Nico, set timer position
+	x = cg_timerX.integer;
+	y = cg_timerY.integer;
+
+	// Nico, get fixed timerun start time
 	startTime = cg.timerunStartTime - 500;
 
-	if ((!millistart && startTime > 0)) {
-		millistart = startTime;
-	}
-
 	if (cg.timerunActive) {
-		milli = nowTime = cg.time - millistart;
-	} else if (cg.finishedTime) {
-		milli = nowTime = cg.finishedTime;
+		// Nico, timerun active, run not finished yet
+		milli = currentTimerunTime = cg.time - startTime;
+	} else if (cg.timerunFinishedTime) {
+		// Nico, timerun inactive, run finished
+		milli = currentTimerunTime = cg.timerunFinishedTime;
 	} else {
-		milli = nowTime;
+		// Nico, timerun not active, run not finished
+		milli = currentTimerunTime;
 	}
 
+	// Nico, extract min:sec.milli
 	min = milli / 60000;
 	milli -= min * 60000;
 	sec = milli / 1000;
 	milli -= sec * 1000;
 
-	sizex *= 3;// Nico, note: timer X size
-	sizey *= 3;// Nico, note: timer X size
+	// Nico, set timer default color
+	Vector4Set(color, colorWhite[0], colorWhite[1], colorWhite[2], colorWhite[3]);
 
-	// Timer position
-	x = 320;
-	y = 425;
+	if (cg.timerunFinishedTime) {
+		// Nico, timerun finished
+		// Compare with client rec
+		if (cg.timerunBestTime[timerunNum] > 0 && cg.timerunLastTime[timerunNum] != cg.timerunBestTime[timerunNum]) {
+			// Nico, did a different time, compute the delta
+			dmilli = abs(cg.timerunLastTime[timerunNum] - cg.timerunBestTime[timerunNum]);
+			dmin = dmilli / 60000;
+			dmilli -= dmin * 60000;
+			dsec = dmilli / 1000;
+			dmilli -= dsec * 1000;
 
-	if (cg.timerunActive) {
-		needsReset = 1;
+			if (cg.timerunLastTime[timerunNum] < cg.timerunBestTime[timerunNum]) {
+				// Nico, did a better time
+				Vector4Set(color, colorGreen[0], colorGreen[1], colorGreen[2], colorGreen[3]);
+				Com_sprintf(status, sizeof(status), va("%02d:%02d.%03d (-%02d:%02d.%03d)", min, sec, milli, dmin, dsec, dmilli));
+			} else {
+				// Nico, did a slower time
+				Vector4Set(color, colorRed[0], colorRed[1], colorRed[2], colorRed[3]);
+				Com_sprintf(status, sizeof(status), va("%02d:%02d.%03d (+%02d:%02d.%03d)", min, sec, milli, dmin, dsec, dmilli));
+			}
+		} else if (cg.timerunBestTime[timerunNum] > 0) {
+			// Nico, did the same time
+			Com_sprintf(status, sizeof(status), va("%02d:%02d.%03d (+00:00.000)", min, sec, milli));		
+		} else {
+			// Nico, first time
+			Com_sprintf(status, sizeof(status), va("%02d:%02d.%03d", min, sec, milli));	
+		}
+	} else {
+		// Nico, timerun not finished yet
+
+		// Nico, you won't beat the rec this time, turn timer to red color
+		if (cg.timerunBestTime[timerunNum] > 0 && currentTimerunTime > cg.timerunBestTime[timerunNum]) {
+			Vector4Set(color, colorRed[0], colorRed[1], colorRed[2], colorRed[3]);
+		}
+
+		Com_sprintf(status, sizeof(status), va("%02d:%02d.%03d", min, sec, milli));
 	}
 
-	if (needsReset && cg.timerunActive) {
-		cg.finishedTime = 0;
-		millistart = 0;
-		needsReset = 0;
-	}
-
-	Com_sprintf(status, sizeof(status), va("%02d:%02d.%03d", min, sec, milli));
-
+	// Nico, print the timer
 	w = CG_Text_Width_Ext( status, sizex, 0, &cgs.media.limboFont2 ) / 2;
-	CG_Text_Paint_Ext(x - w, y, sizex, sizey, colorWhite, status, 0, 0, 0, &cgs.media.limboFont2);
+	CG_Text_Paint_Ext(x - w, y, sizex, sizey, color, status, 0, 0, 0, &cgs.media.limboFont2);
+}
+
+static void CG_DrawCheckpoints(void) {
+	char status[128];
+	int i = 0;
+	int j = 0;
+	int	cmin = 0, csec = 0, cmil = 0;
+	int	cdmin = 0, cdsec = 0, cdmil = 0;
+	float sizex = 0.2f, sizey = 0.2f;
+	int x = 0, y = 0, w = 0;
+	vec4_t color;
+
+	// Nico, checkpoints
+	if (cg_drawCheckPoints.integer) {
+
+		// Nico, printing position
+		x = cg_checkPointsX.value;
+		y = cg_checkPointsY.value;
+
+		// Nico, check cg_maxCheckPoints
+		if (!cg_maxCheckPoints.integer || cg_maxCheckPoints.integer < 0) {
+			cg_maxCheckPoints.integer = 5;
+		}
+
+		// Nico, print check points if any and respect the printing limit (cg_maxCheckPoints)
+		if (cg.timerunCheckPointChecked > 0) {
+			for (i = cg.timerunCheckPointChecked - 1, j = 0; i >= 0 && j < cg_maxCheckPoints.integer; --i, ++j) {
+				cmil = cg.timerunCheckPointTime[i];
+				cmin = cmil / 60000;
+				cmil -= cmin * 60000;
+				csec = cmil / 1000;
+				cmil -= csec * 1000;
+
+				cdmil = cg.timerunCheckPointDiff[i];
+				cdmin = cdmil / 60000;
+				cdmil -= cdmin * 60000;
+				cdsec = cdmil / 1000;
+				cdmil -= cdsec * 1000;
+
+				// Nico, set checkpoint default color
+				Vector4Set(color, colorWhite[0], colorWhite[1], colorWhite[2], colorWhite[3]);
+
+				// Nico, no best time yet, print the check point times
+				if (!cg.timerunBestTime[cg.currentTimerun]) {
+					Com_sprintf(status, sizeof(status), va("%02d:%02d.%03d", cmin, csec, cmil));
+				} else if (cg.timerunCheckPointDiff[i] == 0) {
+					// Nico, same check point time
+					Com_sprintf(status, sizeof(status), va("%02d:%02d.%03d", cdmin, cdsec, cdmil));
+				} else if (cg.timerunCheckIsFaster[i] == 1) {
+					// Nico, faster check point time
+					Vector4Set(color, colorGreen[0], colorGreen[1], colorGreen[2], colorGreen[3]);
+					Com_sprintf(status, sizeof(status), va("-%02d:%02d.%03d", cdmin, cdsec, cdmil));
+				} else {
+					// Nico, slower check point time
+					Vector4Set(color, colorRed[0], colorRed[1], colorRed[2], colorRed[3]);
+					Com_sprintf(status, sizeof(status), va("+%02d:%02d.%03d", cdmin, cdsec, cdmil));
+				}
+
+				// Nico, print the check point
+				w = CG_Text_Width_Ext( status, sizex, 0, &cgs.media.limboFont2 ) / 2;
+				CG_Text_Paint_Ext(x - w, y, sizex, sizey, color, status, 0, 0, 0, &cgs.media.limboFont2);
+
+				// Nico, line jump
+				y += 10;
+			}
+		}
+	}
 }
 
 
@@ -4215,13 +4339,6 @@ CG_Draw2D
 */
 static void CG_Draw2D( void ) {
 	CG_ScreenFade();
-
-	// Arnout: no 2d when in esc menu
-	// FIXME: do allow for quickchat (bleh)
-	// Gordon: Removing for now
-/*	if( trap_Key_GetCatcher() & KEYCATCH_UI ) {
-		return;
-	}*/
 
 	/* Nico, removed debriefing
 	if ( cg.snap->ps.pm_type == PM_INTERMISSION ) {
@@ -4267,8 +4384,6 @@ static void CG_Draw2D( void ) {
 				CG_DrawCrosshairNames();
 
 				CG_DrawNoShootIcon();
-
-//				CG_DrawPickupItem();
 			}
 
 			CG_DrawTeamInfo();
@@ -4345,6 +4460,9 @@ static void CG_Draw2D( void ) {
 
 		// Nico, draw timer
 		CG_DrawTimer();
+
+		// Nico, draw check points
+		CG_DrawCheckpoints();
 
 		CG_DrawSpectatorMessage();
 

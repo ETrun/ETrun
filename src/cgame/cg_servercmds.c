@@ -2528,29 +2528,69 @@ static void CG_ServerCommand( void ) {
 		return;
 	}
 
-	// Nico, timer stuff from TJMod
+	// Nico, timer start/stop/check related
 
-	if (!Q_stricmp(cmd, "setTimerunStartTime")) {
-		CG_Printf("received setTimerunStartTime %s\n", CG_Argv(1));
-		cg.timerunStartTime = atoi(CG_Argv(1));
+	if (!Q_stricmp(cmd, "timerun_start")) {
+		cg.timerunActive = 1;
+		cg.timerunCheckPointChecked = 0;
+		cg.currentTimerun = atoi(CG_Argv(1));
+		cg.timerunStartTime = atoi(CG_Argv(2));
+
+		if (!cg.timerunBestTime[cg.currentTimerun] || cg.timerunLastTime[cg.currentTimerun] < cg.timerunBestTime[cg.currentTimerun]) {
+			cg.timerunBestTime[cg.currentTimerun] = cg.timerunLastTime[cg.currentTimerun];
+		}
 		return;
 	}
 
-	if (!Q_stricmp(cmd, "timerun_start")) {
-		CG_Printf("received timerun_start\n");
+	if (!Q_stricmp(cmd, "timerun_start_spec")) {
+		// Nico, only for specs
+		if (cgs.clientinfo[cg.clientNum].team != TEAM_SPECTATOR) {
+			return;
+		}
 		cg.timerunActive = 1;
+		cg.timerunCheckPointChecked = 0;
+		cg.currentTimerun = atoi(CG_Argv(1));
+		cg.timerunStartTime = atoi(CG_Argv(2));
+
+		if (!cg.timerunBestTime[cg.currentTimerun] || cg.timerunLastTime[cg.currentTimerun] < cg.timerunBestTime[cg.currentTimerun]) {
+			cg.timerunBestTime[cg.currentTimerun] = cg.timerunLastTime[cg.currentTimerun];
+		}
+		return;
+	}
+
+	if (!Q_stricmp(cmd, "timerun_check")) {
+		cg.timerunCheckPointDiff[cg.timerunCheckPointChecked] = atoi(CG_Argv(1));
+		cg.timerunCheckPointTime[cg.timerunCheckPointChecked] = atoi(CG_Argv(2));
+		cg.timerunCheckIsFaster[cg.timerunCheckPointChecked++] = atoi(CG_Argv(3));
+
+		if (cg.timerunCheckPointChecked > MAX_TIMERUN_CHECKPOINTS) {
+			CG_Error("MAX_TIMERUN_CHECKPOINTS limit reached\n");
+		}
 		return;
 	}
 
 	if (!Q_stricmp(cmd, "timerun_stop")) {
-		CG_Printf("received timerun_stop %s\n", CG_Argv(1));
 		cg.timerunActive = 0;
 
 		if (atoi(CG_Argv(2))) {
-			cg.timerunLastTime = cg.finishedTime = atoi(CG_Argv(1));
+			cg.timerunLastTime[atoi(CG_Argv(1))] = cg.timerunFinishedTime = atoi(CG_Argv(2));
 		}
 		return;
 	}
+
+	if (!Q_stricmp(cmd, "timerun_stop_spec")) {
+		// Nico, only for specs
+		if (cgs.clientinfo[cg.clientNum].team != TEAM_SPECTATOR) {
+			return;
+		}
+		cg.timerunActive = 0;
+
+		if (atoi(CG_Argv(2))) {
+			cg.timerunLastTime[atoi(CG_Argv(1))] = cg.timerunFinishedTime = atoi(CG_Argv(2));
+		}
+		return;
+	}
+	// Nico, end of timer start/stop/check related
 
 	CG_Printf( "Unknown client game command: %s\n", cmd );
 }

@@ -507,6 +507,9 @@ struct gentity_s {
 
 	//bani
 	int etpro_misc_1;
+
+	// Nico, run name used by target_starttimer, target_stoptimer and target_checkpoint
+	char	*timerunName;
 };
 
 typedef enum {
@@ -637,9 +640,11 @@ typedef struct {
 
 	qboolean versionOK;
 
-	// Nico, timer stuff from TJMod
-	int timerunLastTime;
-	int	finishedTime;
+	// Nico, client session timerun related
+	int			timerunLastTime[MAX_TIMERUNS];
+	int			timerunBestTime[MAX_TIMERUNS];
+	int			timerunBestCheckpointTimes[MAX_TIMERUNS][MAX_TIMERUN_CHECKPOINTS];
+	// Nico, end of client session timerun related
 } clientSession_t;
 
 //
@@ -913,9 +918,19 @@ struct gclient_s {
 	/* Nico, removed respawnLeft
 	qboolean maxlivescalced;*/
 
-	// Nico, timer stuff from TJMod
-	qboolean		timerunActive;
-	int				timerunStartTime;	// absolute start time
+	// Nico, timerun server vars
+	qboolean	timerunActive;
+	int			timerunStartTime;	// absolute start time
+	int			timerunCheckpointTimes[MAX_TIMERUN_CHECKPOINTS];
+	int			timerunCheckpointsPassed;
+	char		*currentTimerun;
+
+	int			nextTimerunStartAllowed;
+
+	// Speed related
+	float		startSpeed;
+	float		stopSpeed;
+	// Nico, end of timerun server vars
 };
 
 typedef struct {
@@ -1165,6 +1180,21 @@ typedef struct {
 	int commanderLastSoundTime[2];
 
 	qboolean tempTraceIgnoreEnts[ MAX_GENTITIES ];
+
+	// Nico, timerun level vars
+	int			numTimeruns;
+	char		*timerunsNames[MAX_TIMERUNS];
+	int			numCheckpoints[MAX_TIMERUNS];
+
+	// timerun records
+	int			timerunRecordsTimes[MAX_TIMERUNS];	// in miliseconds
+	char		timerunRecordsPlayers[MAX_TIMERUNS][MAX_NETNAME];
+
+	// Nico, note: set to true if there's at least one target_(starttimer|stoptimer|checkpoint)
+	qboolean	isTimerun;
+
+	int			rocketRun;
+	// Nico, end of timerun level vars
 } level_locals_t;
 
 typedef struct {
@@ -1639,6 +1669,9 @@ void script_mover_blocked( gentity_t *ent, gentity_t *other );
 // g_props.c
 void Props_Chair_Skyboxtouch( gentity_t *ent );
 
+// Nico, g_starget.c
+void notify_timerun_stop(gentity_t *activator, int finishTime);
+
 #include "g_team.h" // teamplay specific stuff
 
 extern level_locals_t level;
@@ -1945,6 +1978,9 @@ extern vmCvar_t g_enableMapEntities;
 
 // Force timer reset, i.e. bypass "wait 9999" on start triggers
 extern vmCvar_t g_forceTimerReset;
+
+// Is level a timerun?
+extern vmCvar_t	isTimerun;
 
 // Nico, end of ETrun cvars
 

@@ -352,6 +352,9 @@ vmCvar_t g_enableMapEntities;
 // Force timer reset, i.e. bypass "wait 9999" on start triggers
 vmCvar_t g_forceTimerReset;
 
+// Is level a timerun?
+vmCvar_t isTimerun;
+
 // Nico, end of ETrun cvars
 
 
@@ -470,7 +473,7 @@ cvarTable_t gameCvarTable[] = {
 	{ &g_forcerespawn, "g_forcerespawn", "0", 0, 0, qtrue },*/
 
 	{ &g_inactivity, "g_inactivity", "0", 0, 0, qtrue },
-	{ &g_debugMove, "g_debugMove", "1", 0, 0, qfalse },// Nico, #fixme
+	{ &g_debugMove, "g_debugMove", "0", 0, 0, qfalse },
 	{ &g_debugDamage, "g_debugDamage", "0", CVAR_CHEAT, 0, qfalse },
 	{ &g_debugAlloc, "g_debugAlloc", "0", 0, 0, qfalse },
 	{ &g_debugBullets, "g_debugBullets", "0", CVAR_CHEAT, 0, qfalse}, //----(SA)	added
@@ -666,6 +669,9 @@ cvarTable_t gameCvarTable[] = {
 
 	// Force timer reset, i.e. bypass "wait 9999" on start triggers
 	{ &g_forceTimerReset, "g_forceTimerReset", "1", CVAR_SERVERINFO | CVAR_ARCHIVE | CVAR_LATCH},
+
+	// Is level a timerun?
+	{ &isTimerun, "isTimerun", "0", CVAR_ROM | CVAR_SYSTEMINFO },
 
 	// Nico, end of ETrun cvars
 };
@@ -2156,6 +2162,14 @@ void G_InitGame( int levelTime, int randomSeed, int restart ) {
 	// --- maybe not the best place to do this... seems to be some race conditions on map_restart
 	/* Nico, removed multiview
 	G_spawnPrintf( DP_MVSPAWN, level.time + 2000, NULL );*/
+
+	// Nico, is level a timerun?
+	if (!level.isTimerun) {
+		trap_Cvar_Set("isTimerun", "0");
+		G_Printf (va("%s: No timerun found in map:\n- Disabled recordmode physics limitations.\n", GAMEVERSION));
+	} else {
+		trap_Cvar_Set("isTimerun", "1");
+	}
 }
 
 

@@ -333,12 +333,26 @@ vmCvar_t cg_recording_statusline;
 // Nico, beginning of ETrun client cvars
 
 // Game physics 
-vmCvar_t	physics;
+vmCvar_t physics;
+
+// Is level a timerun?
+vmCvar_t isTimerun;
 
 // Speed meter
-vmCvar_t	cg_drawSpeedMeter;
-vmCvar_t	cg_speedMeterX;
-vmCvar_t	cg_speedMeterY;
+vmCvar_t cg_drawSpeedMeter;
+vmCvar_t cg_speedMeterX;
+vmCvar_t cg_speedMeterY;
+
+// Timer
+vmCvar_t cg_drawTimer;
+vmCvar_t cg_timerX;
+vmCvar_t cg_timerY;
+
+// Check points
+vmCvar_t cg_drawCheckPoints;
+vmCvar_t cg_checkPointsX;
+vmCvar_t cg_checkPointsY;
+vmCvar_t cg_maxCheckPoints;
 
 // Nico, end of ETrun cvars
 
@@ -582,10 +596,24 @@ cvarTable_t cvarTable[] = {
 	// Game physics 
 	{ &physics, "physics", "0", CVAR_ROM },
 
+	// Is level a timerun?
+	{ &isTimerun, "isTimerun", "0", CVAR_ROM | CVAR_CHEAT },
+
 	// Speed meter
 	{ &cg_drawSpeedMeter, "cg_drawSpeedMeter", "1", CVAR_ARCHIVE },
 	{ &cg_speedMeterX, "cg_speedMeterX", "320", CVAR_ARCHIVE },
 	{ &cg_speedMeterY, "cg_speedMeterY", "220", CVAR_ARCHIVE },
+
+	// Timer
+	{ &cg_drawTimer, "cg_drawTimer", "1", CVAR_ARCHIVE },
+	{ &cg_timerX, "cg_timerX", "320", CVAR_ARCHIVE },
+	{ &cg_timerY, "cg_timerY", "420", CVAR_ARCHIVE },
+
+	// Check points
+	{ &cg_drawCheckPoints, "cg_drawCheckPoints", "1", CVAR_ARCHIVE },
+	{ &cg_checkPointsX, "cg_checkPointsX", "320", CVAR_ARCHIVE },
+	{ &cg_checkPointsY, "cg_checkPointsY", "435", CVAR_ARCHIVE },
+	{ &cg_maxCheckPoints, "cg_maxCheckPoints", "5", CVAR_ARCHIVE },
 
 	// Nico, end of ETrun cvars
 };

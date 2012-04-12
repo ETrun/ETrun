@@ -1268,7 +1268,98 @@ void SP_target_rumble( gentity_t *self ) {
 	trap_LinkEntity( self );
 }
 
-// Nico, timer stuff taken from TJMod
+/*
+ * Help function for target_starttimer, target_stoptimer, target_checkpoint.
+ * Creates a new timerun if there isn't any timerun with such name.
+ * source: TJMod
+ */
+static int GetTimerunNum(char *name)
+{
+	char	**cur = level.timerunsNames;
+
+	while (*cur) {
+		if (!Q_stricmp(*cur, name)) {
+			return cur - level.timerunsNames;
+		}
+		cur++;
+	}
+
+	if (level.numTimeruns >= MAX_TIMERUNS) {
+		G_Error("Exceeded maximum number of timeruns (max %i)\n", MAX_TIMERUNS);
+	}
+	level.timerunsNames[level.numTimeruns] = name;
+	trap_SetConfigstring(CS_TIMERUNS + level.numTimeruns, name);
+	return level.numTimeruns++;
+}
+
+// Nico, function used to notify the client his timerun has started and also the spectators of this client
+static void notify_timerun_start(gentity_t *activator) {
+	int i = 0;
+	gentity_t *o = NULL;
+	int timerunNum = 0;
+
+	timerunNum = GetTimerunNum(activator->client->currentTimerun);
+
+	// Nico, notify the client itself first
+	G_Printf("Sending a timerun_start to client %d\n", activator - g_entities);
+	trap_SendServerCommand(activator - g_entities, va("timerun_start %i %i", timerunNum, activator->client->timerunStartTime + 500));
+
+	// Nico, notify its spectators
+	for (; i < level.numConnectedClients; ++i) {
+		o = g_entities + level.sortedClients[i];
+
+		if (!o->client) {
+			continue;
+		}
+
+		if (o == activator) {
+			continue;
+		}
+
+		if ( o->client->sess.sessionTeam != TEAM_SPECTATOR ) {
+			continue;
+		}
+
+		if (o->client->sess.spectatorClient == activator - g_entities) {
+			G_Printf("Sending a timerun_start_spec to client %d\n", o - g_entities);
+			trap_SendServerCommand(o - g_entities, va("timerun_start_spec %i %i", timerunNum, activator->client->timerunStartTime + 500));
+		}
+	}
+}
+
+// Nico, function used to notify the client his timerun has started and also the spectators of this client
+// note: it is called when client loads a position, or gets killed
+void notify_timerun_stop(gentity_t *activator, int finishTime) {
+	int i = 0;
+	gentity_t *o = NULL;
+	int timerunNum = 0;
+
+	timerunNum = GetTimerunNum(activator->client->currentTimerun);
+
+	// Nico, notify the client itself first
+	trap_SendServerCommand(activator - g_entities, va("timerun_stop %i %i", timerunNum, finishTime));
+
+	// Nico, notify its spectators
+	for (; i < level.numConnectedClients; ++i) {
+		o = g_entities + level.sortedClients[i];
+
+		if (!o->client) {
+			continue;
+		}
+
+		if (o == activator) {
+			continue;
+		}
+
+		if ( o->client->sess.sessionTeam != TEAM_SPECTATOR ) {
+			continue;
+		}
+
+		if (o->client->sess.spectatorClient == activator - g_entities) {
+			trap_SendServerCommand(o - g_entities, va("timerun_stop_spec %i %i", timerunNum, finishTime));
+		}
+	}
+}
 
 /* QUAKED target_startTimer (1 0 0) (-8 -8 -8) (8 8 8)
  * timer start
@@ -1281,7 +1372,6 @@ void target_starttimer_use(gentity_t *self, gentity_t *other, gentity_t *activat
 	client = activator->client;
 
 	if (client->timerunActive) {
-		Com_Printf("Timerun is already active\n");
 		return;
 	}
 
@@ -1298,19 +1388,29 @@ void target_starttimer_use(gentity_t *self, gentity_t *other, gentity_t *activat
 		return;
 	}
 
-	// TODO: Check teleport abuse
+	if (client->nextTimerunStartAllowed > client->ps.commandTime) {
+		CPx(activator - g_entities, "cpm \"^1Timerun not started, possible teleporter abuse!\n\"");
+		return;
+	}
 	
-	trap_SendServerCommand(activator - g_entities, va("timerun_start"));
+	client->currentTimerun = self->timerunName;
 
-	// XXX setup - not sure if using ps.commandTime is the right way how to
 	// get the time
 	client->timerunStartTime = client->ps.commandTime;
-	trap_SendServerCommand(activator - g_entities, va("setTimerunStartTime %i", client->timerunStartTime + 500));
+	client->startSpeed = sqrt(client->ps.velocity[0]*client->ps.velocity[0] + client->ps.velocity[1]*client->ps.velocity[1]);
 	client->timerunActive = qtrue;
+
+	// Nico, notify timerun_start event to client and to its spectators
+	notify_timerun_start(activator);
+	
+	// reset checkpoints
+	memset(client->timerunCheckpointTimes, 0, sizeof(client->timerunCheckpointTimes));
+	client->timerunCheckpointsPassed = 0;
 }
 
 void SP_target_starttimer(gentity_t *ent) {
-	
+	char *t = NULL;
+
 	// Nico, used to look for parent
 	gentity_t *parent = NULL;
 
@@ -1324,7 +1424,14 @@ void SP_target_starttimer(gentity_t *ent) {
 		}
 	} 
 
+	// Nico, create a timerun with this name if it doesn't exist yet
+	G_SpawnString("name", "default", &t);
+	ent->timerunName = G_NewString(t);
+	GetTimerunNum(ent->timerunName);
+
 	ent->use = target_starttimer_use;
+
+	level.isTimerun = qtrue;
 }
 
 /* QUAKED target_stopTimer (1 0 0) (-8 -8 -8) (8 8 8)
@@ -1334,17 +1441,261 @@ void SP_target_starttimer(gentity_t *ent) {
  * "minCheckpoints"		minimal passed checkpoints to activate this stoptimer
  */
 void target_stoptimer_use(gentity_t *self, gentity_t *other, gentity_t *activator) {
+	int			min, sec, milli;
+	int			delta, dmin, dsec, dmilli;
+	int			type = 0; // default: no record
+	int			time;
+	float		oldNewDiff;
 	gclient_t	*client;
+	int			timerunNum;
+	int			intTopSpeed = 0;
 
 	client = activator->client;
 
-	if (!client->timerunActive)
+	if (!client->timerunActive) {
 		return;
+	}
+
+	// don't stop the time if this isn't a corresponding stoptimer
+	if (Q_stricmp(self->timerunName, client->currentTimerun)) {
+		return;
+	}
+
+	timerunNum = GetTimerunNum(client->currentTimerun);
+
+	// if (client->ps.ping > 400) {
+	//	client->timerunActive = qfalse;
+	//	return;
+	// }
+
+	// required number of checkpoints passed?
+	if (client->timerunCheckpointsPassed < self->count) {
+		CPx(activator - g_entities, va("cpm \"^d%s^f:^1 Minimum checkpoints not passed (%d/%d)\n\"", client->currentTimerun, client->timerunCheckpointsPassed, self->count));
+		client->timerunActive = qfalse;
+
+		return;
+	}
+
+	time = client->sess.timerunLastTime[timerunNum] = client->ps.commandTime - client->timerunStartTime;
+
+	// convert time into MM:SS:mmm
+	milli = time;
+	min = milli / 60000;
+	milli -= min * 60000;
+	sec = milli / 1000;
+	milli -= sec * 1000;
+
+	delta = abs(time - client->sess.timerunBestTime[timerunNum]);
+	if (/*client->sess.logged && */(!client->sess.timerunBestTime[timerunNum] || time < client->sess.timerunBestTime[timerunNum])) {
+		// best personal
+		client->sess.timerunBestTime[timerunNum] = time;
+		memcpy(client->sess.timerunBestCheckpointTimes[timerunNum], client->timerunCheckpointTimes, sizeof(client->timerunCheckpointTimes));
+		type = 1;
+	}
+
+	// extract MM:SS:mmm from delta
+	dmilli = delta;
+	dmin = dmilli / 60000;
+	dmilli -= dmin * 60000;
+	dsec = dmilli / 1000;
+	dmilli -= dsec * 1000;
+
+	client->stopSpeed = sqrt(client->ps.velocity[0] * client->ps.velocity[0] + client->ps.velocity[1] * client->ps.velocity[1]);
+	
+	switch (type) {
+		case 0: // no record
+				CPx(activator - g_entities, va("cpm \"^d%s^f:^z %02d:%02d.%03d (+%02d:%02d.%03d)\n\"",
+					client->currentTimerun, min, sec, milli, dmin, dsec, dmilli));
+			break;
+		case 1: // best personal
+				CPx(activator - g_entities, va("cpm \"^d%s^f:^g %02d:%02d.%03d (-%02d:%02d.%03d)\n\"",
+					client->currentTimerun, min, sec, milli, dmin, dsec, dmilli));
+			if (qtrue/*client->sess.logged*/)
+			{
+				// Console print to all players
+				AP(va("print \"^fTimerun:^7 %s^7, ^fPlayer:^7 %s^7, ^fTime: ^g%02d:%02d.%03d\n\"",
+					client->currentTimerun, client->pers.netname, min, sec, milli));
+
+				// Banner print to all players
+				if (/*client->pers.bpTimes && */(!level.timerunRecordsTimes[timerunNum] || time < level.timerunRecordsTimes[timerunNum]))
+				{
+					char nn[16], on[16];
+					Q_strncpyz(nn, client->pers.netname, sizeof(nn));
+					Q_strncpyz(on, level.timerunRecordsPlayers[timerunNum], sizeof(on));
+		
+					// Get old time etc
+					if (!level.timerunRecordsTimes[timerunNum])
+						oldNewDiff = 0;
+					else 
+						oldNewDiff = level.timerunRecordsTimes[timerunNum] - time;
+
+					/*if (!oldNewDiff)
+						AP(va("bp \"^z%s ^z- %s\n^7%s ^7set ^g%02d:%02d.%03d ^7as a new record\n\"", 
+							level.rawmapname, client->currentTimerun, client->pers.netname, min, sec, milli));
+					else if (!Q_stricmp(on, nn))
+						AP(va("bp \"^z%s ^z- %s\n^7%s ^7beat his old time by ^g%.3f ^7seconds (%02d:%02d.%03d)\n\"", 
+							level.rawmapname, client->currentTimerun, nn, oldNewDiff / 1000, min, sec, milli));
+					else
+						AP(va("bp \"^z%s ^z- %s\n^7%s ^7beat %s^7's record by ^g%.3f ^7seconds (%02d:%02d.%03d)\n\"", 
+							level.rawmapname, client->currentTimerun, nn, on, oldNewDiff / 1000, min, sec, milli));*/
+
+					Q_strncpyz(level.timerunRecordsPlayers[timerunNum], client->pers.netname, sizeof(level.timerunRecordsPlayers[timerunNum]));
+					level.timerunRecordsTimes[timerunNum] = time;
+				}
+			}
+			
+			//trap_SendServerCommand(activator - g_entities, va("runSave %s_%02d-%02d-%03d", client->currentTimerun, min, sec, milli));
+			break;
+	}
+
+	// Start recording a new temp demo.
+	// trap_SendServerCommand(activator - g_entities, "tempDemoStart 1");
 
 	client->timerunActive = qfalse;
-	trap_SendServerCommand(activator - g_entities, va("timerun_stop %i", client->sess.timerunLastTime));
+
+	// Nico, notify the client and its spectators the timerun has stopped
+	notify_timerun_stop(activator, client->sess.timerunLastTime[timerunNum]);
 }
 
 void SP_target_stoptimer(gentity_t *ent) {
+	char *t = NULL;
+
+	// Nico, do we need to bypass wait on stoptimer too?
+
+	G_SpawnString("name", "default", &t);
+	ent->timerunName = G_NewString(t);
+	// create a timerun with this name if it doesn't exit yet
+	GetTimerunNum(ent->timerunName);
+
+	G_SpawnInt("mincheckpoints", "0", &ent->count);
+
 	ent->use = target_stoptimer_use;
+
+	level.isTimerun = qtrue;
+}
+
+/* QUAKED target_checkpoint (1 0 0) (-8 -8 -8) (8 8 8)
+ * checkpoint
+ *
+ * "name"  timerun name
+ */
+void target_checkpoint_use(gentity_t *self, gentity_t *other, gentity_t *activator) {
+	int			min, sec, milli;
+	int			delta, dmin, dsec, dmilli;
+	int			time;
+	char		c;
+	gentity_t	*o;
+	gclient_t	*client;
+	int			timerunNum;
+	int			isFaster;
+	int			i;
+
+	client = activator->client;
+
+	if (!client->timerunActive) {
+		return;
+	}
+
+	// make sure this is a checkpoint for a current timerun
+	if (Q_stricmp(self->timerunName, client->currentTimerun)) {
+		return;
+	}
+
+	timerunNum = GetTimerunNum(client->currentTimerun);
+
+	// already used?
+	if (client->timerunCheckpointTimes[self->count]) {
+		return;
+	}
+
+	client->timerunCheckpointsPassed++;
+
+	time = client->timerunCheckpointTimes[self->count] = client->ps.commandTime - client->timerunStartTime;
+
+	isFaster = 0;
+	if (!client->sess.timerunBestCheckpointTimes[timerunNum][self->count] || time <= client->sess.timerunBestCheckpointTimes[timerunNum][self->count]) {
+		c = '-';
+		isFaster = 1;
+	}
+	else {
+		c = '+';
+	}
+	delta = abs(time - client->sess.timerunBestCheckpointTimes[timerunNum][self->count]);
+
+	// convert time into MM:SS:mm
+	milli = time;
+	min = milli / 60000;
+	milli -= min * 60000;
+	sec = milli / 1000;
+	milli -= sec * 1000;
+
+	// extract SS:mm from delta
+	dmilli = delta;
+	dmin = dmilli / 60000;
+	dmilli -= dmin * 60000;
+	dsec = dmilli / 1000;
+	dmilli -= dsec * 1000; // only one digit
+
+	CPx(activator - g_entities, va("cpm \"^d%s^f:^7 %c%02d:%02d.%03d ^z(%02d:%02d.%03d)\n\"",
+			client->currentTimerun, c, dmin, dsec, dmilli, min, sec, milli));
+
+	trap_SendServerCommand(activator - g_entities, va("timerun_check %i %i %i", delta, time, isFaster));
+	// Send stuff to any spectator currently spectating
+	for (i = 0; i < level.numConnectedClients; i++) {
+		o = g_entities + level.sortedClients[i];
+
+		if (!o->client) {
+			continue;
+		}
+
+		if (o == activator) {
+			continue;
+		}
+
+		if( o->client->sess.sessionTeam != TEAM_SPECTATOR ) {
+			continue;
+		}
+
+		if (o->client->sess.spectatorClient == activator - g_entities) {
+			trap_SendServerCommand(o - g_entities, va("timerun_check %i %i %i", delta, time, isFaster));
+		}
+	}
+}
+
+void SP_target_checkpoint(gentity_t *ent)
+{
+	char	*t = NULL;
+	int		timerunNum = 0;
+
+	// Nico, do we need to bypass wait on stoptimer too?
+
+	G_SpawnString("name", "default", &t);
+	ent->timerunName = G_NewString(t);
+	// create a timerun with this name if it doesn't exit yet
+	timerunNum = GetTimerunNum(ent->timerunName);
+
+	if (level.numCheckpoints[timerunNum] >= MAX_TIMERUN_CHECKPOINTS) {
+		G_Error("Exceeded maximum number of 'target_checkpoint' entities in '%s' timerun (max %i)\n", ent->timerunName, MAX_TIMERUN_CHECKPOINTS);
+		return;
+	}
+
+	ent->count = level.numCheckpoints[timerunNum];
+	ent->use = target_checkpoint_use;
+
+	level.numCheckpoints[timerunNum]++;
+
+	level.isTimerun = qtrue;
+}
+
+
+void SP_rocketrun(gentity_t *ent)
+{
+	int		count;
+
+	// Don't add if already added from one?
+	if (!level.rocketRun) {
+		G_SpawnInt( "count", "1", &count );
+
+		level.rocketRun = count;
+	}
 }

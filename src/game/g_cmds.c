@@ -908,7 +908,6 @@ void StopFollowing( gentity_t *ent ) {
 		vec3_t pos, angle;
 		gclient_t   *client = ent->client;
 		VectorCopy( client->ps.origin, pos );
-//		pos[2] += 16; // Gordon: removing for now
 		VectorCopy( client->ps.viewangles, angle );
 		// Need this as it gets spec mode reset properly
 		SetTeam( ent, "s", qtrue, -1, -1, qfalse );

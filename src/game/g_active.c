@@ -978,6 +978,9 @@ void ClientThink_real( gentity_t *ent ) {
 	// Nico, game physics
 	pm.physics = physics.integer;
 
+	pm.timerunActive = client->timerunActive;
+	pm.timerunStartTime = client->timerunStartTime + 500;
+
 	pm.noWeapClips = qfalse;
 
 	VectorCopy( client->ps.origin, client->oldOrigin );

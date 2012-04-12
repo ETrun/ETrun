@@ -1215,11 +1215,25 @@ typedef struct {
 
 	int waterundertime;
 
-	// Nico, timer stuff from TJMod
-	int	timerunActive;
-	int	timerunStartTime;
-	int finishedTime;
-	int	timerunLastTime;
+	// Nico, beginning of ETrun client variables
+
+	// Checkpoints related vars
+	int				timerunCheckPointChecked;
+	int				timerunCheckPointDiff[MAX_TIMERUN_CHECKPOINTS];
+	int				timerunCheckPointTime[MAX_TIMERUN_CHECKPOINTS];
+	char			timerunCheckIsFaster[MAX_TIMERUN_CHECKPOINTS];// Nico, note: this is 0 or 1
+
+	// Timer related vars
+	int				timerunStartTime;
+	int				timerunFinishedTime;
+	int				timerunBestTime[MAX_TIMERUNS];
+	int				timerunLastTime[MAX_TIMERUNS];
+
+	// Timerun vars
+	int				timerunActive;
+	int				currentTimerun;
+
+	// Nico, end of ETrun client variables
 } cg_t;
 
 #define NUM_FUNNEL_SPRITES  21
@@ -2346,10 +2360,24 @@ extern vmCvar_t cg_recording_statusline;
 // Game physics 
 extern vmCvar_t	physics;
 
+// Is level a timerun?
+extern vmCvar_t	isTimerun;
+
 // Speed meter
 extern vmCvar_t	cg_drawSpeedMeter;
 extern vmCvar_t cg_speedMeterX;
 extern vmCvar_t cg_speedMeterY;
+
+// Timer
+extern vmCvar_t	cg_drawTimer;
+extern vmCvar_t cg_timerX;
+extern vmCvar_t cg_timerY;
+
+// Check points
+extern vmCvar_t	cg_drawCheckPoints;
+extern vmCvar_t cg_checkPointsX;
+extern vmCvar_t cg_checkPointsY;
+extern vmCvar_t cg_maxCheckPoints;
 
 // Nico, end of ETrun cvars
 
