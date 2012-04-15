@@ -237,7 +237,9 @@ vmCvar_t cg_voiceSpriteTime;    // DHM - Nerve
 
 vmCvar_t cg_animState;
 
-vmCvar_t cg_drawCompass;
+/* Nico, removed compass
+vmCvar_t cg_drawCompass;*/
+
 vmCvar_t cg_drawNotifyText;
 vmCvar_t cg_quickMessageAlt;
 vmCvar_t cg_popupLimboMenu;
@@ -510,7 +512,10 @@ cvarTable_t cvarTable[] = {
 	{ &cg_movespeed, "g_movespeed", "76", 0 }, // actual movespeed of player*/
 
 	{ &cg_animState, "cg_animState", "0", CVAR_CHEAT},
-	{ &cg_drawCompass, "cg_drawCompass", "0", CVAR_ARCHIVE },// Nico, disabled by default
+
+	/* Nico, removed compass
+	{ &cg_drawCompass, "cg_drawCompass", "1", CVAR_ARCHIVE },*/
+
 	{ &cg_drawNotifyText, "cg_drawNotifyText", "1", CVAR_ARCHIVE },
 	{ &cg_quickMessageAlt, "cg_quickMessageAlt", "0", CVAR_ARCHIVE },
 	{ &cg_popupLimboMenu, "cg_popupLimboMenu", "1", CVAR_ARCHIVE },

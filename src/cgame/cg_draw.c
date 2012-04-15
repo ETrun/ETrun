@@ -3310,6 +3310,7 @@ CG_DrawCompassIcon
 NERVE - SMF
 =================
 */
+/* Nico, removed compass
 void CG_DrawCompassIcon( float x, float y, float w, float h, vec3_t origin, vec3_t dest, qhandle_t shader ) {
 	float angle, pi2 = M_PI * 2;
 	vec3_t v1, angles;
@@ -3346,13 +3347,14 @@ void CG_DrawCompassIcon( float x, float y, float w, float h, vec3_t origin, vec3
 
 
 	CG_DrawPic( x - ( 14 * len + 4 ) / 2, y - ( 14 * len + 4 ) / 2, 14 * len + 8, 14 * len + 8, shader );
-}
+}*/
 
 /*
 =================
 CG_DrawNewCompass
 =================
 */
+/* Nico, removed compass
 static void CG_DrawNewCompass( void ) {
 	float basex, basey;
 	float basew, baseh;
@@ -3369,8 +3371,8 @@ static void CG_DrawNewCompass( void ) {
 		snap = cg.snap;
 	}
 
-	/* Nico, removed multiview
-	if ( snap->ps.pm_flags & PMF_LIMBO || snap->ps.persistant[PERS_TEAM] == TEAM_SPECTATOR || cg.mvTotalClients > 0 ) {*/
+	// Nico, removed multiview
+	// if ( snap->ps.pm_flags & PMF_LIMBO || snap->ps.persistant[PERS_TEAM] == TEAM_SPECTATOR || cg.mvTotalClients > 0 ) {
 	if ( snap->ps.pm_flags & PMF_LIMBO || snap->ps.persistant[PERS_TEAM] == TEAM_SPECTATOR) {
 		return;
 	}
@@ -3484,7 +3486,7 @@ static void CG_DrawNewCompass( void ) {
 		CG_DrawCompassIcon( basex, basey, basew, baseh, cg.predictedPlayerState.origin, ent->pos.trBase, cgs.media.buddyShader );
 	}
 //	}
-}
+}*/
 
 static int CG_PlayerAmmoValue( int *ammo, int *clips, int *akimboammo ) {
 	centity_t       *cent;
@@ -4062,18 +4064,16 @@ static void CG_DrawSpeedMeter (void) {
 
 	speed = sqrt(cg.predictedPlayerState.velocity[0] * cg.predictedPlayerState.velocity[0] + cg.predictedPlayerState.velocity[1] * cg.predictedPlayerState.velocity[1]);
 
-	sizex = sizey = 0.1f;
-	sizex *= 3;
-	sizey *= 3;
+	sizex = sizey = 0.25f;
 
 	x = cg_speedMeterX.integer;
 	y = cg_speedMeterY.integer;
 	
 	Com_sprintf(status, sizeof(status), "%.0f", speed);
 
-	w = CG_Text_Width_Ext( status, sizex, 0, &cgs.media.limboFont2 ) / 2;
+	w = CG_Text_Width_Ext( status, sizex, sizey, &cgs.media.limboFont1 ) / 2;
 
-	CG_Text_Paint_Ext(x - w, y, sizex, sizey, colorWhite, status, 0, 0, 0, &cgs.media.limboFont2);
+	CG_Text_Paint_Ext(x - w, y, sizex, sizey, colorWhite, status, 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
 }
 
 // Nico, from TJMod
@@ -4164,7 +4164,7 @@ static void CG_DrawTimer(void) {
 	int timerunNum = 0;
 	int startTime = 0;
 	int currentTimerunTime = 0;
-	float sizex = 0.3f, sizey = 0.3f;
+	float sizex = 0.25f, sizey = 0.25f;
 	vec4_t	color;
 	static int needsReset = 0;
 	
@@ -4260,8 +4260,8 @@ static void CG_DrawTimer(void) {
 	}
 
 	// Nico, print the timer
-	w = CG_Text_Width_Ext( status, sizex, 0, &cgs.media.limboFont2 ) / 2;
-	CG_Text_Paint_Ext(x - w, y, sizex, sizey, color, status, 0, 0, 0, &cgs.media.limboFont2);
+	w = CG_Text_Width_Ext( status, sizex, sizey, &cgs.media.limboFont1 ) / 2;
+	CG_Text_Paint_Ext(x - w, y, sizex, sizey, color, status, 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
 }
 
 static void CG_DrawCheckpoints(void) {
@@ -4321,8 +4321,8 @@ static void CG_DrawCheckpoints(void) {
 				}
 
 				// Nico, print the check point
-				w = CG_Text_Width_Ext( status, sizex, 0, &cgs.media.limboFont2 ) / 2;
-				CG_Text_Paint_Ext(x - w, y, sizex, sizey, color, status, 0, 0, 0, &cgs.media.limboFont2);
+				w = CG_Text_Width_Ext( status, sizex, sizey, &cgs.media.limboFont1 ) / 2;
+				CG_Text_Paint_Ext(x - w, y, sizex, sizey, color, status, 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
 
 				// Nico, line jump
 				y += 10;
@@ -4446,9 +4446,10 @@ static void CG_Draw2D( void ) {
 
 		CG_DrawNotify();
 
+		/* Nico, removed compass
 		if ( cg_drawCompass.integer ) {
 			CG_DrawNewCompass();
-		}
+		}*/
 
 		CG_DrawObjectiveInfo();
 

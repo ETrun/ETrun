@@ -7494,7 +7494,9 @@ cvarTable_t cvarTable[] = {
 	{ NULL, "cg_printObjectiveInfo", "1", CVAR_ARCHIVE },
 	{ NULL, "cg_useScreenshotJPEG", "1", CVAR_ARCHIVE },
 	{ NULL, "cg_drawGun", "1", CVAR_ARCHIVE },
-	{ NULL, "cg_drawCompass", "1", CVAR_ARCHIVE },
+
+	/* Nico, removed compass
+	{ NULL, "cg_drawCompass", "1", CVAR_ARCHIVE },*/
 
 	/* Nico, instant reswawn
 	{ NULL, "cg_drawRoundTimer", "1", CVAR_ARCHIVE },*/

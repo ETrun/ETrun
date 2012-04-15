@@ -2265,7 +2265,9 @@ extern vmCvar_t cg_movespeed;*/
 
 extern vmCvar_t cg_animState;
 
-extern vmCvar_t cg_drawCompass;
+/* Nico, removed compass
+extern vmCvar_t cg_drawCompass;*/
+
 extern vmCvar_t cg_drawNotifyText;
 extern vmCvar_t cg_quickMessageAlt;
 extern vmCvar_t cg_popupLimboMenu;
