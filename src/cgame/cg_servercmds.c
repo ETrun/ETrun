@@ -2569,6 +2569,21 @@ static void CG_ServerCommand( void ) {
 		return;
 	}
 
+	if (!Q_stricmp(cmd, "timerun_check_spec")) {
+		// Nico, only for specs
+		if (cgs.clientinfo[cg.clientNum].team != TEAM_SPECTATOR) {
+			return;
+		}
+		cg.timerunCheckPointDiff[cg.timerunCheckPointChecked] = atoi(CG_Argv(1));
+		cg.timerunCheckPointTime[cg.timerunCheckPointChecked] = atoi(CG_Argv(2));
+		cg.timerunCheckIsFaster[cg.timerunCheckPointChecked++] = atoi(CG_Argv(3));
+
+		if (cg.timerunCheckPointChecked > MAX_TIMERUN_CHECKPOINTS) {
+			CG_Error("MAX_TIMERUN_CHECKPOINTS limit reached\n");
+		}
+		return;
+	}
+
 	if (!Q_stricmp(cmd, "timerun_stop")) {
 		cg.timerunActive = 0;
 

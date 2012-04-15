@@ -1327,40 +1327,6 @@ static void notify_timerun_start(gentity_t *activator) {
 	}
 }
 
-// Nico, function used to notify the client his timerun has started and also the spectators of this client
-// note: it is called when client loads a position, or gets killed
-void notify_timerun_stop(gentity_t *activator, int finishTime) {
-	int i = 0;
-	gentity_t *o = NULL;
-	int timerunNum = 0;
-
-	timerunNum = GetTimerunNum(activator->client->currentTimerun);
-
-	// Nico, notify the client itself first
-	trap_SendServerCommand(activator - g_entities, va("timerun_stop %i %i", timerunNum, finishTime));
-
-	// Nico, notify its spectators
-	for (; i < level.numConnectedClients; ++i) {
-		o = g_entities + level.sortedClients[i];
-
-		if (!o->client) {
-			continue;
-		}
-
-		if (o == activator) {
-			continue;
-		}
-
-		if ( o->client->sess.sessionTeam != TEAM_SPECTATOR ) {
-			continue;
-		}
-
-		if (o->client->sess.spectatorClient == activator - g_entities) {
-			trap_SendServerCommand(o - g_entities, va("timerun_stop_spec %i %i", timerunNum, finishTime));
-		}
-	}
-}
-
 /* QUAKED target_startTimer (1 0 0) (-8 -8 -8) (8 8 8)
  * timer start
  *
@@ -1432,6 +1398,40 @@ void SP_target_starttimer(gentity_t *ent) {
 	ent->use = target_starttimer_use;
 
 	level.isTimerun = qtrue;
+}
+
+// Nico, function used to notify the client his timerun has stopped and also the spectators of this client
+// note: it is called when client loads a position, or gets killed
+void notify_timerun_stop(gentity_t *activator, int finishTime) {
+	int i = 0;
+	gentity_t *o = NULL;
+	int timerunNum = 0;
+
+	timerunNum = GetTimerunNum(activator->client->currentTimerun);
+
+	// Nico, notify the client itself first
+	trap_SendServerCommand(activator - g_entities, va("timerun_stop %i %i", timerunNum, finishTime));
+
+	// Nico, notify its spectators
+	for (; i < level.numConnectedClients; ++i) {
+		o = g_entities + level.sortedClients[i];
+
+		if (!o->client) {
+			continue;
+		}
+
+		if (o == activator) {
+			continue;
+		}
+
+		if ( o->client->sess.sessionTeam != TEAM_SPECTATOR ) {
+			continue;
+		}
+
+		if (o->client->sess.spectatorClient == activator - g_entities) {
+			trap_SendServerCommand(o - g_entities, va("timerun_stop_spec %i %i", timerunNum, finishTime));
+		}
+	}
 }
 
 /* QUAKED target_stopTimer (1 0 0) (-8 -8 -8) (8 8 8)
@@ -1574,21 +1574,52 @@ void SP_target_stoptimer(gentity_t *ent) {
 	level.isTimerun = qtrue;
 }
 
+// Nico, function used to notify the client he has reached a check point and also the spectators of this client
+static void notify_timerun_check(gentity_t *activator, int deltaTime, int time, int isFaster) {
+	int i = 0;
+	gentity_t *o = NULL;
+	int timerunNum = 0;
+
+	timerunNum = GetTimerunNum(activator->client->currentTimerun);
+
+	// Nico, notify the client itself first
+	G_Printf("Sending a timerun_check to client %d\n", activator - g_entities);
+	trap_SendServerCommand(activator - g_entities, va("timerun_check %i %i %i", deltaTime, time, isFaster));
+
+	// Nico, notify its spectators
+	for (; i < level.numConnectedClients; ++i) {
+		o = g_entities + level.sortedClients[i];
+
+		if (!o->client) {
+			continue;
+		}
+
+		if (o == activator) {
+			continue;
+		}
+
+		if ( o->client->sess.sessionTeam != TEAM_SPECTATOR ) {
+			continue;
+		}
+
+		if (o->client->sess.spectatorClient == activator - g_entities) {
+			G_Printf("Sending a timerun_check_spec to client %d\n", o - g_entities);
+			trap_SendServerCommand(o - g_entities, va("timerun_check_spec %i %i %i", deltaTime, time, isFaster));
+		}
+	}
+}
+
 /* QUAKED target_checkpoint (1 0 0) (-8 -8 -8) (8 8 8)
  * checkpoint
  *
  * "name"  timerun name
  */
 void target_checkpoint_use(gentity_t *self, gentity_t *other, gentity_t *activator) {
-	int			min, sec, milli;
-	int			delta, dmin, dsec, dmilli;
-	int			time;
-	char		c;
-	gentity_t	*o;
-	gclient_t	*client;
-	int			timerunNum;
-	int			isFaster;
-	int			i;
+	int			delta = 0;
+	int			time = 0;
+	gclient_t	*client = NULL;
+	int			timerunNum = 0;
+	int			isFaster = 0;
 
 	client = activator->client;
 
@@ -1603,7 +1634,7 @@ void target_checkpoint_use(gentity_t *self, gentity_t *other, gentity_t *activat
 
 	timerunNum = GetTimerunNum(client->currentTimerun);
 
-	// already used?
+	// Nico, test if the checkpoint was already used
 	if (client->timerunCheckpointTimes[self->count]) {
 		return;
 	}
@@ -1612,54 +1643,12 @@ void target_checkpoint_use(gentity_t *self, gentity_t *other, gentity_t *activat
 
 	time = client->timerunCheckpointTimes[self->count] = client->ps.commandTime - client->timerunStartTime;
 
-	isFaster = 0;
 	if (!client->sess.timerunBestCheckpointTimes[timerunNum][self->count] || time <= client->sess.timerunBestCheckpointTimes[timerunNum][self->count]) {
-		c = '-';
 		isFaster = 1;
-	}
-	else {
-		c = '+';
 	}
 	delta = abs(time - client->sess.timerunBestCheckpointTimes[timerunNum][self->count]);
 
-	// convert time into MM:SS:mm
-	milli = time;
-	min = milli / 60000;
-	milli -= min * 60000;
-	sec = milli / 1000;
-	milli -= sec * 1000;
-
-	// extract SS:mm from delta
-	dmilli = delta;
-	dmin = dmilli / 60000;
-	dmilli -= dmin * 60000;
-	dsec = dmilli / 1000;
-	dmilli -= dsec * 1000; // only one digit
-
-	CPx(activator - g_entities, va("cpm \"^d%s^f:^7 %c%02d:%02d.%03d ^z(%02d:%02d.%03d)\n\"",
-			client->currentTimerun, c, dmin, dsec, dmilli, min, sec, milli));
-
-	trap_SendServerCommand(activator - g_entities, va("timerun_check %i %i %i", delta, time, isFaster));
-	// Send stuff to any spectator currently spectating
-	for (i = 0; i < level.numConnectedClients; i++) {
-		o = g_entities + level.sortedClients[i];
-
-		if (!o->client) {
-			continue;
-		}
-
-		if (o == activator) {
-			continue;
-		}
-
-		if( o->client->sess.sessionTeam != TEAM_SPECTATOR ) {
-			continue;
-		}
-
-		if (o->client->sess.spectatorClient == activator - g_entities) {
-			trap_SendServerCommand(o - g_entities, va("timerun_check %i %i %i", delta, time, isFaster));
-		}
-	}
+	notify_timerun_check(activator, delta, time, isFaster);
 }
 
 void SP_target_checkpoint(gentity_t *ent)
