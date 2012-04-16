@@ -3395,6 +3395,7 @@ static int CG_PlayerAmmoValue( int *ammo, int *clips, int *akimboammo ) {
 	return weap;
 }
 
+/* Nico, removed hud head animation
 #define HEAD_TURNTIME 10000
 #define HEAD_TURNANGLE 20
 #define HEAD_PITCHANGLE 2.5
@@ -3444,12 +3445,12 @@ static void CG_DrawPlayerStatusHead( void ) {
 		}
 	}
 
-	/* Nico, removed rank
-	CG_DrawPlayerHead( &headRect, character, headcharacter, 180, 0, cg.snap->ps.eFlags & EF_HEADSHOT ? qfalse : qtrue, anim, painshader, cgs.clientinfo[ cg.snap->ps.clientNum ].rank, qfalse );*/
+	// Nico, removed rank
+	// CG_DrawPlayerHead( &headRect, character, headcharacter, 180, 0, cg.snap->ps.eFlags & EF_HEADSHOT ? qfalse : qtrue, anim, painshader, cgs.clientinfo[ cg.snap->ps.clientNum ].rank, qfalse );
 	CG_DrawPlayerHead( &headRect, character, headcharacter, 180, 0, cg.snap->ps.eFlags & EF_HEADSHOT ? qfalse : qtrue, anim, painshader, 0, qfalse );
 
 //	CG_DrawKeyHint( &headHintRect, "openlimbomenu" );
-}
+}*/
 
 static void CG_DrawPlayerHealthBar( rectDef_t *rect ) {
 	vec4_t bgcolour =   {   1.f,    1.f,    1.f,    0.3f    };
@@ -3666,24 +3667,6 @@ static void CG_DrawSkillBar( float x, float y, float w, float h, int skill ) {
 	}
 }*/
 
-#define SKILL_ICON_SIZE     14
-
-#define SKILLS_X 112
-#define SKILLS_Y 20
-
-#define SKILL_BAR_OFFSET    ( 2 * SKILL_BAR_X_INDENT )
-#define SKILL_BAR_X_INDENT  0
-#define SKILL_BAR_Y_INDENT  6
-
-#define SKILL_BAR_WIDTH     ( SKILL_ICON_SIZE - SKILL_BAR_OFFSET )
-#define SKILL_BAR_X         ( SKILL_BAR_OFFSET + SKILL_BAR_X_INDENT + SKILLS_X )
-#define SKILL_BAR_X_SCALE   ( SKILL_ICON_SIZE + 2 )
-#define SKILL_ICON_X        ( SKILL_BAR_OFFSET + SKILLS_X )
-#define SKILL_ICON_X_SCALE  ( SKILL_ICON_SIZE + 2 )
-#define SKILL_BAR_Y         ( SKILL_BAR_Y_INDENT - SKILL_BAR_OFFSET - SKILLS_Y )
-#define SKILL_BAR_Y_SCALE   ( SKILL_ICON_SIZE + 2 )
-#define SKILL_ICON_Y        ( -( SKILL_ICON_SIZE + 2 ) - SKILL_BAR_OFFSET - SKILLS_Y )
-
 /* Nico, removed skills
 skillType_t CG_ClassSkillForPosition( clientInfo_t* ci, int pos ) {
 	switch ( pos ) {
@@ -3698,65 +3681,15 @@ skillType_t CG_ClassSkillForPosition( clientInfo_t* ci, int pos ) {
 	return SK_BATTLE_SENSE;
 }*/
 
+// Nico, heavilly modified
 static void CG_DrawPlayerStats( void ) {
-	int value = 0;
-	playerState_t       *ps;
-	// clientInfo_t        *ci; Nico, unused warning fix
-
-	/* Nico, removed skills
-	skillType_t skill;
-	int i;*/
-
-	const char*         str;
+	const char *str;
 	float w;
-	// vec_t*              clr; Nico, unused warning fix
 
 	str = va( "%i", cg.snap->ps.stats[STAT_HEALTH] );
 	w = CG_Text_Width_Ext( str, 0.25f, 0, &cgs.media.limboFont1 );
-	CG_Text_Paint_Ext( SKILLS_X - 28 - w, 480 - 4, 0.25f, 0.25f, colorWhite, str, 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1 );
-	CG_Text_Paint_Ext( SKILLS_X - 28 + 2, 480 - 4, 0.2f, 0.2f, colorWhite, "HP", 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1 );
-
-	/* Nico, removed LMS
-	if ( cgs.gametype == GT_WOLF_LMS ) {
-		return;
-	}*/
-
-	ps = &cg.snap->ps;
-	// ci = &cgs.clientinfo[ ps->clientNum ];
-
-
-	/* Nico, removed skills
-	for ( i = 0; i < 3; i++ ) {
-		skill = CG_ClassSkillForPosition( ci, i );
-
-		CG_DrawSkillBar( i * SKILL_BAR_X_SCALE + SKILL_BAR_X, 480 - ( 5 * SKILL_BAR_Y_SCALE ) + SKILL_BAR_Y, SKILL_BAR_WIDTH, 4 * SKILL_ICON_SIZE, ci->skill[skill] );
-		CG_DrawPic( i * SKILL_ICON_X_SCALE + SKILL_ICON_X, 480 + SKILL_ICON_Y, SKILL_ICON_SIZE, SKILL_ICON_SIZE, cgs.media.skillPics[skill] );
-	}*/
-
-	/* Nico, removed XP
-	if ( cg.time - cg.xpChangeTime < 1000 ) {
-		clr = colorYellow;
-	} else {
-		clr = colorWhite;
-	}
-
-
-	str = va( "%i", cg.snap->ps.stats[STAT_XP] );
-	w = CG_Text_Width_Ext( str, 0.25f, 0, &cgs.media.limboFont1 );
-	CG_Text_Paint_Ext( SKILLS_X + 28 - w, 480 - 4, 0.25f, 0.25f, clr, str, 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1 );
-	CG_Text_Paint_Ext( SKILLS_X + 28 + 2, 480 - 4, 0.2f, 0.2f, clr, "XP", 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1 );*/
-
-	// draw treasure icon if we have the flag
-	// rain - #274 - use the playerstate instead of the clientinfo
-	if ( ps->powerups[PW_REDFLAG] || ps->powerups[PW_BLUEFLAG] ) {
-		trap_R_SetColor( NULL );
-		CG_DrawPic( 640 - 40, 480 - 140 - value, 36, 36, cgs.media.objectiveShader );
-	}
-	
-	/* Nico, removed disguise stuff
-	else if ( ps->powerups[PW_OPS_DISGUISED] ) { // Disguised?
-		CG_DrawPic( 640 - 40, 480 - 140 - value, 36, 36, ps->persistant[PERS_TEAM] == TEAM_AXIS ? cgs.media.alliedUniformShader : cgs.media.axisUniformShader );
-	}*/
+	CG_Text_Paint_Ext( 42 - w, 474, 0.25f, 0.25f, colorWhite, str, 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1 );
+	CG_Text_Paint_Ext( 44, 474, 0.2f, 0.2f, colorWhite, "HP", 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1 );
 }
 
 static char statsDebugStrings[6][512];
@@ -4230,7 +4163,10 @@ static void CG_Draw2D( void ) {
 			rectDef_t rect;
 
 			if ( cg.snap->ps.stats[STAT_HEALTH] > 0 ) {
-				CG_DrawPlayerStatusHead();
+
+				/* Nico, removed hud head animation
+				CG_DrawPlayerStatusHead();*/
+
 				CG_DrawPlayerStatus();
 				CG_DrawPlayerStats();
 			}

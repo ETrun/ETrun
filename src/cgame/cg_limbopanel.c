@@ -365,17 +365,18 @@ LEFT_FRAME( "gfx/limbo/limbo_frame07",   7, 0,       LF_Y2,  LF_W1,  LF_H3 );
 
 LEFT_FRAME( "gfx/limbo/limbo_frame08",   8, 0,       LF_Y1,  LF_W1,  LF_H2 );
 
+/* Nico, removed hud head animation
 panel_button_t playerLimboHead = {
 	NULL,
 	NULL,
 	{ 456, 30, 68, 84 },
 	{ 0, 0, 0, 0, 0, 0, 0, 0 },
-	NULL,   /* font		*/
-	NULL,   /* keyDown	*/
-	NULL,   /* keyUp	*/
+	NULL,   
+	NULL,   
+	NULL,  
 	CG_LimboPanel_RenderHead,
 	NULL,
-};
+};*/
 
 /* Nico, removed XP
 panel_button_t playerXPCounterText = {
@@ -949,7 +950,8 @@ panel_button_t* limboPanelButtons[] = {
 	&teamCounterLight0, &teamCounterLight1, &teamCounterLight2,
 	&teamButton0,       &teamButton1,       &teamButton2,
 
-	&playerLimboHead,
+	/* Nico, removed hud head animation
+	&playerLimboHead,*/
 
 	/* Nico, removed XP
 	&playerXPCounter, &playerXPCounterText,*/
@@ -1551,6 +1553,7 @@ void CG_LimboPanel_RenderLight( panel_button_t* button ) {
 	}
 }
 
+/* Nico, removed hud head animation
 void CG_DrawPlayerHead( rectDef_t *rect, bg_character_t* character, bg_character_t* headcharacter, float yaw, float pitch, qboolean drawHat, hudHeadAnimNumber_t animation, qhandle_t painSkin, int rank, qboolean spectator ) {
 	float len;
 	vec3_t origin;
@@ -1614,7 +1617,7 @@ void CG_DrawPlayerHead( rectDef_t *rect, bg_character_t* character, bg_character
 	// ydnar: light the model with the current lightgrid
 	//VectorCopy( cg.refdef.vieworg, head.lightingOrigin );
 	if ( !cg.showGameView ) {
-		head.renderfx |= /*RF_LIGHTING_ORIGIN |*/ RF_MINLIGHT;
+		head.renderfx |= RF_MINLIGHT;
 	}
 
 	CG_HudHeadAnimation( headcharacter, &cg.predictedPlayerEntity.pe.hudhead, &head.oldframe, &head.frame, &head.backlerp, animation );
@@ -1628,7 +1631,7 @@ void CG_DrawPlayerHead( rectDef_t *rect, bg_character_t* character, bg_character
 		// ydnar: light the model with the current lightgrid
 		//VectorCopy( cg.refdef.vieworg, hat.lightingOrigin );
 		if ( !cg.showGameView ) {
-			hat.renderfx |= /*RF_LIGHTING_ORIGIN |*/ RF_MINLIGHT;
+			hat.renderfx |= RF_MINLIGHT;
 		}
 
 		CG_PositionEntityOnTag( &hat, &head, "tag_mouth", 0, NULL );
@@ -1638,8 +1641,8 @@ void CG_DrawPlayerHead( rectDef_t *rect, bg_character_t* character, bg_character
 
 			mrank.hModel = character->accModels[ ACC_RANK ];
 
-			/* Nico, removed rankicons
-			mrank.customShader = rankicons[ rank ][ 1 ].shader;*/
+			// Nico, removed rankicons
+			// mrank.customShader = rankicons[ rank ][ 1 ].shader;
 
 			mrank.renderfx = RF_NOSHADOW | RF_FORCENOLOD;       // no stencil shadows
 
@@ -1662,10 +1665,6 @@ void CG_DrawPlayerHead( rectDef_t *rect, bg_character_t* character, bg_character
 	mrank.shaderRGBA[2] = 255;
 	mrank.shaderRGBA[3] = 255;
 
-	/*if( spectator ) {
-		head.customShader = cgs.media.limboSpectator;
-		head.customSkin = 0;
-	}*/
 	trap_R_AddRefEntityToScene( &head );
 
 	if ( painSkin ) {
@@ -1675,10 +1674,6 @@ void CG_DrawPlayerHead( rectDef_t *rect, bg_character_t* character, bg_character
 	}
 
 	if ( drawHat ) {
-		/*if( spectator ) {
-			hat.customShader = cgs.media.limboSpectator;
-			hat.customSkin = 0;
-		}*/
 		trap_R_AddRefEntityToScene( &hat );
 
 		if ( rank ) {
@@ -1732,7 +1727,7 @@ void CG_LimboPanel_RenderHead( panel_button_t* button ) {
 	CG_DrawPicST( button->rect.x - 2,               button->rect.y + button->rect.h,    2,  2, 0.f, 1.f, 1.f, 0.f, cgs.media.limboWeaponCardSurroundC );
 
 	trap_R_SetColor( NULL );
-}
+}*/
 
 qboolean CG_LimboPanel_Filter_KeyDown( panel_button_t* button, int key ) {
 	if ( key == K_MOUSE1 ) {

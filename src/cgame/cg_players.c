@@ -2000,7 +2000,8 @@ void CG_Player( centity_t *cent ) {
 			anim = HD_IDLE1;
 		}
 
-		CG_HudHeadAnimation( character, &cent->pe.head, &head.oldframe, &head.frame, &head.backlerp, anim );
+		/* Nico, removed hud head animation
+		CG_HudHeadAnimation( character, &cent->pe.head, &head.oldframe, &head.frame, &head.backlerp, anim );*/
 	} else {
 		head.frame = 0;
 		head.oldframe = 0;

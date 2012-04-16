@@ -2561,7 +2561,8 @@ sfxHandle_t CG_CustomSound( int clientNum, const char *soundName );
 /* Nico, removed skills
 void CG_ParseTeamXPs( int n );*/
 
-void CG_HudHeadAnimation( bg_character_t* ch, lerpFrame_t* lf, int *oldframe, int *frame, float *backlerp, hudHeadAnimNumber_t animation );
+/* Nico, removed hud head animation
+void CG_HudHeadAnimation( bg_character_t* ch, lerpFrame_t* lf, int *oldframe, int *frame, float *backlerp, hudHeadAnimNumber_t animation );*/
 
 
 // Rafael particles
@@ -3458,7 +3459,10 @@ void CG_LimboPanel_RenderCommandMap( panel_button_t* button );
 void CG_LimboPanel_RenderObjectiveBack( panel_button_t* button );
 void CG_LimboPanel_RenderLight( panel_button_t* button );
 void CG_LimboPanel_WeaponLights( panel_button_t* button );
-void CG_LimboPanel_RenderHead( panel_button_t* button );
+
+/* Nico, removed hud head animation
+void CG_LimboPanel_RenderHead( panel_button_t* button );*/
+
 void CG_LimboPanel_WeaponPanel( panel_button_t* button );
 void CG_LimboPanel_Border_Draw( panel_button_t* button );
 
