@@ -640,6 +640,10 @@ void CG_RegisterCvars( void ) {
 
 	trap_Cvar_Set( "cg_letterbox", "0" ); // force this for people who might have it in their
 
+	// Nico, remove foliage and fog
+	trap_Cvar_Set("r_drawfoliage", "0");
+	trap_Cvar_Set("r_wolffog", "0");
+
 	for ( i = 0, cv = cvarTable ; i < cvarTableSize ; i++, cv++ ) {
 		trap_Cvar_Register( cv->vmCvar, cv->cvarName, cv->defaultString, cv->cvarFlags );
 		if ( cv->vmCvar != NULL ) {
