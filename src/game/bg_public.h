@@ -1586,6 +1586,9 @@ void    BG_AddPredictableEventToPlayerstate( int newEvent, int eventParm, player
 // Nico, uncommented to add jumppads support
 void	BG_TouchJumpPad( playerState_t *ps, entityState_t *jumppad );
 
+// Nico, velocity jumppads support
+void BG_TouchVelocityJumpPad(playerState_t *ps, entityState_t *jumppad, float speed, int count);
+
 void    BG_PlayerStateToEntityState( playerState_t *ps, entityState_t *s, qboolean snap );
 void    BG_PlayerStateToEntityStateExtraPolate( playerState_t *ps, entityState_t *s, int time, qboolean snap );
 weapon_t BG_DuplicateWeapon( weapon_t weap );

@@ -5425,7 +5425,7 @@ BG_TouchJumpPad
 ========================
 */
 void BG_TouchJumpPad( playerState_t *ps, entityState_t *jumppad ) {
-	// spectators don't use jump pads
+	// spectators don't use jumppads
 	if ( ps->pm_type != PM_NORMAL ) {
 		return;
 	}
@@ -5433,3 +5433,34 @@ void BG_TouchJumpPad( playerState_t *ps, entityState_t *jumppad ) {
 	// give the player the velocity from the jumppad
 	VectorCopy( jumppad->origin2, ps->velocity );
 }
+
+// Nico, velocity jumppads support
+void BG_TouchVelocityJumpPad(playerState_t *ps, entityState_t *jumppad, float speed, int count) {
+	vec3_t velocity;
+	int currentXYSpeed = 0;
+
+	if (ps->pm_type != PM_NORMAL) {
+		return;
+	}
+
+	VectorCopy(ps->velocity, velocity);
+	
+	if (VectorLength(velocity) == 0) {
+		return;
+	}
+
+	// Nico, check (x,y) velocity
+	if (velocity[0] == 0 && velocity[1] == 0) {
+		return;
+	}
+	
+	// Nico, add (x, y) speed
+	velocity[0] += (speed * velocity[0]) / sqrt(pow(velocity[0], 2) + pow(velocity[1], 2));
+	velocity[1] += (speed * velocity[1]) / sqrt(pow(velocity[0], 2) + pow(velocity[1], 2));
+	
+	// Nico, add z speed
+	velocity[2] = jumppad->origin2[2] + count;
+
+	VectorCopy(velocity, ps->velocity);
+}
+// Nico, end of velocity jumppads support

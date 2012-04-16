@@ -1651,8 +1651,7 @@ void target_checkpoint_use(gentity_t *self, gentity_t *other, gentity_t *activat
 	notify_timerun_check(activator, delta, time, isFaster);
 }
 
-void SP_target_checkpoint(gentity_t *ent)
-{
+void SP_target_checkpoint(gentity_t *ent) {
 	char	*t = NULL;
 	int		timerunNum = 0;
 
@@ -1677,8 +1676,7 @@ void SP_target_checkpoint(gentity_t *ent)
 }
 
 
-void SP_rocketrun(gentity_t *ent)
-{
+void SP_rocketrun(gentity_t *ent) {
 	int		count;
 
 	// Don't add if already added from one?

@@ -407,7 +407,7 @@ void G_UseTargets( gentity_t *ent, gentity_t *activator ) {
 			G_Printf( "WARNING: Entity used itself.\n" );
 		} else {
 			if ( t->use ) {
-				//G_Printf ("ent->classname %s ent->targetname %s t->targetname %s t->s.number %d\n", ent->classname, ent->targetname, t->targetname, t->s.number);
+				// G_Printf ("ent->classname %s ent->targetname %s t->targetname %s t->s.number %d\n", ent->classname, ent->targetname, t->targetname, t->s.number);
 
 				t->flags |= ( ent->flags & FL_KICKACTIVATE ); // (SA) If 'ent' was kicked to activate, pass this along to it's targets.
 															  //		It may become handy to put a "KICKABLE" flag in ents so that it knows whether to pass this along or not

@@ -665,7 +665,7 @@ cvarTable_t gameCvarTable[] = {
 
 	// Enable certain map entities
 	// 3 enabled both kill entities and hurt entities
-	{ &g_enableMapEntities, "g_enableMapEntities", "7", CVAR_SERVERINFO | CVAR_ARCHIVE},
+	{ &g_enableMapEntities, "g_enableMapEntities", "15", CVAR_SERVERINFO | CVAR_ARCHIVE},
 
 	// Force timer reset, i.e. bypass "wait 9999" on start triggers
 	{ &g_forceTimerReset, "g_forceTimerReset", "1", CVAR_SERVERINFO | CVAR_ARCHIVE | CVAR_LATCH},

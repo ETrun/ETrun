@@ -2604,6 +2604,7 @@ qboolean G_CanPickupWeapon( weapon_t weapon, gentity_t* ent );
 qboolean G_LandmineSnapshotCallback( int entityNum, int clientNum );*/
 
 // Nico, flags enabling map entities
-#define MAP_KILL_ENTITIES	1
-#define MAP_HURT_ENTITIES	2
-#define MAP_JUMPPADS		4
+#define MAP_KILL_ENTITIES		1
+#define MAP_HURT_ENTITIES		2
+#define MAP_JUMPPADS			4
+#define MAP_VELOCITY_JUMPPADS	8

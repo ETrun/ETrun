@@ -1566,3 +1566,47 @@ void SP_trigger_concussive_dust( gentity_t *self ) {
 }
 // jpw
 
+// Nico, velocity jumppads support
+
+void trigger_push_velocity_touch(gentity_t *self, gentity_t *other, trace_t *trace) {
+	// Nico, jumpads support
+	if (!(g_enableMapEntities.integer & MAP_VELOCITY_JUMPPADS) || !other->client ) {
+		return;
+	}	
+
+	BG_TouchVelocityJumpPad(&other->client->ps, &self->s, self->speed, self->count);
+}
+
+/*QUAKED trigger_push_velocity (.5 .5 .5) ? PLAYERDIR_XY ADD_XY PLAYERDIR_Z ADD_Z BIDIRECTIONAL_XY BIDIRECTIONAL_Z CLAMP_NEGATIVE_ADDS
+This is used to create jump pads and launch ramps. It MUST point to a target_position or info_notnull entity to work. 
+Unlike target_push, this is client side predicted.  This is similar to a jumppad, however, it may be configured to add to the player's velocity, as opposed to just setting it.
+-------- KEYS --------
+target : this points to the target_position to which the player will jump.
+notfree : when set to 1, entity will not spawn in "Free for all" and "Tournament" modes.
+notteam : when set to 1, entity will not spawn in "Teamplay" and "CTF" modes.
+notsingle : when set to 1, entity will not spawn in Single Player mode (bot play mode).
+speed: XY speed for player-directional velocity pads - either sets or adds to the player's horizontal velocity.
+count: Z speed for player-directional velocity pads - either sets or adds to the player's vectical velocity.
+-------- SPAWNFLAGS --------
+PLAYERDIR_XY: if set, trigger will apply the horizontal speed in the player's horizontal direction of travel, otherwise it uses the target XY component.
+ADD_XY: if set, trigger will add to the player's horizontal velocity, otherwise it set's the player's horizontal velociy.
+PLAYERDIR_Z: if set, trigger will apply the vertical speed in the player's vertical direction of travel, otherwise it uses the target Z component.
+ADD_Z: if set, trigger will add to the player's vertical velocity, otherwise it set's the player's vectical velociy.
+BIDIRECTIONAL_XY: if set, non-playerdir velocity pads will function in 2 directions based on the target specified.  The chosen direction is based on the current direction of travel.  Applies to horizontal direction.
+BIDIRECTIONAL_Z: if set, non-playerdir velocity pads will function in 2 directions based on the target specified.  The chosen direction is based on the current direction of travel.  Applies to vertical direction.
+CLAMP_NEGATIVE_ADDS: if set, then a velocity pad that adds negative velocity will be clamped to 0, if the resultant velocity would bounce the player in the opposite direction.
+-------- NOTES --------
+To make a jump pad or launch ramp, place the target_position/info_notnull entity at the highest point of the jump and target it with this entity.*/
+void SP_trigger_push_velocity(gentity_t *self) {
+	InitTrigger (self);
+
+	// unlike other triggers, we need to send this one to the client
+	self->r.svFlags &= ~SVF_NOCLIENT;
+
+	self->s.eType = ET_PUSH_TRIGGER;
+	self->touch = trigger_push_velocity_touch;
+	self->think = AimAtTarget;
+	self->nextthink = level.time + FRAMETIME;
+	trap_LinkEntity (self);
+}
+// Nico, end of velocity jumppads support
