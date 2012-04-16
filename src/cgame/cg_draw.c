@@ -1933,24 +1933,13 @@ void CG_CheckForCursorHints( void ) {
 CG_DrawCrosshairNames
 =====================
 */
+// Nico, heavilly modified to always display colored player names
 static void CG_DrawCrosshairNames( void ) {
-	float       *color;
-	char        *name;
+	float *color;
 	float w;
-	const char  *s, *playerClass;
-	int playerHealth = 0;
-	vec4_t c;
-	float barFrac;
-	qboolean drawStuff = qfalse;
-	// const char *playerRank; Nico, unused warning fix
-	qboolean isTank = qfalse;
-	int maxHealth = 1;
-	int i;
-
+	const char  *s;
 	// Distance to the entity under the crosshair
-	// float dist; Nico, unused warning fix
 	float zChange;
-
 	qboolean hitClient = qfalse;
 
 	if ( cg_drawCrosshair.integer < 0 ) {
@@ -1958,7 +1947,6 @@ static void CG_DrawCrosshairNames( void ) {
 	}
 
 	// scan the known entities to see if the crosshair is sighted on one
-	// dist = CG_ScanForCrosshairEntity( &zChange, &hitClient ); Nico, unused warning fix
 	CG_ScanForCrosshairEntity( &zChange, &hitClient );
 
 	if ( cg.renderingThirdPerson ) {
@@ -1966,194 +1954,24 @@ static void CG_DrawCrosshairNames( void ) {
 	}
 
 	// draw the name of the player being looked at
-	color = CG_FadeColor( cg.crosshairClientTime, 1000 );
+	color = CG_FadeColor( cg.crosshairClientTime, 500 );
 
 	if ( !color ) {
 		trap_R_SetColor( NULL );
 		return;
 	}
 
-	// NERVE - SMF
-	if ( cg.crosshairClientNum > MAX_CLIENTS ) {
-		if ( !cg_drawCrosshairNames.integer ) {
-			return;
-		}
-
-		if ( cgs.clientinfo[cg.snap->ps.clientNum].team != TEAM_SPECTATOR ) {
-			if ( cg_entities[cg.crosshairClientNum].currentState.eType == ET_MOVER && cg_entities[cg.crosshairClientNum].currentState.effect1Time ) {
-				isTank = qtrue;
-
-				playerHealth = cg_entities[cg.crosshairClientNum].currentState.dl_intensity;
-				maxHealth = 255;
-
-				s = Info_ValueForKey( CG_ConfigString( CS_SCRIPT_MOVER_NAMES ), va( "%i", cg.crosshairClientNum ) );
-				if ( !*s ) {
-					return;
-				}
-
-				w = CG_DrawStrlen( s ) * SMALLCHAR_WIDTH;
-				CG_DrawSmallStringColor( 320 - w / 2, 170, s, color );
-			} else if ( cg_entities[cg.crosshairClientNum].currentState.eType == ET_CONSTRUCTIBLE_MARKER ) {
-				s = Info_ValueForKey( CG_ConfigString( CS_CONSTRUCTION_NAMES ), va( "%i", cg.crosshairClientNum ) );
-				if ( *s ) {
-					w = CG_DrawStrlen( s ) * SMALLCHAR_WIDTH;
-					CG_DrawSmallStringColor( 320 - w / 2, 170, s, color );
-				}
-				return;
-			}
-		}
-
-		if ( !isTank ) {
-			return;
-		}
-	} else if ( cgs.clientinfo[cg.crosshairClientNum].team != cgs.clientinfo[cg.snap->ps.clientNum].team ) {
-
-		/* Nico, removed disguise stuff
-		if ( ( cg_entities[cg.crosshairClientNum].currentState.powerups & ( 1 << PW_OPS_DISGUISED ) ) && cgs.clientinfo[cg.snap->ps.clientNum].team != TEAM_SPECTATOR ) {
-			
-			// Nico, removed skills
-			// if ( cgs.clientinfo[cg.snap->ps.clientNum].team != TEAM_SPECTATOR &&
-			//	 cgs.clientinfo[cg.snap->ps.clientNum].skill[SK_SIGNALS] >= 4 && cgs.clientinfo[cg.snap->ps.clientNum].cls == PC_FIELDOPS ) {
-			//	s = CG_TranslateString( "Disguised Enemy!" );
-			//	w = CG_DrawStrlen( s ) * SMALLCHAR_WIDTH;
-			//	CG_DrawSmallStringColor( 320 - w / 2, 170, s, color );
-			//	return;
-			// } else
-			if ( dist > 512 ) {
-				if ( !cg_drawCrosshairNames.integer ) {
-					return;
-				}
-
-				drawStuff = qtrue;
-
-				// determine player class
-				playerClass = BG_ClassLetterForNumber( ( cg_entities[ cg.crosshairClientNum ].currentState.powerups >> PW_OPS_CLASS_1 ) & 6 );
-
-				name = cgs.clientinfo[ cg.crosshairClientNum ].disguiseName;
-
-				playerRank = cgs.clientinfo[ cg.crosshairClientNum ].team != TEAM_AXIS ? rankNames_Axis[cgs.clientinfo[cg.crosshairClientNum].disguiseRank] : rankNames_Allies[cgs.clientinfo[cg.crosshairClientNum].disguiseRank];
-				s = va( "[%s] %s %s", CG_TranslateString( playerClass ), playerRank, name );
-				w = CG_DrawStrlen( s ) * SMALLCHAR_WIDTH;
-
-				// draw the name and class
-				CG_DrawSmallStringColor( 320 - w / 2, 170, s, color );
-
-				// set the health
-				// rain - #480 - make sure it's the health for the right entity;
-				// if it's not, use the clientinfo health (which is updated
-				// by tinfo)
-				if ( cg.crosshairClientNum == cg.snap->ps.identifyClient ) {
-					playerHealth = cg.snap->ps.identifyClientHealth;
-				} else {
-					playerHealth = cgs.clientinfo[ cg.crosshairClientNum ].health;
-				}
-
-				maxHealth = 100;
-			} else {
-				// rain - #480 - don't show the name after you look away, should this be
-				// a disguised covert
-				cg.crosshairClientTime = 0;
-				return;
-			}
-		} else {*/
-			return;
-		// }
-	}
-
 	if ( !cg_drawCrosshairNames.integer ) {
 		return;
 	}
 
-	// Mad Doc - TDF
-	// changed this from early-exiting if true, to only executing most stuff if false. We want to
-	// show debug info regardless
+	s = va("%s", cgs.clientinfo[cg.crosshairClientNum].name);
 
-	// we only want to see players on our team
-	if ( !isTank && !( cgs.clientinfo[cg.snap->ps.clientNum].team != TEAM_SPECTATOR && cgs.clientinfo[ cg.crosshairClientNum ].team != cgs.clientinfo[cg.snap->ps.clientNum].team ) ) {
-		drawStuff = qtrue;
+	w = CG_Text_Width_Ext( s, 0.2f, 0.2f, &cgs.media.limboFont1 ) / 2;
 
-		// determine player class
-		playerClass = BG_ClassLetterForNumber( cg_entities[ cg.crosshairClientNum ].currentState.teamNum );
+	CG_Text_Paint_Ext(320 - w, 200, 0.2f, 0.2f, colorWhite, s, 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
 
-		name = cgs.clientinfo[ cg.crosshairClientNum ].name;
-
-		/* Nico, removed rank
-		playerRank = cgs.clientinfo[cg.crosshairClientNum].team == TEAM_AXIS ? rankNames_Axis[cgs.clientinfo[cg.crosshairClientNum].rank] : rankNames_Allies[cgs.clientinfo[cg.crosshairClientNum].rank];
-		s = va( "[%s] %s %s", CG_TranslateString( playerClass ), playerRank, name );*/
-		s = va( "[%s] %s", CG_TranslateString( playerClass ), name );
-		w = CG_DrawStrlen( s ) * SMALLCHAR_WIDTH;
-
-		// draw the name and class
-		CG_DrawSmallStringColor( 320 - w / 2, 170, s, color );
-
-		// set the health
-		if ( cg.crosshairClientNum == cg.snap->ps.identifyClient ) {
-			playerHealth = cg.snap->ps.identifyClientHealth;
-		} else {
-			playerHealth = cgs.clientinfo[ cg.crosshairClientNum ].health;
-		}
-
-		maxHealth = 100;
-		for ( i = 0; i < MAX_CLIENTS; i++ ) {
-			if ( !cgs.clientinfo[i].infoValid ) {
-				continue;
-			}
-
-			if ( cgs.clientinfo[i].team != cgs.clientinfo[cg.snap->ps.clientNum].team ) {
-				continue;
-			}
-
-			if ( cgs.clientinfo[i].cls != PC_MEDIC ) {
-				continue;
-			}
-
-			maxHealth += 10;
-
-			if ( maxHealth >= 125 ) {
-				maxHealth = 125;
-				break;
-			}
-		}
-
-		/* Nico, removed skills
-		if ( cgs.clientinfo[ cg.crosshairClientNum ].skill[SK_BATTLE_SENSE] >= 3 ) {
-			maxHealth += 15;
-		}*/
-
-		if ( cgs.clientinfo[ cg.crosshairClientNum ].cls == PC_MEDIC ) {
-			maxHealth *= 1.12f;
-		}
-	}
-
-	// draw the health bar
-	{
-		vec4_t bgcolor;
-
-		barFrac = (float)playerHealth / maxHealth;
-
-		if ( barFrac > 1.0 ) {
-			barFrac = 1.0;
-		} else if ( barFrac < 0 ) {
-			barFrac = 0;
-		}
-
-		c[0] = 1.0f;
-		c[1] = c[2] = barFrac;
-		c[3] = ( 0.25 + barFrac * 0.5 ) * color[3];
-
-		Vector4Set( bgcolor, 1.f, 1.f, 1.f, .25f * color[3] );
-
-		CG_FilledBar( 320 - 110 /*w*/ / 2, 190, 110, 10, c, NULL, bgcolor, barFrac, 16 );
-	}
-
-	// -NERVE - SMF
-	if ( isTank ) {
-		return;
-	}
-
-	if ( drawStuff ) {
-		trap_R_SetColor( NULL );
-	}
+	trap_R_SetColor(NULL);
 }
 
 
@@ -2165,9 +1983,10 @@ static void CG_DrawCrosshairNames( void ) {
 CG_DrawSpectator
 =================
 */
+/* Nico, unused anymore
 static void CG_DrawSpectator( void ) {
 	CG_DrawBigString( 320 - 9 * 8, 440, CG_TranslateString( "SPECTATOR" ), 1.f );
-}
+}*/
 
 /*
 =================
@@ -2657,13 +2476,13 @@ static qboolean CG_DrawFollow( void ) {
 		// Don't display if you're following yourself
 		if ( cg.snap->ps.clientNum != cg.clientNum ) {
 			/* Nico, removed rank
+			Nico, removed class
 			sprintf( deploytime, "(%s %s %s [%s])", CG_TranslateString( "Following" ),
 					 cgs.clientinfo[cg.snap->ps.clientNum].team == TEAM_ALLIES ? rankNames_Allies[cgs.clientinfo[cg.snap->ps.clientNum].rank] : rankNames_Axis[cgs.clientinfo[cg.snap->ps.clientNum].rank],
 					 cgs.clientinfo[cg.snap->ps.clientNum].name,
 					 BG_ClassnameForNumber( cgs.clientinfo[cg.snap->ps.clientNum].cls ) );*/
-			sprintf( deploytime, "(%s %s [%s])", CG_TranslateString( "Following" ),
-					 cgs.clientinfo[cg.snap->ps.clientNum].name,
-					 BG_ClassnameForNumber( cgs.clientinfo[cg.snap->ps.clientNum].cls ) );
+			sprintf( deploytime, "(%s %s)", CG_TranslateString( "Following" ),
+					 cgs.clientinfo[cg.snap->ps.clientNum].name);
 
 			CG_DrawStringExt( INFOTEXT_STARTX, 136, deploytime, colorWhite, qtrue, qtrue, SMALLCHAR_WIDTH, SMALLCHAR_HEIGHT, 80 );
 		}
@@ -2671,12 +2490,13 @@ static qboolean CG_DrawFollow( void ) {
 		CG_DrawStringExt( INFOTEXT_STARTX, 118, CG_TranslateString( "Following" ), colorWhite, qtrue, qtrue, BIGCHAR_WIDTH / 2, BIGCHAR_HEIGHT, 0 );
 
 		/* Nico, removed rank
+		Nico, removed class
 		CG_DrawStringExt( 84, 118, va( "%s %s [%s]",
 									   cgs.clientinfo[cg.snap->ps.clientNum].team == TEAM_ALLIES ? rankNames_Allies[cgs.clientinfo[cg.snap->ps.clientNum].rank] : rankNames_Axis[cgs.clientinfo[cg.snap->ps.clientNum].rank],
 									   cgs.clientinfo[cg.snap->ps.clientNum].name, BG_ClassnameForNumber( cgs.clientinfo[cg.snap->ps.clientNum].cls ) ),
 						  colorWhite, qtrue, qtrue, BIGCHAR_WIDTH / 2, BIGCHAR_HEIGHT, 0 );*/
-		CG_DrawStringExt( 84, 118, va( "%s [%s]",
-									   cgs.clientinfo[cg.snap->ps.clientNum].name, BG_ClassnameForNumber( cgs.clientinfo[cg.snap->ps.clientNum].cls ) ),
+		CG_DrawStringExt( 84, 118, va( "%s",
+									   cgs.clientinfo[cg.snap->ps.clientNum].name),
 						  colorWhite, qtrue, qtrue, BIGCHAR_WIDTH / 2, BIGCHAR_HEIGHT, 0 );
 	}
 
@@ -3655,6 +3475,7 @@ static void CG_DrawPlayerHealthBar( rectDef_t *rect ) {
 	CG_DrawPic( rect->x, rect->y + rect->h + 4, rect->w, rect->w, cgs.media.hudHealthIcon );
 }
 
+/* Nico, unused anymore
 static void CG_DrawStaminaBar( rectDef_t *rect ) {
 	vec4_t bgcolour =   {   1.f,    1.f,    1.f,    0.3f    };
 	vec4_t colour =     {   0.1f,   1.0f,   0.1f,   0.5f    };
@@ -3662,10 +3483,10 @@ static void CG_DrawStaminaBar( rectDef_t *rect ) {
 	vec_t* color = colour;
 	int flags = 1 | 4 | 16 | 64;
 
-	/* Nico, removed sprint time limit
-	float frac = cg.pmext.sprintTime / (float)SPRINTTIME;*/
+	// Nico, removed sprint time limit
+	// float frac = cg.pmext.sprintTime / (float)SPRINTTIME;
 
-	/* Nico, removed adrenaline
+	// Nico, removed adrenaline
 	if ( cg.snap->ps.powerups[PW_ADRENALINE] ) {
 		if ( cg.snap->ps.pm_flags & PMF_FOLLOW ) {
 			Vector4Average( colour, colorWhite, sin( cg.time * .005f ), colour );
@@ -3678,23 +3499,23 @@ static void CG_DrawStaminaBar( rectDef_t *rect ) {
 				Vector4Average( colour, colorWhite, .5f + sin( .2f * sqrt( msec ) * 2 * M_PI ) * .5f, colour );
 			}
 		}
-	} else {*/
+	} else {
 
-		/* Nico, removed sprint time limit
-		if ( frac < 0.25 ) {
-			color = colourlow;
-		}*/
+		// Nico, removed sprint time limit
+		// if ( frac < 0.25 ) {
+		// 	color = colourlow;
+		// }
 
 	//}
 
-	/* Nico, removed sprint time limit
-	CG_FilledBar( rect->x, rect->y + ( rect->h * 0.1f ), rect->w, rect->h * 0.84f, color, NULL, bgcolour, frac, flags );*/
+	// Nico, removed sprint time limit
+	// CG_FilledBar( rect->x, rect->y + ( rect->h * 0.1f ), rect->w, rect->h * 0.84f, color, NULL, bgcolour, frac, flags );
 	CG_FilledBar( rect->x, rect->y + ( rect->h * 0.1f ), rect->w, rect->h * 0.84f, color, NULL, bgcolour, 1.0f, flags );
 
 	trap_R_SetColor( NULL );
 	CG_DrawPic( rect->x, rect->y, rect->w, rect->h, cgs.media.hudSprintBar );
 	CG_DrawPic( rect->x, rect->y + rect->h + 4, rect->w, rect->w, cgs.media.hudSprintIcon );
-}
+}*/
 
 static void CG_DrawWeapRecharge( rectDef_t *rect ) {
 	float barFrac, chargeTime;
@@ -3787,7 +3608,7 @@ static void CG_DrawPlayerStatus( void ) {
 
 
 // ==
-	rect.x = 24;
+	rect.x = 4;// Nico, 24 -> 4
 	rect.y = 480 - 92;
 	rect.w = 12;
 	rect.h = 72;
@@ -3795,11 +3616,12 @@ static void CG_DrawPlayerStatus( void ) {
 // ==
 
 // ==
+	/* Nico, do not display staminabar
 	rect.x = 4;
 	rect.y = 480 - 92;
 	rect.w = 12;
 	rect.h = 72;
-	CG_DrawStaminaBar( &rect );
+	CG_DrawStaminaBar( &rect );*/
 // ==
 
 // ==
@@ -4369,7 +4191,10 @@ static void CG_Draw2D( void ) {
 		CG_DrawFlashBlendBehindHUD();
 
 		if ( cg.snap->ps.persistant[PERS_TEAM] == TEAM_SPECTATOR ) {
-			CG_DrawSpectator();
+
+			// Nico, do not draw "SPECTATOR" to specs
+			// CG_DrawSpectator();
+			
 			CG_DrawCrosshair();
 			CG_DrawCrosshairNames();
 
