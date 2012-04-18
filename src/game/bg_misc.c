@@ -5437,7 +5437,6 @@ void BG_TouchJumpPad( playerState_t *ps, entityState_t *jumppad ) {
 // Nico, velocity jumppads support
 void BG_TouchVelocityJumpPad(playerState_t *ps, entityState_t *jumppad, float speed, int count) {
 	vec3_t velocity;
-	int currentXYSpeed = 0;
 
 	if (ps->pm_type != PM_NORMAL) {
 		return;

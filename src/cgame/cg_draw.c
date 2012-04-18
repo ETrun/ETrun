@@ -4001,7 +4001,7 @@ static void CG_DrawTimer(void) {
 			Com_sprintf(status, sizeof(status), "%s", va("%02d:%02d.%03d (+00:00.000)", min, sec, milli));		
 		} else {
 			// Nico, first time
-			Com_sprintf(status, sizeof(status), va("%02d:%02d.%03d", min, sec, milli));	
+			Com_sprintf(status, sizeof(status), "%s", va("%02d:%02d.%03d", min, sec, milli));	
 		}
 	} else {
 		// Nico, timerun not finished yet

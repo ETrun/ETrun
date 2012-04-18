@@ -1448,7 +1448,6 @@ void target_stoptimer_use(gentity_t *self, gentity_t *other, gentity_t *activato
 	float		oldNewDiff;
 	gclient_t	*client;
 	int			timerunNum;
-	int			intTopSpeed = 0;
 
 	client = activator->client;
 
