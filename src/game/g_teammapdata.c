@@ -726,6 +726,7 @@ void G_UpdateTeamMapData_CommandmapMarker( gentity_t* ent ) {
 	}
 }
 
+/* Nico, removed commandmap
 void G_SendSpectatorMapEntityInfo( gentity_t* e ) {
 	// special version, sends different set of ents - only the objectives, but also team info (string is split in two basically)
 	mapEntityData_t *mEnt;
@@ -834,13 +835,13 @@ void G_SendMapEntityInfo( gentity_t* e ) {
 				continue;
 			} 
 			
-			/* Nico, removed disguise stuff
-			else if ( mEnt->type == ME_PLAYER_DISGUISED ) {
-				if ( mEnt->singleClient == e->s.clientNum ) {
-					mEnt = G_FreeMapEntityData( teamList, mEnt );
-					continue;
-				}
-			}*/
+			// Nico, removed disguise stuff
+			// else if ( mEnt->type == ME_PLAYER_DISGUISED ) {
+			//	if ( mEnt->singleClient == e->s.clientNum ) {
+			//		mEnt = G_FreeMapEntityData( teamList, mEnt );
+			//		continue;
+			//	}
+			// }
 		} else {
 			mEnt->status = 2;
 		}
@@ -865,7 +866,7 @@ void G_SendMapEntityInfo( gentity_t* e ) {
 	}
 
 	trap_SendServerCommand( e - g_entities, buffer );
-}
+}*/
 
 void G_UpdateTeamMapData( void ) {
 	int i, j /*, k*/;
@@ -879,8 +880,6 @@ void G_UpdateTeamMapData( void ) {
 
 	for ( i = 0, ent = g_entities; i < level.num_entities; i++, ent++ ) {
 		if ( !ent->inuse ) {
-//			mapEntityData[0][i].valid = qfalse;
-//			mapEntityData[1][i].valid = qfalse;
 			continue;
 		}
 
@@ -929,7 +928,6 @@ void G_UpdateTeamMapData( void ) {
 		}
 	}
 
-	//for(i = 0, ent = g_entities; i < MAX_CLIENTS; i++, ent++) {
 	for ( i = 0, ent = g_entities; i < level.num_entities; i++, ent++ ) {
 		qboolean f1, f2;
 		if ( !ent->inuse || !ent->client ) {

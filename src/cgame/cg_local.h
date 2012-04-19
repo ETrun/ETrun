@@ -785,7 +785,8 @@ typedef enum {
 	SHOW_ON
 } showView_t;
 
-void CG_ParseMapEntityInfo( int axis_number, int allied_number );
+/* Nico, removed commandmap
+void CG_ParseMapEntityInfo( int axis_number, int allied_number );*/
 
 #define MAX_BACKUP_STATES ( CMD_BACKUP + 2 )
 
@@ -2855,7 +2856,8 @@ qboolean CG_ViewingDraw( void );
 //
 qboolean CG_DrawScoreboard( void );
 
-void CG_TransformToCommandMapCoord( float *coord_x, float *coord_y );
+/* Nico, removed commandmap
+void CG_TransformToCommandMapCoord( float *coord_x, float *coord_y );*/
 
 void CG_CommandCentreClick( int key );
 void CG_DrawAutoMap( void );
@@ -3296,7 +3298,9 @@ weaponType_t* WM_FindWeaponTypeForWeapon( weapon_t weapon );
 
 extern animation_t      *lastTorsoAnim;
 extern animation_t      *lastLegsAnim;
-extern qboolean ccInitial;
+
+/* Nico, removed commandmap
+extern qboolean ccInitial;*/
 
 void CG_MenuCheckPendingAnimation( playerInfo_t *pi );
 void CG_MenuPendingAnimation( playerInfo_t *pi, const char* legsAnim, const char* torsoAnim, int delay );
@@ -3546,26 +3550,30 @@ typedef struct mapScissor_s {
 	vec2_t br;
 } mapScissor_t;
 
-int CG_CurLayerForZ( int z );
+/* Nico, removed commandmap
+int CG_CurLayerForZ( int z );*/
+
 void CG_DrawMap( float x, float y, float w, float h, int mEntFilter, mapScissor_t *scissor, qboolean interactive, float alpha, qboolean borderblend );
 int CG_DrawSpawnPointInfo( int px, int py, int pw, int ph, qboolean draw, mapScissor_t *scissor, int expand );
 
 /* Nico, removed airstrikes
 void CG_DrawMortarMarker( int px, int py, int pw, int ph, qboolean draw, mapScissor_t *scissor, int expand );*/
 
+/* Nico, removed commandmap
 void CG_CommandMap_SetHighlightText( const char* text, float x, float y );
 void CG_CommandMap_DrawHighlightText( void );
-qboolean CG_CommandCentreSpawnPointClick( void );
+qboolean CG_CommandCentreSpawnPointClick( void );*/
 
 #define LIMBO_3D_X  0// Nico, 287 -> 0 //%	280
 #define LIMBO_3D_Y  0// Nico, 382 -> 0
 #define LIMBO_3D_W  440// Nico, 128 -> 440
 #define LIMBO_3D_H  480// Nico, 96 -> 480  //%	94
 
+/* Nico, removed commandmap
 #define CC_2D_X 64
 #define CC_2D_Y 23
 #define CC_2D_W 352
-#define CC_2D_H 352
+#define CC_2D_H 352*/
 
 void CG_DrawPlayerHead( rectDef_t *rect, bg_character_t* character, bg_character_t* headcharacter, float yaw, float pitch, qboolean drawHat, hudHeadAnimNumber_t animation, qhandle_t painSkin, int rank, qboolean spectator );
 

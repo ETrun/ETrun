@@ -873,7 +873,10 @@ void ClientThink_real( gentity_t *ent ) {
 	}
 
 	if ( !( ent->r.svFlags & SVF_BOT ) && level.time - client->pers.lastCCPulseTime > 2000 ) {
-		G_SendMapEntityInfo( ent );
+
+		/* Nico, removed commandmap
+		G_SendMapEntityInfo( ent );*/
+
 		client->pers.lastCCPulseTime = level.time;
 	}
 

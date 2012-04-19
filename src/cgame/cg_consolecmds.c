@@ -683,6 +683,7 @@ static void CG_SelectBuddy_f( void ) {
 	}
 }
 
+/* Nico, removed commandmap
 extern void CG_AdjustAutomapZoom( int zoomIn );
 
 static void CG_AutomapZoomIn_f( void ) {
@@ -721,7 +722,7 @@ static void CG_AutomapExpandUp_f( void ) {
 
 static void CG_ToggleAutomap_f( void ) {
 	cgs.autoMapOff = !cgs.autoMapOff;
-}
+}*/
 
 // OSP
 const char *aMonths[12] = {
@@ -978,14 +979,17 @@ static consoleCommand_t commands[] =
 
 	{ "selectbuddy", CG_SelectBuddy_f },
 
+	/* Nico, removed commandmap
 	{ "MapZoomIn", CG_AutomapZoomIn_f },
 	{ "MapZoomOut", CG_AutomapZoomOut_f },
 	{ "+mapexpand", CG_AutomapExpandDown_f },
-	{ "-mapexpand", CG_AutomapExpandUp_f },
+	{ "-mapexpand", CG_AutomapExpandUp_f },*/
 
 	{ "generateTracemap", CG_GenerateTracemap },
+
 	// xkan, 11/27/2002, toggle automap on/off
-	{ "ToggleAutoMap", CG_ToggleAutomap_f },
+	/* Nico, removed commandmap
+	{ "ToggleAutoMap", CG_ToggleAutomap_f },*/
 
 	{ "editSpeakers", CG_EditSpeakers_f },
 	{ "dumpSpeaker", CG_DumpSpeaker_f },

@@ -193,7 +193,10 @@ void CG_SetInitialSnapshot( snapshot_t *snap ) {
 		// Arnout: confirmation screen
 		trap_UI_Popup( UIMENU_INGAME );
 	} else if ( cg.demoPlayback ) {
-		ccInitial = qtrue;
+
+		/* Nico, removed commandmap
+		ccInitial = qtrue;*/
+
 	} else {
 		static char prevmap[64] = { 0 };
 		char curmap[64];

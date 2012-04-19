@@ -47,9 +47,6 @@
     <ClCompile Include="cg_character.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="cg_commandmap.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="cg_consolecmds.c">
       <Filter>Source Files</Filter>
     </ClCompile>

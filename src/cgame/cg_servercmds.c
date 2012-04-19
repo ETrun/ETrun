@@ -387,7 +387,8 @@ void CG_ParseSpawns( void ) {
 			cg.spawnCoordsUntransformed[i][2] = cg.spawnCoords[i][2] = atof( s );
 		}
 
-		CG_TransformToCommandMapCoord( &cg.spawnCoords[i][0], &cg.spawnCoords[i][1] );
+		/* Nico, removed commandmap
+		CG_TransformToCommandMapCoord( &cg.spawnCoords[i][0], &cg.spawnCoords[i][1] );*/
 
 		s = Info_ValueForKey( info, "t" );
 
@@ -2168,6 +2169,7 @@ static void CG_ServerCommand( void ) {
 		return;
 	}
 
+	/* Nico, removed commandmap
 	if ( !Q_stricmp( cmd, "entnfo" ) ) {
 		char buffer[16];
 		int allied_number, axis_number;
@@ -2181,7 +2183,7 @@ static void CG_ServerCommand( void ) {
 		CG_ParseMapEntityInfo( axis_number, allied_number );
 
 		return;
-	}
+	}*/
 
 	if ( !Q_stricmp( cmd, "chat" ) ) {
 		const char *s;

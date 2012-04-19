@@ -2160,7 +2160,11 @@ typedef enum {
 
 void G_CheckForNeededClasses( void );
 void G_CheckMenDown( void );
-void G_SendMapEntityInfo( gentity_t* e );
+
+/* Nico, removed commandmap
+void G_SendMapEntityInfo( gentity_t* e );*/
+
+
 void G_SendSystemMessage( sysMsg_t message, int team );
 int G_GetSysMessageNumber( const char* sysMsg );
 

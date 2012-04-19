@@ -163,7 +163,6 @@
     <ClCompile Include="..\game\bg_weapons.c" />
     <ClCompile Include="cg_atmospheric.c" />
     <ClCompile Include="cg_character.c" />
-    <ClCompile Include="cg_commandmap.c" />
     <ClCompile Include="cg_consolecmds.c" />
     <ClCompile Include="cg_draw.c" />
     <ClCompile Include="cg_drawtools.c" />

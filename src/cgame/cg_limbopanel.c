@@ -2404,9 +2404,10 @@ void CG_LimboPanel_Setup( void ) {
 	trap_Cvar_VariableStringBuffer( "name", buffer, 256 );
 	trap_Cvar_Set( "limboname", buffer );
 
+	/* Nico, removed commandmap
 	if ( cgs.ccLayers ) {
 		cgs.ccSelectedLayer = CG_CurLayerForZ( (int)cg.predictedPlayerEntity.lerpOrigin[2] );
-	}
+	}*/
 
 	for ( ; *buttons; buttons++ ) {
 		button = ( *buttons );
@@ -2527,11 +2528,12 @@ void CG_LimboPanel_KeyHandling( int key, qboolean down ) {
 		}
 	}
 
+	/* Nico, removed commandmap
 	if ( down && key ) {
 		if ( CG_CommandCentreSpawnPointClick() ) {
 			return;
 		}
-	}
+	}*/
 }
 
 void CG_LimboPanel_GetWeaponCardIconData( weapon_t weap, qhandle_t* shader, float* w, float* h, float* s0, float* t0, float* s1, float* t1 ) {

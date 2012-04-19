@@ -826,7 +826,10 @@ void CG_EventHandling( int type, qboolean fForced ) {
 
 	if ( type == CGAME_EVENT_NONE ) {
 		trap_Key_SetCatcher( trap_Key_GetCatcher() & ~KEYCATCH_CGAME );
-		ccInitial = qfalse;
+
+		/* Nico, removed commandmap
+		ccInitial = qfalse;*/
+
 		if ( cg.demoPlayback && cg.demohelpWindow != SHOW_OFF ) {
 			CG_ShowHelp_Off( &cg.demohelpWindow );
 		}
