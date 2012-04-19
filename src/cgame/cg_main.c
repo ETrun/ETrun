@@ -2020,7 +2020,9 @@ static void CG_RegisterGraphics( void ) {
 	cgs.media.limboBriefingButtonStopOff =      trap_R_RegisterShaderNoMip( "gfx/limbo/but_stop_off" );
 
 	cgs.media.limboSpectator =                  trap_R_RegisterShaderNoMip( "gfx/limbo/spectator" );
-	cgs.media.limboRadioBroadcast =             trap_R_RegisterShaderNoMip( "ui/assets/radio_tower" );
+
+	/* Nico, removed stuff in limbo
+	cgs.media.limboRadioBroadcast =             trap_R_RegisterShaderNoMip( "ui/assets/radio_tower" );*/
 
 	cgs.media.cursorIcon =                      trap_R_RegisterShaderNoMip( "ui/assets/3_cursor3" );
 

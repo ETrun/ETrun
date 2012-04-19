@@ -120,12 +120,13 @@ panel_button_text_t weaponPanelStatsPercFont = {
 	&cgs.media.limboFont1,
 };
 
+/* Nico, removed stuff in limbo
 panel_button_text_t objectivePanelTxt = {
 	0.2f, 0.2f,
 	{ 0.0f, 0.0f, 0.0f, 0.5f },
 	0, 0,
 	&cgs.media.limboFont2,
-};
+};*/
 
 
 panel_button_t rightLimboPannel = {
@@ -248,17 +249,6 @@ TEAM_COUNTER( 2 );
 		CG_LimboPanel_RenderClassButton,		\
 		NULL,									\
 	}
-/*panel_button_t classCounterLight##number = { \
-	NULL, \
-	NULL, \
-	{ CLASS_COUNTER_X + CLASS_COUNTER_GAP + (number*(CLASS_COUNTER_GAP + CLASS_COUNTER_WIDTH)) + (CLASS_COUNTER_LIGHT_DIFF/2.f), 266, CLASS_COUNTER_WIDTH - CLASS_COUNTER_LIGHT_DIFF, 16 }, \
-	{ 0, number, 0, 0, 0, 0, 0, 0 }, \
-	NULL, \
-	CG_LimboPanel_ClassButton_KeyDown, \
-	NULL, \
-	CG_LimboPanel_RenderLight, \
-	NULL, \
-};											\*/
 
 panel_button_t classBar = {
 	"gfx/limbo/lightup_bar",
@@ -290,15 +280,16 @@ CLASS_COUNTER( 2 );
 CLASS_COUNTER( 3 );
 CLASS_COUNTER( 4 );
 
+/* Nico, removed stuff in limbo
 #define FILTER_BUTTON( number )	\
 	panel_button_t filterButton ## number = { \
 		NULL,								\
 		NULL,								\
 		{ 15, 54 + ( number * 31 ), 26, 26 },	  \
 		{ number, 0, 0, 0, 0, 0, 0, 0 },	\
-		NULL, /* font		*/			\
-		CG_LimboPanel_Filter_KeyDown, /* keyDown	*/				\
-		NULL, /* keyUp	*/				\
+		NULL,			\
+		CG_LimboPanel_Filter_KeyDown, 			\
+		NULL,				\
 		CG_LimboPanel_Filter_Draw,			\
 		NULL,								\
 	}
@@ -317,22 +308,23 @@ panel_button_t filterTitleText = {
 	"FILTERS",
 	{ 8, 36, 0, 0 },
 	{ 0, 0, 0, 0, 0, 0, 0, 0 },
-	&weaponPanelFilterFont, /* font		*/
-	NULL,                   /* keyDown	*/
-	NULL,                   /* keyUp	*/
+	&weaponPanelFilterFont,
+	NULL,                   
+	NULL,                   
 	BG_PanelButtonsRender_Text,
 	NULL,
-};
+};*/
 
+/* Nico, removed stuff in limbo
 #define LEFT_FRAME( shader, number, x, y, w, h ) \
 	panel_button_t leftFrame0 ## number = {	  \
 		shader,								\
 		NULL,								\
 		{ x, y, w, h },						\
 		{ 0, 0, 0, 0, 0, 0, 0, 0 },			\
-		NULL, /* font		*/			\
-		NULL, /* keyDown	*/				\
-		NULL, /* keyUp	*/				\
+		NULL,			\
+		NULL, 			\
+		NULL,		\
 		BG_PanelButtonsRender_Img,			\
 		NULL,								\
 	}
@@ -361,9 +353,10 @@ LEFT_FRAME( "gfx/limbo/limbo_frame04",   4, LF_X2,   LF_Y1,  LF_W3,  LF_H2 );
 
 LEFT_FRAME( "gfx/limbo/limbo_frame05",   5, LF_X2,   LF_Y2,  LF_W3,  LF_H3 );
 LEFT_FRAME( "gfx/limbo/limbo_frame06",   6, LF_X1,   LF_Y2,  LF_W2,  LF_H3 );
+
 LEFT_FRAME( "gfx/limbo/limbo_frame07",   7, 0,       LF_Y2,  LF_W1,  LF_H3 );
 
-LEFT_FRAME( "gfx/limbo/limbo_frame08",   8, 0,       LF_Y1,  LF_W1,  LF_H2 );
+LEFT_FRAME( "gfx/limbo/limbo_frame08",   8, 0,       LF_Y1,  LF_W1,  LF_H2 );*/
 
 /* Nico, removed hud head animation
 panel_button_t playerLimboHead = {
@@ -403,14 +396,15 @@ panel_button_t playerXPCounter = {
 	NULL,
 };*/
 
+/* Nico, removed stuff in limbo
 panel_button_t playerSkillCounter0 = {
 	NULL,
 	NULL,
 	{ 552, 36, 60, 16 },
 	{ 4, 0, 0, 0, 0, 0, 4, 0 },
-	NULL,   /* font		*/
-	NULL,   /* keyDown	*/
-	NULL,   /* keyUp	*/
+	NULL,
+	NULL,
+	NULL,
 	CG_LimboPanel_RenderCounter,
 	NULL,
 };
@@ -420,9 +414,9 @@ panel_button_t playerSkillCounter1 = {
 	NULL,
 	{ 552, 56, 60, 16 },
 	{ 4, 1, 0, 0, 0, 0, 4, 0 },
-	NULL,   /* font		*/
-	NULL,   /* keyDown	*/
-	NULL,   /* keyUp	*/
+	NULL,
+	NULL,
+	NULL,
 	CG_LimboPanel_RenderCounter,
 	NULL,
 };
@@ -432,9 +426,9 @@ panel_button_t playerSkillCounter2 = {
 	NULL,
 	{ 552, 76, 60, 16 },
 	{ 4, 2, 0, 0, 0, 0, 4, 0 },
-	NULL,   /* font		*/
-	NULL,   /* keyDown	*/
-	NULL,   /* keyUp	*/
+	NULL,
+	NULL,
+	NULL,
 	CG_LimboPanel_RenderCounter,
 	NULL,
 };
@@ -444,9 +438,9 @@ panel_button_t playerSkillIcon0 = {
 	NULL,
 	{ 532, 36, 16, 16 },
 	{ 0, 0, 0, 0, 0, 0, 0, 0 },
-	NULL,   /* font		*/
-	NULL,   /* keyDown	*/
-	NULL,   /* keyUp	*/
+	NULL,
+	NULL,
+	NULL,
 	CG_LimboPanel_RenderSkillIcon,
 	NULL,
 };
@@ -456,9 +450,9 @@ panel_button_t playerSkillIcon1 = {
 	NULL,
 	{ 532, 56, 16, 16 },
 	{ 1, 0, 0, 0, 0, 0, 0, 0 },
-	NULL,   /* font		*/
-	NULL,   /* keyDown	*/
-	NULL,   /* keyUp	*/
+	NULL,
+	NULL,
+	NULL,
 	CG_LimboPanel_RenderSkillIcon,
 	NULL,
 };
@@ -468,24 +462,24 @@ panel_button_t playerSkillIcon2 = {
 	NULL,
 	{ 532, 76, 16, 16 },
 	{ 2, 0, 0, 0, 0, 0, 0, 0 },
-	NULL,   /* font		*/
-	NULL,   /* keyDown	*/
-	NULL,   /* keyUp	*/
+	NULL,
+	NULL,
+	NULL,
 	CG_LimboPanel_RenderSkillIcon,
 	NULL,
-};
+};*/
 
 // =======================
 
-
+/* Nico, removed stuff in limbo
 panel_button_t mapTimeCounter = {
 	NULL,
 	NULL,
 	{ 276, 5, 20, 14 },
 	{ 5, 0, 0, 0, 0, 0, 0, 0 },
-	NULL,   /* font		*/
-	NULL,   /* keyDown	*/
-	NULL,   /* keyUp	*/
+	NULL,
+	NULL,
+	NULL,
 	CG_LimboPanel_RenderCounter,
 	NULL,
 };
@@ -495,9 +489,9 @@ panel_button_t mapTimeCounter2 = {
 	NULL,
 	{ 252, 5, 20, 14 },
 	{ 5, 1, 0, 0, 0, 0, 0, 0 },
-	NULL,   /* font		*/
-	NULL,   /* keyDown	*/
-	NULL,   /* keyUp	*/
+	NULL,
+	NULL,
+	NULL,
 	CG_LimboPanel_RenderCounter,
 	NULL,
 };
@@ -507,9 +501,9 @@ panel_button_t mapTimeCounterText = {
 	"MISSION TIME",
 	{ 172, 16, 0, 0 },
 	{ 0, 0, 0, 0, 0, 0, 0, 0 },
-	&spawnLimboFont, /* font		*/
-	NULL,           /* keyDown	*/
-	NULL,           /* keyUp	*/
+	&spawnLimboFont,
+	NULL,
+	NULL,
 	BG_PanelButtonsRender_Text,
 	NULL,
 };
@@ -521,9 +515,9 @@ panel_button_t respawnCounter = {
 	NULL,
 	{ 400, 5, 20, 14 },
 	{ 3, 0, 0, 0, 0, 0, 0, 0 },
-	NULL,   /* font		*/
-	NULL,   /* keyDown	*/
-	NULL,   /* keyUp	*/
+	NULL,
+	NULL, 
+	NULL,
 	CG_LimboPanel_RenderCounter,
 	NULL,
 };
@@ -533,9 +527,9 @@ panel_button_t respawnCounterText = {
 	"REINFORCEMENTS",
 	{ 300, 16, 0, 0 },
 	{ 0, 0, 0, 0, 0, 0, 0, 0 },
-	&spawnLimboFont, /* font		*/
-	NULL,           /* keyDown	*/
-	NULL,           /* keyUp	*/
+	&spawnLimboFont,
+	NULL,        
+	NULL,       
 	BG_PanelButtonsRender_Text,
 	NULL,
 };
@@ -547,9 +541,9 @@ panel_button_t limboTitleText = {
 	"COMMAND MAP",
 	{ 8, 16, 0, 0 },
 	{ 0, 0, 0, 0, 0, 0, 0, 0 },
-	&titleLimboFont, /* font		*/
-	NULL,           /* keyDown	*/
-	NULL,           /* keyUp	*/
+	&titleLimboFont, 
+	NULL,          
+	NULL,          
 	BG_PanelButtonsRender_Text,
 	NULL,
 };
@@ -559,9 +553,9 @@ panel_button_t playerSetupText = {
 	"PLAYER SETUP",
 	{ 448, 16, 0, 0 },
 	{ 0, 0, 0, 0, 0, 0, 0, 0 },
-	&titleLimboFont, /* font		*/
-	NULL,           /* keyDown	*/
-	NULL,           /* keyUp	*/
+	&titleLimboFont,
+	NULL,          
+	NULL,          
 	BG_PanelButtonsRender_Text,
 	NULL,
 };
@@ -571,12 +565,12 @@ panel_button_t skillsText = {
 	"SKILLS",
 	{ 532, 32, 0, 0 },
 	{ 0, 0, 0, 0, 0, 0, 0, 0 },
-	&weaponPanelStatsFont,  /* font		*/
-	NULL,                   /* keyDown	*/
-	NULL,                   /* keyUp	*/
+	&weaponPanelStatsFont,  
+	NULL,                   
+	NULL,                   
 	CG_LimboPanelRenderText_SkillsText,
 	NULL,
-};
+};*/
 
 // =======================
 
@@ -729,14 +723,15 @@ panel_button_t weaponStatsAccPercentage = {
 
 // =======================
 
+/* Nico, removed stuff in limbo
 panel_button_t commandmapPanel = {
 	NULL,
 	NULL,
 	{ CC_2D_X, CC_2D_Y, CC_2D_W, CC_2D_H },
 	{ 0, 0, 0, 0, 0, 0, 0, 0 },
-	NULL,   /* font		*/
-	NULL,   /* keyDown	*/
-	NULL,   /* keyUp	*/
+	NULL,  
+	NULL,  
+	NULL,   
 	CG_LimboPanel_RenderCommandMap,
 	NULL,
 };
@@ -748,9 +743,9 @@ panel_button_t objectivePanel = {
 	NULL,
 	{ 8, 398, 240, 74 },
 	{ 0, 0, 0, 0, 0, 0, 0, 0 },
-	NULL,   /* font		*/
-	NULL,   /* keyDown	*/
-	NULL,   /* keyUp	*/
+	NULL,   
+	NULL,   
+	NULL,   
 	CG_LimboPanel_RenderObjectiveBack,
 	NULL,
 };
@@ -760,9 +755,9 @@ panel_button_t objectivePanelText = {
 	NULL,
 	{ 8, 398, 240, 74 },
 	{ 0, 0, 0, 0, 0, 0, 0, 0 },
-	&objectivePanelTxt,     /* font		*/
-	NULL,                   /* keyDown	*/
-	NULL,                   /* keyUp	*/
+	&objectivePanelTxt,    
+	NULL,                  
+	NULL,                  
 	CG_LimboPanel_RenderObjectiveText,
 	NULL,
 };
@@ -772,9 +767,9 @@ panel_button_t objectivePanelTitle = {
 	"OBJECTIVES",
 	{ 8, 392, 0, 0 },
 	{ 0, 0, 0, 0, 0, 0, 0, 0 },
-	&titleLimboFont,    /* font		*/
-	NULL,               /* keyDown	*/
-	NULL,               /* keyUp	*/
+	&titleLimboFont,    
+	NULL,               
+	NULL,               
 	BG_PanelButtonsRender_Text,
 	NULL,
 };
@@ -784,9 +779,9 @@ panel_button_t objectivePanelButtonUp = {
 	NULL,
 	{ 252, 416, 24, 24 },
 	{ 0, 0, 0, 0, 0, 0, 0, 1 },
-	NULL,                                   /* font		*/
-	CG_LimboPanel_ObjectiveText_KeyDown,    /* keyDown	*/
-	NULL,                                   /* keyUp	*/
+	NULL,                                   
+	CG_LimboPanel_ObjectiveText_KeyDown,    
+	NULL,                                  
 	BG_PanelButtonsRender_Img,
 	NULL,
 };
@@ -796,9 +791,9 @@ panel_button_t briefingButton = {
 	NULL,
 	{ 252, 388, 24, 24 },
 	{ 0, 0, 0, 0, 0, 0, 0, 0 },
-	NULL,                                   /* font		*/
-	CG_LimboPanel_BriefingButton_KeyDown,   /* keyDown	*/
-	NULL,                                   /* keyUp	*/
+	NULL,                                   
+	CG_LimboPanel_BriefingButton_KeyDown,   
+	NULL,                                  
 	CG_LimboPanel_BriefingButton_Draw,
 	NULL,
 };
@@ -808,12 +803,12 @@ panel_button_t objectivePanelButtonDown = {
 	NULL,
 	{ 252, 444, 24, 24 },
 	{ 0, 0, 0, 0, 0, 0, 0, 0 },
-	NULL,                                   /* font		*/
-	CG_LimboPanel_ObjectiveText_KeyDown,    /* keyDown	*/
-	NULL,                                   /* keyUp	*/
+	NULL,                                   
+	CG_LimboPanel_ObjectiveText_KeyDown,    
+	NULL,                                  
 	BG_PanelButtonsRender_Img,
 	NULL,
-};
+};*/
 
 // =======================
 
@@ -879,14 +874,15 @@ panel_button_t nameEdit = {
 	CG_LimboPanel_NameEditFinish,
 };
 
+/* Nico, removed stuff in limbo
 panel_button_t plusButton = {
 	NULL,
 	NULL,
 	{ 19, 320, 18, 14 },
 	{ 12, 0, 0, 0, 0, 0, 0, 0 },
-	NULL,                               /* font		*/
-	CG_LimboPanel_PlusButton_KeyDown,   /* keyDown	*/
-	NULL,                               /* keyUp	*/
+	NULL,                              
+	CG_LimboPanel_PlusButton_KeyDown,   
+	NULL,                              
 	CG_LimboPanel_Border_Draw,
 	NULL,
 };
@@ -896,9 +892,9 @@ panel_button_t plusButtonText = {
 	"+",
 	{ 19, 321, 18, 14 },
 	{ 12, 0, 0, 0, 0, 0, 0, 0 },
-	&titleLimboFontBigCenter,           /* font		*/
-	NULL,                               /* keyDown	*/
-	NULL,                               /* keyUp	*/
+	&titleLimboFontBigCenter,          
+	NULL,                              
+	NULL,                              
 	BG_PanelButtonsRender_Text,
 	NULL,
 };
@@ -908,9 +904,9 @@ panel_button_t minusButton = {
 	NULL,
 	{ 19, 346, 18, 14 },
 	{ 12, 0, 0, 0, 0, 0, 0, 0 },
-	NULL,                               /* font		*/
-	CG_LimboPanel_MinusButton_KeyDown,  /* keyDown	*/
-	NULL,                               /* keyUp	*/
+	NULL,                              
+	CG_LimboPanel_MinusButton_KeyDown,  
+	NULL,                               
 	CG_LimboPanel_Border_Draw,
 	NULL,
 };
@@ -920,28 +916,29 @@ panel_button_t minusButtonText = {
 	"-",
 	{ 19, 346, 18, 14 },
 	{ 12, 0, 0, 0, 0, 0, 0, 0 },
-	&titleLimboFontBigCenter,           /* font		*/
-	NULL,                               /* keyDown	*/
-	NULL,                               /* keyUp	*/
+	&titleLimboFontBigCenter,          
+	NULL,                              
+	NULL,                              
 	BG_PanelButtonsRender_Text,
 	NULL,
-};
+};*/
 
 panel_button_t* limboPanelButtons[] = {
 	&rightLimboPannel,
 
 	&classCounter0,         &classCounter1,         &classCounter2,         &classCounter3,         &classCounter4,
-//	&classCounterLight0,	&classCounterLight1,	&classCounterLight2,	&classCounterLight3,	&classCounterLight4,
 	&classButton0,          &classButton1,          &classButton2,          &classButton3,          &classButton4,
 
 	&classBar, &classBarText,
 
+	/* Nico, removed stuff in limbo
 	&leftFrame01, &leftFrame02, &leftFrame03, &leftFrame04,
-	&leftFrame05, &leftFrame06, &leftFrame07, &leftFrame08,
+	&leftFrame05, &leftFrame06, &leftFrame07, &leftFrame08,*/
 
+	/* Nico, removed stuff in limbo
 	&filterButton0, &filterButton1, &filterButton2, &filterButton3, &filterButton4,
-	&filterButton5, &filterButton6, &filterButton7, /* &filterButton8,*/
-	&filterTitleText,
+	&filterButton5, &filterButton6, &filterButton7,
+	&filterTitleText,*/
 
 	/* Nico, removed skills
 	&medalPic0, &medalPic1, &medalPic2, &medalPic3, &medalPic4, &medalPic5, &medalPic6,*/
@@ -956,6 +953,7 @@ panel_button_t* limboPanelButtons[] = {
 	/* Nico, removed XP
 	&playerXPCounter, &playerXPCounterText,*/
 
+	/* Nico, removed stuff in limbo
 	&respawnCounter, &respawnCounterText,
 	&mapTimeCounter, &mapTimeCounter2, &mapTimeCounterText,
 
@@ -969,7 +967,7 @@ panel_button_t* limboPanelButtons[] = {
 	&playerSetupText,
 	&skillsText,
 
-	&commandmapPanel,
+	&commandmapPanel,*/
 
 	&okButton, &okButtonText,
 	&cancelButton, &cancelButtonText,
@@ -985,20 +983,22 @@ panel_button_t* limboPanelButtons[] = {
 	&weaponStatsShotsCounter, &weaponStatsHitsCounter, &weaponStatsAccCounter,
 	&weaponStatsAccPercentage,*/
 
+	/* Nico, removed stuff in limbo
 	&briefingButton,
 
 	&plusButton, &plusButtonText,
-	&minusButton, &minusButtonText,
+	&minusButton, &minusButtonText,*/
 
 	NULL,
 };
 
+/* Nico, removed stuff in limbo
 qboolean CG_LimboPanel_BriefingButton_KeyDown( panel_button_t* button, int key ) {
 
-	/* Nico, removed LMS
-	if ( cg_gameType.integer == GT_WOLF_LMS ) {
-		return qfalse;
-	}*/
+	// Nico, removed LMS
+	// if ( cg_gameType.integer == GT_WOLF_LMS ) {
+	//	return qfalse;
+	// }
 
 	if ( key == K_MOUSE1 ) {
 
@@ -1021,17 +1021,17 @@ qboolean CG_LimboPanel_BriefingButton_KeyDown( panel_button_t* button, int key )
 
 void CG_LimboPanel_BriefingButton_Draw( panel_button_t* button ) {
 
-	/* Nico, removed LMS
-	if ( cg_gameType.integer == GT_WOLF_LMS ) {
-		return;
-	}*/
+	// Nico, removed LMS
+	// if ( cg_gameType.integer == GT_WOLF_LMS ) {
+	//	return;
+	// }
 
 	if ( cg.limboEndCinematicTime > cg.time ) {
 		CG_DrawPic( button->rect.x, button->rect.y, button->rect.w, button->rect.h, BG_CursorInRect( &button->rect ) ? cgs.media.limboBriefingButtonStopOn : cgs.media.limboBriefingButtonStopOff );
 	} else {
 		CG_DrawPic( button->rect.x, button->rect.y, button->rect.w, button->rect.h, BG_CursorInRect( &button->rect ) ? cgs.media.limboBriefingButtonOn : cgs.media.limboBriefingButtonOff );
 	}
-}
+}*/
 
 void CG_LimboPanel_NameEditFinish( panel_button_t* button ) {
 	char buffer[256];
@@ -1056,6 +1056,7 @@ qboolean CG_LimboPanel_CancelButton_KeyDown( panel_button_t* button, int key ) {
 	return qfalse;
 }
 
+/* Nico, removed stuff in limbo
 qboolean CG_LimboPanel_PlusButton_KeyDown( panel_button_t* button, int key ) {
 	if ( key == K_MOUSE1 ) {
 		SOUND_SELECT;
@@ -1086,7 +1087,7 @@ qboolean CG_LimboPanel_MinusButton_KeyDown( panel_button_t* button, int key ) {
 	}
 
 	return qfalse;
-}
+}*/
 
 void CG_LimboPanel_SendSetupMsg( qboolean forceteam ) {
 	weapon_t weap1, weap2;
@@ -1175,13 +1176,16 @@ qboolean CG_LimboPanel_TeamButton_KeyDown( panel_button_t* button, int key ) {
 		SOUND_SELECT;
 
 		if ( cgs.ccSelectedTeam != button->data[0] ) {
-			int oldmax = CG_LimboPanel_GetMaxObjectives();
+
+			/* Nico, removed stuff in limbo
+			int oldmax = CG_LimboPanel_GetMaxObjectives();*/
 
 			cgs.ccSelectedTeam = button->data[0];
 
+			/* Nico, removed stuff in limbo
 			if ( cgs.ccSelectedObjective == oldmax ) {
 				cgs.ccSelectedObjective = CG_LimboPanel_GetMaxObjectives();
-			}
+			}*/
 
 			CG_LimboPanel_SetSelectedWeaponNumForSlot( 0, 0 );
 
@@ -1198,7 +1202,6 @@ qboolean CG_LimboPanel_TeamButton_KeyDown( panel_button_t* button, int key ) {
 }
 
 void CG_LimboPanel_RenderTeamButton( panel_button_t* button ) {
-//	vec4_t clr = { 1.f, 1.f, 1.f, 1.0f };
 	vec4_t clr2 = { 1.f, 1.f, 1.f, 0.4f };
 
 	qhandle_t shader;
@@ -1381,6 +1384,7 @@ void CG_LimboPanel_RenderClassButton( panel_button_t* button ) {
 	}
 }
 
+/* Nico, removed stuff in limbo
 int CG_LimboPanel_GetMaxObjectives( void ) {
 	if ( CG_LimboPanel_GetTeam() == TEAM_SPECTATOR ) {
 		return 0;
@@ -1422,10 +1426,10 @@ void CG_LimboPanel_RenderObjectiveText( panel_button_t* button ) {
 	char buffer[1024];
 	int status = 0;
 
-	/* Nico, removed LMS
-	if ( cg_gameType.integer == GT_WOLF_LMS ) {
-		Q_strncpyz( buffer, cg.objMapDescription_Neutral, sizeof( buffer ) );
-	} else {*/
+	// Nico, removed LMS
+	// if ( cg_gameType.integer == GT_WOLF_LMS ) {
+	//	Q_strncpyz( buffer, cg.objMapDescription_Neutral, sizeof( buffer ) );
+	// } else {
 
 		if ( CG_LimboPanel_GetTeam() == TEAM_SPECTATOR ) {
 			//cs = CG_ConfigString( CS_MULTI_MAPDESC3 );
@@ -1484,8 +1488,8 @@ void CG_LimboPanel_RenderObjectiveText( panel_button_t* button ) {
 		}
 	}
 
-	/* Nico, removed LMS
-	if ( cg_gameType.integer != GT_WOLF_LMS && CG_LimboPanel_GetTeam() != TEAM_SPECTATOR ) {*/
+	// Nico, removed LMS
+	// if ( cg_gameType.integer != GT_WOLF_LMS && CG_LimboPanel_GetTeam() != TEAM_SPECTATOR ) {
 	if ( CG_LimboPanel_GetTeam() != TEAM_SPECTATOR ) {
 		const char* ofTxt;
 		float w, x;
@@ -1523,7 +1527,7 @@ void CG_LimboPanel_RenderObjectiveBack( panel_button_t* button ) {
 void CG_LimboPanel_RenderCommandMap( panel_button_t* button ) {
 	CG_DrawMap( button->rect.x, button->rect.y, button->rect.w, button->rect.h, cgs.ccFilter, NULL, qtrue, 1.f, qtrue );
 	CG_CommandMap_DrawHighlightText();
-}
+}*/
 
 qboolean CG_LimboPanel_RenderLight_GetValue( panel_button_t* button ) {
 	switch ( button->data[0] ) {
@@ -1538,14 +1542,7 @@ qboolean CG_LimboPanel_RenderLight_GetValue( panel_button_t* button ) {
 
 void CG_LimboPanel_RenderLight( panel_button_t* button ) {
 	if ( CG_LimboPanel_RenderLight_GetValue( button ) ) {
-//		if( !button->data[2] || (button->data[2] - cg.time < 0) ) {
 		button->data[3] = button->data[3] ^ 1;
-//			if( button->data[3] ) {
-//				button->data[2] = cg.time + rand() % 200;
-//			} else {
-//				button->data[2] = cg.time + rand() % 1000;
-//			}
-//		}
 
 		CG_DrawPic( button->rect.x - 4, button->rect.y - 2, button->rect.w + 4, button->rect.h + 4, button->data[3] ? cgs.media.limboLight_on2 : cgs.media.limboLight_on );
 	} else {
@@ -1729,6 +1726,7 @@ void CG_LimboPanel_RenderHead( panel_button_t* button ) {
 	trap_R_SetColor( NULL );
 }*/
 
+/* Nico, removed stuff in limbo
 qboolean CG_LimboPanel_Filter_KeyDown( panel_button_t* button, int key ) {
 	if ( key == K_MOUSE1 ) {
 		SOUND_FILTER;
@@ -1747,18 +1745,16 @@ void CG_LimboPanel_Filter_Draw( panel_button_t* button ) {
 		CG_DrawPic( button->rect.x, button->rect.y, button->rect.w, button->rect.h, cgs.media.ccFilterBackOn );
 	}
 
-//	CG_DrawPic( button->rect.x, button->rect.y, button->rect.w, button->rect.h, cgs.media.ccFilterPics[button->data[0]] );
 	CG_DrawPic( button->rect.x + 1, button->rect.y + 1, button->rect.w - 2, button->rect.h - 2, cgs.media.ccFilterPics[button->data[0]] );
 }
-
 
 void CG_LimboPanel_RenderSkillIcon( panel_button_t* button ) {
 	qhandle_t shader;
 
-	/* Nico, removed LMS
-	if ( cg_gameType.integer == GT_WOLF_LMS ) {
-		return;
-	}*/
+	// Nico, removed LMS
+	// if ( cg_gameType.integer == GT_WOLF_LMS ) {
+	//	return;
+	// }
 
 	switch ( button->data[0] ) {
 	case 0:
@@ -1775,8 +1771,7 @@ void CG_LimboPanel_RenderSkillIcon( panel_button_t* button ) {
 	}
 
 	CG_DrawPic( button->rect.x, button->rect.y, button->rect.w, button->rect.h, shader );
-}
-
+}*/
 
 qboolean CG_LimboPanel_WeaponLights_KeyDown( panel_button_t* button, int key ) {
 	if ( CG_LimboPanel_GetTeam() == TEAM_SPECTATOR ) {
@@ -1878,7 +1873,6 @@ void CG_LimboPanel_WeaponPanel_DrawWeapon( rectDef_t* rect, weapon_t weap, qbool
 	}
 
 	CG_DrawPic( rect->x, rect->y, rect->w, rect->h, shader );
-//	CG_DrawRect( rect->x, rect->y, rect->w, rect->h, 1, colorWhite );
 	if ( wt->desc ) {
 		if ( highlight && BG_CursorInRect( rect ) ) {
 			Vector4Copy( weaponPanelNameFont.colour, clr );
@@ -2167,6 +2161,7 @@ int CG_LimboPanel_RenderCounter_MaxChangeForButton( panel_button_t* button ) {
 
 	return 1;
 }
+
 int CG_LimboPanel_RenderCounter_NumRollers( panel_button_t* button ) {
 	switch ( button->data[0] ) {
 	case 0:     // class counts
@@ -2291,15 +2286,16 @@ void CG_LimboPanelRenderText_NoLMS( panel_button_t* button ) {
 	BG_PanelButtonsRender_Text( button );
 }
 
+/* Nico, removed stuff in limbo
 void CG_LimboPanelRenderText_SkillsText( panel_button_t* button ) {
 
-	/* Nico, removed LMS
-	if ( cg_gameType.integer == GT_WOLF_LMS ) {
-		return;
-	}*/
+	// Nico, removed LMS
+	// if ( cg_gameType.integer == GT_WOLF_LMS ) {
+	//	return;
+	// }
 
 	BG_PanelButtonsRender_Text( button );
-}
+}*/
 
 #define MAX_ROLLERS 8
 #define COUNTER_ROLLTOTAL ( cg.time - button->data[4] )
@@ -2356,14 +2352,12 @@ void CG_LimboPanel_RenderCounter( panel_button_t* button ) {
 				if ( CG_LimboPanel_RenderCounter_CountsUp( button ) ) {
 					button->data[5] = button->data[3] + maxchange;
 				} else {
-//					button->data[3] =
 					button->data[5] = value;
 				}
 			} else {
 				if ( CG_LimboPanel_RenderCounter_CountsDown( button ) ) {
 					button->data[5] = button->data[3] - maxchange;
 				} else {
-//					button->data[3] =
 					button->data[5] = value;
 				}
 			}
@@ -2406,11 +2400,6 @@ void CG_LimboPanel_Setup( void ) {
 	char buffer[256];
 
 	cgs.limboLoadoutModified = qfalse;
-
-//	if( !cgs.playedLimboMusic ) {
-//		trap_S_StartBackgroundTrack( "sound/music/menu_briefing.wav", "", 0 );
-//		cgs.playedLimboMusic = qtrue;
-//	}
 
 	trap_Cvar_VariableStringBuffer( "name", buffer, 256 );
 	trap_Cvar_Set( "limboname", buffer );
@@ -2463,10 +2452,12 @@ void CG_LimboPanel_Setup( void ) {
 	/* Nico, removed weaponstats
 	CG_LimboPanel_RequestWeaponStats();*/
 
+	/* Nico, removed stuff in limbo
 	cgs.ccRequestedObjective = cgs.ccSelectedObjective = CG_LimboPanel_GetMaxObjectives();
 	CG_LimboPanel_RequestObjective();
 
-	cgs.ccSelectedObjective = CG_LimboPanel_GetMaxObjectives();
+	cgs.ccSelectedObjective = CG_LimboPanel_GetMaxObjectives();*/
+
 	cgs.ccSelectedWeaponNumber = 1;
 
 	// classinfo = CG_LimboPanel_GetPlayerClass();
@@ -2486,24 +2477,23 @@ void CG_LimboPanel_Init( void ) {
 qboolean CG_LimboPanel_Draw( void ) {
 	static panel_button_t* lastHighlight;
 	panel_button_t* hilight;
-//	panel_button_t** buttons = limboPanelButtons;
 
 	hilight = BG_PanelButtonsGetHighlightButton( limboPanelButtons );
 	if ( hilight && hilight != lastHighlight ) {
 		lastHighlight = hilight;
-//		SOUND_FOCUS;
 	}
 
+	/* Nico, removed stuff in limbo
 	if ( cg.limboEndCinematicTime > cg.time ) {
-		//%	CG_DrawPic( LIMBO_3D_X, LIMBO_3D_Y, LIMBO_3D_W, LIMBO_3D_H, cgs.media.limboRadioBroadcast );
 		CG_DrawPic( LIMBO_3D_X + 4, LIMBO_3D_Y - 8, LIMBO_3D_W - 8, LIMBO_3D_W - 8, cgs.media.limboRadioBroadcast );
-	}
+	}*/
 
 	BG_PanelButtonsRender( limboPanelButtons );
 
 	trap_R_SetColor( NULL );
 	CG_DrawPic( cgDC.cursorx, cgDC.cursory, 32, 32, cgs.media.cursorIcon );
 
+	/* Nico, removed stuff in limbo
 	if ( cgs.ccRequestedObjective != -1 ) {
 		if ( cg.time - cgs.ccLastObjectiveRequestTime > 1000 ) {
 			if ( CG_LimboPanel_GetTeam() == TEAM_SPECTATOR ) {
@@ -2518,7 +2508,7 @@ qboolean CG_LimboPanel_Draw( void ) {
 				}
 			}
 		}
-	}
+	}*/
 
 	return qtrue;
 }
@@ -2833,6 +2823,7 @@ void CG_LimboPanel_RequestWeaponStats( void ) {
 	// trap_SendClientCommand( va( "ws %i", weapStat ) );
 }*/
 
+/* Nico, removed stuff in limbo
 void CG_LimboPanel_RequestObjective( void ) {
 	int max = CG_LimboPanel_GetMaxObjectives();
 
@@ -2843,7 +2834,7 @@ void CG_LimboPanel_RequestObjective( void ) {
 	}
 	cgs.ccRequestedObjective = cgs.ccSelectedObjective;
 	cgs.ccLastObjectiveRequestTime = cg.time;
-}
+}*/
 
 
 void CG_LimboPanel_SetSelectedWeaponNum( int number ) {

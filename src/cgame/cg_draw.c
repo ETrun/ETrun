@@ -4394,9 +4394,10 @@ void CG_DrawActive( stereoFrame_t stereoView ) {
 	// Gordon
 	CG_DrawMiscGamemodels();
 
-	if ( !( cg.limboEndCinematicTime > cg.time && cg.showGameView ) ) {
+	// Nico, removed stuff in limbo
+	// if ( !( cg.limboEndCinematicTime > cg.time && cg.showGameView ) ) {
 		trap_R_RenderScene( cg.refdef_current );
-	}
+	// }
 
 	// restore original viewpoint if running stereo
 	if ( separation != 0 ) {

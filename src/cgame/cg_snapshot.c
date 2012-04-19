@@ -206,11 +206,6 @@ void CG_SetInitialSnapshot( snapshot_t *snap ) {
 				if ( !cg.showGameView ) {
 					CG_LimboMenu_f();
 				}
-/*			} else {
-				ccInitial = qtrue;
-
-				// Start the Initial Camera if specified
-				CG_StartInitialCamera(); */
 			}
 		}
 	}

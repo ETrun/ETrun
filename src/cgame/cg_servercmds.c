@@ -955,7 +955,8 @@ static void CG_MapRestart( void ) {
 	cgs.complaintClient = -1;
 	cgs.complaintEndTime = 0;*/
 
-	CG_LimboPanel_RequestObjective();
+	/* Nico, removed stuff in limbo
+	CG_LimboPanel_RequestObjective();*/
 
 	// (SA) clear zoom (so no warpies)
 	cg.zoomedBinoc = qfalse;

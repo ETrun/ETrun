@@ -1054,7 +1054,8 @@ typedef struct {
 	// Duffy end
 
 	// NERVE - SMF - Objective info display
-	qboolean limboMenu;
+	// Nico, unused
+	// qboolean limboMenu;
 
 	int oidTeam;
 	int oidPrintTime;
@@ -1165,7 +1166,10 @@ typedef struct {
 	int medicChargeTime[2];
 	int covertopsChargeTime[2];
 	int binocZoomTime;
-	int limboEndCinematicTime;
+
+	/* Nico, removed stuff in limbo
+	int limboEndCinematicTime;*/
+
 	int proneMovingTime;
 	fireteamData_t fireTeams[32];
 
@@ -1744,7 +1748,9 @@ typedef struct {
 	qhandle_t limboBriefingButtonStopOff;
 
 	qhandle_t limboSpectator;
-	qhandle_t limboRadioBroadcast;
+
+	/* Nico, removed stuff in limbo
+	qhandle_t limboRadioBroadcast;*/
 
 	qhandle_t cursorIcon;
 
@@ -2851,10 +2857,10 @@ qboolean CG_DrawScoreboard( void );
 
 void CG_TransformToCommandMapCoord( float *coord_x, float *coord_y );
 
-//qboolean CG_DrawCommandMap( void );
 void CG_CommandCentreClick( int key );
 void CG_DrawAutoMap( void );
 
+/* Nico, unsed functions
 qboolean CG_DrawLimboMenu( void );
 qboolean CG_DrawObjectivePanel( void );
 qboolean CG_DrawFireTeamMenu( void );
@@ -2868,7 +2874,7 @@ void CG_GetLimboWeaponAnim( const char **torso_anim, const char **legs_anim );
 int CG_GetLimboSelectedWeapon();
 
 qboolean CG_DrawMissionBriefing( void );
-void CG_MissionBriefingClick( int key );
+void CG_MissionBriefingClick( int key );*/
 
 /* Nico, removed rankicons
 void CG_LoadRankIcons( void );*/
@@ -3433,30 +3439,47 @@ void CG_PB_RenderPolyBuffers( void );
 //
 
 void CG_LimboPanel_KeyHandling( int key, qboolean down );
-int CG_LimboPanel_GetMaxObjectives( void );
+
+/* Nico, removed stuff in limbo
+int CG_LimboPanel_GetMaxObjectives( void );*/
 
 qboolean CG_LimboPanel_WeaponLights_KeyDown( panel_button_t* button, int key );
 qboolean CG_LimboPanel_WeaponPanel_KeyDown( panel_button_t* button, int key );
 qboolean CG_LimboPanel_WeaponPanel_KeyUp( panel_button_t* button, int key );
-qboolean CG_LimboPanel_ObjectiveText_KeyDown( panel_button_t* button, int key );
+
+/* Nico, removed stuff in limbo
+qboolean CG_LimboPanel_ObjectiveText_KeyDown( panel_button_t* button, int key );*/
+
 qboolean CG_LimboPanel_TeamButton_KeyDown( panel_button_t* button, int key );
 qboolean CG_LimboPanel_ClassButton_KeyDown( panel_button_t* button, int key );
 qboolean CG_LimboPanel_OkButton_KeyDown( panel_button_t* button, int key );
+
+/* Nico, removed stuff in limbo
 qboolean CG_LimboPanel_PlusButton_KeyDown( panel_button_t* button, int key );
-qboolean CG_LimboPanel_MinusButton_KeyDown( panel_button_t* button, int key );
+qboolean CG_LimboPanel_MinusButton_KeyDown( panel_button_t* button, int key );*/
+
 qboolean CG_LimboPanel_CancelButton_KeyDown( panel_button_t* button, int key );
+
+/* Nico, removed stuff in limbo
 qboolean CG_LimboPanel_Filter_KeyDown( panel_button_t* button, int key );
 qboolean CG_LimboPanel_BriefingButton_KeyDown( panel_button_t* button, int key );
 
-void CG_LimboPanel_BriefingButton_Draw( panel_button_t* button );
+void CG_LimboPanel_BriefingButton_Draw( panel_button_t* button );*/
+
 void CG_LimboPanel_ClassBar_Draw( panel_button_t* button );
+
+/* Nico, removed stuff in limbo
 void CG_LimboPanel_Filter_Draw( panel_button_t* button );
-void CG_LimboPanel_RenderSkillIcon( panel_button_t* button );
+void CG_LimboPanel_RenderSkillIcon( panel_button_t* button );*/
+
 void CG_LimboPanel_RenderTeamButton( panel_button_t* button );
 void CG_LimboPanel_RenderClassButton( panel_button_t* button );
+
+/* Nico, removed stuff in limbo
 void CG_LimboPanel_RenderObjectiveText( panel_button_t* button );
 void CG_LimboPanel_RenderCommandMap( panel_button_t* button );
-void CG_LimboPanel_RenderObjectiveBack( panel_button_t* button );
+void CG_LimboPanel_RenderObjectiveBack( panel_button_t* button );*/
+
 void CG_LimboPanel_RenderLight( panel_button_t* button );
 void CG_LimboPanel_WeaponLights( panel_button_t* button );
 
@@ -3471,7 +3494,9 @@ void CG_LimboPanel_RenderMedal( panel_button_t* button );*/
 
 void CG_LimboPanel_RenderCounter( panel_button_t* button );
 void CG_LimboPanelRenderText_NoLMS( panel_button_t* button );
-void CG_LimboPanelRenderText_SkillsText( panel_button_t* button );
+
+/* Nico, removed stuff in limbo
+void CG_LimboPanelRenderText_SkillsText( panel_button_t* button );*/
 
 void CG_LimboPanel_NameEditFinish( panel_button_t* button );
 
@@ -3479,7 +3504,9 @@ void CG_LimboPanel_Setup( void );
 void CG_LimboPanel_Init( void );
 
 void                CG_LimboPanel_GetWeaponCardIconData( weapon_t weap, qhandle_t* shader, float* w, float* h, float* s0, float* t0, float* s1, float* t1 );
-void                CG_LimboPanel_RequestObjective( void );
+
+/* Nico, removed stuff in limbo
+void                CG_LimboPanel_RequestObjective( void );*/
 
 /* Nico, removed weaponstats
 void                CG_LimboPanel_RequestWeaponStats( void );*/
@@ -3530,10 +3557,10 @@ void CG_CommandMap_SetHighlightText( const char* text, float x, float y );
 void CG_CommandMap_DrawHighlightText( void );
 qboolean CG_CommandCentreSpawnPointClick( void );
 
-#define LIMBO_3D_X  287 //%	280
-#define LIMBO_3D_Y  382
-#define LIMBO_3D_W  128
-#define LIMBO_3D_H  96  //%	94
+#define LIMBO_3D_X  0// Nico, 287 -> 0 //%	280
+#define LIMBO_3D_Y  0// Nico, 382 -> 0
+#define LIMBO_3D_W  440// Nico, 128 -> 440
+#define LIMBO_3D_H  480// Nico, 96 -> 480  //%	94
 
 #define CC_2D_X 64
 #define CC_2D_Y 23

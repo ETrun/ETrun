@@ -788,7 +788,9 @@ void CG_EventHandling( int type, qboolean fForced ) {
 			trap_S_FadeBackgroundTrack( 0.0f, 500, 0 );
 
 			trap_S_StopStreamingSound( -1 );
-			cg.limboEndCinematicTime = 0;
+
+			/* Nico, removed stuff in limbo
+			cg.limboEndCinematicTime = 0;*/
 
 			if ( fForced ) {
 				if ( cgs.limboLoadoutModified ) {
