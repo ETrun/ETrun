@@ -1787,7 +1787,6 @@ void CG_Player( centity_t *cent ) {
 	int renderfx;
 	qboolean shadow;
 	float shadowPlane;
-//	float			gumsflappin = 0;	// talking amplitude
 	qboolean usingBinocs = qfalse;
 	centity_t       *cgsnap;
 	bg_character_t  *character;

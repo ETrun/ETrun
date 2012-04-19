@@ -1109,10 +1109,6 @@ int CG_CalcViewValues( void ) {
 
 	memset( cg.refdef_current, 0, sizeof( cg.refdef ) );
 
-	// strings for in game rendering
-	// Q_strncpyz( cg.refdef.text[0], "Park Ranger", sizeof(cg.refdef_current->text[0]) );
-	// Q_strncpyz( cg.refdef.text[1], "19", sizeof(cg.refdef_current->text[1]) );
-
 	// calculate size of 3D view
 	CG_CalcVrect();
 

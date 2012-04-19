@@ -2300,16 +2300,6 @@ static void CG_DrawIntermission( void ) {
 
 /*
 =================
-CG_ActivateLimboMenu
-
-NERVE - SMF
-=================
-*/
-static void CG_ActivateLimboMenu( void ) {
-}
-
-/*
-=================
 CG_DrawSpectatorMessage
 =================
 */
@@ -4366,8 +4356,6 @@ void CG_DrawActive( stereoFrame_t stereoView ) {
 	}
 
 	cg.refdef_current->glfog.registered = 0;    // make sure it doesn't use fog from another scene
-
-	CG_ActivateLimboMenu();
 
 	if ( cg.showGameView ) {
 		float x, y, w, h;
