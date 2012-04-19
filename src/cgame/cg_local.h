@@ -2057,17 +2057,21 @@ typedef struct {
 
 	cg_gamemodel_t miscGameModels[MAX_STATIC_GAMEMODELS];
 
+	/* Nico, removed stuff in limbo
 	vec2_t ccMenuPos;
 	qboolean ccMenuShowing;
 	int ccMenuType;
 	mapEntityData_t ccMenuEnt;
 	int ccSelectedLayer;
-	int ccSelectedObjective;
+	int ccSelectedObjective;*/
+
 	int ccSelectedTeam;                     // ( 1 = ALLIES, 0 = AXIS )
 	int ccSelectedWeaponNumber;
 	int ccSelectedClass;
 	int ccSelectedWeapon;
 	int ccSelectedWeapon2;
+
+	/* Nico, removed stuff in limbo
 	int ccWeaponShots;
 	int ccWeaponHits;
 	vec3_t ccPortalPos;
@@ -2083,7 +2087,8 @@ typedef struct {
 	int dbSortedClients[MAX_CLIENTS];
 	int dbSelectedClient;
 
-	int dbMode;
+	int dbMode;*/
+
 	qboolean dbShowing;
 
 	/* Nico, commented because unused

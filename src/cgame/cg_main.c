@@ -2721,8 +2721,9 @@ void CG_Init( int serverMessageNum, int serverCommandSequence, int clientNum, qb
 	cgs.processedSnapshotNum = serverMessageNum;
 	cgs.serverCommandSequence = serverCommandSequence;
 
+	/* Nico, removed stuff in limbo
 	cgs.ccRequestedObjective = -1;
-	cgs.ccCurrentCamObjective = -2;
+	cgs.ccCurrentCamObjective = -2;*/
 
 	// Nico, bugfix on loading screen
 	// http://games.chruker.dk/enemy_territory/modding_project_bugfix.php?bug_id=079

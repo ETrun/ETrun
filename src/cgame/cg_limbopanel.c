@@ -2111,6 +2111,8 @@ int CG_LimboPanel_RenderCounter_ValueForButton( panel_button_t* button ) {
 			return count / 60;
 		}*/
 		return 0;
+
+	/* Nico, removed stuff in limbo
 	case 6:     // stats
 		switch ( button->data[1] ) {
 		case 0:
@@ -2119,7 +2121,7 @@ int CG_LimboPanel_RenderCounter_ValueForButton( panel_button_t* button ) {
 			return cgs.ccWeaponHits;
 		case 2:
 			return cgs.ccWeaponShots != 0 ? 100 * cgs.ccWeaponHits / cgs.ccWeaponShots : 0;
-		}
+		}*/
 	}
 
 	return 0;

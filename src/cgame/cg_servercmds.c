@@ -1647,6 +1647,7 @@ void CG_ParseWeaponStats( void ) {
 	cgs.ccWeaponHits =  atoi( CG_Argv( 2 ) );
 }*/
 
+/* Nico, removed stuff in limbo
 void CG_ParsePortalPos( void ) {
 	int i;
 
@@ -1660,7 +1661,7 @@ void CG_ParsePortalPos( void ) {
 	for ( i = 0; i < 3; i++ ) {
 		cgs.ccPortalAngles[i] = atoi( CG_Argv( i + 5 ) );
 	}
-}
+}*/
 
 
 /* Nico, removed showstats client command
@@ -2322,10 +2323,11 @@ static void CG_ServerCommand( void ) {
 		return;
 	}*/
 
+	/* Nico, removed stuff in limbo
 	if ( !Q_stricmp( cmd, "portalcampos" ) ) {
 		CG_ParsePortalPos();
 		return;
-	}
+	}*/
 
 	if ( !Q_stricmp( cmd, "startCam" ) ) {
 		CG_StartCamera( CG_Argv( 1 ), atoi( CG_Argv( 2 ) ) );

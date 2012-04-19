@@ -1168,6 +1168,7 @@ int CG_CalcViewValues( void ) {
 
 
 
+	/* Nico, removed stuff in limbo
 	if ( cg.showGameView ) {
 		VectorCopy( cgs.ccPortalPos, cg.refdef_current->vieworg );
 		if ( cg.showGameView && cgs.ccPortalEnt != -1 ) {
@@ -1177,8 +1178,6 @@ int CG_CalcViewValues( void ) {
 		} else {
 			VectorCopy( cgs.ccPortalAngles, cg.refdefViewAngles );
 		}
-	}
-	/* Nico, render while in limbo
 	} else if ( cg.renderingThirdPerson && ( ps->eFlags & EF_MG42_ACTIVE || ps->eFlags & EF_AAGUN_ACTIVE ) ) { // Arnout: see if we're attached to a gun*/
 	if ( cg.renderingThirdPerson && ( ps->eFlags & EF_MG42_ACTIVE || ps->eFlags & EF_AAGUN_ACTIVE ) ) { // Arnout: see if we're attached to a gun
 		centity_t *mg42 = &cg_entities[ps->viewlocked_entNum];
