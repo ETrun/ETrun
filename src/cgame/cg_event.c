@@ -169,7 +169,8 @@ static void CG_Obituary( entityState_t *ent ) {
 
 	if ( message ) {
 		message = CG_TranslateString( message );
-		CG_AddPMItem( PM_DEATH, va( "%s %s.", targetName, message ), deathShader );
+		// Nico, removed obituary messages
+		// CG_AddPMItem( PM_DEATH, va( "%s %s.", targetName, message ), deathShader );
 		return;
 	}
 
@@ -186,7 +187,8 @@ static void CG_Obituary( entityState_t *ent ) {
 		} else {
 			s = va( "%s %s", CG_TranslateString( "You killed" ), targetName );
 		}
-		CG_PriorityCenterPrint( s, SCREEN_HEIGHT * 0.75, BIGCHAR_WIDTH * 0.6, 1 );
+		// Nico, removed obituary messages
+		// CG_PriorityCenterPrint( s, SCREEN_HEIGHT * 0.75, BIGCHAR_WIDTH * 0.6, 1 );
 		// print the text message as well
 	}
 
@@ -208,10 +210,6 @@ static void CG_Obituary( entityState_t *ent ) {
 		case MOD_KNIFE:
 			message = "was stabbed by";
 			message2 = "'s knife";
-			// OSP - goat luvin
-//			if( attacker == cg.snap->ps.clientNum || target == cg.snap->ps.clientNum ) {
-//				trap_S_StartSound( cg.snap->ps.origin, cg.snap->ps.clientNum, CHAN_AUTO, cgs.media.goatAxis );
-//			}
 			break;
 
 		case MOD_AKIMBO_COLT:
@@ -396,8 +394,8 @@ static void CG_Obituary( entityState_t *ent ) {
 			message = CG_TranslateString( message );
 			if ( message2 ) {
 				message2 = CG_TranslateString( message2 );
-				CG_AddPMItem( PM_DEATH, va( "%s %s %s%s", targetName, message, attackerName, message2 ), deathShader );
-//				CG_Printf( "[cgnotify]%s %s %s%s\n", targetName, message, attackerName, message2 );
+				// Nico, removed obituary messages
+				// CG_AddPMItem( PM_DEATH, va( "%s %s %s%s", targetName, message, attackerName, message2 ), deathShader );
 			}
 			return;
 		}
