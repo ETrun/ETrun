@@ -2839,7 +2839,9 @@ CG_DrawFlashBlend
 */
 static void CG_DrawFlashBlend( void ) {
 	// Gordon: no flash blends if in limbo or spectator, and in the limbo menu
-	if ( ( cg.snap->ps.pm_flags & PMF_LIMBO || cgs.clientinfo[cg.clientNum].team == TEAM_SPECTATOR ) && cg.showGameView ) {
+	// Nico, render while in limbo
+	// if ( ( cg.snap->ps.pm_flags & PMF_LIMBO || cgs.clientinfo[cg.clientNum].team == TEAM_SPECTATOR ) && cg.showGameView ) {
+	if ( ( cg.snap->ps.pm_flags & PMF_LIMBO || cgs.clientinfo[cg.clientNum].team == TEAM_SPECTATOR )) {
 		return;
 	}
 
@@ -4357,6 +4359,7 @@ void CG_DrawActive( stereoFrame_t stereoView ) {
 
 	cg.refdef_current->glfog.registered = 0;    // make sure it doesn't use fog from another scene
 
+	/* Nico, render while in limbo
 	if ( cg.showGameView ) {
 		float x, y, w, h;
 		x = LIMBO_3D_X;
@@ -4372,7 +4375,7 @@ void CG_DrawActive( stereoFrame_t stereoView ) {
 		cg.refdef_current->height = h;
 
 		CG_Letterbox( ( LIMBO_3D_W / 640.f ) * 100, ( LIMBO_3D_H / 480.f ) * 100, qfalse );
-	}
+	}*/
 
 	CG_ShakeCamera();       // NERVE - SMF
 
@@ -4392,9 +4395,13 @@ void CG_DrawActive( stereoFrame_t stereoView ) {
 		VectorCopy( baseOrg, cg.refdef_current->vieworg );
 	}
 
+	// Nico, render while in limbo
+	CG_Draw2D();
+
 	if ( !cg.showGameView ) {
 		// draw status bar and other floating elements
-		CG_Draw2D();
+		// Nico, render while in limbo
+		// CG_Draw2D();
 	} else {
 		CG_LimboPanel_Draw();
 	}

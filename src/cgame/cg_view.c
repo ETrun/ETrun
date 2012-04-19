@@ -220,6 +220,7 @@ void CG_Letterbox( float xsize, float ysize, qboolean center ) {
 }
 
 static void CG_CalcVrect( void ) {
+	/* Nico, render while in limbo
 	if ( cg.showGameView ) {
 		float x, y, w, h;
 		x = LIMBO_3D_X;
@@ -236,7 +237,7 @@ static void CG_CalcVrect( void ) {
 
 		CG_Letterbox( ( LIMBO_3D_W / 640.f ) * 100, ( LIMBO_3D_H / 480.f ) * 100, qfalse );
 		return;
-	}
+	}*/
 
 	CG_Letterbox( 100, 100, qtrue );
 }
@@ -957,9 +958,10 @@ static int CG_CalcFov( void ) {
 		fov_x = 75;
 	}
 
+	/* Nico, render while in limbo
 	if ( cg.showGameView ) {
 		fov_x = fov_y = 60.f;
-	}
+	}*/
 
 	// Arnout: this is weird... (but ensures square pixel ratio!)
 	x = cg.refdef_current->width / tan( fov_x / 360 * M_PI );
@@ -1165,6 +1167,7 @@ int CG_CalcViewValues( void ) {
 	cg.xyspeed = sqrt( ps->velocity[0] * ps->velocity[0] + ps->velocity[1] * ps->velocity[1] );
 
 
+
 	if ( cg.showGameView ) {
 		VectorCopy( cgs.ccPortalPos, cg.refdef_current->vieworg );
 		if ( cg.showGameView && cgs.ccPortalEnt != -1 ) {
@@ -1174,7 +1177,10 @@ int CG_CalcViewValues( void ) {
 		} else {
 			VectorCopy( cgs.ccPortalAngles, cg.refdefViewAngles );
 		}
-	} else if ( cg.renderingThirdPerson && ( ps->eFlags & EF_MG42_ACTIVE || ps->eFlags & EF_AAGUN_ACTIVE ) ) { // Arnout: see if we're attached to a gun
+	}
+	/* Nico, render while in limbo
+	} else if ( cg.renderingThirdPerson && ( ps->eFlags & EF_MG42_ACTIVE || ps->eFlags & EF_AAGUN_ACTIVE ) ) { // Arnout: see if we're attached to a gun*/
+	if ( cg.renderingThirdPerson && ( ps->eFlags & EF_MG42_ACTIVE || ps->eFlags & EF_AAGUN_ACTIVE ) ) { // Arnout: see if we're attached to a gun
 		centity_t *mg42 = &cg_entities[ps->viewlocked_entNum];
 		vec3_t forward;
 
@@ -1192,7 +1198,8 @@ int CG_CalcViewValues( void ) {
 		VectorCopy( ps->viewangles, cg.refdefViewAngles );
 	}
 
-	if ( !cg.showGameView ) {
+	/* Nico, render while in limbo
+	if ( !cg.showGameView ) {*/
 		// add error decay
 		if ( cg_errorDecay.value > 0 ) {
 			int t;
@@ -1270,7 +1277,7 @@ int CG_CalcViewValues( void ) {
 			cg.refdef_current->vieworg[2] = oldZ;
 		}
 		// done.
-	}
+	// }
 
 	// position eye reletive to origin
 	AnglesToAxis( cg.refdefViewAngles, cg.refdef_current->viewaxis );
@@ -1697,7 +1704,9 @@ void CG_DrawActiveFrame( int serverTime, stereoFrame_t stereoView, qboolean demo
 		DEBUGTIME
 
 		// decide on third person view
-		cg.renderingThirdPerson = cg_thirdPerson.integer || ( cg.snap->ps.stats[STAT_HEALTH] <= 0 ) || cg.showGameView;
+		/* Nico, render while in limbo
+		cg.renderingThirdPerson = cg_thirdPerson.integer || ( cg.snap->ps.stats[STAT_HEALTH] <= 0 ) || cg.showGameView;*/
+		cg.renderingThirdPerson = cg_thirdPerson.integer || ( cg.snap->ps.stats[STAT_HEALTH] <= 0 );
 
 		// build cg.refdef
 		inwater = CG_CalcViewValues();
@@ -1753,7 +1762,9 @@ void CG_DrawActiveFrame( int serverTime, stereoFrame_t stereoView, qboolean demo
 		}
 
 		// Rafael mg42
-		if ( !cg.showGameView && !cgs.dbShowing ) {
+		/* Nico, render while in limbo
+		if ( !cg.showGameView && !cgs.dbShowing ) {*/
+		if ( !cgs.dbShowing ) {
 			if ( !cg.snap->ps.persistant[PERS_HWEAPON_USE] ) {
 				CG_AddViewWeapon( &cg.predictedPlayerState );
 			} else {
@@ -1833,6 +1844,8 @@ void CG_DrawActiveFrame( int serverTime, stereoFrame_t stereoView, qboolean demo
 	DEBUGTIME
 
 	// let the client system know what our weapon, holdable item and zoom settings are
-	trap_SetUserCmdValue( cg.weaponSelect, cg.showGameView ? 0x01 : 0x00, cg.zoomSensitivity, cg.identifyClientRequest );
+	/* Nico, render while in limbo
+	trap_SetUserCmdValue( cg.weaponSelect, cg.showGameView ? 0x01 : 0x00, cg.zoomSensitivity, cg.identifyClientRequest );*/
+	trap_SetUserCmdValue( cg.weaponSelect, 0x00, cg.zoomSensitivity, cg.identifyClientRequest );
 }
 

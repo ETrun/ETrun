@@ -413,9 +413,10 @@ static void CG_InterpolatePlayerState( qboolean grabAngles ) {
 
 	*out = cg.snap->ps;
 
+	/* Nico, render while in limbo
 	if ( cg.showGameView ) {
 		return;
-	}
+	}*/
 
 	// if we are still allowing local input, short circuit the view angles
 	if ( grabAngles ) {
@@ -1038,7 +1039,9 @@ void CG_PredictPlayerState( void ) {
 					CG_Printf( "PredictionTeleport\n" );
 				}
 				cg.thisFrameTeleport = qfalse;
-			} else if ( !cg.showGameView ) {
+			/* Nico, render while in limbo
+			} else if ( !cg.showGameView ) {*/
+			} else {
 				vec3_t adjusted;
 				CG_AdjustPositionForMover( cg.predictedPlayerState.origin, cg.predictedPlayerState.groundEntityNum, cg.physicsTime, cg.oldTime, adjusted, deltaAngles );
 				// RF, add the deltaAngles (fixes jittery view while riding trains)
@@ -1134,10 +1137,11 @@ void CG_PredictPlayerState( void ) {
 	// restore pmext
 	memcpy( &cg.pmext, &pmext, sizeof( pmoveExt_t ) );
 
-	if ( !cg.showGameView ) {
+	/* Nico, render while in limbo
+	if ( !cg.showGameView ) {*/
 		// adjust for the movement of the groundentity
 		CG_AdjustPositionForMover( cg.predictedPlayerState.origin, cg.predictedPlayerState.groundEntityNum, cg.physicsTime, cg.time, cg.predictedPlayerState.origin, deltaAngles );
-	}
+	// }
 
 	// fire events and other transition triggered things
 	CG_TransitionPlayerState( &cg.predictedPlayerState, &oldPlayerState );

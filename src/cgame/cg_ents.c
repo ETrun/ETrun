@@ -2154,7 +2154,10 @@ void CG_CalcEntityLerpPositions( centity_t *cent ) {
 
 	// adjust for riding a mover if it wasn't rolled into the predicted
 	// player state
-	if ( cent != &cg.predictedPlayerEntity && !cg.showGameView ) {
+
+	// Nico, render while in limbo
+	// if ( cent != &cg.predictedPlayerEntity && !cg.showGameView ) {
+	if ( cent != &cg.predictedPlayerEntity ) {
 		CG_AdjustPositionForMover( cent->lerpOrigin, cent->currentState.groundEntityNum, cg.snap->serverTime, cg.time, cent->lerpOrigin, NULL );
 	}
 }
@@ -2208,7 +2211,9 @@ static void CG_ProcessEntity( centity_t *cent ) {
 		break;
 	case ET_CORPSE:
 	case ET_PLAYER:
-		if ( cg.showGameView && cg.filtercams ) {
+		// Nico, render while in limbo
+		// if ( cg.showGameView && cg.filtercams ) {
+		if ( cg.filtercams ) {
 			break;
 		}
 		CG_Player( cent );
