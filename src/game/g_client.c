@@ -1264,10 +1264,13 @@ void ClientUserinfoChanged( int clientNum ) {
 		client->pers.predictItemPickup = qfalse;
 	} else {*/
 		s = Info_ValueForKey( userinfo, "cg_uinfo" );
-		sscanf( s, "%i %i %i",
+		sscanf( s, "%i %i %i %i",
 				&client->pers.clientFlags,
 				&client->pers.clientTimeNudge,
-				&client->pers.clientMaxPackets );
+				&client->pers.clientMaxPackets,
+
+				// Nico, max FPS
+				&client->pers.maxFPS);
 
 		client->pers.autoActivate = ( client->pers.clientFlags & CGF_AUTOACTIVATE ) ? PICKUP_TOUCH : PICKUP_ACTIVATE;
 		client->pers.predictItemPickup = ( ( client->pers.clientFlags & CGF_PREDICTITEMS ) != 0 );

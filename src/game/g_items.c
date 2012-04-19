@@ -497,7 +497,6 @@ void G_DropWeapon( gentity_t *ent, weapon_t weapon ) {
 		ent2->delay = 0;
 	}
 
-//	ent2->item->quantity = client->ps.ammoclip[BG_FindClipForWeapon(weapon)]; // Gordon: um, modifying an item is not a good idea
 	client->ps.ammoclip[BG_FindClipForWeapon( weapon )] = 0;
 }
 

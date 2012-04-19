@@ -356,6 +356,9 @@ vmCvar_t cg_checkPointsX;
 vmCvar_t cg_checkPointsY;
 vmCvar_t cg_maxCheckPoints;
 
+// Max FPS
+vmCvar_t com_maxfps;
+
 // Nico, end of ETrun cvars
 
 typedef struct {
@@ -620,6 +623,9 @@ cvarTable_t cvarTable[] = {
 	{ &cg_checkPointsY, "cg_checkPointsY", "435", CVAR_ARCHIVE },
 	{ &cg_maxCheckPoints, "cg_maxCheckPoints", "5", CVAR_ARCHIVE },
 
+	// Com_maxFPS
+	{ &com_maxfps, "com_maxfps", "125", CVAR_ARCHIVE },
+
 	// Nico, end of ETrun cvars
 };
 
@@ -690,10 +696,11 @@ void CG_UpdateCvars( void ) {
 
 				// Check if we need to update any client flags to be sent to the server
 				// Nico, added pmove_fixed
+				// Nico, added com_maxfps
 				if ( cv->vmCvar == &cg_autoAction || cv->vmCvar == &cg_autoReload ||
 					 cv->vmCvar == &int_cl_timenudge || cv->vmCvar == &int_cl_maxpackets ||
 					 cv->vmCvar == &cg_autoactivate || cv->vmCvar == &cg_predictItems ||
-					 cv->vmCvar == &pmove_fixed ) {
+					 cv->vmCvar == &pmove_fixed || cv->vmCvar == &com_maxfps ) {
 					fSetFlags = qtrue;
 				} else if ( cv->vmCvar == &cg_crosshairColor || cv->vmCvar == &cg_crosshairAlpha )      {
 					BG_setCrosshair( cg_crosshairColor.string, cg.xhairColor, cg_crosshairAlpha.value, "cg_crosshairColor" );
@@ -735,7 +742,7 @@ void CG_setClientFlags( void ) {
 	}
 
 	cg.pmext.bAutoReload = ( cg_autoReload.integer > 0 );
-	trap_Cvar_Set( "cg_uinfo", va( "%d %d %d",
+	trap_Cvar_Set( "cg_uinfo", va( "%d %d %d %d",
 	// Client Flags
 	(
 		( ( cg_autoReload.integer > 0 ) ? CGF_AUTORELOAD : 0 ) |
@@ -751,7 +758,11 @@ void CG_setClientFlags( void ) {
 	// Timenudge
 	int_cl_timenudge.integer,
 	// MaxPackets
-	int_cl_maxpackets.integer
+	int_cl_maxpackets.integer,
+
+	// Nico, max FPS
+	com_maxfps.integer
+
 	) );
 }
 

@@ -2533,6 +2533,13 @@ static void CG_ServerCommand( void ) {
 		return;
 	}
 
+	// Nico, force max FPS
+	if (!Q_stricmp(cmd, "resetMaxFPS")) {
+		trap_SendConsoleCommand("set com_maxfps 125\n");
+		CG_AddPMItem(PM_MESSAGE, "com_maxfps has been set to 125\n", cgs.media.voiceChatShader);
+		return;
+	}
+	
 	// Nico, timer start/stop/check related
 
 	if (!Q_stricmp(cmd, "timerun_start")) {

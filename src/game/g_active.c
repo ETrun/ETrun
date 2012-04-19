@@ -1193,6 +1193,13 @@ void ClientThink_real( gentity_t *ent ) {
 		trap_SendServerCommand(ent-g_entities, "pmoveon");
 		SetTeam(ent, "s", qtrue, -1, -1, qfalse);
 	}
+
+	// Nico, check max FPS
+	if (client->pers.maxFPS < 40) {
+		CP("cpm \"^1You were removed from teams because you must use com_maxfps > 40.\n\"");
+		trap_SendServerCommand(ent-g_entities, "resetMaxFPS");
+		SetTeam(ent, "s", qtrue, -1, -1, qfalse);
+	}
 }
 
 /*

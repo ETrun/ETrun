@@ -757,6 +757,10 @@ typedef struct {
 
 	/* Nico, removed complaints
 	ipFilter_t complaintips[MAX_COMPLAINTIPS];*/
+
+	// Nico, max FPS
+	int maxFPS;
+
 } clientPersistant_t;
 
 typedef struct {
