@@ -1189,6 +1189,13 @@ void ClientUserinfoChanged( int clientNum ) {
 		client->medals += client->sess.medals[ i ];
 	}*/
 
+	// Nico, flood protection
+	if (ClientIsFlooding(ent)) {
+		G_Printf("Dropping client %d: flooded userinfo\n", clientNum); 
+		trap_DropClient(clientNum, "^1Flooded userinfo" , 0);
+		return;
+	}
+
 	trap_GetUserinfo( clientNum, userinfo, sizeof( userinfo ) );
 
 	// check for malformed or illegal info strings

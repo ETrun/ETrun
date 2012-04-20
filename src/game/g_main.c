@@ -680,7 +680,7 @@ cvarTable_t gameCvarTable[] = {
 
 	// Flood protection
 	{ &g_floodProtect, "g_floodProtect", "1", 0 },
-	{ &g_floodThreshold, "g_floodThreshold", "6", 0 },
+	{ &g_floodThreshold, "g_floodThreshold", "8", 0 },
 	{ &g_floodWait, "g_floodWait", "768", 0 },
 
 	// Nico, end of ETrun cvars
