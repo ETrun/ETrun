@@ -645,6 +645,12 @@ typedef struct {
 	int			timerunBestTime[MAX_TIMERUNS];
 	int			timerunBestCheckpointTimes[MAX_TIMERUNS][MAX_TIMERUN_CHECKPOINTS];
 	// Nico, end of client session timerun related
+
+	// Nico, flood protection
+	int nextReliableTime;
+	int numReliableCmds;
+	int thresholdTime;
+
 } clientSession_t;
 
 //
@@ -934,6 +940,7 @@ struct gclient_s {
 	// Speed related
 	float		startSpeed;
 	float		stopSpeed;
+
 	// Nico, end of timerun server vars
 };
 
@@ -1250,6 +1257,18 @@ void G_EntitySoundNoCut( gentity_t *ent, const char *soundId, int volume );
 int ClientNumberFromString( gentity_t *to, char *s );
 void SanitizeString( char *in, char *out, qboolean fToLower );
 
+// Nico, flood protection
+
+typedef struct {
+	char		*cmd;
+	qboolean	isProtected;
+	void		(*function)(gentity_t *ent);
+} command_t;
+
+qboolean ClientIsFlooding(gentity_t *ent);
+
+// Nico, end of flood protection
+
 //
 // g_items.c
 //
@@ -1561,7 +1580,11 @@ void G_SayTo( gentity_t *ent, gentity_t *other, int mode, int color, const char 
 qboolean Cmd_CallVote_f( gentity_t *ent, unsigned int dwCommand, qboolean fValue );
 void Cmd_Follow_f( gentity_t *ent, unsigned int dwCommand, qboolean fValue );
 void Cmd_Say_f( gentity_t *ent, int mode, qboolean arg0 );
-void Cmd_Team_f( gentity_t *ent, unsigned int dwCommand, qboolean fValue );
+
+// Nico, flood protection
+// void Cmd_Team_f( gentity_t *ent, unsigned int dwCommand, qboolean fValue );
+void Cmd_Team_f( gentity_t *ent );
+
 void Cmd_SetWeapons_f( gentity_t *ent, unsigned int dwCommand, qboolean fValue );
 void Cmd_SetClass_f( gentity_t *ent, unsigned int dwCommand, qboolean fValue );
 
@@ -1986,6 +2009,11 @@ extern vmCvar_t g_forceTimerReset;
 // Is level a timerun?
 extern vmCvar_t	isTimerun;
 
+// Flood protection
+extern vmCvar_t g_floodProtect;
+extern vmCvar_t g_floodThreshold;
+extern vmCvar_t g_floodWait;
+
 // Nico, end of ETrun cvars
 
 void    trap_Printf( const char *fmt );
@@ -2301,7 +2329,10 @@ void G_wipeCvars( void );
 ///////////////////////
 // g_cmds_ext.c
 //
-qboolean G_commandCheck( gentity_t *ent, char *cmd, qboolean fDoAnytime );
+// Nico, removed intermission, so anytime doesn't make sens anymore
+// qboolean G_commandCheck( gentity_t *ent, char *cmd, qboolean fDoAnytime );
+qboolean G_commandCheck( gentity_t *ent, char *cmd );
+
 qboolean G_commandHelp( gentity_t *ent, char *pszCommand, unsigned int dwCommand );
 qboolean G_cmdDebounce( gentity_t *ent, const char *pszCommand );
 void G_commands_cmd( gentity_t *ent, unsigned int dwCommand, qboolean fValue );
@@ -2317,7 +2348,8 @@ void G_players_cmd( gentity_t *ent, unsigned int dwCommand, qboolean fDump );
 /* Nico, removed ready client command
 void G_ready_cmd( gentity_t *ent, unsigned int dwCommand, qboolean fDump );*/
 
-void G_say_teamnl_cmd( gentity_t *ent, unsigned int dwCommand, qboolean fValue );
+// Nico, removed say_teamnl
+// void G_say_teamnl_cmd( gentity_t *ent, unsigned int dwCommand, qboolean fValue );
 
 /* Nico, removed scores client command
 void G_scores_cmd( gentity_t *ent, unsigned int dwCommand, qboolean fValue );*/

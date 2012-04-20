@@ -355,6 +355,11 @@ vmCvar_t g_forceTimerReset;
 // Is level a timerun?
 vmCvar_t isTimerun;
 
+// Flood protection
+vmCvar_t g_floodProtect;
+vmCvar_t g_floodThreshold;
+vmCvar_t g_floodWait;
+
 // Nico, end of ETrun cvars
 
 
@@ -672,6 +677,11 @@ cvarTable_t gameCvarTable[] = {
 
 	// Is level a timerun?
 	{ &isTimerun, "isTimerun", "0", CVAR_ROM | CVAR_SYSTEMINFO },
+
+	// Flood protection
+	{ &g_floodProtect, "g_floodProtect", "1", 0 },
+	{ &g_floodThreshold, "g_floodThreshold", "6", 0 },
+	{ &g_floodWait, "g_floodWait", "768", 0 },
 
 	// Nico, end of ETrun cvars
 };
@@ -2162,6 +2172,13 @@ void G_InitGame( int levelTime, int randomSeed, int restart ) {
 	// --- maybe not the best place to do this... seems to be some race conditions on map_restart
 	/* Nico, removed multiview
 	G_spawnPrintf( DP_MVSPAWN, level.time + 2000, NULL );*/
+
+	// Nico, flood protection
+	if (g_floodProtect.integer) {
+		if (trap_Cvar_VariableIntegerValue("sv_floodprotect")) {
+			trap_Cvar_Set("sv_floodprotect", "0");
+		}
+	}
 
 	// Nico, is level a timerun?
 	if (!level.isTimerun) {

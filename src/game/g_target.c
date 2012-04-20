@@ -1555,10 +1555,10 @@ void target_stoptimer_use(gentity_t *self, gentity_t *other, gentity_t *activato
 	// Start recording a new temp demo.
 	// trap_SendServerCommand(activator - g_entities, "tempDemoStart 1");
 
-	client->timerunActive = qfalse;
-
 	// Nico, notify the client and its spectators the timerun has stopped
 	notify_timerun_stop(activator, client->sess.timerunLastTime[timerunNum]);
+
+	client->timerunActive = qfalse;
 }
 
 void SP_target_stoptimer(gentity_t *ent) {

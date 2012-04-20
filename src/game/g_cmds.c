@@ -1057,7 +1057,9 @@ void G_SetClientWeapons( gentity_t* ent, weapon_t w1, weapon_t w2, qboolean upda
 Cmd_Team_f
 =================
 */
-void Cmd_Team_f( gentity_t *ent, unsigned int dwCommand, qboolean fValue ) {
+// Nico, flood protection
+// void Cmd_Team_f( gentity_t *ent, unsigned int dwCommand, qboolean fValue ) {
+void Cmd_Team_f( gentity_t *ent ) {
 	char s[MAX_TOKEN_CHARS];
 	char ptype[4];
 	char weap[4], weap2[4];
@@ -2945,6 +2947,26 @@ void Cmd_UnIgnore_f( gentity_t* ent ) {
 	}
 }
 
+
+// Nico, defines commands that are flood protected or not
+static command_t floodProtectedCommands[] = {
+	{ "score",				qfalse,	Cmd_Score_f },
+	{ "vote",				qtrue,	Cmd_Vote_f },
+	{ "fireteam",			qfalse,	Cmd_FireTeam_MP_f },
+	{ "rconauth",			qfalse,	Cmd_AuthRcon_f },
+	{ "ignore",				qfalse,	Cmd_Ignore_f },
+	{ "unignore",			qfalse,	Cmd_UnIgnore_f },
+	{ "obj",				qfalse,	Cmd_SelectedObjective_f },
+	{ "rs",					qfalse,	Cmd_ResetSetup_f },
+	{ "noclip",				qfalse,	Cmd_Noclip_f },
+	{ "kill",				qtrue,	Cmd_Kill_f },
+	{ "team",				qtrue,	Cmd_Team_f },
+	{ "stopcamera",			qfalse,	Cmd_StopCamera_f },
+	{ "setcameraorigin",	qfalse,	Cmd_SetCameraOrigin_f },
+	{ "setspawnpt",			qfalse,	Cmd_SetSpawnPoint_f },
+};
+// Nico, end of defines commands that are flood protected or not
+
 /*
 =================
 ClientCommand
@@ -2954,6 +2976,10 @@ void ClientCommand( int clientNum ) {
 	gentity_t *ent;
 	char cmd[MAX_TOKEN_CHARS];
 
+	// Nico, flood protection
+	qboolean flooding = qfalse;
+	int i = 0;
+
 	ent = g_entities + clientNum;
 	if ( !ent->client ) {
 		return;     // not fully in game yet
@@ -2962,6 +2988,13 @@ void ClientCommand( int clientNum ) {
 	trap_Argv( 0, cmd, sizeof( cmd ) );
 
 	if ( Q_stricmp( cmd, "say" ) == 0 ) {
+
+		// Nico, flood protection
+		if (ClientIsFlooding(ent)) {
+			CP("print \"^1Spam Protection: ^7dropping say\n\"");
+			return;
+		}
+
 		if ( !ent->client->sess.muted ) {
 			Cmd_Say_f( ent, SAY_ALL, qfalse );
 		}
@@ -2976,11 +3009,24 @@ void ClientCommand( int clientNum ) {
 			return;
 		}*/
 
+		// Nico, flood protection
+		if (ClientIsFlooding(ent)) {
+			CP("print \"^1Spam Protection: ^7dropping say_team\n\"");
+			return;
+		}
+
 		if ( !ent->client->sess.muted ) {
 			Cmd_Say_f( ent, SAY_TEAM, qfalse );
 		}
 		return;
 	} else if ( Q_stricmp( cmd, "vsay" ) == 0 ) {
+
+		// Nico, flood protection
+		if (ClientIsFlooding(ent)) {
+			CP("print \"^1Spam Protection: ^7dropping vsay\n\"");
+			return;
+		}
+
 		if ( !ent->client->sess.muted ) {
 			Cmd_Voice_f( ent, SAY_ALL, qfalse, qfalse );
 		}
@@ -2993,21 +3039,44 @@ void ClientCommand( int clientNum ) {
 			return;
 		}*/
 
+		// Nico, flood protection
+		if (ClientIsFlooding(ent)) {
+			CP("print \"^1Spam Protection: ^7dropping vsay_team\n\"");
+			return;
+		}
+
 		if ( !ent->client->sess.muted ) {
 			Cmd_Voice_f( ent, SAY_TEAM, qfalse, qfalse );
 		}
 		return;
 	} else if ( Q_stricmp( cmd, "say_buddy" ) == 0 ) {
+
+		// Nico, flood protection
+		if (ClientIsFlooding(ent)) {
+			CP("print \"^1Spam Protection: ^7dropping say_buddy\n\"");
+			return;
+		}
+
 		if ( !ent->client->sess.muted ) {
 			Cmd_Say_f( ent, SAY_BUDDY, qfalse );
 		}
 		return;
 	} else if ( Q_stricmp( cmd, "vsay_buddy" ) == 0 ) {
+
+		// Nico, flood protection
+		if (ClientIsFlooding(ent)) {
+			CP("print \"^1Spam Protection: ^7dropping vsay_buddy\n\"");
+			return;
+		}
+
 		if ( !ent->client->sess.muted ) {
 			Cmd_Voice_f( ent, SAY_BUDDY, qfalse, qfalse );
 		}
 		return;
-	} else if ( Q_stricmp( cmd, "score" ) == 0 ) {
+	} 
+	
+	/* Nico, added to floodProtectedCommands
+	else if ( Q_stricmp( cmd, "score" ) == 0 ) {
 		Cmd_Score_f( ent );
 		return;
 	} else if ( Q_stricmp( cmd, "vote" ) == 0 ) {
@@ -3016,7 +3085,7 @@ void ClientCommand( int clientNum ) {
 	} else if ( Q_stricmp( cmd, "fireteam" ) == 0 ) {
 		Cmd_FireTeam_MP_f( ent );
 		return;
-	} 
+	} */
 
 	/* Nico, removed showstats client command
 	else if ( Q_stricmp( cmd, "showstats" ) == 0 ) {
@@ -3024,6 +3093,7 @@ void ClientCommand( int clientNum ) {
 		return;
 	}*/
 
+	/* Nico, added to floodProtectedCommands
 	else if ( Q_stricmp( cmd, "rconAuth" ) == 0 ) {
 		Cmd_AuthRcon_f( ent );
 		return;
@@ -3036,7 +3106,7 @@ void ClientCommand( int clientNum ) {
 	} else if ( Q_stricmp( cmd, "obj" ) == 0 ) {
 		Cmd_SelectedObjective_f( ent );
 		return;
-	}
+	}*/
 
 	/* Nico, removed intermission
 	else if ( !Q_stricmp( cmd, "impkd" ) ) {
@@ -3090,14 +3160,11 @@ void ClientCommand( int clientNum ) {
 		return;
 	}*/
 
+	/* Nico, added to floodProtectedCommands
 	if ( !Q_stricmp( cmd, "rs" ) ) {
 		Cmd_ResetSetup_f( ent );
 		return;
-	}
-
-	if ( G_commandCheck( ent, cmd, qtrue ) ) {
-		return;
-	}
+	}*/
 	// OSP
 
 	// ignore all other commands when at intermission
@@ -3127,11 +3194,14 @@ void ClientCommand( int clientNum ) {
 		Cmd_Notarget_f( ent );
 	}*/ 
 
+	/* Nico, added to floodProtectedCommands
 	else if ( Q_stricmp( cmd, "noclip" ) == 0 ) {
 		Cmd_Noclip_f( ent );
 	} else if ( Q_stricmp( cmd, "kill" ) == 0 ) {
 		Cmd_Kill_f( ent );
-	} else if ( Q_stricmp( cmd, "follownext" ) == 0 ) {
+	} */
+	
+	else if ( Q_stricmp( cmd, "follownext" ) == 0 ) {
 		Cmd_FollowCycle_f( ent, 1 );
 	} else if ( Q_stricmp( cmd, "followprev" ) == 0 ) {
 		Cmd_FollowCycle_f( ent, -1 );
@@ -3140,25 +3210,73 @@ void ClientCommand( int clientNum ) {
 	else if ( Q_stricmp( cmd, "where" ) == 0 ) {
 		Cmd_Where_f( ent );
 	}*/
+
+	/* Nico, added to floodProtectedCommands
 	else if ( Q_stricmp( cmd, "stopCamera" ) == 0 ) {
 		Cmd_StopCamera_f( ent );
 	} else if ( Q_stricmp( cmd, "setCameraOrigin" ) == 0 ) {
 		Cmd_SetCameraOrigin_f( ent );
-	}
+	}*/
+
 	/* Nico, removed setviewpos command
 	else if ( Q_stricmp( cmd, "setviewpos" ) == 0 ) {
 		Cmd_SetViewpos_f( ent );
 	}*/
+
+	/* Nico, added to floodProtectedCommands
 	else if ( Q_stricmp( cmd, "setspawnpt" ) == 0 ) {
 		Cmd_SetSpawnPoint_f( ent );
 	} else if ( Q_stricmp( cmd, "setsniperspot" ) == 0 ) {
 		Cmd_SetSniperSpot_f( ent );
-	} else if ( G_commandCheck( ent, cmd, qfalse ) ) {
-		return;
+	}*/
 
-	} else {
-		trap_SendServerCommand( clientNum, va( "print \"unknown cmd[lof] %s\n\"", cmd ) );
+	// Nico, flood protection
+	for (i = 0 ; i < sizeof(floodProtectedCommands) / sizeof(floodProtectedCommands[0]) ; ++i) {
+		if (!Q_stricmp(cmd, floodProtectedCommands[i].cmd)) {
+			if (floodProtectedCommands[i].isProtected && ClientIsFlooding(ent)) {
+				CP(va("print \"^1Spam Protection: ^7dropping %s\n\"", cmd));
+			} else {
+				floodProtectedCommands[i].function(ent);
+			}
+			return;
+		}
 	}
+		
+	if ( G_commandCheck( ent, cmd ) ) {
+		return;
+	}
+	
+	CP(va("print \"Unknown command %s^7.\n\"", cmd));
 }
 
+/*
+ * Nico, anti-flood from ETpub
+ * Returns qtrue if user requested too many commands in past time, otherwise
+ * qfalse.
+ */
+qboolean ClientIsFlooding(gentity_t *ent) {
+	if (!ent->client || !g_floodProtect.integer) {
+		return qfalse;
+	}
+
+	if (level.time - ent->client->sess.thresholdTime > 30000) {
+		ent->client->sess.thresholdTime = level.time;
+	}
+
+	if (level.time < ent->client->sess.nextReliableTime) {
+		return qtrue;
+	}
+
+	if (level.time - ent->client->sess.thresholdTime <= 30000
+			&& ent->client->sess.numReliableCmds > g_floodThreshold.integer) {
+		ent->client->sess.nextReliableTime = level.time + g_floodWait.integer;
+		return qtrue;
+	}
+
+	ent->client->sess.numReliableCmds++;	
+	// delay between each command (values >0 break batch of commands)
+	ent->client->sess.nextReliableTime = level.time + 0;
+
+	return qfalse;
+}
 

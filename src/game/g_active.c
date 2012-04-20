@@ -1531,6 +1531,17 @@ while a slow client may have multiple ClientEndFrame between ClientThink.
 void ClientEndFrame( gentity_t *ent ) {
 	int i;
 
+	// Nico, flood protection
+	if (level.time >= (ent->client->sess.nextReliableTime + 1000) &&
+		ent->client->sess.numReliableCmds) {
+		ent->client->sess.numReliableCmds--;
+		
+		// Reset the threshold because they were good for a bit
+		if (!ent->client->sess.numReliableCmds) {
+			ent->client->sess.thresholdTime = 0;
+		}
+	}
+
 
 	// used for informing of speclocked teams.
 	// Zero out here and set only for certain specs
