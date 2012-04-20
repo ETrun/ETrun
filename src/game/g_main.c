@@ -360,6 +360,9 @@ vmCvar_t g_floodProtect;
 vmCvar_t g_floodThreshold;
 vmCvar_t g_floodWait;
 
+// Name changes limit
+vmCvar_t g_maxNameChanges;
+
 // Nico, end of ETrun cvars
 
 
@@ -682,6 +685,9 @@ cvarTable_t gameCvarTable[] = {
 	{ &g_floodProtect, "g_floodProtect", "1", 0 },
 	{ &g_floodThreshold, "g_floodThreshold", "8", 0 },
 	{ &g_floodWait, "g_floodWait", "768", 0 },
+
+	// Name changes limit
+	{ &g_maxNameChanges, "g_maxNameChanges", "3", 0},
 
 	// Nico, end of ETrun cvars
 };

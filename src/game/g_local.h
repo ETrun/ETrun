@@ -767,6 +767,9 @@ typedef struct {
 	// Nico, max FPS
 	int maxFPS;
 
+	// Nico, name changes limit
+	int	nameChanges;
+
 } clientPersistant_t;
 
 typedef struct {
@@ -2013,6 +2016,9 @@ extern vmCvar_t	isTimerun;
 extern vmCvar_t g_floodProtect;
 extern vmCvar_t g_floodThreshold;
 extern vmCvar_t g_floodWait;
+
+// Name changes limit
+extern vmCvar_t g_maxNameChanges;
 
 // Nico, end of ETrun cvars
 

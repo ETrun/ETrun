@@ -1074,12 +1074,6 @@ static void ClientCleanName( const char *in, char *out, int outSize ) {
 				break;
 			}
 
-			// don't allow black in a name, period
-/*			if( ColorIndex(*in) == 0 ) {
-				in++;
-				continue;
-			}
-*/
 			// make sure room in dest for both chars
 			if ( len > outSize - 2 ) {
 				break;
@@ -1191,7 +1185,7 @@ void ClientUserinfoChanged( int clientNum ) {
 
 	// Nico, flood protection
 	if (ClientIsFlooding(ent)) {
-		G_Printf("Dropping client %d: flooded userinfo\n", clientNum); 
+		G_LogPrintf("Dropping client %d: flooded userinfo\n", clientNum); 
 		trap_DropClient(clientNum, "^1Flooded userinfo" , 0);
 		return;
 	}
@@ -1208,19 +1202,19 @@ void ClientUserinfoChanged( int clientNum ) {
 	// Nico, check userinfo length (from combinedfixes)
 	len = strlen(userinfo);
 	if (len > MAX_INFO_STRING - 44) {
-		G_Printf("Dropping client %d: oversized userinfo\n", clientNum); 
+		G_LogPrintf("Dropping client %d: oversized userinfo\n", clientNum); 
 		trap_DropClient(clientNum, "^1Oversized userinfo" , 0);
 	}
 
 	// Nico, check userinfo leading backslash (from combinedfixes)
 	if (userinfo[0] != '\\') {
-		G_Printf("Dropping client %d: malformed userinfo (missing leading backslash)\n", clientNum); 
+		G_LogPrintf("Dropping client %d: malformed userinfo (missing leading backslash)\n", clientNum); 
 		trap_DropClient(clientNum, "^1Malformed userinfo" , 0);
 	}
 
 	// Nico, check userinfo trailing backslash (from combinedfixes)
 	if (len > 0 && userinfo[len - 1] == '\\') {
-		G_Printf("Dropping client %d: malformed userinfo (trailing backslash)\n", clientNum); 
+		G_LogPrintf("Dropping client %d: malformed userinfo (trailing backslash)\n", clientNum); 
 		trap_DropClient(clientNum, "^1Malformed userinfo" , 0);
 	}
 
@@ -1231,21 +1225,21 @@ void ClientUserinfoChanged( int clientNum ) {
 		}
 	}
 	if (count % 2 != 0) {
-		G_Printf("Dropping client %d: malformed userinfo (odd number of backslash)\n", clientNum); 
+		G_LogPrintf("Dropping client %d: malformed userinfo (odd number of backslash)\n", clientNum); 
 		trap_DropClient(clientNum, "^1Malformed userinfo" , 0);
 	}
 
 	// Nico, make sure client ip is not empty or malformed (from combinedfixes)
 	ip = Info_ValueForKey( userinfo, "ip" );
 	if (!strcmp(ip, "") || getParsedIp(ip) == NULL) {
-		G_Printf("Dropping client %d: malformed userinfo (empty or malformed ip)\n", clientNum); 
+		G_LogPrintf("Dropping client %d: malformed userinfo (empty or malformed ip)\n", clientNum); 
 		trap_DropClient(clientNum, "^1Malformed userinfo" , 0);
 	}
 
 	// Nico, make sure client name is not empty (from combinedfixes)
 	name = Info_ValueForKey( userinfo, "name" );
 	if (!strcmp(name, "")) {
-		G_Printf("Dropping client %d: malformed userinfo (empty name)\n", clientNum); 
+		G_LogPrintf("Dropping client %d: malformed userinfo (empty name)\n", clientNum); 
 		trap_DropClient(clientNum, "^1Malformed userinfo" , 0);
 	}
 
@@ -1300,8 +1294,21 @@ void ClientUserinfoChanged( int clientNum ) {
 
 	if ( client->pers.connected == CON_CONNECTED ) {
 		if ( strcmp( oldname, client->pers.netname ) ) {
-			trap_SendServerCommand( -1, va( "print \"[lof]%s" S_COLOR_WHITE " [lon]renamed to[lof] %s\n\"", oldname,
+
+			// Nico, name changes limit
+			if (g_maxNameChanges.integer > -1 && client->pers.nameChanges >= g_maxNameChanges.integer) {
+				Q_strncpyz( client->pers.netname, oldname, sizeof( client->pers.netname ) );
+				Info_SetValueForKey( userinfo, "name", oldname);
+				trap_SetUserinfo( clientNum, userinfo );
+				CPx(clientNum, "print \"^1You had too many namechanges\n\"");
+				G_LogPrintf("Client %d name change refused\n", clientNum); 
+				return;
+			} else {
+				client->pers.nameChanges++;
+				trap_SendServerCommand( -1, va( "print \"[lof]%s" S_COLOR_WHITE " [lon]renamed to[lof] %s\n\"", oldname,
 											client->pers.netname ) );
+			}
+
 		}
 	}
 
