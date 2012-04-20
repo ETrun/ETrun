@@ -7,15 +7,16 @@ ETrun is currently under development.
 
 **Visit www.timeruns.net for more information.**
 
-Features
---------
+Key features
+------------
 
-* Instant players spawn
-* No warmup, no debriefing, no timelimit
-* Unlimited stamina
 * Many bugfixes and exploit fixes
+* Support of +forward turning
+* Doublejump
+* Timer reset fix
+* Velocity jumppads support
+* Fixed kill & hurt triggers
 * Introduced ETrun cvars (see https://github.com/boutetnico/ETrun/wiki/ETrun-cvars)
-* Ghost players (no collision between players)
 
 Bootstrapping
 -------------
