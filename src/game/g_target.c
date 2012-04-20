@@ -1273,8 +1273,7 @@ void SP_target_rumble( gentity_t *self ) {
  * Creates a new timerun if there isn't any timerun with such name.
  * source: TJMod
  */
-static int GetTimerunNum(char *name)
-{
+static int GetTimerunNum(char *name) {
 	char	**cur = level.timerunsNames;
 
 	while (*cur) {
@@ -1407,6 +1406,11 @@ void notify_timerun_stop(gentity_t *activator, int finishTime) {
 	gentity_t *o = NULL;
 	int timerunNum = 0;
 
+	// Nico, check if timerun is active
+	if (!activator->client->timerunActive) {
+		return;
+	}
+
 	timerunNum = GetTimerunNum(activator->client->currentTimerun);
 
 	// Nico, notify the client itself first
@@ -1462,6 +1466,7 @@ void target_stoptimer_use(gentity_t *self, gentity_t *other, gentity_t *activato
 
 	timerunNum = GetTimerunNum(client->currentTimerun);
 
+	// Nico, #todo
 	// if (client->ps.ping > 400) {
 	//	client->timerunActive = qfalse;
 	//	return;
@@ -1559,7 +1564,7 @@ void target_stoptimer_use(gentity_t *self, gentity_t *other, gentity_t *activato
 void SP_target_stoptimer(gentity_t *ent) {
 	char *t = NULL;
 
-	// Nico, do we need to bypass wait on stoptimer too?
+	// Nico, #todo, do we need to bypass wait on stoptimer too?
 
 	G_SpawnString("name", "default", &t);
 	ent->timerunName = G_NewString(t);
@@ -1578,6 +1583,11 @@ static void notify_timerun_check(gentity_t *activator, int deltaTime, int time, 
 	int i = 0;
 	gentity_t *o = NULL;
 	int timerunNum = 0;
+
+	// Nico, check if timerun is active
+	if (!activator->client->timerunActive) {
+		return;
+	}
 
 	timerunNum = GetTimerunNum(activator->client->currentTimerun);
 
@@ -1654,7 +1664,7 @@ void SP_target_checkpoint(gentity_t *ent) {
 	char	*t = NULL;
 	int		timerunNum = 0;
 
-	// Nico, do we need to bypass wait on stoptimer too?
+	// Nico, #todo, do we need to bypass wait on stoptimer too?
 
 	G_SpawnString("name", "default", &t);
 	ent->timerunName = G_NewString(t);
