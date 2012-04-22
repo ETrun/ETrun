@@ -22,7 +22,6 @@ libcgame_la_SOURCES = \
 ../game/q_shared.c \
 ../ui/ui_shared.c cg_atmospheric.c \
 cg_character.c \
-cg_commandmap.c\
 cg_consolecmds.c \
 cg_draw.c \
 cg_drawtools.c \

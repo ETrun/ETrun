@@ -175,6 +175,7 @@ static void CG_Obituary( entityState_t *ent ) {
 	}
 
 	// check for kill messages from the current clientNum
+	/* Nico, removed obituary messages
 	if ( attacker == cg.snap->ps.clientNum ) {
 		char    *s;
 
@@ -187,10 +188,10 @@ static void CG_Obituary( entityState_t *ent ) {
 		} else {
 			s = va( "%s %s", CG_TranslateString( "You killed" ), targetName );
 		}
-		// Nico, removed obituary messages
+		
 		// CG_PriorityCenterPrint( s, SCREEN_HEIGHT * 0.75, BIGCHAR_WIDTH * 0.6, 1 );
 		// print the text message as well
-	}
+	}*/
 
 	// check for double client messages
 	if ( !ca ) {

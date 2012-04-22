@@ -2975,9 +2975,6 @@ ClientCommand
 void ClientCommand( int clientNum ) {
 	gentity_t *ent;
 	char cmd[MAX_TOKEN_CHARS];
-
-	// Nico, flood protection
-	qboolean flooding = qfalse;
 	int i = 0;
 
 	ent = g_entities + clientNum;

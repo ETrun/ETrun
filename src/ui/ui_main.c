@@ -4975,9 +4975,9 @@ UI_MapCountByGameType
 ==================
 */
 static int UI_MapCountByGameType( qboolean singlePlayer ) {
-	int i, c, game;
+	int i, c;// Nico, unused, game;
 	c = 0;
-	game = singlePlayer ? uiInfo.gameTypes[ui_gameType.integer].gtEnum : ui_netGameType.integer;
+	// game = singlePlayer ? uiInfo.gameTypes[ui_gameType.integer].gtEnum : ui_netGameType.integer;
 
 	/* Nico, removed gametypes
 	if ( game == GT_WOLF_CAMPAIGN ) {

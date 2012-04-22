@@ -1449,7 +1449,6 @@ void target_stoptimer_use(gentity_t *self, gentity_t *other, gentity_t *activato
 	int			delta, dmin, dsec, dmilli;
 	int			type = 0; // default: no record
 	int			time;
-	float		oldNewDiff;
 	gclient_t	*client;
 	int			timerunNum;
 
@@ -1519,33 +1518,6 @@ void target_stoptimer_use(gentity_t *self, gentity_t *other, gentity_t *activato
 				// Console print to all players
 				AP(va("print \"^fTimerun:^7 %s^7, ^fPlayer:^7 %s^7, ^fTime: ^g%02d:%02d.%03d\n\"",
 					client->currentTimerun, client->pers.netname, min, sec, milli));
-
-				// Banner print to all players
-				if (/*client->pers.bpTimes && */(!level.timerunRecordsTimes[timerunNum] || time < level.timerunRecordsTimes[timerunNum]))
-				{
-					char nn[16], on[16];
-					Q_strncpyz(nn, client->pers.netname, sizeof(nn));
-					Q_strncpyz(on, level.timerunRecordsPlayers[timerunNum], sizeof(on));
-		
-					// Get old time etc
-					if (!level.timerunRecordsTimes[timerunNum])
-						oldNewDiff = 0;
-					else 
-						oldNewDiff = level.timerunRecordsTimes[timerunNum] - time;
-
-					/*if (!oldNewDiff)
-						AP(va("bp \"^z%s ^z- %s\n^7%s ^7set ^g%02d:%02d.%03d ^7as a new record\n\"", 
-							level.rawmapname, client->currentTimerun, client->pers.netname, min, sec, milli));
-					else if (!Q_stricmp(on, nn))
-						AP(va("bp \"^z%s ^z- %s\n^7%s ^7beat his old time by ^g%.3f ^7seconds (%02d:%02d.%03d)\n\"", 
-							level.rawmapname, client->currentTimerun, nn, oldNewDiff / 1000, min, sec, milli));
-					else
-						AP(va("bp \"^z%s ^z- %s\n^7%s ^7beat %s^7's record by ^g%.3f ^7seconds (%02d:%02d.%03d)\n\"", 
-							level.rawmapname, client->currentTimerun, nn, on, oldNewDiff / 1000, min, sec, milli));*/
-
-					Q_strncpyz(level.timerunRecordsPlayers[timerunNum], client->pers.netname, sizeof(level.timerunRecordsPlayers[timerunNum]));
-					level.timerunRecordsTimes[timerunNum] = time;
-				}
 			}
 			
 			//trap_SendServerCommand(activator - g_entities, va("runSave %s_%02d-%02d-%03d", client->currentTimerun, min, sec, milli));
@@ -1582,14 +1554,13 @@ void SP_target_stoptimer(gentity_t *ent) {
 static void notify_timerun_check(gentity_t *activator, int deltaTime, int time, int isFaster) {
 	int i = 0;
 	gentity_t *o = NULL;
-	int timerunNum = 0;
 
 	// Nico, check if timerun is active
 	if (!activator->client->timerunActive) {
 		return;
 	}
 
-	timerunNum = GetTimerunNum(activator->client->currentTimerun);
+	//timerunNum = GetTimerunNum(activator->client->currentTimerun);
 
 	// Nico, notify the client itself first
 	G_Printf("Sending a timerun_check to client %d\n", activator - g_entities);

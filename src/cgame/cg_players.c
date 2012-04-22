@@ -1989,6 +1989,7 @@ void CG_Player( centity_t *cent ) {
 	}
 
 	if ( cent->currentState.eType != ET_CORPSE && !( cent->currentState.eFlags & EF_DEAD ) ) {
+		/* Nico, removed hud head animation
 		hudHeadAnimNumber_t anim;
 
 		if ( cent->pe.weaponFireTime > 500 ) {
@@ -1998,8 +1999,7 @@ void CG_Player( centity_t *cent ) {
 		} else {
 			anim = HD_IDLE1;
 		}
-
-		/* Nico, removed hud head animation
+		
 		CG_HudHeadAnimation( character, &cent->pe.head, &head.oldframe, &head.frame, &head.backlerp, anim );*/
 	} else {
 		head.frame = 0;
