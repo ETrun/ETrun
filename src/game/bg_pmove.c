@@ -82,7 +82,7 @@ float pm_spectatorfriction = 5.0f;
 const float pm_aircontrol = 150.0f; // aircontrol multiplier (intertia velocity to forward velocity conversion)
 const float pm_strafeaccelerate = 70; // forward acceleration when strafe bunny hopping
 const float pm_wishspeed = 30;
-const float pm_airstopaccelerate = 2.5f;// Nico, this is CPM value (Racesow value is 2.0f)
+const float pm_airstopaccelerate = 2.0f;// Nico, CPM value: 2.5f, Racesow value: 2.0f
 
 int c_pmove = 0;
 
