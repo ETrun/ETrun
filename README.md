@@ -14,7 +14,7 @@ Key features
 * Support of +forward turning
 * Doublejump
 * Timer reset fix
-* Velocity jumppads support
+* Velocity jumppads & location jumppads support
 * Fixed kill & hurt triggers
 * Introduced ETrun cvars (see https://github.com/boutetnico/ETrun/wiki/ETrun-cvars)
 
