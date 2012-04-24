@@ -202,7 +202,7 @@ trigger_push
 
 void trigger_push_touch( gentity_t *self, gentity_t *other, trace_t *trace ) {
 
-	// Nico, jumpads support
+	// Nico, jumppads support
 	if (!(g_enableMapEntities.integer & MAP_JUMPPADS) || !other->client ) {
 		return;
 	}
@@ -1569,7 +1569,7 @@ void SP_trigger_concussive_dust( gentity_t *self ) {
 // Nico, velocity jumppads support
 
 void trigger_push_velocity_touch(gentity_t *self, gentity_t *other, trace_t *trace) {
-	// Nico, jumpads support
+	// Nico, jumppads support
 	if (!(g_enableMapEntities.integer & MAP_VELOCITY_JUMPPADS) || !other->client ) {
 		return;
 	}	

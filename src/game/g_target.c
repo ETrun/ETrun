@@ -748,22 +748,14 @@ Closest target_location in sight used for the location, if none
 in site, closest in distance
 */
 void SP_target_location( gentity_t *self ) {
-	G_Printf( S_COLOR_YELLOW "WARNING: target_location entities are now obsolete. Please remove ASAP\n" );
-
-	G_FreeEntity( self );
+	
+	// Nico, location jumppads support
+	if (!(g_enableMapEntities.integer & MAP_LOCATION_JUMPPADS)) {
+		G_FreeEntity(self);
+	}
 }
 
 //---- (SA) Wolf targets
-
-/*
-==============
-Use_Target_Autosave
-	save game for emergency backup or convienience
-==============
-*/
-/*void Use_Target_Autosave( gentity_t *ent, gentity_t *other, gentity_t *activator ) {
-	G_SaveGame("autosave.sav");
-}*/
 
 /*
 ==============
@@ -777,10 +769,7 @@ void Use_Target_Counter( gentity_t *ent, gentity_t *other, gentity_t *activator 
 
 	ent->count -= 1;    // dec count
 
-//	G_Printf("count at: %d\n", ent->count);
-
 	if ( !ent->count ) {   // specified count is now hit
-//		G_Printf("firing!!\n");
 		G_UseTargets( ent, other );
 	}
 }
@@ -795,7 +784,6 @@ void Use_Target_Lock( gentity_t *ent, gentity_t *other, gentity_t *activator ) {
 
 	while ( ( t = G_Find( t, FOFS( targetname ), ent->target ) ) != NULL )
 	{
-//		G_Printf("target_lock locking entity with key: %d\n", ent->count);
 		t->key = ent->key;
 	}
 
@@ -905,43 +893,6 @@ end_size	= 96 default
 wait		= default is 50 the rate at which it will travel up
 shader		= custom shader to use for particles
 */
-
-/*void smoke_think (gentity_t *ent)
-{
-	gentity_t	*tent;
-
-	ent->nextthink = level.time + ent->delay;
-
-	if (!(ent->spawnflags & 4))
-		return;
-
-	if (ent->health)
-	{
-		ent->health --;
-		if (!ent->health)
-		{
-			ent->think = G_FreeEntity;
-			ent->nextthink = level.time + FRAMETIME;
-		}
-	}
-
-	tent = G_TempEntity (ent->r.currentOrigin, EV_SMOKE);
-	VectorCopy (ent->r.currentOrigin, tent->s.origin);
-	tent->s.time = ent->speed;
-	tent->s.time2 = ent->duration;
-	tent->s.density = ent->s.density;
-
-	// this is used to set the size of the smoke particle
-	tent->s.angles2[0] = ent->start_size;
-	tent->s.angles2[1] = ent->end_size;
-	tent->s.angles2[2] = ent->wait;
-
-	VectorCopy (ent->pos3, tent->s.origin2);
-
-	if (ent->s.frame) // denotes reverse gravity effect
-		tent->s.frame = 1;
-
-}*/
 
 void smoke_think( gentity_t *ent ) {
 	ent->nextthink = level.time + ent->s.constantLight;

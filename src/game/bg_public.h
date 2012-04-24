@@ -363,7 +363,7 @@ extern const unsigned int aReinfSeeds[MAX_REINFSEEDS];
 #define CS_CUSTMOTD                     ( CS_FIRETEAMS +            MAX_FIRETEAMS               )
 #define CS_STRINGS                      ( CS_CUSTMOTD +             MAX_MOTDLINES               )
 #define CS_TIMERUNS						( CS_STRINGS +				MAX_CSSTRINGS				)// Nico, timerun configstring
-#define CS_MAX                          ( CS_STRINGS +              MAX_CSSTRINGS               )
+#define CS_MAX                          ( CS_TIMERUNS +             MAX_CSSTRINGS               )
 
 #if ( CS_MAX ) > MAX_CONFIGSTRINGS
 #error overflow: (CS_MAX) > MAX_CONFIGSTRINGS

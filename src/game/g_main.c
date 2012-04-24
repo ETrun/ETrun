@@ -669,11 +669,11 @@ cvarTable_t gameCvarTable[] = {
 	{ &g_maxConnsPerIP, "g_maxConnsPerIP", "3", CVAR_SERVERINFO | CVAR_ARCHIVE},
 
 	// Game physics (set serverside but sent to client for prediction)
-	{ &physics, "physics", "0", CVAR_SERVERINFO | CVAR_ARCHIVE | CVAR_LATCH | CVAR_SYSTEMINFO},
+	{ &physics, "physics", "15", CVAR_SERVERINFO | CVAR_ARCHIVE | CVAR_LATCH | CVAR_SYSTEMINFO},
 
 	// Enable certain map entities
 	// 3 enabled both kill entities and hurt entities
-	{ &g_enableMapEntities, "g_enableMapEntities", "15", CVAR_SERVERINFO | CVAR_ARCHIVE},
+	{ &g_enableMapEntities, "g_enableMapEntities", "31", CVAR_SERVERINFO | CVAR_ARCHIVE | CVAR_LATCH},
 
 	// Force timer reset, i.e. bypass "wait 9999" on start triggers
 	{ &g_forceTimerReset, "g_forceTimerReset", "1", CVAR_SERVERINFO | CVAR_ARCHIVE | CVAR_LATCH},

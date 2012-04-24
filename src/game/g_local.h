@@ -2654,3 +2654,4 @@ qboolean G_LandmineSnapshotCallback( int entityNum, int clientNum );*/
 #define MAP_HURT_ENTITIES		2
 #define MAP_JUMPPADS			4
 #define MAP_VELOCITY_JUMPPADS	8
+#define MAP_LOCATION_JUMPPADS	16
