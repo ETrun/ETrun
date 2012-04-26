@@ -88,7 +88,9 @@ static void insert_sort(s_timerunScores *tab, int size) {
 static char *WM_ETrun_coloredPing(int ping) {
 	char *s;
 
-	if (ping <= GOOD_PING_LIMIT) {
+	if (ping == -1) {
+		s = va("-1");
+	} else if (ping <= GOOD_PING_LIMIT) {
 		s = va("^2%i", ping);
 	} else if (ping <= MEDIUM_PING_LIMIT) {
 		s = va("^3%i", ping);
@@ -180,7 +182,7 @@ static void WM_ETrun_DrawPlayers(int *x, int *y, int width, float fade, fontInfo
 		*y += 4;
 
 		// Draw background (highlight your line)
-		CG_FillRect(*x, *y, INFO_TOTAL_WIDTH, INFO_LINE_HEIGHT, orderedScores[i].clientNum == cg.snap->ps.clientNum ? clrUiYou : clrUiBack);
+		CG_FillRect(*x, *y, INFO_TOTAL_WIDTH, INFO_LINE_HEIGHT, orderedScores[i].clientNum == cg.clientNum ? clrUiYou : clrUiBack);
 		CG_DrawRect_FixedBorder(*x, *y, INFO_TOTAL_WIDTH, INFO_LINE_HEIGHT, 1, colorBlack);
 		*y += INFO_LINE_HEIGHT - 2;
 
@@ -280,7 +282,7 @@ static void WM_ETrun_DrawSpectators(int *x, int *y, int width, float fade, fontI
 		*y += 4;
 
 		// Draw background (highlight your line)
-		CG_FillRect(*x, *y, INFO_SPEC_TOTAL_WIDTH, INFO_LINE_HEIGHT, orderedScores[i].clientNum == cg.snap->ps.clientNum ? clrUiYou : clrUiBack);
+		CG_FillRect(*x, *y, INFO_SPEC_TOTAL_WIDTH, INFO_LINE_HEIGHT, orderedScores[i].clientNum == cg.clientNum ? clrUiYou : clrUiBack);
 		CG_DrawRect_FixedBorder(*x, *y, INFO_SPEC_TOTAL_WIDTH, INFO_LINE_HEIGHT, 1, colorBlack);
 		*y += INFO_LINE_HEIGHT - 2;
 
