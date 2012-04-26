@@ -567,6 +567,13 @@ typedef struct {
 	unsigned int kills;
 } weapon_stat_t;*/
 
+// Nico, position saving structure
+#define MAX_SAVED_POSITIONS 6 // per team
+typedef struct {
+	qboolean valid;
+	vec3_t origin;
+	vec3_t vangles;
+} save_position_t;
 
 // client data that stays across multiple levels or tournament restarts
 // this is achieved by writing all the data to cvar strings at game shutdown
@@ -649,6 +656,10 @@ typedef struct {
 	int nextReliableTime;
 	int numReliableCmds;
 	int thresholdTime;
+
+	// Nico, save/load
+	save_position_t	alliesSaves[MAX_SAVED_POSITIONS];
+	save_position_t	axisSaves[MAX_SAVED_POSITIONS];
 
 } clientSession_t;
 
@@ -2018,6 +2029,9 @@ extern vmCvar_t g_floodWait;
 
 // Name changes limit
 extern vmCvar_t g_maxNameChanges;
+
+// Save/load
+extern vmCvar_t g_saveLoad;
 
 // Nico, end of ETrun cvars
 

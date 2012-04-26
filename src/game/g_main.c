@@ -363,6 +363,9 @@ vmCvar_t g_floodWait;
 // Name changes limit
 vmCvar_t g_maxNameChanges;
 
+// Save/load
+vmCvar_t g_saveLoad;
+
 // Nico, end of ETrun cvars
 
 
@@ -688,6 +691,9 @@ cvarTable_t gameCvarTable[] = {
 
 	// Name changes limit
 	{ &g_maxNameChanges, "g_maxNameChanges", "3", 0},
+
+	// Save/load
+	{ &g_saveLoad, "g_saveLoad", "1", CVAR_ARCHIVE},
 
 	// Nico, end of ETrun cvars
 };

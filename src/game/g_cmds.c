@@ -2956,6 +2956,147 @@ void Cmd_UnIgnore_f( gentity_t* ent ) {
 	}
 }
 
+void Cmd_Load_f(gentity_t *ent)
+{
+	char cmd[MAX_TOKEN_CHARS];
+	int argc;
+	int posNum;
+	save_position_t *pos;
+
+	if (!g_saveLoad.integer) {
+		CP("print \"Save/load is not enabled on this server.\n\"");
+		return;
+	}
+
+	// get save slot (do this first so players can get usage message even if
+	// they are not allowed to use this command)
+	argc = trap_Argc();
+	if (argc == 1) {
+		posNum = 0;
+	} else if (argc == 2) {
+		trap_Argv(1, cmd, sizeof(cmd));		
+		if ((posNum = atoi(cmd)) < 0 || posNum >= MAX_SAVED_POSITIONS) {
+			CP("print \"Invalid position!\n\"");
+			return;
+		}
+	} else {
+		CP("print \"usage: load [position]\n\"");
+		return;
+	}
+
+	if (ent->client->sess.sessionTeam == TEAM_SPECTATOR) {
+		CP("cp \"You can not load as a spectator!\n\"");
+		return;
+	}
+
+	if (ent->client->ps.eFlags & EF_PRONE) {
+		CP("cp \"You can not load while proning!\n\"");
+		return;
+	}
+
+	if (ent->client->sess.sessionTeam == TEAM_ALLIES) {
+		pos = ent->client->sess.alliesSaves + posNum;
+	} else {
+		pos = ent->client->sess.axisSaves + posNum;
+	}
+
+	if (pos->valid) {
+		if (ent->client->timerunActive) {
+			// Nico, notify the client and its spectators the timerun has stopped
+			notify_timerun_stop(ent, 0);
+
+			ent->client->timerunActive = qfalse;
+		}
+
+		ent->client->nextTimerunStartAllowed = ent->client->ps.commandTime;
+		VectorCopy(pos->origin, ent->client->ps.origin);
+
+		SetClientViewAngle(ent, pos->vangles);
+
+		VectorClear(ent->client->ps.velocity);
+
+		if (ent->client->ps.stats[STAT_HEALTH] < 100 && ent->client->ps.stats[STAT_HEALTH] > 0) {
+			ent->health = 100;
+		}
+
+		if (level.rocketRun && ent->client->ps.weapon == WP_PANZERFAUST) {
+			ent->client->ps.ammoclip[WP_PANZERFAUST] = level.rocketRun;
+		}
+	} else {
+		CP("cp \"Use save first!\n\"");
+	}
+}
+
+void Cmd_Save_f(gentity_t *ent)
+{
+	char cmd[MAX_TOKEN_CHARS];
+	int argc;
+	int posNum;
+	save_position_t *pos;
+
+	if (!g_saveLoad.integer) {
+		CP("print \"Save/load is not enabled on this server.\n\"");
+		return;
+	}
+
+	// get save slot (do this first so players can get usage message even if
+	// they are not allowed to use this command)
+	argc = trap_Argc();
+	if (argc == 1) {
+		posNum = 0;
+	} else if (argc == 2) {
+		trap_Argv(1, cmd, sizeof(cmd));		
+		if ((posNum = atoi(cmd)) < 0 || posNum >= MAX_SAVED_POSITIONS) {
+			CP("print \"Invalid position!\n\"");
+			return;
+		}
+	} else {
+		CP("print \"usage: save [position]\n\"");
+		return;
+	}
+
+	if (ent->client->sess.sessionTeam == TEAM_SPECTATOR) {
+		CP("cp \"You can not save as a spectator!\n\"");
+		return;
+	}
+
+	if (ent->client->ps.groundEntityNum == ENTITYNUM_NONE) {
+		CP("cp \"You can not save while in the air!\n\"");
+		return;
+	}
+
+	if (VectorLengthSquared(ent->client->ps.velocity) > 0) {
+		CP("cp \"You can not save while moving!\n\"");
+		return;
+	}
+
+	if (ent->client->ps.eFlags & EF_PRONE || ent->client->ps.eFlags & EF_PRONE_MOVING){
+		CP("cp \"You can not save while proning!\n\"");
+		return;
+	}
+
+	if (ent->client->ps.eFlags & EF_CROUCHING){
+		CP("cp \"You can not save while crouching!\n\"");
+		return;
+	}
+
+
+	if (ent->client->sess.sessionTeam == TEAM_ALLIES) {
+		pos = ent->client->sess.alliesSaves + posNum;
+	} else {
+		pos = ent->client->sess.axisSaves + posNum;
+	}
+
+	VectorCopy(ent->client->ps.origin, pos->origin);
+	VectorCopy(ent->client->ps.viewangles, pos->vangles);
+	pos->valid = qtrue;
+
+	if (posNum == 0) {
+		CP("cp \"Saved\n\"");
+	} else {
+		CP(va("cp \"Saved ^z%d\n\"", posNum));
+	}
+}
 
 // Nico, defines commands that are flood protected or not
 static command_t floodProtectedCommands[] = {
@@ -2973,6 +3114,8 @@ static command_t floodProtectedCommands[] = {
 	{ "stopcamera",			qfalse,	Cmd_StopCamera_f },
 	{ "setcameraorigin",	qfalse,	Cmd_SetCameraOrigin_f },
 	{ "setspawnpt",			qfalse,	Cmd_SetSpawnPoint_f },
+	{ "load",				qfalse,	Cmd_Load_f },
+	{ "save",				qfalse,	Cmd_Save_f },
 };
 // Nico, end of defines commands that are flood protected or not
 

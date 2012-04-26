@@ -1180,4 +1180,8 @@ void CG_InitConsoleCommands( void ) {
 	trap_AddCommand ("vsay_team");
 	/* Nico, removed where command
 	trap_AddCommand ("where");*/
+
+	// Nico, save/load
+	trap_AddCommand("load");
+	trap_AddCommand("save");	
 }
