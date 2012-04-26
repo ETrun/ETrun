@@ -2189,7 +2189,7 @@ void G_InitGame( int levelTime, int randomSeed, int restart ) {
 	// Nico, is level a timerun?
 	if (!level.isTimerun) {
 		trap_Cvar_Set("isTimerun", "0");
-		G_Printf ("%s: No timerun found in map", GAME_VERSION);
+		G_Printf ("%s: No timerun found in map\n", GAME_VERSION);
 	} else {
 		trap_Cvar_Set("isTimerun", "1");
 	}

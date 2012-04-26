@@ -1976,6 +1976,11 @@ static void CG_DrawCrosshairNames( void ) {
 		return;
 	}
 
+	// Nico, only display valid clientnum players
+	if (cgs.clientinfo[cg.crosshairClientNum].clientNum != cg.crosshairClientNum) {
+		return;
+	}
+
 	s = va("%s", cgs.clientinfo[cg.crosshairClientNum].name);
 
 	w = CG_Text_Width_Ext( s, 0.2f, 0.2f, &cgs.media.limboFont1 ) / 2;
