@@ -895,7 +895,10 @@ typedef struct {
 	int numScores;
 	int selectedScore;
 	int teamScores[2];
-	int teamPlayers[TEAM_NUM_TEAMS];         // JPW NERVE for scoreboard
+
+	// Nico, unused
+	// int teamPlayers[TEAM_NUM_TEAMS];         // JPW NERVE for scoreboard
+	
 	score_t scores[MAX_CLIENTS];
 	qboolean showScores;
 	qboolean scoreBoardShowing;

@@ -4161,9 +4161,12 @@ static void CG_Draw2D( void ) {
 			}
 		}
 
-		CG_DrawVote();
+		// Nico, do not draw this if scoreboard is up
+		if (!cg.showScores) {
+			CG_DrawVote();
 
-		CG_DrawLagometer();
+			CG_DrawLagometer();
+		}
 	}
 
 	// don't draw center string if scoreboard is up
