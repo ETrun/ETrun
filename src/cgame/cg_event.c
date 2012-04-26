@@ -45,7 +45,10 @@ static void CG_Obituary( entityState_t *ent ) {
 	char        *message;
 	char        *message2;
 	char targetName[32];
-	char attackerName[32];
+
+	/* Nico, removed obituary messages
+	char attackerName[32];*/
+
 	clientInfo_t    *ci, *ca; // JPW NERVE ca = attacker
 	qhandle_t deathShader = cgs.media.pmImages[PM_DEATH];
 
@@ -194,6 +197,7 @@ static void CG_Obituary( entityState_t *ent ) {
 	}*/
 
 	// check for double client messages
+	/* Nico, removed obituary messages
 	if ( !ca ) {
 		strcpy( attackerName, "noname" );
 	} else {
@@ -204,7 +208,7 @@ static void CG_Obituary( entityState_t *ent ) {
 		if ( target == cg.snap->ps.clientNum ) {
 			Q_strncpyz( cg.killerName, attackerName, sizeof( cg.killerName ) );
 		}
-	}
+	}*/
 
 	if ( ca ) {
 		switch ( mod ) {

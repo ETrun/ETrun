@@ -1531,6 +1531,9 @@ while a slow client may have multiple ClientEndFrame between ClientThink.
 void ClientEndFrame( gentity_t *ent ) {
 	int i;
 
+	// Nico, timerun stats
+	float currentSpeed = 0;
+
 	// Nico, flood protection
 	if (level.time >= (ent->client->sess.nextReliableTime + 1000) &&
 		ent->client->sess.numReliableCmds) {
@@ -1542,7 +1545,16 @@ void ClientEndFrame( gentity_t *ent ) {
 		}
 	}
 
+	
+	// Nico, update timerun best speed
+	if (ent->client->timerunActive) {
+		currentSpeed = sqrt(ent->client->ps.velocity[0] * ent->client->ps.velocity[0] + ent->client->ps.velocity[1] * ent->client->ps.velocity[1]);
 
+		if (currentSpeed > ent->client->sess.timerunBestSpeed) {
+			ent->client->sess.timerunBestSpeed = currentSpeed;
+		}
+	}
+	
 	// used for informing of speclocked teams.
 	// Zero out here and set only for certain specs
 	ent->client->ps.powerups[PW_BLACKOUT] = 0;

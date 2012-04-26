@@ -531,6 +531,18 @@ typedef struct {
 	/* Nico, removed respawnLeft
 	int respawnsLeft;                   // NERVE - SMF*/
 
+	// Nico, timerun best time
+	int timerunBestTime;
+
+	// Nico, timerun best speed
+	int timerunBestSpeed;
+
+	// Nico, timerun status
+	int timerunStatus;
+
+	// Nico, followed client
+	int followedClient;
+
 } score_t;
 
 // each client has an associated clientInfo_t
@@ -888,7 +900,10 @@ typedef struct {
 	qboolean showScores;
 	qboolean scoreBoardShowing;
 	int scoreFadeTime;
-	char killerName[MAX_NAME_LENGTH];
+
+	/* Nico, removed obituary messages
+	char killerName[MAX_NAME_LENGTH];*/
+
 	char spectatorList[MAX_STRING_CHARS];                   // list of names
 	int spectatorLen;                                                           // length of list
 	float spectatorWidth;                                                   // width in device units
@@ -2133,6 +2148,20 @@ typedef struct {
 
 	qboolean initing;
 } cgs_t;
+
+// Nico, score structure for scoreboard
+typedef struct {
+	int		scoreId;
+	int		clientNum;
+	char	name[MAX_QPATH];
+	int		team;// 1 = axis, 2 = allies, 3 = spectator
+	int		timerunBestTime;
+	int		timerunBestSpeed;
+	int		timerunStatus;
+	int		ping;
+	int		followedClient;
+	char	followedClientName[MAX_QPATH];
+} s_timerunScores;
 
 //==============================================================================
 

@@ -66,25 +66,28 @@ static void CG_ParseScore( team_t team ) {
 	for ( j = 0; j < numScores; j++ ) {
 		i = cg.numScores;
 
-		cg.scores[i].client = atoi(         CG_Argv( offset + 0 + ( j * 5 ) ) );// Nico, *7 => *5
+		cg.scores[i].client = atoi(         CG_Argv( offset + 0 + ( j * 9 ) ) );// Nico, *7 => *9
 
-		/* Nico, removed score
-		cg.scores[i].score = atoi(          CG_Argv( offset + 1 + ( j * 7 ) ) );*/
+		cg.scores[i].ping = atoi(           CG_Argv( offset + 1 + ( j * 9 ) ) );// Nico, 2 => 1, *7 => *9
+		cg.scores[i].time = atoi(           CG_Argv( offset + 2 + ( j * 9 ) ) );// Nico, 3 => 2, *7 => *9
+		powerups = atoi(                    CG_Argv( offset + 3 + ( j * 9 ) ) );// Nico, 4 => 3, *7 => *9
+		cg.scores[i].playerClass = atoi(    CG_Argv( offset + 4 + ( j * 9 ) ) );// Nico, 5 => 4, *7 => *9
 
-		cg.scores[i].ping = atoi(           CG_Argv( offset + 1 + ( j * 5 ) ) );// Nico, 2 => 1, *7 => *5
-		cg.scores[i].time = atoi(           CG_Argv( offset + 2 + ( j * 5 ) ) );// Nico, 3 => 2, *7 => *5
-		powerups = atoi(                    CG_Argv( offset + 3 + ( j * 5 ) ) );// Nico, 4 => 3, *7 => *5
-		cg.scores[i].playerClass = atoi(    CG_Argv( offset + 4 + ( j * 5 ) ) );// Nico, 5 => 4, *7 => *5
+		// Nico, timerun best time
+		cg.scores[i].timerunBestTime = atoi(CG_Argv(offset + 5 + (j * 9)));
 
-		/* Nico, removed respawnLeft
-		cg.scores[i].respawnsLeft = atoi(   CG_Argv( offset + 6 + ( j * 7 ) ) );*/
+		// Nico, timerun best speed
+		cg.scores[i].timerunBestSpeed = atoi(CG_Argv(offset + 6 + (j * 9)));
+
+		// Nico, timerun status
+		cg.scores[i].timerunStatus = atoi(CG_Argv(offset + 7 + (j * 9)));
+
+		// Nico, followed client
+		cg.scores[i].followedClient = atoi(CG_Argv(offset + 8 + (j * 9)));
 
 		if ( cg.scores[i].client < 0 || cg.scores[i].client >= MAX_CLIENTS ) {
 			cg.scores[i].client = 0;
 		}
-
-		/* Nico, removed score
-		cgs.clientinfo[ cg.scores[i].client ].score = cg.scores[i].score;*/
 
 		cgs.clientinfo[ cg.scores[i].client ].powerups = powerups;
 

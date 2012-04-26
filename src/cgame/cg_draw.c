@@ -1594,6 +1594,11 @@ static void CG_DrawCrosshair( void ) {
 		return;
 	}
 
+	// Nico, don't draw crosshair if scoreboard is up
+	if (cg.showScores) {
+		return;
+	}
+
 	// using binoculars
 	if ( cg.zoomedBinoc ) {
 		CG_DrawBinocReticle();
@@ -1718,6 +1723,7 @@ static void CG_DrawCrosshair( void ) {
 	}
 }
 
+/* Nico, unused
 static void CG_DrawNoShootIcon( void ) {
 	float x, y, w, h;
 	float *color;
@@ -1748,7 +1754,7 @@ static void CG_DrawNoShootIcon( void ) {
 
 	// FIXME precache
 	trap_R_DrawStretchPic( x + 0.5 * ( cg.refdef_current->width - w ), y + 0.5 * ( cg.refdef_current->height - h ), w, h, 0, 0, 1, 1, cgs.media.friendShader );
-}
+}*/
 
 /*
 =================
@@ -1943,6 +1949,11 @@ static void CG_DrawCrosshairNames( void ) {
 	qboolean hitClient = qfalse;
 
 	if ( cg_drawCrosshair.integer < 0 ) {
+		return;
+	}
+
+	// Nico, don't draw crosshair names if scoreboard is up
+	if (cg.showScores) {
 		return;
 	}
 
@@ -4133,7 +4144,8 @@ static void CG_Draw2D( void ) {
 
 				CG_DrawCrosshairNames();
 
-				CG_DrawNoShootIcon();
+				// Nico, unused
+				// CG_DrawNoShootIcon();
 			}
 
 			CG_DrawTeamInfo();

@@ -2619,11 +2619,9 @@ void CG_LoadHudMenu() {
 	cgDC.getKeysForBinding = &trap_Key_KeysForBinding;
 	cgDC.keynumToStringBuf = &trap_Key_KeynumToStringBuf;   // NERVE - SMF
 	cgDC.translateString = &CG_TranslateString;             // NERVE - SMF
-	//cgDC.executeText = &trap_Cmd_ExecuteText;
 	cgDC.Error = &Com_Error;
 	cgDC.Print = &Com_Printf;
 	cgDC.ownerDrawWidth = &CG_OwnerDrawWidth;
-	//cgDC.Pause = &CG_Pause;
 	cgDC.registerSound = &trap_S_RegisterSound;
 	cgDC.startBackgroundTrack = &trap_S_StartBackgroundTrack;
 	cgDC.stopBackgroundTrack = &trap_S_StopBackgroundTrack;
@@ -2644,8 +2642,6 @@ void CG_LoadHudMenu() {
 	Init_Display( &cgDC );
 
 	Menu_Reset();
-
-//	CG_LoadMenus("ui/hud.txt");
 
 	CG_Text_SetActiveFont( 0 );
 }
