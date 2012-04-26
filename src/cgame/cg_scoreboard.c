@@ -108,7 +108,6 @@ static char *WM_ETrun_coloredPing(int ping) {
  */
 static void WM_ETrun_DrawHeader(int *x, int *y, int width, float fade, fontInfo_t *font) {
 	const char *s;
-	float scale = 0;
 
 	// ETrun x.x
 	s = GAME_VERSION_COLORED " " MOD_VERSION_COLORED " " MOD_STATUS_COLORED;
