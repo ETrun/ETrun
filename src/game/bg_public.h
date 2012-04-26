@@ -39,12 +39,23 @@ If you have questions concerning this license or the applicable additional terms
 #ifndef __BG_PUBLIC_H__
 #define __BG_PUBLIC_H__
 
-#define GAME_VERSION    "Enemy Territory"
+// Nico, changed to ETrun
+// #define GAME_VERSION    "Enemy Territory"
+
+// Nico, game version
+#define	GAME_VERSION			"ETrun"
+#define GAME_VERSION_COLORED	"^gET^drun"
+#define	MOD_VERSION				"1.0"
+#define	MOD_VERSION_COLORED		"^g1.0"
+#define	MOD_STATUS				"Alpha"
+#define	MOD_STATUS_COLORED		"^1Alpha"
+#define	MOD_URL					"http://www.timeruns.net"
+#define	SHORT_MOD_URL			"www.timeruns.net"
 
 #if defined( _DEBUG )
 	#define GAME_VERSION_DATED          GAME_VERSION
 #else
-	#define GAME_VERSION_DATED          ( GAME_VERSION ", " Q3_VERSION )
+	#define GAME_VERSION_DATED          (GAME_VERSION " " MOD_VERSION " " MOD_STATUS) // Nico( GAME_VERSION ", " Q3_VERSION )
 #endif
 
 //bani

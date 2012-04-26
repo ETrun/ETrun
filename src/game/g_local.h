@@ -36,9 +36,6 @@ If you have questions concerning this license or the applicable additional terms
 
 //==================================================================
 
-// the "gameversion" client command will print this plus compile date
-#define GAMEVERSION         "ETrun"
-
 /* Nico, removed gib
 #define BODY_QUEUE_SIZE     8*/
 
@@ -644,6 +641,8 @@ typedef struct {
 	int			timerunLastTime[MAX_TIMERUNS];
 	int			timerunBestTime[MAX_TIMERUNS];
 	int			timerunBestCheckpointTimes[MAX_TIMERUNS][MAX_TIMERUN_CHECKPOINTS];
+
+	int			timerunBestSpeed;
 	// Nico, end of client session timerun related
 
 	// Nico, flood protection
