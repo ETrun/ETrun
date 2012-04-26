@@ -272,6 +272,9 @@ void PM_StepSlideMove( qboolean gravity ) {
 	trace_t trace;
 	vec3_t up, down;
 
+	// Nico, no DJ if no enough XY speed
+	float XYspeed = 0;
+
 	VectorCopy( pm->ps->origin, start_o );
 	VectorCopy( pm->ps->velocity, start_v );
 
@@ -316,7 +319,10 @@ void PM_StepSlideMove( qboolean gravity ) {
 
 	// never step up when you still have up velocity
 	// Nico, add doublejump support
-	if ( !(pm->physics & PHYSICS_DOUBLEJUMP) && pm->ps->velocity[2] > 0 && ( trace.fraction == 1.0 || DotProduct( trace.plane.normal, up ) < 0.7 ) ) {
+	// Nico, no DJ if no enough XY speed (352ups: running speed)
+	XYspeed = sqrt(pm->ps->velocity[0] * pm->ps->velocity[0] + pm->ps->velocity[1] * pm->ps->velocity[1]);
+	if ( !(pm->physics & PHYSICS_DOUBLEJUMP && XYspeed > 352) && pm->ps->velocity[2] > 0 && ( trace.fraction == 1.0 || DotProduct( trace.plane.normal, up ) < 0.7 ) ) {
+		// Com_Printf("No dj XYspeed = %f\n", XYspeed);
 		return;
 	}
 
