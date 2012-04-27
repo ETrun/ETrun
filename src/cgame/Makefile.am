@@ -54,4 +54,5 @@ cg_syscalls.c \
 cg_trails.c \
 cg_view.c \
 cg_weapons.c \
-cg_window.c
+cg_window.c \
+cg_timerun_draw.c

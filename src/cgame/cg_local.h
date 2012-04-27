@@ -2590,7 +2590,13 @@ float CG_CalculateReinfTime_Float( qboolean menu );*/
 void CG_Fade( int r, int g, int b, int a, int time, int duration );
 const char* CG_PickupItemText( int item );
 
-
+// Nico
+// cg_timerun_draw.c
+//
+void CG_DrawCheckpoints(void);
+void CG_DrawSpeedMeter(void);
+// void CG_DrawOB(void);
+void CG_DrawTimer(void);
 
 //
 // cg_players.c

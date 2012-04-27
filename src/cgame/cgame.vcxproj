@@ -192,6 +192,7 @@
     <ClCompile Include="cg_sound.c" />
     <ClCompile Include="cg_spawn.c" />
     <ClCompile Include="cg_syscalls.c" />
+    <ClCompile Include="cg_timerun_draw.c" />
     <ClCompile Include="cg_trails.c" />
     <ClCompile Include="cg_view.c" />
     <ClCompile Include="cg_weapons.c" />
