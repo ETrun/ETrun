@@ -2030,9 +2030,6 @@ extern vmCvar_t g_floodWait;
 // Name changes limit
 extern vmCvar_t g_maxNameChanges;
 
-// Save/load
-extern vmCvar_t g_saveLoad;
-
 // Nico, end of ETrun cvars
 
 void    trap_Printf( const char *fmt );

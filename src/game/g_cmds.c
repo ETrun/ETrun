@@ -2963,11 +2963,6 @@ void Cmd_Load_f(gentity_t *ent)
 	int posNum;
 	save_position_t *pos;
 
-	if (!g_saveLoad.integer) {
-		CP("print \"Save/load is not enabled on this server.\n\"");
-		return;
-	}
-
 	// get save slot (do this first so players can get usage message even if
 	// they are not allowed to use this command)
 	argc = trap_Argc();
@@ -3033,11 +3028,6 @@ void Cmd_Save_f(gentity_t *ent)
 	int argc;
 	int posNum;
 	save_position_t *pos;
-
-	if (!g_saveLoad.integer) {
-		CP("print \"Save/load is not enabled on this server.\n\"");
-		return;
-	}
 
 	// get save slot (do this first so players can get usage message even if
 	// they are not allowed to use this command)
