@@ -531,7 +531,13 @@ qboolean ClientInactivityTimer( gclient_t *client ) {
 		if ( level.time > client->inactivityTime && client->inactivityWarning ) {
 			client->inactivityWarning = qfalse;
 			client->inactivityTime = level.time + 60 * 1000;
-			trap_DropClient( client - level.clients, "Dropped due to inactivity", 0 );
+
+			// Nico, move inactive player to spec instead of kicking them
+			// trap_DropClient( client - level.clients, "Dropped due to inactivity", 0 );
+			
+			AP(va("cpm \"%s ^7removed from teams due to inactivity! ^z(%i seconds) \n\"", client->pers.netname, g_inactivity.integer));
+			SetTeam( g_entities + (client - level.clients), "s", qtrue, -1, -1, qfalse );
+
 			return( qfalse );
 		}
 
@@ -1545,7 +1551,6 @@ void ClientEndFrame( gentity_t *ent ) {
 		}
 	}
 
-	
 	// Nico, update timerun best speed
 	if (ent->client->timerunActive) {
 		currentSpeed = sqrt(ent->client->ps.velocity[0] * ent->client->ps.velocity[0] + ent->client->ps.velocity[1] * ent->client->ps.velocity[1]);
@@ -1580,9 +1585,6 @@ void ClientEndFrame( gentity_t *ent ) {
 			 || i == PW_OPS_CLASS_2
 			 || i == PW_OPS_CLASS_3
 
-			 /* Nico, removed disguise stuff
-			 || i == PW_OPS_DISGUISED*/
-
 			 ) {
 
 			continue;
@@ -1599,14 +1601,6 @@ void ClientEndFrame( gentity_t *ent ) {
 			ent->client->ps.powerups[ i ] = 0;
 		}
 	}
-
-	/* Nico, removed XP
-	ent->client->ps.stats[STAT_XP] = 0;*/
-
-	/* Nico, removed skills
-	for ( i = 0; i < SK_NUM_SKILLS; i++ ) {
-		ent->client->ps.stats[STAT_XP] += ent->client->sess.skillpoints[i];
-	}*/
 
 	// OSP - If we're paused, make sure other timers stay in sync
 	//		--> Any new things in ET we should worry about?

@@ -480,7 +480,7 @@ cvarTable_t gameCvarTable[] = {
 	/* Nico, removed forcerespawn
 	{ &g_forcerespawn, "g_forcerespawn", "0", 0, 0, qtrue },*/
 
-	{ &g_inactivity, "g_inactivity", "0", 0, 0, qtrue },
+	{ &g_inactivity, "g_inactivity", "120", 0, 0, qtrue },// Nico, set to 120 secs (default was 0)
 	{ &g_debugMove, "g_debugMove", "0", 0, 0, qfalse },
 	{ &g_debugDamage, "g_debugDamage", "0", CVAR_CHEAT, 0, qfalse },
 	{ &g_debugAlloc, "g_debugAlloc", "0", 0, 0, qfalse },
@@ -3818,7 +3818,7 @@ Advances the non-player objects in the world
 */
 void G_RunFrame( int levelTime ) {
 	int i, msec;
-//	int			pass = 0;
+
 
 	// if we are waiting for the level to restart, do nothing
 	if ( level.restarted ) {
@@ -3890,20 +3890,4 @@ void G_RunFrame( int levelTime ) {
 	CheckCvars();
 
 	G_UpdateTeamMapData();
-
-	/* Nico, removed mines
-	if ( level.gameManager ) {
-		level.gameManager->s.otherEntityNum = MAX_TEAM_LANDMINES - G_CountTeamLandmines( TEAM_AXIS );
-		level.gameManager->s.otherEntityNum2 = MAX_TEAM_LANDMINES - G_CountTeamLandmines( TEAM_ALLIES );
-	}*/
 }
-
-// Is this a single player type game - sp or coop?
-/* Nico, removed gametypes
-qboolean G_IsSinglePlayerGame() {
-	if ( g_gametype.integer == GT_SINGLE_PLAYER || g_gametype.integer == GT_COOP ) {
-		return qtrue;
-	}
-
-	return qfalse;
-}*/

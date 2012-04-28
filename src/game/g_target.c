@@ -1251,7 +1251,7 @@ static void notify_timerun_start(gentity_t *activator) {
 	timerunNum = GetTimerunNum(activator->client->currentTimerun);
 
 	// Nico, notify the client itself first
-	G_Printf("Sending a timerun_start to client %d\n", activator - g_entities);
+	G_DPrintf("Sending a timerun_start to client %d\n", activator - g_entities);
 	trap_SendServerCommand(activator - g_entities, va("timerun_start %i %i", timerunNum, activator->client->timerunStartTime + 500));
 
 	// Nico, notify its spectators
@@ -1271,7 +1271,7 @@ static void notify_timerun_start(gentity_t *activator) {
 		}
 
 		if (o->client->sess.spectatorClient == activator - g_entities) {
-			G_Printf("Sending a timerun_start_spec to client %d\n", o - g_entities);
+			G_DPrintf("Sending a timerun_start_spec to client %d\n", o - g_entities);
 			trap_SendServerCommand(o - g_entities, va("timerun_start_spec %i %i", timerunNum, activator->client->timerunStartTime + 500));
 		}
 	}
@@ -1357,8 +1357,11 @@ void notify_timerun_stop(gentity_t *activator, int finishTime) {
 	gentity_t *o = NULL;
 	int timerunNum = 0;
 
+	G_DPrintf("notify_timerun_stop(%d, %d)\n", activator, finishTime);
+
 	// Nico, check if timerun is active
 	if (!activator->client->timerunActive) {
+		G_DPrintf("notify_timerun_stop canceled because timerun wasn't active\n");
 		return;
 	}
 
@@ -1425,6 +1428,7 @@ void target_stoptimer_use(gentity_t *self, gentity_t *other, gentity_t *activato
 	// required number of checkpoints passed?
 	if (client->timerunCheckpointsPassed < self->count) {
 		CPx(activator - g_entities, va("cpm \"^d%s^f:^1 Minimum checkpoints not passed (%d/%d)\n\"", client->currentTimerun, client->timerunCheckpointsPassed, self->count));
+		notify_timerun_stop(activator, 0);
 		client->timerunActive = qfalse;
 
 		return;
@@ -1514,7 +1518,7 @@ static void notify_timerun_check(gentity_t *activator, int deltaTime, int time, 
 	//timerunNum = GetTimerunNum(activator->client->currentTimerun);
 
 	// Nico, notify the client itself first
-	G_Printf("Sending a timerun_check to client %d\n", activator - g_entities);
+	G_DPrintf("Sending a timerun_check to client %d\n", activator - g_entities);
 	trap_SendServerCommand(activator - g_entities, va("timerun_check %i %i %i", deltaTime, time, isFaster));
 
 	// Nico, notify its spectators
@@ -1534,7 +1538,7 @@ static void notify_timerun_check(gentity_t *activator, int deltaTime, int time, 
 		}
 
 		if (o->client->sess.spectatorClient == activator - g_entities) {
-			G_Printf("Sending a timerun_check_spec to client %d\n", o - g_entities);
+			G_DPrintf("Sending a timerun_check_spec to client %d\n", o - g_entities);
 			trap_SendServerCommand(o - g_entities, va("timerun_check_spec %i %i %i", deltaTime, time, isFaster));
 		}
 	}

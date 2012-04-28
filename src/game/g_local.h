@@ -36,17 +36,7 @@ If you have questions concerning this license or the applicable additional terms
 
 //==================================================================
 
-/* Nico, removed gib
-#define BODY_QUEUE_SIZE     8*/
-
 #define EVENT_VALID_MSEC    300
-
-/* Nico, removed rewards
-#define CARNAGE_REWARD_TIME 3000*/
-
-
-/* Nico, removed intermission
-#define INTERMISSION_DELAY_TIME 1000*/
 
 #define MG42_MULTIPLAYER_HEALTH 350             // JPW NERVE
 

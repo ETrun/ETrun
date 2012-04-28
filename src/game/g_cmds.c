@@ -666,9 +666,6 @@ qboolean SetTeam( gentity_t *ent, char *s, qboolean force, weapon_t w1, weapon_t
 	spectatorState_t specState;
 	int specClient;
 
-	/* Nico, removed respawnLeft
-	int respawnsLeft;*/
-
 	//
 	// see what change is requested
 	//
@@ -676,10 +673,6 @@ qboolean SetTeam( gentity_t *ent, char *s, qboolean force, weapon_t w1, weapon_t
 
 	clientNum = client - level.clients;
 	specClient = 0;
-
-	// ydnar: preserve respawn count
-	/* Nico, removed respawnLeft
-	respawnsLeft = client->ps.persistant[ PERS_RESPAWNS_LEFT ];*/
 
 	G_TeamDataForString( s, client - level.clients, &team, &specState, &specClient );
 
@@ -689,38 +682,7 @@ qboolean SetTeam( gentity_t *ent, char *s, qboolean force, weapon_t w1, weapon_t
 			// Leave them where they were before the command was issued
 			return( qfalse );
 		}
-
-		/* Nico, removed team switch protection
-		if ( g_noTeamSwitching.integer && ( team != ent->client->sess.sessionTeam && ent->client->sess.sessionTeam != TEAM_SPECTATOR ) && g_gamestate.integer == GS_PLAYING && !force ) {
-			trap_SendServerCommand( clientNum, "cp \"You cannot switch during a match, please wait until the round ends.\n\"" );
-			return qfalse;  // ignore the request
-		}*/
-
-		/* Nico, removed balancedteams
-		if ( ( ( g_gametype.integer == GT_WOLF_LMS && g_lms_teamForceBalance.integer ) || g_teamForceBalance.integer ) && !force ) {
-			int counts[TEAM_NUM_TEAMS];
-
-			counts[TEAM_ALLIES] = TeamCount( ent - g_entities, TEAM_ALLIES );
-			counts[TEAM_AXIS] = TeamCount( ent - g_entities, TEAM_AXIS );
-
-			// We allow a spread of one
-			if ( team == TEAM_AXIS && counts[TEAM_AXIS] - counts[TEAM_ALLIES] >= 1 ) {
-				CP( "cp \"The Axis has too many players.\n\"" );
-				return qfalse; // ignore the request
-			}
-			if ( team == TEAM_ALLIES && counts[TEAM_ALLIES] - counts[TEAM_AXIS] >= 1 ) {
-				CP( "cp \"The Allies have too many players.\n\"" );
-				return qfalse; // ignore the request
-			}
-
-			// It's ok, the team we are switching to has less or same number of players
-		}*/
 	}
-
-	/* Nico, removed gameClients limits
-	if ( g_maxGameClients.integer > 0 && level.numNonSpectatorClients >= g_maxGameClients.integer ) {
-		team = TEAM_SPECTATOR;
-	}*/
 
 	//
 	// decide if we will allow the change
@@ -730,37 +692,11 @@ qboolean SetTeam( gentity_t *ent, char *s, qboolean force, weapon_t w1, weapon_t
 		return qfalse;
 	}
 
-	// NERVE - SMF - prevent players from switching to regain deployments
-	/* Nico, removed respawnLeft
-	if ( g_gametype.integer != GT_WOLF_LMS ) {
-		if ( ( g_maxlives.integer > 0 ||
-			   ( g_alliedmaxlives.integer > 0 && ent->client->sess.sessionTeam == TEAM_ALLIES ) ||
-			   ( g_axismaxlives.integer > 0 && ent->client->sess.sessionTeam == TEAM_AXIS ) )
-
-			 && ent->client->ps.persistant[PERS_RESPAWNS_LEFT] == 0 && oldTeam != TEAM_SPECTATOR ) {
-			CP( "cp \"You can't switch teams because you are out of lives.\n\" 3" );
-			return qfalse;  // ignore the request
-		}
-	}*/
-
 	// DHM - Nerve
 	// OSP
 	if ( team != TEAM_SPECTATOR ) {
 		client->pers.initialSpawn = qfalse;
-		// no MV in-game
-		/* Nico, removed multiview
-		if ( client->pers.mvCount > 0 ) {
-			G_smvRemoveInvalidClients( ent, TEAM_AXIS );
-			G_smvRemoveInvalidClients( ent, TEAM_ALLIES );
-		}*/
 	}
-
-	// he starts at 'base'
-	// RF, in single player, bots always use regular spawn points
-	/* Nico, removed gametypes
-	if ( !( ( g_gametype.integer == GT_SINGLE_PLAYER || g_gametype.integer == GT_COOP ) && ( ent->r.svFlags & SVF_BOT ) ) ) {
-		client->pers.teamState.state = TEAM_BEGIN;
-	}*/
 
 	if ( oldTeam != TEAM_SPECTATOR ) {
 		if ( !( ent->client->ps.pm_flags & PMF_LIMBO ) ) {
@@ -776,19 +712,10 @@ qboolean SetTeam( gentity_t *ent, char *s, qboolean force, weapon_t w1, weapon_t
 		if ( !client->sess.referee ) {
 			client->pers.invite = 0;
 		}
-		/* Nico, removed multiview
-		if ( team != oldTeam ) {
-			G_smvAllRemoveSingleClient( ent - g_entities );
-		}*/
 	}
 
 	G_LeaveTank( ent, qfalse );
 	G_RemoveClientFromFireteams( clientNum, qtrue, qfalse );
-
-	/* Nico, removed mines
-	if ( g_landminetimeout.integer ) {
-		G_ExplodeMines( ent );
-	}*/
 
 	G_FadeItems( ent, MOD_SATCHEL );
 
@@ -840,42 +767,19 @@ qboolean SetTeam( gentity_t *ent, char *s, qboolean force, weapon_t w1, weapon_t
 
 	ClientBegin( clientNum );
 
-	// ydnar: restore old respawn count (players cannot jump from team to team to regain lives)
-	/* Nico, removed respawnLeft
-	if ( respawnsLeft >= 0 && oldTeam != TEAM_SPECTATOR ) {
-		client->ps.persistant[ PERS_RESPAWNS_LEFT ] = respawnsLeft;
-	}*/
-
-	/* Nico, removed warmup
-	G_verifyMatchState( oldTeam );*/
-
-	/* Nico, removed ws related command
-	// Reset stats when changing teams
-	if ( team != oldTeam ) {
-		G_deleteStats( clientNum );
-	}*/
-
 	G_UpdateSpawnCounts();
 
 	if ( g_gamestate.integer == GS_PLAYING && ( client->sess.sessionTeam == TEAM_AXIS || client->sess.sessionTeam == TEAM_ALLIES ) ) {
+		int i;
+		int x = client->sess.sessionTeam - TEAM_AXIS;
 
-		/* Nico, removed LMS
-		if ( g_gametype.integer == GT_WOLF_LMS && level.numTeamClients[0] > 0 && level.numTeamClients[1] > 0 ) {
-			trap_SendServerCommand( clientNum, "cp \"Will spawn next round, please wait.\n\"" );
-			limbo( ent, qfalse );
-			return( qfalse );
-		} else {*/
-			int i;
-			int x = client->sess.sessionTeam - TEAM_AXIS;
-
-			for ( i = 0; i < MAX_COMMANDER_TEAM_SOUNDS; i++ ) {
-				if ( level.commanderSounds[ x ][ i ].index ) {
-					gentity_t* tent = G_TempEntity( client->ps.origin, EV_GLOBAL_CLIENT_SOUND );
-					tent->s.eventParm = level.commanderSounds[ x ][ i ].index - 1;
-					tent->s.teamNum = clientNum;
-				}
+		for ( i = 0; i < MAX_COMMANDER_TEAM_SOUNDS; i++ ) {
+			if ( level.commanderSounds[ x ][ i ].index ) {
+				gentity_t* tent = G_TempEntity( client->ps.origin, EV_GLOBAL_CLIENT_SOUND );
+				tent->s.eventParm = level.commanderSounds[ x ][ i ].index - 1;
+				tent->s.teamNum = clientNum;
 			}
-		// }
+		}
 	}
 
 	ent->client->pers.autofireteamCreateEndTime = 0;
@@ -888,8 +792,6 @@ qboolean SetTeam( gentity_t *ent, char *s, qboolean force, weapon_t w1, weapon_t
 			if ( ft ) {
 				trap_SendServerCommand( ent - g_entities, "aftj -1" );
 				ent->client->pers.autofireteamJoinEndTime = level.time + 20500;
-
-//				G_AddClientToFireteam( ent-g_entities, ft->joinOrder[0] );
 			} else {
 				trap_SendServerCommand( ent - g_entities, "aftc -1" );
 				ent->client->pers.autofireteamCreateEndTime = level.time + 20500;

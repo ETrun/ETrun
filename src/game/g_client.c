@@ -493,19 +493,6 @@ void limbo( gentity_t *ent) {
 	}
 
 	if ( !( ent->client->ps.pm_flags & PMF_LIMBO ) ) {
-
-		// Nico, notify the client and its spectators the timerun has stopped
-		notify_timerun_stop(ent, 0);
-
-		/* Nico, removed respawnLeft
-		if ( ent->client->ps.persistant[PERS_RESPAWNS_LEFT] == 0 ) {
-			if ( g_maxlivesRespawnPenalty.integer ) {
-				ent->client->ps.persistant[PERS_RESPAWNS_PENALTY] = g_maxlivesRespawnPenalty.integer;
-			} else {
-				ent->client->ps.persistant[PERS_RESPAWNS_PENALTY] = -1;
-			}
-		}*/
-
 		// DHM - Nerve :: First save off persistant info we'll need for respawn
 		for ( i = 0; i < MAX_PERSISTANT; i++ ) {
 			ent->client->saved_persistant[i] = ent->client->ps.persistant[i];
@@ -514,12 +501,7 @@ void limbo( gentity_t *ent) {
 		ent->client->ps.pm_flags |= PMF_LIMBO;
 		ent->client->ps.pm_flags |= PMF_FOLLOW;
 
-		/* Nico, removed gib
-		if ( makeCorpse ) {
-			CopyToBodyQue( ent ); // make a nice looking corpse
-		} else {*/
-			trap_UnlinkEntity( ent );
-		// }
+		trap_UnlinkEntity( ent );
 
 		// DHM - Nerve :: reset these values
 		ent->client->ps.viewlocked = 0;
@@ -527,15 +509,10 @@ void limbo( gentity_t *ent) {
 
 		ent->r.maxs[2] = 0;
 		ent->r.currentOrigin[2] += 8;
-		// contents = trap_PointContents( ent->r.currentOrigin, -1 ); // drop stuff
+
 		trap_PointContents( ent->r.currentOrigin, -1 ); // drop stuff
 
 		ent->s.weapon = ent->client->limboDropWeapon; // stored in player_die()
-
-		/* Nico, removed gib
-		if ( makeCorpse && !( contents & CONTENTS_NODROP ) ) {
-			TossClientItems( ent );
-		}*/
 
 		ent->client->sess.spectatorClient = startclient;
 		Cmd_FollowCycle_f( ent,1 ); // get fresh spectatorClient
@@ -1841,9 +1818,6 @@ void ClientSpawn( gentity_t *ent, qboolean revived ) {
 	client->pers.lastSpawnTime = level.time;
 	client->pers.lastBattleSenseBonusTime = level.timeCurrent;
 
-	/* Nico, removed mines
-	client->pers.lastHQMineReportTime = level.timeCurrent;*/
-
 	// find a spawn point
 	// do it before setting health back up, so farthest
 	// ranging doesn't count this client
@@ -1885,15 +1859,10 @@ void ClientSpawn( gentity_t *ent, qboolean revived ) {
 		persistant[i] = client->ps.persistant[i];
 	}
 
-	{
-		/* Nico, removed respawnLeft
-		qboolean set = client->maxlivescalced;*/
+	// Nico, notify timerun_stop (ent->client->timerunActive will be memseted to 0)
+	notify_timerun_stop(ent, 0);
 
-		memset( client, 0, sizeof( *client ) );
-
-		/* Nico, removed respawnLeft
-		client->maxlivescalced = set;*/
-	}
+	memset( client, 0, sizeof( *client ) );
 
 	client->pers            = saved;
 	client->sess            = savedSess;
