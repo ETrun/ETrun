@@ -2015,19 +2015,6 @@ static void CG_DrawVote( void ) {
 	float color[4] = { 1, 1, 0, 1 };
 	int sec;
 
-	/* Nico, removed complaints
-	if ( cgs.complaintEndTime > cg.time && !cg.demoPlayback && cg_complaintPopUp.integer > 0 && cgs.complaintClient >= 0 ) {
-		Q_strncpyz( str1, BindingFromName( "vote yes" ), 32 );
-		Q_strncpyz( str2, BindingFromName( "vote no" ), 32 );
-
-		s = va( CG_TranslateString( "File complaint against %s for team-killing?" ), cgs.clientinfo[cgs.complaintClient].name );
-		CG_DrawStringExt( 8, 200, s, color, qtrue, qtrue, TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 80 );
-
-		s = va( CG_TranslateString( "Press '%s' for YES, or '%s' for No" ), str1, str2 );
-		CG_DrawStringExt( 8, 214, s, color, qtrue, qtrue, TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 80 );
-		return;
-	}*/
-
 	if ( cgs.applicationEndTime > cg.time && cgs.applicationClient >= 0 ) {
 		Q_strncpyz( str1, BindingFromName( "vote yes" ), 32 );
 		Q_strncpyz( str2, BindingFromName( "vote no" ), 32 );
@@ -2157,30 +2144,6 @@ static void CG_DrawVote( void ) {
 		}
 	}
 
-	/* Nico, removed complaints
-	if ( cgs.complaintEndTime > cg.time && !cg.demoPlayback && cg_complaintPopUp.integer > 0 && cgs.complaintClient < 0 ) {
-		if ( cgs.complaintClient == -1 ) {
-			s = "Your complaint has been filed";
-			CG_DrawStringExt( 8, 200, CG_TranslateString( s ), color, qtrue, qtrue, TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 80 );
-			return;
-		}
-		if ( cgs.complaintClient == -2 ) {
-			s = "Complaint dismissed";
-			CG_DrawStringExt( 8, 200, CG_TranslateString( s ), color, qtrue, qtrue, TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 80 );
-			return;
-		}
-		if ( cgs.complaintClient == -3 ) {
-			s = "Server Host cannot be complained against";
-			CG_DrawStringExt( 8, 200, CG_TranslateString( s ), color, qtrue, qtrue, TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 80 );
-			return;
-		}
-		if ( cgs.complaintClient == -4 ) {
-			s = "You were team-killed by the Server Host";
-			CG_DrawStringExt( 8, 200, CG_TranslateString( s ), color, qtrue, qtrue, TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 80 );
-			return;
-		}
-	}*/
-
 	if ( cgs.applicationEndTime > cg.time && cgs.applicationClient < 0 ) {
 		if ( cgs.applicationClient == -1 ) {
 			s = "Your application has been submitted";
@@ -2270,50 +2233,6 @@ static void CG_DrawVote( void ) {
 	}
 }
 
-/* Nico, removed debriefing
-=================
-CG_DrawIntermission
-=================
-
-static void CG_DrawIntermission( void ) {
-	// End-of-level autoactions
-	if ( !cg.demoPlayback ) {
-		static int doScreenshot = 0, doDemostop = 0;
-
-		if ( !cg.latchAutoActions ) {
-			cg.latchAutoActions = qtrue;
-
-			if ( cg_autoAction.integer & AA_SCREENSHOT ) {
-				doScreenshot = cg.time + 1000;
-			}
-
-			// Nico, removed statsdump client command
-			// if ( cg_autoAction.integer & AA_STATSDUMP ) {
-			// 	CG_dumpStats_f();
-			// }
-
-			if ( ( cg_autoAction.integer & AA_DEMORECORD ) &&
-				 ( ( cgs.gametype == GT_WOLF_STOPWATCH && cgs.currentRound == 0 ) ||
-				   cgs.gametype != GT_WOLF_STOPWATCH ) ) {
-				doDemostop = cg.time + 5000;    // stats should show up within 5 seconds
-			}
-		}
-
-		if ( doScreenshot > 0 && doScreenshot < cg.time ) {
-			CG_autoScreenShot_f();
-			doScreenshot = 0;
-		}
-
-		if ( doDemostop > 0 && doDemostop < cg.time ) {
-			trap_SendConsoleCommand( "stoprecord\n" );
-			doDemostop = 0;
-		}
-	}
-
-	// Intermission view
-	CG_Debriefing_Draw();
-}*/
-
 /*
 =================
 CG_DrawSpectatorMessage
@@ -2339,7 +2258,6 @@ static void CG_DrawSpectatorMessage( void ) {
 		lastconfigGet = cg.time;
 	}
 
-	// x = ( cg.snap->ps.pm_flags & PMF_LIMBO ) ? 170 : 80;
 	y = 408;
 
 	y -= 2 * TINYCHAR_HEIGHT;
@@ -2355,32 +2273,6 @@ static void CG_DrawSpectatorMessage( void ) {
 	str = va( CG_TranslateString( "Press %s to follow next player" ), str2 );
 	CG_DrawStringExt( 8, 172, str, colorWhite, qtrue, qtrue, TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 0 );
 }
-
-/* Nico, instant reswawn
-float CG_CalculateReinfTime_Float( qboolean menu ) {
-	team_t team;
-	int dwDeployTime;
-
-	if ( menu ) {
-		if ( cgs.clientinfo[cg.clientNum].team == TEAM_SPECTATOR ) {
-			team = cgs.ccSelectedTeam == 0 ? TEAM_AXIS : TEAM_ALLIES;
-		} else {
-			team = cgs.clientinfo[cg.clientNum].team;
-		}
-	} else {
-		team = cgs.clientinfo[cg.snap->ps.clientNum].team;
-	}
-
-	dwDeployTime = ( team == TEAM_AXIS ) ? cg_redlimbotime.integer : cg_bluelimbotime.integer;
-
-	return ( 1 + ( dwDeployTime - ( ( cgs.aReinfOffset[team] + cg.time - cgs.levelStartTime ) % dwDeployTime ) ) * 0.001f );
-}*/
-
-/* Nico, instant reswawn
-int CG_CalculateReinfTime( qboolean menu ) {
-	return( (int)CG_CalculateReinfTime_Float( menu ) );
-}*/
-
 
 /*
 =================
@@ -2412,28 +2304,10 @@ static void CG_DrawLimboMessage( void ) {
 		CG_DrawSmallStringColor( INFOTEXT_STARTX, y, str, color );
 		y += 18;
 
-		/* Nico, removed LMS
-		if ( cgs.gametype == GT_WOLF_LMS ) {
-			trap_R_SetColor( NULL );
-			return;
-		}*/
-
 		str = CG_TranslateString( "Press JUMP to go into reinforcement queue." );
 		CG_DrawSmallStringColor( INFOTEXT_STARTX, 134, str, color );
 		y += 18;
 	}
-	/* Nico, removed LMS
-	else if ( cgs.gametype == GT_WOLF_LMS ) {
-		trap_R_SetColor( NULL );
-		return;
-	}*/
-
-	// JPW NERVE
-	/* Nico, instant reswawn
-	str = ( ps->persistant[PERS_RESPAWNS_LEFT] == 0 ) ? CG_TranslateString( "No more reinforcements this round." ) : va( CG_TranslateString( "Reinforcements deploy in %d seconds." ), CG_CalculateReinfTime( qfalse ) );
-
-	CG_DrawSmallStringColor( INFOTEXT_STARTX, y, str, color );
-	y += 18;*/
 	// jpw
 
 	trap_R_SetColor( NULL );
@@ -2459,34 +2333,9 @@ static qboolean CG_DrawFollow( void ) {
 
 	// if in limbo, show different follow message
 	if ( cg.snap->ps.pm_flags & PMF_LIMBO ) {
-		/* Nico, instant reswawn
-		if ( cgs.gametype != GT_WOLF_LMS ) {
-			if ( cg.snap->ps.persistant[PERS_RESPAWNS_LEFT] == 0 ) {
-				if ( cg.snap->ps.persistant[PERS_RESPAWNS_PENALTY] >= 0 ) {
-
-					int deployTime = ( cgs.clientinfo[cg.snap->ps.clientNum].team == TEAM_AXIS ) ? cg_redlimbotime.integer : cg_bluelimbotime.integer;
-
-					deployTime *= 0.001f;
-
-					sprintf( deploytime, CG_TranslateString( "Bonus Life! Deploying in %d seconds" ), CG_CalculateReinfTime( qfalse ) + cg.snap->ps.persistant[PERS_RESPAWNS_PENALTY] * deployTime );
-				} else {
-					sprintf( deploytime, CG_TranslateString( "No more deployments this round" ) );
-				}
-			} else {
-				sprintf( deploytime, CG_TranslateString( "Deploying in %d seconds" ), CG_CalculateReinfTime( qfalse ) );
-			}
-
-			CG_DrawStringExt( INFOTEXT_STARTX, 118, deploytime, colorWhite, qtrue, qtrue, SMALLCHAR_WIDTH, SMALLCHAR_HEIGHT, 80 );
-		}*/
 
 		// Don't display if you're following yourself
 		if ( cg.snap->ps.clientNum != cg.clientNum ) {
-			/* Nico, removed rank
-			Nico, removed class
-			sprintf( deploytime, "(%s %s %s [%s])", CG_TranslateString( "Following" ),
-					 cgs.clientinfo[cg.snap->ps.clientNum].team == TEAM_ALLIES ? rankNames_Allies[cgs.clientinfo[cg.snap->ps.clientNum].rank] : rankNames_Axis[cgs.clientinfo[cg.snap->ps.clientNum].rank],
-					 cgs.clientinfo[cg.snap->ps.clientNum].name,
-					 BG_ClassnameForNumber( cgs.clientinfo[cg.snap->ps.clientNum].cls ) );*/
 			sprintf( deploytime, "(%s %s)", CG_TranslateString( "Following" ),
 					 cgs.clientinfo[cg.snap->ps.clientNum].name);
 
@@ -2494,13 +2343,6 @@ static qboolean CG_DrawFollow( void ) {
 		}
 	} else {
 		CG_DrawStringExt( INFOTEXT_STARTX, 118, CG_TranslateString( "Following" ), colorWhite, qtrue, qtrue, BIGCHAR_WIDTH / 2, BIGCHAR_HEIGHT, 0 );
-
-		/* Nico, removed rank
-		Nico, removed class
-		CG_DrawStringExt( 84, 118, va( "%s %s [%s]",
-									   cgs.clientinfo[cg.snap->ps.clientNum].team == TEAM_ALLIES ? rankNames_Allies[cgs.clientinfo[cg.snap->ps.clientNum].rank] : rankNames_Axis[cgs.clientinfo[cg.snap->ps.clientNum].rank],
-									   cgs.clientinfo[cg.snap->ps.clientNum].name, BG_ClassnameForNumber( cgs.clientinfo[cg.snap->ps.clientNum].cls ) ),
-						  colorWhite, qtrue, qtrue, BIGCHAR_WIDTH / 2, BIGCHAR_HEIGHT, 0 );*/
 		CG_DrawStringExt( 84, 118, va( "%s",
 									   cgs.clientinfo[cg.snap->ps.clientNum].name),
 						  colorWhite, qtrue, qtrue, BIGCHAR_WIDTH / 2, BIGCHAR_HEIGHT, 0 );
@@ -2508,128 +2350,6 @@ static qboolean CG_DrawFollow( void ) {
 
 	return( qtrue );
 }
-
-
-/* Nico, removed warmup
-=================
-CG_DrawWarmup
-=================
-
-static void CG_DrawWarmup( void ) {
-	int w;
-	int sec;
-	int cw;
-	const char  *s, *s1, *s2;
-
-	sec = cg.warmup;
-	if ( !sec ) {
-		if ( ( cgs.gamestate == GS_WARMUP && !cg.warmup ) || cgs.gamestate == GS_WAITING_FOR_PLAYERS ) {
-			cw = 10;
-
-			s1 = va( CG_TranslateString( "^3WARMUP:^7 Waiting on ^2%i^7 %s" ), cgs.minclients, cgs.minclients == 1 ? "player" : "players" );
-			w = CG_DrawStrlen( s1 );
-			CG_DrawStringExt( 320 - w * 12 / 2, 188, s1, colorWhite, qfalse, qtrue, 12, 18, 0 );
-
-			if ( !cg.demoPlayback && cg.snap->ps.persistant[PERS_TEAM] != TEAM_SPECTATOR &&
-				 ( !( cg.snap->ps.pm_flags & PMF_FOLLOW ) || ( cg.snap->ps.pm_flags & PMF_LIMBO ) ) ) {
-				char str1[32];
-				Q_strncpyz( str1, BindingFromName( "ready" ), 32 );
-				if ( !Q_stricmp( str1, "(?" "?" "?)" ) ) {
-					s2 = CG_TranslateString( "Type ^3\\ready^* in the console to start" );
-				} else {
-					s2 = va( "Press ^3%s^* to start", str1 );
-					s2 = CG_TranslateString( s2 );
-				}
-				w = CG_DrawStrlen( s2 );
-				CG_DrawStringExt( 320 - w * cw / 2, 208, s2, colorWhite, qfalse, qtrue, cw, (int)( cw * 1.5 ), 0 );
-			}
-			return;
-		}
-
-		return;
-	}
-
-	sec = ( sec - cg.time ) / 1000;
-	if ( sec < 0 ) {
-		sec = 0;
-	}
-
-	s = va( "%s %i", CG_TranslateString( "(WARMUP) Match begins in:" ), sec + 1 );
-
-	w = CG_DrawStrlen( s );
-	CG_DrawStringExt( 320 - w * 6, 120, s, colorYellow, qfalse, qtrue, 12, 18, 0 );
-
-	// NERVE - SMF - stopwatch stuff
-	s1 = "";
-	s2 = "";
-
-	if ( cgs.gametype == GT_WOLF_STOPWATCH ) {
-		const char  *cs;
-		int defender;
-
-		s = va( "%s %i", CG_TranslateString( "Stopwatch Round" ), cgs.currentRound + 1 );
-
-		cs = CG_ConfigString( CS_MULTI_INFO );
-		defender = atoi( Info_ValueForKey( cs, "defender" ) );
-
-		if ( !defender ) {
-			if ( cg.snap->ps.persistant[PERS_TEAM] == TEAM_AXIS ) {
-				if ( cgs.currentRound == 1 ) {
-					s1 = "You have been switched to the Axis team";
-					s2 = "Keep the Allies from beating the clock!";
-				} else {
-					s1 = "You are on the Axis team";
-				}
-			} else if ( cg.snap->ps.persistant[PERS_TEAM] == TEAM_ALLIES )   {
-				if ( cgs.currentRound == 1 ) {
-					s1 = "You have been switched to the Allied team";
-					s2 = "Try to beat the clock!";
-				} else {
-					s1 = "You are on the Allied team";
-				}
-			}
-		} else {
-			if ( cg.snap->ps.persistant[PERS_TEAM] == TEAM_AXIS ) {
-				if ( cgs.currentRound == 1 ) {
-					s1 = "You have been switched to the Axis team";
-					s2 = "Try to beat the clock!";
-				} else {
-					s1 = "You are on the Axis team";
-				}
-			} else if ( cg.snap->ps.persistant[PERS_TEAM] == TEAM_ALLIES )   {
-				if ( cgs.currentRound == 1 ) {
-					s1 = "You have been switched to the Allied team";
-					s2 = "Keep the Axis from beating the clock!";
-				} else {
-					s1 = "You are on the Allied team";
-				}
-			}
-		}
-
-		if ( strlen( s1 ) ) {
-			s1 = CG_TranslateString( s1 );
-		}
-
-		if ( strlen( s2 ) ) {
-			s2 = CG_TranslateString( s2 );
-		}
-
-		cw = 10;
-
-		w = CG_DrawStrlen( s );
-		CG_DrawStringExt( 320 - w * cw / 2, 140, s, colorWhite,
-						  qfalse, qtrue, cw, (int)( cw * 1.5 ), 0 );
-
-		w = CG_DrawStrlen( s1 );
-		CG_DrawStringExt( 320 - w * cw / 2, 160, s1, colorWhite,
-						  qfalse, qtrue, cw, (int)( cw * 1.5 ), 0 );
-
-		w = CG_DrawStrlen( s2 );
-		CG_DrawStringExt( 320 - w * cw / 2, 180, s2, colorWhite,
-						  qfalse, qtrue, cw, (int)( cw * 1.5 ), 0 );
-	}
-}*/
-
 //==================================================================================
 
 /*
@@ -2665,13 +2385,9 @@ static void CG_DrawFlashFade( void ) {
 
 	// OSP - ugh, have to inform the ui that we need to remain blacked out (or not)
 	if ( int_ui_blackout.integer == 0 ) {
-		/* Nico, removed multiview
-		if ( cg.mvTotalClients < 1 && cg.snap->ps.powerups[PW_BLACKOUT] > 0 ) {*/
 		if ( cg.snap->ps.powerups[PW_BLACKOUT] > 0 ) {
 			trap_Cvar_Set( "ui_blackout", va( "%d", cg.snap->ps.powerups[PW_BLACKOUT] ) );
 		}
-	/* Nico, removed multiview
-	} else if ( cg.snap->ps.powerups[PW_BLACKOUT] == 0 || cg.mvTotalClients > 0 ) {*/
 	} else if (cg.snap->ps.powerups[PW_BLACKOUT] == 0) {
 		trap_Cvar_Set( "ui_blackout", "0" );
 	}
@@ -2745,40 +2461,6 @@ static void CG_DrawFlashZoomTransition( void ) {
 		CG_FillRect( -10, -10, 650, 490, color );
 	}
 }
-
-
-
-/*
-=================
-CG_DrawFlashDamage
-=================
-*/
-/* Nico, removed blood
-static void CG_DrawFlashDamage( void ) {
-	vec4_t col;
-	float redFlash;
-
-	if ( !cg.snap ) {
-		return;
-	}
-
-	if ( cg.v_dmg_time > cg.time ) {
-		redFlash = fabs( cg.v_dmg_pitch * ( ( cg.v_dmg_time - cg.time ) / DAMAGE_TIME ) );
-
-		// blend the entire screen red
-		if ( redFlash > 5 ) {
-			redFlash = 5;
-		}
-
-		VectorSet( col, 0.2, 0, 0 );
-		col[3] =  0.7 * ( redFlash / 5.0 ) * ( ( cg_bloodFlash.value > 1.0 ) ? 1.0 :
-											   ( cg_bloodFlash.value < 0.0 ) ? 0.0 :
-											   cg_bloodFlash.value );
-
-		CG_FillRect( -10, -10, 650, 490, col );
-	}
-}*/
-
 
 /*
 =================
@@ -2855,16 +2537,11 @@ CG_DrawFlashBlend
 */
 static void CG_DrawFlashBlend( void ) {
 	// Gordon: no flash blends if in limbo or spectator, and in the limbo menu
-	// Nico, render while in limbo
-	// if ( ( cg.snap->ps.pm_flags & PMF_LIMBO || cgs.clientinfo[cg.clientNum].team == TEAM_SPECTATOR ) && cg.showGameView ) {
 	if ( ( cg.snap->ps.pm_flags & PMF_LIMBO || cgs.clientinfo[cg.clientNum].team == TEAM_SPECTATOR )) {
 		return;
 	}
 
 	CG_DrawFlashFire();
-
-	/* Nico, removed blood
-	CG_DrawFlashDamage();*/
 }
 
 // NERVE - SMF
@@ -2945,14 +2622,11 @@ static void CG_DrawObjectiveInfo( void ) {
 
 	start = cg.oidPrint;
 
-// JPW NERVE
-	//	y = cg.oidPrintY - cg.oidPrintLines * BIGCHAR_HEIGHT / 2;
 	y = 400 - cg.oidPrintLines * BIGCHAR_HEIGHT / 2;
 
 	x1 = 319;
 	y1 = y - 2;
 	x2 = 321;
-// jpw
 
 	// first just find the bounding rect
 	while ( 1 ) {
@@ -2988,8 +2662,6 @@ static void CG_DrawObjectiveInfo( void ) {
 
 	x2 = x2 + 4;
 	y2 = y - cg.oidPrintCharWidth * 1.5 + 4;
-
-	// h = y2 - y1; // JPW NERVE
 
 	VectorCopy( color, backColor );
 	backColor[3] = 0.5 * color[3];
@@ -3131,191 +2803,6 @@ static void CG_ScreenFade( void ) {
 	}
 }
 
-/*
-=================
-CG_DrawCompassIcon
-
-NERVE - SMF
-=================
-*/
-/* Nico, removed compass
-void CG_DrawCompassIcon( float x, float y, float w, float h, vec3_t origin, vec3_t dest, qhandle_t shader ) {
-	float angle, pi2 = M_PI * 2;
-	vec3_t v1, angles;
-	float len;
-
-	VectorCopy( dest, v1 );
-	VectorSubtract( origin, v1, v1 );
-	len = VectorLength( v1 );
-	VectorNormalize( v1 );
-	vectoangles( v1, angles );
-
-	if ( v1[0] == 0 && v1[1] == 0 && v1[2] == 0 ) {
-		return;
-	}
-
-	angles[YAW] = AngleSubtract( cg.predictedPlayerState.viewangles[YAW], angles[YAW] );
-
-	angle = ( ( angles[YAW] + 180.f ) / 360.f - ( 0.50 / 2.f ) ) * pi2;
-
-
-	w /= 2;
-	h /= 2;
-
-	x += w;
-	y += h;
-
-
-	w = sqrt( ( w * w ) + ( h * h ) ) / 3.f * 2.f * 0.9f;
-
-	x = x + ( cos( angle ) * w );
-	y = y + ( sin( angle ) * w );
-
-	len = 1 - min( 1.f, len / 2000.f );
-
-
-	CG_DrawPic( x - ( 14 * len + 4 ) / 2, y - ( 14 * len + 4 ) / 2, 14 * len + 8, 14 * len + 8, shader );
-}*/
-
-/*
-=================
-CG_DrawNewCompass
-=================
-*/
-/* Nico, removed compass
-static void CG_DrawNewCompass( void ) {
-	float basex, basey;
-	float basew, baseh;
-	snapshot_t  *snap;
-	float angle;
-	int i;
-	static float lastangle = 0;
-	static float anglespeed = 0;
-	float diff;
-
-	if ( cg.nextSnap && !cg.nextFrameTeleport && !cg.thisFrameTeleport ) {
-		snap = cg.nextSnap;
-	} else {
-		snap = cg.snap;
-	}
-
-	// Nico, removed multiview
-	// if ( snap->ps.pm_flags & PMF_LIMBO || snap->ps.persistant[PERS_TEAM] == TEAM_SPECTATOR || cg.mvTotalClients > 0 ) {
-	if ( snap->ps.pm_flags & PMF_LIMBO || snap->ps.persistant[PERS_TEAM] == TEAM_SPECTATOR) {
-		return;
-	}
-
-	// Arnout: bit larger
-	basex = 520 - 16;
-	basey = 20 - 16;
-	basew = 100 + 32;
-	baseh = 100 + 32;
-
-	CG_DrawAutoMap();
-
-	if ( cgs.autoMapExpanded ) {
-		if ( cg.time - cgs.autoMapExpandTime < 100.f ) {
-			basey -= ( ( cg.time - cgs.autoMapExpandTime ) / 100.f ) * 128.f;
-		} else {
-			//basey -= 128.f;
-			return;
-		}
-	} else {
-		if ( cg.time - cgs.autoMapExpandTime <= 150.f ) {
-			//basey -= 128.f;
-			return;
-		} else if ( ( cg.time - cgs.autoMapExpandTime > 150.f ) && ( cg.time - cgs.autoMapExpandTime < 250.f ) ) {
-
-			basey = ( basey - 128.f ) + ( ( cg.time - cgs.autoMapExpandTime - 150.f ) / 100.f ) * 128.f;
-		} else {
-			rectDef_t compassHintRect = { 640 - 22, 128, 20, 20 };
-
-			CG_DrawKeyHint( &compassHintRect, "+mapexpand" );
-		}
-	}
-
-	CG_DrawPic( basex + 4, basey + 4, basew - 8, baseh - 8, cgs.media.compassShader );
-
-	angle = ( cg.predictedPlayerState.viewangles[YAW] + 180.f ) / 360.f - ( 0.125f );
-	diff = AngleSubtract( angle * 360, lastangle * 360 ) / 360.f;
-	anglespeed /= 1.08f;
-	anglespeed += diff * 0.01f;
-	if ( Q_fabs( anglespeed ) < 0.00001f ) {
-		anglespeed = 0;
-	}
-	lastangle += anglespeed;
-	CG_DrawRotatedPic( basex + 4, basey + 4, basew - 8, baseh - 8, cgs.media.compass2Shader, lastangle );
-
-//	if( !(cgs.ccFilter & CC_FILTER_REQUESTS) ) {
-	// draw voice chats
-	for ( i = 0; i < MAX_CLIENTS; i++ ) {
-		centity_t *cent = &cg_entities[i];
-
-		if ( cg.predictedPlayerState.clientNum == i || !cgs.clientinfo[i].infoValid || cg.predictedPlayerState.persistant[PERS_TEAM] != cgs.clientinfo[i].team ) {
-			continue;
-		}
-
-		// also draw revive icons if cent is dead and player is a medic
-		if ( cent->voiceChatSpriteTime < cg.time ) {
-			continue;
-		}
-
-		if ( cgs.clientinfo[i].health <= 0 ) {
-			// reset
-			cent->voiceChatSpriteTime = cg.time;
-			continue;
-		}
-
-		CG_DrawCompassIcon( basex, basey, basew, baseh, cg.predictedPlayerState.origin, cent->lerpOrigin, cent->voiceChatSprite );
-	}
-//	}
-
-//	if( !(cgs.ccFilter & CC_FILTER_REQUESTS) ) {
-	// draw revive medic icons
-	if ( cg.predictedPlayerState.stats[ STAT_PLAYER_CLASS ] == PC_MEDIC ) {
-		for ( i = 0; i < snap->numEntities; i++ ) {
-			entityState_t *ent = &snap->entities[i];
-
-			if ( ent->eType != ET_PLAYER ) {
-				continue;
-			}
-
-			if ( ( ent->eFlags & EF_DEAD ) && ent->number == ent->clientNum ) {
-				if ( !cgs.clientinfo[ent->clientNum].infoValid || cg.predictedPlayerState.persistant[PERS_TEAM] != cgs.clientinfo[ent->clientNum].team ) {
-					continue;
-				}
-
-				CG_DrawCompassIcon( basex, basey, basew, baseh, cg.predictedPlayerState.origin, ent->pos.trBase, cgs.media.medicReviveShader );
-			}
-		}
-	}
-//	}
-
-//	if( !(cgs.ccFilter & CC_FILTER_BUDDIES) ) {
-	for ( i = 0; i < snap->numEntities; i++ ) {
-		entityState_t *ent = &snap->entities[i];
-
-		if ( ent->eType != ET_PLAYER ) {
-			continue;
-		}
-
-		if ( ent->eFlags & EF_DEAD ) {
-			continue;
-		}
-
-		if ( !cgs.clientinfo[ent->clientNum].infoValid || cg.predictedPlayerState.persistant[PERS_TEAM] != cgs.clientinfo[ent->clientNum].team ) {
-			continue;
-		}
-
-		if ( !CG_IsOnSameFireteam( cg.clientNum, ent->clientNum ) ) {
-			continue;
-		}
-
-		CG_DrawCompassIcon( basex, basey, basew, baseh, cg.predictedPlayerState.origin, ent->pos.trBase, cgs.media.buddyShader );
-	}
-//	}
-}*/
-
 static int CG_PlayerAmmoValue( int *ammo, int *clips, int *akimboammo ) {
 	centity_t       *cent;
 	playerState_t   *ps;
@@ -3403,63 +2890,6 @@ static int CG_PlayerAmmoValue( int *ammo, int *clips, int *akimboammo ) {
 	return weap;
 }
 
-/* Nico, removed hud head animation
-#define HEAD_TURNTIME 10000
-#define HEAD_TURNANGLE 20
-#define HEAD_PITCHANGLE 2.5
-static void CG_DrawPlayerStatusHead( void ) {
-	hudHeadAnimNumber_t anim;
-	rectDef_t headRect =        { 44, 480 - 92, 62, 80 };
-//	rectDef_t headHintRect =	{ 40, 480 - 22, 20, 20 };
-	bg_character_t* character = CG_CharacterForPlayerstate( &cg.snap->ps );
-	bg_character_t* headcharacter = BG_GetCharacter( cgs.clientinfo[ cg.snap->ps.clientNum ].team, cgs.clientinfo[ cg.snap->ps.clientNum ].cls );
-
-	qhandle_t painshader = 0;
-
-	anim = cg.idleAnim;
-
-	if ( cg.weaponFireTime > 500 ) {
-		anim = HD_ATTACK;
-	} else if ( cg.time - cg.lastFiredWeaponTime < 500 ) {
-		anim = HD_ATTACK_END;
-	} else if ( cg.time - cg.painTime < ( character->hudheadanimations[ HD_PAIN ].numFrames * character->hudheadanimations[ HD_PAIN ].frameLerp ) ) {
-		anim = HD_PAIN;
-	} else if ( cg.time > cg.nextIdleTime ) {
-		cg.nextIdleTime = cg.time + 7000 + rand() % 1000;
-		if ( cg.snap->ps.stats[ STAT_HEALTH ] < 40 ) {
-			cg.idleAnim = ( rand() % ( HD_DAMAGED_IDLE3 - HD_DAMAGED_IDLE2 + 1 ) ) + HD_DAMAGED_IDLE2;
-		} else {
-			cg.idleAnim = ( rand() % ( HD_IDLE8 - HD_IDLE2 + 1 ) ) + HD_IDLE2;
-		}
-
-		cg.lastIdleTimeEnd = cg.time + character->hudheadanimations[ cg.idleAnim ].numFrames * character->hudheadanimations[ cg.idleAnim ].frameLerp;
-	}
-
-	if ( cg.snap->ps.stats[ STAT_HEALTH ] < 5 ) {
-		painshader = cgs.media.hudDamagedStates[3];
-	} else if ( cg.snap->ps.stats[ STAT_HEALTH ] < 20 ) {
-		painshader = cgs.media.hudDamagedStates[2];
-	} else if ( cg.snap->ps.stats[ STAT_HEALTH ] < 40 ) {
-		painshader = cgs.media.hudDamagedStates[1];
-	} else if ( cg.snap->ps.stats[ STAT_HEALTH ] < 60 ) {
-		painshader = cgs.media.hudDamagedStates[0];
-	}
-
-	if ( cg.time > cg.lastIdleTimeEnd ) {
-		if ( cg.snap->ps.stats[ STAT_HEALTH ] < 40 ) {
-			cg.idleAnim = HD_DAMAGED_IDLE1;
-		} else {
-			cg.idleAnim = HD_IDLE1;
-		}
-	}
-
-	// Nico, removed rank
-	// CG_DrawPlayerHead( &headRect, character, headcharacter, 180, 0, cg.snap->ps.eFlags & EF_HEADSHOT ? qfalse : qtrue, anim, painshader, cgs.clientinfo[ cg.snap->ps.clientNum ].rank, qfalse );
-	CG_DrawPlayerHead( &headRect, character, headcharacter, 180, 0, cg.snap->ps.eFlags & EF_HEADSHOT ? qfalse : qtrue, anim, painshader, 0, qfalse );
-
-//	CG_DrawKeyHint( &headHintRect, "openlimbomenu" );
-}*/
-
 static void CG_DrawPlayerHealthBar( rectDef_t *rect ) {
 	vec4_t bgcolour =   {   1.f,    1.f,    1.f,    0.3f    };
 	vec4_t colour;
@@ -3483,48 +2913,6 @@ static void CG_DrawPlayerHealthBar( rectDef_t *rect ) {
 	CG_DrawPic( rect->x, rect->y, rect->w, rect->h, cgs.media.hudSprintBar );
 	CG_DrawPic( rect->x, rect->y + rect->h + 4, rect->w, rect->w, cgs.media.hudHealthIcon );
 }
-
-/* Nico, unused anymore
-static void CG_DrawStaminaBar( rectDef_t *rect ) {
-	vec4_t bgcolour =   {   1.f,    1.f,    1.f,    0.3f    };
-	vec4_t colour =     {   0.1f,   1.0f,   0.1f,   0.5f    };
-	// vec4_t colourlow =  {   1.0f,   0.1f,   0.1f,   0.5f    }; Nico, unused warning fix
-	vec_t* color = colour;
-	int flags = 1 | 4 | 16 | 64;
-
-	// Nico, removed sprint time limit
-	// float frac = cg.pmext.sprintTime / (float)SPRINTTIME;
-
-	// Nico, removed adrenaline
-	if ( cg.snap->ps.powerups[PW_ADRENALINE] ) {
-		if ( cg.snap->ps.pm_flags & PMF_FOLLOW ) {
-			Vector4Average( colour, colorWhite, sin( cg.time * .005f ), colour );
-		} else {
-			float msec = cg.snap->ps.powerups[PW_ADRENALINE] - cg.time;
-
-			if ( msec < 0 ) {
-				msec = 0;
-			} else {
-				Vector4Average( colour, colorWhite, .5f + sin( .2f * sqrt( msec ) * 2 * M_PI ) * .5f, colour );
-			}
-		}
-	} else {
-
-		// Nico, removed sprint time limit
-		// if ( frac < 0.25 ) {
-		// 	color = colourlow;
-		// }
-
-	//}
-
-	// Nico, removed sprint time limit
-	// CG_FilledBar( rect->x, rect->y + ( rect->h * 0.1f ), rect->w, rect->h * 0.84f, color, NULL, bgcolour, frac, flags );
-	CG_FilledBar( rect->x, rect->y + ( rect->h * 0.1f ), rect->w, rect->h * 0.84f, color, NULL, bgcolour, 1.0f, flags );
-
-	trap_R_SetColor( NULL );
-	CG_DrawPic( rect->x, rect->y, rect->w, rect->h, cgs.media.hudSprintBar );
-	CG_DrawPic( rect->x, rect->y + rect->h + 4, rect->w, rect->w, cgs.media.hudSprintIcon );
-}*/
 
 static void CG_DrawWeapRecharge( rectDef_t *rect ) {
 	float barFrac, chargeTime;
@@ -3574,12 +2962,7 @@ static void CG_DrawWeapRecharge( rectDef_t *rect ) {
 static void CG_DrawPlayerStatus( void ) {
 	int value, value2, value3;
 	char buffer[32];
-	// int weap; Nico, unused warning fix
-	// playerState_t   *ps;
 	rectDef_t rect;
-//	vec4_t			colorFaded = { 1.f, 1.f, 1.f, 0.3f };
-
-	// ps = &cg.snap->ps;
 
 	// Draw weapon icon and overheat bar
 	rect.x = 640 - 82;
@@ -3587,107 +2970,39 @@ static void CG_DrawPlayerStatus( void ) {
 	rect.w = 60;
 	rect.h = 32;
 	CG_DrawWeapHeat( &rect, HUD_HORIZONTAL );
-	/* Nico, removed multiview
-	if ( cg.mvTotalClients < 1 && cg_drawWeaponIconFlash.integer == 0 ) {*/
+
 	if ( cg_drawWeaponIconFlash.integer == 0 ) {
 		CG_DrawPlayerWeaponIcon( &rect, qtrue, ITEM_ALIGN_RIGHT, &colorWhite );
 	} else {
-		/* Nico, removed multiview
-		int ws = ( cg.mvTotalClients > 0 ) ? cgs.clientinfo[cg.snap->ps.clientNum].weaponState : BG_simpleWeaponState( cg.snap->ps.weaponstate );*/
 		int ws = BG_simpleWeaponState(cg.snap->ps.weaponstate);
 		CG_DrawPlayerWeaponIcon( &rect, ( ws != WSTATE_IDLE ), ITEM_ALIGN_RIGHT, ( ( ws == WSTATE_SWITCH ) ? &colorWhite : ( ws == WSTATE_FIRE ) ? &colorRed : &colorYellow ) );
 	}
 
 	// Draw ammo
-	// weap = CG_PlayerAmmoValue( &value, &value2, &value3 );
 	CG_PlayerAmmoValue( &value, &value2, &value3 );
 	if ( value3 >= 0 ) {
 		Com_sprintf( buffer, sizeof( buffer ), "%i|%i/%i", value3, value, value2 );
 		CG_Text_Paint_Ext( 640 - 22 - CG_Text_Width_Ext( buffer, .25f, 0, &cgs.media.limboFont1 ), 480 - 1 * ( 16 + 2 ) + 12 - 4, .25f, .25f, colorWhite, buffer, 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1 );
-//		CG_DrawPic( 640 - 2 * ( 12 + 2 ) - 16 - 4, 480 - 1 * ( 16 + 2 ) - 4, 16, 16, cgs.media.SPPlayerInfoAmmoIcon );
 	} else if ( value2 >= 0 ) {
 		Com_sprintf( buffer, sizeof( buffer ), "%i/%i", value, value2 );
 		CG_Text_Paint_Ext( 640 - 22 - CG_Text_Width_Ext( buffer, .25f, 0, &cgs.media.limboFont1 ), 480 - 1 * ( 16 + 2 ) + 12 - 4, .25f, .25f, colorWhite, buffer, 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1 );
-//		CG_DrawPic( 640 - 2 * ( 12 + 2 ) - 16 - 4, 480 - 1 * ( 16 + 2 ) - 4, 16, 16, cgs.media.SPPlayerInfoAmmoIcon );
 	} else if ( value >= 0 ) {
 		Com_sprintf( buffer, sizeof( buffer ), "%i", value );
 		CG_Text_Paint_Ext( 640 - 22 - CG_Text_Width_Ext( buffer, .25f, 0, &cgs.media.limboFont1 ), 480 - 1 * ( 16 + 2 ) + 12 - 4, .25f, .25f, colorWhite, buffer, 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1 );
-//		CG_DrawPic( 640 - 2 * ( 12 + 2 ) - 16 - 4, 480 - 1 * ( 16 + 2 ) - 4, 16, 16, cgs.media.SPPlayerInfoAmmoIcon );
 	}
 
-
-// ==
 	rect.x = 4;// Nico, 24 -> 4
 	rect.y = 480 - 92;
 	rect.w = 12;
 	rect.h = 72;
 	CG_DrawPlayerHealthBar( &rect );
-// ==
 
-// ==
-	/* Nico, do not display staminabar
-	rect.x = 4;
-	rect.y = 480 - 92;
-	rect.w = 12;
-	rect.h = 72;
-	CG_DrawStaminaBar( &rect );*/
-// ==
-
-// ==
 	rect.x = 640 - 16;
 	rect.y = 480 - 92;
 	rect.w = 12;
 	rect.h = 72;
 	CG_DrawWeapRecharge( &rect );
-// ==
 }
-
-/* Nico, removed skills
-static void CG_DrawSkillBar( float x, float y, float w, float h, int skill ) {
-	int i;
-	float blockheight = ( h - 4 ) / (float)( NUM_SKILL_LEVELS - 1 );
-	float draw_y;
-	vec4_t colour;
-	float x1, y1, w1, h1;
-
-	draw_y = y + h - blockheight;
-	for ( i = 0; i < NUM_SKILL_LEVELS - 1; i++ ) {
-		if ( i >= skill ) {
-			Vector4Set( colour, 1.f, 1.f, 1.f, .15f );
-		} else {
-			Vector4Set( colour, 0.f, 0.f, 0.f, .4f );
-		}
-
-		CG_FillRect( x, draw_y, w, blockheight, colour );
-
-		if ( i < skill ) {
-			x1 = x;
-			y1 = draw_y;
-			w1 = w;
-			h1 = blockheight;
-			CG_AdjustFrom640( &x1, &y1, &w1, &h1 );
-
-			trap_R_DrawStretchPic( x1, y1, w1, h1, 0, 0, 1.f, 0.5f, cgs.media.limboStar_roll );
-		}
-
-		CG_DrawRect_FixedBorder( x, draw_y, w, blockheight, 1, colorBlack );
-		draw_y -= ( blockheight + 1 );
-	}
-}*/
-
-/* Nico, removed skills
-skillType_t CG_ClassSkillForPosition( clientInfo_t* ci, int pos ) {
-	switch ( pos ) {
-	case 0:
-		return BG_ClassSkillForClass( ci->cls );
-	case 1:
-		return SK_BATTLE_SENSE;
-	case 2:
-		return SK_LIGHT_WEAPONS;
-	}
-
-	return SK_BATTLE_SENSE;
-}*/
 
 // Nico, heavilly modified
 static void CG_DrawPlayerStats( void ) {
@@ -3726,62 +3041,6 @@ void CG_StatsDebugAddText( const char *text ) {
 		CG_Printf( "%s\n", text );
 	}
 }
-
-/* Nico, removed ws related command
-static void CG_DrawStatsDebug( void ) {
-	int textWidth = 0;
-	int i, x, y, w, h;
-
-	if ( !cg_debugSkills.integer ) {
-		return;
-	}
-
-	for ( i = 0; i < 6; i++ ) {
-		if ( statsDebugTime[i] + 9000 > cg.time ) {
-			if ( statsDebugTextWidth[i] > textWidth ) {
-				textWidth = statsDebugTextWidth[i];
-			}
-		}
-	}
-
-	w = textWidth + 6;
-	h = 9;
-	x = 640 - w;
-	y = ( 480 - 5 * ( 12 + 2 ) + 6 - 4 ) - 6 - h; // don't ask
-
-	i = statsDebugPos;
-
-	do {
-		vec4_t colour;
-
-		if ( statsDebugTime[i] + 9000 <= cg.time ) {
-			break;
-		}
-
-		colour[0] = colour[1] = colour[2] = .5f;
-		if ( cg.time - statsDebugTime[i] > 5000 ) {
-			colour[3] = .5f - .5f * ( ( cg.time - statsDebugTime[i] - 5000 ) / 4000.f );
-		} else {
-			colour[3] = .5f ;
-		}
-		CG_FillRect( x, y, w, h, colour );
-
-		colour[0] = colour[1] = colour[2] = 1.f;
-		if ( cg.time - statsDebugTime[i] > 5000 ) {
-			colour[3] = 1.f - ( ( cg.time - statsDebugTime[i] - 5000 ) / 4000.f );
-		} else {
-			colour[3] = 1.f ;
-		}
-		CG_Text_Paint_Ext( 640.f - 3 - statsDebugTextWidth[i], y + h - 2, .15f, .15f, colour, statsDebugStrings[i], 0, 0, ITEM_TEXTSTYLE_NORMAL, &cgs.media.limboFont2 );
-
-		y -= h;
-
-		i--;
-		if ( i < 0 ) {
-			i = 6 - 1;
-		}
-	} while ( i != statsDebugPos );
-}*/
 
 //bani
 void CG_DrawDemoRecording( void ) {
@@ -3822,16 +3081,6 @@ CG_Draw2D
 static void CG_Draw2D( void ) {
 	CG_ScreenFade();
 
-	/* Nico, removed debriefing
-	if ( cg.snap->ps.pm_type == PM_INTERMISSION ) {
-		CG_DrawIntermission();
-		return;
-	} else {
-		if ( cgs.dbShowing ) {
-			CG_Debriefing_Shutdown();
-		}
-	}*/
-
 	if ( cg.editingSpeakers ) {
 		CG_SpeakerEditorDraw();
 		return;
@@ -3851,9 +3100,6 @@ static void CG_Draw2D( void ) {
 		CG_DrawFlashBlendBehindHUD();
 
 		if ( cg.snap->ps.persistant[PERS_TEAM] == TEAM_SPECTATOR ) {
-
-			// Nico, do not draw "SPECTATOR" to specs
-			// CG_DrawSpectator();
 			
 			CG_DrawCrosshair();
 			CG_DrawCrosshairNames();
@@ -3867,9 +3113,6 @@ static void CG_Draw2D( void ) {
 				CG_DrawCrosshair();
 
 				CG_DrawCrosshairNames();
-
-				// Nico, unused
-				// CG_DrawNoShootIcon();
 			}
 
 			CG_DrawTeamInfo();
@@ -3895,15 +3138,9 @@ static void CG_Draw2D( void ) {
 
 			if ( cg.snap->ps.stats[STAT_HEALTH] > 0 ) {
 
-				/* Nico, removed hud head animation
-				CG_DrawPlayerStatusHead();*/
-
 				CG_DrawPlayerStatus();
 				CG_DrawPlayerStats();
 			}
-
-			/* Nico, removed respawnLeft
-			CG_DrawLivesLeft();*/
 
 			// Cursor hint
 			rect.w = rect.h = 48;
@@ -3917,10 +3154,6 @@ static void CG_Draw2D( void ) {
 			rect.w = 10;
 			rect.h = 64;
 			CG_DrawWeapStability( &rect );
-
-			// Stats Debugging
-			/* Nico, removed ws related command
-			CG_DrawStatsDebug();*/
 		}
 
 		if ( !cg_paused.integer ) {
@@ -3933,15 +3166,7 @@ static void CG_Draw2D( void ) {
 
 		CG_DrawFollow();
 
-		/* Nico, removed warmup
-		CG_DrawWarmup();*/
-
 		CG_DrawNotify();
-
-		/* Nico, removed compass
-		if ( cg_drawCompass.integer ) {
-			CG_DrawNewCompass();
-		}*/
 
 		CG_DrawObjectiveInfo();
 
@@ -4098,24 +3323,6 @@ void CG_DrawActive( stereoFrame_t stereoView ) {
 
 	cg.refdef_current->glfog.registered = 0;    // make sure it doesn't use fog from another scene
 
-	/* Nico, render while in limbo
-	if ( cg.showGameView ) {
-		float x, y, w, h;
-		x = LIMBO_3D_X;
-		y = LIMBO_3D_Y;
-		w = LIMBO_3D_W;
-		h = LIMBO_3D_H;
-
-		CG_AdjustFrom640( &x, &y, &w, &h );
-
-		cg.refdef_current->x = x;
-		cg.refdef_current->y = y;
-		cg.refdef_current->width = w;
-		cg.refdef_current->height = h;
-
-		CG_Letterbox( ( LIMBO_3D_W / 640.f ) * 100, ( LIMBO_3D_H / 480.f ) * 100, qfalse );
-	}*/
-
 	CG_ShakeCamera();       // NERVE - SMF
 
 	// Gordon
@@ -4124,10 +3331,7 @@ void CG_DrawActive( stereoFrame_t stereoView ) {
 	// Gordon
 	CG_DrawMiscGamemodels();
 
-	// Nico, removed stuff in limbo
-	// if ( !( cg.limboEndCinematicTime > cg.time && cg.showGameView ) ) {
-		trap_R_RenderScene( cg.refdef_current );
-	// }
+	trap_R_RenderScene( cg.refdef_current );
 
 	// restore original viewpoint if running stereo
 	if ( separation != 0 ) {
@@ -4137,11 +3341,7 @@ void CG_DrawActive( stereoFrame_t stereoView ) {
 	// Nico, render while in limbo
 	CG_Draw2D();
 
-	if ( !cg.showGameView ) {
-		// draw status bar and other floating elements
-		// Nico, render while in limbo
-		// CG_Draw2D();
-	} else {
+	if ( cg.showGameView ) {
 		CG_LimboPanel_Draw();
 	}
 }

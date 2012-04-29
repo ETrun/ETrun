@@ -376,44 +376,28 @@ const char* ftLeaderMenuListAlphachars[] = {
 	NULL,
 };
 
-int CG_CountFireteamsByTeam( team_t t ) {
+// Nico, allow cross-team fireteams
+int CG_CountFireteams() {
 	int cnt = 0;
 	int i;
-
-	if ( t != TEAM_AXIS && t != TEAM_ALLIES ) {
-		return 0;
-	}
 
 	for ( i = 0; i < MAX_FIRETEAMS; i++ ) {
 		if ( !cg.fireTeams[i].inuse ) {
 			continue;
 		}
-
-		if ( cgs.clientinfo[cg.fireTeams[i].leader].team != t ) {
-			continue;
-		}
-
 		cnt++;
 	}
 
 	return cnt;
 }
 
-void CG_DrawFireteamsByTeam( panel_button_t* button, team_t t ) {
+void CG_DrawFireteams( panel_button_t* button) {
 	float y = button->rect.y;
 	const char* str;
 	int i;
 
-	if ( t != TEAM_AXIS && t != TEAM_ALLIES ) {
-		return;
-	}
-
 	for ( i = 0; i < MAX_FIRETEAMS; i++ ) {
 		if ( !cg.fireTeams[i].inuse ) {
-			continue;
-		}
-
-		if ( cgs.clientinfo[cg.fireTeams[i].leader].team != t ) {
 			continue;
 		}
 
@@ -441,10 +425,6 @@ int CG_CountPlayersSF( void ) {
 			continue;
 		}
 
-		if ( cgs.clientinfo[i].team != cgs.clientinfo[cg.clientNum].team ) {
-			continue;
-		}
-
 		if ( CG_IsOnFireteam( i ) != CG_IsOnFireteam( cg.clientNum ) ) {
 			continue;
 		}
@@ -465,10 +445,6 @@ int CG_CountPlayersNF( void ) {
 		}
 
 		if ( !cgs.clientinfo[i].infoValid ) {
-			continue;
-		}
-
-		if ( cgs.clientinfo[i].team != cgs.clientinfo[cg.clientNum].team ) {
 			continue;
 		}
 
@@ -502,10 +478,6 @@ int CG_PlayerSFFromPos( int pos, int* pageofs ) {
 		}
 
 		if ( !cgs.clientinfo[i].infoValid ) {
-			continue;
-		}
-
-		if ( cgs.clientinfo[i].team != cgs.clientinfo[cg.clientNum].team ) {
 			continue;
 		}
 
@@ -547,10 +519,6 @@ int CG_PlayerNFFromPos( int pos, int* pageofs ) {
 		}
 
 		if ( !cgs.clientinfo[i].infoValid ) {
-			continue;
-		}
-
-		if ( cgs.clientinfo[i].team != cgs.clientinfo[cg.clientNum].team ) {
 			continue;
 		}
 
@@ -719,7 +687,7 @@ void CG_Fireteams_MenuText_Draw( panel_button_t* button ) {
 			for ( i = 0; ftOffMenuList[i]; i++ ) {
 				const char* str;
 
-				if ( i == 0 && !CG_CountFireteamsByTeam( cgs.clientinfo[cg.clientNum].team ) ) {
+				if ( i == 0 && !CG_CountFireteams() ) {
 					continue;
 				}
 
@@ -779,12 +747,12 @@ void CG_Fireteams_MenuText_Draw( panel_button_t* button ) {
 		break;
 
 	case 2:
-		if ( !CG_CountFireteamsByTeam( cgs.clientinfo[cg.clientNum].team ) || CG_IsOnFireteam( cg.clientNum ) ) {
+		if ( !CG_CountFireteams() || CG_IsOnFireteam( cg.clientNum ) ) {
 			cgs.ftMenuMode = 1;
 			break;
 		}
 
-		CG_DrawFireteamsByTeam( button, cgs.clientinfo[cg.clientNum].team );
+		CG_DrawFireteams( button );
 		break;
 
 	case 3:
@@ -987,7 +955,7 @@ qboolean CG_FireteamCheckExecKey( int key, qboolean doaction ) {
 				break;
 			}
 
-			if ( i == 0 && !CG_CountFireteamsByTeam( cgs.clientinfo[cg.clientNum].team ) ) {
+			if ( i == 0 && !CG_CountFireteams() ) {
 				return qfalse;
 			}
 
@@ -1063,10 +1031,6 @@ qboolean CG_FireteamCheckExecKey( int key, qboolean doaction ) {
 
 		for ( i = 0; i < MAX_FIRETEAMS; i++ ) {
 			if ( !cg.fireTeams[i].inuse ) {
-				continue;
-			}
-
-			if ( cgs.clientinfo[cg.fireTeams[i].leader].team != cgs.clientinfo[cg.clientNum].team ) {
 				continue;
 			}
 

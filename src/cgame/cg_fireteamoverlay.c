@@ -174,7 +174,7 @@ clientInfo_t* CG_ClientInfoForPosition( int pos, int max ) {
 	int i, cnt = 0;
 
 	for ( i = 0; i < MAX_CLIENTS && cnt < max; i++ ) {
-		if ( cg.clientNum != i && cgs.clientinfo[i].infoValid && !CG_IsOnFireteam( i ) && cgs.clientinfo[cg.clientNum].team == cgs.clientinfo[i].team ) {
+		if ( cg.clientNum != i && cgs.clientinfo[i].infoValid && !CG_IsOnFireteam( i ) ) {
 			if ( cnt == pos ) {
 				return &cgs.clientinfo[i];
 			}
@@ -190,7 +190,7 @@ fireteamData_t* CG_FireTeamForPosition( int pos, int max ) {
 	int i, cnt = 0;
 
 	for ( i = 0; i < MAX_FIRETEAMS && cnt < max; i++ ) {
-		if ( cg.fireTeams[i].inuse && cgs.clientinfo[cg.fireTeams[i].leader].team == cgs.clientinfo[cg.clientNum].team ) {
+		if ( cg.fireTeams[i].inuse ) {
 			if ( cnt == pos ) {
 				return &cg.fireTeams[i];
 			}
@@ -211,7 +211,7 @@ clientInfo_t* CG_FireTeamPlayerForPosition( int pos, int max ) {
 	}
 
 	for ( i = 0; i < MAX_CLIENTS && cnt < max; i++ ) {
-		if ( cgs.clientinfo[i].infoValid && cgs.clientinfo[cg.clientNum].team == cgs.clientinfo[i].team ) {
+		if ( cgs.clientinfo[i].infoValid ) {
 			if ( !( f == CG_IsOnFireteam( i ) ) ) {
 				continue;
 			}
@@ -255,6 +255,7 @@ clientInfo_t* CG_SortedFireTeamPlayerForPosition( int pos, int max ) {
 
 #define FT_BAR_YSPACING 2.f
 #define FT_BAR_HEIGHT 10.f
+#define FT_WIDTH 115// Nico
 void CG_DrawFireTeamOverlay( rectDef_t* rect ) {
 	int x = rect->x;
 	int y = rect->y + 1;    // +1, jitter it into place in 1024 :)
@@ -267,7 +268,7 @@ void CG_DrawFireTeamOverlay( rectDef_t* rect ) {
 	vec4_t clr2 =   { 0.f,      0.f,        0.f,        .2f };
 	vec4_t clr3 =   { 0.25f,        0.f,        0.f,        153 / 255.f };
 	vec4_t tclr =   { 0.6f,     0.6f,       0.6f,       1.0f };
-	vec4_t bgColor      = { 0.0f, 0.0f, 0.0f, 0.6f };       // window
+	vec4_t bgColor      = { 0.0f, 0.0f, 0.0f, 0.5f };       // window
 	vec4_t borderColor  = { 0.5f, 0.5f, 0.5f, 0.5f };   // window
 
 	if ( !( f = CG_IsOnFireteam( cg.clientNum ) ) ) {
@@ -284,20 +285,19 @@ void CG_DrawFireTeamOverlay( rectDef_t* rect ) {
 		h += FT_BAR_HEIGHT + FT_BAR_YSPACING;
 	}
 
-	CG_DrawRect( x, y, 204, h, 1, borderColor );
-	CG_FillRect( x + 1, y + 1, 204 - 2, h - 2, bgColor );
+	CG_DrawRect( x, y, FT_WIDTH, h, 1, borderColor );
+	CG_FillRect( x + 1, y + 1, FT_WIDTH - 2, h - 2, bgColor );
 
 	x += 2;
 	y += 2;
 
-	CG_FillRect( x, y, 204 - 4, 12, clr1 );
+	CG_FillRect( x, y, FT_WIDTH - 4, 12, clr1 );
 
-	sprintf( buffer, "Fireteam: %s", bg_fireteamNames[f->ident] );
+	sprintf( buffer, "Fireteam %s", bg_fireteamNames[f->ident] );
 	Q_strupr( buffer );
 	CG_Text_Paint_Ext( x + 3, y + FT_BAR_HEIGHT, .19f, .19f, tclr, buffer, 0, 0, 0, &cgs.media.limboFont1 );
 
 	x += 2;
-	//y += 2;
 
 	for ( i = 0; i < 6; i++ ) {
 		y += FT_BAR_HEIGHT + FT_BAR_YSPACING;
@@ -305,49 +305,12 @@ void CG_DrawFireTeamOverlay( rectDef_t* rect ) {
 
 		ci = CG_SortedFireTeamPlayerForPosition( i, 6 );
 		if ( !ci ) {
-			break;;
-		}
-
-		if ( ci->selected ) {
-			CG_FillRect( x, y + FT_BAR_YSPACING, 204 - 4, FT_BAR_HEIGHT, clr3 );
-		} else {
-			CG_FillRect( x, y + FT_BAR_YSPACING, 204 - 4, FT_BAR_HEIGHT, clr2 );
+			break;
 		}
 
 		x += 4;
 
-		CG_Text_Paint_Ext( x, y + FT_BAR_HEIGHT, .2f, .2f, tclr, BG_ClassLetterForNumber( ci->cls ), 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont2 );
-		x += 10;
-
-		/* Nico, removed rankNames
-		CG_Text_Paint_Ext( x, y + FT_BAR_HEIGHT, .2f, .2f, tclr, ci->team == TEAM_AXIS ? miniRankNames_Axis[ci->rank] : miniRankNames_Allies[ci->rank], 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont2 );
-		x += 22;*/
-
 		CG_Text_Paint_Ext( x, y + FT_BAR_HEIGHT, .2f, .2f, tclr, ci->name, 0, 17, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont2 );
-		x += 90;
-		x += 20;
-
-		if ( ci->health > 80 ) {
-			CG_Text_Paint_Ext( x, y + FT_BAR_HEIGHT,  .2f, .2f, tclr, va( "%i", ci->health < 0 ? 0 : ci->health ), 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont2 );
-		} else if ( ci->health > 0 ) {
-			CG_Text_Paint_Ext( x, y + FT_BAR_HEIGHT,  .2f, .2f, colorYellow, va( "%i", ci->health < 0 ? 0 : ci->health ), 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont2 );
-		} else {
-			CG_Text_Paint_Ext( x, y + FT_BAR_HEIGHT,  .2f, .2f, colorRed, va( "%i", ci->health < 0 ? 0 : ci->health ), 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont2 );
-		}
-
-		{
-			vec2_t loc;
-			char *s;
-
-			loc[0] = ci->location[0];
-			loc[1] = ci->location[1];
-
-			s = va( "^3(%s)", BG_GetLocationString( loc ) );
-
-			x = rect->x + ( 204 - 4 - CG_Text_Width_Ext( s, .2f, 0, &cgs.media.limboFont2 ) );
-
-			CG_Text_Paint_Ext( x, y + FT_BAR_HEIGHT,  .2f, .2f, tclr, va( "^3(%s)", BG_GetLocationString( loc ) ), 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont2 );
-		}
 	}
 }
 
@@ -461,10 +424,6 @@ qboolean CG_FireteamHasClass( int classnum, qboolean selectedonly ) {
 	}
 
 	for ( i = 0; i < MAX_CLIENTS; i++ ) {
-/*		if( i == cgs.clientinfo ) {
-			continue;
-		}*/
-
 		if ( !cgs.clientinfo[ i ].infoValid ) {
 			continue;
 		}

@@ -385,7 +385,7 @@ void CG_QuickFireteamAdmin_f( void ) {
 		} else {
 			cgs.ftMenuMode = 1;
 		}
-	} else if ( cgs.clientinfo[ cg.clientNum ].team != TEAM_SPECTATOR ) {
+	} else {// Nico, allow FT menu for spectators too
 		CG_EventHandling( CGAME_EVENT_FIRETEAMMSG, qfalse );
 		cgs.ftMenuMode = 1;
 	}

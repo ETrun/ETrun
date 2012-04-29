@@ -456,11 +456,11 @@ extern vec3_t bytedirs[NUMVERTEXNORMALS];
 #define SCREEN_WIDTH        640
 #define SCREEN_HEIGHT       480
 
-#define TINYCHAR_WIDTH      ( SMALLCHAR_WIDTH )
-#define TINYCHAR_HEIGHT     ( SMALLCHAR_HEIGHT )
+#define TINYCHAR_WIDTH      6
+#define TINYCHAR_HEIGHT     12
 
-#define MINICHAR_WIDTH      8
-#define MINICHAR_HEIGHT     12
+#define MINICHAR_WIDTH      7
+#define MINICHAR_HEIGHT     14
 
 #define SMALLCHAR_WIDTH     8
 #define SMALLCHAR_HEIGHT    16
