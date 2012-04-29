@@ -18,6 +18,7 @@ Key features
 * Fixed kill & hurt triggers
 * Introduced ETrun cvars (see https://github.com/boutetnico/ETrun/wiki/ETrun-cvars)
 * New scoreboard
+* No overbounce mode
 
 Bootstrapping
 -------------
