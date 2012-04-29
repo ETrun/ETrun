@@ -103,7 +103,6 @@ void CG_DrawSpeedMeter(void) {
  *
  * @author Nico
  */
-/*
 void CG_DrawOB(void) {
 	double a, b, c;
 	float psec;
@@ -115,12 +114,12 @@ void CG_DrawOB(void) {
 	float t;
 	trace_t trace;
 	vec3_t start, end;
-	// float n1; @unused
 	float n2;
 	int n;
 
-	if (cg_thirdPerson.integer)
+	if (!cg_drawOB.integer || cg_thirdPerson.integer || physics.integer & PHYSICS_NO_OVERBOUNCE) {
 		return;
+	}
 
 	psec = pmove_msec.integer / 1000.0;
 	gravity = cg.predictedPlayerState.gravity;
@@ -140,12 +139,14 @@ void CG_DrawOB(void) {
 		cg.predictedPlayerState.clientNum, CONTENTS_SOLID);
 
 	// we didn't hit anything
-	if (trace.fraction == 1.0)
+	if (trace.fraction == 1.0) {
 		return;
+	}
 
 	// not a floor
-	if (trace.plane.type != 2)
+	if (trace.plane.type != 2) {
 		return;
+	}
 
 	t = trace.endpos[2];
 	//CG_Printf("h0: %f, t: %f\n", h0, t);
@@ -161,9 +162,10 @@ void CG_DrawOB(void) {
 	n = floor(n2);
 	hn = h0 + psec * n * (v0 - gravity * psec / 2 - (n - 1) * rintv / 2);
 	//CG_Printf("h0: %f, v0: %f, n: %d, hn: %f, t: %f\n", h0, v0, n, hn, t);
-	if (n && hn < t + 0.25 && hn > t)
+	if (n && hn < t + 0.25 && hn > t) {
 		CG_DrawStringExt(320, 220, "F", colorWhite, qfalse, qtrue,
 				TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 0);
+	}
 
 	if (cg.predictedPlayerState.groundEntityNum != ENTITYNUM_NONE) {
 		// jump ob
@@ -176,11 +178,12 @@ void CG_DrawOB(void) {
 		n = floor(n2);
 		hn = h0 + psec * n * (v0 - gravity * psec / 2 - ( n - 1 ) * rintv / 2);
 		//CG_Printf("h0: %f, v0: %f, n: %d, hn: %f, t: %f\n", h0, v0, n, hn, t);
-		if (hn < t + 0.25 && hn > t)
+		if (hn < t + 0.25 && hn > t) {
 			CG_DrawStringExt(330, 220, "J", colorWhite, qfalse, qtrue,
 					TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 0);
+		}
 	}
-}*/
+}
 
 /* Draw timer
  *

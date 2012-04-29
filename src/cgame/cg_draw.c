@@ -3949,7 +3949,7 @@ static void CG_Draw2D( void ) {
 		CG_DrawSpeedMeter();
 
 		// Nico, draw OB
-		// CG_DrawOB();
+		CG_DrawOB();
 
 		// Nico, draw timer
 		CG_DrawTimer();

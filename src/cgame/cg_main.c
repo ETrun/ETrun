@@ -359,6 +359,9 @@ vmCvar_t cg_maxCheckPoints;
 // Max FPS
 vmCvar_t com_maxfps;
 
+// OB detector
+vmCvar_t cg_drawOB;
+
 // Nico, end of ETrun cvars
 
 typedef struct {
@@ -625,6 +628,9 @@ cvarTable_t cvarTable[] = {
 
 	// Com_maxFPS
 	{ &com_maxfps, "com_maxfps", "125", CVAR_ARCHIVE },
+
+	// OB detector
+	{ &cg_drawOB, "cg_drawOB", "0", CVAR_ARCHIVE },
 
 	// Nico, end of ETrun cvars
 };

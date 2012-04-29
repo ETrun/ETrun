@@ -2425,6 +2425,9 @@ extern vmCvar_t cg_checkPointsX;
 extern vmCvar_t cg_checkPointsY;
 extern vmCvar_t cg_maxCheckPoints;
 
+// OB detector
+extern vmCvar_t cg_drawOB;
+
 // Nico, end of ETrun cvars
 
 //
@@ -2595,7 +2598,7 @@ const char* CG_PickupItemText( int item );
 //
 void CG_DrawCheckpoints(void);
 void CG_DrawSpeedMeter(void);
-// void CG_DrawOB(void);
+void CG_DrawOB(void);
 void CG_DrawTimer(void);
 
 //

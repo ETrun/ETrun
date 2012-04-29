@@ -2372,4 +2372,5 @@ void PM_TraceAll( trace_t *trace, vec3_t start, vec3_t end );
 #define PHYSICS_NO_FALLDAMAGE		2
 #define PHYSICS_DOUBLEJUMP			4
 #define PHYSICS_AIRCONTROL			8
+#define PHYSICS_NO_OVERBOUNCE		16
 
