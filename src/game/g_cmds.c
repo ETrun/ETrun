@@ -69,8 +69,6 @@ void G_SendScore( gentity_t *ent ) {
 		count = 0;
 
 		for (; i < numSorted ; i++ ) {
-			/* Nico, removed respawnLeft
-			int ping, playerClass, respawnsLeft;*/
 			int ping, playerClass;
 
 			cl = &level.clients[level.sortedClients[i]];
@@ -81,26 +79,11 @@ void G_SendScore( gentity_t *ent ) {
 
 			// NERVE - SMF - if on same team, send across player class
 			// Gordon: FIXME: remove/move elsewhere?
-			/* Nico, removed multiview
-			if ( cl->ps.persistant[PERS_TEAM] == ent->client->ps.persistant[PERS_TEAM] || G_smvLocateEntityInMVList( ent, level.sortedClients[i], qfalse ) ) {*/
 			if (cl->ps.persistant[PERS_TEAM] == ent->client->ps.persistant[PERS_TEAM]) {
 				playerClass = cl->ps.stats[STAT_PLAYER_CLASS];
 			} else {
 				playerClass = 0;
 			}
-
-			// NERVE - SMF - number of respawns left
-			/* Nico, removed respawnLeft
-			respawnsLeft = cl->ps.persistant[PERS_RESPAWNS_LEFT];
-			if ( g_gametype.integer == GT_WOLF_LMS ) {
-				if ( g_entities[level.sortedClients[i]].health <= 0 ) {
-					respawnsLeft = -2;
-				}
-			} else {
-				if ( ( respawnsLeft == 0 && ( ( cl->ps.pm_flags & PMF_LIMBO ) || ( ( level.intermissiontime ) && g_entities[level.sortedClients[i]].health <= 0 ) ) ) ) {
-					respawnsLeft = -2;
-				}
-			}*/
 
 			if ( cl->pers.connected == CON_CONNECTING ) {
 				ping = -1;
@@ -108,39 +91,17 @@ void G_SendScore( gentity_t *ent ) {
 				ping = cl->ps.ping < 999 ? cl->ps.ping : 999;
 			}
 
-			/* Nico, removed LMS
-			if ( g_gametype.integer == GT_WOLF_LMS ) {
-				// Nico, removed respawnLeft
-				// Com_sprintf( entry, sizeof( entry ), " %i %i %i %i %i %i %i", level.sortedClients[i], cl->ps.persistant[PERS_SCORE], ping,
-							 ( level.time - cl->pers.enterTime ) / 60000, g_entities[level.sortedClients[i]].s.powerups, playerClass, respawnsLeft );
-				Com_sprintf( entry, sizeof( entry ), " %i %i %i %i %i %i", level.sortedClients[i], cl->ps.persistant[PERS_SCORE], ping,
-							 ( level.time - cl->pers.enterTime ) / 60000, g_entities[level.sortedClients[i]].s.powerups, playerClass );
-			} else {*/
-
-				/* Nico, removed skills
-				int j, totalXP;
-
-				for ( totalXP = 0, j = 0; j < SK_NUM_SKILLS; j++ ) {
-					totalXP += cl->sess.skillpoints[j];
-				}
-
-				int totalXP = 0;*/
-
-				// Nico, removed respawnLeft
-				// Com_sprintf( entry, sizeof( entry ), " %i %i %i %i %i %i %i", level.sortedClients[i], totalXP, ping,
-				//			 ( level.time - cl->pers.enterTime ) / 60000, g_entities[level.sortedClients[i]].s.powerups, playerClass, respawnsLeft );
-				// Nico, added timerun best time, timerun best speed, timerun status, followed client
-				Com_sprintf( entry, sizeof( entry ), " %i %i %i %i %i %i %i %i %i",
-					level.sortedClients[i], 
-					ping,
-					( level.time - cl->pers.enterTime ) / 60000, 
-					g_entities[level.sortedClients[i]].s.powerups, 
-					playerClass, 
-					cl->sess.timerunBestTime[0], 
-					cl->sess.timerunBestSpeed, 
-					cl->timerunActive ? 1 : 0,
-					cl->ps.clientNum);
-			// }
+			// Nico, added timerun best time, timerun best speed, timerun status, followed client
+			Com_sprintf( entry, sizeof( entry ), " %i %i %i %i %i %i %i %i %i",
+				level.sortedClients[i], 
+				ping,
+				( level.time - cl->pers.enterTime ) / 60000, 
+				g_entities[level.sortedClients[i]].s.powerups, 
+				playerClass, 
+				cl->sess.timerunBestTime[0], 
+				cl->sess.timerunBestSpeed, 
+				cl->timerunActive ? 1 : 0,
+				cl->ps.clientNum);
 
 			if ( size + strlen( entry ) > 1000 ) {
 				i--; // we need to redo this client in the next buffer (if we can)
@@ -306,273 +267,6 @@ int ClientNumberFromString( gentity_t *to, char *s ) {
 	CPx( to - g_entities, va( "print \"User [lof]%s [lon]is not on the server\n\"", s ) );
 	return( -1 );
 }
-
-/*
-Nico, commented because give command was removed and this is no longer used
-==================
-Cmd_Give_f
-
-Give items to a client
-==================
-
-void Cmd_Give_f( gentity_t *ent ) {
-	char        *name, *amt;
-	int i;
-	qboolean give_all;
-	int amount;
-	qboolean hasAmount = qfalse;
-
-	if ( !CheatsOk( ent ) ) {
-		return;
-	}
-
-	//----(SA)	check for an amount (like "give health 30")
-	amt = ConcatArgs( 2 );
-	if ( *amt ) {
-		hasAmount = qtrue;
-	}
-	amount = atoi( amt );
-	//----(SA)	end
-
-	name = ConcatArgs( 1 );
-
-	if ( Q_stricmp( name, "all" ) == 0 ) {
-		give_all = qtrue;
-	} else {
-		give_all = qfalse;
-	}
-
-	if ( Q_stricmpn( name, "skill", 5 ) == 0 ) {
-		if ( hasAmount ) {
-			if ( amount >= 0 && amount < SK_NUM_SKILLS ) {
-				G_AddSkillPoints( ent, amount, 20 );
-				G_DebugAddSkillPoints( ent, amount, 20, "give skill" );
-			}
-		} else {
-			// bumps all skills with 1 level
-			for ( i = 0; i < SK_NUM_SKILLS; i++ ) {
-				G_AddSkillPoints( ent, i, 20 );
-				G_DebugAddSkillPoints( ent, i, 20, "give skill" );
-			}
-		}
-		return;
-	}
-
-	if ( Q_stricmpn( name, "medal", 5 ) == 0 ) {
-		for ( i = 0; i < SK_NUM_SKILLS; i++ ) {
-			if ( !ent->client->sess.medals[i] ) {
-				ent->client->sess.medals[i] = 1;
-			}
-		}
-		ClientUserinfoChanged( ent - g_entities );
-		return;
-	}
-
-	if ( give_all || Q_stricmpn( name, "health", 6 ) == 0 ) {
-		//----(SA)	modified
-		if ( amount ) {
-			ent->health += amount;
-		} else {
-			ent->health = ent->client->ps.stats[STAT_MAX_HEALTH];
-		}
-		if ( !give_all ) {
-			return;
-		}
-	}
-
-	if ( give_all || Q_stricmp( name, "weapons" ) == 0 ) {
-		for ( i = 0; i < WP_NUM_WEAPONS; i++ ) {
-			if ( BG_WeaponInWolfMP( i ) ) {
-				COM_BitSet( ent->client->ps.weapons, i );
-			}
-		}
-
-		if ( !give_all ) {
-			return;
-		}
-	}
-
-	if ( give_all || Q_stricmpn( name, "ammo", 4 ) == 0 ) {
-		if ( amount ) {
-			if ( ent->client->ps.weapon
-				 && ent->client->ps.weapon != WP_SATCHEL && ent->client->ps.weapon != WP_SATCHEL_DET
-				 ) {
-				Add_Ammo( ent, ent->client->ps.weapon, amount, qtrue );
-			}
-		} else {
-			for ( i = 1 ; i < WP_NUM_WEAPONS ; i++ ) {
-				if ( COM_BitCheck( ent->client->ps.weapons, i ) && i != WP_SATCHEL && i != WP_SATCHEL_DET ) {
-					Add_Ammo( ent, i, 9999, qtrue );
-				}
-			}
-		}
-
-		if ( !give_all ) {
-			return;
-		}
-	}
-
-	//	"give allammo <n>" allows you to give a specific amount of ammo to /all/ weapons while
-	//	allowing "give ammo <n>" to only give to the selected weap.
-	if ( Q_stricmpn( name, "allammo", 7 ) == 0 && amount ) {
-		for ( i = 1 ; i < WP_NUM_WEAPONS; i++ )
-			Add_Ammo( ent, i, amount, qtrue );
-
-		if ( !give_all ) {
-			return;
-		}
-	}
-
-	//---- (SA) Wolf keys
-	if ( give_all || Q_stricmp( name, "keys" ) == 0 ) {
-		ent->client->ps.stats[STAT_KEYS] = ( 1 << KEY_NUM_KEYS ) - 2;
-		if ( !give_all ) {
-			return;
-		}
-	}
-	//---- (SA) end
-}*/
-
-
-/*
-Nico, commented this because god command was removed but this function could be useful later
-
-==================
-Cmd_God_f
-
-Sets client to godmode
-
-argv(0) god
-==================
-
-void Cmd_God_f( gentity_t *ent ) {
-	char    *msg;
-	char    *name;
-	qboolean godAll = qfalse;
-
-	if ( !CheatsOk( ent ) ) {
-		return;
-	}
-
-	name = ConcatArgs( 1 );
-
-	// are we supposed to make all our teammates gods too?
-	if ( Q_stricmp( name, "all" ) == 0 ) {
-		godAll = qtrue;
-	}
-
-	// can only use this cheat in single player
-	if ( godAll && g_gametype.integer == GT_SINGLE_PLAYER ) {
-		int j;
-		qboolean settingFlag = qtrue;
-		gentity_t *other;
-
-		// are we turning it on or off?
-		if ( ent->flags & FL_GODMODE ) {
-			settingFlag = qfalse;
-		}
-
-		// loop through all players
-		for ( j = 0; j < level.maxclients; j++ )
-		{
-			other = &g_entities[j];
-			// if they're on the same team
-			if ( OnSameTeam( other, ent ) ) {
-				// set or clear the flag
-				if ( settingFlag ) {
-					other->flags |= FL_GODMODE;
-				} else {
-					other->flags &= ~FL_GODMODE;
-				}
-			}
-		}
-		if ( settingFlag ) {
-			msg = "godmode all ON\n";
-		} else {
-			msg = "godmode all OFF\n";
-		}
-	} else
-	{
-		if ( !Q_stricmp( name, "on" ) || atoi( name ) ) {
-			ent->flags |= FL_GODMODE;
-		} else if ( !Q_stricmp( name, "off" ) || !Q_stricmp( name, "0" ) ) {
-			ent->flags &= ~FL_GODMODE;
-		} else {
-			ent->flags ^= FL_GODMODE;
-		}
-		if ( !( ent->flags & FL_GODMODE ) ) {
-			msg = "godmode OFF\n";
-		} else {
-			msg = "godmode ON\n";
-		}
-	}
-
-	trap_SendServerCommand( ent - g_entities, va( "print \"%s\"", msg ) );
-}*/
-
-/*
-Nico, commented this because it's no longer used
-==================
-Cmd_Nofatigue_f
-
-Sets client to nofatigue
-
-argv(0) nofatigue
-==================
-
-void Cmd_Nofatigue_f( gentity_t *ent ) {
-	char    *msg;
-
-	char    *name = ConcatArgs( 1 );
-
-	if ( !CheatsOk( ent ) ) {
-		return;
-	}
-
-	if ( !Q_stricmp( name, "on" ) || atoi( name ) ) {
-		ent->flags |= FL_NOFATIGUE;
-	} else if ( !Q_stricmp( name, "off" ) || !Q_stricmp( name, "0" ) ) {
-		ent->flags &= ~FL_NOFATIGUE;
-	} else {
-		ent->flags ^= FL_NOFATIGUE;
-	}
-
-	if ( !( ent->flags & FL_NOFATIGUE ) ) {
-		msg = "nofatigue OFF\n";
-	} else {
-		msg = "nofatigue ON\n";
-	}
-
-	trap_SendServerCommand( ent - g_entities, va( "print \"%s\"", msg ) );
-}*/
-
-/*
-Nico, removed notarget command so this function is unused
-==================
-Cmd_Notarget_f
-
-Sets client to notarget
-
-argv(0) notarget
-==================
-
-void Cmd_Notarget_f( gentity_t *ent ) {
-	char    *msg;
-
-	if ( !CheatsOk( ent ) ) {
-		return;
-	}
-
-	ent->flags ^= FL_NOTARGET;
-	if ( !( ent->flags & FL_NOTARGET ) ) {
-		msg = "notarget OFF\n";
-	} else {
-		msg = "notarget ON\n";
-	}
-
-	trap_SendServerCommand( ent - g_entities, va( "print \"%s\"", msg ) );
-}*/
-
 
 /*
 ==================
@@ -1257,15 +951,6 @@ void G_SayTo( gentity_t *ent, gentity_t *other, int mode, int color, const char 
 	}
 
 	// NERVE - SMF - if spectator, no chatting to players in WolfMP
-	/* Nico, removed match_* cvars
-	if ( match_mutespecs.integer > 0 && ent->client->sess.referee == 0 &&   // OSP
-		 ( ( ent->client->sess.sessionTeam == TEAM_FREE && other->client->sess.sessionTeam != TEAM_FREE ) ||
-		   ( ent->client->sess.sessionTeam == TEAM_SPECTATOR && other->client->sess.sessionTeam != TEAM_SPECTATOR ) ) ) {*/
-
-	/* Nico, enable voice chat for spectators
-	if ( ent->client->sess.referee == 0 &&   // OSP
-		 ( ( ent->client->sess.sessionTeam == TEAM_FREE && other->client->sess.sessionTeam != TEAM_FREE ) ||
-		   ( ent->client->sess.sessionTeam == TEAM_SPECTATOR && other->client->sess.sessionTeam != TEAM_SPECTATOR ) ) ) {*/
 	if ( ent->client->sess.referee == 0 &&   // OSP
 		 ( ( ent->client->sess.sessionTeam == TEAM_FREE && other->client->sess.sessionTeam != TEAM_FREE ) ) ) {
 		return;
@@ -1382,9 +1067,6 @@ void G_VoiceTo( gentity_t *ent, gentity_t *other, int mode, const char *id, qboo
 	}
 
 	// OSP - spec vchat rules follow the same as normal chatting rules
-	/* Nico, removed match_* cvars
-	if ( match_mutespecs.integer > 0 && ent->client->sess.referee == 0 &&
-		 ent->client->sess.sessionTeam == TEAM_SPECTATOR && other->client->sess.sessionTeam != TEAM_SPECTATOR ) {*/
 	if ( ent->client->sess.referee == 0 &&
 		 ent->client->sess.sessionTeam == TEAM_SPECTATOR && other->client->sess.sessionTeam != TEAM_SPECTATOR ) {
 		return;
@@ -1583,11 +1265,6 @@ qboolean Cmd_CallVote_f( gentity_t *ent, unsigned int dwCommand, qboolean fRefCo
 			G_printFull("A vote is already in progress.", ent);
 			return qfalse;
 		}
-		/* Nico, removed intermission
-		else if ( level.intermissiontime ) {
-			G_printFull("Cannot callvote during intermission.", ent);
-			return qfalse;
-		}*/
 		else if ( !ent->client->sess.referee ) {
 			if ( voteFlags.integer == VOTING_DISABLED ) {
 				G_printFull("Voting not enabled on this server.", ent);
@@ -1680,27 +1357,6 @@ qboolean Cmd_CallVote_f( gentity_t *ent, unsigned int dwCommand, qboolean fRefCo
 
 qboolean StringToFilter( const char *s, ipFilter_t *f );
 
-/* Nico, removed complaints
-qboolean G_FindFreeComplainIP( gclient_t* cl, ipFilter_t* ip ) {
-	int i = 0;
-
-	if ( !g_ipcomplaintlimit.integer ) {
-		return qtrue;
-	}
-
-	for ( i = 0; i < MAX_COMPLAINTIPS && i < g_ipcomplaintlimit.integer; i++ ) {
-		if ( !cl->pers.complaintips[i].compare && !cl->pers.complaintips[i].mask ) {
-			cl->pers.complaintips[i].compare = ip->compare;
-			cl->pers.complaintips[i].mask = ip->mask;
-			return qtrue;
-		}
-		if ( ( cl->pers.complaintips[i].compare & cl->pers.complaintips[i].mask ) == ( ip->compare & ip->mask ) ) {
-			return qtrue;
-		}
-	}
-	return qfalse;
-}*/
-
 /*
 ==================
 Cmd_Vote_f
@@ -1708,70 +1364,6 @@ Cmd_Vote_f
 */
 void Cmd_Vote_f( gentity_t *ent ) {
 	char msg[64];
-	// int num; Nico, unused warning fix
-
-	/* Nico, removed complaints
-	// DHM - Nerve :: Complaints supercede voting (and share command)
-	if ( ent->client->pers.complaintEndTime > level.time && g_gamestate.integer == GS_PLAYING && g_complaintlimit.integer ) {
-
-		gentity_t* other = &g_entities[ ent->client->pers.complaintClient ];
-		gclient_t *cl = other->client;
-		if ( !cl ) {
-			return;
-		}
-		if ( cl->pers.connected != CON_CONNECTED ) {
-			return;
-		}
-		if ( cl->pers.localClient ) {
-			trap_SendServerCommand( ent - g_entities, "complaint -3" );
-			return;
-		}
-
-		trap_Argv( 1, msg, sizeof( msg ) );
-
-		if ( msg[0] == 'y' || msg[1] == 'Y' || msg[1] == '1' ) {
-			// Increase their complaint counter
-			cl->pers.complaints++;
-
-			num = g_complaintlimit.integer - cl->pers.complaints;
-
-			if ( !cl->pers.localClient ) {
-
-				const char* value;
-				char userinfo[MAX_INFO_STRING];
-				ipFilter_t ip;
-
-				trap_GetUserinfo( ent - g_entities, userinfo, sizeof( userinfo ) );
-				value = Info_ValueForKey( userinfo, "ip" );
-
-				StringToFilter( value, &ip );
-
-				if ( num <= 0 || !G_FindFreeComplainIP( cl, &ip ) ) {
-					trap_DropClient( cl - level.clients, "kicked after too many complaints.", cl->sess.referee ? 0 : 300 );
-					trap_SendServerCommand( ent - g_entities, "complaint -1" );
-					return;
-				}
-			}
-
-			trap_SendServerCommand( ent->client->pers.complaintClient, va( "cpm \"^1Warning^7: Complaint filed against you by %s^* You have Lost XP.\n\"", ent->client->pers.netname ) );
-			trap_SendServerCommand( ent - g_entities, "complaint -1" );
-
-			AddScore( other, WOLF_FRIENDLY_PENALTY );
-
-			// Nico, removed g_stats.c
-			// G_LoseKillSkillPoints( other, ent->sound2to1, ent->sound1to2, ent->sound2to3 ? qtrue : qfalse );
-		} else {
-			trap_SendServerCommand( ent->client->pers.complaintClient, "cpm \"No complaint filed against you.\n\"" );
-			trap_SendServerCommand( ent - g_entities, "complaint -2" );
-		}
-
-		// Reset this ent's complainEndTime so they can't send multiple complaints
-		ent->client->pers.complaintEndTime = -1;
-		ent->client->pers.complaintClient = -1;
-
-		return;
-	}*/
-	// dhm
 
 	if ( ent->client->pers.applicationEndTime > level.time ) {
 
@@ -1927,9 +1519,6 @@ void Cmd_Vote_f( gentity_t *ent ) {
 
 	// dhm
 	// Reset this ent's complainEndTime so they can't send multiple complaints
-	/* Nico, removed complaints
-	ent->client->pers.complaintEndTime = -1;
-	ent->client->pers.complaintClient = -1;*/
 
 	if ( !level.voteInfo.voteTime ) {
 		trap_SendServerCommand( ent - g_entities, "print \"No vote in progress.\n\"" );
@@ -2132,52 +1721,8 @@ Cmd_Activate_f
 ==================
 */
 qboolean Do_Activate2_f( gentity_t *ent, gentity_t *traceEnt ) {
-	qboolean found = qfalse;
-
-	/* Nico, removed disguise stuff TEST
-	if ( ent->client->sess.playerType == PC_COVERTOPS && !ent->client->ps.powerups[PW_OPS_DISGUISED] && ent->health > 0 ) {
-		if ( !ent->client->ps.powerups[PW_BLUEFLAG] && !ent->client->ps.powerups[PW_REDFLAG] ) {
-			if ( traceEnt->s.eType == ET_CORPSE ) {
-				if ( BODY_TEAM( traceEnt ) < 4 && BODY_TEAM( traceEnt ) != ent->client->sess.sessionTeam ) {
-					found = qtrue;
-
-					if ( BODY_VALUE( traceEnt ) >= 250 ) {
-
-						traceEnt->nextthink = traceEnt->timestamp + BODY_TIME( BODY_TEAM( traceEnt ) );
-
-						ent->client->ps.powerups[PW_OPS_DISGUISED] = 1;
-						ent->client->ps.powerups[PW_OPS_CLASS_1] = BODY_CLASS( traceEnt ) & 1;
-						ent->client->ps.powerups[PW_OPS_CLASS_2] = BODY_CLASS( traceEnt ) & 2;
-						ent->client->ps.powerups[PW_OPS_CLASS_3] = BODY_CLASS( traceEnt ) & 4;
-
-						BODY_TEAM( traceEnt ) += 4;
-						traceEnt->activator = ent;
-
-						traceEnt->s.time2 = 1;
-
-						// sound effect
-						G_AddEvent( ent, EV_DISGUISE_SOUND, 0 );
-
-						// Nico, removed g_stats.c
-						// G_AddSkillPoints( ent, SK_MILITARY_INTELLIGENCE_AND_SCOPED_WEAPONS, 5.f );
-						// G_DebugAddSkillPoints( ent, SK_MILITARY_INTELLIGENCE_AND_SCOPED_WEAPONS, 5, "stealing uniform" );
-
-						Q_strncpyz( ent->client->disguiseNetname, g_entities[traceEnt->s.clientNum].client->pers.netname, sizeof( ent->client->disguiseNetname ) );
-
-						// Nico, removed rank
-						// ent->client->disguiseRank = g_entities[traceEnt->s.clientNum].client ? g_entities[traceEnt->s.clientNum].client->sess.rank : 0;
-						ent->client->disguiseRank = 0;
-
-						ClientUserinfoChanged( ent->s.clientNum );
-					} else {
-						BODY_VALUE( traceEnt ) += 5;
-					}
-				}
-			}
-		}
-	}*/
-
-	return found;
+	// Nico, #fixme
+	return qfalse;
 }
 
 // TAT 1/14/2003 - extracted out the functionality of Cmd_Activate_f from finding the object to use
@@ -2186,7 +1731,6 @@ qboolean Do_Activate_f( gentity_t *ent, gentity_t *traceEnt ) {
 	qboolean found = qfalse;
 	qboolean walking = qfalse;
 	vec3_t forward;         //, offset, end;
-	//trace_t		tr;
 
 	// Arnout: invisible entities can't be used
 
@@ -2586,10 +2130,6 @@ void Cmd_SetSpawnPoint_f( gentity_t* ent ) {
 		if ( level.limboCams[i].spawn && x == val ) {
 			VectorCopy( level.limboCams[i].origin, ent->s.origin2 );
 			ent->r.svFlags |= SVF_SELF_PORTAL_EXCLUSIVE;
-
-			/* Nico, removed stuff in limbo
-			trap_SendServerCommand( ent - g_entities, va( "portalcampos %i %i %i %i %i %i %i %i", val - 1, (int)level.limboCams[i].origin[0], (int)level.limboCams[i].origin[1], (int)level.limboCams[i].origin[2], (int)level.limboCams[i].angles[0], (int)level.limboCams[i].angles[1], (int)level.limboCams[i].angles[2], level.limboCams[i].hasEnt ? level.limboCams[i].targetEnt : -1 ) );*/
-
 			break;
 		}
 	}
@@ -2643,51 +2183,6 @@ void Cmd_SetSniperSpot_f( gentity_t *clent ) {
 	return;
 }
 
-/* Nico, removed showstats client command
-void G_PrintAccuracyLog( gentity_t *ent );*/
-
-/* Nico, removed +topshots command
-void Cmd_WeaponStat_f( gentity_t* ent ) {
-	char buffer[16];
-	extWeaponStats_t stat;
-
-	if ( !ent || !ent->client ) {
-		return;
-	}
-
-	if ( trap_Argc() != 2 ) {
-		return;
-	}
-	trap_Argv( 1, buffer, 16 );
-	stat = atoi( buffer );
-
-	trap_SendServerCommand( ent - g_entities, va( "rws %i %i", ent->client->sess.aWeaponStats[stat].atts, ent->client->sess.aWeaponStats[stat].hits ) );
-}*/
-
-/* Nico, removed intermission
-void Cmd_IntermissionWeaponStats_f( gentity_t* ent ) {
-	char buffer[1024];
-	int i, clientNum;
-
-	if ( !ent || !ent->client ) {
-		return;
-	}
-
-	trap_Argv( 1, buffer, sizeof( buffer ) );
-
-	clientNum = atoi( buffer );
-	if ( clientNum < 0 || clientNum > MAX_CLIENTS ) {
-		return;
-	}
-
-	Q_strncpyz( buffer, "imws ", sizeof( buffer ) );
-	for ( i = 0; i < WS_MAX; i++ ) {
-		Q_strcat( buffer, sizeof( buffer ), va( "%i %i %i ", level.clients[clientNum].sess.aWeaponStats[i].atts, level.clients[clientNum].sess.aWeaponStats[i].hits, level.clients[clientNum].sess.aWeaponStats[i].kills ) );
-	}
-
-	trap_SendServerCommand( ent - g_entities, buffer );
-}*/
-
 void G_MakeReady( gentity_t* ent ) {
 	ent->client->ps.eFlags |= EF_READY;
 	ent->s.eFlags |= EF_READY;
@@ -2702,36 +2197,6 @@ void G_MakeUnready( gentity_t* ent ) {
 	ent->client->pers.ready = qfalse;
 }
 
-/* Nico, removed imready client command
-void Cmd_IntermissionReady_f( gentity_t* ent ) {
-	if ( !ent || !ent->client ) {
-		return;
-	}
-
-	G_MakeReady( ent );
-}*/
-
-/* Nico, removed intermission
-void Cmd_IntermissionPlayerKillsDeaths_f( gentity_t* ent ) {
-	char buffer[1024];
-	int i;
-
-	if ( !ent || !ent->client ) {
-		return;
-	}
-
-	Q_strncpyz( buffer, "impkd ", sizeof( buffer ) );
-	for ( i = 0; i < MAX_CLIENTS; i++ ) {
-		if ( g_entities[i].inuse ) {
-			Q_strcat( buffer, sizeof( buffer ), va( "%i %i ", level.clients[i].sess.kills, level.clients[i].sess.deaths ) );
-		} else {
-			Q_strcat( buffer, sizeof( buffer ), "0 0 " );
-		}
-	}
-
-	trap_SendServerCommand( ent - g_entities, buffer );
-}*/
-
 void G_CalcClientAccuracies( void ) {
 	int i;// , j; Nico, unused warning fix
 	int shots, hits;
@@ -2741,37 +2206,12 @@ void G_CalcClientAccuracies( void ) {
 		hits = 0;
 
 		if ( g_entities[i].inuse ) {
-			/* Nico, removed weaponstats
-			for ( j = 0; j < WS_MAX; j++ ) {
-				shots += level.clients[i].sess.aWeaponStats[j].atts;
-				hits += level.clients[i].sess.aWeaponStats[j].hits;
-			}*/
-
 			level.clients[ i ].acc = shots ? ( 100 * hits ) / (float)shots : 0;
 		} else {
 			level.clients[ i ].acc = 0;
 		}
 	}
 }
-
-/* Nico, removed intermission
-void Cmd_IntermissionWeaponAccuracies_f( gentity_t* ent ) {
-	char buffer[1024];
-	int i;
-
-	if ( !ent || !ent->client ) {
-		return;
-	}
-
-	G_CalcClientAccuracies();
-
-	Q_strncpyz( buffer, "imwa ", sizeof( buffer ) );
-	for ( i = 0; i < MAX_CLIENTS; i++ ) {
-		Q_strcat( buffer, sizeof( buffer ), va( "%i ", (int)level.clients[ i ].acc ) );
-	}
-
-	trap_SendServerCommand( ent - g_entities, buffer );
-}*/
 
 void Cmd_SelectedObjective_f( gentity_t* ent ) {
 	int i, val;
@@ -2796,10 +2236,6 @@ void Cmd_SelectedObjective_f( gentity_t* ent ) {
 			if ( !level.limboCams[i].hasEnt ) {
 				VectorCopy( level.limboCams[i].origin, ent->s.origin2 );
 				ent->r.svFlags |= SVF_SELF_PORTAL_EXCLUSIVE;
-
-				/* Nico, removed stuff in limbo
-				trap_SendServerCommand( ent - g_entities, va( "portalcampos %i %i %i %i %i %i %i %i", val - 1, (int)level.limboCams[i].origin[0], (int)level.limboCams[i].origin[1], (int)level.limboCams[i].origin[2], (int)level.limboCams[i].angles[0], (int)level.limboCams[i].angles[1], (int)level.limboCams[i].angles[2], level.limboCams[i].hasEnt ? level.limboCams[i].targetEnt : -1 ) );*/
-
 				break;
 			} else {
 				dist = VectorDistanceSquared( level.limboCams[i].origin, g_entities[level.limboCams[i].targetEnt].r.currentOrigin );
@@ -2816,9 +2252,6 @@ void Cmd_SelectedObjective_f( gentity_t* ent ) {
 
 		VectorCopy( level.limboCams[i].origin, ent->s.origin2 );
 		ent->r.svFlags |= SVF_SELF_PORTAL_EXCLUSIVE;
-
-		/* Nico, removed stuff in limbo
-		trap_SendServerCommand( ent - g_entities, va( "portalcampos %i %i %i %i %i %i %i %i", val - 1, (int)level.limboCams[i].origin[0], (int)level.limboCams[i].origin[1], (int)level.limboCams[i].origin[2], (int)level.limboCams[i].angles[0], (int)level.limboCams[i].angles[1], (int)level.limboCams[i].angles[2], level.limboCams[i].hasEnt ? level.limboCams[i].targetEnt : -1 ) );*/
 	}
 }
 
@@ -3114,65 +2547,7 @@ void ClientCommand( int clientNum ) {
 			Cmd_Voice_f( ent, SAY_BUDDY, qfalse, qfalse );
 		}
 		return;
-	} 
-	
-	/* Nico, added to floodProtectedCommands
-	else if ( Q_stricmp( cmd, "score" ) == 0 ) {
-		Cmd_Score_f( ent );
-		return;
-	} else if ( Q_stricmp( cmd, "vote" ) == 0 ) {
-		Cmd_Vote_f( ent );
-		return;
-	} else if ( Q_stricmp( cmd, "fireteam" ) == 0 ) {
-		Cmd_FireTeam_MP_f( ent );
-		return;
-	} */
-
-	/* Nico, removed showstats client command
-	else if ( Q_stricmp( cmd, "showstats" ) == 0 ) {
-		G_PrintAccuracyLog( ent );
-		return;
-	}*/
-
-	/* Nico, added to floodProtectedCommands
-	else if ( Q_stricmp( cmd, "rconAuth" ) == 0 ) {
-		Cmd_AuthRcon_f( ent );
-		return;
-	} else if ( Q_stricmp( cmd, "ignore" ) == 0 ) {
-		Cmd_Ignore_f( ent );
-		return;
-	} else if ( Q_stricmp( cmd, "unignore" ) == 0 ) {
-		Cmd_UnIgnore_f( ent );
-		return;
-	} else if ( Q_stricmp( cmd, "obj" ) == 0 ) {
-		Cmd_SelectedObjective_f( ent );
-		return;
-	}*/
-
-	/* Nico, removed intermission
-	else if ( !Q_stricmp( cmd, "impkd" ) ) {
-		Cmd_IntermissionPlayerKillsDeaths_f( ent );
-		return;
-	} else if ( !Q_stricmp( cmd, "imwa" ) ) {
-		Cmd_IntermissionWeaponAccuracies_f( ent );
-		return;
-	} else if ( !Q_stricmp( cmd, "imws" ) ) {
-		Cmd_IntermissionWeaponStats_f( ent );
-		return;
-	}*/
-
-	/* Nico, removed imready client command
-	else if ( !Q_stricmp( cmd, "imready" ) ) {
-		Cmd_IntermissionReady_f( ent );
-		return;
-	}*/
-
-	/* Nico, removed ws related command
-	else if ( Q_stricmp( cmd, "ws" ) == 0 ) {
-		Cmd_WeaponStat_f( ent );
-		return;
-	}*/
-	
+	} 	
 	else if ( !Q_stricmp( cmd, "forcetapout" ) ) {
 		if ( !ent || !ent->client ) {
 			return;
@@ -3185,91 +2560,11 @@ void ClientCommand( int clientNum ) {
 		return;
 	}
 
-	// OSP
-	// Do these outside as we don't want to advertise it in the help screen
-	/* Nico, removed ws related command
-	if ( !Q_stricmp( cmd, "wstats" ) ) {
-		G_statsPrint( ent, 1 );
-		return;
-	}
-	if ( !Q_stricmp( cmd, "sgstats" ) ) { // Player game stats
-		G_statsPrint( ent, 2 );
-		return;
-	}
-	if ( !Q_stricmp( cmd, "stshots" ) ) { // "Topshots" accuracy rankings
-		G_weaponStatsLeaders_cmd( ent, qtrue, qtrue );
-		return;
-	}*/
-
-	/* Nico, added to floodProtectedCommands
-	if ( !Q_stricmp( cmd, "rs" ) ) {
-		Cmd_ResetSetup_f( ent );
-		return;
-	}*/
-	// OSP
-
-	// ignore all other commands when at intermission
-	/* Nico, removed intermission
-	if ( level.intermissiontime ) {
-		CPx( clientNum, va( "print \"^3%s^7 not allowed during intermission.\n\"", cmd ) );
-		return;
-	}*/
-
-	/* Nico, removed give command
-	if ( Q_stricmp( cmd, "give" ) == 0 ) {
-		Cmd_Give_f( ent );
-	}*/
-
-	/* Nico, removed god command
-	else if ( Q_stricmp( cmd, "god" ) == 0 ) {
-		Cmd_God_f( ent );
-	} */
-
-	/* Nico, removed client command nofatigue
-	else if ( Q_stricmp( cmd, "nofatigue" ) == 0 ) {
-		Cmd_Nofatigue_f( ent );
-	}*/
-
-	/* Nico, removed notarget command
-	else if ( Q_stricmp( cmd, "notarget" ) == 0 ) {
-		Cmd_Notarget_f( ent );
-	}*/ 
-
-	/* Nico, added to floodProtectedCommands
-	else if ( Q_stricmp( cmd, "noclip" ) == 0 ) {
-		Cmd_Noclip_f( ent );
-	} else if ( Q_stricmp( cmd, "kill" ) == 0 ) {
-		Cmd_Kill_f( ent );
-	} */
-	
 	else if ( Q_stricmp( cmd, "follownext" ) == 0 ) {
 		Cmd_FollowCycle_f( ent, 1 );
 	} else if ( Q_stricmp( cmd, "followprev" ) == 0 ) {
 		Cmd_FollowCycle_f( ent, -1 );
 	}
-	/* Nico, removed where command
-	else if ( Q_stricmp( cmd, "where" ) == 0 ) {
-		Cmd_Where_f( ent );
-	}*/
-
-	/* Nico, added to floodProtectedCommands
-	else if ( Q_stricmp( cmd, "stopCamera" ) == 0 ) {
-		Cmd_StopCamera_f( ent );
-	} else if ( Q_stricmp( cmd, "setCameraOrigin" ) == 0 ) {
-		Cmd_SetCameraOrigin_f( ent );
-	}*/
-
-	/* Nico, removed setviewpos command
-	else if ( Q_stricmp( cmd, "setviewpos" ) == 0 ) {
-		Cmd_SetViewpos_f( ent );
-	}*/
-
-	/* Nico, added to floodProtectedCommands
-	else if ( Q_stricmp( cmd, "setspawnpt" ) == 0 ) {
-		Cmd_SetSpawnPoint_f( ent );
-	} else if ( Q_stricmp( cmd, "setsniperspot" ) == 0 ) {
-		Cmd_SetSniperSpot_f( ent );
-	}*/
 
 	// Nico, flood protection
 	for (i = 0 ; i < sizeof(floodProtectedCommands) / sizeof(floodProtectedCommands[0]) ; ++i) {

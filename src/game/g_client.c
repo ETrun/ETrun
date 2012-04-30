@@ -30,10 +30,6 @@ If you have questions concerning this license or the applicable additional terms
 #include "../../etrun/ui/menudef.h"
 
 // g_client.c -- client functions that don't happen every frame
-
-// Ridah, new bounding box
-//static vec3_t	playerMins = {-15, -15, -24};
-//static vec3_t	playerMaxs = {15, 15, 32};
 vec3_t playerMins = {-18, -18, -24};
 vec3_t playerMaxs = {18, 18, 48};
 // done.
@@ -255,25 +251,6 @@ BODYQUE
 */
 
 /*
-===============
-InitBodyQue
-===============
-*/
-/* Nico, removed gib
-void InitBodyQue( void ) {
-	int i;
-	gentity_t   *ent;
-
-	level.bodyQueIndex = 0;
-	for ( i = 0; i < BODY_QUEUE_SIZE ; i++ ) {
-		ent = G_Spawn();
-		ent->classname = "bodyque";
-		ent->neverFree = qtrue;
-		level.bodyQue[i] = ent;
-	}
-}*/
-
-/*
 =============
 BodyUnlink
 
@@ -311,139 +288,11 @@ After sitting around for five seconds, fall into the ground and dissapear
 */
 void BodySink( gentity_t *ent ) {
 	if ( ent->activator ) {
-		// see if parent is still disguised
-		/* Nico, removed disguise stuff
-		if ( ent->activator->client->ps.powerups[PW_OPS_DISGUISED] ) {
-			ent->nextthink = level.time + 100;
-			return;
-		} else {*/
-			ent->activator = NULL;
-		// }
+		ent->activator = NULL;
 	}
 
 	BodySink2( ent );
 }
-
-
-/*
-=============
-CopyToBodyQue
-
-A player is respawning, so make an entity that looks
-just like the existing corpse to leave behind.
-=============
-*/
-/* Nico, removed gib
-void CopyToBodyQue( gentity_t *ent ) {
-	gentity_t       *body;
-	int contents, i;
-
-	trap_UnlinkEntity( ent );
-
-	// if client is in a nodrop area, don't leave the body
-	contents = trap_PointContents( ent->client->ps.origin, -1 );
-	if ( contents & CONTENTS_NODROP ) {
-		return;
-	}
-
-	// grab a body que and cycle to the next one
-	body = level.bodyQue[ level.bodyQueIndex ];
-	level.bodyQueIndex = ( level.bodyQueIndex + 1 ) % BODY_QUEUE_SIZE;
-
-	// Gordon: um, what on earth was this here for?
-//	trap_UnlinkEntity (body);
-
-	body->s = ent->s;
-	body->s.eFlags = EF_DEAD;       // clear EF_TALK, etc
-
-	if ( ent->client->ps.eFlags & EF_HEADSHOT ) {
-		body->s.eFlags |= EF_HEADSHOT;          // make sure the dead body draws no head (if killed that way)
-	}
-
-	body->s.eType = ET_CORPSE;
-	body->classname = "corpse";
-	body->s.powerups = 0;   // clear powerups
-	body->s.loopSound = 0;  // clear lava burning
-	body->s.number = body - g_entities;
-	body->timestamp = level.time;
-	body->physicsObject = qtrue;
-	body->physicsBounce = 0;        // don't bounce
-	if ( body->s.groundEntityNum == ENTITYNUM_NONE ) {
-		body->s.pos.trType = TR_GRAVITY;
-		body->s.pos.trTime = level.time;
-		VectorCopy( ent->client->ps.velocity, body->s.pos.trDelta );
-	} else {
-		body->s.pos.trType = TR_STATIONARY;
-	}
-	body->s.event = 0;
-
-	// DHM - Clear out event system
-	for ( i = 0; i < MAX_EVENTS; i++ )
-		body->s.events[i] = 0;
-	body->s.eventSequence = 0;
-
-	// DHM - Nerve
-	// change the animation to the last-frame only, so the sequence
-	// doesn't repeat anew for the body
-	switch ( body->s.legsAnim & ~ANIM_TOGGLEBIT )
-	{
-	case BOTH_DEATH1:
-	case BOTH_DEAD1:
-	default:
-		body->s.torsoAnim = body->s.legsAnim = BOTH_DEAD1;
-		break;
-	case BOTH_DEATH2:
-	case BOTH_DEAD2:
-		body->s.torsoAnim = body->s.legsAnim = BOTH_DEAD2;
-		break;
-	case BOTH_DEATH3:
-	case BOTH_DEAD3:
-		body->s.torsoAnim = body->s.legsAnim = BOTH_DEAD3;
-		break;
-	}
-
-	body->r.svFlags = ent->r.svFlags & ~SVF_BOT;
-	VectorCopy( ent->r.mins, body->r.mins );
-	VectorCopy( ent->r.maxs, body->r.maxs );
-	VectorCopy( ent->r.absmin, body->r.absmin );
-	VectorCopy( ent->r.absmax, body->r.absmax );
-
-	// ydnar: bodies have lower bounding box
-	body->r.maxs[ 2 ] = 0;
-
-	body->clipmask = CONTENTS_SOLID | CONTENTS_PLAYERCLIP;
-	// DHM - Nerve :: allow bullets to pass through bbox
-	// Gordon: need something to allow the hint for covert ops
-	body->r.contents = CONTENTS_CORPSE;
-	body->r.ownerNum = ent->r.ownerNum;
-
-	BODY_TEAM( body ) =       ent->client->sess.sessionTeam;
-	BODY_CLASS( body ) =      ent->client->sess.playerType;
-	BODY_CHARACTER( body ) =  ent->client->pers.characterIndex;
-	BODY_VALUE( body ) =      0;
-
-	body->s.time2 =         0;
-
-	body->activator = NULL;
-
-	body->nextthink = level.time + BODY_TIME( ent->client->sess.sessionTeam );
-
-	body->think = BodySink;
-
-	body->die = body_die;
-
-	// don't take more damage if already gibbed
-	if ( ent->health <= GIB_HEALTH ) {
-		body->takedamage = qfalse;
-	} else {
-		body->takedamage = qtrue;
-	}
-
-
-	VectorCopy( body->s.pos.trBase, body->r.currentOrigin );
-	trap_LinkEntity( body );
-}*/
-
 //======================================================================
 
 
@@ -482,8 +331,6 @@ void SetClientViewAnglePitch( gentity_t *ent, vec_t angle ) {
 limbo
 ================
 */
-/* Nico, removed gib
-void limbo( gentity_t *ent, qboolean makeCorpse ) {*/
 void limbo( gentity_t *ent) {
 	int i;//, contents; Nico, unused warning fix
 	int startclient = ent->client->ps.clientNum;
@@ -568,12 +415,6 @@ void reinforce( gentity_t *ent ) {
 		return;
 	}
 
-	/* Nico, removed multiview
-	if ( ent->client->pers.mvCount > 0 ) {
-		G_smvRemoveInvalidClients( ent, TEAM_AXIS );
-		G_smvRemoveInvalidClients( ent, TEAM_ALLIES );
-	}*/
-
 	// get team to deploy from passed entity
 	team = ent->client->sess.sessionTeam;
 
@@ -605,31 +446,7 @@ respawn
 void respawn( gentity_t *ent ) {
 	ent->client->ps.pm_flags &= ~PMF_LIMBO; // JPW NERVE turns off limbo
 
-	// DHM - Nerve :: Decrease the number of respawns left
-	/* Nico, removed respawnLeft
-	if ( g_gametype.integer != GT_WOLF_LMS ) {
-		if ( ent->client->ps.persistant[PERS_RESPAWNS_LEFT] > 0 && g_gamestate.integer == GS_PLAYING ) {
-			if ( g_maxlives.integer > 0 ) {
-				ent->client->ps.persistant[PERS_RESPAWNS_LEFT]--;
-			} else {
-				if ( g_alliedmaxlives.integer > 0 && ent->client->sess.sessionTeam == TEAM_ALLIES ) {
-					ent->client->ps.persistant[PERS_RESPAWNS_LEFT]--;
-				}
-				if ( g_axismaxlives.integer > 0 && ent->client->sess.sessionTeam == TEAM_AXIS ) {
-					ent->client->ps.persistant[PERS_RESPAWNS_LEFT]--;
-				}
-			}
-		}
-	}
-
-	G_DPrintf( "Respawning %s, %i lives left\n", ent->client->pers.netname, ent->client->ps.persistant[PERS_RESPAWNS_LEFT] );*/
-
 	ClientSpawn( ent, qfalse );
-
-	// DHM - Nerve :: Add back if we decide to have a spawn effect
-	// add a teleportation effect
-	//tent = G_TempEntity( ent->client->ps.origin, EV_PLAYER_TELEPORT_IN );
-	//tent->s.clientNum = ent->s.clientNum;
 }
 
 // NERVE - SMF - merge from team arena
@@ -686,7 +503,6 @@ AddExtraSpawnAmmo
 */
 static void AddExtraSpawnAmmo( gclient_t *client, weapon_t weaponNum ) {
 	switch ( weaponNum ) {
-		//case WP_KNIFE:
 	case WP_LUGER:
 	case WP_COLT:
 	case WP_STEN:
@@ -694,76 +510,20 @@ static void AddExtraSpawnAmmo( gclient_t *client, weapon_t weaponNum ) {
 	case WP_CARBINE:
 	case WP_KAR98:
 	case WP_SILENCED_COLT:
-
-		/* Nico, removed skills
-		if ( client->sess.skill[SK_LIGHT_WEAPONS] >= 1 ) {
-			client->ps.ammo[BG_FindAmmoForWeapon( weaponNum )] += GetAmmoTableData( weaponNum )->maxclip;
-		}*/
-
-		break;
 	case WP_MP40:
 	case WP_THOMPSON:
-
-		/* Nico, removed skills
-		if ( ( client->sess.skill[SK_FIRST_AID] >= 1 && client->sess.playerType == PC_MEDIC ) || client->sess.skill[SK_LIGHT_WEAPONS] >= 1 ) {
-			client->ps.ammo[BG_FindAmmoForWeapon( weaponNum )] += GetAmmoTableData( weaponNum )->maxclip;
-		}*/
-
-		break;
 	case WP_M7:
 	case WP_GPG40:
-
-		/* Nico, removed skills
-		if ( client->sess.skill[SK_EXPLOSIVES_AND_CONSTRUCTION] >= 1 ) {
-			client->ps.ammo[BG_FindAmmoForWeapon( weaponNum )] += 4;
-		}*/
-
-		break;
 	case WP_GRENADE_PINEAPPLE:
 	case WP_GRENADE_LAUNCHER:
-
-		/* Nico, removed skills
-		if ( client->sess.playerType == PC_ENGINEER ) {
-			if ( client->sess.skill[SK_EXPLOSIVES_AND_CONSTRUCTION] >= 1 ) {
-				client->ps.ammoclip[BG_FindAmmoForWeapon( weaponNum )] += 4;
-			}
-		}
-		if ( client->sess.playerType == PC_MEDIC ) {
-			if ( client->sess.skill[SK_FIRST_AID] >= 1 ) {
-				client->ps.ammoclip[BG_FindAmmoForWeapon( weaponNum )] += 1;
-			}
-		}*/
-
-		break;
 	case WP_MEDIC_SYRINGE:
 	case WP_MEDIC_ADRENALINE:
-
-		/* Nico, removed skills
-		if ( client->sess.skill[SK_FIRST_AID] >= 2 ) {
-			client->ps.ammoclip[BG_FindAmmoForWeapon( weaponNum )] += 2;
-		}*/
-
-		break;
 	case WP_GARAND:
 	case WP_K43:
 	case WP_FG42:
-
-		/* Nico, removed skills
-		if ( client->sess.skill[SK_MILITARY_INTELLIGENCE_AND_SCOPED_WEAPONS] >= 1 || client->sess.skill[SK_LIGHT_WEAPONS] >= 1 ) {
-			client->ps.ammo[BG_FindAmmoForWeapon( weaponNum )] += GetAmmoTableData( weaponNum )->maxclip;
-		}*/
-
-		break;
 	case WP_GARAND_SCOPE:
 	case WP_K43_SCOPE:
 	case WP_FG42SCOPE:
-
-		/* Nico, removed skills
-		if ( client->sess.skill[SK_MILITARY_INTELLIGENCE_AND_SCOPED_WEAPONS] >= 1 ) {
-			client->ps.ammo[BG_FindAmmoForWeapon( weaponNum )] += GetAmmoTableData( weaponNum )->maxclip;
-		}*/
-
-		break;
 	default:
 		break;
 	}
@@ -1005,11 +765,6 @@ void AddMedicTeamBonus( gclient_t *client ) {
 		client->pers.maxHealth = 125;
 	}
 
-	/* Nico, removed skills
-	if ( client->sess.skill[SK_BATTLE_SENSE] >= 3 ) {
-		client->pers.maxHealth += 15;
-	}*/
-
 	client->ps.stats[STAT_MAX_HEALTH] = client->pers.maxHealth;
 }
 
@@ -1141,24 +896,10 @@ void ClientUserinfoChanged( int clientNum ) {
 	char *ip = NULL;// Nico, used to store client ip.
 	char *name = NULL;// Nico, used to store client name
 
-	// Nico, removed medals
-	// char skillStr[16] = "";
-	// char medalStr[16] = "";
-
-	// int characterIndex; Nico, unused warning fix
-
 	ent = g_entities + clientNum;
 	client = ent->client;
 
 	client->ps.clientNum = clientNum;
-
-	/* Nico, removed medals
-	client->medals = 0;*/
-
-	/* Nico, removed skills
-	for ( i = 0; i < SK_NUM_SKILLS; i++ ) {
-		client->medals += client->sess.medals[ i ];
-	}*/
 
 	// Nico, flood protection
 	if (ClientIsFlooding(ent)) {
@@ -1232,35 +973,25 @@ void ClientUserinfoChanged( int clientNum ) {
 		client->sess.referee = RL_REFEREE;
 	}
 
-	// OSP - extra client info settings
-	//		 FIXME: move other userinfo flag settings in here
-	/* Nico, removed bot support
-	if ( ent->r.svFlags & SVF_BOT ) {
-		client->pers.autoActivate = PICKUP_TOUCH;
+	s = Info_ValueForKey( userinfo, "cg_uinfo" );
+	sscanf( s, "%i %i %i %i",
+			&client->pers.clientFlags,
+			&client->pers.clientTimeNudge,
+			&client->pers.clientMaxPackets,
+
+			// Nico, max FPS
+			&client->pers.maxFPS);
+
+	client->pers.autoActivate = ( client->pers.clientFlags & CGF_AUTOACTIVATE ) ? PICKUP_TOUCH : PICKUP_ACTIVATE;
+	client->pers.predictItemPickup = ( ( client->pers.clientFlags & CGF_PREDICTITEMS ) != 0 );
+
+	if ( client->pers.clientFlags & CGF_AUTORELOAD ) {
 		client->pers.bAutoReloadAux = qtrue;
 		client->pmext.bAutoReload = qtrue;
-		client->pers.predictItemPickup = qfalse;
-	} else {*/
-		s = Info_ValueForKey( userinfo, "cg_uinfo" );
-		sscanf( s, "%i %i %i %i",
-				&client->pers.clientFlags,
-				&client->pers.clientTimeNudge,
-				&client->pers.clientMaxPackets,
-
-				// Nico, max FPS
-				&client->pers.maxFPS);
-
-		client->pers.autoActivate = ( client->pers.clientFlags & CGF_AUTOACTIVATE ) ? PICKUP_TOUCH : PICKUP_ACTIVATE;
-		client->pers.predictItemPickup = ( ( client->pers.clientFlags & CGF_PREDICTITEMS ) != 0 );
-
-		if ( client->pers.clientFlags & CGF_AUTORELOAD ) {
-			client->pers.bAutoReloadAux = qtrue;
-			client->pmext.bAutoReload = qtrue;
-		} else {
-			client->pers.bAutoReloadAux = qfalse;
-			client->pmext.bAutoReload = qfalse;
-		}
-	// }
+	} else {
+		client->pers.bAutoReloadAux = qfalse;
+		client->pmext.bAutoReload = qfalse;
+	}
 
 	// Nico, pmove_fixed
 	client->pers.pmoveFixed = client->pers.clientFlags & CGF_PMOVEFIXED;
@@ -1289,23 +1020,7 @@ void ClientUserinfoChanged( int clientNum ) {
 		}
 	}
 
-	/* Nico, removed skills
-	for ( i = 0; i < SK_NUM_SKILLS; i++ ) {
-		Q_strcat( skillStr, sizeof( skillStr ), va( "%i",client->sess.skill[i] ) );
-		Q_strcat( medalStr, sizeof( medalStr ), va( "%i",client->sess.medals[i] ) );
-		// FIXME: Gordon: wont this break if medals > 9 arnout? JK: Medal count is tied to skill count :() Gordon: er, it's based on >> skill per map, so for a huuuuuuge campaign it could break...
-	}*/
-
 	client->ps.stats[STAT_MAX_HEALTH] = client->pers.maxHealth;
-
-	// check for custom character
-	/* Nico, unused warning fix
-	s = Info_ValueForKey( userinfo, "ch" );
-	if ( *s ) {
-		characterIndex = atoi( s );
-	} else {
-		characterIndex = -1;
-	}*/
 
 	// To communicate it to cgame
 	client->ps.stats[ STAT_PLAYER_CLASS ] = client->sess.playerType;
@@ -1314,68 +1029,17 @@ void ClientUserinfoChanged( int clientNum ) {
 	// send over a subset of the userinfo keys so other clients can
 	// print scoreboards, display models, and play custom sounds
 
-	/* Nico, clean userinfo
-	if ( ent->r.svFlags & SVF_BOT ) {
-		// n: netname
-		// t: sessionTeam
-		// c1: color
-		// hc: maxHealth
-		// skill: skill
-		// c: playerType (class?)
-		// r: rank
-		// f: fireteam
-		// bot: botSlotNumber
-		// nwp: noWeapon
-		// m: medals
-		// ch: character
-
-		s = va( "n\\%s\\t\\%i\\skill\\%s\\c\\%i\\r\\%i\\m\\%s\\s\\%s%s\\dn\\%s\\dr\\%i\\w\\%i\\lw\\%i\\sw\\%i\\mu\\%i",
-				client->pers.netname,
-				client->sess.sessionTeam,
-				Info_ValueForKey( userinfo, "skill" ),
-				client->sess.playerType,
-				client->sess.rank,
-				medalStr,
-				skillStr,
-				characterIndex >= 0 ? va( "\\ch\\%i", characterIndex ) : "",
-				client->disguiseNetname,
-				client->disguiseRank,
-				client->sess.playerWeapon,
-				client->sess.latchPlayerWeapon,
-				client->sess.latchPlayerWeapon2,
-				client->sess.muted ? 1 : 0
-				);
-	} else {*/
-
-		/* Nico, reference kept
-		s = va( "n\\%s\\t\\%i\\c\\%i\\r\\%i\\m\\%s\\s\\%s\\dn\\%s\\dr\\%i\\w\\%i\\lw\\%i\\sw\\%i\\mu\\%i\\ref\\%i",
-				client->pers.netname,
-				client->sess.sessionTeam,
-				client->sess.playerType,
-				client->sess.rank,
-				medalStr,
-				skillStr,
-				client->disguiseNetname,
-				client->disguiseRank,
-				client->sess.playerWeapon,
-				client->sess.latchPlayerWeapon,
-				client->sess.latchPlayerWeapon2,
-				client->sess.muted ? 1 : 0,
-				client->sess.referee
-				);*/
-
-		s = va( "n\\%s\\t\\%i\\c\\%i\\w\\%i\\lw\\%i\\sw\\%i\\mu\\%i\\ref\\%i\\pm\\%i",
-				client->pers.netname,
-				client->sess.sessionTeam,
-				client->sess.playerType,
-				client->sess.playerWeapon,
-				client->sess.latchPlayerWeapon,
-				client->sess.latchPlayerWeapon2,
-				client->sess.muted ? 1 : 0,
-				client->sess.referee,
-				client->pers.pmoveFixed ? 1 : 0// Nico, pmove_fixed
-				);
-	// }
+	s = va( "n\\%s\\t\\%i\\c\\%i\\w\\%i\\lw\\%i\\sw\\%i\\mu\\%i\\ref\\%i\\pm\\%i",
+	client->pers.netname,
+	client->sess.sessionTeam,
+	client->sess.playerType,
+	client->sess.playerWeapon,
+	client->sess.latchPlayerWeapon,
+	client->sess.latchPlayerWeapon2,
+	client->sess.muted ? 1 : 0,
+	client->sess.referee,
+	client->pers.pmoveFixed ? 1 : 0// Nico, pmove_fixed
+	);
 
 	trap_GetConfigstring( CS_PLAYERS + clientNum, oldname, sizeof( oldname ) );
 
@@ -1454,26 +1118,7 @@ char *ClientConnect( int clientNum, qboolean firstTime, qboolean isBot ) {
 		G_LogPrintf("ETrun: possible DoS attack, rejecting client from %s (%d connections already)\n", ip, g_maxConnsPerIP.integer);
 		return "Too many connections from your IP.";
 	}
-	// Nico, end of check maximum connextions per I
-
-	// Xian - check for max lives enforcement ban
-	/* Nico, removed respawnLeft
-	if ( g_gametype.integer != GT_WOLF_LMS ) {
-		if ( g_enforcemaxlives.integer && ( g_maxlives.integer > 0 || g_axismaxlives.integer > 0 || g_alliedmaxlives.integer > 0 ) ) {
-			if ( trap_Cvar_VariableIntegerValue( "sv_punkbuster" ) ) {
-				value = Info_ValueForKey( userinfo, "cl_guid" );
-				if ( G_FilterMaxLivesPacket( value ) ) {
-					return "Max Lives Enforcement Temp Ban. You will be able to reconnect when the next round starts. This ban is enforced to ensure you don't reconnect to get additional lives.";
-				}
-			} else {
-				value = Info_ValueForKey( userinfo, "ip" ); // this isn't really needed, oh well.
-				if ( G_FilterMaxLivesIPPacket( value ) ) {
-					return "Max Lives Enforcement Temp Ban. You will be able to reconnect when the next round starts. This ban is enforced to ensure you don't reconnect to get additional lives.";
-				}
-			}
-		}
-	}*/
-	// End Xian
+	// Nico, end of check maximum connextions per IP
 
 	// we don't check password for bots and local client
 	// NOTE: local client <-> "ip" "localhost"
@@ -1519,26 +1164,8 @@ char *ClientConnect( int clientNum, qboolean firstTime, qboolean isBot ) {
 	} else {
 		G_ReadSessionData( client );
 	}
+	client->pers.enterTime = level.time;
 
-	/* Nico, removed gametypes
-	if ( g_gametype.integer == GT_WOLF_CAMPAIGN ) {
-		if ( g_campaigns[level.currentCampaign].current == 0 || level.newCampaign ) {
-			client->pers.enterTime = level.time;
-		}
-	} else {*/
-		client->pers.enterTime = level.time;
-	// }
-
-	/* Nico, removed gametypes
-	if ( g_gametype.integer == GT_COOP || g_gametype.integer == GT_SINGLE_PLAYER )    {
-		// RF, in single player, enforce team = ALLIES
-		// Arnout: disabled this for savegames as the double ClientBegin it causes wipes out all loaded data
-		if ( saveGamePending != 2 ) {
-			client->sess.sessionTeam = TEAM_ALLIES;
-		}
-		client->sess.spectatorState = SPECTATOR_NOT;
-		client->sess.spectatorClient = 0;
-	} else */
 	if ( firstTime ) {
 		// force into spectator
 		client->sess.sessionTeam = TEAM_SPECTATOR;
@@ -1557,8 +1184,6 @@ char *ClientConnect( int clientNum, qboolean firstTime, qboolean isBot ) {
 	// don't do the "xxx connected" messages if they were caried over from previous level
 	//		TAT 12/10/2002 - Don't display connected messages in single player
 
-	/* Nico, removed gametypes
-	if ( firstTime && !G_IsSinglePlayerGame() ) {*/
 	if ( firstTime ) {
 		trap_SendServerCommand( -1, va( "cpm \"%s" S_COLOR_WHITE " connected\n\"", client->pers.netname ) );
 	}
@@ -1568,23 +1193,6 @@ char *ClientConnect( int clientNum, qboolean firstTime, qboolean isBot ) {
 
 	return NULL;
 }
-
-//
-// Scaling for late-joiners of maxlives based on current game time
-//
-/* Nico, removed respawnLeft
-int G_ComputeMaxLives( gclient_t *cl, int maxRespawns ) {
-	float scaled = (float)( maxRespawns - 1 ) * ( 1.0f - ( (float)( level.time - level.startTime ) / ( g_timelimit.value * 60000.0f ) ) );
-	int val = (int)scaled;
-
-	// rain - #102 - don't scale of the timelimit is 0
-	if ( g_timelimit.value == 0.0 ) {
-		return maxRespawns - 1;
-	}
-
-	val += ( ( scaled - (float)val ) < 0.5f ) ? 0 : 1;
-	return( val );
-}*/
 
 /*
 ===========
@@ -1628,86 +1236,23 @@ void ClientBegin( int clientNum ) {
 
 	//bani - proper fix for #328
 
-	/* Nico, removed respawnLeft
-	if ( client->ps.persistant[PERS_RESPAWNS_LEFT] > 0 ) {
-		lives_left = client->ps.persistant[PERS_RESPAWNS_LEFT] - 1;
-	} else {
-		lives_left = client->ps.persistant[PERS_RESPAWNS_LEFT];
-	}*/
-
 	flags = client->ps.eFlags;
 	memset( &client->ps, 0, sizeof( client->ps ) );
 	client->ps.eFlags = flags;
 
 	client->ps.persistant[PERS_SPAWN_COUNT] = spawn_count;
 
-	/* Nico, removed respawnLeft
-	client->ps.persistant[PERS_RESPAWNS_LEFT] = lives_left;*/
-
-	/* Nico, removed complaints
-	client->pers.complaintClient = -1;
-	client->pers.complaintEndTime = -1;*/
-
 	// locate ent at a spawn point
 	ClientSpawn( ent, qfalse );
-
-	// Xian -- Changed below for team independant maxlives
-	/* Nico, removed respawnLeft
-	if ( g_gametype.integer != GT_WOLF_LMS ) {
-		if ( ( client->sess.sessionTeam == TEAM_AXIS || client->sess.sessionTeam == TEAM_ALLIES ) ) {
-
-			if ( !client->maxlivescalced ) {
-				if ( g_maxlives.integer > 0 ) {
-					client->ps.persistant[PERS_RESPAWNS_LEFT] = G_ComputeMaxLives( client, g_maxlives.integer );
-				} else {
-					client->ps.persistant[PERS_RESPAWNS_LEFT] = -1;
-				}
-
-				if ( g_axismaxlives.integer > 0 || g_alliedmaxlives.integer > 0 ) {
-					if ( client->sess.sessionTeam == TEAM_AXIS ) {
-						client->ps.persistant[PERS_RESPAWNS_LEFT] = G_ComputeMaxLives( client, g_axismaxlives.integer );
-					} else if ( client->sess.sessionTeam == TEAM_ALLIES ) {
-						client->ps.persistant[PERS_RESPAWNS_LEFT] = G_ComputeMaxLives( client, g_alliedmaxlives.integer );
-					} else {
-						client->ps.persistant[PERS_RESPAWNS_LEFT] = -1;
-					}
-				}
-
-				client->maxlivescalced = qtrue;
-			} else {
-				if ( g_axismaxlives.integer > 0 || g_alliedmaxlives.integer > 0 ) {
-					if ( client->sess.sessionTeam == TEAM_AXIS ) {
-						if ( client->ps.persistant[ PERS_RESPAWNS_LEFT ] > g_axismaxlives.integer ) {
-							client->ps.persistant[ PERS_RESPAWNS_LEFT ] = g_axismaxlives.integer;
-						}
-					} else if ( client->sess.sessionTeam == TEAM_ALLIES ) {
-						if ( client->ps.persistant[ PERS_RESPAWNS_LEFT ] > g_alliedmaxlives.integer ) {
-							client->ps.persistant[ PERS_RESPAWNS_LEFT ] = g_alliedmaxlives.integer;
-						}
-					}
-				}
-			}
-		}
-	}*/
 
 
 	// DHM - Nerve :: Start players in limbo mode if they change teams during the match
 	if ( client->sess.sessionTeam != TEAM_SPECTATOR && ( level.time - level.startTime > FRAMETIME * GAME_INIT_FRAMES ) ) {
-/*	  if( (client->sess.sessionTeam != TEAM_SPECTATOR && (level.time - client->pers.connectTime) > 60000) ||
-		( g_gamestate.integer == GS_PLAYING && ( client->sess.sessionTeam == TEAM_AXIS || client->sess.sessionTeam == TEAM_ALLIES ) &&
-		 g_gametype.integer == GT_WOLF_LMS && ( level.numTeamClients[0] > 0 || level.numTeamClients[1] > 0 ) ) ) {*/
 		ent->health = 0;
 		ent->r.contents = CONTENTS_CORPSE;
 
 		client->ps.pm_type = PM_DEAD;
 		client->ps.stats[STAT_HEALTH] = 0;
-
-		/* Nico, removed respawnLeft
-		if ( g_gametype.integer != GT_WOLF_LMS ) {
-			if ( g_maxlives.integer > 0 ) {
-				client->ps.persistant[PERS_RESPAWNS_LEFT]++;
-			}
-		}*/
 
 		limbo( ent );
 	}
@@ -1718,34 +1263,11 @@ void ClientBegin( int clientNum ) {
 
 	G_LogPrintf( "ClientBegin: %i\n", clientNum );
 
-	// Xian - Check for maxlives enforcement
-	/* Nico, removed respawnLeft
-	if ( g_gametype.integer != GT_WOLF_LMS ) {
-		if ( g_enforcemaxlives.integer == 1 && ( g_maxlives.integer > 0 || g_axismaxlives.integer > 0 || g_alliedmaxlives.integer > 0 ) ) {
-			char *value;
-			char userinfo[MAX_INFO_STRING];
-			trap_GetUserinfo( clientNum, userinfo, sizeof( userinfo ) );
-			value = Info_ValueForKey( userinfo, "cl_guid" );
-			G_LogPrintf( "EnforceMaxLives-GUID: %s\n", value );
-			AddMaxLivesGUID( value );
-
-			value = Info_ValueForKey( userinfo, "ip" );
-			G_LogPrintf( "EnforceMaxLives-IP: %s\n", value );
-			AddMaxLivesBan( value );
-		}
-	}*/
-	// End Xian
-
 	// count current clients and rank for scoreboard
 	CalculateRanks();
 
 	// No surface determined yet.
 	ent->surfaceFlags = 0;
-
-	// OSP
-	/* Nico, removed multiview
-	G_smvUpdateClientCSList( ent );*/
-	// OSP
 }
 
 gentity_t *SelectSpawnPointFromList( char *list, vec3_t spawn_origin, vec3_t spawn_angles ) {
@@ -1880,11 +1402,6 @@ void ClientSpawn( gentity_t *ent, qboolean revived ) {
 
 	client->ps.persistant[PERS_SPAWN_COUNT]++;
 
-	/* Nico, removed revive_count
-	if ( revived ) {
-		client->ps.persistant[PERS_REVIVE_COUNT]++;
-	}*/
-
 	client->ps.persistant[PERS_TEAM] = client->sess.sessionTeam;
 	client->ps.persistant[PERS_HWEAPON_USE] = 0;
 
@@ -1939,10 +1456,6 @@ void ClientSpawn( gentity_t *ent, qboolean revived ) {
 
 	// Rafael
 
-	/* Nico, removed sprint time limit
-	client->pmext.sprintTime = SPRINTTIME;
-	client->ps.sprintExertTime = 0;*/
-
 	client->ps.friction = 1.0;
 	// done.
 
@@ -1989,19 +1502,6 @@ void ClientSpawn( gentity_t *ent, qboolean revived ) {
 		}
 	}
 
-	// TTimo keep it isolated from spectator to be safe still
-	if ( client->sess.sessionTeam != TEAM_SPECTATOR ) {
-		// Xian - Moved the invul. stuff out of SetWolfSpawnWeapons and put it here for clarity
-		/* Nico, removed fastres
-		if ( g_fastres.integer == 1 && revived ) {
-			client->ps.powerups[PW_INVULNERABLE] = level.time + 1000;
-		} else {*/
-			// Nico, removed spawn shield
-			// client->ps.powerups[PW_INVULNERABLE] = level.time + 3000;
-		// }
-	}
-	// End Xian
-
 	G_UpdateCharacter( client );
 
 	SetWolfSpawnWeapons( client );
@@ -2021,14 +1521,7 @@ void ClientSpawn( gentity_t *ent, qboolean revived ) {
 	// JPW NERVE ***NOTE*** the following line is order-dependent and must *FOLLOW* SetWolfSpawnWeapons() in multiplayer
 	// AddMedicTeamBonus() now adds medic team bonus and stores in ps.stats[STAT_MAX_HEALTH].
 
-
-	/* Nico, removed skills
-	if ( client->sess.skill[SK_BATTLE_SENSE] >= 3 ) {
-		// We get some extra max health, but don't spawn with that much
-		ent->health = client->ps.stats[STAT_HEALTH] = client->ps.stats[STAT_MAX_HEALTH] - 15;
-	} else {*/
-		ent->health = client->ps.stats[STAT_HEALTH] = client->ps.stats[STAT_MAX_HEALTH];
-	// }
+	ent->health = client->ps.stats[STAT_HEALTH] = client->ps.stats[STAT_MAX_HEALTH];
 
 	G_SetOrigin( ent, spawn_origin );
 	VectorCopy( spawn_origin, client->ps.origin );
@@ -2050,7 +1543,6 @@ void ClientSpawn( gentity_t *ent, qboolean revived ) {
 	}
 
 	if ( ent->client->sess.sessionTeam != TEAM_SPECTATOR ) {
-		//G_KillBox( ent );
 		trap_LinkEntity( ent );
 	}
 
@@ -2064,15 +1556,10 @@ void ClientSpawn( gentity_t *ent, qboolean revived ) {
 	// xkan, 1/13/2003 - reset death time
 	client->deathTime = 0;
 
-	/* Nico, removed intermission
-	if ( level.intermissiontime ) {
-		MoveClientToIntermission( ent );
-	} else {*/
-		// fire the targets of the spawn point
-		if ( !revived ) {
-			G_UseTargets( spawnPoint, ent );
-		}
-	// }
+	// fire the targets of the spawn point
+	if ( !revived ) {
+		G_UseTargets( spawnPoint, ent );
+	}
 
 	// run a client frame to drop exactly to the floor,
 	// initialize animations and other things
@@ -2149,23 +1636,6 @@ void ClientDisconnect( int clientNum ) {
 			Cmd_FollowCycle_f( flag, 1 );
 		}
 	}
-
-	// NERVE - SMF - remove complaint client
-	/* Nico, removed complaints
-	for ( i = 0 ; i < level.numConnectedClients ; i++ ) {
-		if ( flag->client->pers.complaintEndTime > level.time && flag->client->pers.complaintClient == clientNum ) {
-			flag->client->pers.complaintClient = -1;
-			flag->client->pers.complaintEndTime = -1;
-
-			CPx( level.sortedClients[i], "complaint -2" );
-			break;
-		}
-	}*/
-
-	/* Nico, removed mines
-	if ( g_landminetimeout.integer ) {
-		G_ExplodeMines( ent );
-	}*/
 
 	G_FadeItems( ent, MOD_SATCHEL );
 
@@ -2255,16 +1725,6 @@ void ClientDisconnect( int clientNum ) {
 
 
 	CalculateRanks();
-
-	// OSP
-
-	/* Nico, removed warmup
-	G_verifyMatchState( i );*/
-
-	/* Nico, removed multiview
-	G_smvAllRemoveSingleClient( ent - g_entities );*/
-
-	// OSP
 }
 
 // In just the GAME DLL, we want to store the groundtrace surface stuff,

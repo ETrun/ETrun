@@ -32,9 +32,6 @@ If you have questions concerning this license or the applicable additional terms
 #include "g_local.h"
 #include "../../etrun/ui/menudef.h"
 
-/* Nico, removed weaponstats
-int iWeap = WS_MAX;*/
-
 char *lock_status[2] = { "unlock", "lock" };
 
 //
@@ -44,8 +41,6 @@ char *lock_status[2] = { "unlock", "lock" };
 //
 typedef struct {
 	char *pszCommandName;
-	// Nico, removed because there is no more intermission 
-	//qboolean fAnytime;
 	qboolean fValue;
 	void ( *pCommand )( gentity_t *ent, unsigned int dwCommand, qboolean fValue );
 	const char *pszHelpInfo;
@@ -54,87 +49,21 @@ typedef struct {
 // VC optimizes for dup strings :)
 static const cmd_reference_t aCommandInfo[] = {
 
-	/* Nico, removed ws related command
-	{ "+stats",          qtrue,  qtrue,  NULL, ":^7 HUD overlay showing current weapon stats info" },*/
-
-	/* Nico, removed +topshots command
-	{ "+topshots",       qtrue,  qtrue,  NULL, ":^7 HUD overlay showing current top accuracies of all players" },*/
-
 	{ "?",				qtrue,  G_commands_cmd, ":^7 Gives a list of OSP-specific commands" },
 	{ "autorecord",     qtrue,  NULL, ":^7 Creates a demo with a consistent naming scheme" },
 	{ "autoscreenshot", qtrue,  NULL, ":^7 Creates a screenshot with a consistent naming scheme" },
-
-	/* Nico, removed bottomshots command
-	{ "bottomshots", qtrue,  qfalse, G_weaponRankings_cmd, ":^7 Shows WORST player for each weapon. Add ^3<weapon_ID>^7 to show all stats for a weapon" },*/
-
 	{ "callvote",       qfalse, ( void( * ) ( gentity_t *, unsigned int, qboolean ) )Cmd_CallVote_f, " <params>:^7 Calls a vote" },
 	{ "commands",       qtrue,  G_commands_cmd, ":^7 Gives a list of OSP-specific commands" },
 	{ "currenttime",	qtrue,  NULL, ":^7 Displays current local time" },
 	{ "follow",			qtrue,  Cmd_Follow_f, " <player_ID|allies|axis>:^7 Spectates a particular player or team" },
-
-	/* Nico, removed lock client command
-	{ "lock",            qtrue,  qtrue,  G_lock_cmd, ":^7 Locks a player's team to prevent others from joining" },*/
-
-	/* Nico, removed notready client command
-	{ "notready",        qtrue,  qfalse, G_ready_cmd, ":^7 Sets your status to ^5not ready^7 to start a match" },*/
-
-	/* Nico, removed pause client command
-	{ "pause",           qfalse, qtrue,  G_pause_cmd, ":^7 Allows a team to pause a match" },*/
-
 	{ "players",		qtrue,  G_players_cmd, ":^7 Lists all active players and their IDs/information" },
-
-	/* Nico, removed ready client command
-	{ "ready",           qtrue,  qtrue,  G_ready_cmd, ":^7 Sets your status to ^5ready^7 to start a match" },*/
-
-	/* Nico, removed readyteam command
-	{ "readyteam",       qfalse, qtrue,  G_teamready_cmd, ":^7 Sets an entire team's status to ^5ready^7 to start a match" },*/
-
 	{ "ref",			qtrue,  G_ref_cmd, " <password>:^7 Become a referee (admin access)" },
-
-	// Nico, removed say_teamnl
-	// { "say_teamnl",      qtrue,  qtrue,  G_say_teamnl_cmd, "<msg>:^7 Sends a team chat without location info" },
-
-	/* Nico, removed scores client command
-	{ "scores",          qtrue,  qtrue,  G_scores_cmd, ":^7 Displays current match stat info" },*/
-
 	{ "specinvite",      qtrue,  G_specinvite_cmd, ":^7 Invites a player to spectate a speclock'ed team" },
 	{ "speclock",		 qtrue,  G_speclock_cmd, ":^7 Locks a player's team from spectators" },
 	{ "specunlock",      qfalse, G_speclock_cmd, ":^7 Unlocks a player's team from spectators" },
-
-	/* Nico, removed statsall client command
-	{ "statsall",        qtrue,  qfalse, G_statsall_cmd, ":^7 Shows weapon accuracy stats for all players" },*/
-
-	/* Nico, removed statsdump client command
-	{ "statsdump",       qtrue,  qtrue,  NULL, ":^7 Shows player stats + match info saved locally to a file" },*/
-
 	// Nico, stoprecord command was missing from commands list
 	// http://games.chruker.dk/enemy_territory/modding_project_bugfix.php?bug_id=012
 	{ "stoprecord",		qtrue,	NULL, ":^7 Stops a demo recording currently in progress" },
-
-	// Nico, moved to floodProtectedCommands
-	// { "team",            qtrue,  qtrue,  Cmd_Team_f, " <b|r|s|none>:^7 Joins a team (b = allies, r = axis, s = spectator)" },
-
-	/* Nico, removed timein client command
-	{ "timein",          qfalse, qfalse, G_pause_cmd, ":^7 Unpauses a match (if initiated by the issuing team)" },*/
-
-	/* Nico, removed timeout client command
-	{ "timeout",     qfalse, qtrue,  G_pause_cmd, ":^7 Allows a team to pause a match" },*/
-
-	/* Nico, removed topshots command
-	{ "topshots",        qtrue,  qtrue,  G_weaponRankings_cmd, ":^7 Shows BEST player for each weapon. Add ^3<weapon_ID>^7 to show all stats for a weapon" },*/
-
-	/* Nico, removed unlock client command
-	{ "unlock",          qtrue,  qfalse, G_lock_cmd, ":^7 Unlocks a player's team, allowing others to join" },*/
-
-	/* Nico, removed unpause client command
-	{ "unpause",     qfalse, qfalse, G_pause_cmd, ":^7 Unpauses a match (if initiated by the issuing team)" },*/
-
-	/* Nico, removed unready client command
-	{ "unready",     qtrue,  qfalse, G_ready_cmd, ":^7 Sets your status to ^5not ready^7 to start a match" },*/
-
-	/* Nico, removed weaponstats client command
-	{ "weaponstats", qtrue,  qfalse, G_weaponStats_cmd, " [player_ID]:^7 Shows weapon accuracy stats for a player" },*/
-
 	{ 0,                qtrue,  NULL, 0 }
 };
 
@@ -153,8 +82,6 @@ qboolean G_commandCheck( gentity_t *ent, char *cmd ) {
 			return( qtrue );
 		}
 	}
-	/* Nico, removed multiview
-	return( G_smvCommands( ent, cmd ) );*/
 	return (qfalse);
 }
 
@@ -240,92 +167,6 @@ void G_commands_cmd( gentity_t *ent, unsigned int dwCommand, qboolean fValue ) {
 	// Nico, replaced cpm by print
 	CP( "print \"\nType: ^3\\command_name ?^7 for more information\n\"" );
 }
-
-
-// ************** LOCK / UNLOCK
-//
-// Locks/unlocks a player's team.
-/* Nico, removed lock client command
-void G_lock_cmd( gentity_t *ent, unsigned int dwCommand, qboolean fLock ) {
-	int tteam;
-
-	if ( team_nocontrols.integer ) {
-		G_noTeamControls( ent ); return;
-	}
-	if ( !G_cmdDebounce( ent, aCommandInfo[dwCommand].pszCommandName ) ) {
-		return;
-	}
-
-	tteam = G_teamID( ent );
-	if ( tteam == TEAM_AXIS || tteam == TEAM_ALLIES ) {
-		if ( teamInfo[tteam].team_lock == fLock ) {
-			CP( va( "print \"^3Your team is already %sed!\n\"", lock_status[fLock] ) );
-		} else {
-			char *info = va( "\"The %s team is now %sed!\n\"", aTeams[tteam], lock_status[fLock] );
-
-			teamInfo[tteam].team_lock = fLock;
-			AP( va( "print %s", info ) );
-			AP( va( "cp %s", info ) );
-		}
-	} else {CP( va( "print \"Spectators can't %s a team!\n\"", lock_status[fLock] ) );}
-}*/
-
-
-// ************** PAUSE / UNPAUSE
-//
-// Pause/unpause a match.
-/* Nico, removed pause client command
-void G_pause_cmd( gentity_t *ent, unsigned int dwCommand, qboolean fPause ) {
-	char *status[2] = { "^5UN", "^1" };
-
-	if ( team_nocontrols.integer ) {
-		G_noTeamControls( ent ); return;
-	}
-
-	if ( ( PAUSE_UNPAUSING >= level.match_pause && !fPause ) || ( PAUSE_NONE != level.match_pause && fPause ) ) {
-		CP( va( "print \"The match is already %sPAUSED^7!\n\"", status[fPause] ) );
-		return;
-	}
-
-	// Alias for referees
-	if ( ent->client->sess.referee ) {
-		G_refPause_cmd( ent, fPause );
-	} else {
-		int tteam = G_teamID( ent );
-
-		if ( !G_cmdDebounce( ent, aCommandInfo[dwCommand].pszCommandName ) ) {
-			return;
-		}
-
-		// Trigger the auto-handling of pauses
-		if ( fPause ) {
-			if ( 0 == teamInfo[tteam].timeouts ) {
-				CP( "cpm \"^3Your team has no more timeouts remaining!\n\"" );
-				return;
-			} else {
-				teamInfo[tteam].timeouts--;
-				level.match_pause = tteam + 128;
-				G_globalSound( "sound/misc/referee.wav" );
-				G_spawnPrintf( DP_PAUSEINFO, level.time + 15000, NULL );
-				AP( va( "print \"^3Match is ^1PAUSED^3!\n^7[%s^7: - %d Timeouts Remaining]\n\"", aTeams[tteam], teamInfo[tteam].timeouts ) );
-				CP( va( "cp \"^3Match is ^1PAUSED^3! (%s^3)\n\"", aTeams[tteam] ) );
-				level.server_settings |= CV_SVS_PAUSE;
-				trap_SetConfigstring( CS_SERVERTOGGLES, va( "%d", level.server_settings ) );
-			}
-		} else if ( tteam + 128 != level.match_pause ) {
-			CP( "cpm \"^3Your team didn't call the timeout!\n\"" );
-			return;
-		} else {
-			// Nico, removed extra linebreaks
-			// http://games.chruker.dk/enemy_territory/modding_project_bugfix.php?bug_id=068
-			AP( "print \"^3Match is ^5UNPAUSED^3 ... resuming in 10 seconds!\n\"" );
-			level.match_pause = PAUSE_UNPAUSING;
-			G_globalSound( "sound/osp/prepare.wav" );
-			G_spawnPrintf( DP_UNPAUSING, level.time + 10, NULL );
-		}
-	}
-}*/
-
 
 // ************** PLAYERS
 //
@@ -429,89 +270,14 @@ void G_players_cmd( gentity_t *ent, unsigned int dwCommand, qboolean fValue ) {
 	} else { G_Printf( "\n%2d total players\n\n", cnt );}
 
 	// Team speclock info
-	/* Nico, removed gametypes
-	if ( g_gametype.integer >= GT_WOLF ) {*/
-		for ( i = TEAM_AXIS; i <= TEAM_ALLIES; i++ ) {
-			if ( teamInfo[i].spec_lock ) {
-				if ( ent ) {
-					CP( va( "print \"** %s team is speclocked.\n\"", aTeams[i] ) );
-				} else { G_Printf( "** %s team is speclocked.\n", aTeams[i] );}
-			}
+	for ( i = TEAM_AXIS; i <= TEAM_ALLIES; i++ ) {
+		if ( teamInfo[i].spec_lock ) {
+			if ( ent ) {
+				CP( va( "print \"** %s team is speclocked.\n\"", aTeams[i] ) );
+			} else { G_Printf( "** %s team is speclocked.\n", aTeams[i] );}
 		}
-	// }
+	}
 }
-
-
-// ************** READY / NOTREADY
-//
-// Sets a player's "ready" status.
-/* Nico, removed ready client command
-void G_ready_cmd( gentity_t *ent, unsigned int dwCommand, qboolean state ) {
-	char *status[2] = { " NOT", "" };
-
-	if ( g_gamestate.integer == GS_PLAYING || g_gamestate.integer == GS_INTERMISSION ) {
-		CP( "cpm \"Match is already in progress!\n\"" );
-		return;
-	}
-
-	if ( !state && g_gamestate.integer == GS_WARMUP_COUNTDOWN ) {
-		CP( "cpm \"Countdown started.... ^3notready^7 ignored!\n\"" );
-		return;
-	}
-
-	if ( ent->client->sess.sessionTeam == TEAM_SPECTATOR ) {
-		CP( "cpm \"You must be in the game to be ^3ready^7!\n\"" );
-		return;
-	}
-
-	// Can't ready until enough players.
-	if ( level.numPlayingClients < match_minplayers.integer ) {
-		CP( "cpm \"Not enough players to start match!\n\"" );
-		return;
-	}
-
-	if ( !G_cmdDebounce( ent, aCommandInfo[dwCommand].pszCommandName ) ) {
-		return;
-	}
-
-	// Move them to correct ready state
-	if ( ent->client->pers.ready == state ) {
-		CP( va( "print \"You are already%s ready!\n\"", status[state] ) );
-	} else {
-		ent->client->pers.ready = state;
-		if ( !level.intermissiontime ) {
-			if ( state ) {
-				G_MakeReady( ent );
-			} else {
-				G_MakeUnready( ent );
-			}
-
-			AP( va( "print \"%s^7 is%s ready!\n\"", ent->client->pers.netname, status[state] ) );
-			AP( va( "cp \"\n%s\n^3is%s ready!\n\"", ent->client->pers.netname, status[state] ) );
-		}
-	}
-
-	G_readyMatchState();
-}*/
-
-
-// ************** SAY_TEAMNL
-//
-// Team chat w/no location info
-/* Nico, removed say_teamnl
-void G_say_teamnl_cmd( gentity_t *ent, unsigned int dwCommand, qboolean fValue ) {
-	Cmd_Say_f( ent, SAY_TEAMNL, qfalse );
-}*/
-
-
-// ************** SCORES
-//
-// Shows match stats to the requesting client.
-/* Nico, removed scores client command
-void G_scores_cmd( gentity_t *ent, unsigned int dwCommand, qboolean fValue ) {
-	G_printMatchInfo( ent );
-}*/
-
 
 // ************** SPECINVITE
 //
@@ -601,259 +367,3 @@ void G_speclock_cmd( gentity_t *ent, unsigned int dwCommand, qboolean fLock ) {
 		CP( va( "print \"Spectators can't %s a team from spectators!\n\"", lock_status[fLock] ) );
 	}
 }
-
-/* Nico, removed weaponstats client command
-// ************** WEAPONSTATS
-//
-// Shows a player's stats to the requesting client.
-void G_weaponStats_cmd( gentity_t *ent, unsigned int dwCommand, qboolean fDump ) {
-	G_statsPrint( ent, 0 );
-}*/
-
-/* Nico, removed statsall client command
-// ************** STATSALL
-//
-// Shows all players' stats to the requesting client.
-void G_statsall_cmd( gentity_t *ent, unsigned int dwCommand, qboolean fDump ) {
-	int i;
-	gentity_t *player;
-
-	for ( i = 0; i < level.numConnectedClients; i++ ) {
-		player = &g_entities[level.sortedClients[i]];
-		if ( player->client->sess.sessionTeam == TEAM_SPECTATOR ) {
-			continue;
-		}
-		CP( va( "ws %s\n", G_createStats( player ) ) );
-	}
-}*/
-
-// ************** TEAMREADY
-//
-// Sets a player's team "ready" status.
-/* Nico, removed readyteam command
-void G_teamready_cmd( gentity_t *ent, unsigned int dwCommand, qboolean state ) {
-	int i, tteam = G_teamID( ent );
-	gclient_t *cl;
-
-	if ( g_gamestate.integer == GS_PLAYING || g_gamestate.integer == GS_INTERMISSION ) {
-		CP( "cpm \"Match is already in progress!\n\"" );
-		return;
-	}
-
-	if ( ent->client->sess.sessionTeam == TEAM_SPECTATOR ) {
-		CP( "cpm \"Spectators can't ready a team!\n\"" );
-		return;
-	}
-
-	// Can't ready until enough players.
-	if ( level.numPlayingClients < match_minplayers.integer ) {
-		CP( "cpm \"Not enough players to start match!\n\"" );
-		return;
-	}
-
-	if ( !G_cmdDebounce( ent, aCommandInfo[dwCommand].pszCommandName ) ) {
-		return;
-	}
-
-	// Move them to correct ready state
-	for ( i = 0; i < level.numPlayingClients; i++ ) {
-		cl = level.clients + level.sortedClients[i];
-		if ( cl->sess.sessionTeam == tteam ) {
-			cl->pers.ready = qtrue;
-
-			G_MakeReady( ent );
-		}
-	}
-
-	G_printFull( va( "The %s team is ready!", aTeams[tteam] ), NULL );
-	G_readyMatchState();
-}*/
-
-// These map to WS_* weapon indexes
-/* Nico, removed weaponstats
-const int cQualifyingShots[WS_MAX] = {
-	10,     // 0
-	15,     // 1
-	15,     // 2
-	30,     // 3
-	30,     // 4
-	30,     // 5
-	30,     // 6
-	3,      // 7
-	100,    // 8
-	5,      // 9
-	5,      // 10
-	5,      // 11
-	3,      // 12
-	3,      // 13
-	5,      // 14
-	3,      // 15
-	3,      // 16
-	5,      // 17
-	10,     // 18
-	100,    // 19
-	30,     // 20
-	30      // 21
-};*/
-
-// ************** TOPSHOTS/BOTTOMSHOTS
-//
-// Gives back overall or specific weapon rankings
-/* Nico, removed weaponstats
-int QDECL SortStats( const void *a, const void *b ) {
-	gclient_t   *ca, *cb;
-	float accA, accB;
-
-	ca = &level.clients[*(int *)a];
-	cb = &level.clients[*(int *)b];
-
-	// then connecting clients
-	if ( ca->pers.connected == CON_CONNECTING ) {
-		return( 1 );
-	}
-	if ( cb->pers.connected == CON_CONNECTING ) {
-		return( -1 );
-	}
-
-	if ( ca->sess.sessionTeam == TEAM_SPECTATOR ) {
-		return( 1 );
-	}
-	if ( cb->sess.sessionTeam == TEAM_SPECTATOR ) {
-		return( -1 );
-	}
-
-	if ( ( ca->sess.aWeaponStats[iWeap].atts ) < cQualifyingShots[iWeap] ) {
-		return( 1 );
-	}
-	if ( ( cb->sess.aWeaponStats[iWeap].atts ) < cQualifyingShots[iWeap] ) {
-		return( -1 );
-	}
-
-	accA = (float)( ca->sess.aWeaponStats[iWeap].hits * 100.0 ) / (float)( ca->sess.aWeaponStats[iWeap].atts );
-	accB = (float)( cb->sess.aWeaponStats[iWeap].hits * 100.0 ) / (float)( cb->sess.aWeaponStats[iWeap].atts );
-
-	// then sort by accuracy
-	if ( accA > accB ) {
-		return( -1 );
-	}
-	return( 1 );
-}*/
-
-/* Nico, removed showstats client command
-// Shows the most accurate players for each weapon to the requesting client
-void G_weaponStatsLeaders_cmd( gentity_t* ent, qboolean doTop, qboolean doWindow ) {
-	int i, iWeap, shots, wBestAcc, cClients, cPlaces;
-	int aClients[MAX_CLIENTS];
-	float acc;
-	char z[MAX_STRING_CHARS];
-	const gclient_t* cl;
-
-	z[0] = 0;
-	for ( iWeap = WS_KNIFE; iWeap < WS_MAX; iWeap++ ) {
-		wBestAcc = ( doTop ) ? 0 : 99999;
-		cClients = 0;
-		cPlaces = 0;
-
-		// suckfest - needs two passes, in case there are ties
-		for ( i = 0; i < level.numConnectedClients; i++ ) {
-			cl = &level.clients[level.sortedClients[i]];
-
-			if ( cl->sess.sessionTeam == TEAM_SPECTATOR ) {
-				continue;
-			}
-
-			shots = cl->sess.aWeaponStats[iWeap].atts;
-			if ( shots >= cQualifyingShots[iWeap] ) {
-				acc = (float)( ( cl->sess.aWeaponStats[iWeap].hits ) * 100.0 ) / (float)shots;
-				aClients[cClients++] = level.sortedClients[i];
-				if ( ( ( doTop ) ? acc : (float)wBestAcc ) > ( ( doTop ) ? wBestAcc : acc ) ) {
-					wBestAcc = (int)acc;
-					cPlaces++;
-				}
-			}
-		}
-
-		if ( !doTop && cPlaces < 2 ) {
-			continue;
-		}
-
-		for ( i = 0; i < cClients; i++ ) {
-			cl = &level.clients[ aClients[i] ];
-			acc = (float)( cl->sess.aWeaponStats[iWeap].hits * 100.0 ) / (float)( cl->sess.aWeaponStats[iWeap].atts );
-
-			if ( ( ( doTop ) ? acc : (float)wBestAcc + 0.999 ) >= ( ( doTop ) ? wBestAcc : acc ) ) {
-				Q_strcat( z, sizeof( z ), va( " %d %d %d %d %d %d", iWeap + 1, aClients[i],
-											  cl->sess.aWeaponStats[iWeap].hits,
-											  cl->sess.aWeaponStats[iWeap].atts,
-											  cl->sess.aWeaponStats[iWeap].kills,
-											  cl->sess.aWeaponStats[iWeap].deaths ) );
-			}
-		}
-	}
-	CP( va( "%sbstats%s %s 0", ( ( doWindow ) ? "w" : "" ), ( ( doTop ) ? "" : "b" ), z ) );
-}*/
-
-
-// Shows best/worst accuracy for all weapons, or sorted
-// accuracies for a single weapon.
-/* Nico, removed topshots/bottomshots commands
-void G_weaponRankings_cmd( gentity_t *ent, unsigned int dwCommand, qboolean state ) {
-	gclient_t *cl;
-	int c = 0, i, shots, wBestAcc;
-	char z[MAX_STRING_CHARS];
-
-	if ( trap_Argc() < 2 ) {
-		G_weaponStatsLeaders_cmd( ent, state, qfalse );
-		return;
-	}
-
-	wBestAcc = ( state ) ? 0 : 99999;
-
-	// Find the weapon
-	trap_Argv( 1, z, sizeof( z ) );
-	if ( ( iWeap = atoi( z ) ) == 0 || iWeap < WS_KNIFE || iWeap >= WS_MAX ) {
-		for ( iWeap = WS_SYRINGE; iWeap >= WS_KNIFE; iWeap-- ) {
-			if ( !Q_stricmp( z, aWeaponInfo[iWeap].pszCode ) ) {
-				break;
-			}
-		}
-	}
-
-	if ( iWeap < WS_KNIFE ) {
-		G_commandHelp( ent, ( state ) ? "topshots" : "bottomshots", dwCommand );
-
-		Q_strncpyz( z, "^3Available weapon codes:^7\n", sizeof( z ) );
-		for ( i = WS_KNIFE; i < WS_MAX; i++ ) {
-			Q_strcat( z, sizeof( z ), va( "  %s - %s\n", aWeaponInfo[i].pszCode, aWeaponInfo[i].pszName ) );
-		}
-		CP( va( "print \"%s\"", z ) );
-		return;
-	}
-
-	memcpy( &level.sortedStats, &level.sortedClients, sizeof( level.sortedStats ) );
-	qsort( level.sortedStats, level.numConnectedClients, sizeof( level.sortedStats[0] ), SortStats );
-
-	z[0] = 0;
-	for ( i = 0; i < level.numConnectedClients; i++ ) {
-		cl = &level.clients[level.sortedStats[i]];
-
-		if ( cl->sess.sessionTeam == TEAM_SPECTATOR ) {
-			continue;
-		}
-
-		shots = cl->sess.aWeaponStats[iWeap].atts;
-		if ( shots >= cQualifyingShots[iWeap] ) {
-			float acc = (float)( cl->sess.aWeaponStats[iWeap].hits * 100.0 ) / (float)shots;
-
-			c++;
-			wBestAcc = ( ( ( state ) ? acc : wBestAcc ) > ( ( state ) ? wBestAcc : acc ) ) ? (int)acc : wBestAcc;
-			Q_strcat( z, sizeof( z ), va( " %d %d %d %d %d", level.sortedStats[i],
-										  cl->sess.aWeaponStats[iWeap].hits,
-										  shots,
-										  cl->sess.aWeaponStats[iWeap].kills,
-										  cl->sess.aWeaponStats[iWeap].deaths ) );
-		}
-	}
-
-	CP( va( "astats%s %d %d %d%s", ( ( state ) ? "" : "b" ), c, iWeap, wBestAcc, z ) );
-}*/

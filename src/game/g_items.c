@@ -63,17 +63,7 @@ int Pickup_Powerup( gentity_t *ent, gentity_t *other ) {
 	gclient_t   *client;
 
 	if ( !other->client->ps.powerups[ent->item->giTag] ) {
-
-		// some powerups are time based on how long the powerup is /used/
-		// rather than timed from when the player picks it up.
-
-		/* Nico, removed nofatigue
-		if ( ent->item->giTag == PW_NOFATIGUE ) {
-		} else {*/
-			// round timing to seconds to make multiple powerup timers
-			// count in sync
-			other->client->ps.powerups[ent->item->giTag] = level.time - ( level.time % 1000 );
-		// }
+		other->client->ps.powerups[ent->item->giTag] = level.time - ( level.time % 1000 );
 	}
 
 	// if an amount was specified in the ent, use it
@@ -84,20 +74,6 @@ int Pickup_Powerup( gentity_t *ent, gentity_t *other ) {
 	}
 
 	other->client->ps.powerups[ent->item->giTag] += quantity * 1000;
-
-
-	// brandy also gives a little health (10)
-	/* Nico, removed nofatigue
-	if ( ent->item->giTag == PW_NOFATIGUE ) {
-		if ( Q_stricmp( ent->item->classname, "item_stamina_brandy" ) == 0 ) {
-			other->health += 10;
-			if ( other->health > other->client->ps.stats[STAT_MAX_HEALTH] ) {
-				other->health = other->client->ps.stats[STAT_MAX_HEALTH];
-			}
-			other->client->ps.stats[STAT_HEALTH] = other->health;
-		}
-	}*/
-
 
 	// give any nearby players a "denied" anti-reward
 	for ( i = 0 ; i < level.maxclients ; i++ ) {
@@ -217,15 +193,11 @@ void UseHoldableItem( gentity_t *ent, int item ) {
 		//----(SA)	NOTE:	currently only gives free nofatigue time, doesn't reset fatigue bar.
 		//					(this is because I'd like the restore to be visually gradual (on the HUD item representing
 		//					current status of your fatigue) rather than snapping back to 'full')
-
-		/* Nico, removed nofatigue
-		ent->client->ps.powerups[PW_NOFATIGUE] = 60000;*/
 		break;
 
 	case HI_BOOK1:
 	case HI_BOOK2:
 	case HI_BOOK3:
-		//G_AddEvent(	ent, EV_POPUPBOOK, (item - HI_BOOK1)+1 );
 		break;
 	}
 }
@@ -304,9 +276,6 @@ Add_Ammo
 int Add_Ammo( gentity_t *ent, int weapon, int count, qboolean fillClip ) {
 	int ammoweap = BG_FindAmmoForWeapon( weapon );
 	int originalCount;
-
-	/* Nico, removed skills
-	int maxammo = BG_MaxAmmoForWeapon( ammoweap, ent->client->sess.skill );*/
 	int maxammo = BG_MaxAmmoForWeapon( ammoweap, 0 );
 
 	originalCount = ent->client->ps.ammo[ammoweap];
@@ -369,22 +338,6 @@ int Pickup_Ammo( gentity_t *ent, gentity_t *other ) {
 	return RESPAWN_AMMO;
 }
 
-// xkan, 9/18/2002 - Extracted AddMagicAmmo from Pickup_Weapon()
-/*
-=================================================================
-AddMagicAmmo - added the specified number of clips of magic ammo
-for any two-handed weapon
-
-- returns whether any ammo was actually added
-=================================================================
-*/
-/* Nico, removed skills
-qboolean AddMagicAmmo( gentity_t *receiver, int numOfClips ) {
-	return BG_AddMagicAmmo( &receiver->client->ps, receiver->client->sess.skill, receiver->client->sess.sessionTeam, numOfClips );
-}*/
-
-//======================================================================
-
 weapon_t G_GetPrimaryWeaponForClient( gclient_t *client ) {
 	int i;
 	bg_playerclass_t *classInfo;
@@ -393,15 +346,12 @@ weapon_t G_GetPrimaryWeaponForClient( gclient_t *client ) {
 		return WP_NONE;
 	}
 
-	/* Nico, removed skills
-	if ( client->sess.skill[SK_HEAVY_WEAPONS] < 4 ) {*/
-		if ( COM_BitCheck( client->ps.weapons, WP_THOMPSON ) ) {
-			return WP_THOMPSON;
-		}
-		if ( COM_BitCheck( client->ps.weapons, WP_MP40 ) ) {
-			return WP_MP40;
-		}
-	// }
+	if ( COM_BitCheck( client->ps.weapons, WP_THOMPSON ) ) {
+		return WP_THOMPSON;
+	}
+	if ( COM_BitCheck( client->ps.weapons, WP_MP40 ) ) {
+		return WP_MP40;
+	}
 
 	classInfo = &bg_allies_playerclasses[client->sess.playerType];
 	for ( i = 0; i < MAX_WEAPS_PER_CLASS; i++ ) {
@@ -520,11 +470,6 @@ qboolean G_CanPickupWeapon( weapon_t weapon, gentity_t* ent ) {
 		}
 	}
 
-	/* Nico, removed skills
-	if ( ent->client->sess.skill[SK_HEAVY_WEAPONS] >= 4 && ( weapon == WP_THOMPSON || weapon == WP_MP40 ) ) {
-		return qfalse;
-	}*/
-
 	return BG_WeaponIsPrimaryForClassAndTeam( ent->client->sess.playerType, ent->client->sess.sessionTeam, weapon );
 }
 
@@ -534,10 +479,6 @@ int Pickup_Weapon( gentity_t *ent, gentity_t *other ) {
 
 	// JPW NERVE -- magic ammo for any two-handed weapon
 	if ( ent->item->giTag == WP_AMMO ) {
-
-		/* Nico, removed skills
-		AddMagicAmmo( other, ent->count );*/
-
 		// if LT isn't giving ammo to self or another LT or the enemy, give him some props
 		if ( other->client->ps.stats[STAT_PLAYER_CLASS] != PC_FIELDOPS ) {
 			if ( ent->parent && ent->parent->client && other->client->sess.sessionTeam == ent->parent->client->sess.sessionTeam ) {
@@ -548,10 +489,6 @@ int Pickup_Weapon( gentity_t *ent, gentity_t *other ) {
 					}
 				}
 				ent->parent->client->PCSpecialPickedUpCount++;
-
-				/* Nico, removed g_stats.c
-				G_AddSkillPoints( ent->parent, SK_SIGNALS, 1.f );
-				G_DebugAddSkillPoints( ent->parent, SK_SIGNALS, 1.f, "ammo pack picked up" );*/
 
 				// extracted code originally here into AddMagicAmmo -xkan, 9/18/2002
 				// add 1 clip of magic ammo for any two-handed weapon
@@ -587,10 +524,6 @@ int Pickup_Weapon( gentity_t *ent, gentity_t *other ) {
 			weapon_t primaryWeapon = G_GetPrimaryWeaponForClient( other->client );
 
 			// rain - added parens around ambiguous &&
-
-			/* Nico, removed skills
-			if ( primaryWeapon ||
-				 ( other->client->sess.playerType == PC_SOLDIER && other->client->sess.skill[SK_HEAVY_WEAPONS] >= 4 ) ) {*/
 			if ( primaryWeapon ) {
 
 				if ( primaryWeapon ) {
@@ -662,10 +595,6 @@ int Pickup_Health( gentity_t *ent, gentity_t *other ) {
 				AddScore( ent->parent, WOLF_HEALTH_UP );
 				G_LogPrintf( "Health_Pack: %d %d\n", ent->parent - g_entities, other - g_entities );    // OSP
 			}
-
-			/* Nico, removed g_stats.c
-			G_AddSkillPoints( ent->parent, SK_FIRST_AID, 1.f );
-			G_DebugAddSkillPoints( ent->parent, SK_FIRST_AID, 1.f, "health pack picked up" );*/
 
 			ent->parent->client->PCSpecialPickedUpCount++;
 		}
@@ -780,12 +709,6 @@ void Touch_Item( gentity_t *ent, gentity_t *other, trace_t *trace ) {
 		return;     // dead people can't pickup
 	}
 
-	// the same pickup rules are used for client side and server side
-	/* Nico, removed skills
-	if ( !BG_CanItemBeGrabbed( &ent->s, &other->client->ps, other->client->sess.skill, other->client->sess.sessionTeam ) ) {
-		return;
-	}*/
-
 	if ( g_gamestate.integer == GS_PLAYING ) {
 		G_LogPrintf( "Item: %i %s\n", other->s.number, ent->item->classname );
 	} else {
@@ -796,8 +719,6 @@ void Touch_Item( gentity_t *ent, gentity_t *other, trace_t *trace ) {
 			return;
 		}
 	}
-
-//	G_LogPrintf( "Calling item pickup function for %s\n", ent->item->classname );
 
 	// call the item-specific pickup function
 	switch ( ent->item->giType ) {

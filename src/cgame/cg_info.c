@@ -31,35 +31,6 @@ If you have questions concerning this license or the applicable additional terms
 #include "cg_local.h"
 
 /*
-===================
-CG_DrawLoadingIcons
-===================
-*/
-/*static void CG_DrawLoadingIcons( void ) {
-	int		n;
-	int		x, y;
-
-	// JOSEPH 5-2-00 Per MAXX
-	return;
-
-	for( n = 0; n < loadingPlayerIconCount; n++ ) {
-		x = 16 + n * 78;
-		y = 324;
-		CG_DrawPic( x, y, 64, 64, loadingPlayerIcons[n] );
-	}
-
-	for( n = 0; n < loadingItemIconCount; n++ ) {
-		y = 400;
-		if( n >= 13 ) {
-			y += 40;
-		}
-		x = 16 + n % 13 * 48;
-		CG_DrawPic( x, y, 32, 32, loadingItemIcons[n] );
-	}
-}*/
-
-
-/*
 ======================
 CG_LoadingString
 
@@ -72,8 +43,6 @@ void CG_LoadingString( const char *s ) {
 		CG_Printf( va( "LOADING... %s\n",s ) );   //----(SA)	added so you can see from the console what's going on
 
 	}
-	// Arnout: no need for this
-	//trap_UpdateScreen();
 }
 
 /*
@@ -96,15 +65,6 @@ void CG_DrawInformation( qboolean forcerefresh ) {
 	}
 
 	CG_DrawConnectScreen( qfalse, forcerefresh );
-
-	// OSP - Server MOTD window
-/*	if(cg.motdWindow == NULL) {
-		CG_createMOTDWindow();
-	}
-	if(cg.motdWindow != NULL) {
-		CG_windowDraw();
-	}*/
-	// OSP*/
 }
 
 
@@ -365,9 +325,11 @@ vec4_t color_name   = COLOR_TEXT;
 #define VD_SCALE_Y_NAME 0.30f
 
 qboolean CG_ViewingDraw() {
+	// Nico, #fixme
 	return( qfalse );
 }
 
+// Nico, #fixme
 #define GS_X    166
 #define GS_Y    10
 #define GS_W    308

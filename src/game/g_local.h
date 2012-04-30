@@ -1644,13 +1644,7 @@ void        trap_SendMessage( int clientNum, char *buf, int buflen );
 messageStatus_t trap_MessageStatus( int clientNum );
 
 void G_ExplodeMissile( gentity_t *ent );
-
-/* Nico, no longer used
-void Svcmd_StartMatch_f( void );*/
 void Svcmd_ResetMatch_f( qboolean fDoReset, qboolean fDoRestart );
-/* Nico, removed swap_teams command
-void Svcmd_SwapTeams_f( void );*/
-
 void trap_PbStat( int clientNum, char *category, char *values ) ;
 
 // g_antilag.c
@@ -1721,29 +1715,6 @@ void G_UpdateTeamMapData();
 void G_SetupFrustum( gentity_t* ent );
 void G_SetupFrustum_ForBinoculars( gentity_t* ent );
 qboolean G_VisibleFromBinoculars( gentity_t* viewer, gentity_t* ent, vec3_t origin );
-
-/* Nico, removed g_stats.c
-void G_LogTeamKill(     gentity_t* ent, weapon_t weap );
-void G_LogDeath(        gentity_t* ent, weapon_t weap );
-void G_LogKill(         gentity_t* ent, weapon_t weap );
-void G_LogRegionHit(    gentity_t* ent, hitRegion_t hr );
-
-
-// Skills
-void G_SetPlayerScore( gclient_t *client );
-void G_SetPlayerSkill( gclient_t *client, skillType_t skill );
-
-
-void G_AddSkillPoints( gentity_t *ent, skillType_t skill, float points );
-void G_LoseSkillPoints( gentity_t *ent, skillType_t skill, float points );
-void G_AddKillSkillPoints( gentity_t *attacker, meansOfDeath_t mod, hitRegion_t hr, qboolean splash );
-void G_AddKillSkillPointsForDestruction( gentity_t *attacker, meansOfDeath_t mod, g_constructible_stats_t *constructibleStats );
-void G_LoseKillSkillPoints( gentity_t *tker, meansOfDeath_t mod, hitRegion_t hr, qboolean splash );
-
-void G_DebugOpenSkillLog( void );
-void G_DebugCloseSkillLog( void );
-void G_DebugAddSkillLevel( gentity_t *ent, skillType_t skill );
-void G_DebugAddSkillPoints( gentity_t *ent, skillType_t skill, float points, const char *reason );*/
 
 typedef enum {
 	SM_NEED_MEDIC,
@@ -1849,8 +1820,6 @@ typedef enum {
 	DP_PAUSEINFO,       // Print current pause info
 	DP_UNPAUSING,       // Print unpause countdown + unpause
 	DP_CONNECTINFO,     // Display OSP info on connect
-	/* Nico, removed multiview
-	DP_MVSPAWN          // Set up MV views for clients who need them*/
 } enum_t_dp;
 
 
@@ -1862,9 +1831,6 @@ typedef struct {
 	qboolean team_lock;
 	char team_name[24];
 	int team_score;
-
-	/* Nico, removed timeouts
-	int timeouts;*/
 } team_info;
 
 
@@ -1880,124 +1846,33 @@ void G_wipeCvars( void );
 ///////////////////////
 // g_cmds_ext.c
 //
-// Nico, removed intermission, so anytime doesn't make sens anymore
-// qboolean G_commandCheck( gentity_t *ent, char *cmd, qboolean fDoAnytime );
 qboolean G_commandCheck( gentity_t *ent, char *cmd );
 
 qboolean G_commandHelp( gentity_t *ent, char *pszCommand, unsigned int dwCommand );
 qboolean G_cmdDebounce( gentity_t *ent, const char *pszCommand );
 void G_commands_cmd( gentity_t *ent, unsigned int dwCommand, qboolean fValue );
-
-/* Nico, removed lock client command
-void G_lock_cmd( gentity_t *ent, unsigned int dwCommand, qboolean state );*/
-
-/* Nico, removed pause client command
-void G_pause_cmd( gentity_t *ent, unsigned int dwCommand, qboolean fValue );*/
-
 void G_players_cmd( gentity_t *ent, unsigned int dwCommand, qboolean fDump );
-
-/* Nico, removed ready client command
-void G_ready_cmd( gentity_t *ent, unsigned int dwCommand, qboolean fDump );*/
-
-// Nico, removed say_teamnl
-// void G_say_teamnl_cmd( gentity_t *ent, unsigned int dwCommand, qboolean fValue );
-
-/* Nico, removed scores client command
-void G_scores_cmd( gentity_t *ent, unsigned int dwCommand, qboolean fValue );*/
-
 void G_specinvite_cmd( gentity_t *ent, unsigned int dwCommand, qboolean fLock );
 void G_speclock_cmd( gentity_t *ent, unsigned int dwCommand, qboolean fLock );
-
-/* Nico, removed statsall client command
-void G_statsall_cmd( gentity_t *ent, unsigned int dwCommand, qboolean fDump );*/
-
-/* Nico, removed readyteam command
-void G_teamready_cmd( gentity_t *ent, unsigned int dwCommand, qboolean fDump );*/
-
-/* Nico, removed topshots/bottomshots commands
-void G_weaponRankings_cmd( gentity_t *ent, unsigned int dwCommand, qboolean state );*/
-
-/* Nico, removed weaponstats client command
-void G_weaponStats_cmd( gentity_t *ent, unsigned int dwCommand, qboolean fDump );*/
-
-/* Nico, removed showstats client command
-void G_weaponStatsLeaders_cmd( gentity_t* ent, qboolean doTop, qboolean doWindow );*/
-
 void G_VoiceTo( gentity_t *ent, gentity_t *other, int mode, const char *id, qboolean voiceonly );
 
 ///////////////////////
 // g_match.c
 //
-
-/* Nico, removed G_addStats because it does nothing
-void G_addStats( gentity_t *targ, gentity_t *attacker, int dmg_ref, int mod );*/
-
-/* Nico, removed G_addStatsHeadShot because it does nothing
-void G_addStatsHeadShot( gentity_t *attacker, int mod );*/
-
 qboolean G_allowPanzer( gentity_t *ent );
 int G_checkServerToggle( vmCvar_t *cv );
-
-/* Nico, removed ws related command
-char *G_createStats( gentity_t *refEnt );*/
-
-/* Nico, removed ws related command
-void G_deleteStats( int nClient );*/
-
 qboolean G_desiredFollow( gentity_t *ent, int nTeam );
 void G_globalSound( char *sound );
 void G_initMatch( void );
 void G_loadMatchGame( void );
 void G_matchInfoDump( unsigned int dwDumpType );
-
-/* Nico, removed unused G_printMatchInfo
-void G_printMatchInfo( gentity_t *ent );*/
-
-/* Nico, removed ws related command
-void G_parseStats( char *pszStatsInfo );*/
-
 void G_printFull( char *str, gentity_t *ent );
-
-/* Nico, removed LMS
-void G_resetModeState( void );*/
-
-/* Nico, removed currentRound
-void G_resetRoundState( void );*/
-
 void G_spawnPrintf( int print_type, int print_time, gentity_t *owner );
-
-/* Nico, removed ws related command
-void G_statsPrint( gentity_t *ent, int nType );*/
-
-/* Nico, removed weaponstats
-unsigned int G_weapStatIndex_MOD( unsigned int iWeaponMOD );*/
-
-///////////////////////
-// g_multiview.c
-//
-/* Nico, removed multiview
-qboolean G_smvCommands( gentity_t *ent, char *cmd );
-void G_smvAdd_cmd( gentity_t *ent );
-void G_smvAddTeam_cmd( gentity_t *ent, int nTeam );
-void G_smvDel_cmd( gentity_t *ent );
-void G_smvAddView( gentity_t *ent, int pID );
-void G_smvAllRemoveSingleClient( int pID );
-unsigned int G_smvGenerateClientList( gentity_t *ent );
-qboolean G_smvLocateEntityInMVList( gentity_t *ent, int pID, qboolean fRemove );
-void G_smvRegenerateClients( gentity_t *ent, int clientList );
-void G_smvRemoveEntityInMVList( gentity_t *ent, mview_t *ref );
-void G_smvRemoveInvalidClients( gentity_t *ent, int nTeam );
-qboolean G_smvRunCamera( gentity_t *ent );
-void G_smvUpdateClientCSList( gentity_t *ent );*/
 
 ///////////////////////
 // g_referee.c
 //
 void Cmd_AuthRcon_f( gentity_t *ent );
-
-/* Nico, removed warmup
-void G_refAllReady_cmd( gentity_t *ent );*/
-
 void G_ref_cmd( gentity_t *ent, unsigned int dwCommand, qboolean fValue );
 qboolean G_refCommandCheck( gentity_t *ent, char *cmd );
 void G_refHelp_cmd( gentity_t *ent );
@@ -2006,10 +1881,6 @@ void G_refPause_cmd( gentity_t *ent, qboolean fPause );
 void G_refPlayerPut_cmd( gentity_t *ent, int team_id );
 void G_refRemove_cmd( gentity_t *ent );
 void G_refSpeclockTeams_cmd( gentity_t *ent, qboolean fLock );
-
-/* Nico, removed warmup
-void G_refWarmup_cmd( gentity_t* ent );*/
-
 void G_refWarning_cmd( gentity_t* ent );
 void G_refMute_cmd( gentity_t *ent, qboolean mute );
 int  G_refClientnumForName( gentity_t *ent, const char *name );
@@ -2030,27 +1901,12 @@ extern team_info teamInfo[TEAM_NUM_TEAMS];
 
 qboolean G_allowFollow( gentity_t *ent, int nTeam );
 int G_blockoutTeam( gentity_t *ent, int nTeam );
-
-/* Nico, removed warmup
-qboolean G_checkReady( void );*/
-
-/* Nico, removed warmup
-qboolean G_readyMatchState( void );*/
-
 void G_removeSpecInvite( int team );
-
-/* Nico, removed shuffleteam
-void G_shuffleTeams( void );*/
-
 void G_swapTeamLocks( void );
 void G_swapTeams( void );
 qboolean G_teamJoinCheck( int team_num, gentity_t *ent );
 int  G_teamID( gentity_t *ent );
 void G_teamReset( int team_num, qboolean fClearSpecLock );
-
-/* Nico, removed warmup
-void G_verifyMatchState( int team_id );*/
-
 void G_updateSpecLock( int nTeam, qboolean fLock );
 
 
@@ -2063,78 +1919,22 @@ void G_voteFlags( void );
 void G_voteHelp( gentity_t *ent, qboolean fShowVote );
 void G_playersMessage( gentity_t *ent );
 // Actual voting commands
-
-/* Nico, removed competition settings
-int G_Comp_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd );*/
-
-/* Nico, removed gametypes
-int G_Gametype_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd );*/
-
 int G_Kick_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd );
 int G_Mute_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd );
 int G_UnMute_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd );
 int G_Map_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd );
-
-/* Nico, removed campaign client command
-int G_Campaign_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd );*/
-
 int G_MapRestart_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd );
 int G_MatchReset_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd );
-
-/* Nico, removed match_* cvars
-int G_Mutespecs_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd );*/
-
 int G_Nextmap_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd );
-
-/* Nico, removed public settings
-int G_Pub_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd );*/
-
 int G_Referee_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd );
-
-/* Nico, removed shuffleteam
-int G_ShuffleTeams_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd );*/
-
 int G_StartMatch_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd );
-
-/* Nico, removed swap_teams command
-int G_SwapTeams_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd );*/
-
-/* Nico, no friendlyfire
-int G_FriendlyFire_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd );*/
-
-/* Nico, no timelimit
-int G_Timelimit_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd );*/
-
-/* Nico, removed warmup
-int G_Warmupfire_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd );*/
-
 int G_Unreferee_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd );
 int G_AntiLag_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd );
-
-/* Nico, removed balancedteams
-int G_BalancedTeams_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd );*/
-
 void G_LinkDebris( void );
 void G_LinkDamageParents( void );
 int EntsThatRadiusCanDamage( vec3_t origin, float radius, int *damagedList );
-
-/* Nico, removed mines
-qboolean G_LandmineTriggered( gentity_t* ent );
-qboolean G_LandmineArmed( gentity_t* ent );
-qboolean G_LandmineUnarmed( gentity_t* ent );
-team_t G_LandmineTeam( gentity_t* ent );
-qboolean G_LandmineSpotted( gentity_t* ent );*/
-
 gentity_t* G_FindSmokeBomb( gentity_t* start );
-
-/* Nico, removed mines
-gentity_t* G_FindLandmine( gentity_t* start );*/
-
 gentity_t* G_FindDynamite( gentity_t* start );
-
-/* Nico, removed satchel
-gentity_t* G_FindSatchels( gentity_t* start );*/
-
 void G_SetTargetName( gentity_t* ent, char* targetname );
 void G_KillEnts( const char* target, gentity_t* ignore, gentity_t* killer, meansOfDeath_t mod );
 void trap_EngineerTrace( trace_t *results, const vec3_t start, const vec3_t mins, const vec3_t maxs, const vec3_t end, int passEntityNum, int contentmask );
@@ -2157,24 +1957,11 @@ qboolean G_EmplacedGunIsRepairable( gentity_t* ent, gentity_t* other );
 qboolean G_EmplacedGunIsMountable( gentity_t* ent, gentity_t* other );
 void G_CheckForCursorHints( gentity_t *ent );
 void G_CalcClientAccuracies( void );
-
-/* Nico, removed endgame
-void G_BuildEndgameStats( void );*/
-
 int G_TeamCount( gentity_t* ent, weapon_t weap );
 
 qboolean G_IsFireteamLeader( int entityNum, fireteamData_t** teamNum );
 fireteamData_t* G_FindFreePublicFireteam( team_t team );
 void G_RegisterFireteam( /*const char* name,*/ int entityNum );
-
-/* Nico, removed airstrikes
-void weapon_callAirStrike( gentity_t *ent );
-void weapon_checkAirStrikeThink2( gentity_t *ent );
-void weapon_checkAirStrikeThink1( gentity_t *ent );
-void weapon_callSecondPlane( gentity_t *ent );
-qboolean weapon_checkAirStrike( gentity_t *ent );*/
-
-
 void G_MakeReady( gentity_t* ent );
 void G_MakeUnready( gentity_t* ent );
 
@@ -2190,9 +1977,6 @@ void G_TempTraceIgnoreEntity( gentity_t* ent );
 void G_TempTraceIgnorePlayersAndBodies( void );
 
 qboolean G_CanPickupWeapon( weapon_t weapon, gentity_t* ent );
-
-/* Nico, removed mines
-qboolean G_LandmineSnapshotCallback( int entityNum, int clientNum );*/
 
 // Nico, flags enabling map entities
 #define MAP_KILL_ENTITIES		1

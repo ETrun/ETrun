@@ -45,6 +45,7 @@ AddScore
 Adds score to both the client and his team
 ============
 */
+// Nico, #fixme useless?
 void AddScore( gentity_t *ent, int score ) {
 	if ( !ent || !ent->client ) {
 		return;
@@ -53,11 +54,6 @@ void AddScore( gentity_t *ent, int score ) {
 	if ( g_gamestate.integer != GS_PLAYING ) {
 		return;
 	}
-
-	/* Nico, removed LMS
-	if ( g_gametype.integer == GT_WOLF_LMS ) {
-		return;
-	}*/
 
 	ent->client->sess.game_points += score;
 
@@ -76,23 +72,6 @@ void AddKillScore( gentity_t *ent, int score ) {
 		return;
 	}
 
-	/* Nico, removed warmup
-	// no scoring during pre-match warmup
-	if ( level.warmupTime ) {
-		return;
-	}*/
-
-	// someone already won
-	/* Nico, removed LMS
-	if ( level.lmsWinningTeam ) {
-		return;
-	}
-
-	if ( g_gametype.integer == GT_WOLF_LMS ) {
-		ent->client->ps.persistant[PERS_SCORE] += score;
-		level.teamScores[ ent->client->ps.persistant[PERS_TEAM] ] += score;
-	}*/
-
 	ent->client->sess.game_points += score;
 
 	CalculateRanks();
@@ -107,11 +86,6 @@ Toss the weapon and powerups for the killed player
 */
 void TossClientItems( gentity_t *self ) {
 	weapon_t primaryWeapon;
-
-	/* Nico, removed intermission
-	if ( g_gamestate.integer == GS_INTERMISSION ) {
-		return;
-	}*/
 
 	primaryWeapon = G_GetPrimaryWeaponForClient( self->client );
 
@@ -284,21 +258,11 @@ void player_die( gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int
 	if ( attacker == self ) {
 		if ( self->client ) {
 
-			/* Nico, removed playerStats
-			self->client->pers.playerStats.suicides++;*/
-
 			trap_PbStat( self - g_entities, "suicide",
 						 va( "%d %d %d", self->client->sess.sessionTeam, self->client->sess.playerType, weap ) ) ;
 		}
 	} else if ( OnSameTeam( self, attacker ) ) {
-		/* Nico, removed g_stats.c
-		G_LogTeamKill(  attacker,   weap );*/
 	} else {
-
-		/* Nico, removed g_stats.c
-		G_LogDeath( self,       weap );
-		G_LogKill(  attacker,   weap );*/
-
 		if ( g_gamestate.integer == GS_PLAYING ) {
 			if ( attacker->client ) {
 				attacker->client->combatState |= ( 1 << COMBATSTATE_KILLEDPLAYER );
@@ -354,16 +318,9 @@ void player_die( gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int
 		killedintank = qtrue;
 	}
 
-	/* Nico, removed intermission
-	if ( self->client->ps.pm_type == PM_DEAD || g_gamestate.integer == GS_INTERMISSION ) {*/
 	if ( self->client->ps.pm_type == PM_DEAD ) {
 		return;
 	}
-
-	// OSP - death stats handled out-of-band of G_Damage for external calls
-	/* Nico, removed G_addStats because it does nothing
-	G_addStats( self, attacker, damage, meansOfDeath );*/
-	// OSP
 
 	self->client->ps.pm_type = PM_DEAD;
 
@@ -422,63 +379,12 @@ void player_die( gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int
 
 	if ( attacker && attacker->client ) {
 		if ( attacker == self || OnSameTeam( self, attacker ) ) {
-
-			// DHM - Nerve :: Complaint lodging
-			// Nico, removed warmup
-			// if ( attacker != self && level.warmupTime <= 0 && g_gamestate.integer == GS_PLAYING ) {
-			/* Nico, removed complaints
-			if ( attacker != self && g_gamestate.integer == GS_PLAYING ) {
-				if ( attacker->client->pers.localClient ) {
-					trap_SendServerCommand( self - g_entities, "complaint -4" );
-				} else {
-					if ( meansOfDeath != MOD_CRUSH_CONSTRUCTION && meansOfDeath != MOD_CRUSH_CONSTRUCTIONDEATH && meansOfDeath != MOD_CRUSH_CONSTRUCTIONDEATH_NOATTACKER ) {
-						if ( g_complaintlimit.integer ) {
-
-							if ( !( meansOfDeath == MOD_LANDMINE && g_disableComplaints.integer & TKFL_MINES ) &&
-								 !( ( meansOfDeath == MOD_ARTY || meansOfDeath == MOD_AIRSTRIKE ) && g_disableComplaints.integer & TKFL_AIRSTRIKE ) &&
-								 !( meansOfDeath == MOD_MORTAR && g_disableComplaints.integer & TKFL_MORTAR ) ) {
-								trap_SendServerCommand( self - g_entities, va( "complaint %i", attacker->s.number ) );
-								self->client->pers.complaintClient = attacker->s.clientNum;
-								self->client->pers.complaintEndTime = level.time + 20500;
-							}
-						}
-					}
-				}
-			}*/
-
-			// high penalty to offset medic heal
-/*			AddScore( attacker, WOLF_FRIENDLY_PENALTY ); */
-
-			/* Nico, removed LMS
-			if ( g_gametype.integer == GT_WOLF_LMS ) {
-				AddKillScore( attacker, WOLF_FRIENDLY_PENALTY );
-			}*/
 		} else {
-
-			//G_AddExperience( attacker, 1 );
-
 			// JPW NERVE -- mostly added as conveneience so we can tweak from the #defines all in one place
 			AddScore( attacker, WOLF_FRAG_BONUS );
-
-			/* Nico, removed LMS
-			if ( g_gametype.integer == GT_WOLF_LMS ) {
-				if ( level.firstbloodTeam == -1 ) {
-					level.firstbloodTeam = attacker->client->sess.sessionTeam;
-				}
-
-				AddKillScore( attacker, WOLF_FRAG_BONUS );
-			}*/
-
-			/* Nico, removed lastkilltime
-			attacker->client->lastKillTime = level.time;*/
 		}
 	} else {
 		AddScore( self, -1 );
-
-		/* Nico, removed LMS
-		if ( g_gametype.integer == GT_WOLF_LMS ) {
-			AddKillScore( self, -1 );
-		}*/
 	}
 
 	// Add team bonuses
@@ -637,13 +543,6 @@ void player_die( gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int
 	} else if ( ( meansOfDeath == MOD_SUICIDE && g_gamestate.integer == GS_PLAYING ) ) {
 		limbo( self );
 	}
-	
-	/* Nico, removed LMS
-	else if ( g_gametype.integer == GT_WOLF_LMS ) {
-		if ( !G_CountTeamMedics( self->client->sess.sessionTeam, qtrue ) ) {
-			limbo( self, qtrue );
-		}
-	}*/
 }
 
 qboolean IsHeadShotWeapon( int mod ) {
@@ -977,15 +876,6 @@ void G_Damage( gentity_t *targ, gentity_t *inflictor, gentity_t *attacker,  vec3
 		return;
 	}
 
-	// the intermission has allready been qualified for, so don't
-	// allow any extra scoring
-	/* Nico, removed warmup
-	if ( level.intermissionQueued || ( g_gamestate.integer != GS_PLAYING && match_warmupDamage.integer == 0 ) ) {*/
-	/* Nico, removed intermission
-	if ( level.intermissionQueued ) {
-		return;
-	}*/
-
 	if ( !inflictor ) {
 		inflictor = &g_entities[ENTITYNUM_WORLD];
 	}
@@ -1190,20 +1080,6 @@ void G_Damage( gentity_t *targ, gentity_t *inflictor, gentity_t *attacker,  vec3
 			(targ->client->sess.sessionTeam == TEAM_ALLIES && attacker->client->sess.sessionTeam == TEAM_AXIS))) {
 				return;
 		}
-
-		/* Nico, no friendlyfire
-		// if TF_NO_FRIENDLY_FIRE is set, don't do damage to the target
-		// if the attacker was on the same team
-		if ( targ != attacker && OnSameTeam( targ, attacker )  ) {
-			// Nico, removed warmup
-			// if ( ( g_gamestate.integer != GS_PLAYING && match_warmupDamage.integer == 1 ) ) {
-			//	return;
-			// } else
-
-			if ( !g_friendlyFire.integer )     {
-				return;
-			}
-		}*/
 	}
 
 	// add to the attacker's hit counter
@@ -1219,37 +1095,6 @@ void G_Damage( gentity_t *targ, gentity_t *inflictor, gentity_t *attacker,  vec3
 		damage = 1;
 	}
 	take = damage;
-	// save = 0;
-
-	// adrenaline junkie!
-	/* Nico, removed adrenaline
-	if ( targ->client && targ->client->ps.powerups[PW_ADRENALINE] ) {
-		take *= .5f;
-	}*/
-
-	// save some from flak jacket
-	/* Nico, removed skills
-	if ( targ->client && targ->client->sess.skill[SK_EXPLOSIVES_AND_CONSTRUCTION] >= 4 && targ->client->sess.playerType == PC_ENGINEER ) {
-		if ( mod == MOD_GRENADE ||
-			 mod == MOD_GRENADE_LAUNCHER ||
-			 mod == MOD_ROCKET ||
-			 mod == MOD_GRENADE_PINEAPPLE ||
-			 mod == MOD_MAPMORTAR ||
-			 mod == MOD_MAPMORTAR_SPLASH ||
-			 mod == MOD_EXPLOSIVE ||
-			 mod == MOD_LANDMINE ||
-			 mod == MOD_GPG40 ||
-			 mod == MOD_M7 ||
-			 mod == MOD_SATCHEL ||
-			 mod == MOD_ARTY ||
-			 mod == MOD_AIRSTRIKE ||
-			 mod == MOD_DYNAMITE ||
-			 mod == MOD_MORTAR ||
-			 mod == MOD_PANZERFAUST ||
-			 mod == MOD_MAPMORTAR ) {
-			take -= take * .5f;
-		}
-	}*/
 
 	headShot = IsHeadShot( targ, dir, point, mod );
 	if ( headShot ) {
@@ -1313,23 +1158,12 @@ void G_Damage( gentity_t *targ, gentity_t *inflictor, gentity_t *attacker,  vec3
 		targ->client->ps.eFlags |= EF_HEADSHOT;
 
 		// OSP - Record the headshot
-		/* Nico, removed G_addStatsHeadShot because it does nothing
-		if ( client && attacker && attacker->client && attacker->client->sess.sessionTeam != targ->client->sess.sessionTeam ) {
-			G_addStatsHeadShot( attacker, mod );
-		}*/
-
 		if ( g_debugBullets.integer ) {
 			trap_SendServerCommand( attacker - g_entities, "print \"Head Shot\n\"\n" );
 		}
 
-		/* Nico, removed g_stats.c
-		G_LogRegionHit( attacker, HR_HEAD );*/
-
 		hr = HR_HEAD;
 	} else if ( IsLegShot( targ, dir, point, mod ) ) {
-
-		/* Nico, removed g_stats.c
-		G_LogRegionHit( attacker, HR_LEGS );*/
 
 		hr = HR_LEGS;
 		if ( g_debugBullets.integer ) {
@@ -1337,17 +1171,11 @@ void G_Damage( gentity_t *targ, gentity_t *inflictor, gentity_t *attacker,  vec3
 		}
 	} else if ( IsArmShot( targ, attacker, point, mod ) ) {
 
-		/* Nico, removed g_stats.c
-		G_LogRegionHit( attacker, HR_ARMS );*/
-
 		hr = HR_ARMS;
 		if ( g_debugBullets.integer ) {
 			trap_SendServerCommand( attacker - g_entities, "print \"Arm Shot\n\"\n" );
 		}
 	} else if ( targ->client && targ->health > 0 && IsHeadShotWeapon( mod ) ) {
-
-		/* Nico, removed g_stats.c
-		G_LogRegionHit( attacker, HR_BODY );*/
 
 		hr = HR_BODY;
 		if ( g_debugBullets.integer ) {
@@ -1380,9 +1208,6 @@ void G_Damage( gentity_t *targ, gentity_t *inflictor, gentity_t *attacker,  vec3
 			client->damage_fromWorld = qtrue;
 		}
 	}
-
-	// See if it's the player hurting the emeny flag carrier
-//	Team_CheckHurtCarrier(targ, attacker);
 
 	if ( targ->client ) {
 		// set the last client who damaged the target
@@ -1423,12 +1248,6 @@ void G_Damage( gentity_t *targ, gentity_t *inflictor, gentity_t *attacker,  vec3
 		if ( targ->health <= 0 ) {
 			if ( client && !wasAlive ) {
 				targ->flags |= FL_NO_KNOCKBACK;
-				// OSP - special hack to not count attempts for body gibbage
-				/* Nico, removed G_addStats because it does nothing
-				if ( targ->client->ps.pm_type == PM_DEAD ) {
-					G_addStats( targ, attacker, take, mod );
-				}*/
-
 				if ( ( targ->health < FORCE_LIMBO_HEALTH ) && ( targ->health > GIB_HEALTH ) ) {
 					limbo( targ );
 				}
@@ -1498,12 +1317,6 @@ void G_Damage( gentity_t *targ, gentity_t *inflictor, gentity_t *attacker,  vec3
 
 			targ->pain( targ, attacker, take, point );
 		}
-		/* Nico, removed G_addStats because it does nothing
-		else {
-			// OSP - update weapon/dmg stats
-			G_addStats( targ, attacker, take, mod );
-			// OSP
-		}*/
 
 		// RF, entity scripting
 		G_Script_ScriptEvent( targ, "pain", va( "%d %d", targ->health, targ->health + take ) );

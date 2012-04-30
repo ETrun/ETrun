@@ -46,86 +46,19 @@ gclient_t g_clients[MAX_CLIENTS];
 
 g_campaignInfo_t g_campaigns[MAX_CAMPAIGNS];
 
-/* Nico, removed saveGamePending
-int saveGamePending;                // 0 = no, 1 = check, 2 = loading*/
-
 mapEntityData_Team_t mapEntityData[2];
-
-/* Nico, removed (c)g_gametype
-vmCvar_t g_gametype;*/
-
-/* Nico, no fraglimit
-vmCvar_t g_fraglimit;*/
-
-/* Nico, no timelimit
-vmCvar_t g_timelimit;*/
-
-/* Nico, no friendlyfire
-vmCvar_t g_friendlyFire;*/
 
 vmCvar_t g_password;
 vmCvar_t sv_privatepassword;
 vmCvar_t g_maxclients;
-
-/* Nico, removed gameClients limits
-vmCvar_t g_maxGameClients;
-vmCvar_t g_minGameClients;          // NERVE - SMF*/
-
 vmCvar_t g_dedicated;
-
-/* Nico, g_speed is now hardcoded as DEFAULT_SPEED
-vmCvar_t g_speed;*/
-
-/* Nico, g_gravity is hardcoded as DEFAULT_GRAVITY
-vmCvar_t g_gravity;*/
-
 vmCvar_t g_cheats;
-
-/* Nico, hardcoded knockback
-vmCvar_t g_knockback;*/
-
-/* Nico, removed quadfactor
-vmCvar_t g_quadfactor;*/
-
-/* Nico, removed forcerespawn
-vmCvar_t g_forcerespawn;*/
-
 vmCvar_t g_inactivity;
 vmCvar_t g_debugMove;
 vmCvar_t g_debugDamage;
 vmCvar_t g_debugAlloc;
 vmCvar_t g_debugBullets;    //----(SA)	added
 vmCvar_t g_motd;
-
-/* Nico, removed warmup
-vmCvar_t g_warmup;*/
-
-// NERVE - SMF
-/* Nico, removed warmup
-vmCvar_t g_warmupLatch;*/
-
-/* Nico, no timelimit
-vmCvar_t g_nextTimeLimit;*/
-
-/* Nico, removed showHeadshotRatio
-vmCvar_t g_showHeadshotRatio;*/
-
-/* Nico, no timelimit
-vmCvar_t g_userTimeLimit;*/
-
-/* Nico, instant reswawn
-vmCvar_t g_userAlliedRespawnTime;
-vmCvar_t g_userAxisRespawnTime;*/
-
-/* Nico, removed currentRound
-vmCvar_t g_currentRound;*/
-
-/* Nico, removed team switch protection
-vmCvar_t g_noTeamSwitching;*/
-
-/* Nico, removed altStopwatchMode
-vmCvar_t g_altStopwatchMode;*/
-
 vmCvar_t g_gamestate;
 vmCvar_t g_swapteams;
 // -NERVE - SMF
@@ -133,58 +66,12 @@ vmCvar_t g_swapteams;
 vmCvar_t g_restarted;
 vmCvar_t g_log;
 vmCvar_t g_logSync;
-
-/* Nico, removed unused podium stuff
-vmCvar_t g_podiumDist;
-vmCvar_t g_podiumDrop;*/
-
 vmCvar_t voteFlags;
-
-/* Nico, removed complaints
-vmCvar_t g_complaintlimit;          // DHM - Nerve
-vmCvar_t g_ipcomplaintlimit;*/
-
 vmCvar_t g_filtercams;
-
-/* Nico, removed respawnLeft
-vmCvar_t g_maxlives;                // DHM - Nerve
-vmCvar_t g_maxlivesRespawnPenalty;*/
-
 vmCvar_t g_voiceChatsAllowed;       // DHM - Nerve
-
-/* Nico, removed respawnLeft
-vmCvar_t g_alliedmaxlives;          // Xian
-vmCvar_t g_axismaxlives;            // Xian*/
-
-/* Nico, removed fastres
-vmCvar_t g_fastres;                 // Xian*/
-
-/* Nico, removed knifeonly
-vmCvar_t g_knifeonly;               // Xian*/
-
-/* Nico, removed respawnLeft
-vmCvar_t g_enforcemaxlives;         // Xian*/
-
 vmCvar_t g_needpass;
-
-/* Nico, removed balancedteams
-vmCvar_t g_balancedteams;*/
-
-/* Nico, removed warmup
-vmCvar_t g_doWarmup;*/
-
-/* Nico, commented because unused
-vmCvar_t g_teamAutoJoin;*/
-
-/* Nico, removed balancedteams
-vmCvar_t g_teamForceBalance;*/
-
 vmCvar_t g_banIPs;
 vmCvar_t g_filterBan;
-
-/* Nico, commented because unused
-vmCvar_t g_rankings;*/
-
 vmCvar_t g_smoothClients;
 vmCvar_t pmove_fixed;
 vmCvar_t pmove_msec;
@@ -193,16 +80,7 @@ vmCvar_t pmove_msec;
 vmCvar_t g_scriptName;          // name of script file to run (instead of default for that map)
 
 vmCvar_t g_developer;
-
-/* Nico, removed useraim
-vmCvar_t g_userAim;*/
-
 vmCvar_t g_footstepAudibleRange;
-
-// JPW NERVE multiplayer reinforcement times
-/* Nico, instant reswawn
-vmCvar_t g_redlimbotime;
-vmCvar_t g_bluelimbotime;*/
 
 // charge times for character class special weapons
 vmCvar_t g_medicChargeTime;
@@ -216,21 +94,6 @@ vmCvar_t g_antilag;
 
 // OSP
 vmCvar_t g_spectatorInactivity;
-
-/* Nico, removed match_* cvars
-vmCvar_t match_latejoin;
-vmCvar_t match_minplayers;
-vmCvar_t match_mutespecs;
-vmCvar_t match_readypercent;
-vmCvar_t match_timeoutcount;
-vmCvar_t match_timeoutlength;*/
-
-/* Nico, removed warmup
-vmCvar_t match_warmupDamage;*/
-
-/* Nico, removed server autoconfig
-vmCvar_t server_autoconfig;*/
-
 vmCvar_t team_maxPanzers;
 vmCvar_t team_maxplayers;
 vmCvar_t team_nocontrols;
@@ -240,87 +103,25 @@ vmCvar_t server_motd2;
 vmCvar_t server_motd3;
 vmCvar_t server_motd4;
 vmCvar_t server_motd5;
-
-/* Nico, removed vote_allow_comp
-vmCvar_t vote_allow_comp;*/
-
-/* Nico, removed vote_allow_gametype
-vmCvar_t vote_allow_gametype;*/
-
 vmCvar_t vote_allow_kick;
 vmCvar_t vote_allow_map;
 vmCvar_t vote_allow_matchreset;
 vmCvar_t vote_allow_mutespecs;
 vmCvar_t vote_allow_nextmap;
-
-/* Nico, removed vote_allow_pub
-vmCvar_t vote_allow_pub;*/
-
 vmCvar_t vote_allow_referee;
-
-/* Nico, removed shuffleteam
-vmCvar_t vote_allow_shuffleteamsxp;*/
-
 vmCvar_t vote_allow_swapteams;
-
-/* Nico, no friendlyfire
-vmCvar_t vote_allow_friendlyfire;*/
-
-/* Nico, no timelimit
-vmCvar_t vote_allow_timelimit;*/
-
-/* Nico, removed warmup
-vmCvar_t vote_allow_warmupdamage;*/
-
 vmCvar_t vote_allow_antilag;
-
-/* Nico, removed balancedteams
-vmCvar_t vote_allow_balancedteams;*/
-
 vmCvar_t vote_allow_muting;
 vmCvar_t vote_limit;
 vmCvar_t vote_percent;
-
-/* Nico, removed serverflags
-vmCvar_t z_serverflags;*/
-
 vmCvar_t g_covertopsChargeTime;
 vmCvar_t refereePassword;
 vmCvar_t g_debugConstruct;
-
-/* Nico, removed mines
-vmCvar_t g_landminetimeout;*/
 
 // Variable for setting the current level of debug printing/logging
 // enabled in bot scripts and regular scripts.
 // Added by Mad Doctor I, 8/23/2002
 vmCvar_t g_scriptDebugLevel;
-
-/* Nico, removed (c)g_movespeed
-vmCvar_t g_movespeed;*/
-
-/* Nico, removed gametypes
-vmCvar_t g_axismapxp;
-vmCvar_t g_alliedmapxp;
-vmCvar_t g_oldCampaign;
-vmCvar_t g_currentCampaign;
-vmCvar_t g_currentCampaignMap;*/
-
-// Arnout: for LMS
-/* Nico, removed LMS
-vmCvar_t g_axiswins;
-vmCvar_t g_alliedwins;*/
-
-/* Nico, removed balancedteams
-vmCvar_t g_lms_teamForceBalance;*/
-
-/* Nico, removed LMS
-vmCvar_t g_lms_roundlimit;
-vmCvar_t g_lms_matchlimit;
-vmCvar_t g_lms_currentMatch;
-vmCvar_t g_lms_lockTeams;
-vmCvar_t g_lms_followTeamOnly;*/
-
 vmCvar_t mod_url;
 vmCvar_t url;
 
@@ -329,14 +130,7 @@ vmCvar_t g_letterbox;
 vmCvar_t g_debugSkills;
 vmCvar_t g_heavyWeaponRestriction;
 vmCvar_t g_autoFireteams;
-
 vmCvar_t g_nextmap;
-
-/* Nico, removed gametypes
-vmCvar_t g_nextcampaign;*/
-
-/* Nico, removed complaints
-vmCvar_t g_disableComplaints;*/
 
 // Nico, beginning of ETrun server cvars
 
@@ -377,74 +171,16 @@ cvarTable_t gameCvarTable[] = {
 	{ NULL, "sv_mapname", "", CVAR_SERVERINFO | CVAR_ROM, 0, qfalse  },
 
 	// latched vars
-	/* Nico, removed (c)g_gametype
-	{ &g_gametype, "g_gametype", "4", CVAR_SERVERINFO | CVAR_LATCH, 0, qfalse  },     // Arnout: default to GT_WOLF_CAMPAIGN*/
-
-// JPW NERVE multiplayer stuffs
-	/* Nico, instant reswawn
-	{ &g_redlimbotime, "g_redlimbotime", "30000", CVAR_SERVERINFO | CVAR_LATCH, 0, qfalse },
-	{ &g_bluelimbotime, "g_bluelimbotime", "30000", CVAR_SERVERINFO | CVAR_LATCH, 0, qfalse },*/
 
 	{ &g_medicChargeTime, "g_medicChargeTime", "45000", CVAR_SERVERINFO | CVAR_LATCH, 0, qfalse, qtrue },
 	{ &g_engineerChargeTime, "g_engineerChargeTime", "30000", CVAR_SERVERINFO | CVAR_LATCH, 0, qfalse, qtrue },
 	{ &g_LTChargeTime, "g_LTChargeTime", "40000", CVAR_SERVERINFO | CVAR_LATCH, 0, qfalse, qtrue },
 	{ &g_soldierChargeTime, "g_soldierChargeTime", "20000", CVAR_SERVERINFO | CVAR_LATCH, 0, qfalse, qtrue },
-// jpw
 
 	{ &g_covertopsChargeTime, "g_covertopsChargeTime", "30000", CVAR_SERVERINFO | CVAR_LATCH, 0, qfalse, qtrue },
-
-	/* Nico, removed mines
-	{ &g_landminetimeout, "g_landminetimeout", "1", CVAR_ARCHIVE, 0, qfalse, qtrue },*/
-
 	{ &g_maxclients, "sv_maxclients", "20", CVAR_SERVERINFO | CVAR_LATCH | CVAR_ARCHIVE, 0, qfalse  },            // NERVE - SMF - made 20 from 8
 
-	/* Nico, removed gameClients limits
-	{ &g_maxGameClients, "g_maxGameClients", "0", CVAR_SERVERINFO | CVAR_LATCH | CVAR_ARCHIVE, 0, qfalse  },
-	{ &g_minGameClients, "g_minGameClients", "8", CVAR_SERVERINFO, 0, qfalse  },                              // NERVE - SMF*/
-
-	// change anytime vars
-	/* Nico, no fraglimit
-	{ &g_fraglimit, "fraglimit", "0", CVAR_ARCHIVE | CVAR_NORESTART, 0, qtrue },*/
-
-	/* Nico, no timelimit
-	{ &g_timelimit, "timelimit", "0", CVAR_SERVERINFO | CVAR_ARCHIVE | CVAR_NORESTART, 0, qtrue },*/
-
-	/* Nico, no friendlyfire
-	{ &g_friendlyFire, "g_friendlyFire", "1", CVAR_SERVERINFO | CVAR_ARCHIVE, 0, qtrue, qtrue },*/
-
-	/* Nico, removed balancedteams
-	{ &g_teamForceBalance, "g_teamForceBalance", "0", CVAR_ARCHIVE  },                            // NERVE - SMF - merge from team arena*/
-
-	/* Nico, removed warmup
-	{ &g_warmup, "g_warmup", "60", CVAR_ARCHIVE, 0, qtrue  },
-	{ &g_doWarmup, "g_doWarmup", "0", CVAR_ARCHIVE, 0, qtrue  },
-
-	// NERVE - SMF
-	{ &g_warmupLatch, "g_warmupLatch", "1", 0, 0, qfalse },*/
-
-	/* Nico, no timelimit
-	{ &g_nextTimeLimit, "g_nextTimeLimit", "0", CVAR_WOLFINFO, 0, qfalse  },*/
-
-	/* Nico, removed currentRound
-	{ &g_currentRound, "g_currentRound", "0", CVAR_WOLFINFO, 0, qfalse, qtrue },*/
-
-	/* Nico, removed altStopwatchMode
-	{ &g_altStopwatchMode, "g_altStopwatchMode", "0", CVAR_ARCHIVE, 0, qtrue, qtrue },*/
-
 	{ &g_gamestate, "gamestate", "-1", CVAR_WOLFINFO | CVAR_ROM, 0, qfalse  },
-
-	/* Nico, removed team switch protection
-	{ &g_noTeamSwitching, "g_noTeamSwitching", "0", CVAR_ARCHIVE, 0, qtrue  },*/
-
-	/* Nico, removed showHeadshotRatio
-	{ &g_showHeadshotRatio, "g_showHeadshotRatio", "0", 0, 0, qfalse  },*/
-
-	/* Nico, no timelimit
-	{ &g_userTimeLimit, "g_userTimeLimit", "0", 0, 0, qfalse, qtrue },*/
-
-	/* Nico, instant reswawn
-	{ &g_userAlliedRespawnTime, "g_userAlliedRespawnTime", "0", 0, 0, qfalse, qtrue },
-	{ &g_userAxisRespawnTime, "g_userAxisRespawnTime", "0", 0, 0, qfalse, qtrue },*/
 
 	{ &g_swapteams, "g_swapteams", "0", CVAR_ROM, 0, qfalse, qtrue },
 	// -NERVE - SMF
@@ -460,25 +196,7 @@ cvarTable_t gameCvarTable[] = {
 
 	{ &g_dedicated, "dedicated", "0", 0, 0, qfalse },
 
-	/* Nico, g_speed is now hardcoded as DEFAULT_SPEED
-	{ &g_speed, "g_speed", "320", 0, 0, qtrue, qtrue },*/
-
-	/* Nico, g_gravity is hardcoded as DEFAULT_GRAVITY
-	{ &g_gravity, "g_gravity", "800", 0, 0, qtrue, qtrue },*/
-
-	/* Nico, hardcoded knockback
-	{ &g_knockback, "g_knockback", "1000", 0, 0, qtrue, qtrue },*/
-
-	/* Nico, removed quadfactor
-	{ &g_quadfactor, "g_quadfactor", "3", 0, 0, qtrue },*/
-
 	{ &g_needpass, "g_needpass", "0", CVAR_SERVERINFO | CVAR_ROM, 0, qtrue },
-
-	/* Nico, removed balancedteams
-	{ &g_balancedteams, "g_balancedteams", "0", CVAR_SERVERINFO | CVAR_ROM, 0, qtrue },*/
-
-	/* Nico, removed forcerespawn
-	{ &g_forcerespawn, "g_forcerespawn", "0", 0, 0, qtrue },*/
 
 	{ &g_inactivity, "g_inactivity", "120", 0, 0, qtrue },// Nico, set to 120 secs (default was 0)
 	{ &g_debugMove, "g_debugMove", "0", 0, 0, qfalse },
@@ -486,46 +204,10 @@ cvarTable_t gameCvarTable[] = {
 	{ &g_debugAlloc, "g_debugAlloc", "0", 0, 0, qfalse },
 	{ &g_debugBullets, "g_debugBullets", "0", CVAR_CHEAT, 0, qfalse}, //----(SA)	added
 	{ &g_motd, "g_motd", "", CVAR_ARCHIVE, 0, qfalse },
-
-	/* Nico, removed unused podium stuff
-	{ &g_podiumDist, "g_podiumDist", "80", 0, 0, qfalse },
-	{ &g_podiumDrop, "g_podiumDrop", "70", 0, 0, qfalse },*/
-
 	{ &voteFlags, "voteFlags", "0", CVAR_TEMP | CVAR_ROM | CVAR_SERVERINFO, 0, qfalse },
-
-	/* Nico, removed complaints
-	{ &g_complaintlimit, "g_complaintlimit", "6", CVAR_ARCHIVE, 0, qtrue },                       // DHM - Nerve
-	{ &g_ipcomplaintlimit, "g_ipcomplaintlimit", "3", CVAR_ARCHIVE, 0, qtrue },*/
-
 	{ &g_filtercams, "g_filtercams", "0", CVAR_ARCHIVE, 0, qfalse },
-
-	/* Nico, removed respawnLeft
-	{ &g_maxlives, "g_maxlives", "0", CVAR_ARCHIVE | CVAR_LATCH | CVAR_SERVERINFO, 0, qtrue },        // DHM - Nerve
-	{ &g_maxlivesRespawnPenalty, "g_maxlivesRespawnPenalty", "0", CVAR_ARCHIVE | CVAR_LATCH | CVAR_SERVERINFO, 0, qtrue },*/
-
 	{ &g_voiceChatsAllowed, "g_voiceChatsAllowed", "4", CVAR_ARCHIVE, 0, qfalse },                // DHM - Nerve
-
-	/* Nico, removed respawnLeft
-	{ &g_alliedmaxlives, "g_alliedmaxlives", "0", CVAR_LATCH | CVAR_SERVERINFO, 0, qtrue },     // Xian
-	{ &g_axismaxlives, "g_axismaxlives", "0", CVAR_LATCH | CVAR_SERVERINFO, 0, qtrue },         // Xian*/
-
-	/* Nico, removed fastres
-	{ &g_fastres, "g_fastres", "0", CVAR_ARCHIVE, 0, qtrue, qtrue },                          // Xian - Fast Medic Resing*/
-
-	/* Nico, removed knifeonly
-	{ &g_knifeonly, "g_knifeonly", "0", 0, 0, qtrue },                                            // Xian - Fast Medic Resing*/
-
-	/* Nico, removed respawnLeft
-	{ &g_enforcemaxlives, "g_enforcemaxlives", "1", CVAR_ARCHIVE, 0, qtrue },                 // Xian - Gestapo enforce maxlives stuff by temp banning*/
-
 	{ &g_developer, "developer", "0", CVAR_TEMP, 0, qfalse },
-
-	/* Nico, commented because unused
-	{ &g_rankings, "g_rankings", "0", 0, 0, qfalse },*/
-
-	/* Nico, removed useraim
-	{ &g_userAim, "g_userAim", "1", CVAR_CHEAT, 0, qfalse },*/
-
 	{ &g_smoothClients, "g_smoothClients", "1", 0, 0, qfalse },
 	{ &pmove_fixed, "pmove_fixed", "0", 0, 0, qfalse },// Nico, removed CVAR_SYSTEMINFO
 	{ &pmove_msec, "pmove_msec", "8", CVAR_SYSTEMINFO, 0, qfalse },
@@ -542,20 +224,6 @@ cvarTable_t gameCvarTable[] = {
 	{ &refereePassword, "refereePassword", "none", 0, 0, qfalse},
 	{ &g_spectatorInactivity, "g_spectatorInactivity", "0", 0, 0, qfalse, qfalse },
 
-	/* Nico, removed match_* cvars
-	{ &match_latejoin,      "match_latejoin", "1", 0, 0, qfalse, qfalse },
-	{ &match_minplayers,    "match_minplayers", MATCH_MINPLAYERS, 0, 0, qfalse, qfalse },
-	{ &match_mutespecs,     "match_mutespecs", "0", 0, 0, qfalse, qtrue },
-	{ &match_readypercent,  "match_readypercent", "100", 0, 0, qfalse, qtrue },
-	{ &match_timeoutcount,  "match_timeoutcount", "3", 0, 0, qfalse, qtrue },
-	{ &match_timeoutlength, "match_timeoutlength", "180", 0, 0, qfalse, qtrue },*/
-
-	/* Nico, removed warmup
-	{ &match_warmupDamage,  "match_warmupDamage", "1", 0, 0, qfalse },*/
-
-	/* Nico, removed server autoconfig
-	{ &server_autoconfig, "server_autoconfig", "0", 0, 0, qfalse, qfalse },*/
-
 	{ &server_motd0,    "server_motd0", " ^NEnemy Territory ^7MOTD ", 0, 0, qfalse, qfalse },
 	{ &server_motd1,    "server_motd1", "", 0, 0, qfalse, qfalse },
 	{ &server_motd2,    "server_motd2", "", 0, 0, qfalse, qfalse },
@@ -566,82 +234,29 @@ cvarTable_t gameCvarTable[] = {
 	{ &team_maxplayers, "team_maxplayers", "0", 0, 0, qfalse, qfalse },
 	{ &team_nocontrols, "team_nocontrols", "1", 0, 0, qfalse, qfalse },
 
-	/* Nico, removed vote_allow_comp
-	{ &vote_allow_comp,         "vote_allow_comp", "1", 0, 0, qfalse, qfalse },*/
-
-	/* Nico, removed vote_allow_gametype
-	{ &vote_allow_gametype,     "vote_allow_gametype", "1", 0, 0, qfalse, qfalse },*/
-
 	{ &vote_allow_kick,         "vote_allow_kick", "1", 0, 0, qfalse, qfalse },
 	{ &vote_allow_map,          "vote_allow_map", "1", 0, 0, qfalse, qfalse },
 	{ &vote_allow_matchreset,   "vote_allow_matchreset", "1", 0, 0, qfalse, qfalse },
 	{ &vote_allow_mutespecs,    "vote_allow_mutespecs", "1", 0, 0, qfalse, qfalse },
 	{ &vote_allow_nextmap,      "vote_allow_nextmap", "1", 0, 0, qfalse, qfalse },
 
-	/* Nico, removed vote_allow_pub
-	{ &vote_allow_pub,          "vote_allow_pub", "1", 0, 0, qfalse, qfalse },*/
-
 	{ &vote_allow_referee,      "vote_allow_referee", "0", 0, 0, qfalse, qfalse },
-
-	/* Nico, removed shuffleteam
-	{ &vote_allow_shuffleteamsxp,   "vote_allow_shuffleteamsxp", "1", 0, 0, qfalse, qfalse },*/
 
 	{ &vote_allow_swapteams,    "vote_allow_swapteams", "1", 0, 0, qfalse, qfalse },
 
-	/* Nico, no friendlyfire
-	{ &vote_allow_friendlyfire, "vote_allow_friendlyfire", "1", 0, 0, qfalse, qfalse },*/
-
-	/* Nico, no timelimit
-	{ &vote_allow_timelimit,    "vote_allow_timelimit", "0", 0, 0, qfalse, qfalse },*/
-
-	/* Nico, removed warmup
-	{ &vote_allow_warmupdamage, "vote_allow_warmupdamage", "1", 0, 0, qfalse, qfalse },*/
-
 	{ &vote_allow_antilag,      "vote_allow_antilag", "1", 0, 0, qfalse, qfalse },
-
-	/* Nico, removed balancedteams
-	{ &vote_allow_balancedteams,"vote_allow_balancedteams", "1", 0, 0, qfalse, qfalse },*/
 
 	{ &vote_allow_muting,       "vote_allow_muting", "1", 0, 0, qfalse, qfalse },
 	{ &vote_limit,      "vote_limit", "5", 0, 0, qfalse, qfalse },
 	{ &vote_percent,    "vote_percent", "50", 0, 0, qfalse, qfalse },
 
 	// state vars
-	/* Nico, removed serverflags
-	{ &z_serverflags, "z_serverflags", "0", 0, 0, qfalse, qfalse },*/
-
 	{ &g_debugConstruct, "g_debugConstruct", "0", CVAR_CHEAT, 0, qfalse },
 
 	{ &g_scriptDebug, "g_scriptDebug", "0", CVAR_CHEAT, 0, qfalse },
 
 	// What level of detail do we want script printing to go to.
 	{ &g_scriptDebugLevel, "g_scriptDebugLevel", "0", CVAR_CHEAT, 0, qfalse },
-
-	// How fast do we want Allied single player movement?
-	/* Nico, removed (c)g_movespeed
-	{ &g_movespeed, "g_movespeed", "76", CVAR_CHEAT, 0, qfalse },*/
-
-	// Arnout: LMS
-	/* Nico, removed balancedteams
-	{ &g_lms_teamForceBalance,  "g_lms_teamForceBalance",    "1", CVAR_ARCHIVE },*/
-
-	/* Nico, removed LMS
-	{ &g_lms_roundlimit,        "g_lms_roundlimit",          "3", CVAR_ARCHIVE },
-	{ &g_lms_matchlimit,        "g_lms_matchlimit",          "2", CVAR_ARCHIVE },
-	{ &g_lms_currentMatch,      "g_lms_currentMatch",        "0", CVAR_ROM, 0, qfalse, qtrue },
-	{ &g_lms_lockTeams,         "g_lms_lockTeams",           "0", CVAR_ARCHIVE },
-	{ &g_lms_followTeamOnly,    "g_lms_followTeamOnly",      "1", CVAR_ARCHIVE },
-	{ &g_axiswins,              "g_axiswins",                "0", CVAR_ROM, 0, qfalse, qtrue },
-	{ &g_alliedwins,            "g_alliedwins",              "0", CVAR_ROM, 0, qfalse, qtrue },*/
-
-
-	/* Nico, removed gametypes
-	{ &g_axismapxp,             "g_axismapxp",               "0", CVAR_ROM, 0, qfalse, qtrue },
-	{ &g_alliedmapxp,           "g_alliedmapxp",         "0", CVAR_ROM, 0, qfalse, qtrue },
-
-	{ &g_oldCampaign,           "g_oldCampaign",         "",      CVAR_ROM, 0, },
-	{ &g_currentCampaign,       "g_currentCampaign",     "",      CVAR_WOLFINFO | CVAR_ROM, 0, },
-	{ &g_currentCampaignMap,    "g_currentCampaignMap",      "0", CVAR_WOLFINFO | CVAR_ROM, 0, },*/
 
 	// points to the URL for mod information, should not be modified by server admin
 	{ &mod_url, "mod_url", "", CVAR_SERVERINFO | CVAR_ROM, 0, qfalse },
@@ -656,12 +271,6 @@ cvarTable_t gameCvarTable[] = {
 	{ &g_autoFireteams, "g_autoFireteams", "1", CVAR_ARCHIVE },
 
 	{ &g_nextmap, "nextmap", "", CVAR_TEMP },
-
-	/* Nico, removed gametypes
-	{ &g_nextcampaign, "nextcampaign", "", CVAR_TEMP },*/
-
-	/* Nico, removed complaints
-	{ &g_disableComplaints, "g_disableComplaints", "0", CVAR_ARCHIVE },*/
 
 	// Nico, beginning of ETrun server cvars
 

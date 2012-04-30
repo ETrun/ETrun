@@ -199,38 +199,9 @@ G_SetClientSound
 ===============
 */
 void G_SetClientSound( gentity_t *ent ) {
-/*	if (ent->waterlevel && (ent->watertype & CONTENTS_LAVA) )	//----(SA)	modified since slime is no longer deadly
-		ent->s.loopSound = level.snd_fry;
-	else*/                                                                                                                                                   // Gordon: doesnt exist
 	ent->s.loopSound = 0;
 }
 
-/*
-==============
-ClientNeedsAmmo
-==============
-*/
-/* Nico, removed skills
-qboolean ClientNeedsAmmo( int client ) {
-	return AddMagicAmmo( &g_entities[client], 0 ) ? qtrue : qfalse;
-}*/
-
-// Does ent have enough "energy" to call artillery?
-/* Nico, removed airstrikes
-qboolean ReadyToCallArtillery( gentity_t* ent ) {
-
-	// Nico, removed skills
-	// if ( ent->client->sess.skill[SK_SIGNALS] >= 2 ) {
-	//	if ( level.time - ent->client->ps.classWeaponTime <= ( level.lieutenantChargeTime[ent->client->sess.sessionTeam - 1] * 0.66f ) ) {
-	//		return qfalse;
-	//	}
-	// } else
-	if ( level.time - ent->client->ps.classWeaponTime <= level.lieutenantChargeTime[ent->client->sess.sessionTeam - 1] ) {
-		return qfalse;
-	}
-
-	return qtrue;
-}*/
 
 
 // Are we ready to construct?  Optionally, will also update the time while we are constructing
@@ -245,14 +216,7 @@ qboolean ReadyToConstruct( gentity_t *ent, gentity_t *constructible, qboolean up
 	if ( g_debugConstruct.integer ) {
 		weaponTime += 0.5f * ( (float)level.engineerChargeTime[ent->client->sess.sessionTeam - 1] / ( constructible->constructibleStats.duration / (float)FRAMETIME ) );
 	} else {
-
-		/* Nico, removed skills
-		if ( ent->client->sess.skill[SK_EXPLOSIVES_AND_CONSTRUCTION] >= 3 ) {
-			weaponTime += 0.66f * constructible->constructibleStats.chargebarreq * ( (float)level.engineerChargeTime[ent->client->sess.sessionTeam - 1] / ( constructible->constructibleStats.duration / (float)FRAMETIME ) );
-		}
-		else {*/
-			weaponTime += constructible->constructibleStats.chargebarreq * ( (float)level.engineerChargeTime[ent->client->sess.sessionTeam - 1] / ( constructible->constructibleStats.duration / (float)FRAMETIME ) );
-		// }
+		weaponTime += constructible->constructibleStats.chargebarreq * ( (float)level.engineerChargeTime[ent->client->sess.sessionTeam - 1] / ( constructible->constructibleStats.duration / (float)FRAMETIME ) );
 	}
 
 	// if the time is in the future, we have NO energy left
@@ -404,10 +368,6 @@ void SpectatorThink( gentity_t *ent, usercmd_t *ucmd ) {
 	// something completely bogus
 	crosshairEnt = &g_entities[ent->client->ps.identifyClient];
 
-	/* Nico, removed disguise stuff
-	if ( crosshairEnt->inuse && crosshairEnt->client &&
-		 ( ent->client->sess.sessionTeam == crosshairEnt->client->sess.sessionTeam ||
-		   crosshairEnt->client->ps.powerups[PW_OPS_DISGUISED] ) ) {*/
 	if ( crosshairEnt->inuse && crosshairEnt->client &&
 		 ( ent->client->sess.sessionTeam == crosshairEnt->client->sess.sessionTeam ) ) {
 
@@ -441,10 +401,6 @@ void SpectatorThink( gentity_t *ent, usercmd_t *ucmd ) {
 		pm.pmext = &client->pmext;
 		pm.character = client->pers.character;
 		pm.cmd = *ucmd;
-
-		/* Nico, removed skills
-		pm.skill = client->sess.skill;*/
-
 		pm.tracemask = MASK_PLAYERSOLID & ~CONTENTS_BODY;   // spectators can fly through bodies
 		pm.trace = trap_TraceCapsuleNoEnts;
 		pm.pointcontents = trap_PointContents;
@@ -464,12 +420,6 @@ void SpectatorThink( gentity_t *ent, usercmd_t *ucmd ) {
 		trap_UnlinkEntity( ent );
 	}
 
-	/* Nico, removed sprint time limit
-	if ( ent->flags & FL_NOFATIGUE ) {
-		ent->client->pmext.sprintTime = SPRINTTIME;
-	}*/
-
-
 	client->oldbuttons = client->buttons;
 	client->buttons = ucmd->buttons;
 
@@ -477,23 +427,18 @@ void SpectatorThink( gentity_t *ent, usercmd_t *ucmd ) {
 	client->oldwbuttons = client->wbuttons;
 	client->wbuttons = ucmd->wbuttons;
 
-	// MV clients use these buttons locally for other things
-	/* Nico, removed multiview
-	if ( client->pers.mvCount < 1 ) {*/
-		// attack button cycles through spectators
-		if ( ( client->buttons & BUTTON_ATTACK ) && !( client->oldbuttons & BUTTON_ATTACK ) ) {
-			Cmd_FollowCycle_f( ent, 1 );
-		} else if (
-			( client->sess.sessionTeam == TEAM_SPECTATOR ) && // don't let dead team players do free fly
-			( client->sess.spectatorState == SPECTATOR_FOLLOW ) &&
-			( ( ( client->buttons & BUTTON_ACTIVATE ) &&
-				!( client->oldbuttons & BUTTON_ACTIVATE ) ) || ucmd->upmove > 0 ) &&
-			G_allowFollow( ent, TEAM_AXIS ) && G_allowFollow( ent, TEAM_ALLIES ) ) {
-			// code moved to StopFollowing
-			StopFollowing( ent );
-		}
-	/* Nico, removed multiview
-	}*/
+	// attack button cycles through spectators
+	if ( ( client->buttons & BUTTON_ATTACK ) && !( client->oldbuttons & BUTTON_ATTACK ) ) {
+		Cmd_FollowCycle_f( ent, 1 );
+	} else if (
+		( client->sess.sessionTeam == TEAM_SPECTATOR ) && // don't let dead team players do free fly
+		( client->sess.spectatorState == SPECTATOR_FOLLOW ) &&
+		( ( ( client->buttons & BUTTON_ACTIVATE ) &&
+			!( client->oldbuttons & BUTTON_ACTIVATE ) ) || ucmd->upmove > 0 ) &&
+		G_allowFollow( ent, TEAM_AXIS ) && G_allowFollow( ent, TEAM_ALLIES ) ) {
+		// code moved to StopFollowing
+		StopFollowing( ent );
+	}
 }
 
 
@@ -591,27 +536,6 @@ void ClientTimerActions( gentity_t *ent, int msec ) {
 	}
 }
 
-/* Nico, removed intermission
-====================
-ClientIntermissionThink
-====================
-
-void ClientIntermissionThink( gclient_t *client ) {
-	client->ps.eFlags &= ~EF_TALK;
-	client->ps.eFlags &= ~EF_FIRING;
-
-	// the level will exit when everyone wants to or after timeouts
-
-	// swap and latch button actions
-	client->oldbuttons = client->buttons;
-	client->buttons = client->pers.cmd.buttons;
-
-//----(SA)	added
-	client->oldwbuttons = client->wbuttons;
-	client->wbuttons = client->pers.cmd.wbuttons;
-}*/
-
-
 /*
 ================
 ClientEvents
@@ -675,38 +599,13 @@ void ClientEvents( gentity_t *ent, int oldEventSequence ) {
 			break;
 
 		case EV_FIRE_WEAPON_MG42:
-
-			// Gordon: reset player disguise on stealing docs
-			/* Nico, removed disguise stuff
-			ent->client->ps.powerups[PW_OPS_DISGUISED] = 0;*/
-
 			mg42_fire( ent );
-
-			// Only 1 stats bin for mg42
-			/* Nico, removed weaponstats
-			if ( g_gamestate.integer == GS_PLAYING )
-				ent->client->sess.aWeaponStats[BG_WeapStatForWeapon( WP_MOBILE_MG42 )].atts++;*/
-
 			break;
 		case EV_FIRE_WEAPON_MOUNTEDMG42:
-			// Gordon: reset player disguise on stealing docs
-			/* Nico, removed disguise stuff
-			ent->client->ps.powerups[PW_OPS_DISGUISED] = 0;*/
-
 			mountedmg42_fire( ent );
-			// Only 1 stats bin for mg42
-			/* Nico, removed weaponstats
-			if ( g_gamestate.integer == GS_PLAYING )
-				ent->client->sess.aWeaponStats[BG_WeapStatForWeapon( WP_MOBILE_MG42 )].atts++;*/
-
 			break;
 
 		case EV_FIRE_WEAPON_AAGUN:
-
-			// Gordon: reset player disguise on stealing docs
-			/* Nico, removed disguise stuff
-			ent->client->ps.powerups[PW_OPS_DISGUISED] = 0;*/
-
 			aagun_fire( ent );
 			break;
 
@@ -821,12 +720,6 @@ void ClientThink_real( gentity_t *ent ) {
 		client->pmext.centerangles[PITCH] = ent->tagParent->r.currentAngles[ PITCH ];
 	}
 
-/*	if (client->cameraPortal) {
-		G_SetOrigin( client->cameraPortal, client->ps.origin );
-		trap_LinkEntity(client->cameraPortal);
-		VectorCopy( client->cameraOrigin, client->cameraPortal->s.origin2);
-	}*/
-
 	// mark the time, so the connection sprite can be removed
 	ucmd = &ent->client->pers.cmd;
 
@@ -835,11 +728,9 @@ void ClientThink_real( gentity_t *ent ) {
 	// sanity check the command time to prevent speedup cheating
 	if ( ucmd->serverTime > level.time + 200 ) {
 		ucmd->serverTime = level.time + 200;
-//		G_Printf("serverTime <<<<<\n" );
 	}
 	if ( ucmd->serverTime < level.time - 1000 ) {
 		ucmd->serverTime = level.time - 1000;
-//		G_Printf("serverTime >>>>>\n" );
 	}
 
 	msec = ucmd->serverTime - client->ps.commandTime;
@@ -863,15 +754,6 @@ void ClientThink_real( gentity_t *ent ) {
 		client->wantsscore = qfalse;
 	}
 
-	//
-	// check for exiting intermission
-	//
-	/* Nico, removed intermission
-	if ( level.intermissiontime ) {
-		ClientIntermissionThink( client );
-		return;
-	}*/
-
 	// check for inactivity timer, but never drop the local client of a non-dedicated server
 	// OSP - moved here to allow for spec inactivity checks as well
 	if ( !ClientInactivityTimer( client ) ) {
@@ -879,10 +761,6 @@ void ClientThink_real( gentity_t *ent ) {
 	}
 
 	if ( !( ent->r.svFlags & SVF_BOT ) && level.time - client->pers.lastCCPulseTime > 2000 ) {
-
-		/* Nico, removed commandmap
-		G_SendMapEntityInfo( ent );*/
-
 		client->pers.lastCCPulseTime = level.time;
 	}
 
@@ -893,9 +771,6 @@ void ClientThink_real( gentity_t *ent ) {
 	// spectators don't do much
 	// DHM - Nerve :: In limbo use SpectatorThink
 	if ( client->sess.sessionTeam == TEAM_SPECTATOR || client->ps.pm_flags & PMF_LIMBO ) {
-		/*if ( client->sess.spectatorState == SPECTATOR_SCOREBOARD ) {
-			return;
-		}*/
 		SpectatorThink( ent, ucmd );
 		return;
 	}
@@ -995,35 +870,17 @@ void ClientThink_real( gentity_t *ent ) {
 	VectorCopy( client->ps.origin, client->oldOrigin );
 
 	// NERVE - SMF
-	/* Nico, removed (c)g_gametype
-	pm.gametype = g_gametype.integer;*/
-
 	pm.ltChargeTime = level.lieutenantChargeTime[client->sess.sessionTeam - 1];
 	pm.soldierChargeTime = level.soldierChargeTime[client->sess.sessionTeam - 1];
 	pm.engineerChargeTime = level.engineerChargeTime[client->sess.sessionTeam - 1];
 	pm.medicChargeTime = level.medicChargeTime[client->sess.sessionTeam - 1];
 	// -NERVE - SMF
 
-	/* Nico, removed skills
-	pm.skill = client->sess.skill;*/
-
 	client->pmext.airleft = ent->client->airOutTime - level.time;
 
 	pm.covertopsChargeTime = level.covertopsChargeTime[client->sess.sessionTeam - 1];
 
 	if ( client->ps.pm_type != PM_DEAD && level.timeCurrent - client->pers.lastBattleSenseBonusTime > 45000 ) {
-
-		/* Nico, removed g_stats.c
-		if ( client->combatState != COMBATSTATE_COLD ) {
-			if ( client->combatState & ( 1 << COMBATSTATE_KILLEDPLAYER ) && client->combatState & ( 1 << COMBATSTATE_DAMAGERECEIVED ) ) {
-				G_AddSkillPoints( ent, SK_BATTLE_SENSE, 8.f ); G_DebugAddSkillPoints( ent, SK_BATTLE_SENSE, 8.f, "combatstate super-hot" );
-			} else if ( client->combatState & ( 1 << COMBATSTATE_DAMAGEDEALT ) && client->combatState & ( 1 << COMBATSTATE_DAMAGERECEIVED ) ) {
-				G_AddSkillPoints( ent, SK_BATTLE_SENSE, 5.f ); G_DebugAddSkillPoints( ent, SK_BATTLE_SENSE, 5.f, "combatstate hot" );
-			} else {
-				G_AddSkillPoints( ent, SK_BATTLE_SENSE, 2.f ); G_DebugAddSkillPoints( ent, SK_BATTLE_SENSE, 2.f, "combatstate warm" );
-			}
-		}*/
-
 		client->pers.lastBattleSenseBonusTime = level.timeCurrent;
 		client->combatState = COMBATSTATE_COLD; // cool down again
 	}
@@ -1131,11 +988,6 @@ void ClientThink_real( gentity_t *ent ) {
 		Cmd_Activate_f( ent );
 	}
 
-	/* Nico, removed sprint time limit
-	if ( ent->flags & FL_NOFATIGUE ) {
-		ent->client->pmext.sprintTime = SPRINTTIME;
-	}*/
-
 	if ( g_entities[ent->client->ps.identifyClient].team == ent->team && g_entities[ent->client->ps.identifyClient].client ) {
 		ent->client->ps.identifyClientHealth = g_entities[ent->client->ps.identifyClient].health;
 	} else {
@@ -1145,48 +997,11 @@ void ClientThink_real( gentity_t *ent ) {
 
 	// check for respawning
 	if ( client->ps.stats[STAT_HEALTH] <= 0 ) {
-
-		// DHM - Nerve
-		/* Nico, forcing respawn
-		WolfFindMedic( ent );*/
-
-		// See if we need to hop to limbo
-		/* Nico, instant reswawn
-		Note: not sure about this
-		if ( level.timeCurrent > client->respawnTime && !( ent->client->ps.pm_flags & PMF_LIMBO ) ) {
-			if ( ucmd->upmove > 0 ) {
-				if ( g_gametype.integer == GT_WOLF_LMS || client->ps.persistant[PERS_RESPAWNS_LEFT] >= 0 ) {
-					trap_SendServerCommand( ent - g_entities, "reqforcespawn" );
-				} else {
-					limbo( ent, ( client->ps.stats[STAT_HEALTH] > GIB_HEALTH ) );
-				}
-			}
-
-			if ( ( g_forcerespawn.integer > 0 && level.timeCurrent - client->respawnTime > g_forcerespawn.integer * 1000 ) || client->ps.stats[STAT_HEALTH] <= GIB_HEALTH ) {
-				limbo( ent, ( client->ps.stats[STAT_HEALTH] > GIB_HEALTH ) );
-			}
-		}*/
-
 		// Nico, forcing respawn
 		limbo( ent );
 
 		return;
 	}
-
-	/* Nico, removed mines
-	if ( level.gameManager && level.timeCurrent - client->pers.lastHQMineReportTime > 20000 ) {  // NOTE: 60 seconds? bit much innit
-		if ( level.gameManager->s.modelindex && client->sess.sessionTeam == TEAM_AXIS ) {
-			if ( G_SweepForLandmines( ent->r.currentOrigin, 256.f, TEAM_AXIS ) ) {
-				client->pers.lastHQMineReportTime = level.timeCurrent;
-				trap_SendServerCommand( ent - g_entities, "cp \"Mines have been reported in this area.\" 1" );
-			}
-		} else if ( level.gameManager->s.modelindex2 && client->sess.sessionTeam == TEAM_ALLIES ) {
-			if ( G_SweepForLandmines( ent->r.currentOrigin, 256.f, TEAM_ALLIES ) ) {
-				client->pers.lastHQMineReportTime = level.timeCurrent;
-				trap_SendServerCommand( ent - g_entities, "cp \"Mines have been reported in this area.\" 1" );
-			}
-		}
-	}*/
 
 	// perform once-a-second actions
 	if ( level.match_pause == PAUSE_NONE ) {
@@ -1251,62 +1066,11 @@ SpectatorClientEndFrame
 */
 void SpectatorClientEndFrame( gentity_t *ent ) {
 	// OSP - specs periodically get score updates for useful demo playback info
-	/* Nico, removed multiview
-	if ( ent->client->pers.mvScoreUpdate < level.time ) {
-		ent->client->pers.mvScoreUpdate = level.time + MV_SCOREUPDATE_INTERVAL;
-		ent->client->wantsscore = qtrue;
-	}*/
 
 	// if we are doing a chase cam or a remote view, grab the latest info
 	if ( ( ent->client->sess.spectatorState == SPECTATOR_FOLLOW ) || ( ent->client->ps.pm_flags & PMF_LIMBO ) ) {
 		int clientNum;//, testtime; Nico, unused warning fix
 		gclient_t *cl;
-
-		/* Nico, removed warmup
-		qboolean do_respawn = qfalse; // JPW NERVE
-
-		// Players can respawn quickly in warmup
-		if ( g_gamestate.integer != GS_PLAYING && ent->client->respawnTime <= level.timeCurrent &&
-			 ent->client->sess.sessionTeam != TEAM_SPECTATOR ) {
-			do_respawn = qtrue;
-		} else if ( ent->client->sess.sessionTeam == TEAM_AXIS ) {
-			testtime = ( level.dwRedReinfOffset + level.timeCurrent - level.startTime ) % g_redlimbotime.integer;
-			do_respawn = ( testtime < ent->client->pers.lastReinforceTime );
-			ent->client->pers.lastReinforceTime = testtime;
-			do_respawn = qtrue;
-		} else if ( ent->client->sess.sessionTeam == TEAM_ALLIES )     {
-			testtime = ( level.dwBlueReinfOffset + level.timeCurrent - level.startTime ) % g_bluelimbotime.integer;
-			do_respawn = ( testtime < ent->client->pers.lastReinforceTime );
-			ent->client->pers.lastReinforceTime = testtime;
-			do_respawn = qtrue;
-		}
-
-		if ( g_gametype.integer != GT_WOLF_LMS ) {
-			if ( ( g_maxlives.integer > 0 || g_alliedmaxlives.integer > 0 || g_axismaxlives.integer > 0 )
-				 && ent->client->ps.persistant[PERS_RESPAWNS_LEFT] == 0 ) {
-				if ( do_respawn ) {
-					if ( g_maxlivesRespawnPenalty.integer ) {
-						if ( ent->client->ps.persistant[PERS_RESPAWNS_PENALTY] > 0 ) {
-							ent->client->ps.persistant[PERS_RESPAWNS_PENALTY]--;
-							do_respawn = qfalse;
-						}
-					} else {
-						do_respawn = qfalse;
-					}
-				}
-			}
-		}
-		
-		if ( g_gametype.integer == GT_WOLF_LMS && g_gamestate.integer == GS_PLAYING ) {
-			// Force respawn in LMS when nobody is playing and we aren't at the timelimit yet
-			if ( !level.teamEliminateTime &&
-				 level.numTeamClients[0] == level.numFinalDead[0] && level.numTeamClients[1] == level.numFinalDead[1] &&
-				 ent->client->respawnTime <= level.timeCurrent && ent->client->sess.sessionTeam != TEAM_SPECTATOR ) {
-				do_respawn = qtrue;
-			} else {
-				do_respawn = qfalse;
-			}
-		}*/
 
 		if (ent->client->sess.sessionTeam != TEAM_SPECTATOR) {
 			reinforce( ent );
@@ -1314,8 +1078,6 @@ void SpectatorClientEndFrame( gentity_t *ent ) {
 		}
 
 		// Limbos aren't following while in MV
-		/* Nico, removed multiview
-		if ( ( ent->client->ps.pm_flags & PMF_LIMBO ) && ent->client->pers.mvCount > 0 ) {*/
 		if (( ent->client->ps.pm_flags & PMF_LIMBO )) {
 			return;
 		}
@@ -1337,33 +1099,12 @@ void SpectatorClientEndFrame( gentity_t *ent ) {
 
 				if ( ent->client->sess.sessionTeam != TEAM_SPECTATOR && ( ent->client->ps.pm_flags & PMF_LIMBO ) ) {
 					int savedScore = ent->client->ps.persistant[PERS_SCORE];
-
-					/* Nico, removed respawnLeft
-					int savedRespawns = ent->client->ps.persistant[PERS_RESPAWNS_LEFT];
-					int savedRespawnPenalty = ent->client->ps.persistant[PERS_RESPAWNS_PENALTY];*/
-
 					int savedClass = ent->client->ps.stats[STAT_PLAYER_CLASS];
-
-					/* Nico, removed multiview
-					int savedMVList = ent->client->ps.powerups[PW_MVCLIENTLIST];*/
-
-					/* Nico, removed warmup
-					do_respawn = ent->client->ps.pm_time;*/
 
 					ent->client->ps = cl->ps;
 					ent->client->ps.pm_flags |= PMF_FOLLOW;
 					ent->client->ps.pm_flags |= PMF_LIMBO;
-
-					/* Nico, removed warmup
-					ent->client->ps.pm_time = do_respawn;                           // put pm_time back*/
-
-					/* Nico, removed respawnLeft
-					ent->client->ps.persistant[PERS_RESPAWNS_LEFT] = savedRespawns;
-					ent->client->ps.persistant[PERS_RESPAWNS_PENALTY] = savedRespawnPenalty;*/
-
 					ent->client->ps.persistant[PERS_SCORE] = savedScore;            // put score back
-					/* Nico, removed multiview
-					ent->client->ps.powerups[PW_MVCLIENTLIST] = savedMVList;*/
 					ent->client->ps.stats[STAT_PLAYER_CLASS] = savedClass;          // NERVE - SMF - put player class back
 				} else {
 					ent->client->ps = cl->ps;
@@ -1388,12 +1129,8 @@ void SpectatorClientEndFrame( gentity_t *ent ) {
 	// we are at a free-floating spec state for a player,
 	// set speclock status, as appropriate
 	//	 --> Can we use something besides a powerup slot?
-	/* Nico, removed multiview
-	if ( ent->client->pers.mvCount < 1 ) {*/
-		ent->client->ps.powerups[PW_BLACKOUT] = ( G_blockoutTeam( ent, TEAM_AXIS ) * TEAM_AXIS ) |
-												( G_blockoutTeam( ent, TEAM_ALLIES ) * TEAM_ALLIES );
-	/* Nico, removed multiview
-	}*/
+	ent->client->ps.powerups[PW_BLACKOUT] = ( G_blockoutTeam( ent, TEAM_AXIS ) * TEAM_AXIS ) |
+											( G_blockoutTeam( ent, TEAM_ALLIES ) * TEAM_ALLIES );
 }
 
 
@@ -1576,10 +1313,6 @@ void ClientEndFrame( gentity_t *ent ) {
 		if ( i == PW_FIRE ||                // these aren't dependant on level.time
 			 i == PW_ELECTRIC ||
 			 i == PW_BREATHER ||
-
-			 /* Nico, removed nofatigue
-			 i == PW_NOFATIGUE ||*/
-
 			 ent->client->ps.powerups[i] == 0           // OSP
 			 || i == PW_OPS_CLASS_1
 			 || i == PW_OPS_CLASS_2
@@ -1625,10 +1358,6 @@ void ClientEndFrame( gentity_t *ent ) {
 	// If the end of unit layout is displayed, don't give
 	// the player any normal movement attributes
 	//
-	/* Nico, removed intermission
-	if ( level.intermissiontime ) {
-		return;
-	}*/
 
 	// burn from lava, etc
 	P_WorldEffects( ent );
