@@ -304,16 +304,6 @@ void G_ExplodeMissile( gentity_t *ent ) {
 	// qboolean small = qfalse; Nico, unused warning fix
 	int etype;
 
-
-	/* Nico, removed airstrikes
-	if ( ent->s.weapon == WP_SMOKE_MARKER && ent->active ) {
-		if ( ent->s.teamNum == TEAM_AXIS ) {
-			level.numActiveAirstrikes[0]--;
-		} else {
-			level.numActiveAirstrikes[1]--;
-		}
-	}*/
-
 	etype = ent->s.eType;
 	ent->s.eType = ET_GENERAL;
 
@@ -422,10 +412,6 @@ void G_ExplodeMissile( gentity_t *ent ) {
 
 				if ( ( ( hit->spawnflags & AXIS_OBJECTIVE ) && ( ent->s.teamNum == TEAM_ALLIES ) ) || ( ( hit->spawnflags & ALLIED_OBJECTIVE ) && ( ent->s.teamNum == TEAM_AXIS ) ) ) {
 					if ( ent->parent->client && G_GetWeaponClassForMOD( MOD_DYNAMITE ) >= hit->target_ent->constructibleStats.weaponclass ) {
-
-						/* Nico, removed g_stats.c
-						G_AddKillSkillPointsForDestruction( ent->parent, MOD_DYNAMITE, &hit->target_ent->constructibleStats );*/
-
 					}
 
 					G_UseTargets( hit, ent );
@@ -435,13 +421,6 @@ void G_ExplodeMissile( gentity_t *ent ) {
 			}
 		}
 
-
-		// give big weapons the shakey shakey
-		/* Nico, removed airstrikes
-		if ( ent->s.weapon == WP_DYNAMITE || ent->s.weapon == WP_PANZERFAUST || ent->s.weapon == WP_GRENADE_LAUNCHER ||
-			 ent->s.weapon == WP_GRENADE_PINEAPPLE || ent->s.weapon == WP_MAPMORTAR || ent->s.weapon == WP_ARTY || ent->s.weapon == WP_SMOKE_MARKER
-			 || ent->s.weapon == WP_LANDMINE || ent->s.weapon == WP_SATCHEL || ent->s.weapon == WP_TRIPMINE
-			 ) {*/
 		if ( ent->s.weapon == WP_DYNAMITE || ent->s.weapon == WP_PANZERFAUST || ent->s.weapon == WP_GRENADE_LAUNCHER ||
 			 ent->s.weapon == WP_GRENADE_PINEAPPLE || ent->s.weapon == WP_MAPMORTAR || ent->s.weapon == WP_LANDMINE || 
 			 ent->s.weapon == WP_SATCHEL || ent->s.weapon == WP_TRIPMINE
@@ -517,33 +496,6 @@ void G_RunBomb( gentity_t *ent ) {
 	G_RunThink( ent );
 }
 
-/*
-=================
-Landmine_Check_Ground
-
-=================
-*/
-/* Nico, removed mines
-void Landmine_Check_Ground( gentity_t *self ) {
-	vec3_t mins, maxs;
-	vec3_t start, end;
-	trace_t tr;
-
-	VectorCopy( self->r.currentOrigin, start );
-	VectorCopy( self->r.currentOrigin, end );
-
-	end[2] -= 4;
-
-	VectorCopy( self->r.mins, mins );
-	VectorCopy( self->r.maxs, maxs );
-
-	trap_Trace( &tr, start, mins, maxs, end, self->s.number, MASK_MISSILESHOT );
-
-	if ( tr.fraction == 1 ) {
-		self->s.groundEntityNum = -1;
-	}
-}*/
-
 
 /*
 ================
@@ -556,10 +508,6 @@ void G_RunMissile( gentity_t *ent ) {
 	int impactDamage;
 
 	if ( ent->s.weapon == WP_LANDMINE || ent->s.weapon == WP_DYNAMITE || ent->s.weapon == WP_SATCHEL ) {
-
-		/* Nico, removed mines
-		Landmine_Check_Ground( ent );*/
-
 		if ( ent->s.groundEntityNum == -1 ) {
 			if ( ent->s.pos.trType != TR_GRAVITY ) {
 				ent->s.pos.trType = TR_GRAVITY;
@@ -1253,97 +1201,6 @@ void G_FadeItems( gentity_t* ent, int modType ) {
 	}
 }
 
-/* Nico, removed mines
-int G_CountTeamLandmines( team_t team ) {
-	gentity_t* e;
-	int i;
-	int cnt = 0;
-
-	e = &g_entities[MAX_CLIENTS];
-	for ( i = MAX_CLIENTS ; i < level.num_entities ; i++, e++ ) {
-		if ( !e->inuse ) {
-			continue;
-		}
-
-		if ( e->s.eType != ET_MISSILE ) {
-			continue;
-		}
-
-		if ( e->methodOfDeath != MOD_LANDMINE ) {
-			continue;
-		}
-
-		if ( e->s.teamNum % 4 == team && e->s.teamNum < 4 ) {
-			cnt++;
-		}
-	}
-
-	return cnt;
-}
-
-qboolean G_SweepForLandmines( vec3_t origin, float radius, int team ) {
-	gentity_t* e;
-	int i;
-	vec3_t dist;
-
-	radius *= radius;
-
-	e = &g_entities[MAX_CLIENTS];
-	for ( i = MAX_CLIENTS; i < level.num_entities; i++, e++ ) {
-		if ( !e->inuse ) {
-			continue;
-		}
-
-		if ( e->s.eType != ET_MISSILE ) {
-			continue;
-		}
-
-		if ( e->methodOfDeath != MOD_LANDMINE ) {
-			continue;
-		}
-
-		if ( e->s.teamNum % 4 != team && e->s.teamNum < 4 ) {
-			VectorSubtract( origin, e->r.currentOrigin, dist );
-			if ( VectorLengthSquared( dist ) > radius ) {
-				continue;
-			}
-
-			return( qtrue ); // found one
-		}
-	}
-
-	return( qfalse );
-}*/
-
-/* Nico, removed satchel
-gentity_t *G_FindSatchel( gentity_t* ent ) {
-	gentity_t* e;
-	int i;
-
-	e = &g_entities[MAX_CLIENTS];
-	for ( i = MAX_CLIENTS ; i < level.num_entities ; i++, e++ ) {
-		if ( !e->inuse ) {
-			continue;
-		}
-
-		if ( e->s.eType != ET_MISSILE ) {
-			continue;
-		}
-
-		if ( e->methodOfDeath != MOD_SATCHEL ) {
-			continue;
-		}
-
-		if ( e->parent != ent ) {
-			continue;
-		}
-
-		return e;
-	}
-
-	return NULL;
-}*/
-
 /*
 ==========
 G_FindDroppedItem
@@ -1376,17 +1233,6 @@ qboolean G_HasDroppedItem( gentity_t* ent, int modType ) {
 	}
 	return qfalse;
 }
-
-/*
-==========
-G_ExplodeMines
-==========
-*/
-// removes any weapon objects lying around in the map when they disconnect/switch team
-/* Nico, removed mines
-void G_ExplodeMines( gentity_t* ent ) {
-	G_FadeItems( ent, MOD_LANDMINE );
-}*/
 
 /*
 ==========
@@ -1455,215 +1301,6 @@ void G_FreeSatchel( gentity_t* ent ) {
 		G_AddEvent( other, EV_NOAMMO, 0 );
 	}
 }
-
-/*
-==========
-LandMineTrigger
-==========
-*/
-/* Nico, removed mines
-void LandminePostThink( gentity_t *self );
-
-void LandMineTrigger( gentity_t* self ) {
-	self->r.contents = CONTENTS_CORPSE;
-	trap_LinkEntity( self );
-	self->nextthink = level.time + FRAMETIME;
-	self->think = LandminePostThink;
-	self->s.teamNum += 8;
-	// rain - communicate trigger time to client
-	self->s.time = level.time;
-}
-
-void LandMinePostTrigger( gentity_t* self ) {
-	self->nextthink = level.time + 300;
-	self->think = G_ExplodeMissile;
-}*/
-
-
-/*
-==========
-G_TripMineThink
-==========
-*/
-/* Nico, removed mines
-void G_TripMineThink( gentity_t* ent ) {
-	trace_t trace;
-	vec3_t start, end;
-	gentity_t* traceEnt;
-
-	VectorMA( ent->r.currentOrigin, 2, ent->s.origin2, start );
-	VectorMA( start, 2048, ent->s.origin2, end );
-
-	trap_Trace( &trace, start, NULL, NULL, end, ent->s.number, MASK_SHOT );
-
-	ent->nextthink = level.time + FRAMETIME;
-
-	if ( trace.fraction == 1.f ) { // Gordon: shouldnt really happen once we do a proper range check on placing
-		return;
-	}
-
-	if ( trace.entityNum >= ENTITYNUM_NONE ) {
-		return;
-	}
-
-	traceEnt = &g_entities[trace.entityNum];
-
-	if ( !Q_stricmp( traceEnt->classname, "player" ) ) {
-		ent->think = G_ExplodeMissile;
-	}
-}*/
-
-/*
-==========
-G_TripMinePrime
-==========
-*/
-/* Nico, removed mines
-void G_TripMinePrime( gentity_t* ent ) {
-	ent->think = G_TripMineThink;
-	ent->nextthink = level.time + 500;
-}*/
-
-/*107     11      20      0       0       0       0       //fire gren
-
-==========
-G_LandmineThink
-==========
-*/
-/* Nico, removed mines
-// TAT 11/20/2002
-//		Function to check if an entity will set off a landmine
-#define LANDMINE_TRIGGER_DIST 64.0f
-
-qboolean sEntWillTriggerMine( gentity_t *ent, gentity_t *mine ) {
-	// player types are the only things that set off mines (human and bot)
-	if ( ent->s.eType == ET_PLAYER && ent->client ) {
-		vec3_t dist;
-		VectorSubtract( mine->r.currentOrigin, ent->r.currentOrigin, dist );
-		// have to be within the trigger distance AND on the ground -- if we jump over a mine, we don't set it off
-		//		(or if we fly by after setting one off)
-		if ( ( VectorLengthSquared( dist ) <= SQR( LANDMINE_TRIGGER_DIST ) ) && ( fabs( dist[2] ) < 45.f ) ) {
-			return qtrue;
-		}
-	}
-
-	return qfalse;
-}
-
-// Gordon: Landmine waits for 2 seconds then primes, which sets think to checking for "enemies"
-void G_LandmineThink( gentity_t *self ) {
-	int entityList[MAX_GENTITIES];
-	int i, cnt;
-	vec3_t range = {LANDMINE_TRIGGER_DIST, LANDMINE_TRIGGER_DIST, LANDMINE_TRIGGER_DIST};
-	vec3_t mins, maxs;
-	qboolean trigger = qfalse;
-	gentity_t* ent;
-
-	self->nextthink = level.time + FRAMETIME;
-
-	if ( level.time - self->missionLevel > 200 ) {
-		self->s.density = 0; // Gordon: time out the covert ops visibile thing, or we could get other clients being able to see mine later, etc
-	}
-
-	VectorSubtract( self->r.currentOrigin, range, mins );
-	VectorAdd( self->r.currentOrigin, range, maxs );
-
-	cnt = trap_EntitiesInBox( mins, maxs, entityList, MAX_GENTITIES );
-
-	for ( i = 0; i < cnt; i++ ) {
-		ent = &g_entities[entityList[i]];
-
-		if ( !ent->client ) {
-			continue;
-		}
-
-		// TAT 11/20/2002 use the unified trigger check to see if we are close enough to prime the mine
-		if ( sEntWillTriggerMine( ent, self ) ) {
-			trigger = qtrue;
-			break;
-		}
-	}
-
-	if ( trigger ) {
-		LandMineTrigger( self );
-	}
-}
-
-void LandminePostThink( gentity_t *self ) {
-	int entityList[MAX_GENTITIES];
-	int i, cnt;
-	vec3_t range = {LANDMINE_TRIGGER_DIST, LANDMINE_TRIGGER_DIST, LANDMINE_TRIGGER_DIST};
-	vec3_t mins, maxs;
-	qboolean trigger = qfalse;
-	gentity_t* ent;
-
-	self->nextthink = level.time + FRAMETIME;
-
-	if ( level.time - self->missionLevel > 5000 ) {
-		self->s.density = 0; // Gordon: time out the covert ops visibile thing, or we could get other clients being able to see mine later, etc
-	}
-
-	VectorSubtract( self->r.currentOrigin, range, mins );
-	VectorAdd( self->r.currentOrigin, range, maxs );
-
-	cnt = trap_EntitiesInBox( mins, maxs, entityList, MAX_GENTITIES );
-
-	for ( i = 0; i < cnt; i++ ) {
-		ent = &g_entities[entityList[i]];
-
-		// TAT 11/20/2002 use the unifed trigger check to see if we're still standing on the mine, so we don't set it off
-		if ( sEntWillTriggerMine( ent, self ) ) {
-			trigger = qtrue;
-			break;
-		}
-	}
-
-	if ( !trigger ) {
-		LandMinePostTrigger( self );
-	}
-}*/
-
-/*
-==========
-G_LandminePrime
-==========
-*/
-/* Nico, removed mines
-void G_LandminePrime( gentity_t *self ) {
-	self->nextthink = level.time + FRAMETIME;
-	self->think = G_LandmineThink;
-}
-
-qboolean G_LandmineSnapshotCallback( int entityNum, int clientNum ) {
-	gentity_t* ent      = &g_entities[ entityNum ];
-	gentity_t* clEnt    = &g_entities[ clientNum ];
-	team_t team;
-
-	// Nico, removed skills
-	// if ( clEnt->client->sess.skill[ SK_BATTLE_SENSE ] >= 4 ) {
-	//	return qtrue;
-	// }
-
-	if ( !G_LandmineArmed( ent ) ) {
-		return qtrue;
-	}
-
-	if ( G_LandmineSpotted( ent ) ) {
-		return qtrue;
-	}
-
-	team = G_LandmineTeam( ent );
-	if ( team == clEnt->client->sess.sessionTeam ) {
-		return qtrue;
-	}
-
-	//bani - fix for covops spotting
-	if ( clEnt->client->sess.playerType == PC_COVERTOPS && clEnt->client->ps.eFlags & EF_ZOOMING && ( clEnt->client->ps.stats[STAT_KEYS] & ( 1 << INV_BINOCS ) ) ) {
-		return qtrue;
-	}
-
-	return qfalse;
-}*/
 
 /*
 =================

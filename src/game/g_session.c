@@ -48,21 +48,9 @@ Called on game shutdown
 ================
 */
 void G_WriteClientSessionData( gclient_t *client, qboolean restart ) {
-	/* Nico, removed multiview
-	int mvc = G_smvGenerateClientList( g_entities + ( client - level.clients ) );*/
 	int mvc = 0;
 	const char  *s;
 
-	/* Nico, removed ws related command
-	// OSP -- stats reset check
-	if ( level.fResetStats ) {
-		G_deleteStats( client - level.clients );
-	}*/
-
-	/* Nico, removed deaths counter
-	// Nico, removed kills counter
-	// Nico, removed suicides & team_damage & team_kills counters
-	s = va( "%i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i",*/
 	s = va( "%i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i",
 			client->sess.sessionTeam,
 			client->sess.spectatorTime,
@@ -74,32 +62,13 @@ void G_WriteClientSessionData( gclient_t *client, qboolean restart ) {
 			client->sess.latchPlayerType,   // DHM - Nerve
 			client->sess.latchPlayerWeapon, // DHM - Nerve
 			client->sess.latchPlayerWeapon2,
-
-			// OSP
 			client->sess.coach_team,
-
-			/* Nico, removed deaths counter
-			client->sess.deaths,*/
-
 			client->sess.game_points,
-
-			/* Nico, removed kills counter
-			client->sess.kills,*/
-
 			client->sess.referee,
 			client->sess.spec_invite,
 			client->sess.spec_team,
-
-			/* Nico, removed suicides & team_damage & team_kills counters
-			client->sess.suicides,
-			client->sess.team_kills,*/
-
 			( mvc & 0xFFFF ),
-			( ( mvc >> 16 ) & 0xFFFF )
-			// Damage and rounds played rolled in with weapon stats (below)
-			// OSP
-
-			,
+			( ( mvc >> 16 ) & 0xFFFF ),
 			client->sess.muted,
 			client->sess.ignoreClients[0],
 			client->sess.ignoreClients[1],
@@ -108,40 +77,6 @@ void G_WriteClientSessionData( gclient_t *client, qboolean restart ) {
 			);
 
 	trap_Cvar_Set( va( "session%i", client - level.clients ), s );
-
-	// Arnout: store the clients stats (7) and medals (7)
-	// addition: but only if it isn't a forced map_restart (done by someone on the console)
-	/* Nico, removed warmup
-	if ( !( restart && !level.warmupTime ) ) {*/
-
-	/* Nico, removed skills
-	if ( !( restart ) ) {
-		s = va( "%.2f %.2f %.2f %.2f %.2f %.2f %.2f %i %i %i %i %i %i %i",
-				client->sess.skillpoints[0],
-				client->sess.skillpoints[1],
-				client->sess.skillpoints[2],
-				client->sess.skillpoints[3],
-				client->sess.skillpoints[4],
-				client->sess.skillpoints[5],
-				client->sess.skillpoints[6],
-				client->sess.medals[0],
-				client->sess.medals[1],
-				client->sess.medals[2],
-				client->sess.medals[3],
-				client->sess.medals[4],
-				client->sess.medals[5],
-				client->sess.medals[6]
-				);
-
-		trap_Cvar_Set( va( "sessionstats%i", client - level.clients ), s );
-	}*/
-
-	// OSP -- save weapon stats too
-	if ( !level.fResetStats ) {
-		/* Nico, removed ws related command
-		trap_Cvar_Set( va( "wstats%i", client - level.clients ), G_createStats( &g_entities[client - level.clients] ) );*/
-	}
-	// OSP
 }
 
 
@@ -183,40 +118,6 @@ void G_ClientSwap( gclient_t *client ) {
 	client->sess.spec_team = flags;
 }
 
-/* Nico, removed skills
-void G_CalcRank( gclient_t* client ) {
-	int i, highestskill = 0;
-
-	for ( i = 0; i < SK_NUM_SKILLS; i++ ) {
-
-		// Nico, removed g_stats.c
-		// G_SetPlayerSkill( client, i );
-
-		if ( client->sess.skill[i] > highestskill ) {
-			highestskill = client->sess.skill[i];
-		}
-	}
-
-	// set rank
-	client->sess.rank = highestskill;
-
-	if ( client->sess.rank >= 4 ) {
-		int cnt = 0;
-
-		// Gordon: count the number of maxed out skills
-		for ( i = 0; i < SK_NUM_SKILLS; i++ ) {
-			if ( client->sess.skill[ i ] >= 4 ) {
-				cnt++;
-			}
-		}
-
-		client->sess.rank = cnt + 3;
-		if ( client->sess.rank > 10 ) {
-			client->sess.rank = 10;
-		}
-	}
-}*/
-
 /*
 ================
 G_ReadSessionData
@@ -228,139 +129,36 @@ void G_ReadSessionData( gclient_t *client ) {
 	int mvc_l, mvc_h;
 	char s[MAX_STRING_CHARS];
 
-	/* Nico, removed altStopwatchMode
-	qboolean test;*/
-
 	trap_Cvar_VariableStringBuffer( va( "session%i", client - level.clients ), s, sizeof( s ) );
 
-	/* Nico, removed deaths counter
-	// Nico, removed kills counter
-	// Nico, removed suicides & team_damage & team_kills counters
-	sscanf( s, "%i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i",*/
 	sscanf( s, "%i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i",
-			(int *)&client->sess.sessionTeam,
-			&client->sess.spectatorTime,
-			(int *)&client->sess.spectatorState,
-			&client->sess.spectatorClient,
-			&client->sess.playerType,       // DHM - Nerve
-			&client->sess.playerWeapon,     // DHM - Nerve
-			&client->sess.playerWeapon2,
-			&client->sess.latchPlayerType,  // DHM - Nerve
-			&client->sess.latchPlayerWeapon, // DHM - Nerve
-			&client->sess.latchPlayerWeapon2,
-
-			// OSP
-			&client->sess.coach_team,
-
-			/* Nico, removed deaths counter
-			&client->sess.deaths,*/
-
-			&client->sess.game_points,
-
-			/* Nico, removed kills counter
-			&client->sess.kills,*/
-
-			&client->sess.referee,
-			&client->sess.spec_invite,
-			&client->sess.spec_team,
-
-			/* Nico, removed suicides & team_damage & team_kills counters
-			&client->sess.suicides,
-			&client->sess.team_kills,*/
-
-			&mvc_l,
-			&mvc_h
-			// Damage and round count rolled in with weapon stats (below)
-			// OSP
-
-			,
-//		&client->sess.experience,
-			(int *)&client->sess.muted,
-			&client->sess.ignoreClients[0],
-			&client->sess.ignoreClients[1],
-			&client->pers.enterTime,
-			&client->sess.spawnObjectiveIndex
-			);
-
-	// OSP -- reinstate MV clients
-	/* Nico, removed multiview
-	client->pers.mvReferenceList = ( mvc_h << 16 ) | mvc_l;*/
-	// OSP
-
-	// OSP -- pull and parse weapon stats
-	/* Nico, removed ws related command
-	*s = 0;
-	trap_Cvar_VariableStringBuffer( va( "wstats%i", client - level.clients ), s, sizeof( s ) );
-	if ( *s ) {
-		G_parseStats( s );
-		if ( g_gamestate.integer == GS_PLAYING ) {
-			client->sess.rounds++;
-		}
-	}*/
-	// OSP
-
-	// Arnout: likely there are more cases in which we don't want this
-	/* Nico, removed skills
-	if ( g_gametype.integer != GT_SINGLE_PLAYER &&
-		 g_gametype.integer != GT_COOP &&
-		 g_gametype.integer != GT_WOLF &&
-		 g_gametype.integer != GT_WOLF_STOPWATCH &&
-		 !( g_gametype.integer == GT_WOLF_CAMPAIGN && ( g_campaigns[level.currentCampaign].current == 0  || level.newCampaign ) ) &&
-		 !( g_gametype.integer == GT_WOLF_LMS && g_currentRound.integer == 0 ) ) {
-
-		trap_Cvar_VariableStringBuffer( va( "sessionstats%i", client - level.clients ), s, sizeof( s ) );
-
-		// Arnout: read the clients stats (7) and medals (7)
-		sscanf( s, "%f %f %f %f %f %f %f %i %i %i %i %i %i %i",
-				&client->sess.skillpoints[0],
-				&client->sess.skillpoints[1],
-				&client->sess.skillpoints[2],
-				&client->sess.skillpoints[3],
-				&client->sess.skillpoints[4],
-				&client->sess.skillpoints[5],
-				&client->sess.skillpoints[6],
-				&client->sess.medals[0],
-				&client->sess.medals[1],
-				&client->sess.medals[2],
-				&client->sess.medals[3],
-				&client->sess.medals[4],
-				&client->sess.medals[5],
-				&client->sess.medals[6]
-				);
-
-	}
-
-	G_CalcRank( client );*/
-
-	/* Nico, removed currentRound
-	test = ( g_altStopwatchMode.integer != 0 || g_currentRound.integer == 1 );*/
-	/* Nico, removed altStopwatchMode
-	test = ( g_altStopwatchMode.integer != 0 );*/
-
-	/* Nico, removed gametypes
-	if ( g_gametype.integer == GT_WOLF_STOPWATCH && g_gamestate.integer != GS_PLAYING && test ) {*/
-	/* Nico, removed altStopwatchMode
-	if ( g_gamestate.integer != GS_PLAYING && test ) {
-		G_ClientSwap( client );
-	}*/
+	(int *)&client->sess.sessionTeam,
+	&client->sess.spectatorTime,
+	(int *)&client->sess.spectatorState,
+	&client->sess.spectatorClient,
+	&client->sess.playerType,       // DHM - Nerve
+	&client->sess.playerWeapon,     // DHM - Nerve
+	&client->sess.playerWeapon2,
+	&client->sess.latchPlayerType,  // DHM - Nerve
+	&client->sess.latchPlayerWeapon, // DHM - Nerve
+	&client->sess.latchPlayerWeapon2,
+	&client->sess.coach_team,
+	&client->sess.game_points,
+	&client->sess.referee,
+	&client->sess.spec_invite,
+	&client->sess.spec_team,
+	&mvc_l,
+	&mvc_h,
+	(int *)&client->sess.muted,
+	&client->sess.ignoreClients[0],
+	&client->sess.ignoreClients[1],
+	&client->pers.enterTime,
+	&client->sess.spawnObjectiveIndex
+	);
 
 	if ( g_swapteams.integer ) {
 		trap_Cvar_Set( "g_swapteams", "0" );
 		G_ClientSwap( client );
-	}
-
-	{
-		/* Nico, removed skills
-		int j;*/
-
-		/* Nico, removed startxptotal
-		client->sess.startxptotal = 0;*/
-
-		/* Nico, removed skills
-		for ( j = 0; j < SK_NUM_SKILLS; j++ ) {
-			client->sess.startskillpoints[j] = client->sess.skillpoints[j];
-			client->sess.startxptotal += client->sess.skillpoints[j];
-		}*/
 	}
 }
 
@@ -374,7 +172,6 @@ Called on a first-time connect
 */
 void G_InitSessionData( gclient_t *client, char *userinfo ) {
 	clientSession_t *sess;
-//	const char		*value;
 
 	sess = &client->sess;
 
@@ -393,24 +190,13 @@ void G_InitSessionData( gclient_t *client, char *userinfo ) {
 	// dhm - end
 
 	memset( sess->ignoreClients, 0, sizeof( sess->ignoreClients ) );
-//	sess->experience = 0;
 	sess->muted = qfalse;
-
-	/* Nico, removed skills
-	memset( sess->skill, 0, sizeof( sess->skill ) );
-	memset( sess->skillpoints, 0, sizeof( sess->skillpoints ) );
-	memset( sess->medals, 0, sizeof( sess->medals ) );*/
-
-	/* Nico, removed rank
-	sess->rank = 0;*/
 
 	// OSP
 	sess->coach_team = 0;
 	sess->referee = ( client->pers.localClient ) ? RL_REFEREE : RL_NONE;
 	sess->spec_invite = 0;
 	sess->spec_team = 0;
-	/* Nico, removed ws related command
-	G_deleteStats( client - level.clients );*/
 	// OSP
 
 	G_WriteClientSessionData( client, qfalse );
@@ -425,46 +211,12 @@ G_InitWorldSession
 */
 void G_InitWorldSession( void ) {
 	char s[MAX_STRING_CHARS];
-
-	/* Nico, removed (c)g_gametype
-	int gt;*/
-
 	int i, j;
 
 	trap_Cvar_VariableStringBuffer( "session", s, sizeof( s ) );
-	
-	/* Nico, removed (c)g_gametype
-	gt = atoi( s );
 
-	// if the gametype changed since the last session, don't use any
-	// client sessions
-
-	if ( g_gametype.integer != gt ) {
-		level.newSession = qtrue;
-		level.fResetStats = qtrue;
-		G_Printf( "Gametype changed, clearing session data.\n" );
-	} else*/
 	{
-
 		char *tmp = s;
-		/* Nico, removed currentRound
-		qboolean test = ( g_altStopwatchMode.integer != 0 || g_currentRound.integer == 1 );*/
-		/* Nico, removed altStopwatchMode
-		qboolean test = ( g_altStopwatchMode.integer != 0 );*/
-
-/* Nico, removed (c)g_gametype
-#define GETVAL( x ) if ( ( tmp = strchr( tmp, ' ' ) ) == NULL ) {return; \
-						   } x = atoi( ++tmp );
-
-		// Get team lock stuff
-		GETVAL( gt );
-		teamInfo[TEAM_AXIS].spec_lock = ( gt & TEAM_AXIS ) ? qtrue : qfalse;
-		teamInfo[TEAM_ALLIES].spec_lock = ( gt & TEAM_ALLIES ) ? qtrue : qfalse;*/
-
-		// See if we need to clear player stats
-		// FIXME: deal with the multi-map missions
-		/* Nico, removed gametypes
-		if ( g_gametype.integer != GT_WOLF_CAMPAIGN ) {*/
 			if ( ( tmp = strchr( va( "%s", tmp ), ' ' ) ) != NULL ) {
 				tmp++;
 				trap_GetServerinfo( s, sizeof( s ) );
@@ -473,15 +225,6 @@ void G_InitWorldSession( void ) {
 					G_Printf( "Map changed, clearing player stats.\n" );
 				}
 			}
-		// }
-
-		// OSP - have to make sure spec locks follow the right teams
-		/* Nico, removed gametypes
-		if ( g_gametype.integer == GT_WOLF_STOPWATCH && g_gamestate.integer != GS_PLAYING && test ) {*/
-		/* Nico, removed altStopwatchMode
-		if ( g_gamestate.integer != GS_PLAYING && test ) {
-			G_swapTeamLocks();
-		}*/
 
 		if ( g_swapteams.integer ) {
 			G_swapTeamLocks();
@@ -543,33 +286,15 @@ void G_WriteSessionData( qboolean restart ) {
 
 	trap_GetServerinfo( strServerInfo, sizeof( strServerInfo ) );
 
-	/* Nico, removed (c)g_gametype
-	trap_Cvar_Set( "session", va( "%i %i %s", g_gametype.integer,
-								  ( teamInfo[TEAM_AXIS].spec_lock * TEAM_AXIS | teamInfo[TEAM_ALLIES].spec_lock * TEAM_ALLIES ),
-								  Info_ValueForKey( strServerInfo, "mapname" ) ) );*/
 	trap_Cvar_Set( "session", va( "%i %s", 
 									( teamInfo[TEAM_AXIS].spec_lock * TEAM_AXIS | teamInfo[TEAM_ALLIES].spec_lock * TEAM_ALLIES ),
 									Info_ValueForKey( strServerInfo, "mapname" ) ) );
-
-	// Keep stats for all players in sync
-	/* Nico, removed warmup
-	for ( i = 0; !level.fResetStats && i < level.numConnectedClients; i++ ) {
-		if ( ( g_gamestate.integer == GS_WARMUP_COUNTDOWN &&
-			   ( ( g_gametype.integer == GT_WOLF_STOPWATCH && level.clients[level.sortedClients[i]].sess.rounds >= 2 ) ||
-				 ( g_gametype.integer != GT_WOLF_STOPWATCH && level.clients[level.sortedClients[i]].sess.rounds >= 1 ) ) ) ) {
-			level.fResetStats = qtrue;
-		}
-	}*/
 
 	for ( i = 0; i < level.numConnectedClients; i++ ) {
 		if ( level.clients[level.sortedClients[i]].pers.connected == CON_CONNECTED ) {
 			G_WriteClientSessionData( &level.clients[level.sortedClients[i]], restart );
 			// For slow connecters and a short warmup
-		} 
-		/* Nico, removed ws related command
-		else if ( level.fResetStats ) {
-			G_deleteStats( level.sortedClients[i] );
-		}*/
+		}
 	}
 
 	for ( i = 0; i < MAX_FIRETEAMS; i++ ) {

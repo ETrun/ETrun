@@ -1703,10 +1703,6 @@ void ClientDisconnect( int clientNum ) {
 			ent->s.otherEntityNum2 = 0;
 			ent->message = NULL;
 		}
-
-		// OSP - Log stats too
-		/* Nico, removed ws related command
-		G_LogPrintf( "WeaponStats: %s\n", G_createStats( ent ) );*/
 	}
 
 	G_LogPrintf( "ClientDisconnect: %i\n", clientNum );

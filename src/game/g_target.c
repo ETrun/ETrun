@@ -603,8 +603,6 @@ void target_relay_use( gentity_t *self, gentity_t *other, gentity_t *activator )
 
 	if ( activator ) { // activator can be NULL if called from script
 		if ( self->key ) {
-			// Gordon: removed keys
-//			gitem_t *item;
 
 			if ( self->key == -1 ) { // relay permanently locked
 				if ( self->soundPos1 ) {
@@ -612,34 +610,6 @@ void target_relay_use( gentity_t *self, gentity_t *other, gentity_t *activator )
 				}
 				return;
 			}
-
-/*			item = BG_FindItemForKey(self->key, 0);
-
-			if(item)
-			{
-				if(activator->client->ps.stats[STAT_KEYS] & (1<<item->giTag))	// user has key
-				{
-					if (self->spawnflags & 8 ) {	// relay is NOKEY_ONLY and player has key
-						if (self->soundPos1)
-							G_Sound( self, self->soundPos1);	//----(SA)	added
-						return;
-					}
-				}
-				else							// user does not have key
-				{
-					if (!(self->spawnflags & 8) )
-					{
-						if (self->soundPos1)
-							G_Sound( self, self->soundPos1);	//----(SA)	added
-						return;
-					}
-				}
-			}*/
-
-/*			if(self->spawnflags & 16) {	// (SA) take key
-				activator->client->ps.stats[STAT_KEYS] &= ~(1<<item->giTag);
-				// (SA) TODO: "took inventory item" sound
-			}*/
 		}
 	}
 
@@ -700,12 +670,6 @@ void G_KillEnts( const char* target, gentity_t* ignore, gentity_t* killer, means
 		}
 
 		if ( targ->s.eType == ET_CONSTRUCTIBLE ) {
-			
-			/* Nico, removed g_stats.c
-			if ( killer ) {
-				G_AddKillSkillPointsForDestruction( killer, mod, &targ->constructibleStats );
-			}*/
-
 			targ->die( targ, killer, killer, targ->health, 0 );
 			continue;
 		}

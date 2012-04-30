@@ -706,11 +706,6 @@ qboolean G_IsAllowedAmmo( gentity_t* ent ) {
 		return qfalse;
 	}
 
-	/* Nico, removed skills
-	if ( !AddMagicAmmo( ent, 0 ) ) {
-		return qfalse;
-	}*/
-
 	return qtrue;
 }
 
@@ -742,39 +737,11 @@ void ammo_touch( gentity_t *self, gentity_t *other, trace_t *trace ) {
 	if ( clientcount == 0 ) {
 		return;
 	}
-
-	// Gordon: if low, just give out what's left
-	/* Nico, removed skills
-	if ( self->health == -9999 ) {
-		count = clientcount;
-	} else {
-		count = min( clientcount, self->health / (float)self->damage );
-	}
-
-	for ( i = 0; i < count; i++ ) {
-		int ammoAdded = qfalse;
-
-		// self->damage contains the amount of ammo to add
-		ammoAdded = AddMagicAmmo( touchClients[i], self->damage );
-
-		if ( ammoAdded ) {
-			// add the ammo pack event (to get sound, etc.)
-			G_AddPredictableEvent( touchClients[i], EV_ITEM_PICKUP, BG_FindItem( "Ammo Pack" ) - bg_itemlist );
-			if ( self->health != -9999 ) {
-				// reduce the ammount of available ammo by the added clip number
-				self->health -= self->damage;
-			}
-		}
-	}*/
 }
 
 #define AMMO_REGENTIME 60000
 void trigger_ammo_think( gentity_t* self ) {
 	self->nextthink = level.time + AMMO_REGENTIME;
-/*	if(self->timestamp - level.time > -AMMO_REGENTIME) {
-		return;
-	}*/
-
 	self->health += self->damage;
 	if ( self->health > self->count ) {
 		self->health = self->count;
@@ -944,48 +911,7 @@ void SP_trigger_once( gentity_t *ent ) {
 // put this back in and modifyed for single player bots
 
 void trigger_aidoor_stayopen( gentity_t * ent, gentity_t * other, trace_t * trace ) {
-	gentity_t *door;
-
-
-	// only use this in single player. It was taken out of multiplayer, and I'm guessing there was a good reason.
-	/* Nico, removed gametypes
-	if ( g_gametype.integer != GT_SINGLE_PLAYER && g_gametype.integer != GT_COOP ) {*/
-		return;
-	// }
-
-	// Nico, note: below is dead code #FIXME
-
-	// FIXME: port this code over to moving doors (use MOVER_POSx instead of MOVER_POSxROTATE)
-	if ( other->client && other->health > 0 ) {
-		if ( !ent->target || !( strlen( ent->target ) ) ) {
-			// ent->target of "" will crash game in Q_stricmp()
-
-			// FIXME: commented out so it can be fixed
-
-//			G_Printf( "trigger_aidoor at loc %s does not have a target door\n", vtos (ent->s.origin) );
-			return;
-		}
-
-		door = G_FindByTargetname( NULL, ent->target );
-
-		if ( !door ) {
-			// FIXME: commented out so it can be fixed
-//			G_Printf( "trigger_aidoor at loc %s does not have a target door\n", vtos (ent->s.origin) );
-			return;
-		}
-
-		if ( ( door->moverState == MOVER_POS2ROTATE ) || ( door->moverState == MOVER_POS2 ) ) { // door is in open state waiting to close keep it open
-			door->nextthink = level.time + door->wait + 3000;
-		}
-
-
-		// what about other move states?
-
-		// for now, don't worry about getting the bots out of the way. this is just for single player, and the bots should have
-		// orders to follow anyway
-
-	}
-
+	return;
 }
 
 

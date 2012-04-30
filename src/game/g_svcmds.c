@@ -85,11 +85,6 @@ typedef struct ipFilterList_s {
 
 static ipFilterList_t ipFilters;
 
-/* Nico, removed respawnLeft
-static ipFilterList_t ipMaxLivesFilters;
-static ipGUID_t guidMaxLivesFilters[MAX_IPFILTERS];
-static int numMaxLivesFilters = 0;*/
-
 /*
 =================
 StringToFilter
@@ -186,17 +181,6 @@ static void UpdateIPBans( ipFilterList_t *ipFilterList ) {
 	trap_Cvar_Set( ipFilterList->cvarIPList, iplist_final );
 }
 
-/* Nico, removed respawnLeft
-void PrintMaxLivesGUID() {
-	int i;
-
-	for ( i = 0 ; i < numMaxLivesFilters ; i++ )
-	{
-		G_LogPrintf( "%i. %s\n", i, guidMaxLivesFilters[i].compare );
-	}
-	G_LogPrintf( "--- End of list\n" );
-}*/
-
 /*
 =================
 G_FilterPacket
@@ -236,26 +220,6 @@ qboolean G_FilterIPBanPacket( char *from ) {
 	return( G_FilterPacket( &ipFilters, from ) );
 }
 
-/* Nico, removed respawnLeft
-qboolean G_FilterMaxLivesIPPacket( char *from ) {
-	return( G_FilterPacket( &ipMaxLivesFilters, from ) );
-}*/
-
-/* Nico, removed respawnLeft
- Check to see if the user is trying to sneak back in with g_enforcemaxlives enabled
-
-qboolean G_FilterMaxLivesPacket( char *from ) {
-	int i;
-
-	for ( i = 0; i < numMaxLivesFilters; i++ )
-	{
-		if ( !Q_stricmp( guidMaxLivesFilters[i].compare, from ) ) {
-			return 1;
-		}
-	}
-	return 0;
-}*/
-
 /*
 =================
 AddIP
@@ -288,26 +252,6 @@ void AddIP( ipFilterList_t *ipFilterList, const char *str ) {
 void AddIPBan( const char *str ) {
 	AddIP( &ipFilters, str );
 }
-
-/* Nico, removed respawnLeft
-void AddMaxLivesBan( const char *str ) {
-	AddIP( &ipMaxLivesFilters, str );
-}*/
-
-/* Nico, removed respawnLeft
-=================
-AddMaxLivesGUID
-Xian - with g_enforcemaxlives enabled, this adds a client GUID to a list
-that prevents them from quitting and reconnecting
-=================
-void AddMaxLivesGUID( char *str ) {
-	if ( numMaxLivesFilters == MAX_IPFILTERS ) {
-		G_Printf( "MaxLives GUID filter list is full\n" );
-		return;
-	}
-	Q_strncpyz( guidMaxLivesFilters[numMaxLivesFilters].compare, str, 33 );
-	numMaxLivesFilters++;
-}*/
 
 /*
 =================
@@ -390,21 +334,6 @@ void Svcmd_RemoveIP_f( void ) {
 
 	G_Printf( "Didn't find %s.\n", str );
 }
-
-/* Nico, removed respawnLeft
- Xian - Clears out the entire list maxlives enforcement banlist
-
-void ClearMaxLivesBans() {
-	int i;
-
-	for ( i = 0; i < numMaxLivesFilters; i++ ) {
-		guidMaxLivesFilters[i].compare[0] = '\0';
-	}
-	numMaxLivesFilters = 0;
-
-	ipMaxLivesFilters.numIPFilters = 0;
-	Q_strncpyz( ipMaxLivesFilters.cvarIPList, "g_maxlivesbanIPs", sizeof( ipMaxLivesFilters.cvarIPList ) );
-}*/
 
 /*
 ===================
@@ -665,134 +594,10 @@ void Svcmd_ResetMatch_f( qboolean fDoReset, qboolean fDoRestart ) {
 		g_entities[level.sortedClients[i]].client->pers.ready = 0;
 	}
 
-	/* Nico, removed currentRound
-	if ( fDoReset ) {
-		G_resetRoundState();
-
-		// Nico, removed LMS
-		// G_resetModeState();
-	}*/
-
 	if ( fDoRestart ) {
-		/* Nico, removed warmup
-		trap_SendConsoleCommand( EXEC_APPEND, va( "map_restart 0 %i\n", ( ( g_gamestate.integer != GS_PLAYING ) ? GS_RESET : GS_WARMUP ) ) );*/
 		trap_SendConsoleCommand( EXEC_APPEND, va( "map_restart 0 %i\n", GS_RESET ) );
 	}
 }
-
-/*
-Nico, removed swap_teams command
-============
-Svcmd_SwapTeams_f
-
-NERVE - SMF - swaps all clients to opposite team
-============
-
-void Svcmd_SwapTeams_f( void ) {
-	G_resetRoundState();
-
-	if ( ( g_gamestate.integer == GS_INITIALIZE ) ||
-		 ( g_gamestate.integer == GS_WARMUP ) ||
-		 ( g_gamestate.integer == GS_RESET ) ) {
-		G_swapTeams();
-		return;
-	}
-
-	G_resetModeState();
-
-	trap_Cvar_Set( "g_swapteams", "1" );
-	Svcmd_ResetMatch_f( qfalse, qtrue );
-}*/
-
-
-/*
-====================
-Svcmd_ShuffleTeams_f
-
-OSP - randomly places players on teams
-====================
-*/
-/* Nico, removed shuffleteam
-void Svcmd_ShuffleTeams_f( void ) {
-
-	// Nico, removed currentRound
-	// G_resetRoundState();
-
-	G_shuffleTeams();
-
-	if ( ( g_gamestate.integer == GS_INITIALIZE ) ||
-		// Nico, removed warmup
-		// ( g_gamestate.integer == GS_WARMUP ) ||
-		 ( g_gamestate.integer == GS_RESET ) ) {
-		return;
-	}
-
-	// Nico, removed LMS
-	// G_resetModeState();
-
-	Svcmd_ResetMatch_f( qfalse, qtrue );
-}*/
-
-/* Nico, removed campaign client command
-void Svcmd_Campaign_f( void ) {
-	char str[MAX_TOKEN_CHARS];
-	int i;
-	g_campaignInfo_t *campaign = NULL;
-
-	// find the campaign
-	trap_Argv( 1, str, sizeof( str ) );
-
-	for ( i = 0; i < level.campaignCount; i++ ) {
-		campaign = &g_campaigns[i];
-
-		if ( !Q_stricmp( campaign->shortname, str ) ) {
-			break;
-		}
-	}
-
-	if ( i == level.campaignCount || !( campaign->typeBits & ( 1 << GT_WOLF ) ) ) {
-		G_Printf( "Can't find campaign '%s'\n", str );
-		return;
-	}
-
-	trap_Cvar_Set( "g_oldCampaign", g_currentCampaign.string );
-	trap_Cvar_Set( "g_currentCampaign", campaign->shortname );
-	trap_Cvar_Set( "g_currentCampaignMap", "0" );
-
-	level.newCampaign = qtrue;
-
-	// we got a campaign, start it
-	trap_Cvar_Set( "g_gametype", va( "%i", GT_WOLF_CAMPAIGN ) );
-	trap_SendConsoleCommand( EXEC_APPEND, va( "map %s\n", campaign->mapnames[0] ) );
-}*/
-
-/* Nico, removed listcampaigns client command
-void Svcmd_ListCampaigns_f( void ) {
-	int i, mpCampaigns;
-
-	mpCampaigns = 0;
-
-	for ( i = 0; i < level.campaignCount; i++ ) {
-		if ( g_campaigns[i].typeBits & ( 1 << GT_WOLF ) ) {
-			mpCampaigns++;
-		}
-	}
-
-	if ( mpCampaigns ) {
-		G_Printf( "%i campaigns found:\n", mpCampaigns );
-	} else {
-		G_Printf( "No campaigns found.\n" );
-		return;
-	}
-
-	for ( i = 0; i < level.campaignCount; i++ ) {
-		if ( g_campaigns[i].typeBits & ( 1 << GT_WOLF ) ) {
-			G_Printf( " %s\n", g_campaigns[i].shortname );
-		}
-	}
-}*/
-
-// fretn - kicking
 
 /*
 ==================
@@ -1031,38 +836,6 @@ qboolean    ConsoleCommand( void ) {
 		trap_SendConsoleCommand( EXEC_INSERT, "g_banIPs\n" );
 		return qtrue;
 	}
-
-	/* Nico, removed respawnLeft
-	if ( Q_stricmp( cmd, "listmaxlivesip" ) == 0 ) {
-		PrintMaxLivesGUID();
-		return qtrue;
-	}*/
-
-	// NERVE - SMF
-	/* Nico, removed start_match command
-	if ( Q_stricmp( cmd, "start_match" ) == 0 ) {
-		Svcmd_StartMatch_f();
-		return qtrue;
-	}*/
-
-	/* Nico, removed reset_match command
-	if ( Q_stricmp( cmd, "reset_match" ) == 0 ) {
-		Svcmd_ResetMatch_f( qtrue, qtrue );
-		return qtrue;
-	}*/
-
-	/* Nico, removed swap_teams command
-	if ( Q_stricmp( cmd, "swap_teams" ) == 0 ) {
-		Svcmd_SwapTeams_f();
-		return qtrue;
-	}*/
-
-	/* Nico, removed shuffleteam
-	if ( Q_stricmp( cmd, "shuffle_teams" ) == 0 ) {
-		Svcmd_ShuffleTeams_f();
-		return qtrue;
-	}*/
-
 	// -NERVE - SMF
 
 	if ( Q_stricmp( cmd, "makeReferee" ) == 0 ) {
@@ -1075,32 +848,10 @@ qboolean    ConsoleCommand( void ) {
 		return qtrue;
 	}
 
-	/*if (Q_stricmp (cmd, "mute") == 0) {
-		G_MuteClient();
-		return qtrue;
-	}
-
-	if (Q_stricmp (cmd, "unmute") == 0) {
-		G_UnMuteClient();
-		return qtrue;
-	}*/
-
 	if ( Q_stricmp( cmd, "ban" ) == 0 ) {
 		G_PlayerBan();
 		return qtrue;
 	}
-
-	/* Nico, removed campaign client command
-	if ( Q_stricmp( cmd, "campaign" ) == 0 ) {
-		Svcmd_Campaign_f();
-		return qtrue;
-	}*/
-
-	/* Nico, removed listcampaigns client command
-	if ( Q_stricmp( cmd, "listcampaigns" ) == 0 ) {
-		Svcmd_ListCampaigns_f();
-		return qtrue;
-	}*/
 
 	// fretn - moved from engine
 	if ( !Q_stricmp( cmd, "kick" ) ) {
@@ -1130,9 +881,6 @@ qboolean    ConsoleCommand( void ) {
 			}
 			return( qtrue );
 		}
-
-		// everything else will also be printed as a say command
-//		trap_SendServerCommand( -1, va("cpm \"server: %s\n\"", ConcatArgs(0) ) );
 
 		// prints to the console instead now
 		return qfalse;

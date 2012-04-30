@@ -82,10 +82,6 @@ char *hintStrings[HINT_NUM_HINTS] = {
 
 	"HINT_CONSTRUCTIBLE",
 	"HINT_UNIFORM",
-
-	/* Nico, removed mines
-	"HINT_LANDMINE",*/
-
 	"HINT_TANK",
 	"HINT_SATCHELCHARGE",
 	// START Mad Doc - TDF
@@ -406,10 +402,6 @@ qboolean G_TryPushingEntity( gentity_t *check, gentity_t *pusher, vec3_t move, v
 	return qfalse;
 }
 
-//bani - referenced in G_MoverPush()
-/* Nico, removed mines
-extern void LandMineTrigger( gentity_t* self );*/
-
 /*
 ============
 G_MoverPush
@@ -492,24 +484,12 @@ qboolean G_MoverPush( gentity_t *pusher, vec3_t move, vec3_t amove, gentity_t **
 		}
 
 		if ( check->s.eType == ET_MISSILE && check->s.groundEntityNum != pusher->s.number ) {
-
-			/* Nico, removed mines
-			if ( check->methodOfDeath == MOD_LANDMINE ) {
-				if ( check->s.teamNum >= 0 && check->s.teamNum < 4 ) {
-					LandMineTrigger( check );
-				}
-			}*/
-
 			continue;
 		}
 
 		if ( check->s.eType == ET_PLAYER && check->client && ( ( check->client->ps.eFlags & EF_TAGCONNECT ) || ( check->client->ps.pm_type == PM_NOCLIP ) ) ) {
 			continue;
 		}
-
-		//if ( check->s.eType == ET_MISSILE && VectorLengthSquared( check->s.pos.trDelta ) ) {
-		//	continue;	// it's moving
-		//}
 
 		// if the entity is standing on the pusher, it will definitely be moved
 		if ( check->s.groundEntityNum != pusher->s.number ) {
@@ -2067,38 +2047,15 @@ void G_TryDoor( gentity_t *ent, gentity_t *other, gentity_t *activator ) {
 		if ( ent->active == qfalse ) {
 			if ( ent->key < 0
 				 || !G_AllowTeamsAllowed( ent, activator )
-				 /* Nico, removed gametypes
-				 || ( G_IsSinglePlayerGame() && ent->key == KEY_LOCKED_PICKABLE )  ) { // door force locked*/
 			) { // door force locked
 				G_AddEvent( ent, EV_GENERAL_SOUND, ent->soundPos3 );
 				return;
 			}
 
-/*			// TAT 2/3/2003 - want keys in SP
-			if (G_IsSinglePlayerGame()
-				&& activator
-				// door requires key
-				&& ent->key > 0)
-			{
-				gitem_t *item = BG_FindItemForKey(ent->key, 0);
-				if(!(activator->client->ps.stats[STAT_KEYS] & (1<<item->giTag)))
-				{
-//					if(!walking)	// only send audible event if not trying to open slowly
-//						AICast_AudibleEvent( activator->s.clientNum, ent->s.origin, HEAR_RANGE_DOOR_LOCKED );	// "someone tried locked door near me!"
-					// player does not have key
-					G_AddEvent( ent, EV_GENERAL_SOUND, ent->soundPos3);
-					return;
-				}
-			}
-*/
-
 			if ( ent->teammaster && ent->team && ent != ent->teammaster ) {
 				ent->teammaster->active = qtrue;
 				if ( walking ) {
 					ent->teammaster->flags |= FL_SOFTACTIVATE;      // no noise generated
-				} else {
-//					if(activator)
-//						AICast_AudibleEvent( activator->s.clientNum, ent->s.origin, HEAR_RANGE_DOOR_OPEN );	// "someone opened door near me!"
 				}
 
 				Use_BinaryMover( ent->teammaster, activator, activator );
@@ -2108,9 +2065,6 @@ void G_TryDoor( gentity_t *ent, gentity_t *other, gentity_t *activator ) {
 				ent->active = qtrue;
 				if ( walking ) {
 					ent->flags |= FL_SOFTACTIVATE;      // no noise
-				} else {
-//					if(activator)
-//						AICast_AudibleEvent( activator->s.clientNum, ent->s.origin, HEAR_RANGE_DOOR_OPEN );	// "someone opened door near me!"
 				}
 
 				Use_BinaryMover( ent, activator, activator );
@@ -2917,22 +2871,10 @@ void info_limbo_camera_setup( gentity_t* self ) {
 
 void SP_info_limbo_camera( gentity_t* self ) {
 	if ( !( self->spawnflags & 2 ) ) {
-
-		/* Nico, removed LMS
-		if ( g_gametype.integer == GT_WOLF_LMS ) {
-			if ( !( self->spawnflags & 1 ) ) {
-				G_FreeEntity( self );
-				return;
-			}
-		}*/
-
-		/* Nico, removed LMS
-		if ( g_gametype.integer != GT_WOLF_LMS ) {*/
-			if ( ( self->spawnflags & 1 ) ) {
-				G_FreeEntity( self );
-				return;
-			}
-		// }
+		if ( ( self->spawnflags & 1 ) ) {
+			G_FreeEntity( self );
+			return;
+		}
 	}
 
 	self->think =       info_limbo_camera_setup;
@@ -3638,13 +3580,6 @@ void SP_func_door_rotating( gentity_t *ent ) {
 
 	}
 	// special case for single player
-	/* Nico, removed gametypes
-	if ( G_IsSinglePlayerGame() && ( ent->key == 99 ) ) {
-		ent->key = KEY_LOCKED_PICKABLE;
-
-		// TAT 1/29/2003 - also load how long it takes to pick the lock - default to 30 seconds
-		G_SpawnInt( "lockpickTime", "30", &ent->grenadeFired );
-	}*/
 
 	// if the key is invalid, set the key in the finishSpawning routine
 	if ( ent->key > KEY_NUM_KEYS || ent->key < -2 ) {
@@ -3915,10 +3850,6 @@ void func_explosive_explode( gentity_t *self, gentity_t *inflictor, gentity_t *a
 	// Skills stuff
 
 	if ( G_GetWeaponClassForMOD( mod ) >= self->constructibleStats.weaponclass ) {
-
-		/* Nico, removed g_stats.c
-		G_AddKillSkillPointsForDestruction( attacker, mod, &self->constructibleStats );*/
-
 	}
 }
 
@@ -4613,10 +4544,6 @@ void func_constructible_explode( gentity_t *self, gentity_t *inflictor, gentity_
 
 			// Skills stuff
 			if ( G_GetWeaponClassForMOD( mod ) >= self->constructibleStats.weaponclass ) {
-
-				/* Nico, removed g_stats.c
-				G_AddKillSkillPointsForDestruction( attacker, mod, &self->constructibleStats );*/
-
 			}
 		} else {
 
@@ -4643,10 +4570,6 @@ void func_constructible_explode( gentity_t *self, gentity_t *inflictor, gentity_
 
 			// Skills stuff
 			if ( G_GetWeaponClassForMOD( mod ) >= self->constructibleStats.weaponclass ) {
-
-				/* Nico, removed g_stats.c
-				G_AddKillSkillPointsForDestruction( attacker, mod, &self->constructibleStats );*/
-
 			}
 
 			// unlink
@@ -4673,10 +4596,6 @@ void func_constructible_explode( gentity_t *self, gentity_t *inflictor, gentity_
 
 		// Skills stuff
 		if ( G_GetWeaponClassForMOD( mod ) >= self->constructibleStats.weaponclass ) {
-
-			/* Nico, removed g_stats.c
-			G_AddKillSkillPointsForDestruction( attacker, mod, &self->constructibleStats );*/
-
 		}
 
 		// unlink

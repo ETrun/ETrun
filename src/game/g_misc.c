@@ -1210,12 +1210,6 @@ void Fire_Lead_Ext( gentity_t *ent, gentity_t *activator, float spread, int dama
 
 		tent = G_TempEntity( tr.endpos, EV_MG42BULLET_HIT_WALL );
 
-		// Gordon: bleugh, lets broadcast this in SP, (trainwreck issues)
-		/* Nico, removed gametypes
-		if ( G_IsSinglePlayerGame() ) {
-			tent->r.svFlags |= SVF_BROADCAST;
-		}*/
-
 		dot = DotProduct( forward, tr.plane.normal );
 		VectorMA( forward, -2 * dot, tr.plane.normal, reflect );
 		VectorNormalize( reflect );
@@ -1348,11 +1342,6 @@ void aagun_think( gentity_t *self ) {
 	gentity_t   *owner;
 	int i;
 
-	/* Nico, removed intermission
-	if ( g_gamestate.integer == GS_INTERMISSION ) {
-		return;
-	}*/
-
 	VectorClear( vec );
 
 	owner = &g_entities[self->r.ownerNum];
@@ -1361,8 +1350,6 @@ void aagun_think( gentity_t *self ) {
 	if ( self->timestamp > level.time ) {
 		BG_EvaluateTrajectory( &self->s.apos, level.time, self->s.apos.trBase, qfalse, 0 );
 	}
-
-//	self->s.frame++;
 
 	if ( owner->client ) {
 		vec3_t dang;
@@ -1608,11 +1595,6 @@ void mg42_think( gentity_t *self ) {
 	float len;
 	float usedist;
 
-	/* Nico, removed intermission
-	if ( g_gamestate.integer == GS_INTERMISSION ) {
-		return;
-	}*/
-
 	VectorClear( vec );
 
 	owner = &g_entities[self->r.ownerNum];
@@ -1828,118 +1810,115 @@ void mg42_spawn( gentity_t *ent ) {
 	vec3_t offset;
 
 	// Xian -- If in knifeonly mode, prevent MG42's from spawning
-	/* Nico, removed knifeonly
-	if ( g_knifeonly.integer != 1 ) {*/
-		// Need to spawn the base even when no tripod cause the gun itself isn't solid
-		base = G_Spawn();
-		base->classname = "misc_mg42base";   // Arnout - ease tracking
+	// Need to spawn the base even when no tripod cause the gun itself isn't solid
+	base = G_Spawn();
+	base->classname = "misc_mg42base";   // Arnout - ease tracking
 
-		if ( !( ent->spawnflags & 2 ) ) { // no tripod
-			base->clipmask = CONTENTS_SOLID;
-			base->r.contents = CONTENTS_SOLID;
-			base->r.svFlags = 0;
-			base->s.eType = ET_GENERAL;
-			base->takedamage = qtrue;
-			base->die = mg42_die;
-
-			// Arnout: move track and targetname over to these entities for construction system
-			base->track = ent->track;
-			G_SetTargetName( base, ent->targetname );
-
-			base->s.modelindex = G_ModelIndex( "models/mapobjects/weapons/mg42b.md3" );
-		} else {
-			base->takedamage = qfalse;
-		}
-
-		VectorSet( base->r.mins, -8, -8, -8 );
-		VectorSet( base->r.maxs, 8, 8, 48 );
-		VectorCopy( ent->s.origin, offset );
-		offset[2] -= 24;
-		G_SetOrigin( base, offset );
-		base->s.apos.trType = TR_STATIONARY;
-		base->s.apos.trTime = 0;
-		base->s.apos.trDuration = 0;
-		base->s.dmgFlags = HINT_MG42;   // identify this for cursorhints
-		VectorCopy( ent->s.angles, base->s.angles );
-		VectorCopy( base->s.angles, base->s.apos.trBase );
-		VectorCopy( base->s.angles, base->s.apos.trDelta );
-		base->health = ent->health;
-		base->target = ent->target; //----(SA)	added so mounting mg42 can trigger targets
-		base->sound3to2 = -1;
-		trap_LinkEntity( base );
-
-		// Arnout: copy state over from original entity
-		G_SetEntState( base, ent->entstate );
-
-		// Spawn the barrel
-		gun =                   G_Spawn();
-		gun->classname =        "misc_mg42";
-		gun->clipmask =         CONTENTS_SOLID;
-		gun->r.contents =       CONTENTS_TRIGGER;
-		gun->r.svFlags =        0;
-		gun->s.eType =          ET_MG42_BARREL;
-		gun->health =           base->health; // JPW NERVE
-		gun->s.modelindex =     G_ModelIndex( "models/multiplayer/mg42/mg42.md3" );
-		gun->sound3to2 =        -1;
-
-		VectorSet( offset, ent->s.origin[0], ent->s.origin[1], ent->s.origin[2] + 24 );
-		G_SetOrigin( gun, offset );
-
-		VectorSet( gun->r.mins, -24, -24, -8 );
-		VectorSet( gun->r.maxs, 24, 24, 48 );
-
-		gun->s.apos.trTime =        0;
-		gun->s.apos.trDuration =    0;
-		gun->s.apos.trType =        TR_LINEAR_STOP;
-
-		VectorCopy( ent->s.angles, gun->s.angles );
-		VectorCopy( gun->s.angles, gun->s.apos.trBase );
-		VectorCopy( gun->s.angles, gun->s.apos.trDelta );
-
-		VectorCopy( ent->s.angles, gun->s.angles2 );
-
-
-		gun->touch =            mg42_touch;
-		gun->think =            mg42_think;
-		gun->use =              mg42_use;
-		gun->die =              mg42_die;
-
-		gun->nextthink =        level.time + FRAMETIME;
-		gun->timestamp =        level.time + 1000;
-		gun->s.number =         gun - g_entities;
-		gun->harc =             ent->harc;
-		gun->varc =             ent->varc;
-		gun->s.origin2[0] =     ent->harc;
-		gun->s.origin2[1] =     ent->varc;
-		gun->takedamage =       qtrue;
-		G_SetTargetName( gun, ent->targetname );
-		gun->damage =           ent->damage;
-		gun->accuracy =         ent->accuracy;
-		gun->target =           ent->target;
-		gun->spawnflags =       ent->spawnflags;
-
-		// Gordon: storing heat now
-		gun->mg42weapHeat    =      0;
+	if ( !( ent->spawnflags & 2 ) ) { // no tripod
+		base->clipmask = CONTENTS_SOLID;
+		base->r.contents = CONTENTS_SOLID;
+		base->r.svFlags = 0;
+		base->s.eType = ET_GENERAL;
+		base->takedamage = qtrue;
+		base->die = mg42_die;
 
 		// Arnout: move track and targetname over to these entities for construction system
-		gun->track =        ent->track;
+		base->track = ent->track;
+		G_SetTargetName( base, ent->targetname );
 
-		// Arnout: copy state over from original entity
-		G_SetEntState( gun, ent->entstate );
+		base->s.modelindex = G_ModelIndex( "models/mapobjects/weapons/mg42b.md3" );
+	} else {
+		base->takedamage = qfalse;
+	}
 
-		if ( !( ent->spawnflags & 2 ) ) { // no tripod
-			gun->mg42BaseEnt = base->s.number;
-			base->chain = gun;
-		} else {
-			gun->mg42BaseEnt = -1;
-		}
+	VectorSet( base->r.mins, -8, -8, -8 );
+	VectorSet( base->r.maxs, 8, 8, 48 );
+	VectorCopy( ent->s.origin, offset );
+	offset[2] -= 24;
+	G_SetOrigin( base, offset );
+	base->s.apos.trType = TR_STATIONARY;
+	base->s.apos.trTime = 0;
+	base->s.apos.trDuration = 0;
+	base->s.dmgFlags = HINT_MG42;   // identify this for cursorhints
+	VectorCopy( ent->s.angles, base->s.angles );
+	VectorCopy( base->s.angles, base->s.apos.trBase );
+	VectorCopy( base->s.angles, base->s.apos.trDelta );
+	base->health = ent->health;
+	base->target = ent->target; //----(SA)	added so mounting mg42 can trigger targets
+	base->sound3to2 = -1;
+	trap_LinkEntity( base );
 
-		if ( gun->spawnflags & 1 ) {
-			gun->s.onFireStart = 1;
-		}
+	// Arnout: copy state over from original entity
+	G_SetEntState( base, ent->entstate );
 
-		trap_LinkEntity( gun );
-	// }
+	// Spawn the barrel
+	gun =                   G_Spawn();
+	gun->classname =        "misc_mg42";
+	gun->clipmask =         CONTENTS_SOLID;
+	gun->r.contents =       CONTENTS_TRIGGER;
+	gun->r.svFlags =        0;
+	gun->s.eType =          ET_MG42_BARREL;
+	gun->health =           base->health; // JPW NERVE
+	gun->s.modelindex =     G_ModelIndex( "models/multiplayer/mg42/mg42.md3" );
+	gun->sound3to2 =        -1;
+
+	VectorSet( offset, ent->s.origin[0], ent->s.origin[1], ent->s.origin[2] + 24 );
+	G_SetOrigin( gun, offset );
+
+	VectorSet( gun->r.mins, -24, -24, -8 );
+	VectorSet( gun->r.maxs, 24, 24, 48 );
+
+	gun->s.apos.trTime =        0;
+	gun->s.apos.trDuration =    0;
+	gun->s.apos.trType =        TR_LINEAR_STOP;
+
+	VectorCopy( ent->s.angles, gun->s.angles );
+	VectorCopy( gun->s.angles, gun->s.apos.trBase );
+	VectorCopy( gun->s.angles, gun->s.apos.trDelta );
+
+	VectorCopy( ent->s.angles, gun->s.angles2 );
+
+
+	gun->touch =            mg42_touch;
+	gun->think =            mg42_think;
+	gun->use =              mg42_use;
+	gun->die =              mg42_die;
+
+	gun->nextthink =        level.time + FRAMETIME;
+	gun->timestamp =        level.time + 1000;
+	gun->s.number =         gun - g_entities;
+	gun->harc =             ent->harc;
+	gun->varc =             ent->varc;
+	gun->s.origin2[0] =     ent->harc;
+	gun->s.origin2[1] =     ent->varc;
+	gun->takedamage =       qtrue;
+	G_SetTargetName( gun, ent->targetname );
+	gun->damage =           ent->damage;
+	gun->accuracy =         ent->accuracy;
+	gun->target =           ent->target;
+	gun->spawnflags =       ent->spawnflags;
+
+	// Gordon: storing heat now
+	gun->mg42weapHeat    =      0;
+
+	// Arnout: move track and targetname over to these entities for construction system
+	gun->track =        ent->track;
+
+	// Arnout: copy state over from original entity
+	G_SetEntState( gun, ent->entstate );
+
+	if ( !( ent->spawnflags & 2 ) ) { // no tripod
+		gun->mg42BaseEnt = base->s.number;
+		base->chain = gun;
+	} else {
+		gun->mg42BaseEnt = -1;
+	}
+
+	if ( gun->spawnflags & 1 ) {
+		gun->s.onFireStart = 1;
+	}
+
+	trap_LinkEntity( gun );
 
 	G_FreeEntity( ent );
 }
@@ -2283,88 +2262,6 @@ than 10 left.
 */
 extern int G_GetWeaponDamage( int weapon );
 
-/* Nico, removed mines
-extern void G_LandmineThink( gentity_t *self );
-
-void landmine_setup( gentity_t *ent ) {
-	trace_t tr;
-	vec3_t end;
-
-	VectorSet( ent->r.mins, -16, -16, 0 );
-	VectorCopy( ent->r.mins, ent->r.absmin );
-	VectorSet( ent->r.maxs, 16, 16, 16 );
-	VectorCopy( ent->r.maxs, ent->r.absmax );
-
-	ent->clipmask       = MASK_MISSILESHOT;
-
-	// drop to floor
-	VectorCopy( ent->s.origin, end );
-	end[2] -= 64;
-	trap_Trace( &tr, ent->s.origin, NULL, NULL, end, ent->s.number, ent->clipmask );
-
-	if ( tr.startsolid || tr.fraction == 1.f || !( tr.surfaceFlags & ( SURF_GRASS | SURF_SNOW | SURF_GRAVEL | SURF_LANDMINE ) ) ||
-		 ( tr.entityNum != ENTITYNUM_WORLD && ( !g_entities[tr.entityNum].inuse || g_entities[tr.entityNum].s.eType != ET_CONSTRUCTIBLE ) ) ) {
-		G_Printf( "^3WARNING: 'misc_landmine' entity at %.2f %.2f %.2f doesn't have a surface to settle on\n", ent->s.origin[0], ent->s.origin[1], ent->s.origin[2] );
-		G_FreeEntity( ent );
-		return;
-	}
-
-	G_SetOrigin( ent, tr.endpos );
-	ent->s.pos.trDelta[2] = 1.f;
-	ent->s.time         = ent->s.angles[1] + 90;
-
-	// all fine
-	ent->s.eType        = ET_MISSILE;
-	ent->r.svFlags      = SVF_BROADCAST;
-	ent->s.weapon       = WP_LANDMINE;
-	ent->r.ownerNum     = ENTITYNUM_WORLD;
-
-	ent->damage         = G_GetWeaponDamage( WP_LANDMINE ); // overridden for dynamite
-	ent->splashDamage   = G_GetWeaponDamage( WP_LANDMINE );
-
-	ent->accuracy       = 0;
-	ent->classname      = "landmine";
-	ent->damage         = 0;
-	ent->splashRadius   = 225;  // was: 400
-	ent->methodOfDeath  = MOD_LANDMINE;
-	ent->splashMethodOfDeath    = MOD_LANDMINE;
-	ent->s.eFlags       = ( EF_BOUNCE | EF_BOUNCE_HALF );
-	ent->health         = 5;
-	ent->takedamage     = qtrue;
-	ent->r.contents     = CONTENTS_CORPSE;  // (player can walk through)
-
-	ent->splashRadius   = G_GetWeaponDamage( WP_LANDMINE );
-
-	ent->health         = 0;
-	ent->s.modelindex2  = 0;
-
-	ent->nextthink      = level.time + FRAMETIME;
-	ent->think          = G_LandmineThink;
-
-	ent->damage         = 0;
-
-	if ( ent->s.teamNum == TEAM_AXIS ) { // store team so we can generate red or blue smoke
-		ent->s.otherEntityNum2 = 1;
-	} else {
-		ent->s.otherEntityNum2 = 0;
-	}
-
-	trap_LinkEntity( ent );
-}
-
-void SP_misc_landmine( gentity_t *ent ) {
-	if ( ent->spawnflags & 1 ) {
-		ent->s.teamNum = TEAM_AXIS;
-	} else if ( ent->spawnflags & 2 ) {
-		ent->s.teamNum = TEAM_ALLIES;
-	} else {
-		G_Error( "ERROR: misc_landmine without a team\n" );
-	}
-
-	ent->nextthink = level.time + FRAMETIME * 5;
-	ent->think = landmine_setup;
-}*/
-
 /*QUAKED misc_commandmap_marker (0 0.85 .85) (-16 -16 0) (16 16 16) ONLY_AXIS ONLY_ALLIED ISOBJECTIVE ISHEALTHAMMOCABINET ISCOMMANDPOST
 Command map marker entity. When set to state default it shows, any other state and it isn't visible.
 -------- KEYS --------
@@ -2413,9 +2310,4 @@ void G_TempTraceIgnorePlayersAndBodies( void ) {
 	for ( i = 0; i < MAX_CLIENTS; i++ ) {
 		G_TempTraceIgnoreEntity( &g_entities[ i ] );
 	}
-
-	/* Nico, removed gib
-	for ( i = 0; i < BODY_QUEUE_SIZE; i++ ) {
-		G_TempTraceIgnoreEntity( level.bodyQue[ i ] );
-	}*/
 }

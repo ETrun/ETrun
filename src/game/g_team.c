@@ -467,8 +467,6 @@ void Team_DroppedFlagThink( gentity_t *ent ) {
 		if ( level.gameManager ) {
 			G_Script_ScriptEvent( level.gameManager, "trigger", "allied_object_returned" );
 		}
-
-//		trap_SendServerCommand(-1, "cp \"Allies have returned the objective!\" 2");
 	}
 	// Reset Flag will delete this entity
 }
@@ -566,11 +564,6 @@ int Team_TouchEnemyFlag( gentity_t *ent, gentity_t *other, int team ) {
 
 	ent->parent = tmp;
 
-	// Gordon: reset player disguise on stealing docs
-	/* Nico, removed disguise stuff
-	other->client->ps.powerups[PW_OPS_DISGUISED] = 0;*/
-
-
 	if ( team == TEAM_AXIS ) {
 		cl->ps.powerups[PW_REDFLAG] = INT_MAX;
 	} else {
@@ -599,39 +592,24 @@ int Pickup_Team( gentity_t *ent, gentity_t *other ) {
 	int team;
 	gclient_t *cl = other->client;
 
-	// START Mad Doc - TDF
-	/* Nico, removed gametypes
-	if ( ( g_gametype.integer != GT_SINGLE_PLAYER ) && ( g_gametype.integer != GT_COOP ) ) {*/
+	// figure out what team this flag is
+	if ( strcmp( ent->classname, "team_CTF_redflag" ) == 0 ) {
+		team = TEAM_AXIS;
+	} else if ( strcmp( ent->classname, "team_CTF_blueflag" ) == 0 ) {
+		team = TEAM_ALLIES;
+	} else {
+		PrintMsg( other, "Don't know what team the flag is on.\n" );
+		return 0;
+	}
 
-		// figure out what team this flag is
-		if ( strcmp( ent->classname, "team_CTF_redflag" ) == 0 ) {
-			team = TEAM_AXIS;
-		} else if ( strcmp( ent->classname, "team_CTF_blueflag" ) == 0 ) {
-			team = TEAM_ALLIES;
-		} else {
-			PrintMsg( other, "Don't know what team the flag is on.\n" );
-			return 0;
-		}
+	// JPW NERVE -- set flag model in carrying entity if multiplayer and flagmodel is set
+	other->message = ent->message;
+	other->s.otherEntityNum2 = ent->s.modelindex2;
+	// jpw
 
-		// JPW NERVE -- set flag model in carrying entity if multiplayer and flagmodel is set
-		other->message = ent->message;
-		other->s.otherEntityNum2 = ent->s.modelindex2;
-		// jpw
-
-		return ( ( team == cl->sess.sessionTeam ) ?
-				 Team_TouchOurFlag : Team_TouchEnemyFlag )
-							( ent, other, team );
-	/* Nico, removed gametypes
-	} else
-	{
-		other->message = ent->message;
-		other->s.otherEntityNum2 = ent->s.modelindex2;
-
-		// for single player, we want the allies to be able to pick up both flags
-		return Team_TouchEnemyFlag( ent, other, TEAM_ALLIES );
-
-	}*/
-	// END Mad Doc - TDF
+	return ( ( team == cl->sess.sessionTeam ) ?
+				Team_TouchOurFlag : Team_TouchEnemyFlag )
+						( ent, other, team );
 }
 
 /*---------------------------------------------------------------------------*/
@@ -648,9 +626,6 @@ int FindFarthestObjectiveIndex( vec3_t source ) {
 	int i,j = 0;
 	float dist = 0,tdist;
 	vec3_t tmp;
-//	int	cs_obj = CS_MULTI_SPAWNTARGETS;
-//	char	cs[MAX_STRING_CHARS];
-//	char *objectivename;
 
 	for ( i = 0; i < level.numspawntargets; i++ ) {
 		VectorSubtract( level.spawntargets[i],source,tmp );
@@ -660,14 +635,6 @@ int FindFarthestObjectiveIndex( vec3_t source ) {
 			j = i;
 		}
 	}
-
-/*
-	cs_obj += j;
-	trap_GetConfigstring( cs_obj, cs, sizeof(cs) );
-	objectivename = Info_ValueForKey( cs, "spawn_targ");
-
-	G_Printf("got furthest dist (%f) at point %d (%s) of %d\n",dist,j,objectivename,i);
-*/
 
 	return j;
 }
@@ -1231,10 +1198,6 @@ void checkpoint_use( gentity_t *ent, gentity_t *other, gentity_t *activator ) {
 	ent->count2 = level.time;
 	ent->think = checkpoint_use_think;
 	ent->nextthink = level.time + 2000;
-
-	// Gordon: reset player disguise on touching flag
-	/* Nico, removed disguise stuff
-	other->client->ps.powerups[PW_OPS_DISGUISED] = 0;*/
 }
 
 void checkpoint_spawntouch( gentity_t *self, gentity_t *other, trace_t *trace ); // JPW NERVE
@@ -1341,8 +1304,6 @@ void checkpoint_touch( gentity_t *self, gentity_t *other, trace_t *trace ) {
 	self->parent = other;
 
 	// Gordon: reset player disguise on touching flag
-	/* Nico, removed disguise stuff
-	other->client->ps.powerups[PW_OPS_DISGUISED] = 0;*/
 	// Run script trigger
 	if ( self->count == TEAM_AXIS ) {
 		self->health = 0;
@@ -1432,8 +1393,6 @@ void checkpoint_spawntouch( gentity_t *self, gentity_t *other, trace_t *trace ) 
 	self->parent = other;
 
 	// Gordon: reset player disguise on touching flag
-	/* Nico, removed disguise stuff
-	other->client->ps.powerups[PW_OPS_DISGUISED] = 0;*/
 	// Run script trigger
 	if ( self->count == TEAM_AXIS ) {
 		G_Script_ScriptEvent( self, "trigger", "axis_capture" );
@@ -1583,14 +1542,9 @@ team_info teamInfo[TEAM_NUM_TEAMS];
 
 // Resets a team's settings
 void G_teamReset( int team_num, qboolean fClearSpecLock ) {
-
-	/* Nico, removed match_* cvars
-	teamInfo[team_num].team_lock = ( match_latejoin.integer == 0 && g_gamestate.integer == GS_PLAYING );*/
 	teamInfo[team_num].team_lock = qfalse;
 	teamInfo[team_num].team_name[0] = 0;
 	teamInfo[team_num].team_score = 0;
-	/* Nico, removed match_* cvars
-	teamInfo[team_num].timeouts = match_timeoutcount.integer;*/
 
 	if ( fClearSpecLock ) {
 		teamInfo[team_num].spec_lock = qfalse;
@@ -1698,97 +1652,6 @@ int G_teamID( gentity_t *ent ) {
 	return( ent->client->sess.sessionTeam );
 }
 
-/* Nico, removed warmup
-// Determine if the "ready" player threshold has been reached.
-qboolean G_checkReady( void ) {
-	int i, ready = 0, notReady = match_minplayers.integer;
-	gclient_t *cl;
-
-	if ( 0 == g_doWarmup.integer ) {
-		return( qtrue );
-	}
-
-	// Ensure we have enough real players
-	if ( level.numNonSpectatorClients >= match_minplayers.integer && level.voteInfo.numVotingClients > 0 ) {
-		// Step through all active clients
-		notReady = 0;
-		for ( i = 0; i < level.numConnectedClients; i++ ) {
-			cl = level.clients + level.sortedClients[i];
-
-			if ( cl->pers.connected != CON_CONNECTED || cl->sess.sessionTeam == TEAM_SPECTATOR ) {
-				continue;
-			} else if ( cl->pers.ready || ( g_entities[level.sortedClients[i]].r.svFlags & SVF_BOT ) ) {
-				ready++;
-			} else { notReady++;}
-		}
-	}
-
-	notReady = ( notReady > 0 || ready > 0 ) ? notReady : match_minplayers.integer;
-	if ( g_minGameClients.integer != notReady ) {
-		trap_Cvar_Set( "g_minGameClients", va( "%d", notReady ) );
-	}
-
-	// Do we have enough "ready" players?
-	return( level.ref_allready || ( ( ready + notReady > 0 ) && 100 * ready / ( ready + notReady ) >= match_readypercent.integer ) );
-}*/
-
-/* Nico, removed warmup
-// Checks ready states to start/stop the sequence to get the match rolling.
-qboolean G_readyMatchState( void ) {
-	if ( ( g_doWarmup.integer ||
-		   ( g_gametype.integer == GT_WOLF_LMS && g_lms_lockTeams.integer ) ||
-		   level.warmupTime > ( level.time + 10 * 1000 ) ) &&
-		 g_gamestate.integer == GS_WARMUP && G_checkReady() ) {
-		level.ref_allready = qfalse;
-		if ( g_doWarmup.integer > 0 || ( g_gametype.integer == GT_WOLF_LMS && g_lms_lockTeams.integer ) ) {
-			teamInfo[TEAM_AXIS].team_lock = qtrue;
-			teamInfo[TEAM_ALLIES].team_lock = qtrue;
-		}
-
-		return( qtrue );
-
-	} else if ( !G_checkReady() ) {
-		if ( g_gamestate.integer == GS_WARMUP_COUNTDOWN ) {
-			AP( "cp \"^1COUNTDOWN STOPPED!^7  Back to warmup...\n\"" );
-		}
-		level.lastRestartTime = level.time;
-		trap_SendConsoleCommand( EXEC_APPEND, va( "map_restart 0 %i\n", GS_WARMUP ) );
-//		G_LogPrintf("Warmup:\n");
-	}
-
-	return( qfalse );
-}*/
-
-/* Nico, removed warmup
-// Check if we need to reset the game state due to an empty team
-void G_verifyMatchState( int nTeam ) {
-	gamestate_t gs = g_gamestate.integer;
-
-	if ( ( level.lastRestartTime + 1000 ) < level.time && ( nTeam == TEAM_ALLIES || nTeam == TEAM_AXIS ) &&
-		 ( gs == GS_PLAYING || gs == GS_WARMUP_COUNTDOWN || gs == GS_INTERMISSION ) ) {
-		if ( TeamCount( -1, nTeam ) == 0 ) {
-			if ( g_doWarmup.integer > 0 ) {
-				level.lastRestartTime = level.time;
-				if ( g_gametype.integer == GT_WOLF_STOPWATCH ) {
-					trap_Cvar_Set( "g_currentRound", "0" );
-					trap_Cvar_Set( "g_nextTimeLimit", "0" );
-				}
-
-				trap_SendConsoleCommand( EXEC_APPEND, va( "map_restart 0 %i\n", GS_WARMUP ) );
-
-			} else {
-				teamInfo[nTeam].team_lock = qfalse;
-			}
-
-			G_teamReset( nTeam, qtrue );
-		}
-	}
-
-	// Cleanup of ready count
-	G_checkReady();
-}*/
-
-
 // Checks to see if a specified team is allowing players to join.
 qboolean G_teamJoinCheck( int team_num, gentity_t *ent ) {
 	int cnt = TeamCount( -1, team_num );
@@ -1804,29 +1667,16 @@ qboolean G_teamJoinCheck( int team_num, gentity_t *ent ) {
 		if ( ent->client->sess.sessionTeam == team_num ) {
 			return( qtrue );
 		}
+		// Check for full teams
+		if ( team_maxplayers.integer > 0 && team_maxplayers.integer <= cnt ) {
+			G_printFull( va( "The %s team is full!", aTeams[team_num] ), ent );
+			return( qfalse );
 
-		/* Nico, removed LMS
-		if ( g_gametype.integer != GT_WOLF_LMS ) {*/
-			// Check for full teams
-			if ( team_maxplayers.integer > 0 && team_maxplayers.integer <= cnt ) {
-				G_printFull( va( "The %s team is full!", aTeams[team_num] ), ent );
-				return( qfalse );
-
-				// Check for locked teams
-			} else if ( teamInfo[team_num].team_lock && ( !( ent->client->pers.invite & team_num ) ) ) {
-				G_printFull( va( "The %s team is LOCKED!", aTeams[team_num] ), ent );
-				return( qfalse );
-			}
-		/* Nico, removed LMS
-		} else {
-			if ( team_maxplayers.integer > 0 && team_maxplayers.integer <= cnt ) {
-				G_printFull( va( "The %s team is full!", aTeams[team_num] ), ent );
-				return( qfalse );
-			} else if ( g_gamestate.integer == GS_PLAYING && g_lms_lockTeams.integer && ( !( ent->client->pers.invite & team_num ) ) ) {
-				G_printFull( va( "The %s team is LOCKED!", aTeams[team_num] ), ent );
-				return( qfalse );
-			}
-		}*/
+			// Check for locked teams
+		} else if ( teamInfo[team_num].team_lock && ( !( ent->client->pers.invite & team_num ) ) ) {
+			G_printFull( va( "The %s team is LOCKED!", aTeams[team_num] ), ent );
+			return( qfalse );
+		}
 	}
 
 	return( qtrue );
@@ -1859,21 +1709,12 @@ void G_updateSpecLock( int nTeam, qboolean fLock ) {
 			continue;
 		}
 
-		/* Nico, removed multiview
-		if ( ent->client->pers.mvCount > 0 ) {
-			G_smvRemoveInvalidClients( ent, nTeam );
-		} else */
 		if ( ent->client->sess.spectatorState == SPECTATOR_FOLLOW ) {
 			StopFollowing( ent );
 			ent->client->sess.spec_team &= ~nTeam;
 		}
 
-		// ClientBegin sets blackout
-		/* Nico, removed multiview
-		if ( ent->client->pers.mvCount < 1 ) {*/
-			SetTeam( ent, "s", qtrue, -1, -1, qfalse );
-		/* Nico, removed multiview
-		}*/
+		SetTeam( ent, "s", qtrue, -1, -1, qfalse );
 	}
 }
 
@@ -1914,18 +1755,6 @@ int G_blockoutTeam( gentity_t *ent, int nTeam ) {
 
 // Figure out if we are allowed/want to follow a given player
 qboolean G_allowFollow( gentity_t *ent, int nTeam ) {
-
-	/* Nico, removed LMS
-	if ( g_gametype.integer == GT_WOLF_LMS && g_lms_followTeamOnly.integer ) {
-		if ( ( ent->client->sess.spec_invite & nTeam ) == nTeam ) {
-			return qtrue;
-		}
-		if ( ent->client->sess.sessionTeam != TEAM_SPECTATOR &&
-			 ent->client->sess.sessionTeam != nTeam ) {
-			return qfalse;
-		}
-	}*/
-
 	if ( level.time - level.startTime > 2500 ) {
 		if ( TeamCount( -1, TEAM_AXIS ) == 0 ) {
 			teamInfo[TEAM_AXIS].spec_lock = qfalse;

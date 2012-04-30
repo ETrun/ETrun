@@ -248,15 +248,12 @@ void G_players_cmd( gentity_t *ent, unsigned int dwCommand, qboolean fValue ) {
 		}
 
 		tc = ( ent ) ? "^7 " : " ";
-		/* Nico, removed gametypes
-		if ( g_gametype.integer >= GT_WOLF ) {*/
-			if ( tteam == TEAM_AXIS ) {
-				tc = ( ent ) ? "^1X^7" : "X";
-			}
-			if ( tteam == TEAM_ALLIES ) {
-				tc = ( ent ) ? "^4L^7" : "L";
-			}
-		// }
+		if ( tteam == TEAM_AXIS ) {
+			tc = ( ent ) ? "^1X^7" : "X";
+		}
+		if ( tteam == TEAM_ALLIES ) {
+			tc = ( ent ) ? "^4L^7" : "L";
+		}
 
 		if ( ent ) {
 			CP( va( "print \"%s%s%2d%s^1:%s %-26s^7%s  ^3%s\n\"", ready, tc, idnum, coach, ( ( ref[0] ) ? "^3" : "^7" ), n2, rate, ref ) );

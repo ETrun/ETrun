@@ -211,13 +211,6 @@ void SP_info_player_checkpoint( gentity_t *ent );
 void SP_info_player_deathmatch( gentity_t *ent );
 
 void SP_info_player_intermission( gentity_t *ent );// Nico, note: keep this
-
-/* Nico, removed unused podium stuff
-void SP_info_firstplace( gentity_t *ent );
-void SP_info_secondplace( gentity_t *ent );
-void SP_info_thirdplace( gentity_t *ent );
-void SP_info_podium( gentity_t *ent );*/
-
 void SP_func_plat( gentity_t *ent );
 void SP_func_static( gentity_t *ent );
 void SP_func_leaky( gentity_t *ent ); //----(SA)	added
@@ -240,10 +233,6 @@ void SP_func_constructible( gentity_t *ent );
 void SP_func_brushmodel( gentity_t *ent );
 void SP_misc_constructiblemarker( gentity_t *ent );
 void SP_target_explosion( gentity_t *ent );
-
-/* Nico, removed mines
-void SP_misc_landmine( gentity_t *ent );*/
-
 void SP_trigger_always( gentity_t *ent );
 void SP_trigger_multiple( gentity_t *ent );
 void SP_trigger_push( gentity_t *ent );
@@ -643,9 +632,6 @@ spawn_t spawns[] = {
 	{"misc_constructiblemarker", SP_misc_constructiblemarker},
 	{"target_explosion", SP_target_explosion },
 
-	/* Nico, removed mines
-	{"misc_landmine",        SP_misc_landmine },*/
-
 	// Nico, bind timerun entities handlers
 
 	// Timer related
@@ -683,15 +669,10 @@ qboolean G_CallSpawn( gentity_t *ent ) {
 	for ( item = bg_itemlist + 1 ; item->classname ; item++ ) {
 		if ( !strcmp( item->classname, ent->classname ) ) {
 			// found it
-			/* Nico, removed LMS
-			if ( g_gametype.integer != GT_WOLF_LMS ) { // Gordon: lets not have items in last man standing for the moment*/
-				G_SpawnItem( ent, item );
+			G_SpawnItem( ent, item );
 
-				G_Script_ScriptParse( ent );
-				G_Script_ScriptEvent( ent, "spawn", "" );
-			// } else {
-			// 	return qfalse;
-			// }
+			G_Script_ScriptParse( ent );
+			G_Script_ScriptEvent( ent, "spawn", "" );
 			return qtrue;
 		}
 	}
@@ -703,7 +684,7 @@ qboolean G_CallSpawn( gentity_t *ent ) {
 			s->spawn( ent );
 
 			// RF, entity scripting
-			if ( /*ent->s.number >= MAX_CLIENTS &&*/ ent->scriptName ) {
+			if ( ent->scriptName ) {
 				G_Script_ScriptParse( ent );
 				G_Script_ScriptEvent( ent, "spawn", "" );
 			}
@@ -843,12 +824,6 @@ void G_SpawnGEntityFromSpawnVars( void ) {
 		if ( strstr( str, "allies" ) ) {
 			ent->allowteams |= ALLOW_ALLIED_TEAM;
 		}
-
-		/* Nico, removed disguise stuff
-		if ( strstr( str, "cvops" ) ) {
-			ent->allowteams |= ALLOW_DISGUISED_CVOPS;
-		}*/
-
 	}
 
 	if ( ent->targetname && *ent->targetname ) {
@@ -865,9 +840,6 @@ void G_SpawnGEntityFromSpawnVars( void ) {
 	if ( !G_CallSpawn( ent ) ) {
 		G_FreeEntity( ent );
 	}
-
-	// RF, try and move it into the bot entities if possible
-//	BotCheckBotGameEntity( ent );
 }
 
 
@@ -995,10 +967,6 @@ void SP_worldspawn( void ) {
 
 	trap_SetConfigstring( CS_MOTD, g_motd.string );     // message of the day
 
-	/* Nico, g_gravity is hardcoded as DEFAULT_GRAVITY
-	G_SpawnString( "gravity", "800", &s );
-	trap_Cvar_Set( "g_gravity", s );*/
-
 	G_SpawnString( "spawnflags", "0", &s );
 	g_entities[ENTITYNUM_WORLD].spawnflags = atoi( s );
 	g_entities[ENTITYNUM_WORLD].r.worldflags = g_entities[ENTITYNUM_WORLD].spawnflags;
@@ -1006,15 +974,8 @@ void SP_worldspawn( void ) {
 	g_entities[ENTITYNUM_WORLD].s.number = ENTITYNUM_WORLD;
 	g_entities[ENTITYNUM_WORLD].classname = "worldspawn";
 
-	// see if we want a warmup time
-	/* Nico, removed warmup
-	trap_SetConfigstring( CS_WARMUP, "" );*/
-
 	if ( g_restarted.integer ) {
 		trap_Cvar_Set( "g_restarted", "0" );
-
-		/* Nico, removed warmup
-		level.warmupTime = 0;*/
 	}
 
 	if ( g_gamestate.integer == GS_PLAYING ) {

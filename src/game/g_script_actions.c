@@ -2811,11 +2811,6 @@ qboolean G_ScriptAction_VoiceAnnounce( gentity_t *ent, char *params ) {
 	char *pString, *token;
 	int num, sysmsg;
 
-	/* Nico, removed intermission
-	if ( g_gamestate.integer == GS_INTERMISSION ) {
-		return qtrue;
-	}*/
-
 	pString = params;
 	token = COM_Parse( &pString );
 	if ( !token[0] ) {
@@ -2858,11 +2853,6 @@ qboolean G_ScriptAction_SetWinner( gentity_t *ent, char *params ) {
 	char cs[MAX_STRING_CHARS];
 	int num;
 
-	/* Nico, removed intermission
-	if ( g_gamestate.integer == GS_INTERMISSION ) {
-		return qtrue;
-	}*/
-
 	pString = params;
 	token = COM_Parse( &pString );
 	if ( !token[0] ) {
@@ -2873,11 +2863,6 @@ qboolean G_ScriptAction_SetWinner( gentity_t *ent, char *params ) {
 	if ( num < -1 || num > 1 ) {
 		G_Error( "G_ScriptAction_SetWinner: Invalid team number\n" );
 	}
-
-	/* Nico, removed LMS
-	if ( g_gametype.integer == GT_WOLF_LMS ) {
-		num = -1;
-	}*/
 
 	trap_GetConfigstring( CS_MULTI_MAPWINNER, cs, sizeof( cs ) );
 
@@ -2903,11 +2888,6 @@ qboolean G_ScriptAction_SetDefendingTeam( gentity_t *ent, char *params ) {
 	char *pString, *token;
 	char cs[MAX_STRING_CHARS];
 	int num;
-
-	/* Nico, removed intermission
-	if ( g_gamestate.integer == GS_INTERMISSION ) {
-		return qtrue;
-	}*/
 
 	pString = params;
 	token = COM_Parse( &pString );
@@ -3067,11 +3047,6 @@ qboolean G_ScriptAction_Announce_Icon( gentity_t *ent, char *params ) {
 	char *pString, *token;
 	int iconnumber;
 
-	/* Nico, removed intermission
-	if ( g_gamestate.integer == GS_INTERMISSION ) {
-		return qtrue;
-	}*/
-
 	pString = params;
 
 	token = COM_Parse( &pString );
@@ -3103,11 +3078,6 @@ G_ScriptAction_Announce
 qboolean G_ScriptAction_Announce( gentity_t *ent, char *params ) {
 	char *pString, *token;
 
-	/* Nico, removed intermission
-	if ( g_gamestate.integer == GS_INTERMISSION ) {
-		return qtrue;
-	}*/
-
 	pString = params;
 	token = COM_Parse( &pString );
 	if ( !token[0] ) {
@@ -3126,18 +3096,8 @@ G_ScriptAction_EndRound
   syntax: wm_endround <>
 ===================
 */
-/* Nico, removed gametypes
-extern void LogExit( const char *string );*/
 
 qboolean G_ScriptAction_EndRound( gentity_t *ent, char *params ) {
-
-	/* Nico, removed intermission
-	if ( g_gamestate.integer == GS_INTERMISSION ) {
-		return qtrue;
-	}*/
-
-	/* Nico, removed gametypes
-	LogExit( "Wolf EndRound." );*/
 	G_Printf("Warning: G_ScriptAction_EndRound ignored\n");
 
 	return qtrue;
@@ -3862,11 +3822,6 @@ G_ScriptAction_AbortIfWarmup
 =====================
 */
 qboolean G_ScriptAction_AbortIfWarmup( gentity_t *ent, char *params ) {
-	/* Nico, removed warmup
-	if ( level.warmupTime ) {
-		// abort the current script
-		ent->scriptStatus.scriptStackHead = ent->scriptEvents[ent->scriptStatus.scriptEventIndex].stack.numItems;
-	}*/
 	G_Printf("Warning: G_ScriptAction_AbortIfWarmup ignored\n");
 	return qtrue;
 }
@@ -3877,12 +3832,7 @@ G_ScriptAction_AbortIfNotSinglePlayer
 ====================
 */
 qboolean G_ScriptAction_AbortIfNotSinglePlayer( gentity_t *ent, char *params ) {
-	/* Nico, removed gametypes
-	if ( !G_IsSinglePlayerGame() ) {*/
-		// abort the current script
-		ent->scriptStatus.scriptStackHead = ent->scriptEvents[ent->scriptStatus.scriptEventIndex].stack.numItems;
-	// }
-	//
+	ent->scriptStatus.scriptStackHead = ent->scriptEvents[ent->scriptStatus.scriptEventIndex].stack.numItems;
 	return qtrue;
 }
 

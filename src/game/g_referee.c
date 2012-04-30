@@ -43,12 +43,6 @@ If you have questions concerning this license or the applicable additional terms
 //	--> ref arg allows for the server console to utilize all referee commands (ent == NULL)
 //
 qboolean G_refCommandCheck( gentity_t *ent, char *cmd ) {
-
-	/* Nico, removed warmup
-	if ( !Q_stricmp( cmd, "allready" ) ) {
-		G_refAllReady_cmd( ent );
-	} else*/
-
 	if ( !Q_stricmp( cmd, "lock" ) ) {
 		G_refLockTeams_cmd( ent, qtrue );
 	} else if ( !Q_stricmp( cmd, "help" ) ) {
@@ -69,12 +63,7 @@ qboolean G_refCommandCheck( gentity_t *ent, char *cmd ) {
 		G_refLockTeams_cmd( ent, qfalse );
 	} else if ( !Q_stricmp( cmd, "unpause" ) ) {
 		G_refPause_cmd( ent, qfalse );
-	}
-	/* Nico, removed warmup
-	else if ( !Q_stricmp( cmd, "warmup" ) ) {
-		G_refWarmup_cmd( ent );
-	}*/
-	else if ( !Q_stricmp( cmd, "warn" ) ) {
+	} else if ( !Q_stricmp( cmd, "warn" ) ) {
 		G_refWarning_cmd( ent );
 	} else if ( !Q_stricmp( cmd, "mute" ) ) {
 		G_refMute_cmd( ent, qtrue );
@@ -173,33 +162,6 @@ void G_ref_cmd( gentity_t *ent, unsigned int dwCommand, qboolean fValue ) {
 	}
 }
 
-/* Nico, removed warmup
-// Readies all players in the game.
-void G_refAllReady_cmd( gentity_t *ent ) {
-	int i;
-	gclient_t *cl;
-
-	if ( g_gamestate.integer == GS_PLAYING ) {
-// rain - #105 - allow allready in intermission
-//	|| g_gamestate.integer == GS_INTERMISSION) {
-		G_refPrintf( ent, "Match already in progress!" );
-		return;
-	}
-
-	// Ready them all and lock the teams
-	for ( i = 0; i < level.numConnectedClients; i++ ) {
-		cl = level.clients + level.sortedClients[i];
-		if ( cl->sess.sessionTeam != TEAM_SPECTATOR ) {
-			cl->pers.ready = qtrue;
-		}
-	}
-
-	// Can we start?
-	level.ref_allready = qtrue;
-	G_readyMatchState();
-}*/
-
-
 // Changes team lock status
 void G_refLockTeams_cmd( gentity_t *ent, qboolean fLock ) {
 	char *status;
@@ -266,13 +228,6 @@ void G_refPlayerPut_cmd( gentity_t *ent, int team_id ) {
 	char arg[MAX_TOKEN_CHARS];
 	gentity_t *player;
 
-	// Works for teamplayish matches
-	/* Nico, removed gametypes
-	if ( g_gametype.integer < GT_WOLF ) {
-		G_refPrintf( ent, "\"put[allies|axis]\" only for team-based games!" );
-		return;
-	}*/
-
 	// Find the player to place.
 	trap_Argv( 2, arg, sizeof( arg ) );
 	if ( ( pid = ClientNumberFromString( ent, arg ) ) == -1 ) {
@@ -304,11 +259,6 @@ void G_refPlayerPut_cmd( gentity_t *ent, int team_id ) {
 	} else {
 		SetTeam( player, "blue", qtrue, -1, -1, qfalse );
 	}
-
-	/* Nico, removed warmup
-	if ( g_gamestate.integer == GS_WARMUP || g_gamestate.integer == GS_WARMUP_COUNTDOWN ) {
-		G_readyMatchState();
-	}*/
 }
 
 
@@ -317,13 +267,6 @@ void G_refRemove_cmd( gentity_t *ent ) {
 	int pid;
 	char arg[MAX_TOKEN_CHARS];
 	gentity_t *player;
-
-	// Works for teamplayish matches
-	/* Nico, removed gametypes
-	if ( g_gametype.integer < GT_WOLF ) {
-		G_refPrintf( ent, "\"remove\" only for team-based games!" );
-		return;
-	}*/
 
 	// Find the player to remove.
 	trap_Argv( 2, arg, sizeof( arg ) );
@@ -344,11 +287,6 @@ void G_refRemove_cmd( gentity_t *ent ) {
 	CPx( pid, va( "print \"^5You've been removed from the %s team\n\"", aTeams[player->client->sess.sessionTeam] ) );
 
 	SetTeam( player, "s", qtrue, -1, -1, qfalse );
-
-	/* Nico, removed warmup
-	if ( g_gamestate.integer == GS_WARMUP || g_gamestate.integer == GS_WARMUP_COUNTDOWN ) {
-		G_readyMatchState();
-	}*/
 }
 
 
@@ -364,9 +302,6 @@ void G_refSpeclockTeams_cmd( gentity_t *ent, qboolean fLock ) {
 
 	G_printFull( status, ent );
 
-	// Update viewers as necessary
-//	G_pollMultiPlayers();
-
 	if ( fLock ) {
 		level.server_settings |= CV_SVS_LOCKSPECS;
 	} else {
@@ -374,23 +309,6 @@ void G_refSpeclockTeams_cmd( gentity_t *ent, qboolean fLock ) {
 	}
 	trap_SetConfigstring( CS_SERVERTOGGLES, va( "%d", level.server_settings ) );
 }
-
-/* Nico, removed warmup
-void G_refWarmup_cmd( gentity_t* ent ) {
-	char cmd[MAX_TOKEN_CHARS];
-
-	trap_Argv( 2, cmd, sizeof( cmd ) );
-
-	if ( !*cmd || atoi( cmd ) < 0 ) {
-		trap_Cvar_VariableStringBuffer( "g_warmup", cmd, sizeof( cmd ) );
-		// Nico, removed unneeded linebreak
-		// http://games.chruker.dk/enemy_territory/modding_project_bugfix.php?bug_id=047
-		G_refPrintf( ent, "Warmup Time: %d", atoi( cmd ) );
-		return;
-	}
-
-	trap_Cvar_Set( "g_warmup", va( "%d", atoi( cmd ) ) );
-}*/
 
 void G_refWarning_cmd( gentity_t* ent ) {
 	char cmd[MAX_TOKEN_CHARS];
