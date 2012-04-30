@@ -1997,7 +1997,6 @@ tryagain:
 void Cmd_Activate2_f( gentity_t *ent ) {
 	trace_t tr;
 	vec3_t end;
-	gentity_t   *traceEnt;
 	vec3_t forward, right, up, offset;
 	qboolean pass2 = qfalse;
 
@@ -2021,8 +2020,6 @@ tryagain:
 	if ( tr.surfaceFlags & SURF_NOIMPACT || tr.entityNum == ENTITYNUM_WORLD ) {
 		return;
 	}
-
-	traceEnt = &g_entities[ tr.entityNum ];
 
 	if ( !pass2 ) {
 		pass2 = qtrue;

@@ -616,7 +616,6 @@ qboolean IsHeadShot( gentity_t *targ, vec3_t dir, vec3_t point, int mod ) {
 	gentity_t   *head;
 	trace_t tr;
 	vec3_t start, end;
-	gentity_t   *traceEnt;
 
 	// not a player or critter so bail
 	if ( !( targ->client ) ) {
@@ -637,8 +636,6 @@ qboolean IsHeadShot( gentity_t *targ, vec3_t dir, vec3_t point, int mod ) {
 	VectorCopy( point, start );
 	VectorMA( start, 64, dir, end );
 	trap_Trace( &tr, start, NULL, NULL, end, targ->s.number, MASK_SHOT );
-
-	traceEnt = &g_entities[ tr.entityNum ];
 
 	if ( g_debugBullets.integer >= 3 ) { // show hit player head bb
 		gentity_t *tent;
