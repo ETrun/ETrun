@@ -126,124 +126,6 @@ localEntity_t   *CG_AllocLocalEntity( void ) {
 	return le;
 }
 
-
-/*
-====================================================================================
-
-FRAGMENT PROCESSING
-
-A fragment localentity interacts with the environment in some way (hitting walls),
-or generates more localentities along a trail.
-
-====================================================================================
-*/
-
-/*
-================
-CG_BloodTrail
-
-Leave expanding blood puffs behind gibs
-================
-*/
-// use this to change between particle and trail code
-//#define BLOOD_PARTICLE_TRAIL
-/* Nico, removed blood
-void CG_BloodTrail( localEntity_t *le ) {
-	int t;
-	int t2;
-	int step;
-	vec3_t newOrigin;
-	float vl;   //bani
-
-#ifndef BLOOD_PARTICLE_TRAIL
-	static vec3_t col = {1,1,1};
-#endif
-
-	// centity_t   *cent; Nico, unused warning fix
-	// cent = &cg_entities[le->ownerNum];
-
-	if ( !cg_blood.integer ) {
-		return;
-	}
-
-	// step = 150;
-#ifdef BLOOD_PARTICLE_TRAIL
-	step = 10;
-#else
-	// time it takes to move 3 units
-	vl = VectorLength( le->pos.trDelta );
-	// rain - need to check FLT_EPSILON because floating-point math sucks <3
-	if ( vl < FLT_EPSILON ) {
-		return;
-	}
-	step = ( 1000 * 3 ) / vl;
-//bani - avoid another div by 0
-//zinx - check against <= 0 instead of == 0, because it can still wrap; (3000 / (FLT_EPSILON*11.7f)) < 0
-	if ( step <= 0 ) {
-		return;
-	}
-#endif
-
-	t = step * ( ( cg.time - cg.frametime + step ) / step );
-	t2 = step * ( cg.time / step );
-
-	for ( ; t <= t2; t += step ) {
-		BG_EvaluateTrajectory( &le->pos, t, newOrigin, qfalse, -1 );
-
-#ifdef BLOOD_PARTICLE_TRAIL
-		CG_Particle_Bleed( cgs.media.smokePuffShader, newOrigin, vec3_origin, 0, 500 + rand() % 200 );
-#else
-		// Ridah, blood trail using trail code (should be faster since we don't have to spawn as many)
-		le->headJuncIndex = CG_AddTrailJunc( le->headJuncIndex,
-											 le, // rain - zinx's trail fix
-											 cgs.media.bloodTrailShader,
-											 t,
-											 STYPE_STRETCH,
-											 newOrigin,
-											 180,
-											 1.0, // start alpha
-											 0.0, // end alpha
-											 12.0,
-											 12.0,
-											 TJFL_NOCULL,
-											 col, col,
-											 0, 0 );
-#endif
-
-	}
-}*/
-
-
-/*
-================
-CG_FragmentBounceMark
-================
-*/
-/* Nico, removed blood
-void CG_FragmentBounceMark( localEntity_t *le, trace_t *trace ) {
-	int radius;
-	vec4_t projection, color;
-
-	if ( le->leMarkType == LEMT_BLOOD ) {
-		static int lastBloodMark;
-
-		// don't drop too many blood marks
-		if ( !( lastBloodMark > cg.time || lastBloodMark > cg.time - 100 ) ) {
-			radius = 16 + ( rand() & 31 );
-			VectorSet( projection, 0, 0, -1 );
-			projection[ 3 ] = radius;
-			Vector4Set( color, 1.0f, 1.0f, 1.0f, 1.0f );
-			trap_R_ProjectDecal( cgs.media.bloodDotShaders[ rand() % 5 ], 1, (vec3_t*) trace->endpos, projection, color,
-								 cg_bloodTime.integer * 1000, ( cg_bloodTime.integer * 1000 ) >> 4 );
-			lastBloodMark = cg.time;
-		}
-	}
-
-	// don't allow a fragment to make multiple marks, or they
-	// pile up while settling
-	le->leMarkType = LEMT_NONE;
-}*/
-
 /*
 ================
 CG_FragmentBounceSound
@@ -541,12 +423,6 @@ void CG_AddFragment( localEntity_t *le ) {
 
 		trap_R_AddRefEntityToScene( &le->refEntity );
 
-		// add a blood trail
-		/* Nico, removed blood
-		if ( le->leBounceSoundType == LEBS_BLOOD ) {
-			CG_BloodTrail( le );
-		}*/
-
 		return;
 	}
 
@@ -595,15 +471,6 @@ void CG_AddFragment( localEntity_t *le ) {
 			return;
 		}
 	}
-
-	/* Nico, removed blood
-	if ( le->pos.trType == TR_STATIONARY && le->leMarkType == LEMT_BLOOD ) {
-
-		// leave a mark
-		if ( le->leMarkType ) {
-			CG_FragmentBounceMark( le, &trace );
-		}
-	}*/
 
 	// Ridah, add the flame
 	if ( hasFlame ) {
@@ -762,68 +629,6 @@ void CG_AddFuseSparkElements( localEntity_t *le ) {
 
 /*
 ================
-CG_AddBloodElements
-================
-*/
-/* Nico, removed blood
-void CG_AddBloodElements( localEntity_t *le ) {
-	vec3_t newOrigin;
-	trace_t trace;
-	float time;
-	float lifeFrac;
-	int numbounces;
-
-	time = (float)( cg.time - cg.frametime );
-
-	for ( numbounces = 0; numbounces < 5; numbounces++ ) {
-		// calculate new position
-		BG_EvaluateTrajectory( &le->pos, cg.time, newOrigin, qfalse, -1 );
-
-		// trace a line from previous position to new position
-		CG_Trace( &trace, le->refEntity.origin, NULL, NULL, newOrigin, -1, MASK_SHOT );
-
-		// if stuck, kill it
-		if ( trace.startsolid ) {
-			// HACK, some walls screw up, so just pass through if starting in a solid
-			VectorCopy( newOrigin, trace.endpos );
-			trace.fraction = 1.0;
-		}
-
-		// moved some distance
-		VectorCopy( trace.endpos, le->refEntity.origin );
-		time += cg.frametime * trace.fraction;
-
-		lifeFrac = (float)( cg.time - le->startTime ) / (float)( le->endTime - le->startTime );
-
-		// add a trail
-		le->headJuncIndex = CG_AddSparkJunc( le->headJuncIndex,
-											 le, // rain - zinx's trail fix
-											 cgs.media.bloodTrailShader,
-											 le->refEntity.origin,
-											 200,
-											 1.0 - lifeFrac, // start alpha
-											 1.0 - lifeFrac, // end alpha
-											 3.0,
-											 5.0 );
-
-		if ( trace.fraction < 1.0 ) {
-			// reflect the velocity on the trace plane
-			CG_ReflectVelocity( le, &trace );
-
-			// TODO: spawn a blood decal here?
-
-			// the intersection is a fraction of the frametime
-			le->pos.trTime = (int)time;
-		}
-
-		if ( trace.fraction == 1.0 || time >= (float)cg.time ) {
-			return;
-		}
-	}
-}*/
-
-/*
-================
 CG_AddDebrisElements
 ================
 */
@@ -943,10 +748,6 @@ void CG_AddShrapnel( localEntity_t *le ) {
 		CG_FreeLocalEntity( le );
 		return;
 	}
-
-	// leave a mark
-	/* Nico, removed blood
-	CG_FragmentBounceMark( le, &trace );*/
 
 	// do a bouncy sound
 	CG_FragmentBounceSound( le, &trace );
@@ -1253,10 +1054,6 @@ void CG_AddLocalEntities( void ) {
 			CG_AddDebrisElements( le );
 			break;
 		case LE_BLOOD:
-
-			/* Nico, removed blood
-			CG_AddBloodElements( le );*/
-
 			break;
 			// done.
 

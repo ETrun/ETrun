@@ -118,10 +118,6 @@ vmCvar_t cg_bobroll;
 vmCvar_t cg_bobyaw;
 vmCvar_t cg_swingSpeed;
 vmCvar_t cg_shadows;
-
-/* Nico, removed gib
-vmCvar_t cg_gibs;*/
-
 vmCvar_t cg_draw2D;
 vmCvar_t cg_drawFPS;
 vmCvar_t cg_drawSnapshot;
@@ -186,44 +182,22 @@ vmCvar_t cg_buildScript;
 vmCvar_t cg_coronafardist;
 vmCvar_t cg_coronas;
 vmCvar_t cg_paused;
-
-/* Nico, removed blood
-vmCvar_t cg_blood;*/
-
 vmCvar_t cg_predictItems;
 vmCvar_t cg_deferPlayers;
 vmCvar_t cg_drawTeamOverlay;
 vmCvar_t cg_enableBreath;
 vmCvar_t cg_autoactivate;
 vmCvar_t cg_blinktime;      //----(SA)	added
-
 vmCvar_t cg_smoothClients;
 vmCvar_t pmove_fixed;
 vmCvar_t pmove_msec;
-
-// Rafael - particle switch
 vmCvar_t cg_wolfparticles;
-// done
-
-// Ridah
-/* Nico, removed (c)g_gametype
-vmCvar_t cg_gameType;*/
-
-/* Nico, removed blood
-vmCvar_t cg_bloodTime;*/
-
 vmCvar_t cg_norender;
 vmCvar_t cg_skybox;
-
-// ydnar: say, team say, etc.
 vmCvar_t cg_message;
 vmCvar_t cg_messageType;
 vmCvar_t cg_messagePlayer;
 vmCvar_t cg_messagePlayerName;
-
-/* Nico, removed (c)g_movespeed
-vmCvar_t cg_movespeed;*/
-
 vmCvar_t cg_cameraMode;
 vmCvar_t cg_cameraOrbit;
 vmCvar_t cg_cameraOrbitDelay;
@@ -234,46 +208,16 @@ vmCvar_t cg_smallFont;
 vmCvar_t cg_bigFont;
 vmCvar_t cg_noTaunt;                // NERVE - SMF
 vmCvar_t cg_voiceSpriteTime;    // DHM - Nerve
-
 vmCvar_t cg_animState;
-
-/* Nico, removed compass
-vmCvar_t cg_drawCompass;*/
-
 vmCvar_t cg_drawNotifyText;
 vmCvar_t cg_quickMessageAlt;
 vmCvar_t cg_popupLimboMenu;
 vmCvar_t cg_descriptiveText;
-// -NERVE - SMF
-
-/* Nico, instant reswawn
-vmCvar_t cg_redlimbotime;
-vmCvar_t cg_bluelimbotime;*/
-
 vmCvar_t cg_antilag;
-
 vmCvar_t developer;
-
-// OSP
 vmCvar_t authLevel;
-
-/* Nico, removed ws related command
-vmCvar_t cf_wstats;                     // Font scale for +wstats window*/
-
-/* Nico, removed +topshots command
-vmCvar_t cf_wtopshots;                  // Font scale for +wtopshots window*/
-
-//vmCvar_t	cg_announcer;
 vmCvar_t cg_autoAction;
 vmCvar_t cg_autoReload;
-
-/* Nico, removed blood
-vmCvar_t cg_bloodDamageBlend;
-vmCvar_t cg_bloodFlash;*/
-
-/* Nico, removed complaints
-vmCvar_t cg_complaintPopUp;*/
-
 vmCvar_t cg_crosshairAlpha;
 vmCvar_t cg_crosshairAlphaAlt;
 vmCvar_t cg_crosshairColor;
@@ -286,9 +230,7 @@ vmCvar_t cg_printObjectiveInfo;
 vmCvar_t cg_specHelp;
 vmCvar_t cg_uinfo;
 vmCvar_t cg_useScreenshotJPEG;
-
 vmCvar_t ch_font;
-
 vmCvar_t demo_avifpsF1;
 vmCvar_t demo_avifpsF2;
 vmCvar_t demo_avifpsF3;
@@ -296,28 +238,17 @@ vmCvar_t demo_avifpsF4;
 vmCvar_t demo_avifpsF5;
 vmCvar_t demo_drawTimeScale;
 vmCvar_t demo_infoWindow;
-/* Nico, removed multiview
-vmCvar_t mv_sensitivity;*/
-
 vmCvar_t int_cl_maxpackets;
 vmCvar_t int_cl_timenudge;
 vmCvar_t int_m_pitch;
 vmCvar_t int_sensitivity;
 vmCvar_t int_timescale;
 vmCvar_t int_ui_blackout;
-// -OSP
-
 vmCvar_t cg_rconPassword;
 vmCvar_t cg_refereePassword;
 vmCvar_t cg_atmosphericEffects;
-// START Mad Doc - TDF
-/* Nico, instant reswawn
-vmCvar_t cg_drawRoundTimer;*/
-// END Mad Doc - TDF
-
 vmCvar_t cg_fastSolids;
 vmCvar_t cg_instanttapout;
-
 vmCvar_t cg_debugSkills;
 vmCvar_t cg_drawFireteamOverlay;
 vmCvar_t cg_drawSmallPopupIcons;
@@ -391,12 +322,6 @@ cvarTable_t cvarTable[] = {
 	{ &cg_letterbox, "cg_letterbox", "0", CVAR_TEMP },    //----(SA)	added
 	{ &cg_stereoSeparation, "cg_stereoSeparation", "0.4", CVAR_ARCHIVE  },
 	{ &cg_shadows, "cg_shadows", "1", CVAR_ARCHIVE  },
-
-	/* Nico, removed gib
-	{ &cg_gibs, "cg_gibs", "1", CVAR_ARCHIVE  },*/
-
-//bani - #127 - we now draw reticles always in non demoplayback
-//	{ &cg_draw2D, "cg_draw2D", "1", CVAR_CHEAT }, // JPW NERVE changed per atvi req to prevent sniper rifle zoom cheats
 	{ &cg_draw2D, "cg_draw2D", "1", CVAR_ARCHIVE },
 	{ &cg_drawSpreadScale, "cg_drawSpreadScale", "1", CVAR_ARCHIVE },
 	{ &cg_drawStatus, "cg_drawStatus", "1", CVAR_ARCHIVE  },
@@ -433,10 +358,6 @@ cvarTable_t cvarTable[] = {
 
 	// Ridah, more fluid rotations
 	{ &cg_swingSpeed, "cg_swingSpeed", "0.1", CVAR_CHEAT },   // was 0.3 for Q3
-
-	/* Nico, removed blood
-	{ &cg_bloodTime, "cg_bloodTime", "120", CVAR_ARCHIVE },*/
-
 	{ &cg_skybox, "cg_skybox", "1", CVAR_CHEAT },
 	// done.
 
@@ -498,29 +419,12 @@ cvarTable_t cvarTable[] = {
 
 	{ &cg_buildScript, "com_buildScript", "0", 0 },   // force loading of all possible data amd error on failures
 	{ &cg_paused, "cl_paused", "0", CVAR_ROM },
-
-	/* Nico, removed blood
-	{ &cg_blood, "cg_showblood", "1", CVAR_ARCHIVE },*/
-
 	// Rafael - particle switch
 	{ &cg_wolfparticles, "cg_wolfparticles", "1", CVAR_ARCHIVE },
 
-	/* Nico, removed (c)g_gametype
-	{ &cg_gameType, "g_gametype", "0", 0 }, // communicated by systeminfo*/
-
 	{ &cg_norender, "cg_norender", "0", 0 },  // only used during single player, to suppress rendering until the server is ready
 
-	/* Nico, instant reswawn
-	{ &cg_bluelimbotime,        "", "30000", 0 }, // communicated by systeminfo
-	{ &cg_redlimbotime,         "", "30000", 0 }, // communicated by systeminfo*/
-
-	/* Nico, removed (c)g_movespeed
-	{ &cg_movespeed, "g_movespeed", "76", 0 }, // actual movespeed of player*/
-
 	{ &cg_animState, "cg_animState", "0", CVAR_CHEAT},
-
-	/* Nico, removed compass
-	{ &cg_drawCompass, "cg_drawCompass", "1", CVAR_ARCHIVE },*/
 
 	{ &cg_drawNotifyText, "cg_drawNotifyText", "1", CVAR_ARCHIVE },
 	{ &cg_quickMessageAlt, "cg_quickMessageAlt", "0", CVAR_ARCHIVE },
@@ -529,21 +433,8 @@ cvarTable_t cvarTable[] = {
 	{ &cg_antilag, "g_antilag", "1", 0 },
 	{ &developer, "developer", "0", CVAR_CHEAT },
 
-	/* Nico, removed ws related command
-	{ &cf_wstats, "cf_wstats", "1.2", CVAR_ARCHIVE },*/
-
-	/* Nico, removed +topshots command
-	{ &cf_wtopshots, "cf_wtopshots", "1.0", CVAR_ARCHIVE },*/
-
 	{ &cg_autoAction, "cg_autoAction", "0", CVAR_ARCHIVE },
 	{ &cg_autoReload, "cg_autoReload", "1", CVAR_ARCHIVE },
-
-	/* Nico, removed blood
-	{ &cg_bloodDamageBlend, "cg_bloodDamageBlend", "1.0", CVAR_ARCHIVE },
-	{ &cg_bloodFlash, "cg_bloodFlash", "1.0", CVAR_ARCHIVE },*/
-
-	/* Nico, removed complaints
-	{ &cg_complaintPopUp, "cg_complaintPopUp", "1", CVAR_ARCHIVE },*/
 
 	{ &cg_crosshairAlpha, "cg_crosshairAlpha", "1.0", CVAR_ARCHIVE },
 	{ &cg_crosshairAlphaAlt, "cg_crosshairAlphaAlt", "1.0", CVAR_ARCHIVE },
@@ -579,9 +470,6 @@ cvarTable_t cvarTable[] = {
 
 	{ &cg_rconPassword, "auth_rconPassword", "", CVAR_TEMP},
 	{ &cg_refereePassword, "auth_refereePassword", "", CVAR_TEMP},
-
-	/* Nico, instant reswawn
-	{ &cg_drawRoundTimer, "cg_drawRoundTimer", "1", CVAR_ARCHIVE },*/
 
 	// Gordon: optimization cvars: 18/12/02 enabled by default now
 	{ &cg_fastSolids,       "cg_fastSolids", "1", CVAR_ARCHIVE },
@@ -752,9 +640,6 @@ void CG_setClientFlags( void ) {
 	// Client Flags
 	(
 		( ( cg_autoReload.integer > 0 ) ? CGF_AUTORELOAD : 0 ) |
-		// Nico, removed statsdump client command
-		// Nico, added pmove_fixed
-		//( ( cg_autoAction.integer & AA_STATSDUMP ) ? CGF_STATSDUMP : 0 ) |
 		( ( cg_autoactivate.integer > 0 ) ? CGF_AUTOACTIVATE : 0 ) |
 		( ( cg_predictItems.integer > 0 ) ? CGF_PREDICTITEMS : 0 ) |
 		((pmove_fixed.integer > 0) ? CGF_PMOVEFIXED : 0)
@@ -780,12 +665,6 @@ int CG_CrosshairPlayer( void ) {
 }
 
 int CG_LastAttacker( void ) {
-	// OSP - used for messaging clients in the currect active window
-	/* Nico, removed multiview
-	if ( cg.mvTotalClients > 0 ) {
-		return( cg.mvCurrentActive->mvInfo & MV_PID );
-	}*/
-	// OSP
 	return( ( !cg.attackerTime ) ? -1 : cg.snap->ps.persistant[PERS_ATTACKER] );
 }
 
@@ -907,19 +786,9 @@ void CG_nameCleanFilename( const char *pszIn, char *pszOut, unsigned int dwOutSi
 // Standard naming for screenshots/demos
 char *CG_generateFilename( void ) {
 	qtime_t ct;
-//	int index = (cg.snap == NULL || (cg.snap->ps.pm_flags & PMF_LIMBO)) ? cg.clientNum : cg.snap->ps.clientNum;
-//	char strCleanName[64];
 	const char *pszServerInfo = CG_ConfigString( CS_SERVERINFO );
-//	const char *pszPlayerInfo = CG_ConfigString(CS_PLAYERS + index);
 
 	trap_RealTime( &ct );
-//	CG_nameCleanFilename(Info_ValueForKey(pszPlayerInfo, "n"), strCleanName, sizeof(strCleanName));
-	/* Nico, removed multiview
-	return( va( "%d-%02d-%02d-%02d%02d%02d-%s%s",
-				1900 + ct.tm_year, ct.tm_mon + 1,ct.tm_mday,
-				ct.tm_hour, ct.tm_min, ct.tm_sec,
-				Info_ValueForKey( pszServerInfo, "mapname" ),
-				( cg.mvTotalClients < 1 ) ? "" : "-MVD" ) );*/
 	return(va( "%d-%02d-%02d-%02d%02d%02d-%s%s",
 				1900 + ct.tm_year, ct.tm_mon + 1,ct.tm_mday,
 				ct.tm_hour, ct.tm_min, ct.tm_sec,
@@ -973,12 +842,7 @@ void CG_LoadObjectiveData( void ) {
 	pc_token_t token, token2;
 	int handle;
 
-	/* Nico, removed LMS
-	if ( cg_gameType.integer == GT_WOLF_LMS ) {
-		handle = trap_PC_LoadSource( va( "maps/%s_lms.objdata", Q_strlwr( cgs.rawmapname ) ) );
-	} else {*/
-		handle = trap_PC_LoadSource( va( "maps/%s.objdata", Q_strlwr( cgs.rawmapname ) ) );
-	// }
+	handle = trap_PC_LoadSource( va( "maps/%s.objdata", Q_strlwr( cgs.rawmapname ) ) );
 
 	if ( !handle ) {
 		return;
@@ -1197,16 +1061,8 @@ static void CG_RegisterSounds( void ) {
 	cgs.media.noFireUnderwater =    trap_S_RegisterSound( "sound/weapons/misc/fire_water.wav", qfalse );
 	cgs.media.selectSound =         trap_S_RegisterSound( "sound/weapons/misc/change.wav", qfalse );
 	cgs.media.landHurt =            trap_S_RegisterSound( "sound/player/land_hurt.wav", qfalse );
-
-	/* Nico, removed gib
-	cgs.media.gibSound =            trap_S_RegisterSound( "sound/player/gib.wav", qfalse );*/
-
 	cgs.media.dynamitebounce1 =     trap_S_RegisterSound( "sound/weapons/dynamite/dynamite_bounce.wav", qfalse );
 	cgs.media.satchelbounce1 =      trap_S_RegisterSound( "sound/weapons/satchel/satchel_bounce.wav", qfalse );
-
-	/* Nico, removed mines
-	cgs.media.landminebounce1 =     trap_S_RegisterSound( "sound/weapons/landmine/mine_bounce.wav", qfalse );*/
-
 	cgs.media.watrInSound =         trap_S_RegisterSound( "sound/player/water_in.wav", qfalse );
 	cgs.media.watrOutSound =        trap_S_RegisterSound( "sound/player/water_out.wav", qfalse );
 	cgs.media.watrUnSound =         trap_S_RegisterSound( "sound/player/water_un.wav", qfalse );
@@ -1331,11 +1187,6 @@ static void CG_RegisterSounds( void ) {
 
 	cgs.media.sfx_satchelexp =      trap_S_RegisterSound( "sound/weapons/satchel/satchel_expl.wav", qfalse );
 	cgs.media.sfx_satchelexpDist =  trap_S_RegisterSound( "sound/weapons/satchel/satchel_expl_far.wav", qfalse );
-
-	/* Nico, removed mines
-	cgs.media.sfx_landmineexp =     trap_S_RegisterSound( "sound/weapons/landmine/mine_expl.wav", qfalse );
-	cgs.media.sfx_landmineexpDist = trap_S_RegisterSound( "sound/weapons/landmine/mine_expl_far.wav", qfalse );*/
-
 	cgs.media.sfx_mortarexp[0] =    trap_S_RegisterSound( "sound/weapons/mortar/mortar_expl1.wav", qfalse );
 	cgs.media.sfx_mortarexp[1] =    trap_S_RegisterSound( "sound/weapons/mortar/mortar_expl2.wav", qfalse );
 	cgs.media.sfx_mortarexp[2] =    trap_S_RegisterSound( "sound/weapons/mortar/mortar_expl3.wav", qfalse );
@@ -1382,16 +1233,6 @@ static void CG_RegisterSounds( void ) {
 
 	cgs.media.sndMedicCall[0] =     trap_S_RegisterSound( "sound/chat/axis/medic.wav", qfalse );
 	cgs.media.sndMedicCall[1] =     trap_S_RegisterSound( "sound/chat/allies/medic.wav", qfalse );
-
-
-	// FIXME: send as a special event
-	/* Nico, removed airstrikes
-	trap_S_RegisterSound( "sound/weapons/artillery/artillery_fly_1.wav", qfalse );
-	trap_S_RegisterSound( "sound/weapons/artillery/artillery_fly_2.wav", qfalse );
-	trap_S_RegisterSound( "sound/weapons/artillery/artillery_fly_3.wav", qfalse );
-
-	trap_S_RegisterSound( "sound/weapons/airstrike/airstrike_plane.wav", qfalse );*/
-
 
 	if ( cg_buildScript.integer ) {
 		CG_PrecacheFXSounds();
@@ -1495,10 +1336,6 @@ static void CG_RegisterGraphics( void ) {
 	cgs.media.hud5Shader = trap_R_RegisterShader( "jpwhud5" );
 	cgs.media.smokePuffShader = trap_R_RegisterShader( "smokePuff" );
 
-	// RF, blood cloud
-	/* Nico, removed blood
-	cgs.media.bloodCloudShader = trap_R_RegisterShader( "bloodCloud" );*/
-
 	// Rafael - cannon
 	cgs.media.smokePuffShaderdirty = trap_R_RegisterShader( "smokePuffdirty" );
 	cgs.media.smokePuffShaderb1 = trap_R_RegisterShader( "smokePuffblack1" );
@@ -1508,25 +1345,12 @@ static void CG_RegisterGraphics( void ) {
 	cgs.media.smokePuffShaderb5 = trap_R_RegisterShader( "smokePuffblack5" );
 	// done
 
-	// Rafael - bleedanim
-	/* Nico, removed bleed
-	for ( i = 0; i < 5; i++ ) {
-		cgs.media.viewBloodAni[i] = trap_R_RegisterShader( va( "viewBloodBlend%i", i + 1 ) );
-	}*/
-
-	/* Nico, removed blood
-	cgs.media.viewFlashBlood = trap_R_RegisterShader( "viewFlashBlood" );*/
-
 	for ( i = 0; i < 16; i++ ) {
 		cgs.media.viewFlashFire[i] = trap_R_RegisterShader( va( "viewFlashFire%i", i + 1 ) );
 	}
 
 	cgs.media.smokePuffRageProShader = trap_R_RegisterShader( "smokePuffRagePro" );
 	cgs.media.shotgunSmokePuffShader = trap_R_RegisterShader( "shotgunSmokePuff" );
-
-	/* Nico, removed blood
-	cgs.media.bloodTrailShader      = trap_R_RegisterShader( "bloodTrail" );*/
-
 	cgs.media.lagometerShader       = trap_R_RegisterShader( "lagometer" );
 	cgs.media.reticleShaderSimple   = trap_R_RegisterShader( "gfx/misc/reticlesimple" );
 	cgs.media.binocShaderSimple     = trap_R_RegisterShader( "gfx/misc/binocsimple"  );
@@ -1576,9 +1400,6 @@ static void CG_RegisterGraphics( void ) {
 	cgs.media.tankHintShader        = trap_R_RegisterShaderNoMip( "gfx/2d/tankHint" );
 	cgs.media.satchelchargeHintShader = trap_R_RegisterShaderNoMip( "gfx/2d/satchelchargeHint" ),
 
-	/* Nico, removed mines
-	cgs.media.landmineHintShader    = trap_R_RegisterShaderNoMip( "gfx/2d/landmineHint" );*/
-
 	cgs.media.uniformHintShader     = trap_R_RegisterShaderNoMip( "gfx/2d/uniformHint" );
 	cgs.media.waypointAttackShader  = trap_R_RegisterShaderNoMip( "sprites/waypoint_attack" );
 	cgs.media.waypointDefendShader  = trap_R_RegisterShaderNoMip( "sprites/waypoint_defend" );
@@ -1614,11 +1435,6 @@ static void CG_RegisterGraphics( void ) {
 		cgs.media.crosshairShader[i] = trap_R_RegisterShader( va( "gfx/2d/crosshair%c", 'a' + i ) );
 		cg.crosshairShaderAlt[i] = trap_R_RegisterShader( va( "gfx/2d/crosshair%c_alt", 'a' + i ) );
 	}
-
-	/* Nico, removed skills
-	for ( i = 0 ; i < SK_NUM_SKILLS ; i++ ) {
-		cgs.media.medals[i] = trap_R_RegisterShaderNoMip( va( "gfx/limbo/medals0%i", i ) );
-	}*/
 
 	cgs.media.backTileShader =  trap_R_RegisterShader( "gfx/2d/backtile" );
 	cgs.media.noammoShader =    trap_R_RegisterShader( "icons/noammo" );
@@ -1674,9 +1490,6 @@ static void CG_RegisterGraphics( void ) {
 	cgs.media.balloonShader = trap_R_RegisterShader( "sprites/balloon3" );
 
 	cgs.media.objectiveShader = trap_R_RegisterShader( "sprites/objective" );
-
-	/* Nico, removed blood
-	cgs.media.bloodExplosionShader = trap_R_RegisterShader( "bloodExplosion" );*/
 
 	//----(SA)	water splash
 	cgs.media.waterSplashModel = trap_R_RegisterModel( "models/weaphits/bullet.md3" );
@@ -1746,25 +1559,10 @@ static void CG_RegisterGraphics( void ) {
 	cgs.media.ccMortarTarget =          trap_R_RegisterShaderNoMip( "gfx/limbo/mort_target" );
 	cgs.media.ccMortarTargetArrow =     trap_R_RegisterShaderNoMip( "gfx/limbo/mort_targetarrow" );
 
-	/* Nico, removed skills
-	cgs.media.skillPics[SK_BATTLE_SENSE]                                = trap_R_RegisterShaderNoMip( "gfx/limbo/ic_battlesense" );
-	cgs.media.skillPics[SK_EXPLOSIVES_AND_CONSTRUCTION]                 = trap_R_RegisterShaderNoMip( "gfx/limbo/ic_engineer" );
-	cgs.media.skillPics[SK_FIRST_AID]                                   = trap_R_RegisterShaderNoMip( "gfx/limbo/ic_medic" );
-	cgs.media.skillPics[SK_SIGNALS]                                     = trap_R_RegisterShaderNoMip( "gfx/limbo/ic_fieldops" );
-	cgs.media.skillPics[SK_LIGHT_WEAPONS]                               = trap_R_RegisterShaderNoMip( "gfx/limbo/ic_lightweap" );
-	cgs.media.skillPics[SK_HEAVY_WEAPONS]                               = trap_R_RegisterShaderNoMip( "gfx/limbo/ic_soldier" );
-	cgs.media.skillPics[SK_MILITARY_INTELLIGENCE_AND_SCOPED_WEAPONS]    = trap_R_RegisterShaderNoMip( "gfx/limbo/ic_covertops" );*/
-
 	WM_RegisterWeaponTypeShaders();
-
-	/* Nico, removed rankicons
-	CG_LoadRankIcons();*/
 
 	// Gordon: limbo menu setup
 	CG_LimboPanel_Init();
-
-	/* Nico, removed debriefing TEST
-	CG_ChatPanel_Setup();*/
 
 	CG_Fireteams_Setup();
 
@@ -1848,13 +1646,6 @@ static void CG_RegisterGraphics( void ) {
 	cgs.media.bulletMarkShaderWood =    trap_R_RegisterShaderNoMip( "gfx/damage/wood_mrk" );
 	cgs.media.bulletMarkShaderGlass =   trap_R_RegisterShaderNoMip( "gfx/damage/glass_mrk" );
 
-	/* Nico, removed blood
-	for ( i = 0 ; i < 5 ; i++ ) {
-		char name[32];
-		Com_sprintf( name, sizeof( name ), "blood_dot%i", i + 1 );
-		cgs.media.bloodDotShaders[i] = trap_R_RegisterShader( name );
-	}*/
-
 	CG_LoadingString( " - inline models" );
 
 	// register the inline models
@@ -1862,8 +1653,6 @@ static void CG_RegisterGraphics( void ) {
 	// TAT 12/23/2002 - as a safety check, let's not let the number of models exceed MAX_MODELS
 	if ( cgs.numInlineModels > MAX_MODELS ) {
 		CG_Error( "CG_RegisterGraphics: Too many inline models: %i\n", cgs.numInlineModels );
-		//CG_Printf( S_COLOR_RED "WARNING: CG_RegisterGraphics: Too many inline models: %i\n", cgs.numInlineModels );
-		//cgs.numInlineModels = MAX_MODELS;
 	}
 
 	for ( i = 1 ; i < cgs.numInlineModels ; i++ ) {
@@ -1960,9 +1749,6 @@ static void CG_RegisterGraphics( void ) {
 	trap_R_RegisterFont( "ariblk", 16, &cgs.media.limboFont1_lo );
 	trap_R_RegisterFont( "courbd", 30, &cgs.media.limboFont2 );
 
-	/* Nico, removed skills
-	cgs.media.medal_back =              trap_R_RegisterShaderNoMip( "gfx/limbo/medal_back" );*/
-
 	cgs.media.limboNumber_roll =        trap_R_RegisterShaderNoMip( "gfx/limbo/number_roll" );
 	cgs.media.limboNumber_back =        trap_R_RegisterShaderNoMip( "gfx/limbo/number_back" );
 	cgs.media.limboStar_roll =          trap_R_RegisterShaderNoMip( "gfx/limbo/skill_roll" );
@@ -2037,9 +1823,6 @@ static void CG_RegisterGraphics( void ) {
 	cgs.media.limboBriefingButtonStopOff =      trap_R_RegisterShaderNoMip( "gfx/limbo/but_stop_off" );
 
 	cgs.media.limboSpectator =                  trap_R_RegisterShaderNoMip( "gfx/limbo/spectator" );
-
-	/* Nico, removed stuff in limbo
-	cgs.media.limboRadioBroadcast =             trap_R_RegisterShaderNoMip( "ui/assets/radio_tower" );*/
 
 	cgs.media.cursorIcon =                      trap_R_RegisterShaderNoMip( "ui/assets/3_cursor3" );
 
@@ -2708,11 +2491,6 @@ void CG_Init( int serverMessageNum, int serverCommandSequence, int clientNum, qb
 
 	cgs.initing = qtrue;
 
-	/* Nico, removed airstrikes
-	for ( i = 0; i < MAX_CLIENTS; i++ ) {
-		cg.artilleryRequestTime[i] = -99999;
-	}*/
-
 	CG_InitStatsDebug();
 
 	cgs.ccZoomFactor = 1.f;
@@ -2733,10 +2511,6 @@ void CG_Init( int serverMessageNum, int serverCommandSequence, int clientNum, qb
 
 	cgs.processedSnapshotNum = serverMessageNum;
 	cgs.serverCommandSequence = serverCommandSequence;
-
-	/* Nico, removed stuff in limbo
-	cgs.ccRequestedObjective = -1;
-	cgs.ccCurrentCamObjective = -2;*/
 
 	// Nico, bugfix on loading screen
 	// http://games.chruker.dk/enemy_territory/modding_project_bugfix.php?bug_id=079
@@ -2763,22 +2537,12 @@ void CG_Init( int serverMessageNum, int serverCommandSequence, int clientNum, qb
 	// get the gamestate from the client system
 	trap_GetGameState( &cgs.gameState );
 
-	/* Nico, removed warmup
-	cg.warmupCount = -1;*/
-
 	CG_ParseServerinfo();
 	CG_ParseWolfinfo();     // NERVE - SMF
 
 	cgs.campaignInfoLoaded = qfalse;
 
-	/* Nico, removed gametypes
-	if ( cgs.gametype == GT_WOLF_CAMPAIGN ) {
-		CG_LocateCampaign();
-	// Nico, removed LMS
-	// } else if ( cgs.gametype == GT_WOLF_STOPWATCH || cgs.gametype == GT_WOLF_LMS || cgs.gametype == GT_WOLF ) {
-	} else if ( cgs.gametype == GT_WOLF_STOPWATCH || cgs.gametype == GT_WOLF ) {*/
-		CG_LocateArena();
-	// }
+	CG_LocateArena();
 
 	CG_ClearTrails();
 	CG_ClearParticles();
@@ -2794,11 +2558,6 @@ void CG_Init( int serverMessageNum, int serverCommandSequence, int clientNum, qb
 
 	s = CG_ConfigString( CS_LEVEL_START_TIME );
 	cgs.levelStartTime = atoi( s );
-
-	/* Nico, removed intermission
-	s = CG_ConfigString( CS_INTERMISSION_START_TIME );
-	cgs.intermissionStartTime = atoi( s );*/
-
 
 	// OSP
 	CG_ParseServerVersionInfo( CG_ConfigString( CS_VERSIONINFO ) );
@@ -2881,10 +2640,6 @@ void CG_Init( int serverMessageNum, int serverCommandSequence, int clientNum, qb
 	trap_S_ClearLoopingSounds();
 	trap_S_ClearSounds( qfalse );
 
-	/* Nico, removed rounds
-	cg.teamWonRounds[1] = atoi( CG_ConfigString( CS_ROUNDSCORES1 ) );
-	cg.teamWonRounds[0] = atoi( CG_ConfigString( CS_ROUNDSCORES2 ) );*/
-
 	cg.filtercams = atoi( CG_ConfigString( CS_FILTERCAMS ) ) ? qtrue : qfalse;
 
 	CG_ParseFireteams();
@@ -2906,12 +2661,6 @@ void CG_Init( int serverMessageNum, int serverCommandSequence, int clientNum, qb
 	CG_SetupCabinets();
 
 	trap_S_FadeAllSound( 1.0f, 0, qfalse );   // fade sound up
-
-	// OSP
-	/* Nico, removed statsdump client command
-	cgs.dumpStatsFile = 0;
-	cgs.dumpStatsTime = 0;*/
-//	CG_Printf("Time taken: %i\n", trap_Milliseconds() - startat);
 }
 
 /*

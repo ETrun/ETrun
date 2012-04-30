@@ -1074,15 +1074,6 @@ qboolean CG_LimboPanel_RenderCounter_StartSet( panel_button_t* button ) {
 	return qfalse;
 }
 
-
-/* Nico, removed skills
-void CG_LimboPanel_RenderMedal( panel_button_t* button ) {
-	CG_DrawPic( button->rect.x, button->rect.y, button->rect.w, button->rect.h, cgs.media.medal_back );
-	if ( cgs.clientinfo[cg.clientNum].medals[button->data[0]] ) {
-		CG_DrawPic( button->rect.x - 2, button->rect.y, button->rect.w + 4, button->rect.h, cgs.media.medals[button->data[0]] );
-	}
-}*/
-
 qboolean CG_LimboPanel_RenderCounter_IsReversed( panel_button_t* button ) {
 	switch ( button->data[0] ) {
 	case 4:     // skill

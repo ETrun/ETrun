@@ -435,11 +435,6 @@ void CG_DrawCursorhint( rectDef_t *rect ) {
 		icon = cgs.media.uniformHintShader;
 		break;
 
-	/* Nico, removed mines
-	case HINT_LANDMINE:
-		icon = cgs.media.landmineHintShader;
-		break;*/
-
 	case HINT_CHAIR:
 		icon = cgs.media.notUsableHintShader;
 
@@ -735,12 +730,6 @@ void CG_MouseEvent( int x, int y ) {
 
 
 	default:
-		/* Nico, removed debriefing
-		if ( cg.snap->ps.pm_type == PM_INTERMISSION ) {
-			CG_Debriefing_MouseEvent( x, y );
-			return;
-		}*/
-
 		// default handling
 		if ( ( cg.predictedPlayerState.pm_type == PM_NORMAL ||
 			   cg.predictedPlayerState.pm_type == PM_SPECTATOR ) &&
@@ -789,9 +778,6 @@ void CG_EventHandling( int type, qboolean fForced ) {
 
 			trap_S_StopStreamingSound( -1 );
 
-			/* Nico, removed stuff in limbo
-			cg.limboEndCinematicTime = 0;*/
-
 			if ( fForced ) {
 				if ( cgs.limboLoadoutModified ) {
 					trap_SendClientCommand( "rs" );
@@ -812,12 +798,6 @@ void CG_EventHandling( int type, qboolean fForced ) {
 			cg.showFireteamMenu = qfalse;
 			trap_Cvar_Set( "cl_bypassmouseinput", "0" );
 		} 
-		/* Nico, removed intermission
-		else if ( cg.snap && cg.snap->ps.pm_type == PM_INTERMISSION && fForced ) {
-			trap_UI_Popup( UIMENU_INGAME );
-		}*/
-
-
 		break;
 	}
 
@@ -826,9 +806,6 @@ void CG_EventHandling( int type, qboolean fForced ) {
 
 	if ( type == CGAME_EVENT_NONE ) {
 		trap_Key_SetCatcher( trap_Key_GetCatcher() & ~KEYCATCH_CGAME );
-
-		/* Nico, removed commandmap
-		ccInitial = qfalse;*/
 
 		if ( cg.demoPlayback && cg.demohelpWindow != SHOW_OFF ) {
 			CG_ShowHelp_Off( &cg.demohelpWindow );
@@ -872,12 +849,6 @@ void CG_KeyEvent( int key, qboolean down ) {
 		break;
 
 	default:
-		/* Nico, removed debriefing
-		if ( cg.snap->ps.pm_type == PM_INTERMISSION ) {
-			CG_Debriefing_KeyEvent( key, down );
-			return;
-		}*/
-
 		// default handling
 		if ( !down ) {
 			return;
