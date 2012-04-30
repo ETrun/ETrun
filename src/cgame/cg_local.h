@@ -2462,7 +2462,6 @@ void CG_DrawInformation( qboolean forcerefresh );
 void CG_DemoClick( int key, qboolean down );
 void CG_ShowHelp_Off( int *status );
 void CG_ShowHelp_On( int *status );
-qboolean CG_ViewingDraw( void );
 
 //
 // cg_scoreboard.c

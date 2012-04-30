@@ -182,10 +182,7 @@ void Team_FragBonuses( gentity_t *targ, gentity_t *inflictor, gentity_t *attacke
 	// did the attacker frag the flag carrier?
 	if ( targ->client->ps.powerups[enemy_flag_pw] ) {
 		attacker->client->pers.teamState.lastfraggedcarrier = level.time;
-		AddScore( attacker, WOLF_FRAG_CARRIER_BONUS );
 		attacker->client->pers.teamState.fragcarrier++;
-
-		//G_AddExperience( attacker, 0.5f );
 
 		// the target had the flag, clear the hurt carrier
 		// field on the other team
@@ -244,30 +241,9 @@ void Team_FragBonuses( gentity_t *targ, gentity_t *inflictor, gentity_t *attacke
 			 attacker->client->sess.sessionTeam != targ->client->sess.sessionTeam ) {
 			// we defended the base flag
 			// JPW NERVE FIXME -- don't report flag defense messages, change to gooder message
-			AddScore( attacker, WOLF_FLAG_DEFENSE_BONUS );
-			//G_AddExperience( attacker, 0.5f );
 			attacker->client->pers.teamState.basedefense++;
 			return;
 		}
-
-/*		if (g_gametype.integer < GT_WOLF) { // JPW NERVE no attacker protect in wolf MP
-			if (carrier && carrier != attacker) {
-				VectorSubtract(targ->s.origin, carrier->s.origin, v1);
-				VectorSubtract(attacker->s.origin, carrier->s.origin, v1);
-
-				if (VectorLengthSquared(v1) < SQR(CTF_ATTACKER_PROTECT_RADIUS) ||
-					VectorLengthSquared(v2) < SQR(CTF_ATTACKER_PROTECT_RADIUS) ||
-					CanDamage(carrier, targ->s.origin) || CanDamage(carrier, attacker->s.origin)) {
-					AddScore(attacker, CTF_CARRIER_PROTECT_BONUS);
-					attacker->client->pers.teamState.carrierdefense++;
-					PrintMsg(NULL, "%s" S_COLOR_WHITE " defends the %s's flag carrier.\n",
-						attacker->client->pers.netname,
-						TeamName(attacker->client->sess.sessionTeam));
-					return;
-				}
-			}
-		}*/
-
 	} // JPW NERVE
 
 // JPW NERVE -- look for nearby checkpoints and spawnpoints
@@ -276,13 +252,6 @@ void Team_FragBonuses( gentity_t *targ, gentity_t *inflictor, gentity_t *attacke
 		VectorSubtract( targ->client->ps.origin, flag->s.origin, v1 );
 		if ( ( flag->s.frame != WCP_ANIM_NOFLAG ) && ( flag->count == attacker->client->sess.sessionTeam ) ) {
 			if ( VectorLengthSquared( v1 ) < SQR( WOLF_CP_PROTECT_RADIUS ) ) {
-				if ( flag->spawnflags & 1 ) {                     // protected spawnpoint
-					AddScore( attacker, WOLF_SP_PROTECT_BONUS );
-					//G_AddExperience( attacker, 0.5f );
-				} else {
-					AddScore( attacker, WOLF_CP_PROTECT_BONUS );  // protected checkpoint
-					//G_AddExperience( attacker, 0.5f );
-				}
 			}
 		}
 	}
@@ -476,7 +445,6 @@ int Team_TouchOurFlag( gentity_t *ent, gentity_t *other, int team ) {
 
 	if ( ent->flags & FL_DROPPED_ITEM ) {
 		// hey, its not home.  return it by teleporting it back
-		AddScore( other, WOLF_SECURE_OBJ_BONUS );
 		if ( cl->sess.sessionTeam == TEAM_AXIS ) {
 			if ( level.gameManager ) {
 				G_Script_ScriptEvent( level.gameManager, "trigger", "axis_object_returned" );
@@ -507,8 +475,6 @@ int Team_TouchEnemyFlag( gentity_t *ent, gentity_t *other, int team ) {
 	gentity_t *tmp;
 
 	ent->s.density--;
-
-	AddScore( other, WOLF_STEAL_OBJ_BONUS );
 
 	tmp = ent->parent;
 	ent->parent = other;
@@ -1240,16 +1206,6 @@ void checkpoint_touch( gentity_t *self, gentity_t *other, trace_t *trace ) {
 		return;
 	}
 
-// JPW NERVE
-	if ( self->s.frame == WCP_ANIM_NOFLAG ) {
-		AddScore( other, WOLF_CP_CAPTURE );
-		//G_AddExperience( other, 0.8f );
-	} else {
-		AddScore( other, WOLF_CP_RECOVER );
-		//G_AddExperience( other, 0.8f );
-	}
-// jpw
-
 	// Set controlling team
 	self->count = other->client->sess.sessionTeam;
 
@@ -1303,16 +1259,6 @@ void checkpoint_spawntouch( gentity_t *self, gentity_t *other, trace_t *trace ) 
 	if ( self->count == other->client->sess.sessionTeam ) {
 		return;
 	}
-
-// JPW NERVE
-	if ( self->s.frame == WCP_ANIM_NOFLAG ) {
-		AddScore( other, WOLF_SP_CAPTURE );
-		//G_AddExperience( other, 0.8f );
-	} else {
-		AddScore( other, WOLF_SP_RECOVER );
-		//G_AddExperience( other, 0.8f );
-	}
-// jpw
 
 	if ( self->count < 0 ) {
 		firsttime = qtrue;

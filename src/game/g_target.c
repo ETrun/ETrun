@@ -131,8 +131,6 @@ void SP_target_delay( gentity_t *ent ) {
 The activator is given this many points.
 */
 void Use_Target_Score( gentity_t *ent, gentity_t *other, gentity_t *activator ) {
-	AddScore( activator, ent->count );
-	//G_AddExperience( activator, 0 ); // Gordon: FIXME: add this to part of the entity?
 }
 
 void SP_target_score( gentity_t *ent ) {

@@ -1302,8 +1302,6 @@ void InitClientPersistant( gclient_t *client );
 void InitClientResp( gclient_t *client );
 void ClientSpawn( gentity_t *ent, qboolean revived );
 void player_die( gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int damage, int mod );
-void AddScore( gentity_t *ent, int score );
-void AddKillScore( gentity_t *ent, int score );
 void CalculateRanks( void );
 qboolean SpotWouldTelefrag( gentity_t *spot );
 qboolean G_CheckForExistingModelInfo( bg_playerclass_t* classInfo, const char *modelName, animModelInfo_t **modelInfo );

@@ -460,9 +460,6 @@ void Weapon_Syringe( gentity_t *ent ) {
 					G_LogPrintf( "Medic_Revive: %d %d\n", ent - g_entities, traceEnt - g_entities );                // OSP
 
 				}
-				if ( !traceEnt->isProp ) { // Gordon: flag for if they were teamkilled or not
-					AddScore( ent, WOLF_MEDIC_BONUS ); // JPW NERVE props to the medic for the swift and dexterous bit o healitude
-				}
 			}
 		}
 	}
@@ -952,8 +949,6 @@ static qboolean TryConstructing( gentity_t *ent ) {
 			constructible->s.angles2[1] = 1;
 		}
 
-		AddScore( ent, constructible->accuracy ); // give drop score to guy who built it
-
 		G_SetEntState( constructible, STATE_DEFAULT );
 
 		// make destructable
@@ -1319,10 +1314,6 @@ void Weapon_Engineer( gentity_t *ent ) {
 
 			G_LogPrintf( "Repair: %d\n", ent - g_entities );    // OSP
 
-			if ( traceEnt->sound3to2 != ent->client->sess.sessionTeam ) {
-				AddScore( ent, WOLF_REPAIR_BONUS ); // JPW NERVE props to the E for the fixin'
-			}
-
 			traceEnt->takedamage = qtrue;
 			traceEnt->s.eFlags &= ~EF_SMOKING;
 
@@ -1557,7 +1548,6 @@ void Weapon_Engineer( gentity_t *ent ) {
 							G_Script_ScriptEvent( hit, "dynamited", "" );
 
 							if ( !( hit->spawnflags & OBJECTIVE_DESTROYED ) ) {
-								AddScore( traceEnt->parent, WOLF_DYNAMITE_PLANT ); // give drop score to guy who dropped it
 								if ( traceEnt->parent && traceEnt->parent->client ) {
 									G_LogPrintf( "Dynamite_Plant: %d\n", traceEnt->parent - g_entities );   // OSP
 								}
@@ -1627,7 +1617,6 @@ void Weapon_Engineer( gentity_t *ent ) {
 
 							if ( ( !( hit->parent->spawnflags & OBJECTIVE_DESTROYED ) ) &&
 								 hit->s.teamNum && ( hit->s.teamNum == ent->client->sess.sessionTeam ) ) { // ==, as it's inverse
-								AddScore( traceEnt->parent, WOLF_DYNAMITE_PLANT ); // give drop score to guy who dropped it
 								if ( traceEnt->parent && traceEnt->parent->client ) {
 									G_LogPrintf( "Dynamite_Plant: %d\n", traceEnt->parent - g_entities );   // OSP
 								}
@@ -1696,7 +1685,6 @@ void Weapon_Engineer( gentity_t *ent ) {
 
 							if ( ent->client->sess.sessionTeam == TEAM_AXIS ) {
 								if ( ( hit->spawnflags & AXIS_OBJECTIVE ) && ( !scored ) ) {
-									AddScore( ent,WOLF_DYNAMITE_DIFFUSE );
 									scored++;
 								}
 								if ( hit->target_ent ) {
@@ -1712,8 +1700,6 @@ void Weapon_Engineer( gentity_t *ent ) {
 								defusedObj = qtrue;
 							} else { // TEAM_ALLIES
 								if ( ( hit->spawnflags & ALLIED_OBJECTIVE ) && ( !scored ) ) {
-									AddScore( ent,WOLF_DYNAMITE_DIFFUSE );
-
 									scored++;
 									hit->spawnflags &= ~OBJECTIVE_DESTROYED; // "re-activate" objective since it wasn't destroyed
 								}
@@ -1774,7 +1760,6 @@ void Weapon_Engineer( gentity_t *ent ) {
 							// we got somthing to destroy
 							if ( ent->client->sess.sessionTeam == TEAM_AXIS ) {
 								if ( hit->s.teamNum == TEAM_AXIS && ( !scored ) ) {
-									AddScore( ent,WOLF_DYNAMITE_DIFFUSE );
 									if ( ent && ent->client ) {
 										G_LogPrintf( "Dynamite_Diffuse: %d\n", ent - g_entities );                  // OSP
 									}
@@ -1792,7 +1777,6 @@ void Weapon_Engineer( gentity_t *ent ) {
 
 							} else { // TEAM_ALLIES
 								if ( hit->s.teamNum == TEAM_ALLIES && ( !scored ) ) {
-									AddScore( ent,WOLF_DYNAMITE_DIFFUSE );
 									if ( ent && ent->client ) {
 										G_LogPrintf( "Dynamite_Diffuse: %d\n", ent - g_entities );                  // OSP
 									}

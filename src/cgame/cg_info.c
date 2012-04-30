@@ -290,8 +290,6 @@ void CG_DemoClick( int key, qboolean down ) {
 	}
 }
 
-
-
 //
 // Color/font info used for all overlays (below)
 //
@@ -306,37 +304,7 @@ void CG_DemoClick( int key, qboolean down ) {
 #define COLOR_TEXT          { 0.625f, 0.625f, 0.6f,  1.0f }
 
 #define FONT_HEADER         &cgs.media.limboFont1
-#define FONT_SUBHEADER      &cgs.media.limboFont1_lo
 #define FONT_TEXT           &cgs.media.limboFont2
-
-
-
-
-vec4_t color_bg     = COLOR_BG_VIEW;
-vec4_t color_border = COLOR_BORDER_VIEW;
-vec4_t color_hdr    = COLOR_HDR2;
-vec4_t color_name   = COLOR_TEXT;
-
-#define VD_X    4
-#define VD_Y    78
-#define VD_SCALE_X_HDR  0.25f
-#define VD_SCALE_Y_HDR  0.30f
-#define VD_SCALE_X_NAME 0.30f
-#define VD_SCALE_Y_NAME 0.30f
-
-qboolean CG_ViewingDraw() {
-	// Nico, #fixme
-	return( qfalse );
-}
-
-// Nico, #fixme
-#define GS_X    166
-#define GS_Y    10
-#define GS_W    308
-
-#define TS_X    -20     // spacing from right
-#define TS_Y    -60     // spacing from bottom
-#define TS_W    308
 
 #define DH_X    -20     // spacing from right
 #define DH_Y    -60     // spacing from bottom
@@ -450,9 +418,6 @@ void CG_DemoHelpDraw() {
 		CG_Text_Paint_Ext( x, y, tScale, tScale, tColor, "^nBACKSPACE ^mhelp on/off", 0.0f, 0, tStyle, tFont );
 	}
 }
-
-
-
 
 char *CG_getBindKeyName( const char *cmd, char *buf, int len ) {
 	int j;

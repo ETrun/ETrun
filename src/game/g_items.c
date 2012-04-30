@@ -483,7 +483,6 @@ int Pickup_Weapon( gentity_t *ent, gentity_t *other ) {
 		if ( other->client->ps.stats[STAT_PLAYER_CLASS] != PC_FIELDOPS ) {
 			if ( ent->parent && ent->parent->client && other->client->sess.sessionTeam == ent->parent->client->sess.sessionTeam ) {
 				if ( !( ent->parent->client->PCSpecialPickedUpCount % LT_SPECIAL_PICKUP_MOD ) ) {
-					AddScore( ent->parent, WOLF_AMMO_UP );
 					if ( ent->parent && ent->parent->client ) {
 						G_LogPrintf( "Ammo_Pack: %d %d\n", ent->parent - g_entities, other - g_entities );  // OSP
 					}
@@ -586,13 +585,11 @@ int Pickup_Weapon( gentity_t *ent, gentity_t *other ) {
 
 int Pickup_Health( gentity_t *ent, gentity_t *other ) {
 	int max;
-//	int			quantity = 0;
 
 	// if medic isn't giving ammo to self or another medic or the enemy, give him some props
 	if ( other->client->ps.stats[STAT_PLAYER_CLASS] != PC_MEDIC ) {
 		if ( ent->parent && ent->parent->client && other->client->sess.sessionTeam == ent->parent->client->sess.sessionTeam ) {
 			if ( !( ent->parent->client->PCSpecialPickedUpCount % MEDIC_SPECIAL_PICKUP_MOD ) ) {
-				AddScore( ent->parent, WOLF_HEALTH_UP );
 				G_LogPrintf( "Health_Pack: %d %d\n", ent->parent - g_entities, other - g_entities );    // OSP
 			}
 

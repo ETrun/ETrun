@@ -1714,17 +1714,6 @@ qboolean G_TankIsMountable( gentity_t* ent, gentity_t* other ) {
 	return qtrue;
 }
 
-// Rafael
-/*
-==================
-Cmd_Activate_f
-==================
-*/
-qboolean Do_Activate2_f( gentity_t *ent, gentity_t *traceEnt ) {
-	// Nico, #fixme
-	return qfalse;
-}
-
 // TAT 1/14/2003 - extracted out the functionality of Cmd_Activate_f from finding the object to use
 //		so we can force bots to use items, without worrying that they are looking EXACTLY at the target
 qboolean Do_Activate_f( gentity_t *ent, gentity_t *traceEnt ) {
@@ -2010,8 +1999,6 @@ void Cmd_Activate2_f( gentity_t *ent ) {
 	vec3_t end;
 	gentity_t   *traceEnt;
 	vec3_t forward, right, up, offset;
-//	int			activatetime = level.time;
-	qboolean found = qfalse;
 	qboolean pass2 = qfalse;
 
 	if ( ent->client->sess.playerType != PC_COVERTOPS ) {
@@ -2037,9 +2024,7 @@ tryagain:
 
 	traceEnt = &g_entities[ tr.entityNum ];
 
-	found = Do_Activate2_f( ent, traceEnt );
-
-	if ( !found && !pass2 ) {
+	if ( !pass2 ) {
 		pass2 = qtrue;
 		trap_Trace( &tr, offset, NULL, NULL, end, ent->s.number, ( CONTENTS_SOLID | CONTENTS_BODY | CONTENTS_CORPSE | CONTENTS_TRIGGER ) );
 		goto tryagain;

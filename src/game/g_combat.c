@@ -39,45 +39,6 @@ If you have questions concerning this license or the applicable additional terms
 extern vec3_t muzzleTrace;
 
 /*
-============
-AddScore
-
-Adds score to both the client and his team
-============
-*/
-// Nico, #fixme useless?
-void AddScore( gentity_t *ent, int score ) {
-	if ( !ent || !ent->client ) {
-		return;
-	}
-	// no scoring during pre-match warmup
-	if ( g_gamestate.integer != GS_PLAYING ) {
-		return;
-	}
-
-	ent->client->sess.game_points += score;
-
-	CalculateRanks();
-}
-
-/*
-============
-AddKillScore
-
-Adds score to both the client and his team, only used for playerkills, for lms
-============
-*/
-void AddKillScore( gentity_t *ent, int score ) {
-	if ( !ent || !ent->client ) {
-		return;
-	}
-
-	ent->client->sess.game_points += score;
-
-	CalculateRanks();
-}
-
-/*
 =================
 TossClientItems
 
@@ -364,16 +325,6 @@ void player_die( gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int
 			gentity_t *m = fire_grenade( self, launchspot, launchvel, self->s.weapon );
 			m->damage = 0;
 		}
-	}
-
-	if ( attacker && attacker->client ) {
-		if ( attacker == self || OnSameTeam( self, attacker ) ) {
-		} else {
-			// JPW NERVE -- mostly added as conveneience so we can tweak from the #defines all in one place
-			AddScore( attacker, WOLF_FRAG_BONUS );
-		}
-	} else {
-		AddScore( self, -1 );
 	}
 
 	// Add team bonuses
@@ -940,10 +891,6 @@ void G_Damage( gentity_t *targ, gentity_t *inflictor, gentity_t *attacker,  vec3
 
 				if ( ( mEnt = G_FindMapEntityData( &mapEntityData[1], targ - g_entities ) ) != NULL ) {
 					G_FreeMapEntityData( &mapEntityData[1], mEnt );
-				}
-
-				if ( attacker && attacker->client ) {
-					AddScore( attacker, 1 );
 				}
 
 				G_ExplodeMissile( targ );

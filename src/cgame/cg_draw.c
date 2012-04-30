@@ -1966,11 +1966,6 @@ CG_DrawFollow
 static qboolean CG_DrawFollow( void ) {
 	char deploytime[128];
 
-	// MV following info for mainview
-	if ( CG_ViewingDraw() ) {
-		return( qtrue );
-	}
-
 	if ( !( cg.snap->ps.pm_flags & PMF_FOLLOW ) ) {
 		return( qfalse );
 	}

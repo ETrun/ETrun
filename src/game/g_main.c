@@ -1610,9 +1610,6 @@ and team change.
 */
 void CalculateRanks( void ) {
 	int i;
-//	int		rank;
-//	int		score;
-//	int		newScore;
 	char teaminfo[TEAM_NUM_TEAMS][256];     // OSP
 	gclient_t   *cl;
 
