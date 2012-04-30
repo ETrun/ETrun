@@ -1364,7 +1364,6 @@ typedef struct {
 	qhandle_t selectCursor;
 	qhandle_t sizeCursor;
 
-	sfxHandle_t uniformPickup;
 	sfxHandle_t minePrimedSound;
 	sfxHandle_t buildDecayedSound;
 
@@ -1372,11 +1371,6 @@ typedef struct {
 	sfxHandle_t sndLimboFocus;
 	sfxHandle_t sndLimboFilter;
 	sfxHandle_t sndLimboCancel;
-
-	sfxHandle_t sndRankUp;
-	sfxHandle_t sndSkillUp;
-
-	sfxHandle_t sndMedicCall[2];
 
 	qhandle_t hWeaponSnd;
 	qhandle_t hWeaponEchoSnd;

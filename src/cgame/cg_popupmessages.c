@@ -63,11 +63,6 @@ pmListItemBig_t*    cg_pmWaitingListBig;
 
 pmListItemBig_t cg_pmStackBig[NUM_PM_STACK_ITEMS_BIG];
 
-void CG_PMItemBigSound( pmListItemBig_t* item );
-
-
-
-
 void CG_InitPMGraphics( void ) {
 	cgs.media.pmImages[PM_DYNAMITE] =       trap_R_RegisterShaderNoMip( "gfx/limbo/cm_dynamite" );
 	cgs.media.pmImages[PM_CONSTRUCTION] =   trap_R_RegisterShaderNoMip( "sprites/voiceChat" );
@@ -185,8 +180,6 @@ void CG_UpdatePMLists( void ) {
 				// there's another item waiting to come on, so kill us and shove the next one to the front
 				cg_pmWaitingListBig = listItem2->next;
 				cg_pmWaitingListBig->time = cg.time; // set time we popped up at
-
-				CG_PMItemBigSound( cg_pmWaitingListBig );
 
 				listItem2->inuse = qfalse;
 				listItem2->next = NULL;
@@ -308,23 +301,6 @@ void CG_AddPMItem( popupMessageType_t type, const char* message, qhandle_t shade
 	}
 }
 
-void CG_PMItemBigSound( pmListItemBig_t* item ) {
-	if ( !cg.snap ) {
-		return;
-	}
-
-	switch ( item->type ) {
-	case PM_RANK:
-		trap_S_StartSound( NULL, cg.snap->ps.clientNum, CHAN_AUTO, cgs.media.sndRankUp );
-		break;
-	case PM_SKILL:
-		trap_S_StartSound( NULL, cg.snap->ps.clientNum, CHAN_AUTO, cgs.media.sndSkillUp );
-		break;
-	default:
-		break;
-	}
-}
-
 void CG_AddPMItemBig( popupMessageBigType_t type, const char* message, qhandle_t shader ) {
 	pmListItemBig_t* listItem = CG_FindFreePMItem2();
 	if ( !listItem ) {
@@ -345,8 +321,6 @@ void CG_AddPMItemBig( popupMessageBigType_t type, const char* message, qhandle_t
 	if ( !cg_pmWaitingListBig ) {
 		cg_pmWaitingListBig = listItem;
 		listItem->time = cg.time;
-
-		CG_PMItemBigSound( listItem );
 	} else {
 		pmListItemBig_t* loop = cg_pmWaitingListBig;
 		while ( loop->next ) {

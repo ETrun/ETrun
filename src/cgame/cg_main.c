@@ -1143,16 +1143,6 @@ static void CG_RegisterSounds( void ) {
 		}
 	}
 
-/*
-	// OSP
-	cgs.media.countFight = trap_S_RegisterSound( "sound/osp/fight.wav" );
-	cgs.media.countPrepare = trap_S_RegisterSound( "sound/osp/prepare.wav" );
-	cgs.media.goatAxis = trap_S_RegisterSound( "sound/osp/goat.wav" );
-	cgs.media.winAllies = trap_S_RegisterSound( "sound/osp/winallies.wav" );
-	cgs.media.winAxis = trap_S_RegisterSound( "sound/osp/winaxis.wav" );
-	// OSP
-*/
-
 	cgs.media.flameSound =          trap_S_RegisterSound( "sound/weapons/flamethrower/flame_burn.wav", qfalse );
 	cgs.media.flameBlowSound =      trap_S_RegisterSound( "sound/weapons/flamethrower/flame_pilot.wav", qfalse );
 	cgs.media.flameStartSound =     trap_S_RegisterSound( "sound/weapons/flamethrower/flame_up.wav", qfalse );
@@ -1206,19 +1196,12 @@ static void CG_RegisterSounds( void ) {
 		cgs.media.sfx_bullet_waterhit[i] =      trap_S_RegisterSound( va( "sound/weapons/impact/water%i.wav", i + 1 ),   qfalse );
 	}
 
-	cgs.media.uniformPickup =       trap_S_RegisterSound( "sound/misc/body_pickup.wav", qfalse );
 	cgs.media.buildDecayedSound =   trap_S_RegisterSound( "sound/world/build_abort.wav", qfalse );
 
 	cgs.media.sndLimboSelect =      trap_S_RegisterSound( "sound/menu/select.wav", qfalse );
 	cgs.media.sndLimboFocus =       trap_S_RegisterSound( "sound/menu/focus.wav", qfalse );
 	cgs.media.sndLimboFilter =      trap_S_RegisterSound( "sound/menu/filter.wav", qfalse );
 	cgs.media.sndLimboCancel =      trap_S_RegisterSound( "sound/menu/cancel.wav", qfalse );
-
-	cgs.media.sndRankUp =           trap_S_RegisterSound( "sound/misc/rank_up.wav", qfalse );
-	cgs.media.sndSkillUp =          trap_S_RegisterSound( "sound/misc/skill_up.wav", qfalse );
-
-	cgs.media.sndMedicCall[0] =     trap_S_RegisterSound( "sound/chat/axis/medic.wav", qfalse );
-	cgs.media.sndMedicCall[1] =     trap_S_RegisterSound( "sound/chat/allies/medic.wav", qfalse );
 
 	if ( cg_buildScript.integer ) {
 		CG_PrecacheFXSounds();

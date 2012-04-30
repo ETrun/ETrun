@@ -2597,7 +2597,6 @@ void CG_EntityEvent( centity_t *cent, vec3_t position ) {
 		break;
 
 	case EV_DISGUISE_SOUND:
-		trap_S_StartSound( NULL, cent->currentState.number, CHAN_WEAPON, cgs.media.uniformPickup );
 		break;
 	case EV_BUILDDECAYED_SOUND:
 		trap_S_StartSound( cent->lerpOrigin, cent->currentState.number, CHAN_AUTO, cgs.media.buildDecayedSound );
@@ -2722,17 +2721,6 @@ void CG_EntityEvent( centity_t *cent, vec3_t position ) {
 	break;
 
 	case EV_MEDIC_CALL:
-		switch ( cgs.clientinfo[ cent->currentState.number ].team ) {
-		case TEAM_AXIS:
-			trap_S_StartSound( NULL, cent->currentState.number, CHAN_AUTO, cgs.media.sndMedicCall[0] );
-			break;
-		case TEAM_ALLIES:
-			trap_S_StartSound( NULL, cent->currentState.number, CHAN_AUTO, cgs.media.sndMedicCall[1] );
-			break;
-		default:     // shouldn't happen
-			break;
-		}
-
 		break;
 
 	default:
