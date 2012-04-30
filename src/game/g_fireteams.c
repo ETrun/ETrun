@@ -102,7 +102,7 @@ qboolean G_GetFireteam( fireteamData_t* ft ) {
 
 // Nico, allow cross-team fireteams
 int G_CountFireteams() {
-	int i, cnt = 0, team = 0;
+	int i, cnt = 0;
 
 	for ( i = 0; i < MAX_FIRETEAMS; i++ ) {
 		if (G_GetFireteam(&level.fireTeams[i])) {

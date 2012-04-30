@@ -1357,7 +1357,7 @@ void notify_timerun_stop(gentity_t *activator, int finishTime) {
 	gentity_t *o = NULL;
 	int timerunNum = 0;
 
-	G_DPrintf("notify_timerun_stop(%d, %d)\n", activator, finishTime);
+	G_DPrintf("notify_timerun_stop(%d, %d)\n", (int)activator, finishTime);
 
 	// Nico, check if timerun is active
 	if (!activator->client->timerunActive) {
