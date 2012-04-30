@@ -1199,7 +1199,6 @@ static void CG_RegisterSounds( void ) {
 	cgs.media.sfx_knifehit[4] =             trap_S_RegisterSound( "sound/weapons/knife/knife_hitwall1.wav", qfalse );
 
 	for ( i = 0; i < 5; i++ ) {
-		cgs.media.sfx_bullet_fleshhit[i] =      trap_S_RegisterSound( va( "sound/weapons/impact/flesh%i.wav", i + 1 ),   qfalse );
 		cgs.media.sfx_bullet_metalhit[i] =      trap_S_RegisterSound( va( "sound/weapons/impact/metal%i.wav", i + 1 ),   qfalse );
 		cgs.media.sfx_bullet_woodhit[i] =       trap_S_RegisterSound( va( "sound/weapons/impact/wood%i.wav",      i + 1 ),   qfalse );
 		cgs.media.sfx_bullet_glasshit[i] =      trap_S_RegisterSound( va( "sound/weapons/impact/glass%i.wav", i + 1 ),   qfalse );
@@ -1313,14 +1312,8 @@ static void CG_RegisterGraphics( void ) {
 		cgs.media.numberShaders[i] = trap_R_RegisterShader( sb_nums[i] );
 	}
 
-	cgs.media.fleshSmokePuffShader = trap_R_RegisterShader( "fleshimpactsmokepuff" ); // JPW NERVE
 	cgs.media.nerveTestShader = trap_R_RegisterShader( "jpwtest1" );
 	cgs.media.idTestShader = trap_R_RegisterShader( "jpwtest2" );
-	cgs.media.hud1Shader = trap_R_RegisterShader( "jpwhud1" );
-	cgs.media.hud2Shader = trap_R_RegisterShader( "jpwhud2" );
-	cgs.media.hud3Shader = trap_R_RegisterShader( "jpwhud3" );
-	cgs.media.hud4Shader = trap_R_RegisterShader( "jpwhud4" );
-	cgs.media.hud5Shader = trap_R_RegisterShader( "jpwhud5" );
 	cgs.media.smokePuffShader = trap_R_RegisterShader( "smokePuff" );
 
 	// Rafael - cannon
@@ -1377,8 +1370,6 @@ static void CG_RegisterGraphics( void ) {
 	cgs.media.holdableHintShader    = trap_R_RegisterShader( "gfx/2d/holdableHint" );
 	cgs.media.inventoryHintShader   = trap_R_RegisterShader( "gfx/2d/inventoryHint" );
 
-	cgs.media.friendShader          = trap_R_RegisterShaderNoMip( "gfx/2d/friendlycross.tga" );
-
 	cgs.media.buildHintShader       = trap_R_RegisterShader( "gfx/2d/buildHint" );       // DHM - Nerve
 	cgs.media.disarmHintShader      = trap_R_RegisterShader( "gfx/2d/disarmHint" );      // DHM - Nerve
 	cgs.media.reviveHintShader      = trap_R_RegisterShader( "gfx/2d/reviveHint" );      // DHM - Nerve
@@ -1395,14 +1386,10 @@ static void CG_RegisterGraphics( void ) {
 	}
 
 	cgs.media.backTileShader =  trap_R_RegisterShader( "gfx/2d/backtile" );
-	cgs.media.noammoShader =    trap_R_RegisterShader( "icons/noammo" );
 
 	cgs.media.teamStatusBar =   trap_R_RegisterShader( "gfx/2d/colorbar.tga" );
 
 	cgs.media.hudSprintBar =    trap_R_RegisterShader( "sprintbar" );
-
-	cgs.media.hudAlliedHelmet = trap_R_RegisterShader( "AlliedHelmet" );
-	cgs.media.hudAxisHelmet =   trap_R_RegisterShader( "AxisHelmet" );
 
 	CG_LoadingString( " - models" );
 
@@ -1439,10 +1426,7 @@ static void CG_RegisterGraphics( void ) {
 	//----(SA) end
 
 	cgs.media.spawnInvincibleShader = trap_R_RegisterShader( "sprites/shield" );
-	cgs.media.scoreEliminatedShader = trap_R_RegisterShader( "sprites/skull" );
 	cgs.media.medicReviveShader = trap_R_RegisterShader( "sprites/medic_revive" );
-
-	cgs.media.destroyShader = trap_R_RegisterShader( "sprites/destroy" );
 
 	cgs.media.voiceChatShader = trap_R_RegisterShader( "sprites/voiceChat" );
 	cgs.media.balloonShader = trap_R_RegisterShader( "sprites/balloon3" );
@@ -1458,14 +1442,11 @@ static void CG_RegisterGraphics( void ) {
 	cgs.media.sparkParticleShader = trap_R_RegisterShader( "sparkParticle" );
 	cgs.media.smokeTrailShader = trap_R_RegisterShader( "smokeTrail" );
 	cgs.media.flamethrowerFireStream = trap_R_RegisterShader( "flamethrowerFireStream" );
-	cgs.media.flamethrowerBlueStream = trap_R_RegisterShader( "flamethrowerBlueStream" );
 	cgs.media.onFireShader2 = trap_R_RegisterShader( "entityOnFire1" );
 	cgs.media.onFireShader = trap_R_RegisterShader( "entityOnFire2" );
-	cgs.media.viewFadeBlack = trap_R_RegisterShader( "viewFadeBlack" );
 	cgs.media.sparkFlareShader = trap_R_RegisterShader( "sparkFlareParticle" );
 	cgs.media.spotLightShader = trap_R_RegisterShader( "spotLight" );
 	cgs.media.spotLightBeamShader = trap_R_RegisterShader( "lightBeam" );
-	cgs.media.bulletParticleTrailShader = trap_R_RegisterShader( "bulletParticleTrail" );
 	cgs.media.smokeParticleShader = trap_R_RegisterShader( "smokeParticle" );
 
 	// DHM - Nerve :: bullet hitting dirt
@@ -1473,26 +1454,6 @@ static void CG_RegisterGraphics( void ) {
 	cgs.media.dirtParticle2Shader = trap_R_RegisterShader( "water_splash" );
 
 	cgs.media.genericConstructionShader =       trap_R_RegisterShader( "textures/sfx/construction" );
-	cgs.media.alliedUniformShader =             trap_R_RegisterShader( "sprites/uniform_allied" );
-	cgs.media.axisUniformShader =               trap_R_RegisterShader( "sprites/uniform_axis" );
-
-	cgs.media.ccPlayerHighlight =       trap_R_RegisterShaderNoMip( "ui/assets/mp_player_highlight.tga" );
-	cgs.media.ccConstructIcon[0] =      trap_R_RegisterShaderNoMip( "gfx/limbo/cm_constaxis" );
-	cgs.media.ccConstructIcon[1] =      trap_R_RegisterShaderNoMip( "gfx/limbo/cm_constallied" );
-	cgs.media.ccDestructIcon[0][0] =    trap_R_RegisterShaderNoMip( "gfx/limbo/cm_axisgren" );
-	cgs.media.ccDestructIcon[0][1] =    trap_R_RegisterShaderNoMip( "gfx/limbo/cm_alliedgren" );
-	cgs.media.ccDestructIcon[1][0] =    trap_R_RegisterShaderNoMip( "gfx/limbo/cm_satchel" );
-	cgs.media.ccDestructIcon[1][1] =    trap_R_RegisterShaderNoMip( "gfx/limbo/cm_satchel" );
-	cgs.media.ccDestructIcon[2][0] =    trap_R_RegisterShaderNoMip( "gfx/limbo/cm_dynamite" );
-	cgs.media.ccDestructIcon[2][1] =    trap_R_RegisterShaderNoMip( "gfx/limbo/cm_dynamite" );
-	cgs.media.ccTankIcon =              trap_R_RegisterShaderNoMip( "gfx/limbo/cm_churchill" );
-
-	cgs.media.ccCmdPost[0] =            trap_R_RegisterShaderNoMip( "gfx/limbo/cm_bo_axis" );
-	cgs.media.ccCmdPost[1] =            trap_R_RegisterShaderNoMip( "gfx/limbo/cm_bo_allied" );
-
-	cgs.media.ccMortarHit =             trap_R_RegisterShaderNoMip( "gfx/limbo/mort_hit" );
-	cgs.media.ccMortarTarget =          trap_R_RegisterShaderNoMip( "gfx/limbo/mort_target" );
-	cgs.media.ccMortarTargetArrow =     trap_R_RegisterShaderNoMip( "gfx/limbo/mort_targetarrow" );
 
 	WM_RegisterWeaponTypeShaders();
 
@@ -1549,7 +1510,6 @@ static void CG_RegisterGraphics( void ) {
 		CG_RegisterItemVisuals( i );
 	}
 
-	cgs.media.grenadeExplosionShader =  trap_R_RegisterShader( "grenadeExplosion" );
 	cgs.media.rocketExplosionShader = trap_R_RegisterShader( "rocketExplosion" );
 
 	cgs.media.hWeaponSnd =          trap_S_RegisterSound( "sound/weapons/mg42/mg42_fire.wav", qfalse  );
@@ -1559,8 +1519,6 @@ static void CG_RegisterGraphics( void ) {
 	cgs.media.hWeaponSnd_2 =        trap_S_RegisterSound( "sound/weapons/browning/browning_fire.wav", qfalse  );
 	cgs.media.hWeaponEchoSnd_2 =    trap_S_RegisterSound( "sound/weapons/browning/browning_far.wav", qfalse );
 	cgs.media.hWeaponHeatSnd_2 =    trap_S_RegisterSound( "sound/weapons/browning/browning_heat.wav", qfalse  );
-
-//	cgs.media.hflakWeaponSnd =		trap_S_RegisterSound( "sound/vehicles/misc/20mm_fire.wav", qfalse );
 
 	cgs.media.minePrimedSound =     trap_S_RegisterSound( "sound/weapons/landmine/mine_on.wav", qfalse );
 
@@ -1673,9 +1631,6 @@ static void CG_RegisterGraphics( void ) {
 	cgs.media.hMountedFPMG42 =      trap_R_RegisterModel( "models/multiplayer/mg42/v_mg42.md3" );
 	cgs.media.hMountedFPBrowning =  trap_R_RegisterModel( "models/multiplayer/browning/tankmounted.md3" );
 
-	// medic icon for commandmap
-	cgs.media.medicIcon = trap_R_RegisterShaderNoMip( "sprites/voiceMedic" );
-
 	trap_R_RegisterFont( "ariblk", 27, &cgs.media.limboFont1 );
 	trap_R_RegisterFont( "ariblk", 16, &cgs.media.limboFont1_lo );
 	trap_R_RegisterFont( "courbd", 30, &cgs.media.limboFont2 );
@@ -1703,9 +1658,6 @@ static void CG_RegisterGraphics( void ) {
 	cgs.media.limboClassButtons[PC_COVERTOPS] = trap_R_RegisterShaderNoMip( "gfx/limbo/ic_covertops" );
 	cgs.media.limboClassButtons[PC_FIELDOPS] =  trap_R_RegisterShaderNoMip( "gfx/limbo/ic_fieldops"      );
 	cgs.media.limboClassButtons[PC_MEDIC] =     trap_R_RegisterShaderNoMip( "gfx/limbo/ic_medic"     );
-	cgs.media.limboSkillsBS =                   trap_R_RegisterShaderNoMip( "gfx/limbo/ic_battlesense"   );
-	cgs.media.limboSkillsLW =                   trap_R_RegisterShaderNoMip( "gfx/limbo/ic_lightweap" );
-	//cgs.media.limboClassButtonBack =			trap_R_RegisterShaderNoMip( "gfx/limbo/but_class"		);
 
 	cgs.media.limboClassButton2Back_on =        trap_R_RegisterShaderNoMip( "gfx/limbo/skill_back_on"            );
 	cgs.media.limboClassButton2Back_off =       trap_R_RegisterShaderNoMip( "gfx/limbo/skill_back_off"           );
@@ -1724,17 +1676,11 @@ static void CG_RegisterGraphics( void ) {
 	cgs.media.limboTeamButtonAxis =             trap_R_RegisterShaderNoMip( "gfx/limbo/but_team_axis"    );
 	cgs.media.limboTeamButtonSpec =             trap_R_RegisterShaderNoMip( "gfx/limbo/but_team_spec"    );
 
-
-	cgs.media.limboBlendThingy =                trap_R_RegisterShaderNoMip( "gfx/limbo/cc_blend"     );
 	cgs.media.limboWeaponBlendThingy =          trap_R_RegisterShaderNoMip( "gfx/limbo/weap_blend"       );
-
-	//cgs.media.limboCursor_on =					trap_R_RegisterShaderNoMip( "gfx/limbo/et_cursor_on"	);
-	//cgs.media.limboCursor_off =					trap_R_RegisterShaderNoMip( "gfx/limbo/et_cursor_off"	);
 
 	cgs.media.limboCounterBorder =              trap_R_RegisterShaderNoMip( "gfx/limbo/number_border"    );
 
 	cgs.media.hudPowerIcon =                    trap_R_RegisterShaderNoMip( "gfx/hud/ic_power"           );
-	cgs.media.hudSprintIcon =                   trap_R_RegisterShaderNoMip( "gfx/hud/ic_stamina"     );
 	cgs.media.hudHealthIcon =                   trap_R_RegisterShaderNoMip( "gfx/hud/ic_health"          );
 
 	cgs.media.limboWeaponCard1 =                trap_R_RegisterShaderNoMip( "gfx/limbo/weaponcard01" );
@@ -1748,13 +1694,6 @@ static void CG_RegisterGraphics( void ) {
 
 	cgs.media.limboClassBar =                   trap_R_RegisterShaderNoMip( "gfx/limbo/lightup_bar" );
 
-	cgs.media.limboBriefingButtonOn =           trap_R_RegisterShaderNoMip( "gfx/limbo/but_play_on" );
-	cgs.media.limboBriefingButtonOff =          trap_R_RegisterShaderNoMip( "gfx/limbo/but_play_off" );
-	cgs.media.limboBriefingButtonStopOn =       trap_R_RegisterShaderNoMip( "gfx/limbo/but_stop_on" );
-	cgs.media.limboBriefingButtonStopOff =      trap_R_RegisterShaderNoMip( "gfx/limbo/but_stop_off" );
-
-	cgs.media.limboSpectator =                  trap_R_RegisterShaderNoMip( "gfx/limbo/spectator" );
-
 	cgs.media.cursorIcon =                      trap_R_RegisterShaderNoMip( "ui/assets/3_cursor3" );
 
 	cgs.media.hudDamagedStates[0] =             trap_R_RegisterSkin( "models/players/hud/damagedskins/blood01.skin" );
@@ -1764,8 +1703,6 @@ static void CG_RegisterGraphics( void ) {
 
 	cgs.media.browningIcon =                    trap_R_RegisterShaderNoMip( "icons/iconw_browning_1_select" );
 
-	cgs.media.axisFlag =                        trap_R_RegisterShaderNoMip( "gfx/limbo/flag_axis" );
-	cgs.media.alliedFlag =                      trap_R_RegisterShaderNoMip( "gfx/limbo/flag_allied" );
 	cgs.media.disconnectIcon =                  trap_R_RegisterShaderNoMip( "gfx/2d/net" );
 
 	for ( i = 0; i < 6; i++ ) {

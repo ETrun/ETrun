@@ -1125,18 +1125,10 @@ typedef struct {
 	qhandle_t charsetPropB;
 	qhandle_t whiteShader;
 
-	qhandle_t armorModel;
-
 // JPW NERVE
 	qhandle_t hudSprintBar;
-	qhandle_t hudAxisHelmet;
-	qhandle_t hudAlliedHelmet;
-	qhandle_t redColorBar;
-	qhandle_t blueColorBar;
 // jpw
 	qhandle_t teamStatusBar;
-
-	qhandle_t deferShader;
 
 	// debris
 	qhandle_t debBlock[6];
@@ -1144,55 +1136,32 @@ typedef struct {
 	qhandle_t debFabric[3];
 	qhandle_t debWood[6];
 
-	qhandle_t targetEffectExplosionShader;
-
 	qhandle_t machinegunBrassModel;
 	qhandle_t panzerfaustBrassModel;    //----(SA)	added
 
 	// Rafael
 	qhandle_t smallgunBrassModel;
 
-	qhandle_t shotgunBrassModel;
-
-	qhandle_t railRingsShader;
 	qhandle_t railCoreShader;
 	qhandle_t ropeShader;
 
-	qhandle_t lightningShader;
-
-	qhandle_t friendShader;
-
 	qhandle_t spawnInvincibleShader;
-	qhandle_t scoreEliminatedShader;
 
 	qhandle_t medicReviveShader;
 	qhandle_t voiceChatShader;
 	qhandle_t balloonShader;
 	qhandle_t objectiveShader;
 
-	qhandle_t vehicleShader;
-	qhandle_t destroyShader;
-
 	qhandle_t tracerShader;
 	qhandle_t crosshairShader[NUM_CROSSHAIRS];
 	qhandle_t lagometerShader;
 	qhandle_t backTileShader;
-	qhandle_t noammoShader;
 
-	qhandle_t reticleShader;
 	qhandle_t reticleShaderSimple;
-	qhandle_t snooperShader;
-	qhandle_t binocShader;
 	qhandle_t binocShaderSimple;
 // JPW NERVE
-	qhandle_t fleshSmokePuffShader;   // JPW NERVE for bullet hit flesh smoke puffs
 	qhandle_t nerveTestShader;
 	qhandle_t idTestShader;
-	qhandle_t hud1Shader;
-	qhandle_t hud2Shader;
-	qhandle_t hud3Shader;
-	qhandle_t hud4Shader;
-	qhandle_t hud5Shader;
 // jpw
 	qhandle_t smokePuffShader;
 	qhandle_t smokePuffRageProShader;
@@ -1305,11 +1274,7 @@ typedef struct {
 	qhandle_t thirdPersonBinocModel;    //----(SA)	added
 
 	// weapon effect shaders
-	qhandle_t railExplosionShader;
-	qhandle_t bulletExplosionShader;
 	qhandle_t rocketExplosionShader;
-	qhandle_t grenadeExplosionShader;
-	qhandle_t bfgExplosionShader;
 
 	// special effects models
 	qhandle_t teleportEffectModel;
@@ -1317,18 +1282,13 @@ typedef struct {
 
 	qhandle_t sparkParticleShader;
 	qhandle_t smokeTrailShader;
-	qhandle_t fireTrailShader;
+
 	qhandle_t flamethrowerFireStream;
-	qhandle_t flamethrowerBlueStream;
-	qhandle_t flamethrowerFuelStream;
-	qhandle_t flamethrowerFuelShader;
+
 	qhandle_t onFireShader, onFireShader2;
-	qhandle_t viewFadeBlack;
 	qhandle_t sparkFlareShader;
-	qhandle_t funnelFireShader[NUM_FUNNEL_SPRITES];
 	qhandle_t spotLightShader;
 	qhandle_t spotLightBeamShader;
-	qhandle_t bulletParticleTrailShader;
 	qhandle_t smokeParticleShader;
 
 	// DHM - Nerve :: bullet hitting dirt
@@ -1337,8 +1297,6 @@ typedef struct {
 	qhandle_t dirtParticle3Shader;
 
 	qhandle_t genericConstructionShader;
-	qhandle_t alliedUniformShader;
-	qhandle_t axisUniformShader;
 
 	// sounds
 	sfxHandle_t noFireUnderwater;
@@ -1359,7 +1317,6 @@ typedef struct {
 	sfxHandle_t sfx_brassSound[BRASSSOUND_MAX][3];
 	sfxHandle_t sfx_rubbleBounce[3];
 
-	sfxHandle_t sfx_bullet_fleshhit[5];
 	sfxHandle_t sfx_bullet_metalhit[5];
 	sfxHandle_t sfx_bullet_woodhit[5];
 	sfxHandle_t sfx_bullet_glasshit[5];
@@ -1368,7 +1325,6 @@ typedef struct {
 
 	sfxHandle_t sfx_dynamiteexp;
 	sfxHandle_t sfx_dynamiteexpDist;
-	sfxHandle_t sfx_spearhit;
 	sfxHandle_t sfx_knifehit[5];
 
 	sfxHandle_t noAmmoSound;
@@ -1404,13 +1360,6 @@ typedef struct {
 
 	sfxHandle_t dynamitebounce1;    //----(SA)	added
 
-	sfxHandle_t fkickwall;
-	sfxHandle_t fkickflesh;
-
-	sfxHandle_t fkickmiss;
-
-	int bulletHitFleshScript;
-
 	sfxHandle_t satchelbounce1;
 
 	qhandle_t cursor;
@@ -1419,7 +1368,6 @@ typedef struct {
 
 	sfxHandle_t uniformPickup;
 	sfxHandle_t minePrimedSound;
-	sfxHandle_t buildSound[4];
 	sfxHandle_t buildDecayedSound;
 
 	sfxHandle_t sndLimboSelect;
@@ -1431,26 +1379,6 @@ typedef struct {
 	sfxHandle_t sndSkillUp;
 
 	sfxHandle_t sndMedicCall[2];
-
-	qhandle_t ccPaper;
-	qhandle_t ccPaperConsole;
-	qhandle_t ccBars[3];
-	qhandle_t ccFlags[3];
-	qhandle_t ccLeather;
-	qhandle_t ccPlayerHighlight;
-	qhandle_t ccConstructIcon[2];
-	qhandle_t ccCmdPost[2];
-	qhandle_t ccDestructIcon[3][2];
-	qhandle_t ccTankIcon;
-
-	qhandle_t ccMortarHit;
-	qhandle_t ccMortarTarget;
-	qhandle_t ccMortarTargetArrow;
-
-	qhandle_t currentSquadBackground;
-
-	// Gordon: for commandmap
-	qhandle_t medicIcon;
 
 	qhandle_t hWeaponSnd;
 	qhandle_t hWeaponEchoSnd;
@@ -1496,27 +1424,19 @@ typedef struct {
 	qhandle_t limboTeamButtonAllies;
 	qhandle_t limboTeamButtonAxis;
 	qhandle_t limboTeamButtonSpec;
-	qhandle_t limboBlendThingy;
+
 	qhandle_t limboWeaponBlendThingy;
-	qhandle_t limboSkillsLW;
-	qhandle_t limboSkillsBS;
+
 	qhandle_t limboCounterBorder;
 	qhandle_t limboWeaponCard1;
 	qhandle_t limboWeaponCard2;
 	qhandle_t limboWeaponCardArrow;
 	qhandle_t limboObjectiveBack[3];
 	qhandle_t limboClassBar;
-	qhandle_t limboBriefingButtonOn;
-	qhandle_t limboBriefingButtonOff;
-	qhandle_t limboBriefingButtonStopOn;
-	qhandle_t limboBriefingButtonStopOff;
-
-	qhandle_t limboSpectator;
 
 	qhandle_t cursorIcon;
 
 	qhandle_t hudPowerIcon;
-	qhandle_t hudSprintIcon;
 	qhandle_t hudHealthIcon;
 
 	qhandle_t pmImages[PM_NUM_TYPES];
@@ -1529,9 +1449,6 @@ typedef struct {
 	qhandle_t hudDamagedStates[4];
 
 	qhandle_t browningIcon;
-
-	qhandle_t axisFlag;
-	qhandle_t alliedFlag;
 
 	qhandle_t disconnectIcon;
 
@@ -1914,11 +1831,6 @@ extern vmCvar_t cg_rconPassword;
 extern vmCvar_t cg_refereePassword;
 extern vmCvar_t cg_atmosphericEffects;
 
-// START Mad Doc - TDF
-/* Nico, instant reswawn
-extern vmCvar_t cg_drawRoundTimer;*/
-// END Mad Doc - TDF
-
 extern vmCvar_t cg_debugSkills;
 extern vmCvar_t cg_drawFireteamOverlay;
 extern vmCvar_t cg_drawSmallPopupIcons;
@@ -2117,13 +2029,6 @@ void CG_DrawCursorhint( rectDef_t *rect );
 void CG_DrawWeapStability( rectDef_t *rect );
 void CG_DrawWeapHeat( rectDef_t *rect, int align );
 void CG_DrawPlayerWeaponIcon( rectDef_t *rect, qboolean drawHighlighted, int align, vec4_t *refcolor );
-
-/* Nico, instant reswawn
-int CG_CalculateReinfTime( qboolean menu );*/
-
-/* Nico, instant reswawn
-float CG_CalculateReinfTime_Float( qboolean menu );*/
-
 void CG_Fade( int r, int g, int b, int a, int time, int duration );
 const char* CG_PickupItemText( int item );
 
@@ -2391,7 +2296,6 @@ void        CG_ParseEntitiesFromString( void );
 // cg_info.c
 //
 void CG_LoadingString( const char *s );
-//void CG_LoadingItem( int itemNum );
 void CG_LoadingClient( int clientNum );
 void CG_DrawInformation( qboolean forcerefresh );
 void CG_DemoClick( int key, qboolean down );
