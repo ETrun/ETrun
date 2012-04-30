@@ -607,11 +607,6 @@ void CG_LimboPanel_ClassBar_Draw( panel_button_t* button ) {
 void CG_LimboPanel_RenderClassButton( panel_button_t* button ) {
 	vec4_t clr = { 1.f, 1.f, 1.f, 0.4f };
 	vec4_t clr2 = { 1.f, 1.f, 1.f, 0.75f };
-	// vec4_t clr3 = { 1.f, 1.f, 1.f, 0.6f }; Nico, unused warning fix
-
-	// int i; Nico, unused warning fix
-	// float s0, t0, s1, t1; Nico, unused warning fix
-	// float x, y, w, h; Nico, unused warning fix
 
 	CG_DrawPic( button->rect.x, button->rect.y, button->rect.w, button->rect.h, cgs.media.limboClassButton2Back_off );
 
@@ -1203,7 +1198,6 @@ void CG_LimboPanel_Setup( void ) {
 	panel_button_t* button;
 	panel_button_t** buttons = limboPanelButtons;
 	clientInfo_t* ci = &cgs.clientinfo[cg.clientNum];
-	// bg_playerclass_t *classinfo; Nico, unused warning fix
 	int i;
 	char buffer[256];
 

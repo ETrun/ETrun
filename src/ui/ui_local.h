@@ -134,19 +134,9 @@ extern vmCvar_t ui_limboOptions;
 extern vmCvar_t ui_isSpectator;
 // -NERVE - SMF
 
-/* Nico, removed (c)g_gametype
-extern vmCvar_t g_gameType;*/
-
 extern vmCvar_t cl_profile;
 extern vmCvar_t cl_defaultProfile;
 extern vmCvar_t ui_profile;
-
-/* Nico, removed gametypes
-extern vmCvar_t ui_currentNetCampaign;
-extern vmCvar_t ui_currentCampaign;
-extern vmCvar_t ui_campaignIndex;
-extern vmCvar_t ui_currentCampaignCompleted;*/
-
 extern vmCvar_t ui_blackout;
 extern vmCvar_t cg_crosshairAlpha;
 extern vmCvar_t cg_crosshairAlphaAlt;
@@ -171,7 +161,6 @@ extern vmCvar_t ui_autoredirect;
 
 #define MAX_MENUDEPTH           8
 #define MAX_MENUITEMS           128 // JPW NERVE put this back for MP
-//#define MAX_MENUITEMS			256
 
 #define MTYPE_NULL              0
 #define MTYPE_SLIDER            1
@@ -406,20 +395,10 @@ int             UI_AdjustTimeByGame( int time );
 void            UI_ShowPostGame( qboolean newHigh );
 void            UI_ClearScores();
 void            UI_LoadArenas( void );
-
-/* Nico, removed gametypes
-void            UI_LoadCampaigns( void );*/
-
 mapInfo*        UI_FindMapInfoByMapname( const char* name );
 void            UI_ReadableSize( char *buf, int bufsize, int value );
 void            UI_PrintTime( char *buf, int bufsize, int time );
 void            Text_Paint_Ext( float x, float y, float scalex, float scaley, vec4_t color, const char *text, float adjust, int limit, int style, fontInfo_t* font );
-
-/* Nico, removed campaign client command
-void UI_Campaign_f( void );*/
-
-/* Nico, removed listcampaigns client command
-void UI_ListCampaigns_f( void );*/
 
 #define GLINFO_LINES        128
 
@@ -1200,9 +1179,5 @@ void UI_SPUnlock_f( void );
 void UI_SPUnlockMedals_f( void );
 
 void UI_InitGameinfo( void );
-
-/* Nico, removed gametypes
-const char* UI_DescriptionForCampaign( void );
-const char* UI_NameForCampaign( void );*/
 
 #endif

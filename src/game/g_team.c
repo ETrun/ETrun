@@ -473,16 +473,6 @@ void Team_DroppedFlagThink( gentity_t *ent ) {
 
 int Team_TouchOurFlag( gentity_t *ent, gentity_t *other, int team ) {
 	gclient_t *cl = other->client;
-//	gentity_t* te;
-	// int our_flag, enemy_flag; Nico, unused warning fix
-
-	// if ( cl->sess.sessionTeam == TEAM_AXIS ) {
-	// 	our_flag = PW_REDFLAG;
-	// 	enemy_flag = PW_BLUEFLAG;
-	// } else {
-	// 	our_flag = PW_BLUEFLAG;
-	// 	enemy_flag = PW_REDFLAG;
-	// }
 
 	if ( ent->flags & FL_DROPPED_ITEM ) {
 		// hey, its not home.  return it by teleporting it back
@@ -514,18 +504,11 @@ int Team_TouchOurFlag( gentity_t *ent, gentity_t *other, int team ) {
 
 int Team_TouchEnemyFlag( gentity_t *ent, gentity_t *other, int team ) {
 	gclient_t *cl = other->client;
-//	gentity_t *te;
 	gentity_t *tmp;
 
 	ent->s.density--;
 
-	// hey, its not our flag, pick it up
-// JPW NERVE
 	AddScore( other, WOLF_STEAL_OBJ_BONUS );
-	//G_AddExperience( other, 0.8f );
-//	te = G_TempEntity( other->s.pos.trBase, EV_GLOBAL_SOUND );
-//	te->r.svFlags |= SVF_BROADCAST;
-//	te->s.teamNum = cl->sess.sessionTeam;
 
 	tmp = ent->parent;
 	ent->parent = other;
@@ -535,10 +518,6 @@ int Team_TouchEnemyFlag( gentity_t *ent, gentity_t *other, int team ) {
 		pm->s.effect3Time = G_StringIndex( ent->message );
 		pm->s.effect2Time = TEAM_AXIS;
 		pm->s.density = 0; // 0 = stolen
-
-//		te->s.eventParm = G_SoundIndex( "sound/chat/axis/g-objective_taken.wav" );
-
-//		trap_SendServerCommand(-1, va("cp \"Axis have stolen %s!\n\" 2", ent->message));
 
 		if ( level.gameManager ) {
 			G_Script_ScriptEvent( level.gameManager, "trigger", "allied_object_stolen" );
@@ -550,17 +529,11 @@ int Team_TouchEnemyFlag( gentity_t *ent, gentity_t *other, int team ) {
 		pm->s.effect2Time = TEAM_ALLIES;
 		pm->s.density = 0; // 0 = stolen
 
-//		te->s.eventParm = G_SoundIndex( "sound/chat/allies/a-objective_taken.wav" );
-
-//		trap_SendServerCommand(-1, va("cp \"Allies have stolen %s!\n\" 2", ent->message));
-
 		if ( level.gameManager ) {
 			G_Script_ScriptEvent( level.gameManager, "trigger", "axis_object_stolen" );
 		}
 		G_Script_ScriptEvent( ent, "trigger", "stolen" );
 	}
-	// dhm
-// jpw
 
 	ent->parent = tmp;
 
@@ -678,7 +651,7 @@ gentity_t *SelectRandomTeamSpawnPoint( int teamstate, team_t team, int spawnObje
 	gentity_t   *spot;
 	gentity_t   *spots[MAX_TEAM_SPAWN_POINTS];
 
-	int count, closest;//, defendingTeam; Nico, unused warning fix
+	int count, closest;
 	int i = 0;
 
 	char        *classname;
@@ -686,8 +659,6 @@ gentity_t *SelectRandomTeamSpawnPoint( int teamstate, team_t team, int spawnObje
 
 	vec3_t target;
 	vec3_t farthest;
-
-	// defendingTeam = -1;
 
 	if ( team == TEAM_AXIS ) {
 		classname = "team_CTF_redspawn";
@@ -1592,57 +1563,6 @@ int QDECL G_SortPlayersByXP( const void *a, const void *b ) {
 
 	return 0;
 }
-
-
-// Shuffle active players onto teams
-/* Nico, removed shuffleteam
-void G_shuffleTeams( void ) {
-	int i, cTeam; //, cMedian = level.numNonSpectatorClients / 2;
-	// int aTeamCount[TEAM_NUM_TEAMS]; Nico, unused warning fix
-	int cnt = 0;
-	int sortClients[MAX_CLIENTS];
-
-	gclient_t *cl;
-
-	G_teamReset( TEAM_AXIS, qtrue );
-	G_teamReset( TEAM_ALLIES, qtrue );
-
-	for ( i = 0; i < level.numConnectedClients; i++ ) {
-		cl = level.clients + level.sortedClients[ i ];
-
-		if ( cl->sess.sessionTeam != TEAM_AXIS && cl->sess.sessionTeam != TEAM_ALLIES ) {
-			continue;
-		}
-
-		sortClients[ cnt++ ] = level.sortedClients[ i ];
-	}
-
-	qsort( sortClients, cnt, sizeof( int ), G_SortPlayersByXP );
-
-	for ( i = 0; i < cnt; i++ ) {
-		cl = level.clients + sortClients[i];
-
-		cTeam = ( i % 2 ) + TEAM_AXIS;
-
-		if ( cl->sess.sessionTeam != cTeam ) {
-			G_LeaveTank( g_entities + sortClients[i], qfalse );
-			G_RemoveClientFromFireteams( sortClients[i], qtrue, qfalse );
-			if ( g_landminetimeout.integer ) {
-				G_ExplodeMines( g_entities + sortClients[i] );
-			}
-			G_FadeItems( g_entities + sortClients[i], MOD_SATCHEL );
-		}
-
-		cl->sess.sessionTeam = cTeam;
-
-		G_UpdateCharacter( cl );
-		ClientUserinfoChanged( sortClients[i] );
-		ClientBegin( sortClients[i] );
-	}
-
-	AP( "cp \"^1Teams have been shuffled!\n\"" );
-}*/
-
 
 // Returns player's "real" team.
 int G_teamID( gentity_t *ent ) {

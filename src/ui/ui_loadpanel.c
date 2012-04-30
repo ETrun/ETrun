@@ -387,8 +387,6 @@ void UI_LoadPanel_RenderLoadingText( panel_button_t* button ) {
 	uiClientState_t cstate;
 	char downloadName[MAX_INFO_VALUE];
 	char buff[2560];
-	// static connstate_t lastConnState; Nico, unused warning fix
-	// static char lastLoadingText[MAX_INFO_VALUE]; Nico, unused warning fix
 	char            *p, *s = "";
 	float y;
 
@@ -396,14 +394,7 @@ void UI_LoadPanel_RenderLoadingText( panel_button_t* button ) {
 
 	Com_sprintf( buff, sizeof( buff ), "Connecting to:\n %s^*\n\n%s", cstate.servername, Info_ValueForKey( cstate.updateInfoString, "motd" ) );
 
-	//Com_sprintf( buff, sizeof(buff), "%s^*", cstate.servername, Info_ValueForKey( cstate.updateInfoString, "motd" ) );
-
 	trap_Cvar_VariableStringBuffer( "cl_downloadName", downloadName, sizeof( downloadName ) );
-
-	// if ( lastConnState > cstate.connState ) {
-	// 	lastLoadingText[0] = '\0';
-	// }
-	// lastConnState = cstate.connState;
 
 	if ( !connect_ownerdraw ) {
 		if ( !trap_Cvar_VariableValue( "ui_connecting" ) ) {
@@ -440,8 +431,6 @@ void UI_LoadPanel_RenderLoadingText( panel_button_t* button ) {
 	}
 
 	BG_FitTextToWidth_Ext( buff, button->font->scalex, button->rect.w, sizeof( buff ), button->font->font );
-
-	//UI_DrawRect( button->rect.x, button->rect.y, button->rect.w, button->rect.h, colorRed );
 
 	y = button->rect.y + 12;
 

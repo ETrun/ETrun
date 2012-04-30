@@ -357,15 +357,11 @@ static void CG_RainParticleRender( cg_atmosphericParticle_t *particle ) {
 	vec3_t forward, right;
 	polyVert_t verts[3];
 	vec2_t line;
-	float len, dist; // , frac Nico, unused warning fix
+	float len, dist;
 	vec3_t start, finish;
 	float groundHeight;
-//	int			msec = trap_Milliseconds();
-
-//	n_rendertime++;
 
 	if ( particle->active == ACT_NOT ) {
-//		rendertime += trap_Milliseconds() - msec;
 		return;
 	}
 
@@ -383,12 +379,10 @@ static void CG_RainParticleRender( cg_atmosphericParticle_t *particle ) {
 	if ( start[2] <= groundHeight ) {
 		// Stop snow going through surfaces.
 		len = particle->height - groundHeight + start[2];
-		// frac = start[2];
 		VectorMA( start, len - particle->height, particle->deltaNormalized, start );
 	}
 
 	if ( len <= 0 ) {
-//		rendertime += trap_Milliseconds() - msec;
 		return;
 	}
 
@@ -436,8 +430,6 @@ static void CG_RainParticleRender( cg_atmosphericParticle_t *particle ) {
 	verts[2].modulate[3] = 200 * dist;
 
 	CG_AddPolyToPool( *particle->effectshader, verts );
-
-//	rendertime += trap_Milliseconds() - msec;
 }
 
 /*
@@ -449,9 +441,6 @@ static qboolean CG_SnowParticleGenerate( cg_atmosphericParticle_t *particle, vec
 
 	float angle, distance;
 	float groundHeight, skyHeight;
-//	int msec = trap_Milliseconds();
-
-//	n_generatetime++;
 
 	angle = random() * 2 * M_PI;
 	distance = 20 + MAX_ATMOSPHERIC_DISTANCE * random();
@@ -532,15 +521,11 @@ static void CG_SnowParticleRender( cg_atmosphericParticle_t *particle ) {
 	vec3_t forward, right;
 	polyVert_t verts[3];
 	vec2_t line;
-	float len, sinTumbling, cosTumbling, particleWidth, dist;// , frac Nico, unused warning fix
+	float len, sinTumbling, cosTumbling, particleWidth, dist;
 	vec3_t start, finish;
 	float groundHeight;
-//	int			msec = trap_Milliseconds();
-
-//	n_rendertime++;
 
 	if ( particle->active == ACT_NOT ) {
-//		rendertime += trap_Milliseconds() - msec;
 		return;
 	}
 

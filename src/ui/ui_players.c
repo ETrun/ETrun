@@ -1004,19 +1004,9 @@ UI_ParseAnimationFile
 ======================
 */
 static qboolean UI_ParseAnimationFile( const char *filename, playerInfo_t *pi ) {
-	// char        *text_p, *prev; Nico, unused warning fix
 	int len;
-	// int i; Nico, unused warning fix
-	// char        *token; Nico, unused warning fix
-	// float fps; Nico, unused warning fix
-	// int skip; Nico, unused warning fix
 	char text[20000];
 	fileHandle_t f;
-
-	// token = NULL;
-	// i = 0;
-	// fps = 0;
-	// prev = 0;
 
 	memset( pi->animations, 0, sizeof( animation_t ) * MAX_ANIMATIONS );
 
@@ -1032,10 +1022,6 @@ static qboolean UI_ParseAnimationFile( const char *filename, playerInfo_t *pi ) 
 	trap_FS_Read( text, len, f );
 	text[len] = 0;
 	trap_FS_FCloseFile( f );
-
-	// parse the text
-	// text_p = text;
-	// skip = 0;   // quite the compiler warning
 
 	// NERVE - SMF - new!!!!
 	AnimParseAnimConfig( pi, filename, text );

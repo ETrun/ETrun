@@ -139,23 +139,12 @@ static void UI_Cache_f() {
 }
 
 /*
-=======================
-UI_CalcPostGameStats
-=======================
-*/
-/* Nico, removed gameStats
-static void UI_CalcPostGameStats() {
-}*/
-
-
-/*
 =================
 UI_ConsoleCommand
 =================
 */
 qboolean UI_ConsoleCommand( int realTime ) {
 	char    *cmd;
-	uiClientState_t cstate;
 
 	uiInfo.uiDC.frameTime = realTime - uiInfo.uiDC.realTime;
 	uiInfo.uiDC.realTime = realTime;
@@ -176,12 +165,6 @@ qboolean UI_ConsoleCommand( int realTime ) {
 		return qtrue;
 	}
 
-	/* Nico, removed gameStats
-	if ( Q_stricmp( cmd, "postgame" ) == 0 ) {
-		UI_CalcPostGameStats();
-		return qtrue;
-	}*/
-
 	if ( Q_stricmp( cmd, "ui_cache" ) == 0 ) {
 		UI_Cache_f();
 		return qtrue;
@@ -193,37 +176,7 @@ qboolean UI_ConsoleCommand( int realTime ) {
 
 
 	if ( Q_stricmp( cmd, "ui_cdkey" ) == 0 ) {
-		//UI_CDKeyMenu_f();
 		return qtrue;
-	}
-
-	/* Nico, removed gametypes
-	if ( Q_stricmp( cmd, "iamacheater" ) == 0 ) {
-		int i;
-
-		// unlock all available levels and campaigns for SP
-		for ( i = 0; i < uiInfo.campaignCount; i++ ) {
-			if ( uiInfo.campaignList[i].typeBits & ( 1 << GT_SINGLE_PLAYER ) ) {
-				uiInfo.campaignList[i].unlocked = qtrue;
-				uiInfo.campaignList[i].progress = uiInfo.campaignList[i].mapCount;
-			}
-		}
-		return qtrue;
-	}*/
-
-	trap_GetClientState( &cstate );
-	if ( cstate.connState == CA_DISCONNECTED ) {
-		/* Nico, removed campaign client command
-		if ( Q_stricmp( cmd, "campaign" ) == 0 ) {
-			UI_Campaign_f();
-			return qtrue;
-		}*/
-
-		/* Nico, removed listcampaigns client command
-		if ( Q_stricmp( cmd, "listcampaigns" ) == 0 ) {
-			UI_ListCampaigns_f();
-			return qtrue;
-		}*/
 	}
 
 	return qfalse;

@@ -975,10 +975,6 @@ typedef struct {
 	qboolean cameraMode;        // if rendering from a camera
 	// Duffy end
 
-	// NERVE - SMF - Objective info display
-	// Nico, unused
-	// qboolean limboMenu;
-
 	int oidTeam;
 	int oidPrintTime;
 	int oidPrintCharWidth;

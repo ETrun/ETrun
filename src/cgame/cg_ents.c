@@ -142,7 +142,6 @@ void CG_AddLightstyle( centity_t *cent ) {
 	int r, g, b;
 	int stringlength;
 	float offset;
-	// int offsetwhole; Nico, unused warning fix
 	int otime;
 	int lastch, nextch;
 
@@ -163,7 +162,6 @@ void CG_AddLightstyle( centity_t *cent ) {
 	cent->dl_time = cg.time;
 
 	offset = ( (float)otime ) / LS_FRAMETIME;
-	// offsetwhole = (int)offset;
 
 	cent->dl_backlerp += offset;
 
@@ -200,8 +198,6 @@ void CG_AddLightstyle( centity_t *cent ) {
 	r = cl & 255;
 	g = ( cl >> 8 ) & 255;
 	b = ( cl >> 16 ) & 255;
-
-	//%	trap_R_AddLightToScene( cent->lerpOrigin, lightval, 1.0, (float)r/255.0f, (float)g/255.0f, (float)b/255.0f, 0, 0 );	// overdraw forced to 0 for now
 
 	// ydnar: if the dlight has angles, then it is a directional global dlight
 	if ( cent->currentState.angles[ 0 ] || cent->currentState.angles[ 1 ] || cent->currentState.angles[ 2 ] ) {
@@ -2422,7 +2418,6 @@ CG_AddEntityToTag
 */
 qboolean CG_AddEntityToTag( centity_t *cent ) {
 	centity_t           *centParent;
-	// entityState_t       *sParent; Nico, unused warning fix
 	refEntity_t ent;
 
 	// event-only entities will have been dealt with already
@@ -2443,7 +2438,6 @@ qboolean CG_AddEntityToTag( centity_t *cent ) {
 	}
 
 	centParent =    &cg_entities[cent->tagParent];
-	// sParent =       &centParent->currentState;
 
 	// if parent isn't visible, then don't draw us
 	if ( !centParent->currentValid ) {

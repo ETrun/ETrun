@@ -549,7 +549,6 @@ G_ScriptAction_FollowSpline
 
 qboolean G_ScriptAction_FollowSpline( gentity_t* ent, char *params ) {
 	char    *pString, *token;
-	// vec3_t vec; Nico, unused warning fix
 	float speed;
 	qboolean wait = qfalse;
 	int backward;
@@ -642,7 +641,6 @@ qboolean G_ScriptAction_FollowSpline( gentity_t* ent, char *params ) {
 		if ( !( pSpline = BG_Find_Spline( token ) ) ) {
 			G_Error( "G_Scripting: can't find spline with \"targetname\" = \"%s\"\n", token );
 		}
-		// VectorSubtract( pSpline->point.origin, ent->r.currentOrigin, vec );
 
 		token = COM_ParseExt( &pString, qfalse );
 		if ( !token[0] ) {
@@ -3112,7 +3110,6 @@ G_ScriptAction_SetRoundTimelimit
 */
 qboolean G_ScriptAction_SetRoundTimelimit( gentity_t *ent, char *params ) {
 	char *pString, *token;
-	// float nextTimeLimit; Nico, unused warning fix
 
 	pString = params;
 	token = COM_Parse( &pString );
@@ -3120,26 +3117,6 @@ qboolean G_ScriptAction_SetRoundTimelimit( gentity_t *ent, char *params ) {
 		G_Error( "G_ScriptAction_SetRoundTimelimit: number parameter required\n" );
 	}
 
-	/* Nico, no timelimit
-	// NERVE - SMF
-	nextTimeLimit = g_nextTimeLimit.value;
-
-	if ( g_gametype.integer == GT_WOLF_STOPWATCH && nextTimeLimit ) {
-		trap_Cvar_Set( "timelimit", va( "%f", nextTimeLimit ) );
-	} else if ( g_gametype.integer == GT_WOLF_LMS ) {
-		if ( g_userTimeLimit.integer ) {
-			int timelimit = g_userTimeLimit.integer < 3 ? 3 : g_userTimeLimit.integer;
-			trap_Cvar_Set( "timelimit", va( "%i", timelimit ) );
-		} else {
-			trap_Cvar_Set( "timelimit", token );
-		}
-	} else {
-		if ( g_userTimeLimit.integer ) {
-			trap_Cvar_Set( "timelimit", va( "%i", g_userTimeLimit.integer ) );
-		} else {
-			trap_Cvar_Set( "timelimit", token );
-		}
-	}*/
 	G_Printf("Warning: G_ScriptAction_SetRoundTimelimit ignored\n");
 
 	return qtrue;

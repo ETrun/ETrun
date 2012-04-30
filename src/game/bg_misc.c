@@ -63,7 +63,6 @@ pathCorner_t pathCorners[MAX_PATH_CORNERS];
 #define DELAY_THROW     250 // grenades, dynamite
 
 // Arnout: the new loadout for WolfXP
-// Nico, removed airstrikes, akimbos, flamethrower, mg42, mortar, grenade, medic siryngue, smoke bomb, dynamite, ammopacks, satchel, landmine, adrenaline
 int weapBanksMultiPlayer[MAX_WEAP_BANKS_MP][MAX_WEAPS_IN_BANK_MP] = {
 	{0,                     0,                      0,                  0,                          0,                      0,                          0,          0,          0,          0,      0,              0           },  // empty bank '0'
 	{WP_KNIFE,              0,                      0,                  0,                          0,                      0,                          0,          0,          0,          0,      0,              0           },
@@ -80,7 +79,6 @@ int weapBanksMultiPlayer[MAX_WEAP_BANKS_MP][MAX_WEAPS_IN_BANK_MP] = {
 // TAT 10/4/2002
 //		Using one unified list for which weapons can received ammo
 //		This is used both by the ammo pack code and by the bot code to determine if reloads are needed
-// Nico, removed akimbos, flamethrower, mg42, mortar
 int reloadableWeapons[] = {
 	WP_MP40,        WP_THOMPSON,    WP_STEN,            WP_GARAND,              WP_PANZERFAUST,
 	WP_KAR98,       WP_CARBINE,     WP_FG42,            WP_K43,                 WP_COLT,

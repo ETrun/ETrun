@@ -2198,7 +2198,7 @@ void G_MakeUnready( gentity_t* ent ) {
 }
 
 void G_CalcClientAccuracies( void ) {
-	int i;// , j; Nico, unused warning fix
+	int i;
 	int shots, hits;
 
 	for ( i = 0; i < MAX_CLIENTS; i++ ) {

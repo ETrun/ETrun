@@ -102,7 +102,6 @@ LookAtKiller
 */
 void LookAtKiller( gentity_t *self, gentity_t *inflictor, gentity_t *attacker ) {
 	vec3_t dir;
-	// vec3_t angles; Nico, unused warning fix
 
 	if ( attacker && attacker != self ) {
 		VectorSubtract( attacker->s.pos.trBase, self->s.pos.trBase, dir );
@@ -856,7 +855,6 @@ dflags		these flags are used to control how T_Damage works
 void G_Damage( gentity_t *targ, gentity_t *inflictor, gentity_t *attacker,  vec3_t dir, vec3_t point, int damage, int dflags, int mod ) {
 	gclient_t   *client;
 	int take;
-	// int save; Nico, unused warning fix
 	int knockback;
 	qboolean headShot;
 	qboolean wasAlive;
@@ -1006,11 +1004,6 @@ void G_Damage( gentity_t *targ, gentity_t *inflictor, gentity_t *attacker,  vec3
 		knockback *= 0.5;
 	}
 
-	/* Nico, no friendlyfire
-	if ( targ->client && g_friendlyFire.integer && OnSameTeam( targ, attacker ) ) {
-		knockback = 0;
-	}*/
-
 	// Nico, only do knockback to ourself at panzerfaust
 	if (attacker->client == targ->client && mod == MOD_PANZERFAUST) {
 		knockback = qtrue;
@@ -1021,13 +1014,6 @@ void G_Damage( gentity_t *targ, gentity_t *inflictor, gentity_t *attacker,  vec3
 	// figure momentum add, even if the damage won't be taken
 	if ( knockback && targ->client ) {
 		vec3_t kvel;
-
-		/* Nico, set knockback
-		float mass;
-
-		mass = 200;
-
-		VectorScale( dir, g_knockback.value * (float)knockback / mass, kvel );*/
 
 		VectorScale( dir, KNOCKBACK_VALUE, kvel );
 		VectorAdd( targ->client->ps.velocity, kvel, targ->client->ps.velocity );

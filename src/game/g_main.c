@@ -510,8 +510,7 @@ void G_CheckForCursorHints( gentity_t *ent ) {
 	gentity_t   *checkEnt, *traceEnt = 0;
 	playerState_t *ps;
 	int hintType, hintDist, hintVal;
-	qboolean zooming;// Nico, unused warning fix
-	//, indirectHit;      // indirectHit means the checkent was not the ent hit by the trace (checkEnt!=traceEnt)
+	qboolean zooming;
 	int trace_contents;                 // DHM - Nerve
 	int numOfIgnoredEnts = 0;
 
@@ -520,8 +519,6 @@ void G_CheckForCursorHints( gentity_t *ent ) {
 	}
 
 	ps = &ent->client->ps;
-
-	// indirectHit = qfalse;
 
 	zooming = (qboolean)( ps->eFlags & EF_ZOOMING );
 

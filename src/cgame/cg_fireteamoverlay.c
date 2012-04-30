@@ -43,15 +43,10 @@ static int sortedFireTeamClients[MAX_CLIENTS];
 ****/
 
 int QDECL CG_SortFireTeam( const void *a, const void *b ) {
-	// clientInfo_t    *ca, *cb; Nico, unused warning fix
 	int cna, cnb;
 
 	cna = *(int*)a;
 	cnb = *(int*)b;
-
-	// Nico, unused warning fix
-	// ca = &cgs.clientinfo[cna];
-	// cb = &cgs.clientinfo[cnb];
 
 	// Not on our team, so shove back
 	if ( !CG_IsOnSameFireteam( cnb, cg.clientNum ) ) {
@@ -89,9 +84,6 @@ void CG_ParseFireteams() {
 	const char* p;
 	int clnts[2];
 
-	// qboolean onFireteam2; Nico, unused warning fix
-	// qboolean isLeader2; Nico, unused warning fix
-
 	for ( i = 0; i < MAX_CLIENTS; i++ ) {
 		cgs.clientinfo[i].fireteamData = NULL;
 	}
@@ -122,7 +114,6 @@ void CG_ParseFireteams() {
 			if ( COM_BitCheck( clnts, j ) ) {
 				cg.fireTeams[i].joinOrder[j] = qtrue;
 				cgs.clientinfo[j].fireteamData = &cg.fireTeams[i];
-//				CG_Printf("%s\n", cgs.clientinfo[j].name);
 			} else {
 				cg.fireTeams[i].joinOrder[j] = qfalse;
 			}
@@ -130,9 +121,6 @@ void CG_ParseFireteams() {
 	}
 
 	CG_SortClientFireteam();
-
-	// onFireteam2 =   CG_IsOnFireteam( cg.clientNum ) ? qtrue : qfalse;
-	// isLeader2 =     CG_IsFireTeamLeader( cg.clientNum ) ? qtrue : qfalse;
 }
 
 // Fireteam that both specified clients are on, if they both are on the same team

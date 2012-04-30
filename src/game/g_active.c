@@ -549,7 +549,6 @@ void ClientEvents( gentity_t *ent, int oldEventSequence ) {
 	int event;
 	gclient_t   *client;
 	int damage;
-	// vec3_t dir; Nico, unused warning fix
 
 	client = ent->client;
 
@@ -704,7 +703,7 @@ once for each server frame, which makes for smooth demo recording.
 ==============
 */
 void ClientThink_real( gentity_t *ent ) {
-	int msec, oldEventSequence;//, monsterslick = 0; Nico, unused warning fix
+	int msec, oldEventSequence;
 	pmove_t pm;
 	usercmd_t   *ucmd;
 	gclient_t   *client = ent->client;
@@ -744,7 +743,6 @@ void ClientThink_real( gentity_t *ent ) {
 	}
 
 	// Nico, pmove_fixed
-	//if ( pmove_fixed.integer || client->pers.pmoveFixed ) {
 	if ( client->pers.pmoveFixed ) { 
 		ucmd->serverTime = ( ( ucmd->serverTime + pmove_msec.integer - 1 ) / pmove_msec.integer ) * pmove_msec.integer;
 	}
@@ -799,14 +797,7 @@ void ClientThink_real( gentity_t *ent ) {
 	}
 
 	client->ps.aiState = AISTATE_COMBAT;
-
-	/* Nico, g_gravity is hardcoded as DEFAULT_GRAVITY
-	client->ps.gravity = g_gravity.value;*/
 	client->ps.gravity = DEFAULT_GRAVITY;
-
-	// set speed
-	/* Nico, g_speed is now hardcoded as DEFAULT_SPEED
-	client->ps.speed = g_speed.value;*/
 	client->ps.speed = DEFAULT_SPEED;
 
 	if ( client->speedScale ) {              // Goalitem speed scale
@@ -828,18 +819,7 @@ void ClientThink_real( gentity_t *ent ) {
 	// MrE: always use capsule for AI and player
 	pm.trace = trap_TraceCapsule;
 
-	/* Nico, ghost players
-	if ( pm.ps->pm_type == PM_DEAD ) {
-		pm.tracemask = MASK_PLAYERSOLID & ~CONTENTS_BODY;
-		// DHM-Nerve added:: EF_DEAD is checked for in Pmove functions, but wasn't being set
-		//              until after Pmove
-		pm.ps->eFlags |= EF_DEAD;
-		// dhm-Nerve end
-	} else if ( pm.ps->pm_type == PM_SPECTATOR ) {
-		pm.trace = trap_TraceCapsuleNoEnts;
-	} else {
-		pm.tracemask = MASK_PLAYERSOLID;
-	}*/
+	// Nico, ghost players
 	pm.tracemask = MASK_PLAYERSOLID & ~CONTENTS_BODY;
 	if ( pm.ps->pm_type == PM_DEAD ) {
 		pm.ps->eFlags |= EF_DEAD;
@@ -849,7 +829,6 @@ void ClientThink_real( gentity_t *ent ) {
 	// Nico, end of ghost players
 
 	//DHM - Nerve :: We've gone back to using normal bbox traces
-	//pm.trace = trap_Trace;
 	pm.pointcontents = trap_PointContents;
 	pm.debugLevel = g_debugMove.integer;
 	pm.noFootsteps = qfalse;
@@ -894,7 +873,6 @@ void ClientThink_real( gentity_t *ent ) {
 		pm.cmd.weapon = client->ps.weapon;
 	}
 
-	// monsterslick = Pmove( &pm ); Nico, unused warning fix
 	Pmove( &pm );
 
 	// Gordon: thx to bani for this
@@ -935,10 +913,6 @@ void ClientThink_real( gentity_t *ent ) {
 		client->fireHeld = qfalse;      // for grapple
 	}
 
-//
-//	// use the precise origin for linking
-//	VectorCopy( ent->client->ps.origin, ent->r.currentOrigin );
-//
 //	// use the snapped origin for linking so it matches client predicted versions
 	VectorCopy( ent->s.pos.trBase, ent->r.currentOrigin );
 
@@ -1069,7 +1043,7 @@ void SpectatorClientEndFrame( gentity_t *ent ) {
 
 	// if we are doing a chase cam or a remote view, grab the latest info
 	if ( ( ent->client->sess.spectatorState == SPECTATOR_FOLLOW ) || ( ent->client->ps.pm_flags & PMF_LIMBO ) ) {
-		int clientNum;//, testtime; Nico, unused warning fix
+		int clientNum;
 		gclient_t *cl;
 
 		if (ent->client->sess.sessionTeam != TEAM_SPECTATOR) {

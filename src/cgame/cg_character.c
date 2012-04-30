@@ -125,7 +125,6 @@ static void CG_CalcMoveSpeeds( bg_character_t *character ) {
 	float totalSpeed;
 	int numSpeed;
 	int low;
-	// int lastLow; Nico, unused warning fix
 	orientation_t o[2];
 
 	memset( &refent, 0, sizeof( refent ) );
@@ -140,7 +139,6 @@ static void CG_CalcMoveSpeeds( bg_character_t *character ) {
 		}
 
 		totalSpeed = 0;
-		// lastLow = -1;
 		numSpeed = 0;
 
 		// for each frame
@@ -180,7 +178,6 @@ static void CG_CalcMoveSpeeds( bg_character_t *character ) {
 			for ( k = 0; k < 2; k++ ) {
 				VectorCopy( o[k].origin, oldPos[k] );
 			}
-			// lastLow = low;
 		}
 
 		// record the speed
@@ -407,8 +404,6 @@ qboolean CG_RegisterCharacter( const char *characterFile, bg_character_t *charac
 }
 
 bg_character_t *CG_CharacterForClientinfo( clientInfo_t *ci, centity_t *cent ) {
-	// int team, cls; Nico, unused warning fix
-
 	if ( cent && cent->currentState.eType == ET_CORPSE ) {
 		if ( cent->currentState.onFireStart >= 0 ) {
 			return cgs.gameCharacters[ cent->currentState.onFireStart ];

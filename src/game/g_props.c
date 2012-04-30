@@ -885,7 +885,6 @@ void Props_Chair_Die( gentity_t *ent, gentity_t *inflictor, gentity_t *attacker,
 void Just_Got_Thrown( gentity_t *self ) {
 	float len;
 	vec3_t vec;
-	// qboolean prop_hits = qfalse; Nico, unused warning fix
 
 	len = 0;
 
@@ -893,8 +892,6 @@ void Just_Got_Thrown( gentity_t *self ) {
 		self->nextthink = level.time + FRAMETIME;
 
 		if ( self->enemy ) {
-			// prop_hits = qtrue;
-
 			G_Damage( self->enemy, self, self, NULL, NULL, 5, 0, MOD_CRUSH );
 
 			self->die = Props_Chair_Die;
@@ -911,14 +908,11 @@ void Just_Got_Thrown( gentity_t *self ) {
 		{
 			trace_t trace;
 			vec3_t end;
-			// gentity_t   *traceEnt; Nico, unused warning fix
 
 			VectorCopy( self->r.currentOrigin, end );
 			end[2] += 1;
 
 			trap_Trace( &trace, self->r.currentOrigin, self->r.mins, self->r.maxs, end, self->s.number, MASK_SHOT );
-
-			// traceEnt = &g_entities[ trace.entityNum ];
 
 			if ( trace.startsolid ) {
 				len = 9999;
@@ -1883,19 +1877,6 @@ void smoker_think( gentity_t *ent ) {
 
 void SP_OilSlick( gentity_t *ent ) {
 	gentity_t *tent;
-	// gentity_t   *target = NULL; Nico, unused warning fix
-	// vec3_t point; Nico, unused warning fix
-
-	// if ( ent->target ) {
-	// 	target = G_FindByTargetname( NULL, ent->target );
-	// }
-
-	// if ( target ) {
-	// 	VectorCopy( target->s.origin, point );
-	// 	point[2] = ent->r.currentOrigin[2]; // just in case
-	// } else {
-	// 	VectorCopy( ent->r.currentOrigin, point );
-	// }
 
 	tent = G_TempEntity( ent->r.currentOrigin, EV_OILSLICK );
 	VectorCopy( ent->r.currentOrigin, tent->s.origin );

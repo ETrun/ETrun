@@ -710,7 +710,7 @@ qboolean G_IsAllowedAmmo( gentity_t* ent ) {
 }
 
 void ammo_touch( gentity_t *self, gentity_t *other, trace_t *trace ) {
-	int i, clientcount = 0;//, count; Nico, unused warning fix
+	int i, clientcount = 0;
 	gentity_t* touchClients[MAX_CLIENTS];
 
 	memset( touchClients, 0, sizeof( touchClients ) );

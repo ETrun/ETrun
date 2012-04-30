@@ -293,8 +293,6 @@ void CG_AddFragment( localEntity_t *le ) {
 //----(SA)	end
 
 	if ( le->pos.trType == TR_STATIONARY ) {
-		// int t; Nico, unused warning fix
-
 		// Ridah, add the flame
 		if ( hasFlame ) {
 			refEntity_t backupEnt;
@@ -320,8 +318,6 @@ void CG_AddFragment( localEntity_t *le ) {
 		return;
 
 	} else if ( le->pos.trType == TR_GRAVITY_PAUSED ) {
-		// int t; Nico, unused warning fix
-
 		// Ridah, add the flame
 		if ( hasFlame ) {
 			refEntity_t backupEnt;

@@ -203,7 +203,6 @@ void CG_Text_Paint( float x, float y, float scale, vec4_t color, const char *tex
 int CG_DrawFieldWidth( int x, int y, int width, int value, int charWidth, int charHeight ) {
 	char num[16], *ptr;
 	int l;
-	// int frame; Nico, unused warning fix
 	int totalwidth = 0;
 
 	if ( width < 1 ) {
@@ -243,12 +242,6 @@ int CG_DrawFieldWidth( int x, int y, int width, int value, int charWidth, int ch
 	ptr = num;
 	while ( *ptr && l )
 	{
-		// if ( *ptr == '-' ) {
-		// 	frame = STAT_MINUS;
-		// } else {
-		// 	frame = *ptr - '0';
-		// }
-
 		totalwidth += charWidth;
 		ptr++;
 		l--;
@@ -617,7 +610,7 @@ CG_DrawTeamInfo
 =================
 */
 static void CG_DrawTeamInfo( void ) {
-	int w;// , h; Nico, unused warning fix
+	int w;
 	int i, len;
 	vec4_t hcolor;
 	int chatHeight;
@@ -640,8 +633,6 @@ static void CG_DrawTeamInfo( void ) {
 		if ( cg.time - cgs.teamChatMsgTimes[cgs.teamLastChatPos % chatHeight] > cg_teamChatTime.integer ) {
 			cgs.teamLastChatPos++;
 		}
-
-		// h = ( cgs.teamChatPos - cgs.teamLastChatPos ) * lineHeight;
 
 		w = 0;
 
@@ -719,7 +710,7 @@ CG_DrawNotify
 #define NOTIFYLOC_Y_SP 128
 
 static void CG_DrawNotify( void ) {
-	int w;// , h; Nico, unused warning fix
+	int w;
 	int i, len;
 	vec4_t hcolor;
 	int chatHeight;
@@ -745,8 +736,6 @@ static void CG_DrawNotify( void ) {
 		if ( cg.time - cgs.notifyMsgTimes[cgs.notifyLastPos % chatHeight] > notifytime ) {
 			cgs.notifyLastPos++;
 		}
-
-		// h = ( cgs.notifyPos - cgs.notifyLastPos ) * TINYCHAR_HEIGHT;
 
 		w = 0;
 
@@ -1434,39 +1423,6 @@ static void CG_DrawCrosshair( void ) {
 	}
 }
 
-/* Nico, unused
-static void CG_DrawNoShootIcon( void ) {
-	float x, y, w, h;
-	float *color;
-
-	if ( cg.predictedPlayerState.eFlags & EF_PRONE && cg.snap->ps.weapon == WP_PANZERFAUST ) {
-		trap_R_SetColor( colorRed );
-	} else if ( cg.crosshairClientNoShoot
-				// xkan, 1/6/2003 - don't shoot friend or civilian
-				|| cg.snap->ps.serverCursorHint == HINT_PLYR_NEUTRAL
-				|| cg.snap->ps.serverCursorHint == HINT_PLYR_FRIEND ) {
-		color = CG_FadeColor( cg.crosshairClientTime, 1000 );
-
-		if ( !color ) {
-			trap_R_SetColor( NULL );
-			return;
-		} else {
-			trap_R_SetColor( color );
-		}
-	} else {
-		return;
-	}
-
-	w = h = 48.f;
-
-	x = cg_crosshairX.integer + 1;
-	y = cg_crosshairY.integer + 1;
-	CG_AdjustFrom640( &x, &y, &w, &h );
-
-	// FIXME precache
-	trap_R_DrawStretchPic( x + 0.5 * ( cg.refdef_current->width - w ), y + 0.5 * ( cg.refdef_current->height - h ), w, h, 0, 0, 1, 1, cgs.media.friendShader );
-}*/
-
 /*
 =================
 CG_ScanForCrosshairEntity
@@ -1479,7 +1435,6 @@ static float CG_ScanForCrosshairEntity( float * zChange, qboolean * hitClient ) 
 	trace_t trace;
 	vec3_t start, end;
 	float dist;
-	// centity_t*  cent; Nico, unused warning fix
 
 	// We haven't hit a client yet
 	*hitClient = qfalse;
@@ -1517,8 +1472,6 @@ static float CG_ScanForCrosshairEntity( float * zChange, qboolean * hitClient ) 
 
 		return dist;
 	}
-
-//	traceEnt = &g_entities[trace.entityNum];
 
 	// Reset the draw time for the SP crosshair
 	cg.crosshairSPClientTime = cg.time;
@@ -1695,16 +1648,6 @@ static void CG_DrawCrosshairNames( void ) {
 
 
 //==============================================================================
-
-/*
-=================
-CG_DrawSpectator
-=================
-*/
-/* Nico, unused anymore
-static void CG_DrawSpectator( void ) {
-	CG_DrawBigString( 320 - 9 * 8, 440, CG_TranslateString( "SPECTATOR" ), 1.f );
-}*/
 
 /*
 =================
@@ -1942,7 +1885,6 @@ CG_DrawSpectatorMessage
 */
 static void CG_DrawSpectatorMessage( void ) {
 	const char *str, *str2;
-	// float x; Nico, unused warning fix
 	float y;
 	static int lastconfigGet = 0;
 
@@ -2301,7 +2243,7 @@ void CG_ObjectivePrint( const char *str, int charWidth ) {
 static void CG_DrawObjectiveInfo( void ) {
 	char    *start;
 	int l;
-	int x, y, w;// ,h; Nico, unused warning fix
+	int x, y, w;
 	int x1, y1, x2, y2;
 	float   *color;
 	vec4_t backColor;
@@ -2618,7 +2560,6 @@ static void CG_DrawPlayerHealthBar( rectDef_t *rect ) {
 
 static void CG_DrawWeapRecharge( rectDef_t *rect ) {
 	float barFrac, chargeTime;
-	// int weap; Nico, unused warning fix
 	int flags;
 	qboolean fade = qfalse;
 

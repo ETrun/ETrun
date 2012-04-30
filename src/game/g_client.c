@@ -332,7 +332,7 @@ limbo
 ================
 */
 void limbo( gentity_t *ent) {
-	int i;//, contents; Nico, unused warning fix
+	int i;
 	int startclient = ent->client->ps.clientNum;
 
 	if ( ent->r.svFlags & SVF_POW ) {
@@ -397,8 +397,7 @@ reinforce
 // -- called when time expires for a team deployment cycle and there is at least one guy ready to go
 */
 void reinforce( gentity_t *ent ) {
-	int p, team; // numDeployable=0, finished=0; // TTimo unused
-	// char *classname; Nico, unused warning fix
+	int p, team;
 	gclient_t *rclient;
 	char userinfo[MAX_INFO_STRING], *respawnStr;
 
@@ -420,9 +419,7 @@ void reinforce( gentity_t *ent ) {
 
 	// find number active team spawnpoints
 	if ( team == TEAM_AXIS ) {
-		// classname = "team_CTF_redspawn";
 	} else if ( team == TEAM_ALLIES ) {
-		// classname = "team_CTF_bluespawn";
 	} else {
 		assert( 0 );
 	}
@@ -1207,7 +1204,7 @@ void ClientBegin( int clientNum ) {
 	gentity_t   *ent;
 	gclient_t   *client;
 	int flags;
-	int spawn_count;//, lives_left; Nico, unused warning fix
+	int spawn_count;
 
 	ent = g_entities + clientNum;
 

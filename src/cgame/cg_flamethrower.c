@@ -591,7 +591,6 @@ CG_MoveFlameChunk
 void CG_MoveFlameChunk( flameChunk_t *f ) {
 	vec3_t newOrigin, sOrg;
 	trace_t trace;
-	// int jiggleCount; Nico, unused warning fix
 	float dot;
 
 	// subtract friction from speed
@@ -614,7 +613,6 @@ void CG_MoveFlameChunk( flameChunk_t *f ) {
 		}
 	}
 
-	// jiggleCount = 0;
 	VectorCopy( f->baseOrg, sOrg );
 	while ( f->velSpeed > 1 && f->baseOrgTime != cg.time ) {
 		CG_FlameCalcOrg( f, cg.time, newOrigin );
@@ -702,7 +700,6 @@ void CG_AddFlameSpriteToScene( flameChunk_t *f, float lifeFrac, float alpha ) {
 	vec3_t vec, rotate_ang;
 	unsigned char alphaChar;
 	vec2_t rST;
-	// static vec3_t lastPos; Nico, unused warning fix
 	polyBuffer_t* pPolyBuffer;
 
 	if ( alpha < 0 ) {
@@ -793,8 +790,6 @@ void CG_AddFlameSpriteToScene( flameChunk_t *f, float lifeFrac, float alpha ) {
 
 	pPolyBuffer->numIndicies += 6;
 	pPolyBuffer->numVerts += 4;
-
-	// VectorCopy( f->org, lastPos );
 }
 
 static int nextFlameLight = 0;
@@ -818,7 +813,7 @@ void CG_AddFlameToScene( flameChunk_t *fHead ) {
 	int headTimeStart;
 	float vdist, bdot;
 	flameChunk_t *lastBlowChunk = NULL;
-	qboolean isClientFlame;// , firing; Nico, unused warning fix
+	qboolean isClientFlame;
 	int shader;
 	flameChunk_t *lastBlueChunk = NULL;
 	qboolean skip = qfalse, droppedTrail;
@@ -832,10 +827,8 @@ void CG_AddFlameToScene( flameChunk_t *fHead ) {
 
 	if ( ( cg_entities[fHead->ownerCent].currentState.eFlags & EF_FIRING ) && ( centFlameInfo[fHead->ownerCent].lastFlameChunk == fHead ) ) {
 		headTimeStart = fHead->timeStart;
-		// firing = qtrue;
 	} else {
 		headTimeStart = cg.time;
-		// firing = qfalse;
 	}
 
 	VectorClear( lightOrg );
@@ -906,11 +899,6 @@ void CG_AddFlameToScene( flameChunk_t *fHead ) {
 
 
 			if ( !skip ) {
-
-				// just call this for damage checking
-				//if (!f->ignitionOnly)
-				//CG_AddFlameSpriteToScene( f, f->lifeFrac, -1 );
-
 				lastBlueChunk = f;
 
 				alpha = 1.0;    // new nozzle sprite
@@ -1043,8 +1031,6 @@ void CG_AddFlameToScene( flameChunk_t *fHead ) {
 		lightSize = 500;
 	}
 	lightSize *= 1.0 + 0.2 * ( sin( 1.0 * cg.time / 50.0 ) * cos( 1.0 * cg.time / 43.0 ) );
-	// set the alpha
-	//%	alpha = lightSize / 500.0;
 	alpha = lightSize * 0.005;  // ydnar
 	if ( alpha > 2.0 ) {
 		alpha = 2.0;
@@ -1055,10 +1041,8 @@ void CG_AddFlameToScene( flameChunk_t *fHead ) {
 		if ( lightSize > 80 ) {
 			lightSize = 80;
 		}
-		//%	trap_R_AddLightToScene( lightOrg, 90 + lightSize, 0, 0, alpha, 0 + isClientFlame * (fHead->ownerCent == cg.snap->ps.clientNum) );
 		trap_R_AddLightToScene( lightOrg, 80, alpha, 0.2, 0.21, 0.5, 0, 0 );
 	} else if ( isClientFlame || ( fHead->ownerCent == cg.snap->ps.clientNum ) ) {
-		//%	trap_R_AddLightToScene( lightOrg, 90 + lightSize, 1.000000*alpha, 0.603922*alpha, 0.207843*alpha, 0 );
 		trap_R_AddLightToScene( lightOrg, 320, alpha, 1.000000, 0.603922, 0.207843, 0, 0 );
 	}
 }

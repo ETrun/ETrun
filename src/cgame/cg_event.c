@@ -1249,13 +1249,10 @@ CG_Effect
 void CG_Effect( centity_t *cent, vec3_t origin, vec3_t dir ) {
 	localEntity_t   *le;
 	refEntity_t     *re;
-	// int mass; Nico, unused warning fix
 	vec4_t projection, color;
-
 
 	VectorSet( dir, 0, 0, 1 );    // straight up.
 
-	// mass = cent->currentState.density;
 
 	if ( cent->currentState.eventParm & 1 ) {  // fire
 		CG_MissileHitWall( WP_DYNAMITE, 0, origin, dir, 0 );
@@ -1263,7 +1260,6 @@ void CG_Effect( centity_t *cent, vec3_t origin, vec3_t dir ) {
 	}
 
 	// (SA) right now force smoke on any explosions
-//	if(cent->currentState.eventParm & 4)	// smoke
 	if ( cent->currentState.eventParm & 7 ) {
 		int i, j;
 		vec3_t sprVel, sprOrg;
@@ -1273,7 +1269,6 @@ void CG_Effect( centity_t *cent, vec3_t origin, vec3_t dir ) {
 			for ( j = 0; j < 3; j++ )
 				sprOrg[j] = origin[j] + 64 * dir[j] + 24 * crandom();
 			sprVel[2] += rand() % 50;
-//			CG_ParticleExplosion( 2, sprOrg, sprVel, 1000+rand()%250, 20, 40+rand()%60 );
 			CG_ParticleExplosion( "blacksmokeanim", sprOrg, sprVel, 3500 + rand() % 250, 10, 250 + rand() % 60, qfalse ); // JPW NERVE was smokeanimb
 		}
 	}
@@ -1287,7 +1282,6 @@ void CG_Effect( centity_t *cent, vec3_t origin, vec3_t dir ) {
 		VectorMA( origin, 16, dir, sprOrg );
 		VectorScale( dir, 100, sprVel );
 		CG_ParticleExplosion( "explode1", sprOrg, sprVel, 500, 20, 160, qtrue );
-		//CG_ParticleExplosion( "blueexp", sprOrg, sprVel, 1200, 9, 300 );
 
 		// (SA) this is done only if the level designer has it marked in the entity.
 		//		(see "cent->currentState.eventParm & 64" below)
@@ -1503,9 +1497,6 @@ void CG_Shard( centity_t *cent, vec3_t origin, vec3_t dir ) {
 void CG_ShardJunk( centity_t *cent, vec3_t origin, vec3_t dir ) {
 	localEntity_t   *le;
 	refEntity_t     *re;
-	// int type; Nico, unused warning fix
-
-	// type = cent->currentState.density;
 
 	le = CG_AllocLocalEntity();
 	re = &le->refEntity;
@@ -1541,12 +1532,7 @@ void CG_ShardJunk( centity_t *cent, vec3_t origin, vec3_t dir ) {
 	// rotation
 	le->angles.trType = TR_LINEAR;
 	le->angles.trTime = cg.time;
-	//le->angles.trBase[0] = rand()&31;
-	//le->angles.trBase[1] = rand()&31;
 	le->angles.trBase[2] = rand() & 31;
-
-	//le->angles.trDelta[0] = (100 + (rand()&500)) - 300;
-	//le->angles.trDelta[1] = (100 + (rand()&500)) - 300;
 	le->angles.trDelta[2] = ( 100 + ( rand() & 500 ) ) - 300;
 
 }
@@ -1555,9 +1541,6 @@ void CG_ShardJunk( centity_t *cent, vec3_t origin, vec3_t dir ) {
 void CG_Debris( centity_t *cent, vec3_t origin, vec3_t dir ) {
 	localEntity_t   *le;
 	refEntity_t     *re;
-	// int type; Nico, unused warning fix
-
-	// type = cent->currentState.density;
 
 	le = CG_AllocLocalEntity();
 	re = &le->refEntity;
@@ -1597,11 +1580,6 @@ void CG_Debris( centity_t *cent, vec3_t origin, vec3_t dir ) {
 	le->angles.trDelta[2] = ( 50 + ( rand() & 400 ) ) - 100;
 }
 // ===================
-
-//void CG_BatDeath( centity_t *cent )
-//{
-//	CG_ParticleExplosion( "blood", cent->lerpOrigin, vec3_origin, 400, 20, 30, qfalse );
-//}
 
 void CG_MortarImpact( centity_t *cent, vec3_t origin, int sfx, qboolean dist ) {
 	if ( sfx >= 0 ) {

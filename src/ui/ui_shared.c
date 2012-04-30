@@ -2170,13 +2170,10 @@ int Item_Slider_OverSlider( itemDef_t *item, float x, float y ) {
 
 int Item_ListBox_OverLB( itemDef_t *item, float x, float y ) {
 	rectDef_t r;
-	// listBoxDef_t *listPtr; Nico, unused warning fix
 	int thumbstart;
-	// int count; Nico, unused warning fix
 
-	// count = DC->feederCount( item->special );
 	DC->feederCount( item->special );
-	// listPtr = (listBoxDef_t*)item->typeData;
+
 	if ( item->window.flags & WINDOW_HORIZONTAL ) {
 		// check if on left arrow
 		r.x = item->window.rect.x;
@@ -2191,7 +2188,6 @@ int Item_ListBox_OverLB( itemDef_t *item, float x, float y ) {
 			return WINDOW_LB_RIGHTARROW;
 		}
 		// check if on thumb
-		//thumbstart = Item_ListBox_ThumbPosition(item);
 		thumbstart = Item_ListBox_ThumbDrawPosition( item );
 		r.x = thumbstart;
 		if ( Rect_ContainsPoint( &r, x, y ) ) {
@@ -2225,7 +2221,6 @@ int Item_ListBox_OverLB( itemDef_t *item, float x, float y ) {
 		if ( Rect_ContainsPoint( &r, x, y ) ) {
 			return WINDOW_LB_RIGHTARROW;
 		}
-		//thumbstart = Item_ListBox_ThumbPosition(item);
 		thumbstart = Item_ListBox_ThumbDrawPosition( item );
 		r.y = thumbstart;
 		if ( Rect_ContainsPoint( &r, x, y ) ) {
@@ -4291,10 +4286,9 @@ char* BindingFromName( const char *cvar ) {
 
 void Item_Slider_Paint( itemDef_t *item ) {
 	vec4_t newColor, lowLight;
-	float x, y;//, value; Nico, unused warning fix
+	float x, y;
 	menuDef_t *parent = (menuDef_t*)item->parent;
 
-	// value = ( item->cvar ) ? DC->getCVarValue( item->cvar ) : 0;
 	DC->getCVarValue( item->cvar );
 
 	if ( item->window.flags & WINDOW_HASFOCUS && item->window.flags & WINDOW_FOCUSPULSE ) {
@@ -4315,11 +4309,9 @@ void Item_Slider_Paint( itemDef_t *item ) {
 		x = item->window.rect.x;
 	}
 	DC->setColor( newColor );
-	//DC->drawHandlePic( x, y, SLIDER_WIDTH, SLIDER_HEIGHT, DC->Assets.sliderBar );
 	DC->drawHandlePic( x, y + 1, SLIDER_WIDTH, SLIDER_HEIGHT, DC->Assets.sliderBar );
 
 	x = Item_Slider_ThumbPosition( item );
-	//DC->drawHandlePic( x - (SLIDER_THUMB_WIDTH / 2), y - 2, SLIDER_THUMB_WIDTH, SLIDER_THUMB_HEIGHT, DC->Assets.sliderThumb );
 	DC->drawHandlePic( x - ( SLIDER_THUMB_WIDTH / 2 ), y, SLIDER_THUMB_WIDTH, SLIDER_THUMB_HEIGHT, DC->Assets.sliderThumb );
 }
 
@@ -4789,7 +4781,6 @@ void Item_OwnerDraw_Paint( itemDef_t *item ) {
 
 	if ( DC->ownerDrawItem ) {
 		vec4_t color, lowLight;
-		// menuDef_t *parent = (menuDef_t*)item->parent;, Nico, warning unused fix
 		Fade( &item->window.flags, &item->window.foreColor[3], parent->fadeClamp, &item->window.nextTime, parent->fadeCycle, qtrue, parent->fadeAmount );
 		memcpy( &color, &item->window.foreColor, sizeof( color ) );
 		if ( item->numColors > 0 && DC->getValue ) {
@@ -5499,16 +5490,13 @@ qboolean ItemParse_group( itemDef_t *item, int handle ) {
 // asset_model <string>
 qboolean ItemParse_asset_model( itemDef_t *item, int handle ) {
 	const char *temp = NULL;
-	// modelDef_t *modelPtr; Nico, unused warning fix
 	Item_ValidateTypeData( item );
-	// modelPtr = (modelDef_t*)item->typeData;
 
 	if ( !PC_String_Parse( handle, &temp ) ) {
 		return qfalse;
 	}
 	if ( !( item->asset ) ) {
 		item->asset = DC->registerModel( temp );
-//		modelPtr->angle = rand() % 360;
 	}
 	return qtrue;
 }

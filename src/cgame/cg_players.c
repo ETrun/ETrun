@@ -258,8 +258,6 @@ PLAYER ANIMATION
 */
 
 bg_playerclass_t* CG_PlayerClassForClientinfo( clientInfo_t *ci, centity_t* cent ) {
-	// int team, cls; Nico, unused warning fix
-
 	if ( cent && cent->currentState.eType == ET_CORPSE ) {
 		return BG_GetPlayerClassInfo( cent->currentState.modelindex, cent->currentState.modelindex2 );
 	}
@@ -404,7 +402,7 @@ may include ANIM_TOGGLEBIT
 */
 void CG_SetLerpFrameAnimationRate( centity_t *cent, clientInfo_t *ci, lerpFrame_t *lf, int newAnimation ) {
 	animation_t     *anim, *oldanim;
-	int transitionMin = -1; // oldAnimTime, Nico, unused warning fix 
+	int transitionMin = -1;
 	int oldAnimNum;
 	qboolean firstAnim = qfalse;
 
@@ -414,7 +412,6 @@ void CG_SetLerpFrameAnimationRate( centity_t *cent, clientInfo_t *ci, lerpFrame_
 		return;
 	}
 
-	// oldAnimTime = lf->animationTime;
 	oldanim     = lf->animation;
 	oldAnimNum  = lf->animationNumber;
 
@@ -917,7 +914,7 @@ static void CG_PlayerAngles( centity_t *cent, vec3_t legs[3], vec3_t torso[3], v
 	vec3_t velocity;
 	float speed;
 	float clampTolerance;
-	int legsSet;// , torsoSet; Nico, unused warning fix
+	int legsSet;
 	clientInfo_t    *ci;
 	bg_character_t  *character;
 
@@ -930,7 +927,6 @@ static void CG_PlayerAngles( centity_t *cent, vec3_t legs[3], vec3_t torso[3], v
 	}
 
 	legsSet = cent->currentState.legsAnim & ~ANIM_TOGGLEBIT;
-	// torsoSet = cent->currentState.torsoAnim & ~ANIM_TOGGLEBIT;
 
 	VectorCopy( cent->lerpAngles, headAngles );
 	headAngles[YAW] = AngleMod( headAngles[YAW] );
@@ -958,7 +954,6 @@ static void CG_PlayerAngles( centity_t *cent, vec3_t legs[3], vec3_t torso[3], v
 	if ( cent->currentState.eFlags & EF_DEAD || cent->currentState.eFlags & EF_MOUNTEDTANK ) {
 		// don't let dead bodies twitch
 		legsAngles[YAW] = headAngles[YAW];
-		// torsoAngles[YAW] = headAngles[YAW];
 	} else {
 		legsAngles[YAW] = headAngles[YAW] + cent->currentState.angles2[YAW];
 
@@ -967,8 +962,6 @@ static void CG_PlayerAngles( centity_t *cent, vec3_t legs[3], vec3_t torso[3], v
 			clampTolerance = 90;
 		} else {    // must be firing
 			torsoAngles[YAW] = headAngles[YAW]; // always face firing direction
-			//if (fabs(cent->currentState.angles2[YAW]) > 30)
-			//	legsAngles[YAW] = headAngles[YAW];
 			clampTolerance = 60;
 		}
 
@@ -1005,8 +998,6 @@ static void CG_PlayerAngles( centity_t *cent, vec3_t legs[3], vec3_t torso[3], v
 	} else {
 		dest = headAngles[PITCH] * 0.75;
 	}
-	//CG_SwingAngles( dest, 15, 30, 0.1, &cent->pe.torso.pitchAngle, &cent->pe.torso.pitching );
-	//torsoAngles[PITCH] = cent->pe.torso.pitchAngle;
 
 	if ( cent->currentState.eFlags & EF_PRONE ) {
 		torsoAngles[PITCH] = legsAngles[PITCH] - 3;

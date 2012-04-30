@@ -63,14 +63,9 @@ If you have questions concerning this license or the applicable additional terms
 
 //===============================================================
 
-/* Nico, removed mines
-#define MAX_TEAM_LANDMINES  10*/
-
 typedef qboolean ( *addToSnapshotCallback )( int entityNum, int clientNum );
 
 typedef struct {
-//	entityState_t	s;				// communicated by server to clients
-
 	qboolean linked;                // qfalse if not in any good cluster
 	int linkcount;
 

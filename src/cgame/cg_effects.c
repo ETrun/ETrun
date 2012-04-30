@@ -492,7 +492,6 @@ void CG_Spotlight( centity_t *cent, float *color, vec3_t realstart, vec3_t light
 	vec3_t endCenter;
 	polyVert_t coreverts[4];
 	trace_t tr;
-	// float alpha; Nico, unused warning fix
 	float radius = 0.0; // TTimo might be used uninitialized
 	float coreEndRadius;
 	qboolean capStart = qtrue;
@@ -545,7 +544,6 @@ void CG_Spotlight( centity_t *cent, float *color, vec3_t realstart, vec3_t light
 		} else {
 			CG_Trace( &tr, start, NULL, NULL, traceEnd, -1, MASK_SHOT );
 		}
-//		CG_Trace( &tr, start, NULL, NULL, traceEnd, -1, MASK_ALL &~(CONTENTS_MONSTERCLIP|CONTENTS_AREAPORTAL|CONTENTS_CLUSTERPORTAL));
 	}
 
 
@@ -584,7 +582,6 @@ void CG_Spotlight( centity_t *cent, float *color, vec3_t realstart, vec3_t light
 		VectorCopy( cent->lerpOrigin, ent.origin );
 		VectorCopy( cent->lerpOrigin, ent.oldorigin );
 		ent.hModel = cgs.gameModels[cent->currentState.modelindex];
-		//	AnglesToAxis( cent->lerpAngles, ent.axis );
 		vectoangles( lightDir, angles );
 		AnglesToAxis( angles, ent.axis );
 		trap_R_AddRefEntityToScene( &ent );
@@ -646,8 +643,6 @@ void CG_Spotlight( centity_t *cent, float *color, vec3_t realstart, vec3_t light
 //
 // generate the beam cylinder
 //
-
-
 
 	for ( i = 0; i <= segs; i++ ) {
 		RotatePointAroundVector( start_points[i], lightDir, startvec, ( 360.0f / (float)segs ) * i );
@@ -722,11 +717,7 @@ void CG_Spotlight( centity_t *cent, float *color, vec3_t realstart, vec3_t light
 		if ( hitDist ) {
 			VectorMA( startvec, hitDist, conevec, endvec );
 
-			// alpha = 0.3f;
 			radius = coreEndRadius * ( hitDist / beamLen );
-
-			//%	VectorNegate( lightDir, proj );
-			//%	CG_ImpactMark( cgs.media.spotLightShader, tr.endpos, proj, 0, colorNorm[0], colorNorm[1], colorNorm[2], alpha, qfalse, radius, qtrue, -1 );
 
 			VectorCopy( lightDir, projection );
 			projection[ 3 ] = radius * 2.0f;
