@@ -343,17 +343,6 @@ static void CG_FTSayPlayerClass_f( void ) {
 		s = "IamSoldier";
 	}
 
-	/* Nico, removed intermission
-	if ( cg.snap && ( cg.snap->ps.pm_type != PM_INTERMISSION ) ) {*/
-
-	/* Nico, enable voice chat for spectators
-	if ( cg.snap ) {
-		if ( cgs.clientinfo[cg.clientNum].team == TEAM_SPECTATOR || cgs.clientinfo[cg.clientNum].team == TEAM_FREE ) {
-			CG_Printf( CG_TranslateString( "Can't team voice chat as a spectator.\n" ) );
-			return;
-		}
-	}*/
-
 	trap_SendConsoleCommand( va( "cmd vsay_buddy -1 %s %s\n", CG_BuildSelectedFirteamString(), s ) );
 }
 

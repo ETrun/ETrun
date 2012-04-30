@@ -68,16 +68,6 @@ int QDECL CG_SortFireTeam( const void *a, const void *b ) {
 	if ( CG_IsFireTeamLeader( cnb ) ) {
 		return 1;
 	}
-
-	// Then higher ranks
-	/* Nico, removed rank
-	if ( ca->rank > cb->rank ) {
-		return -1;
-	}
-	if ( cb->rank > ca->rank ) {
-		return 1;
-	}*/
-
 	return 0;
 }
 

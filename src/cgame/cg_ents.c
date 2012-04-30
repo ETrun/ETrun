@@ -1098,34 +1098,14 @@ static void CG_Missile( centity_t *cent ) {
 
 			if ( ( cgs.clientinfo[cg.snap->ps.clientNum].team != ( !cent->currentState.otherEntityNum2 ? TEAM_ALLIES : TEAM_AXIS ) ) ) {
 				if ( cent->currentState.density - 1 == cg.snap->ps.clientNum ) {
-					//ent.customShader = cgs.media.genericConstructionShaderModel;
 					ent.customShader = cgs.media.genericConstructionShader;
 				} else if ( !cent->currentState.modelindex2 ) {
-					// see if we have the skill to see them and are close enough
-					/* Nico, removed skills
-					if ( cgs.clientinfo[cg.snap->ps.clientNum].skill[SK_BATTLE_SENSE] >= 4 ) {
-						vec_t distSquared = DistanceSquared( cent->lerpOrigin, cg.predictedPlayerEntity.lerpOrigin );
-
-						if ( distSquared > Square( 256 ) ) {
-							return;
-						} else {
-							//ent.customShader = cgs.media.genericConstructionShaderModel;
-							ent.customShader = cgs.media.genericConstructionShader;
-						}
-					} else {*/
-						return;
-					// }
+					return;
 				} else {
 					CG_DrawMineMarkerFlag( cent, &ent, weapon );
 				}
 			} else {
 				CG_DrawMineMarkerFlag( cent, &ent, weapon );
-				/*if ( !cent->highlighted ) {
-					cent->highlighted = qtrue;
-					cent->highlightTime = cg.time;
-				}
-
-				ent.hilightIntensity = 0.5f * sin((cg.time-cent->highlightTime)/1000.f) + 1.f;*/
 			}
 		}
 
@@ -2329,10 +2309,6 @@ qboolean CG_AddLinkedEntity( centity_t *cent, qboolean ignoreframe, int atTime )
 	if ( !ignoreframe ) {
 		cent->processedFrame = cg.clientFrame;
 	}
-
-	// Arnout: removed from here
-	//VectorCopy( cent->lerpAngles, cent->lastLerpAngles );
-	//VectorCopy( cent->lerpOrigin, cent->lastLerpOrigin );
 
 	if ( !( sParent->eFlags & EF_PATH_LINK ) ) {
 		if ( sParent->pos.trType == TR_LINEAR_PATH ) {

@@ -365,377 +365,16 @@ vec4_t color_name   = COLOR_TEXT;
 #define VD_SCALE_Y_NAME 0.30f
 
 qboolean CG_ViewingDraw() {
-	/* Nico, removed multiview
-	if ( cg.mvTotalClients < 1 ) {
-		return( qfalse );
-
-	} else {
-		int w, wTag;
-		int tSpacing = 15;      // Should derive from CG_Text_Height_Ext
-		int pID = cg.mvCurrentMainview->mvInfo & MV_PID;
-		char *viewInfo = "Viewing:";
-
-		wTag = CG_Text_Width_Ext( viewInfo, VD_SCALE_X_HDR, 0, FONT_HEADER );
-		w = wTag + 3 + CG_Text_Width_Ext( cgs.clientinfo[pID].name, VD_SCALE_X_NAME, 0, FONT_TEXT );
-
-		CG_DrawRect( VD_X - 2, VD_Y, w + 7, tSpacing + 4, 1, color_border );
-		CG_FillRect( VD_X - 2, VD_Y, w + 7, tSpacing + 4, color_bg );
-
-		CG_Text_Paint_Ext( VD_X, VD_Y + tSpacing,            // x, y
-						   VD_SCALE_X_HDR, VD_SCALE_Y_HDR,  // scale_x, scale_y
-						   color_hdr,
-						   viewInfo,
-						   0.0f, 0,
-						   ITEM_TEXTSTYLE_SHADOWED,
-						   FONT_HEADER );
-
-		CG_Text_Paint_Ext( VD_X + wTag + 5, VD_Y + tSpacing, // x, y
-						   VD_SCALE_X_NAME, VD_SCALE_Y_NAME, // scale_x, scale_y
-						   color_name,
-						   cgs.clientinfo[pID].name,
-						   0.0f, 0,
-						   ITEM_TEXTSTYLE_SHADOWED,
-						   FONT_TEXT );
-
-		return( qtrue );
-	}*/
 	return( qfalse );
 }
-
-
 
 #define GS_X    166
 #define GS_Y    10
 #define GS_W    308
 
-/* Nico, removed gameStats
-void CG_GameStatsDraw() {
-	if ( cgs.gamestats.show == SHOW_OFF ) {
-		return;
-
-	} else {
-		int i, x = GS_X + 4, y = GS_Y, h;
-		gameStats_t *gs = &cgs.gamestats;
-
-		vec4_t bgColor      = COLOR_BG;     // window
-		vec4_t borderColor  = COLOR_BORDER; // window
-
-		vec4_t bgColorTitle     = COLOR_BG_TITLE;       // titlebar
-		vec4_t borderColorTitle = COLOR_BORDER_TITLE;   // titlebar
-
-		// Main header
-		int hStyle          = ITEM_TEXTSTYLE_SHADOWED;
-		float hScale        = 0.16f;
-		float hScaleY       = 0.21f;
-		fontInfo_t *hFont   = FONT_HEADER;
-
-		// Sub header
-		int hStyle2         = 0;
-		float hScale2       = 0.16f;
-		float hScaleY2      = 0.20f;
-		fontInfo_t *hFont2  = FONT_SUBHEADER;
-
-		vec4_t hdrColor     = COLOR_HDR;    // text
-
-		// Text settings
-		int tStyle          = ITEM_TEXTSTYLE_SHADOWED;
-		int tSpacing        = 9;        // Should derive from CG_Text_Height_Ext
-		float tScale        = 0.19f;
-		fontInfo_t *tFont   = FONT_TEXT;
-		vec4_t tColor       = COLOR_TEXT;   // text
-
-		float diff = cgs.gamestats.fadeTime - cg.time;
-
-
-		// FIXME: Should compute this beforehand
-		h = 2 + tSpacing + 2 +                              // Header
-			2 + 2 + tSpacing + 2 +                          // Stats columns
-			1 +                                             // Stats + extra
-			tSpacing * ( ( gs->cWeapons > 0 ) ? gs->cWeapons : 1 ) +
-			tSpacing * ( ( gs->fHasStats ) ? 3 : 0 ) +
-			
-			// Nico, removed LMS
-			// ( ( cgs.gametype == GT_WOLF_LMS ) ? 0 :
-
-			( (
-				  4 + 2 * tSpacing +                                // Rank/XP
-				  1 + tSpacing +
-				  4 + 2 * tSpacing +                                // Skill columns
-				  1 +                                               // Skillz
-				  tSpacing * ( ( gs->cSkills > 0 ) ? gs->cSkills : 1 )
-			  )
-			) +
-			2;
-
-		// Fade-in effects
-		if ( diff > 0.0f ) {
-			float scale = ( diff / STATS_FADE_TIME );
-
-			if ( cgs.gamestats.show == SHOW_ON ) {
-				scale = 1.0f - scale;
-			}
-
-			bgColor[3] *= scale;
-			bgColorTitle[3] *= scale;
-			borderColor[3] *= scale;
-			borderColorTitle[3] *= scale;
-			hdrColor[3] *= scale;
-			tColor[3] *= scale;
-
-			y -= h * ( 1.0f - scale );
-
-		} else if ( cgs.gamestats.show == SHOW_SHUTDOWN ) {
-			cgs.gamestats.show = SHOW_OFF;
-			return;
-		}
-
-		CG_DrawRect( GS_X, y, GS_W, h, 1, borderColor );
-		CG_FillRect( GS_X, y, GS_W, h, bgColor );
-
-
-
-		// Header
-		CG_FillRect( GS_X, y, GS_W, tSpacing + 4, bgColorTitle );
-		CG_DrawRect( GS_X, y, GS_W, tSpacing + 4, 1, borderColorTitle );
-
-		y += 1;
-		y += tSpacing;
-		CG_Text_Paint_Ext( x, y, hScale, hScaleY, hdrColor, "PLAYER STATS", 0.0f, 0, hStyle, hFont );
-		y += 3;
-
-		y += 2;
-
-
-
-		// Weapon stats
-		y += 2;
-		CG_FillRect( GS_X, y, GS_W, tSpacing + 3, bgColorTitle );
-		CG_DrawRect( GS_X, y, GS_W, tSpacing + 3, 1, borderColorTitle );
-
-		y += 1 + tSpacing;
-		CG_Text_Paint_Ext( x, y, hScale2, hScaleY2, hdrColor, "Weapon", 0.0f, 0, hStyle2, hFont2 );
-		x += 66;
-		CG_Text_Paint_Ext( x, y, hScale2, hScaleY2, hdrColor, "Accuracy", 0.0f, 0, hStyle2, hFont2 );
-		x += 53;
-		CG_Text_Paint_Ext( x, y, hScale2, hScaleY2, hdrColor, "Hits / Shots", 0.0f, 0, hStyle2, hFont2 );
-		x += 62;
-		CG_Text_Paint_Ext( x, y, hScale2, hScaleY2, hdrColor, "Kills", 0.0f, 0, hStyle2, hFont2 );
-		x += 29;
-		CG_Text_Paint_Ext( x, y, hScale2, hScaleY2, hdrColor, "Deaths", 0.0f, 0, hStyle2, hFont2 );
-		x += 40;
-		CG_Text_Paint_Ext( x, y, hScale2, hScaleY2, hdrColor, "Headshots", 0.0f, 0, hStyle2, hFont2 );
-
-		x = GS_X + 4;
-		y += 2;
-
-		y += 1;
-		if ( gs->cWeapons == 0 ) {
-			y += tSpacing;
-			CG_Text_Paint_Ext( x, y, tScale, tScale, tColor, "No weapon info available.", 0.0f, 0, tStyle, tFont );
-		} else {
-
-			// Nico, removed weaponstats
-			// for ( i = 0; i < gs->cWeapons; i++ ) {
-			//	y += tSpacing;
-			//	CG_Text_Paint_Ext( x, y, tScale, tScale, tColor, gs->strWS[i], 0.0f, 0, tStyle, tFont );
-			// }
-
-			if ( gs->fHasStats ) {
-				y += tSpacing;
-				for ( i = 0; i < 2; i++ ) {
-					y += tSpacing;
-					CG_Text_Paint_Ext( x, y, tScale, tScale, tColor, gs->strExtra[i], 0.0f, 0, tStyle, tFont );
-				}
-			}
-		}
-
-
-		// No rank/xp/skill info for LMS
-		// Nico, removed LMS
-		// if ( cgs.gametype == GT_WOLF_LMS ) {
-		//	return;
-		// }
-		
-		// Rank/XP info
-		y += tSpacing;
-		y += 2;
-		CG_FillRect( GS_X, y, GS_W, tSpacing + 3, bgColorTitle );
-		CG_DrawRect( GS_X, y, GS_W, tSpacing + 3, 1, borderColorTitle );
-
-		y += 1 + tSpacing;
-		CG_Text_Paint_Ext( x, y, hScale2, hScaleY2, hdrColor, "Rank", 0.0f, 0, hStyle2, hFont2 );
-		x += 82;
-		CG_Text_Paint_Ext( x, y, hScale2, hScaleY2, hdrColor, "XP", 0.0f, 0, hStyle2, hFont2 );
-
-		x = GS_X + 4;
-
-		y += 1;
-		y += tSpacing;
-		CG_Text_Paint_Ext( x, y, tScale, tScale, tColor, gs->strRank, 0.0f, 0, tStyle, tFont );
-
-
-
-		// Skill info
-		y += tSpacing;
-		y += 2;
-		CG_FillRect( GS_X, y, GS_W, tSpacing + 3, bgColorTitle );
-		CG_DrawRect( GS_X, y, GS_W, tSpacing + 3, 1, borderColorTitle );
-
-		y += 1 + tSpacing;
-		CG_Text_Paint_Ext( x, y, hScale2, hScaleY2, hdrColor, "Skills", 0.0f, 0, hStyle2, hFont2 );
-		x += 84;
-		CG_Text_Paint_Ext( x, y, hScale2, hScaleY2, hdrColor, "Level", 0.0f, 0, hStyle2, hFont2 );
-		x += 40;
-		CG_Text_Paint_Ext( x, y, hScale2, hScaleY2, hdrColor, "XP / Next Level", 0.0f, 0, hStyle2, hFont2 );
-
-		// Nico, removed gametypes
-		// if ( cgs.gametype == GT_WOLF_CAMPAIGN ) {
-		//	x += 86;
-		//	CG_Text_Paint_Ext( x, y, hScale2, hScaleY2, hdrColor, "Medals", 0.0f, 0, hStyle2, hFont2 );
-		// }
-
-		x = GS_X + 4;
-
-		y += 1;
-		if ( gs->cSkills == 0 ) {
-			y += tSpacing;
-			CG_Text_Paint_Ext( x, y, tScale, tScale, tColor, "No skills acquired!", 0.0f, 0, tStyle, tFont );
-		} 
-		// Nico, removed skills
-		// else {
-		//	for ( i = 0; i < gs->cSkills; i++ ) {
-		//		y += tSpacing;
-		//		CG_Text_Paint_Ext( x, y, tScale, tScale, tColor, gs->strSkillz[i], 0.0f, 0, tStyle, tFont );
-		//	}
-		// }
-	}
-}*/
-
 #define TS_X    -20     // spacing from right
 #define TS_Y    -60     // spacing from bottom
 #define TS_W    308
-
-/* Nico, removed +topshots command
-void CG_TopShotsDraw() {
-	if ( cgs.topshots.show == SHOW_OFF ) {
-		return;
-
-	} else {
-		int i, x = 640 + TS_X - TS_W, y = 480, h;
-		topshotStats_t *ts = &cgs.topshots;
-
-		vec4_t bgColor      = COLOR_BG;         // window
-		vec4_t borderColor  = COLOR_BORDER;     // window
-
-		vec4_t bgColorTitle     = COLOR_BG_TITLE;   // titlebar
-		vec4_t borderColorTitle = COLOR_BORDER_TITLE;   // titlebar
-
-		// Main header
-		int hStyle          = ITEM_TEXTSTYLE_SHADOWED;
-		float hScale        = 0.16f;
-		float hScaleY       = 0.21f;
-		fontInfo_t *hFont   = FONT_HEADER;
-
-		// Sub header
-		int hStyle2         = 0;
-		float hScale2       = 0.16f;
-		float hScaleY2      = 0.20f;
-		fontInfo_t *hFont2  = FONT_SUBHEADER;
-
-		vec4_t hdrColor     = COLOR_HDR;    // text
-		vec4_t hdrColor2    = COLOR_HDR2;   // text
-
-		// Text settings
-		int tStyle          = ITEM_TEXTSTYLE_SHADOWED;
-		int tSpacing        = 9;        // Should derive from CG_Text_Height_Ext
-		float tScale        = 0.19f;
-		fontInfo_t *tFont   = FONT_TEXT;
-		vec4_t tColor       = COLOR_TEXT;   // text
-
-		float diff = cgs.topshots.fadeTime - cg.time;
-
-
-		// FIXME: Should compute this beforehand
-		h = 2 + tSpacing + 2 +                                  // Header
-			2 + 2 + tSpacing + 2 +                          // Stats columns
-			1 +                                             // Stats + extra
-			tSpacing * ( ( ts->cWeapons > 0 ) ? ts->cWeapons : 1 ) +
-			1;
-
-		// Fade-in effects
-		if ( diff > 0.0f ) {
-			float scale = ( diff / STATS_FADE_TIME );
-
-			if ( cgs.topshots.show == SHOW_ON ) {
-				scale = 1.0f - scale;
-			}
-
-			bgColor[3] *= scale;
-			bgColorTitle[3] *= scale;
-			borderColor[3] *= scale;
-			borderColorTitle[3] *= scale;
-			hdrColor[3] *= scale;
-			hdrColor2[3] *= scale;
-			tColor[3] *= scale;
-
-			y += ( TS_Y - h ) * scale;
-
-		} else if ( cgs.topshots.show == SHOW_SHUTDOWN ) {
-			cgs.topshots.show = SHOW_OFF;
-			return;
-		} else {
-			y += TS_Y - h;
-		}
-
-		CG_DrawRect( x, y, TS_W, h, 1, borderColor );
-		CG_FillRect( x, y, TS_W, h, bgColor );
-
-
-
-		// Header
-		CG_FillRect( x, y, TS_W, tSpacing + 4, bgColorTitle );
-		CG_DrawRect( x, y, TS_W, tSpacing + 4, 1, borderColorTitle );
-
-		y += 1;
-		y += tSpacing;
-		CG_Text_Paint_Ext( x + 4, y, hScale, hScaleY, hdrColor, "\"TOPSHOT\" ACCURACIES", 0.0f, 0, hStyle, hFont );
-		y += 4;
-
-
-
-		// Weapon stats
-		y += 2;
-		CG_FillRect( x, y, TS_W, tSpacing + 3, bgColorTitle );
-		CG_DrawRect( x, y, TS_W, tSpacing + 3, 1, borderColorTitle );
-
-		x += 4;
-		y += 1 + tSpacing;
-		CG_Text_Paint_Ext( x, y, hScale2, hScaleY2, hdrColor, "Weapon", 0.0f, 0, hStyle2, hFont2 );
-		x += 60;
-		CG_Text_Paint_Ext( x, y, hScale2, hScaleY2, hdrColor, "Accuracy", 0.0f, 0, hStyle2, hFont2 );
-		x += 53;
-		CG_Text_Paint_Ext( x, y, hScale2, hScaleY2, hdrColor, "Hits / Shots", 0.0f, 0, hStyle2, hFont2 );
-		x += 62;
-		CG_Text_Paint_Ext( x, y, hScale2, hScaleY2, hdrColor, "Kills", 0.0f, 0, hStyle2, hFont2 );
-		x += 32;
-		CG_Text_Paint_Ext( x, y, hScale2, hScaleY2, hdrColor, "Player", 0.0f, 0, hStyle2, hFont2 );
-
-		x = 640 + TS_X - TS_W + 4;
-		y += 1;
-
-		if ( ts->cWeapons == 0 ) {
-			y += tSpacing;
-			CG_Text_Paint_Ext( x, y, tScale, tScale, tColor, "No qualifying weapon info available.", 0.0f, 0, tStyle, tFont );
-		} else {
-			for ( i = 0; i < ts->cWeapons; i++ ) {
-				y += tSpacing;
-				CG_Text_Paint_Ext( x, y, tScale, tScale, tColor, ts->strWS[i], 0.0f, 0, tStyle, tFont );
-			}
-		}
-	}
-}*/
-
-
 
 #define DH_X    -20     // spacing from right
 #define DH_Y    -60     // spacing from bottom
@@ -762,16 +401,6 @@ void CG_DemoHelpDraw() {
 			"^nUP/DOWN   ^mMove in/out"
 		};
 
-		/* Nico, removed multiview
-		const char *mvhelp[] = {
-			NULL,
-			"^nMOUSE1    ^mSelect/move view",
-			"^nMOUSE2    ^mSwap w/main view",
-			"^nMOUSE3    ^mToggle on/off",
-			"^nSHIFT     ^mHold to resize",
-			"^nKP_PGUP   ^mEnable a view",
-			"^nKP_PGDN   ^mClose a view"
-		};*/
 
 		int i, x, y = 480, w, h;
 
@@ -799,15 +428,8 @@ void CG_DemoHelpDraw() {
 
 
 		// FIXME: Should compute this beforehand
-		/* Nico, removed multiview
-		w = DH_W + ( ( cg.mvTotalClients > 1 ) ? 12 : 0 );*/
 		w = DH_W;
 		x = 640 + DH_X - w;
-		/* Nico, removed multiview
-		h = 2 + tSpacing + 2 +                                  // Header
-			2 + 1 +
-			tSpacing * ( 2 + ( sizeof( help ) + ( ( cg.mvTotalClients > 1 ) ? sizeof( mvhelp ) : 0 ) ) / sizeof( char * ) ) +
-			2;*/
 		h = 2 + tSpacing + 2 +                                  // Header
 			2 + 1 +
 			tSpacing * ( 2 + ( sizeof( help ) ) / sizeof( char * ) ) +
@@ -861,16 +483,6 @@ void CG_DemoHelpDraw() {
 				CG_Text_Paint_Ext( x, y, tScale, tScale, tColor, (char*)help[i], 0.0f, 0, tStyle, tFont );
 			}
 		}
-
-		/* Nico, removed multiview
-		if ( cg.mvTotalClients > 1 ) {
-			for ( i = 0; i < sizeof( mvhelp ) / sizeof( char * ); i++ ) {
-				y += tSpacing;
-				if ( mvhelp[i] != NULL ) {
-					CG_Text_Paint_Ext( x, y, tScale, tScale, tColor, (char*)mvhelp[i], 0.0f, 0, tStyle, tFont );
-				}
-			}
-		}*/
 
 		y += tSpacing * 2;
 		CG_Text_Paint_Ext( x, y, tScale, tScale, tColor, "^nBACKSPACE ^mhelp on/off", 0.0f, 0, tStyle, tFont );
@@ -1038,13 +650,6 @@ void CG_SpecHelpDraw() {
 
 
 void CG_DrawOverlays( void ) {
-
-	/* Nico, removed gameStats
-	CG_GameStatsDraw();*/
-
-	/* Nico, removed +topshots command
-	CG_TopShotsDraw();*/
-	
 	if ( cg.demoPlayback ) {
 		CG_DemoHelpDraw();
 	}

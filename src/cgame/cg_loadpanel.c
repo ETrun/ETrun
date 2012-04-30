@@ -146,31 +146,6 @@ panel_button_t missiondescriptionPanelText = {
 	NULL,
 };
 
-/* Nico, removed gametypes
-panel_button_t campaignheaderPanelText = {
-	NULL,
-	NULL,
-	{ 456, 24, 152, 232 },
-	{ 0, 0, 0, 0, 0, 0, 0, 0 },
-	&campaignpheaderTxt,   
-	NULL,                   
-	NULL,                   
-	CG_LoadPanel_RenderCampaignTypeText,
-	NULL,
-};
-
-panel_button_t campaignPanelText = {
-	NULL,
-	NULL,
-	{ 464, 40, 152, 232 },
-	{ 0, 0, 0, 0, 0, 0, 0, 0 },
-	&campaignpTxt,          
-	NULL,                   
-	NULL,                   
-	CG_LoadPanel_RenderCampaignNameText,
-	NULL,
-};*/
-
 panel_button_t loadScreenMeterBack = {
 	"gfx/loading/progressbar_back",
 	NULL,
@@ -213,45 +188,12 @@ panel_button_t* loadpanelButtons[] = {
 
 	&missiondescriptionPanelText, &missiondescriptionPanelHeaderText,
 
-	/* Nico, removed gametypes
-	&campaignheaderPanelText, &campaignPanelText,*/
-
 	&loadScreenMeterBack, &loadScreenMeterBack2, &loadScreenMeterBackText,
 
 	&loadScreenPins,
 
 	NULL,
 };
-
-/*
-================
-CG_DrawConnectScreen
-================
-*/
-/* Nico, removed gametypes
-const char* CG_LoadPanel_GameTypeName( gametype_t gt ) {
-	switch ( gt ) {
-	case GT_SINGLE_PLAYER:
-		return "Single Player";
-	case GT_COOP:
-		return "Co-op";
-	case GT_WOLF:
-		return "Objective";
-	case GT_WOLF_STOPWATCH:
-		return "Stopwatch";
-	case GT_WOLF_CAMPAIGN:
-		return "Campaign";
-
-	// Nico, removed LMS
-	// case GT_WOLF_LMS:
-	//	return "Last Man Standing";
-
-	default:
-		break;
-	}
-
-	return "Invalid";
-}*/
 
 void CG_DrawConnectScreen( qboolean interactive, qboolean forcerefresh ) {
 	static qboolean inside = qfalse;
@@ -387,13 +329,6 @@ void CG_DrawConnectScreen( qboolean interactive, qboolean forcerefresh ) {
 			x = 575;
 			CG_DrawPic( x, y, 16, 16, bg_filter_al );
 		}
-
-		/* Nico, removed balancedteams
-		str = Info_ValueForKey( buffer, "g_balancedteams" );
-		if ( str && *str && atoi( str ) ) {
-			x = 604;
-			CG_DrawPic( x, y, 16, 16, bg_filter_bt );
-		}*/
 	}
 
 	if ( *cgs.rawmapname ) {
@@ -442,67 +377,11 @@ void CG_LoadPanel_RenderLoadingBar( panel_button_t* button ) {
 	CG_DrawPicST( button->rect.x, button->rect.y, button->rect.w * frac, button->rect.h, 0, 0, frac, 1, button->hShaderNormal );
 }
 
-/* Nico, removed gametypes
-void CG_LoadPanel_RenderCampaignTypeText( panel_button_t* button ) {
-	CG_Text_Paint_Ext( button->rect.x, button->rect.y, button->font->scalex, button->font->scaley, button->font->colour, va( "%s:", CG_LoadPanel_GameTypeName( cgs.gametype ) ), 0, 0, button->font->style, button->font->font );
-}*/
-
-/* Nico, removed gametypes
-void CG_LoadPanel_RenderCampaignNameText( panel_button_t* button ) {
-	// const char* cs; Nico, unused warning fix
-	float w;
-
-	if ( cgs.gametype == GT_WOLF_CAMPAIGN ) {
-
-		cs = DC->nameForCampaign();
-		if ( !cs ) {
-			return;
-		}
-
-		cs = va( "%s %iof%i", cs, cgs.currentCampaignMap + 1, cgs.campaignData.mapCount );
-
-		w = CG_Text_Width_Ext( cs, button->font->scalex, 0, button->font->font );
-		CG_Text_Paint_Ext( button->rect.x + ( button->rect.w - w ) * 0.5f, button->rect.y, button->font->scalex, button->font->scaley, button->font->colour, cs, 0, 0, 0, button->font->font );
-
-	} else {
-
-		if ( !cgs.arenaInfoLoaded ) {
-			return;
-		}
-
-		w = CG_Text_Width_Ext( cgs.arenaData.longname, button->font->scalex, 0, button->font->font );
-		CG_Text_Paint_Ext( button->rect.x + ( button->rect.w - w ) * 0.5f, button->rect.y, button->font->scalex, button->font->scaley, button->font->colour, cgs.arenaData.longname, 0, 0, 0, button->font->font );
-	}
-}*/
-
 void CG_LoadPanel_RenderMissionDescriptionText( panel_button_t* button ) {
 	const char* cs;
 	char *s, *p;
 	char buffer[1024];
 	float y;
-
-	/* Nico, removed gametypes
-	if ( cgs.gametype == GT_WOLF_CAMPAIGN ) {
-
-		cs = DC->descriptionForCampaign();
-		if ( !cs ) {
-			return;
-		}
-
-	}*/
-	
-	/* Nico, removed LMS
-	else if ( cgs.gametype == GT_WOLF_LMS ) {
-
-		//cs = CG_ConfigString( CS_MULTI_MAPDESC3 );
-
-		if ( !cgs.arenaInfoLoaded ) {
-			return;
-		}
-
-		cs = cgs.arenaData.lmsdescription;
-
-	} */
 	
 	//else
 	{
@@ -580,51 +459,14 @@ void CG_LoadPanel_DrawPin( const char* text, float px, float py, float sx, float
 }
 
 void CG_LoadPanel_RenderCampaignPins( panel_button_t* button ) {
-	
-	/* Nico, removed gametypes
-	int i;
-	qhandle_t shader;*/
+	float px, py;
 
-	/* Nico, removed LMS
-	if ( cgs.gametype == GT_WOLF_STOPWATCH || cgs.gametype == GT_WOLF_LMS || cgs.gametype == GT_WOLF ) {*/
+	if ( !cgs.arenaInfoLoaded ) {
+		return;
+	}
 
-	/* Nico, removed gametypes
-	if ( cgs.gametype == GT_WOLF_STOPWATCH || cgs.gametype == GT_WOLF ) {*/
-		float px, py;
+	px = ( cgs.arenaData.mappos[0] / 1024.f ) * 440.f;
+	py = ( cgs.arenaData.mappos[1] / 1024.f ) * 480.f;
 
-		if ( !cgs.arenaInfoLoaded ) {
-			return;
-		}
-
-		px = ( cgs.arenaData.mappos[0] / 1024.f ) * 440.f;
-		py = ( cgs.arenaData.mappos[1] / 1024.f ) * 480.f;
-
-		CG_LoadPanel_DrawPin( cgs.arenaData.longname, px, py, 0.22f, 0.25f, bg_neutralpin, 16.f, 16.f );
-	
-	/* Nico, removed gametypes
-	} else {
-		if ( !cgs.campaignInfoLoaded ) {
-			return;
-		}
-
-		for ( i = 0; i < cgs.campaignData.mapCount; i++ ) {
-			float px, py;
-
-			cg.teamWonRounds[1] = atoi( CG_ConfigString( CS_ROUNDSCORES1 ) );
-			cg.teamWonRounds[0] = atoi( CG_ConfigString( CS_ROUNDSCORES2 ) );
-
-			if ( cg.teamWonRounds[1] & ( 1 << i ) ) {
-				shader = bg_axispin;
-			} else if ( cg.teamWonRounds[0] & ( 1 << i ) ) {
-				shader = bg_alliedpin;
-			} else {
-				shader = bg_neutralpin;
-			}
-
-			px = ( cgs.campaignData.arenas[i].mappos[0] / 1024.f ) * 440.f;
-			py = ( cgs.campaignData.arenas[i].mappos[1] / 1024.f ) * 480.f;
-
-			CG_LoadPanel_DrawPin( cgs.campaignData.arenas[i].longname, px, py, 0.22f, 0.25f, shader, 16.f, 16.f );
-		}
-	}*/
+	CG_LoadPanel_DrawPin( cgs.arenaData.longname, px, py, 0.22f, 0.25f, bg_neutralpin, 16.f, 16.f );
 }

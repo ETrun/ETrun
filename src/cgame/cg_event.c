@@ -46,9 +46,6 @@ static void CG_Obituary( entityState_t *ent ) {
 	char        *message2;
 	char targetName[32];
 
-	/* Nico, removed obituary messages
-	char attackerName[32];*/
-
 	clientInfo_t    *ci, *ca; // JPW NERVE ca = attacker
 	qhandle_t deathShader = cgs.media.pmImages[PM_DEATH];
 
@@ -172,43 +169,8 @@ static void CG_Obituary( entityState_t *ent ) {
 
 	if ( message ) {
 		message = CG_TranslateString( message );
-		// Nico, removed obituary messages
-		// CG_AddPMItem( PM_DEATH, va( "%s %s.", targetName, message ), deathShader );
 		return;
 	}
-
-	// check for kill messages from the current clientNum
-	/* Nico, removed obituary messages
-	if ( attacker == cg.snap->ps.clientNum ) {
-		char    *s;
-
-		if ( ci->team == ca->team ) {
-			if ( mod == MOD_SWAP_PLACES ) {
-				s = va( "%s %s", CG_TranslateString( "You swapped places with" ), targetName );
-			} else {
-				s = va( "%s %s", CG_TranslateString( "You killed ^1TEAMMATE^7" ), targetName );
-			}
-		} else {
-			s = va( "%s %s", CG_TranslateString( "You killed" ), targetName );
-		}
-		
-		// CG_PriorityCenterPrint( s, SCREEN_HEIGHT * 0.75, BIGCHAR_WIDTH * 0.6, 1 );
-		// print the text message as well
-	}*/
-
-	// check for double client messages
-	/* Nico, removed obituary messages
-	if ( !ca ) {
-		strcpy( attackerName, "noname" );
-	} else {
-		Q_strncpyz( attackerName, ca->name, sizeof( attackerName ) - 2 );
-		strcat( attackerName, S_COLOR_WHITE );
-
-		// check for kill messages about the current clientNum
-		if ( target == cg.snap->ps.clientNum ) {
-			Q_strncpyz( cg.killerName, attackerName, sizeof( cg.killerName ) );
-		}
-	}*/
 
 	if ( ca ) {
 		switch ( mod ) {
@@ -399,8 +361,6 @@ static void CG_Obituary( entityState_t *ent ) {
 			message = CG_TranslateString( message );
 			if ( message2 ) {
 				message2 = CG_TranslateString( message2 );
-				// Nico, removed obituary messages
-				// CG_AddPMItem( PM_DEATH, va( "%s %s %s%s", targetName, message, attackerName, message2 ), deathShader );
 			}
 			return;
 		}
@@ -834,15 +794,6 @@ void CG_RubbleFx( vec3_t origin, vec3_t dir, int mass, int type, sfxHandle_t sou
 				break;
 
 			case 3: // "gibs"
-				/* Nico, removed gib
-				snd = LEBS_BLOOD;
-				if ( i == 5 ) {
-					hmodel = cgs.media.gibIntestine;
-				} else if ( i == 4 ) {
-					hmodel = cgs.media.gibLeg;
-				} else if ( i == 2 )                                        {
-					hmodel = cgs.media.gibChest;
-				} else { goto pass;}*/
 				break;
 
 			case 4: // "brick"
@@ -1124,15 +1075,6 @@ void CG_Explodef( vec3_t origin, vec3_t dir, int mass, int type, qhandle_t sound
 				break;
 
 			case 3: // "gibs"
-				/* Nico, removed gib
-				snd = LEBS_BLOOD;
-				if ( i == 5 ) {
-					hmodel = cgs.media.gibIntestine;
-				} else if ( i == 4 ) {
-					hmodel = cgs.media.gibLeg;
-				} else if ( i == 2 ) {
-					hmodel = cgs.media.gibChest;
-				} else { goto pass;}*/
 				break;
 
 			case 4: // "brick"
@@ -1393,13 +1335,9 @@ void CG_Effect( centity_t *cent, vec3_t origin, vec3_t dir ) {
 
 		VectorCopy( origin, re->origin );
 		AxisCopy( axisDefault, re->axis );
-		//	re->hModel = hModel;
-		/* Nico, removed gib
-		re->hModel = cgs.media.gibIntestine;*/
 		le->pos.trType = TR_GRAVITY;
 		VectorCopy( origin, le->pos.trBase );
 
-		//	VectorCopy( velocity, le->pos.trDelta );
 		VectorNormalize( dir );
 		VectorMA( dir, 200, dir, le->pos.trDelta );
 
@@ -2084,11 +2022,6 @@ void CG_EntityEvent( centity_t *cent, vec3_t position ) {
 
 	case EV_FILL_CLIP:
 		DEBUGNAME( "EV_FILL_CLIP" );
-
-		/* Nico, removed skills
-		if ( cgs.clientinfo[cg.clientNum].skill[SK_LIGHT_WEAPONS] >= 2 && BG_isLightWeaponSupportingFastReload( es->weapon ) && cg_weapons[es->weapon].reloadFastSound ) {
-			trap_S_StartSound( NULL, es->number, CHAN_WEAPON, cg_weapons[es->weapon].reloadFastSound );
-		} else */
 		if ( cg_weapons[es->weapon].reloadSound ) {
 			trap_S_StartSound( NULL, es->number, CHAN_WEAPON, cg_weapons[es->weapon].reloadSound ); // JPW NERVE following sherman's SP fix, should allow killing reload sound when player dies
 		}
@@ -2097,7 +2030,6 @@ void CG_EntityEvent( centity_t *cent, vec3_t position ) {
 // JPW NERVE play a sound when engineer fixes MG42
 	case EV_MG42_FIXED:
 		DEBUGNAME( "EV_MG42_FIXED" );
-		//trap_S_StartSound(NULL,es->number,CHAN_WEAPON,cg_weapons[WP_MAUSER].reloadSound); // Arnout: needs updating
 		break;
 // jpw
 
@@ -2236,14 +2168,7 @@ void CG_EntityEvent( centity_t *cent, vec3_t position ) {
 			trap_S_StartSound( NULL, es->number, CHAN_AUTO, cgs.media.satchelbounce1 );
 		} else if ( es->weapon == WP_DYNAMITE ) {
 			trap_S_StartSound( NULL, es->number, CHAN_AUTO, cgs.media.dynamitebounce1 );
-		} 
-		
-		/* Nico, removed mines
-		else if ( es->weapon == WP_LANDMINE ) {
-			trap_S_StartSound( NULL, es->number, CHAN_AUTO, cgs.media.landminebounce1 );
-		}*/
-		
-		else {
+		} else {
 			// GRENADES
 			if ( es->eventParm != FOOTSTEP_TOTAL ) {
 				if ( rand() & 1 ) {
@@ -2254,15 +2179,6 @@ void CG_EntityEvent( centity_t *cent, vec3_t position ) {
 			}
 		}
 		break;
-
-/*	case EV_FLAMEBARREL_BOUNCE:
-		DEBUGNAME("EV_FLAMEBARREL_BOUNCE");
-		if ( rand() & 1 ) {
-			trap_S_StartSound (NULL, es->number, CHAN_AUTO, cgs.media.fbarrelexp1 );
-		} else {
-			trap_S_StartSound (NULL, es->number, CHAN_AUTO,  cgs.media.fbarrelexp2 );
-		}
-		break;*/
 
 	case EV_RAILTRAIL:
 		CG_RailTrail( &cgs.clientinfo[ es->otherEntityNum2 ], es->origin2, es->pos.trBase, es->dmgFlags );   //----(SA)	added 'type' field
@@ -2307,8 +2223,6 @@ void CG_EntityEvent( centity_t *cent, vec3_t position ) {
 		DEBUGNAME( "EV_MISSILE_MISS_LARGE" );
 		ByteToDir( es->eventParm, dir );
 		if ( es->weapon == WP_ARTY || es->weapon == WP_SMOKE_MARKER ) {
-			/* Nico, removed airstrikes
-			CG_MissileHitWall( es->weapon, 0, position, dir, 0 );    // (SA) modified to send missilehitwall surface parameters*/
 		} else {
 			CG_MissileHitWall( VERYBIGEXPLOSION, 0, position, dir, 0 );  // (SA) modified to send missilehitwall surface parameters
 		}
@@ -2515,22 +2429,9 @@ void CG_EntityEvent( centity_t *cent, vec3_t position ) {
 		break;
 
 	case EV_LOSE_HAT:
-
-		/* Nico, removed loseHat
-		DEBUGNAME( "EV_LOSE_HAT" );
-		ByteToDir( es->eventParm, dir );
-		CG_LoseHat( cent, dir );*/
-
 		break;
 
 	case EV_GIB_PLAYER:
-
-		/* Nico, removed gib
-		DEBUGNAME( "EV_GIB_PLAYER" );
-		trap_S_StartSound( es->pos.trBase, -1, CHAN_AUTO, cgs.media.gibSound );
-		ByteToDir( es->eventParm, dir );
-		CG_GibPlayer( cent, cent->lerpOrigin, dir );*/
-
 		break;
 
 	case EV_STOPLOOPINGSOUND:
@@ -2560,10 +2461,6 @@ void CG_EntityEvent( centity_t *cent, vec3_t position ) {
 		break;
 
 	case EV_DUST:
-
-		/* Nico, removed blood
-		CG_ParticleDust( cent, cent->currentState.origin, cent->currentState.angles );*/
-
 		break;
 
 	case EV_RUMBLE_EFX:
