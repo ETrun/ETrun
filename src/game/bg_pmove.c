@@ -41,13 +41,6 @@ If you have questions concerning this license or the applicable additional terms
 
 #include "bg_local.h"
 
-/* Nico, removed (c)g_gametype
-#ifdef CGAMEDLL
-#define PM_GameType cg_gameType.integer
-#elif GAMEDLL
-#define PM_GameType g_gametype.integer
-#endif*/
-
 #define PM_IsSinglePlayerGame() ( PM_GameType == GT_SINGLE_PLAYER || PM_GameType == GT_COOP )
 
 pmove_t     *pm;
@@ -85,10 +78,6 @@ const float pm_wishspeed = 30;// Nico, default value 30
 const float pm_airstopaccelerate = 2.0f;// Nico, CPM value: 2.5f, Racesow value: 2.0f
 
 int c_pmove = 0;
-
-/* Nico, removed mines
-#define TRIPMINE_RANGE 512.f*/
-
 
 #ifdef GAMEDLL
 
@@ -260,9 +249,6 @@ static void PM_Friction( void ) {
 	drop = 0;
 
 	// apply end of dodge friction
-	/* Nico, removed dodgeTime
-	if ( pm->cmd.serverTime - pm->pmext->dodgeTime < 350 &&
-		 pm->cmd.serverTime - pm->pmext->dodgeTime > 250 ) {*/
 	if ( pm->cmd.serverTime < 350 &&
 		 pm->cmd.serverTime > 250 ) {
 		drop += speed * 20 * pml.frametime;
@@ -352,22 +338,6 @@ static void PM_Accelerate( vec3_t wishdir, float wishspeed, float accel ) {
 		pm->ps->velocity[i] += accelspeed * wishdir[i];
 	}
 }
-// JPW NERVE -- added because I need to check single/multiplayer instances and branch accordingly
-/* Nico, removed (c)g_movespeed
-#ifdef CGAMEDLL
-
-// Nico, removed (c)g_gametype
-// extern vmCvar_t cg_gameType;
-
-extern vmCvar_t cg_movespeed;
-#endif
-#ifdef GAMEDLL
-
-// Nico, removed (c)g_gametype
-// extern vmCvar_t g_gametype;
-
-extern vmCvar_t g_movespeed;
-#endif*/
 
 /*
 ============
@@ -382,21 +352,6 @@ static float PM_CmdScale( usercmd_t *cmd ) {
 	int max;
 	float total;
 	float scale;
-
-/* Nico, removed (c)g_movespeed
-#ifdef CGAMEDLL
-
-	// Nico, removed (c)g_gametype
-	// int gametype = cg_gameType.integer;
-
-	int movespeed = cg_movespeed.integer;
-#elif GAMEDLL
-
-	// Nico, removed (c)g_gametype
-	// int gametype = g_gametype.integer;
-
-	int movespeed = g_movespeed.integer;
-#endif*/
 
 	max = abs( cmd->forwardmove );
 	if ( abs( cmd->rightmove ) > max ) {
@@ -413,8 +368,6 @@ static float PM_CmdScale( usercmd_t *cmd ) {
 				  + cmd->rightmove * cmd->rightmove + cmd->upmove * cmd->upmove );
 	scale = (float)pm->ps->speed * max / ( 127.0 * total );
 
-	/* Nico, removed sprint time limit
-	if ( pm->cmd.buttons & BUTTON_SPRINT && pm->pmext->sprintTime > 50 ) {*/
 	if ( pm->cmd.buttons & BUTTON_SPRINT ) {
 		scale *= pm->ps->sprintSpeedScale;
 	} else {
@@ -436,29 +389,14 @@ static float PM_CmdScale( usercmd_t *cmd ) {
 		 ( pm->ps->weapon == WP_MOBILE_MG42_SET ) ||
 		 ( pm->ps->weapon == WP_MORTAR ) ) {
 
-		 /* Nico, removed skills
-		if ( pm->skill[SK_HEAVY_WEAPONS] >= 3 ) {
-			scale *= 0.75;
-		} else {*/
-			scale *= 0.5;
-		// }
+		scale *= 0.5;
 	}
 
 	if ( pm->ps->weapon == WP_FLAMETHROWER ) { // trying some different balance for the FT
-
-		/* Nico, removed skills
-		if ( !( pm->skill[SK_HEAVY_WEAPONS] >= 3 ) || pm->cmd.buttons & BUTTON_ATTACK ) {*/
 		if ( pm->cmd.buttons & BUTTON_ATTACK ) {
 			scale *= 0.7;
 		}
 	}
-
-	/* Nico, removed gametypes
-	if ( gametype == GT_SINGLE_PLAYER || gametype == GT_COOP ) {
-		// Adjust the movespeed
-		scale *= ( ( (float) movespeed ) / (float) 127 );
-	}*/
-
 	return scale;
 }
 
@@ -773,17 +711,6 @@ static qboolean PM_CheckProne( void ) {
 
 	return( qfalse );
 }
-
-/*
-=============
-PM_CheckDodge
-=============
-*/
-/* Nico, removed because useless (always returning qfalse)
-static qboolean PM_CheckDodge( void ) {
-	return qfalse;
-}*/
-
 //============================================================================
 
 /*
@@ -980,8 +907,6 @@ static void PM_AirMove( void ) {
 	smove = pm->cmd.rightmove;
 
 	// project moves down to flat plane
-	/* Nico, removed dodgeTime
-	if ( pm->cmd.serverTime - pm->pmext->dodgeTime < 350 ) {*/
 	if ( pm->cmd.serverTime < 350 ) {
 		pml.forward[2] = fmove = 0;
 		smove = pm->pmext->dtmove == DT_MOVELEFT ? -2070 : 2070;
@@ -1085,13 +1010,6 @@ static void PM_WalkMove( void ) {
 		}
 
 		if ( !( pm->cmd.serverTime - pm->pmext->jumpTime < 850 ) ) {
-
-			/* Nico, removed sprint time limit
-			pm->pmext->sprintTime -= 2500;
-			if ( pm->pmext->sprintTime < 0 ) {
-				pm->pmext->sprintTime = 0;
-			}*/
-
 			pm->pmext->jumpTime = pm->cmd.serverTime;
 		}
 
@@ -1100,13 +1018,6 @@ static void PM_WalkMove( void ) {
 
 		return;
 	}
-	/* Nico, removed because PM_CheckDodge is useless (always returning qfalse)
-	else {
-		if ( pm->waterlevel <= 1 && PM_CheckDodge() ) {
-			PM_AirMove();
-			return;
-		}
-	}*/
 
 	PM_Friction();
 
@@ -2198,8 +2109,6 @@ void PM_UpdateViewAngles( playerState_t *ps, pmoveExt_t *pmext, usercmd_t *cmd, 
 	vec3_t oldViewAngles;
 
 	// DHM - Nerve :: Added support for PMF_TIME_LOCKPLAYER
-	/* Nico, removed intermission
-	if ( ps->pm_type == PM_INTERMISSION || ps->pm_flags & PMF_TIME_LOCKPLAYER ) {*/
 	if ( ps->pm_flags & PMF_TIME_LOCKPLAYER ) {
 		return;     // no view changes at all
 	}
@@ -2688,101 +2597,6 @@ void PM_LadderMove( void ) {
 	pm->ps->movementDir = 0;
 }
 
-
-/*
-Nico, this function does norhing because there is no more fatigue
-==============
-PM_Sprint
-==============
-
-void PM_Sprint( void ) {
-	if ( pm->cmd.buttons & BUTTON_SPRINT && ( pm->cmd.forwardmove || pm->cmd.rightmove ) && !( pm->ps->pm_flags & PMF_DUCKED ) && !( pm->ps->eFlags & EF_PRONE ) ) {
-		
-		// Nico, removed adrenaline
-		// if ( pm->ps->powerups[PW_ADRENALINE] ) {
-		//	pm->pmext->sprintTime = SPRINTTIME;
-		// } else 
-
-		// Nico, removed nofatigue
-		if ( pm->ps->powerups[PW_NOFATIGUE] ) {
-			// take time from powerup before taking it from sprintTime
-			pm->ps->powerups[PW_NOFATIGUE] -= 50;
-
-			// (SA) go ahead and continue to recharge stamina at double
-			// rate with stamina powerup even when exerting
-			// Nico, removed sprint time limit
-			// pm->pmext->sprintTime += 10;
-			// if ( pm->pmext->sprintTime > SPRINTTIME ) {
-			// 	pm->pmext->sprintTime = SPRINTTIME;
-			// }
-
-			if ( pm->ps->powerups[PW_NOFATIGUE] < 0 ) {
-				pm->ps->powerups[PW_NOFATIGUE] = 0;
-			}
-		}
-		// JPW NERVE -- sprint time tuned for multiplayer
-		// Nico, removed sprint time limit
-		// else  {
-			// JPW NERVE adjusted for framerate independence
-		//	pm->pmext->sprintTime -= 5000 * pml.frametime;
-		// }
-		// jpw
-
-		// Nico, removed sprint time limit
-		// if ( pm->pmext->sprintTime < 0 ) {
-		// 	pm->pmext->sprintTime = 0;
-		//}
-
-		if ( !pm->ps->sprintExertTime ) {
-			pm->ps->sprintExertTime = 1;
-		}
-	} else
-	{
-		// JPW NERVE -- in multiplayer, recharge faster for top 75% of sprint bar
-		// (for people that *just* use it for jumping, not sprint) this code was
-		// mucked about with to eliminate client-side framerate-dependancy in wolf single player
-		
-		// Nico, removed adrenaline
-		// if ( pm->ps->powerups[PW_ADRENALINE] ) {
-		//	pm->pmext->sprintTime = SPRINTTIME;
-		// } else 
-
-		if ( pm->ps->powerups[PW_NOFATIGUE] ) { // (SA) recharge at 2x with stamina powerup
-
-			// Nico, removed sprint time limit
-			// pm->pmext->sprintTime += 10;
-
-		} else {
-			int rechargebase = 500;
-
-#ifdef GAMEDLL // Gordon: FIXME: predict leadership clientside
-			if ( pm->leadership ) {
-				rechargebase = 1000;
-			} else
-#endif // GAMEDLL
-			{
-				if ( pm->skill[SK_BATTLE_SENSE] >= 2 ) {
-					rechargebase *= 1.6f;
-				}
-			}
-
-			// Nico, removed sprint time limit
-			// pm->pmext->sprintTime += rechargebase * pml.frametime;        // JPW NERVE adjusted for framerate independence
-			// if ( pm->pmext->sprintTime > 5000 ) {
-			//	pm->pmext->sprintTime += rechargebase * pml.frametime;    // JPW NERVE adjusted for framerate independence
-			// }
-
-			// jpw
-		}
-
-		// Nico, removed sprint time limit
-		// if ( pm->pmext->sprintTime > SPRINTTIME ) {
-		// 	pm->pmext->sprintTime = SPRINTTIME;
-		// }
-		// pm->ps->sprintExertTime = 0;
-	}
-}*/
-
 /*
 ================
 PmoveSingle
@@ -2807,8 +2621,6 @@ void PmoveSingle( pmove_t *pmove ) {
 	pm->waterlevel = 0;
 
 	if ( pm->ps->stats[STAT_HEALTH] <= 0 ) {
-		// Nico, ghost players
-		// pm->tracemask &= ~CONTENTS_BODY;    // corpses can fly through bodies
 		pm->ps->eFlags &= ~EF_ZOOMING;
 	}
 
@@ -2847,10 +2659,6 @@ void PmoveSingle( pmove_t *pmove ) {
 		}
 	}
 
-
-	/* Nico, removed intermission
-	if ( !( pm->ps->pm_flags & PMF_RESPAWNED ) &&
-		 ( pm->ps->pm_type != PM_INTERMISSION ) ) {*/
 	if ( !( pm->ps->pm_flags & PMF_RESPAWNED ) ) {
 
 		// check for ammo
@@ -2970,11 +2778,6 @@ void PmoveSingle( pmove_t *pmove ) {
 	if ( pm->ps->pm_type == PM_FREEZE ) {
 		return;     // no movement at all
 	}
-
-	/* Nico, removed intermission
-	if ( pm->ps->pm_type == PM_INTERMISSION ) {
-		return;     // no movement at all
-	}*/
 
 	// ydnar: need gravity etc to affect a player with a set mortar
 	if ( pm->ps->weapon == WP_MORTAR_SET && pm->ps->pm_type == PM_NORMAL ) {

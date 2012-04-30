@@ -274,15 +274,3 @@ int BG_ClassTextToClass( char *token ) {
 
 	return -1;
 }
-
-/* Nico, removed skills
-skillType_t BG_ClassSkillForClass( int classnum ) {
-	skillType_t classskill[NUM_PLAYER_CLASSES] = { SK_HEAVY_WEAPONS, SK_FIRST_AID, SK_EXPLOSIVES_AND_CONSTRUCTION, SK_SIGNALS, SK_MILITARY_INTELLIGENCE_AND_SCOPED_WEAPONS };
-
-	if ( classnum < 0 || classnum >= NUM_PLAYER_CLASSES ) {
-		return SK_BATTLE_SENSE;
-	}
-
-	return classskill[ classnum ];
-}*/
-

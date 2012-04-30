@@ -70,76 +70,6 @@ void CG_LimboMenu_f( void ) {
 	}
 }
 
-/* Nico, removed ws related command
-static void CG_StatsDown_f( void ) {
-	if ( !cg.demoPlayback ) {
-		// Nico, removed multiview
-		// int i = ( cg.mvTotalClients > 0 ) ? ( cg.mvCurrentActive->mvInfo & MV_PID ) : cg.snap->ps.clientNum;
-		int i =  cg.snap->ps.clientNum;
-
-		// Nico, removed multiview
-		//if ( cg.mvTotalClients < 1 && cg.snap->ps.persistant[PERS_TEAM] == TEAM_SPECTATOR ) {
-		if ( cg.snap->ps.persistant[PERS_TEAM] == TEAM_SPECTATOR ) {
-			Pri( "You must be a player or following a player to use +stats\n" );
-			return;
-		}
-
-		if ( cgs.gamestats.show == SHOW_SHUTDOWN && cg.time < cgs.gamestats.fadeTime ) {
-			cgs.gamestats.fadeTime = 2 * cg.time + STATS_FADE_TIME - cgs.gamestats.fadeTime;
-		} else if ( cgs.gamestats.show != SHOW_ON ) {
-			cgs.gamestats.fadeTime = cg.time + STATS_FADE_TIME;
-		}
-
-		cgs.gamestats.show = SHOW_ON;
-
-		if ( cgs.gamestats.requestTime < cg.time ) {
-			cgs.gamestats.requestTime = cg.time + 2000;
-			trap_SendClientCommand( va( "sgstats %d", i ) );
-		}
-	}
-}*/
-
-/* Nico, removed ws related command
-static void CG_StatsUp_f( void ) {
-	if ( cgs.gamestats.show == SHOW_ON ) {
-		cgs.gamestats.show = SHOW_SHUTDOWN;
-		if ( cg.time < cgs.gamestats.fadeTime ) {
-			cgs.gamestats.fadeTime = 2 * cg.time + STATS_FADE_TIME - cgs.gamestats.fadeTime;
-		} else {
-			cgs.gamestats.fadeTime = cg.time + STATS_FADE_TIME;
-		}
-	}
-}*/
-
-/* Nico, removed +topshots command
-void CG_topshotsDown_f( void ) {
-	if ( !cg.demoPlayback ) {
-		if ( cgs.topshots.show == SHOW_SHUTDOWN && cg.time < cgs.topshots.fadeTime ) {
-			cgs.topshots.fadeTime = 2 * cg.time + STATS_FADE_TIME - cgs.topshots.fadeTime;
-		} else if ( cgs.topshots.show != SHOW_ON ) {
-			cgs.topshots.fadeTime = cg.time + STATS_FADE_TIME;
-		}
-
-		cgs.topshots.show = SHOW_ON;
-
-		if ( cgs.topshots.requestTime < cg.time ) {
-			cgs.topshots.requestTime = cg.time + 2000;
-			trap_SendClientCommand( "stshots" );
-		}
-	}
-}
-
-void CG_topshotsUp_f( void ) {
-	if ( cgs.topshots.show == SHOW_ON ) {
-		cgs.topshots.show = SHOW_SHUTDOWN;
-		if ( cg.time < cgs.topshots.fadeTime ) {
-			cgs.topshots.fadeTime = 2 * cg.time + STATS_FADE_TIME - cgs.topshots.fadeTime;
-		} else {
-			cgs.topshots.fadeTime = cg.time + STATS_FADE_TIME;
-		}
-	}
-}*/
-
 void CG_ScoresDown_f( void ) {
 	if ( cg.scoresRequestTime + 2000 < cg.time ) {
 		// the scores are more than two seconds out of data,
@@ -147,8 +77,6 @@ void CG_ScoresDown_f( void ) {
 		cg.scoresRequestTime = cg.time;
 
 		// OSP - we get periodic score updates if we are merging clients
-		/* Nico, removed multiview
-		if ( !cg.demoPlayback && cg.mvTotalClients < 1 ) {*/
 		if (!cg.demoPlayback) {
 			trap_SendClientCommand( "score" );
 		}
@@ -157,8 +85,6 @@ void CG_ScoresDown_f( void ) {
 		// displayed, but if this is the first hit, clear them out
 		if ( !cg.showScores ) {
 			cg.showScores = qtrue;
-			/* Nico, removed multiview
-			if ( !cg.demoPlayback && cg.mvTotalClients < 1 ) {*/
 			if (!cg.demoPlayback) {
 				cg.numScores = 0;
 			}
@@ -176,11 +102,6 @@ void CG_ScoresUp_f( void ) {
 		cg.scoreFadeTime = cg.time;
 	}
 }
-
-/* Nico, empty function
-static void CG_LoadHud_f( void ) {
-}*/
-
 static void CG_LoadWeapons_f( void ) {
 	int i;
 
@@ -454,17 +375,6 @@ static void CG_SayPlayerClass_f( void ) {
 		s = "IamSoldier";
 	}
 
-	/* Nico, removed intermission
-	if ( cg.snap && ( cg.snap->ps.pm_type != PM_INTERMISSION ) ) {*/
-
-	/* Nico, enable voice chat for spectators
-	if ( cg.snap ) {
-		if ( cgs.clientinfo[cg.clientNum].team == TEAM_SPECTATOR || cgs.clientinfo[cg.clientNum].team == TEAM_FREE ) {
-			CG_Printf( CG_TranslateString( "Can't team voice chat as a spectator.\n" ) );
-			return;
-		}
-	}*/
-
 	trap_SendConsoleCommand( va( "cmd vsay_team %s\n", s ) );
 }
 
@@ -474,19 +384,6 @@ static void CG_VoiceChat_f( void ) {
 	if ( trap_Argc() != 2 ) {
 		return;
 	}
-
-	// NERVE - SMF - don't let spectators voice chat
-	// NOTE - This cg.snap will be the person you are following, but its just for intermission test
-	/* Nico, removed intermission
-	if ( cg.snap && ( cg.snap->ps.pm_type != PM_INTERMISSION ) ) {*/
-
-	/* Nico, enable voice chat for spectators
-	if ( cg.snap ) {
-		if ( cgs.clientinfo[cg.clientNum].team == TEAM_SPECTATOR || cgs.clientinfo[cg.clientNum].team == TEAM_FREE ) {
-			CG_Printf( CG_TranslateString( "Can't voice chat as a spectator.\n" ) );
-			return;
-		}
-	}*/
 
 	trap_Argv( 1, chatCmd, 64 );
 
@@ -500,19 +397,6 @@ static void CG_TeamVoiceChat_f( void ) {
 		return;
 	}
 
-	// NERVE - SMF - don't let spectators voice chat
-	// NOTE - This cg.snap will be the person you are following, but its just for intermission test
-	/* Nico, removed intermission
-	if ( cg.snap && ( cg.snap->ps.pm_type != PM_INTERMISSION ) ) {*/
-
-	/* Nico, enable voice chat for spectators
-	if ( cg.snap ) {
-		if ( cgs.clientinfo[cg.clientNum].team == TEAM_SPECTATOR || cgs.clientinfo[cg.clientNum].team == TEAM_FREE ) {
-			CG_Printf( CG_TranslateString( "Can't team voice chat as a spectator.\n" ) );
-			return;
-		}
-	}*/
-
 	trap_Argv( 1, chatCmd, 64 );
 
 	trap_SendConsoleCommand( va( "cmd vsay_team %s\n", chatCmd ) );
@@ -524,19 +408,6 @@ static void CG_BuddyVoiceChat_f( void ) {
 	if ( trap_Argc() != 2 ) {
 		return;
 	}
-
-	// NERVE - SMF - don't let spectators voice chat
-	// NOTE - This cg.snap will be the person you are following, but its just for intermission test
-	/* Nico, removed intermission
-	if ( cg.snap && ( cg.snap->ps.pm_type != PM_INTERMISSION ) ) {*/
-
-	/* Nico, enable voice chat for spectators
-	if ( cg.snap ) {
-		if ( cgs.clientinfo[cg.clientNum].team == TEAM_SPECTATOR || cgs.clientinfo[cg.clientNum].team == TEAM_FREE ) {
-			CG_Printf( CG_TranslateString( "Can't buddy voice chat as a spectator.\n" ) );
-			return;
-		}
-	}*/
 
 	trap_Argv( 1, chatCmd, 64 );
 
@@ -683,47 +554,6 @@ static void CG_SelectBuddy_f( void ) {
 	}
 }
 
-/* Nico, removed commandmap
-extern void CG_AdjustAutomapZoom( int zoomIn );
-
-static void CG_AutomapZoomIn_f( void ) {
-	if ( !cgs.autoMapOff ) {
-		CG_AdjustAutomapZoom( qtrue );
-	}
-}
-
-static void CG_AutomapZoomOut_f( void ) {
-	if ( !cgs.autoMapOff ) {
-		CG_AdjustAutomapZoom( qfalse );
-	}
-}
-
-static void CG_AutomapExpandDown_f( void ) {
-	if ( !cgs.autoMapExpanded ) {
-		cgs.autoMapExpanded = qtrue;
-		if ( cg.time - cgs.autoMapExpandTime < 250.f ) {
-			cgs.autoMapExpandTime = cg.time - ( 250.f - ( cg.time - cgs.autoMapExpandTime ) );
-		} else {
-			cgs.autoMapExpandTime = cg.time;
-		}
-	}
-}
-
-static void CG_AutomapExpandUp_f( void ) {
-	if ( cgs.autoMapExpanded ) {
-		cgs.autoMapExpanded = qfalse;
-		if ( cg.time - cgs.autoMapExpandTime < 250.f ) {
-			cgs.autoMapExpandTime = cg.time - ( 250.f - ( cg.time - cgs.autoMapExpandTime ) );
-		} else {
-			cgs.autoMapExpandTime = cg.time;
-		}
-	}
-}
-
-static void CG_ToggleAutomap_f( void ) {
-	cgs.autoMapOff = !cgs.autoMapOff;
-}*/
-
 // OSP
 const char *aMonths[12] = {
 	"Jan", "Feb", "Mar", "Apr", "May", "Jun",
@@ -781,48 +611,8 @@ void CG_keyOff_f( void ) {
 	CG_EventHandling( CGAME_EVENT_NONE, qfalse );
 }
 
-/* Nico, removed statsdump client command
-void CG_dumpStats_f( void ) {
-	if ( cgs.dumpStatsTime < cg.time ) {
-		cgs.dumpStatsTime = cg.time + 2000;
-		// Nico, removed multiview
-		// trap_SendClientCommand( ( cg.mvTotalClients < 1 ) ? "weaponstats" : "statsall" );
-		trap_SendClientCommand("weaponstats");
-	}
-}*/
-
-/* Nico, removed ws related command
-void CG_wStatsDown_f( void ) {
-	// Nico, removed multiview
-	//int i = ( cg.mvTotalClients > 0 ) ? ( cg.mvCurrentActive->mvInfo & MV_PID ) : cg.snap->ps.clientNum;
-	int i = cg.snap->ps.clientNum;
-
-	// Nico, removed multiview
-	// if ( cg.mvTotalClients < 1 && cg.snap->ps.persistant[PERS_TEAM] == TEAM_SPECTATOR ) {
-	if (cg.snap->ps.persistant[PERS_TEAM] == TEAM_SPECTATOR) {
-		Pri( "You must be a player or following a player to use +wstats\n" );
-		return;
-	}
-
-	if ( cg.statsRequestTime < cg.time ) {
-		cg.statsRequestTime = cg.time + 500;
-		trap_SendClientCommand( va( "wstats %d", i ) );
-	}
-	// Nico, removed showstats client command
-	// cg.showStats = qtrue;
-}*/
-
-/* Nico, removed ws related command
-void CG_wStatsUp_f( void ) {
-	// Nico, removed showstats client command
-	// cg.showStats = qfalse;
-	CG_windowFree( cg.statsWindow );
-	cg.statsWindow = NULL;
-}*/
 
 void CG_toggleSpecHelp_f( void ) {
-	/* Nico, removed multiview
-	if ( cg.mvTotalClients > 0 && !cg.demoPlayback ) {*/
 	if ( !cg.demoPlayback ) {
 		if ( cg.spechelpWindow != SHOW_ON && cg_specHelp.integer > 0 ) {
 			CG_ShowHelp_On( &cg.spechelpWindow );
@@ -926,71 +716,30 @@ static consoleCommand_t commands[] =
 	{ "tell_attacker", CG_TellAttacker_f },
 	{ "tcmd", CG_TargetCommand_f },
 	{ "fade", CG_Fade_f },   // duffy
-
-	/* Nico, call an empty function
-	{ "loadhud", CG_LoadHud_f },*/
-
 	{ "loadweapons", CG_LoadWeapons_f },
-
 	{ "mp_QuickMessage", CG_QuickMessage_f },
 	{ "mp_fireteammsg",      CG_QuickFireteams_f },
 	{ "mp_fireteamadmin",    CG_QuickFireteamAdmin_f },
 	{ "wm_sayPlayerClass",   CG_SayPlayerClass_f },
 	{ "wm_ftsayPlayerClass",CG_FTSayPlayerClass_f },
-
-
 	{ "VoiceChat",       CG_VoiceChat_f },
 	{ "VoiceTeamChat",   CG_TeamVoiceChat_f },
-
-	// ydnar: say, teamsay, etc
 	{ "messageMode", CG_MessageMode_f },
 	{ "messageMode2", CG_MessageMode_f },
 	{ "messageMode3", CG_MessageMode_f },
 	{ "messageSend", CG_MessageSend_f },
-
 	{ "SetWeaponCrosshair", CG_SetWeaponCrosshair_f },
-	// -NERVE - SMF
-
 	{ "VoiceFireTeamChat", CG_BuddyVoiceChat_f },
-
 	{ "openlimbomenu",   CG_LimboMenu_f },
-
-	/* Nico, removed ws related command
-	{ "+stats",          CG_StatsDown_f },
-	{ "-stats",          CG_StatsUp_f },*/
-
-	/* Nico, removed +topshots command
-	{ "+topshots",       CG_topshotsDown_f },
-	{ "-topshots",       CG_topshotsUp_f },*/
-
-	// OSP
 	{ "autoRecord",      CG_autoRecord_f },
 	{ "autoScreenshot",  CG_autoScreenShot_f },
 	{ "currentTime", CG_currentTime_f },
 	{ "keyoff",          CG_keyOff_f },
 	{ "keyon",           CG_keyOn_f },
-
-	/* Nico, removed statsdump client command
-	{ "statsdump",       CG_dumpStats_f },*/
-
 	{ "+vstr",           CG_vstrDown_f },
 	{ "-vstr",           CG_vstrUp_f },
-	// OSP
-
 	{ "selectbuddy", CG_SelectBuddy_f },
-
-	/* Nico, removed commandmap
-	{ "MapZoomIn", CG_AutomapZoomIn_f },
-	{ "MapZoomOut", CG_AutomapZoomOut_f },
-	{ "+mapexpand", CG_AutomapExpandDown_f },
-	{ "-mapexpand", CG_AutomapExpandUp_f },*/
-
 	{ "generateTracemap", CG_GenerateTracemap },
-
-	// xkan, 11/27/2002, toggle automap on/off
-	/* Nico, removed commandmap
-	{ "ToggleAutoMap", CG_ToggleAutomap_f },*/
-
 	{ "editSpeakers", CG_EditSpeakers_f },
 	{ "dumpSpeaker", CG_DumpSpeaker_f },
 	{ "modifySpeaker", CG_ModifySpeaker_f },
@@ -1051,135 +800,30 @@ void CG_InitConsoleCommands( void ) {
 	//
 	trap_AddCommand( "kill" );
 	trap_AddCommand( "say" );
-
-	/* Nico, removed give command
-	trap_AddCommand( "give" );*/
-
-	/* Nico, removed god command
-	trap_AddCommand( "god" );*/
-
-	/* Nico, removed notarget command
-	trap_AddCommand( "notarget" );*/
-
 	trap_AddCommand( "noclip" );
 	trap_AddCommand( "team" );
 	trap_AddCommand( "follow" ); // Nico, note: this is used to spectate
-
-	/* Nico, removed setviewpos command
-	trap_AddCommand( "setviewpos" );*/
-
 	trap_AddCommand( "callvote" );
 	trap_AddCommand( "vote" );
-
-	// Rafael
-	/* Nico, removed client command nofatigue
-	trap_AddCommand( "nofatigue" );*/
-
-	// NERVE - SMF
 	trap_AddCommand( "follownext" );
 	trap_AddCommand( "followprev" );
-
-	/* Nico, removed start_match command
-	trap_AddCommand( "start_match" );*/
-
-	/* Nico, removed reset_match command
-	trap_AddCommand( "reset_match" );*/
-
-	/* Nico, removed swap_teams command
-	trap_AddCommand( "swap_teams" );*/
-
-	// -NERVE - SMF
-	// OSP
 	trap_AddCommand( "?" );
-
-	/* Nico, removed bottomshots command
-	trap_AddCommand( "bottomshots" );*/
-
 	trap_AddCommand( "commands" );
-
-	/* Nico, removed lock client command
-	trap_AddCommand( "lock" );*/
-
-	/* Nico, removed notready client command
-	trap_AddCommand( "notready" );*/
-
-	/* Nico, removed pause client command
-	trap_AddCommand( "pause" );*/
-
 	trap_AddCommand( "players" );
-
-	/* Nico, removed readyteam command
-	trap_AddCommand( "readyteam" );*/
-
-	/* Nico, removed ready client command
-	trap_AddCommand( "ready" );*/
-
 	trap_AddCommand( "ref" );
 	trap_AddCommand( "say_teamnl" );
 	trap_AddCommand( "say_team" );
-
-	/* Nico, removed scores client command
-	trap_AddCommand( "scores" );*/
-
 	trap_AddCommand( "specinvite" );
 	trap_AddCommand( "speclock" );
 	trap_AddCommand( "specunlock" );
-
-	/* Nico, removed statsall client command
-	trap_AddCommand( "statsall" );*/
-
-	/* Nico, removed statsdump client command
-	trap_AddCommand( "statsdump" );*/
-
-	/* Nico, removed timein client command
-	trap_AddCommand( "timein" );*/
-
-	/* Nico, removed timeout client command
-	trap_AddCommand( "timeout" );*/
-
-	/* Nico, removed topshots command
-	trap_AddCommand( "topshots" );*/
-
-	/* Nico, removed unlock client command
-	trap_AddCommand( "unlock" );*/
-
-	/* Nico, removed unpause client command
-	trap_AddCommand( "unpause" );*/
-
-	/* Nico, removed unready client command
-	trap_AddCommand( "unready" );*/
-
-	/* Nico, removed weaponstats client command
-	trap_AddCommand( "weaponstats" );*/
-	// OSP
-
 	trap_AddCommand( "fireteam" );
-
-	/* Nico, removed showstats client command
-	trap_AddCommand( "showstats" );*/
-
 	trap_AddCommand( "ignore" );
 	trap_AddCommand( "unignore" );
-
-	/* Nico, removed campaign client command
-	trap_AddCommand( "campaign" );*/
-
-	/* Nico, removed listcampaigns client command
-	trap_AddCommand( "listcampaigns" );*/
-
-	// Nico, added missing commands
-	// http://games.chruker.dk/enemy_territory/modding_project_bugfix.php?bug_id=011
-
-	/* Nico, removed imready client command
-	trap_AddCommand ("imready");*/
-
 	trap_AddCommand ("say_buddy");
 	trap_AddCommand ("setspawnpt");
 	trap_AddCommand ("vsay");
 	trap_AddCommand ("vsay_buddy");
 	trap_AddCommand ("vsay_team");
-	/* Nico, removed where command
-	trap_AddCommand ("where");*/
 
 	// Nico, save/load
 	trap_AddCommand("load");

@@ -62,9 +62,6 @@ If you have questions concerning this license or the applicable additional terms
 #define MUZZLE_FLASH_TIME   30
 #define SINK_TIME           1000        // time for fragments to sink into ground before going away
 
-/* Nico, removed rewards
-#define REWARD_TIME         3000*/
-
 #define PRONE_TIME          500
 
 #define PULSE_SCALE         1.5         // amount to scale up the icons when activating
@@ -110,9 +107,6 @@ If you have questions concerning this license or the applicable additional terms
 #define AA_DEMORECORD   0x01
 #define AA_SCREENSHOT   0x02
 
-/* Nico, removed statsdump client command
-#define AA_STATSDUMP    0x04*/
-
 // Cursor
 #define CURSOR_OFFSETX  13
 #define CURSOR_OFFSETY  12
@@ -121,12 +115,6 @@ If you have questions concerning this license or the applicable additional terms
 #define DEMO_THIRDPERSONUPDATE  0
 #define DEMO_RANGEDELTA         6
 #define DEMO_ANGLEDELTA         4
-
-// MV overlay
-/* Nico, removed multiview
-#define MVINFO_TEXTSIZE     10
-#define MVINFO_RIGHT        640 - 3
-#define MVINFO_TOP          100*/
 
 #define MAX_WINDOW_COUNT        10
 #define MAX_WINDOW_LINES        64
@@ -139,8 +127,7 @@ If you have questions concerning this license or the applicable additional terms
 
 #define WID_NONE            0x00    // General window
 #define WID_STATS           0x01    // Stats (reusable due to scroll effect)
-/* Nico, removed +topshots command
-#define WID_TOPSHOTS        0x02    // Top/Bottom-shots*/
+
 #define WID_MOTD            0x04    // MOTD
 
 #define WFX_TEXTSIZING      0x01    // Size the window based on text/font setting
@@ -158,10 +145,6 @@ If you have questions concerning this license or the applicable additional terms
 #define WSTATE_START        0x01    // Window is "initializing" w/effects
 #define WSTATE_SHUTDOWN     0x02    // Window is shutting down with effects
 #define WSTATE_OFF          0x04    // Window is completely shutdown
-
-/* Nico, removed multiview
-#define MV_PID              0x00FF  // Bits available for player IDs for MultiView windows
-#define MV_SELECTED         0x0100  // MultiView selected window flag is the 9th bit*/
 
 typedef struct {
 	vec4_t colorBorder;         // Window border color
@@ -185,9 +168,6 @@ typedef struct {
 	float m_x;                  // Mouse X position
 	float m_y;                  // Mouse Y position
 
-	/* Nico, removed multiview
-	int mvInfo;                 // lower 8 = player id, 9 = is_selected*/
-
 	int targetTime;             // Time to complete any defined effect
 	int state;                  // Current state of the window
 	int time;                   // Current window time
@@ -208,16 +188,6 @@ typedef struct {
 	int numActiveWindows;                               // Number of active windows in use
 	cg_window_t window[MAX_WINDOW_COUNT];           // Static allocation of all windows
 } cg_windowHandler_t;
-
-/* Nico, removed multiview
-typedef struct {
-	int pID;                    // Player ID
-	int classID;                // Player's current class
-	int width;                  // Width of text box
-	char info[8];               // On-screen info (w/color coding)
-	qboolean fActive;           // Overlay element is active
-	cg_window_t *w;         // Window handle (may be NULL)
-} cg_mvinfo_t;*/
 // OSP
 
 
@@ -516,20 +486,11 @@ typedef struct localEntity_s {
 typedef struct {
 	int client;
 
-	/* Nico, removed score
-	int score;*/
-
 	int ping;
 	int time;
 
-	/* Nico, removed because unused
-	int powerUps;*/
-
 	int team;
 	int playerClass;                    // NERVE - SMF
-
-	/* Nico, removed respawnLeft
-	int respawnsLeft;                   // NERVE - SMF*/
 
 	// Nico, timerun best time
 	int timerunBestTime;
@@ -574,15 +535,6 @@ typedef struct clientInfo_s {
 	qboolean ccSelected;
 	int fireteam;
 
-	/* Nico, removed skills
-	int medals[SK_NUM_SKILLS];
-	int skill[SK_NUM_SKILLS];
-	int skillpoints[SK_NUM_SKILLS];             // filled OOB by +wstats*/
-
-	/* Nico, removed disguise stuff
-	char disguiseName[MAX_QPATH];
-	int disguiseRank;*/
-
 	int weapon;
 	int secondaryweapon;
 	int latchedweapon;
@@ -597,12 +549,6 @@ typedef struct clientInfo_s {
 	// Gordon: for fireteams, has been selected
 	qboolean selected;
 
-	// Gordon: Intermission stats
-	/* Nico, removed intermission
-	int totalWeapAcc;
-	int kills;
-	int deaths;*/
-
 	// OSP - per client MV ps info
 	int ammo;
 	int ammoclip;
@@ -612,9 +558,6 @@ typedef struct clientInfo_s {
 	int grenadeTimeLeft;                // Actual time remaining
 	int grenadeTimeStart;               // Time trigger base to compute TimeLeft
 	int hintTime;
-
-	/* Nico, removed sprint time limit
-	int sprintTime;*/
 
 	int weapHeat;
 	int weaponState;
@@ -723,10 +666,6 @@ typedef struct {
 	int damageTime, damageDuration;
 	float damageX, damageY, damageValue;
 } viewDamage_t;
-
-/* Nico, removed rewards
-#define MAX_REWARDSTACK     5*/
-
 //======================================================================
 
 // all cg.stepTime, cg.duckTime, cg.landTime, etc are set to cg.time when the action
@@ -797,9 +736,6 @@ typedef enum {
 	SHOW_ON
 } showView_t;
 
-/* Nico, removed commandmap
-void CG_ParseMapEntityInfo( int axis_number, int allied_number );*/
-
 #define MAX_BACKUP_STATES ( CMD_BACKUP + 2 )
 
 typedef struct {
@@ -811,9 +747,6 @@ typedef struct {
 
 	qboolean demoPlayback;
 	qboolean loading;               // don't defer players at initial startup
-
-	/* Nico, removed intermission
-	qboolean intermissionStarted;       // don't play voice rewards, because game will end shortly*/
 
 	// there are only one or two snapshot_t that are relevent at a time
 	int latestSnapshotNum;          // the number of snapshots the client system has received
@@ -895,17 +828,11 @@ typedef struct {
 	int numScores;
 	int selectedScore;
 	int teamScores[2];
-
-	// Nico, unused
-	// int teamPlayers[TEAM_NUM_TEAMS];         // JPW NERVE for scoreboard
 	
 	score_t scores[MAX_CLIENTS];
 	qboolean showScores;
 	qboolean scoreBoardShowing;
 	int scoreFadeTime;
-
-	/* Nico, removed obituary messages
-	char killerName[MAX_NAME_LENGTH];*/
 
 	char spectatorList[MAX_STRING_CHARS];                   // list of names
 	int spectatorLen;                                                           // length of list
@@ -939,10 +866,6 @@ typedef struct {
 	// low ammo warning state
 	int lowAmmoWarning;             // 1 = low, 2 = empty
 
-	// kill timers for carnage reward
-	/* Nico, removed lastkilltime
-	int lastKillTime;*/
-
 	// crosshair client ID
 	int crosshairClientNum;
 	int crosshairClientTime;
@@ -952,12 +875,6 @@ typedef struct {
 	int crosshairVerticalShift;
 	qboolean crosshairClientNoShoot;
 	qboolean crosshairTerrain;
-
-	/* Nico, removed firstblood
-	int teamFirstBlood;                     // 0: allies 1: axis -1: nobody*/
-
-	/* Nico, removed rounds
-	int teamWonRounds[2];*/
 
 	qboolean filtercams;
 
@@ -981,20 +898,6 @@ typedef struct {
 	// attacking player
 	int attackerTime;
 	int voiceTime;
-
-	// reward tmedals
-	/* Nico, removed rewards
-	int rewardStack;
-	int rewardTime;
-	int rewardCount[MAX_REWARDSTACK];
-	qhandle_t rewardShader[MAX_REWARDSTACK];
-	qhandle_t rewardSound[MAX_REWARDSTACK];*/
-
-	// warmup countdown
-	/* Nico, removed warmup
-	int warmup;
-	int warmupCount;*/
-
 	//==========================
 
 	int itemPickup;
@@ -1134,32 +1037,11 @@ typedef struct {
 	int demohelpWindow;
 	cg_window_t         *motdWindow;
 
-	/* Nico, removed ws related command
-	cg_window_t         *msgWstatsWindow;*/
-
-	/* Nico, removed +topshots command
-	cg_window_t         *msgWtopshotsWindow;*/
-
-	/* Nico, removed multiview
-	int mv_cnt;                                 // Number of active MV windows
-	int mvClientList;                           // Cached client listing of who is merged
-	cg_window_t         *mvCurrentActive;       // Client ID of current active window (-1 = none)
-	cg_window_t         *mvCurrentMainview;     // Client ID used in the main display (should always be set if mv_cnt > 0)
-	cg_mvinfo_t mvOverlay[MAX_MVCLIENTS];        // Cached info for MV overlay
-	int mvTeamList[TEAM_NUM_TEAMS][MAX_MVCLIENTS];
-	int mvTotalClients;                         // Total # of clients available for MV processing
-	int mvTotalTeam[TEAM_NUM_TEAMS];*/
 	refdef_t            *refdef_current;        // Handling of some drawing elements for MV
-
-	/* Nico, removed showstats client command
-	qboolean showStats;*/
 
 	int spechelpWindow;
 	int statsRequestTime;
 	cg_window_t         *statsWindow;
-	/* Nico, removed +topshots command
-	int topshotsRequestTime;
-	cg_window_t         *topshotsWindow;*/
 	cg_window_t         *windowCurrent;         // Current window to update.. a bit of a hack :p
 	cg_windowHandler_t winHandler;
 	vec4_t xhairColor;
@@ -1185,9 +1067,6 @@ typedef struct {
 	int medicChargeTime[2];
 	int covertopsChargeTime[2];
 	int binocZoomTime;
-
-	/* Nico, removed stuff in limbo
-	int limboEndCinematicTime;*/
 
 	int proneMovingTime;
 	fireteamData_t fireTeams[32];
@@ -1220,11 +1099,6 @@ typedef struct {
 	int mortarImpactTime;
 	vec3_t mortarImpactPos;
 	qboolean mortarImpactOutOfMap;
-
-	// artillery requests
-	/* Nico, removed airstrikes
-	vec3_t artilleryRequestPos[MAX_CLIENTS];
-	int artilleryRequestTime[MAX_CLIENTS];*/
 
 	soundScript_t*  bufferSoundScripts[MAX_BUFFERED_SOUNDSCRIPTS];
 	int bufferedSoundScriptEndTime;
@@ -1290,19 +1164,6 @@ typedef struct {
 
 	qhandle_t deferShader;
 
-	// gib explosions
-	/* Nico, removed gib
-	qhandle_t gibAbdomen;
-	qhandle_t gibArm;
-	qhandle_t gibChest;
-	qhandle_t gibFist;
-	qhandle_t gibFoot;
-	qhandle_t gibForearm;
-	qhandle_t gibIntestine;
-	qhandle_t gibLeg;
-	qhandle_t gibSkull;
-	qhandle_t gibBrain;*/
-
 	// debris
 	qhandle_t debBlock[6];
 	qhandle_t debRock[3];
@@ -1338,9 +1199,6 @@ typedef struct {
 	qhandle_t vehicleShader;
 	qhandle_t destroyShader;
 
-	/* Nico, removed blood
-	qhandle_t viewBloodShader;*/
-
 	qhandle_t tracerShader;
 	qhandle_t crosshairShader[NUM_CROSSHAIRS];
 	qhandle_t lagometerShader;
@@ -1366,9 +1224,6 @@ typedef struct {
 	qhandle_t smokePuffRageProShader;
 	qhandle_t shotgunSmokePuffShader;
 	qhandle_t waterBubbleShader;
-
-	/* Nico, removed blood
-	qhandle_t bloodTrailShader;*/
 
 //----(SA)	cursor hints
 	// would be nice to specify these in the menu scripts instead of permanent handles...
@@ -1438,9 +1293,6 @@ typedef struct {
 	// Mad Doc - TDF
 	qhandle_t ingameAutomapBackground;
 
-	/* Nico, removed mines
-	qhandle_t landmineHintShader;*/
-
 	qhandle_t compassConstructShader;
 	qhandle_t compassDestroyShader;
 	qhandle_t buddyShader;
@@ -1467,15 +1319,6 @@ typedef struct {
 	qhandle_t smokePuffShaderb4;
 	qhandle_t smokePuffShaderb5;
 	// done
-
-	// Rafael - blood pool
-	/* Nico, removed blood
-	qhandle_t bloodPool;*/
-
-	// Ridah, viewscreen blood animation
-	/* Nico, removed blood
-	qhandle_t viewBloodAni[5];
-	qhandle_t viewFlashBlood;*/
 
 	qhandle_t viewFlashFire[16];
 	// done
@@ -1505,10 +1348,6 @@ typedef struct {
 	qhandle_t wakeMarkShader;
 	qhandle_t wakeMarkShaderAnim;
 
-	/* Nico, removed blood
-	qhandle_t bloodMarkShaders[5];
-	qhandle_t bloodDotShaders[5];*/
-
 	qhandle_t bulletMarkShader;
 	qhandle_t bulletMarkShaderMetal;
 	qhandle_t bulletMarkShaderWood;
@@ -1530,16 +1369,9 @@ typedef struct {
 	qhandle_t grenadeExplosionShader;
 	qhandle_t bfgExplosionShader;
 
-	/* Nico, removed blood
-	qhandle_t bloodExplosionShader;*/
-
 	// special effects models
 	qhandle_t teleportEffectModel;
 	qhandle_t teleportEffectShader;
-
-	// Ridah
-	/* Nico, removed blood
-	qhandle_t bloodCloudShader;*/
 
 	qhandle_t sparkParticleShader;
 	qhandle_t smokeTrailShader;
@@ -1566,13 +1398,6 @@ typedef struct {
 	qhandle_t alliedUniformShader;
 	qhandle_t axisUniformShader;
 
-	/* Nico, removed airstrikes
-	sfxHandle_t sfx_artilleryExp[3];
-	sfxHandle_t sfx_artilleryDist;
-
-	sfxHandle_t sfx_airstrikeExp[3];
-	sfxHandle_t sfx_airstrikeDist;*/
-
 	// sounds
 	sfxHandle_t noFireUnderwater;
 	sfxHandle_t selectSound;
@@ -1584,10 +1409,6 @@ typedef struct {
 	sfxHandle_t sfx_rockexpWater;
 	sfxHandle_t sfx_satchelexp;
 	sfxHandle_t sfx_satchelexpDist;
-
-	/* Nico, removed mines
-	sfxHandle_t sfx_landmineexp;
-	sfxHandle_t sfx_landmineexpDist;*/
 
 	sfxHandle_t sfx_mortarexp[4];
 	sfxHandle_t sfx_mortarexpDist;
@@ -1607,9 +1428,6 @@ typedef struct {
 	sfxHandle_t sfx_dynamiteexpDist;
 	sfxHandle_t sfx_spearhit;
 	sfxHandle_t sfx_knifehit[5];
-
-	/* Nico, removed gib
-	sfxHandle_t gibSound;*/
 
 	sfxHandle_t noAmmoSound;
 	sfxHandle_t landSound[FOOTSTEP_TOTAL];
@@ -1643,9 +1461,6 @@ typedef struct {
 	sfxHandle_t grenadebounce[FOOTSTEP_TOTAL][2];
 
 	sfxHandle_t dynamitebounce1;    //----(SA)	added
-
-	/* Nico, removed mines
-	sfxHandle_t landminebounce1;*/
 
 	sfxHandle_t fkickwall;
 	sfxHandle_t fkickflesh;
@@ -1690,9 +1505,6 @@ typedef struct {
 	qhandle_t ccDestructIcon[3][2];
 	qhandle_t ccTankIcon;
 
-	/* Nico, removed skills
-	qhandle_t skillPics[SK_NUM_SKILLS];*/
-
 	qhandle_t ccMortarHit;
 	qhandle_t ccMortarTarget;
 	qhandle_t ccMortarTargetArrow;
@@ -1716,11 +1528,6 @@ typedef struct {
 	qhandle_t hMountedBrowning;
 	qhandle_t hMountedFPMG42;
 	qhandle_t hMountedFPBrowning;
-
-	// Gordon: medals
-	/* Nico, removed skills
-	qhandle_t medals[SK_NUM_SKILLS];
-	qhandle_t medal_back;*/
 
 	// Gordon: new limbo stuff
 	fontInfo_t limboFont1;
@@ -1768,12 +1575,7 @@ typedef struct {
 
 	qhandle_t limboSpectator;
 
-	/* Nico, removed stuff in limbo
-	qhandle_t limboRadioBroadcast;*/
-
 	qhandle_t cursorIcon;
-
-
 
 	qhandle_t hudPowerIcon;
 	qhandle_t hudSprintIcon;
@@ -1799,10 +1601,6 @@ typedef struct {
 } cgMedia_t;
 
 typedef struct {
-
-	/* Nico, removed LMS
-	char lmsdescription[1024];*/
-
 	char description[1024];
 	char axiswintext[1024];
 	char alliedwintext[1024];
@@ -1832,46 +1630,6 @@ typedef struct cg_gamemodel_s {
 	vec_t radius;
 } cg_gamemodel_t;
 
-/* Nico, removed weaponstats
-typedef struct cg_weaponstats_s {
-	int numKills;
-	int numHits;
-	int numShots;
-} cg_weaponstats_t;*/
-
-/* Nico, removed gameStats
-typedef struct {
-
-	// Nico, removed weaponstats
-	// char strWS[WS_MAX][MAX_STRING_TOKENS];
-
-	char strExtra[2][MAX_STRING_TOKENS];
-
-
-	char strRank[MAX_STRING_TOKENS];
-
-	// Nico, removed skills
-	// char strSkillz[SK_NUM_SKILLS][MAX_STRING_TOKENS];
-
-	int cWeapons;
-	int cSkills;
-	qboolean fHasStats;
-	int nClientID;
-	int nRounds;
-	int fadeTime;
-	int show;
-	int requestTime;
-} gameStats_t;*/
-
-/* Nico, removed +topshots command
-typedef struct {
-	char strWS[WS_MAX * 2][MAX_STRING_TOKENS];
-	int cWeapons;
-	int fadeTime;
-	int show;
-	int requestTime;
-} topshotStats_t;*/
-
 typedef struct oidInfo_s {
 	int spawnflags;
 	qhandle_t customimageallies;
@@ -1881,10 +1639,6 @@ typedef struct oidInfo_s {
 	char name[MAX_QPATH];
 	vec3_t origin;
 } oidInfo_t;
-
-/* Nico, removed endgame
-#define NUM_ENDGAME_AWARDS 14*/
-
 
 // The client game static (cgs) structure hold everything
 // loaded or calculated from the gamestate.  It will NOT
@@ -1904,13 +1658,7 @@ typedef struct {
 
 	// parsed from serverinfo
 
-	/* Nico, removed gametypes
-	gametype_t gametype;*/
-
 	int antilag;
-
-	/* Nico, no timelimit
-	float timelimit;                        // NERVE - SMF - made this a float*/
 
 	int maxclients;
 	char mapname[MAX_QPATH];
@@ -1932,9 +1680,6 @@ typedef struct {
 	char teamVoteString[2][MAX_STRING_TOKENS];
 
 	int levelStartTime;
-
-	/* Nico, removed intermission
-	int intermissionStartTime;*/
 
 	//
 	// locally derived information from gamestate
@@ -1986,29 +1731,12 @@ typedef struct {
 
 	int currentVoiceClient;
 
-	/* Nico, removed currentRound
-	int currentRound;*/
-
-	/* Nico, no timelimit
-	float nextTimeLimit;*/
-
 	int minclients;
 	gamestate_t gamestate;
 	char        *currentCampaign;
 	int currentCampaignMap;
 
-	/* Nico, removed complaints
-	int complaintClient;        // DHM - Nerve
-	int complaintEndTime;       // DHM - Nerve*/
-
 	float smokeWindDir; // JPW NERVE for smoke puffs & wind (arty, airstrikes, bullet impacts)
-
-	/* Nico, removed playerStats
-	playerStats_t playerStats;*/
-
-	/* Nico, commented because unused
-	int numOIDtriggers;
-	int teamobjectiveStats[MAX_OID_TRIGGERS];*/
 
 	qboolean campaignInfoLoaded;
 	cg_campaignInfo_t campaignData;
@@ -2054,18 +1782,7 @@ typedef struct {
 	int aReinfOffset[TEAM_NUM_TEAMS];                   // Team reinforcement offsets
 	int cursorUpdate;                                   // Timeout for mouse pointer view
 
-	/* Nico, removed statsdump client command
-	fileHandle_t dumpStatsFile;                         // File to dump stats
-	char*               dumpStatsFileName;              // Name of file to dump stats
-	int dumpStatsTime;                                  // Next stats command that comes back will be written to a logfile*/
-
 	int game_versioninfo;                               // game base version
-
-	/* Nico, removed gameStats
-	gameStats_t gamestats;*/
-
-	/* Nico, removed +topshots command
-	topshotStats_t topshots;*/
 
 	qboolean fResize;                                   // MV window "resize" status
 	qboolean fSelect;                                   // MV window "select" status
@@ -2075,70 +1792,13 @@ typedef struct {
 
 	cg_gamemodel_t miscGameModels[MAX_STATIC_GAMEMODELS];
 
-	/* Nico, removed stuff in limbo
-	vec2_t ccMenuPos;
-	qboolean ccMenuShowing;
-	int ccMenuType;
-	mapEntityData_t ccMenuEnt;
-	int ccSelectedLayer;
-	int ccSelectedObjective;*/
-
 	int ccSelectedTeam;                     // ( 1 = ALLIES, 0 = AXIS )
 	int ccSelectedWeaponNumber;
 	int ccSelectedClass;
 	int ccSelectedWeapon;
 	int ccSelectedWeapon2;
 
-	/* Nico, removed stuff in limbo
-	int ccWeaponShots;
-	int ccWeaponHits;
-	vec3_t ccPortalPos;
-	vec3_t ccPortalAngles;
-	int ccPortalEnt;
-	int ccFilter;
-	int ccCurrentCamObjective;
-	int ccRequestedObjective;
-	int ccLastObjectiveRequestTime;
-
-	int loadingLatch;                 // ( 0 = nothing yet, 1 = latched )
-
-	int dbSortedClients[MAX_CLIENTS];
-	int dbSelectedClient;
-
-	int dbMode;*/
-
 	qboolean dbShowing;
-
-	/* Nico, commented because unused
-	qboolean dbAccuraciesRecieved;
-	qboolean dbPlayerKillsDeathsRecieved;
-	qboolean dbWeaponStatsRecieved;
-	qboolean dbAwardsParsed;*/
-
-	/* Nico, removed endgame
-	char*               dbAwardNames[NUM_ENDGAME_AWARDS];
-	team_t dbAwardTeams[NUM_ENDGAME_AWARDS];*/
-
-	/* Nico, commented because unused
-	char dbAwardNamesBuffer[1024];
-	int dbLastRequestTime;
-	int dbLastScoreRequest;
-	int dbPlayerListOffset;
-	int dbWeaponListOffset;*/
-
-	/* Nico, removed weaponstats
-	cg_weaponstats_t dbWeaponStats[WS_MAX];*/
-
-	/* Nico, commented because unused
-	int dbChatMode;*/
-
-	/* Nico, removed skills
-	int tdbAxisMapsXP[SK_NUM_SKILLS][MAX_MAPS_PER_CAMPAIGN];
-	int tdbAlliedMapsXP[SK_NUM_SKILLS][MAX_MAPS_PER_CAMPAIGN];*/
-
-	/* Nico, commented because unused
-	int tdbMapListOffset;
-	int tdbSelectedMap;*/
 
 	int ftMenuPos;
 	int ftMenuMode;
@@ -2184,10 +1844,6 @@ extern vmCvar_t cg_bobroll;
 extern vmCvar_t cg_bobyaw;
 extern vmCvar_t cg_swingSpeed;
 extern vmCvar_t cg_shadows;
-
-/* Nico, removed gib
-extern vmCvar_t cg_gibs;*/
-
 extern vmCvar_t cg_draw2D;
 extern vmCvar_t cg_drawFPS;
 extern vmCvar_t cg_drawSnapshot;
@@ -2252,10 +1908,6 @@ extern vmCvar_t cg_coronafardist;
 extern vmCvar_t cg_coronas;
 extern vmCvar_t cg_buildScript;
 extern vmCvar_t cg_paused;
-
-/* Nico, removed blood
-extern vmCvar_t cg_blood;*/
-
 extern vmCvar_t cg_predictItems;
 extern vmCvar_t cg_deferPlayers;
 extern vmCvar_t cg_teamChatsOnly;
@@ -2277,70 +1929,24 @@ extern vmCvar_t cg_smallFont;
 extern vmCvar_t cg_bigFont;
 extern vmCvar_t cg_noTaunt;             // NERVE - SMF
 extern vmCvar_t cg_voiceSpriteTime;             // DHM - Nerve
-
 extern vmCvar_t cg_blinktime;           //----(SA)	added
-
 // Rafael - particle switch
 extern vmCvar_t cg_wolfparticles;
 // done
-
-// Ridah
-/* Nico, removed (c)g_gametype
-extern vmCvar_t cg_gameType;*/
-
-/* Nico, removed blood
-extern vmCvar_t cg_bloodTime;*/
-
 extern vmCvar_t cg_norender;
 extern vmCvar_t cg_skybox;
-
-// Rafael gameskill
-//extern vmCvar_t			cg_gameSkill;
-// done
-
-// JPW NERVE
-/* Nico, instant reswawn
-extern vmCvar_t cg_redlimbotime;
-extern vmCvar_t cg_bluelimbotime;*/
-// jpw
-
-/* Nico, removed (c)g_movespeed
-extern vmCvar_t cg_movespeed;*/
-
 extern vmCvar_t cg_animState;
-
-/* Nico, removed compass
-extern vmCvar_t cg_drawCompass;*/
-
 extern vmCvar_t cg_drawNotifyText;
 extern vmCvar_t cg_quickMessageAlt;
 extern vmCvar_t cg_popupLimboMenu;
 extern vmCvar_t cg_descriptiveText;
-// -NERVE - SMF
-
 extern vmCvar_t cg_antilag;
-
 extern vmCvar_t developer;
 
 // OSP
 extern vmCvar_t authLevel;
-
-/* Nico, removed ws related command
-extern vmCvar_t cf_wstats;*/
-
-/* Nico, removed +topshots command
-extern vmCvar_t cf_wtopshots;*/
-
 extern vmCvar_t cg_autoAction;
 extern vmCvar_t cg_autoReload;
-
-/* Nico, removed blood
-extern vmCvar_t cg_bloodDamageBlend;
-extern vmCvar_t cg_bloodFlash;*/
-
-/* Nico, removed complaints
-extern vmCvar_t cg_complaintPopUp;*/
-
 extern vmCvar_t cg_crosshairAlpha;
 extern vmCvar_t cg_crosshairAlphaAlt;
 extern vmCvar_t cg_crosshairColor;
@@ -2363,9 +1969,6 @@ extern vmCvar_t demo_avifpsF4;
 extern vmCvar_t demo_avifpsF5;
 extern vmCvar_t demo_drawTimeScale;
 extern vmCvar_t demo_infoWindow;
-
-/* Nico, removed multiview
-extern vmCvar_t mv_sensitivity;*/
 
 // engine mappings
 extern vmCvar_t int_cl_maxpackets;
@@ -2611,13 +2214,6 @@ void CG_AddRefEntityWithPowerups( refEntity_t *ent, int powerups, int team, enti
 void CG_NewClientInfo( int clientNum );
 sfxHandle_t CG_CustomSound( int clientNum, const char *soundName );
 
-/* Nico, removed skills
-void CG_ParseTeamXPs( int n );*/
-
-/* Nico, removed hud head animation
-void CG_HudHeadAnimation( bg_character_t* ch, lerpFrame_t* lf, int *oldframe, int *frame, float *backlerp, hudHeadAnimNumber_t animation );*/
-
-
 // Rafael particles
 extern qboolean initparticles;
 int CG_NewParticleArea( int num );
@@ -2732,9 +2328,6 @@ void    CG_ParticleDirtBulletDebris( vec3_t org, vec3_t vel, int duration );    
 void    CG_ParticleDirtBulletDebris_Core( vec3_t org, vec3_t vel, int duration, float width, float height, float alpha, qhandle_t shader );
 void    CG_ParticleSparks( vec3_t org, vec3_t vel, int duration, float x, float y, float speed );
 
-/* Nico, removed blood
-void    CG_ParticleDust( centity_t *cent, vec3_t origin, vec3_t dir );*/
-
 void    CG_ParticleMisc( qhandle_t pshader, vec3_t origin, int size, int duration, float alpha );
 
 // Ridah
@@ -2746,18 +2339,9 @@ void    CG_SnowLink( centity_t *cent, qboolean particleOn );
 
 void CG_ParticleImpactSmokePuff( qhandle_t pshader, vec3_t origin );
 void CG_ParticleImpactSmokePuffExtended( qhandle_t pshader, vec3_t origin, int lifetime, int vel, int acc, int maxroll, float alpha, float size );      // (SA) so I can add more parameters without screwing up the one that's there
-
-/* Nico, removed bleed
-void CG_Particle_Bleed( qhandle_t pshader, vec3_t start, vec3_t dir, int fleshEntityNum, int duration );
-void CG_GetBleedOrigin( vec3_t head_origin, vec3_t body_origin, int fleshEntityNum );*/
-
 void CG_Particle_OilParticle( qhandle_t pshader, vec3_t origin, vec3_t origin2, int ptime, int snum );
 void CG_Particle_OilSlick( qhandle_t pshader, centity_t *cent );
 void CG_OilSlickRemove( centity_t *cent );
-
-/* Nico, removed blood
-void CG_ParticleBloodCloudZombie( centity_t *cent, vec3_t origin, vec3_t dir );
-void CG_ParticleBloodCloud( centity_t *cent, vec3_t origin, vec3_t dir );*/
 // done
 
 // Ridah, trails
@@ -2787,9 +2371,6 @@ void CG_SoundInit( void );
 void CG_SetViewanglesForSpeakerEditor( void );
 void CG_SpeakerEditorDraw( void );
 void CG_SpeakerEditor_KeyHandling( int key, qboolean down );
-
-/* Nico, removed debriefing
-void CG_Debriefing_KeyEvent( int key, qboolean down );*/
 
 void CG_SpeakerEditorMouseMove_Handling( int x, int y );
 void CG_ActivateEditSoundMode( void );
@@ -2832,16 +2413,6 @@ localEntity_t *CG_SmokePuff( const vec3_t p,
 
 void CG_BubbleTrail( vec3_t start, vec3_t end, float size, float spacing );
 void CG_SpawnEffect( vec3_t org );
-
-/* Nico, removed gib
-void CG_GibPlayer( centity_t *cent, vec3_t playerOrigin, vec3_t gdir );*/
-
-/* Nico, removed loseHat
-void CG_LoseHat( centity_t *cent, vec3_t dir );         //----(SA)	added*/
-
-/* Nico, removed bleed
-void CG_Bleed( vec3_t origin, int entityNum );*/
-
 localEntity_t *CG_MakeExplosion( vec3_t origin, vec3_t dir,
 								 qhandle_t hModel, qhandle_t shader, int msec,
 								 qboolean isSprite );
@@ -2902,34 +2473,8 @@ qboolean CG_ViewingDraw( void );
 //
 qboolean CG_DrawScoreboard( void );
 
-/* Nico, removed commandmap
-void CG_TransformToCommandMapCoord( float *coord_x, float *coord_y );*/
-
 void CG_CommandCentreClick( int key );
 void CG_DrawAutoMap( void );
-
-/* Nico, unsed functions
-qboolean CG_DrawLimboMenu( void );
-qboolean CG_DrawObjectivePanel( void );
-qboolean CG_DrawFireTeamMenu( void );
-
-qboolean CG_LimboMenuClick( int key );
-qboolean CG_FireTeamClick( int key );
-qboolean CG_ObjectiveMenuClick( int key );
-
-void CG_GameViewMenuClick( int key );
-void CG_GetLimboWeaponAnim( const char **torso_anim, const char **legs_anim );
-int CG_GetLimboSelectedWeapon();
-
-qboolean CG_DrawMissionBriefing( void );
-void CG_MissionBriefingClick( int key );*/
-
-/* Nico, removed rankicons
-void CG_LoadRankIcons( void );*/
-
-/* Nico, removed ws related command
-qboolean CG_DrawStatsRanksMedals( void );*/
-
 void CG_StatsRanksMedalsClick( int key );
 
 typedef struct {
@@ -2979,10 +2524,6 @@ void CG_autoRecord_f( void );
 void CG_autoScreenShot_f( void );
 void CG_keyOn_f( void );
 void CG_keyOff_f( void );
-
-/* Nico, removed statsdump client command
-void CG_dumpStats_f( void );*/
-
 void CG_toggleSwing_f( void );
 
 //
@@ -3001,25 +2542,6 @@ void CG_LoadVoiceChats();               // NERVE - SMF
 void CG_PlayBufferedVoiceChats();       // NERVE - SMF
 void CG_AddToNotify( const char *str );
 const char* CG_LocalizeServerCommand( const char *buf );
-
-/* Nico, removed showstats client command
-void CG_wstatsParse_cmd( void );*/
-
-/* Nico, removed +topshots command
-void CG_wtopshotsParse_cmd( qboolean doBest );*/
-
-/* Nico, removed showstats client command
-void CG_parseWeaponStats_cmd( void( txt_dump ) ( char * ) );*/
-
-/* Nico, removed showstats client command
-void CG_parseBestShotsStats_cmd( qboolean doTop, void( txt_dump ) ( char * ) );*/
-
-/* Nico, removed +topshots command
-void CG_parseTopShotsStats_cmd( qboolean doTop, void( txt_dump ) ( char * ) );*/
-
-/* Nico, removed scores client command
-void CG_scores_cmd( void );*/
-
 //
 // cg_playerstate.c
 //
@@ -3345,9 +2867,6 @@ weaponType_t* WM_FindWeaponTypeForWeapon( weapon_t weapon );
 extern animation_t      *lastTorsoAnim;
 extern animation_t      *lastLegsAnim;
 
-/* Nico, removed commandmap
-extern qboolean ccInitial;*/
-
 void CG_MenuCheckPendingAnimation( playerInfo_t *pi );
 void CG_MenuPendingAnimation( playerInfo_t *pi, const char* legsAnim, const char* torsoAnim, int delay );
 void CG_MenuSetAnimation( playerInfo_t *pi, const char* legsAnim, const char* torsoAnim, qboolean force, qboolean clearpending );
@@ -3360,16 +2879,6 @@ void CG_MenuSetAnimation( playerInfo_t *pi, const char* legsAnim, const char* to
 #define CC_FILTER_CONSTRUCTIONS ( 1 << 5 )
 #define CC_FILTER_DESTRUCTIONS  ( 1 << 6 )
 #define CC_FILTER_OBJECTIVES    ( 1 << 7 )
-
-/* Nico, removed rankicons
-typedef struct {
-	qhandle_t shader;
-	const char *iconname;
-	int width;
-	int height;
-} rankicon_t;
-
-extern rankicon_t rankicons[NUM_EXPERIENCE_LEVELS][2];*/
 
 #define TAB_LEFT_WIDTH 178
 #define TAB_LEFT_EDGE ( 640 - TAB_LEFT_WIDTH )
@@ -3405,7 +2914,6 @@ void CG_AddToJournal( char *text );
 
 // Gordon: Fireteam stuff
 
-//fireteamData_t* CG_IsOnFireteam(		int clientNum );
 #define CG_IsOnFireteam( clientNum ) cgs.clientinfo[clientNum].fireteamData
 fireteamData_t* CG_IsOnSameFireteam(    int clientNum, int clientNum2 );
 fireteamData_t* CG_IsFireTeamLeader(    int clientNum );
@@ -3429,19 +2937,7 @@ const char* CG_BuildSelectedFirteamString( void );
 qboolean CG_addString( cg_window_t *w, char *buf );
 void CG_createStatsWindow( void );
 
-/* Nico, removed +topshots command
-void CG_createTopShotsWindow( void );*/
-
-/* Nico, removed ws related command
-void CG_createWstatsMsgWindow( void );*/
-
-/* Nico, removed +topshots command
-void CG_createWtopshotsMsgWindow( void );*/
-
 void CG_createMOTDWindow( void );
-
-/* Nico, removed multiview
-void CG_cursorUpdate( void );*/
 
 void CG_initStrings( void );
 void CG_printWindow( char *str );
@@ -3490,63 +2986,29 @@ void CG_PB_RenderPolyBuffers( void );
 
 void CG_LimboPanel_KeyHandling( int key, qboolean down );
 
-/* Nico, removed stuff in limbo
-int CG_LimboPanel_GetMaxObjectives( void );*/
-
 qboolean CG_LimboPanel_WeaponLights_KeyDown( panel_button_t* button, int key );
 qboolean CG_LimboPanel_WeaponPanel_KeyDown( panel_button_t* button, int key );
 qboolean CG_LimboPanel_WeaponPanel_KeyUp( panel_button_t* button, int key );
-
-/* Nico, removed stuff in limbo
-qboolean CG_LimboPanel_ObjectiveText_KeyDown( panel_button_t* button, int key );*/
 
 qboolean CG_LimboPanel_TeamButton_KeyDown( panel_button_t* button, int key );
 qboolean CG_LimboPanel_ClassButton_KeyDown( panel_button_t* button, int key );
 qboolean CG_LimboPanel_OkButton_KeyDown( panel_button_t* button, int key );
 
-/* Nico, removed stuff in limbo
-qboolean CG_LimboPanel_PlusButton_KeyDown( panel_button_t* button, int key );
-qboolean CG_LimboPanel_MinusButton_KeyDown( panel_button_t* button, int key );*/
-
 qboolean CG_LimboPanel_CancelButton_KeyDown( panel_button_t* button, int key );
 
-/* Nico, removed stuff in limbo
-qboolean CG_LimboPanel_Filter_KeyDown( panel_button_t* button, int key );
-qboolean CG_LimboPanel_BriefingButton_KeyDown( panel_button_t* button, int key );
-
-void CG_LimboPanel_BriefingButton_Draw( panel_button_t* button );*/
-
 void CG_LimboPanel_ClassBar_Draw( panel_button_t* button );
-
-/* Nico, removed stuff in limbo
-void CG_LimboPanel_Filter_Draw( panel_button_t* button );
-void CG_LimboPanel_RenderSkillIcon( panel_button_t* button );*/
 
 void CG_LimboPanel_RenderTeamButton( panel_button_t* button );
 void CG_LimboPanel_RenderClassButton( panel_button_t* button );
 
-/* Nico, removed stuff in limbo
-void CG_LimboPanel_RenderObjectiveText( panel_button_t* button );
-void CG_LimboPanel_RenderCommandMap( panel_button_t* button );
-void CG_LimboPanel_RenderObjectiveBack( panel_button_t* button );*/
-
 void CG_LimboPanel_RenderLight( panel_button_t* button );
 void CG_LimboPanel_WeaponLights( panel_button_t* button );
-
-/* Nico, removed hud head animation
-void CG_LimboPanel_RenderHead( panel_button_t* button );*/
 
 void CG_LimboPanel_WeaponPanel( panel_button_t* button );
 void CG_LimboPanel_Border_Draw( panel_button_t* button );
 
-/* Nico, removed skills
-void CG_LimboPanel_RenderMedal( panel_button_t* button );*/
-
 void CG_LimboPanel_RenderCounter( panel_button_t* button );
 void CG_LimboPanelRenderText_NoLMS( panel_button_t* button );
-
-/* Nico, removed stuff in limbo
-void CG_LimboPanelRenderText_SkillsText( panel_button_t* button );*/
 
 void CG_LimboPanel_NameEditFinish( panel_button_t* button );
 
@@ -3554,12 +3016,6 @@ void CG_LimboPanel_Setup( void );
 void CG_LimboPanel_Init( void );
 
 void                CG_LimboPanel_GetWeaponCardIconData( weapon_t weap, qhandle_t* shader, float* w, float* h, float* s0, float* t0, float* s1, float* t1 );
-
-/* Nico, removed stuff in limbo
-void                CG_LimboPanel_RequestObjective( void );*/
-
-/* Nico, removed weaponstats
-void                CG_LimboPanel_RequestWeaponStats( void );*/
 
 qboolean            CG_LimboPanel_Draw( void );
 team_t              CG_LimboPanel_GetTeam( void );
@@ -3573,9 +3029,6 @@ void                CG_LimboPanel_SetSelectedWeaponNum( int number );
 bg_playerclass_t*   CG_LimboPanel_GetPlayerClass( void );
 weapon_t            CG_LimboPanel_GetSelectedWeapon( void );
 weapon_t            CG_LimboPanel_GetWeaponForNumber( int number, int slot, qboolean ignoreDisabled );
-
-/* Nico, removed weaponstats
-extWeaponStats_t    CG_LimboPanel_GetSelectedWeaponStat( void );*/
 
 qboolean            CG_LimboPanel_WeaponIsDisabled( int weap );
 qboolean            CG_LimboPanel_RealWeaponIsDisabled( weapon_t weap );
@@ -3596,30 +3049,13 @@ typedef struct mapScissor_s {
 	vec2_t br;
 } mapScissor_t;
 
-/* Nico, removed commandmap
-int CG_CurLayerForZ( int z );*/
-
 void CG_DrawMap( float x, float y, float w, float h, int mEntFilter, mapScissor_t *scissor, qboolean interactive, float alpha, qboolean borderblend );
 int CG_DrawSpawnPointInfo( int px, int py, int pw, int ph, qboolean draw, mapScissor_t *scissor, int expand );
-
-/* Nico, removed airstrikes
-void CG_DrawMortarMarker( int px, int py, int pw, int ph, qboolean draw, mapScissor_t *scissor, int expand );*/
-
-/* Nico, removed commandmap
-void CG_CommandMap_SetHighlightText( const char* text, float x, float y );
-void CG_CommandMap_DrawHighlightText( void );
-qboolean CG_CommandCentreSpawnPointClick( void );*/
 
 #define LIMBO_3D_X  0// Nico, 287 -> 0 //%	280
 #define LIMBO_3D_Y  0// Nico, 382 -> 0
 #define LIMBO_3D_W  440// Nico, 128 -> 440
 #define LIMBO_3D_H  480// Nico, 96 -> 480  //%	94
-
-/* Nico, removed commandmap
-#define CC_2D_X 64
-#define CC_2D_Y 23
-#define CC_2D_W 352
-#define CC_2D_H 352*/
 
 void CG_DrawPlayerHead( rectDef_t *rect, bg_character_t* character, bg_character_t* headcharacter, float yaw, float pitch, qboolean drawHat, hudHeadAnimNumber_t animation, qhandle_t painSkin, int rank, qboolean spectator );
 
@@ -3646,10 +3082,6 @@ void CG_DrawKeyHint( rectDef_t* rect, const char* binding );
 void CG_LoadPanel_DrawPin( const char* text, float px, float py, float sx, float sy, qhandle_t shader, float pinsize, float backheight );
 void CG_LoadPanel_RenderCampaignPins( panel_button_t* button );
 void CG_LoadPanel_RenderMissionDescriptionText( panel_button_t* button );
-
-/* Nico, removed gametypes
-void CG_LoadPanel_RenderCampaignTypeText( panel_button_t* button );
-void CG_LoadPanel_RenderCampaignNameText( panel_button_t* button );*/
 
 void CG_LoadPanel_RenderPercentageMeter( panel_button_t* button );
 void CG_LoadPanel_RenderContinueButton( panel_button_t* button );

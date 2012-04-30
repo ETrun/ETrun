@@ -65,9 +65,6 @@ If you have questions concerning this license or the applicable additional terms
 #define _attribute( x )
 #endif
 
-/* Nico, removed sprint time limit
-#define SPRINTTIME 20000.0f*/
-
 #define DEFAULT_GRAVITY     800
 
 // Nico, g_speed is now hardcoded as DEFAULT_SPEED
@@ -190,22 +187,9 @@ typedef struct {
 	qhandle_t levelShot;
 	qboolean active;
 
-	// NERVE - SMF
-	/* Nico, no timelimit
-	int Timelimit;*/
-
-	/* Nico, instant reswawn
-	int AxisRespawnTime;
-	int AlliedRespawnTime;*/
-
-	// -NERVE - SMF
-
 	vec2_t mappos;
 
 	const char *briefing;
-
-	/* Nico, removed LMS
-	const char *lmsbriefing;*/
 
 	const char *objectives;
 } mapInfo;
@@ -288,11 +272,6 @@ extern const unsigned int aReinfSeeds[MAX_REINFSEEDS];
 #define CGF_PMOVEFIXED      0x10	// Nico, pmove_fixed
 
 #define MAX_MOTDLINES   6
-
-// Multiview settings
-/* Nico, removed multiview
-#define MAX_MVCLIENTS               32
-#define MV_SCOREUPDATE_INTERVAL     5000    // in msec*/
 
 #define MAX_CHARACTERS  16
 
@@ -459,9 +438,6 @@ typedef struct {
 	int weapAnimTimer;              // don't change low priority animations until this runs out		//----(SA)	added
 	int silencedSideArm;            // Gordon: Keep track of whether the luger/colt is silenced "in holster", prolly want to do this for the kar98 etc too
 
-	/* Nico, removed sprint time limit
-	int sprintTime;*/
-
 	int airleft;
 
 	// Arnout: MG42 aiming
@@ -469,9 +445,6 @@ typedef struct {
 	vec3_t centerangles;
 
 	int dtmove;         // doubletap move
-
-	/* Nico, removed dodgeTime
-	int dodgeTime;*/
 
 	int proneTime;                  // time a go-prone or stop-prone move starts, to sync the animation to
 
@@ -805,11 +778,6 @@ extern int weapBanksMultiPlayer[MAX_WEAP_BANKS_MP][MAX_WEAPS_IN_BANK_MP];
 //		This is used by the ammo pack code to determine if reloads are needed
 extern int reloadableWeapons[];
 
-/* Nico, removed weaponstats
-typedef struct {
-	int kills, teamkills, killedby;
-} weaponStats_t;*/
-
 typedef enum {
 	HR_HEAD,
 	HR_ARMS,
@@ -817,37 +785,6 @@ typedef enum {
 	HR_LEGS,
 	HR_NUM_HITREGIONS,
 } hitRegion_t;
-
-/* Nico, removed skills
-typedef enum {
-	SK_BATTLE_SENSE,
-	SK_EXPLOSIVES_AND_CONSTRUCTION,
-	SK_FIRST_AID,
-	SK_SIGNALS,
-	SK_LIGHT_WEAPONS,
-	SK_HEAVY_WEAPONS,
-	SK_MILITARY_INTELLIGENCE_AND_SCOPED_WEAPONS,
-	SK_NUM_SKILLS
-} skillType_t;
-
-extern const char* skillNames[SK_NUM_SKILLS];
-extern const char* skillNamesLine1[SK_NUM_SKILLS];
-extern const char* skillNamesLine2[SK_NUM_SKILLS];
-extern const char* medalNames[SK_NUM_SKILLS];
-
-#define NUM_SKILL_LEVELS 5
-extern const int skillLevels[NUM_SKILL_LEVELS];*/
-
-/* Nico, removed playerStats
-typedef struct {
-
-	// Nico, removed weaponstats
-	// weaponStats_t weaponStats[WP_NUM_WEAPONS];
-
-	int suicides;
-	int hitRegions[HR_NUM_HITREGIONS];
-	int objectiveStats[MAX_OBJECTIVES];
-} playerStats_t;*/
 
 typedef struct ammotable_s {
 	int maxammo;            //
@@ -1313,46 +1250,6 @@ typedef enum {
 
 // Time between location updates
 #define TEAM_LOCATION_UPDATE_TIME       1000
-
-// OSP - weapon stat info: mapping between MOD_ and WP_ types (FIXME for new ET weapons)
-/* Nico, removed weaponstats
-typedef enum extWeaponStats_s
-{
-	WS_KNIFE,               // 0
-	WS_LUGER,               // 1
-	WS_COLT,                // 2
-	WS_MP40,                // 3
-	WS_THOMPSON,            // 4
-	WS_STEN,                // 5
-	WS_FG42,                // 6	-- Also includes WS_BAR (allies version of fg42)
-	WS_PANZERFAUST,         // 7
-	WS_FLAMETHROWER,        // 8
-	WS_GRENADE,             // 9	-- Includes axis and allies grenade types
-	WS_MORTAR,              // 10
-	WS_DYNAMITE,            // 11
-	WS_AIRSTRIKE,           // 12	-- Lt. smoke grenade attack
-	WS_ARTILLERY,           // 13	-- Lt. binocular attack
-	WS_SYRINGE,             // 14	-- Medic syringe uses/successes
-
-	WS_SMOKE,               // 15
-	WS_SATCHEL,             // 16
-	WS_GRENADELAUNCHER,     // 17
-	WS_LANDMINE,            // 18
-	WS_MG42,                // 19
-	WS_GARAND,              // 20 // Gordon: (carbine and garand)
-	WS_K43,                 // 21 // Gordon: (kar98 and k43)
-
-	WS_MAX
-} extWeaponStats_t;
-
-typedef struct {
-	qboolean fHasHeadShots;
-	const char *pszCode;
-	const char *pszName;
-} weap_ws_t;
-
-extern const weap_ws_t aWeaponInfo[WS_MAX];*/
-// OSP
 
 // means of death
 typedef enum {
@@ -2067,14 +1964,6 @@ typedef enum {
 	ME_COMMANDMAP_MARKER,
 } mapEntityType_t;
 
-/* Nico, removed rankNames
-extern const char* rankNames_Axis[NUM_EXPERIENCE_LEVELS];
-extern const char* rankNames_Allies[NUM_EXPERIENCE_LEVELS];
-extern const char* miniRankNames_Axis[NUM_EXPERIENCE_LEVELS];
-extern const char* miniRankNames_Allies[NUM_EXPERIENCE_LEVELS];
-extern const char* rankSoundNames_Axis[NUM_EXPERIENCE_LEVELS];
-extern const char* rankSoundNames_Allies[NUM_EXPERIENCE_LEVELS];*/
-
 #define MAX_SPLINE_PATHS        512
 #define MAX_SPLINE_CONTROLS     4
 #define MAX_SPLINE_SEGMENTS     16
@@ -2195,16 +2084,10 @@ void BG_AdjustAAGunMuzzleForBarrel( vec_t* origin, vec_t* forward, vec_t* right,
 
 int BG_ClassTextToClass( char *token );
 
-/* Nico, removed skills
-skillType_t BG_ClassSkillForClass( int classnum );*/
-
 qboolean BG_isLightWeaponSupportingFastReload( int weapon );
 qboolean BG_IsScopedWeapon( int weapon );
 
 int BG_FootstepForSurface( int surfaceFlags );
-
-/* Nico, removed match_* cvars
-#define MATCH_MINPLAYERS "4" //"1"	// Minimum # of players needed to start a match*/
 
 // Multiview support
 int BG_simpleHintsCollapse( int hint, int val );
@@ -2326,14 +2209,6 @@ qboolean BG_BBoxCollision( vec3_t min1, vec3_t max1, vec3_t min2, vec3_t max2 );
 //
 // bg_stats.c
 //
-
-/* Nico, removed weaponstats
-typedef struct weap_ws_convert_s {
-	weapon_t iWeapon;
-	extWeaponStats_t iWS;
-} weap_ws_convert_t;
-
-extWeaponStats_t BG_WeapStatForWeapon( weapon_t iWeaponID );*/
 
 typedef enum popupMessageType_e {
 	PM_DYNAMITE,

@@ -39,71 +39,12 @@ If you have questions concerning this license or the applicable additional terms
 #include "../../etrun/ui/menudef.h"
 
 #ifdef CGAMEDLL
-/* Nico, removed (c)g_gametype
-extern vmCvar_t cg_gameType;
-#define gametypeCvar cg_gameType*/
 #elif GAMEDLL
 extern vmCvar_t g_developer;
-/* Nico, removed (c)g_gametype
-extern vmCvar_t g_gametype;
-#define gametypeCvar g_gametype*/
 #else
 extern vmCvar_t ui_gameType;
 #define gametypeCvar ui_gameType
 #endif
-
-/* Nico, removed gametypes
-#define BG_IsSinglePlayerGame() ( gametypeCvar.integer == GT_SINGLE_PLAYER ) || ( gametypeCvar.integer == GT_COOP )*/
-
-/* Nico, removed skills
-const char* skillNames[SK_NUM_SKILLS] = {
-	"Battle Sense",
-	"Engineering",
-	"First Aid",
-	"Signals",
-	"Light Weapons",
-	"Heavy Weapons",
-	"Covert Ops"
-};
-
-const char* skillNamesLine1[SK_NUM_SKILLS] = {
-	"Battle",
-	"Engineering",
-	"First",
-	"Signals",
-	"Light",
-	"Heavy",
-	"Covert"
-};
-
-const char* skillNamesLine2[SK_NUM_SKILLS] = {
-	"Sense",
-	"",
-	"Aid",
-	"",
-	"Weapons",
-	"Weapons",
-	"Ops"
-};
-
-const char* medalNames[SK_NUM_SKILLS] = {
-	"Distinguished Service Medal",
-	"Steel Star",
-	"Silver Cross",
-	"Signals Medal",
-	"Infantry Medal",
-	"Bombardment Medal",
-	"Silver Snake"
-};
-
-const int skillLevels[NUM_SKILL_LEVELS] = {
-	0,      // reaching level 0
-	20,     // reaching level 1
-	50,     // reaching level 2
-	90,     // reaching level 3
-	140     // reaching level 4
-//	200		// reaching level 5
-};*/
 
 vec3_t playerlegsProneMins = { -13.5f, -13.5f, -24.f };
 vec3_t playerlegsProneMaxs = { 13.5f, 13.5f, -14.4f };
@@ -2906,20 +2847,12 @@ WARNING: when numOfClips is 0, DO NOT CHANGE ANYTHING under ps.
 int BG_GrenadesForClass( int cls, int* skills ) {
 	switch ( cls ) {
 	case PC_MEDIC:
-		/* Nico, removed skills
-		if ( skills[SK_FIRST_AID] >= 1 ) {
-			return 2;
-		}*/
 		return 1;
 	case PC_SOLDIER:
 		return 4;
 	case PC_ENGINEER:
 		return 8;
 	case PC_FIELDOPS:
-		/* Nico, removed skills
-		if ( skills[SK_SIGNALS] >= 1 ) {
-			return 2;
-		}*/
 		return 1;
 	case PC_COVERTOPS:
 		return 2;
@@ -2971,8 +2904,6 @@ qboolean BG_AddMagicAmmo( playerState_t *ps, int *skill, int teamNum, int numOfC
 	}
 
 	if ( COM_BitCheck( ps->weapons, WP_MEDIC_SYRINGE ) ) {
-		// Nico, removed skills
-		// i = skill[ SK_FIRST_AID ] >= 2 ? 12 : 10;
 		i = 10;
 
 		clip = BG_FindClipForWeapon( WP_MEDIC_SYRINGE );
@@ -3060,8 +2991,6 @@ BG_CanUseWeapon: can a player of the specified team and class use this weapon?
 qboolean BG_CanUseWeapon( int classNum, int teamNum, weapon_t weapon ) {
 	// TAT 1/11/2003 - is this SP game? - different weapons available in SP
 
-	/* Nico, removed gametypes
-	qboolean isSinglePlayer = BG_IsSinglePlayerGame() ? qtrue : qfalse;*/
 	qboolean isSinglePlayer = qfalse;
 
 	switch ( classNum ) {
@@ -3999,25 +3928,6 @@ void BG_AddPredictableEventToPlayerstate( int newEvent, int eventParm, playerSta
 	ps->eventSequence++;
 }
 
-// Gordon: would like to just inline this but would likely break qvm support
-/* Nico, removed disguise stuff
-#define SETUP_MOUNTEDGUN_STATUS( ps )							\
-	switch ( ps->persistant[PERS_HWEAPON_USE] ) {				 \
-	case 1:													\
-		ps->eFlags |= EF_MG42_ACTIVE;						\
-		ps->eFlags &= ~EF_AAGUN_ACTIVE;						\
-		ps->powerups[PW_OPS_DISGUISED] = 0;					\
-		break;												\
-	case 2:													\
-		ps->eFlags |= EF_AAGUN_ACTIVE;						\
-		ps->eFlags &= ~EF_MG42_ACTIVE;						\
-		ps->powerups[PW_OPS_DISGUISED] = 0;					\
-		break;												\
-	default:												\
-		ps->eFlags &= ~EF_MG42_ACTIVE;						\
-		ps->eFlags &= ~EF_AAGUN_ACTIVE;						\
-		break;												\
-	}*/
 #define SETUP_MOUNTEDGUN_STATUS( ps )							\
 	switch ( ps->persistant[PERS_HWEAPON_USE] ) {				 \
 	case 1:													\
@@ -4045,8 +3955,6 @@ and after local prediction on the client
 void BG_PlayerStateToEntityState( playerState_t *ps, entityState_t *s, qboolean snap ) {
 	int i;
 
-	/* Nico, removed intermission
-	if ( ps->pm_type == PM_INTERMISSION || ps->pm_type == PM_SPECTATOR ) {// JPW NERVE limbo*/
 	if ( ps->pm_type == PM_SPECTATOR ) {
 		s->eType = ET_INVISIBLE;
 	} else if ( ps->stats[STAT_HEALTH] <= GIB_HEALTH ) {
@@ -4150,8 +4058,6 @@ and after local prediction on the client
 void BG_PlayerStateToEntityStateExtraPolate( playerState_t *ps, entityState_t *s, int time, qboolean snap ) {
 	int i;
 
-	/* Nico, removed intermission
-	if ( ps->pm_type == PM_INTERMISSION || ps->pm_type == PM_SPECTATOR ) { // JPW NERVE limbo*/
 	if ( ps->pm_type == PM_SPECTATOR ) {
 		s->eType = ET_INVISIBLE;
 	} else if ( ps->stats[STAT_HEALTH] <= GIB_HEALTH ) {
@@ -4289,95 +4195,6 @@ weapon_t BG_WeaponForMOD( int MOD ) {
 
 	return 0;
 }
-
-/* Nico, removed rankNames
-const char* rankSoundNames_Allies[NUM_EXPERIENCE_LEVELS] = {
-	"",
-	"allies_hq_promo_private",
-	"allies_hq_promo_corporal",
-	"allies_hq_promo_sergeant",
-	"allies_hq_promo_lieutenant",
-	"allies_hq_promo_captain",
-	"allies_hq_promo_major",
-	"allies_hq_promo_colonel",
-	"allies_hq_promo_general_brigadier",
-	"allies_hq_promo_general_lieutenant",
-	"allies_hq_promo_general",
-};
-
-const char* rankSoundNames_Axis[NUM_EXPERIENCE_LEVELS] = {
-	"",
-	"axis_hq_promo_private",
-	"axis_hq_promo_corporal",
-	"axis_hq_promo_sergeant",
-	"axis_hq_promo_lieutenant",
-	"axis_hq_promo_captain",
-	"axis_hq_promo_major",
-	"axis_hq_promo_colonel",
-	"axis_hq_promo_general_major",
-	"axis_hq_promo_general_lieutenant",
-	"axis_hq_promo_general",
-};
-
-const char* rankNames_Axis[NUM_EXPERIENCE_LEVELS] = {
-	"Schutze",
-	"Oberschutze",
-	"Gefreiter",
-	"Feldwebel",
-	"Leutnant",
-	"Hauptmann",
-	"Major",
-	"Oberst",
-	"Generalmajor",
-	"Generalleutnant",
-	"General",
-};
-
-const char* rankNames_Allies[NUM_EXPERIENCE_LEVELS] = {
-	"Private",
-	"Private 1st Class",
-	"Corporal",
-	"Sergeant",
-	"Lieutenant",
-	"Captain",
-	"Major",
-	"Colonel",
-	"Brigadier General",
-	"Lieutenant General",
-	"General",
-};
-
-
-
-
-const char* miniRankNames_Axis[NUM_EXPERIENCE_LEVELS] = {
-	"Stz",
-	"Otz",
-	"Gfr",
-	"Fwb",
-	"Ltn",
-	"Hpt",
-	"Mjr",
-	"Obs",
-	"BGn",
-	"LtG",
-	"Gen",
-};
-
-const char* miniRankNames_Allies[NUM_EXPERIENCE_LEVELS] = {
-	"Pvt",
-	"PFC",
-	"Cpl",
-	"Sgt",
-	"Lt",
-	"Cpt",
-	"Maj",
-	"Cnl",
-	"GMj",
-	"GLt",
-	"Gen",
-};*/
-
 /*
 =============
 BG_Find_PathCorner
@@ -4555,78 +4372,28 @@ int BG_MaxAmmoForWeapon( weapon_t weaponNum, int *skill ) {
 	case WP_CARBINE:
 	case WP_KAR98:
 	case WP_SILENCED_COLT:
-		/* Nico, removed skills
-		if ( skill[SK_LIGHT_WEAPONS] >= 1 ) {
-			return( GetAmmoTableData( weaponNum )->maxammo + GetAmmoTableData( weaponNum )->maxclip );
-		} else {*/
-			return( GetAmmoTableData( weaponNum )->maxammo );
-		// }
-		break;
+		return( GetAmmoTableData( weaponNum )->maxammo );
 	case WP_MP40:
 	case WP_THOMPSON:
-
-		/* Nico, removed skills
-		if ( skill[SK_FIRST_AID] >= 1 || skill[SK_LIGHT_WEAPONS] >= 1 ) {
-			return( GetAmmoTableData( weaponNum )->maxammo + GetAmmoTableData( weaponNum )->maxclip );
-		} else {*/
-			return( GetAmmoTableData( weaponNum )->maxammo );
-		// }
-		break;
+		return( GetAmmoTableData( weaponNum )->maxammo );
 	case WP_M7:
 	case WP_GPG40:
-		/* Nico, removed skills
-		if ( skill[SK_EXPLOSIVES_AND_CONSTRUCTION] >= 1 ) {
-			return( GetAmmoTableData( weaponNum )->maxammo + 4 );
-		} else {*/
-			return( GetAmmoTableData( weaponNum )->maxammo );
-		// }
-		break;
+		return( GetAmmoTableData( weaponNum )->maxammo );
 	case WP_GRENADE_PINEAPPLE:
 	case WP_GRENADE_LAUNCHER:
-		// FIXME: this is class dependant, not ammo table
-		/* Nico, removed skills
-		if ( skill[SK_EXPLOSIVES_AND_CONSTRUCTION] >= 1 ) {
-			return( GetAmmoTableData( weaponNum )->maxammo + 4 );
-		} else if ( skill[SK_FIRST_AID] >= 1 ) {
-			return( GetAmmoTableData( weaponNum )->maxammo + 1 );
-		} else {*/
-			return( GetAmmoTableData( weaponNum )->maxammo );
-		// }
-		break;
+		return( GetAmmoTableData( weaponNum )->maxammo );
 	case WP_MEDIC_SYRINGE:
-
-		/* Nico, removed skills
-		if ( skill[SK_FIRST_AID] >= 2 ) {
-			return( GetAmmoTableData( weaponNum )->maxammo + 2 );
-		} else {*/
-			return( GetAmmoTableData( weaponNum )->maxammo );
-		// }
-		break;
+		return( GetAmmoTableData( weaponNum )->maxammo );
 	case WP_GARAND:
 	case WP_K43:
 	case WP_FG42:
-
-		/* Nico, removed skills
-		if ( skill[SK_MILITARY_INTELLIGENCE_AND_SCOPED_WEAPONS] >= 1 || skill[SK_LIGHT_WEAPONS] >= 1 ) {
-			return( GetAmmoTableData( weaponNum )->maxammo + GetAmmoTableData( weaponNum )->maxclip );
-		} else {*/
-			return( GetAmmoTableData( weaponNum )->maxammo );
-		// }
-		break;
+		return( GetAmmoTableData( weaponNum )->maxammo );
 	case WP_GARAND_SCOPE:
 	case WP_K43_SCOPE:
 	case WP_FG42SCOPE:
-
-		/* Nico, removed skills
-		if ( skill[SK_MILITARY_INTELLIGENCE_AND_SCOPED_WEAPONS] >= 1 ) {
-			return( GetAmmoTableData( weaponNum )->maxammo + GetAmmoTableData( weaponNum )->maxclip );
-		} else {*/
-			return( GetAmmoTableData( weaponNum )->maxammo );
-		// }
-		break;
+		return( GetAmmoTableData( weaponNum )->maxammo );
 	default:
 		return( GetAmmoTableData( weaponNum )->maxammo );
-		break;
 	}
 }
 
@@ -4905,42 +4672,14 @@ const char* bg_fireteamNames[MAX_FIRETEAMS / 2] = {
 
 const voteType_t voteToggles[] =
 {
-	/* Nico, removed vote_allow_comp
-	{ "vote_allow_comp",         CV_SVF_COMP },*/
-
-	/* Nico, removed vote_allow_gametype
-	{ "vote_allow_gametype",     CV_SVF_GAMETYPE },*/
-
 	{ "vote_allow_kick",         CV_SVF_KICK },
 	{ "vote_allow_map",              CV_SVF_MAP },
 	{ "vote_allow_matchreset",       CV_SVF_MATCHRESET },
 	{ "vote_allow_mutespecs",        CV_SVF_MUTESPECS },
 	{ "vote_allow_nextmap",          CV_SVF_NEXTMAP },
-
-	/* Nico, removed vote_allow_pub
-	{ "vote_allow_pub",              CV_SVF_PUB },*/
-
 	{ "vote_allow_referee",          CV_SVF_REFEREE },
-
-	/* Nico, removed shuffleteam
-	{ "vote_allow_shuffleteamsxp",   CV_SVF_SHUFFLETEAMS },*/
-
 	{ "vote_allow_swapteams",        CV_SVF_SWAPTEAMS },
-
-	/* Nico, no friendlyfire
-	{ "vote_allow_friendlyfire", CV_SVF_FRIENDLYFIRE },*/
-
-	/* Nico, no timelimit
-	{ "vote_allow_timelimit",        CV_SVF_TIMELIMIT },*/
-
-	/* Nico, removed warmup
-	{ "vote_allow_warmupdamage", CV_SVF_WARMUPDAMAGE },*/
-
 	{ "vote_allow_antilag",          CV_SVF_ANTILAG },
-
-	/* Nico, removed balancedteams
-	{ "vote_allow_balancedteams",    CV_SVF_BALANCEDTEAMS },*/
-
 	{ "vote_allow_muting",           CV_SVF_MUTING }
 };
 
@@ -4948,33 +4687,6 @@ int numVotesAvailable = sizeof( voteToggles ) / sizeof( voteType_t );
 
 // consts to offset random reinforcement seeds
 const unsigned int aReinfSeeds[MAX_REINFSEEDS] = { 11, 3, 13, 7, 2, 5, 1, 17 };
-
-// Weapon full names + headshot capability
-/* Nico, removed weaponstats
-const weap_ws_t aWeaponInfo[WS_MAX] = {
-	{ qfalse,   "KNIF",  "Knife"      },  // 0
-	{ qtrue,    "LUGR",  "Luger"      },  // 1
-	{ qtrue,    "COLT",  "Colt"       },  // 2
-	{ qtrue,    "MP40",  "MP-40"      },  // 3
-	{ qtrue,    "TMPS",  "Thompson"   },  // 4
-	{ qtrue,    "STEN",  "Sten"       },  // 5
-	{ qtrue,    "FG42",  "FG-42"      },  // 6
-	{ qtrue,    "PNZR",  "Panzer" },  // 7
-	{ qtrue,    "FLAM",  "F.Thrower"  },  // 8
-	{ qfalse,   "GRND",  "Grenade"    },  // 9
-	{ qfalse,   "MRTR",  "Mortar" },  // 10
-	{ qfalse,   "DYNA",  "Dynamite"   },  // 11
-	{ qfalse,   "ARST",  "Airstrike"  },  // 12
-	{ qfalse,   "ARTY",  "Artillery"  },  // 13
-	{ qfalse,   "SRNG",  "Syringe"    },  // 14
-	{ qfalse,   "SMOK", "SmokeScrn"   },  // 15
-	{ qfalse,   "STCH",  "Satchel"    },  // 16
-	{ qfalse,   "GRLN", "G.Launchr"   },  // 17
-	{ qfalse,   "LNMN", "Landmine"    },  // 18
-	{ qtrue,    "MG42",  "MG-42 Gun"  },  // 19
-	{ qtrue,    "GARN",  "Garand" },  // 20
-	{ qtrue,    "K-43",  "K43 Rifle"  }   // 21
-};*/
 
 // Multiview: Convert weaponstate to simpler format
 int BG_simpleWeaponState( int ws ) {

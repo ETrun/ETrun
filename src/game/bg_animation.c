@@ -40,19 +40,6 @@ If you have questions concerning this license or the applicable additional terms
 #include "q_shared.h"
 #include "bg_public.h"
 
-// JPW NERVE -- added because I need to check single/multiplayer instances and branch accordingly
-/* Nico, removed (c)g_gametype
-#ifdef CGAMEDLL
-extern vmCvar_t cg_gameType;
-#endif
-#ifdef GAMEDLL
-extern vmCvar_t g_gametype;
-#endif*/
-
-// debug defines, to prevent doing costly string cvar lookups
-//#define	DBGANIMS
-//#define	DBGANIMEVENTS
-
 // this is used globally within this file to reduce redundant params
 static animScriptData_t *globalScriptData = NULL;
 

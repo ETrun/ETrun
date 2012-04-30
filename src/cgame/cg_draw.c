@@ -1006,22 +1006,6 @@ static void CG_DrawLagometer( void ) {
 
 	CG_DrawDisconnect();
 }
-
-/* Nico, removed respawnLeft
-void CG_DrawLivesLeft( void ) {
-	if ( cg_gameType.integer == GT_WOLF_LMS ) {
-		return;
-	}
-
-	if ( cg.snap->ps.persistant[PERS_RESPAWNS_LEFT] < 0 ) {
-		return;
-	}
-
-	CG_DrawPic( 4, 360, 48, 24, cg.snap->ps.persistant[PERS_TEAM] == TEAM_ALLIES ? cgs.media.hudAlliedHelmet : cgs.media.hudAxisHelmet );
-
-	CG_DrawField( 44, 360, 3, cg.snap->ps.persistant[PERS_RESPAWNS_LEFT], 14, 20, qtrue, qtrue );
-}*/
-
 /*
 ===============================================================================
 
@@ -1283,274 +1267,6 @@ static void CG_DrawWeapReticle( void ) {
 
 /*
 ==============
-CG_DrawMortarReticle
-==============
-*/
-/* Nico, removed airstrikes
-static void CG_DrawMortarReticle( void ) {
-	vec4_t color = { 1.f, 1.f, 1.f, .5f };
-	vec4_t color_back = { 0.f, 0.f, 0.f, .25f };
-	vec4_t color_extends = { .77f, .73f, .1f, 1.f };
-	vec4_t color_lastfire = { .77f, .1f, .1f, 1.f };
-	//vec4_t	color_firerequest = { .23f, 1.f, .23f, 1.f };
-	vec4_t color_firerequest = { 1.f, 1.f, 1.f, 1.f };
-	float offset, localOffset;
-	int i, min, majorOffset, val, printval, fadeTime;
-	char    *s;
-	float angle, angleMin, angleMax;
-	qboolean hasRightTarget, hasLeftTarget;
-
-	// Background
-	CG_FillRect( 136, 236, 154, 38, color_back );
-	CG_FillRect( 290, 160, 60, 208, color_back );
-	CG_FillRect( 350, 236, 154, 38, color_back );
-
-	// Horizontal bar
-
-	// bottom
-	CG_FillRect( 140, 264, 150, 1, color );  // left
-	CG_FillRect( 350, 264, 150, 1, color );  // right
-
-	// 10 units - 5 degrees
-	// total of 360 units
-	// nothing displayed between 150 and 210 units
-	// 360 / 10 = 36 bits, means 36 * 5 = 180 degrees
-	// that means left is cg.predictedPlayerState.viewangles[YAW] - .5f * 180
-	angle = 360 - AngleNormalize360( cg.predictedPlayerState.viewangles[YAW] - 90.f );
-
-	offset = ( 5.f / 65536 ) * ( (int)( angle * ( 65536 / 5.f ) ) & 65535 );
-	min = (int)( AngleNormalize360( angle - .5f * 180 ) / 15.f ) * 15;
-	majorOffset = (int)( floor( (int)floor( AngleNormalize360( angle - .5f * 180 ) ) % 15 ) / 5.f );
-
-	for ( val = i = 0; i < 36; i++ ) {
-		localOffset = i * 10.f + ( offset * 2.f );
-
-		if ( localOffset >= 150 && localOffset <= 210 ) {
-			if ( i % 3 == majorOffset ) {
-				val++;
-			}
-			continue;
-		}
-
-		if ( i % 3 == majorOffset ) {
-			printval = min - val * 15 + 180;
-
-			// rain - old tertiary abuse was nasty and had undefined result
-			if ( printval < 0 ) {
-				printval += 360;
-			} else if ( printval >= 360 ) {
-				printval -= 360;
-			}
-
-			s = va( "%i", printval );
-			CG_Text_Paint_Ext( 500 - localOffset - .5f * CG_Text_Width_Ext( s, .15f, 0, &cgs.media.limboFont1 ), 244, .15f, .15f, color, s, 0, 0, 0, &cgs.media.limboFont1 );
-			CG_FillRect( 500 - localOffset, 248, 1, 16, color );
-			val++;
-		} else {
-			CG_FillRect( 500 - localOffset, 256, 1, 8, color );
-		}
-	}
-
-	// the extremes
-	// 30 degrees plus a 15 degree border
-	angleMin = AngleNormalize360( 360 - ( cg.pmext.mountedWeaponAngles[YAW] - 90.f ) - ( 30.f + 15.f ) );
-	angleMax = AngleNormalize360( 360 - ( cg.pmext.mountedWeaponAngles[YAW] - 90.f ) + ( 30.f + 15.f ) );
-
-	// right
-	localOffset = ( AngleNormalize360( angle - angleMin ) / 5.f ) * 10.f;
-	CG_FillRect( 320 - localOffset, 252, 2, 18, color_extends );
-
-	// left
-	localOffset = ( AngleNormalize360( angleMax - angle ) / 5.f ) * 10.f;
-	CG_FillRect( 320 + localOffset, 252, 2, 18, color_extends );
-
-	// last fire pos
-	fadeTime = 0;
-	if ( cg.lastFiredWeapon == WP_MORTAR_SET && cg.mortarImpactTime >= -1 ) {
-		fadeTime = cg.time - ( cg.predictedPlayerEntity.muzzleFlashTime + 5000 );
-
-		if ( fadeTime < 3000 ) {
-			float lastfireAngle;
-
-			if ( fadeTime > 0 ) {
-				color_lastfire[3] = 1.f - ( fadeTime / 3000.f );
-			}
-
-			lastfireAngle = AngleNormalize360( 360 - ( cg.mortarFireAngles[YAW] - 90.f ) );
-
-			localOffset = ( ( AngleSubtract( angle, lastfireAngle ) ) / 5.f ) * 10.f;
-			//CG_FillRect( 320 + localOffset, 252, 2, 18, color_lastfire);
-			CG_FillRect( 320 - localOffset, 252, 2, 18, color_lastfire );
-		}
-	}
-
-	// mortar attack requests
-	hasRightTarget = hasLeftTarget = qfalse;
-	for ( i = 0; i < MAX_CLIENTS; i++ ) {
-
-		int requestFadeTime = cg.time - ( cg.artilleryRequestTime[i] + 25000 );
-
-		if ( requestFadeTime < 5000 ) {
-			vec3_t dir;
-			float yaw;
-			float attackRequestAngle;
-
-			VectorSubtract( cg.artilleryRequestPos[i], cg.predictedPlayerEntity.lerpOrigin, dir );
-
-			// ripped this out of vectoangles
-			if ( dir[1] == 0 && dir[0] == 0 ) {
-				yaw = 0;
-			} else {
-				if ( dir[0] ) {
-					yaw = ( atan2( dir[1], dir[0] ) * 180 / M_PI );
-				} else if ( dir[1] > 0 )   {
-					yaw = 90;
-				} else {
-					yaw = 270;
-				}
-				if ( yaw < 0 ) {
-					yaw += 360;
-				}
-			}
-
-			if ( requestFadeTime > 0 ) {
-				color_firerequest[3] = 1.f - ( requestFadeTime / 5000.f );
-			}
-
-			attackRequestAngle = AngleNormalize360( 360 - ( yaw - 90.f ) );
-
-			yaw = AngleSubtract( attackRequestAngle, angleMin );
-
-			if ( yaw < 0 ) {
-				if ( !hasLeftTarget ) {
-
-					trap_R_SetColor( color_firerequest );
-					CG_DrawPic( 136 + 2, 236 + 38 - 10 + 1, 8, 8, cgs.media.ccMortarTargetArrow );
-					trap_R_SetColor( NULL );
-
-					hasLeftTarget = qtrue;
-				}
-			} else if ( yaw > 90 ) {
-				if ( !hasRightTarget ) {
-
-					trap_R_SetColor( color_firerequest );
-					CG_DrawPic( 350 + 154 - 10, 236 + 38 - 10 + 1, -8, 8, cgs.media.ccMortarTargetArrow );
-					trap_R_SetColor( NULL );
-
-					hasRightTarget = qtrue;
-				}
-			} else {
-				localOffset = ( ( AngleSubtract( angle, attackRequestAngle ) ) / 5.f ) * 10.f;
-
-				trap_R_SetColor( color_firerequest );
-				CG_DrawPic( 320 - localOffset - 8, 264 - 8, 16, 16, cgs.media.ccMortarTarget );
-				trap_R_SetColor( NULL );
-			}
-		}
-	}
-
-	// Vertical bar
-
-	// sides
-	CG_FillRect( 295, 164, 1, 200, color );  // left
-	CG_FillRect( 345, 164, 1, 200, color );  // right
-
-	// 10 units - 2.5 degrees
-	// total of 200 units
-	// 200 / 10 = 20 bits, means 20 * 2.5 = 50 degrees
-	// that means left is cg.predictedPlayerState.viewangles[PITCH] - .5f * 50
-	angle = AngleNormalize180( 360 - ( cg.predictedPlayerState.viewangles[PITCH] - 60 ) );
-
-	offset = ( 2.5f / 65536 ) * ( (int)( angle * ( 65536 / 2.5f ) ) & 65535 );
-	min = floor( ( angle + .5f * 50 ) / 10.f ) * 10;
-	majorOffset = (int)( floor( (int)( ( angle + .5f * 50 ) * 10.f ) % 100 ) / 25.f );
-
-	for ( val = i = 0; i < 20; i++ ) {
-		localOffset = i * 10.f + ( offset * 4.f );
-
-		if ( i % 4 == majorOffset ) {
-			printval = min - val * 10;
-
-			// rain - old tertiary abuse was nasty and had undefined result
-			if ( printval <= -180 ) {
-				printval += 360;
-			} else if ( printval >= 180 ) {
-				printval -= 180;
-			}
-
-			s = va( "%i", printval );
-			CG_Text_Paint_Ext( 320 - .5f * CG_Text_Width_Ext( s, .15f, 0, &cgs.media.limboFont1 ), 164 + localOffset + .5f * CG_Text_Height_Ext( s, .15f, 0, &cgs.media.limboFont1 ), .15f, .15f, color, s, 0, 0, 0, &cgs.media.limboFont1 );
-			CG_FillRect( 295 + 1, 164 + localOffset, 12, 1, color );
-			CG_FillRect( 345 - 12, 164 + localOffset, 12, 1, color );
-			val++;
-		} else {
-			CG_FillRect( 295 + 1, 164 + localOffset, 8, 1, color );
-			CG_FillRect( 345 - 8, 164 + localOffset, 8, 1, color );
-		}
-	}
-
-	// the extremes
-	// 30 degrees up
-	// 20 degrees down
-	angleMin = AngleNormalize180( 360 - ( cg.pmext.mountedWeaponAngles[PITCH] - 60 ) ) - 20.f;
-	angleMax = AngleNormalize180( 360 - ( cg.pmext.mountedWeaponAngles[PITCH] - 60 ) ) + 30.f;
-
-	// top
-	localOffset = angleMax - angle;
-	if ( localOffset < 0 ) {
-		localOffset = 0;
-	}
-	localOffset = ( AngleNormalize360( localOffset ) / 2.5f ) * 10.f;
-	if ( localOffset < 100 ) {
-		CG_FillRect( 295 - 2, 264 - localOffset, 6, 2, color_extends );
-		CG_FillRect( 345 - 4 + 1, 264 - localOffset, 6, 2, color_extends );
-	}
-
-	// bottom
-	localOffset = angle - angleMin;
-	if ( localOffset < 0 ) {
-		localOffset = 0;
-	}
-	localOffset = ( AngleNormalize360( localOffset ) / 2.5f ) * 10.f;
-	if ( localOffset < 100 ) {
-		CG_FillRect( 295 - 2, 264 + localOffset, 6, 2, color_extends );
-		CG_FillRect( 345 - 4 + 1, 264 + localOffset, 6, 2, color_extends );
-	}
-
-	// last fire pos
-	if ( cg.lastFiredWeapon == WP_MORTAR_SET && cg.mortarImpactTime >= -1 ) {
-		if ( fadeTime < 3000 ) {
-			float lastfireAngle;
-
-			lastfireAngle = AngleNormalize180( 360 - ( cg.mortarFireAngles[PITCH] - 60 ) );
-
-			if ( lastfireAngle > angle ) {
-				localOffset = lastfireAngle - angle;
-				if ( localOffset < 0 ) {
-					localOffset = 0;
-				}
-				localOffset = ( AngleNormalize360( localOffset ) / 2.5f ) * 10.f;
-				if ( localOffset < 100 ) {
-					CG_FillRect( 295 - 2, 264 - localOffset, 6, 2, color_lastfire );
-					CG_FillRect( 345 - 4 + 1, 264 - localOffset, 6, 2, color_lastfire );
-				}
-			} else {
-				localOffset = angle - lastfireAngle;
-				if ( localOffset < 0 ) {
-					localOffset = 0;
-				}
-				localOffset = ( AngleNormalize360( localOffset ) / 2.5f ) * 10.f;
-				if ( localOffset < 100 ) {
-					CG_FillRect( 295 - 2, 264 + localOffset, 6, 2, color_lastfire );
-					CG_FillRect( 345 - 4 + 1, 264 + localOffset, 6, 2, color_lastfire );
-				}
-			}
-		}
-	}
-}*/
-
-/*
-==============
 CG_DrawBinocReticle
 ==============
 */
@@ -1645,8 +1361,6 @@ static void CG_DrawCrosshair( void ) {
 			}
 
 			// OSP
-			/* Nico, removed multiview
-			if ( cg.mvTotalClients < 1 || cg.snap->ps.stats[STAT_HEALTH] > 0 ) {*/
 			if (cg.snap->ps.stats[STAT_HEALTH] > 0) {
 				CG_DrawWeapReticle();
 			}
@@ -1664,9 +1378,6 @@ static void CG_DrawCrosshair( void ) {
 
 	// FIXME: spectators/chasing?
 	if ( cg.predictedPlayerState.weapon == WP_MORTAR_SET && cg.predictedPlayerState.weaponstate != WEAPON_RAISING ) {
-
-		/* Nico, removed airstrikes
-		CG_DrawMortarReticle();*/
 		return;
 	}
 
@@ -1824,15 +1535,6 @@ static float CG_ScanForCrosshairEntity( float * zChange, qboolean * hitClient ) 
 	if ( cg.crosshairClientNum != cg.snap->ps.identifyClient && cg.crosshairClientNum != ENTITYNUM_WORLD ) {
 		cg.identifyClientRequest = cg.crosshairClientNum;
 	}
-
-	// cent = &cg_entities[cg.crosshairClientNum]; Nico, unused warning fix
-
-	/* Nico, removed disguise stuff
-	if ( cent && cent->currentState.powerups & ( 1 << PW_OPS_DISGUISED ) ) {
-		if ( cgs.clientinfo[cg.crosshairClientNum].team == cgs.clientinfo[cg.clientNum].team ) {
-			cg.crosshairClientNoShoot = qtrue;
-		}
-	}*/
 
 	return dist;
 }

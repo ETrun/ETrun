@@ -84,12 +84,7 @@ int PM_ReloadAnimForWeapon( int weapon ) {
 	case WP_MOBILE_MG42_SET:
 		return WEAP_RELOAD3;
 	default:
-		/* Nico, removed skills
-		if ( pm->skill[SK_LIGHT_WEAPONS] >= 2 && BG_isLightWeaponSupportingFastReload( weapon )  ) {
-			return WEAP_RELOAD2;        // faster reload
-		} else {*/
-			return WEAP_RELOAD1;
-		// }
+		return WEAP_RELOAD1;
 	}
 }
 
@@ -826,13 +821,7 @@ void PM_CoolWeapons( void ) {
 		if ( COM_BitCheck( pm->ps->weapons, wp ) ) {
 			// and it's hot
 			if ( pm->ps->weapHeat[wp] ) {
-
-				/* Nico, removed skills
-				if ( pm->skill[SK_HEAVY_WEAPONS] >= 2 && pm->ps->stats[STAT_PLAYER_CLASS] == PC_SOLDIER ) {
-					pm->ps->weapHeat[wp] -= ( (float)GetAmmoTableData( wp )->coolRate * 2.f * pml.frametime );
-				} else {*/
-					pm->ps->weapHeat[wp] -= ( (float)GetAmmoTableData( wp )->coolRate * pml.frametime );
-				// }
+				pm->ps->weapHeat[wp] -= ( (float)GetAmmoTableData( wp )->coolRate * pml.frametime );
 
 				if ( pm->ps->weapHeat[wp] < 0 ) {
 					pm->ps->weapHeat[wp] = 0;
@@ -912,12 +901,7 @@ void PM_AdjustAimSpreadScale( void ) {
 	case WP_K43_SCOPE:
 	case WP_GARAND_SCOPE:
 	case WP_FG42SCOPE:
-		/* Nico, removed skills
-		if ( pm->skill[SK_MILITARY_INTELLIGENCE_AND_SCOPED_WEAPONS] >= 3 ) {
-			wpnScale = 5.f;
-		} else {*/
-			wpnScale = 10.f;
-		// }
+		wpnScale = 10.f;
 		break;
 	case WP_K43:
 		wpnScale = 0.5f;
@@ -1072,22 +1056,11 @@ void PM_Weapon( void ) {
 		}
 
 		if ( pm->cmd.buttons & BUTTON_ATTACK ) {
-
-			/* Nico, removed gametypes
-			if ( PM_IsSinglePlayerGame() ) {
-				pm->ps->weapHeat[WP_DUMMY_MG42] += MG42_RATE_OF_FIRE_SP;
-			} else {*/
-				pm->ps->weapHeat[WP_DUMMY_MG42] += MG42_RATE_OF_FIRE_MP;
-			// }
+			pm->ps->weapHeat[WP_DUMMY_MG42] += MG42_RATE_OF_FIRE_MP;
 
 			PM_AddEvent( EV_FIRE_WEAPON_MG42 );
 
-			/* Nico, removed gametypes
-			if ( PM_IsSinglePlayerGame() ) {
-				pm->ps->weaponTime += MG42_RATE_OF_FIRE_SP;
-			} else {*/
-				pm->ps->weaponTime += MG42_RATE_OF_FIRE_MP;
-			// }
+			pm->ps->weaponTime += MG42_RATE_OF_FIRE_MP;
 
 			BG_AnimScriptEvent( pm->ps, pm->character->animModelInfo, ANIM_ET_FIREWEAPON, qfalse, qtrue );
 			pm->ps->viewlocked = 2;         // this enable screen jitter when firing
@@ -1426,12 +1399,6 @@ void PM_Weapon( void ) {
 			return;
 		}
 
-		/* Nico, removed skills
-		if ( pm->skill[SK_HEAVY_WEAPONS] >= 1 ) {
-			if ( pm->cmd.serverTime - pm->ps->classWeaponTime < pm->soldierChargeTime * 0.66f ) {
-				return;
-			}
-		} else */
 		if ( pm->cmd.serverTime - pm->ps->classWeaponTime < pm->soldierChargeTime ) {
 			return;
 		}
@@ -1444,12 +1411,6 @@ void PM_Weapon( void ) {
 	}
 
 	if ( pm->ps->weapon == WP_MORTAR_SET ) {
-		/* Nico, removed skills
-		if ( pm->skill[SK_HEAVY_WEAPONS] >= 1 ) {
-			if ( pm->cmd.serverTime - pm->ps->classWeaponTime < ( pm->soldierChargeTime * 0.33f ) ) {
-				return;
-			}
-		} else */
 		if ( pm->cmd.serverTime - pm->ps->classWeaponTime < ( pm->soldierChargeTime * 0.5f ) ) {
 			return;
 		}
@@ -1460,49 +1421,24 @@ void PM_Weapon( void ) {
 	}
 
 	if ( pm->ps->weapon == WP_SMOKE_BOMB || pm->ps->weapon == WP_SATCHEL ) {
-		/* Nico, removed skills
-		if ( pm->skill[SK_MILITARY_INTELLIGENCE_AND_SCOPED_WEAPONS] >= 2 ) {
-			if ( pm->cmd.serverTime - pm->ps->classWeaponTime < ( pm->covertopsChargeTime * 0.66f ) ) {
-				return;
-			}
-		} else */
 		if ( pm->cmd.serverTime - pm->ps->classWeaponTime < pm->covertopsChargeTime ) {
 			return;
 		}
 	}
 
 	if ( pm->ps->weapon == WP_LANDMINE ) {
-		/* Nico, removed skills
-		if ( pm->skill[SK_EXPLOSIVES_AND_CONSTRUCTION] >= 2 ) {
-			if ( pm->cmd.serverTime - pm->ps->classWeaponTime < ( pm->engineerChargeTime * 0.33f ) ) {
-				return;
-			}
-		} else */if ( pm->cmd.serverTime - pm->ps->classWeaponTime < ( pm->engineerChargeTime * 0.5f ) ) {
+		if ( pm->cmd.serverTime - pm->ps->classWeaponTime < ( pm->engineerChargeTime * 0.5f ) ) {
 			return;
 		}
 	}
 
 	if ( pm->ps->weapon == WP_DYNAMITE ) {
-		/* Nico, removed skills
-		if ( pm->skill[SK_EXPLOSIVES_AND_CONSTRUCTION] >= 3 ) {
-			if ( pm->cmd.serverTime - pm->ps->classWeaponTime < ( pm->engineerChargeTime * 0.66f ) ) {
-				return;
-			}
-		} else */if ( pm->cmd.serverTime - pm->ps->classWeaponTime < pm->engineerChargeTime ) {
+		if ( pm->cmd.serverTime - pm->ps->classWeaponTime < pm->engineerChargeTime ) {
 			return;
 		}
 	}
 
 	if ( pm->ps->weapon == WP_AMMO ) {
-		/* Nico, removed skills
-		if ( pm->skill[SK_SIGNALS] >= 1 ) {
-			if ( pm->cmd.serverTime - pm->ps->classWeaponTime < ( pm->ltChargeTime * 0.15f ) ) {
-				if ( pm->cmd.buttons & BUTTON_ATTACK ) {
-					BG_AnimScriptEvent( pm->ps, pm->character->animModelInfo, ANIM_ET_NOPOWER, qtrue, qfalse );
-				}
-				return;
-			}
-		} else */
 		if ( pm->cmd.serverTime - pm->ps->classWeaponTime < ( pm->ltChargeTime * 0.25f ) ) {
 			// rain - #202 - ^^ properly check ltChargeTime here, not medicChargeTime
 			if ( pm->cmd.buttons & BUTTON_ATTACK ) {
@@ -1513,15 +1449,6 @@ void PM_Weapon( void ) {
 	}
 
 	if ( pm->ps->weapon == WP_MEDKIT ) {
-		/* Nico, removed skills
-		if ( pm->skill[SK_FIRST_AID] >= 2 ) {
-			if ( pm->cmd.serverTime - pm->ps->classWeaponTime < ( pm->medicChargeTime * 0.15f ) ) {
-				if ( pm->cmd.buttons & BUTTON_ATTACK ) {
-					BG_AnimScriptEvent( pm->ps, pm->character->animModelInfo, ANIM_ET_NOPOWER, qtrue, qfalse );
-				}
-				return;
-			}
-		} else */
 		if ( pm->cmd.serverTime - pm->ps->classWeaponTime < ( pm->medicChargeTime * 0.25f ) ) {
 			if ( pm->cmd.buttons & BUTTON_ATTACK ) {
 				BG_AnimScriptEvent( pm->ps, pm->character->animModelInfo, ANIM_ET_NOPOWER, qtrue, qfalse );
@@ -1531,12 +1458,6 @@ void PM_Weapon( void ) {
 	}
 
 	if ( pm->ps->weapon == WP_SMOKE_MARKER ) {
-		/* Nico, removed skills
-		if ( pm->skill[SK_SIGNALS] >= 2 ) {
-			if ( pm->cmd.serverTime - pm->ps->classWeaponTime < ( pm->ltChargeTime * 0.66f ) ) {
-				return;
-			}
-		} else */
 		if ( pm->cmd.serverTime - pm->ps->classWeaponTime < pm->ltChargeTime ) {
 			return;
 		}
@@ -2122,13 +2043,7 @@ void PM_Weapon( void ) {
 		pm->pmext->weapRecoilTime = pm->cmd.serverTime;
 		pm->pmext->weapRecoilDuration = 300;
 		pm->pmext->weapRecoilYaw = crandom() * .5f;
-
-		/* Nico, removed skills
-		if ( pm->skill[SK_MILITARY_INTELLIGENCE_AND_SCOPED_WEAPONS] >= 3 ) {
-			pm->pmext->weapRecoilPitch = .25f;
-		} else {*/
-			pm->pmext->weapRecoilPitch = .5f;
-		// }
+		pm->pmext->weapRecoilPitch = .5f;
 		break;
 	case WP_MOBILE_MG42:
 		pm->pmext->weapRecoilTime = pm->cmd.serverTime;
@@ -2141,21 +2056,11 @@ void PM_Weapon( void ) {
 			pm->pmext->weapRecoilPitch = .75f * random() * .2f;
 		}
 		break;
-		/*case WP_MOBILE_MG42_SET:
-			pm->pmext->weapRecoilTime = 0;
-			pm->pmext->weapRecoilYaw = 0.f;
-			break;*/
 	case WP_FG42SCOPE:
 		pm->pmext->weapRecoilTime = pm->cmd.serverTime;
 		pm->pmext->weapRecoilDuration = 100;
 		pm->pmext->weapRecoilYaw = 0.f;
 		pm->pmext->weapRecoilPitch = .45f * random() * .15f;
-
-		/* Nico, removed skills
-		if ( pm->skill[SK_MILITARY_INTELLIGENCE_AND_SCOPED_WEAPONS] >= 3 ) {
-			pm->pmext->weapRecoilPitch *= .5f;
-		}*/
-
 		break;
 	case WP_LUGER:
 	case WP_SILENCER:
@@ -2166,15 +2071,9 @@ void PM_Weapon( void ) {
 	case WP_AKIMBO_COLT:
 	case WP_AKIMBO_SILENCEDCOLT:
 		pm->pmext->weapRecoilTime = pm->cmd.serverTime;
-
-		/* Nico, removed skills
-		pm->pmext->weapRecoilDuration = pm->skill[SK_LIGHT_WEAPONS] >= 3 ? 70 : 100;*/
 		pm->pmext->weapRecoilDuration = 100;
 
 		pm->pmext->weapRecoilYaw = 0.f; //crandom() * .1f;
-
-		/* Nico, removed skills
-		pm->pmext->weapRecoilPitch = pm->skill[SK_LIGHT_WEAPONS] >= 3 ? .25f * random() * .15f : .45f * random() * .15f;*/
 		pm->pmext->weapRecoilPitch = .45f * random() * .15f;
 
 		break;
@@ -2200,11 +2099,6 @@ void PM_Weapon( void ) {
 	if ( pm->ps->aimSpreadScaleFloat > 255 ) {
 		pm->ps->aimSpreadScaleFloat = 255;
 	}
-
-	/* Nico, removed skills
-	if ( pm->skill[SK_MILITARY_INTELLIGENCE_AND_SCOPED_WEAPONS] >= 3 && pm->ps->stats[STAT_PLAYER_CLASS] == PC_COVERTOPS ) {
-		pm->ps->aimSpreadScaleFloat *= .5f;
-	}*/
 
 	pm->ps->aimSpreadScale = (int)( pm->ps->aimSpreadScaleFloat );
 
@@ -2275,11 +2169,6 @@ void PM_BeginWeaponReload( int weapon ) {
 	// okay to reload while overheating without tacking the reload time onto the end of the
 	// current weaponTime (the reload time is partially absorbed into the overheat time)
 	reloadTime = GetAmmoTableData( weapon )->reloadTime;
-
-	/* Nico, removed skills
-	if ( pm->skill[SK_LIGHT_WEAPONS] >= 2 && BG_isLightWeaponSupportingFastReload( weapon ) ) {
-		reloadTime *= .65f;
-	}*/
 
 	if ( pm->ps->weaponstate == WEAPON_READY ) {
 		pm->ps->weaponTime += reloadTime;
