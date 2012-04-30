@@ -237,7 +237,7 @@ CG_Respawn
 A respawn happened this snapshot
 ================
 */
-void CG_Respawn( qboolean revived ) {
+void CG_Respawn() {
 	cg.serverRespawning = qfalse;   // Arnout: just in case
 
 	// no error decay on player movement
@@ -272,9 +272,7 @@ void CG_Respawn( qboolean revived ) {
 
 	cg.pmext.bAutoReload = ( cg_autoReload.integer > 0 );
 
-	if ( !revived ) {
-		cgs.limboLoadoutSelected = qfalse;
-	}
+	cgs.limboLoadoutSelected = qfalse;
 
 	if ( cg.predictedPlayerState.stats[STAT_PLAYER_CLASS] == PC_COVERTOPS ) {
 		cg.pmext.silencedSideArm = 1;
@@ -507,11 +505,11 @@ void CG_TransitionPlayerState( playerState_t *ps, playerState_t *ops ) {
 
 	// respawning
 	if ( ps->persistant[PERS_SPAWN_COUNT] != ops->persistant[PERS_SPAWN_COUNT] ) {
-		CG_Respawn( qfalse );
+		CG_Respawn();
 	}
 
 	if ( cg.mapRestart ) {
-		CG_Respawn( qfalse );
+		CG_Respawn();
 		cg.mapRestart = qfalse;
 	}
 

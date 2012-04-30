@@ -1156,85 +1156,6 @@ qboolean StuckInClient( gentity_t *self ) {
 }
 
 extern vec3_t playerMins, playerMaxs;
-#define WR_PUSHAMOUNT 25
-
-void WolfRevivePushEnt( gentity_t *self, gentity_t *other ) {
-	vec3_t dir, push;
-
-	VectorSubtract( self->r.currentOrigin, other->r.currentOrigin, dir );
-	dir[2] = 0;
-	VectorNormalizeFast( dir );
-
-	VectorScale( dir, WR_PUSHAMOUNT, push );
-
-	if ( self->client ) {
-		VectorAdd( self->s.pos.trDelta, push, self->s.pos.trDelta );
-		VectorAdd( self->client->ps.velocity, push, self->client->ps.velocity );
-	}
-
-	VectorScale( dir, -WR_PUSHAMOUNT, push );
-	push[2] = WR_PUSHAMOUNT / 2;
-
-	VectorAdd( other->s.pos.trDelta, push, other->s.pos.trDelta );
-	VectorAdd( other->client->ps.velocity, push, other->client->ps.velocity );
-}
-
-// Arnout: completely revived for capsules
-/* Nico, ghost players
-void WolfReviveBbox( gentity_t *self ) {
-	int touch[MAX_GENTITIES];
-	int num,i, touchnum = 0;
-	gentity_t   *hit = NULL; // TTimo: init
-	vec3_t mins, maxs;
-
-	hit = G_TestEntityPosition( self );
-
-	if ( hit && ( hit->s.number == ENTITYNUM_WORLD || ( hit->client && ( hit->client->ps.persistant[PERS_HWEAPON_USE] || ( hit->client->ps.eFlags & EF_MOUNTEDTANK ) ) ) ) ) {
-		G_DPrintf( "WolfReviveBbox: Player stuck in world or MG42 using player\n" );
-		// Move corpse directly to the person who revived them
-		if ( self->props_frame_state >= 0 ) {
-			VectorCopy( g_entities[self->props_frame_state].client->ps.origin, self->client->ps.origin );
-			VectorCopy( self->client->ps.origin, self->r.currentOrigin );
-			trap_LinkEntity( self );
-
-			// Reset value so we don't continue to warp them
-			self->props_frame_state = -1;
-		}
-		return;
-	}
-
-	VectorAdd( self->r.currentOrigin, playerMins, mins );
-	VectorAdd( self->r.currentOrigin, playerMaxs, maxs );
-
-	num = trap_EntitiesInBox( mins, maxs, touch, MAX_GENTITIES );
-
-	for ( i = 0 ; i < num ; i++ ) {
-		hit = &g_entities[touch[i]];
-
-		// Always use capsule for player
-		if ( !trap_EntityContactCapsule( mins, maxs, hit ) ) {
-			//if ( !trap_EntityContact( mins, maxs, hit ) ) {
-			continue;
-		}
-
-		if ( hit->client && hit->health > 0 ) {
-			if ( hit->s.number != self->s.number ) {
-				WolfRevivePushEnt( hit, self );
-				touchnum++;
-			}
-		} else if ( hit->r.contents & ( CONTENTS_SOLID | CONTENTS_BODY | CONTENTS_PLAYERCLIP ) ) {
-			WolfRevivePushEnt( hit, self );
-			touchnum++;
-		}
-	}
-
-	G_DPrintf( "WolfReviveBbox: Touchnum: %d\n", touchnum );
-
-	if ( touchnum == 0 ) {
-		G_DPrintf( "WolfReviveBbox:  Player is solid now!\n" );
-		self->r.contents = CONTENTS_BODY;
-	}
-}*/
 
 /*
 ==============
@@ -1365,16 +1286,6 @@ void ClientEndFrame( gentity_t *ent ) {
 	if ( ent->props_frame_state >= 0 && ( ( level.time - ent->s.effect3Time ) > 100 ) ) {
 		ent->props_frame_state = -1;
 	}
-
-	/* Nico, ghost players
-	if ( ent->health > 0 && StuckInClient( ent ) ) {
-		G_DPrintf( "%s is stuck in a client.\n", ent->client->pers.netname );
-		ent->r.contents = CONTENTS_CORPSE;
-	}
-
-	if ( ent->health > 0 && ent->r.contents == CONTENTS_CORPSE && !( ent->s.eFlags & EF_MOUNTEDTANK ) ) {
-		WolfReviveBbox( ent );
-	}*/
 
 	// DHM - Nerve :: Reset 'count2' for flamethrower
 	if ( !( ent->client->buttons & BUTTON_ATTACK ) ) {

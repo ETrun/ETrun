@@ -1205,18 +1205,6 @@ static void CG_PlayerSprites( centity_t *cent ) {
 
 	team = cgs.clientinfo[ cent->currentState.clientNum ].team;
 
-	// DHM - Nerve :: If this client is a medic, draw a 'revive' icon over
-	//					dead players that are not in limbo yet.
-	if ( ( cent->currentState.eFlags & EF_DEAD )
-		 && cent->currentState.number == cent->currentState.clientNum
-		 && cg.snap->ps.stats[ STAT_PLAYER_CLASS ] == PC_MEDIC
-		 && cg.snap->ps.stats[ STAT_HEALTH ] > 0
-		 && cg.snap->ps.persistant[PERS_TEAM] == team ) {
-
-		CG_PlayerFloatSprite( cent, cgs.media.medicReviveShader, 8 );
-		return;
-	}
-
 	// DHM - Nerve :: show voice chat signal so players know who's talking
 	if ( cent->voiceChatSpriteTime > cg.time && cg.snap->ps.persistant[PERS_TEAM] == team ) {
 		CG_PlayerFloatSprite( cent, cent->voiceChatSprite, 56 );

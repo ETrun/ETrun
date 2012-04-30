@@ -524,7 +524,6 @@ void CG_DrawCursorhint( rectDef_t *rect ) {
 		icon = cgs.media.disarmHintShader;
 		break;
 	case HINT_REVIVE:
-		icon = cgs.media.reviveHintShader;
 		break;
 	case HINT_DYNAMITE:
 		icon = cgs.media.dynamiteHintShader;

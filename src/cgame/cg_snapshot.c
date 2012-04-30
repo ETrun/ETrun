@@ -168,7 +168,7 @@ void CG_SetInitialSnapshot( snapshot_t *snap ) {
 
 	// set our local weapon selection pointer to
 	// what the server has indicated the current weapon is
-	CG_Respawn( qfalse );
+	CG_Respawn();
 
 	for ( i = 0 ; i < cg.snap->numEntities ; i++ ) {
 		state = &cg.snap->entities[ i ];

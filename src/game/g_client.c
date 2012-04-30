@@ -443,7 +443,7 @@ respawn
 void respawn( gentity_t *ent ) {
 	ent->client->ps.pm_flags &= ~PMF_LIMBO; // JPW NERVE turns off limbo
 
-	ClientSpawn( ent, qfalse );
+	ClientSpawn( ent );
 }
 
 // NERVE - SMF - merge from team arena
@@ -1240,7 +1240,7 @@ void ClientBegin( int clientNum ) {
 	client->ps.persistant[PERS_SPAWN_COUNT] = spawn_count;
 
 	// locate ent at a spawn point
-	ClientSpawn( ent, qfalse );
+	ClientSpawn( ent );
 
 
 	// DHM - Nerve :: Start players in limbo mode if they change teams during the match
@@ -1316,7 +1316,7 @@ after the first ClientBegin, and after each respawn
 Initializes all non-persistant parts of playerState
 ============
 */
-void ClientSpawn( gentity_t *ent, qboolean revived ) {
+void ClientSpawn( gentity_t *ent ) {
 	int index;
 	vec3_t spawn_origin, spawn_angles;
 	gclient_t   *client;
@@ -1329,31 +1329,24 @@ void ClientSpawn( gentity_t *ent, qboolean revived ) {
 	int savedPing;
 	int savedTeam;
 	int savedSlotNumber;
+	qboolean update = qfalse;
+
 	index = ent - g_entities;
 	client = ent->client;
+	
 
 	G_UpdateSpawnCounts();
 
 	client->pers.lastSpawnTime = level.time;
 	client->pers.lastBattleSenseBonusTime = level.timeCurrent;
 
-	// find a spawn point
-	// do it before setting health back up, so farthest
-	// ranging doesn't count this client
-	if ( revived ) {
-		spawnPoint = ent;
-		VectorCopy( ent->r.currentOrigin, spawn_origin );
-		spawn_origin[2] += 9;   // spawns seem to be sunk into ground?
-		VectorCopy( ent->s.angles, spawn_angles );
+	// Arnout: let's just be sure it does the right thing at all times. (well maybe not the right thing, but at least not the bad thing!)
+	//if( client->sess.sessionTeam == TEAM_SPECTATOR || client->sess.sessionTeam == TEAM_FREE ) {
+	if ( client->sess.sessionTeam != TEAM_AXIS && client->sess.sessionTeam != TEAM_ALLIES ) {
+		spawnPoint = SelectSpectatorSpawnPoint( spawn_origin, spawn_angles );
 	} else {
-		// Arnout: let's just be sure it does the right thing at all times. (well maybe not the right thing, but at least not the bad thing!)
-		//if( client->sess.sessionTeam == TEAM_SPECTATOR || client->sess.sessionTeam == TEAM_FREE ) {
-		if ( client->sess.sessionTeam != TEAM_AXIS && client->sess.sessionTeam != TEAM_ALLIES ) {
-			spawnPoint = SelectSpectatorSpawnPoint( spawn_origin, spawn_angles );
-		} else {
-			// RF, if we have requested a specific spawn point, use it (fixme: what if this will place us inside another character?)
-			spawnPoint = SelectCTFSpawnPoint( client->sess.sessionTeam, client->pers.teamState.state, spawn_origin, spawn_angles, client->sess.spawnObjectiveIndex );
-		}
+		// RF, if we have requested a specific spawn point, use it (fixme: what if this will place us inside another character?)
+		spawnPoint = SelectCTFSpawnPoint( client->sess.sessionTeam, client->pers.teamState.state, spawn_origin, spawn_angles, client->sess.spawnObjectiveIndex );
 	}
 
 	client->pers.teamState.state = TEAM_ACTIVE;
@@ -1407,8 +1400,6 @@ void ClientSpawn( gentity_t *ent, qboolean revived ) {
 	// clear entity values
 	client->ps.stats[STAT_MAX_HEALTH] = client->pers.maxHealth;
 	client->ps.eFlags = flags;
-	// MrE: use capsules for AI and player
-	//client->ps.eFlags |= EF_CAPSULE;
 
 	ent->s.groundEntityNum = ENTITYNUM_NONE;
 	ent->client = &level.clients[index];
@@ -1424,9 +1415,7 @@ void ClientSpawn( gentity_t *ent, qboolean revived ) {
 	ent->clipmask = MASK_PLAYERSOLID;
 
 	// DHM - Nerve :: Init to -1 on first spawn;
-	if ( !revived ) {
-		ent->props_frame_state = -1;
-	}
+	ent->props_frame_state = -1;
 
 	ent->die = player_die;
 	ent->waterlevel = 0;
@@ -1465,39 +1454,35 @@ void ClientSpawn( gentity_t *ent, qboolean revived ) {
 
 	trap_GetUsercmd( client - level.clients, &ent->client->pers.cmd );  // NERVE - SMF - moved this up here
 
-	// DHM - Nerve :: Add appropriate weapons
-	if ( !revived ) {
-		qboolean update = qfalse;
-
-		if ( client->sess.playerType != client->sess.latchPlayerType ) {
-			update = qtrue;
-		}
-
-		client->sess.playerType = client->sess.latchPlayerType;
-
-		if ( G_IsWeaponDisabled( ent, client->sess.latchPlayerWeapon ) ) {
-			bg_playerclass_t* classInfo = BG_PlayerClassForPlayerState( &ent->client->ps );
-			client->sess.latchPlayerWeapon = classInfo->classWeapons[0];
-			update = qtrue;
-		}
-
-		if ( client->sess.playerWeapon != client->sess.latchPlayerWeapon ) {
-			client->sess.playerWeapon = client->sess.latchPlayerWeapon;
-			update = qtrue;
-		}
-
-		if ( G_IsWeaponDisabled( ent, client->sess.playerWeapon ) ) {
-			bg_playerclass_t* classInfo = BG_PlayerClassForPlayerState( &ent->client->ps );
-			client->sess.playerWeapon = classInfo->classWeapons[0];
-			update = qtrue;
-		}
-
-		client->sess.playerWeapon2 = client->sess.latchPlayerWeapon2;
-
-		if ( update ) {
-			ClientUserinfoChanged( index );
-		}
+	if ( client->sess.playerType != client->sess.latchPlayerType ) {
+		update = qtrue;
 	}
+
+	client->sess.playerType = client->sess.latchPlayerType;
+
+	if ( G_IsWeaponDisabled( ent, client->sess.latchPlayerWeapon ) ) {
+		bg_playerclass_t* classInfo = BG_PlayerClassForPlayerState( &ent->client->ps );
+		client->sess.latchPlayerWeapon = classInfo->classWeapons[0];
+		update = qtrue;
+	}
+
+	if ( client->sess.playerWeapon != client->sess.latchPlayerWeapon ) {
+		client->sess.playerWeapon = client->sess.latchPlayerWeapon;
+		update = qtrue;
+	}
+
+	if ( G_IsWeaponDisabled( ent, client->sess.playerWeapon ) ) {
+		bg_playerclass_t* classInfo = BG_PlayerClassForPlayerState( &ent->client->ps );
+		client->sess.playerWeapon = classInfo->classWeapons[0];
+		update = qtrue;
+	}
+
+	client->sess.playerWeapon2 = client->sess.latchPlayerWeapon2;
+
+	if ( update ) {
+		ClientUserinfoChanged( index );
+	}
+
 
 	G_UpdateCharacter( client );
 
@@ -1510,9 +1495,7 @@ void ClientSpawn( gentity_t *ent, qboolean revived ) {
 
 	// END		Mad Doctor I changes, 8/17/2002
 
-	if ( !revived ) {
-		client->pers.cmd.weapon = ent->client->ps.weapon;
-	}
+	client->pers.cmd.weapon = ent->client->ps.weapon;
 // dhm - end
 
 	// JPW NERVE ***NOTE*** the following line is order-dependent and must *FOLLOW* SetWolfSpawnWeapons() in multiplayer
@@ -1526,25 +1509,11 @@ void ClientSpawn( gentity_t *ent, qboolean revived ) {
 	// the respawned flag will be cleared after the attack and jump keys come up
 	client->ps.pm_flags |= PMF_RESPAWNED;
 
-	if ( !revived ) {
-		SetClientViewAngle( ent, spawn_angles );
-	} else {
-		//bani - #245 - we try to orient them in the freelook direction when revived
-		vec3_t newangle;
-
-		newangle[YAW] = SHORT2ANGLE( ent->client->pers.cmd.angles[YAW] + ent->client->ps.delta_angles[YAW] );
-		newangle[PITCH] = 0;
-		newangle[ROLL] = 0;
-
-		SetClientViewAngle( ent, newangle );
-	}
+	SetClientViewAngle( ent, spawn_angles );
 
 	if ( ent->client->sess.sessionTeam != TEAM_SPECTATOR ) {
 		trap_LinkEntity( ent );
 	}
-
-	/* Nico, instant reswawn
-	client->respawnTime = level.timeCurrent;*/
 
 	client->inactivityTime = level.time + g_inactivity.integer * 1000;
 	client->latched_buttons = 0;
@@ -1554,9 +1523,7 @@ void ClientSpawn( gentity_t *ent, qboolean revived ) {
 	client->deathTime = 0;
 
 	// fire the targets of the spawn point
-	if ( !revived ) {
-		G_UseTargets( spawnPoint, ent );
-	}
+	G_UseTargets( spawnPoint, ent );
 
 	// run a client frame to drop exactly to the floor,
 	// initialize animations and other things
@@ -1584,7 +1551,7 @@ void ClientSpawn( gentity_t *ent, qboolean revived ) {
 	G_ResetMarkers( ent );
 
 	// RF, start the scripting system
-	if ( !revived && client->sess.sessionTeam != TEAM_SPECTATOR ) {
+	if ( client->sess.sessionTeam != TEAM_SPECTATOR ) {
 
 		// RF, call entity scripting event
 		G_Script_ScriptEvent( ent, "playerstart", "" );

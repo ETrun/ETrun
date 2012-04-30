@@ -1147,7 +1147,6 @@ typedef struct {
 
 	qhandle_t spawnInvincibleShader;
 
-	qhandle_t medicReviveShader;
 	qhandle_t voiceChatShader;
 	qhandle_t balloonShader;
 	qhandle_t objectiveShader;
@@ -1207,7 +1206,6 @@ typedef struct {
 	// DHM - Nerve :: Multiplayer hints
 	qhandle_t buildHintShader;
 	qhandle_t disarmHintShader;
-	qhandle_t reviveHintShader;
 	qhandle_t dynamiteHintShader;
 	// dhm - end
 
@@ -2376,7 +2374,7 @@ const char* CG_LocalizeServerCommand( const char *buf );
 //
 // cg_playerstate.c
 //
-void CG_Respawn( qboolean revived );
+void CG_Respawn();
 void CG_TransitionPlayerState( playerState_t *ps, playerState_t *ops );
 
 //

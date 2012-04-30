@@ -1372,7 +1372,6 @@ static void CG_RegisterGraphics( void ) {
 
 	cgs.media.buildHintShader       = trap_R_RegisterShader( "gfx/2d/buildHint" );       // DHM - Nerve
 	cgs.media.disarmHintShader      = trap_R_RegisterShader( "gfx/2d/disarmHint" );      // DHM - Nerve
-	cgs.media.reviveHintShader      = trap_R_RegisterShader( "gfx/2d/reviveHint" );      // DHM - Nerve
 	cgs.media.dynamiteHintShader    = trap_R_RegisterShader( "gfx/2d/dynamiteHint" );    // DHM - Nerve
 
 	cgs.media.tankHintShader        = trap_R_RegisterShaderNoMip( "gfx/2d/tankHint" );
@@ -1426,7 +1425,6 @@ static void CG_RegisterGraphics( void ) {
 	//----(SA) end
 
 	cgs.media.spawnInvincibleShader = trap_R_RegisterShader( "sprites/shield" );
-	cgs.media.medicReviveShader = trap_R_RegisterShader( "sprites/medic_revive" );
 
 	cgs.media.voiceChatShader = trap_R_RegisterShader( "sprites/voiceChat" );
 	cgs.media.balloonShader = trap_R_RegisterShader( "sprites/balloon3" );
