@@ -1390,35 +1390,6 @@ static void CG_RegisterGraphics( void ) {
 	cgs.media.satchelchargeHintShader = trap_R_RegisterShaderNoMip( "gfx/2d/satchelchargeHint" ),
 
 	cgs.media.uniformHintShader     = trap_R_RegisterShaderNoMip( "gfx/2d/uniformHint" );
-	cgs.media.waypointAttackShader  = trap_R_RegisterShaderNoMip( "sprites/waypoint_attack" );
-	cgs.media.waypointDefendShader  = trap_R_RegisterShaderNoMip( "sprites/waypoint_defend" );
-	cgs.media.waypointRegroupShader = trap_R_RegisterShaderNoMip( "sprites/waypoint_regroup" );
-	if ( cgs.ccLayers ) {
-		for ( i = 0; i < cgs.ccLayers; i++ ) {
-			cgs.media.commandCentreMapShader[i]     = trap_R_RegisterShaderNoMip( va( "levelshots/%s_%i_cc.tga", cgs.rawmapname, i ) );
-			cgs.media.commandCentreMapShaderTrans[i] = trap_R_RegisterShaderNoMip( va( "levelshots/%s_%i_cc_trans", cgs.rawmapname, i ) );
-			cgs.media.commandCentreAutomapShader[i] = trap_R_RegisterShaderNoMip( va( "levelshots/%s_%i_cc_automap", cgs.rawmapname, i ) );
-		}
-	} else {
-		cgs.media.commandCentreMapShader[0]         = trap_R_RegisterShaderNoMip( va( "levelshots/%s_cc.tga", cgs.rawmapname ) );
-		cgs.media.commandCentreMapShaderTrans[0]    = trap_R_RegisterShaderNoMip( va( "levelshots/%s_cc_trans", cgs.rawmapname ) );
-		cgs.media.commandCentreAutomapShader[0]     = trap_R_RegisterShaderNoMip( va( "levelshots/%s_cc_automap", cgs.rawmapname ) );
-	}
-	cgs.media.commandCentreAutomapMaskShader = trap_R_RegisterShaderNoMip( "levelshots/automap_mask" );
-	cgs.media.commandCentreAutomapBorderShader = trap_R_RegisterShaderNoMip( "ui/assets2/maptrim_long" );
-	cgs.media.commandCentreAutomapBorder2Shader = trap_R_RegisterShaderNoMip( "ui/assets2/maptrim_long2" );
-	cgs.media.commandCentreAutomapCornerShader = trap_R_RegisterShaderNoMip( "ui/assets2/maptrim_edge.tga" );
-	cgs.media.commandCentreAxisMineShader   = trap_R_RegisterShaderNoMip( "sprites/landmine_axis" );
-	cgs.media.commandCentreAlliedMineShader = trap_R_RegisterShaderNoMip( "sprites/landmine_allied" );
-	cgs.media.commandCentreSpawnShader[0] = trap_R_RegisterShaderNoMip( "gfx/limbo/cm_flagaxis" );
-	cgs.media.commandCentreSpawnShader[1] = trap_R_RegisterShaderNoMip( "gfx/limbo/cm_flagallied" );
-	cgs.media.compassConstructShader =      trap_R_RegisterShaderNoMip( "sprites/construct.tga" );
-
-	cgs.media.compassDestroyShader =        trap_R_RegisterShaderNoMip( "sprites/destroy.tga" );
-	cgs.media.slashShader =                 trap_R_RegisterShaderNoMip( "gfx/2d/numbers/slash" );
-	cgs.media.compass2Shader =              trap_R_RegisterShaderNoMip( "gfx/2d/compass2.tga" );
-	cgs.media.compassShader =               trap_R_RegisterShaderNoMip( "gfx/2d/compass.tga" );
-	cgs.media.buddyShader =                 trap_R_RegisterShaderNoMip( "sprites/buddy.tga" );
 
 	for ( i = 0 ; i < NUM_CROSSHAIRS ; i++ ) {
 		cgs.media.crosshairShader[i] = trap_R_RegisterShader( va( "gfx/2d/crosshair%c", 'a' + i ) );
@@ -1507,29 +1478,6 @@ static void CG_RegisterGraphics( void ) {
 	cgs.media.alliedUniformShader =             trap_R_RegisterShader( "sprites/uniform_allied" );
 	cgs.media.axisUniformShader =               trap_R_RegisterShader( "sprites/uniform_axis" );
 
-	// used in:
-	// command map
-	cgs.media.ccFilterPics[0] = trap_R_RegisterShaderNoMip( "gfx/limbo/filter_axis" );
-	cgs.media.ccFilterPics[1] = trap_R_RegisterShaderNoMip( "gfx/limbo/filter_allied" );
-	cgs.media.ccFilterPics[2] = trap_R_RegisterShaderNoMip( "gfx/limbo/filter_spawn" );
-
-	cgs.media.ccFilterPics[3] = trap_R_RegisterShaderNoMip( "gfx/limbo/filter_bo" );
-	cgs.media.ccFilterPics[4] = trap_R_RegisterShaderNoMip( "gfx/limbo/filter_healthammo" );
-	cgs.media.ccFilterPics[5] = trap_R_RegisterShaderNoMip( "gfx/limbo/filter_construction" );
-	cgs.media.ccFilterPics[6] = trap_R_RegisterShaderNoMip( "gfx/limbo/filter_destruction" );
-	cgs.media.ccFilterPics[7] = trap_R_RegisterShaderNoMip( "gfx/limbo/filter_objective" );
-
-	cgs.media.ccFilterBackOn =  trap_R_RegisterShaderNoMip( "gfx/limbo/filter_back_on" );
-	cgs.media.ccFilterBackOff = trap_R_RegisterShaderNoMip( "gfx/limbo/filter_back_off" );
-
-	// used in:
-	//  statsranksmedals
-	//	command map
-	//	limbo menu
-	cgs.media.ccStamps[0] =             trap_R_RegisterShaderNoMip( "ui/assets2/stamp_complete" );
-	cgs.media.ccStamps[1] =             trap_R_RegisterShaderNoMip( "ui/assets2/stamp_failed" );
-
-	//cgs.media.ccArrow =					trap_R_RegisterShaderNoMip( "ui/assets2/arrow_up" );
 	cgs.media.ccPlayerHighlight =       trap_R_RegisterShaderNoMip( "ui/assets/mp_player_highlight.tga" );
 	cgs.media.ccConstructIcon[0] =      trap_R_RegisterShaderNoMip( "gfx/limbo/cm_constaxis" );
 	cgs.media.ccConstructIcon[1] =      trap_R_RegisterShaderNoMip( "gfx/limbo/cm_constallied" );
@@ -1555,8 +1503,6 @@ static void CG_RegisterGraphics( void ) {
 
 	CG_Fireteams_Setup();
 
-	cgs.media.waypointMarker =              trap_R_RegisterModel( "models/multiplayer/flagpole/flag_waypoint.md3" );
-
 	cgs.media.railCoreShader =  trap_R_RegisterShaderNoMip( "railCore" );    // (SA) for debugging server traces
 	cgs.media.ropeShader =      trap_R_RegisterShader( "textures/props/cable_m01" );
 
@@ -1571,8 +1517,6 @@ static void CG_RegisterGraphics( void ) {
 	cgs.media.shardWood2 = trap_R_RegisterModel( "models/shards/wood2.md3" );
 	cgs.media.shardMetal1 = trap_R_RegisterModel( "models/shards/metal1.md3" );
 	cgs.media.shardMetal2 = trap_R_RegisterModel( "models/shards/metal2.md3" );
-//	cgs.media.shardCeramic1 = trap_R_RegisterModel( "models/shards/ceramic1.md3" );
-//	cgs.media.shardCeramic2 = trap_R_RegisterModel( "models/shards/ceramic2.md3" );
 	// done
 
 	cgs.media.shardRubble1 = trap_R_RegisterModel( "models/mapobjects/debris/brick000.md3" );

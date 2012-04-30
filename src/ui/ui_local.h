@@ -365,10 +365,6 @@ extern vec4_t text_color_disabled;
 extern vec4_t text_color_normal;
 extern vec4_t text_color_highlight;
 
-extern char *ui_medalNames[];
-extern char *ui_medalPicNames[];
-extern char *ui_medalSounds[];
-
 //
 // ui_mfield.c
 //
@@ -846,7 +842,6 @@ typedef struct {
 	int mapCount;
 	mapInfo mapList[MAX_MAPS];
 
-	int campaignCount;
 	campaignInfo_t campaignList[MAX_CAMPAIGNS];
 
 	cpsFile_t campaignStatus;
@@ -1176,7 +1171,6 @@ void UI_LogAwardData( int award, int data );
 int UI_GetAwardLevel( int award );
 
 void UI_SPUnlock_f( void );
-void UI_SPUnlockMedals_f( void );
 
 void UI_InitGameinfo( void );
 

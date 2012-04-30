@@ -51,7 +51,7 @@ void G_WriteClientSessionData( gclient_t *client, qboolean restart ) {
 	int mvc = 0;
 	const char  *s;
 
-	s = va( "%i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i",
+	s = va( "%i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i",
 			client->sess.sessionTeam,
 			client->sess.spectatorTime,
 			client->sess.spectatorState,
@@ -63,7 +63,6 @@ void G_WriteClientSessionData( gclient_t *client, qboolean restart ) {
 			client->sess.latchPlayerWeapon, // DHM - Nerve
 			client->sess.latchPlayerWeapon2,
 			client->sess.coach_team,
-			client->sess.game_points,
 			client->sess.referee,
 			client->sess.spec_invite,
 			client->sess.spec_team,
@@ -131,7 +130,7 @@ void G_ReadSessionData( gclient_t *client ) {
 
 	trap_Cvar_VariableStringBuffer( va( "session%i", client - level.clients ), s, sizeof( s ) );
 
-	sscanf( s, "%i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i",
+	sscanf( s, "%i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i",
 	(int *)&client->sess.sessionTeam,
 	&client->sess.spectatorTime,
 	(int *)&client->sess.spectatorState,
@@ -143,7 +142,6 @@ void G_ReadSessionData( gclient_t *client ) {
 	&client->sess.latchPlayerWeapon, // DHM - Nerve
 	&client->sess.latchPlayerWeapon2,
 	&client->sess.coach_team,
-	&client->sess.game_points,
 	&client->sess.referee,
 	&client->sess.spec_invite,
 	&client->sess.spec_team,
@@ -221,7 +219,6 @@ void G_InitWorldSession( void ) {
 				tmp++;
 				trap_GetServerinfo( s, sizeof( s ) );
 				if ( Q_stricmp( tmp, Info_ValueForKey( s, "mapname" ) ) ) {
-					level.fResetStats = qtrue;
 					G_Printf( "Map changed, clearing player stats.\n" );
 				}
 			}

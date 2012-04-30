@@ -70,9 +70,6 @@ void G_loadMatchGame( void ) {
 		strcat( strReinfSeeds, va( " %d", aRandomValues[i] ) );
 	}
 
-	level.dwBlueReinfOffset = 1000 * aRandomValues[dwBlueOffset] / aReinfSeeds[dwBlueOffset];
-	level.dwRedReinfOffset  = 1000 * aRandomValues[dwRedOffset] / aReinfSeeds[dwRedOffset];
-
 	trap_SetConfigstring( CS_REINFSEEDS, strReinfSeeds );
 }
 

@@ -573,15 +573,9 @@ static void CG_DrawUpperRight( void ) {
 		}
 	}
 
-	if ( !( cg.snap->ps.pm_flags & PMF_LIMBO ) && ( cg.snap->ps.persistant[PERS_TEAM] != TEAM_SPECTATOR ) &&
-		 ( cgs.autoMapExpanded || ( !cgs.autoMapExpanded && ( cg.time - cgs.autoMapExpandTime < 250.f ) ) ) ) {
+	if ( !( cg.snap->ps.pm_flags & PMF_LIMBO ) && ( cg.snap->ps.persistant[PERS_TEAM] != TEAM_SPECTATOR ) ) {
 		return;
 	}
-
-	/* Nico, instant reswawn
-	if ( cg_drawRoundTimer.integer ) {
-		y = CG_DrawTimer( y );
-	}*/
 
 	if ( cg_drawFPS.integer ) {
 		y = CG_DrawFPS( y );

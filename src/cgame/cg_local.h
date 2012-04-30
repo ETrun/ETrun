@@ -44,11 +44,7 @@ If you have questions concerning this license or the applicable additional terms
 #include "../ui/ui_shared.h"
 
 
-#define MAX_LOCATIONS       256
-#define POWERUP_BLINKS      5
-
 #define STATS_FADE_TIME     200.0f
-#define POWERUP_BLINK_TIME  1000
 #define FADE_TIME           200
 #define DAMAGE_DEFLECT_TIME 100
 #define DAMAGE_RETURN_TIME  400
@@ -103,9 +99,6 @@ If you have questions concerning this license or the applicable additional terms
 // done.
 
 // OSP
-// Autoaction values
-#define AA_DEMORECORD   0x01
-#define AA_SCREENSHOT   0x02
 
 // Cursor
 #define CURSOR_OFFSETX  13
@@ -190,13 +183,6 @@ typedef struct {
 } cg_windowHandler_t;
 // OSP
 
-
-
-
-// START Mad Doc - TDF
-#define NUM_OVERLAY_FACES 1
-// END Mad Doc - TDF
-
 //=================================================
 
 // player entities need to track more information
@@ -234,7 +220,6 @@ typedef struct {
 	vec3_t oldFramePos;
 	float animSpeedScale;
 	int oldFrameSnapshotTime;
-	headAnimation_t *headAnim;
 	// done.
 
 } lerpFrame_t;
@@ -676,7 +661,6 @@ typedef struct {
 #define MAX_SPAWN_VARS          64
 #define MAX_SPAWN_VARS_CHARS    2048
 
-
 #define MAX_SPAWNPOINTS 32
 #define MAX_SPAWNDESC   128
 
@@ -718,9 +702,6 @@ typedef struct {
 	int yaw;
 	int data;
 	char type;
-
-	vec2_t transformed;
-	vec2_t automapTransformed;
 
 	team_t team;
 } mapEntityData_t;
@@ -1011,11 +992,8 @@ typedef struct {
 	vec2_t mapcoordsScale;
 	qboolean mapcoordsValid;
 
-
 	int numMiscGameModels;
 
-
-	qboolean showCampaignBriefing;
 	qboolean showGameView;
 	qboolean showFireteamMenu;
 
@@ -1268,38 +1246,6 @@ typedef struct {
 	qhandle_t tankHintShader;
 	qhandle_t satchelchargeHintShader;
 	qhandle_t uniformHintShader;
-	qhandle_t waypointAttackShader;
-	qhandle_t waypointDefendShader;
-	qhandle_t waypointRegroupShader;
-	qhandle_t waypointCompassAttackShader;
-	qhandle_t waypointCompassDefendShader;
-	qhandle_t waypointCompassRegroupShader;
-	qhandle_t commandCentreWoodShader;
-	qhandle_t commandCentreMapShader[MAX_COMMANDMAP_LAYERS];
-	qhandle_t commandCentreMapShaderTrans[MAX_COMMANDMAP_LAYERS];
-	qhandle_t commandCentreAutomapShader[MAX_COMMANDMAP_LAYERS];
-	qhandle_t commandCentreAutomapMaskShader;
-	qhandle_t commandCentreAutomapBorderShader;
-	qhandle_t commandCentreAutomapBorder2Shader;
-	qhandle_t commandCentreAutomapCornerShader;
-	qhandle_t commandCentreAxisMineShader;
-	qhandle_t commandCentreAlliedMineShader;
-	qhandle_t commandCentreSpawnShader[2];
-
-	// Mad Doc - TDF
-	qhandle_t ingameAutomapBackground;
-
-	qhandle_t compassConstructShader;
-	qhandle_t compassDestroyShader;
-	qhandle_t buddyShader;
-	qhandle_t hudBorderVert;
-	qhandle_t hudBorderVert2;
-
-	qhandle_t waypointMarker;
-
-	qhandle_t slashShader;
-	qhandle_t compassShader;
-	qhandle_t compass2Shader;
 
 	// Rafael
 	qhandle_t snowShader;
@@ -1486,10 +1432,6 @@ typedef struct {
 
 	sfxHandle_t sndMedicCall[2];
 
-	qhandle_t ccStamps[2];
-	qhandle_t ccFilterPics[10];
-	qhandle_t ccFilterBackOn;
-	qhandle_t ccFilterBackOff;
 	qhandle_t ccPaper;
 	qhandle_t ccPaperConsole;
 	qhandle_t ccBars[3];
@@ -1764,12 +1706,6 @@ typedef struct {
 
 	int autoFireteamJoinEndTime;
 	int autoFireteamJoinNum;
-
-
-	qboolean autoMapExpanded;
-	int autoMapExpandTime;
-
-	qboolean autoMapOff;                // is automap on or off
 
 	bg_character_t      *offscreenCmdr;
 
@@ -2469,8 +2405,6 @@ void CG_ShowHelp_On( int *status );
 qboolean CG_DrawScoreboard( void );
 
 void CG_CommandCentreClick( int key );
-void CG_DrawAutoMap( void );
-void CG_StatsRanksMedalsClick( int key );
 
 typedef struct {
 	int pendingAnimationTime;
@@ -2481,7 +2415,6 @@ typedef struct {
 typedef struct {
 	lerpFrame_t legs;
 	lerpFrame_t torso;
-	lerpFrame_t headAnim;
 
 	vec3_t headOrigin;          // used for centering talking heads
 

@@ -88,29 +88,9 @@ typedef enum {
 	MOVER_2TO1ROTATE
 } moverState_t;
 
-// door AI sound ranges
-#define HEAR_RANGE_DOOR_LOCKED      128 // really close since this is a cruel check
-#define HEAR_RANGE_DOOR_KICKLOCKED  512
-#define HEAR_RANGE_DOOR_OPEN        256
-#define HEAR_RANGE_DOOR_KICKOPEN    768
-
-// DHM - Nerve :: Worldspawn spawnflags to indicate if a gametype is not supported
-#define NO_GT_WOLF      1
-#define NO_STOPWATCH    2
-#define NO_CHECKPOINT   4
-#define NO_LMS          8
-
 #define MAX_CONSTRUCT_STAGES 3
-
 #define ALLOW_AXIS_TEAM         1
 #define ALLOW_ALLIED_TEAM       2
-
-// RF, different types of dynamic area flags
-#define AAS_AREA_ENABLED                    0x0000
-#define AAS_AREA_DISABLED                   0x0001
-#define AAS_AREA_AVOID                      0x0010
-#define AAS_AREA_TEAM_AXIS                  0x0020
-#define AAS_AREA_TEAM_ALLIES                0x0040
 
 // Nico, knockback value at panzerfaust
 #define KNOCKBACK_VALUE						500
@@ -138,14 +118,9 @@ typedef struct
 	g_script_stack_action_t     *action;            // points to an action to perform
 	char                        *params;
 } g_script_stack_item_t;
-//
-// Gordon: need to up this, forest has a HUGE script for the tank.....
-//#define	G_MAX_SCRIPT_STACK_ITEMS	128
-//#define	G_MAX_SCRIPT_STACK_ITEMS	176
-// RF, upped this again for the tank
-// Gordon: and again...
+
 #define G_MAX_SCRIPT_STACK_ITEMS    196
-//
+
 typedef struct
 {
 	g_script_stack_item_t items[G_MAX_SCRIPT_STACK_ITEMS];
@@ -556,13 +531,10 @@ typedef struct {
 
 	// OSP
 	int coach_team;
-	int game_points;
 	int referee;
 	int spec_invite;
 	int spec_team;
 	// OSP
-
-	qboolean versionOK;
 
 	// Nico, client session timerun related
 	int			timerunLastTime[MAX_TIMERUNS];
@@ -582,9 +554,6 @@ typedef struct {
 	save_position_t	axisSaves[MAX_SAVED_POSITIONS];
 
 } clientSession_t;
-
-//
-#define MAX_VOTE_COUNT      3
 
 #define PICKUP_ACTIVATE 0   // pickup items only when using "+activate"
 #define PICKUP_TOUCH    1   // pickup items when touched
@@ -639,8 +608,6 @@ typedef struct {
 	int lastCCPulseTime;
 
 	int lastSpawnTime;
-
-	char botScriptName[MAX_NETNAME];
 
 	// OSP
 	unsigned int autoaction;            // End-of-match auto-requests
@@ -725,7 +692,6 @@ struct gclient_s {
 	qboolean damage_fromWorld;      // if true, don't use the damage_from vector
 
 	//
-	int lastkilled_client;          // last client that this client killed
 	int lasthurt_client;            // last client that damaged this client
 	int lasthurt_mod;               // type of damage the client did
 
@@ -739,18 +705,11 @@ struct gclient_s {
 	qboolean fireHeld;              // used for hook
 	gentity_t   *hook;              // grapple hook if out
 
-	int switchTeamTime;             // time the player switched teams
-
 	// timeResidual is used to handle events that happen every second
 	// like health / armor countdowns and regeneration
 	int timeResidual;
 
 	float currentAimSpreadScale;
-
-	gentity_t   *persistantPowerup;
-	int portalID;
-	int ammoTimes[WP_NUM_WEAPONS];
-	int invulnerabilityTime;
 
 	gentity_t   *cameraPortal;              // grapple hook if out
 	vec3_t cameraOrigin;
@@ -909,9 +868,6 @@ typedef struct {
 
 	int portalSequence;
 	// Ridah
-	char        *scriptAI;
-	int reloadPauseTime;                // don't think AI/client's until this time has elapsed
-	int reloadDelayTime;                // don't start loading the savegame until this has expired
 
 	int capturetimes[4];         // red, blue, none, spectator for WOLF_MP_CPH
 	int redReinforceTime, blueReinforceTime;         // last time reinforcements arrived in ms
@@ -925,22 +881,11 @@ typedef struct {
 	// player/AI model scripting (server repository)
 	animScriptData_t animScriptData;
 
-	int totalHeadshots;
-	int missedHeadshots;
 	qboolean lastRestartTime;
 
 	int numFinalDead[2];                // DHM - Nerve :: unable to respawn and in limbo (per team)
 	int numOidTriggers;                 // DHM - Nerve
 
-	qboolean latchGametype;             // DHM - Nerve
-
-	// RF
-	int attackingTeam;                  // which team is attacking
-	int explosiveTargets[2];            // attackers need to explode something to get through
-	qboolean captureFlagMode;
-	qboolean initStaticEnts;
-	qboolean initSeekCoverChains;
-	char        *botScriptBuffer;
 	int globalAccumBuffer[MAX_SCRIPT_ACCUM_BUFFERS];
 
 	int soldierChargeTime[2];
@@ -962,11 +907,7 @@ typedef struct {
 	float lieutenantChargeTimeModifier[2];
 	float covertopsChargeTimeModifier[2];
 
-	int teamEliminateTime;
-
-	int campaignCount;
 	int currentCampaign;
-	qboolean newCampaign;
 
 	brushmodelInfo_t brushModelInfo[128];
 	int numBrushModels;
@@ -983,10 +924,7 @@ typedef struct {
 	qboolean ccLayers;
 
 	// OSP
-	int dwBlueReinfOffset;
-	int dwRedReinfOffset;
 	qboolean fLocalHost;
-	qboolean fResetStats;
 	int match_pause;                        // Paused state of the match
 
 	int server_settings;
@@ -1012,8 +950,6 @@ typedef struct {
 	int axisBombCounter, alliedBombCounter;
 	int axisAutoSpawn, alliesAutoSpawn;
 	int axisMG42Counter, alliesMG42Counter;
-
-	int lastClientBotThink;
 
 	limbo_cam_t limboCams[MAX_LIMBO_CAMS];
 	int numLimboCams;
@@ -1078,7 +1014,6 @@ void G_ParseField( const char *key, const char *value, gentity_t *ent );
 //
 void Cmd_Score_f( gentity_t *ent );
 void StopFollowing( gentity_t *ent );
-//void BroadcastTeamChange( gclient_t *client, int oldTeam );
 void G_TeamDataForString( const char* teamstr, int clientNum, team_t* team, spectatorState_t* sState, int* specClient );
 qboolean SetTeam( gentity_t *ent, char *s, qboolean force, weapon_t w1, weapon_t w2, qboolean setweapons );
 void G_SetClientWeapons( gentity_t* ent, weapon_t w1, weapon_t w2, qboolean updateclient );
@@ -1106,7 +1041,6 @@ qboolean ClientIsFlooding(gentity_t *ent);
 //
 void G_RunItem( gentity_t *ent );
 void RespawnItem( gentity_t *ent );
-
 void UseHoldableItem( gentity_t *ent, int item );
 void PrecacheItem( gitem_t *it );
 gentity_t *Drop_Item( gentity_t *ent, gitem_t *item, float angle, qboolean novelocity );
@@ -1161,8 +1095,6 @@ gentity_t* G_PopupMessage( popupMessageType_t type );
 void    G_Sound( gentity_t *ent, int soundIndex );
 void    G_AnimScriptSound( int soundIndex, vec3_t org, int client );
 void    G_FreeEntity( gentity_t *e );
-//qboolean	G_EntitiesFree( void );
-
 void    G_TouchTriggers( gentity_t *ent );
 void    G_TouchSolids( gentity_t *ent );
 

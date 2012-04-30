@@ -663,13 +663,6 @@ qboolean IsHeadShot( gentity_t *targ, vec3_t dir, vec3_t point, int mod ) {
 
 	G_FreeEntity( head );
 
-	if ( traceEnt == head ) {
-		level.totalHeadshots++;     // NERVE - SMF
-		return qtrue;
-	} else {
-		level.missedHeadshots++;    // NERVE - SMF
-
-	}
 	return qfalse;
 }
 
