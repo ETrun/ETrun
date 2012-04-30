@@ -1449,9 +1449,6 @@ The string has been tokenized and can be retrieved with
 Cmd_Argc() / Cmd_Argv()
 =================
 */
-
-void CG_ForceTapOut_f( void );
-
 static void CG_ServerCommand( void ) {
 	const char  *cmd;
 	char text[MAX_SAY_TEXT];
@@ -1504,11 +1501,6 @@ static void CG_ServerCommand( void ) {
 	}
 
 	if ( !Q_stricmp( cmd, "reqforcespawn" ) ) {
-		if ( cg_instanttapout.integer ) {
-			CG_ForceTapOut_f();
-		} else {
-			trap_UI_Popup( UIMENU_WM_TAPOUT );
-		}
 		return;
 	}
 

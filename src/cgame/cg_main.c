@@ -248,7 +248,6 @@ vmCvar_t cg_rconPassword;
 vmCvar_t cg_refereePassword;
 vmCvar_t cg_atmosphericEffects;
 vmCvar_t cg_fastSolids;
-vmCvar_t cg_instanttapout;
 vmCvar_t cg_debugSkills;
 vmCvar_t cg_drawFireteamOverlay;
 vmCvar_t cg_drawSmallPopupIcons;
@@ -474,7 +473,6 @@ cvarTable_t cvarTable[] = {
 	// Gordon: optimization cvars: 18/12/02 enabled by default now
 	{ &cg_fastSolids,       "cg_fastSolids", "1", CVAR_ARCHIVE },
 
-	{ &cg_instanttapout,    "cg_instanttapout",  "0", CVAR_ARCHIVE },
 	{ &cg_debugSkills,      "cg_debugSkills",    "0", 0 },
 	{ NULL,                 "cg_etVersion",      "",      CVAR_USERINFO | CVAR_ROM },
 	{ &cg_drawFireteamOverlay, "cg_drawFireteamOverlay", "1", CVAR_ARCHIVE },

@@ -1925,7 +1925,6 @@ extern vmCvar_t cg_drawSmallPopupIcons;
 
 // Gordon: some optimization cvars
 extern vmCvar_t cg_fastSolids;
-extern vmCvar_t cg_instanttapout;
 
 // bani - demo recording cvars
 extern vmCvar_t cl_demorecording;

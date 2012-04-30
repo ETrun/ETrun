@@ -1250,6 +1250,7 @@ void target_starttimer_use(gentity_t *self, gentity_t *other, gentity_t *activat
 	client = activator->client;
 
 	if (client->timerunActive) {
+		G_DPrintf("target_starttimer_use: timerun already active for client %d\n", client->ps.clientNum);
 		return;
 	}
 

@@ -6129,14 +6129,6 @@ void _UI_SetActiveMenu( uiMenuCommand_t menu ) {
 			Menus_OpenByName( "wm_ftquickmessageAlt" );
 			return;
 
-		case UIMENU_WM_TAPOUT:
-			uiInfo.uiDC.cursorx = 639;
-			uiInfo.uiDC.cursory = 479;
-			trap_Key_SetCatcher( KEYCATCH_UI );
-			Menus_CloseAll();
-			Menus_OpenByName( "tapoutmsg" );
-			return;
-
 		case UIMENU_WM_AUTOUPDATE:
 			// TTimo - changing the auto-update strategy to a modal prompt
 			Menus_OpenByName( "wm_autoupdate_modal" );

@@ -667,10 +667,6 @@ static void CG_UndoSpeaker_f( void ) {
 	}
 }
 
-void CG_ForceTapOut_f( void ) {
-	trap_SendClientCommand( "forcetapout" );
-}
-
 static void CG_CPM_f( void ) {
 	CG_AddPMItem( PM_MESSAGE, CG_Argv( 1 ), cgs.media.voiceChatShader );
 }
@@ -734,7 +730,6 @@ static consoleCommand_t commands[] =
 	{ "modifySpeaker", CG_ModifySpeaker_f },
 	{ "undoSpeaker", CG_UndoSpeaker_f },
 	{ "cpm", CG_CPM_f },
-	{ "forcetapout", CG_ForceTapOut_f },
 };
 
 

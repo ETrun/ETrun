@@ -68,6 +68,4 @@
 	loadMenu { "ui/ingame_serverinfo.menu" }
 	loadMenu { "ui/ingame_disconnect.menu" }
 	loadMenu { "ui/ingame_messagemode.menu" }
-	loadMenu { "ui/ingame_tapout.menu" }
-	loadMenu { "ui/ingame_tapoutlms.menu" }
 }
