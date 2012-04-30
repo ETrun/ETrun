@@ -4166,13 +4166,6 @@ static bind_t g_bindings[] = {
 	{ "+mapexpand",      'g',     -1, '#',         -1, -1, -1 },
 	{ "+reload",     'r',     -1, K_END,          -1, -1, -1 },
 	{ "+scores",     K_TAB,      -1, K_TAB,          -1, -1, -1 },
-
-	/* Nico, removed ws related command
-	{ "+stats",          K_ALT,      -1, K_F9,           -1, -1, -1 },*/
-
-	/* Nico, removed +topshots command
-	{ "+topshots",       K_CTRL,     -1, K_F10,          -1, -1, -1 },*/
-
 	{ "toggleconsole",   '`',     '~', '`',     '~', -1, -1 },
 	{ "togglemenu",      K_ESCAPE,   -1, K_ESCAPE,       -1, -1, -1 },
 	{ "openlimbomenu",   'l',     -1, 'l',         -1, -1, -1 },
@@ -4188,13 +4181,6 @@ static bind_t g_bindings[] = {
 	{ "mp_fireteammsg",  'z',     -1, 'c',         -1, -1, -1 },
 	{ "vote yes",        K_F1,       -1, K_F1,           -1, -1, -1 },
 	{ "vote no",     K_F2,       -1, K_F2,           -1, -1, -1 },
-
-	/* Nico, removed ready client command
-	{ "ready",           K_F3,       -1, K_F3,           -1, -1, -1 },*/
-
-	/* Nico, removed notready client command
-	{ "notready",        K_F4,       -1, K_F4,           -1, -1, -1 },*/
-
 	{ "autoscreenshot",  K_F11,      -1, K_F11,          -1, -1, -1 },
 	{ "autoRecord",      K_F12,      -1, K_F12,          -1, -1, -1 },
 	{ "mp_fireteamadmin",    K_KP_ENTER, -1, K_KP_ENTER,     -1, -1, -1 },

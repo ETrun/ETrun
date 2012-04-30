@@ -41,30 +41,18 @@ If you have questions concerning this license or the applicable additional terms
 #define MG42_MULTIPLAYER_HEALTH 350             // JPW NERVE
 
 // How long do bodies last?
-// SP : Axis: 20 seconds
-//		Allies: 30 seconds
-// MP : Both 10 seconds
-/* Nico, removed gametypes
-#define BODY_TIME( t ) ( ( g_gametype.integer != GT_SINGLE_PLAYER || g_gametype.integer == GT_COOP ) ? 10000 : ( t ) == TEAM_AXIS ? 20000 : 30000 )*/
 #define BODY_TIME( t ) ( 10000 )
 
 #define MAX_MG42_HEAT           1500.f
 
 // gentity->flags
 #define FL_GODMODE              0x00000010
-/* Nico, unused
-#define FL_NOTARGET             0x00000020*/
 #define FL_TEAMSLAVE            0x00000400  // not the first on the team
 #define FL_NO_KNOCKBACK         0x00000800
 #define FL_DROPPED_ITEM         0x00001000
 #define FL_NO_BOTS              0x00002000  // spawn point not for bot use
 #define FL_NO_HUMANS            0x00004000  // spawn point just for bots
 #define FL_AI_GRENADE_KICK      0x00008000  // an AI has already decided to kick this grenade
-// Rafael
-
-/* Nico, removed nofatigue
-#define FL_NOFATIGUE            0x00010000  // cheat flag no fatigue*/
-
 #define FL_TOGGLE               0x00020000  //----(SA)	ent is toggling (doors use this for ex.)
 #define FL_KICKACTIVATE         0x00040000  //----(SA)	ent has been activated by a kick (doors use this too for ex.)
 #define FL_SOFTACTIVATE         0x00000040  //----(SA)	ent has been activated while 'walking' (doors use this too for ex.)
@@ -117,19 +105,12 @@ typedef enum {
 #define ALLOW_AXIS_TEAM         1
 #define ALLOW_ALLIED_TEAM       2
 
-/* Nico, removed disguise stuff
-#define ALLOW_DISGUISED_CVOPS   4*/
-
 // RF, different types of dynamic area flags
 #define AAS_AREA_ENABLED                    0x0000
 #define AAS_AREA_DISABLED                   0x0001
 #define AAS_AREA_AVOID                      0x0010
 #define AAS_AREA_TEAM_AXIS                  0x0020
 #define AAS_AREA_TEAM_ALLIES                0x0040
-
-/* Nico, removed disguise stuff
-#define AAS_AREA_TEAM_AXIS_DISGUISED        0x0080
-#define AAS_AREA_TEAM_ALLIES_DISGUISED      0x0100*/
 
 // Nico, knockback value at panzerfaust
 #define KNOCKBACK_VALUE						500
@@ -546,17 +527,6 @@ typedef struct {
 #define FOLLOW_ACTIVE1  -1
 #define FOLLOW_ACTIVE2  -2
 
-
-/* Nico, removed weapon_stat_t
-// OSP - weapon stat counters
-typedef struct {
-	unsigned int atts;
-	unsigned int deaths;
-	unsigned int headshots;
-	unsigned int hits;
-	unsigned int kills;
-} weapon_stat_t;*/
-
 // Nico, position saving structure
 #define MAX_SAVED_POSITIONS 6 // per team
 typedef struct {
@@ -584,52 +554,12 @@ typedef struct {
 	int ignoreClients[MAX_CLIENTS / ( sizeof( int ) * 8 )];
 	qboolean muted;
 
-	/* Nico, removed skills
-	float skillpoints[SK_NUM_SKILLS];           // Arnout: skillpoints
-	float startskillpoints[SK_NUM_SKILLS];      // Gordon: initial skillpoints at map beginning*/
-
-	/* Nico, removed startxptotal
-	float startxptotal;*/
-
-	/* Nico, removed skills
-	int skill[SK_NUM_SKILLS];                   // Arnout: skill*/
-
-	/* Nico, removed rank
-	int rank;                                   // Arnout: rank*/
-
-	/* Nico, removed skills
-	int medals[SK_NUM_SKILLS];                  // Arnout: medals*/
-
 	// OSP
 	int coach_team;
-
-	/* Nico, removed damage_given & damage_received
-	int damage_given;
-	int damage_received;*/
-
-	/* Nico, removed deaths counter
-	int deaths;*/
-
 	int game_points;
-
-	/* Nico, removed kills counter
-	int kills;*/
-
 	int referee;
-
-	/* Nico, removed rounds
-	int rounds;*/
-
 	int spec_invite;
 	int spec_team;
-
-	/* Nico, removed suicides & team_damage & team_kills counters
-	int suicides;
-	int team_damage;
-	int team_kills;*/
-
-	/* Nico, removed weaponstats
-	weapon_stat_t aWeaponStats[WS_MAX + 1];   // Weapon stats.  +1 to avoid invalid weapon check*/
 	// OSP
 
 	qboolean versionOK;
@@ -660,22 +590,10 @@ typedef struct {
 #define PICKUP_TOUCH    1   // pickup items when touched
 #define PICKUP_FORCE    2   // pickup the next item when touched (and reset to PICKUP_ACTIVATE when done)
 
-// OSP -- multiview handling
-/* Nico, removed multiview
-#define MULTIVIEW_MAXVIEWS  16
-typedef struct {
-	qboolean fActive;
-	int entID;
-	gentity_t   *camera;
-} mview_t;*/
-
 typedef struct ipFilter_s {
 	unsigned mask;
 	unsigned compare;
 } ipFilter_t;
-
-/* Nico, removed complaints
-#define MAX_COMPLAINTIPS 5*/
 
 // client data that stays across multiple respawns, but is cleared
 // on each level change or team change at ClientBegin()
@@ -698,14 +616,6 @@ typedef struct {
 	int voteCount;                  // to prevent people from constantly calling votes
 	int teamVoteCount;              // to prevent people from constantly calling votes
 
-	/* Nico, removed complaints
-	int complaints;                     // DHM - Nerve :: number of complaints lodged against this client
-	int complaintClient;                // DHM - Nerve :: able to lodge complaint against this client
-	int complaintEndTime;               // DHM - Nerve :: until this time has expired*/
-
-	/* Nico, instant reswawn
-	int lastReinforceTime;              // DHM - Nerve :: last reinforcement*/
-
 	qboolean teamInfo;              // send team overlay updates?
 
 	qboolean bAutoReloadAux;            // TTimo - auxiliary storage for pmoveExt_t::bAutoReload, to achieve persistance
@@ -724,14 +634,7 @@ typedef struct {
 	int autofireteamCreateEndTime;
 	int autofireteamJoinEndTime;
 
-	/* Nico, removed playerStats
-	playerStats_t playerStats;*/
-
-
 	int lastBattleSenseBonusTime;
-
-	/* Nico, removed mines
-	int lastHQMineReportTime;*/
 
 	int lastCCPulseTime;
 
@@ -747,12 +650,6 @@ typedef struct {
 	int cmd_debounce;                   // Dampening of command spam
 	unsigned int invite;                // Invitation to a team to join
 
-	/* Nico, removed multiview
-	mview_t mv[MULTIVIEW_MAXVIEWS];         // Multiview portals
-	int mvCount;                        // Number of active portals
-	int mvReferenceList;                // Reference list used to generate views after a map_restart
-	int mvScoreUpdate;                  // Period to send score info to MV clients*/
-
 	int panzerDropTime;                 // Time which a player dropping panzer still "has it" if limiting panzer counts
 	int panzerSelectTime;               // *when* a client selected a panzer as spawn weapon
 	qboolean ready;                     // Ready state to begin play
@@ -760,9 +657,6 @@ typedef struct {
 
 	bg_character_t  *character;
 	int characterIndex;
-
-	/* Nico, removed complaints
-	ipFilter_t complaintips[MAX_COMPLAINTIPS];*/
 
 	// Nico, max FPS
 	int maxFPS;
@@ -836,20 +730,11 @@ struct gclient_s {
 	int lasthurt_mod;               // type of damage the client did
 
 	// timers
-	
-	/* Nico, instant reswawn
-	int respawnTime;                // can respawn when time > this, force after g_forcerespwan*/
 
 	int inactivityTime;             // kick players when time > this
 	qboolean inactivityWarning;     // qtrue if the five seoond warning has been given
 
-	/* Nico, removed rewards
-	int rewardTime;                 // clear the EF_AWARD_IMPRESSIVE, etc when time > this*/
-
 	int airOutTime;
-
-	/* Nico, removed lastkilltime
-	int lastKillTime;               // for multiple kill rewards*/
 
 	qboolean fireHeld;              // used for hook
 	gentity_t   *hook;              // grapple hook if out
@@ -882,10 +767,6 @@ struct gclient_s {
 	int lastConstructibleBlockingWarnTime;
 	int lastConstructibleBlockingWarnEnt;
 
-	/* Nico, removed mines
-	int landmineSpottedTime;
-	gentity_t*  landmineSpotted;*/
-
 	int speedScale;
 
 	combatstate_t combatState;
@@ -914,22 +795,9 @@ struct gclient_s {
 	int lastHealTimes[2];
 	int lastAmmoTimes[2];
 
-	/* Nico, removed disguise stuff
-	char disguiseNetname[MAX_NETNAME];
-	int disguiseRank;*/
-
-	/* Nico, removed medals
-	int medals;*/
-
 	float acc;
 
-	/* Nico, removed hasaward
-	qboolean hasaward;*/
-
 	qboolean wantsscore;
-
-	/* Nico, removed respawnLeft
-	qboolean maxlivescalced;*/
 
 	// Nico, timerun server vars
 	qboolean	timerunActive;
@@ -992,9 +860,6 @@ typedef struct {
 	int gentitySize;
 	int num_entities;               // current number, <= MAX_GENTITIES
 
-	/* Nico, removed warmup
-	int warmupTime;                 // restart match at this time*/
-
 	fileHandle_t logFile;
 
 	char rawmapname[MAX_QPATH];
@@ -1023,11 +888,6 @@ typedef struct {
 	int sortedClients[MAX_CLIENTS];             // sorted by score
 	int follow1, follow2;               // clientNums for auto-follow spectators
 
-//	int			snd_fry;				// sound index for standing in lava
-
-	/* Nico, removed warmup
-	int warmupModificationCount;            // for detecting if g_warmup is changed*/
-
 	voteInfo_t voteInfo;
 
 	int numTeamClients[2];
@@ -1040,28 +900,12 @@ typedef struct {
 	int numSpawnVarChars;
 	char spawnVarChars[MAX_SPAWN_VARS_CHARS];
 
-	// intermission state
-	/* Nico, removed intermission
-	int intermissionQueued;             // intermission was qualified, but
-										// wait INTERMISSION_DELAY_TIME before
-										// actually going there so the last
-										// frag can be watched.  Disable future
-										// kills during this delay
-	int intermissiontime;               // time the intermission was started*/
-
 	char        *changemap;
 	int exitTime;
 
 	// Nico, note: keep these 2 vars
 	vec3_t intermission_origin;         // also used for spectator spawns
 	vec3_t intermission_angle;
-
-	/* Nico, removed LMS
-	qboolean lmsDoNextMap;              // should LMS do a map_restart or a vstr nextmap*/
-
-	/* Nico, removed gib
-	int bodyQueIndex;                   // dead bodies
-	gentity_t   *bodyQue[BODY_QUEUE_SIZE];*/
 
 	int portalSequence;
 	// Ridah
@@ -1118,13 +962,7 @@ typedef struct {
 	float lieutenantChargeTimeModifier[2];
 	float covertopsChargeTimeModifier[2];
 
-	/* Nico, removed firstblood
-	int firstbloodTeam;*/
-
 	int teamEliminateTime;
-
-	/* Nico, removed LMS
-	int lmsWinningTeam;*/
 
 	int campaignCount;
 	int currentCampaign;
@@ -1182,12 +1020,6 @@ typedef struct {
 
 	limbo_cam_t limboCams[MAX_LIMBO_CAMS];
 	int numLimboCams;
-
-	/* Nico, removed airstrikes
-	int numActiveAirstrikes[2];*/
-
-	/* Nico, removed skills
-	float teamXP[SK_NUM_SKILLS][2];*/
 
 	commanderTeamChat_t commanderSounds[2][MAX_COMMANDER_TEAM_SOUNDS];
 	int commanderSoundInterval[2];
@@ -1291,9 +1123,6 @@ void Fill_Clip( playerState_t *ps, int weapon );
 int Add_Ammo( gentity_t *ent, int weapon, int count, qboolean fillClip );
 void Touch_Item( gentity_t *ent, gentity_t *other, trace_t *trace );
 
-/* Nico, removed skills
-qboolean AddMagicAmmo( gentity_t *receiver, int numOfClips );*/
-
 weapon_t G_GetPrimaryWeaponForClient( gclient_t *client );
 void G_DropWeapon( gentity_t *ent, weapon_t weapon );
 
@@ -1356,10 +1185,6 @@ void G_ProcessTagConnect( gentity_t *ent, qboolean clearAngles );
 
 void G_SetEntState( gentity_t *ent, entState_t state );
 
-/* Nico, removed gametypes
-void G_ParseCampaigns( void );
-qboolean G_MapIsValidCampaignStartMap( void );*/
-
 team_t G_GetTeamFromEntity( gentity_t *ent );
 
 //
@@ -1389,9 +1214,6 @@ gentity_t* G_BuildLeg( gentity_t *ent );
 void G_RunMissile( gentity_t *ent );
 void G_RunBomb( gentity_t *ent );
 int G_PredictMissile( gentity_t *ent, int duration, vec3_t endPos, qboolean allowBounce );
-
-/* Nico, removed mines
-void G_TripMinePrime( gentity_t* ent );*/
 
 qboolean G_HasDroppedItem( gentity_t* ent, int modType );
 
@@ -1462,16 +1284,7 @@ void CalcMuzzlePoint( gentity_t *ent, int weapon, vec3_t forward, vec3_t right, 
 void SnapVectorTowards( vec3_t v, vec3_t to );
 gentity_t *weapon_grenadelauncher_fire( gentity_t *ent, int grenadeWPID );
 
-/* Nico, removed mines
-void G_PlaceTripmine( gentity_t* ent );*/
-
 void G_FadeItems( gentity_t* ent, int modType );
-
-/* Nico, removed satchel
-gentity_t *G_FindSatchel( gentity_t* ent );*/
-
-/* Nico, removed mines
-void G_ExplodeMines( gentity_t* ent );*/
 
 qboolean G_ExplodeSatchels( gentity_t* ent );
 void G_FreeSatchel( gentity_t* ent );
@@ -1488,16 +1301,8 @@ team_t PickTeam( int ignoreClientNum );
 void SetClientViewAngle( gentity_t *ent, vec3_t angle );
 gentity_t *SelectSpawnPoint( vec3_t avoidPoint, vec3_t origin, vec3_t angles );
 void respawn( gentity_t *ent );
-
-/* Nico, removed intermission
-void BeginIntermission( void );*/
-
 void InitClientPersistant( gclient_t *client );
 void InitClientResp( gclient_t *client );
-
-/* Nico, removed gib
-void InitBodyQue( void );*/
-
 void ClientSpawn( gentity_t *ent, qboolean revived );
 void player_die( gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int damage, int mod );
 void AddScore( gentity_t *ent, int score );
@@ -1507,8 +1312,6 @@ qboolean SpotWouldTelefrag( gentity_t *spot );
 qboolean G_CheckForExistingModelInfo( bg_playerclass_t* classInfo, const char *modelName, animModelInfo_t **modelInfo );
 void G_StartPlayerAppropriateSound( gentity_t *ent, char* soundType );
 void SetWolfSpawnWeapons( gclient_t *client );
-/* Nico, removed gib
-void limbo( gentity_t *ent, qboolean makeCorpse ); // JPW NERVE*/
 void limbo( gentity_t *ent );
 void reinforce( gentity_t *ent ); // JPW NERVE
 
@@ -1518,7 +1321,6 @@ void reinforce( gentity_t *ent ); // JPW NERVE
 
 qboolean G_RegisterCharacter( const char *characterFile, bg_character_t *character );
 void G_RegisterPlayerClasses( void );
-//void G_SetCharacter( gclient_t *client, bg_character_t *character, qboolean custom );
 void G_UpdateCharacter( gclient_t *client );
 
 //
@@ -1527,26 +1329,11 @@ void G_UpdateCharacter( gclient_t *client );
 qboolean ConsoleCommand( void );
 void G_ProcessIPBans( void );
 qboolean G_FilterIPBanPacket( char *from );
-
-/* Nico, removed respawnLeft
-qboolean G_FilterMaxLivesPacket( char *from );
-qboolean G_FilterMaxLivesIPPacket( char *from );*/
-
 void G_AddXPBackup( gentity_t* ent );
 void G_StoreXPBackup( void );
 void G_ClearXPBackup( void );
 void G_ReadXPBackup( void );
-
-/* Nico, removed respawnLeft
-void AddMaxLivesGUID( char *str );
-void AddMaxLivesBan( const char *str );
-void ClearMaxLivesBans();*/
-
 void AddIPBan( const char *str );
-
-/* Nico, removed shuffleteam
-void Svcmd_ShuffleTeams_f( void );*/
-
 
 //
 // g_weapon.c
@@ -1570,9 +1357,6 @@ qboolean IsSilencedWeapon
 //
 // p_hud.c
 //
-/* Nico, removed intermission
-void MoveClientToIntermission( gentity_t *client );*/
-
 void G_SetStats( gentity_t *ent );
 void G_SendScore( gentity_t *client );
 
@@ -1608,9 +1392,6 @@ void SendScoreboardMessageToAllClients( void );
 void QDECL G_Printf( const char *fmt, ... ) _attribute( ( format( printf,1,2 ) ) );
 void QDECL G_DPrintf( const char *fmt, ... ) _attribute( ( format( printf,1,2 ) ) );
 void QDECL G_Error( const char *fmt, ... ) _attribute( ( format( printf,1,2 ) ) );
-// Is this a single player type game - sp or coop?
-/* Nico, removed gametypes
-qboolean G_IsSinglePlayerGame();*/
 
 //
 // g_client.c
@@ -1627,18 +1408,7 @@ void ClientCommand( int clientNum );
 void ClientThink( int clientNum );
 void ClientEndFrame( gentity_t *ent );
 void G_RunClient( gentity_t *ent );
-
-/* Nico, removed skills
-qboolean ClientNeedsAmmo( int client );*/
-
 qboolean ClientOutOfAmmo( int client );
-
-// Does ent have enough "energy" to call artillery?
-/* Nico, removed airstrikes
-qboolean ReadyToCallArtillery( gentity_t* ent );
-// to call airstrike?
-qboolean ReadyToCallAirstrike( gentity_t* ent );*/
-
 // to use smoke grenade?
 qboolean ReadyToThrowSmoke( gentity_t *ent );
 // Are we ready to construct?  Optionally, will also update the time while we are constructing
@@ -1668,10 +1438,6 @@ void G_InitSessionData( gclient_t *client, char *userinfo );
 
 void G_InitWorldSession( void );
 void G_WriteSessionData( qboolean restart );
-
-/* Nico, removed skills
-void G_CalcRank( gclient_t* client );*/
-
 
 //returns the number of the client with the given name
 int ClientFromName( char *name );
@@ -1708,110 +1474,27 @@ extern level_locals_t level;
 extern gentity_t g_entities[];          //DAJ was explicit set to MAX_ENTITIES
 extern g_campaignInfo_t g_campaigns[];
 
-/* Nico, removed saveGamePending
-extern int saveGamePending;*/
-
 #define FOFS( x ) ( (int)&( ( (gentity_t *)0 )->x ) )
-
-/* Nico, removed (c)g_gametype
-extern vmCvar_t g_gametype;*/
 
 extern vmCvar_t g_log;
 extern vmCvar_t g_dedicated;
 extern vmCvar_t g_cheats;
 extern vmCvar_t g_maxclients;               // allow this many total, including spectators
-
-/* Nico, removed gameClients limits
-extern vmCvar_t g_maxGameClients;           // allow this many active
-extern vmCvar_t g_minGameClients;           // NERVE - SMF - we need at least this many before match actually starts*/
-
 extern vmCvar_t g_restarted;
-
-/* Nico, no fraglimit
-extern vmCvar_t g_fraglimit;*/
-
-/* Nico, no timelimit
-extern vmCvar_t g_timelimit;*/
-
-/* Nico, no friendlyfire
-extern vmCvar_t g_friendlyFire;*/
-
 extern vmCvar_t g_password;
 extern vmCvar_t sv_privatepassword;
-
-/* Nico, g_gravity is hardcoded as DEFAULT_GRAVITY
-extern vmCvar_t g_gravity;*/
-
-/* Nico, g_speed is now hardcoded as DEFAULT_SPEED
-extern vmCvar_t g_speed;*/
-
-/* Nico, hardcoded knockback
-extern vmCvar_t g_knockback;*/
-
-/* Nico, removed quadfactor
-extern vmCvar_t g_quadfactor;*/
-
-/* Nico, removed forcerespawn
-extern vmCvar_t g_forcerespawn;*/
-
 extern vmCvar_t g_inactivity;
 extern vmCvar_t g_debugMove;
 extern vmCvar_t g_debugAlloc;
 extern vmCvar_t g_debugDamage;
 extern vmCvar_t g_debugBullets;     //----(SA)	added
 extern vmCvar_t g_motd;
-
-/* Nico, removed warmup
-extern vmCvar_t g_warmup;*/
-
 extern vmCvar_t voteFlags;
-
-// DHM - Nerve :: The number of complaints allowed before kick/ban
-/* Nico, removed complaints
-extern vmCvar_t g_complaintlimit;
-extern vmCvar_t g_ipcomplaintlimit;*/
-
 extern vmCvar_t g_filtercams;
-
-/* Nico, removed respawnLeft
-extern vmCvar_t g_maxlives;                 // DHM - Nerve :: number of respawns allowed (0==infinite)
-extern vmCvar_t g_maxlivesRespawnPenalty;*/
-
 extern vmCvar_t g_voiceChatsAllowed;        // DHM - Nerve :: number before spam control
-
-/* Nico, removed respawnLeft
-extern vmCvar_t g_alliedmaxlives;           // Xian
-extern vmCvar_t g_axismaxlives;             // Xian*/
-
-/* Nico, removed fastres
-extern vmCvar_t g_fastres;                  // Xian - Fast medic res'ing*/
-
-/* Nico, removed knifeonly
-extern vmCvar_t g_knifeonly;                // Xian - Wacky Knife-Only rounds*/
-
-/* Nico, removed respawnLeft
-extern vmCvar_t g_enforcemaxlives;          // Xian - Temp ban with maxlives between rounds*/
-
 extern vmCvar_t g_needpass;
-
-/* Nico, removed balancedteams
-extern vmCvar_t g_balancedteams;*/
-
-/* Nico, removed warmup
-extern vmCvar_t g_doWarmup;*/
-
-/* Nico, commented because unused
-extern vmCvar_t g_teamAutoJoin;*/
-
-/* Nico, removed balancedteams
-extern vmCvar_t g_teamForceBalance;*/
-
 extern vmCvar_t g_banIPs;
 extern vmCvar_t g_filterBan;
-
-/* Nico, commented because unused
-extern vmCvar_t g_rankings;*/
-
 extern vmCvar_t g_smoothClients;
 extern vmCvar_t pmove_fixed;
 extern vmCvar_t pmove_msec;
@@ -1820,19 +1503,10 @@ extern vmCvar_t pmove_msec;
 extern vmCvar_t g_scriptName;           // name of script file to run (instead of default for that map)
 
 extern vmCvar_t g_scriptDebug;
-
-/* Nico, removed useraim
-extern vmCvar_t g_userAim;*/
-
 extern vmCvar_t g_developer;
 
 extern vmCvar_t g_footstepAudibleRange;
 // JPW NERVE multiplayer
-
-/* Nico, instant reswawn
-extern vmCvar_t g_redlimbotime;
-extern vmCvar_t g_bluelimbotime;*/
-
 extern vmCvar_t g_medicChargeTime;
 extern vmCvar_t g_engineerChargeTime;
 extern vmCvar_t g_LTChargeTime;
@@ -1842,63 +1516,8 @@ extern vmCvar_t g_soldierChargeTime;
 extern vmCvar_t g_covertopsChargeTime;
 extern vmCvar_t g_debugConstruct;
 
-/* Nico, removed mines
-extern vmCvar_t g_landminetimeout;*/
-
 // What level of detail do we want script printing to go to.
 extern vmCvar_t g_scriptDebugLevel;
-
-// How fast do SP player and allied bots move?
-/* Nico, removed (c)g_movespeed
-extern vmCvar_t g_movespeed;*/
-
-/* Nico, removed gametypes
-extern vmCvar_t g_axismapxp;
-extern vmCvar_t g_alliedmapxp;
-extern vmCvar_t g_oldCampaign;
-extern vmCvar_t g_currentCampaign;
-extern vmCvar_t g_currentCampaignMap;*/
-
-// Arnout: for LMS
-/* Nico, removed LMS
-extern vmCvar_t g_axiswins;
-extern vmCvar_t g_alliedwins;*/
-
-/* Nico, removed balancedteams
-extern vmCvar_t g_lms_teamForceBalance;*/
-
-/* Nico, removed LMS
-extern vmCvar_t g_lms_roundlimit;
-extern vmCvar_t g_lms_matchlimit;
-extern vmCvar_t g_lms_currentMatch;
-extern vmCvar_t g_lms_lockTeams;
-extern vmCvar_t g_lms_followTeamOnly;*/
-
-// NERVE - SMF
-/* Nico, removed warmup
-extern vmCvar_t g_warmupLatch;*/
-
-/* Nico, no timelimit
-extern vmCvar_t g_nextTimeLimit;*/
-
-/* Nico, removed showHeadshotRatio
-extern vmCvar_t g_showHeadshotRatio;*/
-
-/* Nico, no timelimit
-extern vmCvar_t g_userTimeLimit;*/
-
-/* Nico, instant reswawn
-extern vmCvar_t g_userAlliedRespawnTime;
-extern vmCvar_t g_userAxisRespawnTime;*/
-
-/* Nico, removed currentRound
-extern vmCvar_t g_currentRound;*/
-
-/* Nico, removed team switch protection
-extern vmCvar_t g_noTeamSwitching;*/
-
-/* Nico, removed altStopwatchMode
-extern vmCvar_t g_altStopwatchMode;*/
 
 extern vmCvar_t g_gamestate;
 extern vmCvar_t g_swapteams;
@@ -1910,21 +1529,6 @@ extern vmCvar_t g_antilag;
 // OSP
 extern vmCvar_t refereePassword;
 extern vmCvar_t g_spectatorInactivity;
-
-/* Nico, removed match_* cvars
-extern vmCvar_t match_latejoin;
-extern vmCvar_t match_minplayers;
-extern vmCvar_t match_mutespecs;
-extern vmCvar_t match_readypercent;
-extern vmCvar_t match_timeoutcount;
-extern vmCvar_t match_timeoutlength;*/
-
-/* Nico, removed warmup
-extern vmCvar_t match_warmupDamage;*/
-
-/* Nico, removed server autoconfig
-extern vmCvar_t server_autoconfig;*/
-
 extern vmCvar_t server_motd0;
 extern vmCvar_t server_motd1;
 extern vmCvar_t server_motd2;
@@ -1938,62 +1542,22 @@ extern vmCvar_t team_nocontrols;
 // NOTE!!! If any vote flags are added, MAKE SURE to update the voteFlags struct in bg_misc.c w/appropriate info,
 //         menudef.h for the mask and g_main.c for vote_allow_* flag updates
 //
-/* Nico, removed vote_allow_comp
-extern vmCvar_t vote_allow_comp;*/
-
-/* Nico, removed vote_allow_gametype
-extern vmCvar_t vote_allow_gametype;*/
-
 extern vmCvar_t vote_allow_kick;
 extern vmCvar_t vote_allow_map;
 extern vmCvar_t vote_allow_matchreset;
 extern vmCvar_t vote_allow_mutespecs;
 extern vmCvar_t vote_allow_nextmap;
-
-/* Nico, removed vote_allow_pub
-extern vmCvar_t vote_allow_pub;*/
-
 extern vmCvar_t vote_allow_referee;
-
-/* Nico, removed shuffleteam
-extern vmCvar_t vote_allow_shuffleteamsxp;*/
-
 extern vmCvar_t vote_allow_swapteams;
-
-/* Nico, no friendlyfire
-extern vmCvar_t vote_allow_friendlyfire;*/
-
-/* Nico, no timelimit
-extern vmCvar_t vote_allow_timelimit;*/
-
-/* Nico, removed warmup
-extern vmCvar_t vote_allow_warmupdamage;*/
-
 extern vmCvar_t vote_allow_antilag;
-
-/* Nico, removed balancedteams
-extern vmCvar_t vote_allow_balancedteams;*/
-
 extern vmCvar_t vote_allow_muting;
 extern vmCvar_t vote_limit;
 extern vmCvar_t vote_percent;
-
-/* Nico, removed serverflags
-extern vmCvar_t z_serverflags;*/
-
 extern vmCvar_t g_letterbox;
-
 extern vmCvar_t g_debugSkills;
 extern vmCvar_t g_heavyWeaponRestriction;
 extern vmCvar_t g_autoFireteams;
-
 extern vmCvar_t g_nextmap;
-
-/* Nico, removed gametypes
-extern vmCvar_t g_nextcampaign;*/
-
-/* Nico, removed complaints
-extern vmCvar_t g_disableComplaints;*/
 
 // Nico, beginning of ETrun server cvars
 
@@ -2198,18 +1762,8 @@ typedef enum {
 
 void G_CheckForNeededClasses( void );
 void G_CheckMenDown( void );
-
-/* Nico, removed commandmap
-void G_SendMapEntityInfo( gentity_t* e );*/
-
-
 void G_SendSystemMessage( sysMsg_t message, int team );
 int G_GetSysMessageNumber( const char* sysMsg );
-
-/* Nico, removed mines
-int G_CountTeamLandmines( team_t team );
-qboolean G_SweepForLandmines( vec3_t origin, float radius, int team );*/
-
 void G_AddClientToFireteam( int entityNum, int leaderNum );
 void G_InviteToFireTeam( int entityNum, int otherEntityNum );
 void G_UpdateFireteamConfigString( fireteamData_t* ft );
@@ -2283,21 +1837,12 @@ g_serverEntity_t *FindServerEntity( g_serverEntity_t *from, int fieldofs, char *
 #define PAUSE_NONE      0x00    // Match is NOT paused.
 #define PAUSE_UNPAUSING 0x01    // Pause is about to expire
 
-/* Nico, removed serverflags
-#define ZSF_COMP        0x01    // Have comp settings loaded for current gametype?*/
-
 #define HELP_COLUMNS    4
 
 #define CMD_DEBOUNCE    5000    // 5s between cmds
 
 #define EOM_WEAPONSTATS 0x01    // Dump of player weapon stats at end of match.
 #define EOM_MATCHINFO   0x02    // Dump of match stats at end of match.
-
-/* Nico, removed statsall client command
-#define AA_STATSALL     0x01    // Client AutoAction: Dump ALL player stats*/
-
-#define AA_STATSTEAM    0x02    // Client AutoAction: Dump TEAM player stats
-
 
 // "Delayed Print" ent enumerations
 typedef enum {

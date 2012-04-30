@@ -275,9 +275,6 @@ void CG_Respawn( qboolean revived ) {
 
 	cg.pmext.bAutoReload = ( cg_autoReload.integer > 0 );
 
-	/* Nico, removed sprint time limit
-	cg.pmext.sprintTime = SPRINTTIME;*/
-
 	if ( !revived ) {
 		cgs.limboLoadoutSelected = qfalse;
 	}
@@ -478,22 +475,6 @@ CG_TransitionPlayerState
 ===============
 */
 void CG_TransitionPlayerState( playerState_t *ps, playerState_t *ops ) {
-	// OSP - MV client handling
-	/* Nico, removed multiview
-	if ( cg.mvTotalClients > 0 ) {
-		if ( ps->clientNum != ops->clientNum ) {
-			cg.thisFrameTeleport = qtrue;
-
-			// clear voicechat
-			cg.predictedPlayerEntity.voiceChatSpriteTime = 0;   // CHECKME: should we do this here?
-			cg_entities[ps->clientNum].voiceChatSpriteTime = 0;
-
-			*ops = *ps;
-		}
-		CG_CheckLocalSounds( ps, ops );
-		return;
-	}*/
-
 	// check for changing follow mode
 	if ( ps->clientNum != ops->clientNum ) {
 		cg.thisFrameTeleport = qtrue;
@@ -529,8 +510,6 @@ void CG_TransitionPlayerState( playerState_t *ps, playerState_t *ops ) {
 
 	// respawning
 	if ( ps->persistant[PERS_SPAWN_COUNT] != ops->persistant[PERS_SPAWN_COUNT] ) {
-		/* Nico, removed revive_count
-		// CG_Respawn( ps->persistant[PERS_REVIVE_COUNT] != ops->persistant[PERS_REVIVE_COUNT] ? qtrue : qfalse );*/
 		CG_Respawn( qfalse );
 	}
 
@@ -539,11 +518,7 @@ void CG_TransitionPlayerState( playerState_t *ps, playerState_t *ops ) {
 		cg.mapRestart = qfalse;
 	}
 
-	/* Nico, removed intermission
-	if ( cg.snap->ps.pm_type != PM_INTERMISSION
-		 && ps->persistant[PERS_TEAM] != TEAM_SPECTATOR ) {*/
-		CG_CheckLocalSounds( ps, ops );
-	// }
+	CG_CheckLocalSounds( ps, ops );
 
 	// check for going low on ammo
 	CG_CheckAmmo();

@@ -63,18 +63,6 @@ pmListItemBig_t*    cg_pmWaitingListBig;
 
 pmListItemBig_t cg_pmStackBig[NUM_PM_STACK_ITEMS_BIG];
 
-
-/* Nico, removed rewards
-const char* cg_skillRewards[SK_NUM_SKILLS][NUM_SKILL_LEVELS - 1] = {
-	{ "Binoculars", "Improved Physical Fitness", "Improved Health", "Trap Awareness" },                                         // battle sense
-	{ "Improved use of Explosive Ammunition", "Improved Dexterity", "Improved Construction and Destruction", "a Flak Jacket" }, // explosives & construction
-	{ "Medic Ammo", "Improved Resources", "Full Revive", "Adrenalin Self" },                                                    // first aid
-	{ "Improved Resources", "Improved Signals", "Improved Air and Ground Support", "Enemy Recognition" },                       // signals
-	{ "Improved use of Light Weapon Ammunition", "Faster Reload", "Improved Light Weapon Handling", "Dual-Wield Pistols" },     // light weapons
-	{ "Improved Projectile Resources", "Heavy Weapon Proficiency", "Improved Dexterity", "Improved Weapon Handling" },          // heavy weapons
-	{ "Improved use of Scoped Weapon Ammunition", "Improved use of Sabotage and Misdirection", "Breath Control", "Assassin" }   // scoped weapons & military intelligence
-};*/
-
 void CG_PMItemBigSound( pmListItemBig_t* item );
 
 
@@ -386,11 +374,6 @@ void CG_DrawPMItems( void ) {
 	} else {
 		size = PM_ICON_SIZE_NORMAL;
 	}
-
-	/* Nico, removed respawnLeft
-	if ( cg.snap->ps.persistant[PERS_RESPAWNS_LEFT] >= 0 ) {
-		y -= 20;
-	}*/
 
 	if ( !cg_pmWaitingList ) {
 		return;

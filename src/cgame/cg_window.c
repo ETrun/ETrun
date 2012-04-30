@@ -42,47 +42,6 @@ vec4_t colorBrown1 = { 0.3f, 0.2f, 0.1f, 0.9f };    // Brown
 vec4_t colorGreen1 = { 0.21f, 0.3f, 0.0f, 0.9f };   // Greenish (darker)
 vec4_t colorGreen2 = { 0.305f, 0.475f, 0.305f, 0.48f }; // Slightly off from default fill
 
-
-
-/* Nico, removed ws related command
-void CG_createStatsWindow( void ) {
-	cg_window_t *sw = CG_windowAlloc( WFX_TEXTSIZING | WFX_FADEIN | WFX_TRUETYPE, 110 );
-
-	cg.statsWindow = sw;
-	if ( sw == NULL ) {
-		return;
-	}
-
-	// Window specific
-	sw->id = WID_STATS;
-	sw->fontScaleX = cf_wstats.value * 0.2f;
-	sw->fontScaleY = cf_wstats.value * 0.2f;
-//	sw->x = (cg.snap->ps.pm_type == PM_INTERMISSION) ?  10 : 160;
-//	sw->y = (cg.snap->ps.pm_type == PM_INTERMISSION) ? -20 : -7;	// Align from bottom minus offset and height
-	sw->x = ( cg.snap->ps.pm_type == PM_INTERMISSION ) ?  10 : 4;
-	sw->y = ( cg.snap->ps.pm_type == PM_INTERMISSION ) ? -20 : -100;  // Align from bottom minus offset and height
-}*/
-
-/* Nico, removed +topshots command
-void CG_createTopShotsWindow( void ) {
-	cg_window_t *sw = CG_windowAlloc( WFX_TEXTSIZING | WFX_FLASH | WFX_FADEIN | WFX_SCROLLUP | WFX_TRUETYPE, 190 );
-
-	cg.topshotsWindow = sw;
-	if ( sw == NULL ) {
-		return;
-	}
-
-	// Window specific
-	sw->id = WID_TOPSHOTS;
-	sw->fontScaleX = cf_wtopshots.value * 0.2f;
-	sw->fontScaleY = cf_wtopshots.value * 0.2f;
-	sw->x = ( cg.snap->ps.pm_type == PM_INTERMISSION ) ? -10 : -20;
-	sw->y = ( cg.snap->ps.pm_type == PM_INTERMISSION ) ? -20 : -60;   // Align from bottom minus offset and height
-	sw->flashMidpoint = sw->flashPeriod * 0.8f;
-	memcpy( &sw->colorBackground2, &colorGreen2, sizeof( vec4_t ) );
-}*/
-
-
 void CG_createMOTDWindow( void ) {
 	const char *str = CG_ConfigString( CS_CUSTMOTD + 0 );
 
@@ -135,16 +94,7 @@ void CG_windowInit( void ) {
 		cg.winHandler.window[i].inuse = qfalse;
 	}
 
-	/* Nico, removed ws related command
-	cg.msgWstatsWindow = NULL;*/
-
-	/* Nico, removed +topshots command
-	cg.msgWtopshotsWindow = NULL;*/
-
 	cg.statsWindow = NULL;
-
-	/* Nico, removed +topshots command
-	cg.topshotsWindow = NULL;*/
 }
 
 
@@ -276,8 +226,6 @@ void CG_windowDraw( void ) {
 	cg_window_t *w;
 	qboolean fCleanup = qfalse;
 	// Gordon: FIXME, the limbomenu var no longer exists
-	/* Nico, removed multiview
-	qboolean fAllowMV = ( cg.snap != NULL && cg.snap->ps.pm_type != PM_INTERMISSION );*/
 	vec4_t *bg;
 	vec4_t textColor, borderColor, bgColor;
 
@@ -293,11 +241,6 @@ void CG_windowDraw( void ) {
 
 	// Mouse cursor position for MV highlighting (offset for cursor pointer position)
 	// Also allow for swingcam toggling
-	/* Nico, removed multiview
-	if ( cg.mvTotalClients > 0 && fAllowMV ) {
-		CG_cursorUpdate();
-	}*/
-
 	for ( i = 0; i < cg.winHandler.numActiveWindows; i++ ) {
 		w = &cg.winHandler.window[cg.winHandler.activeWindows[i]];
 
@@ -305,15 +248,6 @@ void CG_windowDraw( void ) {
 			fCleanup = qtrue;
 			continue;
 		}
-
-		// Multiview rendering has its own handling
-		/* Nico, removed multiview
-		if ( w->effects & WFX_MULTIVIEW ) {
-			if ( w != cg.mvCurrentMainview && fAllowMV ) {
-				CG_mvDraw( w );
-			}
-			continue;
-		}*/
 
 		if ( w->effects & WFX_TEXTSIZING ) {
 			CG_windowNormalizeOnText( w );
@@ -394,21 +328,9 @@ void CG_windowDraw( void ) {
 		}
 	}
 
-	// Wedge in MV info overlay
-	/* Nico, removed multiview
-	if ( cg.mvTotalClients > 0 && fAllowMV ) {
-		CG_mvOverlayDisplay();
-	}*/
-
 	// Extra rate info
 	CG_demoAviFPSDraw();
 	CG_demoTimescaleDraw();
-
-	// Mouse cursor lays on top of everything
-	/* Nico, removed multiview
-	if ( cg.mvTotalClients > 0 && cg.time < cgs.cursorUpdate && fAllowMV ) {
-		CG_DrawPic( cgDC.cursorx, cgDC.cursory, 32, 32, cgs.media.cursorIcon );
-	}*/
 
 	if ( fCleanup ) {
 		CG_windowCleanup();
@@ -570,222 +492,3 @@ void CG_removeStrings( cg_window_t *w ) {
 		}
 	}
 }
-
-
-
-
-//
-// cgame cursor handling
-//
-
-// Mouse overlay for controlling multiview windows
-/* Nico, removed multiview
-void CG_cursorUpdate( void ) {
-	int i, j, x;
-	float nx, ny;
-	int nSelectedWindow = -1;
-	cg_window_t *w;
-	cg_windowHandler_t *wh = &cg.winHandler;
-	qboolean fFound = qfalse, fUpdateOverlay = qfalse;
-	qboolean fSelect, fResize;
-
-
-	// Get cursor current position (when connected to a server)
-	if ( !cg.demoPlayback ) {
-
-		// Allow for limbo'd updates as well
-		trap_GetUserCmd( trap_GetCurrentCmdNumber(), &cg_pmove.cmd );
-
-		nx = 640.0 * ( 65536.0 - cg_pmove.cmd.angles[1] ) / 65536.0;
-		ny = 480.0 / 65536.0 * ( ( int_m_pitch.value < 0.0 ) ? ( 65536.0 - cg_pmove.cmd.angles[0] ) : cg_pmove.cmd.angles[0] );
-
-		fSelect = ( ( cg_pmove.cmd.buttons & BUTTON_ATTACK ) != 0 );
-
-		if ( cgs.cursorX == (int)nx  && cgs.cursorY == (int)ny && !fSelect ) {
-			return;
-		}
-
-		fResize = ( ( cg_pmove.cmd.buttons & BUTTON_SPRINT ) != 0 );
-
-		cgs.cursorUpdate = cg.time + 5000;
-		cgs.cursorX = nx;
-		cgs.cursorY = ny;
-	} else {
-		// Already updated in the keycatcher
-		nx = cgs.cursorX;
-		ny = cgs.cursorY;
-		fSelect = cgs.fSelect;
-		fResize = cgs.fResize;
-	}
-
-	// For mm4
-	cg.mvCurrentActive = cg.mvCurrentMainview;
-
-	// For overlay highlights
-	for ( i = 0; i < cg.mvTotalClients; i++ ) {
-		cg.mvOverlay[i].fActive = qfalse;
-	}
-
-	for ( i = wh->numActiveWindows - 1; i >= 0; i-- ) {
-		w = &wh->window[wh->activeWindows[i]];
-		if ( ( w->effects & WFX_MULTIVIEW ) && w != cg.mvCurrentMainview ) {
-		if (( w->effects & WFX_MULTIVIEW )) {
-			// Mouse/window detection
-			// If the current window is selected, and the button is down, then allow the update
-			// to occur, as quick mouse movements can move it past the window borders
-			if ( !fFound &&
-				 (
-					 ( ( w->mvInfo & MV_SELECTED ) && fSelect ) ||
-					 ( !fSelect && nx >= w->x && nx < w->x + w->w && ny >= w->y && ny < w->y + w->h )
-				 ) ) {
-				if ( !( w->mvInfo & MV_SELECTED ) ) {
-					w->mvInfo |= MV_SELECTED;
-					nSelectedWindow = i;
-				}
-
-				// If not dragging/resizing, prime for later update
-				if ( !fSelect ) {
-					w->m_x = -1.0f;
-					w->m_y = -1.0f;
-				} else {
-					if ( w->m_x > 0 && w->m_y > 0 ) {
-						if ( fResize ) {
-							w->w += nx - w->m_x;
-							if ( w->x + w->w > 640 - 2 ) {
-								w->w = 640 - 2 - w->x;
-							}
-							if ( w->w < 64 ) {
-								w->w = 64;
-							}
-
-							w->h += ny - w->m_y;
-							if ( w->y + w->h > 480 - 2 ) {
-								w->h = 480 - 2 - w->y;
-							}
-							if ( w->h < 48 ) {
-								w->h = 48;
-							}
-						} else {
-							w->x += nx - w->m_x;
-							if ( w->x + w->w > 640 - 2 ) {
-								w->x = 640 - 2 - w->w;
-							}
-							if ( w->x < 2 ) {
-								w->x = 2;
-							}
-
-							w->y += ny - w->m_y;
-							if ( w->y + w->h > 480 - 2 ) {
-								w->y = 480 - 2 - w->h;
-							}
-							if ( w->y < 2 ) {
-								w->y = 2;
-							}
-						}
-					}
-
-					w->m_x = nx;
-					w->m_y = ny;
-				}
-
-				fFound = qtrue;
-				cg.mvCurrentActive = w;
-
-				// Reset mouse info for window if it loses focuse
-			} else if ( w->mvInfo & MV_SELECTED ) {
-				fUpdateOverlay = qtrue;
-				w->m_x = -1.0f;
-				w->m_y = -1.0f;
-				w->mvInfo &= ~MV_SELECTED;
-
-				if ( fFound ) {
-					break;              // Small optimization: we've found a new window, and cleared the old focus
-				}
-			}
-		}
-	}
-
-	nx = (float)( MVINFO_RIGHT - ( MVINFO_TEXTSIZE * 3 ) );
-	ny = (float)( MVINFO_TOP + ( MVINFO_TEXTSIZE + 1 ) );
-
-	// Highlight corresponding active window's overlay element
-	if ( fFound ) {
-		
-		for ( i = 0; i < cg.mvTotalClients; i++ ) {
-			if ( cg.mvOverlay[i].pID == ( cg.mvCurrentActive->mvInfo & MV_PID ) ) {
-				cg.mvOverlay[i].fActive = qtrue;
-				break;
-			}
-		}
-	}
-	// Check MV overlay detection here for better perf with more text elements
-	// General boundary check
-	else {
-		// Ugh, have to loop through BOTH team lists
-		int vOffset = 0;
-
-		for ( i = TEAM_AXIS; i <= TEAM_ALLIES; i++ ) {
-			if ( cg.mvTotalTeam[i] == 0 ) {
-				continue;
-			}
-			if ( cgs.cursorX >= nx && cgs.cursorY >= ny && cgs.cursorX < MVINFO_RIGHT &&
-				 cgs.cursorY < ny + ( cg.mvTotalTeam[i] * ( MVINFO_TEXTSIZE + 1 ) ) ) {
-				int pos = (int)( cgs.cursorY - ny ) / ( MVINFO_TEXTSIZE + 1 );
-
-				if ( pos < cg.mvTotalTeam[i] ) {
-					int x = MVINFO_RIGHT - cg.mvOverlay[( cg.mvTeamList[i][pos] )].width;
-					int y = MVINFO_TOP + vOffset + ( ( pos + 1 ) * ( MVINFO_TEXTSIZE + 1 ) );
-
-					// See if we're really over something
-					if ( cgs.cursorX >= x && cgs.cursorY >= y &&
-						 cgs.cursorX <= MVINFO_RIGHT &&
-						 cgs.cursorY <= y + MVINFO_TEXTSIZE ) {
-						// Perform any other window handling here for MV
-						// views based on element selection
-						cg.mvOverlay[( cg.mvTeamList[i][pos] )].fActive = qtrue;
-
-						w = CG_mvClientLocate( cg.mvOverlay[( cg.mvTeamList[i][pos] )].pID );
-						w = NULL;
-						if ( w != NULL ) {
-							cg.mvCurrentActive = w;
-						}
-
-						if ( fSelect ) {
-							if ( w != NULL ) {
-								// Swap window-view with mainview
-								if ( w != cg.mvCurrentMainview ) {
-									CG_mvMainviewSwap( w );
-								}
-							} else {
-								// Swap non-view with mainview
-								cg.mvCurrentMainview->mvInfo = ( cg.mvCurrentMainview->mvInfo & ~MV_PID ) |
-															   ( cg.mvOverlay[cg.mvTeamList[i][pos]].pID & MV_PID );
-								fUpdateOverlay = qtrue;
-							}
-						}
-					}
-				}
-			}
-			vOffset += ( cg.mvTotalTeam[i] + 2 ) * ( MVINFO_TEXTSIZE + 1 );
-			ny += vOffset;
-		}
-	}
-
-	// If we have a new highlight, reorder so our highlight is always
-	// drawn last (on top of all other windows)
-	if ( nSelectedWindow >= 0 ) {
-		fUpdateOverlay = qtrue;
-		x = wh->activeWindows[nSelectedWindow];
-
-		for ( j = nSelectedWindow; j < wh->numActiveWindows - 1; j++ ) {
-			wh->activeWindows[j] = wh->activeWindows[j + 1];
-		}
-
-		wh->activeWindows[wh->numActiveWindows - 1] = x;
-	}
-
-	// Finally, sync the overlay, if needed
-	if ( fUpdateOverlay ) {
-		CG_mvOverlayUpdate();
-	}
-}*/

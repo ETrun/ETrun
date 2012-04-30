@@ -47,9 +47,6 @@ static float jumpHeight;
 animation_t     *lastTorsoAnim;
 animation_t     *lastLegsAnim;
 
-/* Nico, removed rewards
-extern const char* cg_skillRewards[SK_NUM_SKILLS][NUM_SKILL_LEVELS - 1];*/
-
 /*
 ================
 CG_EntOnFire
@@ -129,29 +126,6 @@ static void CG_LoadClientInfo( int clientNum ) {
 	}
 }
 
-/* Nico, removed skills
-void CG_ParseTeamXPs( int n ) {
-	int i, j;
-	char* cs = (char*)CG_ConfigString( CS_AXIS_MAPS_XP + n );
-	const char* token;
-
-	for ( i = 0; i < MAX_MAPS_PER_CAMPAIGN; i++ ) {
-		for ( j = 0; j < SK_NUM_SKILLS; j++ ) {
-			token = COM_ParseExt( &cs, qfalse );
-
-			if ( !token || !*token ) {
-				return;
-			}
-
-			if ( n == 0 ) {
-				cgs.tdbAxisMapsXP[ j ][ i ] = atoi( token );
-			} else {
-				cgs.tdbAlliedMapsXP[ j ][ i ] = atoi( token );
-			}
-		}
-	}
-}*/
-
 void CG_LimboPanel_SendSetupMsg( qboolean forceteam );
 
 /*
@@ -164,9 +138,6 @@ void CG_NewClientInfo( int clientNum ) {
 	clientInfo_t newInfo;
 	const char  *configstring;
 	const char  *v;
-
-	/* Nico, removed skills
-	int oldclass;*/
 
 	ci = &cgs.clientinfo[clientNum];
 
@@ -189,9 +160,6 @@ void CG_NewClientInfo( int clientNum ) {
 	newInfo.clientNum =     clientNum;
 	newInfo.selected =      ci->selected;
 
-	/* Nico, removed intermission
-	newInfo.totalWeapAcc =  ci->totalWeapAcc;*/
-
 	// isolate the player's name
 	v = Info_ValueForKey( configstring, "n" );
 	Q_strncpyz( newInfo.name, v, sizeof( newInfo.name ) );
@@ -213,51 +181,10 @@ void CG_NewClientInfo( int clientNum ) {
 	v = Info_ValueForKey( configstring, "f" );
 	newInfo.fireteam = atoi( v );
 
-	v = Info_ValueForKey( configstring, "m" );
-	if ( *v ) {
-
-		/* Nico, removed skills
-		int i;
-
-		char buf[2];
-		buf[1] = '\0';
-
-		for ( i = 0; i < SK_NUM_SKILLS; i++ ) {
-			buf[0] = *v;
-			newInfo.medals[i] = atoi( buf );
-			v++;
-		}*/
-	}
-
 	v = Info_ValueForKey( configstring, "ch" );
 	if ( *v ) {
 		newInfo.character = cgs.gameCharacters[atoi( v )];
 	}
-
-	v = Info_ValueForKey( configstring, "s" );
-	if ( *v ) {
-
-		/* Nico, removed skills
-		int i;
-
-		for ( i = 0; i < SK_NUM_SKILLS; i++ ) {
-			char skill[2];
-
-			skill[0] = v[i];
-			skill[1] = '\0';
-
-			newInfo.skill[i] = atoi( skill );
-		}*/
-	}
-
-	/* Nico, removed disguise stuff
-	// diguiseName
-	v = Info_ValueForKey( configstring, "dn" );
-	Q_strncpyz( newInfo.disguiseName, v, sizeof( newInfo.disguiseName ) );
-
-	// disguiseRank
-	v = Info_ValueForKey( configstring, "dr" );
-	newInfo.disguiseRank = atoi( v );*/
 
 	// Gordon: weapon and latchedweapon ( FIXME: make these more secure )
 	v = Info_ValueForKey( configstring, "w" );
@@ -278,10 +205,6 @@ void CG_NewClientInfo( int clientNum ) {
 
 	// Gordon: detect rank/skill changes client side
 	if ( clientNum == cg.clientNum ) {
-
-		/* Nico, removed skills
-		int i;*/
-
 		if ( newInfo.team != cgs.clientinfo[ cg.clientNum ].team ) {
 			if ( cgs.autoFireteamCreateEndTime != cg.time + 20000 ) {
 				cgs.autoFireteamCreateEndTime = 0;
@@ -290,69 +213,6 @@ void CG_NewClientInfo( int clientNum ) {
 				cgs.autoFireteamJoinEndTime = 0;
 			}
 		}
-
-		/* Nico, removed rankNames
-		if ( newInfo.rank > cgs.clientinfo[ cg.clientNum ].rank ) {
-
-			CG_SoundPlaySoundScript( cgs.clientinfo[cg.clientNum].team == TEAM_ALLIES ? rankSoundNames_Allies[ newInfo.rank ] : rankSoundNames_Axis[ newInfo.rank ], NULL, -1, qtrue );
-
-			// Nico, removed rankicons
-			// CG_AddPMItemBig( PM_RANK, va( "Promoted to rank %s!", cgs.clientinfo[ cg.clientNum ].team == TEAM_AXIS ? rankNames_Axis[newInfo.rank] : rankNames_Allies[newInfo.rank] ), rankicons[ newInfo.rank ][ 0 ].shader );
-		}*/
-
-		/* Nico, removed skills
-		for ( i = 0; i < SK_NUM_SKILLS; i++ ) {
-			if ( newInfo.skill[i] > cgs.clientinfo[ cg.clientNum ].skill[i] ) {
-				// Gordon: slick hack so that funcs we call use teh new value now
-				cgs.clientinfo[ cg.clientNum ].skill[ i ] = newInfo.skill[ i ];
-
-				if ( newInfo.skill[i] == 4 && i == SK_HEAVY_WEAPONS ) {
-					if ( cgs.clientinfo[ cg.clientNum ].skill[SK_LIGHT_WEAPONS] == 4 ) {
-						oldclass = cgs.ccSelectedClass;
-						cgs.ccSelectedClass = newInfo.cls;
-						CG_LimboPanel_SetSelectedWeaponNumForSlot( 1, 2 );
-						CG_LimboPanel_SendSetupMsg( qfalse );
-						cgs.ccSelectedClass = oldclass;
-					} else {
-						oldclass = cgs.ccSelectedClass;
-						cgs.ccSelectedClass = newInfo.cls;
-						CG_LimboPanel_SetSelectedWeaponNumForSlot( 1, 1 );
-						CG_LimboPanel_SendSetupMsg( qfalse );
-						cgs.ccSelectedClass = oldclass;
-					}
-				}
-
-				if ( newInfo.skill[i] == 4 && i == SK_LIGHT_WEAPONS ) {
-					if ( cgs.clientinfo[ cg.clientNum ].skill[SK_HEAVY_WEAPONS] == 4 ) {
-						if ( cgs.ccSelectedWeapon2 == 2 ) {
-							oldclass = cgs.ccSelectedClass;
-							cgs.ccSelectedClass = newInfo.cls;
-							CG_LimboPanel_SetSelectedWeaponNumForSlot( 1, 3 );
-							CG_LimboPanel_SendSetupMsg( qfalse );
-							cgs.ccSelectedClass = oldclass;
-						}
-					} else {
-						oldclass = cgs.ccSelectedClass;
-						cgs.ccSelectedClass = newInfo.cls;
-						CG_LimboPanel_SetSelectedWeaponNumForSlot( 1, 1 );
-						CG_LimboPanel_SendSetupMsg( qfalse );
-						cgs.ccSelectedClass = oldclass;
-					}
-				}
-
-				CG_AddPMItemBig( PM_SKILL, va( "Increased %s skill to level %i!", skillNames[i], newInfo.skill[i] ), cgs.media.skillPics[ i ] );
-
-				// Nico, removed rewards
-				// CG_PriorityCenterPrint( va( "You have been rewarded with %s", cg_skillRewards[ i ][ newInfo.skill[i] - 1 ] ), SCREEN_HEIGHT - ( SCREEN_HEIGHT * 0.20 ), SMALLCHAR_WIDTH, 99999 );
-			}
-		}*/
-
-		/* Nico, removed airstrikes
-		if ( newInfo.team != cgs.clientinfo[ cg.clientNum ].team ) {
-			// clear these
-			memset( cg.artilleryRequestPos, 0, sizeof( cg.artilleryRequestPos ) );
-			memset( cg.artilleryRequestTime, 0, sizeof( cg.artilleryRequestTime ) );
-		}*/
 
 		trap_Cvar_Set( "authLevel", va( "%i", newInfo.refStatus ) );
 
@@ -403,17 +263,6 @@ bg_playerclass_t* CG_PlayerClassForClientinfo( clientInfo_t *ci, centity_t* cent
 	if ( cent && cent->currentState.eType == ET_CORPSE ) {
 		return BG_GetPlayerClassInfo( cent->currentState.modelindex, cent->currentState.modelindex2 );
 	}
-
-	/* Nico, removed disguise stuff
-	if ( cent && cent->currentState.powerups & ( 1 << PW_OPS_DISGUISED ) ) {
-		team = ci->team == TEAM_AXIS ? TEAM_ALLIES : TEAM_AXIS;
-
-		// rain - fixed incorrect class determination (was & 6,
-		// should be & 7)
-		cls = ( cent->currentState.powerups >> PW_OPS_CLASS_1 ) & 7;
-
-		return BG_GetPlayerClassInfo( team, cls );
-	}*/
 
 	return BG_GetPlayerClassInfo( ci->team, ci->cls );
 }
@@ -1989,18 +1838,6 @@ void CG_Player( centity_t *cent ) {
 	}
 
 	if ( cent->currentState.eType != ET_CORPSE && !( cent->currentState.eFlags & EF_DEAD ) ) {
-		/* Nico, removed hud head animation
-		hudHeadAnimNumber_t anim;
-
-		if ( cent->pe.weaponFireTime > 500 ) {
-			anim = HD_ATTACK;
-		} else if ( cg.time - cent->pe.lastFiredWeaponTime < 500 ) {
-			anim = HD_ATTACK_END;
-		} else {
-			anim = HD_IDLE1;
-		}
-		
-		CG_HudHeadAnimation( character, &cent->pe.head, &head.oldframe, &head.frame, &head.backlerp, anim );*/
 	} else {
 		head.frame = 0;
 		head.oldframe = 0;
@@ -2077,9 +1914,6 @@ void CG_Player( centity_t *cent ) {
 					if ( ci->rank == 0 ) {
 						continue;
 					}
-
-					/* Nico, removed rankicons
-					acc.customShader = rankicons[ ci->rank ][ 1 ].shader;*/
 				}
 
 				CG_PositionEntityOnTag( &acc,   &head,  "tag_mouth", 0, NULL );
@@ -2148,53 +1982,6 @@ void CG_ResetPlayerEntity( centity_t *cent ) {
 	cent->pe.animSpeed = 1.0;
 
 }
-
-/* Nico, removed bleed
-void CG_GetBleedOrigin( vec3_t head_origin, vec3_t body_origin, int fleshEntityNum ) {
-	clientInfo_t        *ci;
-	refEntity_t body;
-	refEntity_t head;
-	centity_t           *cent, backupCent;
-	bg_character_t      *character;
-
-	ci = &cgs.clientinfo[ fleshEntityNum ];
-
-	if ( !ci->infoValid ) {
-		return;
-	}
-
-	character = CG_CharacterForClientinfo( ci, NULL );
-
-	cent = &cg_entities [ fleshEntityNum ];
-	backupCent = *cent;
-
-	memset( &body, 0, sizeof( body ) );
-	memset( &head, 0, sizeof( head ) );
-
-	CG_PlayerAngles( cent, body.axis, body.torsoAxis, head.axis );
-	CG_PlayerAnimation( cent, &body );
-
-	body.hModel = character->mesh;
-	if ( !body.hModel ) {
-		return;
-	}
-
-	head.hModel = character->hudhead;
-	if ( !head.hModel ) {
-		return;
-	}
-
-	VectorCopy( cent->lerpOrigin, body.origin );
-	VectorCopy( body.origin, body.oldorigin );
-
-	// Ridah, restore the cent so we don't interfere with animation timings
-	*cent = backupCent;
-
-	CG_PositionRotatedEntityOnTag( &head, &body, "tag_head" );
-
-	VectorCopy( head.origin, head_origin );
-	VectorCopy( body.origin, body_origin );
-}*/
 
 /*
 ===============

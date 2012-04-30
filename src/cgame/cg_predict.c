@@ -486,11 +486,6 @@ static void CG_TouchItem( centity_t *cent ) {
 		return;
 	}
 
-	/* Nico, removed skills
-	if ( !BG_CanItemBeGrabbed( &cent->currentState, &cg.predictedPlayerState, cgs.clientinfo[cg.snap->ps.clientNum].skill, cgs.clientinfo[cg.snap->ps.clientNum].team ) ) {
-		return;     // can't hold it
-	}*/
-
 	item = &bg_itemlist[ cent->currentState.modelindex ];
 
 	// force activate only for weapons you don't have
@@ -910,31 +905,10 @@ void CG_PredictPlayerState( void ) {
 		cg.pmext.centerangles[PITCH] = tank->lerpAngles[PITCH];
 	}
 
-	/* Nico, removed skills
-	cg_pmove.skill = cgs.clientinfo[cg.snap->ps.clientNum].skill;*/
-
-	/* Nico, don't trace players
-	cg_pmove.trace = CG_TraceCapsule;*/
 	cg_pmove.trace = CG_TraceCapsuleNoPlayers;
 
 	cg_pmove.pointcontents = CG_PointContents;
 
-	/* Nico, ghost players
-	if ( cg_pmove.ps->pm_type == PM_DEAD ) {
-		cg_pmove.tracemask = MASK_PLAYERSOLID & ~CONTENTS_BODY;
-		cg_pmove.ps->eFlags |= EF_DEAD; // DHM-Nerve added:: EF_DEAD is checked for in Pmove functions, but wasn't being set until after Pmove
-	} else if ( cg_pmove.ps->pm_type == PM_SPECTATOR ) {
-		// rain - fix the spectator can-move-partway-through-world weirdness
-		// bug by actually setting tracemask when spectating :x
-		cg_pmove.tracemask = MASK_PLAYERSOLID & ~CONTENTS_BODY;
-		cg_pmove.trace = CG_TraceCapsule_World;
-	} else {
-		cg_pmove.tracemask = MASK_PLAYERSOLID;
-	}
-	
-	if ( ( cg.snap->ps.persistant[PERS_TEAM] == TEAM_SPECTATOR ) || ( cg.snap->ps.pm_flags & PMF_LIMBO ) ) { // JPW NERVE limbo
-		cg_pmove.tracemask &= ~CONTENTS_BODY;   // spectators can fly through bodies
-	}*/
 	cg_pmove.tracemask = MASK_PLAYERSOLID;
 	if ( cg_pmove.ps->pm_type == PM_DEAD ) {
 		cg_pmove.ps->eFlags |= EF_DEAD;
@@ -1095,9 +1069,6 @@ void CG_PredictPlayerState( void ) {
 		if ( cg.serverRespawning ) {
 			cg_pmove.ps->pm_type = PM_FREEZE;
 		}
-
-		/* Nico, removed gametypes
-		cg_pmove.gametype =             cgs.gametype;*/
 
 		// rain - only fill in the charge times if we're on a playing team
 		if ( cg.snap->ps.persistant[PERS_TEAM] == TEAM_AXIS || cg.snap->ps.persistant[PERS_TEAM] == TEAM_ALLIES ) {

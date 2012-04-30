@@ -194,9 +194,6 @@ void CG_SetInitialSnapshot( snapshot_t *snap ) {
 		trap_UI_Popup( UIMENU_INGAME );
 	} else if ( cg.demoPlayback ) {
 
-		/* Nico, removed commandmap
-		ccInitial = qtrue;*/
-
 	} else {
 		static char prevmap[64] = { 0 };
 		char curmap[64];
@@ -280,14 +277,6 @@ static void CG_TransitionSnapshot( void ) {
 	oldFrame = cg.snap;
 	cg.snap = cg.nextSnap;
 
-	/* Nico, removed XP
-	if ( cg.snap->ps.clientNum == cg.clientNum ) {
-		if ( cg.xp < cg.snap->ps.stats[STAT_XP] ) {
-			cg.xpChangeTime = cg.time;
-		}
-		cg.xp = cg.snap->ps.stats[STAT_XP];
-	}*/
-
 	BG_PlayerStateToEntityState( &cg.snap->ps, &cg_entities[ cg.snap->ps.clientNum ].currentState, qfalse );
 	cg_entities[ cg.snap->ps.clientNum ].interpolate = qfalse;
 
@@ -301,17 +290,7 @@ static void CG_TransitionSnapshot( void ) {
 		if ( cg_entities[id].currentValid == qfalse && oldValid[id] == qtrue ) {
 			CG_ResetEntity( &cg_entities[id] );
 		}
-
-		/* Nico, removed multiview
-		if ( cg.mvTotalClients > 0 && CG_mvMergedClientLocate( id ) ) {
-			CG_mvUpdateClientInfo( id );
-		}*/
 	}
-
-	/* Nico, removed multiview
-	if ( cg.mvTotalClients > 0 ) {
-		CG_mvTransitionPlayerState( &cg.snap->ps );
-	}*/
 
 	cg.nextSnap = NULL;
 

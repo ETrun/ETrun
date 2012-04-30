@@ -545,11 +545,6 @@ static void CG_OffsetFirstPersonView( void ) {
 	int timeDelta;
 	qboolean useLastValidBob = qfalse;
 
-	/* Nico, removed intermission
-	if ( cg.snap->ps.pm_type == PM_INTERMISSION ) {
-		return;
-	}*/
-
 	origin = cg.refdef_current->vieworg;
 	angles = cg.refdefViewAngles;
 
@@ -896,56 +891,50 @@ static int CG_CalcFov( void ) {
 		cg.zoomval = 0;
 	}
 
-	/* Nico, removed intermission
-	if ( cg.predictedPlayerState.pm_type == PM_INTERMISSION ) {
-		// if in intermission, use a fixed value
-		fov_x = 90;
-	} else {*/
-		fov_x = cg_fov.value;
-		if ( !developer.integer ) {
-			if ( fov_x < 90 ) {
-				fov_x = 90;
-			} else if ( fov_x > 160 ) {
-				fov_x = 160;
+	fov_x = cg_fov.value;
+	if ( !developer.integer ) {
+		if ( fov_x < 90 ) {
+			fov_x = 90;
+		} else if ( fov_x > 160 ) {
+			fov_x = 160;
+		}
+	}
+
+	if ( !cg.renderingThirdPerson || developer.integer ) {
+		// account for zooms
+		if ( cg.zoomval ) {
+			zoomFov = cg.zoomval;   // (SA) use user scrolled amount
+
+			if ( zoomFov < 1 ) {
+				zoomFov = 1;
+			} else if ( zoomFov > 160 ) {
+				zoomFov = 160;
 			}
+		} else {
+			zoomFov = lastfov;
 		}
 
-		if ( !cg.renderingThirdPerson || developer.integer ) {
-			// account for zooms
-			if ( cg.zoomval ) {
-				zoomFov = cg.zoomval;   // (SA) use user scrolled amount
-
-				if ( zoomFov < 1 ) {
-					zoomFov = 1;
-				} else if ( zoomFov > 160 ) {
-					zoomFov = 160;
-				}
+		// do smooth transitions for the binocs
+		if ( cg.zoomedBinoc ) {        // binoc zooming in
+			f = ( cg.time - cg.zoomTime ) / (float)ZOOM_TIME;
+			if ( f > 1.0 ) {
+				fov_x = zoomFov;
 			} else {
-				zoomFov = lastfov;
+				fov_x = fov_x + f * ( zoomFov - fov_x );
 			}
-
-			// do smooth transitions for the binocs
-			if ( cg.zoomedBinoc ) {        // binoc zooming in
-				f = ( cg.time - cg.zoomTime ) / (float)ZOOM_TIME;
-				if ( f > 1.0 ) {
-					fov_x = zoomFov;
-				} else {
-					fov_x = fov_x + f * ( zoomFov - fov_x );
-				}
-				lastfov = fov_x;
-			} else if ( cg.zoomval ) {    // zoomed by sniper/snooper
-				fov_x = cg.zoomval;
-				lastfov = fov_x;
-			} else {                    // binoc zooming out
-				f = ( cg.time - cg.zoomTime ) / (float)ZOOM_TIME;
-				if ( f > 1.0 ) {
-					fov_x = fov_x;
-				} else {
-					fov_x = zoomFov + f * ( fov_x - zoomFov );
-				}
+			lastfov = fov_x;
+		} else if ( cg.zoomval ) {    // zoomed by sniper/snooper
+			fov_x = cg.zoomval;
+			lastfov = fov_x;
+		} else {                    // binoc zooming out
+			f = ( cg.time - cg.zoomTime ) / (float)ZOOM_TIME;
+			if ( f > 1.0 ) {
+				fov_x = fov_x;
+			} else {
+				fov_x = zoomFov + f * ( fov_x - zoomFov );
 			}
 		}
-	// }
+	}
 
 	cg.refdef_current->rdflags &= ~RDF_SNOOPERVIEW;
 
@@ -958,20 +947,11 @@ static int CG_CalcFov( void ) {
 		fov_x = 75;
 	}
 
-	/* Nico, render while in limbo
-	if ( cg.showGameView ) {
-		fov_x = fov_y = 60.f;
-	}*/
-
 	// Arnout: this is weird... (but ensures square pixel ratio!)
 	x = cg.refdef_current->width / tan( fov_x / 360 * M_PI );
 	fov_y = atan2( cg.refdef_current->height, x );
 	fov_y = fov_y * 360 / M_PI;
-	// And this seems better - but isn't really
-	//fov_y = fov_x / cgs.glconfig.windowAspect;
 
-	// warp if underwater
-	//if ( cg_pmove.waterlevel == 3 ) {
 	contents = CG_PointContents( cg.refdef.vieworg, -1 );
 	if ( contents & ( CONTENTS_WATER | CONTENTS_SLIME | CONTENTS_LAVA ) ) {
 		phase = cg.time / 1000.0 * WAVE_FREQUENCY * M_PI * 2;
@@ -989,11 +969,6 @@ static int CG_CalcFov( void ) {
 	cg.refdef_current->fov_x = fov_x;
 	cg.refdef_current->fov_y = fov_y;
 
-/*
-	if( cg.predictedPlayerState.eFlags & EF_PRONE ) {
-		cg.zoomSensitivity = cg.refdef.fov_y / 500.0;
-	} else
-*/
 	// rain - allow freelook when dead until we tap out into limbo
 	if ( cg.snap->ps.pm_type == PM_FREEZE || ( cg.snap->ps.pm_type == PM_DEAD && ( cg.snap->ps.pm_flags & PMF_LIMBO ) ) || cg.snap->ps.pm_flags & PMF_TIME_LOCKPLAYER ) {
 		// No movement for pauses
@@ -1002,7 +977,6 @@ static int CG_CalcFov( void ) {
 		// NERVE - SMF - fix for zoomed in/out movement bug
 		if ( cg.zoomval ) {
 			cg.zoomSensitivity = 0.6 * ( cg.zoomval / 90.f );   // NERVE - SMF - changed to get less sensitive as you zoom in
-//				cg.zoomSensitivity = 0.1;
 		} else {
 			cg.zoomSensitivity = 1;
 		}
@@ -1022,82 +996,8 @@ CG_UnderwaterSounds
 */
 #define UNDERWATER_BIT 16
 static void CG_UnderwaterSounds( void ) {
-//	trap_S_AddLoopingSound( cent->lerpOrigin, vec3_origin, cgs.media.underWaterSound, 255, 0 );
 	trap_S_AddLoopingSound( cg.snap->ps.origin, vec3_origin, cgs.media.underWaterSound, 255 | ( 1 << UNDERWATER_BIT ), 0 );
 }
-
-
-/*
-===============
-CG_DamageBlendBlob
-
-===============
-*/
-/* Nico, removed blood
-static void CG_DamageBlendBlob( void ) {
-	int t,i;
-	int maxTime;
-	refEntity_t ent;
-	qboolean pointDamage;
-	viewDamage_t *vd;
-	float redFlash;
-
-	// Gordon: no damage blend blobs if in limbo or spectator, and in the limbo menu
-	if ( ( cg.snap->ps.pm_flags & PMF_LIMBO || cgs.clientinfo[cg.clientNum].team == TEAM_SPECTATOR ) && cg.showGameView ) {
-		return;
-	}
-
-	// ragePro systems can't fade blends, so don't obscure the screen
-	if ( cgs.glconfig.hardwareType == GLHW_RAGEPRO ) {
-		return;
-	}
-
-	redFlash = 0;
-
-	for ( i = 0; i < MAX_VIEWDAMAGE; i++ ) {
-		vd = &cg.viewDamage[i];
-
-		if ( !vd->damageValue ) {
-			continue;
-		}
-
-		maxTime = vd->damageDuration;
-		t = cg.time - vd->damageTime;
-		if ( t <= 0 || t >= maxTime ) {
-			vd->damageValue = 0;
-			continue;
-		}
-
-		pointDamage = !( !vd->damageX && !vd->damageY );
-
-		// if not point Damage, only do flash blend
-		if ( !pointDamage ) {
-			redFlash += 10.0 * ( 1.0 - (float)t / maxTime );
-			continue;
-		}
-
-		memset( &ent, 0, sizeof( ent ) );
-		ent.reType = RT_SPRITE;
-		ent.renderfx = RF_FIRST_PERSON;
-
-		VectorMA( cg.refdef_current->vieworg, 8, cg.refdef_current->viewaxis[0], ent.origin );
-		VectorMA( ent.origin, vd->damageX * -8, cg.refdef_current->viewaxis[1], ent.origin );
-		VectorMA( ent.origin, vd->damageY * 8, cg.refdef_current->viewaxis[2], ent.origin );
-
-		ent.radius = vd->damageValue * 0.4 * ( 0.5 + 0.5 * (float)t / maxTime ) * ( 0.75 + 0.5 * fabs( sin( vd->damageTime ) ) );
-
-		ent.customShader = cgs.media.viewBloodAni[(int)( floor( ( (float)t / maxTime ) * 4.9 ) )]; //cgs.media.viewBloodShader;
-		ent.shaderRGBA[0] = 255;
-		ent.shaderRGBA[1] = 255;
-		ent.shaderRGBA[2] = 255;
-		ent.shaderRGBA[3] = 255 * ( ( cg_bloodDamageBlend.value > 1.0f ) ? 1.0f :
-									( cg_bloodDamageBlend.value < 0.0f ) ? 0.0f : cg_bloodDamageBlend.value );
-
-		trap_R_AddRefEntityToScene( &ent );
-
-		redFlash += ent.radius;
-	}
-}*/
 
 /*
 ===============
@@ -1148,15 +1048,6 @@ int CG_CalcViewValues( void ) {
 		}
 	}
 
-	// intermission view
-	/* Nico, removed intermission
-	if ( ps->pm_type == PM_INTERMISSION ) {
-		VectorCopy( ps->origin, cg.refdef_current->vieworg );
-		VectorCopy( ps->viewangles, cg.refdefViewAngles );
-		AnglesToAxis( cg.refdefViewAngles, cg.refdef_current->viewaxis );
-		return CG_CalcFov();
-	}*/
-
 	if ( cg.bobfracsin > 0 && !ps->bobCycle ) {
 		cg.lastvalidBobcycle = cg.bobcycle;
 		cg.lastvalidBobfracsin = cg.bobfracsin;
@@ -1166,19 +1057,6 @@ int CG_CalcViewValues( void ) {
 	cg.bobfracsin = fabs( sin( ( ps->bobCycle & 127 ) / 127.0 * M_PI ) );
 	cg.xyspeed = sqrt( ps->velocity[0] * ps->velocity[0] + ps->velocity[1] * ps->velocity[1] );
 
-
-
-	/* Nico, removed stuff in limbo
-	if ( cg.showGameView ) {
-		VectorCopy( cgs.ccPortalPos, cg.refdef_current->vieworg );
-		if ( cg.showGameView && cgs.ccPortalEnt != -1 ) {
-			vec3_t vec;
-			VectorSubtract( cg_entities[cgs.ccPortalEnt].lerpOrigin, cg.refdef_current->vieworg, vec );
-			vectoangles( vec, cg.refdefViewAngles );
-		} else {
-			VectorCopy( cgs.ccPortalAngles, cg.refdefViewAngles );
-		}
-	} else if ( cg.renderingThirdPerson && ( ps->eFlags & EF_MG42_ACTIVE || ps->eFlags & EF_AAGUN_ACTIVE ) ) { // Arnout: see if we're attached to a gun*/
 	if ( cg.renderingThirdPerson && ( ps->eFlags & EF_MG42_ACTIVE || ps->eFlags & EF_AAGUN_ACTIVE ) ) { // Arnout: see if we're attached to a gun
 		centity_t *mg42 = &cg_entities[ps->viewlocked_entNum];
 		vec3_t forward;
@@ -1197,86 +1075,73 @@ int CG_CalcViewValues( void ) {
 		VectorCopy( ps->viewangles, cg.refdefViewAngles );
 	}
 
-	/* Nico, render while in limbo
-	if ( !cg.showGameView ) {*/
-		// add error decay
-		if ( cg_errorDecay.value > 0 ) {
-			int t;
-			float f;
+	// add error decay
+	if ( cg_errorDecay.value > 0 ) {
+		int t;
+		float f;
 
-			t = cg.time - cg.predictedErrorTime;
-			f = ( cg_errorDecay.value - t ) / cg_errorDecay.value;
-			if ( f > 0 && f < 1 ) {
-				VectorMA( cg.refdef_current->vieworg, f, cg.predictedError, cg.refdef_current->vieworg );
-			} else {
-				cg.predictedErrorTime = 0;
-			}
-		}
-
-		// Ridah, lock the viewangles if the game has told us to
-		if ( ps->viewlocked ) {
-
-			/*
-			if (ps->viewlocked == 4)
-			{
-				centity_t *tent;
-				tent = &cg_entities[ps->viewlocked_entNum];
-				VectorCopy (tent->currentState.apos.trBase, cg.refdefViewAngles);
-			}
-			else
-			*/
-			// DHM - Nerve :: don't bother evaluating if set to 7 (look at medic)
-			if ( ps->viewlocked != 7 && ps->viewlocked != 3 && ps->viewlocked != 2 ) {
-				BG_EvaluateTrajectory( &cg_entities[ps->viewlocked_entNum].currentState.apos, cg.time, cg.refdefViewAngles, qtrue, cg_entities[ps->viewlocked_entNum].currentState.effect2Time );
-			}
-
-			if ( ps->viewlocked == 2 ) {
-				cg.refdefViewAngles[0] += crandom();
-				cg.refdefViewAngles[1] += crandom();
-			}
-		}
-
-		if ( cg.renderingThirdPerson ) {
-			// back away from character
-			CG_OffsetThirdPersonView();
+		t = cg.time - cg.predictedErrorTime;
+		f = ( cg_errorDecay.value - t ) / cg_errorDecay.value;
+		if ( f > 0 && f < 1 ) {
+			VectorMA( cg.refdef_current->vieworg, f, cg.predictedError, cg.refdef_current->vieworg );
 		} else {
+			cg.predictedErrorTime = 0;
+		}
+	}
 
-			// offset for local bobbing and kicks
-			CG_OffsetFirstPersonView();
-
-			if ( cg.editingSpeakers ) {
-				CG_SetViewanglesForSpeakerEditor();
-			}
+	// Ridah, lock the viewangles if the game has told us to
+	if ( ps->viewlocked ) {
+		// DHM - Nerve :: don't bother evaluating if set to 7 (look at medic)
+		if ( ps->viewlocked != 7 && ps->viewlocked != 3 && ps->viewlocked != 2 ) {
+			BG_EvaluateTrajectory( &cg_entities[ps->viewlocked_entNum].currentState.apos, cg.time, cg.refdefViewAngles, qtrue, cg_entities[ps->viewlocked_entNum].currentState.effect2Time );
 		}
 
-		// Ridah, lock the viewangles if the game has told us to
-		if ( ps->viewlocked == 7 ) {
-			centity_t   *tent;
-			vec3_t vec;
-
-			tent = &cg_entities[ps->viewlocked_entNum];
-			VectorCopy( tent->lerpOrigin, vec );
-			VectorSubtract( vec, cg.refdef_current->vieworg, vec );
-			vectoangles( vec, cg.refdefViewAngles );
-		} else if ( ps->viewlocked == 4 )     {
-			vec3_t fwd;
-			AngleVectors( cg.refdefViewAngles, fwd, NULL, NULL );
-			VectorMA( cg_entities[ps->viewlocked_entNum].lerpOrigin, 16, fwd, cg.refdef_current->vieworg );
-		} else if ( ps->viewlocked ) {
-			vec3_t fwd;
-			float oldZ;
-			// set our position to be behind it
-			oldZ = cg.refdef_current->vieworg[2];
-			AngleVectors( cg.refdefViewAngles, fwd, NULL, NULL );
-			if ( cg.predictedPlayerState.eFlags & EF_AAGUN_ACTIVE ) {
-				VectorMA( cg_entities[ps->viewlocked_entNum].lerpOrigin, 0, fwd, cg.refdef_current->vieworg );
-			} else {
-				VectorMA( cg_entities[ps->viewlocked_entNum].lerpOrigin, -34, fwd, cg.refdef_current->vieworg );
-			}
-			cg.refdef_current->vieworg[2] = oldZ;
+		if ( ps->viewlocked == 2 ) {
+			cg.refdefViewAngles[0] += crandom();
+			cg.refdefViewAngles[1] += crandom();
 		}
-		// done.
-	// }
+	}
+
+	if ( cg.renderingThirdPerson ) {
+		// back away from character
+		CG_OffsetThirdPersonView();
+	} else {
+
+		// offset for local bobbing and kicks
+		CG_OffsetFirstPersonView();
+
+		if ( cg.editingSpeakers ) {
+			CG_SetViewanglesForSpeakerEditor();
+		}
+	}
+
+	// Ridah, lock the viewangles if the game has told us to
+	if ( ps->viewlocked == 7 ) {
+		centity_t   *tent;
+		vec3_t vec;
+
+		tent = &cg_entities[ps->viewlocked_entNum];
+		VectorCopy( tent->lerpOrigin, vec );
+		VectorSubtract( vec, cg.refdef_current->vieworg, vec );
+		vectoangles( vec, cg.refdefViewAngles );
+	} else if ( ps->viewlocked == 4 )     {
+		vec3_t fwd;
+		AngleVectors( cg.refdefViewAngles, fwd, NULL, NULL );
+		VectorMA( cg_entities[ps->viewlocked_entNum].lerpOrigin, 16, fwd, cg.refdef_current->vieworg );
+	} else if ( ps->viewlocked ) {
+		vec3_t fwd;
+		float oldZ;
+		// set our position to be behind it
+		oldZ = cg.refdef_current->vieworg[2];
+		AngleVectors( cg.refdefViewAngles, fwd, NULL, NULL );
+		if ( cg.predictedPlayerState.eFlags & EF_AAGUN_ACTIVE ) {
+			VectorMA( cg_entities[ps->viewlocked_entNum].lerpOrigin, 0, fwd, cg.refdef_current->vieworg );
+		} else {
+			VectorMA( cg_entities[ps->viewlocked_entNum].lerpOrigin, -34, fwd, cg.refdef_current->vieworg );
+		}
+		cg.refdef_current->vieworg[2] = oldZ;
+	}
+	// done.
 
 	// position eye reletive to origin
 	AnglesToAxis( cg.refdefViewAngles, cg.refdef_current->viewaxis );
@@ -1418,44 +1283,38 @@ void CG_DrawSkyBoxPortal( qboolean fLocalView ) {
 		float zoomFov;
 		float f;
 
-		/* Nico, removed intermission
-		if ( cg.predictedPlayerState.pm_type == PM_INTERMISSION ) {
-			// if in intermission, use a fixed value
-			fov_x = 90;
-		} else {*/
-			// user selectable
-			fov_x = cg_fov.value;
-			if ( fov_x < 1 ) {
-				fov_x = 1;
-			} else if ( fov_x > 160 ) {
-				fov_x = 160;
-			}
+		// user selectable
+		fov_x = cg_fov.value;
+		if ( fov_x < 1 ) {
+			fov_x = 1;
+		} else if ( fov_x > 160 ) {
+			fov_x = 160;
+		}
 
-			// account for zooms
-			if ( cg.zoomval ) {
-				zoomFov = cg.zoomval;   // (SA) use user scrolled amount
-				if ( zoomFov < 1 ) {
-					zoomFov = 1;
-				} else if ( zoomFov > 160 ) {
-					zoomFov = 160;
-				}
-			} else {
-				zoomFov = lastfov;
+		// account for zooms
+		if ( cg.zoomval ) {
+			zoomFov = cg.zoomval;   // (SA) use user scrolled amount
+			if ( zoomFov < 1 ) {
+				zoomFov = 1;
+			} else if ( zoomFov > 160 ) {
+				zoomFov = 160;
 			}
+		} else {
+			zoomFov = lastfov;
+		}
 
-			// do smooth transitions for the binocs
-			if ( cg.zoomedBinoc ) {        // binoc zooming in
-				f = ( cg.time - cg.zoomTime ) / (float)ZOOM_TIME;
-				fov_x = ( f > 1.0 ) ? zoomFov : fov_x + f * ( zoomFov - fov_x );
-				lastfov = fov_x;
-			} else if ( cg.zoomval ) { // zoomed by sniper/snooper
-				fov_x = cg.zoomval;
-				lastfov = fov_x;
-			} else {                    // binoc zooming out
-				f = ( cg.time - cg.zoomTime ) / (float)ZOOM_TIME;
-				fov_x = ( f > 1.0 ) ? fov_x : zoomFov + f * ( fov_x - zoomFov );
-			}
-		// }
+		// do smooth transitions for the binocs
+		if ( cg.zoomedBinoc ) {        // binoc zooming in
+			f = ( cg.time - cg.zoomTime ) / (float)ZOOM_TIME;
+			fov_x = ( f > 1.0 ) ? zoomFov : fov_x + f * ( zoomFov - fov_x );
+			lastfov = fov_x;
+		} else if ( cg.zoomval ) { // zoomed by sniper/snooper
+			fov_x = cg.zoomval;
+			lastfov = fov_x;
+		} else {                    // binoc zooming out
+			f = ( cg.time - cg.zoomTime ) / (float)ZOOM_TIME;
+			fov_x = ( f > 1.0 ) ? fov_x : zoomFov + f * ( fov_x - zoomFov );
+		}
 
 		rd.rdflags &= ~RDF_SNOOPERVIEW;
 
@@ -1689,152 +1548,132 @@ void CG_DrawActiveFrame( int serverTime, stereoFrame_t stereoView, qboolean demo
 
 	DEBUGTIME
 
+	// clear all the render lists
+	trap_R_ClearScene();
 
-	// OSP -- MV handling
-	/* Nico, removed multiview
-	if ( cg.mvCurrentMainview != NULL && cg.snap->ps.pm_type != PM_INTERMISSION ) {
-		CG_mvDraw( cg.mvCurrentMainview );
-		// FIXME: not valid for demo playback
-		cg.zoomSensitivity = mv_sensitivity.value / int_sensitivity.value;
-	} else {*/
-		// clear all the render lists
-		trap_R_ClearScene();
+	DEBUGTIME
 
-		DEBUGTIME
+	// decide on third person view
+	/* Nico, render while in limbo
+	cg.renderingThirdPerson = cg_thirdPerson.integer || ( cg.snap->ps.stats[STAT_HEALTH] <= 0 ) || cg.showGameView;*/
+	cg.renderingThirdPerson = cg_thirdPerson.integer || ( cg.snap->ps.stats[STAT_HEALTH] <= 0 );
 
-		// decide on third person view
-		/* Nico, render while in limbo
-		cg.renderingThirdPerson = cg_thirdPerson.integer || ( cg.snap->ps.stats[STAT_HEALTH] <= 0 ) || cg.showGameView;*/
-		cg.renderingThirdPerson = cg_thirdPerson.integer || ( cg.snap->ps.stats[STAT_HEALTH] <= 0 );
+	// build cg.refdef
+	inwater = CG_CalcViewValues();
+	CG_SetupFrustum();
 
-		// build cg.refdef
-		inwater = CG_CalcViewValues();
-		CG_SetupFrustum();
+	DEBUGTIME
 
-		DEBUGTIME
+	// RF, draw the skyboxportal
+	CG_DrawSkyBoxPortal( qtrue );
 
-		// RF, draw the skyboxportal
-		CG_DrawSkyBoxPortal( qtrue );
+	DEBUGTIME
 
-		DEBUGTIME
+	if ( inwater ) {
+		CG_UnderwaterSounds();
+	}
 
-		if ( inwater ) {
-			CG_UnderwaterSounds();
-		}
+	DEBUGTIME
 
-		DEBUGTIME
-
-		// first person blend blobs, done after AnglesToAxis
-		/* Nico, removed blood
-		if ( !cg.renderingThirdPerson ) {
-			CG_DamageBlendBlob();
-		}*/
+	// build the render lists
+	if ( !cg.hyperspace ) {
+		CG_AddPacketEntities();         // adter calcViewValues, so predicted player state is correct
+		CG_AddMarks();
 
 		DEBUGTIME
 
-		// build the render lists
-		if ( !cg.hyperspace ) {
-			CG_AddPacketEntities();         // adter calcViewValues, so predicted player state is correct
-			CG_AddMarks();
-
-			DEBUGTIME
-
-			CG_AddScriptSpeakers();
-
-			DEBUGTIME
-
-			// Rafael particles
-			CG_AddParticles();
-			// done.
-
-			DEBUGTIME
-
-			CG_AddLocalEntities();
-
-			DEBUGTIME
-
-			CG_AddSmokeSprites();
-
-			DEBUGTIME
-
-			CG_AddAtmosphericEffects();
-		}
-
-		// Rafael mg42
-		/* Nico, render while in limbo
-		if ( !cg.showGameView && !cgs.dbShowing ) {*/
-		if ( !cgs.dbShowing ) {
-			if ( !cg.snap->ps.persistant[PERS_HWEAPON_USE] ) {
-				CG_AddViewWeapon( &cg.predictedPlayerState );
-			} else {
-				if ( cg.time - cg.predictedPlayerEntity.overheatTime < 3000 ) {
-					vec3_t muzzle;
-
-					CG_CalcMuzzlePoint( cg.snap->ps.clientNum, muzzle );
-
-					muzzle[2] -= 32;
-
-					if ( !( rand() % 3 ) ) {
-						float alpha;
-						alpha = 1.0f - ( (float)( cg.time - cg.predictedPlayerEntity.overheatTime ) / 3000.0f );
-						alpha *= 0.25f;     // .25 max alpha
-						CG_ParticleImpactSmokePuffExtended( cgs.media.smokeParticleShader, muzzle, 1000, 8, 20, 30, alpha, 8.f );
-					}
-				}
-			}
-		}
-
-		// NERVE - SMF - play buffered voice chats
-		CG_PlayBufferedVoiceChats();
+		CG_AddScriptSpeakers();
 
 		DEBUGTIME
-		// Ridah, trails
-		if ( !cg.hyperspace ) {
-			CG_AddFlameChunks();
-			CG_AddTrails();         // this must come last, so the trails dropped this frame get drawn
-		}
+
+		// Rafael particles
+		CG_AddParticles();
 		// done.
 
 		DEBUGTIME
 
-		// finish up the rest of the refdef
-		if ( cg.testModelEntity.hModel ) {
-			CG_AddTestModel();
-		}
-		cg.refdef.time = cg.time;
-		memcpy( cg.refdef.areamask, cg.snap->areamask, sizeof( cg.refdef.areamask ) );
+		CG_AddLocalEntities();
 
 		DEBUGTIME
 
-		// warning sounds when powerup is wearing off
-		//CG_PowerupTimerSounds();
+		CG_AddSmokeSprites();
 
-		// make sure the lagometerSample and frame timing isn't done twice when in stereo
-		if ( stereoView != STEREO_RIGHT ) {
-			cg.frametime = cg.time - cg.oldTime;
-			if ( cg.frametime < 0 ) {
-				cg.frametime = 0;
+		DEBUGTIME
+
+		CG_AddAtmosphericEffects();
+	}
+
+	// Rafael mg42
+	if ( !cgs.dbShowing ) {
+		if ( !cg.snap->ps.persistant[PERS_HWEAPON_USE] ) {
+			CG_AddViewWeapon( &cg.predictedPlayerState );
+		} else {
+			if ( cg.time - cg.predictedPlayerEntity.overheatTime < 3000 ) {
+				vec3_t muzzle;
+
+				CG_CalcMuzzlePoint( cg.snap->ps.clientNum, muzzle );
+
+				muzzle[2] -= 32;
+
+				if ( !( rand() % 3 ) ) {
+					float alpha;
+					alpha = 1.0f - ( (float)( cg.time - cg.predictedPlayerEntity.overheatTime ) / 3000.0f );
+					alpha *= 0.25f;     // .25 max alpha
+					CG_ParticleImpactSmokePuffExtended( cgs.media.smokeParticleShader, muzzle, 1000, 8, 20, 30, alpha, 8.f );
+				}
 			}
-			cg.oldTime = cg.time;
-			CG_AddLagometerFrameInfo();
 		}
+	}
 
-		DEBUGTIME
+	// NERVE - SMF - play buffered voice chats
+	CG_PlayBufferedVoiceChats();
 
-		DEBUGTIME
+	DEBUGTIME
+	// Ridah, trails
+	if ( !cg.hyperspace ) {
+		CG_AddFlameChunks();
+		CG_AddTrails();         // this must come last, so the trails dropped this frame get drawn
+	}
+	// done.
 
-		// DHM - Nerve :: let client system know our predicted origin
-		trap_SetClientLerpOrigin( cg.refdef.vieworg[0], cg.refdef.vieworg[1], cg.refdef.vieworg[2] );
+	DEBUGTIME
 
-		// actually issue the rendering calls
-		CG_DrawActive( stereoView );
+	// finish up the rest of the refdef
+	if ( cg.testModelEntity.hModel ) {
+		CG_AddTestModel();
+	}
+	cg.refdef.time = cg.time;
+	memcpy( cg.refdef.areamask, cg.snap->areamask, sizeof( cg.refdef.areamask ) );
 
-		DEBUGTIME
+	DEBUGTIME
 
-		// update audio positions
-		trap_S_Respatialize( cg.snap->ps.clientNum, cg.refdef.vieworg, cg.refdef.viewaxis, inwater );
-	/* Nico, removed multiview
-	}*/
+	// warning sounds when powerup is wearing off
+	//CG_PowerupTimerSounds();
+
+	// make sure the lagometerSample and frame timing isn't done twice when in stereo
+	if ( stereoView != STEREO_RIGHT ) {
+		cg.frametime = cg.time - cg.oldTime;
+		if ( cg.frametime < 0 ) {
+			cg.frametime = 0;
+		}
+		cg.oldTime = cg.time;
+		CG_AddLagometerFrameInfo();
+	}
+
+	DEBUGTIME
+
+	DEBUGTIME
+
+	// DHM - Nerve :: let client system know our predicted origin
+	trap_SetClientLerpOrigin( cg.refdef.vieworg[0], cg.refdef.vieworg[1], cg.refdef.vieworg[2] );
+
+	// actually issue the rendering calls
+	CG_DrawActive( stereoView );
+
+	DEBUGTIME
+
+	// update audio positions
+	trap_S_Respatialize( cg.snap->ps.clientNum, cg.refdef.vieworg, cg.refdef.viewaxis, inwater );
 
 	if ( cg_stats.integer ) {
 		CG_Printf( "cg.clientFrame:%i\n", cg.clientFrame );

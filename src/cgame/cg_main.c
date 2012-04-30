@@ -1171,17 +1171,6 @@ static void CG_RegisterSounds( void ) {
 	cgs.media.sfx_rockexp =         trap_S_RegisterSound( "sound/weapons/rocket/rocket_expl.wav", qfalse );
 	cgs.media.sfx_rockexpDist =     trap_S_RegisterSound( "sound/weapons/rocket/rocket_expl_far.wav", qfalse );
 
-	/* Nico, removed airstrikes
-	cgs.media.sfx_artilleryExp[0] = trap_S_RegisterSound( "sound/weapons/artillery/artillery_expl_1.wav", qfalse );
-	cgs.media.sfx_artilleryExp[1] = trap_S_RegisterSound( "sound/weapons/artillery/artillery_expl_2.wav", qfalse );
-	cgs.media.sfx_artilleryExp[2] = trap_S_RegisterSound( "sound/weapons/artillery/artillery_expl_3.wav", qfalse );
-	cgs.media.sfx_artilleryDist =   trap_S_RegisterSound( "sound/weapons/artillery/artillery_expl_far.wav", qfalse );
-
-	cgs.media.sfx_airstrikeExp[0] = trap_S_RegisterSound( "sound/weapons/airstrike/airstrike_expl_1.wav", qfalse );
-	cgs.media.sfx_airstrikeExp[1] = trap_S_RegisterSound( "sound/weapons/airstrike/airstrike_expl_2.wav", qfalse );
-	cgs.media.sfx_airstrikeExp[2] = trap_S_RegisterSound( "sound/weapons/airstrike/airstrike_expl_3.wav", qfalse );
-	cgs.media.sfx_airstrikeDist =   trap_S_RegisterSound( "sound/weapons/airstrike/airstrike_expl_far.wav", qfalse );*/
-
 	cgs.media.sfx_dynamiteexp =     trap_S_RegisterSound( "sound/weapons/dynamite/dynamite_expl.wav", qfalse );
 	cgs.media.sfx_dynamiteexpDist = trap_S_RegisterSound( "sound/weapons/dynamite/dynamite_expl_far.wav", qfalse );
 

@@ -2125,11 +2125,6 @@ void CG_AddPlayerWeapon( refEntity_t *parent, playerState_t *ps, centity_t *cent
 	if ( ps ) {
 		team_t team = ps->persistant[PERS_TEAM];
 
-		/* Nico, removed disguise stuff
-		if ( ( weaponNum != WP_SATCHEL ) && ( cent->currentState.powerups & ( 1 << PW_OPS_DISGUISED ) ) ) {
-			team = team == TEAM_AXIS ? TEAM_ALLIES : TEAM_AXIS;
-		}*/
-
 		gun.hModel = weapon->weaponModel[W_FP_MODEL].model;
 		if ( ( team == TEAM_AXIS ) &&
 			 weapon->weaponModel[W_FP_MODEL].skin[TEAM_AXIS] ) {
@@ -2142,11 +2137,6 @@ void CG_AddPlayerWeapon( refEntity_t *parent, playerState_t *ps, centity_t *cent
 		}
 	} else {
 		team_t team = cgs.clientinfo[cent->currentState.clientNum].team;
-
-		/* Nico, removed disguise stuff
-		if ( ( weaponNum != WP_SATCHEL ) && cent->currentState.powerups & ( 1 << PW_OPS_DISGUISED ) ) {
-			team = team == TEAM_AXIS ? TEAM_ALLIES : TEAM_AXIS;
-		}*/
 
 		gun.hModel = weapon->weaponModel[W_TP_MODEL].model;
 		if ( ( team == TEAM_AXIS ) &&
@@ -2211,26 +2201,6 @@ void CG_AddPlayerWeapon( refEntity_t *parent, playerState_t *ps, centity_t *cent
 	}
 
 	if ( drawpart ) {
-		/* Nico, removed skills
-		if ( weaponNum == WP_AMMO ) {
-
-			if ( ps ) {
-				if ( cgs.clientinfo[ ps->clientNum ].skill[ SK_SIGNALS ] >= 1 ) {
-					gun.customShader = weapon->modModels[0];
-				}
-			} else {
-				if ( cgs.clientinfo[ cent->currentState.clientNum ].skill[ SK_SIGNALS ] >= 1 ) {
-					gun.customShader = weapon->modModels[0];
-				}
-			}
-		}
-		if ( !ps ) {
-			if ( weaponNum == WP_MEDIC_SYRINGE ) {
-				if ( cgs.clientinfo[ cent->currentState.clientNum ].skill[ SK_FIRST_AID ] >= 3 ) {
-					gun.customShader = weapon->modModels[ 0 ];
-				}
-			}
-		}*/
 		CG_AddWeaponWithPowerups( &gun, cent->currentState.powerups, ps, cent );
 	}
 
@@ -2313,29 +2283,14 @@ void CG_AddPlayerWeapon( refEntity_t *parent, playerState_t *ps, centity_t *cent
 				}
 
 				if ( drawpart ) {
-					/* Nico, removed disguise stuff
-					if ( ( ps->persistant[PERS_TEAM] == TEAM_AXIS ||
-						   ( ps->persistant[PERS_TEAM] == TEAM_ALLIES && cent->currentState.powerups & ( 1 << PW_OPS_DISGUISED ) ) ) &&
-						 weapon->partModels[W_FP_MODEL][i].skin[TEAM_AXIS] ) {*/
 					if ( ps->persistant[PERS_TEAM] == TEAM_AXIS ) {
 						barrel.customSkin = weapon->partModels[W_FP_MODEL][i].skin[TEAM_AXIS];
 					} 
-					/* Nico, removed disguise stuff
-					else if ( ( ps->persistant[PERS_TEAM] == TEAM_ALLIES ||
-								  ( ps->persistant[PERS_TEAM] == TEAM_AXIS && cent->currentState.powerups & ( 1 << PW_OPS_DISGUISED ) ) ) &&
-								weapon->partModels[W_FP_MODEL][i].skin[TEAM_ALLIES] ) {*/
 					else if ( ps->persistant[PERS_TEAM] == TEAM_ALLIES ) {
 						barrel.customSkin = weapon->partModels[W_FP_MODEL][i].skin[TEAM_ALLIES];
 					} else {
 						barrel.customSkin = weapon->partModels[W_FP_MODEL][i].skin[0];  // if not loaded it's 0 so doesn't do any harm
 					}
-
-					/* Nico, removed skills
-					if ( weaponNum == WP_MEDIC_SYRINGE && i == W_PART_1 ) {
-						if ( cgs.clientinfo[ ps->clientNum ].skill[ SK_FIRST_AID ] >= 3 ) {
-							barrel.customShader = weapon->modModels[ 0 ];
-						}
-					}*/
 
 					CG_AddWeaponWithPowerups( &barrel, cent->currentState.powerups, ps, cent );
 
@@ -2664,11 +2619,6 @@ void CG_AddViewWeapon( playerState_t *ps ) {
 	if ( ps->persistant[PERS_TEAM] == TEAM_SPECTATOR ) {
 		return;
 	}
-
-	/* Nico, removed intermission
-	if ( ps->pm_type == PM_INTERMISSION ) {
-		return;
-	}*/
 
 	// no gun if in third person view
 	if ( cg.renderingThirdPerson ) {
@@ -3394,8 +3344,6 @@ void CG_AltWeapon_f( void ) {
 	}
 
 	// Overload for spec mode when following
-	/* Nico, removed multiview
-	if ( ( cg.snap->ps.pm_flags & PMF_FOLLOW ) || cg.mvTotalClients > 0 ) {*/
 	if (( cg.snap->ps.pm_flags & PMF_FOLLOW )) {
 		return;
 	}
@@ -3961,13 +3909,6 @@ void CG_NextWeapon_f( void ) {
 		return;
 	}
 
-	// Overload for MV clients
-	/* Nico, removed multiview
-	if ( cg.mvTotalClients > 0 ) {
-		CG_mvToggleView_f();
-		return;
-	}*/
-
 	//fretn - #447
 	//osp-rtcw & et pause bug
 	if ( cg.snap->ps.pm_type == PM_FREEZE ) {
@@ -4021,13 +3962,6 @@ void CG_PrevWeapon_f( void ) {
 	if ( !cg.snap ) {
 		return;
 	}
-
-	// Overload for MV clients
-	/* Nico, removed multiview
-	if ( cg.mvTotalClients > 0 ) {
-		CG_mvSwapViews_f();
-		return;
-	}*/
 
 	//fretn - #447
 	//osp-rtcw & et pause bug
@@ -5213,14 +5147,7 @@ void CG_MissileHitWall( int weapon, int clientNum, vec3_t origin, vec3_t dir, in
 		if ( weapon == WP_SATCHEL ) {
 			sfx =       cgs.media.sfx_satchelexp;
 			sfx2 =      cgs.media.sfx_satchelexpDist;
-		}
-		
-		/* Nico, removed mines
-		else if ( weapon == WP_LANDMINE ) {
-			sfx =       cgs.media.sfx_landmineexp;
-			sfx2 =      cgs.media.sfx_landmineexpDist;
-		}*/
-		
+		}		
 		else if ( weapon == WP_MORTAR_SET ) {
 			sfx = sfx2 = 0;
 		} else if ( weapon == WP_GRENADE_LAUNCHER || weapon == WP_GRENADE_PINEAPPLE || weapon == WP_GPG40 || weapon == WP_M7 ) {
@@ -5273,67 +5200,6 @@ void CG_MissileHitWall( int weapon, int clientNum, vec3_t origin, vec3_t dir, in
 	case VERYBIGEXPLOSION:
 	case WP_ARTY:
 	case WP_SMOKE_MARKER:
-
-		/* Nico, removed airstrikes
-		sfx = cgs.media.sfx_rockexp;
-		sfx2 = cgs.media.sfx_rockexpDist;
-
-		if ( weapon == VERYBIGEXPLOSION || weapon == WP_ARTY ) {
-			sfx =   cgs.media.sfx_artilleryExp[rand() % 3];
-			sfx2 =  cgs.media.sfx_artilleryDist;
-		} else if ( weapon == WP_SMOKE_MARKER ) {
-			sfx =   cgs.media.sfx_airstrikeExp[rand() % 3];
-			sfx2 =  cgs.media.sfx_airstrikeDist;
-		}
-
-		sfx2range = 800;
-		mark = cgs.media.burnMarkShader;
-		markDuration = cg_markTime.integer * 3;
-		radius = 128;   // ydnar: bigger mark radius
-		light = 600;
-		isSprite = qtrue;
-		duration = 1000;
-		// Ridah, changed to flamethrower colors
-		lightColor[0] = 0.75;
-		lightColor[1] = 0.5;
-		lightColor[2] = 0.1;
-
-		// explosion sprite animation
-		VectorMA( origin, 24, dir, sprOrg );
-		VectorScale( dir, 64, sprVel );
-
-		if ( CG_PointContents( origin, 0 ) & CONTENTS_WATER ) {
-			VectorCopy( origin,tmpv );
-			tmpv[2] += 10000;
-
-			trap_CM_BoxTrace( &trace, tmpv,origin, NULL, NULL, 0, MASK_WATER );
-			CG_WaterRipple( cgs.media.wakeMarkShaderAnim, trace.endpos, dir, 300, 2000 );
-
-			CG_AddDirtBulletParticles( trace.endpos, dir, 400 + random() * 200, 900, 15, 0.5, 512, 128, 0.125, cgs.media.dirtParticle2Shader );
-			CG_AddDirtBulletParticles( trace.endpos, dir, 400 + random() * 600, 1400, 15, 0.5, 128, 512, 0.125, cgs.media.dirtParticle2Shader );
-		} else {
-			VectorCopy( origin,tmpv );
-			tmpv[2] += 20;
-			VectorCopy( origin,tmpv2 );
-			tmpv2[2] -= 20;
-			trap_CM_BoxTrace( &trace,tmpv,tmpv2,NULL,NULL,0,MASK_SHOT );
-
-			if ( trace.surfaceFlags & SURF_GRASS || trace.surfaceFlags & SURF_GRAVEL ) {
-				CG_AddDirtBulletParticles( origin, dir, 400 + random() * 200, 3000, 10, 0.5, 400,256, 0.25, cgs.media.dirtParticle1Shader );
-			}
-			CG_ParticleExplosion( "explode1", sprOrg, sprVel, 1600, 20, 200 + random() * 400, qtrue );
-
-			for ( i = 0; i < 4; i++ ) { // JPW random vector based on plane normal so explosions move away from walls/dirt/etc
-				for ( j = 0; j < 3; j++ ) {
-					sprOrg[j] = origin[j] + 50 * crandom();
-					sprVel[j] = 0.35 * crandom();
-				}
-				VectorAdd( sprVel, trace.plane.normal, sprVel );
-				VectorScale( sprVel,300,sprVel );
-				CG_ParticleExplosion( "explode1", sprOrg, sprVel, 1600, 40, 260 + rand() % 120, qfalse );
-			}
-			CG_AddDebris( origin, dir, 400 + random() * 200, rand() % 2000 + 1000, 5 + rand() % 5 );
-		}*/
 		break;
 
 	default:
@@ -5481,10 +5347,6 @@ CG_MissileHitPlayer
 =================
 */
 void CG_MissileHitPlayer( centity_t *cent, int weapon, vec3_t origin, vec3_t dir, int entityNum ) {
-
-	/* Nico, removed bleed
-	CG_Bleed( origin, entityNum );*/
-
 	// some weapons will make an explosion with the blood, while
 	// others will just make the blood
 	switch ( weapon ) {
@@ -5893,11 +5755,6 @@ void CG_Bullet( vec3_t end, int sourceEntityNum, vec3_t normal, qboolean flesh, 
 		vec3_t smokedir, tmpv, tmpv2; // JPW NERVE
 		int i;//,headshot; Nico, unused warning fix
 
-		/* Nico, removed bleed
-		if ( fleshEntityNum < MAX_CLIENTS ) {
-			CG_Bleed( end, fleshEntityNum );
-		}*/
-
 		// JPW NERVE smoke puffs (sometimes with some blood)
 		VectorSubtract( end,start,smokedir ); // get a nice "through the body" vector
 		VectorNormalize( smokedir );
@@ -5913,37 +5770,19 @@ void CG_Bullet( vec3_t end, int sourceEntityNum, vec3_t normal, qboolean flesh, 
 		VectorSubtract( tmpv, origin, tmpv2 );
 		// headshot = ( VectorLength( tmpv2 ) < 10 );
 
-		/* Nico, removed blood
-		if ( headshot && cg_blood.integer ) {
-			for ( i = 0; i < 5; i++ ) {
-				rnd = random();
-				VectorScale( smokedir,25.0 + random() * 25,tmpv );
-				tmpv[0] += crandom() * 25.0f;
-				tmpv[1] += crandom() * 25.0f;
-				tmpv[2] += crandom() * 25.0f;
-				CG_GetWindVector( tmpv2 );
-				VectorScale( tmpv2,35,tmpv2 ); // was 75, before that 55
-				tmpv2[2] = 0;
-				VectorAdd( tmpv,tmpv2,tmpv );
-				// le = CG_SmokePuff( origin, tmpv, 5 + rnd * 10, 1, rnd * 0.8, rnd * 0.8, 0.5, 500 + ( rand() % 800 ), cg.time, 0, 0, cgs.media.fleshSmokePuffShader );
-				CG_SmokePuff( origin, tmpv, 5 + rnd * 10, 1, rnd * 0.8, rnd * 0.8, 0.5, 500 + ( rand() % 800 ), cg.time, 0, 0, cgs.media.fleshSmokePuffShader );
-
-			}
-		} else {*/
-			// puff out the front (more dust no blood)
-			for ( i = 0; i < 10; i++ ) {
-				rnd = random();
-				VectorScale( smokedir,-35.0 + random() * 25,tmpv );
-				tmpv[0] += crandom() * 25.0f;
-				tmpv[1] += crandom() * 25.0f;
-				tmpv[2] += crandom() * 25.0f;
-				CG_GetWindVector( tmpv2 );
-				VectorScale( tmpv2,35,tmpv2 ); // was 75, before that 55
-				tmpv2[2] = 0;
-				VectorAdd( tmpv,tmpv2,tmpv );
-				// le = CG_SmokePuff( origin, tmpv, 5 + rnd * 10,  rnd * 0.3f + 0.5f, rnd * 0.3f + 0.5f, rnd * 0.3f + 0.5f, 0.125f, 500 + ( rand() % 300 ), cg.time, 0, 0, cgs.media.smokePuffShader );
-				CG_SmokePuff( origin, tmpv, 5 + rnd * 10,  rnd * 0.3f + 0.5f, rnd * 0.3f + 0.5f, rnd * 0.3f + 0.5f, 0.125f, 500 + ( rand() % 300 ), cg.time, 0, 0, cgs.media.smokePuffShader );
-			// }
+		// puff out the front (more dust no blood)
+		for ( i = 0; i < 10; i++ ) {
+			rnd = random();
+			VectorScale( smokedir,-35.0 + random() * 25,tmpv );
+			tmpv[0] += crandom() * 25.0f;
+			tmpv[1] += crandom() * 25.0f;
+			tmpv[2] += crandom() * 25.0f;
+			CG_GetWindVector( tmpv2 );
+			VectorScale( tmpv2,35,tmpv2 ); // was 75, before that 55
+			tmpv2[2] = 0;
+			VectorAdd( tmpv,tmpv2,tmpv );
+			// le = CG_SmokePuff( origin, tmpv, 5 + rnd * 10,  rnd * 0.3f + 0.5f, rnd * 0.3f + 0.5f, rnd * 0.3f + 0.5f, 0.125f, 500 + ( rand() % 300 ), cg.time, 0, 0, cgs.media.smokePuffShader );
+			CG_SmokePuff( origin, tmpv, 5 + rnd * 10,  rnd * 0.3f + 0.5f, rnd * 0.3f + 0.5f, rnd * 0.3f + 0.5f, 0.125f, 500 + ( rand() % 300 ), cg.time, 0, 0, cgs.media.smokePuffShader );
 		}
 // jpw
 
@@ -5956,45 +5795,6 @@ void CG_Bullet( vec3_t end, int sourceEntityNum, vec3_t normal, qboolean flesh, 
 			//CG_SoundPlayIndexedScript( cgs.media.bulletHitFleshScript, cg_entities[fleshEntityNum].currentState.origin, ENTITYNUM_WORLD ); // JPW NERVE changed from ,origin, to this
 			trap_S_StartSound( cg_entities[fleshEntityNum].currentState.origin, ENTITYNUM_WORLD, CHAN_BODY, cgs.media.sfx_bullet_stonehit[rand() % MAX_IMPACT_SOUNDS] );
 		}
-
-		// if we haven't dropped a blood spat in a while, check if this is a good scenario
-		/* Nico, removed blood
-		if ( cg_blood.integer && ( lastBloodSpat > cg.time || lastBloodSpat < cg.time - 500 ) ) {
-			vec4_t color;
-
-
-			if ( CG_CalcMuzzlePoint( sourceEntityNum, start ) ) {
-				VectorSubtract( end, start, dir );
-				VectorNormalize( dir );
-				VectorMA( end, 128, dir, trend );
-				trap_CM_BoxTrace( &trace, end, trend, NULL, NULL, 0, MASK_SHOT & ~CONTENTS_BODY );
-
-				if ( trace.fraction < 1 ) {
-					VectorSet( projection, 0, 0, -1 );
-					projection[ 3 ] = 15.0f + random() * 20.0f;
-					Vector4Set( color, 1.0f, 1.0f, 1.0f, 1.0f );
-					trap_R_ProjectDecal( cgs.media.bloodDotShaders[ rand() % 5 ], 1, (vec3_t*) origin, projection, color,
-										 cg_bloodTime.integer * 1000, ( cg_bloodTime.integer * 1000 ) >> 4 );
-					lastBloodSpat = cg.time;
-				} else if ( lastBloodSpat < cg.time - 1000 )    {
-					// drop one on the ground?
-					VectorCopy( end, trend );
-					trend[ 2 ] -= 64;
-					trap_CM_BoxTrace( &trace, end, trend, NULL, NULL, 0, MASK_SHOT & ~CONTENTS_BODY );
-
-					if ( trace.fraction < 1 ) {
-						//%	CG_ImpactMark( cgs.media.bloodDotShaders[rand()%5], trace.endpos, trace.plane.normal, random()*360,
-						VectorSet( projection, 0, 0, -1 );
-						projection[ 3 ] = 15.0f + random() * 20.0f;
-						Vector4Set( color, 1.0f, 1.0f, 1.0f, 1.0f );
-						trap_R_ProjectDecal( cgs.media.bloodDotShaders[ rand() % 5 ], 1, (vec3_t*) origin, projection, color,
-											 cg_bloodTime.integer * 1000, ( cg_bloodTime.integer * 1000 ) >> 4 );
-						lastBloodSpat = cg.time;
-					}
-				}
-			}
-		}*/
-
 	} else {    // (not flesh)
 		// Gordon: all bullet weapons have the same fx, and this stops pvs issues causing grenade explosions
 		int fromweap = WP_MP40; // cg_entities[sourceEntityNum].currentState.weapon;
