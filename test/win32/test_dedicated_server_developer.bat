@@ -13,4 +13,4 @@ xcopy /Y _build\*.dll C:\Users\Nicolas\Desktop\etrun\
 echo Press ENTER to start game...
 pause
 cd ..\
-C:\Users\Nicolas\Desktop\ETDED.exe +set fs_basepath "C:\Users\Nicolas\Desktop\" +set fs_game etrun +map killua-pornstar
+C:\Users\Nicolas\Desktop\ETDED.exe +set fs_basepath "C:\Users\Nicolas\Desktop\" +set fs_game etrun +map killua-pornstar +set developer 1
