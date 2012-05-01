@@ -476,23 +476,6 @@ qboolean SetTeam( gentity_t *ent, char *s, qboolean force, weapon_t w1, weapon_t
 		}
 	}
 
-	ent->client->pers.autofireteamCreateEndTime = 0;
-	ent->client->pers.autofireteamJoinEndTime = 0;
-
-	if ( client->sess.sessionTeam == TEAM_AXIS || client->sess.sessionTeam == TEAM_ALLIES ) {
-		if ( g_autoFireteams.integer ) {
-			fireteamData_t* ft = G_FindFreePublicFireteam( client->sess.sessionTeam );
-
-			if ( ft ) {
-				trap_SendServerCommand( ent - g_entities, "aftj -1" );
-				ent->client->pers.autofireteamJoinEndTime = level.time + 20500;
-			} else {
-				trap_SendServerCommand( ent - g_entities, "aftc -1" );
-				ent->client->pers.autofireteamCreateEndTime = level.time + 20500;
-			}
-		}
-	}
-
 	return qtrue;
 }
 
@@ -1451,64 +1434,6 @@ void Cmd_Vote_f( gentity_t *ent ) {
 		ent->client->pers.propositionEndTime = 0;
 		ent->client->pers.propositionClient = -1;
 		ent->client->pers.propositionClient2 = -1;
-
-		return;
-	}
-
-	if ( ent->client->pers.autofireteamEndTime > level.time ) {
-		fireteamData_t* ft;
-
-		trap_Argv( 1, msg, sizeof( msg ) );
-
-		if ( msg[0] == 'y' || msg[1] == 'Y' || msg[1] == '1' ) {
-			trap_SendServerCommand( ent - g_entities, "aft -2" );
-
-			if ( G_IsFireteamLeader( ent - g_entities, &ft ) ) {
-				ft->priv = qtrue;
-			}
-		} else {
-			trap_SendServerCommand( ent - g_entities, "aft -2" );
-		}
-
-		ent->client->pers.autofireteamEndTime = 0;
-
-		return;
-	}
-
-	if ( ent->client->pers.autofireteamCreateEndTime > level.time ) {
-		trap_Argv( 1, msg, sizeof( msg ) );
-
-		if ( msg[0] == 'y' || msg[1] == 'Y' || msg[1] == '1' ) {
-			trap_SendServerCommand( ent - g_entities, "aftc -2" );
-
-			G_RegisterFireteam( ent - g_entities );
-		} else {
-			trap_SendServerCommand( ent - g_entities, "aftc -2" );
-		}
-
-		ent->client->pers.autofireteamCreateEndTime = 0;
-
-		return;
-	}
-
-	if ( ent->client->pers.autofireteamJoinEndTime > level.time ) {
-		trap_Argv( 1, msg, sizeof( msg ) );
-
-		if ( msg[0] == 'y' || msg[1] == 'Y' || msg[1] == '1' ) {
-			fireteamData_t* ft;
-
-			trap_SendServerCommand( ent - g_entities, "aftj -2" );
-
-
-			ft = G_FindFreePublicFireteam( ent->client->sess.sessionTeam );
-			if ( ft ) {
-				G_AddClientToFireteam( ent - g_entities, ft->joinOrder[0] );
-			}
-		} else {
-			trap_SendServerCommand( ent - g_entities, "aftj -2" );
-		}
-
-		ent->client->pers.autofireteamCreateEndTime = 0;
 
 		return;
 	}

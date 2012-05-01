@@ -758,10 +758,6 @@ void ClientThink_real( gentity_t *ent ) {
 		return;
 	}
 
-	if ( !( ent->r.svFlags & SVF_BOT ) && level.time - client->pers.lastCCPulseTime > 2000 ) {
-		client->pers.lastCCPulseTime = level.time;
-	}
-
 	if ( !( ucmd->flags & 0x01 ) || ucmd->forwardmove || ucmd->rightmove || ucmd->upmove || ucmd->wbuttons || ucmd->doubleTap ) {
 		ent->r.svFlags &= ~( SVF_SELF_PORTAL_EXCLUSIVE | SVF_SELF_PORTAL );
 	}
@@ -858,11 +854,6 @@ void ClientThink_real( gentity_t *ent ) {
 	client->pmext.airleft = ent->client->airOutTime - level.time;
 
 	pm.covertopsChargeTime = level.covertopsChargeTime[client->sess.sessionTeam - 1];
-
-	if ( client->ps.pm_type != PM_DEAD && level.timeCurrent - client->pers.lastBattleSenseBonusTime > 45000 ) {
-		client->pers.lastBattleSenseBonusTime = level.timeCurrent;
-		client->combatState = COMBATSTATE_COLD; // cool down again
-	}
 
 	pm.leadership = qfalse;
 

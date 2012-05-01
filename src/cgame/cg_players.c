@@ -205,15 +205,6 @@ void CG_NewClientInfo( int clientNum ) {
 
 	// Gordon: detect rank/skill changes client side
 	if ( clientNum == cg.clientNum ) {
-		if ( newInfo.team != cgs.clientinfo[ cg.clientNum ].team ) {
-			if ( cgs.autoFireteamCreateEndTime != cg.time + 20000 ) {
-				cgs.autoFireteamCreateEndTime = 0;
-			}
-			if ( cgs.autoFireteamJoinEndTime != cg.time + 20000 ) {
-				cgs.autoFireteamJoinEndTime = 0;
-			}
-		}
-
 		trap_Cvar_Set( "authLevel", va( "%i", newInfo.refStatus ) );
 
 		if ( newInfo.refStatus != ci->refStatus ) {

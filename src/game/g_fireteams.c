@@ -218,7 +218,7 @@ int G_FindFreeFireteamIdent() {
 }
 
 // Should be the only function that ever creates a fireteam
-void G_RegisterFireteam( int entityNum ) {
+void G_RegisterFireteam(int entityNum, qboolean priv) {
 	fireteamData_t* ft;
 	gentity_t* leader;
 	int count, ident;
@@ -257,14 +257,7 @@ void G_RegisterFireteam( int entityNum ) {
 	ft->joinOrder[0] = leader - g_entities;
 	ft->ident = ident;
 
-	if ( g_autoFireteams.integer ) {
-		ft->priv = qfalse;
-
-		trap_SendServerCommand( entityNum, "aft -1" );
-		leader->client->pers.autofireteamEndTime = level.time + 20500;
-	} else {
-		ft->priv = qfalse;
-	}
+	ft->priv = priv;
 
 	G_UpdateFireteamConfigString( ft );
 }
@@ -487,6 +480,11 @@ void G_ApplyToFireTeam( int entityNum, int fireteamNum ) {
 		G_ClientPrintAndReturn( entityNum, "The Fireteam you requested does not exist" );
 	}
 
+	// Nico, cannot apply for private FT
+	if ( ft->priv ) {
+		G_ClientPrintAndReturn( entityNum, "This fireteam is private" );
+	}
+
 	if ( ft->joinOrder[0] < 0 || ft->joinOrder[0] >= MAX_CLIENTS ) {
 		G_Error( "G_ApplyToFireTeam: Fireteam leader is invalid\n" );
 	}
@@ -565,34 +563,6 @@ int G_FireteamNumberForString( const char* name ) {
 	return fireteam;
 }
 
-fireteamData_t* G_FindFreePublicFireteam( team_t team ) {
-	int i, j;
-
-	for ( i = 0; i < MAX_FIRETEAMS; i++ ) {
-		if ( !level.fireTeams[ i ].inuse ) {
-			continue;
-		}
-
-		if ( level.fireTeams[ i ].priv ) {
-			continue;
-		}
-
-		for ( j = 0; j < MAX_CLIENTS; j++ ) {
-			if ( j >= 6 || level.fireTeams[i].joinOrder[j] == -1 ) {
-				break;
-			}
-		}
-		if ( j >= 6 ) {
-			continue;
-		}
-
-		return &level.fireTeams[ i ];
-	}
-
-	return NULL;
-}
-
-
 // Command handler
 void Cmd_FireTeam_MP_f( gentity_t* ent ) {
 	char command[32];
@@ -605,7 +575,20 @@ void Cmd_FireTeam_MP_f( gentity_t* ent ) {
 	trap_Argv( 1, command, 32 );
 
 	if ( !Q_stricmp( command, "create" ) ) {
-		G_RegisterFireteam( ent - g_entities );
+		// Nico, public or private fireteam
+		char visibility[8];
+
+		if ( trap_Argc() < 2 ) {
+			G_ClientPrintAndReturn( ent - g_entities, "usage: fireteam create <public|private>" );
+		}
+
+		trap_Argv(2, visibility, 8);
+
+		if (!Q_stricmp( visibility, "public")) {
+			G_RegisterFireteam( ent - g_entities, qfalse );
+		} else {
+			G_RegisterFireteam( ent - g_entities, qtrue );
+		}
 	} else if ( !Q_stricmp( command, "disband" ) ) {
 		G_DestroyFireteam( ent - g_entities );
 	} else if ( !Q_stricmp( command, "leave" ) ) {

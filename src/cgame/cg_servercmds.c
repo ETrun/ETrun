@@ -840,8 +840,6 @@ static void CG_MapRestart( void ) {
 	cgs.invitationEndTime = 0;
 	cgs.applicationEndTime = 0;
 	cgs.propositionEndTime = 0;
-	cgs.autoFireteamEndTime = 0;
-	cgs.autoFireteamCreateEndTime = 0;
 
 	// reset fog to world fog (if present)
 	trap_R_SetFog( FOG_CMD_SWITCHFOG, FOG_MAP,20,0,0,0,0 );
@@ -1639,36 +1637,6 @@ static void CG_ServerCommand( void ) {
 			cgs.propositionEndTime = cg.time + 10000;
 		}
 
-		return;
-	}
-
-	if ( !Q_stricmp( cmd, "aft" ) ) {
-		cgs.autoFireteamEndTime = cg.time + 20000;
-		cgs.autoFireteamNum = atoi( CG_Argv( 1 ) );
-
-		if ( cgs.autoFireteamNum < -1 ) {
-			cgs.autoFireteamEndTime = cg.time + 10000;
-		}
-		return;
-	}
-
-	if ( !Q_stricmp( cmd, "aftc" ) ) {
-		cgs.autoFireteamCreateEndTime = cg.time + 20000;
-		cgs.autoFireteamCreateNum = atoi( CG_Argv( 1 ) );
-
-		if ( cgs.autoFireteamCreateNum < -1 ) {
-			cgs.autoFireteamCreateEndTime = cg.time + 10000;
-		}
-		return;
-	}
-
-	if ( !Q_stricmp( cmd, "aftj" ) ) {
-		cgs.autoFireteamJoinEndTime = cg.time + 20000;
-		cgs.autoFireteamJoinNum = atoi( CG_Argv( 1 ) );
-
-		if ( cgs.autoFireteamJoinNum < -1 ) {
-			cgs.autoFireteamJoinEndTime = cg.time + 10000;
-		}
 		return;
 	}
 

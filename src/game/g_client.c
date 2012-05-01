@@ -1338,7 +1338,6 @@ void ClientSpawn( gentity_t *ent ) {
 	G_UpdateSpawnCounts();
 
 	client->pers.lastSpawnTime = level.time;
-	client->pers.lastBattleSenseBonusTime = level.timeCurrent;
 
 	// Arnout: let's just be sure it does the right thing at all times. (well maybe not the right thing, but at least not the bad thing!)
 	//if( client->sess.sessionTeam == TEAM_SPECTATOR || client->sess.sessionTeam == TEAM_FREE ) {

@@ -599,14 +599,6 @@ typedef struct {
 	int propositionClient2;             // Gordon:
 	int propositionEndTime;             // Gordon: tick, tick, tick....
 
-	int autofireteamEndTime;
-	int autofireteamCreateEndTime;
-	int autofireteamJoinEndTime;
-
-	int lastBattleSenseBonusTime;
-
-	int lastCCPulseTime;
-
 	int lastSpawnTime;
 
 	// OSP
@@ -727,8 +719,6 @@ struct gclient_s {
 	int lastConstructibleBlockingWarnEnt;
 
 	int speedScale;
-
-	combatstate_t combatState;
 
 	int topMarker;
 	clientMarker_t clientMarkers[MAX_CLIENT_MARKERS];
@@ -1483,7 +1473,6 @@ extern vmCvar_t vote_percent;
 extern vmCvar_t g_letterbox;
 extern vmCvar_t g_debugSkills;
 extern vmCvar_t g_heavyWeaponRestriction;
-extern vmCvar_t g_autoFireteams;
 extern vmCvar_t g_nextmap;
 
 // Nico, beginning of ETrun server cvars
@@ -1887,8 +1876,7 @@ void G_CalcClientAccuracies( void );
 int G_TeamCount( gentity_t* ent, weapon_t weap );
 
 qboolean G_IsFireteamLeader( int entityNum, fireteamData_t** teamNum );
-fireteamData_t* G_FindFreePublicFireteam( team_t team );
-void G_RegisterFireteam( /*const char* name,*/ int entityNum );
+void G_RegisterFireteam(int entityNum, qboolean priv);
 void G_MakeReady( gentity_t* ent );
 void G_MakeUnready( gentity_t* ent );
 

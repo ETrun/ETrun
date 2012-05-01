@@ -1689,44 +1689,7 @@ static void CG_DrawVote( void ) {
 		CG_DrawStringExt( 8, 214, s, color, qtrue, qtrue, TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 80 );
 		return;
 	}
-
-	if ( cgs.autoFireteamEndTime > cg.time && cgs.autoFireteamNum == -1 ) {
-		Q_strncpyz( str1, BindingFromName( "vote yes" ), 32 );
-		Q_strncpyz( str2, BindingFromName( "vote no" ), 32 );
-
-		s = "Make Fireteam private?";
-		CG_DrawStringExt( 8, 200, s, color, qtrue, qtrue, TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 80 );
-
-		s = va( CG_TranslateString( "Press '%s' for YES, or '%s' for No" ), str1, str2 );
-		CG_DrawStringExt( 8, 214, s, color, qtrue, qtrue, TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 80 );
-		return;
-	}
-
-	if ( cgs.autoFireteamCreateEndTime > cg.time && cgs.autoFireteamCreateNum == -1 ) {
-		Q_strncpyz( str1, BindingFromName( "vote yes" ), 32 );
-		Q_strncpyz( str2, BindingFromName( "vote no" ), 32 );
-
-		s = "Create a Fireteam?";
-		CG_DrawStringExt( 8, 200, s, color, qtrue, qtrue, TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 80 );
-
-		s = va( CG_TranslateString( "Press '%s' for YES, or '%s' for No" ), str1, str2 );
-		CG_DrawStringExt( 8, 214, s, color, qtrue, qtrue, TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 80 );
-		return;
-	}
-
-	if ( cgs.autoFireteamJoinEndTime > cg.time && cgs.autoFireteamJoinNum == -1 ) {
-		Q_strncpyz( str1, BindingFromName( "vote yes" ), 32 );
-		Q_strncpyz( str2, BindingFromName( "vote no" ), 32 );
-
-		s = "Join a Fireteam?";
-		CG_DrawStringExt( 8, 200, s, color, qtrue, qtrue, TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 80 );
-
-		s = va( CG_TranslateString( "Press '%s' for YES, or '%s' for No" ), str1, str2 );
-		CG_DrawStringExt( 8, 214, s, color, qtrue, qtrue, TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 80 );
-		return;
-	}
-
-
+	
 	if ( cgs.voteTime ) {
 		Q_strncpyz( str1, BindingFromName( "vote yes" ), 32 );
 		Q_strncpyz( str2, BindingFromName( "vote no" ), 32 );
@@ -1863,12 +1826,6 @@ static void CG_DrawVote( void ) {
 		if ( cgs.invitationClient < 0 ) {
 			return;
 		}
-	}
-
-	if ( ( cgs.autoFireteamEndTime > cg.time && cgs.autoFireteamNum == -2 ) || ( cgs.autoFireteamCreateEndTime > cg.time && cgs.autoFireteamCreateNum == -2 ) || ( cgs.autoFireteamJoinEndTime > cg.time && cgs.autoFireteamJoinNum == -2 ) ) {
-		s = "Response Sent";
-		CG_DrawStringExt( 8, 200, CG_TranslateString( s ), color, qtrue, qtrue, TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 80 );
-		return;
 	}
 }
 

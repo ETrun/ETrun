@@ -337,6 +337,7 @@ void CG_Fireteams_MenuTitleText_Draw( panel_button_t* button ) {
 const char* ftOffMenuList[] = {
 	"Apply",
 	"Create",
+	"Create private",
 	NULL,
 };
 
@@ -951,7 +952,7 @@ qboolean CG_FireteamCheckExecKey( int key, qboolean doaction ) {
 		}
 
 		if ( !CG_IsOnFireteam( cg.clientNum ) ) {
-			if ( i >= 2 ) {
+			if ( i >= 3 ) {// Nico, 2 => 3
 				break;
 			}
 
@@ -961,7 +962,10 @@ qboolean CG_FireteamCheckExecKey( int key, qboolean doaction ) {
 
 			if ( doaction ) {
 				if ( i == 1 ) {
-					trap_SendConsoleCommand( "fireteam create\n" );
+					trap_SendConsoleCommand( "fireteam create public\n" );
+					CG_EventHandling( CGAME_EVENT_NONE, qfalse );
+				} else if ( i == 2 ) {
+					trap_SendConsoleCommand( "fireteam create private\n" );
 					CG_EventHandling( CGAME_EVENT_NONE, qfalse );
 				} else {
 					cgs.ftMenuMode = 2;

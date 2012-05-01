@@ -1607,15 +1607,6 @@ typedef struct {
 	int propositionClient2;
 	int propositionEndTime;
 
-	int autoFireteamEndTime;
-	int autoFireteamNum;
-
-	int autoFireteamCreateEndTime;
-	int autoFireteamCreateNum;
-
-	int autoFireteamJoinEndTime;
-	int autoFireteamJoinNum;
-
 	bg_character_t      *offscreenCmdr;
 
 	// OSP

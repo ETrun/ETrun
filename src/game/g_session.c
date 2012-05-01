@@ -307,7 +307,6 @@ void G_WriteSessionData( qboolean restart ) {
 				Com_sprintf( p, 8, " %i", level.fireTeams[i].joinOrder[j] );
 				Q_strcat( buffer2, MAX_STRING_CHARS, p );
 			}
-			//		Com_sprintf(buffer, MAX_STRING_CHARS, "\\n\\%s\\i\\%s", level.fireTeams[i].name, buffer2);
 			Com_sprintf( buffer, MAX_STRING_CHARS, "\\id\\%i\\i\\%s\\p\\%i", level.fireTeams[i].ident - 1, buffer2, level.fireTeams[i].priv ? 1 : 0 );
 		}
 

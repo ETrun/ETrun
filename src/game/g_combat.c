@@ -221,13 +221,6 @@ void player_die( gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int
 			trap_PbStat( self - g_entities, "suicide",
 						 va( "%d %d %d", self->client->sess.sessionTeam, self->client->sess.playerType, weap ) ) ;
 		}
-	} else if ( OnSameTeam( self, attacker ) ) {
-	} else {
-		if ( g_gamestate.integer == GS_PLAYING ) {
-			if ( attacker->client ) {
-				attacker->client->combatState |= ( 1 << COMBATSTATE_KILLEDPLAYER );
-			}
-		}
 	}
 
 	// RF, record this death in AAS system so that bots avoid areas which have high death rates
@@ -820,16 +813,6 @@ void G_Damage( gentity_t *targ, gentity_t *inflictor, gentity_t *attacker,  vec3
 
 	// xkan, 12/23/2002 - was the bot alive before applying any damage?
 	wasAlive = ( targ->health > 0 );
-
-	// Arnout: combatstate
-	if ( targ->client && attacker && attacker->client && attacker != targ ) {
-		if ( g_gamestate.integer == GS_PLAYING ) {
-			if ( !OnSameTeam( attacker, targ ) ) {
-				targ->client->combatState |= ( 1 << COMBATSTATE_DAMAGERECEIVED );
-				attacker->client->combatState |= ( 1 << COMBATSTATE_DAMAGEDEALT );
-			}
-		}
-	}
 
 // JPW NERVE
 	if ( ( targ->waterlevel >= 3 ) && ( mod == MOD_FLAMETHROWER ) ) {
