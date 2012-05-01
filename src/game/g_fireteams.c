@@ -126,7 +126,7 @@ void G_UpdateFireteamConfigString( fireteamData_t* ft ) {
 				COM_BitSet( clnts, ft->joinOrder[i] );
 			}
 		}
-		Com_sprintf( buffer, 128, "\\id\\%i\\l\\%i\\c\\%.8x%.8x", ft->ident - 1, ft->joinOrder[0], clnts[1], clnts[0] );
+		Com_sprintf( buffer, 128, "\\id\\%i\\l\\%i\\c\\%.8x%.8x\\p\\%i", ft->ident - 1, ft->joinOrder[0], clnts[1], clnts[0], ft->priv ? qtrue : qfalse );
 	}
 
 	trap_SetConfigstring( CS_FIRETEAMS + ( ft - level.fireTeams ), buffer );
@@ -191,7 +191,7 @@ qboolean G_IsFireteamLeader( int entityNum, fireteamData_t** teamNum ) {
 }
 
 int G_FindFreeFireteamIdent() {
-	qboolean freeIdent[MAX_FIRETEAMS / 2];
+	qboolean freeIdent[MAX_FIRETEAMS];
 	int i;
 
 	memset( freeIdent, qtrue, sizeof( freeIdent ) );
@@ -201,13 +201,12 @@ int G_FindFreeFireteamIdent() {
 			continue;
 		}
 
-		if ( g_entities[(int)level.fireTeams[i].joinOrder[0]].client->sess.sessionTeam == TEAM_ALLIES ||
-			g_entities[(int)level.fireTeams[i].joinOrder[0]].client->sess.sessionTeam == TEAM_AXIS ) {
+		if (g_entities[(int)level.fireTeams[i].joinOrder[0]].client->sess.sessionTeam >= TEAM_AXIS) {
 			freeIdent[level.fireTeams[i].ident - 1] = qfalse;
 		}
 	}
 
-	for ( i = 0; i < ( MAX_FIRETEAMS / 2 ); i++ ) {
+	for ( i = 0; i < MAX_FIRETEAMS; i++ ) {
 		if ( freeIdent[i] ) {
 			return i;
 		}
@@ -242,7 +241,7 @@ void G_RegisterFireteam(int entityNum, qboolean priv) {
 
 	// Nico, allow cross-team fireteams
 	count = G_CountFireteams();
-	if ( count >= MAX_FIRETEAMS / 2 ) {
+	if ( count >= MAX_FIRETEAMS ) {
 		G_ClientPrintAndReturn( entityNum, "Your team already has the maximum number of fireteams allowed" );
 	}
 

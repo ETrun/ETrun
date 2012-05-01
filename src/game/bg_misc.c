@@ -4659,7 +4659,7 @@ qboolean PC_String_ParseNoAlloc( int handle, char *out, size_t size ) {
 	return qtrue;
 }
 
-const char* bg_fireteamNames[MAX_FIRETEAMS / 2] = {
+const char* bg_fireteamNames[MAX_FIRETEAMS] = {
 	"Alpha",
 	"Bravo",
 	"Charlie",

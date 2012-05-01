@@ -2012,9 +2012,9 @@ int BG_MaxAmmoForWeapon( weapon_t weaponNum, int *skill );
 void BG_InitLocations( vec2_t world_mins, vec2_t world_maxs );
 char *BG_GetLocationString( vec_t* pos );
 
-#define MAX_FIRETEAMS       12
+#define MAX_FIRETEAMS       6
 
-extern const char* bg_fireteamNames[MAX_FIRETEAMS / 2];
+extern const char* bg_fireteamNames[MAX_FIRETEAMS];
 
 typedef struct {
 	int ident;

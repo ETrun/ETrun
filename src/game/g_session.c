@@ -211,21 +211,8 @@ void G_InitWorldSession( void ) {
 	char s[MAX_STRING_CHARS];
 	int i, j;
 
-	trap_Cvar_VariableStringBuffer( "session", s, sizeof( s ) );
-
-	{
-		char *tmp = s;
-			if ( ( tmp = strchr( va( "%s", tmp ), ' ' ) ) != NULL ) {
-				tmp++;
-				trap_GetServerinfo( s, sizeof( s ) );
-				if ( Q_stricmp( tmp, Info_ValueForKey( s, "mapname" ) ) ) {
-					G_Printf( "Map changed, clearing player stats.\n" );
-				}
-			}
-
-		if ( g_swapteams.integer ) {
-			G_swapTeamLocks();
-		}
+	if ( g_swapteams.integer ) {
+		G_swapTeamLocks();
 	}
 
 	for ( i = 0; i < MAX_FIRETEAMS; i++ ) {

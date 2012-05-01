@@ -409,7 +409,9 @@ qboolean SetTeam( gentity_t *ent, char *s, qboolean force, weapon_t w1, weapon_t
 	}
 
 	G_LeaveTank( ent, qfalse );
-	G_RemoveClientFromFireteams( clientNum, qtrue, qfalse );
+
+	// Nico, keep fireteams
+	// G_RemoveClientFromFireteams( clientNum, qtrue, qfalse );
 
 	G_FadeItems( ent, MOD_SATCHEL );
 
