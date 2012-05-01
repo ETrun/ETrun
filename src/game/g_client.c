@@ -911,6 +911,7 @@ void ClientUserinfoChanged( int clientNum ) {
 	if ( !Info_Validate( userinfo ) ) {
 		// Nico, changing malformed user info is a nonsense, simply drop the client
 		// Q_strncpyz( userinfo, "\\name\\badinfo", sizeof( userinfo ) );
+		G_LogPrintf("Dropping client %d: forbidden character in userinfo\n", clientNum); 
 		trap_DropClient(clientNum, "^1Forbidden character in userinfo" , 0);
 	}
 
@@ -955,6 +956,76 @@ void ClientUserinfoChanged( int clientNum ) {
 	name = Info_ValueForKey( userinfo, "name" );
 	if (!strcmp(name, "")) {
 		G_LogPrintf("Dropping client %d: malformed userinfo (empty name)\n", clientNum); 
+		trap_DropClient(clientNum, "^1Malformed userinfo" , 0);
+	}
+
+	// Nico, one ip in userinfo (from ETpub)
+	count = 0;
+	if (len > 4) {
+		for (i = 0; userinfo[i + 3]; ++i) {
+			if (userinfo[i] == '\\' && userinfo[i + 1] == 'i' &&
+				userinfo[i + 2] == 'p' && userinfo[i + 3] == '\\') {
+				count++;
+			}
+		}
+	}
+	if (count > 1) {
+		G_LogPrintf("Dropping client %d: malformed userinfo (too many IP fields)\n", clientNum); 
+		trap_DropClient(clientNum, "^1Malformed userinfo" , 0);
+	} 
+
+	// Nico, one cl_guid in userinfo (from ETpub)
+	count = 0;
+	if (len > 9) {
+		for (i = 0; userinfo[i + 8]; ++i) {
+			if (userinfo[i] == '\\' && userinfo[i + 1] == 'c' &&
+				userinfo[i + 2] == 'l' && userinfo[i + 3] == '_' &&
+				userinfo[i + 4] == 'g' && userinfo[i + 5] == 'u' &&
+				userinfo[i + 6] == 'i' && userinfo[i + 7] == 'd' &&
+				userinfo[i + 8] == '\\') {
+				count++;
+			}
+		}
+	}
+	if (count > 1) {
+		G_LogPrintf("Dropping client %d: malformed userinfo (too many cl_guid fields)\n", clientNum); 
+		trap_DropClient(clientNum, "^1Malformed userinfo" , 0);
+	}
+
+	// Nico, one name in userinfo (from ETpub)
+	count = 0;
+	if (len > 6) {
+		for (i = 0; userinfo[i + 5]; ++i) {
+			if (userinfo[i] == '\\' && userinfo[i + 1] == 'n' &&
+				userinfo[i + 2] == 'a' && userinfo[i + 3] == 'm' &&
+				userinfo[i + 4] == 'e' && userinfo[i + 5] == '\\') {
+				count++;
+			}
+		}
+	}
+	if (count > 1) {
+		G_LogPrintf("Dropping client %d: malformed userinfo (too many name fields)\n", clientNum); 
+		trap_DropClient(clientNum, "^1Malformed userinfo" , 0);
+	}
+
+	// Nico, one cl_punkbuster in userinfo (from ETpub)
+	count = 0;
+	if (len > 15) {
+		for (i = 0; userinfo[i + 14]; ++i) {
+			if (userinfo[i] == '\\' && userinfo[i + 1] == 'c' &&
+				userinfo[i + 2] == 'l' && userinfo[i + 3] == '_' &&
+				userinfo[i + 4] == 'p' && userinfo[i + 5] == 'u' &&
+				userinfo[i + 6] == 'n' && userinfo[i + 7] == 'k' &&
+				userinfo[i + 8] == 'b' && userinfo[i + 9] == 'u' &&
+				userinfo[i + 10] == 's' && userinfo[i + 11] == 't' &&
+				userinfo[i + 12] == 'e' && userinfo[i + 13] == 'r' &&
+				userinfo[i + 14] == '\\') {
+				count++;
+			}
+		}
+	}
+	if (count > 1) {
+		G_LogPrintf("Dropping client %d: malformed userinfo (too many cl_punkbuster fields)\n", clientNum); 
 		trap_DropClient(clientNum, "^1Malformed userinfo" , 0);
 	}
 
