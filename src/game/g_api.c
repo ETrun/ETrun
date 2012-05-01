@@ -1,11 +1,21 @@
-﻿#include "g_api.h"
+#include "g_api.h"
 #include "g_local.h"
 
-HMODULE api_module;
+#if defined _WIN32
+	HMODULE api_module;
+# else
+	void *api_module;
+# endif
+
 
 static qboolean loadModule() {
-	api_module = LoadLibrary(MODULE_DIR"/"MODULE_NAME);
 
+#ifdef OS_WINDOWS
+	api_module = LoadLibrary(MODULE_DIR"/"MODULE_NAME);
+#else
+	api_module = dlopen(MODULE_DIR"/"MODULE_NAME, RTLD_LAZY);
+#endif
+	
 	if (api_module == NULL) {
 		return qfalse;
 	}
@@ -17,5 +27,3 @@ void G_loadApi() {
 		G_Error("Error loading %s\n", MODULE_DIR"/"MODULE_NAME);
 	}
 }
-
-

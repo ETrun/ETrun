@@ -1,4 +1,5 @@
-﻿#ifndef G_API_H_
+#ifndef G_API_H_
+
 # define G_API_H_
 
 # define MODULE_NAME "APImodule.dll"
@@ -6,10 +7,10 @@
 
 void G_loadApi();
 
-# ifdef __unix__
-
-# elif defined _WIN32
+#ifdef OS_WINDOWS
 	# include <windows.h>
+# else
+	# include <dlfcn.h>
 # endif
 
 #endif

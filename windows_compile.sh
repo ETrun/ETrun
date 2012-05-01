@@ -6,7 +6,7 @@ BUILD_DIR=_build
 make distclean
 
 # Compile for windows
-./configure --build i686-pc-linux-gnu --host i586-mingw32msvc CFLAGS="-no-undefined"
+./configure --build i686-pc-linux-gnu --host i586-mingw32msvc CFLAGS="-no-undefined -DOS_WINDOWS"
 make
 
 if [ $? != 0 ]; then
