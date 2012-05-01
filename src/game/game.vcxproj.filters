@@ -159,11 +159,15 @@
     <ClCompile Include="bg_weapons.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="g_api.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="game.def">
       <Filter>Source Files</Filter>
     </None>
+    <None Include="Themes\Generic.xaml" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="bg_classes.h">
@@ -200,6 +204,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="g_team.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="g_api.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

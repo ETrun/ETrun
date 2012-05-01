@@ -27,6 +27,7 @@ If you have questions concerning this license or the applicable additional terms
 */
 
 #include "g_local.h"
+#include "g_api.h"
 
 level_locals_t level;
 
@@ -1442,6 +1443,11 @@ void G_InitGame( int levelTime, int randomSeed, int restart ) {
 		G_Printf ("%s: No timerun found in map\n", GAME_VERSION);
 	} else {
 		trap_Cvar_Set("isTimerun", "1");
+	}
+
+	// Nico, load API
+	if (1) {
+		G_loadApi();
 	}
 }
 
