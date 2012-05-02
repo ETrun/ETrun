@@ -2,7 +2,12 @@
 
 # define G_API_H_
 
-# define MODULE_NAME "APImodule.dll"
+#ifdef OS_WINDOWS
+	#	define MODULE_NAME "APImodule.dll"
+# else
+	#	define MODULE_NAME "APImodule.so"
+# endif
+
 # define MODULE_DIR "etrun"
 
 void G_loadApi();

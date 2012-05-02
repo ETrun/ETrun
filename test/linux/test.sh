@@ -17,5 +17,6 @@ cd ..
 cp -f etrun.pk3 $path_to_mod
 rm -f etrun.pk3
 cp -f _build/qagame.mp.i386.so $path_to_mod
+cp -f _build/APImodule.so $path_to_mod
 read -p "Press ENTER to start game..."
 /usr/local/games/enemy-territory/etded.x86 +set fs_basepath "/usr/local/games/enemy-territory" +set fs_game etrun +devmap goldrush

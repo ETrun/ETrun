@@ -19,6 +19,6 @@ AC_CHECK_TOOL([STRIP],[strip])
 AC_CONFIG_HEADERS([config.h])
 
 # List of Makefiles we want to generate
-AC_CONFIG_FILES([Makefile src/cgame/Makefile src/game/Makefile src/ui/Makefile])
+AC_CONFIG_FILES([Makefile src/cgame/Makefile src/game/Makefile src/ui/Makefile src/APImodule/Makefile])
 
 AC_OUTPUT
