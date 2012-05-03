@@ -4,11 +4,11 @@ _build/*
 
 # Compilation related
 _build/*/*.*
-src/*/.deps
-src/*/.libs
-src/*/*.lo
-src/*/*.la
-src/*/*.o
+.deps
+.libs
+*.lo
+*.la
+*.o
 
 # Autotools related
 autom4te.cache/
@@ -33,6 +33,18 @@ ipch/
 # Xcode related
 src/*.xcodeproj/project.xcworkspace
 src/*.xcodeproj/xcuserdata
+
+# curl related
+src/libs/curl-7.25.0/curl-config
+src/libs/curl-7.25.0/include/curl/stamp-h3
+src/libs/curl-7.25.0/*/curl_config.h
+*.vers
+*.pc
+*.spec
+*.list
+src/libs/curl-7.25.0/src/curl
+src/libs/curl-7.25.0/src/stamp-h2
+src/libs/curl-7.25.0/tests/configurehelp.pm
 
 # Others
 *~
