@@ -16,6 +16,8 @@ fi
 strip -x src/cgame/.libs/libcgame.dylib
 strip -x src/game/.libs/libgame.dylib
 strip -x src/ui/.libs/libui.dylib
+strip -x src/APImodule/.libs/libapi.dylib
 mv src/cgame/.libs/libcgame.dylib $BUILD_DIR/cgame_mac
 mv src/game/.libs/libgame.dylib $BUILD_DIR/qagame_mac
 mv src/ui/.libs/libui.dylib $BUILD_DIR/ui_mac
+mv src/APImodule/.libs/libapi.dylib $BUILD_DIR/api_mac
