@@ -9,6 +9,7 @@ _build/*/*.*
 *.lo
 *.la
 *.o
+*.obj
 
 # Autotools related
 autom4te.cache/
