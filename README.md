@@ -29,7 +29,6 @@ On Linux, make sure you have the following packages installed:
 * autoconf
 * automake
 * libtool
-* gcc-mingw32 (needed if you want to compile for Windows)
 
 Then, run the bootstrap script:
 
@@ -42,11 +41,7 @@ Compiling for Windows
 
 On Windows: use MSVC compiler.
 
-On Linux, run:
-
-<pre>
-$ ./windows_compile.sh
-</pre>
+On Linux, not supported.
 
 Compiling for Linux
 -------------------
