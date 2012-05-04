@@ -110,6 +110,7 @@ void G_callAPI(char *result, char *query) {
 	G_Printf("G_callAPI: thread started!\n");
 }
 
+#if defined _WIN32
 static void pthread_load() {
 	pthread_win32_process_attach_np();
 }
@@ -117,6 +118,7 @@ static void pthread_load() {
 static void pthread_unload() {
 	pthread_win32_process_detach_np();
 }
+#endif
 
 
 void G_loadAPI() {
