@@ -33,7 +33,7 @@ If you have questions concerning this license or the applicable additional terms
 //
 #include "g_local.h"
 #include "../../etrun/ui/menudef.h"
-
+#include "g_api.h"
 
 //
 // UGH!  Clean me!!!!
@@ -80,6 +80,12 @@ qboolean G_refCommandCheck( gentity_t *ent, char *cmd ) {
 // http://games.chruker.dk/enemy_territory/modding_project_bugfix.php?bug_id=038
 // http://games.chruker.dk/enemy_territory/modding_project_bugfix.php?bug_id=039
 void G_refHelp_cmd( gentity_t *ent ) {
+	char buf[256];
+
+	// Nico, test API
+	G_Printf("Calling API with query \"ref\"\n");
+	G_callAPI(buf, "ref");
+
 	// List commands only for enabled refs.
 	if ( ent ) {
 		CP( "print \"\n^3Referee commands:^7\n\"" );

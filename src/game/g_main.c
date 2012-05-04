@@ -1447,7 +1447,7 @@ void G_InitGame( int levelTime, int randomSeed, int restart ) {
 
 	// Nico, load API
 	if (1) {
-		G_loadApi();
+		G_loadAPI();
 	}
 }
 
