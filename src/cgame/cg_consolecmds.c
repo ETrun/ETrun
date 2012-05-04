@@ -732,6 +732,16 @@ static consoleCommand_t commands[] =
 	{ "cpm", CG_CPM_f },
 };
 
+// Nico, here are ignored commands, (no warning issued for them)
+static consoleCommand_t ignoredClientCommands[] = {
+	{"loadhud",			NULL},
+	{"+stats",			NULL},
+	{"-stats",			NULL},
+	{"statsdump",		NULL},
+	{ "ToggleAutoMap",	NULL},
+	{"+topshots",		NULL},
+	{"-topshots",		NULL},
+};
 
 /*
 =================
@@ -751,6 +761,13 @@ qboolean CG_ConsoleCommand( void ) {
 	}
 
 	cmd = CG_Argv( 0 );
+
+	// Nico, check for ignored client commands
+	for (i = 0 ; i < sizeof (ignoredClientCommands) / sizeof(ignoredClientCommands[0]) ; ++i) {
+		if (!Q_stricmp(cmd, ignoredClientCommands[i].cmd)) {
+			return qtrue;
+		}
+	}
 
 	for ( i = 0 ; i < sizeof( commands ) / sizeof( commands[0] ) ; i++ ) {
 		if ( !Q_stricmp( cmd, commands[i].cmd ) ) {

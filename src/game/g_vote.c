@@ -396,7 +396,7 @@ int G_UnMute_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2,
 
 // Nico, delayed map change check function
 void G_check_delayed_map_change() {
-	if (level.time <= level.delayedMapChange.timeChange) {
+	if (level.time && level.delayedMapChange.timeChange && level.time <= level.delayedMapChange.timeChange) {
 		// There is a delayed change
 
 		G_DPrintf("Map change in: %d secs\n", level.delayedMapChange.timeChange - level.time);

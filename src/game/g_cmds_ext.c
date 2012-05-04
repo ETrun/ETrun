@@ -48,7 +48,6 @@ typedef struct {
 
 // VC optimizes for dup strings :)
 static const cmd_reference_t aCommandInfo[] = {
-
 	{ "?",				qtrue,  G_commands_cmd, ":^7 Gives a list of OSP-specific commands" },
 	{ "autorecord",     qtrue,  NULL, ":^7 Creates a demo with a consistent naming scheme" },
 	{ "autoscreenshot", qtrue,  NULL, ":^7 Creates a screenshot with a consistent naming scheme" },
@@ -67,6 +66,10 @@ static const cmd_reference_t aCommandInfo[] = {
 	{ 0,                qtrue,  NULL, 0 }
 };
 
+// Nico, here are ignored commands, (no warning issued for them)
+static cmd_reference_t ignoredServerCommands[] = {
+	{"forcetapout",		qtrue, NULL, 0}
+};
 
 // OSP-specific Commands
 qboolean G_commandCheck( gentity_t *ent, char *cmd ) {
@@ -82,6 +85,17 @@ qboolean G_commandCheck( gentity_t *ent, char *cmd ) {
 			return( qtrue );
 		}
 	}
+
+	// Nico, check ignored commands
+	cCommands = sizeof(ignoredServerCommands) / sizeof (ignoredServerCommands[0]);
+	for (i = 0; i < cCommands; ++i) {
+		pCR = &ignoredServerCommands[i];
+		if (!Q_stricmp(cmd, pCR->pszCommandName)) {
+			G_DPrintf("Ignoring client command: %s\n", cmd);
+			return(qtrue);
+		}
+	}
+
 	return (qfalse);
 }
 
