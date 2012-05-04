@@ -110,6 +110,15 @@ void G_callAPI(char *result, char *query) {
 	G_Printf("G_callAPI: thread started!\n");
 }
 
+static void pthread_load() {
+	pthread_win32_process_attach_np();
+}
+
+static void pthread_unload() {
+	pthread_win32_process_detach_np();
+}
+
+
 void G_loadAPI() {
 
 	// Load the module
@@ -124,6 +133,8 @@ void G_loadAPI() {
 		G_Error("Error loading %s from %s\n", API_INTERFACE_NAME, g_APImodulePath.string);
 	}
 
+	pthread_load();
+
 	G_Printf("ETrun: API module loaded!\n");
 }
 
@@ -137,6 +148,8 @@ void G_unloadAPI() {
 #else
 	dlclose(api_module);
 #endif
+
+	pthread_unload();
 
 	G_Printf("ETrun: API module unloaded!\n");
 }
