@@ -394,6 +394,22 @@ int G_UnMute_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2,
 	return( G_OK );
 }
 
+// Nico, delayed map change check function
+void G_check_delayed_map_change() {
+	if (level.time <= level.delayedMapChange.timeChange) {
+		// There is a delayed change
+
+		G_DPrintf("Map change in: %d secs\n", level.delayedMapChange.timeChange - level.time);
+
+		if (level.time == level.delayedMapChange.timeChange) {
+			char s[MAX_STRING_CHARS];
+			Svcmd_ResetMatch_f( qtrue, qfalse );
+			trap_Cvar_VariableStringBuffer( "nextmap", s, sizeof( s ) );
+			trap_SendConsoleCommand( EXEC_APPEND, va( "map %s%s\n", level.delayedMapChange.passedVote, ( ( *s ) ? va( "; set nextmap \"%s\"", s ) : "" ) ) );
+		}
+	}
+}
+
 // *** Map - simpleton: we dont verify map is allowed/exists ***
 int G_Map_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd ) {
 	// Vote request (vote is being initiated)
@@ -414,10 +430,14 @@ int G_Map_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qb
 
 		// Vote action (vote has passed)
 	} else {
+		/* Nico, delay the map change
 		char s[MAX_STRING_CHARS];
 		Svcmd_ResetMatch_f( qtrue, qfalse );
 		trap_Cvar_VariableStringBuffer( "nextmap", s, sizeof( s ) );
-		trap_SendConsoleCommand( EXEC_APPEND, va( "map %s%s\n", level.voteInfo.vote_value, ( ( *s ) ? va( "; set nextmap \"%s\"", s ) : "" ) ) );
+		trap_SendConsoleCommand( EXEC_APPEND, va( "map %s%s\n", level.voteInfo.vote_value, ( ( *s ) ? va( "; set nextmap \"%s\"", s ) : "" ) ) );*/
+		Q_strncpyz(level.delayedMapChange.passedVote, level.voteInfo.vote_value, VOTE_MAXSTRING);
+		level.delayedMapChange.timeChange = level.time + 15000;
+		AP("cpm \"^5Map will be changed in 15secs\n\"");
 	}
 
 	return( G_OK );

@@ -1121,11 +1121,6 @@ void G_Voice( gentity_t *ent, gentity_t *target, int mode, const char *id, qbool
 	}
 	// dhm
 
-	// OSP - Charge for the lame spam!
-	/*if(mode == SAY_ALL && (!Q_stricmp(id, "DynamiteDefused") || !Q_stricmp(id, "DynamitePlanted"))) {
-		return;
-	}*/
-
 	if ( target ) {
 		G_VoiceTo( ent, target, mode, id, voiceonly );
 		return;
@@ -1221,18 +1216,6 @@ static void Cmd_Voice_f( gentity_t *ent, int mode, qboolean arg0, qboolean voice
 }
 
 /*
-Nico, commented this because it's no longer used
-==================
-Cmd_Where_f
-==================
-
-void Cmd_Where_f( gentity_t *ent ) {
-	// Nico, bugfix, where command doesn't work as expected
-	// trap_SendServerCommand( ent - g_entities, va( "print \"%s\n\"", vtos( ent->s.origin ) ) );
-	trap_SendServerCommand( ent - g_entities, va( "print \"%s\n\"", vtos( ent->r.currentOrigin ) ) );
-}*/
-
-/*
 ==================
 Cmd_CallVote_f
 ==================
@@ -1321,6 +1304,10 @@ qboolean Cmd_CallVote_f( gentity_t *ent, unsigned int dwCommand, qboolean fRefCo
 
 	level.voteInfo.voteTime = level.time;
 	level.voteInfo.voteNo = 0;
+
+	// Nico, used to check if voter switches team
+	level.voteInfo.voter_team = ent->client->sess.sessionTeam;
+	level.voteInfo.voter_cn = ent - g_entities;
 
 	// Don't send the vote info if a ref initiates (as it will automatically pass)
 	if ( !fRefCommand ) {
@@ -1496,41 +1483,6 @@ qboolean G_canPickupMelee( gentity_t *ent ) {
 	return qfalse;
 }
 // jpw
-
-
-
-
-/*
-Nico, commented this because it's no longer used
-=================
-Cmd_SetViewpos_f
-=================
-
-void Cmd_SetViewpos_f( gentity_t *ent ) {
-	vec3_t origin, angles;
-	char buffer[MAX_TOKEN_CHARS];
-	int i;
-
-	if ( !g_cheats.integer ) {
-		trap_SendServerCommand( ent - g_entities, va( "print \"Cheats are not enabled on this server.\n\"" ) );
-		return;
-	}
-	if ( trap_Argc() != 5 ) {
-		trap_SendServerCommand( ent - g_entities, va( "print \"usage: setviewpos x y z yaw\n\"" ) );
-		return;
-	}
-
-	VectorClear( angles );
-	for ( i = 0 ; i < 3 ; i++ ) {
-		trap_Argv( i + 1, buffer, sizeof( buffer ) );
-		origin[i] = atof( buffer );
-	}
-
-	trap_Argv( 4, buffer, sizeof( buffer ) );
-	angles[YAW] = atof( buffer );
-
-	TeleportPlayer( ent, origin, angles );
-}*/
 
 /*
 =================

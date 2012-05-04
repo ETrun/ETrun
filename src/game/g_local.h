@@ -799,8 +799,16 @@ typedef struct voteInfo_s {
 	int numVotingTeamClients[2];
 	int ( *vote_fn )( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd );
 	char vote_value[VOTE_MAXSTRING];        // Desired vote item setting.
+	// Nico, used to check if voter switches team
+	char		voter_team;
+	int			voter_cn;
 } voteInfo_t;
 
+// Nico, delayed map change
+typedef struct delayedMapChange_s {
+	char passedVote[VOTE_MAXSTRING];
+	int	timeChange;
+} delayedMapChange_t;
 
 typedef struct {
 	struct gclient_s    *clients;       // [maxclients]
@@ -838,6 +846,9 @@ typedef struct {
 	int follow1, follow2;               // clientNums for auto-follow spectators
 
 	voteInfo_t voteInfo;
+
+	// Nico, delayed map change
+	delayedMapChange_t delayedMapChange;
 
 	int numTeamClients[2];
 	int numVotingTeamClients[2];
@@ -1842,6 +1853,7 @@ void G_playersMessage( gentity_t *ent );
 int G_Kick_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd );
 int G_Mute_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd );
 int G_UnMute_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd );
+void G_check_delayed_map_change();// Nico, delayed map change function
 int G_Map_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd );
 int G_MapRestart_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd );
 int G_MatchReset_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd );

@@ -1920,11 +1920,18 @@ CheckVote
 ==================
 */
 void CheckVote( void ) {
+	gentity_t *other = NULL;
+
 	if ( !level.voteInfo.voteTime || level.voteInfo.vote_fn == NULL || level.time - level.voteInfo.voteTime < 1000 ) {
 		return;
 	}
 
-	if ( level.time - level.voteInfo.voteTime >= VOTE_TIME ) {
+	// Nico, check if the voter switches teams (from TJMod)
+	other = g_entities + level.voteInfo.voter_cn;
+	if (level.voteInfo.voter_team != other->client->sess.sessionTeam) {
+		AP("cpm \"^5Vote canceled^z: voter switched teams\n\"");
+		G_LogPrintf("Vote Failed: %s (voter %s switched teams)\n", level.voteInfo.voteString, other->client->pers.netname);
+	} else if ( level.time - level.voteInfo.voteTime >= VOTE_TIME ) {
 		AP( va( "cpm \"^2Vote FAILED! ^3(%s)\n\"", level.voteInfo.voteString ) );
 		G_LogPrintf( "Vote Failed: %s\n", level.voteInfo.voteString );
 	} else {
@@ -2433,6 +2440,9 @@ void G_RunFrame( int levelTime ) {
 
 	// cancel vote if timed out
 	CheckVote();
+
+	// Nico, check for delayed map change
+	G_check_delayed_map_change();
 
 	// for tracking changes
 	CheckCvars();
