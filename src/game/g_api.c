@@ -133,7 +133,9 @@ void G_loadAPI() {
 		G_Error("Error loading %s from %s\n", API_INTERFACE_NAME, g_APImodulePath.string);
 	}
 
+#if defined _WIN32
 	pthread_load();
+#endif
 
 	G_Printf("ETrun: API module loaded!\n");
 }
@@ -144,12 +146,13 @@ void G_unloadAPI() {
 	}
 
 #if defined _WIN32
-	// TODO FreeLibrary(api_module);
+	FreeLibrary(api_module);
+	pthread_unload();
 #else
 	dlclose(api_module);
 #endif
 
-	pthread_unload();
+	
 
 	G_Printf("ETrun: API module unloaded!\n");
 }
