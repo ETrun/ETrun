@@ -1636,6 +1636,11 @@ void CG_Player( centity_t *cent ) {
 		return;
 	}
 
+	// Nico, don't draw if hiding others is enabled and distance to the player is < cg_hideRange
+	if (cg_hideOthers.integer && ci->clientNum != cg.clientNum && Distance(cgsnap->lerpOrigin, cent->lerpOrigin) < cg_hideRange.integer) {
+		return;
+	}
+
 	character = CG_CharacterForClientinfo( ci, cent );
 
 	if ( cent->currentState.eFlags & EF_MOUNTEDTANK ) {

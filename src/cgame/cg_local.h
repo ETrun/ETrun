@@ -1857,6 +1857,10 @@ extern vmCvar_t cg_maxCheckPoints;
 // OB detector
 extern vmCvar_t cg_drawOB;
 
+// Hide other players
+extern vmCvar_t cg_hideOthers;
+extern vmCvar_t cg_hideRange;
+
 // Nico, end of ETrun cvars
 
 //

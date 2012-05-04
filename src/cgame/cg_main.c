@@ -292,6 +292,10 @@ vmCvar_t com_maxfps;
 // OB detector
 vmCvar_t cg_drawOB;
 
+// Hide other players
+vmCvar_t cg_hideOthers;
+vmCvar_t cg_hideRange;
+
 // Nico, end of ETrun cvars
 
 typedef struct {
@@ -517,6 +521,10 @@ cvarTable_t cvarTable[] = {
 
 	// OB detector
 	{ &cg_drawOB, "cg_drawOB", "0", CVAR_ARCHIVE },
+
+	// Hide other players
+	{ &cg_hideOthers, "cg_hideOthers", "1", CVAR_ARCHIVE },
+	{ &cg_hideRange, "cg_hideRange", "128", CVAR_ARCHIVE },
 
 	// Nico, end of ETrun cvars
 };

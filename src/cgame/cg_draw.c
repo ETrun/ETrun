@@ -1596,6 +1596,7 @@ static void CG_DrawCrosshairNames( void ) {
 	// Distance to the entity under the crosshair
 	float zChange;
 	qboolean hitClient = qfalse;
+	float dist = 0;
 
 	if ( cg_drawCrosshair.integer < 0 ) {
 		return;
@@ -1607,7 +1608,12 @@ static void CG_DrawCrosshairNames( void ) {
 	}
 
 	// scan the known entities to see if the crosshair is sighted on one
-	CG_ScanForCrosshairEntity( &zChange, &hitClient );
+	dist = CG_ScanForCrosshairEntity( &zChange, &hitClient );
+
+	// Nico, don't draw if hiding others is enabled and distance to the player is < cg_hideRange
+	if (cg_hideOthers.integer && dist < cg_hideRange.integer) {
+		return;
+	}
 
 	if ( cg.renderingThirdPerson ) {
 		return;
