@@ -3,19 +3,20 @@
 
 #if defined _WIN32
 	typedef api_status (*MYPROC)(char *, char *);
-	HMODULE api_module;
 	MYPROC API_query;
+	HMODULE api_module;
 # else
 	void *api_module;
+	api_status (*API_query)(char *, char *);
 # endif
 
 
 static qboolean loadModule() {
 
 #if defined _WIN32
-	api_module = LoadLibraryA(MODULE_DIR"\\"MODULE_NAME);
+	api_module = LoadLibraryA(g_APImodulePath.string);
 #else
-	api_module = dlopen(MODULE_DIR"/"MODULE_NAME, RTLD_LAZY);
+	api_module = dlopen(g_APImodulePath.string, RTLD_LAZY);
 #endif
 	
 	if (api_module == NULL) {
@@ -29,7 +30,7 @@ static qboolean loadAPIquery() {
 #if defined _WIN32
 	API_query = (MYPROC)GetProcAddress(api_module, API_INTERFACE_NAME);
 #else
-	// #TODO
+	*(void **) (&API_query) = dlsym(api_module, API_INTERFACE_NAME);
 #endif
 	
 	if (API_query == NULL) {
@@ -59,7 +60,7 @@ static void printError()
 
     LocalFree(error);
 #else
-	// #TODO
+	G_Printf("Error: %s\n", dlerror());
 #endif
 }
 
@@ -88,12 +89,7 @@ void G_callAPI(char *result, char *query) {
 	pthread_t thread;
 	int returnCode = 0;
 
-#if defined _WIN32
-
-#else
-	// #TODO
-#endif
-	if (API_query == NULL) {
+	if (api_module == NULL || API_query == NULL) {
 		G_Error("G_callAPI: API module is not loaded.");
 	}
 
@@ -119,14 +115,28 @@ void G_loadAPI() {
 	// Load the module
 	if (!loadModule()) {
 		printError();
-		G_Error("Error loading %s\n", MODULE_DIR"\\"MODULE_NAME);
+		G_Error("Error loading %s\n", g_APImodulePath.string);
 	}
 
 	// Load the APIquery function 
 	if (!loadAPIquery()) {
 		printError();
-		G_Error("Error loading %s from %s\n", API_INTERFACE_NAME, MODULE_NAME);
+		G_Error("Error loading %s from %s\n", API_INTERFACE_NAME, g_APImodulePath.string);
 	}
 
 	G_Printf("ETrun: API module loaded!\n");
+}
+
+void G_unloadAPI() {
+	if (api_module == NULL) {
+		G_Error("G_callAPI: API module is not loaded.");
+	}
+
+#if defined _WIN32
+	// TODO FreeLibrary(api_module);
+#else
+	dlclose(api_module);
+#endif
+
+	G_Printf("ETrun: API module unloaded!\n");
 }

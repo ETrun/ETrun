@@ -1500,6 +1500,10 @@ extern vmCvar_t g_floodWait;
 // Name changes limit
 extern vmCvar_t g_maxNameChanges;
 
+// API module
+extern vmCvar_t g_useAPI;
+extern vmCvar_t g_APImodulePath;
+
 // Nico, end of ETrun cvars
 
 void    trap_Printf( const char *fmt );

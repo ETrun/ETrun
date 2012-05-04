@@ -1,24 +1,17 @@
 #ifndef G_API_H_
+# define G_API_H_
 
-# include <strsafe.h>
 # include "../APImodule/status.h"
 # include <pthread.h>
 
-# define G_API_H_
-
-#if defined _WIN32
-	# define MODULE_NAME "APImodule.dll"
-# else
-	# define MODULE_NAME "APImodule.so"
-# endif
-
-# define MODULE_DIR "etrun"
 # define API_INTERFACE_NAME "API_query"
 
-void G_loadAPI();
 void G_callAPI(char *result, char *query);
+void G_loadAPI();
+void G_unloadAPI();
 
 #if defined _WIN32
+	# include <strsafe.h>
 	# include <windows.h>
 # else
 	# include <dlfcn.h>

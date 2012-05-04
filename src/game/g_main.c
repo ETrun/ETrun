@@ -157,6 +157,10 @@ vmCvar_t g_floodWait;
 // Name changes limit
 vmCvar_t g_maxNameChanges;
 
+// API module
+vmCvar_t g_useAPI;
+vmCvar_t g_APImodulePath;
+
 // Nico, end of ETrun cvars
 
 
@@ -296,6 +300,10 @@ cvarTable_t gameCvarTable[] = {
 
 	// Name changes limit
 	{ &g_maxNameChanges, "g_maxNameChanges", "3", 0},
+
+	// API module
+	{ &g_useAPI, "g_useAPI", "1", CVAR_ARCHIVE | CVAR_LATCH},
+	{ &g_APImodulePath, "g_APImodulePath", "", CVAR_ARCHIVE | CVAR_LATCH}
 
 	// Nico, end of ETrun cvars
 };
@@ -1446,7 +1454,7 @@ void G_InitGame( int levelTime, int randomSeed, int restart ) {
 	}
 
 	// Nico, load API
-	if (1) {
+	if (g_useAPI.integer) {
 		G_loadAPI();
 	}
 }
@@ -1466,6 +1474,11 @@ void G_ShutdownGame( int restart ) {
 		G_LogPrintf( "------------------------------------------------------------\n" );
 		trap_FS_FCloseFile( level.logFile );
 		level.logFile = 0;
+	}
+
+	// Nico, unload API
+	if (g_useAPI.integer) {
+		G_unloadAPI();
 	}
 
 	// write all the client session data so we can get it back

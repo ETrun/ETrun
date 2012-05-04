@@ -1,6 +1,7 @@
 #! /bin/bash
 
 path_to_mod='/home/me/.etwolf/etrun/'
+APImodule_name='APImodule.so'
 
 cp -f _build/cgame_mp_x86.dll etrun/
 cp -f _build/ui_mp_x86.dll etrun/
@@ -17,6 +18,6 @@ cd ..
 cp -f etrun.pk3 $path_to_mod
 rm -f etrun.pk3
 cp -f _build/qagame.mp.i386.so $path_to_mod
-cp -f _build/APImodule.so $path_to_mod
+cp -f _build/$APImodule_name $path_to_mod
 read -p "Press ENTER to start game..."
-/usr/local/games/enemy-territory/etded.x86 +set fs_basepath "/usr/local/games/enemy-territory" +set fs_game etrun +devmap goldrush
+/usr/local/games/enemy-territory/etded.x86 +set fs_basepath "/usr/local/games/enemy-territory" +set fs_game etrun +devmap goldrush +set g_APImodulePath $path_to_mod$APImodule_name
