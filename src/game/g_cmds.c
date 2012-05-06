@@ -27,6 +27,7 @@ If you have questions concerning this license or the applicable additional terms
 */
 
 #include "g_local.h"
+#include "g_api.h"
 
 qboolean G_IsOnFireteam( int entityNum, fireteamData_t** teamNum );
 
@@ -2284,6 +2285,24 @@ void Cmd_Save_f(gentity_t *ent)
 	}
 }
 
+// Nico, ETrun login command
+void Cmd_Login_f(gentity_t *ent) {
+	char token[MAX_TOKEN_CHARS];
+	char *result = NULL;
+
+	result = malloc(MAX_TOKEN_CHARS * sizeof (char));
+
+	// #fixme, returns "", auth token probably needs to be passed in clientuseriinfo and be kept serverside
+	trap_Cvar_VariableStringBuffer("cg_authToken", token, MAX_TOKEN_CHARS);
+
+	if (!token) {
+		G_Printf("Cmd_Login_f: empty_token\n");
+	} else {
+		G_Printf("Cmd_Login_f: token = %s\n", token);
+		G_API_login(token, ent->client->ps.clientNum, result);
+	}
+}
+
 // Nico, defines commands that are flood protected or not
 static command_t floodProtectedCommands[] = {
 	{ "score",				qfalse,	Cmd_Score_f },
@@ -2302,6 +2321,9 @@ static command_t floodProtectedCommands[] = {
 	{ "setspawnpt",			qfalse,	Cmd_SetSpawnPoint_f },
 	{ "load",				qfalse,	Cmd_Load_f },
 	{ "save",				qfalse,	Cmd_Save_f },
+
+	// ETrun specific commands
+	{ "login",				qtrue, Cmd_Login_f }
 };
 // Nico, end of defines commands that are flood protected or not
 

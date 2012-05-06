@@ -1,18 +1,22 @@
 #include "g_api.h"
 #include "g_local.h"
 
+/*
+ * Global handles
+ */
 #if defined _WIN32
-	typedef api_status (*MYPROC)(char *, char *);
+	typedef int (*MYPROC)(char *, char *, char *);
 	MYPROC API_query;
 	HMODULE api_module;
 # else
 	void *api_module;
-	api_status (*API_query)(char *, char *);
+	int (*API_query)(char *, char *, char *);
 # endif
 
-
+/*
+ * Module loading
+ */
 static qboolean loadModule() {
-
 #if defined _WIN32
 	api_module = LoadLibraryA(g_APImodulePath.string);
 #else
@@ -25,8 +29,10 @@ static qboolean loadModule() {
 	return qtrue;
 }
 
+/*
+ * Module interface linking
+ */
 static qboolean loadAPIquery() {
-
 #if defined _WIN32
 	API_query = (MYPROC)GetProcAddress(api_module, API_INTERFACE_NAME);
 #else
@@ -39,8 +45,10 @@ static qboolean loadAPIquery() {
 	return qtrue;
 }
 
-static void printError() 
-{ 
+/*
+ * Error printing
+ */
+static void printError() {
 #if defined _WIN32
     LPVOID error;
 
@@ -64,30 +72,123 @@ static void printError()
 #endif
 }
 
-static void *myCallAPI(void *data) {
+/*
+ * Map records handler
+ */
+static void *mapRecordsHandler(void *data) {
 	int code = -1;
 
 	struct query_s *queryStruct;
 
 	queryStruct = (struct query_s *)data;
 
-	code = API_query(queryStruct->result, queryStruct->query);
+	G_Printf("[THREAD]Calling API now!\n");
 
-	if (code == OK) {
-		G_Printf("[THREAD]Result: size = %d, %s\n", strlen(queryStruct->result), queryStruct->result);
+	code = API_query(queryStruct->cmd, queryStruct->result, queryStruct->query);
+
+	if (code == 0) {
+		G_Printf("[THREAD]Result size = %d:\n", (int)strlen(queryStruct->result));
+		G_Printf("%s\n", queryStruct->result);
 	} else {
-		G_Printf("[THREAD]Error, code: %d\n", code);
+		G_Printf("[THREAD]Error, code: %d, %s\n", code, queryStruct->result);
 	}
 
+	free(queryStruct->result);
 	free(queryStruct);
 
 	return NULL;
 }
 
-void G_callAPI(char *result, char *query) {
+/*
+ * Map records request command
+ */
+void G_API_mapRecords(char *mapName, char *result) {
+	G_callAPI("m", result, 1, mapName);
+
+	G_Printf("Map records request sent!\n");
+}
+
+/*
+ * Map records handler
+ */
+static void *loginHandler(void *data) {
+	int code = -1;
+
+	struct query_s *queryStruct;
+
+	queryStruct = (struct query_s *)data;
+
+	G_Printf("[THREAD]Calling API now!\n");
+
+	code = API_query(queryStruct->cmd, queryStruct->result, queryStruct->query);
+
+	if (code == 0) {
+		G_Printf("[THREAD]Result: size = %d, %s\n", (int)strlen(queryStruct->result), queryStruct->result);
+	} else {
+		G_Printf("[THREAD]Error, code: %d\n", code);
+	}
+
+	free(queryStruct->result);
+	free(queryStruct);
+
+	return NULL;
+}
+
+/*
+ * Login request command
+ * Format: authToken:clientNum
+ */
+void G_API_login(char *authToken, int clientNum, char *result) {
+	char buf[3];
+
+	sprintf(buf, "%d", clientNum);
+
+	G_callAPI("l", result, 2, authToken, buf);
+
+	G_Printf("Login request sent!\n");
+}
+
+// Commands handler binding
+static const api_glue_t APICommands[] = {
+	{ "l",	loginHandler },
+	{ "m", mapRecordsHandler }
+};
+
+/*
+ * Takes a command string as argument and returns the associated handler if any, NULL otherwise
+ */
+static handler_t getHandlerForCommand(char *cmd) {
+	unsigned int i, cCommands = sizeof (APICommands) / sizeof (APICommands[0]);
+	const api_glue_t *element;
+
+	if (!cmd) {
+		return NULL;
+	}
+
+	for (i = 0; i < cCommands; ++i) {
+		element = &APICommands[i];
+		if ( element && element->cmd && !Q_stricmp(cmd, element->cmd)) {
+			return element->handler;
+		}
+	}
+	return NULL;
+}
+
+/*
+ * APImodule entry point
+ *
+ * command: must be a command in apiCommands
+ * result: pointer to an *already allocated* buffer for storing result
+ * count: number of variadic arguments
+ */
+void G_callAPI(char *command, char *result, int count, ...) {
 	struct query_s *queryStruct;
 	pthread_t thread;
 	int returnCode = 0;
+	void *(*handler)(void *) = NULL;
+	va_list ap;
+	int i = 0;
+	char *arg = NULL;
 
 	if (api_module == NULL || API_query == NULL) {
 		G_Error("G_callAPI: API module is not loaded.");
@@ -99,15 +200,46 @@ void G_callAPI(char *result, char *query) {
 		G_Error("G_callAPI: malloc failed\n");
 	}
 
-	Q_strncpyz(queryStruct->query, query, 256);
+	va_start (ap, count);
+
+	// Init query buffer
+	memset(queryStruct->query, 0, QUERY_MAX_SIZE);
+
+	for (i = 0; i < count; ++i) {
+		arg = va_arg (ap, char*);
+
+		if (!arg) {
+			G_Error("G_callAPI: empty arg %d\n", i);
+		}
+		G_Printf("arg : %s\n", arg);
+	
+		Q_strcat(queryStruct->query, QUERY_MAX_SIZE, arg);
+
+		// No trailing /
+		if (i + 1 < count) {
+			Q_strcat(queryStruct->query, QUERY_MAX_SIZE, CHAR_SEPARATOR);
+		}
+	}
+	Q_strncpyz(queryStruct->cmd, command, sizeof (queryStruct->cmd));
 	queryStruct->result = result;
 
-	returnCode = pthread_create(&thread, NULL, myCallAPI, (void *)queryStruct);
+	// Get the command handler
+	handler = getHandlerForCommand(command);
+
+	if (!handler) {
+		G_Error("G_callAPI: no handler for command: %s\n", command);
+	}
+
+	G_Printf("Calling API with query: %s\n", queryStruct->query);
+
+	returnCode = pthread_create(&thread, NULL, handler, (void *)queryStruct);
 
 	if (returnCode) {
 		G_Error("G_callAPI: error creating thread\n");
 	}
 	G_Printf("G_callAPI: thread started!\n");
+
+	va_end (ap);
 }
 
 #if defined _WIN32
@@ -144,8 +276,8 @@ void G_loadAPI() {
 
 void G_unloadAPI() {
 	if (api_module == NULL) {
-		G_Error("G_callAPI: API module is not loaded.");
-	}
+		G_DPrintf("G_callAPI: API module is not loaded.");
+	} else {
 
 #if defined _WIN32
 	FreeLibrary(api_module);
@@ -154,7 +286,6 @@ void G_unloadAPI() {
 	dlclose(api_module);
 #endif
 
-	
-
-	G_Printf("ETrun: API module unloaded!\n");
+		G_Printf("ETrun: API module unloaded!\n");
+	}
 }

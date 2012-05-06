@@ -80,11 +80,13 @@ qboolean G_refCommandCheck( gentity_t *ent, char *cmd ) {
 // http://games.chruker.dk/enemy_territory/modding_project_bugfix.php?bug_id=038
 // http://games.chruker.dk/enemy_territory/modding_project_bugfix.php?bug_id=039
 void G_refHelp_cmd( gentity_t *ent ) {
-	char buf[256];
+	char *buf = NULL;
+
+	buf = malloc(MAX_TOKEN_CHARS * sizeof (char));
 
 	// Nico, test API
-	G_Printf("Calling API with query \"ref\"\n");
-	G_callAPI(buf, "ref");
+	G_Printf("Asking for map record...\n");
+	G_API_mapRecords(level.rawmapname, buf);
 
 	// List commands only for enabled refs.
 	if ( ent ) {
