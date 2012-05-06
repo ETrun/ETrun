@@ -296,6 +296,9 @@ vmCvar_t cg_drawOB;
 vmCvar_t cg_hideOthers;
 vmCvar_t cg_hideRange;
 
+// Auth token
+vmCvar_t cg_authToken;
+
 // Nico, end of ETrun cvars
 
 typedef struct {
@@ -525,6 +528,9 @@ cvarTable_t cvarTable[] = {
 	// Hide other players
 	{ &cg_hideOthers, "cg_hideOthers", "1", CVAR_ARCHIVE },
 	{ &cg_hideRange, "cg_hideRange", "128", CVAR_ARCHIVE },
+
+	// Auth token
+	{ &cg_authToken, "cg_authToken", "", CVAR_ARCHIVE },
 
 	// Nico, end of ETrun cvars
 };
