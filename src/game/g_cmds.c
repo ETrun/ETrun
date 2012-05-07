@@ -2295,7 +2295,7 @@ void Cmd_Login_f(gentity_t *ent) {
 	// #fixme, returns "", auth token probably needs to be passed in clientuseriinfo and be kept serverside
 	trap_Cvar_VariableStringBuffer("cg_authToken", token, MAX_TOKEN_CHARS);
 
-	if (!token) {
+	if (strlen(token) == 0) {
 		G_Printf("Cmd_Login_f: empty_token\n");
 	} else {
 		G_Printf("Cmd_Login_f: token = %s\n", token);
@@ -2486,4 +2486,3 @@ qboolean ClientIsFlooding(gentity_t *ent) {
 
 	return qfalse;
 }
-
