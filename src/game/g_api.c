@@ -1,5 +1,5 @@
-#include "g_api.h"
 #include "g_local.h"
+#include "g_api.h"
 
 /*
  * Global handles
@@ -73,6 +73,57 @@ static void printError() {
 }
 
 /*
+ * Login handler
+ */
+static void *loginHandler(void *data) {
+	int code = -1;
+	int len = 0;
+	gentity_t *ent = NULL;
+
+	struct query_s *queryStruct;
+
+	queryStruct = (struct query_s *)data;
+	ent = queryStruct->ent;
+
+	G_Printf("[THREAD]Calling API now!\n");
+
+	code = API_query(queryStruct->cmd, queryStruct->result, queryStruct->query);
+
+	len = strlen(queryStruct->result);
+
+	if (code == 0) {
+		G_Printf("[THREAD]Result: size = %d, %s\n", (int)len, queryStruct->result);
+
+		if (len > 0 && ent && ent->client) {
+			ent->client->sess.logged = qtrue;
+			// #todo: keep auth token too
+			CP("cp \"You are now logged in!\n\"");
+			G_Printf("[THREAD] %s is now authentificated!\n", queryStruct->result);
+			ClientUserinfoChanged(ent->client->ps.clientNum);
+		} else {
+			G_Printf("[THREAD]Authentification failed\n");
+		}
+	} else {
+		CP("cp \"Login failed!\n\"");
+		G_Printf("[THREAD]Error, code: %d\n", code);
+	}
+
+	free(queryStruct->result);
+	free(queryStruct);
+
+	return NULL;
+}
+
+/*
+ * Login request command
+ */
+void G_API_login(char *result, gentity_t *ent, char *authToken) {
+	G_callAPI("l", result, ent, 1, authToken);
+
+	G_Printf("Login request sent!\n");
+}
+
+/*
  * Map records handler
  */
 static void *mapRecordsHandler(void *data) {
@@ -102,56 +153,16 @@ static void *mapRecordsHandler(void *data) {
 /*
  * Map records request command
  */
-void G_API_mapRecords(char *mapName, char *result) {
-	G_callAPI("m", result, 1, mapName);
+void G_API_mapRecords(char *result, gentity_t *ent, char *mapName) {
+	G_callAPI("m", result, ent, 1, mapName);
 
 	G_Printf("Map records request sent!\n");
-}
-
-/*
- * Map records handler
- */
-static void *loginHandler(void *data) {
-	int code = -1;
-
-	struct query_s *queryStruct;
-
-	queryStruct = (struct query_s *)data;
-
-	G_Printf("[THREAD]Calling API now!\n");
-
-	code = API_query(queryStruct->cmd, queryStruct->result, queryStruct->query);
-
-	if (code == 0) {
-		G_Printf("[THREAD]Result: size = %d, %s\n", (int)strlen(queryStruct->result), queryStruct->result);
-	} else {
-		G_Printf("[THREAD]Error, code: %d\n", code);
-	}
-
-	free(queryStruct->result);
-	free(queryStruct);
-
-	return NULL;
-}
-
-/*
- * Login request command
- * Format: authToken:clientNum
- */
-void G_API_login(char *authToken, int clientNum, char *result) {
-	char buf[3];
-
-	sprintf(buf, "%d", clientNum);
-
-	G_callAPI("l", result, 2, authToken, buf);
-
-	G_Printf("Login request sent!\n");
 }
 
 // Commands handler binding
 static const api_glue_t APICommands[] = {
 	{ "l",	loginHandler },
-	{ "m", mapRecordsHandler }
+	{ "m",	mapRecordsHandler }
 };
 
 /*
@@ -179,9 +190,10 @@ static handler_t getHandlerForCommand(char *cmd) {
  *
  * command: must be a command in apiCommands
  * result: pointer to an *already allocated* buffer for storing result
+ * ent: entity who made the request
  * count: number of variadic arguments
  */
-void G_callAPI(char *command, char *result, int count, ...) {
+void G_callAPI(char *command, char *result, gentity_t *ent, int count, ...) {
 	struct query_s *queryStruct;
 	pthread_t thread;
 	int returnCode = 0;
@@ -222,6 +234,7 @@ void G_callAPI(char *command, char *result, int count, ...) {
 	}
 	Q_strncpyz(queryStruct->cmd, command, sizeof (queryStruct->cmd));
 	queryStruct->result = result;
+	queryStruct->ent = ent;
 
 	// Get the command handler
 	handler = getHandlerForCommand(command);

@@ -200,8 +200,12 @@ void CG_NewClientInfo( int clientNum ) {
 	newInfo.refStatus = atoi( v );
 
 	// Nico, pmove_fixed
-	v = Info_ValueForKey( configstring, "pm" );
-	newInfo.pmoveFixed = atoi( v );
+	v = Info_ValueForKey(configstring, "pm");
+	newInfo.pmoveFixed = atoi(v);
+
+	// Nico, login status
+	v = Info_ValueForKey(configstring, "l");
+	newInfo.logged = atoi(v) == 1 ? qtrue : qfalse;
 
 	// Gordon: detect rank/skill changes client side
 	if ( clientNum == cg.clientNum ) {

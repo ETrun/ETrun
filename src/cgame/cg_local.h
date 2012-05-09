@@ -551,6 +551,9 @@ typedef struct clientInfo_s {
 	// Nico, pmove_fixed
 	int	pmoveFixed;
 
+	// Nico, login status
+	qboolean logged;
+
 } clientInfo_t;
 
 typedef enum {

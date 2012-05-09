@@ -2290,17 +2290,54 @@ void Cmd_Login_f(gentity_t *ent) {
 	char token[MAX_TOKEN_CHARS];
 	char *result = NULL;
 
+	if (!ent || !ent->client) {
+		G_DPrintf("Cmd_Login_f: invalid ent: %d\n", ent);
+		return;
+	}
+
+	// Check if already logged in
+	if (ent->client->sess.logged) {
+		CP("cp \"You are already logged in!\n\"");
+		G_DPrintf("Cmd_Login_f: client already logged in\n");
+		return;
+	}
+
 	result = malloc(MAX_TOKEN_CHARS * sizeof (char));
 
-	// #fixme, returns "", auth token probably needs to be passed in clientuseriinfo and be kept serverside
-	trap_Cvar_VariableStringBuffer("cg_authToken", token, MAX_TOKEN_CHARS);
+	if (!result) {
+		G_Error("Cmd_Login_f: malloc failed\n");
+	}
+
+	Q_strncpyz(token, ent->client->pers.authToken, MAX_QPATH);
 
 	if (strlen(token) == 0) {
-		G_Printf("Cmd_Login_f: empty_token\n");
+		CP("cp \"Empty auth token! (use cg_authToken \"YourAuthToken\")\n\"");
+		G_DPrintf("Cmd_Login_f: empty_token\n");
 	} else {
-		G_Printf("Cmd_Login_f: token = %s\n", token);
-		G_API_login(token, ent->client->ps.clientNum, result);
+		G_DPrintf("Cmd_Login_f: token = %s, ent = %d, ent->client = %d\n", token, ent, ent->client);
+		G_API_login(result, ent, token);
 	}
+
+	// Do not free result here!
+}
+
+// Nico, ETrun logout command
+void Cmd_Logout_f(gentity_t *ent) {
+	if (!ent || !ent->client) {
+		G_DPrintf("Cmd_Login_f: invalid ent: %d\n", ent);
+		return;
+	}
+
+	// Check if already logged in
+	if (!ent->client->sess.logged) {
+		CP("cp \"You are not logged in!\n\"");
+		return;
+	}
+
+	CP("cp \"You are no longer logged in!\n\"");
+	ent->client->sess.logged = qfalse;
+	ClientUserinfoChanged(ent->client->ps.clientNum);
+	//#todo: release auth token?
 }
 
 // Nico, defines commands that are flood protected or not
@@ -2323,7 +2360,8 @@ static command_t floodProtectedCommands[] = {
 	{ "save",				qfalse,	Cmd_Save_f },
 
 	// ETrun specific commands
-	{ "login",				qtrue, Cmd_Login_f }
+	{ "login",				qtrue, Cmd_Login_f },
+	{ "logout",				qtrue, Cmd_Logout_f }
 };
 // Nico, end of defines commands that are flood protected or not
 

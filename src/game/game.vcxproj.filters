@@ -209,8 +209,5 @@
     <ClInclude Include="g_api.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\libs\cJSON\cJSON.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
   </ItemGroup>
 </Project>

@@ -214,7 +214,6 @@
     <None Include="Themes\Generic.xaml" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\libs\cJSON\cJSON.h" />
     <ClInclude Include="g_api.h" />
     <ClInclude Include="bg_classes.h" />
     <ClInclude Include="bg_local.h" />

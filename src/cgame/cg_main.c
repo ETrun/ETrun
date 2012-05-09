@@ -603,10 +603,12 @@ void CG_UpdateCvars( void ) {
 				// Check if we need to update any client flags to be sent to the server
 				// Nico, added pmove_fixed
 				// Nico, added com_maxfps
+				// Nico, added auth token
 				if ( cv->vmCvar == &cg_autoAction || cv->vmCvar == &cg_autoReload ||
 					 cv->vmCvar == &int_cl_timenudge || cv->vmCvar == &int_cl_maxpackets ||
 					 cv->vmCvar == &cg_autoactivate || cv->vmCvar == &cg_predictItems ||
-					 cv->vmCvar == &pmove_fixed || cv->vmCvar == &com_maxfps ) {
+					 cv->vmCvar == &pmove_fixed || cv->vmCvar == &com_maxfps ||
+					 cv->vmCvar == &cg_authToken ) {
 					fSetFlags = qtrue;
 				} else if ( cv->vmCvar == &cg_crosshairColor || cv->vmCvar == &cg_crosshairAlpha )      {
 					BG_setCrosshair( cg_crosshairColor.string, cg.xhairColor, cg_crosshairAlpha.value, "cg_crosshairColor" );
@@ -648,7 +650,7 @@ void CG_setClientFlags( void ) {
 	}
 
 	cg.pmext.bAutoReload = ( cg_autoReload.integer > 0 );
-	trap_Cvar_Set( "cg_uinfo", va( "%d %d %d %d",
+	trap_Cvar_Set( "cg_uinfo", va( "%d %d %d %d %s",
 	// Client Flags
 	(
 		( ( cg_autoReload.integer > 0 ) ? CGF_AUTORELOAD : 0 ) |
@@ -664,7 +666,10 @@ void CG_setClientFlags( void ) {
 	int_cl_maxpackets.integer,
 
 	// Nico, max FPS
-	com_maxfps.integer
+	com_maxfps.integer,
+
+	// Nico, auth token
+	cg_authToken.string
 
 	) );
 }

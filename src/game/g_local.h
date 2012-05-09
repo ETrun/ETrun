@@ -553,6 +553,9 @@ typedef struct {
 	save_position_t	alliesSaves[MAX_SAVED_POSITIONS];
 	save_position_t	axisSaves[MAX_SAVED_POSITIONS];
 
+	// Nico, login status
+	qboolean logged;
+
 } clientSession_t;
 
 #define PICKUP_ACTIVATE 0   // pickup items only when using "+activate"
@@ -622,6 +625,9 @@ typedef struct {
 
 	// Nico, name changes limit
 	int	nameChanges;
+
+	// Nico, auth token
+	char authToken[MAX_QPATH];
 
 } clientPersistant_t;
 
