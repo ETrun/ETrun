@@ -372,14 +372,6 @@ void limbo( gentity_t *ent) {
 			ent->client->sess.spectatorState = SPECTATOR_FOLLOW;
 		}
 
-		if ( ent->client->sess.sessionTeam == TEAM_AXIS ) {
-			ent->client->deployQueueNumber = level.redNumWaiting;
-			level.redNumWaiting++;
-		} else if ( ent->client->sess.sessionTeam == TEAM_ALLIES )     {
-			ent->client->deployQueueNumber = level.blueNumWaiting;
-			level.blueNumWaiting++;
-		}
-
 		for ( i = 0; i < level.numConnectedClients; i++ ) {
 			gclient_t *cl = &level.clients[level.sortedClients[i]];
 			if ( ( ( cl->ps.pm_flags & PMF_LIMBO ) ||

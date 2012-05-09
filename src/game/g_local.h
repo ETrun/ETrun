@@ -717,7 +717,6 @@ struct gclient_s {
 
 	int dropWeaponTime;         // JPW NERVE last time a weapon was dropped
 	int limboDropWeapon;         // JPW NERVE weapon to drop in limbo
-	int deployQueueNumber;         // JPW NERVE player order in reinforcement FIFO queue
 	int lastBurnTime;         // JPW NERVE last time index for flamethrower burn
 	int PCSpecialPickedUpCount;         // JPW NERVE used to count # of times somebody's picked up this LTs ammo (or medic health) (for scoring)
 	int saved_persistant[MAX_PERSISTANT];           // DHM - Nerve :: Save ps->persistant here during Limbo
@@ -840,7 +839,7 @@ typedef struct {
 
 	int startTime;                      // level.time the map was started
 
-	int lastTeamLocationTime;               // last time of client team location update
+	int lastTeamLocationTime;           // last time of client team location update
 
 	qboolean newSession;                // don't use any old session data, because
 										// we changed gametype
@@ -864,11 +863,11 @@ typedef struct {
 	// spawn variables
 	qboolean spawning;                  // the G_Spawn*() functions are valid
 	int numSpawnVars;
-	char        *spawnVars[MAX_SPAWN_VARS][2];  // key / value pairs
+	char *spawnVars[MAX_SPAWN_VARS][2]; // key / value pairs
 	int numSpawnVarChars;
 	char spawnVarChars[MAX_SPAWN_VARS_CHARS];
 
-	char        *changemap;
+	char *changemap;
 	int exitTime;
 
 	// Nico, note: keep these 2 vars
@@ -878,8 +877,6 @@ typedef struct {
 	int portalSequence;
 	// Ridah
 
-	int capturetimes[4];         // red, blue, none, spectator for WOLF_MP_CPH
-	int redReinforceTime, blueReinforceTime;         // last time reinforcements arrived in ms
 	int redNumWaiting, blueNumWaiting;         // number of reinforcements in queue
 	vec3_t spawntargets[MAX_MULTI_SPAWNTARGETS];      // coordinates of spawn targets
 	int numspawntargets;         // # spawntargets in this map
