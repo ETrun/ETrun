@@ -456,7 +456,8 @@ void CG_DrawCursorhint( rectDef_t *rect ) {
 		icon = cgs.media.treasureHintShader;
 		break;
 	case HINT_KNIFE:
-		icon = cgs.media.knifeHintShader;
+		// Nico, useless
+		// icon = cgs.media.knifeHintShader;
 		break;
 	case HINT_LADDER:
 		icon = cgs.media.ladderHintShader;
