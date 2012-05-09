@@ -811,7 +811,6 @@ typedef struct {
 	int scoresRequestTime;
 	int numScores;
 	int selectedScore;
-	int teamScores[2];
 	
 	score_t scores[MAX_CLIENTS];
 	qboolean showScores;

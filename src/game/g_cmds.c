@@ -62,7 +62,7 @@ void G_SendScore( gentity_t *ent ) {
 		*buffer = '\0';
 		*startbuffer = '\0';
 		if ( team == 0 ) {
-			Q_strncpyz( startbuffer, va( "sc0 %i %i", level.teamScores[TEAM_AXIS], level.teamScores[TEAM_ALLIES] ), 32 );
+			Q_strncpyz( startbuffer, "sc0", 32 );
 		} else {
 			Q_strncpyz( startbuffer, "sc1", 32 );
 		}

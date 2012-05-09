@@ -1624,7 +1624,6 @@ and team change.
 void CalculateRanks( void ) {
 	int i;
 	char teaminfo[TEAM_NUM_TEAMS][256];     // OSP
-	gclient_t   *cl;
 
 	level.follow1 = -1;
 	level.follow2 = -1;
@@ -1695,19 +1694,6 @@ void CalculateRanks( void ) {
 
 	qsort( level.sortedClients, level.numConnectedClients,
 		   sizeof( level.sortedClients[0] ), SortRanks );
-
-	// set the rank value for all clients that are connected and not spectators
-	// in team games, rank is just the order of the teams, 0=red, 1=blue, 2=tied
-	for ( i = 0;  i < level.numConnectedClients; i++ ) {
-		cl = &level.clients[ level.sortedClients[i] ];
-		if ( level.teamScores[TEAM_AXIS] == level.teamScores[TEAM_ALLIES] ) {
-			cl->ps.persistant[PERS_RANK] = 2;
-		} else if ( level.teamScores[TEAM_AXIS] > level.teamScores[TEAM_ALLIES] ) {
-			cl->ps.persistant[PERS_RANK] = 0;
-		} else {
-			cl->ps.persistant[PERS_RANK] = 1;
-		}
-	}
 
 	//bani - #184
 	etpro_PlayerInfo();
@@ -1820,10 +1806,6 @@ void ExitLevel( void ) {
 	trap_SendConsoleCommand( EXEC_APPEND, "vstr nextmap\n" );
 
 	level.changemap = NULL;
-
-	// reset all the scores so we don't enter the intermission again
-	level.teamScores[TEAM_AXIS] = 0;
-	level.teamScores[TEAM_ALLIES] = 0;
 
 	for ( i = 0 ; i < g_maxclients.integer ; i++ ) {
 		cl = level.clients + i;

@@ -490,8 +490,8 @@ team_t PickTeam( int ignoreClientNum ) {
 		return( TEAM_ALLIES );
 	}
 
-	// equal team count, so join the team with the lowest score
-	return( ( ( level.teamScores[TEAM_ALLIES] > level.teamScores[TEAM_AXIS] ) ? TEAM_AXIS : TEAM_ALLIES ) );
+	// Nico, let's pick axis team, why not ? :)
+	return TEAM_AXIS;
 }
 
 /*

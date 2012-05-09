@@ -47,43 +47,34 @@ CG_ParseScores
 static void CG_ParseScore( team_t team ) {
 	int i, j, powerups;
 	int numScores;
-	int offset;
 
 	if ( team == TEAM_AXIS ) {
 		cg.numScores = 0;
-
-		cg.teamScores[0] = atoi( CG_Argv( 1 ) );
-		cg.teamScores[1] = atoi( CG_Argv( 2 ) );
-
-		offset = 4;
-	} else {
-		offset = 2;
 	}
 
-
-	numScores = atoi( CG_Argv( offset - 1 ) );
+	numScores = atoi( CG_Argv( 1 ) );
 
 	for ( j = 0; j < numScores; j++ ) {
 		i = cg.numScores;
 
-		cg.scores[i].client = atoi(         CG_Argv( offset + 0 + ( j * 9 ) ) );// Nico, *7 => *9
+		cg.scores[i].client = atoi(         CG_Argv( 2 + ( j * 9 ) ) );// Nico, *7 => *9
 
-		cg.scores[i].ping = atoi(           CG_Argv( offset + 1 + ( j * 9 ) ) );// Nico, 2 => 1, *7 => *9
-		cg.scores[i].time = atoi(           CG_Argv( offset + 2 + ( j * 9 ) ) );// Nico, 3 => 2, *7 => *9
-		powerups = atoi(                    CG_Argv( offset + 3 + ( j * 9 ) ) );// Nico, 4 => 3, *7 => *9
-		cg.scores[i].playerClass = atoi(    CG_Argv( offset + 4 + ( j * 9 ) ) );// Nico, 5 => 4, *7 => *9
+		cg.scores[i].ping = atoi(           CG_Argv( 3 + ( j * 9 ) ) );// Nico, 2 => 1, *7 => *9
+		cg.scores[i].time = atoi(           CG_Argv( 4 + ( j * 9 ) ) );// Nico, 3 => 2, *7 => *9
+		powerups = atoi(                    CG_Argv( 5 + ( j * 9 ) ) );// Nico, 4 => 3, *7 => *9
+		cg.scores[i].playerClass = atoi(    CG_Argv( 6 + ( j * 9 ) ) );// Nico, 5 => 4, *7 => *9
 
 		// Nico, timerun best time
-		cg.scores[i].timerunBestTime = atoi(CG_Argv(offset + 5 + (j * 9)));
+		cg.scores[i].timerunBestTime = atoi(CG_Argv(7 + (j * 9)));
 
 		// Nico, timerun best speed
-		cg.scores[i].timerunBestSpeed = atoi(CG_Argv(offset + 6 + (j * 9)));
+		cg.scores[i].timerunBestSpeed = atoi(CG_Argv(8 + (j * 9)));
 
 		// Nico, timerun status
-		cg.scores[i].timerunStatus = atoi(CG_Argv(offset + 7 + (j * 9)));
+		cg.scores[i].timerunStatus = atoi(CG_Argv(9 + (j * 9)));
 
 		// Nico, followed client
-		cg.scores[i].followedClient = atoi(CG_Argv(offset + 8 + (j * 9)));
+		cg.scores[i].followedClient = atoi(CG_Argv(10 + (j * 9)));
 
 		if ( cg.scores[i].client < 0 || cg.scores[i].client >= MAX_CLIENTS ) {
 			cg.scores[i].client = 0;
