@@ -735,9 +735,6 @@ struct gclient_s {
 	gentity_t       *tempHead;  // Gordon: storing a temporary head for bullet head shot detection
 	gentity_t       *tempLeg;   // Arnout: storing a temporary leg for bullet head shot detection
 
-	int botSlotNumber;              // the slot the bot falls into (set up in the initial UI screen)
-	// END		xkan, 8/27/2002
-
 	int flagParent;
 
 	// the next 2 are used to play the proper animation on the body

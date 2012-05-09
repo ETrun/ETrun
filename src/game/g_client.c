@@ -1404,7 +1404,6 @@ void ClientSpawn( gentity_t *ent ) {
 	int flags;
 	int savedPing;
 	int savedTeam;
-	int savedSlotNumber;
 	qboolean update = qfalse;
 
 	index = ent - g_entities;
@@ -1438,9 +1437,6 @@ void ClientSpawn( gentity_t *ent ) {
 	savedSess       = client->sess;
 	savedPing       = client->ps.ping;
 	savedTeam       = client->ps.teamNum;
-	// START	xkan, 8/27/2002
-	savedSlotNumber = client->botSlotNumber;
-	// END		xkan, 8/27/2002
 
 	for ( i = 0 ; i < MAX_PERSISTANT ; i++ ) {
 		persistant[i] = client->ps.persistant[i];
@@ -1455,9 +1451,6 @@ void ClientSpawn( gentity_t *ent ) {
 	client->sess            = savedSess;
 	client->ps.ping         = savedPing;
 	client->ps.teamNum      = savedTeam;
-	// START	xkan, 8/27/2002
-	client->botSlotNumber   = savedSlotNumber;
-	// END		xkan, 8/27/2002
 
 	for ( i = 0 ; i < MAX_PERSISTANT ; i++ ) {
 		client->ps.persistant[i] = persistant[i];

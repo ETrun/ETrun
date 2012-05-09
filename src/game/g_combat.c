@@ -418,31 +418,7 @@ void player_die( gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int
 			self->health = GIB_HEALTH + 1;
 		}
 
-		// Arnout: re-enable this for flailing
-/*		if( self->client->ps.groundEntityNum == ENTITYNUM_NONE ) {
-			self->client->ps.pm_flags |= PMF_FLAILING;
-			self->client->ps.pm_time = 750;
-			BG_AnimScriptAnimation( &self->client->ps, ANIM_MT_FLAILING, qtrue );
-
-			// Face explosion directory
-			{
-				vec3_t angles;
-
-				vectoangles( self->client->ps.velocity, angles );
-				self->client->ps.viewangles[YAW] = angles[YAW];
-				SetClientViewAngle( self, self->client->ps.viewangles );
-			}
-		} else*/
-
-		// DHM - Play death animation, and set pm_time to delay 'fallen' animation
-		//if( G_IsSinglePlayerGame() && self->client->sess.sessionTeam == TEAM_ALLIES ) {
-		//	// play "falldown" animation since allies bots won't ever die completely
-		//	self->client->ps.pm_time = BG_AnimScriptEvent( &self->client->ps, self->client->pers.character->animModelInfo, ANIM_ET_FALLDOWN, qfalse, qtrue );
-		//	G_StartPlayerAppropriateSound(self, "death");
-		//} else {
 		self->client->ps.pm_time = BG_AnimScriptEvent( &self->client->ps, self->client->pers.character->animModelInfo, ANIM_ET_DEATH, qfalse, qtrue );
-		// death animation script already contains sound
-		//}
 
 		// record the death animation to be used later on by the corpse
 		self->client->torsoDeathAnim = self->client->ps.torsoAnim;
