@@ -2201,7 +2201,7 @@ void Cmd_Login_f(gentity_t *ent) {
 	char *result = NULL;
 
 	if (!ent || !ent->client) {
-		G_DPrintf("Cmd_Login_f: invalid ent: %d\n", ent);
+		G_DPrintf("Cmd_Login_f: invalid ent: %d\n", (int)ent);
 		return;
 	}
 
@@ -2220,7 +2220,7 @@ void Cmd_Login_f(gentity_t *ent) {
 
 	Q_strncpyz(token, ent->client->pers.authToken, MAX_QPATH);
 
-	G_DPrintf("Cmd_Login_f: token = %s, ent = %d, ent->client = %d\n", token, ent, ent->client);
+	G_DPrintf("Cmd_Login_f: token = %s, ent = %d, ent->client = %d\n", token, (int)ent, (int)ent->client);
 
 	if (strlen(token) == 0) {
 		CP("cp \"Empty auth token!\n\"");
@@ -2235,7 +2235,7 @@ void Cmd_Login_f(gentity_t *ent) {
 // Nico, ETrun logout command
 void Cmd_Logout_f(gentity_t *ent) {
 	if (!ent || !ent->client) {
-		G_DPrintf("Cmd_Login_f: invalid ent: %d\n", ent);
+		G_DPrintf("Cmd_Login_f: invalid ent: %d\n", (int)ent);
 		return;
 	}
 

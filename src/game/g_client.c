@@ -1052,7 +1052,7 @@ void ClientUserinfoChanged( int clientNum ) {
 			&client->pers.maxFPS,
 
 			// Nico, auth Token
-			&client->pers.authToken
+			(char *)&client->pers.authToken
 
 			);
 
