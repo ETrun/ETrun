@@ -73,13 +73,29 @@ static void printError() {
 }
 
 /*
+ * Function used to print large buffers (> 1022) to client
+ */
+static void clientBigDataPrint(gentity_t *ent, char *data) {
+	int len = 0;
+	char buf[512];
+	int count = 0;
+
+	len = strlen(data);
+
+	while (count < len) {
+		Q_strncpyz(buf, data + count * sizeof (char), sizeof (buf) + 1);
+		count += sizeof (buf);
+		CP(va("print \"%s\"", buf));
+	}
+}
+
+/*
  * Login handler
  */
 static void *loginHandler(void *data) {
 	int code = -1;
 	int len = 0;
 	gentity_t *ent = NULL;
-
 	struct query_s *queryStruct;
 
 	queryStruct = (struct query_s *)data;
@@ -128,10 +144,11 @@ void G_API_login(char *result, gentity_t *ent, char *authToken) {
  */
 static void *mapRecordsHandler(void *data) {
 	int code = -1;
-
+	gentity_t *ent = NULL;
 	struct query_s *queryStruct;
 
 	queryStruct = (struct query_s *)data;
+	ent = queryStruct->ent;
 
 	G_Printf("[THREAD]Calling API now!\n");
 
@@ -140,8 +157,10 @@ static void *mapRecordsHandler(void *data) {
 	if (code == 0) {
 		G_Printf("[THREAD]Result size = %d:\n", (int)strlen(queryStruct->result));
 		G_Printf("%s\n", queryStruct->result);
+		clientBigDataPrint(ent, queryStruct->result);
 	} else {
 		G_Printf("[THREAD]Error, code: %d, %s\n", code, queryStruct->result);
+		CP(va("print \"Error while requesting records\n\""));
 	}
 
 	free(queryStruct->result);

@@ -2197,7 +2197,7 @@ void Cmd_Save_f(gentity_t *ent)
 
 // Nico, ETrun login command
 void Cmd_Login_f(gentity_t *ent) {
-	char token[MAX_TOKEN_CHARS];
+	char token[MAX_QPATH];
 	char *result = NULL;
 
 	if (!ent || !ent->client) {
@@ -2212,7 +2212,7 @@ void Cmd_Login_f(gentity_t *ent) {
 		return;
 	}
 
-	result = malloc(MAX_TOKEN_CHARS * sizeof (char));
+	result = malloc(RESPONSE_MAX_SIZE * sizeof (char));
 
 	if (!result) {
 		G_Error("Cmd_Login_f: malloc failed\n");
@@ -2251,6 +2251,18 @@ void Cmd_Logout_f(gentity_t *ent) {
 	//#todo: release auth token?
 }
 
+// Nico, records command
+void Cmd_Records_f(gentity_t *ent) {
+	char *buf = NULL;
+
+	buf = malloc(RESPONSE_MAX_SIZE * sizeof (char));
+
+	G_Printf("Asking for map record...\n");
+	G_API_mapRecords(buf, ent, level.rawmapname);
+
+	// Do *not* free buf here
+}
+
 // Nico, defines commands that are flood protected or not
 static command_t floodProtectedCommands[] = {
 	{ "score",				qfalse,	Cmd_Score_f },
@@ -2272,7 +2284,8 @@ static command_t floodProtectedCommands[] = {
 
 	// ETrun specific commands
 	{ "login",				qtrue, Cmd_Login_f },
-	{ "logout",				qtrue, Cmd_Logout_f }
+	{ "logout",				qtrue, Cmd_Logout_f },
+	{ "records",			qtrue, Cmd_Records_f }
 };
 // Nico, end of defines commands that are flood protected or not
 

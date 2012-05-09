@@ -33,7 +33,6 @@ If you have questions concerning this license or the applicable additional terms
 //
 #include "g_local.h"
 #include "../../etrun/ui/menudef.h"
-#include "g_api.h"
 
 //
 // UGH!  Clean me!!!!
@@ -80,18 +79,6 @@ qboolean G_refCommandCheck( gentity_t *ent, char *cmd ) {
 // http://games.chruker.dk/enemy_territory/modding_project_bugfix.php?bug_id=038
 // http://games.chruker.dk/enemy_territory/modding_project_bugfix.php?bug_id=039
 void G_refHelp_cmd( gentity_t *ent ) {
-	char *buf = NULL;
-
-	buf = malloc(MAX_TOKEN_CHARS * sizeof (char));
-
-	// Nico, test API
-	//G_Printf("Asking for map record...\n");
-	//G_API_mapRecords(level.rawmapname, buf);
-
-	//memset(buf, 0, MAX_TOKEN_CHARS);
-	G_Printf("Fake login attempt for client %d...\n", ent);
-	G_API_login(buf, ent, "7e443468562");
-
 	// List commands only for enabled refs.
 	if ( ent ) {
 		CP( "print \"\n^3Referee commands:^7\n\"" );
