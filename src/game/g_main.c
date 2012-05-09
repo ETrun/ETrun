@@ -298,7 +298,7 @@ cvarTable_t gameCvarTable[] = {
 	{ &g_maxNameChanges, "g_maxNameChanges", "3", 0},
 
 	// API module
-	{ &g_useAPI, "g_useAPI", "1", CVAR_ARCHIVE | CVAR_LATCH},
+	{ &g_useAPI, "g_useAPI", "0", CVAR_ARCHIVE | CVAR_LATCH},
 	{ &g_APImodulePath, "g_APImodulePath", "", CVAR_ARCHIVE | CVAR_LATCH}
 
 	// Nico, end of ETrun cvars
