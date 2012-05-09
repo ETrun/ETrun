@@ -132,26 +132,7 @@ Request current scoreboard information
 */
 void Cmd_Score_f( gentity_t *ent ) {
 	ent->client->wantsscore = qtrue;
-//	G_SendScore( ent );
 }
-
-/*
-==================
-CheatsOk
-==================
-*/
-qboolean    CheatsOk( gentity_t *ent ) {
-	if ( !g_cheats.integer ) {
-		trap_SendServerCommand( ent - g_entities, va( "print \"Cheats are not enabled on this server.\n\"" ) );
-		return qfalse;
-	}
-	if ( ent->health <= 0 ) {
-		trap_SendServerCommand( ent - g_entities, va( "print \"You must be alive to use this command.\n\"" ) );
-		return qfalse;
-	}
-	return qtrue;
-}
-
 
 /*
 ==================
@@ -281,7 +262,14 @@ void Cmd_Noclip_f( gentity_t *ent ) {
 
 	char    *name = ConcatArgs( 1 );
 
-	if ( !CheatsOk( ent ) ) {
+	// Nico, only available if client is not logged in
+	if (ent->client->sess.logged) {
+		trap_SendServerCommand( ent - g_entities, va( "print \"You must /logout to use this command.\n\"" ) );
+		return;
+	}
+
+	if ( ent->health <= 0 ) {
+		trap_SendServerCommand( ent - g_entities, va( "print \"You must be alive to use this command.\n\"" ) );
 		return;
 	}
 
@@ -1997,84 +1985,6 @@ void Cmd_SetSpawnPoint_f( gentity_t* ent ) {
 	}
 }
 
-/*
-============
-Cmd_SetSniperSpot_f
-============
-*/
-void Cmd_SetSniperSpot_f( gentity_t *clent ) {
-	gentity_t *spot;
-
-	vmCvar_t cvar_mapname;
-	char filename[MAX_QPATH];
-	fileHandle_t f;
-	char buf[1024];
-
-	if ( !g_cheats.integer ) {
-		return;
-	}
-	if ( !trap_Cvar_VariableIntegerValue( "cl_running" ) ) {
-		return;                                                 // only allow locally playing client
-	}
-	if ( clent->s.number != 0 ) {
-		return;                         // only allow locally playing client
-
-	}
-	// drop a sniper spot here
-	spot = G_Spawn();
-	spot->classname = "bot_sniper_spot";
-	VectorCopy( clent->r.currentOrigin, spot->s.origin );
-	VectorCopy( clent->client->ps.viewangles, spot->s.angles );
-	spot->aiTeam = clent->client->sess.sessionTeam;
-
-	// output to text file
-	trap_Cvar_Register( &cvar_mapname, "mapname", "", CVAR_SERVERINFO | CVAR_ROM );
-
-	Com_sprintf( filename, sizeof( filename ), "maps/%s.botents", cvar_mapname.string );
-	if ( trap_FS_FOpenFile( filename, &f, FS_APPEND ) < 0 ) {
-		G_Error( "Cmd_SetSniperSpot_f: cannot open %s for writing", filename );
-	}
-
-	Com_sprintf( buf, sizeof( buf ), "{\n\"classname\" \"%s\"\n\"origin\" \"%.3f %.3f %.3f\"\n\"angles\" \"%.2f %.2f %.2f\"\n\"aiTeam\" \"%i\"\n}\n\n", spot->classname, spot->s.origin[0], spot->s.origin[1], spot->s.origin[2], spot->s.angles[0], spot->s.angles[1], spot->s.angles[2], spot->aiTeam );
-	trap_FS_Write( buf, strlen( buf ), f );
-
-	trap_FS_FCloseFile( f );
-
-	G_Printf( "dropped sniper spot\n" );
-
-	return;
-}
-
-void G_MakeReady( gentity_t* ent ) {
-	ent->client->ps.eFlags |= EF_READY;
-	ent->s.eFlags |= EF_READY;
-	// rain - #105 - moved this set here
-	ent->client->pers.ready = qtrue;
-}
-
-void G_MakeUnready( gentity_t* ent ) {
-	ent->client->ps.eFlags &= ~EF_READY;
-	ent->s.eFlags &= ~EF_READY;
-	// rain - #105 - moved this set here
-	ent->client->pers.ready = qfalse;
-}
-
-void G_CalcClientAccuracies( void ) {
-	int i;
-	int shots, hits;
-
-	for ( i = 0; i < MAX_CLIENTS; i++ ) {
-		shots = 0;
-		hits = 0;
-
-		if ( g_entities[i].inuse ) {
-			level.clients[ i ].acc = shots ? ( 100 * hits ) / (float)shots : 0;
-		} else {
-			level.clients[ i ].acc = 0;
-		}
-	}
-}
-
 void Cmd_SelectedObjective_f( gentity_t* ent ) {
 	int i, val;
 	char buffer[16];
@@ -2310,11 +2220,12 @@ void Cmd_Login_f(gentity_t *ent) {
 
 	Q_strncpyz(token, ent->client->pers.authToken, MAX_QPATH);
 
+	G_DPrintf("Cmd_Login_f: token = %s, ent = %d, ent->client = %d\n", token, ent, ent->client);
+
 	if (strlen(token) == 0) {
-		CP("cp \"Empty auth token! (use cg_authToken \"YourAuthToken\")\n\"");
+		CP("cp \"Empty auth token!\n\"");
 		G_DPrintf("Cmd_Login_f: empty_token\n");
 	} else {
-		G_DPrintf("Cmd_Login_f: token = %s, ent = %d, ent->client = %d\n", token, ent, ent->client);
 		G_API_login(result, ent, token);
 	}
 

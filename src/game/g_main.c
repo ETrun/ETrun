@@ -53,7 +53,6 @@ vmCvar_t g_password;
 vmCvar_t sv_privatepassword;
 vmCvar_t g_maxclients;
 vmCvar_t g_dedicated;
-vmCvar_t g_cheats;
 vmCvar_t g_inactivity;
 vmCvar_t g_debugMove;
 vmCvar_t g_debugDamage;
@@ -165,9 +164,6 @@ vmCvar_t g_APImodulePath;
 
 
 cvarTable_t gameCvarTable[] = {
-	// don't override the cheat state set by the system
-	{ &g_cheats, "sv_cheats", "", 0, qfalse },
-
 	// noset vars
 	{ NULL, "gamename", GAME_VERSION, CVAR_SERVERINFO | CVAR_ROM, 0, qfalse  },
 	{ NULL, "gamedate", __DATE__, CVAR_ROM, 0, qfalse  },

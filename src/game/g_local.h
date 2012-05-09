@@ -1414,7 +1414,6 @@ extern g_campaignInfo_t g_campaigns[];
 
 extern vmCvar_t g_log;
 extern vmCvar_t g_dedicated;
-extern vmCvar_t g_cheats;
 extern vmCvar_t g_maxclients;               // allow this many total, including spectators
 extern vmCvar_t g_restarted;
 extern vmCvar_t g_password;
@@ -1896,13 +1895,10 @@ gentity_t* G_IsConstructible( team_t team, gentity_t* toi );
 qboolean G_EmplacedGunIsRepairable( gentity_t* ent, gentity_t* other );
 qboolean G_EmplacedGunIsMountable( gentity_t* ent, gentity_t* other );
 void G_CheckForCursorHints( gentity_t *ent );
-void G_CalcClientAccuracies( void );
 int G_TeamCount( gentity_t* ent, weapon_t weap );
 
 qboolean G_IsFireteamLeader( int entityNum, fireteamData_t** teamNum );
 void G_RegisterFireteam(int entityNum, qboolean priv);
-void G_MakeReady( gentity_t* ent );
-void G_MakeUnready( gentity_t* ent );
 
 void SetPlayerSpawn( gentity_t* ent, int spawn, qboolean update );
 void G_UpdateSpawnCounts( void );

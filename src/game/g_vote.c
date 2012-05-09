@@ -399,7 +399,10 @@ void G_check_delayed_map_change() {
 	if (level.time && level.delayedMapChange.timeChange && level.time <= level.delayedMapChange.timeChange) {
 		// There is a delayed change
 
-		G_DPrintf("Map change in: %d secs\n", level.delayedMapChange.timeChange - level.time);
+		// Print remaining time each sec
+		if ((level.delayedMapChange.timeChange - level.time) % 1000 == 0) {
+			G_DPrintf("Map change in: %d secs\n", level.delayedMapChange.timeChange - level.time);
+		}
 
 		if (level.time == level.delayedMapChange.timeChange) {
 			char s[MAX_STRING_CHARS];

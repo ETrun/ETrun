@@ -763,9 +763,6 @@ int G_Script_GetEventIndex( gentity_t *ent, char *eventStr, char *params ) {
 	}
 
 	if ( eventNum < 0 ) {
-		if ( g_cheats.integer ) {    // dev mode
-			G_Printf( "devmode-> G_Script_GetEventIndex(), unknown event: %s\n", eventStr );
-		}
 		return -1;
 	}
 

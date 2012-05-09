@@ -266,11 +266,11 @@ extern const unsigned int aReinfSeeds[MAX_REINFSEEDS];
 
 // Client flags for server processing
 #define CGF_AUTORELOAD      0x01
-#define CGF_STATSDUMP       0x02
+#define CGF_STATSDUMP       0x02	// Nico, note: unused
 #define CGF_AUTOACTIVATE    0x04
 #define CGF_PREDICTITEMS    0x08
 #define CGF_PMOVEFIXED      0x10	// Nico, pmove_fixed
-#define CGF_AUTOLOGIN		0x12	// Nico, autologin
+#define CGF_AUTOLOGIN		0x20	// Nico, autologin
 
 #define MAX_MOTDLINES   6
 
