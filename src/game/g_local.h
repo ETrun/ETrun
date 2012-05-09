@@ -629,6 +629,9 @@ typedef struct {
 	// Nico, auth token
 	char authToken[MAX_QPATH];
 
+	// Nico, auto login
+	qboolean autoLogin;
+
 } clientPersistant_t;
 
 typedef struct {
@@ -1030,9 +1033,9 @@ void G_EntitySound( gentity_t *ent, const char *soundId, int volume );
 void G_EntitySoundNoCut( gentity_t *ent, const char *soundId, int volume );
 int ClientNumberFromString( gentity_t *to, char *s );
 void SanitizeString( char *in, char *out, qboolean fToLower );
+void Cmd_Login_f(gentity_t *ent);// Nico, login
 
 // Nico, flood protection
-
 typedef struct {
 	char		*cmd;
 	qboolean	isProtected;
@@ -1040,7 +1043,6 @@ typedef struct {
 } command_t;
 
 qboolean ClientIsFlooding(gentity_t *ent);
-
 // Nico, end of flood protection
 
 //

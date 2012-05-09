@@ -270,6 +270,7 @@ extern const unsigned int aReinfSeeds[MAX_REINFSEEDS];
 #define CGF_AUTOACTIVATE    0x04
 #define CGF_PREDICTITEMS    0x08
 #define CGF_PMOVEFIXED      0x10	// Nico, pmove_fixed
+#define CGF_AUTOLOGIN		0x12	// Nico, autologin
 
 #define MAX_MOTDLINES   6
 

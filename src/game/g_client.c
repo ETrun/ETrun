@@ -28,6 +28,7 @@ If you have questions concerning this license or the applicable additional terms
 
 #include "g_local.h"
 #include "../../etrun/ui/menudef.h"
+#include "g_api.h"
 
 // g_client.c -- client functions that don't happen every frame
 vec3_t playerMins = {-18, -18, -24};
@@ -1068,6 +1069,12 @@ void ClientUserinfoChanged( int clientNum ) {
 
 	// Nico, pmove_fixed
 	client->pers.pmoveFixed = client->pers.clientFlags & CGF_PMOVEFIXED;
+
+	// Nico, check autologin
+	if (!client->pers.autoLogin && (client->pers.clientFlags & CGF_AUTOLOGIN) && !client->sess.logged) {
+		Cmd_Login_f(ent);
+	}
+	client->pers.autoLogin = client->pers.clientFlags & CGF_AUTOLOGIN;
 
 	// set name
 	Q_strncpyz( oldname, client->pers.netname, sizeof( oldname ) );

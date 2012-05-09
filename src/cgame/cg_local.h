@@ -1864,8 +1864,9 @@ extern vmCvar_t cg_drawOB;
 extern vmCvar_t cg_hideOthers;
 extern vmCvar_t cg_hideRange;
 
-// Auth token
+// Auth related
 extern vmCvar_t cg_authToken;
+extern vmCvar_t cg_autoLogin;
 
 // Nico, end of ETrun cvars
 

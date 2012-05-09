@@ -296,8 +296,9 @@ vmCvar_t cg_drawOB;
 vmCvar_t cg_hideOthers;
 vmCvar_t cg_hideRange;
 
-// Auth token
+// Auth related
 vmCvar_t cg_authToken;
+vmCvar_t cg_autoLogin;
 
 // Nico, end of ETrun cvars
 
@@ -529,8 +530,9 @@ cvarTable_t cvarTable[] = {
 	{ &cg_hideOthers, "cg_hideOthers", "1", CVAR_ARCHIVE },
 	{ &cg_hideRange, "cg_hideRange", "128", CVAR_ARCHIVE },
 
-	// Auth token
+	// Auth related
 	{ &cg_authToken, "cg_authToken", "", CVAR_ARCHIVE },
+	{ &cg_autoLogin, "cg_autoLogin", "0", CVAR_ARCHIVE },
 
 	// Nico, end of ETrun cvars
 };
@@ -603,12 +605,12 @@ void CG_UpdateCvars( void ) {
 				// Check if we need to update any client flags to be sent to the server
 				// Nico, added pmove_fixed
 				// Nico, added com_maxfps
-				// Nico, added auth token
+				// Nico, added auth token & auto login
 				if ( cv->vmCvar == &cg_autoAction || cv->vmCvar == &cg_autoReload ||
 					 cv->vmCvar == &int_cl_timenudge || cv->vmCvar == &int_cl_maxpackets ||
 					 cv->vmCvar == &cg_autoactivate || cv->vmCvar == &cg_predictItems ||
 					 cv->vmCvar == &pmove_fixed || cv->vmCvar == &com_maxfps ||
-					 cv->vmCvar == &cg_authToken ) {
+					 cv->vmCvar == &cg_authToken || cv->vmCvar == &cg_autoLogin ) {
 					fSetFlags = qtrue;
 				} else if ( cv->vmCvar == &cg_crosshairColor || cv->vmCvar == &cg_crosshairAlpha )      {
 					BG_setCrosshair( cg_crosshairColor.string, cg.xhairColor, cg_crosshairAlpha.value, "cg_crosshairColor" );
@@ -656,7 +658,8 @@ void CG_setClientFlags( void ) {
 		( ( cg_autoReload.integer > 0 ) ? CGF_AUTORELOAD : 0 ) |
 		( ( cg_autoactivate.integer > 0 ) ? CGF_AUTOACTIVATE : 0 ) |
 		( ( cg_predictItems.integer > 0 ) ? CGF_PREDICTITEMS : 0 ) |
-		((pmove_fixed.integer > 0) ? CGF_PMOVEFIXED : 0)
+		((pmove_fixed.integer > 0) ? CGF_PMOVEFIXED : 0) |
+		((cg_autoLogin.integer > 0) ? CGF_AUTOLOGIN : 0)
 		// Add more in here, as needed
 	),
 
