@@ -163,6 +163,7 @@
     <ClCompile Include="..\game\bg_sscript.c" />
     <ClCompile Include="..\game\bg_tracemap.c" />
     <ClCompile Include="..\game\bg_weapons.c" />
+    <ClCompile Include="..\libs\sha-1\sha1.c" />
     <ClCompile Include="cg_atmospheric.c" />
     <ClCompile Include="cg_character.c" />
     <ClCompile Include="cg_consolecmds.c" />

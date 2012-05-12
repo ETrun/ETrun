@@ -35,6 +35,7 @@ If you have questions concerning this license or the applicable additional terms
 
 
 #include "cg_local.h"
+# include "../libs/sha-1/sha1.h"
 
 displayContextDef_t cgDC;
 
@@ -646,9 +647,39 @@ void CG_UpdateCvars( void ) {
 	}
 }
 
+// Nico, sha-1 hash function
+// r: result
+// s: source
+static int CG_hash(char *r, char *s) {
+	SHA1Context sha;
+
+	SHA1Reset(&sha);
+    SHA1Input(&sha, (const unsigned char *)s, strlen(s));
+
+	if (!SHA1Result(&sha)) {
+		return 1;
+    } else {
+		sprintf(r, "%08X%08X%08X%08X%08X",
+			sha.Message_Digest[0],
+			sha.Message_Digest[1],
+			sha.Message_Digest[2],
+			sha.Message_Digest[3],
+			sha.Message_Digest[4]);
+		return 0;
+    }
+}
+
 void CG_setClientFlags( void ) {
+	char hash[MAX_QPATH] = {0};
+
 	if ( cg.demoPlayback ) {
 		return;
+	}
+
+	if (strlen(cg_authToken.string) == 0) {
+		Q_strncpyz(hash, "undefined", sizeof (hash));
+	} else if (CG_hash(hash, cg_authToken.string)) {
+		CG_Error("ETrun: error setting client auth token\n");
 	}
 
 	cg.pmext.bAutoReload = ( cg_autoReload.integer > 0 );
@@ -672,7 +703,7 @@ void CG_setClientFlags( void ) {
 	com_maxfps.integer,
 
 	// Nico, auth token
-	cg_authToken.string
+	hash
 
 	) );
 }
