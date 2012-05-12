@@ -968,6 +968,12 @@ void CG_PredictPlayerState( void ) {
 	// Nico, game physics
 	cg_pmove.physics = physics.integer;
 
+	// Nico, #removeme
+	cg_pmove.pm_aircontrol = aircontrol.integer;
+	cg_pmove.pm_strafeaccelerate = strafeaccelerate.integer;
+	cg_pmove.pm_wishspeed = wishspeed.integer;
+	cg_pmove.pm_airstopaccelerate = airstopaccelerate.integer;
+
 	cg_pmove.timerunActive = cg.timerunActive;
 	cg_pmove.timerunStartTime = cg.timerunStartTime;
 

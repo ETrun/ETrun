@@ -837,6 +837,12 @@ void ClientThink_real( gentity_t *ent ) {
 	// Nico, game physics
 	pm.physics = physics.integer;
 
+	// Nico, #removeme
+	pm.pm_aircontrol = aircontrol.integer;
+	pm.pm_strafeaccelerate = strafeaccelerate.integer;
+	pm.pm_wishspeed = wishspeed.integer;
+	pm.pm_airstopaccelerate = airstopaccelerate.integer;
+
 	pm.timerunActive = client->timerunActive;
 	pm.timerunStartTime = client->timerunStartTime + 500;
 

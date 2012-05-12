@@ -72,10 +72,11 @@ float pm_spectatorfriction = 5.0f;
 //----(SA)	end
 
 // Nico, from Racesow
+/* #removeme
 const float pm_aircontrol = 150.0f; // aircontrol multiplier (intertia velocity to forward velocity conversion), default: 150
 const float pm_strafeaccelerate = 100; // forward acceleration when strafe bunny hopping, default: 70
 const float pm_wishspeed = 30;// Nico, default value 30
-const float pm_airstopaccelerate = 2.0f;// Nico, CPM value: 2.5f, Racesow value: 2.0f
+const float pm_airstopaccelerate = 2.0f;// Nico, CPM value: 2.5f, Racesow value: 2.0f*/
 
 int c_pmove = 0;
 
@@ -849,7 +850,8 @@ static void PM_Aircontrol( pmove_t *pm, vec3_t wishdir, float wishspeed ) {
 	int i;
 	float smove;
 
-	if ( !pm_aircontrol ) {
+	//if ( !pm_aircontrol ) { #removeme
+	if ( !pm->pm_aircontrol ) {
 		return;
 	}
 
@@ -865,7 +867,8 @@ static void PM_Aircontrol( pmove_t *pm, vec3_t wishdir, float wishspeed ) {
 	speed = VectorNormalize( pm->ps->velocity );
 
 	dot = DotProduct( pm->ps->velocity, wishdir );
-	k = 32.0f * pm_aircontrol * dot * dot * pml.frametime;
+	// k = 32.0f * pm_aircontrol * dot * dot * pml.frametime; #removeme
+	k = 32.0f * pm->pm_aircontrol * dot * dot * pml.frametime;
 
 	if ( dot > 0 ) {
 		// we can't change direction while slowing down
@@ -943,16 +946,20 @@ static void PM_AirMove( void ) {
 		// Air Control
 		wishspeed2 = wishspeed;
 		if ( DotProduct( pm->ps->velocity, wishdir ) < 0 ) {
-			accel = pm_airstopaccelerate;
+			//accel = pm_airstopaccelerate; #removeme
+			accel = pm->pm_airstopaccelerate;
 		} else {
 			accel = pm_airaccelerate;
 		}
 
 		if ( ( smove > 0 || smove < 0 ) && !fmove ) {
-			if ( wishspeed > pm_wishspeed ) {
-				wishspeed = pm_wishspeed;
+			// if ( wishspeed > pm_wishspeed ) { #removeme
+			if ( wishspeed > pm->pm_wishspeed ) {
+				// wishspeed = pm_wishspeed; #removeme
+				wishspeed = pm->pm_wishspeed;
 			}
-			accel = pm_strafeaccelerate;
+			// accel = pm_strafeaccelerate; #removeme
+			accel = pm->pm_strafeaccelerate;
 		}
 
 		// Air control

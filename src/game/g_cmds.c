@@ -2200,6 +2200,12 @@ void Cmd_Login_f(gentity_t *ent) {
 	char token[MAX_QPATH];
 	char *result = NULL;
 
+	// Check if API is used
+	if (!g_useAPI.integer) {
+		CP("cp \"Login is disabled on this server.\n\"");
+		return;
+	}
+
 	if (!ent || !ent->client) {
 		G_DPrintf("Cmd_Login_f: invalid ent: %d\n", (int)ent);
 		return;
@@ -2255,7 +2261,17 @@ void Cmd_Logout_f(gentity_t *ent) {
 void Cmd_Records_f(gentity_t *ent) {
 	char *buf = NULL;
 
+	// Check if API is used
+	if (!g_useAPI.integer) {
+		CP("cp \"This command is disabled on this server.\n\"");
+		return;
+	}
+
 	buf = malloc(RESPONSE_MAX_SIZE * sizeof (char));
+
+	if (!buf) {
+		G_Error("Cmd_Records_f: malloc failed\n");
+	}
 
 	G_Printf("Asking for map record...\n");
 	G_API_mapRecords(buf, ent, level.rawmapname);

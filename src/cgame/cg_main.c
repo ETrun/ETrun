@@ -268,6 +268,12 @@ vmCvar_t cg_recording_statusline;
 // Game physics 
 vmCvar_t physics;
 
+// Nico, #removeme
+vmCvar_t aircontrol;
+vmCvar_t strafeaccelerate;
+vmCvar_t wishspeed;
+vmCvar_t airstopaccelerate;
+
 // Is level a timerun?
 vmCvar_t isTimerun;
 
@@ -501,6 +507,12 @@ cvarTable_t cvarTable[] = {
 
 	// Game physics 
 	{ &physics, "physics", "0", CVAR_ROM },
+
+	// Nico, #removeme
+	{ &aircontrol, "aircontrol", "150", CVAR_ROM },
+	{ &strafeaccelerate, "strafeaccelerate", "70", CVAR_ROM },
+	{ &wishspeed, "wishspeed", "30", CVAR_ROM },
+	{ &airstopaccelerate, "airstopaccelerate", "2", CVAR_ROM },
 
 	// Is level a timerun?
 	{ &isTimerun, "isTimerun", "0", CVAR_ROM | CVAR_CHEAT },
