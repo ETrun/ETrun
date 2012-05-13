@@ -424,6 +424,23 @@ qboolean CG_DrawScoreboard(void) {
 		teamPlayers[orderedScores[i].team]++;
 	}
 
+	// Nico, draw some settings
+	#if 1
+
+	if (physics.integer & PHYSICS_NO_OVERBOUNCE) {
+		WM_ETrun_print("Overbounce: disabled", &cgs.media.limboFont2, 0.15, 20, 10, qtrue, 0);
+	} else {
+		WM_ETrun_print("Overbounce: enabled", &cgs.media.limboFont2, 0.15, 20, 10, qtrue, 0);
+	}
+
+	if (physics.integer & PHYSICS_UPMOVE_BUG_FIX) {
+		WM_ETrun_print("Upmove bug fix: enabled", &cgs.media.limboFont2, 0.15, 20, 30, qtrue, 0);
+	} else {
+		WM_ETrun_print("Upmove bug fix: disabled", &cgs.media.limboFont2, 0.15, 20, 30, qtrue, 0);
+	}
+
+	#endif
+
 	// Nico, draw scoreboard header
 	y = 30;// Start drawing from y = 30
 	WM_ETrun_DrawHeader(&x, &y, SCREEN_WIDTH - 2 * x, fade, &cgs.media.limboFont1);
