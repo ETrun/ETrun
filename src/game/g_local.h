@@ -763,8 +763,6 @@ struct gclient_s {
 	int			timerunCheckpointsPassed;
 	char		*currentTimerun;
 
-	int			nextTimerunStartAllowed;
-
 	// Speed related
 	float		startSpeed;
 	float		stopSpeed;

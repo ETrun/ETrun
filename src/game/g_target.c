@@ -1268,11 +1268,6 @@ void target_starttimer_use(gentity_t *self, gentity_t *other, gentity_t *activat
 		CPx(activator - g_entities, "cpm \"^1Timerun not started, invalid playerstate!\n\"");
 		return;
 	}
-
-	if (client->nextTimerunStartAllowed > client->ps.commandTime) {
-		CPx(activator - g_entities, "cpm \"^1Timerun not started, possible teleporter abuse!\n\"");
-		return;
-	}
 	
 	client->currentTimerun = self->timerunName;
 

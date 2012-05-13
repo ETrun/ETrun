@@ -2110,7 +2110,6 @@ void Cmd_Load_f(gentity_t *ent)
 			ent->client->timerunActive = qfalse;
 		}
 
-		ent->client->nextTimerunStartAllowed = ent->client->ps.commandTime;
 		VectorCopy(pos->origin, ent->client->ps.origin);
 
 		SetClientViewAngle(ent, pos->vangles);
