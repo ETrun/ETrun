@@ -110,6 +110,8 @@ vmCvar_t vote_allow_nextmap;
 vmCvar_t vote_allow_referee;
 vmCvar_t vote_allow_antilag;
 vmCvar_t vote_allow_muting;
+vmCvar_t vote_allow_ob;
+vmCvar_t vote_allow_upmovebugfix;
 vmCvar_t vote_limit;
 vmCvar_t vote_percent;
 vmCvar_t g_covertopsChargeTime;
@@ -246,6 +248,9 @@ cvarTable_t gameCvarTable[] = {
 	{ &vote_allow_referee,      "vote_allow_referee", "0", 0, 0, qfalse, qfalse },
 
 	{ &vote_allow_antilag,      "vote_allow_antilag", "1", 0, 0, qfalse, qfalse },
+
+	{ &vote_allow_ob,			"vote_allow_ob", "1", 0, 0, qfalse, qfalse },
+	{ &vote_allow_upmovebugfix, "vote_allow_upmovebugfix", "1", 0, 0, qfalse, qfalse },
 
 	{ &vote_allow_muting,       "vote_allow_muting", "1", 0, 0, qfalse, qfalse },
 	{ &vote_limit,      "vote_limit", "5", 0, 0, qfalse, qfalse },
@@ -1150,12 +1155,15 @@ void G_UpdateCvars( void ) {
 					}
 				}
 				// OSP - Update vote info for clients, if necessary
-				if ( cv->vmCvar == &vote_allow_kick          || cv->vmCvar == &vote_allow_map            ||
+				if ( cv->vmCvar == &vote_allow_kick			    || 
+						cv->vmCvar == &vote_allow_map           ||
 						cv->vmCvar == &vote_allow_matchreset    ||
-						cv->vmCvar == &vote_allow_nextmap        ||
+						cv->vmCvar == &vote_allow_nextmap       ||
 						cv->vmCvar == &vote_allow_referee       ||
-						cv->vmCvar == &vote_allow_antilag        ||
-						cv->vmCvar == &vote_allow_muting
+						cv->vmCvar == &vote_allow_antilag       ||
+						cv->vmCvar == &vote_allow_muting		||
+						cv->vmCvar == &vote_allow_ob			||
+						cv->vmCvar == &vote_allow_upmovebugfix
 						) {
 					fVoteFlags = qtrue;
 				} else {

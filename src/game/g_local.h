@@ -1478,6 +1478,8 @@ extern vmCvar_t vote_allow_nextmap;
 extern vmCvar_t vote_allow_referee;
 extern vmCvar_t vote_allow_antilag;
 extern vmCvar_t vote_allow_muting;
+extern vmCvar_t vote_allow_ob;
+extern vmCvar_t vote_allow_upmovebugfix;
 extern vmCvar_t vote_limit;
 extern vmCvar_t vote_percent;
 extern vmCvar_t g_letterbox;
@@ -1867,6 +1869,8 @@ int G_Referee_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2
 int G_StartMatch_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd );
 int G_Unreferee_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd );
 int G_AntiLag_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd );
+int G_OB_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd );
+int G_UpmoveBugFix_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd );
 void G_LinkDebris( void );
 void G_LinkDamageParents( void );
 int EntsThatRadiusCanDamage( vec3_t origin, float radius, int *damagedList );

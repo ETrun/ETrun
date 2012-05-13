@@ -421,6 +421,8 @@ If you have questions concerning this license or the applicable additional terms
 #define CV_SVS_LOCKSPECS        4
 #define CV_SVS_ANTILAG          8
 #define CV_SVS_NEXTMAP          16
+#define CV_SVS_OB				32
+#define CV_SVS_UPMOVEBUGFIX		64
 
 // "cg_ui_voteFlags"
 #define CV_SVF_KICK             1
@@ -430,6 +432,8 @@ If you have questions concerning this license or the applicable additional terms
 #define CV_SVF_REFEREE          16
 #define CV_SVF_ANTILAG          32
 #define CV_SVF_MUTING           64
+#define CV_SVF_OB				128
+#define CV_SVF_UPMOVEBUGFIX		256
 
 // referee level
 #define RL_NONE                 0

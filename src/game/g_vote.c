@@ -65,17 +65,19 @@ typedef struct {
 
 // VC optimizes for dup strings :)
 static const vote_reference_t aVoteInfo[] = {
-	{ 0x1ff, "kick",      G_Kick_v,          "KICK",              " <player_id>^7\n  Attempts to kick player from server" },
-	{ 0x1ff, "mute",      G_Mute_v,          "MUTE",              " <player_id>^7\n  Removes the chat capabilities of a player" },
-	{ 0x1ff, "unmute",        G_UnMute_v,        "UN-MUTE",           " <player_id>^7\n  Restores the chat capabilities of a player" },
-	{ 0x1ff, "map",           G_Map_v,           "Change map to", " <mapname>^7\n  Votes for a new map to be loaded" },
-	{ 0x1ff, "maprestart",    G_MapRestart_v,    "Map Restart",       "^7\n  Restarts the current map in progress" },
-	{ 0x1ff, "matchreset",   G_MatchReset_v, "Match Reset",       "^7\n  Resets the entire match" },
-	{ 0x1ff, "nextmap",       G_Nextmap_v,       "Load Next Map", "^7\n  Loads the next map or campaign in the map queue" },
-	{ 0x1ff, "referee",       G_Referee_v,       "Referee",           " <player_id>^7\n  Elects a player to have admin abilities" },
-	{ 0x1ff, "startmatch",    G_StartMatch_v,    "Start Match",       " ^7\n  Sets all players to \"ready\" status to start the match" },
-	{ 0x1ff, "unreferee",     G_Unreferee_v,     "UNReferee",     " <player_id>^7\n  Elects a player to have admin abilities removed" },
-	{ 0x1ff, "antilag",       G_AntiLag_v,       "Anti-Lag",          " <0|1>^7\n  Toggles Anit-Lag on the server" },
+	{ 0x1ff, "kick",		G_Kick_v,			"KICK",             " <player_id>^7\n  Attempts to kick player from server" },
+	{ 0x1ff, "mute",		G_Mute_v,			"MUTE",             " <player_id>^7\n  Removes the chat capabilities of a player" },
+	{ 0x1ff, "unmute",      G_UnMute_v,			"UN-MUTE",          " <player_id>^7\n  Restores the chat capabilities of a player" },
+	{ 0x1ff, "map",         G_Map_v,			"Change map to",	" <mapname>^7\n  Votes for a new map to be loaded" },
+	{ 0x1ff, "maprestart",  G_MapRestart_v,		"Map Restart",      "^7\n  Restarts the current map in progress" },
+	{ 0x1ff, "matchreset",  G_MatchReset_v,		"Match Reset",      "^7\n  Resets the entire match" },
+	{ 0x1ff, "nextmap",     G_Nextmap_v,		"Load Next Map",	"^7\n  Loads the next map or campaign in the map queue" },
+	{ 0x1ff, "referee",     G_Referee_v,		"Referee",          " <player_id>^7\n  Elects a player to have admin abilities" },
+	{ 0x1ff, "startmatch",  G_StartMatch_v,		"Start Match",      " ^7\n  Sets all players to \"ready\" status to start the match" },
+	{ 0x1ff, "unreferee",   G_Unreferee_v,		"UNReferee",		" <player_id>^7\n  Elects a player to have admin abilities removed" },
+	{ 0x1ff, "antilag",     G_AntiLag_v,		"Anti-Lag",         " <0|1>^7\n  Toggles Anit-Lag on the server" },
+	{ 0x1ff, "ob",			G_OB_v,				"Overbounce",		" <0|1>^7\n  Toggles overbounce on the server" },
+	{ 0x1ff, "upmovebugfix",G_UpmoveBugFix_v,   "Upmove bug fix",	" <0|1>^7\n  Toggles upmove bug fix on the server" },
 	{ 0, 0, NULL, 0 }
 };
 
@@ -658,6 +660,47 @@ int G_Unreferee_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *ar
 		cl->sess.spec_invite = 0;
 		AP( va( "cp \"%s^7\nis no longer a referee\n\"", cl->pers.netname ) );
 		ClientUserinfoChanged( atoi( level.voteInfo.vote_value ) );
+	}
+
+	return( G_OK );
+}
+
+int G_OB_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd ) {
+	char val[2];
+
+	if ( arg ) {
+		// Usage ...
+	} else {
+		if (physics.integer & PHYSICS_NO_OVERBOUNCE) {
+			G_Printf("OB enabled\n");
+			sprintf(val, "%d", physics.integer -= PHYSICS_NO_OVERBOUNCE);
+			trap_Cvar_Set("physics", val);
+		} else {
+			G_Printf("OB disabled\n");
+			sprintf(val, "%d", physics.integer += PHYSICS_NO_OVERBOUNCE);
+			trap_Cvar_Set("physics", val);
+		}
+		AP( va( "cpm \"^3Overbounce is: ^5%s\n\"", (!(physics.integer & PHYSICS_NO_OVERBOUNCE)) ? ENABLED : DISABLED ) );
+	}
+
+	return( G_OK );
+}
+
+int G_UpmoveBugFix_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd ) {
+	char val[2];
+
+	if ( arg ) {
+	} else {
+		if (physics.integer & PHYSICS_UPMOVE_BUG_FIX) {
+			G_Printf("Upmove bug fix disabled\n");
+			sprintf(val, "%d", physics.integer -= PHYSICS_UPMOVE_BUG_FIX);
+			trap_Cvar_Set("physics", val);
+		} else {
+			G_Printf("Upmove bug fix enabled\n");
+			sprintf(val, "%d", physics.integer += PHYSICS_UPMOVE_BUG_FIX);
+			trap_Cvar_Set("physics", val);
+		}
+		AP( va( "cpm \"^3Upmove bug fix is: ^5%s\n\"", (physics.integer & PHYSICS_UPMOVE_BUG_FIX) ? ENABLED : DISABLED ) );
 	}
 
 	return( G_OK );

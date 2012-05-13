@@ -250,18 +250,10 @@ void CG_DrawConnectScreen( qboolean interactive, qboolean forcerefresh ) {
 		qboolean enabled = qfalse;
 		float x, y;
 		int i;
-//		vec4_t clr1 = { 41/255.f,	51/255.f,	43/255.f,	204/255.f };
-//		vec4_t clr2 = { 0.f,		0.f,		0.f,		225/255.f };
 		vec4_t clr3 = { 1.f,        1.f,        1.f,        .6f };
 
-/*		CG_FillRect( 8, 8, 230, 16, clr1 );
-		CG_DrawRect_FixedBorder( 8, 8, 230, 16, 1, colorMdGrey );
-
-		CG_FillRect( 8, 23, 230, 210, clr2 );
-		CG_DrawRect_FixedBorder( 8, 23, 230, 216, 1, colorMdGrey );*/
-
 		y = 322;
-		CG_Text_Paint_Centred_Ext( 540, y, 0.22f, 0.22f, clr3, "SERVER INFO", 0, 0, 0, &bg_loadscreenfont1 );
+		CG_Text_Paint_Centred_Ext( 540, y, 0.22f, 0.22f, clr3, GAME_VERSION_COLORED " " MOD_VERSION_COLORED " " MOD_STATUS_COLORED, 0, 0, 0, &bg_loadscreenfont1 );
 
 		y = 340;
 		str = Info_ValueForKey( buffer, "sv_hostname" );

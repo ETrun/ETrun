@@ -40,5 +40,11 @@ menuDef {
 	BUTTONEXT( 6, 104, .5*(WINDOW_WIDTH-18), 14, "ANTI-LAG ON", .24, 11, exec "cmd callvote antilag 1"; uiScript closeingame, settingDisabled CV_SVS_ANTILAG voteFlag CV_SVF_ANTILAG )
 	BUTTONEXT( 6, 104, .5*(WINDOW_WIDTH-18), 14, "ANTI-LAG OFF", .24, 11, exec "cmd callvote antilag 0"; uiScript closeingame, settingEnabled CV_SVS_ANTILAG voteFlag CV_SVF_ANTILAG )
 
+	BUTTONEXT( 6, 122, .5*(WINDOW_WIDTH-18), 14, "OVERBOUNCE ON", .24, 11, exec "cmd callvote ob"; uiScript closeingame, settingDisabled CV_SVS_OB voteFlag CV_SVF_OB )
+	BUTTONEXT( 6, 122, .5*(WINDOW_WIDTH-18), 14, "OVERBOUNCE OFF", .24, 11, exec "cmd callvote ob"; uiScript closeingame, settingEnabled CV_SVS_OB voteFlag CV_SVF_OB )
+
+	BUTTONEXT( 6, 140, .5*(WINDOW_WIDTH-18), 14, "UPMOVEBUGFIX ON", .24, 11, exec "cmd callvote upmovebugfix"; uiScript closeingame, settingDisabled CV_SVS_UPMOVEBUGFIX voteFlag CV_SVF_UPMOVEBUGFIX )
+	BUTTONEXT( 6, 140, .5*(WINDOW_WIDTH-18), 14, "UPMOVEBUGFIX OFF", .24, 11, exec "cmd callvote upmovebugfix"; uiScript closeingame, settingEnabled CV_SVS_UPMOVEBUGFIX voteFlag CV_SVF_UPMOVEBUGFIX )
+
 	BUTTON( 6, WINDOW_HEIGHT-24, WINDOW_WIDTH-12, 18, "BACK", .3, 14, close ingame_vote_misc ; open ingame_vote )
 }

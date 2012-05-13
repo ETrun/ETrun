@@ -4676,7 +4676,9 @@ const voteType_t voteToggles[] =
 	{ "vote_allow_nextmap",         CV_SVF_NEXTMAP },
 	{ "vote_allow_referee",         CV_SVF_REFEREE },
 	{ "vote_allow_antilag",         CV_SVF_ANTILAG },
-	{ "vote_allow_muting",          CV_SVF_MUTING }
+	{ "vote_allow_muting",          CV_SVF_MUTING },
+	{ "vote_allow_ob",				CV_SVF_OB },
+	{ "vote_allow_upmovebugfix",    CV_SVF_UPMOVEBUGFIX }
 };
 
 int numVotesAvailable = sizeof( voteToggles ) / sizeof( voteType_t );

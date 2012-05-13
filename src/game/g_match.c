@@ -187,18 +187,28 @@ int G_checkServerToggle( vmCvar_t *cv ) {
 
 	if ( cv == &g_antilag ) {
 		nFlag = CV_SVS_ANTILAG;
-	}
-	
-	else if ( cv == &g_nextmap ) {
+	} else if ( cv == &g_nextmap ) {
 		if ( *cv->string ) {
 			level.server_settings |= CV_SVS_NEXTMAP;
 		} else {
 			level.server_settings &= ~CV_SVS_NEXTMAP;
 		}
 		return( qtrue );
-	} 
-
-	else {return( qfalse );}
+	} else if (cv == &physics) {
+		if (physics.integer & PHYSICS_NO_OVERBOUNCE) {
+			level.server_settings &= ~CV_SVS_OB;
+		} else {
+			level.server_settings |= CV_SVS_OB;
+		}
+		if (physics.integer & PHYSICS_UPMOVE_BUG_FIX) {
+			level.server_settings |= CV_SVS_UPMOVEBUGFIX;
+		} else {
+			level.server_settings &= ~CV_SVS_UPMOVEBUGFIX;
+		}
+		return( qtrue );
+	} else {
+		return( qfalse );
+	}
 
 	if ( cv->integer > 0 ) {
 		level.server_settings |= nFlag;
