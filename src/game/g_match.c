@@ -78,7 +78,7 @@ void G_loadMatchGame( void ) {
 void G_printFull( char *str, gentity_t *ent ) {
 	if ( ent != NULL ) {
 		CP( va( "print \"%s\n\"", str ) );
-		CP( va( "cp \"%s\n\"", str ) );
+		CP( va( "cp \"%s\n\"", str ) );// #fixme, prints "cp" :o
 	} else {
 		AP( va( "print \"%s\n\"", str ) );
 		AP( va( "cp \"%s\n\"", str ) );

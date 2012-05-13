@@ -3687,7 +3687,8 @@ void UI_RunMenuScript( char **args ) {
 		} else if ( Q_stricmp( name, "voteGame" ) == 0 ) {
 			int ui_voteGameType = trap_Cvar_VariableValue( "ui_voteGameType" );
 			if ( ui_voteGameType >= 0 && ui_voteGameType < uiInfo.numGameTypes ) {
-				trap_Cmd_ExecuteText( EXEC_APPEND, va( "callvote gametype %i\n", ui_voteGameType ) );
+				// Nico, unused
+				// trap_Cmd_ExecuteText( EXEC_APPEND, va( "callvote gametype %i\n", ui_voteGameType ) );
 			}
 		} else if ( Q_stricmp( name, "refGame" ) == 0 ) {
 			int ui_voteGameType = trap_Cvar_VariableValue( "ui_voteGameType" );
@@ -6637,10 +6638,8 @@ cvarTable_t cvarTable[] = {
 	{ NULL, "team_nocontrols", "0", CVAR_ARCHIVE },
 	{ NULL, "vote_allow_kick", "1", CVAR_ARCHIVE },
 	{ NULL, "vote_allow_map", "1", CVAR_ARCHIVE },
-	{ NULL, "vote_allow_mutespecs", "1", CVAR_ARCHIVE },
 	{ NULL, "vote_allow_nextmap", "1", CVAR_ARCHIVE },
 	{ NULL, "vote_allow_referee", "0", CVAR_ARCHIVE },
-	{ NULL, "vote_allow_swapteams", "1", CVAR_ARCHIVE },
 	{ NULL, "vote_allow_antilag", "1", CVAR_ARCHIVE },
 	{ NULL, "vote_allow_muting", "1", CVAR_ARCHIVE },
 	{ NULL, "vote_allow_kick", "1", CVAR_ARCHIVE },

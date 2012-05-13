@@ -106,10 +106,8 @@ vmCvar_t server_motd5;
 vmCvar_t vote_allow_kick;
 vmCvar_t vote_allow_map;
 vmCvar_t vote_allow_matchreset;
-vmCvar_t vote_allow_mutespecs;
 vmCvar_t vote_allow_nextmap;
 vmCvar_t vote_allow_referee;
-vmCvar_t vote_allow_swapteams;
 vmCvar_t vote_allow_antilag;
 vmCvar_t vote_allow_muting;
 vmCvar_t vote_limit;
@@ -243,12 +241,9 @@ cvarTable_t gameCvarTable[] = {
 	{ &vote_allow_kick,         "vote_allow_kick", "1", 0, 0, qfalse, qfalse },
 	{ &vote_allow_map,          "vote_allow_map", "1", 0, 0, qfalse, qfalse },
 	{ &vote_allow_matchreset,   "vote_allow_matchreset", "1", 0, 0, qfalse, qfalse },
-	{ &vote_allow_mutespecs,    "vote_allow_mutespecs", "1", 0, 0, qfalse, qfalse },
 	{ &vote_allow_nextmap,      "vote_allow_nextmap", "1", 0, 0, qfalse, qfalse },
 
 	{ &vote_allow_referee,      "vote_allow_referee", "0", 0, 0, qfalse, qfalse },
-
-	{ &vote_allow_swapteams,    "vote_allow_swapteams", "1", 0, 0, qfalse, qfalse },
 
 	{ &vote_allow_antilag,      "vote_allow_antilag", "1", 0, 0, qfalse, qfalse },
 
@@ -288,7 +283,7 @@ cvarTable_t gameCvarTable[] = {
 	// Nico, #removeme
 	{ &aircontrol, "aircontrol", "150",  CVAR_SERVERINFO | CVAR_ARCHIVE | CVAR_LATCH | CVAR_SYSTEMINFO },
 	{ &strafeaccelerate, "strafeaccelerate", "70",  CVAR_SERVERINFO | CVAR_ARCHIVE | CVAR_LATCH | CVAR_SYSTEMINFO },
-	{ &wishspeed, "wishspeed", "30",  CVAR_SERVERINFO | CVAR_ARCHIVE | CVAR_LATCH | CVAR_SYSTEMINFO },
+	{ &wishspeed, "wishspeed", "45",  CVAR_SERVERINFO | CVAR_ARCHIVE | CVAR_LATCH | CVAR_SYSTEMINFO },
 	{ &airstopaccelerate, "airstopaccelerate", "2",  CVAR_SERVERINFO | CVAR_ARCHIVE | CVAR_LATCH | CVAR_SYSTEMINFO },
 
 	// Enable certain map entities
@@ -1157,9 +1152,9 @@ void G_UpdateCvars( void ) {
 				// OSP - Update vote info for clients, if necessary
 				if ( cv->vmCvar == &vote_allow_kick          || cv->vmCvar == &vote_allow_map            ||
 						cv->vmCvar == &vote_allow_matchreset    ||
-						cv->vmCvar == &vote_allow_mutespecs     || cv->vmCvar == &vote_allow_nextmap        ||
+						cv->vmCvar == &vote_allow_nextmap        ||
 						cv->vmCvar == &vote_allow_referee       ||
-						cv->vmCvar == &vote_allow_swapteams	 || cv->vmCvar == &vote_allow_antilag        ||
+						cv->vmCvar == &vote_allow_antilag        ||
 						cv->vmCvar == &vote_allow_muting
 						) {
 					fVoteFlags = qtrue;

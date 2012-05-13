@@ -52,11 +52,8 @@ void multi_wait( gentity_t *ent ) {
 // so wait for the delay time before firing
 void multi_trigger( gentity_t *ent, gentity_t *activator ) {
 	ent->activator = activator;
-	G_Script_ScriptEvent( ent, "activate", NULL );
 
-	if ( ent->nextthink ) {
-		return;     // can't retrigger until the wait is over
-	}
+	G_Script_ScriptEvent( ent, "activate", NULL );
 
 	G_UseTargets( ent, ent->activator );
 
@@ -66,7 +63,7 @@ void multi_trigger( gentity_t *ent, gentity_t *activator ) {
 	} else {
 		// we can't just remove (self) here, because this is a touch function
 		// called while looping through area links...
-		ent->touch = 0;
+		ent->touch = NULL;
 		ent->nextthink = level.time + FRAMETIME;
 		ent->think = G_FreeEntity;
 	}

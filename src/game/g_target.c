@@ -1213,7 +1213,7 @@ static void notify_timerun_start(gentity_t *activator) {
 	timerunNum = GetTimerunNum(activator->client->currentTimerun);
 
 	// Nico, notify the client itself first
-	G_DPrintf("Sending a timerun_start to client %d\n", activator - g_entities);
+	G_DPrintf("notify_timerun_start(%d, %d)\n", activator->client->ps.clientNum);
 	trap_SendServerCommand(activator - g_entities, va("timerun_start %i %i", timerunNum, activator->client->timerunStartTime + 500));
 
 	// Nico, notify its spectators
@@ -1248,6 +1248,8 @@ void target_starttimer_use(gentity_t *self, gentity_t *other, gentity_t *activat
 	gclient_t		*client;
 
 	client = activator->client;
+
+	G_DPrintf("target_starttimer_use: client = %d\n", client->ps.clientNum);
 
 	if (client->timerunActive) {
 		G_DPrintf("target_starttimer_use: timerun already active for client %d\n", client->ps.clientNum);
@@ -1320,7 +1322,7 @@ void notify_timerun_stop(gentity_t *activator, int finishTime) {
 	gentity_t *o = NULL;
 	int timerunNum = 0;
 
-	G_DPrintf("notify_timerun_stop(%d, %d)\n", (int)activator, finishTime);
+	G_DPrintf("notify_timerun_stop(%d, %d)\n", activator->client->ps.clientNum, finishTime);
 
 	// Nico, check if timerun is active
 	if (!activator->client->timerunActive) {
@@ -1350,6 +1352,7 @@ void notify_timerun_stop(gentity_t *activator, int finishTime) {
 		}
 
 		if (o->client->sess.spectatorClient == activator - g_entities) {
+			G_DPrintf("Sending a timerun_stop_spec to client %d\n", o - g_entities);
 			trap_SendServerCommand(o - g_entities, va("timerun_stop_spec %i %i", timerunNum, finishTime));
 		}
 	}
@@ -1371,12 +1374,16 @@ void target_stoptimer_use(gentity_t *self, gentity_t *other, gentity_t *activato
 
 	client = activator->client;
 
+	G_DPrintf("target_stoptimer_use: client = %d\n", client->ps.clientNum);
+
 	if (!client->timerunActive) {
+		G_DPrintf("target_stoptimer_use: ignored because timerun wasn't active for client %d\n", client->ps.clientNum);
 		return;
 	}
 
 	// don't stop the time if this isn't a corresponding stoptimer
 	if (Q_stricmp(self->timerunName, client->currentTimerun)) {
+		G_DPrintf("target_stoptimer_use: ignored because started run != ended run for client %d\n", client->ps.clientNum);
 		return;
 	}
 

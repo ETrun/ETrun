@@ -511,7 +511,7 @@ cvarTable_t cvarTable[] = {
 	// Nico, #removeme
 	{ &aircontrol, "aircontrol", "150", CVAR_ROM },
 	{ &strafeaccelerate, "strafeaccelerate", "70", CVAR_ROM },
-	{ &wishspeed, "wishspeed", "30", CVAR_ROM },
+	{ &wishspeed, "wishspeed", "45", CVAR_ROM },
 	{ &airstopaccelerate, "airstopaccelerate", "2", CVAR_ROM },
 
 	// Is level a timerun?

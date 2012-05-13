@@ -45,8 +45,8 @@ If you have questions concerning this license or the applicable additional terms
 // Nico, game version
 #define	GAME_VERSION			"ETrun"
 #define GAME_VERSION_COLORED	"^gET^drun"
-#define	MOD_VERSION				"1.0"
-#define	MOD_VERSION_COLORED		"^g1.0"
+#define	MOD_VERSION				"1.0.0"
+#define	MOD_VERSION_COLORED		"^g1.0.0"
 #define	MOD_STATUS				"Alpha"
 #define	MOD_STATUS_COLORED		"^1Alpha"
 #define	MOD_URL					"http://www.timeruns.net"

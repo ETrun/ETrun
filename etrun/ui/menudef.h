@@ -408,26 +408,6 @@ If you have questions concerning this license or the applicable additional terms
 #define WM_ENGINEER             4
 #define WM_COVERTOPS            5
 
-/*#define WM_PISTOL_1911			1
-#define WM_PISTOL_LUGER			2
-
-#define WM_WEAPON_MP40			3
-#define WM_WEAPON_THOMPSON		4
-#define WM_WEAPON_STEN			5
-#define WM_WEAPON_MAUSER		6
-#define WM_WEAPON_PANZERFAUST	8
-#define WM_WEAPON_VENOM			9
-#define WM_WEAPON_FLAMETHROWER	10
-
-#define WM_PINEAPPLE_GRENADE	11
-#define WM_STICK_GRENADE		12
-
-#define WM_WEAPON_KAR98			13
-#define WM_WEAPON_CARBINE		14
-#define WM_WEAPON_GARAND		15
-#define WM_WEAPON_FG42			16*/
-// -NERVE - SMF
-
 // Arnout: UI fonts, supports up to 6 fonts
 #define UI_FONT_ARIBLK_16       0
 #define UI_FONT_ARIBLK_27       1
@@ -436,35 +416,20 @@ If you have questions concerning this license or the applicable additional terms
 
 // OSP - callvote server setting toggles
 // CS_SERVERTOGGLES
-#define CV_SVS_MUTESPECS        1
-#define CV_SVS_FRIENDLYFIRE     2
-// 2 bits for warmup damage setting
-#define CV_SVS_WARMUPDMG        12
-#define CV_SVS_PAUSE            16
-#define CV_SVS_LOCKTEAMS        32
-#define CV_SVS_LOCKSPECS        64
-#define CV_SVS_ANTILAG          128
-#define CV_SVS_BALANCEDTEAMS    256
-#define CV_SVS_NEXTMAP          512
+#define CV_SVS_PAUSE            1
+#define CV_SVS_LOCKTEAMS        2
+#define CV_SVS_LOCKSPECS        4
+#define CV_SVS_ANTILAG          8
+#define CV_SVS_NEXTMAP          16
 
 // "cg_ui_voteFlags"
-#define CV_SVF_COMP             1
-#define CV_SVF_GAMETYPE         2
-#define CV_SVF_KICK             4
-#define CV_SVF_MAP              8
-#define CV_SVF_MATCHRESET       16
-#define CV_SVF_MUTESPECS        32
-#define CV_SVF_NEXTMAP          64
-#define CV_SVF_PUB              128
-#define CV_SVF_REFEREE          256
-#define CV_SVF_SHUFFLETEAMS     512
-#define CV_SVF_SWAPTEAMS        1024
-#define CV_SVF_FRIENDLYFIRE     2048
-#define CV_SVF_TIMELIMIT        4096
-#define CV_SVF_WARMUPDAMAGE     8192
-#define CV_SVF_ANTILAG          16384
-#define CV_SVF_BALANCEDTEAMS    32768
-#define CV_SVF_MUTING           65536
+#define CV_SVF_KICK             1
+#define CV_SVF_MAP              2
+#define CV_SVF_MATCHRESET       4
+#define CV_SVF_NEXTMAP          8
+#define CV_SVF_REFEREE          16
+#define CV_SVF_ANTILAG          32
+#define CV_SVF_MUTING           64
 
 // referee level
 #define RL_NONE                 0

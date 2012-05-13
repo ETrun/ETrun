@@ -2162,11 +2162,6 @@ void Cmd_Save_f(gentity_t *ent)
 		return;
 	}
 
-	if (VectorLengthSquared(ent->client->ps.velocity) > 0) {
-		CP("cp \"You can not save while moving!\n\"");
-		return;
-	}
-
 	if (ent->client->ps.eFlags & EF_PRONE || ent->client->ps.eFlags & EF_PRONE_MOVING){
 		CP("cp \"You can not save while proning!\n\"");
 		return;

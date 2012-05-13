@@ -849,8 +849,6 @@ void G_BurnTarget( gentity_t *self, gentity_t *body, qboolean directhit ) {
 			return;
 		}
 
-		/* Nico, no friendlyfire
-		if ( !( g_friendlyFire.integer ) && OnSameTeam( body, self->parent ) ) {*/
 		if ( OnSameTeam( body, self->parent ) ) {
 			return;
 		}
