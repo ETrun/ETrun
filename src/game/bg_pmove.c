@@ -349,10 +349,21 @@ This allows the clients to use axial -127 to 127 values for all directions
 without getting a sqrt(2) distortion in speed.
 ============
 */
-static float PM_CmdScale( usercmd_t *cmd ) {
+static float PM_CmdScale( usercmd_t *cmd, qboolean horizontalOnly ) {
 	int max;
 	float total;
 	float scale;
+	signed char	upmove = 0;
+
+	// Nico, ignore horizontalOnly flag if we use the original physics (from TJMod)
+	if (!(pm->physics & PHYSICS_UPMOVE_BUG_FIX)) {
+		horizontalOnly = qfalse;
+	}
+
+	if (horizontalOnly) {
+		upmove = cmd->upmove;
+		cmd->upmove = 0;
+	}
 
 	max = abs( cmd->forwardmove );
 	if ( abs( cmd->rightmove ) > max ) {
@@ -398,6 +409,11 @@ static float PM_CmdScale( usercmd_t *cmd ) {
 			scale *= 0.7;
 		}
 	}
+
+	if (horizontalOnly) {
+		cmd->upmove = upmove;
+	}
+
 	return scale;
 }
 
@@ -754,7 +770,7 @@ static void PM_WaterMove( void ) {
 	}
 	PM_Friction();
 
-	scale = PM_CmdScale( &pm->cmd );
+	scale = PM_CmdScale( &pm->cmd, qfalse );
 	//
 	// user intentions
 	//
@@ -818,7 +834,7 @@ static void PM_FlyMove( void ) {
 	// normal slowdown
 	PM_Friction();
 
-	scale = PM_CmdScale( &pm->cmd );
+	scale = PM_CmdScale( &pm->cmd, qfalse );
 
 	//
 	// user intentions
@@ -916,7 +932,7 @@ static void PM_AirMove( void ) {
 		scale = 1.f;
 	} else {
 		cmd = pm->cmd;
-		scale = PM_CmdScale( &cmd );
+		scale = PM_CmdScale( &cmd, qtrue );
 
 		// Ridah, moved this down, so we use the actual movement direction
 		// set the movementDir so clients can rotate the legs for strafing
@@ -1032,7 +1048,7 @@ static void PM_WalkMove( void ) {
 	smove = pm->cmd.rightmove;
 
 	cmd = pm->cmd;
-	scale = PM_CmdScale( &cmd );
+	scale = PM_CmdScale( &cmd, qtrue );
 
 // Ridah, moved this down, so we use the actual movement direction
 	// set the movementDir so clients can rotate the legs for strafing
@@ -1203,7 +1219,7 @@ static void PM_NoclipMove( void ) {
 	}
 
 	// accelerate
-	scale = PM_CmdScale( &pm->cmd );
+	scale = PM_CmdScale( &pm->cmd, qfalse );
 
 	fmove = pm->cmd.forwardmove;
 	smove = pm->cmd.rightmove;
@@ -2547,7 +2563,7 @@ void PM_LadderMove( void ) {
 	// move depending on the view, if view is straight forward, then go up
 	// if view is down more then X degrees, start going down
 	// if they are back pedalling, then go in reverse of above
-	scale = PM_CmdScale( &pm->cmd );
+	scale = PM_CmdScale( &pm->cmd, qfalse );
 	VectorClear( wishvel );
 
 	if ( pm->cmd.forwardmove ) {
