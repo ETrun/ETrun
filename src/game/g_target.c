@@ -1300,7 +1300,7 @@ void SP_target_starttimer(gentity_t *ent) {
 		parent = G_FindByTarget(NULL, ent->targetname);
 		if (parent) {
 			if (!Q_stricmp(parent->classname, "trigger_multiple")) {
-				G_Printf("SP_target_starttimer, wait found = %f, overrided to 0.5\n", parent->wait);
+				G_DPrintf("SP_target_starttimer, wait found = %f, overrided to 0.5\n", parent->wait);
 				G_SpawnFloat("wait", "0.5", &parent->wait);
 			}
 		}
@@ -1431,7 +1431,7 @@ void target_stoptimer_use(gentity_t *self, gentity_t *other, gentity_t *activato
 
 	client->stopSpeed = sqrt(client->ps.velocity[0] * client->ps.velocity[0] + client->ps.velocity[1] * client->ps.velocity[1]);
 	
-	switch (type) {
+	/*switch (type) {
 		case 0: // no record
 				CPx(activator - g_entities, va("cpm \"^d%s^f:^z %02d:%02d.%03d (+%02d:%02d.%03d)\n\"",
 					client->currentTimerun, min, sec, milli, dmin, dsec, dmilli));
@@ -1439,7 +1439,7 @@ void target_stoptimer_use(gentity_t *self, gentity_t *other, gentity_t *activato
 		case 1: // best personal
 				CPx(activator - g_entities, va("cpm \"^d%s^f:^g %02d:%02d.%03d (-%02d:%02d.%03d)\n\"",
 					client->currentTimerun, min, sec, milli, dmin, dsec, dmilli));
-			if (qtrue/*client->sess.logged*/)
+			if (client->sess.logged)
 			{
 				// Console print to all players
 				AP(va("print \"^fTimerun:^7 %s^7, ^fPlayer:^7 %s^7, ^fTime: ^g%02d:%02d.%03d\n\"",
@@ -1448,7 +1448,7 @@ void target_stoptimer_use(gentity_t *self, gentity_t *other, gentity_t *activato
 			
 			//trap_SendServerCommand(activator - g_entities, va("runSave %s_%02d-%02d-%03d", client->currentTimerun, min, sec, milli));
 			break;
-	}
+	}*/
 
 	// Start recording a new temp demo.
 	// trap_SendServerCommand(activator - g_entities, "tempDemoStart 1");
@@ -1470,7 +1470,7 @@ void SP_target_stoptimer(gentity_t *ent) {
 		parent = G_FindByTarget(NULL, ent->targetname);
 		if (parent) {
 			if (!Q_stricmp(parent->classname, "trigger_multiple")) {
-				G_Printf("SP_target_stoptimer, wait found = %f, overrided to 0.5\n", parent->wait);
+				G_DPrintf("SP_target_stoptimer, wait found = %f, overrided to 0.5\n", parent->wait);
 				G_SpawnFloat("wait", "0.5", &parent->wait);
 			}
 		}
@@ -1581,7 +1581,7 @@ void SP_target_checkpoint(gentity_t *ent) {
 		parent = G_FindByTarget(NULL, ent->targetname);
 		if (parent) {
 			if (!Q_stricmp(parent->classname, "trigger_multiple")) {
-				G_Printf("SP_target_checkpoint, wait found = %f, overrided to 0.5\n", parent->wait);
+				G_DPrintf("SP_target_checkpoint, wait found = %f, overrided to 0.5\n", parent->wait);
 				G_SpawnFloat("wait", "0.5", &parent->wait);
 			}
 		}
