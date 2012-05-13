@@ -296,3 +296,180 @@ void CG_DrawTimer(void) {
 	w = CG_Text_Width_Ext( status, sizex, sizey, &cgs.media.limboFont1 ) / 2;
 	CG_Text_Paint_Ext(x - w, y, sizex, sizey, color, status, 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
 }
+
+// Dzikie CGaz 3rd party functions
+#define SCREEN_CENTER_X ((SCREEN_WIDTH / 2) - 1)
+#define SCREEN_CENTER_Y ((SCREEN_HEIGHT / 2) - 1)
+#define CGAZ3_ANG 20
+
+static void PutPixel(float x, float y) {
+	if (x > 0 && x < SCREEN_WIDTH && y > 0 && y < SCREEN_HEIGHT) {
+		CG_DrawPic(x, y, 1, 1, cgs.media.whiteShader);
+	}
+}
+
+static void DrawLine(float x1, float y1, float x2, float y2, vec4_t color) {
+	float len, stepx, stepy;
+	float i;
+
+	trap_R_SetColor(color);
+	len = (x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1);
+	len = sqrt(len);
+	stepx = (x2 - x1) / len;
+	stepy = (y2 - y1) / len;
+	for (i = 0; i < len; i++) {
+		PutPixel(x1, y1);
+		x1 += stepx;
+		y1 += stepy;
+	}
+	trap_R_SetColor(NULL);
+}
+
+extern float	pm_stopspeed;
+extern float	pm_accelerate;
+extern float	pm_airaccelerate;
+extern float	pm_friction;
+
+typedef struct {
+	vec3_t forward, right, up;
+	float frametime;
+
+	int msec;
+
+	qboolean walking;
+	qboolean groundPlane;
+	trace_t groundTrace;
+
+	float impactSpeed;
+
+	vec3_t previous_origin;
+	vec3_t previous_velocity;
+	int previous_waterlevel;
+
+	// Ridah, ladders
+	qboolean ladder;
+} pml_t;
+extern pml_t	pml;
+
+/* Draw CGaz from TJMod
+ *
+ * @author Nico
+ */
+void CG_DrawCGaz(void) {
+	float vel_angle; // absolute velocity angle
+	float vel_relang; // relative velocity angle to viewangles[1]
+	float per_angle;
+	float a, y, h, w;
+	float accel, scale;
+
+	int forward = 0;
+	int right = 0;
+
+	vec_t vel_size;
+	vec3_t vel;
+	vec4_t color;
+
+	playerState_t *ps;
+
+	// Nico, if cg_drawCGaz is 0
+	if (!cg_drawCGaz.integer) {
+		return;
+	}
+
+	ps = &cg.predictedPlayerState;
+
+	if (ps->persistant[PERS_TEAM] == TEAM_SPECTATOR) {
+		return;
+	}
+
+	a = 0.15;
+	a = (a > 1.0f) ? 1.0f : (a < 0.0f) ? 0.0f : a;
+	color[3] = a;
+	y = 260;
+	h = 20;
+	w = 300;
+
+	VectorCopy(ps->velocity, vel);
+
+	// for a simplicity water, ladder etc. calculations are omitted
+	// only air, ground and ice movement is important
+	if (pml.walking && !(pml.groundTrace.surfaceFlags & SURF_SLICK)) {
+		// apply friction
+		float	speed, newspeed, control;
+		float	drop;
+
+		speed = VectorLength(vel);
+		if (speed > 0) {
+			drop = 0;
+
+			// if getting knocked back, no friction
+			if (!(ps->pm_flags & PMF_TIME_KNOCKBACK)) {
+				control = speed < pm_stopspeed ? pm_stopspeed : speed;
+				drop += control * pm_friction * pmove_msec.integer / 1000;
+			}
+			newspeed = speed - drop;
+			if (newspeed < 0) {
+				newspeed = 0;
+			}
+			newspeed /= speed;
+			VectorScale(vel, newspeed, vel);
+		}
+
+		// on ground
+		accel = pm_accelerate;
+	}
+	else {
+		// in air or on ice, no friction
+		accel = pm_airaccelerate;
+	}
+
+	vel_size = sqrt(vel[0] * vel[0] + vel[1] * vel[1]);
+	accel = accel * ps->speed * pmove_msec.integer / 1000;
+
+	// based on PM_CmdScale from bg_pmove.c
+	scale = ps->stats[STAT_USERCMD_BUTTONS] & (BUTTON_SPRINT << 8) ? ps->sprintSpeedScale : ps->runSpeedScale;
+	per_angle = (ps->speed - accel) / vel_size * scale;
+	if (per_angle < 1) {
+		per_angle = RAD2DEG(acos(per_angle));
+	} else {
+		per_angle = ps->viewangles[YAW];
+	}
+
+	vel_angle = AngleNormalize180(RAD2DEG(atan2(vel[1], vel[0])));
+	vel_relang = AngleNormalize180(ps->viewangles[YAW] - vel_angle);
+
+	// parse usercmd
+	if (ps->stats[STAT_USERCMD_MOVE] & UMOVE_FORWARD) {
+		forward = 127;
+	} else if (ps->stats[STAT_USERCMD_MOVE] & UMOVE_BACKWARD) {
+		forward = -128;
+	}
+
+	if (ps->stats[STAT_USERCMD_MOVE] & UMOVE_RIGHT) {
+		right = 127;
+	} else if (ps->stats[STAT_USERCMD_MOVE] & UMOVE_LEFT) {
+		right = -128;
+	}
+
+	// CGaz 2
+	vel_relang = DEG2RAD(vel_relang);
+	per_angle = DEG2RAD(per_angle);
+
+	DrawLine(SCREEN_CENTER_X, SCREEN_CENTER_Y,
+		SCREEN_CENTER_X + right, SCREEN_CENTER_Y - forward, colorCyan);
+
+	vel_size /= 5;
+	DrawLine(SCREEN_CENTER_X, SCREEN_CENTER_Y,
+		SCREEN_CENTER_X + vel_size * sin(vel_relang),
+		SCREEN_CENTER_Y - vel_size * cos(vel_relang), colorRed);
+	if (vel_size > SCREEN_HEIGHT / 2)
+		vel_size = SCREEN_HEIGHT / 2;
+	vel_size /= 2;
+	DrawLine(SCREEN_CENTER_X, SCREEN_CENTER_Y,
+		SCREEN_CENTER_X + vel_size * sin(vel_relang + per_angle),
+		SCREEN_CENTER_Y - vel_size * cos(vel_relang + per_angle), colorRed);
+	DrawLine(SCREEN_CENTER_X, SCREEN_CENTER_Y,
+		SCREEN_CENTER_X + vel_size * sin(vel_relang - per_angle),
+		SCREEN_CENTER_Y - vel_size * cos(vel_relang - per_angle), colorRed);
+	return;
+}

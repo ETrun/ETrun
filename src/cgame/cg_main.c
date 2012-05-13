@@ -307,6 +307,9 @@ vmCvar_t cg_hideRange;
 vmCvar_t cg_authToken;
 vmCvar_t cg_autoLogin;
 
+// CGaz
+vmCvar_t cg_drawCGaz;
+
 // Nico, end of ETrun cvars
 
 typedef struct {
@@ -546,6 +549,9 @@ cvarTable_t cvarTable[] = {
 	// Auth related
 	{ &cg_authToken, "cg_authToken", "", CVAR_ARCHIVE },
 	{ &cg_autoLogin, "cg_autoLogin", "0", CVAR_ARCHIVE },
+
+	// CGaz
+	{ &cg_drawCGaz, "cg_drawCGaz", "0", CVAR_ARCHIVE },
 
 	// Nico, end of ETrun cvars
 };

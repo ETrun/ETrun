@@ -559,7 +559,17 @@ typedef enum {
 	STAT_CAPTUREHOLD_RED,           // JPW NERVE - red team score
 	STAT_CAPTUREHOLD_BLUE,          // JPW NERVE - blue team score
 	STAT_XP,                        // Gordon: "realtime" version of xp that doesnt need to go thru the scoreboard
+	STAT_USERCMD_BUTTONS,			// Nico, keys pressed (high byte contains buttons, low byte contains wbuttons)
+	STAT_USERCMD_MOVE				// Nico, keys pressed (see UMOVE_* for flags)
 } statIndex_t;
+
+// Nico, keys pressed
+#define UMOVE_FORWARD	0x0001
+#define UMOVE_BACKWARD	0x0002
+#define UMOVE_LEFT		0x0004
+#define UMOVE_RIGHT		0x0008
+#define UMOVE_UP		0x0010
+#define UMOVE_DOWN		0x0020
 
 // player_state->persistant[] indexes
 // these fields are the only part of player_state that isn't

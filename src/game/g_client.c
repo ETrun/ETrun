@@ -1063,7 +1063,7 @@ void ClientUserinfoChanged( int clientNum ) {
 	client->pers.pmoveFixed = client->pers.clientFlags & CGF_PMOVEFIXED;
 
 	// Nico, check autologin
-	if (!client->pers.autoLogin && (client->pers.clientFlags & CGF_AUTOLOGIN) && !client->sess.logged) {
+	if (g_useAPI.integer && !client->pers.autoLogin && (client->pers.clientFlags & CGF_AUTOLOGIN) && !client->sess.logged) {
 		Cmd_Login_f(ent);
 	}
 	client->pers.autoLogin = client->pers.clientFlags & CGF_AUTOLOGIN;

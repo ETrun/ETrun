@@ -1874,6 +1874,9 @@ extern vmCvar_t cg_hideRange;
 extern vmCvar_t cg_authToken;
 extern vmCvar_t cg_autoLogin;
 
+// CGaz
+extern vmCvar_t cg_drawCGaz;
+
 // Nico, end of ETrun cvars
 
 //
@@ -2039,6 +2042,7 @@ void CG_DrawCheckpoints(void);
 void CG_DrawSpeedMeter(void);
 void CG_DrawOB(void);
 void CG_DrawTimer(void);
+void CG_DrawCGaz(void);
 
 //
 // cg_players.c

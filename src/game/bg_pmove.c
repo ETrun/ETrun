@@ -2647,6 +2647,33 @@ void PmoveSingle( pmove_t *pmove ) {
 		pm->ps->eFlags &= ~EF_ZOOMING;
 	}
 
+	// Nico, copy pressed keys into playerstate
+	// buttons, wbuttons
+	pm->ps->stats[STAT_USERCMD_BUTTONS] = pm->cmd.buttons << 8;
+	pm->ps->stats[STAT_USERCMD_BUTTONS] |= pm->cmd.wbuttons;
+	pm->ps->stats[STAT_USERCMD_MOVE] = 0;
+
+	// forwardmove
+	if (pm->cmd.forwardmove > 0) {
+		pm->ps->stats[STAT_USERCMD_MOVE] |= UMOVE_FORWARD;
+	} else if (pm->cmd.forwardmove < 0) {
+		pm->ps->stats[STAT_USERCMD_MOVE] |= UMOVE_BACKWARD;
+	}
+
+	// rightmove
+	if (pm->cmd.rightmove > 0) {
+		pm->ps->stats[STAT_USERCMD_MOVE] |= UMOVE_RIGHT;
+	} else if (pm->cmd.rightmove < 0) {
+		pm->ps->stats[STAT_USERCMD_MOVE] |= UMOVE_LEFT;
+	}
+
+	// upmove
+	if (pm->cmd.upmove > 0) {
+		pm->ps->stats[STAT_USERCMD_MOVE] |= UMOVE_UP;
+	} else if (pm->cmd.upmove < 0) {
+		pm->ps->stats[STAT_USERCMD_MOVE] |= UMOVE_DOWN;
+	}
+
 	// make sure walking button is clear if they are running, to avoid
 	// proxy no-footsteps cheats
 	if ( abs( pm->cmd.forwardmove ) > 64 || abs( pm->cmd.rightmove ) > 64 ) {
