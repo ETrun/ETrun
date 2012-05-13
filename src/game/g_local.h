@@ -317,6 +317,9 @@ struct gentity_s {
 	float wait;
 	float random;
 
+	// Nico, last trigger time for all clients
+	int triggerTime[MAX_CLIENTS];
+
 	// Rafael - sniper variable
 	// sniper uses delay, random, radius
 	int radius;

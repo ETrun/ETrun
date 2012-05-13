@@ -15,7 +15,6 @@ void G_API_login(char *result, gentity_t *ent, char *authToken);
 void G_API_mapRecords(char *result, gentity_t *ent, char *mapName);
 
 #if defined _WIN32
-	# include <strsafe.h>
 	# include <windows.h>
 # else
 	# include <dlfcn.h>

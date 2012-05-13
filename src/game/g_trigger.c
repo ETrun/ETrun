@@ -50,20 +50,29 @@ void multi_wait( gentity_t *ent ) {
 // the trigger was just activated
 // ent->activator should be set to the activator so it can be held through a delay
 // so wait for the delay time before firing
+// Nico, note: ent->random is effect less on this entity
 void multi_trigger( gentity_t *ent, gentity_t *activator ) {
 	ent->activator = activator;
-
 	G_Script_ScriptEvent( ent, "activate", NULL );
 
-	G_UseTargets( ent, ent->activator );
-
 	if ( ent->wait > 0 ) {
-		ent->think = multi_wait;
-		ent->nextthink = level.time + ( ent->wait + ent->random * crandom() ) * 1000;
+		// G_Printf("ent->wait = %f\n", ent->wait);
+
+		if (activator->client && ent->triggerTime[activator->client->ps.clientNum] + ent->wait * 1000 > level.time) {
+			// G_Printf("Client %d has to wait before triggering this entity!\n");
+			return;
+		}
+
+		G_UseTargets (ent, ent->activator);
+		if (activator->client) {
+			ent->triggerTime[activator->client->ps.clientNum] = level.time;
+		}
 	} else {
+		G_UseTargets(ent, ent->activator);
+
 		// we can't just remove (self) here, because this is a touch function
 		// called while looping through area links...
-		ent->touch = NULL;
+		ent->touch = 0;
 		ent->nextthink = level.time + FRAMETIME;
 		ent->think = G_FreeEntity;
 	}
@@ -145,11 +154,6 @@ so, the basic time between firing is a random time between
 */
 void SP_trigger_multiple( gentity_t *ent ) {
 	G_SpawnFloat( "wait", "0.5", &ent->wait );
-	G_SpawnFloat( "random", "0", &ent->random );
-
-	if ( ent->random >= ent->wait && ent->wait >= 0 ) {
-		ent->random = ent->wait - ( FRAMETIME * 0.001f );
-	}
 
 	ent->touch = Touch_Multi;
 	ent->use = Use_Multi;
