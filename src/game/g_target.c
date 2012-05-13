@@ -1213,7 +1213,7 @@ static void notify_timerun_start(gentity_t *activator) {
 	timerunNum = GetTimerunNum(activator->client->currentTimerun);
 
 	// Nico, notify the client itself first
-	G_DPrintf("notify_timerun_start(%d, %d)\n", activator->client->ps.clientNum);
+	G_DPrintf("notify_timerun_start(%d)\n", activator->client->ps.clientNum);
 	trap_SendServerCommand(activator - g_entities, va("timerun_start %i %i", timerunNum, activator->client->timerunStartTime + 500));
 
 	// Nico, notify its spectators
