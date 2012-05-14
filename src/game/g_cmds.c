@@ -916,7 +916,9 @@ G_Say
 */
 #define MAX_SAY_TEXT    150
 
-void G_SayTo( gentity_t *ent, gentity_t *other, int mode, int color, const char *name, const char *message, qboolean localize ) {
+void G_SayTo(gentity_t *ent, gentity_t *other, int mode, int color, const char *name, const char *message, qboolean localize, qboolean encoded) {
+	char *cmd = NULL;
+
 	if ( !other || !other->inuse || !other->client ) {
 		return;
 	}
@@ -944,11 +946,16 @@ void G_SayTo( gentity_t *ent, gentity_t *other, int mode, int color, const char 
 			}
 		}
 
-		trap_SendServerCommand( other - g_entities, va( "%s \"%s%c%c%s\" %i %i", mode == SAY_TEAM || mode == SAY_BUDDY ? "tchat" : "chat", name, Q_COLOR_ESCAPE, color, message, ent - g_entities, localize ) );
+		if (encoded) {
+			cmd = mode == SAY_TEAM || mode == SAY_BUDDY ? "enc_tchat" : "enc_chat";
+		} else {
+			cmd = mode == SAY_TEAM || mode == SAY_BUDDY ? "tchat" : "chat";
+		}
+		trap_SendServerCommand( other - g_entities, va( "%s \"%s%c%c%s\" %i %i", cmd, name, Q_COLOR_ESCAPE, color, message, ent - g_entities, localize ) );
 	}
 }
 
-void G_Say( gentity_t *ent, gentity_t *target, int mode, const char *chatText ) {
+void G_Say(gentity_t *ent, gentity_t *target, int mode, qboolean encoded, const char *chatText) {
 	int j;
 	gentity_t   *other;
 	int color;
@@ -990,7 +997,7 @@ void G_Say( gentity_t *ent, gentity_t *target, int mode, const char *chatText ) 
 
 	if ( target ) {
 		if ( !COM_BitCheck( target->client->sess.ignoreClients, ent - g_entities ) ) {
-			G_SayTo( ent, target, mode, color, name, text, localize );
+			G_SayTo(ent, target, mode, color, name, text, localize, encoded);
 		}
 		return;
 	}
@@ -1004,7 +1011,7 @@ void G_Say( gentity_t *ent, gentity_t *target, int mode, const char *chatText ) 
 	for ( j = 0; j < level.numConnectedClients; j++ ) {
 		other = &g_entities[level.sortedClients[j]];
 		if ( !COM_BitCheck( other->client->sess.ignoreClients, ent - g_entities ) ) {
-			G_SayTo( ent, other, mode, color, name, text, localize );
+			G_SayTo(ent, other, mode, color, name, text, localize, encoded);
 		}
 	}
 }
@@ -1015,11 +1022,11 @@ void G_Say( gentity_t *ent, gentity_t *target, int mode, const char *chatText ) 
 Cmd_Say_f
 ==================
 */
-void Cmd_Say_f( gentity_t *ent, int mode, qboolean arg0 ) {
-	if ( trap_Argc() < 2 && !arg0 ) {
+void Cmd_Say_f(gentity_t *ent, int mode, qboolean arg0, qboolean encoded) {
+	if (trap_Argc() < 2 && !arg0) {
 		return;
 	}
-	G_Say( ent, NULL, mode, ConcatArgs( ( ( arg0 ) ? 0 : 1 ) ) );
+	G_Say(ent, NULL, mode, encoded, ConcatArgs((arg0 ? 0 : 1)));
 }
 
 // NERVE - SMF
@@ -2308,6 +2315,7 @@ void ClientCommand( int clientNum ) {
 	gentity_t *ent;
 	char cmd[MAX_TOKEN_CHARS];
 	int i = 0;
+	qboolean	enc = qfalse; // used for enc_say, enc_say_team, enc_say_buddy
 
 	ent = g_entities + clientNum;
 	if ( !ent->client ) {
@@ -2316,7 +2324,7 @@ void ClientCommand( int clientNum ) {
 
 	trap_Argv( 0, cmd, sizeof( cmd ) );
 
-	if ( Q_stricmp( cmd, "say" ) == 0 ) {
+	if (!Q_stricmp(cmd, "say") || (enc = !Q_stricmp(cmd, "enc_say"))) {
 
 		// Nico, flood protection
 		if (ClientIsFlooding(ent)) {
@@ -2324,31 +2332,24 @@ void ClientCommand( int clientNum ) {
 			return;
 		}
 
-		if ( !ent->client->sess.muted ) {
-			Cmd_Say_f( ent, SAY_ALL, qfalse );
+		if (!ent->client->sess.muted) {
+			Cmd_Say_f(ent, SAY_ALL, qfalse, enc);
 		}
 		return;
 	}
 
-	if ( Q_stricmp( cmd, "say_team" ) == 0 ) {
-
-		/* Nico, enable voice chat for spectators
-		if ( ent->client->sess.sessionTeam == TEAM_SPECTATOR || ent->client->sess.sessionTeam == TEAM_FREE ) {
-			trap_SendServerCommand( ent - g_entities, "print \"Can't team chat as spectator\n\"\n" );
-			return;
-		}*/
-
+	if (!Q_stricmp(cmd, "say_team") || (enc = !Q_stricmp(cmd, "enc_say_team"))) {
 		// Nico, flood protection
 		if (ClientIsFlooding(ent)) {
 			CP("print \"^1Spam Protection: ^7dropping say_team\n\"");
 			return;
 		}
 
-		if ( !ent->client->sess.muted ) {
-			Cmd_Say_f( ent, SAY_TEAM, qfalse );
+		if (!ent->client->sess.muted) {
+			Cmd_Say_f(ent, SAY_TEAM, qfalse, enc);
 		}
 		return;
-	} else if ( Q_stricmp( cmd, "vsay" ) == 0 ) {
+	} else if (!Q_stricmp(cmd, "vsay")) {
 
 		// Nico, flood protection
 		if (ClientIsFlooding(ent)) {
@@ -2356,29 +2357,22 @@ void ClientCommand( int clientNum ) {
 			return;
 		}
 
-		if ( !ent->client->sess.muted ) {
-			Cmd_Voice_f( ent, SAY_ALL, qfalse, qfalse );
+		if (!ent->client->sess.muted) {
+			Cmd_Voice_f(ent, SAY_ALL, qfalse, qfalse);
 		}
 		return;
-	} else if ( Q_stricmp( cmd, "vsay_team" ) == 0 ) {
-
-		/* Nico, enable voice chat for spectators
-		if ( ent->client->sess.sessionTeam == TEAM_SPECTATOR || ent->client->sess.sessionTeam == TEAM_FREE ) {
-			trap_SendServerCommand( ent - g_entities, "print \"Can't team chat as spectator\n\"\n" );
-			return;
-		}*/
-
+	} else if (!Q_stricmp(cmd, "vsay_team")) {
 		// Nico, flood protection
 		if (ClientIsFlooding(ent)) {
 			CP("print \"^1Spam Protection: ^7dropping vsay_team\n\"");
 			return;
 		}
 
-		if ( !ent->client->sess.muted ) {
-			Cmd_Voice_f( ent, SAY_TEAM, qfalse, qfalse );
+		if (!ent->client->sess.muted) {
+			Cmd_Voice_f(ent, SAY_TEAM, qfalse, qfalse);
 		}
 		return;
-	} else if ( Q_stricmp( cmd, "say_buddy" ) == 0 ) {
+	} else if (!Q_stricmp(cmd, "say_buddy") || (enc = !Q_stricmp(cmd, "enc_say_buddy"))) {
 
 		// Nico, flood protection
 		if (ClientIsFlooding(ent)) {
@@ -2386,11 +2380,11 @@ void ClientCommand( int clientNum ) {
 			return;
 		}
 
-		if ( !ent->client->sess.muted ) {
-			Cmd_Say_f( ent, SAY_BUDDY, qfalse );
+		if (!ent->client->sess.muted) {
+			Cmd_Say_f(ent, SAY_BUDDY, qfalse, enc);
 		}
 		return;
-	} else if ( Q_stricmp( cmd, "vsay_buddy" ) == 0 ) {
+	} else if (!Q_stricmp(cmd, "vsay_buddy")) {
 
 		// Nico, flood protection
 		if (ClientIsFlooding(ent)) {
@@ -2398,15 +2392,15 @@ void ClientCommand( int clientNum ) {
 			return;
 		}
 
-		if ( !ent->client->sess.muted ) {
-			Cmd_Voice_f( ent, SAY_BUDDY, qfalse, qfalse );
+		if (!ent->client->sess.muted) {
+			Cmd_Voice_f(ent, SAY_BUDDY, qfalse, qfalse);
 		}
 		return;
 	} 	
-	else if ( Q_stricmp( cmd, "follownext" ) == 0 ) {
-		Cmd_FollowCycle_f( ent, 1 );
-	} else if ( Q_stricmp( cmd, "followprev" ) == 0 ) {
-		Cmd_FollowCycle_f( ent, -1 );
+	else if (!Q_stricmp(cmd, "follownext")) {
+		Cmd_FollowCycle_f(ent, 1);
+	} else if (!Q_stricmp(cmd, "followprev")) {
+		Cmd_FollowCycle_f(ent, -1);
 	}
 
 	// Nico, flood protection
@@ -2421,7 +2415,7 @@ void ClientCommand( int clientNum ) {
 		}
 	}
 		
-	if ( G_commandCheck( ent, cmd ) ) {
+	if (G_commandCheck(ent, cmd)) {
 		return;
 	}
 	

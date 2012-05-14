@@ -436,41 +436,38 @@ static void CG_MessageMode_f( void ) {
 	trap_UI_Popup( UIMENU_INGAME_MESSAGEMODE );
 }
 
-static void CG_MessageSend_f( void ) {
-	char messageText[ 256 ];
+// Nico, note: using Quoted-Printable encoding
+static void CG_MessageSend_f(void) {
+	char messageText[256];
+	char messageTextEncoded[3 * 256];
 	int messageType;
-
-
+	
 	// get values
-	trap_Cvar_VariableStringBuffer( "cg_messageType", messageText, 256 );
-	messageType = atoi( messageText );
-	trap_Cvar_VariableStringBuffer( "cg_messageText", messageText, 256 );
-
+	trap_Cvar_VariableStringBuffer("cg_messageType", messageText, sizeof (messageText));
+	messageType = atoi(messageText);
+	trap_Cvar_VariableStringBuffer("cg_messageText", messageText, sizeof (messageText));
+	
 	// reset values
-	trap_Cvar_Set( "cg_messageText", "" );
-	trap_Cvar_Set( "cg_messageType", "" );
-	trap_Cvar_Set( "cg_messagePlayer", "" );
-
+	trap_Cvar_Set("cg_messageText", "");
+	trap_Cvar_Set("cg_messageType", "");
+	trap_Cvar_Set("cg_messagePlayer", "");
+	 
 	// don't send empty messages
-	if ( messageText[ 0 ] == '\0' ) {
+	if (messageText[0] == '\0') {
 		return;
 	}
 
+	CG_EncodeQP(messageText, messageTextEncoded, sizeof (messageTextEncoded));
+
 	// team say
-	if ( messageType == 2 ) {
-		trap_SendConsoleCommand( va( "say_team \"%s\"\n", messageText ) );
-
-		// fireteam say
-	} else if ( messageType == 3 ) {
-		trap_SendConsoleCommand( va( "say_buddy \"%s\"\n", messageText ) );
-
-		// normal say
-	} else {
-		trap_SendConsoleCommand( va( "say \"%s\"\n", messageText ) );
+	if (messageType == 2) {
+		trap_SendConsoleCommand(va("enc_say_team \"%s\"\n", messageTextEncoded));
+	} else if (messageType == 3) {// fireteam say
+		trap_SendConsoleCommand(va("enc_say_buddy \"%s\"\n", messageTextEncoded));
+	}	else {// normal say
+		trap_SendConsoleCommand(va("enc_say \"%s\"\n", messageTextEncoded));
 	}
 }
-
-
 
 static void CG_SetWeaponCrosshair_f( void ) {
 	char crosshair[64];
