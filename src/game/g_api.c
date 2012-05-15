@@ -173,7 +173,7 @@ static void *mapRecordsHandler(void *data) {
  * Check API command
  */
 void G_API_check(char *result, gentity_t *ent) {
-	G_callAPI("c", result, ent, 1, "4242"); #fixme send server port here
+	G_callAPI("c", result, ent, 1, "4242"); //#fixme send server port here
 
 	G_Printf("Check API request sent!\n");
 }
