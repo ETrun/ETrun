@@ -1912,6 +1912,9 @@ void CG_EventHandling( int type, qboolean fForced );
 qboolean CG_GetTag( int clientNum, char *tagname, orientation_t * or );
 qboolean CG_GetWeaponTag( int clientNum, char *tagname, orientation_t * or );
 
+void CG_EncodeQP(const char *in, char *out, int maxlen);
+void CG_DecodeQP(char *line);
+
 //
 // cg_view.c
 //
