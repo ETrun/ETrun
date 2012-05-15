@@ -32,7 +32,7 @@ If you have questions concerning this license or the applicable additional terms
 // this file holds commands that can be executed by the server console, but not remote clients
 
 #include "g_local.h"
-
+#include "g_api.h"
 
 /*
 ==============================================================================
@@ -792,7 +792,35 @@ static void Svcmd_KickNum_f( void ) {
 
 // -fretn
 
+// Nico, check API command
+static void Svcmd_CheckAPI_f( void ) {
+	char *result = NULL;
 
+	// make sure server is running
+	if (!G_Is_SV_Running()) {
+		G_Printf( "Server is not running.\n" );
+		return;
+	}
+
+	if (trap_Argc() > 1) {
+		G_Printf( "Usage: checkAPI\n" );
+		return;
+	}
+
+	// Check if API is used
+	if (!g_useAPI.integer) {
+		G_Printf("API is disabled on this server.\n");
+		return;
+	}
+
+	result = malloc(RESPONSE_MAX_SIZE * sizeof (char));
+
+	if (!result) {
+		G_Error("Svcmd_CheckAPI_f: malloc failed\n");
+	}
+
+	G_API_check(result, NULL);
+}
 
 char    *ConcatArgs( int start );
 
@@ -864,6 +892,12 @@ qboolean    ConsoleCommand( void ) {
 		return qtrue;
 	}
 	// -fretn
+
+	// Nico, check API command
+	if (!Q_stricmp(cmd, "checkAPI")) {
+		Svcmd_CheckAPI_f();
+		return qtrue;
+	}
 
 	if ( g_dedicated.integer ) {
 		if ( !Q_stricmp( cmd, "say" ) ) {

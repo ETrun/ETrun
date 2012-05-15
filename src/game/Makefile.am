@@ -1,7 +1,7 @@
 lib_LTLIBRARIES = libgame.la
 
 # Compilation flags
-libgame_la_CFLAGS = -DGAMEDLL -pipe -Wall -Werror -fno-strict-aliasing -D_REENTRANT -lpthread
+libgame_la_CFLAGS = -DGAMEDLL -pipe -Wall -Werror -fno-strict-aliasing -pthread
 
 # Linker options
 libgame_la_LDFLAGS = -avoid-version

@@ -13,6 +13,7 @@ void G_loadAPI();
 void G_unloadAPI();
 void G_API_login(char *result, gentity_t *ent, char *authToken);
 void G_API_mapRecords(char *result, gentity_t *ent, char *mapName);
+void G_API_check(char *result, gentity_t *ent);
 
 #if defined _WIN32
 	# include <windows.h>
