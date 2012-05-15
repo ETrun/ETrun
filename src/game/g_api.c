@@ -173,7 +173,7 @@ static void *mapRecordsHandler(void *data) {
  * Check API command
  */
 void G_API_check(char *result, gentity_t *ent) {
-	G_callAPI("c", result, ent, 0);
+	G_callAPI("c", result, ent, 1, "4242"); #fixme send server port here
 
 	G_Printf("Check API request sent!\n");
 }
@@ -187,12 +187,7 @@ static void *checkAPIHandler(void *data) {
 
 	queryStruct = (struct query_s *)data;
 
-	//while (1);
-	// Ca plante apres
-
-	G_Printf("[THREAD]Calling API now!\n");// Crash
-
-	while (1);
+	G_Printf("[THREAD]Calling API now!\n");// Crash here on OSX
 
 	code = API_query(queryStruct->cmd, queryStruct->result, queryStruct->query);
 
@@ -203,8 +198,8 @@ static void *checkAPIHandler(void *data) {
 		G_Printf("[THREAD]Error, code: %d, %s\n", code, queryStruct->result);
 	}
 
-	//free(queryStruct->result);
-	//free(queryStruct);
+	free(queryStruct->result);
+	free(queryStruct);
 
 	return NULL;
 }
@@ -306,8 +301,6 @@ void G_callAPI(char *command, char *result, gentity_t *ent, int count, ...) {
 	}
 
 	G_Printf("Calling API with command: %s, query: %s\n", command, queryStruct->query);
-
-	G_Printf("Creating thread\n");
 
 	returnCode = pthread_create(&thread, NULL, handler, (void *)queryStruct);
 
