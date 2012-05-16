@@ -1520,6 +1520,9 @@ extern vmCvar_t g_maxNameChanges;
 extern vmCvar_t g_useAPI;
 extern vmCvar_t g_APImodulePath;
 
+// Hold doors open
+extern vmCvar_t g_holdDoorsOpen;
+
 // Nico, end of ETrun cvars
 
 void    trap_Printf( const char *fmt );

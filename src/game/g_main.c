@@ -164,6 +164,9 @@ vmCvar_t g_maxNameChanges;
 vmCvar_t g_useAPI;
 vmCvar_t g_APImodulePath;
 
+// Hold doors open
+vmCvar_t g_holdDoorsOpen;
+
 // Nico, end of ETrun cvars
 
 
@@ -297,16 +300,19 @@ cvarTable_t gameCvarTable[] = {
 	{ &isTimerun, "isTimerun", "0", CVAR_ROM | CVAR_SYSTEMINFO },
 
 	// Flood protection
-	{ &g_floodProtect, "g_floodProtect", "1", 0 },
-	{ &g_floodThreshold, "g_floodThreshold", "8", 0 },
-	{ &g_floodWait, "g_floodWait", "768", 0 },
+	{ &g_floodProtect, "g_floodProtect", "1", CVAR_ARCHIVE | CVAR_LATCH },
+	{ &g_floodThreshold, "g_floodThreshold", "8", CVAR_ARCHIVE | CVAR_LATCH },
+	{ &g_floodWait, "g_floodWait", "768", CVAR_ARCHIVE | CVAR_LATCH },
 
 	// Name changes limit
-	{ &g_maxNameChanges, "g_maxNameChanges", "3", 0},
+	{ &g_maxNameChanges, "g_maxNameChanges", "3", CVAR_ARCHIVE | CVAR_LATCH},
 
 	// API module
 	{ &g_useAPI, "g_useAPI", "0", CVAR_ARCHIVE | CVAR_LATCH},
-	{ &g_APImodulePath, "g_APImodulePath", "", CVAR_ARCHIVE | CVAR_LATCH}
+	{ &g_APImodulePath, "g_APImodulePath", "", CVAR_ARCHIVE | CVAR_LATCH},
+
+	// Hold doors open
+	{ &g_holdDoorsOpen, "g_holdDoorsOpen", "0", CVAR_ARCHIVE | CVAR_LATCH}
 
 	// Nico, end of ETrun cvars
 };
@@ -860,7 +866,7 @@ void G_CheckForCursorHints( gentity_t *ent ) {
 					if ( checkEnt->moverState == MOVER_POS1ROTATE ) {    // stationary/closed
 						hintDist = CH_DOOR_DIST;
 						hintType = HINT_DOOR_ROTATING;
-						if ( checkEnt->key == -1 || !G_AllowTeamsAllowed( checkEnt, ent ) ) {    // locked
+						if (!G_AllowTeamsAllowed( checkEnt, ent ) ) {    // locked
 							hintType = HINT_DOOR_ROTATING_LOCKED;
 						}
 					}
@@ -869,7 +875,7 @@ void G_CheckForCursorHints( gentity_t *ent ) {
 						hintDist = CH_DOOR_DIST;
 						hintType = HINT_DOOR;
 
-						if ( checkEnt->key == -1 || !G_AllowTeamsAllowed( checkEnt, ent ) ) {    // locked
+						if (!G_AllowTeamsAllowed( checkEnt, ent ) ) {    // locked
 							hintType = HINT_DOOR_LOCKED;
 						}
 					}
