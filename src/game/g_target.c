@@ -1363,7 +1363,6 @@ void notify_timerun_stop(gentity_t *activator, int finishTime) {
 void target_stoptimer_use(gentity_t *self, gentity_t *other, gentity_t *activator) {
 	int			min, sec, milli;
 	int			delta, dmin, dsec, dmilli;
-	int			type = 0; // default: no record
 	int			time;
 	gclient_t	*client;
 	int			timerunNum;
@@ -1414,7 +1413,6 @@ void target_stoptimer_use(gentity_t *self, gentity_t *other, gentity_t *activato
 		// best personal
 		client->sess.timerunBestTime[timerunNum] = time;
 		memcpy(client->sess.timerunBestCheckpointTimes[timerunNum], client->timerunCheckpointTimes, sizeof(client->timerunCheckpointTimes));
-		type = 1;
 	}
 
 	// extract MM:SS:mmm from delta

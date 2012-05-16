@@ -1,7 +1,7 @@
 #! /bin/bash
 
 basepath="/usr/local/games/enemy-territory"
-path_to_game_exec="/usr/local/games/enemy-territory/etded.x86"
+path_to_game_exec="/usr/local/games/enemy-territory/et.x86"
 
 homepath=/home/$USER/.etwolf
 
@@ -32,4 +32,4 @@ rm -f $pk3_name
 cp -rf _build/$qagame_name "$homepath/$mod_name"
 cp -rf _build/$apimodule_name "$homepath/$mod_name"
 read -p "Press ENTER to start game..."
-"$path_to_game_exec" +set fs_basepath $basepath +set fs_game $mod_name +set dedicated 2 +map goldrush +set g_useAPI 0 +set g_APImodulePath "$path_to_api"
+"$path_to_game_exec" +set fs_basepath $basepath +set fs_game $mod_name +map goldrush +set g_useAPI 0 +set g_APImodulePath "$path_to_api" +set developer 1

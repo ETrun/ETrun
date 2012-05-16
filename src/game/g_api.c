@@ -170,6 +170,41 @@ static void *mapRecordsHandler(void *data) {
 }
 
 /*
+ * Check API command
+ */
+void G_API_check(char *result, gentity_t *ent) {
+	G_callAPI("c", result, ent, 1, "4242"); //#fixme send server port here
+
+	G_Printf("Check API request sent!\n");
+}
+
+/*
+ * Check API handler
+ */
+static void *checkAPIHandler(void *data) {
+	int code = -1;
+	struct query_s *queryStruct;
+
+	queryStruct = (struct query_s *)data;
+
+	G_Printf("[THREAD]Calling API now!\n");// Crash here on OSX
+
+	code = API_query(queryStruct->cmd, queryStruct->result, queryStruct->query);
+
+	if (code == 0) {
+		G_Printf("[THREAD]Result size = %d:\n", (int)strlen(queryStruct->result));
+		G_Printf("%s\n", queryStruct->result);
+	} else {
+		G_Printf("[THREAD]Error, code: %d, %s\n", code, queryStruct->result);
+	}
+
+	free(queryStruct->result);
+	free(queryStruct);
+
+	return NULL;
+}
+
+/*
  * Map records request command
  */
 void G_API_mapRecords(char *result, gentity_t *ent, char *mapName) {
@@ -181,7 +216,8 @@ void G_API_mapRecords(char *result, gentity_t *ent, char *mapName) {
 // Commands handler binding
 static const api_glue_t APICommands[] = {
 	{ "l",	loginHandler },
-	{ "m",	mapRecordsHandler }
+	{ "m",	mapRecordsHandler },
+	{ "c", 	checkAPIHandler}
 };
 
 /*
@@ -231,7 +267,9 @@ void G_callAPI(char *command, char *result, gentity_t *ent, int count, ...) {
 		G_Error("G_callAPI: malloc failed\n");
 	}
 
-	va_start (ap, count);
+	if (count > 0) {
+		va_start (ap, count);
+	}
 
 	// Init query buffer
 	memset(queryStruct->query, 0, QUERY_MAX_SIZE);
@@ -262,7 +300,7 @@ void G_callAPI(char *command, char *result, gentity_t *ent, int count, ...) {
 		G_Error("G_callAPI: no handler for command: %s\n", command);
 	}
 
-	G_Printf("Calling API with query: %s\n", queryStruct->query);
+	G_Printf("Calling API with command: %s, query: %s\n", command, queryStruct->query);
 
 	returnCode = pthread_create(&thread, NULL, handler, (void *)queryStruct);
 
@@ -271,7 +309,9 @@ void G_callAPI(char *command, char *result, gentity_t *ent, int count, ...) {
 	}
 	G_Printf("G_callAPI: thread started!\n");
 
-	va_end (ap);
+	if (count > 0) {
+		va_end (ap);
+	}
 }
 
 #if defined _WIN32

@@ -1672,7 +1672,7 @@ extern void G_ExplodeMissile( gentity_t *ent );
 
 #define NUMBOMBS 10
 #define BOMBSPREAD 150
-extern void G_SayTo( gentity_t *ent, gentity_t *other, int mode, int color, const char *name, const char *message, qboolean localize );
+extern void G_SayTo(gentity_t *ent, gentity_t *other, int mode, int color, const char *name, const char *message, qboolean localize, qboolean encoded);
 
 void G_RailTrail( vec_t* start, vec_t* end );
 

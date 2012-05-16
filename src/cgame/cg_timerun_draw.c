@@ -359,7 +359,7 @@ void CG_DrawCGaz(void) {
 	float vel_angle; // absolute velocity angle
 	float vel_relang; // relative velocity angle to viewangles[1]
 	float per_angle;
-	float a, y, h, w;
+	float a;
 	float accel, scale;
 
 	int forward = 0;
@@ -367,7 +367,6 @@ void CG_DrawCGaz(void) {
 
 	vec_t vel_size;
 	vec3_t vel;
-	vec4_t color;
 
 	playerState_t *ps;
 
@@ -384,10 +383,6 @@ void CG_DrawCGaz(void) {
 
 	a = 0.15;
 	a = (a > 1.0f) ? 1.0f : (a < 0.0f) ? 0.0f : a;
-	color[3] = a;
-	y = 260;
-	h = 20;
-	w = 300;
 
 	VectorCopy(ps->velocity, vel);
 

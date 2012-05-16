@@ -1441,6 +1441,7 @@ Cmd_Argc() / Cmd_Argv()
 static void CG_ServerCommand( void ) {
 	const char  *cmd;
 	char text[MAX_SAY_TEXT];
+	qboolean enc = qfalse; // used for enc_chat, enc_tchat
 
 	cmd = CG_Argv( 0 );
 
@@ -1508,7 +1509,7 @@ static void CG_ServerCommand( void ) {
 		return;
 	}
 
-	if ( !Q_stricmp( cmd, "chat" ) ) {
+	if (!Q_stricmp(cmd, "chat") || (enc = !Q_stricmp(cmd, "enc_chat"))) {
 		const char *s;
 
 		if ( cg_teamChatsOnly.integer ) {
@@ -1523,13 +1524,16 @@ static void CG_ServerCommand( void ) {
 
 		Q_strncpyz( text, s, MAX_SAY_TEXT );
 		CG_RemoveChatEscapeChar( text );
+		if (enc) {
+			CG_DecodeQP(text);
+		}
 		CG_AddToTeamChat( text, atoi( CG_Argv( 2 ) ) );
 		CG_Printf( "%s\n", text );
 
 		return;
 	}
 
-	if ( !Q_stricmp( cmd, "tchat" ) ) {
+	if (!Q_stricmp(cmd, "tchat") || (enc = !Q_stricmp(cmd, "enc_tchat"))) {
 		const char *s;
 
 		if ( atoi( CG_Argv( 3 ) ) ) {
@@ -1540,6 +1544,9 @@ static void CG_ServerCommand( void ) {
 
 		Q_strncpyz( text, s, MAX_SAY_TEXT );
 		CG_RemoveChatEscapeChar( text );
+		if (enc) {
+			CG_DecodeQP(text);
+		}
 		CG_AddToTeamChat( text, atoi( CG_Argv( 2 ) ) );
 		CG_Printf( "%s\n", text ); // JPW NERVE
 

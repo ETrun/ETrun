@@ -1293,10 +1293,10 @@ void G_SendScore( gentity_t *client );
 //
 // g_cmds.c
 //
-void G_SayTo( gentity_t *ent, gentity_t *other, int mode, int color, const char *name, const char *message, qboolean localize ); // JPW NERVE removed static declaration so it would link
+void G_SayTo(gentity_t *ent, gentity_t *other, int mode, int color, const char *name, const char *message, qboolean localize, qboolean encoded);
 qboolean Cmd_CallVote_f( gentity_t *ent, unsigned int dwCommand, qboolean fValue );
 void Cmd_Follow_f( gentity_t *ent, unsigned int dwCommand, qboolean fValue );
-void Cmd_Say_f( gentity_t *ent, int mode, qboolean arg0 );
+void Cmd_Say_f(gentity_t *ent, int mode, qboolean arg0, qboolean encoded);
 
 // Nico, flood protection
 // void Cmd_Team_f( gentity_t *ent, unsigned int dwCommand, qboolean fValue );
@@ -1521,6 +1521,9 @@ extern vmCvar_t g_maxNameChanges;
 // API module
 extern vmCvar_t g_useAPI;
 extern vmCvar_t g_APImodulePath;
+
+// Hold doors open
+extern vmCvar_t g_holdDoorsOpen;
 
 // Nico, end of ETrun cvars
 

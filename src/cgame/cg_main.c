@@ -2604,3 +2604,70 @@ qboolean CG_CheckExecKey( int key ) {
 
 	return CG_FireteamCheckExecKey( key, qfalse );
 }
+
+// Quoted-Printable like encoding
+void CG_EncodeQP(const char *in, char *out, int maxlen) {
+	char t;
+	char *first = out;
+
+	// sanity check
+	if (maxlen <= 0) {
+		return;
+	}
+
+	while (*in) {
+		if (*in == '"' || *in == '%' || *in == '=' || *((byte *) in) > 127) {
+			if (out - first + 4 >= maxlen) {
+				break;
+			}
+			*out++ = '=';
+			t = *((byte *) in) / 16;
+			*out++ = t <= 9 ? t + '0' : t - 10 + 'A';
+			t = *((byte *) in) % 16;
+			*out++ = t <= 9 ? t + '0' : t - 10 + 'A';
+			in++;
+		}	else {
+			if (out - first + 1 >= maxlen) {
+				break;
+			}
+			*out++ = *in++;
+		}
+	}
+	*out = '\0';
+}
+
+// Quoted-Printable decoding
+void CG_DecodeQP(char *line) {
+	char *o = line;
+	char t;
+
+	while (*line) {
+		if (*line == '=') {
+			line++;
+
+			if (!*line || !*(line + 1)) {
+				break;
+			}
+
+			t = 0;
+			if (!isxdigit(*line)) {
+				line += 2;
+				continue;
+			}
+			t = gethex(*line) * 16;
+
+			line++;
+			if (!isxdigit(*line)) {
+				line++;
+				continue;
+			}
+			t += gethex(*line);
+			line++;
+			*o++ = t;
+		}	else {
+			*o++ = *line++;
+		}
+	}
+	*o = '\0';
+}
+

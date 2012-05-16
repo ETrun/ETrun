@@ -982,6 +982,11 @@ void Reached_BinaryMover( gentity_t *ent ) {
 		if ( ent->wait != -1000 ) {
 			ent->think = ReturnToPos1;
 			ent->nextthink = level.time + ent->wait;
+
+			// Nico, do we keep doors opened?
+			if (g_holdDoorsOpen.integer) {
+				ent->nextthink = 0;
+			}
 		}
 		// END JOSEPH
 	} else if ( ent->moverState == MOVER_2TO1 ) {
@@ -1025,6 +1030,11 @@ void Reached_BinaryMover( gentity_t *ent ) {
 		// return to pos1 after a delay
 		ent->think = ReturnToPos1Rotate;
 		ent->nextthink = level.time + ent->wait;
+
+		// Nico, do we keep doors opened?
+		if (g_holdDoorsOpen.integer) {
+			ent->nextthink = 0;
+		}
 
 	} else if ( ent->moverState == MOVER_2TO1ROTATE )   {
 		// reached pos1
@@ -1098,7 +1108,6 @@ qboolean IsBinaryMoverBlocked( gentity_t *ent, gentity_t *other, gentity_t *acti
 		}
 
 		AngleVectors( angles, forward, NULL, NULL );
-		// VectorSubtract (other->r.currentOrigin, pos, vec);
 
 		if ( is_relay ) {
 			VectorSubtract( other->r.currentOrigin, pos, vec );
@@ -2043,8 +2052,7 @@ void G_TryDoor( gentity_t *ent, gentity_t *other, gentity_t *activator ) {
 
 	if ( ( ent->s.apos.trType == TR_STATIONARY && ent->s.pos.trType == TR_STATIONARY ) ) {
 		if ( ent->active == qfalse ) {
-			if ( ent->key < 0
-				 || !G_AllowTeamsAllowed( ent, activator )
+			if (!G_AllowTeamsAllowed( ent, activator )
 			) { // door force locked
 				G_AddEvent( ent, EV_GENERAL_SOUND, ent->soundPos3 );
 				return;
@@ -2127,7 +2135,7 @@ void SP_func_door( gentity_t *ent ) {
 	float distance;
 	vec3_t size;
 	float lip;
-	int key, doortype;
+	int doortype;
 
 	G_SpawnInt( "type", "0", &doortype );
 
@@ -2148,22 +2156,8 @@ void SP_func_door( gentity_t *ent ) {
 	}
 	ent->wait *= 1000;
 
-	//---- (SA) door keys
-
-	if ( G_SpawnInt( "key", "", &key ) ) { // if door has a key entered, set it
-		ent->key = key;
-	} else {
-		ent->key = -2;                  // otherwise, set the key when this ent finishes spawning
-
-
-	}
-
-	// if the key is invalid, set the key in the finishSpawning routine
-	if ( ent->key > KEY_NUM_KEYS || ent->key < -2 ) {
-		G_Error( "invalid key number: %d in func_door_rotating\n", ent->key );
-		ent->key = -2;
-	}
-	//---- (SA) end
+	// Nico, set key to -2
+	ent->key = -2;
 
 	// default lip of 8 units
 	G_SpawnFloat( "lip", "8", &lip );
@@ -2253,7 +2247,6 @@ void SP_func_secret( gentity_t *ent ) {
 	float distance;
 	vec3_t size;
 	float lip;
-	int key;
 
 	ent->sound1to2 = ent->sound2to1 = ent->sound2to3 = G_SoundIndex( "sound/movers/doors/dr1_strt.wav" );
 	ent->soundPos1 = ent->soundPos3 = G_SoundIndex( "sound/movers/doors/dr1_end.wav" );
@@ -2271,21 +2264,8 @@ void SP_func_secret( gentity_t *ent ) {
 	}
 	ent->wait *= 1000;
 
-	//---- (SA) door keys
-
-	if ( G_SpawnInt( "key", "", &key ) ) { // if door has a key entered, set it
-		ent->key = key;
-	} else {
-		ent->key = -1;                  // otherwise, set the key when this ent finishes spawning
-
-	}
-
-	// if the key is invalid, set the key in the finishSpawning routine
-	if ( ent->key > KEY_NUM_KEYS || ent->key < -1 ) {
-		G_Error( "invalid key number: %d in func_door_rotating\n", ent->key );
-		ent->key = -1;
-	}
-	//---- (SA) end
+	// Nico, set key to -1
+	ent->key = -1;
 
 	// default lip of 8 units
 	G_SpawnFloat( "lip", "8", &lip );
@@ -3539,7 +3519,7 @@ ACCEPT_CVOPS Accept a disguised covert ops as a valid team member for team only 
 //
 //
 void SP_func_door_rotating( gentity_t *ent ) {
-	int key, doortype;
+	int doortype;
 
 	G_SpawnInt( "type", "0", &doortype );
 
@@ -3568,24 +3548,8 @@ void SP_func_door_rotating( gentity_t *ent ) {
 		ent->flags |= FL_TOGGLE;
 	}
 
-	//---- (SA) door keys
-
-	if ( G_SpawnInt( "key", "", &key ) ) { // if door has a key entered, set it
-		ent->key = key;
-	} else {
-		ent->key = -2;                  // otherwise, set the key when this ent finishes spawning
-
-
-	}
-	// special case for single player
-
-	// if the key is invalid, set the key in the finishSpawning routine
-	if ( ent->key > KEY_NUM_KEYS || ent->key < -2 ) {
-		G_Error( "invalid key number: %d in func_door_rotating\n", ent->key );
-		ent->key = -2;
-	}
-	//---- (SA) end
-
+	// Nico, set key to -2
+	ent->key = -2;
 
 	// set the rotation axis
 	VectorClear( ent->rotate );
