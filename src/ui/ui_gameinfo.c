@@ -127,10 +127,6 @@ static void UI_LoadArenasFromFile( char *filename ) {
 	while ( trap_PC_ReadToken( handle, &token ) ) {
 		if ( *token.string == '}' ) {
 
-			if ( !uiInfo.mapList[uiInfo.mapCount].typeBits ) {
-				uiInfo.mapList[uiInfo.mapCount].typeBits |= ( 1 << GT_WOLF );
-			}
-
 			uiInfo.mapCount++;
 			if ( uiInfo.mapCount >= MAX_MAPS ) {
 				break;
@@ -178,17 +174,6 @@ static void UI_LoadArenasFromFile( char *filename ) {
 				trap_Print( va( S_COLOR_RED "unexpected end of file inside: %s\n", filename ) );
 				trap_PC_FreeSource( handle );
 				return;
-			} else {
-				if ( strstr( token.string, "wolfsp" ) ) {
-					uiInfo.mapList[uiInfo.mapCount].typeBits |= ( 1 << GT_SINGLE_PLAYER );
-				}
-
-				if ( strstr( token.string, "wolfmp" ) ) {
-					uiInfo.mapList[uiInfo.mapCount].typeBits |= ( 1 << GT_WOLF );
-				}
-				if ( strstr( token.string, "wolfsw" ) ) {
-					uiInfo.mapList[uiInfo.mapCount].typeBits |= ( 1 << GT_WOLF_STOPWATCH );
-				}
 			}
 		} else if ( !Q_stricmp( token.string, "mapposition_x" ) ) {
 			if ( !PC_Float_Parse( handle, &uiInfo.mapList[uiInfo.mapCount].mappos[0] ) ) {

@@ -41,12 +41,7 @@ menuDef {
 			( "setitemcolor grpColumns backcolor 0 0 0 0 ; setitemcolor grpTabs backcolor .1 .1 .1 .3 ; setitemcolor grpTabs forecolor .6 .6 .6 1 ;	setitemcolor playerColumn backcolor .35 .35 .35 .2 ; setitemcolor playerColumnTab backcolor .35 .35 .35 .2 ; setitemcolor playerColumnTab forecolor .9 .9 .9 1" )
 			( "clearFocus" )
 
-		// sort by gametype ?
-		conditionalScript serversort_3 2
-			( "setitemcolor grpColumns backcolor 0 0 0 0 ; setitemcolor grpTabs backcolor .1 .1 .1 .3 ; setitemcolor grpTabs forecolor .6 .6 .6 1 ; setitemcolor gametypeColumn backcolor .35 .35 .35 .2 ; setitemcolor gametypeColumnTab backcolor .35 .35 .35 .2 ; setitemcolor gametypeColumnTab forecolor .9 .9 .9 1" )
-			( "clearFocus" )
-
-		// sort by ping ?
+		// sort by ping ? #fixme, server_sort
 		conditionalScript serversort_4 2
 			( "setitemcolor grpColumns backcolor 0 0 0 0 ; setitemcolor grpTabs backcolor .1 .1 .1 .3 ; setitemcolor grpTabs forecolor .6 .6 .6 1 ; setitemcolor pingColumn backcolor .35 .35 .35 .2 ; setitemcolor pingColumnTab backcolor .35 .35 .35 .2 ; setitemcolor pingColumnTab forecolor .9 .9 .9 1" )
 			( "clearFocus" )
@@ -96,7 +91,6 @@ menuDef {
 	SUBWINDOW( 6, 64, (FILTERS_WIDTH), 94, "FILTERS" )
 	
 	MULTIACTIONLEFT( 8, 80, .5*((FILTERS_WIDTH)-6), 10, "Source:", .2, 8, "ui_netSource", cvarFloatList { "Local" 0 "Internet" 1 "Favorites" 2 }, uiScript UpdateFilter, "Choose the type of game servers to display, from Internet, local and the favorites list" )
-	MULTIACTIONLEFT( 8+.5*((FILTERS_WIDTH)-6)+2, 80, .5*((FILTERS_WIDTH)-6), 10, "Game Type:", .2, 8, "ui_joinGameType", cvarFloatList { "All" -1 "Objective" 2 "Stopwatch" 3 "Campaign" 4 "Last Man Standing" 5 }, uiScript RefreshFilter, "Displays only game servers offering this Game Type" )
 
 	itemDef {
 		name		"filtericonEmptyFull"
@@ -121,39 +115,6 @@ menuDef {
 	TRICHECKBOXACTIONMULTI( 10+12, 104, .5*((FILTERS_WIDTH)-6)-14, 10, .2, 8, "ui_browserShowPasswordProtected", cvarFloatList { "Filter Disabled" 0 "Only show..." 1 "Don't show..." 2 }, uiScript RefreshFilter ; setcvar ui_filterdescription "Filter affecting Password Protected Servers", "Includes or excludes password protected servers, from the server list" )
 
 	itemDef {
-		name		"filtericonFriendlyFire"
-		rect		10 116 10 10
-		style		WINDOW_STYLE_SHADER
-		background	"ui/assets/filter_ff"
-		forecolor	1 1 1 1
-		visible		1
-		decoration
-	}
-	TRICHECKBOXACTIONMULTI( 10+12, 116, .5*((FILTERS_WIDTH)-6)-14, 10, .2, 8, "ui_browserShowFriendlyFire", cvarFloatList { "Filter Disabled" 0 "Only show..." 1 "Don't show..." 2 }, uiScript RefreshFilter ; setcvar ui_filterdescription "Filter affecting Servers with Friendly Fire", "Includes or excludes servers where team mates can damage each other, from the server list"  )
-
-	itemDef {
-		name		"filtericonMaxLives"
-		rect		10 128 10 10
-		style		WINDOW_STYLE_SHADER
-		background	"ui/assets/filter_lives"
-		forecolor	1 1 1 1
-		visible		1
-		decoration
-	}
-	TRICHECKBOXACTIONMULTI( 10+12, 128, .5*((FILTERS_WIDTH)-6)-14, 10, .2, 8, "ui_browserShowMaxlives", cvarFloatList { "Filter Disabled" 0 "Only show..." 1 "Don't show..." 2 }, uiScript RefreshFilter ; setcvar ui_filterdescription "Filter affecting Servers with Max Lives", "Includes or excludes servers that limit the number of player lives per match, from the server list" )
-
-	itemDef {
-		name		"filtericonWeapRestrict"
-		rect		$evalfloat(8+.5*((FILTERS_WIDTH)-6)+2+2) 92 10 10
-		style		WINDOW_STYLE_SHADER
-		background	"ui/assets/filter_weap"
-		forecolor	1 1 1 1
-		visible		1
-		decoration
-	}
-	TRICHECKBOXACTIONMULTI( 8+.5*((FILTERS_WIDTH)-6)+2+2+12, 92, .5*((FILTERS_WIDTH)-6)-14, 10, .2, 8, "ui_browserShowWeaponsRestricted", cvarFloatList { "Filter Disabled" 0 "Only show..." 1 "Don't show..." 2 }, uiScript RefreshFilter ; setcvar ui_filterdescription "Filter affecting Servers with Weapon Restrictions", "Includes or excludes servers that limit the number of available heavy weapons, from the server list" )
-
-	itemDef {
 		name		"filtericonPunkBuster"
 		rect		$evalfloat(8+.5*((FILTERS_WIDTH)-6)+2+2) 104 10 10
 		style		WINDOW_STYLE_SHADER
@@ -174,17 +135,6 @@ menuDef {
 		decoration
 	}
 	TRICHECKBOXACTIONMULTI( 8+.5*((FILTERS_WIDTH)-6)+2+2+12, 116, .5*((FILTERS_WIDTH)-6)-14, 10, .2, 8, "ui_browserShowAntilag", cvarFloatList { "Filter Disabled" 0 "Only show..." 1 "Don't show..." 2 }, uiScript RefreshFilter ; setcvar ui_filterdescription "Filter affecting Anti-Lag Servers", "Includes or excludes servers with support for modem players, from the server list" )
-
-	itemDef {
-		name		"filtericonTeamBalance"
-		rect		$evalfloat(8+.5*((FILTERS_WIDTH)-6)+2+2) 128 10 10
-		style		WINDOW_STYLE_SHADER
-		background	"ui/assets/filter_balance"
-		forecolor	1 1 1 1
-		visible		1
-		decoration
-	}
-	TRICHECKBOXACTIONMULTI( 8+.5*((FILTERS_WIDTH)-6)+2+2+12, 128, .5*((FILTERS_WIDTH)-6)-14, 10, .2, 8, "ui_browserShowTeamBalanced", cvarFloatList { "Filter Disabled" 0 "Only show..." 1 "Don't show..." 2 }, uiScript RefreshFilter ; setcvar ui_filterdescription "Filter affecting Servers with Force Team Balance", "Includes or excludes servers that enforce balanced teams, from the server list" )
 
 	itemDef {
 		name			"descriptionFilters"
@@ -309,10 +259,10 @@ menuDef {
 	// Columns and sort tabs
 	
 #define COLUMN_HEIGHT		194
-#define SERVERNAME_WIDTH	250
-#define MAPNAME_WIDTH		96
+#define SERVERNAME_WIDTH	274
+#define MAPNAME_WIDTH		120
 #define PLAYERS_WIDTH		42
-#define GAMETYPE_WIDTH		48
+#define GAMETYPE_WIDTH		0
 #define PING_WIDTH			34
 	
 	itemDef {
@@ -430,47 +380,6 @@ menuDef {
 		name		"playerColumn"
 		group		"grpColumns"
 		rect		$evalfloat(12+SERVERNAME_WIDTH+MAPNAME_WIDTH) 195 $evalfloat(PLAYERS_WIDTH+1) COLUMN_HEIGHT
-		style		WINDOW_STYLE_FILLED
-		backcolor	0 0 0 0
-		border		WINDOW_BORDER_FULL
-		bordercolor	.5 .5 .5 .5
-		visible		1
-		decoration
-	}
-	
-	itemDef {
-		name		"gametypeColumnTab"
-		group		"grpTabs"
-		rect		$evalfloat(12+SERVERNAME_WIDTH+MAPNAME_WIDTH+PLAYERS_WIDTH) 180 $evalfloat(GAMETYPE_WIDTH+1) 16
-		type		ITEM_TYPE_BUTTON
-		text		"TYPE"
-		textfont	UI_FONT_ARIBLK_27
-		textscale	.19
-		textalignx	4
-		textaligny	12
-		style		WINDOW_STYLE_FILLED
-		backcolor	.1 .1 .1 .3
-		forecolor	.6 .6 .6 1
-		border		WINDOW_BORDER_FULL
-		bordercolor	.5 .5 .5 .5
-		visible		1
-		tooltip		"Click here to sort by Game Type"
-
-		action {
-			setitemcolor "grpColumns" backcolor 0 0 0 0;
-			setitemcolor "grpTabs" backcolor .1 .1 .1 .3 ;
-			setitemcolor "grpTabs" forecolor .6 .6 .6 1 ;
-			setitemcolor "gametypeColumn" backcolor .35 .35 .35 .2 ;
-			setitemcolor "gametypeColumnTab" backcolor .35 .35 .35 .2 ;
-			setitemcolor "gametypeColumnTab" forecolor .9 .9 .9 1 ;
-			uiScript ServerSort 3
-		}
-	}
-
-	itemDef {
-		name		"gametypeColumn"
-		group		"grpColumns"
-		rect		$evalfloat(12+SERVERNAME_WIDTH+MAPNAME_WIDTH+PLAYERS_WIDTH) 195 $evalfloat(GAMETYPE_WIDTH+1) COLUMN_HEIGHT
 		style		WINDOW_STYLE_FILLED
 		backcolor	0 0 0 0
 		border		WINDOW_BORDER_FULL

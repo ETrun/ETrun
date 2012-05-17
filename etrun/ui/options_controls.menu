@@ -74,12 +74,6 @@ menuDef {
 	SUBWINDOW( 6, 314, (SUBWINDOW_WIDTH), 100, "POP-UPS" )
 	BIND( 8, 330, (SUBWINDOW_WIDTH)-4, 10, "Show Scores:", .2, 8, "+scores", "" )
 	BIND( 8, 342, (SUBWINDOW_WIDTH)-4, 10, "Show Limbo Menu:", .2, 8, "OpenLimboMenu", "" )
-	BIND( 8, 354, (SUBWINDOW_WIDTH)-4, 10, "Show Command Map:", .2, 8, "+mapexpand", "" )
-	BIND( 8, 366, (SUBWINDOW_WIDTH)-4, 10, "Compass Map Zoom In:", .2, 8, "MapZoomIn", "" )
-	BIND( 8, 378, (SUBWINDOW_WIDTH)-4, 10, "Compass Map Zoom Out:", .2, 8, "MapZoomOut", "" )
-	BIND( 8, 390, (SUBWINDOW_WIDTH)-4, 10, "Player Stats:", .2, 8, "+stats", "" )
-	BIND( 8, 402, (SUBWINDOW_WIDTH)-4, 10, "Top Shots:", .2, 8, "+topshots", "" )
-//	BIND( 8, 402, (SUBWINDOW_WIDTH)-4, 10, "Multiview:", .2, 8, "mvactivate", "" )
 	
 // Use Weapons //
 

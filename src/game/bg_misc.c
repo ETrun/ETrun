@@ -38,12 +38,8 @@ If you have questions concerning this license or the applicable additional terms
 #include "bg_public.h"
 #include "../../etrun/ui/menudef.h"
 
-#ifdef CGAMEDLL
-#elif GAMEDLL
+#ifdef GAMEDLL
 extern vmCvar_t g_developer;
-#else
-extern vmCvar_t ui_gameType;
-#define gametypeCvar ui_gameType
 #endif
 
 vec3_t playerlegsProneMins = { -13.5f, -13.5f, -24.f };

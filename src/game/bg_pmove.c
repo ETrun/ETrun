@@ -41,8 +41,6 @@ If you have questions concerning this license or the applicable additional terms
 
 #include "bg_local.h"
 
-#define PM_IsSinglePlayerGame() ( PM_GameType == GT_SINGLE_PLAYER || PM_GameType == GT_COOP )
-
 pmove_t     *pm;
 pml_t pml;
 
