@@ -1085,10 +1085,6 @@ void G_RegisterCvars( void ) {
 		G_RemapTeamShaders();
 	}
 
-	// check some things
-	// DHM - Gametype is currently restricted to supported types only
-	trap_Cvar_Set( "g_gametype", va( "%i",GT_WOLF ) );// Nico, set a gametype for queries about server info
-
 	// OSP
 	trap_SetConfigstring( CS_SERVERTOGGLES, va( "%d", level.server_settings ) );
 

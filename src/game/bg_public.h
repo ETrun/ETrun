@@ -169,8 +169,6 @@ typedef enum {
 #define MAX_OID_TRIGGERS    18
 // dhm
 
-#define MAX_GAMETYPES 16
-
 typedef struct {
 	const char *mapName;
 	const char *mapLoadName;
@@ -182,7 +180,6 @@ typedef struct {
 	// Gordon: FIXME: remove
 	const char *opponentName;
 	int teamMembers;
-	int timeToBeat[MAX_GAMETYPES];
 
 	qhandle_t levelShot;
 	qboolean active;
@@ -360,16 +357,6 @@ extern const unsigned int aReinfSeeds[MAX_REINFSEEDS];
 #error overflow: (CS_MAX) > MAX_CONFIGSTRINGS
 #endif
 
-typedef enum {
-	GT_SINGLE_PLAYER,
-	GT_COOP,
-	GT_WOLF,
-	GT_WOLF_STOPWATCH,
-	GT_WOLF_CAMPAIGN,   // Exactly the same as GT_WOLF, but uses campaign roulation (multiple maps form one virtual map)
-	GT_WOLF_LMS,
-	GT_MAX_GAME_TYPE
-} gametype_t;
-
 typedef enum { GENDER_MALE, GENDER_FEMALE, GENDER_NEUTER } gender_t;
 
 /*
@@ -480,7 +467,6 @@ typedef struct {
 	qboolean gauntletHit;           // true if a gauntlet attack would actually hit something
 
 	// NERVE - SMF (in)
-	int gametype;
 	int ltChargeTime;
 	int soldierChargeTime;
 	int engineerChargeTime;

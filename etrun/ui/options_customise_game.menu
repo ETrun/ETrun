@@ -80,7 +80,6 @@ menuDef {
 // Miscellaneous //
 
 	SUBWINDOW( 6, 332, (SUBWINDOW_WIDTH), 76, "MISCELLANEOUS" )
-	MULTI( 8, 348, (SUBWINDOW_WIDTH)-4, 10, "Complaint PopUp:", .2, 8, "cg_complaintPopUp", cvarFloatList { "Off" 0 "On" 1 }, "Display the option to file complaints about teammates who kill you" )
 //	YESNO( 8, 372, (SUBWINDOW_WIDTH)-4, 10, "Announcer:", .2, 8, "cg_announcer", "Enables or disables the in-game Commander" )
 	YESNO( 8, 360, (SUBWINDOW_WIDTH)-4, 10, "Log Important Messages:", .2, 8, "cg_printObjectiveInfo", "Prints important game messages to the console" )
 	MULTI( 8, 372, (SUBWINDOW_WIDTH)-4, 10, "Auto-Action:", .2, 8, "cg_autoAction", cvarFloatList { "None" 0 "Demo" 1 "Screenshot" 2 "Stats Dump" 4 "Demo + SS" 3 "Demo + Stats" 5 "SS + Stats" 6 "Demo + SS + Stats" 7 }, "Automatically performs actions at the start or end of a round" )

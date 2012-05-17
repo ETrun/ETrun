@@ -104,9 +104,6 @@ extern vmCvar_t ui_selectedPlayer;
 extern vmCvar_t ui_selectedPlayerName;
 extern vmCvar_t ui_netSource;
 extern vmCvar_t ui_menuFiles;
-extern vmCvar_t ui_gameType;
-extern vmCvar_t ui_netGameType;
-extern vmCvar_t ui_joinGameType;
 extern vmCvar_t ui_dedicated;
 extern vmCvar_t ui_notebookCurrentPage;
 extern vmCvar_t ui_clipboardName;
@@ -118,7 +115,6 @@ extern vmCvar_t ui_currentMap;
 extern vmCvar_t ui_mapIndex;
 
 extern vmCvar_t ui_browserMaster;
-extern vmCvar_t ui_browserGameType;
 extern vmCvar_t ui_browserSortKey;
 extern vmCvar_t ui_browserShowEmptyOrFull;
 extern vmCvar_t ui_browserShowPasswordProtected;
@@ -658,7 +654,6 @@ typedef struct {
 #define MAX_ALIASES 64
 #define MAX_HEADNAME  32
 #define MAX_TEAMS 64
-//#define MAX_GAMETYPES 16 // moved up
 #define MAX_MAPS 128
 #define MAX_SPMAPS 16
 #define PLAYERS_PER_TEAM 5
@@ -722,20 +717,6 @@ typedef struct {
 	qhandle_t teamIcon_Name;
 	int cinematic;
 } teamInfo;
-
-typedef struct {
-	const char *gameType;
-	const char *gameTypeShort;
-	int gtEnum;
-	const char *gameTypeDescription;
-} gameTypeInfo;
-
-/*typedef struct {
-	const char *tierName;
-	const char *maps[MAPS_PER_TIER];
-	int gameTypes[MAPS_PER_TIER];
-	qhandle_t mapHandles[MAPS_PER_TIER];
-} tierInfo;*/
 
 typedef struct {
 	const char *name;
@@ -818,12 +799,6 @@ typedef struct {
 
 	int teamCount;
 	teamInfo teamList[MAX_TEAMS];
-
-	int numGameTypes;
-	gameTypeInfo gameTypes[MAX_GAMETYPES];
-
-	int numJoinGameTypes;
-	gameTypeInfo joinGameTypes[MAX_GAMETYPES];
 
 	int redBlue;
 	int playerCount;
