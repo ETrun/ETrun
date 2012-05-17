@@ -4303,11 +4303,9 @@ UI_BuildServerDisplayList
 ==================
 */
 static void UI_BuildServerDisplayList( qboolean force ) {
-	int i, count, clients, maxClients, ping, game, len, visible, friendlyFire, maxlives, punkbuster, antilag, password, weaponrestricted, balancedteams;
+	int i, count, clients, maxClients, ping, len, visible, friendlyFire, maxlives, punkbuster, antilag, password, weaponrestricted, balancedteams;
 	char info[MAX_STRING_CHARS];
 	static int numinvisible;
-
-	game = 0;       // NERVE - SMF - shut up compiler warning
 
 	if ( !( force || uiInfo.uiDC.realTime > uiInfo.serverStatus.nextDisplayRefresh ) ) {
 		return;
