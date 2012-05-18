@@ -238,7 +238,6 @@ void CG_DrawConnectScreen( qboolean interactive, qboolean forcerefresh ) {
 	DC->getConfigString( CS_SERVERINFO, buffer, sizeof( buffer ) );
 	if ( *buffer ) {
 		const char *str;
-		qboolean enabled = qfalse;
 		float x, y;
 		int i;
 		vec4_t clr3 = { 1.f,        1.f,        1.f,        .6f };
