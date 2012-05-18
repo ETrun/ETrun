@@ -584,27 +584,6 @@ int G_TeamCount( gentity_t* ent, weapon_t weap ) {
 	return cnt;
 }
 
-qboolean G_IsWeaponDisabled( gentity_t* ent, weapon_t weapon ) {
-	int count, wcount;
-
-	if ( ent->client->sess.sessionTeam == TEAM_SPECTATOR ) {
-		return qtrue;
-	}
-
-	if ( !G_IsHeavyWeapon( weapon ) ) {
-		return qfalse;
-	}
-
-	count =     G_TeamCount( ent, -1 );
-	wcount =    G_TeamCount( ent, weapon );
-
-	if ( wcount >= ceil( count * g_heavyWeaponRestriction.integer * 0.01f ) ) {
-		return qtrue;
-	}
-
-	return qfalse;
-}
-
 void G_SetClientWeapons( gentity_t* ent, weapon_t w1, weapon_t w2, qboolean updateclient ) {
 	qboolean changed = qfalse;
 
@@ -613,16 +592,9 @@ void G_SetClientWeapons( gentity_t* ent, weapon_t w1, weapon_t w2, qboolean upda
 		changed = qtrue;
 	}
 
-	if ( !G_IsWeaponDisabled( ent, w1 ) ) {
-		if ( ent->client->sess.latchPlayerWeapon != w1 ) {
-			ent->client->sess.latchPlayerWeapon = w1;
-			changed = qtrue;
-		}
-	} else {
-		if ( ent->client->sess.latchPlayerWeapon != 0 ) {
-			ent->client->sess.latchPlayerWeapon = 0;
-			changed = qtrue;
-		}
+	if ( ent->client->sess.latchPlayerWeapon != w1 ) {
+		ent->client->sess.latchPlayerWeapon = w1;
+		changed = qtrue;
 	}
 
 	if ( updateclient && changed ) {

@@ -36,27 +36,9 @@ If you have questions concerning this license or the applicable additional terms
 #include "../game/bg_public.h"
 #include "ui_shared.h"
 
-/* Nico, no fraglimit
-extern vmCvar_t ui_ffa_fraglimit;*/
-
-/* Nico, no timelimit
-extern vmCvar_t ui_ffa_timelimit;*/
-
-/* Nico, no fraglimit
-extern vmCvar_t ui_team_fraglimit;*/
-
-/* Nico, no timelimit
-extern vmCvar_t ui_team_timelimit;*/
-
 extern vmCvar_t ui_team_friendly;
-
 extern vmCvar_t ui_ctf_capturelimit;
-
-/* Nico, no timelimit
-extern vmCvar_t ui_ctf_timelimit;*/
-
 extern vmCvar_t ui_ctf_friendly;
-
 extern vmCvar_t ui_arenasFile;
 extern vmCvar_t ui_spScores1;
 extern vmCvar_t ui_spScores2;
@@ -118,12 +100,8 @@ extern vmCvar_t ui_browserMaster;
 extern vmCvar_t ui_browserSortKey;
 extern vmCvar_t ui_browserShowEmptyOrFull;
 extern vmCvar_t ui_browserShowPasswordProtected;
-extern vmCvar_t ui_browserShowFriendlyFire;
-extern vmCvar_t ui_browserShowMaxlives;
 extern vmCvar_t ui_browserShowPunkBuster;
 extern vmCvar_t ui_browserShowAntilag;
-extern vmCvar_t ui_browserShowWeaponsRestricted;
-extern vmCvar_t ui_browserShowTeamBalanced;
 extern vmCvar_t ui_serverStatusTimeOut;
 extern vmCvar_t ui_limboOptions;
 
@@ -887,13 +865,8 @@ typedef struct {
 	vec4_t xhairColorAlt;
 
 	qhandle_t passwordFilter;
-	qhandle_t friendlyFireFilter;
-	qhandle_t maxLivesFilter;
 	qhandle_t punkBusterFilter;
-	qhandle_t weaponRestrictionsFilter;
 	qhandle_t antiLagFilter;
-	qhandle_t teamBalanceFilter;
-
 	qhandle_t campaignMap;
 } uiInfo_t;
 

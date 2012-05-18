@@ -128,7 +128,6 @@ vmCvar_t url;
 vmCvar_t g_letterbox;
 
 vmCvar_t g_debugSkills;
-vmCvar_t g_heavyWeaponRestriction;
 vmCvar_t g_nextmap;
 
 // Nico, beginning of ETrun server cvars
@@ -276,8 +275,6 @@ cvarTable_t gameCvarTable[] = {
 
 	{ &g_debugSkills,   "g_debugSkills", "0", 0       },
 
-	{ &g_heavyWeaponRestriction, "g_heavyWeaponRestriction", "100", CVAR_ARCHIVE | CVAR_SERVERINFO },
-
 	{ &g_nextmap, "nextmap", "", CVAR_TEMP },
 
 	// Nico, beginning of ETrun server cvars
@@ -286,13 +283,13 @@ cvarTable_t gameCvarTable[] = {
 	{ &g_maxConnsPerIP, "g_maxConnsPerIP", "3", CVAR_SERVERINFO | CVAR_ARCHIVE},
 
 	// Game physics (set serverside but sent to client for prediction)
-	{ &physics, "physics", "15", CVAR_SERVERINFO | CVAR_ARCHIVE | CVAR_LATCH | CVAR_SYSTEMINFO},
+	{ &physics, "physics", "127", CVAR_SERVERINFO | CVAR_ARCHIVE | CVAR_LATCH | CVAR_SYSTEMINFO},
 
 	// Nico, #removeme
-	{ &aircontrol, "aircontrol", "150",  CVAR_SERVERINFO | CVAR_ARCHIVE | CVAR_LATCH | CVAR_SYSTEMINFO },
-	{ &strafeaccelerate, "strafeaccelerate", "70",  CVAR_SERVERINFO | CVAR_ARCHIVE | CVAR_LATCH | CVAR_SYSTEMINFO },
-	{ &wishspeed, "wishspeed", "45",  CVAR_SERVERINFO | CVAR_ARCHIVE | CVAR_LATCH | CVAR_SYSTEMINFO },
-	{ &airstopaccelerate, "airstopaccelerate", "2",  CVAR_SERVERINFO | CVAR_ARCHIVE | CVAR_LATCH | CVAR_SYSTEMINFO },
+	{ &aircontrol, "aircontrol", "150",  CVAR_ARCHIVE | CVAR_LATCH | CVAR_SYSTEMINFO },
+	{ &strafeaccelerate, "strafeaccelerate", "70",  CVAR_ARCHIVE | CVAR_LATCH | CVAR_SYSTEMINFO },
+	{ &wishspeed, "wishspeed", "45",  CVAR_ARCHIVE | CVAR_LATCH | CVAR_SYSTEMINFO },
+	{ &airstopaccelerate, "airstopaccelerate", "2",  CVAR_ARCHIVE | CVAR_LATCH | CVAR_SYSTEMINFO },
 
 	// Enable certain map entities
 	// 3 enabled both kill entities and hurt entities

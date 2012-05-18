@@ -513,10 +513,7 @@ static qboolean PM_CheckJump( void ) {
 	pm->ps->groundEntityNum = ENTITYNUM_NONE;
 
 	// Nico, add doublejump support
-	if (pm->physics & PHYSICS_DOUBLEJUMP && pm->ps->velocity[2] > 100) {
-		PM_AddEvent( EV_DOUBLE_JUMP );
-		pm->ps->velocity[2] += JUMP_VELOCITY;
-	} else if (pm->physics & PHYSICS_DOUBLEJUMP && pm->ps->velocity[2] > 0) {
+	if (pm->physics & PHYSICS_RAMPBOUNCE && pm->ps->velocity[2] > 0) {
 		PM_AddEvent( EV_JUMP );
 		pm->ps->velocity[2] += JUMP_VELOCITY;
 	} else {

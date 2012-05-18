@@ -41,11 +41,7 @@ qhandle_t bg_neutralpin;
 qhandle_t bg_pin;
 
 qhandle_t bg_filter_pb;
-qhandle_t bg_filter_ff;
-qhandle_t bg_filter_hw;
-qhandle_t bg_filter_lv;
 qhandle_t bg_filter_al;
-qhandle_t bg_filter_bt;
 
 qhandle_t bg_mappic;
 
@@ -224,12 +220,7 @@ void CG_DrawConnectScreen( qboolean interactive, qboolean forcerefresh ) {
 
 
 		bg_filter_pb =  DC->registerShaderNoMip( "ui/assets/filter_pb" );
-		bg_filter_ff =  DC->registerShaderNoMip( "ui/assets/filter_ff" );
-		bg_filter_hw =  DC->registerShaderNoMip( "ui/assets/filter_weap" );
-		bg_filter_lv =  DC->registerShaderNoMip( "ui/assets/filter_lives" );
 		bg_filter_al =  DC->registerShaderNoMip( "ui/assets/filter_antilag" );
-		bg_filter_bt =  DC->registerShaderNoMip( "ui/assets/filter_balance" );
-
 
 		bg_mappic =     0;
 
@@ -274,21 +265,10 @@ void CG_DrawConnectScreen( qboolean interactive, qboolean forcerefresh ) {
 
 		y = 417;
 
-		if ( enabled ) {
-			x = 489;
-			CG_DrawPic( x, y, 16, 16, bg_filter_lv );
-		}
-
 		str = Info_ValueForKey( buffer, "sv_punkbuster" );
 		if ( str && *str && atoi( str ) ) {
 			x = 518;
 			CG_DrawPic( x, y, 16, 16, bg_filter_pb );
-		}
-
-		str = Info_ValueForKey( buffer, "g_heavyWeaponRestriction" );
-		if ( str && *str && atoi( str ) != 100 ) {
-			x = 546;
-			CG_DrawPic( x, y, 16, 16, bg_filter_hw );
 		}
 
 		str = Info_ValueForKey( buffer, "g_antilag" );
