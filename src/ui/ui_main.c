@@ -283,10 +283,7 @@ int vmMain( int command, int arg0, int arg1, int arg2, int arg3, int arg4, int a
 
 void AssetCache() {
 	int n;
-	//if (Assets.textFont == NULL) {
-	//}
-	//Assets.background = trap_R_RegisterShaderNoMip( ASSET_BACKGROUND );
-	//Com_Printf("Menu Size: %i bytes\n", sizeof(Menus));
+
 	uiInfo.uiDC.Assets.gradientBar = trap_R_RegisterShaderNoMip( ASSET_GRADIENTBAR );
 	uiInfo.uiDC.Assets.fxBasePic = trap_R_RegisterShaderNoMip( ART_FX_BASE );
 	uiInfo.uiDC.Assets.fxPic[0] = trap_R_RegisterShaderNoMip( ART_FX_RED );
@@ -312,14 +309,6 @@ void AssetCache() {
 		uiInfo.uiDC.Assets.crosshairShader[n] = trap_R_RegisterShaderNoMip( va( "gfx/2d/crosshair%c", 'a' + n ) );
 		uiInfo.uiDC.Assets.crosshairAltShader[n] = trap_R_RegisterShaderNoMip( va( "gfx/2d/crosshair%c_alt", 'a' + n ) );
 	}
-
-	//uiInfo.newHighScoreSound = trap_S_RegisterSound("sound/feedback/voc_newhighscore.wav");
-
-/*	for ( n = 1; weaponTypes[n].shadername; n++ ) {
-		if ( weaponTypes[n].shadername )
-			trap_R_RegisterShaderNoMip( weaponTypes[n].shadername );
-	}*/
-	// -NERVE - SMF
 }
 
 void _UI_DrawSides( float x, float y, float w, float h, float size ) {
@@ -3929,37 +3918,6 @@ void UI_RunMenuScript( char **args ) {
 			} else {
 				trap_SetPbSvStatus( 1 );
 			}
-		} else if ( Q_stricmp( name, "initHostGameFeatures" ) == 0 ) {
-
-			int cvar = trap_Cvar_VariableValue( "g_maxlives" );
-			if ( cvar ) {
-				trap_Cvar_Set( "ui_maxlives", "1" );
-			} else {
-				trap_Cvar_Set( "ui_maxlives", "0" );
-			}
-
-			cvar = trap_Cvar_VariableValue( "g_heavyWeaponRestriction" );
-			if ( cvar == 100 ) {
-				trap_Cvar_Set( "ui_heavyWeaponRestriction", "0" );
-			} else {
-				trap_Cvar_Set( "ui_heavyWeaponRestriction", "1" );
-			}
-		} 
-		else if ( Q_stricmp( name, "toggleMaxLives" ) == 0 ) {
-			int ui_ml = trap_Cvar_VariableValue( "ui_maxlives" );
-			if ( ui_ml ) {
-				trap_Cvar_Set( "g_maxlives", "5" );
-			} else {
-				trap_Cvar_Set( "g_maxlives", "0" );
-			}
-		}
-		else if ( Q_stricmp( name, "toggleWeaponRestriction" ) == 0 ) {
-			int ui_hwr = trap_Cvar_VariableValue( "ui_heavyWeaponRestriction" );
-			if ( ui_hwr ) {
-				trap_Cvar_Set( "g_heavyWeaponRestriction", "10" );
-			} else {
-				trap_Cvar_Set( "g_heavyWeaponRestriction", "100" );
-			}
 		} else if ( Q_stricmp( name, "openModURL" ) == 0 ) {
 			trap_Cvar_Set( "ui_finalURL", UI_Cvar_VariableString( "ui_modURL" ) );
 		} else if ( Q_stricmp( name, "openServerURL" ) == 0 ) {
@@ -4303,7 +4261,7 @@ UI_BuildServerDisplayList
 ==================
 */
 static void UI_BuildServerDisplayList( qboolean force ) {
-	int i, count, clients, maxClients, ping, len, visible, friendlyFire, maxlives, punkbuster, antilag, password, weaponrestricted, balancedteams;
+	int i, count, clients, maxClients, ping, len, visible, punkbuster, antilag, password;
 	char info[MAX_STRING_CHARS];
 	static int numinvisible;
 
@@ -4399,27 +4357,6 @@ static void UI_BuildServerDisplayList( qboolean force ) {
 				}
 			}
 
-			trap_Cvar_Update( &ui_browserShowFriendlyFire );
-			if ( ui_browserShowFriendlyFire.integer ) {
-				friendlyFire = atoi( Info_ValueForKey( info, "friendlyFire" ) );
-
-				if ( ( friendlyFire && ui_browserShowFriendlyFire.integer == 2 ) ||
-					 ( !friendlyFire && ui_browserShowFriendlyFire.integer == 1 ) ) {
-					trap_LAN_MarkServerVisible( ui_netSource.integer, i, qfalse );
-					continue;
-				}
-			}
-
-			trap_Cvar_Update( &ui_browserShowMaxlives );
-			if ( ui_browserShowMaxlives.integer ) {
-				maxlives = atoi( Info_ValueForKey( info, "maxlives" ) );
-				if ( ( maxlives && ui_browserShowMaxlives.integer == 2 ) ||
-					 ( !maxlives && ui_browserShowMaxlives.integer == 1 ) ) {
-					trap_LAN_MarkServerVisible( ui_netSource.integer, i, qfalse );
-					continue;
-				}
-			}
-
 			trap_Cvar_Update( &ui_browserShowPunkBuster );
 			if ( ui_browserShowPunkBuster.integer ) {
 				punkbuster = atoi( Info_ValueForKey( info, "punkbuster" ) );
@@ -4437,28 +4374,6 @@ static void UI_BuildServerDisplayList( qboolean force ) {
 
 				if ( ( antilag && ui_browserShowAntilag.integer == 2 ) ||
 					 ( !antilag && ui_browserShowAntilag.integer == 1 ) ) {
-					trap_LAN_MarkServerVisible( ui_netSource.integer, i, qfalse );
-					continue;
-				}
-			}
-
-			trap_Cvar_Update( &ui_browserShowWeaponsRestricted );
-			if ( ui_browserShowWeaponsRestricted.integer ) {
-				weaponrestricted = atoi( Info_ValueForKey( info, "weaprestrict" ) );
-
-				if ( ( weaponrestricted != 100 && ui_browserShowWeaponsRestricted.integer == 2 ) ||
-					 ( weaponrestricted == 100 && ui_browserShowWeaponsRestricted.integer == 1 ) ) {
-					trap_LAN_MarkServerVisible( ui_netSource.integer, i, qfalse );
-					continue;
-				}
-			}
-
-			trap_Cvar_Update( &ui_browserShowTeamBalanced );
-			if ( ui_browserShowTeamBalanced.integer ) {
-				balancedteams = atoi( Info_ValueForKey( info, "balancedteams" ) );
-
-				if ( ( balancedteams && ui_browserShowTeamBalanced.integer == 2 ) ||
-					 ( !balancedteams && ui_browserShowTeamBalanced.integer == 1 ) ) {
 					trap_LAN_MarkServerVisible( ui_netSource.integer, i, qfalse );
 					continue;
 				}
@@ -5032,7 +4947,7 @@ const char *UI_FeederItemText( float feederID, int index, int column, qhandle_t 
 		} else {return "";}
 	} else if ( feederID == FEEDER_SERVERS ) {
 		if ( index >= 0 && index < uiInfo.serverStatus.numDisplayServers ) {
-			int ping, antilag, needpass, friendlyfire, maxlives, punkbuster, weaponrestrictions, balancedteams, serverload;
+			int ping, antilag, needpass, punkbuster, serverload;
 			if ( lastColumn != column || lastTime > uiInfo.uiDC.realTime + 5000 ) {
 				trap_LAN_GetServerInfo( ui_netSource.integer, uiInfo.serverStatus.displayServers[index], info, MAX_STRING_CHARS );
 				lastColumn = column;
@@ -5079,36 +4994,20 @@ const char *UI_FeederItemText( float feederID, int index, int column, qhandle_t 
 					*numhandles = 0;
 					return "";
 				} else {
-					*numhandles = 7;
+					*numhandles = 3;
 					needpass = atoi( Info_ValueForKey( info, "needpass" ) );
-					friendlyfire = atoi( Info_ValueForKey( info, "friendlyFire" ) );
-					maxlives = atoi( Info_ValueForKey( info, "maxlives" ) );
 					punkbuster = atoi( Info_ValueForKey( info, "punkbuster" ) );
-					weaponrestrictions = atoi( Info_ValueForKey( info, "weaprestrict" ) );
 					antilag = atoi( Info_ValueForKey( info, "g_antilag" ) );
-					balancedteams = atoi( Info_ValueForKey( info, "balancedteams" ) );
 
 					if ( needpass ) {
 						handles[0] = uiInfo.passwordFilter;
 					} else { handles[0] = -1;}
-					if ( friendlyfire ) {
-						handles[1] = uiInfo.friendlyFireFilter;
-					} else { handles[1] = -1;}
-					if ( maxlives ) {
-						handles[2] = uiInfo.maxLivesFilter;
-					} else { handles[2] = -1;}
 					if ( punkbuster ) {
-						handles[3] = uiInfo.punkBusterFilter;
-					} else { handles[3] = -1;}
-					if ( weaponrestrictions < 100 ) {
-						handles[4] = uiInfo.weaponRestrictionsFilter;
-					} else { handles[4] = -1;}
+						handles[1] = uiInfo.punkBusterFilter;
+					} else { handles[1] = -1;}
 					if ( antilag ) {
-						handles[5] = uiInfo.antiLagFilter;
-					} else { handles[5] = -1;}
-					if ( balancedteams ) {
-						handles[6] = uiInfo.teamBalanceFilter;
-					} else { handles[6] = -1;}
+						handles[2] = uiInfo.antiLagFilter;
+					} else { handles[2] = -1;}
 
 					return "";
 				}
@@ -5520,12 +5419,8 @@ void _UI_Init( qboolean inGameLoad ) {
 	AssetCache();
 
 	uiInfo.passwordFilter = trap_R_RegisterShaderNoMip( "ui/assets/filter_pass.tga" );
-	uiInfo.friendlyFireFilter = trap_R_RegisterShaderNoMip( "ui/assets/filter_ff.tga" );
-	uiInfo.maxLivesFilter = trap_R_RegisterShaderNoMip( "ui/assets/filter_lives.tga" );
 	uiInfo.punkBusterFilter = trap_R_RegisterShaderNoMip( "ui/assets/filter_pb.tga" );
-	uiInfo.weaponRestrictionsFilter = trap_R_RegisterShaderNoMip( "ui/assets/filter_weap.tga" );
 	uiInfo.antiLagFilter = trap_R_RegisterShaderNoMip( "ui/assets/filter_antilag.tga" );
-	uiInfo.teamBalanceFilter = trap_R_RegisterShaderNoMip( "ui/assets/filter_balance.tga" );
 
 	uiInfo.campaignMap = trap_R_RegisterShaderNoMip( "gfx/loading/camp_map.tga" );
 
@@ -6031,27 +5926,9 @@ typedef struct {
 	int modificationCount;          // for tracking changes
 } cvarTable_t;
 
-/* Nico, no fraglimit
-vmCvar_t ui_ffa_fraglimit;*/
-
-/* Nico, no timelimit
-vmCvar_t ui_ffa_timelimit;*/
-
-/* Nico, no fraglimit
-vmCvar_t ui_team_fraglimit;*/
-
-/* Nico, no timelimit
-vmCvar_t ui_team_timelimit;*/
-
 vmCvar_t ui_team_friendly;
-
 vmCvar_t ui_ctf_capturelimit;
-
-/* Nico, no timelimit
-vmCvar_t ui_ctf_timelimit;*/
-
 vmCvar_t ui_ctf_friendly;
-
 vmCvar_t ui_arenasFile;
 vmCvar_t ui_spScores1;
 vmCvar_t ui_spScores2;
@@ -6106,12 +5983,8 @@ vmCvar_t ui_browserMaster;
 vmCvar_t ui_browserSortKey;
 vmCvar_t ui_browserShowEmptyOrFull;
 vmCvar_t ui_browserShowPasswordProtected;
-vmCvar_t ui_browserShowFriendlyFire;            // NERVE - SMF
-vmCvar_t ui_browserShowMaxlives;                // NERVE - SMF
 vmCvar_t ui_browserShowPunkBuster;              // DHM - Nerve
 vmCvar_t ui_browserShowAntilag;     // TTimo
-vmCvar_t ui_browserShowWeaponsRestricted;
-vmCvar_t ui_browserShowTeamBalanced;
 vmCvar_t ui_serverStatusTimeOut;
 vmCvar_t ui_Q3Model;
 vmCvar_t ui_headModel;
@@ -6129,7 +6002,6 @@ vmCvar_t ui_team;
 vmCvar_t ui_class;
 vmCvar_t ui_weapon;
 vmCvar_t ui_isSpectator;
-vmCvar_t ui_friendlyFire;
 vmCvar_t ui_glCustom;    // JPW NERVE missing from q3ta
 vmCvar_t cl_profile;
 vmCvar_t cl_defaultProfile;
@@ -6165,7 +6037,6 @@ cvarTable_t cvarTable[] = {
 	{ &ui_spAwards, "g_spAwards", "", CVAR_ARCHIVE | CVAR_ROM },
 	{ &ui_spVideos, "g_spVideos", "", CVAR_ARCHIVE | CVAR_ROM },
 	{ &ui_spSkill, "g_spSkill", "2", CVAR_ARCHIVE | CVAR_LATCH },
-	{ &ui_friendlyFire, "g_friendlyFire", "1", CVAR_ARCHIVE },
 
 // JPW NERVE
 	{ &ui_teamArenaFirstRun, "ui_teamArenaFirstRun", "0", CVAR_ARCHIVE}, // so sound stuff latches, strange as that seems
@@ -6219,12 +6090,8 @@ cvarTable_t cvarTable[] = {
 	{ &ui_browserSortKey, "ui_browserSortKey", "4", CVAR_ARCHIVE },
 	{ &ui_browserShowEmptyOrFull, "ui_browserShowEmptyOrFull", "0", CVAR_ARCHIVE },
 	{ &ui_browserShowPasswordProtected, "ui_browserShowPasswordProtected", "0", CVAR_ARCHIVE },
-	{ &ui_browserShowFriendlyFire, "ui_browserShowFriendlyFire", "0", CVAR_ARCHIVE },
-	{ &ui_browserShowMaxlives, "ui_browserShowMaxlives", "0", CVAR_ARCHIVE },
 	{ &ui_browserShowPunkBuster, "ui_browserShowPunkBuster", "0", CVAR_ARCHIVE },
 	{ &ui_browserShowAntilag, "ui_browserShowAntilag", "0", CVAR_ARCHIVE },
-	{ &ui_browserShowWeaponsRestricted, "ui_browserShowWeaponsRestricted", "0", CVAR_ARCHIVE },
-	{ &ui_browserShowTeamBalanced, "ui_browserShowTeamBalanced", "0", CVAR_ARCHIVE },
 	{ &ui_serverStatusTimeOut, "ui_serverStatusTimeOut", "7000", CVAR_ARCHIVE},
 
 	{ &ui_Q3Model, "ui_Q3Model", "1", 0 },
@@ -6271,10 +6138,6 @@ cvarTable_t cvarTable[] = {
 	{ NULL, "cg_wolfparticles", "1", CVAR_ARCHIVE },
 	{ NULL, "g_password", "none", CVAR_USERINFO },
 	{ NULL, "g_antilag", "1", CVAR_SERVERINFO | CVAR_ARCHIVE },
-	{ NULL, "g_lms_roundlimit", "3", CVAR_ARCHIVE },
-	{ NULL, "g_lms_matchlimit", "2", CVAR_ARCHIVE },
-	{ NULL, "g_lms_followTeamOnly", "1", CVAR_ARCHIVE },
-	{ NULL, "g_heavyWeaponRestriction", "100", CVAR_ARCHIVE | CVAR_SERVERINFO },
 
 	{ &cl_profile, "cl_profile", "", CVAR_ROM },
 	{ &cl_defaultProfile, "cl_defaultProfile", "", CVAR_ROM },
@@ -6287,7 +6150,6 @@ cvarTable_t cvarTable[] = {
 	{ &cg_crosshairSize, "cg_crosshairSize", "48", CVAR_ARCHIVE },
 
 	{ NULL, "g_inactivity", "0", CVAR_ARCHIVE },
-	{ NULL, "g_maxLives", "0", CVAR_ARCHIVE },
 	{ NULL, "refereePassword", "none", CVAR_ARCHIVE },
 	{ NULL, "sv_maxRate", "0", CVAR_ARCHIVE },
 	{ NULL, "g_spectatorInactivity", "0", CVAR_ARCHIVE },

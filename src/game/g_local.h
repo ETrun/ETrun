@@ -1080,7 +1080,6 @@ int     G_CharacterIndex( const char *name );
 int     G_StringIndex( const char* string );
 qboolean G_AllowTeamsAllowed( gentity_t *ent, gentity_t *activator );
 void    G_UseEntity( gentity_t *ent, gentity_t *other, gentity_t *activator );
-qboolean G_IsWeaponDisabled( gentity_t* ent, weapon_t weapon );
 void    G_TeamCommand( team_t team, char *cmd );
 void    G_KillBox( gentity_t *ent );
 gentity_t *G_Find( gentity_t *from, int fieldofs, const char *match );
@@ -1484,7 +1483,6 @@ extern vmCvar_t vote_limit;
 extern vmCvar_t vote_percent;
 extern vmCvar_t g_letterbox;
 extern vmCvar_t g_debugSkills;
-extern vmCvar_t g_heavyWeaponRestriction;
 extern vmCvar_t g_nextmap;
 
 // Nico, beginning of ETrun server cvars

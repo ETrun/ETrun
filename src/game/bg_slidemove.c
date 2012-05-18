@@ -272,9 +272,6 @@ void PM_StepSlideMove( qboolean gravity ) {
 	trace_t trace;
 	vec3_t up, down;
 
-	// Nico, no DJ if no enough XY speed
-	float XYspeed = 0;
-
 	VectorCopy( pm->ps->origin, start_o );
 	VectorCopy( pm->ps->velocity, start_v );
 
@@ -319,11 +316,30 @@ void PM_StepSlideMove( qboolean gravity ) {
 
 	// never step up when you still have up velocity
 	// Nico, add doublejump support
-	// Nico, no DJ if no enough XY speed (352ups: running speed)
-	XYspeed = sqrt(pm->ps->velocity[0] * pm->ps->velocity[0] + pm->ps->velocity[1] * pm->ps->velocity[1]);
-	if ( !(pm->physics & PHYSICS_DOUBLEJUMP && XYspeed > 352) && pm->ps->velocity[2] > 0 && ( trace.fraction == 1.0 || DotProduct( trace.plane.normal, up ) < 0.7 ) ) {
-		// Com_Printf("No dj XYspeed = %f\n", XYspeed);
-		return;
+	// Nico, no DJ if too much Z-speed (300) prevents DJ bugs after jumppads (on ghost-afu for example)
+	if ( pm->ps->velocity[2] > 0 && ( trace.fraction == 1.0 || DotProduct( trace.plane.normal, up ) < 0.7 ) ) {
+		if (pm->physics & PHYSICS_DOUBLEJUMP && pm->ps->velocity[2] < 300) {
+
+			if (trace.fraction == 1.0 && DotProduct( trace.plane.normal, up ) == 0) {
+				if (pm->ps->stats[STAT_DOUBLEJUMP_TIME] < pml.msec) {
+					// Com_Printf("DJ!\n");
+				} else {
+					// Com_Printf("DJ not allowed yet\n");
+					return;
+				}
+			} else {
+				// Com_Printf("No DJ because of surface: trace.friction = %f, dotproduct = %f\n", trace.fraction, DotProduct( trace.plane.normal, up ));
+				// Nico, disable DJ for 1 sec
+				pm->ps->stats[STAT_DOUBLEJUMP_TIME] = pml.msec + 1000;
+				return;
+			}
+		} else if (!(pm->physics & PHYSICS_DOUBLEJUMP)) {
+			// Com_Printf("DJ is disabled\n");
+			return;
+		} else {
+			// Com_Printf("No DJ, too high z-speed (%f)\n", pm->ps->velocity[2]);
+			return;
+		}
 	}
 
 	VectorCopy( pm->ps->origin, down_o );
