@@ -41,11 +41,7 @@ qhandle_t bg_neutralpin;
 qhandle_t bg_pin;
 
 qhandle_t bg_filter_pb;
-qhandle_t bg_filter_ff;
-qhandle_t bg_filter_hw;
-qhandle_t bg_filter_lv;
 qhandle_t bg_filter_al;
-qhandle_t bg_filter_bt;
 
 qhandle_t bg_mappic;
 
@@ -224,12 +220,7 @@ void CG_DrawConnectScreen( qboolean interactive, qboolean forcerefresh ) {
 
 
 		bg_filter_pb =  DC->registerShaderNoMip( "ui/assets/filter_pb" );
-		bg_filter_ff =  DC->registerShaderNoMip( "ui/assets/filter_ff" );
-		bg_filter_hw =  DC->registerShaderNoMip( "ui/assets/filter_weap" );
-		bg_filter_lv =  DC->registerShaderNoMip( "ui/assets/filter_lives" );
 		bg_filter_al =  DC->registerShaderNoMip( "ui/assets/filter_antilag" );
-		bg_filter_bt =  DC->registerShaderNoMip( "ui/assets/filter_balance" );
-
 
 		bg_mappic =     0;
 
@@ -250,15 +241,7 @@ void CG_DrawConnectScreen( qboolean interactive, qboolean forcerefresh ) {
 		qboolean enabled = qfalse;
 		float x, y;
 		int i;
-//		vec4_t clr1 = { 41/255.f,	51/255.f,	43/255.f,	204/255.f };
-//		vec4_t clr2 = { 0.f,		0.f,		0.f,		225/255.f };
 		vec4_t clr3 = { 1.f,        1.f,        1.f,        .6f };
-
-/*		CG_FillRect( 8, 8, 230, 16, clr1 );
-		CG_DrawRect_FixedBorder( 8, 8, 230, 16, 1, colorMdGrey );
-
-		CG_FillRect( 8, 23, 230, 210, clr2 );
-		CG_DrawRect_FixedBorder( 8, 23, 230, 216, 1, colorMdGrey );*/
 
 		y = 322;
 		CG_Text_Paint_Centred_Ext( 540, y, 0.22f, 0.22f, clr3, "SERVER INFO", 0, 0, 0, &bg_loadscreenfont1 );
@@ -282,21 +265,10 @@ void CG_DrawConnectScreen( qboolean interactive, qboolean forcerefresh ) {
 
 		y = 417;
 
-		if ( enabled ) {
-			x = 489;
-			CG_DrawPic( x, y, 16, 16, bg_filter_lv );
-		}
-
 		str = Info_ValueForKey( buffer, "sv_punkbuster" );
 		if ( str && *str && atoi( str ) ) {
 			x = 518;
 			CG_DrawPic( x, y, 16, 16, bg_filter_pb );
-		}
-
-		str = Info_ValueForKey( buffer, "g_heavyWeaponRestriction" );
-		if ( str && *str && atoi( str ) != 100 ) {
-			x = 546;
-			CG_DrawPic( x, y, 16, 16, bg_filter_hw );
 		}
 
 		str = Info_ValueForKey( buffer, "g_antilag" );

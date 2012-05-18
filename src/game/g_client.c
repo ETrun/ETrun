@@ -1528,20 +1528,8 @@ void ClientSpawn( gentity_t *ent ) {
 
 	client->sess.playerType = client->sess.latchPlayerType;
 
-	if ( G_IsWeaponDisabled( ent, client->sess.latchPlayerWeapon ) ) {
-		bg_playerclass_t* classInfo = BG_PlayerClassForPlayerState( &ent->client->ps );
-		client->sess.latchPlayerWeapon = classInfo->classWeapons[0];
-		update = qtrue;
-	}
-
 	if ( client->sess.playerWeapon != client->sess.latchPlayerWeapon ) {
 		client->sess.playerWeapon = client->sess.latchPlayerWeapon;
-		update = qtrue;
-	}
-
-	if ( G_IsWeaponDisabled( ent, client->sess.playerWeapon ) ) {
-		bg_playerclass_t* classInfo = BG_PlayerClassForPlayerState( &ent->client->ps );
-		client->sess.playerWeapon = classInfo->classWeapons[0];
 		update = qtrue;
 	}
 

@@ -126,7 +126,6 @@ vmCvar_t url;
 vmCvar_t g_letterbox;
 
 vmCvar_t g_debugSkills;
-vmCvar_t g_heavyWeaponRestriction;
 vmCvar_t g_nextmap;
 
 // Nico, beginning of ETrun server cvars
@@ -270,8 +269,6 @@ cvarTable_t gameCvarTable[] = {
 	{ &g_letterbox, "cg_letterbox", "0", CVAR_TEMP    },
 
 	{ &g_debugSkills,   "g_debugSkills", "0", 0       },
-
-	{ &g_heavyWeaponRestriction, "g_heavyWeaponRestriction", "100", CVAR_ARCHIVE | CVAR_SERVERINFO },
 
 	{ &g_nextmap, "nextmap", "", CVAR_TEMP },
 
