@@ -871,7 +871,6 @@ typedef enum {
 	EV_FALL_DMG_25,
 	EV_FALL_DMG_50,
 	EV_JUMP,
-	EV_DOUBLE_JUMP,// Nico, double jump event
 	EV_WATER_TOUCH, // foot touches
 	EV_WATER_LEAVE, // foot leaves
 	EV_WATER_UNDER, // head touches
@@ -2248,8 +2247,8 @@ void PM_TraceAll( trace_t *trace, vec3_t start, vec3_t end );
 #define PHYSICS_NORMAL				0
 #define PHYSICS_FLAT_JUMPING		1
 #define PHYSICS_NO_FALLDAMAGE		2
-#define PHYSICS_DOUBLEJUMP			4
+#define PHYSICS_RAMPBOUNCE			4
 #define PHYSICS_AIRCONTROL			8
 #define PHYSICS_NO_OVERBOUNCE		16
 #define PHYSICS_UPMOVE_BUG_FIX		32
-
+#define PHYSICS_DOUBLEJUMP			64
