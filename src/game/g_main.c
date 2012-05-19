@@ -1404,7 +1404,7 @@ void G_InitGame( int levelTime, int randomSeed, int restart ) {
 	// ===================
 
 	if ( !level.gameManager ) {
-		G_Printf( "^1ERROR No 'script_multiplayer' found in map\n" );
+		G_DPrintf( "^1ERROR No 'script_multiplayer' found in map\n" );
 	}
 
 	// Link all the splines up
