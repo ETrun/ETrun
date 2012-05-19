@@ -244,11 +244,8 @@ cvarTable_t gameCvarTable[] = {
 	{ &vote_allow_map,          "vote_allow_map", "1", 0, 0, qfalse, qfalse },
 	{ &vote_allow_matchreset,   "vote_allow_matchreset", "1", 0, 0, qfalse, qfalse },
 	{ &vote_allow_nextmap,      "vote_allow_nextmap", "1", 0, 0, qfalse, qfalse },
-
 	{ &vote_allow_referee,      "vote_allow_referee", "0", 0, 0, qfalse, qfalse },
-
 	{ &vote_allow_antilag,      "vote_allow_antilag", "1", 0, 0, qfalse, qfalse },
-
 	{ &vote_allow_muting,       "vote_allow_muting", "1", 0, 0, qfalse, qfalse },
 	{ &vote_limit,      "vote_limit", "5", 0, 0, qfalse, qfalse },
 	{ &vote_percent,    "vote_percent", "50", 0, 0, qfalse, qfalse },
@@ -275,7 +272,7 @@ cvarTable_t gameCvarTable[] = {
 	// Nico, beginning of ETrun server cvars
 
 	// Max connections per IP
-	{ &g_maxConnsPerIP, "g_maxConnsPerIP", "3", CVAR_SERVERINFO | CVAR_ARCHIVE},
+	{ &g_maxConnsPerIP, "g_maxConnsPerIP", "3", CVAR_ARCHIVE},
 
 	// Game physics (set serverside but sent to client for prediction)
 	{ &physics, "physics", "127", CVAR_SERVERINFO | CVAR_ARCHIVE | CVAR_LATCH | CVAR_SYSTEMINFO},
@@ -288,10 +285,10 @@ cvarTable_t gameCvarTable[] = {
 
 	// Enable certain map entities
 	// 3 enabled both kill entities and hurt entities
-	{ &g_enableMapEntities, "g_enableMapEntities", "31", CVAR_SERVERINFO | CVAR_ARCHIVE | CVAR_LATCH},
+	{ &g_enableMapEntities, "g_enableMapEntities", "31", CVAR_ARCHIVE | CVAR_LATCH},
 
 	// Force timer reset, i.e. bypass "wait 9999" on start triggers
-	{ &g_forceTimerReset, "g_forceTimerReset", "1", CVAR_SERVERINFO | CVAR_ARCHIVE | CVAR_LATCH},
+	{ &g_forceTimerReset, "g_forceTimerReset", "1", CVAR_ARCHIVE | CVAR_LATCH},
 
 	// Is level a timerun?
 	{ &isTimerun, "isTimerun", "0", CVAR_ROM | CVAR_SYSTEMINFO },

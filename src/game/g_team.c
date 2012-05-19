@@ -1491,21 +1491,6 @@ void G_swapTeams( void ) {
 	AP( "cp \"^1Teams have been swapped!\n\"" );
 }
 
-
-int QDECL G_SortPlayersByXP( const void *a, const void *b ) {
-	gclient_t* cla = &level.clients[ *( (int*)a ) ];
-	gclient_t* clb = &level.clients[ *( (int*)b ) ];
-
-	if ( cla->ps.persistant[ PERS_SCORE ] > clb->ps.persistant[ PERS_SCORE ] ) {
-		return -1;
-	}
-	if ( clb->ps.persistant[ PERS_SCORE ] > cla->ps.persistant[ PERS_SCORE ] ) {
-		return 1;
-	}
-
-	return 0;
-}
-
 // Returns player's "real" team.
 int G_teamID( gentity_t *ent ) {
 	if ( ent->client->sess.coach_team ) {
