@@ -30,7 +30,7 @@ ipch/
 *.sdf
 *.opensdf
 *.ncb
-.suo
+*.suo
 
 # Xcode related
 src/*.xcodeproj/project.xcworkspace

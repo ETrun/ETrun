@@ -1,0 +1,46 @@
+#include "ui/menudef.h"
+
+// Defines //
+
+#define WINDOW_X		16
+#define WINDOW_Y		16
+#define WINDOW_WIDTH	128
+#define WINDOW_HEIGHT	108
+#define GROUP_NAME		"grpEtrun"
+
+// Macros //
+
+#include "ui/menumacros.h"
+		
+// Options Menu //
+	
+menuDef {
+	name		"etrun"
+	visible		0
+	fullscreen	0
+	rect		WINDOW_X WINDOW_Y WINDOW_WIDTH WINDOW_HEIGHT
+	style		WINDOW_STYLE_FILLED
+	
+	onESC {
+		close etrun ;
+#ifdef FUI
+		open main
+#else
+		open ingame_main
+#endif // FUI
+	}
+
+// Window //
+
+	WINDOW( "ETrun", 94 )
+	
+// Buttons //
+
+	BUTTON ( 6, 32, WINDOW_WIDTH-12, 18, "GAME", .3, 14, close etrun ; open etrun_customise_game )
+	BUTTON ( 6, 56, WINDOW_WIDTH-12, 18, "VIEW", .3, 14, close etrun ; open etrun_customise_hud )
+#ifdef FUI
+	BUTTON ( 6, 80, WINDOW_WIDTH-12, 18, "BACK", .3, 14, close etrun ; open main )
+#else
+	BUTTON ( 6, 80, WINDOW_WIDTH-12, 18, "BACK", .3, 14, close etrun ; open ingame_main )
+#endif // FUI
+}
