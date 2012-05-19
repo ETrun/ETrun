@@ -39,24 +39,6 @@ If you have questions concerning this license or the applicable additional terms
 extern vec3_t muzzleTrace;
 
 /*
-=================
-TossClientItems
-
-Toss the weapon and powerups for the killed player
-=================
-*/
-void TossClientItems( gentity_t *self ) {
-	weapon_t primaryWeapon;
-
-	primaryWeapon = G_GetPrimaryWeaponForClient( self->client );
-
-	if ( primaryWeapon ) {
-		// drop our primary weapon
-		G_DropWeapon( self, primaryWeapon );
-	}
-}
-
-/*
 ==================
 LookAtKiller
 ==================
