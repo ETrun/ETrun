@@ -70,6 +70,9 @@ If you have questions concerning this license or the applicable additional terms
 // Nico, g_speed is now hardcoded as DEFAULT_SPEED
 #define DEFAULT_SPEED		320
 
+// Nico, spectator speedF
+#define SPECTATOR_SPEED		1000
+
 #define FORCE_LIMBO_HEALTH  -75 // JPW NERVE
 
 #define GIB_HEALTH          -175 // JPW NERVE
