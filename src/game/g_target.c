@@ -1413,6 +1413,9 @@ void target_stoptimer_use(gentity_t *self, gentity_t *other, gentity_t *activato
 		// best personal
 		client->sess.timerunBestTime[timerunNum] = time;
 		memcpy(client->sess.timerunBestCheckpointTimes[timerunNum], client->timerunCheckpointTimes, sizeof(client->timerunCheckpointTimes));
+
+		// Nico, set score so that xfire can see it
+		client->ps.persistant[PERS_SCORE] = client->sess.timerunLastTime[timerunNum];
 	}
 
 	// extract MM:SS:mmm from delta
