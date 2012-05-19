@@ -27,9 +27,6 @@
     <ClCompile Include="bg_classes.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="bg_lib.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="bg_misc.c">
       <Filter>Source Files</Filter>
     </ClCompile>

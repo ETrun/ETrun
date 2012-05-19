@@ -2386,7 +2386,6 @@ void CG_TransitionPlayerState( playerState_t *ps, playerState_t *ops );
 //
 // cg_atmospheric.c
 //
-void CG_GenerateTracemap( void );
 void CG_EffectParse( const char *effectstr );
 void CG_AddAtmosphericEffects();
 

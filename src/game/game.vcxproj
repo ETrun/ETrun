@@ -162,10 +162,6 @@
     <ClCompile Include="bg_animgroup.c" />
     <ClCompile Include="bg_character.c" />
     <ClCompile Include="bg_classes.c" />
-    <ClCompile Include="bg_lib.c">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
     <ClCompile Include="bg_misc.c" />
     <ClCompile Include="bg_pmove.c" />
     <ClCompile Include="bg_slidemove.c" />

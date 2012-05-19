@@ -41,7 +41,7 @@ menuDef {
 			( "setitemcolor grpColumns backcolor 0 0 0 0 ; setitemcolor grpTabs backcolor .1 .1 .1 .3 ; setitemcolor grpTabs forecolor .6 .6 .6 1 ;	setitemcolor playerColumn backcolor .35 .35 .35 .2 ; setitemcolor playerColumnTab backcolor .35 .35 .35 .2 ; setitemcolor playerColumnTab forecolor .9 .9 .9 1" )
 			( "clearFocus" )
 
-		// sort by ping ? #fixme, server_sort
+		// sort by ping ?
 		conditionalScript serversort_4 2
 			( "setitemcolor grpColumns backcolor 0 0 0 0 ; setitemcolor grpTabs backcolor .1 .1 .1 .3 ; setitemcolor grpTabs forecolor .6 .6 .6 1 ; setitemcolor pingColumn backcolor .35 .35 .35 .2 ; setitemcolor pingColumnTab backcolor .35 .35 .35 .2 ; setitemcolor pingColumnTab forecolor .9 .9 .9 1" )
 			( "clearFocus" )

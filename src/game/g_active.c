@@ -945,13 +945,11 @@ void ClientThink_real( gentity_t *ent ) {
 	client->oldbuttons = client->buttons;
 	client->buttons = ucmd->buttons;
 	client->latched_buttons = client->buttons & ~client->oldbuttons;
-//	client->latched_buttons |= client->buttons & ~client->oldbuttons;	// FIXME:? (SA) MP method (causes problems for us.  activate 'sticks')
 
 	//----(SA)	added
 	client->oldwbuttons = client->wbuttons;
 	client->wbuttons = ucmd->wbuttons;
 	client->latched_wbuttons = client->wbuttons & ~client->oldwbuttons;
-//	client->latched_wbuttons |= client->wbuttons & ~client->oldwbuttons;	// FIXME:? (SA) MP method
 
 	// Rafael - Activate
 	// Ridah, made it a latched event (occurs on keydown only)
@@ -991,6 +989,14 @@ void ClientThink_real( gentity_t *ent ) {
 		CP("cpm \"^1You were removed from teams because you must use com_maxfps > 40.\n\"");
 		trap_SendServerCommand(ent-g_entities, "resetMaxFPS");
 		SetTeam(ent, "s", qtrue, -1, -1, qfalse);
+	}
+
+	// Nico, check ping
+	if (client->timerunActive && client->ps.ping > 400) {
+		CP("cpm \"^1Too high ping detected, timerun stopped.\n\"");
+		// Nico, notify the client and its spectators the timerun has stopped
+		notify_timerun_stop(ent, 0);
+		client->timerunActive = qfalse;
 	}
 }
 

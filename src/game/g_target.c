@@ -1384,12 +1384,6 @@ void target_stoptimer_use(gentity_t *self, gentity_t *other, gentity_t *activato
 
 	timerunNum = GetTimerunNum(client->currentTimerun);
 
-	// Nico, #todo
-	// if (client->ps.ping > 400) {
-	//	client->timerunActive = qfalse;
-	//	return;
-	// }
-
 	// required number of checkpoints passed?
 	if (client->timerunCheckpointsPassed < self->count) {
 		CPx(activator - g_entities, va("cpm \"^d%s^f:^1 Minimum checkpoints not passed (%d/%d)\n\"", client->currentTimerun, client->timerunCheckpointsPassed, self->count));

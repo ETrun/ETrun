@@ -721,7 +721,6 @@ static consoleCommand_t commands[] =
 	{ "+vstr",           CG_vstrDown_f },
 	{ "-vstr",           CG_vstrUp_f },
 	{ "selectbuddy", CG_SelectBuddy_f },
-	{ "generateTracemap", CG_GenerateTracemap },
 	{ "editSpeakers", CG_EditSpeakers_f },
 	{ "dumpSpeaker", CG_DumpSpeaker_f },
 	{ "modifySpeaker", CG_ModifySpeaker_f },

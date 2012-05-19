@@ -1412,14 +1412,7 @@ void G_InitGame( int levelTime, int randomSeed, int restart ) {
 	// ===================
 
 	if ( !level.gameManager ) {
-		G_Printf( "^1ERROR No 'script_multiplayer' found in map\n" );
-	}
-
-	level.tracemapLoaded = qfalse;
-	if ( !BG_LoadTraceMap( level.rawmapname, level.mapcoordsMins, level.mapcoordsMaxs ) ) {
-		G_Printf( "^1ERROR No tracemap found for map\n" );
-	} else {
-		level.tracemapLoaded = qtrue;
+		G_DPrintf( "^1ERROR No 'script_multiplayer' found in map\n" );
 	}
 
 	// Link all the splines up
