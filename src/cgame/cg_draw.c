@@ -1822,45 +1822,7 @@ static void CG_DrawSpectatorMessage( void ) {
 	CG_DrawStringExt( 8, 172, str, colorWhite, qtrue, qtrue, TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 0 );
 }
 
-/*
-=================
-CG_DrawLimboMessage
-=================
-*/
-
 #define INFOTEXT_STARTX 8
-
-static void CG_DrawLimboMessage( void ) {
-	float color[4] = { 1, 1, 1, 1 };
-	const char *str;
-	playerState_t *ps;
-	int y = 118;
-
-
-	ps = &cg.snap->ps;
-
-	if ( ps->stats[STAT_HEALTH] > 0 ) {
-		return;
-	}
-
-	if ( cg.snap->ps.pm_flags & PMF_LIMBO || cgs.clientinfo[cg.clientNum].team == TEAM_SPECTATOR ) {
-		return;
-	}
-
-	if ( cg_descriptiveText.integer ) {
-		str = CG_TranslateString( "You are wounded and waiting for a medic." );
-		CG_DrawSmallStringColor( INFOTEXT_STARTX, y, str, color );
-		y += 18;
-
-		str = CG_TranslateString( "Press JUMP to go into reinforcement queue." );
-		CG_DrawSmallStringColor( INFOTEXT_STARTX, 134, str, color );
-		y += 18;
-	}
-	// jpw
-
-	trap_R_SetColor( NULL );
-}
-// -NERVE - SMF
 
 /*
 =================
@@ -2728,8 +2690,6 @@ static void CG_Draw2D( void ) {
 		CG_DrawCGaz();
 
 		CG_DrawSpectatorMessage();
-
-		CG_DrawLimboMessage();
 	} else {
 		if ( cgs.eventHandling != CGAME_EVENT_NONE ) {
 			trap_R_SetColor( NULL );

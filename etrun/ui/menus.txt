@@ -68,4 +68,9 @@
 	loadMenu { "ui/ingame_serverinfo.menu" }
 	loadMenu { "ui/ingame_disconnect.menu" }
 	loadMenu { "ui/ingame_messagemode.menu" }
+
+	// Nico, ETrun
+	loadMenu { "ui/etrun.menu" }
+	loadMenu { "ui/etrun_customise_game.menu" }
+	loadMenu { "ui/etrun_customise_hud.menu" }
 }

@@ -753,9 +753,6 @@ typedef struct {
 
 	int physicsTime;            // either cg.snap->time or cg.nextSnap->time
 
-	/* Nico, no timelimit
-	int timelimitWarnings;          // 5 min, 1 min, overtime*/
-
 	qboolean mapRestart;            // set on a map restart to set back the weapon
 
 	qboolean renderingThirdPerson;          // during deaths, chasecams, etc

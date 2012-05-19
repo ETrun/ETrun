@@ -1690,8 +1690,6 @@ void ClientDisconnect( int clientNum ) {
 
 		// They don't get to take powerups with them!
 		// Especially important for stuff like CTF flags
-		TossClientItems( ent );
-
 		// New code for tossing flags
 		if ( ent->client->ps.powerups[PW_REDFLAG] ) {
 			item = BG_FindItem( "Red Flag" );
