@@ -498,7 +498,5 @@ qboolean CG_DrawScoreboard(void) {
 		
 	}
 
-
-	
 	return qtrue;
 }

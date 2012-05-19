@@ -242,16 +242,17 @@ cvarTable_t gameCvarTable[] = {
 	{ &team_maxplayers, "team_maxplayers", "0", 0, 0, qfalse, qfalse },
 	{ &team_nocontrols, "team_nocontrols", "1", 0, 0, qfalse, qfalse },
 
-	{ &vote_allow_kick,         "vote_allow_kick", "1", 0, 0, qfalse, qfalse },
+	{ &vote_allow_kick,         "vote_allow_kick", "0", 0, 0, qfalse, qfalse },
 	{ &vote_allow_map,          "vote_allow_map", "1", 0, 0, qfalse, qfalse },
 	{ &vote_allow_matchreset,   "vote_allow_matchreset", "1", 0, 0, qfalse, qfalse },
 	{ &vote_allow_nextmap,      "vote_allow_nextmap", "1", 0, 0, qfalse, qfalse },
 	{ &vote_allow_referee,      "vote_allow_referee", "0", 0, 0, qfalse, qfalse },
-	{ &vote_allow_antilag,      "vote_allow_antilag", "1", 0, 0, qfalse, qfalse },
+	{ &vote_allow_antilag,      "vote_allow_antilag", "0", 0, 0, qfalse, qfalse },
+	{ &vote_allow_muting,       "vote_allow_muting", "0", 0, 0, qfalse, qfalse },
+
 	{ &vote_allow_ob,			"vote_allow_ob", "1", 0, 0, qfalse, qfalse },
 	{ &vote_allow_upmovebugfix, "vote_allow_upmovebugfix", "1", 0, 0, qfalse, qfalse },
 
-	{ &vote_allow_muting,       "vote_allow_muting", "1", 0, 0, qfalse, qfalse },
 	{ &vote_limit,      "vote_limit", "5", 0, 0, qfalse, qfalse },
 	{ &vote_percent,    "vote_percent", "50", 0, 0, qfalse, qfalse },
 
