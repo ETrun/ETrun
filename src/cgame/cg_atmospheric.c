@@ -788,7 +788,7 @@ void CG_EffectParse( const char *effectstr ) {
 		startptr = endptr;
 	}
 
-	if ( atmFXType == ATM_NONE || !BG_LoadTraceMap( cgs.rawmapname, cg.mapcoordsMins, cg.mapcoordsMaxs ) ) {
+	if ( atmFXType == ATM_NONE ) {
 		// No effects
 
 		cg_atmFx.numDrops = -1;

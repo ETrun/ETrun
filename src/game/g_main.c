@@ -1407,13 +1407,6 @@ void G_InitGame( int levelTime, int randomSeed, int restart ) {
 		G_Printf( "^1ERROR No 'script_multiplayer' found in map\n" );
 	}
 
-	level.tracemapLoaded = qfalse;
-	if ( !BG_LoadTraceMap( level.rawmapname, level.mapcoordsMins, level.mapcoordsMaxs ) ) {
-		G_Printf( "^1ERROR No tracemap found for map\n" );
-	} else {
-		level.tracemapLoaded = qtrue;
-	}
-
 	// Link all the splines up
 	BG_BuildSplinePaths();
 
