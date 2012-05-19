@@ -2125,7 +2125,6 @@ float BG_GetSkyHeightAtPoint( vec3_t pos );
 float BG_GetSkyGroundHeightAtPoint( vec3_t pos );
 float BG_GetGroundHeightAtPoint( vec3_t pos );
 int BG_GetTracemapGroundFloor( void );
-int BG_GetTracemapGroundCeil( void );
 
 //
 // bg_animgroup.c

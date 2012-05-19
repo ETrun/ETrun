@@ -39,7 +39,6 @@ If you have questions concerning this license or the applicable additional terms
 #define MAX_WORLD_HEIGHT            MAX_MAP_SIZE    // maximum world height
 #define MIN_WORLD_HEIGHT            -MAX_MAP_SIZE   // minimum world height
 
-//#define TRACEMAP_SIZE				1024
 #define TRACEMAP_SIZE               256
 
 typedef struct tracemap_s {
@@ -141,13 +140,6 @@ int BG_GetTracemapGroundFloor( void ) {
 		return MIN_WORLD_HEIGHT;
 	}
 	return tracemap.groundfloor;
-}
-
-int BG_GetTracemapGroundCeil( void ) {
-	if ( !tracemap.loaded ) {
-		return MAX_WORLD_HEIGHT;
-	}
-	return tracemap.groundceil;
 }
 
 // rain - re-clamp the points, because a rounding error can cause
