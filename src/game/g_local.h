@@ -93,7 +93,10 @@ typedef enum {
 #define ALLOW_ALLIED_TEAM       2
 
 // Nico, knockback value at panzerfaust
-#define KNOCKBACK_VALUE						500
+#define KNOCKBACK_VALUE			500
+
+// Nico, map change delay
+#define MAP_CHANGE_DELAY		15
 
 //============================================================================
 
@@ -814,6 +817,7 @@ typedef struct voteInfo_s {
 typedef struct delayedMapChange_s {
 	char passedVote[VOTE_MAXSTRING];
 	int	timeChange;
+	qboolean pendingChange;
 } delayedMapChange_t;
 
 typedef struct {

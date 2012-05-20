@@ -406,6 +406,8 @@ void G_check_delayed_map_change() {
 
 		if (level.time == level.delayedMapChange.timeChange) {
 			char s[MAX_STRING_CHARS];
+
+			level.delayedMapChange.pendingChange = qfalse;
 			Svcmd_ResetMatch_f( qtrue, qfalse );
 			trap_Cvar_VariableStringBuffer( "nextmap", s, sizeof( s ) );
 			trap_SendConsoleCommand( EXEC_APPEND, va( "map %s%s\n", level.delayedMapChange.passedVote, ( ( *s ) ? va( "; set nextmap \"%s\"", s ) : "" ) ) );
@@ -439,8 +441,9 @@ int G_Map_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qb
 		trap_Cvar_VariableStringBuffer( "nextmap", s, sizeof( s ) );
 		trap_SendConsoleCommand( EXEC_APPEND, va( "map %s%s\n", level.voteInfo.vote_value, ( ( *s ) ? va( "; set nextmap \"%s\"", s ) : "" ) ) );*/
 		Q_strncpyz(level.delayedMapChange.passedVote, level.voteInfo.vote_value, VOTE_MAXSTRING);
-		level.delayedMapChange.timeChange = level.time + 15000;
-		AP("cpm \"^5Map will be changed in 15secs\n\"");
+		level.delayedMapChange.timeChange = level.time + MAP_CHANGE_DELAY * 1000;
+		level.delayedMapChange.pendingChange = qtrue;
+		AP(va("cpm \"^5Map will be changed in %dsecs\n\"", MAP_CHANGE_DELAY));
 	}
 
 	return( G_OK );

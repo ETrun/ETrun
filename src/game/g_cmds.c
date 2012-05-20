@@ -1233,6 +1233,34 @@ qboolean Cmd_CallVote_f( gentity_t *ent, unsigned int dwCommand, qboolean fRefCo
 		return( qfalse );
 	}
 
+	// Nico, if it's a map vote, do these checks
+	if (!Q_stricmp(arg1, "map")) {
+		char			mapfile[MAX_QPATH];
+		fileHandle_t    f;
+		int				len;
+
+		// Check if there is a pending map vote
+		if (level.delayedMapChange.pendingChange) {
+			CP("print \"^1Callvote:^7 there is a pending map change.\n\"");
+			return qfalse;
+		}
+
+		if (arg2[0] == '\0' || trap_Argc() == 1) {
+			CP("print \"^1Callvote:^7 no map specified.\n\"");
+			return qfalse;
+		}
+
+		Com_sprintf(mapfile, sizeof(mapfile), "maps/%s.bsp", arg2);
+
+		len = trap_FS_FOpenFile(mapfile, &f, FS_READ);
+
+		trap_FS_FCloseFile(f);
+
+		if (!f) {
+			CP(va("print \"^1Callvote:^7 the map ^3%s^7 is not on the server.\n\"", arg2));
+			return qfalse;
+		}
+	}
 
 	if ( trap_Argc() > 1 && ( i = G_voteCmdCheck( ent, arg1, arg2, fRefCommand ) ) != G_NOTFOUND ) {   //  --OSP
 		if ( i != G_OK ) {
