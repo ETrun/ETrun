@@ -417,6 +417,9 @@ void G_check_delayed_map_change() {
 
 // *** Map - simpleton: we dont verify map is allowed/exists ***
 int G_Map_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd ) {
+	int i = 0;
+	int activeRunsCount = 0;
+
 	// Vote request (vote is being initiated)
 	if ( arg ) {
 		char serverinfo[MAX_INFO_STRING];
@@ -441,9 +444,21 @@ int G_Map_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qb
 		trap_Cvar_VariableStringBuffer( "nextmap", s, sizeof( s ) );
 		trap_SendConsoleCommand( EXEC_APPEND, va( "map %s%s\n", level.voteInfo.vote_value, ( ( *s ) ? va( "; set nextmap \"%s\"", s ) : "" ) ) );*/
 		Q_strncpyz(level.delayedMapChange.passedVote, level.voteInfo.vote_value, VOTE_MAXSTRING);
-		level.delayedMapChange.timeChange = level.time + MAP_CHANGE_DELAY * 1000;
+
+		// Nico, if no timerun is currenlty active, change the map in 1 sec, otherwise wait MAP_CHANGE_DELAY
+		for (i = 0; i < level.numConnectedClients; ++i) {
+			if (level.clients[i].timerunActive) {
+				activeRunsCount++;
+			}
+		}
+		if (activeRunsCount > 0) {
+			level.delayedMapChange.timeChange = level.time + MAP_CHANGE_DELAY * 1000;
+			AP(va("cpm \"^5Map will be changed in %dsecs\n\"", MAP_CHANGE_DELAY));
+		} else {
+			level.delayedMapChange.timeChange = level.time + 1000;
+		}
+		
 		level.delayedMapChange.pendingChange = qtrue;
-		AP(va("cpm \"^5Map will be changed in %dsecs\n\"", MAP_CHANGE_DELAY));
 	}
 
 	return( G_OK );
