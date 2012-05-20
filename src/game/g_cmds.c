@@ -1251,7 +1251,6 @@ qboolean Cmd_CallVote_f( gentity_t *ent, unsigned int dwCommand, qboolean fRefCo
 	// start the voting, the caller automatically votes yes
 	// If a referee, vote automatically passes.	// OSP
 	if ( fRefCommand ) {
-//		level.voteInfo.voteYes = level.voteInfo.numVotingClients + 10;	// JIC :)
 		// Don't announce some votes, as in comp mode, it is generally a ref
 		// who is policing people who shouldn't be joining and players don't want
 		// this sort of spam in the console
@@ -1291,6 +1290,9 @@ qboolean Cmd_CallVote_f( gentity_t *ent, unsigned int dwCommand, qboolean fRefCo
 		trap_SetConfigstring( CS_VOTE_STRING, level.voteInfo.voteString );
 		trap_SetConfigstring( CS_VOTE_TIME,   va( "%i", level.voteInfo.voteTime ) );
 	}
+
+	// Nico, need to recompute
+	CalculateRanks();
 
 	return( qtrue );
 }
@@ -1410,10 +1412,12 @@ void Cmd_Vote_f( gentity_t *ent ) {
 		trap_SendServerCommand( ent - g_entities, "print \"Vote already cast.\n\"" );
 		return;
 	}
+
+	/* Nico, allow spectators to vote
 	if ( ent->client->sess.sessionTeam == TEAM_SPECTATOR ) {
 		trap_SendServerCommand( ent - g_entities, "print \"Not allowed to vote as spectator.\n\"" );
 		return;
-	}
+	}*/
 
 	if ( level.voteInfo.vote_fn == G_Kick_v ) {
 		int pid = atoi( level.voteInfo.vote_value );
@@ -1440,6 +1444,9 @@ void Cmd_Vote_f( gentity_t *ent ) {
 		level.voteInfo.voteNo++;
 		trap_SetConfigstring( CS_VOTE_NO, va( "%i", level.voteInfo.voteNo ) );
 	}
+
+	// Nico, need to recompute
+	CalculateRanks();
 
 	// a majority will be determined in G_CheckVote, which will also account
 	// for players entering or leaving

@@ -1648,6 +1648,11 @@ void CalculateRanks( void ) {
 			level.sortedClients[level.numConnectedClients] = i;
 			level.numConnectedClients++;
 
+			// Nico, count spectators that voted
+			if (team == TEAM_SPECTATOR && level.clients[i].ps.eFlags & EF_VOTED) {
+				level.voteInfo.numVotingClients++;
+			}
+
 			if ( team != TEAM_SPECTATOR ) {
 				level.numNonSpectatorClients++;
 
@@ -1658,17 +1663,13 @@ void CalculateRanks( void ) {
 				if ( level.clients[i].pers.connected == CON_CONNECTED ) {
 					int teamIndex = level.clients[i].sess.sessionTeam == TEAM_AXIS ? 0 : 1;
 					level.numPlayingClients++;
-					if ( !( g_entities[i].r.svFlags & SVF_BOT ) ) {
-						level.voteInfo.numVotingClients++;
-					}
+					level.voteInfo.numVotingClients++;
 
 					if ( level.clients[i].sess.sessionTeam == TEAM_AXIS ||
 						 level.clients[i].sess.sessionTeam == TEAM_ALLIES ) {
 
 						level.numTeamClients[teamIndex]++;
-						if ( !( g_entities[i].r.svFlags & SVF_BOT ) ) {
-							level.voteInfo.numVotingTeamClients[ teamIndex ]++;
-						}
+						level.voteInfo.numVotingTeamClients[ teamIndex ]++;
 					}
 
 					if ( level.follow1 == -1 ) {

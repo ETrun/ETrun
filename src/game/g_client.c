@@ -1737,7 +1737,6 @@ void ClientDisconnect( int clientNum ) {
 
 	trap_SetConfigstring( CS_PLAYERS + clientNum, "" );
 
-
 	CalculateRanks();
 }
 
