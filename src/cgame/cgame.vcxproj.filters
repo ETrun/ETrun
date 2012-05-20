@@ -163,9 +163,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\game\bg_classes.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\game\bg_local.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -179,9 +176,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\ui\keycodes.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\main\ui\menudef.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\game\q_shared.h">
