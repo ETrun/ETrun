@@ -1208,10 +1208,12 @@ qboolean Cmd_CallVote_f( gentity_t *ent, unsigned int dwCommand, qboolean fRefCo
 			} else if ( vote_limit.integer > 0 && ent->client->pers.voteCount >= vote_limit.integer ) {
 				G_printFull(va("You have already called the maximum number of votes (%d).", vote_limit.integer), ent);
 				return qfalse;
-			} else if ( ent->client->sess.sessionTeam == TEAM_SPECTATOR ) {
+			}
+			/* Nico, allow spectators to callvote
+			else if ( ent->client->sess.sessionTeam == TEAM_SPECTATOR ) {
 				G_printFull("Not allowed to call a vote as a spectator.", ent);
 				return qfalse;
-			}
+			}*/
 		}
 	}
 
