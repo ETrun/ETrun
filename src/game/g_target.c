@@ -1290,10 +1290,10 @@ void SP_target_starttimer(gentity_t *ent) {
 	// Nico, used to look for parent
 	gentity_t *parent = NULL;
 
-	// Nico, override wait -1 or wait 9999 on start timer entities
+	// Nico, override wait -1 or wait 9999 on trigger_multiple where target is start timer
 	if (g_forceTimerReset.integer && ent) {
 		parent = G_FindByTarget(NULL, ent->targetname);
-		if (parent) {
+		if (parent && parent->wait != 0.5) {
 			if (!Q_stricmp(parent->classname, "trigger_multiple")) {
 				G_DPrintf("SP_target_starttimer, wait found = %f, overrided to 0.5\n", parent->wait);
 				G_SpawnFloat("wait", "0.5", &parent->wait);
@@ -1458,7 +1458,7 @@ void SP_target_stoptimer(gentity_t *ent) {
 	// Nico, override wait -1 or wait 9999 on stop timer entities
 	if (g_forceTimerReset.integer && ent) {
 		parent = G_FindByTarget(NULL, ent->targetname);
-		if (parent) {
+		if (parent && parent->wait != 0.5) {
 			if (!Q_stricmp(parent->classname, "trigger_multiple")) {
 				G_DPrintf("SP_target_stoptimer, wait found = %f, overrided to 0.5\n", parent->wait);
 				G_SpawnFloat("wait", "0.5", &parent->wait);
@@ -1569,7 +1569,7 @@ void SP_target_checkpoint(gentity_t *ent) {
 	// Nico, override wait -1 or wait 9999 on timer check entities
 	if (g_forceTimerReset.integer && ent) {
 		parent = G_FindByTarget(NULL, ent->targetname);
-		if (parent) {
+		if (parent && parent->wait != 0.5) {
 			if (!Q_stricmp(parent->classname, "trigger_multiple")) {
 				G_DPrintf("SP_target_checkpoint, wait found = %f, overrided to 0.5\n", parent->wait);
 				G_SpawnFloat("wait", "0.5", &parent->wait);
