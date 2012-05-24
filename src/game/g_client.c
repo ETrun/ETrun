@@ -360,26 +360,7 @@ void limbo( gentity_t *ent) {
 
 		trap_PointContents( ent->r.currentOrigin, -1 ); // drop stuff
 
-		ent->s.weapon = ent->client->limboDropWeapon; // stored in player_die()
-
 		ent->client->sess.spectatorClient = startclient;
-		Cmd_FollowCycle_f( ent,1 ); // get fresh spectatorClient
-
-		if ( ent->client->sess.spectatorClient == startclient ) {
-			// No one to follow, so just stay put
-			ent->client->sess.spectatorState = SPECTATOR_FREE;
-		} else {
-			ent->client->sess.spectatorState = SPECTATOR_FOLLOW;
-		}
-
-		for ( i = 0; i < level.numConnectedClients; i++ ) {
-			gclient_t *cl = &level.clients[level.sortedClients[i]];
-			if ( ( ( cl->ps.pm_flags & PMF_LIMBO ) ||
-				   ( cl->sess.sessionTeam == TEAM_SPECTATOR && cl->sess.spectatorState == SPECTATOR_FOLLOW ) ) &&
-				 cl->sess.spectatorClient == ent - g_entities ) { //ent->s.number ) {
-				Cmd_FollowCycle_f( &g_entities[level.sortedClients[i]], 1 );
-			}
-		}
 	}
 }
 

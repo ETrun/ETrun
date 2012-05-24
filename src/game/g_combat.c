@@ -367,8 +367,6 @@ void player_die( gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int
 	self->s.powerups = 0;
 	self->s.loopSound = 0;
 
-	self->client->limboDropWeapon = self->s.weapon; // store this so it can be dropped in limbo
-
 	LookAtKiller( self, inflictor, attacker );
 	self->client->ps.viewangles[0] = 0;
 	self->client->ps.viewangles[2] = 0;
