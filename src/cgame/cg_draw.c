@@ -520,10 +520,6 @@ static void CG_DrawUpperRight( void ) {
 		}
 	}
 
-	if ( !( cg.snap->ps.pm_flags & PMF_LIMBO ) && ( cg.snap->ps.persistant[PERS_TEAM] != TEAM_SPECTATOR ) ) {
-		return;
-	}
-
 	if ( cg_drawFPS.integer ) {
 		y = CG_DrawFPS( y );
 	}
