@@ -638,6 +638,9 @@ typedef struct {
 	// Nico, auto login
 	qboolean autoLogin;
 
+	// Nico, load view angles on load
+	qboolean loadViewAngles;
+
 } clientPersistant_t;
 
 typedef struct {

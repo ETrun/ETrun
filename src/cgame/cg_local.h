@@ -1874,6 +1874,9 @@ extern vmCvar_t cg_autoLogin;
 // CGaz
 extern vmCvar_t cg_drawCGaz;
 
+// Load view angles on load
+extern vmCvar_t cg_loadViewAngles;
+
 // Nico, end of ETrun cvars
 
 //

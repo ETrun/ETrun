@@ -1016,7 +1016,7 @@ void ClientUserinfoChanged( int clientNum ) {
 	}
 
 	s = Info_ValueForKey( userinfo, "cg_uinfo" );
-	sscanf( s, "%i %i %i %i %s",
+	sscanf( s, "%i %i %i %i %s %i",
 			&client->pers.clientFlags,
 			&client->pers.clientTimeNudge,
 			&client->pers.clientMaxPackets,
@@ -1025,7 +1025,10 @@ void ClientUserinfoChanged( int clientNum ) {
 			&client->pers.maxFPS,
 
 			// Nico, auth Token
-			(char *)&client->pers.authToken
+			(char *)&client->pers.authToken,
+
+			// Nico, load view angles on load
+			&client->pers.loadViewAngles
 
 			);
 

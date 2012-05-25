@@ -310,6 +310,9 @@ vmCvar_t cg_autoLogin;
 // CGaz
 vmCvar_t cg_drawCGaz;
 
+// Load view angles on load
+vmCvar_t cg_loadViewAngles;
+
 // Nico, end of ETrun cvars
 
 typedef struct {
@@ -553,6 +556,9 @@ cvarTable_t cvarTable[] = {
 	// CGaz
 	{ &cg_drawCGaz, "cg_drawCGaz", "0", CVAR_ARCHIVE },
 
+	// Load view angles on load
+	{ &cg_loadViewAngles, "cg_loadViewAngles", "1", CVAR_ARCHIVE },
+
 	// Nico, end of ETrun cvars
 };
 
@@ -625,11 +631,13 @@ void CG_UpdateCvars( void ) {
 				// Nico, added pmove_fixed
 				// Nico, added com_maxfps
 				// Nico, added auth token & auto login
+				// Nico, added load view angles
 				if ( cv->vmCvar == &cg_autoAction || cv->vmCvar == &cg_autoReload ||
 					 cv->vmCvar == &int_cl_timenudge || cv->vmCvar == &int_cl_maxpackets ||
 					 cv->vmCvar == &cg_autoactivate || cv->vmCvar == &cg_predictItems ||
 					 cv->vmCvar == &pmove_fixed || cv->vmCvar == &com_maxfps ||
-					 cv->vmCvar == &cg_authToken || cv->vmCvar == &cg_autoLogin ) {
+					 cv->vmCvar == &cg_authToken || cv->vmCvar == &cg_autoLogin ||
+					 cv->vmCvar == &cg_loadViewAngles ) {
 					fSetFlags = qtrue;
 				} else if ( cv->vmCvar == &cg_crosshairColor || cv->vmCvar == &cg_crosshairAlpha )      {
 					BG_setCrosshair( cg_crosshairColor.string, cg.xhairColor, cg_crosshairAlpha.value, "cg_crosshairColor" );
@@ -701,7 +709,7 @@ void CG_setClientFlags( void ) {
 	}
 
 	cg.pmext.bAutoReload = ( cg_autoReload.integer > 0 );
-	trap_Cvar_Set( "cg_uinfo", va( "%d %d %d %d %s",
+	trap_Cvar_Set( "cg_uinfo", va( "%d %d %d %d %s %d",
 	// Client Flags
 	(
 		( ( cg_autoReload.integer > 0 ) ? CGF_AUTORELOAD : 0 ) |
@@ -721,7 +729,10 @@ void CG_setClientFlags( void ) {
 	com_maxfps.integer,
 
 	// Nico, auth token
-	hash
+	hash,
+
+	// Nico, load view angles on load
+	cg_loadViewAngles.integer
 
 	) );
 }

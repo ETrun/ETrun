@@ -2128,7 +2128,10 @@ void Cmd_Load_f(gentity_t *ent)
 
 		VectorCopy(pos->origin, ent->client->ps.origin);
 
-		SetClientViewAngle(ent, pos->vangles);
+		// Nico, load angles if cg_loadViewAngles = 1
+		if (ent->client->pers.loadViewAngles) {
+			SetClientViewAngle(ent, pos->vangles);
+		}
 
 		VectorClear(ent->client->ps.velocity);
 
@@ -2138,6 +2141,12 @@ void Cmd_Load_f(gentity_t *ent)
 
 		if (level.rocketRun && ent->client->ps.weapon == WP_PANZERFAUST) {
 			ent->client->ps.ammoclip[WP_PANZERFAUST] = level.rocketRun;
+		}
+
+		if (posNum == 0) {
+			CP("cp \"Loaded\n\"");
+		} else {
+			CP(va("cp \"Loaded ^z%d\n\"", posNum));
 		}
 	} else {
 		CP("cp \"Use save first!\n\"");
