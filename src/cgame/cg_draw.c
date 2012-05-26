@@ -2686,6 +2686,9 @@ static void CG_Draw2D( void ) {
 		// Nico, draw CGaz
 		CG_DrawCGaz();
 
+		// Nico, draw keys pressed
+		CG_DrawKeys();
+
 		CG_DrawSpectatorMessage();
 	} else {
 		if ( cgs.eventHandling != CGAME_EVENT_NONE ) {

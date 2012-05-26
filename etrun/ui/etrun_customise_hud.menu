@@ -5,7 +5,7 @@
 #define WINDOW_X		16
 #define WINDOW_Y		16
 #define WINDOW_WIDTH	400
-#define WINDOW_HEIGHT	350
+#define WINDOW_HEIGHT	420
 #define GROUP_NAME		"grpEtrunCustomiseHud"
 
 // Macros //
@@ -61,6 +61,15 @@ menuDef {
 
 	SUBWINDOW( 6, 280, (SUBWINDOW_WIDTH), 30, "Overbounce detector" )
 	YESNO( 8, 296, (SUBWINDOW_WIDTH)-4, 10, "Show overbounce detector:", .2, 8, "cg_drawOB", "" )
+
+	SUBWINDOW( 6, 318, (SUBWINDOW_WIDTH), 80, "Pressed keys" )
+	MULTI( 8, 334, (SUBWINDOW_WIDTH)-4, 10, "Show pressed keys:", .2, 8, "cg_drawKeys", cvarFloatList { "No" 0 "Type 1" 1 "Type 2" 2 }, "Show pressed keys" )
+	SLIDER( 8, 350, (SUBWINDOW_WIDTH)-4, 10, "Keys X-position:", .2, 8, "cg_keysX" 550 0 640, "Use the slider to move keys" )
+	CVARFLOATLABEL( 8, 350, (SUBWINDOW_WIDTH)-4, 10, "cg_keysX", .2, ITEM_ALIGN_RIGHT, $evalfloat((SUBWINDOW_WIDTH)-4), 8 )
+	SLIDER( 8, 366, (SUBWINDOW_WIDTH)-4, 10, "Keys Y-position:", .2, 8, "cg_keysY" 300 0 480, "Use the slider to move keys" )
+	CVARFLOATLABEL( 8, 366, (SUBWINDOW_WIDTH)-4, 10, "cg_keysY", .2, ITEM_ALIGN_RIGHT, $evalfloat((SUBWINDOW_WIDTH)-4), 8 )
+	SLIDER( 8, 382, (SUBWINDOW_WIDTH)-4, 10, "Keys size:", .2, 8, "cg_keysSize" 64 0 128, "Use the slider to adjust keys size" )
+	CVARFLOATLABEL( 8, 382, (SUBWINDOW_WIDTH)-4, 10, "cg_keysSize", .2, ITEM_ALIGN_RIGHT, $evalfloat((SUBWINDOW_WIDTH)-4), 8 )
 
 // Buttons //
 

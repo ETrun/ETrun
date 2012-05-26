@@ -468,3 +468,107 @@ void CG_DrawCGaz(void) {
 		SCREEN_CENTER_Y - vel_size * cos(vel_relang - per_angle), colorRed);
 	return;
 }
+
+/* Draw keys from TJMod
+ *
+ * @author Nico
+ */
+void CG_DrawKeys(void) {
+	playerState_t *ps;
+	float x, y, size;
+	int i;
+	int skew;
+
+	if (cg_drawKeys.integer <= 0) {
+		return;
+	}
+
+	// some checks
+	if (cg_keysX.value < 0 || cg_keysY.value < 0 || cg_keysX.value > SCREEN_WIDTH || cg_keysY.value > SCREEN_HEIGHT) {
+		return;
+	}
+
+	// Dini, add in here for any other keysets with skew effect or related.
+	if (cg_drawKeys.value == 1) {
+		skew = cg_keysSize.value / 18;
+	} else {
+		skew = 0;
+	}
+
+	ps = &cg.predictedPlayerState;
+
+	trap_R_SetColor(colorWhite);
+
+	size = cg_keysSize.value / 3;
+	i = (cg_drawKeys.integer - 1) % NUM_KEYS_SETS;
+
+	// first (upper) row
+	// sprint (upper left)
+	x = cg_keysX.value + 2 * skew;
+	y = cg_keysY.value;
+	if (ps->stats[STAT_USERCMD_BUTTONS] & (BUTTON_SPRINT << 8)) {
+		CG_DrawPic(x, y, size, size, cgs.media.keys[i].SprintPressedShader);
+	} else {
+		CG_DrawPic(x, y, size, size, cgs.media.keys[i].SprintNotPressedShader);
+	}
+
+	// forward
+	x += size;
+	if (ps->stats[STAT_USERCMD_MOVE] & UMOVE_FORWARD) {
+		CG_DrawPic(x, y, size, size, cgs.media.keys[i].ForwardPressedShader);
+	} else {
+		CG_DrawPic(x, y, size, size, cgs.media.keys[i].ForwardNotPressedShader);
+	}
+
+	// jump (upper right)
+	x += size;
+	if (ps->stats[STAT_USERCMD_MOVE] & UMOVE_UP) {
+		CG_DrawPic(x, y, size, size, cgs.media.keys[i].JumpPressedShader);
+	} else {
+		CG_DrawPic(x, y, size, size, cgs.media.keys[i].JumpNotPressedShader);
+	}
+
+	// second (middle) row
+	// left
+	x = cg_keysX.value + skew;
+	y += size;
+	if (ps->stats[STAT_USERCMD_MOVE] & UMOVE_LEFT) {
+		CG_DrawPic(x, y, size, size, cgs.media.keys[i].LeftPressedShader);
+	} else {
+		CG_DrawPic(x, y, size, size, cgs.media.keys[i].LeftNotPressedShader);
+	}
+
+	// right
+	x += 2 * size;
+	if (ps->stats[STAT_USERCMD_MOVE] & UMOVE_RIGHT) {
+		CG_DrawPic(x, y, size, size, cgs.media.keys[i].RightPressedShader);
+	} else {
+		CG_DrawPic(x, y, size, size, cgs.media.keys[i].RightNotPressedShader);
+	}
+
+	// third (bottom) row
+	x = cg_keysX.value;
+	y += size;
+	// prone (bottom left)
+	if (ps->stats[STAT_USERCMD_BUTTONS] & WBUTTON_PRONE) {
+		CG_DrawPic(x, y, size, size, cgs.media.keys[i].PronePressedShader);
+	} else {
+		CG_DrawPic(x, y, size, size, cgs.media.keys[i].ProneNotPressedShader);
+	}
+
+	// backward
+	x += size;
+	if (ps->stats[STAT_USERCMD_MOVE] & UMOVE_BACKWARD) {
+		CG_DrawPic(x, y, size, size, cgs.media.keys[i].BackwardPressedShader);
+	} else {
+		CG_DrawPic(x, y, size, size, cgs.media.keys[i].BackwardNotPressedShader);
+	}
+
+	// crouch (bottom right)
+	x += size;
+	if (ps->stats[STAT_USERCMD_MOVE] & UMOVE_DOWN) {
+		CG_DrawPic(x, y, size, size, cgs.media.keys[i].CrouchPressedShader);
+	} else {
+		CG_DrawPic(x, y, size, size, cgs.media.keys[i].CrouchNotPressedShader);
+	}
+}
