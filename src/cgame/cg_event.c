@@ -43,7 +43,6 @@ static void CG_Obituary( entityState_t *ent ) {
 	int target;
 
 	clientInfo_t    *ci; // JPW NERVE ca = attacker
-	qhandle_t deathShader = cgs.media.pmImages[PM_DEATH];
 
 	target = ent->otherEntityNum;
 
