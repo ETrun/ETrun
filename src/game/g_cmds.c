@@ -2154,12 +2154,13 @@ void Cmd_UnIgnore_f( gentity_t* ent ) {
 	}
 }
 
-void Cmd_Load_f(gentity_t *ent)
-{
+void Cmd_Load_f(gentity_t *ent) {
 	char cmd[MAX_TOKEN_CHARS];
 	int argc;
 	int posNum;
 	save_position_t *pos;
+
+	G_Printf("Cmd_Load_f ent = %d\n", ent);
 
 	// get save slot (do this first so players can get usage message even if
 	// they are not allowed to use this command)
@@ -2228,8 +2229,7 @@ void Cmd_Load_f(gentity_t *ent)
 	}
 }
 
-void Cmd_Save_f(gentity_t *ent)
-{
+void Cmd_Save_f(gentity_t *ent) {
 	char cmd[MAX_TOKEN_CHARS];
 	int argc;
 	int posNum;

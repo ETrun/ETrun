@@ -319,6 +319,9 @@ vmCvar_t cg_keysX;
 vmCvar_t cg_keysY;
 vmCvar_t cg_keysSize;
 
+// Load position when player dies
+vmCvar_t cg_loadPositionWhenDie;
+
 // Nico, end of ETrun cvars
 
 typedef struct {
@@ -571,6 +574,9 @@ cvarTable_t cvarTable[] = {
 	{ &cg_keysY, "cg_keysY", "300", CVAR_ARCHIVE },
 	{ &cg_keysSize, "cg_keysSize", "64", CVAR_ARCHIVE },
 
+	// Load position when player dies
+	{ &cg_loadPositionWhenDie, "cg_loadPositionWhenDie", "1", CVAR_ARCHIVE },
+
 	// Nico, end of ETrun cvars
 };
 
@@ -649,7 +655,7 @@ void CG_UpdateCvars( void ) {
 					 cv->vmCvar == &cg_autoactivate || cv->vmCvar == &cg_predictItems ||
 					 cv->vmCvar == &pmove_fixed || cv->vmCvar == &com_maxfps ||
 					 cv->vmCvar == &cg_authToken || cv->vmCvar == &cg_autoLogin ||
-					 cv->vmCvar == &cg_loadViewAngles ) {
+					 cv->vmCvar == &cg_loadViewAngles ||cv->vmCvar == &cg_loadPositionWhenDie ) {
 					fSetFlags = qtrue;
 				} else if ( cv->vmCvar == &cg_crosshairColor || cv->vmCvar == &cg_crosshairAlpha )      {
 					BG_setCrosshair( cg_crosshairColor.string, cg.xhairColor, cg_crosshairAlpha.value, "cg_crosshairColor" );
@@ -721,7 +727,7 @@ void CG_setClientFlags( void ) {
 	}
 
 	cg.pmext.bAutoReload = ( cg_autoReload.integer > 0 );
-	trap_Cvar_Set( "cg_uinfo", va( "%d %d %d %d %s %d",
+	trap_Cvar_Set( "cg_uinfo", va( "%d %d %d %d %s %d %d",
 	// Client Flags
 	(
 		( ( cg_autoReload.integer > 0 ) ? CGF_AUTORELOAD : 0 ) |
@@ -744,7 +750,10 @@ void CG_setClientFlags( void ) {
 	hash,
 
 	// Nico, load view angles on load
-	cg_loadViewAngles.integer
+	cg_loadViewAngles.integer,
+
+	// Nico, load position when player dies
+	cg_loadPositionWhenDie.integer
 
 	) );
 }

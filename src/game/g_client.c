@@ -1018,7 +1018,7 @@ void ClientUserinfoChanged( int clientNum ) {
 	}
 
 	s = Info_ValueForKey( userinfo, "cg_uinfo" );
-	sscanf( s, "%i %i %i %i %s %i",
+	sscanf( s, "%i %i %i %i %s %i %i",
 			&client->pers.clientFlags,
 			&client->pers.clientTimeNudge,
 			&client->pers.clientMaxPackets,
@@ -1030,7 +1030,10 @@ void ClientUserinfoChanged( int clientNum ) {
 			(char *)&client->pers.authToken,
 
 			// Nico, load view angles on load
-			&client->pers.loadViewAngles
+			&client->pers.loadViewAngles,
+
+			// Nico, load position when player dies
+			&client->pers.loadPositionWhenDie
 
 			);
 
@@ -1391,6 +1394,7 @@ void ClientSpawn( gentity_t *ent ) {
 	int savedPing;
 	int savedTeam;
 	qboolean update = qfalse;
+	save_position_t *pos = NULL;
 
 	index = ent - g_entities;
 	client = ent->client;
@@ -1597,6 +1601,31 @@ void ClientSpawn( gentity_t *ent ) {
 
 		// RF, call entity scripting event
 		G_Script_ScriptEvent( ent, "playerstart", "" );
+	}
+
+	if (ent->client->pers.loadPositionWhenDie && (ent->client->sess.sessionTeam == TEAM_AXIS || ent->client->sess.sessionTeam == TEAM_ALLIES)) {
+		if (ent->client->sess.sessionTeam == TEAM_ALLIES) {
+			pos = ent->client->sess.alliesSaves;
+		} else {
+			pos = ent->client->sess.axisSaves;
+		}
+
+		if (pos->valid) {
+			G_Printf("Loading pos\n");
+
+			VectorCopy(pos->origin, ent->client->ps.origin);
+
+			// Nico, load angles if cg_loadViewAngles = 1
+			if (ent->client->pers.loadViewAngles) {
+				SetClientViewAngle(ent, pos->vangles);
+			}
+
+			VectorClear(ent->client->ps.velocity);
+
+			if (ent->client->ps.stats[STAT_HEALTH] < 100 && ent->client->ps.stats[STAT_HEALTH] > 0) {
+				ent->health = 100;
+			}
+		}
 	}
 }
 

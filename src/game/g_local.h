@@ -641,6 +641,9 @@ typedef struct {
 	// Nico, load view angles on load
 	int loadViewAngles;
 
+	// Nico, load position when player dies
+	int loadPositionWhenDie;
+
 } clientPersistant_t;
 
 typedef struct {
@@ -1033,6 +1036,8 @@ void G_EntitySound( gentity_t *ent, const char *soundId, int volume );
 void G_EntitySoundNoCut( gentity_t *ent, const char *soundId, int volume );
 int ClientNumberFromString( gentity_t *to, char *s );
 void SanitizeString( char *in, char *out, qboolean fToLower );
+void Cmd_Load_f(gentity_t *ent);
+void Cmd_Save_f(gentity_t *ent);
 void Cmd_Login_f(gentity_t *ent);// Nico, login
 
 // Nico, flood protection
