@@ -1312,7 +1312,6 @@ qboolean Cmd_CallVote_f( gentity_t *ent, unsigned int dwCommand, qboolean fRefCo
 	if (!Q_stricmp(arg1, "map")) {
 		char			mapfile[MAX_QPATH];
 		fileHandle_t    f;
-		int				len;
 
 		// Check if there is a pending map vote
 		if (level.delayedMapChange.pendingChange) {
@@ -1327,7 +1326,7 @@ qboolean Cmd_CallVote_f( gentity_t *ent, unsigned int dwCommand, qboolean fRefCo
 
 		Com_sprintf(mapfile, sizeof(mapfile), "maps/%s.bsp", arg2);
 
-		len = trap_FS_FOpenFile(mapfile, &f, FS_READ);
+		trap_FS_FOpenFile(mapfile, &f, FS_READ);
 
 		trap_FS_FCloseFile(f);
 
