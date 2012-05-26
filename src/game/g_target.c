@@ -1186,8 +1186,12 @@ void SP_target_rumble( gentity_t *self ) {
  * Creates a new timerun if there isn't any timerun with such name.
  * source: TJMod
  */
-static int GetTimerunNum(char *name) {
+int GetTimerunNum(char *name) {
 	char	**cur = level.timerunsNames;
+
+	if (!name) {
+		return 0;
+	}
 
 	while (*cur) {
 		if (!Q_stricmp(*cur, name)) {

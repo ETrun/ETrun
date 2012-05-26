@@ -1290,7 +1290,6 @@ qboolean IsSilencedWeapon
 //
 // p_hud.c
 //
-void G_SetStats( gentity_t *ent );
 void G_SendScore( gentity_t *client );
 
 //
@@ -1399,6 +1398,7 @@ void script_mover_blocked( gentity_t *ent, gentity_t *other );
 void Props_Chair_Skyboxtouch( gentity_t *ent );
 
 // Nico, g_starget.c
+int GetTimerunNum(char *name);
 void notify_timerun_stop(gentity_t *activator, int finishTime);
 
 #include "g_team.h" // teamplay specific stuff

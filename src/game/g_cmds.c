@@ -99,7 +99,7 @@ void G_SendScore( gentity_t *ent ) {
 				( level.time - cl->pers.enterTime ) / 60000, 
 				g_entities[level.sortedClients[i]].s.powerups, 
 				playerClass, 
-				cl->sess.timerunBestTime[0], 
+				cl->sess.timerunBestTime[GetTimerunNum(cl->currentTimerun)], 
 				cl->sess.timerunBestSpeed, 
 				cl->timerunActive ? 1 : 0,
 				cl->ps.clientNum);
