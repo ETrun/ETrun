@@ -1864,7 +1864,7 @@ extern vmCvar_t aircontrol;
 extern vmCvar_t strafeaccelerate;
 extern vmCvar_t wishspeed;
 extern vmCvar_t airstopaccelerate;
-
+extern vmCvar_t slickaccelerate;
 
 // Is level a timerun?
 extern vmCvar_t	isTimerun;

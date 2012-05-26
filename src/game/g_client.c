@@ -1611,8 +1611,6 @@ void ClientSpawn( gentity_t *ent ) {
 		}
 
 		if (pos->valid) {
-			G_Printf("Loading pos\n");
-
 			VectorCopy(pos->origin, ent->client->ps.origin);
 
 			// Nico, load angles if cg_loadViewAngles = 1

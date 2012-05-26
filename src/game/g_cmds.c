@@ -2160,8 +2160,6 @@ void Cmd_Load_f(gentity_t *ent) {
 	int posNum;
 	save_position_t *pos;
 
-	G_Printf("Cmd_Load_f ent = %d\n", ent);
-
 	// get save slot (do this first so players can get usage message even if
 	// they are not allowed to use this command)
 	argc = trap_Argc();

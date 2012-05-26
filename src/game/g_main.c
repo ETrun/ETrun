@@ -139,6 +139,7 @@ vmCvar_t aircontrol;
 vmCvar_t strafeaccelerate;
 vmCvar_t wishspeed;
 vmCvar_t airstopaccelerate;
+vmCvar_t slickaccelerate;
 
 // Enable certain map entities
 vmCvar_t g_enableMapEntities;
@@ -277,6 +278,7 @@ cvarTable_t gameCvarTable[] = {
 	{ &strafeaccelerate, "strafeaccelerate", "70",  CVAR_ARCHIVE | CVAR_LATCH | CVAR_SYSTEMINFO },
 	{ &wishspeed, "wishspeed", "45",  CVAR_ARCHIVE | CVAR_LATCH | CVAR_SYSTEMINFO },
 	{ &airstopaccelerate, "airstopaccelerate", "2",  CVAR_ARCHIVE | CVAR_LATCH | CVAR_SYSTEMINFO },
+	{ &slickaccelerate, "slickaccelerate", "10",  CVAR_ARCHIVE | CVAR_LATCH | CVAR_SYSTEMINFO },
 
 	// Enable certain map entities
 	// 3 enabled both kill entities and hurt entities

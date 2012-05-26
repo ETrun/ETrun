@@ -1504,6 +1504,7 @@ extern vmCvar_t aircontrol;
 extern vmCvar_t strafeaccelerate;
 extern vmCvar_t wishspeed;
 extern vmCvar_t airstopaccelerate;
+extern vmCvar_t slickaccelerate;
 
 // Enable certain map entities
 extern vmCvar_t g_enableMapEntities;
