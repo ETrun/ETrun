@@ -558,25 +558,10 @@ void CG_AddSparkElements( localEntity_t *le ) {
 											 lifeFrac * 2.0 * ( ( ( le->endTime - le->startTime ) > 400 ) + 1 ) * 1.5,
 											 lifeFrac * 2.0 * ( ( ( le->endTime - le->startTime ) > 400 ) + 1 ) * 1.5 );
 
-		// if it is in a nodrop zone, remove it
-		// this keeps gibs from waiting at the bottom of pits of death
-		// and floating levels
-// for some reason SFM1.BSP is one big NODROP zone
-//		if ( CG_PointContents( le->refEntity.origin, 0 ) & CONTENTS_NODROP ) {
-//			CG_FreeLocalEntity( le );
-//			return;
-//		}
-
 		if ( trace.fraction < 1.0 ) {
 			// just kill it
 			CG_FreeLocalEntity( le );
 			return;
-/*
-			// reflect the velocity on the trace plane
-			CG_ReflectVelocity( le, &trace );
-			// the intersection is a fraction of the frametime
-			le->pos.trTime = (int)time;
-*/
 		}
 
 		if ( trace.fraction == 1.0 || time >= (float)cg.time ) {

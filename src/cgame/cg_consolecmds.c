@@ -832,4 +832,7 @@ void CG_InitConsoleCommands( void ) {
 
 	// Nico, records
 	trap_AddCommand("records");
+
+	// Nico, class command
+	trap_AddCommand("class");
 }

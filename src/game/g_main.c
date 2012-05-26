@@ -125,8 +125,6 @@ vmCvar_t g_scriptDebugLevel;
 vmCvar_t mod_url;
 vmCvar_t url;
 
-vmCvar_t g_letterbox;
-
 vmCvar_t g_debugSkills;
 vmCvar_t g_nextmap;
 
@@ -169,7 +167,6 @@ vmCvar_t g_APImodulePath;
 vmCvar_t g_holdDoorsOpen;
 
 // Nico, end of ETrun cvars
-
 
 cvarTable_t gameCvarTable[] = {
 	// noset vars
@@ -268,8 +265,6 @@ cvarTable_t gameCvarTable[] = {
 	{ &mod_url, "mod_url", "", CVAR_SERVERINFO | CVAR_ROM, 0, qfalse },
 	// configured by the server admin, points to the web pages for the server
 	{ &url, "URL", "", CVAR_SERVERINFO | CVAR_ARCHIVE, 0, qfalse },
-
-	{ &g_letterbox, "cg_letterbox", "0", CVAR_TEMP    },
 
 	{ &g_debugSkills,   "g_debugSkills", "0", 0       },
 
@@ -1657,6 +1652,11 @@ void CalculateRanks( void ) {
 			level.sortedClients[level.numConnectedClients] = i;
 			level.numConnectedClients++;
 
+			// Nico, count spectators that voted
+			if (team == TEAM_SPECTATOR && level.clients[i].ps.eFlags & EF_VOTED) {
+				level.voteInfo.numVotingClients++;
+			}
+
 			if ( team != TEAM_SPECTATOR ) {
 				level.numNonSpectatorClients++;
 
@@ -1667,17 +1667,13 @@ void CalculateRanks( void ) {
 				if ( level.clients[i].pers.connected == CON_CONNECTED ) {
 					int teamIndex = level.clients[i].sess.sessionTeam == TEAM_AXIS ? 0 : 1;
 					level.numPlayingClients++;
-					if ( !( g_entities[i].r.svFlags & SVF_BOT ) ) {
-						level.voteInfo.numVotingClients++;
-					}
+					level.voteInfo.numVotingClients++;
 
 					if ( level.clients[i].sess.sessionTeam == TEAM_AXIS ||
 						 level.clients[i].sess.sessionTeam == TEAM_ALLIES ) {
 
 						level.numTeamClients[teamIndex]++;
-						if ( !( g_entities[i].r.svFlags & SVF_BOT ) ) {
-							level.voteInfo.numVotingTeamClients[ teamIndex ]++;
-						}
+						level.voteInfo.numVotingTeamClients[ teamIndex ]++;
 					}
 
 					if ( level.follow1 == -1 ) {

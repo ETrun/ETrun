@@ -93,7 +93,10 @@ typedef enum {
 #define ALLOW_ALLIED_TEAM       2
 
 // Nico, knockback value at panzerfaust
-#define KNOCKBACK_VALUE						500
+#define KNOCKBACK_VALUE			500
+
+// Nico, map change delay
+#define MAP_CHANGE_DELAY		15
 
 //============================================================================
 
@@ -635,6 +638,12 @@ typedef struct {
 	// Nico, auto login
 	qboolean autoLogin;
 
+	// Nico, load view angles on load
+	int loadViewAngles;
+
+	// Nico, load position when player dies
+	int loadPositionWhenDie;
+
 } clientPersistant_t;
 
 typedef struct {
@@ -719,7 +728,6 @@ struct gclient_s {
 	vec3_t cameraOrigin;
 
 	int dropWeaponTime;         // JPW NERVE last time a weapon was dropped
-	int limboDropWeapon;         // JPW NERVE weapon to drop in limbo
 	int lastBurnTime;         // JPW NERVE last time index for flamethrower burn
 	int PCSpecialPickedUpCount;         // JPW NERVE used to count # of times somebody's picked up this LTs ammo (or medic health) (for scoring)
 	int saved_persistant[MAX_PERSISTANT];           // DHM - Nerve :: Save ps->persistant here during Limbo
@@ -814,6 +822,7 @@ typedef struct voteInfo_s {
 typedef struct delayedMapChange_s {
 	char passedVote[VOTE_MAXSTRING];
 	int	timeChange;
+	qboolean pendingChange;
 } delayedMapChange_t;
 
 typedef struct {
@@ -1027,6 +1036,8 @@ void G_EntitySound( gentity_t *ent, const char *soundId, int volume );
 void G_EntitySoundNoCut( gentity_t *ent, const char *soundId, int volume );
 int ClientNumberFromString( gentity_t *to, char *s );
 void SanitizeString( char *in, char *out, qboolean fToLower );
+void Cmd_Load_f(gentity_t *ent);
+void Cmd_Save_f(gentity_t *ent);
 void Cmd_Login_f(gentity_t *ent);// Nico, login
 
 // Nico, flood protection
@@ -1126,7 +1137,6 @@ qboolean CanDamage( gentity_t *targ, vec3_t origin );
 void G_Damage( gentity_t *targ, gentity_t *inflictor, gentity_t *attacker, vec3_t dir, vec3_t point, int damage, int dflags, int mod );
 qboolean G_RadiusDamage( vec3_t origin, gentity_t *inflictor, gentity_t *attacker, float damage, float radius, gentity_t *ignore, int mod );
 qboolean etpro_RadiusDamage( vec3_t origin, gentity_t *inflictor, gentity_t *attacker, float damage, float radius, gentity_t *ignore, int mod, qboolean clientsonly );
-void body_die( gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int damage, int meansOfDeath );
 gentity_t* G_BuildHead( gentity_t *ent );
 gentity_t* G_BuildLeg( gentity_t *ent );
 
@@ -1285,7 +1295,6 @@ qboolean IsSilencedWeapon
 //
 // p_hud.c
 //
-void G_SetStats( gentity_t *ent );
 void G_SendScore( gentity_t *client );
 
 //
@@ -1394,6 +1403,7 @@ void script_mover_blocked( gentity_t *ent, gentity_t *other );
 void Props_Chair_Skyboxtouch( gentity_t *ent );
 
 // Nico, g_starget.c
+int GetTimerunNum(char *name);
 void notify_timerun_stop(gentity_t *activator, int finishTime);
 
 #include "g_team.h" // teamplay specific stuff
@@ -1480,7 +1490,6 @@ extern vmCvar_t vote_allow_ob;
 extern vmCvar_t vote_allow_upmovebugfix;
 extern vmCvar_t vote_limit;
 extern vmCvar_t vote_percent;
-extern vmCvar_t g_letterbox;
 extern vmCvar_t g_debugSkills;
 extern vmCvar_t g_nextmap;
 

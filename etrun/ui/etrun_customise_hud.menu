@@ -5,7 +5,7 @@
 #define WINDOW_X		16
 #define WINDOW_Y		16
 #define WINDOW_WIDTH	400
-#define WINDOW_HEIGHT	350
+#define WINDOW_HEIGHT	430
 #define GROUP_NAME		"grpEtrunCustomiseHud"
 
 // Macros //
@@ -28,30 +28,30 @@ menuDef {
 
 // Window //
 
-	WINDOW( "VIEW", 94 )
+	WINDOW( "View", 94 )
 
 // Subwindows //
 
 #define SUBWINDOW_WIDTH		WINDOW_WIDTH-12
 
-	SUBWINDOW( 6, 32, (SUBWINDOW_WIDTH), 60, "SPEED METER" )
+	SUBWINDOW( 6, 32, (SUBWINDOW_WIDTH), 60, "Speed meter" )
 	YESNO( 8, 48, (SUBWINDOW_WIDTH)-4, 10, "Show speed meter:", .2, 8, "cg_drawSpeedMeter", "" )
 	SLIDER( 8, 64, (SUBWINDOW_WIDTH)-4, 10, "Speed meter X-position:", .2, 8, "cg_speedMeterX" 320 0 640, "Use the slider to move the speed meter" )
 	CVARFLOATLABEL( 8, 64, (SUBWINDOW_WIDTH)-4, 10, "cg_speedMeterX", .2, ITEM_ALIGN_RIGHT, $evalfloat((SUBWINDOW_WIDTH)-4), 8 )
 	SLIDER( 8, 78, (SUBWINDOW_WIDTH)-4, 10, "Speed meter Y-position:", .2, 8, "cg_speedMeterY" 240 0 480, "Use the slider to move the speed meter" )
 	CVARFLOATLABEL( 8, 78, (SUBWINDOW_WIDTH)-4, 10, "cg_speedMeterY", .2, ITEM_ALIGN_RIGHT, $evalfloat((SUBWINDOW_WIDTH)-4), 8 )
 
-	SUBWINDOW( 6, 96, (SUBWINDOW_WIDTH), 30, "CGAZ" )
+	SUBWINDOW( 6, 96, (SUBWINDOW_WIDTH), 30, "CGaz" )
 	YESNO( 8, 112, (SUBWINDOW_WIDTH)-4, 10, "Show CGaz:", .2, 8, "cg_drawCGaz", "" )
 
-	SUBWINDOW( 6, 130, (SUBWINDOW_WIDTH), 60, "TIMER" )
+	SUBWINDOW( 6, 130, (SUBWINDOW_WIDTH), 60, "Timer" )
 	YESNO( 8, 146, (SUBWINDOW_WIDTH)-4, 10, "Show timer:", .2, 8, "cg_drawTimer", "" )
 	SLIDER( 8, 162, (SUBWINDOW_WIDTH)-4, 10, "Timer X-position:", .2, 8, "cg_timerX" 320 0 640, "Use the slider to move the timer" )
 	CVARFLOATLABEL( 8, 162, (SUBWINDOW_WIDTH)-4, 10, "cg_timerX", .2, ITEM_ALIGN_RIGHT, $evalfloat((SUBWINDOW_WIDTH)-4), 8 )
 	SLIDER( 8, 178, (SUBWINDOW_WIDTH)-4, 10, "Timer Y-position:", .2, 8, "cg_timerY" 420 0 480, "Use the slider to move the timer" )
 	CVARFLOATLABEL( 8, 178, (SUBWINDOW_WIDTH)-4, 10, "cg_timerY", .2, ITEM_ALIGN_RIGHT, $evalfloat((SUBWINDOW_WIDTH)-4), 8 )
 
-	SUBWINDOW( 6, 196, (SUBWINDOW_WIDTH), 80, "CHECKPOINTS" )
+	SUBWINDOW( 6, 196, (SUBWINDOW_WIDTH), 80, "Checkpoints" )
 	YESNO( 8, 212, (SUBWINDOW_WIDTH)-4, 10, "Show checkpoints:", .2, 8, "cg_drawCheckPoints", "" )
 	SLIDER( 8, 228, (SUBWINDOW_WIDTH)-4, 10, "Checkpoints X-position:", .2, 8, "cg_checkPointsX" 320 0 640, "Use the slider to move checkpoints" )
 	CVARFLOATLABEL( 8, 228, (SUBWINDOW_WIDTH)-4, 10, "cg_checkPointsX", .2, ITEM_ALIGN_RIGHT, $evalfloat((SUBWINDOW_WIDTH)-4), 8 )
@@ -59,10 +59,19 @@ menuDef {
 	CVARFLOATLABEL( 8, 244, (SUBWINDOW_WIDTH)-4, 10, "cg_checkPointsY", .2, ITEM_ALIGN_RIGHT, $evalfloat((SUBWINDOW_WIDTH)-4), 8 )
 	MULTI( 8, 260, (SUBWINDOW_WIDTH)-4, 10, "Max checkpoints:", .2, 8, "cg_maxCheckPoints", cvarFloatList { "1" 1 "2" 2 "3" 3 "4" 4 "5" 5 }, "Maxium checkpoints to display" )
 
-	SUBWINDOW( 6, 280, (SUBWINDOW_WIDTH), 30, "OVERBOUNCE DETECTOR" )
+	SUBWINDOW( 6, 280, (SUBWINDOW_WIDTH), 30, "Overbounce detector" )
 	YESNO( 8, 296, (SUBWINDOW_WIDTH)-4, 10, "Show overbounce detector:", .2, 8, "cg_drawOB", "" )
+
+	SUBWINDOW( 6, 318, (SUBWINDOW_WIDTH), 80, "Pressed keys" )
+	MULTI( 8, 334, (SUBWINDOW_WIDTH)-4, 10, "Show pressed keys:", .2, 8, "cg_drawKeys", cvarFloatList { "No" 0 "Type 1" 1 "Type 2" 2 }, "Show pressed keys" )
+	SLIDER( 8, 350, (SUBWINDOW_WIDTH)-4, 10, "Keys X-position:", .2, 8, "cg_keysX" 550 0 640, "Use the slider to move keys" )
+	CVARFLOATLABEL( 8, 350, (SUBWINDOW_WIDTH)-4, 10, "cg_keysX", .2, ITEM_ALIGN_RIGHT, $evalfloat((SUBWINDOW_WIDTH)-4), 8 )
+	SLIDER( 8, 366, (SUBWINDOW_WIDTH)-4, 10, "Keys Y-position:", .2, 8, "cg_keysY" 300 0 480, "Use the slider to move keys" )
+	CVARFLOATLABEL( 8, 366, (SUBWINDOW_WIDTH)-4, 10, "cg_keysY", .2, ITEM_ALIGN_RIGHT, $evalfloat((SUBWINDOW_WIDTH)-4), 8 )
+	SLIDER( 8, 382, (SUBWINDOW_WIDTH)-4, 10, "Keys size:", .2, 8, "cg_keysSize" 64 0 128, "Use the slider to adjust keys size" )
+	CVARFLOATLABEL( 8, 382, (SUBWINDOW_WIDTH)-4, 10, "cg_keysSize", .2, ITEM_ALIGN_RIGHT, $evalfloat((SUBWINDOW_WIDTH)-4), 8 )
 
 // Buttons //
 
-	BUTTON( 6, WINDOW_HEIGHT-24, WINDOW_WIDTH-12, 18, "BACK", .3, 14, close etrun_customise_hud ; open etrun )
+	BUTTON( 6, WINDOW_HEIGHT-24, WINDOW_WIDTH-12, 18, "Back", .3, 14, close etrun_customise_hud ; open etrun )
 }

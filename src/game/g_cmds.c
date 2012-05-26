@@ -99,7 +99,7 @@ void G_SendScore( gentity_t *ent ) {
 				( level.time - cl->pers.enterTime ) / 60000, 
 				g_entities[level.sortedClients[i]].s.powerups, 
 				playerClass, 
-				cl->sess.timerunBestTime[0], 
+				cl->sess.timerunBestTime[GetTimerunNum(cl->currentTimerun)], 
 				cl->sess.timerunBestSpeed, 
 				cl->timerunActive ? 1 : 0,
 				cl->ps.clientNum);
@@ -661,6 +661,81 @@ void Cmd_Team_f( gentity_t *ent ) {
 	}
 }
 
+// Nico, class command from TJMod
+void Cmd_Class_f(gentity_t *ent) {
+	char ptype[4];
+	char weap[4], weap2[4];
+	weapon_t w, w2;
+
+	if (trap_Argc() < 2) {
+		CP("Print \"^dUsage:\n\n\"");
+		CP("Print \"^dMedic - /class m\n\"");
+		CP("Print \"^dEngineer with SMG - /class e 1\n\"");
+		CP("Print \"^dEngineer with Rifle - /class e 2\n\"");
+		CP("Print \"^dField ops - /class f\n\"");
+		CP("Print \"^dCovert ops with sten - /class c 1\n\"");
+		CP("Print \"^dCovert ops with FG42 - /class c 2\n\"");
+		CP("Print \"^dCovert ops with Rifle - /class c 3\n\"");
+		CP("Print \"^dSoldier with SMG - /class s 1\n\"");
+		CP("Print \"^dSoldier with MG42 - /class s 2\n\"");
+		CP("Print \"^dSoldier with Flamethrower - /class s 3\n\"");
+		CP("Print \"^dSoldier with Panzerfaust - /class s 4\n\"");
+		CP("Print \"^dSoldier with Mortar - /class s 5\n\"");
+		return;
+	}
+
+	trap_Argv(1, ptype, sizeof(ptype));
+	trap_Argv(2, weap,	sizeof(weap));
+	trap_Argv(3, weap2, sizeof(weap2));
+
+	if (!Q_stricmp(ptype, "m")) {
+		Q_strncpyz(ptype, "1", sizeof(ptype));
+	}
+
+	if (!Q_stricmp(ptype, "e")) {
+		Q_strncpyz(ptype, "2", sizeof(ptype));
+		if (!Q_stricmp(weap, "2")) {
+			Q_strncpyz(weap, "23", sizeof(weap));
+		}
+	}
+
+	if (!Q_stricmp(ptype, "f")) {
+		Q_strncpyz(ptype, "3", sizeof(ptype));
+	}
+
+	if (!Q_stricmp(ptype, "c")) {
+		Q_strncpyz(ptype, "4", sizeof(ptype));
+		if (!Q_stricmp(weap, "2")) {
+			Q_strncpyz(weap, "33", sizeof(weap));
+		} else if (!Q_stricmp(weap, "3")) {
+			Q_strncpyz(weap, "25", sizeof(weap));
+		}
+	}
+
+	if (!Q_stricmp(ptype, "s")) {
+		Q_strncpyz(ptype, "5", sizeof(ptype));
+		if (!Q_stricmp(weap, "2")) {
+			Q_strncpyz(weap, "31", sizeof(weap));
+		} else if (!Q_stricmp(weap, "3")) {
+			Q_strncpyz(weap, "6", sizeof(weap));
+		} else if (!Q_stricmp(weap, "4")) {
+			Q_strncpyz(weap, "5", sizeof(weap));
+		} else if (!Q_stricmp(weap, "5")) {
+			Q_strncpyz(weap, "35", sizeof(weap));
+		}
+	}
+
+	w =	atoi(weap);
+	w2 = atoi(weap2);
+
+	ent->client->sess.latchPlayerType = atoi(ptype);
+	if (ent->client->sess.latchPlayerType < PC_SOLDIER || ent->client->sess.latchPlayerType > PC_COVERTOPS) {
+		ent->client->sess.latchPlayerType = PC_SOLDIER;
+	}
+
+	G_SetClientWeapons(ent, w, w2, qtrue);
+}
+
 void Cmd_ResetSetup_f( gentity_t* ent ) {
 	qboolean changed = qfalse;
 
@@ -1208,10 +1283,12 @@ qboolean Cmd_CallVote_f( gentity_t *ent, unsigned int dwCommand, qboolean fRefCo
 			} else if ( vote_limit.integer > 0 && ent->client->pers.voteCount >= vote_limit.integer ) {
 				G_printFull(va("You have already called the maximum number of votes (%d).", vote_limit.integer), ent);
 				return qfalse;
-			} else if ( ent->client->sess.sessionTeam == TEAM_SPECTATOR ) {
+			}
+			/* Nico, allow spectators to callvote
+			else if ( ent->client->sess.sessionTeam == TEAM_SPECTATOR ) {
 				G_printFull("Not allowed to call a vote as a spectator.", ent);
 				return qfalse;
-			}
+			}*/
 		}
 	}
 
@@ -1231,6 +1308,34 @@ qboolean Cmd_CallVote_f( gentity_t *ent, unsigned int dwCommand, qboolean fRefCo
 		return( qfalse );
 	}
 
+	// Nico, if it's a map vote, do these checks
+	if (!Q_stricmp(arg1, "map")) {
+		char			mapfile[MAX_QPATH];
+		fileHandle_t    f;
+		int				len;
+
+		// Check if there is a pending map vote
+		if (level.delayedMapChange.pendingChange) {
+			CP("print \"^1Callvote:^7 there is a pending map change.\n\"");
+			return qfalse;
+		}
+
+		if (arg2[0] == '\0' || trap_Argc() == 1) {
+			CP("print \"^1Callvote:^7 no map specified.\n\"");
+			return qfalse;
+		}
+
+		Com_sprintf(mapfile, sizeof(mapfile), "maps/%s.bsp", arg2);
+
+		len = trap_FS_FOpenFile(mapfile, &f, FS_READ);
+
+		trap_FS_FCloseFile(f);
+
+		if (!f) {
+			CP(va("print \"^1Callvote:^7 the map ^3%s^7 is not on the server.\n\"", arg2));
+			return qfalse;
+		}
+	}
 
 	if ( trap_Argc() > 1 && ( i = G_voteCmdCheck( ent, arg1, arg2, fRefCommand ) ) != G_NOTFOUND ) {   //  --OSP
 		if ( i != G_OK ) {
@@ -1251,7 +1356,6 @@ qboolean Cmd_CallVote_f( gentity_t *ent, unsigned int dwCommand, qboolean fRefCo
 	// start the voting, the caller automatically votes yes
 	// If a referee, vote automatically passes.	// OSP
 	if ( fRefCommand ) {
-//		level.voteInfo.voteYes = level.voteInfo.numVotingClients + 10;	// JIC :)
 		// Don't announce some votes, as in comp mode, it is generally a ref
 		// who is policing people who shouldn't be joining and players don't want
 		// this sort of spam in the console
@@ -1291,6 +1395,9 @@ qboolean Cmd_CallVote_f( gentity_t *ent, unsigned int dwCommand, qboolean fRefCo
 		trap_SetConfigstring( CS_VOTE_STRING, level.voteInfo.voteString );
 		trap_SetConfigstring( CS_VOTE_TIME,   va( "%i", level.voteInfo.voteTime ) );
 	}
+
+	// Nico, need to recompute
+	CalculateRanks();
 
 	return( qtrue );
 }
@@ -1410,10 +1517,12 @@ void Cmd_Vote_f( gentity_t *ent ) {
 		trap_SendServerCommand( ent - g_entities, "print \"Vote already cast.\n\"" );
 		return;
 	}
+
+	/* Nico, allow spectators to vote
 	if ( ent->client->sess.sessionTeam == TEAM_SPECTATOR ) {
 		trap_SendServerCommand( ent - g_entities, "print \"Not allowed to vote as spectator.\n\"" );
 		return;
-	}
+	}*/
 
 	if ( level.voteInfo.vote_fn == G_Kick_v ) {
 		int pid = atoi( level.voteInfo.vote_value );
@@ -1440,6 +1549,9 @@ void Cmd_Vote_f( gentity_t *ent ) {
 		level.voteInfo.voteNo++;
 		trap_SetConfigstring( CS_VOTE_NO, va( "%i", level.voteInfo.voteNo ) );
 	}
+
+	// Nico, need to recompute
+	CalculateRanks();
 
 	// a majority will be determined in G_CheckVote, which will also account
 	// for players entering or leaving
@@ -2042,12 +2154,13 @@ void Cmd_UnIgnore_f( gentity_t* ent ) {
 	}
 }
 
-void Cmd_Load_f(gentity_t *ent)
-{
+void Cmd_Load_f(gentity_t *ent) {
 	char cmd[MAX_TOKEN_CHARS];
 	int argc;
 	int posNum;
 	save_position_t *pos;
+
+	G_Printf("Cmd_Load_f ent = %d\n", ent);
 
 	// get save slot (do this first so players can get usage message even if
 	// they are not allowed to use this command)
@@ -2091,7 +2204,10 @@ void Cmd_Load_f(gentity_t *ent)
 
 		VectorCopy(pos->origin, ent->client->ps.origin);
 
-		SetClientViewAngle(ent, pos->vangles);
+		// Nico, load angles if cg_loadViewAngles = 1
+		if (ent->client->pers.loadViewAngles) {
+			SetClientViewAngle(ent, pos->vangles);
+		}
 
 		VectorClear(ent->client->ps.velocity);
 
@@ -2102,13 +2218,18 @@ void Cmd_Load_f(gentity_t *ent)
 		if (level.rocketRun && ent->client->ps.weapon == WP_PANZERFAUST) {
 			ent->client->ps.ammoclip[WP_PANZERFAUST] = level.rocketRun;
 		}
+
+		if (posNum == 0) {
+			CP("cp \"Loaded\n\"");
+		} else {
+			CP(va("cp \"Loaded ^z%d\n\"", posNum));
+		}
 	} else {
 		CP("cp \"Use save first!\n\"");
 	}
 }
 
-void Cmd_Save_f(gentity_t *ent)
-{
+void Cmd_Save_f(gentity_t *ent) {
 	char cmd[MAX_TOKEN_CHARS];
 	int argc;
 	int posNum;
@@ -2270,6 +2391,9 @@ static command_t floodProtectedCommands[] = {
 	{ "setspawnpt",			qfalse,	Cmd_SetSpawnPoint_f },
 	{ "load",				qfalse,	Cmd_Load_f },
 	{ "save",				qfalse,	Cmd_Save_f },
+
+	// Nico, class command
+	{ "class",				qtrue,	Cmd_Class_f },
 
 	// ETrun specific commands
 	{ "login",				qtrue, Cmd_Login_f },

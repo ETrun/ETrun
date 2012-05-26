@@ -310,6 +310,18 @@ vmCvar_t cg_autoLogin;
 // CGaz
 vmCvar_t cg_drawCGaz;
 
+// Load view angles on load
+vmCvar_t cg_loadViewAngles;
+
+// Show pressed keys
+vmCvar_t cg_drawKeys;
+vmCvar_t cg_keysX;
+vmCvar_t cg_keysY;
+vmCvar_t cg_keysSize;
+
+// Load position when player dies
+vmCvar_t cg_loadPositionWhenDie;
+
 // Nico, end of ETrun cvars
 
 typedef struct {
@@ -553,6 +565,18 @@ cvarTable_t cvarTable[] = {
 	// CGaz
 	{ &cg_drawCGaz, "cg_drawCGaz", "0", CVAR_ARCHIVE },
 
+	// Load view angles on load
+	{ &cg_loadViewAngles, "cg_loadViewAngles", "1", CVAR_ARCHIVE },
+
+	// Show pressed keys
+	{ &cg_drawKeys, "cg_drawKeys", "1", CVAR_ARCHIVE },
+	{ &cg_keysX, "cg_keysX", "550", CVAR_ARCHIVE },
+	{ &cg_keysY, "cg_keysY", "300", CVAR_ARCHIVE },
+	{ &cg_keysSize, "cg_keysSize", "64", CVAR_ARCHIVE },
+
+	// Load position when player dies
+	{ &cg_loadPositionWhenDie, "cg_loadPositionWhenDie", "1", CVAR_ARCHIVE },
+
 	// Nico, end of ETrun cvars
 };
 
@@ -625,11 +649,13 @@ void CG_UpdateCvars( void ) {
 				// Nico, added pmove_fixed
 				// Nico, added com_maxfps
 				// Nico, added auth token & auto login
+				// Nico, added load view angles
 				if ( cv->vmCvar == &cg_autoAction || cv->vmCvar == &cg_autoReload ||
 					 cv->vmCvar == &int_cl_timenudge || cv->vmCvar == &int_cl_maxpackets ||
 					 cv->vmCvar == &cg_autoactivate || cv->vmCvar == &cg_predictItems ||
 					 cv->vmCvar == &pmove_fixed || cv->vmCvar == &com_maxfps ||
-					 cv->vmCvar == &cg_authToken || cv->vmCvar == &cg_autoLogin ) {
+					 cv->vmCvar == &cg_authToken || cv->vmCvar == &cg_autoLogin ||
+					 cv->vmCvar == &cg_loadViewAngles ||cv->vmCvar == &cg_loadPositionWhenDie ) {
 					fSetFlags = qtrue;
 				} else if ( cv->vmCvar == &cg_crosshairColor || cv->vmCvar == &cg_crosshairAlpha )      {
 					BG_setCrosshair( cg_crosshairColor.string, cg.xhairColor, cg_crosshairAlpha.value, "cg_crosshairColor" );
@@ -701,7 +727,7 @@ void CG_setClientFlags( void ) {
 	}
 
 	cg.pmext.bAutoReload = ( cg_autoReload.integer > 0 );
-	trap_Cvar_Set( "cg_uinfo", va( "%d %d %d %d %s",
+	trap_Cvar_Set( "cg_uinfo", va( "%d %d %d %d %s %d %d",
 	// Client Flags
 	(
 		( ( cg_autoReload.integer > 0 ) ? CGF_AUTORELOAD : 0 ) |
@@ -721,7 +747,13 @@ void CG_setClientFlags( void ) {
 	com_maxfps.integer,
 
 	// Nico, auth token
-	hash
+	hash,
+
+	// Nico, load view angles on load
+	cg_loadViewAngles.integer,
+
+	// Nico, load position when player dies
+	cg_loadPositionWhenDie.integer
 
 	) );
 }
@@ -1130,6 +1162,7 @@ static void CG_RegisterSounds( void ) {
 	cgs.media.noFireUnderwater =    trap_S_RegisterSound( "sound/weapons/misc/fire_water.wav", qfalse );
 	cgs.media.selectSound =         trap_S_RegisterSound( "sound/weapons/misc/change.wav", qfalse );
 	cgs.media.landHurt =            trap_S_RegisterSound( "sound/player/land_hurt.wav", qfalse );
+	cgs.media.gibSound =			trap_S_RegisterSound( "sound/player/gib.wav", qfalse );
 	cgs.media.dynamitebounce1 =     trap_S_RegisterSound( "sound/weapons/dynamite/dynamite_bounce.wav", qfalse );
 	cgs.media.satchelbounce1 =      trap_S_RegisterSound( "sound/weapons/satchel/satchel_bounce.wav", qfalse );
 	cgs.media.watrInSound =         trap_S_RegisterSound( "sound/player/water_in.wav", qfalse );
@@ -1761,6 +1794,42 @@ static void CG_RegisterGraphics( void ) {
 		cgs.media.fireteamicons[i] =            trap_R_RegisterShaderNoMip( va( "gfx/hud/fireteam/fireteam%i", i + 1 ) );
 	}
 
+	// Nico, load keysets
+	for (i = 0; i < NUM_KEYS_SETS; i++) {
+		cgs.media.keys[i].ForwardPressedShader
+			= trap_R_RegisterShaderNoMip(va("gfx/2d/keyset%d/key_forward_pressed", i + 1));
+		cgs.media.keys[i].ForwardNotPressedShader
+			= trap_R_RegisterShaderNoMip(va("gfx/2d/keyset%d/key_forward_not_pressed", i + 1));
+		cgs.media.keys[i].BackwardPressedShader
+			= trap_R_RegisterShaderNoMip(va("gfx/2d/keyset%d/key_backward_pressed", i + 1));
+		cgs.media.keys[i].BackwardNotPressedShader
+			= trap_R_RegisterShaderNoMip(va("gfx/2d/keyset%d/key_backward_not_pressed", i + 1));
+		cgs.media.keys[i].RightPressedShader
+			= trap_R_RegisterShaderNoMip(va("gfx/2d/keyset%d/key_right_pressed", i + 1));
+		cgs.media.keys[i].RightNotPressedShader
+			= trap_R_RegisterShaderNoMip(va("gfx/2d/keyset%d/key_right_not_pressed", i + 1));
+		cgs.media.keys[i].LeftPressedShader
+			= trap_R_RegisterShaderNoMip(va("gfx/2d/keyset%d/key_left_pressed", i + 1));
+		cgs.media.keys[i].LeftNotPressedShader
+			= trap_R_RegisterShaderNoMip(va("gfx/2d/keyset%d/key_left_not_pressed", i + 1));
+		cgs.media.keys[i].JumpPressedShader
+			= trap_R_RegisterShaderNoMip(va("gfx/2d/keyset%d/key_jump_pressed", i + 1));
+		cgs.media.keys[i].JumpNotPressedShader
+			= trap_R_RegisterShaderNoMip(va("gfx/2d/keyset%d/key_jump_not_pressed", i + 1));
+		cgs.media.keys[i].CrouchPressedShader
+			= trap_R_RegisterShaderNoMip(va("gfx/2d/keyset%d/key_crouch_pressed", i + 1));
+		cgs.media.keys[i].CrouchNotPressedShader
+			= trap_R_RegisterShaderNoMip(va("gfx/2d/keyset%d/key_crouch_not_pressed", i + 1));
+		cgs.media.keys[i].SprintPressedShader
+			= trap_R_RegisterShaderNoMip(va("gfx/2d/keyset%d/key_sprint_pressed", i + 1));
+		cgs.media.keys[i].SprintNotPressedShader
+			= trap_R_RegisterShaderNoMip(va("gfx/2d/keyset%d/key_sprint_not_pressed", i + 1));
+		cgs.media.keys[i].PronePressedShader
+			= trap_R_RegisterShaderNoMip(va("gfx/2d/keyset%d/key_prone_pressed", i + 1));
+		cgs.media.keys[i].ProneNotPressedShader
+			= trap_R_RegisterShaderNoMip(va("gfx/2d/keyset%d/key_prone_not_pressed", i + 1));
+	}
+
 	CG_LoadingString( " - game media done" );
 }
 
@@ -1780,7 +1849,6 @@ static void CG_RegisterClients( void ) {
 		if ( !clientInfo[0] ) {
 			continue;
 		}
-//		CG_LoadingClient( i );
 		CG_NewClientInfo( i );
 	}
 }

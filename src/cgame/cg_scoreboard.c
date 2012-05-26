@@ -5,27 +5,21 @@
 vec4_t clrUiBack = { 0.f, 0.f, 0.f, .5f };
 vec4_t clrUiYou = { 0.2f, 0.1f, 0.1f, .5f };
 
-/*
-=================
-WM_DrawObjectives
-=================
-*/
-
-#define INFO_PLAYER_WIDTH				64
-#define INFO_TEAM_WIDTH					36
-#define INFO_SCORE_WIDTH				48
-#define INFO_SPEED_WIDTH				36
-#define INFO_LATENCY_WIDTH				24
-#define INFO_STATE_WIDTH				48
+#define INFO_PLAYER_WIDTH				75
+#define INFO_TEAM_WIDTH					40
+#define INFO_SCORE_WIDTH				50
+#define INFO_SPEED_WIDTH				40
+#define INFO_LATENCY_WIDTH				35
+#define INFO_STATE_WIDTH				60
 
 #define INFO_TOTAL_WIDTH				(INFO_PLAYER_WIDTH + INFO_TEAM_WIDTH + INFO_SCORE_WIDTH + INFO_SPEED_WIDTH + INFO_LATENCY_WIDTH + INFO_STATE_WIDTH)
 
-#define INFO_LINE_HEIGHT				10
+#define INFO_LINE_HEIGHT				12
 
 #define INFO_SPEC_PLAYER_WIDTH			INFO_PLAYER_WIDTH
 #define INFO_SPEC_FOLLOWED_PLAYER_WIDTH	INFO_PLAYER_WIDTH
-#define INFO_SPEC_SCORE_WIDTH			48
-#define INFO_SPEC_LATENCY_WIDTH			24
+#define INFO_SPEC_SCORE_WIDTH			INFO_SCORE_WIDTH
+#define INFO_SPEC_LATENCY_WIDTH			INFO_LATENCY_WIDTH
 #define INFO_SPEC_TOTAL_WIDTH			(INFO_SPEC_PLAYER_WIDTH + INFO_SPEC_FOLLOWED_PLAYER_WIDTH + INFO_SPEC_SCORE_WIDTH + INFO_SPEC_LATENCY_WIDTH)
 
 #define NAME_MAX_LENGHT					13
@@ -134,7 +128,7 @@ static void WM_ETrun_DrawHeader(int *x, int *y, int width, float fade, fontInfo_
 static void WM_ETrun_DrawPlayers(int *x, int *y, int width, float fade, fontInfo_t *font, s_timerunScores *orderedScores, int numScores) {
 	char *s = NULL;
 	int tempx = 0;
-	float fontsize = 0.14f;
+	float fontsize = 0.16f;
 	int i = 0;
 	int mil, min, sec;
 
@@ -241,7 +235,7 @@ static void WM_ETrun_DrawPlayers(int *x, int *y, int width, float fade, fontInfo
 static void WM_ETrun_DrawSpectators(int *x, int *y, int width, float fade, fontInfo_t *font, s_timerunScores *orderedScores, int numScores) {
 	char *s = NULL;
 	int tempx = 0;
-	float fontsize = 0.14f;
+	float fontsize = 0.16f;
 	int i = 0;
 	int mil, min, sec;
 

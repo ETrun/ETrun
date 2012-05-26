@@ -204,13 +204,11 @@
     <ClCompile Include="..\ui\ui_shared.c" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\game\bg_classes.h" />
     <ClInclude Include="..\game\bg_local.h" />
     <ClInclude Include="..\game\bg_public.h" />
     <ClInclude Include="cg_local.h" />
     <ClInclude Include="cg_public.h" />
     <ClInclude Include="..\ui\keycodes.h" />
-    <ClInclude Include="..\..\main\ui\menudef.h" />
     <ClInclude Include="..\game\q_shared.h" />
     <ClInclude Include="..\game\surfaceflags.h" />
     <ClInclude Include="tr_types.h" />

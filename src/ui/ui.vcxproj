@@ -234,10 +234,8 @@
   <ItemGroup>
     <ClInclude Include="..\..\etrun\ui\menudef.h" />
     <ClInclude Include="..\..\etrun\ui\menumacros.h" />
-    <ClInclude Include="..\game\bg_classes.h" />
     <ClInclude Include="..\game\bg_public.h" />
     <ClInclude Include="keycodes.h" />
-    <ClInclude Include="..\..\main\ui\menudef.h" />
     <ClInclude Include="..\game\q_shared.h" />
     <ClInclude Include="..\game\surfaceflags.h" />
     <ClInclude Include="..\cgame\tr_types.h" />

@@ -1110,6 +1110,27 @@ typedef struct {
 
 #define MAX_LOCKER_DEBRIS   5
 
+// Nico, used to show pressed keys
+#define NUM_KEYS_SETS		2
+typedef struct {
+	qhandle_t		ForwardPressedShader;
+	qhandle_t		ForwardNotPressedShader;
+	qhandle_t		BackwardPressedShader;
+	qhandle_t		BackwardNotPressedShader;
+	qhandle_t		RightPressedShader;
+	qhandle_t		RightNotPressedShader;
+	qhandle_t		LeftPressedShader;
+	qhandle_t		LeftNotPressedShader;
+	qhandle_t		JumpPressedShader;
+	qhandle_t		JumpNotPressedShader;
+	qhandle_t		CrouchPressedShader;
+	qhandle_t		CrouchNotPressedShader;
+	qhandle_t		SprintPressedShader;
+	qhandle_t		SprintNotPressedShader;
+	qhandle_t		PronePressedShader;
+	qhandle_t		ProneNotPressedShader;
+} keys_set_t;
+
 // all of the model, shader, and sound references that are
 // loaded at gamestate time are stored in cgMedia_t
 // Other media that can be tied to clients, weapons, or items are
@@ -1326,6 +1347,7 @@ typedef struct {
 
 	sfxHandle_t noAmmoSound;
 	sfxHandle_t landSound[FOOTSTEP_TOTAL];
+	sfxHandle_t	gibSound;
 
 	sfxHandle_t fiveMinuteSound_g, fiveMinuteSound_a;
 	sfxHandle_t twoMinuteSound_g, twoMinuteSound_a;
@@ -1444,6 +1466,9 @@ typedef struct {
 	qhandle_t disconnectIcon;
 
 	qhandle_t fireteamicons[6];
+
+	// Nico, used to show pressed keys
+	keys_set_t		keys[NUM_KEYS_SETS];
 } cgMedia_t;
 
 typedef struct {
@@ -1874,6 +1899,18 @@ extern vmCvar_t cg_autoLogin;
 // CGaz
 extern vmCvar_t cg_drawCGaz;
 
+// Load view angles on load
+extern vmCvar_t cg_loadViewAngles;
+
+// Show pressed keys
+extern vmCvar_t cg_drawKeys;
+extern vmCvar_t cg_keysX;
+extern vmCvar_t cg_keysY;
+extern vmCvar_t cg_keysSize;
+
+// Load position when player dies
+extern vmCvar_t cg_loadPositionWhenDie;
+
 // Nico, end of ETrun cvars
 
 //
@@ -2043,6 +2080,7 @@ void CG_DrawSpeedMeter(void);
 void CG_DrawOB(void);
 void CG_DrawTimer(void);
 void CG_DrawCGaz(void);
+void CG_DrawKeys(void);
 
 //
 // cg_players.c

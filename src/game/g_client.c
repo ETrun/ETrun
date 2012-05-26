@@ -360,26 +360,7 @@ void limbo( gentity_t *ent) {
 
 		trap_PointContents( ent->r.currentOrigin, -1 ); // drop stuff
 
-		ent->s.weapon = ent->client->limboDropWeapon; // stored in player_die()
-
 		ent->client->sess.spectatorClient = startclient;
-		Cmd_FollowCycle_f( ent,1 ); // get fresh spectatorClient
-
-		if ( ent->client->sess.spectatorClient == startclient ) {
-			// No one to follow, so just stay put
-			ent->client->sess.spectatorState = SPECTATOR_FREE;
-		} else {
-			ent->client->sess.spectatorState = SPECTATOR_FOLLOW;
-		}
-
-		for ( i = 0; i < level.numConnectedClients; i++ ) {
-			gclient_t *cl = &level.clients[level.sortedClients[i]];
-			if ( ( ( cl->ps.pm_flags & PMF_LIMBO ) ||
-				   ( cl->sess.sessionTeam == TEAM_SPECTATOR && cl->sess.spectatorState == SPECTATOR_FOLLOW ) ) &&
-				 cl->sess.spectatorClient == ent - g_entities ) { //ent->s.number ) {
-				Cmd_FollowCycle_f( &g_entities[level.sortedClients[i]], 1 );
-			}
-		}
 	}
 }
 
@@ -615,35 +596,37 @@ void SetWolfSpawnWeapons( gclient_t *client ) {
 
 		switch ( client->sess.sessionTeam ) {
 		case TEAM_AXIS:
+			/* Nico, #todo rocket runs support
 			switch ( client->sess.playerWeapon ) {
 			default:
 			case WP_FLAMETHROWER:
 			case WP_MOBILE_MG42:
 			case WP_MORTAR:
-			case WP_MP40:
+			case WP_MP40:*/
 				AddWeaponToPlayer( client, WP_MP40, GetAmmoTableData( WP_MP40 )->defaultStartingAmmo, GetAmmoTableData( WP_MP40 )->defaultStartingClip, qtrue );
-				break;
+				/*break;
 
 			case WP_PANZERFAUST:
 				AddWeaponToPlayer( client, WP_PANZERFAUST, GetAmmoTableData( WP_PANZERFAUST )->defaultStartingAmmo, GetAmmoTableData( WP_PANZERFAUST )->defaultStartingClip, qtrue );
 				break;
 			}
-			break;
+			break;*/
 		case TEAM_ALLIES:
+			/* Nico, #todo rocket runs support
 			switch ( client->sess.playerWeapon ) {
 			default:
 			// Nico, replaced weapons
 			case WP_FLAMETHROWER:
 			case WP_MOBILE_MG42:
 			case WP_MORTAR:
-			case WP_THOMPSON:
+			case WP_THOMPSON:*/
 				AddWeaponToPlayer( client, WP_THOMPSON, GetAmmoTableData( WP_THOMPSON )->defaultStartingAmmo, GetAmmoTableData( WP_THOMPSON )->defaultStartingClip, qtrue );
-				break;
+				/*break;
 			case WP_PANZERFAUST:
 				AddWeaponToPlayer( client, WP_PANZERFAUST, GetAmmoTableData( WP_PANZERFAUST )->defaultStartingAmmo, GetAmmoTableData( WP_PANZERFAUST )->defaultStartingClip, qtrue );
 				break;
 			}
-			break;
+			break;*/
 		default:
 			break;
 		}
@@ -1035,7 +1018,7 @@ void ClientUserinfoChanged( int clientNum ) {
 	}
 
 	s = Info_ValueForKey( userinfo, "cg_uinfo" );
-	sscanf( s, "%i %i %i %i %s",
+	sscanf( s, "%i %i %i %i %s %i %i",
 			&client->pers.clientFlags,
 			&client->pers.clientTimeNudge,
 			&client->pers.clientMaxPackets,
@@ -1044,7 +1027,13 @@ void ClientUserinfoChanged( int clientNum ) {
 			&client->pers.maxFPS,
 
 			// Nico, auth Token
-			(char *)&client->pers.authToken
+			(char *)&client->pers.authToken,
+
+			// Nico, load view angles on load
+			&client->pers.loadViewAngles,
+
+			// Nico, load position when player dies
+			&client->pers.loadPositionWhenDie
 
 			);
 
@@ -1405,6 +1394,7 @@ void ClientSpawn( gentity_t *ent ) {
 	int savedPing;
 	int savedTeam;
 	qboolean update = qfalse;
+	save_position_t *pos = NULL;
 
 	index = ent - g_entities;
 	client = ent->client;
@@ -1612,6 +1602,31 @@ void ClientSpawn( gentity_t *ent ) {
 		// RF, call entity scripting event
 		G_Script_ScriptEvent( ent, "playerstart", "" );
 	}
+
+	if (ent->client->pers.loadPositionWhenDie && (ent->client->sess.sessionTeam == TEAM_AXIS || ent->client->sess.sessionTeam == TEAM_ALLIES)) {
+		if (ent->client->sess.sessionTeam == TEAM_ALLIES) {
+			pos = ent->client->sess.alliesSaves;
+		} else {
+			pos = ent->client->sess.axisSaves;
+		}
+
+		if (pos->valid) {
+			G_Printf("Loading pos\n");
+
+			VectorCopy(pos->origin, ent->client->ps.origin);
+
+			// Nico, load angles if cg_loadViewAngles = 1
+			if (ent->client->pers.loadViewAngles) {
+				SetClientViewAngle(ent, pos->vangles);
+			}
+
+			VectorClear(ent->client->ps.velocity);
+
+			if (ent->client->ps.stats[STAT_HEALTH] < 100 && ent->client->ps.stats[STAT_HEALTH] > 0) {
+				ent->health = 100;
+			}
+		}
+	}
 }
 
 
@@ -1736,7 +1751,6 @@ void ClientDisconnect( int clientNum ) {
 	ent->active = 0;
 
 	trap_SetConfigstring( CS_PLAYERS + clientNum, "" );
-
 
 	CalculateRanks();
 }
