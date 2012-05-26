@@ -596,35 +596,37 @@ void SetWolfSpawnWeapons( gclient_t *client ) {
 
 		switch ( client->sess.sessionTeam ) {
 		case TEAM_AXIS:
+			/* Nico, #todo rocket runs support
 			switch ( client->sess.playerWeapon ) {
 			default:
 			case WP_FLAMETHROWER:
 			case WP_MOBILE_MG42:
 			case WP_MORTAR:
-			case WP_MP40:
+			case WP_MP40:*/
 				AddWeaponToPlayer( client, WP_MP40, GetAmmoTableData( WP_MP40 )->defaultStartingAmmo, GetAmmoTableData( WP_MP40 )->defaultStartingClip, qtrue );
-				break;
+				/*break;
 
 			case WP_PANZERFAUST:
 				AddWeaponToPlayer( client, WP_PANZERFAUST, GetAmmoTableData( WP_PANZERFAUST )->defaultStartingAmmo, GetAmmoTableData( WP_PANZERFAUST )->defaultStartingClip, qtrue );
 				break;
 			}
-			break;
+			break;*/
 		case TEAM_ALLIES:
+			/* Nico, #todo rocket runs support
 			switch ( client->sess.playerWeapon ) {
 			default:
 			// Nico, replaced weapons
 			case WP_FLAMETHROWER:
 			case WP_MOBILE_MG42:
 			case WP_MORTAR:
-			case WP_THOMPSON:
+			case WP_THOMPSON:*/
 				AddWeaponToPlayer( client, WP_THOMPSON, GetAmmoTableData( WP_THOMPSON )->defaultStartingAmmo, GetAmmoTableData( WP_THOMPSON )->defaultStartingClip, qtrue );
-				break;
+				/*break;
 			case WP_PANZERFAUST:
 				AddWeaponToPlayer( client, WP_PANZERFAUST, GetAmmoTableData( WP_PANZERFAUST )->defaultStartingAmmo, GetAmmoTableData( WP_PANZERFAUST )->defaultStartingClip, qtrue );
 				break;
 			}
-			break;
+			break;*/
 		default:
 			break;
 		}

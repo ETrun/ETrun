@@ -661,6 +661,81 @@ void Cmd_Team_f( gentity_t *ent ) {
 	}
 }
 
+// Nico, class command from TJMod
+void Cmd_Class_f(gentity_t *ent) {
+	char ptype[4];
+	char weap[4], weap2[4];
+	weapon_t w, w2;
+
+	if (trap_Argc() < 2) {
+		CP("Print \"^dUsage:\n\n\"");
+		CP("Print \"^dMedic - /class m\n\"");
+		CP("Print \"^dEngineer with SMG - /class e 1\n\"");
+		CP("Print \"^dEngineer with Rifle - /class e 2\n\"");
+		CP("Print \"^dField ops - /class f\n\"");
+		CP("Print \"^dCovert ops with sten - /class c 1\n\"");
+		CP("Print \"^dCovert ops with FG42 - /class c 2\n\"");
+		CP("Print \"^dCovert ops with Rifle - /class c 3\n\"");
+		CP("Print \"^dSoldier with SMG - /class s 1\n\"");
+		CP("Print \"^dSoldier with MG42 - /class s 2\n\"");
+		CP("Print \"^dSoldier with Flamethrower - /class s 3\n\"");
+		CP("Print \"^dSoldier with Panzerfaust - /class s 4\n\"");
+		CP("Print \"^dSoldier with Mortar - /class s 5\n\"");
+		return;
+	}
+
+	trap_Argv(1, ptype, sizeof(ptype));
+	trap_Argv(2, weap,	sizeof(weap));
+	trap_Argv(3, weap2, sizeof(weap2));
+
+	if (!Q_stricmp(ptype, "m")) {
+		Q_strncpyz(ptype, "1", sizeof(ptype));
+	}
+
+	if (!Q_stricmp(ptype, "e")) {
+		Q_strncpyz(ptype, "2", sizeof(ptype));
+		if (!Q_stricmp(weap, "2")) {
+			Q_strncpyz(weap, "23", sizeof(weap));
+		}
+	}
+
+	if (!Q_stricmp(ptype, "f")) {
+		Q_strncpyz(ptype, "3", sizeof(ptype));
+	}
+
+	if (!Q_stricmp(ptype, "c")) {
+		Q_strncpyz(ptype, "4", sizeof(ptype));
+		if (!Q_stricmp(weap, "2")) {
+			Q_strncpyz(weap, "33", sizeof(weap));
+		} else if (!Q_stricmp(weap, "3")) {
+			Q_strncpyz(weap, "25", sizeof(weap));
+		}
+	}
+
+	if (!Q_stricmp(ptype, "s")) {
+		Q_strncpyz(ptype, "5", sizeof(ptype));
+		if (!Q_stricmp(weap, "2")) {
+			Q_strncpyz(weap, "31", sizeof(weap));
+		} else if (!Q_stricmp(weap, "3")) {
+			Q_strncpyz(weap, "6", sizeof(weap));
+		} else if (!Q_stricmp(weap, "4")) {
+			Q_strncpyz(weap, "5", sizeof(weap));
+		} else if (!Q_stricmp(weap, "5")) {
+			Q_strncpyz(weap, "35", sizeof(weap));
+		}
+	}
+
+	w =	atoi(weap);
+	w2 = atoi(weap2);
+
+	ent->client->sess.latchPlayerType = atoi(ptype);
+	if (ent->client->sess.latchPlayerType < PC_SOLDIER || ent->client->sess.latchPlayerType > PC_COVERTOPS) {
+		ent->client->sess.latchPlayerType = PC_SOLDIER;
+	}
+
+	G_SetClientWeapons(ent, w, w2, qtrue);
+}
+
 void Cmd_ResetSetup_f( gentity_t* ent ) {
 	qboolean changed = qfalse;
 
@@ -2316,6 +2391,9 @@ static command_t floodProtectedCommands[] = {
 	{ "setspawnpt",			qfalse,	Cmd_SetSpawnPoint_f },
 	{ "load",				qfalse,	Cmd_Load_f },
 	{ "save",				qfalse,	Cmd_Save_f },
+
+	// Nico, class command
+	{ "class",				qtrue,	Cmd_Class_f },
 
 	// ETrun specific commands
 	{ "login",				qtrue, Cmd_Login_f },
