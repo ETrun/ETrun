@@ -423,11 +423,12 @@ void hurt_touch( gentity_t *self, gentity_t *other, trace_t *trace ) {
 		return;
 	}
 
-	if ( self->spawnflags & 16 ) {
+	// Nico, make hurt triggers slow
+	// if ( self->spawnflags & 16 ) {
 		self->timestamp = level.time + 1000;
-	} else {
-		self->timestamp = level.time + FRAMETIME;
-	}
+	// } else {
+	//	self->timestamp = level.time + FRAMETIME;
+	// }
 
 	// play sound
 	if ( !( self->spawnflags & 4 ) ) {
