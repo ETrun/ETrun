@@ -83,18 +83,6 @@ void GibEntity( gentity_t *self, int killer ) {
 	self->r.contents = 0;
 }
 
-/*
-==================
-body_die
-==================
-*/
-void body_die( gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int damage, int meansOfDeath ) {
-	if ( self->health <= GIB_HEALTH ) {
-		GibEntity( self, 0 );
-	}
-}
-
-
 // these are just for logging, the client prints its own messages
 char *modNames[] =
 {
@@ -334,13 +322,6 @@ void player_die( gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int
 		self->message = NULL;
 	}
 
-	// send a fancy "MEDIC!" scream.  Sissies, ain' they?
-	if ( self->client != NULL ) {
-		if ( self->health > GIB_HEALTH && meansOfDeath != MOD_SUICIDE && meansOfDeath != MOD_SWITCHTEAM ) {
-			G_AddEvent( self, EV_MEDIC_CALL, 0 );
-		}
-	}
-
 	Cmd_Score_f( self );        // show scores
 
 	// send updated scores to any clients that are following this one,
@@ -385,19 +366,12 @@ void player_die( gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int
 
 	// never gib in a nodrop
 	// FIXME: contents is always 0 here
-	if ( self->health <= GIB_HEALTH && !( contents & CONTENTS_NODROP ) ) {
+	if ( !( contents & CONTENTS_NODROP ) ) {
 		GibEntity( self, killer );
 		nogib = qfalse;
 	}
 
 	if ( nogib ) {
-		// normal death
-		// for the no-blood option, we need to prevent the health
-		// from going to gib level
-		if ( self->health <= GIB_HEALTH ) {
-			self->health = GIB_HEALTH + 1;
-		}
-
 		self->client->ps.pm_time = BG_AnimScriptEvent( &self->client->ps, self->client->pers.character->animModelInfo, ANIM_ET_DEATH, qfalse, qtrue );
 
 		// record the death animation to be used later on by the corpse
@@ -405,9 +379,6 @@ void player_die( gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int
 		self->client->legsDeathAnim = self->client->ps.legsAnim;
 
 		G_AddEvent( self, EV_DEATH1 + 1, killer );
-
-		// the body can still be gibbed
-		self->die = body_die;
 	}
 
 	if ( meansOfDeath == MOD_MACHINEGUN ) {
@@ -1076,22 +1047,6 @@ void G_Damage( gentity_t *targ, gentity_t *inflictor, gentity_t *attacker,  vec3
 			targ->health = -1;
 		}
 
-		// Ridah, can't gib with bullet weapons (except VENOM)
-		// Arnout: attacker == inflictor can happen in other cases as well! (movers trying to gib things)
-		//if ( attacker == inflictor && targ->health <= GIB_HEALTH) {
-		if ( targ->health <= GIB_HEALTH ) {
-			if ( !G_WeaponIsExplosive( mod ) ) {
-				targ->health = GIB_HEALTH + 1;
-			}
-		}
-
-// JPW NERVE overcome previous chunk of code for making grenades work again
-//		if ((take > 190)) // 190 is greater than 2x mauser headshot, so headshots don't gib
-		// Arnout: only player entities! messes up ents like func_constructibles and func_explosives otherwise
-		if ( ( ( targ->s.number < MAX_CLIENTS ) && ( take > 190 ) ) && !( targ->r.svFlags & SVF_POW ) ) {
-			targ->health = GIB_HEALTH - 1;
-		}
-
 		if ( targ->s.eType == ET_MOVER && !Q_stricmp( targ->classname, "script_mover" ) ) {
 			targ->s.dl_intensity = 255.f * ( targ->health / (float)targ->count ); // send it to the client
 		}
@@ -1100,7 +1055,7 @@ void G_Damage( gentity_t *targ, gentity_t *inflictor, gentity_t *attacker,  vec3
 		if ( targ->health <= 0 ) {
 			if ( client && !wasAlive ) {
 				targ->flags |= FL_NO_KNOCKBACK;
-				if ( ( targ->health < FORCE_LIMBO_HEALTH ) && ( targ->health > GIB_HEALTH ) ) {
+				if ( ( targ->health < FORCE_LIMBO_HEALTH ) ) {
 					limbo( targ );
 				}
 

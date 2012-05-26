@@ -1326,6 +1326,7 @@ typedef struct {
 
 	sfxHandle_t noAmmoSound;
 	sfxHandle_t landSound[FOOTSTEP_TOTAL];
+	sfxHandle_t	gibSound;
 
 	sfxHandle_t fiveMinuteSound_g, fiveMinuteSound_a;
 	sfxHandle_t twoMinuteSound_g, twoMinuteSound_a;

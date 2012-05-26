@@ -1141,6 +1141,7 @@ static void CG_RegisterSounds( void ) {
 	cgs.media.noFireUnderwater =    trap_S_RegisterSound( "sound/weapons/misc/fire_water.wav", qfalse );
 	cgs.media.selectSound =         trap_S_RegisterSound( "sound/weapons/misc/change.wav", qfalse );
 	cgs.media.landHurt =            trap_S_RegisterSound( "sound/player/land_hurt.wav", qfalse );
+	cgs.media.gibSound =			trap_S_RegisterSound( "sound/player/gib.wav", qfalse );
 	cgs.media.dynamitebounce1 =     trap_S_RegisterSound( "sound/weapons/dynamite/dynamite_bounce.wav", qfalse );
 	cgs.media.satchelbounce1 =      trap_S_RegisterSound( "sound/weapons/satchel/satchel_bounce.wav", qfalse );
 	cgs.media.watrInSound =         trap_S_RegisterSound( "sound/player/water_in.wav", qfalse );
