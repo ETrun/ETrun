@@ -1908,8 +1908,8 @@ extern vmCvar_t cg_keysX;
 extern vmCvar_t cg_keysY;
 extern vmCvar_t cg_keysSize;
 
-// Load position when player dies
-extern vmCvar_t cg_loadPositionWhenDie;
+// Automatically load player position when he gets killed (except /kill)
+extern vmCvar_t cg_autoLoad;
 
 // Nico, end of ETrun cvars
 

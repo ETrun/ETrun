@@ -191,6 +191,11 @@ void player_die( gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int
 			trap_PbStat( self - g_entities, "suicide",
 						 va( "%d %d %d", self->client->sess.sessionTeam, self->client->sess.playerType, weap ) ) ;
 		}
+
+		// Nico, do not automatically load player position on /kill
+		self->client->sess.loadPositionOnNextSpawn = qfalse;
+	} else {
+		self->client->sess.loadPositionOnNextSpawn = qtrue;
 	}
 
 	// RF, record this death in AAS system so that bots avoid areas which have high death rates

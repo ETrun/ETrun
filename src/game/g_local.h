@@ -558,6 +558,7 @@ typedef struct {
 	// Nico, save/load
 	save_position_t	alliesSaves[MAX_SAVED_POSITIONS];
 	save_position_t	axisSaves[MAX_SAVED_POSITIONS];
+	qboolean loadPositionOnNextSpawn;
 
 	// Nico, login status
 	qboolean logged;
@@ -641,8 +642,8 @@ typedef struct {
 	// Nico, load view angles on load
 	int loadViewAngles;
 
-	// Nico, load position when player dies
-	int loadPositionWhenDie;
+	// Automatically load player position when he gets killed (except /kill)
+	int autoLoad;
 
 } clientPersistant_t;
 
