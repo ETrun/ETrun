@@ -34,7 +34,10 @@ void InitTrigger( gentity_t *self ) {
 		G_SetMovedir( self->s.angles, self->movedir );
 	}
 
-	trap_SetBrushModel( self, self->model );
+	// Nico, fix against error: SV_SetBrushModel: NULL
+	if (self->model) {
+		trap_SetBrushModel( self, self->model );
+	}
 
 	self->r.contents = CONTENTS_TRIGGER;        // replaces the -1 from trap_SetBrushModel
 	self->r.svFlags = SVF_NOCLIENT;
