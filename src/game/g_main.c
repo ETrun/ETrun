@@ -271,7 +271,7 @@ cvarTable_t gameCvarTable[] = {
 	{ &g_maxConnsPerIP, "g_maxConnsPerIP", "3", CVAR_ARCHIVE},
 
 	// Game physics (set serverside but sent to client for prediction)
-	{ &physics, "physics", "127", CVAR_SERVERINFO | CVAR_ARCHIVE | CVAR_LATCH | CVAR_SYSTEMINFO},
+	{ &physics, "physics", "255", CVAR_SERVERINFO | CVAR_ARCHIVE | CVAR_LATCH | CVAR_SYSTEMINFO},
 
 	// Nico, #removeme
 	{ &aircontrol, "aircontrol", "150",  CVAR_ARCHIVE | CVAR_LATCH | CVAR_SYSTEMINFO },
