@@ -510,7 +510,8 @@ typedef struct {
 	int pm_aircontrol; // aircontrol multiplier (intertia velocity to forward velocity conversion), default: 150
 	int pm_strafeaccelerate; // forward acceleration when strafe bunny hopping, default: 70
 	int pm_wishspeed;// Nico, default value 30
-	int pm_airstopaccelerate;// Nico, CPM value: 2.5f, Racesow value: 2.0f*/
+	int pm_airstopaccelerate;// Nico, CPM value: 2.5f, Racesow value: 2.0f
+	int pm_slickaccelerate; // Nico, slick control acceleration
 
 	// Nico, timerun vars
 	int			timerunActive;
@@ -2251,3 +2252,4 @@ void PM_TraceAll( trace_t *trace, vec3_t start, vec3_t end );
 #define PHYSICS_NO_OVERBOUNCE		16
 #define PHYSICS_UPMOVE_BUG_FIX		32
 #define PHYSICS_DOUBLEJUMP			64
+#define PHYSICS_SLICK_CONTROL		128

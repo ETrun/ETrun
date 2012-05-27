@@ -3237,18 +3237,6 @@ void CG_FinishWeaponChange( int lastweap, int newweap ) {
 			cg.weaponSelect = newweap;
 		}
 		break;
-//	case WP_MEDIC_SYRINGE:
-//		if((cg.pmext.silencedSideArm & 4) && lastweap != WP_MEDIC_ADRENALINE) {
-//			newweap = WP_MEDIC_ADRENALINE;
-//			cg.weaponSelect = newweap;
-//		}
-//		break;
-//	case WP_MEDIC_ADRENALINE:
-//		if(!(cg.pmext.silencedSideArm & 4) && lastweap != WP_MEDIC_SYRINGE) {
-//			newweap = WP_MEDIC_SYRINGE;
-//			cg.weaponSelect = newweap;
-//		}
-//		break;
 	}
 
 	if ( lastweap == WP_BINOCULARS && cg.snap->ps.eFlags & EF_ZOOMING ) {
@@ -4080,8 +4068,6 @@ CG_Weapon_f
 */
 void CG_Weapon_f( void ) {
 	int num;
-//	int bank = 0, cycle = 0, newbank = 0, newcycle = 0;
-//	qboolean banked = qfalse;
 
 	if ( !cg.snap ) {
 		return;
@@ -4110,51 +4096,6 @@ void CG_Weapon_f( void ) {
 	}
 	return;
 // jpw
-
-/*	cg.weaponSelectTime = cg.time;	// flash the current weapon icon
-
-	// Don't try to switch when in the middle of reloading.
-	if ( cg.snap->ps.weaponstate == WEAPON_RELOADING )
-		return;
-
-
-	if ( num <= WP_NONE || num > WP_NUM_WEAPONS ) {
-		return;
-	}
-
-	curweap = cg.weaponSelect;
-
-	CG_WeaponIndex(curweap, &bank, &cycle);		// get bank/cycle of current weapon
-	banked = CG_WeaponIndex(num, &newbank, &newcycle);		// get bank/cycle of requested weapon
-
-	// the new weapon was not found in the reglar banks
-	// assume the player want's to go directly to it if possible
-	if(!banked) {
-		if(CG_WeaponSelectable(num)) {
-			CG_FinishWeaponChange(curweap, num);
-			return;
-		}
-	}
-
-	if(bank != newbank)
-		cycle = newcycle - 1;	//	drop down one from the requested weap's cycle so it will
-								//	try to initially cycle up to the requested weapon
-
-	for(i = 0; i < MAX_WEAPS_IN_BANK; i++) {
-		num = getNextWeapInBank(newbank, cycle+i);
-
-		if(num == curweap)	// no other weapons in bank
-			return;
-
-		if(CG_WeaponSelectable(num)) {
-			break;
-		}
-	}
-
-	if(i == MAX_WEAPS_IN_BANK)
-		return;
-
-	CG_FinishWeaponChange(curweap, num);*/
 }
 
 /*

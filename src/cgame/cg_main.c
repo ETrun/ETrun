@@ -273,6 +273,7 @@ vmCvar_t aircontrol;
 vmCvar_t strafeaccelerate;
 vmCvar_t wishspeed;
 vmCvar_t airstopaccelerate;
+vmCvar_t slickaccelerate;
 
 // Is level a timerun?
 vmCvar_t isTimerun;
@@ -319,8 +320,8 @@ vmCvar_t cg_keysX;
 vmCvar_t cg_keysY;
 vmCvar_t cg_keysSize;
 
-// Load position when player dies
-vmCvar_t cg_loadPositionWhenDie;
+// Automatically load player position when he gets killed (except /kill)
+vmCvar_t cg_autoLoad;
 
 // Nico, end of ETrun cvars
 
@@ -528,6 +529,7 @@ cvarTable_t cvarTable[] = {
 	{ &strafeaccelerate, "strafeaccelerate", "70", CVAR_ROM },
 	{ &wishspeed, "wishspeed", "45", CVAR_ROM },
 	{ &airstopaccelerate, "airstopaccelerate", "2", CVAR_ROM },
+	{ &slickaccelerate, "slickaccelerate", "10", CVAR_ROM },
 
 	// Is level a timerun?
 	{ &isTimerun, "isTimerun", "0", CVAR_ROM | CVAR_CHEAT },
@@ -574,8 +576,8 @@ cvarTable_t cvarTable[] = {
 	{ &cg_keysY, "cg_keysY", "300", CVAR_ARCHIVE },
 	{ &cg_keysSize, "cg_keysSize", "64", CVAR_ARCHIVE },
 
-	// Load position when player dies
-	{ &cg_loadPositionWhenDie, "cg_loadPositionWhenDie", "1", CVAR_ARCHIVE },
+	// Automatically load player position when he gets killed (except /kill)
+	{ &cg_autoLoad, "cg_autoLoad", "1", CVAR_ARCHIVE },
 
 	// Nico, end of ETrun cvars
 };
@@ -650,12 +652,13 @@ void CG_UpdateCvars( void ) {
 				// Nico, added com_maxfps
 				// Nico, added auth token & auto login
 				// Nico, added load view angles
+				// Nico, added auto load
 				if ( cv->vmCvar == &cg_autoAction || cv->vmCvar == &cg_autoReload ||
 					 cv->vmCvar == &int_cl_timenudge || cv->vmCvar == &int_cl_maxpackets ||
 					 cv->vmCvar == &cg_autoactivate || cv->vmCvar == &cg_predictItems ||
 					 cv->vmCvar == &pmove_fixed || cv->vmCvar == &com_maxfps ||
 					 cv->vmCvar == &cg_authToken || cv->vmCvar == &cg_autoLogin ||
-					 cv->vmCvar == &cg_loadViewAngles ||cv->vmCvar == &cg_loadPositionWhenDie ) {
+					 cv->vmCvar == &cg_loadViewAngles ||cv->vmCvar == &cg_autoLoad ) {
 					fSetFlags = qtrue;
 				} else if ( cv->vmCvar == &cg_crosshairColor || cv->vmCvar == &cg_crosshairAlpha )      {
 					BG_setCrosshair( cg_crosshairColor.string, cg.xhairColor, cg_crosshairAlpha.value, "cg_crosshairColor" );
@@ -752,8 +755,8 @@ void CG_setClientFlags( void ) {
 	// Nico, load view angles on load
 	cg_loadViewAngles.integer,
 
-	// Nico, load position when player dies
-	cg_loadPositionWhenDie.integer
+	// Nico, automatically load player position when he gets killed (except /kill)
+	cg_autoLoad.integer
 
 	) );
 }

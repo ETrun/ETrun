@@ -1033,7 +1033,7 @@ void ClientUserinfoChanged( int clientNum ) {
 			&client->pers.loadViewAngles,
 
 			// Nico, load position when player dies
-			&client->pers.loadPositionWhenDie
+			&client->pers.autoLoad
 
 			);
 
@@ -1603,7 +1603,10 @@ void ClientSpawn( gentity_t *ent ) {
 		G_Script_ScriptEvent( ent, "playerstart", "" );
 	}
 
-	if (ent->client->pers.loadPositionWhenDie && (ent->client->sess.sessionTeam == TEAM_AXIS || ent->client->sess.sessionTeam == TEAM_ALLIES)) {
+	if (ent->client->pers.autoLoad && ent->client->sess.loadPositionOnNextSpawn && (ent->client->sess.sessionTeam == TEAM_AXIS || ent->client->sess.sessionTeam == TEAM_ALLIES)) {
+
+		ent->client->sess.loadPositionOnNextSpawn = qfalse;
+
 		if (ent->client->sess.sessionTeam == TEAM_ALLIES) {
 			pos = ent->client->sess.alliesSaves;
 		} else {
@@ -1611,8 +1614,6 @@ void ClientSpawn( gentity_t *ent ) {
 		}
 
 		if (pos->valid) {
-			G_Printf("Loading pos\n");
-
 			VectorCopy(pos->origin, ent->client->ps.origin);
 
 			// Nico, load angles if cg_loadViewAngles = 1

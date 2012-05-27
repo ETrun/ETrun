@@ -56,6 +56,7 @@ float pm_slagWadeScale    = 0.70;
 float pm_proneSpeedScale  = 0.21;   // was: 0.18 (too slow) then: 0.24 (too fast)
 
 float pm_accelerate       = 15;// Nico, 10 was standard value
+// #fixme float pm_slickaccelerate  = 10;// Nico, slick accelerate
 float pm_airaccelerate    = 1;
 float pm_wateraccelerate  = 4;
 float pm_slagaccelerate   = 2;
@@ -70,7 +71,7 @@ float pm_spectatorfriction = 5.0f;
 //----(SA)	end
 
 // Nico, from Racesow
-/* #removeme
+/* #fixme
 const float pm_aircontrol = 150.0f; // aircontrol multiplier (intertia velocity to forward velocity conversion), default: 150
 const float pm_strafeaccelerate = 100; // forward acceleration when strafe bunny hopping, default: 70
 const float pm_wishspeed = 30;// Nico, default value 30
@@ -1097,22 +1098,22 @@ static void PM_WalkMove( void ) {
 
 	// when a player gets hit, they temporarily lose
 	// full control, which allows them to be moved a bit
-	if ( ( pml.groundTrace.surfaceFlags & SURF_SLICK ) || pm->ps->pm_flags & PMF_TIME_KNOCKBACK ) {
+	if (pm->ps->pm_flags & PMF_TIME_KNOCKBACK ) {
 		accelerate = pm_airaccelerate;
+	} else if (pml.groundTrace.surfaceFlags & SURF_SLICK) {
+		if (pm->physics & PHYSICS_SLICK_CONTROL) {
+			accelerate = pm->pm_slickaccelerate;
+		} else {
+			accelerate = pm_airaccelerate;
+		}
 	} else {
 		accelerate = pm_accelerate;
 	}
 
 	PM_Accelerate( wishdir, wishspeed, accelerate );
 
-	//Com_Printf("velocity = %1.1f %1.1f %1.1f\n", pm->ps->velocity[0], pm->ps->velocity[1], pm->ps->velocity[2]);
-	//Com_Printf("velocity1 = %1.1f\n", VectorLength(pm->ps->velocity));
-
 	if ( ( pml.groundTrace.surfaceFlags & SURF_SLICK ) || pm->ps->pm_flags & PMF_TIME_KNOCKBACK ) {
 		pm->ps->velocity[2] -= pm->ps->gravity * pml.frametime;
-	} else {
-		// don't reset the z velocity for slopes
-		//pm->ps->velocity[2] = 0;
 	}
 
 //----(SA)	added
@@ -2984,8 +2985,6 @@ int Pmove( pmove_t *pmove ) {
 	} else if ( pmove->ps->curWeapHeat < 0 ) {
 		pmove->ps->curWeapHeat = 0;
 	}
-
-	//PM_CheckStuck();
 
 	if ( ( pm->ps->stats[STAT_HEALTH] <= 0 || pm->ps->pm_type == PM_DEAD ) && pml.groundTrace.surfaceFlags & SURF_MONSTERSLICK ) {
 		return ( pml.groundTrace.surfaceFlags );

@@ -16,9 +16,16 @@ Key features
 * Timer reset fix
 * Velocity jumppads & location jumppads support
 * Fixed kill & hurt triggers
-* Introduced ETrun cvars (see https://github.com/boutetnico/ETrun/wiki/ETrun-cvars)
+* Introduced [ETrun cvars](https://github.com/boutetnico/ETrun/wiki/ETrun-cvars)
 * New scoreboard
 * No overbounce mode
+* Slick control
+
+Credits
+-------
+
+* TJMod developpers
+* Racesow project
 
 Bootstrapping
 -------------
@@ -42,6 +49,8 @@ Compiling for Windows
 On Windows: use MSVC compiler.
 
 On Linux, not supported.
+
+Windows server module requires [Microsoft Visual C++ 2010 Redistributable Package](http://www.microsoft.com/en-us/download/details.aspx?id=5555) to run properly.
 
 Compiling for Linux
 -------------------

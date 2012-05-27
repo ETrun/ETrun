@@ -259,7 +259,7 @@ void CG_DrawFireTeamOverlay( rectDef_t* rect ) {
 	for ( i = 0; i < 6; i++ ) {
 		ci = CG_SortedFireTeamPlayerForPosition( i, 6 );
 		if ( !ci ) {
-			break;;
+			break;
 		}
 
 		h += FT_BAR_HEIGHT + FT_BAR_YSPACING;

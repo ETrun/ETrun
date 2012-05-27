@@ -973,6 +973,7 @@ void CG_PredictPlayerState( void ) {
 	cg_pmove.pm_strafeaccelerate = strafeaccelerate.integer;
 	cg_pmove.pm_wishspeed = wishspeed.integer;
 	cg_pmove.pm_airstopaccelerate = airstopaccelerate.integer;
+	cg_pmove.pm_slickaccelerate = slickaccelerate.integer;
 
 	cg_pmove.timerunActive = cg.timerunActive;
 	cg_pmove.timerunStartTime = cg.timerunStartTime;

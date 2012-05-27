@@ -379,11 +379,10 @@ void CG_DrawKeyModel( int keynum, float x, float y, float w, float h, int fadeti
 	origin[2] = -0.5 * ( mins[2] + maxs[2] );
 	origin[1] = 0.5 * ( mins[1] + maxs[1] );
 
-//	len = 0.5 * ( maxs[2] - mins[2] );
 	len = 0.75 * ( maxs[2] - mins[2] );
 	origin[0] = len / 0.268;    // len / tan( fov/2 )
 
-	angles[YAW] = 30 * sin( cg.time / 2000.0 );;
+	angles[YAW] = 30 * sin( cg.time / 2000.0 );
 
 	CG_Draw3DModel( x, y, w, h, cg_items[keynum].models[0], 0, origin, angles );
 }

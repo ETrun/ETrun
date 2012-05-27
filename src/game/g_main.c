@@ -141,6 +141,7 @@ vmCvar_t aircontrol;
 vmCvar_t strafeaccelerate;
 vmCvar_t wishspeed;
 vmCvar_t airstopaccelerate;
+vmCvar_t slickaccelerate;
 
 // Enable certain map entities
 vmCvar_t g_enableMapEntities;
@@ -276,13 +277,14 @@ cvarTable_t gameCvarTable[] = {
 	{ &g_maxConnsPerIP, "g_maxConnsPerIP", "3", CVAR_ARCHIVE},
 
 	// Game physics (set serverside but sent to client for prediction)
-	{ &physics, "physics", "127", CVAR_SERVERINFO | CVAR_ARCHIVE | CVAR_LATCH | CVAR_SYSTEMINFO},
+	{ &physics, "physics", "255", CVAR_SERVERINFO | CVAR_ARCHIVE | CVAR_LATCH | CVAR_SYSTEMINFO},
 
 	// Nico, #removeme
 	{ &aircontrol, "aircontrol", "150",  CVAR_ARCHIVE | CVAR_LATCH | CVAR_SYSTEMINFO },
 	{ &strafeaccelerate, "strafeaccelerate", "70",  CVAR_ARCHIVE | CVAR_LATCH | CVAR_SYSTEMINFO },
 	{ &wishspeed, "wishspeed", "45",  CVAR_ARCHIVE | CVAR_LATCH | CVAR_SYSTEMINFO },
 	{ &airstopaccelerate, "airstopaccelerate", "2",  CVAR_ARCHIVE | CVAR_LATCH | CVAR_SYSTEMINFO },
+	{ &slickaccelerate, "slickaccelerate", "10",  CVAR_ARCHIVE | CVAR_LATCH | CVAR_SYSTEMINFO },
 
 	// Enable certain map entities
 	// 3 enabled both kill entities and hurt entities

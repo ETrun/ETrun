@@ -842,6 +842,7 @@ void ClientThink_real( gentity_t *ent ) {
 	pm.pm_strafeaccelerate = strafeaccelerate.integer;
 	pm.pm_wishspeed = wishspeed.integer;
 	pm.pm_airstopaccelerate = airstopaccelerate.integer;
+	pm.pm_slickaccelerate = slickaccelerate.integer;
 
 	pm.timerunActive = client->timerunActive;
 	pm.timerunStartTime = client->timerunStartTime + 500;
