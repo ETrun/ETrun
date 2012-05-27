@@ -419,6 +419,7 @@ void G_check_delayed_map_change() {
 int G_Map_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd ) {
 	int i = 0;
 	int activeRunsCount = 0;
+	gclient_t *cl = NULL;
 
 	// Vote request (vote is being initiated)
 	if ( arg ) {
@@ -445,13 +446,15 @@ int G_Map_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qb
 		trap_SendConsoleCommand( EXEC_APPEND, va( "map %s%s\n", level.voteInfo.vote_value, ( ( *s ) ? va( "; set nextmap \"%s\"", s ) : "" ) ) );*/
 		Q_strncpyz(level.delayedMapChange.passedVote, level.voteInfo.vote_value, VOTE_MAXSTRING);
 
-		// Nico, if no timerun is currenlty active, change the map in 1 sec, otherwise wait MAP_CHANGE_DELAY
+		// Nico, if no timerun is currenlty active or if player is alone on the server
+		// change the map in 1 sec, otherwise wait MAP_CHANGE_DELAY
 		for (i = 0; i < level.numConnectedClients; ++i) {
-			if (level.clients[i].timerunActive) {
+			cl = &level.clients[level.sortedClients[i]];
+			if ((cl->sess.sessionTeam == TEAM_ALLIES || cl->sess.sessionTeam == TEAM_AXIS) && cl->timerunActive) {
 				activeRunsCount++;
 			}
 		}
-		if (activeRunsCount > 0) {
+		if (level.numConnectedClients > 1 && activeRunsCount > 0) {
 			level.delayedMapChange.timeChange = level.time + MAP_CHANGE_DELAY * 1000;
 			AP(va("cpm \"^5Map will be changed in %dsecs\n\"", MAP_CHANGE_DELAY));
 		} else {
