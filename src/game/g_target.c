@@ -34,6 +34,7 @@ If you have questions concerning this license or the applicable additional terms
 */
 
 #include "g_local.h"
+#include "g_api.h"
 
 //==========================================================
 
@@ -1358,6 +1359,31 @@ void notify_timerun_stop(gentity_t *activator, int finishTime) {
 	}
 }
 
+// Nico, records command
+static void Cmd_SendRecord_f(gentity_t *ent, char *runName, char *authToken, int time, int startSpeed, int stopSpeed, int maxSpeed, int avgSpeed) {
+	char *buf = NULL;
+	char data[RESPONSE_MAX_SIZE] = {0};
+
+	// Check if API is used
+	if (!g_useAPI.integer) {
+		CP("cp \"This command is disabled on this server.\n\"");
+		return;
+	}
+
+	buf = malloc(RESPONSE_MAX_SIZE * sizeof (char));
+
+	if (!buf) {
+		G_Error("Cmd_SendRecord_f: malloc failed\n");
+	}
+
+	sprintf(data, "%d/%d/%d/%d/%d/%d", time, physics.integer, startSpeed, stopSpeed, maxSpeed, avgSpeed);
+
+	G_Printf("Sending record...\n");
+	G_API_sendRecord(buf, ent, level.rawmapname, runName, authToken, data, GAME_VERSION_DATED);
+
+	// Do *not* free buf here
+}
+
 /* QUAKED target_stopTimer (1 0 0) (-8 -8 -8) (8 8 8)
  * timer stop
  *
@@ -1424,7 +1450,13 @@ void target_stoptimer_use(gentity_t *self, gentity_t *other, gentity_t *activato
 	dmilli -= dsec * 1000;
 
 	client->stopSpeed = sqrt(client->ps.velocity[0] * client->ps.velocity[0] + client->ps.velocity[1] * client->ps.velocity[1]);
-	
+
+	// Nico, send record if needed
+	if (g_useAPI.integer && client->sess.logged) {
+		Cmd_SendRecord_f(activator, client->currentTimerun, client->pers.authToken, 
+			client->sess.timerunLastTime[timerunNum], (int)client->startSpeed, 
+			(int)client->stopSpeed, (int)client->maxSpeed, (int)client->avgSpeed);
+	}
 	/*switch (type) {
 		case 0: // no record
 				CPx(activator - g_entities, va("cpm \"^d%s^f:^z %02d:%02d.%03d (+%02d:%02d.%03d)\n\"",

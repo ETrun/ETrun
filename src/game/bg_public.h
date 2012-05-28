@@ -55,7 +55,7 @@ If you have questions concerning this license or the applicable additional terms
 #if defined( _DEBUG )
 	#define GAME_VERSION_DATED          GAME_VERSION
 #else
-	#define GAME_VERSION_DATED          (GAME_VERSION " " MOD_VERSION " " MOD_STATUS) // Nico( GAME_VERSION ", " Q3_VERSION )
+	#define GAME_VERSION_DATED          (GAME_VERSION "_" MOD_VERSION "_" MOD_STATUS) // Nico( GAME_VERSION ", " Q3_VERSION )
 #endif
 
 //bani

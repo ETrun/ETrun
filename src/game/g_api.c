@@ -225,11 +225,55 @@ void G_API_mapRecords(char *result, gentity_t *ent, char *mapName) {
 	G_Printf("Map records request sent!\n");
 }
 
+/*
+ * Record handler
+ */
+static void *recordHandler(void *data) {
+	int code = -1;
+	struct query_s *queryStruct;
+	gentity_t *ent = NULL;
+
+	queryStruct = (struct query_s *)data;
+	ent = queryStruct->ent;
+
+	G_Printf("[THREAD]Calling API now!\n");// Crash here on OSX
+
+	code = API_query(queryStruct->cmd, queryStruct->result, queryStruct->query);
+
+	if (code == 0) {
+		G_Printf("[THREAD]Result size = %d:\n", (int)strlen(queryStruct->result));
+		G_Printf("%s\n", queryStruct->result);
+		CP(va("print \"Record sent!\n\""));
+	} else {
+		G_Printf("[THREAD]Error, code: %d, %s\n", code, queryStruct->result);
+	}
+
+	free(queryStruct->result);
+	free(queryStruct);
+
+	return NULL;
+}
+
+/*
+ * Record send command
+ */
+void G_API_sendRecord(char *result, gentity_t *ent, char *mapName, char *runName, 
+					  char *authToken, char *data, char *etrunVersion) {
+	char net_port[8];
+
+	sprintf(net_port, "%d", trap_Cvar_VariableIntegerValue("net_port"));
+
+	G_callAPI("d", result, ent, 6, mapName, runName, authToken, data, etrunVersion, net_port);
+
+	G_Printf("Map record send request sent!\n");
+}
+
 // Commands handler binding
 static const api_glue_t APICommands[] = {
 	{ "l",	loginHandler },
 	{ "m",	mapRecordsHandler },
-	{ "c", 	checkAPIHandler}
+	{ "c", 	checkAPIHandler },
+	{ "d",	recordHandler }
 };
 
 /*

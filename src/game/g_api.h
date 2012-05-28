@@ -14,6 +14,8 @@ void G_unloadAPI();
 void G_API_login(char *result, gentity_t *ent, char *authToken);
 void G_API_mapRecords(char *result, gentity_t *ent, char *mapName);
 void G_API_check(char *result, gentity_t *ent);
+void G_API_sendRecord(char *result, gentity_t *ent, char *mapName, char *runName, 
+					  char *authToken, char *data, char *etrunVersion);
 
 #if defined _WIN32
 	# include <windows.h>
