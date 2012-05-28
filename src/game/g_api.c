@@ -134,7 +134,11 @@ static void *loginHandler(void *data) {
  * Login request command
  */
 void G_API_login(char *result, gentity_t *ent, char *authToken) {
-	G_callAPI("l", result, ent, 1, authToken);
+	char net_port[8];
+
+	sprintf(net_port, "%d", trap_Cvar_VariableIntegerValue("net_port"));
+
+	G_callAPI("l", result, ent, 2, authToken, net_port);
 
 	G_Printf("Login request sent!\n");
 }
@@ -173,7 +177,11 @@ static void *mapRecordsHandler(void *data) {
  * Check API command
  */
 void G_API_check(char *result, gentity_t *ent) {
-	G_callAPI("c", result, ent, 1, "4242"); //#fixme send server port here
+	char net_port[8];
+
+	sprintf(net_port, "%d", trap_Cvar_VariableIntegerValue("net_port"));
+
+	G_callAPI("c", result, ent, 1, net_port);
 
 	G_Printf("Check API request sent!\n");
 }
@@ -208,7 +216,11 @@ static void *checkAPIHandler(void *data) {
  * Map records request command
  */
 void G_API_mapRecords(char *result, gentity_t *ent, char *mapName) {
-	G_callAPI("m", result, ent, 1, mapName);
+	char net_port[8];
+
+	sprintf(net_port, "%d", trap_Cvar_VariableIntegerValue("net_port"));
+
+	G_callAPI("m", result, ent, 2, mapName, net_port);
 
 	G_Printf("Map records request sent!\n");
 }
