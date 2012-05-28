@@ -170,7 +170,7 @@ void SP_trigger_multiple( gentity_t *ent ) {
 	// Note, this test is in case the start/stop timer or checkpoint entity was defined before the trigger multiple
 	if (g_forceTimerReset.integer && ent) {
 		target = G_FindByTargetname(NULL, ent->target);
-		if (target && target->wait != 0.5) {
+		if (target && ent->wait != 0.5) {
 			if (!Q_stricmp(target->classname, "target_startTimer")
 				|| !Q_stricmp(target->classname, "target_stopTimer")
 				|| !Q_stricmp(target->classname, "target_checkpoint")) {
