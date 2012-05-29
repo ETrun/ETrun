@@ -868,6 +868,7 @@ void ClientUserinfoChanged( int clientNum ) {
 	int i = 0;
 	char *ip = NULL;// Nico, used to store client ip.
 	char *name = NULL;// Nico, used to store client name
+	char oldAuthToken[MAX_QPATH];// Nico, used to see if auth token was changed
 
 	ent = g_entities + clientNum;
 	client = ent->client;
@@ -1017,6 +1018,9 @@ void ClientUserinfoChanged( int clientNum ) {
 		client->sess.referee = RL_REFEREE;
 	}
 
+	// Nico, backup old auth token
+	Q_strncpyz(oldAuthToken, client->pers.authToken, sizeof (oldAuthToken));
+
 	s = Info_ValueForKey( userinfo, "cg_uinfo" );
 	sscanf( s, "%i %i %i %i %s %i %i",
 			&client->pers.clientFlags,
@@ -1036,6 +1040,15 @@ void ClientUserinfoChanged( int clientNum ) {
 			&client->pers.autoLoad
 
 			);
+
+	// Nico, check if auth token was changed
+	if (strlen(oldAuthToken) > 0 && Q_stricmp(oldAuthToken, client->pers.authToken)) {
+		// Nico, auth token was changed => logout player if he was logged in
+		if (client->sess.logged) {
+			CP("cp \"You are no longer logged in!\n\"");
+			ent->client->sess.logged = qfalse;
+		}
+	}
 
 	client->pers.autoActivate = ( client->pers.clientFlags & CGF_AUTOACTIVATE ) ? PICKUP_TOUCH : PICKUP_ACTIVATE;
 	client->pers.predictItemPickup = ( ( client->pers.clientFlags & CGF_PREDICTITEMS ) != 0 );
