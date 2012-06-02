@@ -1187,7 +1187,7 @@ void ClientEndFrame( gentity_t *ent ) {
 		}
 	}
 
-	// Nico, update timerun best speed
+	// Nico, update timerun best speed and run distance
 	if (ent->client->timerunActive) {
 		currentSpeed = sqrt(ent->client->ps.velocity[0] * ent->client->ps.velocity[0] + ent->client->ps.velocity[1] * ent->client->ps.velocity[1]);
 

@@ -775,8 +775,6 @@ struct gclient_s {
 	// Speed related
 	float		startSpeed;
 	float		stopSpeed;
-	float		maxSpeed; // #fixme, compute me!
-	float		avgSpeed; // #fixme, compute me!
 
 	// Nico, end of timerun server vars
 };

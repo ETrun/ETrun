@@ -1360,7 +1360,7 @@ void notify_timerun_stop(gentity_t *activator, int finishTime) {
 }
 
 // Nico, records command
-static void Cmd_SendRecord_f(gentity_t *ent, char *runName, char *authToken, int time, int startSpeed, int stopSpeed, int maxSpeed, int avgSpeed) {
+static void Cmd_SendRecord_f(gentity_t *ent, char *runName, char *authToken, int time, int startSpeed, int stopSpeed, int maxSpeed) {
 	char *buf = NULL;
 	char data[RESPONSE_MAX_SIZE] = {0};
 
@@ -1376,7 +1376,7 @@ static void Cmd_SendRecord_f(gentity_t *ent, char *runName, char *authToken, int
 		G_Error("Cmd_SendRecord_f: malloc failed\n");
 	}
 
-	sprintf(data, "%d/%d/%d/%d/%d/%d", time, physics.integer, startSpeed, stopSpeed, maxSpeed, avgSpeed);
+	sprintf(data, "%d/%d/%d/%d/%d", time, physics.integer, startSpeed, stopSpeed, maxSpeed);
 
 	G_Printf("Sending record...\n");
 	G_API_sendRecord(buf, ent, level.rawmapname, runName, authToken, data, GAME_VERSION_DATED);
@@ -1449,13 +1449,14 @@ void target_stoptimer_use(gentity_t *self, gentity_t *other, gentity_t *activato
 	dsec = dmilli / 1000;
 	dmilli -= dsec * 1000;
 
+
+	// Nico, stop speed
 	client->stopSpeed = sqrt(client->ps.velocity[0] * client->ps.velocity[0] + client->ps.velocity[1] * client->ps.velocity[1]);
 
 	// Nico, send record if needed
 	if (g_useAPI.integer && client->sess.logged) {
 		Cmd_SendRecord_f(activator, client->currentTimerun, client->pers.authToken, 
-			client->sess.timerunLastTime[timerunNum], (int)client->startSpeed, 
-			(int)client->stopSpeed, (int)client->maxSpeed, (int)client->avgSpeed);
+			time, (int)client->startSpeed, (int)client->stopSpeed, (int)client->sess.timerunBestSpeed);
 	}
 	/*switch (type) {
 		case 0: // no record
