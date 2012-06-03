@@ -1,7 +1,7 @@
 #include "g_local.h"
 #include "g_api.h"
 
-/*
+/**
  * Global handles
  */
 #if defined _WIN32
@@ -13,7 +13,7 @@
 	int (*API_query)(char *, char *, char *);
 # endif
 
-/*
+/**
  * Module loading
  */
 static qboolean loadModule() {
@@ -29,7 +29,7 @@ static qboolean loadModule() {
 	return qtrue;
 }
 
-/*
+/**
  * Module interface linking
  */
 static qboolean loadAPIquery() {
@@ -45,7 +45,7 @@ static qboolean loadAPIquery() {
 	return qtrue;
 }
 
-/*
+/**
  * Error printing
  */
 static void printError() {
@@ -72,7 +72,7 @@ static void printError() {
 #endif
 }
 
-/*
+/**
  * Function used to print large buffers (> 1022) to client
  */
 static void clientBigDataPrint(gentity_t *ent, char *data) {
@@ -89,7 +89,33 @@ static void clientBigDataPrint(gentity_t *ent, char *data) {
 	}
 }
 
-/*
+static char to_hex(char code) {
+  char hex[] = "0123456789abcdef";
+  return hex[code & 15];
+}
+
+/**
+ * Function used to encode an url
+ */
+void url_encode(char *str, char *dst) {
+	char *pstr = str;
+	int i = 0;
+
+	while (*pstr) {
+		if (isalnum(*pstr) || *pstr == '-' || *pstr == '_' || *pstr == '.' || *pstr == '~') {
+			dst[i] = *pstr;
+		} else {
+			dst[i++] = '%';
+			dst[i++] = to_hex(*pstr >> 4);
+			dst[i] = to_hex(*pstr & 15);
+		}
+		pstr++;
+		i++;
+	}
+	dst[i] = '\0';
+}
+
+/**
  * Login handler
  */
 static void *loginHandler(void *data) {
@@ -130,7 +156,7 @@ static void *loginHandler(void *data) {
 	return NULL;
 }
 
-/*
+/**
  * Login request command
  */
 void G_API_login(char *result, gentity_t *ent, char *authToken) {
@@ -143,7 +169,7 @@ void G_API_login(char *result, gentity_t *ent, char *authToken) {
 	G_Printf("Login request sent!\n");
 }
 
-/*
+/**
  * Map records handler
  */
 static void *mapRecordsHandler(void *data) {
@@ -173,20 +199,23 @@ static void *mapRecordsHandler(void *data) {
 	return NULL;
 }
 
-/*
- * Check API command
+/**
+ * Map records request command
  */
-void G_API_check(char *result, gentity_t *ent) {
+void G_API_mapRecords(char *result, gentity_t *ent, char *mapName) {
 	char net_port[8];
+	char encodedMapName[255] = {0};
 
 	sprintf(net_port, "%d", trap_Cvar_VariableIntegerValue("net_port"));
 
-	G_callAPI("c", result, ent, 1, net_port);
+	url_encode(mapName, encodedMapName);
 
-	G_Printf("Check API request sent!\n");
+	G_callAPI("m", result, ent, 2, encodedMapName, net_port);
+
+	G_Printf("Map records request sent!\n");
 }
 
-/*
+/**
  * Check API handler
  */
 static void *checkAPIHandler(void *data) {
@@ -212,20 +241,20 @@ static void *checkAPIHandler(void *data) {
 	return NULL;
 }
 
-/*
- * Map records request command
+/**
+ * Check API command
  */
-void G_API_mapRecords(char *result, gentity_t *ent, char *mapName) {
+void G_API_check(char *result, gentity_t *ent) {
 	char net_port[8];
 
 	sprintf(net_port, "%d", trap_Cvar_VariableIntegerValue("net_port"));
 
-	G_callAPI("m", result, ent, 2, mapName, net_port);
+	G_callAPI("c", result, ent, 1, net_port);
 
-	G_Printf("Map records request sent!\n");
+	G_Printf("Check API request sent!\n");
 }
 
-/*
+/**
  * Record handler
  */
 static void *recordHandler(void *data) {
@@ -243,7 +272,9 @@ static void *recordHandler(void *data) {
 	if (code == 0) {
 		G_Printf("[THREAD]Result size = %d:\n", (int)strlen(queryStruct->result));
 		G_Printf("%s\n", queryStruct->result);
-		CP(va("print \"Record sent!\n\""));
+		if (queryStruct->result) {
+			CP(va("print \"%s\n\"", queryStruct->result));
+		}
 	} else {
 		G_Printf("[THREAD]Error, code: %d, %s\n", code, queryStruct->result);
 	}
@@ -254,16 +285,21 @@ static void *recordHandler(void *data) {
 	return NULL;
 }
 
-/*
+/**
  * Record send command
  */
 void G_API_sendRecord(char *result, gentity_t *ent, char *mapName, char *runName, 
 					  char *authToken, char *data, char *etrunVersion) {
 	char net_port[8];
+	char encodedMapName[255] = {0};
+	char encodedRunName[255] = {0};
 
 	sprintf(net_port, "%d", trap_Cvar_VariableIntegerValue("net_port"));
 
-	G_callAPI("d", result, ent, 6, mapName, runName, authToken, data, etrunVersion, net_port);
+	url_encode(mapName, encodedMapName);
+	url_encode(runName, encodedRunName);
+
+	G_callAPI("d", result, ent, 6, encodedMapName, encodedRunName, authToken, data, etrunVersion, net_port);
 
 	G_Printf("Map record send request sent!\n");
 }
@@ -276,7 +312,7 @@ static const api_glue_t APICommands[] = {
 	{ "d",	recordHandler }
 };
 
-/*
+/**
  * Takes a command string as argument and returns the associated handler if any, NULL otherwise
  */
 static handler_t getHandlerForCommand(char *cmd) {
@@ -296,7 +332,7 @@ static handler_t getHandlerForCommand(char *cmd) {
 	return NULL;
 }
 
-/*
+/**
  * APImodule entry point
  *
  * command: must be a command in apiCommands
