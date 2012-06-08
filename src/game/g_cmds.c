@@ -93,7 +93,7 @@ void G_SendScore( gentity_t *ent ) {
 			}
 
 			// Nico, added timerun best time, timerun best speed, timerun status, followed client
-			Com_sprintf( entry, sizeof( entry ), " %i %i %i %i %i %i %i %i %i",
+			Com_sprintf( entry, sizeof( entry ), " %i %i %i %i %i %i %i %i %i %i %i",
 				level.sortedClients[i], 
 				ping,
 				( level.time - cl->pers.enterTime ) / 60000, 
@@ -102,7 +102,9 @@ void G_SendScore( gentity_t *ent ) {
 				cl->sess.timerunBestTime[GetTimerunNum(cl->currentTimerun)], 
 				cl->sess.timerunBestSpeed, 
 				cl->timerunActive ? 1 : 0,
-				cl->ps.clientNum);
+				cl->ps.clientNum,
+				cl->sess.logged ? 1 : 0,
+				cl->pers.cgaz > 0 ? 1 : 0);
 
 			if ( size + strlen( entry ) > 1000 ) {
 				i--; // we need to redo this client in the next buffer (if we can)

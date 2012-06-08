@@ -642,8 +642,11 @@ typedef struct {
 	// Nico, load view angles on load
 	int loadViewAngles;
 
-	// Automatically load player position when he gets killed (except /kill)
+	// Nico, automatically load player position when he gets killed (except /kill)
 	int autoLoad;
+
+	// Nico, client draw cgaz setting
+	int cgaz;
 
 } clientPersistant_t;
 

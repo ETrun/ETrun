@@ -131,6 +131,7 @@ static void WM_ETrun_DrawPlayers(int *x, int *y, int width, float fade, fontInfo
 	float fontsize = 0.16f;
 	int i = 0;
 	int mil, min, sec;
+	char status[MAX_QPATH] = {0};
 
 	// Draw "Players"
 	s = "Players";
@@ -162,7 +163,7 @@ static void WM_ETrun_DrawPlayers(int *x, int *y, int width, float fade, fontInfo
 	WM_ETrun_print("Ping", font, fontsize, tempx, *y, qtrue, 0);
 	tempx += INFO_LATENCY_WIDTH;
 
-	WM_ETrun_print("State", font, fontsize, tempx, *y, qtrue, 0);
+	WM_ETrun_print("Status", font, fontsize, tempx, *y, qtrue, 0);
 	tempx += INFO_STATE_WIDTH;
 
 	for (i = 0; i < numScores; ++i) {
@@ -216,13 +217,21 @@ static void WM_ETrun_DrawPlayers(int *x, int *y, int width, float fade, fontInfo
 		WM_ETrun_print(WM_ETrun_coloredPing(orderedScores[i].ping), font, fontsize, tempx, *y, qtrue, 0);
 		tempx += INFO_LATENCY_WIDTH;
 
-		// Nico, draw timerun status
+		// Nico, draw status
 		if (orderedScores[i].timerunStatus == 1) {
-			s = "^2Running";
-		} else {
-			s = "^3Not running";
+			Q_strcat(status, sizeof (status), "^2R ");
 		}
-		WM_ETrun_print(s, font, fontsize, tempx, *y, qtrue, 0);
+		if (orderedScores[i].clientLogged == 1) {
+			Q_strcat(status, sizeof (status), "^7L ");
+		}
+		if (orderedScores[i].clientCGaz == 1) {
+			Q_strcat(status, sizeof (status), "^8C ");
+		}
+		if (strlen(status) == 0) {
+			Q_strncpyz(status, "-", sizeof (status));
+		}
+
+		WM_ETrun_print(status, font, fontsize, tempx, *y, qtrue, 0);
 		tempx += INFO_STATE_WIDTH;
 	}
 	WM_ETrun_newlines(2, y, SMALLCHAR_HEIGHT);
@@ -370,6 +379,8 @@ qboolean CG_DrawScoreboard(void) {
 		orderedScores[i].timerunBestTime = cg.scores[i].timerunBestTime;// Best time
 		orderedScores[i].timerunBestSpeed = cg.scores[i].timerunBestSpeed;// Best speed
 		orderedScores[i].timerunStatus = cg.scores[i].timerunStatus;// Timerun status
+		orderedScores[i].clientLogged = cg.scores[i].logged;// Client login status
+		orderedScores[i].clientCGaz = cg.scores[i].cgaz;// Client cgaz setting
 		orderedScores[i].ping = cg.scores[i].ping;
 		orderedScores[i].followedClient = cg.scores[i].followedClient;// Followed client
 		Q_strncpyz(orderedScores[i].followedClientName, cgs.clientinfo[cg.scores[i].followedClient].name, MAX_QPATH);// Followed client name

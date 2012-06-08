@@ -489,6 +489,12 @@ typedef struct {
 	// Nico, followed client
 	int followedClient;
 
+	// Nico, client login status
+	int logged;
+
+	// Nico, client cgaz setting
+	int cgaz;
+
 } score_t;
 
 // each client has an associated clientInfo_t
@@ -1677,6 +1683,8 @@ typedef struct {
 	int		timerunBestTime;
 	int		timerunBestSpeed;
 	int		timerunStatus;
+	int		clientLogged;
+	int		clientCGaz;
 	int		ping;
 	int		followedClient;
 	char	followedClientName[MAX_QPATH];

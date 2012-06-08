@@ -653,12 +653,14 @@ void CG_UpdateCvars( void ) {
 				// Nico, added auth token & auto login
 				// Nico, added load view angles
 				// Nico, added auto load
+				// Nico, added cgaz
 				if ( cv->vmCvar == &cg_autoAction || cv->vmCvar == &cg_autoReload ||
 					 cv->vmCvar == &int_cl_timenudge || cv->vmCvar == &int_cl_maxpackets ||
 					 cv->vmCvar == &cg_autoactivate || cv->vmCvar == &cg_predictItems ||
 					 cv->vmCvar == &pmove_fixed || cv->vmCvar == &com_maxfps ||
 					 cv->vmCvar == &cg_authToken || cv->vmCvar == &cg_autoLogin ||
-					 cv->vmCvar == &cg_loadViewAngles ||cv->vmCvar == &cg_autoLoad ) {
+					 cv->vmCvar == &cg_loadViewAngles || cv->vmCvar == &cg_autoLoad ||
+					 cv->vmCvar == &cg_drawCGaz ) {
 					fSetFlags = qtrue;
 				} else if ( cv->vmCvar == &cg_crosshairColor || cv->vmCvar == &cg_crosshairAlpha )      {
 					BG_setCrosshair( cg_crosshairColor.string, cg.xhairColor, cg_crosshairAlpha.value, "cg_crosshairColor" );
@@ -730,7 +732,7 @@ void CG_setClientFlags( void ) {
 	}
 
 	cg.pmext.bAutoReload = ( cg_autoReload.integer > 0 );
-	trap_Cvar_Set( "cg_uinfo", va( "%d %d %d %d %s %d %d",
+	trap_Cvar_Set( "cg_uinfo", va( "%d %d %d %d %s %d %d %d",
 	// Client Flags
 	(
 		( ( cg_autoReload.integer > 0 ) ? CGF_AUTORELOAD : 0 ) |
@@ -756,7 +758,10 @@ void CG_setClientFlags( void ) {
 	cg_loadViewAngles.integer,
 
 	// Nico, automatically load player position when he gets killed (except /kill)
-	cg_autoLoad.integer
+	cg_autoLoad.integer,
+
+	// Nico, cgaz
+	cg_drawCGaz.integer
 
 	) );
 }

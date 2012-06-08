@@ -1022,7 +1022,7 @@ void ClientUserinfoChanged( int clientNum ) {
 	Q_strncpyz(oldAuthToken, client->pers.authToken, sizeof (oldAuthToken));
 
 	s = Info_ValueForKey( userinfo, "cg_uinfo" );
-	sscanf( s, "%i %i %i %i %s %i %i",
+	sscanf( s, "%i %i %i %i %s %i %i %i",
 			&client->pers.clientFlags,
 			&client->pers.clientTimeNudge,
 			&client->pers.clientMaxPackets,
@@ -1037,7 +1037,10 @@ void ClientUserinfoChanged( int clientNum ) {
 			&client->pers.loadViewAngles,
 
 			// Nico, load position when player dies
-			&client->pers.autoLoad
+			&client->pers.autoLoad,
+
+			// Nico, cgaz
+			&client->pers.cgaz
 
 			);
 

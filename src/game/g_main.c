@@ -257,7 +257,7 @@ cvarTable_t gameCvarTable[] = {
 	{ &g_scriptDebugLevel, "g_scriptDebugLevel", "0", CVAR_CHEAT, 0, qfalse },
 
 	// points to the URL for mod information, should not be modified by server admin
-	{ &mod_url, "mod_url", "", CVAR_SERVERINFO | CVAR_ROM, 0, qfalse },
+	{ &mod_url, "mod_url", "", CVAR_SERVERINFO | CVAR_ROM, 0, qfalse },//#fixme, also add mod_version
 	// configured by the server admin, points to the web pages for the server
 	{ &url, "URL", "", CVAR_SERVERINFO | CVAR_ARCHIVE, 0, qfalse },
 
