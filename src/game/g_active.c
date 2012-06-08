@@ -621,76 +621,6 @@ void ClientEvents( gentity_t *ent, int oldEventSequence ) {
 
 }
 
-/* Nico, forcing respawn
-// DHM - Nerve
-void WolfFindMedic( gentity_t *self ) {
-	int i, medic = -1;
-	gclient_t   *cl;
-	vec3_t start, end;
-	trace_t tr;
-	float bestdist = 1024, dist;
-
-	self->client->ps.viewlocked_entNum = 0;
-	self->client->ps.viewlocked = 0;
-	self->client->ps.stats[STAT_DEAD_YAW] = 999;
-
-	VectorCopy( self->s.pos.trBase, start );
-	start[2] += self->client->ps.viewheight;
-
-	for ( i = 0; i < level.numConnectedClients; i++ ) {
-		cl = &level.clients[ level.sortedClients[i] ];
-
-		if ( level.sortedClients[i] == self->client->ps.clientNum ) {
-			continue;
-		}
-
-		if ( cl->sess.sessionTeam != self->client->sess.sessionTeam ) {
-			continue;
-		}
-
-		if ( cl->ps.pm_type == PM_DEAD ) {
-			continue;
-		}
-
-		// zinx - limbo'd players are not PM_DEAD or STAT_HEALTH <= 0.
-		// and we certainly don't want to lock to them
-		// fix for bug #345
-		if ( cl->ps.pm_flags & PMF_LIMBO ) {
-			continue;
-		}
-
-		if ( cl->ps.stats[ STAT_HEALTH ] <= 0 ) {
-			continue;
-		}
-
-		if ( cl->ps.stats[ STAT_PLAYER_CLASS ] != PC_MEDIC ) {
-			continue;
-		}
-
-		VectorCopy( g_entities[level.sortedClients[i]].s.pos.trBase, end );
-		end[2] += cl->ps.viewheight;
-
-		trap_Trace( &tr, start, NULL, NULL, end, self->s.number, CONTENTS_SOLID );
-		if ( tr.fraction < 0.95 ) {
-			continue;
-		}
-
-		VectorSubtract( end, start, end );
-		dist = VectorNormalize( end );
-
-		if ( dist < bestdist ) {
-			medic = cl->ps.clientNum;
-			bestdist = dist;
-		}
-	}
-
-	if ( medic >= 0 ) {
-		self->client->ps.viewlocked_entNum = medic;
-		self->client->ps.viewlocked = 7;
-	}
-}*/
-
-
 /*
 ==============
 ClientThink
@@ -998,6 +928,13 @@ void ClientThink_real( gentity_t *ent ) {
 		// Nico, notify the client and its spectators the timerun has stopped
 		notify_timerun_stop(ent, 0);
 		client->timerunActive = qfalse;
+	}
+
+	// Nico, check maxpackets
+	if (client->pers.clientMaxPackets < 30) {
+		CP("cpm \"^1cl_maxpackets too low, must be >= 30.\n\"");
+		trap_SendServerCommand(ent-g_entities, "resetMaxpackets");
+		SetTeam(ent, "s", qtrue, -1, -1, qfalse);
 	}
 }
 
