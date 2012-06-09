@@ -968,6 +968,7 @@ void CG_PredictPlayerState( void ) {
 	// Nico, game physics
 	cg_pmove.physics = physics.integer;
 
+	cg_pmove.isTimerun = isTimerun.integer;
 	cg_pmove.timerunActive = cg.timerunActive;
 	cg_pmove.timerunStartTime = cg.timerunStartTime;
 

@@ -1465,24 +1465,6 @@ void target_stoptimer_use(gentity_t *self, gentity_t *other, gentity_t *activato
 		Cmd_SendRecord_f(activator, client->currentTimerun, client->pers.authToken, 
 			time, (int)client->startSpeed, (int)client->stopSpeed, (int)client->sess.timerunBestSpeed);
 	}
-	/*switch (type) {
-		case 0: // no record
-				CPx(activator - g_entities, va("cpm \"^d%s^f:^z %02d:%02d.%03d (+%02d:%02d.%03d)\n\"",
-					client->currentTimerun, min, sec, milli, dmin, dsec, dmilli));
-			break;
-		case 1: // best personal
-				CPx(activator - g_entities, va("cpm \"^d%s^f:^g %02d:%02d.%03d (-%02d:%02d.%03d)\n\"",
-					client->currentTimerun, min, sec, milli, dmin, dsec, dmilli));
-			if (client->sess.logged)
-			{
-				// Console print to all players
-				AP(va("print \"^fTimerun:^7 %s^7, ^fPlayer:^7 %s^7, ^fTime: ^g%02d:%02d.%03d\n\"",
-					client->currentTimerun, client->pers.netname, min, sec, milli));
-			}
-			
-			//trap_SendServerCommand(activator - g_entities, va("runSave %s_%02d-%02d-%03d", client->currentTimerun, min, sec, milli));
-			break;
-	}*/
 
 	// Start recording a new temp demo.
 	// trap_SendServerCommand(activator - g_entities, "tempDemoStart 1");

@@ -2347,7 +2347,6 @@ void Cmd_Logout_f(gentity_t *ent) {
 	CP("cp \"You are no longer logged in!\n\"");
 	ent->client->sess.logged = qfalse;
 	ClientUserinfoChanged(ent->client->ps.clientNum);
-	//#todo: release auth token?
 }
 
 // Nico, records command

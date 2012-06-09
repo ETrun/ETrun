@@ -138,7 +138,6 @@ static void *loginHandler(void *data) {
 
 		if (len > 0 && ent && ent->client) {
 			ent->client->sess.logged = qtrue;
-			// #todo: keep auth token too
 			CP("cp \"You are now logged in!\n\"");
 			G_Printf("[THREAD] %s is now authentificated!\n", queryStruct->result);
 			ClientUserinfoChanged(ent->client->ps.clientNum);

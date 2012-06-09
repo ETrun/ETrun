@@ -507,6 +507,7 @@ typedef struct {
 	int	physics;
 
 	// Nico, timerun vars
+	int			isTimerun;// Nico, is level a timerun?
 	int			timerunActive;
 	int			timerunStartTime;
 } pmove_t;
