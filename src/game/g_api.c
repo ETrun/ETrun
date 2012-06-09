@@ -77,7 +77,7 @@ static void printError() {
  */
 static void clientBigDataPrint(gentity_t *ent, char *data) {
 	int len = 0;
-	char buf[512];
+	char buf[512] = {0};
 	int count = 0;
 
 	len = strlen(data);
