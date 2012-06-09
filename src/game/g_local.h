@@ -1503,13 +1503,6 @@ extern vmCvar_t g_maxConnsPerIP;
 // Game physics
 extern vmCvar_t	physics;
 
-// Nico, #removeme
-extern vmCvar_t aircontrol;
-extern vmCvar_t strafeaccelerate;
-extern vmCvar_t wishspeed;
-extern vmCvar_t airstopaccelerate;
-extern vmCvar_t slickaccelerate;
-
 // Enable certain map entities
 extern vmCvar_t g_enableMapEntities;
 

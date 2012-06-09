@@ -506,13 +506,6 @@ typedef struct {
 	// Nico, game physics
 	int	physics;
 
-	// Nico, test purpose #removeme
-	int pm_aircontrol; // aircontrol multiplier (intertia velocity to forward velocity conversion), default: 150
-	int pm_strafeaccelerate; // forward acceleration when strafe bunny hopping, default: 70
-	int pm_wishspeed;// Nico, default value 30
-	int pm_airstopaccelerate;// Nico, CPM value: 2.5f, Racesow value: 2.0f
-	int pm_slickaccelerate; // Nico, slick control acceleration
-
 	// Nico, timerun vars
 	int			timerunActive;
 	int			timerunStartTime;

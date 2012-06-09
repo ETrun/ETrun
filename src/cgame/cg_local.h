@@ -1867,13 +1867,6 @@ extern vmCvar_t cg_recording_statusline;
 // Game physics 
 extern vmCvar_t	physics;
 
-// Nico, tweaking purpose only, #removeme
-extern vmCvar_t aircontrol;
-extern vmCvar_t strafeaccelerate;
-extern vmCvar_t wishspeed;
-extern vmCvar_t airstopaccelerate;
-extern vmCvar_t slickaccelerate;
-
 // Is level a timerun?
 extern vmCvar_t	isTimerun;
 
