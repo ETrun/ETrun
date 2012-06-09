@@ -561,7 +561,7 @@ cvarTable_t cvarTable[] = {
 	{ &cg_hideRange, "cg_hideRange", "128", CVAR_ARCHIVE },
 
 	// Auth related
-	{ &cg_authToken, "cg_authToken", "", CVAR_ARCHIVE },
+	{ &cg_authToken, "cg_timerunsToken", "", CVAR_ARCHIVE },
 	{ &cg_autoLogin, "cg_autoLogin", "0", CVAR_ARCHIVE },
 
 	// CGaz
