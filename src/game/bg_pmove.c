@@ -56,7 +56,6 @@ float pm_slagWadeScale    = 0.70;
 float pm_proneSpeedScale  = 0.21;   // was: 0.18 (too slow) then: 0.24 (too fast)
 
 float pm_accelerate       = 15;// Nico, 10 was standard value
-// #fixme float pm_slickaccelerate  = 10;// Nico, slick accelerate
 float pm_airaccelerate    = 1;
 float pm_wateraccelerate  = 4;
 float pm_slagaccelerate   = 2;
