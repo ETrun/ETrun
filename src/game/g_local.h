@@ -546,6 +546,7 @@ typedef struct {
 	int			timerunLastTime[MAX_TIMERUNS];
 	int			timerunBestTime[MAX_TIMERUNS];
 	int			timerunBestCheckpointTimes[MAX_TIMERUNS][MAX_TIMERUN_CHECKPOINTS];
+	int			timerunCheckpointWereLoaded[MAX_TIMERUNS];
 
 	int			timerunBestSpeed;
 	// Nico, end of client session timerun related

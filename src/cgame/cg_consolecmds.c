@@ -835,4 +835,7 @@ void CG_InitConsoleCommands( void ) {
 
 	// Nico, class command
 	trap_AddCommand("class");
+
+	// Nico, load player checkpoints command
+	trap_AddCommand("loadCheckpoints");
 }

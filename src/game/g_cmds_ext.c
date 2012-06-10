@@ -91,7 +91,7 @@ qboolean G_commandCheck( gentity_t *ent, char *cmd ) {
 	for (i = 0; i < cCommands; ++i) {
 		pCR = &ignoredServerCommands[i];
 		if (!Q_stricmp(cmd, pCR->pszCommandName)) {
-			G_DPrintf("Ignoring client command: %s\n", cmd);
+			// G_DPrintf("Ignoring client command: %s\n", cmd);
 			return(qtrue);
 		}
 	}

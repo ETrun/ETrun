@@ -116,6 +116,23 @@ void url_encode(char *str, char *dst) {
 }
 
 /**
+ * Check for errors in API string result
+ */
+static qboolean checkAPIResult(char *result) {
+	if (!result) {
+		return qfalse;
+	}
+
+	if (!Q_stricmp(result, "timemout")) {
+		return qfalse;
+	}
+	if (!Q_stricmp(result, "error")) {
+		return qfalse;
+	}
+	return qtrue;
+}
+
+/**
  * Login handler
  */
 static void *loginHandler(void *data) {
@@ -185,11 +202,11 @@ static void *mapRecordsHandler(void *data) {
 
 	if (code == 0) {
 		G_Printf("[THREAD]Result size = %d:\n", (int)strlen(queryStruct->result));
-		G_Printf("%s\n", queryStruct->result);
+		G_Printf("^1> ^w%s\n", queryStruct->result);
 		clientBigDataPrint(ent, queryStruct->result);
 	} else {
 		G_Printf("[THREAD]Error, code: %d, %s\n", code, queryStruct->result);
-		CP(va("print \"Error while requesting records\n\""));
+		CP(va("print \"^1> ^wError while requesting records\n\""));
 	}
 
 	free(queryStruct->result);
@@ -260,6 +277,7 @@ static void *recordHandler(void *data) {
 	int code = -1;
 	struct query_s *queryStruct;
 	gentity_t *ent = NULL;
+	int timerunNum = 0;
 
 	queryStruct = (struct query_s *)data;
 	ent = queryStruct->ent;
@@ -268,14 +286,46 @@ static void *recordHandler(void *data) {
 
 	code = API_query(queryStruct->cmd, queryStruct->result, queryStruct->query);
 
-	if (code == 0) {
-		G_Printf("[THREAD]Result size = %d:\n", (int)strlen(queryStruct->result));
-		G_Printf("%s\n", queryStruct->result);
-		if (queryStruct->result) {
-			CP(va("print \"%s\n\"", queryStruct->result));
+	G_Printf("[THREAD]Result size = %d:\n", (int)strlen(queryStruct->result));
+
+	timerunNum = GetTimerunNum(ent->client->currentTimerun);
+
+	switch (code) {
+	case 1000:// New record for this run
+		if (ent->client->sess.timerunCheckpointWereLoaded[timerunNum]) {
+			memcpy(ent->client->sess.timerunBestCheckpointTimes[timerunNum], ent->client->timerunCheckpointTimes, sizeof (ent->client->timerunCheckpointTimes));
 		}
-	} else {
-		G_Printf("[THREAD]Error, code: %d, %s\n", code, queryStruct->result);
+		CP(va("print \"^1> ^w%s\n\"", queryStruct->result));
+		break;
+
+	case 1001: // PB
+		if (ent->client->sess.timerunCheckpointWereLoaded[timerunNum]) {
+			memcpy(ent->client->sess.timerunBestCheckpointTimes[timerunNum], ent->client->timerunCheckpointTimes, sizeof (ent->client->timerunCheckpointTimes));
+		}
+		CP(va("print \"^1> ^w%s\n\"", queryStruct->result));
+		break;
+
+	case 1002:// SB
+		if (ent->client->sess.timerunCheckpointWereLoaded[timerunNum]) {
+			memcpy(ent->client->sess.timerunBestCheckpointTimes[timerunNum], ent->client->timerunCheckpointTimes, sizeof (ent->client->timerunCheckpointTimes));
+		}
+		CP(va("print \"^1> ^w%s\n\"", queryStruct->result));
+		break;
+
+	case 1003:// SB but player was already rec holder
+		if (ent->client->sess.timerunCheckpointWereLoaded[timerunNum]) {
+			memcpy(ent->client->sess.timerunBestCheckpointTimes[timerunNum], ent->client->timerunCheckpointTimes, sizeof (ent->client->timerunCheckpointTimes));
+		}
+		CP(va("print \"^1> ^w%s\n\"", queryStruct->result));
+		break;
+
+	case 1004:// Slow time
+		CP(va("print \"^1> ^w%s\n\"", queryStruct->result));
+		break;
+
+	default:// Error
+		CP(va("print \"^1> ^w%s\n\"", queryStruct->result));
+		break;
 	}
 
 	free(queryStruct->result);
@@ -303,12 +353,91 @@ void G_API_sendRecord(char *result, gentity_t *ent, char *mapName, char *runName
 	G_Printf("Map record send request sent!\n");
 }
 
+/**
+ * Get checkpoints handler
+ */
+static void *checkpointsHandler(void *data) {
+	int code = -1;
+	struct query_s *queryStruct;
+	gentity_t *ent = NULL;
+	char * pch = NULL;
+	int i = 0;
+	int timerunNum = 0;
+
+	queryStruct = (struct query_s *)data;
+	ent = queryStruct->ent;
+
+	G_Printf("[THREAD]Calling API now!\n");// Crash here on OSX
+
+	code = API_query(queryStruct->cmd, queryStruct->result, queryStruct->query);
+
+	if (code >= 1000) {
+		G_Printf("[THREAD]Result size = %d:\n", (int)strlen(queryStruct->result));
+		G_Printf("%s\n", queryStruct->result);
+
+		timerunNum = code - 1000;
+
+		if (queryStruct->result && checkAPIResult(queryStruct->result) && timerunNum >= 0 && timerunNum < MAX_TIMERUNS) {
+			// No error, no timeout
+
+			// Reset client checkpoints
+			memset(ent->client->sess.timerunBestCheckpointTimes[timerunNum], 0, sizeof(ent->client->sess.timerunBestCheckpointTimes[timerunNum]));
+			ent->client->timerunCheckpointsPassed = 0;
+
+			// Set new checkpoints
+			pch = strtok (queryStruct->result, "O");
+			while (pch != NULL && i < MAX_TIMERUN_CHECKPOINTS) {
+				ent->client->sess.timerunBestCheckpointTimes[timerunNum][i] = atoi(pch);
+				pch = strtok (NULL, "O");
+				i++;
+			}
+
+			// Mark CP were loaded for this run
+			ent->client->sess.timerunCheckpointWereLoaded[timerunNum] = 1;
+
+			CP(va("print \"^1> ^wCheckpoints loaded for run #%d!\n\"", timerunNum));
+		} else {
+			G_Printf("[THREAD]Error while loading checkpoints\n");
+			CP(va("print \"^1> ^wError while loading checkpoints!\n\""));
+		}
+	} else {
+		G_Printf("[THREAD]Error, code: %d, %s\n", code, queryStruct->result);
+		CP(va("print \"^1> ^wError while loading checkpoints!\n\""));
+	}
+
+	free(queryStruct->result);
+	free(queryStruct);
+
+	return NULL;
+}
+
+/**
+ * Checkpoints request command
+ */
+void G_API_getPlayerCheckpoints(char *result, gentity_t *ent, char *mapName, char *runName, int runNum, char *authToken) {
+	char net_port[8] = {0};
+	char bufferRunNum[8] = {0};
+	char encodedMapName[255] = {0};
+	char encodedRunName[255] = {0};
+
+	sprintf(net_port, "%d", trap_Cvar_VariableIntegerValue("net_port"));
+	sprintf(bufferRunNum, "%d", runNum);
+
+	url_encode(mapName, encodedMapName);
+	url_encode(runName, encodedRunName);
+
+	G_callAPI("e", result, ent, 5, encodedMapName, encodedRunName, bufferRunNum, authToken, net_port);
+
+	G_Printf("^1> ^wCheckpoints request sent!\n");
+}
+
 // Commands handler binding
 static const api_glue_t APICommands[] = {
 	{ "l",	loginHandler },
 	{ "m",	mapRecordsHandler },
 	{ "c", 	checkAPIHandler },
-	{ "d",	recordHandler }
+	{ "d",	recordHandler },
+	{ "e",	checkpointsHandler }
 };
 
 /**

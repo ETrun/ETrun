@@ -1182,7 +1182,7 @@ void SP_target_rumble( gentity_t *self ) {
 	trap_LinkEntity( self );
 }
 
-/*
+/**
  * Help function for target_starttimer, target_stoptimer, target_checkpoint.
  * Creates a new timerun if there isn't any timerun with such name.
  * source: TJMod
@@ -1441,10 +1441,14 @@ void target_stoptimer_use(gentity_t *self, gentity_t *other, gentity_t *activato
 	milli -= sec * 1000;
 
 	delta = abs(time - client->sess.timerunBestTime[timerunNum]);
-	if (/*client->sess.logged && */(!client->sess.timerunBestTime[timerunNum] || time < client->sess.timerunBestTime[timerunNum])) {
-		// best personal
+	if (client->sess.logged && (!client->sess.timerunBestTime[timerunNum] || time < client->sess.timerunBestTime[timerunNum])) {
+		// best personal for this session
 		client->sess.timerunBestTime[timerunNum] = time;
-		memcpy(client->sess.timerunBestCheckpointTimes[timerunNum], client->timerunCheckpointTimes, sizeof(client->timerunCheckpointTimes));
+
+		// CP are updated here if API is not used or if CP were note loaded
+		if (!g_useAPI.integer || client->sess.timerunCheckpointWereLoaded[timerunNum] == 0) {
+			memcpy(client->sess.timerunBestCheckpointTimes[timerunNum], client->timerunCheckpointTimes, sizeof (client->timerunCheckpointTimes));
+		}
 
 		// Nico, set score so that xfire can see it
 		client->ps.persistant[PERS_SCORE] = client->sess.timerunLastTime[timerunNum];

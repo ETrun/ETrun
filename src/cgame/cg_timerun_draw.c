@@ -45,7 +45,7 @@ void CG_DrawCheckpoints(void) {
 				Vector4Set(color, colorWhite[0], colorWhite[1], colorWhite[2], colorWhite[3]);
 
 				// Nico, no best time yet, print the check point times
-				if (!cg.timerunBestTime[cg.currentTimerun]) {
+				if (!cg.timerunBestTime[cg.currentTimerun] && (cg.timerunCheckPointDiff[i] == cg.timerunCheckPointTime[i] || cg.timerunCheckPointTime[i] == 0)) {
 					Com_sprintf(status, sizeof(status), "%s", va("%02d:%02d.%03d", cmin, csec, cmil));
 				} else if (cg.timerunCheckPointDiff[i] == 0) {
 					// Nico, same check point time

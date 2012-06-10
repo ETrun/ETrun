@@ -16,6 +16,7 @@ void G_API_mapRecords(char *result, gentity_t *ent, char *mapName);
 void G_API_check(char *result, gentity_t *ent);
 void G_API_sendRecord(char *result, gentity_t *ent, char *mapName, char *runName, 
 					  char *authToken, char *data, char *etrunVersion);
+void G_API_getPlayerCheckpoints(char *result, gentity_t *ent, char *mapName, char *runName, int runNum, char *authToken);
 
 #if defined _WIN32
 	# include <windows.h>
