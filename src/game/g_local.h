@@ -1314,9 +1314,6 @@ void Cmd_Say_f(gentity_t *ent, int mode, qboolean arg0, qboolean encoded);
 // void Cmd_Team_f( gentity_t *ent, unsigned int dwCommand, qboolean fValue );
 void Cmd_Team_f( gentity_t *ent );
 
-void Cmd_SetWeapons_f( gentity_t *ent, unsigned int dwCommand, qboolean fValue );
-void Cmd_SetClass_f( gentity_t *ent, unsigned int dwCommand, qboolean fValue );
-
 //
 // g_pweapon.c
 //
