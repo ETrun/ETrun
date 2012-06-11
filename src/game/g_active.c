@@ -121,9 +121,7 @@ void P_WorldEffects( gentity_t *ent ) {
 			if ( ent->client->ps.powerups[PW_BREATHER] ) { // take air from the breather now that we need it
 				ent->client->ps.powerups[PW_BREATHER] -= ( level.time - ent->client->airOutTime );
 				ent->client->airOutTime = level.time + ( level.time - ent->client->airOutTime );
-			} else {
-
-
+			} else if (!g_disableDrowning.integer) {// Nico, check if drowning is disabled
 				// drown!
 				ent->client->airOutTime += 1000;
 				if ( ent->health > 0 ) {

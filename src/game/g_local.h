@@ -1528,6 +1528,9 @@ extern vmCvar_t g_APImodulePath;
 // Hold doors open
 extern vmCvar_t g_holdDoorsOpen;
 
+// Disable drowning
+extern vmCvar_t g_disableDrowning;
+
 // Nico, end of ETrun cvars
 
 void    trap_Printf( const char *fmt );

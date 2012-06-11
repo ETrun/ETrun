@@ -158,6 +158,9 @@ vmCvar_t g_APImodulePath;
 // Hold doors open
 vmCvar_t g_holdDoorsOpen;
 
+// Disable drowning
+vmCvar_t g_disableDrowning;
+
 // Nico, end of ETrun cvars
 
 cvarTable_t gameCvarTable[] = {
@@ -292,7 +295,10 @@ cvarTable_t gameCvarTable[] = {
 	{ &g_APImodulePath, "g_APImodulePath", "", CVAR_ARCHIVE | CVAR_LATCH},
 
 	// Hold doors open
-	{ &g_holdDoorsOpen, "g_holdDoorsOpen", "0", CVAR_ARCHIVE | CVAR_LATCH}
+	{ &g_holdDoorsOpen, "g_holdDoorsOpen", "0", CVAR_ARCHIVE | CVAR_LATCH},
+
+	// Disable drowning
+	{ &g_disableDrowning, "g_disableDrowning", "1", CVAR_ARCHIVE | CVAR_LATCH}
 
 	// Nico, end of ETrun cvars
 };
