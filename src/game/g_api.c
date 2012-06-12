@@ -441,10 +441,6 @@ static void *randommapHandler(void *data) {
 	int code = -1;
 	struct query_s *queryStruct;
 	gentity_t *ent = NULL;
-	char *pch = NULL;
-	int i = 0;
-	int activeRunsCount = 0;
-	gclient_t *cl = NULL;
 	char mapfile[MAX_QPATH] = {0};
 	fileHandle_t f;
 

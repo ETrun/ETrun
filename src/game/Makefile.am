@@ -55,4 +55,5 @@ q_math.c \
 q_shared.c \
 g_buddy_list.c \
 g_construction.c \
-g_api.c
+g_api.c \
+g_apicmds.c
