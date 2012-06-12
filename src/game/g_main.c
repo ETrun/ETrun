@@ -106,7 +106,7 @@ vmCvar_t server_motd5;
 vmCvar_t vote_allow_kick;
 vmCvar_t vote_allow_map;
 vmCvar_t vote_allow_matchreset;
-vmCvar_t vote_allow_nextmap;
+vmCvar_t vote_allow_randommap;
 vmCvar_t vote_allow_referee;
 vmCvar_t vote_allow_antilag;
 vmCvar_t vote_allow_muting;
@@ -124,7 +124,6 @@ vmCvar_t mod_url;
 vmCvar_t url;
 
 vmCvar_t g_debugSkills;
-vmCvar_t g_nextmap;
 
 // Nico, beginning of ETrun server cvars
 
@@ -237,7 +236,7 @@ cvarTable_t gameCvarTable[] = {
 	{ &vote_allow_kick,         "vote_allow_kick", "0", 0, 0, qfalse, qfalse },
 	{ &vote_allow_map,          "vote_allow_map", "1", 0, 0, qfalse, qfalse },
 	{ &vote_allow_matchreset,   "vote_allow_matchreset", "1", 0, 0, qfalse, qfalse },
-	{ &vote_allow_nextmap,      "vote_allow_nextmap", "1", 0, 0, qfalse, qfalse },
+	{ &vote_allow_randommap,      "vote_allow_randommap", "1", 0, 0, qfalse, qfalse },
 	{ &vote_allow_referee,      "vote_allow_referee", "0", 0, 0, qfalse, qfalse },
 	{ &vote_allow_antilag,      "vote_allow_antilag", "0", 0, 0, qfalse, qfalse },
 	{ &vote_allow_muting,       "vote_allow_muting", "0", 0, 0, qfalse, qfalse },
@@ -261,8 +260,6 @@ cvarTable_t gameCvarTable[] = {
 	{ &url, "URL", SHORT_MOD_URL, CVAR_SERVERINFO | CVAR_ARCHIVE, 0, qfalse },
 
 	{ &g_debugSkills,   "g_debugSkills", "0", 0       },
-
-	{ &g_nextmap, "nextmap", "", CVAR_TEMP },
 
 	// Nico, beginning of ETrun server cvars
 
@@ -1140,7 +1137,7 @@ void G_UpdateCvars( void ) {
 				// OSP - Update vote info for clients, if necessary
 				if ( cv->vmCvar == &vote_allow_kick          || cv->vmCvar == &vote_allow_map            ||
 						cv->vmCvar == &vote_allow_matchreset    ||
-						cv->vmCvar == &vote_allow_nextmap        ||
+						cv->vmCvar == &vote_allow_randommap        ||
 						cv->vmCvar == &vote_allow_referee       ||
 						cv->vmCvar == &vote_allow_antilag        ||
 						cv->vmCvar == &vote_allow_muting
@@ -1229,6 +1226,7 @@ G_InitGame
 void G_InitGame( int levelTime, int randomSeed, int restart ) {
 	int i;
 	char cs[MAX_INFO_STRING];
+	char *result = NULL;
 
 	G_Printf( "------- Game Initialization -------\n" );
 	G_Printf( "gamename: %s\n", GAME_VERSION );
@@ -1437,9 +1435,20 @@ void G_InitGame( int levelTime, int randomSeed, int restart ) {
 		trap_Cvar_Set("isTimerun", "1");
 	}
 
-	// Nico, load API
+	// Nico, load & check API
 	if (g_useAPI.integer) {
 		G_loadAPI();
+
+		result = malloc(RESPONSE_MAX_SIZE * sizeof (char));
+
+		if (!result) {
+			G_Error("G_InitGame: malloc failed\n");
+		}
+
+		G_Printf("ETrun: checking API...\n");
+		G_API_check(result, NULL);
+
+		// Nico, note: do not free result here, it's done in thread
 	}
 }
 
@@ -1777,47 +1786,6 @@ void FindIntermissionPoint( void ) {
 		}
 	}
 
-}
-
-/*
-=============
-ExitLevel
-
-When the intermission has been exited, the server is either killed
-or moved to a new level based on the "nextmap" cvar
-
-=============
-*/
-void ExitLevel( void ) {
-	int i;
-	gclient_t *cl;
-
-	trap_SendConsoleCommand( EXEC_APPEND, "vstr nextmap\n" );
-
-	level.changemap = NULL;
-
-	for ( i = 0 ; i < g_maxclients.integer ; i++ ) {
-		cl = level.clients + i;
-		if ( cl->pers.connected != CON_CONNECTED ) {
-			continue;
-		}
-		cl->ps.persistant[PERS_SCORE] = 0;
-	}
-
-	// we need to do this here before chaning to CON_CONNECTING
-	G_WriteSessionData( qfalse );
-
-	// change all client states to connecting, so the early players into the
-	// next level will know the others aren't done reconnecting
-	for ( i = 0 ; i < g_maxclients.integer ; i++ ) {
-
-		if ( level.clients[i].pers.connected == CON_CONNECTED ) {
-			level.clients[i].pers.connected = CON_CONNECTING;
-			trap_UnlinkEntity( &g_entities[i] );
-		}
-	}
-
-	G_LogPrintf( "ExitLevel: executed\n" );
 }
 
 /*

@@ -36,7 +36,7 @@ menuDef {
 	BUTTON( 6, 32, .5*(WINDOW_WIDTH-18), 14, "START MATCH", .24, 11, exec "cmd ref startmatch"; uiScript closeingame )
 	BUTTONEXT( 6, 50, .5*(WINDOW_WIDTH-18), 14, "RESET MATCH", .24, 11, exec "cmd ref matchreset"; uiScript closeingame, voteFlag CV_SVF_MATCHRESET )
 	BUTTON( 6, 68, .5*(WINDOW_WIDTH-18), 14, "RESTART MAP", .24, 11, exec "cmd ref maprestart"; uiScript closeingame )
-	NAMEDBUTTONEXT( bttn_nextmap, 6, 86, .5*(WINDOW_WIDTH-18), 14, "NEXT MAP", .24, 11, exec "cmd ref nextmap"; uiScript closeingame, settingEnabled CV_SVS_NEXTMAP voteFlag CV_SVF_NEXTMAP )
+	BUTTONEXT( 6, 86, .5*(WINDOW_WIDTH-18), 14, "RANDOM MAP", .24, 11, exec "cmd ref randommap"; uiScript closeingame, voteFlag CV_SVF_RANDOMMAP )
 	BUTTONEXT( 6, 104, .5*(WINDOW_WIDTH-18), 14, "ANTI-LAG ON", .24, 11, exec "cmd ref antilag 1"; uiScript closeingame, settingDisabled CV_SVS_ANTILAG voteFlag CV_SVF_ANTILAG )
 	BUTTONEXT( 6, 104, .5*(WINDOW_WIDTH-18), 14, "ANTI-LAG OFF", .24, 11, exec "cmd ref antilag 0"; uiScript closeingame, settingEnabled CV_SVS_ANTILAG voteFlag CV_SVF_ANTILAG )
 	

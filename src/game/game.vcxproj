@@ -171,6 +171,7 @@
     <ClCompile Include="g_active.c" />
     <ClCompile Include="g_alarm.c" />
     <ClCompile Include="g_antilag.c" />
+    <ClCompile Include="g_apicmds.c" />
     <ClCompile Include="g_buddy_list.c" />
     <ClCompile Include="g_character.c" />
     <ClCompile Include="g_client.c" />
@@ -214,6 +215,7 @@
     <ClInclude Include="g_api.h" />
     <ClInclude Include="bg_local.h" />
     <ClInclude Include="bg_public.h" />
+    <ClInclude Include="g_apicmds.h" />
     <ClInclude Include="g_local.h" />
     <ClInclude Include="g_public.h" />
     <ClInclude Include="g_team.h" />

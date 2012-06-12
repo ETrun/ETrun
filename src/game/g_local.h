@@ -1043,7 +1043,14 @@ int ClientNumberFromString( gentity_t *to, char *s );
 void SanitizeString( char *in, char *out, qboolean fToLower );
 void Cmd_Load_f(gentity_t *ent);
 void Cmd_Save_f(gentity_t *ent);
-void Cmd_Login_f(gentity_t *ent);// Nico, login
+
+//
+// g_apicmds.c
+//
+void Cmd_Login_f(gentity_t *ent);
+void Cmd_Logout_f(gentity_t *ent);
+void Cmd_Records_f(gentity_t *ent);
+void Cmd_LoadCheckpoints_f(gentity_t *ent);
 
 // Nico, flood protection
 typedef struct {
@@ -1484,14 +1491,13 @@ extern vmCvar_t team_nocontrols;
 extern vmCvar_t vote_allow_kick;
 extern vmCvar_t vote_allow_map;
 extern vmCvar_t vote_allow_matchreset;
-extern vmCvar_t vote_allow_nextmap;
+extern vmCvar_t vote_allow_randommap;
 extern vmCvar_t vote_allow_referee;
 extern vmCvar_t vote_allow_antilag;
 extern vmCvar_t vote_allow_muting;
 extern vmCvar_t vote_limit;
 extern vmCvar_t vote_percent;
 extern vmCvar_t g_debugSkills;
-extern vmCvar_t g_nextmap;
 
 // Nico, beginning of ETrun server cvars
 
@@ -1866,11 +1872,12 @@ void G_playersMessage( gentity_t *ent );
 int G_Kick_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd );
 int G_Mute_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd );
 int G_UnMute_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd );
+void G_delay_map_change(char *mapName);// Nico, function to delay a map change
 void G_check_delayed_map_change();// Nico, delayed map change function
 int G_Map_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd );
 int G_MapRestart_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd );
 int G_MatchReset_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd );
-int G_Nextmap_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd );
+int G_Randommap_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd );
 int G_Referee_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd );
 int G_StartMatch_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd );
 int G_Unreferee_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd );

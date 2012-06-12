@@ -420,13 +420,12 @@ If you have questions concerning this license or the applicable additional terms
 #define CV_SVS_LOCKTEAMS        2
 #define CV_SVS_LOCKSPECS        4
 #define CV_SVS_ANTILAG          8
-#define CV_SVS_NEXTMAP          16
 
 // "cg_ui_voteFlags"
 #define CV_SVF_KICK             1
 #define CV_SVF_MAP              2
 #define CV_SVF_MATCHRESET       4
-#define CV_SVF_NEXTMAP          8
+#define CV_SVF_RANDOMMAP        8
 #define CV_SVF_REFEREE          16
 #define CV_SVF_ANTILAG          32
 #define CV_SVF_MUTING           64

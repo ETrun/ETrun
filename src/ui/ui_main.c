@@ -6164,7 +6164,7 @@ cvarTable_t cvarTable[] = {
 	{ NULL, "team_nocontrols", "0", CVAR_ARCHIVE },
 	{ NULL, "vote_allow_kick", "1", CVAR_ARCHIVE },
 	{ NULL, "vote_allow_map", "1", CVAR_ARCHIVE },
-	{ NULL, "vote_allow_nextmap", "1", CVAR_ARCHIVE },
+	{ NULL, "vote_allow_randommap", "1", CVAR_ARCHIVE },
 	{ NULL, "vote_allow_referee", "0", CVAR_ARCHIVE },
 	{ NULL, "vote_allow_antilag", "1", CVAR_ARCHIVE },
 	{ NULL, "vote_allow_muting", "1", CVAR_ARCHIVE },

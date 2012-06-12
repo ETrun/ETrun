@@ -31,8 +31,7 @@ If you have questions concerning this license or the applicable additional terms
 //
 #include "g_local.h"
 #include "../../etrun/ui/menudef.h" // For vote options
-
-
+#include "g_api.h"
 
 #define T_FFA   0x01
 #define T_1V1   0x02
@@ -65,17 +64,17 @@ typedef struct {
 
 // VC optimizes for dup strings :)
 static const vote_reference_t aVoteInfo[] = {
-	{ 0x1ff, "kick",      G_Kick_v,          "KICK",              " <player_id>^7\n  Attempts to kick player from server" },
-	{ 0x1ff, "mute",      G_Mute_v,          "MUTE",              " <player_id>^7\n  Removes the chat capabilities of a player" },
-	{ 0x1ff, "unmute",        G_UnMute_v,        "UN-MUTE",           " <player_id>^7\n  Restores the chat capabilities of a player" },
-	{ 0x1ff, "map",           G_Map_v,           "Change map to", " <mapname>^7\n  Votes for a new map to be loaded" },
-	{ 0x1ff, "maprestart",    G_MapRestart_v,    "Map Restart",       "^7\n  Restarts the current map in progress" },
-	{ 0x1ff, "matchreset",   G_MatchReset_v, "Match Reset",       "^7\n  Resets the entire match" },
-	{ 0x1ff, "nextmap",       G_Nextmap_v,       "Load Next Map", "^7\n  Loads the next map or campaign in the map queue" },
-	{ 0x1ff, "referee",       G_Referee_v,       "Referee",           " <player_id>^7\n  Elects a player to have admin abilities" },
-	{ 0x1ff, "startmatch",    G_StartMatch_v,    "Start Match",       " ^7\n  Sets all players to \"ready\" status to start the match" },
-	{ 0x1ff, "unreferee",     G_Unreferee_v,     "UNReferee",     " <player_id>^7\n  Elects a player to have admin abilities removed" },
-	{ 0x1ff, "antilag",       G_AntiLag_v,       "Anti-Lag",          " <0|1>^7\n  Toggles Anit-Lag on the server" },
+	{ 0x1ff, "kick",		G_Kick_v,			"KICK",             " <player_id>^7\n  Attempts to kick player from server" },
+	{ 0x1ff, "mute",		G_Mute_v,			"MUTE",             " <player_id>^7\n  Removes the chat capabilities of a player" },
+	{ 0x1ff, "unmute",      G_UnMute_v,			"UN-MUTE",          " <player_id>^7\n  Restores the chat capabilities of a player" },
+	{ 0x1ff, "map",         G_Map_v,			"Change map to",	" <mapname>^7\n  Votes for a new map to be loaded" },
+	{ 0x1ff, "maprestart",  G_MapRestart_v,		"Map Restart",      "^7\n  Restarts the current map in progress" },
+	{ 0x1ff, "matchreset",  G_MatchReset_v,		"Match Reset",      "^7\n  Resets the entire match" },
+	{ 0x1ff, "randommap",   G_Randommap_v,      "Load Random Map",	"^7\n  Loads a random map" },
+	{ 0x1ff, "referee",     G_Referee_v,		"Referee",          " <player_id>^7\n  Elects a player to have admin abilities" },
+	{ 0x1ff, "startmatch",  G_StartMatch_v,		"Start Match",      " ^7\n  Sets all players to \"ready\" status to start the match" },
+	{ 0x1ff, "unreferee",   G_Unreferee_v,		"UNReferee",		" <player_id>^7\n  Elects a player to have admin abilities removed" },
+	{ 0x1ff, "antilag",     G_AntiLag_v,		"Anti-Lag",         " <0|1>^7\n  Toggles Anit-Lag on the server" },
 	{ 0, 0, NULL, 0 }
 };
 
@@ -361,13 +360,6 @@ int G_UnMute_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2,
 			return( G_INVALID );
 		}
 
-		// Nico, bugfix: allow ref to be unmuted
-		// http://games.chruker.dk/enemy_territory/modding_project_bugfix.php?bug_id=060
-		/*if ( level.clients[pid].sess.referee ) {
-			G_refPrintf( ent, "Can't vote to un-mute referees!" );
-			return( G_INVALID );
-		}*/
-
 		if ( !level.clients[pid].sess.muted ) {
 			G_refPrintf( ent, "Player is not muted!" );
 			return( G_INVALID );
@@ -394,6 +386,32 @@ int G_UnMute_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2,
 	return( G_OK );
 }
 
+// Nico, function to delay a map change
+void G_delay_map_change(char *mapName) {
+	int i = 0;
+	int activeRunsCount = 0;
+	gclient_t *cl = NULL;
+
+	Q_strncpyz(level.delayedMapChange.passedVote, mapName, VOTE_MAXSTRING);
+
+	// Nico, if no timerun is currenlty active or if player is alone on the server
+	// change the map in 1 sec, otherwise wait MAP_CHANGE_DELAY
+	for (i = 0; i < level.numConnectedClients; ++i) {
+		cl = &level.clients[level.sortedClients[i]];
+		if ((cl->sess.sessionTeam == TEAM_ALLIES || cl->sess.sessionTeam == TEAM_AXIS) && cl->timerunActive) {
+			activeRunsCount++;
+		}
+	}
+	if (level.numConnectedClients > 1 && activeRunsCount > 0) {
+		level.delayedMapChange.timeChange = level.time + MAP_CHANGE_DELAY * 1000;
+		AP(va("cpm \"^5Map will be changed in %dsecs\n\"", MAP_CHANGE_DELAY));
+	} else {
+		level.delayedMapChange.timeChange = level.time + 1000;
+	}
+
+	level.delayedMapChange.pendingChange = qtrue;
+}
+
 // Nico, delayed map change check function
 void G_check_delayed_map_change() {
 	if (level.time && level.delayedMapChange.timeChange && level.time <= level.delayedMapChange.timeChange) {
@@ -405,22 +423,15 @@ void G_check_delayed_map_change() {
 		}
 
 		if (level.time == level.delayedMapChange.timeChange) {
-			char s[MAX_STRING_CHARS];
-
-			level.delayedMapChange.pendingChange = qfalse;
+			// Nico, useless: level.delayedMapChange.pendingChange = qfalse;
 			Svcmd_ResetMatch_f( qtrue, qfalse );
-			trap_Cvar_VariableStringBuffer( "nextmap", s, sizeof( s ) );
-			trap_SendConsoleCommand( EXEC_APPEND, va( "map %s%s\n", level.delayedMapChange.passedVote, ( ( *s ) ? va( "; set nextmap \"%s\"", s ) : "" ) ) );
+			trap_SendConsoleCommand( EXEC_APPEND, va( "map %s\n", level.delayedMapChange.passedVote ) );
 		}
 	}
 }
 
 // *** Map - simpleton: we dont verify map is allowed/exists ***
 int G_Map_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd ) {
-	int i = 0;
-	int activeRunsCount = 0;
-	gclient_t *cl = NULL;
-
 	// Vote request (vote is being initiated)
 	if ( arg ) {
 		char serverinfo[MAX_INFO_STRING];
@@ -439,29 +450,8 @@ int G_Map_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qb
 
 		// Vote action (vote has passed)
 	} else {
-		/* Nico, delay the map change
-		char s[MAX_STRING_CHARS];
-		Svcmd_ResetMatch_f( qtrue, qfalse );
-		trap_Cvar_VariableStringBuffer( "nextmap", s, sizeof( s ) );
-		trap_SendConsoleCommand( EXEC_APPEND, va( "map %s%s\n", level.voteInfo.vote_value, ( ( *s ) ? va( "; set nextmap \"%s\"", s ) : "" ) ) );*/
-		Q_strncpyz(level.delayedMapChange.passedVote, level.voteInfo.vote_value, VOTE_MAXSTRING);
-
-		// Nico, if no timerun is currenlty active or if player is alone on the server
-		// change the map in 1 sec, otherwise wait MAP_CHANGE_DELAY
-		for (i = 0; i < level.numConnectedClients; ++i) {
-			cl = &level.clients[level.sortedClients[i]];
-			if ((cl->sess.sessionTeam == TEAM_ALLIES || cl->sess.sessionTeam == TEAM_AXIS) && cl->timerunActive) {
-				activeRunsCount++;
-			}
-		}
-		if (level.numConnectedClients > 1 && activeRunsCount > 0) {
-			level.delayedMapChange.timeChange = level.time + MAP_CHANGE_DELAY * 1000;
-			AP(va("cpm \"^5Map will be changed in %dsecs\n\"", MAP_CHANGE_DELAY));
-		} else {
-			level.delayedMapChange.timeChange = level.time + 1000;
-		}
-		
-		level.delayedMapChange.pendingChange = qtrue;
+		// Nico, delay the map change
+		G_delay_map_change(level.voteInfo.vote_value);
 	}
 
 	return( G_OK );
@@ -510,32 +500,46 @@ int G_MatchReset_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *a
 	return( G_OK );
 }
 
-// *** Nextmap ***
-int G_Nextmap_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd ) {
+/**
+ * Random map
+ */
+int G_Randommap_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd ) {
+	char *result = NULL;
+
+	// Nico, check if API is used
+	if (!g_useAPI.integer) {
+		G_Printf("API is disabled on this server.\n");
+		return G_INVALID;
+	}
+
+	// Nico, check if there is a pending map change
+	if (level.delayedMapChange.pendingChange) {
+		CP("print \"^1Callvote:^7 there is a pending map change.\n\"");
+		return qfalse;
+	}
+
 	// Vote request (vote is being initiated)
 	if ( arg ) {
 		if ( trap_Argc() > 2 ) {
 			G_refPrintf( ent, "Usage: ^3%s %s%s\n", ( ( fRefereeCmd ) ? "\\ref" : "\\callvote" ), arg, aVoteInfo[dwVoteIndex].pszVoteHelp );
 			return( G_INVALID );
-		} else if ( !vote_allow_nextmap.integer && ent && !ent->client->sess.referee ) {
+		} else if ( !vote_allow_randommap.integer && ent && !ent->client->sess.referee ) {
 			G_voteDisableMessage( ent, arg );
 			return( G_INVALID );
-		} else {
-			char s[MAX_STRING_CHARS];
-
-			trap_Cvar_VariableStringBuffer( "nextmap", s, sizeof( s ) );
-			if ( !*s ) {
-				G_refPrintf( ent, "'nextmap' is not set." );
-				return( G_INVALID );
-			}
 		}
 
 		// Vote action (vote has passed)
 	} else {
-		trap_SendConsoleCommand( EXEC_APPEND, "vstr nextmap\n" );
-		AP( "cp \"^3*** Loading nextmap! ***\n\"" );
-	}
+		AP( "cp \"Loading a random map!\n\"" );
 
+		result = malloc(RESPONSE_MAX_SIZE * sizeof (char));
+
+		if (!result) {
+			G_Error("G_Randommap_v: malloc failed\n");
+		}
+
+		G_API_randommap(result, ent, level.rawmapname);
+	}
 	return( G_OK );
 }
 

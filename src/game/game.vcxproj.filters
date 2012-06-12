@@ -159,6 +159,9 @@
     <ClCompile Include="g_api.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="g_apicmds.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="game.def">
@@ -190,6 +193,9 @@
     </ClInclude>
     <ClInclude Include="g_api.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="g_apicmds.h">
+      <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

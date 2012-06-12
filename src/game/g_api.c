@@ -144,7 +144,7 @@ static void *loginHandler(void *data) {
 	queryStruct = (struct query_s *)data;
 	ent = queryStruct->ent;
 
-	G_Printf("[THREAD]Calling API now!\n");
+	// G_Printf("[THREAD]Calling API now!\n");
 
 	code = API_query(queryStruct->cmd, queryStruct->result, queryStruct->query);
 
@@ -159,6 +159,7 @@ static void *loginHandler(void *data) {
 			G_Printf("[THREAD] %s is now authentificated!\n", queryStruct->result);
 			ClientUserinfoChanged(ent->client->ps.clientNum);
 		} else {
+			CP("cp \"Login failed!\n\"");
 			G_Printf("[THREAD]Authentification failed\n");
 		}
 	} else {
@@ -240,15 +241,17 @@ static void *checkAPIHandler(void *data) {
 
 	queryStruct = (struct query_s *)data;
 
-	G_Printf("[THREAD]Calling API now!\n");// Crash here on OSX
+	// G_Printf("[THREAD]Calling API now!\n");// Crash here on OSX
 
 	code = API_query(queryStruct->cmd, queryStruct->result, queryStruct->query);
 
 	if (code == 0) {
-		G_Printf("[THREAD]Result size = %d:\n", (int)strlen(queryStruct->result));
 		G_Printf("%s\n", queryStruct->result);
 	} else {
-		G_Printf("[THREAD]Error, code: %d, %s\n", code, queryStruct->result);
+		G_Printf("ETrun: failed to check API (code: %d, result: %s)\n", code, queryStruct->result);
+
+		// Nico, disable use of API
+		trap_Cvar_Set("g_useAPI", "0");
 	}
 
 	free(queryStruct->result);
@@ -267,7 +270,7 @@ void G_API_check(char *result, gentity_t *ent) {
 
 	G_callAPI("c", result, ent, 1, net_port);
 
-	G_Printf("Check API request sent!\n");
+	// G_Printf("Check API request sent!\n");
 }
 
 /**
@@ -428,7 +431,69 @@ void G_API_getPlayerCheckpoints(char *result, gentity_t *ent, char *mapName, cha
 
 	G_callAPI("e", result, ent, 5, encodedMapName, encodedRunName, bufferRunNum, authToken, net_port);
 
-	G_Printf("^1> ^wCheckpoints request sent!\n");
+	G_Printf("Checkpoints request sent!\n");
+}
+
+/**
+ * Random map handler
+ */
+static void *randommapHandler(void *data) {
+	int code = -1;
+	struct query_s *queryStruct;
+	gentity_t *ent = NULL;
+	char *pch = NULL;
+	int i = 0;
+	int activeRunsCount = 0;
+	gclient_t *cl = NULL;
+	char mapfile[MAX_QPATH] = {0};
+	fileHandle_t f;
+
+	queryStruct = (struct query_s *)data;
+	ent = queryStruct->ent;
+
+	G_Printf("[THREAD]Calling API now!\n");// Crash here on OSX
+
+	code = API_query(queryStruct->cmd, queryStruct->result, queryStruct->query);
+
+	if (code == 0 && queryStruct->result && checkAPIResult(queryStruct->result)) {
+
+		Com_sprintf(mapfile, sizeof(mapfile), "maps/%s.bsp", queryStruct->result);
+
+		trap_FS_FOpenFile(mapfile, &f, FS_READ);
+
+		trap_FS_FCloseFile(f);
+
+		if (!f) {
+			AP(va("print \"^1Error:^7 the map ^3%s^7 is not on the server.\n\"", queryStruct->result));
+		} else {
+			// Nico, delay the map change
+			G_delay_map_change(queryStruct->result);
+		}
+	} else {
+		G_Printf("[THREAD]Error, code: %d, %s\n", code, queryStruct->result);
+		CP(va("print \"^1> ^wError while getting a random map!\n\""));
+	}
+
+	free(queryStruct->result);
+	free(queryStruct);
+
+	return NULL;
+}
+
+/**
+ * Checkpoints request command
+ */
+void G_API_randommap(char *result, gentity_t *ent, char *mapName) {
+	char net_port[8] = {0};
+	char encodedMapName[255] = {0};
+
+	sprintf(net_port, "%d", trap_Cvar_VariableIntegerValue("net_port"));
+
+	url_encode(mapName, encodedMapName);
+
+	G_callAPI("f", result, ent, 2, encodedMapName, net_port);
+
+	G_Printf("Random map request sent!\n");
 }
 
 // Commands handler binding
@@ -437,7 +502,8 @@ static const api_glue_t APICommands[] = {
 	{ "m",	mapRecordsHandler },
 	{ "c", 	checkAPIHandler },
 	{ "d",	recordHandler },
-	{ "e",	checkpointsHandler }
+	{ "e",	checkpointsHandler },
+	{ "f",	randommapHandler }
 };
 
 /**
@@ -500,7 +566,7 @@ void G_callAPI(char *command, char *result, gentity_t *ent, int count, ...) {
 		if (!arg) {
 			G_Error("G_callAPI: empty arg %d\n", i);
 		}
-		G_Printf("arg : %s\n", arg);
+		// G_Printf("arg : %s\n", arg);
 	
 		Q_strcat(queryStruct->query, QUERY_MAX_SIZE, arg);
 
@@ -520,14 +586,14 @@ void G_callAPI(char *command, char *result, gentity_t *ent, int count, ...) {
 		G_Error("G_callAPI: no handler for command: %s\n", command);
 	}
 
-	G_Printf("Calling API with command: %s, query: %s\n", command, queryStruct->query);
+	G_DPrintf("Calling API with command: %s, query: %s\n", command, queryStruct->query);
 
 	returnCode = pthread_create(&thread, NULL, handler, (void *)queryStruct);
 
 	if (returnCode) {
 		G_Error("G_callAPI: error creating thread\n");
 	}
-	G_Printf("G_callAPI: thread started!\n");
+	// G_Printf("G_callAPI: thread started!\n");
 
 	if (count > 0) {
 		va_end (ap);

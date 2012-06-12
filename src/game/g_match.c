@@ -188,16 +188,6 @@ int G_checkServerToggle( vmCvar_t *cv ) {
 	if ( cv == &g_antilag ) {
 		nFlag = CV_SVS_ANTILAG;
 	}
-	
-	else if ( cv == &g_nextmap ) {
-		if ( *cv->string ) {
-			level.server_settings |= CV_SVS_NEXTMAP;
-		} else {
-			level.server_settings &= ~CV_SVS_NEXTMAP;
-		}
-		return( qtrue );
-	} 
-
 	else {return( qfalse );}
 
 	if ( cv->integer > 0 ) {
