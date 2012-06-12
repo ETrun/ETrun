@@ -215,7 +215,6 @@
     <ClInclude Include="g_api.h" />
     <ClInclude Include="bg_local.h" />
     <ClInclude Include="bg_public.h" />
-    <ClInclude Include="g_apicmds.h" />
     <ClInclude Include="g_local.h" />
     <ClInclude Include="g_public.h" />
     <ClInclude Include="g_team.h" />

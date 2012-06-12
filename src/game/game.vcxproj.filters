@@ -194,8 +194,5 @@
     <ClInclude Include="g_api.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="g_apicmds.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
   </ItemGroup>
 </Project>
