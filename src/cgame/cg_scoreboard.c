@@ -342,7 +342,8 @@ qboolean CG_DrawScoreboard(void) {
 	qboolean thereAreSpectators = qfalse;
 	int		yCopy = 0;
 	int numScores = cg.numScores;
-	int teamPlayers[TEAM_NUM_TEAMS]; 
+	int teamPlayers[TEAM_NUM_TEAMS];
+	char physicsName[MAX_QPATH] = {0};
 	
 	// don't draw anything if the menu or console is up
 	if (cg_paused.integer) {
@@ -428,6 +429,36 @@ qboolean CG_DrawScoreboard(void) {
 	for (i = 0; i < numScores; ++i) {
 		teamPlayers[orderedScores[i].team]++;
 	}
+
+	// Nico, draw physics
+	// #todo: move this elsewhere
+	switch (physics.integer) {
+	case 239:
+		sprintf(physicsName, "AP (with OB)");
+		break;
+
+	case 255:
+		sprintf(physicsName, "AP");
+		break;
+
+	case 231:
+		sprintf(physicsName, "VQ3 (with OB)");
+		break;
+
+	case 247:
+		sprintf(physicsName, "VQ3");
+		break;
+
+	case 0:
+		sprintf(physicsName, "VET");
+		break;
+
+	default:
+		sprintf(physicsName, "^1Unknown!");
+		break;
+	}
+
+	WM_ETrun_print(va("Physics: %s", physicsName), &cgs.media.limboFont2, 0.15, 20, 10, qtrue, 0);
 
 	// Nico, draw scoreboard header
 	y = 30;// Start drawing from y = 30
