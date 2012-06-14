@@ -246,6 +246,18 @@
     <None Include="..\..\etrun\ui\wm_quickmessageAlt.menu">
       <Filter>Menu Files</Filter>
     </None>
+    <None Include="..\..\etrun\ui\etrun.menu">
+      <Filter>Menu Files</Filter>
+    </None>
+    <None Include="..\..\etrun\ui\etrun_customise_game.menu">
+      <Filter>Menu Files</Filter>
+    </None>
+    <None Include="..\..\etrun\ui\etrun_customise_hud.menu">
+      <Filter>Menu Files</Filter>
+    </None>
+    <None Include="..\..\etrun\ui\etrun_customise_misc.menu">
+      <Filter>Menu Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\game\bg_public.h">

@@ -1,0 +1,43 @@
+#include "ui/menudef.h"
+
+// Defines //
+
+#define WINDOW_X		16
+#define WINDOW_Y		16
+#define WINDOW_WIDTH	280
+#define WINDOW_HEIGHT	110
+#define GROUP_NAME		"grpEtrunCustomiseMisc"
+
+// Macros //
+
+#include "ui/menumacros.h"
+		
+// Customise Misc Menu //
+	
+menuDef {
+	name		"etrun_customise_misc"
+	visible		0
+	fullscreen	0
+	rect		WINDOW_X WINDOW_Y WINDOW_WIDTH WINDOW_HEIGHT
+	style		WINDOW_STYLE_FILLED
+	
+	onESC {
+		close etrun_customise_misc ;
+		open etrun
+	}
+
+// Window //
+
+	WINDOW( "Misc", 94 )
+	
+// Subwindows //
+
+#define SUBWINDOW_WIDTH		WINDOW_WIDTH-12
+
+	SUBWINDOW( 6, 32, (SUBWINDOW_WIDTH), 50, "Login" )
+	YESNO( 8, 48, (SUBWINDOW_WIDTH)-4, 10, "Automatically login:", .2, 8, "cg_autoLogin", "" )
+
+// Buttons //
+	
+	BUTTON( 6, WINDOW_HEIGHT-24, WINDOW_WIDTH-12, 18, "Back", .3, 14, close etrun_customise_misc ; open etrun )
+}

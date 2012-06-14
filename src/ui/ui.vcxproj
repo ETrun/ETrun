@@ -173,6 +173,10 @@
     <None Include="..\..\etrun\ui\credits_idsoftware.menu" />
     <None Include="..\..\etrun\ui\credits_quit.menu" />
     <None Include="..\..\etrun\ui\credits_splashdamage.menu" />
+    <None Include="..\..\etrun\ui\etrun.menu" />
+    <None Include="..\..\etrun\ui\etrun_customise_game.menu" />
+    <None Include="..\..\etrun\ui\etrun_customise_hud.menu" />
+    <None Include="..\..\etrun\ui\etrun_customise_misc.menu" />
     <None Include="..\..\etrun\ui\global.menu" />
     <None Include="..\..\etrun\ui\hostgame.menu" />
     <None Include="..\..\etrun\ui\hostgame_advanced.menu" />

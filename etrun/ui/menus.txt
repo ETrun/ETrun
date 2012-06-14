@@ -73,4 +73,5 @@
 	loadMenu { "ui/etrun.menu" }
 	loadMenu { "ui/etrun_customise_game.menu" }
 	loadMenu { "ui/etrun_customise_hud.menu" }
+	loadMenu { "ui/etrun_customise_misc.menu" }
 }
