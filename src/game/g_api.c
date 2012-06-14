@@ -133,6 +133,31 @@ static qboolean checkAPIResult(char *result) {
 }
 
 /**
+ * Log (and print) an API message
+ */
+void APILog(const char *s, qboolean printIt) {
+	char string[1024] = {0};
+	const char *aMonths[12] = {
+		"Jan", "Feb", "Mar", "Apr", "May", "Jun",
+		"Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+	};
+	qtime_t ct;
+	trap_RealTime(&ct);
+
+	if (printIt) {
+		G_Printf("%s", s);
+	}
+
+	Com_sprintf(string, sizeof (string), "[%s%02d-%02d %02d:%02d:%02d] %s", aMonths[ct.tm_mon], ct.tm_mday, 1900 + ct.tm_year, ct.tm_hour, ct.tm_min, ct.tm_sec, s);
+
+	if (level.APILog) {
+		trap_FS_Write(string, strlen(string), level.APILog);
+	} else {
+		G_Printf("APILog: error while logging\n");
+	}
+}
+
+/**
  * Login handler
  */
 static void *loginHandler(void *data) {
@@ -144,27 +169,22 @@ static void *loginHandler(void *data) {
 	queryStruct = (struct query_s *)data;
 	ent = queryStruct->ent;
 
-	// G_Printf("[THREAD]Calling API now!\n");
-
 	code = API_query(queryStruct->cmd, queryStruct->result, queryStruct->query);
 
 	len = strlen(queryStruct->result);
 
-	if (code == 0) {
-		G_Printf("[THREAD]Result: size = %d, %s\n", (int)len, queryStruct->result);
+	APILog(va("Login: code = %d, result = %s\n", code, queryStruct->result), qfalse);
 
+	if (code == 0) {
 		if (len > 0 && ent && ent->client) {
 			ent->client->sess.logged = qtrue;
-			CP("cp \"You are now logged in!\n\"");
-			G_Printf("[THREAD] %s is now authentificated!\n", queryStruct->result);
+			CP(va("print \"%s^w: you are now logged in!\n\"", GAME_VERSION_COLORED));
 			ClientUserinfoChanged(ent->client->ps.clientNum);
 		} else {
-			CP("cp \"Login failed!\n\"");
-			G_Printf("[THREAD]Authentification failed\n");
+			CP(va("print \"%s^w: login failed!\n\"", GAME_VERSION_COLORED));
 		}
 	} else {
-		CP("cp \"Login failed!\n\"");
-		G_Printf("[THREAD]Error, code: %d\n", code);
+		CP(va("print \"%s^w: login failed!\n\"", GAME_VERSION_COLORED));
 	}
 
 	free(queryStruct->result);
@@ -183,7 +203,7 @@ void G_API_login(char *result, gentity_t *ent, char *authToken) {
 
 	G_callAPI("l", result, ent, 2, authToken, net_port);
 
-	G_Printf("Login request sent!\n");
+	APILog("Login request sent!\n", qfalse);
 }
 
 /**
@@ -197,16 +217,13 @@ static void *mapRecordsHandler(void *data) {
 	queryStruct = (struct query_s *)data;
 	ent = queryStruct->ent;
 
-	G_Printf("[THREAD]Calling API now!\n");
-
 	code = API_query(queryStruct->cmd, queryStruct->result, queryStruct->query);
 
+	APILog(va("mapRecords: code = %d\n", code), qfalse);
+
 	if (code == 0) {
-		G_Printf("[THREAD]Result size = %d:\n", (int)strlen(queryStruct->result));
-		G_Printf("^1> ^w%s\n", queryStruct->result);
 		clientBigDataPrint(ent, queryStruct->result);
 	} else {
-		G_Printf("[THREAD]Error, code: %d, %s\n", code, queryStruct->result);
 		CP(va("print \"^1> ^wError while requesting records\n\""));
 	}
 
@@ -229,7 +246,7 @@ void G_API_mapRecords(char *result, gentity_t *ent, char *mapName) {
 
 	G_callAPI("m", result, ent, 2, encodedMapName, net_port);
 
-	G_Printf("Map records request sent!\n");
+	APILog("Map records request sent!\n", qfalse);
 }
 
 /**
@@ -241,17 +258,17 @@ static void *checkAPIHandler(void *data) {
 
 	queryStruct = (struct query_s *)data;
 
-	// G_Printf("[THREAD]Calling API now!\n");// Crash here on OSX
-
 	code = API_query(queryStruct->cmd, queryStruct->result, queryStruct->query);
 
+	APILog(va("checkAPI: code = %d, result = %s\n", code, queryStruct->result), qfalse);
+
 	if (code == 0) {
-		G_Printf("%s\n", queryStruct->result);
+		G_Printf("%s: %s\n", GAME_VERSION, queryStruct->result);
 	} else {
-		G_Printf("ETrun: failed to check API (code: %d, result: %s)\n", code, queryStruct->result);
+		G_Printf("%s: failed to check API (code: %d, result: %s)\n", GAME_VERSION, code, queryStruct->result);
 
 		// Nico, disable use of API
-		trap_Cvar_Set("g_useAPI", "0");
+		// trap_Cvar_Set("g_useAPI", "0");
 	}
 
 	free(queryStruct->result);
@@ -270,7 +287,7 @@ void G_API_check(char *result, gentity_t *ent) {
 
 	G_callAPI("c", result, ent, 1, net_port);
 
-	// G_Printf("Check API request sent!\n");
+	APILog("Check API request sent!\n", qfalse);
 }
 
 /**
@@ -285,11 +302,9 @@ static void *recordHandler(void *data) {
 	queryStruct = (struct query_s *)data;
 	ent = queryStruct->ent;
 
-	G_Printf("[THREAD]Calling API now!\n");// Crash here on OSX
-
 	code = API_query(queryStruct->cmd, queryStruct->result, queryStruct->query);
 
-	G_Printf("[THREAD]Result size = %d:\n", (int)strlen(queryStruct->result));
+	APILog(va("Record: code = %d, result = %s\n", code, queryStruct->result), qfalse);
 
 	timerunNum = GetTimerunNum(ent->client->currentTimerun);
 
@@ -346,7 +361,7 @@ void G_API_sendRecord(char *result, gentity_t *ent, char *mapName, char *runName
 
 	G_callAPI("d", result, ent, 6, encodedMapName, encodedRunName, authToken, data, etrunVersion, net_port);
 
-	G_Printf("Map record send request sent!\n");
+	APILog("Map record send request sent!\n", qfalse);
 }
 
 /**
@@ -363,13 +378,11 @@ static void *checkpointsHandler(void *data) {
 	queryStruct = (struct query_s *)data;
 	ent = queryStruct->ent;
 
-	G_Printf("[THREAD]Calling API now!\n");// Crash here on OSX
-
 	code = API_query(queryStruct->cmd, queryStruct->result, queryStruct->query);
 
+	APILog(va("Checkpoints: code = %d, result = %s\n", code, queryStruct->result), qfalse);
+
 	if (code >= 1000) {
-		G_Printf("[THREAD]Result size = %d:\n", (int)strlen(queryStruct->result));
-		G_Printf("%s\n", queryStruct->result);
 
 		timerunNum = code - 1000;
 
@@ -393,11 +406,9 @@ static void *checkpointsHandler(void *data) {
 
 			CP(va("print \"^1> ^wCheckpoints loaded for run #%d!\n\"", timerunNum));
 		} else {
-			G_Printf("[THREAD]Error while loading checkpoints\n");
 			CP(va("print \"^1> ^wError while loading checkpoints!\n\""));
 		}
 	} else {
-		G_Printf("[THREAD]Error, code: %d, %s\n", code, queryStruct->result);
 		CP(va("print \"^1> ^wError while loading checkpoints!\n\""));
 	}
 
@@ -424,7 +435,7 @@ void G_API_getPlayerCheckpoints(char *result, gentity_t *ent, char *mapName, cha
 
 	G_callAPI("e", result, ent, 5, encodedMapName, encodedRunName, bufferRunNum, authToken, net_port);
 
-	G_Printf("Checkpoints request sent!\n");
+	APILog("Checkpoints request sent!\n", qfalse);
 }
 
 /**
@@ -440,9 +451,9 @@ static void *randommapHandler(void *data) {
 	queryStruct = (struct query_s *)data;
 	ent = queryStruct->ent;
 
-	G_Printf("[THREAD]Calling API now!\n");// Crash here on OSX
-
 	code = API_query(queryStruct->cmd, queryStruct->result, queryStruct->query);
+
+	APILog(va("Randommap: code = %d, result = %s\n", code, queryStruct->result), qfalse);
 
 	if (code == 0 && queryStruct->result && checkAPIResult(queryStruct->result)) {
 
@@ -459,7 +470,6 @@ static void *randommapHandler(void *data) {
 			G_delay_map_change(queryStruct->result);
 		}
 	} else {
-		G_Printf("[THREAD]Error, code: %d, %s\n", code, queryStruct->result);
 		CP(va("print \"^1> ^wError while getting a random map!\n\""));
 	}
 
@@ -482,7 +492,7 @@ void G_API_randommap(char *result, gentity_t *ent, char *mapName) {
 
 	G_callAPI("f", result, ent, 2, encodedMapName, net_port);
 
-	G_Printf("Random map request sent!\n");
+	APILog("Random map request sent!\n", qfalse);
 }
 
 // Commands handler binding
@@ -575,14 +585,13 @@ void G_callAPI(char *command, char *result, gentity_t *ent, int count, ...) {
 		G_Error("G_callAPI: no handler for command: %s\n", command);
 	}
 
-	G_DPrintf("Calling API with command: %s, query: %s\n", command, queryStruct->query);
+	APILog(va("Calling API with command: %s, query: %s\n", command, queryStruct->query), qfalse);
 
 	returnCode = pthread_create(&thread, NULL, handler, (void *)queryStruct);
 
 	if (returnCode) {
 		G_Error("G_callAPI: error creating thread\n");
 	}
-	// G_Printf("G_callAPI: thread started!\n");
 
 	if (count > 0) {
 		va_end (ap);

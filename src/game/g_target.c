@@ -1386,7 +1386,6 @@ static void Cmd_SendRecord_f(gentity_t *ent, char *runName, char *authToken, int
 		i++;
 	}
 
-	G_Printf("Sending record...\n");
 	G_API_sendRecord(buf, ent, level.rawmapname, runName, authToken, data, GAME_VERSION_DATED);
 
 	// Do *not* free buf here

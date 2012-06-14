@@ -838,6 +838,7 @@ typedef struct {
 	int num_entities;               // current number, <= MAX_GENTITIES
 
 	fileHandle_t logFile;
+	fileHandle_t APILog;// Nico, API log
 
 	char rawmapname[MAX_QPATH];
 

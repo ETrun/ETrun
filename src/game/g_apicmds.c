@@ -32,8 +32,6 @@ void Cmd_Login_f(gentity_t *ent) {
 
 	Q_strncpyz(token, ent->client->pers.authToken, MAX_QPATH);
 
-	G_DPrintf("Cmd_Login_f: token = %s, ent = %d, ent->client = %d\n", token, (int)ent, (int)ent->client);
-
 	if (strlen(token) == 0) {
 		CP("cp \"Empty auth token!\n\"");
 		G_DPrintf("Cmd_Login_f: empty_token\n");
@@ -84,7 +82,6 @@ void Cmd_Records_f(gentity_t *ent) {
 		G_Error("Cmd_Records_f: malloc failed\n");
 	}
 
-	G_Printf("Asking for map record...\n");
 	G_API_mapRecords(buf, ent, level.rawmapname);
 
 	// Do *not* free buf here
@@ -153,7 +150,6 @@ void Cmd_LoadCheckpoints_f(gentity_t *ent) {
 		G_Error("Cmd_LoadCheckpoints_f: malloc failed\n");
 	}
 
-	G_Printf("Asking for map checkpoints for map: %s, run: %s, id = %d...\n", level.rawmapname, level.timerunsNames[runNum], runNum);
 	G_API_getPlayerCheckpoints(buf, ent, level.rawmapname, level.timerunsNames[runNum], runNum, ent->client->pers.authToken);
 
 	// Do *not* free buf here
