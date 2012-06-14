@@ -5,6 +5,7 @@
 void Cmd_Login_f(gentity_t *ent) {
 	char token[MAX_QPATH];
 	char *result = NULL;
+	int i = 0;
 
 	// Check if API is used
 	if (!g_useAPI.integer) {
@@ -22,6 +23,17 @@ void Cmd_Login_f(gentity_t *ent) {
 		CP("cp \"You are already logged in!\n\"");
 		G_DPrintf("Cmd_Login_f: client already logged in\n");
 		return;
+	}
+
+	// Nico, reset saves
+	for (i = 0; i < MAX_SAVED_POSITIONS; ++i) {
+		ent->client->sess.alliesSaves[i].valid = qfalse;
+		ent->client->sess.axisSaves[i].valid = qfalse;
+	}
+
+	// Nico, kill player
+	if (ent->client->sess.sessionTeam != TEAM_SPECTATOR) {
+		player_die(ent, ent, ent, 100000, MOD_SUICIDE);
 	}
 
 	result = malloc(RESPONSE_MAX_SIZE * sizeof (char));

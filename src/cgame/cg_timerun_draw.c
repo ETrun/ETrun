@@ -44,20 +44,27 @@ void CG_DrawCheckpoints(void) {
 				// Nico, set checkpoint default color
 				Vector4Set(color, colorWhite[0], colorWhite[1], colorWhite[2], colorWhite[3]);
 
-				// Nico, no best time yet, print the check point times
-				if (!cg.timerunBestTime[cg.currentTimerun] && (cg.timerunCheckPointDiff[i] == cg.timerunCheckPointTime[i] || cg.timerunCheckPointTime[i] == 0)) {
+				// Nico, print checkpoints
+				switch (cg.timerunCheckStatus[i]) {
+				case 0:
 					Com_sprintf(status, sizeof(status), "%s", va("%02d:%02d.%03d", cmin, csec, cmil));
-				} else if (cg.timerunCheckPointDiff[i] == 0) {
-					// Nico, same check point time
+					break;
+
+				case 1:
 					Com_sprintf(status, sizeof(status), "%s", va("%02d:%02d.%03d", cdmin, cdsec, cdmil));
-				} else if (cg.timerunCheckIsFaster[i] == 1) {
+					break;
+
+				case 2:
 					// Nico, faster check point time
 					Vector4Set(color, colorGreen[0], colorGreen[1], colorGreen[2], colorGreen[3]);
 					Com_sprintf(status, sizeof(status), "%s", va("-%02d:%02d.%03d", cdmin, cdsec, cdmil));
-				} else {
+					break;
+
+				case 3:
 					// Nico, slower check point time
 					Vector4Set(color, colorRed[0], colorRed[1], colorRed[2], colorRed[3]);
 					Com_sprintf(status, sizeof(status), "%s", va("+%02d:%02d.%03d", cdmin, cdsec, cdmil));
+					break;
 				}
 
 				// Nico, print the check point

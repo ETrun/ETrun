@@ -1440,17 +1440,19 @@ void target_stoptimer_use(gentity_t *self, gentity_t *other, gentity_t *activato
 	milli -= sec * 1000;
 
 	delta = abs(time - client->sess.timerunBestTime[timerunNum]);
-	if (client->sess.logged && (!client->sess.timerunBestTime[timerunNum] || time < client->sess.timerunBestTime[timerunNum])) {
+	if ((!client->sess.timerunBestTime[timerunNum] || time < client->sess.timerunBestTime[timerunNum])) {
 		// best personal for this session
-		client->sess.timerunBestTime[timerunNum] = time;
+		if (client->sess.logged) {
+			client->sess.timerunBestTime[timerunNum] = time;
+
+			// Nico, set score so that xfire can see it
+			client->ps.persistant[PERS_SCORE] = client->sess.timerunLastTime[timerunNum];
+		}
 
 		// CP are updated here if API is not used or if CP were note loaded
 		if (!g_useAPI.integer || client->sess.timerunCheckpointWereLoaded[timerunNum] == 0) {
 			memcpy(client->sess.timerunBestCheckpointTimes[timerunNum], client->timerunCheckpointTimes, sizeof (client->timerunCheckpointTimes));
 		}
-
-		// Nico, set score so that xfire can see it
-		client->ps.persistant[PERS_SCORE] = client->sess.timerunLastTime[timerunNum];
 	}
 
 	// extract MM:SS:mmm from delta
@@ -1508,7 +1510,7 @@ void SP_target_stoptimer(gentity_t *ent) {
 }
 
 // Nico, function used to notify the client he has reached a check point and also the spectators of this client
-static void notify_timerun_check(gentity_t *activator, int deltaTime, int time, int isFaster) {
+static void notify_timerun_check(gentity_t *activator, int deltaTime, int time, int status) {
 	int i = 0;
 	gentity_t *o = NULL;
 
@@ -1517,11 +1519,9 @@ static void notify_timerun_check(gentity_t *activator, int deltaTime, int time, 
 		return;
 	}
 
-	//timerunNum = GetTimerunNum(activator->client->currentTimerun);
-
 	// Nico, notify the client itself first
 	G_DPrintf("Sending a timerun_check to client %d\n", activator - g_entities);
-	trap_SendServerCommand(activator - g_entities, va("timerun_check %i %i %i", deltaTime, time, isFaster));
+	trap_SendServerCommand(activator - g_entities, va("timerun_check %i %i %i", deltaTime, time, status));
 
 	// Nico, notify its spectators
 	for (; i < level.numConnectedClients; ++i) {
@@ -1541,7 +1541,7 @@ static void notify_timerun_check(gentity_t *activator, int deltaTime, int time, 
 
 		if (o->client->sess.spectatorClient == activator - g_entities) {
 			G_DPrintf("Sending a timerun_check_spec to client %d\n", o - g_entities);
-			trap_SendServerCommand(o - g_entities, va("timerun_check_spec %i %i %i", deltaTime, time, isFaster));
+			trap_SendServerCommand(o - g_entities, va("timerun_check_spec %i %i %i", deltaTime, time, status));
 		}
 	}
 }
@@ -1556,7 +1556,7 @@ void target_checkpoint_use(gentity_t *self, gentity_t *other, gentity_t *activat
 	int			time = 0;
 	gclient_t	*client = NULL;
 	int			timerunNum = 0;
-	int			isFaster = 0;
+	int			status = 0;
 
 	client = activator->client;
 
@@ -1580,12 +1580,19 @@ void target_checkpoint_use(gentity_t *self, gentity_t *other, gentity_t *activat
 
 	time = client->timerunCheckpointTimes[self->count] = client->ps.commandTime - client->timerunStartTime;
 
-	if (!client->sess.timerunBestCheckpointTimes[timerunNum][self->count] || time <= client->sess.timerunBestCheckpointTimes[timerunNum][self->count]) {
-		isFaster = 1;
+	if (client->sess.logged && !client->sess.timerunBestTime[timerunNum] && !client->sess.timerunCheckpointWereLoaded[timerunNum]) {
+		status = 0;
+	} else if (!client->sess.timerunBestCheckpointTimes[timerunNum][self->count] || time == client->sess.timerunBestCheckpointTimes[timerunNum][self->count]) {
+		status = 1;
+	} else if (time <= client->sess.timerunBestCheckpointTimes[timerunNum][self->count]) {
+		status = 2;
+	} else {
+		status = 3;
 	}
+
 	delta = abs(time - client->sess.timerunBestCheckpointTimes[timerunNum][self->count]);
 
-	notify_timerun_check(activator, delta, time, isFaster);
+	notify_timerun_check(activator, delta, time, status);
 }
 
 void SP_target_checkpoint(gentity_t *ent) {

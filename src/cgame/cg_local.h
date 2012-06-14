@@ -1097,7 +1097,7 @@ typedef struct {
 	int				timerunCheckPointChecked;
 	int				timerunCheckPointDiff[MAX_TIMERUN_CHECKPOINTS];
 	int				timerunCheckPointTime[MAX_TIMERUN_CHECKPOINTS];
-	char			timerunCheckIsFaster[MAX_TIMERUN_CHECKPOINTS];// Nico, note: this is 0 or 1
+	char			timerunCheckStatus[MAX_TIMERUN_CHECKPOINTS];// Nico, note: this is 0 or 1
 
 	// Timer related vars
 	int				timerunStartTime;

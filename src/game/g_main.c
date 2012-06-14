@@ -1325,13 +1325,14 @@ void G_InitGame( int levelTime, int randomSeed, int restart ) {
 			G_LogPrintf( "------------------------------------------------------------\n" );
 			G_LogPrintf( "InitGame: %s\n", cs );
 		}
-
-		trap_FS_FOpenFile("API.log", &level.APILog, FS_APPEND_SYNC);
-		if (!level.logFile) {
-			G_Printf("WARNING: Couldn't open logfile: %s\n", "API.log");
-		}
 	} else {
 		G_Printf( "Not logging to disk.\n" );
+	}
+
+	// Nico, API logging
+	trap_FS_FOpenFile("API.log", &level.APILog, FS_APPEND_SYNC);
+	if (!level.logFile) {
+		G_Printf("WARNING: Couldn't open logfile: %s\n", "API.log");
 	}
 
 	G_InitWorldSession();

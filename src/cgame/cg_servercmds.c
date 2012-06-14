@@ -1788,7 +1788,7 @@ static void CG_ServerCommand( void ) {
 	if (!Q_stricmp(cmd, "timerun_check")) {
 		cg.timerunCheckPointDiff[cg.timerunCheckPointChecked] = atoi(CG_Argv(1));
 		cg.timerunCheckPointTime[cg.timerunCheckPointChecked] = atoi(CG_Argv(2));
-		cg.timerunCheckIsFaster[cg.timerunCheckPointChecked++] = atoi(CG_Argv(3));
+		cg.timerunCheckStatus[cg.timerunCheckPointChecked++] = atoi(CG_Argv(3));
 
 		if (cg.timerunCheckPointChecked > MAX_TIMERUN_CHECKPOINTS) {
 			CG_Error("MAX_TIMERUN_CHECKPOINTS limit reached\n");
@@ -1803,7 +1803,7 @@ static void CG_ServerCommand( void ) {
 		}
 		cg.timerunCheckPointDiff[cg.timerunCheckPointChecked] = atoi(CG_Argv(1));
 		cg.timerunCheckPointTime[cg.timerunCheckPointChecked] = atoi(CG_Argv(2));
-		cg.timerunCheckIsFaster[cg.timerunCheckPointChecked++] = atoi(CG_Argv(3));
+		cg.timerunCheckStatus[cg.timerunCheckPointChecked++] = atoi(CG_Argv(3));
 
 		if (cg.timerunCheckPointChecked > MAX_TIMERUN_CHECKPOINTS) {
 			CG_Error("MAX_TIMERUN_CHECKPOINTS limit reached\n");
