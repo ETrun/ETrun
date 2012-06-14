@@ -559,7 +559,7 @@ cvarTable_t cvarTable[] = {
 	// Show pressed keys
 	{ &cg_drawKeys, "cg_drawKeys", "1", CVAR_ARCHIVE },
 	{ &cg_keysX, "cg_keysX", "550", CVAR_ARCHIVE },
-	{ &cg_keysY, "cg_keysY", "300", CVAR_ARCHIVE },
+	{ &cg_keysY, "cg_keysY", "210", CVAR_ARCHIVE },
 	{ &cg_keysSize, "cg_keysSize", "64", CVAR_ARCHIVE },
 
 	// Automatically load player position when he gets killed (except /kill)
