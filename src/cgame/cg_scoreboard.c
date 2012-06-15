@@ -217,6 +217,9 @@ static void WM_ETrun_DrawPlayers(int *x, int *y, int width, float fade, fontInfo
 		WM_ETrun_print(WM_ETrun_coloredPing(orderedScores[i].ping), font, fontsize, tempx, *y, qtrue, 0);
 		tempx += INFO_LATENCY_WIDTH;
 
+		// Nico, reset status
+		memset(status, 0, sizeof (status));
+
 		// Nico, draw status
 		if (orderedScores[i].timerunStatus == 1) {
 			Q_strcat(status, sizeof (status), "^2R ");
@@ -399,6 +402,8 @@ qboolean CG_DrawScoreboard(void) {
 		orderedScores[j].timerunBestTime = rand();// Best time
 		orderedScores[j].timerunBestSpeed = rand() % 3000;// Best speed
 		orderedScores[j].timerunStatus = rand() % 2;// Timerun status
+		orderedScores[i].clientLogged = 0;// Client login status
+		orderedScores[i].clientCGaz = 0;// Client cgaz setting
 		orderedScores[j].ping = rand() % 800;
 		orderedScores[j].followedClient = 0;// Followed client
 		Q_strncpyz(orderedScores[j].followedClientName, "none", MAX_QPATH);// Followed client name
