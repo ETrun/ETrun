@@ -1049,6 +1049,7 @@ void ClientUserinfoChanged( int clientNum ) {
 		// Nico, auth token was changed => logout player if he was logged in
 		if (client->sess.logged) {
 			CP("cp \"You are no longer logged in!\n\"");
+			G_LogPrintf(va("ClientUserinfoChanged: authToken changed for client %d, forcing logout\n", client->ps.clientNum));
 			ent->client->sess.logged = qfalse;
 		}
 	}
@@ -1067,10 +1068,7 @@ void ClientUserinfoChanged( int clientNum ) {
 	// Nico, pmove_fixed
 	client->pers.pmoveFixed = client->pers.clientFlags & CGF_PMOVEFIXED;
 
-	// Nico, check autologin
-	if (g_useAPI.integer && !client->pers.autoLogin && (client->pers.clientFlags & CGF_AUTOLOGIN) && !client->sess.logged) {
-		Cmd_Login_f(ent);
-	}
+	// Nico, autologin
 	client->pers.autoLogin = client->pers.clientFlags & CGF_AUTOLOGIN;
 
 	// set name
@@ -1339,13 +1337,19 @@ void ClientBegin( int clientNum ) {
 		trap_SendServerCommand( -1, va( "print \"[lof]%s" S_COLOR_WHITE " [lon]entered the game\n\"", client->pers.netname ) );
 	}
 
-	G_LogPrintf( "ClientBegin: %i\n", clientNum );
-
 	// count current clients and rank for scoreboard
 	CalculateRanks();
 
 	// No surface determined yet.
 	ent->surfaceFlags = 0;
+
+	// Nico, check for autologin
+	if (g_useAPI.integer && client->pers.autoLogin && !client->sess.logged) {
+		G_LogPrintf("ClientBegin: login client %d via autoLogin\n", clientNum);
+		Cmd_Login_f(ent);
+	}
+
+	G_LogPrintf( "ClientBegin: %i\n", clientNum );
 }
 
 gentity_t *SelectSpawnPointFromList( char *list, vec3_t spawn_origin, vec3_t spawn_angles ) {

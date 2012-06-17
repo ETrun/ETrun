@@ -586,7 +586,7 @@ void G_callAPI(char *command, char *result, gentity_t *ent, int count, ...) {
 	}
 
 	APILog(va("Calling API with command: %s, query: %s\n", command, queryStruct->query), qfalse);
-
+	G_LogPrintf(va("Calling API with command: %s, query: %s\n", command, queryStruct->query), qfalse);
 	returnCode = pthread_create(&thread, NULL, handler, (void *)queryStruct);
 
 	if (returnCode) {
