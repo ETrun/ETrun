@@ -316,6 +316,9 @@ vmCvar_t cg_keysSize;
 // Automatically load player position when he gets killed (except /kill)
 vmCvar_t cg_autoLoad;
 
+// View log (ET Console)
+vmCvar_t cg_viewLog;
+
 // Nico, end of ETrun cvars
 
 typedef struct {
@@ -565,6 +568,9 @@ cvarTable_t cvarTable[] = {
 	// Automatically load player position when he gets killed (except /kill)
 	{ &cg_autoLoad, "cg_autoLoad", "1", CVAR_ARCHIVE },
 
+	// View log (ET Console)
+	{ &cg_viewLog, "cg_viewLog", "0", CVAR_ARCHIVE },
+
 	// Nico, end of ETrun cvars
 };
 
@@ -671,6 +677,8 @@ void CG_UpdateCvars( void ) {
 					} else if ( cg_errorDecay.value > 500.0 ) {
 						trap_Cvar_Set( "cg_errorDecay", "500" );
 					}
+				} else if (cv->vmCvar == &cg_viewLog) {
+					trap_Cvar_Set("viewlog", cg_viewLog.string);
 				}
 			}
 		}

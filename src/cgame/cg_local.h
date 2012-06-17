@@ -1912,6 +1912,9 @@ extern vmCvar_t cg_keysSize;
 // Automatically load player position when he gets killed (except /kill)
 extern vmCvar_t cg_autoLoad;
 
+// View log (ET Console)
+extern vmCvar_t cg_viewLog;
+
 // Nico, end of ETrun cvars
 
 //
