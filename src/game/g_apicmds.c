@@ -47,11 +47,11 @@ void Cmd_Login_f(gentity_t *ent) {
 	if (strlen(token) == 0) {
 		CP("cp \"Empty auth token!\n\"");
 		G_DPrintf("Cmd_Login_f: empty_token\n");
+		free(result);
 	} else {
 		G_API_login(result, ent, token);
+		// Do not free result here!
 	}
-
-	// Do not free result here!
 }
 
 // Nico, ETrun logout command

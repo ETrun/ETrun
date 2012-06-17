@@ -1339,6 +1339,7 @@ void SendScoreboardMessageToAllClients( void );
 void QDECL G_Printf( const char *fmt, ... ) _attribute( ( format( printf,1,2 ) ) );
 void QDECL G_DPrintf( const char *fmt, ... ) _attribute( ( format( printf,1,2 ) ) );
 void QDECL G_Error( const char *fmt, ... ) _attribute( ( format( printf,1,2 ) ) );
+void G_ShutdownGame( int restart );
 
 //
 // g_client.c
@@ -1412,9 +1413,15 @@ void script_mover_blocked( gentity_t *ent, gentity_t *other );
 // g_props.c
 void Props_Chair_Skyboxtouch( gentity_t *ent );
 
-// Nico, g_starget.c
+// Nico, g_target.c
 int GetTimerunNum(char *name);
 void notify_timerun_stop(gentity_t *activator, int finishTime);
+
+// Nico, g_crash.c
+void EnableCoreDumps();
+void DisableCoreDumps();
+void EnableStackTrace();
+void DisableStackTrace();
 
 #include "g_team.h" // teamplay specific stuff
 
