@@ -512,12 +512,6 @@ int G_Randommap_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *ar
 		return G_INVALID;
 	}
 
-	// Nico, check if there is a pending map change
-	if (level.delayedMapChange.pendingChange) {
-		CP("print \"^1Callvote:^7 there is a pending map change.\n\"");
-		return qfalse;
-	}
-
 	// Vote request (vote is being initiated)
 	if ( arg ) {
 		if ( trap_Argc() > 2 ) {

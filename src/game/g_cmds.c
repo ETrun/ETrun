@@ -1327,6 +1327,12 @@ qboolean Cmd_CallVote_f( gentity_t *ent, unsigned int dwCommand, qboolean fRefCo
 		}
 	}
 
+	// Nico, do not allow random map vote if there is a pending map change
+	if (!Q_stricmp(arg1, "randommap") && level.delayedMapChange.pendingChange) {
+		CP("print \"^1Callvote:^7 there is a pending map change.\n\"");
+		return qfalse;
+	}
+
 	if ( trap_Argc() > 1 && ( i = G_voteCmdCheck( ent, arg1, arg2, fRefCommand ) ) != G_NOTFOUND ) {   //  --OSP
 		if ( i != G_OK ) {
 			if ( i == G_NOTFOUND ) {
