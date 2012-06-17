@@ -1417,12 +1417,6 @@ void Props_Chair_Skyboxtouch( gentity_t *ent );
 int GetTimerunNum(char *name);
 void notify_timerun_stop(gentity_t *activator, int finishTime);
 
-// Nico, g_crash.c
-void EnableCoreDumps();
-void DisableCoreDumps();
-void EnableStackTrace();
-void DisableStackTrace();
-
 #include "g_team.h" // teamplay specific stuff
 
 extern level_locals_t level;

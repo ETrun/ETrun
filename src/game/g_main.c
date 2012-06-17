@@ -325,12 +325,10 @@ int vmMain( int command, int arg0, int arg1, int arg2, int arg3, int arg4, int a
 #endif
 	switch ( command ) {
 	case GAME_INIT:
-		EnableStackTrace();
 		G_InitGame( arg0, arg1, arg2 );
 		return 0;
 	case GAME_SHUTDOWN:
 		G_ShutdownGame( arg0 );
-		DisableStackTrace();
 		return 0;
 	case GAME_CLIENT_CONNECT:
 		return (int)ClientConnect( arg0, arg1, arg2 );
@@ -1228,7 +1226,6 @@ G_InitGame
 void G_InitGame( int levelTime, int randomSeed, int restart ) {
 	int i;
 	char cs[MAX_INFO_STRING];
-	char *result = NULL;
 
 	G_Printf( "------- Game Initialization -------\n" );
 	G_Printf( "gamename: %s\n", GAME_VERSION );
@@ -1443,20 +1440,10 @@ void G_InitGame( int levelTime, int randomSeed, int restart ) {
 		trap_Cvar_Set("isTimerun", "1");
 	}
 
-	// Nico, load & check API
+	// Nico, load API
+	// Note: do not check API here, it could crash
 	if (g_useAPI.integer) {
 		G_loadAPI();
-
-		result = malloc(RESPONSE_MAX_SIZE * sizeof (char));
-
-		if (!result) {
-			G_Error("G_InitGame: malloc failed\n");
-		}
-
-		G_Printf("ETrun: checking API...\n");
-		G_API_check(result, NULL);
-
-		// Nico, note: do not free result here, it's done in thread
 	}
 }
 
