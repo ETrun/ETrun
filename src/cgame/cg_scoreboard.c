@@ -19,8 +19,9 @@ vec4_t clrUiYou = { 0.2f, 0.1f, 0.1f, .5f };
 #define INFO_SPEC_PLAYER_WIDTH			INFO_PLAYER_WIDTH
 #define INFO_SPEC_FOLLOWED_PLAYER_WIDTH	INFO_PLAYER_WIDTH
 #define INFO_SPEC_SCORE_WIDTH			INFO_SCORE_WIDTH
+#define INFO_SPEC_SPEED_WIDTH			INFO_SPEED_WIDTH
 #define INFO_SPEC_LATENCY_WIDTH			INFO_LATENCY_WIDTH
-#define INFO_SPEC_TOTAL_WIDTH			(INFO_SPEC_PLAYER_WIDTH + INFO_SPEC_FOLLOWED_PLAYER_WIDTH + INFO_SPEC_SCORE_WIDTH + INFO_SPEC_LATENCY_WIDTH)
+#define INFO_SPEC_TOTAL_WIDTH			(INFO_SPEC_PLAYER_WIDTH + INFO_SPEC_FOLLOWED_PLAYER_WIDTH + INFO_SPEC_SCORE_WIDTH + INFO_SPEC_SPEED_WIDTH + INFO_SPEC_LATENCY_WIDTH)
 
 #define NAME_MAX_LENGHT					13
 
@@ -274,6 +275,9 @@ static void WM_ETrun_DrawSpectators(int *x, int *y, int width, float fade, fontI
 	WM_ETrun_print("Time", font, fontsize, tempx, *y, qtrue, 0);
 	tempx += INFO_SPEC_SCORE_WIDTH;
 
+	WM_ETrun_print("Speed", font, fontsize, tempx, *y, qtrue, 0);
+	tempx += INFO_SPEC_SPEED_WIDTH;
+
 	WM_ETrun_print("Ping", font, fontsize, tempx, *y, qtrue, 0);
 	tempx += INFO_SPEC_LATENCY_WIDTH;
 
@@ -319,6 +323,10 @@ static void WM_ETrun_DrawSpectators(int *x, int *y, int width, float fade, fontI
 		}
 		WM_ETrun_print(s, font, fontsize, tempx, *y, qtrue, 0);
 		tempx += INFO_SPEC_SCORE_WIDTH;
+
+		// Nico, draw best speed
+		WM_ETrun_print(va("%d", orderedScores[i].timerunBestSpeed), font, fontsize, tempx, *y, qtrue, 0);
+		tempx += INFO_SPEC_SPEED_WIDTH;
 
 		// Nico, draw ping
 		WM_ETrun_print(WM_ETrun_coloredPing(orderedScores[i].ping), font, fontsize, tempx, *y, qtrue, 0);
