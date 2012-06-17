@@ -1049,7 +1049,7 @@ void ClientUserinfoChanged( int clientNum ) {
 		// Nico, auth token was changed => logout player if he was logged in
 		if (client->sess.logged) {
 			CP("cp \"You are no longer logged in!\n\"");
-			G_LogPrintf(va("ClientUserinfoChanged: authToken changed for client %d, forcing logout\n", client->ps.clientNum));
+			G_LogPrintf("ClientUserinfoChanged: authToken changed for client %d, forcing logout\n", clientNum);
 			ent->client->sess.logged = qfalse;
 		}
 	}
