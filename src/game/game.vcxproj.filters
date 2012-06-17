@@ -162,9 +162,6 @@
     <ClCompile Include="g_apicmds.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="g_crash.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="game.def">
