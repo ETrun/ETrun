@@ -454,11 +454,11 @@ qboolean CG_DrawScoreboard(void) {
 		sprintf(physicsName, "AP");
 		break;
 
-	case 199:
+	case 7:
 		sprintf(physicsName, "VQ3 (with OB)");
 		break;
 
-	case 215:
+	case 23:
 		sprintf(physicsName, "VQ3");
 		break;
 
