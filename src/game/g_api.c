@@ -536,6 +536,7 @@ static handler_t getHandlerForCommand(char *cmd) {
 void G_callAPI(char *command, char *result, gentity_t *ent, int count, ...) {
 	struct query_s *queryStruct;
 	pthread_t thread;
+	pthread_attr_t attr;
 	int returnCode = 0;
 	void *(*handler)(void *) = NULL;
 	va_list ap;
@@ -587,7 +588,14 @@ void G_callAPI(char *command, char *result, gentity_t *ent, int count, ...) {
 
 	APILog(va("Calling API with command: %s, query: %s\n", command, queryStruct->query), qfalse);
 	G_LogPrintf(va("Calling API with command: %s, query: %s\n", command, queryStruct->query), qfalse);
-	returnCode = pthread_create(&thread, NULL, handler, (void *)queryStruct);
+
+	// Create threads as detached as they will never be joined
+	pthread_attr_init(&attr);
+	pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
+
+	returnCode = pthread_create(&thread, &attr, handler, (void *)queryStruct);
+
+	pthread_attr_destroy(&attr);
 
 	if (returnCode) {
 		G_Error("G_callAPI: error creating thread\n");
