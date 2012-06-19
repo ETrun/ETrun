@@ -979,7 +979,7 @@ void SpectatorClientEndFrame( gentity_t *ent ) {
 		int clientNum;
 		gclient_t *cl;
 
-		if (ent->client->sess.sessionTeam != TEAM_SPECTATOR) {
+		if (ent->client->sess.sessionTeam == TEAM_AXIS || ent->client->sess.sessionTeam == TEAM_ALLIES) {
 			reinforce( ent );
 			return;
 		}
