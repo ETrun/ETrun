@@ -5,12 +5,18 @@
  * Global handles
  */
 #if defined _WIN32
-	typedef int (*MYPROC)(char *, char *, char *);
-	MYPROC API_query;
+	typedef int (*API_query_t)(char *, char *, char *);
+	API_query_t API_query;
+	typedef int (*API_init_t)(void);
+	API_init_t API_init;
+	typedef void (*API_clean_t)(void);
+	API_clean_t API_clean;
 	HMODULE api_module;
 # else
 	void *api_module;
 	int (*API_query)(char *, char *, char *);
+	int (*API_init)(void);
+	void (*API_clean)(void);
 # endif
 
 /**
@@ -32,11 +38,15 @@ static qboolean loadModule() {
 /**
  * Module interface linking
  */
-static qboolean loadAPIquery() {
+static qboolean loadAPISymbols() {
 #if defined _WIN32
-	API_query = (MYPROC)GetProcAddress(api_module, API_INTERFACE_NAME);
+	API_query = (API_query_t)GetProcAddress(api_module, API_INTERFACE_NAME);
+	API_init = (API_init_t)GetProcAddress(api_module, API_INIT_NAME);
+	API_clean = (API_clean_t)GetProcAddress(api_module, API_CLEAN_NAME);
 #else
 	*(void **) (&API_query) = dlsym(api_module, API_INTERFACE_NAME);
+	*(void **) (&API_init) = dlsym(api_module, API_INIT_NAME);
+	*(void **) (&API_clean) = dlsym(api_module, API_CLEAN_NAME);
 #endif
 	
 	if (API_query == NULL) {
@@ -164,7 +174,7 @@ static void *loginHandler(void *data) {
 	int code = -1;
 	int len = 0;
 	gentity_t *ent = NULL;
-	struct query_s *queryStruct;
+	struct query_s *queryStruct = NULL;
 
 	queryStruct = (struct query_s *)data;
 	ent = queryStruct->ent;
@@ -197,7 +207,7 @@ static void *loginHandler(void *data) {
  * Login request command
  */
 void G_API_login(char *result, gentity_t *ent, char *authToken) {
-	char net_port[8];
+	char net_port[8] = {0};
 
 	sprintf(net_port, "%d", trap_Cvar_VariableIntegerValue("net_port"));
 
@@ -212,7 +222,7 @@ void G_API_login(char *result, gentity_t *ent, char *authToken) {
 static void *mapRecordsHandler(void *data) {
 	int code = -1;
 	gentity_t *ent = NULL;
-	struct query_s *queryStruct;
+	struct query_s *queryStruct = NULL;
 
 	queryStruct = (struct query_s *)data;
 	ent = queryStruct->ent;
@@ -237,14 +247,16 @@ static void *mapRecordsHandler(void *data) {
  * Map records request command
  */
 void G_API_mapRecords(char *result, gentity_t *ent, char *mapName) {
-	char net_port[8];
+	char net_port[8] = {0};
+	char cphysics[8] = {0};
 	char encodedMapName[255] = {0};
 
 	sprintf(net_port, "%d", trap_Cvar_VariableIntegerValue("net_port"));
+	sprintf(cphysics, "%d", physics.integer);
 
 	url_encode(mapName, encodedMapName);
 
-	G_callAPI("m", result, ent, 2, encodedMapName, net_port);
+	G_callAPI("m", result, ent, 3, encodedMapName, cphysics, net_port);
 
 	APILog("Map records request sent!\n", qfalse);
 }
@@ -254,7 +266,7 @@ void G_API_mapRecords(char *result, gentity_t *ent, char *mapName) {
  */
 static void *checkAPIHandler(void *data) {
 	int code = -1;
-	struct query_s *queryStruct;
+	struct query_s *queryStruct = NULL;
 
 	queryStruct = (struct query_s *)data;
 
@@ -281,11 +293,13 @@ static void *checkAPIHandler(void *data) {
  * Check API command
  */
 void G_API_check(char *result, gentity_t *ent) {
-	char net_port[8];
+	char net_port[8] = {0};
+	char cphysics[8] = {0};
 
 	sprintf(net_port, "%d", trap_Cvar_VariableIntegerValue("net_port"));
+	sprintf(cphysics, "%d", physics.integer);
 
-	G_callAPI("c", result, ent, 1, net_port);
+	G_callAPI("c", result, ent, 2, cphysics, net_port);
 
 	APILog("Check API request sent!\n", qfalse);
 }
@@ -295,7 +309,7 @@ void G_API_check(char *result, gentity_t *ent) {
  */
 static void *recordHandler(void *data) {
 	int code = -1;
-	struct query_s *queryStruct;
+	struct query_s *queryStruct = NULL;
 	gentity_t *ent = NULL;
 	int timerunNum = 0;
 
@@ -350,7 +364,7 @@ static void *recordHandler(void *data) {
  */
 void G_API_sendRecord(char *result, gentity_t *ent, char *mapName, char *runName, 
 					  char *authToken, char *data, char *etrunVersion) {
-	char net_port[8];
+	char net_port[8] = {0};
 	char encodedMapName[255] = {0};
 	char encodedRunName[255] = {0};
 
@@ -369,7 +383,7 @@ void G_API_sendRecord(char *result, gentity_t *ent, char *mapName, char *runName
  */
 static void *checkpointsHandler(void *data) {
 	int code = -1;
-	struct query_s *queryStruct;
+	struct query_s *queryStruct = NULL;
 	gentity_t *ent = NULL;
 	char * pch = NULL;
 	int i = 0;
@@ -426,14 +440,16 @@ void G_API_getPlayerCheckpoints(char *result, gentity_t *ent, char *mapName, cha
 	char bufferRunNum[8] = {0};
 	char encodedMapName[255] = {0};
 	char encodedRunName[255] = {0};
+	char cphysics[8] = {0};
 
 	sprintf(net_port, "%d", trap_Cvar_VariableIntegerValue("net_port"));
 	sprintf(bufferRunNum, "%d", runNum);
+	sprintf(cphysics, "%d", physics.integer);
 
 	url_encode(mapName, encodedMapName);
 	url_encode(runName, encodedRunName);
 
-	G_callAPI("e", result, ent, 5, encodedMapName, encodedRunName, bufferRunNum, authToken, net_port);
+	G_callAPI("e", result, ent, 6, encodedMapName, encodedRunName, bufferRunNum, authToken, cphysics, net_port);
 
 	APILog("Checkpoints request sent!\n", qfalse);
 }
@@ -443,7 +459,7 @@ void G_API_getPlayerCheckpoints(char *result, gentity_t *ent, char *mapName, cha
  */
 static void *randommapHandler(void *data) {
 	int code = -1;
-	struct query_s *queryStruct;
+	struct query_s *queryStruct = NULL;
 	gentity_t *ent = NULL;
 	char mapfile[MAX_QPATH] = {0};
 	fileHandle_t f;
@@ -485,12 +501,14 @@ static void *randommapHandler(void *data) {
 void G_API_randommap(char *result, gentity_t *ent, char *mapName) {
 	char net_port[8] = {0};
 	char encodedMapName[255] = {0};
+	char cphysics[8] = {0};
 
 	sprintf(net_port, "%d", trap_Cvar_VariableIntegerValue("net_port"));
+	sprintf(cphysics, "%d", physics.integer);
 
 	url_encode(mapName, encodedMapName);
 
-	G_callAPI("f", result, ent, 2, encodedMapName, net_port);
+	G_callAPI("f", result, ent, 3, encodedMapName, cphysics, net_port);
 
 	APILog("Random map request sent!\n", qfalse);
 }
@@ -591,9 +609,11 @@ void G_callAPI(char *command, char *result, gentity_t *ent, int count, ...) {
 
 	// Create threads as detached as they will never be joined
 	pthread_attr_init(&attr);
-	pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
+	// pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
 
 	returnCode = pthread_create(&thread, &attr, handler, (void *)queryStruct);
+
+	// pthread_detach(thread);
 
 	pthread_attr_destroy(&attr);
 
@@ -626,9 +646,13 @@ void G_loadAPI() {
 	}
 
 	// Load the APIquery function 
-	if (!loadAPIquery()) {
+	if (!loadAPISymbols()) {
 		printError();
 		G_Error("Error loading %s from %s\n", API_INTERFACE_NAME, g_APImodulePath.string);
+	}
+
+	if (API_init() != 0) {
+		G_Error("Error calling API_init()");
 	}
 
 #if defined _WIN32
@@ -642,6 +666,8 @@ void G_unloadAPI() {
 	if (api_module == NULL) {
 		G_DPrintf("G_callAPI: API module is not loaded.");
 	} else {
+
+	API_clean();
 
 #if defined _WIN32
 	FreeLibrary(api_module);

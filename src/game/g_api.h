@@ -4,6 +4,8 @@
 # include <pthread.h>
 
 # define API_INTERFACE_NAME "API_query"
+# define API_INIT_NAME "API_init"
+# define API_CLEAN_NAME "API_clean"
 # define RESPONSE_MAX_SIZE 2048
 # define QUERY_MAX_SIZE 1024
 # define CHAR_SEPARATOR "/"
