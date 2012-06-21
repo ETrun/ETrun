@@ -82,12 +82,6 @@ void Cmd_Records_f(gentity_t *ent) {
 		return;
 	}
 
-	// Check if client is logged in
-	if (!ent->client->sess.logged) {
-		CP("cp \"You must login to use this command.\n\"");
-		return;
-	}
-
 	buf = malloc(RESPONSE_MAX_SIZE * sizeof (char));
 
 	if (!buf) {

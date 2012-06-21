@@ -608,17 +608,21 @@ void G_callAPI(char *command, char *result, gentity_t *ent, int count, ...) {
 	G_LogPrintf(va("Calling API with command: %s, query: %s\n", command, queryStruct->query), qfalse);
 
 	// Create threads as detached as they will never be joined
-	pthread_attr_init(&attr);
-	// pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
+	if (pthread_attr_init(&attr)) {
+		G_Error("G_callAPI: error in pthread_attr_init\n");
+	}
+	if (pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED)) {
+		G_Error("G_callAPI: error in pthread_attr_setdetachstate\n");
+	}
 
 	returnCode = pthread_create(&thread, &attr, handler, (void *)queryStruct);
 
-	// pthread_detach(thread);
-
-	pthread_attr_destroy(&attr);
-
 	if (returnCode) {
-		G_Error("G_callAPI: error creating thread\n");
+		G_Error("G_callAPI: error in pthread_create: %d\n", returnCode);
+	}
+
+	if (pthread_attr_destroy(&attr)) {
+		G_Error("G_callAPI: error in pthread_attr_destroy\n");
 	}
 
 	if (count > 0) {
