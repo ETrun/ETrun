@@ -205,7 +205,11 @@ void CG_NewClientInfo( int clientNum ) {
 
 	// Nico, login status
 	v = Info_ValueForKey(configstring, "l");
-	newInfo.logged = atoi(v) == 1 ? qtrue : qfalse;
+	newInfo.logged = (atoi(v) == 1) ? qtrue : qfalse;
+
+	// Nico, hideme
+	v = Info_ValueForKey( configstring, "h" );
+	newInfo.hideme = (atoi( v ) == 1) ? qtrue : qfalse;
 
 	// Gordon: detect rank/skill changes client side
 	if ( clientNum == cg.clientNum ) {
@@ -1642,6 +1646,11 @@ void CG_Player( centity_t *cent ) {
 
 	// Nico, don't draw if hiding others is enabled and distance to the player is < cg_hideRange
 	if (cg_hideOthers.integer && ci->clientNum != cg.clientNum && Distance(cgsnap->lerpOrigin, cent->lerpOrigin) < cg_hideRange.integer) {
+		return;
+	}
+
+	// Nico, don't draw if hideme is ON
+	if (ci->hideme) {
 		return;
 	}
 

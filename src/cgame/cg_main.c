@@ -319,6 +319,9 @@ vmCvar_t cg_autoLoad;
 // View log (ET Console)
 vmCvar_t cg_viewLog;
 
+// Hide me
+vmCvar_t cg_hideMe;
+
 // Nico, end of ETrun cvars
 
 typedef struct {
@@ -571,6 +574,9 @@ cvarTable_t cvarTable[] = {
 	// View log (ET Console)
 	{ &cg_viewLog, "cg_viewLog", "0", CVAR_ARCHIVE },
 
+	// Hide me
+	{ &cg_hideMe, "cg_hideMe", "0", CVAR_ARCHIVE },
+
 	// Nico, end of ETrun cvars
 };
 
@@ -646,13 +652,14 @@ void CG_UpdateCvars( void ) {
 				// Nico, added load view angles
 				// Nico, added auto load
 				// Nico, added cgaz
+				// Nico, added hideme
 				if ( cv->vmCvar == &cg_autoAction || cv->vmCvar == &cg_autoReload ||
 					 cv->vmCvar == &int_cl_timenudge || cv->vmCvar == &int_cl_maxpackets ||
 					 cv->vmCvar == &cg_autoactivate || cv->vmCvar == &cg_predictItems ||
 					 cv->vmCvar == &pmove_fixed || cv->vmCvar == &com_maxfps ||
 					 cv->vmCvar == &cg_authToken || cv->vmCvar == &cg_autoLogin ||
 					 cv->vmCvar == &cg_loadViewAngles || cv->vmCvar == &cg_autoLoad ||
-					 cv->vmCvar == &cg_drawCGaz ) {
+					 cv->vmCvar == &cg_drawCGaz || cv->vmCvar == &cg_hideMe ) {
 					fSetFlags = qtrue;
 				} else if ( cv->vmCvar == &cg_crosshairColor || cv->vmCvar == &cg_crosshairAlpha )      {
 					BG_setCrosshair( cg_crosshairColor.string, cg.xhairColor, cg_crosshairAlpha.value, "cg_crosshairColor" );
@@ -726,7 +733,7 @@ void CG_setClientFlags( void ) {
 	}
 
 	cg.pmext.bAutoReload = ( cg_autoReload.integer > 0 );
-	trap_Cvar_Set( "cg_uinfo", va( "%d %d %d %d %s %d %d %d",
+	trap_Cvar_Set( "cg_uinfo", va( "%d %d %d %d %s %d %d %d %d",
 	// Client Flags
 	(
 		( ( cg_autoReload.integer > 0 ) ? CGF_AUTORELOAD : 0 ) |
@@ -755,7 +762,10 @@ void CG_setClientFlags( void ) {
 	cg_autoLoad.integer,
 
 	// Nico, cgaz
-	cg_drawCGaz.integer
+	cg_drawCGaz.integer,
+
+	// Nico, hideme
+	cg_hideMe.integer
 
 	) );
 }

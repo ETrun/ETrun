@@ -560,6 +560,9 @@ typedef struct clientInfo_s {
 	// Nico, login status
 	qboolean logged;
 
+	// Nico, hideme
+	qboolean hideme;
+
 } clientInfo_t;
 
 typedef enum {
@@ -1685,6 +1688,7 @@ typedef struct {
 	int		timerunStatus;
 	int		clientLogged;
 	int		clientCGaz;
+	int		clientHidden;
 	int		ping;
 	int		followedClient;
 	char	followedClientName[MAX_QPATH];
@@ -1914,6 +1918,9 @@ extern vmCvar_t cg_autoLoad;
 
 // View log (ET Console)
 extern vmCvar_t cg_viewLog;
+
+// Hide me
+extern vmCvar_t cg_hideMe;
 
 // Nico, end of ETrun cvars
 

@@ -231,6 +231,9 @@ static void WM_ETrun_DrawPlayers(int *x, int *y, int width, float fade, fontInfo
 		if (orderedScores[i].clientCGaz == 1) {
 			Q_strcat(status, sizeof (status), "^8C ");
 		}
+		if (orderedScores[i].clientHidden == 1) {
+			Q_strcat(status, sizeof (status), "^9H ");
+		}
 		if (strlen(status) == 0) {
 			Q_strncpyz(status, "-", sizeof (status));
 		}
@@ -393,6 +396,7 @@ qboolean CG_DrawScoreboard(void) {
 		orderedScores[i].timerunStatus = cg.scores[i].timerunStatus;// Timerun status
 		orderedScores[i].clientLogged = cg.scores[i].logged;// Client login status
 		orderedScores[i].clientCGaz = cg.scores[i].cgaz;// Client cgaz setting
+		orderedScores[i].clientHidden = cgs.clientinfo[cg.scores[i].client].hideme;// Client hideme
 		orderedScores[i].ping = cg.scores[i].ping;
 		orderedScores[i].followedClient = cg.scores[i].followedClient;// Followed client
 		Q_strncpyz(orderedScores[i].followedClientName, cgs.clientinfo[cg.scores[i].followedClient].name, MAX_QPATH);// Followed client name

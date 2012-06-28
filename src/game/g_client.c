@@ -1022,7 +1022,7 @@ void ClientUserinfoChanged( int clientNum ) {
 	Q_strncpyz(oldAuthToken, client->pers.authToken, sizeof (oldAuthToken));
 
 	s = Info_ValueForKey( userinfo, "cg_uinfo" );
-	sscanf( s, "%i %i %i %i %s %i %i %i",
+	sscanf( s, "%i %i %i %i %s %i %i %i %i",
 			&client->pers.clientFlags,
 			&client->pers.clientTimeNudge,
 			&client->pers.clientMaxPackets,
@@ -1040,7 +1040,10 @@ void ClientUserinfoChanged( int clientNum ) {
 			&client->pers.autoLoad,
 
 			// Nico, cgaz
-			&client->pers.cgaz
+			&client->pers.cgaz,
+
+			// Nico, hideme
+			&client->pers.hideme
 
 			);
 
@@ -1104,7 +1107,7 @@ void ClientUserinfoChanged( int clientNum ) {
 	// send over a subset of the userinfo keys so other clients can
 	// print scoreboards, display models, and play custom sounds
 
-	s = va( "n\\%s\\t\\%i\\c\\%i\\w\\%i\\lw\\%i\\sw\\%i\\mu\\%i\\ref\\%i\\pm\\%i\\l\\%i",
+	s = va( "n\\%s\\t\\%i\\c\\%i\\w\\%i\\lw\\%i\\sw\\%i\\mu\\%i\\ref\\%i\\pm\\%i\\l\\%i\\h\\%i",
 	client->pers.netname,
 	client->sess.sessionTeam,
 	client->sess.playerType,
@@ -1114,7 +1117,8 @@ void ClientUserinfoChanged( int clientNum ) {
 	client->sess.muted ? 1 : 0,
 	client->sess.referee,
 	client->pers.pmoveFixed ? 1 : 0,// Nico, pmove_fixed
-	client->sess.logged ? 1 : 0// Nico, login status
+	client->sess.logged ? 1 : 0,// Nico, login status
+	client->pers.hideme// Nico, hideme
 	);
 
 	trap_GetConfigstring( CS_PLAYERS + clientNum, oldname, sizeof( oldname ) );

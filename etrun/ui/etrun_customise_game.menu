@@ -5,7 +5,7 @@
 #define WINDOW_X		16
 #define WINDOW_Y		16
 #define WINDOW_WIDTH	510
-#define WINDOW_HEIGHT	200
+#define WINDOW_HEIGHT	210
 #define GROUP_NAME		"grpEtrunCustomiseGame"
 
 // Macros //
@@ -34,15 +34,16 @@ menuDef {
 
 #define SUBWINDOW_WIDTH		WINDOW_WIDTH-12
 
-	SUBWINDOW( 6, 32, (SUBWINDOW_WIDTH), 50, "Hide other players" )
-	YESNO( 8, 48, (SUBWINDOW_WIDTH)-4, 10, "Hide other players:", .2, 8, "cg_hideOthers", "" )
-	MULTI( 8, 64, (SUBWINDOW_WIDTH)-4, 10, "Hide range:", .2, 8, "cg_hideRange", cvarFloatList { "Very close" 64 "Close" 128 "Normal" 256 "Far" 512 "Very Far" 1024 }, "Distance range in units which to hide other players" )
+	SUBWINDOW( 6, 32, (SUBWINDOW_WIDTH), 60, "Hide" )
+	YESNO( 8, 48, (SUBWINDOW_WIDTH)-4, 10, "Hide me from others:", .2, 8, "cg_hideMe", "" )
+	YESNO( 8, 64, (SUBWINDOW_WIDTH)-4, 10, "Hide other players:", .2, 8, "cg_hideOthers", "" )
+	MULTI( 8, 80, (SUBWINDOW_WIDTH)-4, 10, "Hide range:", .2, 8, "cg_hideRange", cvarFloatList { "Very close" 64 "Close" 128 "Normal" 256 "Far" 512 "Very Far" 1024 }, "Distance range in units which to hide other players" )
 
-	SUBWINDOW( 6, 86, (SUBWINDOW_WIDTH), 80, "Position control" )
-	BIND( 8, 102, (SUBWINDOW_WIDTH)-5, 10, "Save button:", .2, 8, save, "Saves your position (save, save 1, save 2...)" )
-	BIND( 8, 118, (SUBWINDOW_WIDTH)-5, 10, "Load button:", .2, 8, load, "Loads your position (load, load 1, load 2...)" )
-	YESNO( 8, 134, (SUBWINDOW_WIDTH)-4, 10, "Load view angles on load:", .2, 8, "cg_loadViewAngles", "" )
-	YESNO( 8, 150, (SUBWINDOW_WIDTH)-4, 10, "Automatically load when you get killed:", .2, 8, "cg_autoLoad", "" )
+	SUBWINDOW( 6, 102, (SUBWINDOW_WIDTH), 80, "Position control" )
+	BIND( 8, 118, (SUBWINDOW_WIDTH)-5, 10, "Save button:", .2, 8, save, "Saves your position (save, save 1, save 2...)" )
+	BIND( 8, 134, (SUBWINDOW_WIDTH)-5, 10, "Load button:", .2, 8, load, "Loads your position (load, load 1, load 2...)" )
+	YESNO( 8, 150, (SUBWINDOW_WIDTH)-4, 10, "Load view angles on load:", .2, 8, "cg_loadViewAngles", "" )
+	YESNO( 8, 166, (SUBWINDOW_WIDTH)-4, 10, "Automatically load when you get killed:", .2, 8, "cg_autoLoad", "" )
 
 // Buttons //
 	

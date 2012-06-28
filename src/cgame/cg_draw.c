@@ -1557,6 +1557,11 @@ static void CG_DrawCrosshairNames( void ) {
 		return;
 	}
 
+	// Nico, don't draw if client has hideme turned on
+	if (cgs.clientinfo[cg.crosshairClientNum].hideme) {
+		return;
+	}
+
 	if ( cg.renderingThirdPerson ) {
 		return;
 	}

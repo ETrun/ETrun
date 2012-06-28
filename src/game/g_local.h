@@ -649,6 +649,9 @@ typedef struct {
 	// Nico, client draw cgaz setting
 	int cgaz;
 
+	// Nico, hideme
+	int	hideme;
+
 } clientPersistant_t;
 
 typedef struct {
