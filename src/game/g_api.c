@@ -49,7 +49,7 @@ static qboolean loadAPISymbols() {
 	*(void **) (&API_clean) = dlsym(api_module, API_CLEAN_NAME);
 #endif
 	
-	if (API_query == NULL) {
+	if (API_query == NULL || API_init == NULL || API_clean == NULL) {
 		return qfalse;
 	}
 	return qtrue;
@@ -652,7 +652,7 @@ void G_loadAPI() {
 	// Load the APIquery function 
 	if (!loadAPISymbols()) {
 		printError();
-		G_Error("Error loading %s from %s\n", API_INTERFACE_NAME, g_APImodulePath.string);
+		G_Error("Error loading symbols from %s\n", g_APImodulePath.string);
 	}
 
 	if (API_init() != 0) {
