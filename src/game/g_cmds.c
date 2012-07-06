@@ -198,6 +198,71 @@ void SanitizeString( char *in, char *out, qboolean fToLower ) {
 	*out = 0;
 }
 
+/**
+==================
+ClientNumbersFromString
+
+Sets plist to an array of integers that represent client numbers that have
+names that are a partial match for s. List is terminated by a -1.
+
+Returns number of matching clientids.
+==================
+@source: ETpub
+*/
+int ClientNumbersFromString(char *s, int *plist) {
+	gclient_t *p = NULL;
+	int i = 0;
+	int found = 0;
+	char s2[MAX_STRING_CHARS] = {0};
+	char n2[MAX_STRING_CHARS] = {0};
+	char *m = NULL;
+	qboolean is_slot = qtrue;
+
+	*plist = -1;
+
+	// if a number is provided, it might be a slot #
+	for (i = 0; i < (int)strlen(s); ++i) {
+		if (s[i] < '0' || s[i] > '9') {
+			is_slot = qfalse;
+			break;
+		}
+	}
+	if (is_slot) {
+		i = atoi(s);
+		if (i >= 0 && i < level.maxclients) {
+			p = &level.clients[i];
+			if (p->pers.connected == CON_CONNECTED ||
+				p->pers.connected == CON_CONNECTING) {
+
+				*plist++ = i;
+				*plist = -1;
+				return 1;
+			}
+		}
+	}
+
+	// now look for name matches
+	SanitizeString(s, s2, qtrue);
+	if (strlen(s2) < 1) {
+		return 0;
+	}
+	for (i = 0; i < level.maxclients; ++i) {
+		p = &level.clients[i];
+		if (p->pers.connected != CON_CONNECTED &&
+			p->pers.connected != CON_CONNECTING) {
+			continue;
+		}
+		SanitizeString(p->pers.netname, n2, qtrue);
+		m = strstr(n2, s2);
+		if (m != NULL) {
+			*plist++ = i;
+			found++;
+		}
+	}
+	*plist = -1;
+	return found;
+}
+
 /*
 ==================
 ClientNumberFromString
@@ -2303,6 +2368,9 @@ static command_t floodProtectedCommands[] = {
 	// Nico, class command
 	{ "class",				qtrue,	Cmd_Class_f },
 
+	// Nico, private messages
+	{ "m",					qtrue,	Cmd_PrivateMessage_f },
+
 	// ETrun specific commands
 	{ "login",				qtrue, Cmd_Login_f },
 	{ "logout",				qtrue, Cmd_Logout_f },
@@ -2555,5 +2623,101 @@ void Cmd_SpecInvite_f(gentity_t *ent, unsigned int dwCommand, qboolean invite) {
 
 		CP(va("print \"%s^7 was removed from invited spectators.\n\"", other->client->pers.netname));
 		CPx(other - g_entities, va("cpm \"You have been uninvited to spectate %s^7.\n\"", ent->client->pers.netname));
+	}
+}
+
+/**
+ * @source: ETpub
+ */
+static char *Q_SayConcatArgs(int start) {
+	char *s = NULL;
+	int c = 0;
+
+	s = ConcatArgs(0);
+	while (*s) {
+		if (c == start) {
+			return s;
+		}
+		if (*s == ' ') {
+			s++;
+			if (*s != ' ') {
+				c++;
+				continue;
+			}
+			while (*s && *s == ' ') {
+				s++;
+			}
+			c++;
+		}
+		s++;
+	}
+	return s;
+}
+
+/**
+ * Private message command
+ * @source: TJMod
+ */
+void Cmd_PrivateMessage_f(gentity_t *ent) {
+	int pids[MAX_CLIENTS] = {0};
+	char name[MAX_NAME_LENGTH] = {0};
+	char netname[MAX_NAME_LENGTH] = {0};
+	char cmd[12] = {0};
+	char str[MAX_STRING_CHARS] = {0};
+	char *msg = NULL;
+	int pcount = 0;
+	int count = 0;
+	int i = 0;
+	gentity_t *tmpent = NULL;
+
+	trap_Argv(0, cmd, sizeof (cmd));
+
+	if (trap_Argc() < 3) {
+		CP(va("print \"usage: %s [name|slot#] [message]\n\"", cmd));
+		return;
+	}
+
+	trap_Argv(1, name, sizeof(name));
+	msg = Q_SayConcatArgs(2);
+	pcount = ClientNumbersFromString(name, pids);
+
+	if (ent) {
+		Q_strncpyz(netname, ent->client->pers.netname, sizeof (name));
+	} else {
+		Q_strncpyz(netname, "console", sizeof (name));
+	}
+
+	Q_strncpyz(str, va("^3sent to %i player%s: ^7", pcount, pcount == 1 ? "" : "s"), sizeof (str));
+
+	for (i = 0; i < pcount; ++i) {
+		tmpent = &g_entities[pids[i]];
+
+		if (i > 0) {
+			Q_strcat(str, sizeof (str), "^7, ");
+		}
+		Q_strcat(str, sizeof (str), tmpent->client->pers.netname);
+
+		if (ent && COM_BitCheck(tmpent->client->sess.ignoreClients, ent - g_entities)) {
+			CP(va("print \"%s^1 is ignoring you\n\"", tmpent->client->pers.netname));
+			continue;
+		}
+		CPx(pids[i], va(
+			"chat \"%s^3 -> ^7%s^7: (%d recipient%s): ^3%s^7\" %i",
+			netname,
+			name,
+			pcount,
+			pcount == 1 ? "" : "s",
+			msg,
+			ent ? ent-g_entities : -1));
+		CPx(pids[i], va("cp \"^3private message from ^7%s^7\"", netname));
+	}
+
+	if (!pcount) {
+		CP(va("print \"^3No player matching ^7\'%s^7\' ^3to send message to.\n\"",name));
+	} else {
+		CP(va("print \"^3Private message: ^7%s\n\"", msg));
+		CP(va("print \"%s\n\"", str));
+
+		G_LogPrintf( "privmsg: %s: %s: %s\n", netname, name, msg );
 	}
 }

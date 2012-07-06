@@ -839,4 +839,7 @@ void CG_InitConsoleCommands( void ) {
 
 	// Nico, load player checkpoints command
 	trap_AddCommand("loadCheckpoints");
+
+	// Nico, private message
+	trap_AddCommand("m");
 }

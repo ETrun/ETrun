@@ -1047,12 +1047,19 @@ void Cmd_FollowCycle_f( gentity_t *ent, int dir );
 void Cmd_Kill_f( gentity_t *ent );
 void G_EntitySound( gentity_t *ent, const char *soundId, int volume );
 void G_EntitySoundNoCut( gentity_t *ent, const char *soundId, int volume );
+int ClientNumbersFromString( char *s, int *plist);
 int ClientNumberFromString( gentity_t *to, char *s );
 void SanitizeString( char *in, char *out, qboolean fToLower );
 void Cmd_Load_f(gentity_t *ent);
 void Cmd_Save_f(gentity_t *ent);
 void Cmd_SpecLock_f(gentity_t *ent, unsigned int dwCommand, qboolean lock);
 void Cmd_SpecInvite_f(gentity_t *ent, unsigned int dwCommand, qboolean invite);
+void G_SayTo(gentity_t *ent, gentity_t *other, int mode, int color, const char *name, const char *message, qboolean localize, qboolean encoded);
+qboolean Cmd_CallVote_f( gentity_t *ent, unsigned int dwCommand, qboolean fValue );
+void Cmd_Follow_f( gentity_t *ent, unsigned int dwCommand, qboolean fValue );
+void Cmd_Say_f(gentity_t *ent, int mode, qboolean arg0, qboolean encoded);
+void Cmd_Team_f( gentity_t *ent );
+void Cmd_PrivateMessage_f(gentity_t *ent);
 
 //
 // g_apicmds.c
@@ -1318,15 +1325,6 @@ qboolean IsSilencedWeapon
 // p_hud.c
 //
 void G_SendScore( gentity_t *client );
-
-//
-// g_cmds.c
-//
-void G_SayTo(gentity_t *ent, gentity_t *other, int mode, int color, const char *name, const char *message, qboolean localize, qboolean encoded);
-qboolean Cmd_CallVote_f( gentity_t *ent, unsigned int dwCommand, qboolean fValue );
-void Cmd_Follow_f( gentity_t *ent, unsigned int dwCommand, qboolean fValue );
-void Cmd_Say_f(gentity_t *ent, int mode, qboolean arg0, qboolean encoded);
-void Cmd_Team_f( gentity_t *ent );
 
 //
 // g_pweapon.c
