@@ -92,8 +92,8 @@ void G_SendScore( gentity_t *ent ) {
 				ping = cl->ps.ping < 999 ? cl->ps.ping : 999;
 			}
 
-			// Nico, added timerun best time, timerun best speed, timerun status, followed client
-			Com_sprintf( entry, sizeof( entry ), " %i %i %i %i %i %i %i %i %i %i %i",
+			// Nico, added timerun best time, timerun best speed, timerun status, followed client, login status, cgaz, speclocked status
+			Com_sprintf( entry, sizeof( entry ), " %i %i %i %i %i %i %i %i %i %i %i %i",
 				level.sortedClients[i], 
 				ping,
 				( level.time - cl->pers.enterTime ) / 60000, 
@@ -104,7 +104,9 @@ void G_SendScore( gentity_t *ent ) {
 				cl->timerunActive ? 1 : 0,
 				cl->ps.clientNum,
 				cl->sess.logged ? 1 : 0,
-				cl->pers.cgaz > 0 ? 1 : 0);
+				cl->pers.cgaz > 0 ? 1 : 0,
+				cl->sess.specLocked ? 1 : 0
+				);
 
 			if ( size + strlen( entry ) > 1000 ) {
 				i--; // we need to redo this client in the next buffer (if we can)
@@ -804,13 +806,9 @@ void Cmd_Follow_f( gentity_t *ent, unsigned int dwCommand, qboolean fValue ) {
 
 		// Allow for simple toggle
 		if ( ent->client->sess.spec_team != i ) {
-			if ( teamInfo[i].spec_lock && !( ent->client->sess.spec_invite & i ) ) {
-				CP( va( "print \"Sorry, the %s team is locked from spectators.\n\"", aTeams[i] ) );
-			} else {
-				ent->client->sess.spec_team = i;
-				CP( va( "print \"Spectator follow is now locked on the %s team.\n\"", aTeams[i] ) );
-				Cmd_FollowCycle_f( ent, 1 );
-			}
+			ent->client->sess.spec_team = i;
+			CP( va( "print \"Spectator follow is now locked on the %s team.\n\"", aTeams[i] ) );
+			Cmd_FollowCycle_f( ent, 1 );
 		} else {
 			ent->client->sess.spec_team = 0;
 			CP( va( "print \"%s team spectating is now disabled.\n\"", aTeams[i] ) );
@@ -832,9 +830,9 @@ void Cmd_Follow_f( gentity_t *ent, unsigned int dwCommand, qboolean fValue ) {
 		return;
 	}
 
-	// OSP - can't follow a player on a speclocked team, unless allowed
-	if ( !G_allowFollow( ent, level.clients[i].sess.sessionTeam ) ) {
-		CP( va( "print \"Sorry, the %s team is locked from spectators.\n\"", aTeams[level.clients[i].sess.sessionTeam] ) );
+	// can't follow a speclocked client, unless allowed
+	if (!G_AllowFollow(ent, g_entities + i) && !ent->client->sess.freeSpec) {
+		CP(va("print \"Sorry, player %s ^7is locked from spectators.\n\"", level.clients[i].pers.netname));
 		return;
 	}
 
@@ -901,7 +899,7 @@ void Cmd_FollowCycle_f( gentity_t *ent, int dir ) {
 		}
 
 		// OSP
-		if ( !G_desiredFollow( ent, level.clients[clientnum].sess.sessionTeam ) ) {
+		if (!G_DesiredFollow(ent, g_entities + clientnum) && !ent->client->sess.freeSpec) {
 			continue;
 		}
 
@@ -2458,4 +2456,104 @@ qboolean ClientIsFlooding(gentity_t *ent) {
 	ent->client->sess.nextReliableTime = level.time + 0;
 
 	return qfalse;
+}
+
+/**
+ * Locks/unlocks a client from spectators.
+ * @source: TJMod
+ */
+void Cmd_SpecLock_f(gentity_t *ent, unsigned int dwCommand, qboolean lock) {
+	int	i = 0;
+	gentity_t *other = NULL;
+
+	if (ent->client->sess.specLocked == lock) {
+		CP(va("print \"You are already %slocked from spectators!\n\"", lock ? "" : "un"));
+		return;
+	}
+
+	ent->client->sess.specLocked = lock;
+
+	// unlocked
+	if (!ent->client->sess.specLocked) {
+		CP("cpm \"You are now unlocked from spectators!\n\"");
+		return;
+	}
+
+	// locked
+	CP("cpm \"You are now locked from spectators!\n\"");
+	CP("cpm \"Use ^3specinvite^7 to invite people to spectate.\n\"");
+
+	// update following players
+	for (i = 0; i < level.numConnectedClients; i++) {
+		other = g_entities + level.sortedClients[i];
+
+		if (other->client->sess.referee) {
+			continue;
+		}
+
+		if (other->client->sess.sessionTeam != TEAM_SPECTATOR) {
+			continue;
+		}
+
+		if (other->client->sess.spectatorState == SPECTATOR_FOLLOW
+				&& other->client->sess.spectatorClient == ent - g_entities
+				&& !G_AllowFollow(other, ent) && !other->client->sess.freeSpec) {
+			StopFollowing(other);
+		}
+	}
+}
+
+/**
+ * Sends an invitation to a client to spectate him.
+ * @source: TJMod
+ */
+void Cmd_SpecInvite_f(gentity_t *ent, unsigned int dwCommand, qboolean invite) {
+	int	clientNum = 0;
+	gentity_t *other = NULL;
+	char arg[MAX_TOKEN_CHARS] = {0};
+
+	if (ClientIsFlooding(ent)) {
+		CP("print \"^1Spam Protection:^7 Specinvite ignored\n\"");
+		return;
+	}
+
+	// find the client to invite
+	trap_Argv(1, arg, sizeof(arg));
+	if ((clientNum = ClientNumberFromString(ent, arg)) == -1) {
+		return;
+	}
+
+	other = g_entities + clientNum;
+
+	// can't invite self
+	if (other == ent) {
+		CP(va("print \"You can not spec%sinvite yourself!\n\"", invite ? "" : "un"));
+		return;
+	}
+
+	if (invite) {
+		if (COM_BitCheck(ent->client->sess.specInvitedClients, clientNum)) {
+			CP(va("print \"%s^7 is already specinvited.\n\"", other->client->pers.netname));
+			return;
+		}
+		COM_BitSet(ent->client->sess.specInvitedClients, clientNum);
+
+		CP(va("print \"%s^7 has been sent a spectator invitation.\n\"", other->client->pers.netname));
+		CPx(other - g_entities, va("cpm \"You have been invited to spectate %s^7.\n\"", ent->client->pers.netname));
+	} else {
+		if (!COM_BitCheck(ent->client->sess.specInvitedClients, clientNum)) {
+			CP(va("print \"%s^7 is not specinvited.\n\"", other->client->pers.netname));
+			return;
+		}
+
+		COM_BitClear(ent->client->sess.specInvitedClients, clientNum);
+		if (other->client->sess.spectatorState == SPECTATOR_FOLLOW
+				&& other->client->sess.spectatorClient == ent - g_entities
+				&& !G_AllowFollow(other, ent)) {
+			StopFollowing(other);
+		}
+
+		CP(va("print \"%s^7 was removed from invited spectators.\n\"", other->client->pers.netname));
+		CPx(other - g_entities, va("cpm \"You have been uninvited to spectate %s^7.\n\"", ent->client->pers.netname));
+	}
 }

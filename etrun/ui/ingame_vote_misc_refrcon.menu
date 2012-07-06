@@ -45,9 +45,6 @@ menuDef {
 	
 	BUTTONEXT( 6, 230, .5*(WINDOW_WIDTH-18), 14, "LOCK TEAMS", .24, 11, exec "cmd ref lock"; uiScript closeingame, settingDisabled CV_SVS_LOCKTEAMS cvarTest "authLevel" showCVar { RL_REFEREE RL_RCON } )
 	BUTTONEXT( 6, 230, .5*(WINDOW_WIDTH-18), 14, "UNLOCK TEAMS", .24, 11, exec "cmd ref unlock"; uiScript closeingame, settingEnabled CV_SVS_LOCKTEAMS cvarTest "authLevel" showCVar { RL_REFEREE RL_RCON } )
-	
-	BUTTONEXT( 6+.5*(WINDOW_WIDTH-18)+6, 230, .5*(WINDOW_WIDTH-18), 14, "LOCK SPECS", .24, 11, exec "cmd ref speclock"; uiScript closeingame, settingDisabled CV_SVS_LOCKSPECS cvarTest "authLevel" showCVar { RL_REFEREE RL_RCON } )
-	BUTTONEXT( 6+.5*(WINDOW_WIDTH-18)+6, 230, .5*(WINDOW_WIDTH-18), 14, "UNLOCK SPECS", .24, 11, exec "cmd ref specunlock"; uiScript closeingame, settingEnabled CV_SVS_LOCKSPECS cvarTest "authLevel" showCVar { RL_REFEREE RL_RCON } )
 
 	BUTTON( 6, WINDOW_HEIGHT-24, WINDOW_WIDTH-12, 18, "BACK", .3, 14, close ingame_vote_misc_refrcon ; open ingame_vote )
 }

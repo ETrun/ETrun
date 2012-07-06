@@ -234,6 +234,9 @@ static void WM_ETrun_DrawPlayers(int *x, int *y, int width, float fade, fontInfo
 		if (orderedScores[i].clientHidden == 1) {
 			Q_strcat(status, sizeof (status), "^9H ");
 		}
+		if (orderedScores[i].speclocked == 1) {
+			Q_strcat(status, sizeof (status), "^bS ");
+		}
 		if (strlen(status) == 0) {
 			Q_strncpyz(status, "-", sizeof (status));
 		}
@@ -400,6 +403,7 @@ qboolean CG_DrawScoreboard(void) {
 		orderedScores[i].ping = cg.scores[i].ping;
 		orderedScores[i].followedClient = cg.scores[i].followedClient;// Followed client
 		Q_strncpyz(orderedScores[i].followedClientName, cgs.clientinfo[cg.scores[i].followedClient].name, MAX_QPATH);// Followed client name
+		orderedScores[i].speclocked = cg.scores[i].speclocked;// Speclock status
 	}
 
 	// Nico, fake test data
@@ -455,7 +459,7 @@ qboolean CG_DrawScoreboard(void) {
 		break;
 
 	case 255:
-		sprintf(physicsName, "AP");
+		sprintf(physicsName, "AP (no OB)");
 		break;
 
 	case 7:
@@ -463,7 +467,7 @@ qboolean CG_DrawScoreboard(void) {
 		break;
 
 	case 23:
-		sprintf(physicsName, "VQ3");
+		sprintf(physicsName, "VQ3 (no OB)");
 		break;
 
 	case 0:

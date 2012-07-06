@@ -432,8 +432,7 @@ void SpectatorThink( gentity_t *ent, usercmd_t *ucmd ) {
 		( client->sess.sessionTeam == TEAM_SPECTATOR ) && // don't let dead team players do free fly
 		( client->sess.spectatorState == SPECTATOR_FOLLOW ) &&
 		( ( ( client->buttons & BUTTON_ACTIVATE ) &&
-			!( client->oldbuttons & BUTTON_ACTIVATE ) ) || ucmd->upmove > 0 ) &&
-		G_allowFollow( ent, TEAM_AXIS ) && G_allowFollow( ent, TEAM_ALLIES ) ) {
+			!( client->oldbuttons & BUTTON_ACTIVATE ) ) || ucmd->upmove > 0 ) ) {
 		// code moved to StopFollowing
 		StopFollowing( ent );
 	}
@@ -1032,12 +1031,6 @@ void SpectatorClientEndFrame( gentity_t *ent ) {
 			}
 		}
 	}
-
-	// we are at a free-floating spec state for a player,
-	// set speclock status, as appropriate
-	//	 --> Can we use something besides a powerup slot?
-	ent->client->ps.powerups[PW_BLACKOUT] = ( G_blockoutTeam( ent, TEAM_AXIS ) * TEAM_AXIS ) |
-											( G_blockoutTeam( ent, TEAM_ALLIES ) * TEAM_ALLIES );
 }
 
 

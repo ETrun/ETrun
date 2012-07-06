@@ -581,7 +581,6 @@ int G_Referee_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2
 			AP( "print \"Player left before becoming referee\n\"" );
 		} else {
 			cl->sess.referee = RL_REFEREE;  // FIXME: Differentiate voted refs from passworded refs
-			cl->sess.spec_invite = TEAM_AXIS | TEAM_ALLIES;
 			AP( va( "cp \"%s^7 is now a referee\n\"", cl->pers.netname ) );
 			ClientUserinfoChanged( atoi( level.voteInfo.vote_value ) );
 		}
@@ -674,7 +673,6 @@ int G_Unreferee_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *ar
 		gclient_t *cl = &level.clients[atoi( level.voteInfo.vote_value )];
 
 		cl->sess.referee = RL_NONE;
-		cl->sess.spec_invite = 0;
 		AP( va( "cp \"%s^7\nis no longer a referee\n\"", cl->pers.netname ) );
 		ClientUserinfoChanged( atoi( level.voteInfo.vote_value ) );
 	}

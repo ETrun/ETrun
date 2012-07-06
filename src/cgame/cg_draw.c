@@ -1866,8 +1866,6 @@ CG_DrawFlashFade
 static void CG_DrawFlashFade( void ) {
 	static int lastTime;
 	int elapsed, time;
-	vec4_t col;
-	qboolean fBlackout = ( int_ui_blackout.integer > 0 );
 
 	if ( cgs.fadeStartTime + cgs.fadeDuration < cg.time ) {
 		cgs.fadeAlphaCurrent = cgs.fadeAlpha;
@@ -1884,43 +1882,6 @@ static void CG_DrawFlashFade( void ) {
 				cgs.fadeAlphaCurrent += ( (float)elapsed / (float)cgs.fadeDuration );
 				if ( cgs.fadeAlphaCurrent > cgs.fadeAlpha ) {
 					cgs.fadeAlphaCurrent = cgs.fadeAlpha;
-				}
-			}
-		}
-	}
-
-	// OSP - ugh, have to inform the ui that we need to remain blacked out (or not)
-	if ( int_ui_blackout.integer == 0 ) {
-		if ( cg.snap->ps.powerups[PW_BLACKOUT] > 0 ) {
-			trap_Cvar_Set( "ui_blackout", va( "%d", cg.snap->ps.powerups[PW_BLACKOUT] ) );
-		}
-	} else if (cg.snap->ps.powerups[PW_BLACKOUT] == 0) {
-		trap_Cvar_Set( "ui_blackout", "0" );
-	}
-
-	// now draw the fade
-	if ( cgs.fadeAlphaCurrent > 0.0 || fBlackout ) {
-		VectorClear( col );
-		col[3] = ( fBlackout ) ? 1.0f : cgs.fadeAlphaCurrent;
-		CG_FillRect( 0, 0, 640, 480, col ); // why do a bunch of these extend outside 640x480?
-
-		//bani - #127 - bail out if we're a speclocked spectator with cg_draw2d = 0
-		if ( cgs.clientinfo[ cg.clientNum ].team == TEAM_SPECTATOR && !cg_draw2D.integer ) {
-			return;
-		}
-
-		// OSP - Show who is speclocked
-		if ( fBlackout ) {
-			int i, nOffset = 90;
-			char *str, *format = "The %s team is speclocked!";
-			char *teams[TEAM_NUM_TEAMS] = { "??", "AXIS", "ALLIES", "???" };
-			float color[4] = { 1, 1, 0, 1 };
-
-			for ( i = TEAM_AXIS; i <= TEAM_ALLIES; i++ ) {
-				if ( cg.snap->ps.powerups[PW_BLACKOUT] & i ) {
-					str = va( format, teams[i] );
-					CG_DrawStringExt( INFOTEXT_STARTX, nOffset, str, color, qtrue, qfalse, 10, 10, 0 );
-					nOffset += 12;
 				}
 			}
 		}

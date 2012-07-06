@@ -51,7 +51,7 @@ void G_WriteClientSessionData( gclient_t *client, qboolean restart ) {
 	int mvc = 0;
 	const char  *s;
 
-	s = va( "%i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i",
+	s = va( "%i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i",
 			client->sess.sessionTeam,
 			client->sess.spectatorTime,
 			client->sess.spectatorState,
@@ -64,7 +64,6 @@ void G_WriteClientSessionData( gclient_t *client, qboolean restart ) {
 			client->sess.latchPlayerWeapon2,
 			client->sess.coach_team,
 			client->sess.referee,
-			client->sess.spec_invite,
 			client->sess.spec_team,
 			( mvc & 0xFFFF ),
 			( ( mvc >> 16 ) & 0xFFFF ),
@@ -72,7 +71,10 @@ void G_WriteClientSessionData( gclient_t *client, qboolean restart ) {
 			client->sess.ignoreClients[0],
 			client->sess.ignoreClients[1],
 			client->pers.enterTime,
-			restart ? client->sess.spawnObjectiveIndex : 0
+			restart ? client->sess.spawnObjectiveIndex : 0,
+			client->sess.specLocked,
+			client->sess.specInvitedClients[0],
+			client->sess.specInvitedClients[1]
 			);
 
 	trap_Cvar_Set( va( "session%i", client - level.clients ), s );
@@ -94,16 +96,6 @@ void G_ClientSwap( gclient_t *client ) {
 	} else if ( client->sess.sessionTeam == TEAM_ALLIES ) {
 		client->sess.sessionTeam = TEAM_AXIS;
 	}
-
-	// Swap spec invites as well
-	if ( client->sess.spec_invite & TEAM_AXIS ) {
-		flags |= TEAM_ALLIES;
-	}
-	if ( client->sess.spec_invite & TEAM_ALLIES ) {
-		flags |= TEAM_AXIS;
-	}
-
-	client->sess.spec_invite = flags;
 
 	// Swap spec follows as well
 	flags = 0;
@@ -130,7 +122,7 @@ void G_ReadSessionData( gclient_t *client ) {
 
 	trap_Cvar_VariableStringBuffer( va( "session%i", client - level.clients ), s, sizeof( s ) );
 
-	sscanf( s, "%i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i",
+	sscanf( s, "%i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i",
 	(int *)&client->sess.sessionTeam,
 	&client->sess.spectatorTime,
 	(int *)&client->sess.spectatorState,
@@ -143,7 +135,6 @@ void G_ReadSessionData( gclient_t *client ) {
 	&client->sess.latchPlayerWeapon2,
 	&client->sess.coach_team,
 	&client->sess.referee,
-	&client->sess.spec_invite,
 	&client->sess.spec_team,
 	&mvc_l,
 	&mvc_h,
@@ -151,7 +142,10 @@ void G_ReadSessionData( gclient_t *client ) {
 	&client->sess.ignoreClients[0],
 	&client->sess.ignoreClients[1],
 	&client->pers.enterTime,
-	&client->sess.spawnObjectiveIndex
+	&client->sess.spawnObjectiveIndex,
+	(int *) &client->sess.specLocked,
+	&client->sess.specInvitedClients[0],
+	&client->sess.specInvitedClients[1]
 	);
 
 	if ( g_swapteams.integer ) {
@@ -193,7 +187,6 @@ void G_InitSessionData( gclient_t *client, char *userinfo ) {
 	// OSP
 	sess->coach_team = 0;
 	sess->referee = ( client->pers.localClient ) ? RL_REFEREE : RL_NONE;
-	sess->spec_invite = 0;
 	sess->spec_team = 0;
 	// OSP
 
@@ -210,10 +203,6 @@ G_InitWorldSession
 void G_InitWorldSession( void ) {
 	char s[MAX_STRING_CHARS];
 	int i, j;
-
-	if ( g_swapteams.integer ) {
-		G_swapTeamLocks();
-	}
 
 	for ( i = 0; i < MAX_FIRETEAMS; i++ ) {
 		char *p, *c;
@@ -270,8 +259,7 @@ void G_WriteSessionData( qboolean restart ) {
 
 	trap_GetServerinfo( strServerInfo, sizeof( strServerInfo ) );
 
-	trap_Cvar_Set( "session", va( "%i %s", 
-									( teamInfo[TEAM_AXIS].spec_lock * TEAM_AXIS | teamInfo[TEAM_ALLIES].spec_lock * TEAM_ALLIES ),
+	trap_Cvar_Set( "session", va( "%s", 
 									Info_ValueForKey( strServerInfo, "mapname" ) ) );
 
 	for ( i = 0; i < level.numConnectedClients; i++ ) {

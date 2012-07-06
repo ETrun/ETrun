@@ -538,7 +538,6 @@ typedef struct {
 	// OSP
 	int coach_team;
 	int referee;
-	int spec_invite;
 	int spec_team;
 	// OSP
 
@@ -563,6 +562,11 @@ typedef struct {
 
 	// Nico, login status
 	qboolean logged;
+
+	// Nico, speclock
+	qboolean	specLocked;
+	int			specInvitedClients[MAX_CLIENTS / (sizeof(int) * 8)];
+	qboolean	freeSpec;
 
 } clientSession_t;
 
@@ -1047,6 +1051,8 @@ int ClientNumberFromString( gentity_t *to, char *s );
 void SanitizeString( char *in, char *out, qboolean fToLower );
 void Cmd_Load_f(gentity_t *ent);
 void Cmd_Save_f(gentity_t *ent);
+void Cmd_SpecLock_f(gentity_t *ent, unsigned int dwCommand, qboolean lock);
+void Cmd_SpecInvite_f(gentity_t *ent, unsigned int dwCommand, qboolean invite);
 
 //
 // g_apicmds.c
@@ -1320,9 +1326,6 @@ void G_SayTo(gentity_t *ent, gentity_t *other, int mode, int color, const char *
 qboolean Cmd_CallVote_f( gentity_t *ent, unsigned int dwCommand, qboolean fValue );
 void Cmd_Follow_f( gentity_t *ent, unsigned int dwCommand, qboolean fValue );
 void Cmd_Say_f(gentity_t *ent, int mode, qboolean arg0, qboolean encoded);
-
-// Nico, flood protection
-// void Cmd_Team_f( gentity_t *ent, unsigned int dwCommand, qboolean fValue );
 void Cmd_Team_f( gentity_t *ent );
 
 //
@@ -1782,7 +1785,6 @@ typedef enum {
 
 // Team extras
 typedef struct {
-	qboolean spec_lock;
 	qboolean team_lock;
 	char team_name[24];
 	int team_score;
@@ -1802,21 +1804,18 @@ void G_wipeCvars( void );
 // g_cmds_ext.c
 //
 qboolean G_commandCheck( gentity_t *ent, char *cmd );
-
 qboolean G_commandHelp( gentity_t *ent, char *pszCommand, unsigned int dwCommand );
 qboolean G_cmdDebounce( gentity_t *ent, const char *pszCommand );
 void G_commands_cmd( gentity_t *ent, unsigned int dwCommand, qboolean fValue );
 void G_players_cmd( gentity_t *ent, unsigned int dwCommand, qboolean fDump );
-void G_specinvite_cmd( gentity_t *ent, unsigned int dwCommand, qboolean fLock );
-void G_speclock_cmd( gentity_t *ent, unsigned int dwCommand, qboolean fLock );
 void G_VoiceTo( gentity_t *ent, gentity_t *other, int mode, const char *id, qboolean voiceonly );
+
 
 ///////////////////////
 // g_match.c
 //
 qboolean G_allowPanzer( gentity_t *ent );
 int G_checkServerToggle( vmCvar_t *cv );
-qboolean G_desiredFollow( gentity_t *ent, int nTeam );
 void G_globalSound( char *sound );
 void G_initMatch( void );
 void G_loadMatchGame( void );
@@ -1835,7 +1834,6 @@ void G_refLockTeams_cmd( gentity_t *ent, qboolean fLock );
 void G_refPause_cmd( gentity_t *ent, qboolean fPause );
 void G_refPlayerPut_cmd( gentity_t *ent, int team_id );
 void G_refRemove_cmd( gentity_t *ent );
-void G_refSpeclockTeams_cmd( gentity_t *ent, qboolean fLock );
 void G_refWarning_cmd( gentity_t* ent );
 void G_refMute_cmd( gentity_t *ent, qboolean mute );
 int  G_refClientnumForName( gentity_t *ent, const char *name );
@@ -1854,16 +1852,12 @@ void G_UnMuteClient( void );
 extern char *aTeams[TEAM_NUM_TEAMS];
 extern team_info teamInfo[TEAM_NUM_TEAMS];
 
-qboolean G_allowFollow( gentity_t *ent, int nTeam );
-int G_blockoutTeam( gentity_t *ent, int nTeam );
-void G_removeSpecInvite( int team );
-void G_swapTeamLocks( void );
+qboolean G_AllowFollow( gentity_t *ent, gentity_t *other );
+qboolean G_DesiredFollow(gentity_t *ent, gentity_t *other);
 void G_swapTeams( void );
 qboolean G_teamJoinCheck( int team_num, gentity_t *ent );
 int  G_teamID( gentity_t *ent );
 void G_teamReset( int team_num, qboolean fClearSpecLock );
-void G_updateSpecLock( int nTeam, qboolean fLock );
-
 
 
 ///////////////////////

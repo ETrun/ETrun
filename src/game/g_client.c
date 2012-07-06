@@ -1683,6 +1683,11 @@ void ClientDisconnect( int clientNum ) {
 	G_RemoveFromAllIgnoreLists( clientNum );
 	G_LeaveTank( ent, qfalse );
 
+	// Nico, remove the client from all specInvited lists
+	for (i = 0; i < level.numConnectedClients; ++i) {
+		COM_BitClear(level.clients[level.sortedClients[i]].sess.specInvitedClients, clientNum);
+	}
+
 	// stop any following clients
 	for ( i = 0 ; i < level.numConnectedClients ; i++ ) {
 		flag = g_entities + level.sortedClients[i];

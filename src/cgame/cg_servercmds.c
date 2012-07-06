@@ -57,30 +57,33 @@ static void CG_ParseScore( team_t team ) {
 	for ( j = 0; j < numScores; j++ ) {
 		i = cg.numScores;
 
-		cg.scores[i].client = atoi(         CG_Argv( 2 + ( j * 11 ) ) );// Nico, *7 => *11
+		cg.scores[i].client = atoi(         CG_Argv( 2 + ( j * 12 ) ) );// Nico, *7 => *12
 
-		cg.scores[i].ping = atoi(           CG_Argv( 3 + ( j * 11 ) ) );// Nico, 2 => 1, *7 => *11
-		cg.scores[i].time = atoi(           CG_Argv( 4 + ( j * 11 ) ) );// Nico, 3 => 2, *7 => *11
-		powerups = atoi(                    CG_Argv( 5 + ( j * 11 ) ) );// Nico, 4 => 3, *7 => *11
-		cg.scores[i].playerClass = atoi(    CG_Argv( 6 + ( j * 11 ) ) );// Nico, 5 => 4, *7 => *11
+		cg.scores[i].ping = atoi(           CG_Argv( 3 + ( j * 12 ) ) );// Nico, 2 => 1, *7 => *12
+		cg.scores[i].time = atoi(           CG_Argv( 4 + ( j * 12 ) ) );// Nico, 3 => 2, *7 => *12
+		powerups = atoi(                    CG_Argv( 5 + ( j * 12 ) ) );// Nico, 4 => 3, *7 => *12
+		cg.scores[i].playerClass = atoi(    CG_Argv( 6 + ( j * 12 ) ) );// Nico, 5 => 4, *7 => *12
 
 		// Nico, timerun best time
-		cg.scores[i].timerunBestTime = atoi(CG_Argv(7 + (j * 11)));
+		cg.scores[i].timerunBestTime = atoi(CG_Argv(7 + (j * 12)));
 
 		// Nico, timerun best speed
-		cg.scores[i].timerunBestSpeed = atoi(CG_Argv(8 + (j * 11)));
+		cg.scores[i].timerunBestSpeed = atoi(CG_Argv(8 + (j * 12)));
 
 		// Nico, timerun status
-		cg.scores[i].timerunStatus = atoi(CG_Argv(9 + (j * 11)));
+		cg.scores[i].timerunStatus = atoi(CG_Argv(9 + (j * 12)));
 
 		// Nico, followed client
-		cg.scores[i].followedClient = atoi(CG_Argv(10 + (j * 11)));
+		cg.scores[i].followedClient = atoi(CG_Argv(10 + (j * 12)));
 
 		// Nico, login status
-		cg.scores[i].logged = atoi(CG_Argv(11 + (j * 11)));
+		cg.scores[i].logged = atoi(CG_Argv(11 + (j * 12)));
 
 		// Nico, cgaz setting
-		cg.scores[i].cgaz = atoi(CG_Argv(12 + (j * 11)));
+		cg.scores[i].cgaz = atoi(CG_Argv(12 + (j * 12)));
+
+		// Nico, speclocked status
+		cg.scores[i].speclocked = atoi(CG_Argv(13 + (j * 12)));
 
 		if ( cg.scores[i].client < 0 || cg.scores[i].client >= MAX_CLIENTS ) {
 			cg.scores[i].client = 0;

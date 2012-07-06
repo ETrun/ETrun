@@ -54,10 +54,6 @@ qboolean G_refCommandCheck( gentity_t *ent, char *cmd ) {
 		G_refPlayerPut_cmd( ent, TEAM_AXIS );
 	} else if ( !Q_stricmp( cmd, "remove" ) ) {
 		G_refRemove_cmd( ent );
-	} else if ( !Q_stricmp( cmd, "speclock" ) ) {
-		G_refSpeclockTeams_cmd( ent, qtrue );
-	} else if ( !Q_stricmp( cmd, "specunlock" ) ) {
-		G_refSpeclockTeams_cmd( ent, qfalse );
 	} else if ( !Q_stricmp( cmd, "unlock" ) ) {
 		G_refLockTeams_cmd( ent, qfalse );
 	} else if ( !Q_stricmp( cmd, "unpause" ) ) {
@@ -86,21 +82,18 @@ void G_refHelp_cmd( gentity_t *ent ) {
 
 		G_voteHelp( ent, qfalse );
 
-		CP(  "print \"\n^5help             putallies^7 <pid>  ^5specunlock       warn ^7<pid>\n\"");
-		CP(  "print \"^5lock             putaxis^7 <pid>    ^5unlock\n\"");
-		CP(  "print \"^5mute ^7<pid>       ^5remove^7 <pid>     ^5unmute ^7<pid>\n\"");
-		CP(  "print \"^5pause            speclock         ^5unpause\n\"");
+		CP(  "print \"\n^5help             putallies^7 <pid>  ^5warn ^7<pid>       ^5putaxis^7 <pid>\n\"");
+		CP(  "print \"^5unlock           ^5mute ^7<pid>       ^5remove^7 <pid>     ^5unmute ^7<pid>\n\"");
+		CP(  "print \"^5pause            ^5unpause\n\"");
 		CP(  "print \"Usage: ^3\\ref <cmd> [params]\n\n\"" );
 
 		// Help for the console
 	} else {
 		G_Printf( "\nAdditional console commands:\n" );
 		G_Printf(  "----------------------------------------------\n" );
-		G_Printf(  "help            remove <pid>    warn <pid>\n");
-		G_Printf(  "lock            speclock\n");
-		G_Printf(  "pause           specunlock\n");
-		G_Printf(  "putallies <pid> unlock\n");
-		G_Printf(  "putaxis <pid>   unpause\n\n");
+		G_Printf(  "help     remove <pid>      warn <pid>    lock\n");
+		G_Printf(  "pause    putallies <pid>   unlock	 putaxis <pid>\n");
+		G_Printf(  "unpause\n\n");
 
 		G_Printf(  "Usage: <cmd> [params]\n\n" );
 	}
@@ -155,7 +148,6 @@ void G_ref_cmd( gentity_t *ent, unsigned int dwCommand, qboolean fValue ) {
 		}
 
 		ent->client->sess.referee = 1;
-		ent->client->sess.spec_invite = TEAM_AXIS | TEAM_ALLIES;
 		AP( va( "cp \"%s\n^3has become a referee\n\"", ent->client->pers.netname ) );
 		ClientUserinfoChanged( ent - g_entities );
 	}
@@ -286,27 +278,6 @@ void G_refRemove_cmd( gentity_t *ent ) {
 	CPx( pid, va( "print \"^5You've been removed from the %s team\n\"", aTeams[player->client->sess.sessionTeam] ) );
 
 	SetTeam( player, "s", qtrue, -1, -1, qfalse );
-}
-
-
-// Changes team spectator lock status
-void G_refSpeclockTeams_cmd( gentity_t *ent, qboolean fLock ) {
-	char *status;
-
-	// Ensure proper locking
-	G_updateSpecLock( TEAM_AXIS, ( TeamCount( -1, TEAM_AXIS ) ) ? fLock : qfalse );
-	G_updateSpecLock( TEAM_ALLIES, ( TeamCount( -1, TEAM_ALLIES ) ) ? fLock : qfalse );
-
-	status = va( "Referee has ^3SPECTATOR %sLOCKED^7 teams", ( ( fLock ) ? "" : "UN" ) );
-
-	G_printFull( status, ent );
-
-	if ( fLock ) {
-		level.server_settings |= CV_SVS_LOCKSPECS;
-	} else {
-		level.server_settings &= ~CV_SVS_LOCKSPECS;
-	}
-	trap_SetConfigstring( CS_SERVERTOGGLES, va( "%d", level.server_settings ) );
 }
 
 void G_refWarning_cmd( gentity_t* ent ) {

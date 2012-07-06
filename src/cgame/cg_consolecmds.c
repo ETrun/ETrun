@@ -811,6 +811,7 @@ void CG_InitConsoleCommands( void ) {
 	trap_AddCommand( "say_teamnl" );
 	trap_AddCommand( "say_team" );
 	trap_AddCommand( "specinvite" );
+	trap_AddCommand( "specuninvite" );
 	trap_AddCommand( "speclock" );
 	trap_AddCommand( "specunlock" );
 	trap_AddCommand( "fireteam" );

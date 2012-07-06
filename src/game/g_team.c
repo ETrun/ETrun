@@ -28,7 +28,7 @@ If you have questions concerning this license or the applicable additional terms
 
 
 #include <limits.h>
-
+#include "../../etrun/ui/menudef.h"
 #include "g_local.h"
 
 typedef struct teamgame_s
@@ -1458,10 +1458,6 @@ void G_teamReset( int team_num, qboolean fClearSpecLock ) {
 	teamInfo[team_num].team_lock = qfalse;
 	teamInfo[team_num].team_name[0] = 0;
 	teamInfo[team_num].team_score = 0;
-
-	if ( fClearSpecLock ) {
-		teamInfo[team_num].spec_lock = qfalse;
-	}
 }
 
 
@@ -1529,99 +1525,18 @@ qboolean G_teamJoinCheck( int team_num, gentity_t *ent ) {
 	return( qtrue );
 }
 
-
-// Update specs for blackout, as needed
-void G_updateSpecLock( int nTeam, qboolean fLock ) {
-	int i;
-	gentity_t *ent;
-
-	teamInfo[nTeam].spec_lock = fLock;
-	for ( i = 0; i < level.numConnectedClients; i++ ) {
-		ent = g_entities + level.sortedClients[i];
-
-		if ( ent->client->sess.referee ) {
-			continue;
-		}
-		if ( ent->client->sess.coach_team ) {
-			continue;
-		}
-
-		ent->client->sess.spec_invite &= ~nTeam;
-
-		if ( ent->client->sess.sessionTeam != TEAM_SPECTATOR ) {
-			continue;
-		}
-
-		if ( !fLock ) {
-			continue;
-		}
-
-		if ( ent->client->sess.spectatorState == SPECTATOR_FOLLOW ) {
-			StopFollowing( ent );
-			ent->client->sess.spec_team &= ~nTeam;
-		}
-
-		SetTeam( ent, "s", qtrue, -1, -1, qfalse );
-	}
-}
-
-
-// Swap team speclocks
-void G_swapTeamLocks( void ) {
-	qboolean fLock = teamInfo[TEAM_AXIS].spec_lock;
-	teamInfo[TEAM_AXIS].spec_lock = teamInfo[TEAM_ALLIES].spec_lock;
-	teamInfo[TEAM_ALLIES].spec_lock = fLock;
-
-	fLock = teamInfo[TEAM_AXIS].team_lock;
-	teamInfo[TEAM_AXIS].team_lock = teamInfo[TEAM_ALLIES].team_lock;
-	teamInfo[TEAM_ALLIES].team_lock = fLock;
-}
-
-
-// Removes everyone's specinvite for a particular team.
-void G_removeSpecInvite( int team ) {
-	int i;
-	gentity_t *cl;
-
-	for ( i = 0; i < level.numConnectedClients; i++ ) {
-		cl = g_entities + level.sortedClients[i];
-		if ( !cl->inuse || cl->client->sess.referee || cl->client->sess.coach_team == team ) {
-			continue;
-		}
-
-		cl->client->sess.spec_invite &= ~team;  // none = 0, red = 1, blue = 2
-	}
-}
-
-
-// Return blockout status for a player
-int G_blockoutTeam( gentity_t *ent, int nTeam ) {
-	return( !G_allowFollow( ent, nTeam ) );
+// Nico, check if ew can follow a given client
+qboolean G_AllowFollow( gentity_t *ent, gentity_t *other ) {
+	return !other->client->sess.specLocked || 
+		COM_BitCheck(other->client->sess.specInvitedClients, ent - g_entities) ||
+		ent->client->sess.referee == RL_REFEREE;
 }
 
 
 // Figure out if we are allowed/want to follow a given player
-qboolean G_allowFollow( gentity_t *ent, int nTeam ) {
-	if ( level.time - level.startTime > 2500 ) {
-		if ( TeamCount( -1, TEAM_AXIS ) == 0 ) {
-			teamInfo[TEAM_AXIS].spec_lock = qfalse;
-		}
-		if ( TeamCount( -1, TEAM_ALLIES ) == 0 ) {
-			teamInfo[TEAM_ALLIES].spec_lock = qfalse;
-		}
-	}
-
-	return( ( !teamInfo[nTeam].spec_lock || ent->client->sess.sessionTeam != TEAM_SPECTATOR || ( ent->client->sess.spec_invite & nTeam ) == nTeam ) );
-}
-
-
-// Figure out if we are allowed/want to follow a given player
-qboolean G_desiredFollow( gentity_t *ent, int nTeam ) {
-	if ( G_allowFollow( ent, nTeam ) &&
-		 ( ent->client->sess.spec_team == 0 || ent->client->sess.spec_team == nTeam ) ) {
-		return( qtrue );
-	}
-
-	return( qfalse );
+qboolean G_DesiredFollow(gentity_t *ent, gentity_t *other) {
+	return G_AllowFollow(ent, other)
+		&& (ent->client->sess.spec_team == 0
+				|| ent->client->sess.spec_team == other->client->sess.sessionTeam);
 }
 // -OSP

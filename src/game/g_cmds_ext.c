@@ -57,9 +57,10 @@ static const cmd_reference_t aCommandInfo[] = {
 	{ "follow",			qtrue,  Cmd_Follow_f, " <player_ID|allies|axis>:^7 Spectates a particular player or team" },
 	{ "players",		qtrue,  G_players_cmd, ":^7 Lists all active players and their IDs/information" },
 	{ "ref",			qtrue,  G_ref_cmd, " <password>:^7 Become a referee (admin access)" },
-	{ "specinvite",      qtrue,  G_specinvite_cmd, ":^7 Invites a player to spectate a speclock'ed team" },
-	{ "speclock",		 qtrue,  G_speclock_cmd, ":^7 Locks a player's team from spectators" },
-	{ "specunlock",      qfalse, G_speclock_cmd, ":^7 Unlocks a player's team from spectators" },
+	{ "specinvite",		qtrue,	Cmd_SpecInvite_f, ":^7 Invites a player to spectate" },
+	{ "specuninvite",	qfalse,	Cmd_SpecInvite_f, ":^7 Uninvites a player to spectate" },
+	{ "speclock",		qtrue,	Cmd_SpecLock_f, ":^7 Locks a player from spectators" },
+	{ "specunlock",		qfalse,	Cmd_SpecLock_f, ":^7 Unlocks a player from spectators" },
 	// Nico, stoprecord command was missing from commands list
 	// http://games.chruker.dk/enemy_territory/modding_project_bugfix.php?bug_id=012
 	{ "stoprecord",		qtrue,	NULL, ":^7 Stops a demo recording currently in progress" },
@@ -279,102 +280,4 @@ void G_players_cmd( gentity_t *ent, unsigned int dwCommand, qboolean fValue ) {
 	if ( ent ) {
 		CP( va( "print \"\n^3%2d^7 total players\n\n\"", cnt ) );
 	} else { G_Printf( "\n%2d total players\n\n", cnt );}
-
-	// Team speclock info
-	for ( i = TEAM_AXIS; i <= TEAM_ALLIES; i++ ) {
-		if ( teamInfo[i].spec_lock ) {
-			if ( ent ) {
-				CP( va( "print \"** %s team is speclocked.\n\"", aTeams[i] ) );
-			} else { G_Printf( "** %s team is speclocked.\n", aTeams[i] );}
-		}
-	}
-}
-
-// ************** SPECINVITE
-//
-// Sends an invitation to a player to spectate a team.
-void G_specinvite_cmd( gentity_t *ent, unsigned int dwCommand, qboolean fLock ) {
-	int tteam, pid;
-	gentity_t *player;
-	char arg[MAX_TOKEN_CHARS];
-
-	// Nico, flood protection
-	if (ClientIsFlooding(ent)) {
-		CP("print \"^1Spam Protection: ^7dropping specinvite\n\"");
-		return;
-	}
-
-	if ( team_nocontrols.integer ) {
-		G_noTeamControls( ent ); return;
-	}
-	if ( !G_cmdDebounce( ent, aCommandInfo[dwCommand].pszCommandName ) ) {
-		return;
-	}
-
-	tteam = G_teamID( ent );
-	if ( tteam == TEAM_AXIS || tteam == TEAM_ALLIES ) {
-		if ( !teamInfo[tteam].spec_lock ) {
-			CP( "cpm \"Your team isn't locked from spectators!\n\"" );
-			return;
-		}
-
-		// Find the player to invite.
-		trap_Argv( 1, arg, sizeof( arg ) );
-		if ( ( pid = ClientNumberFromString( ent, arg ) ) == -1 ) {
-			return;
-		}
-
-		player = g_entities + pid;
-
-		// Can't invite self
-		if ( player->client == ent->client ) {
-			CP( "cpm \"You can't specinvite yourself!\n\"" );
-			return;
-		}
-
-		// Can't invite an active player.
-		if ( player->client->sess.sessionTeam != TEAM_SPECTATOR ) {
-			CP( "cpm \"You can't specinvite a non-spectator!\n\"" );
-			return;
-		}
-
-		player->client->sess.spec_invite |= tteam;
-
-		// Notify sender/recipient
-		CP( va( "print \"%s^7 has been sent a spectator invitation.\n\"", player->client->pers.netname ) );
-		G_printFull( va( "*** You've been invited to spectate the %s team!", aTeams[tteam] ), player );
-
-	} else {CP( "cpm \"Spectators can't specinvite players!\n\"" );}
-}
-
-
-// ************** SPECLOCK / SPECUNLOCK
-//
-// Locks/unlocks a player's team from spectators.
-void G_speclock_cmd( gentity_t *ent, unsigned int dwCommand, qboolean fLock ) {
-	int tteam;
-
-	if ( team_nocontrols.integer ) {
-		G_noTeamControls( ent );
-		return;
-	}
-
-	if ( !G_cmdDebounce( ent, aCommandInfo[dwCommand].pszCommandName ) ) {
-		return;
-	}
-
-	tteam = G_teamID( ent );
-	if ( tteam == TEAM_AXIS || tteam == TEAM_ALLIES ) {
-		if ( teamInfo[tteam].spec_lock == fLock ) {
-			CP( va( "print \"\n^3Your team is already %sed from spectators!\n\n\"", lock_status[fLock] ) );
-		} else {
-			G_printFull( va( "The %s team is now %sed from spectators", aTeams[tteam], lock_status[fLock] ), NULL );
-			G_updateSpecLock( tteam, fLock );
-			if ( fLock ) {
-				CP( "cpm \"Use ^3specinvite^7 to invite people to spectate.\n\"" );
-			}
-		}
-	} else {
-		CP( va( "print \"Spectators can't %s a team from spectators!\n\"", lock_status[fLock] ) );
-	}
 }

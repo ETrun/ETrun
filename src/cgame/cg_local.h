@@ -495,6 +495,9 @@ typedef struct {
 	// Nico, client cgaz setting
 	int cgaz;
 
+	// Nico, speclock status
+	int speclocked;
+
 } score_t;
 
 // each client has an associated clientInfo_t
@@ -1692,6 +1695,7 @@ typedef struct {
 	int		ping;
 	int		followedClient;
 	char	followedClientName[MAX_QPATH];
+	int		speclocked;
 } s_timerunScores;
 
 //==============================================================================
