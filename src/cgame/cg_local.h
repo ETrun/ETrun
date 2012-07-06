@@ -1115,6 +1115,12 @@ typedef struct {
 	int				timerunActive;
 	int				currentTimerun;
 
+	// Auto demo
+	int				runsave;
+	char			runsavename[MAX_TOKEN_CHARS];
+	int				currentdemo;
+	int				startedNewDemo;
+
 	// Nico, end of ETrun client variables
 } cg_t;
 
@@ -1925,6 +1931,9 @@ extern vmCvar_t cg_viewLog;
 
 // Hide me
 extern vmCvar_t cg_hideMe;
+
+// Auto demo
+extern vmCvar_t cg_autoDemo;
 
 // Nico, end of ETrun cvars
 

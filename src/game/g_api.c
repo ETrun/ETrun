@@ -190,6 +190,9 @@ static void *loginHandler(void *data) {
 			ent->client->sess.logged = qtrue;
 			CP(va("print \"%s^w: you are now logged in!\n\"", GAME_VERSION_COLORED));
 			ClientUserinfoChanged(ent->client->ps.clientNum);
+
+			// Start recording a new temp demo.
+			trap_SendServerCommand(ent - g_entities, "tempDemoStart");
 		} else {
 			CP(va("print \"%s^w: login failed!\n\"", GAME_VERSION_COLORED));
 		}

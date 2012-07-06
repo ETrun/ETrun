@@ -185,6 +185,9 @@ void player_die( gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int
 
 	weapon_t weap = BG_WeaponForMOD( meansOfDeath );
 
+	// Start recording a new temp demo.
+	trap_SendServerCommand(self - g_entities, "tempDemoStart");
+
 	if ( attacker == self ) {
 		if ( self->client ) {
 

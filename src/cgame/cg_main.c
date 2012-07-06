@@ -322,6 +322,9 @@ vmCvar_t cg_viewLog;
 // Hide me
 vmCvar_t cg_hideMe;
 
+// Auto demo
+vmCvar_t cg_autoDemo;
+
 // Nico, end of ETrun cvars
 
 typedef struct {
@@ -576,6 +579,9 @@ cvarTable_t cvarTable[] = {
 
 	// Hide me
 	{ &cg_hideMe, "cg_hideMe", "0", CVAR_ARCHIVE },
+
+	// Auto demo
+	{ &cg_autoDemo, "cg_autoDemo", "0", CVAR_ARCHIVE },
 
 	// Nico, end of ETrun cvars
 };

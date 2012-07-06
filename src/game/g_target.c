@@ -1471,8 +1471,11 @@ void target_stoptimer_use(gentity_t *self, gentity_t *other, gentity_t *activato
 			time, (int)client->startSpeed, (int)client->stopSpeed, (int)client->sess.timerunBestSpeed);
 	}
 
+	// Save run
+	trap_SendServerCommand(activator - g_entities, va("runSave %s_%02d-%02d-%03d", client->currentTimerun, min, sec, milli));
+
 	// Start recording a new temp demo.
-	// trap_SendServerCommand(activator - g_entities, "tempDemoStart 1");
+	trap_SendServerCommand(activator - g_entities, "tempDemoStart 1");
 
 	// Nico, notify the client and its spectators the timerun has stopped
 	notify_timerun_stop(activator, client->sess.timerunLastTime[timerunNum]);

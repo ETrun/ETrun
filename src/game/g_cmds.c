@@ -2281,6 +2281,9 @@ void Cmd_Load_f(gentity_t *ent) {
 		} else {
 			CP(va("cp \"Loaded ^z%d\n\"", posNum));
 		}
+
+		// Start recording a new temp demo.
+		trap_SendServerCommand(ent - g_entities, "tempDemoStart");
 	} else {
 		CP("cp \"Use save first!\n\"");
 	}

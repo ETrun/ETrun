@@ -4,8 +4,8 @@
 
 #define WINDOW_X		16
 #define WINDOW_Y		16
-#define WINDOW_WIDTH	280
-#define WINDOW_HEIGHT	110
+#define WINDOW_WIDTH	360
+#define WINDOW_HEIGHT	130
 #define GROUP_NAME		"grpEtrunCustomiseMisc"
 
 // Macros //
@@ -34,8 +34,11 @@ menuDef {
 
 #define SUBWINDOW_WIDTH		WINDOW_WIDTH-12
 
-	SUBWINDOW( 6, 32, (SUBWINDOW_WIDTH), 50, "Login" )
+	SUBWINDOW( 6, 32, (SUBWINDOW_WIDTH), 30, "Login" )
 	YESNO( 8, 48, (SUBWINDOW_WIDTH)-4, 10, "Automatically login:", .2, 8, "cg_autoLogin", "" )
+
+	SUBWINDOW( 6, 66, (SUBWINDOW_WIDTH), 30, "Demos" )
+	YESNO( 8, 82, (SUBWINDOW_WIDTH)-4, 10, "Automatically record demos:", .2, 8, "cg_autoDemo", "" )
 
 // Buttons //
 	

@@ -1451,6 +1451,7 @@ static void CG_ServerCommand( void ) {
 	const char  *cmd;
 	char text[MAX_SAY_TEXT];
 	qboolean enc = qfalse; // used for enc_chat, enc_tchat
+	static int currentdemo = 0, ignoreNextStart = 0;
 
 	cmd = CG_Argv( 0 );
 
@@ -1836,6 +1837,46 @@ static void CG_ServerCommand( void ) {
 		return;
 	}
 	// Nico, end of timer start/stop/check related
+
+	// Nico, auto demo related
+	if (!Q_stricmp(cmd, "runSave"))  {
+		if (!cg_autoDemo.integer || cg.demoPlayback) {
+			return;
+		}
+
+		cg.startedNewDemo = 0;
+		cg.runsave = 1;
+		Com_sprintf(cg.runsavename, sizeof (cg.runsavename), CG_Argv(1));
+		cg.currentdemo = currentdemo;
+		return;
+	}
+
+	if (!Q_stricmp(cmd, "tempDemoStart")) {
+		if (!cg_autoDemo.integer || cg.demoPlayback) {
+			return;
+		}
+
+		if (currentdemo > 20) {
+			currentdemo = 1;
+		}
+
+		// Sent from stoptimer, do a 1 sec delay.
+		if (trap_Argc() > 1) {
+			currentdemo++;
+			cg.startedNewDemo = currentdemo+1;
+			ignoreNextStart = 1;
+		} else if (!ignoreNextStart) {
+			currentdemo++;
+			cg.startedNewDemo = 1;
+			trap_SendConsoleCommand(va("stoprecord\n"));
+			trap_SendConsoleCommand(va("record temp_%i\n", currentdemo));
+			ignoreNextStart = 1;
+		} else {
+			ignoreNextStart = 0;
+		}
+		return;
+	}
+	// Nico, end of auto demo related
 
 	CG_Printf( "Unknown client game command: %s\n", cmd );
 }
