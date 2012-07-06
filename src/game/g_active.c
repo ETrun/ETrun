@@ -768,6 +768,13 @@ void ClientThink_real( gentity_t *ent ) {
 	pm.timerunActive = client->timerunActive;
 	pm.timerunStartTime = client->timerunStartTime + 500;
 
+	// Nico, store logins status in pmove
+	if (client->sess.logged) {
+		pm.isLogged = 1;
+	} else {
+		pm.isLogged = 0;
+	}
+
 	pm.noWeapClips = qfalse;
 
 	VectorCopy( client->ps.origin, client->oldOrigin );

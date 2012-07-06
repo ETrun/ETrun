@@ -947,7 +947,7 @@ static void PM_AirMove( void ) {
 	wishspeed *= scale;
 
 	// Nico, add aircontrol support
-	if (!(pm->physics & PHYSICS_AIRCONTROL && (!pm->isTimerun || pm->timerunActive == 1))) {
+	if (!(pm->physics & PHYSICS_AIRCONTROL && (!pm->isTimerun || pm->timerunActive == 1 || pm->isLogged == 0))) {
 		// Nico, note: disabled air control
 		// not on ground, so little effect on velocity
 		PM_Accelerate( wishdir, wishspeed, pm_airaccelerate );

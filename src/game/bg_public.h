@@ -507,6 +507,7 @@ typedef struct {
 	int			isTimerun;// Nico, is level a timerun?
 	int			timerunActive;
 	int			timerunStartTime;
+	int			isLogged;// Nico, is client logged in?
 } pmove_t;
 
 
