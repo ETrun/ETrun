@@ -2669,7 +2669,6 @@ void Cmd_PrivateMessage_f(gentity_t *ent) {
 	char str[MAX_STRING_CHARS] = {0};
 	char *msg = NULL;
 	int pcount = 0;
-	int count = 0;
 	int i = 0;
 	gentity_t *tmpent = NULL;
 

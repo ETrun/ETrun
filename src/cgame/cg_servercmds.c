@@ -1846,7 +1846,7 @@ static void CG_ServerCommand( void ) {
 
 		cg.startedNewDemo = 0;
 		cg.runsave = 1;
-		Com_sprintf(cg.runsavename, sizeof (cg.runsavename), CG_Argv(1));
+		Com_sprintf(cg.runsavename, sizeof (cg.runsavename), "%s", CG_Argv(1));
 		cg.currentdemo = currentdemo;
 		return;
 	}
