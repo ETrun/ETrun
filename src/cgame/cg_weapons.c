@@ -815,16 +815,9 @@ void CG_RailTrail2( clientInfo_t *ci, vec3_t start, vec3_t end ) {
 	VectorCopy( start, re->origin );
 	VectorCopy( end, re->oldorigin );
 
-//	// still allow different colors so we can tell AI shots from player shots, etc.
-/*	if(ci) {
-		le->color[0] = ci->color[0] * 0.75;
-		le->color[1] = ci->color[1] * 0.75;
-		le->color[2] = ci->color[2] * 0.75;
-	} else {*/
 	le->color[0] = 1;
 	le->color[1] = 0;
 	le->color[2] = 0;
-//	}
 	le->color[3] = 1.0f;
 
 	AxisClear( re->axis );

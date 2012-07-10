@@ -103,33 +103,12 @@ void CG_BuildSolidList( void ) {
 		}
 
 		if ( cent->nextState.solid ) {
-/*			if(cg_fastSolids.integer) { // Gordon: "optimization" (disabling until i fix it)
-				vec3_t vec;
-				float len;
+			cg_solidEntities[cg_numSolidEntities] = cent;
+			cg_numSolidEntities++;
 
-				cg_solidFTEntities[cg_numSolidFTEntities] = cent;
-				cg_numSolidFTEntities++;
-
-				// FIXME: use range to bbox, not to origin
-				if ( cent->nextState.solid == SOLID_BMODEL ) {
-					VectorAdd( cgs.inlineModelMidpoints[ cent->currentState.modelindex ], cent->lerpOrigin, vec );
-					VectorSubtract( vec, cg.predictedPlayerEntity.lerpOrigin, vec );
-				} else {
-					VectorSubtract( cent->lerpOrigin, cg.predictedPlayerEntity.lerpOrigin, vec );
-				}
-				if((len = DotProduct( vec, vec )) < (512 * 512)) {
-					cg_solidEntities[cg_numSolidEntities] = cent;
-					cg_numSolidEntities++;
-					continue;
-				}
-			} else*/{
-				cg_solidEntities[cg_numSolidEntities] = cent;
-				cg_numSolidEntities++;
-
-				cg_solidFTEntities[cg_numSolidFTEntities] = cent;
-				cg_numSolidFTEntities++;
-				continue;
-			}
+			cg_solidFTEntities[cg_numSolidFTEntities] = cent;
+			cg_numSolidFTEntities++;
+			continue;
 		}
 	}
 }
@@ -140,7 +119,7 @@ CG_ClipMoveToEntities
 
 ====================
 */
-/* Nico, add an extra argument to enabled/disable tracing players
+/* Nico, add an extra argument to enable/disable tracing players
 static void CG_ClipMoveToEntities( const vec3_t start, const vec3_t mins, const vec3_t maxs, const vec3_t end,
 								   int skipNumber, int mask, int capsule, trace_t *tr ) {*/
 static void CG_ClipMoveToEntities( const vec3_t start, const vec3_t mins, const vec3_t maxs, const vec3_t end,
