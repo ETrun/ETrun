@@ -420,6 +420,9 @@ void SP_rocketrun(gentity_t *ent);
 // Velocity jumppads handling
 void SP_trigger_push_velocity(gentity_t *ent);
 
+// Fakebrush
+void SP_func_fakebrush(gentity_t *ent);
+
 // Nico, end of timerun entities handling functions
 
 spawn_t spawns[] = {
@@ -642,6 +645,9 @@ spawn_t spawns[] = {
 
 	// Velocity jumppads handling
 	{"trigger_push_velocity", SP_trigger_push_velocity},
+
+	// Fakebrush
+	{"func_fakebrush", SP_func_fakebrush},
 
 	// Nico, enf of bind timerun entities handlers
 
