@@ -1,0 +1,577 @@
+//Thanks to RoeltjE and {Just-Me}
+// Fixed version by Dinius
+
+game_manager
+{
+	spawn
+	{
+		globalaccum 0 set 0 	
+		globalaccum 1 set 0 	
+		wait 200 	
+		setautospawn "EasyJump 1" 1 		
+		setautospawn "HardJump 1" 0	
+		setstate axis_cleanup invisible 	
+		setstate allies_cleanup invisible	
+		setstate secret_teleporter invisible
+		setstate axisparttwo invisible
+		setstate axispartone default
+		setstate alliesparttwo invisible
+		setstate alliespartone default
+		setstate switchaxispartone default
+		setstate switchaxisparttwo invisible
+		setstate switchalliespartone default
+		setstate switchalliesparttwo invisible
+	}
+	trigger axis_reset
+	{
+		setstate axis_resetter_trigger invisible //hide the trigger so it cant be capped anymore
+		wm_announce "^1Axis ^7Flags resetting in ^110 seconds^7!" 
+		wm_announce "^zwww.^7Trickjump^z.me -^7 Fixed Version!" 
+		wait 5000
+		wm_announce "^1Axis ^7Flags resetting in ^15 seconds^7!" 
+		wait 5000
+		setstate axis_cleanup default //kill all axis
+		trigger axis_flag_2 reset //run the reset triggers
+		trigger axis_flag_3 reset
+		trigger axis_flag_4 reset
+		trigger axis_flag_5 reset
+		trigger axis_flag_6 reset
+		trigger axis_flag_7 reset
+		trigger axis_flag_8 reset
+		globalaccum 0 set 0 //current spawn is 0 again
+		setautospawn "HardJump 1" 0 //set flag 0 as spawnpoint
+		wm_announce "^1Axis ^7Flags resetted^1!"
+		wm_teamvoiceannounce 0 "axis_hq_objective_lost"
+		wait 50 //wait for everyone to die
+		setstate axis_cleanup invisible //hide the kill trigger again
+		setstate axis_resetter_trigger default //now we can reset again
+	}
+	trigger allies_reset
+	{
+		setstate allies_resetter_trigger invisible
+		wm_announce "^1Allies ^7Flags resetting in ^110 seconds^7!" 
+		wm_announce "^zwww.^7Trickjump^z.me -^7 Fixed Version!"
+		wait 5000
+		wm_announce "^1Allies ^7Flags resetting in ^15 seconds^7!" 
+		wait 5000
+		setstate allies_cleanup default
+		trigger allies_flag_2 reset
+		trigger allies_flag_3 reset
+		trigger allies_flag_4 reset
+		trigger allies_flag_5 reset
+		trigger allies_flag_6 reset
+		trigger allies_flag_7 reset
+		trigger allies_flag_8 reset
+		globalaccum 1 set 0 
+		setautospawn "EasyJump 1" 1
+		wm_announce "^1Allies ^7Flags resetted^1!"
+		wm_teamvoiceannounce 1 "allies_hq_objective_lost"
+		wait 50
+		setstate allies_cleanup invisible
+		setstate allies_resetter_trigger default
+	}
+}
+
+switchaxispartone_script
+{
+	spawn
+	{
+		accum 0 set 0
+	}
+	trigger switchtoparttwo
+	{
+		setstate switchaxispartone invisible
+		wait 10000
+		accum 0 abort_if_not_equal 0
+		accum 0 set 0 
+		setstate axisparttwo default
+		setstate axispartone invisible
+		wait 50
+		setstate switchaxisparttwo default
+		wm_announce "^1Axis ^7Part ^1Two ^7is waiting^1!"
+	}
+}
+
+switchaxisparttwo_script
+{
+	spawn
+	{
+		accum 0 set 0
+	}
+	trigger switchtopartone
+	{
+		setstate switchaxisparttwo invisible
+		wait 10000
+		accum 0 abort_if_not_equal 0
+		accum 0 set 0
+		setstate axispartone default
+		setstate axisparttwo invisible
+		wait 50
+		setstate switchaxispartone default
+		wm_announce "^1Axis ^7Part ^1One ^7is waiting^1!"
+	}
+}
+
+switchalliespartone_script
+{
+	spawn
+	{
+		accum 0 set 0
+	}
+	trigger switchtoparttwo_allies
+	{
+		setstate switchalliespartone invisible
+		wait 10000
+		accum 0 abort_if_not_equal 0
+		accum 0 set 0
+		setstate alliesparttwo default
+		setstate alliespartone invisible
+		wait 50
+		setstate switchalliesparttwo default
+		wm_announce "^1Allies ^7Part ^1Two ^7is waiting^1!"
+	}
+}
+
+switchalliesparttwo_script
+{
+	spawn
+	{
+		accum 0 set 0
+	}
+	trigger switchtopartone_allies
+	{
+		setstate switchalliesparttwo invisible
+		wait 10000
+		accum 0 abort_if_not_equal 0
+		accum 0 set 0
+		setstate alliespartone default
+		setstate alliesparttwo invisible
+		wait 50
+		setstate switchalliespartone default
+		wm_announce "^1Allies ^7Part ^1One ^7is waiting^1!"
+	}
+}
+
+secret1
+{
+	spawn
+	{
+		accum 0 set 0				//set check to 0
+	}
+
+	trigger enable
+	{
+		accum 0 abort_if_not_equal 0		//only continue if isn't bussy yet
+		accum 0 set 1				//set check to 1 (tells it's busy already)
+		setstate secret_teleporter default	//trigger appears
+		wait 10000				//figure that out yourself :P
+		setstate secret_teleporter invisible	//trigger disappears
+		accum 0 set 0				//set check to 0 (done)
+	}
+}
+
+allies_flag_2
+{
+	spawn
+	{
+		accum 0 set 0 //is the flag captured? 0-no 1-yes
+	}
+	trigger captured
+	{
+		accum 0 abort_if_equal 1 //if the flag is capped, then abort
+		accum 0 set 1 //this means the flag is captured 
+		wm_announce "^<Allies ^7captured ^<Easy^7Jumps Flag 2^<!"
+		wm_teamvoiceannounce 1 "allies_hq_objective_captured"
+		alertentity allies_flag_2_wobj //show up the flag
+		alertentity allies_flag_2_spawns //activate the spawns
+		alertentity allies_flag_2_glowstuff //show up the green and hide the white
+		globalaccum 1 abort_if_greater_than 2 //if a spawn further is capped, then abort
+		setautospawn "EasyJump 2" 1 //make it the current spawnpoint
+		globalaccum 1 set 2 //set spawnpoint count thing to 1
+	}
+	trigger reset
+	{
+		accum 0 abort_if_equal 0 //if the flag is not capped, then we dont have to reset
+		alertentity allies_flag_2_wobj //hide all stuff again
+		alertentity allies_flag_2_spawns
+		alertentity allies_flag_2_glowstuff
+		accum 0 set 0 //now we can cap it again
+	}
+}
+
+axis_flag_2
+{
+	spawn
+	{
+		accum 0 set 0
+	}
+	trigger captured
+	{
+		accum 0 abort_if_equal 1
+		accum 0 set 1
+		wm_announce "^>Axis ^7captured ^>Hard^7Jumps Flag 2^>!"
+		wm_teamvoiceannounce 0 "axis_hq_objective_captured"
+		alertentity axis_flag_2_wobj
+		alertentity axis_flag_2_glowstuff
+		alertentity axis_flag_2_spawns 
+		globalaccum 0 abort_if_greater_than 2
+		setautospawn "HardJump 2" 0
+		globalaccum 0 set 2
+	}
+	trigger reset
+	{
+		accum 0 abort_if_equal 0
+		alertentity axis_flag_2_wobj
+		alertentity axis_flag_2_spawns
+		alertentity axis_flag_2_glowstuff
+		accum 0 set 0
+	}
+}
+
+allies_flag_3
+{
+	spawn
+	{
+		accum 0 set 0 //is the flag captured? 0-no 1-yes
+	}
+	trigger captured
+	{
+		accum 0 abort_if_equal 1 //if the flag is capped, then abort
+		accum 0 set 1
+		wm_announce "^<Allies ^7captured ^<Easy^7Jumps Flag 3^<!"
+		wm_teamvoiceannounce 1 "allies_hq_objective_captured"
+		alertentity allies_flag_3_wobj
+		alertentity allies_flag_3_spawns
+		alertentity allies_flag_3_glowstuff
+		globalaccum 1 abort_if_greater_than 3
+		setautospawn "EasyJump 3" 1
+		globalaccum 1 set 3 
+	}
+	trigger reset
+	{
+		accum 0 abort_if_equal 0
+		alertentity allies_flag_3_wobj
+		alertentity allies_flag_3_spawns
+		alertentity allies_flag_3_glowstuff
+		accum 0 set 0
+	}
+}
+
+axis_flag_3
+{
+	spawn
+	{
+		accum 0 set 0
+	}
+	trigger captured
+	{
+		accum 0 abort_if_equal 1
+		accum 0 set 1
+		wm_announce "^>Axis ^7captured ^>Hard^7Jumps Flag 3^>!"
+		wm_teamvoiceannounce 0 "axis_hq_objective_captured"
+		alertentity axis_flag_3_wobj
+		alertentity axis_flag_3_glowstuff
+		alertentity axis_flag_3_spawns 
+		globalaccum 0 abort_if_greater_than 3
+		setautospawn "HardJump 3" 0
+		globalaccum 0 set 3
+	}
+	trigger reset
+	{
+		accum 0 abort_if_equal 0
+		alertentity axis_flag_3_wobj
+		alertentity axis_flag_3_spawns
+		alertentity axis_flag_3_glowstuff
+		accum 0 set 0
+	}
+}
+
+allies_flag_4
+{
+	spawn
+	{
+		accum 0 set 0 //is the flag captured? 0-no 1-yes
+	}
+	trigger captured
+	{
+		accum 0 abort_if_equal 1 //if the flag is capped, then abort
+		accum 0 set 1
+		wm_announce "^<Allies ^7captured ^<Easy^7Jumps Flag 4^<!"
+		wm_teamvoiceannounce 1 "allies_hq_objective_captured"
+		alertentity allies_flag_4_wobj
+		alertentity allies_flag_4_spawns
+		alertentity allies_flag_4_glowstuff
+		globalaccum 1 abort_if_greater_than 4
+		setautospawn "EasyJump 4" 1
+		globalaccum 1 set 4 
+	}
+	trigger reset
+	{
+		accum 0 abort_if_equal 0
+		alertentity allies_flag_4_wobj
+		alertentity allies_flag_4_spawns
+		alertentity allies_flag_4_glowstuff
+		accum 0 set 0
+	}
+}
+
+axis_flag_4
+{
+	spawn
+	{
+		accum 0 set 0
+	}
+	trigger captured
+	{
+		accum 0 abort_if_equal 1
+		accum 0 set 1
+		wm_announce "^>Axis ^7captured ^>Hard^7Jumps Flag 4^>!"
+		wm_teamvoiceannounce 0 "axis_hq_objective_captured"
+		alertentity axis_flag_4_wobj
+		alertentity axis_flag_4_glowstuff
+		alertentity axis_flag_4_spawns 
+		globalaccum 0 abort_if_greater_than 4
+		setautospawn "HardJump 4" 0
+		globalaccum 0 set 4
+	}
+	trigger reset
+	{
+		accum 0 abort_if_equal 0
+		alertentity axis_flag_4_wobj
+		alertentity axis_flag_4_spawns
+		alertentity axis_flag_4_glowstuff
+		accum 0 set 0
+	}
+}
+
+allies_flag_5
+{
+	spawn
+	{
+		accum 0 set 0 //is the flag captured? 0-no 1-yes
+	}
+	trigger captured
+	{
+		accum 0 abort_if_equal 1 //if the flag is capped, then abort
+		accum 0 set 1
+		wm_announce "^<Allies ^7captured ^<Easy^7Jumps Flag 5^<!"
+		wm_teamvoiceannounce 1 "allies_hq_objective_captured"
+		alertentity allies_flag_5_wobj
+		alertentity allies_flag_5_spawns
+		alertentity allies_flag_5_glowstuff
+		globalaccum 1 abort_if_greater_than 5
+		setautospawn "EasyJump 5" 1
+		globalaccum 1 set 5 
+	}
+	trigger reset
+	{
+		accum 0 abort_if_equal 0
+		alertentity allies_flag_5_wobj
+		alertentity allies_flag_5_spawns
+		alertentity allies_flag_5_glowstuff
+		accum 0 set 0
+	}
+}
+
+axis_flag_5
+{
+	spawn
+	{
+		accum 0 set 0
+	}
+	trigger captured
+	{
+		accum 0 abort_if_equal 1
+		accum 0 set 1
+		wm_announce "^>Axis ^7captured ^>Hard^7Jumps Flag 5^>!"
+		wm_teamvoiceannounce 0 "axis_hq_objective_captured"
+		alertentity axis_flag_5_wobj
+		alertentity axis_flag_5_glowstuff
+		alertentity axis_flag_5_spawns 
+		globalaccum 0 abort_if_greater_than 5
+		setautospawn "HardJump 5" 0
+		globalaccum 0 set 5
+	}
+	trigger reset
+	{
+		accum 0 abort_if_equal 0
+		alertentity axis_flag_5_wobj
+		alertentity axis_flag_5_spawns
+		alertentity axis_flag_5_glowstuff
+		accum 0 set 0
+	}
+}
+
+allies_flag_6
+{
+	spawn
+	{
+		accum 0 set 0 //is the flag captured? 0-no 1-yes
+	}
+	trigger captured
+	{
+		accum 0 abort_if_equal 1 //if the flag is capped, then abort
+		accum 0 set 1
+		wm_announce "^<Allies ^7captured ^<Easy^7Jumps Flag 6^<!"
+		wm_teamvoiceannounce 1 "allies_hq_objective_captured"
+		alertentity allies_flag_6_wobj
+		alertentity allies_flag_6_spawns
+		alertentity allies_flag_6_glowstuff
+		globalaccum 1 abort_if_greater_than 6
+		setautospawn "EasyJump 6" 1
+		globalaccum 1 set 6
+	}
+	trigger reset
+	{
+		accum 0 abort_if_equal 0
+		alertentity allies_flag_6_wobj
+		alertentity allies_flag_6_spawns
+		alertentity allies_flag_6_glowstuff
+		accum 0 set 0
+	}
+}
+
+axis_flag_6
+{
+	spawn
+	{
+		accum 0 set 0
+	}
+	trigger captured
+	{
+		accum 0 abort_if_equal 1
+		accum 0 set 1
+		wm_announce "^>Axis ^7captured ^>Hard^7Jumps Flag 6^>!"
+		wm_teamvoiceannounce 0 "axis_hq_objective_captured"
+		alertentity axis_flag_6_wobj
+		alertentity axis_flag_6_glowstuff
+		alertentity axis_flag_6_spawns 
+		globalaccum 0 abort_if_greater_than 6
+		setautospawn "HardJump 6" 0
+		globalaccum 0 set 6
+	}
+	trigger reset
+	{
+		accum 0 abort_if_equal 0
+		alertentity axis_flag_6_wobj
+		alertentity axis_flag_6_spawns
+		alertentity axis_flag_6_glowstuff
+		accum 0 set 0
+	}
+}
+
+allies_flag_7
+{
+	spawn
+	{
+		accum 0 set 0 //is the flag captured? 0-no 1-yes
+	}
+	trigger captured
+	{
+		accum 0 abort_if_equal 1 //if the flag is capped, then abort
+		accum 0 set 1
+		wm_announce "^<Allies ^7captured ^<Easy^7Jumps Flag 7^<!"
+		wm_teamvoiceannounce 1 "allies_hq_objective_captured"
+		alertentity allies_flag_7_wobj
+		alertentity allies_flag_7_spawns
+		alertentity allies_flag_7_glowstuff
+		globalaccum 1 abort_if_greater_than 7
+		setautospawn "EasyJump 7" 1
+		globalaccum 1 set 7 
+	}
+	trigger reset
+	{
+		accum 0 abort_if_equal 0
+		alertentity allies_flag_7_wobj
+		alertentity allies_flag_7_spawns
+		alertentity allies_flag_7_glowstuff
+		accum 0 set 0
+	}
+}
+
+axis_flag_7
+{
+	spawn
+	{
+		accum 0 set 0
+	}
+	trigger captured
+	{
+		accum 0 abort_if_equal 1
+		accum 0 set 1
+		wm_announce "^>Axis ^7captured ^>Hard^7Jumps Flag 7^>!"
+		wm_teamvoiceannounce 0 "axis_hq_objective_captured"
+		alertentity axis_flag_7_wobj
+		alertentity axis_flag_7_glowstuff
+		alertentity axis_flag_7_spawns 
+		globalaccum 0 abort_if_greater_than 7
+		setautospawn "HardJump 7" 0
+		globalaccum 0 set 7
+	}
+	trigger reset
+	{
+		accum 0 abort_if_equal 0
+		alertentity axis_flag_7_wobj
+		alertentity axis_flag_7_spawns
+		alertentity axis_flag_7_glowstuff
+		accum 0 set 0
+	}
+}
+
+allies_flag_8
+{
+	spawn
+	{
+		accum 0 set 0 //is the flag captured? 0-no 1-yes
+	}
+	trigger captured
+	{
+		accum 0 abort_if_equal 1 //if the flag is capped, then abort
+		accum 0 set 1
+		wm_announce "^<Allies ^7captured ^<Easy^7Jumps Flag 8^<!"
+		wm_teamvoiceannounce 1 "allies_hq_objective_captured"
+		alertentity allies_flag_8_wobj
+		alertentity allies_flag_8_spawns
+		alertentity allies_flag_8_glowstuff
+		globalaccum 1 abort_if_greater_than 8
+		setautospawn "EasyJump 8" 1
+		globalaccum 1 set 8 
+	}
+	trigger reset
+	{
+		accum 0 abort_if_equal 0
+		alertentity allies_flag_8_wobj
+		alertentity allies_flag_8_spawns
+		alertentity allies_flag_8_glowstuff
+		accum 0 set 0
+	}
+}
+
+axis_flag_8
+{
+	spawn
+	{
+		accum 0 set 0
+	}
+	trigger captured
+	{
+		accum 0 abort_if_equal 1
+		accum 0 set 1
+		wm_announce "^>Axis ^7captured ^>Hard^7Jumps Flag 8^>!"
+		wm_teamvoiceannounce 0 "axis_hq_objective_captured"
+		alertentity axis_flag_8_wobj
+		alertentity axis_flag_8_glowstuff
+		alertentity axis_flag_8_spawns 
+		globalaccum 0 abort_if_greater_than 8
+		setautospawn "HardJump 8" 0
+		globalaccum 0 set 8
+	}
+	trigger reset
+	{
+		accum 0 abort_if_equal 0
+		alertentity axis_flag_8_wobj
+		alertentity axis_flag_8_spawns
+		alertentity axis_flag_8_glowstuff
+		accum 0 set 0
+	}
+}

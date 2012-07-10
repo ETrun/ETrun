@@ -3902,3 +3902,107 @@ qboolean etpro_ScriptAction_SetValues( gentity_t *ent, char *params ) {
 
 	return qtrue;
 }
+
+/**
+* Nico, added again for mapscript support
+===================
+G_SpawnGEntityFromSpawnVars
+
+Spawn an entity and fill in all of the level fields from
+level.spawnVars[], then call the class specfic spawn function
+===================
+*/
+static void G_SpawnGEntityFromSpawnVars( void ) {
+	int			i;
+	gentity_t	*ent;
+	char		*str;
+
+	// get the next free entity
+	ent = G_Spawn();
+
+	for ( i = 0 ; i < level.numSpawnVars ; i++ ) {
+		G_ParseField( level.spawnVars[i][0], level.spawnVars[i][1], ent );
+	}
+
+	// check for "notteam" / "notfree" flags
+	G_SpawnInt( "notteam", "0", &i );
+	if ( i ) {
+		G_FreeEntity( ent );
+		return;
+	}
+
+	// allowteams handling
+	G_SpawnString( "allowteams", "", &str );
+	if( str[0] ) {
+		str = Q_strlwr( str );
+		if( strstr( str, "axis" ) ) {
+			ent->allowteams |= ALLOW_AXIS_TEAM;
+		}
+		if( strstr( str, "allies" ) ) {
+			ent->allowteams |= ALLOW_ALLIED_TEAM;
+		}
+	}
+
+	if( ent->targetname && *ent->targetname ) {
+		ent->targetnamehash = BG_StringHashValue( ent->targetname );
+	} else {
+		ent->targetnamehash = -1;
+	}
+
+	// move editor origin to pos
+	VectorCopy( ent->s.origin, ent->s.pos.trBase );
+	VectorCopy( ent->s.origin, ent->r.currentOrigin );
+
+	// if we didn't get a classname, don't bother spawning anything
+	if ( !G_CallSpawn( ent ) ) {
+		G_FreeEntity( ent );
+	}
+
+	// RF, try and move it into the bot entities if possible
+//	BotCheckBotGameEntity( ent );
+}
+
+/**
+ * G_ScriptAction_Create
+ *
+ * @source: TJMod
+ */
+qboolean G_ScriptAction_Create(gentity_t *ent, char *params) {
+	char	*token = NULL;
+	char	*p = NULL;
+	char	key[MAX_TOKEN_CHARS] = {0};
+
+	// reset and fill in the spawnVars info so that spawn functions can use
+	// them
+	level.numSpawnVars = 0;
+	level.numSpawnVarChars = 0;
+
+	p = params;
+
+	// get each key/value pair
+	while (1) {
+		token = COM_ParseExt(&p, qfalse);
+		if (!token[0]) {
+			break;
+		}
+
+		strcpy(key, token);
+
+		token = COM_ParseExt(&p, qfalse);
+		if (!token[0]) {
+			G_Error("key \"%s\" has no value", key);
+			break;
+		}
+
+		// add spawn var so that spawn functions can use them
+		if (level.numSpawnVars == MAX_SPAWN_VARS) {
+			G_Error("G_ScriptAction_Create: MAX_SPAWN_VARS");
+		}
+		level.spawnVars[level.numSpawnVars][0] = G_AddSpawnVarToken(key);
+		level.spawnVars[level.numSpawnVars][1] = G_AddSpawnVarToken(token);
+		level.numSpawnVars++;
+	}
+	G_SpawnGEntityFromSpawnVars();
+
+	return qtrue;
+}

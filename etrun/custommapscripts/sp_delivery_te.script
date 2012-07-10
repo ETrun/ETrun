@@ -1,0 +1,989 @@
+game_manager
+{
+	spawn
+	{
+		// TJMod
+		// Global noreset
+		create
+		{
+			scriptname "noreset"
+			origin "512 128 256"
+			mins "-2560 -4992 -768"
+			maxs "2560 4992 768"
+			classname "func_fakebrush"
+			contents "2097152"
+		}
+		
+		///////////////////////////////////////
+		// GOLD TO TRUCK
+		create
+		{
+			scriptname "startfield"
+			origin "-1038 1516 148"
+			mins "-4 -32 -56"
+			maxs "4 32 56"
+			classname "trigger_multiple"
+			target "starttimer1"
+			contents "1073741824"
+		}
+
+		create
+		{
+			scriptname "start"
+			origin "-1038 1516 148"
+			classname "target_startTimer"
+			targetname "starttimer1"
+			name "Gold to truck"
+		}
+		
+		create
+		{
+			scriptname "stopfield"
+			origin "1456 4248 -160"
+			mins "-176 -24 -48"
+			maxs "176 24 48"
+			classname "trigger_multiple"
+			target "stoptimer1"
+			contents "1073741824"
+		}
+
+		create
+		{
+			scriptname "stop"
+			origin "1456 4248 -160"
+			classname "target_stopTimer"
+			targetname "stoptimer1"
+			name "Gold to truck"
+		}
+		
+		///////////////////////////////////////
+		// ALLIES 1ST TO FLAG
+		create
+		{
+			scriptname "startfield"
+			origin "-262 -3464 0"
+			mins "-2 -56 -64"
+			maxs "2 56 64"
+			classname "trigger_multiple"
+			target "starttimer2"
+			contents "1073741824"
+		}
+		create
+		{
+			scriptname "startfield"
+			origin "-122 -3464 0"
+			mins "-2 -56 -64"
+			maxs "2 56 64"
+			classname "trigger_multiple"
+			target "starttimer2"
+			contents "1073741824"
+		}
+		
+		create
+		{
+			scriptname "start"
+			origin "-280 -3464 0"
+			classname "target_startTimer"
+			targetname "starttimer2"
+			name "Allies 1st to Flag"
+		}
+		
+		create
+		{
+			scriptname "stopfield"
+			origin "-192 384 84"
+			mins "-24 -24 -76"
+			maxs "24 24 76"
+			classname "trigger_multiple"
+			target "stoptimer2"
+			contents "1073741824"
+		}
+
+		create
+		{
+			scriptname "stop"
+			origin "1456 4248 -160"
+			classname "target_stopTimer"
+			targetname "stoptimer2"
+			name "Allies 1st to Flag"
+		}
+		
+		///////////////////////////////////////
+		// FLAG TO DOOR CONTROLS
+		create
+		{
+			scriptname "startfield"
+			origin "32 520 72"
+			mins "-64 -8 -56"
+			maxs "64 8 56"
+			classname "trigger_multiple"
+			target "starttimer3"
+			contents "1073741824"
+		}
+		
+		create
+		{
+			scriptname "start"
+			origin "32 520 72"
+			classname "target_startTimer"
+			targetname "starttimer3"
+			name "Flag to door controls"
+		}
+		
+		create
+		{
+			scriptname "stopfield"
+			origin "1274 3542 116"
+			mins "-66 -70 -52"
+			maxs "66 70 52"
+			classname "trigger_multiple"
+			target "stoptimer3"
+			contents "1073741824"
+		}
+
+		create
+		{
+			scriptname "stop"
+			origin "1274 3542 116"
+			classname "target_stopTimer"
+			targetname "stoptimer3"
+			name "Flag to door controls"
+		}		
+
+		wait 200
+		setstate golddoor2fake invisible
+		wait 200
+		setstate doorbutton_toi invisible
+		//setstate forwardbunkerflag invisible
+
+		accum 1 set 0
+		accum 2 set 0
+
+		wm_number_of_objectives 7
+		wm_setwinner 0
+
+		wm_objective_status 1 0 0
+		wm_objective_status 1 1 0
+		wm_objective_status 2 0 0
+		wm_objective_status 2 1 0
+		wm_objective_status 3 0 0
+		wm_objective_status 3 1 0
+		wm_objective_status 4 0 0
+		wm_objective_status 4 1 0
+		wm_objective_status 5 0 0
+		wm_objective_status 5 1 0
+		wm_objective_status 6 0 0
+		wm_objective_status 6 1 0
+		wm_objective_status 7 0 0
+		wm_objective_status 7 1 0
+
+		wait 150
+
+		setautospawn "The Train Cars" 1
+
+		setstate forwardbunker_wo invisible
+
+		wait 1000
+
+		wm_teamvoiceannounce 0 "radar_axis_bunker_stop"
+		wm_teamvoiceannounce 1 "radar_allies_bunker_capture"
+		wm_addteamvoiceannounce 0 "radar_axis_bunker_stop"
+		wm_addteamvoiceannounce 1 "radar_allies_bunker_capture"
+		
+		setstate axis_lever_trigger invisible
+		setstate goldclip2 invisible
+	}
+
+	trigger objective_counter
+	{
+		accum 1 inc 1
+		trigger game_manager checkgame
+	}
+
+	trigger checkgame
+	{
+		accum 1 abort_if_not_equal 2
+
+		wm_announce "Allies have escaped with the Gold!"
+		wm_setwinner 1
+	}		
+}
+
+forwardbunkerflag
+{
+	spawn
+	{
+		accum 0 set 0
+	}
+
+	trigger axis_capture
+	{
+	wait 200
+	}
+
+	trigger allied_capture
+	{
+	wait 200
+	}
+
+	trigger switchit
+	{
+	wait 200
+	}
+}
+
+east_wall
+{
+	spawn 
+	{
+		constructible_class 3
+		accum 3 set 0
+	}
+
+	death 
+	{
+		accum 3 abort_if_equal 1
+		accum 3 set 1
+
+		alertentity east_rubble
+
+		wm_announce "Allies have damaged the East Wall"
+
+		wm_teamvoiceannounce 0 "general_objdestroy_axis"
+		wm_teamvoiceannounce 1 "general_objdestroy_allies"
+
+		wm_objective_status 1 0 2
+		wm_objective_status 1 1 1
+
+	}
+}
+
+west_wall
+{
+	spawn 
+	{
+		constructible_class 3
+		accum 4 set 0
+	}
+
+	death 
+	{
+		accum 4 abort_if_equal 1
+		accum 4 set 1
+
+		alertentity west_rubble
+
+		wm_announce "Allies have damaged the West Wall"
+
+		wm_teamvoiceannounce 0 "general_objdestroy_axis"
+		wm_teamvoiceannounce 1 "general_objdestroy_allies"
+
+		wm_objective_status 2 0 2
+		wm_objective_status 2 1 1
+	}
+}
+
+axis_gold1
+{
+	spawn
+	{
+		wait 200
+		remove
+	}
+
+	trigger stolen
+	{
+		wm_announce "The Allies have stolen a gold crate!"
+
+		setstate axis_gold_cm_marker invisible
+
+		wm_objective_status 4 0 2
+		wm_objective_status 4 1 1
+
+		wm_teamvoiceannounce 0 "goldrush_axis_gold1_taken"
+		wm_teamvoiceannounce 1 "goldrush_allies_gold1_taken"
+	}
+
+	trigger returned
+	{
+		setstate axis_gold_cm_marker default
+
+		wm_announce "The Axis have intercepted the stolen gold crate!"
+
+		wm_teamvoiceannounce 0 "goldrush_axis_gold1_returned"
+		wm_teamvoiceannounce 1 "goldrush_allies_gold1_returned"
+	}
+
+	trigger captured
+	{
+		setstate axis_gold_cm_marker default
+		setstate goldclip invisible
+		setstate goldclip2 default
+
+		trigger golddoor2 schnellzu
+		wait 100
+		alertentity golddoor2fake
+		alertentity golddoor1fake
+		trigger golddoor1 bewege
+		trigger golddoor2 bewege
+		wait 100
+		trigger golddoor2 auf
+
+		trigger game_manager objective_counter
+
+		wm_announce "The Allies have secured a gold crate!"
+
+		wm_objective_status 6 0 2
+		wm_objective_status 6 1 1
+
+		wm_teamvoiceannounce 0 "goldrush_axis_gold1_secured"
+		wm_teamvoiceannounce 1 "goldrush_allies_gold1_secured"
+	}
+}
+
+axis_gold2
+{
+	spawn
+	{
+		wait 200
+		remove
+	}
+
+	trigger stolen
+	{
+		setstate axis_gold_cm_marker invisible
+
+		wm_announce "The Allies have stolen a gold crate!"
+
+		wm_teamvoiceannounce 0 "goldrush_axis_gold2_taken"
+		wm_teamvoiceannounce 1 "goldrush_allies_gold2_taken"
+	}
+
+	trigger returned
+	{
+		setstate axis_gold_cm_marker default
+
+		wm_announce "The Axis have intercepted the stolen gold crate!"
+
+		wm_teamvoiceannounce 0 "goldrush_axis_gold2_returned"
+		wm_teamvoiceannounce 1 "goldrush_allies_gold2_returned"
+	}
+
+	trigger captured
+	{
+		trigger game_manager objective_counter
+
+		wm_announce "The Allies have secured a gold crate!"
+
+		wm_objective_status 7 0 2
+		wm_objective_status 7 1 1
+
+		wm_teamvoiceannounce 0 "goldrush_axis_gold2_secured"
+		wm_teamvoiceannounce 1 "goldrush_allies_gold2_secured"
+	}
+}
+
+truckbed_trigger1
+{
+	spawn
+	{
+	}
+
+	death
+	{
+		setstate axis_gold_red1 invisible
+		setstate axis_gold_captured1 default
+
+		trigger game_manager checkgame
+
+		remove
+	}
+}
+
+truckbed_trigger2
+{
+	spawn
+	{
+	}
+
+	death
+	{
+		setstate axis_gold_red2 invisible
+		setstate axis_gold_captured2 default
+
+		trigger game_manager checkgame
+
+		remove
+	}
+}
+
+lever
+{
+	spawn
+	{
+	}
+
+	trigger move_up
+	{
+		playsound sound/movers/switches/switch.wav
+	}
+	
+	trigger move_down
+	{
+		playsound sound/movers/switches/butn2.wav
+	}
+}
+
+lever_trigger
+{
+	spawn
+	{
+		accum 1 set 1
+	}
+
+	trigger up
+	{
+		accum 1 abort_if_not_equal 1
+		accum 1 set 0
+
+		trigger lever move_up
+		trigger door2 move_up
+		trigger door3 move_up
+
+		alertentity door_open_trigger
+
+		trigger sounds off
+
+		wm_announce "The Loading Doors are Opening!"
+
+		wm_objective_status 5 0 2
+		wm_objective_status 5 1 1
+
+		wait 2500
+
+		setstate allies_lever_trigger invisible
+		setstate axis_lever_trigger default
+
+		trigger lever_trigger2	setaccum0
+
+		
+		//trigger golddoor1 auf
+		//trigger golddoor2 auf
+	}
+	
+	trigger setaccum1
+	{
+		accum 1 set 1
+	}
+
+}
+
+sounds
+{
+	spawn
+	{
+	}
+
+	off
+	{
+		wait 10000
+
+		alertentity door_open_trigger
+	}
+	
+	offer
+	{
+		wait 5000
+		
+		alertentity door_open_trigger
+	}
+}
+
+lever_trigger2
+{
+	spawn
+	{
+		accum 2 set 1
+	}
+	
+	trigger down
+	{
+		accum 2 abort_if_not_equal 0
+		accum 2 set 1
+
+		trigger lever move_down
+		trigger door2 move_down
+		trigger door3 move_down
+
+		wm_announce "The Loading Doors are Closing!"
+
+		wait 2500
+
+		setstate allies_lever_trigger default
+		setstate axis_lever_trigger invisible
+
+		alertentity door_open_trigger
+
+		trigger sounds offer
+
+		trigger lever_trigger setaccum1
+
+		//trigger golddoor1 zu
+		//trigger golddoor2 zu
+	}
+
+	trigger setaccum0
+	{
+		accum 2 set 0
+	}
+}
+
+
+door2
+{
+	spawn
+	{
+		remove
+	}
+
+	trigger move_up
+	{
+		wait 500
+
+		playsound sound/movers/misc/big_gate1.wav
+
+		wait 400
+
+		playsound sound/movers/misc/big_gate2.wav looping forever
+
+		gotomarker door2_uppos 32 wait
+
+		stopsound
+
+		playsound sound/movers/misc/big_gate3.wav
+	}
+	
+	trigger move_down
+	{
+		wait 500
+
+		playsound sound/movers/misc/big_gate1.wav
+
+		wait 400
+
+		playsound sound/movers/misc/big_gate2.wav looping forever
+
+		gotomarker door2_downpos 32 wait
+
+		stopsound
+
+		playsound sound/movers/misc/big_gate3.wav
+	}
+}
+
+door3
+{
+	spawn
+	{
+		remove
+	}
+
+	trigger move_up
+	{
+		wait 500
+
+		playsound sound/movers/misc/big_gate1.wav
+
+		wait 400
+
+		playsound sound/movers/misc/big_gate2.wav looping forever
+
+		gotomarker door3_uppos 32 wait
+
+		stopsound
+
+		playsound sound/movers/misc/big_gate3.wav
+	}
+	
+	trigger move_down
+	{
+		wait 500
+
+		playsound sound/movers/misc/big_gate1.wav
+
+		wait 400
+
+		playsound sound/movers/misc/big_gate2.wav looping forever
+
+		gotomarker door3_downpos 32 wait
+
+		stopsound
+
+		playsound sound/movers/misc/big_gate3.wav
+	}
+}
+
+golddoor1
+{
+	spawn
+	{
+	}
+
+	trigger auf
+	{
+		wait 500
+
+		playsound sound/movers/doors/door5_open.wav
+
+		faceangles 0 270 0 3000
+
+	}
+	
+	trigger zu
+	{
+		wait 500
+
+		playsound sound/movers/doors/door5_close.wav
+
+		faceangles 0 0 0 3000
+
+
+	}
+
+	trigger bewege
+	{
+		gotomarker golddoor1point 1000 wait
+	}
+}
+
+golddoor2
+{
+	spawn
+	{
+	}
+
+	trigger auf
+	{
+		wait 500
+
+		playsound sound/movers/doors/door5_open.wav
+
+		faceangles 0 270 0 3000
+
+	}
+	
+	trigger zu
+	{
+		wait 500
+
+		playsound sound/movers/doors/door5_close.wav
+
+		faceangles 0 0 0 3000
+		
+	}
+
+	trigger bewege
+	{
+		gotomarker golddoor2point 1000 wait
+	}
+
+	trigger schnellzu
+	{
+		faceangles 0 0 0 1
+	}
+}
+
+elevator_trigger
+{
+	spawn
+	{
+	}
+
+	trigger activate
+	{
+		trigger bottom_l_door close
+		trigger bottom_r_door close
+
+		wait 700
+
+		trigger eldoor_l closelow
+		trigger eldoor_r closelow
+
+		wait 2000
+
+		trigger eldoor_l move_up
+		trigger eldoor_r move_up
+		trigger elevator move_up
+
+		wait 2500
+
+
+		trigger top_l_door open
+		trigger top_r_door open
+
+		wait 700
+
+		alertentity ding_trigger
+
+		trigger eldoor_l openhigh
+		trigger eldoor_r openhigh
+
+		wait 1000
+
+
+		wait 3000
+
+		trigger top_l_door close
+		trigger top_r_door close
+
+		wait 700
+
+		trigger eldoor_l closehigh
+		trigger eldoor_r closehigh
+
+		wait 2000
+
+		trigger eldoor_l move_down
+		trigger eldoor_r move_down
+		trigger elevator move_down
+
+		wait 2500
+
+		trigger bottom_l_door open
+		trigger bottom_r_door open
+
+		wait 700
+
+		trigger eldoor_l openlow
+		trigger eldoor_r openlow
+	}
+
+}
+
+elevator
+{
+	spawn
+	{
+	}
+
+	trigger move_up
+	{
+		gotomarker elevator_uppos 100
+	}
+
+	trigger move_down
+	{
+		gotomarker elevator_downpos 100
+	}
+}
+
+eldoor_l
+{
+	spawn
+	{
+	}
+
+	trigger openlow
+	{
+		gotomarker eldoor_l_openlow 24
+	}
+
+	trigger closelow
+	{
+		gotomarker eldoor_l_closedlow 24
+	}
+
+	trigger move_up
+	{
+		gotomarker eldoor_l_closedhigh 100
+	}
+
+	trigger move_down
+	{
+		gotomarker eldoor_l_closedlow 100
+	}
+
+	trigger openhigh
+	{
+		gotomarker eldoor_l_openhigh 24
+	}
+
+	trigger closehigh
+	{
+		gotomarker eldoor_l_closedhigh 24
+	}
+}
+
+eldoor_r
+{
+	spawn
+	{
+	}
+
+	trigger openlow
+	{
+		gotomarker eldoor_r_openlow 24
+	}
+
+	trigger closelow
+	{
+		gotomarker eldoor_r_closedlow 24
+	}
+
+	trigger move_up
+	{
+		gotomarker eldoor_r_closedhigh 100
+	}
+
+	trigger move_down
+	{
+		gotomarker eldoor_r_closedlow 100
+	}
+
+	trigger openhigh
+	{
+		gotomarker eldoor_r_openhigh 24
+	}
+
+	trigger closehigh
+	{
+		gotomarker eldoor_r_closedhigh 24
+	}
+
+
+}
+
+bottom_l_door
+{
+	spawn
+	{
+	}
+
+	trigger open
+	{
+		gotomarker bottom_l_door_open 24
+	}
+
+	trigger close
+	{
+		gotomarker bottom_l_door_closed 24
+	}
+}
+
+bottom_r_door
+{
+	spawn
+	{
+	}
+
+	trigger open
+	{
+		gotomarker bottom_r_door_open 24
+	}
+
+	trigger close
+	{
+		gotomarker bottom_r_door_closed 24
+	}
+}
+
+top_l_door
+{
+	spawn
+	{
+	}
+
+	trigger open
+	{
+		gotomarker top_l_door_open 24
+	}
+
+	trigger close
+	{
+		gotomarker top_l_door_closed 24
+	}
+}
+
+top_r_door
+{
+	spawn
+	{
+	}
+
+	trigger open
+	{
+		gotomarker top_r_door_open 24
+	}
+	
+	trigger close
+	{
+		gotomarker top_r_door_closed 24
+	}
+}
+
+doorbutton
+{
+	spawn
+	{
+		wait 400
+		remove
+	}
+
+	trigger setup
+	{
+		setstate doorbutton_materials default
+		setstate doorbutton_materials_clip default
+	}
+
+	buildstart final
+	{
+		setstate doorbutton_materials default
+		setstate doorbutton_materials_clip default
+	}
+
+	built final
+	{
+		setstate axis_lever_trigger default
+		setstate allies_lever_trigger default
+
+		setstate doorbutton_materials invisible
+		setstate doorbutton_materials_clip invisible
+		setstate doorbutton_toi invisible
+
+		//setstate forwardbunkerflag invisible
+
+		setstate forwardbunker_wo default
+
+		//accum 0 trigger_if_equal 0 forwardbunkerflag switchit
+
+		setautospawn "Forward Bunker" 1		
+
+		wm_announce "Allies have secured the forward bunker."
+		wm_announce "Door Controls have been constructed."
+
+		trigger golddoor1 auf
+
+		wm_teamvoiceannounce 0 "construction_completed"
+		wm_teamvoiceannounce 1 "construction_completed"
+	}
+
+	decayed final
+	{
+		setstate doorbutton_materials default
+		setstate doorbutton_materials_clip default
+	}
+
+	death
+	{
+	}
+
+	trigger remove
+	{
+		setstate doorbutton_toi invisible
+		setstate doorbutton_materials invisible
+		setstate doorbutton_materials_clip invisible
+
+		remove
+	}
+}
+

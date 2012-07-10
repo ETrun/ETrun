@@ -160,6 +160,9 @@ vmCvar_t g_holdDoorsOpen;
 // Disable drowning
 vmCvar_t g_disableDrowning;
 
+// Mapscript support
+vmCvar_t g_mapScriptDirectory;
+
 // Nico, end of ETrun cvars
 
 cvarTable_t gameCvarTable[] = {
@@ -285,17 +288,20 @@ cvarTable_t gameCvarTable[] = {
 	{ &g_floodWait, "g_floodWait", "768", CVAR_ARCHIVE | CVAR_LATCH },
 
 	// Name changes limit
-	{ &g_maxNameChanges, "g_maxNameChanges", "3", CVAR_ARCHIVE | CVAR_LATCH},
+	{ &g_maxNameChanges, "g_maxNameChanges", "3", CVAR_ARCHIVE | CVAR_LATCH },
 
 	// API module
-	{ &g_useAPI, "g_useAPI", "0", CVAR_ARCHIVE | CVAR_LATCH},
-	{ &g_APImodulePath, "g_APImodulePath", "", CVAR_ARCHIVE | CVAR_LATCH},
+	{ &g_useAPI, "g_useAPI", "0", CVAR_ARCHIVE | CVAR_LATCH },
+	{ &g_APImodulePath, "g_APImodulePath", "", CVAR_ARCHIVE | CVAR_LATCH },
 
 	// Hold doors open
-	{ &g_holdDoorsOpen, "g_holdDoorsOpen", "1", CVAR_ARCHIVE | CVAR_LATCH},
+	{ &g_holdDoorsOpen, "g_holdDoorsOpen", "1", CVAR_ARCHIVE | CVAR_LATCH },
 
 	// Disable drowning
-	{ &g_disableDrowning, "g_disableDrowning", "1", CVAR_ARCHIVE | CVAR_LATCH}
+	{ &g_disableDrowning, "g_disableDrowning", "1", CVAR_ARCHIVE | CVAR_LATCH },
+
+	// Mapscript support
+	{ &g_mapScriptDirectory, "g_mapScriptDirectory", "custommapscripts", CVAR_ARCHIVE | CVAR_LATCH }
 
 	// Nico, end of ETrun cvars
 };

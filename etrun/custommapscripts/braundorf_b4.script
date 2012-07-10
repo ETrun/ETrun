@@ -1,0 +1,872 @@
+//Braundorf b3 script
+//Written (with sections copied and pasted from other scripts) by Brevik
+
+
+game_manager
+{
+	spawn 
+   	{
+		// TJMOD
+		// Global noreset
+		create
+		{
+			scriptname "noreset"
+			origin "2544 -5312 408"
+			mins "-9999 -9999 -9999"
+			maxs "9999 9999 9999"
+			classname "func_fakebrush"
+			contents "2097152"
+		}
+		///////////////////////////////////////
+		// Allies left to flag
+		create
+		{
+			scriptname "startfield"
+			origin "2544 -5312 408"
+			mins "-8 -160 -72"
+			maxs "8 160 72"
+			classname "trigger_multiple"
+			target "starttimer1"
+			contents "1073741824"
+		}
+		create
+		{
+			scriptname "start"
+			origin "2752 -5104 408"
+			classname "target_startTimer"
+			targetname "starttimer1"
+			name "Allies left to flag"
+		}
+		
+		create
+		{
+			scriptname "checkfield"
+			origin "1520 -4080 368"
+			mins "-272 -16 -208"
+			maxs "272 16 208"
+			classname "trigger_multiple"
+			target "check2"
+			contents "1073741824"
+		}
+
+		create
+		{
+			scriptname "check"
+			origin "1520 -4080 368"
+			classname "target_checkpoint"
+			targetname "check2"
+			name "Allies left to flag"
+		}
+		
+		create
+		{
+			scriptname "stopfield"
+			origin "3456 -2280 320"
+			mins "-16 -128 -128"
+			maxs "16 128 128"
+			classname "trigger_multiple"
+			target "stoptimer1"
+			contents "1073741824"
+		}
+
+		create
+		{
+			scriptname "stop"
+			origin "3456 -2280 320"
+			classname "target_stopTimer"
+			targetname "stoptimer1"
+			name "Allies left to flag"
+			mincheckpoints "1"
+		}
+		
+		///////////////////////////////////////
+		// Allies right to flag
+		create
+		{
+			scriptname "startfield"
+			origin "2752 -5104 408"
+			mins "-160 -8 -72"
+			maxs "160 8 72"
+			classname "trigger_multiple"
+			target "starttimerx"
+			contents "1073741824"
+		}
+		create
+		{
+			scriptname "start"
+			origin "2752 -5104 408"
+			classname "target_startTimer"
+			targetname "starttimerx"
+			name "Allies right to flag"
+		}
+		
+		create
+		{
+			scriptname "checkfield"
+			origin "3456 -2280 320"
+			mins "-24 -24 -72"
+			maxs "24 24 72"
+			classname "trigger_multiple"
+			target "check2"
+			contents "1073741824"
+		}
+
+		create
+		{
+			scriptname "check"
+			origin "3456 -2280 320"
+			classname "target_checkpoint"
+			targetname "check2"
+			name "Allies right to flag"
+		}
+		
+		create
+		{
+			scriptname "stopfield"
+			origin "3456 -2280 320"
+			mins "-16 -128 -128"
+			maxs "16 128 128"
+			classname "trigger_multiple"
+			target "stoptimerx"
+			contents "1073741824"
+		}
+
+		create
+		{
+			scriptname "stop"
+			origin "3456 -2280 320"
+			classname "target_stopTimer"
+			targetname "stoptimerx"
+			name "Allies right to flag"
+			mincheckpoints "1"
+		}
+		
+		///////////////////////////////////////
+		// Flag -> Main -> Controls
+		create
+		{
+			scriptname "startfield"
+			origin "3200 -2544 256"
+			mins "-24 -4 -48"
+			maxs "24 4 48"
+			classname "trigger_multiple"
+			target "starttimer2"
+			contents "1073741824"
+		}
+		create
+		{
+			scriptname "start"
+			origin "3200 -2544 256"
+			classname "target_startTimer"
+			targetname "starttimer2"
+			name "Flag -> Main -> Controls"
+		}
+		
+		create
+		{
+			scriptname "stopfield"
+			origin "1920 1472 88"
+			mins "-112 -112 -48"
+			maxs "112 112 48"
+			classname "trigger_multiple"
+			target "stoptimer2"
+			contents "1073741824"
+		}
+
+		create
+		{
+			scriptname "stop"
+			origin "1920 1472 88"
+			classname "target_stopTimer"
+			targetname "stoptimer2"
+			name "Flag -> Main -> Controls"
+		}	
+		
+		///////////////////////////////////////
+		// Flag -> Side -> Controls
+		create
+		{
+			scriptname "startfield"
+			origin "3840 -2472 256"
+			mins "-4 -24 -48"
+			maxs "4 24 48"
+			classname "trigger_multiple"
+			target "starttimer3"
+			contents "1073741824"
+		}
+		create
+		{
+			scriptname "start"
+			origin "3840 -2472 256"
+			classname "target_startTimer"
+			targetname "starttimer3"
+			name "Flag -> Side -> Controls"
+		}
+		
+		create
+		{
+			scriptname "checkfield"
+			origin "5488 -560 416"
+			mins "-272 -16 -192"
+			maxs "272 16 192"
+			classname "trigger_multiple"
+			target "check3"
+			contents "1073741824"
+		}
+
+		create
+		{
+			scriptname "check"
+			origin "5488 -560 416"
+			classname "target_checkpoint"
+			targetname "check3"
+			name "Flag -> Side -> Controls"
+		}
+		
+		create
+		{
+			scriptname "stopfield"
+			origin "1920 1472 88"
+			mins "-112 -112 -48"
+			maxs "112 112 48"
+			classname "trigger_multiple"
+			target "stoptimer3"
+			contents "1073741824"
+		}
+
+		create
+		{
+			scriptname "stop"
+			origin "1920 1472 88"
+			classname "target_stopTimer"
+			targetname "stoptimer3"
+			name "Flag -> Side -> Controls"
+			mincheckpoints "1"
+		}
+		
+		///////////////////////////////////////
+		// Axis 2nd to controls
+		create
+		{
+			scriptname "startfield"
+			origin "2688 888 64"
+			mins "-96 -8 -64"
+			maxs "96 8 64"
+			classname "trigger_multiple"
+			target "starttimer4"
+			contents "1073741824"
+		}
+		create
+		{
+			scriptname "start"
+			origin "2688 888 64"
+			classname "target_startTimer"
+			targetname "starttimer4"
+			name "Axis 2nd to controls"
+		}
+		
+		
+		create
+		{
+			scriptname "startfield"
+			origin "2688 1416 64"
+			mins "-96 -8 -64"
+			maxs "96 8 64"
+			classname "trigger_multiple"
+			target "starttimer4b"
+			contents "1073741824"
+		}
+		create
+		{
+			scriptname "start"
+			origin "2688 888 64"
+			classname "target_startTimer"
+			targetname "starttimer4b"
+			name "Axis 2nd to controls"
+		}
+
+		
+		create
+		{
+			scriptname "stopfield"
+			origin "1920 1472 88"
+			mins "-112 -112 -48"
+			maxs "112 112 48"
+			classname "trigger_multiple"
+			target "stoptimer4"
+			contents "1073741824"
+		}
+
+		create
+		{
+			scriptname "stop"
+			origin "1920 1472 88"
+			classname "target_stopTimer"
+			targetname "stoptimer4"
+			name "Axis 2nd to controls"
+		}			
+		
+		wait 3500
+		setstate main_gate_script invisible
+		setstate side_door_script invisible
+		setstate neutral_cp_toi invisible
+		setstate side_gate invisible
+		setstate side_gate_toi invisible
+		
+		remapshaderflush
+		
+		// Game rules
+		wm_number_of_objectives	7
+
+		// Objectives
+		//1 Primary: Blow up Main Gate
+		//2 Primary: Destroy Bunker Controls
+		//3 Secondary: Blow up Side Door
+		//4 Secondary: Hold Factory District
+		//5 Build Command Post
+		//6 Destroy Side Gate
+		
+
+		// Current main objectives for each team (0=Axis, 1=Allies)
+		wm_objective_status 1 0 0
+		wm_objective_status 1 1 0
+		wm_objective_status 2 0 0
+		wm_objective_status 2 1 0
+		wm_objective_status 3 0 0
+		wm_objective_status 3 1 0
+		wm_objective_status 4 0 0
+		wm_objective_status 4 1 0
+		wm_objective_status 5 0 0
+		wm_objective_status 5 1 0
+		wm_objective_status 6 0 0
+		wm_objective_status 6 1 0
+		wm_objective_status 7 0 0
+		wm_objective_status 7 1 0
+		
+		wm_set_main_objective		2	0
+		wm_set_main_objective		2	1
+
+		//Accum values
+		accum 1 set 0 //Overall Allied status
+		accum 2 set 2 //set 2 = null value
+
+		// Stopwatch mode defending team (0=Axis, 1=Allies)
+		wm_set_defending_team	0
+
+		// Winner on expiration of round timer (0=Axis, 1=Allies, -1=no winner at expiration)
+		wm_setwinner	0 
+		wait 150
+
+		
+		// Set initial spawn points for both teams
+	}
+	
+	trigger endgame
+	{
+		
+   		wait 5000
+   		
+		wm_objective_status 2 1 1
+		wm_objective_status 2 0 2
+		
+		// Set the round winner:  0 == AXIS, 1 == ALLIED
+		wm_setwinner 1
+
+		wait 500
+	}
+} 
+
+forwardflag_wobj
+{
+	spawn
+	{
+		remove
+	}
+}
+
+
+//End of Game_manager section
+
+
+// --------------------
+// BUNKER CONTROLS CODE
+// --------------------
+
+bunker_controls_script
+{
+	spawn 
+	{
+		wait 200
+		constructible_class 3 
+	}
+	
+	death 
+	{
+	
+		// wait 200
+
+   		wm_announce "Allies have destroyed the Bunker Controls!"
+   		
+  		// wm_teamvoiceannounce 0 "allies_hq_objective_destroyed"
+		// wm_teamvoiceannounce 1 "allies_hq_objective_destroyed"
+
+		trigger game_manager endgame
+		setstate bc_debris default
+		setstate bc_smoke default
+		togglespeaker bc_explosion2
+	}
+}
+
+bc_debris_script
+{
+	spawn
+	{
+		wait 200
+		setstate bc_debris invisible
+	}
+}
+
+bc_smoke_script
+{
+	spawn
+	{
+		wait 200
+		setstate bc_smoke invisible
+	}
+}
+
+
+
+// --------------
+// MAIN GATE CODE
+// --------------
+
+main_gate_script
+{
+	spawn 
+	{
+		wait 200
+		constructible_class 3
+		remove
+	}
+	
+	death 
+	{
+		wait 200
+	}
+}
+
+mg_debris_script
+{
+	spawn
+	{
+		wait 200
+		setstate mg_debris invisible
+	}
+}
+
+
+// --------------
+// SIDE DOOR CODE
+// --------------
+
+side_door_script
+{
+	spawn 
+	{
+		wait 200
+		constructible_class 3 
+		remove
+	}
+	
+	death 
+	{
+	
+		wm_announce "Allies have destroyed the Side Door!"
+		
+		wm_teamvoiceannounce 0 "allies_hq_objective_destroyed"
+		wm_teamvoiceannounce 1 "allies_hq_objective_destroyed"
+		
+		wm_objective_status 		3 0 2
+		wm_objective_status 		3 1 1
+		
+	}
+}
+
+
+// --------------
+// SIDE GATE CODE
+// --------------
+
+side_gate
+{
+	spawn
+	{
+		wait 200
+		constructible_class 2
+		constructible_constructxpbonus 7
+		constructible_destructxpbonus 7
+	}
+	
+	built final
+	{
+		wm_announce "The side gate has been built!"
+		
+		wm_teamvoiceannounce 0 "axis_hq_const_completed"
+		wm_teamvoiceannounce 1 "axis_hq_const_completed"
+		
+		setstate side_gate default 
+		setstate side_gate_materials invisible
+		setstate side_gate_materials_extras invisible
+		setstate cm_marker_sidegate default
+		
+		wm_objective_status 7 0 1
+		wm_objective_status 7 1 2
+	}
+	
+	decayed final
+	{
+		setstate side_gate_materials default
+		setstate side_gate_materials_extras default
+		setstate side_gate invisible
+		setstate cm_marker_sidegate invisible
+	}
+	
+	death
+	{
+		wm_announce "The side gate has been destroyed!" 
+		
+		wm_teamvoiceannounce 0 "allies_hq_const_destroyed"
+		wm_teamvoiceannounce 1 "allies_hq_const_destroyed"
+		
+		setstate side_gate_materials default
+		setstate side_gate_materials_extras default
+		setstate cm_marker_sidegate invisible
+		
+		wm_objective_status 7 0 2
+		wm_objective_status 7 1 1
+	}
+}
+
+// ------------------
+// FORWARD SPAWN CODE
+// ------------------
+
+forward_spawn
+{
+	spawn
+	{
+		setstate forward_spawn invisible
+		accum 0 set 0
+	}
+
+	trigger axis_capture
+	{
+		wait 200
+	}
+
+	trigger allied_capture
+	{
+		wait 200
+	}
+	
+	trigger check_obj
+	{
+		wait 200
+	}
+	
+	trigger force_allied
+	{
+		wait 200
+	}
+	
+	trigger kill
+	{
+		wait 200
+	}
+}
+
+// -------------------------------------------------
+// COMMAND POST CODE:  Copied from sock's online LDR
+// -------------------------------------------------
+
+// ================================================
+neutral_cp_toi
+{
+	spawn
+	{
+		wait 50
+		accum 3 set 0	// 0=Neutral Closed, 1=Allied Damaged, 2=Axis Damaged
+
+		trigger self show_previous_cabinet		// Setup teamdoors and correct cabinet
+	}
+
+	trigger set_alliedcabinet
+	{
+		accum 3 set 1			// Allied cabinet has been built
+	}
+
+	trigger set_axiscabinet
+	{
+		accum 3 set 2			// Axis cabinet has been built
+	}
+
+	trigger show_previous_cabinet			// Show correct CP state
+	{
+		accum 3 trigger_if_equal 0 neutral_cp_toi show_neutral_cabinet
+		accum 3 trigger_if_equal 1 neutral_cp_toi show_allied_cabinet
+		accum 3 trigger_if_equal 2 neutral_cp_toi show_axis_cabinet
+	}
+
+	trigger show_neutral_cabinet			// Neutral Closed CP
+	{
+		setstate neutral_cp_closed default
+		setstate neutral_cp_closed_model default
+	}
+
+	trigger show_allied_cabinet			// Allied damaged CP
+	{
+		setstate allied_cp_damaged default
+		setstate allied_cp_damaged_model default
+	}
+
+	trigger show_axis_cabinet			// Axis damaged CP
+	{
+		setstate axis_cp_damaged default
+		setstate axis_cp_damaged_model default
+	}
+
+	trigger hide_all_cabinet			// Hide all previous CP states
+	{
+		setstate neutral_cp_closed invisible
+		setstate neutral_cp_closed_model invisible
+		setstate allied_cp_damaged invisible
+		setstate allied_cp_damaged_model invisible
+		setstate axis_cp_damaged invisible
+		setstate axis_cp_damaged_model invisible
+	}
+}
+
+// ================================================
+allied_cp_open
+{
+	spawn
+	{
+		wait 100
+		constructible_class 2			// Dyno+Satchel
+
+		setstate allied_cp_damaged invisible	// Hide damaged CP model+clip
+		setstate allied_cp_damaged_model invisible
+		trigger self disable_cp_features		// Default charge bar times
+	}
+
+	trigger disable_cp_features
+	{
+		setstate allied_cp_open_model invisible	// Hide Open CP model
+
+		setchargetimefactor 1 soldier 1
+		setchargetimefactor 1 lieutenant 1
+		setchargetimefactor 1 medic 1
+		setchargetimefactor 1 engineer 1
+		setchargetimefactor 1 covertops 1
+
+		wm_objective_status 5 0 0
+		wm_objective_status 5 1 0
+		wm_objective_status 6 0 0
+		wm_objective_status 6 1 0
+		
+		sethqstatus 1 0			// Landmines team warning message
+		disablespeaker allied_cp_sound		// Disable morse code sound
+	}
+
+	trigger enable_cp_features
+	{
+		setstate allied_cp_open_model default	// Show open CP model
+
+		setchargetimefactor 1 soldier 0.75
+		setchargetimefactor 1 lieutenant 0.75
+		setchargetimefactor 1 medic 0.75
+		setchargetimefactor 1 engineer 0.75
+		setchargetimefactor 1 covertops 0.75
+
+		wm_objective_status 5 0 2
+		wm_objective_status 5 1 1
+		wm_objective_status 6 0 2
+		wm_objective_status 6 1 1
+		
+		sethqstatus 1 1			// Landmines team warning message
+		enablespeaker allied_cp_sound		// Enable morse code sound
+	}
+
+	buildstart final
+	{
+		trigger neutral_cp_toi hide_all_cabinet	// Hide all previous cabinet states
+	}
+
+	built final
+	{
+		trigger neutral_cp_toi set_alliedcabinet	// Allied cabinet has been built
+		trigger self enable_cp_features		// Increase charge bar times
+		trigger cpspawn_wobj on
+		
+		wm_announce "Allied Command Post constructed. Charge speed increased!"
+		// *----------------------------------- vo ------------------------------------------*
+		wm_teamvoiceannounce 0 "axis_hq_compost_constructed_allies"
+		wm_teamvoiceannounce 1 "allies_hq_compost_constructed"
+		wm_removeteamvoiceannounce 1 "allies_hq_compost_construct"
+		// *----------------------------------- vo ------------------------------------------*
+	}
+
+	decayed final
+	{
+		setstate allied_cp_open_model invisible	// Hide Open CP model
+		trigger neutral_cp_toi show_previous_cabinet	// Show previous cabinet state
+	}
+
+	death
+	{
+		trigger neutral_cp_toi show_previous_cabinet	// Show damaged cabinet state
+		trigger self disable_cp_features		// Default charge bar times
+		trigger cpspawn_wobj off
+
+		wm_announce "Axis team has destroyed the Allied Command Post!"
+		// *----------------------------------- vo ------------------------------------------*
+		wm_addteamvoiceannounce 0 "axis_hq_compost_construct"
+		wm_addteamvoiceannounce 1 "allies_hq_compost_construct"
+		wm_teamvoiceannounce 0 "axis_hq_compost_construct"
+		wm_teamvoiceannounce 1 "allies_hq_compost_damaged"
+		// *----------------------------------- vo ------------------------------------------*
+	}
+}
+
+// ================================================
+axis_cp_open
+{
+	spawn
+	{
+		wait 100
+		constructible_class 2			// Dyno+Satchel
+
+		setstate axis_cp_damaged invisible	// Hide damaged CP model+clip
+		setstate axis_cp_damaged_model invisible
+		trigger self disable_cp_features		// Default charge bar times
+	}
+
+	trigger disable_cp_features
+	{
+		setstate axis_cp_open_model invisible	// Hide Open CP model
+
+		setchargetimefactor 0 soldier 1
+		setchargetimefactor 0 lieutenant 1
+		setchargetimefactor 0 medic 1
+		setchargetimefactor 0 engineer 1
+		setchargetimefactor 0 covertops 1
+
+		wm_objective_status 5 0 0
+		wm_objective_status 5 1 0
+		wm_objective_status 6 0 0
+		wm_objective_status 6 1 0
+		
+		sethqstatus 0 0			// Landmines team warning message
+		disablespeaker axis_cp_sound		// Disable morse code sound
+	}
+
+	trigger enable_cp_features
+	{
+		setstate axis_cp_open_model default	// Show open CP model
+
+		setchargetimefactor 0 soldier 0.75
+		setchargetimefactor 0 lieutenant 0.75
+		setchargetimefactor 0 medic 0.75
+		setchargetimefactor 0 engineer 0.75
+		setchargetimefactor 0 covertops 0.75
+
+		wm_objective_status 5 0 1
+		wm_objective_status 5 1 2
+		wm_objective_status 6 0 1
+		wm_objective_status 6 1 2
+
+		sethqstatus 0 1			// Landmines team warning message
+		enablespeaker axis_cp_sound		// Enable morse code sound
+	}
+
+	buildstart final
+	{
+		trigger neutral_cp_toi hide_all_cabinet	// Hide all previous cabinet states
+	}
+
+	built final
+	{
+		trigger neutral_cp_toi set_axiscabinet	// Allied cabinet built
+		trigger self enable_cp_features		// Increase charge bar times
+		
+		wm_objective_status 5 0 1
+		wm_objective_status 5 1 2
+
+		wm_announce "Axis Command Post constructed. Charge speed increased!"
+		// *----------------------------------- vo ------------------------------------------*
+		wm_teamvoiceannounce 0 "axis_hq_compost_constructed"
+		wm_teamvoiceannounce 1 "allies_hq_compost_constructed_axis"
+		wm_removeteamvoiceannounce 0 "axis_hq_compost_construct"
+		// *----------------------------------- vo ------------------------------------------*
+	}
+
+	decayed final
+	{
+		setstate axis_cp_open_model invisible	// Hide Open CP model
+		trigger neutral_cp_toi show_previous_cabinet	// Show previous cabinet state
+	}
+
+	death
+	{
+		trigger neutral_cp_toi show_previous_cabinet	// Show damaged cabinet state
+		trigger self disable_cp_features		// Default charge bar times
+
+		wm_announce "Allied team has destroyed the Axis Command Post!"
+		// *----------------------------------- vo ------------------------------------------*
+		wm_addteamvoiceannounce 0 "axis_hq_compost_construct"
+		wm_addteamvoiceannounce 1 "allies_hq_compost_construct"
+		wm_teamvoiceannounce 0 "axis_hq_compost_damaged"
+		wm_teamvoiceannounce 1 "allies_hq_compost_construct"
+		// *----------------------------------- vo ------------------------------------------*
+	}
+}
+
+
+// -----------------------
+// COMMAND POST SPAWN CODE
+// -----------------------
+
+cp_spawn
+{
+	spawn
+	{
+		wait 50
+		setstate cp_spawn invisible	
+	}
+}
+
+cpspawn_wobj
+{
+	spawn
+	{
+		wait 50
+		setstate cpspawn_wobj invisible
+		setstate cp_spawn invisible
+	}
+
+	trigger on
+	{
+		setstate cpspawn_wobj default
+		setstate cp_spawn default
+	}
+
+	trigger off
+	{
+		setstate cpspawn_wobj invisible
+		setstate cp_spawn invisible
+	}
+}
+
+
+

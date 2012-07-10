@@ -138,6 +138,9 @@ qboolean G_ScriptAction_ConstructibleDuration( gentity_t *ent, char *params ) ;
 //bani
 qboolean etpro_ScriptAction_SetValues( gentity_t *ent, char *params );
 
+// Nico, create action
+qboolean G_ScriptAction_Create(gentity_t *ent, char *params);
+
 // these are the actions that each event can call
 g_script_stack_action_t gScriptActions[] =
 {
@@ -238,6 +241,10 @@ g_script_stack_action_t gScriptActions[] =
 	{ "constructible_health",            G_ScriptAction_ConstructibleHealth },
 	{ "constructible_weaponclass",       G_ScriptAction_ConstructibleWeaponclass },
 	{ "constructible_duration",       G_ScriptAction_ConstructibleDuration },
+
+	// Nico, create action
+	{"create",							G_ScriptAction_Create},
+
 	{NULL,                              NULL}
 };
 
@@ -356,6 +363,7 @@ void G_Script_ScriptLoad( void ) {
 	vmCvar_t mapname;
 	fileHandle_t f;
 	int len;
+	qboolean found = qfalse;
 
 	trap_Cvar_Register( &g_scriptDebug, "g_scriptDebug", "0", 0 );
 
@@ -367,11 +375,29 @@ void G_Script_ScriptLoad( void ) {
 	} else {
 		trap_Cvar_Register( &mapname, "mapname", "", CVAR_SERVERINFO | CVAR_ROM );
 	}
-	Q_strncpyz( filename, "maps/", sizeof( filename ) );
-	Q_strcat( filename, sizeof( filename ), mapname.string );
-	Q_strcat( filename, sizeof( filename ), ".script" );
 
-	len = trap_FS_FOpenFile( filename, &f, FS_READ );
+	// Nico, check if this map a special mapscript
+	if (g_mapScriptDirectory.string[0]) {
+		G_Printf("%s: checking for custom mapscript...\n", GAME_VERSION);
+		Q_strncpyz(filename, g_mapScriptDirectory.string, sizeof (filename));
+		Q_strcat(filename, sizeof (filename), "/");
+		Q_strcat(filename, sizeof (filename), mapname.string);
+		Q_strcat(filename, sizeof (filename), ".script");
+		len = trap_FS_FOpenFile(filename, &f, FS_READ);
+		if (len > 0) {
+			found = qtrue;
+			G_Printf("%s: loaded custom mapscript!\n", GAME_VERSION);
+		}
+	}
+
+	// Nico, should we use default map script or custom one?
+	if (!found) {
+		Q_strncpyz(filename, "maps/", sizeof (filename));
+		Q_strcat(filename, sizeof (filename), mapname.string);
+		Q_strcat(filename, sizeof (filename), ".script");
+		len = trap_FS_FOpenFile(filename, &f, FS_READ);
+		G_Printf("%s: no custom mapscript, using default!\n", GAME_VERSION);
+	}
 
 	// make sure we clear out the temporary scriptname
 	trap_Cvar_Set( "g_scriptName", "" );
@@ -589,7 +615,8 @@ void G_Script_ScriptParse( gentity_t *ent ) {
 				memset( params, 0, sizeof( params ) );
 
 				// Ikkyo - Parse for {}'s if this is a set command
-				if ( !Q_stricmp( action->actionString, "set" ) ) {
+				// Nico, added "create" condition
+				if ( !Q_stricmp( action->actionString, "set" ) || !Q_stricmp(action->actionString, "create") ) {
 					token = COM_Parse( &pScript );
 					if ( token[0] != '{' ) {
 						COM_ParseError( "'{' expected, found: %s.\n", token );

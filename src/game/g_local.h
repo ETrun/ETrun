@@ -1540,6 +1540,9 @@ extern vmCvar_t g_holdDoorsOpen;
 // Disable drowning
 extern vmCvar_t g_disableDrowning;
 
+// Mapscript support
+extern vmCvar_t g_mapScriptDirectory;
+
 // Nico, end of ETrun cvars
 
 void    trap_Printf( const char *fmt );
