@@ -89,7 +89,7 @@ void CG_BuildSolidList( void ) {
 			 || ent->eType == ET_TRIGGER_MULTIPLE
 			 || ent->eType == ET_TRIGGER_FLAGONLY
 			 || ent->eType == ET_TRIGGER_FLAGONLY_MULTIPLE
-#endif // VISIBLE_TRIGGERS
+#endif
 			 ) {
 
 			cg_triggerEntities[cg_numTriggerEntities] = cent;
@@ -148,15 +148,21 @@ static void CG_ClipMoveToEntities( const vec3_t start, const vec3_t mins, const 
 			BG_EvaluateTrajectory( &cent->currentState.apos, cg.physicsTime, angles, qtrue, cent->currentState.effect2Time );
 			BG_EvaluateTrajectory( &cent->currentState.pos, cg.physicsTime, origin, qfalse, cent->currentState.effect2Time );
 		} else {
-			// encoded bbox
-			x = ( ent->solid & 255 );
-			zd = ( ( ent->solid >> 8 ) & 255 );
-			zu = ( ( ent->solid >> 16 ) & 255 ) - 32;
+			// Nico, see g_misc.c SP_func_fakebrush...
+			if (ent->eFlags & EF_FAKEBMODEL) {
+				VectorCopy(ent->origin2, bmins);
+				VectorCopy(ent->angles2, bmaxs);
+			} else {
+				// encoded bbox
+				x = ( ent->solid & 255 );
+				zd = ( ( ent->solid >> 8 ) & 255 );
+				zu = ( ( ent->solid >> 16 ) & 255 ) - 32;
 
-			bmins[0] = bmins[1] = -x;
-			bmaxs[0] = bmaxs[1] = x;
-			bmins[2] = -zd;
-			bmaxs[2] = zu;
+				bmins[0] = bmins[1] = -x;
+				bmaxs[0] = bmaxs[1] = x;
+				bmins[2] = -zd;
+				bmaxs[2] = zu;
+			}
 
 			cmodel = trap_CM_TempBoxModel( bmins, bmaxs );
 
@@ -204,8 +210,6 @@ static void CG_ClipMoveToEntities_FT( const vec3_t start, const vec3_t mins, con
 		if ( ent->solid == SOLID_BMODEL ) {
 			// special value for bmodel
 			cmodel = trap_CM_InlineModel( ent->modelindex );
-//			VectorCopy( cent->lerpAngles, angles );
-//			VectorCopy( cent->lerpOrigin, origin );
 			BG_EvaluateTrajectory( &cent->currentState.apos, cg.physicsTime, angles, qtrue, cent->currentState.effect2Time );
 			BG_EvaluateTrajectory( &cent->currentState.pos, cg.physicsTime, origin, qfalse, cent->currentState.effect2Time );
 		} else {
@@ -546,7 +550,6 @@ Predict push triggers and items
 */
 static void CG_TouchTriggerPrediction( void ) {
 	int i;
-//	trace_t			trace;
 	entityState_t   *ent;
 	clipHandle_t cmodel;
 	centity_t       *cent;
@@ -579,7 +582,6 @@ static void CG_TouchTriggerPrediction( void ) {
 
 		// Gordon: er, this lookup was wrong...
 		cmodel = cgs.inlineDrawModel[ ent->modelindex ];
-//		cmodel = trap_CM_InlineModel( ent->modelindex );
 		if ( !cmodel ) {
 			continue;
 		}
@@ -590,7 +592,7 @@ static void CG_TouchTriggerPrediction( void ) {
 			 || ent->eType == ET_TRIGGER_MULTIPLE
 			 || ent->eType == ET_TRIGGER_FLAGONLY
 			 || ent->eType == ET_TRIGGER_FLAGONLY_MULTIPLE
-#endif // VISIBLE_TRIGGERS
+#endif
 			 ) {
 			vec3_t mins, maxs, pmins, pmaxs;
 
@@ -606,19 +608,19 @@ static void CG_TouchTriggerPrediction( void ) {
 #ifdef VISIBLE_TRIGGERS
 			if ( ent->eType == ET_TRIGGER_MULTIPLE || ent->eType == ET_TRIGGER_FLAGONLY || ent->eType == ET_TRIGGER_FLAGONLY_MULTIPLE ) {
 			} else
-#endif // VISIBLE_TRIGGERS
-			{
-				// expand the bbox a bit
-				VectorSet( mins, mins[0] - 48, mins[1] - 48, mins[2] - 48 );
-				VectorSet( maxs, maxs[0] + 48, maxs[1] + 48, maxs[2] + 48 );
-			}
+#endif
+		{
+			// expand the bbox a bit
+			VectorSet( mins, mins[0] - 48, mins[1] - 48, mins[2] - 48 );
+			VectorSet( maxs, maxs[0] + 48, maxs[1] + 48, maxs[2] + 48 );
+		}
 
 			VectorAdd( cg.predictedPlayerState.origin, cg_pmove.mins, pmins );
 			VectorAdd( cg.predictedPlayerState.origin, cg_pmove.maxs, pmaxs );
 
 #ifdef VISIBLE_TRIGGERS
 			CG_RailTrail( NULL, mins, maxs, 1 );
-#endif // VISIBLE_TRIGGERS
+#endif
 
 			if ( !BG_BBoxCollision( pmins, pmaxs, mins, maxs ) ) {
 				continue;

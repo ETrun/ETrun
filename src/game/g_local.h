@@ -458,7 +458,7 @@ struct gentity_s {
 	int etpro_misc_1;
 
 	// Nico, run name used by target_starttimer, target_stoptimer and target_checkpoint
-	char	*timerunName;
+	char *timerunName;
 };
 
 typedef enum {

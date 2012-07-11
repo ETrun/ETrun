@@ -609,7 +609,7 @@ typedef enum {
 #define EF_TAGCONNECT       0x00008000      // connected to another entity via tag
 #define EF_MOUNTEDTANK      EF_TAGCONNECT   // Gordon: duplicated for clarity
 
-#define EF_FAKEBMODEL       0x00010000      // Nico, replace unused EF_SPARE3 with EF_FAKEBMODEL
+#define EF_FAKEBMODEL       0x00010000      // Nico, replaced unused EF_SPARE3 with EF_FAKEBMODEL
 #define EF_PATH_LINK        0x00020000      // Gordon: linking trains together
 #define EF_ZOOMING          0x00040000      // client is zooming
 #define EF_PRONE            0x00080000      // player is prone
@@ -1380,8 +1380,6 @@ typedef struct gitem_s {
 
 	char        *precaches;     // string of all models and images this item will use
 	char        *sounds;        // string of all sounds this item will use
-
-//	int			gameskillnumber[5];
 } gitem_t;
 // END JOSEPH
 

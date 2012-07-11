@@ -197,6 +197,11 @@ field_t fields[] = {
 
 	{"damageparent", FOFS( damageparent ),         F_LSTRING},
 
+	// Nico, some extra keys
+	{"mins",			FOFS(r.mins),				F_VECTOR},
+	{"maxs",			FOFS(r.maxs),				F_VECTOR},
+	{"contents",		FOFS(r.contents),			F_INT},
+
 	{NULL}
 };
 

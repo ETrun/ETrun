@@ -1372,12 +1372,6 @@ static qboolean CG_RW_ParseClient( int handle, weaponInfo_t *weaponInfo ) {
 			} else {
 				weaponInfo->weaponIcon[1] = trap_R_RegisterShader( filename );
 			}
-			/*} else if( !Q_stricmp( token.string, "ammoIcon" ) ) {
-				if( !PC_String_ParseNoAlloc( handle, filename, sizeof(filename) ) ) {
-					return CG_RW_ParseError( handle, "expected ammoIcon filename" );
-				} else {
-					weaponInfo->ammoIcon = trap_R_RegisterShader( filename );
-				}*/
 		} else if ( !Q_stricmp( token.string, "missileModel" ) ) {
 			if ( !PC_String_ParseNoAlloc( handle, filename, sizeof( filename ) ) ) {
 				return CG_RW_ParseError( handle, "expected missileModel filename" );

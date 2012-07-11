@@ -524,11 +524,6 @@ static void CG_General( centity_t *cent ) {
 
 	// special shader if under construction
 	if ( cent->currentState.powerups == STATE_UNDERCONSTRUCTION ) {
-		/*if( cent->currentState.solid == SOLID_BMODEL ) {
-			ent.customShader = cgs.media.genericConstructionShaderBrush;
-		} else {
-			ent.customShader = cgs.media.genericConstructionShaderModel;
-		}*/
 		ent.customShader = cgs.media.genericConstructionShader;
 	}
 
@@ -1549,19 +1544,6 @@ static void CG_Mover( centity_t *cent ) {
 	} else {
 		trap_R_AddRefEntityToScene( &ent );
 	}
-
-	// alarm box spark effects
-/*	if(	cent->currentState.eType == ET_ALARMBOX) {
-		if(cent->currentState.frame == 2 ) {	// i'm dead
-			if(rand()%50 == 1) {
-				vec3_t	angNorm;				// normalized angles
-				VectorNormalize2(cent->lerpAngles, angNorm);
-				//		(origin, dir, speed, duration, count, 'randscale')
-				CG_AddBulletParticles( cent->lerpOrigin, angNorm, 2, 800, 4, 16.0f );
-				trap_S_StartSound (NULL, cent->currentState.number, CHAN_AUTO, cgs.media.sparkSounds );
-			}
-		}
-	}*/
 }
 
 void CG_Mover_PostProcess( centity_t* cent ) {
@@ -2161,7 +2143,7 @@ static void CG_ProcessEntity( centity_t *cent ) {
 	case ET_TRIGGER_MULTIPLE:
 	case ET_TRIGGER_FLAGONLY:
 	case ET_TRIGGER_FLAGONLY_MULTIPLE:
-#endif // VISIBLE_TRIGGERS
+#endif
 		break;
 	case ET_SPEAKER:
 		CG_Speaker( cent );
@@ -2512,7 +2494,6 @@ qboolean CG_AddCEntity_Filter( centity_t* cent ) {
 void CG_AddPacketEntities( void ) {
 	int num;
 	playerState_t       *ps;
-	//int					clcount;
 
 	// set cg.frameInterpolation
 	if ( cg.nextSnap ) {

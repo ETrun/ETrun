@@ -180,9 +180,11 @@ void SP_trigger_multiple( gentity_t *ent ) {
 		}
 	}
 
+
+
 #ifdef VISIBLE_TRIGGERS
 	ent->r.svFlags &= ~SVF_NOCLIENT;
-#endif // VISIBLE_TRIGGERS
+#endif
 
 	trap_LinkEntity( ent );
 }
@@ -1070,7 +1072,7 @@ void SP_trigger_flagonly( gentity_t *ent ) {
 	ent->s.eType = ET_TRIGGER_FLAGONLY;
 #ifdef VISIBLE_TRIGGERS
 	ent->r.svFlags &= ~SVF_NOCLIENT;
-#endif // VISIBLE_TRIGGERS
+#endif
 
 	trap_LinkEntity( ent );
 }
@@ -1098,7 +1100,7 @@ void SP_trigger_flagonly_multiple( gentity_t *ent ) {
 	ent->s.eType = ET_TRIGGER_FLAGONLY_MULTIPLE;
 #ifdef VISIBLE_TRIGGERS
 	ent->r.svFlags &= ~SVF_NOCLIENT;
-#endif // VISIBLE_TRIGGERS
+#endif
 
 	trap_LinkEntity( ent );
 }
@@ -1484,10 +1486,6 @@ Must point at a target_position, which will be the teleport destination.
 */
 void SP_trigger_concussive_dust( gentity_t *self ) {
 	InitTrigger( self );
-
-	// unlike other triggers, we need to send this one to the client
-//	self->r.svFlags &= ~SVF_NOCLIENT;
-//	self->r.svFlags |= SVF_BROADCAST;
 
 	self->s.eType = ET_CONCUSSIVE_TRIGGER;
 	self->touch = trigger_concussive_touch;
