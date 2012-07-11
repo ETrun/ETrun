@@ -421,19 +421,6 @@ static void CG_General( centity_t *cent ) {
 			//AnglesToAxis( cg_entities[cent->currentState.otherEntityNum].lerpAngles, ent.axis );
 			AnglesToAxis( cent->lerpAngles, ent.axis );
 		}
-/*		{
-			vec3_t v;
-			VectorCopy( cent->lerpOrigin, v );
-			VectorMA( cent->lerpOrigin, 10, ent.axis[0], v );
-			CG_RailTrail2( NULL, cent->lerpOrigin, v );
-			VectorCopy( cent->lerpOrigin, v );
-			VectorMA( cent->lerpOrigin, 10, ent.axis[1], v );
-			CG_RailTrail2( NULL, cent->lerpOrigin, v );
-			VectorCopy( cent->lerpOrigin, v );
-			VectorMA( cent->lerpOrigin, 10, ent.axis[2], v );
-			CG_RailTrail2( NULL, cent->lerpOrigin, v );
-			return;
-		}*/
 	} else {
 		// convert angles to axis
 		AnglesToAxis( cent->lerpAngles, ent.axis );
@@ -551,8 +538,6 @@ static void CG_Speaker( centity_t *cent ) {
 
 	trap_S_StartSound( NULL, cent->currentState.number, CHAN_ITEM, cgs.gameSounds[cent->currentState.eventParm] );
 
-	//	ent->s.frame = ent->wait * 10;
-	//	ent->s.clientNum = ent->random * 10;
 	cent->miscTime = cg.time + cent->currentState.frame * 100 + cent->currentState.clientNum * 100 * crandom();
 }
 
@@ -565,8 +550,6 @@ qboolean CG_PlayerSeesItem( playerState_t *ps, entityState_t *item, int atTime, 
 
 	VectorCopy( ps->origin, vorigin );
 	vorigin[2] += ps->viewheight;           // get the view loc up to the viewheight
-//	eorigin[2] += 8;						// and subtract the item's offset (that is used to place it on the ground)
-
 
 	VectorSubtract( vorigin, eorigin, dir );
 
@@ -587,7 +570,6 @@ qboolean CG_PlayerSeesItem( playerState_t *ps, entityState_t *item, int atTime, 
 
 	// give more range based on distance (the hit area is wider when closer)
 
-//	foo = -0.94f - (dist/255.0f) * 0.057f;	// (ranging from -0.94 to -0.997) (it happened to be a pretty good range)
 	foo = -0.94f - ( dist * ( 1.0f / 255.0f ) ) * 0.057f;   // (ranging from -0.94 to -0.997) (it happened to be a pretty good range)
 
 ///	Com_Printf("test: if(%f > %f) return qfalse (dot > foo)\n", dot, foo);
@@ -618,7 +600,6 @@ static void CG_Item( centity_t *cent ) {
 	refEntity_t ent;
 	entityState_t       *es;
 	gitem_t             *item;
-//	float				scale;
 	qboolean hasStand, highlight;
 	float highlightFadeScale = 1.0f;
 
@@ -639,8 +620,6 @@ static void CG_Item( centity_t *cent ) {
 	}
 
 	item = &bg_itemlist[ es->modelindex ];
-
-//	scale = 0.005 + cent->currentState.number * 0.00001;
 
 	memset( &ent, 0, sizeof( ent ) );
 
@@ -729,8 +708,6 @@ static void CG_Item( centity_t *cent ) {
 							   // try to load it first, and if it fails, default to the itemlist model
 		ent.hModel = cgs.gameModels[ es->modelindex2 ];
 	} else {
-		//if( item->giType == IT_WEAPON && cg_items[es->modelindex].models[2])	// check if there's a specific model for weapon pickup placement
-		//	ent.hModel = cg_items[es->modelindex].models[2];
 		if ( item->giType == IT_WEAPON ) {
 			ent.hModel = cg_weapons[item->giTag].weaponModel[W_PU_MODEL].model;
 
@@ -768,9 +745,7 @@ static void CG_Item( centity_t *cent ) {
 	}
 
 	// items without glow textures need to keep a minimum light value so they are always visible
-//	if ( ( item->giType == IT_WEAPON ) || ( item->giType == IT_ARMOR ) ) {
 	ent.renderfx |= RF_MINLIGHT;
-//	}
 
 	// highlighting items the player looks at
 	if ( cg_drawCrosshairPickups.integer ) {
@@ -1800,11 +1775,6 @@ static void CG_Prop( centity_t *cent ) {
 
 	// special shader if under construction
 	if ( cent->currentState.powerups == STATE_UNDERCONSTRUCTION ) {
-		/*if( cent->currentState.solid == SOLID_BMODEL ) {
-			ent.customShader = cgs.media.genericConstructionShaderBrush;
-		} else {
-			ent.customShader = cgs.media.genericConstructionShaderModel;
-		}*/
 		ent.customShader = cgs.media.genericConstructionShader;
 	}
 
@@ -1847,12 +1817,6 @@ cabinetTag_t cabinetInfo[CT_MAX] = {
 			"tag_ammo04",
 			"tag_ammo05",
 			"tag_ammo06",
-/*			"tag_obj1",
-			"tag_obj1",
-			"tag_obj1",
-			"tag_obj1",
-			"tag_obj1",
-			"tag_obj1",*/
 		},
 		{
 			"models/multiplayer/supplies/ammobox_wm.md3",
@@ -1866,7 +1830,6 @@ cabinetTag_t cabinetInfo[CT_MAX] = {
 			0, 0, 0, 0, 0, 0
 		},
 		"models/mapobjects/supplystands/stand_ammo.md3",
-//		"models/mapobjects/blitz_sd/blitzbody.md3",
 		0,
 	},
 	{
@@ -1943,11 +1906,6 @@ void CG_Cabinet( centity_t* cent, cabinetType_t type ) {
 
 		trap_R_AddRefEntityToScene( &mini_me );
 	}
-
-/*	for( k = 0; k < 3; k++ ) {
-		VectorScale( cabinet.axis[k], 2.f, cabinet.axis[k] );
-	}
-	cabinet.nonNormalizedAxes = qtrue;*/
 
 	trap_R_AddRefEntityToScene( &cabinet );
 }
@@ -2163,8 +2121,6 @@ static void CG_ProcessEntity( centity_t *cent ) {
 		break;
 	case ET_CORPSE:
 	case ET_PLAYER:
-		// Nico, render while in limbo
-		// if ( cg.showGameView && cg.filtercams ) {
 		if ( cg.filtercams ) {
 			break;
 		}

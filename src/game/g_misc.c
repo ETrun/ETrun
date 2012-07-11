@@ -561,10 +561,6 @@ void SP_misc_gamemodel( gentity_t *ent ) {
 		Q_strcat( tagname, MAX_QPATH, ".tag" );
 
 		ent->tagNumber = trap_LoadTag( tagname );
-
-/*		if( !(ent->tagNumber = trap_LoadTag( tagname )) ) {
-			Com_Error( ERR_DROP, "Failed to load Tag File (%s)\n", tagname );
-		}*/
 	}
 
 	if ( !G_SpawnVector( "modelscale_vec", "1 1 1", vScale ) ) {
