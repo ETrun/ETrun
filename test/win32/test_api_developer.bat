@@ -10,6 +10,9 @@ xcopy /Y etrun.pk3 C:\Users\Nicolas\Desktop\etrun\
 xcopy /Y etrun.pk3 "C:\Program Files (x86)\ET\etrun\"
 del /Q etrun.pk3
 xcopy /Y _build\*.dll C:\Users\Nicolas\Desktop\etrun\
+
+xcopy /Y etrun\custommapscripts\* "C:\Users\Nicolas\Desktop\etrun\custommapscripts\"
+
 echo Press ENTER to start game...
 pause
 cd ..\
