@@ -2,17 +2,7 @@ game_manager
 {
 	spawn
 	{
-		// TJMod
-		// Global noreset
-		create
-		{
-			scriptname "noreset"
-			origin "512 128 256"
-			mins "-2560 -4992 -768"
-			maxs "2560 4992 768"
-			classname "func_fakebrush"
-			contents "2097152"
-		}
+		// Runs
 		
 		///////////////////////////////////////
 		// GOLD TO TRUCK

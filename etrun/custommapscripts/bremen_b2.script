@@ -9,16 +9,9 @@ game_manager
 			targetname "maingate"
 			origin "-940 1620 128"
 		}
-		//Noreset Area
-		create
-		{
-			scriptname "noreset"
-			origin "400 400 400"
-			mins "-8096 -8096 -8096"
-			maxs "8096 8096 8096"
-			classname "func_fakebrush"
-			contents "2097152"
-		}
+
+		// Runs
+
 		// Allies Spawn to Flag
 		// Start trigger
 		create

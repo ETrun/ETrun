@@ -103,17 +103,7 @@ game_manager {
 					classname "func_fakebrush"
 					contents "1"
 				}			
-				
-				// Global noreset
-				create
-				{
-					scriptname "noreset"
-					origin "128 128 384"
-					mins "-2944 -2944 -640"
-					maxs "2944 2944 640"
-					classname "func_fakebrush"
-					contents "2097152"
-				}
+
 				// Both sides of the house, but not the top window thingy
 				create
 				{

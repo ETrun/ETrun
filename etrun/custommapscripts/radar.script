@@ -2,17 +2,7 @@ game_manager
 {
 	spawn
 	{
-		// TJMod
-		// Global noreset, any loading will reset
-		create
-		{
-			scriptname "noreset"
-			origin "-384 1024 1568"
-			mins "-4736 -7424 -1248"
-			maxs "4736 7424 1248"
-			classname "func_fakebrush"
-			contents "2097152"
-		}
+		// Runs
 		
 		///////////////////////////////////////////
 		// EAST RADAR PARTS

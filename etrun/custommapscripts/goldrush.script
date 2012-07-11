@@ -2,22 +2,9 @@ game_manager
 {
 	spawn
 	{
-		// TJMod Timers
-		// Trigger: 1073741824
-		// Noreset: 2097152
-		
-		
+		// Runs
+
 		// Axis 1st to bank
-		create
-		{
-			scriptname "noreset"
-			origin "-16 3672 376"
-			mins "-240 -200 -196"
-			maxs "240 200 196"
-			classname "func_fakebrush"
-			contents "2097152"
-		}
-		
 		create
 		{
 			scriptname "startfield"
@@ -62,16 +49,6 @@ game_manager
 		// Allies 1st to bank 1
 		create
 		{
-			scriptname "noreset"
-			origin "-2108 556 48"
-			mins "-172 -172 -144"
-			maxs "172 172 144"
-			classname "func_fakebrush"
-			contents "2097152"
-		}
-		
-		create
-		{
 			scriptname "startfield2"
 			origin "-1912 552 88"
 			mins "-16 -56 -64"
@@ -111,16 +88,6 @@ game_manager
 		}			
 
 		// Allies 1st to bank 2
-		create
-		{
-			scriptname "noreset"
-			origin "-3368 -632 0"
-			mins "-152 -328 -128"
-			maxs "152 328 128"
-			classname "func_fakebrush"
-			contents "2097152"
-		}
-		
 		create
 		{
 			scriptname "startfield3"

@@ -2,11 +2,9 @@ game_manager
 {
 	spawn
 	{
-		// TJMod Timers
 		// func_fakebrush for just creating a brush, need to set contents.
 		// e.g. contents 1 = clip => will make it a clip brush..
 		// Trigger: 1073741824
-		// Noreset: 2097152
 		
 		// Origin is the absolute center of the brush.
 		// To get mins\maxs, just get the distance from the origin to a corner,
@@ -20,16 +18,6 @@ game_manager
 		
 		// 1 run created by Dinius
 		// 5 runs added by .namdam + wall is removed
-		// Noreset area
-		create
-		{
-			scriptname "noreset"
-			origin "440 2272 -204"
-			mins "-8096 -8096 -8096"
-			maxs "8096 8096 8096"
-			classname "func_fakebrush"
-			contents "2097152"
-		}
 		
 		// Allies 1st to Wall
 		// Start trigger

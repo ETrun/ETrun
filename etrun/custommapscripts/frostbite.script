@@ -2,17 +2,8 @@ game_manager
 {
 	spawn
 	{
-		// TJMod
-		create
-		{
-			scriptname "noreset"
-			origin "992 160 432"
-			mins "-224 -288 -80"
-			maxs "224 288 80"
-			classname "func_fakebrush"
-			contents "2097152"
-		}
-		
+		// Runs
+
 		///////////////////////////////////////
 		// OBJ TO TRANSMITTER
 		create

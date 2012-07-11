@@ -1,223 +1,213 @@
 game_manager
 {
-spawn
-{
+	spawn
+	{
+		// Runs
 
-// TJMod
-// Global noreset
-create
-{
-	scriptname "noreset"
-	origin "896 -1024 512"
-	mins "-2560 -4992 -768"
-	maxs "3200 3072 1536"
-	classname "func_fakebrush"
-	contents "2097152"
-}
-/////////////////////////////////////////
-// ALLIES TO OBJ
-create
-{
-	scriptname "startfield"
-	origin "2740 -1536 -24"
-	mins "-148 -8 -96"
-	maxs "148 8 96"
-	classname "trigger_multiple"
-	target "starttimer1"
-	contents "1073741824"
-}
-create
-{
-	scriptname "start"
-	origin "2740 -1536 -24"
-	classname "target_startTimer"
-	targetname "starttimer1"
-	name "Allies to Obj"
-}
+		/////////////////////////////////////////
+		// ALLIES TO OBJ
+		create
+		{
+			scriptname "startfield"
+			origin "2740 -1536 -24"
+			mins "-148 -8 -96"
+			maxs "148 8 96"
+			classname "trigger_multiple"
+			target "starttimer1"
+			contents "1073741824"
+		}
+		create
+		{
+			scriptname "start"
+			origin "2740 -1536 -24"
+			classname "target_startTimer"
+			targetname "starttimer1"
+			name "Allies to Obj"
+		}
 
-create
-{
-	scriptname "checkfield"
-	origin "1104 -2096 -256"
-	mins "-16 -240 -96"
-	maxs "16 240 96"
-	classname "trigger_multiple"
-	target "check0"
-	contents "1073741824"
-}
-create
-{
-	scriptname "check"
-	origin "1104 -2096 -256"
-	classname "target_checkpoint"
-	targetname "check0"
-	name "Allies to Obj"
-}
-create
-{
-	scriptname "checkfield"
-	origin "-892 996 144"
-	mins "-4 -72 -40"
-	maxs "4 72 40"
-	classname "trigger_multiple"
-	target "check1"
-	contents "1073741824"
-}
-create
-{
-	scriptname "check"
-	origin "-892 996 144"
-	classname "target_checkpoint"
-	targetname "check1"
-	name "Allies to Obj"
-}
+		create
+		{
+			scriptname "checkfield"
+			origin "1104 -2096 -256"
+			mins "-16 -240 -96"
+			maxs "16 240 96"
+			classname "trigger_multiple"
+			target "check0"
+			contents "1073741824"
+		}
+		create
+		{
+			scriptname "check"
+			origin "1104 -2096 -256"
+			classname "target_checkpoint"
+			targetname "check0"
+			name "Allies to Obj"
+		}
+		create
+		{
+			scriptname "checkfield"
+			origin "-892 996 144"
+			mins "-4 -72 -40"
+			maxs "4 72 40"
+			classname "trigger_multiple"
+			target "check1"
+			contents "1073741824"
+		}
+		create
+		{
+			scriptname "check"
+			origin "-892 996 144"
+			classname "target_checkpoint"
+			targetname "check1"
+			name "Allies to Obj"
+		}
 
 
-create
-{
-	scriptname "stopfield"
-	origin "-674 486 116"
-	mins "-46 -34 -20"
-	maxs "46 34 20"
-	classname "trigger_multiple"
-	target "stoptimer1"
-	contents "1073741824"
-}
+		create
+		{
+			scriptname "stopfield"
+			origin "-674 486 116"
+			mins "-46 -34 -20"
+			maxs "46 34 20"
+			classname "trigger_multiple"
+			target "stoptimer1"
+			contents "1073741824"
+		}
 
-create
-{
-	scriptname "stop"
-	origin "-674 486 116"
-	classname "target_stopTimer"
-	targetname "stoptimer1"
-	mincheckpoints "2"
-	name "Allies to Obj"
-}
-
-
-/////////////////////////////////////////
-// AXIS TO ALLIES
-create
-{
-	scriptname "startfield"
-	origin "-1336 -816 72"
-	mins "-392 -16 -200"
-	maxs "392 16 200"
-	classname "trigger_multiple"
-	target "starttimer2"
-	contents "1073741824"
-}
-create
-{
-	scriptname "start"
-	origin "-1336 -816 72"
-	classname "target_startTimer"
-	targetname "starttimer2"
-	name "Axis to Allies"
-}
-
-create
-{
-	scriptname "stopfield"
-	origin "2740 -1408 -24"
-	mins "-148 -8 -96"
-	maxs "148 8 96"
-	classname "trigger_multiple"
-	target "stoptimer2"
-	contents "1073741824"
-}
-
-create
-{
-	scriptname "stop"
-	origin "2740 -1408 -24"
-	classname "target_stopTimer"
-	targetname "stoptimer2"
-	name "Axis to Allies"
-}
-
-/////////////////////////////////////////
-// OBJ TO TRANSMITTER
-create
-{
-	scriptname "startfield"
-	origin "-416 944 128"
-	mins "-8 -176 -88"
-	maxs "8 176 88"
-	classname "trigger_multiple"
-	target "starttimer3"
-	contents "1073741824"
-}
-create
-{
-	scriptname "start"
-	origin "-416 944 128"
-	classname "target_startTimer"
-	targetname "starttimer3"
-	name "Obj to transmitter"
-}
-
-create
-{
-	scriptname "stopfield"
-	origin "-508 -3148 -84"
-	mins "-60 -132 -76"
-	maxs "60 132 76"
-	classname "trigger_multiple"
-	target "stoptimer3"
-	contents "1073741824"
-}
-
-create
-{
-	scriptname "stop"
-	origin "-508 -3148 -84"
-	classname "target_stopTimer"
-	targetname "stoptimer3"
-	name "Obj to transmitter"
-}
-
-/////////////////////////////////////////
-// ALLIES SIDE TO OBJ
-create
-{
-	scriptname "startfield"
-	origin "2728 -608 -24"
-	mins "-184 -16 -88"
-	maxs "184 16 88"
-	classname "trigger_multiple"
-	target "starttimer4"
-	contents "1073741824"
-}
-create
-{
-	scriptname "start"
-	origin "-416 944 128"
-	classname "target_startTimer"
-	targetname "starttimer4"
-	name "Allies side to Obj"
-}
+		create
+		{
+			scriptname "stop"
+			origin "-674 486 116"
+			classname "target_stopTimer"
+			targetname "stoptimer1"
+			mincheckpoints "2"
+			name "Allies to Obj"
+		}
 
 
-create
-{
-	scriptname "stopfield"
-	origin "-674 486 116"
-	mins "-46 -34 -20"
-	maxs "46 34 20"
-	classname "trigger_multiple"
-	target "stoptimer4"
-	contents "1073741824"
-}
+		/////////////////////////////////////////
+		// AXIS TO ALLIES
+		create
+		{
+			scriptname "startfield"
+			origin "-1336 -816 72"
+			mins "-392 -16 -200"
+			maxs "392 16 200"
+			classname "trigger_multiple"
+			target "starttimer2"
+			contents "1073741824"
+		}
+		create
+		{
+			scriptname "start"
+			origin "-1336 -816 72"
+			classname "target_startTimer"
+			targetname "starttimer2"
+			name "Axis to Allies"
+		}
 
-create
-{
-	scriptname "stop"
-	origin "-674 486 116"
-	classname "target_stopTimer"
-	targetname "stoptimer4"
-	name "Allies side to Obj"
-}
+		create
+		{
+			scriptname "stopfield"
+			origin "2740 -1408 -24"
+			mins "-148 -8 -96"
+			maxs "148 8 96"
+			classname "trigger_multiple"
+			target "stoptimer2"
+			contents "1073741824"
+		}
+
+		create
+		{
+			scriptname "stop"
+			origin "2740 -1408 -24"
+			classname "target_stopTimer"
+			targetname "stoptimer2"
+			name "Axis to Allies"
+		}
+
+		/////////////////////////////////////////
+		// OBJ TO TRANSMITTER
+		create
+		{
+			scriptname "startfield"
+			origin "-416 944 128"
+			mins "-8 -176 -88"
+			maxs "8 176 88"
+			classname "trigger_multiple"
+			target "starttimer3"
+			contents "1073741824"
+		}
+		create
+		{
+			scriptname "start"
+			origin "-416 944 128"
+			classname "target_startTimer"
+			targetname "starttimer3"
+			name "Obj to transmitter"
+		}
+
+		create
+		{
+			scriptname "stopfield"
+			origin "-508 -3148 -84"
+			mins "-60 -132 -76"
+			maxs "60 132 76"
+			classname "trigger_multiple"
+			target "stoptimer3"
+			contents "1073741824"
+		}
+
+		create
+		{
+			scriptname "stop"
+			origin "-508 -3148 -84"
+			classname "target_stopTimer"
+			targetname "stoptimer3"
+			name "Obj to transmitter"
+		}
+
+		/////////////////////////////////////////
+		// ALLIES SIDE TO OBJ
+		create
+		{
+			scriptname "startfield"
+			origin "2728 -608 -24"
+			mins "-184 -16 -88"
+			maxs "184 16 88"
+			classname "trigger_multiple"
+			target "starttimer4"
+			contents "1073741824"
+		}
+		create
+		{
+			scriptname "start"
+			origin "-416 944 128"
+			classname "target_startTimer"
+			targetname "starttimer4"
+			name "Allies side to Obj"
+		}
+
+
+		create
+		{
+			scriptname "stopfield"
+			origin "-674 486 116"
+			mins "-46 -34 -20"
+			maxs "46 34 20"
+			classname "trigger_multiple"
+			target "stoptimer4"
+			contents "1073741824"
+		}
+
+		create
+		{
+			scriptname "stop"
+			origin "-674 486 116"
+			classname "target_stopTimer"
+			targetname "stoptimer4"
+			name "Allies side to Obj"
+		}
 
 // Open doors
 trigger phasedoor1 move_up

@@ -5,17 +5,8 @@ game_manager
 {
 	spawn
 	{
-		// TJMod
-		// Global noreset
-		create
-		{
-			scriptname "noreset"
-			origin "2944 3200 640"
-			mins "-6272 -3200 -640"
-			maxs "6272 3200 640"
-			classname "func_fakebrush"
-			contents "2097152"
-		}
+		// Runs
+
 		// Six timeruns for Railgun created by .namdam
 		// Axis to Flag
 		// Start trigger

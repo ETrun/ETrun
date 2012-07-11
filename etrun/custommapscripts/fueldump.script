@@ -6,17 +6,8 @@ game_manager
 {
 	spawn
 	{	
-		// TJMod
-		// Global noreset
-		create
-		{
-			scriptname "noreset"
-			origin "-6528 -4608 896"
-			mins "-7808 -6656 -1152"
-			maxs "7808 6656 1152"
-			classname "func_fakebrush"
-			contents "2097152"
-		}
+		// Runs
+
 		/////////////////////////////////////////
 		// ALLIES 1ST TO OVER BRIDGE
 		create

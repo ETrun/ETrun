@@ -5,18 +5,9 @@
 game_manager
 {
 	spawn 
-   	{
-		// TJMOD
-		// Global noreset
-		create
-		{
-			scriptname "noreset"
-			origin "2544 -5312 408"
-			mins "-9999 -9999 -9999"
-			maxs "9999 9999 9999"
-			classname "func_fakebrush"
-			contents "2097152"
-		}
+  {
+		// Runs
+
 		///////////////////////////////////////
 		// Allies left to flag
 		create
