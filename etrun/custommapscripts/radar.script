@@ -24,6 +24,18 @@ game_manager
 			targetname "starttimer1"
 			name "East to truck"
 		}
+		create
+		{
+			scriptname "test"
+			origin "340 -3104 1516"
+			classname "misc_gamemodel"
+			modelscale 1
+			contents 1
+			mins "-90 -90 -25"
+			maxs "90 90 25"
+			clipmask 1
+			model "models/mapobjects/supplystands/stand_ammo.md3"
+		}
 		
 		create
 		{
@@ -82,7 +94,8 @@ game_manager
 			classname "target_stopTimer"
 			targetname "stoptimer2"
 			name "West to truck"
-		}		
+		}
+
 		///////////////////////////////////////////
 		// ALLIES 1ST TO FLAG
 		create
