@@ -27,14 +27,18 @@ game_manager
 		create
 		{
 			scriptname "test"
-			origin "340 -3104 1516"
+			origin "450 -3140 1675"
 			classname "misc_gamemodel"
 			modelscale 1
 			contents 1
 			mins "-90 -90 -25"
 			maxs "90 90 25"
 			clipmask 1
-			model "models/mapobjects/supplystands/stand_ammo.md3"
+			model "models/mapobjects/timerun/start_1.md3"
+			fps "12"
+			frames "26"
+			start "0"
+			spawnflags "2"
 		}
 		
 		create
