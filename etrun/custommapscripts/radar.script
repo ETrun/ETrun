@@ -6,6 +6,7 @@ game_manager
 		
 		///////////////////////////////////////////
 		// EAST RADAR PARTS
+		///////////////////////////////////////////
 		create
 		{
 			scriptname "startfield"
@@ -26,14 +27,11 @@ game_manager
 		}
 		create
 		{
-			scriptname "test"
-			origin "450 -3140 1675"
+			scriptname "start_1"
+			origin "380 -3140 1600"
 			classname "misc_gamemodel"
-			modelscale 1
-			contents 1
 			mins "-90 -90 -25"
 			maxs "90 90 25"
-			clipmask 1
 			model "models/mapobjects/timerun/start_1.md3"
 			fps "12"
 			frames "26"
@@ -59,9 +57,23 @@ game_manager
 			targetname "stoptimer1"
 			name "East to truck"
 		}
+		create
+		{
+			scriptname "stop_1"
+			origin "-1198 416 1500"
+			classname "misc_gamemodel"
+			mins "-90 -90 -25"
+			maxs "90 90 25"
+			model "models/mapobjects/timerun/stop_1.md3"
+			fps "12"
+			frames "26"
+			start "0"
+			spawnflags "2"
+		}
 		
 		///////////////////////////////////////////
 		// WEST RADAR PARTS
+		///////////////////////////////////////////
 		create
 		{
 			scriptname "startfield"
@@ -79,6 +91,19 @@ game_manager
 			classname "target_startTimer"
 			targetname "starttimer2"
 			name "West to truck"
+		}
+		create
+		{
+			scriptname "start_2"
+			origin "-1800 -2280 1650"
+			classname "misc_gamemodel"
+			mins "-90 -90 -25"
+			maxs "90 90 25"
+			model "models/mapobjects/timerun/start_2.md3"
+			fps "12"
+			frames "26"
+			start "0"
+			spawnflags "2"
 		}
 		
 		create
@@ -99,9 +124,23 @@ game_manager
 			targetname "stoptimer2"
 			name "West to truck"
 		}
+		create
+		{
+			scriptname "stop_2"
+			origin "-1275 375 1500"
+			classname "misc_gamemodel"
+			mins "-90 -90 -25"
+			maxs "90 90 25"
+			model "models/mapobjects/timerun/stop_2.md3"
+			fps "12"
+			frames "26"
+			start "0"
+			spawnflags "2"
+		}
 
 		///////////////////////////////////////////
 		// ALLIES 1ST TO FLAG
+		///////////////////////////////////////////
 		create
 		{
 			scriptname "startfield"
@@ -119,6 +158,19 @@ game_manager
 			classname "target_startTimer"
 			targetname "starttimer3"
 			name "Allies 1st to flag"
+		}
+		create
+		{
+			scriptname "start_3"
+			origin "2240 3584 1400"
+			classname "misc_gamemodel"
+			mins "-90 -90 -25"
+			maxs "90 90 25"
+			model "models/mapobjects/timerun/start_3.md3"
+			fps "12"
+			frames "26"
+			start "0"
+			spawnflags "2"
 		}
 		
 		create
@@ -138,10 +190,24 @@ game_manager
 			classname "target_stopTimer"
 			targetname "stoptimer3"
 			name "Allies 1st to flag"
-		}	
+		}
+		create
+		{
+			scriptname "stop_3"
+			origin "-584 1704 1400"
+			classname "misc_gamemodel"
+			mins "-90 -90 -25"
+			maxs "90 90 25"
+			model "models/mapobjects/timerun/stop_3.md3"
+			fps "12"
+			frames "26"
+			start "0"
+			spawnflags "2"
+		}
 		
 		///////////////////////////////////////////
 		// ALLIES SIDE TO ROAD HOUSE
+		///////////////////////////////////////////
 		create
 		{
 			scriptname "startfield"
@@ -159,6 +225,19 @@ game_manager
 			classname "target_startTimer"
 			targetname "starttimer4"
 			name "Allies side to road house"
+		}
+		create
+		{
+			scriptname "start_4"
+			origin "1880 4544 1400"
+			classname "misc_gamemodel"
+			mins "-90 -90 -25"
+			maxs "90 90 25"
+			model "models/mapobjects/timerun/start_4.md3"
+			fps "12"
+			frames "26"
+			start "0"
+			spawnflags "2"
 		}
 		
 		create
@@ -178,10 +257,24 @@ game_manager
 			classname "target_stopTimer"
 			targetname "stoptimer4"
 			name "Allies side to road house"
-		}	
+		}
+		create
+		{
+			scriptname "stop_4"
+			origin "-2368 3448 1500"
+			classname "misc_gamemodel"
+			mins "-90 -90 -25"
+			maxs "90 90 25"
+			model "models/mapobjects/timerun/stop_4.md3"
+			fps "12"
+			frames "26"
+			start "0"
+			spawnflags "2"
+		}
 		
 		///////////////////////////////////////////
 		// CP TO AXIS HUT
+		///////////////////////////////////////////
 		create
 		{
 			scriptname "startfield"
@@ -199,6 +292,19 @@ game_manager
 			classname "target_startTimer"
 			targetname "starttimer5"
 			name "CP to axis hut"
+		}
+		create
+		{
+			scriptname "start_5"
+			origin "2680 -1616 1544"
+			classname "misc_gamemodel"
+			mins "-90 -90 -25"
+			maxs "90 90 25"
+			model "models/mapobjects/timerun/start_5.md3"
+			fps "12"
+			frames "26"
+			start "0"
+			spawnflags "2"
 		}
 		
 		create
@@ -218,10 +324,24 @@ game_manager
 			classname "target_stopTimer"
 			targetname "stoptimer5"
 			name "CP to axis hut"
+		}
+		create
+		{
+			scriptname "stop_5"
+			origin "-3712 -1248 1456"
+			classname "misc_gamemodel"
+			mins "-90 -90 -25"
+			maxs "90 90 25"
+			model "models/mapobjects/timerun/stop_5.md3"
+			fps "12"
+			frames "26"
+			start "0"
+			spawnflags "2"
 		}	
 		
 		///////////////////////////////////////////
 		// AXIS HUT TO TRUCK
+		///////////////////////////////////////////
 		create
 		{
 			scriptname "startfield"
@@ -239,6 +359,19 @@ game_manager
 			classname "target_startTimer"
 			targetname "starttimer6"
 			name "Axis hut to truck"
+		}
+		create
+		{
+			scriptname "start_6"
+			origin "-3448 -720 1456"
+			classname "misc_gamemodel"
+			mins "-90 -90 -25"
+			maxs "90 90 25"
+			model "models/mapobjects/timerun/start_6.md3"
+			fps "12"
+			frames "26"
+			start "0"
+			spawnflags "2"
 		}
 		
 		create
@@ -258,10 +391,24 @@ game_manager
 			classname "target_stopTimer"
 			targetname "stoptimer6"
 			name "Axis hut to truck"
+		}
+		create
+		{
+			scriptname "stop_6"
+			origin "-1132 441 1500"
+			classname "misc_gamemodel"
+			mins "-90 -90 -25"
+			maxs "90 90 25"
+			model "models/mapobjects/timerun/stop_6.md3"
+			fps "12"
+			frames "26"
+			start "0"
+			spawnflags "2"
 		}		
 		
 		///////////////////////////////////////////
 		// ROAD HOUSE TO EAST
+		///////////////////////////////////////////
 		create
 		{
 			scriptname "startfield"
@@ -279,6 +426,19 @@ game_manager
 			classname "target_startTimer"
 			targetname "starttimer7"
 			name "Road house to east"
+		}
+		create
+		{
+			scriptname "start_7"
+			origin "-2440 3192 1440"
+			classname "misc_gamemodel"
+			mins "-90 -90 -25"
+			maxs "90 90 25"
+			model "models/mapobjects/timerun/start_7.md3"
+			fps "12"
+			frames "26"
+			start "0"
+			spawnflags "2"
 		}
 		
 		create
@@ -298,7 +458,20 @@ game_manager
 			classname "target_stopTimer"
 			targetname "stoptimer7"
 			name "Road house to east"
-		}				
+		}
+		create
+		{
+			scriptname "stop_7"
+			origin "380 -3140 1660"
+			classname "misc_gamemodel"
+			mins "-90 -90 -25"
+			maxs "90 90 25"
+			model "models/mapobjects/timerun/stop_7.md3"
+			fps "12"
+			frames "26"
+			start "0"
+			spawnflags "2"
+		}			
 
 		wait 200
 		setstate maindoor1 invisible
