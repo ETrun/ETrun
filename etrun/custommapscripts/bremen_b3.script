@@ -2,17 +2,11 @@ game_manager
 {
 	spawn
 	{
-		// fake maingate
-		create
-		{
-			classname "info_null"
-			targetname "maingate"
-			origin "-940 1620 128"
-		}
-
 		// Runs
 
+		///////////////////////////////////////
 		// Allies Spawn to Flag
+		///////////////////////////////////////
 		// Start trigger
 		create
 		{
@@ -32,6 +26,19 @@ game_manager
 			classname "target_startTimer"
 			targetname "starttimer1"
 			name "Allies Spawn to Flag"
+		}
+		create
+		{
+			scriptname "start_1"
+			origin "-2400 -2075 220"
+			classname "misc_gamemodel"
+			mins "-90 -90 -25"
+			maxs "90 90 25"
+			model "models/mapobjects/timerun/start_1.md3"
+			fps "12"
+			frames "26"
+			start "0"
+			spawnflags "2"
 		}
 		
 		// Stop trigger
@@ -54,8 +61,23 @@ game_manager
 			targetname "stoptimer1"
 			name "Allies Spawn to Flag"
 		}
+		create
+		{
+			scriptname "stop_1"
+			origin "-2816 1200 236"
+			classname "misc_gamemodel"
+			mins "-90 -90 -25"
+			maxs "90 90 25"
+			model "models/mapobjects/timerun/stop_1.md3"
+			fps "12"
+			frames "26"
+			start "0"
+			spawnflags "2"
+		}
 		
+		///////////////////////////////////////
 		// Flag to Keycard
+		///////////////////////////////////////
 		// Start trigger
 		create
 		{
@@ -75,6 +97,19 @@ game_manager
 			classname "target_startTimer"
 			targetname "starttimer2"
 			name "Flag to Keycard"
+		}
+		create
+		{
+			scriptname "start_2"
+			origin "-2816 1360 236"
+			classname "misc_gamemodel"
+			mins "-90 -90 -25"
+			maxs "90 90 25"
+			model "models/mapobjects/timerun/start_2.md3"
+			fps "12"
+			frames "26"
+			start "0"
+			spawnflags "2"
 		}
 		
 		// Stop trigger
@@ -97,8 +132,23 @@ game_manager
 			targetname "stoptimer2"
 			name "Flag to Keycard"
 		}
+		create
+		{
+			scriptname "stop_2"
+			origin "1272 198 216"
+			classname "misc_gamemodel"
+			mins "-90 -90 -25"
+			maxs "90 90 25"
+			model "models/mapobjects/timerun/stop_2.md3"
+			fps "12"
+			frames "26"
+			start "0"
+			spawnflags "2"
+		}
 		
+		///////////////////////////////////////
 		// Keycard to Generator
+		///////////////////////////////////////
 		// Start trigger
 		create
 		{
@@ -141,7 +191,9 @@ game_manager
 			name "Keycard to Generator"
 		}
 		
+		///////////////////////////////////////
 		// Flag to CP
+		///////////////////////////////////////
 		// Start trigger
 		create
 		{
@@ -184,7 +236,9 @@ game_manager
 			name "Flag to CP"
 		}
 		
+		///////////////////////////////////////
 		// Axis 2nd to CP
+		///////////////////////////////////////
 		// Start trigger
 		create
 		{
@@ -308,10 +362,11 @@ game_manager
 		
 		setautospawn "Allied first spawn"	1	// Set Allies to forward spawn
 		setautospawn "Axis flag spawn"	0	// Set Axis to forward spawn
-		wait 500
 		
 		wait 500
 		trigger self startvos
+		
+		// setstate defense3_fake invisible
 	}
 	
 	trigger startvos
@@ -349,6 +404,8 @@ game_manager
 	{
 		accum 1 abort_if_not_equal 1
 		wm_setwinner 1
+
+		wm_endround
 	}
 }
 
@@ -364,11 +421,6 @@ game_manager
 // ================================================
 neutral_cp_toi
 {
-	spawn
-	{
-		wait 500
-	}
-
 	trigger show_neutral_cabinet			// Show Neutral Closed CP
 	{
 		setstate neutral_cp_closed default
@@ -763,15 +815,84 @@ flag1_flag
 	
 	trigger allied_capture
 	{
+		globalaccum 3 abort_if_equal 1
+		globalaccum 3 set 1
+		trigger axis1spawn_wobj off
+		trigger allied3spawn_wobj on
+		
+		wm_announce "The Allies have captured the forward bunker!"
+								
+		wm_objective_status 3 1 1		
+		wm_objective_status 3 0 0
+						
+		// *----------------------------------- vo ------------------------------------------*
+		wm_teamvoiceannounce 0 "radar_axis_bunker_captured"
+
+		wm_teamvoiceannounce 1 "radar_allies_bunker_captured"
+
+		wm_removeteamvoiceannounce 0 "radar_axis_bunker_stop"
+
+		wm_removeteamvoiceannounce 1 "radar_allies_bunker_capture"
+		// *---------------------------------------------------------------------------------*
+		
+		// abort if CP is done
+		globalaccum 6 abort_if_equal 1
+		
+		setautospawn "Allied flag spawn"	1
 		
 	}
 	
 	trigger axis_capture
 	{
+		globalaccum 3 abort_if_equal 0
+		globalaccum 3 set 0
+		trigger axis1spawn_wobj on
+		trigger allied3spawn_wobj off
+		
+		wm_announce "The Axis have reclaimed the forward bunker!"
+								
+		wm_objective_status 3 1 0		
+		wm_objective_status 3 0 1
+        
+		// *----------------------------------- vo ------------------------------------------*
+		wm_addteamvoiceannounce 0 "radar_axis_bunker_stop"
+
+		wm_addteamvoiceannounce 1 "radar_allies_bunker_capture"
+
+		wm_teamvoiceannounce 0 "radar_axis_bunker_reclaimed"
+
+		wm_teamvoiceannounce 1 "radar_allies_bunker_reclaimed"
+		// *---------------------------------------------------------------------------------*
 	}
 	
 	trigger force_allied
-	{		
+	{
+		setstate flag1_flag invisible
+		globalaccum 3 abort_if_equal 1
+		globalaccum 3 set 1
+		trigger axis1spawn_wobj off
+		trigger allied3spawn_wobj on
+		
+		wm_announce "The Allies have secured the forward bunker!"
+								
+		wm_objective_status 3 1 1		
+		wm_objective_status 3 0 2
+						
+		// *----------------------------------- vo ------------------------------------------*
+		wm_teamvoiceannounce 0 "radar_axis_bunker_captured"
+
+		wm_teamvoiceannounce 1 "radar_allies_bunker_captured"
+
+		wm_removeteamvoiceannounce 0 "radar_axis_bunker_stop"
+
+		wm_removeteamvoiceannounce 1 "radar_allies_bunker_capture"
+		// *---------------------------------------------------------------------------------*
+		
+		// abort if CP is done
+		globalaccum 6 abort_if_equal 1
+		
+		setautospawn "Allied flag spawn"	1
+		
 	}
 }
 
@@ -789,8 +910,8 @@ maingate
 {
 	spawn
 	{
-		wait 200
-		remove
+		wait 50
+		constructible_class 3
 	}
 	
 	death
@@ -1170,6 +1291,7 @@ truck_engine
 	{
 		wait 200
 		attachtotag truck tag_wfront
+
 		//trigger truck_engine sound_idle
 	}
 
@@ -1478,6 +1600,9 @@ truck
 		accum 1 bitreset 2
 
 		accum 3 set 8
+		
+		trigger truck stuck_check_barrier3_built_msg
+
 		trigger truck run_continue
 	}
 
@@ -1493,18 +1618,29 @@ truck
 
 	trigger run_10
 	{
+		// **************************
+		trigger defense3 remove
+		// **************************
+
+	
 		accum 1 bitset 2
 		followspline 0 tspln_10 125 wait length 304 wait roll 0 -2 dampin
 		accum 1 bitreset 2
 
-		accum 3 set 10
-		trigger truck stuck_check_barrier3_built_msg
-		
+		accum 3 set 10		
 		trigger truck run_continue
 	}
 
 	trigger run_11
 	{
+	
+		// *----------------------------------- vo ------------------------------------------*
+		wm_teamvoiceannounce 0 "goldrush_axis_truck_barrier1"
+
+		wm_teamvoiceannounce 1 "goldrush_allies_truck_barrier1"
+		// *---------------------------------------------------------------------------------*
+
+
 		accum 1 bitset 2
 		followspline 0 tspln_11 125 wait length 304 wait roll -2 0
 		accum 1 bitreset 2
@@ -1525,10 +1661,6 @@ truck
 
 	trigger run_13
 	{
-		// **************************
-		trigger defense3 remove
-		// **************************
-		
 		accum 1 bitset 2
 		followspline 0 tspln_13 125 wait length 304 wait roll -3 0 dampout
 		accum 1 bitreset 2
@@ -1540,12 +1672,6 @@ truck
 
 	trigger run_14
 	{
-		// *----------------------------------- vo ------------------------------------------*
-		wm_teamvoiceannounce 0 "goldrush_axis_truck_barrier1"
-
-		wm_teamvoiceannounce 1 "goldrush_allies_truck_barrier1"
-		// *---------------------------------------------------------------------------------*
-		
 		accum 1 bitset 2
 		followspline 0 tspln_14 125 wait length 304 wait roll -3 +3 dampout
 		accum 1 bitreset 2
@@ -1961,7 +2087,7 @@ truck
 
 	trigger stuck_check_barrier3
 	{
-		accum 3 abort_if_not_equal 12
+		accum 3 abort_if_not_equal 9
 
 		accum 1 abort_if_not_bitset 0
 
@@ -2577,4 +2703,54 @@ defense4
 		wm_removeteamvoiceannounce 1 "goldrush_allies_truckbars_destroy"
 		// *---------------------------------------------------------------------------------*
 	}
+}
+
+woodenbarrier
+{
+spawn
+{
+wait 200
+trigger self setup
+
+setstate baumaterial default
+setstate baumaterial_mod default
+setstate baumaterial_toi default
+}
+
+trigger setup
+{
+setstate woodenbarrier invisible
+
+setstate woodenbarrier_toi default
+
+setstate baumaterial default
+setstate woodenbarrier_mod default
+}
+
+buildstart final
+{
+setstate woodenbarrier underconstruction
+
+setstate baumaterial default
+setstate woodenbarrier_mod default
+}
+
+built final
+{
+setstate woodenbarrier default
+
+setstate baumaterial invisible
+setstate baumaterial_mod invisible
+setstate woodenbarrier_toi invisible
+
+wm_announce "The Wooden Barrier has been constructed."
+}
+
+decayed final
+{
+setstate woodenbarrier invisible
+
+setstate baumaterial default
+setstate baumaterial_mod default
+}
 }
