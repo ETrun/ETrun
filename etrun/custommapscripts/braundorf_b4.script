@@ -10,6 +10,7 @@ game_manager
 
 		///////////////////////////////////////
 		// Allies left to flag
+		///////////////////////////////////////
 		create
 		{
 			scriptname "startfield"
@@ -27,6 +28,19 @@ game_manager
 			classname "target_startTimer"
 			targetname "starttimer1"
 			name "Allies left to flag"
+		}
+		create
+		{
+			scriptname "start_1"
+			origin "2544 -5220 408"
+			classname "misc_gamemodel"
+			mins "-90 -90 -25"
+			maxs "90 90 25"
+			model "models/mapobjects/timerun/start_1.md3"
+			fps "12"
+			frames "26"
+			start "0"
+			spawnflags "2"
 		}
 		
 		create
@@ -69,9 +83,23 @@ game_manager
 			name "Allies left to flag"
 			mincheckpoints "1"
 		}
+		create
+		{
+			scriptname "stop_1"
+			origin "3400 -2300 320"
+			classname "misc_gamemodel"
+			mins "-90 -90 -25"
+			maxs "90 90 25"
+			model "models/mapobjects/timerun/stop_1.md3"
+			fps "12"
+			frames "26"
+			start "0"
+			spawnflags "2"
+		}
 		
 		///////////////////////////////////////
 		// Allies right to flag
+		///////////////////////////////////////
 		create
 		{
 			scriptname "startfield"
@@ -89,6 +117,19 @@ game_manager
 			classname "target_startTimer"
 			targetname "starttimerx"
 			name "Allies right to flag"
+		}
+		create
+		{
+			scriptname "start_2"
+			origin "2820 -5104 408"
+			classname "misc_gamemodel"
+			mins "-90 -90 -25"
+			maxs "90 90 25"
+			model "models/mapobjects/timerun/start_2.md3"
+			fps "12"
+			frames "26"
+			start "0"
+			spawnflags "2"
 		}
 		
 		create
@@ -131,9 +172,23 @@ game_manager
 			name "Allies right to flag"
 			mincheckpoints "1"
 		}
+		create
+		{
+			scriptname "stop_2"
+			origin "3500 -2300 320"
+			classname "misc_gamemodel"
+			mins "-90 -90 -25"
+			maxs "90 90 25"
+			model "models/mapobjects/timerun/stop_2.md3"
+			fps "12"
+			frames "26"
+			start "0"
+			spawnflags "2"
+		}
 		
 		///////////////////////////////////////
 		// Flag -> Main -> Controls
+		///////////////////////////////////////
 		create
 		{
 			scriptname "startfield"
@@ -151,6 +206,19 @@ game_manager
 			classname "target_startTimer"
 			targetname "starttimer2"
 			name "Flag -> Main -> Controls"
+		}
+		create
+		{
+			scriptname "start_3"
+			origin "3200 -2544 256"
+			classname "misc_gamemodel"
+			mins "-90 -90 -25"
+			maxs "90 90 25"
+			model "models/mapobjects/timerun/start_3.md3"
+			fps "12"
+			frames "26"
+			start "0"
+			spawnflags "2"
 		}
 		
 		create
@@ -171,10 +239,24 @@ game_manager
 			classname "target_stopTimer"
 			targetname "stoptimer2"
 			name "Flag -> Main -> Controls"
-		}	
+		}
+		create
+		{
+			scriptname "stop_3"
+			origin "1920 1472 100"
+			classname "misc_gamemodel"
+			mins "-90 -90 -25"
+			maxs "90 90 25"
+			model "models/mapobjects/timerun/stop_3.md3"
+			fps "12"
+			frames "26"
+			start "0"
+			spawnflags "2"
+		}
 		
 		///////////////////////////////////////
 		// Flag -> Side -> Controls
+		///////////////////////////////////////
 		create
 		{
 			scriptname "startfield"
@@ -192,6 +274,19 @@ game_manager
 			classname "target_startTimer"
 			targetname "starttimer3"
 			name "Flag -> Side -> Controls"
+		}
+		create
+		{
+			scriptname "start_4"
+			origin "3840 -2472 256"
+			classname "misc_gamemodel"
+			mins "-90 -90 -25"
+			maxs "90 90 25"
+			model "models/mapobjects/timerun/start_4.md3"
+			fps "12"
+			frames "26"
+			start "0"
+			spawnflags "2"
 		}
 		
 		create
@@ -234,9 +329,23 @@ game_manager
 			name "Flag -> Side -> Controls"
 			mincheckpoints "1"
 		}
+		create
+		{
+			scriptname "stop_4"
+			origin "1920 1472 160"
+			classname "misc_gamemodel"
+			mins "-90 -90 -25"
+			maxs "90 90 25"
+			model "models/mapobjects/timerun/stop_4.md3"
+			fps "12"
+			frames "26"
+			start "0"
+			spawnflags "2"
+		}
 		
 		///////////////////////////////////////
 		// Axis 2nd to controls
+		///////////////////////////////////////
 		create
 		{
 			scriptname "startfield"
@@ -254,6 +363,19 @@ game_manager
 			classname "target_startTimer"
 			targetname "starttimer4"
 			name "Axis 2nd to controls"
+		}
+		create
+		{
+			scriptname "start_5"
+			origin "2688 888 64"
+			classname "misc_gamemodel"
+			mins "-90 -90 -25"
+			maxs "90 90 25"
+			model "models/mapobjects/timerun/start_5.md3"
+			fps "12"
+			frames "26"
+			start "0"
+			spawnflags "2"
 		}
 		
 		
@@ -295,7 +417,20 @@ game_manager
 			classname "target_stopTimer"
 			targetname "stoptimer4"
 			name "Axis 2nd to controls"
-		}			
+		}
+		create
+		{
+			scriptname "stop_5"
+			origin "1920 1472 220"
+			classname "misc_gamemodel"
+			mins "-90 -90 -25"
+			maxs "90 90 25"
+			model "models/mapobjects/timerun/stop_5.md3"
+			fps "12"
+			frames "26"
+			start "0"
+			spawnflags "2"
+		}
 		
 		wait 3500
 		setstate main_gate_script invisible
