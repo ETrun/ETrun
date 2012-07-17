@@ -10,6 +10,7 @@ game_manager
 
 		/////////////////////////////////////////
 		// ALLIES 1ST TO OVER BRIDGE
+		/////////////////////////////////////////
 		create
 		{
 			scriptname "startfield"
@@ -27,6 +28,19 @@ game_manager
 			classname "target_startTimer"
 			targetname "starttimer1"
 			name "Allies 1st to bridge"
+		}
+		create
+		{
+			scriptname "start_1"
+			origin "-896 -8200 360"
+			classname "misc_gamemodel"
+			mins "-90 -90 -25"
+			maxs "90 90 25"
+			model "models/mapobjects/timerun/start_1.md3"
+			fps "12"
+			frames "26"
+			start "0"
+			spawnflags "2"
 		}
 
 
@@ -49,9 +63,23 @@ game_manager
 			targetname "stoptimer1"
 			name "Allies 1st to bridge"
 		}
+		create
+		{
+			scriptname "stop_1"
+			origin "-3712 -4288 264"
+			classname "misc_gamemodel"
+			mins "-90 -90 -25"
+			maxs "90 90 25"
+			model "models/mapobjects/timerun/stop_1.md3"
+			fps "12"
+			frames "26"
+			start "0"
+			spawnflags "2"
+		}
 		
 		/////////////////////////////////////////
 		// AMMO HOUSE TO MAINGATE
+		/////////////////////////////////////////
 		create
 		{
 			scriptname "startfield"
@@ -69,6 +97,19 @@ game_manager
 			classname "target_startTimer"
 			targetname "starttimer2"
 			name "Ammo house to maingate"
+		}
+		create
+		{
+			scriptname "start_2"
+			origin "-3136 -8128 440"
+			classname "misc_gamemodel"
+			mins "-90 -90 -25"
+			maxs "90 90 25"
+			model "models/mapobjects/timerun/start_2.md3"
+			fps "12"
+			frames "26"
+			start "0"
+			spawnflags "2"
 		}
 
 		create
@@ -89,9 +130,23 @@ game_manager
 			targetname "stoptimer2"
 			name "Ammo house to maingate"
 		}
+		create
+		{
+			scriptname "stop_2"
+			origin "-9792 -5584 272"
+			classname "misc_gamemodel"
+			mins "-90 -90 -25"
+			maxs "90 90 25"
+			model "models/mapobjects/timerun/stop_2.md3"
+			fps "12"
+			frames "26"
+			start "0"
+			spawnflags "2"
+		}
 			
 		/////////////////////////////////////////
 		// ALLIES CP TO DUMP
+		/////////////////////////////////////////
 		create
 		{
 			scriptname "startfield"
@@ -109,6 +164,19 @@ game_manager
 			classname "target_startTimer"
 			targetname "starttimer3"
 			name "Allies CP to dump"
+		}
+		create
+		{
+			scriptname "start_3"
+			origin "-10648 -2368 576"
+			classname "misc_gamemodel"
+			mins "-90 -90 -25"
+			maxs "90 90 25"
+			model "models/mapobjects/timerun/start_3.md3"
+			fps "12"
+			frames "26"
+			start "0"
+			spawnflags "2"
 		}
 
 		create
@@ -128,48 +196,20 @@ game_manager
 			classname "target_stopTimer"
 			targetname "stoptimer3"
 			name "Allies CP to dump"
-		}	
-		
-		
-		/////////////////////////////////////////
-		// ALLIES CP TO WATER TOWER
-		create
-		{
-			scriptname "startfield"
-			origin "-11320 -2288 608"
-			mins "-8 -48 -48"
-			maxs "8 48 48"
-			classname "trigger_multiple"
-			target "starttimer4"
-			contents "1073741824"
 		}
 		create
 		{
-			scriptname "start"
-			origin "-10648 -2368 576"
-			classname "target_startTimer"
-			targetname "starttimer4"
-			name "Allies CP to water tower"
+			scriptname "stop_3"
+			origin "-10456 -7152 256"
+			classname "misc_gamemodel"
+			mins "-90 -90 -25"
+			maxs "90 90 25"
+			model "models/mapobjects/timerun/stop_3.md3"
+			fps "12"
+			frames "26"
+			start "0"
+			spawnflags "2"
 		}
-
-		create
-		{
-			scriptname "stopfield"
-			origin "-10616 -6744 824"
-			mins "-32 -32 -32"
-			maxs "32 32 32"
-			classname "trigger_multiple"
-			target "stoptimer4"
-			contents "1073741824"
-		}
-		create
-		{
-			scriptname "stop"
-			origin "-10616 -6744 824"
-			classname "target_stopTimer"
-			targetname "stoptimer4"
-			name "Allies CP to water tower"
-		}	
 		
 		trigger tunnelgrate_solid switch
 		wait 500
