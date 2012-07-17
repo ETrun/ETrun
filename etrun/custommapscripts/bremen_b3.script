@@ -117,8 +117,8 @@ game_manager
 		{
 			scriptname "stopfield2"
 			origin "1272 42 212"
-			mins "-32 -32 -64"
-			maxs "32 32 64"
+			mins "-64 -64 -64"
+			maxs "64 64 64"
 			classname "trigger_multiple"
 			target "stoptimer2"
 			contents "1073741824"
@@ -169,6 +169,19 @@ game_manager
 			targetname "starttimer3"
 			name "Keycard to Generator"
 		}
+		create
+		{
+			scriptname "start_3"
+			origin "1288 42 212"
+			classname "misc_gamemodel"
+			mins "-90 -90 -25"
+			maxs "90 90 25"
+			model "models/mapobjects/timerun/start_3.md3"
+			fps "12"
+			frames "26"
+			start "0"
+			spawnflags "2"
+		}
 		
 		// Stop trigger
 		create
@@ -190,17 +203,31 @@ game_manager
 			targetname "stoptimer3"
 			name "Keycard to Generator"
 		}
+		create
+		{
+			scriptname "stop_3"
+			origin "660 2630 150"
+			classname "misc_gamemodel"
+			mins "-90 -90 -25"
+			maxs "90 90 25"
+			model "models/mapobjects/timerun/stop_3.md3"
+			fps "12"
+			frames "26"
+			start "0"
+			spawnflags "2"
+		}
+
 		
 		///////////////////////////////////////
-		// Flag to CP
+		// Axis 2nd to CP
 		///////////////////////////////////////
 		// Start trigger
 		create
 		{
 			scriptname "startfield4"
-			origin "-2816 1280 236"
-			mins "-64 -64 -64"
-			maxs "64 64 64"
+			origin "948 -996 164"
+			mins "-32 -16 -64"
+			maxs "32 16 64"
 			classname "trigger_multiple"
 			target "starttimer4"
 			contents "1073741824"
@@ -209,10 +236,23 @@ game_manager
 		create
 		{
 			scriptname "start4"
-			origin "-2800 1280 240"
+			origin "948 -996 180"
 			classname "target_startTimer"
 			targetname "starttimer4"
-			name "Flag to CP"
+			name "Axis 2nd to CP"
+		}
+		create
+		{
+			scriptname "start_4"
+			origin "948 -996 180"
+			classname "misc_gamemodel"
+			mins "-90 -90 -25"
+			maxs "90 90 25"
+			model "models/mapobjects/timerun/start_4.md3"
+			fps "12"
+			frames "26"
+			start "0"
+			spawnflags "2"
 		}
 		
 		// Stop trigger
@@ -230,55 +270,23 @@ game_manager
 		create
 		{
 			scriptname "stop4"
-			origin "2390 2430 360"
-			classname "target_stopTimer"
-			targetname "stoptimer4"
-			name "Flag to CP"
-		}
-		
-		///////////////////////////////////////
-		// Axis 2nd to CP
-		///////////////////////////////////////
-		// Start trigger
-		create
-		{
-			scriptname "startfield5"
-			origin "948 -996 164"
-			mins "-32 -16 -64"
-			maxs "32 16 64"
-			classname "trigger_multiple"
-			target "starttimer5"
-			contents "1073741824"
-		}
-		// Start timer
-		create
-		{
-			scriptname "start5"
-			origin "948 -996 180"
-			classname "target_startTimer"
-			targetname "starttimer5"
-			name "Axis 2nd to CP"
-		}
-		
-		// Stop trigger
-		create
-		{
-			scriptname "stopfield5"
-			origin "2396 2430 324"
-			mins "-48 -48 -64"
-			maxs "48 48 64"
-			classname "trigger_multiple"
-			target "stoptimer5"
-			contents "1073741824"
-		}
-		// stop timer
-		create
-		{
-			scriptname "stop5"
 			origin "2390 2430 380"
 			classname "target_stopTimer"
-			targetname "stoptimer5"
+			targetname "stoptimer4"
 			name "Axis 2nd to CP"
+		}
+		create
+		{
+			scriptname "stop_4"
+			origin "2390 2430 380"
+			classname "misc_gamemodel"
+			mins "-90 -90 -25"
+			maxs "90 90 25"
+			model "models/mapobjects/timerun/stop_4.md3"
+			fps "12"
+			frames "26"
+			start "0"
+			spawnflags "2"
 		}
 
 		wait 1000
@@ -306,6 +314,7 @@ game_manager
 		setstate truck_bwheel2 invisible
 		setstate truck invisible
 		setstate truck_smoke invisible
+		setstate maingate invisible
 
 		// Set scenario information
 		wm_number_of_objectives 8
