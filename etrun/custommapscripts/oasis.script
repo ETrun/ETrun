@@ -2,24 +2,12 @@ game_manager
 {
 	spawn
 	{
-		// func_fakebrush for just creating a brush, need to set contents.
-		// e.g. contents 1 = clip => will make it a clip brush..
-		// Trigger: 1073741824
-		
-		// Origin is the absolute center of the brush.
-		// To get mins\maxs, just get the distance from the origin to a corner,
-		// and set that as -x -y -z and x y z and you got a brush.
-		// Scriptname is like an "identifier" kinda, can be ignored\not used I guess
-		// some more info: http://wolfwiki.anime.net/index.php/Map_scripting
-		
-		
-		// Delete command doesn't work in tjmod yet, you gotta use setstate <scriptname> invisible
-		// or do remove in the spawn {} of the thingie:P
-		
-		// 1 run created by Dinius
+				// 1 run created by Dinius
 		// 5 runs added by .namdam + wall is removed
-		
+
+		/////////////////////////////////////////
 		// Allies 1st to Wall
+		/////////////////////////////////////////
 		// Start trigger
 		create
 		{
@@ -39,6 +27,19 @@ game_manager
 			classname "target_startTimer"
 			targetname "starttimer1"
 			name "Allies 1st to Wall"
+		}
+		create
+		{
+			scriptname "start_1"
+			origin "1672 2848 -208"
+			classname "misc_gamemodel"
+			mins "-90 -90 -25"
+			maxs "90 90 25"
+			model "models/mapobjects/timerun/start_1.md3"
+			fps "12"
+			frames "26"
+			start "0"
+			spawnflags "2"
 		}
 		
 		// Stop trigger
@@ -61,8 +62,23 @@ game_manager
 			targetname "stoptimer1"
 			name "Allies 1st to Wall"
 		}
+		create
+		{
+			scriptname "stop_1"
+			origin "5120 7248 -320"
+			classname "misc_gamemodel"
+			mins "-90 -90 -25"
+			maxs "90 90 25"
+			model "models/mapobjects/timerun/stop_1.md3"
+			fps "12"
+			frames "26"
+			start "0"
+			spawnflags "2"
+		}
 
+		/////////////////////////////////////////
 		// Allies 2nd to North Gun
+		/////////////////////////////////////////
 		// Start trigger
 		create
 		{
@@ -82,6 +98,19 @@ game_manager
 			classname "target_startTimer"
 			targetname "starttimer2"
 			name "Allies 2nd to North Gun"
+		}
+		create
+		{
+			scriptname "start_2"
+			origin "3778 7189 -420"
+			classname "misc_gamemodel"
+			mins "-90 -90 -25"
+			maxs "90 90 25"
+			model "models/mapobjects/timerun/start_2.md3"
+			fps "12"
+			frames "26"
+			start "0"
+			spawnflags "2"
 		}
 		
 		// Stop trigger
@@ -104,8 +133,23 @@ game_manager
 			targetname "stoptimer2"
 			name "Allies 2nd to North Gun"
 		}
+		create
+		{
+			scriptname "stop_2"
+			origin "9544 4736 -140"
+			classname "misc_gamemodel"
+			mins "-90 -90 -25"
+			maxs "90 90 25"
+			model "models/mapobjects/timerun/stop_2.md3"
+			fps "12"
+			frames "26"
+			start "0"
+			spawnflags "2"
+		}
 
+		/////////////////////////////////////////
 		// Allies 2nd to South Gun
+		/////////////////////////////////////////
 		// Start trigger
 		create
 		{
@@ -125,6 +169,19 @@ game_manager
 			classname "target_startTimer"
 			targetname "starttimer3"
 			name "Allies 2nd to South Gun"
+		}
+		create
+		{
+			scriptname "start_3"
+			origin "3712 8052 -150"
+			classname "misc_gamemodel"
+			mins "-90 -90 -25"
+			maxs "90 90 25"
+			model "models/mapobjects/timerun/start_3.md3"
+			fps "12"
+			frames "26"
+			start "0"
+			spawnflags "2"
 		}
 		
 		// Stop trigger
@@ -147,8 +204,23 @@ game_manager
 			targetname "stoptimer3"
 			name "Allies 2nd to South Gun"
 		}
+		create
+		{
+			scriptname "stop_3"
+			origin "9544 3916 -140"
+			classname "misc_gamemodel"
+			mins "-90 -90 -25"
+			maxs "90 90 25"
+			model "models/mapobjects/timerun/stop_3.md3"
+			fps "12"
+			frames "26"
+			start "0"
+			spawnflags "2"
+		}
 
+		/////////////////////////////////////////
 		// Axis 2nd to North Gun
+		/////////////////////////////////////////
 		// Start trigger
 		create
 		{
@@ -168,6 +240,19 @@ game_manager
 			classname "target_startTimer"
 			targetname "starttimer4"
 			name "Axis 2nd to North Gun"
+		}
+		create
+		{
+			scriptname "start_4"
+			origin "7104 4826 -412"
+			classname "misc_gamemodel"
+			mins "-90 -90 -25"
+			maxs "90 90 25"
+			model "models/mapobjects/timerun/start_4.md3"
+			fps "12"
+			frames "26"
+			start "0"
+			spawnflags "2"
 		}
 		
 		// Stop trigger
@@ -190,8 +275,23 @@ game_manager
 			targetname "stoptimer4"
 			name "Axis 2nd to North Gun"
 		}
+		create
+		{
+			scriptname "stop_4"
+			origin "9544 4736 -195"
+			classname "misc_gamemodel"
+			mins "-90 -90 -25"
+			maxs "90 90 25"
+			model "models/mapobjects/timerun/stop_4.md3"
+			fps "12"
+			frames "26"
+			start "0"
+			spawnflags "2"
+		}
 
+		/////////////////////////////////////////
 		// Axis 2nd to South Gun
+		/////////////////////////////////////////
 		// Start trigger
 		create
 		{
@@ -211,6 +311,19 @@ game_manager
 			classname "target_startTimer"
 			targetname "starttimer5"
 			name "Axis 2nd to South Gun"
+		}
+		create
+		{
+			scriptname "start_5"
+			origin "7600 4060 -400"
+			classname "misc_gamemodel"
+			mins "-90 -90 -25"
+			maxs "90 90 25"
+			model "models/mapobjects/timerun/start_5.md3"
+			fps "12"
+			frames "26"
+			start "0"
+			spawnflags "2"
 		}
 		
 		// Stop trigger
@@ -233,8 +346,23 @@ game_manager
 			targetname "stoptimer5"
 			name "Axis 2nd to South Gun"
 		}
+		create
+		{
+			scriptname "stop_5"
+			origin "9544 3916 -195"
+			classname "misc_gamemodel"
+			mins "-90 -90 -25"
+			maxs "90 90 25"
+			model "models/mapobjects/timerun/stop_5.md3"
+			fps "12"
+			frames "26"
+			start "0"
+			spawnflags "2"
+		}
 
-		// Allies 2nd to CP
+		/////////////////////////////////////////
+		// Allies 2nd to allies CP
+		/////////////////////////////////////////
 		// Start trigger
 		create
 		{
@@ -254,6 +382,19 @@ game_manager
 			classname "target_startTimer"
 			targetname "starttimer6"
 			name "Allies 2nd to CP"
+		}
+		create
+		{
+			scriptname "start_6"
+			origin "3548 7402 -420"
+			classname "misc_gamemodel"
+			mins "-90 -90 -25"
+			maxs "90 90 25"
+			model "models/mapobjects/timerun/start_6.md3"
+			fps "12"
+			frames "26"
+			start "0"
+			spawnflags "2"
 		}
 		
 		// Stop trigger
@@ -275,6 +416,19 @@ game_manager
 			classname "target_stopTimer"
 			targetname "stoptimer6"
 			name "Allies 2nd to CP"
+		}
+		create
+		{
+			scriptname "stop_6"
+			origin "2400 4708 -216"
+			classname "misc_gamemodel"
+			mins "-90 -90 -25"
+			maxs "90 90 25"
+			model "models/mapobjects/timerun/stop_6.md3"
+			fps "12"
+			frames "26"
+			start "0"
+			spawnflags "2"
 		}
 		
 		accum 1 set 0		// State of objective number one
