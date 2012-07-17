@@ -1,0 +1,93 @@
+// Modified by Nico for ETrun
+// Last update 18 07 2012
+
+theend
+{
+	spawn
+	{
+		// Nico, for some reasons game_manger spawns twice in this map
+		// Preventing it this way...
+
+		// Runs
+
+		/////////////////////////////////////////
+		// Default
+		/////////////////////////////////////////
+		create
+		{
+			scriptname "startfield"
+			origin "-3380 3766 177"
+			mins "-64 -32 -256"
+			maxs "64 0 256"
+			classname "trigger_multiple"
+			target "starttimer1"
+			contents "1073741824"
+		}
+		create
+		{
+			scriptname "start"
+			oorigin "-3380 3766 177"
+			classname "target_startTimer"
+			targetname "starttimer1"
+			name "default"
+		}
+		create
+		{
+			scriptname "start_1"
+			origin "-3380 3766 177"
+			classname "misc_gamemodel"
+			mins "-90 -90 -25"
+			maxs "90 90 25"
+			model "models/mapobjects/timerun/start_1.md3"
+			fps "12"
+			frames "26"
+			start "0"
+			spawnflags "2"
+		}
+
+		create
+		{
+			scriptname "stopfield"
+			origin "-3598 589 439"
+			mins "-32 -155 -256"
+			maxs "32 0 256"
+			classname "trigger_multiple"
+			target "stoptimer1"
+			contents "1073741824"
+		}
+		create
+		{
+			scriptname "stop"
+			origin "-3598 589 439"
+			classname "target_stopTimer"
+			targetname "stoptimer1"
+			name "default"
+		}
+		create
+		{
+			scriptname "stop_1"
+			origin "-3598 589 439"
+			classname "misc_gamemodel"
+			mins "-90 -90 -25"
+			maxs "90 90 25"
+			model "models/mapobjects/timerun/stop_1.md3"
+			fps "12"
+			frames "26"
+			start "0"
+			spawnflags "2"
+		}
+	}
+
+	trigger allied_capture
+	{
+		wait 1000
+		wm_announce "You Win !"
+	}
+
+	trigger axis_capture
+	{
+		wait 1000
+		wm_announce "Good but try allies now :p"
+	}
+}
+
