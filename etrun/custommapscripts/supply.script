@@ -55,231 +55,304 @@ game_manager {
                         mins "0 -4 -64"
                         maxs "48 4 64"
                 }
-				
-						
-				// TJMod
-				create
-				{
-					scriptname "clippp"
-					origin "-1968 32 120"
-					mins "-32 -32 -56"
-					maxs "32 32 56"
-					classname "func_fakebrush"
-					contents "1"
-				}
-				create
-				{
-					scriptname "clippp"
-					origin "-1968 -208 120"
-					mins "-32 -32 -56"
-					maxs "32 32 56"
-					classname "func_fakebrush"
-					contents "1"
-				}
-				create
-				{
-					scriptname "clippp"
-					origin "-2384 -144 120"
-					mins "-32 -32 -56"
-					maxs "32 32 56"
-					classname "func_fakebrush"
-					contents "1"
-				}
-				create
-				{
-					scriptname "clippp"
-					origin "-2384 336 120"
-					mins "-32 -32 -56"
-					maxs "32 32 56"
-					classname "func_fakebrush"
-					contents "1"
-				}
-				create
-				{
-					scriptname "cliptop"
-					origin "-2176 64 272"
-					mins "-240 -304 -112"
-					maxs "240 304 112"
-					classname "func_fakebrush"
-					contents "1"
-				}			
 
-				// Both sides of the house, but not the top window thingy
-				create
-				{
-					scriptname "startfieldmain"
-					origin "-2176 376 72"
-					mins "-112 -8 -72"
-					maxs "112 8 72"
-					classname "trigger_multiple"
-					target "starttimer1"
-					contents "1073741824"
-				}
-				create
-				{
-					scriptname "startfieldside"
-					origin "-1928 32 56"
-					mins "-8 -176 -56"
-					maxs "8 176 56"
-					classname "trigger_multiple"
-					target "starttimer1"
-					contents "1073741824"
-				}	
-				create
-				{
-					scriptname "start"
-					origin "-2176 376 72"
-					classname "target_startTimer"
-					targetname "starttimer1"
-					name "Allies 1st to Flag"
-				}
-				
-				
-				create
-				{
-					scriptname "stopfield"
-					origin "-200 2368 260"
-					mins "-24 -24 -25"
-					maxs "24 24 25"
-					classname "trigger_multiple"
-					target "stoptimer1"
-					contents "1073741824"
-				}	
-				create
-				{
-					scriptname "stop"
-					origin "-200 2368 344"
-					classname "target_stopTimer"
-					targetname "stoptimer1"
-					name "Allies 1st to Flag"
-				}
-					
-				///////////////////////////////////////////
-				// FLAG TO CRANE CONTROLS
-				create
-				{
-					scriptname "startfield"
-					origin "-48 2368 288"
-					mins "-8 -56 -56"
-					maxs "8 56 56"
-					classname "trigger_multiple"
-					target "starttimer2"
-					contents "1073741824"
-				}
-				create
-				{
-					scriptname "start"
-					origin "-48 2368 288"
-					classname "target_startTimer"
-					targetname "starttimer2"
-					name "Flag to Crane Controls"
-				}
-				
-				create
-				{
-					scriptname "stopfield"
-					origin "652 -1544 384"
-					mins "-52 -40 -64"
-					maxs "52 40 64"
-					classname "trigger_multiple"
-					target "stoptimer2"
-					contents "1073741824"
-				}
-				create
-				{
-					scriptname "stop"
-					origin "652 -1544 384"
-					classname "target_stopTimer"
-					targetname "stoptimer2"
-					name "Flag to Crane Controls"
-				}		
-				///////////////////////////////////////////
-				// CP -> WEST -> CRANE CONTROLS
-				create
-				{
-					scriptname "startfield"
-					origin "2621 998 288"
-					mins "-32 -32 -32"
-					maxs "32 32 32"
-					classname "trigger_multiple"
-					target "starttimer3"
-					contents "1073741824"
-				}
-				create
-				{
-					scriptname "start"
-					origin "2621 998 288"
-					classname "target_startTimer"
-					targetname "starttimer3"
-					name "CP -> West -> Crane controls"
-				}
+		create
+		{
+			scriptname "clippp"
+			origin "-1968 32 120"
+			mins "-32 -32 -56"
+			maxs "32 32 56"
+			classname "func_fakebrush"
+			contents "1"
+		}
+		create
+		{
+			scriptname "clippp"
+			origin "-1968 -208 120"
+			mins "-32 -32 -56"
+			maxs "32 32 56"
+			classname "func_fakebrush"
+			contents "1"
+		}
+		create
+		{
+			scriptname "clippp"
+			origin "-2384 -144 120"
+			mins "-32 -32 -56"
+			maxs "32 32 56"
+			classname "func_fakebrush"
+			contents "1"
+		}
+		create
+		{
+			scriptname "clippp"
+			origin "-2384 336 120"
+			mins "-32 -32 -56"
+			maxs "32 32 56"
+			classname "func_fakebrush"
+			contents "1"
+		}
+		create
+		{
+			scriptname "cliptop"
+			origin "-2176 64 272"
+			mins "-240 -304 -112"
+			maxs "240 304 112"
+			classname "func_fakebrush"
+			contents "1"
+		}
 
-				create
-				{
-					scriptname "stopfield"
-					origin "-672 -416 128"
-					mins "-160 -48 -512"
-					maxs "160 48 512"
-					classname "trigger_multiple"
-					target "checkx2"
-					contents "1073741824"
-				}
-				create
-				{
-					scriptname "stop"
-					origin "-672 -416 128"
-					classname "target_checkpoint"
-					targetname "checkx2"
-					name "CP -> West -> Crane controls"
-				}
+                ///////////////////////////////////////////
+                // ALLIES 1ST TO FLAG
+                ///////////////////////////////////////////
+		// Both sides of the house, but not the top window thingy
+		create
+		{
+			scriptname "startfieldmain"
+			origin "-2176 376 72"
+			mins "-112 -8 -72"
+			maxs "112 8 72"
+			classname "trigger_multiple"
+			target "starttimer1"
+			contents "1073741824"
+		}
+		create
+		{
+			scriptname "startfieldside"
+			origin "-1928 32 56"
+			mins "-8 -176 -56"
+			maxs "8 176 56"
+			classname "trigger_multiple"
+			target "starttimer1"
+			contents "1073741824"
+		}
+		create
+		{
+			scriptname "start"
+			origin "-2176 376 72"
+			classname "target_startTimer"
+			targetname "starttimer1"
+			name "Allies 1st to Flag"
+		}
+                create
+                {
+                        scriptname "start_1"
+                        origin "-2176 376 72"
+                        classname "misc_gamemodel"
+                        mins "-90 -90 -25"
+                        maxs "90 90 25"
+                        model "models/mapobjects/timerun/start_1.md3"
+                        fps "12"
+                        frames "26"
+                        start "0"
+                        spawnflags "2"
+                }
 				
-				create
-				{
-					scriptname "stopfield"
-					origin "-414 -1467 71"
-					mins "-52 -40 -64"
-					maxs "52 40 64"
-					classname "trigger_multiple"
-					target "checkx"
-					contents "1073741824"
-				}
-				create
-				{
-					scriptname "stop"
-					origin "-414 -1467 71"
-					classname "target_checkpoint"
-					targetname "checkx"
-					name "CP -> West -> Crane controls"
-				}
 				
-				create
-				{
-					scriptname "stopfield"
-					origin "652 -1544 384"
-					mins "-52 -40 -64"
-					maxs "52 40 64"
-					classname "trigger_multiple"
-					target "stoptimer3"
-					contents "1073741824"
-				}
-				create
-				{
-					scriptname "stop"
-					origin "652 -1544 384"
-					classname "target_stopTimer"
-					targetname "stoptimer3"
-					name "CP -> West -> Crane controls"
-					mincheckpoints "2"
-				}
+		create
+		{
+			scriptname "stopfield"
+			origin "-200 2368 260"
+			mins "-24 -24 -25"
+			maxs "24 24 25"
+			classname "trigger_multiple"
+			target "stoptimer1"
+			contents "1073741824"
+		}
+		create
+		{
+			scriptname "stop"
+			origin "-200 2368 344"
+			classname "target_stopTimer"
+			targetname "stoptimer1"
+			name "Allies 1st to Flag"
+		}
+                create
+                {
+                        scriptname "stop_1"
+                        origin "-200 2368 344"
+                        classname "misc_gamemodel"
+                        mins "-90 -90 -25"
+                        maxs "90 90 25"
+                        model "models/mapobjects/timerun/stop_1.md3"
+                        fps "12"
+                        frames "26"
+                        start "0"
+                        spawnflags "2"
+                }
 
-				setstate fence_toi invisible
-				setstate truck_move_trigger invisible
-				setstate truck_obj_inf invisible
-				setstate truck invisible
-				setstate truckbackwheels invisible
-				setstate truckfrontwheels invisible
-				setstate truckcrate invisible
+		///////////////////////////////////////////
+		// FLAG TO CRANE CONTROLS
+                ///////////////////////////////////////////
+		create
+		{
+			scriptname "startfield"
+			origin "-48 2368 288"
+			mins "-8 -56 -56"
+			maxs "8 56 56"
+			classname "trigger_multiple"
+			target "starttimer2"
+			contents "1073741824"
+		}
+		create
+		{
+			scriptname "start"
+			origin "-48 2368 288"
+			classname "target_startTimer"
+			targetname "starttimer2"
+			name "Flag to Crane Controls"
+		}
+                create
+                {
+                        scriptname "start_2"
+                        origin "-48 2368 288"
+                        classname "misc_gamemodel"
+                        mins "-90 -90 -25"
+                        maxs "90 90 25"
+                        model "models/mapobjects/timerun/start_2.md3"
+                        fps "12"
+                        frames "26"
+                        start "0"
+                        spawnflags "2"
+                }
 
+		create
+		{
+			scriptname "stopfield"
+			origin "652 -1544 384"
+			mins "-52 -40 -64"
+			maxs "52 40 64"
+			classname "trigger_multiple"
+			target "stoptimer2"
+			contents "1073741824"
+		}
+		create
+		{
+			scriptname "stop"
+			origin "652 -1544 384"
+			classname "target_stopTimer"
+			targetname "stoptimer2"
+			name "Flag to Crane Controls"
+		}
+                create
+                {
+                        scriptname "stop_2"
+                        origin "652 -1544 360"
+                        classname "misc_gamemodel"
+                        mins "-90 -90 -25"
+                        maxs "90 90 25"
+                        model "models/mapobjects/timerun/stop_2.md3"
+                        fps "12"
+                        frames "26"
+                        start "0"
+                        spawnflags "2"
+                }
+
+		///////////////////////////////////////////
+		// CP -> WEST -> CRANE CONTROLS
+                ///////////////////////////////////////////
+		create
+		{
+			scriptname "startfield"
+			origin "2621 998 288"
+			mins "-32 -32 -32"
+			maxs "32 32 32"
+			classname "trigger_multiple"
+			target "starttimer3"
+			contents "1073741824"
+		}
+		create
+		{
+			scriptname "start"
+			origin "2621 998 288"
+			classname "target_startTimer"
+			targetname "starttimer3"
+			name "CP -> West -> Crane controls"
+		}
+                create
+                {
+                        scriptname "start_3"
+                        origin "2621 998 288"
+                        classname "misc_gamemodel"
+                        mins "-90 -90 -25"
+                        maxs "90 90 25"
+                        model "models/mapobjects/timerun/start_3.md3"
+                        fps "12"
+                        frames "26"
+                        start "0"
+                        spawnflags "2"
+                }
+
+		create
+		{
+			scriptname "checkfield"
+			origin "-672 -416 128"
+			mins "-160 -48 -512"
+			maxs "160 48 512"
+			classname "trigger_multiple"
+			target "checkx2"
+			contents "1073741824"
+		}
+		create
+		{
+			scriptname "check"
+			origin "-672 -416 128"
+			classname "target_checkpoint"
+			targetname "checkx2"
+			name "CP -> West -> Crane controls"
+		}
+
+		create
+		{
+			scriptname "checkfield"
+			origin "-414 -1467 71"
+			mins "-52 -40 -64"
+			maxs "52 40 64"
+			classname "trigger_multiple"
+			target "checkx"
+			contents "1073741824"
+		}
+		create
+		{
+			scriptname "check"
+			origin "-414 -1467 71"
+			classname "target_checkpoint"
+			targetname "checkx"
+			name "CP -> West -> Crane controls"
+		}
+
+		create
+		{
+			scriptname "stopfield"
+			origin "652 -1544 384"
+			mins "-52 -40 -64"
+			maxs "52 40 64"
+			classname "trigger_multiple"
+			target "stoptimer3"
+			contents "1073741824"
+		}
+		create
+		{
+			scriptname "stop"
+			origin "652 -1544 384"
+			classname "target_stopTimer"
+			targetname "stoptimer3"
+			name "CP -> West -> Crane controls"
+			mincheckpoints "2"
+		}
+                create
+                {
+                        scriptname "stop_3"
+                        origin "652 -1544 420"
+                        classname "misc_gamemodel"
+                        mins "-90 -90 -25"
+                        maxs "90 90 25"
+                        model "models/mapobjects/timerun/stop_3.md3"
+                        fps "12"
+                        frames "26"
+                        start "0"
+                        spawnflags "2"
+                }
 				
                 // Game rules
                 wm_number_of_objectives 8
