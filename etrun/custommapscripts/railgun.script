@@ -8,7 +8,9 @@ game_manager
 		// Runs
 
 		// Six timeruns for Railgun created by .namdam
+		/////////////////////////////////////////
 		// Axis to Flag
+		/////////////////////////////////////////
 		// Start trigger
 		create
 		{
@@ -28,6 +30,19 @@ game_manager
 			classname "target_startTimer"
 			targetname "starttimer1"
 			name "Axis to Flag"
+		}
+		create
+		{
+			scriptname "start_1"
+			origin "-1424 5192 368"
+			classname "misc_gamemodel"
+			mins "-90 -90 -25"
+			maxs "90 90 25"
+			model "models/mapobjects/timerun/start_1.md3"
+			fps "12"
+			frames "26"
+			start "0"
+			spawnflags "2"
 		}
 		
 		// Stop trigger
@@ -50,8 +65,23 @@ game_manager
 			targetname "stoptimer1"
 			name "Axis to Flag"
 		}
-		
+		create
+		{
+			scriptname "stop_1"
+			origin "512 1600 450"
+			classname "misc_gamemodel"
+			mins "-90 -90 -25"
+			maxs "90 90 25"
+			model "models/mapobjects/timerun/stop_1.md3"
+			fps "12"
+			frames "26"
+			start "0"
+			spawnflags "2"
+		}
+
+		/////////////////////////////////////////
 		// Axis Rails to Railgun
+		/////////////////////////////////////////
 		// Start trigger
 		create
 		{
@@ -71,6 +101,19 @@ game_manager
 			classname "target_startTimer"
 			targetname "starttimer2"
 			name "Axis Rails to Railgun"
+		}
+		create
+		{
+			scriptname "start_2"
+			origin "-1416 5472 320"
+			classname "misc_gamemodel"
+			mins "-90 -90 -25"
+			maxs "90 90 25"
+			model "models/mapobjects/timerun/start_2.md3"
+			fps "12"
+			frames "26"
+			start "0"
+			spawnflags "2"
 		}
 		
 		// Stop trigger
@@ -93,8 +136,23 @@ game_manager
 			targetname "stoptimer2"
 			name "Axis Rails to Railgun"
 		}
+		create
+		{
+			scriptname "stop_2"
+			origin "3912 5600 336"
+			classname "misc_gamemodel"
+			mins "-90 -90 -25"
+			maxs "90 90 25"
+			model "models/mapobjects/timerun/stop_2.md3"
+			fps "12"
+			frames "26"
+			start "0"
+			spawnflags "2"
+		}
 
+		/////////////////////////////////////////
 		// Allies ice to Flag
+		/////////////////////////////////////////
 		// Start trigger
 		create
 		{
@@ -110,10 +168,23 @@ game_manager
 		create
 		{
 			scriptname "start3"
-			origin "3912 5600 336"
+			origin "7072 3008 384"
 			classname "target_startTimer"
 			targetname "starttimer3"
 			name "Allies ice to Flag"
+		}
+		create
+		{
+			scriptname "start_3"
+			origin "7195 3008 384"
+			classname "misc_gamemodel"
+			mins "-90 -90 -25"
+			maxs "90 90 25"
+			model "models/mapobjects/timerun/start_3.md3"
+			fps "12"
+			frames "26"
+			start "0"
+			spawnflags "2"
 		}
 		
 		// Stop trigger
@@ -131,13 +202,28 @@ game_manager
 		create
 		{
 			scriptname "stop3"
-			origin "3912 5600 336"
+			origin "512 1600 448"
 			classname "target_stopTimer"
 			targetname "stoptimer3"
 			name "Allies ice to Flag"
 		}
+		create
+		{
+			scriptname "stop_3"
+			origin "512 1600 510"
+			classname "misc_gamemodel"
+			mins "-90 -90 -25"
+			maxs "90 90 25"
+			model "models/mapobjects/timerun/stop_3.md3"
+			fps "12"
+			frames "26"
+			start "0"
+			spawnflags "2"
+		}
 
+		/////////////////////////////////////////
 		// Depot Yard to Bunker
+		/////////////////////////////////////////
 		// Start trigger
 		create
 		{
@@ -157,6 +243,19 @@ game_manager
 			classname "target_startTimer"
 			targetname "starttimer4"
 			name "Depot Yard to Bunker"
+		}
+		create
+		{
+			scriptname "start_4"
+			origin "320 1504 448"
+			classname "misc_gamemodel"
+			mins "-90 -90 -25"
+			maxs "90 90 25"
+			model "models/mapobjects/timerun/start_4.md3"
+			fps "12"
+			frames "26"
+			start "0"
+			spawnflags "2"
 		}
 		
 		// Stop trigger
@@ -179,8 +278,23 @@ game_manager
 			targetname "stoptimer4"
 			name "Depot Yard to Bunker"
 		}
+		create
+		{
+			scriptname "stop_4"
+			origin "2944 3352 176"
+			classname "misc_gamemodel"
+			mins "-90 -90 -25"
+			maxs "90 90 25"
+			model "models/mapobjects/timerun/stop_4.md3"
+			fps "12"
+			frames "26"
+			start "0"
+			spawnflags "2"
+		}
 
+		/////////////////////////////////////////
 		// Allies Spawn to Railgun
+		/////////////////////////////////////////
 		// Start trigger
 		create
 		{
@@ -200,6 +314,19 @@ game_manager
 			classname "target_startTimer"
 			targetname "starttimer5"
 			name "Allies Spawn to Railgun"
+		}
+		create
+		{
+			scriptname "start_5"
+			origin "6720 3264 320"
+			classname "misc_gamemodel"
+			mins "-90 -90 -25"
+			maxs "90 90 25"
+			model "models/mapobjects/timerun/start_5.md3"
+			fps "12"
+			frames "26"
+			start "0"
+			spawnflags "2"
 		}
 		
 		// Stop trigger
@@ -222,8 +349,23 @@ game_manager
 			targetname "stoptimer5"
 			name "Allies Spawn to Railgun"
 		}
+		create
+		{
+			scriptname "stop_5"
+			origin "3776 5632 320"
+			classname "misc_gamemodel"
+			mins "-90 -90 -25"
+			maxs "90 90 25"
+			model "models/mapobjects/timerun/stop_5.md3"
+			fps "12"
+			frames "26"
+			start "0"
+			spawnflags "2"
+		}
 
+		/////////////////////////////////////////
 		// Allies Spawn to Bunker
+		/////////////////////////////////////////
 		// Start trigger
 		create
 		{
@@ -243,6 +385,19 @@ game_manager
 			classname "target_startTimer"
 			targetname "starttimer6"
 			name "Allies Spawn to Bunker"
+		}
+		create
+		{
+			scriptname "start_6"
+			origin "7392 4096 352"
+			classname "misc_gamemodel"
+			mins "-90 -90 -25"
+			maxs "90 90 25"
+			model "models/mapobjects/timerun/start_6.md3"
+			fps "12"
+			frames "26"
+			start "0"
+			spawnflags "2"
 		}
 		
 		// Stop trigger
@@ -264,6 +419,19 @@ game_manager
 			classname "target_stopTimer"
 			targetname "stoptimer6"
 			name "Allies Spawn to Bunker"
+		}
+		create
+		{
+			scriptname "stop_6"
+			origin "3648 2816 320"
+			classname "misc_gamemodel"
+			mins "-90 -90 -25"
+			maxs "90 90 25"
+			model "models/mapobjects/timerun/stop_6.md3"
+			fps "12"
+			frames "26"
+			start "0"
+			spawnflags "2"
 		}
 
 		wait 600
