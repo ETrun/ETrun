@@ -6,6 +6,7 @@ game_manager
 
 		///////////////////////////////////////
 		// OBJ TO TRANSMITTER
+		///////////////////////////////////////
 		create
 		{
 			scriptname "startfield"
@@ -23,6 +24,19 @@ game_manager
 			classname "target_startTimer"
 			targetname "starttimer1"
 			name "Obj to transmitter"
+		}
+		create
+		{
+			scriptname "start_1"
+			origin "816 160 450"
+			classname "misc_gamemodel"
+			mins "-90 -90 -25"
+			maxs "90 90 25"
+			model "models/mapobjects/timerun/start_1.md3"
+			fps "12"
+			frames "26"
+			start "0"
+			spawnflags "2"
 		}
 		
 		
@@ -45,49 +59,19 @@ game_manager
 			targetname "stoptimer1"
 			name "Obj to transmitter"
 		}
-		
-		///////////////////////////////////////
-		// OBJ TO TRANSMITTER #2
 		create
 		{
-			scriptname "startfield"
-			origin "900 -272 260"
-			mins "-316 -144 -68"
-			maxs "316 144 68"
-			classname "trigger_multiple"
-			target "starttimer2"
-			contents "1073741824"
-		}
-		create
-		{
-			scriptname "start"
-			origin "900 -272 260"
-			classname "target_startTimer"
-			targetname "starttimer2"
-			name "Obj to transmitter #2"
-		}
-		
-		
-		create
-		{
-			scriptname "stopfield"
+			scriptname "stop_1"
 			origin "-4564 2244 -96"
-			mins "-60 -52 -80"
-			maxs "60 52 80"
-			classname "trigger_multiple"
-			target "stoptimer2"
-			contents "1073741824"
+			classname "misc_gamemodel"
+			mins "-90 -90 -25"
+			maxs "90 90 25"
+			model "models/mapobjects/timerun/stop_1.md3"
+			fps "12"
+			frames "26"
+			start "0"
+			spawnflags "2"
 		}
-
-		create
-		{
-			scriptname "stop"
-			origin "-4564 2244 -96"
-			classname "target_stopTimer"
-			targetname "stoptimer2"
-			name "Obj to transmitter #2"
-		}	
-		
 		
 		// Fix for removing the main door
 		create
