@@ -1078,23 +1078,19 @@ void ClientUserinfoChanged( int clientNum ) {
 	Q_strncpyz( oldname, client->pers.netname, sizeof( oldname ) );
 	ClientCleanName( name, client->pers.netname, sizeof( client->pers.netname ) );
 
-	if ( client->pers.connected == CON_CONNECTED ) {
-		if ( strcmp( oldname, client->pers.netname ) ) {
-
-			// Nico, name changes limit
-			if (g_maxNameChanges.integer > -1 && client->pers.nameChanges >= g_maxNameChanges.integer) {
-				Q_strncpyz( client->pers.netname, oldname, sizeof( client->pers.netname ) );
-				Info_SetValueForKey( userinfo, "name", oldname);
-				trap_SetUserinfo( clientNum, userinfo );
-				CPx(clientNum, "print \"^1You had too many namechanges\n\"");
-				G_LogPrintf("Client %d name change refused\n", clientNum); 
-				return;
-			} else {
-				client->pers.nameChanges++;
-				trap_SendServerCommand( -1, va( "print \"[lof]%s" S_COLOR_WHITE " [lon]renamed to[lof] %s\n\"", oldname,
-											client->pers.netname ) );
-			}
-
+	if ( client->pers.connected == CON_CONNECTED && strcmp( oldname, client->pers.netname ) ) {
+		// Nico, name changes limit
+		if (g_maxNameChanges.integer > -1 && client->pers.nameChanges >= g_maxNameChanges.integer) {
+			Q_strncpyz( client->pers.netname, oldname, sizeof( client->pers.netname ) );
+			Info_SetValueForKey( userinfo, "name", oldname);
+			trap_SetUserinfo( clientNum, userinfo );
+			CPx(clientNum, "print \"^1You had too many namechanges\n\"");
+			G_LogPrintf("Client %d name change refused\n", clientNum); 
+			return;
+		} else {
+			client->pers.nameChanges++;
+			trap_SendServerCommand( -1, va( "print \"[lof]%s" S_COLOR_WHITE " [lon]renamed to[lof] %s\n\"", oldname,
+										client->pers.netname ) );
 		}
 	}
 

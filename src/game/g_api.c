@@ -100,7 +100,7 @@ static void clientBigDataPrint(gentity_t *ent, char *data) {
 }
 
 static char to_hex(char code) {
-  char hex[] = "0123456789abcdef";
+  char hex[] = "0123456789ABCDEF";
   return hex[code & 15];
 }
 
@@ -330,7 +330,7 @@ static void *recordHandler(void *data) {
 		if (ent->client->sess.timerunCheckpointWereLoaded[timerunNum]) {
 			memcpy(ent->client->sess.timerunBestCheckpointTimes[timerunNum], ent->client->timerunCheckpointTimes, sizeof (ent->client->timerunCheckpointTimes));
 		}
-		CP(va("print \"^1> ^w%s\n\"", queryStruct->result));
+		AP(va("print \"^1> ^w%s\n\"", queryStruct->result));
 		break;
 
 	case 1002:// SB
