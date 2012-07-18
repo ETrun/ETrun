@@ -1415,7 +1415,7 @@ void target_stoptimer_use(gentity_t *self, gentity_t *other, gentity_t *activato
 
 	// don't stop the time if this isn't a corresponding stoptimer
 	if (Q_stricmp(self->timerunName, client->currentTimerun)) {
-		G_DPrintf("target_stoptimer_use: ignored because started run != ended run for client %d\n", client->ps.clientNum);
+		G_DPrintf("target_stoptimer_use: ignored because started run (%s) != ended run (%s) for client %d\n", client->currentTimerun, self->timerunName, client->ps.clientNum);
 		return;
 	}
 
