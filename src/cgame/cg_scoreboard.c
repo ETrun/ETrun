@@ -451,6 +451,9 @@ qboolean CG_DrawScoreboard(void) {
 		teamPlayers[orderedScores[i].team]++;
 	}
 
+	// Nico, draw time
+	CG_DrawClock(540, 10, qtrue);
+
 	// Nico, draw physics
 	// #todo: move this elsewhere
 	switch (physics.integer) {
@@ -479,7 +482,7 @@ qboolean CG_DrawScoreboard(void) {
 		break;
 	}
 
-	WM_ETrun_print(va("Physics: %s", physicsName), &cgs.media.limboFont2, 0.15, 20, 10, qtrue, 0);
+	WM_ETrun_print(va("Physics: %s", physicsName), &cgs.media.limboFont2, 0.15, 540, 20, qtrue, 0);
 
 	// Nico, draw scoreboard header
 	y = 30;// Start drawing from y = 30

@@ -2105,6 +2105,7 @@ void CG_DrawOB(void);
 void CG_DrawTimer(void);
 void CG_DrawCGaz(void);
 void CG_DrawKeys(void);
+void CG_DrawClock(float x, float y, qboolean shadowed);
 
 //
 // cg_players.c

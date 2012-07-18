@@ -1,6 +1,7 @@
 #include "cg_local.h"
 
-/* Draw checkpoints times
+/**
+ * Draw checkpoints times
  *
  * @author Nico
  */
@@ -78,7 +79,8 @@ void CG_DrawCheckpoints(void) {
 	}
 }
 
-/* Draw speed meter
+/**
+ * Draw speed meter
  *
  * @author Nico
  */
@@ -106,7 +108,8 @@ void CG_DrawSpeedMeter(void) {
 	CG_Text_Paint_Ext(x - w, y, sizex, sizey, colorWhite, status, 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
 }
 
-/* OB detector from TJMod
+/**
+ * OB detector from TJMod
  *
  * @author Nico
  */
@@ -192,7 +195,8 @@ void CG_DrawOB(void) {
 	}
 }
 
-/* Draw timer
+/**
+ * Draw timer
  *
  * @author Nico
  */
@@ -358,7 +362,8 @@ typedef struct {
 } pml_t;
 extern pml_t	pml;
 
-/* Draw CGaz from TJMod
+/**
+ * Draw CGaz from TJMod
  *
  * @author Nico
  */
@@ -476,7 +481,8 @@ void CG_DrawCGaz(void) {
 	return;
 }
 
-/* Draw keys from TJMod
+/**
+ * Draw keys from TJMod
  *
  * @author Nico
  */
@@ -577,5 +583,34 @@ void CG_DrawKeys(void) {
 		CG_DrawPic(x, y, size, size, cgs.media.keys[i].CrouchPressedShader);
 	} else {
 		CG_DrawPic(x, y, size, size, cgs.media.keys[i].CrouchNotPressedShader);
+	}
+}
+
+/**
+ * Draw clock from TJMod
+ *
+ * @author Nico
+ */
+void CG_DrawClock(float x, float y, qboolean shadowed) {
+	char displayTime[18] = {0};
+	qtime_t tm;
+	vec4_t clr = { 1.0f, 1.0f, 1.0f, 0.8f };
+
+	trap_RealTime(&tm);
+	displayTime[0] = '\0';
+
+	Q_strcat(displayTime, sizeof (displayTime),
+		va("Time: %d:%02d",
+			((tm.tm_hour == 0 || tm.tm_hour == 12) ? 12 : tm.tm_hour % 12),
+			tm.tm_min));
+	Q_strcat(displayTime, sizeof (displayTime),
+		va(":%02d", tm.tm_sec));
+	Q_strcat(displayTime, sizeof (displayTime),
+		(tm.tm_hour < 12) ? " am" : " pm");
+
+	if (shadowed == qtrue) {
+		CG_Text_Paint_Ext(x, y, 0.15, 0.15, clr, displayTime, 0, 24, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont2);
+	} else {
+		CG_Text_Paint_Ext(x, y, 0.15, 0.15, clr, displayTime, 0, 24, 0, &cgs.media.limboFont2);
 	}
 }
