@@ -347,7 +347,14 @@ static void *recordHandler(void *data) {
 		AP(va("print \"^1> ^w%s\n\"", queryStruct->result));
 		break;
 
-	case 1004:// Slow time
+	case 1004:// SB was tied
+		if (ent->client->sess.timerunCheckpointWereLoaded[timerunNum]) {
+			memcpy(ent->client->sess.timerunBestCheckpointTimes[timerunNum], ent->client->timerunCheckpointTimes, sizeof (ent->client->timerunCheckpointTimes));
+		}
+		AP(va("print \"^1> ^w%s\n\"", queryStruct->result));
+		break;
+
+	case 1005:// Slow time
 		CP(va("print \"^1> ^w%s\n\"", queryStruct->result));
 		break;
 
