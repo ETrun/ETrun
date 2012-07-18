@@ -1250,7 +1250,8 @@ static void notify_timerun_start(gentity_t *activator) {
  * "name"	timerun name
  */
 void target_starttimer_use(gentity_t *self, gentity_t *other, gentity_t *activator) {
-	gclient_t		*client;
+	gclient_t *client = NULL;
+	int i = 0;
 
 	client = activator->client;
 
@@ -1287,6 +1288,14 @@ void target_starttimer_use(gentity_t *self, gentity_t *other, gentity_t *activat
 	// reset checkpoints
 	memset(client->timerunCheckpointTimes, 0, sizeof(client->timerunCheckpointTimes));
 	client->timerunCheckpointsPassed = 0;
+
+	// Nico, reset saves if physics is VET
+	if (physics.integer == 0) {
+		for (i = 0; i < MAX_SAVED_POSITIONS; ++i) {
+			client->sess.alliesSaves[i].valid = qfalse;
+			client->sess.axisSaves[i].valid = qfalse;
+		}
+	}
 }
 
 void SP_target_starttimer(gentity_t *ent) {
