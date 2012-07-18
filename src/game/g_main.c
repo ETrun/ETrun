@@ -60,7 +60,6 @@ vmCvar_t g_debugAlloc;
 vmCvar_t g_debugBullets;    //----(SA)	added
 vmCvar_t g_motd;
 vmCvar_t g_gamestate;
-vmCvar_t g_swapteams;
 // -NERVE - SMF
 
 vmCvar_t g_restarted;
@@ -183,8 +182,6 @@ cvarTable_t gameCvarTable[] = {
 	{ &g_maxclients, "sv_maxclients", "20", CVAR_SERVERINFO | CVAR_LATCH | CVAR_ARCHIVE, 0, qfalse  },            // NERVE - SMF - made 20 from 8
 
 	{ &g_gamestate, "gamestate", "-1", CVAR_WOLFINFO | CVAR_ROM, 0, qfalse  },
-
-	{ &g_swapteams, "g_swapteams", "0", CVAR_ROM, 0, qfalse, qtrue },
 	// -NERVE - SMF
 
 	{ &g_log, "g_log", "", CVAR_ARCHIVE, 0, qfalse },

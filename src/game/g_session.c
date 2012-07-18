@@ -80,35 +80,6 @@ void G_WriteClientSessionData( gclient_t *client, qboolean restart ) {
 	trap_Cvar_Set( va( "session%i", client - level.clients ), s );
 }
 
-
-/*
-================
-G_ClientSwap
-
-Client swap handling
-================
-*/
-void G_ClientSwap( gclient_t *client ) {
-	int flags = 0;
-
-	if ( client->sess.sessionTeam == TEAM_AXIS ) {
-		client->sess.sessionTeam = TEAM_ALLIES;
-	} else if ( client->sess.sessionTeam == TEAM_ALLIES ) {
-		client->sess.sessionTeam = TEAM_AXIS;
-	}
-
-	// Swap spec follows as well
-	flags = 0;
-	if ( client->sess.spec_team & TEAM_AXIS ) {
-		flags |= TEAM_ALLIES;
-	}
-	if ( client->sess.spec_team & TEAM_ALLIES ) {
-		flags |= TEAM_AXIS;
-	}
-
-	client->sess.spec_team = flags;
-}
-
 /*
 ================
 G_ReadSessionData
@@ -147,11 +118,6 @@ void G_ReadSessionData( gclient_t *client ) {
 	&client->sess.specInvitedClients[0],
 	&client->sess.specInvitedClients[1]
 	);
-
-	if ( g_swapteams.integer ) {
-		trap_Cvar_Set( "g_swapteams", "0" );
-		G_ClientSwap( client );
-	}
 }
 
 

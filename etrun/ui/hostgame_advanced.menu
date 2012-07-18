@@ -71,8 +71,7 @@ menuDef {
 	CHECKBOXALIGNX( 6+(SUBWINDOW_WIDTH)+6+2, 218, .5*((SUBWINDOW_WIDTH)-6), 10, "Random Map:", .2, 24, 8, "vote_allow_randommap", "Allow players to vote for a random map" )
 	
 	CHECKBOXALIGNX( 6+(SUBWINDOW_WIDTH)+6+2+(.5*((SUBWINDOW_WIDTH)-6))+2, 170, .5*((SUBWINDOW_WIDTH)-6), 10, "Referee:", .2, 24, 8, "vote_allow_referee", "Allow players to vote for a referee" )
-	CHECKBOXALIGNX( 6+(SUBWINDOW_WIDTH)+6+2+(.5*((SUBWINDOW_WIDTH)-6))+2, 182, .5*((SUBWINDOW_WIDTH)-6), 10, "Swap Teams:", .2, 24, 8, "vote_allow_swapteams", "Allow players to vote for teams to swap sides" )
-	CHECKBOXALIGNX( 6+(SUBWINDOW_WIDTH)+6+2+(.5*((SUBWINDOW_WIDTH)-6))+2, 194, .5*((SUBWINDOW_WIDTH)-6), 10, "Anti-Lag:", .2, 24, 8, "vote_allow_antilag", "Allow players to vote for antilag to be enabled or disabled" )
+	CHECKBOXALIGNX( 6+(SUBWINDOW_WIDTH)+6+2+(.5*((SUBWINDOW_WIDTH)-6))+2, 182, .5*((SUBWINDOW_WIDTH)-6), 10, "Anti-Lag:", .2, 24, 8, "vote_allow_antilag", "Allow players to vote for antilag to be enabled or disabled" )
 	
 // Message of the Day //
 

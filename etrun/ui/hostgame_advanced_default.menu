@@ -37,7 +37,6 @@
 							setcvar vote_allow_mutespecs 1 ;		\
 							setcvar vote_allow_randommap 1 ;		\
 							setcvar vote_allow_referee 0 ;			\
-							setcvar vote_allow_swapteams 1 ;		\
 							setcvar vote_allow_antilag 1 ;			\
 							setcvar vote_allow_muting 1 ;			\
 							setcvar server_motd0 " ^NEnemy Territory ^7MOTD " ; \

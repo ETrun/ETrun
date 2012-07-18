@@ -1472,7 +1472,6 @@ extern vmCvar_t g_debugConstruct;
 extern vmCvar_t g_scriptDebugLevel;
 
 extern vmCvar_t g_gamestate;
-extern vmCvar_t g_swapteams;
 // -NERVE - SMF
 
 //Gordon
@@ -1855,7 +1854,6 @@ extern team_info teamInfo[TEAM_NUM_TEAMS];
 
 qboolean G_AllowFollow( gentity_t *ent, gentity_t *other );
 qboolean G_DesiredFollow(gentity_t *ent, gentity_t *other);
-void G_swapTeams( void );
 qboolean G_teamJoinCheck( int team_num, gentity_t *ent );
 int  G_teamID( gentity_t *ent );
 void G_teamReset( int team_num, qboolean fClearSpecLock );

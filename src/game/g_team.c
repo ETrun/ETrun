@@ -1460,33 +1460,6 @@ void G_teamReset( int team_num, qboolean fClearSpecLock ) {
 	teamInfo[team_num].team_score = 0;
 }
 
-
-// Swaps active players on teams
-void G_swapTeams( void ) {
-	int i;
-	gclient_t *cl;
-
-	for ( i = TEAM_AXIS; i <= TEAM_ALLIES; i++ ) {
-		G_teamReset( i, qtrue );
-	}
-
-	for ( i = 0; i < level.numConnectedClients; i++ ) {
-		cl = level.clients + level.sortedClients[i];
-
-		if ( cl->sess.sessionTeam == TEAM_AXIS ) {
-			cl->sess.sessionTeam = TEAM_ALLIES;
-		} else if ( cl->sess.sessionTeam == TEAM_ALLIES ) {
-			cl->sess.sessionTeam = TEAM_AXIS;
-		} else { continue;}
-
-		G_UpdateCharacter( cl );
-		ClientUserinfoChanged( level.sortedClients[i] );
-		ClientBegin( level.sortedClients[i] );
-	}
-
-	AP( "cp \"^1Teams have been swapped!\n\"" );
-}
-
 // Returns player's "real" team.
 int G_teamID( gentity_t *ent ) {
 	if ( ent->client->sess.coach_team ) {
