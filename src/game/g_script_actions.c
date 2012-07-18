@@ -2699,35 +2699,6 @@ G_ScriptAction_SetMainObjective
 ===================
 */
 qboolean G_ScriptAction_SetMainObjective( gentity_t *ent, char *params ) {
-/*	char *pString, *token;
-	char	cs[MAX_STRING_CHARS];
-	char*	parm;
-	int		num, cs_obj;
-
-	pString = params;
-	token = COM_Parse(&pString);
-	if (!token[0]) {
-		G_Error( "G_ScriptAction_ObjectiveImage: number parameter required\n" );
-	}
-
-	num = atoi( token );
-	if ( num < 1 || num > MAX_OBJECTIVES ) {
-		G_Error( "G_ScriptAction_ObjectiveImage: Invalid objective number\n" );
-	}
-	parm = va("%i", num);
-
-	token = COM_Parse(&pString);
-	if (!token[0]) {
-		G_Error( "G_ScriptAction_ObjectiveImage: team parameter required\n" );
-	}
-
-	cs_obj = !atoi(token) ? CS_MAIN_AXIS_OBJECTIVE : CS_MAIN_ALLIES_OBJECTIVE;
-	trap_GetConfigstring( cs_obj, cs, sizeof(cs) );
-
-	if ( Q_stricmp( cs , parm ) ) {
-		trap_SetConfigstring( cs_obj, parm );
-	}*/
-
 	return qtrue;
 }
 
@@ -2845,28 +2816,10 @@ G_ScriptAction_SetWinner
 
   team: 0==AXIS, 1==ALLIED
 ===================
+
 */
 qboolean G_ScriptAction_SetWinner( gentity_t *ent, char *params ) {
-	char *pString, *token;
-	char cs[MAX_STRING_CHARS];
-	int num;
-
-	pString = params;
-	token = COM_Parse( &pString );
-	if ( !token[0] ) {
-		G_Error( "G_ScriptAction_SetWinner: number parameter required\n" );
-	}
-
-	num = atoi( token );
-	if ( num < -1 || num > 1 ) {
-		G_Error( "G_ScriptAction_SetWinner: Invalid team number\n" );
-	}
-
-	trap_GetConfigstring( CS_MULTI_MAPWINNER, cs, sizeof( cs ) );
-
-	Info_SetValueForKey( cs, "winner", token );
-
-	trap_SetConfigstring( CS_MULTI_MAPWINNER, cs );
+	G_Printf("Warning: G_ScriptAction_SetWinner ignored\n");
 
 	return qtrue;
 }

@@ -1738,9 +1738,6 @@ This is also used for spectator spawns
 void FindIntermissionPoint( void ) {
 	gentity_t   *ent = NULL, *target;
 	vec3_t dir;
-	char cs[MAX_STRING_CHARS];              // DHM - Nerve
-	char        *buf;                       // DHM - Nerve
-	int winner;                             // DHM - Nerve
 
 	// NERVE - SMF - if the match hasn't ended yet, and we're just a spectator
 	// try to find the intermission spawnpoint with no team flags set
@@ -1752,22 +1749,10 @@ void FindIntermissionPoint( void ) {
 		}
 	}
 
-	trap_GetConfigstring( CS_MULTI_MAPWINNER, cs, sizeof( cs ) );
-	buf = Info_ValueForKey( cs, "winner" );
-	winner = atoi( buf );
-
-	// Change from scripting value for winner (0==AXIS, 1==ALLIES) to spawnflag value
-	if ( winner == 0 ) {
-		winner = TEAM_AXIS;
-	} else {
-		winner = TEAM_ALLIES;
-	}
-
-
 	if ( !ent ) {
 		ent = G_Find( NULL, FOFS( classname ), "info_player_intermission" );
 		while ( ent ) {
-			if ( ent->spawnflags & winner ) {
+			if ( ent->spawnflags & TEAM_AXIS ) {
 				break;
 			}
 
@@ -1831,27 +1816,6 @@ void QDECL G_LogPrintf( const char *fmt, ... ) {
 }
 //bani
 void QDECL G_LogPrintf( const char *fmt, ... ) _attribute( ( format( printf,1,2 ) ) );
-
-/*
-=============
-ScoreIsTied
-=============
-*/
-qboolean ScoreIsTied( void ) {
-	int a /*, b*/;
-	char cs[MAX_STRING_CHARS];
-	char    *buf;
-
-	// DHM - Nerve :: GT_WOLF checks the current value of
-	trap_GetConfigstring( CS_MULTI_MAPWINNER, cs, sizeof( cs ) );
-
-	buf = Info_ValueForKey( cs, "winner" );
-	a = atoi( buf );
-
-	return a == -1;
-}
-
-qboolean G_ScriptAction_SetWinner( gentity_t *ent, char *params );
 
 /*
 ==================
