@@ -1398,11 +1398,15 @@ static void Cmd_SendRecord_f(gentity_t *ent, char *runName, char *authToken, int
  * "minCheckpoints"		minimal passed checkpoints to activate this stoptimer
  */
 void target_stoptimer_use(gentity_t *self, gentity_t *other, gentity_t *activator) {
-	int			min, sec, milli;
-	int			delta, dmin, dsec, dmilli;
-	int			time;
-	gclient_t	*client;
-	int			timerunNum;
+	int	min, sec, milli;
+	int	delta, dmin, dsec, dmilli;
+	int	time;
+	gclient_t *client = NULL;
+	int	timerunNum;
+	int i = 0;
+	int len = 0;
+	char cleanRunName[256] = {0};
+	char physicsName[MAX_QPATH] = {0};
 
 	client = activator->client;
 
@@ -1471,8 +1475,34 @@ void target_stoptimer_use(gentity_t *self, gentity_t *other, gentity_t *activato
 			time, (int)client->startSpeed, (int)client->stopSpeed, (int)client->sess.timerunBestSpeed);
 	}
 
-	// Save run
-	trap_SendServerCommand(activator - g_entities, va("runSave %s_%02d-%02d-%03d", client->currentTimerun, min, sec, milli));
+	// Save run after replacing spaces in run name (in any) by underscores
+	Q_strncpyz(cleanRunName, client->currentTimerun, sizeof (cleanRunName));
+	len = strlen(cleanRunName);
+	for (i = 0; i < len; ++i) {
+		if (cleanRunName[i] == ' ') {
+			cleanRunName[i] = '_';
+		}
+	}
+	switch (physics.integer) {
+	case 239:
+	case 255:
+		sprintf(physicsName, "AP");
+		break;
+
+	case 7:
+	case 23:
+		sprintf(physicsName, "VQ3");
+		break;
+
+	case 0:
+		sprintf(physicsName, "VET");
+		break;
+
+	default:
+		sprintf(physicsName, "Unknown");
+		break;
+	}
+	trap_SendServerCommand(activator - g_entities, va("runSave %s[%s]_%02d-%02d-%03d", cleanRunName, physicsName, min, sec, milli));
 
 	// Start recording a new temp demo.
 	trap_SendServerCommand(activator - g_entities, "tempDemoStart 1");
