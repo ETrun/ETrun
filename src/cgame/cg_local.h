@@ -1121,6 +1121,10 @@ typedef struct {
 	int				currentdemo;
 	int				startedNewDemo;
 
+	// Banner printing
+	int			bannerPrintTime;
+	char		bannerPrint[1024];
+
 	// Nico, end of ETrun client variables
 } cg_t;
 
@@ -2106,6 +2110,7 @@ void CG_DrawTimer(void);
 void CG_DrawCGaz(void);
 void CG_DrawKeys(void);
 void CG_DrawClock(float x, float y, qboolean shadowed);
+void CG_DrawBannerPrint(void);
 
 //
 // cg_players.c

@@ -2654,6 +2654,9 @@ static void CG_Draw2D( void ) {
 		// Nico, draw keys pressed
 		CG_DrawKeys();
 
+		// Nico, draw banners
+		CG_DrawBannerPrint();
+
 		CG_DrawSpectatorMessage();
 	} else {
 		if ( cgs.eventHandling != CGAME_EVENT_NONE ) {

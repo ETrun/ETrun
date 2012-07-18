@@ -330,36 +330,36 @@ static void *recordHandler(void *data) {
 		if (ent->client->sess.timerunCheckpointWereLoaded[timerunNum]) {
 			memcpy(ent->client->sess.timerunBestCheckpointTimes[timerunNum], ent->client->timerunCheckpointTimes, sizeof (ent->client->timerunCheckpointTimes));
 		}
-		AP(va("print \"^1> ^w%s\n\"", queryStruct->result));
+		AP(va("print \"%s: ^w%s\n\"", GAME_VERSION_COLORED, queryStruct->result));
 		break;
 
 	case 1002:// SB
 		if (ent->client->sess.timerunCheckpointWereLoaded[timerunNum]) {
 			memcpy(ent->client->sess.timerunBestCheckpointTimes[timerunNum], ent->client->timerunCheckpointTimes, sizeof (ent->client->timerunCheckpointTimes));
 		}
-		AP(va("print \"^1> ^w%s\n\"", queryStruct->result));
+		AP(va("bp \"^w%s\n\"", queryStruct->result));
 		break;
 
 	case 1003:// SB but player was already rec holder
 		if (ent->client->sess.timerunCheckpointWereLoaded[timerunNum]) {
 			memcpy(ent->client->sess.timerunBestCheckpointTimes[timerunNum], ent->client->timerunCheckpointTimes, sizeof (ent->client->timerunCheckpointTimes));
 		}
-		AP(va("print \"^1> ^w%s\n\"", queryStruct->result));
+		AP(va("bp \"^w%s\n\"", queryStruct->result));
 		break;
 
 	case 1004:// SB was tied
 		if (ent->client->sess.timerunCheckpointWereLoaded[timerunNum]) {
 			memcpy(ent->client->sess.timerunBestCheckpointTimes[timerunNum], ent->client->timerunCheckpointTimes, sizeof (ent->client->timerunCheckpointTimes));
 		}
-		AP(va("print \"^1> ^w%s\n\"", queryStruct->result));
+		AP(va("bp \"^w%s\n\"", queryStruct->result));
 		break;
 
 	case 1005:// Slow time
-		CP(va("print \"^1> ^w%s\n\"", queryStruct->result));
+		CP(va("print \"%s: ^w%s\n\"", GAME_VERSION_COLORED, queryStruct->result));
 		break;
 
 	default:// Error
-		CP(va("print \"^1> ^wError: %s\n\"", queryStruct->result));
+		CP(va("print \"%s: ^wError: %s\n\"", GAME_VERSION_COLORED, queryStruct->result));
 		break;
 	}
 

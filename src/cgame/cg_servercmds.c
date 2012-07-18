@@ -1439,6 +1439,90 @@ const char* CG_LocalizeServerCommand( const char *buf ) {
 }
 // -NERVE - SMF
 
+/**
+ * Create banner to be printed
+ * @source: TJMod
+ *
+ * @author Nico
+ */
+#define BP_LINEWIDTH 80
+static void CG_BannerPrint(const char *str) {
+	char buff[MAX_STRING_CHARS] = {0};
+	int	i = 0;
+	int len = 0;
+	int textlen = 0;
+	qboolean neednewline = qfalse;
+
+	Q_strncpyz(cg.bannerPrint, str, sizeof (cg.bannerPrint));
+
+	// turn spaces into newlines, if we've run over the linewidth
+	len = strlen(cg.bannerPrint);
+	for (i = 0, textlen = 0; i < len; ++i, ++textlen) {
+
+		// "\n" in center/banner prints are seen as new lines.
+		// kw: this is also done serverside in etpub
+		if (cg.bannerPrint[i] == '\\' && cg.bannerPrint[i+1] == 'n') {
+			Q_strncpyz(buff, &cg.bannerPrint[i + 2], sizeof (buff));
+			cg.bannerPrint[i] = '\n';
+			cg.bannerPrint[i + 1] = 0;
+			Q_strcat(cg.bannerPrint, sizeof (cg.bannerPrint), buff);
+		}
+
+		if (cg.bannerPrint[i] == '\n') {
+			textlen = 0;
+		}
+
+		if (Q_IsColorString(&cg.bannerPrint[i])) {
+			textlen -= 2;
+		}
+
+		// NOTE: subtracted a few chars here so long words still
+		// get displayed properly
+		if (textlen % (BP_LINEWIDTH - 10) == 0 && textlen > 0) {
+			neednewline = qtrue;
+		}
+
+		if (cg.bannerPrint[i] == ' ' && neednewline) {
+			cg.bannerPrint[i] = '\n';
+			textlen = 0;
+			neednewline = qfalse;
+		}
+
+		// if still to long just cut it at BP_LINEWIDTH
+		if (textlen % BP_LINEWIDTH == 0 && textlen > 0) {
+			Q_strncpyz(buff, &cg.bannerPrint[i], sizeof (buff));
+			cg.bannerPrint[i] = '\n';
+			cg.bannerPrint[i + 1] = 0;
+			Q_strcat(cg.bannerPrint, sizeof (cg.bannerPrint), buff);
+			textlen = 0;
+			neednewline = qfalse;
+		}
+	}
+
+	// post-editing to print text correctly into the console
+	for (i = 0, len = 0; i < strlen(cg.bannerPrint); ++i) {
+		// replace newlines with spaces
+		if (cg.bannerPrint[i] == '\n' ) {
+			if (len != 0 && buff[len - 1] != ' ') {
+				buff[len] = ' ';
+				len++;
+			}
+			continue;
+		}
+		// no spaces at the beginning of the string
+		if (len == 0 && cg.bannerPrint[i] == ' ')  {
+			continue;
+		}
+		buff[len] = cg.bannerPrint[i];
+		len++;
+	}
+	buff[len] = 0;
+
+	CG_Printf("^9banner: ^7%s\n", buff);
+
+	cg.bannerPrintTime = cg.time;
+}
+
 /*
 =================
 CG_ServerCommand
@@ -1877,6 +1961,12 @@ static void CG_ServerCommand( void ) {
 		return;
 	}
 	// Nico, end of auto demo related
+
+	// Nico, banner printing
+	if (!Q_stricmp(cmd, "bp")) {
+		CG_BannerPrint(CG_LocalizeServerCommand(CG_Argv(1)));
+		return;
+	}
 
 	CG_Printf( "Unknown client game command: %s\n", cmd );
 }

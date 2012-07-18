@@ -614,3 +614,77 @@ void CG_DrawClock(float x, float y, qboolean shadowed) {
 		CG_Text_Paint_Ext(x, y, 0.15, 0.15, clr, displayTime, 0, 24, 0, &cgs.media.limboFont2);
 	}
 }
+
+/**
+ * Print banner
+ * @source: TJMod
+ *
+ * @author Nico
+ */
+void CG_DrawBannerPrint(void) {
+	char *start = NULL;
+	int	l = 0;
+	int	x = 0;
+	int y = 0;
+	int w = 0;
+	float *color = NULL;
+	float sizex = 0;
+	float sizey = 0;
+	char lastcolor = COLOR_WHITE;
+	int	charHeight;
+	int	bannerShowTime;
+
+	if (!cg.bannerPrintTime) {
+		return;
+	}
+
+	bannerShowTime = 10000;
+
+	color = CG_FadeColor(cg.bannerPrintTime, bannerShowTime);
+	if (!color) {
+		cg.bannerPrintTime = 0;
+		return;
+	}
+
+	trap_R_SetColor(color);
+
+	start = cg.bannerPrint;
+
+	sizex = sizey = 0.2f;
+
+	y = 20;
+	charHeight = CG_Text_Height_Ext("A", sizey, 0, &cgs.media.limboFont2);
+
+	while (1) {
+		char linebuffer[1024];
+		char colorchar = lastcolor;
+
+		for (l = 0; l < strlen(cg.bannerPrint); ++l) {
+			if (!start[l] || start[l] == '\n') {
+				break;
+			}
+			if (Q_IsColorString(&start[l])) {
+				lastcolor = start[l + 1];
+			}
+			linebuffer[l] = start[l];
+		}
+		linebuffer[l] = 0;
+
+		w = CG_Text_Width_Ext(linebuffer, sizex, 0, &cgs.media.limboFont2);
+
+		x = ( SCREEN_WIDTH - w ) / 2;
+
+		CG_Text_Paint_Ext( x, y, sizex, sizey, color, va( "^%c%s", colorchar, linebuffer),	0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont2);
+
+		y += charHeight * 2;
+
+		while (*start && *start != '\n') {
+			start++;
+		}
+		if (!*start) {
+			break;
+		}
+		start++;
+	}
+	trap_R_SetColor(NULL);
+}
