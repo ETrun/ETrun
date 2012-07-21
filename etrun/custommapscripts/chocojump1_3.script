@@ -1,4 +1,4 @@
-// Modified by Nico for ETrun
+// Modified by Timothy for ETrun
 // Last update 21 07 2012
 
 allied_flag1
@@ -5284,7 +5284,7 @@ game_manager
 		    origin "1123 692 416" // x y z coordinates of entity position
 		    classname "target_startTimer"
 		    targetname "starttimer1"
-		    name "allies" // Run name
+		    name "allies-originals" // Run name
 		}
 		// Colored start_1 entity
 		create
@@ -5299,6 +5299,88 @@ game_manager
 		    frames "26"
 		    start "0"
 		    spawnflags "2"
+		}
+
+		// Checkpoint 1
+		create
+		{
+		    scriptname "checkfield"
+		    origin "8566 3843 1732"
+		    mins "-272 -16 -208"
+		    maxs "272 16 208"
+		    classname "trigger_multiple"
+		    target "check1"
+		    contents "1073741824"
+		}
+		create
+		{
+		    scriptname "check"
+		    origin "8566 3843 1732"
+		    classname "target_checkpoint"
+		    targetname "check1"
+		    name "allies-originals"
+		}
+
+		// Checkpoint 2
+		create
+		{
+		    scriptname "checkfield"
+		    origin "887 2692 2900"
+		    mins "-272 -16 -208"
+		    maxs "272 16 208"
+		    classname "trigger_multiple"
+		    target "check2"
+		    contents "1073741824"
+		}
+		create
+		{
+		    scriptname "check"
+		    origin "887 2692 2900"
+		    classname "target_checkpoint"
+		    targetname "check2"
+		    name "allies-originals"
+		}
+
+		// Checkpoint 3
+		create
+		{
+		    scriptname "checkfield"
+		    origin "5972 9537 2836"
+		    mins "-272 -16 -208"
+		    maxs "272 16 208"
+		    classname "trigger_multiple"
+		    target "check3"
+		    contents "1073741824"
+		}
+
+		create
+		{
+		    scriptname "check"
+		    origin "5972 9537 2836"
+		    classname "target_checkpoint"
+		    targetname "check3"
+		    name "allies-originals"
+		}
+
+		// Checkpoint 4
+		create
+		{
+		    scriptname "checkfield"
+		    origin "4225 6725 4468"
+		    mins "-272 -16 -208"
+		    maxs "272 16 208"
+		    classname "trigger_multiple"
+		    target "check4"
+		    contents "1073741824"
+		}
+
+		create
+		{
+		    scriptname "check"
+		    origin "4225 6725 4468"
+		    classname "target_checkpoint"
+		    targetname "check4"
+		    name "allies-originals"
 		}
 
 		// Trigger multiple
@@ -5320,7 +5402,7 @@ game_manager
 		    origin "1558 6324 4848" // x y z coordinates of entity position
 		    classname "target_stopTimer"
 		    targetname "stoptimer1"
-		    name "allies" // Run name
+		    name "allies-originals" // Run name
 		}
 		// Colored stop_1 entity
 		create
@@ -5359,7 +5441,7 @@ game_manager
 		    origin "590 797 440" // x y z coordinates of entity position
 		    classname "target_startTimer"
 		    targetname "starttimer2"
-		    name "axis" // Run name
+		    name "axis-customs" // Run name
 		}
 		// Colored start_2 entity
 		create
@@ -5374,6 +5456,27 @@ game_manager
 		    frames "26"
 		    start "0"
 		    spawnflags "2"
+		}
+
+		// Checkpoint 1
+		create
+		{
+		    scriptname "checkfield"
+		    origin "-1339 3534 832"
+		    mins "-272 -16 -208"
+		    maxs "272 16 208"
+		    classname "trigger_multiple"
+		    target "check1"
+		    contents "1073741824"
+		}
+
+		create
+		{
+		    scriptname "check"
+		    origin "-1339 3534 832"
+		    classname "target_checkpoint"
+		    targetname "check1"
+		    name "axis-customs"
 		}
 
 		// Trigger multiple
@@ -5395,7 +5498,7 @@ game_manager
 		    origin "-1409 770 328" // x y z coordinates of entity position
 		    classname "target_stopTimer"
 		    targetname "stoptimer2"
-		    name "axis" // Run name
+		    name "axis-customs" // Run name
 		}
 		// Colored stop_1 entity
 		create
