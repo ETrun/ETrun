@@ -2836,26 +2836,7 @@ G_ScriptAction_SetDefendingTeam
 ===================
 */
 qboolean G_ScriptAction_SetDefendingTeam( gentity_t *ent, char *params ) {
-	char *pString, *token;
-	char cs[MAX_STRING_CHARS];
-	int num;
-
-	pString = params;
-	token = COM_Parse( &pString );
-	if ( !token[0] ) {
-		G_Error( "G_ScriptAction_SetDefendingTeam: number parameter required\n" );
-	}
-
-	num = atoi( token );
-	if ( num < 0 || num > 1 ) {
-		G_Error( "G_ScriptAction_SetDefendingTeam: Invalid team number\n" );
-	}
-
-	trap_GetConfigstring( CS_MULTI_INFO, cs, sizeof( cs ) );
-
-	Info_SetValueForKey( cs, "defender", token );
-
-	trap_SetConfigstring( CS_MULTI_INFO, cs );
+	G_Printf("Warning: G_ScriptAction_SetDefendingTeam ignored\n");
 
 	return qtrue;
 }

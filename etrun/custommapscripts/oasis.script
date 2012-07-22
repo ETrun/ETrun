@@ -475,13 +475,6 @@ game_manager
 		wm_objective_status 8 1 0
 		wm_objective_status 8 0 0
 
-		// Stopwatch mode defending team (0=Axis, 1=Allies)
-		wm_set_defending_team	0
-
-		// If the round timer expires, the Axis have won, so set the current winning team
-		// Set the round winner:  0 == AXIS, 1 == ALLIED
-		wm_setwinner 0
-
 		// Set autospawn markers <team (0 = axis, 1 = allies)> <message key of marker>
 		// Spawns on siwa:
 		// Axis Garrison
@@ -562,9 +555,6 @@ game_manager
 	trigger checkgame
 	{
 		accum 1 abort_if_not_equal 1
-
-		// Set the round winner:  0 == AXIS, 1 == ALLIED
-		wm_setwinner 1
 
 		wait 500
 

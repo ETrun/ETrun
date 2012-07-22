@@ -252,12 +252,6 @@ game_manager
 		wm_set_main_objective		1	0
 		wm_set_main_objective		1	1
 
-		// Stopwatch mode defending team (0=Axis, 1=Allies)
-		wm_set_defending_team	0
-
-		// Winner on expiration of round timer (0=Axis, 1=Allies)
-		wm_setwinner	0
-
 		wait 500
 		setautospawn	"Tank Depot"	0
 		setautospawn	"Allied Spawn"	1
@@ -289,7 +283,6 @@ game_manager
 
 	trigger allies_win
 	{
-		wm_setwinner	1
 		wm_announce "Allied team escaped with the Gold Crates!"
 
 		wm_objective_status 5 0 2

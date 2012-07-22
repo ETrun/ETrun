@@ -5250,7 +5250,6 @@ game_manager
 		wm_objective_status 3 1 1
 		wm_announce "Allies Win!!!"
 		wait 5000
-		wm_setwinner 1
 	}
 	trigger open_final_door 
 	{
@@ -5516,12 +5515,8 @@ game_manager
 		}
 
 		accum 7 bitreset 0
-		wm_set_round_timelimit 90
-		wm_allied_respawntime 1
-		wm_axis_respawntime 1
 		wait 2000
 		alertentity weapons
-		wm_setwinner -1
 		wm_number_of_objectives 3
 		wm_objective_status 1 0 0
 		wm_objective_status 1 1 0

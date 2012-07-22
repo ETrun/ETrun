@@ -506,12 +506,6 @@ game_manager
 		wm_objective_status 5 1 0
 		wm_objective_status 5 0 0
 
-		// Stopwatch mode defending team (0=Axis, 1=Allies)
-		wm_set_defending_team	0
-
-		// Winner on expiration of round timer (0=Axis, 1=Allies)
-		wm_setwinner	0
-
 		accum 1 set 0		// Set counter for radar equipment
 
 		wait 500
@@ -622,7 +616,6 @@ game_manager
 	trigger checkgame
 	{
 		accum 1 abort_if_not_equal 2
-		wm_setwinner 1
 		wait 1500
 	}
 }

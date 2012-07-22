@@ -231,7 +231,6 @@ game_manager
 		accum 2 set 0
 
 		wm_number_of_objectives 7
-		wm_setwinner 0
 
 		wm_objective_status 1 0 0
 		wm_objective_status 1 1 0
@@ -276,7 +275,6 @@ game_manager
 		accum 1 abort_if_not_equal 2
 
 		wm_announce "Allies have escaped with the Gold!"
-		wm_setwinner 1
 	}		
 }
 

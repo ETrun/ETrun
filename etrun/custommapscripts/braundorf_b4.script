@@ -476,11 +476,6 @@ game_manager
 		accum 1 set 0 //Overall Allied status
 		accum 2 set 2 //set 2 = null value
 
-		// Stopwatch mode defending team (0=Axis, 1=Allies)
-		wm_set_defending_team	0
-
-		// Winner on expiration of round timer (0=Axis, 1=Allies, -1=no winner at expiration)
-		wm_setwinner	0 
 		wait 150
 
 		
@@ -494,9 +489,6 @@ game_manager
    		
 		wm_objective_status 2 1 1
 		wm_objective_status 2 0 2
-		
-		// Set the round winner:  0 == AXIS, 1 == ALLIED
-		wm_setwinner 1
 
 		wait 500
 	}

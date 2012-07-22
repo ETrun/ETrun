@@ -254,12 +254,6 @@ game_manager
 		wm_objective_status 7 1 0
 		wm_objective_status 7 0 0
 
-		// Stopwatch mode defending team (0=Axis, 1=Allies)
-		wm_set_defending_team	0
-
-		// Winner on expiration of round timer (0=Axis, 1=Allies)
-		wm_setwinner	0
-
 		// Accumulator to check win conditions
 		accum 1 set 0
 
@@ -405,7 +399,6 @@ game_manager
 	trigger checkgame
 	{
 		accum 1 abort_if_not_equal 1
-		wm_setwinner 1
 		wait 1000
 	}
 }

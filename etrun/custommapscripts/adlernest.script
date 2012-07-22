@@ -342,10 +342,6 @@ trigger game_manager cap_docs
 // Set scenario information
 wm_number_of_objectives 5
 
-// 0  is axis
-wm_set_defending_team 0
-wm_setwinner 0
-
 //Take docs
 wm_objective_status 1 1 0
 wm_objective_status 1 0 0
@@ -415,7 +411,6 @@ trigger axis_object_returned
 trigger checkgame
 {
 	accum 1 abort_if_not_equal 1
-	wm_setwinner 1
 	wait 100
 }
 }

@@ -120,12 +120,6 @@ game_manager
 		wm_objective_status 6 1 0
 		wm_objective_status 6 0 0
 
-		// Stopwatch mode defending team (0=Axis, 1=Allies)
-		wm_set_defending_team	0
-
-		// Winner on expiration of round timer (0=Axis, 1=Allies)
-		wm_setwinner	0
-
 		wait 500
 		// spawns:
 		// Axis Barracks
@@ -163,8 +157,7 @@ game_manager
 
 	trigger allies_transmit
 	{
-	        wm_announce "The Allies have transmitted the Supply Documents!" 
-		wm_setwinner 1
+	    wm_announce "The Allies have transmitted the Supply Documents!" 
 		wait 1500
 	}
 

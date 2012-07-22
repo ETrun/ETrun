@@ -321,10 +321,6 @@ game_manager
 		
 		//mapscript by Dersaidin
 		
-		// 0  is axis
-		wm_set_defending_team 0
-		wm_setwinner 0
-		
 		//Cap obj
 		wm_objective_status 1 1 0
 		wm_objective_status 1 0 0
@@ -412,9 +408,6 @@ game_manager
 	trigger checkgame
 	{
 		accum 1 abort_if_not_equal 1
-		wm_setwinner 1
-
-		wm_endround
 	}
 }
 
