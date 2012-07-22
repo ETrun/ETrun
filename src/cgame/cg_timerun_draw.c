@@ -341,6 +341,9 @@ extern float	pm_accelerate;
 extern float	pm_airaccelerate;
 extern float	pm_friction;
 
+// Nico, AP accel
+extern float	pm_accelerate_AP;
+
 typedef struct {
 	vec3_t forward, right, up;
 	float frametime;
@@ -423,7 +426,13 @@ void CG_DrawCGaz(void) {
 		}
 
 		// on ground
-		accel = pm_accelerate;
+
+		// Nico, AP or stock accel?
+		if (physics.integer == PHYSICS_MODE_AP_NO_OB || physics.integer == PHYSICS_MODE_AP_OB) {
+			accel = pm_accelerate_AP;
+		} else {
+			accel = pm_accelerate;
+		}
 	}
 	else {
 		// in air or on ice, no friction

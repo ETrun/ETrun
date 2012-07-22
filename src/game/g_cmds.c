@@ -2252,7 +2252,7 @@ void Cmd_Load_f(gentity_t *ent) {
 	}
 
 	if (pos->valid) {
-		if (ent->client->timerunActive && physics.integer != 0) {// Nico, don't stop timer on load for VET
+		if (ent->client->timerunActive && physics.integer != PHYSICS_MODE_VET) {// Nico, don't stop timer on load for VET
 			// Nico, notify the client and its spectators the timerun has stopped
 			notify_timerun_stop(ent, 0);
 

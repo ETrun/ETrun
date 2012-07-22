@@ -2243,3 +2243,10 @@ void PM_TraceAll( trace_t *trace, vec3_t start, vec3_t end );
 #define PHYSICS_UPMOVE_BUG_FIX		32
 #define PHYSICS_DOUBLEJUMP			64
 #define PHYSICS_SLICK_CONTROL		128
+
+// Nico, physics mode
+#define PHYSICS_MODE_AP_NO_OB		255
+#define PHYSICS_MODE_AP_OB			239
+#define PHYSICS_MODE_VQ3_NO_OB		23
+#define PHYSICS_MODE_VQ3_OB			7
+#define PHYSICS_MODE_VET			0

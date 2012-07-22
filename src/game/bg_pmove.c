@@ -55,7 +55,7 @@ float pm_slagWadeScale    = 0.70;
 
 float pm_proneSpeedScale  = 0.21;   // was: 0.18 (too slow) then: 0.24 (too fast)
 
-float pm_accelerate       = 15;// Nico, 10 was standard value
+float pm_accelerate       = 10;
 float pm_airaccelerate    = 1;
 float pm_wateraccelerate  = 4;
 float pm_slagaccelerate   = 2;
@@ -75,6 +75,7 @@ const float pm_strafeaccelerate = 100; // forward acceleration when strafe bunny
 const float pm_wishspeed = 30;// Nico, default value 30
 const float pm_airstopaccelerate = 2.0f;// Nico, CPM value: 2.5f, Racesow value: 2.0f
 const float pm_slickaccelerate = 10.0f;// Nico, slick control accelerate
+const float pm_accelerate_AP = 15;// Nico, only used for AP
 
 int c_pmove = 0;
 
@@ -1100,7 +1101,12 @@ static void PM_WalkMove( void ) {
 			accelerate = pm_airaccelerate;
 		}
 	} else {
-		accelerate = pm_accelerate;
+		// Nico, AP or stock accel?
+		if (pm->physics == PHYSICS_MODE_AP_NO_OB || pm->physics == PHYSICS_MODE_AP_OB) {
+			accelerate = pm_accelerate_AP;
+		} else {
+			accelerate = pm_accelerate;
+		}
 	}
 
 	PM_Accelerate( wishdir, wishspeed, accelerate );
@@ -1221,7 +1227,12 @@ static void PM_NoclipMove( void ) {
 	wishspeed = VectorNormalize( wishdir );
 	wishspeed *= scale;
 
-	PM_Accelerate( wishdir, wishspeed, pm_accelerate );
+	// Nico, AP or stock accel?
+	if (pm->physics == PHYSICS_MODE_AP_NO_OB || pm->physics == PHYSICS_MODE_AP_OB) {
+		PM_Accelerate(wishdir, wishspeed, pm_accelerate_AP);
+	} else {
+		PM_Accelerate(wishdir, wishspeed, pm_accelerate);
+	}
 
 	// move
 	VectorMA( pm->ps->origin, pml.frametime, pm->ps->velocity, pm->ps->origin );
@@ -2587,7 +2598,13 @@ void PM_LadderMove( void ) {
 
 	wishspeed = VectorNormalize2( wishvel, wishdir );
 
-	PM_Accelerate( wishdir, wishspeed, pm_accelerate );
+	// Nico, AP or stock accel?
+	if (pm->physics == PHYSICS_MODE_AP_NO_OB || pm->physics == PHYSICS_MODE_AP_OB) {
+		PM_Accelerate(wishdir, wishspeed, pm_accelerate_AP);
+	} else {
+		PM_Accelerate(wishdir, wishspeed, pm_accelerate);
+	}
+
 	if ( !wishvel[2] ) {
 		if ( pm->ps->velocity[2] > 0 ) {
 			pm->ps->velocity[2] -= pm->ps->gravity * pml.frametime;

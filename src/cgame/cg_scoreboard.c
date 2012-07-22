@@ -457,23 +457,23 @@ qboolean CG_DrawScoreboard(void) {
 	// Nico, draw physics
 	// #todo: move this elsewhere
 	switch (physics.integer) {
-	case 239:
+	case PHYSICS_MODE_AP_OB:
 		sprintf(physicsName, "AP (with OB)");
 		break;
 
-	case 255:
+	case PHYSICS_MODE_AP_NO_OB:
 		sprintf(physicsName, "AP (no OB)");
 		break;
 
-	case 7:
+	case PHYSICS_MODE_VQ3_OB:
 		sprintf(physicsName, "VQ3 (with OB)");
 		break;
 
-	case 23:
+	case PHYSICS_MODE_VQ3_NO_OB:
 		sprintf(physicsName, "VQ3 (no OB)");
 		break;
 
-	case 0:
+	case PHYSICS_MODE_VET:
 		sprintf(physicsName, "VET");
 		break;
 

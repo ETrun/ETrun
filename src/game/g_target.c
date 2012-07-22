@@ -1290,7 +1290,7 @@ void target_starttimer_use(gentity_t *self, gentity_t *other, gentity_t *activat
 	client->timerunCheckpointsPassed = 0;
 
 	// Nico, reset saves if physics is VET
-	if (physics.integer == 0) {
+	if (physics.integer == PHYSICS_MODE_VET) {
 		for (i = 0; i < MAX_SAVED_POSITIONS; ++i) {
 			client->sess.alliesSaves[i].valid = qfalse;
 			client->sess.axisSaves[i].valid = qfalse;
@@ -1493,17 +1493,17 @@ void target_stoptimer_use(gentity_t *self, gentity_t *other, gentity_t *activato
 		}
 	}
 	switch (physics.integer) {
-	case 239:
-	case 255:
+	case PHYSICS_MODE_AP_OB:
+	case PHYSICS_MODE_AP_NO_OB:
 		sprintf(physicsName, "AP");
 		break;
 
-	case 7:
-	case 23:
+	case PHYSICS_MODE_VQ3_OB:
+	case PHYSICS_MODE_VQ3_NO_OB:
 		sprintf(physicsName, "VQ3");
 		break;
 
-	case 0:
+	case PHYSICS_MODE_VET:
 		sprintf(physicsName, "VET");
 		break;
 
