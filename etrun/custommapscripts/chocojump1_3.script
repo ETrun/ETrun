@@ -1,15 +1,11 @@
 // Modified by Timothy for ETrun
-// Last update 21 07 2012
+// Last update 22 07 2012
 
 allied_flag1
 {
 	trigger allied_capture 
 	{
-		wm_announce "Allies Captured the Flag 1!"
-		setstate allied_flag_objective1 default
-		setautospawn "Flag 1" 1
-		wait 1000
-		setstate allied_flag1 invisible
+		wait 1
 	}
 	trigger axis_capture 
 	{
@@ -20,11 +16,7 @@ allied_flag2
 {
 	trigger allied_capture 
 	{
-		wm_announce "Allies Captured the Flag 2!"
-		setstate allied_flag_objective2 default
-		setautospawn "Flag 2" 1
-		wait 1000
-		setstate allied_flag2 invisible
+		wait 1
 	}
 	trigger axis_capture 
 	{
@@ -35,11 +27,7 @@ allied_flag3
 {
 	trigger allied_capture 
 	{
-		wm_announce "Allies Captured the Flag 3!"
-		setstate allied_flag_objective3 default
-		setautospawn "Flag 3" 1
-		wait 1000
-		setstate allied_flag3 invisible
+		wait 1
 	}
 	trigger axis_capture 
 	{

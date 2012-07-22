@@ -1,0 +1,417 @@
+// Modified by Timothy for ETrun
+// Last update 22 07 2012
+
+game_manager 
+{ 
+   spawn 
+   { 
+   		///////////////////////////////////////
+		// Customs, allies only
+		///////////////////////////////////////
+		
+		// Trigger multiple
+		create
+		{
+		    scriptname "startfield"
+		    origin "11112 -11554 2112" // x y z coordinates of entity position
+		    mins "-28 -24 -20"
+		    maxs "28 24 20"
+		    classname "trigger_multiple"
+		    target "starttimer1"
+		    contents "1073741824"
+		}
+		// Start timer
+		create
+		{
+		    scriptname "start"
+		    origin "11112 -11554 2112" // x y z coordinates of entity position
+		    classname "target_startTimer"
+		    targetname "starttimer1"
+		    name "allies-customs" // Run name
+		}
+		// Colored start_1 entity
+		create
+		{
+		    scriptname "start_1"
+		    origin "11112 -11554 2112" // x y z coordinates of entity position
+		    classname "misc_gamemodel"
+		    mins "-90 -90 -25"
+		    maxs "90 90 25"
+		    model "models/mapobjects/timerun/start_1.md3"
+		    fps "12"
+		    frames "26"
+		    start "0"
+		    spawnflags "2"
+		}
+
+		// Checkpoint 1
+		create
+		{
+			scriptname "checkfield"
+			origin "104 -15488 1280"
+			mins "-272 -16 -208"
+			maxs "272 16 208"
+			classname "trigger_multiple"
+			target "check1"
+			contents "1073741824"
+		}
+		create
+		{
+			scriptname "check"
+			origin "104 -15488 1280"
+			classname "target_checkpoint"
+			targetname "check1"
+			name "allies-customs"
+		}
+
+		// Checkpoint 2
+		create
+		{
+			scriptname "checkfield"
+			origin "-13920 -6291 -1279"
+			mins "-272 -16 -208"
+			maxs "272 16 208"
+			classname "trigger_multiple"
+			target "check2"
+			contents "1073741824"
+		}
+		create
+		{
+			scriptname "check"
+			origin "-13920 -6291 -1279"
+			classname "target_checkpoint"
+			targetname "check2"
+			name "allies-customs"
+		}
+
+		// Checkpoint 3
+		create
+		{
+			scriptname "checkfield"
+			origin "11155 6389 1856"
+			mins "-272 -16 -208"
+			maxs "272 16 208"
+			classname "trigger_multiple"
+			target "check3"
+			contents "1073741824"
+		}
+		create
+		{
+			scriptname "check"
+			origin "11155 6389 1856"
+			classname "target_checkpoint"
+			targetname "check3"
+			name "allies-customs"
+		}
+
+		// Checkpoint 4
+		create
+		{
+			scriptname "checkfield"
+			origin "6817 4981 896"
+			mins "-272 -16 -208"
+			maxs "272 16 208"
+			classname "trigger_multiple"
+			target "check4"
+			contents "1073741824"
+		}
+		create
+		{
+			scriptname "check"
+			origin "6817 4981 896"
+			classname "target_checkpoint"
+			targetname "check4"
+			name "allies-customs"
+		} 
+
+		// Trigger multiple
+		create
+		{
+		    scriptname "stopfield"
+		    origin "9273 -4276 704" // x y z coordinates of entity position
+		    mins "-28 -24 -20"
+		    maxs "28 24 20"
+		    classname "trigger_multiple"
+		    target "stoptimer1"
+		    contents "1073741824"
+		}
+		// Stop timer
+		create
+		{
+		    scriptname "stop"
+		    origin "9273 -4276 704" // x y z coordinates of entity position
+		    classname "target_stopTimer"
+		    targetname "stoptimer1"
+		    name "allies-customs" // Run name
+		}
+		// Colored stop_1 entity
+		create
+		{
+		    scriptname "stop_1"
+		    origin "9273 -4276 704" // x y z coordinates of entity position
+		    classname "misc_gamemodel"
+		    mins "-90 -90 -25"
+		    maxs "90 90 25"
+		    model "models/mapobjects/timerun/stop_1.md3"
+		    fps "12"
+		    frames "26"
+		    start "0"
+		    spawnflags "2"
+		}
+	}
+}
+/////////////////////////////////////  FLAGS  //////////////////////////////////////
+
+flag1
+{
+	spawn
+	{
+		accum 0 set 1			// Who owns flag: 0-Axis, 1-Allied
+	}
+
+	trigger axis_capture				// Touched by an Axis player
+	{
+		accum 0 abort_if_equal 0 		// do Axis own flag?
+
+		accum 0 set 0 			// Axis own the flag
+		wm_announce "it begins!"
+
+		setautospawn "Flag 1"	0	// Set Axis to forward spawn
+	}
+
+	trigger allied_capture				// Touched by an allied player
+	{
+		accum 0 abort_if_equal 1 		// do Allies own flag?
+
+		accum 0 set 1 			// Allied own the flag
+		wm_announce "allies just capped an axis flag?.. lamebot."
+
+
+		setautospawn "Flag 1"	1	// Set Allies to forward spawn
+	}
+}
+
+flag2
+{
+	spawn
+	{
+		accum 0 set 1			// Who owns flag: 0-Axis, 1-Allied
+	}
+
+	trigger axis_capture				// Touched by an Axis player
+	{
+		accum 0 abort_if_equal 0 		// do Axis own flag?
+
+		accum 0 set 0 			// Axis own the flag
+		wm_announce "axis capture flag 2"
+
+		setautospawn "Flag 2"	0	// Set Axis to forward spawn
+	}
+
+	trigger allied_capture				// Touched by an allied player
+	{
+		accum 0 abort_if_equal 1 		// do Allies own flag?
+
+		accum 0 set 1 			// Allied own the flag
+		wm_announce "CHEATER!"
+
+
+		setautospawn "Flag 2"	1	// Set Allies to forward spawn
+	}
+}
+
+flag3
+{
+	spawn
+	{
+		accum 0 set 1			// Who owns flag: 0-Axis, 1-Allied
+	}
+
+	trigger axis_capture				// Touched by an Axis player
+	{
+		accum 0 abort_if_equal 0 		// do Axis own flag?
+
+		accum 0 set 0 			// Axis own the flag
+		wm_announce "axis capture flag 3"
+
+		setautospawn "Flag 3"	0	// Set Axis to forward spawn
+	}
+
+	trigger allied_capture				// Touched by an allied player
+	{
+		accum 0 abort_if_equal 1 		// do Allies own flag?
+
+		accum 0 set 1 			// Allied own the flag
+		wm_announce "CHEATER!"
+
+
+		setautospawn "Flag 3"	1	// Set Allies to forward spawn
+	}
+}
+
+flag4
+{
+	spawn
+	{
+		accum 0 set 1			// Who owns flag: 0-Axis, 1-Allied
+	}
+
+	trigger axis_capture				// Touched by an Axis player
+	{
+		accum 0 abort_if_equal 0 		// do Axis own flag?
+
+		accum 0 set 0 			// Axis own the flag
+		wm_announce "axis capture flag 4"
+
+		setautospawn "Flag 4"	0	// Set Axis to forward spawn
+	}
+
+	trigger allied_capture				// Touched by an allied player
+	{
+		accum 0 abort_if_equal 1 		// do Allies own flag?
+
+		accum 0 set 1 			// Allied own the flag
+		wm_announce "CHEATER!"
+
+
+		setautospawn "Flag 4"	1	// Set Allies to forward spawn
+	}
+}
+
+flag5
+{
+	spawn
+	{
+		accum 0 set 1			// Who owns flag: 0-Axis, 1-Allied
+	}
+
+	trigger axis_capture				// Touched by an Axis player
+	{
+		accum 0 abort_if_equal 0 		// do Axis own flag?
+
+		accum 0 set 0 			// Axis own the flag
+		wm_announce "axis capture flag 5"
+
+		setautospawn "Flag 5"	0	// Set Axis to forward spawn
+	}
+
+	trigger allied_capture				// Touched by an allied player
+	{
+		accum 0 abort_if_equal 1 		// do Allies own flag?
+
+		accum 0 set 1 			// Allied own the flag
+		wm_announce "CHEATER!"
+
+
+
+		setautospawn "Flag 5"	1	// Set Allies to forward spawn
+	}
+}
+
+flag6
+{
+	spawn
+	{
+		accum 0 set 1			// Who owns flag: 0-Axis, 1-Allied
+	}
+
+	trigger axis_capture				// Touched by an Axis player
+	{
+		accum 0 abort_if_equal 0 		// do Axis own flag?
+
+		accum 0 set 0 			// Axis own the flag
+		wm_announce "axis capture flag 6"
+
+		setautospawn "Flag 6"	0	// Set Axis to forward spawn
+	}
+
+	trigger allied_capture				// Touched by an allied player
+	{
+		accum 0 abort_if_equal 1 		// do Allies own flag?
+
+		accum 0 set 1 			// Allied own the flag
+		wm_announce "CHEATER!"
+
+
+
+		setautospawn "Flag 6"	1	// Set Allies to forward spawn
+	}
+}
+
+flag7
+{
+	spawn
+	{
+		accum 0 set 1			// Who owns flag: 0-Axis, 1-Allied
+	}
+
+	trigger axis_capture				// Touched by an Axis player
+	{
+		accum 0 abort_if_equal 0 		// do Axis own flag?
+
+		accum 0 set 0 			// Axis own the flag
+		wm_announce "axis capture flag 7"
+
+		setautospawn "Flag 7"	0	// Set Axis to forward spawn
+	}
+
+	trigger allied_capture				// Touched by an allied player
+	{
+		accum 0 abort_if_equal 1 		// do Allies own flag?
+
+		accum 0 set 1 			// Allied own the flag
+		wm_announce "CHEATER!"
+
+
+		setautospawn "Flag 7"	1	// Set Allies to forward spawn
+	}
+}
+
+flag8
+{
+	spawn
+	{
+		accum 0 set 1			// Who owns flag: 0-Axis, 1-Allied
+	}
+
+	trigger axis_capture				// Touched by an Axis player
+	{
+		accum 0 abort_if_equal 0 		// do Axis own flag?
+
+		accum 0 set 0 			// Axis own the flag
+		wm_announce "axis capture flag 8"
+
+		setautospawn "Flag 8"	0	// Set Axis to forward spawn
+	}
+
+	trigger allied_capture				// Touched by an allied player
+	{
+		accum 0 abort_if_equal 1 		// do Allies own flag?
+
+		accum 0 set 1 			// Allied own the flag
+		wm_announce "CHEATER!"
+
+
+		setautospawn "Flag 8"	1	// Set Allies to forward spawn
+	}
+}
+
+
+ende
+{
+	trigger allied_capture
+	{
+	wait 1000
+	wm_announce "allies captured end flag? - you cant win."
+	wm_teamvoiceannounce 0 "allies_hq_objective_captured"
+	wm_teamvoiceannounce 1 "allies_hq_objective_captured"
+	}
+
+trigger axis_capture
+	{
+	wait 1000
+	wm_announce "nice. but axis cant win. nobody can."
+	wm_teamvoiceannounce 0 "axis_hq_objective_captured"
+	wm_teamvoiceannounce 1 "axis_hq_objective_captured"
+	}
+}

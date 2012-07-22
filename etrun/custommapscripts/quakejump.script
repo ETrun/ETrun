@@ -1,0 +1,157 @@
+// Modified by Timothy for ETrun
+// Last update 22 07 2012
+
+game_manager
+{
+	spawn
+	{
+		// Runs
+
+		///////////////////////////////////////
+		// Originals, allies only
+		///////////////////////////////////////
+
+		// Trigger multiple
+		create
+		{
+		    scriptname "startfield"
+		    origin "-211 3746 435" // x y z coordinates of entity position
+		    mins "-28 -24 -20"
+		    maxs "28 24 20"
+		    classname "trigger_multiple"
+		    target "starttimer1"
+		    contents "1073741824"
+			spawnflags "2"
+		}
+		// Start timer
+		create
+		{
+		    scriptname "start"
+		    origin "-211 3746 435" // x y z coordinates of entity position
+		    classname "target_startTimer"
+		    targetname "starttimer1"
+		    name "allies-originals" // Run name
+		}
+		// Colored start_1 entity
+		create
+		{
+		    scriptname "start_1"
+		    origin "-211 3746 435" // x y z coordinates of entity position
+		    classname "misc_gamemodel"
+		    mins "-90 -90 -25"
+		    maxs "90 90 25"
+		    model "models/mapobjects/timerun/start_1.md3"
+		    fps "12"
+		    frames "26"
+		    start "0"
+		    spawnflags "2"
+		}
+
+		// Checkpoint 1
+		create
+		{
+		    scriptname "checkfield"
+		    origin "-281 1255 1169"
+		    mins "-272 -16 -208"
+		    maxs "272 16 208"
+		    classname "trigger_multiple"
+		    target "check1"
+		    contents "1073741824"
+		}
+		create
+		{
+		    scriptname "check"
+		    origin "-281 1255 1169"
+		    classname "target_checkpoint"
+		    targetname "check1"
+		    name "allies-originals"
+		}
+
+		// Checkpoint 2
+		create
+		{
+		    scriptname "checkfield"
+		    origin "2822 -1647 -978"
+		    mins "-272 -16 -208"
+		    maxs "272 16 208"
+		    classname "trigger_multiple"
+		    target "check2"
+		    contents "1073741824"
+		}
+		create
+		{
+		    scriptname "check"
+		    origin "2822 -1647 -978"
+		    classname "target_checkpoint"
+		    targetname "check2"
+		    name "allies-originals"
+		}
+
+		// Trigger multiple
+		create
+		{
+		    scriptname "stopfield"
+		    origin "448 -6172 1996" // x y z coordinates of entity position
+		    mins "-28 -24 -20"
+		    maxs "28 24 20"
+		    classname "trigger_multiple"
+		    target "stoptimer1"
+		    contents "1073741824"
+			spawnflags "2"
+		}
+		// Stop timer
+		create
+		{
+		    scriptname "stop"
+		    origin "448 -6172 1996" // x y z coordinates of entity position
+		    classname "target_stopTimer"
+		    targetname "stoptimer1"
+		    name "allies-originals" // Run name
+		}
+		// Colored stop_1 entity
+		create
+		{
+		    scriptname "stop_1"
+		    origin "448 -6172 1996" // x y z coordinates of entity position
+		    classname "misc_gamemodel"
+		    mins "-90 -90 -25"
+		    maxs "90 90 25"
+		    model "models/mapobjects/timerun/stop_1.md3"
+		    fps "12"
+		    frames "26"
+		    start "0"
+		    spawnflags "2"
+		}
+	}
+}
+
+allied_flag1
+{
+	trigger allied_capture 
+	{
+	}
+	trigger axis_capture 
+	{
+	}
+}
+
+allied_flag2
+{
+	trigger allied_capture 
+	{
+	}
+	trigger axis_capture 
+	{
+	}
+}
+
+flag3
+{
+
+	trigger allied_capture 
+	{
+	}
+	trigger axis_capture 
+	{
+	}
+}
