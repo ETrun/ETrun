@@ -2316,17 +2316,20 @@ void Cmd_Save_f(gentity_t *ent) {
 		return;
 	}
 
-	if (ent->client->ps.groundEntityNum == ENTITYNUM_NONE) {
+	// Nico, allow save in the air for VET
+	if (physics.integer != PHYSICS_MODE_VET && ent->client->ps.groundEntityNum == ENTITYNUM_NONE) {
 		CP("cp \"You can not save while in the air!\n\"");
 		return;
 	}
 
-	if (ent->client->ps.eFlags & EF_PRONE || ent->client->ps.eFlags & EF_PRONE_MOVING){
+	// Nico, allow save while proning for VET
+	if (physics.integer != PHYSICS_MODE_VET && (ent->client->ps.eFlags & EF_PRONE || ent->client->ps.eFlags & EF_PRONE_MOVING)){
 		CP("cp \"You can not save while proning!\n\"");
 		return;
 	}
 
-	if (ent->client->ps.eFlags & EF_CROUCHING){
+	// Nico, allow save while crouching for VET
+	if (physics.integer != PHYSICS_MODE_VET && ent->client->ps.eFlags & EF_CROUCHING){
 		CP("cp \"You can not save while crouching!\n\"");
 		return;
 	}
