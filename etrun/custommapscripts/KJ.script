@@ -9,7 +9,7 @@ game_manager
 		// Customs, allies only
 		///////////////////////////////////////
 		
-		// Trigger multiple
+		// Start of run 1
 		create
 		{
 		    scriptname "startfield"
@@ -20,7 +20,6 @@ game_manager
 		    target "starttimer1"
 		    contents "1073741824"
 		}
-		// Start timer
 		create
 		{
 		    scriptname "start"
@@ -29,7 +28,6 @@ game_manager
 		    targetname "starttimer1"
 		    name "allies-customs" // Run name
 		}
-		// Colored start_1 entity
 		create
 		{
 		    scriptname "start_1"
@@ -124,7 +122,7 @@ game_manager
 			name "allies-customs"
 		} 
 
-		// Trigger multiple
+		// Stop of run 1
 		create
 		{
 		    scriptname "stopfield"
@@ -135,7 +133,6 @@ game_manager
 		    target "stoptimer1"
 		    contents "1073741824"
 		}
-		// Stop timer
 		create
 		{
 		    scriptname "stop"
@@ -144,7 +141,6 @@ game_manager
 		    targetname "stoptimer1"
 		    name "allies-customs" // Run name
 		}
-		// Colored stop_1 entity
 		create
 		{
 		    scriptname "stop_1"
