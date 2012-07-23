@@ -3924,7 +3924,7 @@ qboolean G_ScriptAction_Create(gentity_t *ent, char *params) {
 
 		token = COM_ParseExt(&p, qfalse);
 		if (!token[0]) {
-			G_Error("key \"%s\" has no value", key);
+			G_Error("G_ScriptAction_Create: key \"%s\" has no value", key);
 			break;
 		}
 
@@ -3965,7 +3965,7 @@ qboolean G_ScriptAction_Delete(gentity_t *ent, char *params) {
 
 		token = COM_ParseExt(&p, qfalse);
 		if (!token[0]) {
-			G_Error("key \"%s\" has no value", key);
+			G_Error("G_ScriptAction_Delete: key \"%s\" has no value", key);
 			break;
 		}
 
