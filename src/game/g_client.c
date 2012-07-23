@@ -1418,7 +1418,6 @@ void ClientSpawn( gentity_t *ent ) {
 
 	index = ent - g_entities;
 	client = ent->client;
-	
 
 	G_UpdateSpawnCounts();
 
@@ -1443,6 +1442,12 @@ void ClientSpawn( gentity_t *ent ) {
 
 	ent->s.eFlags &= ~EF_MOUNTEDTANK;
 
+	// Nico, notify timerun_stop (not if physics is VET and player just selfkilled)
+	if (physics.integer != PHYSICS_MODE_VET || (physics.integer == PHYSICS_MODE_VET && client->sess.lastDieWasASelfkill)) {
+		notify_timerun_stop(ent, 0);
+		ent->client->sess.timerunActive = qfalse;
+	}
+
 	saved           = client->pers;
 	savedSess       = client->sess;
 	savedPing       = client->ps.ping;
@@ -1451,9 +1456,6 @@ void ClientSpawn( gentity_t *ent ) {
 	for ( i = 0 ; i < MAX_PERSISTANT ; i++ ) {
 		persistant[i] = client->ps.persistant[i];
 	}
-
-	// Nico, notify timerun_stop (ent->client->timerunActive will be memseted to 0)
-	notify_timerun_stop(ent, 0);
 
 	memset( client, 0, sizeof( *client ) );
 
@@ -1623,10 +1625,7 @@ void ClientSpawn( gentity_t *ent ) {
 		G_Script_ScriptEvent( ent, "playerstart", "" );
 	}
 
-	if (ent->client->pers.autoLoad && ent->client->sess.loadPositionOnNextSpawn && (ent->client->sess.sessionTeam == TEAM_AXIS || ent->client->sess.sessionTeam == TEAM_ALLIES)) {
-
-		ent->client->sess.loadPositionOnNextSpawn = qfalse;
-
+	if (ent->client->pers.autoLoad && !ent->client->sess.lastDieWasASelfkill && (ent->client->sess.sessionTeam == TEAM_AXIS || ent->client->sess.sessionTeam == TEAM_ALLIES)) {
 		if (ent->client->sess.sessionTeam == TEAM_ALLIES) {
 			pos = ent->client->sess.alliesSaves;
 		} else {

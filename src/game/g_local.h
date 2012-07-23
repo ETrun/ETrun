@@ -540,7 +540,7 @@ typedef struct {
 	int referee;
 	int spec_team;
 	// OSP
-
+	
 	// Nico, client session timerun related
 	int			timerunLastTime[MAX_TIMERUNS];
 	int			timerunBestTime[MAX_TIMERUNS];
@@ -548,6 +548,16 @@ typedef struct {
 	int			timerunCheckpointWereLoaded[MAX_TIMERUNS];
 
 	int			timerunBestSpeed;
+
+	qboolean	timerunActive;
+	int			timerunStartTime;	// absolute start time
+	int			timerunCheckpointTimes[MAX_TIMERUN_CHECKPOINTS];
+	int			timerunCheckpointsPassed;
+	char		*currentTimerun;
+
+	// Speed related
+	float		startSpeed;
+	float		stopSpeed;
 	// Nico, end of client session timerun related
 
 	// Nico, flood protection
@@ -558,7 +568,9 @@ typedef struct {
 	// Nico, save/load
 	save_position_t	alliesSaves[MAX_SAVED_POSITIONS];
 	save_position_t	axisSaves[MAX_SAVED_POSITIONS];
-	qboolean loadPositionOnNextSpawn;
+
+	// Nico, was it a selfkill last time you died?
+	qboolean lastDieWasASelfkill;
 
 	// Nico, login status
 	qboolean logged;
@@ -775,19 +787,6 @@ struct gclient_s {
 	float acc;
 
 	qboolean wantsscore;
-
-	// Nico, timerun server vars
-	qboolean	timerunActive;
-	int			timerunStartTime;	// absolute start time
-	int			timerunCheckpointTimes[MAX_TIMERUN_CHECKPOINTS];
-	int			timerunCheckpointsPassed;
-	char		*currentTimerun;
-
-	// Speed related
-	float		startSpeed;
-	float		stopSpeed;
-
-	// Nico, end of timerun server vars
 };
 
 typedef struct {

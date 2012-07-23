@@ -398,7 +398,7 @@ void G_delay_map_change(char *mapName) {
 	// change the map in 1 sec, otherwise wait MAP_CHANGE_DELAY
 	for (i = 0; i < level.numConnectedClients; ++i) {
 		cl = &level.clients[level.sortedClients[i]];
-		if ((cl->sess.sessionTeam == TEAM_ALLIES || cl->sess.sessionTeam == TEAM_AXIS) && cl->timerunActive) {
+		if ((cl->sess.sessionTeam == TEAM_ALLIES || cl->sess.sessionTeam == TEAM_AXIS) && cl->sess.timerunActive) {
 			activeRunsCount++;
 		}
 	}

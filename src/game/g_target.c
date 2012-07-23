@@ -1215,11 +1215,11 @@ static void notify_timerun_start(gentity_t *activator) {
 	gentity_t *o = NULL;
 	int timerunNum = 0;
 
-	timerunNum = GetTimerunNum(activator->client->currentTimerun);
+	timerunNum = GetTimerunNum(activator->client->sess.currentTimerun);
 
 	// Nico, notify the client itself first
 	G_DPrintf("notify_timerun_start(%d)\n", activator->client->ps.clientNum);
-	trap_SendServerCommand(activator - g_entities, va("timerun_start %i %i", timerunNum, activator->client->timerunStartTime + 500));
+	trap_SendServerCommand(activator - g_entities, va("timerun_start %i %i", timerunNum, activator->client->sess.timerunStartTime + 500));
 
 	// Nico, notify its spectators
 	for (; i < level.numConnectedClients; ++i) {
@@ -1239,7 +1239,7 @@ static void notify_timerun_start(gentity_t *activator) {
 
 		if (o->client->sess.spectatorClient == activator - g_entities) {
 			G_DPrintf("Sending a timerun_start_spec to client %d\n", o - g_entities);
-			trap_SendServerCommand(o - g_entities, va("timerun_start_spec %i %i", timerunNum, activator->client->timerunStartTime + 500));
+			trap_SendServerCommand(o - g_entities, va("timerun_start_spec %i %i", timerunNum, activator->client->sess.timerunStartTime + 500));
 		}
 	}
 }
@@ -1257,7 +1257,7 @@ void target_starttimer_use(gentity_t *self, gentity_t *other, gentity_t *activat
 
 	G_DPrintf("target_starttimer_use: client = %d\n", client->ps.clientNum);
 
-	if (client->timerunActive) {
+	if (client->sess.timerunActive) {
 		G_DPrintf("target_starttimer_use: timerun already active for client %d\n", client->ps.clientNum);
 		return;
 	}
@@ -1275,19 +1275,19 @@ void target_starttimer_use(gentity_t *self, gentity_t *other, gentity_t *activat
 		return;
 	}
 	
-	client->currentTimerun = self->timerunName;
+	client->sess.currentTimerun = self->timerunName;
 
 	// get the time
-	client->timerunStartTime = client->ps.commandTime;
-	client->startSpeed = sqrt(client->ps.velocity[0]*client->ps.velocity[0] + client->ps.velocity[1]*client->ps.velocity[1]);
-	client->timerunActive = qtrue;
+	client->sess.timerunStartTime = client->ps.commandTime;
+	client->sess.startSpeed = sqrt(client->ps.velocity[0]*client->ps.velocity[0] + client->ps.velocity[1]*client->ps.velocity[1]);
+	client->sess.timerunActive = qtrue;
 
 	// Nico, notify timerun_start event to client and to its spectators
 	notify_timerun_start(activator);
 	
 	// reset checkpoints
-	memset(client->timerunCheckpointTimes, 0, sizeof(client->timerunCheckpointTimes));
-	client->timerunCheckpointsPassed = 0;
+	memset(client->sess.timerunCheckpointTimes, 0, sizeof (client->sess.timerunCheckpointTimes));
+	client->sess.timerunCheckpointsPassed = 0;
 
 	// Nico, reset saves if physics is VET
 	if (physics.integer == PHYSICS_MODE_VET) {
@@ -1335,12 +1335,12 @@ void notify_timerun_stop(gentity_t *activator, int finishTime) {
 	G_DPrintf("notify_timerun_stop(%d, %d)\n", activator->client->ps.clientNum, finishTime);
 
 	// Nico, check if timerun is active
-	if (!activator->client->timerunActive) {
+	if (!activator->client->sess.timerunActive) {
 		G_DPrintf("notify_timerun_stop canceled because timerun wasn't active\n");
 		return;
 	}
 
-	timerunNum = GetTimerunNum(activator->client->currentTimerun);
+	timerunNum = GetTimerunNum(activator->client->sess.currentTimerun);
 
 	// Nico, notify the client itself first
 	trap_SendServerCommand(activator - g_entities, va("timerun_stop %i %i", timerunNum, finishTime));
@@ -1389,8 +1389,8 @@ static void Cmd_SendRecord_f(gentity_t *ent, char *runName, char *authToken, int
 
 	sprintf(data, "%d/%d/%d/%d/%d/O", time, physics.integer, startSpeed, stopSpeed, maxSpeed);
 
-	while (i < MAX_TIMERUN_CHECKPOINTS && ent->client->timerunCheckpointTimes[i] != 0) {
-		sprintf(temp, "%dO", ent->client->timerunCheckpointTimes[i]);
+	while (i < MAX_TIMERUN_CHECKPOINTS && ent->client->sess.timerunCheckpointTimes[i] != 0) {
+		sprintf(temp, "%dO", ent->client->sess.timerunCheckpointTimes[i]);
 		Q_strcat(data, sizeof (data), temp);
 		i++;
 	}
@@ -1421,29 +1421,29 @@ void target_stoptimer_use(gentity_t *self, gentity_t *other, gentity_t *activato
 
 	G_DPrintf("target_stoptimer_use: client = %d\n", client->ps.clientNum);
 
-	if (!client->timerunActive) {
+	if (!client->sess.timerunActive) {
 		G_DPrintf("target_stoptimer_use: ignored because timerun wasn't active for client %d\n", client->ps.clientNum);
 		return;
 	}
 
 	// don't stop the time if this isn't a corresponding stoptimer
-	if (Q_stricmp(self->timerunName, client->currentTimerun)) {
-		G_DPrintf("target_stoptimer_use: ignored because started run (%s) != ended run (%s) for client %d\n", client->currentTimerun, self->timerunName, client->ps.clientNum);
+	if (Q_stricmp(self->timerunName, client->sess.currentTimerun)) {
+		G_DPrintf("target_stoptimer_use: ignored because started run (%s) != ended run (%s) for client %d\n", client->sess.currentTimerun, self->timerunName, client->ps.clientNum);
 		return;
 	}
 
-	timerunNum = GetTimerunNum(client->currentTimerun);
+	timerunNum = GetTimerunNum(client->sess.currentTimerun);
 
 	// required number of checkpoints passed?
-	if (client->timerunCheckpointsPassed < self->count) {
-		CPx(activator - g_entities, va("cpm \"^d%s^f:^1 Minimum checkpoints not passed (%d/%d)\n\"", client->currentTimerun, client->timerunCheckpointsPassed, self->count));
+	if (client->sess.timerunCheckpointsPassed < self->count) {
+		CPx(activator - g_entities, va("cpm \"^d%s^f:^1 Minimum checkpoints not passed (%d/%d)\n\"", client->sess.currentTimerun, client->sess.timerunCheckpointsPassed, self->count));
 		notify_timerun_stop(activator, 0);
-		client->timerunActive = qfalse;
+		client->sess.timerunActive = qfalse;
 
 		return;
 	}
 
-	time = client->sess.timerunLastTime[timerunNum] = client->ps.commandTime - client->timerunStartTime;
+	time = client->sess.timerunLastTime[timerunNum] = client->ps.commandTime - client->sess.timerunStartTime;
 
 	// convert time into MM:SS:mmm
 	milli = time;
@@ -1464,7 +1464,7 @@ void target_stoptimer_use(gentity_t *self, gentity_t *other, gentity_t *activato
 
 		// CP are updated here if API is not used or if CP were note loaded
 		if (!g_useAPI.integer || client->sess.timerunCheckpointWereLoaded[timerunNum] == 0) {
-			memcpy(client->sess.timerunBestCheckpointTimes[timerunNum], client->timerunCheckpointTimes, sizeof (client->timerunCheckpointTimes));
+			memcpy(client->sess.timerunBestCheckpointTimes[timerunNum], client->sess.timerunCheckpointTimes, sizeof (client->sess.timerunCheckpointTimes));
 		}
 	}
 
@@ -1476,16 +1476,16 @@ void target_stoptimer_use(gentity_t *self, gentity_t *other, gentity_t *activato
 	dmilli -= dsec * 1000;
 
 	// Nico, stop speed
-	client->stopSpeed = sqrt(client->ps.velocity[0] * client->ps.velocity[0] + client->ps.velocity[1] * client->ps.velocity[1]);
+	client->sess.stopSpeed = sqrt(client->ps.velocity[0] * client->ps.velocity[0] + client->ps.velocity[1] * client->ps.velocity[1]);
 
 	// Nico, send record if needed
 	if (g_useAPI.integer && client->sess.logged) {
-		Cmd_SendRecord_f(activator, client->currentTimerun, client->pers.authToken, 
-			time, (int)client->startSpeed, (int)client->stopSpeed, (int)client->sess.timerunBestSpeed);
+		Cmd_SendRecord_f(activator, client->sess.currentTimerun, client->pers.authToken, 
+			time, (int)client->sess.startSpeed, (int)client->sess.stopSpeed, (int)client->sess.timerunBestSpeed);
 	}
 
 	// Save run after replacing spaces in run name (in any) by underscores
-	Q_strncpyz(cleanRunName, client->currentTimerun, sizeof (cleanRunName));
+	Q_strncpyz(cleanRunName, client->sess.currentTimerun, sizeof (cleanRunName));
 	len = strlen(cleanRunName);
 	for (i = 0; i < len; ++i) {
 		if (cleanRunName[i] == ' ') {
@@ -1519,7 +1519,7 @@ void target_stoptimer_use(gentity_t *self, gentity_t *other, gentity_t *activato
 	// Nico, notify the client and its spectators the timerun has stopped
 	notify_timerun_stop(activator, client->sess.timerunLastTime[timerunNum]);
 
-	client->timerunActive = qfalse;
+	client->sess.timerunActive = qfalse;
 }
 
 void SP_target_stoptimer(gentity_t *ent) {
@@ -1557,7 +1557,7 @@ static void notify_timerun_check(gentity_t *activator, int deltaTime, int time, 
 	gentity_t *o = NULL;
 
 	// Nico, check if timerun is active
-	if (!activator->client->timerunActive) {
+	if (!activator->client->sess.timerunActive) {
 		return;
 	}
 
@@ -1602,25 +1602,25 @@ void target_checkpoint_use(gentity_t *self, gentity_t *other, gentity_t *activat
 
 	client = activator->client;
 
-	if (!client->timerunActive) {
+	if (!client->sess.timerunActive) {
 		return;
 	}
 
 	// make sure this is a checkpoint for a current timerun
-	if (Q_stricmp(self->timerunName, client->currentTimerun)) {
+	if (Q_stricmp(self->timerunName, client->sess.currentTimerun)) {
 		return;
 	}
 
-	timerunNum = GetTimerunNum(client->currentTimerun);
+	timerunNum = GetTimerunNum(client->sess.currentTimerun);
 
 	// Nico, test if the checkpoint was already used
-	if (client->timerunCheckpointTimes[self->count]) {
+	if (client->sess.timerunCheckpointTimes[self->count]) {
 		return;
 	}
 
-	client->timerunCheckpointsPassed++;
+	client->sess.timerunCheckpointsPassed++;
 
-	time = client->timerunCheckpointTimes[self->count] = client->ps.commandTime - client->timerunStartTime;
+	time = client->sess.timerunCheckpointTimes[self->count] = client->ps.commandTime - client->sess.timerunStartTime;
 
 	if (client->sess.logged && !client->sess.timerunBestTime[timerunNum] && !client->sess.timerunCheckpointWereLoaded[timerunNum]) {
 		status = 0;

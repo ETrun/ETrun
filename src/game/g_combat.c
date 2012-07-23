@@ -196,9 +196,9 @@ void player_die( gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int
 		}
 
 		// Nico, do not automatically load player position on /kill
-		self->client->sess.loadPositionOnNextSpawn = qfalse;
+		self->client->sess.lastDieWasASelfkill = qtrue;
 	} else {
-		self->client->sess.loadPositionOnNextSpawn = qtrue;
+		self->client->sess.lastDieWasASelfkill = qfalse;
 	}
 
 	// RF, record this death in AAS system so that bots avoid areas which have high death rates

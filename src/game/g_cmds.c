@@ -99,9 +99,9 @@ void G_SendScore( gentity_t *ent ) {
 				( level.time - cl->pers.enterTime ) / 60000, 
 				g_entities[level.sortedClients[i]].s.powerups, 
 				playerClass, 
-				cl->sess.timerunBestTime[GetTimerunNum(cl->currentTimerun)], 
+				cl->sess.timerunBestTime[GetTimerunNum(cl->sess.currentTimerun)], 
 				cl->sess.timerunBestSpeed, 
-				cl->timerunActive ? 1 : 0,
+				cl->sess.timerunActive ? 1 : 0,
 				cl->ps.clientNum,
 				cl->sess.logged ? 1 : 0,
 				cl->pers.cgaz > 0 ? 1 : 0,
@@ -2252,11 +2252,11 @@ void Cmd_Load_f(gentity_t *ent) {
 	}
 
 	if (pos->valid) {
-		if (ent->client->timerunActive && physics.integer != PHYSICS_MODE_VET) {// Nico, don't stop timer on load for VET
+		if (ent->client->sess.timerunActive && physics.integer != PHYSICS_MODE_VET) {// Nico, don't stop timer on load for VET
 			// Nico, notify the client and its spectators the timerun has stopped
 			notify_timerun_stop(ent, 0);
 
-			ent->client->timerunActive = qfalse;
+			ent->client->sess.timerunActive = qfalse;
 		}
 
 		VectorCopy(pos->origin, ent->client->ps.origin);

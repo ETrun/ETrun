@@ -323,33 +323,33 @@ static void *recordHandler(void *data) {
 
 	APILog(va("Record: code = %d, result = %s\n", code, queryStruct->result), qfalse);
 
-	timerunNum = GetTimerunNum(ent->client->currentTimerun);
+	timerunNum = GetTimerunNum(ent->client->sess.currentTimerun);
 
 	switch (code) {
 	case 1001: // PB
 		if (ent->client->sess.timerunCheckpointWereLoaded[timerunNum]) {
-			memcpy(ent->client->sess.timerunBestCheckpointTimes[timerunNum], ent->client->timerunCheckpointTimes, sizeof (ent->client->timerunCheckpointTimes));
+			memcpy(ent->client->sess.timerunBestCheckpointTimes[timerunNum], ent->client->sess.timerunCheckpointTimes, sizeof (ent->client->sess.timerunCheckpointTimes));
 		}
 		AP(va("print \"%s: ^w%s\n\"", GAME_VERSION_COLORED, queryStruct->result));
 		break;
 
 	case 1002:// SB
 		if (ent->client->sess.timerunCheckpointWereLoaded[timerunNum]) {
-			memcpy(ent->client->sess.timerunBestCheckpointTimes[timerunNum], ent->client->timerunCheckpointTimes, sizeof (ent->client->timerunCheckpointTimes));
+			memcpy(ent->client->sess.timerunBestCheckpointTimes[timerunNum], ent->client->sess.timerunCheckpointTimes, sizeof (ent->client->sess.timerunCheckpointTimes));
 		}
 		AP(va("bp \"^w%s\n\"", queryStruct->result));
 		break;
 
 	case 1003:// SB but player was already rec holder
 		if (ent->client->sess.timerunCheckpointWereLoaded[timerunNum]) {
-			memcpy(ent->client->sess.timerunBestCheckpointTimes[timerunNum], ent->client->timerunCheckpointTimes, sizeof (ent->client->timerunCheckpointTimes));
+			memcpy(ent->client->sess.timerunBestCheckpointTimes[timerunNum], ent->client->sess.timerunCheckpointTimes, sizeof (ent->client->sess.timerunCheckpointTimes));
 		}
 		AP(va("bp \"^w%s\n\"", queryStruct->result));
 		break;
 
 	case 1004:// SB was tied
 		if (ent->client->sess.timerunCheckpointWereLoaded[timerunNum]) {
-			memcpy(ent->client->sess.timerunBestCheckpointTimes[timerunNum], ent->client->timerunCheckpointTimes, sizeof (ent->client->timerunCheckpointTimes));
+			memcpy(ent->client->sess.timerunBestCheckpointTimes[timerunNum], ent->client->sess.timerunCheckpointTimes, sizeof (ent->client->sess.timerunCheckpointTimes));
 		}
 		AP(va("bp \"^w%s\n\"", queryStruct->result));
 		break;
@@ -415,7 +415,7 @@ static void *checkpointsHandler(void *data) {
 
 			// Reset client checkpoints
 			memset(ent->client->sess.timerunBestCheckpointTimes[timerunNum], 0, sizeof(ent->client->sess.timerunBestCheckpointTimes[timerunNum]));
-			ent->client->timerunCheckpointsPassed = 0;
+			ent->client->sess.timerunCheckpointsPassed = 0;
 
 			// Set new checkpoints
 			pch = strtok (queryStruct->result, "O");

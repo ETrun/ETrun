@@ -765,8 +765,8 @@ void ClientThink_real( gentity_t *ent ) {
 	pm.physics = physics.integer;
 
 	pm.isTimerun = isTimerun.integer;
-	pm.timerunActive = client->timerunActive;
-	pm.timerunStartTime = client->timerunStartTime + 500;
+	pm.timerunActive = client->sess.timerunActive;
+	pm.timerunStartTime = client->sess.timerunStartTime + 500;
 
 	// Nico, store logins status in pmove
 	if (client->sess.logged) {
@@ -921,11 +921,11 @@ void ClientThink_real( gentity_t *ent ) {
 	}
 
 	// Nico, check ping
-	if (client->timerunActive && client->ps.ping > 400) {
+	if (client->sess.timerunActive && client->ps.ping > 400) {
 		CP("cpm \"^1Too high ping detected, timerun stopped.\n\"");
 		// Nico, notify the client and its spectators the timerun has stopped
 		notify_timerun_stop(ent, 0);
-		client->timerunActive = qfalse;
+		client->sess.timerunActive = qfalse;
 	}
 
 	// Nico, check maxpackets
@@ -1117,7 +1117,7 @@ void ClientEndFrame( gentity_t *ent ) {
 	}
 
 	// Nico, update timerun best speed and run distance
-	if (ent->client->timerunActive) {
+	if (ent->client->sess.timerunActive) {
 		currentSpeed = sqrt(ent->client->ps.velocity[0] * ent->client->ps.velocity[0] + ent->client->ps.velocity[1] * ent->client->ps.velocity[1]);
 
 		if (currentSpeed > ent->client->sess.timerunBestSpeed) {
