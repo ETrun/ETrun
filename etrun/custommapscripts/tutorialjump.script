@@ -281,6 +281,12 @@ game_manager
 		{
 			target "t76843"
 		}
+
+		// Remove skip in first originals jump near rotating Thompson
+		delete
+		{
+			target "woo4"
+		}
 	}
 }
 
