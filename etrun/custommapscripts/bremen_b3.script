@@ -2716,7 +2716,6 @@ trigger self setup
 
 setstate baumaterial default
 setstate baumaterial_mod default
-setstate baumaterial_toi default
 }
 
 trigger setup
@@ -2726,7 +2725,6 @@ setstate woodenbarrier invisible
 setstate woodenbarrier_toi default
 
 setstate baumaterial default
-setstate woodenbarrier_mod default
 }
 
 buildstart final
@@ -2734,7 +2732,6 @@ buildstart final
 setstate woodenbarrier underconstruction
 
 setstate baumaterial default
-setstate woodenbarrier_mod default
 }
 
 built final

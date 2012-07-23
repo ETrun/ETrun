@@ -13,7 +13,6 @@ game_manager
 		///////////////////////////////////////
 		create
 		{
-			scriptname "startfield"
 			origin "2544 -5312 408"
 			mins "-8 -160 -72"
 			maxs "8 160 72"
@@ -23,7 +22,6 @@ game_manager
 		}
 		create
 		{
-			scriptname "start"
 			origin "2752 -5104 408"
 			classname "target_startTimer"
 			targetname "starttimer1"
@@ -31,7 +29,6 @@ game_manager
 		}
 		create
 		{
-			scriptname "start_1"
 			origin "2544 -5220 408"
 			classname "misc_gamemodel"
 			mins "-90 -90 -25"
@@ -45,7 +42,6 @@ game_manager
 		
 		create
 		{
-			scriptname "checkfield"
 			origin "1520 -4080 368"
 			mins "-272 -16 -208"
 			maxs "272 16 208"
@@ -53,10 +49,8 @@ game_manager
 			target "check2"
 			contents "1073741824"
 		}
-
 		create
 		{
-			scriptname "check"
 			origin "1520 -4080 368"
 			classname "target_checkpoint"
 			targetname "check2"
@@ -65,7 +59,6 @@ game_manager
 		
 		create
 		{
-			scriptname "stopfield"
 			origin "3456 -2280 320"
 			mins "-16 -128 -128"
 			maxs "16 128 128"
@@ -73,10 +66,8 @@ game_manager
 			target "stoptimer1"
 			contents "1073741824"
 		}
-
 		create
 		{
-			scriptname "stop"
 			origin "3456 -2280 320"
 			classname "target_stopTimer"
 			targetname "stoptimer1"
@@ -85,7 +76,6 @@ game_manager
 		}
 		create
 		{
-			scriptname "stop_1"
 			origin "3400 -2300 320"
 			classname "misc_gamemodel"
 			mins "-90 -90 -25"
@@ -102,7 +92,6 @@ game_manager
 		///////////////////////////////////////
 		create
 		{
-			scriptname "startfield"
 			origin "2752 -5104 408"
 			mins "-160 -8 -72"
 			maxs "160 8 72"
@@ -112,7 +101,6 @@ game_manager
 		}
 		create
 		{
-			scriptname "start"
 			origin "2752 -5104 408"
 			classname "target_startTimer"
 			targetname "starttimerx"
@@ -120,7 +108,6 @@ game_manager
 		}
 		create
 		{
-			scriptname "start_2"
 			origin "2820 -5104 408"
 			classname "misc_gamemodel"
 			mins "-90 -90 -25"
@@ -134,7 +121,6 @@ game_manager
 		
 		create
 		{
-			scriptname "checkfield"
 			origin "3456 -2280 320"
 			mins "-24 -24 -72"
 			maxs "24 24 72"
@@ -142,19 +128,16 @@ game_manager
 			target "check2"
 			contents "1073741824"
 		}
-
 		create
 		{
-			scriptname "check"
 			origin "3456 -2280 320"
 			classname "target_checkpoint"
 			targetname "check2"
 			name "Allies right to flag"
 		}
-		
+
 		create
 		{
-			scriptname "stopfield"
 			origin "3456 -2280 320"
 			mins "-16 -128 -128"
 			maxs "16 128 128"
@@ -162,10 +145,8 @@ game_manager
 			target "stoptimerx"
 			contents "1073741824"
 		}
-
 		create
 		{
-			scriptname "stop"
 			origin "3456 -2280 320"
 			classname "target_stopTimer"
 			targetname "stoptimerx"
@@ -174,7 +155,6 @@ game_manager
 		}
 		create
 		{
-			scriptname "stop_2"
 			origin "3500 -2300 320"
 			classname "misc_gamemodel"
 			mins "-90 -90 -25"
@@ -191,7 +171,6 @@ game_manager
 		///////////////////////////////////////
 		create
 		{
-			scriptname "startfield"
 			origin "3200 -2544 256"
 			mins "-24 -4 -48"
 			maxs "24 4 48"
@@ -201,7 +180,6 @@ game_manager
 		}
 		create
 		{
-			scriptname "start"
 			origin "3200 -2544 256"
 			classname "target_startTimer"
 			targetname "starttimer2"
@@ -209,7 +187,6 @@ game_manager
 		}
 		create
 		{
-			scriptname "start_3"
 			origin "3200 -2544 256"
 			classname "misc_gamemodel"
 			mins "-90 -90 -25"
@@ -223,7 +200,6 @@ game_manager
 		
 		create
 		{
-			scriptname "stopfield"
 			origin "1920 1472 88"
 			mins "-112 -112 -48"
 			maxs "112 112 48"
@@ -231,10 +207,8 @@ game_manager
 			target "stoptimer2"
 			contents "1073741824"
 		}
-
 		create
 		{
-			scriptname "stop"
 			origin "1920 1472 88"
 			classname "target_stopTimer"
 			targetname "stoptimer2"
@@ -242,7 +216,6 @@ game_manager
 		}
 		create
 		{
-			scriptname "stop_3"
 			origin "1920 1472 100"
 			classname "misc_gamemodel"
 			mins "-90 -90 -25"
@@ -259,7 +232,6 @@ game_manager
 		///////////////////////////////////////
 		create
 		{
-			scriptname "startfield"
 			origin "3840 -2472 256"
 			mins "-4 -24 -48"
 			maxs "4 24 48"
@@ -269,7 +241,6 @@ game_manager
 		}
 		create
 		{
-			scriptname "start"
 			origin "3840 -2472 256"
 			classname "target_startTimer"
 			targetname "starttimer3"
@@ -277,7 +248,6 @@ game_manager
 		}
 		create
 		{
-			scriptname "start_4"
 			origin "3840 -2472 256"
 			classname "misc_gamemodel"
 			mins "-90 -90 -25"
@@ -291,7 +261,6 @@ game_manager
 		
 		create
 		{
-			scriptname "checkfield"
 			origin "5488 -560 416"
 			mins "-272 -16 -192"
 			maxs "272 16 192"
@@ -299,10 +268,8 @@ game_manager
 			target "check3"
 			contents "1073741824"
 		}
-
 		create
 		{
-			scriptname "check"
 			origin "5488 -560 416"
 			classname "target_checkpoint"
 			targetname "check3"
@@ -311,7 +278,6 @@ game_manager
 		
 		create
 		{
-			scriptname "stopfield"
 			origin "1920 1472 88"
 			mins "-112 -112 -48"
 			maxs "112 112 48"
@@ -319,10 +285,8 @@ game_manager
 			target "stoptimer3"
 			contents "1073741824"
 		}
-
 		create
 		{
-			scriptname "stop"
 			origin "1920 1472 88"
 			classname "target_stopTimer"
 			targetname "stoptimer3"
@@ -331,7 +295,6 @@ game_manager
 		}
 		create
 		{
-			scriptname "stop_4"
 			origin "1920 1472 160"
 			classname "misc_gamemodel"
 			mins "-90 -90 -25"
@@ -348,7 +311,6 @@ game_manager
 		///////////////////////////////////////
 		create
 		{
-			scriptname "startfield"
 			origin "2688 888 64"
 			mins "-96 -8 -64"
 			maxs "96 8 64"
@@ -358,7 +320,6 @@ game_manager
 		}
 		create
 		{
-			scriptname "start"
 			origin "2688 888 64"
 			classname "target_startTimer"
 			targetname "starttimer4"
@@ -366,7 +327,6 @@ game_manager
 		}
 		create
 		{
-			scriptname "start_5"
 			origin "2688 888 64"
 			classname "misc_gamemodel"
 			mins "-90 -90 -25"
@@ -378,10 +338,8 @@ game_manager
 			spawnflags "2"
 		}
 		
-		
 		create
 		{
-			scriptname "startfield"
 			origin "2688 1416 64"
 			mins "-96 -8 -64"
 			maxs "96 8 64"
@@ -391,7 +349,6 @@ game_manager
 		}
 		create
 		{
-			scriptname "start"
 			origin "2688 888 64"
 			classname "target_startTimer"
 			targetname "starttimer4b"
@@ -401,7 +358,6 @@ game_manager
 		
 		create
 		{
-			scriptname "stopfield"
 			origin "1920 1472 88"
 			mins "-112 -112 -48"
 			maxs "112 112 48"
@@ -409,10 +365,8 @@ game_manager
 			target "stoptimer4"
 			contents "1073741824"
 		}
-
 		create
 		{
-			scriptname "stop"
 			origin "1920 1472 88"
 			classname "target_stopTimer"
 			targetname "stoptimer4"
@@ -420,7 +374,6 @@ game_manager
 		}
 		create
 		{
-			scriptname "stop_5"
 			origin "1920 1472 220"
 			classname "misc_gamemodel"
 			mins "-90 -90 -25"
@@ -433,8 +386,6 @@ game_manager
 		}
 		
 		wait 3500
-		setstate main_gate_script invisible
-		setstate side_door_script invisible
 		setstate neutral_cp_toi invisible
 		setstate side_gate invisible
 		setstate side_gate_toi invisible
