@@ -5255,7 +5255,6 @@ game_manager
 		// Trigger multiple
 		create
 		{
-		    scriptname "startfield"
 		    origin "1123 692 416" // x y z coordinates of entity position
 		    mins "-28 -24 -20"
 		    maxs "28 24 20"
@@ -5267,7 +5266,6 @@ game_manager
 		// Start timer
 		create
 		{
-		    scriptname "start"
 		    origin "1123 692 416" // x y z coordinates of entity position
 		    classname "target_startTimer"
 		    targetname "starttimer1"
@@ -5276,7 +5274,6 @@ game_manager
 		// Colored start_1 entity
 		create
 		{
-		    scriptname "start_1"
 		    origin "1123 692 416" // x y z coordinates of entity position
 		    classname "misc_gamemodel"
 		    mins "-90 -90 -25"
@@ -5291,7 +5288,6 @@ game_manager
 		// Checkpoint 1
 		create
 		{
-		    scriptname "checkfield"
 		    origin "8566 3843 1732"
 		    mins "-272 -16 -208"
 		    maxs "272 16 208"
@@ -5301,7 +5297,6 @@ game_manager
 		}
 		create
 		{
-		    scriptname "check"
 		    origin "8566 3843 1732"
 		    classname "target_checkpoint"
 		    targetname "check1"
@@ -5311,7 +5306,6 @@ game_manager
 		// Checkpoint 2
 		create
 		{
-		    scriptname "checkfield"
 		    origin "887 2692 2900"
 		    mins "-272 -16 -208"
 		    maxs "272 16 208"
@@ -5321,7 +5315,6 @@ game_manager
 		}
 		create
 		{
-		    scriptname "check"
 		    origin "887 2692 2900"
 		    classname "target_checkpoint"
 		    targetname "check2"
@@ -5331,7 +5324,6 @@ game_manager
 		// Checkpoint 3
 		create
 		{
-		    scriptname "checkfield"
 		    origin "5972 9537 2836"
 		    mins "-272 -16 -208"
 		    maxs "272 16 208"
@@ -5342,7 +5334,6 @@ game_manager
 
 		create
 		{
-		    scriptname "check"
 		    origin "5972 9537 2836"
 		    classname "target_checkpoint"
 		    targetname "check3"
@@ -5352,7 +5343,6 @@ game_manager
 		// Checkpoint 4
 		create
 		{
-		    scriptname "checkfield"
 		    origin "4225 6725 4468"
 		    mins "-272 -16 -208"
 		    maxs "272 16 208"
@@ -5363,7 +5353,6 @@ game_manager
 
 		create
 		{
-		    scriptname "check"
 		    origin "4225 6725 4468"
 		    classname "target_checkpoint"
 		    targetname "check4"
@@ -5373,7 +5362,6 @@ game_manager
 		// Trigger multiple
 		create
 		{
-		    scriptname "stopfield"
 		    origin "1558 6324 4848" // x y z coordinates of entity position
 		    mins "-28 -24 -20"
 		    maxs "28 24 20"
@@ -5385,7 +5373,6 @@ game_manager
 		// Stop timer
 		create
 		{
-		    scriptname "stop"
 		    origin "1558 6324 4848" // x y z coordinates of entity position
 		    classname "target_stopTimer"
 		    targetname "stoptimer1"
@@ -5394,7 +5381,6 @@ game_manager
 		// Colored stop_1 entity
 		create
 		{
-		    scriptname "stop_1"
 		    origin "1558 6324 4848" // x y z coordinates of entity position
 		    classname "misc_gamemodel"
 		    mins "-90 -90 -25"
@@ -5412,7 +5398,6 @@ game_manager
 		// Trigger multiple
 		create
 		{
-		    scriptname "startfield"
 		    origin "590 797 440" // x y z coordinates of entity position
 		    mins "-28 -24 -20"
 		    maxs "28 24 20"
@@ -5424,7 +5409,6 @@ game_manager
 		// Start timer
 		create
 		{
-		    scriptname "start"
 		    origin "590 797 440" // x y z coordinates of entity position
 		    classname "target_startTimer"
 		    targetname "starttimer2"
@@ -5433,7 +5417,6 @@ game_manager
 		// Colored start_2 entity
 		create
 		{
-		    scriptname "start_2"
 		    origin "590 797 440" // x y z coordinates of entity position
 		    classname "misc_gamemodel"
 		    mins "-90 -90 -25"
@@ -5448,7 +5431,6 @@ game_manager
 		// Checkpoint 1
 		create
 		{
-		    scriptname "checkfield"
 		    origin "-1339 3534 832"
 		    mins "-272 -16 -208"
 		    maxs "272 16 208"
@@ -5459,7 +5441,6 @@ game_manager
 
 		create
 		{
-		    scriptname "check"
 		    origin "-1339 3534 832"
 		    classname "target_checkpoint"
 		    targetname "check1"
@@ -5469,7 +5450,6 @@ game_manager
 		// Trigger multiple
 		create
 		{
-		    scriptname "stopfield"
 		    origin "-1409 770 328" // x y z coordinates of entity position
 		    mins "-28 -24 -20"
 		    maxs "28 24 20"
@@ -5481,7 +5461,6 @@ game_manager
 		// Stop timer
 		create
 		{
-		    scriptname "stop"
 		    origin "-1409 770 328" // x y z coordinates of entity position
 		    classname "target_stopTimer"
 		    targetname "stoptimer2"
@@ -5490,7 +5469,6 @@ game_manager
 		// Colored stop_1 entity
 		create
 		{
-		    scriptname "stop_2"
 		    origin "-1409 770 328" // x y z coordinates of entity position
 		    classname "misc_gamemodel"
 		    mins "-90 -90 -25"
