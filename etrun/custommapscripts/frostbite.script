@@ -9,7 +9,6 @@ game_manager
 		///////////////////////////////////////
 		create
 		{
-			scriptname "startfield"
 			origin "816 160 400"
 			mins "-16 -48 -16"
 			maxs "16 48 16"
@@ -19,7 +18,6 @@ game_manager
 		}
 		create
 		{
-			scriptname "start"
 			origin "816 160 400"
 			classname "target_startTimer"
 			targetname "starttimer1"
@@ -27,7 +25,6 @@ game_manager
 		}
 		create
 		{
-			scriptname "start_1"
 			origin "816 160 450"
 			classname "misc_gamemodel"
 			mins "-90 -90 -25"
@@ -42,7 +39,6 @@ game_manager
 		
 		create
 		{
-			scriptname "stopfield"
 			origin "-4564 2244 -96"
 			mins "-60 -52 -80"
 			maxs "60 52 80"
@@ -53,7 +49,6 @@ game_manager
 
 		create
 		{
-			scriptname "stop"
 			origin "-4564 2244 -96"
 			classname "target_stopTimer"
 			targetname "stoptimer1"
@@ -61,7 +56,6 @@ game_manager
 		}
 		create
 		{
-			scriptname "stop_1"
 			origin "-4564 2244 -96"
 			classname "misc_gamemodel"
 			mins "-90 -90 -25"

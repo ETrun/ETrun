@@ -2,7 +2,7 @@ game_manager
 {
 	spawn
 	{
-				// 1 run created by Dinius
+		// 1 run created by Dinius
 		// 5 runs added by .namdam + wall is removed
 
 		/////////////////////////////////////////
@@ -11,7 +11,6 @@ game_manager
 		// Start trigger
 		create
 		{
-			scriptname "startfield"
 			origin "1672 2272 -208"
 			mins "-24 -1568 -440"
 			maxs "24 1568 440"
@@ -22,7 +21,6 @@ game_manager
 		// Start timer
 		create
 		{
-			scriptname "start"
 			origin "1672 2272 -208"
 			classname "target_startTimer"
 			targetname "starttimer1"
@@ -30,7 +28,6 @@ game_manager
 		}
 		create
 		{
-			scriptname "start_1"
 			origin "1672 2848 -208"
 			classname "misc_gamemodel"
 			mins "-90 -90 -25"
@@ -45,7 +42,6 @@ game_manager
 		// Stop trigger
 		create
 		{
-			scriptname "stopfield"
 			origin "5120 7248 -320"
 			mins "-8 -240 -248"
 			maxs "8 240 248"
@@ -56,7 +52,6 @@ game_manager
 		// stop timer
 		create
 		{
-			scriptname "stop"
 			origin "5120 7248 -320"
 			classname "target_stopTimer"
 			targetname "stoptimer1"
@@ -64,7 +59,6 @@ game_manager
 		}
 		create
 		{
-			scriptname "stop_1"
 			origin "5120 7248 -320"
 			classname "misc_gamemodel"
 			mins "-90 -90 -25"
@@ -82,7 +76,6 @@ game_manager
 		// Start trigger
 		create
 		{
-			scriptname "startfield2"
 			origin "3760 7192 -396"
 			mins "-16 -16 -64"
 			maxs "16 16 64"
@@ -93,7 +86,6 @@ game_manager
 		// Start timer
 		create
 		{
-			scriptname "start2"
 			origin "3760 7192 -404"
 			classname "target_startTimer"
 			targetname "starttimer2"
@@ -101,7 +93,6 @@ game_manager
 		}
 		create
 		{
-			scriptname "start_2"
 			origin "3778 7189 -420"
 			classname "misc_gamemodel"
 			mins "-90 -90 -25"
@@ -116,7 +107,6 @@ game_manager
 		// Stop trigger
 		create
 		{
-			scriptname "stopfield2"
 			origin "9544 4736 -156"
 			mins "-32 -32 -64"
 			maxs "32 32 64"
@@ -127,7 +117,6 @@ game_manager
 		// stop timer
 		create
 		{
-			scriptname "stop2"
 			origin "9544 4736 -140"
 			classname "target_stopTimer"
 			targetname "stoptimer2"
@@ -135,7 +124,6 @@ game_manager
 		}
 		create
 		{
-			scriptname "stop_2"
 			origin "9544 4736 -140"
 			classname "misc_gamemodel"
 			mins "-90 -90 -25"
@@ -153,7 +141,6 @@ game_manager
 		// Start trigger
 		create
 		{
-			scriptname "startfield3"
 			origin "3712 8052 -150"  
 			mins "-8 -192 -64"
 			maxs "8 192 64"
@@ -164,7 +151,6 @@ game_manager
 		// Start timer
 		create
 		{
-			scriptname "start3"
 			origin "3872 8020 -100"
 			classname "target_startTimer"
 			targetname "starttimer3"
@@ -172,7 +158,6 @@ game_manager
 		}
 		create
 		{
-			scriptname "start_3"
 			origin "3712 8052 -150"
 			classname "misc_gamemodel"
 			mins "-90 -90 -25"
@@ -187,7 +172,6 @@ game_manager
 		// Stop trigger
 		create
 		{
-			scriptname "stopfield3"
 			origin "9544 3916 -160"
 			mins "-32 -32 -64"
 			maxs "32 32 64"
@@ -198,7 +182,6 @@ game_manager
 		// stop timer
 		create
 		{
-			scriptname "stop3"
 			origin "9544 3916 -140"
 			classname "target_stopTimer"
 			targetname "stoptimer3"
@@ -206,7 +189,6 @@ game_manager
 		}
 		create
 		{
-			scriptname "stop_3"
 			origin "9544 3916 -140"
 			classname "misc_gamemodel"
 			mins "-90 -90 -25"
@@ -224,7 +206,6 @@ game_manager
 		// Start trigger
 		create
 		{
-			scriptname "startfield4"
 			origin "7104 4826 -412"
 			mins "-8 -64 -64"
 			maxs "8 64 64"
@@ -235,7 +216,6 @@ game_manager
 		// Start timer
 		create
 		{
-			scriptname "start4"
 			origin "7120 4826 -400"
 			classname "target_startTimer"
 			targetname "starttimer4"
@@ -243,7 +223,6 @@ game_manager
 		}
 		create
 		{
-			scriptname "start_4"
 			origin "7104 4826 -412"
 			classname "misc_gamemodel"
 			mins "-90 -90 -25"
@@ -258,7 +237,6 @@ game_manager
 		// Stop trigger
 		create
 		{
-			scriptname "stopfield4"
 			origin "9544 4736 -156"
 			mins "-32 -32 -64"
 			maxs "32 32 64"
@@ -269,7 +247,6 @@ game_manager
 		// stop timer
 		create
 		{
-			scriptname "stop4"
 			origin "9544 4736 -140"
 			classname "target_stopTimer"
 			targetname "stoptimer4"
@@ -277,7 +254,6 @@ game_manager
 		}
 		create
 		{
-			scriptname "stop_4"
 			origin "9544 4736 -195"
 			classname "misc_gamemodel"
 			mins "-90 -90 -25"
@@ -295,7 +271,6 @@ game_manager
 		// Start trigger
 		create
 		{
-			scriptname "startfield5"
 			origin "7600 4060 -412"
 			mins "-8 -32 -64"
 			maxs "8 32 64"
@@ -306,7 +281,6 @@ game_manager
 		// Start timer
 		create
 		{
-			scriptname "start5"
 			origin "7600 4060 -400"
 			classname "target_startTimer"
 			targetname "starttimer5"
@@ -314,7 +288,6 @@ game_manager
 		}
 		create
 		{
-			scriptname "start_5"
 			origin "7600 4060 -400"
 			classname "misc_gamemodel"
 			mins "-90 -90 -25"
@@ -329,7 +302,6 @@ game_manager
 		// Stop trigger
 		create
 		{
-			scriptname "stopfield5"
 			origin "9544 3916 -160"
 			mins "-32 -32 -64"
 			maxs "32 32 64"
@@ -340,7 +312,6 @@ game_manager
 		// stop timer
 		create
 		{
-			scriptname "stop5"
 			origin "9544 3916 -140"
 			classname "target_stopTimer"
 			targetname "stoptimer5"
@@ -348,7 +319,6 @@ game_manager
 		}
 		create
 		{
-			scriptname "stop_5"
 			origin "9544 3916 -195"
 			classname "misc_gamemodel"
 			mins "-90 -90 -25"
@@ -366,7 +336,6 @@ game_manager
 		// Start trigger
 		create
 		{
-			scriptname "startfield6"
 			origin "3548 7402 -430"
 			mins "-8 -32 -64"
 			maxs "8 32 64"
@@ -377,7 +346,6 @@ game_manager
 		// Start timer
 		create
 		{
-			scriptname "start6"
 			origin "3548 7402 -420"
 			classname "target_startTimer"
 			targetname "starttimer6"
@@ -385,7 +353,6 @@ game_manager
 		}
 		create
 		{
-			scriptname "start_6"
 			origin "3548 7402 -420"
 			classname "misc_gamemodel"
 			mins "-90 -90 -25"
@@ -400,7 +367,6 @@ game_manager
 		// Stop trigger
 		create
 		{
-			scriptname "stopfield6"
 			origin "2400 4650 -216"
 			mins "-48 -48 -64"
 			maxs "48 48 64"
@@ -411,7 +377,6 @@ game_manager
 		// stop timer
 		create
 		{
-			scriptname "stop6"
 			origin "2398 4748 -216"
 			classname "target_stopTimer"
 			targetname "stoptimer6"
@@ -419,7 +384,6 @@ game_manager
 		}
 		create
 		{
-			scriptname "stop_6"
 			origin "2400 4708 -216"
 			classname "misc_gamemodel"
 			mins "-90 -90 -25"
@@ -856,7 +820,6 @@ water_pump_2
 		setstate pump_flag_2 default
 		setstate pump2_p1 default
 		setstate pump2_p2 invisible
-		setstate pump2_sound invisible
 		setstate water_pump_2_oldclip default
 	}
 
@@ -914,7 +877,6 @@ water_pump_2
 		setstate water_pump_2_oldclip default
 
 		setstate pump2_p2 invisible
-		setstate pump2_sound invisible
 
 		disablespeaker wp2_sound
 		enablespeaker hose2_sound2
@@ -951,7 +913,6 @@ water_pump_2
 		setstate pump_flag_2 default
 		setstate pump2_p1 default
 		setstate pump2_p2 invisible
-		setstate pump2_sound invisible
 		setstate water_pump_2_oldclip default
 	}
 

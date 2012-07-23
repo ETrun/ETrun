@@ -24,7 +24,7 @@ game_manager
 			origin "-4783 2582 1847"
 			classname "target_startTimer"
 			targetname "starttimer1"
-			name "originals" // Run name
+			name "originals"
 		}
 		create
 		{
@@ -108,7 +108,7 @@ game_manager
 			origin "-116 -2967 -382"
 			classname "target_stopTimer"
 			targetname "stoptimer1"
-			name "originals" // Run name
+			name "originals"
 			mincheckpoints "3"
 		}
 		create
@@ -143,7 +143,7 @@ game_manager
 			origin "-4789 3515 1847"
 			classname "target_startTimer"
 			targetname "starttimer2"
-			name "customs" // Run name
+			name "customs"
 		}
 		create
 		{
@@ -210,7 +210,7 @@ game_manager
 			origin "-334 -2967 -382"
 			classname "target_stopTimer"
 			targetname "stoptimer2"
-			name "customs" // Run name
+			name "customs"
 		}
 		create
 		{

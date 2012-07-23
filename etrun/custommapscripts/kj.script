@@ -12,8 +12,7 @@ game_manager
 		// Start of run 1
 		create
 		{
-		    scriptname "startfield"
-		    origin "11112 -11554 2112" // x y z coordinates of entity position
+		    origin "11112 -11554 2112"
 		    mins "-28 -24 -20"
 		    maxs "28 24 20"
 		    classname "trigger_multiple"
@@ -22,16 +21,14 @@ game_manager
 		}
 		create
 		{
-		    scriptname "start"
-		    origin "11112 -11554 2112" // x y z coordinates of entity position
+		    origin "11112 -11554 2112"
 		    classname "target_startTimer"
 		    targetname "starttimer1"
-		    name "allies-customs" // Run name
+		    name "allies-customs"
 		}
 		create
 		{
-		    scriptname "start_1"
-		    origin "11112 -11554 2112" // x y z coordinates of entity position
+		    origin "11112 -11554 2112"
 		    classname "misc_gamemodel"
 		    mins "-90 -90 -25"
 		    maxs "90 90 25"
@@ -45,7 +42,6 @@ game_manager
 		// Checkpoint 1
 		create
 		{
-			scriptname "checkfield"
 			origin "104 -15488 1280"
 			mins "-272 -16 -208"
 			maxs "272 16 208"
@@ -55,7 +51,6 @@ game_manager
 		}
 		create
 		{
-			scriptname "check"
 			origin "104 -15488 1280"
 			classname "target_checkpoint"
 			targetname "check1"
@@ -65,7 +60,6 @@ game_manager
 		// Checkpoint 2
 		create
 		{
-			scriptname "checkfield"
 			origin "-13920 -6291 -1279"
 			mins "-272 -16 -208"
 			maxs "272 16 208"
@@ -75,7 +69,6 @@ game_manager
 		}
 		create
 		{
-			scriptname "check"
 			origin "-13920 -6291 -1279"
 			classname "target_checkpoint"
 			targetname "check2"
@@ -85,7 +78,6 @@ game_manager
 		// Checkpoint 3
 		create
 		{
-			scriptname "checkfield"
 			origin "11155 6389 1856"
 			mins "-272 -16 -208"
 			maxs "272 16 208"
@@ -95,7 +87,6 @@ game_manager
 		}
 		create
 		{
-			scriptname "check"
 			origin "11155 6389 1856"
 			classname "target_checkpoint"
 			targetname "check3"
@@ -105,7 +96,6 @@ game_manager
 		// Checkpoint 4
 		create
 		{
-			scriptname "checkfield"
 			origin "6817 4981 896"
 			mins "-272 -16 -208"
 			maxs "272 16 208"
@@ -115,7 +105,6 @@ game_manager
 		}
 		create
 		{
-			scriptname "check"
 			origin "6817 4981 896"
 			classname "target_checkpoint"
 			targetname "check4"
@@ -125,8 +114,7 @@ game_manager
 		// Stop of run 1
 		create
 		{
-		    scriptname "stopfield"
-		    origin "9273 -4276 704" // x y z coordinates of entity position
+		    origin "9273 -4276 704"
 		    mins "-28 -24 -20"
 		    maxs "28 24 20"
 		    classname "trigger_multiple"
@@ -135,16 +123,14 @@ game_manager
 		}
 		create
 		{
-		    scriptname "stop"
-		    origin "9273 -4276 704" // x y z coordinates of entity position
+		    origin "9273 -4276 704"
 		    classname "target_stopTimer"
 		    targetname "stoptimer1"
-		    name "allies-customs" // Run name
+		    name "allies-customs"
 		}
 		create
 		{
-		    scriptname "stop_1"
-		    origin "9273 -4276 704" // x y z coordinates of entity position
+		    origin "9273 -4276 704"
 		    classname "misc_gamemodel"
 		    mins "-90 -90 -25"
 		    maxs "90 90 25"

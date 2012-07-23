@@ -9,7 +9,6 @@ game_manager
 		///////////////////////////////////////
 		create
 		{
-			scriptname "startfield"
 			origin "-1038 1516 148"
 			mins "-4 -32 -56"
 			maxs "4 32 56"
@@ -20,7 +19,6 @@ game_manager
 
 		create
 		{
-			scriptname "start"
 			origin "-1038 1516 148"
 			classname "target_startTimer"
 			targetname "starttimer1"
@@ -28,7 +26,6 @@ game_manager
 		}
 		create
 		{
-			scriptname "start_1"
 			origin "-1038 1516 148"
 			classname "misc_gamemodel"
 			mins "-90 -90 -25"
@@ -42,7 +39,6 @@ game_manager
 		
 		create
 		{
-			scriptname "stopfield"
 			origin "1456 4248 -160"
 			mins "-176 -24 -48"
 			maxs "176 24 48"
@@ -53,7 +49,6 @@ game_manager
 
 		create
 		{
-			scriptname "stop"
 			origin "1456 4248 -160"
 			classname "target_stopTimer"
 			targetname "stoptimer1"
@@ -61,7 +56,6 @@ game_manager
 		}
 		create
 		{
-			scriptname "stop_1"
 			origin "1326 4225 -160"
 			classname "misc_gamemodel"
 			mins "-90 -90 -25"
@@ -78,7 +72,6 @@ game_manager
 		///////////////////////////////////////
 		create
 		{
-			scriptname "startfield"
 			origin "-262 -3464 0"
 			mins "-2 -56 -64"
 			maxs "2 56 64"
@@ -88,7 +81,6 @@ game_manager
 		}
 		create
 		{
-			scriptname "startfield"
 			origin "-122 -3464 0"
 			mins "-2 -56 -64"
 			maxs "2 56 64"
@@ -98,7 +90,6 @@ game_manager
 		}
 		create
 		{
-			scriptname "start_2"
 			origin "-122 -3464 0"
 			classname "misc_gamemodel"
 			mins "-90 -90 -25"
@@ -112,7 +103,6 @@ game_manager
 		
 		create
 		{
-			scriptname "start"
 			origin "-280 -3464 0"
 			classname "target_startTimer"
 			targetname "starttimer2"
@@ -121,7 +111,6 @@ game_manager
 		
 		create
 		{
-			scriptname "stopfield"
 			origin "-192 384 84"
 			mins "-24 -24 -76"
 			maxs "24 24 76"
@@ -132,7 +121,6 @@ game_manager
 
 		create
 		{
-			scriptname "stop"
 			origin "1456 4248 -160"
 			classname "target_stopTimer"
 			targetname "stoptimer2"
@@ -140,7 +128,6 @@ game_manager
 		}
 		create
 		{
-			scriptname "stop_2"
 			origin "-192 435 84"
 			classname "misc_gamemodel"
 			mins "-90 -90 -25"
@@ -157,7 +144,6 @@ game_manager
 		///////////////////////////////////////
 		create
 		{
-			scriptname "startfield"
 			origin "32 520 72"
 			mins "-64 -8 -56"
 			maxs "64 8 56"
@@ -168,7 +154,6 @@ game_manager
 		
 		create
 		{
-			scriptname "start"
 			origin "32 520 72"
 			classname "target_startTimer"
 			targetname "starttimer3"
@@ -176,7 +161,6 @@ game_manager
 		}
 		create
 		{
-			scriptname "start_3"
 			origin "32 520 72"
 			classname "misc_gamemodel"
 			mins "-90 -90 -25"
@@ -190,7 +174,6 @@ game_manager
 		
 		create
 		{
-			scriptname "stopfield"
 			origin "1274 3542 116"
 			mins "-66 -70 -52"
 			maxs "66 70 52"
@@ -201,7 +184,6 @@ game_manager
 
 		create
 		{
-			scriptname "stop"
 			origin "1274 3542 116"
 			classname "target_stopTimer"
 			targetname "stoptimer3"
@@ -209,7 +191,6 @@ game_manager
 		}
 		create
 		{
-			scriptname "stop_3"
 			origin "1274 3542 150"
 			classname "misc_gamemodel"
 			mins "-90 -90 -25"
@@ -261,7 +242,6 @@ game_manager
 		wm_addteamvoiceannounce 1 "radar_allies_bunker_capture"
 		
 		setstate axis_lever_trigger invisible
-		setstate goldclip2 invisible
 	}
 
 	trigger objective_counter
@@ -387,7 +367,6 @@ axis_gold1
 	{
 		setstate axis_gold_cm_marker default
 		setstate goldclip invisible
-		setstate goldclip2 default
 
 		trigger golddoor2 schnellzu
 		wait 100
