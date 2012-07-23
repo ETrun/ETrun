@@ -1,5 +1,5 @@
 // Modified by Timothy for ETrun
-// Last update 22 07 2012
+// Last update 23 07 2012
 
 end
 {
@@ -14,8 +14,8 @@ end
 		{
 		    scriptname "startfield"
 		    origin "1740 791 2216" // x y z coordinates of entity position
-		    mins "-28 -24 -20"
-		    maxs "28 24 20"
+		    mins "-100 -24 -20"
+		    maxs "100 24 20"
 		    classname "trigger_multiple"
 		    target "starttimer1"
 		    contents "1073741824"
@@ -46,7 +46,7 @@ end
 		create
 		{
 			scriptname "checkfield"
-			origin "104 -15488 1280"
+			origin "1774 1368 -2923"
 			mins "-272 -16 -208"
 			maxs "272 16 208"
 			classname "trigger_multiple"
@@ -56,7 +56,7 @@ end
 		create
 		{
 			scriptname "check"
-			origin "104 -15488 1280"
+			origin "1774 1368 -2923"
 			classname "target_checkpoint"
 			targetname "check1"
 			name "allies-originals"
@@ -86,7 +86,7 @@ end
 		create
 		{
 			scriptname "checkfield"
-			origin "11155 6389 1856"
+			origin "423 -900 -123"
 			mins "-272 -16 -208"
 			maxs "272 16 208"
 			classname "trigger_multiple"
@@ -96,7 +96,7 @@ end
 		create
 		{
 			scriptname "check"
-			origin "11155 6389 1856"
+			origin "423 -900 -123"
 			classname "target_checkpoint"
 			targetname "check3"
 			name "allies-originals"
@@ -106,7 +106,7 @@ end
 		create
 		{
 			scriptname "checkfield"
-			origin "6817 4981 896"
+			origin "-2425 -877 406"
 			mins "-272 -16 -208"
 			maxs "272 16 208"
 			classname "trigger_multiple"
@@ -117,9 +117,49 @@ end
 		create
 		{
 			scriptname "check"
-			origin "6817 4981 896"
+			origin "-2425 -877 406"
 			classname "target_checkpoint"
 			targetname "check4"
+			name "allies-originals"
+		}
+
+		// Checkpoint 5
+		create
+		{
+			scriptname "checkfield"
+			origin "-1720 2095 1872"
+			mins "-272 -16 -208"
+			maxs "272 16 208"
+			classname "trigger_multiple"
+			target "check5"
+			contents "1073741824"
+		}
+		create
+		{
+			scriptname "check"
+			origin "-1720 2095 1872"
+			classname "target_checkpoint"
+			targetname "check5"
+			name "allies-originals"
+		}
+
+		// Checkpoint 6
+		create
+		{
+			scriptname "checkfield"
+			origin "-4092 -2105 1632"
+			mins "-272 -16 -208"
+			maxs "272 16 208"
+			classname "trigger_multiple"
+			target "check6"
+			contents "1073741824"
+		}
+		create
+		{
+			scriptname "check"
+			origin "-4092 -2105 1632"
+			classname "target_checkpoint"
+			targetname "check6"
 			name "allies-originals"
 		}
 
