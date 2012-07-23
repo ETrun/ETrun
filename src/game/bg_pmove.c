@@ -1355,13 +1355,14 @@ static void PM_CrashLand( void ) {
 			{
 				PM_AddEventExt( EV_FOOTSTEP, PM_FootstepForSurface() );
 			}
-		}
 
-		// rain - when falling damage happens, velocity is cleared, but
-		// this needs to happen in pmove, not g_active!  (prediction will be
-		// wrong, otherwise.)
-		if ( delta > 38.75 ) {
-			VectorClear( pm->ps->velocity );
+			// rain - when falling damage happens, velocity is cleared, but
+			// this needs to happen in pmove, not g_active!  (prediction will be
+			// wrong, otherwise.)
+			// Nico, don't reset speed on SURF_NODAMAGE
+			if ( delta > 38.75 ) {
+				VectorClear( pm->ps->velocity );
+			}
 		}
 	}
 	// Nico, end of add no fall damage support
@@ -1568,9 +1569,6 @@ static void PM_GroundTrace( void ) {
 	if (pm->physics & PHYSICS_NO_OVERBOUNCE && trace.plane.normal[2] == 1) {
 		pm->ps->velocity[2] = 0;
 	}
-
-	// don't reset the z velocity for slopes
-//	pm->ps->velocity[2] = 0;
 
 	PM_AddTouchEnt( trace.entityNum );
 }
