@@ -2289,7 +2289,8 @@ void Cmd_Load_f(gentity_t *ent) {
 	}
 }
 
-void Cmd_Save_f(gentity_t *ent) {
+// Nico, note: this version can only be performed while timer is not active
+void Cmd_Load2_f(gentity_t *ent) {
 	char cmd[MAX_TOKEN_CHARS];
 	int argc;
 	int posNum;
@@ -2302,6 +2303,80 @@ void Cmd_Save_f(gentity_t *ent) {
 		posNum = 0;
 	} else if (argc == 2) {
 		trap_Argv(1, cmd, sizeof(cmd));		
+		if ((posNum = atoi(cmd)) < 0 || posNum >= MAX_SAVED_POSITIONS) {
+			CP("print \"Invalid position!\n\"");
+			return;
+		}
+	} else {
+		CP("print \"usage: load [position]\n\"");
+		return;
+	}
+
+	if (ent->client->sess.sessionTeam == TEAM_SPECTATOR) {
+		CP("cp \"You can not load as a spectator!\n\"");
+		return;
+	}
+
+	if (ent->client->ps.eFlags & EF_PRONE) {
+		CP("cp \"You can not load while proning!\n\"");
+		return;
+	}
+
+	if (ent->client->sess.timerunActive) {
+		CP("cp \"You can not load2 while your timer is active!\n\"");
+		return;
+	}
+
+	if (ent->client->sess.sessionTeam == TEAM_ALLIES) {
+		pos = ent->client->sess.alliesSaves2 + posNum;
+	} else {
+		pos = ent->client->sess.axisSaves2 + posNum;
+	}
+
+	if (pos->valid) {
+		VectorCopy(pos->origin, ent->client->ps.origin);
+
+		// Nico, load angles if cg_loadViewAngles = 1
+		if (ent->client->pers.loadViewAngles) {
+			SetClientViewAngle(ent, pos->vangles);
+		}
+
+		VectorClear(ent->client->ps.velocity);
+
+		if (ent->client->ps.stats[STAT_HEALTH] < 100 && ent->client->ps.stats[STAT_HEALTH] > 0) {
+			ent->health = 100;
+		}
+
+		if (level.rocketRun && ent->client->ps.weapon == WP_PANZERFAUST) {
+			ent->client->ps.ammoclip[WP_PANZERFAUST] = level.rocketRun;
+		}
+
+		if (posNum == 0) {
+			CP("cp \"Loaded\n\"");
+		} else {
+			CP(va("cp \"Loaded ^z%d\n\"", posNum));
+		}
+
+		// Start recording a new temp demo.
+		trap_SendServerCommand(ent - g_entities, "tempDemoStart");
+	} else {
+		CP("cp \"Use save2 first!\n\"");
+	}
+}
+
+void Cmd_Save_f(gentity_t *ent) {
+	char cmd[MAX_TOKEN_CHARS];
+	int argc;
+	int posNum;
+	save_position_t *pos;
+
+	// get save slot (do this first so players can get usage message even if
+	// they are not allowed to use this command)
+	argc = trap_Argc();
+	if (argc == 1) {
+		posNum = 0;
+	} else if (argc == 2) {
+		trap_Argv(1, cmd, sizeof(cmd));
 		if ((posNum = atoi(cmd)) < 0 || posNum >= MAX_SAVED_POSITIONS) {
 			CP("print \"Invalid position!\n\"");
 			return;
@@ -2352,6 +2427,74 @@ void Cmd_Save_f(gentity_t *ent) {
 	}
 }
 
+// Nico, note: this version can only be performed while timer is not active
+void Cmd_Save2_f(gentity_t *ent) {
+	char cmd[MAX_TOKEN_CHARS];
+	int argc;
+	int posNum;
+	save_position_t *pos;
+
+	// get save slot (do this first so players can get usage message even if
+	// they are not allowed to use this command)
+	argc = trap_Argc();
+	if (argc == 1) {
+		posNum = 0;
+	} else if (argc == 2) {
+		trap_Argv(1, cmd, sizeof(cmd));
+		if ((posNum = atoi(cmd)) < 0 || posNum >= MAX_SAVED_POSITIONS) {
+			CP("print \"Invalid position!\n\"");
+			return;
+		}
+	} else {
+		CP("print \"usage: save [position]\n\"");
+		return;
+	}
+
+	if (ent->client->sess.sessionTeam == TEAM_SPECTATOR) {
+		CP("cp \"You can not save as a spectator!\n\"");
+		return;
+	}
+
+	// Nico, allow save in the air for VET
+	if (physics.integer != PHYSICS_MODE_VET && ent->client->ps.groundEntityNum == ENTITYNUM_NONE) {
+		CP("cp \"You can not save while in the air!\n\"");
+		return;
+	}
+
+	// Nico, allow save while proning for VET
+	if (physics.integer != PHYSICS_MODE_VET && (ent->client->ps.eFlags & EF_PRONE || ent->client->ps.eFlags & EF_PRONE_MOVING)){
+		CP("cp \"You can not save while proning!\n\"");
+		return;
+	}
+
+	// Nico, allow save while crouching for VET
+	if (physics.integer != PHYSICS_MODE_VET && ent->client->ps.eFlags & EF_CROUCHING){
+		CP("cp \"You can not save while crouching!\n\"");
+		return;
+	}
+
+	if (ent->client->sess.timerunActive) {
+		CP("cp \"You can not save2 while your timer is active!\n\"");
+		return;
+	}
+
+	if (ent->client->sess.sessionTeam == TEAM_ALLIES) {
+		pos = ent->client->sess.alliesSaves2 + posNum;
+	} else {
+		pos = ent->client->sess.axisSaves2 + posNum;
+	}
+
+	VectorCopy(ent->client->ps.origin, pos->origin);
+	VectorCopy(ent->client->ps.viewangles, pos->vangles);
+	pos->valid = qtrue;
+
+	if (posNum == 0) {
+		CP("cp \"Saved\n\"");
+	} else {
+		CP(va("cp \"Saved ^z%d\n\"", posNum));
+	}
+}
+
 // Nico, defines commands that are flood protected or not
 static command_t floodProtectedCommands[] = {
 	{ "score",				qfalse,	Cmd_Score_f },
@@ -2370,6 +2513,8 @@ static command_t floodProtectedCommands[] = {
 	{ "setspawnpt",			qfalse,	Cmd_SetSpawnPoint_f },
 	{ "load",				qfalse,	Cmd_Load_f },
 	{ "save",				qfalse,	Cmd_Save_f },
+	{ "load2",				qfalse,	Cmd_Load2_f },
+	{ "save2",				qfalse,	Cmd_Save2_f },
 
 	// Nico, class command
 	{ "class",				qtrue,	Cmd_Class_f },
