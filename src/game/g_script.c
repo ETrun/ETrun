@@ -141,6 +141,9 @@ qboolean etpro_ScriptAction_SetValues( gentity_t *ent, char *params );
 // Nico, create action
 qboolean G_ScriptAction_Create(gentity_t *ent, char *params);
 
+// Nico, delete action
+qboolean G_ScriptAction_Delete(gentity_t *ent, char *params);
+
 // these are the actions that each event can call
 g_script_stack_action_t gScriptActions[] =
 {
@@ -244,6 +247,9 @@ g_script_stack_action_t gScriptActions[] =
 
 	// Nico, create action
 	{"create",							G_ScriptAction_Create},
+
+	// Nico, delete action
+	{"delete",							G_ScriptAction_Delete},
 
 	{NULL,                              NULL}
 };
@@ -625,8 +631,10 @@ void G_Script_ScriptParse( gentity_t *ent ) {
 				memset( params, 0, sizeof( params ) );
 
 				// Ikkyo - Parse for {}'s if this is a set command
-				// Nico, added "create" condition
-				if ( !Q_stricmp( action->actionString, "set" ) || !Q_stricmp(action->actionString, "create") ) {
+				// Nico, added "create" & "delete" condition
+				if ( !Q_stricmp( action->actionString, "set" ) ||
+					!Q_stricmp(action->actionString, "create") ||
+					!Q_stricmp(action->actionString, "delete")) {
 					token = COM_Parse( &pScript );
 					if ( token[0] != '{' ) {
 						COM_ParseError( "'{' expected, found: %s.\n", token );

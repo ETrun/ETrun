@@ -3940,3 +3940,58 @@ qboolean G_ScriptAction_Create(gentity_t *ent, char *params) {
 
 	return qtrue;
 }
+
+/**
+ * Delete entity
+ *
+ * @author: Nico
+ */
+qboolean G_ScriptAction_Delete(gentity_t *ent, char *params) {
+	char	*token = NULL;
+	char	*p = NULL;
+	char	key[MAX_TOKEN_CHARS] = {0};
+	gentity_t *entity = NULL;
+
+	p = params;
+
+	// get each key/value pair
+	while (1) {
+		token = COM_ParseExt(&p, qfalse);
+		if (!token[0]) {
+			break;
+		}
+
+		strcpy(key, token);
+
+		token = COM_ParseExt(&p, qfalse);
+		if (!token[0]) {
+			G_Error("key \"%s\" has no value", key);
+			break;
+		}
+
+		// Remove by target
+		if (!Q_stricmp(key, "target")) {
+			G_DPrintf("Looking for entity to remove having target = %s...\n", token);
+			entity = G_FindByTarget(NULL, token);
+			if (entity) {
+				G_DPrintf("found! '%s': %s\n", token, entity->classname);
+				G_ScriptAction_RemoveEntity(entity, NULL);
+			} else {
+				G_DPrintf("not found !\n");
+			}
+		} else if (!Q_stricmp(key, "targetname")) {// Remove by targetname
+			G_DPrintf("Looking for entity to remove having targetname = %s...\n", token);
+			entity = G_FindByTargetname(NULL, token);
+			if (entity) {
+				G_DPrintf("found! '%s': %s\n", token, entity->classname);
+				G_ScriptAction_RemoveEntity(entity, NULL);
+			} else {
+				G_DPrintf("not found !\n");
+			}
+		} else {
+			G_Error("G_ScriptAction_Delete: unknown key '%s'\n", key);
+		}
+	}
+
+	return qtrue;
+}
