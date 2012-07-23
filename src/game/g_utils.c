@@ -1162,3 +1162,14 @@ team_t G_GetTeamFromEntity( gentity_t *ent ) {
 
 	return TEAM_FREE;
 }
+
+void strtolower(char *in, char *out, int size) {
+	int i = 0;
+	int l = strlen(in);
+
+	Q_strncpyz(out, in, size);
+
+	for (i = 0; i < l; ++i) {
+		out[i] = tolower(in[i]);
+	}
+}

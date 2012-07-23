@@ -360,6 +360,7 @@ G_Script_ScriptLoad
 */
 void G_Script_ScriptLoad( void ) {
 	char filename[MAX_QPATH];
+	char toLowerFilename[MAX_QPATH];
 	vmCvar_t mapname;
 	fileHandle_t f;
 	int len;
@@ -387,6 +388,15 @@ void G_Script_ScriptLoad( void ) {
 		if (len > 0) {
 			found = qtrue;
 			G_Printf("%s: loaded custom mapscript!\n", GAME_VERSION);
+		}
+
+		// Nico, try to load lowercased script name
+		if (!found) {
+			strtolower(filename, toLowerFilename, sizeof (toLowerFilename));
+			if (len > 0) {
+				found = qtrue;
+				G_Printf("%s: loaded custom mapscript!\n", GAME_VERSION);
+			}
 		}
 	}
 
