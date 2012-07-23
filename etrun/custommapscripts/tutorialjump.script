@@ -12,7 +12,6 @@ game_manager
 		// Start of run 1
 		create
 		{
-			scriptname "startfield"
 			origin "-4783 2582 1847"
 			mins "-28 -24 -20"
 			maxs "28 24 20"
@@ -22,7 +21,6 @@ game_manager
 		}
 		create
 		{
-			scriptname "start"
 			origin "-4783 2582 1847"
 			classname "target_startTimer"
 			targetname "starttimer1"
@@ -30,7 +28,6 @@ game_manager
 		}
 		create
 		{
-			scriptname "start_1"
 			origin "-4783 2582 1847"
 			classname "misc_gamemodel"
 			mins "-90 -90 -25"
@@ -45,7 +42,6 @@ game_manager
 		// Checkpoint 1
 		create
 		{
-			scriptname "checkfield"
 			origin "99 1604 1712"
 			mins "-272 -16 -208"
 			maxs "272 16 208"
@@ -55,7 +51,6 @@ game_manager
 		}
 		create
 		{
-			scriptname "check"
 			origin "99 1604 1712"
 			classname "target_checkpoint"
 			targetname "check1"
@@ -65,7 +60,6 @@ game_manager
 		// Checkpoint 2
 		create
 		{
-			scriptname "checkfield"
 			origin "785 3845 3200"
 			mins "-272 -16 -208"
 			maxs "272 16 208"
@@ -75,7 +69,6 @@ game_manager
 		}
 		create
 		{
-			scriptname "check"
 			origin "785 3845 3200"
 			classname "target_checkpoint"
 			targetname "check2"
@@ -85,7 +78,6 @@ game_manager
 		// Checkpoint 3
 		create
 		{
-			scriptname "checkfield"
 			origin "-4707 1716 864"
 			mins "-272 -16 -208"
 			maxs "272 16 208"
@@ -95,7 +87,6 @@ game_manager
 		}
 		create
 		{
-			scriptname "check"
 			origin "-4707 1716 864"
 			classname "target_checkpoint"
 			targetname "check3"
@@ -105,7 +96,6 @@ game_manager
 		// Stop of run 1
 		create
 		{
-			scriptname "stopfield"
 			origin "-116 -2967 -382"
 			mins "-28 -24 -20"
 			maxs "28 24 20"
@@ -115,7 +105,6 @@ game_manager
 		}
 		create
 		{
-			scriptname "stop"
 			origin "-116 -2967 -382"
 			classname "target_stopTimer"
 			targetname "stoptimer1"
@@ -124,7 +113,6 @@ game_manager
 		}
 		create
 		{
-			scriptname "stop_1"
 			origin "-116 -2967 -382"
 			classname "misc_gamemodel"
 			mins "-90 -90 -25"
@@ -142,7 +130,6 @@ game_manager
 		// Start of run 2
 		create
 		{
-			scriptname "startfield"
 			origin "-4789 3515 1847"
 			mins "-28 -24 -20"
 			maxs "28 24 20"
@@ -153,7 +140,6 @@ game_manager
 		}
 		create
 		{
-			scriptname "start"
 			origin "-4789 3515 1847"
 			classname "target_startTimer"
 			targetname "starttimer2"
@@ -161,7 +147,6 @@ game_manager
 		}
 		create
 		{
-			scriptname "start_2"
 			origin "-4789 3515 1847"
 			classname "misc_gamemodel"
 			mins "-90 -90 -25"
@@ -176,7 +161,6 @@ game_manager
 		// Checkpoint 1
 		create
 		{
-			scriptname "checkfield"
 			origin "-2674 2187 2792"
 			mins "-272 -16 -208"
 			maxs "272 16 208"
@@ -186,7 +170,6 @@ game_manager
 		}
 		create
 		{
-			scriptname "check"
 			origin "-2674 2187 2792"
 			classname "target_checkpoint"
 			targetname "check1"
@@ -196,7 +179,6 @@ game_manager
 		// Checkpoint 2	
 		create
 		{
-			scriptname "checkfield"
 			origin "-1110 6835 1928"
 			mins "-272 -16 -208"
 			maxs "272 16 208"
@@ -206,7 +188,6 @@ game_manager
 		}
 		create
 		{
-			scriptname "check"
 			origin "-1110 6835 1928"
 			classname "target_checkpoint"
 			targetname "check2"
@@ -216,7 +197,6 @@ game_manager
 		// Stop of run 2
 		create
 		{
-			scriptname "stopfield"
 			origin "-334 -2967 -382"
 			mins "-28 -24 -20"
 			maxs "28 24 20"
@@ -227,7 +207,6 @@ game_manager
 		}
 		create
 		{
-			scriptname "stop"
 			origin "-334 -2967 -382"
 			classname "target_stopTimer"
 			targetname "stoptimer2"
@@ -235,7 +214,6 @@ game_manager
 		}
 		create
 		{
-			scriptname "stop_2"
 			origin "-334 -2967 -382"
 			classname "misc_gamemodel"
 			mins "-90 -90 -25"
@@ -247,17 +225,17 @@ game_manager
 			spawnflags "2"
 		}
 
-		// Clip 1
+		// Clip 1 to prevent skipping Goldrush first jump via stairs
 		create
 		{
 			classname "func_fakebrush"
 			contents "1"
-			origin "1063 1741 168"
-			mins "-16 -95 -208"
-			maxs "16 95 208"
+			origin "-408 552 -800"
+			mins "-16 -152 -220"
+			maxs "16 152 220"
 		}
 
-		// Clip 2
+		// Clip 2 to prevent skipping Oasis jump via ladder
 		create
 		{
 			classname "func_fakebrush"
@@ -267,7 +245,7 @@ game_manager
 			maxs "16 95 208"
 		}
 
-		// Clip 3
+		// Clip 3 to prevent skipping Radar jump via tower
 		create
 		{
 			classname "func_fakebrush"
@@ -275,36 +253,33 @@ game_manager
 			origin "3658 2581 1664"
 			mins "-16 -95 -208"
 			maxs "16 95 208"
-		}	
-
-		// Clip 4
-		create
-		{
-			classname "func_fakebrush"
-			contents "1"
-			origin "450 -1667 -63"
-			mins "-90 -16 -208"
-			maxs "90 16 208"
 		}
 
-		// Clip 5
-		create
-		{
-			classname "func_fakebrush"
-			contents "1"
-			origin "1878 358 2112"
-			mins "-16 -95 -208"
-			maxs "16 95 208"
-		}	
+		// Wait a bit everything gets spawned
+		wait 200
 
-		// Clip 6
-		create
+		// Delete end hidden button
+		delete
 		{
-			classname "func_fakebrush"
-			contents "1"
-			origin "-232 -3548 -383"
-			mins "-40 -16 -208"
-			maxs "40 16 208"
+			target "t76889"
+		}
+
+		// Delete end unlock button
+		delete
+		{
+			target "unlock"
+		}
+
+		// Remove Oasis skip button
+		delete
+		{
+			target "t76790"
+		}
+
+		// Remove custom-1 skip button
+		delete
+		{
+			target "t76843"
 		}
 	}
 }
