@@ -2247,6 +2247,6 @@ void PM_TraceAll( trace_t *trace, vec3_t start, vec3_t end );
 // Nico, physics mode
 #define PHYSICS_MODE_AP_NO_OB		255
 #define PHYSICS_MODE_AP_OB			239
-#define PHYSICS_MODE_VQ3_NO_OB		23
-#define PHYSICS_MODE_VQ3_OB			7
+#define PHYSICS_MODE_VQ3_NO_OB		19
+#define PHYSICS_MODE_VQ3_OB			3
 #define PHYSICS_MODE_VET			0
