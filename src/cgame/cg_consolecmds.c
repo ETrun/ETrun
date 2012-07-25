@@ -825,7 +825,9 @@ void CG_InitConsoleCommands( void ) {
 
 	// Nico, save/load
 	trap_AddCommand("load");
-	trap_AddCommand("save");	
+	trap_AddCommand("save");
+	trap_AddCommand("load2");
+	trap_AddCommand("save2");
 
 	// Nico, login/logout
 	trap_AddCommand("login");
