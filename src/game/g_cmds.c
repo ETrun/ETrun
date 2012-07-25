@@ -2322,11 +2322,6 @@ void Cmd_Load2_f(gentity_t *ent) {
 		return;
 	}
 
-	if (ent->client->sess.timerunActive) {
-		CP("cp \"You can not load2 while your timer is active!\n\"");
-		return;
-	}
-
 	if (ent->client->sess.sessionTeam == TEAM_ALLIES) {
 		pos = ent->client->sess.alliesSaves2 + posNum;
 	} else {
@@ -2334,6 +2329,13 @@ void Cmd_Load2_f(gentity_t *ent) {
 	}
 
 	if (pos->valid) {
+		if (ent->client->sess.timerunActive) {// Nico, stop timer
+			// Nico, notify the client and its spectators the timerun has stopped
+			notify_timerun_stop(ent, 0);
+
+			ent->client->sess.timerunActive = qfalse;
+		}
+
 		VectorCopy(pos->origin, ent->client->ps.origin);
 
 		// Nico, load angles if cg_loadViewAngles = 1
