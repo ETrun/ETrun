@@ -4,6 +4,214 @@ if [ ! -d build-aux ]; then
 	mkdir build-aux
 fi
 
+# Parse options
+api=0
+args=`getopt a $*`
+if [ $? != 0 ]
+then
+  echo 'Usage: ./bootstrap [-a]'
+  exit 2
+fi
+set -- $args
+for i
+do
+  case "$i"
+  in
+    -a)
+      api=1
+      shift;;
+
+    --)
+      shift; break;;
+  esac
+done
+
+# Create root Makefile.am & configure.ac
+if [ $api -eq 0 ]; then
+
+  echo "Bootstraping..."
+
+  echo 'AC_INIT([ETrun], [1.0], [www.timeruns.net])
+
+AC_CONFIG_AUX_DIR([build-aux])
+
+AC_CONFIG_MACRO_DIR([m4])
+
+AM_INIT_AUTOMAKE([ETrun], [1.0])
+
+# Init libtool and disable static library creation
+LT_INIT(disable-static)
+
+# Compilers we use
+AC_PROG_CC
+
+# Auto strip
+AC_CHECK_TOOL([STRIP],[strip])
+
+# Check if these headers exist
+AC_CONFIG_HEADERS([config.h])
+
+# List of Makefiles we want to generate
+AC_CONFIG_FILES([Makefile src/cgame/Makefile src/game/Makefile src/ui/Makefile])
+
+AC_OUTPUT' > configure.ac
+
+  echo 'SUBDIRS = src/game src/cgame src/ui
+ACLOCAL_AMFLAGS = -I m4' > Makefile.am
+
+  echo '#! /bin/bash
+
+BUILD_DIR=_build
+QAGAME_LIB=qagame_mac
+CGAME_LIB=cgame_mac
+UI_LIB=ui_mac
+
+# Clean
+make distclean
+
+rm -f $BUILD_DIR/*_mac
+rm -rf $BUILD_DIR/*_mac.bundle
+
+# Compile for linux
+./configure CFLAGS="-m32"
+make
+
+if [ $? != 0 ]; then
+  exit
+fi
+
+strip -x src/cgame/.libs/libcgame.dylib
+strip -x src/game/.libs/libgame.dylib
+strip -x src/ui/.libs/libui.dylib
+mv src/cgame/.libs/libcgame.dylib $BUILD_DIR/$CGAME_LIB
+mv src/game/.libs/libgame.dylib $BUILD_DIR/$QAGAME_LIB
+mv src/ui/.libs/libui.dylib $BUILD_DIR/$UI_LIB
+
+cd $BUILD_DIR
+../makebundle.sh qagame
+../makebundle.sh cgame
+../makebundle.sh ui
+cd ..' > osx_compile.sh
+
+  echo '#! /bin/bash
+
+BUILD_DIR=_build
+
+# Clean
+make distclean
+
+# Compile for linux
+./configure CFLAGS="-Wno-enum-compare -Wno-format-security -Wno-switch -Wno-array-bounds"
+make
+
+if [ $? != 0 ]; then
+  exit
+fi
+
+strip -s src/cgame/.libs/libcgame.so
+strip -s src/game/.libs/libgame.so
+strip -s src/ui/.libs/libui.so
+mv src/cgame/.libs/libcgame.so $BUILD_DIR/cgame.mp.i386.so
+mv src/game/.libs/libgame.so $BUILD_DIR/qagame.mp.i386.so
+mv src/ui/.libs/libui.so $BUILD_DIR/ui.mp.i386.so' > linux_compile.sh
+
+else
+
+  echo "Boostraping with api..."
+
+  echo 'AC_INIT([ETrun], [1.0], [www.timeruns.net])
+
+AC_CONFIG_AUX_DIR([build-aux])
+
+AC_CONFIG_MACRO_DIR([m4])
+
+AM_INIT_AUTOMAKE([ETrun], [1.0])
+
+# Init libtool and disable static library creation
+LT_INIT(disable-static)
+
+# Compilers we use
+AC_PROG_CC
+
+# Auto strip
+AC_CHECK_TOOL([STRIP],[strip])
+
+# Check if these headers exist
+AC_CONFIG_HEADERS([config.h])
+
+# List of Makefiles we want to generate
+AC_CONFIG_FILES([Makefile src/cgame/Makefile src/game/Makefile src/ui/Makefile src/APImodule/Makefile])
+
+AC_OUTPUT' > configure.ac
+
+  echo 'SUBDIRS = src/APImodule src/game src/cgame src/ui
+ACLOCAL_AMFLAGS = -I m4' > Makefile.am
+
+  echo '#! /bin/bash
+
+BUILD_DIR=_build
+QAGAME_LIB=qagame_mac
+API_LIB=api_mac
+CGAME_LIB=cgame_mac
+UI_LIB=ui_mac
+
+# Clean
+make distclean
+
+rm -f $BUILD_DIR/*_mac
+rm -rf $BUILD_DIR/*_mac.bundle
+
+# Compile for linux
+./configure CFLAGS="-m32"
+make
+
+if [ $? != 0 ]; then
+  exit
+fi
+
+strip -x src/cgame/.libs/libcgame.dylib
+strip -x src/game/.libs/libgame.dylib
+strip -x src/ui/.libs/libui.dylib
+strip -x src/APImodule/.libs/libapi.dylib
+mv src/cgame/.libs/libcgame.dylib $BUILD_DIR/$CGAME_LIB
+mv src/game/.libs/libgame.dylib $BUILD_DIR/$QAGAME_LIB
+mv src/ui/.libs/libui.dylib $BUILD_DIR/$UI_LIB
+mv src/APImodule/.libs/libapi.dylib $BUILD_DIR/$API_LIB
+
+cd $BUILD_DIR
+../makebundle.sh qagame
+../makebundle.sh cgame
+../makebundle.sh ui
+cd ..' > osx_compile.sh
+
+  echo '#! /bin/bash
+
+BUILD_DIR=_build
+
+# Clean
+make distclean
+
+# Compile for linux
+./configure CFLAGS="-Wno-enum-compare -Wno-format-security -Wno-switch -Wno-array-bounds"
+make
+
+if [ $? != 0 ]; then
+  exit
+fi
+
+strip -s src/cgame/.libs/libcgame.so
+strip -s src/game/.libs/libgame.so
+strip -s src/ui/.libs/libui.so
+strip -s src/APImodule/.libs/libapi.so
+mv src/cgame/.libs/libcgame.so $BUILD_DIR/cgame.mp.i386.so
+mv src/game/.libs/libgame.so $BUILD_DIR/qagame.mp.i386.so
+mv src/ui/.libs/libui.so $BUILD_DIR/ui.mp.i386.so
+mv src/APImodule/.libs/libapi.so $BUILD_DIR/APImodule.so' > linux_compile.sh
+fi
+
+
+# Bootstrap
+
 echo "Running aclocal"
 aclocal
 
@@ -26,3 +234,17 @@ fi
 
 echo "Running automake"
 automake --add-missing --copy --no-force --foreign
+
+# Check errors
+if [ $? != 0 ]
+then
+  echo "Bootstrap failed!"
+else
+  # End
+  echo "Bootstrap done."
+  if [ $host = "Darwin" ]; then
+    echo "Run ./osx_compile to compile ETrun"
+  else
+    echo "Run ./linux_compile to compile ETrun"
+  fi
+fi
