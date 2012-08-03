@@ -1491,6 +1491,9 @@ typedef struct {
 
 	// Nico, used to show pressed keys
 	keys_set_t		keys[NUM_KEYS_SETS];
+
+	// Nico, CGaz arrow
+	qhandle_t CGazArrow;
 } cgMedia_t;
 
 typedef struct {

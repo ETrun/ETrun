@@ -374,14 +374,21 @@ void CG_DrawCGaz(void) {
 	float vel_angle; // absolute velocity angle
 	float vel_relang; // relative velocity angle to viewangles[1]
 	float per_angle;
+	float accel_angle;
 	float a;
-	float accel, scale;
+	float accel;
+	float scale;
+	float ang;
+	float y = 260; // Y pos
+	float h = 20; // CGaz height
+	float w = 300;// CGaz width
 
 	int forward = 0;
 	int right = 0;
 
 	vec_t vel_size;
 	vec3_t vel;
+	vec4_t color;
 
 	playerState_t *ps;
 
@@ -398,7 +405,7 @@ void CG_DrawCGaz(void) {
 
 	a = 0.15;
 	a = (a > 1.0f) ? 1.0f : (a < 0.0f) ? 0.0f : a;
-
+	color[3] = a;
 	VectorCopy(ps->velocity, vel);
 
 	// for a simplicity water, ladder etc. calculations are omitted
@@ -467,27 +474,130 @@ void CG_DrawCGaz(void) {
 		right = -128;
 	}
 
-	// CGaz 2
-	vel_relang = DEG2RAD(vel_relang);
-	per_angle = DEG2RAD(per_angle);
+	if (cg_drawCGaz.integer == 1) {
+		VectorCopy(colorBlue, color);
+		CG_FillRect(SCREEN_CENTER_X - w / 2, y, w, h, color);
+		CG_FillRect(SCREEN_CENTER_X - w / 2, y, 1, h, colorWhite);
+		CG_FillRect(SCREEN_CENTER_X - w / 4, y, 1, h, colorWhite);
+		CG_FillRect(SCREEN_CENTER_X        , y, 1, h, colorWhite);
+		CG_FillRect(SCREEN_CENTER_X + w / 4, y, 1, h, colorWhite);
+		CG_FillRect(SCREEN_CENTER_X + w / 2, y, 1, h, colorWhite);
 
-	DrawLine(SCREEN_CENTER_X, SCREEN_CENTER_Y,
-		SCREEN_CENTER_X + right, SCREEN_CENTER_Y - forward, colorCyan);
+		if (vel_size < ps->speed * scale) {
+			return;
+		}
 
-	vel_size /= 5;
-	DrawLine(SCREEN_CENTER_X, SCREEN_CENTER_Y,
-		SCREEN_CENTER_X + vel_size * sin(vel_relang),
-		SCREEN_CENTER_Y - vel_size * cos(vel_relang), colorRed);
-	if (vel_size > SCREEN_HEIGHT / 2)
-		vel_size = SCREEN_HEIGHT / 2;
-	vel_size /= 2;
-	DrawLine(SCREEN_CENTER_X, SCREEN_CENTER_Y,
-		SCREEN_CENTER_X + vel_size * sin(vel_relang + per_angle),
-		SCREEN_CENTER_Y - vel_size * cos(vel_relang + per_angle), colorRed);
-	DrawLine(SCREEN_CENTER_X, SCREEN_CENTER_Y,
-		SCREEN_CENTER_X + vel_size * sin(vel_relang - per_angle),
-		SCREEN_CENTER_Y - vel_size * cos(vel_relang - per_angle), colorRed);
-	return;
+		// velocity
+		if (vel_relang > -90 && vel_relang < 90) {
+			CG_FillRect(SCREEN_CENTER_X + w * vel_relang / 180, y, 1, h, colorOrange);
+		}
+
+		// left/right perfect strafe
+		if (vel_relang > 0) {
+			ang = AngleNormalize180(vel_relang - per_angle);
+			if (ang > -90 && ang < 90) {
+				CG_FillRect(SCREEN_CENTER_X + w * ang / 180, y, 1, h, colorGreen);
+			}
+		} else {
+			ang = AngleNormalize180(vel_relang + per_angle);
+			if (ang > -90 && ang < 90) {
+				CG_FillRect(SCREEN_CENTER_X + w * ang / 180, y, 1, h, colorGreen);
+			}
+		}
+	} else if (cg_drawCGaz.integer == 2) {
+		// CGaz 2
+		vel_relang = DEG2RAD(vel_relang);
+		per_angle = DEG2RAD(per_angle);
+
+		DrawLine(SCREEN_CENTER_X, SCREEN_CENTER_Y,
+			SCREEN_CENTER_X + right, SCREEN_CENTER_Y - forward, colorCyan);
+
+		vel_size /= 5;
+		DrawLine(SCREEN_CENTER_X, SCREEN_CENTER_Y,
+			SCREEN_CENTER_X + vel_size * sin(vel_relang),
+			SCREEN_CENTER_Y - vel_size * cos(vel_relang), colorRed);
+		if (vel_size > SCREEN_HEIGHT / 2) {
+			vel_size = SCREEN_HEIGHT / 2;
+		}
+		vel_size /= 2;
+		DrawLine(SCREEN_CENTER_X, SCREEN_CENTER_Y,
+			SCREEN_CENTER_X + vel_size * sin(vel_relang + per_angle),
+			SCREEN_CENTER_Y - vel_size * cos(vel_relang + per_angle), colorRed);
+		DrawLine(SCREEN_CENTER_X, SCREEN_CENTER_Y,
+			SCREEN_CENTER_X + vel_size * sin(vel_relang - per_angle),
+			SCREEN_CENTER_Y - vel_size * cos(vel_relang - per_angle), colorRed);
+	} else if (cg_drawCGaz.integer == 3) {
+		accel_angle = atan2(-right, forward);
+		accel_angle = AngleNormalize180(ps->viewangles[YAW] + RAD2DEG(accel_angle));
+
+		CG_FillRect(SCREEN_CENTER_X - w / 2, y, 1, h, colorWhite);
+		CG_FillRect(SCREEN_CENTER_X        , y, 1, h, colorWhite);
+		CG_FillRect(SCREEN_CENTER_X + w / 2, y, 1, h, colorWhite);
+
+		if (vel_size < ps->speed * scale) {
+			return;
+		}
+
+		// first case (consider left strafe)
+		ang = AngleNormalize180(vel_angle + per_angle - accel_angle);
+		if (ang > -CGAZ3_ANG && ang < CGAZ3_ANG) {
+			// acceleration "should be on the left side" from velocity
+			if (ang < 0) {
+				VectorCopy(colorGreen, color);
+				CG_FillRect(SCREEN_CENTER_X + w * ang / (2 * CGAZ3_ANG), y, -w * ang / (2 * CGAZ3_ANG), h, color);
+			} else {
+				VectorCopy(colorRed, color);
+				CG_FillRect(SCREEN_CENTER_X, y, w * ang / (2 * CGAZ3_ANG), h, color);
+			}
+			return;
+		}
+		// second case (consider right strafe)
+		ang = AngleNormalize180(vel_angle - per_angle - accel_angle);
+		if (ang > -CGAZ3_ANG && ang < CGAZ3_ANG) {
+			// acceleration "should be on the right side" from velocity
+			if (ang > 0) {
+				VectorCopy(colorGreen, color);
+				CG_FillRect(SCREEN_CENTER_X, y, w * ang / (2 * CGAZ3_ANG), h, color);
+			} else {
+				VectorCopy(colorRed, color);
+				CG_FillRect(SCREEN_CENTER_X + w * ang / (2 * CGAZ3_ANG), y, -w * ang / (2 * CGAZ3_ANG), h, color);
+			}
+			return;
+		}
+	} else if (cg_drawCGaz.integer == 4) {
+		accel_angle = atan2(-right, forward);
+		accel_angle = AngleNormalize180(ps->viewangles[YAW] + RAD2DEG(accel_angle));
+
+		if (vel_size < ps->speed * scale) {
+			return;
+		}
+
+		VectorCopy(colorGreen, color);
+
+		// Speed direction
+		// FIXME: Shows @side of screen when going backward
+		//CG_FillRect(SCREEN_CENTER_X + w * vel_relang / 180, y+20, 1, h/2, colorCyan);
+		CG_DrawPic(SCREEN_CENTER_X + w * vel_relang / 180, y + h, 16, 16, cgs.media.CGazArrow);
+
+		// FIXME show proper outside border where you stop accelerating
+		// first case (consider left strafe)
+		ang = AngleNormalize180(vel_angle + per_angle - accel_angle);
+		if (ang < 90 && ang > -90) {
+			// acceleration "should be on the left side" from velocity
+			CG_FillRect(SCREEN_CENTER_X + w * ang / 180, y, w / 2, h, color);
+			CG_FillRect(SCREEN_CENTER_X + w * ang / 180, y, 1, h, colorGreen);
+			return;
+
+		}
+		// second case (consider right strafe)
+		ang = AngleNormalize180(vel_angle - per_angle - accel_angle);
+		if (ang < 90 && ang > -90) {
+			// acceleration "should be on the right side" from velocity
+			CG_FillRect(SCREEN_CENTER_X + w * ang / 180 - w / 2, y, w / 2, h, color);
+			CG_FillRect(SCREEN_CENTER_X + w * ang / 180, y, 1, h, colorGreen);
+			return;
+		}
+	}
 }
 
 /**

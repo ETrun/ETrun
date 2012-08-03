@@ -1848,6 +1848,9 @@ static void CG_RegisterGraphics( void ) {
 			= trap_R_RegisterShaderNoMip(va("gfx/2d/keyset%d/key_prone_not_pressed", i + 1));
 	}
 
+	// Nico, load CGaz arrow
+	cgs.media.CGazArrow = trap_R_RegisterShaderNoMip( "gfx/2d/cgaz_arrow" );
+
 	CG_LoadingString( " - game media done" );
 }
 
