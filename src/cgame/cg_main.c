@@ -1813,7 +1813,7 @@ static void CG_RegisterGraphics( void ) {
 	}
 
 	// Nico, load keysets
-	for (i = 0; i < NUM_KEYS_SETS; i++) {
+	for (i = 0; i < NUM_KEYS_SETS; ++i) {
 		cgs.media.keys[i].ForwardPressedShader
 			= trap_R_RegisterShaderNoMip(va("gfx/2d/keyset%d/key_forward_pressed", i + 1));
 		cgs.media.keys[i].ForwardNotPressedShader

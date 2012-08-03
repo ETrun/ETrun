@@ -1133,7 +1133,7 @@ typedef struct {
 #define MAX_LOCKER_DEBRIS   5
 
 // Nico, used to show pressed keys
-#define NUM_KEYS_SETS		2
+#define NUM_KEYS_SETS		3
 typedef struct {
 	qhandle_t		ForwardPressedShader;
 	qhandle_t		ForwardNotPressedShader;
