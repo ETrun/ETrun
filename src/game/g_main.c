@@ -162,6 +162,9 @@ vmCvar_t g_disableDrowning;
 // Mapscript support
 vmCvar_t g_mapScriptDirectory;
 
+// Cup mode
+vmCvar_t g_cupMode;
+
 // Nico, end of ETrun cvars
 
 cvarTable_t gameCvarTable[] = {
@@ -298,7 +301,10 @@ cvarTable_t gameCvarTable[] = {
 	{ &g_disableDrowning, "g_disableDrowning", "1", CVAR_ARCHIVE | CVAR_LATCH },
 
 	// Mapscript support
-	{ &g_mapScriptDirectory, "g_mapScriptDirectory", "custommapscripts", CVAR_ARCHIVE | CVAR_LATCH }
+	{ &g_mapScriptDirectory, "g_mapScriptDirectory", "custommapscripts", CVAR_ARCHIVE | CVAR_LATCH },
+
+	// Cup mode
+	{ &g_cupMode, "g_cupMode", "0", CVAR_ARCHIVE | CVAR_LATCH }
 
 	// Nico, end of ETrun cvars
 };

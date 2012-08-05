@@ -1548,6 +1548,9 @@ extern vmCvar_t g_disableDrowning;
 // Mapscript support
 extern vmCvar_t g_mapScriptDirectory;
 
+// Cup mode
+extern vmCvar_t g_cupMode;
+
 // Nico, end of ETrun cvars
 
 void    trap_Printf( const char *fmt );

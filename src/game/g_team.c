@@ -1500,6 +1500,12 @@ qboolean G_teamJoinCheck( int team_num, gentity_t *ent ) {
 
 // Nico, check if ew can follow a given client
 qboolean G_AllowFollow( gentity_t *ent, gentity_t *other ) {
+
+	// Nico, only referee can spec in cup mode
+	if (g_cupMode.integer != 0 && ent->client->sess.referee != RL_REFEREE) {
+		return qfalse;
+	}
+
 	return !other->client->sess.specLocked || 
 		COM_BitCheck(other->client->sess.specInvitedClients, ent - g_entities) ||
 		ent->client->sess.referee == RL_REFEREE;
