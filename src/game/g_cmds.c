@@ -93,14 +93,15 @@ void G_SendScore( gentity_t *ent ) {
 			}
 
 			// Nico, added timerun best time, timerun best speed, timerun status, followed client, login status, cgaz, speclocked status
+			// Nico, don't send time and speed while in cup mode
 			Com_sprintf( entry, sizeof( entry ), " %i %i %i %i %i %i %i %i %i %i %i %i",
 				level.sortedClients[i], 
 				ping,
 				( level.time - cl->pers.enterTime ) / 60000, 
 				g_entities[level.sortedClients[i]].s.powerups, 
 				playerClass, 
-				cl->sess.timerunBestTime[GetTimerunNum(cl->sess.currentTimerun)], 
-				cl->sess.timerunBestSpeed, 
+				g_cupMode.integer > 0 ? 0 : cl->sess.timerunBestTime[GetTimerunNum(cl->sess.currentTimerun)], 
+				g_cupMode.integer > 0 ? 0 : cl->sess.timerunBestSpeed, 
 				cl->sess.timerunActive ? 1 : 0,
 				cl->ps.clientNum,
 				cl->sess.logged ? 1 : 0,

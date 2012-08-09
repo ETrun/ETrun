@@ -920,6 +920,13 @@ void ClientThink_real( gentity_t *ent ) {
 		SetTeam(ent, "s", qtrue, -1, -1, qfalse);
 	}
 
+	// Nico, force auto demo record in cup mode
+	if (g_cupMode.integer != 0 && client->pers.autoDemo == 0) {
+		CP("cpm \"^1You were removed from teams because you must use cg_autoDemo 1.\n\"");
+		trap_SendServerCommand(ent-g_entities, "autoDemoOn");
+		SetTeam(ent, "s", qtrue, -1, -1, qfalse);
+	}
+
 	// Nico, check ping
 	if (client->sess.timerunActive && client->ps.ping > 400) {
 		CP("cpm \"^1Too high ping detected, timerun stopped.\n\"");
