@@ -70,6 +70,9 @@ void Cmd_Logout_f(gentity_t *ent) {
 	CP("cp \"You are no longer logged in!\n\"");
 	ent->client->sess.logged = qfalse;
 	ClientUserinfoChanged(ent->client->ps.clientNum);
+
+	// Notify client that he is now logged out
+	trap_SendServerCommand(ent - g_entities, "client_logout");
 }
 
 // Nico, records command

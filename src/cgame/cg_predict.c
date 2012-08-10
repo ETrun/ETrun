@@ -953,6 +953,9 @@ void CG_PredictPlayerState( void ) {
 	cg_pmove.timerunActive = cg.timerunActive;
 	cg_pmove.timerunStartTime = cg.timerunStartTime;
 
+	// Nico, store login status in pmove
+	cg_pmove.isLogged = cg.isLogged;
+
 	// run cmds
 	moved = qfalse;
 	for ( cmdNum = current - CMD_BACKUP + 1 ; cmdNum <= current ; cmdNum++ ) {

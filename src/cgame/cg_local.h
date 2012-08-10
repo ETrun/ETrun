@@ -1125,6 +1125,9 @@ typedef struct {
 	int			bannerPrintTime;
 	char		bannerPrint[1024];
 
+	// Client side login status
+	int			isLogged;
+
 	// Nico, end of ETrun client variables
 } cg_t;
 

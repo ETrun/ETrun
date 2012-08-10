@@ -191,6 +191,9 @@ static void *loginHandler(void *data) {
 			CP(va("print \"%s^w: you are now logged in!\n\"", GAME_VERSION_COLORED));
 			ClientUserinfoChanged(ent->client->ps.clientNum);
 
+			// Notify client that he is now logged in
+			trap_SendServerCommand(ent - g_entities, "client_login");
+
 			// Start recording a new temp demo.
 			trap_SendServerCommand(ent - g_entities, "tempDemoStart");
 		} else {

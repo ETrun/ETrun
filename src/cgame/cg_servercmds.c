@@ -1967,6 +1967,19 @@ static void CG_ServerCommand( void ) {
 		CG_BannerPrint(CG_LocalizeServerCommand(CG_Argv(1)));
 		return;
 	}
+	// Nico, end of banner printing
+
+	// Nico, login notifications
+	if (!Q_stricmp(cmd, "client_login")) {
+		cg.isLogged = 1;
+		return;
+	}
+
+	if (!Q_stricmp(cmd, "client_logout")) {
+		cg.isLogged = 0;
+		return;
+	}
+	// Nico, end of login notifications
 
 	CG_Printf( "Unknown client game command: %s\n", cmd );
 }
