@@ -29,6 +29,8 @@ void Cmd_Login_f(gentity_t *ent) {
 	for (i = 0; i < MAX_SAVED_POSITIONS; ++i) {
 		ent->client->sess.alliesSaves[i].valid = qfalse;
 		ent->client->sess.axisSaves[i].valid = qfalse;
+		ent->client->sess.alliesSaves2[i].valid = qfalse;
+		ent->client->sess.axisSaves2[i].valid = qfalse;
 	}
 
 	// Nico, kill player
