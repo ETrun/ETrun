@@ -99,6 +99,10 @@ static void clientBigDataPrint(gentity_t *ent, char *data) {
 	}
 }
 
+static char from_hex(char ch) {
+  return isdigit(ch) ? ch - '0' : tolower(ch) - 'A' + 10;
+}
+
 static char to_hex(char code) {
   char hex[] = "0123456789ABCDEF";
   return hex[code & 15];
@@ -118,6 +122,26 @@ void url_encode(char *str, char *dst) {
 			dst[i++] = '%';
 			dst[i++] = to_hex(*pstr >> 4);
 			dst[i] = to_hex(*pstr & 15);
+		}
+		pstr++;
+		i++;
+	}
+	dst[i] = '\0';
+}
+
+/**
+ * Function used to decode an url
+ */
+void url_decode(char *str, char *dst) {
+	char *pstr = str;
+	int i = 0;
+
+	while (*pstr) {
+		if (*pstr == '%' && pstr[1] && pstr[2]) {
+			dst[i] = from_hex(pstr[1]) << 4 | from_hex(pstr[2]);
+			pstr += 2;
+		} else {
+			dst[i] = *pstr;
 		}
 		pstr++;
 		i++;
@@ -618,7 +642,7 @@ void G_callAPI(char *command, char *result, gentity_t *ent, int count, ...) {
 	}
 
 	APILog(va("Calling API with command: %s, query: %s\n", command, queryStruct->query), qfalse);
-	G_LogPrintf(va("Calling API with command: %s, query: %s\n", command, queryStruct->query), qfalse);
+	G_LogPrintf("Calling API with command: %s, query: %s\n", command, queryStruct->query);
 
 	// Create threads as detached as they will never be joined
 	if (pthread_attr_init(&attr)) {
