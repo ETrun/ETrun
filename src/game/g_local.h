@@ -678,6 +678,9 @@ typedef struct {
 	// Nico, hideme
 	int	hideme;
 
+	// Nico, client auto demo record setting
+	int autoDemo;
+
 } clientPersistant_t;
 
 typedef struct {

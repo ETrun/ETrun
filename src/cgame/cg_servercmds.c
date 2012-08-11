@@ -1842,6 +1842,13 @@ static void CG_ServerCommand( void ) {
 		CG_AddPMItem(PM_MESSAGE, "com_maxfps has been set to 125\n", cgs.media.voiceChatShader);
 		return;
 	}
+
+	// Nico, force auto demo record
+	if (!Q_stricmp(cmd, "autoDemoOn")) {
+		trap_SendConsoleCommand("set cg_autoDemo 1\n");
+		CG_AddPMItem(PM_MESSAGE, "cg_autoDemo has been set to 1\n", cgs.media.voiceChatShader);
+		return;
+	}
 	
 	// Nico, timer start/stop/check related
 

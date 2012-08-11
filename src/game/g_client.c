@@ -1022,7 +1022,7 @@ void ClientUserinfoChanged( int clientNum ) {
 	Q_strncpyz(oldAuthToken, client->pers.authToken, sizeof (oldAuthToken));
 
 	s = Info_ValueForKey( userinfo, "cg_uinfo" );
-	sscanf( s, "%i %i %i %i %s %i %i %i %i",
+	sscanf( s, "%i %i %i %i %s %i %i %i %i %i",
 			&client->pers.clientFlags,
 			&client->pers.clientTimeNudge,
 			&client->pers.clientMaxPackets,
@@ -1043,7 +1043,10 @@ void ClientUserinfoChanged( int clientNum ) {
 			&client->pers.cgaz,
 
 			// Nico, hideme
-			&client->pers.hideme
+			&client->pers.hideme,
+
+			// Nico, client auto demo record setting
+			&client->pers.autoDemo
 
 			);
 
