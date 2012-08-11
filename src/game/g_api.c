@@ -326,7 +326,7 @@ static void *recordHandler(void *data) {
 
 	APILog(va("Record: code = %d, result = %s\n", code, queryStruct->result), qfalse);
 
-	timerunNum = GetTimerunNum(ent->client->sess.currentTimerun);
+	timerunNum = ent->client->sess.currentTimerunNum;
 
 	switch (code) {
 	case 1001: // PB

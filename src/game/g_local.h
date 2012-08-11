@@ -547,17 +547,23 @@ typedef struct {
 	int			timerunBestCheckpointTimes[MAX_TIMERUNS][MAX_TIMERUN_CHECKPOINTS];
 	int			timerunCheckpointWereLoaded[MAX_TIMERUNS];
 
-	int			timerunBestSpeed;
+	int			timerunBestSpeed[MAX_TIMERUNS];// Best speed made with timerunBestTime
 
 	qboolean	timerunActive;
 	int			timerunStartTime;	// absolute start time
 	int			timerunCheckpointTimes[MAX_TIMERUN_CHECKPOINTS];
 	int			timerunCheckpointsPassed;
-	char		*currentTimerun;
+	char		*currentTimerun;// current timerun name
+	int			currentTimerunNum;// current timerun num
 
-	// Speed related
+	// Speed values of the current run
 	float		startSpeed;
 	float		stopSpeed;
+	int			maxSpeed;
+
+	// Overall max speed for the session
+	int			overallMaxSpeed;
+
 	// Nico, end of client session timerun related
 
 	// Nico, flood protection

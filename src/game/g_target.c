@@ -1215,7 +1215,7 @@ static void notify_timerun_start(gentity_t *activator) {
 	gentity_t *o = NULL;
 	int timerunNum = 0;
 
-	timerunNum = GetTimerunNum(activator->client->sess.currentTimerun);
+	timerunNum = activator->client->sess.currentTimerunNum;
 
 	// Nico, notify the client itself first
 	G_DPrintf("notify_timerun_start(%d)\n", activator->client->ps.clientNum);
@@ -1276,10 +1276,11 @@ void target_starttimer_use(gentity_t *self, gentity_t *other, gentity_t *activat
 	}
 	
 	client->sess.currentTimerun = self->timerunName;
+	client->sess.currentTimerunNum = GetTimerunNum(activator->client->sess.currentTimerun);
 
 	// get the time
 	client->sess.timerunStartTime = client->ps.commandTime;
-	client->sess.startSpeed = sqrt(client->ps.velocity[0]*client->ps.velocity[0] + client->ps.velocity[1]*client->ps.velocity[1]);
+	client->sess.startSpeed = (int)sqrt(client->ps.velocity[0]*client->ps.velocity[0] + client->ps.velocity[1]*client->ps.velocity[1]);
 	client->sess.timerunActive = qtrue;
 
 	// Nico, notify timerun_start event to client and to its spectators
@@ -1288,6 +1289,9 @@ void target_starttimer_use(gentity_t *self, gentity_t *other, gentity_t *activat
 	// reset checkpoints
 	memset(client->sess.timerunCheckpointTimes, 0, sizeof (client->sess.timerunCheckpointTimes));
 	client->sess.timerunCheckpointsPassed = 0;
+
+	// Nico, reset max speed of the run
+	client->sess.maxSpeed = 0;
 
 	// Nico, reset saves if physics is VET
 	if (physics.integer == PHYSICS_MODE_VET) {
@@ -1340,7 +1344,7 @@ void notify_timerun_stop(gentity_t *activator, int finishTime) {
 		return;
 	}
 
-	timerunNum = GetTimerunNum(activator->client->sess.currentTimerun);
+	timerunNum = activator->client->sess.currentTimerunNum;
 
 	// Nico, notify the client itself first
 	trap_SendServerCommand(activator - g_entities, va("timerun_stop %i %i", timerunNum, finishTime));
@@ -1432,7 +1436,7 @@ void target_stoptimer_use(gentity_t *self, gentity_t *other, gentity_t *activato
 		return;
 	}
 
-	timerunNum = GetTimerunNum(client->sess.currentTimerun);
+	timerunNum = client->sess.currentTimerunNum;
 
 	// required number of checkpoints passed?
 	if (client->sess.timerunCheckpointsPassed < self->count) {
@@ -1458,6 +1462,9 @@ void target_stoptimer_use(gentity_t *self, gentity_t *other, gentity_t *activato
 		if (client->sess.logged) {
 			client->sess.timerunBestTime[timerunNum] = time;
 
+			// Nico, update best speed of run
+			client->sess.timerunBestSpeed[timerunNum] = client->sess.maxSpeed;
+
 			// Nico, set score so that xfire can see it
 			client->ps.persistant[PERS_SCORE] = client->sess.timerunLastTime[timerunNum];
 		}
@@ -1476,12 +1483,12 @@ void target_stoptimer_use(gentity_t *self, gentity_t *other, gentity_t *activato
 	dmilli -= dsec * 1000;
 
 	// Nico, stop speed
-	client->sess.stopSpeed = sqrt(client->ps.velocity[0] * client->ps.velocity[0] + client->ps.velocity[1] * client->ps.velocity[1]);
+	client->sess.stopSpeed = (int)sqrt(client->ps.velocity[0] * client->ps.velocity[0] + client->ps.velocity[1] * client->ps.velocity[1]);
 
 	// Nico, send record if needed
 	if (g_useAPI.integer && client->sess.logged) {
 		Cmd_SendRecord_f(activator, client->sess.currentTimerun, client->pers.authToken, 
-			time, (int)client->sess.startSpeed, (int)client->sess.stopSpeed, (int)client->sess.timerunBestSpeed);
+			time, client->sess.startSpeed, client->sess.stopSpeed, client->sess.maxSpeed);
 	}
 
 	// Save run after replacing spaces in run name (in any) by underscores
@@ -1611,7 +1618,7 @@ void target_checkpoint_use(gentity_t *self, gentity_t *other, gentity_t *activat
 		return;
 	}
 
-	timerunNum = GetTimerunNum(client->sess.currentTimerun);
+	timerunNum = client->sess.currentTimerunNum;
 
 	// Nico, test if the checkpoint was already used
 	if (client->sess.timerunCheckpointTimes[self->count]) {
