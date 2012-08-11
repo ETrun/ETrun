@@ -488,7 +488,9 @@ void SP_trigger_hurt( gentity_t *self ) {
 
 	InitTrigger( self );
 
-	G_SpawnString( "sound", "sound/player/hurt_barbwire.wav", &sound );
+	// Nico, new sound
+	// G_SpawnString( "sound", "sound/player/hurt_barbwire.wav", &sound );
+	G_SpawnString( "sound", "sound/weapons/grenade/gren_throw.wav", &sound );
 
 	self->noise_index = G_SoundIndex( sound );
 

@@ -1493,7 +1493,7 @@ typedef struct {
 	qhandle_t fireteamicons[6];
 
 	// Nico, used to show pressed keys
-	keys_set_t		keys[NUM_KEYS_SETS];
+	keys_set_t keys[NUM_KEYS_SETS];
 
 	// Nico, CGaz arrow
 	qhandle_t CGazArrow;
