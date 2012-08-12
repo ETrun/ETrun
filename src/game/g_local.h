@@ -1172,6 +1172,8 @@ void G_SetEntState( gentity_t *ent, entState_t state );
 
 team_t G_GetTeamFromEntity( gentity_t *ent );
 void strtolower(char *in, char *out, int size);
+void my_sleep(unsigned milliseconds);
+
 
 //
 // g_combat.c
@@ -1437,6 +1439,9 @@ int GetTimerunNum(char *name);
 void notify_timerun_stop(gentity_t *activator, int finishTime);
 
 #include "g_team.h" // teamplay specific stuff
+
+// Nico, active threads counter
+extern int activeThreadsCounter;
 
 extern level_locals_t level;
 extern gentity_t g_entities[];          //DAJ was explicit set to MAX_ENTITIES

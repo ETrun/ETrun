@@ -230,6 +230,10 @@ static void *loginHandler(void *data) {
 	free(queryStruct->result);
 	free(queryStruct);
 
+	// Decrease global active thread counter
+	activeThreadsCounter--;
+	G_Printf("Decreasing threads counter to %d\n", activeThreadsCounter);
+
 	return NULL;
 }
 
@@ -269,6 +273,10 @@ static void *mapRecordsHandler(void *data) {
 
 	free(queryStruct->result);
 	free(queryStruct);
+
+	// Decrease global active thread counter
+	activeThreadsCounter--;
+	G_Printf("Decreasing threads counter to %d\n", activeThreadsCounter);
 
 	return NULL;
 }
@@ -315,6 +323,10 @@ static void *checkAPIHandler(void *data) {
 
 	free(queryStruct->result);
 	free(queryStruct);
+
+	// Decrease global active thread counter
+	activeThreadsCounter--;
+	G_Printf("Decreasing threads counter to %d\n", activeThreadsCounter);
 
 	return NULL;
 }
@@ -393,6 +405,10 @@ static void *recordHandler(void *data) {
 	free(queryStruct->result);
 	free(queryStruct);
 
+	// Decrease global active thread counter
+	activeThreadsCounter--;
+	G_Printf("Decreasing threads counter to %d\n", activeThreadsCounter);
+
 	return NULL;
 }
 
@@ -466,6 +482,10 @@ static void *checkpointsHandler(void *data) {
 	free(queryStruct->result);
 	free(queryStruct);
 
+	// Decrease global active thread counter
+	activeThreadsCounter--;
+	G_Printf("Decreasing threads counter to %d\n", activeThreadsCounter);
+
 	return NULL;
 }
 
@@ -528,6 +548,10 @@ static void *randommapHandler(void *data) {
 
 	free(queryStruct->result);
 	free(queryStruct);
+
+	// Decrease global active thread counter
+	activeThreadsCounter--;
+	G_Printf("Decreasing threads counter to %d\n", activeThreadsCounter);
 
 	return NULL;
 }
@@ -656,6 +680,10 @@ void G_callAPI(char *command, char *result, gentity_t *ent, int count, ...) {
 
 	if (returnCode) {
 		G_Error("G_callAPI: error in pthread_create: %d\n", returnCode);
+	} else {
+		// Nico, increase active threads counter
+		activeThreadsCounter++;
+		G_Printf("Increasing threads counter to %d\n", activeThreadsCounter);
 	}
 
 	if (pthread_attr_destroy(&attr)) {

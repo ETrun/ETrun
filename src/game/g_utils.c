@@ -1173,3 +1173,19 @@ void strtolower(char *in, char *out, int size) {
 		out[i] = tolower(in[i]);
 	}
 }
+
+// Nico, wait functions
+#ifdef _WIN32
+#include <windows.h>
+
+void my_sleep(unsigned milliseconds)
+{
+    Sleep(milliseconds);
+}
+#else
+#include <unistd.h>
+void my_sleep(unsigned milliseconds)
+{
+    usleep(milliseconds * 1000); // takes microseconds
+}
+#endif

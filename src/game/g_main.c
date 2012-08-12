@@ -29,6 +29,9 @@ If you have questions concerning this license or the applicable additional terms
 #include "g_local.h"
 #include "g_api.h"
 
+// Nico, active threads counter
+int activeThreadsCounter;
+
 level_locals_t level;
 
 typedef struct {
@@ -1434,6 +1437,9 @@ void G_InitGame( int levelTime, int randomSeed, int restart ) {
 	// Match init work
 	G_loadMatchGame();
 
+	// Nico, init global active threads counter
+	activeThreadsCounter = 0;
+
 	// Nico, flood protection
 	if (g_floodProtect.integer) {
 		if (trap_Cvar_VariableIntegerValue("sv_floodprotect")) {
@@ -1464,7 +1470,21 @@ G_ShutdownGame
 =================
 */
 void G_ShutdownGame( int restart ) {
+	int count = 0;
+	int limit = 10;// Nico, in seconds
+
 	G_Printf( "==== ShutdownGame ====\n" );
+
+	// Nico, do we have to wait for some threads to finish their work?
+	while (activeThreadsCounter > 0 && count < limit) {
+		G_Printf("Waiting for %d thread(s)\n", activeThreadsCounter);
+		my_sleep(1000); // Nico, sleep for 1sec
+		count++;
+	}
+
+	if (count >= limit) {
+		G_Printf("Warning: G_ShutdownGame: threads waiting timeout reached (threads: %d)", activeThreadsCounter);
+	}
 
 	if ( level.logFile ) {
 		G_LogPrintf( "ShutdownGame:\n" );
