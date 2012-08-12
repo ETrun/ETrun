@@ -32,6 +32,10 @@ If you have questions concerning this license or the applicable additional terms
 // Nico, active threads counter
 int activeThreadsCounter;
 
+// Nico, global threads
+#define DELAYED_MAP_CHANGE_THREAD_ID 0
+pthread_t globalThreads[4];
+
 level_locals_t level;
 
 typedef struct {
@@ -1460,6 +1464,9 @@ void G_InitGame( int levelTime, int randomSeed, int restart ) {
 	if (g_useAPI.integer) {
 		G_loadAPI();
 	}
+
+	// Nico, enabled delayed map change watcher
+	G_enable_delayed_map_change_watcher();
 }
 
 
@@ -1470,21 +1477,10 @@ G_ShutdownGame
 =================
 */
 void G_ShutdownGame( int restart ) {
-	int count = 0;
-	int limit = 10;// Nico, in seconds
-
 	G_Printf( "==== ShutdownGame ====\n" );
 
-	// Nico, do we have to wait for some threads to finish their work?
-	while (activeThreadsCounter > 0 && count < limit) {
-		G_Printf("Waiting for %d thread(s)\n", activeThreadsCounter);
-		my_sleep(1000); // Nico, sleep for 1sec
-		count++;
-	}
-
-	if (count >= limit) {
-		G_Printf("Warning: G_ShutdownGame: threads waiting timeout reached (threads: %d)", activeThreadsCounter);
-	}
+	// Nico, disable delayed map change watcher
+	G_disable_delayed_map_change_watcher();
 
 	if ( level.logFile ) {
 		G_LogPrintf( "ShutdownGame:\n" );
@@ -1493,7 +1489,7 @@ void G_ShutdownGame( int restart ) {
 		level.logFile = 0;
 	}
 
-	// Nico, close AOI log
+	// Nico, close API log
 	if (level.APILog) {
 		trap_FS_FCloseFile(level.APILog);
 		level.APILog = 0;
@@ -2370,11 +2366,35 @@ void G_RunFrame( int levelTime ) {
 	// cancel vote if timed out
 	CheckVote();
 
-	// Nico, check for delayed map change
-	G_check_delayed_map_change();
-
 	// for tracking changes
 	CheckCvars();
 
 	G_UpdateTeamMapData();
+}
+
+// Nico, delayed map change watcher helper functions
+void G_enable_delayed_map_change_watcher() {
+	int rc = 0;
+	pthread_attr_t attr;
+
+	// Create threads as detached as they will never be joined
+	if (pthread_attr_init(&attr)) {
+		G_Error("G_callAPI: error in pthread_attr_init\n");
+	}
+	if (pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED)) {
+		G_Error("G_callAPI: error in pthread_attr_setdetachstate\n");
+	}
+
+	rc = pthread_create(&globalThreads[DELAYED_MAP_CHANGE_THREAD_ID], &attr, G_delayed_map_change_watcher, NULL);
+	if (rc) {
+		G_Error("G_enable_delayed_map_change_watcher: error in pthread_create: %d\n", rc);
+    }
+
+	if (pthread_attr_destroy(&attr)) {
+		G_Error("G_enable_delayed_map_change_watcher: error in pthread_attr_destroy\n");
+	}
+}
+
+void G_disable_delayed_map_change_watcher() {
+	pthread_cancel(globalThreads[DELAYED_MAP_CHANGE_THREAD_ID]);
 }

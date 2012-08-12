@@ -33,6 +33,7 @@ If you have questions concerning this license or the applicable additional terms
 #include "q_shared.h"
 #include "bg_public.h"
 #include "g_public.h"
+#include <pthread.h>
 
 //==================================================================
 
@@ -900,7 +901,6 @@ typedef struct {
 	char spawnVarChars[MAX_SPAWN_VARS_CHARS];
 
 	char *changemap;
-	int exitTime;
 
 	// Nico, note: keep these 2 vars
 	vec3_t intermission_origin;         // also used for spectator spawns
@@ -918,8 +918,6 @@ typedef struct {
 
 	// player/AI model scripting (server repository)
 	animScriptData_t animScriptData;
-
-	qboolean lastRestartTime;
 
 	int numFinalDead[2];                // DHM - Nerve :: unable to respawn and in limbo (per team)
 	int numOidTriggers;                 // DHM - Nerve
@@ -950,9 +948,6 @@ typedef struct {
 	brushmodelInfo_t brushModelInfo[128];
 	int numBrushModels;
 	gentity_t   *gameManager;
-
-	// record last time we loaded, so we can hack around sighting issues on reload
-	int lastLoadTime;
 
 	qboolean doorAllowTeams;    // used by bots to decide whether or not to use team travel flags
 
@@ -1361,6 +1356,8 @@ void QDECL G_Printf( const char *fmt, ... ) _attribute( ( format( printf,1,2 ) )
 void QDECL G_DPrintf( const char *fmt, ... ) _attribute( ( format( printf,1,2 ) ) );
 void QDECL G_Error( const char *fmt, ... ) _attribute( ( format( printf,1,2 ) ) );
 void G_ShutdownGame( int restart );
+void G_enable_delayed_map_change_watcher();
+void G_disable_delayed_map_change_watcher();
 
 //
 // g_client.c
@@ -1442,6 +1439,9 @@ void notify_timerun_stop(gentity_t *activator, int finishTime);
 
 // Nico, active threads counter
 extern int activeThreadsCounter;
+
+// Nico, global threads
+extern pthread_t globalThreads[];
 
 extern level_locals_t level;
 extern gentity_t g_entities[];          //DAJ was explicit set to MAX_ENTITIES
@@ -1894,7 +1894,7 @@ int G_Kick_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, q
 int G_Mute_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd );
 int G_UnMute_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd );
 void G_delay_map_change(char *mapName);// Nico, function to delay a map change
-void G_check_delayed_map_change();// Nico, delayed map change function
+void *G_delayed_map_change_watcher(void *arg);// Nico, thread used to check map changes
 int G_Map_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd );
 int G_MapRestart_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd );
 int G_MatchReset_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd );

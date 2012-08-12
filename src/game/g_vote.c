@@ -412,21 +412,40 @@ void G_delay_map_change(char *mapName) {
 	level.delayedMapChange.pendingChange = qtrue;
 }
 
-// Nico, delayed map change check function
-void G_check_delayed_map_change() {
-	if (level.time && level.delayedMapChange.timeChange && level.time <= level.delayedMapChange.timeChange) {
-		// There is a delayed change
+// Nico, delayed map change check function (thread)
+void *G_delayed_map_change_watcher(void *arg) {
+	int count = 0;
+	int limit = 10;// Nico, in seconds
 
-		// Print remaining time each sec
-		if ((level.delayedMapChange.timeChange - level.time) % 1000 == 0) {
-			G_DPrintf("Map change in: %d secs\n", (level.delayedMapChange.timeChange - level.time) / 1000);
-		}
+	while (1) {
+		if (level.time && level.delayedMapChange.timeChange) {
+			// There is a delayed change
 
-		if (level.time == level.delayedMapChange.timeChange) {
-			// Nico, useless: level.delayedMapChange.pendingChange = qfalse;
-			Svcmd_ResetMatch_f( qtrue, qfalse );
-			trap_SendConsoleCommand( EXEC_APPEND, va( "map %s\n", level.delayedMapChange.passedVote ) );
+			if (level.time >= level.delayedMapChange.timeChange) {
+				// Nico, useless: level.delayedMapChange.pendingChange = qfalse;
+
+				// Nico, do we have to wait for some threads to finish their work?
+				while (activeThreadsCounter > 0 && count < limit) {
+					G_DPrintf("Waiting for %d thread(s) before changing map\n", activeThreadsCounter);
+					my_sleep(1000); // Nico, sleep for 1sec
+					count++;
+				}
+
+				if (count >= limit) {
+					G_Error("Warning: threads waiting timeout reached (threads: %d)", activeThreadsCounter);
+				}
+				G_DPrintf("Changing map now!\n");
+				Svcmd_ResetMatch_f( qtrue, qfalse );
+				trap_SendConsoleCommand( EXEC_APPEND, va( "map %s\n", level.delayedMapChange.passedVote ) );
+
+				pthread_exit(NULL);
+				return NULL;
+			} else {
+				// Print remaining time each sec
+				G_DPrintf("Map change in: %d msecs\n", level.delayedMapChange.timeChange - level.time);
+			}
 		}
+		my_sleep(1000);
 	}
 }
 

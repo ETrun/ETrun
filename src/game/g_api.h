@@ -1,8 +1,6 @@
 #ifndef G_API_H_
 # define G_API_H_
 
-# include <pthread.h>
-
 # define API_INTERFACE_NAME "API_query"
 # define API_INIT_NAME "API_init"
 # define API_CLEAN_NAME "API_clean"
