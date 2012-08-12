@@ -29,5 +29,9 @@ cp -f $pk3_name "$basepath/$mod_name"
 rm -f $pk3_name
 cp -rf _build/$qagame_name "$basepath/$mod_name"
 cp -rf _build/$apimodule_name "$basepath/$mod_name"
+
+mkdir "$basepath/$mod_name/custommapscripts"
+cp -rf etrun/custommapscripts/* "$basepath/$mod_name/custommapscripts/"
+
 read -p "Press ENTER to start game..."
 "$path_to_game_exec" +set fs_game $mod_name +set dedicated 2 +map goldrush +set g_useAPI 1 +set g_APImodulePath "$path_to_api"
