@@ -1441,6 +1441,11 @@ void G_InitGame( int levelTime, int randomSeed, int restart ) {
 	// Match init work
 	G_loadMatchGame();
 
+	// Nico, load pthread (win32 ony)
+	#if defined _WIN32
+		pthread_win32_process_attach_np();
+	#endif
+
 	// Nico, init global active threads counter
 	activeThreadsCounter = 0;
 
@@ -1499,6 +1504,11 @@ void G_ShutdownGame( int restart ) {
 	if (g_useAPI.integer) {
 		G_unloadAPI();
 	}
+
+	// Nico, unload pthread (win32 ony)
+	#if defined _WIN32
+		pthread_win32_process_detach_np();
+	#endif
 
 	// write all the client session data so we can get it back
 	G_WriteSessionData( restart );

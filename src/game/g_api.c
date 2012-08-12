@@ -695,17 +695,6 @@ void G_callAPI(char *command, char *result, gentity_t *ent, int count, ...) {
 	}
 }
 
-#if defined _WIN32
-static void pthread_load() {
-	pthread_win32_process_attach_np();
-}
-
-static void pthread_unload() {
-	pthread_win32_process_detach_np();
-}
-#endif
-
-
 void G_loadAPI() {
 
 	// Load the module
@@ -724,10 +713,6 @@ void G_loadAPI() {
 		G_Error("Error calling API_init()");
 	}
 
-#if defined _WIN32
-	pthread_load();
-#endif
-
 	G_Printf("ETrun: API module loaded!\n");
 }
 
@@ -740,7 +725,6 @@ void G_unloadAPI() {
 
 #if defined _WIN32
 	FreeLibrary(api_module);
-	pthread_unload();
 #else
 	dlclose(api_module);
 #endif
