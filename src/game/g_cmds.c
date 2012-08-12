@@ -1327,6 +1327,7 @@ qboolean Cmd_CallVote_f( gentity_t *ent, unsigned int dwCommand, qboolean fRefCo
 	int i;
 	char arg1[MAX_STRING_TOKENS];
 	char arg2[MAX_STRING_TOKENS];
+	int waitTime = 0;
 
 	// Normal checks, if its not being issued as a referee command
 	// Nico, moved 'callvote' command erros from popup messages to center print and console
@@ -1371,6 +1372,13 @@ qboolean Cmd_CallVote_f( gentity_t *ent, unsigned int dwCommand, qboolean fRefCo
 		// Check if there is a pending map vote
 		if (level.delayedMapChange.pendingChange) {
 			CP("print \"^1Callvote:^7 there is a pending map change.\n\"");
+			return qfalse;
+		}
+
+		// Check level has started more than 10 secs ago
+		waitTime = 10 - (level.time - level.startTime) / 1000;
+		if (waitTime > 0) {
+			CP(va("print \"^1Callvote:^7 please wait %d sec%s before voting.\n\"", waitTime, waitTime > 1 ? "s" : ""));
 			return qfalse;
 		}
 
