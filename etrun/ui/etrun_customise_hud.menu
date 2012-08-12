@@ -42,7 +42,7 @@ menuDef {
 	CVARFLOATLABEL( 8, 78, (SUBWINDOW_WIDTH)-4, 10, "cg_speedMeterY", .2, ITEM_ALIGN_RIGHT, $evalfloat((SUBWINDOW_WIDTH)-4), 8 )
 
 	SUBWINDOW( 6, 96, (SUBWINDOW_WIDTH), 30, "CGaz" )
-	YESNO( 8, 112, (SUBWINDOW_WIDTH)-4, 10, "Show CGaz:", .2, 8, "cg_drawCGaz", "" )
+	MULTI( 8, 112, (SUBWINDOW_WIDTH)-4, 10, "Show CGaz:", .2, 8, "cg_drawCGaz", cvarFloatList { "No" 0 "Type 1" 1 "Type 2" 2 "Type 3" 3 "Type 4" 4}, "Show CGaz on HUD" )
 
 	SUBWINDOW( 6, 130, (SUBWINDOW_WIDTH), 60, "Timer" )
 	YESNO( 8, 146, (SUBWINDOW_WIDTH)-4, 10, "Show timer:", .2, 8, "cg_drawTimer", "" )
@@ -63,7 +63,7 @@ menuDef {
 	YESNO( 8, 296, (SUBWINDOW_WIDTH)-4, 10, "Show overbounce detector:", .2, 8, "cg_drawOB", "" )
 
 	SUBWINDOW( 6, 318, (SUBWINDOW_WIDTH), 80, "Pressed keys" )
-	MULTI( 8, 334, (SUBWINDOW_WIDTH)-4, 10, "Show pressed keys:", .2, 8, "cg_drawKeys", cvarFloatList { "No" 0 "Type 1" 1 "Type 2" 2 }, "Show pressed keys" )
+	MULTI( 8, 334, (SUBWINDOW_WIDTH)-4, 10, "Show pressed keys:", .2, 8, "cg_drawKeys", cvarFloatList { "No" 0 "Type 1" 1 "Type 2" 2 "Type 3" 3}, "Show pressed keys" )
 	SLIDER( 8, 350, (SUBWINDOW_WIDTH)-4, 10, "Keys X-position:", .2, 8, "cg_keysX" 550 0 640, "Use the slider to move keys" )
 	CVARFLOATLABEL( 8, 350, (SUBWINDOW_WIDTH)-4, 10, "cg_keysX", .2, ITEM_ALIGN_RIGHT, $evalfloat((SUBWINDOW_WIDTH)-4), 8 )
 	SLIDER( 8, 366, (SUBWINDOW_WIDTH)-4, 10, "Keys Y-position:", .2, 8, "cg_keysY" 300 0 480, "Use the slider to move keys" )
