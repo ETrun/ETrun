@@ -1341,6 +1341,9 @@ qboolean Cmd_CallVote_f( gentity_t *ent, unsigned int dwCommand, qboolean fRefCo
 			if ( voteFlags.integer == VOTING_DISABLED ) {
 				G_printFull("Voting not enabled on this server.", ent);
 				return qfalse;
+			} else if (g_cupMode.integer != 0) {// Nico, disable voting in cup mode
+				G_printFull("Voting is disabled in cup mode.", ent);
+				return qfalse;
 			} else if ( vote_limit.integer > 0 && ent->client->pers.voteCount >= vote_limit.integer ) {
 				G_printFull(va("You have already called the maximum number of votes (%d).", vote_limit.integer), ent);
 				return qfalse;
