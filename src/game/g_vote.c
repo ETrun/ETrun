@@ -412,15 +412,6 @@ void G_delay_map_change(char *mapName) {
 	level.delayedMapChange.pendingChange = qtrue;
 }
 
-// Nico, is server restarting?
-static qboolean G_Is_SV_Restarting( void ) {
-
-	char cvar[MAX_TOKEN_CHARS];
-
-	trap_Cvar_VariableStringBuffer( "sv_serverRestarting", cvar, sizeof( cvar ) );
-	return (qboolean)atoi( cvar );
-}
-
 // Nico, delayed map change check function (thread)
 void *G_delayed_map_change_watcher(void *arg) {
 	int count = 0;
