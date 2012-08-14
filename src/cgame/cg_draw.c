@@ -2513,6 +2513,8 @@ void CG_DrawDemoRecording( void ) {
 	char status[1024];
 	char demostatus[128];
 	char wavestatus[128];
+	vec4_t clrUiWhite = { 1.0f, 1.0f, 1.0f, 0.8f };
+	vec4_t clrUiRed = { 1.0f, 0.0f, 0.0f, 0.8f };
 
 	if ( !cl_demorecording.integer && !cl_waverecording.integer ) {
 		return;
@@ -2534,9 +2536,10 @@ void CG_DrawDemoRecording( void ) {
 		strncpy( wavestatus, "", sizeof( wavestatus ) );
 	}
 
-	Com_sprintf( status, sizeof( status ), "RECORDING%s%s", demostatus, wavestatus );
+	Com_sprintf( status, sizeof( status ), "recording%s%s", demostatus, wavestatus );
 
-	CG_Text_Paint_Ext( 5, cg_recording_statusline.integer, 0.2f, 0.2f, colorWhite, status, 0, 0, 0, &cgs.media.limboFont2 );
+	CG_Text_Paint_Ext( 0, cg_recording_statusline.integer, 0.5f, 0.5f, clrUiRed, ".", 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont2 );
+	CG_Text_Paint_Ext( 14, cg_recording_statusline.integer, 0.15f, 0.15f, clrUiWhite, status, 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont2 );
 }
 
 /*
