@@ -569,18 +569,6 @@ void Svcmd_ForceTeam_f( void ) {
 }
 
 /*
-Nico, commented this because it's no longer used
-============
-Svcmd_StartMatch_f
-
-NERVE - SMF - starts match if in tournament mode
-============
-
-void Svcmd_StartMatch_f( void ) {
-	G_refAllReady_cmd( NULL );
-}*/
-
-/*
 ==================
 Svcmd_ResetMatch_f
 

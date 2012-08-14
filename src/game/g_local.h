@@ -848,6 +848,7 @@ typedef struct delayedMapChange_s {
 	char passedVote[VOTE_MAXSTRING];
 	int	timeChange;
 	qboolean pendingChange;
+	qboolean disabledWatcher;
 } delayedMapChange_t;
 
 typedef struct {

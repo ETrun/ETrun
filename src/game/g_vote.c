@@ -412,12 +412,21 @@ void G_delay_map_change(char *mapName) {
 	level.delayedMapChange.pendingChange = qtrue;
 }
 
+// Nico, is server restarting?
+static qboolean G_Is_SV_Restarting( void ) {
+
+	char cvar[MAX_TOKEN_CHARS];
+
+	trap_Cvar_VariableStringBuffer( "sv_serverRestarting", cvar, sizeof( cvar ) );
+	return (qboolean)atoi( cvar );
+}
+
 // Nico, delayed map change check function (thread)
 void *G_delayed_map_change_watcher(void *arg) {
 	int count = 0;
 	int limit = 10;// Nico, in seconds
 
-	while (1) {
+	while (!level.delayedMapChange.disabledWatcher) {
 		if (level.time && level.delayedMapChange.timeChange) {
 			// There is a delayed change
 
@@ -437,16 +446,15 @@ void *G_delayed_map_change_watcher(void *arg) {
 				G_DPrintf("Changing map now!\n");
 				Svcmd_ResetMatch_f( qtrue, qfalse );
 				trap_SendConsoleCommand( EXEC_APPEND, va( "map %s\n", level.delayedMapChange.passedVote ) );
-
-				pthread_exit(NULL);
-				return NULL;
+				break;
 			} else {
 				// Print remaining time each sec
 				G_DPrintf("Map change in: %d msecs\n", level.delayedMapChange.timeChange - level.time);
 			}
 		}
-		my_sleep(1000);
+		my_sleep(500);
 	}
+	return NULL;
 }
 
 // *** Map - simpleton: we dont verify map is allowed/exists ***

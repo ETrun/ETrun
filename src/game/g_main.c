@@ -1249,6 +1249,13 @@ void G_InitGame( int levelTime, int randomSeed, int restart ) {
 
 	srand( randomSeed );
 
+	// Nico, load pthread (win32 ony)
+	#if defined _WIN32
+		if (pthread_win32_process_attach_np() != TRUE) {
+			G_Error("G_InitGame: failed to load pthread library!\n");
+		}
+	#endif
+
 	//bani - make sure pak2.pk3 gets referenced on server so pure checks pass
 	trap_FS_FOpenFile( "pak2.dat", &i, FS_READ );
 	trap_FS_FCloseFile( i );
@@ -1441,11 +1448,6 @@ void G_InitGame( int levelTime, int randomSeed, int restart ) {
 	// Match init work
 	G_loadMatchGame();
 
-	// Nico, load pthread (win32 ony)
-	#if defined _WIN32
-		pthread_win32_process_attach_np();
-	#endif
-
 	// Nico, init global active threads counter
 	activeThreadsCounter = 0;
 
@@ -1505,13 +1507,14 @@ void G_ShutdownGame( int restart ) {
 		G_unloadAPI();
 	}
 
+	// write all the client session data so we can get it back
+	G_WriteSessionData( restart );
+
 	// Nico, unload pthread (win32 ony)
 	#if defined _WIN32
 		pthread_win32_process_detach_np();
+		pthread_win32_thread_detach_np();
 	#endif
-
-	// write all the client session data so we can get it back
-	G_WriteSessionData( restart );
 }
 
 
@@ -2387,7 +2390,7 @@ void G_enable_delayed_map_change_watcher() {
 	int rc = 0;
 	pthread_attr_t attr;
 
-	// Create threads as detached as they will never be joined
+	// Create threads as detached
 	if (pthread_attr_init(&attr)) {
 		G_Error("G_callAPI: error in pthread_attr_init\n");
 	}
@@ -2406,5 +2409,8 @@ void G_enable_delayed_map_change_watcher() {
 }
 
 void G_disable_delayed_map_change_watcher() {
-	pthread_cancel(globalThreads[DELAYED_MAP_CHANGE_THREAD_ID]);
+	level.delayedMapChange.disabledWatcher = qtrue;
+
+	G_DPrintf("Waiting for delayed map change watcher to end...\n");
+	my_sleep(1000);
 }
