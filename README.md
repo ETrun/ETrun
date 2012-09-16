@@ -36,6 +36,7 @@ On Linux, make sure you have the following packages installed:
 * autoconf
 * automake
 * libtool
+* libcurl dev packages
 
 Then, run the bootstrap script:
 
@@ -52,8 +53,8 @@ On Linux, not supported.
 
 Windows server module requires [Microsoft Visual C++ 2010 Redistributable Package](http://www.microsoft.com/en-us/download/details.aspx?id=5555) to run properly.
 
-Compiling for Linux
--------------------
+Compiling for Linux (32-bit)
+----------------------------
 
 On Windows: not supported.
 
