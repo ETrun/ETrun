@@ -1,11 +1,10 @@
 //Braundorf b3 script
 //Written (with sections copied and pasted from other scripts) by Brevik
 
-
 game_manager
 {
 	spawn 
-  {
+    {
 		// Runs
 
 		///////////////////////////////////////
