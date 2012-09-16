@@ -325,6 +325,12 @@ vmCvar_t cg_hideMe;
 // Auto demo
 vmCvar_t cg_autoDemo;
 
+// Popups
+vmCvar_t cg_numPopups;
+vmCvar_t cg_popupTime;
+vmCvar_t cg_popupStayTime;
+vmCvar_t cg_popupFadeTime;
+
 // Nico, end of ETrun cvars
 
 typedef struct {
@@ -582,6 +588,12 @@ cvarTable_t cvarTable[] = {
 
 	// Auto demo
 	{ &cg_autoDemo, "cg_autoDemo", "0", CVAR_ARCHIVE },
+
+	// Popups
+	{ &cg_numPopups, "cg_numPopups", "5", CVAR_ARCHIVE },
+	{ &cg_popupTime, "cg_popupTime", "1000", CVAR_ARCHIVE },
+	{ &cg_popupStayTime, "cg_popupStayTime", "2000", CVAR_ARCHIVE },
+	{ &cg_popupFadeTime, "cg_popupFadeTime", "2500", CVAR_ARCHIVE },
 
 	// Nico, end of ETrun cvars
 };

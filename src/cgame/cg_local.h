@@ -1945,6 +1945,12 @@ extern vmCvar_t cg_hideMe;
 // Auto demo
 extern vmCvar_t cg_autoDemo;
 
+// Popups
+extern vmCvar_t cg_numPopups;
+extern vmCvar_t cg_popupTime;
+extern vmCvar_t cg_popupStayTime;
+extern vmCvar_t cg_popupFadeTime;
+
 // Nico, end of ETrun cvars
 
 //
@@ -2975,13 +2981,11 @@ void CG_InitPM( void );
 void CG_InitPMGraphics( void );
 void CG_UpdatePMLists( void );
 void CG_AddPMItem( popupMessageType_t type, const char* message, qhandle_t shader );
-void CG_AddPMItemBig( popupMessageBigType_t type, const char* message, qhandle_t shader );
 void CG_DrawPMItems( void );
 void CG_DrawPMItemsBig( void );
 const char* CG_GetPMItemText( centity_t* cent );
 void CG_PlayPMItemSound( centity_t *cent );
 qhandle_t CG_GetPMItemIcon( centity_t* cent );
-void CG_DrawKeyHint( rectDef_t* rect, const char* binding );
 
 //
 // cg_loadpanel.c

@@ -4,8 +4,8 @@
 
 #define WINDOW_X		16
 #define WINDOW_Y		16
-#define WINDOW_WIDTH	400
-#define WINDOW_HEIGHT	430
+#define WINDOW_WIDTH	608
+#define WINDOW_HEIGHT	448
 #define GROUP_NAME		"grpEtrunCustomiseHud"
 
 // Macros //
@@ -28,11 +28,11 @@ menuDef {
 
 // Window //
 
-	WINDOW( "View", 94 )
+	WINDOW( "View", 90 )
 
 // Subwindows //
 
-#define SUBWINDOW_WIDTH		WINDOW_WIDTH-12
+#define SUBWINDOW_WIDTH		.5*(WINDOW_WIDTH-18)
 
 	SUBWINDOW( 6, 32, (SUBWINDOW_WIDTH), 60, "Speed meter" )
 	YESNO( 8, 48, (SUBWINDOW_WIDTH)-4, 10, "Show speed meter:", .2, 8, "cg_drawSpeedMeter", "" )
@@ -60,7 +60,7 @@ menuDef {
 	MULTI( 8, 260, (SUBWINDOW_WIDTH)-4, 10, "Max checkpoints:", .2, 8, "cg_maxCheckPoints", cvarFloatList { "1" 1 "2" 2 "3" 3 "4" 4 "5" 5 }, "Maxium checkpoints to display" )
 
 	SUBWINDOW( 6, 280, (SUBWINDOW_WIDTH), 30, "Overbounce detector" )
-	YESNO( 8, 296, (SUBWINDOW_WIDTH)-4, 10, "Show overbounce detector:", .2, 8, "cg_drawOB", "" )
+	YESNO( 8, 296, (SUBWINDOW_WIDTH)-4, 10, "Show OB detector:", .2, 8, "cg_drawOB", "" )
 
 	SUBWINDOW( 6, 318, (SUBWINDOW_WIDTH), 80, "Pressed keys" )
 	MULTI( 8, 334, (SUBWINDOW_WIDTH)-4, 10, "Show pressed keys:", .2, 8, "cg_drawKeys", cvarFloatList { "No" 0 "Type 1" 1 "Type 2" 2 "Type 3" 3}, "Show pressed keys" )
@@ -71,7 +71,16 @@ menuDef {
 	SLIDER( 8, 382, (SUBWINDOW_WIDTH)-4, 10, "Keys size:", .2, 8, "cg_keysSize" 64 0 128, "Use the slider to adjust keys size" )
 	CVARFLOATLABEL( 8, 382, (SUBWINDOW_WIDTH)-4, 10, "cg_keysSize", .2, ITEM_ALIGN_RIGHT, $evalfloat((SUBWINDOW_WIDTH)-4), 8 )
 
-// Buttons //
+	//
+	// Popups
+	//
+	SUBWINDOW( 6+(SUBWINDOW_WIDTH)+6, 32, (SUBWINDOW_WIDTH), 80, "Popups" )
+	MULTI( 6+(SUBWINDOW_WIDTH)+6+2, 48, (SUBWINDOW_WIDTH)-4, 10, "Number of popups:", .2, 8, "cg_numPopups", cvarFloatList { "None" 0 "1" 1 "2" 2 "3" 3 "4" 4 "5" 5 "6" 6 "7" 7 "8" 8 "9" 9 "10" 10 "11" 11 "12" 12 "13" 13 "14" 14 "15" 15 "16" 16}, "Number of popups displayed" )
+	MULTI( 6+(SUBWINDOW_WIDTH)+6+2, 60, (SUBWINDOW_WIDTH)-4, 10, "Popup time:", .2, 8, "cg_popupTime", cvarFloatList { "0 sec" 0 "1 sec" 1000 "2 secs" 2000 "3 secs" 3000 "4 secs" 4000 "5 secssec" 5000}, "Delay between popups" )
+	MULTI( 6+(SUBWINDOW_WIDTH)+6+2, 72, (SUBWINDOW_WIDTH)-4, 10, "Popup stay time:", .2, 8, "cg_popupStayTime", cvarFloatList { "0 sec" 0 "5 secs" 5000 "10 secs" 10000 "30 secs" 30000 "1 min" 60000}, "Time that popups will stay before fading" )
+	MULTI( 6+(SUBWINDOW_WIDTH)+6+2, 84, (SUBWINDOW_WIDTH)-4, 10, "Popup fade time:", .2, 8, "cg_popupFadeTime", cvarFloatList { "0 sec" 0 "1 sec" 1000 "2 secs" 2000 "3 secs" 3000 "4 secs" 4000 "5 secs" 5000}, "Time that popups take to fade out" )
+	YESNO( 6+(SUBWINDOW_WIDTH)+6+2, 96, (SUBWINDOW_WIDTH)-4, 10, "Small popup icons:", .2, 8, "cg_drawSmallPopupIcons", "" )
 
+	// Buttons //
 	BUTTON( 6, WINDOW_HEIGHT-24, WINDOW_WIDTH-12, 18, "Back", .3, 14, close etrun_customise_hud ; open etrun )
 }
