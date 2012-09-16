@@ -1289,11 +1289,11 @@ void Think_SetupObjectiveInfo( gentity_t *ent ) {
 			team[1] = constructibles[1]->spawnflags & AXIS_CONSTRUCTIBLE ? TEAM_AXIS : TEAM_ALLIES;
 
 			if ( constructibles[1]->s.eType != ET_CONSTRUCTIBLE ) {
-				G_Error( "'trigger_objective_info' targets multiple entities with targetname '%s', the second one isn't a 'func_constructible'\n", ent->target );
+				G_Printf( "ERROR: 'trigger_objective_info' targets multiple entities with targetname '%s', the second one isn't a 'func_constructible'\n", ent->target );
 			}
 
 			if ( team[0] == team[1] ) {
-				G_Error( "'trigger_objective_info' targets two 'func_constructible' entities with targetname '%s' that are constructible by the same team\n", ent->target );
+				G_Printf( "ERROR: 'trigger_objective_info' targets two 'func_constructible' entities with targetname '%s' that are constructible by the same team\n", ent->target );
 			}
 
 			constructibles[1]->s.otherEntityNum2 = ent->s.teamNum;
@@ -1309,8 +1309,6 @@ void Think_SetupObjectiveInfo( gentity_t *ent ) {
 
 		// if already constructed (in case of START_BUILT)
 		if ( constructibles[0]->s.angles2[1] != 0 ) {
-//			trap_UnlinkEntity( ent );
-//			return;
 		} else {
 			// Arnout: spawn a constructible icon - this is for compass usage
 			gentity_t *e;
