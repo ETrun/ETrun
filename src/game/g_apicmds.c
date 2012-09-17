@@ -175,7 +175,6 @@ void Cmd_Rank_f(gentity_t *ent) {
 	char runName[MAX_QPATH] = {0};
 	char physicsName[MAX_QPATH] = {0};
 	int argc = 0;
-	int i = 0;
 
 	// Check if API is used
 	if (!g_useAPI.integer) {
