@@ -1849,6 +1849,20 @@ static void CG_ServerCommand( void ) {
 		CG_AddPMItem(PM_MESSAGE, "cg_autoDemo has been set to 1\n", cgs.media.voiceChatShader);
 		return;
 	}
+
+	// Nico, force hideMe ON
+	if (!Q_stricmp(cmd, "hideMeOn")) {
+		trap_SendConsoleCommand("set cg_hideMe 1\n");
+		CG_AddPMItem(PM_MESSAGE, "cg_hideMe has been set to 1\n", cgs.media.voiceChatShader);
+		return;
+	}
+
+	// Nico, force CGaz off
+	if (!Q_stricmp(cmd, "CGazOff")) {
+		trap_SendConsoleCommand("set cg_drawCGaz 0\n");
+		CG_AddPMItem(PM_MESSAGE, "cg_drawCGaz has been set to 0\n", cgs.media.voiceChatShader);
+		return;
+	}
 	
 	// Nico, timer start/stop/check related
 

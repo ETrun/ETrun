@@ -941,6 +941,20 @@ void ClientThink_real( gentity_t *ent ) {
 		trap_SendServerCommand(ent-g_entities, "resetMaxpackets");
 		SetTeam(ent, "s", qtrue, -1, -1, qfalse);
 	}
+
+	// Nico, force hide me in cup mode
+	if (g_cupMode.integer != 0 && client->pers.hideme == 0) {
+		CP("cpm \"^1You were removed from teams because you must use cg_hideMe 1.\n\"");
+		trap_SendServerCommand(ent-g_entities, "hideMeOn");
+		SetTeam(ent, "s", qtrue, -1, -1, qfalse);
+	}
+
+	// Nico, force CGaz 0 in cup mode
+	if (g_cupMode.integer != 0 && client->pers.cgaz != 0) {
+		CP("cpm \"^1You were removed from teams because you must use cg_drawCGaz 0.\n\"");
+		trap_SendServerCommand(ent-g_entities, "CGazOff");
+		SetTeam(ent, "s", qtrue, -1, -1, qfalse);
+	}
 }
 
 /*
