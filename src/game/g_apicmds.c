@@ -127,7 +127,7 @@ void Cmd_LoadCheckpoints_f(gentity_t *ent) {
 	argc = trap_Argc();
 
 	if (argc == 2) {
-		trap_Argv(1, arg, sizeof(arg));
+		trap_Argv(1, arg, sizeof (arg));
 
 		// Find by run name
 		for (i = 0; i < MAX_TIMERUNS; ++i) {
@@ -162,6 +162,66 @@ void Cmd_LoadCheckpoints_f(gentity_t *ent) {
 	}
 
 	G_API_getPlayerCheckpoints(buf, ent, level.rawmapname, level.timerunsNames[runNum], runNum, ent->client->pers.authToken);
+
+	// Do *not* free buf here
+}
+
+// Nico, rank command
+// /rank [userName] [mapName] [runName] [physicsName]
+void Cmd_Rank_f(gentity_t *ent) {
+	char *buf = NULL;
+	char userName[MAX_QPATH] = {0};
+	char mapName[MAX_QPATH] = {0};
+	char runName[MAX_QPATH] = {0};
+	char physicsName[MAX_QPATH] = {0};
+	int argc = 0;
+	int i = 0;
+
+	// Check if API is used
+	if (!g_useAPI.integer) {
+		CP("cp \"This command is disabled on this server.\n\"");
+		return;
+	}
+
+	// Parse options
+	argc = trap_Argc();
+	if (argc >= 1) {
+		trap_Argv(1, userName, sizeof (userName));
+	}
+	if (strlen(userName) == 0) {
+		sprintf(userName, "0");
+	}
+
+	if (argc >= 2) {
+		trap_Argv(2, mapName, sizeof (mapName));
+	}
+	if (strlen(mapName) == 0) {
+		sprintf(mapName, "0");
+	}
+
+	if (argc >= 3) {
+		trap_Argv(3, runName, sizeof (runName));
+	}
+	if (strlen(runName) == 0) {
+		sprintf(runName, "0");
+	}
+
+	if (argc >= 4) {
+		trap_Argv(4, physicsName, sizeof (physicsName));
+	}
+	if (strlen(physicsName) == 0) {
+		sprintf(physicsName, "0");
+	}
+
+	buf = malloc(RESPONSE_MAX_SIZE * sizeof (char));
+
+	if (!buf) {
+		G_Error("Cmd_Rank_f: malloc failed\n");
+	}
+
+	// Parse options
+
+	G_API_mapRank(buf, ent, level.rawmapname, userName, mapName, runName, physicsName, ent->client->pers.authToken);
 
 	// Do *not* free buf here
 }

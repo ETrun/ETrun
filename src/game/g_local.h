@@ -1078,6 +1078,7 @@ void Cmd_Login_f(gentity_t *ent);
 void Cmd_Logout_f(gentity_t *ent);
 void Cmd_Records_f(gentity_t *ent);
 void Cmd_LoadCheckpoints_f(gentity_t *ent);
+void Cmd_Rank_f(gentity_t *ent);
 
 // Nico, flood protection
 typedef struct {

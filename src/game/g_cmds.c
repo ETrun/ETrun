@@ -2537,6 +2537,7 @@ static command_t floodProtectedCommands[] = {
 	{ "login",				qtrue, Cmd_Login_f },
 	{ "logout",				qtrue, Cmd_Logout_f },
 	{ "records",			qtrue, Cmd_Records_f },
+	{ "rank",				qtrue, Cmd_Rank_f },
 	{ "loadCheckpoints",	qtrue, Cmd_LoadCheckpoints_f }
 };
 // Nico, end of defines commands that are flood protected or not

@@ -574,6 +574,61 @@ void G_API_randommap(char *result, gentity_t *ent, char *mapName) {
 	APILog("Random map request sent!\n", qfalse);
 }
 
+/**
+ * Map rank command handler
+ */
+static void *mapRankHandler(void *data) {
+	int code = -1;
+	gentity_t *ent = NULL;
+	struct query_s *queryStruct = NULL;
+
+	queryStruct = (struct query_s *)data;
+	ent = queryStruct->ent;
+
+	code = API_query(queryStruct->cmd, queryStruct->result, queryStruct->query);
+
+	APILog(va("mapRank: code = %d\n", code), qfalse);
+
+	if (code == 0) {
+		clientBigDataPrint(ent, queryStruct->result);
+	} else {
+		CP(va("print \"^1> ^wError while requesting rank\n\""));
+	}
+
+	free(queryStruct->result);
+	free(queryStruct);
+
+	// Decrease global active thread counter
+	activeThreadsCounter--;
+	G_DPrintf("Decreasing threads counter to %d\n", activeThreadsCounter);
+
+	return NULL;
+}
+
+/**
+ * Map rank request command
+ */
+void G_API_mapRank(char *result, gentity_t *ent, char *mapName, char *optUserName, char *optMapName, char *optRunName, char *optPhysicsName, char *authToken) {
+	char net_port[8] = {0};
+	char cphysics[8] = {0};
+	char encodedMapName[255] = {0};
+	char encodedOptUserName[255] = {0};
+	char encodedOptMapName[255] = {0};
+	char encodedOptRunName[255] = {0};
+
+	sprintf(net_port, "%d", trap_Cvar_VariableIntegerValue("net_port"));
+	sprintf(cphysics, "%d", physics.integer);
+
+	url_encode(mapName, encodedMapName);
+	url_encode(optUserName, encodedOptUserName);
+	url_encode(optMapName, encodedOptMapName);
+	url_encode(optRunName, encodedOptRunName);
+
+	G_callAPI("r", result, ent, 8, encodedOptUserName, encodedOptMapName, encodedOptRunName, optPhysicsName, encodedMapName, authToken, cphysics, net_port);
+
+	APILog("Map rank request sent!\n", qfalse);
+}
+
 // Commands handler binding
 static const api_glue_t APICommands[] = {
 	{ "l",	loginHandler },
@@ -581,7 +636,8 @@ static const api_glue_t APICommands[] = {
 	{ "c", 	checkAPIHandler },
 	{ "d",	recordHandler },
 	{ "e",	checkpointsHandler },
-	{ "f",	randommapHandler }
+	{ "f",	randommapHandler },
+	{ "r",	mapRankHandler }
 };
 
 /**

@@ -18,6 +18,7 @@ void G_API_sendRecord(char *result, gentity_t *ent, char *mapName, char *runName
 					  char *authToken, char *data, char *etrunVersion);
 void G_API_getPlayerCheckpoints(char *result, gentity_t *ent, char *mapName, char *runName, int runNum, char *authToken);
 void G_API_randommap(char *result, gentity_t *ent, char *mapName);
+void G_API_mapRank(char *result, gentity_t *ent, char *mapName, char *optUserName, char *optMapName, char *optRunName, char *optPhysicsName, char *authToken);
 
 #if defined _WIN32
 	# include <windows.h>

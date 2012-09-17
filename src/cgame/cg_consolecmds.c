@@ -833,8 +833,9 @@ void CG_InitConsoleCommands( void ) {
 	trap_AddCommand("login");
 	trap_AddCommand("logout");
 
-	// Nico, records
+	// Nico, records & rank
 	trap_AddCommand("records");
+	trap_AddCommand("rank");
 
 	// Nico, class command
 	trap_AddCommand("class");
