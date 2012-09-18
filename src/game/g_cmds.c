@@ -2887,7 +2887,6 @@ void Cmd_PrivateMessage_f(gentity_t *ent) {
 
 // Nico, help command
 void Cmd_Help_f(gentity_t *ent) {
-	char *buf = NULL;
 	int argc = 0;
 	int i = 0;
 	char option[MAX_QPATH] = {0};
