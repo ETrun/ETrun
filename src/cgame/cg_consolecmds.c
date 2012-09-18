@@ -845,4 +845,7 @@ void CG_InitConsoleCommands( void ) {
 
 	// Nico, private message
 	trap_AddCommand("m");
+
+	// Nico, help
+	trap_AddCommand("h");
 }

@@ -2508,37 +2508,38 @@ void Cmd_Save2_f(gentity_t *ent) {
 
 // Nico, defines commands that are flood protected or not
 static command_t floodProtectedCommands[] = {
-	{ "score",				qfalse,	Cmd_Score_f },
-	{ "vote",				qtrue,	Cmd_Vote_f },
-	{ "fireteam",			qfalse,	Cmd_FireTeam_MP_f },
-	{ "rconauth",			qfalse,	Cmd_AuthRcon_f },
-	{ "ignore",				qfalse,	Cmd_Ignore_f },
-	{ "unignore",			qfalse,	Cmd_UnIgnore_f },
-	{ "obj",				qfalse,	Cmd_SelectedObjective_f },
-	{ "rs",					qfalse,	Cmd_ResetSetup_f },
-	{ "noclip",				qfalse,	Cmd_Noclip_f },
-	{ "kill",				qtrue,	Cmd_Kill_f },
-	{ "team",				qtrue,	Cmd_Team_f },
-	{ "stopcamera",			qfalse,	Cmd_StopCamera_f },
-	{ "setcameraorigin",	qfalse,	Cmd_SetCameraOrigin_f },
-	{ "setspawnpt",			qfalse,	Cmd_SetSpawnPoint_f },
-	{ "load",				qfalse,	Cmd_Load_f },
-	{ "save",				qfalse,	Cmd_Save_f },
-	{ "load2",				qfalse,	Cmd_Load2_f },
-	{ "save2",				qfalse,	Cmd_Save2_f },
+	{ "score",				qfalse,	Cmd_Score_f,				qfalse,	NULL,											NULL },
+	{ "vote",				qtrue,	Cmd_Vote_f,					qfalse,	NULL,											NULL },
+	{ "fireteam",			qfalse,	Cmd_FireTeam_MP_f,			qfalse,	NULL,											NULL },
+	{ "rconauth",			qfalse,	Cmd_AuthRcon_f,				qfalse,	NULL,											NULL },
+	{ "ignore",				qfalse,	Cmd_Ignore_f,				qfalse,	NULL,											NULL },
+	{ "unignore",			qfalse,	Cmd_UnIgnore_f,				qfalse,	NULL,											NULL },
+	{ "obj",				qfalse,	Cmd_SelectedObjective_f,	qfalse,	NULL,											NULL },
+	{ "rs",					qfalse,	Cmd_ResetSetup_f,			qfalse,	NULL,											NULL },
+	{ "noclip",				qfalse,	Cmd_Noclip_f,				qfalse,	NULL,											NULL },
+	{ "kill",				qtrue,	Cmd_Kill_f,					qfalse,	NULL,											NULL },
+	{ "team",				qtrue,	Cmd_Team_f ,				qfalse,	NULL,											NULL },
+	{ "stopcamera",			qfalse,	Cmd_StopCamera_f,			qfalse,	NULL,											NULL },
+	{ "setcameraorigin",	qfalse,	Cmd_SetCameraOrigin_f,		qfalse,	NULL,											NULL },
+	{ "setspawnpt",			qfalse,	Cmd_SetSpawnPoint_f,		qtrue,	"Allows you to choose a spawn point",			"spawnId" },
+	{ "load",				qfalse,	Cmd_Load_f,					qtrue,	"Allows you to load a saved position",			"[slot]" },
+	{ "save",				qfalse,	Cmd_Save_f,					qtrue,	"Allows you to save your current position",		"[slot]" },
+	{ "load2",				qfalse,	Cmd_Load2_f,				qtrue,	"Allows you to load another saved position",	"[slot]" },
+	{ "save2",				qfalse,	Cmd_Save2_f,				qtrue,	"Allows you to save another position",			"[slot]" },
 
 	// Nico, class command
-	{ "class",				qtrue,	Cmd_Class_f },
+	{ "class",				qtrue,	Cmd_Class_f,				qtrue,	"Allows you to change your current class",		"class [weapon1] [weapon2]" },
 
 	// Nico, private messages
-	{ "m",					qtrue,	Cmd_PrivateMessage_f },
+	{ "m",					qtrue,	Cmd_PrivateMessage_f,		qtrue,	"Allows you send private messages",				"dest message" },
 
 	// ETrun specific commands
-	{ "login",				qtrue, Cmd_Login_f },
-	{ "logout",				qtrue, Cmd_Logout_f },
-	{ "records",			qtrue, Cmd_Records_f },
-	{ "rank",				qtrue, Cmd_Rank_f },
-	{ "loadCheckpoints",	qtrue, Cmd_LoadCheckpoints_f }
+	{ "login",				qtrue, Cmd_Login_f,					qtrue,	"Allows you to login via timeruns.net",			NULL },
+	{ "logout",				qtrue, Cmd_Logout_f,				qtrue,	"Allows you to logout",							NULL },
+	{ "records",			qtrue, Cmd_Records_f,				qtrue,	"Displays current map #1 records",				NULL },
+	{ "rank",				qtrue, Cmd_Rank_f,					qtrue,	"Shows rankings for given options",				"[userName] [mapName] [runName] [physicsName]" },
+	{ "loadCheckpoints",	qtrue, Cmd_LoadCheckpoints_f,		qtrue,	"Loads checkpoints from your PB",				"[run name or id]" },
+	{ "h",					qtrue, Cmd_Help_f,					qtrue,	"Shows help message",							"[command]" },
 };
 // Nico, end of defines commands that are flood protected or not
 
@@ -2640,7 +2641,7 @@ void ClientCommand( int clientNum ) {
 	}
 
 	// Nico, flood protection
-	for (i = 0 ; i < sizeof(floodProtectedCommands) / sizeof(floodProtectedCommands[0]) ; ++i) {
+	for (i = 0 ; i < sizeof (floodProtectedCommands) / sizeof (floodProtectedCommands[0]) ; ++i) {
 		if (!Q_stricmp(cmd, floodProtectedCommands[i].cmd)) {
 			if (floodProtectedCommands[i].isProtected && ClientIsFlooding(ent)) {
 				CP(va("print \"^1Spam Protection: ^7dropping %s\n\"", cmd));
@@ -2881,5 +2882,46 @@ void Cmd_PrivateMessage_f(gentity_t *ent) {
 		CP(va("print \"%s\n\"", str));
 
 		G_LogPrintf( "privmsg: %s: %s: %s\n", netname, name, msg );
+	}
+}
+
+// Nico, help command
+void Cmd_Help_f(gentity_t *ent) {
+	char *buf = NULL;
+	int argc = 0;
+	int i = 0;
+	char option[MAX_QPATH] = {0};
+
+	// Parse options
+	argc = trap_Argc();
+	if (argc <= 1) {
+		CP(va("print \"  List of %s ^wcommands:\n\"", GAME_VERSION_COLORED));
+		CP("print \"-------------------------------------------------------------------\n\"");
+		for (i = 0; i < sizeof (floodProtectedCommands) / sizeof (floodProtectedCommands[0]); ++i) {
+			if (floodProtectedCommands[i].inHelp == qtrue && floodProtectedCommands[i].desc) {
+				CP(va("print \"  ^8%-15s ^w%s\n\"", floodProtectedCommands[i].cmd, floodProtectedCommands[i].desc));
+			}
+		}
+		CP("print \"-------------------------------------------------------------------\n\"");
+	} else {
+		trap_Argv(1, option, sizeof (option));
+		for (i = 0 ; i < sizeof (floodProtectedCommands) / sizeof (floodProtectedCommands[0]) ; ++i) {
+			if (!Q_stricmp(option, floodProtectedCommands[i].cmd)) {
+				if (floodProtectedCommands[i].inHelp == qtrue && floodProtectedCommands[i].desc) {
+					CP(va("print \"  ^wCommand     ^8%-15s\n\"", floodProtectedCommands[i].cmd));
+					CP(va("print \"  ^wDescription ^8%s\n\"", floodProtectedCommands[i].desc));
+
+					// Nico, show usage message
+					if (floodProtectedCommands[i].usage) {
+						CP(va("print \"  ^wUsage       ^8/%s %s\n\"", floodProtectedCommands[i].cmd, floodProtectedCommands[i].usage));
+					} else {
+						CP(va("print \"  ^wUsage       ^8/%s\n\"", floodProtectedCommands[i].cmd));
+					}
+				} else {
+					CP(va("print \"  ^1Error^w: unrecognised command ^8'%s'\n\"", option));
+					CP("print \"  ^8Usage: /help [command]\n\"");
+				}
+			}
+		}
 	}
 }
