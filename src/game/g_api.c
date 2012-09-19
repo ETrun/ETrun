@@ -774,7 +774,7 @@ void G_loadAPI() {
 
 void G_unloadAPI() {
 	if (api_module == NULL) {
-		G_DPrintf("G_callAPI: API module is not loaded.");
+		G_DPrintf("G_callAPI: API module is not loaded.\n");
 	} else {
 
 	API_clean();
