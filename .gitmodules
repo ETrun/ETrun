@@ -1,3 +1,6 @@
 [submodule "src/APImodule"]
 	path = src/APImodule
 	url = git@bitbucket.org:boutetnico/etrun_apimodule.git
+[submodule "doc"]
+	path = doc
+	url = ./doc/
