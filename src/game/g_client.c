@@ -1081,7 +1081,7 @@ void ClientUserinfoChanged( int clientNum ) {
 	Q_strncpyz( oldname, client->pers.netname, sizeof( oldname ) );
 	ClientCleanName( name, client->pers.netname, sizeof( client->pers.netname ) );
 
-	if ( client->pers.connected == CON_CONNECTED && strcmp( oldname, client->pers.netname ) ) {
+	if ( client->pers.connected == CON_CONNECTED && strcmp( oldname, client->pers.netname ) != 0 ) {
 		// Nico, name changes limit
 		if (g_maxNameChanges.integer > -1 && client->pers.nameChanges >= g_maxNameChanges.integer) {
 			Q_strncpyz( client->pers.netname, oldname, sizeof( client->pers.netname ) );
@@ -1206,7 +1206,7 @@ char *ClientConnect( int clientNum, qboolean firstTime, qboolean isBot ) {
 		// check for a password
 		value = Info_ValueForKey( userinfo, "password" );
 		if ( g_password.string[0] && Q_stricmp( g_password.string, "none" ) && strcmp( g_password.string, value ) != 0 ) {
-			if ( !sv_privatepassword.string[ 0 ] || strcmp( sv_privatepassword.string, value ) ) {
+			if ( !sv_privatepassword.string[ 0 ] || strcmp( sv_privatepassword.string, value ) != 0 ) {
 				return "Invalid password";
 			}
 		}
