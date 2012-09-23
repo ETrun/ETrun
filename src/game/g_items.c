@@ -525,10 +525,8 @@ int Pickup_Weapon( gentity_t *ent, gentity_t *other ) {
 			// rain - added parens around ambiguous &&
 			if ( primaryWeapon ) {
 
-				if ( primaryWeapon ) {
-					// drop our primary weapon
-					G_DropWeapon( other, primaryWeapon );
-				}
+				// drop our primary weapon
+				G_DropWeapon( other, primaryWeapon );
 
 				// now pickup the other one
 				other->client->dropWeaponTime = level.time;
