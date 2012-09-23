@@ -596,7 +596,7 @@ void G_UpdateTeamMapData_CommandmapMarker( gentity_t* ent ) {
 			mEnt->entNum = num;
 		}
 		VectorCopy( ent->s.origin, mEnt->org );
-		mEnt->data = ent->parent->s.teamNum;
+		mEnt->data = ent->parent->s.teamNum; //-V595
 		mEnt->startTime = level.time;
 		mEnt->type = ME_COMMANDMAP_MARKER;
 		mEnt->yaw = 0;
@@ -618,7 +618,7 @@ void G_UpdateTeamMapData_CommandmapMarker( gentity_t* ent ) {
 }
 
 void G_UpdateTeamMapData( void ) {
-	int i, j /*, k*/;
+	int i, j;
 	gentity_t *ent, *ent2;
 	mapEntityData_t *mEnt;
 

@@ -168,7 +168,7 @@ void SP_trigger_multiple( gentity_t *ent ) {
 
 	// Nico, override wait -1 or wait 9999 on trigger_multiple where target is start timer
 	// Note, this test is in case the start/stop timer or checkpoint entity was defined before the trigger multiple
-	if (g_forceTimerReset.integer && ent) {
+	if (g_forceTimerReset.integer) {
 		target = G_FindByTargetname(NULL, ent->target);
 		if (target && ent->wait != 0.5) {
 			if (!Q_stricmp(target->classname, "target_startTimer")
