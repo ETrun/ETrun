@@ -642,129 +642,6 @@ static void CG_TouchTriggerPrediction( void ) {
 	}
 }
 
-
-#define MAX_PREDICT_ORIGIN_DELTA        0.1f
-#define MAX_PREDICT_VELOCITY_DELTA      0.1f
-#define MAX_PREDICT_VIEWANGLES_DELTA    1.0f
-
-qboolean CG_PredictionOk( playerState_t *ps1, playerState_t *ps2 ) {
-	vec3_t vec;
-	int i;
-
-	if ( ps2->pm_type != ps1->pm_type || ps2->pm_flags != ps1->pm_flags || ps2->pm_time != ps1->pm_time ) {
-		return qfalse;
-	}
-
-	VectorSubtract( ps2->origin, ps1->origin, vec );
-	if ( DotProduct( vec, vec ) > Square( MAX_PREDICT_ORIGIN_DELTA ) ) {
-		return qfalse;
-	}
-
-	VectorSubtract( ps2->velocity, ps1->velocity, vec );
-	if ( DotProduct( vec, vec ) > Square( MAX_PREDICT_VELOCITY_DELTA ) ) {
-		return qfalse;
-	}
-
-	if ( ps2->eFlags != ps1->eFlags ) {
-		return qfalse;
-	}
-
-	if ( ps2->weaponTime != ps1->weaponTime ) {
-		return qfalse;
-	}
-
-	if ( ps2->groundEntityNum != ps1->groundEntityNum ) {
-		return qfalse;
-	}
-
-	if ( ps1->groundEntityNum != ENTITYNUM_WORLD || ps1->groundEntityNum != ENTITYNUM_NONE || ps2->groundEntityNum != ENTITYNUM_WORLD || ps2->groundEntityNum != ENTITYNUM_NONE ) {
-		return qfalse;
-	}
-
-	if ( ps2->speed != ps1->speed || ps2->delta_angles[0] != ps1->delta_angles[0] || ps2->delta_angles[1] != ps1->delta_angles[1] || ps2->delta_angles[2] != ps1->delta_angles[2] ) {
-		return qfalse;
-	}
-
-	if ( ps2->legsTimer != ps1->legsTimer || ps2->legsAnim != ps1->legsAnim ||
-		 ps2->torsoTimer != ps1->torsoTimer || ps2->torsoAnim != ps1->torsoAnim ) {
-		return qfalse;
-	}
-
-/*	if( ps2->movementDir != ps1->movementDir ) {
-		return qfalse;
-	}*/
-
-	if ( ps2->eventSequence != ps1->eventSequence ) {
-		return qfalse;
-	}
-
-	for ( i = 0; i < MAX_EVENTS; i++ ) {
-		if ( ps2->events[i] != ps1->events[i] || ps2->eventParms[i] != ps1->eventParms[i] ) {
-			return qfalse;
-		}
-	}
-
-	if ( ps2->externalEvent != ps1->externalEvent || ps2->externalEventParm != ps1->externalEventParm || ps2->externalEventTime != ps1->externalEventTime ) {
-		return qfalse;
-	}
-
-	if ( ps2->clientNum != ps1->clientNum ) {
-		return qfalse;
-	}
-
-	if ( ps2->weapon != ps1->weapon || ps2->weaponstate != ps1->weaponstate ) {
-		return qfalse;
-	}
-
-	for ( i = 0; i < 3; i++ ) {
-		if ( abs( ps2->viewangles[i] - ps1->viewangles[i] ) > MAX_PREDICT_VIEWANGLES_DELTA ) {
-			return qfalse;
-		}
-	}
-
-	if ( ps2->viewheight != ps1->viewheight ) {
-		return qfalse;
-	}
-
-	if ( ps2->damageEvent != ps1->damageEvent || ps2->damageYaw != ps1->damageYaw || ps2->damagePitch != ps1->damagePitch || ps2->damageCount != ps1->damageCount ) {
-		return qfalse;
-	}
-
-	for ( i = 0; i < MAX_STATS; i++ ) {
-		if ( ps2->stats[i] != ps1->stats[i] ) {
-			return qfalse;
-		}
-	}
-
-	for ( i = 0; i < MAX_PERSISTANT; i++ ) {
-		if ( ps2->persistant[i] != ps1->persistant[i] ) {
-			return qfalse;
-		}
-	}
-
-	for ( i = 0; i < MAX_POWERUPS; i++ ) {
-		if ( ps2->powerups[i] != ps1->powerups[i] ) {
-			return qfalse;
-		}
-	}
-
-	for ( i = 0; i < MAX_WEAPONS; i++ ) {
-		if ( ps2->ammo[i] != ps1->ammo[i] || ps2->ammoclip[i] != ps1->ammoclip[i] ) {
-			return qfalse;
-		}
-	}
-
-	if ( ps1->viewlocked != ps2->viewlocked || ps1->viewlocked_entNum !=  ps2->viewlocked_entNum ) {
-		return qfalse;
-	}
-
-	if ( ps1->onFireStart != ps2->onFireStart ) {
-		return qfalse;
-	}
-
-	return qtrue;
-}
-
 #define RESET_PREDICTION						\
 	cg.lastPredictedCommand = 0;				\
 	cg.backupStateTail = cg.backupStateTop;		\
@@ -816,7 +693,6 @@ void CG_PredictPlayerState( void ) {
 	usercmd_t latestCmd;
 	vec3_t deltaAngles;
 	pmoveExt_t pmext;
-//	int useCommand = 0;
 
 	cg.hyperspace = qfalse; // will be set if touching a trigger_teleport
 
