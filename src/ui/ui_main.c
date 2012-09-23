@@ -5575,14 +5575,7 @@ void _UI_SetActiveMenu( uiMenuCommand_t menu ) {
 			//Menus_ActivateByName( "background_1", qtrue );
 			Menus_ActivateByName( "backgroundmusic", qtrue );    // Arnout: not nice, but best way to do it - putting the music in it's own menudef
 																 // makes sure it doesn't get restarted every time you reach the main menu
-			if ( !cl_profile.string[0] ) {
-				//Menus_ActivateByName( "profilelogin", qtrue );
-				// FIXME: initial profile popup
-				// FIXED: handled in opener now
-				Menus_ActivateByName( "main_opener", qtrue );
-			} else {
-				Menus_ActivateByName( "main_opener", qtrue );
-			}
+			Menus_ActivateByName( "main_opener", qtrue );
 
 			trap_Cvar_VariableStringBuffer( "com_errorMessage", buf, sizeof( buf ) );
 

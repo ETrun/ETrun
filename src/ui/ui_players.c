@@ -753,15 +753,8 @@ static qboolean AnimParseAnimConfig( playerInfo_t *animModelInfo, const char *fi
 	headAnimation_t *headAnims;
 	int i, fps, skip = -1;
 
-//	if (!weaponStringsInited) {
-//		BG_InitWeaponStrings();
-//	}
-
-//	globalFilename = (char *)filename;
-
 	animations = animModelInfo->animations;
 	animModelInfo->numAnimations = 0;
-//	headAnims = animModelInfo->headAnims;
 
 	text_p = (char *)input;
 	COM_BeginParseSession( "AnimParseAnimConfig" );
@@ -785,8 +778,6 @@ static qboolean AnimParseAnimConfig( playerInfo_t *animModelInfo, const char *fi
 			}
 			if ( !Q_stricmp( token, "default" ) || !Q_stricmp( token, "normal" ) ) {
 				animModelInfo->footsteps = FOOTSTEP_NORMAL;
-			} else {
-//				BG_AnimParseError( "Bad footsteps parm '%s'\n", token );
 			}
 			continue;
 		} else if ( !Q_stricmp( token, "headoffset" ) ) {
@@ -835,7 +826,6 @@ static qboolean AnimParseAnimConfig( playerInfo_t *animModelInfo, const char *fi
 		if ( !Q_stricmp( token, "STARTANIMS" ) ) {
 			break;
 		}
-//		BG_AnimParseError( "unknown token '%s'", token );
 	}
 
 	// read information for each frame
@@ -857,9 +847,6 @@ static qboolean AnimParseAnimConfig( playerInfo_t *animModelInfo, const char *fi
 			Q_strlwr( animations[i].name );
 			//
 			token = COM_ParseExt( &text_p, qfalse );
-			if ( !token || !token[0] ) {
-//				BG_AnimParseError( "end of file without ENDANIMS" );
-			}
 		} else {
 			// just set it to the equivalent animStrings[]
 			Q_strncpyz( animations[i].name, animStrings[i], sizeof( animations[i].name ) );
@@ -882,20 +869,13 @@ static qboolean AnimParseAnimConfig( playerInfo_t *animModelInfo, const char *fi
 		}
 
 		token = COM_ParseExt( &text_p, qfalse );
-		if ( !token || !token[0] ) {
-//			BG_AnimParseError( "end of file without ENDANIMS" );
-		}
 		animations[i].numFrames = atoi( token );
 
 		token = COM_ParseExt( &text_p, qfalse );
-		if ( !token || !token[0] ) {
-//			BG_AnimParseError( "end of file without ENDANIMS: line %i" );
-		}
 		animations[i].loopFrames = atoi( token );
 
 		token = COM_ParseExt( &text_p, qfalse );
 		if ( !token || !token[0] ) {
-//			BG_AnimParseError( "end of file without ENDANIMS: line %i" );
 		}
 		fps = atof( token );
 		if ( fps == 0 ) {
@@ -906,9 +886,6 @@ static qboolean AnimParseAnimConfig( playerInfo_t *animModelInfo, const char *fi
 
 		// movespeed
 		token = COM_ParseExt( &text_p, qfalse );
-		if ( !token || !token[0] ) {
-//			BG_AnimParseError( "end of file without ENDANIMS" );
-		}
 		animations[i].moveSpeed = atoi( token );
 
 		// animation blending
@@ -940,7 +917,6 @@ static qboolean AnimParseAnimConfig( playerInfo_t *animModelInfo, const char *fi
 	animModelInfo->numAnimations = i;
 
 	if ( animModelInfo->version < 2 && i != MAX_ANIMATIONS ) {
-//		BG_AnimParseError( "Incorrect number of animations" );
 		return qfalse;
 	}
 
@@ -985,10 +961,8 @@ static qboolean AnimParseAnimConfig( playerInfo_t *animModelInfo, const char *fi
 				token = COM_ParseExt( &text_p, qfalse );
 			}
 
-//			animModelInfo->numHeadAnims = i;
 
 			if ( i != MAX_HEAD_ANIMS ) {
-//				BG_AnimParseError( "Incorrect number of head frames" );
 				return qfalse;
 			}
 

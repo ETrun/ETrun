@@ -1210,12 +1210,12 @@ void PM_Weapon( void ) {
 		for ( i = pm->pmext->lastRecoilDeltaTime; i < deltaTime; i += 15 ) {
 			if ( pm->pmext->weapRecoilPitch > 0.f ) {
 				muzzlebounce[PITCH] -= 2*pm->pmext->weapRecoilPitch*cos( 2.5*(i) / pm->pmext->weapRecoilDuration );
-				muzzlebounce[PITCH] -= 0.25 * random() * ( 1.0f - ( i ) / pm->pmext->weapRecoilDuration );
+				muzzlebounce[PITCH] -= 0.25 * random() * ( 1.0f - ( i ) / (float)pm->pmext->weapRecoilDuration );
 			}
 
 			if ( pm->pmext->weapRecoilYaw > 0.f ) {
 				muzzlebounce[YAW] += 0.5*pm->pmext->weapRecoilYaw*cos( 1.0 - (i)*3 / pm->pmext->weapRecoilDuration );
-				muzzlebounce[YAW] += 0.5 * crandom() * ( 1.0f - ( i ) / pm->pmext->weapRecoilDuration );
+				muzzlebounce[YAW] += 0.5 * crandom() * ( 1.0f - ( i ) / (float)pm->pmext->weapRecoilDuration );
 			}
 		}
 
@@ -1750,8 +1750,7 @@ void PM_Weapon( void ) {
 		float fwdmove_knockback = 0.f;
 
 		switch ( pm->ps->weapon ) {
-		case WP_MOBILE_MG42:    fwdmove_knockback = 4000.f;
-			fwdmove_knockback = 400.f;
+		case WP_MOBILE_MG42:    fwdmove_knockback = 400.f;
 			break;
 		case WP_PANZERFAUST:    fwdmove_knockback = 32000.f;
 			break;
@@ -1764,12 +1763,7 @@ void PM_Weapon( void ) {
 			vec3_t kvel;
 			float mass = 200;
 
-			if ( DotProduct( pml.forward, pm->ps->velocity ) > 0  ) {
-				VectorScale( pml.forward, -1.f * ( fwdmove_knockback / mass ), kvel );    // -1 as we get knocked backwards
-			} else {
-				VectorScale( pml.forward, -1.f * ( fwdmove_knockback / mass ), kvel );    // -1 as we get knocked backwards
-			}
-
+			VectorScale( pml.forward, -1.f * ( fwdmove_knockback / mass ), kvel );    // -1 as we get knocked backwards
 			VectorAdd( pm->ps->velocity, kvel, pm->ps->velocity );
 
 			if ( !pm->ps->pm_time ) {

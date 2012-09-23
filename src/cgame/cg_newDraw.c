@@ -29,191 +29,6 @@ If you have questions concerning this license or the applicable additional terms
 
 #include "cg_local.h"
 
-int CG_DrawField( int x, int y, int width, int value, int charWidth, int charHeight, qboolean dodrawpic, qboolean leftAlign );      // NERVE - SMF
-
-/*void CG_FitTextToWidth( char* instr, int w, int size) {
-	char buffer[1024];
-	char	*s, *p, *c, *ls;
-	int		l;
-
-	strcpy(buffer, instr);
-	memset(instr, 0, size);
-
-	c = s = instr;
-	p = buffer;
-	ls = NULL;
-	l = 0;
-	while(*p) {
-		*c = *p++;
-		l++;
-
-		if(*c == ' ') {
-			ls = c;
-		} // store last space, to try not to break mid word
-
-		c++;
-
-		if(*p == '\n') {
-			s = c+1;
-			l = 0;
-		} else if(l > w) {
-			if(ls) {
-				*ls = '\n';
-				l = strlen(ls+1);
-			} else {
-				*c = *(c-1);
-				*(c-1) = '\n';
-				s = c++;
-				l = 0;
-			}
-
-			ls = NULL;
-		}
-	}
-
-	if(c != buffer && (*(c-1) != '\n')) {
-		*c++ = '\n';
-	}
-
-	*c = '\0';
-}*/
-
-int CG_TrimLeftPixels( char* instr, float scale, float w, int size ) {
-	char buffer[1024];
-	char *p, *s;
-	int tw;
-	int i;
-
-	Q_strncpyz( buffer, instr, 1024 );
-	memset( instr, 0, size );
-
-	for ( i = 0, p = buffer; *p; p++, i++ ) {
-		instr[i] = *p;
-		tw = CG_Text_Width( instr, scale, 0 );
-		if ( tw >= w ) {
-			memset( instr, 0, size );
-			for ( s = instr, p = &buffer[i + 1]; *p && ( ( s - instr ) < size ); p++, s++ ) {
-				*s = *p;
-			}
-			return tw - w;
-		}
-	}
-
-	return -1;
-}
-
-
-void CG_FitTextToWidth_Ext( char* instr, float scale, float w, int size, fontInfo_t* font ) {
-	char buffer[1024];
-	char    *s, *p, *c, *ls;
-	int l;
-
-	Q_strncpyz( buffer, instr, 1024 );
-	memset( instr, 0, size );
-
-	c = s = instr;
-	p = buffer;
-	ls = NULL;
-	l = 0;
-	while ( *p ) {
-		*c = *p++;
-		l++;
-
-		if ( *c == ' ' ) {
-			ls = c;
-		} // store last space, to try not to break mid word
-
-		c++;
-
-		if ( *p == '\n' ) {
-			s = c + 1;
-			l = 0;
-		} else if ( CG_Text_Width_Ext( s, scale, 0, font ) > w ) {
-			if ( ls ) {
-				*ls = '\n';
-				s = ls + 1;
-			} else {
-				*c = *( c - 1 );
-				*( c - 1 ) = '\n';
-				s = c++;
-			}
-
-			ls = NULL;
-			l = 0;
-		}
-	}
-
-	if ( c != buffer && ( *( c - 1 ) != '\n' ) ) {
-		*c++ = '\n';
-	}
-
-	*c = '\0';
-}
-
-void CG_FitTextToWidth2( char* instr, float scale, float w, int size ) {
-	char buffer[1024];
-	char    *s, *p, *c, *ls;
-	int l;
-
-	Q_strncpyz( buffer, instr, 1024 );
-	memset( instr, 0, size );
-
-	c = s = instr;
-	p = buffer;
-	ls = NULL;
-	l = 0;
-	while ( *p ) {
-		*c = *p++;
-		l++;
-
-		if ( *c == ' ' ) {
-			ls = c;
-		} // store last space, to try not to break mid word
-
-		c++;
-
-		if ( *p == '\n' ) {
-			s = c + 1;
-			l = 0;
-		} else if ( CG_Text_Width( s, scale, 0 ) > w ) {
-			if ( ls ) {
-				*ls = '\n';
-				s = ls + 1;
-			} else {
-				*c = *( c - 1 );
-				*( c - 1 ) = '\n';
-				s = c++;
-			}
-
-			ls = NULL;
-			l = 0;
-		}
-	}
-
-	if ( c != buffer && ( *( c - 1 ) != '\n' ) ) {
-		*c++ = '\n';
-	}
-
-	*c = '\0';
-}
-
-void CG_FitTextToWidth_SingleLine( char* instr, float scale, float w, int size ) {
-	char    *s, *p;
-	char buffer[1024];
-
-	Q_strncpyz( buffer, instr, 1024 );
-	memset( instr, 0, size );
-	p = instr;
-
-	for ( s = buffer; *s; s++, p++ ) {
-		*p = *s;
-		if ( CG_Text_Width( instr, scale, 0 ) > w ) {
-			*p = '\0';
-			return;
-		}
-	}
-}
-
 /*
 ==============
 weapIconDrawSize
@@ -221,18 +36,12 @@ weapIconDrawSize
 */
 static int weapIconDrawSize( int weap ) {
 	switch ( weap ) {
-
-		// weapons to not draw
-//		case WP_KNIFE:
-//			return 0;
-
-		// weapons with 'wide' icons
+	// weapons with 'wide' icons
 	case WP_THOMPSON:
 	case WP_MP40:
 	case WP_STEN:
 	case WP_PANZERFAUST:
 	case WP_FLAMETHROWER:
-//		case WP_SPEARGUN:
 	case WP_GARAND:
 	case WP_FG42:
 	case WP_FG42SCOPE:
@@ -285,12 +94,7 @@ void CG_DrawPlayerWeaponIcon( rectDef_t *rect, qboolean drawHighlighted, int ali
 	if ( cg.predictedPlayerEntity.currentState.eFlags & EF_MOUNTEDTANK && cg_entities[cg_entities[ cg_entities[ cg.snap->ps.clientNum ].tagParent ].tankparent].currentState.density & 8 ) {
 		icon = cgs.media.browningIcon;
 	} else {
-		if ( drawHighlighted ) {
-			//icon = cg_weapons[ realweap ].weaponIcon[1];
-			icon = cg_weapons[ realweap ].weaponIcon[1];    // we don't have icon[0];
-		} else {
-			icon = cg_weapons[ realweap ].weaponIcon[1];
-		}
+		icon = cg_weapons[ realweap ].weaponIcon[1];
 	}
 
 
@@ -676,8 +480,6 @@ void CG_DrawWeapHeat( rectDef_t *rect, int align ) {
 
 	flags |= 1;       // BAR_LEFT			- this is hardcoded now, but will be decided by the menu script
 	flags |= 16;      // BAR_BG			- draw the filled contrast box
-//	flags|=32;		// BAR_BGSPACING_X0Y5	- different style
-
 	flags |= 256;     // BAR_COLOR_LERP
 
 	CG_FilledBar( rect->x, rect->y, rect->w, rect->h, color, color2, NULL, (float)cg.snap->ps.curWeapHeat / 255.0f, flags );
@@ -862,16 +664,6 @@ void CG_KeyEvent( int key, qboolean down ) {
 		}
 		break;
 	}
-}
-
-int CG_ClientNumFromName( const char *p ) {
-	int i;
-	for ( i = 0; i < cgs.maxclients; i++ ) {
-		if ( cgs.clientinfo[i].infoValid && Q_stricmp( cgs.clientinfo[i].name, p ) == 0 ) {
-			return i;
-		}
-	}
-	return -1;
 }
 
 void CG_GetTeamColor( vec4_t *color ) {

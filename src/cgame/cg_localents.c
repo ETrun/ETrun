@@ -193,13 +193,7 @@ void CG_ReflectVelocity( localEntity_t *le, trace_t *trace ) {
 	// check for stop, making sure that even on low FPS systems it doesn't bobble
 
 	if ( le->leMarkType == LEMT_BLOOD && trace->startsolid ) {
-		//centity_t *cent;
-		//cent = &cg_entities[trace->entityNum];
-		//if (cent && cent->currentState.apos.trType != TR_STATIONARY)
-		//	le->pos.trType = TR_STATIONARY;
-	} else if ( trace->allsolid || ( trace->plane.normal[2] > 0 && ( le->pos.trDelta[2] < 40 || le->pos.trDelta[2] < -cg.frametime * le->pos.trDelta[2] ) ) ) {
-//----(SA)	if it's a fragment and it's not resting on the world...
-//			if(le->leType == LE_DEBRIS && trace->entityNum < (MAX_ENTITIES - 1))
+	} else if ( trace->allsolid || ( trace->plane.normal[2] > 0 && ( le->pos.trDelta[2] < 40 || le->pos.trDelta[2] < -cg.frametime * le->pos.trDelta[2] ) ) ) { //-V584
 		if ( le->leType == LE_FRAGMENT && trace->entityNum < ( MAX_ENTITIES - 1 ) ) {
 			le->pos.trType = TR_GRAVITY_PAUSED;
 		} else {

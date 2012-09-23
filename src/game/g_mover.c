@@ -1381,8 +1381,6 @@ void Use_BinaryMover( gentity_t *ent, gentity_t *other, gentity_t *activator ) {
 			if ( ent->flags & FL_SOFTACTIVATE ) {
 				G_AddEvent( ent, EV_GENERAL_SOUND, ent->soundSoftopen );
 			} else {
-//				if(activator)
-//					AICast_AudibleEvent( activator->s.number, ent->s.origin, HEAR_RANGE_DOOR_KICKOPEN );	// "someone kicked open a door near me!"
 				G_AddEvent( ent, EV_GENERAL_SOUND, ent->sound1to2 );
 			}
 		}
@@ -1392,8 +1390,6 @@ void Use_BinaryMover( gentity_t *ent, gentity_t *other, gentity_t *activator ) {
 		// looping sound
 		if ( !nosound ) {
 			ent->s.loopSound = ent->sound2to3;
-		} else if ( !nosound ) {
-			ent->s.loopSound = ent->soundLoop;
 		}
 
 		// open areaportal
@@ -1913,7 +1909,7 @@ qboolean findNonAIBrushTargeter( gentity_t *ent ) {
 
 	while ( ( targeter = G_Find( targeter, FOFS( target ), ent->targetname ) ) != NULL )
 	{
-		if ( strcmp( targeter->classname,"trigger_aidoor" ) &&
+		if ( strcmp( targeter->classname,"trigger_aidoor" ) != 0 &&
 			 Q_stricmp( targeter->classname, "func_invisible_user" ) ) {
 			return qtrue;
 		}
@@ -2688,7 +2684,7 @@ void Think_SetupTrainTargets( gentity_t *ent ) {
 						  vtos( path->s.origin ) );
 				return;
 			}
-		} while ( strcmp( next->classname, "path_corner" ) );
+		} while ( strcmp( next->classname, "path_corner" ) != 0 );
 
 		path->nextTrain = next;
 	}
@@ -3080,7 +3076,7 @@ void Think_SetupTrainTargets_rotating( gentity_t *ent ) {
 						  vtos( path->s.origin ) );
 				return;
 			}
-		} while ( strcmp( next->classname, "path_corner" ) );
+		} while ( strcmp( next->classname, "path_corner" ) != 0 );
 
 		path->nextTrain = next;
 	}

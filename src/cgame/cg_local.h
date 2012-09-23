@@ -2087,7 +2087,6 @@ void CG_PriorityCenterPrint( const char *str, int y, int charWidth, int priority
 void CG_ObjectivePrint( const char *str, int charWidth );                       // NERVE - SMF
 void CG_DrawActive( stereoFrame_t stereoView );
 void CG_CheckForCursorHints( void );
-void CG_DrawTeamBackground( int x, int y, int w, int h, float alpha, int team );
 void CG_Text_Paint_Ext( float x, float y, float scalex, float scaley, vec4_t color, const char *text, float adjust, int limit, int style, fontInfo_t* font );
 void CG_Text_Paint_Centred_Ext( float x, float y, float scalex, float scaley, vec4_t color, const char *text, float adjust, int limit, int style, fontInfo_t* font );
 void CG_Text_Paint( float x, float y, float scale, vec4_t color, const char *text, float adjust, int limit, int style );
@@ -2753,12 +2752,6 @@ void        CG_FreeCamera( int camNum );
 //----(SA)	end
 
 bg_playerclass_t* CG_PlayerClassForClientinfo( clientInfo_t *ci, centity_t* cent );
-
-void CG_FitTextToWidth( char* instr, int w, int size );
-void CG_FitTextToWidth2( char* instr, float scale, float w, int size );
-void CG_FitTextToWidth_Ext( char* instr, float scale, float w, int size, fontInfo_t* font );
-int CG_TrimLeftPixels( char* instr, float scale, float w, int size );
-void CG_FitTextToWidth_SingleLine( char* instr, float scale, float w, int size );
 
 void CG_LocateCampaign( void );
 void CG_LocateArena( void );

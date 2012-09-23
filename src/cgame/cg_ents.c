@@ -1181,7 +1181,7 @@ static void CG_Trap( centity_t *cent ) {
 		CG_TrapSetAnim( cent, traplf, cs->frame );
 
 		traplf->frame           =
-			traplf->oldFrame        = traplf->animation->firstFrame;
+		traplf->oldFrame        = traplf->animation->firstFrame;
 	}
 
 	// transition to new anim if requested

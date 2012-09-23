@@ -423,9 +423,7 @@ qboolean IsHeadShotWeapon( int mod ) {
 			mod == MOD_AKIMBO_SILENCEDLUGER ||
 			mod == MOD_MP40 ||
 			mod == MOD_THOMPSON ||
-			mod == MOD_STEN ||
-			mod == MOD_GARAND
-
+			mod == MOD_STEN
 			|| mod == MOD_KAR98
 			|| mod == MOD_K43
 			|| mod == MOD_K43_SCOPE

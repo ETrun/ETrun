@@ -5,7 +5,7 @@
  * Global handles
  */
 #if defined _WIN32
-	typedef int (*API_query_t)(char *, char *, char *);
+	typedef int (*API_query_t)(char *, char *, char *, int);
 	API_query_t API_query;
 	typedef int (*API_init_t)(void);
 	API_init_t API_init;
@@ -14,7 +14,7 @@
 	HMODULE api_module;
 # else
 	void *api_module;
-	int (*API_query)(char *, char *, char *);
+	int (*API_query)(char *, char *, char *, int);
 	int (*API_init)(void);
 	void (*API_clean)(void);
 # endif
@@ -203,7 +203,7 @@ static void *loginHandler(void *data) {
 	queryStruct = (struct query_s *)data;
 	ent = queryStruct->ent;
 
-	code = API_query(queryStruct->cmd, queryStruct->result, queryStruct->query);
+	code = API_query(queryStruct->cmd, queryStruct->result, queryStruct->query, sizeof (queryStruct->query));
 
 	len = strlen(queryStruct->result);
 
@@ -261,7 +261,7 @@ static void *mapRecordsHandler(void *data) {
 	queryStruct = (struct query_s *)data;
 	ent = queryStruct->ent;
 
-	code = API_query(queryStruct->cmd, queryStruct->result, queryStruct->query);
+	code = API_query(queryStruct->cmd, queryStruct->result, queryStruct->query, sizeof (queryStruct->query));
 
 	APILog(va("mapRecords: code = %d\n", code), qfalse);
 
@@ -308,7 +308,7 @@ static void *checkAPIHandler(void *data) {
 
 	queryStruct = (struct query_s *)data;
 
-	code = API_query(queryStruct->cmd, queryStruct->result, queryStruct->query);
+	code = API_query(queryStruct->cmd, queryStruct->result, queryStruct->query, sizeof (queryStruct->query));
 
 	APILog(va("checkAPI: code = %d, result = %s\n", code, queryStruct->result), qfalse);
 
@@ -358,7 +358,7 @@ static void *recordHandler(void *data) {
 	queryStruct = (struct query_s *)data;
 	ent = queryStruct->ent;
 
-	code = API_query(queryStruct->cmd, queryStruct->result, queryStruct->query);
+	code = API_query(queryStruct->cmd, queryStruct->result, queryStruct->query, sizeof (queryStruct->query));
 
 	APILog(va("Record: code = %d, result = %s\n", code, queryStruct->result), qfalse);
 
@@ -445,7 +445,7 @@ static void *checkpointsHandler(void *data) {
 	queryStruct = (struct query_s *)data;
 	ent = queryStruct->ent;
 
-	code = API_query(queryStruct->cmd, queryStruct->result, queryStruct->query);
+	code = API_query(queryStruct->cmd, queryStruct->result, queryStruct->query, sizeof (queryStruct->query));
 
 	APILog(va("Checkpoints: code = %d, result = %s\n", code, queryStruct->result), qfalse);
 
@@ -524,7 +524,7 @@ static void *randommapHandler(void *data) {
 	queryStruct = (struct query_s *)data;
 	ent = queryStruct->ent;
 
-	code = API_query(queryStruct->cmd, queryStruct->result, queryStruct->query);
+	code = API_query(queryStruct->cmd, queryStruct->result, queryStruct->query, sizeof (queryStruct->query));
 
 	APILog(va("Randommap: code = %d, result = %s\n", code, queryStruct->result), qfalse);
 
@@ -585,7 +585,7 @@ static void *mapRankHandler(void *data) {
 	queryStruct = (struct query_s *)data;
 	ent = queryStruct->ent;
 
-	code = API_query(queryStruct->cmd, queryStruct->result, queryStruct->query);
+	code = API_query(queryStruct->cmd, queryStruct->result, queryStruct->query, sizeof (queryStruct->query));
 
 	APILog(va("mapRank: code = %d\n", code), qfalse);
 

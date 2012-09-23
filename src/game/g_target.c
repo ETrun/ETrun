@@ -206,8 +206,6 @@ void Use_Target_Speaker( gentity_t *ent, gentity_t *other, gentity_t *activator 
 	} else { // normal sound
 		if ( ent->spawnflags & 8 ) {
 			G_AddEvent( activator, EV_GENERAL_SOUND_VOLUME, ent->noise_index );
-		} else if ( ent->spawnflags & 4 ) {
-			G_AddEvent( ent, EV_GENERAL_SOUND_VOLUME, ent->noise_index );
 		} else {
 			G_AddEvent( ent, EV_GENERAL_SOUND_VOLUME, ent->noise_index );
 		}
@@ -1457,7 +1455,7 @@ void target_stoptimer_use(gentity_t *self, gentity_t *other, gentity_t *activato
 	milli -= sec * 1000;
 
 	delta = abs(time - client->sess.timerunBestTime[timerunNum]);
-	if ((!client->sess.timerunBestTime[timerunNum] || time < client->sess.timerunBestTime[timerunNum])) {
+	if (!client->sess.timerunBestTime[timerunNum] || time < client->sess.timerunBestTime[timerunNum]) {
 		// best personal for this session
 		if (client->sess.logged) {
 			client->sess.timerunBestTime[timerunNum] = time;

@@ -1816,20 +1816,9 @@ void Props_Barrel_Animate( gentity_t *ent ) {
 	vec3_t v;
 
 	if ( ent->s.frame == 14 ) {
-		if ( ent->spawnflags & 1 ) {
-			//	G_UseTargets (ent, NULL);
-			ent->think = G_FreeEntity;
-			ent->nextthink = level.time + 25000;
-			return;
-		} else
-		{
-			//	G_UseTargets (ent, NULL);
-			ent->think = G_FreeEntity;
-			ent->nextthink = level.time + 25000;
-			//ent->s.time = level.time;
-			//ent->s.time2 = level.time + 2000;
-			return;
-		}
+		ent->think = G_FreeEntity;
+		ent->nextthink = level.time + 25000;
+		return;
 	} else
 	{
 		ent->nextthink = level.time + ( FRAMETIME / 2 );
@@ -2134,48 +2123,6 @@ void SP_Props_Flamebarrel( gentity_t *ent ) {
 	ent->takedamage = qtrue;
 	trap_LinkEntity( ent );
 }
-
-/*QUAKED props_crate_64 (.8 .6 .2) (-32 -32 0) (32 32 64)
-breakable pushable
-
-  health = default = 20
-wait = defaults to 10 how many shards to spawn ( try not to exceed 20 )
-
-shard =
-	FXTYPE_GLASS = 0,
-	FXTYPE_WOOD = 1,
-	FXTYPE_METAL = 2
-
-*/
-
-/*QUAKED props_crate_32 (.8 .6 .2) (-16 -16 0) (16 16 32)
-breakable pushable
-
-  health = default = 20
-wait = defaults to 10 how many shards to spawn ( try not to exceed 20 )
-
-shard =
-	FXTYPE_GLASS = 0,
-	FXTYPE_WOOD = 1,
-	FXTYPE_METAL = 2
-*/
-
-/*QUAKED props_crate_32x64 (.8 .6 .2) ?
-requires an origin brush
-
-breakable NOT pushable
-
-brushmodel only
-
-  health = default = 20
-wait = defaults to 10 how many shards to spawn ( try not to exceed 20 )
-
-shard =
-	FXTYPE_GLASS = 0,
-	FXTYPE_WOOD = 1,
-	FXTYPE_METAL = 2
-
-*/
 
 void touch_crate_64( gentity_t *self, gentity_t *other, trace_t *trace ) {
 	float ratio;

@@ -112,11 +112,7 @@ void G_BounceMissile( gentity_t *ent, trace_t *trace ) {
 		}
 
 		// ydnar: calculate relative delta for stop calcs
-		if ( ent->s.groundEntityNum == ENTITYNUM_WORLD || 1 ) {
-			VectorCopy( ent->s.pos.trDelta, relativeDelta );
-		} else {
-			VectorSubtract( ent->s.pos.trDelta, ground->instantVelocity, relativeDelta );
-		}
+		VectorCopy( ent->s.pos.trDelta, relativeDelta );
 
 		// check for stop
 		//%	if ( trace->plane.normal[2] > 0.2 && VectorLengthSquared( ent->s.pos.trDelta ) < SQR(40) )
@@ -265,13 +261,9 @@ void M_think( gentity_t *ent ) {
 
 	tent = G_TempEntity( ent->s.origin, EV_SMOKE );
 	VectorCopy( ent->s.origin, tent->s.origin );
-	if ( ent->s.density == 1 ) {
-		tent->s.origin[2] += 16;
-	} else {
-		// tent->s.origin[2]+=32;
-		// Note to self Maxx said to lower the spawn loc for the smoke 16 units
-		tent->s.origin[2] += 16;
-	}
+
+	// Note to self Maxx said to lower the spawn loc for the smoke 16 units
+	tent->s.origin[2] += 16;
 
 	tent->s.time = 3000;
 	tent->s.time2 = 100;

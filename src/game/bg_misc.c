@@ -3001,11 +3001,6 @@ qboolean BG_CanUseWeapon( int classNum, int teamNum, weapon_t weapon ) {
 			return ( teamNum == TEAM_ALLIES );
 		}
 	case PC_FIELDOPS:
-		// TAT 1/11/2003 - in SP, field op can only use handgun, check after switch below
-		if ( isSinglePlayer && teamNum == TEAM_ALLIES ) {
-			break;
-		}
-
 		if ( weapon == WP_STEN ) {
 			return qtrue;
 		} else if ( weapon == WP_MP40 ) {
@@ -3037,10 +3032,7 @@ qboolean BG_CanUseWeapon( int classNum, int teamNum, weapon_t weapon ) {
 			 || weapon == WP_MEDKIT ) {
 			return qtrue;
 		}
-		// TAT 1/11/2003 - in SP, medic can only use handgun, check after switch below
-		else if ( isSinglePlayer && teamNum == TEAM_ALLIES ) {
-			break;
-		} else if ( weapon == WP_MP40 ) {
+		else if ( weapon == WP_MP40 ) {
 			return ( teamNum == TEAM_AXIS );
 		} else if ( weapon == WP_THOMPSON ) {
 			return ( teamNum == TEAM_ALLIES );

@@ -4357,7 +4357,7 @@ void Item_Bind_Paint( itemDef_t *item ) {
 		BindingFromName( item->cvar );
 		DC->drawText( item->textRect.x + item->textRect.w + 8, item->textRect.y, item->textscale, newColor, g_nameBind1, 0, maxChars, item->textStyle );
 	} else {
-		DC->drawText( item->textRect.x, item->textRect.y, item->textscale, newColor, ( value != 0 ) ? "FIXME" : "FIXME", 0, maxChars, item->textStyle );
+		DC->drawText( item->textRect.x, item->textRect.y, item->textscale, newColor, "FIXME", 0, maxChars, item->textStyle );
 	}
 }
 
