@@ -162,7 +162,7 @@ void CG_Text_Paint_Ext( float x, float y, float scalex, float scaley, vec4_t col
 		}
 		count = 0;
 		while ( s && *s && count < len ) {
-			glyph = &font->glyphs[(unsigned char)*s];
+			glyph = &font->glyphs[(unsigned char)*s]; //-V595
 			if ( Q_IsColorString( s ) ) {
 				if ( *( s + 1 ) == COLOR_NULL ) {
 					memcpy( newColor, color, sizeof( newColor ) );
