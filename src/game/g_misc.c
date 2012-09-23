@@ -1725,18 +1725,21 @@ void mg42_die( gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int d
 		gun = self;
 	}
 
-	gun->sound3to2 = attacker->client ? attacker->client->sess.sessionTeam : -1;
+	// Nico, check gun here
+	if (gun) {
+		gun->sound3to2 = attacker->client ? attacker->client->sess.sessionTeam : -1;
 
-	owner = &g_entities[gun->r.ownerNum];
+		owner = &g_entities[gun->r.ownerNum];
 
-	if ( gun && self->health <= 0 ) {
-		gun->s.frame = 2;
-		gun->takedamage = qfalse;
+		if (self->health <= 0 ) {
+			gun->s.frame = 2;
+			gun->takedamage = qfalse;
 
-		// DHM - Nerve :: health is used in repairing later
-		gun->health = 0;
-		gun->s.eFlags = EF_SMOKING;         // Make it smoke on client side
-		self->health = 0;
+			// DHM - Nerve :: health is used in repairing later
+			gun->health = 0;
+			gun->s.eFlags = EF_SMOKING;         // Make it smoke on client side
+			self->health = 0;
+		}
 	}
 
 	self->takedamage = qfalse;
