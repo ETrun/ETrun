@@ -206,7 +206,6 @@ qboolean G_ScriptAction_ShaderRemap( gentity_t* ent, char *params ) {
 	Q_strncpyz( newShader, token, 256 );
 
 	AddRemap( oldShader, newShader, f );
-//	trap_SetConfigstring(CS_SHADERSTATE, BuildShaderStateConfig());
 
 	return qtrue;
 }
