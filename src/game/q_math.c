@@ -371,7 +371,7 @@ void RotatePointAroundVector( vec3_t dst, const vec3_t dir, const vec3_t point,
 	im[2][1] = m[1][2];
 
 	memset( zrot, 0, sizeof( zrot ) );
-	zrot[0][0] = zrot[1][1] = zrot[2][2] = 1.0F;
+	zrot[1][1] = zrot[2][2] = 1.0F;
 
 	rad = DEG2RAD( degrees );
 	zrot[0][0] = cos( rad );
@@ -396,11 +396,6 @@ Rotate a point around a vertex
 */
 void RotatePointAroundVertex( vec3_t pnt, float rot_x, float rot_y, float rot_z, const vec3_t origin ) {
 	float tmp[11];
-	//float rad_x, rad_y, rad_z;
-
-	/*rad_x = DEG2RAD( rot_x );
-	rad_y = DEG2RAD( rot_y );
-	rad_z = DEG2RAD( rot_z );*/
 
 	// move pnt to rel{0,0,0}
 	VectorSubtract( pnt, origin, pnt );

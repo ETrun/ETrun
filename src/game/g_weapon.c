@@ -232,7 +232,7 @@ void Weapon_Medic( gentity_t *ent ) {
 
 	AngleVectors( angles, velocity, NULL, NULL );
 	VectorScale( velocity, 64, offset );
-	offset[2] += ent->client->ps.viewheight / 2;
+	offset[2] += (float)(ent->client->ps.viewheight) / 2;
 	VectorScale( velocity, 75, velocity );
 	velocity[2] += 50 + crandom() * 25;
 
@@ -297,7 +297,7 @@ void Weapon_MagicAmmo( gentity_t *ent ) {
 
 	AngleVectors( angles, velocity, NULL, NULL );
 	VectorScale( velocity, 64, offset );
-	offset[2] += ent->client->ps.viewheight / 2;
+	offset[2] += (float)(ent->client->ps.viewheight) / 2;
 	VectorScale( velocity, 75, velocity );
 	velocity[2] += 50 + crandom() * 25;
 
