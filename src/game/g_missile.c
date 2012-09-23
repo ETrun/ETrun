@@ -112,11 +112,7 @@ void G_BounceMissile( gentity_t *ent, trace_t *trace ) {
 		}
 
 		// ydnar: calculate relative delta for stop calcs
-		if ( ent->s.groundEntityNum == ENTITYNUM_WORLD || 1 ) {
-			VectorCopy( ent->s.pos.trDelta, relativeDelta );
-		} else {
-			VectorSubtract( ent->s.pos.trDelta, ground->instantVelocity, relativeDelta );
-		}
+		VectorCopy( ent->s.pos.trDelta, relativeDelta );
 
 		// check for stop
 		//%	if ( trace->plane.normal[2] > 0.2 && VectorLengthSquared( ent->s.pos.trDelta ) < SQR(40) )
