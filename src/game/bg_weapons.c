@@ -1750,8 +1750,7 @@ void PM_Weapon( void ) {
 		float fwdmove_knockback = 0.f;
 
 		switch ( pm->ps->weapon ) {
-		case WP_MOBILE_MG42:    fwdmove_knockback = 4000.f;
-			fwdmove_knockback = 400.f;
+		case WP_MOBILE_MG42:    fwdmove_knockback = 400.f;
 			break;
 		case WP_PANZERFAUST:    fwdmove_knockback = 32000.f;
 			break;
