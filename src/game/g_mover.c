@@ -1909,7 +1909,7 @@ qboolean findNonAIBrushTargeter( gentity_t *ent ) {
 
 	while ( ( targeter = G_Find( targeter, FOFS( target ), ent->targetname ) ) != NULL )
 	{
-		if ( strcmp( targeter->classname,"trigger_aidoor" ) &&
+		if ( strcmp( targeter->classname,"trigger_aidoor" ) != 0 &&
 			 Q_stricmp( targeter->classname, "func_invisible_user" ) ) {
 			return qtrue;
 		}
@@ -2684,7 +2684,7 @@ void Think_SetupTrainTargets( gentity_t *ent ) {
 						  vtos( path->s.origin ) );
 				return;
 			}
-		} while ( strcmp( next->classname, "path_corner" ) );
+		} while ( strcmp( next->classname, "path_corner" ) != 0 );
 
 		path->nextTrain = next;
 	}
@@ -3076,7 +3076,7 @@ void Think_SetupTrainTargets_rotating( gentity_t *ent ) {
 						  vtos( path->s.origin ) );
 				return;
 			}
-		} while ( strcmp( next->classname, "path_corner" ) );
+		} while ( strcmp( next->classname, "path_corner" ) != 0 );
 
 		path->nextTrain = next;
 	}

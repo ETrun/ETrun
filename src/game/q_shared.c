@@ -624,7 +624,7 @@ void COM_MatchToken( char **buf_p, char *match ) {
 	char    *token;
 
 	token = COM_Parse( buf_p );
-	if ( strcmp( token, match ) ) {
+	if ( strcmp( token, match ) != 0 ) {
 		Com_Error( ERR_DROP, "MatchToken: %s != %s", token, match );
 	}
 }
@@ -753,7 +753,7 @@ int Com_ParseInfos( char *buf, int max, char infos[][MAX_INFO_STRING] ) {
 		if ( !token[0] ) {
 			break;
 		}
-		if ( strcmp( token, "{" ) ) {
+		if ( strcmp( token, "{" ) != 0 ) {
 			Com_Printf( "Missing { in info file\n" );
 			break;
 		}

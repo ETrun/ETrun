@@ -943,7 +943,7 @@ void G_CheckForCursorHints( gentity_t *ent ) {
 		}
 	}
 
-	if ( dist <= Square( hintDist ) ) {
+	if ( dist <= (float)Square( hintDist ) ) {
 		ps->serverCursorHint = hintType;
 		ps->serverCursorHintVal = hintVal;
 	}
