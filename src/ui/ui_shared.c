@@ -4317,15 +4317,12 @@ void Item_Slider_Paint( itemDef_t *item ) {
 
 void Item_Bind_Paint( itemDef_t *item ) {
 	vec4_t newColor, lowLight;
-	float value;
 	int maxChars = 0;
 	menuDef_t *parent = (menuDef_t*)item->parent;
 	editFieldDef_t *editPtr = (editFieldDef_t*)item->typeData;
 	if ( editPtr ) {
 		maxChars = editPtr->maxPaintChars;
 	}
-
-	value = ( item->cvar ) ? DC->getCVarValue( item->cvar ) : 0;
 
 	if ( item->window.flags & WINDOW_HASFOCUS && item->window.flags & WINDOW_FOCUSPULSE ) {
 		if ( g_bindItem == item ) {
