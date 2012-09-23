@@ -1455,7 +1455,7 @@ void target_stoptimer_use(gentity_t *self, gentity_t *other, gentity_t *activato
 	milli -= sec * 1000;
 
 	delta = abs(time - client->sess.timerunBestTime[timerunNum]);
-	if ((!client->sess.timerunBestTime[timerunNum] || time < client->sess.timerunBestTime[timerunNum])) {
+	if (!client->sess.timerunBestTime[timerunNum] || time < client->sess.timerunBestTime[timerunNum]) {
 		// best personal for this session
 		if (client->sess.logged) {
 			client->sess.timerunBestTime[timerunNum] = time;
