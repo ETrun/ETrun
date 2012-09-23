@@ -1719,7 +1719,6 @@ typedef enum {
 } sysMsg_t;
 
 void G_CheckForNeededClasses( void );
-void G_CheckMenDown( void );
 void G_SendSystemMessage( sysMsg_t message, int team );
 int G_GetSysMessageNumber( const char* sysMsg );
 void G_AddClientToFireteam( int entityNum, int leaderNum );
