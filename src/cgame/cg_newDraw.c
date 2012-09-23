@@ -94,12 +94,7 @@ void CG_DrawPlayerWeaponIcon( rectDef_t *rect, qboolean drawHighlighted, int ali
 	if ( cg.predictedPlayerEntity.currentState.eFlags & EF_MOUNTEDTANK && cg_entities[cg_entities[ cg_entities[ cg.snap->ps.clientNum ].tagParent ].tankparent].currentState.density & 8 ) {
 		icon = cgs.media.browningIcon;
 	} else {
-		if ( drawHighlighted ) {
-			//icon = cg_weapons[ realweap ].weaponIcon[1];
-			icon = cg_weapons[ realweap ].weaponIcon[1];    // we don't have icon[0];
-		} else {
-			icon = cg_weapons[ realweap ].weaponIcon[1];
-		}
+		icon = cg_weapons[ realweap ].weaponIcon[1];
 	}
 
 
