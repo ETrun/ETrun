@@ -1381,8 +1381,6 @@ void Use_BinaryMover( gentity_t *ent, gentity_t *other, gentity_t *activator ) {
 			if ( ent->flags & FL_SOFTACTIVATE ) {
 				G_AddEvent( ent, EV_GENERAL_SOUND, ent->soundSoftopen );
 			} else {
-//				if(activator)
-//					AICast_AudibleEvent( activator->s.number, ent->s.origin, HEAR_RANGE_DOOR_KICKOPEN );	// "someone kicked open a door near me!"
 				G_AddEvent( ent, EV_GENERAL_SOUND, ent->sound1to2 );
 			}
 		}
@@ -1392,8 +1390,6 @@ void Use_BinaryMover( gentity_t *ent, gentity_t *other, gentity_t *activator ) {
 		// looping sound
 		if ( !nosound ) {
 			ent->s.loopSound = ent->sound2to3;
-		} else if ( !nosound ) {
-			ent->s.loopSound = ent->soundLoop;
 		}
 
 		// open areaportal
