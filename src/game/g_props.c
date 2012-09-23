@@ -1816,20 +1816,9 @@ void Props_Barrel_Animate( gentity_t *ent ) {
 	vec3_t v;
 
 	if ( ent->s.frame == 14 ) {
-		if ( ent->spawnflags & 1 ) {
-			//	G_UseTargets (ent, NULL);
-			ent->think = G_FreeEntity;
-			ent->nextthink = level.time + 25000;
-			return;
-		} else
-		{
-			//	G_UseTargets (ent, NULL);
-			ent->think = G_FreeEntity;
-			ent->nextthink = level.time + 25000;
-			//ent->s.time = level.time;
-			//ent->s.time2 = level.time + 2000;
-			return;
-		}
+		ent->think = G_FreeEntity;
+		ent->nextthink = level.time + 25000;
+		return;
 	} else
 	{
 		ent->nextthink = level.time + ( FRAMETIME / 2 );
