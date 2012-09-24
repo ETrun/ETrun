@@ -46,6 +46,8 @@ Then, run the bootstrap script:
 $ ./bootstrap
 </pre>
 
+or run bootstrap.bat if you are running Windows.
+
 Compiling for Windows
 ---------------------
 
@@ -53,7 +55,7 @@ On Windows: use MSVC compiler.
 
 On Linux, not supported.
 
-Windows server module requires [Microsoft Visual C++ 2010 Redistributable Package](http://www.microsoft.com/en-us/download/details.aspx?id=5555) to run properly.
+Windows server module requires [Microsoft Visual C++ 2012 Redistributable Package](http://www.microsoft.com/fr-fr/download/details.aspx?id=30679) to run properly.
 
 Compiling for Linux (32-bit)
 ----------------------------
