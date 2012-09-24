@@ -721,6 +721,11 @@ void G_callAPI(char *command, char *result, gentity_t *ent, int count, ...) {
 		G_Error("G_callAPI: no handler for command: %s\n", command);
 	}
 
+	// Check if thread limit is reached
+	if (activeThreadsCounter >= THREADS_MAX) {
+		G_Error("G_callAPI: threads limit (%d) reached: %d\n", THREADS_MAX, activeThreadsCounter);
+	}
+
 	APILog(va("Calling API with command: %s, query: %s\n", command, queryStruct->query), qfalse);
 	G_LogPrintf("Calling API with command: %s, query: %s\n", command, queryStruct->query);
 

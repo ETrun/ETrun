@@ -7,6 +7,7 @@
 # define RESPONSE_MAX_SIZE 2048
 # define QUERY_MAX_SIZE 1024
 # define CHAR_SEPARATOR "/"
+# define THREADS_MAX 64 // Maximum threads at the same time
 
 void G_callAPI(char *command, char *result, gentity_t *ent, int count, ...);
 void G_loadAPI();
