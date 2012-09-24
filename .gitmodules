@@ -4,3 +4,9 @@
 [submodule "wiki"]
 	path = wiki
 	url = git@github.com:boutetnico/ETrun.wiki.git
+[submodule "src/libs/curl"]
+	path = src/libs/curl
+	url = https://github.com/bagder/curl.git
+[submodule "src/libs/c-ares"]
+	path = src/libs/c-ares
+	url = https://github.com/bagder/c-ares.git

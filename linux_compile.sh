@@ -4,10 +4,11 @@ BUILD_DIR=_build
 
 # Parse options
 debug=0
-args=`getopt d $*`
+build_curl=0
+args=`getopt dc $*`
 if [ $? != 0 ]
 then
-  echo 'Usage: ./bootstrap [-d]'
+  echo 'Usage: ./bootstrap [-d] [-c]'
   exit 2
 fi
 set -- $args
@@ -19,12 +20,25 @@ do
       debug=1
       shift;;
 
+    -c)
+      build_curl=1
+      shift;;
+
     --)
       shift; break;;
   esac
 done
 
-# Clean
+# Build libcurl & c-ares
+	if [ $build_curl -eq 1 ]; then
+	cd src/libs/c-ares
+	./configure && make
+	cd ../curl
+	./configure --without-ssl --disable-shared --disable-crypto-auth  --disable-ipv6 --disable-proxy --enable-ares --disable-manual --disable-ftp --disable-file --disable-ldap --disable-ldaps --disable-rtsp --enable-proxy --disable-dict --disable-telnet --disable-tftp --disable-pop3 --disable-imap --disable-smtp --disable-manual --disable-ipv6 --disable-sspi --disable-cookies --disable-gopher && make
+	cd ../../..
+fi
+
+# Clean ETrun
 make distclean
 
 # Compile for linux
