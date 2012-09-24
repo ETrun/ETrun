@@ -2792,19 +2792,25 @@ void info_limbo_camera_setup( gentity_t* self ) {
 	vec3_t vec;
 
 	if ( level.numLimboCams >= MAX_LIMBO_CAMS ) {
-		G_Error( "info_limbo_camera: MAX_LIMBO_CAMS (%i) hit", MAX_LIMBO_CAMS );
+		// Nico, removed G_Error here
+		G_Printf( "info_limbo_camera: MAX_LIMBO_CAMS (%i) hit", MAX_LIMBO_CAMS );
+		return;
 	}
 
 	caminfo = &level.limboCams[level.numLimboCams];
 	level.numLimboCams++;
 
 	if ( !self->target || !*self->target ) {
-		G_Error( "info_limbo_camera with no target" );
+		// Nico, removed G_Error here
+		G_Printf( "info_limbo_camera with no target" );
+		return;
 	}
 
 	target = G_FindByTargetname( NULL, self->target );
 	if ( !target ) {
-		G_Error( "info_limbo_camera cannot find target" );
+		// Nico, removed G_Error here
+		G_Printf( "info_limbo_camera cannot find target" );
+		return;
 	}
 
 	VectorCopy( self->s.origin, caminfo->origin );

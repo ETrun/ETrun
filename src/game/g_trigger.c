@@ -1223,7 +1223,9 @@ void Think_SetupObjectiveInfo( gentity_t *ent ) {
 	ent->target_ent = G_FindByTargetname( NULL, ent->target );
 
 	if ( !ent->target_ent ) {
-		G_Error( "'trigger_objective_info' has a missing target '%s'\n", ent->target );
+		// Nico, removed G_Error here
+		G_Printf( "'trigger_objective_info' has a missing target '%s'\n", ent->target );
+		return;
 	}
 
 	if ( ent->target_ent->s.eType == ET_EXPLOSIVE ) {
@@ -1289,11 +1291,15 @@ void Think_SetupObjectiveInfo( gentity_t *ent ) {
 			team[1] = constructibles[1]->spawnflags & AXIS_CONSTRUCTIBLE ? TEAM_AXIS : TEAM_ALLIES;
 
 			if ( constructibles[1]->s.eType != ET_CONSTRUCTIBLE ) {
+				// Nico, removed G_Error here
 				G_Printf( "ERROR: 'trigger_objective_info' targets multiple entities with targetname '%s', the second one isn't a 'func_constructible'\n", ent->target );
+				return;
 			}
 
 			if ( team[0] == team[1] ) {
+				// Nico, removed G_Error here
 				G_Printf( "ERROR: 'trigger_objective_info' targets two 'func_constructible' entities with targetname '%s' that are constructible by the same team\n", ent->target );
+				return;
 			}
 
 			constructibles[1]->s.otherEntityNum2 = ent->s.teamNum;
