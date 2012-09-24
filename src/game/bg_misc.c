@@ -2983,10 +2983,6 @@ BG_CanUseWeapon: can a player of the specified team and class use this weapon?
 - added by xkan, 01/02/03
 */
 qboolean BG_CanUseWeapon( int classNum, int teamNum, weapon_t weapon ) {
-	// TAT 1/11/2003 - is this SP game? - different weapons available in SP
-
-	qboolean isSinglePlayer = qfalse;
-
 	switch ( classNum ) {
 	case PC_ENGINEER:
 		if ( weapon == WP_PLIERS
