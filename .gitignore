@@ -11,12 +11,18 @@ _build/*/*.*
 *.o
 *.obj
 
+# Scripts
+linux_compile.sh
+osx_compile.sh
+
 # Autotools related
 autom4te.cache/
 aclocal.m4
 Makefile
 Makefile.in
+Makefile.am
 configure
+configure.ac
 config.h
 config.h.in
 config.status
@@ -35,18 +41,6 @@ ipch/
 # Xcode related
 src/*.xcodeproj/project.xcworkspace
 src/*.xcodeproj/xcuserdata
-
-# curl related
-src/libs/curl-7.25.0/curl-config
-src/libs/curl-7.25.0/include/curl/stamp-h3
-src/libs/curl-7.25.0/*/curl_config.h
-*.vers
-*.pc
-*.spec
-*.list
-src/libs/curl-7.25.0/src/curl
-src/libs/curl-7.25.0/src/stamp-h2
-src/libs/curl-7.25.0/tests/configurehelp.pm
 
 # Others
 *~
