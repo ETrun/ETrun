@@ -243,6 +243,10 @@ mv src/ui/.libs/libui.so $BUILD_DIR/ui.mp.i386.so
 mv src/APImodule/.libs/libapi.so $BUILD_DIR/APImodule.so' > linux_compile.sh
 fi
 
+# Change rights
+chmod +x linux_compile.sh
+chmod +x osx_compile.sh
+
 
 # Bootstrap
 
@@ -277,8 +281,8 @@ else
   # End
   echo "Bootstrap done."
   if [ $host = "Darwin" ]; then
-    echo "Run ./osx_compile to compile ETrun"
+    echo "Run ./osx_compile.sh to compile ETrun"
   else
-    echo "Run ./linux_compile to compile ETrun"
+    echo "Run ./linux_compile.sh to compile ETrun"
   fi
 fi
