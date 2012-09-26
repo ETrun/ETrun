@@ -36,6 +36,8 @@ On Linux, make sure you have the following packages installed:
 * autoconf
 * automake
 * libtool
+* zlib dev package
+* libidn dev package
 
 On OSX, make sure to have autoconf, libtool and libidn. You can install them via homebrew.
 
