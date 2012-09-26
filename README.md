@@ -63,7 +63,7 @@ Compiling for Linux (32-bit)
 
 On Windows: not supported.
 
-On Linux, run:
+On Linux (32-bit only), run:
 
 <pre>
 $ ./linux_compile.sh
