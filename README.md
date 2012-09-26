@@ -36,7 +36,6 @@ On Linux, make sure you have the following packages installed:
 * autoconf
 * automake
 * libtool
-* libcurl dev packages
 
 On OSX, make sure to have autoconf, libtool and libidn. You can install them via homebrew.
 
