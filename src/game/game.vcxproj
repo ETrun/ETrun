@@ -52,8 +52,8 @@
     <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" />
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>..\libs\pthread-2.8.0\include;$(IncludePath)</IncludePath>
-    <LibraryPath>..\libs\pthread-2.8.0\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>..\libs\pthreads-w32-2-9-1;$(IncludePath)</IncludePath>
+    <LibraryPath>..\libs\pthreads-w32-2-9-1;$(LibraryPath)</LibraryPath>
     <TargetName>qagame_mp_x86</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -135,7 +135,7 @@
     </ResourceCompile>
     <Link>
       <AdditionalOptions>/MACHINE:I386 %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalDependencies>winmm.lib;pthread_static.lib;ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>winmm.lib;pthread.lib;ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>..\..\_build/qagame_mp_x86.dll</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <ModuleDefinitionFile>.\game.def</ModuleDefinitionFile>
