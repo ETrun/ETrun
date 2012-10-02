@@ -57,7 +57,7 @@ static qboolean G_ParseAnimationFiles( bg_character_t *character, const char *an
 	if ( len <= 0 ) {
 		return qfalse;
 	}
-	if ( len >= sizeof( text ) - 1 ) {
+	if ( len >= (int)sizeof( text ) - 1 ) {
 		G_Printf( "File %s is too long\n", filename );
 		return qfalse;
 	}
