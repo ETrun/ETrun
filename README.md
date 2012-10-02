@@ -30,7 +30,7 @@ Credits
 Bootstrapping
 -------------
 
-On Linux, make sure you have the following packages installed:
+On *Linux*, make sure you have the following packages installed:
 
 * gcc
 * autoconf
@@ -39,7 +39,13 @@ On Linux, make sure you have the following packages installed:
 * zlib dev package
 * libidn dev package
 
-On OSX, make sure to have autoconf, libtool and libidn. You can install them via homebrew.
+On *OSX*, make sure to have:
+
+* autoconf
+* libtool
+* libidn
+
+You can install them via [homebrew](http://mxcl.github.com/homebrew).
 
 Then, run the bootstrap script:
 
@@ -56,7 +62,7 @@ On Windows: use MSVC compiler.
 
 On Linux, not supported.
 
-Windows server module requires [Microsoft Visual C++ 2012 Redistributable Package](http://www.microsoft.com/fr-fr/download/details.aspx?id=30679) to run properly.
+Windows server module requires [Microsoft Visual C++ 2010 Redistributable Package](http://www.microsoft.com/en-us/download/details.aspx?id=5555) to run properly.
 
 Compiling for Linux (32-bit)
 ----------------------------
