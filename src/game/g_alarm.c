@@ -106,6 +106,9 @@ alarmbox_use
 ==============
 */
 void alarmbox_use( gentity_t *ent, gentity_t *other, gentity_t *foo ) {
+	// Nico, silent GCC
+	foo = foo;
+
 	if ( !( ent->active ) ) {
 		return;
 	}
@@ -120,8 +123,6 @@ void alarmbox_use( gentity_t *ent, gentity_t *other, gentity_t *foo ) {
 	if ( other->client ) {
 		G_AddEvent( ent, EV_GENERAL_SOUND, ent->soundPos3 );
 	}
-//	G_Printf("touched alarmbox\n");
-
 }
 
 
@@ -131,6 +132,12 @@ alarmbox_die
 ==============
 */
 void alarmbox_die( gentity_t *ent, gentity_t *inflictor, gentity_t *attacker, int damage, int mod ) {
+	// Nico, silent GCC
+	inflictor = inflictor;
+	attacker = attacker;
+	damage = damage;
+	mod = mod;
+
 	propExplosion( ent );
 	ent->s.frame    = 2;
 	ent->active     = qfalse;
@@ -220,5 +227,3 @@ void SP_alarm_box( gentity_t *ent ) {
 
 	trap_LinkEntity( ent );
 }
-
-
