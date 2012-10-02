@@ -44,8 +44,8 @@ If you have questions concerning this license or the applicable additional terms
 #define GAME_VERSION_COLORED	"^gET^drun"
 #define	MOD_VERSION				"1.0.0"
 #define	MOD_VERSION_COLORED		"^g1.0.0"
-#define	MOD_STATUS				"Beta9b"
-#define	MOD_STATUS_COLORED		"^1Beta9b"
+#define	MOD_STATUS				"Beta10"
+#define	MOD_STATUS_COLORED		"^1Beta10"
 #define	MOD_URL					"http://www.timeruns.net"
 #define	SHORT_MOD_URL			"www.timeruns.net"
 
