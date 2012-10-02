@@ -1154,12 +1154,6 @@ void G_VoiceTo( gentity_t *ent, gentity_t *other, int mode, const char *id, qboo
 		return;
 	}
 
-	// OSP - spec vchat rules follow the same as normal chatting rules
-	if ( ent->client->sess.referee == 0 &&
-		 ent->client->sess.sessionTeam == TEAM_SPECTATOR && other->client->sess.sessionTeam != TEAM_SPECTATOR ) {
-		return;
-	}
-
 	// send only to people who have the sender on their buddy list
 	if ( mode == SAY_BUDDY ) {
 		if ( ent->s.clientNum != other->s.clientNum ) {
