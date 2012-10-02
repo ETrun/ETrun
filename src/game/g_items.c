@@ -135,6 +135,8 @@ Pickup_Clipboard
 ==============
 */
 int Pickup_Clipboard( gentity_t *ent, gentity_t *other ) {
+	// Nico, silent GCC
+	other = other;
 
 	if ( ent->spawnflags & 4 ) {
 		return 0;   // leave in world
@@ -150,6 +152,10 @@ Pickup_Treasure
 ==============
 */
 int Pickup_Treasure( gentity_t *ent, gentity_t *other ) {
+	// Nico, silent GCC
+	other = other;
+	ent = ent;
+
 	return -1;
 }
 
@@ -206,6 +212,10 @@ void UseHoldableItem( gentity_t *ent, int item ) {
 //======================================================================
 
 int Pickup_Holdable( gentity_t *ent, gentity_t *other ) {
+	// Nico, silent GCC
+	other = other;
+	ent = ent;
+
 	return RESPAWN_HOLDABLE;
 }
 
@@ -431,7 +441,7 @@ void G_DropWeapon( gentity_t *ent, weapon_t weapon ) {
 	// Clear out empty weapon, change to next best weapon
 	G_AddEvent( ent, EV_WEAPONSWITCHED, 0 );
 
-	if ( weapon == client->ps.weapon ) {
+	if ( (int)weapon == client->ps.weapon ) {
 		client->ps.weapon = 0;
 	}
 
@@ -688,6 +698,9 @@ void Touch_Item( gentity_t *ent, gentity_t *other, trace_t *trace ) {
 	int respawn;
 	int makenoise = EV_ITEM_PICKUP;
 
+	// Nico, silent GCC
+	trace = trace;
+
 	// only activated items can be picked up
 	if ( !ent->active ) {
 		return;
@@ -908,6 +921,10 @@ Respawn the item
 ================
 */
 void Use_Item( gentity_t *ent, gentity_t *other, gentity_t *activator ) {
+	// Nico, silent GCC
+	other = other;
+	activator = activator;
+
 	RespawnItem( ent );
 }
 
@@ -947,7 +964,6 @@ void FinishSpawningItem( gentity_t *ent ) {
 
 	ent->s.otherEntityNum2 = 0;     // DHM - Nerve :: takes modelindex2's place in signaling a dropped item
 //----(SA)	we don't use this (yet, anyway) so I'm taking it so you can specify a model for treasure items and clipboards
-//	ent->s.modelindex2 = 0; // zero indicates this isn't a dropped item
 	if ( ent->model ) {
 		ent->s.modelindex2 = G_ModelIndex( ent->model );
 	}
@@ -1220,4 +1236,3 @@ void G_RunItem( gentity_t *ent ) {
 
 	G_BounceItem( ent, &tr );
 }
-
