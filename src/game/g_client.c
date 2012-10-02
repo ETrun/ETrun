@@ -89,7 +89,8 @@ QUAKED info_player_intermission (1 0 1) (-16 -16 -24) (16 16 32) AXIS ALLIED
 The intermission will be viewed from this point.  Target an info_notnull for the view direction.
 */
 void SP_info_player_intermission( gentity_t *ent ) {
-
+	// Nico, silent GCC
+	ent = ent;
 }
 
 /*
@@ -435,7 +436,7 @@ team_t TeamCount( int ignoreClientNum, int team ) {
 		if ( ( ref = level.sortedClients[i] ) == ignoreClientNum ) {
 			continue;
 		}
-		if ( level.clients[ref].sess.sessionTeam == team ) {
+		if ( (int)level.clients[ref].sess.sessionTeam == team ) {
 			count++;
 		}
 	}
@@ -467,39 +468,6 @@ team_t PickTeam( int ignoreClientNum ) {
 	return TEAM_AXIS;
 }
 
-/*
-===========
-AddExtraSpawnAmmo
-===========
-*/
-static void AddExtraSpawnAmmo( gclient_t *client, weapon_t weaponNum ) {
-	switch ( weaponNum ) {
-	case WP_LUGER:
-	case WP_COLT:
-	case WP_STEN:
-	case WP_SILENCER:
-	case WP_CARBINE:
-	case WP_KAR98:
-	case WP_SILENCED_COLT:
-	case WP_MP40:
-	case WP_THOMPSON:
-	case WP_M7:
-	case WP_GPG40:
-	case WP_GRENADE_PINEAPPLE:
-	case WP_GRENADE_LAUNCHER:
-	case WP_MEDIC_SYRINGE:
-	case WP_MEDIC_ADRENALINE:
-	case WP_GARAND:
-	case WP_K43:
-	case WP_FG42:
-	case WP_GARAND_SCOPE:
-	case WP_K43_SCOPE:
-	case WP_FG42SCOPE:
-	default:
-		break;
-	}
-}
-
 qboolean AddWeaponToPlayer( gclient_t *client, weapon_t weapon, int ammo, int ammoclip, qboolean setcurrent ) {
 	COM_BitSet( client->ps.weapons, weapon );
 	client->ps.ammoclip[BG_FindClipForWeapon( weapon )] = ammoclip;
@@ -507,9 +475,6 @@ qboolean AddWeaponToPlayer( gclient_t *client, weapon_t weapon, int ammo, int am
 	if ( setcurrent ) {
 		client->ps.weapon = weapon;
 	}
-
-	// skill handling
-	AddExtraSpawnAmmo( client, weapon );
 
 	return qtrue;
 }
@@ -817,6 +782,9 @@ static void ClientCleanName( const char *in, char *out, int outSize ) {
 }
 
 void G_StartPlayerAppropriateSound( gentity_t *ent, char *soundType ) {
+	// Nico, silent GCC
+	ent = ent;
+	soundType = soundType;
 }
 
 // Nico, returns the IP is it's well-formed, NULL otherwise (from ETpub)
@@ -912,7 +880,7 @@ void ClientUserinfoChanged( int clientNum ) {
 	}
 
 	// Nico, make sure backslah number is even (from combinedfixes)
-	for (i = 0; i < len; ++i) {
+	for (i = 0; i < (int)len; ++i) {
 		if (userinfo[i] == '\\') {
 			count++;
 		}
@@ -1223,8 +1191,6 @@ char *ClientConnect( int clientNum, qboolean firstTime, qboolean isBot ) {
 	// they can connect
 	ent->client = level.clients + clientNum;
 	client = ent->client;
-
-
 
 	memset( client, 0, sizeof( *client ) );
 
