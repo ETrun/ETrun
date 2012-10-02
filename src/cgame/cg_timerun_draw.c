@@ -778,7 +778,7 @@ void CG_DrawBannerPrint(void) {
 		char linebuffer[1024];
 		char colorchar = lastcolor;
 
-		for (l = 0; l < strlen(cg.bannerPrint); ++l) {
+		for (l = 0; l < (int)strlen(cg.bannerPrint); ++l) {
 			if (!start[l] || start[l] == '\n') {
 				break;
 			}
