@@ -280,7 +280,7 @@ int ClientNumberFromString( gentity_t *to, char *s ) {
 	qboolean fIsNumber = qtrue;
 
 	// See if its a number or string
-	for ( idnum = 0; idnum < strlen( s ) && s[idnum] != 0; idnum++ ) {
+	for ( idnum = 0; idnum < (int)strlen( s ) && s[idnum] != 0; idnum++ ) {
 		if ( s[idnum] < '0' || s[idnum] > '9' ) {
 			fIsNumber = qfalse;
 			break;
@@ -418,6 +418,9 @@ qboolean SetTeam( gentity_t *ent, char *s, qboolean force, weapon_t w1, weapon_t
 	int clientNum;
 	spectatorState_t specState;
 	int specClient;
+
+	// Nico, silent GCC
+	force = force;
 
 	//
 	// see what change is requested
@@ -580,11 +583,11 @@ int G_NumPlayersWithWeapon( weapon_t weap, team_t team ) {
 			continue;
 		}
 
-		if ( level.clients[j].sess.sessionTeam != team ) {
+		if ( (int)level.clients[j].sess.sessionTeam != (int)team ) {
 			continue;
 		}
 
-		if ( level.clients[j].sess.latchPlayerWeapon != weap && level.clients[j].sess.playerWeapon != weap ) {
+		if ( level.clients[j].sess.latchPlayerWeapon != (int)weap && level.clients[j].sess.playerWeapon != (int)weap ) {
 			continue;
 		}
 
@@ -625,7 +628,7 @@ qboolean G_IsHeavyWeapon( weapon_t weap ) {
 int G_TeamCount( gentity_t* ent, weapon_t weap ) {
 	int i, j, cnt;
 
-	if ( weap == -1 ) { // we aint checking for a weapon, so always include ourselves
+	if ( (int)weap == -1 ) { // we aint checking for a weapon, so always include ourselves
 		cnt = 1;
 	} else { // we ARE checking for a weapon, so ignore ourselves
 		cnt = 0;
@@ -642,8 +645,8 @@ int G_TeamCount( gentity_t* ent, weapon_t weap ) {
 			continue;
 		}
 
-		if ( weap != -1 ) {
-			if ( level.clients[j].sess.playerWeapon != weap && level.clients[j].sess.latchPlayerWeapon != weap ) {
+		if ( (int)weap != -1 ) {
+			if ( level.clients[j].sess.playerWeapon != (int)weap && level.clients[j].sess.latchPlayerWeapon != (int)weap ) {
 				continue;
 			}
 		}
@@ -657,12 +660,12 @@ int G_TeamCount( gentity_t* ent, weapon_t weap ) {
 void G_SetClientWeapons( gentity_t* ent, weapon_t w1, weapon_t w2, qboolean updateclient ) {
 	qboolean changed = qfalse;
 
-	if ( ent->client->sess.latchPlayerWeapon2 != w2 ) {
+	if ( ent->client->sess.latchPlayerWeapon2 != (int)w2 ) {
 		ent->client->sess.latchPlayerWeapon2 = w2;
 		changed = qtrue;
 	}
 
-	if ( ent->client->sess.latchPlayerWeapon != w1 ) {
+	if ( ent->client->sess.latchPlayerWeapon != (int)w1 ) {
 		ent->client->sess.latchPlayerWeapon = w1;
 		changed = qtrue;
 	}
@@ -840,6 +843,10 @@ void Cmd_Follow_f( gentity_t *ent, unsigned int dwCommand, qboolean fValue ) {
 	int i;
 	char arg[MAX_TOKEN_CHARS];
 
+	// Nico, silent GCC
+	dwCommand = dwCommand;
+	fValue = fValue;
+
 	if ( trap_Argc() != 2 ) {
 		if ( ent->client->sess.spectatorState == SPECTATOR_FOLLOW ) {
 			StopFollowing( ent );
@@ -866,7 +873,7 @@ void Cmd_Follow_f( gentity_t *ent, unsigned int dwCommand, qboolean fValue ) {
 
 		if ( !TeamCount( ent - g_entities, i ) ) {
 			CP( va( "print \"The %s team %s empty!  Follow command ignored.\n\"", aTeams[i],
-					( ( ent->client->sess.sessionTeam != i ) ? "is" : "would be" ) ) );
+					( ( (int)ent->client->sess.sessionTeam != i ) ? "is" : "would be" ) ) );
 			return;
 		}
 
@@ -1323,6 +1330,9 @@ qboolean Cmd_CallVote_f( gentity_t *ent, unsigned int dwCommand, qboolean fRefCo
 	char arg2[MAX_STRING_TOKENS];
 	int waitTime = 0;
 
+	// Nico, silent GCC
+	dwCommand = dwCommand;
+
 	// Normal checks, if its not being issued as a referee command
 	// Nico, moved 'callvote' command erros from popup messages to center print and console
 	// http://games.chruker.dk/enemy_territory/modding_project_bugfix.php?bug_id=067
@@ -1580,12 +1590,6 @@ void Cmd_Vote_f( gentity_t *ent ) {
 		return;
 	}
 
-	/* Nico, allow spectators to vote
-	if ( ent->client->sess.sessionTeam == TEAM_SPECTATOR ) {
-		trap_SendServerCommand( ent - g_entities, "print \"Not allowed to vote as spectator.\n\"" );
-		return;
-	}*/
-
 	if ( level.voteInfo.vote_fn == G_Kick_v ) {
 		int pid = atoi( level.voteInfo.vote_value );
 		if ( !g_entities[ pid ].client ) {
@@ -1622,6 +1626,9 @@ void Cmd_Vote_f( gentity_t *ent ) {
 
 qboolean G_canPickupMelee( gentity_t *ent ) {
 // JPW NERVE -- no "melee" weapons in net play
+	// Nico, silent GCC
+	ent = ent;
+
 	return qfalse;
 }
 // jpw
@@ -1840,7 +1847,7 @@ qboolean Do_Activate_f( gentity_t *ent, gentity_t *traceEnt ) {
 			G_TryDoor( traceEnt, ent, ent );      // (door,other,activator)
 			found = qtrue;
 		} else if ( ( Q_stricmp( traceEnt->classname, "team_WOLF_checkpoint" ) == 0 ) ) {
-			if ( traceEnt->count != ent->client->sess.sessionTeam ) {
+			if ( traceEnt->count != (int)ent->client->sess.sessionTeam ) {
 				traceEnt->health++;
 			}
 			found = qtrue;
@@ -1931,7 +1938,6 @@ void Cmd_Activate_f( gentity_t *ent ) {
 	vec3_t end;
 	gentity_t   *traceEnt;
 	vec3_t forward, right, up, offset;
-//	int			activatetime = level.time;
 	qboolean found = qfalse;
 	qboolean pass2 = qfalse;
 	int i;
@@ -2068,7 +2074,7 @@ void G_UpdateSpawnCounts( void ) {
 				continue;
 			}
 
-			if ( client->sess.sessionTeam == team && client->sess.spawnObjectiveIndex == i + 1 ) {
+			if ( (int)client->sess.sessionTeam == team && client->sess.spawnObjectiveIndex == i + 1 ) {
 				count++;
 				continue;
 			}
@@ -2635,7 +2641,7 @@ void ClientCommand( int clientNum ) {
 	}
 
 	// Nico, flood protection
-	for (i = 0 ; i < sizeof (floodProtectedCommands) / sizeof (floodProtectedCommands[0]) ; ++i) {
+	for (i = 0 ; i < (int)(sizeof (floodProtectedCommands) / sizeof (floodProtectedCommands[0])) ; ++i) {
 		if (!Q_stricmp(cmd, floodProtectedCommands[i].cmd)) {
 			if (floodProtectedCommands[i].isProtected && ClientIsFlooding(ent)) {
 				CP(va("print \"^1Spam Protection: ^7dropping %s\n\"", cmd));
@@ -2692,6 +2698,9 @@ void Cmd_SpecLock_f(gentity_t *ent, unsigned int dwCommand, qboolean lock) {
 	int	i = 0;
 	gentity_t *other = NULL;
 
+	// Nico, silent GCC
+	dwCommand = dwCommand;
+
 	if (ent->client->sess.specLocked == lock) {
 		CP(va("print \"You are already %slocked from spectators!\n\"", lock ? "" : "un"));
 		return;
@@ -2737,6 +2746,9 @@ void Cmd_SpecInvite_f(gentity_t *ent, unsigned int dwCommand, qboolean invite) {
 	int	clientNum = 0;
 	gentity_t *other = NULL;
 	char arg[MAX_TOKEN_CHARS] = {0};
+
+	// Nico, silent GCC
+	dwCommand = dwCommand;
 
 	if (ClientIsFlooding(ent)) {
 		CP("print \"^1Spam Protection:^7 Specinvite ignored\n\"");
@@ -2890,7 +2902,7 @@ void Cmd_Help_f(gentity_t *ent) {
 	if (argc <= 1) {
 		CP(va("print \"  List of %s ^wcommands:\n\"", GAME_VERSION_COLORED));
 		CP("print \"-------------------------------------------------------------------\n\"");
-		for (i = 0; i < sizeof (floodProtectedCommands) / sizeof (floodProtectedCommands[0]); ++i) {
+		for (i = 0; i < (int)(sizeof (floodProtectedCommands) / sizeof (floodProtectedCommands[0])); ++i) {
 			if (floodProtectedCommands[i].inHelp == qtrue && floodProtectedCommands[i].desc) {
 				CP(va("print \"  ^8%-15s ^w%s\n\"", floodProtectedCommands[i].cmd, floodProtectedCommands[i].desc));
 			}
@@ -2898,7 +2910,7 @@ void Cmd_Help_f(gentity_t *ent) {
 		CP("print \"-------------------------------------------------------------------\n\"");
 	} else {
 		trap_Argv(1, option, sizeof (option));
-		for (i = 0 ; i < sizeof (floodProtectedCommands) / sizeof (floodProtectedCommands[0]) ; ++i) {
+		for (i = 0 ; i < (int)(sizeof (floodProtectedCommands) / sizeof (floodProtectedCommands[0])) ; ++i) {
 			if (!Q_stricmp(option, floodProtectedCommands[i].cmd)) {
 				if (floodProtectedCommands[i].inHelp == qtrue && floodProtectedCommands[i].desc) {
 					CP(va("print \"  ^wCommand     ^8%-15s\n\"", floodProtectedCommands[i].cmd));
