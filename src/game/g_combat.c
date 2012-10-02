@@ -183,6 +183,9 @@ void player_die( gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int
 	gentity_t   *ent;
 	qboolean killedintank = qfalse;
 
+	// Nico, silent GCC
+	damage = damage;
+
 	weapon_t weap = BG_WeaponForMOD( meansOfDeath );
 
 	// Start recording a new temp demo.
@@ -260,7 +263,7 @@ void player_die( gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int
 	if ( g_gamestate.integer == GS_PLAYING ) {
 		char *obit;
 
-		if ( meansOfDeath < 0 || meansOfDeath >= sizeof( modNames ) / sizeof( modNames[0] ) ) {
+		if ( meansOfDeath < 0 || meansOfDeath >= (int)(sizeof( modNames ) / sizeof( modNames[0]) ) ) {
 			obit = "<bad obituary>";
 		} else {
 			obit = modNames[meansOfDeath];
@@ -666,6 +669,9 @@ qboolean IsArmShot( gentity_t *targ, gentity_t* ent, vec3_t point, int mod ) {
 	vec3_t path, view;
 	vec_t dot;
 
+	// Nico, silent GCC
+	ent = ent;
+
 	if ( !( targ->client ) ) {
 		return qfalse;
 	}
@@ -1057,7 +1063,6 @@ void G_Damage( gentity_t *targ, gentity_t *inflictor, gentity_t *attacker,  vec3
 			targ->s.dl_intensity = 255.f * ( targ->health / (float)targ->count ); // send it to the client
 		}
 
-		//G_Printf("health at: %d\n", targ->health);
 		if ( targ->health <= 0 ) {
 			if ( client && !wasAlive ) {
 				targ->flags |= FL_NO_KNOCKBACK;
@@ -1175,8 +1180,6 @@ qboolean CanDamage( gentity_t *targ, vec3_t origin ) {
 		VectorAdd( targ->r.absmin, targ->r.absmax, midpoint );
 		VectorScale( midpoint, 0.5, midpoint );
 	}
-
-//	G_RailTrail( origin, dest );
 
 	trap_Trace( &tr, origin, vec3_origin, vec3_origin, midpoint, ENTITYNUM_NONE, MASK_CAN_DAMAGE );
 	if ( tr.fraction == 1.0 ) {
