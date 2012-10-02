@@ -152,6 +152,10 @@ void G_noTeamControls( gentity_t *ent ) {
 void G_commands_cmd( gentity_t *ent, unsigned int dwCommand, qboolean fValue ) {
 	int i, rows, num_cmds = sizeof( aCommandInfo ) / sizeof( aCommandInfo[0] ) - 1;
 
+	// Nico, silent GCC
+	dwCommand = dwCommand;
+	fValue = fValue;
+
 	rows = num_cmds / HELP_COLUMNS;
 	if ( num_cmds % HELP_COLUMNS ) {
 		rows++;
@@ -194,6 +198,9 @@ void G_players_cmd( gentity_t *ent, unsigned int dwCommand, qboolean fValue ) {
 	char n2[MAX_NETNAME], ready[16], ref[16], rate[256];
 	char *s, *tc, *coach, userinfo[MAX_INFO_STRING];
 
+	// Nico, silent GCC
+	dwCommand = dwCommand;
+	fValue = fValue;
 
 	if ( g_gamestate.integer == GS_PLAYING ) {
 		if ( ent ) {
