@@ -1,0 +1,5 @@
+*.tlog
+*.lib
+*.lastbuildstate
+*.pdb
+*.res
