@@ -65,7 +65,6 @@ qboolean G_ScriptAction_ResetScript( gentity_t *ent, char *params );
 qboolean G_ScriptAction_TagConnect( gentity_t *ent, char *params );
 qboolean G_ScriptAction_Halt( gentity_t *ent, char *params );
 qboolean G_ScriptAction_StopSound( gentity_t *ent, char *params );
-//qboolean G_ScriptAction_StartCam( gentity_t *ent, char *params );
 qboolean G_ScriptAction_EntityScriptName( gentity_t *ent, char *params );
 qboolean G_ScriptAction_AIScriptName( gentity_t *ent, char *params );
 qboolean G_ScriptAction_AxisRespawntime( gentity_t *ent, char *params );
@@ -147,111 +146,110 @@ qboolean G_ScriptAction_Delete(gentity_t *ent, char *params);
 // these are the actions that each event can call
 g_script_stack_action_t gScriptActions[] =
 {
-	{"gotomarker",                       G_ScriptAction_GotoMarker},
-	{"playsound",                        G_ScriptAction_PlaySound},
-	{"playanim",                     G_ScriptAction_PlayAnim},
-	{"wait",                         G_ScriptAction_Wait},
-	{"trigger",                          G_ScriptAction_Trigger},
-	{"alertentity",                      G_ScriptAction_AlertEntity},
-	{"togglespeaker",                    G_ScriptAction_ToggleSpeaker},
-	{"disablespeaker",                   G_ScriptAction_DisableSpeaker},
-	{"enablespeaker",                    G_ScriptAction_EnableSpeaker},
-	{"accum",                            G_ScriptAction_Accum},
-	{"globalaccum",                      G_ScriptAction_GlobalAccum},
-	{"print",                            G_ScriptAction_Print},
-	{"faceangles",                       G_ScriptAction_FaceAngles},
-	{"resetscript",                      G_ScriptAction_ResetScript},
-	{"attachtotag",                      G_ScriptAction_TagConnect},
-	{"halt",                         G_ScriptAction_Halt},
-	{"stopsound",                        G_ScriptAction_StopSound},
-//	{"startcam",						G_ScriptAction_StartCam},
-	{"entityscriptname",             G_ScriptAction_EntityScriptName},
-	{"aiscriptname",                 G_ScriptAction_AIScriptName},
-	{"wm_axis_respawntime",              G_ScriptAction_AxisRespawntime},
-	{"wm_allied_respawntime",            G_ScriptAction_AlliedRespawntime},
-	{"wm_number_of_objectives",          G_ScriptAction_NumberofObjectives},
-	{"wm_setwinner",                 G_ScriptAction_SetWinner},
-	{"wm_set_defending_team",            G_ScriptAction_SetDefendingTeam},
-	{"wm_announce",                      G_ScriptAction_Announce},
-	{"wm_teamvoiceannounce",         G_ScriptAction_TeamVoiceAnnounce},
-	{"wm_addteamvoiceannounce",          G_ScriptAction_AddTeamVoiceAnnounce},
-	{"wm_removeteamvoiceannounce",       G_ScriptAction_RemoveTeamVoiceAnnounce},
-	{"wm_announce_icon",             G_ScriptAction_Announce_Icon},
-	{"wm_endround",                      G_ScriptAction_EndRound},
-	{"wm_set_round_timelimit",           G_ScriptAction_SetRoundTimelimit},// Nico, note: keep this
-	{"wm_voiceannounce",             G_ScriptAction_VoiceAnnounce},
-	{"wm_objective_status",              G_ScriptAction_ObjectiveStatus},
-	{"wm_set_main_objective",            G_ScriptAction_SetMainObjective},
-	{"remove",                           G_ScriptAction_RemoveEntity},
-	{"setstate",                     G_ScriptAction_SetState},
-	{"followspline",                 G_ScriptAction_FollowSpline},
-	{"followpath",                       G_ScriptAction_FollowPath},
-	{"abortmove",                        G_ScriptAction_AbortMove},
-	{"setspeed",                     G_ScriptAction_SetSpeed},
-	{"setrotation",                      G_ScriptAction_SetRotation},
-	{"stoprotation",                 G_ScriptAction_StopRotation},
-	{"startanimation",                   G_ScriptAction_StartAnimation},
-	{"attatchtotrain",                   G_ScriptAction_AttatchToTrain},
-	{"freezeanimation",                  G_ScriptAction_FreezeAnimation},
-	{"unfreezeanimation",                G_ScriptAction_UnFreezeAnimation},
-	{"remapshader",                      G_ScriptAction_ShaderRemap},
-	{"remapshaderflush",             G_ScriptAction_ShaderRemapFlush},
-	{"changemodel",                      G_ScriptAction_ChangeModel},
-	{"setchargetimefactor",              G_ScriptAction_SetChargeTimeFactor},
-	{"setdamagable",                 G_ScriptAction_SetDamagable},
-	{"startcam",                     G_ScriptAction_StartCam},
-	{"SetInitialCamera",             G_ScriptAction_SetInitialCamera},
-	{"stopcam",                          G_ScriptAction_StopCam},
-	{"repairmg42",                       G_ScriptAction_RepairMG42},
-	{"sethqstatus",                      G_ScriptAction_SetHQStatus},
+	{"gotomarker",                       G_ScriptAction_GotoMarker, 				0},
+	{"playsound",                        G_ScriptAction_PlaySound, 					0},
+	{"playanim",                     	 G_ScriptAction_PlayAnim, 					0},
+	{"wait",                         	 G_ScriptAction_Wait, 						0},
+	{"trigger",                          G_ScriptAction_Trigger, 					0},
+	{"alertentity",                      G_ScriptAction_AlertEntity, 				0},
+	{"togglespeaker",                    G_ScriptAction_ToggleSpeaker, 				0},
+	{"disablespeaker",                   G_ScriptAction_DisableSpeaker, 			0},
+	{"enablespeaker",                    G_ScriptAction_EnableSpeaker, 				0},
+	{"accum",                            G_ScriptAction_Accum, 						0},
+	{"globalaccum",                      G_ScriptAction_GlobalAccum, 				0},
+	{"print",                            G_ScriptAction_Print, 						0},
+	{"faceangles",                       G_ScriptAction_FaceAngles, 				0},
+	{"resetscript",                      G_ScriptAction_ResetScript, 				0},
+	{"attachtotag",                      G_ScriptAction_TagConnect, 				0},
+	{"halt",                         	 G_ScriptAction_Halt, 						0},
+	{"stopsound",                        G_ScriptAction_StopSound, 					0},
+	{"entityscriptname",             	 G_ScriptAction_EntityScriptName, 			0},
+	{"aiscriptname",                 	 G_ScriptAction_AIScriptName, 				0},
+	{"wm_axis_respawntime",              G_ScriptAction_AxisRespawntime, 			0},
+	{"wm_allied_respawntime",            G_ScriptAction_AlliedRespawntime, 			0},
+	{"wm_number_of_objectives",          G_ScriptAction_NumberofObjectives, 		0},
+	{"wm_setwinner",                 	 G_ScriptAction_SetWinner, 					0},
+	{"wm_set_defending_team",            G_ScriptAction_SetDefendingTeam, 			0},
+	{"wm_announce",                      G_ScriptAction_Announce, 					0},
+	{"wm_teamvoiceannounce",         	 G_ScriptAction_TeamVoiceAnnounce, 			0},
+	{"wm_addteamvoiceannounce",          G_ScriptAction_AddTeamVoiceAnnounce, 		0},
+	{"wm_removeteamvoiceannounce",       G_ScriptAction_RemoveTeamVoiceAnnounce, 	0},
+	{"wm_announce_icon",             	 G_ScriptAction_Announce_Icon, 				0},
+	{"wm_endround",                      G_ScriptAction_EndRound, 					0},
+	{"wm_set_round_timelimit",           G_ScriptAction_SetRoundTimelimit, 			0},// Nico, note: keep this
+	{"wm_voiceannounce",             	 G_ScriptAction_VoiceAnnounce, 				0},
+	{"wm_objective_status",              G_ScriptAction_ObjectiveStatus, 			0},
+	{"wm_set_main_objective",            G_ScriptAction_SetMainObjective, 			0},
+	{"remove",                           G_ScriptAction_RemoveEntity, 				0},
+	{"setstate",                      	 G_ScriptAction_SetState, 					0},
+	{"followspline",                 	 G_ScriptAction_FollowSpline, 				0},
+	{"followpath",                       G_ScriptAction_FollowPath, 				0},
+	{"abortmove",                        G_ScriptAction_AbortMove, 					0},
+	{"setspeed",                     	 G_ScriptAction_SetSpeed, 					0},
+	{"setrotation",                      G_ScriptAction_SetRotation, 				0},
+	{"stoprotation",                 	 G_ScriptAction_StopRotation, 				0},
+	{"startanimation",                   G_ScriptAction_StartAnimation, 			0},
+	{"attatchtotrain",                   G_ScriptAction_AttatchToTrain, 			0},
+	{"freezeanimation",                  G_ScriptAction_FreezeAnimation, 			0},
+	{"unfreezeanimation",                G_ScriptAction_UnFreezeAnimation, 			0},
+	{"remapshader",                      G_ScriptAction_ShaderRemap, 				0},
+	{"remapshaderflush",             	 G_ScriptAction_ShaderRemapFlush, 			0},
+	{"changemodel",                      G_ScriptAction_ChangeModel, 				0},
+	{"setchargetimefactor",              G_ScriptAction_SetChargeTimeFactor, 		0},
+	{"setdamagable",                 	 G_ScriptAction_SetDamagable, 				0},
+	{"startcam",                     	 G_ScriptAction_StartCam, 					0},
+	{"SetInitialCamera",             	 G_ScriptAction_SetInitialCamera, 			0},
+	{"stopcam",                          G_ScriptAction_StopCam, 					0},
+	{"repairmg42",                       G_ScriptAction_RepairMG42, 				0},
+	{"sethqstatus",                      G_ScriptAction_SetHQStatus, 				0},
 
-	{"cvar",                         G_ScriptAction_Cvar},
-	{"abortifwarmup",                    G_ScriptAction_AbortIfWarmup},
-	{"abortifnotsingleplayer",           G_ScriptAction_AbortIfNotSinglePlayer},
+	{"cvar",                         	 G_ScriptAction_Cvar, 						0},
+	{"abortifwarmup",                    G_ScriptAction_AbortIfWarmup, 				0},
+	{"abortifnotsingleplayer",           G_ScriptAction_AbortIfNotSinglePlayer, 	0},
 
-	{"mu_start",                     G_ScriptAction_MusicStart},
-	{"mu_play",                          G_ScriptAction_MusicPlay},
-	{"mu_stop",                          G_ScriptAction_MusicStop},
-	{"mu_queue",                     G_ScriptAction_MusicQueue},
-	{"mu_fade",                          G_ScriptAction_MusicFade},
-	{"setdebuglevel",                    G_ScriptAction_SetDebugLevel},
-	{"setposition",                      G_ScriptAction_SetPosition},
-	{"setautospawn",                 G_ScriptAction_SetAutoSpawn},
+	{"mu_start",                     	 G_ScriptAction_MusicStart, 				0},
+	{"mu_play",                          G_ScriptAction_MusicPlay, 					0},
+	{"mu_stop",                          G_ScriptAction_MusicStop, 					0},
+	{"mu_queue",                     	 G_ScriptAction_MusicQueue, 				0},
+	{"mu_fade",                          G_ScriptAction_MusicFade, 					0},
+	{"setdebuglevel",                    G_ScriptAction_SetDebugLevel, 				0},
+	{"setposition",                      G_ScriptAction_SetPosition, 				0},
+	{"setautospawn",                 	 G_ScriptAction_SetAutoSpawn, 				0},
 
 	// Gordon: going for longest silly script command ever here :) (sets a model for a brush to one stolen from a func_brushmodel
-	{"setmodelfrombrushmodel",           G_ScriptAction_SetModelFromBrushmodel},
+	{"setmodelfrombrushmodel",           G_ScriptAction_SetModelFromBrushmodel, 	0},
 
 	// fade all sounds up or down
-	{"fadeallsounds",                    G_ScriptAction_FadeAllSounds},
+	{"fadeallsounds",                    G_ScriptAction_FadeAllSounds, 				0},
 
-	{"construct",                        G_ScriptAction_Construct},
-	{"spawnrubble",                      G_ScriptAction_SpawnRubble},
-	{"setglobalfog",                 G_ScriptAction_SetGlobalFog},
-	{"allowtankexit",                    G_ScriptAction_AllowTankExit},
-	{"allowtankenter",                   G_ScriptAction_AllowTankEnter},
-	{"settankammo",                      G_ScriptAction_SetTankAmmo},
-	{"addtankammo",                      G_ScriptAction_AddTankAmmo},
-	{"kill",                         G_ScriptAction_Kill},
-	{"disablemessage",                   G_ScriptAction_DisableMessage},
+	{"construct",                        G_ScriptAction_Construct, 					0},
+	{"spawnrubble",                      G_ScriptAction_SpawnRubble, 				0},
+	{"setglobalfog",                 	 G_ScriptAction_SetGlobalFog, 				0},
+	{"allowtankexit",                    G_ScriptAction_AllowTankExit, 				0},
+	{"allowtankenter",                   G_ScriptAction_AllowTankEnter, 			0},
+	{"settankammo",                      G_ScriptAction_SetTankAmmo, 				0},
+	{"addtankammo",                      G_ScriptAction_AddTankAmmo, 				0},
+	{"kill",                         	 G_ScriptAction_Kill, 						0},
+	{"disablemessage",                   G_ScriptAction_DisableMessage, 			0},
 
 //bani
-	{"set",                          etpro_ScriptAction_SetValues},
+	{"set",                          	 etpro_ScriptAction_SetValues, 				0},
 
-	{ "constructible_class",         G_ScriptAction_ConstructibleClass },
-	{ "constructible_chargebarreq",      G_ScriptAction_ConstructibleChargeBarReq },
-	{ "constructible_constructxpbonus",  G_ScriptAction_ConstructibleConstructXPBonus },
-	{ "constructible_destructxpbonus",   G_ScriptAction_ConstructibleDestructXPBonus },
-	{ "constructible_health",            G_ScriptAction_ConstructibleHealth },
-	{ "constructible_weaponclass",       G_ScriptAction_ConstructibleWeaponclass },
-	{ "constructible_duration",       G_ScriptAction_ConstructibleDuration },
+	{ "constructible_class",         	 G_ScriptAction_ConstructibleClass, 		0},
+	{ "constructible_chargebarreq",      G_ScriptAction_ConstructibleChargeBarReq, 	0},
+	{ "constructible_constructxpbonus",  G_ScriptAction_ConstructibleConstructXPBonus, 	0},
+	{ "constructible_destructxpbonus",   G_ScriptAction_ConstructibleDestructXPBonus, 	0},
+	{ "constructible_health",            G_ScriptAction_ConstructibleHealth, 		0},
+	{ "constructible_weaponclass",       G_ScriptAction_ConstructibleWeaponclass, 	0},
+	{ "constructible_duration",       	 G_ScriptAction_ConstructibleDuration, 		0},
 
 	// Nico, create action
-	{"create",							G_ScriptAction_Create},
+	{"create",							 G_ScriptAction_Create, 					0},
 
 	// Nico, delete action
-	{"delete",							G_ScriptAction_Delete},
+	{"delete",							 G_ScriptAction_Delete, 					0},
 
-	{NULL,                              NULL}
+	{NULL,                               NULL, 										0}
 };
 
 qboolean G_Script_EventMatch_StringEqual( g_script_event_t *event, char *eventParm );
@@ -260,25 +258,25 @@ qboolean G_Script_EventMatch_IntInRange( g_script_event_t *event, char *eventPar
 // the list of events that can start an action sequence
 g_script_event_define_t gScriptEvents[] =
 {
-	{"spawn",            NULL},          // called as each character is spawned into the game
-	{"trigger",          G_Script_EventMatch_StringEqual},   // something has triggered us (always followed by an identifier)
-	{"pain",         G_Script_EventMatch_IntInRange},    // we've been hurt
-	{"death",            NULL},          // RIP
-	{"activate",     G_Script_EventMatch_StringEqual},   // something has triggered us [activator team]
-	{"stopcam",          NULL},
-	{"playerstart",      NULL},
-	{"built",            G_Script_EventMatch_StringEqual},
-	{"buildstart",       G_Script_EventMatch_StringEqual},
-	{"decayed",          G_Script_EventMatch_StringEqual},
-	{"destroyed",        G_Script_EventMatch_StringEqual},
-	{"rebirth",          NULL},
-	{"failed",           NULL},
-	{"dynamited",        NULL},
-	{"defused",          NULL},
-	{"mg42",         G_Script_EventMatch_StringEqual},
-	{"message",          G_Script_EventMatch_StringEqual},   // contains a sequence of VO in a message
+	{"spawn",            NULL, 								0},          // called as each character is spawned into the game
+	{"trigger",          G_Script_EventMatch_StringEqual, 	0},   // something has triggered us (always followed by an identifier)
+	{"pain",         	 G_Script_EventMatch_IntInRange, 	0},    // we've been hurt
+	{"death",            NULL, 								0},          // RIP
+	{"activate",     	 G_Script_EventMatch_StringEqual, 	0},   // something has triggered us [activator team]
+	{"stopcam",          NULL, 								0},
+	{"playerstart",      NULL, 								0},
+	{"built",            G_Script_EventMatch_StringEqual, 	0},
+	{"buildstart",       G_Script_EventMatch_StringEqual, 	0},
+	{"decayed",          G_Script_EventMatch_StringEqual, 	0},
+	{"destroyed",        G_Script_EventMatch_StringEqual, 	0},
+	{"rebirth",          NULL, 								0},
+	{"failed",           NULL, 								0},
+	{"dynamited",        NULL, 								0},
+	{"defused",          NULL, 								0},
+	{"mg42",         	 G_Script_EventMatch_StringEqual, 	0},
+	{"message",          G_Script_EventMatch_StringEqual, 	0},   // contains a sequence of VO in a message
 
-	{NULL,              NULL}
+	{NULL,               NULL, 								0}
 };
 
 /*
@@ -432,10 +430,6 @@ void G_Script_ScriptLoad( void ) {
 
 	// Gordon: and make sure ppl haven't put stuff with uppercase in the string table..
 	G_Script_EventStringInit();
-
-	// Gordon: discard all the comments NOW, so we dont deal with them inside scripts
-	// Gordon: disabling for a sec, wanna check if i can get proper line numbers from error output
-//	COM_Compress( level.scriptEntity );
 
 	trap_FS_FCloseFile( f );
 }
@@ -931,7 +925,6 @@ void mountedmg42_fire( gentity_t *other ) {
 
 	AngleVectors( other->client->ps.viewangles, forward, right, up );
 	VectorCopy( other->s.pos.trBase, muzzle );
-//	VectorMA( muzzle, 42, up, muzzle );
 	muzzle[2] += other->client->ps.viewheight;
 	VectorMA( muzzle, 58, forward, muzzle );
 
@@ -948,13 +941,15 @@ void script_linkentity( gentity_t *ent ) {
 
 	// this is required since non-solid brushes need to be linked but not solid
 	trap_LinkEntity( ent );
-
-//	if ((ent->s.eType == ET_MOVER) && !(ent->spawnflags & 2)) {
-//		ent->s.solid = 0;
-//	}
 }
 
 void script_mover_die( gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int damage, int mod ) {
+	// Nico, silent GCC
+	inflictor = inflictor;
+	attacker = attacker;
+	damage = damage;
+	mod = mod;
+
 	G_Script_ScriptEvent( self, "death", "" );
 
 	if ( !( self->spawnflags & 8 ) ) {
@@ -1029,6 +1024,10 @@ void script_mover_spawn( gentity_t *ent ) {
 }
 
 void script_mover_use( gentity_t *ent, gentity_t *other, gentity_t *activator ) {
+	// Nico, silent GCC
+	other = other;
+	activator = activator;
+
 	if ( ent->spawnflags & 8 ) {
 		if ( ent->count ) {
 			ent->health = ent->count;
@@ -1098,7 +1097,6 @@ void SP_script_mover( gentity_t *ent ) {
 	// first position at start
 	VectorCopy( ent->s.origin, ent->pos1 );
 
-//	VectorCopy( ent->r.currentOrigin, ent->pos1 );
 	VectorCopy( ent->pos1, ent->pos2 ); // don't go anywhere just yet
 
 	trap_SetBrushModel( ent, ent->model );
@@ -1169,10 +1167,6 @@ void SP_script_mover( gentity_t *ent ) {
 		Q_strcat( tagname, MAX_QPATH, ".tag" );
 
 		ent->tagNumber = trap_LoadTag( tagname );
-
-/*		if( !(ent->tagNumber = trap_LoadTag( tagname )) ) {
-			Com_Error( ERR_DROP, "Failed to load Tag File (%s)\n", tagname );
-		}*/
 	}
 
 	// look for axis specific scaling
@@ -1224,6 +1218,10 @@ void script_model_med_spawn( gentity_t *ent ) {
 }
 
 void script_model_med_use( gentity_t *ent, gentity_t *other, gentity_t *activator ) {
+	// Nico, silent GCC
+	other = other;
+	activator = activator;
+
 	script_model_med_spawn( ent );
 }
 
