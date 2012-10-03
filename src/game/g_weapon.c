@@ -129,7 +129,7 @@ void Weapon_Knife( gentity_t *ent ) {
 	mod = MOD_KNIFE;
 
 	AngleVectors( ent->client->ps.viewangles, forward, right, up );
-	CalcMuzzlePoint( ent, ent->s.weapon, forward, right, up, muzzleTrace );
+	CalcMuzzlePoint( ent, ent->s.weapon, right, up, muzzleTrace );
 	VectorMA( muzzleTrace, KNIFE_DIST, forward, end );
 	G_HistoricalTrace( ent, &tr, muzzleTrace, NULL, NULL, end, ent->s.number, MASK_SHOT );
 
@@ -646,7 +646,7 @@ static qboolean TryConstructing( gentity_t *ent ) {
 		gentity_t *otherconstructible = NULL;
 
 		// use the target that has the same team as the player
-		if ( constructible->s.teamNum != ent->client->sess.sessionTeam ) {
+		if ( constructible->s.teamNum != (int)ent->client->sess.sessionTeam ) {
 			constructible = ent->client->touchingTOI->chain;
 		}
 
@@ -663,7 +663,7 @@ static qboolean TryConstructing( gentity_t *ent ) {
 
 	// see if we are in a trigger_objective_info targetting a func_constructible
 	if ( constructible->s.eType == ET_CONSTRUCTIBLE &&
-		 constructible->s.teamNum == ent->client->sess.sessionTeam ) {
+		 constructible->s.teamNum == (int)ent->client->sess.sessionTeam ) {
 
 		if ( constructible->s.angles2[0] >= 250 ) { // have to do this so we don't score multiple times
 			return( qfalse );
@@ -1251,7 +1251,7 @@ void Weapon_Engineer( gentity_t *ent ) {
 				qboolean enemyObj = qfalse;
 
 				// Opposing team cannot accidentally arm it
-				if ( ( traceEnt->s.teamNum - 4 ) != ent->client->sess.sessionTeam ) {
+				if ( ( traceEnt->s.teamNum - 4 ) != (int)ent->client->sess.sessionTeam ) {
 					return;
 				}
 
@@ -1478,7 +1478,7 @@ void Weapon_Engineer( gentity_t *ent ) {
 							G_Script_ScriptEvent( hit, "dynamited", "" );
 
 							if ( ( !( hit->parent->spawnflags & OBJECTIVE_DESTROYED ) ) &&
-								 hit->s.teamNum && ( hit->s.teamNum == ent->client->sess.sessionTeam ) ) { // ==, as it's inverse
+								 hit->s.teamNum && ( hit->s.teamNum == (int)ent->client->sess.sessionTeam ) ) { // ==, as it's inverse
 								if ( traceEnt->parent && traceEnt->parent->client ) {
 									G_LogPrintf( "Dynamite_Plant: %d\n", traceEnt->parent - g_entities );   // OSP
 								}
@@ -1519,7 +1519,7 @@ void Weapon_Engineer( gentity_t *ent ) {
 					num = trap_EntitiesInBox( mins, maxs, touch, MAX_GENTITIES );
 
 					//bani - eh, why was this commented out? it makes sense, and prevents a sploit.
-					if ( dynamiteDropTeam == ent->client->sess.sessionTeam ) {
+					if ( dynamiteDropTeam == (int)ent->client->sess.sessionTeam ) {
 						return;
 					}
 
@@ -2069,8 +2069,10 @@ qboolean Bullet_Fire_Extended( gentity_t *source, gentity_t *attacker, vec3_t st
 	gentity_t   *tent;
 	gentity_t   *traceEnt;
 	qboolean hitClient = qfalse;
-
 	qboolean waslinked = qfalse;
+
+	// Nico, silent GCC
+	spread = spread;
 
 	//bani - prevent shooting ourselves in the head when prone, firing through a breakable
 	if ( g_entities[ attacker->s.number ].client && g_entities[ attacker->s.number ].r.linked == qtrue ) {
@@ -2139,7 +2141,7 @@ qboolean Bullet_Fire_Extended( gentity_t *source, gentity_t *attacker, vec3_t st
 		// reducedDamage = qtrue;
 		if ( scale >= 1.0f ) {
 			scale = 1.0f; // reducedDamage = qfalse;
-		} else if ( scale < 0.5f )                                                                {
+		} else if ( scale < 0.5f ) {
 			scale = 0.5f;
 		}
 
@@ -2148,7 +2150,7 @@ qboolean Bullet_Fire_Extended( gentity_t *source, gentity_t *attacker, vec3_t st
 	}
 
 	// send bullet impact
-	if ( traceEnt->takedamage && traceEnt->client /*&& !(traceEnt->flags & FL_DEFENSE_GUARD)*/ ) {
+	if ( traceEnt->takedamage && traceEnt->client ) {
 		tent = G_TempEntity( tr.endpos, EV_BULLET_HIT_FLESH );
 		tent->s.eventParm = traceEnt->s.number;
 
@@ -2165,7 +2167,7 @@ qboolean Bullet_Fire_Extended( gentity_t *source, gentity_t *attacker, vec3_t st
 			VectorAdd( b2, traceEnt->r.maxs, b2 );
 			bboxEnt = G_TempEntity( b1, EV_RAILTRAIL );
 			VectorCopy( b2, bboxEnt->s.origin2 );
-			bboxEnt->s.dmgFlags = 1;    // ("type")
+			bboxEnt->s.dmgFlags = 1;
 		}
 	} else {
 		trace_t tr2;
@@ -2240,7 +2242,6 @@ gentity_t *weapon_gpg40_fire( gentity_t *ent, int grenType ) {
 	gentity_t   *m /*, *te*/; // JPW NERVE
 	trace_t tr;
 	vec3_t viewpos;
-//	float		upangle = 0, pitch;			//	start with level throwing and adjust based on angle
 	vec3_t tosspos;
 	//bani - to prevent nade-through-teamdoor sploit
 	vec3_t orig_viewpos;
@@ -2286,8 +2287,6 @@ gentity_t *weapon_mortar_fire( gentity_t *ent, int grenType ) {
 
 	VectorCopy( ent->client->ps.viewangles, angles );
 	angles[PITCH] -= 60.f;
-/*	if( angles[PITCH] < -89.f )
-		angles[PITCH] = -89.f;*/
 	AngleVectors( angles, forward, NULL, NULL );
 
 	VectorCopy( muzzleEffect, launchPos );
@@ -2584,12 +2583,9 @@ CalcMuzzlePoint
 set muzzle location relative to pivoting eye
 ===============
 */
-void CalcMuzzlePoint( gentity_t *ent, int weapon, vec3_t forward, vec3_t right, vec3_t up, vec3_t muzzlePoint ) {
+void CalcMuzzlePoint( gentity_t *ent, int weapon, vec3_t right, vec3_t up, vec3_t muzzlePoint ) {
 	VectorCopy( ent->r.currentOrigin, muzzlePoint );
 	muzzlePoint[2] += ent->client->ps.viewheight;
-	// Ridah, this puts the start point outside the bounding box, isn't necessary
-//	VectorMA( muzzlePoint, 14, forward, muzzlePoint );
-	// done.
 
 	// Ridah, offset for more realistic firing from actual gun position
 	//----(SA) modified
@@ -2631,7 +2627,7 @@ void CalcMuzzlePoint( gentity_t *ent, int weapon, vec3_t forward, vec3_t right, 
 }
 
 // Rafael - for activate
-void CalcMuzzlePointForActivate( gentity_t *ent, vec3_t forward, vec3_t right, vec3_t up, vec3_t muzzlePoint ) {
+void CalcMuzzlePointForActivate( gentity_t *ent, vec3_t muzzlePoint ) {
 
 	VectorCopy( ent->s.pos.trBase, muzzlePoint );
 	muzzlePoint[2] += ent->client->ps.viewheight;
@@ -2682,8 +2678,8 @@ void CalcMuzzlePoints( gentity_t *ent, int weapon ) {
 //			straight out of the camera (SP5, Mauser right now) can have that accuracy, but
 //			weapons that need an offset effect (bazooka/grenade/etc.) can still look like
 //			they came out of the weap.
-	CalcMuzzlePointForActivate( ent, forward, right, up, muzzleTrace );
-	CalcMuzzlePoint( ent, weapon, forward, right, up, muzzleEffect );
+	CalcMuzzlePointForActivate( ent, muzzleTrace );
+	CalcMuzzlePoint( ent, weapon, right, up, muzzleEffect );
 }
 
 qboolean G_PlayerCanBeSeenByOthers( gentity_t *ent ) {

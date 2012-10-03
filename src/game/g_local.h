@@ -1267,7 +1267,7 @@ void aagun_fire( gentity_t *other );
 // g_weapon.c
 //
 qboolean AccuracyHit( gentity_t *target, gentity_t *attacker );
-void CalcMuzzlePoint( gentity_t *ent, int weapon, vec3_t forward, vec3_t right, vec3_t up, vec3_t muzzlePoint );
+void CalcMuzzlePoint( gentity_t *ent, int weapon, vec3_t right, vec3_t up, vec3_t muzzlePoint );
 void SnapVectorTowards( vec3_t v, vec3_t to );
 gentity_t *weapon_grenadelauncher_fire( gentity_t *ent, int grenadeWPID );
 
@@ -1278,7 +1278,7 @@ void G_FreeSatchel( gentity_t* ent );
 int G_GetWeaponDamage( int weapon );
 
 void CalcMuzzlePoints( gentity_t *ent, int weapon );
-void CalcMuzzlePointForActivate( gentity_t *ent, vec3_t forward, vec3_t right, vec3_t up, vec3_t muzzlePoint );
+void CalcMuzzlePointForActivate( gentity_t *ent, vec3_t muzzlePoint );
 
 //
 // g_client.c
