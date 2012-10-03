@@ -93,7 +93,7 @@ void QDECL PrintMsg( gentity_t *ent, const char *fmt, ... ) {
 
 	// NOTE: if buffer overflow, it's more likely to corrupt stack and crash than do a proper G_Error?
 	va_start( argptr,fmt );
-	if ( Q_vsnprintf( msg, sizeof( msg ), fmt, argptr ) > sizeof( msg ) ) {
+	if ( Q_vsnprintf( msg, sizeof( msg ), fmt, argptr ) > (int)sizeof( msg ) ) {
 		G_Error( "PrintMsg overrun" );
 	}
 	va_end( argptr );
@@ -153,6 +153,9 @@ void Team_FragBonuses( gentity_t *targ, gentity_t *inflictor, gentity_t *attacke
 	vec3_t v1, v2;
 	int team;
 
+	// Nico, silent GCC
+	inflictor = inflictor;
+
 	// no bonus for fragging yourself
 	if ( !targ->client || !attacker->client || targ == attacker ) {
 		return;
@@ -165,7 +168,7 @@ void Team_FragBonuses( gentity_t *targ, gentity_t *inflictor, gentity_t *attacke
 
 	}
 // JPW NERVE -- no bonuses for fragging friendlies, penalties scored elsewhere
-	if ( team == attacker->client->sess.sessionTeam ) {
+	if ( team == (int)attacker->client->sess.sessionTeam ) {
 		return;
 	}
 // jpw
@@ -188,7 +191,7 @@ void Team_FragBonuses( gentity_t *targ, gentity_t *inflictor, gentity_t *attacke
 		// field on the other team
 		for ( i = 0; i < g_maxclients.integer; i++ ) {
 			ent = g_entities + i;
-			if ( ent->inuse && ent->client->sess.sessionTeam == otherteam ) {
+			if ( ent->inuse && (int)ent->client->sess.sessionTeam == otherteam ) {
 				ent->client->pers.teamState.lasthurtcarrier = 0;
 			}
 		}
@@ -250,7 +253,7 @@ void Team_FragBonuses( gentity_t *targ, gentity_t *inflictor, gentity_t *attacke
 	flag = NULL;
 	while ( ( flag = G_Find( flag, FOFS( classname ), "team_WOLF_checkpoint" ) ) != NULL ) {
 		VectorSubtract( targ->client->ps.origin, flag->s.origin, v1 );
-		if ( ( flag->s.frame != WCP_ANIM_NOFLAG ) && ( flag->count == attacker->client->sess.sessionTeam ) ) {
+		if ( ( flag->s.frame != WCP_ANIM_NOFLAG ) && ( flag->count == (int)attacker->client->sess.sessionTeam ) ) {
 			if ( VectorLengthSquared( v1 ) < SQR( WOLF_CP_PROTECT_RADIUS ) ) {
 			}
 		}
@@ -546,7 +549,7 @@ int Pickup_Team( gentity_t *ent, gentity_t *other ) {
 	other->s.otherEntityNum2 = ent->s.modelindex2;
 	// jpw
 
-	return ( ( team == cl->sess.sessionTeam ) ?
+	return ( ( team == (int)cl->sess.sessionTeam ) ?
 				Team_TouchOurFlag : Team_TouchEnemyFlag )
 						( ent, other, team );
 }
@@ -616,15 +619,15 @@ go to a random point that doesn't telefrag
 gentity_t *SelectRandomTeamSpawnPoint( int teamstate, team_t team, int spawnObjective ) {
 	gentity_t   *spot;
 	gentity_t   *spots[MAX_TEAM_SPAWN_POINTS];
-
 	int count, closest;
 	int i = 0;
-
 	char        *classname;
 	float shortest, tmp;
-
 	vec3_t target;
 	vec3_t farthest;
+
+	// Nico, silent GCC
+	teamstate = teamstate;
 
 	if ( team == TEAM_AXIS ) {
 		classname = "team_CTF_redspawn";
@@ -789,7 +792,7 @@ void TeamplayInfoMessage( team_t team ) {
 			Com_sprintf( entry, sizeof( entry ), " %i %i %i %i %i", level.sortedClients[i], player->client->pers.teamState.location[0], player->client->pers.teamState.location[1], h, player->s.powerups );
 
 			j = strlen( entry );
-			if ( stringlength + j > sizeof( string ) ) {
+			if ( stringlength + j > (int)sizeof( string ) ) {
 				break;
 			}
 			strcpy( string + stringlength, entry );
@@ -839,6 +842,10 @@ void CheckTeamStatus( void ) {
 /*-----------------------------------------------------------------*/
 
 void Use_Team_InitialSpawnpoint( gentity_t *ent, gentity_t *other, gentity_t *activator ) {
+	// Nico, silent GCC
+	other = other;
+	activator = activator;
+
 	if ( ent->spawnflags & 4 ) {
 		ent->spawnflags &= ~4;
 	} else {
@@ -847,6 +854,10 @@ void Use_Team_InitialSpawnpoint( gentity_t *ent, gentity_t *other, gentity_t *ac
 }
 
 void Use_Team_Spawnpoint( gentity_t *ent, gentity_t *other, gentity_t *activator ) {
+	// Nico, silent GCC
+	other = other;
+	activator = activator;
+
 	if ( ent->spawnflags & 2 ) {
 		ent->spawnflags &= ~2;
 
@@ -872,13 +883,6 @@ void SP_team_CTF_redplayer( gentity_t *ent ) {
 	G_Printf( "^1team_ctf_*player entities are now obsolete, please remove them!\n" );
 	G_FreeEntity( ent );
 	return;
-
-/*	ent->use = Use_Team_InitialSpawnpoint;
-
-	VectorSet (ent->r.mins, -16, -16, -24);
-	VectorSet (ent->r.maxs, 16, 16, 32);
-
-	ent->think = DropToFloor;*/
 }
 
 /*QUAKED team_CTF_blueplayer (0 0 0.5) (-16 -16 -16) (16 16 32) INVULNERABLE - STARTDISABLED
@@ -889,13 +893,6 @@ void SP_team_CTF_blueplayer( gentity_t *ent ) {
 	G_Printf( "^1team_ctf_*player entities are now obsolete, please remove them!\n" );
 	G_FreeEntity( ent );
 	return;
-
-/*	ent->use = Use_Team_InitialSpawnpoint;
-
-	VectorSet (ent->r.mins, -16, -16, -24);
-	VectorSet (ent->r.maxs, 16, 16, 32);
-
-	ent->think = DropToFloor;*/
 }
 
 // JPW NERVE edited quaked def
@@ -986,6 +983,10 @@ static int numobjectives = 0; // TTimo
 // swaps the team
 void team_wolf_objective_use( gentity_t *self, gentity_t *other, gentity_t *activator ) {
 	char cs[MAX_STRING_CHARS];
+
+	// Nico, silent GCC
+	other = other;
+	activator = activator;
 
 	// Gordon 256 is a disabled flag
 	if ( ( self->count2 & ~256 ) == TEAM_AXIS ) {
@@ -1079,9 +1080,11 @@ void checkpoint_use_think( gentity_t *self ) {
 }
 
 void checkpoint_use( gentity_t *ent, gentity_t *other, gentity_t *activator ) {
-
 	int holderteam;
 	int time;
+
+	// Nico, silent GCC
+	other = other;
 
 	if ( !activator->client ) {
 		return;
@@ -1197,8 +1200,10 @@ void checkpoint_think( gentity_t *self ) {
 }
 
 void checkpoint_touch( gentity_t *self, gentity_t *other, trace_t *trace ) {
+	// Nico, silent GCC
+	trace = trace;
 
-	if ( self->count == other->client->sess.sessionTeam ) {
+	if ( self->count == (int)other->client->sess.sessionTeam ) {
 		return;
 	}
 
@@ -1252,7 +1257,10 @@ void checkpoint_spawntouch( gentity_t *self, gentity_t *other, trace_t *trace ) 
 	qboolean playsound = qtrue;
 	qboolean firsttime = qfalse;
 
-	if ( self->count == other->client->sess.sessionTeam ) {
+	// Nico, silent GCC
+	trace = trace;
+
+	if ( self->count == (int)other->client->sess.sessionTeam ) {
 		return;
 	}
 
@@ -1333,22 +1341,12 @@ void checkpoint_spawntouch( gentity_t *self, gentity_t *other, trace_t *trace ) 
 					ent->spawnflags |= 2;
 				} else if ( !strcmp( ent->classname,"team_CTF_bluespawn" ) ) {
 					ent->spawnflags &= ~2;
-// Gordon: these are obsolete
-/*				} else if (!strcmp(ent->classname,"team_CTF_redplayer")) {
-					ent->spawnflags &= ~4;
-				} else if (!strcmp(ent->classname,"team_CTF_blueplayer")) {
-					ent->spawnflags |= 4;*/
 				}
 			} else {
 				if ( !strcmp( ent->classname,"team_CTF_bluespawn" ) ) {
 					ent->spawnflags |= 2;
 				} else if ( !strcmp( ent->classname,"team_CTF_redspawn" ) ) {
 					ent->spawnflags &= ~2;
-// Gordon: these are obsolete
-/*				} else if (!strcmp(ent->classname,"team_CTF_blueplayer")) {
-					ent->spawnflags &= ~4;
-				} else if (!strcmp(ent->classname,"team_CTF_redplayer")) {
-					ent->spawnflags |= 4;*/
 				}
 			}
 		}
@@ -1455,6 +1453,9 @@ team_info teamInfo[TEAM_NUM_TEAMS];
 
 // Resets a team's settings
 void G_teamReset( int team_num, qboolean fClearSpecLock ) {
+	// Nico, silent GCC
+	fClearSpecLock = fClearSpecLock;
+
 	teamInfo[team_num].team_lock = qfalse;
 	teamInfo[team_num].team_name[0] = 0;
 	teamInfo[team_num].team_score = 0;
@@ -1480,7 +1481,7 @@ qboolean G_teamJoinCheck( int team_num, gentity_t *ent ) {
 
 	// Check for locked teams
 	if ( ( team_num == TEAM_AXIS || team_num == TEAM_ALLIES ) ) {
-		if ( ent->client->sess.sessionTeam == team_num ) {
+		if ( (int)ent->client->sess.sessionTeam == team_num ) {
 			return( qtrue );
 		}
 		// Check for full teams
@@ -1516,6 +1517,6 @@ qboolean G_AllowFollow( gentity_t *ent, gentity_t *other ) {
 qboolean G_DesiredFollow(gentity_t *ent, gentity_t *other) {
 	return G_AllowFollow(ent, other)
 		&& (ent->client->sess.spec_team == 0
-				|| ent->client->sess.spec_team == other->client->sess.sessionTeam);
+				|| ent->client->sess.spec_team == (int)other->client->sess.sessionTeam);
 }
 // -OSP
