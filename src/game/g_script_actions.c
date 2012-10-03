@@ -130,6 +130,9 @@ qboolean G_ScriptAction_SetAutoSpawn( gentity_t* ent, char *params ) {
 	int*    pTeamAutoSpawn;
 	gentity_t* tent;
 
+	// Nico, silent GCC
+	ent = ent;
+
 	pString = params;
 
 	token = COM_ParseExt( &pString, qfalse );
@@ -191,6 +194,9 @@ qboolean G_ScriptAction_ShaderRemap( gentity_t* ent, char *params ) {
 	char oldShader[256];
 	char newShader[256];
 
+	// Nico, silent GCC
+	ent = ent;
+
 	pString = params;
 
 	token = COM_ParseExt( &pString, qfalse );
@@ -211,6 +217,10 @@ qboolean G_ScriptAction_ShaderRemap( gentity_t* ent, char *params ) {
 }
 
 qboolean G_ScriptAction_ShaderRemapFlush( gentity_t* ent, char *params ) {
+	// Nico, silent GCC
+	ent = ent;
+	params = params;
+
 	trap_SetConfigstring( CS_SHADERSTATE, BuildShaderStateConfig() );
 	return qtrue;
 }
@@ -375,12 +385,18 @@ qboolean G_ScriptAction_AttatchToTrain( gentity_t* ent, char *params ) {
 }
 
 qboolean G_ScriptAction_FreezeAnimation( gentity_t* ent, char *params ) {
+	// Nico, silent GCC
+	params = params;
+
 	ent->s.loopSound = 1;
 
 	return qtrue;
 }
 
 qboolean G_ScriptAction_UnFreezeAnimation( gentity_t* ent, char *params ) {
+	// Nico, silent GCC
+	params = params;
+
 	ent->s.loopSound = 0;
 
 	return qtrue;
@@ -525,6 +541,9 @@ qboolean G_ScriptAction_SetRotation( gentity_t* ent, char *params ) {
 }
 
 qboolean G_ScriptAction_StopRotation( gentity_t* ent, char *params ) {
+	// Nico, silent GCC
+	params = params;
+
 	BG_EvaluateTrajectory( &ent->s.apos, level.time, ent->r.currentAngles, qtrue, ent->s.effect2Time  );
 	VectorCopy( ent->r.currentAngles, ent->s.apos.trBase );
 	ent->s.apos.trTime = level.time;
@@ -744,6 +763,8 @@ G_ScriptAction_AbortMove
 ===============
 */
 qboolean G_ScriptAction_AbortMove( gentity_t *ent, char *params ) {
+	// Nico, silent GCC
+	params = params;
 
 	ent->scriptStatus.scriptFlags &= ~SCFL_GOING_TO_MARKER;
 
@@ -784,6 +805,9 @@ qboolean G_ScriptAction_SetChargeTimeFactor( gentity_t* ent, char *params ) {
 	float factor;
 	team_t team;
 	char playerclass[64];
+
+	// Nico, silent GCC
+	ent = ent;
 
 	pString = params;
 
@@ -867,6 +891,9 @@ G_ScriptAction_SpawnRubble
 qboolean G_ScriptAction_SpawnRubble( gentity_t *ent, char *params ) {
 	int i;
 
+	// Nico, silent GCC
+	ent = ent;
+
 	for ( i = 0; i < MAX_DEBRISCHUNKS; i++ ) {
 		if ( !Q_stricmp( level.debrisChunks[i].targetname, params ) ) {
 			gentity_t* temp = G_TempEntity( level.debrisChunks[i].origin, EV_DEBRIS );
@@ -889,6 +916,9 @@ qboolean G_ScriptAction_AllowTankExit( gentity_t *ent, char *params ) {
 	char        *pString, *token;
 	pString = params;
 
+	// Nico, silent GCC
+	ent = ent;
+
 	token = COM_ParseExt( &pString, qfalse );
 	if ( !*token ) {
 		G_Error( "G_Scripting: allowtankexit must have a enable value\n" );
@@ -907,6 +937,9 @@ qboolean G_ScriptAction_AllowTankEnter( gentity_t *ent, char *params ) {
 	char        *pString, *token;
 	pString = params;
 
+	// Nico, silent GCC
+	ent = ent;
+
 	token = COM_ParseExt( &pString, qfalse );
 	if ( !*token ) {
 		G_Error( "G_Scripting: allowtankenter must have a enable value\n" );
@@ -924,6 +957,9 @@ qboolean G_ScriptAction_AllowTankEnter( gentity_t *ent, char *params ) {
 qboolean G_ScriptAction_SetTankAmmo( gentity_t *ent, char *params ) {
 	char        *pString, *token;
 	gentity_t* tank;
+
+	// Nico, silent GCC
+	ent = ent;
 
 	pString = params;
 
@@ -954,6 +990,9 @@ qboolean G_ScriptAction_SetTankAmmo( gentity_t *ent, char *params ) {
 qboolean G_ScriptAction_AddTankAmmo( gentity_t *ent, char *params ) {
 	char        *pString, *token;
 	gentity_t* tank;
+
+	// Nico, silent GCC
+	ent = ent;
 
 	pString = params;
 
@@ -991,6 +1030,9 @@ qboolean G_ScriptAction_AddTankAmmo( gentity_t *ent, char *params ) {
 qboolean G_ScriptAction_DisableMessage( gentity_t *ent, char *params ) {
 	char    *pString, *token;
 	gentity_t* target = NULL;
+
+	// Nico, silent GCC
+	ent = ent;
 
 	pString = params;
 	token = COM_ParseExt( &pString, qfalse );
@@ -1040,6 +1082,9 @@ qboolean G_ScriptAction_SetGlobalFog( gentity_t *ent, char *params ) {
 	int duration;
 	vec3_t color;
 	float depthForOpaque;
+
+	// Nico, silent GCC
+	ent = ent;
 
 	pString = params;
 
@@ -1529,6 +1574,9 @@ qboolean G_ScriptAction_FadeAllSounds( gentity_t *ent, char *params ) {
 	qboolean up = qfalse;
 	int time;
 
+	// Nico, silent GCC
+	ent = ent;
+
 	if ( !params ) {
 		G_Error( "G_Scripting: usage: FadeAllSounds [up|down] time\n" );
 	}
@@ -1569,6 +1617,9 @@ qboolean G_ScriptAction_MusicStart( gentity_t *ent, char *params ) {
 	char cvarName[MAX_QPATH];
 	int fadeupTime = 0;
 
+	// Nico, silent GCC
+	ent = ent;
+
 	pString = params;
 	token = COM_ParseExt( &pString, qfalse );
 	if ( !token[0] ) {
@@ -1597,6 +1648,9 @@ qboolean G_ScriptAction_MusicPlay( gentity_t *ent, char *params ) {
 	char cvarName[MAX_QPATH];
 	int fadeupTime = 0;
 
+	// Nico, silent GCC
+	ent = ent;
+
 	pString = params;
 	token = COM_ParseExt( &pString, qfalse );
 	if ( !token[0] ) {
@@ -1619,6 +1673,9 @@ qboolean G_ScriptAction_MusicStop( gentity_t *ent, char *params ) {
 	char    *pString, *token;
 	int fadeoutTime = 0;
 
+	// Nico, silent GCC
+	ent = ent;
+
 	pString = params;
 	token = COM_ParseExt( &pString, qfalse );
 	if ( token[0] ) {
@@ -1638,6 +1695,9 @@ G_ScriptAction_MusicQueue
 qboolean G_ScriptAction_MusicQueue( gentity_t *ent, char *params ) {
 	char    *pString, *token;
 	char cvarName[MAX_QPATH];
+
+	// Nico, silent GCC
+	ent = ent;
 
 	pString = params;
 	token = COM_ParseExt( &pString, qfalse );
@@ -1660,6 +1720,9 @@ qboolean G_ScriptAction_MusicFade( gentity_t *ent, char *params ) {
 	char    *pString, *token;
 	int fadeoutTime = 0;
 	float targetVol = 0.0;
+
+	// Nico, silent GCC
+	ent = ent;
 
 	pString = params;
 	token = COM_ParseExt( &pString, qfalse );
@@ -1794,6 +1857,9 @@ qboolean G_ScriptAction_AlertEntity( gentity_t *ent, char *params ) {
 	qboolean foundalertent = qfalse;
 	int hash;
 
+	// Nico, silent GCC
+	ent = ent;
+
 	if ( !params || !*params ) {
 		G_Error( "G_Scripting: alertentity without targetname\n" );
 	}
@@ -1842,6 +1908,9 @@ qboolean G_ScriptAction_ToggleSpeaker( gentity_t *ent, char *params ) {
 	gentity_t       *tent;
 	bg_speaker_t    *speaker;
 
+	// Nico, silent GCC
+	ent = ent;
+
 	if ( !params || !*params ) {
 		G_Error( "G_Scripting: togglespeaker without targetname\n" );
 	}
@@ -1878,6 +1947,9 @@ qboolean G_ScriptAction_DisableSpeaker( gentity_t *ent, char *params ) {
 	gentity_t       *tent;
 	bg_speaker_t    *speaker;
 
+	// Nico, silent GCC
+	ent = ent;
+
 	if ( !params || !*params ) {
 		G_Error( "G_Scripting: disablespeaker without targetname\n" );
 	}
@@ -1913,6 +1985,9 @@ qboolean G_ScriptAction_EnableSpeaker( gentity_t *ent, char *params ) {
 	long hash;
 	gentity_t       *tent;
 	bg_speaker_t    *speaker;
+
+	// Nico, silent GCC
+	ent = ent;
 
 	if ( !params || !*params ) {
 		G_Error( "G_Scripting: enablespeaker without targetname\n" );
@@ -2473,6 +2548,9 @@ G_ScriptAction_ResetScript
 ===================
 */
 qboolean G_ScriptAction_ResetScript( gentity_t *ent, char *params ) {
+	// Nico, silent GCC
+	params = params;
+
 	if ( level.time == ent->scriptStatus.scriptStackChangeTime ) {
 		return qfalse;
 	}
@@ -2538,6 +2616,9 @@ G_ScriptAction_Halt
 ====================
 */
 qboolean G_ScriptAction_Halt( gentity_t *ent, char *params ) {
+	// Nico, silent GCC
+	params = params;
+
 	if ( level.time == ent->scriptStatus.scriptStackChangeTime ) {
 		ent->scriptStatus.scriptFlags &= ~SCFL_GOING_TO_MARKER;
 
@@ -2577,6 +2658,9 @@ G_ScriptAction_StopSound
 ===================
 */
 qboolean G_ScriptAction_StopSound( gentity_t *ent, char *params ) {
+	// Nico, silent GCC
+	params = params;
+
 	ent->s.loopSound = 0;
 	return qtrue;
 }
@@ -2587,6 +2671,9 @@ G_ScriptAction_EntityScriptName
 =================
 */
 qboolean G_ScriptAction_EntityScriptName( gentity_t *ent, char *params ) {
+	// Nico, silent GCC
+	ent = ent;
+
 	trap_Cvar_Set( "g_scriptName", params );
 	return qtrue;
 }
@@ -2598,6 +2685,10 @@ G_ScriptAction_AIScriptName
 =================
 */
 qboolean G_ScriptAction_AIScriptName( gentity_t *ent, char *params ) {
+	// Nico, silent GCC
+	ent = ent;
+	params = params;
+
 	return qtrue;
 }
 
@@ -2613,18 +2704,15 @@ G_ScriptAction_AxisRespawntime
 qboolean G_ScriptAction_AxisRespawntime( gentity_t *ent, char *params ) {
 	char *pString, *token;
 
+	// Nico, silent GCC
+	ent = ent;
+
 	pString = params;
 	token = COM_Parse( &pString );
 	if ( !token[0] ) {
 		G_Error( "G_ScriptAction_AxisRespawntime: time parameter required\n" );
 	}
 
-	/* Nico, instant reswawn
-	if ( g_userAxisRespawnTime.integer ) {
-		trap_Cvar_Set( "g_redlimbotime", va( "%i", g_userAxisRespawnTime.integer * 1000 ) );
-	} else {
-		trap_Cvar_Set( "g_redlimbotime", va( "%s000", token ) );
-	}*/
 	G_Printf("Warning: G_ScriptAction_AxisRespawntime ignored\n");
 
 	return qtrue;
@@ -2640,18 +2728,15 @@ G_ScriptAction_AlliedRespawntime
 qboolean G_ScriptAction_AlliedRespawntime( gentity_t *ent, char *params ) {
 	char *pString, *token;
 
+	// Nico, silent GCC
+	ent = ent;
+
 	pString = params;
 	token = COM_Parse( &pString );
 	if ( !token[0] ) {
 		G_Error( "G_ScriptAction_AlliedRespawntime: time parameter required\n" );
 	}
 
-	/* Nico, instant reswawn
-	if ( g_userAlliedRespawnTime.integer ) {
-		trap_Cvar_Set( "g_bluelimbotime", va( "%i", g_userAlliedRespawnTime.integer * 1000 ) );
-	} else {
-		trap_Cvar_Set( "g_bluelimbotime", va( "%s000", token ) );
-	}*/
 	G_Printf("Warning: G_ScriptAction_AlliedRespawntime ignored\n");
 
 	return qtrue;
@@ -2667,8 +2752,10 @@ G_ScriptAction_NumberofObjectives
 qboolean G_ScriptAction_NumberofObjectives( gentity_t *ent, char *params ) {
 	char *pString, *token;
 	char cs[MAX_STRING_CHARS];
-
 	int num;
+
+	// Nico, silent GCC
+	ent = ent;
 
 	pString = params;
 	token = COM_Parse( &pString );
@@ -2698,6 +2785,10 @@ G_ScriptAction_SetMainObjective
 ===================
 */
 qboolean G_ScriptAction_SetMainObjective( gentity_t *ent, char *params ) {
+	// Nico, silent GCC
+	ent = ent;
+	params = params;
+
 	return qtrue;
 }
 
@@ -2712,8 +2803,10 @@ qboolean G_ScriptAction_ObjectiveStatus( gentity_t *ent, char *params ) {
 	char *pString, *token;
 	char cs[MAX_STRING_CHARS];
 	char*   parm;
-
 	int num;
+
+	// Nico, silent GCC
+	ent = ent;
 
 	pString = params;
 	token = COM_Parse( &pString );
@@ -2753,6 +2846,9 @@ qboolean G_ScriptAction_SetDebugLevel( gentity_t *ent, char *params ) {
 	char *pString, *token;
 	int debugLevel = 0;
 
+	// Nico, silent GCC
+	ent = ent;
+
 	if ( !params || !params[0] ) {
 		G_Error( "G_ScriptAction_SetDebugLevel: requires integer level\n" );
 	}
@@ -2778,6 +2874,9 @@ qboolean G_ScriptAction_SetDebugLevel( gentity_t *ent, char *params ) {
 qboolean G_ScriptAction_VoiceAnnounce( gentity_t *ent, char *params ) {
 	char *pString, *token;
 	int num, sysmsg;
+
+	// Nico, silent GCC
+	ent = ent;
 
 	pString = params;
 	token = COM_Parse( &pString );
@@ -2818,6 +2917,10 @@ G_ScriptAction_SetWinner
 
 */
 qboolean G_ScriptAction_SetWinner( gentity_t *ent, char *params ) {
+	// Nico, silent GCC
+	ent = ent;
+	params = params;
+
 	G_Printf("Warning: G_ScriptAction_SetWinner ignored\n");
 
 	return qtrue;
@@ -2835,6 +2938,10 @@ G_ScriptAction_SetDefendingTeam
 ===================
 */
 qboolean G_ScriptAction_SetDefendingTeam( gentity_t *ent, char *params ) {
+	// Nico, silent GCC
+	ent = ent;
+	params = params;
+
 	G_Printf("Warning: G_ScriptAction_SetDefendingTeam ignored\n");
 
 	return qtrue;
@@ -2850,6 +2957,9 @@ G_ScriptAction_AddTeamVoiceAnnounce
 qboolean G_ScriptAction_AddTeamVoiceAnnounce( gentity_t *ent, char *params ) {
 	char *pString, *token;
 	int team, i, index;
+
+	// Nico, silent GCC
+	ent = ent;
 
 	if ( g_gamestate.integer != GS_PLAYING ) {
 		return qtrue;
@@ -2896,6 +3006,9 @@ qboolean G_ScriptAction_RemoveTeamVoiceAnnounce( gentity_t *ent, char *params ) 
 	int team;
 	int index, i;
 
+	// Nico, silent GCC
+	ent = ent;
+
 	pString = params;
 
 	token = COM_Parse( &pString );
@@ -2936,6 +3049,9 @@ qboolean G_ScriptAction_TeamVoiceAnnounce( gentity_t *ent, char *params ) {
 	char *pString, *token;
 	team_t team;
 	gentity_t* tent;
+
+	// Nico, silent GCC
+	ent = ent;
 
 	if ( g_gamestate.integer != GS_PLAYING ) {
 		return qtrue;
@@ -2978,6 +3094,9 @@ qboolean G_ScriptAction_Announce_Icon( gentity_t *ent, char *params ) {
 	char *pString, *token;
 	int iconnumber;
 
+	// Nico, silent GCC
+	ent = ent;
+
 	pString = params;
 
 	token = COM_Parse( &pString );
@@ -3009,6 +3128,9 @@ G_ScriptAction_Announce
 qboolean G_ScriptAction_Announce( gentity_t *ent, char *params ) {
 	char *pString, *token;
 
+	// Nico, silent GCC
+	ent = ent;
+
 	pString = params;
 	token = COM_Parse( &pString );
 	if ( !token[0] ) {
@@ -3029,6 +3151,10 @@ G_ScriptAction_EndRound
 */
 
 qboolean G_ScriptAction_EndRound( gentity_t *ent, char *params ) {
+	// Nico, silent GCC
+	ent = ent;
+	params = params;
+
 	G_Printf("Warning: G_ScriptAction_EndRound ignored\n");
 
 	return qtrue;
@@ -3043,6 +3169,9 @@ G_ScriptAction_SetRoundTimelimit
 */
 qboolean G_ScriptAction_SetRoundTimelimit( gentity_t *ent, char *params ) {
 	char *pString, *token;
+
+	// Nico, silent GCC
+	ent = ent;
 
 	pString = params;
 	token = COM_Parse( &pString );
@@ -3063,6 +3192,9 @@ G_ScriptAction_RemoveEntity
 ===================
 */
 qboolean G_ScriptAction_RemoveEntity( gentity_t *ent, char *params ) {
+	// Nico, silent GCC
+	params = params;
+
 	ent->think = G_FreeEntity;
 	ent->nextthink = level.time + FRAMETIME;
 
@@ -3078,6 +3210,9 @@ qboolean G_ScriptAction_SetDamagable( gentity_t *ent, char *params ) {
 	gentity_t *target;
 	char *pString, name[MAX_QPATH], state[MAX_QPATH], *token;
 	qboolean canDamage;
+
+	// Nico, silent GCC
+	ent = ent;
 
 	pString = params;
 	token = COM_ParseExt( &pString, qfalse );
@@ -3116,6 +3251,9 @@ qboolean G_ScriptAction_SetState( gentity_t *ent, char *params ) {
 	entState_t entState = STATE_DEFAULT;
 	int hash;
 	qboolean found = qfalse;
+
+	// Nico, silent GCC
+	ent = ent;
 
 	// get the cast name
 	pString = params;
@@ -3247,6 +3385,8 @@ G_ScriptAction_StopCam
 ===================
 */
 qboolean G_ScriptAction_StopCam( gentity_t *ent, char *params ) {
+	// Nico, silent GCC
+	params = params;
 
 	if ( !ent->client ) {
 		return qfalse;
@@ -3267,6 +3407,9 @@ G_ScriptAction_RepairMG42
 qboolean G_ScriptAction_RepairMG42( gentity_t *ent, char *params ) {
 	gentity_t *target;
 	char *pString, name[MAX_QPATH], *token;
+
+	// Nico, silent GCC
+	ent = ent;
 
 	pString = params;
 	token = COM_ParseExt( &pString, qfalse );
@@ -3315,6 +3458,9 @@ qboolean G_ScriptAction_SetHQStatus( gentity_t *ent, char *params ) {
 	team_t team;
 	qboolean exists = qfalse;
 
+	// Nico, silent GCC
+	ent = ent;
+
 	pString = params;
 
 	token = COM_ParseExt( &pString, qfalse );
@@ -3352,6 +3498,9 @@ void AutoBuildConstruction( gentity_t* constructible );
 qboolean G_ScriptAction_Construct( gentity_t *ent, char *params ) {
 	char *pString, *token;
 	gentity_t* constructible;
+
+	// Nico, silent GCC
+	ent = ent;
 
 	pString = params;
 	if ( !( token = COM_ParseExt( &pString, qfalse ) ) ) {
@@ -3732,6 +3881,10 @@ G_ScriptAction_AbortIfWarmup
 =====================
 */
 qboolean G_ScriptAction_AbortIfWarmup( gentity_t *ent, char *params ) {
+	// Nico, silent GCC
+	ent = ent;
+	params = params;
+
 	G_Printf("Warning: G_ScriptAction_AbortIfWarmup ignored\n");
 	return qtrue;
 }
@@ -3742,6 +3895,9 @@ G_ScriptAction_AbortIfNotSinglePlayer
 ====================
 */
 qboolean G_ScriptAction_AbortIfNotSinglePlayer( gentity_t *ent, char *params ) {
+	// Nico, silent GCC
+	params = params;
+
 	ent->scriptStatus.scriptStackHead = ent->scriptEvents[ent->scriptStatus.scriptEventIndex].stack.numItems;
 	return qtrue;
 }
@@ -3890,9 +4046,6 @@ static void G_SpawnGEntityFromSpawnVars( void ) {
 	if ( !G_CallSpawn( ent ) ) {
 		G_FreeEntity( ent );
 	}
-
-	// RF, try and move it into the bot entities if possible
-//	BotCheckBotGameEntity( ent );
 }
 
 /**
@@ -3904,6 +4057,9 @@ qboolean G_ScriptAction_Create(gentity_t *ent, char *params) {
 	char	*token = NULL;
 	char	*p = NULL;
 	char	key[MAX_TOKEN_CHARS] = {0};
+
+	// Nico, silent GCC
+	ent = ent;
 
 	// reset and fill in the spawnVars info so that spawn functions can use
 	// them
@@ -3950,6 +4106,9 @@ qboolean G_ScriptAction_Delete(gentity_t *ent, char *params) {
 	char	*p = NULL;
 	char	key[MAX_TOKEN_CHARS] = {0};
 	gentity_t *entity = NULL;
+
+	// Nico, silent GCC
+	ent = ent;
 
 	p = params;
 
