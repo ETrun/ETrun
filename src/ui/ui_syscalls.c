@@ -171,10 +171,6 @@ void trap_R_AddPolyToScene( qhandle_t hShader, int numVerts, const polyVert_t *v
 	syscall( UI_R_ADDPOLYTOSCENE, hShader, numVerts, verts );
 }
 
-// ydnar: new dlight system
-//%	void	trap_R_AddLightToScene( const vec3_t org, float intensity, float r, float g, float b, int overdraw ) {
-//%		syscall( UI_R_ADDLIGHTTOSCENE, org, PASSFLOAT(intensity), PASSFLOAT(r), PASSFLOAT(g), PASSFLOAT(b), overdraw );
-//%	}
 void    trap_R_AddLightToScene( const vec3_t org, float radius, float intensity, float r, float g, float b, qhandle_t hShader, int flags ) {
 	syscall( UI_R_ADDLIGHTTOSCENE, org, PASSFLOAT( radius ), PASSFLOAT( intensity ),
 			 PASSFLOAT( r ), PASSFLOAT( g ), PASSFLOAT( b ), hShader, flags );
@@ -213,6 +209,9 @@ void trap_UpdateScreen( void ) {
 }
 
 int trap_CM_LerpTag( orientation_t *tag, const refEntity_t *refent, const char *tagName, int startIndex ) {
+	// Nico, silent GCC
+	startIndex = startIndex;
+
 	return syscall( UI_CM_LERPTAG, tag, refent, tagName, 0 );           // NEFVE - SMF - fixed
 }
 
@@ -221,7 +220,11 @@ void trap_S_StartLocalSound( sfxHandle_t sfx, int channelNum ) {
 }
 
 sfxHandle_t trap_S_RegisterSound( const char *sample, qboolean compressed ) {
-	int i = syscall( UI_S_REGISTERSOUND, sample, qfalse /* compressed */ );
+	int i = syscall( UI_S_REGISTERSOUND, sample, qfalse );
+
+	// Nico, silent GCC
+	compressed = compressed;
+
 #ifdef DEBUG
 	if ( i == 0 ) {
 		Com_Printf( "^1Warning: Failed to load sound: %s\n", sample );
