@@ -146,6 +146,8 @@ Now that we don't have teleport destination pads, this is just
 an info_notnull
 */
 void SP_misc_teleporter_dest( gentity_t *ent ) {
+	// Nico, silent GCC
+	ent = ent;
 }
 
 
@@ -205,6 +207,11 @@ void grabber_die( gentity_t *ent, gentity_t *inflictor, gentity_t *attacker, int
 	// this is buggy.  the trigger brush entity (ent->enemy) does not free.
 	// need to fix.
 
+	// Nico, silent GCC
+	inflictor = inflictor;
+	damage = damage;
+	mod = mod;
+
 	GibEntity( ent, 0 );    // use temporarily to show 'death' of entity
 
 	ent->enemy->think = G_FreeEntity;
@@ -239,6 +246,10 @@ grabber_close
 ==============
 */
 void grabber_close( gentity_t *ent, gentity_t *other, trace_t *trace ) {
+	// Nico, silent GCC
+	other = other;
+	trace = trace;
+
 	if ( ent->parent->nextthink > level.time ) {
 		return;
 	}
@@ -255,6 +266,11 @@ grabber_pain
 ==============
 */
 void grabber_pain( gentity_t *ent, gentity_t *attacker, int damage, vec3_t point ) {
+	// Nico, silent GCC
+	attacker = attacker;
+	damage = damage;
+	point = point;
+
 	G_AddEvent( ent, EV_GENERAL_SOUND, ent->sound2to1 ); // sound2to1 is the 'pain' sound
 }
 
@@ -312,6 +328,10 @@ grabber_use
 ==============
 */
 void grabber_use( gentity_t *ent, gentity_t *other, gentity_t *activator ) {
+	// Nico, silent GCC
+	other = other;
+	activator = activator;
+
 	G_Printf( "grabber_use: %d\n", level.time );
 
 	if ( !ent->active ) {
@@ -328,6 +348,10 @@ grabber_wake_touch
 ==============
 */
 void grabber_wake_touch( gentity_t *ent, gentity_t *other, trace_t *trace ) {
+	// Nico, silent GCC
+	other = other;
+	trace = trace;
+
 	grabber_wake( ent );
 }
 
@@ -429,6 +453,10 @@ void SP_misc_grabber_trap( gentity_t *ent ) {
 
 void use_spotlight( gentity_t *ent, gentity_t *other, gentity_t *activator ) {
 	gentity_t   *tent;
+
+	// Nico, silent GCC
+	other = other;
+	activator = activator;
 
 	if ( ent->r.linked ) {
 		trap_UnlinkEntity( ent );
@@ -762,6 +790,10 @@ void Use_Shooter( gentity_t *ent, gentity_t *other, gentity_t *activator ) {
 	float deg;
 	vec3_t up, right;
 
+	// Nico, silent GCC
+	other = other;
+	activator = activator;
+
 	// see if we have a target
 	if ( ent->enemy ) {
 		VectorSubtract( ent->enemy->r.currentOrigin, ent->s.origin, dir );
@@ -894,6 +926,10 @@ use_corona
 ==============
 */
 void use_corona( gentity_t *ent, gentity_t *other, gentity_t *activator ) {
+	// Nico, silent GCC
+	other = other;
+	activator = activator;
+
 	if ( ent->r.linked ) {
 		trap_UnlinkEntity( ent );
 	} else
@@ -1038,6 +1074,10 @@ use_dlight
 ==============
 */
 void use_dlight( gentity_t *ent, gentity_t *other, gentity_t *activator ) {
+	// Nico, silent GCC
+	other = other;
+	activator = activator;
+
 	if ( ent->r.linked ) {
 		trap_UnlinkEntity( ent );
 	} else
@@ -1229,6 +1269,8 @@ void clamp_playerbehindgun( gentity_t *self, gentity_t *other, vec3_t dang ) {
 	vec3_t forward, right, up;
 	vec3_t point;
 
+	// Nico, silent GCC
+	dang = dang;
 
 	AngleVectors( self->s.apos.trBase, forward, right, up );
 	if ( self->s.eType == ET_AAGUN ) {
@@ -1289,6 +1331,10 @@ void clamp_hweapontofirearc( gentity_t *self, vec3_t dang ) {
 //
 
 void aagun_use( gentity_t *ent, gentity_t *other, gentity_t *activator ) {
+	// Nico, silent GCC
+	other = other,
+	activator = activator;
+
 	gentity_t *owner = &g_entities[ent->r.ownerNum];
 
 	if ( owner && owner->client ) {
@@ -1304,6 +1350,12 @@ void aagun_use( gentity_t *ent, gentity_t *other, gentity_t *activator ) {
 }
 
 void aagun_die( gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int damage, int mod ) {
+	// Nico, silent GCC
+	self = self;
+	inflictor = inflictor;
+	attacker = attacker,
+	damage = damage;
+	mod = mod;
 }
 
 void aagun_track( gentity_t *self, gentity_t *other ) {
@@ -1431,24 +1483,10 @@ void aagun_fire( gentity_t *other ) {
 }
 
 void aagun_touch( gentity_t *self, gentity_t *other, trace_t *trace ) {
-/*	if (!self->active) {
-		return;
-	}
-
-	if (other->active) {
-		vec3_t	dang;
-		int		i;
-
-		for (i = 0; i < 3; i++) {
-			dang[i] = SHORT2ANGLE(other->client->pers.cmd.angles[i]);
-		}
-
-		// now tell the client to lock the view in the direction of the gun
-		other->client->ps.viewlocked = 3;
-		other->client->ps.viewlocked_entNum = self->s.number;
-
-		clamp_playerbehindgun (self, other, dang);
-	}*/
+	// Nico, silent GCC
+	self = self;
+	other = other;
+	trace = trace;
 }
 
 void aagun_spawn( gentity_t *gun ) {
@@ -1506,6 +1544,9 @@ void mg42_touch( gentity_t *self, gentity_t *other, trace_t *trace ) {
 	vec3_t dang;
 	int i;
 
+	// Nico, silent GCC
+	trace = trace;
+
 	if ( !self->active ) {
 		return;
 	}
@@ -1517,11 +1558,6 @@ void mg42_touch( gentity_t *self, gentity_t *other, trace_t *trace ) {
 		// now tell the client to lock the view in the direction of the gun
 		other->client->ps.viewlocked = 3;
 		other->client->ps.viewlocked_entNum = self->s.number;
-
-		//if (self->s.frame)
-		//	other->client->ps.gunfx = 1;
-		//else
-		//	other->client->ps.gunfx = 0;
 
 		// clamp player behind the gun
 		clamp_playerbehindgun( self, other, dang );
@@ -1535,7 +1571,6 @@ void mg42_fire( gentity_t *other ) {
 
 	self = &g_entities[other->client->ps.viewlocked_entNum];
 
-	//AngleVectors (self->s.apos.trBase, forward, right, up);
 	AngleVectors( other->client->ps.viewangles, forward, right, up );
 	VectorCopy( self->s.pos.trBase, muzzle );
 
@@ -1718,6 +1753,11 @@ void mg42_die( gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int d
 	gentity_t   *owner;
 	trace_t tr;
 
+	// Nico, silent GCC
+	inflictor = inflictor;
+	damage = damage;
+	mod = mod;
+
 	// DHM - Nerve :: self->chain not set if no tripod
 	if ( self->chain ) {
 		gun = self->chain;
@@ -1727,7 +1767,7 @@ void mg42_die( gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int d
 
 	// Nico, check gun here
 	if (gun) {
-		gun->sound3to2 = attacker->client ? attacker->client->sess.sessionTeam : -1;
+		gun->sound3to2 = attacker->client ? (int)attacker->client->sess.sessionTeam : -1;
 
 		owner = &g_entities[gun->r.ownerNum];
 
@@ -1778,6 +1818,9 @@ void mg42_die( gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int d
 
 void mg42_use( gentity_t *ent, gentity_t *other, gentity_t *activator ) {
 	gentity_t *owner;
+
+	// Nico, silent GCC
+	activator = activator;
 
 	owner = &g_entities[ent->r.ownerNum];
 
@@ -2100,14 +2143,12 @@ void misc_spawner_think( gentity_t *ent ) {
 }
 
 void misc_spawner_use( gentity_t *ent, gentity_t *other, gentity_t *activator ) {
+	// Nico, silent GCC
+	other = other;
+	activator = activator;
 
 	ent->think = misc_spawner_think;
 	ent->nextthink = level.time + FRAMETIME;
-
-//	VectorCopy (other->r.currentOrigin, ent->r.currentOrigin);
-//	VectorCopy (ent->r.currentOrigin, ent->s.pos.trBase);
-
-//	VectorCopy (other->r.currentAngles, ent->r.currentAngles);
 
 	trap_LinkEntity( ent );
 }
@@ -2130,6 +2171,10 @@ void firetrail_die( gentity_t *ent ) {
 }
 
 void firetrail_use( gentity_t *ent, gentity_t *other, gentity_t *activator ) {
+	// Nico, silent GCC
+	other = other;
+	activator = activator;
+
 	if ( ent->s.eType == ET_RAMJET ) {
 		ent->s.eType = ET_GENERAL;
 	} else {
