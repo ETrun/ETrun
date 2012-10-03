@@ -77,6 +77,7 @@ panel_button_t loadScreenMap = {
 	NULL,   /* keyUp	*/
 	BG_PanelButtonsRender_Img,
 	NULL,
+	0
 };
 
 panel_button_t loadScreenBack = {
@@ -89,19 +90,8 @@ panel_button_t loadScreenBack = {
 	NULL,   /* keyUp	*/
 	BG_PanelButtonsRender_Img,
 	NULL,
+	0
 };
-
-/*panel_button_t loadingPanelHeaderText = {
-	NULL,
-	"***TOP SECRET***",
-	{ 440, 72, 200, 32 },
-	{ 0, 0, 0, 0, 0, 0, 0, 0 },
-	&missiondescriptionHeaderTxt,
-	NULL,
-	NULL,
-	BG_PanelButtonsRender_Text,
-	NULL,
-};*/
 
 panel_button_t loadingPanelText = {
 	NULL,
@@ -113,20 +103,9 @@ panel_button_t loadingPanelText = {
 	NULL,                   /* keyUp	*/
 	UI_LoadPanel_RenderLoadingText,
 	NULL,
+	0
 };
 
-/*panel_button_t campaignheaderPanelText = {
-	NULL,
-	"Connecting to:",
-	{ 456, 24, 152, 232 },
-	{ 0, 0, 0, 0, 0, 0, 0, 0 },
-	&campaignpheaderTxt,
-	NULL,
-	NULL,
-	BG_PanelButtonsRender_Text,
-	NULL,
-};
-*/
 panel_button_t campaignPanelText = {
 	NULL,
 	NULL, //"CONNECTING...",
@@ -137,16 +116,12 @@ panel_button_t campaignPanelText = {
 	NULL,                   /* keyUp	*/
 	UI_LoadPanel_RenderHeaderText,
 	NULL,
+	0
 };
 
 panel_button_t* loadpanelButtons[] = {
 	&loadScreenMap, &loadScreenBack,
-
-
-	&loadingPanelText, /*&loadingPanelHeaderText,*/
-
-	/*&campaignheaderPanelText,*/ &campaignPanelText,
-
+	&loadingPanelText, &campaignPanelText,
 	NULL,
 };
 
@@ -210,17 +185,6 @@ void UI_LoadPanel_RenderPercentageMeter( panel_button_t* button ) {
 
 	trap_R_Add2dPolys( verts, 4, button->hShaderNormal );
 }
-/*
-void UI_LoadPanel_RenderCampaignNameText( panel_button_t* button ) {
-	uiClientState_t	cstate;
-	char *s;
-
-	trap_GetClientState( &cstate );
-
-	s = Q_strupr( cstate.servername );
-
-	Text_Paint_Ext( button->rect.x, button->rect.y, button->font->scalex, button->font->scaley, button->font->colour, s, 0, 14, 0, button->font->font );
-}*/
 
 void MiniAngleToAxis( vec_t angle, vec2_t axes[2] ) {
 	axes[0][0] = (vec_t)sin( -angle );
