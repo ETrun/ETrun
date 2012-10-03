@@ -75,7 +75,7 @@ static const vote_reference_t aVoteInfo[] = {
 	{ 0x1ff, "startmatch",  G_StartMatch_v,		"Start Match",      " ^7\n  Sets all players to \"ready\" status to start the match" },
 	{ 0x1ff, "unreferee",   G_Unreferee_v,		"UNReferee",		" <player_id>^7\n  Elects a player to have admin abilities removed" },
 	{ 0x1ff, "antilag",     G_AntiLag_v,		"Anti-Lag",         " <0|1>^7\n  Toggles Anit-Lag on the server" },
-	{ 0, 0, NULL, 0 }
+	{ 0, 0, NULL, 0, NULL }
 };
 
 
@@ -207,6 +207,9 @@ void G_voteCurrentSetting( gentity_t *ent, const char *cmd, const char *setting 
 
 // Vote toggling
 int G_voteProcessOnOff( gentity_t *ent, char *arg, char *arg2, qboolean fRefereeCmd, int curr_setting, int vote_allow, int vote_type ) {
+	// Nico, silent GCC
+	arg = arg;
+
 	if ( !vote_allow && ent && !ent->client->sess.referee ) {
 		G_voteDisableMessage( ent, aVoteInfo[vote_type].pszVoteName );
 		G_voteCurrentSetting( ent, aVoteInfo[vote_type].pszVoteName, ( ( curr_setting ) ? ENABLED : DISABLED ) );
@@ -417,6 +420,9 @@ void *G_delayed_map_change_watcher(void *arg) {
 	int count = 0;
 	int limit = 10;// Nico, in seconds
 
+	// Nico, silent GCC
+	arg = arg;
+
 	while (!level.delayedMapChange.disabledWatcher) {
 		if (level.time && level.delayedMapChange.timeChange) {
 			// There is a delayed change
@@ -499,6 +505,9 @@ int G_MapRestart_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *a
 
 // *** Match Restart ***
 int G_MatchReset_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd ) {
+	// Nico, silent GCC
+	arg2 = arg2;
+
 	// Vote request (vote is being initiated)
 	if ( arg ) {
 		if ( !vote_allow_matchreset.integer && ent && !ent->client->sess.referee ) {
@@ -523,6 +532,9 @@ int G_MatchReset_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *a
  */
 int G_Randommap_v( gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd ) {
 	char *result = NULL;
+
+	// Nico, silent GCC
+	arg2 = arg2;
 
 	// Nico, check if API is used
 	if (!g_useAPI.integer) {
