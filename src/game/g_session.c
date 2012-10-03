@@ -131,6 +131,9 @@ Called on a first-time connect
 void G_InitSessionData( gclient_t *client, char *userinfo ) {
 	clientSession_t *sess;
 
+	// Nico, silent GCC
+	userinfo = userinfo;
+
 	sess = &client->sess;
 
 	// initial team determination
