@@ -169,6 +169,9 @@ void G_matchInfoDump( unsigned int dwDumpType ) {
 	gentity_t *ent;
 	gclient_t *cl;
 
+	// Nico, silent GCC
+	dwDumpType = dwDumpType;
+
 	for ( i = 0; i < level.numConnectedClients; i++ ) {
 		ref = level.sortedClients[i];
 		ent = &g_entities[ref];
@@ -179,7 +182,6 @@ void G_matchInfoDump( unsigned int dwDumpType ) {
 		}
 	}
 }
-
 
 // Update configstring for vote info
 int G_checkServerToggle( vmCvar_t *cv ) {
