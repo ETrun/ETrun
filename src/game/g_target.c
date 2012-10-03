@@ -45,6 +45,9 @@ void Use_Target_Give( gentity_t *ent, gentity_t *other, gentity_t *activator ) {
 	gentity_t   *t;
 	trace_t trace;
 
+	// Nico, silent GCC
+	other = other;
+
 	if ( !activator->client ) {
 		return;
 	}
@@ -79,6 +82,10 @@ takes away all the activators powerups.
 Used to drop flight powerups into death puts.
 */
 void Use_target_remove_powerups( gentity_t *ent, gentity_t *other, gentity_t *activator ) {
+	// Nico, silent GCC
+	ent = ent;
+	other = other;
+
 	if ( !activator->client ) {
 		return;
 	}
@@ -106,6 +113,9 @@ void Think_Target_Delay( gentity_t *ent ) {
 }
 
 void Use_Target_Delay( gentity_t *ent, gentity_t *other, gentity_t *activator ) {
+	// Nico, silent GCC
+	other = other;
+
 	ent->nextthink = level.time + ( ent->wait + ent->random * crandom() ) * 1000;
 	ent->think = Think_Target_Delay;
 	ent->activator = activator;
@@ -132,6 +142,10 @@ void SP_target_delay( gentity_t *ent ) {
 The activator is given this many points.
 */
 void Use_Target_Score( gentity_t *ent, gentity_t *other, gentity_t *activator ) {
+	// Nico, silent GCC
+	ent = ent;
+	other = other;
+	activator = activator;
 }
 
 void SP_target_score( gentity_t *ent ) {
@@ -150,6 +164,9 @@ void SP_target_score( gentity_t *ent ) {
 If "private", only the activator gets the message.  If no checks, all clients get the message.
 */
 void Use_Target_Print( gentity_t *ent, gentity_t *other, gentity_t *activator ) {
+	// Nico, silent GCC
+	other = other;
+
 	if ( ( ent->spawnflags & 4 ) ) {
 		if ( !activator ) {
 			G_Error( "G_scripting: call to client only target_print with no activator\n" );
@@ -197,6 +214,9 @@ NO_PVS - this sound will not turn off when not in the player's PVS
 "volume" volume control 255 is default
 */
 void Use_Target_Speaker( gentity_t *ent, gentity_t *other, gentity_t *activator ) {
+	// Nico, silent GCC
+	other = other;
+
 	if ( ent->spawnflags & 3 ) {  // looping sound toggles
 		if ( ent->s.loopSound ) {
 			ent->s.loopSound = 0;   // turn it off
@@ -485,6 +505,9 @@ void target_laser_off( gentity_t *self ) {
 }
 
 void target_laser_use( gentity_t *self, gentity_t *other, gentity_t *activator ) {
+	// Nico, silent GCC
+	other = other;
+
 	self->activator = activator;
 	if ( self->nextthink > 0 ) {
 		target_laser_off( self );
@@ -540,6 +563,9 @@ void SP_target_laser( gentity_t *self ) {
 void target_teleporter_use( gentity_t *self, gentity_t *other, gentity_t *activator ) {
 	gentity_t   *dest;
 
+	// Nico, silent GCC
+	other = other;
+
 	if ( !activator->client ) {
 		return;
 	}
@@ -579,6 +605,9 @@ By default this sound is "sound/movers/doors/default_door_locked.wav"
 NO_LOCKED_NOISE specifies that it will be silent if activated without proper key
 */
 void target_relay_use( gentity_t *self, gentity_t *other, gentity_t *activator ) {
+	// Nico, silent GCC
+	other = other;
+
 	if ( ( self->spawnflags & 1 ) && activator && activator->client
 		 && activator->client->sess.sessionTeam != TEAM_AXIS ) {
 		return;
@@ -651,6 +680,9 @@ If targets, they will be killed when this is fired
 void G_KillEnts( const char* target, gentity_t* ignore, gentity_t* killer, meansOfDeath_t mod ) {
 	gentity_t *targ = NULL;
 
+	// Nico, silent GCC
+	mod = mod;
+
 	while ( ( targ = G_FindByTargetname( targ, target ) ) ) {
 
 		// make sure it isn't going to respawn or show any events
@@ -681,6 +713,9 @@ void G_KillEnts( const char* target, gentity_t* ignore, gentity_t* killer, means
 }
 
 void target_kill_use( gentity_t *self, gentity_t *other, gentity_t *activator ) {
+	// Nico, silent GCC
+	other = other;
+
 	// Nico, if kill triggers are enabled, kill activator (=player) too
 	if (g_enableMapEntities.integer & MAP_KILL_ENTITIES || self->spawnflags & 1) {  // kill usertoo
 		G_Damage( activator, NULL, NULL, NULL, NULL, 100000, DAMAGE_NO_PROTECTION, MOD_TELEFRAG );
@@ -724,6 +759,9 @@ Use_Target_Counter
 ==============
 */
 void Use_Target_Counter( gentity_t *ent, gentity_t *other, gentity_t *activator ) {
+	// Nico, silent GCC
+	activator = activator;
+
 	if ( ent->count < 0 ) { // if the count has already been hit, ignore this
 		return;
 	}
@@ -743,6 +781,10 @@ Use_Target_Lock
 void Use_Target_Lock( gentity_t *ent, gentity_t *other, gentity_t *activator ) {
 	gentity_t   *t = 0;
 
+	// Nico, silent GCC
+	other = other;
+	activator = activator;
+
 	while ( ( t = G_Find( t, FOFS( targetname ), ent->target ) ) != NULL )
 	{
 		t->key = ent->key;
@@ -758,6 +800,10 @@ Use_target_fog
 ==============
 */
 void Use_target_fog( gentity_t *ent, gentity_t *other, gentity_t *activator ) {
+	// Nico, silent GCC
+	other = other;
+	activator = activator;
+
 //	CS_FOGVARS reads:
 //		near
 //		far
@@ -831,6 +877,9 @@ void SP_target_lock( gentity_t *ent ) {
 
 
 void Use_Target_Alarm( gentity_t *ent, gentity_t *other, gentity_t *activator ) {
+	// Nico, silent GCC
+	activator = activator;
+
 	G_UseTargets( ent, other );
 }
 
@@ -872,6 +921,10 @@ void smoke_think( gentity_t *ent ) {
 }
 
 void smoke_toggle( gentity_t *ent, gentity_t *self, gentity_t *activator ) {
+	// Nico, silent GCC
+	self = self;
+	activator = activator;
+
 	if ( ent->spawnflags & 4 ) { // smoke is on turn it off
 		ent->spawnflags &= ~4;
 		trap_UnlinkEntity( ent );
@@ -989,11 +1042,13 @@ when used it will fire its targets
 */
 void target_script_trigger_use( gentity_t *ent, gentity_t *other, gentity_t *activator ) {
 // START	Mad Doctor I changes, 8/16/2002
-
 	qboolean found = qfalse;
 
 	// for all entities/bots with this ainame
 	gentity_t *trent = NULL;
+
+	// Nico, silent GCC
+	activator = activator;
 
 	// Are we using ainame to find another ent instead of using scriptname for this one?
 	if ( ent->aiName ) {
@@ -1107,6 +1162,10 @@ void target_rumble_think( gentity_t * ent ) {
 }
 
 void target_rumble_use( gentity_t *ent, gentity_t *other, gentity_t *activator ) {
+	// Nico, silent GCC
+	other = other;
+	activator = activator;
+
 	if ( ent->spawnflags & 1 ) {
 		ent->spawnflags &= ~1;
 		ent->think = target_rumble_think;
@@ -1250,6 +1309,9 @@ static void notify_timerun_start(gentity_t *activator) {
 void target_starttimer_use(gentity_t *self, gentity_t *other, gentity_t *activator) {
 	gclient_t *client = NULL;
 	int i = 0;
+
+	// Nico, silent GCC
+	other = other;
 
 	client = activator->client;
 
@@ -1418,6 +1480,9 @@ void target_stoptimer_use(gentity_t *self, gentity_t *other, gentity_t *activato
 	int len = 0;
 	char cleanRunName[256] = {0};
 	char physicsName[MAX_QPATH] = {0};
+
+	// Nico, silent GCC
+	other = other;
 
 	client = activator->client;
 
@@ -1605,6 +1670,9 @@ void target_checkpoint_use(gentity_t *self, gentity_t *other, gentity_t *activat
 	int			timerunNum = 0;
 	int			status = 0;
 
+	// Nico, silent GCC
+	other = other;
+
 	client = activator->client;
 
 	if (!client->sess.timerunActive) {
@@ -1681,6 +1749,9 @@ void SP_target_checkpoint(gentity_t *ent) {
 
 void SP_rocketrun(gentity_t *ent) {
 	int		count;
+
+	// Nico, silent GCC
+	ent = ent;
 
 	// Don't add if already added from one?
 	if (!level.rocketRun) {
