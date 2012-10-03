@@ -262,7 +262,6 @@ qboolean G_TryPushingEntity( gentity_t *check, gentity_t *pusher, vec3_t move, v
 	// instead of pushing it, but entities can still ride on top of it
 	if ( ( pusher->s.eFlags & EF_MOVER_STOP ) &&
 		 check->s.groundEntityNum != pusher->s.number ) {
-		//pusher->s.eFlags |= EF_MOVER_BLOCKED;
 		return qfalse;
 	}
 
@@ -602,9 +601,6 @@ void G_MoverTeam( gentity_t *ent ) {
 		VectorSubtract( origin, part->r.currentOrigin, move );
 		VectorSubtract( angles, part->r.currentAngles, amove );
 
-		//if (part->s.eFlags == EF_MOVER_STOP)
-		//	part->s.eFlags &= ~EF_MOVER_BLOCKED;
-
 		if ( part->s.eFlags == EF_MOVER_STOP ) {
 			part->s.eFlags &= ~EF_MOVER_BLOCKED;
 		}
@@ -792,7 +788,6 @@ void SetMoverState( gentity_t *ent, moverState_t moverState, int time ) {
 			ent->s.apos.trDuration = ent->gDuration * 2;
 		} else {
 			f = 1000.0 / ent->gDuration;
-//				ent->s.apos.trDuration = ent->gDurationBack;	// (SA) durationback?
 			ent->s.apos.trDuration = ent->gDuration;
 		}
 		VectorScale( ent->rotate, f * ent->angle, ent->s.apos.trDelta );
@@ -949,7 +944,6 @@ void Reached_BinaryMover( gentity_t *ent ) {
 
 	// stop the looping sound
 	ent->s.loopSound = 0;
-//	ent->s.loopSound = ent->soundLoop;
 
 	if ( ent->moverState == MOVER_1TO2 ) {
 		// reached pos2
@@ -1056,7 +1050,6 @@ void Reached_BinaryMover( gentity_t *ent ) {
 		G_Error( "Reached_BinaryMover: bad moverState" );
 	}
 
-//	ent->flags &= ~(FL_KICKACTIVATE|FL_SOFTACTIVATE);	// (SA) it was not opened normally.  Clear this so it thinks it's closed normally
 	ent->flags &= ~FL_KICKACTIVATE; // (SA) it was not opened normally.  Clear this so it thinks it's closed normally
 
 }
@@ -1084,7 +1077,7 @@ qboolean IsBinaryMoverBlocked( gentity_t *ent, gentity_t *other, gentity_t *acti
 		if ( !activator ) {
 			if ( other && Q_stricmp( other->classname, "target_relay" ) == 0 ) {
 				is_relay = qtrue;
-			} else /*if(!activator->client) */
+			} else
 			{
 				return qfalse;
 			}
@@ -1443,8 +1436,6 @@ void Use_BinaryMover( gentity_t *ent, gentity_t *other, gentity_t *activator ) {
 			if ( ent->flags & FL_SOFTACTIVATE ) {
 				G_AddEvent( ent, EV_GENERAL_SOUND, ent->soundSoftopen );
 			} else {
-//				if(activator)
-//					AICast_AudibleEvent( activator->s.number, ent->s.origin, HEAR_RANGE_DOOR_OPEN );	// "someone opened a door near me!"
 				G_AddEvent( ent, EV_GENERAL_SOUND, ent->sound1to2 );
 			}
 		}
@@ -1531,8 +1522,6 @@ void Use_BinaryMover( gentity_t *ent, gentity_t *other, gentity_t *activator ) {
 		return;
 	}
 }
-
-
 
 /*
 ================
@@ -1746,6 +1735,9 @@ Touch_DoorTriggerSpectator
 static void Touch_DoorTriggerSpectator( gentity_t *ent, gentity_t *other, trace_t *trace ) {
 	int i, axis;
 	vec3_t origin, dir, angles;
+
+	// Nico, silent GCC
+	trace = trace;
 
 	axis = ent->count;
 	VectorClear( dir );
@@ -1970,8 +1962,6 @@ void finishSpawningKeyedMover( gentity_t *ent ) {
 
 //----(SA) end
 
-
-
 /*
 ==============
 Door_reverse_sounds
@@ -2015,6 +2005,9 @@ DoorSetSounds
 ==============
 */
 void DoorSetSounds( gentity_t *ent, int doortype, qboolean isRotating ) {
+	// Nico, silent GCC
+	isRotating = isRotating;
+
 	ent->sound1to2 = G_SoundIndex( va( "sound/movers/doors/door%i_open.wav", doortype ) );       // opening
 	ent->soundPos2 = G_SoundIndex( va( "sound/movers/doors/door%i_endo.wav", doortype ) );       // open
 	ent->sound2to1 = G_SoundIndex( va( "sound/movers/doors/door%i_close.wav", doortype ) );      // closing
@@ -2041,8 +2034,10 @@ G_TryDoor
 void G_TryDoor( gentity_t *ent, gentity_t *other, gentity_t *activator ) {
 	qboolean walking = qfalse;
 
-	walking = (qboolean)( ent->flags & FL_SOFTACTIVATE );
+	// Nico, silent GCC
+	other = other;
 
+	walking = (qboolean)( ent->flags & FL_SOFTACTIVATE );
 
 	if ( ( ent->s.apos.trType == TR_STATIONARY && ent->s.pos.trType == TR_STATIONARY ) ) {
 		if ( ent->active == qfalse ) {
@@ -2297,15 +2292,6 @@ void SP_func_secret( gentity_t *ent ) {
 	distance = DotProduct( abs_movedir, size ) - lip;
 	VectorMA( ent->pos2, distance, ent->movedir, ent->pos3 );
 
-	// if "start_open", reverse position 1 and 3
-	/*if ( ent->spawnflags & 1 ) {
-		vec3_t	temp;
-
-		VectorCopy( ent->pos3, temp );
-		VectorCopy( ent->s.origin, ent->pos3 );
-		VectorCopy( temp, ent->pos1 );
-	}*/
-
 	InitMover( ent );
 
 	if ( !( ent->flags & FL_TEAMSLAVE ) ) {
@@ -2338,6 +2324,9 @@ Don't allow decent if a living player is on it
 ===============
 */
 void Touch_Plat( gentity_t *ent, gentity_t *other, trace_t *trace ) {
+	// Nico, silent GCC
+	trace = trace;
+
 	if ( !other->client || other->client->ps.stats[STAT_HEALTH] <= 0 ) {
 		return;
 	}
@@ -2356,6 +2345,9 @@ If the plat is at the bottom position, start it going up
 ===============
 */
 void Touch_PlatCenterTrigger( gentity_t *ent, gentity_t *other, trace_t *trace ) {
+	// Nico, silent GCC
+	trace = trace;
+
 	if ( !other->client ) {
 		return;
 	}
@@ -2480,6 +2472,9 @@ Touch_Button
 ===============
 */
 void Touch_Button( gentity_t *ent, gentity_t *other, trace_t *trace ) {
+	// Nico, silent GCC
+	trace = trace;
+
 	if ( !other->client ) {
 		return;
 	}
@@ -2758,7 +2753,6 @@ void SP_info_train_spline_main( gentity_t *self ) {
 		return;
 	}
 
-//	if( self->target ) {
 	spline = BG_AddSplinePath( self->targetname, self->target, self->s.origin );
 
 	if ( G_SpawnString( "end", "", &end ) ) {
@@ -2776,9 +2770,6 @@ void SP_info_train_spline_main( gentity_t *self ) {
 
 		BG_AddSplineControl( spline, control );
 	}
-/*	} else {
-		BG_AddPathCorner( self->targetname, self->s.origin );
-	}*/
 
 	G_FreeEntity( self );
 }
@@ -2990,12 +2981,6 @@ void Reached_Train_rotating( gentity_t *ent ) {
 		ent->TargetFlag = 0;
 	}
 
-	//G_Printf( "Train angles %s\n",
-	//			vtos(ent->s.angles) );
-
-	//G_Printf( "Add  X  Y  X %s\n",
-	//			vtos(ent->rotate) );
-
 	// X
 	if ( ent->rotate[2] ) {
 		ent->s.apos.trDelta[2] = ( ent->rotate[2] / frames ) * 10;
@@ -3020,11 +3005,8 @@ void Reached_Train_rotating( gentity_t *ent ) {
 
 	ent->TargetFlag = 1;
 	ent->TargetAngles[0] = ent->r.currentAngles[0] + ent->rotate[0];
-	//ent->TargetAngles[0] = AngleNormalize360 (ent->TargetAngles[0]);
 	ent->TargetAngles[1] = ent->r.currentAngles[1] + ent->rotate[1];
-	//ent->TargetAngles[1] = AngleNormalize360 (ent->TargetAngles[1]);
 	ent->TargetAngles[2] = ent->r.currentAngles[2] + ent->rotate[2];
-	//ent->TargetAngles[2] = AngleNormalize360 (ent->TargetAngles[2]);
 
 	// start it going
 	SetMoverState( ent, MOVER_1TO2, level.time );
@@ -3159,6 +3141,10 @@ Use_Static
 ==============
 */
 void Use_Static( gentity_t *ent, gentity_t *other, gentity_t *activator ) {
+	// Nico, silent GCC
+	other = other;
+	activator = activator;
+
 	if ( ent->r.linked ) {
 		trap_UnlinkEntity( ent );
 	} else {
@@ -3168,6 +3154,10 @@ void Use_Static( gentity_t *ent, gentity_t *other, gentity_t *activator ) {
 
 void Static_Pain( gentity_t *ent, gentity_t *attacker, int damage, vec3_t point ) {
 	vec3_t temp;
+
+	// Nico, silent GCC
+	damage = damage;
+	point = point;
 
 	if ( ent->spawnflags & 4 ) {
 		if ( level.time > ent->wait + ent->delay + rand() % 1000 + 500 ) {
@@ -3321,6 +3311,10 @@ check either the X_AXIS or Y_AXIS box to change that.
 */
 
 void Use_Func_Rotate( gentity_t *ent, gentity_t *other, gentity_t *activator ) {
+	// Nico, silent GCC
+	other = other;
+	activator = activator;
+
 	if ( ent->spawnflags & 4 ) {
 		ent->s.apos.trDelta[2] = ent->speed;
 	} else if ( ent->spawnflags & 8 )   {
@@ -3461,8 +3455,6 @@ void SP_func_pendulum( gentity_t *ent ) {
 		length = 8;
 	}
 
-	/* Nico, g_gravity is hardcoded as DEFAULT_GRAVITY
-	freq = 1 / ( M_PI * 2 ) * sqrt( g_gravity.value / ( 3 * length ) );*/
 	freq = 1 / ( M_PI * 2 ) * sqrt( DEFAULT_GRAVITY / ( 3 * length ) );
 
 	ent->s.pos.trDuration = ( 1000 / freq );
@@ -3512,9 +3504,6 @@ ACCEPT_CVOPS Accept a disguised covert ops as a valid team member for team only 
 	 7 - wood (quiet)
 "team"		team name.  other doors with same team name will open/close in syncronicity
 */
-
-
-
 
 //
 //
@@ -3570,10 +3559,6 @@ void SP_func_door_rotating( gentity_t *ent ) {
 	}
 	ent->wait *= 1000;
 
-	//if (!ent->damage) {
-	//	ent->damage = 2;
-	//}
-
 	trap_SetBrushModel( ent, ent->model );
 
 	InitMoverRotate( ent );
@@ -3623,6 +3608,9 @@ target_effect
 */
 void target_effect( gentity_t *self, gentity_t *other, gentity_t *activator ) {
 	gentity_t   *tent;
+
+	// Nico, silent GCC
+	activator = activator;
 
 	tent = G_TempEntity( self->r.currentOrigin, EV_EFFECT );
 	VectorCopy( self->r.currentOrigin, tent->s.origin );
@@ -3709,7 +3697,11 @@ ThrowDebris
 ==============
 */
 void ThrowDebris( gentity_t *self, char *modelname, float speed, vec3_t origin ) {
-	// probably use le->leType = LE_FRAGMENT like brass and gibs
+	// Nico, silent GCC
+	self = self;
+	modelname = modelname;
+	speed = speed;
+	origin = origin;
 }
 
 /*
@@ -3743,6 +3735,11 @@ void func_explosive_explode( gentity_t *self, gentity_t *inflictor, gentity_t *a
 	vec3_t dir = {0, 0, 1};
 	gentity_t   *tent = 0;
 
+	// Nico, silent GCC
+	inflictor = inflictor;
+	damage = damage;
+	mod = mod;
+
 	self->takedamage = qfalse;          // don't allow anything try to hurt me now that i'm exploding
 
 	self->think = BecomeExplosion;
@@ -3761,7 +3758,6 @@ void func_explosive_explode( gentity_t *self, gentity_t *inflictor, gentity_t *a
 	self->s.frame = self->key;          // pass the type to the client ("glass", "wood", "metal", "gibs", "brick", "stone", "fabric", 0, 1, 2, 3, 4, 5, 6)
 
 	if ( self->damage ) {
-//		G_RadiusDamage(self->s.origin, self, self->damage, self->damage+40, self, MOD_EXPLOSIVE);
 		G_RadiusDamage( self->s.pos.trBase, NULL, self, self->damage, self->damage + 40, self, MOD_EXPLOSIVE );
 	}
 
@@ -3808,11 +3804,6 @@ void func_explosive_explode( gentity_t *self, gentity_t *inflictor, gentity_t *a
 	}
 
 	G_AddEvent( self, EV_EXPLODE, DirToByte( dir ) );
-
-	// Skills stuff
-
-	if ( G_GetWeaponClassForMOD( mod ) >= self->constructibleStats.weaponclass ) {
-	}
 }
 
 /*
@@ -3821,6 +3812,9 @@ func_explosive_touch
 ==============
 */
 void func_explosive_touch( gentity_t *self, gentity_t *other, trace_t *trace ) {
+	// Nico, silent GCC
+	trace = trace;
+
 	func_explosive_explode( self, self, other, self->damage, 0 );
 }
 
@@ -3831,6 +3825,9 @@ func_explosive_use
 ==============
 */
 void func_explosive_use( gentity_t *self, gentity_t *other, gentity_t *activator ) {
+	// Nico, silent GCC
+	activator = activator;
+
 	G_Script_ScriptEvent( self, "death", "" ); // JPW NERVE used to trigger script stuff for MP
 	func_explosive_explode( self, self, other, self->damage, 0 );
 }
@@ -3850,6 +3847,10 @@ func_explosive_spawn
 ==============
 */
 void func_explosive_spawn( gentity_t *self, gentity_t *other, gentity_t *activator ) {
+	// Nico, silent GCC
+	other = other;
+	activator = activator;
+
 	trap_LinkEntity( self );
 	self->use = func_explosive_use;
 	// turn the brush to visible
@@ -3889,6 +3890,9 @@ void InitExplosive( gentity_t *ent ) {
 void target_explosion_use( gentity_t *self, gentity_t *other, gentity_t *attacker ) {
 	vec3_t dir = {0, 0, 1};
 	gentity_t   *tent = NULL;
+
+	// Nico, silent GCC
+	other = other;
 
 	tent = G_TempEntity( self->r.currentOrigin, EV_RUBBLE );
 
@@ -3956,31 +3960,7 @@ void SP_target_explosion( gentity_t *ent ) {
 		} else {
 			ent->s.dl_intensity = -1;
 		}
-	}/* else {
-		switch(ent->key) {
-			case 0:	// "wood"
-				ent->s.dl_intensity = G_SoundIndex("sound/world/boardbreak.wav");
-				break;
-			case 1:	// "glass"
-				ent->s.dl_intensity = G_SoundIndex("sound/world/glassbreak_01.wav");
-				break;
-			case 2:	// "metal"
-				ent->s.dl_intensity = G_SoundIndex("sound/world/metalbreak.wav");
-				break;
-			case 3:	// "gibs"
-				ent->s.dl_intensity = G_SoundIndex("sound/player/gibsplit1.wav");
-				break;
-			case 4:	// "brick"
-				ent->s.dl_intensity = G_SoundIndex("sound/world/debris1.wav");
-				break;
-			case 5:	// "stone"
-				ent->s.dl_intensity = G_SoundIndex("sound/world/stonefall.wav");
-				break;
-
-			default:
-				break;
-		}
-	}*/
+	}
 
 	ent->use = target_explosion_use;
 }
@@ -4116,68 +4096,13 @@ void SP_func_explosive( gentity_t *ent ) {
 	}
 //----(SA)	end
 
-	// (SA) shouldn't need this
-//	ent->s.density = ent->count;	// pass the "mass" to the client
-
-
 	ent->die = func_explosive_explode;
 }
 
-// TODO: stick this somewhere ;) "sonic from australia is the bestest ninja in the world"
-
-/*QUAKED func_invisible_user (.3 .5 .8) ? STARTOFF HAS_USER NO_OFF_NOISE NOT_KICKABLE
-when activated will use its target
-"delay" - time (in seconds) before it can be used again
-"offnoise" - specifies an alternate sound
-"cursorhint" - overrides the auto-location of targeted entity (list below)
-Normally when a player 'activates' this entity, if the entity has been turned 'off' (by a scripted command) you will hear a sound to indicate that you cannot activate the user.
-The sound defaults to "sound/movers/invis_user_off.wav"
-
-NO_OFF_NOISE - no sound will play if the invis_user is used when 'off'
-NOT_KICKABLE - kicking doesn't fire, only player activating
-
-"cursorhint" cursor types: (probably more, ask sherman if you think the list is out of date)
-they /don't/ need to be all uppercase
-	HINT_NONE
-	HINT_PLAYER
-	HINT_ACTIVATE
-	HINT_DOOR
-	HINT_DOOR_ROTATING
-	HINT_DOOR_LOCKED
-	HINT_DOOR_ROTATING_LOCKED
-	HINT_MG42
-	HINT_BREAKABLE
-	HINT_BREAKABLE_BIG
-	HINT_CHAIR
-	HINT_ALARM
-	HINT_HEALTH
-	HINT_TREASURE
-	HINT_KNIFE
-	HINT_LADDER
-	HINT_BUTTON
-	HINT_WATER
-	HINT_CAUTION
-	HINT_DANGER
-	HINT_SECRET
-	HINT_QUESTION
-	HINT_EXCLAMATION
-	HINT_CLIPBOARD
-	HINT_WEAPON
-	HINT_AMMO
-	HINT_ARMOR
-	HINT_POWERUP
-	HINT_HOLDABLE
-	HINT_INVENTORY
-	HINT_SCENARIC
-	HINT_EXIT
-	HINT_NOEXIT
-	HINT_PLYR_FRIEND
-	HINT_PLYR_NEUTRAL
-	HINT_PLYR_ENEMY
-	HINT_PLYR_UNKNOWN
-*/
-
 void use_invisible_user( gentity_t *ent, gentity_t *other, gentity_t *activator ) {
+	// Nico, silent GCC
+	activator = activator;
+
 	if ( ent->wait < level.time ) {
 		ent->wait = level.time + ent->delay;
 	} else {
@@ -4195,7 +4120,6 @@ void use_invisible_user( gentity_t *ent, gentity_t *other, gentity_t *activator 
 		if ( ent->spawnflags & 2 && !( ent->spawnflags & 1 ) ) {
 			G_Script_ScriptEvent( ent, "activate", NULL );
 			G_UseTargets( ent, other );
-			// G_Printf ("ent%s used by %s\n", ent->classname, other->classname);
 		}
 
 		return;
@@ -4329,6 +4253,10 @@ void func_constructible_use( gentity_t *self, gentity_t *other, gentity_t *activ
 	self->grenadeFired = 0;
 	self->s.modelindex = 0;
 
+	// Nico, silent GCC
+	other = other;
+	activator = activator;
+
 	if ( !self->count2 ) {
 		self->s.modelindex2 = atoi( self->model + 1 );
 	} else {
@@ -4394,6 +4322,10 @@ func_constructible_spawn
 ==============
 */
 void func_constructible_spawn( gentity_t *self, gentity_t *other, gentity_t *activator ) {
+	// Nico, silent GCC
+	other = other;
+	activator = activator;
+
 	trap_LinkEntity( self );
 	self->use = func_constructible_use;
 }
@@ -4404,6 +4336,9 @@ func_constructible_explode
 ==============
 */
 void func_constructible_explode( gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int damage, int mod ) {
+	// Nico, silent GCC
+	damage = damage;
+
 	if ( self->desstages ) {
 		if ( self->grenadeFired > 1 ) {
 			// swap back one stage
@@ -4418,12 +4353,10 @@ void func_constructible_explode( gentity_t *self, gentity_t *inflictor, gentity_
 				// relink the objective info to get our indicator back
 				if ( self->parent ) {
 					trap_LinkEntity( self->parent );
-					//if( self->s.angles2[1] ) {
 					if ( self->s.angles2[1] ) {
 						self->s.angles2[1] = 0; // Think_SetupObjectiveInfo needs it
 						Think_SetupObjectiveInfo( self->parent );
 					}
-					//}
 				} else {
 					self->s.angles2[1] = 0;
 				}
@@ -4733,7 +4666,6 @@ void func_constructiblespawn( gentity_t *ent ) {
 			// set initial contents
 			trap_SetBrushModel( ent, ent->model );
 			ent->s.modelindex = 0;
-//			ent->s.solid = CONTENTS_SOLID;	// FIXME: allow other contents?
 			trap_LinkEntity( ent );
 
 			ent->s.modelindex2 = atoi( ent->model + 1 );
@@ -4741,7 +4673,6 @@ void func_constructiblespawn( gentity_t *ent ) {
 			// set initial contents
 			trap_SetBrushModel( ent, va( "*%i", ent->conbmodels[0] ) );
 			ent->s.modelindex = 0;
-//			ent->s.solid = CONTENTS_SOLID;	// FIXME: allow other contents?
 			trap_LinkEntity( ent );
 
 			ent->s.modelindex2 = ent->conbmodels[0];
@@ -4858,11 +4789,8 @@ g_constructible_stats_t g_constructible_classes[NUM_CONSTRUCTIBLE_CLASSES] = {
 };
 
 void SP_func_constructible( gentity_t *ent ) {
-	int /*health, wait, */ i;
-//	char	*s;
+	int i;
 
-	/*G_SpawnInt( "wait", "5000", &wait );
-	ent->wait = wait;*/
 
 	if ( ent->spawnflags & AXIS_CONSTRUCTIBLE ) {
 		ent->s.teamNum = TEAM_AXIS;
@@ -4871,12 +4799,6 @@ void SP_func_constructible( gentity_t *ent ) {
 	} else {
 		G_Error( "'func_constructible' does not have a team that can build it\n" );
 	}
-
-	/*G_SpawnString ("score", "0", &s);
-	ent->accuracy = atof (s);
-
-	G_SpawnInt( "health", "100", &health ); // default low enough to get killed by dynamite
-	ent->sound1to2 = ent->health = health;*/
 
 	memset( &ent->constructibleStats, 0, sizeof( ent->constructibleStats ) );
 	G_SpawnInt( "constructible_class", "0", &i );
