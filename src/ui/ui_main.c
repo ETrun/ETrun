@@ -3288,7 +3288,7 @@ void UI_RunMenuScript( char **args ) {
 		} else if ( Q_stricmp( name, "loadGameInfo" ) == 0 ) {
 
 		} else if ( Q_stricmp( name, "resetScores" ) == 0 ) {
-			UI_ClearScores();
+
 		} else if ( Q_stricmp( name, "RefreshServers" ) == 0 ) {
 			UI_StartServerRefresh( qtrue );
 			UI_BuildServerDisplayList( qtrue );

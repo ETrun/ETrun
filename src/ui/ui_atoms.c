@@ -64,6 +64,9 @@ void QDECL Com_Error( int level, const char *error, ... ) {
 	va_list argptr;
 	char text[1024];
 
+	// Nico, silent GCC
+	level = level;
+
 	va_start( argptr, error );
 	Q_vsnprintf( text, sizeof( text ), error, argptr );
 	va_end( argptr );
@@ -118,21 +121,6 @@ char *UI_Cvar_VariableString( const char *var_name ) {
 
 	return buffer[toggle];
 }
-
-
-
-void UI_LoadBestScores( const char *map, int game ) {
-}
-
-/*
-===============
-UI_ClearScores
-===============
-*/
-void UI_ClearScores() {
-}
-
-
 
 static void UI_Cache_f() {
 	Display_CacheAll();

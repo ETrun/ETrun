@@ -363,7 +363,6 @@ void            _UI_SetActiveMenu( uiMenuCommand_t menu );
 uiMenuCommand_t _UI_GetActiveMenu( void );
 int             UI_AdjustTimeByGame( int time );
 void            UI_ShowPostGame( qboolean newHigh );
-void            UI_ClearScores();
 void            UI_LoadArenas( void );
 mapInfo*        UI_FindMapInfoByMapname( const char* name );
 void            UI_ReadableSize( char *buf, int bufsize, int value );
@@ -907,7 +906,6 @@ extern char         *UI_Argv( int arg );
 extern char         *UI_Cvar_VariableString( const char *var_name );
 extern void         UI_Refresh( int time );
 extern void         UI_KeyEvent( int key );
-void                UI_LoadBestScores( const char *map, int game );           // NERVE - SMF
 extern qboolean m_entersound;
 extern uiStatic_t uis;
 
