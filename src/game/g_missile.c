@@ -50,10 +50,6 @@ void G_BounceMissile( gentity_t *ent, trace_t *trace ) {
 	int hitTime;
 	gentity_t   *ground;
 
-//	if(ent->s.weapon == WP_GPG40 || ent->s.weapon == WP_M7) {
-//		G_ExplodeMissile( ent );
-//		return;
-//	}
 	// boom after 750 msecs
 	if ( ent->s.weapon == WP_M7 || ent->s.weapon == WP_GPG40 ) {
 		ent->s.effect1Time = qtrue; // has bounced
@@ -103,7 +99,6 @@ void G_BounceMissile( gentity_t *ent, trace_t *trace ) {
 		VectorCopy( ent->s.pos.trDelta, relativeDelta );
 
 		// check for stop
-		//%	if ( trace->plane.normal[2] > 0.2 && VectorLengthSquared( ent->s.pos.trDelta ) < SQR(40) )
 		if ( trace->plane.normal[2] > 0.2 && VectorLengthSquared( relativeDelta ) < SQR( 40 ) ) {
 //----(SA)	make the world the owner of the dynamite, so the player can shoot it after it stops moving
 			if ( ent->s.weapon == WP_DYNAMITE || ent->s.weapon == WP_LANDMINE || ent->s.weapon == WP_SATCHEL || ent->s.weapon == WP_TRIPMINE || ent->s.weapon == WP_SMOKE_BOMB ) {
@@ -414,6 +409,11 @@ G_MissileDie
 ================
 */
 void G_MissileDie( gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int damage, int mod ) {
+	// Nico, silent GCC
+	attacker = attacker;
+	damage = damage;
+	mod = mod;
+
 	if ( inflictor == self ) {
 		return;
 	}
@@ -421,44 +421,6 @@ void G_MissileDie( gentity_t *self, gentity_t *inflictor, gentity_t *attacker, i
 	self->think         = G_ExplodeMissile;
 	self->nextthink     = level.time + 10;
 }
-
-/*
-================
-G_ExplodeMissilePoisonGas
-
-Explode a missile without an impact
-================
-*/
-/*void G_ExplodeMissilePoisonGas( gentity_t *ent ) {
-	vec3_t		dir;
-	vec3_t		origin;
-
-	BG_EvaluateTrajectory( &ent->s.pos, level.time, origin );
-	SnapVector( origin );
-	G_SetOrigin( ent, origin );
-
-	// we don't have a valid direction, so just point straight up
-	dir[0] = dir[1] = 0;
-	dir[2] = 1;
-
-	ent->freeAfterEvent = qtrue;
-
-
-	{
-		gentity_t *gas;
-
-		gas = G_Spawn();
-		gas->think = gas_think;
-		gas->nextthink = level.time + FRAMETIME;
-		gas->r.contents = CONTENTS_TRIGGER;
-		gas->touch = gas_touch;
-		gas->health = 100;
-		G_SetOrigin (gas, origin);
-
-		trap_LinkEntity (gas);
-	}
-
-}*/
 
 /*
 ================
@@ -541,15 +503,9 @@ void G_RunMissile( gentity_t *ent ) {
 
 				// are we in worldspace again - or did we hit a ceiling from the outside of the world
 				if ( skyHeight == 65536 ) {
-					//			if( BG_GetSkyGroundHeightAtPoint( origin ) >= origin[2] ) {
-					//				G_FreeEntity( ent );
-					//				return;
-					//			} else {
 					G_RunThink( ent );
 					VectorCopy( origin, ent->r.currentOrigin );
-					//				trap_LinkEntity( ent );
 					return;     // keep flying
-					//			}
 				}
 
 				if ( skyHeight <= origin[2] ) {
@@ -598,19 +554,6 @@ void G_RunMissile( gentity_t *ent ) {
 
 				ent->count2 = 2;
 				ent->s.legsAnim = 1;
-
-
-				/*{
-					gentity_t *tent;
-
-					tent = G_TempEntity( origin, EV_RAILTRAIL );
-					VectorCopy( impactpos, tent->s.origin2 );
-					tent->s.dmgFlags = 0;
-
-					tent = G_TempEntity( origin, EV_RAILTRAIL );
-					VectorCopy( ent->r.currentOrigin, tent->s.origin2 );
-					tent->s.dmgFlags = 0;
-				}*/
 			}
 		}
 	}
@@ -646,8 +589,6 @@ void G_RunMissile( gentity_t *ent ) {
 			G_FreeEntity( ent );
 			return;
 		}
-
-//		G_SetOrigin( ent, tr.endpos );
 
 		if ( ent->s.weapon == WP_PANZERFAUST || ent->s.weapon == WP_MORTAR_SET ) {
 			impactDamage = 999; // goes through pretty much any func_explosives
@@ -770,15 +711,6 @@ int G_PredictMissile( gentity_t *ent, int duration, vec3_t endPos, qboolean allo
 			break;
 		}
 	}
-/*
-	if (!allowBounce && tr.fraction < 1 && tr.entityNum > level.maxclients) {
-		// go back a bit in time, so we can catch it in the air
-		time -= 200;
-		if (time < level.time + FRAMETIME)
-			time = level.time + FRAMETIME;
-		BG_EvaluateTrajectory( &pos, time, org );
-	}
-*/
 
 	// get current position
 	VectorCopy( org, endPos );
@@ -1447,7 +1379,6 @@ gentity_t *fire_grenade( gentity_t *self, vec3_t start, vec3_t dir, int grenadeW
 		bolt->s.teamNum = self->client->sess.sessionTeam + 4;
 		bolt->classname             = "dynamite";
 		bolt->damage                = 0;
-//			bolt->splashDamage			= 300;
 		bolt->splashRadius          = 400;
 		bolt->methodOfDeath         = MOD_DYNAMITE;
 		bolt->splashMethodOfDeath   = MOD_DYNAMITE;
@@ -1461,7 +1392,6 @@ gentity_t *fire_grenade( gentity_t *self, vec3_t start, vec3_t dir, int grenadeW
 
 		// nope - this causes the dynamite to impact on the players bb when he throws it.
 		// will try setting it when it settles
-//			bolt->r.ownerNum			= ENTITYNUM_WORLD;	// (SA) make the world the owner of the dynamite, so the player can shoot it without modifying the bullet code to ignore players id for hits
 
 		// small target cube
 		VectorSet( bolt->r.mins, -12, -12, 0 );
@@ -1481,9 +1411,6 @@ gentity_t *fire_grenade( gentity_t *self, vec3_t start, vec3_t dir, int grenadeW
 	bolt->s.pos.trTime = level.time - MISSILE_PRESTEP_TIME;     // move a bit on the very first frame
 	VectorCopy( start, bolt->s.pos.trBase );
 	VectorCopy( dir, bolt->s.pos.trDelta );
-
-	// ydnar: add velocity of player (:sigh: guess people don't like it)
-	//%	VectorAdd( bolt->s.pos.trDelta, self->s.pos.trDelta, bolt->s.pos.trDelta );
 
 	// ydnar: add velocity of ground entity
 	if ( self->s.groundEntityNum != ENTITYNUM_NONE && self->s.groundEntityNum != ENTITYNUM_WORLD ) {
@@ -1527,7 +1454,6 @@ gentity_t *fire_rocket( gentity_t *self, vec3_t start, vec3_t dir ) {
 	bolt->splashRadius = 300; //G_GetWeaponDamage(WP_PANZERFAUST);	// Arnout : hardcoded bleh hack
 	bolt->methodOfDeath = MOD_PANZERFAUST;
 	bolt->splashMethodOfDeath = MOD_PANZERFAUST;
-//	bolt->clipmask = MASK_SHOT;
 	bolt->clipmask = MASK_MISSILESHOT;
 
 	bolt->s.pos.trType = TR_LINEAR;
@@ -1678,8 +1604,6 @@ qboolean visible( gentity_t *self, gentity_t *other ) {
 	return qfalse;
 
 }
-
-
 
 /*
 ==============
