@@ -104,6 +104,10 @@ void G_refHelp_cmd( gentity_t *ent ) {
 void G_ref_cmd( gentity_t *ent, unsigned int dwCommand, qboolean fValue ) {
 	char arg[MAX_TOKEN_CHARS];
 
+	// Nico, silent GCC
+	dwCommand = dwCommand;
+	fValue = fValue;
+
 	// Roll through ref commands if already a ref
 	if ( ent == NULL || ent->client->sess.referee ) {
 		voteInfo_t votedata;
@@ -228,14 +232,14 @@ void G_refPlayerPut_cmd( gentity_t *ent, int team_id ) {
 	player = g_entities + pid;
 
 	// Can only move to other teams.
-	if ( player->client->sess.sessionTeam == team_id ) {
+	if ( (int)player->client->sess.sessionTeam == team_id ) {
 		// Nico, removed unneeded linebreak
 		// http://games.chruker.dk/enemy_territory/modding_project_bugfix.php?bug_id=047
 		G_refPrintf( ent, "\"%s\" is already on team %s!", player->client->pers.netname, aTeams[team_id] );
 		return;
 	}
 
-	if ( team_maxplayers.integer && TeamCount( -1, team_id ) >= team_maxplayers.integer ) {
+	if ( team_maxplayers.integer && (int)TeamCount( -1, team_id ) >= team_maxplayers.integer ) {
 		// Nico, removed unneeded linebreak
 		// http://games.chruker.dk/enemy_territory/modding_project_bugfix.php?bug_id=047
 		G_refPrintf( ent, "Sorry, the %s team is already full!",  aTeams[team_id] );
