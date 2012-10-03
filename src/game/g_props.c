@@ -114,13 +114,14 @@ void moveit( gentity_t *ent, float yaw, float dist ) {
 	VectorCopy( ent->r.currentOrigin, ent->s.pos.trBase );
 
 	trap_LinkEntity( ent );
-
-	//DropToFloor( ent );
 }
 
 void touch_props_box_32( gentity_t *self, gentity_t *other, trace_t *trace ) {
 	float ratio;
 	vec3_t v;
+
+	// Nico, silent GCC
+	trace = trace;
 
 	if ( other->r.currentOrigin[2] > ( self->r.currentOrigin[2] + 10 + 15 ) ) {
 		return;
@@ -156,6 +157,9 @@ void touch_props_box_48( gentity_t *self, gentity_t *other, trace_t *trace ) {
 	float ratio;
 	vec3_t v;
 
+	// Nico, silent GCC
+	trace = trace;
+
 	if ( other->r.currentOrigin[2] > ( self->r.currentOrigin[2] + 10 + 23 ) ) {
 		return;
 	}
@@ -189,6 +193,9 @@ void SP_props_box_48( gentity_t *self ) {
 void touch_props_box_64( gentity_t *self, gentity_t *other, trace_t *trace ) {
 	float ratio;
 	vec3_t v;
+
+	// Nico, silent GCC
+	trace = trace;
 
 	if ( other->r.currentOrigin[2] > ( self->r.currentOrigin[2] + 10 + 31 ) ) {
 		return;
@@ -271,6 +278,10 @@ speed controls how quickly the sparks will travel default is 2
 
 void PGUNsparks_use( gentity_t *ent, gentity_t *self, gentity_t *activator ) {
 	gentity_t *tent;
+
+	// Nico, silent GCC
+	self = self;
+	activator = activator;
 
 	tent = G_TempEntity( ent->r.currentOrigin, EV_GUNSPARKS );
 	VectorCopy( ent->r.currentOrigin, tent->s.origin );
@@ -407,6 +418,10 @@ void smokedust_use( gentity_t *ent, gentity_t *self, gentity_t *activator ) {
 	gentity_t   *tent;
 	vec3_t forward;
 
+	// Nico, silent GCC
+	self = self;
+	activator = activator;
+
 	AngleVectors( ent->r.currentAngles, forward, NULL, NULL );
 
 	for ( i = 0; i < ent->health; i++ )
@@ -443,6 +458,10 @@ or you could set its angles in the editor
 void dust_use( gentity_t *ent, gentity_t *self, gentity_t *activator ) {
 	gentity_t   *tent;
 	vec3_t forward;
+
+	// Nico, silent GCC
+	self = self;
+	activator = activator;
 
 	if ( ent->target ) {
 		tent = G_TempEntity( ent->r.currentOrigin, EV_DUST );
@@ -642,6 +661,12 @@ void props_bench_think( gentity_t *ent ) {
 }
 
 void props_bench_die( gentity_t *ent, gentity_t *inflictor, gentity_t *attacker, int damage, int mod ) {
+	// Nico, silent GCC
+	inflictor = inflictor;
+	attacker = attacker;
+	damage = damage;
+	mod = mod;
+
 	ent->think = props_bench_think;
 	ent->nextthink = level.time + FRAMETIME;
 }
@@ -670,6 +695,11 @@ void SP_Props_Bench( gentity_t *ent ) {
 }
 
 void props_radio_die( gentity_t *ent, gentity_t *inflictor, gentity_t *attacker, int damage, int mod ) {
+	// Nico, silent GCC
+	inflictor = inflictor;
+	attacker = attacker;
+	damage = damage;
+	mod = mod;
 
 	propExplosion( ent );
 
@@ -705,13 +735,16 @@ void SP_Props_Radio( gentity_t *ent ) {
 	ent->die = props_radio_die;
 
 	trap_LinkEntity( ent );
-
 }
 
 
 void props_radio_dieSEVEN( gentity_t *ent, gentity_t *inflictor, gentity_t *attacker, int damage, int mod ) {
-
 	int i;
+
+	// Nico, silent GCC
+	attacker = attacker;
+	damage = damage;
+	mod = mod;
 
 	propExplosion( ent );
 
@@ -783,6 +816,12 @@ void locker_tall_think( gentity_t *ent ) {
 }
 
 void props_locker_tall_die( gentity_t *ent, gentity_t *inflictor, gentity_t *attacker, int damage, int mod ) {
+	// Nico, silent GCC
+	inflictor = inflictor;
+	attacker = attacker;
+	damage = damage;
+	mod = mod;
+
 	ent->think = locker_tall_think;
 	ent->nextthink = level.time + FRAMETIME;
 
@@ -818,66 +857,6 @@ void SP_Props_Locker_Tall( gentity_t *ent ) {
 
 }
 
-/*QUAKED props_chair_chat(.8 .6 .2) (-16 -16 0) (16 16 32)
-point entity
-health = default = 10
-wait = defaults to 5 how many shards to spawn ( try not to exceed 20 )
-
-shard =
-	FXTYPE_WOOD = 0,
-	FXTYPE_GLASS = 1,
-	FXTYPE_METAL = 2
-
-*/
-
-/*QUAKED props_chair_chatarm(.8 .6 .2) (-16 -16 0) (16 16 32)
-point entity
-health = default = 10
-wait = defaults to 5 how many shards to spawn ( try not to exceed 20 )
-
-shard =
-	FXTYPE_WOOD = 0,
-	FXTYPE_GLASS = 1,
-	FXTYPE_METAL = 2
-
-*/
-
-/*QUAKED props_chair_side (.8 .6 .2) (-16 -16 0) (16 16 32)
-point entity
-health = default = 10
-wait = defaults to 5 how many shards to spawn ( try not to exceed 20 )
-
-shard =
-	FXTYPE_WOOD = 0,
-	FXTYPE_GLASS = 1,
-	FXTYPE_METAL = 2
-
-*/
-
-
-/*QUAKED props_chair_hiback (.8 .6 .2) (-16 -16 0) (16 16 32)
-point entity
-health = default = 10
-wait = defaults to 5 how many shards to spawn ( try not to exceed 20 )
-
-shard =
-	FXTYPE_WOOD = 0,
-	FXTYPE_GLASS = 1,
-	FXTYPE_METAL = 2
-
-*/
-
-/*QUAKED props_chair (.8 .6 .2) (-16 -16 0) (16 16 32)
-point entity
-health = default = 10
-wait = defaults to 5 how many shards to spawn ( try not to exceed 20 )
-
-shard =
-	FXTYPE_WOOD = 0,
-	FXTYPE_GLASS = 1,
-	FXTYPE_METAL = 2
-
-*/
 void Props_Chair_Think( gentity_t *self );
 void Props_Chair_Touch( gentity_t *self, gentity_t *other, trace_t *trace );
 void Props_Chair_Die( gentity_t *ent, gentity_t *inflictor, gentity_t *attacker, int damage, int mod );
@@ -1092,8 +1071,6 @@ void Props_Chair_Think( gentity_t *self ) {
 		return;
 	}
 
-//	trap_UnlinkEntity (self);
-
 	BG_EvaluateTrajectory( &self->s.pos, level.time, self->s.pos.trBase, qfalse, self->s.effect2Time );
 
 	if ( level.time > self->s.pos.trDuration ) {
@@ -1143,13 +1120,7 @@ void Props_Chair_Think( gentity_t *self ) {
 		}
 	}
 
-
-	//bani - we assume groundentity will never change from under
-	//a stationary object.
-//	Prop_Check_Ground (self);
-
 	self->nextthink = level.time + 50;
-//	trap_LinkEntity (self);
 
 	//bani - prevent unneeded links
 	if ( !VectorCompare( self->r.currentOrigin, self->gDelta ) ) {
@@ -1160,7 +1131,6 @@ void Props_Chair_Think( gentity_t *self ) {
 }
 
 qboolean Prop_Touch( gentity_t *self, gentity_t *other, vec3_t v ) {
-
 	vec3_t forward;
 	vec3_t dest;
 	vec3_t angle;
@@ -1230,6 +1200,9 @@ void Prop_Check_Ground( gentity_t *self ) {
 void Props_Chair_Touch( gentity_t *self, gentity_t *other, trace_t *trace ) {
 	vec3_t v;
 	qboolean has_moved;
+
+	// Nico, silent GCC
+	trace = trace;
 
 	if ( !other->client ) {
 		return;
@@ -1320,7 +1293,6 @@ void Props_Chair_Animate( gentity_t *ent ) {
 		}
 	}
 
-
 	ent->s.frame++;
 
 	if ( ent->enemy ) {
@@ -1333,15 +1305,6 @@ void Props_Chair_Animate( gentity_t *ent ) {
 	}
 
 }
-
-/*typedef enum
-{
-	SHARD_GLASS = 0,
-	SHARD_WOOD,
-	SHARD_METAL,
-	SHARD_CERAMIC,
-	SHARD_RUBBLE
-} shards_t;*/
 
 void Spawn_Shard( gentity_t *ent, gentity_t *inflictor, int quantity, int type ) {
 	gentity_t *sfx;
@@ -1405,13 +1368,16 @@ void Props_Chair_Die( gentity_t *ent, gentity_t *inflictor, gentity_t *attacker,
 	int quantity;
 	int type;
 
+	// Nico, silent GCC
+	attacker = attacker;
+	mod = mod;
+
 	ent->think = Props_Chair_Animate;
 	ent->nextthink = level.time + FRAMETIME;
 
 	ent->health = ent->duration;
 	ent->delay = damage;
 	ent->takedamage = qfalse;
-//	ent->enemy = inflictor;
 
 	quantity = ent->wait;
 	type = ent->count;
@@ -1486,7 +1452,6 @@ void SP_Props_Chair( gentity_t *ent ) {
 void SP_Props_ChairHiback( gentity_t *ent ) {
 	int mass;
 
-	// ent->s.modelindex = G_ModelIndex( "models/furniture/chair/hiback.md3" );
 	ent->s.modelindex = G_ModelIndex( "models/furniture/chair/hiback5.md3" );
 
 	ent->delay = 0; // inherits damage value
@@ -1664,6 +1629,10 @@ void SP_Props_ChairChatArm( gentity_t *ent ) {
 void Use_DamageInflictor( gentity_t *ent, gentity_t *other, gentity_t *activator ) {
 	gentity_t *daent;
 
+	// Nico, silent GCC
+	other = other;
+	activator = activator;
+
 	daent = NULL;
 	while ( ( daent = G_FindByTargetname( daent, daent->target ) ) != NULL )
 	{
@@ -1706,6 +1675,10 @@ void Use_Props_Shard_Generator( gentity_t *ent, gentity_t *other, gentity_t *act
 	int quantity;
 	int type;
 	gentity_t *inflictor = NULL;
+
+	// Nico, silent GCC
+	other = other;
+	activator = activator;
 
 	type = ent->count;
 	quantity = ent->wait;
@@ -1968,11 +1941,14 @@ void SP_OilParticles( gentity_t *ent ) {
 	OilLeak->count2 = level.time;
 
 	trap_LinkEntity( OilLeak );
-
 }
 
 
 void Props_Barrel_Pain( gentity_t *ent, gentity_t *attacker, int damage, vec3_t point ) {
+	// Nico, silent GCC
+	attacker = attacker;
+	damage = damage;
+	point = point;
 
 	if ( ent->health <= 0 ) {
 		return;
@@ -2013,6 +1989,10 @@ void Props_Barrel_Die( gentity_t *ent, gentity_t *inflictor, gentity_t *attacker
 	int quantity;
 	int type;
 	vec3_t dir;
+
+	// Nico, silent GCC
+	attacker = attacker;
+	mod = mod;
 
 	if ( ent->spawnflags & 1 ) {
 		ent->s.eFlags = EF_SMOKINGBLACK;
@@ -2128,6 +2108,9 @@ void touch_crate_64( gentity_t *self, gentity_t *other, trace_t *trace ) {
 	float ratio;
 	vec3_t v;
 
+	// Nico, silent GCC
+	trace = trace;
+
 	if ( other->r.currentOrigin[2] > ( self->r.currentOrigin[2] + 10 + 31 ) ) {
 		return;
 	}
@@ -2154,6 +2137,11 @@ void crate_animate( gentity_t *ent ) {
 void crate_die( gentity_t *ent, gentity_t *inflictor, gentity_t *attacker, int damage, int mod ) {
 	int quantity;
 	int type;
+
+	// Nico, silent GCC
+	attacker = attacker;
+	damage = damage;
+	mod = mod;
 
 	quantity = ent->wait;
 	type = ent->count;
@@ -2276,6 +2264,12 @@ void props_crate32x64_think( gentity_t *ent ) {
 }
 
 void props_crate32x64_die( gentity_t *ent, gentity_t *inflictor, gentity_t *attacker, int damage, int mod ) {
+	// Nico, silent GCC
+	inflictor = inflictor;
+	attacker = attacker;
+	damage = damage;
+	mod = mod;
+
 	ent->think = props_crate32x64_think;
 	ent->nextthink = level.time + FRAMETIME;
 }
@@ -2309,6 +2303,9 @@ slave so that the table will flip over correctly.
 void flippy_table_use( gentity_t *ent, gentity_t *other, gentity_t *activator ) {
 	qboolean is_infront;
 	gentity_t   *slave;
+
+	// Nico, silent GCC
+	activator = activator;
 
 	// it would be odd to flip a table if your standing on it
 	if ( other && other->s.groundEntityNum == ent->s.number ) {
@@ -2377,6 +2374,12 @@ void flippy_table_animate( gentity_t *ent ) {
 }
 
 void props_flippy_table_die( gentity_t *ent, gentity_t *inflictor, gentity_t *attacker, int damage, int mod ) {
+	// Nico, silent GCC
+	inflictor = inflictor;
+	attacker = attacker;
+	damage = damage;
+	mod = mod;
+
 	ent->think = flippy_table_animate;
 	ent->nextthink = level.time + FRAMETIME;
 
@@ -2470,10 +2473,6 @@ void SP_Props_Flipping_Table( gentity_t *ent ) {
 
 	ent->wait *= 1000;
 
-	//ent->takedamage = qtrue;
-
-	//ent->die = props_flippy_table_die;
-
 	ent->use = flippy_table_use;
 
 	trap_LinkEntity( ent );
@@ -2517,6 +2516,12 @@ void props_58x112tablew_think( gentity_t *ent ) {
 }
 
 void props_58x112tablew_die( gentity_t *ent, gentity_t *inflictor, gentity_t *attacker, int damage, int mod ) {
+	// Nico, silent GCC
+	inflictor = inflictor;
+	attacker = attacker;
+	damage = damage;
+	mod = mod;
+
 	ent->think = props_58x112tablew_think;
 	ent->nextthink = level.time + FRAMETIME;
 	ent->takedamage = qfalse;
@@ -2561,6 +2566,9 @@ shard =
 */
 
 void props_castlebed_touch( gentity_t *ent, gentity_t *other, trace_t *trace ) {
+	// Nico, silent GCC
+	trace = trace;
+
 	if ( !other->client ) {
 		return;
 	}
@@ -2595,6 +2603,12 @@ void props_castlebed_animate( gentity_t *ent ) {
 }
 
 void props_castlebed_die( gentity_t *ent, gentity_t *inflictor, gentity_t *attacker, int damage, int mod ) {
+	// Nico, silent GCC
+	inflictor = inflictor;
+	attacker = attacker;
+	damage = damage;
+	mod = mod;
+
 	ent->think = props_castlebed_animate;
 	ent->nextthink = level.time + FRAMETIME;
 	ent->touch = NULL;
@@ -2674,6 +2688,10 @@ void props_snowGenerator_think( gentity_t *ent ) {
 }
 
 void props_snowGenerator_use( gentity_t *ent, gentity_t *other, gentity_t *activator ) {
+	// Nico, silent GCC
+	other = other;
+	activator = activator;
+
 	if ( !( ent->spawnflags & 1 ) ) {
 		ent->spawnflags |= 1;
 		ent->think = props_snowGenerator_think;
@@ -3025,6 +3043,11 @@ void props_decoration_animate( gentity_t *ent ) {
 }
 
 void props_decoration_death( gentity_t *ent, gentity_t *inflictor, gentity_t *attacker, int damage, int mod ) {
+	// Nico, silent GCC
+	attacker = attacker;
+	damage = damage;
+	mod = mod;
+
 	if ( !( ent->spawnflags & 8 ) ) {
 		ent->clipmask   = 0;
 		ent->r.contents = 0;
@@ -3051,6 +3074,10 @@ void props_decoration_death( gentity_t *ent, gentity_t *inflictor, gentity_t *at
 }
 
 void Use_props_decoration( gentity_t *ent, gentity_t *self, gentity_t *activator ) {
+	// Nico, silent GCC
+	self = self;
+	activator = activator;
+
 	if ( ent->spawnflags & 1 ) {
 		trap_LinkEntity( ent );
 		ent->spawnflags &= ~1;
@@ -3066,6 +3093,9 @@ void Use_props_decoration( gentity_t *ent, gentity_t *self, gentity_t *activator
 }
 
 void props_touch( gentity_t *self, gentity_t *other, trace_t *trace ) {
+	// Nico, silent GCC
+	trace = trace;
+
 	if ( self->spawnflags & 16 ) {
 		props_decoration_death( self, other, other, 9999, MOD_CRUSH );
 	}
@@ -3426,6 +3456,10 @@ void props_statue_animate( gentity_t *ent ) {
 
 
 void props_statue_death( gentity_t *ent, gentity_t *inflictor, gentity_t *attacker, int damage, int mod ) {
+	// Nico, silent GCC
+	attacker = attacker;
+	damage = damage;
+	mod = mod;
 
 	ent->timestamp = level.time;
 
@@ -3457,6 +3491,9 @@ void props_statue_death( gentity_t *ent, gentity_t *inflictor, gentity_t *attack
 }
 
 void props_statue_touch( gentity_t *self, gentity_t *other, trace_t *trace ) {
+	// Nico, silent GCC
+	trace = trace;
+
 	props_statue_death( self, other, other, 9999, MOD_CRUSH );
 }
 
@@ -3513,11 +3550,11 @@ void SP_props_statue( gentity_t *ent ) {
 	G_SpawnString( "type", "wood", &type );
 	if ( !Q_stricmp( type,"wood" ) ) {
 		ent->key = 1;
-	} else if ( !Q_stricmp( type,"glass" ) )   {
+	} else if ( !Q_stricmp( type,"glass" ) ) {
 		ent->key = 0;
-	} else if ( !Q_stricmp( type,"metal" ) )                                                           {
+	} else if ( !Q_stricmp( type,"metal" ) ) {
 		ent->key = 2;
-	} else if ( !Q_stricmp( type, "rubble" ) )                                                                                                                   {
+	} else if ( !Q_stricmp( type, "rubble" ) ) {
 		ent->key = 3;
 	}
 
@@ -3657,6 +3694,10 @@ void props_locker_endrattle( gentity_t *ent ) {
 
 
 void props_locker_use( gentity_t *ent, gentity_t *other, gentity_t *activator ) {
+	// Nico, silent GCC
+	other = other;
+	activator = activator;
+
 	if ( !ent->delay ) {
 		ent->s.frame = 1;   // rattle when pain starts
 	}
@@ -3666,6 +3707,10 @@ void props_locker_use( gentity_t *ent, gentity_t *other, gentity_t *activator ) 
 }
 
 void props_locker_pain( gentity_t *ent, gentity_t *attacker, int damage, vec3_t point ) {
+	// Nico, silent GCC
+	damage = damage;
+	point = point;
+
 	props_locker_use( ent, attacker, attacker );
 }
 
@@ -3713,7 +3758,6 @@ void props_locker_spawn_item( gentity_t *ent ) {
 		return;
 	}
 
-//	drop = Drop_Item (ent, item, 0, qtrue);
 	drop = LaunchItem( item, ent->r.currentOrigin, tv( 0, 0, 20 ), ent->s.number );
 
 
@@ -3787,6 +3831,12 @@ props_locker_death
 ==============
 */
 void props_locker_death( gentity_t *ent, gentity_t *inflictor, gentity_t *attacker, int damage, int mod ) {
+	// Nico, silent GCC
+	inflictor = inflictor;
+	attacker = attacker;
+	damage = damage;
+	mod = mod;
+
 	ent->takedamage = qfalse;
 	ent->s.frame = 2;   // opening animation
 	ent->think = 0;
@@ -3805,8 +3855,6 @@ void SP_props_footlocker( gentity_t *self ) {
 	char    *sound;
 	char    *locked;
 	int mass;
-
-//	trap_SetBrushModel (self, self->model);
 
 	// (SA) if angle is xx or yy, rotate the bounding box 90 deg to match
 	// NOTE:	Non axis-aligned orientation not allowed.  It will work, but
@@ -3846,15 +3894,15 @@ void SP_props_footlocker( gentity_t *self ) {
 			self->key = FXTYPE_WOOD;
 		} else if ( !Q_stricmp( type,"glass" ) ) {
 			self->key = FXTYPE_GLASS;
-		} else if ( !Q_stricmp( type,"metal" ) )                                                                   {
+		} else if ( !Q_stricmp( type,"metal" ) ) {
 			self->key = FXTYPE_METAL;
-		} else if ( !Q_stricmp( type,"gibs" ) )                                                                                                                                       {
+		} else if ( !Q_stricmp( type,"gibs" ) ) {
 			self->key = FXTYPE_GIBS;
-		} else if ( !Q_stricmp( type,"brick" ) )                                                                                                                                                                                                         {
+		} else if ( !Q_stricmp( type,"brick" ) ) {
 			self->key = FXTYPE_BRICK;
-		} else if ( !Q_stricmp( type,"rock" ) )                                                                                                                                                                                                                                                                             {
+		} else if ( !Q_stricmp( type,"rock" ) ) {
 			self->key = FXTYPE_STONE;
-		} else if ( !Q_stricmp( type,"fabric" ) )                                                                                                                                                                                                                                                                                                                                                {
+		} else if ( !Q_stricmp( type,"fabric" ) ) {
 			self->key = 0;                                  // fixme: not supported
 		}
 	} else {
@@ -3888,7 +3936,6 @@ void props_flamethrower_think( gentity_t *ent ) {
 		}
 
 		if ( !target ) {
-//			VectorSet (ent->r.currentAngles, 0, 0, 1);	// (SA) wasn't working
 			VectorSet( ent->s.apos.trBase, 0, 0, 1 );
 			// TAT - try that for the flame too
 			VectorSet( flameDir, 0, 0, 1 );
@@ -3897,7 +3944,6 @@ void props_flamethrower_think( gentity_t *ent ) {
 			VectorSubtract( target->s.origin, ent->s.origin, vec );
 			VectorNormalize( vec );
 			vectoangles( vec, angles );
-//			VectorCopy (angles, ent->r.currentAngles);	// (SA) wasn't working
 			VectorCopy( angles, ent->s.apos.trBase );
 
 			// TAT - we want the vector going the other way for the flame
@@ -3950,6 +3996,10 @@ void props_flamethrower_use( gentity_t *ent, gentity_t *other, gentity_t *activa
 	int rval;
 	int rnd;
 
+	// Nico, silent GCC
+	other = other;
+	activator = activator;
+
 	if ( ent->spawnflags & 2 ) {
 		ent->spawnflags &= ~2;
 		ent->think = NULL;      // (SA) wasn't working
@@ -3984,14 +4034,12 @@ void props_flamethrower_init( gentity_t *ent ) {
 	}
 
 	if ( !target ) {
-//		VectorSet (ent->r.currentAngles, 0, 0, 1);	//----(SA)
 		VectorSet( ent->s.apos.trBase, 0, 0, 1 );
 	} else
 	{
 		VectorSubtract( target->s.origin, ent->s.origin, vec );
 		VectorNormalize( vec );
 		vectoangles( vec, angles );
-//		VectorCopy (angles, ent->r.currentAngles);	//----(SA)
 		VectorCopy( angles, ent->s.apos.trBase );
 		VectorCopy( angles, ent->s.angles ); // RF, added to fix weird release build issues
 	}
@@ -4016,12 +4064,10 @@ void SP_props_flamethrower( gentity_t *ent ) {
 		ent->duration *= 1000;
 	}
 
-
 	G_SpawnString( "size", "0", &size );
 	dsize = atof( size );
 	if ( !dsize ) {
 		dsize = 1;
 	}
 	ent->accuracy = dsize;
-
 }
