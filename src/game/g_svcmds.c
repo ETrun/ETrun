@@ -578,6 +578,9 @@ OSP - multiuse now for both map restarts and total match resets
 void Svcmd_ResetMatch_f( qboolean fDoReset, qboolean fDoRestart ) {
 	int i;
 
+	// Nico, silent GCC
+	fDoReset = fDoReset;
+
 	for ( i = 0; i < level.numConnectedClients; i++ ) {
 		g_entities[level.sortedClients[i]].client->pers.ready = 0;
 	}
@@ -910,4 +913,3 @@ qboolean    ConsoleCommand( void ) {
 
 	return qfalse;
 }
-
