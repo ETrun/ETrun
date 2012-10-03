@@ -59,10 +59,8 @@ void multi_trigger( gentity_t *ent, gentity_t *activator ) {
 	G_Script_ScriptEvent( ent, "activate", NULL );
 
 	if ( ent->wait > 0 ) {
-		// G_Printf("ent->wait = %f\n", ent->wait);
-
 		if (activator->client && ent->triggerTime[activator->client->ps.clientNum] + ent->wait * 1000 > level.time) {
-			// G_Printf("Client %d has to wait before triggering this entity!\n");
+			// Client has to wait before triggering this entity!
 			return;
 		}
 
@@ -82,10 +80,16 @@ void multi_trigger( gentity_t *ent, gentity_t *activator ) {
 }
 
 void Use_Multi( gentity_t *ent, gentity_t *other, gentity_t *activator ) {
+	// Nico, silent GCC
+	other = other;
+
 	multi_trigger( ent, activator );
 }
 
 void Touch_Multi( gentity_t *self, gentity_t *other, trace_t *trace ) {
+	// Nico, silent GCC
+	trace = trace;
+
 	if ( !other->client ) {
 		return;
 	}
@@ -223,6 +227,8 @@ trigger_push
 */
 
 void trigger_push_touch( gentity_t *self, gentity_t *other, trace_t *trace ) {
+	// Nico, silent GCC
+	trace = trace;
 
 	// Nico, jumppads support
 	if (!(g_enableMapEntities.integer & MAP_JUMPPADS) || !other->client ) {
@@ -257,8 +263,6 @@ void AimAtTarget( gentity_t *self ) {
 
 	height = ent->s.origin[2] - origin[2];
 
-	/* Nico, g_gravity is hardcoded as DEFAULT_GRAVITY
-	gravity = g_gravity.value;*/
 	gravity = DEFAULT_GRAVITY;
 
 	time = sqrt( fabs( height / ( 0.5f * gravity ) ) );
@@ -279,6 +283,10 @@ void AimAtTarget( gentity_t *self ) {
 }
 
 void trigger_push_use( gentity_t *self, gentity_t *other, gentity_t *activator ) {
+	// Nico, silent GCC
+	self = self;
+	other = other;
+	activator = activator;
 }
 
 /*QUAKED trigger_push (.5 .5 .5) ? TOGGLE REMOVEAFTERTOUCH PUSHPLAYERONLY
@@ -301,6 +309,9 @@ void SP_trigger_push( gentity_t *self ) {
 
 
 void Use_target_push( gentity_t *self, gentity_t *other, gentity_t *activator ) {
+	// Nico, silent GCC
+	other = other;
+
 	if ( !activator->client ) {
 		return;
 	}
@@ -354,6 +365,9 @@ trigger_teleport
 
 void trigger_teleporter_touch( gentity_t *self, gentity_t *other, trace_t *trace ) {
 	gentity_t   *dest;
+
+	// Nico, silent GCC
+	trace = trace;
 
 	if ( !other->client ) {
 		return;
@@ -420,6 +434,9 @@ the entity must be used first before it will count down its life
 void hurt_touch( gentity_t *self, gentity_t *other, trace_t *trace ) {
 	int dflags;
 
+	// Nico, silent GCC
+	trace = trace;
+
 	if ( !other->takedamage ) {
 		return;
 	}
@@ -463,6 +480,10 @@ void hurt_think( gentity_t *ent ) {
 }
 
 void hurt_use( gentity_t *self, gentity_t *other, gentity_t *activator ) {
+	// Nico, silent GCC
+	other = other;
+	activator = activator;
+
 	if ( self->touch ) {
 		self->touch = NULL;
 	} else {
@@ -499,11 +520,6 @@ void SP_trigger_hurt( gentity_t *self ) {
 	}
 
 	self->r.contents = CONTENTS_TRIGGER;
-
-//----(SA)
-//	if ( self->spawnflags & 2 ) {
-//		self->use = hurt_use;
-//	}
 
 	self->use = hurt_use;
 
@@ -548,15 +564,6 @@ qboolean G_IsAllowedHeal( gentity_t* ent ) {
 		return qfalse;
 	}
 
-/*	for( i = 0; i < 2; i++ ) {
-		if( !ent->client->lastHealTimes[i] || (level.time - ent->client->lastHealTimes[i] > 60000) ) {
-			ent->client->lastHealTimes[i] = level.time;
-			return qtrue;
-		}
-	}
-
-	return qfalse;*/
-
 	return qtrue;
 }
 
@@ -564,6 +571,9 @@ void heal_touch( gentity_t *self, gentity_t *other, trace_t *trace ) {
 	int i, clientcount = 0;
 	gentity_t* touchClients[MAX_CLIENTS];
 	int healvalue;
+
+	// Nico, silent GCC
+	trace = trace;
 
 	memset( touchClients, 0, sizeof( touchClients ) );
 
@@ -611,9 +621,6 @@ void heal_touch( gentity_t *self, gentity_t *other, trace_t *trace ) {
 #define HEALTH_REGENTIME 10000
 void trigger_heal_think( gentity_t* self ) {
 	self->nextthink = level.time + HEALTH_REGENTIME;
-/*	if(self->timestamp - level.time > -HEALTH_REGENTIME) {
-		return;
-	}*/
 
 	self->health += self->damage;
 	if ( self->health > self->count ) {
@@ -734,6 +741,9 @@ qboolean G_IsAllowedAmmo( gentity_t* ent ) {
 void ammo_touch( gentity_t *self, gentity_t *other, trace_t *trace ) {
 	int i, clientcount = 0;
 	gentity_t* touchClients[MAX_CLIENTS];
+
+	// Nico, silent GCC
+	trace = trace;
 
 	memset( touchClients, 0, sizeof( touchClients ) );
 
@@ -875,6 +885,9 @@ void func_timer_think( gentity_t *self ) {
 }
 
 void func_timer_use( gentity_t *self, gentity_t *other, gentity_t *activator ) {
+	// Nico, silent GCC
+	other = other;
+
 	self->activator = activator;
 
 	// if on, turn it off
@@ -933,6 +946,11 @@ void SP_trigger_once( gentity_t *ent ) {
 // put this back in and modifyed for single player bots
 
 void trigger_aidoor_stayopen( gentity_t * ent, gentity_t * other, trace_t * trace ) {
+	// Nico, silent GCC
+	ent = ent;
+	other = other;
+	trace = trace;
+
 	return;
 }
 
@@ -953,6 +971,8 @@ void SP_trigger_aidoor( gentity_t *ent ) {
 /*QUAKED test_gas (0 0.5 0) (-4 -4 -4) (4 4 4)
 */
 void SP_gas( gentity_t *self ) {
+	// Nico, silent GCC
+	self = self;
 }
 
 
@@ -963,6 +983,9 @@ void SP_gas( gentity_t *self ) {
 
 void Touch_flagonly( gentity_t *ent, gentity_t *other, trace_t *trace ) {
 	gentity_t* tmp;
+
+	// Nico, silent GCC
+	trace = trace;
 
 	if ( !other->client ) {
 		return;
@@ -1012,11 +1035,11 @@ void Touch_flagonly( gentity_t *ent, gentity_t *other, trace_t *trace ) {
 	}
 }
 
-
-
-
 void Touch_flagonly_multiple( gentity_t *ent, gentity_t *other, trace_t *trace ) {
 	gentity_t* tmp;
+
+	// Nico, silent GCC
+	trace = trace;
 
 	if ( !other->client ) {
 		return;
@@ -1186,8 +1209,6 @@ void constructible_indicator_think( gentity_t *ent ) {
 
 		parent->count2 = 0;
 
-		//ent->think = G_FreeEntity;
-		//ent->nextthink = level.time + FRAMETIME;
 		G_FreeEntity( ent );
 		return;
 	}
@@ -1208,6 +1229,8 @@ void G_SetConfigStringValue( int num, const char* key, const char* value ) {
 }
 
 void Touch_ObjectiveInfo( gentity_t *ent, gentity_t *other, trace_t *trace ) {
+	// Nico, silent GCC
+	trace = trace;
 
 	if ( !other->client ) {
 		return;
@@ -1392,9 +1415,6 @@ void SP_trigger_objective_info( gentity_t *ent ) {
 		G_Error( "'trigger_objective_info' does not have a 'track' \n" );
 	}
 
-/*	if ( !ent->message )
-		G_Error ("'trigger_objective_info' does not have a 'shortname' \n");*/
-
 	if ( ent->spawnflags & MESSAGE_OVERRIDE ) {
 		if ( !ent->spawnitem ) {
 			G_Error( "'trigger_objective_info' has override flag set but no override text\n" );
@@ -1476,6 +1496,10 @@ void SP_trigger_objective_info( gentity_t *ent ) {
 
 // JPW NERVE -- field which is acted upon (cgame side) by screenshakes to drop dust particles
 void trigger_concussive_touch( gentity_t *ent, gentity_t *other, trace_t *trace ) {
+	// Nico, silent GCC
+	other = other;
+	trace = trace;
+
 	return; // FIXME this should be NULLed out in SP_trigger_concussive_dust after everything works
 	G_Printf( "hit concussive ent %d mins=%f,%f,%f maxs=%f,%f,%f\n",ent - g_entities,
 			  ent->r.mins[0],
@@ -1503,6 +1527,9 @@ void SP_trigger_concussive_dust( gentity_t *self ) {
 // Nico, velocity jumppads support
 
 void trigger_push_velocity_touch(gentity_t *self, gentity_t *other, trace_t *trace) {
+	// Nico, silent GCC
+	trace = trace;
+
 	// Nico, jumppads support
 	if (!(g_enableMapEntities.integer & MAP_VELOCITY_JUMPPADS) || !other->client ) {
 		return;
