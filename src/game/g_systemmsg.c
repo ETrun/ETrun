@@ -74,11 +74,10 @@ void G_SendSystemMessage( sysMsg_t message, int team ) {
 			continue;
 		}
 
-		if ( other->client->sess.sessionTeam != team ) {
+		if ( (int)other->client->sess.sessionTeam != team ) {
 			continue;
 		}
 
 		trap_SendServerCommand( other - g_entities, va( "vschat 0 %d 3 %s 0 0 0", other - g_entities, systemMessages[message] ) );
 	}
 }
-
