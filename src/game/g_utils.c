@@ -749,26 +749,11 @@ void G_AddEvent( gentity_t *ent, int event, int eventParm ) {
 		ent->client->ps.eventParms[ent->client->ps.eventSequence & ( MAX_EVENTS - 1 )] = eventParm;
 		ent->client->ps.eventSequence++;
 		// -NERVE - SMF
-
-		// NERVE - SMF - commented out
-//		bits = ent->client->ps.externalEvent & EV_EVENT_BITS;
-//		bits = ( bits + EV_EVENT_BIT1 ) & EV_EVENT_BITS;
-//		ent->client->ps.externalEvent = event | bits;
-//		ent->client->ps.externalEventParm = eventParm;
-//		ent->client->ps.externalEventTime = level.time;
-		// -NERVE - SMF
 	} else {
 		// NERVE - SMF - commented in - externalEvents not being handled properly in Wolf right now
 		ent->s.events[ent->s.eventSequence & ( MAX_EVENTS - 1 )] = event;
 		ent->s.eventParms[ent->s.eventSequence & ( MAX_EVENTS - 1 )] = eventParm;
 		ent->s.eventSequence++;
-		// -NERVE - SMF
-
-		// NERVE - SMF - commented out
-//		bits = ent->s.event & EV_EVENT_BITS;
-//		bits = ( bits + EV_EVENT_BIT1 ) & EV_EVENT_BITS;
-//		ent->s.event = event | bits;
-//		ent->s.eventParm = eventParm;
 		// -NERVE - SMF
 	}
 	ent->eventTime = level.time;
@@ -796,6 +781,9 @@ G_AnimScriptSound
 =============
 */
 void G_AnimScriptSound( int soundIndex, vec3_t org, int client ) {
+	// Nico, silent GCC
+	org = org;
+
 	gentity_t *e;
 	e = &g_entities[client];
 	G_AddEvent( e, EV_GENERAL_SOUND, soundIndex );
