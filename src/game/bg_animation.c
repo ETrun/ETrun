@@ -506,7 +506,7 @@ char *BG_CopyStringIntoBuffer( char *string, char *buffer, int bufSize, int *off
 	char *pch;
 
 	// check for overloaded buffer
-	if ( *offset + strlen( string ) + 1 >= bufSize ) {
+	if ( *offset + (int)strlen( string ) + 1 >= bufSize ) {
 		BG_AnimParseError( "BG_CopyStringIntoBuffer: out of buffer space" );
 	}
 
@@ -736,7 +736,7 @@ qboolean BG_ParseConditions( char **text_pp, animScriptItem_t *scriptItem ) {
 BG_ParseCommands
 =================
 */
-static void BG_ParseCommands( char **input, animScriptItem_t *scriptItem, animModelInfo_t *animModelInfo, animScriptData_t *scriptData ) {
+static void BG_ParseCommands( char **input, animScriptItem_t *scriptItem, animModelInfo_t *animModelInfo ) {
 	char    *token;
 	// TTimo gcc: might be used uninitialized
 	animScriptCommand_t *command = NULL;
@@ -1071,7 +1071,7 @@ void BG_AnimParseAnimScript( animModelInfo_t *animModelInfo, animScriptData_t *s
 					BG_AnimParseError( "BG_AnimParseAnimScript: internal error" );
 				}
 				//
-				BG_ParseCommands( &text_p, currentScriptItem, animModelInfo, scriptData );
+				BG_ParseCommands( &text_p, currentScriptItem, animModelInfo);
 
 			} else {
 
@@ -1193,7 +1193,7 @@ void BG_AnimParseAnimScript( animModelInfo_t *animModelInfo, animScriptData_t *s
 					BG_AnimParseError( "BG_AnimParseAnimScript: internal error" );
 				}
 				//
-				BG_ParseCommands( &text_p, currentScriptItem, animModelInfo, scriptData );
+				BG_ParseCommands( &text_p, currentScriptItem, animModelInfo);
 
 			} else {
 
@@ -1640,7 +1640,7 @@ int BG_GetConditionValue( int client, int condition, qboolean checkConversion ) 
 			// we may need to convert to a value
 			//if (!value)
 			//	return 0;
-			for ( i = 0; i < 8 * sizeof( globalScriptData->clientConditions[0][0] ); i++ ) {
+			for ( i = 0; i < 8 * (int)sizeof( globalScriptData->clientConditions[0][0] ); i++ ) {
 				if ( COM_BitCheck( globalScriptData->clientConditions[client][condition], i ) ) {
 					return i;
 				}
