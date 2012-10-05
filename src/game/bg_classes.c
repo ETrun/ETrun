@@ -42,6 +42,8 @@ bg_playerclass_t bg_allies_playerclasses[NUM_PLAYER_CLASSES] = {
 			WP_PANZERFAUST,
 			WP_MORTAR
 		},
+		0,
+		0
 	},
 
 	{
@@ -52,6 +54,8 @@ bg_playerclass_t bg_allies_playerclasses[NUM_PLAYER_CLASSES] = {
 		{
 			WP_THOMPSON,
 		},
+		0,
+		0
 	},
 
 	{
@@ -63,6 +67,8 @@ bg_playerclass_t bg_allies_playerclasses[NUM_PLAYER_CLASSES] = {
 			WP_THOMPSON,
 			WP_CARBINE,
 		},
+		0,
+		0
 	},
 
 	{
@@ -73,6 +79,8 @@ bg_playerclass_t bg_allies_playerclasses[NUM_PLAYER_CLASSES] = {
 		{
 			WP_THOMPSON,
 		},
+		0,
+		0
 	},
 
 	{
@@ -85,6 +93,8 @@ bg_playerclass_t bg_allies_playerclasses[NUM_PLAYER_CLASSES] = {
 			WP_FG42,
 			WP_GARAND,
 		},
+		0,
+		0
 	},
 };
 
@@ -101,6 +111,8 @@ bg_playerclass_t bg_axis_playerclasses[NUM_PLAYER_CLASSES] = {
 			WP_PANZERFAUST,
 			WP_MORTAR
 		},
+		0,
+		0
 	},
 
 	{
@@ -111,6 +123,8 @@ bg_playerclass_t bg_axis_playerclasses[NUM_PLAYER_CLASSES] = {
 		{
 			WP_MP40,
 		},
+		0,
+		0
 	},
 
 	{
@@ -122,6 +136,8 @@ bg_playerclass_t bg_axis_playerclasses[NUM_PLAYER_CLASSES] = {
 			WP_MP40,
 			WP_KAR98,
 		},
+		0,
+		0
 	},
 
 	{
@@ -132,6 +148,8 @@ bg_playerclass_t bg_axis_playerclasses[NUM_PLAYER_CLASSES] = {
 		{
 			WP_MP40,
 		},
+		0,
+		0
 	},
 
 	{
@@ -144,6 +162,8 @@ bg_playerclass_t bg_axis_playerclasses[NUM_PLAYER_CLASSES] = {
 			WP_FG42,
 			WP_K43,
 		},
+		0,
+		0
 	},
 };
 
