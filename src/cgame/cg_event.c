@@ -1605,11 +1605,6 @@ void CG_EntityEvent( centity_t *cent, vec3_t position ) {
 			if ( es->number == cg.snap->ps.clientNum ) {
 				CG_ItemPickup( index );
 			}
-
-//----(SA)	draw the HUD items for a sec since this is a special item
-/*			if ( item->giType == IT_KEY)
-				cg.itemFadeTime = cg.time + 1000;*/
-
 		}
 		break;
 

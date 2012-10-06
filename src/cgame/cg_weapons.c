@@ -1511,17 +1511,6 @@ void CG_RegisterWeapon( int weaponNum, qboolean force ) {
 	memset( weaponInfo, 0, sizeof( *weaponInfo ) );
 	weaponInfo->registered = qtrue;
 
-	/*for( item = bg_itemlist + 1 ; item->classname ; item++ ) {
-		if( item->giType == IT_WEAPON && item->giTag == weaponNum ) {
-			weaponInfo->item = item;
-			break;
-		}
-	}
-
-	if( !item->classname ) {
-		CG_Error( "Couldn't find weapon %i", weaponNum );
-	}*/
-
 	switch ( weaponNum ) {
 	case WP_KNIFE:                  filename = "knife.weap"; break;
 	case WP_LUGER:                  filename = "luger.weap"; break;
