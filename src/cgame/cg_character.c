@@ -53,7 +53,7 @@ static qboolean CG_ParseHudHeadConfig( const char *filename, animation_t* hha ) 
 		return qfalse;
 	}
 
-	if ( len >= sizeof( bigTextBuffer ) - 1 ) {
+	if ( len >= (int)sizeof( bigTextBuffer ) - 1 ) {
 		CG_Printf( "File %s too long\n", filename );
 		return qfalse;
 	}
@@ -211,7 +211,7 @@ static qboolean CG_ParseAnimationFiles( bg_character_t *character, const char *a
 	if ( len <= 0 ) {
 		return qfalse;
 	}
-	if ( len >= sizeof( bigTextBuffer ) - 1 ) {
+	if ( len >= (int)sizeof( bigTextBuffer ) - 1 ) {
 		CG_Printf( "File %s is too long\n", filename );
 		return qfalse;
 	}
