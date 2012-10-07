@@ -53,6 +53,7 @@ panel_button_t fireteamTopBorder = {
 	NULL,                   /* keyUp	*/
 	BG_PanelButtonsRender_Img,
 	NULL,
+	0
 };
 
 panel_button_t fireteamTopBorderBack = {
@@ -65,6 +66,7 @@ panel_button_t fireteamTopBorderBack = {
 	NULL,                   /* keyUp	*/
 	BG_PanelButtonsRender_Img,
 	NULL,
+	0
 };
 
 panel_button_t fireteamTopBorderInner = {
@@ -77,6 +79,7 @@ panel_button_t fireteamTopBorderInner = {
 	NULL,                   /* keyUp	*/
 	BG_PanelButtonsRender_Img,
 	NULL,
+	0
 };
 
 panel_button_t fireteamTopBorderInnerText = {
@@ -89,6 +92,7 @@ panel_button_t fireteamTopBorderInnerText = {
 	NULL,                   /* keyUp	*/
 	CG_Fireteams_MenuTitleText_Draw,
 	NULL,
+	0
 };
 
 panel_button_t fireteamMenuItemText = {
@@ -101,6 +105,7 @@ panel_button_t fireteamMenuItemText = {
 	NULL,                   /* keyUp	*/
 	CG_Fireteams_MenuText_Draw,
 	NULL,
+	0
 };
 
 
