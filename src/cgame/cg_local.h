@@ -2319,7 +2319,7 @@ void    CG_AddLocalEntities( void );
 //
 // cg_effects.c
 //
-int CG_GetOriginForTag( centity_t * cent, refEntity_t * parent, char *tagName, int startIndex, vec3_t org, vec3_t axis[3] );
+int CG_GetOriginForTag( refEntity_t * parent, char *tagName, int startIndex, vec3_t org, vec3_t axis[3] );
 localEntity_t *CG_SmokePuff( const vec3_t p,
 							 const vec3_t vel,
 							 float radius,

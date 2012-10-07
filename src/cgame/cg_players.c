@@ -1075,7 +1075,7 @@ static void CG_BreathPuffs( centity_t *cent, refEntity_t *head ) {
 		return;
 	}
 
-	CG_GetOriginForTag( cent, head, "tag_mouth", 0, morg, maxis );
+	CG_GetOriginForTag( head, "tag_mouth", 0, morg, maxis );
 	AxisToAngles( maxis, mang );
 	AngleVectors( mang, forward, NULL, up );
 
@@ -1333,7 +1333,7 @@ static qboolean CG_PlayerShadow( centity_t *cent, float *shadowPlane ) {
 		// now add shadows for the various body parts
 		for ( tagIndex = 0; shadowParts[tagIndex].tagname; tagIndex++ ) {
 			// grab each tag with this name
-			for ( subIndex = 0; ( subIndex = CG_GetOriginForTag( cent, &cent->pe.bodyRefEnt, shadowParts[tagIndex].tagname, subIndex, origin, axis ) ) >= 0; subIndex++ )
+			for ( subIndex = 0; ( subIndex = CG_GetOriginForTag( &cent->pe.bodyRefEnt, shadowParts[tagIndex].tagname, subIndex, origin, axis ) ) >= 0; subIndex++ )
 			{
 				// project it onto the shadow plane
 				if ( origin[2] < *shadowPlane ) {

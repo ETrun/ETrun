@@ -5627,7 +5627,7 @@ void CG_Bullet( vec3_t end, int sourceEntityNum, vec3_t normal, qboolean flesh, 
 		VectorScale( smokedir,tmpf,tmpv );
 		VectorAdd( end,tmpv,origin );
 		// whee, got a bullet impact point projected to center body
-		CG_GetOriginForTag( cent,&cent->pe.headRefEnt, "tag_mouth", 0, tmpv, NULL );
+		CG_GetOriginForTag( &cent->pe.headRefEnt, "tag_mouth", 0, tmpv, NULL );
 		tmpv[2] += 5;
 		VectorSubtract( tmpv, origin, tmpv2 );
 		// headshot = ( VectorLength( tmpv2 ) < 10 );
