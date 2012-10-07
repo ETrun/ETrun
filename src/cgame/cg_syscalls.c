@@ -805,9 +805,12 @@ void    trap_R_LoadWorldMap( const char *mapname ) {
 }
 #else
 sfxHandle_t trap_S_RegisterSound( const char *sample, qboolean compressed ) {
+	// Nico, silent GCC
+	compressed = compressed;
+
 	CG_DrawInformation( qtrue );
 	trap_PumpEventLoop();
-	return syscall( CG_S_REGISTERSOUND, sample, qfalse /* compressed */ );
+	return syscall( CG_S_REGISTERSOUND, sample, qfalse );
 }
 
 qhandle_t trap_R_RegisterModel( const char *name ) {
