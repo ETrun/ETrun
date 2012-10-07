@@ -161,7 +161,7 @@ typedef struct {
 
 #define PEFOFS( x ) ( (int)&( ( (playerEntity_t *)0 )->x ) )
 
-void CG_PainEvent( centity_t *cent, int health, qboolean crouching ) {
+void CG_PainEvent( centity_t *cent, int health ) {
 	char    *snd;
 
 	// don't do more than two pain sounds a second
@@ -1180,7 +1180,7 @@ void CG_Shard( centity_t *cent, vec3_t origin, vec3_t dir ) {
 }
 
 
-void CG_ShardJunk( centity_t *cent, vec3_t origin, vec3_t dir ) {
+void CG_ShardJunk( vec3_t origin, vec3_t dir ) {
 	localEntity_t   *le;
 	refEntity_t     *re;
 
@@ -1305,7 +1305,7 @@ void CG_MortarMiss( centity_t *cent, vec3_t origin ) {
 }
 
 // a convenience function for all footstep sound playing
-static void CG_StartFootStepSound( bg_playerclass_t* classInfo, entityState_t *es, sfxHandle_t sfx ) {
+static void CG_StartFootStepSound( entityState_t *es, sfxHandle_t sfx ) {
 	if ( cg_footsteps.integer ) {
 		trap_S_StartSound( NULL, es->number, CHAN_BODY, sfx );
 	}
@@ -1333,7 +1333,6 @@ void CG_EntityEvent( centity_t *cent, vec3_t position ) {
 	int clientNum;
 	clientInfo_t        *ci;
 	char tempStr[MAX_QPATH];
-	bg_playerclass_t    *classInfo;
 	bg_character_t      *character;
 
 // JPW NERVE copied here for mg42 SFX event
@@ -1361,7 +1360,6 @@ void CG_EntityEvent( centity_t *cent, vec3_t position ) {
 		clientNum = 0;
 	}
 	ci = &cgs.clientinfo[ clientNum ];
-	classInfo = CG_PlayerClassForClientinfo( ci, cent );
 	character = CG_CharacterForClientinfo( ci, cent );
 
 	switch ( event ) {
@@ -1372,23 +1370,23 @@ void CG_EntityEvent( centity_t *cent, vec3_t position ) {
 		DEBUGNAME( "EV_FOOTSTEP" );
 		if ( es->eventParm != FOOTSTEP_TOTAL ) {
 			if ( es->eventParm ) {
-				CG_StartFootStepSound( classInfo, es, cgs.media.footsteps[ es->eventParm ][footstepcnt] );
+				CG_StartFootStepSound( es, cgs.media.footsteps[ es->eventParm ][footstepcnt] );
 			} else {
-				CG_StartFootStepSound( classInfo, es, cgs.media.footsteps[ character->animModelInfo->footsteps ][footstepcnt] );
+				CG_StartFootStepSound( es, cgs.media.footsteps[ character->animModelInfo->footsteps ][footstepcnt] );
 			}
 		}
 		break;
 	case EV_FOOTSPLASH:
 		DEBUGNAME( "EV_FOOTSPLASH" );
-		CG_StartFootStepSound( classInfo, es, cgs.media.footsteps[ FOOTSTEP_SPLASH ][splashfootstepcnt] );
+		CG_StartFootStepSound( es, cgs.media.footsteps[ FOOTSTEP_SPLASH ][splashfootstepcnt] );
 		break;
 	case EV_FOOTWADE:
 		DEBUGNAME( "EV_FOOTWADE" );
-		CG_StartFootStepSound( classInfo, es, cgs.media.footsteps[ FOOTSTEP_SPLASH ][splashfootstepcnt] );
+		CG_StartFootStepSound( es, cgs.media.footsteps[ FOOTSTEP_SPLASH ][splashfootstepcnt] );
 		break;
 	case EV_SWIM:
 		DEBUGNAME( "EV_SWIM" );
-		CG_StartFootStepSound( classInfo, es, cgs.media.footsteps[ FOOTSTEP_SPLASH ][footstepcnt] );
+		CG_StartFootStepSound( es, cgs.media.footsteps[ FOOTSTEP_SPLASH ][footstepcnt] );
 		break;
 
 	case EV_FALL_SHORT:
@@ -1989,7 +1987,7 @@ void CG_EntityEvent( centity_t *cent, vec3_t position ) {
 
 	case EV_GLOBAL_TEAM_SOUND:
 		DEBUGNAME( "EV_GLOBAL_TEAM_SOUND" );
-		if ( cgs.clientinfo[ cg.snap->ps.clientNum ].team != es->teamNum ) {
+		if ( (int)cgs.clientinfo[ cg.snap->ps.clientNum ].team != es->teamNum ) {
 			break;
 		}
 	case EV_GLOBAL_SOUND:   // play from the player's head so it never diminishes
@@ -2047,7 +2045,7 @@ void CG_EntityEvent( centity_t *cent, vec3_t position ) {
 		// so ignore events on the player
 		DEBUGNAME( "EV_PAIN" );
 		if ( cent->currentState.number != cg.snap->ps.clientNum ) {
-			CG_PainEvent( cent, es->eventParm, qfalse );
+			CG_PainEvent( cent, es->eventParm );
 		}
 		break;
 
@@ -2056,7 +2054,7 @@ void CG_EntityEvent( centity_t *cent, vec3_t position ) {
 		// so ignore events on the player
 		DEBUGNAME( "EV_PAIN" );
 		if ( cent->currentState.number != cg.snap->ps.clientNum ) {
-			CG_PainEvent( cent, es->eventParm, qtrue );
+			CG_PainEvent( cent, es->eventParm );
 		}
 		break;
 
@@ -2266,7 +2264,7 @@ void CG_EntityEvent( centity_t *cent, vec3_t position ) {
 			rval = rand() % 3 + 3;
 
 			for ( i = 0; i < rval; i++ )
-				CG_ShardJunk( cent, position, dir );
+				CG_ShardJunk( position, dir );
 		}
 		break;
 

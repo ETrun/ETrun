@@ -2151,7 +2151,7 @@ void CG_PredictPlayerState( void );
 //
 void CG_CheckEvents( centity_t *cent );
 void CG_EntityEvent( centity_t *cent, vec3_t position );
-void CG_PainEvent( centity_t *cent, int health, qboolean crouching );
+void CG_PainEvent( centity_t *cent, int health );
 void CG_PrecacheFXSounds( void );
 
 
