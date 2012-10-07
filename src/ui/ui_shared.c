@@ -4286,62 +4286,62 @@ typedef struct
 // Gordon: These MUST be all lowercase now
 static bind_t g_bindings[] = {
 
-	{ "+forward",    'w',         -1, K_UPARROW,      -1, -1, -1 },
-	{ "+back",       's',         -1, K_DOWNARROW,    -1, -1, -1 },
-	{ "+moveleft",   'a',         -1, K_LEFTARROW,    -1, -1, -1 },
-	{ "+moveright",  'd',         -1, K_RIGHTARROW,   -1, -1, -1 },
-	{ "+moveup", K_SPACE,        -1, K_KP_INS,       -1, -1, -1 },
-	{ "+movedown",   'c',         -1, K_CTRL,         -1, -1, -1 },
-	{ "+leanright",  'e',         -1, K_PGDN,         -1, -1, -1 },
-	{ "+leanleft",   'q',         -1, K_DEL,          -1, -1, -1 },
-	{ "+prone",      'x',         -1, K_SHIFT,        -1, -1, -1 },
-	{ "+attack", K_MOUSE1,       -1, K_MOUSE1,       -1, -1, -1 },
-	{ "weapalt", K_MOUSE2,       -1, K_MOUSE2,       -1, -1, -1 },
-	{ "weapprev",    K_MWHEELDOWN,   -1, K_MWHEELDOWN,   -1, -1, -1 },
-	{ "weapnext",    K_MWHEELUP,     -1, K_MWHEELUP,     -1, -1, -1 },
-	{ "weaponbank 10",   '0',     -1, '0',         -1, -1, -1 },
-	{ "weaponbank 1",    '1',     -1, '1',         -1, -1, -1 },
-	{ "weaponbank 2",    '2',     -1, '2',         -1, -1, -1 },
-	{ "weaponbank 3",    '3',     -1, '3',         -1, -1, -1 },
-	{ "weaponbank 4",    '4',     -1, '4',         -1, -1, -1 },
-	{ "weaponbank 5",    '5',     -1, '5',         -1, -1, -1 },
-	{ "weaponbank 6",    '6',     -1, '6',         -1, -1, -1 },
-	{ "weaponbank 7",    '7',     -1, '7',         -1, -1, -1 },
-	{ "weaponbank 8",    '8',     -1, '8',         -1, -1, -1 },
-	{ "weaponbank 9",    '9',     -1, '9',         -1, -1, -1 },
-	{ "+sprint",     K_SHIFT,    -1, K_MOUSE3,       -1, -1, -1 },
-	{ "+speed",          K_CAPSLOCK, -1, K_CAPSLOCK,     -1, -1, -1 },
-	{ "+activate",       'f',     -1, K_ENTER,        -1, -1, -1 },
-	{ "+zoom",           'b',     -1, 'b',         -1, -1, -1 },
-	{ "+mapexpand",      'g',     -1, '#',         -1, -1, -1 },
-	{ "+reload",     'r',     -1, K_END,          -1, -1, -1 },
-	{ "+scores",     K_TAB,      -1, K_TAB,          -1, -1, -1 },
-	{ "toggleconsole",   '`',     '~', '`',     '~', -1, -1 },
-	{ "togglemenu",      K_ESCAPE,   -1, K_ESCAPE,       -1, -1, -1 },
-	{ "openlimbomenu",   'l',     -1, 'l',         -1, -1, -1 },
-	{ "mvactivate",      'm',     -1, 'm',         -1, -1, -1 },
-	{ "mapzoomout",      ',',     -1, '[',         -1, -1, -1 },
-	{ "mapzoomin",       '.',     -1, ']',         -1, -1, -1 },
-	{ "zoomin",          '=',     -1, '-',         -1, -1, -1 },
-	{ "zoomout",     '-',     -1, '=',         -1, -1, -1 },
-	{ "messagemode", 't',     -1, 't',         -1, -1, -1 },
-	{ "messagemode2",    'y',     -1, 'y',         -1, -1, -1 },
-	{ "messagemode3",    'u',     -1, 'u',         -1, -1, -1 },
-	{ "mp_quickmessage",'v',      -1, 'v',         -1, -1, -1 },
-	{ "mp_fireteammsg",  'z',     -1, 'c',         -1, -1, -1 },
-	{ "vote yes",        K_F1,       -1, K_F1,           -1, -1, -1 },
-	{ "vote no",     K_F2,       -1, K_F2,           -1, -1, -1 },
-	{ "autoscreenshot",  K_F11,      -1, K_F11,          -1, -1, -1 },
-	{ "autoRecord",      K_F12,      -1, K_F12,          -1, -1, -1 },
-	{ "mp_fireteamadmin",    K_KP_ENTER, -1, K_KP_ENTER,     -1, -1, -1 },
-	{ "selectbuddy -1",  K_KP_DEL,       -1, K_KP_PLUS,      -1, -1, -1 },
-	{ "selectbuddy 0",   K_KP_END,       -1, K_KP_END,       -1, -1, -1 },
-	{ "selectbuddy 1",   K_KP_DOWNARROW, -1, K_KP_DOWNARROW, -1, -1, -1 },
-	{ "selectbuddy 2",   K_KP_PGDN,      -1, K_KP_PGDN,      -1, -1, -1 },
-	{ "selectbuddy 3",   K_KP_LEFTARROW, -1, K_KP_LEFTARROW, -1, -1, -1 },
-	{ "selectbuddy 4",   K_KP_5,         -1, K_KP_5,         -1, -1, -1 },
-	{ "selectbuddy 5",   K_KP_RIGHTARROW,-1, K_KP_RIGHTARROW,-1, -1, -1 },
-	{ "selectbuddy -2",  K_KP_INS,       -1, K_KP_MINUS,     -1, -1, -1 },
+	{ "+forward",    		'w',         	-1, K_UPARROW,      -1, -1, -1, -1 },
+	{ "+back",       		's',         	-1, K_DOWNARROW,    -1, -1, -1, -1 },
+	{ "+moveleft",   		'a',         	-1, K_LEFTARROW,    -1, -1, -1, -1 },
+	{ "+moveright",  		'd',         	-1, K_RIGHTARROW,   -1, -1, -1, -1 },
+	{ "+moveup", 			K_SPACE,        -1, K_KP_INS,       -1, -1, -1, -1 },
+	{ "+movedown",   		'c',         	-1, K_CTRL,         -1, -1, -1, -1 },
+	{ "+leanright",  		'e',         	-1, K_PGDN,         -1, -1, -1, -1 },
+	{ "+leanleft",   		'q',         	-1, K_DEL,          -1, -1, -1, -1 },
+	{ "+prone",      		'x',         	-1, K_SHIFT,        -1, -1, -1, -1 },
+	{ "+attack", 			K_MOUSE1,       -1, K_MOUSE1,       -1, -1, -1, -1 },
+	{ "weapalt", 			K_MOUSE2,       -1, K_MOUSE2,       -1, -1, -1, -1 },
+	{ "weapprev",    		K_MWHEELDOWN,   -1, K_MWHEELDOWN,   -1, -1, -1, -1 },
+	{ "weapnext",    		K_MWHEELUP,     -1, K_MWHEELUP,     -1, -1, -1, -1 },
+	{ "weaponbank 10",   	'0',     		-1, '0',         	-1, -1, -1, -1 },
+	{ "weaponbank 1",    	'1',     		-1, '1',         	-1, -1, -1, -1 },
+	{ "weaponbank 2",    	'2',     		-1, '2',         	-1, -1, -1, -1 },
+	{ "weaponbank 3",    	'3',     		-1, '3',         	-1, -1, -1, -1 },
+	{ "weaponbank 4",    	'4',     		-1, '4',         	-1, -1, -1, -1 },
+	{ "weaponbank 5",    	'5',     		-1, '5',         	-1, -1, -1, -1 },
+	{ "weaponbank 6",    	'6',     		-1, '6',         	-1, -1, -1, -1 },
+	{ "weaponbank 7",    	'7',     		-1, '7',         	-1, -1, -1, -1 },
+	{ "weaponbank 8",    	'8',     		-1, '8',         	-1, -1, -1, -1 },
+	{ "weaponbank 9",    	'9',     		-1, '9',         	-1, -1, -1, -1 },
+	{ "+sprint",     		K_SHIFT,    	-1, K_MOUSE3,       -1, -1, -1, -1 },
+	{ "+speed",          	K_CAPSLOCK, 	-1, K_CAPSLOCK,     -1, -1, -1, -1 },
+	{ "+activate",       	'f',     		-1, K_ENTER,        -1, -1, -1, -1 },
+	{ "+zoom",           	'b',     		-1, 'b',         	-1, -1, -1, -1 },
+	{ "+mapexpand",      	'g',     		-1, '#',         	-1, -1, -1, -1 },
+	{ "+reload",     		'r',     		-1, K_END,          -1, -1, -1, -1 },
+	{ "+scores",     		K_TAB,      	-1, K_TAB,          -1, -1, -1, -1 },
+	{ "toggleconsole",   	'`',     		'~', '`',     		'~',-1, -1, -1 },
+	{ "togglemenu",      	K_ESCAPE,   	-1, K_ESCAPE,       -1, -1, -1, -1 },
+	{ "openlimbomenu",   	'l',     		-1, 'l',         	-1, -1, -1, -1 },
+	{ "mvactivate",      	'm',     		-1, 'm',         	-1, -1, -1, -1 },
+	{ "mapzoomout",      	',',     		-1, '[',         	-1, -1, -1, -1 },
+	{ "mapzoomin",       	'.',     		-1, ']',         	-1, -1, -1, -1 },
+	{ "zoomin",          	'=',     		-1, '-',         	-1, -1, -1, -1 },
+	{ "zoomout",     		'-',     		-1, '=',         	-1, -1, -1, -1 },
+	{ "messagemode", 		't',     		-1, 't',         	-1, -1, -1, -1 },
+	{ "messagemode2",    	'y',     		-1, 'y',         	-1, -1, -1, -1 },
+	{ "messagemode3",    	'u',     		-1, 'u',         	-1, -1, -1, -1 },
+	{ "mp_quickmessage",	'v',      		-1, 'v',         	-1, -1, -1, -1 },
+	{ "mp_fireteammsg",  	'z',     		-1, 'c',         	-1, -1, -1, -1 },
+	{ "vote yes",        	K_F1,       	-1, K_F1,           -1, -1, -1, -1 },
+	{ "vote no",     		K_F2,       	-1, K_F2,           -1, -1, -1, -1 },
+	{ "autoscreenshot",  	K_F11,      	-1, K_F11,          -1, -1, -1, -1 },
+	{ "autoRecord",      	K_F12,      	-1, K_F12,          -1, -1, -1, -1 },
+	{ "mp_fireteamadmin",   K_KP_ENTER, 	-1, K_KP_ENTER,     -1, -1, -1, -1 },
+	{ "selectbuddy -1",  	K_KP_DEL,       -1, K_KP_PLUS,      -1, -1, -1, -1 },
+	{ "selectbuddy 0",   	K_KP_END,       -1, K_KP_END,       -1, -1, -1, -1 },
+	{ "selectbuddy 1",   	K_KP_DOWNARROW, -1, K_KP_DOWNARROW, -1, -1, -1, -1 },
+	{ "selectbuddy 2",   	K_KP_PGDN,      -1, K_KP_PGDN,      -1, -1, -1, -1 },
+	{ "selectbuddy 3",   	K_KP_LEFTARROW, -1, K_KP_LEFTARROW, -1, -1, -1, -1 },
+	{ "selectbuddy 4",   	K_KP_5,         -1, K_KP_5,         -1, -1, -1, -1 },
+	{ "selectbuddy 5",   	K_KP_RIGHTARROW,-1, K_KP_RIGHTARROW,-1, -1, -1, -1 },
+	{ "selectbuddy -2",  	K_KP_INS,       -1, K_KP_MINUS,     -1, -1, -1, -1 },
 };
 
 
@@ -5537,7 +5537,7 @@ typedef struct keywordHash_s
 } keywordHash_t;
 
 int KeywordHash_Key( char *keyword ) {
-	int register hash, i;
+	register int hash, i;
 
 	hash = 0;
 	for ( i = 0; keyword[i] != '\0'; i++ ) {
@@ -5790,12 +5790,18 @@ qboolean ItemParse_style( itemDef_t *item, int handle ) {
 
 // decoration
 qboolean ItemParse_decoration( itemDef_t *item, int handle ) {
+	// Nico, silent GCC
+	handle = handle;
+
 	item->window.flags |= WINDOW_DECORATION;
 	return qtrue;
 }
 
 // textasint
 qboolean ItemParse_textasint( itemDef_t *item, int handle ) {
+	// Nico, silent GCC
+	handle = handle;
+
 	item->window.flags |= WINDOW_TEXTASINT;
 	return qtrue;
 }
@@ -5803,6 +5809,9 @@ qboolean ItemParse_textasint( itemDef_t *item, int handle ) {
 
 // textasfloat
 qboolean ItemParse_textasfloat( itemDef_t *item, int handle ) {
+	// Nico, silent GCC
+	handle = handle;
+
 	item->window.flags |= WINDOW_TEXTASFLOAT;
 	return qtrue;
 }
@@ -5811,6 +5820,10 @@ qboolean ItemParse_textasfloat( itemDef_t *item, int handle ) {
 // notselectable
 qboolean ItemParse_notselectable( itemDef_t *item, int handle ) {
 	listBoxDef_t *listPtr;
+
+	// Nico, silent GCC
+	handle = handle;
+
 	Item_ValidateTypeData( item );
 	listPtr = (listBoxDef_t*)item->typeData;
 	if ( item->type == ITEM_TYPE_LISTBOX && listPtr ) {
@@ -5821,12 +5834,18 @@ qboolean ItemParse_notselectable( itemDef_t *item, int handle ) {
 
 // manually wrapped
 qboolean ItemParse_wrapped( itemDef_t *item, int handle ) {
+	// Nico, silent GCC
+	handle = handle;
+
 	item->window.flags |= WINDOW_WRAPPED;
 	return qtrue;
 }
 
 // auto wrapped
 qboolean ItemParse_autowrapped( itemDef_t *item, int handle ) {
+	// Nico, silent GCC
+	handle = handle;
+
 	item->window.flags |= WINDOW_AUTOWRAPPED;
 	return qtrue;
 }
@@ -5834,6 +5853,9 @@ qboolean ItemParse_autowrapped( itemDef_t *item, int handle ) {
 
 // horizontalscroll
 qboolean ItemParse_horizontalscroll( itemDef_t *item, int handle ) {
+	// Nico, silent GCC
+	handle = handle;
+
 	item->window.flags |= WINDOW_HORIZONTAL;
 	return qtrue;
 }
@@ -6443,6 +6465,9 @@ qboolean ItemParse_disableCvar( itemDef_t *item, int handle ) {
 }
 
 qboolean ItemParse_noToggle( itemDef_t *item, int handle ) {
+	// Nico, silent GCC
+	handle = handle;
+
 	item->cvarFlags |= CVAR_NOTOGGLE;
 	return qtrue;
 }
@@ -6921,6 +6946,10 @@ qboolean MenuParse_ownerdraw( itemDef_t *item, int handle ) {
 // decoration
 qboolean MenuParse_popup( itemDef_t *item, int handle ) {
 	menuDef_t *menu = (menuDef_t*)item;
+
+	// Nico, silent GCC
+	handle = handle;
+
 	menu->window.flags |= WINDOW_POPUP;
 	return qtrue;
 }
@@ -6928,6 +6957,9 @@ qboolean MenuParse_popup( itemDef_t *item, int handle ) {
 
 qboolean MenuParse_outOfBounds( itemDef_t *item, int handle ) {
 	menuDef_t *menu = (menuDef_t*)item;
+
+	// Nico, silent GCC
+	handle = handle;
 
 	menu->window.flags |= WINDOW_OOB_CLICK;
 	return qtrue;
@@ -7033,6 +7065,10 @@ qboolean MenuParse_execKeyInt( itemDef_t *item, int handle ) {
 
 qboolean MenuParse_drawAlwaysOnTop( itemDef_t *item, int handle ) {
 	menuDef_t *menu = (menuDef_t*)item;
+
+	// Nico, silent GCC
+	handle = handle;
+
 	menu->window.flags |= WINDOW_DRAWALWAYSONTOP;
 	return qtrue;
 }
@@ -7052,6 +7088,10 @@ qboolean MenuParse_itemHotkeyMode( itemDef_t *item, int handle ) {
 // TTimo
 qboolean MenuParse_modal( itemDef_t *item, int handle ) {
 	menuDef_t *menu = (menuDef_t*)item;
+
+	// Nico, silent GCC
+	handle = handle;
+
 	menu->window.flags |= WINDOW_MODAL;
 	return qtrue;
 }
