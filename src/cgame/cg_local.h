@@ -2240,14 +2240,11 @@ void    CG_ClearParticles( void );
 void    CG_AddParticles( void );
 void    CG_ParticleSnow( qhandle_t pshader, vec3_t origin, vec3_t origin2, int turb, float range, int snum );
 void    CG_ParticleSmoke( qhandle_t pshader, centity_t *cent );
-void    CG_AddParticleShrapnel( localEntity_t *le );
 void    CG_ParticleSnowFlurry( qhandle_t pshader, centity_t *cent );
 void    CG_ParticleBulletDebris( vec3_t org, vec3_t vel, int duration );
 void    CG_ParticleDirtBulletDebris( vec3_t org, vec3_t vel, int duration );     // DHM - Nerve
 void    CG_ParticleDirtBulletDebris_Core( vec3_t org, vec3_t vel, int duration, float width, float height, float alpha, qhandle_t shader );
 void    CG_ParticleSparks( vec3_t org, vec3_t vel, int duration, float x, float y, float speed );
-
-void    CG_ParticleMisc( qhandle_t pshader, vec3_t origin, int size, int duration, float alpha );
 
 // Ridah
 void CG_ParticleExplosion( char *animStr, vec3_t origin, vec3_t vel, int duration, int sizeStart, int sizeEnd, qboolean dlight );

@@ -184,7 +184,7 @@ CG_AddParticleToScene
 */
 #define ROOT_2 1.414213562373f
 
-void CG_AddParticleToScene( cparticle_t *p, vec3_t org, float alpha ) {
+void CG_AddParticleToScene( cparticle_t *p, vec3_t org ) {
 
 	vec3_t point;
 	polyVert_t verts[4];
@@ -752,8 +752,6 @@ void CG_AddParticleToScene( cparticle_t *p, vec3_t org, float alpha ) {
 	}
 
 	if ( !p->pshader ) {
-// (SA) temp commented out for DM again.  FIXME: TODO: this needs to be addressed
-//		CG_Printf ("CG_AddParticleToScene type %d p->pshader == ZERO\n", p->type);
 		return;
 	}
 
@@ -855,7 +853,7 @@ void CG_AddParticles( void ) {
 
 		if ( p->type == P_SPRITE && p->endtime < 0 ) {
 			// temporary sprite
-			CG_AddParticleToScene( p, p->org, alpha );
+			CG_AddParticleToScene( p, p->org );
 			p->next = free_particles;
 			free_particles = p;
 			p->type = 0;
@@ -883,7 +881,7 @@ void CG_AddParticles( void ) {
 		org[1] = p->org[1] + p->vel[1] * time + p->accel[1] * time2;
 		org[2] = p->org[2] + p->vel[2] * time + p->accel[2] * time2;
 
-		CG_AddParticleToScene( p, org, alpha );
+		CG_AddParticleToScene( p, org );
 	}
 
 	active_particles = active;
@@ -1397,12 +1395,6 @@ void CG_ParticleExplosion( char *animStr, vec3_t origin, vec3_t vel, int duratio
 
 }
 
-// Rafael Shrapnel
-void CG_AddParticleShrapnel( localEntity_t *le ) {
-	return;
-}
-// done.
-
 int CG_NewParticleArea( int num ) {
 	// const char *str;
 	char *str;
@@ -1752,47 +1744,4 @@ void CG_ParticleSparks( vec3_t org, vec3_t vel, int duration, float x, float y, 
 	p->accel[0] = crandom() * 4;
 	p->accel[1] = crandom() * 4;
 
-}
-
-void CG_ParticleMisc( qhandle_t pshader, vec3_t origin, int size, int duration, float alpha ) {
-	cparticle_t *p;
-
-	if ( !pshader ) {
-		CG_Printf( "CG_ParticleImpactSmokePuff pshader == ZERO!\n" );
-	}
-
-	if ( !free_particles ) {
-		return;
-	}
-
-	p = free_particles;
-	free_particles = p->next;
-	p->next = active_particles;
-	active_particles = p;
-	p->time = cg.time;
-	p->alpha = 1.0;
-	p->alphavel = 0;
-	p->roll = rand() % 179;
-
-	p->pshader = pshader;
-
-	if ( duration > 0 ) {
-		p->endtime = cg.time + duration;
-	} else {
-		p->endtime = duration;
-	}
-
-	p->startfade = cg.time;
-
-	p->width = size;
-	p->height = size;
-
-	p->endheight = size;
-	p->endwidth = size;
-
-	p->type = P_SPRITE;
-
-	VectorCopy( origin, p->org );
-
-	p->rotate = qfalse;
 }

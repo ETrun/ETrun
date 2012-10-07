@@ -689,7 +689,6 @@ void CG_AddShrapnel( localEntity_t *le ) {
 			le->refEntity.origin[2] = oldZ;
 		} else {
 			trap_R_AddRefEntityToScene( &le->refEntity );
-			CG_AddParticleShrapnel( le );
 		}
 
 		return;
@@ -712,7 +711,6 @@ void CG_AddShrapnel( localEntity_t *le ) {
 		}
 
 		trap_R_AddRefEntityToScene( &le->refEntity );
-		CG_AddParticleShrapnel( le );
 		return;
 	}
 
@@ -731,7 +729,6 @@ void CG_AddShrapnel( localEntity_t *le ) {
 	CG_ReflectVelocity( le, &trace );
 
 	trap_R_AddRefEntityToScene( &le->refEntity );
-	CG_AddParticleShrapnel( le );
 }
 // done.
 
