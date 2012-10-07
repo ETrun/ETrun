@@ -92,6 +92,7 @@ panel_button_t loadScreenMap = {
 	NULL,   /* keyUp	*/
 	BG_PanelButtonsRender_Img,
 	NULL,
+	0
 };
 
 panel_button_t loadScreenBack = {
@@ -104,6 +105,7 @@ panel_button_t loadScreenBack = {
 	NULL,   /* keyUp	*/
 	BG_PanelButtonsRender_Img,
 	NULL,
+	0
 };
 
 panel_button_t loadScreenPins = {
@@ -116,6 +118,7 @@ panel_button_t loadScreenPins = {
 	NULL,   /* keyUp	*/
 	CG_LoadPanel_RenderCampaignPins,
 	NULL,
+	0
 };
 
 panel_button_t missiondescriptionPanelHeaderText = {
@@ -128,6 +131,7 @@ panel_button_t missiondescriptionPanelHeaderText = {
 	NULL,                   /* keyUp	*/
 	BG_PanelButtonsRender_Text,
 	NULL,
+	0
 };
 
 panel_button_t missiondescriptionPanelText = {
@@ -140,6 +144,7 @@ panel_button_t missiondescriptionPanelText = {
 	NULL,                   /* keyUp	*/
 	CG_LoadPanel_RenderMissionDescriptionText,
 	NULL,
+	0
 };
 
 panel_button_t loadScreenMeterBack = {
@@ -152,6 +157,7 @@ panel_button_t loadScreenMeterBack = {
 	NULL,   /* keyUp	*/
 	BG_PanelButtonsRender_Img,
 	NULL,
+	0
 };
 
 panel_button_t loadScreenMeterBack2 = {
@@ -164,6 +170,7 @@ panel_button_t loadScreenMeterBack2 = {
 	NULL,   /* keyUp	*/
 	CG_LoadPanel_RenderLoadingBar,
 	NULL,
+	0
 };
 
 panel_button_t loadScreenMeterBackText = {
@@ -176,6 +183,7 @@ panel_button_t loadScreenMeterBackText = {
 	NULL,                       /* keyUp	*/
 	BG_PanelButtonsRender_Text,
 	NULL,
+	0
 };
 
 panel_button_t* loadpanelButtons[] = {
@@ -368,6 +376,9 @@ void CG_LoadPanel_KeyHandling( int key, qboolean down ) {
 }
 
 qboolean CG_LoadPanel_ContinueButtonKeyDown( panel_button_t* button, int key ) {
+	// Nico, silent GCC
+	button = button;
+
 	if ( key == K_MOUSE1 ) {
 		CG_EventHandling( CGAME_EVENT_GAMEVIEW, qfalse );
 		return qtrue;
@@ -406,6 +417,9 @@ void CG_LoadPanel_DrawPin( const char* text, float px, float py, float sx, float
 
 void CG_LoadPanel_RenderCampaignPins( panel_button_t* button ) {
 	float px, py;
+
+	// Nico, silent GCC
+	button = button;
 
 	if ( !cgs.arenaInfoLoaded ) {
 		return;
