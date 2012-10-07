@@ -262,19 +262,7 @@ void    CG_Trace( trace_t *result, const vec3_t start, const vec3_t mins, const 
 	t.entityNum = t.fraction != 1.0 ? ENTITYNUM_WORLD : ENTITYNUM_NONE;
 	// check all other solid models
 
-	/* Nico, trace players
-	CG_ClipMoveToEntities( start, mins, maxs, end, skipNumber, mask, qfalse, &t );*/
 	CG_ClipMoveToEntities( start, mins, maxs, end, skipNumber, mask, qfalse, qtrue, &t );
-
-	*result = t;
-}
-
-void    CG_Trace_World( trace_t *result, const vec3_t start, const vec3_t mins, const vec3_t maxs, const vec3_t end,
-						int skipNumber, int mask ) {
-	trace_t t;
-
-	trap_CM_BoxTrace( &t, start, end, mins, maxs, 0, mask );
-	t.entityNum = t.fraction != 1.0 ? ENTITYNUM_WORLD : ENTITYNUM_NONE;
 
 	*result = t;
 }
@@ -330,6 +318,10 @@ void CG_TraceCapsuleNoPlayers(trace_t *result, const vec3_t start, const vec3_t 
 
 void CG_TraceCapsule_World( trace_t *result, const vec3_t start, const vec3_t mins, const vec3_t maxs, const vec3_t end, int skipNumber, int mask ) {
 	trace_t t;
+
+	// Nico, silent GCC
+	skipNumber = skipNumber;
+
 	trap_CM_CapsuleTrace( &t, start, end, mins, maxs, 0, mask );
 
 	t.entityNum = t.fraction != 1.0 ? ENTITYNUM_WORLD : ENTITYNUM_NONE;
