@@ -1119,15 +1119,15 @@ static void CG_Missile( centity_t *cent ) {
 
 // DHM - Nerve :: capture and hold flag
 static animation_t multi_flagpoleAnims[] = {
-	{ 0,    "",  0,      1,      0,      1000 / 15,    1000 / 15 },  // (no flags, idle)
-	{ 0,    "",  0,      15,     0,      1000 / 15,    1000 / 15 },  // (axis flag rising)
-	{ 0,    "",  490,    15,     0,      1000 / 15,    1000 / 15 },  // (american flag rising)
-	{ 0,    "",  20,     211,    211,    1000 / 15,    1000 / 15 },  // (axis flag raised)
-	{ 0,    "",  255,    211,    211,    1000 / 15,    1000 / 15 },  // (american flag raised)
-	{ 0,    "",  235,    15,     0,      1000 / 15,    1000 / 15 },  // (axis switching to american)
-	{ 0,    "",  470,    15,     0,      1000 / 15,    1000 / 15 },  // (american switching to axis)
-	{ 0,    "",  510,    15,     0,      1000 / 15,    1000 / 15 },  // (axis flag falling)
-	{ 0,    "",  530,    15,     0,      1000 / 15,    1000 / 15 }   // (american flag falling)
+	{ 0,    "",  0,      1,      0,      1000 / 15,    1000 / 15, 0, 0, 0, 0, 0, 0 },  // (no flags, idle)
+	{ 0,    "",  0,      15,     0,      1000 / 15,    1000 / 15, 0, 0, 0, 0, 0, 0 },  // (axis flag rising)
+	{ 0,    "",  490,    15,     0,      1000 / 15,    1000 / 15, 0, 0, 0, 0, 0, 0 },  // (american flag rising)
+	{ 0,    "",  20,     211,    211,    1000 / 15,    1000 / 15, 0, 0, 0, 0, 0, 0 },  // (axis flag raised)
+	{ 0,    "",  255,    211,    211,    1000 / 15,    1000 / 15, 0, 0, 0, 0, 0, 0 },  // (american flag raised)
+	{ 0,    "",  235,    15,     0,      1000 / 15,    1000 / 15, 0, 0, 0, 0, 0, 0 },  // (axis switching to american)
+	{ 0,    "",  470,    15,     0,      1000 / 15,    1000 / 15, 0, 0, 0, 0, 0, 0 },  // (american switching to axis)
+	{ 0,    "",  510,    15,     0,      1000 / 15,    1000 / 15, 0, 0, 0, 0, 0, 0 },  // (axis flag falling)
+	{ 0,    "",  530,    15,     0,      1000 / 15,    1000 / 15, 0, 0, 0, 0, 0, 0 }   // (american flag falling)
 };
 
 // dhm - end
@@ -1140,7 +1140,7 @@ extern void CG_RunLerpFrame( centity_t *cent, clientInfo_t *ci, lerpFrame_t *lf,
 CG_TrapSetAnim
 ==============
 */
-static void CG_TrapSetAnim( centity_t *cent, lerpFrame_t *lf, int newAnim ) {
+static void CG_TrapSetAnim( centity_t *cent, lerpFrame_t *lf ) {
 	// transition animation
 	lf->animationNumber = cent->currentState.frame;
 
@@ -1178,7 +1178,7 @@ static void CG_Trap( centity_t *cent ) {
 		traplf->frameTime       =
 			traplf->oldFrameTime    = cg.time;
 
-		CG_TrapSetAnim( cent, traplf, cs->frame );
+		CG_TrapSetAnim( cent, traplf );
 
 		traplf->frame           =
 		traplf->oldFrame        = traplf->animation->firstFrame;
@@ -1186,7 +1186,7 @@ static void CG_Trap( centity_t *cent ) {
 
 	// transition to new anim if requested
 	if ( ( traplf->animationNumber != cs->frame ) || !traplf->animation ) {
-		CG_TrapSetAnim( cent, traplf, cs->frame );
+		CG_TrapSetAnim( cent, traplf );
 	}
 
 	CG_RunLerpFrame( cent, NULL, traplf, 0, 1 );  // use existing lerp code rather than re-writing
@@ -1867,7 +1867,7 @@ void CG_Cabinet( centity_t* cent, cabinetType_t type ) {
 	refEntity_t mini_me;
 	int i, cnt;
 
-	if ( type < 0 || type >= CT_MAX ) {
+	if ( type >= CT_MAX ) {
 		return;
 	}
 
@@ -2081,7 +2081,7 @@ static void CG_ProcessEntity( centity_t *cent ) {
 	switch ( cent->currentState.eType ) {
 	default:
 		// ydnar: test for actual bad entity type
-		if ( cent->currentState.eType < 0 || cent->currentState.eType >= ET_EVENTS ) {
+		if ( cent->currentState.eType >= ET_EVENTS ) {
 			CG_Error( "Bad entity type: %i\n", cent->currentState.eType );
 		}
 		break;
