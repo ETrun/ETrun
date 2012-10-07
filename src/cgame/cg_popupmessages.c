@@ -206,7 +206,7 @@ void CG_AddPMItem( popupMessageType_t type, const char* message, qhandle_t shade
 	if ( !message || !*message ) {
 		return;
 	}
-	if ( type < 0 || type >= PM_NUM_TYPES ) {
+	if ( (int)type < 0 || type >= PM_NUM_TYPES ) {
 		CG_Printf( "Invalid popup type: %d\n", type );
 		return;
 	}
@@ -368,7 +368,7 @@ const char* CG_GetPMItemText( centity_t* cent ) {
 		}
 		break;
 	case PM_MINES:
-		if ( cgs.clientinfo[cg.clientNum].team == cent->currentState.effect2Time ) {
+		if ( (int)cgs.clientinfo[cg.clientNum].team == cent->currentState.effect2Time ) {
 			return NULL;
 		}
 		return va( "Spotted by %s^7 at %s", cgs.clientinfo[cent->currentState.effect3Time].name, BG_GetLocationString( cent->currentState.origin ) );
@@ -428,7 +428,7 @@ void CG_PlayPMItemSound( centity_t *cent ) {
 		}
 		break;
 	case PM_MINES:
-		if ( cgs.clientinfo[cg.clientNum].team != cent->currentState.effect2Time ) {
+		if ( (int)cgs.clientinfo[cg.clientNum].team != cent->currentState.effect2Time ) {
 			// inverted teams
 			if ( cent->currentState.effect2Time == TEAM_AXIS ) {
 				CG_SoundPlaySoundScript( "allies_hq_mines_spotted", NULL, -1, qtrue );
