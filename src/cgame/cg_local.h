@@ -2306,7 +2306,6 @@ void CG_FireFlameChunks( centity_t *cent, vec3_t origin, vec3_t angles, float sp
 void CG_InitFlameChunks( void );
 void CG_AddFlameChunks( void );
 void CG_UpdateFlamethrowerSounds( void );
-void CG_FlameDamage( int owner, vec3_t org, float radius );
 // done.
 
 //

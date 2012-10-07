@@ -689,10 +689,6 @@ static qboolean initFlameShaders = qtrue;
 #define MAX_CLIPPED_FLAMES  8       // dont draw more than this many per frame
 static int numClippedFlames;
 
-void CG_FlameDamage( int owner, vec3_t org, float radius ) {
-	return;
-}
-
 void CG_AddFlameSpriteToScene( flameChunk_t *f, float lifeFrac, float alpha ) {
 	vec3_t point, p2, sProj;
 	float radius, sdist;

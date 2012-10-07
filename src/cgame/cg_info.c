@@ -407,7 +407,7 @@ void CG_DemoHelpDraw() {
 
 
 		// Control info
-		for ( i = 0; i < sizeof( help ) / sizeof( char * ); i++ ) {
+		for ( i = 0; i < (int)(sizeof( help ) / sizeof( char * )); i++ ) {
 			y += tSpacing;
 			if ( help[i] != NULL ) {
 				CG_Text_Paint_Ext( x, y, tScale, tScale, tColor, (char*)help[i], 0.0f, 0, tStyle, tFont );
@@ -496,7 +496,7 @@ void CG_SpecHelpDraw() {
 
 		// FIXME: Should compute all this stuff beforehand
 		// Compute required width
-		for ( i = 0; i < sizeof( help ) / sizeof( helpType_t ); i++ ) {
+		for ( i = 0; i < (int)(sizeof( help ) / sizeof( helpType_t )); i++ ) {
 			if ( help[i].cmd != NULL ) {
 				len = strlen( CG_getBindKeyName( help[i].cmd, buf, sizeof( buf ) ) );
 				if ( len > maxlen ) {
@@ -506,7 +506,7 @@ void CG_SpecHelpDraw() {
 		}
 
 		Q_strncpyz( format, va( "^2%%%ds ^N%%s", maxlen ), sizeof( format ) );
-		for ( i = 0, maxlen = 0; i < sizeof( help ) / sizeof( helpType_t ); i++ ) {
+		for ( i = 0, maxlen = 0; i < (int)(sizeof( help ) / sizeof( helpType_t )); i++ ) {
 			if ( help[i].cmd != NULL ) {
 				lines[i] = va( format, CG_getBindKeyName( help[i].cmd, buf, sizeof( buf ) ), help[i].info );
 				len = CG_Text_Width_Ext( lines[i], tScale, 0, FONT_TEXT );
@@ -566,7 +566,7 @@ void CG_SpecHelpDraw() {
 
 
 		// Control info
-		for ( i = 0; i < sizeof( help ) / sizeof( helpType_t ); i++ ) {
+		for ( i = 0; i < (int)(sizeof( help ) / sizeof( helpType_t )); i++ ) {
 			y += tSpacing;
 			if ( lines[i] != NULL ) {
 				CG_Text_Paint_Ext( x, y, tScale, tScale, tColor, lines[i], 0.0f, 0, tStyle, tFont );
