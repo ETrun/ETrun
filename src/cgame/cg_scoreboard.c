@@ -100,7 +100,7 @@ static char *WM_ETrun_coloredPing(int ping) {
  *
  * @author Nico
  */
-static void WM_ETrun_DrawHeader(int *x, int *y, int width, float fade, fontInfo_t *font) {
+static void WM_ETrun_DrawHeader(int *y, fontInfo_t *font) {
 	const char *s;
 
 	// ETrun x.x
@@ -126,7 +126,7 @@ static void WM_ETrun_DrawHeader(int *x, int *y, int width, float fade, fontInfo_
  *
  * @author Nico
  */
-static void WM_ETrun_DrawPlayers(int *x, int *y, int width, float fade, fontInfo_t *font, s_timerunScores *orderedScores, int numScores) {
+static void WM_ETrun_DrawPlayers(int *x, int *y, fontInfo_t *font, s_timerunScores *orderedScores, int numScores) {
 	char *s = NULL;
 	int tempx = 0;
 	float fontsize = 0.16f;
@@ -251,7 +251,7 @@ static void WM_ETrun_DrawPlayers(int *x, int *y, int width, float fade, fontInfo
  *
  * @author Nico
  */
-static void WM_ETrun_DrawSpectators(int *x, int *y, int width, float fade, fontInfo_t *font, s_timerunScores *orderedScores, int numScores) {
+static void WM_ETrun_DrawSpectators(int *x, int *y, fontInfo_t *font, s_timerunScores *orderedScores, int numScores) {
 	char *s = NULL;
 	int tempx = 0;
 	float fontsize = 0.16f;
@@ -350,8 +350,6 @@ Draw the normal in-game scoreboard
 qboolean CG_DrawScoreboard(void) {
 	int		x = 0;
 	int		y = 0;
-	float	fade;
-	float	*fadeColor;
 	s_timerunScores orderedScores[MAX_CLIENTS];
 	int i = 0;
 	int j = 0;
@@ -376,14 +374,6 @@ qboolean CG_DrawScoreboard(void) {
 	// don't draw if in cameramode
 	if (cg.cameraMode) {
 		return qtrue;
-	}
-
-	if (cg.showScores) {
-		fade = 1.0;
-		fadeColor = colorWhite;
-	} else {
-		fadeColor = CG_FadeColor(cg.scoreFadeTime, FADE_TIME);
- 		fade = fadeColor[3];
 	}
 	
 	// Nico, update ordered scores
@@ -486,7 +476,7 @@ qboolean CG_DrawScoreboard(void) {
 
 	// Nico, draw scoreboard header
 	y = 30;// Start drawing from y = 30
-	WM_ETrun_DrawHeader(&x, &y, SCREEN_WIDTH - 2 * x, fade, &cgs.media.limboFont1);
+	WM_ETrun_DrawHeader(&y, &cgs.media.limboFont1);
 
 	if (numScores < NUM_PLAYERS_LAYOUT) {
 		// Nico, single column scoreboard
@@ -496,13 +486,13 @@ qboolean CG_DrawScoreboard(void) {
 		// Nico, draw players, if any
 		x = (SCREEN_WIDTH - INFO_TOTAL_WIDTH) / 2;// Nico, center horizontally
 		if (teamPlayers[TEAM_ALLIES] != 0 || teamPlayers[TEAM_AXIS] != 0 ) {
-			WM_ETrun_DrawPlayers(&x, &y, SCREEN_WIDTH - 2 * x, fade, &cgs.media.limboFont1, orderedScores, numScores);
+			WM_ETrun_DrawPlayers(&x, &y, &cgs.media.limboFont1, orderedScores, numScores);
 		}
 
 		// Nico, draw spectators, if any
 		x = (SCREEN_WIDTH - INFO_SPEC_TOTAL_WIDTH) / 2;// Nico, center horizontally
 		if (teamPlayers[TEAM_SPECTATOR] != 0) {
-			WM_ETrun_DrawSpectators(&x, &y, SCREEN_WIDTH - 2 * x, fade, &cgs.media.limboFont1, orderedScores, numScores);
+			WM_ETrun_DrawSpectators(&x, &y, &cgs.media.limboFont1, orderedScores, numScores);
 		}
 	} else {
 		// Nico, 2-columns scoreboard
@@ -522,21 +512,21 @@ qboolean CG_DrawScoreboard(void) {
 			// Nico, draw players on a first column
 			x = (SCREEN_WIDTH / 2 - INFO_TOTAL_WIDTH) / 2;// Nico, center horizontally
 			yCopy = y;
-			WM_ETrun_DrawPlayers(&x, &y, SCREEN_WIDTH - 2 * x, fade, &cgs.media.limboFont1, orderedScores, numScores);
+			WM_ETrun_DrawPlayers(&x, &y, &cgs.media.limboFont1, orderedScores, numScores);
 
 			// Nico, draw spectators on a second column
 			x = SCREEN_WIDTH - INFO_SPEC_TOTAL_WIDTH - (SCREEN_WIDTH / 2 - INFO_SPEC_TOTAL_WIDTH) / 2;// Nico, center horizontally
 			y = yCopy;
-			WM_ETrun_DrawSpectators(&x, &y, SCREEN_WIDTH - 2 * x, fade, &cgs.media.limboFont1, orderedScores, numScores);
+			WM_ETrun_DrawSpectators(&x, &y, &cgs.media.limboFont1, orderedScores, numScores);
 
 		} else if (thereArePlayers == qtrue) {
 			// Nico, 1-column of players
 			x = (SCREEN_WIDTH - INFO_TOTAL_WIDTH) / 2;// Nico, center horizontally
-			WM_ETrun_DrawPlayers(&x, &y, SCREEN_WIDTH - 2 * x, fade, &cgs.media.limboFont1, orderedScores, numScores);
+			WM_ETrun_DrawPlayers(&x, &y, &cgs.media.limboFont1, orderedScores, numScores);
 		} else {
 			// Nico, 1-column of spectators
 			x = (SCREEN_WIDTH - INFO_SPEC_TOTAL_WIDTH) / 2;// Nico, center horizontally
-			WM_ETrun_DrawSpectators(&x, &y, SCREEN_WIDTH - 2 * x, fade, &cgs.media.limboFont1, orderedScores, numScores);
+			WM_ETrun_DrawSpectators(&x, &y, &cgs.media.limboFont1, orderedScores, numScores);
 		}
 		
 	}
