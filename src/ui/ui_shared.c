@@ -823,6 +823,10 @@ void Script_SetColor( itemDef_t *item, qboolean *bAbort, char **args ) {
 	int i;
 	float f = 0.0f;
 	vec4_t *out;
+
+	// Nico, silent GCC
+	bAbort = bAbort;
+
 	// expecting type of color to set and 4 args for the color
 	if ( String_Parse( args, &name ) ) {
 		out = NULL;
@@ -849,6 +853,10 @@ void Script_SetColor( itemDef_t *item, qboolean *bAbort, char **args ) {
 
 void Script_SetAsset( itemDef_t *item, qboolean *bAbort, char **args ) {
 	const char *name;
+
+	// Nico, silent GCC
+	bAbort = bAbort;
+
 	// expecting name to set asset to
 	if ( String_Parse( args, &name ) ) {
 		// check for a model
@@ -859,6 +867,10 @@ void Script_SetAsset( itemDef_t *item, qboolean *bAbort, char **args ) {
 
 void Script_SetBackground( itemDef_t *item, qboolean *bAbort, char **args ) {
 	const char *name = NULL;
+
+	// Nico, silent GCC
+	bAbort = bAbort;
+
 	// expecting name to set asset to
 	if ( String_Parse( args, &name ) ) {
 		item->window.background = DC->registerShaderNoMip( name );
@@ -885,6 +897,10 @@ itemDef_t *Menu_FindItemByName( menuDef_t *menu, const char *p ) {
 }
 
 void Script_SetTeamColor( itemDef_t *item, qboolean *bAbort, char **args ) {
+	// Nico, silent GCC
+	bAbort = bAbort;
+	args = args;
+
 	if ( DC->getTeamColor ) {
 		int i;
 		vec4_t color;
@@ -901,6 +917,9 @@ void Script_SetItemColor( itemDef_t *item, qboolean *bAbort, char **args ) {
 	vec4_t color;
 	int i;
 	vec4_t *out;
+
+	// Nico, silent GCC
+	bAbort = bAbort;
 
 	// expecting type of color to set and 4 args for the color
 	if ( String_Parse( args, &itemname ) && String_Parse( args, &name ) ) {
@@ -942,6 +961,10 @@ void Script_SetMenuItemColor( itemDef_t *item, qboolean *bAbort, char **args ) {
 	vec4_t color;
 	int i;
 	vec4_t *out;
+
+	// Nico, silent GCC
+	bAbort = bAbort;
+	item = item;
 
 	// expecting type of color to set and 4 args for the color
 	if ( String_Parse( args, &menuname ) && String_Parse( args, &itemname ) && String_Parse( args, &name ) ) {
@@ -1102,6 +1125,10 @@ void Menus_CloseAll() {
 
 void Script_Show( itemDef_t *item, qboolean *bAbort, char **args ) {
 	const char *name = NULL;
+
+	// Nico, silent GCC
+	bAbort = bAbort;
+
 	if ( String_Parse( args, &name ) ) {
 		Menu_ShowItemByName( item->parent, name, qtrue );
 	}
@@ -1109,6 +1136,10 @@ void Script_Show( itemDef_t *item, qboolean *bAbort, char **args ) {
 
 void Script_Hide( itemDef_t *item, qboolean *bAbort, char **args ) {
 	const char *name = NULL;
+
+	// Nico, silent GCC
+	bAbort = bAbort;
+
 	if ( String_Parse( args, &name ) ) {
 		Menu_ShowItemByName( item->parent, name, qfalse );
 	}
@@ -1116,6 +1147,10 @@ void Script_Hide( itemDef_t *item, qboolean *bAbort, char **args ) {
 
 void Script_FadeIn( itemDef_t *item, qboolean *bAbort, char **args ) {
 	const char *name = NULL;
+
+	// Nico, silent GCC
+	bAbort = bAbort;
+
 	if ( String_Parse( args, &name ) ) {
 		Menu_FadeItemByName( item->parent, name, qfalse );
 	}
@@ -1123,6 +1158,10 @@ void Script_FadeIn( itemDef_t *item, qboolean *bAbort, char **args ) {
 
 void Script_FadeOut( itemDef_t *item, qboolean *bAbort, char **args ) {
 	const char *name = NULL;
+
+	// Nico, silent GCC
+	bAbort = bAbort;
+
 	if ( String_Parse( args, &name ) ) {
 		Menu_FadeItemByName( item->parent, name, qtrue );
 	}
@@ -1130,6 +1169,11 @@ void Script_FadeOut( itemDef_t *item, qboolean *bAbort, char **args ) {
 
 void Script_Open( itemDef_t *item, qboolean *bAbort, char **args ) {
 	const char *name = NULL;
+
+	// Nico, silent GCC
+	bAbort = bAbort;
+	item = item;
+
 	if ( String_Parse( args, &name ) ) {
 		Menus_OpenByName( name );
 	}
@@ -1139,6 +1183,9 @@ void Menu_FadeMenuByName( const char *p, qboolean *bAbort, qboolean fadeOut ) {
 	itemDef_t   *item;
 	int i;
 	menuDef_t *menu = Menus_FindByName( p );
+
+	// Nico, silent GCC
+	bAbort = bAbort;
 
 	if ( menu ) {
 		for ( i = 0; i < menu->itemCount; i++ ) {
@@ -1156,6 +1203,10 @@ void Menu_FadeMenuByName( const char *p, qboolean *bAbort, qboolean fadeOut ) {
 
 void Script_FadeInMenu( itemDef_t *item, qboolean *bAbort, char **args ) {
 	const char *name = NULL;
+
+	// Nico, silent GCC
+	item = item;
+
 	if ( String_Parse( args, &name ) ) {
 		Menu_FadeMenuByName( name, bAbort, qfalse );
 	}
@@ -1163,6 +1214,10 @@ void Script_FadeInMenu( itemDef_t *item, qboolean *bAbort, char **args ) {
 
 void Script_FadeOutMenu( itemDef_t *item, qboolean *bAbort, char **args ) {
 	const char *name = NULL;
+
+	// Nico, silent GCC
+	item = item;
+
 	if ( String_Parse( args, &name ) ) {
 		Menu_FadeMenuByName( name, bAbort, qtrue );
 	}
@@ -1178,6 +1233,10 @@ void Script_ConditionalOpen( itemDef_t *item, qboolean *bAbort, char **args ) {
 	char buff[1024];
 	int testtype;         // 0: check val not 0
 						  // 1: check cvar not empty
+
+	// Nico, silent GCC
+	bAbort = bAbort;
+	item = item;
 
 	if ( String_Parse( args, &cvar ) && Int_Parse( args, &testtype ) && String_Parse( args, &name1 ) && String_Parse( args, &name2 ) ) {
 
@@ -1441,17 +1500,32 @@ void Script_ConditionalScript( itemDef_t *item, qboolean *bAbort, char **args ) 
 
 void Script_Close( itemDef_t *item, qboolean *bAbort, char **args ) {
 	const char *name = NULL;
+
+	// Nico, silent GCC
+	bAbort = bAbort;
+	item = item;
+
 	if ( String_Parse( args, &name ) ) {
 		Menus_CloseByName( name );
 	}
 }
 
 void Script_CloseAll( itemDef_t *item, qboolean *bAbort, char **args ) {
+	// Nico, silent GCC
+	bAbort = bAbort;
+	item = item;
+	args = args;
+
 	Menus_CloseAll();
 }
 
 void Script_CloseAllOtherMenus( itemDef_t *item, qboolean *bAbort, char **args ) {
 	int i;
+
+	// Nico, silent GCC
+	bAbort = bAbort;
+	args = args;
+
 	for ( i = 0; i < menuCount; i++ ) {
 		if ( &Menus[i] == item->parent ) {
 			continue;
@@ -1467,6 +1541,10 @@ Script_Clipboard
 ==============
 */
 void Script_Clipboard( itemDef_t *item, qboolean *bAbort, char **args ) {
+	// Nico, silent GCC
+	item = item;
+	bAbort = bAbort;
+	args = args;
 }
 
 /*
@@ -1480,6 +1558,10 @@ Script_NotebookShowpage
 ==============
 */
 void Script_NotebookShowpage( itemDef_t *item, qboolean *bAbort, char **args ) {
+	// Nico, silent GCC
+	item = item;
+	bAbort = bAbort;
+	args = args;
 }
 
 
@@ -1507,6 +1589,10 @@ void Menu_TransitionItemByName( menuDef_t *menu, const char *p, rectDef_t rectFr
 
 void Script_Transition( itemDef_t *item, qboolean *bAbort, char **args ) {
 	const char *name = NULL;
+
+	// Nico, silent GCC
+	bAbort = bAbort;
+
 	rectDef_t rectFrom, rectTo;
 	int time = 0;
 	float amt = 0.0f;
@@ -1543,6 +1629,9 @@ void Script_Orbit( itemDef_t *item, qboolean *bAbort, char **args ) {
 	float cx = 0.0f, cy = 0.0f, x = 0.0f, y = 0.0f;
 	int time = 0;
 
+	// Nico, silent GCC
+	bAbort = bAbort;
+
 	if ( String_Parse( args, &name ) ) {
 		if ( Float_Parse( args, &x ) && Float_Parse( args, &y ) && Float_Parse( args, &cx ) && Float_Parse( args, &cy ) && Int_Parse( args, &time ) ) {
 			Menu_OrbitItemByName( item->parent, name, x, y, cx, cy, time );
@@ -1555,6 +1644,9 @@ void Script_Orbit( itemDef_t *item, qboolean *bAbort, char **args ) {
 void Script_SetFocus( itemDef_t *item, qboolean *bAbort, char **args ) {
 	const char *name = NULL;
 	itemDef_t *focusItem;
+
+	// Nico, silent GCC
+	bAbort = bAbort;
 
 	if ( String_Parse( args, &name ) ) {
 		focusItem = Menu_FindItemByName( item->parent, name );
@@ -1572,11 +1664,20 @@ void Script_SetFocus( itemDef_t *item, qboolean *bAbort, char **args ) {
 }
 
 void Script_ClearFocus( itemDef_t *item, qboolean *bAbort, char **args ) {
+	// Nico, silent GCC
+	bAbort = bAbort;
+	args = args;
+
 	Menu_ClearFocus( item->parent );
 }
 
 void Script_SetPlayerModel( itemDef_t *item, qboolean *bAbort, char **args ) {
 	const char *name = NULL;
+
+	// Nico, silent GCC
+	item = item;
+	bAbort = bAbort;
+
 	if ( String_Parse( args, &name ) ) {
 		DC->setCVar( "team_model", name );
 	}
@@ -1584,6 +1685,11 @@ void Script_SetPlayerModel( itemDef_t *item, qboolean *bAbort, char **args ) {
 
 void Script_SetPlayerHead( itemDef_t *item, qboolean *bAbort, char **args ) {
 	const char *name = NULL;
+
+	// Nico, silent GCC
+	item = item;
+	bAbort = bAbort;
+
 	if ( String_Parse( args, &name ) ) {
 		DC->setCVar( "team_headmodel", name );
 	}
@@ -1594,6 +1700,11 @@ void Script_SetPlayerHead( itemDef_t *item, qboolean *bAbort, char **args ) {
 // you have to use clearCvar "bleh"
 void Script_ClearCvar( itemDef_t *item, qboolean *bAbort, char **args ) {
 	const char *cvar;
+
+	// Nico, silent GCC
+	item = item;
+	bAbort = bAbort;
+
 	if ( String_Parse( args, &cvar ) ) {
 		DC->setCVar( cvar, "" );
 	}
@@ -1601,6 +1712,11 @@ void Script_ClearCvar( itemDef_t *item, qboolean *bAbort, char **args ) {
 
 void Script_SetCvar( itemDef_t *item, qboolean *bAbort, char **args ) {
 	const char *cvar = NULL, *val = NULL;
+
+	// Nico, silent GCC
+	item = item;
+	bAbort = bAbort;
+
 	if ( String_Parse( args, &cvar ) && String_Parse( args, &val ) ) {
 		DC->setCVar( cvar, val );
 	}
@@ -1608,6 +1724,11 @@ void Script_SetCvar( itemDef_t *item, qboolean *bAbort, char **args ) {
 
 void Script_CopyCvar( itemDef_t *item, qboolean *bAbort, char **args ) {
 	const char *cvar_src = NULL, *cvar_dst = NULL;
+
+	// Nico, silent GCC
+	item = item;
+	bAbort = bAbort;
+
 	if ( String_Parse( args, &cvar_src ) && String_Parse( args, &cvar_dst ) ) {
 		char buff[256];
 
@@ -1618,6 +1739,11 @@ void Script_CopyCvar( itemDef_t *item, qboolean *bAbort, char **args ) {
 
 void Script_Exec( itemDef_t *item, qboolean *bAbort, char **args ) {
 	const char *val = NULL;
+
+	// Nico, silent GCC
+	item = item;
+	bAbort = bAbort;
+
 	if ( String_Parse( args, &val ) ) {
 		DC->executeText( EXEC_APPEND, va( "%s ; ", val ) );
 	}
@@ -1625,6 +1751,11 @@ void Script_Exec( itemDef_t *item, qboolean *bAbort, char **args ) {
 
 void Script_ExecNOW( itemDef_t *item, qboolean *bAbort, char **args ) {
 	const char *val = NULL;
+
+	// Nico, silent GCC
+	item = item;
+	bAbort = bAbort;
+
 	if ( String_Parse( args, &val ) ) {
 		DC->executeText( EXEC_NOW, va( "%s ; ", val ) );
 	}
@@ -1632,6 +1763,11 @@ void Script_ExecNOW( itemDef_t *item, qboolean *bAbort, char **args ) {
 
 void Script_Play( itemDef_t *item, qboolean *bAbort, char **args ) {
 	const char *val = NULL;
+
+	// Nico, silent GCC
+	item = item;
+	bAbort = bAbort;
+
 	if ( String_Parse( args, &val ) ) {
 		DC->startLocalSound( DC->registerSound( val, qfalse ), CHAN_LOCAL_SOUND );      // all sounds are not 3d
 	}
@@ -1639,6 +1775,11 @@ void Script_Play( itemDef_t *item, qboolean *bAbort, char **args ) {
 
 void Script_playLooped( itemDef_t *item, qboolean *bAbort, char **args ) {
 	const char *val = NULL;
+
+	// Nico, silent GCC
+	item = item;
+	bAbort = bAbort;
+
 	if ( String_Parse( args, &val ) ) {
 		DC->stopBackgroundTrack();
 		DC->startBackgroundTrack( val, val, 0 );
@@ -1650,6 +1791,9 @@ void Script_AddListItem( itemDef_t *item, qboolean *bAbort, char **args ) {
 	const char *itemname = NULL, *val = NULL, *name = NULL;
 	itemDef_t *t;
 
+	// Nico, silent GCC
+	bAbort = bAbort;
+
 	if ( String_Parse( args, &itemname ) && String_Parse( args, &val ) && String_Parse( args, &name ) ) {
 		t = Menu_FindItemByName( item->parent, itemname );
 		if ( t && t->special ) {
@@ -1660,16 +1804,29 @@ void Script_AddListItem( itemDef_t *item, qboolean *bAbort, char **args ) {
 // -NERVE - SMF
 // DHM - Nerve
 void Script_CheckAutoUpdate( itemDef_t *item, qboolean *bAbort, char **args ) {
+	// Nico, silent GCC
+	item = item;
+	bAbort = bAbort;
+	args = args;
+
 	DC->checkAutoUpdate();
 }
 
 void Script_GetAutoUpdate( itemDef_t *item, qboolean *bAbort, char **args ) {
+	// Nico, silent GCC
+	item = item;
+	bAbort = bAbort;
+	args = args;
+
 	DC->getAutoUpdate();
 }
 // DHM - Nerve
 
 void Script_SetMenuFocus( itemDef_t *item, qboolean *bAbort, char **args ) {
 	const char *name;
+
+	// Nico, silent GCC
+	bAbort = bAbort;
 
 	if ( String_Parse( args, &name ) ) {
 		menuDef_t *focusMenu = Menus_FindByName( name );
@@ -1752,6 +1909,10 @@ void Script_ExecWolfConfig( itemDef_t *item, qboolean *bAbort, char **args ) {
 	char cl_profileStr[256];
 	int useprofile = 1;
 
+	// Nico, silent GCC
+	item = item;
+	bAbort = bAbort;
+
 	if ( Int_Parse( args, &useprofile ) ) {
 
 		DC->getCVarString( "cl_profile", cl_profileStr, sizeof( cl_profileStr ) );
@@ -1780,6 +1941,10 @@ void Script_SetEditFocus( itemDef_t *item, qboolean *bAbort, char **args ) {
 	const char *name = NULL;
 	itemDef_t *editItem;
 
+	// Nico, silent GCC
+	item = item;
+	bAbort = bAbort;
+
 	if ( String_Parse( args, &name ) ) {
 		editItem = Menu_FindItemByName( item->parent, name );
 		if ( editItem && ( editItem->type == ITEM_TYPE_EDITFIELD || editItem->type == ITEM_TYPE_NUMERICFIELD ) ) {
@@ -1802,15 +1967,15 @@ void Script_SetEditFocus( itemDef_t *item, qboolean *bAbort, char **args ) {
 			editItem->cursorPos = 0;
 			g_editingField = qtrue;
 			g_editItem = editItem;
-
-			// the stupidest idea ever, let's just override the console, every ui element, user choice, etc
-			// nuking this
-			//%	DC->setOverstrikeMode(qtrue);
 		}
 	}
 }
 
 void Script_Abort( itemDef_t *item, qboolean *bAbort, char **args ) {
+	// Nico, silent GCC
+	item = item;
+	args = args;
+
 	*bAbort = qtrue;
 }
 
@@ -2382,7 +2547,7 @@ qboolean Item_OwnerDraw_HandleKey( itemDef_t *item, int key ) {
 	return qfalse;
 }
 
-qboolean Item_ListBox_HandleKey( itemDef_t *item, int key, qboolean down, qboolean force ) {
+qboolean Item_ListBox_HandleKey( itemDef_t *item, int key, qboolean force ) {
 	listBoxDef_t *listPtr = (listBoxDef_t*)item->typeData;
 	int count = DC->feederCount( item->special );
 	int max, viewmax;
@@ -2911,7 +3076,7 @@ static void Scroll_ListBox_AutoFunc( void *p ) {
 		// need to scroll which is done by simulating a click to the item
 		// this is done a bit sideways as the autoscroll "knows" that the item is a listbox
 		// so it calls it directly
-		Item_ListBox_HandleKey( si->item, si->scrollKey, qtrue, qfalse );
+		Item_ListBox_HandleKey( si->item, si->scrollKey, qfalse );
 		si->nextScrollTime = DC->realTime + si->adjustValue;
 	}
 
@@ -2971,7 +3136,7 @@ static void Scroll_ListBox_ThumbFunc( void *p ) {
 		// so it calls it directly
 		// Arnout: clear doubleclicktime though!
 		lastListBoxClickTime = 0;
-		Item_ListBox_HandleKey( si->item, si->scrollKey, qtrue, qfalse );
+		Item_ListBox_HandleKey( si->item, si->scrollKey, qfalse );
 		si->nextScrollTime = DC->realTime + si->adjustValue;
 	}
 
@@ -3055,11 +3220,7 @@ void Item_StartCapture( itemDef_t *item, int key ) {
 	}
 }
 
-void Item_StopCapture( itemDef_t *item ) {
-
-}
-
-qboolean Item_Slider_HandleKey( itemDef_t *item, int key, qboolean down ) {
+qboolean Item_Slider_HandleKey( itemDef_t *item, int key ) {
 	float x, value, width, work;
 
 	//DC->Print("slider handle key\n");
@@ -3109,7 +3270,6 @@ qboolean Item_HandleKey( itemDef_t *item, int key, qboolean down ) {
 	}
 
 	if ( itemCapture ) {
-		Item_StopCapture( itemCapture );
 		itemCapture = NULL;
 		captureFunc = NULL;
 		captureData = NULL;
@@ -3154,7 +3314,7 @@ qboolean Item_HandleKey( itemDef_t *item, int key, qboolean down ) {
 		return qfalse;
 		break;
 	case ITEM_TYPE_LISTBOX:
-		return Item_ListBox_HandleKey( item, key, down, qfalse );
+		return Item_ListBox_HandleKey( item, key, qfalse );
 		break;
 	case ITEM_TYPE_YESNO:
 		return Item_YesNo_HandleKey( item, key );
@@ -3169,17 +3329,12 @@ qboolean Item_HandleKey( itemDef_t *item, int key, qboolean down ) {
 		return Item_Bind_HandleKey( item, key, down );
 		break;
 	case ITEM_TYPE_SLIDER:
-		return Item_Slider_HandleKey( item, key, down );
+		return Item_Slider_HandleKey( item, key );
 		break;
-		//case ITEM_TYPE_IMAGE:
-		//  Item_Image_Paint(item);
-		//  break;
 	default:
 		return qfalse;
 		break;
 	}
-
-	//return qfalse;
 }
 
 void Item_Action( itemDef_t *item ) {
@@ -5078,7 +5233,7 @@ void Menu_ScrollFeeder( menuDef_t *menu, int feeder, qboolean down ) {
 		int i;
 		for ( i = 0; i < menu->itemCount; i++ ) {
 			if ( menu->items[i]->special == feeder ) {
-				Item_ListBox_HandleKey( menu->items[i], ( down ) ? K_DOWNARROW : K_UPARROW, qtrue, qtrue );
+				Item_ListBox_HandleKey( menu->items[i], ( down ) ? K_DOWNARROW : K_UPARROW, qtrue );
 				return;
 			}
 		}
@@ -5175,7 +5330,6 @@ void Menu_HandleMouseMove( menuDef_t *menu, float x, float y ) {
 		if ( itemCapture->type == ITEM_TYPE_LISTBOX ) {
 			// NERVE - SMF - lose capture if out of client rect
 			if ( !Rect_ContainsPoint( &itemCapture->window.rect, x, y ) ) {
-				Item_StopCapture( itemCapture );
 				itemCapture = NULL;
 				captureFunc = NULL;
 				captureData = NULL;
