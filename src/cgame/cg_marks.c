@@ -92,7 +92,7 @@ CG_AllocMark
 Will allways succeed, even if it requires freeing an old active mark
 ===================
 */
-markPoly_t  *CG_AllocMark( int endTime ) {
+markPoly_t  *CG_AllocMark(void) {
 	markPoly_t  *le; //, *trav, *lastTrav;
 	int time;
 
@@ -124,23 +124,11 @@ markPoly_t  *CG_AllocMark( int endTime ) {
 	return le;
 }
 
-
-
-/*
-CG_ImpactMark()
-projection is a normal and distance (not a plane, but rather how far to project)
-it MUST be normalized!
-if lifeTime < 0, then generate a temporary mark
-*/
-
 // Ridah, increased this since we leave them around for longer
 #define MAX_MARK_FRAGMENTS  384
 #define MAX_MARK_POINTS     1024
-//#define	MAX_MARK_FRAGMENTS	128
-//#define	MAX_MARK_POINTS		384
 
 // these are ignored now for the most part
-//#define	MARK_TOTAL_TIME		20000	// (SA) made this a cvar: cg_markTime  (we could cap the time or remove marks quicker if too long a time starts to cause new marks to not appear)
 #define MARK_FADE_TIME      10000
 
 // comment out to use old-style mark code
@@ -155,16 +143,10 @@ void CG_ImpactMark( qhandle_t markShader, vec3_t origin, vec4_t projection, floa
 	int fadeTime;
 	vec3_t points[ 4 ];
 
-
 	/* early out */
 	if ( lifeTime == 0 ) {
 		return;
 	}
-
-	/* set projection (inverse of dir) */
-	//%	VectorSubtract( vec3_origin, dir, projection );
-	//%	VectorNormalize( projection );
-	//%	projection[ 3 ] = radius * 8;
 
 	/* make rotated polygon axis */
 	VectorCopy( projection, axis[ 0 ] );
@@ -229,8 +211,6 @@ void CG_ImpactMark( qhandle_t markShader, vec3_t origin, vec4_t projection, floa
 		if ( duration == -2 ) {
 			multMaxFragments = -1;  // use original mapping
 		}
-
-//		duration = MARK_TOTAL_TIME;
 		duration = cg_markTime.integer;
 	}
 
@@ -251,7 +231,6 @@ void CG_ImpactMark( qhandle_t markShader, vec3_t origin, vec4_t projection, floa
 	}
 
 	// get the fragments
-	//VectorScale( dir, -20, projection );
 	VectorScale( dir, radius * 2, projection );
 	numFragments = trap_CM_MarkFragments( (int)orientation, (void *)originalPoints,
 										  projection, MAX_MARK_POINTS, (float *)&markPoints[0],
@@ -303,7 +282,7 @@ void CG_ImpactMark( qhandle_t markShader, vec3_t origin, vec4_t projection, floa
 		}
 
 		// otherwise save it persistantly
-		mark = CG_AllocMark( cg.time + duration );
+		mark = CG_AllocMark();
 		mark->time = cg.time;
 		mark->alphaFade = alphaFade;
 		mark->markShader = markShader;
@@ -368,4 +347,3 @@ void CG_AddMarks( void ) {
 		trap_R_AddPolyToScene( mp->markShader, mp->poly.numVerts, mp->verts );
 	}
 }
-
