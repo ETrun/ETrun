@@ -189,9 +189,6 @@ CG_StartCamera
 void CG_StartCamera( const char *name, qboolean startBlack ) {
 	char lname[MAX_QPATH];
 
-	//if ( cg.predictedPlayerState.stats[STAT_HEALTH] <= 0 )	// don't allow camera to start if you're dead
-	//	return;
-
 	COM_StripExtension( name, lname );    //----(SA)	added
 	strcat( lname, ".camera" );
 
@@ -201,7 +198,6 @@ void CG_StartCamera( const char *name, qboolean startBlack ) {
 			CG_Fade( 0, 0, 0, 255, cg.time, 0 );  // go black
 		}
 		trap_Cvar_Set( "cg_letterbox", "1" ); // go letterbox
-		//trap_SendClientCommand("startCamera");	// camera on in game
 		trap_startCamera( CAM_PRIMARY, cg.time ); // camera on in client
 	} else {
 //----(SA)	removed check for cams in main dir
@@ -229,7 +225,7 @@ void CG_StartInitialCamera() {
 		g_initialCamera[0] = 0;
 		g_initialCameraStartBlack = qfalse;
 
-	} // if (g_initialCamera[0] != 0)...
+	}
 }
 
 /*
@@ -268,12 +264,6 @@ static void CG_Fade_f( void ) {
 }
 
 void CG_QuickMessage_f( void ) {
-
-	/* Nico, enable voice chat for spectators
-	if ( cgs.clientinfo[ cg.clientNum ].team == TEAM_SPECTATOR ) {
-		return;
-	}*/
-
 	CG_EventHandling( CGAME_EVENT_NONE, qfalse );
 
 	if ( cg_quickMessageAlt.integer ) {
@@ -759,14 +749,14 @@ qboolean CG_ConsoleCommand( void ) {
 	cmd = CG_Argv( 0 );
 
 	// Nico, check for ignored client commands
-	for (i = 0 ; i < sizeof (ignoredClientCommands) / sizeof(ignoredClientCommands[0]) ; ++i) {
+	for (i = 0 ; i < (int)(sizeof (ignoredClientCommands) / sizeof (ignoredClientCommands[0])) ; ++i) {
 		if (!Q_stricmp(cmd, ignoredClientCommands[i].cmd)) {
 			return qtrue;
 		}
 	}
 
-	for ( i = 0 ; i < sizeof( commands ) / sizeof( commands[0] ) ; i++ ) {
-		if ( !Q_stricmp( cmd, commands[i].cmd ) ) {
+	for (i = 0 ; i < (int)(sizeof (commands) / sizeof (commands[0])) ; ++i) {
+		if (!Q_stricmp(cmd, commands[i].cmd)) {
 			commands[i].function();
 			return qtrue;
 		}
@@ -787,7 +777,7 @@ so it can perform tab completion
 void CG_InitConsoleCommands( void ) {
 	int i;
 
-	for ( i = 0 ; i < sizeof( commands ) / sizeof( commands[0] ) ; i++ ) {
+	for ( i = 0 ; i < (int)(sizeof( commands ) / sizeof( commands[0] )) ; i++ ) {
 		trap_AddCommand( commands[i].cmd );
 	}
 
