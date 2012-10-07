@@ -257,7 +257,7 @@ spawn_t spawns[] = {
 	{"misc_gamemodel",               SP_misc_gamemodel},
 };
 
-#define NUMSPAWNS   ( sizeof( spawns ) / sizeof( spawn_t ) )
+#define NUMSPAWNS   (int)( sizeof( spawns ) / sizeof( spawn_t ) )
 
 /*
 ===================
