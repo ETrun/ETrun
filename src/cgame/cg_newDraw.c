@@ -68,7 +68,7 @@ static int weapIconDrawSize( int weap ) {
 CG_DrawPlayerWeaponIcon
 ==============
 */
-void CG_DrawPlayerWeaponIcon( rectDef_t *rect, qboolean drawHighlighted, int align, vec4_t *refcolor ) {
+void CG_DrawPlayerWeaponIcon( rectDef_t *rect, int align, vec4_t *refcolor ) {
 	int size;
 	int realweap;                   // DHM - Nerve
 	qhandle_t icon;
@@ -402,6 +402,9 @@ void CG_DrawCursorhint( rectDef_t *rect ) {
 }
 
 float CG_GetValue( int ownerDraw, int type ) {
+	// Nico, silent GCC
+	type = type;
+
 	switch ( ownerDraw ) {
 	default:
 		break;
@@ -420,6 +423,9 @@ qboolean CG_YourTeamHasFlag() {
 // THINKABOUTME: should these be exclusive or inclusive..
 //
 qboolean CG_OwnerDrawVisible( int flags ) {
+	// Nico, silent GCC
+	flags = flags;
+
 	return qfalse;
 }
 
@@ -683,4 +689,6 @@ void CG_GetTeamColor( vec4_t *color ) {
 }
 
 void CG_RunMenuScript( char **args ) {
+	// Nico, silent GCC
+	args = args;
 }

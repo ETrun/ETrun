@@ -2264,10 +2264,10 @@ static void CG_DrawPlayerStatus( void ) {
 	CG_DrawWeapHeat( &rect, HUD_HORIZONTAL );
 
 	if ( cg_drawWeaponIconFlash.integer == 0 ) {
-		CG_DrawPlayerWeaponIcon( &rect, qtrue, ITEM_ALIGN_RIGHT, &colorWhite );
+		CG_DrawPlayerWeaponIcon( &rect, ITEM_ALIGN_RIGHT, &colorWhite );
 	} else {
 		int ws = BG_simpleWeaponState(cg.snap->ps.weaponstate);
-		CG_DrawPlayerWeaponIcon( &rect, ( ws != WSTATE_IDLE ), ITEM_ALIGN_RIGHT, ( ( ws == WSTATE_SWITCH ) ? &colorWhite : ( ws == WSTATE_FIRE ) ? &colorRed : &colorYellow ) );
+		CG_DrawPlayerWeaponIcon( &rect, ITEM_ALIGN_RIGHT, ( ( ws == WSTATE_SWITCH ) ? &colorWhite : ( ws == WSTATE_FIRE ) ? &colorRed : &colorYellow ) );
 	}
 
 	// Draw ammo

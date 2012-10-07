@@ -2107,7 +2107,7 @@ qboolean CG_OtherTeamHasFlag();
 void CG_DrawCursorhint( rectDef_t *rect );
 void CG_DrawWeapStability( rectDef_t *rect );
 void CG_DrawWeapHeat( rectDef_t *rect, int align );
-void CG_DrawPlayerWeaponIcon( rectDef_t *rect, qboolean drawHighlighted, int align, vec4_t *refcolor );
+void CG_DrawPlayerWeaponIcon( rectDef_t *rect, int align, vec4_t *refcolor );
 void CG_Fade( int r, int g, int b, int a, int time, int duration );
 const char* CG_PickupItemText( int item );
 
