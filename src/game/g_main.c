@@ -2074,13 +2074,13 @@ void G_TagLinkEntity( gentity_t* ent, int msec ) {
 
 			VectorMA( ent->backspline->segments[pos].start, frac, ent->backspline->segments[pos].v_norm, v );
 			if ( parent->s.apos.trBase[0] ) {
-				BG_LinearPathOrigin2( parent->s.apos.trBase[0], &ent->backspline, &ent->backdelta, v, ent->back );
+				BG_LinearPathOrigin2( parent->s.apos.trBase[0], &ent->backspline, &ent->backdelta, v );
 			}
 
 			VectorCopy( v, origin );
 
 			if ( ent->s.angles2[0] ) {
-				BG_LinearPathOrigin2( ent->s.angles2[0], &ent->backspline, &ent->backdelta, v, ent->back );
+				BG_LinearPathOrigin2( ent->s.angles2[0], &ent->backspline, &ent->backdelta, v );
 			}
 
 			VectorCopy( v, ent->backorigin );
@@ -2110,7 +2110,7 @@ void G_TagLinkEntity( gentity_t* ent, int msec ) {
 			VectorCopy( v, origin );
 
 			if ( ent->s.angles2[0] ) {
-				BG_LinearPathOrigin2( ent->s.angles2[0], &ent->backspline, &ent->backdelta, v, ent->back );
+				BG_LinearPathOrigin2( ent->s.angles2[0], &ent->backspline, &ent->backdelta, v );
 			}
 
 			VectorCopy( v, ent->backorigin );

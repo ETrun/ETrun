@@ -1406,9 +1406,6 @@ int BG_AkimboSidearm( int weaponNum );
 
 qboolean BG_CanUseWeapon( int classNum, int teamNum, weapon_t weapon );
 
-qboolean    BG_CanItemBeGrabbed( const entityState_t *ent, const playerState_t *ps, int *skill, int teamNum );
-
-
 // content masks
 #define MASK_ALL                ( -1 )
 #define MASK_SOLID              ( CONTENTS_SOLID )
@@ -1483,7 +1480,7 @@ typedef enum {
 
 
 void    BG_EvaluateTrajectory( const trajectory_t *tr, int atTime, vec3_t result, qboolean isAngle, int splinePath );
-void BG_EvaluateTrajectoryDelta( const trajectory_t *tr, int atTime, vec3_t result, qboolean isAngle, int splineData );
+void BG_EvaluateTrajectoryDelta( const trajectory_t *tr, int atTime, vec3_t result );
 void    BG_GetMarkDir( const vec3_t dir, const vec3_t normal, vec3_t out );
 
 void    BG_AddPredictableEventToPlayerstate( int newEvent, int eventParm, playerState_t *ps );
@@ -1503,7 +1500,7 @@ weapon_t BG_WeaponForMOD( int MOD );
 qboolean    BG_WeaponInWolfMP( int weapon );
 qboolean    BG_PlayerTouchesItem( playerState_t *ps, entityState_t *item, int atTime );
 qboolean    BG_PlayerSeesItem( playerState_t *ps, entityState_t *item, int atTime );
-qboolean    BG_AddMagicAmmo( playerState_t *ps, int *skill, int teamNum, int numOfClips );
+qboolean    BG_AddMagicAmmo( playerState_t *ps, int teamNum, int numOfClips );
 
 #define OVERCLIP        1.001
 
@@ -2002,9 +1999,9 @@ void BG_BuildSplinePaths();
 splinePath_t *BG_Find_Spline( const char *match );
 float BG_SplineLength( splinePath_t* pSpline );
 void BG_AddSplineControl( splinePath_t* spline, const char* name );
-void BG_LinearPathOrigin2( float radius, splinePath_t** pSpline, float *deltaTime, vec3_t result, qboolean backwards );
+void BG_LinearPathOrigin2( float radius, splinePath_t** pSpline, float *deltaTime, vec3_t result );
 
-int BG_MaxAmmoForWeapon( weapon_t weaponNum, int *skill );
+int BG_MaxAmmoForWeapon( weapon_t weaponNum );
 
 void BG_InitLocations( vec2_t world_mins, vec2_t world_maxs );
 char *BG_GetLocationString( vec_t* pos );
@@ -2095,7 +2092,7 @@ int BG_simpleWeaponState( int ws );
 int BG_colorstrncpyz( char *in, char *out, int str_max, int out_max );
 int BG_drawStrlen( const char *str );
 int BG_strRelPos( char *in, int index );
-int BG_cleanName( const char *pszIn, char *pszOut, unsigned int dwMaxLength, qboolean fCRLF );
+int BG_cleanName( const char *pszIn, char *pszOut, int dwMaxLength, qboolean fCRLF );
 
 // Crosshair support
 void BG_setCrosshair( char *colString, float *col, float alpha, char *cvarName );

@@ -276,7 +276,7 @@ Add_Ammo
 int Add_Ammo( gentity_t *ent, int weapon, int count, qboolean fillClip ) {
 	int ammoweap = BG_FindAmmoForWeapon( weapon );
 	int originalCount;
-	int maxammo = BG_MaxAmmoForWeapon( ammoweap, 0 );
+	int maxammo = BG_MaxAmmoForWeapon( ammoweap );
 
 	originalCount = ent->client->ps.ammo[ammoweap];
 
@@ -1077,7 +1077,7 @@ void G_BounceItem( gentity_t *ent, trace_t *trace ) {
 
 	// reflect the velocity on the trace plane
 	hitTime = level.previousTime + ( level.time - level.previousTime ) * trace->fraction;
-	BG_EvaluateTrajectoryDelta( &ent->s.pos, hitTime, velocity, qfalse, ent->s.effect2Time );
+	BG_EvaluateTrajectoryDelta( &ent->s.pos, hitTime, velocity );
 	dot = DotProduct( velocity, trace->plane.normal );
 	VectorMA( velocity, -2 * dot, trace->plane.normal, ent->s.pos.trDelta );
 

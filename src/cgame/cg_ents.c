@@ -995,14 +995,14 @@ static void CG_Missile( centity_t *cent ) {
 					vec3_t velocity;
 					int volume = flytime > 375 ? 255 : ( 75.f / ( (float)flytime - 300.f ) ) * 255;
 
-					BG_EvaluateTrajectoryDelta( &cent->currentState.pos, cg.time, velocity, qfalse, -1 );
+					BG_EvaluateTrajectoryDelta( &cent->currentState.pos, cg.time, velocity );
 					trap_S_AddLoopingSound( cent->lerpOrigin, velocity, weapon->missileSound, volume, 0 );
 				}
 			}
 		} else {
 			vec3_t velocity;
 
-			BG_EvaluateTrajectoryDelta( &cent->currentState.pos, cg.time, velocity, qfalse, -1 );
+			BG_EvaluateTrajectoryDelta( &cent->currentState.pos, cg.time, velocity );
 			trap_S_AddLoopingSound( cent->lerpOrigin, velocity, weapon->missileSound, 255, 0 );
 		}
 	}
@@ -1012,7 +1012,7 @@ static void CG_Missile( centity_t *cent ) {
 		if ( cent->currentState.teamNum < 4 ) {
 			vec3_t velocity;
 
-			BG_EvaluateTrajectoryDelta( &cent->currentState.pos, cg.time, velocity, qfalse, -1 );
+			BG_EvaluateTrajectoryDelta( &cent->currentState.pos, cg.time, velocity );
 			trap_S_AddLoopingSound( cent->lerpOrigin, velocity, weapon->spindownSound, 255, 0 );
 		}
 	}
@@ -2275,13 +2275,13 @@ qboolean CG_AddLinkedEntity( centity_t *cent, qboolean ignoreframe, int atTime )
 
 			VectorMA( cent->backspline->segments[pos].start, frac, cent->backspline->segments[pos].v_norm, v );
 			if ( sParent->apos.trBase[0] ) {
-				BG_LinearPathOrigin2( sParent->apos.trBase[0], &cent->backspline, &cent->backdelta, v, cent->back );
+				BG_LinearPathOrigin2( sParent->apos.trBase[0], &cent->backspline, &cent->backdelta, v );
 			}
 
 			VectorCopy( v, cent->lerpOrigin );
 
 			if ( s1->angles2[0] ) {
-				BG_LinearPathOrigin2( s1->angles2[0], &cent->backspline, &cent->backdelta, v, cent->back );
+				BG_LinearPathOrigin2( s1->angles2[0], &cent->backspline, &cent->backdelta, v);
 			}
 
 			VectorCopy( v, cent->origin2 );
@@ -2313,7 +2313,7 @@ qboolean CG_AddLinkedEntity( centity_t *cent, qboolean ignoreframe, int atTime )
 			VectorCopy( v, cent->lerpOrigin );
 
 			if ( s1->angles2[0] && cent->backspline ) {
-				BG_LinearPathOrigin2( s1->angles2[0], &cent->backspline, &cent->backdelta, v, cent->back );
+				BG_LinearPathOrigin2( s1->angles2[0], &cent->backspline, &cent->backdelta, v );
 			}
 
 			VectorCopy( v, cent->origin2 );

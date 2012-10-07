@@ -64,26 +64,14 @@ void G_BounceMissile( gentity_t *ent, trace_t *trace ) {
 		}
 	}
 
-// Arnout: removed this for MP as well (was already gone from SP)
-/*
-		// Ridah, if we are a grenade, and we have hit an AI that is waiting to catch us, give them a grenade, and delete ourselves
-	if ((ent->splashMethodOfDeath == MOD_GRENADE_SPLASH) && (g_entities[trace->entityNum].flags & FL_AI_GRENADE_KICK) &&
-		(trace->endpos[2] > g_entities[trace->entityNum].r.currentOrigin[2])) {
-		g_entities[trace->entityNum].grenadeExplodeTime = ent->nextthink;
-		g_entities[trace->entityNum].flags &= ~FL_AI_GRENADE_KICK;
-		Add_Ammo( &g_entities[trace->entityNum], WP_GRENADE_LAUNCHER, 1, qfalse );	//----(SA)	modified
-		G_FreeEntity( ent );
-		return;
-	}
-*/
 	// reflect the velocity on the trace plane
 	hitTime = level.previousTime + ( level.time - level.previousTime ) * trace->fraction;
-	BG_EvaluateTrajectoryDelta( &ent->s.pos, hitTime, velocity, qfalse, ent->s.effect2Time );
+	BG_EvaluateTrajectoryDelta( &ent->s.pos, hitTime, velocity );
 	dot = DotProduct( velocity, trace->plane.normal );
 	VectorMA( velocity, -2 * dot, trace->plane.normal, ent->s.pos.trDelta );
 
 	// RF, record this for mover pushing
-	if ( trace->plane.normal[2] > 0.2 /*&& VectorLengthSquared( ent->s.pos.trDelta ) < SQR(40)*/ ) {
+	if ( trace->plane.normal[2] > 0.2 ) {
 		ent->s.groundEntityNum = trace->entityNum;
 	}
 
@@ -164,7 +152,7 @@ void G_MissileImpact( gentity_t *ent, trace_t *trace, int impactDamage ) {
 			// update takedamage would be set to '0' and the func_explosive would not be
 			// removed yet, causing a bounce.
 			if ( other->takedamage ) {
-				BG_EvaluateTrajectoryDelta( &ent->s.pos, level.time, velocity, qfalse, ent->s.effect2Time );
+				BG_EvaluateTrajectoryDelta( &ent->s.pos, level.time, velocity );
 				G_Damage( other, ent, &g_entities[ent->r.ownerNum], velocity, ent->s.origin, impactDamage, 0, ent->methodOfDeath );
 			}
 
@@ -192,7 +180,7 @@ void G_MissileImpact( gentity_t *ent, trace_t *trace, int impactDamage ) {
 		if ( ent->damage ) {
 			if ( AccuracyHit( other, &g_entities[ent->r.ownerNum] ) ) {
 			}
-			BG_EvaluateTrajectoryDelta( &ent->s.pos, level.time, velocity, qfalse, ent->s.effect2Time );
+			BG_EvaluateTrajectoryDelta( &ent->s.pos, level.time, velocity );
 			if ( !VectorLengthSquared( velocity ) ) {
 				velocity[2] = 1;    // stepped on a grenade
 			}
@@ -213,7 +201,7 @@ void G_MissileImpact( gentity_t *ent, trace_t *trace, int impactDamage ) {
 	} else {
 		// Ridah, try projecting it in the direction it came from, for better decals
 		vec3_t dir;
-		BG_EvaluateTrajectoryDelta( &ent->s.pos, level.time, dir, qfalse, ent->s.effect2Time );
+		BG_EvaluateTrajectoryDelta( &ent->s.pos, level.time, dir );
 		BG_GetMarkDir( dir, trace->plane.normal, dir );
 
 		event = EV_MISSILE_MISS;
@@ -704,7 +692,7 @@ void G_PredictBounceMissile( gentity_t *ent, trajectory_t *pos, trace_t *trace, 
 
 	// reflect the velocity on the trace plane
 	hitTime = time;
-	BG_EvaluateTrajectoryDelta( pos, hitTime, velocity, qfalse, ent->s.effect2Time  );
+	BG_EvaluateTrajectoryDelta( pos, hitTime, velocity );
 	dot = DotProduct( velocity, trace->plane.normal );
 	VectorMA( velocity, -2 * dot, trace->plane.normal, pos->trDelta );
 
@@ -1736,7 +1724,6 @@ gentity_t *fire_mortar( gentity_t *self, vec3_t start, vec3_t dir ) {
 	bolt->s.pos.trType = TR_GRAVITY;
 	bolt->s.pos.trTime = level.time - MISSILE_PRESTEP_TIME;     // move a bit on the very first frame
 	VectorCopy( start, bolt->s.pos.trBase );
-//	VectorScale( dir, 900, bolt->s.pos.trDelta );
 	VectorCopy( dir, bolt->s.pos.trDelta );
 	SnapVector( bolt->s.pos.trDelta );          // save net bandwidth
 	VectorCopy( start, bolt->r.currentOrigin );

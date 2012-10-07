@@ -2403,12 +2403,10 @@ gitem_t *BG_FindItemForHoldable( holdable_t pw ) {
 	int i;
 
 	for ( i = 0 ; i < bg_numItems ; i++ ) {
-		if ( bg_itemlist[i].giType == IT_HOLDABLE && bg_itemlist[i].giTag == pw ) {
+		if ( bg_itemlist[i].giType == IT_HOLDABLE && bg_itemlist[i].giTag == (int)pw ) {
 			return &bg_itemlist[i];
 		}
 	}
-
-//	Com_Error( ERR_DROP, "HoldableItem not found" );
 
 	return NULL;
 }
@@ -2424,7 +2422,7 @@ gitem_t *BG_FindItemForWeapon( weapon_t weapon ) {
 	gitem_t *it;
 
 	for ( it = bg_itemlist + 1 ; it->classname ; it++ ) {
-		if ( it->giType == IT_WEAPON && it->giTag == weapon ) {
+		if ( it->giType == IT_WEAPON && it->giTag == (int)weapon ) {
 			return it;
 		}
 	}
@@ -2447,7 +2445,7 @@ weapon_t BG_FindClipForWeapon( weapon_t weapon ) {
 	gitem_t *it;
 
 	for ( it = bg_itemlist + 1 ; it->classname ; it++ ) {
-		if ( it->giType == IT_WEAPON && it->giTag == weapon ) {
+		if ( it->giType == IT_WEAPON && it->giTag == (int)weapon ) {
 			return it->giClipIndex;
 		}
 	}
@@ -2466,7 +2464,7 @@ weapon_t BG_FindAmmoForWeapon( weapon_t weapon ) {
 	gitem_t *it;
 
 	for ( it = bg_itemlist + 1 ; it->classname ; it++ ) {
-		if ( it->giType == IT_WEAPON && it->giTag == weapon ) {
+		if ( it->giType == IT_WEAPON && it->giTag == (int)weapon ) {
 			return it->giAmmoIndex;
 		}
 	}
@@ -2696,7 +2694,7 @@ BG_AddMagicAmmo:
 WARNING: when numOfClips is 0, DO NOT CHANGE ANYTHING under ps.
 =================================
 */
-int BG_GrenadesForClass( int cls, int* skills ) {
+int BG_GrenadesForClass( int cls ) {
 	switch ( cls ) {
 	case PC_MEDIC:
 		return 1;
@@ -2725,7 +2723,7 @@ weapon_t BG_GrenadeTypeForTeam( team_t team ) {
 }
 
 // Gordon: setting numOfClips = 0 allows you to check if the client needs ammo, but doesnt give any
-qboolean BG_AddMagicAmmo( playerState_t *ps, int *skill, int teamNum, int numOfClips ) {
+qboolean BG_AddMagicAmmo( playerState_t *ps, int teamNum, int numOfClips ) {
 	int i, weapon;
 	int ammoAdded = qfalse;
 	int maxammo;
@@ -2733,7 +2731,7 @@ qboolean BG_AddMagicAmmo( playerState_t *ps, int *skill, int teamNum, int numOfC
 	int weapNumOfClips;
 
 	// Gordon: handle grenades first
-	i = BG_GrenadesForClass( ps->stats[STAT_PLAYER_CLASS], skill );
+	i = BG_GrenadesForClass( ps->stats[STAT_PLAYER_CLASS]);
 	weapon = BG_GrenadeTypeForTeam( teamNum );
 
 	clip = BG_FindClipForWeapon( weapon );
@@ -2779,7 +2777,7 @@ qboolean BG_AddMagicAmmo( playerState_t *ps, int *skill, int teamNum, int numOfC
 	for ( i = 0; reloadableWeapons[i] >= 0; i++ ) {
 		weapon = reloadableWeapons[i];
 		if ( COM_BitCheck( ps->weapons, weapon ) ) {
-			maxammo = BG_MaxAmmoForWeapon( weapon, skill );
+			maxammo = BG_MaxAmmoForWeapon( weapon );
 
 			// Handle weapons that just use clip, and not ammo
 			if ( weapon == WP_FLAMETHROWER ) {
@@ -2920,99 +2918,7 @@ qboolean BG_CanUseWeapon( int classNum, int teamNum, weapon_t weapon ) {
 }
 
 #define AMMOFORWEAP BG_FindAmmoForWeapon( item->giTag )
-/*
-================
-BG_CanItemBeGrabbed
 
-Returns false if the item should not be picked up.
-This needs to be the same for client side prediction and server use.
-================
-*/
-qboolean    BG_CanItemBeGrabbed( const entityState_t *ent, const playerState_t *ps, int *skill, int teamNum ) {
-	gitem_t *item;
-
-	if ( ent->modelindex < 1 || ent->modelindex >= bg_numItems ) {
-		Com_Error( ERR_DROP, "BG_CanItemBeGrabbed: index out of range" );
-	}
-
-	item = &bg_itemlist[ent->modelindex];
-
-	switch ( item->giType ) {
-	case IT_WEAPON:
-		if ( item->giTag == WP_AMMO ) {
-			// magic ammo for any two-handed weapon
-			// xkan, 11/21/2002 - only pick up if ammo is not full, numClips is 0, so ps will
-			// NOT be changed (I know, it places the burden on the programmer, rather than the
-			// compiler, to ensure that).
-			return BG_AddMagicAmmo( (playerState_t *)ps, skill, teamNum, 0 );    // Arnout: had to cast const away
-		}
-		return qtrue;
-
-	case IT_AMMO:
-		return qfalse;
-
-	case IT_ARMOR:
-		return qfalse;
-
-	case IT_HEALTH:
-		// Gordon: ps->teamNum is really class.... thx whoever decided on that...
-		if ( ps->teamNum == PC_MEDIC ) {
-			// Gordon: medics can go up to 12% extra on max health as they have perm. regen
-			if ( ps->stats[STAT_HEALTH] >= (int)( ps->stats[STAT_MAX_HEALTH] * 1.12 ) ) {
-				return qfalse;
-			}
-		} else {
-			if ( ps->stats[STAT_HEALTH] >= ps->stats[STAT_MAX_HEALTH] ) {
-				return qfalse;
-			}
-		}
-		return qtrue;
-
-	case IT_TEAM: // team items, such as flags
-
-		// density tracks how many uses left
-		if ( ( ent->density < 1 ) || ( ( ( ps->persistant[PERS_TEAM] == TEAM_AXIS ) ? ps->powerups[PW_BLUEFLAG] : ps->powerups[PW_REDFLAG] ) != 0 ) ) {
-			return qfalse;
-		}
-
-		// DHM - Nerve :: otherEntity2 is now used instead of modelindex2
-		// ent->modelindex2 is non-zero on items if they are dropped
-		// we need to know this because we can pick up our dropped flag (and return it)
-		// but we can't pick up our flag at base
-		if ( ps->persistant[PERS_TEAM] == TEAM_AXIS ) {
-			if ( item->giTag == PW_BLUEFLAG ||
-				 ( item->giTag == PW_REDFLAG && ent->otherEntityNum2 /*ent->modelindex2*/ ) ||
-				 ( item->giTag == PW_REDFLAG && ps->powerups[PW_BLUEFLAG] ) ) {
-				return qtrue;
-			}
-		} else if ( ps->persistant[PERS_TEAM] == TEAM_ALLIES ) {
-			if ( item->giTag == PW_REDFLAG ||
-				 ( item->giTag == PW_BLUEFLAG && ent->otherEntityNum2 /*ent->modelindex2*/ ) ||
-				 ( item->giTag == PW_BLUEFLAG && ps->powerups[PW_REDFLAG] ) ) {
-				return qtrue;
-			}
-		}
-
-		return qfalse;
-
-
-	case IT_HOLDABLE:
-		return qtrue;
-
-	case IT_TREASURE:   // treasure always picked up
-		return qtrue;
-
-	case IT_KEY:
-		return qtrue;   // keys are always picked up
-
-	case IT_BAD:
-		Com_Error( ERR_DROP, "BG_CanItemBeGrabbed: IT_BAD" );
-
-	}
-	return qfalse;
-}
-
-//======================================================================
 
 void BG_CalculateSpline_r( splinePath_t* spline, vec3_t out1, vec3_t out2, float tension ) {
 	vec3_t points[18];
@@ -3026,7 +2932,6 @@ void BG_CalculateSpline_r( splinePath_t* spline, vec3_t out1, vec3_t out2, float
 	}
 	if ( !spline->next ) {
 		return;
-//		Com_Error( ERR_DROP, "Spline (%s) with no target referenced", spline->point.name );
 	}
 	VectorCopy( spline->next->point.origin, points[i + 1] );
 
@@ -3102,13 +3007,11 @@ qboolean BG_RaySphereIntersection( float radius, vec3_t origin, splineSegment_t*
 	return qtrue;
 }
 
-void BG_LinearPathOrigin2( float radius, splinePath_t** pSpline, float *deltaTime, vec3_t result, qboolean backwards ) {
+void BG_LinearPathOrigin2( float radius, splinePath_t** pSpline, float *deltaTime, vec3_t result ) {
 	qboolean first = qtrue;
 	float t = 0.f;
 	int i = floor( ( *deltaTime ) * ( MAX_SPLINE_SEGMENTS ) );
 	float frac;
-//	int x = 0;
-//	splinePath_t* start = *pSpline;
 
 	if ( i >= MAX_SPLINE_SEGMENTS ) {
 		i = MAX_SPLINE_SEGMENTS - 1;
@@ -3437,7 +3340,7 @@ void BG_EvaluateTrajectory( const trajectory_t *tr, int atTime, vec3_t result, q
 				VectorMA( pSpline->segments[pos].start, frac, pSpline->segments[pos].v_norm, result );
 				VectorCopy( result, v );
 
-				BG_LinearPathOrigin2( tr->trBase[0], &pSpline, &deltaTime, v, backwards );
+				BG_LinearPathOrigin2( tr->trBase[0], &pSpline, &deltaTime, v );
 				if ( tr->trBase[0] < 0 ) {
 					VectorSubtract( v, result, result );
 				} else {
@@ -3478,7 +3381,7 @@ BG_EvaluateTrajectoryDelta
 For determining velocity at a given time
 ================
 */
-void BG_EvaluateTrajectoryDelta( const trajectory_t *tr, int atTime, vec3_t result, qboolean isAngle, int splineData ) {
+void BG_EvaluateTrajectoryDelta( const trajectory_t *tr, int atTime, vec3_t result ) {
 	float deltaTime;
 	float phase;
 
@@ -4202,7 +4105,7 @@ splinePath_t* BG_GetSplineData( int number, qboolean* backwards ) {
 	return &splinePaths[number];
 }
 
-int BG_MaxAmmoForWeapon( weapon_t weaponNum, int *skill ) {
+int BG_MaxAmmoForWeapon( weapon_t weaponNum ) {
 	switch ( weaponNum ) {
 		//case WP_KNIFE:
 	case WP_LUGER:
@@ -4665,7 +4568,7 @@ int BG_strRelPos( char *in, int index ) {
 
 // strip colors and control codes, copying up to dwMaxLength-1 "good" chars and nul-terminating
 // returns the length of the cleaned string
-int BG_cleanName( const char *pszIn, char *pszOut, unsigned int dwMaxLength, qboolean fCRLF ) {
+int BG_cleanName( const char *pszIn, char *pszOut, int dwMaxLength, qboolean fCRLF ) {
 	const char *pInCopy = pszIn;
 	const char *pszOutStart = pszOut;
 
@@ -4962,7 +4865,7 @@ int Q_vsnprintf(char *str, size_t size, const char *format, va_list ap) {
 	ret = vsnprintf(str, size, format, ap);
 
 	str[size - 1] = '\0';
-	if (ret < 0 || ret >= size) {
+	if (ret < 0 || ret >= (int)size) {
 		return -1;
 	}
 	return ret;
