@@ -426,7 +426,7 @@ static void CG_SoundLoadSoundFiles( void ) {
 		CG_Printf( S_COLOR_RED "WARNING: no sound files found (filelist.txt not found in sound/scripts)\n" );
 		return;
 	}
-	if ( len > sizeof( bigTextBuffer ) ) {
+	if ( len > (int)sizeof( bigTextBuffer ) ) {
 		CG_Error( "%s is too big, make it smaller (max = %i bytes)\n", filename, sizeof( bigTextBuffer ) );
 	}
 	// load the file into memory
@@ -465,7 +465,7 @@ static void CG_SoundLoadSoundFiles( void ) {
 			}
 			continue;
 		}
-		if ( len > sizeof( bigTextBuffer ) ) {
+		if ( len > (int)sizeof( bigTextBuffer ) ) {
 			CG_Error( "%s is too big, make it smaller (max = %i bytes)\n", filename, sizeof( bigTextBuffer ) );
 		}
 		memset( bigTextBuffer, 0, sizeof( bigTextBuffer ) );
@@ -915,6 +915,7 @@ panel_button_t speakerInfo = {
 	NULL,                   /* keyUp	*/
 	CG_SpeakerInfo_Text,
 	NULL,
+	0
 };
 
 static panel_button_t *speakerInfoButtons[] = {
@@ -1239,7 +1240,7 @@ qboolean CG_SpeakerEditor_Looped_KeyUp( panel_button_t* button, int key ) {
 			memcpy( &rect, &button->rect, sizeof( rect ) );
 
 			for ( i = 0; i < 3; i++ ) {
-				if ( i == editSpeaker->loop ) {
+				if ( i == (int)editSpeaker->loop ) {
 					continue;
 				}
 
@@ -1275,7 +1276,7 @@ qboolean CG_SpeakerEditor_Broadcast_KeyUp( panel_button_t* button, int key ) {
 			memcpy( &rect, &button->rect, sizeof( rect ) );
 
 			for ( i = 0; i < 3; i++ ) {
-				if ( i == editSpeaker->broadcast ) {
+				if ( i == (int)editSpeaker->broadcast ) {
 					continue;
 				}
 
@@ -1445,6 +1446,7 @@ panel_button_t speakerEditorBack = {
 	NULL,                   /* keyUp	*/
 	CG_SpeakerEditor_Back,
 	NULL,
+	0
 };
 
 panel_button_t speakerEditorLocInfo = {
@@ -1457,6 +1459,7 @@ panel_button_t speakerEditorLocInfo = {
 	NULL,                   /* keyUp	*/
 	CG_SpeakerEditor_LocInfo,
 	NULL,
+	0
 };
 
 panel_button_t speakerEditorNoiseLabel = {
@@ -1469,6 +1472,7 @@ panel_button_t speakerEditorNoiseLabel = {
 	NULL,                   /* keyUp	*/
 	BG_PanelButtonsRender_Text,
 	NULL,
+	0
 };
 
 char noiseEditBuffer[MAX_QPATH];
@@ -1483,6 +1487,7 @@ panel_button_t speakerEditorNoiseEdit = {
 	NULL,                               /* keyUp	*/
 	CG_SpeakerEditor_RenderEdit,
 	CG_SpeakerEditor_NoiseEditFinish,
+	0
 };
 
 panel_button_t speakerEditorTargetnameLabel = {
@@ -1495,6 +1500,7 @@ panel_button_t speakerEditorTargetnameLabel = {
 	NULL,                   /* keyUp	*/
 	BG_PanelButtonsRender_Text,
 	NULL,
+	0
 };
 
 char targetnameEditBuffer[32];
@@ -1509,6 +1515,7 @@ panel_button_t speakerEditorTargetnameEdit = {
 	NULL,                               /* keyUp	*/
 	CG_SpeakerEditor_RenderEdit,
 	CG_SpeakerEditor_TargetnameEditFinish,
+	0
 };
 
 panel_button_t speakerEditorLoopedLabel = {
@@ -1521,6 +1528,7 @@ panel_button_t speakerEditorLoopedLabel = {
 	NULL,                   /* keyUp	*/
 	BG_PanelButtonsRender_Text,
 	NULL,
+	0
 };
 
 panel_button_t speakerEditorLoopedDropdown = {
@@ -1533,6 +1541,7 @@ panel_button_t speakerEditorLoopedDropdown = {
 	CG_SpeakerEditor_Looped_KeyUp,      /* keyUp	*/
 	CG_SpeakerEditor_RenderDropdown,
 	NULL,
+	0
 };
 
 panel_button_t speakerEditorBroadcastLabel = {
@@ -1545,6 +1554,7 @@ panel_button_t speakerEditorBroadcastLabel = {
 	NULL,                   /* keyUp	*/
 	BG_PanelButtonsRender_Text,
 	NULL,
+	0
 };
 
 panel_button_t speakerEditorBroadcastDropdown = {
@@ -1557,6 +1567,7 @@ panel_button_t speakerEditorBroadcastDropdown = {
 	CG_SpeakerEditor_Broadcast_KeyUp,   /* keyUp	*/
 	CG_SpeakerEditor_RenderDropdown,
 	NULL,
+	0
 };
 
 panel_button_t speakerEditorWaitLabel = {
@@ -1569,6 +1580,7 @@ panel_button_t speakerEditorWaitLabel = {
 	NULL,                   /* keyUp	*/
 	BG_PanelButtonsRender_Text,
 	NULL,
+	0
 };
 
 char waitEditBuffer[12];
@@ -1583,6 +1595,7 @@ panel_button_t speakerEditorWaitEdit = {
 	NULL,                               /* keyUp	*/
 	CG_SpeakerEditor_RenderEdit,
 	CG_SpeakerEditor_WaitEditFinish,
+	0
 };
 
 panel_button_t speakerEditorRandomLabel = {
@@ -1595,6 +1608,7 @@ panel_button_t speakerEditorRandomLabel = {
 	NULL,                   /* keyUp	*/
 	BG_PanelButtonsRender_Text,
 	NULL,
+	0
 };
 
 char randomEditBuffer[12];
@@ -1609,6 +1623,7 @@ panel_button_t speakerEditorRandomEdit = {
 	NULL,                               /* keyUp	*/
 	CG_SpeakerEditor_RenderEdit,
 	CG_SpeakerEditor_RandomEditFinish,
+	0
 };
 
 panel_button_t speakerEditorVolumeLabel = {
@@ -1621,6 +1636,7 @@ panel_button_t speakerEditorVolumeLabel = {
 	NULL,                               /* keyUp	*/
 	BG_PanelButtonsRender_Text,
 	NULL,
+	0
 };
 
 char volumeEditBuffer[12];
@@ -1635,6 +1651,7 @@ panel_button_t speakerEditorVolumeEdit = {
 	NULL,                               /* keyUp	*/
 	CG_SpeakerEditor_RenderEdit,
 	CG_SpeakerEditor_VolumeEditFinish,
+	0
 };
 
 panel_button_t speakerEditorRangeLabel = {
@@ -1647,6 +1664,7 @@ panel_button_t speakerEditorRangeLabel = {
 	NULL,                               /* keyUp	*/
 	BG_PanelButtonsRender_Text,
 	NULL,
+	0
 };
 
 char rangeEditBuffer[12];
@@ -1661,6 +1679,7 @@ panel_button_t speakerEditorRangeEdit = {
 	NULL,                               /* keyUp	*/
 	CG_SpeakerEditor_RenderEdit,
 	CG_SpeakerEditor_RangeEditFinish,
+	0
 };
 
 panel_button_t speakerEditorOkButton = {
@@ -1673,6 +1692,7 @@ panel_button_t speakerEditorOkButton = {
 	CG_SpeakerEditor_Ok_KeyUp,          /* keyUp	*/
 	CG_SpeakerEditor_RenderButton,
 	NULL,
+	0
 };
 
 panel_button_t speakerEditorCancelButton = {
@@ -1685,6 +1705,7 @@ panel_button_t speakerEditorCancelButton = {
 	CG_SpeakerEditor_Cancel_KeyUp,      /* keyUp	*/
 	CG_SpeakerEditor_RenderButton,
 	NULL,
+	0
 };
 
 panel_button_t speakerEditorDeleteButton = {
@@ -1697,6 +1718,7 @@ panel_button_t speakerEditorDeleteButton = {
 	CG_SpeakerEditor_Delete_KeyUp,      /* keyUp	*/
 	CG_SpeakerEditor_RenderButton,
 	NULL,
+	0
 };
 
 static panel_button_t *speakerEditorButtons[] = {
