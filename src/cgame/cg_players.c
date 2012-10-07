@@ -41,9 +41,6 @@ If you have questions concerning this license or the applicable additional terms
 #define JUMP_HEIGHT             56
 #define SWINGSPEED              0.3
 
-static int dp_realtime;
-static float jumpHeight;
-
 animation_t     *lastTorsoAnim;
 animation_t     *lastLegsAnim;
 
@@ -90,7 +87,7 @@ qboolean CG_IsCrouchingAnim( animModelInfo_t* animModelInfo, int animNum ) {
 CG_CustomSound
 ================
 */
-sfxHandle_t CG_CustomSound( int clientNum, const char *soundName ) {
+sfxHandle_t CG_CustomSound( const char *soundName ) {
 	if ( soundName[0] != '*' ) {
 		return trap_S_RegisterSound( soundName, qfalse );
 	}
@@ -1256,10 +1253,10 @@ static qboolean CG_PlayerShadow( centity_t *cent, float *shadowPlane ) {
 	vec3_t origin, angles, axis[ 3 ];
 	vec4_t projection = { 0, 0, -1, 64 };
 	shadowPart_t shadowParts[] = {
-		{"tag_footleft", 10, 4,  1.0,    0},
-		{"tag_footright",    10, 4,  1.0,    0},
-		{"tag_torso",        18, 96, 0.8,    0},
-		{NULL, 0}
+		{"tag_footleft", 	10, 4,  1.0,    0},
+		{"tag_footright",   10, 4,  1.0,    0},
+		{"tag_torso",       18, 96, 0.8,    0},
+		{NULL, 				0, 	0, 	0, 		0}
 	};
 
 	shadowParts[0].shader = cgs.media.shadowFootShader;     //DAJ pulled out of initliization
@@ -1457,7 +1454,7 @@ Adds a piece with modifications or duplications for powerups
 Also called by CG_Missile for quad rockets, but nobody can tell...
 ===============
 */
-void CG_AddRefEntityWithPowerups( refEntity_t *ent, int powerups, int team, entityState_t *es, const vec3_t fireRiseDir ) {
+void CG_AddRefEntityWithPowerups( refEntity_t *ent, entityState_t *es, const vec3_t fireRiseDir ) {
 	centity_t *cent;
 	refEntity_t backupRefEnt; //, parentEnt;
 	qboolean onFire = qfalse;
@@ -1467,10 +1464,6 @@ void CG_AddRefEntityWithPowerups( refEntity_t *ent, int powerups, int team, enti
 	cent = &cg_entities[es->number];
 
 	ent->entityNum = es->number;
-
-/*	if (cent->pe.forceLOD) {
-		ent->reFlags |= REFLAG_FORCE_LOD;
-	}*/
 
 	backupRefEnt = *ent;
 
@@ -1796,7 +1789,7 @@ void CG_Player( centity_t *cent ) {
 	// (SA) only need to set this once...
 	VectorCopy( lightorigin, acc.lightingOrigin );
 
-	CG_AddRefEntityWithPowerups( &body, cent->currentState.powerups, ci->team, &cent->currentState, cent->fireRiseDir );
+	CG_AddRefEntityWithPowerups( &body, &cent->currentState, cent->fireRiseDir );
 
 	//
 	// add the head
@@ -1833,7 +1826,7 @@ void CG_Player( centity_t *cent ) {
 	}
 
 	// set blinking flag
-	CG_AddRefEntityWithPowerups( &head, cent->currentState.powerups, ci->team, &cent->currentState, cent->fireRiseDir );
+	CG_AddRefEntityWithPowerups( &head, &cent->currentState, cent->fireRiseDir );
 
 	cent->pe.headRefEnt = head;
 
@@ -1859,7 +1852,7 @@ void CG_Player( centity_t *cent ) {
 	if ( usingBinocs ) {         // NERVE - SMF
 		acc.hModel = cgs.media.thirdPersonBinocModel;
 		CG_PositionEntityOnTag( &acc, &body, "tag_weapon", 0, NULL );
-		CG_AddRefEntityWithPowerups( &acc, cent->currentState.powerups, ci->team, &cent->currentState, cent->fireRiseDir );
+		CG_AddRefEntityWithPowerups( &acc, &cent->currentState, cent->fireRiseDir );
 	}
 
 	//
@@ -1921,7 +1914,7 @@ void CG_Player( centity_t *cent ) {
 				continue;
 			}
 
-			CG_AddRefEntityWithPowerups( &acc, cent->currentState.powerups, ci->team, &cent->currentState, cent->fireRiseDir );
+			CG_AddRefEntityWithPowerups( &acc, &cent->currentState, cent->fireRiseDir );
 		}
 	}
 }
@@ -2187,267 +2180,6 @@ animation_t *CG_GetLimboAnimation( playerInfo_t *pi, const char *name ) {
 	return character->animModelInfo->animations[0]; // safe fallback so we never end up without an animation (which will crash the game)
 }
 
-int CG_GetSelectedWeapon( void ) {
-	return 0;
-}
-
-void CG_DrawPlayer_Limbo( float x, float y, float w, float h, playerInfo_t *pi, int time, clientInfo_t *ci, qboolean animatedHead ) {
-	refdef_t refdef;
-	refEntity_t body;
-	refEntity_t head;
-	refEntity_t gun;
-	refEntity_t barrel;
-	refEntity_t acc;
-	vec3_t origin;
-	int renderfx;
-	vec3_t mins = {-16, -16, -24};
-	vec3_t maxs = {16, 16, 32};
-	float len;
-//	float			xx;
-	vec4_t hcolor = { 1, 0, 0, 0.5 };
-	bg_character_t  *character = BG_GetCharacter( pi->teamNum, pi->classNum );
-	int i;
-
-	dp_realtime = time;
-
-	CG_AdjustFrom640( &x, &y, &w, &h );
-	y -= jumpHeight;
-
-	memset( &refdef, 0, sizeof( refdef ) );
-	memset( &body, 0, sizeof( body ) );
-	memset( &head, 0, sizeof( head ) );
-	memset( &acc, 0, sizeof( acc ) );
-
-	refdef.rdflags = RDF_NOWORLDMODEL;
-
-	AxisClear( refdef.viewaxis );
-
-	refdef.x = x;
-	refdef.y = y;
-	refdef.width = w;
-	refdef.height = h;
-
-/*	refdef.fov_x = (int)((float)refdef.width / 640.0f * 90.0f);
-	xx = refdef.width / tan( refdef.fov_x / 360 * M_PI );
-	refdef.fov_y = atan2( refdef.height, xx );
-	refdef.fov_y *= ( 360 / M_PI );*/
-
-	refdef.fov_x = 35;
-	refdef.fov_y = 35;
-
-	// calculate distance so the player nearly fills the box
-
-	// START Mad Doc - TDF
-	// for "talking heads", we calc the origin differently
-	// FIXME - this is stupid - should all be character driven - NO CODE HACKS FOR SPECIFIC THINGS THAT CAN BE DONE CLEANLY
-	if ( animatedHead == qfalse ) {
-		// END Mad Doc - TDF
-		len = 0.9 * ( maxs[2] - mins[2] );                          // NERVE - SMF - changed from 0.7
-		origin[0] = pi->y - 70 + ( len / tan( DEG2RAD( refdef.fov_x ) * 0.5 ) );
-		origin[1] = 0.5 * ( mins[1] + maxs[1] );
-		origin[2] = pi->z - 23 + ( -0.5 * ( mins[2] + maxs[2] ) );
-	} else
-	{
-		// for "talking head" animations, we want to center just below the face
-		// we precalculated this elsewhere
-		VectorCopy( pi->headOrigin, origin );
-	}
-	// END Mad Doc - TDF
-
-	refdef.time = dp_realtime;
-
-	trap_R_SetColor( hcolor );
-	trap_R_ClearScene();
-	trap_R_SetColor( NULL );
-
-	// get the rotation information
-	CG_PlayerAngles_Limbo( pi, body.axis, body.torsoAxis, head.axis );
-
-	renderfx = RF_LIGHTING_ORIGIN | RF_NOSHADOW;
-
-	acc.renderfx = renderfx;
-
-
-	//
-	// add the body
-	//
-
-	body.hModel = character->mesh;
-	body.customSkin = character->skin;
-
-	body.renderfx = renderfx;
-
-	VectorCopy( origin, body.origin );
-	VectorCopy( origin, body.lightingOrigin );
-	VectorCopy( body.origin, body.oldorigin );
-
-	if ( cg.time >= pi->torso.frameTime ) {
-		pi->torso.oldFrameTime = pi->torso.frameTime;
-		pi->torso.oldFrame = pi->torso.frame;
-		pi->torso.oldFrameModel = pi->torso.frameModel = pi->torso.animation->mdxFile;
-
-		while ( cg.time >= pi->torso.frameTime ) {
-			pi->torso.frameTime += ( pi->torso.animation->duration / (float)( pi->torso.animation->numFrames ) );
-			pi->torso.frame++;
-
-			if ( pi->torso.frame >= pi->torso.animation->firstFrame + pi->torso.animation->numFrames ) {
-				pi->torso.frame = pi->torso.animation->firstFrame;
-			}
-		}
-	}
-
-	if ( pi->torso.frameTime == pi->torso.oldFrameTime ) {
-		pi->torso.backlerp = 0;
-	} else {
-		pi->torso.backlerp = 1.0 - (float)( cg.time - pi->torso.oldFrameTime ) / ( pi->torso.frameTime - pi->torso.oldFrameTime );
-	}
-
-	if ( cg.time >= pi->legs.frameTime ) {
-		pi->legs.oldFrameTime = pi->legs.frameTime;
-		pi->legs.oldFrame = pi->legs.frame;
-		pi->legs.oldFrameModel = pi->legs.frameModel = pi->legs.animation->mdxFile;
-
-		while ( cg.time >= pi->legs.frameTime ) {
-			pi->legs.frameTime += ( pi->legs.animation->duration / (float)( pi->legs.animation->numFrames ) );
-			pi->legs.frame++;
-
-			if ( pi->legs.frame >= pi->legs.animation->firstFrame + pi->legs.animation->numFrames ) {
-				pi->legs.frame = pi->legs.animation->firstFrame;
-			}
-		}
-	}
-
-	if ( pi->legs.frameTime == pi->legs.oldFrameTime ) {
-		pi->legs.backlerp = 0;
-	} else {
-		pi->legs.backlerp = 1.0 - (float)( cg.time - pi->legs.oldFrameTime ) / ( pi->legs.frameTime - pi->legs.oldFrameTime );
-	}
-
-	body.oldTorsoFrame = pi->torso.oldFrame;
-	body.torsoFrame = pi->torso.frame;
-	body.torsoBacklerp = pi->torso.backlerp;
-	body.torsoFrameModel = pi->torso.frameModel;
-	body.oldTorsoFrameModel = pi->torso.oldFrameModel;
-
-	body.oldframe = pi->legs.oldFrame;
-	body.frame = pi->legs.frame;
-	body.backlerp = pi->legs.backlerp;
-	body.frameModel = pi->legs.frameModel;
-	body.oldframeModel = pi->legs.oldFrameModel;
-
-	trap_R_AddRefEntityToScene( &body );
-
-	//
-	// add the head
-	//
-
-	head.hModel = character->hudhead;
-	if ( !head.hModel ) {
-		return;
-	}
-	head.customSkin = character->headSkin;
-
-	VectorCopy( origin, head.lightingOrigin );
-
-	CG_PositionRotatedEntityOnTag( &head, &body, "tag_head" );
-
-	head.renderfx = renderfx;
-
-	head.frame = 0;
-	head.oldframe = 0;
-	head.backlerp = 0.f;
-
-	trap_R_AddRefEntityToScene( &head );
-
-	AxisCopy( body.torsoAxis, acc.axis );
-	VectorCopy( origin, acc.lightingOrigin );
-
-
-	for ( i = ACC_BELT_LEFT; i < ACC_MAX; i++ ) {
-		if ( !( character->accModels[i] ) ) {
-			continue;
-		}
-		acc.hModel = character->accModels[i];
-		acc.customSkin = character->accSkins[i];
-
-		switch ( i ) {
-		case ACC_BELT_LEFT:
-			CG_PositionEntityOnTag( &acc,   &body,  "tag_bright", 0, NULL );
-			break;
-		case ACC_BELT_RIGHT:
-			CG_PositionEntityOnTag( &acc,   &body,  "tag_bleft", 0, NULL );
-			break;
-
-		case ACC_BELT:
-			CG_PositionEntityOnTag( &acc,   &body,  "tag_ubelt", 0, NULL );
-			break;
-		case ACC_BACK:
-			CG_PositionEntityOnTag( &acc,   &body,  "tag_back", 0, NULL );
-			break;
-
-		case ACC_HAT:               // hat
-		case ACC_MOUTH2:            // hat2
-		case ACC_MOUTH3:            // hat3
-			CG_PositionEntityOnTag( &acc,   &head,  "tag_mouth", 0, NULL );
-			break;
-
-			// weapon and weapon2
-			// these are used by characters who have permanent weapons attached to their character in the skin
-		case ACC_WEAPON:        // weap
-			CG_PositionEntityOnTag( &acc,   &body,  "tag_weapon", 0, NULL );
-			break;
-		case ACC_WEAPON2:       // weap2
-			CG_PositionEntityOnTag( &acc,   &body,  "tag_weapon2", 0, NULL );
-			break;
-
-		default:
-			continue;
-		}
-
-		trap_R_AddRefEntityToScene( &acc );
-	}
-
-	//
-	// add the gun
-	//
-	{
-		int weap = CG_GetSelectedWeapon();
-
-		memset( &gun, 0, sizeof( gun ) );
-		memset( &barrel, 0, sizeof( barrel ) );
-
-		gun.hModel = cg_weapons[weap].weaponModel[W_TP_MODEL].model;
-
-		VectorCopy( origin, gun.lightingOrigin );
-		CG_PositionEntityOnTag( &gun, &body, "tag_weapon", 0, NULL );
-		gun.renderfx = renderfx;
-		trap_R_AddRefEntityToScene( &gun );
-	}
-
-	// Save out the old render info so we don't kill the LOD system here
-	trap_R_SaveViewParms();
-
-	//
-	// add an accent light
-	//
-	origin[0] -= 100;   // + = behind, - = in front
-	origin[1] += 100;   // + = left, - = right
-	origin[2] += 100;   // + = above, - = below
-	//%	trap_R_AddLightToScene( origin, 1000, 1.0, 1.0, 1.0, 0 );
-	trap_R_AddLightToScene( origin, 1000, 1.0, 1.0, 1.0, 1.0, 0, 0 );
-
-	origin[0] -= 100;
-	origin[1] -= 100;
-	origin[2] -= 100;
-	//%	trap_R_AddLightToScene( origin, 1000, 1.0, 1.0, 1.0, 0 );
-	trap_R_AddLightToScene( origin, 1000, 1.0, 1.0, 1.0, 1.0, 0, 0 );
-
-	trap_R_RenderScene( &refdef );
-
-	// Reset the view parameters
-	trap_R_RestoreViewParms();
-}
-
 weaponType_t weaponTypes[] = {
 	{ WP_MP40,                  "MP 40"          },
 	{ WP_THOMPSON,              "THOMPSON"       },
@@ -2480,7 +2212,7 @@ weaponType_t* WM_FindWeaponTypeForWeapon( weapon_t weapon ) {
 		return NULL;
 	}
 
-	while ( w->weapindex != -1 ) {
+	while ( (int)w->weapindex != -1 ) {
 		if ( w->weapindex == weapon ) {
 			return w;
 		}
@@ -2493,7 +2225,6 @@ void WM_RegisterWeaponTypeShaders() {
 	weaponType_t* w = weaponTypes;
 
 	while ( w->weapindex ) {
-//		w->shaderHandle = trap_R_RegisterShaderNoMip( w->shader );
 		w++;
 	}
 }

@@ -179,7 +179,7 @@ void CG_PainEvent( centity_t *cent, int health ) {
 		snd = "*pain100_1.wav";
 	}
 	trap_S_StartSound( NULL, cent->currentState.number, CHAN_VOICE,
-					   CG_CustomSound( cent->currentState.number, snd ) );
+					   CG_CustomSound( snd ) );
 
 	// save pain time for programitic twitch animation
 	cent->pe.painTime = cg.time;
@@ -1489,15 +1489,15 @@ void CG_EntityEvent( centity_t *cent, vec3_t position ) {
 
 	case EV_EXERT1:
 		DEBUGNAME( "EV_EXERT1" );
-		trap_S_StartSound( NULL, es->number, CHAN_VOICE, CG_CustomSound( es->number, "*exert1.wav" ) );
+		trap_S_StartSound( NULL, es->number, CHAN_VOICE, CG_CustomSound( "*exert1.wav" ) );
 		break;
 	case EV_EXERT2:
 		DEBUGNAME( "EV_EXERT2" );
-		trap_S_StartSound( NULL, es->number, CHAN_VOICE, CG_CustomSound( es->number, "*exert2.wav" ) );
+		trap_S_StartSound( NULL, es->number, CHAN_VOICE, CG_CustomSound( "*exert2.wav" ) );
 		break;
 	case EV_EXERT3:
 		DEBUGNAME( "EV_EXERT3" );
-		trap_S_StartSound( NULL, es->number, CHAN_VOICE, CG_CustomSound( es->number, "*exert3.wav" ) );
+		trap_S_StartSound( NULL, es->number, CHAN_VOICE, CG_CustomSound( "*exert3.wav" ) );
 		break;
 
 	case EV_STEP_4:
@@ -1538,11 +1538,11 @@ void CG_EntityEvent( centity_t *cent, vec3_t position ) {
 
 	case EV_JUMP:
 		DEBUGNAME( "EV_JUMP" );
-		trap_S_StartSound( NULL, es->number, CHAN_VOICE, CG_CustomSound( es->number, "*jump1.wav" ) );
+		trap_S_StartSound( NULL, es->number, CHAN_VOICE, CG_CustomSound( "*jump1.wav" ) );
 		break;
 	case EV_TAUNT:
 		DEBUGNAME( "EV_TAUNT" );
-		trap_S_StartSound( NULL, es->number, CHAN_VOICE, CG_CustomSound( es->number, "*taunt.wav" ) );
+		trap_S_StartSound( NULL, es->number, CHAN_VOICE, CG_CustomSound( "*taunt.wav" ) );
 		break;
 	case EV_WATER_TOUCH:
 		DEBUGNAME( "EV_WATER_TOUCH" );
@@ -1568,7 +1568,6 @@ void CG_EntityEvent( centity_t *cent, vec3_t position ) {
 		break;
 	case EV_WATER_CLEAR:
 		DEBUGNAME( "EV_WATER_CLEAR" );
-		//trap_S_StartSound (NULL, es->number, CHAN_AUTO, CG_CustomSound( es->number, "*gasp.wav" ) );
 		trap_S_StartSound( NULL, es->number, CHAN_AUTO, cgs.media.watrOutSound );
 		if ( es->eventParm ) {
 			trap_S_StartSound( NULL, es->number, CHAN_AUTO, cgs.media.watrGaspSound );
@@ -1936,7 +1935,7 @@ void CG_EntityEvent( centity_t *cent, vec3_t position ) {
 		} else {
 			s = CG_ConfigString( CS_SOUNDS + es->eventParm );
 			// xkan, 10/31/2002 - crank up the volume
-			trap_S_StartSoundVControl( NULL, es->number, CHAN_VOICE, CG_CustomSound( es->number, s ), 255 );
+			trap_S_StartSoundVControl( NULL, es->number, CHAN_VOICE, CG_CustomSound( s ), 255 );
 		}
 		break;
 
@@ -1979,7 +1978,7 @@ void CG_EntityEvent( centity_t *cent, vec3_t position ) {
 			trap_S_StartSoundVControl( NULL, es->number, CHAN_VOICE, cgs.gameSounds[ sound ], volume );
 		} else {
 			s = CG_ConfigString( CS_SOUNDS + sound );
-			trap_S_StartSoundVControl( NULL, es->number, CHAN_VOICE, CG_CustomSound( es->number, s ), volume );
+			trap_S_StartSoundVControl( NULL, es->number, CHAN_VOICE, CG_CustomSound( s ), volume );
 		}
 	}
 	break;
@@ -2009,7 +2008,7 @@ void CG_EntityEvent( centity_t *cent, vec3_t position ) {
 			trap_S_StartSound( NULL, cg.snap->ps.clientNum, CHAN_AUTO, cgs.gameSounds[ es->eventParm ] );
 		} else {
 			s = CG_ConfigString( CS_SOUNDS + es->eventParm );
-			trap_S_StartSound( NULL, cg.snap->ps.clientNum, CHAN_AUTO, CG_CustomSound( es->number, s ) );
+			trap_S_StartSound( NULL, cg.snap->ps.clientNum, CHAN_AUTO, CG_CustomSound( s ) );
 		}
 		break;
 
@@ -2033,7 +2032,7 @@ void CG_EntityEvent( centity_t *cent, vec3_t position ) {
 				trap_S_StartSound( NULL, cg.snap->ps.clientNum, CHAN_AUTO, cgs.gameSounds[ es->eventParm ] );
 			} else {
 				s = CG_ConfigString( CS_SOUNDS + es->eventParm );
-				trap_S_StartSound( NULL, cg.snap->ps.clientNum, CHAN_AUTO, CG_CustomSound( es->number, s ) );
+				trap_S_StartSound( NULL, cg.snap->ps.clientNum, CHAN_AUTO, CG_CustomSound( s ) );
 			}
 		}
 
@@ -2063,7 +2062,7 @@ void CG_EntityEvent( centity_t *cent, vec3_t position ) {
 	case EV_DEATH3:
 		DEBUGNAME( "EV_DEATHx" );
 		trap_S_StartSound( NULL, es->number, CHAN_VOICE,
-						   CG_CustomSound( es->number, va( "*death%i.wav", event - EV_DEATH1 + 1 ) ) );
+						   CG_CustomSound( va( "*death%i.wav", event - EV_DEATH1 + 1 ) ) );
 		break;
 
 

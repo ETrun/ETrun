@@ -2129,9 +2129,9 @@ void CG_DrawBannerPrint(void);
 qboolean CG_EntOnFire( centity_t *cent );    // Ridah
 void CG_Player( centity_t *cent );
 void CG_ResetPlayerEntity( centity_t *cent );
-void CG_AddRefEntityWithPowerups( refEntity_t *ent, int powerups, int team, entityState_t *es, const vec3_t fireRiseDir );
+void CG_AddRefEntityWithPowerups( refEntity_t *ent, entityState_t *es, const vec3_t fireRiseDir );
 void CG_NewClientInfo( int clientNum );
-sfxHandle_t CG_CustomSound( int clientNum, const char *soundName );
+sfxHandle_t CG_CustomSound( const char *soundName );
 
 // Rafael particles
 extern qboolean initparticles;
@@ -2756,7 +2756,6 @@ const char* CG_NameForCampaign( void );
 void CG_CloseMenus();
 void CG_LimboMenu_f( void );
 
-void CG_DrawPlayer_Limbo( float x, float y, float w, float h, playerInfo_t *pi, int time, clientInfo_t *ci, qboolean animatedHead );
 animation_t* CG_GetLimboAnimation( playerInfo_t *pi, const char *name );
 
 typedef struct {

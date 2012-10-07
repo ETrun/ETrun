@@ -828,7 +828,7 @@ static void CG_Bomb( centity_t *cent ) {
 	ent.hModel = weapon->missileModel;
 	ent.renderfx = weapon->missileRenderfx | RF_NOSHADOW;
 
-	CG_AddRefEntityWithPowerups( &ent, s1->powerups, TEAM_FREE, s1, vec3_origin );
+	CG_AddRefEntityWithPowerups( &ent, s1, vec3_origin );
 
 
 	memset( &beam, 0, sizeof( beam ) );
@@ -1112,7 +1112,7 @@ static void CG_Missile( centity_t *cent ) {
 	// Added this since it may be a propExlosion
 	if ( ent.hModel ) {
 		// add to refresh list, possibly with quad glow
-		CG_AddRefEntityWithPowerups( &ent, s1->powerups, TEAM_FREE, s1, vec3_origin );
+		CG_AddRefEntityWithPowerups( &ent, s1, vec3_origin );
 	}
 
 }
