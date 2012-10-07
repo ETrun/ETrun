@@ -320,7 +320,7 @@ void CG_ParseSpawns( void ) {
 		s = Info_ValueForKey( info, "t" );
 
 		newteam = atoi( s );
-		if ( cg.spawnTeams[i] != newteam ) {
+		if ( (int)cg.spawnTeams[i] != newteam ) {
 			cg.spawnTeams_old[i] = cg.spawnTeams[i];
 			cg.spawnTeams_changeTime[i] = cg.time;
 			cg.spawnTeams[i] = newteam;
@@ -1500,7 +1500,7 @@ static void CG_BannerPrint(const char *str) {
 	}
 
 	// post-editing to print text correctly into the console
-	for (i = 0, len = 0; i < strlen(cg.bannerPrint); ++i) {
+	for (i = 0, len = 0; i < (int)strlen(cg.bannerPrint); ++i) {
 		// replace newlines with spaces
 		if (cg.bannerPrint[i] == '\n' ) {
 			if (len != 0 && buff[len - 1] != ' ') {
