@@ -627,7 +627,7 @@ typedef struct weaponInfo_s {
 	qhandle_t missileAlliedSkin;
 	qhandle_t missileAxisSkin;
 	sfxHandle_t missileSound;
-	void ( *missileTrailFunc )( centity_t *, const struct weaponInfo_s *wi );
+	void ( *missileTrailFunc )( centity_t * );
 	float missileDlight;
 	vec3_t missileDlightColor;
 	int missileRenderfx;
@@ -2190,7 +2190,7 @@ void CG_RegisterItemVisuals( int itemNum );
 void CG_FireWeapon( centity_t *cent );   //----(SA)	modified.
 void CG_MissileHitWall( int weapon, int clientNum, vec3_t origin, vec3_t dir, int surfaceFlags );   //	(SA) modified to send missilehitwall surface parameters
 
-void CG_MissileHitWallSmall( int weapon, int clientNum, vec3_t origin, vec3_t dir );
+void CG_MissileHitWallSmall( vec3_t origin, vec3_t dir );
 void CG_DrawTracer( vec3_t start, vec3_t finish );
 
 // Rafael
@@ -2207,12 +2207,12 @@ qboolean CG_MonsterUsingWeapon( centity_t *cent, int aiChar, int weaponNum );
 void CG_MissileHitWall2( int weapon, int clientNum, vec3_t origin, vec3_t dir );
 // done
 
-void CG_MissileHitPlayer( centity_t *cent, int weapon, vec3_t origin, vec3_t dir, int entityNum );
+void CG_MissileHitPlayer( int weapon, vec3_t origin, vec3_t dir );
 qboolean CG_CalcMuzzlePoint( int entityNum, vec3_t muzzle );
-void CG_Bullet( vec3_t end, int sourceEntityNum, vec3_t normal, qboolean flesh, int fleshEntityNum, int otherEntNum2, float waterfraction, int seed );
+void CG_Bullet( vec3_t end, int sourceEntityNum, qboolean flesh, int fleshEntityNum, int otherEntNum2, float waterfraction, int seed );
 
-void CG_RailTrail( clientInfo_t *ci, vec3_t start, vec3_t end, int type );   //----(SA)	added 'type'
-void CG_RailTrail2( clientInfo_t *ci, vec3_t start, vec3_t end );
+void CG_RailTrail( vec3_t start, vec3_t end, int type );   //----(SA)	added 'type'
+void CG_RailTrail2( vec3_t start, vec3_t end );
 void CG_GrappleTrail( centity_t *ent, const weaponInfo_t *wi );
 void CG_AddViewWeapon( playerState_t *ps );
 void CG_AddPlayerWeapon( refEntity_t *parent, playerState_t *ps, centity_t *cent );

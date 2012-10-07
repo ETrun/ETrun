@@ -323,10 +323,6 @@ static void CG_EntityEffects( centity_t *cent ) {
 			if ( dir[2] < 10 ) {
 				dir[2] += 10;
 			}
-//			dir[0] = crandom() * 10;
-//			dir[1] = crandom() * 10;
-//			dir[2] = 10 + rnd * 30;
-// jpw
 			CG_SmokePuff( cent->lerpOrigin, dir, 15 + ( random() * 10 ),
 						  0.3 + rnd, 0.3 + rnd, 0.3 + rnd, 0.4, 1500 + ( rand() % 500 ),
 						  cg.time, cg.time + 500, 0, cgs.media.smokePuffShader );
@@ -351,13 +347,7 @@ static void CG_EntityEffects( centity_t *cent ) {
 						  cg.time, 0, 0, cgs.media.smokePuffShader );
 		}
 	}
-// jpw
-
-
-
 }
-
-void CG_RailTrail2( clientInfo_t *ci, vec3_t start, vec3_t end );
 
 /*
 ==================
@@ -971,7 +961,7 @@ static void CG_Missile( centity_t *cent ) {
 		 || cent->currentState.eType == ET_RAMJET ) {
 		CG_RocketTrail( cent, NULL );
 	} else if ( weapon->missileTrailFunc ) {
-		weapon->missileTrailFunc( cent, weapon );
+		weapon->missileTrailFunc( cent );
 	}
 
 	// add dynamic light
@@ -1404,9 +1394,6 @@ static void CG_Constructible( centity_t *cent ) {
 }
 
 //----(SA) done
-
-// declaration for add bullet particles (might as well stick this one in a .h file I think)
-extern void CG_AddBulletParticles( vec3_t origin, vec3_t dir, int speed, int duration, int count, float randScale );
 
 /*
 ===============
@@ -2346,8 +2333,6 @@ qboolean CG_AddLinkedEntity( centity_t *cent, qboolean ignoreframe, int atTime )
 
 	return qtrue;
 }
-
-void CG_RailTrail2( clientInfo_t *ci, vec3_t start, vec3_t end );
 
 /*
 ==================

@@ -1315,7 +1315,7 @@ An entity has an event value
 also called by CG_CheckPlayerstateEvents
 ==============
 */
-extern void CG_AddBulletParticles( vec3_t origin, vec3_t dir, int speed, int duration, int count, float randScale );
+extern void CG_AddBulletParticles( vec3_t origin, vec3_t dir, int speed, int count, float randScale );
 // JPW NERVE
 void CG_MachineGunEjectBrass( centity_t *cent );
 void CG_MachineGunEjectBrassNew( centity_t *cent );
@@ -1826,7 +1826,7 @@ void CG_EntityEvent( centity_t *cent, vec3_t position ) {
 		break;
 
 	case EV_RAILTRAIL:
-		CG_RailTrail( &cgs.clientinfo[ es->otherEntityNum2 ], es->origin2, es->pos.trBase, es->dmgFlags );   //----(SA)	added 'type' field
+		CG_RailTrail( es->origin2, es->pos.trBase, es->dmgFlags );   //----(SA)	added 'type' field
 		break;
 
 		//
@@ -1835,7 +1835,7 @@ void CG_EntityEvent( centity_t *cent, vec3_t position ) {
 	case EV_MISSILE_HIT:
 		DEBUGNAME( "EV_MISSILE_HIT" );
 		ByteToDir( es->eventParm, dir );
-		CG_MissileHitPlayer( cent, es->weapon, position, dir, es->otherEntityNum );
+		CG_MissileHitPlayer( es->weapon, position, dir );
 		if ( es->weapon == WP_MORTAR_SET ) {
 			if ( !es->legsAnim ) {
 				CG_MortarImpact( cent, position, 3, qtrue );
@@ -1848,7 +1848,7 @@ void CG_EntityEvent( centity_t *cent, vec3_t position ) {
 	case EV_MISSILE_MISS_SMALL:
 		DEBUGNAME( "EV_MISSILE_MISS" );
 		ByteToDir( es->eventParm, dir );
-		CG_MissileHitWallSmall( es->weapon, 0, position, dir );
+		CG_MissileHitWallSmall( position, dir );
 		break;
 
 	case EV_MISSILE_MISS:
@@ -1885,24 +1885,23 @@ void CG_EntityEvent( centity_t *cent, vec3_t position ) {
 	case EV_MG42BULLET_HIT_WALL:
 		DEBUGNAME( "EV_MG42BULLET_HIT_WALL" );
 		ByteToDir( es->eventParm, dir );
-		CG_Bullet( es->pos.trBase, es->otherEntityNum, dir, qfalse, ENTITYNUM_WORLD, es->otherEntityNum2, es->origin2[0], es->effect1Time );
+		CG_Bullet( es->pos.trBase, es->otherEntityNum, qfalse, ENTITYNUM_WORLD, es->otherEntityNum2, es->origin2[0], es->effect1Time );
 		break;
 
 	case EV_MG42BULLET_HIT_FLESH:
 		DEBUGNAME( "EV_MG42BULLET_HIT_FLESH" );
-		CG_Bullet( es->pos.trBase, es->otherEntityNum, dir, qtrue, es->eventParm, es->otherEntityNum2, 0, es->effect1Time );
+		CG_Bullet( es->pos.trBase, es->otherEntityNum, qtrue, es->eventParm, es->otherEntityNum2, 0, es->effect1Time );
 		break;
-
 
 	case EV_BULLET_HIT_WALL:
 		DEBUGNAME( "EV_BULLET_HIT_WALL" );
 		ByteToDir( es->eventParm, dir );
-		CG_Bullet( es->pos.trBase, es->otherEntityNum, dir, qfalse, ENTITYNUM_WORLD, es->otherEntityNum2, es->origin2[0], 0 );
+		CG_Bullet( es->pos.trBase, es->otherEntityNum, qfalse, ENTITYNUM_WORLD, es->otherEntityNum2, es->origin2[0], 0 );
 		break;
 
 	case EV_BULLET_HIT_FLESH:
 		DEBUGNAME( "EV_BULLET_HIT_FLESH" );
-		CG_Bullet( es->pos.trBase, es->otherEntityNum, dir, qtrue, es->eventParm, es->otherEntityNum2, 0, 0 );
+		CG_Bullet( es->pos.trBase, es->otherEntityNum, qtrue, es->eventParm, es->otherEntityNum2, 0, 0 );
 		break;
 
 	case EV_POPUPBOOK:
@@ -2201,7 +2200,7 @@ void CG_EntityEvent( centity_t *cent, vec3_t position ) {
 		numsparks = cent->currentState.density;
 		speed = cent->currentState.angles2[2];
 
-		CG_AddBulletParticles( cent->currentState.origin, cent->currentState.angles, speed, 800, numsparks, 1.0f );
+		CG_AddBulletParticles( cent->currentState.origin, cent->currentState.angles, speed, numsparks, 1.0f );
 
 	}
 	break;

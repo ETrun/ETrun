@@ -611,7 +611,7 @@ static void CG_TouchTriggerPrediction( void ) {
 			VectorAdd( cg.predictedPlayerState.origin, cg_pmove.maxs, pmaxs );
 
 #ifdef VISIBLE_TRIGGERS
-			CG_RailTrail( NULL, mins, maxs, 1 );
+			CG_RailTrail( mins, maxs, 1 );
 #endif
 
 			if ( !BG_BBoxCollision( pmins, pmaxs, mins, maxs ) ) {
