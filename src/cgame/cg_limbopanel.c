@@ -130,6 +130,7 @@ panel_button_t rightLimboPannel = {
 	NULL,   /* keyUp	*/
 	BG_PanelButtonsRender_Img,
 	NULL,
+	0
 };
 
 #define TEAM_COUNTER_GAP    ( ( TEAM_COUNTER_SIZE - ( TEAM_COUNTER_WIDTH * TEAM_COUNTER_COUNT ) ) / ( TEAM_COUNTER_COUNT + 1.f ) )
@@ -151,6 +152,7 @@ panel_button_t rightLimboPannel = {
 		NULL, /* keyUp	*/					\
 		CG_LimboPanel_RenderCounter,			\
 		NULL,									\
+		0 										\
 	};											\
 	panel_button_t teamCounterLight ## number = { \
 		NULL,									\
@@ -162,6 +164,7 @@ panel_button_t rightLimboPannel = {
 		NULL, /* keyUp	*/					\
 		CG_LimboPanel_RenderLight,				\
 		NULL,									\
+		0 										\
 	};											\
 	panel_button_t teamButton ## number = {		  \
 		NULL,									\
@@ -176,6 +179,7 @@ panel_button_t rightLimboPannel = {
 		NULL, /* keyUp	*/					\
 		CG_LimboPanel_RenderTeamButton,			\
 		NULL,									\
+		0 									\
 	}
 
 TEAM_COUNTER( 0 );
@@ -200,6 +204,7 @@ TEAM_COUNTER( 2 );
 		NULL, /* keyUp	*/					\
 		CG_LimboPanel_RenderCounter,			\
 		NULL,									\
+		0 										\
 	};											\
 	panel_button_t classButton ## number = {	  \
 		NULL,									\
@@ -211,6 +216,7 @@ TEAM_COUNTER( 2 );
 		NULL, /* keyUp	*/					\
 		CG_LimboPanel_RenderClassButton,		\
 		NULL,									\
+		0 										\
 	}
 
 panel_button_t classBar = {
@@ -223,6 +229,7 @@ panel_button_t classBar = {
 	NULL,   /* keyUp	*/
 	BG_PanelButtonsRender_Img,
 	NULL,
+	0
 };
 
 panel_button_t classBarText = {
@@ -235,6 +242,7 @@ panel_button_t classBarText = {
 	NULL,   /* keyUp	*/
 	CG_LimboPanel_ClassBar_Draw,
 	NULL,
+	0
 };
 
 CLASS_COUNTER( 0 );
@@ -255,6 +263,7 @@ panel_button_t weaponPanel = {
 	CG_LimboPanel_WeaponPanel_KeyUp,    /* keyUp	*/
 	CG_LimboPanel_WeaponPanel,
 	NULL,
+	0
 };
 
 panel_button_t weaponLight1 = {
@@ -267,6 +276,7 @@ panel_button_t weaponLight1 = {
 	NULL,   /* keyUp	*/
 	CG_LimboPanel_WeaponLights,
 	NULL,
+	0
 };
 
 panel_button_t weaponLight1Text = {
@@ -279,6 +289,7 @@ panel_button_t weaponLight1Text = {
 	NULL,   /* keyUp	*/
 	BG_PanelButtonsRender_Text,
 	NULL,
+	0
 };
 
 panel_button_t weaponLight2 = {
@@ -291,6 +302,7 @@ panel_button_t weaponLight2 = {
 	NULL,   /* keyUp	*/
 	CG_LimboPanel_WeaponLights,
 	NULL,
+	0
 };
 
 panel_button_t weaponLight2Text = {
@@ -303,6 +315,7 @@ panel_button_t weaponLight2Text = {
 	NULL,   /* keyUp	*/
 	BG_PanelButtonsRender_Text,
 	NULL,
+	0
 };
 // =======================
 
@@ -316,6 +329,7 @@ panel_button_t okButtonText = {
 	NULL,                               /* keyUp	*/
 	BG_PanelButtonsRender_Text,
 	NULL,
+	0
 };
 
 panel_button_t okButton = {
@@ -328,6 +342,7 @@ panel_button_t okButton = {
 	NULL,                               /* keyUp	*/
 	CG_LimboPanel_Border_Draw,
 	NULL,
+	0
 };
 
 panel_button_t cancelButtonText = {
@@ -340,6 +355,7 @@ panel_button_t cancelButtonText = {
 	NULL,                               /* keyUp	*/
 	BG_PanelButtonsRender_Text,
 	NULL,
+	0
 };
 
 panel_button_t cancelButton = {
@@ -352,6 +368,7 @@ panel_button_t cancelButton = {
 	NULL,                               /* keyUp	*/
 	CG_LimboPanel_Border_Draw,
 	NULL,
+	0
 };
 
 // =======================
@@ -366,6 +383,7 @@ panel_button_t nameEdit = {
 	NULL,                               /* keyUp	*/
 	BG_PanelButton_RenderEdit,
 	CG_LimboPanel_NameEditFinish,
+	0
 };
 
 panel_button_t* limboPanelButtons[] = {
@@ -399,6 +417,9 @@ void CG_LimboPanel_NameEditFinish( panel_button_t* button ) {
 }
 
 qboolean CG_LimboPanel_CancelButton_KeyDown( panel_button_t* button, int key ) {
+	// Nico, silent GCC
+	button = button;
+
 	if ( key == K_MOUSE1 ) {
 		SOUND_CANCEL;
 
@@ -486,6 +507,9 @@ void CG_LimboPanel_SendSetupMsg( qboolean forceteam ) {
 }
 
 qboolean CG_LimboPanel_OkButton_KeyDown( panel_button_t* button, int key ) {
+	// Nico, silent GCC
+	button = button;
+
 	if ( key == K_MOUSE1 ) {
 		SOUND_SELECT;
 
@@ -1226,7 +1250,7 @@ void CG_LimboPanel_Setup( void ) {
 				break;
 			}
 
-			if ( classInfo->classWeapons[i] == cgs.clientinfo[cg.clientNum].latchedweapon ) {
+			if ( (int)classInfo->classWeapons[i] == cgs.clientinfo[cg.clientNum].latchedweapon ) {
 				cgs.ccSelectedWeapon = i;
 				break;
 			}
@@ -1546,7 +1570,7 @@ void CG_LimboPanel_SetSelectedWeaponNum( int number ) {
 int CG_LimboPanel_TeamCount( weapon_t weap ) {
 	int i, cnt;
 
-	if ( weap == -1 ) { // we aint checking for a weapon, so always include ourselves
+	if ( (int)weap == -1 ) { // we aint checking for a weapon, so always include ourselves
 		cnt = 1;
 	} else { // we ARE checking for a weapon, so ignore ourselves
 		cnt = 0;
@@ -1565,8 +1589,8 @@ int CG_LimboPanel_TeamCount( weapon_t weap ) {
 			continue;
 		}
 
-		if ( weap != -1 ) {
-			if ( cgs.clientinfo[i].weapon != weap && cgs.clientinfo[i].latchedweapon != weap ) {
+		if ( (int)weap != -1 ) {
+			if ( cgs.clientinfo[i].weapon != (int)weap && cgs.clientinfo[i].latchedweapon != (int)weap ) {
 				continue;
 			}
 		}
