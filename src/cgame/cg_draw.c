@@ -1411,7 +1411,7 @@ static void CG_DrawCrosshairNames( void ) {
 
 	s = va("%s", cgs.clientinfo[cg.crosshairClientNum].name);
 
-	w = CG_Text_Width_Ext( s, 0.2f, 0.2f, &cgs.media.limboFont1 ) / 2;
+	w = (float)CG_Text_Width_Ext( s, 0.2f, 0.2f, &cgs.media.limboFont1 ) / 2;
 
 	CG_Text_Paint_Ext(320 - w, 200, 0.2f, 0.2f, colorWhite, s, 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
 
@@ -1899,7 +1899,7 @@ static void CG_DrawObjectiveInfo( void ) {
 	backColor[0] = 0.2f;
 	backColor[1] = 0.2f;
 	backColor[2] = 0.2f;
-	backColor[2] = 1.f;
+	backColor[3] = 1.f;
 
 	if ( !cg.oidPrintTime ) {
 		return;

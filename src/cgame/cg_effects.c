@@ -791,27 +791,18 @@ CG_RumbleEfx
 ==============
 */
 void CG_RumbleEfx( float pitch, float yaw ) {
-	float pitchRecoilAdd, pitchAdd;
-	float yawRandom;
+	float pitchRecoilAdd = 0;
+	float pitchAdd = 0;
+	float yawRandom = 0;
 	vec3_t recoil;
-
-	//
-	pitchRecoilAdd = 0;
-	pitchAdd = 0;
-	yawRandom = 0;
-	//
 
 	if ( pitch < 1 ) {
 		pitch = 1;
 	}
 
-	pitchRecoilAdd = pow( random(),8 ) * ( 10 + VectorLength( cg.snap->ps.velocity ) / 5 );
-	pitchAdd = ( rand() % (int)pitch ) - ( pitch * 0.5 ); //5
-	yawRandom = yaw; //2
-
-	pitchRecoilAdd *= 0.5;
-	pitchAdd *= 0.5;
-	yawRandom *= 0.5;
+	pitchRecoilAdd = 0.5 * pow( random(),8 ) * ( 10 + VectorLength( cg.snap->ps.velocity ) / 5 );
+	pitchAdd = 0.5 * ( rand() % (int)pitch ) - ( pitch * 0.5 ); //5
+	yawRandom = 0.5 * yaw; //2
 
 	// calc the recoil
 

@@ -744,7 +744,7 @@ void CG_AddToNotify( const char *str ) {
 
 	chatHeight = NOTIFY_HEIGHT;
 
-	if ( chatHeight <= 0 || notifytime <= 0 ) {
+	if ( notifytime <= 0 ) {
 		// team chat disabled, dump into normal chat
 		cgs.notifyPos = cgs.notifyLastPos = 0;
 		return;

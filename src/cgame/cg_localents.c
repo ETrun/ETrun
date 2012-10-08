@@ -898,6 +898,7 @@ CG_AddExplosion
 */
 static void CG_AddExplosion( localEntity_t *ex ) {
 	refEntity_t *ent;
+	float light;
 
 	ent = &ex->refEntity;
 
@@ -908,19 +909,14 @@ static void CG_AddExplosion( localEntity_t *ex ) {
 	}
 
 	// add the dlight
-	if ( ex->light || 1 ) {
-		float light;
-
-		light = (float)( cg.time - ex->startTime ) / ( ex->endTime - ex->startTime );
-		if ( light < 0.5 ) {
-			light = 1.0;
-		} else {
-			light = 1.0 - ( light - 0.5 ) * 2;
-		}
-		light = ex->light * light;
-		//%	trap_R_AddLightToScene(ent->origin, light, ex->lightColor[0], ex->lightColor[1], ex->lightColor[2], 0 );
-		trap_R_AddLightToScene( ent->origin, 512, light, ex->lightColor[ 0 ], ex->lightColor[ 1 ], ex->lightColor[ 2 ], 0, 0 );
+	light = (float)( cg.time - ex->startTime ) / ( ex->endTime - ex->startTime );
+	if ( light < 0.5 ) {
+		light = 1.0;
+	} else {
+		light = 1.0 - ( light - 0.5 ) * 2;
 	}
+	light = ex->light * light;
+	trap_R_AddLightToScene( ent->origin, 512, light, ex->lightColor[ 0 ], ex->lightColor[ 1 ], ex->lightColor[ 2 ], 0, 0 );
 }
 
 /*
@@ -931,6 +927,7 @@ CG_AddSpriteExplosion
 static void CG_AddSpriteExplosion( localEntity_t *le ) {
 	refEntity_t re;
 	float c;
+	float light;
 
 	re = le->refEntity;
 
@@ -957,30 +954,15 @@ static void CG_AddSpriteExplosion( localEntity_t *le ) {
 	}
 
 	// add the dlight
-	if ( le->light || 1 ) {
-		float light;
-
-		// Ridah, modified this so the light fades out rather than shrinking
-		/*
-		light = (float)( cg.time - le->startTime ) / ( le->endTime - le->startTime );
-		if ( light < 0.5 ) {
-			light = 1.0;
-		} else {
-			light = 1.0 - ( light - 0.5 ) * 2;
-		}
-		light = le->light * light;
-		trap_R_AddLightToScene(re.origin, light, le->lightColor[0], le->lightColor[1], le->lightColor[2], 0 );
-		*/
-		light = (float)( cg.time - le->startTime ) / ( le->endTime - le->startTime );
-		if ( light < 0.5 ) {
-			light = 1.0;
-		} else {
-			light = 1.0 - ( light - 0.5 ) * 2;
-		}
-		//%	trap_R_AddLightToScene(re.origin, le->light, light*le->lightColor[0], light*le->lightColor[1], light*le->lightColor[2], 0 );
-		trap_R_AddLightToScene( re.origin, 320, light, le->lightColor[ 0 ], le->lightColor[ 1 ], le->lightColor[ 2 ], 0, 0 );
-		// done.
+	// Ridah, modified this so the light fades out rather than shrinking
+	light = (float)( cg.time - le->startTime ) / ( le->endTime - le->startTime );
+	if ( light < 0.5 ) {
+		light = 1.0;
+	} else {
+		light = 1.0 - ( light - 0.5 ) * 2;
 	}
+	trap_R_AddLightToScene( re.origin, 320, light, le->lightColor[ 0 ], le->lightColor[ 1 ], le->lightColor[ 2 ], 0, 0 );
+	// done.
 }
 
 

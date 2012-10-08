@@ -1214,7 +1214,7 @@ void CG_ParticleBulletDebris( vec3_t org, vec3_t vel, int duration ) {
 	p->time = cg.time;
 
 	p->endtime = cg.time + duration;
-	p->startfade = cg.time + duration / 2;
+	p->startfade = (float)(cg.time + duration / 2);
 
 	p->color = EMISIVEFADE;
 	p->alpha = 1.0;
@@ -1234,7 +1234,7 @@ void CG_ParticleBulletDebris( vec3_t org, vec3_t vel, int duration ) {
 	p->vel[0] = vel[0];
 	p->vel[1] = vel[1];
 	p->vel[2] = vel[2];
-	p->accel[0] = p->accel[1] = p->accel[2] = 0;
+	p->accel[0] = p->accel[1] = 0;
 
 	p->accel[2] = -60;
 	p->vel[2] += -20;
@@ -1257,7 +1257,7 @@ void CG_ParticleDirtBulletDebris( vec3_t org, vec3_t vel, int duration ) {
 	p->time = cg.time;
 
 	p->endtime = cg.time + duration;
-	p->startfade = cg.time + duration / 2;
+	p->startfade = (float)(cg.time + duration / 2);
 
 	p->color = EMISIVEFADE;
 	p->alpha = 1.0;
@@ -1283,7 +1283,7 @@ void CG_ParticleDirtBulletDebris( vec3_t org, vec3_t vel, int duration ) {
 	p->vel[0] = vel[0];
 	p->vel[1] = vel[1];
 	p->vel[2] = vel[2];
-	p->accel[0] = p->accel[1] = p->accel[2] = 0;
+	p->accel[0] = p->accel[1] = 0;
 
 	p->accel[2] = -330;
 	p->vel[2] += -20;
@@ -1303,7 +1303,7 @@ void CG_ParticleDirtBulletDebris_Core( vec3_t org, vec3_t vel, int duration, flo
 
 	p->time =       cg.time;
 	p->endtime =    cg.time + duration;
-	p->startfade =  cg.time + duration / 2;
+	p->startfade =  (float)(cg.time + duration / 2);
 
 	p->color =      EMISIVEFADE;
 	p->alpha =      alpha;
@@ -1711,7 +1711,7 @@ void CG_ParticleSparks( vec3_t org, vec3_t vel, int duration, float x, float y, 
 	p->time = cg.time;
 
 	p->endtime = cg.time + duration;
-	p->startfade = cg.time + duration / 2;
+	p->startfade = (float)(cg.time + duration / 2);
 
 	p->color = EMISIVEFADE;
 	p->alpha = 0.4;

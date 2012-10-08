@@ -3826,7 +3826,7 @@ void Item_SetTextExtents( itemDef_t *item, int *width, int *height, const char *
 			item->textRect.x = item->textalignx - originalWidth;
 		} else if ( item->textalignment == ITEM_ALIGN_CENTER || item->textalignment == ITEM_ALIGN_CENTER2 ) {
 			// NERVE - SMF - default centering case
-			item->textRect.x = item->textalignx - originalWidth / 2;
+			item->textRect.x = (float)(item->textalignx - originalWidth / 2);
 		}
 
 		ToWindowCoords( &item->textRect.x, &item->textRect.y, &item->window );
@@ -3917,7 +3917,7 @@ void Item_Text_AutoWrapped_Paint( itemDef_t *item ) {
 				} else if ( item->textalignment == ITEM_ALIGN_RIGHT ) {
 					item->textRect.x = item->textalignx - newLineWidth;
 				} else if ( item->textalignment == ITEM_ALIGN_CENTER ) {
-					item->textRect.x = item->textalignx - newLineWidth / 2;
+					item->textRect.x = (float)(item->textalignx - newLineWidth / 2);
 				}
 				item->textRect.y = y;
 				ToWindowCoords( &item->textRect.x, &item->textRect.y, &item->window );

@@ -446,7 +446,6 @@ void CG_PyroSmokeTrail( centity_t *ent ) {
 	for ( ; t <= ent->trailTime ; t += step ) {
 
 		BG_EvaluateTrajectory( &es->pos, t, lastPos, qfalse, es->effect2Time );
-		rnd = random();
 
 		if ( ent->currentState.density ) { // corkscrew effect
 			vec3_t right;
@@ -4891,44 +4890,23 @@ CG_MissileHitWallSmall
 ==============
 */
 void CG_MissileHitWallSmall( vec3_t origin, vec3_t dir ) {
-	qhandle_t mod;
-	qhandle_t mark;
-	qhandle_t shader;
-	sfxHandle_t sfx;
-	float radius;
-	float light;
+	qhandle_t mod = 0;
+	qhandle_t mark = 0;
+	qhandle_t shader = 0;
+	sfxHandle_t sfx = 0;
+	float radius = 80;
+	float light = 300;
 	vec3_t lightColor;
 	localEntity_t   *le;
-	qboolean isSprite;
-	int duration;
-	int lightOverdraw;
+	qboolean isSprite = qtrue;
+	int duration = 1000;
+	int lightOverdraw = 0;
 	vec3_t sprOrg, sprVel;
 	vec4_t projection, color;
-
-
-	mark = 0;
-	radius = 32;
-	sfx = 0;
-	mod = 0;
-	shader = 0;
-	light = 0;
-	lightColor[0] = 1;
-	lightColor[1] = 1;
-	lightColor[2] = 0;
-	// Ridah
-	lightOverdraw = 0;
-
-	// set defaults
-	isSprite = qfalse;
-	duration = 600;
 
 	shader = cgs.media.rocketExplosionShader;       // copied from RL
 	sfx = cgs.media.sfx_rockexp;
 	mark = cgs.media.burnMarkShader;
-	radius = 80;
-	light = 300;
-	isSprite = qtrue;
-	duration = 1000;
 	lightColor[0] = 0.75;
 	lightColor[1] = 0.5;
 	lightColor[2] = 0.1;
@@ -5409,8 +5387,7 @@ void CG_Bullet( vec3_t end, int sourceEntityNum, qboolean flesh, int fleshEntity
 		// Gordon: all bullet weapons have the same fx, and this stops pvs issues causing grenade explosions
 		int fromweap = WP_MP40; // cg_entities[sourceEntityNum].currentState.weapon;
 
-		if ( !fromweap ||
-			 cg_entities[sourceEntityNum].currentState.eFlags & EF_MG42_ACTIVE ||
+		if ( cg_entities[sourceEntityNum].currentState.eFlags & EF_MG42_ACTIVE ||
 			 cg_entities[sourceEntityNum].currentState.eFlags & EF_MOUNTEDTANK ) { // mounted
 			fromweap = WP_MP40;
 		}

@@ -1473,7 +1473,7 @@ void CG_AddRefEntityWithPowerups( refEntity_t *ent, entityState_t *es, const vec
 
 	trap_R_AddRefEntityToScene( ent );
 
-	if ( !onFire && CG_EntOnFire( &cg_entities[es->number] ) ) {
+	if ( CG_EntOnFire( &cg_entities[es->number] ) ) {
 		onFire = qtrue;
 		// set the alpha
 		if ( ent->entityNum == cg.snap->ps.clientNum ) {
@@ -1605,7 +1605,6 @@ void CG_Player( centity_t *cent ) {
 	vec3_t lightorigin;
 	int clientNum,i;
 	int renderfx;
-	qboolean shadow;
 	float shadowPlane;
 	qboolean usingBinocs = qfalse;
 	centity_t       *cgsnap;
@@ -1614,7 +1613,6 @@ void CG_Player( centity_t *cent ) {
 
 	cgsnap = &cg_entities[cg.snap->ps.clientNum];
 
-	shadow = qfalse;                                                // gjd added to make sure it was initialized
 	shadowPlane = 0.0;                                              // ditto
 
 	// if set to invisible, skip
@@ -1724,10 +1722,6 @@ void CG_Player( centity_t *cent ) {
 		renderfx &= ~RF_THIRD_PERSON;
 	}
 
-	if ( cg_shadows.integer == 3 && shadow ) {
-		renderfx |= RF_SHADOW_PLANE;
-	}
-
 	renderfx |= RF_LIGHTING_ORIGIN;         // use the same origin for all
 
 	// set renderfx for accessories
@@ -1752,8 +1746,6 @@ void CG_Player( centity_t *cent ) {
 			} else {
 				hilightIntensity = 1.f * ( distSquared / Square( 768.f ) );
 			}
-
-			//CG_Printf( "%f\n", hilightIntensity );
 		}
 	}
 
@@ -1832,7 +1824,7 @@ void CG_Player( centity_t *cent ) {
 
 	// add the
 
-	shadow = CG_PlayerShadow( cent, &shadowPlane );
+	CG_PlayerShadow( cent, &shadowPlane );
 
 	// set the shadowplane for accessories
 	acc.shadowPlane = shadowPlane;
@@ -2061,107 +2053,6 @@ qboolean CG_GetWeaponTag( int clientNum, char *tagname, orientation_t *or ) {
 // =============
 // Menu Versions
 // =============
-
-/*
-==================
-CG_SwingAngles_Limbo
-==================
-*/
-static void CG_SwingAngles_Limbo( float destination, float swingTolerance, float clampTolerance,
-								  float speed, float *angle, qboolean *swinging ) {
-	float swing;
-	float move;
-	float scale;
-
-	if ( !*swinging ) {
-		// see if a swing should be started
-		swing = AngleSubtract( *angle, destination );
-		if ( swing > swingTolerance || swing < -swingTolerance ) {
-			*swinging = qtrue;
-		}
-	}
-
-	if ( !*swinging ) {
-		return;
-	}
-
-	// modify the speed depending on the delta
-	// so it doesn't seem so linear
-	swing = AngleSubtract( destination, *angle );
-	scale = fabs( swing );
-	if ( scale < swingTolerance * 0.5 ) {
-		scale = 0.5;
-	} else if ( scale < swingTolerance ) {
-		scale = 1.0;
-	} else {
-		scale = 2.0;
-	}
-
-	// swing towards the destination angle
-	if ( swing >= 0 ) {
-		move = cg.frametime * scale * speed;
-		if ( move >= swing ) {
-			move = swing;
-			*swinging = qfalse;
-		}
-		*angle = AngleMod( *angle + move );
-	} else if ( swing < 0 ) {
-		move = cg.frametime * scale * -speed;
-		if ( move <= swing ) {
-			move = swing;
-			*swinging = qfalse;
-		}
-		*angle = AngleMod( *angle + move );
-	}
-
-	// clamp to no more than tolerance
-	swing = AngleSubtract( destination, *angle );
-	if ( swing > clampTolerance ) {
-		*angle = AngleMod( destination - ( clampTolerance - 1 ) );
-	} else if ( swing < -clampTolerance ) {
-		*angle = AngleMod( destination + ( clampTolerance - 1 ) );
-	}
-}
-
-/*
-===============
-CG_PlayerAngles_Limbo
-===============
-*/
-void CG_PlayerAngles_Limbo( playerInfo_t *pi, vec3_t legs[3], vec3_t torso[3], vec3_t head[3] ) {
-	vec3_t legsAngles, torsoAngles, headAngles;
-	float dest;
-
-	VectorCopy( pi->viewAngles, headAngles );
-	headAngles[YAW] = AngleMod( headAngles[YAW] );
-	VectorClear( legsAngles );
-	VectorClear( torsoAngles );
-
-	torsoAngles[YAW] = 180;
-	legsAngles[YAW] = 180;
-	headAngles[YAW] = 180;
-
-	// --------- pitch -------------
-
-	// only show a fraction of the pitch angle in the torso
-	if ( headAngles[PITCH] > 180 ) {
-		dest = ( -360 + headAngles[PITCH] ) * 0.75;
-	} else {
-		dest = headAngles[PITCH] * 0.75;
-	}
-	CG_SwingAngles_Limbo( dest, 15, 30, 0.1, &pi->torso.pitchAngle, &pi->torso.pitching );
-	torsoAngles[PITCH] = pi->torso.pitchAngle;
-
-	// pull the angles back out of the hierarchial chain
-	AnglesSubtract( headAngles, torsoAngles, headAngles );
-	AnglesSubtract( torsoAngles, legsAngles, torsoAngles );
-
-	AnglesSubtract( legsAngles, pi->moveAngles, legsAngles );       // NERVE - SMF
-
-	AnglesToAxis( legsAngles, legs );
-	AnglesToAxis( torsoAngles, torso );
-	AnglesToAxis( headAngles, head );
-}
 
 animation_t *CG_GetLimboAnimation( playerInfo_t *pi, const char *name ) {
 	int i;
