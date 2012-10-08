@@ -1331,11 +1331,11 @@ void clamp_hweapontofirearc( gentity_t *self, vec3_t dang ) {
 //
 
 void aagun_use( gentity_t *ent, gentity_t *other, gentity_t *activator ) {
+	gentity_t *owner = &g_entities[ent->r.ownerNum];
+
 	// Nico, silent GCC
 	other = other,
 	activator = activator;
-
-	gentity_t *owner = &g_entities[ent->r.ownerNum];
 
 	if ( owner && owner->client ) {
 		ent->r.ownerNum =           ent->s.number;

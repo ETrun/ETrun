@@ -1589,13 +1589,12 @@ void Menu_TransitionItemByName( menuDef_t *menu, const char *p, rectDef_t rectFr
 
 void Script_Transition( itemDef_t *item, qboolean *bAbort, char **args ) {
 	const char *name = NULL;
-
-	// Nico, silent GCC
-	bAbort = bAbort;
-
 	rectDef_t rectFrom, rectTo;
 	int time = 0;
 	float amt = 0.0f;
+
+	// Nico, silent GCC
+	bAbort = bAbort;
 
 	if ( String_Parse( args, &name ) ) {
 		if ( Rect_Parse( args, &rectFrom ) && Rect_Parse( args, &rectTo ) && Int_Parse( args, &time ) && Float_Parse( args, &amt ) ) {
