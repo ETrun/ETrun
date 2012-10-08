@@ -719,7 +719,7 @@ AnimParseAnimConfig
 static qboolean AnimParseAnimConfig( playerInfo_t *animModelInfo, const char *input ) {
 	char    *text_p, *token;
 	animation_t *animations;
-	headAnimation_t *headAnims;
+	headAnimation_t *headAnims = NULL;
 	int i, fps, skip = -1;
 
 	animations = animModelInfo->animations;
@@ -887,55 +887,6 @@ static qboolean AnimParseAnimConfig( playerInfo_t *animModelInfo, const char *in
 
 	if ( animModelInfo->version < 2 && i != MAX_ANIMATIONS ) {
 		return qfalse;
-	}
-
-	return qtrue;           // NERVE - SMF - blah
-
-	// check for head anims
-	token = COM_Parse( &text_p );
-	if ( token && token[0] ) {
-		if ( animModelInfo->version < 2 || !Q_stricmp( token, "HEADFRAMES" ) ) {
-
-			// read information for each head frame
-			for ( i = 0 ; i < MAX_HEAD_ANIMS ; i++ ) {
-
-				token = COM_Parse( &text_p );
-				if ( !token || !token[0] ) {
-					break;
-				}
-
-				if ( animModelInfo->version > 1 ) {   // includes animation names at start of each line
-					// just throw this information away, not required for head
-					token = COM_ParseExt( &text_p, qfalse );
-					if ( !token || !token[0] ) {
-						break;
-					}
-				}
-
-				if ( !i ) {
-					skip = atoi( token );
-				}
-
-				headAnims[i].firstFrame = atoi( token );
-				// modify according to last frame of the main animations, since the head is totally seperate
-				headAnims[i].firstFrame -= animations[MAX_ANIMATIONS - 1].firstFrame + animations[MAX_ANIMATIONS - 1].numFrames + skip;
-
-				token = COM_ParseExt( &text_p, qfalse );
-				if ( !token || !token[0] ) {
-					break;
-				}
-				headAnims[i].numFrames = atoi( token );
-
-				// skip the movespeed
-				token = COM_ParseExt( &text_p, qfalse );
-			}
-
-
-			if ( i != MAX_HEAD_ANIMS ) {
-				return qfalse;
-			}
-
-		}
 	}
 
 	return qtrue;

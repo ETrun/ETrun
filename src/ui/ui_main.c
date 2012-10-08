@@ -890,7 +890,7 @@ void _UI_Refresh( int realtime ) {
 		if ( !total ) {
 			total = 1;
 		}
-		uiInfo.uiDC.FPS = 1000 * UI_FPS_FRAMES / total;
+		uiInfo.uiDC.FPS = (float)(1000 * UI_FPS_FRAMES / total);
 	}
 
 	UI_UpdateCvars();
@@ -1597,7 +1597,7 @@ static void UI_DrawMissionBriefingObjectives( rectDef_t *rect, float scale, vec4
 				} else if ( align == ITEM_ALIGN_RIGHT ) {
 					textRect.x = text_x - newLineWidth;
 				} else if ( align == ITEM_ALIGN_CENTER ) {
-					textRect.x = text_x - newLineWidth / 2;
+					textRect.x = (float)(text_x - newLineWidth / 2);
 				}
 				textRect.y = y;
 
@@ -2940,30 +2940,6 @@ static void UI_LoadDemos() {
 
 }
 
-void WM_setItemPic( char *name, const char *shader ) {
-	menuDef_t *menu = Menu_GetFocused();
-	itemDef_t *item;
-
-	item = Menu_FindItemByName( menu, name );
-	if ( item ) {
-		item->window.background = DC->registerShaderNoMip( shader );
-	}
-}
-
-void WM_setVisibility( char *name, qboolean show ) {
-	menuDef_t *menu = Menu_GetFocused();
-	itemDef_t *item;
-
-	item = Menu_FindItemByName( menu, name );
-	if ( item ) {
-		if ( show ) {
-			item->window.flags |= WINDOW_VISIBLE;
-		} else {
-			item->window.flags &= ~( WINDOW_VISIBLE | WINDOW_MOUSEOVER );
-		}
-	}
-}
-
 qboolean UI_CheckExecKey( int key ) {
 	menuDef_t *menu = Menu_GetFocused();
 
@@ -2989,27 +2965,6 @@ qboolean UI_CheckExecKey( int key ) {
 	}
 
 	return qfalse;
-}
-
-void WM_ActivateLimboChat() {
-	menuDef_t *menu;
-	itemDef_t *itemdef;
-
-	menu = Menu_GetFocused();
-	menu = Menus_ActivateByName( "wm_limboChat", qtrue );
-
-	if ( !menu || g_editItem ) {
-		return;
-	}
-
-	itemdef = Menu_FindItemByName( menu, "window_limbo_chat" );
-
-	if ( itemdef ) {
-		itemdef->cursorPos = 0;
-		g_editingField = qtrue;
-		g_editItem = itemdef;
-		DC->setOverstrikeMode( qtrue );
-	}
 }
 // -NERVE - SMF
 
