@@ -83,7 +83,12 @@ void CG_ClearTrails( void ) {
 
 	for ( i = 0 ; i < MAX_TRAILJUNCS ; i++ )
 	{
-		trailJuncs[i].nextGlobal = &trailJuncs[i + 1];
+		// Nico, possible overflow fix
+		if (i  == MAX_TRAILJUNCS - 1) {
+			trailJuncs[i].nextGlobal = NULL;
+		} else {
+			trailJuncs[i].nextGlobal = &trailJuncs[i + 1];
+		}
 
 		if ( i > 0 ) {
 			trailJuncs[i].prevGlobal = &trailJuncs[i - 1];

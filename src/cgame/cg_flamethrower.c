@@ -155,14 +155,6 @@ static vec3_t flameChunkMaxs = {0, 0, 0};
 #define GET_FLAME_BLUE_SIZE_SPEED( x )    ( ( (float)x / FLAME_LIFETIME ) / 1.0 ) // x is the current sizeMax
 #define GET_FLAME_SIZE_SPEED( x )         ( ( (float)x / FLAME_LIFETIME ) / 0.3 ) // x is the current sizeMax
 
-//#define	FLAME_MIN_DRAWSIZE		20
-
-// enable this for the fuel stream
-//#define FLAME_ENABLE_FUEL_STREAM
-
-// enable this for dynamic lighting around flames
-//#define FLAMETHROW_LIGHTS
-
 // disable this to stop rotating flames (this is variable so we can change it at run-time)
 int rotatingFlames = qtrue;
 
@@ -254,7 +246,6 @@ void CG_FireFlameChunks( centity_t *cent, vec3_t origin, vec3_t angles, float sp
 			f = CG_SpawnFlameChunk( of );
 
 			if ( !f ) {
-				//CG_Printf( "Out of flame chunks\n" );
 				// CHANGE: id
 				// to make sure we do not keep trying to add more and more chunks
 				centInfo->lastFlameChunk->timeStart = cg.time;
@@ -329,7 +320,6 @@ void CG_FireFlameChunks( centity_t *cent, vec3_t origin, vec3_t angles, float sp
 		f = CG_SpawnFlameChunk( NULL );
 
 		if ( !f ) {
-			//CG_Printf( "Out of flame chunks\n" );
 			return;
 		}
 
@@ -371,26 +361,6 @@ void CG_FireFlameChunks( centity_t *cent, vec3_t origin, vec3_t angles, float sp
 		centInfo->lastFlameChunk = f;
 	}
 
-	// push them along
-	/*
-	f = centInfo->lastFlameChunk;
-	while (f) {
-
-		if (f->lastFriction < cg.time - 50) {
-			frametime = (float)(cg.time - f->lastFriction) / 1000.0;
-			f->lastFriction = cg.time;
-			dot = DotProduct(parentFwd, f->parentFwd);
-			if (dot >= 0.99) {
-				dot -= 0.99;
-				dot *= (1.0/(1.0-0.99));
-				CG_FlameAdjustSpeed( f, 0.5 * frametime * FLAME_FRICTION_PER_SEC * pow(dot,4) );
-			}
-		}
-
-		f = f->nextFlameChunk;
-	}
-	*/
-
 	VectorCopy( angles, centInfo->lastAngles );
 	VectorCopy( origin, centInfo->lastOrigin );
 	centInfo->lastClientFrame = cent->currentState.frame;
@@ -413,7 +383,12 @@ void CG_ClearFlameChunks( void ) {
 
 	for ( i = 0 ; i < MAX_FLAME_CHUNKS ; i++ )
 	{
-		flameChunks[i].nextGlobal = &flameChunks[i + 1];
+		// Nico, possible overflow fix
+		if (i == MAX_FLAME_CHUNKS - 1) {
+			flameChunks[i].nextGlobal = NULL;
+		} else {
+			flameChunks[i].nextGlobal = &flameChunks[i + 1];
+		}
 
 		if ( i > 0 ) {
 			flameChunks[i].prevGlobal = &flameChunks[i - 1];
@@ -665,14 +640,6 @@ CG_AddFlameSpriteToScene
 */
 static vec3_t vright, vup;
 static vec3_t rright, rup;
-
-#ifdef _DEBUG   // just in case we forget about it, but it should be disabled at all times (only enabled to generate updated shaders)
-#ifdef ALLOW_GEN_SHADERS    // secondary security measure
-
-//#define	GEN_FLAME_SHADER
-
-#endif  // ALLOW_GEN_SHADERS
-#endif  // _DEBUG
 
 #define FLAME_BLEND_SRC     "GL_ONE"
 #define FLAME_BLEND_DST     "GL_ONE_MINUS_SRC_COLOR"
@@ -1085,89 +1052,6 @@ void CG_InitFlameChunks( void ) {
 	char filename[MAX_QPATH];
 
 	CG_ClearFlameChunks();
-
-#ifdef GEN_FLAME_SHADER
-	CG_GenerateShaders( "scripts/flamethrower.shader",
-						"flamethrowerFire",
-						FLAME_SPRITE_DIR,
-						NUM_FLAME_SPRITES,
-						FLAME_BLEND_SRC,
-						FLAME_BLEND_DST,
-						"",
-						qtrue, qtrue );
-
-	CG_GenerateShaders( "scripts/blacksmokeanim.shader",
-						"blacksmokeanim",
-						"explode1",
-						23,
-						"GL_ZERO",
-						"GL_ONE_MINUS_SRC_ALPHA",
-						"\t\talphaGen const 0.2\n",
-						qfalse, qfalse );
-
-	CG_GenerateShaders( "scripts/viewflames.shader",
-						"viewFlashFire",
-						"clnfire",
-						16,
-						"GL_ONE",
-						"GL_ONE",
-						"\t\talphaGen vertex\n\t\trgbGen vertex\n",
-						qtrue, qtrue );
-
-	CG_GenerateShaders( "scripts/twiltb.shader",
-						"twiltb",
-						"twiltb",
-						42,
-						"GL_SRC_ALPHA",
-						"GL_ONE_MINUS_SRC_COLOR",
-						"",
-						qtrue, qfalse );
-
-	CG_GenerateShaders( "scripts/twiltb2.shader",
-						"twiltb2",
-						"twiltb2",
-						45,
-						"GL_ONE",
-						"GL_ONE_MINUS_SRC_COLOR",
-						"",
-						qtrue, qfalse );
-/*
-	CG_GenerateShaders( "scripts/expblue.shader",
-						"expblue",
-						"expblue",
-						25,
-						"GL_ONE",
-						"GL_ONE_MINUS_SRC_COLOR",
-						"",
-						qfalse, qfalse );
-*/
-	CG_GenerateShaders( "scripts/firest.shader",
-						"firest",
-						"firest",
-						36,
-						"GL_ONE",
-						"GL_ONE_MINUS_SRC_COLOR",
-						"",
-						qtrue, qfalse );
-
-	CG_GenerateShaders( "scripts/explode1.shader",
-						"explode1",
-						"explode1",
-						23,
-						"GL_ONE",
-						"GL_ONE_MINUS_SRC_COLOR",
-						"",
-						qtrue, qfalse );
-
-	CG_GenerateShaders( "scripts/funnel.shader",
-						"funnel",
-						"funnel",
-						21,
-						"GL_ONE",
-						"GL_ONE_MINUS_SRC_COLOR",
-						"",
-						qfalse, qfalse );
-#endif
 
 	for ( i = 0; i < NUM_FLAME_SPRITES; i++ ) {
 		Com_sprintf( filename, MAX_QPATH, "flamethrowerFire%i", i + 1 );

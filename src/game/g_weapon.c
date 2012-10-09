@@ -1620,12 +1620,9 @@ void Weapon_Engineer( gentity_t *ent ) {
 							}
 
 							// we got somthing to destroy
-							if ( ent->client->sess.sessionTeam == TEAM_AXIS ) {
+							if ( ent && ent->client && ent->client->sess.sessionTeam == TEAM_AXIS ) {
 								if ( hit->s.teamNum == TEAM_AXIS && ( !scored ) ) {
-									if ( ent && ent->client ) {
-										G_LogPrintf( "Dynamite_Diffuse: %d\n", ent - g_entities );                  // OSP
-									}
-
+									G_LogPrintf( "Dynamite_Diffuse: %d\n", ent - g_entities );
 									scored++;
 								}
 								G_Script_ScriptEvent( hit, "defused", "" );
