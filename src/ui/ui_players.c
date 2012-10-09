@@ -719,7 +719,6 @@ AnimParseAnimConfig
 static qboolean AnimParseAnimConfig( playerInfo_t *animModelInfo, const char *input ) {
 	char    *text_p, *token;
 	animation_t *animations;
-	headAnimation_t *headAnims = NULL;
 	int i, fps, skip = -1;
 
 	animations = animModelInfo->animations;
