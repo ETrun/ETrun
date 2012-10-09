@@ -525,12 +525,10 @@ void Fade( int *flags, float *f, float clamp, int *nextTime, int offsetTime, qbo
 	}
 }
 
-
-
 void Window_Paint( Window *w, float fadeAmount, float fadeClamp, float fadeCycle ) {
 	//float bordersize = 0;
 	vec4_t color;
-	rectDef_t fillRect = w->rect;
+	rectDef_t fillRect;
 
 	if ( debugMode ) {
 		color[0] = color[1] = color[2] = color[3] = 1;
@@ -540,6 +538,8 @@ void Window_Paint( Window *w, float fadeAmount, float fadeClamp, float fadeCycle
 	if ( w == NULL || ( w->style == 0 && w->border == 0 ) ) {
 		return;
 	}
+
+	fillRect = w->rect;
 
 	// FIXME: do right thing for right border type
 	if ( w->border != 0 ) {
@@ -4984,13 +4984,15 @@ void Item_OwnerDraw_Paint( itemDef_t *item ) {
 
 void Item_Paint( itemDef_t *item ) {
 	vec4_t red;
-	menuDef_t *parent = (menuDef_t*)item->parent;
+	menuDef_t *parent = NULL;
 	red[0] = red[3] = 1;
 	red[1] = red[2] = 0;
 
 	if ( item == NULL ) {
 		return;
 	}
+
+	parent = (menuDef_t*)item->parent;
 
 	if ( DC->textFont ) {
 		DC->textFont( item->font );
@@ -5140,8 +5142,6 @@ void Item_Paint( itemDef_t *item ) {
 		DC->drawRect( r->x, r->y, r->w, r->h, 1, color );
 	}
 
-	//DC->drawRect(item->window.rect.x, item->window.rect.y, item->window.rect.w, item->window.rect.h, 1, red);
-
 	switch ( item->type ) {
 	case ITEM_TYPE_OWNERDRAW:
 		Item_OwnerDraw_Paint( item );
@@ -5166,9 +5166,6 @@ void Item_Paint( itemDef_t *item ) {
 	case ITEM_TYPE_LISTBOX:
 		Item_ListBox_Paint( item );
 		break;
-//		case ITEM_TYPE_IMAGE:
-//			Item_Image_Paint(item);
-//			break;
 	case ITEM_TYPE_MENUMODEL:
 		Item_Model_Paint( item );
 		break;

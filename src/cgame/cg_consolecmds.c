@@ -398,7 +398,7 @@ static void CG_BuddyVoiceChat_f( void ) {
 static void CG_MessageMode_f( void ) {
 	char cmd[ 64 ];
 
-	if ( cgs.eventHandling != CGAME_EVENT_NONE ) {
+	if ( (int)cgs.eventHandling != CGAME_EVENT_NONE ) {
 		return;
 	}
 

@@ -663,7 +663,6 @@ static void CG_DrawLagometer( void ) {
 	float vscale;
 
 	if ( !cg_lagometer.integer || cgs.localServer ) {
-//	if(0) {
 		CG_DrawDisconnect();
 		return;
 	}
@@ -2488,7 +2487,7 @@ static void CG_Draw2D( void ) {
 
 		CG_DrawSpectatorMessage();
 	} else {
-		if ( cgs.eventHandling != CGAME_EVENT_NONE ) {
+		if ( (int)cgs.eventHandling != (int)CGAME_EVENT_NONE ) {
 			trap_R_SetColor( NULL );
 			CG_DrawPic( cgDC.cursorx - 14, cgDC.cursory - 14, 32, 32, cgs.media.cursorIcon );
 		}

@@ -492,7 +492,7 @@ void CG_DrawWeapHeat( rectDef_t *rect, int align ) {
 }
 
 void CG_MouseEvent( int x, int y ) {
-	switch ( cgs.eventHandling ) {
+	switch ( (int)cgs.eventHandling ) {
 	case CGAME_EVENT_SPEAKEREDITOR:
 	case CGAME_EVENT_GAMEVIEW:
 	case CGAME_EVENT_CAMPAIGNBREIFING:
@@ -511,7 +511,7 @@ void CG_MouseEvent( int x, int y ) {
 			cgs.cursorY = 480;
 		}
 
-		if ( cgs.eventHandling == CGAME_EVENT_SPEAKEREDITOR ) {
+		if ( (int)cgs.eventHandling == CGAME_EVENT_SPEAKEREDITOR ) {
 			CG_SpeakerEditorMouseMove_Handling( x, y );
 		}
 
@@ -580,7 +580,7 @@ void CG_EventHandling( int type, qboolean fForced ) {
 	case CGAME_EVENT_FIRETEAMMSG:
 	default:
 		// default handling (cleanup mostly)
-		if ( cgs.eventHandling == CGAME_EVENT_GAMEVIEW ) {
+		if ( (int)cgs.eventHandling == CGAME_EVENT_GAMEVIEW ) {
 			cg.showGameView = qfalse;
 			trap_S_FadeBackgroundTrack( 0.0f, 500, 0 );
 
@@ -593,16 +593,16 @@ void CG_EventHandling( int type, qboolean fForced ) {
 					cgs.limboLoadoutSelected = qfalse;
 				}
 			}
-		} else if ( cgs.eventHandling == CGAME_EVENT_SPEAKEREDITOR ) {
+		} else if ( (int)cgs.eventHandling == CGAME_EVENT_SPEAKEREDITOR ) {
 			if ( type == -CGAME_EVENT_SPEAKEREDITOR ) {
 				type = CGAME_EVENT_NONE;
 			} else {
 				trap_Key_SetCatcher( KEYCATCH_CGAME );
 				return;
 			}
-		} else if ( cgs.eventHandling == CGAME_EVENT_CAMPAIGNBREIFING ) {
+		} else if ( (int)cgs.eventHandling == CGAME_EVENT_CAMPAIGNBREIFING ) {
 			type = CGAME_EVENT_GAMEVIEW;
-		} else if ( cgs.eventHandling == CGAME_EVENT_FIRETEAMMSG ) {
+		} else if ( (int)cgs.eventHandling == CGAME_EVENT_FIRETEAMMSG ) {
 			cg.showFireteamMenu = qfalse;
 			trap_Cvar_Set( "cl_bypassmouseinput", "0" );
 		} 
@@ -634,7 +634,7 @@ void CG_EventHandling( int type, qboolean fForced ) {
 }
 
 void CG_KeyEvent( int key, qboolean down ) {
-	switch ( cgs.eventHandling ) {
+	switch ( (int)cgs.eventHandling ) {
 		// Demos get their own keys
 	case CGAME_EVENT_DEMO:
 		CG_DemoClick( key, down );
