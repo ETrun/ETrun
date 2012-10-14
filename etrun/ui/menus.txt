@@ -29,12 +29,6 @@
 	loadMenu { "ui/options_controls_default.menu" }
 	loadMenu { "ui/options_system.menu" }
 	loadMenu { "ui/options_system_gamma.menu" }
-	loadMenu { "ui/credits_splashdamage.menu" }
-	loadMenu { "ui/credits_idsoftware.menu" }
-	loadMenu { "ui/credits_activision.menu" }
-	loadMenu { "ui/credits_additional.menu" }
-	loadMenu { "ui/credits_et260.menu" }
-	loadMenu { "ui/credits_quit.menu" }
 	loadMenu { "ui/quit.menu" }
 
 	// popups

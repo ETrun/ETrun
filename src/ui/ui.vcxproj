@@ -166,12 +166,6 @@
     <ClCompile Include="ui_syscalls.c" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\etrun\ui\credits_activision.menu" />
-    <None Include="..\..\etrun\ui\credits_additional.menu" />
-    <None Include="..\..\etrun\ui\credits_et260.menu" />
-    <None Include="..\..\etrun\ui\credits_idsoftware.menu" />
-    <None Include="..\..\etrun\ui\credits_quit.menu" />
-    <None Include="..\..\etrun\ui\credits_splashdamage.menu" />
     <None Include="..\..\etrun\ui\etrun.menu" />
     <None Include="..\..\etrun\ui\etrun_customise_game.menu" />
     <None Include="..\..\etrun\ui\etrun_customise_hud.menu" />

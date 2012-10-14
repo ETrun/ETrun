@@ -57,24 +57,6 @@
     <None Include="ui.def">
       <Filter>Source Files</Filter>
     </None>
-    <None Include="..\..\etrun\ui\credits_activision.menu">
-      <Filter>Menu Files</Filter>
-    </None>
-    <None Include="..\..\etrun\ui\credits_additional.menu">
-      <Filter>Menu Files</Filter>
-    </None>
-    <None Include="..\..\etrun\ui\credits_et260.menu">
-      <Filter>Menu Files</Filter>
-    </None>
-    <None Include="..\..\etrun\ui\credits_idsoftware.menu">
-      <Filter>Menu Files</Filter>
-    </None>
-    <None Include="..\..\etrun\ui\credits_quit.menu">
-      <Filter>Menu Files</Filter>
-    </None>
-    <None Include="..\..\etrun\ui\credits_splashdamage.menu">
-      <Filter>Menu Files</Filter>
-    </None>
     <None Include="..\..\etrun\ui\global.menu">
       <Filter>Menu Files</Filter>
     </None>

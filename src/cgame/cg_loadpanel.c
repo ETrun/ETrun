@@ -40,12 +40,9 @@ qhandle_t bg_alliedpin;
 qhandle_t bg_neutralpin;
 qhandle_t bg_pin;
 
-qhandle_t bg_filter_pb;
 qhandle_t bg_filter_al;
 
 qhandle_t bg_mappic;
-
-// panel_button_text_t FONTNAME = { SCALEX, SCALEY, COLOUR, STYLE, FONT };
 
 panel_button_text_t missiondescriptionTxt = {
 	0.2f, 0.2f,
@@ -225,9 +222,6 @@ void CG_DrawConnectScreen( qboolean interactive, qboolean forcerefresh ) {
 		bg_alliedpin =  DC->registerShaderNoMip( "gfx/loading/pin_allied" );
 		bg_neutralpin = DC->registerShaderNoMip( "gfx/loading/pin_neutral" );
 		bg_pin =        DC->registerShaderNoMip( "gfx/loading/pin_shot" );
-
-
-		bg_filter_pb =  DC->registerShaderNoMip( "ui/assets/filter_pb" );
 		bg_filter_al =  DC->registerShaderNoMip( "ui/assets/filter_antilag" );
 
 		bg_mappic =     0;
@@ -271,12 +265,6 @@ void CG_DrawConnectScreen( qboolean interactive, qboolean forcerefresh ) {
 		}
 
 		y = 417;
-
-		str = Info_ValueForKey( buffer, "sv_punkbuster" );
-		if ( str && *str && atoi( str ) ) {
-			x = 518;
-			CG_DrawPic( x, y, 16, 16, bg_filter_pb );
-		}
 
 		str = Info_ValueForKey( buffer, "g_antilag" );
 		if ( str && *str && atoi( str ) ) {

@@ -4074,7 +4074,7 @@ UI_BuildServerDisplayList
 ==================
 */
 static void UI_BuildServerDisplayList( qboolean force ) {
-	int i, count, clients, maxClients, ping, len, punkbuster, antilag, password;
+	int i, count, clients, maxClients, ping, len, antilag, password;
 	char info[MAX_STRING_CHARS];
 	static int numinvisible;
 
@@ -4164,17 +4164,6 @@ static void UI_BuildServerDisplayList( qboolean force ) {
 				password = atoi( Info_ValueForKey( info, "needpass" ) );
 				if ( ( password && ui_browserShowPasswordProtected.integer == 2 ) ||
 					 ( !password && ui_browserShowPasswordProtected.integer == 1 ) ) {
-					trap_LAN_MarkServerVisible( ui_netSource.integer, i, qfalse );
-					continue;
-				}
-			}
-
-			trap_Cvar_Update( &ui_browserShowPunkBuster );
-			if ( ui_browserShowPunkBuster.integer ) {
-				punkbuster = atoi( Info_ValueForKey( info, "punkbuster" ) );
-
-				if ( ( punkbuster && ui_browserShowPunkBuster.integer == 2 ) ||
-					 ( !punkbuster && ui_browserShowPunkBuster.integer == 1 ) ) {
 					trap_LAN_MarkServerVisible( ui_netSource.integer, i, qfalse );
 					continue;
 				}
@@ -4809,9 +4798,7 @@ const char *UI_FeederItemText( float feederID, int index, int column, qhandle_t 
 					if ( needpass ) {
 						handles[0] = uiInfo.passwordFilter;
 					} else { handles[0] = -1;}
-					if ( punkbuster ) {
-						handles[1] = uiInfo.punkBusterFilter;
-					} else { handles[1] = -1;}
+					handles[1] = -1;// Nico, removed pb
 					if ( antilag ) {
 						handles[2] = uiInfo.antiLagFilter;
 					} else { handles[2] = -1;}
@@ -5224,7 +5211,6 @@ void _UI_Init( void ) {
 	AssetCache();
 
 	uiInfo.passwordFilter = trap_R_RegisterShaderNoMip( "ui/assets/filter_pass.tga" );
-	uiInfo.punkBusterFilter = trap_R_RegisterShaderNoMip( "ui/assets/filter_pb.tga" );
 	uiInfo.antiLagFilter = trap_R_RegisterShaderNoMip( "ui/assets/filter_antilag.tga" );
 
 	uiInfo.campaignMap = trap_R_RegisterShaderNoMip( "gfx/loading/camp_map.tga" );

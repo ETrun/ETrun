@@ -100,7 +100,6 @@ extern vmCvar_t ui_browserMaster;
 extern vmCvar_t ui_browserSortKey;
 extern vmCvar_t ui_browserShowEmptyOrFull;
 extern vmCvar_t ui_browserShowPasswordProtected;
-extern vmCvar_t ui_browserShowPunkBuster;
 extern vmCvar_t ui_browserShowAntilag;
 extern vmCvar_t ui_serverStatusTimeOut;
 extern vmCvar_t ui_limboOptions;
@@ -287,71 +286,6 @@ typedef struct
 	float*          color;
 } menutext_s;
 
-extern void         Menu_Cache( void );
-extern void         Menu_Focus( menucommon_s *m );
-extern void         Menu_AddItem( menuframework_s *menu, void *item );
-extern void         Menu_AdjustCursor( menuframework_s *menu, int dir );
-extern void         Menu_Draw( menuframework_s *menu );
-// JOSEPH 11-9-99
-extern void         Menu_Draw_Inactive( menuframework_s *menu );
-// END JOSEPH
-extern void         *Menu_ItemAtCursor( menuframework_s *m );
-extern sfxHandle_t  Menu_ActivateItem( menuframework_s *s, menucommon_s* item );
-extern void         Menu_SetCursor( menuframework_s *s, int cursor );
-extern void         Menu_SetCursorToItem( menuframework_s *m, void* ptr );
-extern sfxHandle_t  Menu_DefaultKey( menuframework_s *s, int key );
-extern void         Bitmap_Init( menubitmap_s *b );
-extern void         Bitmap_Draw( menubitmap_s *b );
-extern void         ScrollList_Draw( menulist_s *l );
-// JOSEPH 11-23-99
-extern void         ScrollList_Draw2( menulist_s *l );
-// END JOSEPH
-extern sfxHandle_t  ScrollList_Key( menulist_s *l, int key );
-extern sfxHandle_t menu_in_sound;
-extern sfxHandle_t menu_move_sound;
-extern sfxHandle_t menu_out_sound;
-extern sfxHandle_t menu_buzz_sound;
-extern sfxHandle_t menu_null_sound;
-extern vec4_t menu_text_color;
-extern vec4_t menu_grayed_color;
-extern vec4_t menu_dark_color;
-extern vec4_t menu_highlight_color;
-extern vec4_t menu_red_color;
-extern vec4_t menu_black_color;
-extern vec4_t menu_dim_color;
-extern vec4_t color_black;
-// JOSEPH 11-29-99
-extern vec4_t color_halfblack;
-// END JOSEPH
-extern vec4_t color_white;
-extern vec4_t color_yellow;
-extern vec4_t color_blue;
-extern vec4_t color_orange;
-extern vec4_t color_red;
-extern vec4_t color_dim;
-extern vec4_t name_color;
-extern vec4_t list_color;
-extern vec4_t listbar_color;
-// JOSEPH 11-23-99
-extern vec4_t listbar_color2;
-// END JOSEPH
-extern vec4_t text_color_disabled;
-extern vec4_t text_color_normal;
-extern vec4_t text_color_highlight;
-
-//
-// ui_mfield.c
-//
-extern void         MField_Clear( mfield_t *edit );
-extern void         MField_KeyDownEvent( mfield_t *edit, int key );
-extern void         MField_CharEvent( mfield_t *edit, int ch );
-extern void         MField_Draw( mfield_t *edit, int x, int y, int style, vec4_t color );
-// JOSEPH 11-23-99
-extern void         MenuField_Draw2( menufield_s *f, int specialtype );
-// END JOSEPH
-extern void         MenuField_Init( menufield_s* m );
-extern void         MenuField_Draw( menufield_s *f );
-extern sfxHandle_t  MenuField_Key( menufield_s* m, int* key );
 
 //
 // ui_main.c
@@ -374,40 +308,8 @@ void            Text_Paint_Ext( float x, float y, float scalex, float scaley, ve
 //
 // ui_menu.c
 //
-extern void MainMenu_Cache( void );
-extern void UI_MainMenu( void );
 extern void UI_RegisterCvars( void );
 extern void UI_UpdateCvars( void );
-
-
-//
-// ui_credits.c
-//
-extern void UI_CreditMenu( void );
-
-//
-// ui_ingame.c
-//
-extern void InGame_Cache( void );
-extern void UI_InGameMenu( void );
-
-//
-// ui_confirm.c
-//
-extern void ConfirmMenu_Cache( void );
-extern void UI_ConfirmMenu( const char *question, void ( *draw )( void ), void ( *action )( qboolean result ) );
-
-//
-// ui_setup.c
-//
-extern void UI_SetupMenu_Cache( void );
-extern void UI_SetupMenu( void );
-
-//
-// ui_team.c
-//
-extern void UI_TeamMainMenu( void );
-extern void TeamMain_Cache( void );
 
 //
 // ui_connect.c
@@ -415,87 +317,9 @@ extern void TeamMain_Cache( void );
 extern void UI_DrawConnectScreen( qboolean overlay );
 
 //
-// ui_controls2.c
-//
-extern void UI_ControlsMenu( void );
-extern void Controls_Cache( void );
-
-//
-// ui_demo2.c
-//
-extern void UI_DemosMenu( void );
-extern void Demos_Cache( void );
-
-//
-// ui_cinematics.c
-//
-extern void UI_CinematicsMenu( void );
-extern void UI_CinematicsMenu_f( void );
-extern void UI_CinematicsMenu_Cache( void );
-
-//
-// ui_cdkey.c
-//
-extern void UI_CDKeyMenu( void );
-extern void UI_CDKeyMenu_Cache( void );
-extern void UI_CDKeyMenu_f( void );
-
-//
 // ui_loadpanel.c
 //
 extern void UI_DrawLoadPanel( qboolean forcerefresh, qboolean ownerdraw, qboolean uihack );
-
-//
-// ui_playermodel.c
-//
-extern void UI_PlayerModelMenu( void );
-extern void PlayerModel_Cache( void );
-
-//
-// ui_playersettings.c
-//
-extern void UI_PlayerSettingsMenu( void );
-extern void PlayerSettings_Cache( void );
-
-//
-// ui_preferences.c
-//
-extern void UI_PreferencesMenu( void );
-extern void Preferences_Cache( void );
-
-//
-// ui_specifyserver.c
-//
-extern void UI_SpecifyServerMenu( void );
-extern void SpecifyServer_Cache( void );
-
-//
-// ui_servers2.c
-//
-#define MAX_FAVORITESERVERS 16
-
-extern void UI_ArenaServersMenu( void );
-extern void ArenaServers_Cache( void );
-
-//
-// ui_startserver.c
-//
-extern void UI_StartServerMenu( qboolean multiplayer );
-extern void StartServer_Cache( void );
-extern void ServerOptions_Cache( void );
-
-//
-// ui_serverinfo.c
-//
-extern void UI_ServerInfoMenu( void );
-extern void ServerInfo_Cache( void );
-
-//
-// ui_video.c
-//
-extern void UI_GraphicsOptionsMenu( void );
-extern void GraphicsOptions_Cache( void );
-extern void DriverInfo_Cache( void );
 
 //
 // ui_players.c
@@ -862,7 +686,6 @@ typedef struct {
 	vec4_t xhairColorAlt;
 
 	qhandle_t passwordFilter;
-	qhandle_t punkBusterFilter;
 	qhandle_t antiLagFilter;
 	qhandle_t campaignMap;
 } uiInfo_t;
