@@ -856,14 +856,12 @@ void PM_CoolWeapons( void ) {
 PM_AdjustAimSpreadScale
 ==============
 */
-//#define	AIMSPREAD_DECREASE_RATE		300.0f
 #define AIMSPREAD_DECREASE_RATE     200.0f      // (SA) when I made the increase/decrease floats (so slower weapon recover could happen for scoped weaps) the average rate increased significantly
 #define AIMSPREAD_INCREASE_RATE     800.0f
 #define AIMSPREAD_VIEWRATE_MIN      30.0f       // degrees per second
 #define AIMSPREAD_VIEWRATE_RANGE    120.0f      // degrees per second
 
 void PM_AdjustAimSpreadScale( void ) {
-//	int		increase, decrease, i;
 	int i;
 	float increase, decrease;       // (SA) was losing lots of precision on slower weapons (scoped)
 	float viewchange, cmdTime, wpnScale;
@@ -883,9 +881,6 @@ void PM_AdjustAimSpreadScale( void ) {
 	case WP_SILENCER:
 	case WP_AKIMBO_LUGER:
 	case WP_AKIMBO_SILENCEDLUGER:
-// rain - luger and akimbo are supposed to be balanced
-//		wpnScale = 0.5f;
-//		break;
 	case WP_COLT:
 	case WP_SILENCED_COLT:
 	case WP_AKIMBO_COLT:
@@ -988,12 +983,6 @@ PM_Weapon
 Generates weapon events and modifes the weapon counter
 ==============
 */
-
-#define VENOM_LOW_IDLE  WEAP_IDLE1
-#define VENOM_HI_IDLE   WEAP_IDLE2
-#define VENOM_RAISE     WEAP_ATTACK1
-#define VENOM_ATTACK    WEAP_ATTACK2
-#define VENOM_LOWER     WEAP_ATTACK_LASTSHOT
 
 //#define DO_WEAPON_DBG 1
 

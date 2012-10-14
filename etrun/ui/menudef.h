@@ -185,38 +185,21 @@ If you have questions concerning this license or the applicable additional terms
 #define CG_SELECTEDPLAYER_STATUS    10
 #define CG_SELECTEDPLAYER_WEAPON    11
 #define CG_SELECTEDPLAYER_POWERUP   12
-
 #define CG_FLAGCARRIER_HEAD         13
 #define CG_FLAGCARRIER_NAME         14
 #define CG_FLAGCARRIER_LOCATION     15
 #define CG_FLAGCARRIER_STATUS       16
 #define CG_FLAGCARRIER_WEAPON       17
 #define CG_FLAGCARRIER_POWERUP      18
-
 #define CG_PLAYER_ITEM              19
 #define CG_PLAYER_SCORE             20
-
-/*#define CG_BLUE_FLAGHEAD			21
-#define CG_BLUE_FLAGSTATUS			22
-#define CG_BLUE_FLAGNAME			23
-#define CG_RED_FLAGHEAD             24
-#define CG_RED_FLAGSTATUS			25
-#define CG_RED_FLAGNAME             26*/
-
 #define CG_BLUE_SCORE               27
 #define CG_RED_SCORE                28
-/*#define CG_RED_NAME               29
-#define CG_BLUE_NAME				30
-#define CG_HARVESTER_SKULLS         31	// only shows in harvester
-#define CG_ONEFLAG_STATUS			32	// only shows in one flag*/
 #define CG_TEAM_COLOR               34
-//#define CG_CTF_POWERUP				35
-
 #define CG_AREA_POWERUP             36
 #define CG_AREA_LAGOMETER           37  // painted with old system
 #define CG_PLAYER_HASFLAG           38
 #define CG_GAME_TYPE                39  // not done
-
 #define CG_SELECTEDPLAYER_HEALTH    41
 #define CG_PLAYER_STATUS            42
 #define CG_FRAGGED_MSG              43  // painted with old system
@@ -283,7 +266,6 @@ If you have questions concerning this license or the applicable additional terms
 #define UI_REDTEAM4                 218
 #define UI_REDTEAM5                 219
 #define UI_NETSOURCE                220
-//#define UI_NETMAPPREVIEW			221
 #define UI_NETFILTER                222
 #define UI_TIER                     223
 #define UI_OPPONENTMODEL            224
@@ -302,7 +284,6 @@ If you have questions concerning this license or the applicable additional terms
 #define UI_OPPONENT_NAME            237
 #define UI_VOTE_KICK                238
 #define UI_BOTNAME                  239
-//#define UI_BOTSKILL               240
 #define UI_REDBLUE                  241
 #define UI_CROSSHAIR                242
 #define UI_SELECTEDPLAYER           243

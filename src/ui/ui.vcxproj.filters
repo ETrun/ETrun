@@ -102,12 +102,6 @@
     <None Include="..\..\etrun\ui\ingame_serverinfo.menu">
       <Filter>Menu Files</Filter>
     </None>
-    <None Include="..\..\etrun\ui\ingame_tapout.menu">
-      <Filter>Menu Files</Filter>
-    </None>
-    <None Include="..\..\etrun\ui\ingame_tapoutlms.menu">
-      <Filter>Menu Files</Filter>
-    </None>
     <None Include="..\..\etrun\ui\ingame_vote.menu">
       <Filter>Menu Files</Filter>
     </None>

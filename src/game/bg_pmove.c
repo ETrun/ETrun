@@ -2742,7 +2742,7 @@ void PmoveSingle( pmove_t *pmove ) {
 
 	// clear the respawned flag if attack and use are cleared
 	if ( pm->ps->stats[STAT_HEALTH] > 0 &&
-		 !( pm->cmd.buttons & ( BUTTON_ATTACK /*| BUTTON_USE_HOLDABLE*/ ) ) ) {
+		 !( pm->cmd.buttons & BUTTON_ATTACK ) ) {
 		pm->ps->pm_flags &= ~PMF_RESPAWNED;
 	}
 

@@ -255,10 +255,6 @@ typedef int sfxHandle_t;
 typedef int fileHandle_t;
 typedef int clipHandle_t;
 
-//#define	SND_NORMAL			0x000	// (default) Allow sound to be cut off only by the same sound on this channel
-#define     SND_OKTOCUT         0x001   // Allow sound to be cut off by any following sounds on this channel
-#define     SND_REQUESTCUT      0x002   // Allow sound to be cut off by following sounds on this channel only for sounds who request cutoff
-#define     SND_CUTOFF          0x004   // Cut off sounds on this channel that are marked 'SND_REQUESTCUT'
 #define     SND_CUTOFF_ALL      0x008   // Cut off all sounds on this channel
 #define     SND_NOCUT           0x010   // Don't cut off.  Always let finish (overridden by SND_CUTOFF_ALL)
 #define     SND_NO_ATTENUATION  0x020   // don't attenuate (even though the sound is in voice channel, for example)
@@ -509,7 +505,6 @@ extern vec4_t clrBrownLineFull;
 #define COLOR_ORANGE    '8'
 #define COLOR_MDGREY    '9'
 #define COLOR_LTGREY    ':'
-//#define COLOR_LTGREY	';'
 #define COLOR_MDGREEN   '<'
 #define COLOR_MDYELLOW  '='
 #define COLOR_MDBLUE    '>'
@@ -534,7 +529,6 @@ extern vec4_t clrBrownLineFull;
 #define S_COLOR_ORANGE      "^8"
 #define S_COLOR_MDGREY      "^9"
 #define S_COLOR_LTGREY      "^:"
-//#define S_COLOR_LTGREY		"^;"
 #define S_COLOR_MDGREEN     "^<"
 #define S_COLOR_MDYELLOW    "^="
 #define S_COLOR_MDBLUE      "^>"
@@ -977,7 +971,6 @@ PlaneTypeForNormal
 =================
 */
 
-//#define PlaneTypeForNormal(x) (x[0] == 1.0 ? PLANE_X : (x[1] == 1.0 ? PLANE_Y : (x[2] == 1.0 ? PLANE_Z : PLANE_NON_AXIAL) ) )
 #define PlaneTypeForNormal( x ) ( x[0] == 1.0 ? PLANE_X : ( x[1] == 1.0 ? PLANE_Y : ( x[2] == 1.0 ? PLANE_Z : ( x[0] == 0.f && x[1] == 0.f && x[2] == 0.f ? PLANE_NON_PLANAR : PLANE_NON_AXIAL ) ) ) )
 
 
@@ -1138,13 +1131,7 @@ typedef enum
 #define MAX_PERSISTANT          16
 #define MAX_POWERUPS            16
 #define MAX_WEAPONS             64  // (SA) and yet more!
-
-// Ridah, increased this
-//#define	MAX_PS_EVENTS			2
-// ACK: I'd really like to make this 4, but that seems to cause network problems
 #define MAX_EVENTS              4   // max events per frame before we drop events
-//#define	MAX_EVENTS				2	// max events per frame before we drop events
-
 
 #define PS_PMOVEFRAMECOUNTBITS  6
 
@@ -1313,8 +1300,6 @@ typedef struct playerState_s {
 //
 #define BUTTON_ATTACK       1
 #define BUTTON_TALK         2           // displays talk balloon and disables actions
-//#define	BUTTON_USE_HOLDABLE	4
-#define BUTTON_GESTURE      8
 #define BUTTON_WALKING      16          // walking can't just be infered from MOVE_RUN
 										// because a key pressed late in the frame will
 										// only generate a small move value for that frame

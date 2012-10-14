@@ -1630,7 +1630,6 @@ void CG_EntityEvent( centity_t *cent, vec3_t position ) {
 		//
 	case EV_VENOM:
 		DEBUGNAME( "EV_VENOM" );
-//		CG_VenomFire( es, qfalse );
 		break;
 
 	case EV_WEAP_OVERHEAT:

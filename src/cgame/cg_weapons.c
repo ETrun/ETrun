@@ -4971,22 +4971,6 @@ void CG_MissileHitPlayer( int weapon, vec3_t origin, vec3_t dir ) {
 	}
 }
 
-
-
-/*
-============================================================================
-
-VENOM GUN TRACING
-
-============================================================================
-*/
-
-//----(SA)	all changes to venom below should be mine
-#define DEFAULT_VENOM_COUNT 10
-//#define DEFAULT_VENOM_SPREAD 20
-//#define DEFAULT_VENOM_SPREAD 400
-#define DEFAULT_VENOM_SPREAD 700
-
 /*
 ============================================================================
 

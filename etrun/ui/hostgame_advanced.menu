@@ -139,7 +139,6 @@ menuDef {
 	NUMERICFIELD( 6+(SUBWINDOW_WIDTH)+6+2, 376, (SUBWINDOW_WIDTH)-4, 10, "Maximum Download Rate:", .2, 8, "sv_dl_maxRate", 6, "Specifies the maximum download rate from the server for players with missing files" )
 	YESNO( 6+(SUBWINDOW_WIDTH)+6+2, 388, (SUBWINDOW_WIDTH)-4, 10, "FTP/HTTP Redirects:", .2, 8, "sv_wwwDownload", "Redirects players with missing files to another server" )
 	EDITFIELD( 6+(SUBWINDOW_WIDTH)+6+2, 400, (SUBWINDOW_WIDTH)-4, 10, "Base URL:", .2, 8, "sv_wwwBaseUrl", 64, 18, "Used to build the URL given to clients for download" )
-//	EDITFIELD( 6+(SUBWINDOW_WIDTH)+6+2, 412, (SUBWINDOW_WIDTH)-4, 10, "Check Path:", .2, 8, "sv_wwwCheckPath", 64, 18, "A local path on the server to check for files" )
 
 // Buttons //
 	

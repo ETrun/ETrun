@@ -4503,7 +4503,6 @@ void func_constructible_explode( gentity_t *self, gentity_t *inflictor, gentity_
 func_constructible_underconstructionthink
 ==============
 */
-//#define CONSTRUCT_PREDECAY_TIME	3000	// if not under construction for this duration, start decaying
 #define CONSTRUCT_PREDECAY_TIME 30000   // if not under construction for this duration, start decaying
 void func_constructible_underconstructionthink( gentity_t *ent ) {
 	if ( level.time - ent->lastHintCheckTime >= CONSTRUCT_PREDECAY_TIME ) {

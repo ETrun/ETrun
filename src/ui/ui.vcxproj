@@ -185,8 +185,6 @@
     <None Include="..\..\etrun\ui\ingame_main.menu" />
     <None Include="..\..\etrun\ui\ingame_messagemode.menu" />
     <None Include="..\..\etrun\ui\ingame_serverinfo.menu" />
-    <None Include="..\..\etrun\ui\ingame_tapout.menu" />
-    <None Include="..\..\etrun\ui\ingame_tapoutlms.menu" />
     <None Include="..\..\etrun\ui\ingame_vote.menu" />
     <None Include="..\..\etrun\ui\ingame_vote_disabled.menu" />
     <None Include="..\..\etrun\ui\ingame_vote_map.menu" />

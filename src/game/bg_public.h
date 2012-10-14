@@ -409,7 +409,6 @@ typedef enum {
 #define PMF_TIME_KNOCKBACK  64      // pm_time is an air-accelerate only time
 #define PMF_TIME_WATERJUMP  256     // pm_time is waterjump
 #define PMF_RESPAWNED       512     // clear after attack and jump buttons come up
-//#define PMF_PRONE_BIPOD		1024	// prone with a bipod set
 #define PMF_FLAILING        2048
 #define PMF_FOLLOW          4096    // spectate following another player
 #define PMF_TIME_LOAD       8192    // hold for this time after a load game, and prevent large thinks
@@ -815,8 +814,6 @@ extern int weapAlts[];  // defined in bg_misc.c
 #define WP_LASTSECONDARY    WP_SILENCED_COLT
 #define WEAPS_ONE_HANDED    ( ( 1 << WP_KNIFE ) | ( 1 << WP_LUGER ) | ( 1 << WP_COLT ) | ( 1 << WP_SILENCER ) | ( 1 << WP_SILENCED_COLT ) | ( 1 << WP_GRENADE_LAUNCHER ) | ( 1 << WP_GRENADE_PINEAPPLE ) )
 
-// TTimo
-// NOTE: what about WP_VENOM and other XP weapons?
 // rain - #81 - added added akimbo weapons and deployed MG42
 #define IS_AUTORELOAD_WEAPON( weapon ) \
 	(	\
@@ -1412,7 +1409,6 @@ qboolean BG_CanUseWeapon( int classNum, int teamNum, weapon_t weapon );
 #define MASK_PLAYERSOLID        ( CONTENTS_SOLID | CONTENTS_PLAYERCLIP | CONTENTS_BODY )
 #define MASK_DEADSOLID          ( CONTENTS_SOLID | CONTENTS_PLAYERCLIP )
 #define MASK_WATER              ( CONTENTS_WATER | CONTENTS_LAVA | CONTENTS_SLIME )
-//#define	MASK_OPAQUE				(CONTENTS_SOLID|CONTENTS_SLIME|CONTENTS_LAVA)
 #define MASK_OPAQUE             ( CONTENTS_SOLID | CONTENTS_LAVA )      //----(SA)	modified since slime is no longer deadly
 #define MASK_SHOT               ( CONTENTS_SOLID | CONTENTS_BODY | CONTENTS_CORPSE )
 #define MASK_MISSILESHOT        ( MASK_SHOT | CONTENTS_MISSILECLIP )
@@ -1507,7 +1503,6 @@ qboolean    BG_AddMagicAmmo( playerState_t *ps, int teamNum, int numOfClips );
 //----(SA)	removed PM_ammoNeeded 11/27/00
 void PM_ClipVelocity( vec3_t in, vec3_t normal, vec3_t out, float overbounce );
 
-//#define ARENAS_PER_TIER		4
 #define MAX_ARENAS          64
 #define MAX_ARENAS_TEXT     8192
 

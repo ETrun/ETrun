@@ -651,8 +651,6 @@ typedef struct {
 #define GAMES_TEAMPLAY      2
 #define GAMES_TOURNEY       3
 #define GAMES_CTF           4
-//#define MAPS_PER_TIER 3
-//#define MAX_TIERS 16
 #define MAX_MODS 64
 #define MAX_DEMOS 256
 #define MAX_MOVIES 256

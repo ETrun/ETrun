@@ -32,8 +32,6 @@ If you have questions concerning this license or the applicable additional terms
 
 #include "cg_local.h"
 
-// Ridah, increased this
-//#define	MAX_LOCAL_ENTITIES	512
 #define MAX_LOCAL_ENTITIES  768     // renderer can only handle 1024 entities max, so we should avoid
 									// overwriting game entities
 // done.
