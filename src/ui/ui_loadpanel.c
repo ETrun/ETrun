@@ -156,10 +156,6 @@ void UI_DrawLoadPanel( qboolean forcerefresh, qboolean ownerdraw, qboolean uihac
 
 	BG_PanelButtonsRender( loadpanelButtons );
 
-	if ( forcerefresh ) {
-		//trap_UpdateScreen();
-	}
-
 	if ( !uihack && trap_Cvar_VariableValue( "ui_connecting" ) ) {
 		trap_Cvar_Set( "ui_connecting", "0" );
 	}

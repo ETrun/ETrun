@@ -52,8 +52,6 @@ If you have questions concerning this license or the applicable additional terms
 
 #define CONFIG_NAME     "etconfig.cfg"
 
-//#define LOCALIZATION_SUPPORT
-
 #define NEW_ANIMS
 #define MAX_TEAMNAME    32
 
@@ -825,11 +823,6 @@ char *Q_CleanStr( char *string );
 // removes whitespaces and other bad directory characters
 char *Q_CleanDirName( char *dirname );
 
-// Nico, not needed
-// #define _vsnprintf use_Q_vsnprintf
-// #define vsnprintf use_Q_vsnprintf
-// Nico, replaced this function by the one in ioquake3
-// int Q_vsnprintf( char *dest, int size, const char *fmt, va_list argptr );
 int Q_vsnprintf(char *str, size_t size, const char *format, va_list ap);
 
 //=============================================
@@ -1013,10 +1006,6 @@ typedef struct {
 	int entityNum;          // entity the contacted sirface is a part of
 } trace_t;
 
-// trace->entityNum can also be 0 to (MAX_GENTITIES-1)
-// or ENTITYNUM_NONE, ENTITYNUM_WORLD
-
-
 // markfragments are returned by CM_MarkFragments()
 typedef struct {
 	int firstPoint;
@@ -1187,8 +1176,6 @@ typedef struct playerState_s {
 									// lifetime when the attack button goes down, then when attack is released
 									// this is the amount of time left before the grenade goes off (or if it
 									// gets to 0 while in players hand, it explodes)
-
-
 	int gravity;
 	float leanf;                // amount of 'lean' when player is looking around corner //----(SA)	added
 
@@ -1208,8 +1195,6 @@ typedef struct playerState_s {
 								// of movement to the view angle (axial and diagonals)
 								// when at rest, the value will remain unchanged
 								// used to twist the legs during strafing
-
-
 
 	int eFlags;                 // copied to entityState_t->eFlags
 
@@ -1265,9 +1250,6 @@ typedef struct playerState_s {
 
 	int nextWeapon;
 	int teamNum;                        // Arnout: doesn't seem to be communicated over the net
-
-	// Rafael
-	//int			gunfx;
 
 	// RF, burning effect is required for view blending effect
 	int onFireStart;

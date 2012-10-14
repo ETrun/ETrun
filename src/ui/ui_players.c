@@ -30,7 +30,6 @@ If you have questions concerning this license or the applicable additional terms
 
 #include "ui_local.h"
 
-
 #define UI_TIMER_GESTURE        2300
 #define UI_TIMER_JUMP           1000
 #define UI_TIMER_LAND           130
@@ -646,13 +645,11 @@ void UI_DrawPlayer( float x, float y, float w, float h, playerInfo_t *pi, int ti
 	origin[0] -= 100;   // + = behind, - = in front
 	origin[1] += 100;   // + = left, - = right
 	origin[2] += 100;   // + = above, - = below
-	//%	trap_R_AddLightToScene( origin, 1000, 1.0, 1.0, 1.0, 0 );
 	trap_R_AddLightToScene( origin, 1000, 1.0, 1.0, 1.0, 1.0, 0, 0 );
 
 	origin[0] -= 100;
 	origin[1] -= 100;
 	origin[2] -= 100;
-	//%	trap_R_AddLightToScene( origin, 1000, 1.0, 1.0, 1.0, 0 );
 	trap_R_AddLightToScene( origin, 1000, 1.0, 1.0, 1.0, 1.0, 0, 0 );
 
 	trap_R_RenderScene( &refdef );
@@ -966,8 +963,6 @@ qboolean UI_RegisterClientModelname( playerInfo_t *pi, const char *modelSkinName
 		const char *playerClass;
 		int var, teamval;
 
-		// DHM - Nerve :: Don't rely on cvar for team, use modelname instead
-		//teamval = trap_Cvar_VariableValue( "mp_team" );
 		if ( !strcmp( modelSkinName, "multi" ) ) {
 			teamval = 1;
 			team = "blue";

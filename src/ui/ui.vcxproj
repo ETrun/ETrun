@@ -164,7 +164,6 @@
     <ClCompile Include="ui_players.c" />
     <ClCompile Include="ui_shared.c" />
     <ClCompile Include="ui_syscalls.c" />
-    <ClCompile Include="ui_util.c" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\etrun\ui\credits_activision.menu" />

@@ -698,47 +698,6 @@ void SetPlaneSignbits( cplane_t *out ) {
 	out->signbits = bits;
 }
 
-
-/*
-==================
-BoxOnPlaneSide
-
-Returns 1, 2, or 1 + 2
-
-// this is the slow, general version
-int BoxOnPlaneSide2 (vec3_t emins, vec3_t emaxs, struct cplane_s *p)
-{
-	int		i;
-	float	dist1, dist2;
-	int		sides;
-	vec3_t	corners[2];
-
-	for (i=0 ; i<3 ; i++)
-	{
-		if (p->normal[i] < 0)
-		{
-			corners[0][i] = emins[i];
-			corners[1][i] = emaxs[i];
-		}
-		else
-		{
-			corners[1][i] = emins[i];
-			corners[0][i] = emaxs[i];
-		}
-	}
-	dist1 = DotProduct (p->normal, corners[0]) - p->dist;
-	dist2 = DotProduct (p->normal, corners[1]) - p->dist;
-	sides = 0;
-	if (dist1 >= 0)
-		sides = 1;
-	if (dist2 < 0)
-		sides |= 2;
-
-	return sides;
-}
-
-==================
-*/
 #if !( defined __linux__ && defined __i386__ && !defined C_ONLY )
 
 #if defined __LCC__ || defined C_ONLY || !id386 || __GNUC__
@@ -1281,27 +1240,6 @@ int Q_log2( int val ) {
 	}
 	return answer;
 }
-
-
-
-/*
-=================
-PlaneTypeForNormal
-=================
-*/
-/*
-int	PlaneTypeForNormal (vec3_t normal) {
-	if ( normal[0] == 1.0 )
-		return PLANE_X;
-	if ( normal[1] == 1.0 )
-		return PLANE_Y;
-	if ( normal[2] == 1.0 )
-		return PLANE_Z;
-
-	return PLANE_NON_AXIAL;
-}
-*/
-
 
 /*
 ================

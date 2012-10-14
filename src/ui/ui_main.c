@@ -26,10 +26,6 @@ If you have questions concerning this license or the applicable additional terms
 ===========================================================================
 */
 
-
-
-
-
 /*
 =======================================================================
 
@@ -236,8 +232,6 @@ int vmMain( int command, int arg0, int arg1, int arg2, int arg3, int arg4, int a
 
 	return -1;
 }
-
-
 
 void AssetCache() {
 	int n;
@@ -961,7 +955,6 @@ char *GetMenuBuffer( const char *filename ) {
 	trap_FS_Read( buf, len, f );
 	buf[len] = 0;
 	trap_FS_FCloseFile( f );
-	//COM_Compress(buf);
 	return buf;
 
 }
@@ -1148,9 +1141,6 @@ qboolean UI_ParseMenu( const char *menuFile ) {
 
 qboolean Load_Menu( int handle ) {
 	pc_token_t token;
-#ifdef LOCALIZATION_SUPPORT
-	int cl_language;    // NERVE - SMF
-#endif // LOCALIZATION_SUPPORT
 
 	if ( !trap_PC_ReadToken( handle, &token ) ) {
 		return qfalse;
@@ -1172,36 +1162,6 @@ qboolean Load_Menu( int handle ) {
 		if ( token.string[0] == '}' ) {
 			return qtrue;
 		}
-
-#ifdef LOCALIZATION_SUPPORT
-		// NERVE - SMF - localization crap
-		cl_language = atoi( UI_Cvar_VariableString( "cl_language" ) );
-
-		if ( cl_language ) {
-			const char *s = NULL; // TTimo: init
-			const char *filename;
-			char out[256];
-
-			COM_StripFilename( token.string, out );
-
-			filename = COM_SkipPath( token.string );
-
-			if ( cl_language == 1 ) {
-				s = va( "%s%s", out, "french/" );
-			} else if ( cl_language == 2 ) {
-				s = va( "%s%s", out, "german/" );
-			} else if ( cl_language == 3 ) {
-				s = va( "%s%s", out, "italian/" );
-			} else if ( cl_language == 4 ) {
-				s = va( "%s%s", out, "spanish/" );
-			}
-
-			if ( UI_ParseMenu( va( "%s%s", s, filename ) ) ) {
-				continue;
-			}
-		}
-		// -NERVE
-#endif // LOCALIZATION_SUPPORT
 
 		UI_ParseMenu( token.string );
 	}
