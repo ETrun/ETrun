@@ -123,8 +123,6 @@ void Tooltip_ComputePosition( itemDef_t *item ) {
 	// Set positioning based on item location
 	tipRect->x = itemRect->x + ( itemRect->w / 3 );
 	tipRect->y = itemRect->y + itemRect->h + 8;
-	//tipRect->h = 14.0f;
-	//tipRect->w = DC->textWidth( item->toolTipData->text, item->toolTipData->textscale, 0 ) + 6.0f;
 	tipRect->h = DC->multiLineTextHeight( item->toolTipData->text, item->toolTipData->textscale, 0 ) + 9.f;
 	tipRect->w = DC->multiLineTextWidth( item->toolTipData->text, item->toolTipData->textscale, 0 ) + 6.f;
 	if ( ( tipRect->w + tipRect->x ) > 635.0f ) {
@@ -171,14 +169,6 @@ void UI_InitMemory( void ) {
 	allocPoint = 0;
 	outOfMemory = qfalse;
 }
-
-qboolean UI_OutOfMemory() {
-	return outOfMemory;
-}
-
-
-
-
 
 #define HASH_TABLE_SIZE 2048
 /*
@@ -526,7 +516,6 @@ void Fade( int *flags, float *f, float clamp, int *nextTime, int offsetTime, qbo
 }
 
 void Window_Paint( Window *w, float fadeAmount, float fadeClamp, float fadeCycle ) {
-	//float bordersize = 0;
 	vec4_t color;
 	rectDef_t fillRect;
 
@@ -637,14 +626,6 @@ void Item_SetScreenCoords( itemDef_t *item, float x, float y ) {
 	item->window.rect.w = item->window.rectClient.w;
 	item->window.rect.h = item->window.rectClient.h;
 
-	// FIXME: do the proper thing for the right borders here?
-	/*if( item->window.border != 0 ) {
-		item->window.rect.x += item->window.borderSize;
-		item->window.rect.y += item->window.borderSize;
-		item->window.rect.w -= 2 * item->window.borderSize;
-		item->window.rect.h -= 2 * item->window.borderSize;
-	}*/
-
 	// Don't let tooltips draw off the screen.
 	if ( item->toolTipData ) {
 		Item_SetScreenCoords( item->toolTipData, x, y );
@@ -676,11 +657,6 @@ void Item_UpdatePosition( itemDef_t *item ) {
 	x = menu->window.rect.x;
 	y = menu->window.rect.y;
 
-	/*if (menu->window.border != 0) {
-		x += menu->window.borderSize;
-		y += menu->window.borderSize;
-	}*/
-
 	Item_SetScreenCoords( item, x, y );
 
 }
@@ -696,11 +672,6 @@ void Menu_UpdatePosition( menuDef_t *menu ) {
 
 	x = menu->window.rect.x;
 	y = menu->window.rect.y;
-
-	/*if (menu->window.border != 0) {
-		x += menu->window.borderSize;
-		y += menu->window.borderSize;
-	}*/
 
 	for ( i = 0; i < menu->itemCount; i++ ) {
 		Item_SetScreenCoords( menu->items[i], x, y );
@@ -1447,17 +1418,6 @@ void Script_ConditionalScript( itemDef_t *item, qboolean *bAbort, char **args ) 
 				} else {
 					Item_RunScript( item, bAbort, script2 );
 				}
-				/*} else if( !Q_stricmpn( cvar, "voteflags", 9 ) ) {
-					char info[MAX_INFO_STRING];
-					int voteflags = atoi(cvar + 9);
-
-					trap_Cvar_VariableStringBuffer( "cg_ui_voteFlags", info, sizeof(info) );
-
-					if( (atoi(info) & item->voteFlag) != item->voteFlag ) {
-						Item_RunScript( item, bAbort, script1 );
-					} else {
-						Item_RunScript( item, bAbort, script2 );
-					}*/
 #ifndef CGAMEDLL
 			} else if ( !Q_stricmpn( cvar, "serversort_", 11 ) ) {
 				int sorttype = atoi( cvar + 11 );
@@ -2309,11 +2269,8 @@ float Item_Slider_ThumbPosition( itemDef_t *item ) {
 	range = editDef->maxVal - editDef->minVal;
 	value -= editDef->minVal;
 	value /= range;
-	//value /= (editDef->maxVal - editDef->minVal);
 	value *= SLIDER_WIDTH;
 	x += value;
-	// vm fuckage
-	//x = x + (((float)value / editDef->maxVal) * SLIDER_WIDTH);
 	return x;
 }
 
@@ -2321,7 +2278,6 @@ int Item_Slider_OverSlider( itemDef_t *item, float x, float y ) {
 	rectDef_t r;
 
 	r.x = Item_Slider_ThumbPosition( item ) - ( SLIDER_THUMB_WIDTH / 2 );
-	//r.y = item->window.rect.y - 2;
 	r.y = item->window.rect.y;
 	r.w = SLIDER_THUMB_WIDTH;
 	r.h = SLIDER_THUMB_HEIGHT;
@@ -3222,7 +3178,6 @@ void Item_StartCapture( itemDef_t *item, int key ) {
 qboolean Item_Slider_HandleKey( itemDef_t *item, int key ) {
 	float x, value, width, work;
 
-	//DC->Print("slider handle key\n");
 	if ( item->window.flags & WINDOW_HASFOCUS && item->cvar && Rect_ContainsPoint( &item->window.rect, DC->cursorx, DC->cursory ) ) {
 		if ( key == K_MOUSE1 || key == K_ENTER || key == K_MOUSE2 || key == K_MOUSE3 ) {
 			editFieldDef_t *editDef = item->typeData;
@@ -3239,15 +3194,11 @@ qboolean Item_Slider_HandleKey( itemDef_t *item, int key ) {
 				testRect.x = x;
 				value = (float)SLIDER_THUMB_WIDTH / 2;
 				testRect.x -= value;
-				//DC->Print("slider x: %f\n", testRect.x);
 				testRect.w = ( SLIDER_WIDTH + (float)SLIDER_THUMB_WIDTH / 2 );
-				//DC->Print("slider w: %f\n", testRect.w);
 				if ( Rect_ContainsPoint( &testRect, DC->cursorx, DC->cursory ) ) {
 					work = DC->cursorx - x;
 					value = work / width;
 					value *= ( editDef->maxVal - editDef->minVal );
-					// vm fuckage
-					// value = (((float)(DC->cursorx - x)/ SLIDER_WIDTH) * (editDef->maxVal - editDef->minVal));
 					value += editDef->minVal;
 					DC->setCVar( item->cvar, va( "%f", value ) );
 					return qtrue;
@@ -3255,7 +3206,6 @@ qboolean Item_Slider_HandleKey( itemDef_t *item, int key ) {
 			}
 		}
 	}
-//	DC->Print("slider handle key exit\n");
 	return qfalse;
 }
 
@@ -3295,44 +3245,29 @@ qboolean Item_HandleKey( itemDef_t *item, int key, qboolean down ) {
 
 	switch ( item->type ) {
 	case ITEM_TYPE_BUTTON:
-		return qfalse;
-		break;
 	case ITEM_TYPE_RADIOBUTTON:
 		return qfalse;
-		break;
 	case ITEM_TYPE_CHECKBOX:
 	case ITEM_TYPE_TRICHECKBOX:
 		return Item_CheckBox_HandleKey( item, key );
-		break;
 	case ITEM_TYPE_EDITFIELD:
 	case ITEM_TYPE_NUMERICFIELD:
-		//return Item_TextField_HandleKey(item, key);
-		return qfalse;
-		break;
 	case ITEM_TYPE_COMBO:
 		return qfalse;
-		break;
 	case ITEM_TYPE_LISTBOX:
 		return Item_ListBox_HandleKey( item, key, qfalse );
-		break;
 	case ITEM_TYPE_YESNO:
 		return Item_YesNo_HandleKey( item, key );
-		break;
 	case ITEM_TYPE_MULTI:
 		return Item_Multi_HandleKey( item, key );
-		break;
 	case ITEM_TYPE_OWNERDRAW:
 		return Item_OwnerDraw_HandleKey( item, key );
-		break;
 	case ITEM_TYPE_BIND:
 		return Item_Bind_HandleKey( item, key, down );
-		break;
 	case ITEM_TYPE_SLIDER:
 		return Item_Slider_HandleKey( item, key );
-		break;
 	default:
 		return qfalse;
-		break;
 	}
 }
 
@@ -3442,23 +3377,6 @@ static void Display_CloseCinematics() {
 	}
 }
 
-/*void  Menus_Activate(menuDef_t *menu) {
-	menu->window.flags |= (WINDOW_HASFOCUS | WINDOW_VISIBLE);
-	if (menu->onOpen) {
-		itemDef_t item;
-		item.parent = menu;
-		Item_RunScript(&item, NULL, menu->onOpen);
-	}
-
-	if (menu->soundName && *menu->soundName) {
-//		DC->stopBackgroundTrack();					// you don't want to do this since it will reset s_rawend
-		DC->startBackgroundTrack(menu->soundName, menu->soundName);
-	}
-
-	Display_CloseCinematics();
-
-}*/
-
 void  Menus_Activate( menuDef_t *menu ) {
 	int i;
 	for ( i = 0; i < menuCount; i++ ) {
@@ -3477,7 +3395,6 @@ void  Menus_Activate( menuDef_t *menu ) {
 	menu->openTime = DC->realTime;
 
 	if ( menu->soundName && *menu->soundName ) {
-//		DC->stopBackgroundTrack();					// you don't want to do this since it will reset s_rawend
 		DC->startBackgroundTrack( menu->soundName, menu->soundName, 0 );
 	}
 
@@ -3517,13 +3434,9 @@ void Menus_HandleOOBClick( menuDef_t *menu, int key, qboolean down ) {
 
 		for ( i = 0; i < menuCount; i++ ) {
 			if ( Menu_OverActiveItem( &Menus[i], DC->cursorx, DC->cursory ) ) {
-//				Menu_RunCloseScript(menu);			// NERVE - SMF - why do we close the calling menu instead of just removing the focus?
-//				menu->window.flags &= ~(WINDOW_HASFOCUS | WINDOW_VISIBLE | WINDOW_MOUSEOVER);
-
 				menu->window.flags &= ~( WINDOW_HASFOCUS | WINDOW_MOUSEOVER );
 				Menus[i].window.flags |= ( WINDOW_HASFOCUS | WINDOW_VISIBLE );
 
-//				Menus_Activate(&Menus[i]);
 				Menu_HandleMouseMove( &Menus[i], DC->cursorx, DC->cursory );
 				Menu_HandleKey( &Menus[i], key, down );
 			}
@@ -3775,10 +3688,6 @@ void Menu_HandleKey( menuDef_t *menu, int key, qboolean down ) {
 }
 
 void ToWindowCoords( float *x, float *y, windowDef_t *window ) {
-	/*if (window->border != 0) {
-		*x += window->borderSize;
-		*y += window->borderSize;
-	} */
 	*x += window->rect.x;
 	*y += window->rect.y;
 }
@@ -4033,10 +3942,8 @@ void Item_Text_Paint( itemDef_t *item ) {
 
 		// build string
 		if ( seconds <= 2 ) {
-			//Com_sprintf( text, 255, "^1%d", seconds );
 			Com_sprintf( text, 255, item->text, va( "^1%d^*", seconds ) );
 		} else {
-			//Com_sprintf( text, 255, "%d", seconds );
 			Com_sprintf( text, 255, item->text, va( "%d", seconds ) );
 		}
 
@@ -4053,35 +3960,6 @@ void Item_Text_Paint( itemDef_t *item ) {
 
 
 	Item_TextColor( item, &color );
-
-	//FIXME: this is a fucking mess
-/*
-	adjust = 0;
-	if (item->textStyle == ITEM_TEXTSTYLE_OUTLINED || item->textStyle == ITEM_TEXTSTYLE_OUTLINESHADOWED) {
-		adjust = 0.5;
-	}
-
-	if (item->textStyle == ITEM_TEXTSTYLE_SHADOWED || item->textStyle == ITEM_TEXTSTYLE_OUTLINESHADOWED) {
-		Fade(&item->window.flags, &DC->Assets.shadowColor[3], DC->Assets.fadeClamp, &item->window.nextTime, DC->Assets.fadeCycle, qfalse);
-		DC->drawText(item->textRect.x + DC->Assets.shadowX, item->textRect.y + DC->Assets.shadowY, item->textscale, DC->Assets.shadowColor, textPtr, adjust);
-	}
-*/
-
-
-//	if (item->textStyle == ITEM_TEXTSTYLE_OUTLINED || item->textStyle == ITEM_TEXTSTYLE_OUTLINESHADOWED) {
-//		Fade(&item->window.flags, &item->window.outlineColor[3], DC->Assets.fadeClamp, &item->window.nextTime, DC->Assets.fadeCycle, qfalse);
-//		/*
-//		Text_Paint(item->textRect.x-1, item->textRect.y-1, item->textscale, item->window.foreColor, textPtr, adjust);
-//		Text_Paint(item->textRect.x, item->textRect.y-1, item->textscale, item->window.foreColor, textPtr, adjust);
-//		Text_Paint(item->textRect.x+1, item->textRect.y-1, item->textscale, item->window.foreColor, textPtr, adjust);
-//		Text_Paint(item->textRect.x-1, item->textRect.y, item->textscale, item->window.foreColor, textPtr, adjust);
-//		Text_Paint(item->textRect.x+1, item->textRect.y, item->textscale, item->window.foreColor, textPtr, adjust);
-//		Text_Paint(item->textRect.x-1, item->textRect.y+1, item->textscale, item->window.foreColor, textPtr, adjust);
-//		Text_Paint(item->textRect.x, item->textRect.y+1, item->textscale, item->window.foreColor, textPtr, adjust);
-//		Text_Paint(item->textRect.x+1, item->textRect.y+1, item->textscale, item->window.foreColor, textPtr, adjust);
-//		*/
-//		DC->drawText(item->textRect.x - 1, item->textRect.y + 1, item->textscale * 1.02, item->window.outlineColor, textPtr, adjust);
-//	}
 
 	DC->drawText( item->textRect.x, item->textRect.y, item->textscale, color, textPtr, 0, 0, item->textStyle );
 }
@@ -4384,7 +4262,6 @@ void Controls_SetConfig( qboolean restart ) {
 		DC->executeText( EXEC_APPEND, "in_restart\n" );
 	}
 #endif
-	//trap_Cmd_ExecuteText( EXEC_APPEND, "in_restart\n" );
 }
 
 /*
@@ -4663,22 +4540,14 @@ void Item_Model_Paint( itemDef_t *item ) {
 	// calculate distance so the model nearly fills the box
 	if ( qtrue ) {
 		float len = 0.5 * ( maxs[2] - mins[2] );
-		origin[0] = len / 0.268;    // len / tan( fov/2 )
-		//origin[0] = len / tan(w/2);
+		origin[0] = len / 0.268;
 	} else {
 		origin[0] = item->textscale;
 	}
 
-#define NEWWAY
-#ifdef NEWWAY
 	refdef.fov_x = ( modelPtr->fov_x ) ? modelPtr->fov_x : w;
 	refdef.fov_y = ( modelPtr->fov_y ) ? modelPtr->fov_y : h;
-#else
-	refdef.fov_x = (int)( (float)refdef.width / 640.0f * 90.0f );
-	xx = refdef.width / tan( refdef.fov_x / 360 * M_PI );
-	refdef.fov_y = atan2( refdef.height, xx );
-	refdef.fov_y *= ( 360 / M_PI );
-#endif
+
 	DC->clearScene();
 
 	refdef.time = DC->realTime;
@@ -4686,10 +4555,6 @@ void Item_Model_Paint( itemDef_t *item ) {
 	// add the model
 
 	memset( &ent, 0, sizeof( ent ) );
-
-	//adjust = 5.0 * sin( (float)uis.realtime / 500 );
-	//adjust = 360 % (int)((float)uis.realtime / 1000);
-	//VectorSet( angles, 0, 0, 1 );
 
 	// use item storage to track
 	if ( modelPtr->rotationSpeed ) {
@@ -4756,13 +4621,6 @@ void Item_ListBox_Paint( itemDef_t *item ) {
 	listBoxDef_t *listPtr = (listBoxDef_t*)item->typeData;
 	rectDef_t fillRect = item->window.rect;
 
-	/*if( item->window.borderSize ) {
-		fillRect.x += item->window.borderSize;
-		fillRect.y += item->window.borderSize;
-		fillRect.w -= 2 * item->window.borderSize;
-		fillRect.h -= 2 * item->window.borderSize;
-	}*/
-
 	// the listbox is horizontal or vertical and has a fixed size scroll bar going either direction
 	// elements are enumerated from the DC and either text or image handles are acquired from the DC as well
 	// textscale is used to size the text, textalignx and textaligny are used to size image elements
@@ -4781,7 +4639,7 @@ void Item_ListBox_Paint( itemDef_t *item ) {
 		x += size - 1;
 		DC->drawHandlePic( x, y, SCROLLBAR_SIZE, SCROLLBAR_SIZE, DC->Assets.scrollBarArrowRight );
 		// thumb
-		thumb = Item_ListBox_ThumbDrawPosition( item ); //Item_ListBox_ThumbPosition(item);
+		thumb = Item_ListBox_ThumbDrawPosition( item );
 		if ( thumb > x - SCROLLBAR_SIZE - 1 ) {
 			thumb = x - SCROLLBAR_SIZE - 1;
 		}
@@ -4809,15 +4667,12 @@ void Item_ListBox_Paint( itemDef_t *item ) {
 
 				size -= listPtr->elementWidth;
 				if ( size < listPtr->elementWidth ) {
-					listPtr->drawPadding = size; //listPtr->elementWidth - size;
+					listPtr->drawPadding = size;
 					break;
 				}
 				x += listPtr->elementWidth;
 				listPtr->endPos++;
-				// fit++;
 			}
-		} else {
-			//
 		}
 	} else {
 		// draw scrollbar to right side of the window
@@ -4832,16 +4687,15 @@ void Item_ListBox_Paint( itemDef_t *item ) {
 		y += size - 1;
 		DC->drawHandlePic( x, y, SCROLLBAR_SIZE, SCROLLBAR_SIZE, DC->Assets.scrollBarArrowDown );
 		// thumb
-		thumb = Item_ListBox_ThumbDrawPosition( item ); //Item_ListBox_ThumbPosition(item);
+		thumb = Item_ListBox_ThumbDrawPosition( item );
 		if ( thumb > y - SCROLLBAR_SIZE - 1 ) {
 			thumb = y - SCROLLBAR_SIZE - 1;
 		}
 		DC->drawHandlePic( x, thumb, SCROLLBAR_SIZE, SCROLLBAR_SIZE, DC->Assets.scrollBarThumb );
 
 		// adjust size for item painting
-		size = fillRect.h /* - 2*/;
+		size = fillRect.h;
 		if ( listPtr->elementStyle == LISTBOX_IMAGE ) {
-			// fit = 0;
 			x = fillRect.x + 1;
 			y = fillRect.y + 1;
 			for ( i = listPtr->startPos; i < count; i++ ) {
@@ -4863,15 +4717,14 @@ void Item_ListBox_Paint( itemDef_t *item ) {
 				listPtr->endPos++;
 				size -= listPtr->elementHeight;
 				if ( size < listPtr->elementHeight ) {
-					listPtr->drawPadding = size; //listPtr->elementHeight - size;
+					listPtr->drawPadding = size;
 					break;
 				}
 				y += listPtr->elementHeight;
-				// fit++;
 			}
 		} else {
-			x = fillRect.x /*+ 1*/;
-			y = fillRect.y /*+ 1*/;
+			x = fillRect.x;
+			y = fillRect.y;
 			for ( i = listPtr->startPos; i < count; i++ ) {
 				const char *text;
 				// always draw at least one
@@ -4888,7 +4741,6 @@ void Item_ListBox_Paint( itemDef_t *item ) {
 													   y + 1, listPtr->elementHeight - 2, listPtr->elementHeight - 2, optionalImages[k] );
 								}
 							}
-							//DC->drawHandlePic( x + 4 + listPtr->columnInfo[j].pos, y - 1 + listPtr->elementHeight / 2, listPtr->columnInfo[j].width, listPtr->columnInfo[j].width, optionalImage);
 						} else if ( text ) {
 							DC->drawText( x + 4 + listPtr->columnInfo[j].pos + item->textalignx,
 										  y + listPtr->elementHeight + item->textaligny, item->textscale, item->window.foreColor, text, 0, listPtr->columnInfo[j].maxChars, item->textStyle );
@@ -4897,24 +4749,22 @@ void Item_ListBox_Paint( itemDef_t *item ) {
 				} else {
 					text = DC->feederItemText( item->special, i, 0, optionalImages, &numOptionalImages );
 					if ( numOptionalImages >= 0 ) {
-						//DC->drawHandlePic(x + 4 + listPtr->elementHeight, y, listPtr->columnInfo[j].width, listPtr->columnInfo[j].width, optionalImage);
 					} else if ( text ) {
 						DC->drawText( x + 4 + item->textalignx, y + listPtr->elementHeight + item->textaligny, item->textscale, item->window.foreColor, text, 0, 0, item->textStyle );
 					}
 				}
 
 				if ( i == item->cursorPos ) {
-					DC->fillRect( x, y, fillRect.w - SCROLLBAR_SIZE - 2, listPtr->elementHeight /* - 1*/, item->window.outlineColor );
+					DC->fillRect( x, y, fillRect.w - SCROLLBAR_SIZE - 2, listPtr->elementHeight, item->window.outlineColor );
 				}
 
 				size -= listPtr->elementHeight;
 				if ( size < listPtr->elementHeight ) {
-					listPtr->drawPadding = size; //listPtr->elementHeight - size;
+					listPtr->drawPadding = size;
 					break;
 				}
 				listPtr->endPos++;
 				y += listPtr->elementHeight;
-				// fit++;
 			}
 		}
 	}
@@ -5236,8 +5086,6 @@ void Menu_ScrollFeeder( menuDef_t *menu, int feeder, qboolean down ) {
 	}
 }
 
-
-
 void Menu_SetFeederSelection( menuDef_t *menu, int feeder, int index, const char *name ) {
 	if ( menu == NULL ) {
 		if ( name == NULL ) {
@@ -5302,7 +5150,6 @@ void Item_Init( itemDef_t *item ) {
 	memset( item, 0, sizeof( itemDef_t ) );
 	item->textscale = 0.55f;
 
-	// default hotkey to -1
 	item->hotkey = -1;
 
 	Window_Init( &item->window );
@@ -5332,7 +5179,6 @@ void Menu_HandleMouseMove( menuDef_t *menu, float x, float y ) {
 			}
 
 		}
-		//Item_MouseMove(itemCapture, x, y);
 		return;
 	}
 
@@ -5344,9 +5190,6 @@ void Menu_HandleMouseMove( menuDef_t *menu, float x, float y ) {
 	// need a better overall solution as i don't like going through everything twice
 	for ( pass = 0; pass < 2; pass++ ) {
 		for ( i = 0; i < menu->itemCount; i++ ) {
-			// turn off focus each item
-			// menu->items[i].window.flags &= ~WINDOW_HASFOCUS;
-
 			if ( !( menu->items[i]->window.flags & ( WINDOW_VISIBLE | WINDOW_FORCED ) ) ) {
 				continue;
 			}
@@ -5381,8 +5224,7 @@ void Menu_HandleMouseMove( menuDef_t *menu, float x, float y ) {
 					if ( IsVisible( overItem->window.flags ) ) {
 						// different one
 						Item_MouseEnter( overItem, x, y );
-						// Item_SetMouseOver(overItem, qtrue);
-
+		
 						// if item is not a decoration see if it can take focus
 						if ( !focusSet ) {
 							focusSet = Item_SetFocus( overItem, x, y );
@@ -5423,9 +5265,6 @@ void Menu_Paint( menuDef_t *menu, qboolean forcePaint ) {
 		// implies a background shader
 		// FIXME: make sure we have a default shader if fullscreen is set with no background
 		DC->drawHandlePic( 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, menu->window.background );
-	} else if ( menu->window.background ) {
-		// this allows a background shader without being full screen
-		//UI_DrawHandlePic(menu->window.rect.x, menu->window.rect.y, menu->window.rect.w, menu->window.rect.h, menu->backgroundShader);
 	}
 
 	// paint the background and or border
@@ -5551,11 +5390,6 @@ void KeywordHash_Add( keywordHash_t *table[], keywordHash_t *key ) {
 	int hash;
 
 	hash = KeywordHash_Key( key->keyword );
-/*
-	if (table[hash]) {
-		int collision = qtrue;
-	}
-*/
 	key->next = table[hash];
 	table[hash] = key;
 }
@@ -6714,10 +6548,6 @@ qboolean MenuParse_name( itemDef_t *item, int handle ) {
 	if ( !PC_String_Parse( handle, &menu->window.name ) ) {
 		return qfalse;
 	}
-	if ( Q_stricmp( menu->window.name, "main" ) == 0 ) {
-		// default main as having focus
-		//menu->window.flags |= WINDOW_HASFOCUS;
-	}
 	return qtrue;
 }
 
@@ -7259,8 +7089,6 @@ void *Display_CaptureItem( int x, int y ) {
 	int i;
 
 	for ( i = 0; i < menuCount; i++ ) {
-		// turn off focus each item
-		// menu->items[i].window.flags &= ~WINDOW_HASFOCUS;
 		if ( Rect_ContainsPoint( &Menus[i].window.rect, x, y ) ) {
 			return &Menus[i];
 		}
@@ -7273,8 +7101,6 @@ void *Display_CaptureItem( int x, int y ) {
 qboolean Display_MouseMove( void *p, int x, int y ) {
 	int i;
 	menuDef_t *menu = p;
-
-//	menu = Menu_GetFocused();
 
 	if ( menu == NULL ) {
 		menu = Menu_GetFocused();
@@ -7366,9 +7192,6 @@ static qboolean Menu_OverActiveItem( menuDef_t *menu, float x, float y ) {
 		if ( Rect_ContainsPoint( &menu->window.rect, x, y ) ) {
 			int i;
 			for ( i = 0; i < menu->itemCount; i++ ) {
-				// turn off focus each item
-				// menu->items[i]->window.flags &= ~WINDOW_HASFOCUS;
-
 				if ( !( menu->items[i]->window.flags & ( WINDOW_VISIBLE | WINDOW_FORCED ) ) ) {
 					continue;
 				}
@@ -7571,58 +7394,6 @@ qboolean BG_PanelButton_EditClick( panel_button_t* button, int key ) {
 			}
 			return qtrue;
 		} else {
-			// Gordon: FIXME: have this work with all our stuff (use data[x] to store cursorpos etc)
-/*			if ( key == K_DEL || key == K_KP_DEL ) {
-				if ( item->cursorPos < len ) {
-					memmove( buff + item->cursorPos, buff + item->cursorPos + 1, len - item->cursorPos);
-					DC->setCVar(item->cvar, buff);
-				}
-				return qtrue;
-			}*/
-
-/*			if ( key == K_RIGHTARROW || key == K_KP_RIGHTARROW )
-			{
-				if (editPtr->maxPaintChars && item->cursorPos >= editPtr->paintOffset + editPtr->maxPaintChars && item->cursorPos < len) {
-					item->cursorPos++;
-					editPtr->paintOffset++;
-					return qtrue;
-				}
-				if (item->cursorPos < len) {
-					item->cursorPos++;
-				}
-				return qtrue;
-			}
-
-			if ( key == K_LEFTARROW || key == K_KP_LEFTARROW )
-			{
-				if ( item->cursorPos > 0 ) {
-					item->cursorPos--;
-				}
-				if (item->cursorPos < editPtr->paintOffset) {
-					editPtr->paintOffset--;
-				}
-				return qtrue;
-			}
-
-			if ( key == K_HOME || key == K_KP_HOME) {// || ( tolower(key) == 'a' && trap_Key_IsDown( K_CTRL ) ) ) {
-				item->cursorPos = 0;
-				editPtr->paintOffset = 0;
-				return qtrue;
-			}
-
-			if ( key == K_END || key == K_KP_END)  {// ( tolower(key) == 'e' && trap_Key_IsDown( K_CTRL ) ) ) {
-				item->cursorPos = len;
-				if(item->cursorPos > editPtr->maxPaintChars) {
-					editPtr->paintOffset = len - editPtr->maxPaintChars;
-				}
-				return qtrue;
-			}
-
-			if ( key == K_INS || key == K_KP_INS ) {
-				DC->setOverstrikeMode(!DC->getOverstrikeMode());
-				return qtrue;
-			}*/
-
 			if ( key == K_ENTER || key == K_KP_ENTER ) {
 				if ( button->onFinish ) {
 					button->onFinish( button );

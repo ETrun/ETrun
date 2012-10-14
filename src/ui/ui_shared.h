@@ -547,7 +547,6 @@ void Menu_ShowItemByName( menuDef_t *menu, const char *p, qboolean bShow );
 
 void        *UI_Alloc( int size );
 void        UI_InitMemory( void );
-qboolean    UI_OutOfMemory();
 
 void        Controls_GetConfig( void );
 void        Controls_SetConfig( qboolean restart );
