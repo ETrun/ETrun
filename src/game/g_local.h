@@ -1215,7 +1215,6 @@ gentity_t *fire_flamechunk( gentity_t *self, vec3_t start, vec3_t dir );
 
 gentity_t *fire_grenade( gentity_t *self, vec3_t start, vec3_t aimdir, int grenadeWPID );
 gentity_t *fire_rocket( gentity_t *self, vec3_t start, vec3_t dir );
-gentity_t *fire_speargun( gentity_t *self, vec3_t start, vec3_t dir );
 
 #define Fire_Lead( ent, activator, spread, damage, muzzle, forward, right, up ) Fire_Lead_Ext( ent, activator, spread, damage, muzzle, forward, right, up, MOD_MACHINEGUN )
 void Fire_Lead_Ext( gentity_t *ent, gentity_t *activator, float spread, int damage, vec3_t muzzle, vec3_t forward, vec3_t right, vec3_t up, int mod );
@@ -1632,7 +1631,6 @@ messageStatus_t trap_MessageStatus( int clientNum );
 
 void G_ExplodeMissile( gentity_t *ent );
 void Svcmd_ResetMatch_f( qboolean fDoReset, qboolean fDoRestart );
-void trap_PbStat( int clientNum, char *category, char *values ) ;
 
 // g_antilag.c
 void G_StoreClientPosition( gentity_t* ent );

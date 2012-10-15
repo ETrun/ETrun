@@ -1439,8 +1439,6 @@ void G_InitGame( int levelTime, int randomSeed ) {
 
 	G_Printf( "-----------------------------------\n" );
 
-	trap_PbStat( -1, "INIT", "GAME" ) ;
-
 	G_RemapTeamShaders();
 
 	BG_ClearAnimationPool();
