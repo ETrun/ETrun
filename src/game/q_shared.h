@@ -1637,15 +1637,7 @@ typedef enum _flag_status {
 	FLAG_DROPPED
 } flagStatus_t;
 
-
-
-#define MAX_GLOBAL_SERVERS          4096
-#define MAX_OTHER_SERVERS           128
-#define MAX_PINGREQUESTS            16
 #define MAX_SERVERSTATUSREQUESTS    16
-
-#define CDKEY_LEN 16
-#define CDCHKSUM_LEN 2
 
 // NERVE - SMF - localization
 typedef enum {

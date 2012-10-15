@@ -80,8 +80,6 @@ extern vmCvar_t ui_server16;
 
 extern vmCvar_t ui_smallFont;
 extern vmCvar_t ui_bigFont;
-extern vmCvar_t ui_cdkey;
-extern vmCvar_t ui_cdkeychecked;
 extern vmCvar_t ui_selectedPlayer;
 extern vmCvar_t ui_selectedPlayerName;
 extern vmCvar_t ui_netSource;
@@ -843,8 +841,6 @@ qboolean        trap_LAN_ServerIsInFavoriteList( int source, int n );
 
 // -NERVE - SMF
 
-void            trap_GetCDKey( char *buf, int buflen );
-void            trap_SetCDKey( char *buf );
 void            trap_R_RegisterFont( const char *pFontname, int pointSize, fontInfo_t *font );
 void            trap_S_StopBackgroundTrack( void );
 void            trap_S_StartBackgroundTrack( const char *intro, const char *loop, int fadeupTime );
@@ -856,7 +852,6 @@ void            trap_CIN_DrawCinematic( int handle );
 void            trap_CIN_SetExtents( int handle, int x, int y, int w, int h );
 int             trap_RealTime( qtime_t *qtime );
 void            trap_R_RemapShader( const char *oldShader, const char *newShader, const char *timeOffset );
-qboolean        trap_VerifyCDKey( const char *key, const char *chksum );
 qboolean        trap_GetLimboString( int index, char *buf );            // NERVE - SMF
 void            trap_CheckAutoUpdate( void );                           // DHM - Nerve
 void            trap_GetAutoUpdate( void );                             // DHM - Nerve

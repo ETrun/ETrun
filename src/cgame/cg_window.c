@@ -36,7 +36,6 @@ If you have questions concerning this license or the applicable additional terms
 
 extern pmove_t cg_pmove;        // cg_predict.c
 
-
 vec4_t colorClear  = { 0.0f, 0.0f, 0.0f, 0.0f };    // Transparent
 vec4_t colorBrown1 = { 0.3f, 0.2f, 0.1f, 0.9f };    // Brown
 vec4_t colorGreen1 = { 0.21f, 0.3f, 0.0f, 0.9f };   // Greenish (darker)

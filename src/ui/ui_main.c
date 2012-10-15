@@ -3038,36 +3038,7 @@ void UI_RunMenuScript( char **args ) {
 			trap_Cvar_Set( "com_recommendedSet", "1" );                   // NERVE - SMF
 			trap_Cmd_ExecuteText( EXEC_APPEND, "vid_restart\n" );
 		} else if ( Q_stricmp( name, "getCDKey" ) == 0 ) {
-			char out[17];
-			trap_GetCDKey( buff, 17 );
-			trap_Cvar_Set( "cdkey1", "" );
-			trap_Cvar_Set( "cdkey2", "" );
-			trap_Cvar_Set( "cdkey3", "" );
-			trap_Cvar_Set( "cdkey4", "" );
-			if ( strlen( buff ) == CDKEY_LEN ) {
-				Q_strncpyz( out, buff, 5 );
-				trap_Cvar_Set( "cdkey1", out );
-				Q_strncpyz( out, buff + 4, 5 );
-				trap_Cvar_Set( "cdkey2", out );
-				Q_strncpyz( out, buff + 8, 5 );
-				trap_Cvar_Set( "cdkey3", out );
-				Q_strncpyz( out, buff + 12, 5 );
-				trap_Cvar_Set( "cdkey4", out );
-			}
-
 		} else if ( Q_stricmp( name, "verifyCDKey" ) == 0 ) {
-			buff[0] = '\0';
-			Q_strcat( buff, 1024, UI_Cvar_VariableString( "cdkey1" ) );
-			Q_strcat( buff, 1024, UI_Cvar_VariableString( "cdkey2" ) );
-			Q_strcat( buff, 1024, UI_Cvar_VariableString( "cdkey3" ) );
-			Q_strcat( buff, 1024, UI_Cvar_VariableString( "cdkey4" ) );
-			trap_Cvar_Set( "cdkey", buff );
-			if ( trap_VerifyCDKey( buff, UI_Cvar_VariableString( "cdkeychecksum" ) ) ) {
-				trap_Cvar_Set( "ui_cdkeyvalid", trap_TranslateString( "CD key appears to be valid." ) );
-				trap_SetCDKey( buff );
-			} else {
-				trap_Cvar_Set( "ui_cdkeyvalid", trap_TranslateString( "CD key does not appear to be valid." ) );
-			}
 		} else if ( Q_stricmp( name, "loadArenas" ) == 0 ) {
 			UI_LoadArenas();
 			Menu_SetFeederSelection( NULL, FEEDER_ALLMAPS, 0, NULL );
@@ -5572,7 +5543,6 @@ vmCvar_t ui_server13;
 vmCvar_t ui_server14;
 vmCvar_t ui_server15;
 vmCvar_t ui_server16;
-vmCvar_t ui_cdkeychecked;
 vmCvar_t ui_selectedPlayer;
 vmCvar_t ui_selectedPlayerName;
 vmCvar_t ui_netSource;
@@ -5677,7 +5647,6 @@ cvarTable_t cvarTable[] = {
 	{ &ui_server16, "server16", "", CVAR_ARCHIVE, 0 },
 
 	{ &ui_dedicated, "ui_dedicated", "0", CVAR_ARCHIVE, 0 },
-	{ &ui_cdkeychecked, "ui_cdkeychecked", "0", CVAR_ROM, 0 },
 	{ &ui_selectedPlayer, "cg_selectedPlayer", "0", CVAR_ARCHIVE, 0 },
 	{ &ui_selectedPlayerName, "cg_selectedPlayerName", "", CVAR_ARCHIVE, 0 },
 	{ &ui_netSource, "ui_netSource", "1", CVAR_ARCHIVE, 0 },
