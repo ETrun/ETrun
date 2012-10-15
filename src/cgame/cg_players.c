@@ -1090,45 +1090,6 @@ static void CG_BreathPuffs( centity_t *cent, refEntity_t *head ) {
 
 /*
 ===============
-CG_TrailItem
-===============
-*/
-/*static void CG_TrailItem( centity_t *cent, qhandle_t hModel ) {
-	refEntity_t		ent;
-	vec3_t			angles;
-	qboolean		ducking;
-
-	// DHM - Nerve :: Don't draw icon above your own head
-	if ( cent->currentState.number == cg.snap->ps.clientNum && !cg.renderingThirdPerson )
-		return;
-
-	memset( &ent, 0, sizeof( ent ) );
-
-	VectorCopy( cent->lerpAngles, angles );
-	angles[PITCH] = 0;
-	angles[ROLL] = 0;
-	AnglesToAxis( angles, ent.axis );
-
-	// DHM - Nerve :: adjusted values
-	VectorCopy( cent->lerpOrigin, ent.origin );
-
-	// Account for ducking
-	if ( cent->currentState.clientNum == cg.snap->ps.clientNum )
-		ducking = (cg.snap->ps.pm_flags & PMF_DUCKED);
-	else
-		ducking = (qboolean)cent->currentState.animMovetype;
-
-	if ( ducking )
-		ent.origin[2] += 38;
-	else
-		ent.origin[2] += 56;
-
-	ent.hModel = hModel;
-	trap_R_AddRefEntityToScene( &ent );
-}*/
-
-/*
-===============
 CG_PlayerFloatSprite
 
 Float a sprite over the player's head

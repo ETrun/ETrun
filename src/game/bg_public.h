@@ -987,7 +987,7 @@ typedef enum {
 	BOTH_DEAD3_WATER,
 
 	BOTH_CLIMB,
-/*10*/ BOTH_CLIMB_DOWN,
+	BOTH_CLIMB_DOWN,
 	BOTH_CLIMB_DISMOUNT,
 
 	BOTH_SALUTE,
@@ -999,7 +999,7 @@ typedef enum {
 	BOTH_PAIN5,     // left shoulder
 	BOTH_PAIN6,     // right knee
 	BOTH_PAIN7,     // left knee
-/*20*/ BOTH_PAIN8,      // dazed
+	BOTH_PAIN8,      // dazed
 
 	BOTH_GRAB_GRENADE,
 
@@ -1012,7 +1012,7 @@ typedef enum {
 	BOTH_EXTRA1,
 	BOTH_EXTRA2,
 	BOTH_EXTRA3,
-/*30*/ BOTH_EXTRA4,
+	BOTH_EXTRA4,
 	BOTH_EXTRA5,
 	BOTH_EXTRA6,
 	BOTH_EXTRA7,
@@ -1022,7 +1022,7 @@ typedef enum {
 	BOTH_EXTRA11,
 	BOTH_EXTRA12,
 	BOTH_EXTRA13,
-/*40*/ BOTH_EXTRA14,
+	BOTH_EXTRA14,
 	BOTH_EXTRA15,
 	BOTH_EXTRA16,
 	BOTH_EXTRA17,
@@ -1033,7 +1033,7 @@ typedef enum {
 	TORSO_GESTURE,
 	TORSO_GESTURE2,
 	TORSO_GESTURE3,
-/*50*/ TORSO_GESTURE4,
+	TORSO_GESTURE4,
 
 	TORSO_DROP,
 
@@ -1046,7 +1046,7 @@ typedef enum {
 	TORSO_RELAX,
 
 	TORSO_RAISE2,   // (high)
-/*60*/ TORSO_ATTACK2,
+	TORSO_ATTACK2,
 	TORSO_STAND2,
 	TORSO_STAND2_ALT1,
 	TORSO_STAND2_ALT2,
@@ -1057,7 +1057,7 @@ typedef enum {
 	TORSO_ATTACK3,
 	TORSO_STAND3,
 	TORSO_STAND3_ALT1,
-/*70*/ TORSO_STAND3_ALT2,
+	TORSO_STAND3_ALT2,
 	TORSO_READY3,
 	TORSO_RELAX3,
 
@@ -1069,7 +1069,7 @@ typedef enum {
 	TORSO_READY4,
 	TORSO_RELAX4,
 
-/*80*/ TORSO_RAISE5,    // (throw)
+	TORSO_RAISE5,    // (throw)
 	TORSO_ATTACK5,
 	TORSO_ATTACK5B,
 	TORSO_STAND5,
@@ -1080,7 +1080,7 @@ typedef enum {
 
 	TORSO_RELOAD1,  // (low)
 	TORSO_RELOAD2,  // (high)
-/*90*/ TORSO_RELOAD3,   // (pistol)
+	TORSO_RELOAD3,   // (pistol)
 	TORSO_RELOAD4,  // (shoulder)
 
 	TORSO_MG42,     // firing tripod mounted weapon animation
@@ -1093,7 +1093,7 @@ typedef enum {
 	TORSO_EXTRA3,
 	TORSO_EXTRA4,
 	TORSO_EXTRA5,
-/*100*/ TORSO_EXTRA6,
+	TORSO_EXTRA6,
 	TORSO_EXTRA7,
 	TORSO_EXTRA8,
 	TORSO_EXTRA9,
@@ -1104,7 +1104,7 @@ typedef enum {
 	LEGS_WALK,
 	LEGS_RUN,
 	LEGS_BACK,
-/*110*/ LEGS_SWIM,
+	LEGS_SWIM,
 	LEGS_SWIM_IDLE,
 
 	LEGS_JUMP,
@@ -1119,7 +1119,7 @@ typedef enum {
 
 	LEGS_BOOT,      // kicking animation
 
-/*120*/ LEGS_EXTRA1,
+	LEGS_EXTRA1,
 	LEGS_EXTRA2,
 	LEGS_EXTRA3,
 	LEGS_EXTRA4,
@@ -1130,7 +1130,7 @@ typedef enum {
 	LEGS_EXTRA9,
 	LEGS_EXTRA10,
 
-/*130*/ MAX_ANIMATIONS
+	MAX_ANIMATIONS
 } animNumber_t;
 
 // text represenation for scripting

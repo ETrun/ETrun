@@ -830,11 +830,6 @@ void Use_Shooter( gentity_t *ent, gentity_t *other, gentity_t *activator ) {
 		SnapVector( ent->s.pos.trDelta );           // save net bandwidth
 		break;
 
-/*	case WP_SPEARGUN:
-	case WP_SPEARGUN_CO2:
-		fire_speargun(ent, ent->s.origin, dir);
-		break;*/
-
 	case WP_MAPMORTAR:
 		AimAtTarget( ent );   // store in ent->s.origin2 the direction/force needed to pass through the target
 		VectorScale( dir, VectorLength( ent->s.origin2 ), dir );
@@ -895,14 +890,6 @@ Fires at either the target or the current direction.
 void SP_shooter_rocket( gentity_t *ent ) {
 	InitShooter( ent, WP_PANZERFAUST );
 }
-
-/*QUAKED shooter_zombiespit (1 0 0) (-16 -16 -16) (16 16 16)
-Fires at either the target or the current direction.
-"random" the number of degrees of deviance from the taget. (1.0 default)
-*/
-/*void SP_shooter_zombiespit( gentity_t *ent ) {
-	InitShooter( ent, WP_MONSTER_ATTACK1 );
-}*/
 
 /*QUAKED shooter_grenade (1 0 0) (-16 -16 -16) (16 16 16)
 Fires at either the target or the current direction.

@@ -145,7 +145,6 @@ extern displayContextDef_t *DC;
 vmMain
 
 This is the only way control passes into the module.
-This must be the very first function compiled into the .qvm file
 ================
 */
 vmCvar_t ui_new;

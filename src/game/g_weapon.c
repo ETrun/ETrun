@@ -723,14 +723,6 @@ static qboolean TryConstructing( gentity_t *ent ) {
 				te->s.eventParm = G_SoundIndex( "sound/world/build.wav" );
 			}
 
-
-			// Play sound
-/*			if( constructible->parent->spawnflags & 8 ) {
-				constructible->parent->s.loopSound = G_SoundIndex( va( "sound/world/build_stage%i.wav", constructible->s.frame ) );
-			} else {
-				constructible->s.loopSound = G_SoundIndex( va( "sound/world/build_stage%i.wav", constructible->s.frame ) );
-			}*/
-
 			if ( ent->client->touchingTOI->chain && ent->client->touchingTOI->count2 ) {
 				// find the constructible indicator and change team
 				mapEntityData_t *mEnt;

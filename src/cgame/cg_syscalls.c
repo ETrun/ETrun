@@ -27,7 +27,6 @@ If you have questions concerning this license or the applicable additional terms
 */
 
 // cg_syscalls.c -- this file is only included when building a dll
-// cg_syscalls.asm is included instead when building a qvm
 #include "cg_local.h"
 
 static int ( QDECL * syscall )( int arg, ... ) = ( int ( QDECL * )( int, ... ) ) - 1;
@@ -41,13 +40,6 @@ void dllEntry( int ( QDECL  *syscallptr )( int arg,... ) ) {
 #if __GNUC__ >= 4
 #pragma GCC visibility pop
 #endif
-
-/*int PASSFLOAT( float x ) {
-	float	floatTemp;
-	floatTemp = x;
-	return *(int *)&floatTemp;
-}*/
-
 
 #define PASSFLOAT( x ) ( *(int*)&x )
 
@@ -142,11 +134,6 @@ void    trap_SendClientCommand( const char *s ) {
 void    trap_UpdateScreen( void ) {
 	syscall( CG_UPDATESCREEN );
 }
-
-/*void	trap_CM_LoadMap( const char *mapname ) {
-	CG_DrawInformation();
-	syscall( CG_CM_LOADMAP, mapname );
-}*/
 
 int     trap_CM_NumInlineModels( void ) {
 	return syscall( CG_CM_NUMINLINEMODELS );
@@ -271,11 +258,6 @@ void    trap_S_Respatialize( int entityNum, const vec3_t origin, vec3_t axis[3],
 	syscall( CG_S_RESPATIALIZE, entityNum, origin, axis, inwater );
 }
 
-/*sfxHandle_t	trap_S_RegisterSound( const char *sample, qboolean compressed ) {
-	CG_DrawInformation();
-	return syscall( CG_S_REGISTERSOUND, sample, compressed );
-}*/
-
 int trap_S_GetSoundLength( sfxHandle_t sfx ) {
 	return syscall( CG_S_GETSOUNDLENGTH, sfx );
 }
@@ -301,16 +283,6 @@ int trap_S_StartStreamingSound( const char *intro, const char *loop, int entnum,
 	return syscall( CG_S_STARTSTREAMINGSOUND, intro, loop, entnum, channel, attenuation );
 }
 
-/*void	trap_R_LoadWorldMap( const char *mapname ) {
-	CG_DrawInformation();
-	syscall( CG_R_LOADWORLDMAP, mapname );
-}
-
-qhandle_t trap_R_RegisterModel( const char *name ) {
-	CG_DrawInformation();
-	return syscall( CG_R_REGISTERMODEL, name );
-}*/
-
 //----(SA)	added
 qboolean trap_R_GetSkinModel( qhandle_t skinid, const char *type, char *name ) {
 	return syscall( CG_R_GETSKINMODEL, skinid, type, name );
@@ -320,25 +292,6 @@ qhandle_t trap_R_GetShaderFromModel( qhandle_t modelid, int surfnum, int withlig
 	return syscall( CG_R_GETMODELSHADER, modelid, surfnum, withlightmap );
 }
 //----(SA)	end
-
-/*qhandle_t trap_R_RegisterSkin( const char *name ) {
-	CG_DrawInformation();
-	return syscall( CG_R_REGISTERSKIN, name );
-}
-
-qhandle_t trap_R_RegisterShader( const char *name ) {
-	CG_DrawInformation();
-	return syscall( CG_R_REGISTERSHADER, name );
-}
-
-qhandle_t trap_R_RegisterShaderNoMip( const char *name ) {
-	CG_DrawInformation();
-	return syscall( CG_R_REGISTERSHADERNOMIP, name );
-}
-
-void trap_R_RegisterFont(const char *fontName, int pointSize, fontInfo_t *font) {
-	syscall(CG_R_REGISTERFONT, fontName, pointSize, font );
-}*/
 
 void    trap_R_ClearScene( void ) {
 	syscall( CG_R_CLEARSCENE );

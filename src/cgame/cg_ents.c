@@ -1334,9 +1334,6 @@ static void CG_Explosive( centity_t *cent ) {
 		ent.hModel = cgs.gameModels[s1->modelindex];
 	}
 
-	// add to refresh list
-	// trap_R_AddRefEntityToScene(&ent);
-
 	// add the secondary model
 	if ( s1->modelindex2 ) {
 		ent.skinNum = 0;

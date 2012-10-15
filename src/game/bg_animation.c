@@ -228,10 +228,6 @@ static animStringItem_t animFlailTypeStr[] =
 
 static animStringItem_t animGenBitFlagStr[] =
 {
-/*	{"SNEAKING", -1},		// in a cover spot
-	{"AFTERBATTLE", -1},	// just finished battle
-	{"AGENT2", -1},			// agent2 only
-	{"RELAXED", -1},		// relaxed aiState*/
 	{"ZOOMING", -1},     // zooming with binoculars
 };
 
@@ -382,44 +378,6 @@ void QDECL BG_AnimParseError( const char *msg, ... ) {
 		Com_Error( ERR_DROP,  "%s", text );
 	}
 }
-
-/*
-=================
-BG_ModelInfoForClient
-=================
-*/
-/*animModelInfo_t *BG_ModelInfoForClient( int client ) {
-	if (!globalScriptData)
-		BG_AnimParseError( "BG_ModelInfoForClient: NULL globalScriptData" );
-	//
-	if (!globalScriptData->clientModels[client])
-		BG_AnimParseError( "BG_ModelInfoForClient: client %i has no modelinfo", client );
-	//
-	return &globalScriptData->modelInfo[globalScriptData->clientModels[client] - 1];
-}*/
-
-/*
-=================
-BG_ModelInfoForModelname
-=================
-*/
-/*animModelInfo_t *BG_ModelInfoForModelname( char *modelname ) {
-	int i;
-	animModelInfo_t *modelInfo;
-	//
-	if (!globalScriptData)
-		BG_AnimParseError( "BG_ModelInfoForModelname: NULL globalScriptData" );
-	//
-	for (i=0, modelInfo=globalScriptData->modelInfo; i<MAX_ANIMSCRIPT_MODELS; i++, modelInfo++) {
-		if (!modelInfo->modelname[0])
-			continue;
-		if (!Q_stricmp( modelname, modelInfo->modelname )) {
-			return modelInfo;
-		}
-	}
-	//
-	return NULL;
-}*/
 
 /*
 =================
@@ -1111,46 +1069,11 @@ void BG_AnimParseAnimScript( animModelInfo_t *animModelInfo, animScriptData_t *s
 				indexes[indentLevel] = -1;
 
 			} else if ( indentLevel == 0 && ( indexes[indentLevel] < 0 ) ) {
-
-/*				if ( parseMode == PARSEMODE_STATECHANGES ) {
-
-					if ( Q_stricmp( token, "statechange" ) ) {
-						BG_AnimParseError( "BG_AnimParseAnimScript: expected 'statechange', got '%s'", token );	// RF mod
-					}
-
-					// read in the old state type
-					token = COM_ParseExt( &text_p, qfalse );
-					if ( !token ) {
-						BG_AnimParseError( "BG_AnimParseAnimScript: expected <state type>" );	// RF mod
-					}
-					oldState = BG_IndexForString( token, animStateStr, qfalse );
-
-					// read in the new state type
-					token = COM_ParseExt( &text_p, qfalse );
-					if ( !token ) {
-						BG_AnimParseError( "BG_AnimParseAnimScript: expected <state type>" );	// RF mod
-					}
-					indexes[indentLevel] = BG_IndexForString( token, animStateStr, qfalse );
-
-					currentScript = &animModelInfo->scriptStateChange[oldState][indexes[indentLevel]];
-
-//----(SA)		// RF mod
-					// check for the open bracket
-					token = COM_ParseExt( &text_p, qtrue );
-					if ( !token || Q_stricmp( token, "{" ) ) {
-						BG_AnimParseError( "BG_AnimParseAnimScript: expected '{'" );
-					}
-					indentLevel++;
-//----(SA)		// RF mod
-				} else {*/
-
 				// read in the event type
 				indexes[indentLevel] = BG_IndexForString( token, animEventTypesStr, qfalse );
 				currentScript = &animModelInfo->scriptEvents[indexes[0]];
 
 				parseEvent = indexes[indentLevel];
-
-//				}
 
 				memset( currentScript, 0, sizeof( *currentScript ) );
 
@@ -1366,7 +1289,6 @@ BG_PlayAnimName
 ===============
 */
 int BG_PlayAnimName( playerState_t *ps, animModelInfo_t *animModelInfo, char *animName, animBodyPart_t bodyPart, qboolean setTimer, qboolean isContinue, qboolean force ) {
-	//return BG_PlayAnim( ps, BG_AnimationIndexForString( animName, BG_GetCharacterForPlayerstate( ps )->animModelInfo ), bodyPart, 0, setTimer, isContinue, force );
 	return BG_PlayAnim( ps, animModelInfo, BG_AnimationIndexForString( animName, animModelInfo ), bodyPart, 0, setTimer, isContinue, force );
 }
 
@@ -1571,24 +1493,6 @@ int BG_AnimScriptEvent( playerState_t *ps, animModelInfo_t *animModelInfo, scrip
 
 /*
 ===============
-BG_ValidAnimScript
-
-  returns qtrue if the given client has animation scripts
-===============
-*/
-/*qboolean BG_ValidAnimScript( int clientNum )
-{
-	if (!globalScriptData->clientModels[clientNum])
-		return qfalse;
-	//
-	if (!globalScriptData->modelInfo[ globalScriptData->clientModels[clientNum] ].numScriptItems)
-		return qfalse;
-	//
-	return qtrue;
-}*/
-
-/*
-===============
 BG_GetAnimString
 ===============
 */
@@ -1637,9 +1541,6 @@ int BG_GetConditionValue( int client, int condition, qboolean checkConversion ) 
 
 	if ( animConditionsTable[condition].type == ANIM_CONDTYPE_BITFLAGS ) {
 		if ( checkConversion ) {
-			// we may need to convert to a value
-			//if (!value)
-			//	return 0;
 			for ( i = 0; i < 8 * (int)sizeof( globalScriptData->clientConditions[0][0] ); i++ ) {
 				if ( COM_BitCheck( globalScriptData->clientConditions[client][condition], i ) ) {
 					return i;

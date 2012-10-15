@@ -289,37 +289,6 @@ void Team_CheckHurtCarrier( gentity_t *targ, gentity_t *attacker ) {
 	}
 }
 
-
-/*gentity_t *Team_ResetFlag(int team)
-{
-	char *c;
-	gentity_t *ent, *rent = NULL;
-
-	switch (team) {
-	case TEAM_AXIS:
-		c = "team_CTF_redflag";
-		break;
-	case TEAM_ALLIES:
-		c = "team_CTF_blueflag";
-		break;
-	default:
-		return NULL;
-	}
-
-	ent = NULL;
-	while ((ent = G_Find (ent, FOFS(classname), c)) != NULL) {
-		if (ent->flags & FL_DROPPED_ITEM)
-			G_FreeEntity(ent);
-		else {
-			rent = ent;
-			ent->s.density++;
-			RespawnItem(ent);
-		}
-	}
-
-	return rent;
-}*/
-
 void Team_ResetFlag( gentity_t *ent ) {
 	if ( ent->flags & FL_DROPPED_ITEM ) {
 		Team_ResetFlag( &g_entities[ent->s.otherEntityNum] );
@@ -333,36 +302,6 @@ void Team_ResetFlag( gentity_t *ent ) {
 		}
 	}
 }
-
-/*void Team_RemoveFlag(int team)
-{
-	char *c;
-	gentity_t *ent, *rent = NULL;
-	int pw;
-	int i = 0;
-
-	switch (team) {
-	case TEAM_AXIS:
-		c = "team_CTF_redflag";
-		pw = PW_REDFLAG;
-		break;
-	case TEAM_ALLIES:
-		c = "team_CTF_blueflag";
-		pw = PW_BLUEFLAG;
-		break;
-	default:
-		return;
-	}
-
-	ent = NULL;
-	while ((ent = G_Find (ent, FOFS(classname), c)) != NULL) {
-		G_FreeEntity(ent);
-	}
-
-	for( i = 0; i < level.numConnectedClients; i++ ) {
-		level.clients[ level.sortedClients[i] ].ps.powerups[pw] = 0;
-	}
-}*/
 
 void Team_ResetFlags( void ) {
 	gentity_t   *ent;
@@ -380,7 +319,6 @@ void Team_ResetFlags( void ) {
 
 void Team_ReturnFlagSound( gentity_t *ent, int team ) {
 	// play powerup spawn sound to all clients
-	//gentity_t	*te;
 	gentity_t* pm;
 
 	if ( ent == NULL ) {
@@ -392,12 +330,6 @@ void Team_ReturnFlagSound( gentity_t *ent, int team ) {
 	pm->s.effect3Time = G_StringIndex( ent->message );
 	pm->s.effect2Time = team;
 	pm->s.density = 1; // 1 = returned
-
-	/*te = G_TempEntity( ent->s.pos.trBase, EV_GLOBAL_SOUND );
-	te->s.eventParm = G_SoundIndex( team == TEAM_AXIS ?
-		"sound/chat/axis/g-objective_secure.wav" :
-		"sound/chat/allies/a-objective_secure.wav" );
-	te->r.svFlags |= SVF_BROADCAST;*/
 }
 
 void Team_ReturnFlag( gentity_t *ent ) {

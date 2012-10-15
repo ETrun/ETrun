@@ -324,10 +324,6 @@ qboolean G_VisibleFromBinoculars( gentity_t* viewer, gentity_t* ent, vec3_t orig
 
 	trap_Trace( &trace, vieworg, NULL, NULL, origin, viewer->s.number, MASK_SHOT );
 
-/*	if( ent && trace.entityNum != ent-g_entities ) {
-		return qfalse;
-	}*/
-
 	if ( trace.fraction != 1.f ) {
 		if ( ent ) {
 			if ( trace.entityNum != ent->s.number ) {

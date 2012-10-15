@@ -221,14 +221,7 @@ qboolean CG_FindArenaInfo( char* filename, char* mapname, arenaInfo_t* info ) {
 				trap_PC_FreeSource( handle );
 				return qfalse;
 			} else {
-				//char* p = info->longname;
-
 				Q_strncpyz( info->longname, dummy, 128 );
-				// Gordon: removing cuz, er, no-one knows why it's here!...
-/*				while(*p) {
-					*p = toupper(*p);
-					p++;
-				}*/
 			}
 		} else if ( !Q_stricmp( token.string, "map" ) ) {
 			if ( !PC_String_Parse( handle, &dummy ) ) {

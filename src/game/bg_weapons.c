@@ -382,7 +382,6 @@ static void PM_FinishWeaponChange( void ) {
 	qboolean doSwitchAnim = qtrue;
 
 	newweapon = pm->ps->nextWeapon;
-//	pm->ps->nextWeapon = newweapon;
 	if ( newweapon < WP_NONE || newweapon >= WP_NUM_WEAPONS ) {
 		newweapon = WP_NONE;
 	}
@@ -773,7 +772,6 @@ int PM_WeaponAmmoAvailable( int wp ) {
 	if ( pm->noWeapClips ) {
 		return pm->ps->ammo[ BG_FindAmmoForWeapon( wp )];
 	} else {
-		//return pm->ps->ammoclip[BG_FindClipForWeapon( wp )];
 		takeweapon = BG_FindClipForWeapon( wp );
 
 		if ( BG_IsAkimboWeapon( wp ) ) {
