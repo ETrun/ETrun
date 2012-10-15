@@ -2438,14 +2438,8 @@ void CG_CheckEvents( centity_t *cent ) {
 	// check for event-only entities
 	if ( cent->currentState.eType > ET_EVENTS ) {
 		if ( cent->previousEvent ) {
-			//goto skipEvent;
 			return; // already fired
 		}
-		// if this is a player event set the entity number of the client entity number
-//(SA) note: EF_PLAYER_EVENT never set
-//		if ( cent->currentState.eFlags & EF_PLAYER_EVENT ) {
-//			cent->currentState.number = cent->currentState.otherEntityNum;
-//		}
 
 		cent->previousEvent = 1;
 
@@ -2459,18 +2453,6 @@ void CG_CheckEvents( centity_t *cent ) {
 		//		to the circular list.
 
 		goto skipEvent;
-		/*
-		// check for events riding with another entity
-		if ( cent->currentState.event == cent->previousEvent ) {
-			goto skipEvent;
-			//return;
-		}
-		cent->previousEvent = cent->currentState.event;
-		if ( ( cent->currentState.event & ~EV_EVENT_BITS ) == 0 ) {
-			goto skipEvent;
-			//return;
-		}
-		*/
 		// dhm - end
 	}
 

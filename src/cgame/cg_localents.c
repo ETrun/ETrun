@@ -78,7 +78,6 @@ void CG_FreeLocalEntity( localEntity_t *le ) {
 
 	// Ridah, debugging
 	localEntCount--;
-//	trap_Print( va("FreeLocalEntity: locelEntCount = %d\n", localEntCount) );
 	// done.
 
 	// remove from the doubly linked active list
@@ -108,7 +107,6 @@ localEntity_t   *CG_AllocLocalEntity( void ) {
 
 	// Ridah, debugging
 	localEntCount++;
-//	trap_Print( va("AllocLocalEntity: locelEntCount = %d\n", localEntCount) );
 	// done.
 
 	le = cg_freeLocalEntities;
@@ -512,8 +510,6 @@ void CG_AddSparkElements( localEntity_t *le ) {
 		// calculate new position
 		BG_EvaluateTrajectory( &le->pos, cg.time, newOrigin, qfalse, -1 );
 
-//		if ((le->endTime - le->startTime) > 500) {
-
 		// trace a line from previous position to new position
 		CG_Trace( &trace, le->refEntity.origin, NULL, NULL, newOrigin, -1, MASK_SHOT );
 
@@ -526,15 +522,7 @@ void CG_AddSparkElements( localEntity_t *le ) {
 
 		// moved some distance
 		VectorCopy( trace.endpos, le->refEntity.origin );
-/*
-		} else
-		{	// just move it there
 
-			VectorCopy( newOrigin, le->refEntity.origin );
-			trace.fraction = 1.0;
-
-		}
-*/
 		time += cg.frametime * trace.fraction;
 
 		lifeFrac = (float)( cg.time - le->startTime ) / (float)( le->endTime - le->startTime );
@@ -546,7 +534,7 @@ void CG_AddSparkElements( localEntity_t *le ) {
 											 le->refEntity.origin,
 											 200,
 											 1.0 - lifeFrac, // start alpha
-											 0.0, //1.0 - lifeFrac,	// end alpha
+											 0.0, // end alpha
 											 lifeFrac * 2.0 * ( ( ( le->endTime - le->startTime ) > 400 ) + 1 ) * 1.5,
 											 lifeFrac * 2.0 * ( ( ( le->endTime - le->startTime ) > 400 ) + 1 ) * 1.5 );
 
@@ -775,7 +763,6 @@ static void CG_AddMoveScaleFade( localEntity_t *le ) {
 	re = &le->refEntity;
 
 	// fade / grow time
-//	c = ( le->endTime - cg.time ) * le->lifeRate;
 	if ( le->fadeInTime > le->startTime && cg.time < le->fadeInTime ) {
 		// fade / grow time
 		c = 1.0 - (float) ( le->fadeInTime - cg.time ) / ( le->fadeInTime - le->startTime );

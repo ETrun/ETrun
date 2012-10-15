@@ -82,7 +82,6 @@ int CG_SoundScriptPrecache( const char *name ) {
 	long hash;
 	char *s;
 	soundScript_t   *sound;
-//	byte buf[1024];
 	int i;
 
 	if ( !name || !name[0] ) {
@@ -100,17 +99,6 @@ int CG_SoundScriptPrecache( const char *name ) {
 				for ( ; scriptSound; scriptSound = scriptSound->next ) {
 					for ( i = 0; i < scriptSound->numsounds; i++ ) {
 						scriptSound->sounds[i].sfxHandle = 0;
-//						scriptSound->sounds[i].sfxHandle = trap_S_RegisterSound( scriptSound->sounds[i].filename, qfalse );	// FIXME: make compressed settable through the soundscript
-					}
-				}
-			} else /*if (cg_buildScript.integer)*/ {    // Enabled this permanently so that streaming sounds get touched within file system on startup
-				for ( ; scriptSound; scriptSound = scriptSound->next ) {
-					for ( i = 0; i < scriptSound->numsounds; i++ ) {
-						// just open the file so it gets copied to the build dir
-/*						fileHandle_t f;
-						trap_FS_FOpenFile( scriptSound->sounds[i].filename, &f, FS_READ );
-						trap_FS_Read( buf, sizeof( buf ), f ); // read a few bytes so the operating system does a better job of caching it for us
-						trap_FS_FCloseFile( f );*/
 					}
 				}
 			}

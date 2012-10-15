@@ -163,7 +163,6 @@ void CG_FilledBar( float x, float y, float w, float h, float *startColor, float 
 		if ( flags & BAR_LERP_COLOR ) {
 			CG_FillRect( x, y, w, h * frac, colorAtPos );
 		} else {
-//			CG_FillRectGradient ( x, y, w, h * frac, startColor, endColor, 0 );
 			CG_FillRect( x, y, w, h * frac, startColor );
 		}
 
@@ -178,7 +177,6 @@ void CG_FilledBar( float x, float y, float w, float h, float *startColor, float 
 		if ( flags & BAR_LERP_COLOR ) {
 			CG_FillRect( x, y, w * frac, h, colorAtPos );
 		} else {
-//			CG_FillRectGradient ( x, y, w * frac, h, startColor, endColor, 0 );
 			CG_FillRect( x, y, w * frac, h, startColor );
 		}
 	}

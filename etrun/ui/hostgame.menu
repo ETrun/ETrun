@@ -49,18 +49,6 @@ menuDef {
 // Settings //
 
 	SUBWINDOW( 6, 126, (SUBWINDOW_WIDTH), 52, "FEATURES" )
-		
-	itemDef {
-		name		"filtericonPunkBuster"
-		rect		$evalfloat(8+2) 142 10 10
-		style		WINDOW_STYLE_SHADER
-		background	"ui/assets/filter_pb"
-		forecolor	1 1 1 1
-		visible		1
-		decoration
-	}
-	LABEL( 8+24+2, 142, .5*((SUBWINDOW_WIDTH)-6)-24-2-4, 10, "PunkBuster", .2, ITEM_ALIGN_LEFT, 0, 8 )
-	CHECKBOXNOTEXTACTION( "labelPunkBuster", 8+12+2, 142, .5*((SUBWINDOW_WIDTH)-6)-14-4, 10, "sv_punkbuster" noToggle, uiScript togglePbSVStatus, "Enable Punkbuster anti-cheating technology" )
 	
 	itemDef {
 		name		"filtericonAntilag"

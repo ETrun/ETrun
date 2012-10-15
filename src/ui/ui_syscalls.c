@@ -387,17 +387,6 @@ void trap_LAN_MarkServerVisible( int source, int n, qboolean visible ) {
 	syscall( UI_LAN_MARKSERVERVISIBLE, source, n, visible );
 }
 
-// DHM - Nerve :: PunkBuster
-void trap_SetPbClStatus( int status ) {
-	syscall( UI_SET_PBCLSTATUS, status );
-}
-// DHM - Nerve
-
-// TTimo: also for Sv
-void trap_SetPbSvStatus( int status ) {
-	syscall( UI_SET_PBSVSTATUS, status );
-}
-
 void trap_LAN_ResetPings( int n ) {
 	syscall( UI_LAN_RESETPINGS, n );
 }

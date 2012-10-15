@@ -22,10 +22,6 @@ menuDef {
 	style		WINDOW_STYLE_FILLED
 	
 	onOpen {
-		conditionalScript cl_punkbuster 0
-			( "hide bttn_pbenable ; show bttn_pbdisable" )
-			( "show bttn_pbenable ; hide bttn_pbdisable" )
-			
 		// sort by servername ?
 		conditionalScript serversort_0 2
 			( "setitemcolor grpColumns backcolor 0 0 0 0 ; setitemcolor grpTabs backcolor .1 .1 .1 .3 ; setitemcolor grpTabs forecolor .6 .6 .6 1 ; setitemcolor serverColumn backcolor .35 .35 .35 .2 ; setitemcolor serverColumnTab backcolor .35 .35 .35 .2 ; setitemcolor serverColumnTab forecolor .9 .9 .9 1" )
@@ -113,17 +109,6 @@ menuDef {
 		decoration
 	}
 	TRICHECKBOXACTIONMULTI( 10+12, 104, .5*((FILTERS_WIDTH)-6)-14, 10, .2, 8, "ui_browserShowPasswordProtected", cvarFloatList { "Filter Disabled" 0 "Only show..." 1 "Don't show..." 2 }, uiScript RefreshFilter ; setcvar ui_filterdescription "Filter affecting Password Protected Servers", "Includes or excludes password protected servers, from the server list" )
-
-	itemDef {
-		name		"filtericonPunkBuster"
-		rect		$evalfloat(8+.5*((FILTERS_WIDTH)-6)+2+2) 92 10 10
-		style		WINDOW_STYLE_SHADER
-		background	"ui/assets/filter_pb"
-		forecolor	1 1 1 1
-		visible		1
-		decoration
-	}
-	TRICHECKBOXACTIONMULTI( 8+.5*((FILTERS_WIDTH)-6)+2+2+12, 92, .5*((FILTERS_WIDTH)-6)-14, 10, .2, 8, "ui_browserShowPunkBuster", cvarFloatList { "Filter Disabled" 0 "Only show..." 1 "Don't show..." 2 }, uiScript RefreshFilter ; setcvar ui_filterdescription "Filter affecting PunkBuster Servers", "Includes or excludes Punk Buster servers from the server list" )
 
 	itemDef {
 		name		"filtericonAntilag"
@@ -530,9 +515,6 @@ menuDef {
 	BUTTON( 12, 102+316-20, .25*((SUBWINDOW_WIDTH)-30), 14, "REFRESH LIST", .24, 11, uiScript RefreshServers )
 	BUTTON( 6+6+(.25*((SUBWINDOW_WIDTH)-30))+6, 102+316-20, .25*((SUBWINDOW_WIDTH)-30), 14, "CONNECT TO IP", .24, 11, clearFocus ; open playonline_connecttoip )
 	BUTTON( 6+6+(.25*((SUBWINDOW_WIDTH)-30))+6+(.25*((SUBWINDOW_WIDTH)-30))+6, 102+316-20, .25*((SUBWINDOW_WIDTH)-30), 14, "SERVER INFO", .24, 11, clearFocus ; open playonline_serverinfo )
-	
-	NAMEDBUTTON( "bttn_pbenable", 6+6+(.25*((SUBWINDOW_WIDTH)-30))+6+(.25*((SUBWINDOW_WIDTH)-30))+6+(.25*((SUBWINDOW_WIDTH)-30))+6, 102+316-20, .25*((SUBWINDOW_WIDTH)-30), 14, "ENABLE PUNKBUSTER", .24, 11, clearFocus ; open playonline_enablepb )
-	NAMEDBUTTON( "bttn_pbdisable", 6+6+(.25*((SUBWINDOW_WIDTH)-30))+6+(.25*((SUBWINDOW_WIDTH)-30))+6+(.25*((SUBWINDOW_WIDTH)-30))+6, 102+316-20, .25*((SUBWINDOW_WIDTH)-30), 14, "DISABLE PUNKBUSTER", .24, 11, clearFocus ; open playonline_disablepb )
 
 // Buttons //
 	

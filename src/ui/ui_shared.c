@@ -6428,7 +6428,7 @@ keywordHash_t itemParseKeywords[] =
 	{ "mouseExit",           ItemParse_mouseExit,        NULL },
 	{ "mouseExitText",       ItemParse_mouseExitText,    NULL },
 	{ "name",                ItemParse_name,             NULL },
-	{ "noToggle",            ItemParse_noToggle,         NULL }, // TTimo: use with ITEM_TYPE_YESNO and an action script (see sv_punkbuster)
+	{ "noToggle",            ItemParse_noToggle,         NULL }, // TTimo: use with ITEM_TYPE_YESNO and an action script
 	{ "notselectable",       ItemParse_notselectable,    NULL },
 	{ "onFocus",         ItemParse_onFocus,          NULL },
 	{ "origin",              ItemParse_origin,           NULL }, // NERVE - SMF

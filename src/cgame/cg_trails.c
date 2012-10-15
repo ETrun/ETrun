@@ -167,9 +167,6 @@ trailJunc_t *CG_SpawnTrailJunc( trailJunc_t *headJunc ) {
 
 	numTrailsInuse++;
 
-	// debugging
-//	CG_Printf( "NumTrails: %i\n", numTrailsInuse );
-
 	return j;
 }
 
@@ -203,7 +200,6 @@ int CG_AddTrailJunc( int headJuncIndex, void *usedby, qhandle_t shader, int spaw
 
 	j = CG_SpawnTrailJunc( headJunc );
 	if ( !j ) {
-//		CG_Printf("couldnt spawn trail junc\n");
 		return 0;
 	}
 
@@ -248,7 +244,6 @@ int CG_AddTrailJunc( int headJuncIndex, void *usedby, qhandle_t shader, int spaw
 		} else {
 			// FIXME: need a way to specify offset timing
 			j->sTex = ( animSpeed * ( 1.0 - ( (float)( cg.time % 1000 ) / 1000.0 ) ) ) / ( sRatio );
-//			j->sTex = 0;
 		}
 	}
 
@@ -298,13 +293,9 @@ int CG_AddSparkJunc( int headJuncIndex, void *usedby, qhandle_t shader, vec3_t p
 
 	VectorSet( j->colorStart, 1.0, 0.8 + 0.2 * alphaStart, 0.4 + 0.4 * alphaStart );
 	VectorSet( j->colorEnd, 1.0, 0.8 + 0.2 * alphaEnd, 0.4 + 0.4 * alphaEnd );
-//	VectorScale( j->colorStart, alphaStart, j->colorStart );
-//	VectorScale( j->colorEnd, alphaEnd, j->colorEnd );
 
 	j->alphaStart = alphaStart * 2;
 	j->alphaEnd = alphaEnd * 2;
-//	j->alphaStart = 1.0;
-//	j->alphaEnd = 1.0;
 
 	j->widthStart = startWidth;
 	j->widthEnd = endWidth;

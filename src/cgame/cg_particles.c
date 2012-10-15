@@ -1511,7 +1511,6 @@ void CG_ParticleImpactSmokePuffExtended( qhandle_t pshader, vec3_t origin, int l
 
 	// (SA) roll either direction
 	p->roll = rand() % ( 2 * maxroll );
-//	p->roll = crandom()*(float)(maxroll*2);
 	p->roll -= maxroll;
 
 	p->pshader = pshader;
@@ -1587,7 +1586,6 @@ void CG_Particle_OilParticle( qhandle_t pshader, vec3_t origin, vec3_t dir, int 
 	p->vel[0] = ( dir[0] * ( 16 * ratio ) );
 	p->vel[1] = ( dir[1] * ( 16 * ratio ) );
 	p->vel[2] = ( dir[2] * ( 16 * ratio ) );
-//	p->vel[2] = (dir[2]);
 
 	p->snum = snum;
 

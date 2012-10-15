@@ -3017,21 +3017,6 @@ void UI_RunMenuScript( char **args ) {
 	if ( String_Parse( args, &name ) ) {
 
 		if ( Q_stricmp( name, "StartServer" ) == 0 ) {
-			int pb_sv, pb_cl;
-
-			// DHM - Nerve
-			if ( !ui_dedicated.integer ) {
-				pb_sv = (int)trap_Cvar_VariableValue( "sv_punkbuster" );
-				pb_cl = (int)trap_Cvar_VariableValue( "cl_punkbuster" );
-
-				if ( pb_sv && !pb_cl ) {
-					trap_Cvar_Set( "com_errorMessage", "You must either disable PunkBuster on the Server, or enable PunkBuster on the Client before starting a non-dedicated server." );
-					Menus_ActivateByName( "hostGamePopupError", qtrue );
-					return;
-				}
-			}
-			// dhm - Nerve
-
 			trap_Cvar_Set( "ui_connecting", "1" );
 			trap_Cvar_Set( "cg_thirdPerson", "0" );
 			trap_Cvar_Set( "cg_cameraOrbit", "0" );
@@ -3494,12 +3479,6 @@ void UI_RunMenuScript( char **args ) {
 				trap_Cmd_ExecuteText( EXEC_APPEND, "+scores\n" );
 			}
 		} else if ( Q_stricmp( name, "setPbClStatus" ) == 0 ) {
-			int stat;
-
-			if ( Int_Parse( args, &stat ) ) {
-				trap_SetPbClStatus( stat );
-			}
-			// DHM - Nerve
 		} else if ( Q_stricmp( name, "rconGame" ) == 0 ) {
 		} else if ( Q_stricmp( name, "rconMap" ) == 0 ) {
 			if ( ui_currentNetMap.integer >= 0 && ui_currentNetMap.integer < uiInfo.mapCount ) {
@@ -3722,13 +3701,6 @@ void UI_RunMenuScript( char **args ) {
 			trap_Cvar_Set( "ui_profile", ui_renameprofileto );
 			trap_Cvar_Set( "ui_profile_renameto", "" );
 		} else if ( Q_stricmp( name, "togglePbSvStatus" ) == 0 ) {
-			// TTimo
-			int sv_pb = trap_Cvar_VariableValue( "sv_punkbuster" );
-			if ( sv_pb ) {
-				trap_SetPbSvStatus( 0 );
-			} else {
-				trap_SetPbSvStatus( 1 );
-			}
 		} else if ( Q_stricmp( name, "openModURL" ) == 0 ) {
 			trap_Cvar_Set( "ui_finalURL", UI_Cvar_VariableString( "ui_modURL" ) );
 		} else if ( Q_stricmp( name, "openServerURL" ) == 0 ) {
@@ -4743,7 +4715,7 @@ const char *UI_FeederItemText( float feederID, int index, int column, qhandle_t 
 		} else {return "";}
 	} else if ( feederID == FEEDER_SERVERS ) {
 		if ( index >= 0 && index < uiInfo.serverStatus.numDisplayServers ) {
-			int ping, antilag, needpass, punkbuster, serverload;
+			int ping, antilag, needpass, serverload;
 			if ( lastColumn != column || lastTime > uiInfo.uiDC.realTime + 5000 ) {
 				trap_LAN_GetServerInfo( ui_netSource.integer, uiInfo.serverStatus.displayServers[index], info, MAX_STRING_CHARS );
 				lastColumn = column;
@@ -4792,7 +4764,6 @@ const char *UI_FeederItemText( float feederID, int index, int column, qhandle_t 
 				} else {
 					*numhandles = 3;
 					needpass = atoi( Info_ValueForKey( info, "needpass" ) );
-					punkbuster = atoi( Info_ValueForKey( info, "punkbuster" ) );
 					antilag = atoi( Info_ValueForKey( info, "g_antilag" ) );
 
 					if ( needpass ) {
@@ -5249,7 +5220,7 @@ void _UI_Init( void ) {
 
 	trap_Cvar_Register( NULL, "debug_protocol", "", 0 );
 
-	// init Yes/No once for cl_language -> server browser (punkbuster)
+	// init Yes/No once for cl_language -> server browser
 	Q_strncpyz( translated_yes, DC->translateString( "Yes" ), sizeof( translated_yes ) );
 	Q_strncpyz( translated_no, DC->translateString( "NO" ), sizeof( translated_no ) );
 }
@@ -5395,11 +5366,6 @@ void _UI_SetActiveMenu( uiMenuCommand_t menu ) {
 						break;
 					}
 				} else {
-					qboolean pb_enable = qfalse;
-
-					if ( strstr( buf, "must be Enabled" ) ) {
-						pb_enable = qtrue;
-					}
 
 					trap_Cvar_Set( "com_errorMessage", trap_TranslateString( buf ) );        // NERVE - SMF
 					// hacky, wanted to have the printout of missing files
@@ -5415,11 +5381,7 @@ void _UI_SetActiveMenu( uiMenuCommand_t menu ) {
 											   missing_files ) );
 						}
 					}
-					if ( pb_enable ) {
-						Menus_ActivateByName( "popupError_pbenable", qtrue );
-					} else {
-						Menus_ActivateByName( "popupError", qtrue );
-					}
+					Menus_ActivateByName( "popupError", qtrue );
 				}
 			}
 
@@ -5627,7 +5589,6 @@ vmCvar_t ui_browserMaster;
 vmCvar_t ui_browserSortKey;
 vmCvar_t ui_browserShowEmptyOrFull;
 vmCvar_t ui_browserShowPasswordProtected;
-vmCvar_t ui_browserShowPunkBuster;              // DHM - Nerve
 vmCvar_t ui_browserShowAntilag;     // TTimo
 vmCvar_t ui_serverStatusTimeOut;
 vmCvar_t ui_Q3Model;
@@ -5734,7 +5695,6 @@ cvarTable_t cvarTable[] = {
 	{ &ui_browserSortKey, "ui_browserSortKey", "4", CVAR_ARCHIVE, 0 },
 	{ &ui_browserShowEmptyOrFull, "ui_browserShowEmptyOrFull", "0", CVAR_ARCHIVE, 0 },
 	{ &ui_browserShowPasswordProtected, "ui_browserShowPasswordProtected", "0", CVAR_ARCHIVE, 0 },
-	{ &ui_browserShowPunkBuster, "ui_browserShowPunkBuster", "0", CVAR_ARCHIVE, 0 },
 	{ &ui_browserShowAntilag, "ui_browserShowAntilag", "0", CVAR_ARCHIVE, 0 },
 	{ &ui_serverStatusTimeOut, "ui_serverStatusTimeOut", "7000", CVAR_ARCHIVE, 0 },
 

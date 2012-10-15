@@ -841,10 +841,6 @@ void            trap_LAN_SaveCachedServers();
 void            trap_LAN_LoadCachedServers();
 qboolean        trap_LAN_ServerIsInFavoriteList( int source, int n );
 
-void            trap_SetPbClStatus( int status );                               // DHM - Nerve
-void            trap_SetPbSvStatus( int status );                               // TTimo
-
-
 // -NERVE - SMF
 
 void            trap_GetCDKey( char *buf, int buflen );

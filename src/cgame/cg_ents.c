@@ -80,7 +80,6 @@ void CG_PositionRotatedEntityOnTag( refEntity_t *entity, const refEntity_t *pare
 	orientation_t lerped;
 	vec3_t tempAxis[3];
 
-//AxisClear( entity->axis );
 	// lerp the tag
 	trap_R_LerpTag( &lerped, parent, tagName, 0 );
 
@@ -470,8 +469,6 @@ static void CG_General( centity_t *cent ) {
 			}
 
 			ent.backlerp = cent->lerpFrame.backlerp;
-
-//			CG_Printf( "Gamemodel: oldframe: %i frame: %i lerp: %f\n", ent.oldframe, ent.frame, ent.backlerp );
 		}
 
 		// xkan, 11/27/2002 - only advance/change frame if the game model has not
@@ -562,7 +559,6 @@ qboolean CG_PlayerSeesItem( playerState_t *ps, entityState_t *item, int atTime, 
 
 	foo = -0.94f - ( dist * ( 1.0f / 255.0f ) ) * 0.057f;   // (ranging from -0.94 to -0.997) (it happened to be a pretty good range)
 
-///	Com_Printf("test: if(%f > %f) return qfalse (dot > foo)\n", dot, foo);
 	if ( dot > foo ) {
 		return qfalse;
 	}
@@ -1239,8 +1235,6 @@ static void CG_Corona( centity_t *cent ) {
 	}
 	// yeah, I could calc side planes to clip against, but would that be worth it? (much better than dumb dot>= thing?)
 
-//	CG_Printf("dot: %f\n", dot);
-
 	if ( cg_coronas.integer == 2 ) {   // if set to '2' trace everything
 		behind = qfalse;
 		toofar = qfalse;
@@ -1598,7 +1592,6 @@ void CG_Beam_2( centity_t *cent ) {
 	VectorCopy( origin, ent.origin );
 	VectorCopy( origin2, ent.oldorigin );
 
-//	CG_Printf( "O: %i %i %i OO: %i %i %i\n", (int)origin[0], (int)origin[1], (int)origin[2], (int)origin2[0], (int)origin2[1], (int)origin2[2] );
 	AxisClear( ent.axis );
 	ent.reType = RT_RAIL_CORE;
 	ent.customShader = cgs.gameShaders[s1->modelindex2];

@@ -361,7 +361,6 @@ int     CG_PointContents( const vec3_t point, int passEntityNum ) {
 
 		contents |= trap_CM_TransformedPointContents( point, cmodel, cent->lerpOrigin, cent->lerpAngles );
 		// Gordon: again, need to use the projected water position to allow for moving entity based water.
-//		contents |= trap_CM_TransformedPointContents( point, cmodel, ent->origin, ent->angles );
 	}
 
 	return contents;

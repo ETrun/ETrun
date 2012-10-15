@@ -157,8 +157,6 @@ void CG_SetInitialSnapshot( snapshot_t *snap ) {
 
 	cg.snap = snap;
 
-//	trap_S_ClearSounds( qtrue );
-
 	BG_PlayerStateToEntityState( &snap->ps, &cg_entities[ snap->ps.clientNum ].currentState, qfalse );
 
 	// sort out solid entities

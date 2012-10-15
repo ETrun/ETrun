@@ -141,12 +141,6 @@
     <None Include="..\..\etrun\ui\playonline_connecttoip.menu">
       <Filter>Menu Files</Filter>
     </None>
-    <None Include="..\..\etrun\ui\playonline_disablepb.menu">
-      <Filter>Menu Files</Filter>
-    </None>
-    <None Include="..\..\etrun\ui\playonline_enablepb.menu">
-      <Filter>Menu Files</Filter>
-    </None>
     <None Include="..\..\etrun\ui\playonline_serverinfo.menu">
       <Filter>Menu Files</Filter>
     </None>
@@ -154,9 +148,6 @@
       <Filter>Menu Files</Filter>
     </None>
     <None Include="..\..\etrun\ui\popup_errormessage.menu">
-      <Filter>Menu Files</Filter>
-    </None>
-    <None Include="..\..\etrun\ui\popup_errormessage_pb.menu">
       <Filter>Menu Files</Filter>
     </None>
     <None Include="..\..\etrun\ui\popup_hostgameerrormessage.menu">

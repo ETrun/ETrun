@@ -193,7 +193,6 @@ qboolean CG_FindArenaInfo( char* filename, char* mapname, arenaInfo_t* info ) {
 	while ( trap_PC_ReadToken( handle, &token ) ) {
 		if ( *token.string == '}' ) {
 			if ( found ) {
-//				info->image = trap_R_RegisterShaderNoMip(va("levelshots/%s", mapname));
 				trap_PC_FreeSource( handle );
 				return qtrue;
 			}

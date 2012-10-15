@@ -314,7 +314,6 @@ void CG_windowDraw( void ) {
 
 		for ( j = w->lineCount - 1; j >= 0; j-- ) {
 			if ( w->effects & WFX_TRUETYPE ) {
-//				CG_Text_Paint(x, y + h, w->fontScale, textColor, (char*)w->lineText[j], 0.0f, 0, 0);
 				CG_Text_Paint_Ext( x, y + h, w->fontScaleX, w->fontScaleY, textColor,
 								   (char*)w->lineText[j], 0.0f, 0, 0, &cgs.media.limboFont2 );
 			}

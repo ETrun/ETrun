@@ -953,27 +953,6 @@ void ClientUserinfoChanged( int clientNum ) {
 		trap_DropClient(clientNum, "^1Malformed userinfo" , 0);
 	}
 
-	// Nico, one cl_punkbuster in userinfo (from ETpub)
-	count = 0;
-	if (len > 15) {
-		for (i = 0; userinfo[i + 14]; ++i) {
-			if (userinfo[i] == '\\' && userinfo[i + 1] == 'c' &&
-				userinfo[i + 2] == 'l' && userinfo[i + 3] == '_' &&
-				userinfo[i + 4] == 'p' && userinfo[i + 5] == 'u' &&
-				userinfo[i + 6] == 'n' && userinfo[i + 7] == 'k' &&
-				userinfo[i + 8] == 'b' && userinfo[i + 9] == 'u' &&
-				userinfo[i + 10] == 's' && userinfo[i + 11] == 't' &&
-				userinfo[i + 12] == 'e' && userinfo[i + 13] == 'r' &&
-				userinfo[i + 14] == '\\') {
-				count++;
-			}
-		}
-	}
-	if (count > 1) {
-		G_LogPrintf("Dropping client %d: malformed userinfo (too many cl_punkbuster fields)\n", clientNum); 
-		trap_DropClient(clientNum, "^1Malformed userinfo" , 0);
-	}
-
 	if ( g_developer.integer || *g_log.string || g_dedicated.integer ) 
 	{
 		G_Printf( "Userinfo: %s\n", userinfo );

@@ -3785,7 +3785,6 @@ void BG_PlayerStateToEntityState( playerState_t *ps, entityState_t *s, qboolean 
 	}
 
 	s->nextWeapon = ps->nextWeapon; // Ridah
-//	s->loopSound = ps->loopSound;
 	s->teamNum = ps->teamNum;
 	s->aiState = ps->aiState;       // xkan, 1/10/2003
 }
@@ -4023,7 +4022,6 @@ float BG_SplineLength( splinePath_t* pSpline ) {
 	float i;
 	float granularity = 0.01f;
 	float dist = 0;
-//	float tension;
 	vec3_t vec[2];
 	vec3_t lastPoint = {0};// Nico, uninitialized warning fix
 	vec3_t result;

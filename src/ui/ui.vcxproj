@@ -198,12 +198,9 @@
     <None Include="..\..\etrun\ui\options_system_gamma.menu" />
     <None Include="..\..\etrun\ui\playonline.menu" />
     <None Include="..\..\etrun\ui\playonline_connecttoip.menu" />
-    <None Include="..\..\etrun\ui\playonline_disablepb.menu" />
-    <None Include="..\..\etrun\ui\playonline_enablepb.menu" />
     <None Include="..\..\etrun\ui\playonline_serverinfo.menu" />
     <None Include="..\..\etrun\ui\popup_autoupdate.menu" />
     <None Include="..\..\etrun\ui\popup_errormessage.menu" />
-    <None Include="..\..\etrun\ui\popup_errormessage_pb.menu" />
     <None Include="..\..\etrun\ui\popup_hostgameerrormessage.menu" />
     <None Include="..\..\etrun\ui\popup_password.menu" />
     <None Include="..\..\etrun\ui\popup_serverredirect.menu" />

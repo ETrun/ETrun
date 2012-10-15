@@ -71,7 +71,6 @@ void CG_BubbleTrail( vec3_t start, vec3_t end, float size, float spacing ) {
 
 		re->reType = RT_SPRITE;
 		re->rotation = 0;
-//		re->radius = 3;
 		re->radius = size; // (SA)
 		re->customShader = cgs.media.waterBubbleShader;
 		re->shaderRGBA[0] = 0xff;
@@ -86,7 +85,6 @@ void CG_BubbleTrail( vec3_t start, vec3_t end, float size, float spacing ) {
 		VectorCopy( move, le->pos.trBase );
 		le->pos.trDelta[0] = crandom() * 3;
 		le->pos.trDelta[1] = crandom() * 3;
-//		le->pos.trDelta[2] = crandom()*5 + 6;
 		le->pos.trDelta[2] = crandom() * 5 + 20;  // (SA)
 
 		VectorAdd( move, vec, move );
@@ -1037,16 +1035,6 @@ void CG_RenderSmokeGrenadeSmoke( centity_t *cent, const weaponInfo_t *weapon ) {
 			return;
 		}
 
-		// Number of sprites for radius calculation:
-		// lifetime of a sprite : (.5f * radius) / velocity
-		// number of sprites in a row: radius / SMOKEBOMB_DISTANCEBETWEENSPRITES
-//		numSpritesForRadius = cent->currentState.effect1Time / SMOKEBOMB_DISTANCEBETWEENSPRITES;
-
-//		numSpritesForRadius = cent->currentState.effect1Time / ((((640.f - 16.f)/16)/1000.f) * cg.frametime);
-//		numNewSpritesNeeded = numSpritesForRadius - cent->miscTime;
-
-//		CG_Printf( "numSpritesForRadius: %i / numNewSpritesNeeded: %i / cent->miscTime: %i\n", numSpritesForRadius, numNewSpritesNeeded, cent->miscTime );
-
 		if ( cg.oldTime && cent->lastFuseSparkTime != cg.time ) {
 			cent->muzzleFlashTime += cg.frametime;
 			spritesNeeded = cent->muzzleFlashTime / spawnrate;
@@ -1057,9 +1045,6 @@ void CG_RenderSmokeGrenadeSmoke( centity_t *cent, const weaponInfo_t *weapon ) {
 		if ( !spritesNeeded ) {
 			return;
 		} else if ( spritesNeeded == 1 ) {
-			// this is theoretically fine, till the smokegrenade ends up in a solid
-			//while( !CG_SpawnSmokeSprite( cent, 0.f ) );
-
 			// this is better
 			if ( !CG_SpawnSmokeSprite( cent, 0.f ) ) {
 				// try again, just in case, so we don't get lots of gaps and remain quite constant
@@ -1070,10 +1055,6 @@ void CG_RenderSmokeGrenadeSmoke( centity_t *cent, const weaponInfo_t *weapon ) {
 			float dtime;
 
 			for ( dtime = spritesNeeded * spawnrate; dtime > 0; dtime -= spawnrate ) {
-				// this is theoretically fine, till the smokegrenade ends up in a solid
-				//while( !CG_SpawnSmokeSprite( cent, lerp * cg.frametime * SMOKEBOMB_SMOKEVELOCITY ) );
-
-				// this is better
 				if ( !CG_SpawnSmokeSprite( cent, lerp * cg.frametime * SMOKEBOMB_SMOKEVELOCITY ) ) {
 					// try again, just in case, so we don't get lots of gaps and remain quite constant
 					CG_SpawnSmokeSprite( cent, lerp * cg.frametime * SMOKEBOMB_SMOKEVELOCITY );

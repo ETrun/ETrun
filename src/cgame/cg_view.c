@@ -446,28 +446,19 @@ CG_Concussive
 */
 void CG_Concussive( centity_t *cent ) {
 	float length;
-//	vec3_t	dir, forward;
 	vec3_t vec;
-//	float	dot;
 
-	//
 	float pitchRecoilAdd, pitchAdd;
 	float yawRandom;
 	vec3_t recoil;
-	//
 
 	if ( !cg.renderingThirdPerson && cent->currentState.density == cg.snap->ps.clientNum ) {
-		//
 		pitchRecoilAdd = 0;
 		pitchAdd = 0;
 		yawRandom = 0;
-		//
 
 		VectorSubtract( cg.snap->ps.origin, cent->currentState.origin, vec );
 		length = VectorLength( vec );
-
-		// pitchAdd = 12+rand()%3;
-		// yawRandom = 6;
 
 		if ( length > 1024 ) {
 			return;
@@ -476,7 +467,6 @@ void CG_Concussive( centity_t *cent ) {
 		pitchAdd = ( 32 / length ) * 64;
 		yawRandom = ( 32 / length ) * 64;
 
-		// recoil[YAW] = crandom()*yawRandom;
 		if ( rand() % 100 > 50 ) {
 			recoil[YAW] = -yawRandom;
 		} else {
@@ -1434,10 +1424,6 @@ CG_DrawActiveFrame
 Generates and draws a game scene and status information at the given time.
 =================
 */
-
-//static int lightningtime = 0;
-//static int lightningsequencetime = 0;
-//static int lightningsequencecounter = 0;
 
 qboolean CG_CalcMuzzlePoint( int entityNum, vec3_t muzzle );
 

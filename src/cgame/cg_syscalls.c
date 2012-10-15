@@ -362,10 +362,6 @@ void    trap_R_AddPolysToScene( qhandle_t hShader, int numVerts, const polyVert_
 }
 // done.
 
-// ydnar: new dlight system
-//%	void	trap_R_AddLightToScene( const vec3_t org, float intensity, float r, float g, float b, int overdraw ) {
-//%		syscall( CG_R_ADDLIGHTTOSCENE, org, PASSFLOAT(intensity), PASSFLOAT(r), PASSFLOAT(g), PASSFLOAT(b), overdraw );
-//%	}
 void    trap_R_AddLightToScene( const vec3_t org, float radius, float intensity, float r, float g, float b, qhandle_t hShader, int flags ) {
 	syscall( CG_R_ADDLIGHTTOSCENE, org, PASSFLOAT( radius ), PASSFLOAT( intensity ),
 			 PASSFLOAT( r ), PASSFLOAT( g ), PASSFLOAT( b ), hShader, flags );
@@ -694,7 +690,6 @@ qboolean trap_GetEntityToken( char *buffer, int bufferSize ) {
 // bring up a popup menu
 extern void Menus_OpenByName( const char *p );
 
-//void trap_UI_Popup( const char *arg0) {
 void trap_UI_Popup( int arg0 ) {
 	syscall( CG_INGAME_POPUP, arg0 );
 }

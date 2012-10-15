@@ -875,10 +875,6 @@ static void CG_MapRestart( void ) {
 	//Rafael particles
 	CG_ClearParticles();
 
-	// Ridah, trails
-//	CG_ClearTrails ();
-	// done.
-
 	// Ridah
 	CG_ClearFlameChunks();
 	CG_SoundInit();
@@ -1688,11 +1684,6 @@ static void CG_ServerCommand( void ) {
 	}
 
 	if ( !strcmp( cmd, "rockandroll" ) ) {   // map loaded, game is ready to begin.
-		// Arnout: FIXME: re-enable when we get menus that deal with fade properly
-//		CG_Fade(0, 0, 0, 255, cg.time, 0);		// go black
-		//trap_UI_Popup("pregame");				// start pregame menu
-		//trap_Cvar_Set("cg_norender", "1");	// don't render the world until the player clicks in and the 'playerstart' func has been called (g_main in G_UpdateCvars() ~ilne 949)
-
 		trap_S_FadeAllSound( 1.0f, 1000, qfalse );    // fade sound up
 
 		return;
