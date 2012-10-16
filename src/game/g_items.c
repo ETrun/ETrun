@@ -494,7 +494,7 @@ int Pickup_Weapon( gentity_t *ent, gentity_t *other ) {
 			if ( ent->parent && ent->parent->client && other->client->sess.sessionTeam == ent->parent->client->sess.sessionTeam ) {
 				if ( !( ent->parent->client->PCSpecialPickedUpCount % LT_SPECIAL_PICKUP_MOD ) ) {
 					if ( ent->parent && ent->parent->client ) {
-						G_LogPrintf( "Ammo_Pack: %d %d\n", ent->parent - g_entities, other - g_entities );  // OSP
+						G_LogPrintf( "Ammo_Pack: %d %d\n", (int)(ent->parent - g_entities), (int)(other - g_entities) );  // OSP
 					}
 				}
 				ent->parent->client->PCSpecialPickedUpCount++;
@@ -598,7 +598,7 @@ int Pickup_Health( gentity_t *ent, gentity_t *other ) {
 	if ( other->client->ps.stats[STAT_PLAYER_CLASS] != PC_MEDIC ) {
 		if ( ent->parent && ent->parent->client && other->client->sess.sessionTeam == ent->parent->client->sess.sessionTeam ) {
 			if ( !( ent->parent->client->PCSpecialPickedUpCount % MEDIC_SPECIAL_PICKUP_MOD ) ) {
-				G_LogPrintf( "Health_Pack: %d %d\n", ent->parent - g_entities, other - g_entities );    // OSP
+				G_LogPrintf( "Health_Pack: %d %d\n", (int)(ent->parent - g_entities), (int)(other - g_entities) );    // OSP
 			}
 
 			ent->parent->client->PCSpecialPickedUpCount++;

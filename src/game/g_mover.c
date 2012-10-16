@@ -4706,7 +4706,7 @@ void func_constructiblespawn( gentity_t *ent ) {
 					e->s.eType = ET_EXPLOSIVE_INDICATOR;
 
 					while ( ( tent = G_Find( tent, FOFS( target ), ent->targetname ) ) != NULL ) {
-						if ( ( tent->s.eType == ET_OID_TRIGGER ) ) {
+						if ( tent->s.eType == ET_OID_TRIGGER ) {
 							if ( tent->spawnflags & 8 ) {
 								e->s.eType = ET_TANK_INDICATOR;
 							}
@@ -4726,7 +4726,7 @@ void func_constructiblespawn( gentity_t *ent ) {
 				if ( !ent->parent ) {
 					gentity_t* tent = NULL;
 					while ( ( tent = G_Find( tent, FOFS( target ), ent->targetname ) ) != NULL ) {
-						if ( ( tent->s.eType == ET_OID_TRIGGER ) ) {
+						if ( tent->s.eType == ET_OID_TRIGGER ) {
 							ent->parent = tent;
 							e->parent = tent;
 						}

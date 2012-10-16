@@ -394,8 +394,6 @@ void QDECL G_Printf( const char *fmt, ... ) {
 
 	trap_Printf( text );
 }
-//bani
-void QDECL G_Printf( const char *fmt, ... ) _attribute( ( format( printf,1,2 ) ) );
 
 void QDECL G_DPrintf( const char *fmt, ... ) {
 	va_list argptr;
@@ -411,8 +409,6 @@ void QDECL G_DPrintf( const char *fmt, ... ) {
 
 	trap_Printf( text );
 }
-//bani
-void QDECL G_DPrintf( const char *fmt, ... ) _attribute( ( format( printf,1,2 ) ) );
 
 void QDECL G_Error( const char *fmt, ... ) {
 	va_list argptr;
@@ -424,9 +420,6 @@ void QDECL G_Error( const char *fmt, ... ) {
 
 	trap_Error( text );
 }
-//bani
-void QDECL G_Error( const char *fmt, ... ) _attribute( ( format( printf,1,2 ) ) );
-
 
 #define CH_KNIFE_DIST       48  // from g_weapon.c
 #define CH_LADDER_DIST      100
@@ -1541,8 +1534,6 @@ void QDECL Com_Error( int level, const char *error, ... ) {
 
 	G_Error( "%s", text );
 }
-//bani
-void QDECL Com_Error( int level, const char *error, ... ) _attribute( ( format( printf,2,3 ) ) );
 
 void QDECL Com_Printf( const char *msg, ... ) {
 	va_list argptr;
@@ -1554,8 +1545,6 @@ void QDECL Com_Printf( const char *msg, ... ) {
 
 	G_Printf( "%s", text );
 }
-//bani
-void QDECL Com_Printf( const char *msg, ... ) _attribute( ( format( printf,1,2 ) ) );
 
 #endif
 
@@ -1856,8 +1845,6 @@ void QDECL G_LogPrintf( const char *fmt, ... ) {
 
 	trap_FS_Write( string, strlen( string ), level.logFile );
 }
-//bani
-void QDECL G_LogPrintf( const char *fmt, ... ) _attribute( ( format( printf,1,2 ) ) );
 
 /*
 ==================

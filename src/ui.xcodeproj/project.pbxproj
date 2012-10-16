@@ -15,7 +15,6 @@
 		B76249A80B470E570088DCD4 /* ui_players.c in Sources */ = {isa = PBXBuildFile; fileRef = B76249A00B470E570088DCD4 /* ui_players.c */; };
 		B76249A90B470E570088DCD4 /* ui_shared.c in Sources */ = {isa = PBXBuildFile; fileRef = B76249A10B470E570088DCD4 /* ui_shared.c */; };
 		B76249AA0B470E570088DCD4 /* ui_syscalls.c in Sources */ = {isa = PBXBuildFile; fileRef = B76249A20B470E570088DCD4 /* ui_syscalls.c */; };
-		B76249AB0B470E570088DCD4 /* ui_util.c in Sources */ = {isa = PBXBuildFile; fileRef = B76249A30B470E570088DCD4 /* ui_util.c */; };
 		B76249B20B470E770088DCD4 /* bg_classes.c in Sources */ = {isa = PBXBuildFile; fileRef = B76249AD0B470E770088DCD4 /* bg_classes.c */; };
 		B76249B30B470E770088DCD4 /* bg_misc.c in Sources */ = {isa = PBXBuildFile; fileRef = B76249AE0B470E770088DCD4 /* bg_misc.c */; };
 		B76249B40B470E770088DCD4 /* q_math.c in Sources */ = {isa = PBXBuildFile; fileRef = B76249AF0B470E770088DCD4 /* q_math.c */; };
@@ -32,7 +31,6 @@
 		B76249A00B470E570088DCD4 /* ui_players.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = ui_players.c; path = ./ui/ui_players.c; sourceTree = SOURCE_ROOT; };
 		B76249A10B470E570088DCD4 /* ui_shared.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = ui_shared.c; path = ./ui/ui_shared.c; sourceTree = SOURCE_ROOT; };
 		B76249A20B470E570088DCD4 /* ui_syscalls.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = ui_syscalls.c; path = ./ui/ui_syscalls.c; sourceTree = SOURCE_ROOT; };
-		B76249A30B470E570088DCD4 /* ui_util.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = ui_util.c; path = ./ui/ui_util.c; sourceTree = SOURCE_ROOT; };
 		B76249AD0B470E770088DCD4 /* bg_classes.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = bg_classes.c; path = ./game/bg_classes.c; sourceTree = SOURCE_ROOT; };
 		B76249AE0B470E770088DCD4 /* bg_misc.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = bg_misc.c; path = ./game/bg_misc.c; sourceTree = SOURCE_ROOT; };
 		B76249AF0B470E770088DCD4 /* q_math.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = q_math.c; path = ./game/q_math.c; sourceTree = SOURCE_ROOT; };
@@ -90,7 +88,6 @@
 				B76249A00B470E570088DCD4 /* ui_players.c */,
 				B76249A10B470E570088DCD4 /* ui_shared.c */,
 				B76249A20B470E570088DCD4 /* ui_syscalls.c */,
-				B76249A30B470E570088DCD4 /* ui_util.c */,
 			);
 			name = Sources;
 			sourceTree = "<group>";
@@ -170,7 +167,6 @@
 				B76249A80B470E570088DCD4 /* ui_players.c in Sources */,
 				B76249A90B470E570088DCD4 /* ui_shared.c in Sources */,
 				B76249AA0B470E570088DCD4 /* ui_syscalls.c in Sources */,
-				B76249AB0B470E570088DCD4 /* ui_util.c in Sources */,
 				B76249B20B470E770088DCD4 /* bg_classes.c in Sources */,
 				B76249B30B470E770088DCD4 /* bg_misc.c in Sources */,
 				B76249B40B470E770088DCD4 /* q_math.c in Sources */,

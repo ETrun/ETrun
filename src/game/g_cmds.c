@@ -1065,7 +1065,7 @@ void G_SayTo(gentity_t *ent, gentity_t *other, int mode, int color, const char *
 		} else {
 			cmd = mode == SAY_TEAM || mode == SAY_BUDDY ? "tchat" : "chat";
 		}
-		trap_SendServerCommand( other - g_entities, va( "%s \"%s%c%c%s\" %i %i", cmd, name, Q_COLOR_ESCAPE, color, message, ent - g_entities, localize ) );
+		trap_SendServerCommand( other - g_entities, va( "%s \"%s%c%c%s\" %d %i", cmd, name, Q_COLOR_ESCAPE, color, message, (int)(ent - g_entities), localize ) );
 	}
 }
 
@@ -1193,9 +1193,9 @@ void G_VoiceTo( gentity_t *ent, gentity_t *other, int mode, const char *id, qboo
 	}
 
 	if ( mode == SAY_TEAM || mode == SAY_BUDDY ) {
-		CPx( other - g_entities, va( "%s %d %d %d %s %i %i %i", cmd, voiceonly, ent - g_entities, color, id, (int)ent->s.pos.trBase[0], (int)ent->s.pos.trBase[1], (int)ent->s.pos.trBase[2] ) );
+		CPx( other - g_entities, va( "%s %d %d %d %s %i %i %i", cmd, voiceonly, (int)(ent - g_entities), color, id, (int)ent->s.pos.trBase[0], (int)ent->s.pos.trBase[1], (int)ent->s.pos.trBase[2] ) );
 	} else {
-		CPx( other - g_entities, va( "%s %d %d %d %s", cmd, voiceonly, ent - g_entities, color, id ) );
+		CPx( other - g_entities, va( "%s %d %d %d %s", cmd, voiceonly, (int)(ent - g_entities), color, id ) );
 	}
 }
 
@@ -2871,13 +2871,13 @@ void Cmd_PrivateMessage_f(gentity_t *ent) {
 			continue;
 		}
 		CPx(pids[i], va(
-			"chat \"%s^3 -> ^7%s^7: (%d recipient%s): ^3%s^7\" %i",
+			"chat \"%s^3 -> ^7%s^7: (%d recipient%s): ^3%s^7\" %d",
 			netname,
 			name,
 			pcount,
 			pcount == 1 ? "" : "s",
 			msg,
-			ent ? ent-g_entities : -1));
+			ent ? (int)(ent-g_entities) : -1));
 		CPx(pids[i], va("cp \"^3private message from ^7%s^7\"", netname));
 	}
 

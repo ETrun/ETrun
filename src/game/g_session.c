@@ -77,7 +77,7 @@ void G_WriteClientSessionData( gclient_t *client, qboolean restart ) {
 			client->sess.specInvitedClients[1]
 			);
 
-	trap_Cvar_Set( va( "session%i", client - level.clients ), s );
+	trap_Cvar_Set( va( "session%d", (int)(client - level.clients) ), s );
 }
 
 /*
@@ -91,7 +91,7 @@ void G_ReadSessionData( gclient_t *client ) {
 	int mvc_l, mvc_h;
 	char s[MAX_STRING_CHARS];
 
-	trap_Cvar_VariableStringBuffer( va( "session%i", client - level.clients ), s, sizeof( s ) );
+	trap_Cvar_VariableStringBuffer( va( "session%d", (int)(client - level.clients) ), s, sizeof( s ) );
 
 	sscanf( s, "%i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i",
 	(int *)&client->sess.sessionTeam,

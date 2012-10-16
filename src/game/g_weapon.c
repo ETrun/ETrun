@@ -861,7 +861,7 @@ static qboolean TryConstructing( gentity_t *ent ) {
 				{
 					gentity_t* tent = NULL;
 					while ( ( tent = G_Find( tent, FOFS( target ), constructible->targetname ) ) != NULL ) {
-						if ( ( tent->s.eType == ET_OID_TRIGGER ) ) {
+						if ( tent->s.eType == ET_OID_TRIGGER ) {
 							e->parent = tent;
 						}
 					}
@@ -1025,7 +1025,7 @@ void AutoBuildConstruction( gentity_t* constructible ) {
 			e->s.eType = ET_EXPLOSIVE_INDICATOR;
 
 			while ( ( tent = G_Find( tent, FOFS( target ), constructible->targetname ) ) != NULL ) {
-				if ( ( tent->s.eType == ET_OID_TRIGGER ) ) {
+				if ( tent->s.eType == ET_OID_TRIGGER ) {
 					if ( tent->spawnflags & 8 ) {
 						e->s.eType = ET_TANK_INDICATOR;
 					}
@@ -1036,7 +1036,7 @@ void AutoBuildConstruction( gentity_t* constructible ) {
 			{
 				gentity_t* tent = NULL;
 				while ( ( tent = G_Find( tent, FOFS( target ), constructible->targetname ) ) != NULL ) {
-					if ( ( tent->s.eType == ET_OID_TRIGGER ) ) {
+					if ( tent->s.eType == ET_OID_TRIGGER ) {
 						e->parent = tent;
 					}
 				}
@@ -1166,7 +1166,7 @@ void Weapon_Engineer( gentity_t *ent ) {
 				traceEnt->health = MG42_MULTIPLAYER_HEALTH;
 			}
 
-			G_LogPrintf( "Repair: %d\n", ent - g_entities );    // OSP
+			G_LogPrintf( "Repair: %d\n", (int)(ent - g_entities) );    // OSP
 
 			traceEnt->takedamage = qtrue;
 			traceEnt->s.eFlags &= ~EF_SMOKING;
@@ -1302,7 +1302,7 @@ void Weapon_Engineer( gentity_t *ent ) {
 						continue;
 					}
 
-					if ( ( hit->s.eType == ET_OID_TRIGGER ) ) {
+					if ( hit->s.eType == ET_OID_TRIGGER ) {
 						if ( !( hit->spawnflags & ( AXIS_OBJECTIVE | ALLIED_OBJECTIVE ) ) ) {
 							continue;
 						}
@@ -1369,7 +1369,7 @@ void Weapon_Engineer( gentity_t *ent ) {
 					if ( !( hit->r.contents & CONTENTS_TRIGGER ) ) {
 						continue;
 					}
-					if ( ( hit->s.eType == ET_OID_TRIGGER ) ) {
+					if ( hit->s.eType == ET_OID_TRIGGER ) {
 
 						if ( !( hit->spawnflags & ( AXIS_OBJECTIVE | ALLIED_OBJECTIVE ) ) ) {
 							continue;
@@ -1403,7 +1403,7 @@ void Weapon_Engineer( gentity_t *ent ) {
 
 							if ( !( hit->spawnflags & OBJECTIVE_DESTROYED ) ) {
 								if ( traceEnt->parent && traceEnt->parent->client ) {
-									G_LogPrintf( "Dynamite_Plant: %d\n", traceEnt->parent - g_entities );   // OSP
+									G_LogPrintf( "Dynamite_Plant: %d\n", (int)(traceEnt->parent - g_entities) );   // OSP
 								}
 								traceEnt->parent = ent; // give explode score to guy who armed it
 							}
@@ -1472,7 +1472,7 @@ void Weapon_Engineer( gentity_t *ent ) {
 							if ( ( !( hit->parent->spawnflags & OBJECTIVE_DESTROYED ) ) &&
 								 hit->s.teamNum && ( hit->s.teamNum == (int)ent->client->sess.sessionTeam ) ) { // ==, as it's inverse
 								if ( traceEnt->parent && traceEnt->parent->client ) {
-									G_LogPrintf( "Dynamite_Plant: %d\n", traceEnt->parent - g_entities );   // OSP
+									G_LogPrintf( "Dynamite_Plant: %d\n", (int)(traceEnt->parent - g_entities) );   // OSP
 								}
 								traceEnt->parent = ent; // give explode score to guy who armed it
 							}
@@ -1521,7 +1521,7 @@ void Weapon_Engineer( gentity_t *ent ) {
 						if ( !( hit->r.contents & CONTENTS_TRIGGER ) ) {
 							continue;
 						}
-						if ( ( hit->s.eType == ET_OID_TRIGGER ) ) {
+						if ( hit->s.eType == ET_OID_TRIGGER ) {
 
 							if ( !( hit->spawnflags & ( AXIS_OBJECTIVE | ALLIED_OBJECTIVE ) ) ) {
 								continue;
@@ -1614,7 +1614,7 @@ void Weapon_Engineer( gentity_t *ent ) {
 							// we got somthing to destroy
 							if ( ent && ent->client && ent->client->sess.sessionTeam == TEAM_AXIS ) {
 								if ( hit->s.teamNum == TEAM_AXIS && ( !scored ) ) {
-									G_LogPrintf( "Dynamite_Diffuse: %d\n", ent - g_entities );
+									G_LogPrintf( "Dynamite_Diffuse: %d\n", (int)(ent - g_entities) );
 									scored++;
 								}
 								G_Script_ScriptEvent( hit, "defused", "" );
@@ -1629,7 +1629,7 @@ void Weapon_Engineer( gentity_t *ent ) {
 							} else { // TEAM_ALLIES
 								if ( hit->s.teamNum == TEAM_ALLIES && ( !scored ) ) {
 									if ( ent && ent->client ) {
-										G_LogPrintf( "Dynamite_Diffuse: %d\n", ent - g_entities );                  // OSP
+										G_LogPrintf( "Dynamite_Diffuse: %d\n", (int)(ent - g_entities) );                  // OSP
 									}
 
 									scored++;
