@@ -131,7 +131,7 @@ CG_DrawConnectScreen
 ================
 */
 static qboolean connect_ownerdraw;
-void UI_DrawLoadPanel( qboolean forcerefresh, qboolean ownerdraw, qboolean uihack ) {
+void UI_DrawLoadPanel( qboolean ownerdraw, qboolean uihack ) {
 	static qboolean inside = qfalse;
 
 	if ( inside ) {

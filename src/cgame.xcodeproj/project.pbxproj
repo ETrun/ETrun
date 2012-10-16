@@ -7,11 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		03EDEB45162C501500EB7A75 /* cg_timerun_draw.c in Sources */ = {isa = PBXBuildFile; fileRef = 03EDEB44162C501500EB7A75 /* cg_timerun_draw.c */; };
+		03EDEB47162C505700EB7A75 /* sha1.c in Sources */ = {isa = PBXBuildFile; fileRef = 03EDEB46162C505700EB7A75 /* sha1.c */; };
 		37BA887A1521F81C00D558A1 /* bg_weapons.c in Sources */ = {isa = PBXBuildFile; fileRef = 37BA88791521F81C00D558A1 /* bg_weapons.c */; };
 		5088180A09F0CE0A0071BF1A /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5088180909F0CE0A0071BF1A /* CoreFoundation.framework */; };
 		B72E62620B47119E0006C962 /* cg_atmospheric.c in Sources */ = {isa = PBXBuildFile; fileRef = B72E623B0B47119E0006C962 /* cg_atmospheric.c */; };
 		B72E62630B47119E0006C962 /* cg_character.c in Sources */ = {isa = PBXBuildFile; fileRef = B72E623C0B47119E0006C962 /* cg_character.c */; };
-		B72E62640B47119E0006C962 /* cg_commandmap.c in Sources */ = {isa = PBXBuildFile; fileRef = B72E623D0B47119E0006C962 /* cg_commandmap.c */; };
 		B72E62650B47119E0006C962 /* cg_consolecmds.c in Sources */ = {isa = PBXBuildFile; fileRef = B72E623E0B47119E0006C962 /* cg_consolecmds.c */; };
 		B72E62670B47119E0006C962 /* cg_draw.c in Sources */ = {isa = PBXBuildFile; fileRef = B72E62400B47119E0006C962 /* cg_draw.c */; };
 		B72E62680B47119E0006C962 /* cg_drawtools.c in Sources */ = {isa = PBXBuildFile; fileRef = B72E62410B47119E0006C962 /* cg_drawtools.c */; };
@@ -60,12 +61,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		03EDEB44162C501500EB7A75 /* cg_timerun_draw.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = cg_timerun_draw.c; path = cgame/cg_timerun_draw.c; sourceTree = "<group>"; };
+		03EDEB46162C505700EB7A75 /* sha1.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = sha1.c; path = "libs/sha-1/sha1.c"; sourceTree = "<group>"; };
 		37BA88791521F81C00D558A1 /* bg_weapons.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = bg_weapons.c; path = game/bg_weapons.c; sourceTree = "<group>"; };
 		508817D409F0C9AD0071BF1A /* cgame_mac.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = cgame_mac.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 		5088180909F0CE0A0071BF1A /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = /System/Library/Frameworks/CoreFoundation.framework; sourceTree = "<absolute>"; };
 		B72E623B0B47119E0006C962 /* cg_atmospheric.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = cg_atmospheric.c; path = ./cgame/cg_atmospheric.c; sourceTree = SOURCE_ROOT; };
 		B72E623C0B47119E0006C962 /* cg_character.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = cg_character.c; path = ./cgame/cg_character.c; sourceTree = SOURCE_ROOT; };
-		B72E623D0B47119E0006C962 /* cg_commandmap.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = cg_commandmap.c; path = ./cgame/cg_commandmap.c; sourceTree = SOURCE_ROOT; };
 		B72E623E0B47119E0006C962 /* cg_consolecmds.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = cg_consolecmds.c; path = ./cgame/cg_consolecmds.c; sourceTree = SOURCE_ROOT; };
 		B72E62400B47119E0006C962 /* cg_draw.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = cg_draw.c; path = ./cgame/cg_draw.c; sourceTree = SOURCE_ROOT; };
 		B72E62410B47119E0006C962 /* cg_drawtools.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = cg_drawtools.c; path = ./cgame/cg_drawtools.c; sourceTree = SOURCE_ROOT; };
@@ -153,6 +155,8 @@
 		508817F509F0CAB50071BF1A /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				03EDEB46162C505700EB7A75 /* sha1.c */,
+				03EDEB44162C501500EB7A75 /* cg_timerun_draw.c */,
 				37BA88791521F81C00D558A1 /* bg_weapons.c */,
 				B72E62A10B4711DA0006C962 /* ui_shared.c */,
 				B72E62890B4711CD0006C962 /* bg_animation.c */,
@@ -168,7 +172,6 @@
 				B72E62940B4711CD0006C962 /* q_shared.c */,
 				B72E623B0B47119E0006C962 /* cg_atmospheric.c */,
 				B72E623C0B47119E0006C962 /* cg_character.c */,
-				B72E623D0B47119E0006C962 /* cg_commandmap.c */,
 				B72E623E0B47119E0006C962 /* cg_consolecmds.c */,
 				B72E62400B47119E0006C962 /* cg_draw.c */,
 				B72E62410B47119E0006C962 /* cg_drawtools.c */,
@@ -240,7 +243,7 @@
 		508817C409F0C9740071BF1A /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0420;
+				LastUpgradeCheck = 0450;
 			};
 			buildConfigurationList = 508817C509F0C9740071BF1A /* Build configuration list for PBXProject "cgame" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -276,7 +279,6 @@
 			files = (
 				B72E62620B47119E0006C962 /* cg_atmospheric.c in Sources */,
 				B72E62630B47119E0006C962 /* cg_character.c in Sources */,
-				B72E62640B47119E0006C962 /* cg_commandmap.c in Sources */,
 				B72E62650B47119E0006C962 /* cg_consolecmds.c in Sources */,
 				B72E62670B47119E0006C962 /* cg_draw.c in Sources */,
 				B72E62680B47119E0006C962 /* cg_drawtools.c in Sources */,
@@ -323,6 +325,8 @@
 				B72E62A00B4711CD0006C962 /* q_shared.c in Sources */,
 				B72E62A20B4711DA0006C962 /* ui_shared.c in Sources */,
 				37BA887A1521F81C00D558A1 /* bg_weapons.c in Sources */,
+				03EDEB45162C501500EB7A75 /* cg_timerun_draw.c in Sources */,
+				03EDEB47162C505700EB7A75 /* sha1.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -365,6 +369,7 @@
 		508817D809F0C9AE0071BF1A /* Development */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
 				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_UNUSED_VARIABLE = YES;
@@ -378,6 +383,7 @@
 		508817D909F0C9AE0071BF1A /* Deployment */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
 				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_UNUSED_VARIABLE = YES;

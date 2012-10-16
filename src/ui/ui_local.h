@@ -317,7 +317,7 @@ extern void UI_DrawConnectScreen( qboolean overlay );
 //
 // ui_loadpanel.c
 //
-extern void UI_DrawLoadPanel( qboolean forcerefresh, qboolean ownerdraw, qboolean uihack );
+extern void UI_DrawLoadPanel( qboolean ownerdraw, qboolean uihack );
 
 //
 // ui_players.c

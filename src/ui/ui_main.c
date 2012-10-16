@@ -889,7 +889,7 @@ void _UI_Refresh( int realtime ) {
 	UI_UpdateCvars();
 
 	if ( trap_Cvar_VariableValue( "ui_connecting" ) ) {
-		UI_DrawLoadPanel( qtrue, qfalse, qtrue );
+		UI_DrawLoadPanel( qfalse, qtrue );
 		if ( !trap_Cvar_VariableValue( "ui_connecting" ) ) {
 			trap_Cvar_Set( "ui_connecting", "1" );
 		}
@@ -2232,7 +2232,7 @@ static void UI_OwnerDraw( float x, float y, float w, float h, float text_x, floa
 		UI_DrawKeyBindStatus( &rect, scale, color, textStyle, text_x, text_y );
 		break;
 	case UI_LOADPANEL:
-		UI_DrawLoadPanel( qfalse, qtrue, qfalse );
+		UI_DrawLoadPanel( qtrue, qfalse );
 		break;
 	default:
 		break;
@@ -5483,7 +5483,7 @@ to prevent it from blinking away too rapidly on local or lan games.
 
 void UI_DrawConnectScreen( qboolean overlay ) {
 	if ( !overlay ) {
-		UI_DrawLoadPanel( qfalse, qfalse, qfalse );
+		UI_DrawLoadPanel( qfalse, qfalse );
 	}
 }
 
