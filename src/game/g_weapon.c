@@ -3376,36 +3376,3 @@ void FireWeapon(gentity_t *ent)
 		break;
 	}
 }
-
-
-//
-// IsSilencedWeapon
-//
-// Description: Is the specified weapon a silenced weapon?
-// Written: 12/26/2002
-//
-qboolean IsSilencedWeapon
-(
-    // The type of weapon in question.  Is it silenced?
-    int weaponType
-)
-{
-	// Local Variables ////////////////////////////////////////////////////////
-	///////////////////////////////////////////////////////////////////////////
-
-	// Return true for any of the silenced types
-	switch (weaponType)
-	{
-	case WP_SILENCED_COLT:
-	case WP_STEN:
-	case WP_SILENCER:
-		return qtrue;
-	}
-	;
-
-	// Otherwise, not silenced
-	return qfalse;
-}
-//
-// IsSilencedWeapon
-//
