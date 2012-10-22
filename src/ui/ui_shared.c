@@ -590,13 +590,18 @@ void Window_Paint(Window *w, float fadeAmount, float fadeClamp, float fadeCycle)
 	vec4_t    color;
 	rectDef_t fillRect;
 
+	if (!w)
+	{
+		return;
+	}
+
 	if (debugMode)
 	{
 		color[0] = color[1] = color[2] = color[3] = 1;
 		DC->drawRect(w->rect.x, w->rect.y, w->rect.w, w->rect.h, 1, color);
 	}
 
-	if (w == NULL || (w->style == 0 && w->border == 0))
+	if (w->style == 0 && w->border == 0)
 	{
 		return;
 	}
