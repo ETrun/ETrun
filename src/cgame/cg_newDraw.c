@@ -2,9 +2,9 @@
 ===========================================================================
 
 Wolfenstein: Enemy Territory GPL Source Code
-Copyright (C) 1999-2010 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2010 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Wolfenstein: Enemy Territory GPL Source Code (Wolf ET Source Code).  
+This file is part of the Wolfenstein: Enemy Territory GPL Source Code (Wolf ET Source Code).
 
 Wolf ET Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -34,8 +34,10 @@ If you have questions concerning this license or the applicable additional terms
 weapIconDrawSize
 ==============
 */
-static int weapIconDrawSize( int weap ) {
-	switch ( weap ) {
+static int weapIconDrawSize(int weap)
+{
+	switch (weap)
+	{
 	// weapons with 'wide' icons
 	case WP_THOMPSON:
 	case WP_MP40:
@@ -68,85 +70,101 @@ static int weapIconDrawSize( int weap ) {
 CG_DrawPlayerWeaponIcon
 ==============
 */
-void CG_DrawPlayerWeaponIcon( rectDef_t *rect, int align, vec4_t *refcolor ) {
-	int size;
-	int realweap;                   // DHM - Nerve
+void CG_DrawPlayerWeaponIcon(rectDef_t *rect, int align, vec4_t *refcolor)
+{
+	int       size;
+	int       realweap;             // DHM - Nerve
 	qhandle_t icon;
-	float scale,halfScale;
-	vec4_t hcolor;
+	float     scale, halfScale;
+	vec4_t    hcolor;
 
-	VectorCopy( *refcolor, hcolor );
+	VectorCopy(*refcolor, hcolor);
 	hcolor[3] = 1.f;
 
-	if ( cg.predictedPlayerEntity.currentState.eFlags & EF_MG42_ACTIVE ||
-		 cg.predictedPlayerEntity.currentState.eFlags & EF_MOUNTEDTANK ) {
+	if (cg.predictedPlayerEntity.currentState.eFlags & EF_MG42_ACTIVE ||
+	    cg.predictedPlayerEntity.currentState.eFlags & EF_MOUNTEDTANK)
+	{
 		realweap = WP_MOBILE_MG42;
-	} else {
+	}
+	else
+	{
 		realweap = cg.predictedPlayerState.weapon;
 	}
 
-	size = weapIconDrawSize( realweap );
+	size = weapIconDrawSize(realweap);
 
-	if ( !size ) {
+	if (!size)
+	{
 		return;
 	}
 
-	if ( cg.predictedPlayerEntity.currentState.eFlags & EF_MOUNTEDTANK && cg_entities[cg_entities[ cg_entities[ cg.snap->ps.clientNum ].tagParent ].tankparent].currentState.density & 8 ) {
+	if (cg.predictedPlayerEntity.currentState.eFlags & EF_MOUNTEDTANK && cg_entities[cg_entities[cg_entities[cg.snap->ps.clientNum].tagParent].tankparent].currentState.density & 8)
+	{
 		icon = cgs.media.browningIcon;
-	} else {
-		icon = cg_weapons[ realweap ].weaponIcon[1];
+	}
+	else
+	{
+		icon = cg_weapons[realweap].weaponIcon[1];
 	}
 
 
 
 	// pulsing grenade icon to help the player 'count' in their head
-	if ( cg.predictedPlayerState.grenadeTimeLeft ) {   // grenades and dynamite set this
-
-		// these time differently
-		if ( realweap == WP_DYNAMITE ) {
-			if ( ( ( cg.grenLastTime ) % 1000 ) > ( ( cg.predictedPlayerState.grenadeTimeLeft ) % 1000 ) ) {
-				trap_S_StartLocalSound( cgs.media.grenadePulseSound4, CHAN_LOCAL_SOUND );
+	if (cg.predictedPlayerState.grenadeTimeLeft)       // grenades and dynamite set this
+	{   // these time differently
+		if (realweap == WP_DYNAMITE)
+		{
+			if (((cg.grenLastTime) % 1000) > ((cg.predictedPlayerState.grenadeTimeLeft) % 1000))
+			{
+				trap_S_StartLocalSound(cgs.media.grenadePulseSound4, CHAN_LOCAL_SOUND);
 			}
-		} else {
-			if ( ( ( cg.grenLastTime ) % 1000 ) < ( ( cg.predictedPlayerState.grenadeTimeLeft ) % 1000 ) ) {
-				switch ( cg.predictedPlayerState.grenadeTimeLeft / 1000 ) {
+		}
+		else
+		{
+			if (((cg.grenLastTime) % 1000) < ((cg.predictedPlayerState.grenadeTimeLeft) % 1000))
+			{
+				switch (cg.predictedPlayerState.grenadeTimeLeft / 1000)
+				{
 				case 3:
-					trap_S_StartLocalSound( cgs.media.grenadePulseSound4, CHAN_LOCAL_SOUND );
+					trap_S_StartLocalSound(cgs.media.grenadePulseSound4, CHAN_LOCAL_SOUND);
 					break;
 				case 2:
-					trap_S_StartLocalSound( cgs.media.grenadePulseSound3, CHAN_LOCAL_SOUND );
+					trap_S_StartLocalSound(cgs.media.grenadePulseSound3, CHAN_LOCAL_SOUND);
 					break;
 				case 1:
-					trap_S_StartLocalSound( cgs.media.grenadePulseSound2, CHAN_LOCAL_SOUND );
+					trap_S_StartLocalSound(cgs.media.grenadePulseSound2, CHAN_LOCAL_SOUND);
 					break;
 				case 0:
-					trap_S_StartLocalSound( cgs.media.grenadePulseSound1, CHAN_LOCAL_SOUND );
+					trap_S_StartLocalSound(cgs.media.grenadePulseSound1, CHAN_LOCAL_SOUND);
 					break;
 				}
 			}
 		}
 
-		scale = (float)( ( cg.predictedPlayerState.grenadeTimeLeft ) % 1000 ) / 100.0f;
+		scale     = (float)((cg.predictedPlayerState.grenadeTimeLeft) % 1000) / 100.0f;
 		halfScale = scale * 0.5f;
 
 		cg.grenLastTime = cg.predictedPlayerState.grenadeTimeLeft;
-	} else {
+	}
+	else
+	{
 		scale = halfScale = 0;
 	}
 
 
-	if ( icon ) {
+	if (icon)
+	{
 		float x, y, w, h;
 
-		if ( size == 1 ) { // draw half width to match the icon asset
-
-			// start at left
+		if (size == 1)     // draw half width to match the icon asset
+		{   // start at left
 			x = rect->x - halfScale;
 			y = rect->y - halfScale;
 			w = rect->w / 2 + scale;
 			h = rect->h + scale;
 
-			switch ( align ) {
+			switch (align)
+			{
 			case ITEM_ALIGN_CENTER:
 				x += rect->w / 4;
 				break;
@@ -158,7 +176,9 @@ void CG_DrawPlayerWeaponIcon( rectDef_t *rect, int align, vec4_t *refcolor ) {
 				break;
 			}
 
-		} else {
+		}
+		else
+		{
 			x = rect->x - halfScale;
 			y = rect->y - halfScale;
 			w = rect->w + scale;
@@ -166,8 +186,8 @@ void CG_DrawPlayerWeaponIcon( rectDef_t *rect, int align, vec4_t *refcolor ) {
 		}
 
 
-		trap_R_SetColor( hcolor ); // JPW NERVE
-		CG_DrawPic( x, y, w, h, icon );
+		trap_R_SetColor(hcolor);   // JPW NERVE
+		CG_DrawPic(x, y, w, h, icon);
 	}
 }
 
@@ -178,28 +198,31 @@ void CG_DrawPlayerWeaponIcon( rectDef_t *rect, int align, vec4_t *refcolor ) {
 CG_DrawCursorHints
 
   cg_cursorHints.integer ==
-	0:	no hints
-	1:	sin size pulse
-	2:	one way size pulse
-	3:	alpha pulse
-	4+:	static image
+    0:	no hints
+    1:	sin size pulse
+    2:	one way size pulse
+    3:	alpha pulse
+    4+:	static image
 
 ==============
 */
-void CG_DrawCursorhint( rectDef_t *rect ) {
-	float       *color;
+void CG_DrawCursorhint(rectDef_t *rect)
+{
+	float     *color;
 	qhandle_t icon, icon2 = 0;
-	float scale, halfscale;
+	float     scale, halfscale;
 	//qboolean	redbar = qfalse;
 	qboolean yellowbar = qfalse;
 
-	if ( !cg_cursorHints.integer ) {
+	if (!cg_cursorHints.integer)
+	{
 		return;
 	}
 
 	CG_CheckForCursorHints();
 
-	switch ( cg.cursorHintIcon ) {
+	switch (cg.cursorHintIcon)
+	{
 
 	case HINT_NONE:
 	case HINT_FORCENONE:
@@ -321,7 +344,7 @@ void CG_DrawCursorhint( rectDef_t *rect ) {
 		icon = cgs.media.hintPlrUnknownShader;
 		break;
 
-		// DHM - Nerve :: multiplayer hints
+	// DHM - Nerve :: multiplayer hints
 	case HINT_BUILD:
 		icon = cgs.media.buildHintShader;
 		break;
@@ -333,11 +356,11 @@ void CG_DrawCursorhint( rectDef_t *rect ) {
 	case HINT_DYNAMITE:
 		icon = cgs.media.dynamiteHintShader;
 		break;
-		// dhm - end
+	// dhm - end
 
-		// Mad Doc - TDF
+	// Mad Doc - TDF
 	case HINT_LOCKPICK:
-		icon = cgs.media.doorLockHintShader;            // TAT 1/30/2003 - use the locked door hint cursor
+		icon      = cgs.media.doorLockHintShader;       // TAT 1/30/2003 - use the locked door hint cursor
 		yellowbar = qtrue;      // draw the status bar in yellow so it shows up better
 		break;
 
@@ -349,80 +372,99 @@ void CG_DrawCursorhint( rectDef_t *rect ) {
 	}
 
 
-	if ( !icon ) {
+	if (!icon)
+	{
 		return;
 	}
 
 
 	// color
-	color = CG_FadeColor( cg.cursorHintTime, cg.cursorHintFade );
-	if ( !color ) {
-		trap_R_SetColor( NULL );
+	color = CG_FadeColor(cg.cursorHintTime, cg.cursorHintFade);
+	if (!color)
+	{
+		trap_R_SetColor(NULL);
 		return;
 	}
 
-	if ( cg_cursorHints.integer == 3 ) {
-		color[3] *= 0.5 + 0.5 * sin( (float)cg.time / 150.0 );
+	if (cg_cursorHints.integer == 3)
+	{
+		color[3] *= 0.5 + 0.5 * sin((float)cg.time / 150.0);
 	}
 
 
 	// size
-	if ( cg_cursorHints.integer >= 3 ) {   // no size pulsing
+	if (cg_cursorHints.integer >= 3)       // no size pulsing
+	{
 		scale = halfscale = 0;
-	} else {
-		if ( cg_cursorHints.integer == 2 ) {
-			scale = (float)( ( cg.cursorHintTime ) % 1000 ) / 100.0f; // one way size pulse
-		} else {
-			scale = CURSORHINT_SCALE * ( 0.5 + 0.5 * sin( (float)cg.time / 150.0 ) ); // sin pulse
+	}
+	else
+	{
+		if (cg_cursorHints.integer == 2)
+		{
+			scale = (float)((cg.cursorHintTime) % 1000) / 100.0f;     // one way size pulse
+		}
+		else
+		{
+			scale = CURSORHINT_SCALE * (0.5 + 0.5 * sin((float)cg.time / 150.0));     // sin pulse
 
 		}
 		halfscale = scale * 0.5f;
 	}
 
 	// set color and draw the hint
-	trap_R_SetColor( color );
-	CG_DrawPic( rect->x - halfscale, rect->y - halfscale, rect->w + scale, rect->h + scale, icon );
+	trap_R_SetColor(color);
+	CG_DrawPic(rect->x - halfscale, rect->y - halfscale, rect->w + scale, rect->h + scale, icon);
 
-	if ( icon2 ) {
-		CG_DrawPic( rect->x - halfscale, rect->y - halfscale, rect->w + scale, rect->h + scale, icon2 );
+	if (icon2)
+	{
+		CG_DrawPic(rect->x - halfscale, rect->y - halfscale, rect->w + scale, rect->h + scale, icon2);
 	}
 
-	trap_R_SetColor( NULL );
+	trap_R_SetColor(NULL);
 
 	// draw status bar under the cursor hint
-	if ( cg.cursorHintValue ) {
-		if ( yellowbar ) {
-			Vector4Set( color, 1, 1, 0, 1.0f );
-		} else {
-			Vector4Set( color, 0, 0, 1, 0.5f );
+	if (cg.cursorHintValue)
+	{
+		if (yellowbar)
+		{
+			Vector4Set(color, 1, 1, 0, 1.0f);
 		}
-		CG_FilledBar( rect->x, rect->y + rect->h + 4, rect->w, 8, color, NULL, NULL, (float)cg.cursorHintValue / 255.0f, 0 );
+		else
+		{
+			Vector4Set(color, 0, 0, 1, 0.5f);
+		}
+		CG_FilledBar(rect->x, rect->y + rect->h + 4, rect->w, 8, color, NULL, NULL, (float)cg.cursorHintValue / 255.0f, 0);
 	}
 
 }
 
-float CG_GetValue( int ownerDraw, int type ) {
+float CG_GetValue(int ownerDraw, int type)
+{
 	// Nico, silent GCC
 	type = type;
 
-	switch ( ownerDraw ) {
+	switch (ownerDraw)
+	{
 	default:
 		break;
 	}
 	return -1;
 }
 
-qboolean CG_OtherTeamHasFlag() {
+qboolean CG_OtherTeamHasFlag()
+{
 	return qfalse;
 }
 
-qboolean CG_YourTeamHasFlag() {
+qboolean CG_YourTeamHasFlag()
+{
 	return qfalse;
 }
 
 // THINKABOUTME: should these be exclusive or inclusive..
 //
-qboolean CG_OwnerDrawVisible( int flags ) {
+qboolean CG_OwnerDrawVisible(int flags)
+{
 	// Nico, silent GCC
 	flags = flags;
 
@@ -434,36 +476,42 @@ qboolean CG_OwnerDrawVisible( int flags ) {
 /*
 ==============
 CG_DrawWeapStability
-	draw a bar showing current stability level (0-255), max at current weapon/ability, and 'perfect' reference mark
+    draw a bar showing current stability level (0-255), max at current weapon/ability, and 'perfect' reference mark
 
-	probably only drawn for scoped weapons
+    probably only drawn for scoped weapons
 ==============
 */
-void CG_DrawWeapStability( rectDef_t *rect ) {
-	vec4_t goodColor = {0, 1, 0, 0.5f}, badColor = {1, 0, 0, 0.5f};
+void CG_DrawWeapStability(rectDef_t *rect)
+{
+	vec4_t goodColor = { 0, 1, 0, 0.5f }, badColor = { 1, 0, 0, 0.5f };
 
-	if ( !cg_drawSpreadScale.integer ) {
+	if (!cg_drawSpreadScale.integer)
+	{
 		return;
 	}
 
-	if ( cg_drawSpreadScale.integer == 1 && !BG_IsScopedWeapon( cg.predictedPlayerState.weapon ) ) {
+	if (cg_drawSpreadScale.integer == 1 && !BG_IsScopedWeapon(cg.predictedPlayerState.weapon))
+	{
 		// cg_drawSpreadScale of '1' means only draw for scoped weapons, '2' means draw all the time (for debugging)
 		return;
 	}
 
-	if ( cg.predictedPlayerState.weaponstate != WEAPON_READY ) {
+	if (cg.predictedPlayerState.weaponstate != WEAPON_READY)
+	{
 		return;
 	}
 
-	if ( !( cg.snap->ps.aimSpreadScale ) ) {
+	if (!(cg.snap->ps.aimSpreadScale))
+	{
 		return;
 	}
 
-	if ( cg.renderingThirdPerson ) {
+	if (cg.renderingThirdPerson)
+	{
 		return;
 	}
 
-	CG_FilledBar( rect->x, rect->y, rect->w, rect->h, goodColor, badColor, NULL, (float)cg.snap->ps.aimSpreadScale / 255.0f, 2 | 4 | 256 ); // flags (BAR_CENTER|BAR_VERT|BAR_LERP_COLOR)
+	CG_FilledBar(rect->x, rect->y, rect->w, rect->h, goodColor, badColor, NULL, (float)cg.snap->ps.aimSpreadScale / 255.0f, 2 | 4 | 256);   // flags (BAR_CENTER|BAR_VERT|BAR_LERP_COLOR)
 }
 
 
@@ -472,15 +520,18 @@ void CG_DrawWeapStability( rectDef_t *rect ) {
 CG_DrawWeapHeat
 ==============
 */
-void CG_DrawWeapHeat( rectDef_t *rect, int align ) {
-	vec4_t color = {1, 0, 0, 0.2f}, color2 = {1, 0, 0, 0.5f};
-	int flags = 0;
+void CG_DrawWeapHeat(rectDef_t *rect, int align)
+{
+	vec4_t color = { 1, 0, 0, 0.2f }, color2 = { 1, 0, 0, 0.5f };
+	int    flags = 0;
 
-	if ( !( cg.snap->ps.curWeapHeat ) ) {
+	if (!(cg.snap->ps.curWeapHeat))
+	{
 		return;
 	}
 
-	if ( align != HUD_HORIZONTAL ) {
+	if (align != HUD_HORIZONTAL)
+	{
 		flags |= 4;   // BAR_VERT
 	}
 
@@ -488,50 +539,66 @@ void CG_DrawWeapHeat( rectDef_t *rect, int align ) {
 	flags |= 16;      // BAR_BG			- draw the filled contrast box
 	flags |= 256;     // BAR_COLOR_LERP
 
-	CG_FilledBar( rect->x, rect->y, rect->w, rect->h, color, color2, NULL, (float)cg.snap->ps.curWeapHeat / 255.0f, flags );
+	CG_FilledBar(rect->x, rect->y, rect->w, rect->h, color, color2, NULL, (float)cg.snap->ps.curWeapHeat / 255.0f, flags);
 }
 
-void CG_MouseEvent( int x, int y ) {
-	switch ( (int)cgs.eventHandling ) {
+void CG_MouseEvent(int x, int y)
+{
+	switch ((int)cgs.eventHandling)
+	{
 	case CGAME_EVENT_SPEAKEREDITOR:
 	case CGAME_EVENT_GAMEVIEW:
 	case CGAME_EVENT_CAMPAIGNBREIFING:
 	case CGAME_EVENT_FIRETEAMMSG:
 		cgs.cursorX += x;
-		if ( cgs.cursorX < 0 ) {
+		if (cgs.cursorX < 0)
+		{
 			cgs.cursorX = 0;
-		} else if ( cgs.cursorX > 640 ) {
+		}
+		else if (cgs.cursorX > 640)
+		{
 			cgs.cursorX = 640;
 		}
 
 		cgs.cursorY += y;
-		if ( cgs.cursorY < 0 ) {
+		if (cgs.cursorY < 0)
+		{
 			cgs.cursorY = 0;
-		} else if ( cgs.cursorY > 480 ) {
+		}
+		else if (cgs.cursorY > 480)
+		{
 			cgs.cursorY = 480;
 		}
 
-		if ( (int)cgs.eventHandling == CGAME_EVENT_SPEAKEREDITOR ) {
-			CG_SpeakerEditorMouseMove_Handling( x, y );
+		if ((int)cgs.eventHandling == CGAME_EVENT_SPEAKEREDITOR)
+		{
+			CG_SpeakerEditorMouseMove_Handling(x, y);
 		}
 
 		break;
 	case CGAME_EVENT_DEMO:
 		cgs.cursorX += x;
-		if ( cgs.cursorX < 0 ) {
+		if (cgs.cursorX < 0)
+		{
 			cgs.cursorX = 0;
-		} else if ( cgs.cursorX > 640 ) {
+		}
+		else if (cgs.cursorX > 640)
+		{
 			cgs.cursorX = 640;
 		}
 
 		cgs.cursorY += y;
-		if ( cgs.cursorY < 0 ) {
+		if (cgs.cursorY < 0)
+		{
 			cgs.cursorY = 0;
-		} else if ( cgs.cursorY > 480 ) {
+		}
+		else if (cgs.cursorY > 480)
+		{
 			cgs.cursorY = 480;
 		}
 
-		if ( x != 0 || y != 0 ) {
+		if (x != 0 || y != 0)
+		{
 			cgs.cursorUpdate = cg.time + 5000;
 		}
 		break;
@@ -539,10 +606,11 @@ void CG_MouseEvent( int x, int y ) {
 
 	default:
 		// default handling
-		if ( ( cg.predictedPlayerState.pm_type == PM_NORMAL ||
-			   cg.predictedPlayerState.pm_type == PM_SPECTATOR ) &&
-			 cg.showScores == qfalse ) {
-			trap_Key_SetCatcher( trap_Key_GetCatcher() & ~KEYCATCH_CGAME );
+		if ((cg.predictedPlayerState.pm_type == PM_NORMAL ||
+		     cg.predictedPlayerState.pm_type == PM_SPECTATOR) &&
+		    cg.showScores == qfalse)
+		{
+			trap_Key_SetCatcher(trap_Key_GetCatcher() & ~KEYCATCH_CGAME);
 			return;
 		}
 		break;
@@ -554,21 +622,25 @@ void CG_MouseEvent( int x, int y ) {
 CG_EventHandling
 ==================
 */
-void CG_EventHandling( int type, qboolean fForced ) {
-	if ( cg.demoPlayback && type == CGAME_EVENT_NONE && !fForced ) {
+void CG_EventHandling(int type, qboolean fForced)
+{
+	if (cg.demoPlayback && type == CGAME_EVENT_NONE && !fForced)
+	{
 		type = CGAME_EVENT_DEMO;
 	}
 
-	if ( type != CGAME_EVENT_NONE ) {
-		trap_Cvar_Set( "cl_bypassMouseInput", 0 );
+	if (type != CGAME_EVENT_NONE)
+	{
+		trap_Cvar_Set("cl_bypassMouseInput", 0);
 	}
 
-	switch ( type ) {
-		// OSP - Demo support
+	switch (type)
+	{
+	// OSP - Demo support
 	case CGAME_EVENT_DEMO:
-		cgs.fResize = qfalse;
-		cgs.fSelect = qfalse;
-		cgs.cursorUpdate = cg.time + 10000;
+		cgs.fResize         = qfalse;
+		cgs.fSelect         = qfalse;
+		cgs.cursorUpdate    = cg.time + 10000;
 		cgs.timescaleUpdate = cg.time + 4000;
 		CG_ScoresUp_f();
 		break;
@@ -580,115 +652,146 @@ void CG_EventHandling( int type, qboolean fForced ) {
 	case CGAME_EVENT_FIRETEAMMSG:
 	default:
 		// default handling (cleanup mostly)
-		if ( (int)cgs.eventHandling == CGAME_EVENT_GAMEVIEW ) {
+		if ((int)cgs.eventHandling == CGAME_EVENT_GAMEVIEW)
+		{
 			cg.showGameView = qfalse;
-			trap_S_FadeBackgroundTrack( 0.0f, 500, 0 );
+			trap_S_FadeBackgroundTrack(0.0f, 500, 0);
 
-			trap_S_StopStreamingSound( -1 );
+			trap_S_StopStreamingSound(-1);
 
-			if ( fForced ) {
-				if ( cgs.limboLoadoutModified ) {
-					trap_SendClientCommand( "rs" );
+			if (fForced)
+			{
+				if (cgs.limboLoadoutModified)
+				{
+					trap_SendClientCommand("rs");
 
 					cgs.limboLoadoutSelected = qfalse;
 				}
 			}
-		} else if ( (int)cgs.eventHandling == CGAME_EVENT_SPEAKEREDITOR ) {
-			if ( type == -CGAME_EVENT_SPEAKEREDITOR ) {
+		}
+		else if ((int)cgs.eventHandling == CGAME_EVENT_SPEAKEREDITOR)
+		{
+			if (type == -CGAME_EVENT_SPEAKEREDITOR)
+			{
 				type = CGAME_EVENT_NONE;
-			} else {
-				trap_Key_SetCatcher( KEYCATCH_CGAME );
+			}
+			else
+			{
+				trap_Key_SetCatcher(KEYCATCH_CGAME);
 				return;
 			}
-		} else if ( (int)cgs.eventHandling == CGAME_EVENT_CAMPAIGNBREIFING ) {
+		}
+		else if ((int)cgs.eventHandling == CGAME_EVENT_CAMPAIGNBREIFING)
+		{
 			type = CGAME_EVENT_GAMEVIEW;
-		} else if ( (int)cgs.eventHandling == CGAME_EVENT_FIRETEAMMSG ) {
+		}
+		else if ((int)cgs.eventHandling == CGAME_EVENT_FIRETEAMMSG)
+		{
 			cg.showFireteamMenu = qfalse;
-			trap_Cvar_Set( "cl_bypassmouseinput", "0" );
-		} 
+			trap_Cvar_Set("cl_bypassmouseinput", "0");
+		}
 		break;
 	}
 
 
 	cgs.eventHandling = type;
 
-	if ( type == CGAME_EVENT_NONE ) {
-		trap_Key_SetCatcher( trap_Key_GetCatcher() & ~KEYCATCH_CGAME );
+	if (type == CGAME_EVENT_NONE)
+	{
+		trap_Key_SetCatcher(trap_Key_GetCatcher() & ~KEYCATCH_CGAME);
 
-		if ( cg.demoPlayback && cg.demohelpWindow != SHOW_OFF ) {
-			CG_ShowHelp_Off( &cg.demohelpWindow );
+		if (cg.demoPlayback && cg.demohelpWindow != SHOW_OFF)
+		{
+			CG_ShowHelp_Off(&cg.demohelpWindow);
 		}
-	} else if ( type == CGAME_EVENT_GAMEVIEW ) {
+	}
+	else if (type == CGAME_EVENT_GAMEVIEW)
+	{
 		cg.showGameView = qtrue;
 		CG_LimboPanel_Setup();
-		trap_Key_SetCatcher( KEYCATCH_CGAME );
-	} else if ( type == CGAME_EVENT_FIRETEAMMSG ) {
-		cgs.ftMenuPos = -1;
-		cgs.ftMenuMode = 0;
+		trap_Key_SetCatcher(KEYCATCH_CGAME);
+	}
+	else if (type == CGAME_EVENT_FIRETEAMMSG)
+	{
+		cgs.ftMenuPos       = -1;
+		cgs.ftMenuMode      = 0;
 		cg.showFireteamMenu = qtrue;
-		trap_Cvar_Set( "cl_bypassmouseinput", "1" );
-		trap_Key_SetCatcher( KEYCATCH_CGAME );
-	} else {
-		trap_Key_SetCatcher( KEYCATCH_CGAME );
+		trap_Cvar_Set("cl_bypassmouseinput", "1");
+		trap_Key_SetCatcher(KEYCATCH_CGAME);
+	}
+	else
+	{
+		trap_Key_SetCatcher(KEYCATCH_CGAME);
 	}
 }
 
-void CG_KeyEvent( int key, qboolean down ) {
-	switch ( (int)cgs.eventHandling ) {
-		// Demos get their own keys
+void CG_KeyEvent(int key, qboolean down)
+{
+	switch ((int)cgs.eventHandling)
+	{
+	// Demos get their own keys
 	case CGAME_EVENT_DEMO:
-		CG_DemoClick( key, down );
+		CG_DemoClick(key, down);
 		return;
 
 	case CGAME_EVENT_CAMPAIGNBREIFING:
-		CG_LoadPanel_KeyHandling( key, down );
+		CG_LoadPanel_KeyHandling(key, down);
 		break;
 
 	case CGAME_EVENT_FIRETEAMMSG:
-		CG_Fireteams_KeyHandling( key, down );
+		CG_Fireteams_KeyHandling(key, down);
 		break;
 
 	case CGAME_EVENT_GAMEVIEW:
-		CG_LimboPanel_KeyHandling( key, down );
+		CG_LimboPanel_KeyHandling(key, down);
 		break;
 
 	case CGAME_EVENT_SPEAKEREDITOR:
-		CG_SpeakerEditor_KeyHandling( key, down );
+		CG_SpeakerEditor_KeyHandling(key, down);
 		break;
 
 	default:
 		// default handling
-		if ( !down ) {
+		if (!down)
+		{
 			return;
 		}
 
-		if ( ( cg.predictedPlayerState.pm_type == PM_NORMAL ||
-			   ( cg.predictedPlayerState.pm_type == PM_SPECTATOR && cg.showScores == qfalse ) ) ) {
+		if ((cg.predictedPlayerState.pm_type == PM_NORMAL ||
+		     (cg.predictedPlayerState.pm_type == PM_SPECTATOR && cg.showScores == qfalse)))
+		{
 
-			CG_EventHandling( CGAME_EVENT_NONE, qfalse );
+			CG_EventHandling(CGAME_EVENT_NONE, qfalse);
 			return;
 		}
 		break;
 	}
 }
 
-void CG_GetTeamColor( vec4_t *color ) {
-	if ( cg.snap->ps.persistant[PERS_TEAM] == TEAM_AXIS ) {
-		( *color )[0] = 1;
-		( *color )[3] = .25f;
-		( *color )[1] = ( *color )[2] = 0;
-	} else if ( cg.snap->ps.persistant[PERS_TEAM] == TEAM_ALLIES ) {
-		( *color )[0] = ( *color )[1] = 0;
-		( *color )[2] = 1;
-		( *color )[3] = .25f;
-	} else {
-		( *color )[0] = ( *color )[2] = 0;
-		( *color )[1] = .17f;
-		( *color )[3] = .25f;
+void CG_GetTeamColor(vec4_t *color)
+{
+	if (cg.snap->ps.persistant[PERS_TEAM] == TEAM_AXIS)
+	{
+		(*color)[0] = 1;
+		(*color)[3] = .25f;
+		(*color)[1] = (*color)[2] = 0;
+	}
+	else if (cg.snap->ps.persistant[PERS_TEAM] == TEAM_ALLIES)
+	{
+		(*color)[0] = (*color)[1] = 0;
+		(*color)[2] = 1;
+		(*color)[3] = .25f;
+	}
+	else
+	{
+		(*color)[0] = (*color)[2] = 0;
+		(*color)[1] = .17f;
+		(*color)[3] = .25f;
 	}
 }
 
-void CG_RunMenuScript( char **args ) {
+void CG_RunMenuScript(char **args)
+{
 	// Nico, silent GCC
 	args = args;
 }

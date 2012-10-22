@@ -2,9 +2,9 @@
 ===========================================================================
 
 Wolfenstein: Enemy Territory GPL Source Code
-Copyright (C) 1999-2010 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2010 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Wolfenstein: Enemy Territory GPL Source Code (Wolf ET Source Code).  
+This file is part of the Wolfenstein: Enemy Territory GPL Source Code (Wolf ET Source Code).
 
 Wolf ET Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -29,7 +29,8 @@ If you have questions concerning this license or the applicable additional terms
 #include "q_shared.h"
 #include "bg_public.h"
 
-bg_playerclass_t bg_allies_playerclasses[NUM_PLAYER_CLASSES] = {
+bg_playerclass_t bg_allies_playerclasses[NUM_PLAYER_CLASSES] =
+{
 	{
 		PC_SOLDIER,
 		"characters/temperate/allied/soldier.char",
@@ -98,7 +99,8 @@ bg_playerclass_t bg_allies_playerclasses[NUM_PLAYER_CLASSES] = {
 	},
 };
 
-bg_playerclass_t bg_axis_playerclasses[NUM_PLAYER_CLASSES] = {
+bg_playerclass_t bg_axis_playerclasses[NUM_PLAYER_CLASSES] =
+{
 	{
 		PC_SOLDIER,
 		"characters/temperate/axis/soldier.char",
@@ -167,14 +169,17 @@ bg_playerclass_t bg_axis_playerclasses[NUM_PLAYER_CLASSES] = {
 	},
 };
 
-bg_playerclass_t* BG_GetPlayerClassInfo( int team, int cls ) {
-	bg_playerclass_t* teamList;
+bg_playerclass_t *BG_GetPlayerClassInfo(int team, int cls)
+{
+	bg_playerclass_t *teamList;
 
-	if ( cls < PC_SOLDIER || cls >= NUM_PLAYER_CLASSES ) {
+	if (cls < PC_SOLDIER || cls >= NUM_PLAYER_CLASSES)
+	{
 		cls = PC_SOLDIER;
 	}
 
-	switch ( team ) {
+	switch (team)
+	{
 	default:
 	case TEAM_AXIS:
 		teamList = bg_axis_playerclasses;
@@ -187,38 +192,49 @@ bg_playerclass_t* BG_GetPlayerClassInfo( int team, int cls ) {
 	return &teamList[cls];
 }
 
-bg_playerclass_t* BG_PlayerClassForPlayerState( playerState_t* ps ) {
-	return BG_GetPlayerClassInfo( ps->persistant[PERS_TEAM], ps->stats[STAT_PLAYER_CLASS] );
+bg_playerclass_t *BG_PlayerClassForPlayerState(playerState_t *ps)
+{
+	return BG_GetPlayerClassInfo(ps->persistant[PERS_TEAM], ps->stats[STAT_PLAYER_CLASS]);
 }
 
-qboolean BG_ClassHasWeapon( bg_playerclass_t* classInfo, weapon_t weap ) {
+qboolean BG_ClassHasWeapon(bg_playerclass_t *classInfo, weapon_t weap)
+{
 	int i;
 
-	if ( !weap ) {
+	if (!weap)
+	{
 		return qfalse;
 	}
 
-	for ( i = 0; i < MAX_WEAPS_PER_CLASS; i++ ) {
-		if ( classInfo->classWeapons[i] == weap ) {
+	for (i = 0; i < MAX_WEAPS_PER_CLASS; i++)
+	{
+		if (classInfo->classWeapons[i] == weap)
+		{
 			return qtrue;
 		}
 	}
 	return qfalse;
 }
 
-qboolean BG_WeaponIsPrimaryForClassAndTeam( int classnum, team_t team, weapon_t weapon ) {
+qboolean BG_WeaponIsPrimaryForClassAndTeam(int classnum, team_t team, weapon_t weapon)
+{
 	bg_playerclass_t *classInfo;
 
-	if ( team == TEAM_ALLIES ) {
+	if (team == TEAM_ALLIES)
+	{
 		classInfo = &bg_allies_playerclasses[classnum];
 
-		if ( BG_ClassHasWeapon( classInfo, weapon ) ) {
+		if (BG_ClassHasWeapon(classInfo, weapon))
+		{
 			return qtrue;
 		}
-	} else if ( team == TEAM_AXIS ) {
+	}
+	else if (team == TEAM_AXIS)
+	{
 		classInfo = &bg_axis_playerclasses[classnum];
 
-		if ( BG_ClassHasWeapon( classInfo, weapon ) ) {
+		if (BG_ClassHasWeapon(classInfo, weapon))
+		{
 			return qtrue;
 		}
 	}
@@ -226,8 +242,10 @@ qboolean BG_WeaponIsPrimaryForClassAndTeam( int classnum, team_t team, weapon_t 
 	return qfalse;
 }
 
-const char* BG_ShortClassnameForNumber( int classNum ) {
-	switch ( classNum ) {
+const char *BG_ShortClassnameForNumber(int classNum)
+{
+	switch (classNum)
+	{
 	case PC_SOLDIER:
 		return "Soldr";
 	case PC_MEDIC:
@@ -243,8 +261,10 @@ const char* BG_ShortClassnameForNumber( int classNum ) {
 	}
 }
 
-const char* BG_ClassnameForNumber( int classNum ) {
-	switch ( classNum ) {
+const char *BG_ClassnameForNumber(int classNum)
+{
+	switch (classNum)
+	{
 	case PC_SOLDIER:
 		return "Soldier";
 	case PC_MEDIC:
@@ -260,8 +280,10 @@ const char* BG_ClassnameForNumber( int classNum ) {
 	}
 }
 
-const char* BG_ClassLetterForNumber( int classNum ) {
-	switch ( classNum ) {
+const char *BG_ClassLetterForNumber(int classNum)
+{
+	switch (classNum)
+	{
 	case PC_SOLDIER:
 		return "S";
 	case PC_MEDIC:
@@ -277,18 +299,30 @@ const char* BG_ClassLetterForNumber( int classNum ) {
 	}
 }
 
-int BG_ClassTextToClass( char *token ) {
-	if ( !Q_stricmp( token, "soldier" ) ) {
+int BG_ClassTextToClass(char *token)
+{
+	if (!Q_stricmp(token, "soldier"))
+	{
 		return PC_SOLDIER;
-	} else if ( !Q_stricmp( token, "medic" ) ) {
+	}
+	else if (!Q_stricmp(token, "medic"))
+	{
 		return PC_MEDIC;
-	} else if ( !Q_stricmp( token, "lieutenant" ) ) { // FIXME: remove from missionpack
+	}
+	else if (!Q_stricmp(token, "lieutenant"))         // FIXME: remove from missionpack
+	{
 		return PC_FIELDOPS;
-	} else if ( !Q_stricmp( token, "fieldops" ) ) {
+	}
+	else if (!Q_stricmp(token, "fieldops"))
+	{
 		return PC_FIELDOPS;
-	} else if ( !Q_stricmp( token, "engineer" ) ) {
+	}
+	else if (!Q_stricmp(token, "engineer"))
+	{
 		return PC_ENGINEER;
-	} else if ( !Q_stricmp( token, "covertops" ) ) {
+	}
+	else if (!Q_stricmp(token, "covertops"))
+	{
 		return PC_COVERTOPS;
 	}
 

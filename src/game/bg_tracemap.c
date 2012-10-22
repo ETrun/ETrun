@@ -2,9 +2,9 @@
 ===========================================================================
 
 Wolfenstein: Enemy Territory GPL Source Code
-Copyright (C) 1999-2010 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2010 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Wolfenstein: Enemy Territory GPL Source Code (Wolf ET Source Code).  
+This file is part of the Wolfenstein: Enemy Territory GPL Source Code (Wolf ET Source Code).
 
 Wolf ET Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -41,7 +41,8 @@ If you have questions concerning this license or the applicable additional terms
 
 #define TRACEMAP_SIZE               256
 
-typedef struct tracemap_s {
+typedef struct tracemap_s
+{
 	qboolean loaded;
 	float sky[TRACEMAP_SIZE][TRACEMAP_SIZE];
 	float skyground[TRACEMAP_SIZE][TRACEMAP_SIZE];
@@ -54,89 +55,108 @@ static tracemap_t tracemap;
 
 static vec2_t one_over_mapgrid_factor;
 
-void etpro_FinalizeTracemapClamp( int *x, int *y );
+void etpro_FinalizeTracemapClamp(int *x, int *y);
 
-static void BG_ClampPointToTracemapExtends( vec3_t point, vec2_t out ) {
+static void BG_ClampPointToTracemapExtends(vec3_t point, vec2_t out)
+{
 
-	if ( point[0] < tracemap.world_mins[0] ) {
+	if (point[0] < tracemap.world_mins[0])
+	{
 		out[0] = tracemap.world_mins[0];
-	} else if ( point[0] > tracemap.world_maxs[0] ) {
+	}
+	else if (point[0] > tracemap.world_maxs[0])
+	{
 		out[0] = tracemap.world_maxs[0];
-	} else {
+	}
+	else
+	{
 		out[0] = point[0];
 	}
 
-	if ( point[1] < tracemap.world_maxs[1] ) {
+	if (point[1] < tracemap.world_maxs[1])
+	{
 		out[1] = tracemap.world_maxs[1];
-	} else if ( point[1] > tracemap.world_mins[1] ) {
+	}
+	else if (point[1] > tracemap.world_mins[1])
+	{
 		out[1] = tracemap.world_mins[1];
-	} else {
+	}
+	else
+	{
 		out[1] = point[1];
 	}
 }
 
-float BG_GetSkyHeightAtPoint( vec3_t pos ) {
-	int i, j;
+float BG_GetSkyHeightAtPoint(vec3_t pos)
+{
+	int    i, j;
 	vec2_t point;
 
-	if ( !tracemap.loaded ) {
+	if (!tracemap.loaded)
+	{
 		return MAX_WORLD_HEIGHT;
 	}
 
-	BG_ClampPointToTracemapExtends( pos, point );
+	BG_ClampPointToTracemapExtends(pos, point);
 
-	i = myftol( ( point[0] - tracemap.world_mins[0] ) * one_over_mapgrid_factor[0] );
-	j = myftol( ( point[1] - tracemap.world_mins[1] ) * one_over_mapgrid_factor[1] );
+	i = myftol((point[0] - tracemap.world_mins[0]) * one_over_mapgrid_factor[0]);
+	j = myftol((point[1] - tracemap.world_mins[1]) * one_over_mapgrid_factor[1]);
 
 	// rain - re-clamp the points, because a rounding error can cause
 	// them to go outside the array
-	etpro_FinalizeTracemapClamp( &i, &j );
+	etpro_FinalizeTracemapClamp(&i, &j);
 
-	return( tracemap.sky[j][i] );
+	return(tracemap.sky[j][i]);
 }
 
-float BG_GetSkyGroundHeightAtPoint( vec3_t pos ) {
-	int i, j;
+float BG_GetSkyGroundHeightAtPoint(vec3_t pos)
+{
+	int    i, j;
 	vec2_t point;
 
-	if ( !tracemap.loaded ) {
+	if (!tracemap.loaded)
+	{
 		return MAX_WORLD_HEIGHT;
 	}
 
-	BG_ClampPointToTracemapExtends( pos, point );
+	BG_ClampPointToTracemapExtends(pos, point);
 
-	i = myftol( ( point[0] - tracemap.world_mins[0] ) * one_over_mapgrid_factor[0] );
-	j = myftol( ( point[1] - tracemap.world_mins[1] ) * one_over_mapgrid_factor[1] );
+	i = myftol((point[0] - tracemap.world_mins[0]) * one_over_mapgrid_factor[0]);
+	j = myftol((point[1] - tracemap.world_mins[1]) * one_over_mapgrid_factor[1]);
 
 	// rain - re-clamp the points, because a rounding error can cause
 	// them to go outside the array
-	etpro_FinalizeTracemapClamp( &i, &j );
+	etpro_FinalizeTracemapClamp(&i, &j);
 
-	return( tracemap.skyground[j][i] );
+	return(tracemap.skyground[j][i]);
 }
 
-float BG_GetGroundHeightAtPoint( vec3_t pos ) {
-	int i, j;
+float BG_GetGroundHeightAtPoint(vec3_t pos)
+{
+	int    i, j;
 	vec2_t point;
 
-	if ( !tracemap.loaded ) {
+	if (!tracemap.loaded)
+	{
 		return MIN_WORLD_HEIGHT;
 	}
 
-	BG_ClampPointToTracemapExtends( pos, point );
+	BG_ClampPointToTracemapExtends(pos, point);
 
-	i = myftol( ( point[0] - tracemap.world_mins[0] ) * one_over_mapgrid_factor[0] );
-	j = myftol( ( point[1] - tracemap.world_mins[1] ) * one_over_mapgrid_factor[1] );
+	i = myftol((point[0] - tracemap.world_mins[0]) * one_over_mapgrid_factor[0]);
+	j = myftol((point[1] - tracemap.world_mins[1]) * one_over_mapgrid_factor[1]);
 
 	// rain - re-clamp the points, because a rounding error can cause
 	// them to go outside the array
-	etpro_FinalizeTracemapClamp( &i, &j );
+	etpro_FinalizeTracemapClamp(&i, &j);
 
-	return( tracemap.ground[j][i] );
+	return(tracemap.ground[j][i]);
 }
 
-int BG_GetTracemapGroundFloor( void ) {
-	if ( !tracemap.loaded ) {
+int BG_GetTracemapGroundFloor(void)
+{
+	if (!tracemap.loaded)
+	{
 		return MIN_WORLD_HEIGHT;
 	}
 	return tracemap.groundfloor;
@@ -144,16 +164,23 @@ int BG_GetTracemapGroundFloor( void ) {
 
 // rain - re-clamp the points, because a rounding error can cause
 // them to go outside the array
-void etpro_FinalizeTracemapClamp( int *x, int *y ) {
-	if ( *x < 0 ) {
+void etpro_FinalizeTracemapClamp(int *x, int *y)
+{
+	if (*x < 0)
+	{
 		*x = 0;
-	} else if ( *x > TRACEMAP_SIZE - 1 ) {
+	}
+	else if (*x > TRACEMAP_SIZE - 1)
+	{
 		*x = TRACEMAP_SIZE - 1;
 	}
 
-	if ( *y < 0 ) {
+	if (*y < 0)
+	{
 		*y = 0;
-	} else if ( *y > TRACEMAP_SIZE - 1 ) {
+	}
+	else if (*y > TRACEMAP_SIZE - 1)
+	{
 		*y = TRACEMAP_SIZE - 1;
 	}
 }

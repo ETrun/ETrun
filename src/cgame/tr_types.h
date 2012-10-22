@@ -2,9 +2,9 @@
 ===========================================================================
 
 Wolfenstein: Enemy Territory GPL Source Code
-Copyright (C) 1999-2010 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2010 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Wolfenstein: Enemy Territory GPL Source Code (Wolf ET Source Code).  
+This file is part of the Wolfenstein: Enemy Territory GPL Source Code (Wolf ET Source Code).
 
 Wolf ET Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -42,12 +42,12 @@ If you have questions concerning this license or the applicable additional terms
 #define RF_NOSHADOW         0x000010        // don't add stencil shadows
 
 #define RF_LIGHTING_ORIGIN  0x000020        // use refEntity->lightingOrigin instead of refEntity->origin
-											// for lighting.  This allows entities to sink into the floor
-											// with their origin going solid, and allows all parts of a
-											// player to get the same lighting
+                                            // for lighting.  This allows entities to sink into the floor
+                                            // with their origin going solid, and allows all parts of a
+                                            // player to get the same lighting
 #define RF_SHADOW_PLANE     0x000040        // use refEntity->shadowPlane
 #define RF_WRAP_FRAMES      0x000080        // mod the model frames by the maxframes to allow continuous
-											// animation without needing to know the frame count
+                                            // animation without needing to know the frame count
 #define RF_HILIGHT          0x000100        // more than RF_MINLIGHT.  For when an object is "Highlighted" (looked at/training identification/etc)
 #define RF_BLINK            0x000200        // eyes in 'blink' state
 #define RF_FORCENOLOD       0x000400
@@ -60,24 +60,27 @@ If you have questions concerning this license or the applicable additional terms
 #define RDF_SKYBOXPORTAL    8
 
 //----(SA)
-#define RDF_UNDERWATER      ( 1 << 4 )  // so the renderer knows to use underwater fog when the player is underwater
-#define RDF_DRAWINGSKY      ( 1 << 5 )
-#define RDF_SNOOPERVIEW     ( 1 << 6 )  //----(SA)	added
+#define RDF_UNDERWATER      (1 << 4)    // so the renderer knows to use underwater fog when the player is underwater
+#define RDF_DRAWINGSKY      (1 << 5)
+#define RDF_SNOOPERVIEW     (1 << 6)    //----(SA)	added
 
 
-typedef struct {
+typedef struct
+{
 	vec3_t xyz;
 	float st[2];
 	byte modulate[4];
 } polyVert_t;
 
-typedef struct poly_s {
+typedef struct poly_s
+{
 	qhandle_t hShader;
 	int numVerts;
-	polyVert_t          *verts;
+	polyVert_t *verts;
 } poly_t;
 
-typedef enum {
+typedef enum
+{
 	RT_MODEL,
 	RT_POLY,
 	RT_SPRITE,
@@ -99,7 +102,8 @@ typedef enum {
 #define REFLAG_ORIENT_LOD   16  // on LOD switch, align the model to the player's camera
 #define REFLAG_DEAD_LOD     32  // allow the LOD to go lower than recommended
 
-typedef struct {
+typedef struct
+{
 	refEntityType_t reType;
 	int renderfx;
 
@@ -160,7 +164,8 @@ typedef struct {
 //                                                                  //
 // WARNING:: synch FOG_SERVER in sv_ccmds.c if you change anything	//
 //                                                                  //
-typedef enum {
+typedef enum
+{
 	FOG_NONE,       //	0
 
 	FOG_SKY,        //	1	fog values to apply to the sky when using density fog for the world (non-distance clipping fog) (only used if(glfogsettings[FOG_MAP].registered) or if(glfogsettings[FOG_MAP].registered))
@@ -183,7 +188,8 @@ typedef enum {
 } glfogType_t;
 
 
-typedef struct {
+typedef struct
+{
 	int mode;                   // GL_LINEAR, GL_EXP
 	int hint;                   // GL_DONT_CARE
 	int startTime;              // in ms
@@ -204,7 +210,8 @@ typedef struct {
 #define MAX_RENDER_STRINGS          8
 #define MAX_RENDER_STRING_LENGTH    32
 
-typedef struct {
+typedef struct
+{
 	int x, y, width, height;
 	float fov_x, fov_y;
 	vec3_t vieworg;
@@ -230,7 +237,8 @@ typedef struct {
 } refdef_t;
 
 
-typedef enum {
+typedef enum
+{
 	STEREO_CENTER,
 	STEREO_LEFT,
 	STEREO_RIGHT
@@ -244,33 +252,37 @@ typedef enum {
 ** being run right now.  These are constant once the OpenGL
 ** subsystem is initialized.
 */
-typedef enum {
+typedef enum
+{
 	TC_NONE,
 	TC_S3TC,
 	TC_EXT_COMP_S3TC
 } textureCompression_t;
 
-typedef enum {
+typedef enum
+{
 	GLDRV_ICD,                  // driver is integrated with window system
-								// WARNING: there are tests that check for
-								// > GLDRV_ICD for minidriverness, so this
-								// should always be the lowest value in this
-								// enum set
+	                            // WARNING: there are tests that check for
+	                            // > GLDRV_ICD for minidriverness, so this
+	                            // should always be the lowest value in this
+	                            // enum set
 	GLDRV_STANDALONE,           // driver is a non-3Dfx standalone driver
 	GLDRV_VOODOO                // driver is a 3Dfx standalone driver
 } glDriverType_t;
 
-typedef enum {
+typedef enum
+{
 	GLHW_GENERIC,           // where everthing works the way it should
 	GLHW_3DFX_2D3D,         // Voodoo Banshee or Voodoo3, relevant since if this is
-							// the hardware type then there can NOT exist a secondary
-							// display adapter
+	                        // the hardware type then there can NOT exist a secondary
+	                        // display adapter
 	GLHW_RIVA128,           // where you can't interpolate alpha
 	GLHW_RAGEPRO,           // where you can't modulate alpha on alpha textures
 	GLHW_PERMEDIA2          // where you don't have src*dst
 } glHardwareType_t;
 
-typedef struct {
+typedef struct
+{
 	char renderer_string[MAX_STRING_CHARS];
 	char vendor_string[MAX_STRING_CHARS];
 	char version_string[MAX_STRING_CHARS];
@@ -334,9 +346,10 @@ typedef struct {
 // =========================================
 // Gordon, these MUST NOT exceed the values for SHADER_MAX_VERTEXES/SHADER_MAX_INDEXES
 #define MAX_PB_VERTS    1025
-#define MAX_PB_INDICIES ( MAX_PB_VERTS * 6 )
+#define MAX_PB_INDICIES (MAX_PB_VERTS * 6)
 
-typedef struct polyBuffer_s {
+typedef struct polyBuffer_s
+{
 	vec4_t xyz[MAX_PB_VERTS];
 	vec2_t st[MAX_PB_VERTS];
 	byte color[MAX_PB_VERTS][4];

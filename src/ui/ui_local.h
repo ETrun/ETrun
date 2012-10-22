@@ -2,9 +2,9 @@
 ===========================================================================
 
 Wolfenstein: Enemy Territory GPL Source Code
-Copyright (C) 1999-2010 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2010 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Wolfenstein: Enemy Territory GPL Source Code (Wolf ET Source Code).  
+This file is part of the Wolfenstein: Enemy Territory GPL Source Code (Wolf ET Source Code).
 
 Wolf ET Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -124,8 +124,8 @@ extern vmCvar_t ui_autoredirect;
 // ui_qmenu.c
 //
 
-#define RCOLUMN_OFFSET          ( BIGCHAR_WIDTH )
-#define LCOLUMN_OFFSET          ( -BIGCHAR_WIDTH )
+#define RCOLUMN_OFFSET          (BIGCHAR_WIDTH)
+#define LCOLUMN_OFFSET          (-BIGCHAR_WIDTH)
 
 #define SLIDER_RANGE            10
 #define MAX_EDIT_LINE           256
@@ -180,8 +180,8 @@ typedef struct _tag_menuframework
 	int nitems;
 	void *items[MAX_MENUITEMS];
 
-	void ( *draw )( void );
-	sfxHandle_t ( *key )( int key );
+	void (*draw)(void);
+	sfxHandle_t (*key)(int key);
 
 	qboolean wrapAround;
 	qboolean fullscreen;
@@ -206,12 +206,13 @@ typedef struct
 	int menuPosition;
 	unsigned flags;
 
-	void ( *callback )( void *self, int event );
-	void ( *statusbar )( void *self );
-	void ( *ownerdraw )( void *self );
+	void (*callback)(void *self, int event);
+	void (*statusbar)(void *self);
+	void (*ownerdraw)(void *self);
 } menucommon_s;
 
-typedef struct {
+typedef struct
+{
 	int cursor;
 	int scroll;
 	int widthInChars;
@@ -267,21 +268,21 @@ typedef struct
 typedef struct
 {
 	menucommon_s generic;
-	char*           focuspic;
-	char*           errorpic;
+	char *focuspic;
+	char *errorpic;
 	qhandle_t shader;
 	qhandle_t focusshader;
 	int width;
 	int height;
-	float*          focuscolor;
+	float *focuscolor;
 } menubitmap_s;
 
 typedef struct
 {
 	menucommon_s generic;
-	char*           string;
+	char *string;
 	int style;
-	float*          color;
+	float *color;
 } menutext_s;
 
 
@@ -290,41 +291,42 @@ typedef struct
 //
 void            UI_Report();
 void            UI_Load();
-void            UI_LoadMenus( const char *menuFile, qboolean reset );
-void            _UI_SetActiveMenu( uiMenuCommand_t menu );
-uiMenuCommand_t _UI_GetActiveMenu( void );
-int             UI_AdjustTimeByGame( int time );
-void            UI_ShowPostGame( qboolean newHigh );
-void            UI_LoadArenas( void );
-mapInfo*        UI_FindMapInfoByMapname( const char* name );
-void            UI_ReadableSize( char *buf, int bufsize, int value );
-void            UI_PrintTime( char *buf, int bufsize, int time );
-void            Text_Paint_Ext( float x, float y, float scalex, float scaley, vec4_t color, const char *text, float adjust, int limit, int style, fontInfo_t* font );
+void            UI_LoadMenus(const char *menuFile, qboolean reset);
+void            _UI_SetActiveMenu(uiMenuCommand_t menu);
+uiMenuCommand_t _UI_GetActiveMenu(void);
+int             UI_AdjustTimeByGame(int time);
+void            UI_ShowPostGame(qboolean newHigh);
+void            UI_LoadArenas(void);
+mapInfo *UI_FindMapInfoByMapname(const char *name);
+void            UI_ReadableSize(char *buf, int bufsize, int value);
+void            UI_PrintTime(char *buf, int bufsize, int time);
+void            Text_Paint_Ext(float x, float y, float scalex, float scaley, vec4_t color, const char *text, float adjust, int limit, int style, fontInfo_t *font);
 
 #define GLINFO_LINES        128
 
 //
 // ui_menu.c
 //
-extern void UI_RegisterCvars( void );
-extern void UI_UpdateCvars( void );
+extern void UI_RegisterCvars(void);
+extern void UI_UpdateCvars(void);
 
 //
 // ui_connect.c
 //
-extern void UI_DrawConnectScreen( qboolean overlay );
+extern void UI_DrawConnectScreen(qboolean overlay);
 
 //
 // ui_loadpanel.c
 //
-extern void UI_DrawLoadPanel( qboolean ownerdraw, qboolean uihack );
+extern void UI_DrawLoadPanel(qboolean ownerdraw, qboolean uihack);
 
 //
 // ui_players.c
 //
 
 //FIXME ripped from cg_local.h
-typedef struct {
+typedef struct
+{
 	int oldFrame;
 	int oldFrameTime;               // time when ->oldFrame was exactly on
 
@@ -343,7 +345,8 @@ typedef struct {
 	int animationTime;              // time when the first frame of the animation will be exact
 } lerpFrame_t;
 
-typedef struct {
+typedef struct
+{
 	// model info
 	qhandle_t legsModel;
 	qhandle_t legsSkin;
@@ -405,22 +408,23 @@ typedef struct {
 	// -NERVE - SMF
 } playerInfo_t;
 
-void UI_DrawPlayer( float x, float y, float w, float h, playerInfo_t *pi, int time );
-void UI_PlayerInfo_SetModel( playerInfo_t *pi, const char *model );
-void UI_PlayerInfo_SetInfo( playerInfo_t *pi, int legsAnim, int torsoAnim, vec3_t viewAngles, vec3_t moveAngles, weapon_t weaponNum, qboolean chat );
-qboolean UI_RegisterClientModelname( playerInfo_t *pi, const char *modelSkinName );
+void UI_DrawPlayer(float x, float y, float w, float h, playerInfo_t *pi, int time);
+void UI_PlayerInfo_SetModel(playerInfo_t *pi, const char *model);
+void UI_PlayerInfo_SetInfo(playerInfo_t *pi, int legsAnim, int torsoAnim, vec3_t viewAngles, vec3_t moveAngles, weapon_t weaponNum, qboolean chat);
+qboolean UI_RegisterClientModelname(playerInfo_t *pi, const char *modelSkinName);
 
 //
 // ui_atoms.c
 //
-typedef struct {
+typedef struct
+{
 	int frametime;
 	int realtime;
 	int cursorx;
 	int cursory;
 	int menusp;
-	menuframework_s*    activemenu;
-	menuframework_s*    stack[MAX_MENUDEPTH];
+	menuframework_s *activemenu;
+	menuframework_s *stack[MAX_MENUDEPTH];
 	glconfig_t glconfig;
 	qboolean debug;
 	qhandle_t whiteShader;
@@ -485,7 +489,8 @@ typedef struct {
 
 #define MAX_PROFILES 64
 
-typedef struct {
+typedef struct
+{
 	const char *name;
 	const char *imageName;
 	qhandle_t headImage;
@@ -493,19 +498,22 @@ typedef struct {
 } characterInfo;
 
 //----(SA)	added
-typedef struct {
-	const char  *name;
+typedef struct
+{
+	const char *name;
 	qhandle_t sshotImage;
 } savegameInfo;
 //----(SA)	end
 
-typedef struct {
+typedef struct
+{
 	const char *name;
 	const char *ai;
 	const char *action;
 } aliasInfo;
 
-typedef struct {
+typedef struct
+{
 	const char *teamName;
 	const char *imageName;
 	const char *teamMembers[TEAM_MEMBERS];
@@ -515,22 +523,26 @@ typedef struct {
 	int cinematic;
 } teamInfo;
 
-typedef struct {
+typedef struct
+{
 	const char *name;
 	const char *dir;
 } profileInfo_t;
 
-typedef struct serverFilter_s {
+typedef struct serverFilter_s
+{
 	const char *description;
 	const char *basedir;
 } serverFilter_t;
 
-typedef struct {
+typedef struct
+{
 	char adrstr[MAX_ADDRESSLENGTH];
 	int start;
 } pinglist_t;
 
-typedef struct serverStatus_s {
+typedef struct serverStatus_s
+{
 	int refreshtime;
 	int sortKey;
 	int sortDir;
@@ -552,7 +564,8 @@ typedef struct serverStatus_s {
 } serverStatus_t;
 
 
-typedef struct {
+typedef struct
+{
 	char adrstr[MAX_ADDRESSLENGTH];
 	char name[MAX_ADDRESSLENGTH];
 	int startTime;
@@ -560,12 +573,14 @@ typedef struct {
 	qboolean valid;
 } pendingServer_t;
 
-typedef struct {
+typedef struct
+{
 	int num;
 	pendingServer_t server[MAX_SERVERSTATUSREQUESTS];
 } pendingServerStatus_t;
 
-typedef struct {
+typedef struct
+{
 	char address[MAX_ADDRESSLENGTH];
 	char *lines[MAX_SERVERSTATUS_LINES][4];
 	char text[MAX_SERVERSTATUS_TEXT];
@@ -573,12 +588,14 @@ typedef struct {
 	int numLines;
 } serverStatusInfo_t;
 
-typedef struct {
+typedef struct
+{
 	const char *modName;
 	const char *modDescr;
 } modInfo_t;
 
-typedef struct {
+typedef struct
+{
 	displayContextDef_t uiDC;
 	int newHighScoreTime;
 	int newBestTime;
@@ -677,7 +694,7 @@ typedef struct {
 
 	int activeFont;
 
-	const char  *glInfoLines[GLINFO_LINES];
+	const char *glInfoLines[GLINFO_LINES];
 	int numGlInfoLines;
 
 	vec4_t xhairColor;
@@ -691,218 +708,219 @@ typedef struct {
 extern uiInfo_t uiInfo;
 
 
-extern void         UI_Init( void );
-extern void         UI_Shutdown( void );
-extern void         UI_KeyEvent( int key );
-extern void         UI_MouseEvent( int dx, int dy );
-extern void         UI_Refresh( int realtime );
-extern qboolean     UI_ConsoleCommand( int realTime );
-extern float        UI_ClampCvar( float min, float max, float value );
-extern void         UI_DrawNamedPic( float x, float y, float width, float height, const char *picname );
-extern void         UI_DrawHandlePic( float x, float y, float w, float h, qhandle_t hShader );
-extern void         UI_FillRect( float x, float y, float width, float height, const float *color );
-extern void         UI_DrawRect( float x, float y, float width, float height, const float *color );
-extern void         UI_DrawTopBottom( float x, float y, float w, float h );
-extern void         UI_DrawSides( float x, float y, float w, float h );
-extern void         UI_UpdateScreen( void );
-extern void         UI_SetColor( const float *rgba );
-extern void         UI_LerpColor( vec4_t a, vec4_t b, vec4_t c, float t );
-extern void         UI_DrawBannerString( int x, int y, const char* str, int style, vec4_t color );
-extern float        UI_ProportionalSizeScale( int style );
-extern void         UI_DrawProportionalString( int x, int y, const char* str, int style, vec4_t color );
-extern int          UI_ProportionalStringWidth( const char* str );
-extern void         UI_DrawString( int x, int y, const char* str, int style, vec4_t color );
-extern void         UI_DrawChar( int x, int y, int ch, int style, vec4_t color );
-extern qboolean     UI_CursorInRect( int x, int y, int width, int height );
-extern void         UI_AdjustFrom640( float *x, float *y, float *w, float *h );
-extern void         UI_DrawTextBox( int x, int y, int width, int lines );
-extern qboolean     UI_IsFullscreen( void );
-extern void         UI_SetActiveMenu( uiMenuCommand_t menu );
-extern void         UI_PushMenu( menuframework_s *menu );
-extern void         UI_PopMenu( void );
-extern void         UI_ForceMenuOff( void );
-extern char         *UI_Argv( int arg );
-extern char         *UI_Cvar_VariableString( const char *var_name );
-extern void         UI_Refresh( int time );
-extern void         UI_KeyEvent( int key );
-extern qboolean m_entersound;
+extern void         UI_Init(void);
+extern void         UI_Shutdown(void);
+extern void         UI_KeyEvent(int key);
+extern void         UI_MouseEvent(int dx, int dy);
+extern void         UI_Refresh(int realtime);
+extern qboolean     UI_ConsoleCommand(int realTime);
+extern float        UI_ClampCvar(float min, float max, float value);
+extern void         UI_DrawNamedPic(float x, float y, float width, float height, const char *picname);
+extern void         UI_DrawHandlePic(float x, float y, float w, float h, qhandle_t hShader);
+extern void         UI_FillRect(float x, float y, float width, float height, const float *color);
+extern void         UI_DrawRect(float x, float y, float width, float height, const float *color);
+extern void         UI_DrawTopBottom(float x, float y, float w, float h);
+extern void         UI_DrawSides(float x, float y, float w, float h);
+extern void         UI_UpdateScreen(void);
+extern void         UI_SetColor(const float *rgba);
+extern void         UI_LerpColor(vec4_t a, vec4_t b, vec4_t c, float t);
+extern void         UI_DrawBannerString(int x, int y, const char *str, int style, vec4_t color);
+extern float        UI_ProportionalSizeScale(int style);
+extern void         UI_DrawProportionalString(int x, int y, const char *str, int style, vec4_t color);
+extern int          UI_ProportionalStringWidth(const char *str);
+extern void         UI_DrawString(int x, int y, const char *str, int style, vec4_t color);
+extern void         UI_DrawChar(int x, int y, int ch, int style, vec4_t color);
+extern qboolean     UI_CursorInRect(int x, int y, int width, int height);
+extern void         UI_AdjustFrom640(float *x, float *y, float *w, float *h);
+extern void         UI_DrawTextBox(int x, int y, int width, int lines);
+extern qboolean     UI_IsFullscreen(void);
+extern void         UI_SetActiveMenu(uiMenuCommand_t menu);
+extern void         UI_PushMenu(menuframework_s *menu);
+extern void         UI_PopMenu(void);
+extern void         UI_ForceMenuOff(void);
+extern char *UI_Argv(int arg);
+extern char *UI_Cvar_VariableString(const char *var_name);
+extern void         UI_Refresh(int time);
+extern void         UI_KeyEvent(int key);
+extern qboolean   m_entersound;
 extern uiStatic_t uis;
 
 //
 // ui_spLevel.c
 //
-void UI_SPLevelMenu_Cache( void );
-void UI_SPLevelMenu( void );
-void UI_SPLevelMenu_f( void );
-void UI_SPLevelMenu_ReInit( void );
+void UI_SPLevelMenu_Cache(void);
+void UI_SPLevelMenu(void);
+void UI_SPLevelMenu_f(void);
+void UI_SPLevelMenu_ReInit(void);
 
 //
 // ui_spArena.c
 //
-void UI_SPArena_Start( const char *arenaInfo );
+void UI_SPArena_Start(const char *arenaInfo);
 
 //
 // ui_spPostgame.c
 //
-void UI_SPPostgameMenu_Cache( void );
-void UI_SPPostgameMenu_f( void );
+void UI_SPPostgameMenu_Cache(void);
+void UI_SPPostgameMenu_f(void);
 
 //
 // ui_spSkill.c
 //
-void UI_SPSkillMenu( const char *arenaInfo );
-void UI_SPSkillMenu_Cache( void );
+void UI_SPSkillMenu(const char *arenaInfo);
+void UI_SPSkillMenu_Cache(void);
 
 //
 // ui_syscalls.c
 //
-void            trap_Print( const char *string );
-void            trap_Error( const char *string );
-int             trap_Milliseconds( void );
-void            trap_Cvar_Register( vmCvar_t *vmCvar, const char *varName, const char *defaultValue, int flags );
-void            trap_Cvar_Update( vmCvar_t *vmCvar );
-void            trap_Cvar_Set( const char *var_name, const char *value );
-float           trap_Cvar_VariableValue( const char *var_name );
-void            trap_Cvar_VariableStringBuffer( const char *var_name, char *buffer, int bufsize );
-void            trap_Cvar_LatchedVariableStringBuffer( const char *var_name, char *buffer, int bufsize );
-void            trap_Cvar_SetValue( const char *var_name, float value );
-void            trap_Cvar_Reset( const char *name );
-void            trap_Cvar_Create( const char *var_name, const char *var_value, int flags );
-void            trap_Cvar_InfoStringBuffer( int bit, char *buffer, int bufsize );
-int             trap_Argc( void );
-void            trap_Argv( int n, char *buffer, int bufferLength );
-void            trap_Cmd_ExecuteText( int exec_when, const char *text );    // don't use EXEC_NOW!
-void            trap_AddCommand( const char *cmdName );
-int             trap_FS_FOpenFile( const char *qpath, fileHandle_t *f, fsMode_t mode );
-void            trap_FS_Read( void *buffer, int len, fileHandle_t f );
-void            trap_FS_Write( const void *buffer, int len, fileHandle_t f );
-void            trap_FS_FCloseFile( fileHandle_t f );
-int             trap_FS_GetFileList(  const char *path, const char *extension, char *listbuf, int bufsize );
-int             trap_FS_Delete( const char *filename );
-qhandle_t       trap_R_RegisterModel( const char *name );
-qhandle_t       trap_R_RegisterSkin( const char *name );
-qhandle_t       trap_R_RegisterShaderNoMip( const char *name );
-void            trap_R_ClearScene( void );
-void            trap_R_AddRefEntityToScene( const refEntity_t *re );
-void            trap_R_AddPolyToScene( qhandle_t hShader, int numVerts, const polyVert_t *verts );
-void            trap_R_AddLightToScene( const vec3_t org, float radius, float intensity, float r, float g, float b, qhandle_t hShader, int flags );
-void            trap_R_AddCoronaToScene( const vec3_t org, float r, float g, float b, float scale, int id, qboolean visible );
-void            trap_R_RenderScene( const refdef_t *fd );
-void            trap_R_SetColor( const float *rgba );
-void            trap_R_Add2dPolys( polyVert_t* verts, int numverts, qhandle_t hShader );
-void            trap_R_DrawStretchPic( float x, float y, float w, float h, float s1, float t1, float s2, float t2, qhandle_t hShader );
-void            trap_R_DrawRotatedPic( float x, float y, float w, float h, float s1, float t1, float s2, float t2, qhandle_t hShader, float angle );
-void            trap_R_ModelBounds( clipHandle_t model, vec3_t mins, vec3_t maxs );
-void            trap_UpdateScreen( void );
-int             trap_CM_LerpTag( orientation_t *tag, const refEntity_t *refent, const char *tagName, int startIndex );
-void            trap_S_StartLocalSound( sfxHandle_t sfx, int channelNum );
-sfxHandle_t     trap_S_RegisterSound( const char *sample, qboolean compressed );
-void            trap_Key_KeynumToStringBuf( int keynum, char *buf, int buflen );
-void            trap_Key_GetBindingBuf( int keynum, char *buf, int buflen );
-void            trap_Key_KeysForBinding( const char* binding, int* key1, int* key2 );
-void            trap_Key_SetBinding( int keynum, const char *binding );
-qboolean        trap_Key_IsDown( int keynum );
-qboolean        trap_Key_GetOverstrikeMode( void );
-void            trap_Key_SetOverstrikeMode( qboolean state );
-void            trap_Key_ClearStates( void );
-int             trap_Key_GetCatcher( void );
-void            trap_Key_SetCatcher( int catcher );
-void            trap_GetClipboardData( char *buf, int bufsize );
-void            trap_GetClientState( uiClientState_t *state );
-void            trap_GetGlconfig( glconfig_t *glconfig );
-int             trap_GetConfigString( int index, char* buff, int buffsize );
-int             trap_LAN_GetServerCount( int source );          // NERVE - SMF
-int             trap_LAN_GetLocalServerCount( void );
-void            trap_LAN_GetLocalServerAddressString( int n, char *buf, int buflen );
-int             trap_LAN_GetGlobalServerCount( void );
-void            trap_LAN_GetGlobalServerAddressString( int n, char *buf, int buflen );
-int             trap_LAN_GetPingQueueCount( void );
-void            trap_LAN_ClearPing( int n );
-void            trap_LAN_GetPing( int n, char *buf, int buflen, int *pingtime );
-void            trap_LAN_GetPingInfo( int n, char *buf, int buflen );
-int             trap_MemoryRemaining( void );
+void            trap_Print(const char *string);
+void            trap_Error(const char *string);
+int             trap_Milliseconds(void);
+void            trap_Cvar_Register(vmCvar_t *vmCvar, const char *varName, const char *defaultValue, int flags);
+void            trap_Cvar_Update(vmCvar_t *vmCvar);
+void            trap_Cvar_Set(const char *var_name, const char *value);
+float           trap_Cvar_VariableValue(const char *var_name);
+void            trap_Cvar_VariableStringBuffer(const char *var_name, char *buffer, int bufsize);
+void            trap_Cvar_LatchedVariableStringBuffer(const char *var_name, char *buffer, int bufsize);
+void            trap_Cvar_SetValue(const char *var_name, float value);
+void            trap_Cvar_Reset(const char *name);
+void            trap_Cvar_Create(const char *var_name, const char *var_value, int flags);
+void            trap_Cvar_InfoStringBuffer(int bit, char *buffer, int bufsize);
+int             trap_Argc(void);
+void            trap_Argv(int n, char *buffer, int bufferLength);
+void            trap_Cmd_ExecuteText(int exec_when, const char *text);      // don't use EXEC_NOW!
+void            trap_AddCommand(const char *cmdName);
+int             trap_FS_FOpenFile(const char *qpath, fileHandle_t *f, fsMode_t mode);
+void            trap_FS_Read(void *buffer, int len, fileHandle_t f);
+void            trap_FS_Write(const void *buffer, int len, fileHandle_t f);
+void            trap_FS_FCloseFile(fileHandle_t f);
+int             trap_FS_GetFileList(const char *path, const char *extension, char *listbuf, int bufsize);
+int             trap_FS_Delete(const char *filename);
+qhandle_t       trap_R_RegisterModel(const char *name);
+qhandle_t       trap_R_RegisterSkin(const char *name);
+qhandle_t       trap_R_RegisterShaderNoMip(const char *name);
+void            trap_R_ClearScene(void);
+void            trap_R_AddRefEntityToScene(const refEntity_t *re);
+void            trap_R_AddPolyToScene(qhandle_t hShader, int numVerts, const polyVert_t *verts);
+void            trap_R_AddLightToScene(const vec3_t org, float radius, float intensity, float r, float g, float b, qhandle_t hShader, int flags);
+void            trap_R_AddCoronaToScene(const vec3_t org, float r, float g, float b, float scale, int id, qboolean visible);
+void            trap_R_RenderScene(const refdef_t *fd);
+void            trap_R_SetColor(const float *rgba);
+void            trap_R_Add2dPolys(polyVert_t *verts, int numverts, qhandle_t hShader);
+void            trap_R_DrawStretchPic(float x, float y, float w, float h, float s1, float t1, float s2, float t2, qhandle_t hShader);
+void            trap_R_DrawRotatedPic(float x, float y, float w, float h, float s1, float t1, float s2, float t2, qhandle_t hShader, float angle);
+void            trap_R_ModelBounds(clipHandle_t model, vec3_t mins, vec3_t maxs);
+void            trap_UpdateScreen(void);
+int             trap_CM_LerpTag(orientation_t *tag, const refEntity_t *refent, const char *tagName, int startIndex);
+void            trap_S_StartLocalSound(sfxHandle_t sfx, int channelNum);
+sfxHandle_t     trap_S_RegisterSound(const char *sample, qboolean compressed);
+void            trap_Key_KeynumToStringBuf(int keynum, char *buf, int buflen);
+void            trap_Key_GetBindingBuf(int keynum, char *buf, int buflen);
+void            trap_Key_KeysForBinding(const char *binding, int *key1, int *key2);
+void            trap_Key_SetBinding(int keynum, const char *binding);
+qboolean        trap_Key_IsDown(int keynum);
+qboolean        trap_Key_GetOverstrikeMode(void);
+void            trap_Key_SetOverstrikeMode(qboolean state);
+void            trap_Key_ClearStates(void);
+int             trap_Key_GetCatcher(void);
+void            trap_Key_SetCatcher(int catcher);
+void            trap_GetClipboardData(char *buf, int bufsize);
+void            trap_GetClientState(uiClientState_t *state);
+void            trap_GetGlconfig(glconfig_t *glconfig);
+int             trap_GetConfigString(int index, char *buff, int buffsize);
+int             trap_LAN_GetServerCount(int source);            // NERVE - SMF
+int             trap_LAN_GetLocalServerCount(void);
+void            trap_LAN_GetLocalServerAddressString(int n, char *buf, int buflen);
+int             trap_LAN_GetGlobalServerCount(void);
+void            trap_LAN_GetGlobalServerAddressString(int n, char *buf, int buflen);
+int             trap_LAN_GetPingQueueCount(void);
+void            trap_LAN_ClearPing(int n);
+void            trap_LAN_GetPing(int n, char *buf, int buflen, int *pingtime);
+void            trap_LAN_GetPingInfo(int n, char *buf, int buflen);
+int             trap_MemoryRemaining(void);
 
 // NERVE - SMF - multiplayer traps
-qboolean        trap_LAN_UpdateVisiblePings( int source );
-void            trap_LAN_MarkServerVisible( int source, int n, qboolean visible );
-void            trap_LAN_ResetPings( int n );
+qboolean        trap_LAN_UpdateVisiblePings(int source);
+void            trap_LAN_MarkServerVisible(int source, int n, qboolean visible);
+void            trap_LAN_ResetPings(int n);
 void            trap_LAN_SaveCachedServers();
-int             trap_LAN_CompareServers( int source, int sortKey, int sortDir, int s1, int s2 );
-void            trap_LAN_GetServerAddressString( int source, int n, char *buf, int buflen );
-void trap_LAN_GetServerInfo( int source, int n, char *buf, int buflen );
-int             trap_LAN_AddServer( int source, const char *name, const char *addr );
-void            trap_LAN_RemoveServer( int source, const char *addr );
-int             trap_LAN_GetServerPing( int source, int n );
-int             trap_LAN_ServerIsVisible( int source, int n );
-int             trap_LAN_ServerStatus( const char *serverAddress, char *serverStatus, int maxLen );
+int             trap_LAN_CompareServers(int source, int sortKey, int sortDir, int s1, int s2);
+void            trap_LAN_GetServerAddressString(int source, int n, char *buf, int buflen);
+void trap_LAN_GetServerInfo(int source, int n, char *buf, int buflen);
+int             trap_LAN_AddServer(int source, const char *name, const char *addr);
+void            trap_LAN_RemoveServer(int source, const char *addr);
+int             trap_LAN_GetServerPing(int source, int n);
+int             trap_LAN_ServerIsVisible(int source, int n);
+int             trap_LAN_ServerStatus(const char *serverAddress, char *serverStatus, int maxLen);
 void            trap_LAN_SaveCachedServers();
 void            trap_LAN_LoadCachedServers();
-qboolean        trap_LAN_ServerIsInFavoriteList( int source, int n );
+qboolean        trap_LAN_ServerIsInFavoriteList(int source, int n);
 
 // -NERVE - SMF
 
-void            trap_R_RegisterFont( const char *pFontname, int pointSize, fontInfo_t *font );
-void            trap_S_StopBackgroundTrack( void );
-void            trap_S_StartBackgroundTrack( const char *intro, const char *loop, int fadeupTime );
-void            trap_S_FadeAllSound( float targetvol, int time, qboolean stopsound );
-int             trap_CIN_PlayCinematic( const char *arg0, int xpos, int ypos, int width, int height, int bits );
-e_status        trap_CIN_StopCinematic( int handle );
-e_status        trap_CIN_RunCinematic( int handle );
-void            trap_CIN_DrawCinematic( int handle );
-void            trap_CIN_SetExtents( int handle, int x, int y, int w, int h );
-int             trap_RealTime( qtime_t *qtime );
-void            trap_R_RemapShader( const char *oldShader, const char *newShader, const char *timeOffset );
-qboolean        trap_GetLimboString( int index, char *buf );            // NERVE - SMF
-void            trap_CheckAutoUpdate( void );                           // DHM - Nerve
-void            trap_GetAutoUpdate( void );                             // DHM - Nerve
+void            trap_R_RegisterFont(const char *pFontname, int pointSize, fontInfo_t *font);
+void            trap_S_StopBackgroundTrack(void);
+void            trap_S_StartBackgroundTrack(const char *intro, const char *loop, int fadeupTime);
+void            trap_S_FadeAllSound(float targetvol, int time, qboolean stopsound);
+int             trap_CIN_PlayCinematic(const char *arg0, int xpos, int ypos, int width, int height, int bits);
+e_status        trap_CIN_StopCinematic(int handle);
+e_status        trap_CIN_RunCinematic(int handle);
+void            trap_CIN_DrawCinematic(int handle);
+void            trap_CIN_SetExtents(int handle, int x, int y, int w, int h);
+int             trap_RealTime(qtime_t *qtime);
+void            trap_R_RemapShader(const char *oldShader, const char *newShader, const char *timeOffset);
+qboolean        trap_GetLimboString(int index, char *buf);              // NERVE - SMF
+void            trap_CheckAutoUpdate(void);                             // DHM - Nerve
+void            trap_GetAutoUpdate(void);                               // DHM - Nerve
 
-void            trap_openURL( const char *url ); // TTimo
-void            trap_GetHunkData( int* hunkused, int* hunkexpected );
+void            trap_openURL(const char *url);   // TTimo
+void            trap_GetHunkData(int *hunkused, int *hunkexpected);
 
 
-char*           trap_TranslateString( const char *string );             // NERVE - SMF - localization
+char *trap_TranslateString(const char *string);                         // NERVE - SMF - localization
 
 //
 // ui_teamorders.c
 //
-extern void UI_TeamOrdersMenu( void );
-extern void UI_TeamOrdersMenu_f( void );
-extern void UI_TeamOrdersMenu_Cache( void );
+extern void UI_TeamOrdersMenu(void);
+extern void UI_TeamOrdersMenu_f(void);
+extern void UI_TeamOrdersMenu_Cache(void);
 
 //
 // ui_loadconfig.c
 //
-void UI_LoadConfig_Cache( void );
-void UI_LoadConfigMenu( void );
+void UI_LoadConfig_Cache(void);
+void UI_LoadConfigMenu(void);
 
 //
 // ui_saveconfig.c
 //
-void UI_SaveConfigMenu_Cache( void );
-void UI_SaveConfigMenu( void );
+void UI_SaveConfigMenu_Cache(void);
+void UI_SaveConfigMenu(void);
 
 //
 // ui_display.c
 //
-void UI_DisplayOptionsMenu_Cache( void );
-void UI_DisplayOptionsMenu( void );
+void UI_DisplayOptionsMenu_Cache(void);
+void UI_DisplayOptionsMenu(void);
 
 //
 // ui_sound.c
 //
-void UI_SoundOptionsMenu_Cache( void );
-void UI_SoundOptionsMenu( void );
+void UI_SoundOptionsMenu_Cache(void);
+void UI_SoundOptionsMenu(void);
 
 //
 // ui_network.c
 //
-void UI_NetworkOptionsMenu_Cache( void );
-void UI_NetworkOptionsMenu( void );
+void UI_NetworkOptionsMenu_Cache(void);
+void UI_NetworkOptionsMenu(void);
 
 //
 // ui_gameinfo.c
 //
-typedef enum {
+typedef enum
+{
 	AWARD_ACCURACY,
 	AWARD_IMPRESSIVE,
 	AWARD_EXCELLENT,
@@ -911,25 +929,25 @@ typedef enum {
 	AWARD_PERFECT
 } awardType_t;
 
-const char *UI_GetArenaInfoByNumber( int num );
-const char *UI_GetArenaInfoByMap( const char *map );
-const char *UI_GetSpecialArenaInfo( const char *tag );
-int UI_GetNumArenas( void );
-int UI_GetNumSPArenas( void );
-int UI_GetNumSPTiers( void );
+const char *UI_GetArenaInfoByNumber(int num);
+const char *UI_GetArenaInfoByMap(const char *map);
+const char *UI_GetSpecialArenaInfo(const char *tag);
+int UI_GetNumArenas(void);
+int UI_GetNumSPArenas(void);
+int UI_GetNumSPTiers(void);
 
-void UI_GetBestScore( int level, int *score, int *skill );
-void UI_SetBestScore( int level, int score );
-int UI_TierCompleted( int levelWon );
-qboolean UI_ShowTierVideo( int tier );
-qboolean UI_CanShowTierVideo( int tier );
-int  UI_GetCurrentGame( void );
-void UI_NewGame( void );
-void UI_LogAwardData( int award, int data );
-int UI_GetAwardLevel( int award );
+void UI_GetBestScore(int level, int *score, int *skill);
+void UI_SetBestScore(int level, int score);
+int UI_TierCompleted(int levelWon);
+qboolean UI_ShowTierVideo(int tier);
+qboolean UI_CanShowTierVideo(int tier);
+int  UI_GetCurrentGame(void);
+void UI_NewGame(void);
+void UI_LogAwardData(int award, int data);
+int UI_GetAwardLevel(int award);
 
-void UI_SPUnlock_f( void );
+void UI_SPUnlock_f(void);
 
-void UI_InitGameinfo( void );
+void UI_InitGameinfo(void);
 
 #endif

@@ -2,9 +2,9 @@
 ===========================================================================
 
 Wolfenstein: Enemy Territory GPL Source Code
-Copyright (C) 1999-2010 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2010 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Wolfenstein: Enemy Territory GPL Source Code (Wolf ET Source Code).  
+This file is part of the Wolfenstein: Enemy Territory GPL Source Code (Wolf ET Source Code).
 
 Wolf ET Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -35,7 +35,7 @@ If you have questions concerning this license or the applicable additional terms
 #define JUMP_VELOCITY   270
 
 #define TIMER_LAND      130
-#define TIMER_GESTURE   ( 34 * 66 + 50 )
+#define TIMER_GESTURE   (34 * 66 + 50)
 
 #define DOUBLE_TAP_DELAY    400
 
@@ -45,7 +45,8 @@ If you have questions concerning this license or the applicable additional terms
 // all of the locals will be zeroed before each
 // pmove, just to make damn sure we don't have
 // any differences when running on client or server
-typedef struct {
+typedef struct
+{
 	vec3_t forward, right, up;
 	float frametime;
 
@@ -65,8 +66,8 @@ typedef struct {
 	qboolean ladder;
 } pml_t;
 
-extern pmove_t     *pm;
-extern pml_t pml;
+extern pmove_t *pm;
+extern pml_t   pml;
 
 // movement parameters
 extern float pm_stopspeed;
@@ -92,21 +93,21 @@ extern float pm_flightfriction;
 
 extern int c_pmove;
 
-void PM_AddTouchEnt( int entityNum );
-void PM_AddEvent( int newEvent );
+void PM_AddTouchEnt(int entityNum);
+void PM_AddEvent(int newEvent);
 
-qboolean    PM_SlideMove( qboolean gravity );
-void        PM_StepSlideMove( qboolean gravity );
+qboolean    PM_SlideMove(qboolean gravity);
+void        PM_StepSlideMove(qboolean gravity);
 
-qboolean    PM_SlideMoveProne( qboolean gravity );
-void        PM_StepSlideMoveProne( qboolean gravity );
+qboolean    PM_SlideMoveProne(qboolean gravity);
+void        PM_StepSlideMoveProne(qboolean gravity);
 
-void PM_BeginWeaponChange( int oldweapon, int newweapon, qboolean reload );
+void PM_BeginWeaponChange(int oldweapon, int newweapon, qboolean reload);
 
 
 // Nico, bg_weapons.c
-int PM_ReloadAnimForWeapon( int weapon );
-int PM_WeaponAmmoAvailable( int wp );
-void PM_Weapon( void );
-void PM_AdjustAimSpreadScale( void );
-void PM_BeginWeaponReload( int weapon );
+int PM_ReloadAnimForWeapon(int weapon);
+int PM_WeaponAmmoAvailable(int wp);
+void PM_Weapon(void);
+void PM_AdjustAimSpreadScale(void);
+void PM_BeginWeaponReload(int weapon);

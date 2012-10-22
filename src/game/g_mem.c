@@ -2,9 +2,9 @@
 ===========================================================================
 
 Wolfenstein: Enemy Territory GPL Source Code
-Copyright (C) 1999-2010 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2010 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Wolfenstein: Enemy Territory GPL Source Code (Wolf ET Source Code).  
+This file is part of the Wolfenstein: Enemy Territory GPL Source Code (Wolf ET Source Code).
 
 Wolf ET Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -35,34 +35,39 @@ If you have questions concerning this license or the applicable additional terms
 
 // Ridah, increased this (fixes Dan's crash)
 
-#define POOLSIZE    ( 4 * 1024 * 1024 )
+#define POOLSIZE    (4 * 1024 * 1024)
 
 static char memoryPool[POOLSIZE];
-static int allocPoint;
+static int  allocPoint;
 
-void *G_Alloc( int size ) {
-	char    *p;
+void *G_Alloc(int size)
+{
+	char *p;
 
-	if ( g_debugAlloc.integer ) {
-		G_Printf( "G_Alloc of %i bytes (%i left)\n", size, POOLSIZE - allocPoint - ( ( size + 31 ) & ~31 ) );
+	if (g_debugAlloc.integer)
+	{
+		G_Printf("G_Alloc of %i bytes (%i left)\n", size, POOLSIZE - allocPoint - ((size + 31) & ~31));
 	}
 
-	if ( allocPoint + size > POOLSIZE ) {
-		G_Error( "G_Alloc: failed on allocation of %u bytes\n", size );
+	if (allocPoint + size > POOLSIZE)
+	{
+		G_Error("G_Alloc: failed on allocation of %u bytes\n", size);
 		return NULL;
 	}
 
 	p = &memoryPool[allocPoint];
 
-	allocPoint += ( size + 31 ) & ~31;
+	allocPoint += (size + 31) & ~31;
 
 	return p;
 }
 
-void G_InitMemory( void ) {
+void G_InitMemory(void)
+{
 	allocPoint = 0;
 }
 
-void Svcmd_GameMem_f( void ) {
-	G_Printf( "Game memory status: %i out of %i bytes allocated\n", allocPoint, POOLSIZE );
+void Svcmd_GameMem_f(void)
+{
+	G_Printf("Game memory status: %i out of %i bytes allocated\n", allocPoint, POOLSIZE);
 }
