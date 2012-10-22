@@ -6173,7 +6173,7 @@ void CG_Tracer(vec3_t source, vec3_t dest, int sparks)
 CG_CalcMuzzlePoint
 ======================
 */
-qboolean CG_CalcMuzzlePoint(int entityNum, vec3_t muzzle)
+void CG_CalcMuzzlePoint(int entityNum, vec3_t muzzle)
 {
 	vec3_t forward, right, up;
 	centity_t *cent;
@@ -6240,11 +6240,10 @@ qboolean CG_CalcMuzzlePoint(int entityNum, vec3_t muzzle)
 				VectorMA(muzzle, 14, forward, muzzle);
 			}
 		}
-		return qtrue;
+		return;
 	}
 
 	cent = &cg_entities[entityNum];
-
 
 	if (cent->currentState.eFlags & EF_MG42_ACTIVE)
 	{
@@ -6309,8 +6308,7 @@ qboolean CG_CalcMuzzlePoint(int entityNum, vec3_t muzzle)
 		}
 	}
 
-	return qtrue;
-
+	return;
 }
 
 void SnapVectorTowards(vec3_t v, vec3_t to)
@@ -6384,49 +6382,48 @@ void CG_Bullet(vec3_t end, int sourceEntityNum, qboolean flesh, int fleshEntityN
 	// do trail effects
 	if (sourceEntityNum >= 0 && cg_tracerChance.value > 0)
 	{
-		if (CG_CalcMuzzlePoint(sourceEntityNum, start))
+		CG_CalcMuzzlePoint(sourceEntityNum, start);
+
+		sourceContentType = CG_PointContents(start, 0);
+		destContentType   = CG_PointContents(end, 0);
+
+		// do a complete bubble trail if necessary
+		if ((sourceContentType == destContentType) && (sourceContentType & CONTENTS_WATER))
 		{
-			sourceContentType = CG_PointContents(start, 0);
-			destContentType   = CG_PointContents(end, 0);
+			CG_BubbleTrail(start, end, .5, 8);
+		}
+		else if ((sourceContentType & CONTENTS_WATER))         // bubble trail from water into air
+		{
+			trap_CM_BoxTrace(&trace, end, start, NULL, NULL, 0, CONTENTS_WATER);
+			CG_BubbleTrail(start, trace.endpos, .5, 8);
+		}
+		else if ((destContentType & CONTENTS_WATER))         // bubble trail from air into water
+		{   // only add bubbles if effect is close to viewer
+			if (Distance(cg.snap->ps.origin, end) < 1024)
+			{
+				trap_CM_BoxTrace(&trace, start, end, NULL, NULL, 0, CONTENTS_WATER);
+				CG_BubbleTrail(end, trace.endpos, .5, 8);
+			}
+		}
 
-			// do a complete bubble trail if necessary
-			if ((sourceContentType == destContentType) && (sourceContentType & CONTENTS_WATER))
+		// if not flesh, then do a moving tracer
+		if (flesh)
+		{
+			// draw a tracer
+			if (random() < cg_tracerChance.value)
 			{
-				CG_BubbleTrail(start, end, .5, 8);
+				CG_Tracer(start, end, 0);
 			}
-			else if ((sourceContentType & CONTENTS_WATER))         // bubble trail from water into air
+		}
+		else        // (not flesh)
+		{
+			if (otherEntNum2 >= 0 && otherEntNum2 != ENTITYNUM_NONE)
 			{
-				trap_CM_BoxTrace(&trace, end, start, NULL, NULL, 0, CONTENTS_WATER);
-				CG_BubbleTrail(start, trace.endpos, .5, 8);
+				CG_SpawnTracer(otherEntNum2, start, end);
 			}
-			else if ((destContentType & CONTENTS_WATER))         // bubble trail from air into water
-			{   // only add bubbles if effect is close to viewer
-				if (Distance(cg.snap->ps.origin, end) < 1024)
-				{
-					trap_CM_BoxTrace(&trace, start, end, NULL, NULL, 0, CONTENTS_WATER);
-					CG_BubbleTrail(end, trace.endpos, .5, 8);
-				}
-			}
-
-			// if not flesh, then do a moving tracer
-			if (flesh)
+			else
 			{
-				// draw a tracer
-				if (random() < cg_tracerChance.value)
-				{
-					CG_Tracer(start, end, 0);
-				}
-			}
-			else        // (not flesh)
-			{
-				if (otherEntNum2 >= 0 && otherEntNum2 != ENTITYNUM_NONE)
-				{
-					CG_SpawnTracer(otherEntNum2, start, end);
-				}
-				else
-				{
-					CG_SpawnTracer(sourceEntityNum, start, end);
-				}
+				CG_SpawnTracer(sourceEntityNum, start, end);
 			}
 		}
 	}
@@ -6482,7 +6479,7 @@ void CG_Bullet(vec3_t end, int sourceEntityNum, qboolean flesh, int fleshEntityN
 	}
 	else        // (not flesh)
 	{   // Gordon: all bullet weapons have the same fx, and this stops pvs issues causing grenade explosions
-		int fromweap = WP_MP40; // cg_entities[sourceEntityNum].currentState.weapon;
+		int fromweap = WP_MP40;
 
 		if (cg_entities[sourceEntityNum].currentState.eFlags & EF_MG42_ACTIVE ||
 		    cg_entities[sourceEntityNum].currentState.eFlags & EF_MOUNTEDTANK)     // mounted
@@ -6490,7 +6487,9 @@ void CG_Bullet(vec3_t end, int sourceEntityNum, qboolean flesh, int fleshEntityN
 			fromweap = WP_MP40;
 		}
 
-		if (CG_CalcMuzzlePoint(sourceEntityNum, start) || cg.snap->ps.persistant[PERS_HWEAPON_USE])
+		CG_CalcMuzzlePoint(sourceEntityNum, start);
+
+		if (cg.snap->ps.persistant[PERS_HWEAPON_USE])
 		{
 			if (waterfraction)
 			{

@@ -337,14 +337,9 @@ static void CG_EntityEffects(centity_t *cent)
 			float  alpha;
 			vec3_t muzzle;
 
-			if (CG_CalcMuzzlePoint((cent - cg_entities), muzzle))
-			{
-				muzzle[2] -= DEFAULT_VIEWHEIGHT;
-			}
-			else
-			{
-				VectorCopy(cent->lerpOrigin, muzzle);
-			}
+			CG_CalcMuzzlePoint((cent - cg_entities), muzzle);
+			muzzle[2] -= DEFAULT_VIEWHEIGHT;
+
 			alpha  = 1.0f - ((float) (cg.time - cent->overheatTime) / 3000.0f);
 			alpha *= 0.25f;
 			CG_ParticleImpactSmokePuffExtended(cgs.media.smokeParticleShader, muzzle,

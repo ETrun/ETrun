@@ -1687,8 +1687,6 @@ Generates and draws a game scene and status information at the given time.
 =================
 */
 
-qboolean CG_CalcMuzzlePoint(int entityNum, vec3_t muzzle);
-
 void CG_DrawActiveFrame(int serverTime, stereoFrame_t stereoView, qboolean demoPlayback)
 {
 	int inwater;

@@ -2246,7 +2246,7 @@ void CG_MissileHitWall2(int weapon, int clientNum, vec3_t origin, vec3_t dir);
 // done
 
 void CG_MissileHitPlayer(int weapon, vec3_t origin, vec3_t dir);
-qboolean CG_CalcMuzzlePoint(int entityNum, vec3_t muzzle);
+void CG_CalcMuzzlePoint(int entityNum, vec3_t muzzle);
 void CG_Bullet(vec3_t end, int sourceEntityNum, qboolean flesh, int fleshEntityNum, int otherEntNum2, float waterfraction, int seed);
 
 void CG_RailTrail(vec3_t start, vec3_t end, int type);     //----(SA)	added 'type'
