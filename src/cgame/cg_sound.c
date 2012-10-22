@@ -301,6 +301,9 @@ static void CG_SoundParseSounds(char *filename, char *buffer)
 	wantSoundName = qtrue;
 	text          = &buffer;
 
+	// Nico, init vars
+	sound.soundList = NULL;
+
 	while (1)
 	{
 		token = COM_ParseExt(text, qtrue);

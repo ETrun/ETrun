@@ -3379,7 +3379,8 @@ void BG_EvaluateTrajectory(const trajectory_t *tr, int atTime, vec3_t result, qb
 		VectorMA(v, -phase * 0.5 * deltaTime * deltaTime, result, result);
 		break;
 	case TR_SPLINE:
-		if (!(pSpline = BG_GetSplineData(splinePath, &backwards)))
+		pSpline = BG_GetSplineData(splinePath, &backwards);
+		if (!pSpline)
 		{
 			return;
 		}
@@ -3501,7 +3502,8 @@ void BG_EvaluateTrajectory(const trajectory_t *tr, int atTime, vec3_t result, qb
 
 		break;
 	case TR_LINEAR_PATH:
-		if (!(pSpline = BG_GetSplineData(splinePath, &backwards)))
+		pSpline = BG_GetSplineData(splinePath, &backwards);
+		if (!pSpline)
 		{
 			return;
 		}
@@ -5252,7 +5254,7 @@ int Q_vsnprintf(char *str, size_t size, const char *format, va_list ap)
 
 	retval = _vsnprintf(str, size, format, ap);
 
-	if (retval < 0 || retval == size)
+	if (retval < 0 || retval == (int)size)
 	{
 		// Microsoft doesn't adhere to the C99 standard of vsnprintf,
 		// which states that the return value must be the number of

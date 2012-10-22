@@ -209,7 +209,7 @@ CG_DrawCursorHints
 void CG_DrawCursorhint(rectDef_t *rect)
 {
 	float     *color;
-	qhandle_t icon, icon2 = 0;
+	qhandle_t icon = 0, icon2 = 0;
 	float     scale, halfscale;
 	//qboolean	redbar = qfalse;
 	qboolean yellowbar = qfalse;

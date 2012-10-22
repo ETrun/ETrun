@@ -1857,7 +1857,8 @@ static void CG_ServerCommand(void)
 		return;
 	}
 
-	if (!Q_stricmp(cmd, "chat") || (enc = !Q_stricmp(cmd, "enc_chat")))
+	enc = !Q_stricmp(cmd, "enc_chat");
+	if (!Q_stricmp(cmd, "chat") || enc)
 	{
 		const char *s;
 
@@ -1887,7 +1888,8 @@ static void CG_ServerCommand(void)
 		return;
 	}
 
-	if (!Q_stricmp(cmd, "tchat") || (enc = !Q_stricmp(cmd, "enc_tchat")))
+	enc = !Q_stricmp(cmd, "enc_tchat");
+	if (!Q_stricmp(cmd, "tchat") || enc)
 	{
 		const char *s;
 

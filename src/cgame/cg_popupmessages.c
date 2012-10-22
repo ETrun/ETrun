@@ -101,7 +101,8 @@ void CG_UpdatePMLists(void)
 	pmListItem_t    *lastItem;
 	pmListItemBig_t *listItem2;
 
-	if ((listItem = cg_pmWaitingList))
+	listItem = cg_pmWaitingList;
+	if (listItem)
 	{
 		int t = (listItem->time + cg_popupTime.integer);
 		if (cg.time > t)
@@ -153,9 +154,9 @@ void CG_UpdatePMLists(void)
 
 				listItem->next  = NULL;
 				listItem->inuse = qfalse;
-
+				listItem = next;
 			}
-			while ((listItem = next));
+			while (listItem);
 			break;
 		}
 
@@ -163,7 +164,8 @@ void CG_UpdatePMLists(void)
 		listItem = listItem->next;
 	}
 
-	if ((listItem2 = cg_pmWaitingListBig))
+	listItem2 = cg_pmWaitingListBig;
+	if (listItem2)
 	{
 		int t = listItem2->time + cg_popupTime.integer;
 		if (cg.time > t)
@@ -206,7 +208,8 @@ pmListItem_t *CG_FindFreePMItem(void)
 	}
 
 	// no totally free items, so just grab the last item in the oldlist
-	if ((lastItem = listItem = cg_pmOldList))
+	lastItem = listItem = cg_pmOldList;
+	if (lastItem)
 	{
 		while (listItem->next)
 		{
@@ -279,10 +282,11 @@ void CG_AddPMItem(popupMessageType_t type, const char *message, qhandle_t shader
 
 	trap_Print(va("%s\n", listItem->message));
 
-	// rain - added parens
-	while ((end = strchr(listItem->message, '\n')))
+	end = strchr(listItem->message, '\n');
+	while (end)
 	{
 		*end = '\0';
+		end = strchr(listItem->message, '\n');
 	}
 
 	// rain - don't eat popups for empty lines

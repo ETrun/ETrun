@@ -4022,13 +4022,15 @@ void CG_NextWeap(qboolean switchBanks)
 				switch (num)
 				{
 				case WP_CARBINE:
-					if ((found = CG_WeaponSelectable(WP_M7)))
+					found = CG_WeaponSelectable(WP_M7);
+					if (found)
 					{
 						num = WP_M7;
 					}
 					break;
 				case WP_KAR98:
-					if ((found = CG_WeaponSelectable(WP_GPG40)))
+					found = CG_WeaponSelectable(WP_GPG40);
+					if (found)
 					{
 						num = WP_GPG40;
 					}
@@ -4082,13 +4084,15 @@ void CG_NextWeap(qboolean switchBanks)
 				switch (num)
 				{
 				case WP_CARBINE:
-					if ((found = CG_WeaponSelectable(WP_M7)))
+					found = CG_WeaponSelectable(WP_M7);
+					if (found)
 					{
 						num = WP_M7;
 					}
 					break;
 				case WP_KAR98:
-					if ((found = CG_WeaponSelectable(WP_GPG40)))
+					found = CG_WeaponSelectable(WP_GPG40);
+					if (found)
 					{
 						num = WP_GPG40;
 					}
@@ -4117,13 +4121,15 @@ void CG_NextWeap(qboolean switchBanks)
 					switch (num)
 					{
 					case WP_CARBINE:
-						if ((found = CG_WeaponSelectable(WP_M7)))
+						found = CG_WeaponSelectable(WP_M7);
+						if (found)
 						{
 							num = WP_M7;
 						}
 						break;
 					case WP_KAR98:
-						if ((found = CG_WeaponSelectable(WP_GPG40)))
+						found = CG_WeaponSelectable(WP_GPG40);
+						if (found)
 						{
 							num = WP_GPG40;
 						}
@@ -4239,13 +4245,15 @@ void CG_PrevWeap(qboolean switchBanks)
 				switch (num)
 				{
 				case WP_CARBINE:
-					if ((found = CG_WeaponSelectable(WP_M7)))
+					found = CG_WeaponSelectable(WP_M7);
+					if (found)
 					{
 						num = WP_M7;
 					}
 					break;
 				case WP_KAR98:
-					if ((found = CG_WeaponSelectable(WP_GPG40)))
+					found = CG_WeaponSelectable(WP_GPG40);
+					if (found)
 					{
 						num = WP_GPG40;
 					}
@@ -4297,13 +4305,15 @@ void CG_PrevWeap(qboolean switchBanks)
 				switch (num)
 				{
 				case WP_CARBINE:
-					if ((found = CG_WeaponSelectable(WP_M7)))
+					found = CG_WeaponSelectable(WP_M7);
+					if (found)
 					{
 						num = WP_M7;
 					}
 					break;
 				case WP_KAR98:
-					if ((found = CG_WeaponSelectable(WP_GPG40)))
+					found = CG_WeaponSelectable(WP_GPG40);
+					if (found)
 					{
 						num = WP_GPG40;
 					}
@@ -4332,13 +4342,15 @@ void CG_PrevWeap(qboolean switchBanks)
 					switch (num)
 					{
 					case WP_CARBINE:
-						if ((found = CG_WeaponSelectable(WP_M7)))
+						found = CG_WeaponSelectable(WP_M7);
+						if (found)
 						{
 							num = WP_M7;
 						}
 						break;
 					case WP_KAR98:
-						if ((found = CG_WeaponSelectable(WP_GPG40)))
+						found = CG_WeaponSelectable(WP_GPG40);
+						if (found)
 						{
 							num = WP_GPG40;
 						}
@@ -4705,13 +4717,15 @@ void CG_WeaponBank_f(void)
 			switch (num)
 			{
 			case WP_CARBINE:
-				if ((found = CG_WeaponSelectable(WP_M7)))
+				found = CG_WeaponSelectable(WP_M7);
+				if (found)
 				{
 					num = WP_M7;
 				}
 				break;
 			case WP_KAR98:
-				if ((found = CG_WeaponSelectable(WP_GPG40)))
+				found = CG_WeaponSelectable(WP_GPG40);
+				if (found)
 				{
 					num = WP_GPG40;
 				}

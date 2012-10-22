@@ -357,21 +357,19 @@ void CG_LoadPanel_RenderMissionDescriptionText(panel_button_t *button)
 	char       buffer[1024];
 	float      y;
 
-	//else
+	if (!cgs.arenaInfoLoaded)
 	{
-
-		if (!cgs.arenaInfoLoaded)
-		{
-			return;
-		}
-
-		cs = cgs.arenaData.description;
+		return;
 	}
 
+	cs = cgs.arenaData.description;
+
 	Q_strncpyz(buffer, cs, sizeof(buffer));
-	while ((s = strchr(buffer, '*')))
+	s = strchr(buffer, '*');
+	while (s)
 	{
 		*s = '\n';
+		s = strchr(buffer, '*');
 	}
 
 	BG_FitTextToWidth_Ext(buffer, button->font->scalex, button->rect.w - 16, sizeof(buffer), button->font->font);

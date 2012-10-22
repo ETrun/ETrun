@@ -534,6 +534,11 @@ void CG_Spotlight(centity_t *cent, float *color, vec3_t realstart, vec3_t lightD
 	vec3_t      angles;
 	vec4_t      projection;
 
+	// Nico, init vars
+	tr.endpos[0] = 0;
+	tr.endpos[1] = 0;
+	tr.endpos[2] = 0;
+
 	VectorCopy(realstart, start);
 
 	// normalize color
