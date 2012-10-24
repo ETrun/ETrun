@@ -164,15 +164,8 @@
     <ClCompile Include="ui_players.c" />
     <ClCompile Include="ui_shared.c" />
     <ClCompile Include="ui_syscalls.c" />
-    <ClCompile Include="ui_util.c" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\etrun\ui\credits_activision.menu" />
-    <None Include="..\..\etrun\ui\credits_additional.menu" />
-    <None Include="..\..\etrun\ui\credits_et260.menu" />
-    <None Include="..\..\etrun\ui\credits_idsoftware.menu" />
-    <None Include="..\..\etrun\ui\credits_quit.menu" />
-    <None Include="..\..\etrun\ui\credits_splashdamage.menu" />
     <None Include="..\..\etrun\ui\etrun.menu" />
     <None Include="..\..\etrun\ui\etrun_customise_game.menu" />
     <None Include="..\..\etrun\ui\etrun_customise_hud.menu" />
@@ -186,8 +179,6 @@
     <None Include="..\..\etrun\ui\ingame_main.menu" />
     <None Include="..\..\etrun\ui\ingame_messagemode.menu" />
     <None Include="..\..\etrun\ui\ingame_serverinfo.menu" />
-    <None Include="..\..\etrun\ui\ingame_tapout.menu" />
-    <None Include="..\..\etrun\ui\ingame_tapoutlms.menu" />
     <None Include="..\..\etrun\ui\ingame_vote.menu" />
     <None Include="..\..\etrun\ui\ingame_vote_disabled.menu" />
     <None Include="..\..\etrun\ui\ingame_vote_map.menu" />
@@ -207,12 +198,9 @@
     <None Include="..\..\etrun\ui\options_system_gamma.menu" />
     <None Include="..\..\etrun\ui\playonline.menu" />
     <None Include="..\..\etrun\ui\playonline_connecttoip.menu" />
-    <None Include="..\..\etrun\ui\playonline_disablepb.menu" />
-    <None Include="..\..\etrun\ui\playonline_enablepb.menu" />
     <None Include="..\..\etrun\ui\playonline_serverinfo.menu" />
     <None Include="..\..\etrun\ui\popup_autoupdate.menu" />
     <None Include="..\..\etrun\ui\popup_errormessage.menu" />
-    <None Include="..\..\etrun\ui\popup_errormessage_pb.menu" />
     <None Include="..\..\etrun\ui\popup_hostgameerrormessage.menu" />
     <None Include="..\..\etrun\ui\popup_password.menu" />
     <None Include="..\..\etrun\ui\popup_serverredirect.menu" />

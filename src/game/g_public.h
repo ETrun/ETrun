@@ -2,9 +2,9 @@
 ===========================================================================
 
 Wolfenstein: Enemy Territory GPL Source Code
-Copyright (C) 1999-2010 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2010 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Wolfenstein: Enemy Territory GPL Source Code (Wolf ET Source Code).  
+This file is part of the Wolfenstein: Enemy Territory GPL Source Code (Wolf ET Source Code).
 
 Wolf ET Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -52,10 +52,10 @@ If you have questions concerning this license or the applicable additional terms
 // recent id changes
 #define SVF_SINGLECLIENT        0x00000800  // only send to a single client (entityShared_t->singleClient)
 #define SVF_NOSERVERINFO        0x00001000  // don't send CS_SERVERINFO updates to this client
-											// so that it can be updated for ping tools without
-											// lagging clients
+                                            // so that it can be updated for ping tools without
+                                            // lagging clients
 #define SVF_NOTSINGLECLIENT     0x00002000  // send entity to everyone but one client
-											// (entityShared_t->singleClient)
+                                            // (entityShared_t->singleClient)
 // Gordon:
 #define SVF_IGNOREBMODELEXTENTS     0x00004000  // just use origin for in pvs check for snapshots, ignore the bmodel extents
 #define SVF_SELF_PORTAL             0x00008000  // use self->origin2 as portal
@@ -63,9 +63,10 @@ If you have questions concerning this license or the applicable additional terms
 
 //===============================================================
 
-typedef qboolean ( *addToSnapshotCallback )( int entityNum, int clientNum );
+typedef qboolean (*addToSnapshotCallback)(int entityNum, int clientNum);
 
-typedef struct {
+typedef struct
+{
 	qboolean linked;                // qfalse if not in any good cluster
 	int linkcount;
 
@@ -73,10 +74,10 @@ typedef struct {
 	int singleClient;               // only send to this client when SVF_SINGLECLIENT is set
 
 	qboolean bmodel;                // if false, assume an explicit mins / maxs bounding box
-									// only set by trap_SetBrushModel
+	                                // only set by trap_SetBrushModel
 	vec3_t mins, maxs;
 	int contents;                   // CONTENTS_TRIGGER, CONTENTS_SOLID, CONTENTS_BODY, etc
-									// a non-solid entity should set to 0
+	                                // a non-solid entity should set to 0
 
 	vec3_t absmin, absmax;          // derived from mins/maxs and origin + rotation
 
@@ -103,7 +104,8 @@ typedef struct {
 
 
 // the server looks at a sharedEntity, which is the start of the game's gentity_t structure
-typedef struct {
+typedef struct
+{
 	entityState_t s;                // communicated by server to clients
 	entityShared_t r;               // shared by both the server system and game
 } sharedEntity_t;
@@ -115,7 +117,8 @@ typedef struct {
 //
 // system traps provided by the main engine
 //
-typedef enum {
+typedef enum
+{
 	//============== general Quake services ==================
 
 	G_PRINT,        // ( const char *string );
@@ -457,7 +460,8 @@ typedef enum {
 //
 // functions exported by the game subsystem
 //
-typedef enum {
+typedef enum
+{
 	GAME_INIT,  // ( int levelTime, int randomSeed, int restart );
 	// init and shutdown will be called every single level
 	// The game should call G_GET_ENTITY_TOKEN to parse through all the
@@ -500,4 +504,3 @@ typedef enum {
 	GAME_MESSAGERECEIVED,           // ( int cno, const char *buf, int buflen, int commandTime );
 	// -zinx
 } gameExport_t;
-

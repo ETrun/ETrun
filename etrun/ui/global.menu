@@ -30,16 +30,6 @@ menuDef {
 	}
 }
 
-/*menuDef {
-	name		"backgroundmusic_server"
-	fullScreen	1
-	visible		1
-
-	onOpen {
-		playlooped "sound/music/menu_server.wav"
-	}
-}*/
-
 // Backgrounds //
 
 menuDef {

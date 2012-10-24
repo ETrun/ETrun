@@ -2,9 +2,9 @@
 ===========================================================================
 
 Wolfenstein: Enemy Territory GPL Source Code
-Copyright (C) 1999-2010 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2010 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Wolfenstein: Enemy Territory GPL Source Code (Wolf ET Source Code).  
+This file is part of the Wolfenstein: Enemy Territory GPL Source Code (Wolf ET Source Code).
 
 Wolf ET Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -36,40 +36,46 @@ If you have questions concerning this license or the applicable additional terms
 
 extern pmove_t cg_pmove;        // cg_predict.c
 
-
-vec4_t colorClear  = { 0.0f, 0.0f, 0.0f, 0.0f };    // Transparent
+vec4_t colorClear = { 0.0f, 0.0f, 0.0f, 0.0f };     // Transparent
 vec4_t colorBrown1 = { 0.3f, 0.2f, 0.1f, 0.9f };    // Brown
 vec4_t colorGreen1 = { 0.21f, 0.3f, 0.0f, 0.9f };   // Greenish (darker)
 vec4_t colorGreen2 = { 0.305f, 0.475f, 0.305f, 0.48f }; // Slightly off from default fill
 
-void CG_createMOTDWindow( void ) {
-	const char *str = CG_ConfigString( CS_CUSTMOTD + 0 );
+void CG_createMOTDWindow(void)
+{
+	const char *str = CG_ConfigString(CS_CUSTMOTD + 0);
 
-	if ( str != NULL && *str != 0 ) {
-		int i;
-		cg_window_t *sw = CG_windowAlloc( WFX_TEXTSIZING | WFX_FADEIN, 500 );
+	if (str != NULL && *str != 0)
+	{
+		int         i;
+		cg_window_t *sw = CG_windowAlloc(WFX_TEXTSIZING | WFX_FADEIN, 500);
 
 		cg.motdWindow = sw;
-		if ( sw == NULL ) {
+		if (sw == NULL)
+		{
 			return;
 		}
 
 		// Window specific
-		sw->id = WID_MOTD;
-		sw->fontScaleX = 1.0f;
-		sw->fontScaleY = 1.0f;
-		sw->x = 10;
-		sw->y = -36;
+		sw->id            = WID_MOTD;
+		sw->fontScaleX    = 1.0f;
+		sw->fontScaleY    = 1.0f;
+		sw->x             = 10;
+		sw->y             = -36;
 		sw->flashMidpoint = sw->flashPeriod * 0.8f;
-		memcpy( &sw->colorBackground2, &colorGreen2, sizeof( vec4_t ) );
+		memcpy(&sw->colorBackground2, &colorGreen2, sizeof(vec4_t));
 
 		// Copy all MOTD info into the window
 		cg.windowCurrent = sw;
-		for ( i = 0; i < MAX_MOTDLINES; i++ ) {
-			str = CG_ConfigString( CS_CUSTMOTD + i );
-			if ( str != NULL && *str != 0 ) {
-				CG_printWindow( (char*)str );
-			} else {
+		for (i = 0; i < MAX_MOTDLINES; i++)
+		{
+			str = CG_ConfigString(CS_CUSTMOTD + i);
+			if (str != NULL && *str != 0)
+			{
+				CG_printWindow((char *)str);
+			}
+			else
+			{
 				break;
 			}
 		}
@@ -86,11 +92,13 @@ void CG_createMOTDWindow( void ) {
 
 
 // Windowing system setup
-void CG_windowInit( void ) {
+void CG_windowInit(void)
+{
 	int i;
 
 	cg.winHandler.numActiveWindows = 0;
-	for ( i = 0; i < MAX_WINDOW_COUNT; i++ ) {
+	for (i = 0; i < MAX_WINDOW_COUNT; i++)
+	{
 		cg.winHandler.window[i].inuse = qfalse;
 	}
 
@@ -99,80 +107,92 @@ void CG_windowInit( void ) {
 
 
 // Window stuct "constructor" with some common defaults
-void CG_windowReset( cg_window_t *w, int fx, int startupLength ) {
+void CG_windowReset(cg_window_t *w, int fx, int startupLength)
+{
 	vec4_t colorGeneralBorder = { 0.5f, 0.35f, 0.25f, 0.5f };
 	vec4_t colorGeneralFill   = { 0.3f, 0.45f, 0.3f, 0.5f };
 
-	w->effects = fx;
-	w->fontScaleX = 0.25;
-	w->fontScaleY = 0.25;
-	w->flashPeriod = 1000;
+	w->effects       = fx;
+	w->fontScaleX    = 0.25;
+	w->fontScaleY    = 0.25;
+	w->flashPeriod   = 1000;
 	w->flashMidpoint = w->flashPeriod / 2;
-	w->id = WID_NONE;
-	w->inuse = qtrue;
-	w->lineCount = 0;
-	w->state = ( fx >= WFX_FADEIN ) ? WSTATE_START : WSTATE_COMPLETE;
-	w->targetTime = ( startupLength > 0 ) ? startupLength : 0;
-	w->time = trap_Milliseconds();
-	w->x = 0;
-	w->y = 0;
+	w->id            = WID_NONE;
+	w->inuse         = qtrue;
+	w->lineCount     = 0;
+	w->state         = (fx >= WFX_FADEIN) ? WSTATE_START : WSTATE_COMPLETE;
+	w->targetTime    = (startupLength > 0) ? startupLength : 0;
+	w->time          = trap_Milliseconds();
+	w->x             = 0;
+	w->y             = 0;
 
-	memcpy( &w->colorBorder, &colorGeneralBorder, sizeof( vec4_t ) );
-	memcpy( &w->colorBackground, &colorGeneralFill, sizeof( vec4_t ) );
+	memcpy(&w->colorBorder, &colorGeneralBorder, sizeof(vec4_t));
+	memcpy(&w->colorBackground, &colorGeneralFill, sizeof(vec4_t));
 }
 
 // Reserve a window
-cg_window_t *CG_windowAlloc( int fx, int startupLength ) {
-	int i;
-	cg_window_t *w;
+cg_window_t *CG_windowAlloc(int fx, int startupLength)
+{
+	int                i;
+	cg_window_t        *w;
 	cg_windowHandler_t *wh = &cg.winHandler;
 
-	if ( wh->numActiveWindows == MAX_WINDOW_COUNT ) {
-		return( NULL );
+	if (wh->numActiveWindows == MAX_WINDOW_COUNT)
+	{
+		return(NULL);
 	}
 
-	for ( i = 0; i < MAX_WINDOW_COUNT; i++ ) {
+	for (i = 0; i < MAX_WINDOW_COUNT; i++)
+	{
 		w = &wh->window[i];
-		if ( w->inuse == qfalse ) {
-			CG_windowReset( w, fx, startupLength );
+		if (w->inuse == qfalse)
+		{
+			CG_windowReset(w, fx, startupLength);
 			wh->activeWindows[wh->numActiveWindows++] = i;
-			return( w );
+			return(w);
 		}
 	}
 
 	// Fail if we're a full airplane
-	return( NULL );
+	return(NULL);
 }
 
 
 // Free up a window reservation
-void CG_windowFree( cg_window_t *w ) {
-	int i, j;
+void CG_windowFree(cg_window_t *w)
+{
+	int                i, j;
 	cg_windowHandler_t *wh = &cg.winHandler;
 
-	if ( w == NULL ) {
+	if (w == NULL)
+	{
 		return;
 	}
 
-	if ( w->effects >= WFX_FADEIN && w->state != WSTATE_OFF && w->inuse == qtrue ) {
+	if (w->effects >= WFX_FADEIN && w->state != WSTATE_OFF && w->inuse == qtrue)
+	{
 		w->state = WSTATE_SHUTDOWN;
-		w->time = trap_Milliseconds();
+		w->time  = trap_Milliseconds();
 		return;
 	}
 
-	for ( i = 0; i < wh->numActiveWindows; i++ ) {
-		if ( w == &wh->window[wh->activeWindows[i]] ) {
-			for ( j = i; j < wh->numActiveWindows; j++ ) {
-				if ( j + 1 < wh->numActiveWindows ) {
+	for (i = 0; i < wh->numActiveWindows; i++)
+	{
+		if (w == &wh->window[wh->activeWindows[i]])
+		{
+			for (j = i; j < wh->numActiveWindows; j++)
+			{
+				if (j + 1 < wh->numActiveWindows)
+				{
 					wh->activeWindows[j] = wh->activeWindows[j + 1];
 				}
 			}
 
-			w->id = WID_NONE;
+			w->id    = WID_NONE;
 			w->inuse = qfalse;
 			w->state = WSTATE_OFF;
 
-			CG_removeStrings( w );
+			CG_removeStrings(w);
 
 			wh->numActiveWindows--;
 
@@ -182,54 +202,63 @@ void CG_windowFree( cg_window_t *w ) {
 }
 
 
-void CG_windowCleanup( void ) {
-	int i;
-	cg_window_t *w;
+void CG_windowCleanup(void)
+{
+	int                i;
+	cg_window_t        *w;
 	cg_windowHandler_t *wh = &cg.winHandler;
 
-	for ( i = 0; i < wh->numActiveWindows; i++ ) {
+	for (i = 0; i < wh->numActiveWindows; i++)
+	{
 		w = &wh->window[wh->activeWindows[i]];
-		if ( !w->inuse || w->state == WSTATE_OFF ) {
-			CG_windowFree( w );
+		if (!w->inuse || w->state == WSTATE_OFF)
+		{
+			CG_windowFree(w);
 			i--;
 		}
 	}
 }
 
 
-void CG_demoAviFPSDraw( void ) {
+void CG_demoAviFPSDraw(void)
+{
 	qboolean fKeyDown = cgs.fKeyPressed[K_F1] | cgs.fKeyPressed[K_F2] | cgs.fKeyPressed[K_F3] | cgs.fKeyPressed[K_F4] | cgs.fKeyPressed[K_F5];
 
-	if ( cg.demoPlayback && fKeyDown && cgs.aviDemoRate >= 0 ) {
-		CG_DrawStringExt( 42, 425,
-						  ( ( cgs.aviDemoRate > 0 ) ? va( "^3Record AVI @ ^7%d^2fps", cgs.aviDemoRate ) : "^1Stop AVI Recording" ),
-						  colorWhite, qfalse, qfalse, SMALLCHAR_WIDTH, SMALLCHAR_HEIGHT - 2, 0 );
+	if (cg.demoPlayback && fKeyDown && cgs.aviDemoRate >= 0)
+	{
+		CG_DrawStringExt(42, 425,
+		                 ((cgs.aviDemoRate > 0) ? va("^3Record AVI @ ^7%d^2fps", cgs.aviDemoRate) : "^1Stop AVI Recording"),
+		                 colorWhite, qfalse, qfalse, SMALLCHAR_WIDTH, SMALLCHAR_HEIGHT - 2, 0);
 	}
 }
 
-void CG_demoTimescaleDraw( void ) {
-	if ( cg.demoPlayback && cgs.timescaleUpdate > cg.time && demo_drawTimeScale.integer != 0 ) {
-		char *s = va( "^3TimeScale: ^7%.1f", cg_timescale.value );
-		int w = CG_DrawStrlen( s ) * SMALLCHAR_WIDTH;
+void CG_demoTimescaleDraw(void)
+{
+	if (cg.demoPlayback && cgs.timescaleUpdate > cg.time && demo_drawTimeScale.integer != 0)
+	{
+		char *s = va("^3TimeScale: ^7%.1f", cg_timescale.value);
+		int  w  = CG_DrawStrlen(s) * SMALLCHAR_WIDTH;
 
-		CG_FillRect( 42 - 2, 400, w + 5, SMALLCHAR_HEIGHT + 3, colorDkGreen );
-		CG_DrawRect( 42 - 2, 400, w + 5, SMALLCHAR_HEIGHT + 3, 1, colorMdYellow );
+		CG_FillRect(42 - 2, 400, w + 5, SMALLCHAR_HEIGHT + 3, colorDkGreen);
+		CG_DrawRect(42 - 2, 400, w + 5, SMALLCHAR_HEIGHT + 3, 1, colorMdYellow);
 
-		CG_DrawStringExt( 42, 400, s, colorWhite, qfalse, qtrue, SMALLCHAR_WIDTH, SMALLCHAR_HEIGHT, 0 );
+		CG_DrawStringExt(42, 400, s, colorWhite, qfalse, qtrue, SMALLCHAR_WIDTH, SMALLCHAR_HEIGHT, 0);
 	}
 }
 
 
 // Main window-drawing handler
-void CG_windowDraw( void ) {
-	int h, x, y, i, j, milli, t_offset, tmp;
+void CG_windowDraw(void)
+{
+	int         h, x, y, i, j, milli, t_offset, tmp;
 	cg_window_t *w;
-	qboolean fCleanup = qfalse;
+	qboolean    fCleanup = qfalse;
 	// Gordon: FIXME, the limbomenu var no longer exists
 	vec4_t *bg;
 	vec4_t textColor, borderColor, bgColor;
 
-	if ( cg.winHandler.numActiveWindows == 0 ) {
+	if (cg.winHandler.numActiveWindows == 0)
+	{
 		// Draw these for demoplayback no matter what
 		CG_demoAviFPSDraw();
 		CG_demoTimescaleDraw();
@@ -237,93 +266,118 @@ void CG_windowDraw( void ) {
 	}
 
 	milli = trap_Milliseconds();
-	memcpy( textColor, colorWhite, sizeof( vec4_t ) );
+	memcpy(textColor, colorWhite, sizeof(vec4_t));
 
 	// Mouse cursor position for MV highlighting (offset for cursor pointer position)
 	// Also allow for swingcam toggling
-	for ( i = 0; i < cg.winHandler.numActiveWindows; i++ ) {
+	for (i = 0; i < cg.winHandler.numActiveWindows; i++)
+	{
 		w = &cg.winHandler.window[cg.winHandler.activeWindows[i]];
 
-		if ( !w->inuse || w->state == WSTATE_OFF ) {
+		if (!w->inuse || w->state == WSTATE_OFF)
+		{
 			fCleanup = qtrue;
 			continue;
 		}
 
-		if ( w->effects & WFX_TEXTSIZING ) {
-			CG_windowNormalizeOnText( w );
+		if (w->effects & WFX_TEXTSIZING)
+		{
+			CG_windowNormalizeOnText(w);
 			w->effects &= ~WFX_TEXTSIZING;
 		}
 
-		bg = ( ( w->effects & WFX_FLASH ) && ( milli % w->flashPeriod ) > w->flashMidpoint ) ? &w->colorBackground2 : &w->colorBackground;
+		bg = ((w->effects & WFX_FLASH) && (milli % w->flashPeriod) > w->flashMidpoint) ? &w->colorBackground2 : &w->colorBackground;
 
-		h = w->h;
-		x = w->x;
-		y = w->y;
-		t_offset = milli - w->time;
+		h            = w->h;
+		x            = w->x;
+		y            = w->y;
+		t_offset     = milli - w->time;
 		textColor[3] = 1.0f;
-		memcpy( &borderColor, w->colorBorder, sizeof( vec4_t ) );
-		memcpy( &bgColor, bg, sizeof( vec4_t ) );
+		memcpy(&borderColor, w->colorBorder, sizeof(vec4_t));
+		memcpy(&bgColor, bg, sizeof(vec4_t));
 
 		// TODO: Add in support for ALL scrolling effects
-		if ( w->state == WSTATE_START ) {
+		if (w->state == WSTATE_START)
+		{
 			tmp = w->targetTime - t_offset;
-			if ( w->effects & WFX_SCROLLUP ) {
-				if ( tmp > 0 ) {
-					y += ( 480 - y ) * tmp / w->targetTime; //(100 * tmp / w->targetTime) / 100;
-				} else {
+			if (w->effects & WFX_SCROLLUP)
+			{
+				if (tmp > 0)
+				{
+					y += (480 - y) * tmp / w->targetTime;   //(100 * tmp / w->targetTime) / 100;
+				}
+				else
+				{
 					w->state = WSTATE_COMPLETE;
 				}
 
 				w->curY = y;
 			}
-			if ( w->effects & WFX_FADEIN ) {
-				if ( tmp > 0 ) {
-					textColor[3] = (float)( (float)t_offset / (float)w->targetTime );
-				} else { w->state = WSTATE_COMPLETE;}
-			}
-		} else if ( w->state == WSTATE_SHUTDOWN ) {
-			tmp = w->targetTime - t_offset;
-			if ( w->effects & WFX_SCROLLUP ) {
-				if ( tmp > 0 ) {
-					y = w->curY + ( 480 - w->y ) * t_offset / w->targetTime;      //(100 * t_offset / w->targetTime) / 100;
+			if (w->effects & WFX_FADEIN)
+			{
+				if (tmp > 0)
+				{
+					textColor[3] = (float)((float)t_offset / (float)w->targetTime);
 				}
-				if ( tmp < 0 || y >= 480 ) {
+				else
+				{
+					w->state = WSTATE_COMPLETE;
+				}
+			}
+		}
+		else if (w->state == WSTATE_SHUTDOWN)
+		{
+			tmp = w->targetTime - t_offset;
+			if (w->effects & WFX_SCROLLUP)
+			{
+				if (tmp > 0)
+				{
+					y = w->curY + (480 - w->y) * t_offset / w->targetTime;        //(100 * t_offset / w->targetTime) / 100;
+				}
+				if (tmp < 0 || y >= 480)
+				{
 					w->state = WSTATE_OFF;
 					fCleanup = qtrue;
 					continue;
 				}
 			}
-			if ( w->effects & WFX_FADEIN ) {
-				if ( tmp > 0 ) {
-					textColor[3] -= (float)( (float)t_offset / (float)w->targetTime );
-				} else {
+			if (w->effects & WFX_FADEIN)
+			{
+				if (tmp > 0)
+				{
+					textColor[3] -= (float)((float)t_offset / (float)w->targetTime);
+				}
+				else
+				{
 					textColor[3] = 0.0f;
-					w->state = WSTATE_OFF;
+					w->state     = WSTATE_OFF;
 				}
 			}
 		}
 
 		borderColor[3] *= textColor[3];
-		bgColor[3] *= textColor[3];
+		bgColor[3]     *= textColor[3];
 
-		CG_FillRect( x, y, w->w, h, bgColor );
-		CG_DrawRect( x, y, w->w, h, 1, borderColor );
+		CG_FillRect(x, y, w->w, h, bgColor);
+		CG_DrawRect(x, y, w->w, h, 1, borderColor);
 
 		x += 5;
-		y -= ( w->effects & WFX_TRUETYPE ) ? 3 : 0;
+		y -= (w->effects & WFX_TRUETYPE) ? 3 : 0;
 
-		for ( j = w->lineCount - 1; j >= 0; j-- ) {
-			if ( w->effects & WFX_TRUETYPE ) {
-//				CG_Text_Paint(x, y + h, w->fontScale, textColor, (char*)w->lineText[j], 0.0f, 0, 0);
-				CG_Text_Paint_Ext( x, y + h, w->fontScaleX, w->fontScaleY, textColor,
-								   (char*)w->lineText[j], 0.0f, 0, 0, &cgs.media.limboFont2 );
+		for (j = w->lineCount - 1; j >= 0; j--)
+		{
+			if (w->effects & WFX_TRUETYPE)
+			{
+				CG_Text_Paint_Ext(x, y + h, w->fontScaleX, w->fontScaleY, textColor,
+				                  (char *)w->lineText[j], 0.0f, 0, 0, &cgs.media.limboFont2);
 			}
 
-			h -= ( w->lineHeight[j] + 3 );
+			h -= (w->lineHeight[j] + 3);
 
-			if ( !( w->effects & WFX_TRUETYPE ) ) {
-				CG_DrawStringExt2( x, y + h, (char*)w->lineText[j], textColor,
-								   qfalse, qtrue, w->fontWidth, w->fontHeight, 0 );
+			if (!(w->effects & WFX_TRUETYPE))
+			{
+				CG_DrawStringExt2(x, y + h, (char *)w->lineText[j], textColor,
+				                  qfalse, qtrue, w->fontWidth, w->fontHeight, 0);
 			}
 		}
 	}
@@ -332,44 +386,57 @@ void CG_windowDraw( void ) {
 	CG_demoAviFPSDraw();
 	CG_demoTimescaleDraw();
 
-	if ( fCleanup ) {
+	if (fCleanup)
+	{
 		CG_windowCleanup();
 	}
 }
 
 
 // Set the window width and height based on the windows text/font parameters
-void CG_windowNormalizeOnText( cg_window_t *w ) {
+void CG_windowNormalizeOnText(cg_window_t *w)
+{
 	int i, tmp;
 
-	if ( w == NULL ) {
+	if (w == NULL)
+	{
 		return;
 	}
 
 	w->w = 0;
 	w->h = 0;
 
-	if ( !( w->effects & WFX_TRUETYPE ) ) {
-		w->fontWidth = w->fontScaleX * WINDOW_FONTWIDTH;
+	if (!(w->effects & WFX_TRUETYPE))
+	{
+		w->fontWidth  = w->fontScaleX * WINDOW_FONTWIDTH;
 		w->fontHeight = w->fontScaleY * WINDOW_FONTHEIGHT;
 	}
 
-	for ( i = 0; i < w->lineCount; i++ ) {
-		if ( w->effects & WFX_TRUETYPE ) {
-			tmp = CG_Text_Width_Ext( (char*)w->lineText[i], w->fontScaleX, 0, &cgs.media.limboFont2 );
-		} else {
-			tmp = CG_DrawStrlen( (char*)w->lineText[i] ) * w->fontWidth;
+	for (i = 0; i < w->lineCount; i++)
+	{
+		if (w->effects & WFX_TRUETYPE)
+		{
+			tmp = CG_Text_Width_Ext((char *)w->lineText[i], w->fontScaleX, 0, &cgs.media.limboFont2);
+		}
+		else
+		{
+			tmp = CG_DrawStrlen((char *)w->lineText[i]) * w->fontWidth;
 		}
 
-		if ( tmp > w->w ) {
+		if (tmp > w->w)
+		{
 			w->w = tmp;
 		}
 	}
 
-	for ( i = 0; i < w->lineCount; i++ ) {
-		if ( w->effects & WFX_TRUETYPE ) {
-			w->lineHeight[i] = CG_Text_Height_Ext( (char*)w->lineText[i], w->fontScaleY, 0, &cgs.media.limboFont2 );
-		} else {
+	for (i = 0; i < w->lineCount; i++)
+	{
+		if (w->effects & WFX_TRUETYPE)
+		{
+			w->lineHeight[i] = CG_Text_Height_Ext((char *)w->lineText[i], w->fontScaleY, 0, &cgs.media.limboFont2);
+		}
+		else
+		{
 			w->lineHeight[i] = w->fontHeight;
 		}
 
@@ -381,35 +448,46 @@ void CG_windowNormalizeOnText( cg_window_t *w ) {
 	w->h += 3;
 
 	// Set up bottom alignment
-	if ( w->x < 0 ) {
+	if (w->x < 0)
+	{
 		w->x += 640 - w->w;
 	}
-	if ( w->y < 0 ) {
+	if (w->y < 0)
+	{
 		w->y += 480 - w->h;
 	}
 }
 
 
-void CG_printWindow( char *str ) {
-	int pos = 0, pos2 = 0;
-	char buf[MAX_STRING_CHARS];
+void CG_printWindow(char *str)
+{
+	int         pos = 0, pos2 = 0;
+	char        buf[MAX_STRING_CHARS];
 	cg_window_t *w = cg.windowCurrent;
 
-	if ( w == NULL ) {
+	if (w == NULL)
+	{
 		return;
 	}
 
 	// Silly logic for a strict format
-	Q_strncpyz( buf, str, MAX_STRING_CHARS );
-	while ( buf[pos] > 0 && w->lineCount < MAX_WINDOW_LINES ) {
-		if ( buf[pos] == '\n' ) {
-			if ( pos2 == pos ) {
-				if ( !CG_addString( w, " " ) ) {
+	Q_strncpyz(buf, str, MAX_STRING_CHARS);
+	while (buf[pos] > 0 && w->lineCount < MAX_WINDOW_LINES)
+	{
+		if (buf[pos] == '\n')
+		{
+			if (pos2 == pos)
+			{
+				if (!CG_addString(w, " "))
+				{
 					return;
 				}
-			} else {
+			}
+			else
+			{
 				buf[pos] = 0;
-				if ( !CG_addString( w, buf + pos2 ) ) {
+				if (!CG_addString(w, buf + pos2))
+				{
 					return;
 				}
 			}
@@ -419,8 +497,9 @@ void CG_printWindow( char *str ) {
 		pos++;
 	}
 
-	if ( pos2 < pos ) {
-		CG_addString( w, buf + pos2 );
+	if (pos2 < pos)
+	{
+		CG_addString(w, buf + pos2);
 	}
 }
 
@@ -429,63 +508,77 @@ void CG_printWindow( char *str ) {
 //
 // String buffer handling
 //
-void CG_initStrings( void ) {
+void CG_initStrings(void)
+{
 	int i;
 
-	for ( i = 0; i < MAX_STRINGS; i++ ) {
+	for (i = 0; i < MAX_STRINGS; i++)
+	{
 		cg.aStringPool[i].fActive = qfalse;
-		cg.aStringPool[i].str[0] = 0;
+		cg.aStringPool[i].str[0]  = 0;
 	}
 }
 
-qboolean CG_addString( cg_window_t *w, char *buf ) {
+qboolean CG_addString(cg_window_t *w, char *buf)
+{
 	int i;
 
 	// Check if we're reusing the current buf
-	if ( w->lineText[w->lineCount] != NULL ) {
-		for ( i = 0; i < MAX_STRINGS; i++ ) {
-			if ( !cg.aStringPool[i].fActive ) {
+	if (w->lineText[w->lineCount] != NULL)
+	{
+		for (i = 0; i < MAX_STRINGS; i++)
+		{
+			if (!cg.aStringPool[i].fActive)
+			{
 				continue;
 			}
 
-			if ( w->lineText[w->lineCount] == (char *)&cg.aStringPool[i].str ) {
+			if (w->lineText[w->lineCount] == (char *)&cg.aStringPool[i].str)
+			{
 				w->lineCount++;
 				cg.aStringPool[i].fActive = qtrue;
-				strcpy( cg.aStringPool[i].str, buf );
+				strcpy(cg.aStringPool[i].str, buf);
 
-				return( qtrue );
+				return(qtrue);
 			}
 		}
 	}
 
-	for ( i = 0; i < MAX_STRINGS; i++ ) {
-		if ( !cg.aStringPool[i].fActive ) {
+	for (i = 0; i < MAX_STRINGS; i++)
+	{
+		if (!cg.aStringPool[i].fActive)
+		{
 			cg.aStringPool[i].fActive = qtrue;
-			strcpy( cg.aStringPool[i].str, buf );
+			strcpy(cg.aStringPool[i].str, buf);
 			w->lineText[w->lineCount++] = (char *)&cg.aStringPool[i].str;
 
-			return( qtrue );
+			return(qtrue);
 		}
 	}
 
-	return( qfalse );
+	return(qfalse);
 }
 
-void CG_removeStrings( cg_window_t *w ) {
+void CG_removeStrings(cg_window_t *w)
+{
 	int i, j;
 
-	for ( i = 0; i < w->lineCount; i++ ) {
+	for (i = 0; i < w->lineCount; i++)
+	{
 		char *ref = w->lineText[i];
 
-		for ( j = 0; j < MAX_STRINGS; j++ ) {
-			if ( !cg.aStringPool[j].fActive ) {
+		for (j = 0; j < MAX_STRINGS; j++)
+		{
+			if (!cg.aStringPool[j].fActive)
+			{
 				continue;
 			}
 
-			if ( ref == (char *)&cg.aStringPool[j].str ) {
-				w->lineText[i] = NULL;
+			if (ref == (char *)&cg.aStringPool[j].str)
+			{
+				w->lineText[i]            = NULL;
 				cg.aStringPool[j].fActive = qfalse;
-				cg.aStringPool[j].str[0] = 0;
+				cg.aStringPool[j].str[0]  = 0;
 
 				break;
 			}

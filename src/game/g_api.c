@@ -5,31 +5,33 @@
  * Global handles
  */
 #if defined _WIN32
-	typedef int (*API_query_t)(char *, char *, char *, int);
-	API_query_t API_query;
-	typedef int (*API_init_t)(void);
-	API_init_t API_init;
-	typedef void (*API_clean_t)(void);
-	API_clean_t API_clean;
-	HMODULE api_module;
+typedef int (*API_query_t)(char *, char *, char *, int);
+API_query_t API_query;
+typedef int (*API_init_t)(void);
+API_init_t API_init;
+typedef void (*API_clean_t)(void);
+API_clean_t API_clean;
+HMODULE     api_module;
 # else
-	void *api_module;
-	int (*API_query)(char *, char *, char *, int);
-	int (*API_init)(void);
-	void (*API_clean)(void);
+void *api_module;
+int  (*API_query)(char *, char *, char *, int);
+int  (*API_init)(void);
+void (*API_clean)(void);
 # endif
 
 /**
  * Module loading
  */
-static qboolean loadModule() {
+static qboolean loadModule()
+{
 #if defined _WIN32
 	api_module = LoadLibraryA(g_APImodulePath.string);
 #else
 	api_module = dlopen(g_APImodulePath.string, RTLD_LAZY);
 #endif
-	
-	if (api_module == NULL) {
+
+	if (api_module == NULL)
+	{
 		return qfalse;
 	}
 	return qtrue;
@@ -38,18 +40,20 @@ static qboolean loadModule() {
 /**
  * Module interface linking
  */
-static qboolean loadAPISymbols() {
+static qboolean loadAPISymbols()
+{
 #if defined _WIN32
 	API_query = (API_query_t)GetProcAddress(api_module, API_INTERFACE_NAME);
-	API_init = (API_init_t)GetProcAddress(api_module, API_INIT_NAME);
+	API_init  = (API_init_t)GetProcAddress(api_module, API_INIT_NAME);
 	API_clean = (API_clean_t)GetProcAddress(api_module, API_CLEAN_NAME);
 #else
 	*(void **) (&API_query) = dlsym(api_module, API_INTERFACE_NAME);
-	*(void **) (&API_init) = dlsym(api_module, API_INIT_NAME);
+	*(void **) (&API_init)  = dlsym(api_module, API_INIT_NAME);
 	*(void **) (&API_clean) = dlsym(api_module, API_CLEAN_NAME);
 #endif
-	
-	if (API_query == NULL || API_init == NULL || API_clean == NULL) {
+
+	if (API_query == NULL || API_init == NULL || API_clean == NULL)
+	{
 		return qfalse;
 	}
 	return qtrue;
@@ -58,25 +62,26 @@ static qboolean loadAPISymbols() {
 /**
  * Error printing
  */
-static void printError() {
+static void printError()
+{
 #if defined _WIN32
-    LPVOID error;
+	LPVOID error;
 
-    DWORD dw = GetLastError(); 
+	DWORD dw = GetLastError();
 
-    FormatMessage(
-        FORMAT_MESSAGE_ALLOCATE_BUFFER | 
-        FORMAT_MESSAGE_FROM_SYSTEM |
-        FORMAT_MESSAGE_IGNORE_INSERTS,
-        NULL,
-        dw,
-        MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-        (LPTSTR) &error,
-        0, NULL );
+	FormatMessage(
+	    FORMAT_MESSAGE_ALLOCATE_BUFFER |
+	    FORMAT_MESSAGE_FROM_SYSTEM |
+	    FORMAT_MESSAGE_IGNORE_INSERTS,
+	    NULL,
+	    dw,
+	    MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+	    (LPTSTR) &error,
+	    0, NULL);
 
 	G_Printf("Error: %s\n", error);
 
-    LocalFree(error);
+	LocalFree(error);
 #else
 	G_Printf("Error: %s\n", dlerror());
 #endif
@@ -85,43 +90,52 @@ static void printError() {
 /**
  * Function used to print large buffers (> 1022) to client
  */
-static void clientBigDataPrint(gentity_t *ent, char *data) {
-	int len = 0;
-	char buf[1000] = {0};
-	int count = 0;
+static void clientBigDataPrint(gentity_t *ent, char *data)
+{
+	int  len       = 0;
+	char buf[1000] = { 0 };
+	int  count     = 0;
 
 	len = strlen(data);
 
-	while (count < len) {
-		Q_strncpyz(buf, data + count * sizeof (char), sizeof (buf) + 1);
-		count += sizeof (buf);
+	while (count < len)
+	{
+		Q_strncpyz(buf, data + count * sizeof(char), sizeof(buf) + 1);
+		count += sizeof(buf);
 		CP(va("print \"%s\"", buf));
 	}
 }
 
-static char from_hex(char ch) {
-  return isdigit(ch) ? ch - '0' : tolower(ch) - 'A' + 10;
+static char from_hex(char ch)
+{
+	return isdigit(ch) ? ch - '0' : tolower(ch) - 'A' + 10;
 }
 
-static char to_hex(char code) {
-  char hex[] = "0123456789ABCDEF";
-  return hex[code & 15];
+static char to_hex(char code)
+{
+	char hex[] = "0123456789ABCDEF";
+	return hex[code & 15];
 }
 
 /**
  * Function used to encode an url
  */
-void url_encode(char *str, char *dst) {
+void url_encode(char *str, char *dst)
+{
 	char *pstr = str;
-	int i = 0;
+	int  i     = 0;
 
-	while (*pstr) {
-		if (isalnum(*pstr) || *pstr == '-' || *pstr == '_' || *pstr == '.' || *pstr == '~') {
+	while (*pstr)
+	{
+		if (isalnum(*pstr) || *pstr == '-' || *pstr == '_' || *pstr == '.' || *pstr == '~')
+		{
 			dst[i] = *pstr;
-		} else {
+		}
+		else
+		{
 			dst[i++] = '%';
 			dst[i++] = to_hex(*pstr >> 4);
-			dst[i] = to_hex(*pstr & 15);
+			dst[i]   = to_hex(*pstr & 15);
 		}
 		pstr++;
 		i++;
@@ -132,15 +146,20 @@ void url_encode(char *str, char *dst) {
 /**
  * Function used to decode an url
  */
-void url_decode(char *str, char *dst) {
+void url_decode(char *str, char *dst)
+{
 	char *pstr = str;
-	int i = 0;
+	int  i     = 0;
 
-	while (*pstr) {
-		if (*pstr == '%' && pstr[1] && pstr[2]) {
+	while (*pstr)
+	{
+		if (*pstr == '%' && pstr[1] && pstr[2])
+		{
 			dst[i] = from_hex(pstr[1]) << 4 | from_hex(pstr[2]);
-			pstr += 2;
-		} else {
+			pstr  += 2;
+		}
+		else
+		{
 			dst[i] = *pstr;
 		}
 		pstr++;
@@ -152,15 +171,19 @@ void url_decode(char *str, char *dst) {
 /**
  * Check for errors in API string result
  */
-static qboolean checkAPIResult(char *result) {
-	if (!result) {
+static qboolean checkAPIResult(char *result)
+{
+	if (!result)
+	{
 		return qfalse;
 	}
 
-	if (!Q_stricmp(result, "timemout")) {
+	if (!Q_stricmp(result, "timemout"))
+	{
 		return qfalse;
 	}
-	if (!Q_stricmp(result, "error")) {
+	if (!Q_stricmp(result, "error"))
+	{
 		return qfalse;
 	}
 	return qtrue;
@@ -169,24 +192,30 @@ static qboolean checkAPIResult(char *result) {
 /**
  * Log (and print) an API message
  */
-void APILog(const char *s, qboolean printIt) {
-	char string[1024] = {0};
-	const char *aMonths[12] = {
+void APILog(const char *s, qboolean printIt)
+{
+	char       string[1024] = { 0 };
+	const char *aMonths[12] =
+	{
 		"Jan", "Feb", "Mar", "Apr", "May", "Jun",
 		"Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
 	};
 	qtime_t ct;
 	trap_RealTime(&ct);
 
-	if (printIt) {
+	if (printIt)
+	{
 		G_Printf("%s", s);
 	}
 
-	Com_sprintf(string, sizeof (string), "[%s%02d-%02d %02d:%02d:%02d] %s", aMonths[ct.tm_mon], ct.tm_mday, 1900 + ct.tm_year, ct.tm_hour, ct.tm_min, ct.tm_sec, s);
+	Com_sprintf(string, sizeof(string), "[%s%02d-%02d %02d:%02d:%02d] %s", aMonths[ct.tm_mon], ct.tm_mday, 1900 + ct.tm_year, ct.tm_hour, ct.tm_min, ct.tm_sec, s);
 
-	if (level.APILog) {
+	if (level.APILog)
+	{
 		trap_FS_Write(string, strlen(string), level.APILog);
-	} else {
+	}
+	else
+	{
 		G_Printf("APILog: error while logging\n");
 	}
 }
@@ -194,23 +223,26 @@ void APILog(const char *s, qboolean printIt) {
 /**
  * Login handler
  */
-static void *loginHandler(void *data) {
-	int code = -1;
-	int len = 0;
-	gentity_t *ent = NULL;
+static void *loginHandler(void *data)
+{
+	int            code         = -1;
+	int            len          = 0;
+	gentity_t      *ent         = NULL;
 	struct query_s *queryStruct = NULL;
 
 	queryStruct = (struct query_s *)data;
-	ent = queryStruct->ent;
+	ent         = queryStruct->ent;
 
-	code = API_query(queryStruct->cmd, queryStruct->result, queryStruct->query, sizeof (queryStruct->query));
+	code = API_query(queryStruct->cmd, queryStruct->result, queryStruct->query, sizeof(queryStruct->query));
 
 	len = strlen(queryStruct->result);
 
 	APILog(va("Login: code = %d, result = %s\n", code, queryStruct->result), qfalse);
 
-	if (code == 0) {
-		if (len > 0 && ent && ent->client) {
+	if (code == 0)
+	{
+		if (len > 0 && ent && ent->client)
+		{
 			ent->client->sess.logged = qtrue;
 			CP(va("print \"%s^w: you are now logged in!\n\"", GAME_VERSION_COLORED));
 			ClientUserinfoChanged(ent->client->ps.clientNum);
@@ -220,10 +252,14 @@ static void *loginHandler(void *data) {
 
 			// Start recording a new temp demo.
 			trap_SendServerCommand(ent - g_entities, "tempDemoStart");
-		} else {
+		}
+		else
+		{
 			CP(va("print \"%s^w: login failed!\n\"", GAME_VERSION_COLORED));
 		}
-	} else {
+	}
+	else
+	{
 		CP(va("print \"%s^w: login failed!\n\"", GAME_VERSION_COLORED));
 	}
 
@@ -240,8 +276,9 @@ static void *loginHandler(void *data) {
 /**
  * Login request command
  */
-void G_API_login(char *result, gentity_t *ent, char *authToken) {
-	char net_port[8] = {0};
+void G_API_login(char *result, gentity_t *ent, char *authToken)
+{
+	char net_port[8] = { 0 };
 
 	sprintf(net_port, "%d", trap_Cvar_VariableIntegerValue("net_port"));
 
@@ -253,21 +290,25 @@ void G_API_login(char *result, gentity_t *ent, char *authToken) {
 /**
  * Map records handler
  */
-static void *mapRecordsHandler(void *data) {
-	int code = -1;
-	gentity_t *ent = NULL;
+static void *mapRecordsHandler(void *data)
+{
+	int            code         = -1;
+	gentity_t      *ent         = NULL;
 	struct query_s *queryStruct = NULL;
 
 	queryStruct = (struct query_s *)data;
-	ent = queryStruct->ent;
+	ent         = queryStruct->ent;
 
-	code = API_query(queryStruct->cmd, queryStruct->result, queryStruct->query, sizeof (queryStruct->query));
+	code = API_query(queryStruct->cmd, queryStruct->result, queryStruct->query, sizeof(queryStruct->query));
 
 	APILog(va("mapRecords: code = %d\n", code), qfalse);
 
-	if (code == 0) {
+	if (code == 0)
+	{
 		clientBigDataPrint(ent, queryStruct->result);
-	} else {
+	}
+	else
+	{
 		CP(va("print \"^1> ^wError while requesting records\n\""));
 	}
 
@@ -284,10 +325,11 @@ static void *mapRecordsHandler(void *data) {
 /**
  * Map records request command
  */
-void G_API_mapRecords(char *result, gentity_t *ent, char *mapName) {
-	char net_port[8] = {0};
-	char cphysics[8] = {0};
-	char encodedMapName[255] = {0};
+void G_API_mapRecords(char *result, gentity_t *ent, char *mapName)
+{
+	char net_port[8]         = { 0 };
+	char cphysics[8]         = { 0 };
+	char encodedMapName[255] = { 0 };
 
 	sprintf(net_port, "%d", trap_Cvar_VariableIntegerValue("net_port"));
 	sprintf(cphysics, "%d", physics.integer);
@@ -302,19 +344,23 @@ void G_API_mapRecords(char *result, gentity_t *ent, char *mapName) {
 /**
  * Check API handler
  */
-static void *checkAPIHandler(void *data) {
-	int code = -1;
+static void *checkAPIHandler(void *data)
+{
+	int            code         = -1;
 	struct query_s *queryStruct = NULL;
 
 	queryStruct = (struct query_s *)data;
 
-	code = API_query(queryStruct->cmd, queryStruct->result, queryStruct->query, sizeof (queryStruct->query));
+	code = API_query(queryStruct->cmd, queryStruct->result, queryStruct->query, sizeof(queryStruct->query));
 
 	APILog(va("checkAPI: code = %d, result = %s\n", code, queryStruct->result), qfalse);
 
-	if (code == 0) {
+	if (code == 0)
+	{
 		G_Printf("%s: %s\n", GAME_VERSION, queryStruct->result);
-	} else {
+	}
+	else
+	{
 		G_Printf("%s: failed to check API (code: %d, result: %s)\n", GAME_VERSION, code, queryStruct->result);
 
 		// Nico, disable use of API
@@ -334,9 +380,10 @@ static void *checkAPIHandler(void *data) {
 /**
  * Check API command
  */
-void G_API_check(char *result, gentity_t *ent) {
-	char net_port[8] = {0};
-	char cphysics[8] = {0};
+void G_API_check(char *result, gentity_t *ent)
+{
+	char net_port[8] = { 0 };
+	char cphysics[8] = { 0 };
 
 	sprintf(net_port, "%d", trap_Cvar_VariableIntegerValue("net_port"));
 	sprintf(cphysics, "%d", physics.integer);
@@ -349,55 +396,61 @@ void G_API_check(char *result, gentity_t *ent) {
 /**
  * Record handler
  */
-static void *recordHandler(void *data) {
-	int code = -1;
+static void *recordHandler(void *data)
+{
+	int            code         = -1;
 	struct query_s *queryStruct = NULL;
-	gentity_t *ent = NULL;
-	int timerunNum = 0;
+	gentity_t      *ent         = NULL;
+	int            timerunNum   = 0;
 
 	queryStruct = (struct query_s *)data;
-	ent = queryStruct->ent;
+	ent         = queryStruct->ent;
 
-	code = API_query(queryStruct->cmd, queryStruct->result, queryStruct->query, sizeof (queryStruct->query));
+	code = API_query(queryStruct->cmd, queryStruct->result, queryStruct->query, sizeof(queryStruct->query));
 
 	APILog(va("Record: code = %d, result = %s\n", code, queryStruct->result), qfalse);
 
 	timerunNum = ent->client->sess.currentTimerunNum;
 
-	switch (code) {
+	switch (code)
+	{
 	case 1001: // PB
-		if (ent->client->sess.timerunCheckpointWereLoaded[timerunNum]) {
-			memcpy(ent->client->sess.timerunBestCheckpointTimes[timerunNum], ent->client->sess.timerunCheckpointTimes, sizeof (ent->client->sess.timerunCheckpointTimes));
+		if (ent->client->sess.timerunCheckpointWereLoaded[timerunNum])
+		{
+			memcpy(ent->client->sess.timerunBestCheckpointTimes[timerunNum], ent->client->sess.timerunCheckpointTimes, sizeof(ent->client->sess.timerunCheckpointTimes));
 		}
 		AP(va("print \"%s: ^w%s\n\"", GAME_VERSION_COLORED, queryStruct->result));
 		break;
 
-	case 1002:// SB
-		if (ent->client->sess.timerunCheckpointWereLoaded[timerunNum]) {
-			memcpy(ent->client->sess.timerunBestCheckpointTimes[timerunNum], ent->client->sess.timerunCheckpointTimes, sizeof (ent->client->sess.timerunCheckpointTimes));
+	case 1002: // SB
+		if (ent->client->sess.timerunCheckpointWereLoaded[timerunNum])
+		{
+			memcpy(ent->client->sess.timerunBestCheckpointTimes[timerunNum], ent->client->sess.timerunCheckpointTimes, sizeof(ent->client->sess.timerunCheckpointTimes));
 		}
 		AP(va("bp \"^w%s\n\"", queryStruct->result));
 		break;
 
-	case 1003:// SB but player was already rec holder
-		if (ent->client->sess.timerunCheckpointWereLoaded[timerunNum]) {
-			memcpy(ent->client->sess.timerunBestCheckpointTimes[timerunNum], ent->client->sess.timerunCheckpointTimes, sizeof (ent->client->sess.timerunCheckpointTimes));
+	case 1003: // SB but player was already rec holder
+		if (ent->client->sess.timerunCheckpointWereLoaded[timerunNum])
+		{
+			memcpy(ent->client->sess.timerunBestCheckpointTimes[timerunNum], ent->client->sess.timerunCheckpointTimes, sizeof(ent->client->sess.timerunCheckpointTimes));
 		}
 		AP(va("bp \"^w%s\n\"", queryStruct->result));
 		break;
 
-	case 1004:// SB was tied
-		if (ent->client->sess.timerunCheckpointWereLoaded[timerunNum]) {
-			memcpy(ent->client->sess.timerunBestCheckpointTimes[timerunNum], ent->client->sess.timerunCheckpointTimes, sizeof (ent->client->sess.timerunCheckpointTimes));
+	case 1004: // SB was tied
+		if (ent->client->sess.timerunCheckpointWereLoaded[timerunNum])
+		{
+			memcpy(ent->client->sess.timerunBestCheckpointTimes[timerunNum], ent->client->sess.timerunCheckpointTimes, sizeof(ent->client->sess.timerunCheckpointTimes));
 		}
 		AP(va("bp \"^w%s\n\"", queryStruct->result));
 		break;
 
-	case 1005:// Slow time
+	case 1005: // Slow time
 		CP(va("print \"%s: ^w%s\n\"", GAME_VERSION_COLORED, queryStruct->result));
 		break;
 
-	default:// Error
+	default: // Error
 		CP(va("print \"%s: ^wError: %s\n\"", GAME_VERSION_COLORED, queryStruct->result));
 		break;
 	}
@@ -415,11 +468,12 @@ static void *recordHandler(void *data) {
 /**
  * Record send command
  */
-void G_API_sendRecord(char *result, gentity_t *ent, char *mapName, char *runName, 
-					  char *authToken, char *data, char *etrunVersion) {
-	char net_port[8] = {0};
-	char encodedMapName[255] = {0};
-	char encodedRunName[255] = {0};
+void G_API_sendRecord(char *result, gentity_t *ent, char *mapName, char *runName,
+                      char *authToken, char *data, char *etrunVersion)
+{
+	char net_port[8]         = { 0 };
+	char encodedMapName[255] = { 0 };
+	char encodedRunName[255] = { 0 };
 
 	sprintf(net_port, "%d", trap_Cvar_VariableIntegerValue("net_port"));
 
@@ -434,37 +488,41 @@ void G_API_sendRecord(char *result, gentity_t *ent, char *mapName, char *runName
 /**
  * Get checkpoints handler
  */
-static void *checkpointsHandler(void *data) {
-	int code = -1;
+static void *checkpointsHandler(void *data)
+{
+	int            code         = -1;
 	struct query_s *queryStruct = NULL;
-	gentity_t *ent = NULL;
-	char * pch = NULL;
-	int i = 0;
-	int timerunNum = 0;
+	gentity_t      *ent         = NULL;
+	char           *pch         = NULL;
+	int            i            = 0;
+	int            timerunNum   = 0;
 
 	queryStruct = (struct query_s *)data;
-	ent = queryStruct->ent;
+	ent         = queryStruct->ent;
 
-	code = API_query(queryStruct->cmd, queryStruct->result, queryStruct->query, sizeof (queryStruct->query));
+	code = API_query(queryStruct->cmd, queryStruct->result, queryStruct->query, sizeof(queryStruct->query));
 
 	APILog(va("Checkpoints: code = %d, result = %s\n", code, queryStruct->result), qfalse);
 
-	if (code >= 1000) {
+	if (code >= 1000)
+	{
 
 		timerunNum = code - 1000;
 
-		if (queryStruct->result && checkAPIResult(queryStruct->result) && timerunNum >= 0 && timerunNum < MAX_TIMERUNS) {
+		if (queryStruct->result && checkAPIResult(queryStruct->result) && timerunNum >= 0 && timerunNum < MAX_TIMERUNS)
+		{
 			// No error, no timeout
 
 			// Reset client checkpoints
-			memset(ent->client->sess.timerunBestCheckpointTimes[timerunNum], 0, sizeof (ent->client->sess.timerunBestCheckpointTimes[timerunNum]));
+			memset(ent->client->sess.timerunBestCheckpointTimes[timerunNum], 0, sizeof(ent->client->sess.timerunBestCheckpointTimes[timerunNum]));
 			ent->client->sess.timerunCheckpointsPassed = 0;
 
 			// Set new checkpoints
-			pch = strtok (queryStruct->result, "O");
-			while (pch != NULL && i < MAX_TIMERUN_CHECKPOINTS) {
+			pch = strtok(queryStruct->result, "O");
+			while (pch != NULL && i < MAX_TIMERUN_CHECKPOINTS)
+			{
 				ent->client->sess.timerunBestCheckpointTimes[timerunNum][i] = atoi(pch);
-				pch = strtok (NULL, "O");
+				pch                                                         = strtok(NULL, "O");
 				i++;
 			}
 
@@ -472,10 +530,14 @@ static void *checkpointsHandler(void *data) {
 			ent->client->sess.timerunCheckpointWereLoaded[timerunNum] = 1;
 
 			CP(va("print \"^1> ^wCheckpoints loaded for run #%d!\n\"", timerunNum));
-		} else {
+		}
+		else
+		{
 			CP(va("print \"^1> ^wError while loading checkpoints!\n\""));
 		}
-	} else {
+	}
+	else
+	{
 		CP(va("print \"^1> ^wError while loading checkpoints!\n\""));
 	}
 
@@ -492,12 +554,13 @@ static void *checkpointsHandler(void *data) {
 /**
  * Checkpoints request command
  */
-void G_API_getPlayerCheckpoints(char *result, gentity_t *ent, char *mapName, char *runName, int runNum, char *authToken) {
-	char net_port[8] = {0};
-	char bufferRunNum[8] = {0};
-	char encodedMapName[255] = {0};
-	char encodedRunName[255] = {0};
-	char cphysics[8] = {0};
+void G_API_getPlayerCheckpoints(char *result, gentity_t *ent, char *mapName, char *runName, int runNum, char *authToken)
+{
+	char net_port[8]         = { 0 };
+	char bufferRunNum[8]     = { 0 };
+	char encodedMapName[255] = { 0 };
+	char encodedRunName[255] = { 0 };
+	char cphysics[8]         = { 0 };
 
 	sprintf(net_port, "%d", trap_Cvar_VariableIntegerValue("net_port"));
 	sprintf(bufferRunNum, "%d", runNum);
@@ -514,21 +577,23 @@ void G_API_getPlayerCheckpoints(char *result, gentity_t *ent, char *mapName, cha
 /**
  * Random map handler
  */
-static void *randommapHandler(void *data) {
-	int code = -1;
-	struct query_s *queryStruct = NULL;
-	gentity_t *ent = NULL;
-	char mapfile[MAX_QPATH] = {0};
-	fileHandle_t f;
+static void *randommapHandler(void *data)
+{
+	int            code               = -1;
+	struct query_s *queryStruct       = NULL;
+	gentity_t      *ent               = NULL;
+	char           mapfile[MAX_QPATH] = { 0 };
+	fileHandle_t   f;
 
 	queryStruct = (struct query_s *)data;
-	ent = queryStruct->ent;
+	ent         = queryStruct->ent;
 
-	code = API_query(queryStruct->cmd, queryStruct->result, queryStruct->query, sizeof (queryStruct->query));
+	code = API_query(queryStruct->cmd, queryStruct->result, queryStruct->query, sizeof(queryStruct->query));
 
 	APILog(va("Randommap: code = %d, result = %s\n", code, queryStruct->result), qfalse);
 
-	if (code == 0 && queryStruct->result && checkAPIResult(queryStruct->result)) {
+	if (code == 0 && queryStruct->result && checkAPIResult(queryStruct->result))
+	{
 
 		Com_sprintf(mapfile, sizeof(mapfile), "maps/%s.bsp", queryStruct->result);
 
@@ -536,13 +601,18 @@ static void *randommapHandler(void *data) {
 
 		trap_FS_FCloseFile(f);
 
-		if (!f) {
+		if (!f)
+		{
 			AP(va("print \"^1Error:^7 the map ^3%s^7 is not on the server.\n\"", queryStruct->result));
-		} else {
+		}
+		else
+		{
 			// Nico, delay the map change
 			G_delay_map_change(queryStruct->result);
 		}
-	} else {
+	}
+	else
+	{
 		CP(va("print \"^1> ^wError while getting a random map!\n\""));
 	}
 
@@ -559,10 +629,11 @@ static void *randommapHandler(void *data) {
 /**
  * Checkpoints request command
  */
-void G_API_randommap(char *result, gentity_t *ent, char *mapName) {
-	char net_port[8] = {0};
-	char encodedMapName[255] = {0};
-	char cphysics[8] = {0};
+void G_API_randommap(char *result, gentity_t *ent, char *mapName)
+{
+	char net_port[8]         = { 0 };
+	char encodedMapName[255] = { 0 };
+	char cphysics[8]         = { 0 };
 
 	sprintf(net_port, "%d", trap_Cvar_VariableIntegerValue("net_port"));
 	sprintf(cphysics, "%d", physics.integer);
@@ -577,21 +648,25 @@ void G_API_randommap(char *result, gentity_t *ent, char *mapName) {
 /**
  * Map rank command handler
  */
-static void *mapRankHandler(void *data) {
-	int code = -1;
-	gentity_t *ent = NULL;
+static void *mapRankHandler(void *data)
+{
+	int            code         = -1;
+	gentity_t      *ent         = NULL;
 	struct query_s *queryStruct = NULL;
 
 	queryStruct = (struct query_s *)data;
-	ent = queryStruct->ent;
+	ent         = queryStruct->ent;
 
-	code = API_query(queryStruct->cmd, queryStruct->result, queryStruct->query, sizeof (queryStruct->query));
+	code = API_query(queryStruct->cmd, queryStruct->result, queryStruct->query, sizeof(queryStruct->query));
 
 	APILog(va("mapRank: code = %d\n", code), qfalse);
 
-	if (code == 0) {
+	if (code == 0)
+	{
 		clientBigDataPrint(ent, queryStruct->result);
-	} else {
+	}
+	else
+	{
 		CP(va("print \"^1> ^wError while requesting rank\n\""));
 	}
 
@@ -608,13 +683,14 @@ static void *mapRankHandler(void *data) {
 /**
  * Map rank request command
  */
-void G_API_mapRank(char *result, gentity_t *ent, char *mapName, char *optUserName, char *optMapName, char *optRunName, char *optPhysicsName, char *authToken) {
-	char net_port[8] = {0};
-	char cphysics[8] = {0};
-	char encodedMapName[255] = {0};
-	char encodedOptUserName[255] = {0};
-	char encodedOptMapName[255] = {0};
-	char encodedOptRunName[255] = {0};
+void G_API_mapRank(char *result, gentity_t *ent, char *mapName, char *optUserName, char *optMapName, char *optRunName, char *optPhysicsName, char *authToken)
+{
+	char net_port[8]             = { 0 };
+	char cphysics[8]             = { 0 };
+	char encodedMapName[255]     = { 0 };
+	char encodedOptUserName[255] = { 0 };
+	char encodedOptMapName[255]  = { 0 };
+	char encodedOptRunName[255]  = { 0 };
 
 	sprintf(net_port, "%d", trap_Cvar_VariableIntegerValue("net_port"));
 	sprintf(cphysics, "%d", physics.integer);
@@ -630,30 +706,35 @@ void G_API_mapRank(char *result, gentity_t *ent, char *mapName, char *optUserNam
 }
 
 // Commands handler binding
-static const api_glue_t APICommands[] = {
-	{ "l",	loginHandler },
-	{ "m",	mapRecordsHandler },
-	{ "c", 	checkAPIHandler },
-	{ "d",	recordHandler },
-	{ "e",	checkpointsHandler },
-	{ "f",	randommapHandler },
-	{ "r",	mapRankHandler }
+static const api_glue_t APICommands[] =
+{
+	{ "l", loginHandler       },
+	{ "m", mapRecordsHandler  },
+	{ "c", checkAPIHandler    },
+	{ "d", recordHandler      },
+	{ "e", checkpointsHandler },
+	{ "f", randommapHandler   },
+	{ "r", mapRankHandler     }
 };
 
 /**
  * Takes a command string as argument and returns the associated handler if any, NULL otherwise
  */
-static handler_t getHandlerForCommand(char *cmd) {
-	unsigned int i, cCommands = sizeof (APICommands) / sizeof (APICommands[0]);
+static handler_t getHandlerForCommand(char *cmd)
+{
+	unsigned int     i, cCommands = sizeof(APICommands) / sizeof(APICommands[0]);
 	const api_glue_t *element;
 
-	if (!cmd) {
+	if (!cmd)
+	{
 		return NULL;
 	}
 
-	for (i = 0; i < cCommands; ++i) {
+	for (i = 0; i < cCommands; ++i)
+	{
 		element = &APICommands[i];
-		if ( element && element->cmd && !Q_stricmp(cmd, element->cmd)) {
+		if (element && element->cmd && !Q_stricmp(cmd, element->cmd))
+		{
 			return element->handler;
 		}
 	}
@@ -668,61 +749,70 @@ static handler_t getHandlerForCommand(char *cmd) {
  * ent: entity who made the request
  * count: number of variadic arguments
  */
-void G_callAPI(char *command, char *result, gentity_t *ent, int count, ...) {
+void G_callAPI(char *command, char *result, gentity_t *ent, int count, ...)
+{
 	struct query_s *queryStruct;
-	pthread_t thread;
+	pthread_t      thread;
 	pthread_attr_t attr;
-	int returnCode = 0;
-	void *(*handler)(void *) = NULL;
-	va_list ap;
-	int i = 0;
-	char *arg = NULL;
+	int            returnCode = 0;
+	void           *(*handler)(void *) = NULL;
+	va_list        ap;
+	int            i    = 0;
+	char           *arg = NULL;
 
-	if (api_module == NULL || API_query == NULL) {
+	if (api_module == NULL || API_query == NULL)
+	{
 		G_Error("G_callAPI: API module is not loaded.");
 	}
 
-	queryStruct = malloc(sizeof (struct query_s));
+	queryStruct = malloc(sizeof(struct query_s));
 
-	if (queryStruct == NULL) {
+	if (queryStruct == NULL)
+	{
 		G_Error("G_callAPI: malloc failed\n");
 	}
 
-	if (count > 0) {
-		va_start (ap, count);
+	if (count > 0)
+	{
+		va_start(ap, count);
 	}
 
 	// Init query buffer
 	memset(queryStruct->query, 0, QUERY_MAX_SIZE);
 
-	for (i = 0; i < count; ++i) {
-		arg = va_arg (ap, char*);
+	for (i = 0; i < count; ++i)
+	{
+		arg = va_arg(ap, char *);
 
-		if (!arg) {
+		if (!arg)
+		{
 			G_Error("G_callAPI: empty arg %d\n", i);
 		}
 		// G_Printf("arg : %s\n", arg);
-	
+
 		Q_strcat(queryStruct->query, QUERY_MAX_SIZE, arg);
 
 		// No trailing /
-		if (i + 1 < count) {
+		if (i + 1 < count)
+		{
 			Q_strcat(queryStruct->query, QUERY_MAX_SIZE, CHAR_SEPARATOR);
 		}
 	}
-	Q_strncpyz(queryStruct->cmd, command, sizeof (queryStruct->cmd));
+	Q_strncpyz(queryStruct->cmd, command, sizeof(queryStruct->cmd));
 	queryStruct->result = result;
-	queryStruct->ent = ent;
+	queryStruct->ent    = ent;
 
 	// Get the command handler
 	handler = getHandlerForCommand(command);
 
-	if (!handler) {
+	if (!handler)
+	{
 		G_Error("G_callAPI: no handler for command: %s\n", command);
 	}
 
 	// Check if thread limit is reached
-	if (activeThreadsCounter >= THREADS_MAX) {
+	if (activeThreadsCounter >= THREADS_MAX)
+	{
 		G_Error("G_callAPI: threads limit (%d) reached: %d\n", THREADS_MAX, activeThreadsCounter);
 	}
 
@@ -730,64 +820,79 @@ void G_callAPI(char *command, char *result, gentity_t *ent, int count, ...) {
 	G_LogPrintf("Calling API with command: %s, query: %s\n", command, queryStruct->query);
 
 	// Create threads as detached as they will never be joined
-	if (pthread_attr_init(&attr)) {
+	if (pthread_attr_init(&attr))
+	{
 		G_Error("G_callAPI: error in pthread_attr_init\n");
 	}
-	if (pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED)) {
+	if (pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED))
+	{
 		G_Error("G_callAPI: error in pthread_attr_setdetachstate\n");
 	}
 
 	returnCode = pthread_create(&thread, &attr, handler, (void *)queryStruct);
 
-	if (returnCode) {
+	if (returnCode)
+	{
 		G_Error("G_callAPI: error in pthread_create: %d\n", returnCode);
-	} else {
+	}
+	else
+	{
 		// Nico, increase active threads counter
 		activeThreadsCounter++;
 		G_DPrintf("Increasing threads counter to %d\n", activeThreadsCounter);
 	}
 
-	if (pthread_attr_destroy(&attr)) {
+	if (pthread_attr_destroy(&attr))
+	{
 		G_Error("G_callAPI: error in pthread_attr_destroy\n");
 	}
 
-	if (count > 0) {
-		va_end (ap);
+	if (count > 0)
+	{
+		va_end(ap);
 	}
 }
 
-void G_loadAPI() {
+void G_loadAPI()
+{
 
 	// Load the module
-	if (!loadModule()) {
+	if (!loadModule())
+	{
 		printError();
 		G_Error("Error loading %s\n", g_APImodulePath.string);
 	}
 
-	// Load the APIquery function 
-	if (!loadAPISymbols()) {
+	// Load the APIquery function
+	if (!loadAPISymbols())
+	{
 		printError();
 		G_Error("Error loading symbols from %s\n", g_APImodulePath.string);
 	}
 
-	if (API_init() != 0) {
+	if (API_init() != 0)
+	{
 		G_Error("Error calling API_init()");
 	}
 
 	G_Printf("ETrun: API module loaded!\n");
 }
 
-void G_unloadAPI() {
-	if (api_module == NULL) {
+void G_unloadAPI()
+{
+	if (api_module == NULL)
+	{
 		G_DPrintf("G_callAPI: API module is not loaded.\n");
-	} else {
+	}
+	else
+	{
 
-	API_clean();
+		API_clean();
 
 #if defined _WIN32
-	FreeLibrary(api_module);
+		FreeLibrary(api_module);
 #else
-	dlclose(api_module);
+		dlclose(api_module);
 #endif
 
 		G_Printf("ETrun: API module unloaded!\n");

@@ -2,9 +2,9 @@
 ===========================================================================
 
 Wolfenstein: Enemy Territory GPL Source Code
-Copyright (C) 1999-2010 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2010 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Wolfenstein: Enemy Territory GPL Source Code (Wolf ET Source Code).  
+This file is part of the Wolfenstein: Enemy Territory GPL Source Code (Wolf ET Source Code).
 
 Wolf ET Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -28,7 +28,8 @@ If you have questions concerning this license or the applicable additional terms
 
 #include "g_local.h"
 
-const char* systemMessages[SM_NUM_SYS_MSGS] = {
+const char *systemMessages[SM_NUM_SYS_MSGS] =
+{
 	"SYS_NeedMedic",
 	"SYS_NeedEngineer",
 	"SYS_NeedLT",
@@ -42,11 +43,14 @@ const char* systemMessages[SM_NUM_SYS_MSGS] = {
 	"SYS_Destroyed",
 };
 
-int G_GetSysMessageNumber( const char* sysMsg ) {
+int G_GetSysMessageNumber(const char *sysMsg)
+{
 	int i;
 
-	for ( i = 0; i < SM_NUM_SYS_MSGS; i++ ) {
-		if ( !Q_stricmp( systemMessages[i], sysMsg ) ) {
+	for (i = 0; i < SM_NUM_SYS_MSGS; i++)
+	{
+		if (!Q_stricmp(systemMessages[i], sysMsg))
+		{
 			return i;
 		}
 	}
@@ -54,31 +58,35 @@ int G_GetSysMessageNumber( const char* sysMsg ) {
 	return -1;
 }
 
-void G_SendSystemMessage( sysMsg_t message, int team ) {
-	gentity_t* other;
-	int *time;
-	int j;
+void G_SendSystemMessage(sysMsg_t message, int team)
+{
+	gentity_t *other;
+	int       *time;
+	int       j;
 
 	time = team == TEAM_AXIS ? &level.lastSystemMsgTime[0] : &level.lastSystemMsgTime[1];
 
-	if ( *time && ( level.time - *time ) < 15000 ) {
+	if (*time && (level.time - *time) < 15000)
+	{
 		return;
 	}
 
 	*time = level.time;
 
-	for ( j = 0; j < level.maxclients; j++ ) {
+	for (j = 0; j < level.maxclients; j++)
+	{
 		other = &g_entities[j];
 
-		if ( !other->client || !other->inuse ) {
+		if (!other->client || !other->inuse)
+		{
 			continue;
 		}
 
-		if ( other->client->sess.sessionTeam != team ) {
+		if ((int)other->client->sess.sessionTeam != team)
+		{
 			continue;
 		}
 
-		trap_SendServerCommand( other - g_entities, va( "vschat 0 %d 3 %s 0 0 0", other - g_entities, systemMessages[message] ) );
+		trap_SendServerCommand(other - g_entities, va("vschat 0 %d 3 %s 0 0 0", (int)(other - g_entities), systemMessages[message]));
 	}
 }
-

@@ -1,7 +1,7 @@
 lib_LTLIBRARIES = libui.la
 
 # Compilation flags
-libui_la_CFLAGS = -DUIDLL -pipe -Wall -Werror -fno-strict-aliasing
+libui_la_CFLAGS = -DUIDLL -pipe -Wall -Wextra -Werror
 
 # Linker options
 libui_la_LDFLAGS = -avoid-version
@@ -15,7 +15,6 @@ ui_main.c \
 ui_players.c \
 ui_shared.c \
 ui_syscalls.c \
-ui_util.c \
 ../game/bg_classes.c \
 ../game/bg_misc.c \
 ../game/q_math.c \

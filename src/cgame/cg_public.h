@@ -2,9 +2,9 @@
 ===========================================================================
 
 Wolfenstein: Enemy Territory GPL Source Code
-Copyright (C) 1999-2010 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2010 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Wolfenstein: Enemy Territory GPL Source Code (Wolf ET Source Code).  
+This file is part of the Wolfenstein: Enemy Territory GPL Source Code (Wolf ET Source Code).
 
 Wolf ET Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -29,7 +29,7 @@ If you have questions concerning this license or the applicable additional terms
 
 
 #define CMD_BACKUP          64
-#define CMD_MASK            ( CMD_BACKUP - 1 )
+#define CMD_MASK            (CMD_BACKUP - 1)
 // allow a lot of command backups for very fast systems
 // multiple commands may be combined into a single packet, so this
 // needs to be larger than PACKET_BACKUP
@@ -42,7 +42,8 @@ If you have questions concerning this license or the applicable additional terms
 // Snapshots are generated at regular time intervals by the server,
 // but they may not be sent if a client's rate level is exceeded, or
 // they may be dropped by the network.
-typedef struct {
+typedef struct
+{
 	int snapFlags;                      // SNAPFLAG_RATE_DELAYED, etc
 	int ping;
 
@@ -59,7 +60,8 @@ typedef struct {
 	int serverCommandSequence;              // snapshot becomes current
 } snapshot_t;
 
-typedef enum cgameEvent_e {
+typedef enum cgameEvent_e
+{
 	CGAME_EVENT_NONE,
 	CGAME_EVENT_GAMEVIEW,
 	CGAME_EVENT_SPEAKEREDITOR,
@@ -78,7 +80,8 @@ functions imported from the main executable
 
 #define CGAME_IMPORT_API_VERSION    3
 
-typedef enum {
+typedef enum
+{
 	CG_PRINT,
 	CG_ERROR,
 	CG_MILLISECONDS,
@@ -276,7 +279,8 @@ functions exported to the main executable
 ==================================================================
 */
 
-typedef enum {
+typedef enum
+{
 	CG_INIT,
 //	void CG_Init( int serverMessageNum, int serverCommandSequence )
 	// called when the level loads or when the renderer is restarted

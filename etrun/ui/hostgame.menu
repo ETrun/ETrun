@@ -22,8 +22,6 @@ menuDef {
 	style		WINDOW_STYLE_FILLED
 	
 	onOpen {
-		//uiScript loadArenas ;
-		//uiScript initHostGameFeatures ;
 		hide labelDetailsCampaign
 	}
 	
@@ -31,11 +29,6 @@ menuDef {
 		close hostgame ;
 		open main
 	}
-
-//	onClose {
-//		close backgroundmusic_server ; 
-//		open backgroundmusic
-//	}
 
 // Window //
 
@@ -56,18 +49,6 @@ menuDef {
 // Settings //
 
 	SUBWINDOW( 6, 126, (SUBWINDOW_WIDTH), 52, "FEATURES" )
-		
-	itemDef {
-		name		"filtericonPunkBuster"
-		rect		$evalfloat(8+2) 142 10 10
-		style		WINDOW_STYLE_SHADER
-		background	"ui/assets/filter_pb"
-		forecolor	1 1 1 1
-		visible		1
-		decoration
-	}
-	LABEL( 8+24+2, 142, .5*((SUBWINDOW_WIDTH)-6)-24-2-4, 10, "PunkBuster", .2, ITEM_ALIGN_LEFT, 0, 8 )
-	CHECKBOXNOTEXTACTION( "labelPunkBuster", 8+12+2, 142, .5*((SUBWINDOW_WIDTH)-6)-14-4, 10, "sv_punkbuster" noToggle, uiScript togglePbSVStatus, "Enable Punkbuster anti-cheating technology" )
 	
 	itemDef {
 		name		"filtericonAntilag"
@@ -141,8 +122,6 @@ menuDef {
 		textfont		UI_FONT_COURBD_21
 		textstyle		ITEM_TEXTSTYLE_SHADOWED
 		textscale		.2
-//		textalign		LABEL_TEXT_ALIGN
-//		textalignx		$evalfloat(LABEL_TEXT_ALIGN_X)
 		textaligny		8
 		forecolor		.6 .6 .6 1
 		visible			1

@@ -67,40 +67,8 @@ menuDef {
 
 		setitemcolor background backcolor 0 0 0 0 ;
 		fadein background ;
-		setEditFocus "efleftProfile Name:" ;
-//		DEFAULT_SETTINGS
-
-		conditionalScript cl_punkbuster 0
-			( "hide bttn_pbenable" )
-			( "show bttn_pbenable" )
-
-		/*conditionalscript com_recommendedSet 0
-			( "clearfocus" )
-			( "abort" )
-
-		conditionalscript com_recommended 3
-			( "setcvar ui_glCustom 1 ; uiScript update ui_glCustom" )
-			( "copycvar com_recommended ui_glCustom ; uiScript update ui_glCustom" ) "-1"*/
+		setEditFocus "efleftProfile Name:"
 	}
-	
-	/*onESC {
-		close profile_create ;
-		open profile ;
-		uiScript systemCvarsReset ;
-		uiScript profileCvarsReset
-	}*/
-	
-// Background //
-
-	/*itemDef {
-		name		"background"
-		rect		0 0 640 480
-		style		WINDOW_STYLE_FILLED
-		background	"ui/assets/fadebox.tga"
-		backcolor	0 0 0 0
-		visible		1
-		decoration
-	}*/
 
 // Subwindows //
 
@@ -146,10 +114,7 @@ menuDef {
 																													( "setcvar ui_glCustom 1 ; uiScript update ui_glCustom" )
 																													( "copycvar com_recommended ui_glCustom ; uiScript update ui_glCustom" ) "-1" )
 	
-	LABEL( SUBWINDOW_X+4, SUBWINDOW_Y+264, (SUBWINDOW_WIDTH)-8-4, 10, "PunkBuster is a powerful cheat protection technology that prevents dishonest players from gaining an unfair advantage. Many games servers will not allow you to join unless PunkBuster is enabled.", .2, ITEM_ALIGN_LEFT, 0, 8 )
-	NAMEDBUTTON( "bttn_pbenable", (SUBWINDOW_X+4)+.5*((SUBWINDOW_WIDTH)-164), SUBWINDOW_Y+312, 164, 14, "ENABLE PUNKBUSTER", .24, 11, clearFocus ; open playonline_enablepb )
-
-	BUTTON( SUBWINDOW_X+6, SUBWINDOW_Y+SUBWINDOW_HEIGHT-24, .5*(SUBWINDOW_WIDTH-18), 18, "QUIT", .3, 14, close profile_create_initial ; close main ; open credits_quit )
+	BUTTON( SUBWINDOW_X+6, SUBWINDOW_Y+SUBWINDOW_HEIGHT-24, .5*(SUBWINDOW_WIDTH-18), 18, "QUIT", .3, 14, close profile_create_initial ; close main ; uiScript quit )
 	BUTTON( SUBWINDOW_X+6+.5*(SUBWINDOW_WIDTH-18)+6, SUBWINDOW_Y+SUBWINDOW_HEIGHT-24, .5*(SUBWINDOW_WIDTH-18), 18, "CREATE", .3, 14, conditionalscript UIProfileValidName 2
 																																		( "clearFocus" )
 																																		( "setcvar ui_profile_create_error \\\"Can't create profile. Please enter a valid player alias.\\\" ; open profile_create_error ; abort" )

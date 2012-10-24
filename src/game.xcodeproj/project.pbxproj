@@ -3,10 +3,11 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 42;
+	objectVersion = 46;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		03EDEB4D162C50BE00EB7A75 /* g_apicmds.c in Sources */ = {isa = PBXBuildFile; fileRef = 03EDEB4C162C50BE00EB7A75 /* g_apicmds.c */; };
 		371C1E9615133D3F00276911 /* g_construction.c in Sources */ = {isa = PBXBuildFile; fileRef = 371C1E9515133D3F00276911 /* g_construction.c */; };
 		37537B681561504000712F74 /* g_api.c in Sources */ = {isa = PBXBuildFile; fileRef = 37537B671561504000712F74 /* g_api.c */; };
 		37BA88801521F89F00D558A1 /* bg_weapons.c in Sources */ = {isa = PBXBuildFile; fileRef = 37BA887F1521F89F00D558A1 /* bg_weapons.c */; };
@@ -59,6 +60,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		03EDEB4C162C50BE00EB7A75 /* g_apicmds.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = g_apicmds.c; path = game/g_apicmds.c; sourceTree = "<group>"; };
 		371C1E9515133D3F00276911 /* g_construction.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = g_construction.c; path = game/g_construction.c; sourceTree = "<group>"; };
 		37537B671561504000712F74 /* g_api.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = g_api.c; path = game/g_api.c; sourceTree = "<group>"; };
 		37BA887F1521F89F00D558A1 /* bg_weapons.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = bg_weapons.c; path = game/bg_weapons.c; sourceTree = "<group>"; };
@@ -151,6 +153,7 @@
 		508817F509F0CAB50071BF1A /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				03EDEB4C162C50BE00EB7A75 /* g_apicmds.c */,
 				37537B671561504000712F74 /* g_api.c */,
 				37BA887F1521F89F00D558A1 /* bg_weapons.c */,
 				371C1E9515133D3F00276911 /* g_construction.c */,
@@ -236,8 +239,11 @@
 /* Begin PBXProject section */
 		508817C409F0C9740071BF1A /* Project object */ = {
 			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0450;
+			};
 			buildConfigurationList = 508817C509F0C9740071BF1A /* Build configuration list for PBXProject "game" */;
-			compatibilityVersion = "Xcode 2.4";
+			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -316,6 +322,7 @@
 				371C1E9615133D3F00276911 /* g_construction.c in Sources */,
 				37BA88801521F89F00D558A1 /* bg_weapons.c in Sources */,
 				37537B681561504000712F74 /* g_api.c in Sources */,
+				03EDEB4D162C50BE00EB7A75 /* g_apicmds.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -330,7 +337,7 @@
 					_DEBUG,
 					GAMEDLL,
 				);
-				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+				SDKROOT = "$(DEVELOPER_SDK_DIR)/MacOSX10.4u.sdk";
 			};
 			name = Development;
 		};
@@ -350,15 +357,15 @@
 				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
 				PRESERVE_DEAD_CODE_INITS_AND_TERMS = YES;
-				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+				SDKROOT = "$(DEVELOPER_SDK_DIR)/MacOSX10.4u.sdk";
 			};
 			name = Deployment;
 		};
 		508817D809F0C9AE0071BF1A /* Development */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT_PRE_XCODE_3_1)";
-				ARCHS_STANDARD_32_64_BIT_PRE_XCODE_3_1 = "x86_64 i386 ppc";
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				COMBINE_HIDPI_IMAGES = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				PRODUCT_NAME = qagame_mac;
 				SDKROOT = macosx;
@@ -370,8 +377,8 @@
 		508817D909F0C9AE0071BF1A /* Deployment */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT_PRE_XCODE_3_1)";
-				ARCHS_STANDARD_32_64_BIT_PRE_XCODE_3_1 = "x86_64 i386 ppc";
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				COMBINE_HIDPI_IMAGES = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				PRODUCT_NAME = qagame_mac;
 				SDKROOT = macosx;

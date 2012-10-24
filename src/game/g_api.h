@@ -15,8 +15,8 @@ void G_unloadAPI();
 void G_API_login(char *result, gentity_t *ent, char *authToken);
 void G_API_mapRecords(char *result, gentity_t *ent, char *mapName);
 void G_API_check(char *result, gentity_t *ent);
-void G_API_sendRecord(char *result, gentity_t *ent, char *mapName, char *runName, 
-					  char *authToken, char *data, char *etrunVersion);
+void G_API_sendRecord(char *result, gentity_t *ent, char *mapName, char *runName,
+                      char *authToken, char *data, char *etrunVersion);
 void G_API_getPlayerCheckpoints(char *result, gentity_t *ent, char *mapName, char *runName, int runNum, char *authToken);
 void G_API_randommap(char *result, gentity_t *ent, char *mapName);
 void G_API_mapRank(char *result, gentity_t *ent, char *mapName, char *optUserName, char *optMapName, char *optRunName, char *optPhysicsName, char *authToken);
@@ -27,16 +27,18 @@ void G_API_mapRank(char *result, gentity_t *ent, char *mapName, char *optUserNam
 	# include <dlfcn.h>
 # endif
 
-struct query_s {
+struct query_s
+{
 	char cmd[64];
 	char query[QUERY_MAX_SIZE];
 	char *result;
 	gentity_t *ent;
 };
 
-typedef void* (*handler_t)(void *);
+typedef void * (*handler_t)(void *);
 
-typedef struct {
+typedef struct
+{
 	char *cmd;
 	handler_t handler;
 } api_glue_t;

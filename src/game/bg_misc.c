@@ -2,9 +2,9 @@
 ===========================================================================
 
 Wolfenstein: Enemy Territory GPL Source Code
-Copyright (C) 1999-2010 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2010 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Wolfenstein: Enemy Territory GPL Source Code (Wolf ET Source Code).  
+This file is part of the Wolfenstein: Enemy Territory GPL Source Code (Wolf ET Source Code).
 
 Wolf ET Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -45,10 +45,10 @@ extern vmCvar_t g_developer;
 vec3_t playerlegsProneMins = { -13.5f, -13.5f, -24.f };
 vec3_t playerlegsProneMaxs = { 13.5f, 13.5f, -14.4f };
 
-int numSplinePaths;
+int          numSplinePaths;
 splinePath_t splinePaths[MAX_SPLINE_PATHS];
 
-int numPathCorners;
+int          numPathCorners;
 pathCorner_t pathCorners[MAX_PATH_CORNERS];
 
 // these defines are matched with the character torso animations
@@ -59,25 +59,27 @@ pathCorner_t pathCorners[MAX_PATH_CORNERS];
 #define DELAY_THROW     250 // grenades, dynamite
 
 // Arnout: the new loadout for WolfXP
-int weapBanksMultiPlayer[MAX_WEAP_BANKS_MP][MAX_WEAPS_IN_BANK_MP] = {
-	{0,                     0,                      0,                  0,                          0,                      0,                          0,          0,          0,          0,      0,              0           },  // empty bank '0'
-	{WP_KNIFE,              0,                      0,                  0,                          0,                      0,                          0,          0,          0,          0,      0,              0           },
-	{WP_LUGER,              WP_COLT,                0,					0,							0,						0,							0,          0,          0,          0,      0,              0           },
-	{WP_MP40,               WP_THOMPSON,            WP_STEN,            WP_GARAND,                  WP_PANZERFAUST,         WP_KAR98,					WP_CARBINE, WP_FG42,    WP_K43,		0,		0,				0			},
-	{0,						0,						0,                  0,                          0,                      0,                          0,          0,          0,          0,      0,              0           },
-	{WP_PLIERS,				0,						0,					0,							0,                      0,                          0,          0,          0,          0,      0,              0           },
-	{WP_MEDKIT,				0,						0,					0,							0,						0,                          0,          0,          0,          0,      0,              0           },
-	{0,						0,						0,                  0,                          0,                      0,                          0,          0,          0,          0,      0,              0           },
-	{WP_BINOCULARS,			0,                      0,                  0,                          0,                      0,                          0,          0,          0,          0,      0,              0           },
-	{0,                     0,                      0,                  0,                          0,                      0,                          0,          0,          0,          0,      0,              0           },
+int weapBanksMultiPlayer[MAX_WEAP_BANKS_MP][MAX_WEAPS_IN_BANK_MP] =
+{
+	{ 0,             0,           0,       0,         0,              0,        0,          0,       0,      0, 0, 0 }, // empty bank '0'
+	{ WP_KNIFE,      0,           0,       0,         0,              0,        0,          0,       0,      0, 0, 0 },
+	{ WP_LUGER,      WP_COLT,     0,       0,         0,              0,        0,          0,       0,      0, 0, 0 },
+	{ WP_MP40,       WP_THOMPSON, WP_STEN, WP_GARAND, WP_PANZERFAUST, WP_KAR98, WP_CARBINE, WP_FG42, WP_K43, 0, 0, 0 },
+	{ 0,             0,           0,       0,         0,              0,        0,          0,       0,      0, 0, 0 },
+	{ WP_PLIERS,     0,           0,       0,         0,              0,        0,          0,       0,      0, 0, 0 },
+	{ WP_MEDKIT,     0,           0,       0,         0,              0,        0,          0,       0,      0, 0, 0 },
+	{ 0,             0,           0,       0,         0,              0,        0,          0,       0,      0, 0, 0 },
+	{ WP_BINOCULARS, 0,           0,       0,         0,              0,        0,          0,       0,      0, 0, 0 },
+	{ 0,             0,           0,       0,         0,              0,        0,          0,       0,      0, 0, 0 },
 };
 
 // TAT 10/4/2002
 //		Using one unified list for which weapons can received ammo
 //		This is used both by the ammo pack code and by the bot code to determine if reloads are needed
-int reloadableWeapons[] = {
-	WP_MP40,        WP_THOMPSON,    WP_STEN,            WP_GARAND,              WP_PANZERFAUST,
-	WP_KAR98,       WP_CARBINE,     WP_FG42,            WP_K43,                 WP_COLT,
+int reloadableWeapons[] =
+{
+	WP_MP40,  WP_THOMPSON, WP_STEN, WP_GARAND, WP_PANZERFAUST,
+	WP_KAR98, WP_CARBINE,  WP_FG42, WP_K43,    WP_COLT,
 	WP_LUGER, -1
 };
 
@@ -105,67 +107,69 @@ int reloadableWeapons[] = {
 // Separate table for SP and MP allow us to make the ammo and med packs function differently and may allow use to balance
 // weapons separately for each game.
 // Gordon: changed to actually use the maxammo values
-ammotable_t ammoTableMP[WP_NUM_WEAPONS] = {
+ammotable_t ammoTableMP[WP_NUM_WEAPONS] =
+{
 	//	MAX				USES	MAX		START	START  RELOAD	FIRE			NEXT	HEAT,	COOL,	MOD,	...
 	//	AMMO			AMT.	CLIP	AMMO	CLIP	TIME	DELAY			SHOT
-	{   0,              0,      0,      0,      0,      0,      50,             0,      0,      0,      0                       },  // WP_NONE					// 0
-	{   999,            0,      999,    0,      0,      0,      50,             200,    0,      0,      MOD_KNIFE               },  // WP_KNIFE					// 1
-	{   24,             1,      8,      24,     8,      1500,   DELAY_PISTOL,   400,    0,      0,      MOD_LUGER               },  // WP_LUGER					// 2	// NOTE: also 32 round 'snail' magazine
-	{   90,             1,      30,     30,     30,     2400,   DELAY_LOW,      150,    0,      0,      MOD_MP40                },  // WP_MP40					// 3
-	{   45,             1,      15,     0,      4,      1000,   DELAY_THROW,    1600,   0,      0,      MOD_GRENADE_LAUNCHER    },  // WP_GRENADE_LAUNCHER		// 4
-	{   4,              1,      1,      0,      4,      1000,   750,           2000,   0,      0,      MOD_PANZERFAUST         },   // WP_PANZERFAUST			// 5	// DHM - Nerve :: updated delay so prediction is correct
-	{   200,            1,      200,    0,      200,    1000,   DELAY_LOW,      50,     0,      0,      MOD_FLAMETHROWER        },  // WP_FLAMETHROWER			// 6
-	{   24,             1,      8,      24,     8,      1500,   DELAY_PISTOL,   400,    0,      0,      MOD_COLT                },  // WP_COLT					// 7
-	{   90,             1,      30,     30,     30,     2400,   DELAY_LOW,      150,    0,      0,      MOD_THOMPSON            },  // WP_THOMPSON				// 8
-	{   45,             1,      15,     0,      4,      1000,   DELAY_THROW,    1600,   0,      0,      MOD_GRENADE_PINEAPPLE   },  // WP_GRENADE_PINEAPPLE		// 9
+	{ 0,   0, 0,   0,  0,   0,    50,           0,    0,    0,   0                        },                                        // WP_NONE					// 0
+	{ 999, 0, 999, 0,  0,   0,    50,           200,  0,    0,   MOD_KNIFE                },                                        // WP_KNIFE					// 1
+	{ 24,  1, 8,   24, 8,   1500, DELAY_PISTOL, 400,  0,    0,   MOD_LUGER                },                                        // WP_LUGER					// 2	// NOTE: also 32 round 'snail' magazine
+	{ 90,  1, 30,  30, 30,  2400, DELAY_LOW,    150,  0,    0,   MOD_MP40                 },                                        // WP_MP40					// 3
+	{ 45,  1, 15,  0,  4,   1000, DELAY_THROW,  1600, 0,    0,   MOD_GRENADE_LAUNCHER     },                                        // WP_GRENADE_LAUNCHER		// 4
+	{ 4,   1, 1,   0,  4,   1000, 750,          2000, 0,    0,   MOD_PANZERFAUST          },                                        // WP_PANZERFAUST			// 5	// DHM - Nerve :: updated delay so prediction is correct
+	{ 200, 1, 200, 0,  200, 1000, DELAY_LOW,    50,   0,    0,   MOD_FLAMETHROWER         },                                        // WP_FLAMETHROWER			// 6
+	{ 24,  1, 8,   24, 8,   1500, DELAY_PISTOL, 400,  0,    0,   MOD_COLT                 },                                        // WP_COLT					// 7
+	{ 90,  1, 30,  30, 30,  2400, DELAY_LOW,    150,  0,    0,   MOD_THOMPSON             },                                        // WP_THOMPSON				// 8
+	{ 45,  1, 15,  0,  4,   1000, DELAY_THROW,  1600, 0,    0,   MOD_GRENADE_PINEAPPLE    },                                        // WP_GRENADE_PINEAPPLE		// 9
 
-	{   96,             1,      32,     32,     32,     3100,   DELAY_LOW,      150,    1200,   450,    MOD_STEN                },  // WP_STEN					// 10
-	{   10,             1,      1,      0,      10,     1500,   50,             1000,   0,      0,      MOD_SYRINGE             },  // WP_MEDIC_SYRINGE			// 11
-	{   1,              0,      1,      0,      0,      3000,   50,             1000,   0,      0,      MOD_AMMO,               },  // WP_AMMO					// 12
-	{   1,              0,      1,      0,      1,      3000,   50,             1000,   0,      0,      MOD_ARTY,               },  // WP_ARTY					// 13
-	{   24,             1,      8,      24,     8,      1500,   DELAY_PISTOL,   400,    0,      0,      MOD_SILENCER            },  // WP_SILENCER				// 14
-	{   1,              0,      10,     0,      0,      1000,   DELAY_THROW,    1600,   0,      0,      MOD_DYNAMITE            },  // WP_DYNAMITE				// 15
-	{   999,            0,      999,    0,      0,      0,      50,             0,      0,      0,      0                       },  // WP_SMOKETRAIL			// 16
-	{   999,            0,      999,    0,      0,      0,      50,             0,      0,      0,      0                       },  // WP_MAPMORTAR				// 17
-	{   999,            0,      999,    0,      0,      0,      50,             0,      0,      0,      0                       },  // VERYBIGEXPLOSION			// 18
-	{   999,            0,      999,    1,      1,      0,      50,             0,      0,      0,      0                       },  // WP_MEDKIT				// 19
+	{ 96,  1, 32,  32, 32,  3100, DELAY_LOW,    150,  1200, 450, MOD_STEN                 },                                        // WP_STEN					// 10
+	{ 10,  1, 1,   0,  10,  1500, 50,           1000, 0,    0,   MOD_SYRINGE              },                                        // WP_MEDIC_SYRINGE			// 11
+	{ 1,   0, 1,   0,  0,   3000, 50,           1000, 0,    0,   MOD_AMMO,                },                                        // WP_AMMO					// 12
+	{ 1,   0, 1,   0,  1,   3000, 50,           1000, 0,    0,   MOD_ARTY,                },                                        // WP_ARTY					// 13
+	{ 24,  1, 8,   24, 8,   1500, DELAY_PISTOL, 400,  0,    0,   MOD_SILENCER             },                                        // WP_SILENCER				// 14
+	{ 1,   0, 10,  0,  0,   1000, DELAY_THROW,  1600, 0,    0,   MOD_DYNAMITE             },                                        // WP_DYNAMITE				// 15
+	{ 999, 0, 999, 0,  0,   0,    50,           0,    0,    0,   0                        },                                        // WP_SMOKETRAIL			// 16
+	{ 999, 0, 999, 0,  0,   0,    50,           0,    0,    0,   0                        },                                        // WP_MAPMORTAR				// 17
+	{ 999, 0, 999, 0,  0,   0,    50,           0,    0,    0,   0                        },                                        // VERYBIGEXPLOSION			// 18
+	{ 999, 0, 999, 1,  1,   0,    50,           0,    0,    0,   0                        },                                        // WP_MEDKIT				// 19
 
-	{   999,            0,      999,    0,      0,      0,      50,             0,      0,      0,      0                       },  // WP_BINOCULARS			// 20
-	{   999,            0,      999,    0,      0,      0,      50,             0,      0,      0,      0                       },  // WP_PLIERS				// 21
-	{   999,            0,      999,    0,      1,      0,      50,             0,      0,      0,      MOD_AIRSTRIKE           },  // WP_SMOKE_MARKER			// 22
-	{   30,             1,      10,     20,     10,     2500,   DELAY_LOW,      400,    0,      0,      MOD_KAR98               },  // WP_KAR98					// 23		K43
-	{   24,             1,      8,      16,     8,      1500,   DELAY_LOW,      400,    0,      0,      MOD_CARBINE             },  // WP_CARBINE				// 24		GARAND
-	{   24,             1,      8,      16,     8,      1500,   DELAY_LOW,      400,    0,      0,      MOD_GARAND              },  // WP_GARAND				// 25		GARAND
-	{   1,              0,      1,      0,      1,      100,    DELAY_LOW,      100,    0,      0,      MOD_LANDMINE            },  // WP_LANDMINE				// 26
-	{   1,              0,      1,      0,      0,      3000,   DELAY_LOW,      2000,   0,      0,      MOD_SATCHEL             },  // WP_SATCHEL				// 27
-	{   1,              0,      1,      0,      0,      3000,   722,            2000,   0,      0,      0,                      },  // WP_SATCHEL_DET			// 28
-	{   6,              1,      1,      0,      0,      2000,   DELAY_HIGH,     2000,   0,      0,      MOD_TRIPMINE            },  // WP_TRIPMINE				// 29
+	{ 999, 0, 999, 0,  0,   0,    50,           0,    0,    0,   0                        },                                        // WP_BINOCULARS			// 20
+	{ 999, 0, 999, 0,  0,   0,    50,           0,    0,    0,   0                        },                                        // WP_PLIERS				// 21
+	{ 999, 0, 999, 0,  1,   0,    50,           0,    0,    0,   MOD_AIRSTRIKE            },                                        // WP_SMOKE_MARKER			// 22
+	{ 30,  1, 10,  20, 10,  2500, DELAY_LOW,    400,  0,    0,   MOD_KAR98                },                                        // WP_KAR98					// 23		K43
+	{ 24,  1, 8,   16, 8,   1500, DELAY_LOW,    400,  0,    0,   MOD_CARBINE              },                                        // WP_CARBINE				// 24		GARAND
+	{ 24,  1, 8,   16, 8,   1500, DELAY_LOW,    400,  0,    0,   MOD_GARAND               },                                        // WP_GARAND				// 25		GARAND
+	{ 1,   0, 1,   0,  1,   100,  DELAY_LOW,    100,  0,    0,   MOD_LANDMINE             },                                        // WP_LANDMINE				// 26
+	{ 1,   0, 1,   0,  0,   3000, DELAY_LOW,    2000, 0,    0,   MOD_SATCHEL              },                                        // WP_SATCHEL				// 27
+	{ 1,   0, 1,   0,  0,   3000, 722,          2000, 0,    0,   0,                       },                                        // WP_SATCHEL_DET			// 28
+	{ 6,   1, 1,   0,  0,   2000, DELAY_HIGH,   2000, 0,    0,   MOD_TRIPMINE             },                                        // WP_TRIPMINE				// 29
 
-	{   1,              0,      10,     0,      1,      1000,   DELAY_THROW,    1600,   0,      0,      MOD_SMOKEBOMB           },  // WP_SMOKE_BOMB			// 30
-	{   450,            1,      150,    0,      150,    3000,   DELAY_LOW,      66,     1500,   300,    MOD_MOBILE_MG42         },  // WP_MOBILE_MG42			// 31
-	{   30,             1,      10,     20,     10,     2500,   DELAY_LOW,      400,    0,      0,      MOD_K43                 },  // WP_K43					// 32		K43
-	{   60,             1,      20,     40,     20,     2000,   DELAY_LOW,      100,    0,      0,      MOD_FG42                },  // WP_FG42					// 33
-	{   0,              0,      0,      0,      0,      0,      0,              0,      1500,   300,    0                       },  // WP_DUMMY_MG42			// 34
-	{   15,             1,      1,      0,      0,      0,      750,            1600,   0,      0,      MOD_MORTAR              },  // WP_MORTAR				// 35
-	{   999,            0,      1,      0,      0,      1000,   750,            1600,   0,      0,      0                       },  // WP_LOCKPICK				// 36
-	{   48,             1,      8,      48,     8,      2700,   DELAY_PISTOL,   200,    0,      0,      MOD_AKIMBO_COLT         },  // WP_AKIMBO_COLT			// 37
-	{   48,             1,      8,      48,     8,      2700,   DELAY_PISTOL,   200,    0,      0,      MOD_AKIMBO_LUGER        },  // WP_AKIMBO_LUGER			// 38
-	{   4,              1,      1,      4,      1,      3000,   DELAY_LOW,      400,    0,      0,      MOD_GPG40               },  // WP_GPG40					// 39
+	{ 1,   0, 10,  0,  1,   1000, DELAY_THROW,  1600, 0,    0,   MOD_SMOKEBOMB            },                                        // WP_SMOKE_BOMB			// 30
+	{ 450, 1, 150, 0,  150, 3000, DELAY_LOW,    66,   1500, 300, MOD_MOBILE_MG42          },                                        // WP_MOBILE_MG42			// 31
+	{ 30,  1, 10,  20, 10,  2500, DELAY_LOW,    400,  0,    0,   MOD_K43                  },                                        // WP_K43					// 32		K43
+	{ 60,  1, 20,  40, 20,  2000, DELAY_LOW,    100,  0,    0,   MOD_FG42                 },                                        // WP_FG42					// 33
+	{ 0,   0, 0,   0,  0,   0,    0,            0,    1500, 300, 0                        },                                        // WP_DUMMY_MG42			// 34
+	{ 15,  1, 1,   0,  0,   0,    750,          1600, 0,    0,   MOD_MORTAR               },                                        // WP_MORTAR				// 35
+	{ 999, 0, 1,   0,  0,   1000, 750,          1600, 0,    0,   0                        },                                        // WP_LOCKPICK				// 36
+	{ 48,  1, 8,   48, 8,   2700, DELAY_PISTOL, 200,  0,    0,   MOD_AKIMBO_COLT          },                                        // WP_AKIMBO_COLT			// 37
+	{ 48,  1, 8,   48, 8,   2700, DELAY_PISTOL, 200,  0,    0,   MOD_AKIMBO_LUGER         },                                        // WP_AKIMBO_LUGER			// 38
+	{ 4,   1, 1,   4,  1,   3000, DELAY_LOW,    400,  0,    0,   MOD_GPG40                },                                        // WP_GPG40					// 39
 
-	{   4,              1,      1,      4,      1,      3000,   DELAY_LOW,      400,    0,      0,      MOD_M7                  },  // WP_M7					// 40
-	{   24,             1,      8,      24,     8,      1500,   DELAY_PISTOL,   400,    0,      0,      MOD_SILENCED_COLT       },  // WP_SILENCED_COLT			// 41
-	{   24,             1,      8,      16,     8,      1500,   0,              400,    0,      0,      MOD_GARAND_SCOPE        },  // WP_GARAND_SCOPE			// 42		GARAND
-	{   30,             1,      10,     20,     10,     2500,   0,              400,    0,      0,      MOD_K43_SCOPE           },  // WP_K43_SCOPE				// 43		K43
-	{   60,             1,      20,     40,     20,     2000,   DELAY_LOW,      400,    0,      0,      MOD_FG42SCOPE           },  // WP_FG42SCOPE				// 44
-	{   16,             1,      1,      12,     0,      0,      750,            1400,   0,      0,      MOD_MORTAR              },  // WP_MORTAR_SET			// 45
-	{   10,             1,      1,      0,      10,     1500,   50,             1000,   0,      0,      MOD_SYRINGE             },  // WP_MEDIC_ADRENALINE		// 46
-	{   48,             1,      8,      48,     8,      2700,   DELAY_PISTOL,   200,    0,      0,      MOD_AKIMBO_SILENCEDCOLT },  // WP_AKIMBO_SILENCEDCOLT	// 47
-	{   48,             1,      8,      48,     8,      2700,   DELAY_PISTOL,   200,    0,      0,      MOD_AKIMBO_SILENCEDLUGER},  // WP_AKIMBO_SILENCEDLUGER	// 48
-	{   450,            1,      150,    0,      150,    3000,   DELAY_LOW,      66,     1500,   300,    MOD_MOBILE_MG42         },  // WP_MOBILE_MG42_SET		// 49
+	{ 4,   1, 1,   4,  1,   3000, DELAY_LOW,    400,  0,    0,   MOD_M7                   },                                        // WP_M7					// 40
+	{ 24,  1, 8,   24, 8,   1500, DELAY_PISTOL, 400,  0,    0,   MOD_SILENCED_COLT        },                                        // WP_SILENCED_COLT			// 41
+	{ 24,  1, 8,   16, 8,   1500, 0,            400,  0,    0,   MOD_GARAND_SCOPE         },                                        // WP_GARAND_SCOPE			// 42		GARAND
+	{ 30,  1, 10,  20, 10,  2500, 0,            400,  0,    0,   MOD_K43_SCOPE            },                                        // WP_K43_SCOPE				// 43		K43
+	{ 60,  1, 20,  40, 20,  2000, DELAY_LOW,    400,  0,    0,   MOD_FG42SCOPE            },                                        // WP_FG42SCOPE				// 44
+	{ 16,  1, 1,   12, 0,   0,    750,          1400, 0,    0,   MOD_MORTAR               },                                        // WP_MORTAR_SET			// 45
+	{ 10,  1, 1,   0,  10,  1500, 50,           1000, 0,    0,   MOD_SYRINGE              },                                        // WP_MEDIC_ADRENALINE		// 46
+	{ 48,  1, 8,   48, 8,   2700, DELAY_PISTOL, 200,  0,    0,   MOD_AKIMBO_SILENCEDCOLT  },                                        // WP_AKIMBO_SILENCEDCOLT	// 47
+	{ 48,  1, 8,   48, 8,   2700, DELAY_PISTOL, 200,  0,    0,   MOD_AKIMBO_SILENCEDLUGER },                                        // WP_AKIMBO_SILENCEDLUGER	// 48
+	{ 450, 1, 150, 0,  150, 3000, DELAY_LOW,    66,   1500, 300, MOD_MOBILE_MG42          },                                        // WP_MOBILE_MG42_SET		// 49
 };
 
 //----(SA)	moved in here so both games can get to it
-int weapAlts[] = {
+int weapAlts[] =
+{
 	WP_NONE,            // 0 WP_NONE
 	WP_NONE,            // 1 WP_KNIFE
 	WP_SILENCER,        // 2 WP_LUGER
@@ -225,7 +229,8 @@ int weapAlts[] = {
 
 
 // new (10/18/00)
-char *animStrings[] = {
+char *animStrings[] =
+{
 	"BOTH_DEATH1",
 	"BOTH_DEAD1",
 	"BOTH_DEAD1_WATER",
@@ -287,7 +292,7 @@ char *animStrings[] = {
 
 	"TORSO_DROP",
 
-	"TORSO_RAISE",   // (low)
+	"TORSO_RAISE",        // (low)
 	"TORSO_ATTACK",
 	"TORSO_STAND",
 	"TORSO_STAND_ALT1",
@@ -295,7 +300,7 @@ char *animStrings[] = {
 	"TORSO_READY",
 	"TORSO_RELAX",
 
-	"TORSO_RAISE2",  // (high)
+	"TORSO_RAISE2",       // (high)
 	"TORSO_ATTACK2",
 	"TORSO_STAND2",
 	"TORSO_STAND2_ALT1",
@@ -303,7 +308,7 @@ char *animStrings[] = {
 	"TORSO_READY2",
 	"TORSO_RELAX2",
 
-	"TORSO_RAISE3",  // (pistol)
+	"TORSO_RAISE3",       // (pistol)
 	"TORSO_ATTACK3",
 	"TORSO_STAND3",
 	"TORSO_STAND3_ALT1",
@@ -311,7 +316,7 @@ char *animStrings[] = {
 	"TORSO_READY3",
 	"TORSO_RELAX3",
 
-	"TORSO_RAISE4",  // (shoulder)
+	"TORSO_RAISE4",       // (shoulder)
 	"TORSO_ATTACK4",
 	"TORSO_STAND4",
 	"TORSO_STAND4_ALT1",
@@ -319,7 +324,7 @@ char *animStrings[] = {
 	"TORSO_READY4",
 	"TORSO_RELAX4",
 
-	"TORSO_RAISE5",  // (throw)
+	"TORSO_RAISE5",       // (throw)
 	"TORSO_ATTACK5",
 	"TORSO_ATTACK5B",
 	"TORSO_STAND5",
@@ -328,15 +333,15 @@ char *animStrings[] = {
 	"TORSO_READY5",
 	"TORSO_RELAX5",
 
-	"TORSO_RELOAD1", // (low)
-	"TORSO_RELOAD2", // (high)
-	"TORSO_RELOAD3", // (pistol)
-	"TORSO_RELOAD4", // (shoulder)
+	"TORSO_RELOAD1",      // (low)
+	"TORSO_RELOAD2",      // (high)
+	"TORSO_RELOAD3",      // (pistol)
+	"TORSO_RELOAD4",      // (shoulder)
 
-	"TORSO_MG42",        // firing tripod mounted weapon animation
+	"TORSO_MG42",         // firing tripod mounted weapon animation
 
-	"TORSO_MOVE",        // torso anim to play while moving and not firing (swinging arms type thing)
-	"TORSO_MOVE_ALT",        // torso anim to play while moving and not firing (swinging arms type thing)
+	"TORSO_MOVE",         // torso anim to play while moving and not firing (swinging arms type thing)
+	"TORSO_MOVE_ALT",     // torso anim to play while moving and not firing (swinging arms type thing)
 
 	"TORSO_EXTRA",
 	"TORSO_EXTRA2",
@@ -362,12 +367,12 @@ char *animStrings[] = {
 	"LEGS_LAND",
 
 	"LEGS_IDLE",
-	"LEGS_IDLE_ALT", //	"LEGS_IDLE2"
+	"LEGS_IDLE_ALT",      //	"LEGS_IDLE2"
 	"LEGS_IDLECR",
 
 	"LEGS_TURN",
 
-	"LEGS_BOOT",     // kicking animation
+	"LEGS_BOOT",          // kicking animation
 
 	"LEGS_EXTRA1",
 	"LEGS_EXTRA2",
@@ -383,7 +388,8 @@ char *animStrings[] = {
 
 
 // old
-char *animStringsOld[] = {
+char *animStringsOld[] =
+{
 	"BOTH_DEATH1",
 	"BOTH_DEAD1",
 	"BOTH_DEATH2",
@@ -419,45 +425,45 @@ char *animStringsOld[] = {
 
 	"TORSO_DROP",
 
-	"TORSO_RAISE",   // (low)
+	"TORSO_RAISE",        // (low)
 	"TORSO_ATTACK",
 	"TORSO_STAND",
 	"TORSO_READY",
 	"TORSO_RELAX",
 
-	"TORSO_RAISE2",  // (high)
+	"TORSO_RAISE2",       // (high)
 	"TORSO_ATTACK2",
 	"TORSO_STAND2",
 	"TORSO_READY2",
 	"TORSO_RELAX2",
 
-	"TORSO_RAISE3",  // (pistol)
+	"TORSO_RAISE3",       // (pistol)
 	"TORSO_ATTACK3",
 	"TORSO_STAND3",
 	"TORSO_READY3",
 	"TORSO_RELAX3",
 
-	"TORSO_RAISE4",  // (shoulder)
+	"TORSO_RAISE4",       // (shoulder)
 	"TORSO_ATTACK4",
 	"TORSO_STAND4",
 	"TORSO_READY4",
 	"TORSO_RELAX4",
 
-	"TORSO_RAISE5",  // (throw)
+	"TORSO_RAISE5",       // (throw)
 	"TORSO_ATTACK5",
 	"TORSO_ATTACK5B",
 	"TORSO_STAND5",
 	"TORSO_READY5",
 	"TORSO_RELAX5",
 
-	"TORSO_RELOAD1", // (low)
-	"TORSO_RELOAD2", // (high)
-	"TORSO_RELOAD3", // (pistol)
-	"TORSO_RELOAD4", // (shoulder)
+	"TORSO_RELOAD1",      // (low)
+	"TORSO_RELOAD2",      // (high)
+	"TORSO_RELOAD3",      // (pistol)
+	"TORSO_RELOAD4",      // (shoulder)
 
-	"TORSO_MG42",        // firing tripod mounted weapon animation
+	"TORSO_MG42",         // firing tripod mounted weapon animation
 
-	"TORSO_MOVE",        // torso anim to play while moving and not firing (swinging arms type thing)
+	"TORSO_MOVE",         // torso anim to play while moving and not firing (swinging arms type thing)
 
 	"TORSO_EXTRA2",
 	"TORSO_EXTRA3",
@@ -480,7 +486,7 @@ char *animStringsOld[] = {
 
 	"LEGS_TURN",
 
-	"LEGS_BOOT",     // kicking animation
+	"LEGS_BOOT",          // kicking animation
 
 	"LEGS_EXTRA1",
 	"LEGS_EXTRA2",
@@ -530,7 +536,6 @@ gitem_t bg_itemlist[] =
 		0,          // cliptype
 		"",          // precache
 		"",          // sounds
-//		{0,0,0,0,0}
 	},  // leave index 0 alone
 
 
@@ -564,7 +569,6 @@ model="models/powerups/treasure/goldbar.md3"
 		0,
 		"",
 		"",
-//		{0,0,0,0,0}
 	},
 
 
@@ -595,7 +599,6 @@ model="models/powerups/health/health_s.md3"
 		0,
 		"",
 		"",
-//		{10,5,5,5,5}
 	},
 
 /*QUAKED item_health (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
@@ -605,7 +608,6 @@ model="models/powerups/health/health_m.md3"
 	{
 		"item_health",
 		"sound/misc/health_pickup.wav",
-//		"sound/multiplayer/health_pickup.wav",
 		{
 			"models/multiplayer/medpack/medpack_pickup.md3", // JPW NERVE was	"models/powerups/health/health_m.md3",
 			0,
@@ -621,7 +623,6 @@ model="models/powerups/health/health_m.md3"
 		0,
 		"",
 		"",
-//		{50,25,20,15,15}
 	},
 
 /*QUAKED item_health_large (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
@@ -631,7 +632,6 @@ model="models/powerups/health/health_m.md3"
 	{
 		"item_health_large",
 		"sound/misc/health_pickup.wav",
-//		"sound/multiplayer/health_pickup.wav",
 		{
 			"models/multiplayer/medpack/medpack_pickup.md3", // JPW NERVE was	"models/powerups/health/health_m.md3",
 			0,
@@ -647,13 +647,11 @@ model="models/powerups/health/health_m.md3"
 		0,
 		"",
 		"",
-//		{50,25,20,15,15}
 	},
 
 	{
 		"item_health_cabinet",
 		"sound/misc/health_pickup.wav",
-//		"sound/multiplayer/health_pickup.wav",
 		{
 			0,
 			0,
@@ -697,7 +695,6 @@ model="models/powerups/health/health_t1.md3"
 		0,
 		"",
 		"",
-//		{50,50,50,40,30}	// amount given in first stage based on gameskill level
 	},
 
 	// xkan, 1/6/2002 - updated
@@ -710,9 +707,9 @@ model="models/powerups/health/health_b1.md3"
 	{
 		"item_health_breadandmeat",
 		"sound/items/cold_pickup.wav",
-		{   "models/powerups/health/health_b3.md3",  // just plate (should now be destructable)
-			"models/powerups/health/health_b2.md3",  // half eaten
-			"models/powerups/health/health_b1.md3"   // whole turkey
+		{ "models/powerups/health/health_b3.md3",       // just plate (should now be destructable)
+		  "models/powerups/health/health_b2.md3",    // half eaten
+		  "models/powerups/health/health_b1.md3"     // whole turkey
 		},
 		NULL,
 		NULL,   // ammo icon
@@ -724,7 +721,6 @@ model="models/powerups/health/health_b1.md3"
 		0,
 		"",
 		"",
-		//{30,30,20,15}	// amount given in first stage based on gameskill level
 	},
 
 	// xkan, 1/6/2002 - updated
@@ -752,7 +748,6 @@ model="models/powerups/health/health_w.md3"
 		0,
 		"",
 		"",
-//		{25,25,25,25,25}
 	},
 
 	//
@@ -788,7 +783,6 @@ model="models/weapons2/knife/knife.md3"
 		WP_KNIFE,
 		"",                      // precache
 		"",                      // sounds
-//		{0,0,0,0,0}
 	},
 
 /*QUAKED weapon_luger (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
@@ -814,7 +808,6 @@ model="models/weapons2/luger/luger.md3"
 		WP_LUGER,
 		"",                      // precache
 		"",                      // sounds
-//		{0,0,0,0,0}
 	},
 
 /*QUAKED weapon_akimboluger (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
@@ -840,7 +833,6 @@ model="models/weapons2/akimbo_luger/luger.md3"
 		WP_AKIMBO_LUGER,
 		"",                      // precache
 		"",                      // sounds
-//		{0,0,0,0,0}
 	},
 
 /*QUAKED weapon_akimbosilencedluger (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
@@ -866,7 +858,6 @@ model="models/weapons2/akimbo_luger/luger.md3"
 		WP_AKIMBO_LUGER,
 		"",                      // precache
 		"",                      // sounds
-//		{0,0,0,0,0}
 	},
 
 /*QUAKED weapon_thompson (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
@@ -878,7 +869,6 @@ model="models/weapons2/thompson/thompson.md3"
 		"sound/misc/w_pkup.wav",
 		{
 			"models/weapons2/thompson/thompson.md3",
-//			"models/multiplayer/mg42/v_mg42.md3",
 			"models/weapons2/thompson/v_thompson.md3",
 			0
 		},
@@ -893,7 +883,6 @@ model="models/weapons2/thompson/thompson.md3"
 		WP_THOMPSON,
 		"",                  // precache
 		"",                  // sounds
-//		{0,0,0,0,0}
 	},
 
 	{
@@ -940,7 +929,6 @@ model="models/weapons2/sten/sten.md3"
 		WP_STEN,
 		"",                  // precache
 		"",                  // sounds
-//		{0,0,0,0,0}
 	},
 
 /*QUAKED weapon_colt (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
@@ -966,7 +954,6 @@ model="models/weapons2/colt/colt.md3"
 		WP_COLT,
 		"",                      // precache
 		"",                      // sounds
-//		{0,0,0,0,0}
 	},
 
 /*QUAKED weapon_akimbocolt (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
@@ -992,7 +979,6 @@ model="models/weapons2/akimbo_colt/colt.md3"
 		WP_AKIMBO_COLT,
 		"",                      // precache
 		"",                      // sounds
-//		{0,0,0,0,0}
 	},
 
 /*QUAKED weapon_akimbosilencedcolt (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
@@ -1018,13 +1004,12 @@ model="models/weapons2/akimbo_colt/colt.md3"
 		WP_AKIMBO_COLT,
 		"",                      // precache
 		"",                      // sounds
-//		{0,0,0,0,0}
 	},
 
 /*QUAKED weapon_mp40 (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
 "stand" values:
-	no value:	laying in a default position on it's side (default)
-	2:			upright, barrel pointing up, slightly angled (rack mount)
+    no value:	laying in a default position on it's side (default)
+    2:			upright, barrel pointing up, slightly angled (rack mount)
 -------- MODEL FOR RADIANT ONLY - DO NOT SET THIS AS A KEY --------
 model="models\weapons2\mp40\mp40.md3"
 */
@@ -1047,7 +1032,6 @@ model="models\weapons2\mp40\mp40.md3"
 		WP_MP40,
 		"",                  // precache
 		"",                  // sounds
-//		{0,0,0,0,0}
 	},
 
 /*QUAKED weapon_panzerfaust (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
@@ -1073,7 +1057,6 @@ model="models/weapons2/panzerfaust/pf.md3"
 		WP_PANZERFAUST,
 		"",                      // precache
 		"",                      // sounds
-//		{0,0,0,0,0}
 	},
 
 //----(SA)	removed the quaked for this.  we don't actually have a grenade launcher as such.  It's given implicitly
@@ -1100,7 +1083,6 @@ weapon_grenadelauncher
 		WP_GRENADE_LAUNCHER,
 		"",                      // precache
 		"",              // sounds
-//		{0,0,0,0,0}
 	},
 
 /*
@@ -1125,7 +1107,6 @@ weapon_grenadePineapple
 		WP_GRENADE_PINEAPPLE,
 		"",                      // precache
 		"",              // sounds
-//		{0,0,0,0,0}
 	},
 
 /* JPW NERVE
@@ -1150,7 +1131,6 @@ weapon_grenadesmoke
 		WP_SMOKE_MARKER,
 		"",                      // precache
 		"",              // sounds
-//		{0,0,0,0,0}
 	},
 // jpw
 
@@ -1176,7 +1156,6 @@ weapon_smoketrail -- only used as a special effects emitter for smoke trails (ar
 		WP_SMOKETRAIL,
 		"",                      // precache
 		"",              // sounds
-//		{0,0,0,0,0}
 	},
 // jpw
 
@@ -1203,7 +1182,6 @@ weapon_medic_heal
 		WP_MEDKIT,
 		"",                      // precache
 		"",                      // sounds
-//		{0,0,0,0,0}
 	},
 // dhm
 
@@ -1229,7 +1207,6 @@ weapon_dynamite
 		WP_DYNAMITE,
 		"models/multiplayer/dynamite/dynamite.md3 models/multiplayer/dynamite/dynamite_3rd.md3", // precache // JPW NERVE
 		"",                      // sounds
-//		{0,0,0,0,0}
 	},
 
 /*QUAKED weapon_flamethrower (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
@@ -1255,7 +1232,6 @@ model="models/weapons2/flamethrower/flamethrower.md3"
 		WP_FLAMETHROWER,
 		"",                          // precache
 		"",                          // sounds
-//		{0,0,0,0,0}
 	},
 
 /*
@@ -1279,7 +1255,6 @@ weapon_mortar (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
 		WP_MAPMORTAR,
 		"",                      // precache
 		"sound/weapons/mortar/mortarf1.wav",             // sounds
-//		{0,0,0,0,0}
 	},
 
 
@@ -1306,7 +1281,6 @@ weapon_class_special (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
 		WP_PLIERS,
 		"",                      // precache
 		"",  // sounds
-//		{0,0,0,0,0}
 	},
 
 /*
@@ -1331,7 +1305,6 @@ weapon_arty (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
 		WP_ARTY,
 		"",                      // precache
 		"",  // sounds
-//		{0,0,0,0,0}
 	},
 
 /*
@@ -1356,7 +1329,6 @@ weapon_medic_syringe (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
 		WP_MEDIC_SYRINGE,
 		"",                      // precache
 		"sound/misc/vo_revive.wav",  // sounds
-//		{0,0,0,0,0}
 	},
 
 /*
@@ -1381,7 +1353,6 @@ weapon_medic_adrenaline (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
 		WP_MEDIC_SYRINGE,
 		"",                      // precache
 		"",                      // sounds
-//		{0,0,0,0,0}
 	},
 /*
 weapon_magicammo (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
@@ -1405,7 +1376,6 @@ weapon_magicammo (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
 		WP_AMMO,
 		"",                      // precache
 		"",                      // sounds
-//		{0,0,0,0,0}
 	},
 
 	{
@@ -1415,9 +1385,6 @@ weapon_magicammo (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
 			"models/multiplayer/binocs/v_binocs.md3",
 			"models/multiplayer/binocs/v_binocs.md3",
 			"models/multiplayer/binocs/v_binocs.md3",
-//			"models/multiplayer/ammopack/ammopack.md3",
-//			"models/multiplayer/ammopack/v_ammopack.md3",
-//			"models/multiplayer/ammopack/ammopack_pickup_s.md3"
 		},
 
 		"icons/iconw_ammopack_1",    // icon
@@ -1454,7 +1421,6 @@ weapon_binoculars (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
 		WP_BINOCULARS,
 		"",                      // precache
 		"",                      // sounds
-//		{0,0,0,0,0}
 	},
 
 /*QUAKED weapon_k43 (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
@@ -1480,7 +1446,6 @@ model=""
 		WP_K43,
 		"",                      // precache
 		"",                      // sounds
-//		{0,0,0,0,0}
 	},
 
 /*QUAKED weapon_kar43_scope (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
@@ -1506,7 +1471,6 @@ model=""
 		WP_K43,
 		"",                      // precache
 		"",                      // sounds
-//		{0,0,0,0,0}
 	},
 
 
@@ -1517,14 +1481,6 @@ model="models/weapons2/mauser/mauser.md3"
 	{
 		"weapon_kar98Rifle",
 		"sound/misc/w_pkup.wav",
-/*        {
-			"models/weapons2/mauser/kar98.md3",
-			"models/multiplayer/kar98/v_kar98.md3",
-			"models/multiplayer/mauser/kar98_pickup.md3"
-		},
-
-		"icons/iconw_kar98_1",	// icon
-		"icons/ammo3",			// ammo icon*/
 		{
 			"models/multiplayer/kar98/kar98_3rd.md3",
 			"models/multiplayer/kar98/v_kar98.md3",
@@ -1541,7 +1497,6 @@ model="models/weapons2/mauser/mauser.md3"
 		WP_KAR98,
 		"",                      // precache
 		"",                      // sounds
-//		{0,0,0,0,0}
 	},
 
 /*QUAKED weapon_gpg40 (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
@@ -1567,7 +1522,6 @@ model="models/weapons2/mauser/mauser.md3"
 		WP_GPG40,
 		"",                          // precache
 		"",                          // sounds
-//		{0,0,0,0,0}
 	},
 
 /*QUAKED weapon_gpg40_allied (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
@@ -1593,7 +1547,6 @@ model="models/weapons2/mauser/mauser.md3"
 		WP_M7,
 		"",                          // precache
 		"",                          // sounds
-//		{0,0,0,0,0}
 	},
 
 /*QUAKED weapon_M1CarbineRifle (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
@@ -1604,10 +1557,10 @@ model="models/weapons2/mauser/mauser.md3"
 		"weapon_M1CarbineRifle",
 		"sound/misc/w_pkup.wav",
 /*        {
-			"models/weapons2/mauser/mauser.md3",
-			"models/weapons2/mauser/v_mauser.md3",
-			"models/multiplayer/mauser/mauser_pickup.md3"
-		},*/
+            "models/weapons2/mauser/mauser.md3",
+            "models/weapons2/mauser/v_mauser.md3",
+            "models/multiplayer/mauser/mauser_pickup.md3"
+        },*/
 		{
 			"models/multiplayer/m1_garand/m1_garand_3rd.md3",
 			"models/multiplayer/m1_garand/v_m1_garand.md3",
@@ -1624,7 +1577,6 @@ model="models/weapons2/mauser/mauser.md3"
 		WP_CARBINE,
 		"",                      // precache
 		"",                      // sounds
-//		{0,0,0,0,0}
 	},
 
 /*
@@ -1651,7 +1603,6 @@ model="models/weapons2/garand/garand.md3"
 		WP_GARAND,
 		"",                      // precache
 		"",                      // sounds
-//		{0,0,0,0}
 	},
 
 /*
@@ -1678,7 +1629,6 @@ model="models/weapons2/garand/garand.md3"
 		WP_GARAND,
 		"",                      // precache
 		"",                      // sounds
-//		{0,0,0,0}
 	},
 
 /*QUAKED weapon_fg42 (.3 .3 1) (-16 -16 -16) (16 16 16) SUSPENDED
@@ -1704,7 +1654,6 @@ model="models/weapons2/fg42/fg42.md3"
 		WP_FG42,
 		"",                  // precache
 		"",                  // sounds
-//		{0,0,0,0}
 	},
 
 /*QUAKED weapon_fg42scope (.3 .3 1) (-16 -16 -16) (16 16 16) SUSPENDED
@@ -1714,9 +1663,9 @@ model="models/weapons2/fg42/fg42.md3"
 	{
 		"weapon_fg42scope",  //----(SA)	modified
 		"sound/misc/w_pkup.wav",
-		{   "models/weapons2/fg42/fg42.md3",
-			"models/weapons2/fg42/v_fg42.md3",
-			"models/weapons2/fg42/pu_fg42.md3"},
+		{ "models/weapons2/fg42/fg42.md3",
+		  "models/weapons2/fg42/v_fg42.md3",
+		  "models/weapons2/fg42/pu_fg42.md3" },
 
 		"icons/iconw_fg42_1",    // icon
 		"icons/ammo5",               // ammo icon
@@ -1728,7 +1677,6 @@ model="models/weapons2/fg42/fg42.md3"
 		WP_FG42,        // shares clip w/
 		"",                          // precache
 		"",                          // sounds
-//		{0,0,0,0}
 	},
 
 /*
@@ -1739,9 +1687,9 @@ model="models/weapons2/bla?bla?/bla!.md3"
 	{
 		"weapon_mortar",
 		"sound/misc/w_pkup.wav",
-		{   "models/multiplayer/mortar/mortar_3rd.md3",
-			"models/multiplayer/mortar/v_mortar.md3",
-			0},
+		{ "models/multiplayer/mortar/mortar_3rd.md3",
+		  "models/multiplayer/mortar/v_mortar.md3",
+		  0 },
 
 		"icons/iconw_mortar_1",  // icon
 		"icons/ammo5",           // ammo icon
@@ -1753,15 +1701,14 @@ model="models/weapons2/bla?bla?/bla!.md3"
 		WP_MORTAR,      // shares clip w/
 		"",                          // precache
 		"",                          // sounds
-//		{0,0,0,0}
 	},
 
 	{
 		"weapon_mortar_set",
 		"sound/misc/w_pkup.wav",
-		{   "models/multiplayer/mortar/mortar_3rd.md3",
-			"models/multiplayer/mortar/v_mortar.md3",
-			0},
+		{ "models/multiplayer/mortar/mortar_3rd.md3",
+		  "models/multiplayer/mortar/v_mortar.md3",
+		  0 },
 
 		"icons/iconw_mortar_1",  // icon
 		"icons/ammo5",           // ammo icon
@@ -1773,7 +1720,6 @@ model="models/weapons2/bla?bla?/bla!.md3"
 		WP_MORTAR,      // shares clip w/
 		"",                          // precache
 		"",                          // sounds
-//		{0,0,0,0}
 	},
 
 /*
@@ -1798,7 +1744,6 @@ weapon_landmine
 		WP_LANDMINE,
 		"models/multiplayer/landmine/landmine.md3",
 		"",                      // sounds
-//		{0,0,0,0,0}
 	},
 
 /*
@@ -1823,7 +1768,6 @@ weapon_satchel (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
 		WP_SATCHEL,
 		"",                      // precache
 		"",                      // sounds
-//		{0,0,0,0,0}
 	},
 
 	{
@@ -1845,7 +1789,6 @@ weapon_satchel (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
 		WP_SATCHEL_DET,
 		"",                      // precache
 		"",                      // sounds
-//		{0,0,0,0,0}
 	},
 
 	{
@@ -1867,7 +1810,6 @@ weapon_satchel (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
 		WP_SMOKE_BOMB,
 		"",                      // precache
 		"",                      // sounds
-//		{0,0,0,0,0}
 	},
 
 	{
@@ -1889,7 +1831,6 @@ weapon_satchel (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
 		WP_TRIPMINE,
 		"models/multiplayer/dynamite/dynamite.md3 models/multiplayer/dynamite/dynamite_3rd.md3",
 		"",                      // sounds
-//		{0,0,0,0,0}
 	},
 
 /*QUAKED weapon_mobile_mg42 (.3 .3 1) (-16 -16 -16) (16 16 16) suspended spin - respawn
@@ -1915,7 +1856,6 @@ model="models/multiplayer/mg42/v_mg42.md3"
 		WP_MOBILE_MG42,
 		"",                  // precache
 		"",                  // sounds
-//		{0,0,0,0,0}
 	},
 
 	{
@@ -1937,15 +1877,14 @@ model="models/multiplayer/mg42/v_mg42.md3"
 		WP_MOBILE_MG42,
 		"",                  // precache
 		"",                  // sounds
-//		{0,0,0,0,0}
 	},
 
 	{
 		"weapon_silencer",
 		"sound/misc/w_pkup.wav",
-		{   "models/weapons2/silencer/silencer.md3", //----(SA)	changed 10/25
-			"models/weapons2/silencer/v_silencer.md3",
-			"models/weapons2/silencer/pu_silencer.md3"},
+		{ "models/weapons2/silencer/silencer.md3",      //----(SA)	changed 10/25
+		  "models/weapons2/silencer/v_silencer.md3",
+		  "models/weapons2/silencer/pu_silencer.md3" },
 
 		"icons/iconw_silencer_1",    // icon
 		"icons/ammo5",       // ammo icon
@@ -1958,7 +1897,6 @@ model="models/multiplayer/mg42/v_mg42.md3"
 		WP_LUGER,
 		"",                  // precache
 		"",                  // sounds
-//		{0,0,0,0}
 	},
 
 /*QUAKED weapon_colt (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
@@ -1984,7 +1922,6 @@ model="models/weapons2/colt/colt.md3"
 		WP_COLT,
 		"",                      // precache
 		"",                      // sounds
-//		{0,0,0,0,0}
 	},
 
 // DHM - Nerve
@@ -2010,7 +1947,6 @@ weapon_medic_heal
 		WP_MEDKIT,
 		"",                      // precache
 		"",                      // sounds
-//		{0,0,0,0,0}
 	},
 // dhm
 
@@ -2025,7 +1961,7 @@ model="models/ammo/syringe/syringe.md3
 		"ammo_syringe",
 		"sound/misc/am_pkup.wav",
 		{ "models/ammo/syringe/syringe.md3",
-		  0, 0},
+		  0, 0 },
 		"", // icon
 		NULL,               // ammo icon
 		"syringe",           // pickup			//----(SA)	changed
@@ -2073,7 +2009,7 @@ model="models/ammo/dynamite/dynamite.md3"
 		"ammo_dynamite",
 		"sound/misc/am_pkup.wav",
 		{ "models/ammo/dynamite/dynamite.md3",
-		  0, 0},
+		  0, 0 },
 		"", // icon
 		NULL,               // ammo icon
 		"dynamite",  // pickup			//----(SA)	changed
@@ -2097,7 +2033,7 @@ model="models/ammo/disguise/disguise.md3"
 		"ammo_disguise",
 		"sound/misc/am_pkup.wav",
 		{ "models/ammo/disguise/disguise.md3",
-		  0, 0},
+		  0, 0 },
 		"", // icon
 		NULL,               // ammo icon
 		"disguise",  // pickup			//----(SA)	changed
@@ -2120,7 +2056,7 @@ model="models/ammo/airstrike/airstrike.md3"
 		"ammo_airstrike",
 		"sound/misc/am_pkup.wav",
 		{ "models/ammo/disguise/disguise.md3",
-		  0, 0},
+		  0, 0 },
 		"", // icon
 		NULL,               // ammo icon
 		"airstrike canister",    // pickup			//----(SA)	changed
@@ -2206,7 +2142,6 @@ model="models/powerups/ammo/am9mm_s.md3"
 		WP_LUGER,
 		"",                  // precache
 		"",                  // sounds
-//		{32,24,16,16}
 	},
 /*QUAKED ammo_9mm (.3 .3 1) (-16 -16 -16) (16 16 16) SUSPENDED SPIN - RESPAWN
 used by: Luger pistol, MP40 machinegun
@@ -2229,7 +2164,6 @@ model="models/powerups/ammo/am9mm_m.md3"
 		WP_LUGER,
 		"",                  // precache
 		"",                  // sounds
-//		{64,48,32,32}
 	},
 /*QUAKED ammo_9mm_large (.3 .3 1) (-16 -16 -16) (16 16 16) SUSPENDED SPIN - RESPAWN
 used by: Luger pistol, MP40 machinegun
@@ -2252,7 +2186,6 @@ model="models/powerups/ammo/am9mm_l.md3"
 		WP_LUGER,
 		"",                  // precache
 		"",                  // sounds
-//		{96,64,48,48}
 	},
 
 
@@ -2277,7 +2210,6 @@ model="models/powerups/ammo/am45cal_s.md3"
 		WP_COLT,
 		"",                  // precache
 		"",                  // sounds
-//		{30,20,15,15}
 	},
 /*QUAKED ammo_45cal (.3 .3 1) (-16 -16 -16) (16 16 16) SUSPENDED SPIN - RESPAWN
 used by: Thompson, Colt
@@ -2300,7 +2232,6 @@ model="models/powerups/ammo/am45cal_m.md3"
 		WP_COLT,
 		"",                  // precache
 		"",                  // sounds
-//		{60,45,30,30}
 	},
 /*QUAKED ammo_45cal_large (.3 .3 1) (-16 -16 -16) (16 16 16) SUSPENDED SPIN - RESPAWN
 used by: Thompson, Colt
@@ -2323,7 +2254,6 @@ model="models/powerups/ammo/am45cal_l.md3"
 		WP_COLT,
 		"",                  // precache
 		"",                  // sounds
-//		{90,60,45,45}
 	},
 
 /*QUAKED ammo_30cal_small (.3 .3 1) (-16 -16 -16) (16 16 16) SUSPENDED SPIN - RESPAWN
@@ -2336,7 +2266,7 @@ model="models/powerups/ammo/am30cal_s.md3"
 		"ammo_30cal_small",
 		"sound/misc/am_pkup.wav",
 		{ "models/powerups/ammo/am30cal_s.md3",
-		  0, 0},
+		  0, 0 },
 		"",  // icon
 		NULL,                       // ammo icon
 		".30cal Rounds",         // pickup
@@ -2347,7 +2277,6 @@ model="models/powerups/ammo/am30cal_s.md3"
 		WP_GARAND,
 		"",                          // precache
 		"",                          // sounds
-//		{5,2,2,2}
 	},
 /*QUAKED ammo_30cal (.3 .3 1) (-16 -16 -16) (16 16 16) SUSPENDED SPIN - RESPAWN
 used by: Garand rifle
@@ -2370,7 +2299,6 @@ model="models/powerups/ammo/am30cal_m.md3"
 		WP_GARAND,
 		"",                          // precache
 		"",                          // sounds
-//		{5,5,5,5	}
 	},
 /*QUAKED ammo_30cal_large (.3 .3 1) (-16 -16 -16) (16 16 16) SUSPENDED SPIN - RESPAWN
 used by: Garand rifle
@@ -2393,7 +2321,6 @@ model="models/powerups/ammo/am30cal_l.md3"
 		WP_GARAND,
 		"",                          // precache
 		"",                          // sounds
-//		{10,10,10,5}
 	},
 
 
@@ -2425,7 +2352,6 @@ model="models/flags/r_flag.md3"
 		0,
 		"",                  // precache
 		"",  // sounds
-//		{0,0,0,0,0}
 	},
 
 /*QUAKED team_CTF_blueflag (0 0 1) (-16 -16 -16) (16 16 16)
@@ -2451,63 +2377,45 @@ model="models/flags/b_flag.md3"
 		0,
 		"",                  // precache
 		"",  // sounds
-//		{0,0,0,0,0}
 	},
-
-	//---- (SA) Wolf keys
-
-/* QUAKED key_1 (1 1 0) (-8 -8 -8) (8 8 8) SUSPENDED SPIN - RESPAWN
-key 1
-
-pickup sound : "sound/misc/w_pkup.wav"
--------- MODEL FOR RADIANT ONLY - DO NOT SET THIS AS A KEY --------
-model="models/powerups/xp_key/key.md3"
-*/
-/*
-	{
-		"key_key1",
-		"sound/misc/w_pkup.wav",	//"sound/pickup/keys/skull.wav",
-		{
-			"models/powerups/xp_key/key.md3",
-			0, 0
-		},
-		"", //"icons/iconk_skull",	// icon
-		NULL,					// ammo icon
-		"Key 1",		// pickup
-		0,
-		IT_KEY,
-		KEY_1,
-		0,
-		0,
-		"",						// precache
-		"models/keys/key.wav",	// sounds
-		//{0,0,0,0}
-	},
-
-*/
 
 	// end of list marker
-	{NULL}
+	{
+		NULL,
+		NULL,
+		{ NULL },
+		NULL,
+		NULL,
+		NULL,
+		0,
+		0,
+		0,
+		0,
+		0,
+		NULL,
+		NULL
+	}
 };
 // END JOSEPH
 
-int bg_numItems = sizeof( bg_itemlist ) / sizeof( bg_itemlist[0] ) - 1;
+int bg_numItems = sizeof(bg_itemlist) / sizeof(bg_itemlist[0]) - 1;
 
 /*
 ==============
 BG_FindItemForHoldable
 ==============
 */
-gitem_t *BG_FindItemForHoldable( holdable_t pw ) {
+gitem_t *BG_FindItemForHoldable(holdable_t pw)
+{
 	int i;
 
-	for ( i = 0 ; i < bg_numItems ; i++ ) {
-		if ( bg_itemlist[i].giType == IT_HOLDABLE && bg_itemlist[i].giTag == pw ) {
+	for (i = 0 ; i < bg_numItems ; i++)
+	{
+		if (bg_itemlist[i].giType == IT_HOLDABLE && bg_itemlist[i].giTag == (int)pw)
+		{
 			return &bg_itemlist[i];
 		}
 	}
-
-//	Com_Error( ERR_DROP, "HoldableItem not found" );
 
 	return NULL;
 }
@@ -2519,16 +2427,19 @@ BG_FindItemForWeapon
 
 ===============
 */
-gitem_t *BG_FindItemForWeapon( weapon_t weapon ) {
+gitem_t *BG_FindItemForWeapon(weapon_t weapon)
+{
 	gitem_t *it;
 
-	for ( it = bg_itemlist + 1 ; it->classname ; it++ ) {
-		if ( it->giType == IT_WEAPON && it->giTag == weapon ) {
+	for (it = bg_itemlist + 1 ; it->classname ; it++)
+	{
+		if (it->giType == IT_WEAPON && it->giTag == (int)weapon)
+		{
 			return it;
 		}
 	}
 
-	Com_Error( ERR_DROP, "Couldn't find item for weapon %i", weapon );
+	Com_Error(ERR_DROP, "Couldn't find item for weapon %i", weapon);
 	return NULL;
 }
 
@@ -2542,11 +2453,14 @@ gitem_t *BG_FindItemForWeapon( weapon_t weapon ) {
 BG_FindClipForWeapon
 ==============
 */
-weapon_t BG_FindClipForWeapon( weapon_t weapon ) {
+weapon_t BG_FindClipForWeapon(weapon_t weapon)
+{
 	gitem_t *it;
 
-	for ( it = bg_itemlist + 1 ; it->classname ; it++ ) {
-		if ( it->giType == IT_WEAPON && it->giTag == weapon ) {
+	for (it = bg_itemlist + 1 ; it->classname ; it++)
+	{
+		if (it->giType == IT_WEAPON && it->giTag == (int)weapon)
+		{
 			return it->giClipIndex;
 		}
 	}
@@ -2561,11 +2475,14 @@ weapon_t BG_FindClipForWeapon( weapon_t weapon ) {
 BG_FindAmmoForWeapon
 ==============
 */
-weapon_t BG_FindAmmoForWeapon( weapon_t weapon ) {
+weapon_t BG_FindAmmoForWeapon(weapon_t weapon)
+{
 	gitem_t *it;
 
-	for ( it = bg_itemlist + 1 ; it->classname ; it++ ) {
-		if ( it->giType == IT_WEAPON && it->giTag == weapon ) {
+	for (it = bg_itemlist + 1 ; it->classname ; it++)
+	{
+		if (it->giType == IT_WEAPON && it->giTag == (int)weapon)
+		{
 			return it->giAmmoIndex;
 		}
 	}
@@ -2575,27 +2492,32 @@ weapon_t BG_FindAmmoForWeapon( weapon_t weapon ) {
 /*
 ==============
 BG_AkimboFireSequence
-	returns 'true' if it's the left hand's turn to fire, 'false' if it's the right hand's turn
+    returns 'true' if it's the left hand's turn to fire, 'false' if it's the right hand's turn
 ==============
 */
-qboolean BG_AkimboFireSequence( int weapon, int akimboClip, int mainClip ) {
-	if ( !BG_IsAkimboWeapon( weapon ) ) {
+qboolean BG_AkimboFireSequence(int weapon, int akimboClip, int mainClip)
+{
+	if (!BG_IsAkimboWeapon(weapon))
+	{
 		return qfalse;
 	}
 
-	if ( !akimboClip ) {
+	if (!akimboClip)
+	{
 		return qfalse;
 	}
 
 	// no ammo in main weapon, must be akimbo turn
-	if ( !mainClip ) {
+	if (!mainClip)
+	{
 		return qtrue;
 	}
 
 	// at this point, both have ammo
 
 	// now check 'cycle'   // (removed old method 11/5/2001)
-	if ( ( akimboClip + mainClip ) & 1 ) {
+	if ((akimboClip + mainClip) & 1)
+	{
 		return qfalse;
 	}
 
@@ -2607,13 +2529,17 @@ qboolean BG_AkimboFireSequence( int weapon, int akimboClip, int mainClip ) {
 BG_IsAkimboWeapon
 ==============
 */
-qboolean BG_IsAkimboWeapon( int weaponNum ) {
-	if ( weaponNum == WP_AKIMBO_COLT ||
-		 weaponNum == WP_AKIMBO_SILENCEDCOLT ||
-		 weaponNum == WP_AKIMBO_LUGER ||
-		 weaponNum == WP_AKIMBO_SILENCEDLUGER ) {
+qboolean BG_IsAkimboWeapon(int weaponNum)
+{
+	if (weaponNum == WP_AKIMBO_COLT ||
+	    weaponNum == WP_AKIMBO_SILENCEDCOLT ||
+	    weaponNum == WP_AKIMBO_LUGER ||
+	    weaponNum == WP_AKIMBO_SILENCEDLUGER)
+	{
 		return qtrue;
-	} else {
+	}
+	else
+	{
 		return qfalse;
 	}
 }
@@ -2623,16 +2549,19 @@ qboolean BG_IsAkimboWeapon( int weaponNum ) {
 BG_IsAkimboSideArm
 ==============
 */
-qboolean BG_IsAkimboSideArm( int weaponNum, playerState_t *ps ) {
-	switch ( weaponNum )
+qboolean BG_IsAkimboSideArm(int weaponNum, playerState_t *ps)
+{
+	switch (weaponNum)
 	{
-	case WP_COLT:   if ( ps->weapon == WP_AKIMBO_COLT || ps->weapon == WP_AKIMBO_SILENCEDCOLT  ) {
+	case WP_COLT:   if (ps->weapon == WP_AKIMBO_COLT || ps->weapon == WP_AKIMBO_SILENCEDCOLT)
+		{
 			return qtrue;
-	}
+		}
 		break;
-	case WP_LUGER:  if ( ps->weapon == WP_AKIMBO_LUGER || ps->weapon == WP_AKIMBO_SILENCEDLUGER ) {
+	case WP_LUGER:  if (ps->weapon == WP_AKIMBO_LUGER || ps->weapon == WP_AKIMBO_SILENCEDLUGER)
+		{
 			return qtrue;
-	}
+		}
 		break;
 	}
 	return qfalse;
@@ -2643,8 +2572,9 @@ qboolean BG_IsAkimboSideArm( int weaponNum, playerState_t *ps ) {
 BG_AkimboSidearm
 ==============
 */
-int BG_AkimboSidearm( int weaponNum ) {
-	switch ( weaponNum )
+int BG_AkimboSidearm(int weaponNum)
+{
+	switch (weaponNum)
 	{
 	case WP_AKIMBO_COLT:            return WP_COLT;             break;
 	case WP_AKIMBO_SILENCEDCOLT:    return WP_COLT; break;
@@ -2654,65 +2584,24 @@ int BG_AkimboSidearm( int weaponNum ) {
 	}
 }
 
-/*
-==============
-BG_AkimboForSideArm
-==============
-*/
-/*int BG_AkimboForSideArm( int weaponNum ) {
-	switch( weaponNum )
-	{
-	case WP_COLT:			return WP_AKIMBO_COLT;			break;
-	case WP_SILENCED_COLT:	return WP_AKIMBO_SILENCEDCOLT;	break;
-	case WP_LUGER:			return WP_AKIMBO_LUGER;			break;
-	case WP_SILENCER:		return WP_AKIMBO_SILENCEDLUGER;	break;
-	default:				return WP_NONE;					break;
-	}
-}*/
-
-
-//----(SA) Added keys
-/*
-==============
-BG_FindItemForKey
-==============
-*/
-/*gitem_t *BG_FindItemForKey(wkey_t k, int *indexreturn)
-{
-	int		i;
-
-	for ( i = 0 ; i < bg_numItems ; i++ ) {
-		if ( bg_itemlist[i].giType == IT_KEY && bg_itemlist[i].giTag == k ) {
-			{
-				if(indexreturn)
-					*indexreturn = i;
-				return &bg_itemlist[i];
-			}
-		}
-	}
-
-	Com_Error( ERR_DROP, "Key %d not found", k );
-	return NULL;
-}*/
-//----(SA) end
-
-
 //----(SA) added
 /*
 ==============
 BG_FindItemForAmmo
 ==============
 */
-gitem_t *BG_FindItemForAmmo( int ammo ) {
+gitem_t *BG_FindItemForAmmo(int ammo)
+{
 	int i = 0;
 
-	for (; i < bg_numItems; i++ )
+	for (; i < bg_numItems; i++)
 	{
-		if ( bg_itemlist[i].giType == IT_AMMO && bg_itemlist[i].giAmmoIndex == ammo ) {
+		if (bg_itemlist[i].giType == IT_AMMO && bg_itemlist[i].giAmmoIndex == ammo)
+		{
 			return &bg_itemlist[i];
 		}
 	}
-	Com_Error( ERR_DROP, "Item not found for ammo: %d", ammo );
+	Com_Error(ERR_DROP, "Item not found for ammo: %d", ammo);
 	return NULL;
 }
 //----(SA) end
@@ -2723,11 +2612,14 @@ gitem_t *BG_FindItemForAmmo( int ammo ) {
 BG_FindItem
 ===============
 */
-gitem_t *BG_FindItem( const char *pickupName ) {
+gitem_t *BG_FindItem(const char *pickupName)
+{
 	gitem_t *it;
 
-	for ( it = bg_itemlist + 1 ; it->classname ; it++ ) {
-		if ( !Q_stricmp( it->pickup_name, pickupName ) ) {
+	for (it = bg_itemlist + 1 ; it->classname ; it++)
+	{
+		if (!Q_stricmp(it->pickup_name, pickupName))
+		{
 			return it;
 		}
 	}
@@ -2735,11 +2627,14 @@ gitem_t *BG_FindItem( const char *pickupName ) {
 	return NULL;
 }
 
-gitem_t *BG_FindItemForClassName( const char *className ) {
+gitem_t *BG_FindItemForClassName(const char *className)
+{
 	gitem_t *it;
 
-	for ( it = bg_itemlist + 1 ; it->classname ; it++ ) {
-		if ( !Q_stricmp( it->classname, className ) ) {
+	for (it = bg_itemlist + 1 ; it->classname ; it++)
+	{
+		if (!Q_stricmp(it->classname, className))
+		{
 			return it;
 		}
 	}
@@ -2750,8 +2645,10 @@ gitem_t *BG_FindItemForClassName( const char *className ) {
 
 // DHM - Nerve :: returns qtrue if a weapon is indeed used in multiplayer
 // Gordon: FIXME: er, we shouldnt really need this, just remove all the weapons we dont actually want :)
-qboolean BG_WeaponInWolfMP( int weapon ) {
-	switch ( weapon ) {
+qboolean BG_WeaponInWolfMP(int weapon)
+{
+	switch (weapon)
+	{
 	case WP_KNIFE:
 	case WP_LUGER:
 	case WP_COLT:
@@ -2810,18 +2707,20 @@ Items can be picked up without actually touching their physical bounds to make
 grabbing them easier
 ============
 */
-qboolean BG_PlayerTouchesItem( playerState_t *ps, entityState_t *item, int atTime ) {
+qboolean BG_PlayerTouchesItem(playerState_t *ps, entityState_t *item, int atTime)
+{
 	vec3_t origin;
 
-	BG_EvaluateTrajectory( &item->pos, atTime, origin, qfalse, item->effect2Time );
+	BG_EvaluateTrajectory(&item->pos, atTime, origin, qfalse, item->effect2Time);
 
 	// we are ignoring ducked differences here
-	if ( ps->origin[0] - origin[0] > 36
-		 || ps->origin[0] - origin[0] < -36
-		 || ps->origin[1] - origin[1] > 36
-		 || ps->origin[1] - origin[1] < -36
-		 || ps->origin[2] - origin[2] > 36
-		 || ps->origin[2] - origin[2] < -36 ) {
+	if (ps->origin[0] - origin[0] > 36
+	    || ps->origin[0] - origin[0] < -36
+	    || ps->origin[1] - origin[1] > 36
+	    || ps->origin[1] - origin[1] < -36
+	    || ps->origin[2] - origin[2] > 36
+	    || ps->origin[2] - origin[2] < -36)
+	{
 		return qfalse;
 	}
 
@@ -2832,14 +2731,16 @@ qboolean BG_PlayerTouchesItem( playerState_t *ps, entityState_t *item, int atTim
 /*
 =================================
 BG_AddMagicAmmo:
-	if numOfClips is 0, no ammo is added, it just return whether any ammo CAN be added;
-	otherwise return whether any ammo was ACTUALLY added.
+    if numOfClips is 0, no ammo is added, it just return whether any ammo CAN be added;
+    otherwise return whether any ammo was ACTUALLY added.
 
 WARNING: when numOfClips is 0, DO NOT CHANGE ANYTHING under ps.
 =================================
 */
-int BG_GrenadesForClass( int cls, int* skills ) {
-	switch ( cls ) {
+int BG_GrenadesForClass(int cls)
+{
+	switch (cls)
+	{
 	case PC_MEDIC:
 		return 1;
 	case PC_SOLDIER:
@@ -2855,8 +2756,10 @@ int BG_GrenadesForClass( int cls, int* skills ) {
 	return 0;
 }
 
-weapon_t BG_GrenadeTypeForTeam( team_t team ) {
-	switch ( team ) {
+weapon_t BG_GrenadeTypeForTeam(team_t team)
+{
+	switch (team)
+	{
 	case TEAM_AXIS:
 		return WP_GRENADE_LAUNCHER;
 	case TEAM_ALLIES:
@@ -2867,7 +2770,8 @@ weapon_t BG_GrenadeTypeForTeam( team_t team ) {
 }
 
 // Gordon: setting numOfClips = 0 allows you to check if the client needs ammo, but doesnt give any
-qboolean BG_AddMagicAmmo( playerState_t *ps, int *skill, int teamNum, int numOfClips ) {
+qboolean BG_AddMagicAmmo(playerState_t *ps, int teamNum, int numOfClips)
+{
 	int i, weapon;
 	int ammoAdded = qfalse;
 	int maxammo;
@@ -2875,14 +2779,16 @@ qboolean BG_AddMagicAmmo( playerState_t *ps, int *skill, int teamNum, int numOfC
 	int weapNumOfClips;
 
 	// Gordon: handle grenades first
-	i = BG_GrenadesForClass( ps->stats[STAT_PLAYER_CLASS], skill );
-	weapon = BG_GrenadeTypeForTeam( teamNum );
+	i      = BG_GrenadesForClass(ps->stats[STAT_PLAYER_CLASS]);
+	weapon = BG_GrenadeTypeForTeam(teamNum);
 
-	clip = BG_FindClipForWeapon( weapon );
-	if ( ps->ammoclip[clip] < i ) {
+	clip = BG_FindClipForWeapon(weapon);
+	if (ps->ammoclip[clip] < i)
+	{
 
 		// Gordon: early out
-		if ( !numOfClips ) {
+		if (!numOfClips)
+		{
 			return qtrue;
 		}
 
@@ -2890,83 +2796,106 @@ qboolean BG_AddMagicAmmo( playerState_t *ps, int *skill, int teamNum, int numOfC
 
 		ammoAdded = qtrue;
 
-		COM_BitSet( ps->weapons, weapon );
+		COM_BitSet(ps->weapons, weapon);
 
-		if ( ps->ammoclip[clip] > i ) {
+		if (ps->ammoclip[clip] > i)
+		{
 			ps->ammoclip[clip] = i;
 		}
 	}
 
-	if ( COM_BitCheck( ps->weapons, WP_MEDIC_SYRINGE ) ) {
+	if (COM_BitCheck(ps->weapons, WP_MEDIC_SYRINGE))
+	{
 		i = 10;
 
-		clip = BG_FindClipForWeapon( WP_MEDIC_SYRINGE );
+		clip = BG_FindClipForWeapon(WP_MEDIC_SYRINGE);
 
-		if ( ps->ammoclip[ clip ] < i ) {
-			if ( !numOfClips ) {
+		if (ps->ammoclip[clip] < i)
+		{
+			if (!numOfClips)
+			{
 				return qtrue;
 			}
 
-			ps->ammoclip[ clip ] += numOfClips;
+			ps->ammoclip[clip] += numOfClips;
 
 			ammoAdded = qtrue;
 
-			if ( ps->ammoclip[ clip ] > i ) {
-				ps->ammoclip[ clip ] = i;
+			if (ps->ammoclip[clip] > i)
+			{
+				ps->ammoclip[clip] = i;
 			}
 		}
 	}
 
 	// Gordon: now other weapons
-	for ( i = 0; reloadableWeapons[i] >= 0; i++ ) {
+	for (i = 0; reloadableWeapons[i] >= 0; i++)
+	{
 		weapon = reloadableWeapons[i];
-		if ( COM_BitCheck( ps->weapons, weapon ) ) {
-			maxammo = BG_MaxAmmoForWeapon( weapon, skill );
+		if (COM_BitCheck(ps->weapons, weapon))
+		{
+			maxammo = BG_MaxAmmoForWeapon(weapon);
 
 			// Handle weapons that just use clip, and not ammo
-			if ( weapon == WP_FLAMETHROWER ) {
-				clip = BG_FindAmmoForWeapon( weapon );
-				if ( ps->ammoclip[clip] < maxammo ) {
+			if (weapon == WP_FLAMETHROWER)
+			{
+				clip = BG_FindAmmoForWeapon(weapon);
+				if (ps->ammoclip[clip] < maxammo)
+				{
 					// early out
-					if ( !numOfClips ) {
+					if (!numOfClips)
+					{
 						return qtrue;
 					}
 
-					ammoAdded = qtrue;
+					ammoAdded          = qtrue;
 					ps->ammoclip[clip] = maxammo;
 				}
-			} else if ( weapon == WP_PANZERFAUST ) { //%	|| weapon == WP_MORTAR ) {
-				clip = BG_FindAmmoForWeapon( weapon );
-				if ( ps->ammoclip[clip] < maxammo ) {
+			}
+			else if (weapon == WP_PANZERFAUST)       //%	|| weapon == WP_MORTAR ) {
+			{
+				clip = BG_FindAmmoForWeapon(weapon);
+				if (ps->ammoclip[clip] < maxammo)
+				{
 					// early out
-					if ( !numOfClips ) {
+					if (!numOfClips)
+					{
 						return qtrue;
 					}
 
-					ammoAdded = qtrue;
+					ammoAdded           = qtrue;
 					ps->ammoclip[clip] += numOfClips;
-					if ( ps->ammoclip[clip] >= maxammo ) {
+					if (ps->ammoclip[clip] >= maxammo)
+					{
 						ps->ammoclip[clip] = maxammo;
 					}
 				}
-			} else {
-				clip = BG_FindAmmoForWeapon( weapon );
-				if ( ps->ammo[clip] < maxammo ) {
+			}
+			else
+			{
+				clip = BG_FindAmmoForWeapon(weapon);
+				if (ps->ammo[clip] < maxammo)
+				{
 					// early out
-					if ( !numOfClips ) {
+					if (!numOfClips)
+					{
 						return qtrue;
 					}
 					ammoAdded = qtrue;
 
-					if ( BG_IsAkimboWeapon( weapon ) ) {
+					if (BG_IsAkimboWeapon(weapon))
+					{
 						weapNumOfClips = numOfClips * 2; // double clips babeh!
-					} else {
+					}
+					else
+					{
 						weapNumOfClips = numOfClips;
 					}
 
 					// add and limit check
-					ps->ammo[clip] += weapNumOfClips * GetAmmoTableData( weapon )->maxclip;
-					if ( ps->ammo[clip] > maxammo ) {
+					ps->ammo[clip] += weapNumOfClips * GetAmmoTableData(weapon)->maxclip;
+					if (ps->ammo[clip] > maxammo)
+					{
 						ps->ammo[clip] = maxammo;
 					}
 				}
@@ -2982,78 +2911,105 @@ BG_CanUseWeapon: can a player of the specified team and class use this weapon?
 ================
 - added by xkan, 01/02/03
 */
-qboolean BG_CanUseWeapon( int classNum, int teamNum, weapon_t weapon ) {
-	switch ( classNum ) {
+qboolean BG_CanUseWeapon(int classNum, int teamNum, weapon_t weapon)
+{
+	switch (classNum)
+	{
 	case PC_ENGINEER:
-		if ( weapon == WP_PLIERS
-			 || weapon == WP_DYNAMITE
-			 || weapon == WP_LANDMINE ) {
+		if (weapon == WP_PLIERS
+		    || weapon == WP_DYNAMITE
+		    || weapon == WP_LANDMINE)
+		{
 			return qtrue;
-		} else if ( weapon == WP_MP40
-					|| weapon == WP_KAR98 ) {
-			return ( teamNum == TEAM_AXIS );
-		} else if ( weapon == WP_THOMPSON
-					|| weapon == WP_CARBINE ) {
-			return ( teamNum == TEAM_ALLIES );
+		}
+		else if (weapon == WP_MP40
+		         || weapon == WP_KAR98)
+		{
+			return (teamNum == TEAM_AXIS);
+		}
+		else if (weapon == WP_THOMPSON
+		         || weapon == WP_CARBINE)
+		{
+			return (teamNum == TEAM_ALLIES);
 		}
 	case PC_FIELDOPS:
-		if ( weapon == WP_STEN ) {
+		if (weapon == WP_STEN)
+		{
 			return qtrue;
-		} else if ( weapon == WP_MP40 ) {
-			return ( teamNum == TEAM_AXIS );
-		} else if ( weapon == WP_THOMPSON ) {
-			return ( teamNum == TEAM_ALLIES );
+		}
+		else if (weapon == WP_MP40)
+		{
+			return (teamNum == TEAM_AXIS);
+		}
+		else if (weapon == WP_THOMPSON)
+		{
+			return (teamNum == TEAM_ALLIES);
 		}
 		break;
 	case PC_SOLDIER:
-		if ( weapon == WP_STEN
-			 || weapon == WP_PANZERFAUST
-			 || weapon == WP_FLAMETHROWER
-			 // Gordon: shouldn't this only be for cvt ops?
-			 || weapon == WP_FG42
-			 || weapon == WP_MOBILE_MG42
-			 || weapon == WP_MOBILE_MG42_SET
-			 || weapon == WP_MORTAR
-			 || weapon == WP_MORTAR_SET ) {
+		if (weapon == WP_STEN
+		    || weapon == WP_PANZERFAUST
+		    || weapon == WP_FLAMETHROWER
+		    // Gordon: shouldn't this only be for cvt ops?
+		    || weapon == WP_FG42
+		    || weapon == WP_MOBILE_MG42
+		    || weapon == WP_MOBILE_MG42_SET
+		    || weapon == WP_MORTAR
+		    || weapon == WP_MORTAR_SET)
+		{
 			return qtrue;
-		} else if ( weapon == WP_MP40 ) {
-			return ( teamNum == TEAM_AXIS );
-		} else if ( weapon == WP_THOMPSON ) {
-			return ( teamNum == TEAM_ALLIES );
+		}
+		else if (weapon == WP_MP40)
+		{
+			return (teamNum == TEAM_AXIS);
+		}
+		else if (weapon == WP_THOMPSON)
+		{
+			return (teamNum == TEAM_ALLIES);
 		}
 		break;
 
 	case PC_MEDIC:
-		if ( weapon == WP_MEDIC_SYRINGE
-			 || weapon == WP_MEDKIT ) {
+		if (weapon == WP_MEDIC_SYRINGE
+		    || weapon == WP_MEDKIT)
+		{
 			return qtrue;
 		}
-		else if ( weapon == WP_MP40 ) {
-			return ( teamNum == TEAM_AXIS );
-		} else if ( weapon == WP_THOMPSON ) {
-			return ( teamNum == TEAM_ALLIES );
+		else if (weapon == WP_MP40)
+		{
+			return (teamNum == TEAM_AXIS);
+		}
+		else if (weapon == WP_THOMPSON)
+		{
+			return (teamNum == TEAM_ALLIES);
 		}
 		break;
 	case PC_COVERTOPS:
-		if ( weapon == WP_STEN
-			 || weapon == WP_SMOKE_BOMB
-			 || weapon == WP_SATCHEL
-			 || weapon == WP_AMMO
-			 // Gordon: this is a cvt ops weapon in single player too, right?
-			 || weapon == WP_FG42 ) {
+		if (weapon == WP_STEN
+		    || weapon == WP_SMOKE_BOMB
+		    || weapon == WP_SATCHEL
+		    || weapon == WP_AMMO
+		    // Gordon: this is a cvt ops weapon in single player too, right?
+		    || weapon == WP_FG42)
+		{
 			return qtrue;
-		} else if ( weapon == WP_K43 ) {
-			return ( teamNum == TEAM_AXIS );
-		} else if ( weapon == WP_GARAND ) {
-			return ( teamNum == TEAM_ALLIES );
+		}
+		else if (weapon == WP_K43)
+		{
+			return (teamNum == TEAM_AXIS);
+		}
+		else if (weapon == WP_GARAND)
+		{
+			return (teamNum == TEAM_ALLIES);
 		}
 		break;
 	}
 
-	if ( weapon == WP_NONE
-		 || weapon == WP_KNIFE
-		 || weapon == WP_LUGER
-		 || weapon == WP_COLT ) {
+	if (weapon == WP_NONE
+	    || weapon == WP_KNIFE
+	    || weapon == WP_LUGER
+	    || weapon == WP_COLT)
+	{
 		return qtrue;
 	}
 
@@ -3061,156 +3017,73 @@ qboolean BG_CanUseWeapon( int classNum, int teamNum, weapon_t weapon ) {
 	return qfalse;
 }
 
-#define AMMOFORWEAP BG_FindAmmoForWeapon( item->giTag )
-/*
-================
-BG_CanItemBeGrabbed
-
-Returns false if the item should not be picked up.
-This needs to be the same for client side prediction and server use.
-================
-*/
-qboolean    BG_CanItemBeGrabbed( const entityState_t *ent, const playerState_t *ps, int *skill, int teamNum ) {
-	gitem_t *item;
-
-	if ( ent->modelindex < 1 || ent->modelindex >= bg_numItems ) {
-		Com_Error( ERR_DROP, "BG_CanItemBeGrabbed: index out of range" );
-	}
-
-	item = &bg_itemlist[ent->modelindex];
-
-	switch ( item->giType ) {
-	case IT_WEAPON:
-		if ( item->giTag == WP_AMMO ) {
-			// magic ammo for any two-handed weapon
-			// xkan, 11/21/2002 - only pick up if ammo is not full, numClips is 0, so ps will
-			// NOT be changed (I know, it places the burden on the programmer, rather than the
-			// compiler, to ensure that).
-			return BG_AddMagicAmmo( (playerState_t *)ps, skill, teamNum, 0 );    // Arnout: had to cast const away
-		}
-		return qtrue;
-
-	case IT_AMMO:
-		return qfalse;
-
-	case IT_ARMOR:
-		return qfalse;
-
-	case IT_HEALTH:
-		// Gordon: ps->teamNum is really class.... thx whoever decided on that...
-		if ( ps->teamNum == PC_MEDIC ) {
-			// Gordon: medics can go up to 12% extra on max health as they have perm. regen
-			if ( ps->stats[STAT_HEALTH] >= (int)( ps->stats[STAT_MAX_HEALTH] * 1.12 ) ) {
-				return qfalse;
-			}
-		} else {
-			if ( ps->stats[STAT_HEALTH] >= ps->stats[STAT_MAX_HEALTH] ) {
-				return qfalse;
-			}
-		}
-		return qtrue;
-
-	case IT_TEAM: // team items, such as flags
-
-		// density tracks how many uses left
-		if ( ( ent->density < 1 ) || ( ( ( ps->persistant[PERS_TEAM] == TEAM_AXIS ) ? ps->powerups[PW_BLUEFLAG] : ps->powerups[PW_REDFLAG] ) != 0 ) ) {
-			return qfalse;
-		}
-
-		// DHM - Nerve :: otherEntity2 is now used instead of modelindex2
-		// ent->modelindex2 is non-zero on items if they are dropped
-		// we need to know this because we can pick up our dropped flag (and return it)
-		// but we can't pick up our flag at base
-		if ( ps->persistant[PERS_TEAM] == TEAM_AXIS ) {
-			if ( item->giTag == PW_BLUEFLAG ||
-				 ( item->giTag == PW_REDFLAG && ent->otherEntityNum2 /*ent->modelindex2*/ ) ||
-				 ( item->giTag == PW_REDFLAG && ps->powerups[PW_BLUEFLAG] ) ) {
-				return qtrue;
-			}
-		} else if ( ps->persistant[PERS_TEAM] == TEAM_ALLIES ) {
-			if ( item->giTag == PW_REDFLAG ||
-				 ( item->giTag == PW_BLUEFLAG && ent->otherEntityNum2 /*ent->modelindex2*/ ) ||
-				 ( item->giTag == PW_BLUEFLAG && ps->powerups[PW_REDFLAG] ) ) {
-				return qtrue;
-			}
-		}
-
-		return qfalse;
+#define AMMOFORWEAP BG_FindAmmoForWeapon(item->giTag)
 
 
-	case IT_HOLDABLE:
-		return qtrue;
-
-	case IT_TREASURE:   // treasure always picked up
-		return qtrue;
-
-	case IT_KEY:
-		return qtrue;   // keys are always picked up
-
-	case IT_BAD:
-		Com_Error( ERR_DROP, "BG_CanItemBeGrabbed: IT_BAD" );
-
-	}
-	return qfalse;
-}
-
-//======================================================================
-
-void BG_CalculateSpline_r( splinePath_t* spline, vec3_t out1, vec3_t out2, float tension ) {
+void BG_CalculateSpline_r(splinePath_t *spline, vec3_t out1, vec3_t out2, float tension)
+{
 	vec3_t points[18];
-	int i;
-	int count = spline->numControls + 2;
+	int    i;
+	int    count = spline->numControls + 2;
 	vec3_t dist;
 
-	VectorCopy( spline->point.origin, points[0] );
-	for ( i = 0; i < spline->numControls; i++ ) {
-		VectorCopy( spline->controls[i].origin, points[i + 1] );
+	VectorCopy(spline->point.origin, points[0]);
+	for (i = 0; i < spline->numControls; i++)
+	{
+		VectorCopy(spline->controls[i].origin, points[i + 1]);
 	}
-	if ( !spline->next ) {
+	if (!spline->next)
+	{
 		return;
-//		Com_Error( ERR_DROP, "Spline (%s) with no target referenced", spline->point.name );
 	}
-	VectorCopy( spline->next->point.origin, points[i + 1] );
+	VectorCopy(spline->next->point.origin, points[i + 1]);
 
 
-	while ( count > 2 ) {
-		for ( i = 0; i < count - 1; i++ ) {
-			VectorSubtract( points[i + 1], points[i], dist );
-			VectorMA( points[i], tension, dist, points[i] );
+	while (count > 2)
+	{
+		for (i = 0; i < count - 1; i++)
+		{
+			VectorSubtract(points[i + 1], points[i], dist);
+			VectorMA(points[i], tension, dist, points[i]);
 		}
 		count--;
 	}
 
-	VectorCopy( points[0], out1 );
-	VectorCopy( points[1], out2 );
+	VectorCopy(points[0], out1);
+	VectorCopy(points[1], out2);
 }
 
-qboolean BG_TraverseSpline( float* deltaTime, splinePath_t** pSpline ) {
+qboolean BG_TraverseSpline(float *deltaTime, splinePath_t **pSpline)
+{
 	float dist;
 
-	while ( ( *deltaTime ) > 1 ) {
-		( *deltaTime ) -= 1;
-		dist = ( *pSpline )->length * ( *deltaTime );
+	while ((*deltaTime) > 1)
+	{
+		(*deltaTime) -= 1;
+		dist          = (*pSpline)->length * (*deltaTime);
 
-		if ( !( *pSpline )->next || !( *pSpline )->next->length ) {
+		if (!(*pSpline)->next || !(*pSpline)->next->length)
+		{
 			return qfalse;
 //			Com_Error( ERR_DROP, "Spline path end passed (%s)", (*pSpline)->point.name );
 		}
 
-		( *pSpline ) = ( *pSpline )->next;
-		*deltaTime = dist / ( *pSpline )->length;
+		(*pSpline) = (*pSpline)->next;
+		*deltaTime = dist / (*pSpline)->length;
 	}
 
-	while ( ( *deltaTime ) < 0 ) {
-		dist = -( ( *pSpline )->length * ( *deltaTime ) );
+	while ((*deltaTime) < 0)
+	{
+		dist = -((*pSpline)->length * (*deltaTime));
 
-		if ( !( *pSpline )->prev || !( *pSpline )->prev->length ) {
+		if (!(*pSpline)->prev || !(*pSpline)->prev->length)
+		{
 			return qfalse;
 //			Com_Error( ERR_DROP, "Spline path end passed (%s)", (*pSpline)->point.name );
 		}
 
-		( *pSpline ) = ( *pSpline )->prev;
-		( *deltaTime ) = 1 - ( dist / ( *pSpline )->length );
+		(*pSpline)   = (*pSpline)->prev;
+		(*deltaTime) = 1 - (dist / (*pSpline)->length);
 	}
 
 	return qtrue;
@@ -3223,94 +3096,124 @@ BG_RaySphereIntersection
 ================
 */
 
-qboolean BG_RaySphereIntersection( float radius, vec3_t origin, splineSegment_t* path, float *t0, float *t1 ) {
+qboolean BG_RaySphereIntersection(float radius, vec3_t origin, splineSegment_t *path, float *t0, float *t1)
+{
 	vec3_t v;
-	float b, c, d;
+	float  b, c, d;
 
-	VectorSubtract( path->start, origin, v );
+	VectorSubtract(path->start, origin, v);
 
-	b = 2 * DotProduct( v, path->v_norm );
-	c = DotProduct( v, v ) - ( radius * radius );
+	b = 2 * DotProduct(v, path->v_norm);
+	c = DotProduct(v, v) - (radius * radius);
 
-	d = ( b * b ) - ( 4 * c );
-	if ( d < 0 ) {
+	d = (b * b) - (4 * c);
+	if (d < 0)
+	{
 		return qfalse;
 	}
-	d = sqrt( d );
+	d = sqrt(d);
 
-	*t0 = ( -b + d ) * 0.5f;
-	*t1 = ( -b - d ) * 0.5f;
+	*t0 = (-b + d) * 0.5f;
+	*t1 = (-b - d) * 0.5f;
 
 	return qtrue;
 }
 
-void BG_LinearPathOrigin2( float radius, splinePath_t** pSpline, float *deltaTime, vec3_t result, qboolean backwards ) {
+void BG_LinearPathOrigin2(float radius, splinePath_t **pSpline, float *deltaTime, vec3_t result)
+{
 	qboolean first = qtrue;
-	float t = 0.f;
-	int i = floor( ( *deltaTime ) * ( MAX_SPLINE_SEGMENTS ) );
-	float frac;
-//	int x = 0;
-//	splinePath_t* start = *pSpline;
+	float    t     = 0.f;
+	int      i     = floor((*deltaTime) * (MAX_SPLINE_SEGMENTS));
+	float    frac;
 
-	if ( i >= MAX_SPLINE_SEGMENTS ) {
-		i = MAX_SPLINE_SEGMENTS - 1;
+	if (i >= MAX_SPLINE_SEGMENTS)
+	{
+		i    = MAX_SPLINE_SEGMENTS - 1;
 		frac = 1.f;
-	} else {
-		frac = ( ( ( *deltaTime ) * ( MAX_SPLINE_SEGMENTS ) ) - i );
+	}
+	else
+	{
+		frac = (((*deltaTime) * (MAX_SPLINE_SEGMENTS)) - i);
 	}
 
-	while ( qtrue ) {
+	while (qtrue)
+	{
 		float t0, t1;
 
-		while ( qtrue ) {
-			if ( BG_RaySphereIntersection( radius, result, &( *pSpline )->segments[i], &t0, &t1 ) ) {
+		while (qtrue)
+		{
+			if (BG_RaySphereIntersection(radius, result, &(*pSpline)->segments[i], &t0, &t1))
+			{
 				qboolean found = qfalse;
 
-				t0 /= ( *pSpline )->segments[i].length;
-				t1 /= ( *pSpline )->segments[i].length;
+				t0 /= (*pSpline)->segments[i].length;
+				t1 /= (*pSpline)->segments[i].length;
 
-				if ( first ) {
-					if ( radius < 0 ) {
-						if ( t0 < frac && ( t0 >= 0.f && t0 <= 1.f ) ) {
-							t = t0;
-							found = qtrue;
-						} else if ( t1 < frac ) {
-							t = t1;
+				if (first)
+				{
+					if (radius < 0)
+					{
+						if (t0 < frac && (t0 >= 0.f && t0 <= 1.f))
+						{
+							t     = t0;
 							found = qtrue;
 						}
-					} else {
-						if ( t0 > frac && ( t0 >= 0.f && t0 <= 1.f ) ) {
-							t = t0;
-							found = qtrue;
-						} else if ( t1 > frac ) {
-							t = t1;
+						else if (t1 < frac)
+						{
+							t     = t1;
 							found = qtrue;
 						}
 					}
-				} else {
-					if ( radius < 0 ) {
-						if ( t0 < t1 && ( t0 >= 0.f && t0 <= 1.f ) ) {
-							t = t0;
-							found = qtrue;
-						} else {
-							t = t1;
+					else
+					{
+						if (t0 > frac && (t0 >= 0.f && t0 <= 1.f))
+						{
+							t     = t0;
 							found = qtrue;
 						}
-					} else {
-						if ( t0 > t1 && ( t0 >= 0.f && t0 <= 1.f ) ) {
-							t = t0;
+						else if (t1 > frac)
+						{
+							t     = t1;
 							found = qtrue;
-						} else {
-							t = t1;
+						}
+					}
+				}
+				else
+				{
+					if (radius < 0)
+					{
+						if (t0 < t1 && (t0 >= 0.f && t0 <= 1.f))
+						{
+							t     = t0;
+							found = qtrue;
+						}
+						else
+						{
+							t     = t1;
+							found = qtrue;
+						}
+					}
+					else
+					{
+						if (t0 > t1 && (t0 >= 0.f && t0 <= 1.f))
+						{
+							t     = t0;
+							found = qtrue;
+						}
+						else
+						{
+							t     = t1;
 							found = qtrue;
 						}
 					}
 				}
 
-				if ( found ) {
-					if ( t >= 0.f && t <= 1.f ) {
-						*deltaTime = ( i / (float)( MAX_SPLINE_SEGMENTS ) ) + ( t / (float)( MAX_SPLINE_SEGMENTS ) );
-						VectorMA( ( *pSpline )->segments[i].start, t * ( *pSpline )->segments[i].length, ( *pSpline )->segments[i].v_norm, result );
+				if (found)
+				{
+					if (t >= 0.f && t <= 1.f)
+					{
+						*deltaTime = (i / (float)(MAX_SPLINE_SEGMENTS)) + (t / (float)(MAX_SPLINE_SEGMENTS));
+						VectorMA((*pSpline)->segments[i].start, t * (*pSpline)->segments[i].length, (*pSpline)->segments[i].v_norm, result);
 						return;
 					}
 				}
@@ -3318,54 +3221,66 @@ void BG_LinearPathOrigin2( float radius, splinePath_t** pSpline, float *deltaTim
 			}
 
 			first = qfalse;
-			if ( radius < 0 ) {
+			if (radius < 0)
+			{
 				i--;
-				if ( i < 0 ) {
+				if (i < 0)
+				{
 					i = MAX_SPLINE_SEGMENTS - 1;
 					break;
 				}
-			} else {
+			}
+			else
+			{
 				i++;
-				if ( i >= MAX_SPLINE_SEGMENTS ) {
+				if (i >= MAX_SPLINE_SEGMENTS)
+				{
 					i = 0;
 					break;
 				}
 			}
 		}
 
-		if ( radius < 0 ) {
-			if ( !( *pSpline )->prev ) {
+		if (radius < 0)
+		{
+			if (!(*pSpline)->prev)
+			{
 				return;
 //				Com_Error( ERR_DROP, "End of spline reached (%s)\n", start->point.name );
 			}
-			*pSpline = ( *pSpline )->prev;
-		} else {
-			if ( !( *pSpline )->next ) {
+			*pSpline = (*pSpline)->prev;
+		}
+		else
+		{
+			if (!(*pSpline)->next)
+			{
 				return;
 //				Com_Error( ERR_DROP, "End of spline reached (%s)\n", start->point.name );
 			}
-			*pSpline = ( *pSpline )->next;
+			*pSpline = (*pSpline)->next;
 		}
 	}
 }
 
-void BG_ComputeSegments( splinePath_t* pSpline ) {
-	int i;
-	float granularity = 1 / ( (float)( MAX_SPLINE_SEGMENTS ) );
+void BG_ComputeSegments(splinePath_t *pSpline)
+{
+	int    i;
+	float  granularity = 1 / ((float)(MAX_SPLINE_SEGMENTS));
 	vec3_t vec[4];
 
-	for ( i = 0; i < MAX_SPLINE_SEGMENTS; i++ ) {
-		BG_CalculateSpline_r( pSpline, vec[0], vec[1], i * granularity );
-		VectorSubtract( vec[1], vec[0], pSpline->segments[i].start );
-		VectorMA( vec[0], i * granularity, pSpline->segments[i].start, pSpline->segments[i].start );
+	for (i = 0; i < MAX_SPLINE_SEGMENTS; i++)
+	{
+		BG_CalculateSpline_r(pSpline, vec[0], vec[1], i * granularity);
+		VectorSubtract(vec[1], vec[0], pSpline->segments[i].start);
+		VectorMA(vec[0], i * granularity, pSpline->segments[i].start, pSpline->segments[i].start);
 
-		BG_CalculateSpline_r( pSpline, vec[2], vec[3], ( i + 1 ) * granularity );
-		VectorSubtract( vec[3], vec[2], vec[0] );
-		VectorMA( vec[2], ( i + 1 ) * granularity, vec[0], vec[0] );
+		BG_CalculateSpline_r(pSpline, vec[2], vec[3], (i + 1) * granularity);
+		VectorSubtract(vec[3], vec[2], vec[0]);
+		VectorMA(vec[2], (i + 1) * granularity, vec[0], vec[0]);
 
-		VectorSubtract( vec[0], pSpline->segments[i].start, pSpline->segments[i].v_norm );
-		pSpline->segments[i].length = VectorLength( pSpline->segments[i].v_norm );
-		VectorNormalize( pSpline->segments[i].v_norm );
+		VectorSubtract(vec[0], pSpline->segments[i].start, pSpline->segments[i].v_norm);
+		pSpline->segments[i].length = VectorLength(pSpline->segments[i].v_norm);
+		VectorNormalize(pSpline->segments[i].v_norm);
 	}
 }
 
@@ -3375,239 +3290,299 @@ BG_EvaluateTrajectory
 
 ================
 */
-void BG_EvaluateTrajectory( const trajectory_t *tr, int atTime, vec3_t result, qboolean isAngle, int splinePath ) {
-	float deltaTime;
-	float phase;
+void BG_EvaluateTrajectory(const trajectory_t *tr, int atTime, vec3_t result, qboolean isAngle, int splinePath)
+{
+	float  deltaTime;
+	float  phase;
 	vec3_t v;
 
-	splinePath_t* pSpline;
-	vec3_t vec[2];
-	qboolean backwards = qfalse;
-	float deltaTime2;
+	splinePath_t *pSpline;
+	vec3_t       vec[2];
+	qboolean     backwards = qfalse;
+	float        deltaTime2;
 
-	switch ( tr->trType ) {
+	switch (tr->trType)
+	{
 	case TR_STATIONARY:
 	case TR_INTERPOLATE:
 	case TR_GRAVITY_PAUSED: //----(SA)
-		VectorCopy( tr->trBase, result );
+		VectorCopy(tr->trBase, result);
 		break;
 	case TR_LINEAR:
-		deltaTime = ( atTime - tr->trTime ) * 0.001;    // milliseconds to seconds
-		VectorMA( tr->trBase, deltaTime, tr->trDelta, result );
+		deltaTime = (atTime - tr->trTime) * 0.001;      // milliseconds to seconds
+		VectorMA(tr->trBase, deltaTime, tr->trDelta, result);
 		break;
 	case TR_SINE:
-		deltaTime = ( atTime - tr->trTime ) / (float) tr->trDuration;
-		phase = sin( deltaTime * M_PI * 2 );
-		VectorMA( tr->trBase, phase, tr->trDelta, result );
+		deltaTime = (atTime - tr->trTime) / (float) tr->trDuration;
+		phase     = sin(deltaTime * M_PI * 2);
+		VectorMA(tr->trBase, phase, tr->trDelta, result);
 		break;
 //----(SA)	removed
 	case TR_LINEAR_STOP:
-		if ( atTime > tr->trTime + tr->trDuration ) {
+		if (atTime > tr->trTime + tr->trDuration)
+		{
 			atTime = tr->trTime + tr->trDuration;
 		}
-		deltaTime = ( atTime - tr->trTime ) * 0.001;    // milliseconds to seconds
-		if ( deltaTime < 0 ) {
+		deltaTime = (atTime - tr->trTime) * 0.001;      // milliseconds to seconds
+		if (deltaTime < 0)
+		{
 			deltaTime = 0;
 		}
-		VectorMA( tr->trBase, deltaTime, tr->trDelta, result );
+		VectorMA(tr->trBase, deltaTime, tr->trDelta, result);
 		break;
 	case TR_GRAVITY:
-		deltaTime = ( atTime - tr->trTime ) * 0.001;    // milliseconds to seconds
-		VectorMA( tr->trBase, deltaTime, tr->trDelta, result );
+		deltaTime = (atTime - tr->trTime) * 0.001;      // milliseconds to seconds
+		VectorMA(tr->trBase, deltaTime, tr->trDelta, result);
 		result[2] -= 0.5 * DEFAULT_GRAVITY * deltaTime * deltaTime;     // FIXME: local gravity...
 		break;
-		// Ridah
+	// Ridah
 	case TR_GRAVITY_LOW:
-		deltaTime = ( atTime - tr->trTime ) * 0.001;    // milliseconds to seconds
-		VectorMA( tr->trBase, deltaTime, tr->trDelta, result );
-		result[2] -= 0.5 * ( DEFAULT_GRAVITY * 0.3 ) * deltaTime * deltaTime;     // FIXME: local gravity...
+		deltaTime = (atTime - tr->trTime) * 0.001;      // milliseconds to seconds
+		VectorMA(tr->trBase, deltaTime, tr->trDelta, result);
+		result[2] -= 0.5 * (DEFAULT_GRAVITY * 0.3) * deltaTime * deltaTime;       // FIXME: local gravity...
 		break;
-		// done.
+	// done.
 //----(SA)
 	case TR_GRAVITY_FLOAT:
-		deltaTime = ( atTime - tr->trTime ) * 0.001;    // milliseconds to seconds
-		VectorMA( tr->trBase, deltaTime, tr->trDelta, result );
-		result[2] -= 0.5 * ( DEFAULT_GRAVITY * 0.2 ) * deltaTime;
+		deltaTime = (atTime - tr->trTime) * 0.001;      // milliseconds to seconds
+		VectorMA(tr->trBase, deltaTime, tr->trDelta, result);
+		result[2] -= 0.5 * (DEFAULT_GRAVITY * 0.2) * deltaTime;
 		break;
 //----(SA)	end
-		// RF, acceleration
+	// RF, acceleration
 	case TR_ACCELERATE:     // trDelta is the ultimate speed
-		if ( atTime > tr->trTime + tr->trDuration ) {
+		if (atTime > tr->trTime + tr->trDuration)
+		{
 			atTime = tr->trTime + tr->trDuration;
 		}
-		deltaTime = ( atTime - tr->trTime ) * 0.001;    // milliseconds to seconds
+		deltaTime = (atTime - tr->trTime) * 0.001;      // milliseconds to seconds
 		// phase is the acceleration constant
-		phase = VectorLength( tr->trDelta ) / ( tr->trDuration * 0.001 );
+		phase = VectorLength(tr->trDelta) / (tr->trDuration * 0.001);
 		// trDelta at least gives us the acceleration direction
-		VectorNormalize2( tr->trDelta, result );
+		VectorNormalize2(tr->trDelta, result);
 		// get distance travelled at current time
-		VectorMA( tr->trBase, phase * 0.5 * deltaTime * deltaTime, result, result );
+		VectorMA(tr->trBase, phase * 0.5 * deltaTime * deltaTime, result, result);
 		break;
 	case TR_DECCELERATE:    // trDelta is the starting speed
-		if ( atTime > tr->trTime + tr->trDuration ) {
+		if (atTime > tr->trTime + tr->trDuration)
+		{
 			atTime = tr->trTime + tr->trDuration;
 		}
-		deltaTime = ( atTime - tr->trTime ) * 0.001;    // milliseconds to seconds
+		deltaTime = (atTime - tr->trTime) * 0.001;      // milliseconds to seconds
 		// phase is the breaking constant
-		phase = VectorLength( tr->trDelta ) / ( tr->trDuration * 0.001 );
+		phase = VectorLength(tr->trDelta) / (tr->trDuration * 0.001);
 		// trDelta at least gives us the acceleration direction
-		VectorNormalize2( tr->trDelta, result );
+		VectorNormalize2(tr->trDelta, result);
 		// get distance travelled at current time (without breaking)
-		VectorMA( tr->trBase, deltaTime, tr->trDelta, v );
+		VectorMA(tr->trBase, deltaTime, tr->trDelta, v);
 		// subtract breaking force
-		VectorMA( v, -phase * 0.5 * deltaTime * deltaTime, result, result );
+		VectorMA(v, -phase * 0.5 * deltaTime * deltaTime, result, result);
 		break;
 	case TR_SPLINE:
-		if ( !( pSpline = BG_GetSplineData( splinePath, &backwards ) ) ) {
+		pSpline = BG_GetSplineData(splinePath, &backwards);
+		if (!pSpline)
+		{
 			return;
 		}
 
-		deltaTime = tr->trDuration ? ( atTime - tr->trTime ) / ( (float)tr->trDuration ) : 0;
+		deltaTime = tr->trDuration ? (atTime - tr->trTime) / ((float)tr->trDuration) : 0;
 
-		if ( deltaTime < 0.f ) {
+		if (deltaTime < 0.f)
+		{
 			deltaTime = 0.f;
-		} else if ( deltaTime > 1.f ) {
+		}
+		else if (deltaTime > 1.f)
+		{
 			deltaTime = 1.f;
 		}
 
-		if ( backwards ) {
+		if (backwards)
+		{
 			deltaTime = 1 - deltaTime;
 		}
 
 		deltaTime2 = deltaTime;
 
-		BG_CalculateSpline_r( pSpline, vec[0], vec[1], deltaTime );
+		BG_CalculateSpline_r(pSpline, vec[0], vec[1], deltaTime);
 
-		if ( isAngle ) {
-			qboolean dampin = qfalse;
+		if (isAngle)
+		{
+			qboolean dampin  = qfalse;
 			qboolean dampout = qfalse;
-			float base1;
+			float    base1;
 
-			if ( tr->trBase[0] ) {
-				vec3_t result2;
-				splinePath_t* pSp2 = pSpline;
+			if (tr->trBase[0])
+			{
+				vec3_t       result2;
+				splinePath_t *pSp2 = pSpline;
 
 				deltaTime2 += tr->trBase[0] / pSpline->length;
 
-				if ( BG_TraverseSpline( &deltaTime2, &pSp2 ) ) {
+				if (BG_TraverseSpline(&deltaTime2, &pSp2))
+				{
 
-					VectorSubtract( vec[1], vec[0], result );
-					VectorMA( vec[0], deltaTime, result, result );
+					VectorSubtract(vec[1], vec[0], result);
+					VectorMA(vec[0], deltaTime, result, result);
 
-					BG_CalculateSpline_r( pSp2, vec[0], vec[1], deltaTime2 );
+					BG_CalculateSpline_r(pSp2, vec[0], vec[1], deltaTime2);
 
-					VectorSubtract( vec[1], vec[0], result2 );
-					VectorMA( vec[0], deltaTime2, result2, result2 );
+					VectorSubtract(vec[1], vec[0], result2);
+					VectorMA(vec[0], deltaTime2, result2, result2);
 
-					if ( tr->trBase[0] < 0 ) {
-						VectorSubtract( result, result2, result );
-					} else {
-						VectorSubtract( result2, result, result );
+					if (tr->trBase[0] < 0)
+					{
+						VectorSubtract(result, result2, result);
 					}
-				} else {
-					VectorSubtract( vec[1], vec[0], result );
+					else
+					{
+						VectorSubtract(result2, result, result);
+					}
 				}
-			} else {
-				VectorSubtract( vec[1], vec[0], result );
+				else
+				{
+					VectorSubtract(vec[1], vec[0], result);
+				}
+			}
+			else
+			{
+				VectorSubtract(vec[1], vec[0], result);
 			}
 
-			vectoangles( result, result );
+			vectoangles(result, result);
 
 			base1 = tr->trBase[1];
-			if ( base1 >= 10000 || base1 < -10000 ) {
+			if (base1 >= 10000 || base1 < -10000)
+			{
 				dampin = qtrue;
-				if ( base1 < 0 ) {
+				if (base1 < 0)
+				{
 					base1 += 10000;
-				} else {
+				}
+				else
+				{
 					base1 -= 10000;
 				}
 			}
 
-			if ( base1 >= 1000 || base1 < -1000 ) {
+			if (base1 >= 1000 || base1 < -1000)
+			{
 				dampout = qtrue;
-				if ( base1 < 0 ) {
+				if (base1 < 0)
+				{
 					base1 += 1000;
-				} else {
+				}
+				else
+				{
 					base1 -= 1000;
 				}
 			}
 
-			if ( dampin && dampout ) {
-				result[ROLL] = base1 + ( ( sin( ( ( deltaTime * 2 ) - 1 ) * M_PI * 0.5f ) + 1 ) * 0.5f * tr->trBase[2] );
-			} else if ( dampin ) {
-				result[ROLL] = base1 + ( sin( deltaTime * M_PI * 0.5f ) * tr->trBase[2] );
-			} else if ( dampout ) {
-				result[ROLL] = base1 + ( ( 1 - sin( ( 1 - deltaTime ) * M_PI * 0.5f ) ) * tr->trBase[2] );
-			} else {
-				result[ROLL] = base1 + ( deltaTime * tr->trBase[2] );
+			if (dampin && dampout)
+			{
+				result[ROLL] = base1 + ((sin(((deltaTime * 2) - 1) * M_PI * 0.5f) + 1) * 0.5f * tr->trBase[2]);
 			}
-		} else {
-			VectorSubtract( vec[1], vec[0], result );
-			VectorMA( vec[0], deltaTime, result, result );
+			else if (dampin)
+			{
+				result[ROLL] = base1 + (sin(deltaTime * M_PI * 0.5f) * tr->trBase[2]);
+			}
+			else if (dampout)
+			{
+				result[ROLL] = base1 + ((1 - sin((1 - deltaTime) * M_PI * 0.5f)) * tr->trBase[2]);
+			}
+			else
+			{
+				result[ROLL] = base1 + (deltaTime * tr->trBase[2]);
+			}
+		}
+		else
+		{
+			VectorSubtract(vec[1], vec[0], result);
+			VectorMA(vec[0], deltaTime, result, result);
 		}
 
 		break;
 	case TR_LINEAR_PATH:
-		if ( !( pSpline = BG_GetSplineData( splinePath, &backwards ) ) ) {
+		pSpline = BG_GetSplineData(splinePath, &backwards);
+		if (!pSpline)
+		{
 			return;
 		}
 
-		deltaTime = tr->trDuration ? ( atTime - tr->trTime ) / ( (float)tr->trDuration ) : 0;
+		deltaTime = tr->trDuration ? (atTime - tr->trTime) / ((float)tr->trDuration) : 0;
 
-		if ( deltaTime < 0.f ) {
+		if (deltaTime < 0.f)
+		{
 			deltaTime = 0.f;
-		} else if ( deltaTime > 1.f ) {
+		}
+		else if (deltaTime > 1.f)
+		{
 			deltaTime = 1.f;
 		}
 
-		if ( backwards ) {
+		if (backwards)
+		{
 			deltaTime = 1 - deltaTime;
 		}
 
-		if ( isAngle ) {
-			int pos = floor( deltaTime * ( MAX_SPLINE_SEGMENTS ) );
+		if (isAngle)
+		{
+			int   pos = floor(deltaTime * (MAX_SPLINE_SEGMENTS));
 			float frac;
 
-			if ( pos >= MAX_SPLINE_SEGMENTS ) {
-				pos = MAX_SPLINE_SEGMENTS - 1;
+			if (pos >= MAX_SPLINE_SEGMENTS)
+			{
+				pos  = MAX_SPLINE_SEGMENTS - 1;
 				frac = pSpline->segments[pos].length;
-			} else {
-				frac = ( ( deltaTime * ( MAX_SPLINE_SEGMENTS ) ) - pos ) * pSpline->segments[pos].length;
+			}
+			else
+			{
+				frac = ((deltaTime * (MAX_SPLINE_SEGMENTS)) - pos) * pSpline->segments[pos].length;
 			}
 
-			if ( tr->trBase[0] ) {
-				VectorMA( pSpline->segments[pos].start, frac, pSpline->segments[pos].v_norm, result );
-				VectorCopy( result, v );
+			if (tr->trBase[0])
+			{
+				VectorMA(pSpline->segments[pos].start, frac, pSpline->segments[pos].v_norm, result);
+				VectorCopy(result, v);
 
-				BG_LinearPathOrigin2( tr->trBase[0], &pSpline, &deltaTime, v, backwards );
-				if ( tr->trBase[0] < 0 ) {
-					VectorSubtract( v, result, result );
-				} else {
-					VectorSubtract( result, v, result );
+				BG_LinearPathOrigin2(tr->trBase[0], &pSpline, &deltaTime, v);
+				if (tr->trBase[0] < 0)
+				{
+					VectorSubtract(v, result, result);
+				}
+				else
+				{
+					VectorSubtract(result, v, result);
 				}
 
-				vectoangles( result, result );
-			} else {
-				vectoangles( pSpline->segments[pos].v_norm, result );
+				vectoangles(result, result);
+			}
+			else
+			{
+				vectoangles(pSpline->segments[pos].v_norm, result);
 			}
 
-		} else {
-			int pos = floor( deltaTime * ( MAX_SPLINE_SEGMENTS ) );
+		}
+		else
+		{
+			int   pos = floor(deltaTime * (MAX_SPLINE_SEGMENTS));
 			float frac;
 
-			if ( pos >= MAX_SPLINE_SEGMENTS ) {
-				pos = MAX_SPLINE_SEGMENTS - 1;
+			if (pos >= MAX_SPLINE_SEGMENTS)
+			{
+				pos  = MAX_SPLINE_SEGMENTS - 1;
 				frac = pSpline->segments[pos].length;
-			} else {
-				frac = ( ( deltaTime * ( MAX_SPLINE_SEGMENTS ) ) - pos ) * pSpline->segments[pos].length;
+			}
+			else
+			{
+				frac = ((deltaTime * (MAX_SPLINE_SEGMENTS)) - pos) * pSpline->segments[pos].length;
 			}
 
-			VectorMA( pSpline->segments[pos].start, frac, pSpline->segments[pos].v_norm, result );
+			VectorMA(pSpline->segments[pos].start, frac, pSpline->segments[pos].v_norm, result);
 		}
 
 		break;
 	default:
-		Com_Error( ERR_DROP, "BG_EvaluateTrajectory: unknown trType: %i", tr->trTime );
+		Com_Error(ERR_DROP, "BG_EvaluateTrajectory: unknown trType: %i", tr->trTime);
 		break;
 	}
 }
@@ -3620,75 +3595,80 @@ BG_EvaluateTrajectoryDelta
 For determining velocity at a given time
 ================
 */
-void BG_EvaluateTrajectoryDelta( const trajectory_t *tr, int atTime, vec3_t result, qboolean isAngle, int splineData ) {
+void BG_EvaluateTrajectoryDelta(const trajectory_t *tr, int atTime, vec3_t result)
+{
 	float deltaTime;
 	float phase;
 
-	switch ( tr->trType ) {
+	switch (tr->trType)
+	{
 	case TR_STATIONARY:
 	case TR_INTERPOLATE:
-		VectorClear( result );
+		VectorClear(result);
 		break;
 	case TR_LINEAR:
-		VectorCopy( tr->trDelta, result );
+		VectorCopy(tr->trDelta, result);
 		break;
 	case TR_SINE:
-		deltaTime = ( atTime - tr->trTime ) / (float) tr->trDuration;
-		phase = cos( deltaTime * M_PI * 2 );    // derivative of sin = cos
-		phase *= 0.5;
-		VectorScale( tr->trDelta, phase, result );
+		deltaTime = (atTime - tr->trTime) / (float) tr->trDuration;
+		phase     = cos(deltaTime * M_PI * 2);  // derivative of sin = cos
+		phase    *= 0.5;
+		VectorScale(tr->trDelta, phase, result);
 		break;
 //----(SA)	removed
 	case TR_LINEAR_STOP:
-		if ( atTime > tr->trTime + tr->trDuration ) {
-			VectorClear( result );
+		if (atTime > tr->trTime + tr->trDuration)
+		{
+			VectorClear(result);
 			return;
 		}
-		VectorCopy( tr->trDelta, result );
+		VectorCopy(tr->trDelta, result);
 		break;
 	case TR_GRAVITY:
-		deltaTime = ( atTime - tr->trTime ) * 0.001;    // milliseconds to seconds
-		VectorCopy( tr->trDelta, result );
+		deltaTime = (atTime - tr->trTime) * 0.001;      // milliseconds to seconds
+		VectorCopy(tr->trDelta, result);
 		result[2] -= DEFAULT_GRAVITY * deltaTime;       // FIXME: local gravity...
 		break;
-		// Ridah
+	// Ridah
 	case TR_GRAVITY_LOW:
-		deltaTime = ( atTime - tr->trTime ) * 0.001;    // milliseconds to seconds
-		VectorCopy( tr->trDelta, result );
-		result[2] -= ( DEFAULT_GRAVITY * 0.3 ) * deltaTime;       // FIXME: local gravity...
+		deltaTime = (atTime - tr->trTime) * 0.001;      // milliseconds to seconds
+		VectorCopy(tr->trDelta, result);
+		result[2] -= (DEFAULT_GRAVITY * 0.3) * deltaTime;         // FIXME: local gravity...
 		break;
-		// done.
+	// done.
 //----(SA)
 	case TR_GRAVITY_FLOAT:
-		deltaTime = ( atTime - tr->trTime ) * 0.001;    // milliseconds to seconds
-		VectorCopy( tr->trDelta, result );
-		result[2] -= ( DEFAULT_GRAVITY * 0.2 ) * deltaTime;
+		deltaTime = (atTime - tr->trTime) * 0.001;      // milliseconds to seconds
+		VectorCopy(tr->trDelta, result);
+		result[2] -= (DEFAULT_GRAVITY * 0.2) * deltaTime;
 		break;
 //----(SA)	end
-		// RF, acceleration
+	// RF, acceleration
 	case TR_ACCELERATE: // trDelta is eventual speed
-		if ( atTime > tr->trTime + tr->trDuration ) {
-			VectorClear( result );
+		if (atTime > tr->trTime + tr->trDuration)
+		{
+			VectorClear(result);
 			return;
 		}
-		deltaTime = ( atTime - tr->trTime ) * 0.001;    // milliseconds to seconds
-		phase = deltaTime / (float)tr->trDuration;
-		VectorScale( tr->trDelta, deltaTime * deltaTime, result );
+		deltaTime = (atTime - tr->trTime) * 0.001;      // milliseconds to seconds
+		phase     = deltaTime / (float)tr->trDuration;
+		VectorScale(tr->trDelta, deltaTime * deltaTime, result);
 		break;
 	case TR_DECCELERATE:    // trDelta is breaking force
-		if ( atTime > tr->trTime + tr->trDuration ) {
-			VectorClear( result );
+		if (atTime > tr->trTime + tr->trDuration)
+		{
+			VectorClear(result);
 			return;
 		}
-		deltaTime = ( atTime - tr->trTime ) * 0.001;    // milliseconds to seconds
-		VectorScale( tr->trDelta, deltaTime, result );
+		deltaTime = (atTime - tr->trTime) * 0.001;      // milliseconds to seconds
+		VectorScale(tr->trDelta, deltaTime, result);
 		break;
 	case TR_SPLINE:
 	case TR_LINEAR_PATH:
-		VectorClear( result );
+		VectorClear(result);
 		break;
 	default:
-		Com_Error( ERR_DROP, "BG_EvaluateTrajectoryDelta: unknown trType: %i", tr->trTime );
+		Com_Error(ERR_DROP, "BG_EvaluateTrajectoryDelta: unknown trType: %i", tr->trTime);
 		break;
 	}
 }
@@ -3703,51 +3683,61 @@ BG_GetMarkDir
   dir is the direction of the projectile or trace that has resulted in a surface being hit
 ============
 */
-void BG_GetMarkDir( const vec3_t dir, const vec3_t normal, vec3_t out ) {
+void BG_GetMarkDir(const vec3_t dir, const vec3_t normal, vec3_t out)
+{
 	vec3_t ndir, lnormal;
-	float minDot = 0.3;
-	int x = 0;
+	float  minDot = 0.3;
+	int    x      = 0;
 
-	if ( dir[0] < 0.001 && dir[1] < 0.001 ) {
-		VectorCopy( dir, out );
+	if (dir[0] < 0.001 && dir[1] < 0.001)
+	{
+		VectorCopy(dir, out);
 		return;
 	}
 
-	if ( VectorLengthSquared( normal ) < SQR( 1.f ) ) {    // this is needed to get rid of (0,0,0) normals (happens with entities?)
-		VectorSet( lnormal, 0.f, 0.f, 1.f );
-	} else {
+	if (VectorLengthSquared(normal) < SQR(1.f))            // this is needed to get rid of (0,0,0) normals (happens with entities?)
+	{
+		VectorSet(lnormal, 0.f, 0.f, 1.f);
+	}
+	else
+	{
 		//VectorCopy( normal, lnormal );
 		//VectorNormalizeFast( lnormal );
-		VectorNormalize2( normal, lnormal );
+		VectorNormalize2(normal, lnormal);
 	}
 
-	VectorNegate( dir, ndir );
-	VectorNormalize( ndir );
-	if ( normal[2] > .8f ) {
+	VectorNegate(dir, ndir);
+	VectorNormalize(ndir);
+	if (normal[2] > .8f)
+	{
 		minDot = .7f;
 	}
 
 	// make sure it makrs the impact surface
-	while ( DotProduct( ndir, lnormal ) < minDot && x < 10 ) {
-		VectorMA( ndir, .5, lnormal, ndir );
-		VectorNormalize( ndir );
+	while (DotProduct(ndir, lnormal) < minDot && x < 10)
+	{
+		VectorMA(ndir, .5, lnormal, ndir);
+		VectorNormalize(ndir);
 
 		x++;
 	}
 
 #ifdef GAMEDLL
-	if ( x >= 10 ) {
-		if ( g_developer.integer ) {
-			Com_Printf( "BG_GetMarkDir loops: %i\n", x );
+	if (x >= 10)
+	{
+		if (g_developer.integer)
+		{
+			Com_Printf("BG_GetMarkDir loops: %i\n", x);
 		}
 	}
 #endif // GAMEDLL
 
-	VectorCopy( ndir, out );
+	VectorCopy(ndir, out);
 }
 
 
-char *eventnames[] = {
+char *eventnames[] =
+{
 	"EV_NONE",
 	"EV_FOOTSTEP",
 	"EV_FOOTSTEP_METAL",
@@ -3773,7 +3763,7 @@ char *eventnames[] = {
 	"EV_FALL_DMG_25",
 	"EV_FALL_DMG_50",
 	"EV_JUMP",
-	"EV_DOUBLE_JUMP",// Nico, double jump event
+	"EV_DOUBLE_JUMP",            // Nico, double jump event
 	"EV_WATER_TOUCH",
 	"EV_WATER_LEAVE",
 	"EV_WATER_UNDER",
@@ -3888,42 +3878,44 @@ Handles the sequence numbers
 ===============
 */
 
-void    trap_Cvar_VariableStringBuffer( const char *var_name, char *buffer, int bufsize );
+void    trap_Cvar_VariableStringBuffer(const char *var_name, char *buffer, int bufsize);
 
-void BG_AddPredictableEventToPlayerstate( int newEvent, int eventParm, playerState_t *ps ) {
+void BG_AddPredictableEventToPlayerstate(int newEvent, int eventParm, playerState_t *ps)
+{
 
 #ifdef _DEBUG
 	{
 		char buf[256];
-		trap_Cvar_VariableStringBuffer( "showevents", buf, sizeof( buf ) );
-		if ( atof( buf ) != 0 ) {
+		trap_Cvar_VariableStringBuffer("showevents", buf, sizeof(buf));
+		if (atof(buf) != 0)
+		{
 #ifdef GAMEDLL
-			Com_Printf( "game event svt %5d -> %5d: num = %20s parm %d\n", ps->pmove_framecount /*ps->commandTime*/, ps->eventSequence, eventnames[newEvent], eventParm );
+			Com_Printf("game event svt %5d -> %5d: num = %20s parm %d\n", ps->pmove_framecount /*ps->commandTime*/, ps->eventSequence, eventnames[newEvent], eventParm);
 #else
-			Com_Printf( "Cgame event svt %5d -> %5d: num = %20s parm %d\n", ps->pmove_framecount /*ps->commandTime*/, ps->eventSequence, eventnames[newEvent], eventParm );
+			Com_Printf("Cgame event svt %5d -> %5d: num = %20s parm %d\n", ps->pmove_framecount /*ps->commandTime*/, ps->eventSequence, eventnames[newEvent], eventParm);
 #endif
 		}
 	}
 #endif
-	ps->events[ps->eventSequence & ( MAX_EVENTS - 1 )] = newEvent;
-	ps->eventParms[ps->eventSequence & ( MAX_EVENTS - 1 )] = eventParm;
+	ps->events[ps->eventSequence & (MAX_EVENTS - 1)]     = newEvent;
+	ps->eventParms[ps->eventSequence & (MAX_EVENTS - 1)] = eventParm;
 	ps->eventSequence++;
 }
 
-#define SETUP_MOUNTEDGUN_STATUS( ps )							\
-	switch ( ps->persistant[PERS_HWEAPON_USE] ) {				 \
-	case 1:													\
-		ps->eFlags |= EF_MG42_ACTIVE;						\
-		ps->eFlags &= ~EF_AAGUN_ACTIVE;						\
-		break;												\
-	case 2:													\
-		ps->eFlags |= EF_AAGUN_ACTIVE;						\
-		ps->eFlags &= ~EF_MG42_ACTIVE;						\
-		break;												\
-	default:												\
-		ps->eFlags &= ~EF_MG42_ACTIVE;						\
-		ps->eFlags &= ~EF_AAGUN_ACTIVE;						\
-		break;												\
+#define SETUP_MOUNTEDGUN_STATUS(ps)                           \
+	switch (ps->persistant[PERS_HWEAPON_USE]) {                \
+	case 1:                                                 \
+		ps->eFlags |= EF_MG42_ACTIVE;                       \
+		ps->eFlags &= ~EF_AAGUN_ACTIVE;                     \
+		break;                                              \
+	case 2:                                                 \
+		ps->eFlags |= EF_AAGUN_ACTIVE;                      \
+		ps->eFlags &= ~EF_MG42_ACTIVE;                      \
+		break;                                              \
+	default:                                                \
+		ps->eFlags &= ~EF_MG42_ACTIVE;                      \
+		ps->eFlags &= ~EF_AAGUN_ACTIVE;                     \
+		break;                                              \
 	}
 
 /*
@@ -3934,99 +3926,122 @@ This is done after each set of usercmd_t on the server,
 and after local prediction on the client
 ========================
 */
-void BG_PlayerStateToEntityState( playerState_t *ps, entityState_t *s, qboolean snap ) {
+void BG_PlayerStateToEntityState(playerState_t *ps, entityState_t *s, qboolean snap)
+{
 	int i;
 
-	if ( ps->pm_type == PM_SPECTATOR ) {
+	if (ps->pm_type == PM_SPECTATOR)
+	{
 		s->eType = ET_INVISIBLE;
-	} else if ( ps->stats[STAT_HEALTH] <= GIB_HEALTH ) {
+	}
+	else if (ps->stats[STAT_HEALTH] <= GIB_HEALTH)
+	{
 		s->eType = ET_INVISIBLE;
-	} else {
+	}
+	else
+	{
 		s->eType = ET_PLAYER;
 	}
 
 	s->number = ps->clientNum;
 
 	s->pos.trType = TR_INTERPOLATE;
-	VectorCopy( ps->origin, s->pos.trBase );
-	if ( snap ) {
-		SnapVector( s->pos.trBase );
+	VectorCopy(ps->origin, s->pos.trBase);
+	if (snap)
+	{
+		SnapVector(s->pos.trBase);
 	}
 
 	s->apos.trType = TR_INTERPOLATE;
-	VectorCopy( ps->viewangles, s->apos.trBase );
-	if ( snap ) {
-		SnapVector( s->apos.trBase );
+	VectorCopy(ps->viewangles, s->apos.trBase);
+	if (snap)
+	{
+		SnapVector(s->apos.trBase);
 	}
 
-	if ( ps->movementDir > 128 ) {
+	if (ps->movementDir > 128)
+	{
 		s->angles2[YAW] = (float)ps->movementDir - 256;
-	} else {
+	}
+	else
+	{
 		s->angles2[YAW] = ps->movementDir;
 	}
 
-	s->legsAnim     = ps->legsAnim;
-	s->torsoAnim    = ps->torsoAnim;
-	s->clientNum    = ps->clientNum;    // ET_PLAYER looks here instead of at number
-										// so corpses can also reference the proper config
+	s->legsAnim  = ps->legsAnim;
+	s->torsoAnim = ps->torsoAnim;
+	s->clientNum = ps->clientNum;       // ET_PLAYER looks here instead of at number
+	                                    // so corpses can also reference the proper config
 	// Ridah, let clients know if this person is using a mounted weapon
 	// so they don't show any client muzzle flashes
 
-	if ( ps->eFlags & EF_MOUNTEDTANK ) {
+	if (ps->eFlags & EF_MOUNTEDTANK)
+	{
 		ps->eFlags &= ~EF_MG42_ACTIVE;
 		ps->eFlags &= ~EF_AAGUN_ACTIVE;
-	} else {
-		SETUP_MOUNTEDGUN_STATUS( ps );
+	}
+	else
+	{
+		SETUP_MOUNTEDGUN_STATUS(ps);
 	}
 
 	s->eFlags = ps->eFlags;
 
-	if ( ps->stats[STAT_HEALTH] <= 0 ) {
+	if (ps->stats[STAT_HEALTH] <= 0)
+	{
 		s->eFlags |= EF_DEAD;
-	} else {
+	}
+	else
+	{
 		s->eFlags &= ~EF_DEAD;
 	}
 
 // from MP
-	if ( ps->externalEvent ) {
-		s->event = ps->externalEvent;
+	if (ps->externalEvent)
+	{
+		s->event     = ps->externalEvent;
 		s->eventParm = ps->externalEventParm;
-	} else if ( ps->entityEventSequence < ps->eventSequence ) {
+	}
+	else if (ps->entityEventSequence < ps->eventSequence)
+	{
 		int seq;
 
-		if ( ps->entityEventSequence < ps->eventSequence - MAX_EVENTS ) {
+		if (ps->entityEventSequence < ps->eventSequence - MAX_EVENTS)
+		{
 			ps->entityEventSequence = ps->eventSequence - MAX_EVENTS;
 		}
-		seq = ps->entityEventSequence & ( MAX_EVENTS - 1 );
-		s->event = ps->events[ seq ] | ( ( ps->entityEventSequence & 3 ) << 8 );
-		s->eventParm = ps->eventParms[ seq ];
+		seq          = ps->entityEventSequence & (MAX_EVENTS - 1);
+		s->event     = ps->events[seq] | ((ps->entityEventSequence & 3) << 8);
+		s->eventParm = ps->eventParms[seq];
 		ps->entityEventSequence++;
 	}
 // end
 	// Ridah, now using a circular list of events for all entities
 	// add any new events that have been added to the playerState_t
 	// (possibly overwriting entityState_t events)
-	for ( i = ps->oldEventSequence; i != ps->eventSequence; i++ ) {
-		s->events[s->eventSequence & ( MAX_EVENTS - 1 )] = ps->events[i & ( MAX_EVENTS - 1 )];
-		s->eventParms[s->eventSequence & ( MAX_EVENTS - 1 )] = ps->eventParms[i & ( MAX_EVENTS - 1 )];
+	for (i = ps->oldEventSequence; i != ps->eventSequence; i++)
+	{
+		s->events[s->eventSequence & (MAX_EVENTS - 1)]     = ps->events[i & (MAX_EVENTS - 1)];
+		s->eventParms[s->eventSequence & (MAX_EVENTS - 1)] = ps->eventParms[i & (MAX_EVENTS - 1)];
 		s->eventSequence++;
 	}
 	ps->oldEventSequence = ps->eventSequence;
 
-	s->weapon = ps->weapon;
+	s->weapon          = ps->weapon;
 	s->groundEntityNum = ps->groundEntityNum;
 
 	s->powerups = 0;
-	for ( i = 0 ; i < MAX_POWERUPS ; i++ ) {
-		if ( ps->powerups[ i ] ) {
+	for (i = 0 ; i < MAX_POWERUPS ; i++)
+	{
+		if (ps->powerups[i])
+		{
 			s->powerups |= 1 << i;
 		}
 	}
 
 	s->nextWeapon = ps->nextWeapon; // Ridah
-//	s->loopSound = ps->loopSound;
-	s->teamNum = ps->teamNum;
-	s->aiState = ps->aiState;       // xkan, 1/10/2003
+	s->teamNum    = ps->teamNum;
+	s->aiState    = ps->aiState;    // xkan, 1/10/2003
 }
 
 /*
@@ -4037,100 +4052,123 @@ This is done after each set of usercmd_t on the server,
 and after local prediction on the client
 ========================
 */
-void BG_PlayerStateToEntityStateExtraPolate( playerState_t *ps, entityState_t *s, int time, qboolean snap ) {
+void BG_PlayerStateToEntityStateExtraPolate(playerState_t *ps, entityState_t *s, int time, qboolean snap)
+{
 	int i;
 
-	if ( ps->pm_type == PM_SPECTATOR ) {
+	if (ps->pm_type == PM_SPECTATOR)
+	{
 		s->eType = ET_INVISIBLE;
-	} else if ( ps->stats[STAT_HEALTH] <= GIB_HEALTH ) {
+	}
+	else if (ps->stats[STAT_HEALTH] <= GIB_HEALTH)
+	{
 		s->eType = ET_INVISIBLE;
-	} else {
+	}
+	else
+	{
 		s->eType = ET_PLAYER;
 	}
 
 	s->number = ps->clientNum;
 
 	s->pos.trType = TR_LINEAR_STOP;
-	VectorCopy( ps->origin, s->pos.trBase );
-	if ( snap ) {
-		SnapVector( s->pos.trBase );
+	VectorCopy(ps->origin, s->pos.trBase);
+	if (snap)
+	{
+		SnapVector(s->pos.trBase);
 	}
 	// set the trDelta for flag direction and linear prediction
-	VectorCopy( ps->velocity, s->pos.trDelta );
+	VectorCopy(ps->velocity, s->pos.trDelta);
 	// set the time for linear prediction
 	s->pos.trTime = time;
 	// set maximum extra polation time
 	s->pos.trDuration = 50; // 1000 / sv_fps (default = 20)
 
 	s->apos.trType = TR_INTERPOLATE;
-	VectorCopy( ps->viewangles, s->apos.trBase );
-	if ( snap ) {
-		SnapVector( s->apos.trBase );
+	VectorCopy(ps->viewangles, s->apos.trBase);
+	if (snap)
+	{
+		SnapVector(s->apos.trBase);
 	}
 
 	s->angles2[YAW] = ps->movementDir;
-	s->legsAnim = ps->legsAnim;
-	s->torsoAnim = ps->torsoAnim;
-	s->clientNum = ps->clientNum;       // ET_PLAYER looks here instead of at number
-										// so corpses can also reference the proper config
+	s->legsAnim     = ps->legsAnim;
+	s->torsoAnim    = ps->torsoAnim;
+	s->clientNum    = ps->clientNum;    // ET_PLAYER looks here instead of at number
+	                                    // so corpses can also reference the proper config
 
-	if ( ps->eFlags & EF_MOUNTEDTANK ) {
+	if (ps->eFlags & EF_MOUNTEDTANK)
+	{
 		ps->eFlags &= ~EF_MG42_ACTIVE;
 		ps->eFlags &= ~EF_AAGUN_ACTIVE;
-	} else {
-		SETUP_MOUNTEDGUN_STATUS( ps );
+	}
+	else
+	{
+		SETUP_MOUNTEDGUN_STATUS(ps);
 	}
 
 	s->eFlags = ps->eFlags;
-	if ( ps->stats[STAT_HEALTH] <= 0 ) {
+	if (ps->stats[STAT_HEALTH] <= 0)
+	{
 		s->eFlags |= EF_DEAD;
-	} else {
+	}
+	else
+	{
 		s->eFlags &= ~EF_DEAD;
 	}
 
-	if ( ps->externalEvent ) {
-		s->event = ps->externalEvent;
+	if (ps->externalEvent)
+	{
+		s->event     = ps->externalEvent;
 		s->eventParm = ps->externalEventParm;
-	} else if ( ps->entityEventSequence < ps->eventSequence ) {
+	}
+	else if (ps->entityEventSequence < ps->eventSequence)
+	{
 		int seq;
 
-		if ( ps->entityEventSequence < ps->eventSequence - MAX_EVENTS ) {
+		if (ps->entityEventSequence < ps->eventSequence - MAX_EVENTS)
+		{
 			ps->entityEventSequence = ps->eventSequence - MAX_EVENTS;
 		}
-		seq = ps->entityEventSequence & ( MAX_EVENTS - 1 );
-		s->event = ps->events[ seq ] | ( ( ps->entityEventSequence & 3 ) << 8 );
-		s->eventParm = ps->eventParms[ seq ];
+		seq          = ps->entityEventSequence & (MAX_EVENTS - 1);
+		s->event     = ps->events[seq] | ((ps->entityEventSequence & 3) << 8);
+		s->eventParm = ps->eventParms[seq];
 		ps->entityEventSequence++;
 	}
 
 	// Ridah, now using a circular list of events for all entities
 	// add any new events that have been added to the playerState_t
 	// (possibly overwriting entityState_t events)
-	for ( i = ps->oldEventSequence; i != ps->eventSequence; i++ ) {
-		s->events[s->eventSequence & ( MAX_EVENTS - 1 )] = ps->events[i & ( MAX_EVENTS - 1 )];
-		s->eventParms[s->eventSequence & ( MAX_EVENTS - 1 )] = ps->eventParms[i & ( MAX_EVENTS - 1 )];
+	for (i = ps->oldEventSequence; i != ps->eventSequence; i++)
+	{
+		s->events[s->eventSequence & (MAX_EVENTS - 1)]     = ps->events[i & (MAX_EVENTS - 1)];
+		s->eventParms[s->eventSequence & (MAX_EVENTS - 1)] = ps->eventParms[i & (MAX_EVENTS - 1)];
 		s->eventSequence++;
 	}
 	ps->oldEventSequence = ps->eventSequence;
 
-	s->weapon = ps->weapon;
+	s->weapon          = ps->weapon;
 	s->groundEntityNum = ps->groundEntityNum;
 
 	s->powerups = 0;
-	for ( i = 0 ; i < MAX_POWERUPS ; i++ ) {
-		if ( ps->powerups[ i ] ) {
+	for (i = 0 ; i < MAX_POWERUPS ; i++)
+	{
+		if (ps->powerups[i])
+		{
 			s->powerups |= 1 << i;
 		}
 	}
 
 	s->nextWeapon = ps->nextWeapon; // Ridah
-	s->teamNum = ps->teamNum;
-	s->aiState = ps->aiState;       // xkan, 1/10/2003
+	s->teamNum    = ps->teamNum;
+	s->aiState    = ps->aiState;    // xkan, 1/10/2003
 }
 
 // Gordon: some weapons are duplicated for code puposes.... just want to treat them as a single
-weapon_t BG_DuplicateWeapon( weapon_t weap ) {
-	switch ( weap ) {
+weapon_t BG_DuplicateWeapon(weapon_t weap)
+{
+	switch (weap)
+	{
 	case WP_M7:     return WP_GPG40;
 	case WP_GARAND_SCOPE:       return WP_GARAND;
 	case WP_K43_SCOPE:          return WP_K43;
@@ -4139,10 +4177,12 @@ weapon_t BG_DuplicateWeapon( weapon_t weap ) {
 	}
 }
 
-gitem_t* BG_ValidStatWeapon( weapon_t weap ) {
+gitem_t *BG_ValidStatWeapon(weapon_t weap)
+{
 	weapon_t weap2;
 
-	switch ( weap ) {
+	switch (weap)
+	{
 	case WP_MEDKIT:
 	case WP_PLIERS:
 	case WP_SMOKETRAIL:
@@ -4154,23 +4194,28 @@ gitem_t* BG_ValidStatWeapon( weapon_t weap ) {
 		break;
 	}
 
-	if ( !BG_WeaponInWolfMP( weap ) ) {
+	if (!BG_WeaponInWolfMP(weap))
+	{
 		return NULL;
 	}
 
-	weap2 = BG_DuplicateWeapon( weap );
-	if ( weap != weap2 ) {
+	weap2 = BG_DuplicateWeapon(weap);
+	if (weap != weap2)
+	{
 		return NULL;
 	}
 
-	return BG_FindItemForWeapon( weap );
+	return BG_FindItemForWeapon(weap);
 }
 
-weapon_t BG_WeaponForMOD( int MOD ) {
+weapon_t BG_WeaponForMOD(int MOD)
+{
 	weapon_t i;
 
-	for ( i = 0; i < WP_NUM_WEAPONS; i++ ) {
-		if ( GetAmmoTableData( i )->mod == MOD ) {
+	for (i = 0; i < WP_NUM_WEAPONS; i++)
+	{
+		if (GetAmmoTableData(i)->mod == MOD)
+		{
 			return i;
 		}
 	}
@@ -4182,11 +4227,14 @@ weapon_t BG_WeaponForMOD( int MOD ) {
 BG_Find_PathCorner
 =============
 */
-pathCorner_t *BG_Find_PathCorner( const char *match ) {
+pathCorner_t *BG_Find_PathCorner(const char *match)
+{
 	int i;
 
-	for ( i = 0 ; i < numPathCorners; i++ ) {
-		if ( !Q_stricmp( pathCorners[i].name, match ) ) {
+	for (i = 0 ; i < numPathCorners; i++)
+	{
+		if (!Q_stricmp(pathCorners[i].name, match))
+		{
 			return &pathCorners[i];
 		}
 	}
@@ -4199,13 +4247,15 @@ pathCorner_t *BG_Find_PathCorner( const char *match ) {
 BG_AddPathCorner
 =============
 */
-void BG_AddPathCorner( const char* name, vec3_t origin ) {
-	if ( numPathCorners >= MAX_PATH_CORNERS ) {
-		Com_Error( ERR_DROP, "MAX PATH CORNERS (%i) hit", MAX_PATH_CORNERS );
+void BG_AddPathCorner(const char *name, vec3_t origin)
+{
+	if (numPathCorners >= MAX_PATH_CORNERS)
+	{
+		Com_Error(ERR_DROP, "MAX PATH CORNERS (%i) hit", MAX_PATH_CORNERS);
 	}
 
-	VectorCopy( origin, pathCorners[numPathCorners].origin );
-	Q_strncpyz( pathCorners[numPathCorners].name, name, 64 );
+	VectorCopy(origin, pathCorners[numPathCorners].origin);
+	Q_strncpyz(pathCorners[numPathCorners].name, name, 64);
 	numPathCorners++;
 }
 
@@ -4214,11 +4264,14 @@ void BG_AddPathCorner( const char* name, vec3_t origin ) {
 BG_Find_Spline
 =============
 */
-splinePath_t *BG_Find_Spline( const char *match ) {
+splinePath_t *BG_Find_Spline(const char *match)
+{
 	int i;
 
-	for ( i = 0 ; i < numSplinePaths; i++ ) {
-		if ( !Q_stricmp( splinePaths[i].point.name, match ) ) {
+	for (i = 0 ; i < numSplinePaths; i++)
+	{
+		if (!Q_stricmp(splinePaths[i].point.name, match))
+		{
 			return &splinePaths[i];
 		}
 	}
@@ -4226,20 +4279,22 @@ splinePath_t *BG_Find_Spline( const char *match ) {
 	return NULL;
 }
 
-splinePath_t* BG_AddSplinePath( const char* name, const char* target, vec3_t origin ) {
-	splinePath_t* spline;
-	if ( numSplinePaths >= MAX_SPLINE_PATHS ) {
-		Com_Error( ERR_DROP, "MAX SPLINES (%i) hit", MAX_SPLINE_PATHS );
+splinePath_t *BG_AddSplinePath(const char *name, const char *target, vec3_t origin)
+{
+	splinePath_t *spline;
+	if (numSplinePaths >= MAX_SPLINE_PATHS)
+	{
+		Com_Error(ERR_DROP, "MAX SPLINES (%i) hit", MAX_SPLINE_PATHS);
 	}
 
 	spline = &splinePaths[numSplinePaths];
 
-	memset( spline, 0, sizeof( splinePath_t ) );
+	memset(spline, 0, sizeof(splinePath_t));
 
-	VectorCopy( origin, spline->point.origin );
+	VectorCopy(origin, spline->point.origin);
 
-	Q_strncpyz( spline->point.name, name,                       64 );
-	Q_strncpyz( spline->strTarget,  target ? target : "",        64 );
+	Q_strncpyz(spline->point.name, name, 64);
+	Q_strncpyz(spline->strTarget, target ? target : "", 64);
 
 	spline->numControls = 0;
 
@@ -4248,105 +4303,126 @@ splinePath_t* BG_AddSplinePath( const char* name, const char* target, vec3_t ori
 	return spline;
 }
 
-void BG_AddSplineControl( splinePath_t* spline, const char* name ) {
-	if ( spline->numControls >= MAX_SPLINE_CONTROLS ) {
-		Com_Error( ERR_DROP, "MAX SPLINE CONTROLS (%i) hit", MAX_SPLINE_CONTROLS );
+void BG_AddSplineControl(splinePath_t *spline, const char *name)
+{
+	if (spline->numControls >= MAX_SPLINE_CONTROLS)
+	{
+		Com_Error(ERR_DROP, "MAX SPLINE CONTROLS (%i) hit", MAX_SPLINE_CONTROLS);
 	}
 
-	Q_strncpyz( spline->controls[spline->numControls].name, name, 64 );
+	Q_strncpyz(spline->controls[spline->numControls].name, name, 64);
 
 	spline->numControls++;
 }
 
-float BG_SplineLength( splinePath_t* pSpline ) {
-	float i;
-	float granularity = 0.01f;
-	float dist = 0;
-//	float tension;
+float BG_SplineLength(splinePath_t *pSpline)
+{
+	float  i;
+	float  granularity = 0.01f;
+	float  dist        = 0;
 	vec3_t vec[2];
-	vec3_t lastPoint = {0};// Nico, uninitialized warning fix
+	vec3_t lastPoint = { 0 }; // Nico, uninitialized warning fix
 	vec3_t result;
 
-	for ( i = 0; i <= 1.f; i += granularity ) {
-		BG_CalculateSpline_r( pSpline, vec[0], vec[1], i );
-		VectorSubtract( vec[1], vec[0], result );
-		VectorMA( vec[0], i, result, result );
+	for (i = 0; i <= 1.f; i += granularity)
+	{
+		BG_CalculateSpline_r(pSpline, vec[0], vec[1], i);
+		VectorSubtract(vec[1], vec[0], result);
+		VectorMA(vec[0], i, result, result);
 
-		if ( i != 0 ) {
-			VectorSubtract( result, lastPoint, vec[0] );
-			dist += VectorLength( vec[0] );
+		if (i != 0)
+		{
+			VectorSubtract(result, lastPoint, vec[0]);
+			dist += VectorLength(vec[0]);
 		}
 
-		VectorCopy( result, lastPoint );
+		VectorCopy(result, lastPoint);
 	}
 
 	return dist;
 }
 
-void BG_BuildSplinePaths() {
-	int i, j;
-	pathCorner_t* pnt;
+void BG_BuildSplinePaths()
+{
+	int          i, j;
+	pathCorner_t *pnt;
 	splinePath_t *spline, *st;
 
-	for ( i = 0; i < numSplinePaths; i++ ) {
+	for (i = 0; i < numSplinePaths; i++)
+	{
 		spline = &splinePaths[i];
 
-		if ( *spline->strTarget ) {
-			for ( j = 0; j < spline->numControls; j++ ) {
-				pnt = BG_Find_PathCorner( spline->controls[j].name );
+		if (*spline->strTarget)
+		{
+			for (j = 0; j < spline->numControls; j++)
+			{
+				pnt = BG_Find_PathCorner(spline->controls[j].name);
 
-				if ( !pnt ) {
-					Com_Printf( "^1Cant find control point (%s) for spline (%s)\n", spline->controls[j].name, spline->point.name );
+				if (!pnt)
+				{
+					Com_Printf("^1Cant find control point (%s) for spline (%s)\n", spline->controls[j].name, spline->point.name);
 					// Gordon: Just changing to a warning for now, easier for region compiles...
 					continue;
 
-				} else {
-					VectorCopy( pnt->origin, spline->controls[j].origin );
+				}
+				else
+				{
+					VectorCopy(pnt->origin, spline->controls[j].origin);
 				}
 			}
 
-			st = BG_Find_Spline( spline->strTarget );
-			if ( !st ) {
-				Com_Printf( "^1Cant find target point (%s) for spline (%s)\n", spline->strTarget, spline->point.name );
+			st = BG_Find_Spline(spline->strTarget);
+			if (!st)
+			{
+				Com_Printf("^1Cant find target point (%s) for spline (%s)\n", spline->strTarget, spline->point.name);
 				// Gordon: Just changing to a warning for now, easier for region compiles...
 				continue;
 			}
 
 			spline->next = st;
 
-			spline->length = BG_SplineLength( spline );
-			BG_ComputeSegments( spline );
+			spline->length = BG_SplineLength(spline);
+			BG_ComputeSegments(spline);
 		}
 	}
 
-	for ( i = 0; i < numSplinePaths; i++ ) {
+	for (i = 0; i < numSplinePaths; i++)
+	{
 		spline = &splinePaths[i];
 
-		if ( spline->next ) {
+		if (spline->next)
+		{
 			spline->next->prev = spline;
 		}
 	}
 }
 
-splinePath_t* BG_GetSplineData( int number, qboolean* backwards ) {
-	if ( number < 0 ) {
+splinePath_t *BG_GetSplineData(int number, qboolean *backwards)
+{
+	if (number < 0)
+	{
 		*backwards = qtrue;
-		number = -number;
-	} else {
+		number     = -number;
+	}
+	else
+	{
 		*backwards = qfalse;
 	}
 	number--;
 
-	if ( number < 0 || number >= numSplinePaths ) {
+	if (number < 0 || number >= numSplinePaths)
+	{
 		return NULL;
 	}
 
 	return &splinePaths[number];
 }
 
-int BG_MaxAmmoForWeapon( weapon_t weaponNum, int *skill ) {
-	switch ( weaponNum ) {
-		//case WP_KNIFE:
+int BG_MaxAmmoForWeapon(weapon_t weaponNum)
+{
+	switch (weaponNum)
+	{
+	//case WP_KNIFE:
 	case WP_LUGER:
 	case WP_COLT:
 	case WP_STEN:
@@ -4354,28 +4430,28 @@ int BG_MaxAmmoForWeapon( weapon_t weaponNum, int *skill ) {
 	case WP_CARBINE:
 	case WP_KAR98:
 	case WP_SILENCED_COLT:
-		return( GetAmmoTableData( weaponNum )->maxammo );
+		return(GetAmmoTableData(weaponNum)->maxammo);
 	case WP_MP40:
 	case WP_THOMPSON:
-		return( GetAmmoTableData( weaponNum )->maxammo );
+		return(GetAmmoTableData(weaponNum)->maxammo);
 	case WP_M7:
 	case WP_GPG40:
-		return( GetAmmoTableData( weaponNum )->maxammo );
+		return(GetAmmoTableData(weaponNum)->maxammo);
 	case WP_GRENADE_PINEAPPLE:
 	case WP_GRENADE_LAUNCHER:
-		return( GetAmmoTableData( weaponNum )->maxammo );
+		return(GetAmmoTableData(weaponNum)->maxammo);
 	case WP_MEDIC_SYRINGE:
-		return( GetAmmoTableData( weaponNum )->maxammo );
+		return(GetAmmoTableData(weaponNum)->maxammo);
 	case WP_GARAND:
 	case WP_K43:
 	case WP_FG42:
-		return( GetAmmoTableData( weaponNum )->maxammo );
+		return(GetAmmoTableData(weaponNum)->maxammo);
 	case WP_GARAND_SCOPE:
 	case WP_K43_SCOPE:
 	case WP_FG42SCOPE:
-		return( GetAmmoTableData( weaponNum )->maxammo );
+		return(GetAmmoTableData(weaponNum)->maxammo);
 	default:
-		return( GetAmmoTableData( weaponNum )->maxammo );
+		return(GetAmmoTableData(weaponNum)->maxammo);
 	}
 }
 
@@ -4384,9 +4460,10 @@ int BG_MaxAmmoForWeapon( weapon_t weaponNum, int *skill ) {
 BG_CreateRotationMatrix
 ================
 */
-void BG_CreateRotationMatrix( const vec3_t angles, vec3_t matrix[3] ) {
-	AngleVectors( angles, matrix[0], matrix[1], matrix[2] );
-	VectorInverse( matrix[1] );
+void BG_CreateRotationMatrix(const vec3_t angles, vec3_t matrix[3])
+{
+	AngleVectors(angles, matrix[0], matrix[1], matrix[2]);
+	VectorInverse(matrix[1]);
 }
 
 /*
@@ -4394,10 +4471,13 @@ void BG_CreateRotationMatrix( const vec3_t angles, vec3_t matrix[3] ) {
 BG_TransposeMatrix
 ================
 */
-void BG_TransposeMatrix( const vec3_t matrix[3], vec3_t transpose[3] ) {
+void BG_TransposeMatrix(const vec3_t matrix[3], vec3_t transpose[3])
+{
 	int i, j;
-	for ( i = 0; i < 3; i++ ) {
-		for ( j = 0; j < 3; j++ ) {
+	for (i = 0; i < 3; i++)
+	{
+		for (j = 0; j < 3; j++)
+		{
 			transpose[i][j] = matrix[j][i];
 		}
 	}
@@ -4408,13 +4488,14 @@ void BG_TransposeMatrix( const vec3_t matrix[3], vec3_t transpose[3] ) {
 BG_RotatePoint
 ================
 */
-void BG_RotatePoint( vec3_t point, const vec3_t matrix[3] ) {
+void BG_RotatePoint(vec3_t point, const vec3_t matrix[3])
+{
 	vec3_t tvec;
 
-	VectorCopy( point, tvec );
-	point[0] = DotProduct( matrix[0], tvec );
-	point[1] = DotProduct( matrix[1], tvec );
-	point[2] = DotProduct( matrix[2], tvec );
+	VectorCopy(point, tvec);
+	point[0] = DotProduct(matrix[0], tvec);
+	point[1] = DotProduct(matrix[1], tvec);
+	point[2] = DotProduct(matrix[2], tvec);
 }
 
 
@@ -4424,27 +4505,29 @@ void BG_RotatePoint( vec3_t point, const vec3_t matrix[3] ) {
 BG_AdjustAAGunMuzzleForBarrel
 ================
 */
-void BG_AdjustAAGunMuzzleForBarrel( vec_t* origin, vec_t* forward, vec_t* right, vec_t* up, int barrel ) {
-	switch ( barrel ) {
+void BG_AdjustAAGunMuzzleForBarrel(vec_t *origin, vec_t *forward, vec_t *right, vec_t *up, int barrel)
+{
+	switch (barrel)
+	{
 	case 0:
-		VectorMA( origin, 64,   forward,    origin );
-		VectorMA( origin, 20,   right,      origin );
-		VectorMA( origin, 40,   up,         origin );
+		VectorMA(origin, 64, forward, origin);
+		VectorMA(origin, 20, right, origin);
+		VectorMA(origin, 40, up, origin);
 		break;
 	case 1:
-		VectorMA( origin, 64,   forward,    origin );
-		VectorMA( origin, 20,   right,      origin );
-		VectorMA( origin, 20,   up,         origin );
+		VectorMA(origin, 64, forward, origin);
+		VectorMA(origin, 20, right, origin);
+		VectorMA(origin, 20, up, origin);
 		break;
 	case 2:
-		VectorMA( origin, 64,   forward,    origin );
-		VectorMA( origin, -20,  right,      origin );
-		VectorMA( origin, 40,   up,         origin );
+		VectorMA(origin, 64, forward, origin);
+		VectorMA(origin, -20, right, origin);
+		VectorMA(origin, 40, up, origin);
 		break;
 	case 3:
-		VectorMA( origin, 64,   forward,    origin );
-		VectorMA( origin, -20,  right,      origin );
-		VectorMA( origin, 20,   up,         origin );
+		VectorMA(origin, 64, forward, origin);
+		VectorMA(origin, -20, right, origin);
+		VectorMA(origin, 20, up, origin);
 		break;
 	}
 }
@@ -4454,21 +4537,22 @@ void BG_AdjustAAGunMuzzleForBarrel( vec_t* origin, vec_t* forward, vec_t* right,
 PC_SourceWarning
 =================
 */
-void PC_SourceWarning( int handle, char *format, ... ) {
-	int line;
-	char filename[128];
-	va_list argptr;
+void PC_SourceWarning(int handle, char *format, ...)
+{
+	int         line;
+	char        filename[128];
+	va_list     argptr;
 	static char string[4096];
 
-	va_start( argptr, format );
-	Q_vsnprintf( string, sizeof( string ), format, argptr );
-	va_end( argptr );
+	va_start(argptr, format);
+	Q_vsnprintf(string, sizeof(string), format, argptr);
+	va_end(argptr);
 
 	filename[0] = '\0';
-	line = 0;
-	trap_PC_SourceFileAndLine( handle, filename, &line );
+	line        = 0;
+	trap_PC_SourceFileAndLine(handle, filename, &line);
 
-	Com_Printf( S_COLOR_YELLOW "WARNING: %s, line %d: %s\n", filename, line, string );
+	Com_Printf(S_COLOR_YELLOW "WARNING: %s, line %d: %s\n", filename, line, string);
 }
 
 /*
@@ -4476,24 +4560,25 @@ void PC_SourceWarning( int handle, char *format, ... ) {
 PC_SourceError
 =================
 */
-void PC_SourceError( int handle, char *format, ... ) {
-	int line;
-	char filename[128];
-	va_list argptr;
+void PC_SourceError(int handle, char *format, ...)
+{
+	int         line;
+	char        filename[128];
+	va_list     argptr;
 	static char string[4096];
 
-	va_start( argptr, format );
-	Q_vsnprintf( string, sizeof( string ), format, argptr );
-	va_end( argptr );
+	va_start(argptr, format);
+	Q_vsnprintf(string, sizeof(string), format, argptr);
+	va_end(argptr);
 
 	filename[0] = '\0';
-	line = 0;
-	trap_PC_SourceFileAndLine( handle, filename, &line );
+	line        = 0;
+	trap_PC_SourceFileAndLine(handle, filename, &line);
 
 #ifdef GAMEDLL
-	Com_Error( ERR_DROP, S_COLOR_RED "ERROR: %s, line %d: %s\n", filename, line, string );
+	Com_Error(ERR_DROP, S_COLOR_RED "ERROR: %s, line %d: %s\n", filename, line, string);
 #else
-	Com_Printf( S_COLOR_RED "ERROR: %s, line %d: %s\n", filename, line, string );
+	Com_Printf(S_COLOR_RED "ERROR: %s, line %d: %s\n", filename, line, string);
 #endif
 }
 
@@ -4502,26 +4587,34 @@ void PC_SourceError( int handle, char *format, ... ) {
 PC_Float_Parse
 =================
 */
-qboolean PC_Float_Parse( int handle, float *f ) {
+qboolean PC_Float_Parse(int handle, float *f)
+{
 	pc_token_t token;
-	int negative = qfalse;
+	int        negative = qfalse;
 
-	if ( !trap_PC_ReadToken( handle, &token ) ) {
+	if (!trap_PC_ReadToken(handle, &token))
+	{
 		return qfalse;
 	}
-	if ( token.string[0] == '-' ) {
-		if ( !trap_PC_ReadToken( handle, &token ) ) {
+	if (token.string[0] == '-')
+	{
+		if (!trap_PC_ReadToken(handle, &token))
+		{
 			return qfalse;
 		}
 		negative = qtrue;
 	}
-	if ( token.type != TT_NUMBER ) {
-		PC_SourceError( handle, "expected float but found %s\n", token.string );
+	if (token.type != TT_NUMBER)
+	{
+		PC_SourceError(handle, "expected float but found %s\n", token.string);
 		return qfalse;
 	}
-	if ( negative ) {
+	if (negative)
+	{
 		*f = -token.floatvalue;
-	} else {
+	}
+	else
+	{
 		*f = token.floatvalue;
 	}
 	return qtrue;
@@ -4532,15 +4625,18 @@ qboolean PC_Float_Parse( int handle, float *f ) {
 PC_Color_Parse
 =================
 */
-qboolean PC_Color_Parse( int handle, vec4_t *c ) {
-	int i;
+qboolean PC_Color_Parse(int handle, vec4_t *c)
+{
+	int   i;
 	float f;
 
-	for ( i = 0; i < 4; i++ ) {
-		if ( !PC_Float_Parse( handle, &f ) ) {
+	for (i = 0; i < 4; i++)
+	{
+		if (!PC_Float_Parse(handle, &f))
+		{
 			return qfalse;
 		}
-		( *c )[i] = f;
+		(*c)[i] = f;
 	}
 	return qtrue;
 }
@@ -4550,15 +4646,18 @@ qboolean PC_Color_Parse( int handle, vec4_t *c ) {
 PC_Vec_Parse
 =================
 */
-qboolean PC_Vec_Parse( int handle, vec3_t *c ) {
-	int i;
+qboolean PC_Vec_Parse(int handle, vec3_t *c)
+{
+	int   i;
 	float f;
 
-	for ( i = 0; i < 3; i++ ) {
-		if ( !PC_Float_Parse( handle, &f ) ) {
+	for (i = 0; i < 3; i++)
+	{
+		if (!PC_Float_Parse(handle, &f))
+		{
 			return qfalse;
 		}
-		( *c )[i] = f;
+		(*c)[i] = f;
 	}
 	return qtrue;
 }
@@ -4568,25 +4667,31 @@ qboolean PC_Vec_Parse( int handle, vec3_t *c ) {
 PC_Int_Parse
 =================
 */
-qboolean PC_Int_Parse( int handle, int *i ) {
+qboolean PC_Int_Parse(int handle, int *i)
+{
 	pc_token_t token;
-	int negative = qfalse;
+	int        negative = qfalse;
 
-	if ( !trap_PC_ReadToken( handle, &token ) ) {
+	if (!trap_PC_ReadToken(handle, &token))
+	{
 		return qfalse;
 	}
-	if ( token.string[0] == '-' ) {
-		if ( !trap_PC_ReadToken( handle, &token ) ) {
+	if (token.string[0] == '-')
+	{
+		if (!trap_PC_ReadToken(handle, &token))
+		{
 			return qfalse;
 		}
 		negative = qtrue;
 	}
-	if ( token.type != TT_NUMBER ) {
-		PC_SourceError( handle, "expected integer but found %s\n", token.string );
+	if (token.type != TT_NUMBER)
+	{
+		PC_SourceError(handle, "expected integer but found %s\n", token.string);
 		return qfalse;
 	}
 	*i = token.intvalue;
-	if ( negative ) {
+	if (negative)
+	{
 		*i = -*i;
 	}
 	return qtrue;
@@ -4598,14 +4703,16 @@ qboolean PC_Int_Parse( int handle, int *i ) {
 PC_String_Parse
 =================
 */
-const char* PC_String_Parse( int handle ) {
+const char *PC_String_Parse(int handle)
+{
 	static char buf[MAX_TOKEN_CHARS];
-	pc_token_t token;
-	if ( !trap_PC_ReadToken( handle, &token ) ) {
+	pc_token_t  token;
+	if (!trap_PC_ReadToken(handle, &token))
+	{
 		return NULL;
 	}
 
-	Q_strncpyz( buf, token.string, MAX_TOKEN_CHARS );
+	Q_strncpyz(buf, token.string, MAX_TOKEN_CHARS);
 	return buf;
 }
 #else
@@ -4614,13 +4721,15 @@ const char* PC_String_Parse( int handle ) {
 PC_String_Parse
 =================
 */
-qboolean PC_String_Parse( int handle, const char **out ) {
+qboolean PC_String_Parse(int handle, const char **out)
+{
 	pc_token_t token;
-	if ( !trap_PC_ReadToken( handle, &token ) ) {
+	if (!trap_PC_ReadToken(handle, &token))
+	{
 		return qfalse;
 	}
 
-	*( out ) = String_Alloc( token.string );
+	*(out) = String_Alloc(token.string);
 	return qtrue;
 }
 #endif
@@ -4632,18 +4741,21 @@ PC_String_ParseNoAlloc
 Same as one above, but uses a static buff and not the string memory pool
 =================
 */
-qboolean PC_String_ParseNoAlloc( int handle, char *out, size_t size ) {
+qboolean PC_String_ParseNoAlloc(int handle, char *out, size_t size)
+{
 	pc_token_t token;
 
-	if ( !trap_PC_ReadToken( handle, &token ) ) {
+	if (!trap_PC_ReadToken(handle, &token))
+	{
 		return qfalse;
 	}
 
-	Q_strncpyz( out, token.string, size );
+	Q_strncpyz(out, token.string, size);
 	return qtrue;
 }
 
-const char* bg_fireteamNames[MAX_FIRETEAMS] = {
+const char *bg_fireteamNames[MAX_FIRETEAMS] =
+{
 	"Alpha",
 	"Bravo",
 	"Charlie",
@@ -4654,103 +4766,118 @@ const char* bg_fireteamNames[MAX_FIRETEAMS] = {
 
 const voteType_t voteToggles[] =
 {
-	{ "vote_allow_kick",			CV_SVF_KICK },
-	{ "vote_allow_map",             CV_SVF_MAP },
-	{ "vote_allow_matchreset",      CV_SVF_MATCHRESET },
-	{ "vote_allow_randommap",       CV_SVF_RANDOMMAP },// Nico, random map voting
-	{ "vote_allow_referee",         CV_SVF_REFEREE },
-	{ "vote_allow_antilag",         CV_SVF_ANTILAG },
-	{ "vote_allow_muting",          CV_SVF_MUTING }
+	{ "vote_allow_kick",       CV_SVF_KICK       },
+	{ "vote_allow_map",        CV_SVF_MAP        },
+	{ "vote_allow_matchreset", CV_SVF_MATCHRESET },
+	{ "vote_allow_randommap",  CV_SVF_RANDOMMAP  }, // Nico, random map voting
+	{ "vote_allow_referee",    CV_SVF_REFEREE    },
+	{ "vote_allow_antilag",    CV_SVF_ANTILAG    },
+	{ "vote_allow_muting",     CV_SVF_MUTING     }
 };
 
-int numVotesAvailable = sizeof( voteToggles ) / sizeof( voteType_t );
+int numVotesAvailable = sizeof(voteToggles) / sizeof(voteType_t);
 
 // consts to offset random reinforcement seeds
 const unsigned int aReinfSeeds[MAX_REINFSEEDS] = { 11, 3, 13, 7, 2, 5, 1, 17 };
 
 // Multiview: Convert weaponstate to simpler format
-int BG_simpleWeaponState( int ws ) {
-	switch ( ws )
+int BG_simpleWeaponState(int ws)
+{
+	switch (ws)
 	{
 	case WEAPON_READY:
 	case WEAPON_READYING:
 	case WEAPON_RELAXING:
-		return( WSTATE_IDLE );
+		return(WSTATE_IDLE);
 	case WEAPON_RAISING:
 	case WEAPON_DROPPING:
 	case WEAPON_DROPPING_TORELOAD:
-		return( WSTATE_SWITCH );
+		return(WSTATE_SWITCH);
 	case WEAPON_FIRING:
 	case WEAPON_FIRINGALT:
-		return( WSTATE_FIRE );
+		return(WSTATE_FIRE);
 	case WEAPON_RELOADING:
-		return( WSTATE_RELOAD );
+		return(WSTATE_RELOAD);
 	}
 
-	return( WSTATE_IDLE );
+	return(WSTATE_IDLE);
 }
 
 
 // Multiview: Reduce hint info to 2 bits.  However, we can really
 // have up to 8 values, as some hints will have a 0 value for
 // cursorHintVal
-int BG_simpleHintsCollapse( int hint, int val ) {
-	switch ( hint ) {
+int BG_simpleHintsCollapse(int hint, int val)
+{
+	switch (hint)
+	{
 	case HINT_DISARM:
-		if ( val > 0 ) {
-			return( 0 );
+		if (val > 0)
+		{
+			return(0);
 		}
 	case HINT_BUILD:
-		if ( val > 0 ) {
-			return( 1 );
+		if (val > 0)
+		{
+			return(1);
 		}
 	case HINT_BREAKABLE:
-		if ( val == 0 ) {
-			return( 1 );
+		if (val == 0)
+		{
+			return(1);
 		}
 	case HINT_DOOR_ROTATING:
 	case HINT_BUTTON:
 	case HINT_MG42:
-		if ( val == 0 ) {
-			return( 2 );
+		if (val == 0)
+		{
+			return(2);
 		}
 	case HINT_BREAKABLE_DYNAMITE:
-		if ( val == 0 ) {
-			return( 3 );
+		if (val == 0)
+		{
+			return(3);
 		}
 	}
 
-	return( 0 );
+	return(0);
 }
 
 
 // Multiview: Expand the hints.  Because we map a couple hints
 // into a single value, we can't replicate the proper hint back
 // in all cases.
-int BG_simpleHintsExpand( int hint, int val ) {
-	switch ( hint ) {
-	case 0: return( ( val >= 0 ) ? HINT_DISARM : 0 );
-	case 1: return( ( val >= 0 ) ? HINT_BUILD : HINT_BREAKABLE );
-	case 2: return( ( val >= 0 ) ? HINT_BUILD : HINT_MG42 );
-	case 3: return( ( val >= 0 ) ? HINT_BUILD : HINT_BREAKABLE_DYNAMITE );
+int BG_simpleHintsExpand(int hint, int val)
+{
+	switch (hint)
+	{
+	case 0: return((val >= 0) ? HINT_DISARM : 0);
+	case 1: return((val >= 0) ? HINT_BUILD : HINT_BREAKABLE);
+	case 2: return((val >= 0) ? HINT_BUILD : HINT_MG42);
+	case 3: return((val >= 0) ? HINT_BUILD : HINT_BREAKABLE_DYNAMITE);
 	}
 
-	return( 0 );
+	return(0);
 }
 
 // Real printable charater count
-int BG_drawStrlen( const char *str ) {
+int BG_drawStrlen(const char *str)
+{
 	int cnt = 0;
 
-	while ( *str ) {
-		if ( Q_IsColorString( str ) ) {
+	while (*str)
+	{
+		if (Q_IsColorString(str))
+		{
 			str += 2;
-		} else {
+		}
+		else
+		{
 			cnt++;
 			str++;
 		}
 	}
-	return( cnt );
+	return(cnt);
 }
 
 
@@ -4761,20 +4888,24 @@ int BG_drawStrlen( const char *str ) {
 //		out_max = max size of target buffer
 //
 // Returns size of printable string
-int BG_colorstrncpyz( char *in, char *out, int str_max, int out_max ) {
-	int str_len = 0;    // current printable string size
-	int out_len = 0;    // current true string size
-	const int in_len = strlen( in );
+int BG_colorstrncpyz(char *in, char *out, int str_max, int out_max)
+{
+	int       str_len = 0; // current printable string size
+	int       out_len = 0; // current true string size
+	const int in_len  = strlen(in);
 
 	out_max--;
-	while ( *in && out_len < out_max && str_len < str_max ) {
-		if ( *in == '^' ) {
-			if ( out_len + 2 >= in_len && out_len + 2 >= out_max ) {
+	while (*in && out_len < out_max && str_len < str_max)
+	{
+		if (*in == '^')
+		{
+			if (out_len + 2 >= in_len && out_len + 2 >= out_max)
+			{
 				break;
 			}
 
-			*out++ = *in++;
-			*out++ = *in++;
+			*out++   = *in++;
+			*out++   = *in++;
 			out_len += 2;
 			continue;
 		}
@@ -4786,47 +4917,60 @@ int BG_colorstrncpyz( char *in, char *out, int str_max, int out_max ) {
 
 	*out = 0;
 
-	return( str_len );
+	return(str_len);
 }
 
-int BG_strRelPos( char *in, int index ) {
-	int cPrintable = 0;
-	const char *ref = in;
+int BG_strRelPos(char *in, int index)
+{
+	int        cPrintable = 0;
+	const char *ref       = in;
 
-	while ( *ref && cPrintable < index ) {
-		if ( Q_IsColorString( ref ) ) {
+	while (*ref && cPrintable < index)
+	{
+		if (Q_IsColorString(ref))
+		{
 			ref += 2;
-		} else {
+		}
+		else
+		{
 			ref++;
 			cPrintable++;
 		}
 	}
 
-	return( ref - in );
+	return(ref - in);
 }
 
 // strip colors and control codes, copying up to dwMaxLength-1 "good" chars and nul-terminating
 // returns the length of the cleaned string
-int BG_cleanName( const char *pszIn, char *pszOut, unsigned int dwMaxLength, qboolean fCRLF ) {
-	const char *pInCopy = pszIn;
+int BG_cleanName(const char *pszIn, char *pszOut, int dwMaxLength, qboolean fCRLF)
+{
+	const char *pInCopy     = pszIn;
 	const char *pszOutStart = pszOut;
 
-	while ( *pInCopy && ( pszOut - pszOutStart < dwMaxLength - 1 ) ) {
-		if ( *pInCopy == '^' ) {
-			pInCopy += ( ( pInCopy[1] == 0 ) ? 1 : 2 );
-		} else if ( ( *pInCopy < 32 && ( !fCRLF || *pInCopy != '\n' ) ) || ( *pInCopy > 126 ) )    {
+	while (*pInCopy && (pszOut - pszOutStart < dwMaxLength - 1))
+	{
+		if (*pInCopy == '^')
+		{
+			pInCopy += ((pInCopy[1] == 0) ? 1 : 2);
+		}
+		else if ((*pInCopy < 32 && (!fCRLF || *pInCopy != '\n')) || (*pInCopy > 126))
+		{
 			pInCopy++;
-		} else {
+		}
+		else
+		{
 			*pszOut++ = *pInCopy++;
 		}
 	}
 
 	*pszOut = 0;
-	return( pszOut - pszOutStart );
+	return(pszOut - pszOutStart);
 }
 
 // Only used locally
-typedef struct {
+typedef struct
+{
 	char *colorname;
 	vec4_t *color;
 } colorTable_t;
@@ -4834,78 +4978,89 @@ typedef struct {
 // Colors for crosshairs
 colorTable_t OSP_Colortable[] =
 {
-	{ "white",       &colorWhite },
-	{ "red",     &colorRed },
-	{ "green",       &colorGreen },
-	{ "blue",        &colorBlue },
-	{ "yellow",      &colorYellow },
-	{ "magenta", &colorMagenta },
-	{ "cyan",        &colorCyan },
-	{ "orange",      &colorOrange },
-	{ "mdred",       &colorMdRed },
-	{ "mdgreen", &colorMdGreen },
-	{ "dkgreen", &colorDkGreen },
-	{ "mdcyan",      &colorMdCyan },
-	{ "mdyellow",    &colorMdYellow },
-	{ "mdorange",    &colorMdOrange },
-	{ "mdblue",      &colorMdBlue },
-	{ "ltgrey",      &colorLtGrey },
-	{ "mdgrey",      &colorMdGrey },
-	{ "dkgrey",      &colorDkGrey },
-	{ "black",       &colorBlack },
-	{ NULL,         NULL }
+	{ "white",    &colorWhite    },
+	{ "red",      &colorRed      },
+	{ "green",    &colorGreen    },
+	{ "blue",     &colorBlue     },
+	{ "yellow",   &colorYellow   },
+	{ "magenta",  &colorMagenta  },
+	{ "cyan",     &colorCyan     },
+	{ "orange",   &colorOrange   },
+	{ "mdred",    &colorMdRed    },
+	{ "mdgreen",  &colorMdGreen  },
+	{ "dkgreen",  &colorDkGreen  },
+	{ "mdcyan",   &colorMdCyan   },
+	{ "mdyellow", &colorMdYellow },
+	{ "mdorange", &colorMdOrange },
+	{ "mdblue",   &colorMdBlue   },
+	{ "ltgrey",   &colorLtGrey   },
+	{ "mdgrey",   &colorMdGrey   },
+	{ "dkgrey",   &colorDkGrey   },
+	{ "black",    &colorBlack    },
+	{ NULL,       NULL           }
 };
 
-extern void trap_Cvar_Set( const char *var_name, const char *value );
-void BG_setCrosshair( char *colString, float *col, float alpha, char *cvarName ) {
+extern void trap_Cvar_Set(const char *var_name, const char *value);
+void BG_setCrosshair(char *colString, float *col, float alpha, char *cvarName)
+{
 	char *s = colString;
 
 	col[0] = 1.0f;
 	col[1] = 1.0f;
 	col[2] = 1.0f;
-	col[3] = ( alpha > 1.0f ) ? 1.0f : ( alpha < 0.0f ) ? 0.0f : alpha;
+	col[3] = (alpha > 1.0f) ? 1.0f : (alpha < 0.0f) ? 0.0f : alpha;
 
-	if ( *s == '0' && ( *( s + 1 ) == 'x' || *( s + 1 ) == 'X' ) ) {
+	if (*s == '0' && (*(s + 1) == 'x' || *(s + 1) == 'X'))
+	{
 		s += 2;
 		//parse rrggbb
-		if ( Q_IsHexColorString( s ) ) {
-			col[0] = ( (float)( gethex( *( s ) ) * 16 + gethex( *( s + 1 ) ) ) ) / 255.00;
-			col[1] = ( (float)( gethex( *( s + 2 ) ) * 16 + gethex( *( s + 3 ) ) ) ) / 255.00;
-			col[2] = ( (float)( gethex( *( s + 4 ) ) * 16 + gethex( *( s + 5 ) ) ) ) / 255.00;
+		if (Q_IsHexColorString(s))
+		{
+			col[0] = ((float)(gethex(*(s)) * 16 + gethex(*(s + 1)))) / 255.00;
+			col[1] = ((float)(gethex(*(s + 2)) * 16 + gethex(*(s + 3)))) / 255.00;
+			col[2] = ((float)(gethex(*(s + 4)) * 16 + gethex(*(s + 5)))) / 255.00;
 			return;
 		}
-	} else {
+	}
+	else
+	{
 		int i = 0;
-		while ( OSP_Colortable[i].colorname != NULL ) {
-			if ( Q_stricmp( s, OSP_Colortable[i].colorname ) == 0 ) {
-				col[0] = ( *OSP_Colortable[i].color )[0];
-				col[1] = ( *OSP_Colortable[i].color )[1];
-				col[2] = ( *OSP_Colortable[i].color )[2];
+		while (OSP_Colortable[i].colorname != NULL)
+		{
+			if (Q_stricmp(s, OSP_Colortable[i].colorname) == 0)
+			{
+				col[0] = (*OSP_Colortable[i].color)[0];
+				col[1] = (*OSP_Colortable[i].color)[1];
+				col[2] = (*OSP_Colortable[i].color)[2];
 				return;
 			}
 			i++;
 		}
 	}
 
-	trap_Cvar_Set( cvarName, "White" );
+	trap_Cvar_Set(cvarName, "White");
 }
 
-qboolean BG_isLightWeaponSupportingFastReload( int weapon ) {
-	if ( weapon == WP_LUGER ||
-		 weapon == WP_COLT ||
-		 weapon == WP_MP40 ||
-		 weapon == WP_THOMPSON ||
-		 weapon == WP_STEN ||
-		 weapon == WP_SILENCER ||
-		 weapon == WP_FG42 ||
-		 weapon == WP_SILENCED_COLT ) {
+qboolean BG_isLightWeaponSupportingFastReload(int weapon)
+{
+	if (weapon == WP_LUGER ||
+	    weapon == WP_COLT ||
+	    weapon == WP_MP40 ||
+	    weapon == WP_THOMPSON ||
+	    weapon == WP_STEN ||
+	    weapon == WP_SILENCER ||
+	    weapon == WP_FG42 ||
+	    weapon == WP_SILENCED_COLT)
+	{
 		return qtrue;
 	}
 	return qfalse;
 }
 
-qboolean BG_IsScopedWeapon( int weapon ) {
-	switch ( weapon ) {
+qboolean BG_IsScopedWeapon(int weapon)
+{
+	switch (weapon)
+	{
 	case WP_GARAND_SCOPE:
 	case WP_K43_SCOPE:
 	case WP_FG42SCOPE:
@@ -4915,57 +5070,66 @@ qboolean BG_IsScopedWeapon( int weapon ) {
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-typedef struct locInfo_s {
+typedef struct locInfo_s
+{
 	vec2_t gridStartCoord;
 	vec2_t gridStep;
 } locInfo_t;
 
 static locInfo_t locInfo;
 
-void BG_InitLocations( vec2_t world_mins, vec2_t world_maxs ) {
+void BG_InitLocations(vec2_t world_mins, vec2_t world_maxs)
+{
 	// keep this in sync with CG_DrawGrid
 	locInfo.gridStep[0] = 1200.f;
 	locInfo.gridStep[1] = 1200.f;
 
 	// ensure minimal grid density
-	while ( ( world_maxs[0] - world_mins[0] ) / locInfo.gridStep[0] < 7 )
+	while ((world_maxs[0] - world_mins[0]) / locInfo.gridStep[0] < 7)
 		locInfo.gridStep[0] -= 50.f;
-	while ( ( world_mins[1] - world_maxs[1] ) / locInfo.gridStep[1] < 7 )
+	while ((world_mins[1] - world_maxs[1]) / locInfo.gridStep[1] < 7)
 		locInfo.gridStep[1] -= 50.f;
 
-	locInfo.gridStartCoord[0] = world_mins[0] + .5f * ( ( ( ( world_maxs[0] - world_mins[0] ) / locInfo.gridStep[0] ) - ( (int)( ( world_maxs[0] - world_mins[0] ) / locInfo.gridStep[0] ) ) ) * locInfo.gridStep[0] );
-	locInfo.gridStartCoord[1] = world_mins[1] - .5f * ( ( ( ( world_mins[1] - world_maxs[1] ) / locInfo.gridStep[1] ) - ( (int)( ( world_mins[1] - world_maxs[1] ) / locInfo.gridStep[1] ) ) ) * locInfo.gridStep[1] );
+	locInfo.gridStartCoord[0] = world_mins[0] + .5f * ((((world_maxs[0] - world_mins[0]) / locInfo.gridStep[0]) - ((int)((world_maxs[0] - world_mins[0]) / locInfo.gridStep[0]))) * locInfo.gridStep[0]);
+	locInfo.gridStartCoord[1] = world_mins[1] - .5f * ((((world_mins[1] - world_maxs[1]) / locInfo.gridStep[1]) - ((int)((world_mins[1] - world_maxs[1]) / locInfo.gridStep[1]))) * locInfo.gridStep[1]);
 }
 
-char *BG_GetLocationString( vec_t* pos ) {
+char *BG_GetLocationString(vec_t *pos)
+{
 	static char coord[6];
-	int x, y;
+	int         x, y;
 
 	coord[0] = '\0';
 
-	x = ( pos[0] - locInfo.gridStartCoord[0] ) / locInfo.gridStep[0];
-	y = ( locInfo.gridStartCoord[1] - pos[1] ) / locInfo.gridStep[1];
+	x = (pos[0] - locInfo.gridStartCoord[0]) / locInfo.gridStep[0];
+	y = (locInfo.gridStartCoord[1] - pos[1]) / locInfo.gridStep[1];
 
-	if ( x < 0 ) {
+	if (x < 0)
+	{
 		x = 0;
 	}
-	if ( y < 0 ) {
+	if (y < 0)
+	{
 		y = 0;
 	}
 
-	Com_sprintf( coord, sizeof( coord ), "%c,%i", 'A' + x, y );
+	Com_sprintf(coord, sizeof(coord), "%c,%i", 'A' + x, y);
 
 	return coord;
 }
 
-qboolean BG_BBoxCollision( vec3_t min1, vec3_t max1, vec3_t min2, vec3_t max2 ) {
+qboolean BG_BBoxCollision(vec3_t min1, vec3_t max1, vec3_t min2, vec3_t max2)
+{
 	int i;
 
-	for ( i = 0; i < 3; i++ ) {
-		if ( min1[i] > max2[i] ) {
+	for (i = 0; i < 3; i++)
+	{
+		if (min1[i] > max2[i])
+		{
 			return qfalse;
 		}
-		if ( min2[i] > max1[i] ) {
+		if (min2[i] > max1[i])
+		{
 			return qfalse;
 		}
 	}
@@ -4973,7 +5137,8 @@ qboolean BG_BBoxCollision( vec3_t min1, vec3_t max1, vec3_t min2, vec3_t max2 ) 
 	return qtrue;
 }
 
-weapon_t bg_heavyWeapons[NUM_HEAVY_WEAPONS] = {
+weapon_t bg_heavyWeapons[NUM_HEAVY_WEAPONS] =
+{
 	WP_FLAMETHROWER,
 	WP_MOBILE_MG42,
 	WP_MOBILE_MG42_SET,
@@ -4984,40 +5149,50 @@ weapon_t bg_heavyWeapons[NUM_HEAVY_WEAPONS] = {
 
 /////////////////////////
 
-int BG_FootstepForSurface( int surfaceFlags ) {
-	if ( surfaceFlags & SURF_NOSTEPS ) {
+int BG_FootstepForSurface(int surfaceFlags)
+{
+	if (surfaceFlags & SURF_NOSTEPS)
+	{
 		return FOOTSTEP_TOTAL;
 	}
 
-	if ( surfaceFlags & SURF_METAL ) {
+	if (surfaceFlags & SURF_METAL)
+	{
 		return FOOTSTEP_METAL;
 	}
 
-	if ( surfaceFlags & SURF_WOOD ) {
+	if (surfaceFlags & SURF_WOOD)
+	{
 		return FOOTSTEP_WOOD;
 	}
 
-	if ( surfaceFlags & SURF_GRASS ) {
+	if (surfaceFlags & SURF_GRASS)
+	{
 		return FOOTSTEP_GRASS;
 	}
 
-	if ( surfaceFlags & SURF_GRAVEL ) {
+	if (surfaceFlags & SURF_GRAVEL)
+	{
 		return FOOTSTEP_GRAVEL;
 	}
 
-	if ( surfaceFlags & SURF_ROOF ) {
+	if (surfaceFlags & SURF_ROOF)
+	{
 		return FOOTSTEP_ROOF;
 	}
 
-	if ( surfaceFlags & SURF_SNOW ) {
+	if (surfaceFlags & SURF_SNOW)
+	{
 		return FOOTSTEP_SNOW;
 	}
 
-	if ( surfaceFlags & SURF_CARPET ) {
+	if (surfaceFlags & SURF_CARPET)
+	{
 		return FOOTSTEP_CARPET;
 	}
 
-	if ( surfaceFlags & SURF_SPLASH ) {
+	if (surfaceFlags & SURF_SPLASH)
+	{
 		return FOOTSTEP_SPLASH;
 	}
 
@@ -5046,50 +5221,52 @@ copied over from common.c implementation
 */
 /* Nico, replaced by the function from ioquake3
 int Q_vsnprintf( char *dest, int size, const char *fmt, va_list argptr ) {
-	int ret;
+    int ret;
 
 #ifdef _WIN32
 #undef _vsnprintf
-	ret = _vsnprintf( dest, size - 1, fmt, argptr );
+    ret = _vsnprintf( dest, size - 1, fmt, argptr );
 #define _vsnprintf  use_idStr_vsnPrintf
 #else
 #undef vsnprintf
-	ret = vsnprintf( dest, size, fmt, argptr );
+    ret = vsnprintf( dest, size, fmt, argptr );
 #define vsnprintf   use_idStr_vsnPrintf
 #endif
-	dest[size - 1] = '\0';
-	if ( ret < 0 || ret >= size ) {
-		return -1;
-	}
-	return ret;
+    dest[size - 1] = '\0';
+    if ( ret < 0 || ret >= size ) {
+        return -1;
+    }
+    return ret;
 }*/
 
 #ifdef _MSC_VER
 /*
 =============
 Q_vsnprintf
- 
+
 Special wrapper function for Microsoft's broken _vsnprintf() function.
 MinGW comes with its own snprintf() which is not broken.
 =============
 */
-int Q_vsnprintf(char *str, size_t size, const char *format, va_list ap) {
+int Q_vsnprintf(char *str, size_t size, const char *format, va_list ap)
+{
 	int retval;
-	
+
 	retval = _vsnprintf(str, size, format, ap);
 
-	if (retval < 0 || retval == size) {
+	if (retval < 0 || retval == (int)size)
+	{
 		// Microsoft doesn't adhere to the C99 standard of vsnprintf,
 		// which states that the return value must be the number of
 		// bytes written if the output string had sufficient length.
 		//
 		// Obviously we cannot determine that value from Microsoft's
 		// implementation, so we have no choice but to return size.
-		
+
 		str[size - 1] = '\0';
 		return size;
 	}
-	
+
 	return retval;
 }
 #else
@@ -5098,13 +5275,15 @@ int Q_vsnprintf(char *str, size_t size, const char *format, va_list ap) {
 Q_vsnprintf
 =============
 */
-int Q_vsnprintf(char *str, size_t size, const char *format, va_list ap) {
+int Q_vsnprintf(char *str, size_t size, const char *format, va_list ap)
+{
 	int ret;
 
 	ret = vsnprintf(str, size, format, ap);
 
 	str[size - 1] = '\0';
-	if (ret < 0 || ret >= size) {
+	if (ret < 0 || ret >= (int)size)
+	{
 		return -1;
 	}
 	return ret;
@@ -5116,39 +5295,45 @@ int Q_vsnprintf(char *str, size_t size, const char *format, va_list ap) {
 BG_TouchJumpPad
 ========================
 */
-void BG_TouchJumpPad( playerState_t *ps, entityState_t *jumppad ) {
+void BG_TouchJumpPad(playerState_t *ps, entityState_t *jumppad)
+{
 	// spectators don't use jumppads
-	if ( ps->pm_type != PM_NORMAL ) {
+	if (ps->pm_type != PM_NORMAL)
+	{
 		return;
 	}
 
 	// give the player the velocity from the jumppad
-	VectorCopy( jumppad->origin2, ps->velocity );
+	VectorCopy(jumppad->origin2, ps->velocity);
 }
 
 // Nico, velocity jumppads support
-void BG_TouchVelocityJumpPad(playerState_t *ps, entityState_t *jumppad, float speed, int count) {
+void BG_TouchVelocityJumpPad(playerState_t *ps, entityState_t *jumppad, float speed, int count)
+{
 	vec3_t velocity;
 
-	if (ps->pm_type != PM_NORMAL) {
+	if (ps->pm_type != PM_NORMAL)
+	{
 		return;
 	}
 
 	VectorCopy(ps->velocity, velocity);
-	
-	if (VectorLength(velocity) == 0) {
+
+	if (VectorLength(velocity) == 0)
+	{
 		return;
 	}
 
 	// Nico, check (x,y) velocity
-	if (velocity[0] == 0 && velocity[1] == 0) {
+	if (velocity[0] == 0 && velocity[1] == 0)
+	{
 		return;
 	}
-	
+
 	// Nico, add (x, y) speed
 	velocity[0] += (speed * velocity[0]) / sqrt(pow(velocity[0], 2) + pow(velocity[1], 2));
 	velocity[1] += (speed * velocity[1]) / sqrt(pow(velocity[0], 2) + pow(velocity[1], 2));
-	
+
 	// Nico, add z speed
 	velocity[2] = jumppad->origin2[2] + count;
 

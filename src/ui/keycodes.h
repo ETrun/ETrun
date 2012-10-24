@@ -2,9 +2,9 @@
 ===========================================================================
 
 Wolfenstein: Enemy Territory GPL Source Code
-Copyright (C) 1999-2010 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2010 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Wolfenstein: Enemy Territory GPL Source Code (Wolf ET Source Code).  
+This file is part of the Wolfenstein: Enemy Territory GPL Source Code (Wolf ET Source Code).
 
 Wolf ET Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -35,11 +35,12 @@ If you have questions concerning this license or the applicable additional terms
 
 // normal keys should be passed as lowercased ascii
 
-typedef enum {
-	K_TAB = 9,
-	K_ENTER = 13,
+typedef enum
+{
+	K_TAB    = 9,
+	K_ENTER  = 13,
 	K_ESCAPE = 27,
-	K_SPACE = 32,
+	K_SPACE  = 32,
 
 	K_BACKSPACE = 127,
 

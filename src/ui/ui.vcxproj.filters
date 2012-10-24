@@ -52,31 +52,10 @@
     <ClCompile Include="ui_syscalls.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ui_util.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="ui.def">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\..\etrun\ui\credits_activision.menu">
-      <Filter>Menu Files</Filter>
-    </None>
-    <None Include="..\..\etrun\ui\credits_additional.menu">
-      <Filter>Menu Files</Filter>
-    </None>
-    <None Include="..\..\etrun\ui\credits_et260.menu">
-      <Filter>Menu Files</Filter>
-    </None>
-    <None Include="..\..\etrun\ui\credits_idsoftware.menu">
-      <Filter>Menu Files</Filter>
-    </None>
-    <None Include="..\..\etrun\ui\credits_quit.menu">
-      <Filter>Menu Files</Filter>
-    </None>
-    <None Include="..\..\etrun\ui\credits_splashdamage.menu">
-      <Filter>Menu Files</Filter>
     </None>
     <None Include="..\..\etrun\ui\global.menu">
       <Filter>Menu Files</Filter>
@@ -103,12 +82,6 @@
       <Filter>Menu Files</Filter>
     </None>
     <None Include="..\..\etrun\ui\ingame_serverinfo.menu">
-      <Filter>Menu Files</Filter>
-    </None>
-    <None Include="..\..\etrun\ui\ingame_tapout.menu">
-      <Filter>Menu Files</Filter>
-    </None>
-    <None Include="..\..\etrun\ui\ingame_tapoutlms.menu">
       <Filter>Menu Files</Filter>
     </None>
     <None Include="..\..\etrun\ui\ingame_vote.menu">
@@ -168,12 +141,6 @@
     <None Include="..\..\etrun\ui\playonline_connecttoip.menu">
       <Filter>Menu Files</Filter>
     </None>
-    <None Include="..\..\etrun\ui\playonline_disablepb.menu">
-      <Filter>Menu Files</Filter>
-    </None>
-    <None Include="..\..\etrun\ui\playonline_enablepb.menu">
-      <Filter>Menu Files</Filter>
-    </None>
     <None Include="..\..\etrun\ui\playonline_serverinfo.menu">
       <Filter>Menu Files</Filter>
     </None>
@@ -181,9 +148,6 @@
       <Filter>Menu Files</Filter>
     </None>
     <None Include="..\..\etrun\ui\popup_errormessage.menu">
-      <Filter>Menu Files</Filter>
-    </None>
-    <None Include="..\..\etrun\ui\popup_errormessage_pb.menu">
       <Filter>Menu Files</Filter>
     </None>
     <None Include="..\..\etrun\ui\popup_hostgameerrormessage.menu">
