@@ -5,7 +5,7 @@
 #define WINDOW_X		16
 #define WINDOW_Y		16
 #define WINDOW_WIDTH	360
-#define WINDOW_HEIGHT	130
+#define WINDOW_HEIGHT	160
 #define GROUP_NAME		"grpEtrunCustomiseMisc"
 
 // Macros //
@@ -39,6 +39,9 @@ menuDef {
 
 	SUBWINDOW( 6, 66, (SUBWINDOW_WIDTH), 30, "Demos" )
 	YESNO( 8, 82, (SUBWINDOW_WIDTH)-4, 10, "Automatically record demos:", .2, 8, "cg_autoDemo", "" )
+
+	SUBWINDOW( 6, 100, (SUBWINDOW_WIDTH), 30, "Minimizer" )
+	BIND( 8, 116, (SUBWINDOW_WIDTH)-5, 10, "Minimize button:", .2, 8, minimize, "Minimize game" )
 
 // Buttons //
 	

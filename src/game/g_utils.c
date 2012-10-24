@@ -1342,7 +1342,6 @@ void strtolower(char *in, char *out, int size)
 // Nico, wait functions
 #ifdef _WIN32
 #include <windows.h>
-
 void my_sleep(unsigned milliseconds)
 {
 	Sleep(milliseconds);

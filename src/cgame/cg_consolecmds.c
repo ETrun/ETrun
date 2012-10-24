@@ -35,6 +35,7 @@ If you have questions concerning this license or the applicable additional terms
 
 
 #include "cg_local.h"
+#include <Windows.h>// Nico, needed for minimize
 
 void CG_TargetCommand_f(void)
 {
@@ -810,6 +811,26 @@ static void CG_CPM_f(void)
 	CG_AddPMItem(PM_MESSAGE, CG_Argv(1), cgs.media.voiceChatShader);
 }
 
+/**
+ * Nico, game minimizer (windows only)
+ * @source: http://forums.warchestgames.com/showthread.php/24040-CODE-Tutorial-Minimize-Et-(Only-Windoof)
+ *
+ */
+static void CG_Minimize_f(void)
+{
+#if defined _WIN32
+	HWND wnd;
+
+	wnd = GetForegroundWindow();
+	if (wnd)
+	{
+		ShowWindow(wnd, SW_MINIMIZE);
+	}
+#else
+	CG_Printf(S_COLOR_RED "ERROR: minimize command is not supported on this OS.\n");
+#endif
+}
+
 typedef struct
 {
 	char *cmd;
@@ -869,6 +890,9 @@ static consoleCommand_t commands[] =
 	{ "modifySpeaker",       CG_ModifySpeaker_f      },
 	{ "undoSpeaker",         CG_UndoSpeaker_f        },
 	{ "cpm",                 CG_CPM_f                },
+
+	// Nico, minimize command
+	{ "minimize",            CG_Minimize_f           },
 };
 
 // Nico, here are ignored commands, (no warning issued for them)
