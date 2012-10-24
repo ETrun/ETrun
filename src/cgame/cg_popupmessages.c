@@ -154,7 +154,7 @@ void CG_UpdatePMLists(void)
 
 				listItem->next  = NULL;
 				listItem->inuse = qfalse;
-				listItem = next;
+				listItem        = next;
 			}
 			while (listItem);
 			break;
@@ -286,7 +286,7 @@ void CG_AddPMItem(popupMessageType_t type, const char *message, qhandle_t shader
 	while (end)
 	{
 		*end = '\0';
-		end = strchr(listItem->message, '\n');
+		end  = strchr(listItem->message, '\n');
 	}
 
 	// rain - don't eat popups for empty lines

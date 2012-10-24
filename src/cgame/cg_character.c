@@ -384,7 +384,7 @@ qboolean CG_RegisterCharacter(const char *characterFile, bg_character_t *charact
 
 	// Register Skin
 	COM_StripExtension(characterDef.mesh, buf);
-	filename = va("%s_%s.skin", buf, characterDef.skin);
+	filename        = va("%s_%s.skin", buf, characterDef.skin);
 	character->skin = trap_R_RegisterSkin(filename);
 	if (!character->skin)
 	{
@@ -427,7 +427,7 @@ qboolean CG_RegisterCharacter(const char *characterFile, bg_character_t *charact
 
 		// Register Undressed Corpse Skin
 		COM_StripExtension(characterDef.undressedCorpseModel, buf);
-		filename = va("%s_%s.skin", buf, characterDef.undressedCorpseSkin);
+		filename                       = va("%s_%s.skin", buf, characterDef.undressedCorpseSkin);
 		character->undressedCorpseSkin = trap_R_RegisterSkin(filename);
 		if (!character->undressedCorpseSkin)
 		{

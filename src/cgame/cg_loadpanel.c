@@ -369,7 +369,7 @@ void CG_LoadPanel_RenderMissionDescriptionText(panel_button_t *button)
 	while (s)
 	{
 		*s = '\n';
-		s = strchr(buffer, '*');
+		s  = strchr(buffer, '*');
 	}
 
 	BG_FitTextToWidth_Ext(buffer, button->font->scalex, button->rect.w - 16, sizeof(buffer), button->font->font);
