@@ -35,7 +35,10 @@ If you have questions concerning this license or the applicable additional terms
 
 
 #include "cg_local.h"
-#include <Windows.h>// Nico, needed for minimize
+
+#if defined _WIN32
+	#include <Windows.h> // Nico, needed for minimize
+#endif
 
 void CG_TargetCommand_f(void)
 {
