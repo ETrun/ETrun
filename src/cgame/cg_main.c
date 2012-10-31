@@ -348,6 +348,9 @@ vmCvar_t cg_popupFadeTime;
 // Automatically load checkpoints
 vmCvar_t cg_autoLoadCheckpoints;
 
+// Persistant speclock
+vmCvar_t cg_specLock;
+
 // Nico, end of ETrun cvars
 
 typedef struct
@@ -615,7 +618,10 @@ cvarTable_t cvarTable[] =
 	{ &cg_popupFadeTime,         "cg_popupFadeTime",         "2500",  CVAR_ARCHIVE,             0 },
 
 	// Automatically load checkpoints
-	{ &cg_autoLoadCheckpoints,	 "cg_autoLoadCheckpoints",   "0",     CVAR_ARCHIVE,             0 }
+	{ &cg_autoLoadCheckpoints,	 "cg_autoLoadCheckpoints",   "0",     CVAR_ARCHIVE,             0 },
+
+	// Persistant speclock
+	{ &cg_specLock,				 "cg_specLock",				 "0",     CVAR_ARCHIVE,             0 }
 
 	// Nico, end of ETrun cvars
 };
@@ -706,6 +712,7 @@ void CG_UpdateCvars(void)
 				// Nico, added hideme
 				// Nico, added autoDemo
 				// Nico, added autoloadCheckpoints
+				// Nico, added persistant specLock
 				if (cv->vmCvar == &cg_autoAction || cv->vmCvar == &cg_autoReload ||
 				    cv->vmCvar == &int_cl_timenudge || cv->vmCvar == &int_cl_maxpackets ||
 				    cv->vmCvar == &cg_autoactivate || cv->vmCvar == &cg_predictItems ||
@@ -713,7 +720,8 @@ void CG_UpdateCvars(void)
 				    cv->vmCvar == &cg_authToken || cv->vmCvar == &cg_autoLogin ||
 				    cv->vmCvar == &cg_loadViewAngles || cv->vmCvar == &cg_autoLoad ||
 				    cv->vmCvar == &cg_drawCGaz || cv->vmCvar == &cg_hideMe ||
-					cv->vmCvar == &cg_autoDemo || cv->vmCvar == &cg_autoLoadCheckpoints)
+					cv->vmCvar == &cg_autoDemo || cv->vmCvar == &cg_autoLoadCheckpoints ||
+					cv->vmCvar == &cg_specLock)
 				{
 					fSetFlags = qtrue;
 				}
@@ -818,7 +826,7 @@ void CG_setClientFlags(void)
 	}
 
 	cg.pmext.bAutoReload = (cg_autoReload.integer > 0);
-	trap_Cvar_Set("cg_uinfo", va("%d %d %d %d %s %d %d %d %d %d %d",
+	trap_Cvar_Set("cg_uinfo", va("%d %d %d %d %s %d %d %d %d %d %d %d",
 	                             // Client Flags
 	                             (
 	                                 ((cg_autoReload.integer > 0) ? CGF_AUTORELOAD : 0) |
@@ -856,7 +864,10 @@ void CG_setClientFlags(void)
 	                             cg_autoDemo.integer,
 
 								 // Automatically load checkpoints
-								 cg_autoLoadCheckpoints.integer
+								 cg_autoLoadCheckpoints.integer,
+
+								 // Persistant speclock
+								 cg_specLock.integer
 
 	                             ));
 }

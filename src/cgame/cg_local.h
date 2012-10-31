@@ -1992,6 +1992,9 @@ extern vmCvar_t cg_popupFadeTime;
 // Automatically load checkpoints
 extern vmCvar_t cg_autoLoadCheckpoints;
 
+// Persistant speclock
+extern vmCvar_t cg_specLock;
+
 // Nico, end of ETrun cvars
 
 //

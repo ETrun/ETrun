@@ -3249,6 +3249,9 @@ void Cmd_SpecLock_f(gentity_t *ent, unsigned int dwCommand, qboolean lock)
 
 	ent->client->sess.specLocked = lock;
 
+	// Nico, update cg_specLock client-side
+	trap_SendServerCommand(ent - g_entities, va("updateSpecLockStatus %d", lock));
+
 	// unlocked
 	if (!ent->client->sess.specLocked)
 	{

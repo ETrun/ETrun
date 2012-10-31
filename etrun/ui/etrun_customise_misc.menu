@@ -4,8 +4,8 @@
 
 #define WINDOW_X		16
 #define WINDOW_Y		16
-#define WINDOW_WIDTH	360
-#define WINDOW_HEIGHT	160
+#define WINDOW_WIDTH	520
+#define WINDOW_HEIGHT	230
 #define GROUP_NAME		"grpEtrunCustomiseMisc"
 
 // Macros //
@@ -42,6 +42,12 @@ menuDef {
 
 	SUBWINDOW( 6, 100, (SUBWINDOW_WIDTH), 30, "Minimizer" )
 	BIND( 8, 116, (SUBWINDOW_WIDTH)-5, 10, "Minimize button:", .2, 8, minimize, "Minimize game" )
+
+	SUBWINDOW( 6, 134, (SUBWINDOW_WIDTH), 30, "Checkpoints" )
+	YESNO( 8, 150, (SUBWINDOW_WIDTH)-4, 10, "Automatically load your PB checkpoints:", .2, 8, "cg_autoloadCheckpoints", "" )
+
+	SUBWINDOW( 6, 168, (SUBWINDOW_WIDTH), 30, "SpecLock" )
+	YESNO( 8, 184, (SUBWINDOW_WIDTH)-4, 10, "Enable persistant spec lock:", .2, 8, "cg_specLock", "" )
 
 // Buttons //
 	

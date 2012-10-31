@@ -1107,7 +1107,7 @@ void ClientUserinfoChanged(int clientNum)
 	Q_strncpyz(oldAuthToken, client->pers.authToken, sizeof(oldAuthToken));
 
 	s = Info_ValueForKey(userinfo, "cg_uinfo");
-	sscanf(s, "%i %i %i %i %s %i %i %i %i %i %i",
+	sscanf(s, "%i %i %i %i %s %i %i %i %i %i %i %i",
 	       &client->pers.clientFlags,
 	       &client->pers.clientTimeNudge,
 	       &client->pers.clientMaxPackets,
@@ -1133,8 +1133,11 @@ void ClientUserinfoChanged(int clientNum)
 	       // Nico, client auto demo record setting
 	       &client->pers.autoDemo,
 
-		   // Automatically load checkpoints
-		   &client->pers.autoLoadCheckpoints
+		   // Nico, automatically load checkpoints
+		   &client->pers.autoLoadCheckpoints,
+
+		   // Nico, persistant specLock
+		   &client->sess.specLocked
 
 	       );
 
@@ -1774,6 +1777,7 @@ void ClientSpawn(gentity_t *ent)
 		G_Script_ScriptEvent(ent, "playerstart", "");
 	}
 
+	// Nico, autoload position
 	if (ent->client->pers.autoLoad && !ent->client->sess.lastDieWasASelfkill && (ent->client->sess.sessionTeam == TEAM_AXIS || ent->client->sess.sessionTeam == TEAM_ALLIES))
 	{
 		if (ent->client->sess.sessionTeam == TEAM_ALLIES)

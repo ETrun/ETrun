@@ -2170,6 +2170,13 @@ static void CG_ServerCommand(void)
 		return;
 	}
 
+	// Nico, update specLock
+	if (!Q_stricmp(cmd, "updateSpecLockStatus"))
+	{
+		trap_SendConsoleCommand(va("set cg_specLock %d\n", atoi(CG_Argv(1))));
+		return;
+	}
+
 	// Nico, timer start/stop/check related
 
 	if (!Q_stricmp(cmd, "timerun_start"))
