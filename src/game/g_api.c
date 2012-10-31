@@ -309,7 +309,7 @@ static void *mapRecordsHandler(void *data)
 	}
 	else
 	{
-		CP(va("print \"^1> ^wError while requesting records\n\""));
+		CP(va("print \"%s^w: error while requesting records\n\"", GAME_VERSION_COLORED));
 	}
 
 	free(queryStruct->result);
@@ -419,7 +419,7 @@ static void *recordHandler(void *data)
 		{
 			memcpy(ent->client->sess.timerunBestCheckpointTimes[timerunNum], ent->client->sess.timerunCheckpointTimes, sizeof(ent->client->sess.timerunCheckpointTimes));
 		}
-		AP(va("print \"%s: ^w%s\n\"", GAME_VERSION_COLORED, queryStruct->result));
+		AP(va("print \"%s^w: %s\n\"", GAME_VERSION_COLORED, queryStruct->result));
 		break;
 
 	case 1002: // SB
@@ -447,11 +447,11 @@ static void *recordHandler(void *data)
 		break;
 
 	case 1005: // Slow time
-		CP(va("print \"%s: ^w%s\n\"", GAME_VERSION_COLORED, queryStruct->result));
+		CP(va("print \"%s^w: %s\n\"", GAME_VERSION_COLORED, queryStruct->result));
 		break;
 
 	default: // Error
-		CP(va("print \"%s: ^wError: %s\n\"", GAME_VERSION_COLORED, queryStruct->result));
+		CP(va("print \"%s^w: error: %s\n\"", GAME_VERSION_COLORED, queryStruct->result));
 		break;
 	}
 
@@ -529,16 +529,16 @@ static void *checkpointsHandler(void *data)
 			// Mark CP were loaded for this run
 			ent->client->sess.timerunCheckpointWereLoaded[timerunNum] = 1;
 
-			CP(va("print \"^1> ^wCheckpoints loaded for run #%d!\n\"", timerunNum));
+			CP(va("print \"%s^w: checkpoints loaded for run #%d!\n\"", GAME_VERSION_COLORED, timerunNum));
 		}
 		else
 		{
-			CP(va("print \"^1> ^wError while loading checkpoints!\n\""));
+			CP(va("print \"%s^w: error while loading checkpoints\n\"", GAME_VERSION_COLORED));
 		}
 	}
 	else
 	{
-		CP(va("print \"^1> ^wError while loading checkpoints!\n\""));
+		CP(va("print \"%s^w: error while loading checkpoints\n\"", GAME_VERSION_COLORED));
 	}
 
 	free(queryStruct->result);
@@ -613,7 +613,7 @@ static void *randommapHandler(void *data)
 	}
 	else
 	{
-		CP(va("print \"^1> ^wError while getting a random map!\n\""));
+		CP(va("print \"%s^w: error while getting a random map!\n\"", GAME_VERSION_COLORED));
 	}
 
 	free(queryStruct->result);
@@ -667,7 +667,7 @@ static void *mapRankHandler(void *data)
 	}
 	else
 	{
-		CP(va("print \"^1> ^wError while requesting rank\n\""));
+		CP(va("print \"%s^w: error while requesting rank\n\"", GAME_VERSION_COLORED));
 	}
 
 	free(queryStruct->result);

@@ -144,16 +144,6 @@ qboolean G_cmdDebounce(gentity_t *ent, const char *pszCommandName)
 	return(qtrue);
 }
 
-
-void G_noTeamControls(gentity_t *ent)
-{
-	CP("cpm \"Team commands not enabled on this server.\n\"");
-}
-
-
-
-
-
 ////////////////////////////////////////////////////////////////////////////
 /////
 /////			Match Commands
