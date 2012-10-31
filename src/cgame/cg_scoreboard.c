@@ -7,7 +7,7 @@ vec4_t clrUiYou = { 0.2f, 0.1f, 0.1f, .5f };
 
 #define INFO_PLAYER_WIDTH               75
 #define INFO_TEAM_WIDTH                 40
-#define INFO_SCORE_WIDTH                50
+#define INFO_SCORE_WIDTH                55
 #define INFO_SPEED_WIDTH                40
 #define INFO_LATENCY_WIDTH              35
 #define INFO_STATE_WIDTH                60
