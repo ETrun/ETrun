@@ -694,6 +694,7 @@ typedef struct
 
 	// Nico, client auto demo record setting
 	int autoDemo;
+	qboolean keepAllDemos;
 
 	// Nico, autoload checkpoints
 	qboolean autoLoadCheckpoints;
@@ -1454,6 +1455,7 @@ void Props_Chair_Skyboxtouch(gentity_t *ent);
 // Nico, g_target.c
 int GetTimerunNum(char *name);
 void notify_timerun_stop(gentity_t *activator, int finishTime);
+void saveDemo(gentity_t *ent);
 
 #include "g_team.h" // teamplay specific stuff
 

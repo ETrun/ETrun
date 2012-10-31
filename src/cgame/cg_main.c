@@ -338,6 +338,7 @@ vmCvar_t cg_hideMe;
 
 // Auto demo
 vmCvar_t cg_autoDemo;
+vmCvar_t cg_keepAllDemos;
 
 // Popups
 vmCvar_t cg_numPopups;
@@ -610,6 +611,7 @@ cvarTable_t cvarTable[] =
 
 	// Auto demo
 	{ &cg_autoDemo,              "cg_autoDemo",              "0",     CVAR_ARCHIVE,             0 },
+	{ &cg_keepAllDemos,          "cg_keepAllDemos",          "1",     CVAR_ARCHIVE,             0 },
 
 	// Popups
 	{ &cg_numPopups,             "cg_numPopups",             "5",     CVAR_ARCHIVE,             0 },
@@ -713,6 +715,7 @@ void CG_UpdateCvars(void)
 				// Nico, added autoDemo
 				// Nico, added autoloadCheckpoints
 				// Nico, added persistant specLock
+				// Nico, added keepAllDemos
 				if (cv->vmCvar == &cg_autoAction || cv->vmCvar == &cg_autoReload ||
 				    cv->vmCvar == &int_cl_timenudge || cv->vmCvar == &int_cl_maxpackets ||
 				    cv->vmCvar == &cg_autoactivate || cv->vmCvar == &cg_predictItems ||
@@ -721,7 +724,7 @@ void CG_UpdateCvars(void)
 				    cv->vmCvar == &cg_loadViewAngles || cv->vmCvar == &cg_autoLoad ||
 				    cv->vmCvar == &cg_drawCGaz || cv->vmCvar == &cg_hideMe ||
 					cv->vmCvar == &cg_autoDemo || cv->vmCvar == &cg_autoLoadCheckpoints ||
-					cv->vmCvar == &cg_specLock)
+					cv->vmCvar == &cg_specLock || cv->vmCvar == &cg_keepAllDemos)
 				{
 					fSetFlags = qtrue;
 				}
@@ -826,7 +829,7 @@ void CG_setClientFlags(void)
 	}
 
 	cg.pmext.bAutoReload = (cg_autoReload.integer > 0);
-	trap_Cvar_Set("cg_uinfo", va("%d %d %d %d %s %d %d %d %d %d %d %d",
+	trap_Cvar_Set("cg_uinfo", va("%d %d %d %d %s %d %d %d %d %d %d %d %d",
 	                             // Client Flags
 	                             (
 	                                 ((cg_autoReload.integer > 0) ? CGF_AUTORELOAD : 0) |
@@ -863,11 +866,14 @@ void CG_setClientFlags(void)
 	                             // Nico, client auto demo record setting
 	                             cg_autoDemo.integer,
 
-								 // Automatically load checkpoints
+								 // Nico, automatically load checkpoints
 								 cg_autoLoadCheckpoints.integer,
 
-								 // Persistant speclock
-								 cg_specLock.integer
+								 // Nico, persistant speclock
+								 cg_specLock.integer,
+
+								 // Nico, keep all demos
+								 cg_keepAllDemos.integer
 
 	                             ));
 }

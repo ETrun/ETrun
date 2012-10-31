@@ -420,34 +420,35 @@ static void *recordHandler(void *data)
 			memcpy(ent->client->sess.timerunBestCheckpointTimes[timerunNum], ent->client->sess.timerunCheckpointTimes, sizeof(ent->client->sess.timerunCheckpointTimes));
 		}
 		AP(va("print \"%s^w: %s\n\"", GAME_VERSION_COLORED, queryStruct->result));
+
+		// Nico, keep this demo if autodemo is enabled
+		if (ent->client->pers.autoDemo) {
+			saveDemo(ent);
+		}
 		break;
 
 	case 1002: // SB
-		if (ent->client->sess.timerunCheckpointWereLoaded[timerunNum])
-		{
-			memcpy(ent->client->sess.timerunBestCheckpointTimes[timerunNum], ent->client->sess.timerunCheckpointTimes, sizeof(ent->client->sess.timerunCheckpointTimes));
-		}
-		AP(va("bp \"^w%s\n\"", queryStruct->result));
-		break;
-
 	case 1003: // SB but player was already rec holder
-		if (ent->client->sess.timerunCheckpointWereLoaded[timerunNum])
-		{
-			memcpy(ent->client->sess.timerunBestCheckpointTimes[timerunNum], ent->client->sess.timerunCheckpointTimes, sizeof(ent->client->sess.timerunCheckpointTimes));
-		}
-		AP(va("bp \"^w%s\n\"", queryStruct->result));
-		break;
-
 	case 1004: // SB was tied
 		if (ent->client->sess.timerunCheckpointWereLoaded[timerunNum])
 		{
 			memcpy(ent->client->sess.timerunBestCheckpointTimes[timerunNum], ent->client->sess.timerunCheckpointTimes, sizeof(ent->client->sess.timerunCheckpointTimes));
 		}
 		AP(va("bp \"^w%s\n\"", queryStruct->result));
+
+		// Nico, keep this demo if autodemo is enabled
+		if (ent->client->pers.autoDemo) {
+			saveDemo(ent);
+		}
 		break;
 
 	case 1005: // Slow time
 		CP(va("print \"%s^w: %s\n\"", GAME_VERSION_COLORED, queryStruct->result));
+
+		// Nico, check player keepDemo setting to see if we keep this one or not
+		if (ent->client->pers.autoDemo && ent->client->pers.keepAllDemos) {
+			saveDemo(ent);
+		}
 		break;
 
 	default: // Error

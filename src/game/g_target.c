@@ -1702,6 +1702,63 @@ static void Cmd_SendRecord_f(gentity_t *ent, char *runName, char *authToken, int
 	// Do *not* free buf here
 }
 
+// Nico, save demo
+void saveDemo(gentity_t *ent) {
+	char      cleanRunName[256]      = { 0 };
+	char      physicsName[MAX_QPATH] = { 0 };
+	int       i                      = 0;
+	int       len                    = 0;
+	int       time, min, sec, milli;
+
+	// Nico, save run after replacing spaces in run name (in any) by underscores
+	Q_strncpyz(cleanRunName, ent->client->sess.currentTimerun, sizeof(cleanRunName));
+
+	Q_CleanStr(cleanRunName);// Nico, strip color tags
+
+	len = strlen(cleanRunName);
+	for (i = 0; i < len; ++i)
+	{
+		if (cleanRunName[i] == ' ')
+		{
+			cleanRunName[i] = '_';
+		}
+	}
+	switch (physics.integer)
+	{
+	case PHYSICS_MODE_AP_OB:
+	case PHYSICS_MODE_AP_NO_OB:
+		sprintf(physicsName, "AP");
+		break;
+
+	case PHYSICS_MODE_VQ3_OB:
+	case PHYSICS_MODE_VQ3_NO_OB:
+		sprintf(physicsName, "VQ3");
+		break;
+
+	case PHYSICS_MODE_VET:
+		sprintf(physicsName, "VET");
+		break;
+
+	default:
+		sprintf(physicsName, "Unknown");
+		break;
+	}
+
+	time = ent->client->sess.timerunLastTime[ent->client->sess.currentTimerunNum];
+
+	// convert time into MM:SS:mmm
+	milli  = time;
+	min    = milli / 60000;
+	milli -= min * 60000;
+	sec    = milli / 1000;
+	milli -= sec * 1000;
+
+	trap_SendServerCommand(ent - g_entities, va("runSave %s[%s]_%02d-%02d-%03d", cleanRunName, physicsName, min, sec, milli));
+
+	// Start recording a new temp demo.
+	trap_SendServerCommand(ent - g_entities, "tempDemoStart 1");
+}
+
 /* QUAKED target_stopTimer (1 0 0) (-8 -8 -8) (8 8 8)
  * timer stop
  *
@@ -1715,10 +1772,6 @@ void target_stoptimer_use(gentity_t *self, gentity_t *other, gentity_t *activato
 	int       time;
 	gclient_t *client = NULL;
 	int       timerunNum;
-	int       i                      = 0;
-	int       len                    = 0;
-	char      cleanRunName[256]      = { 0 };
-	char      physicsName[MAX_QPATH] = { 0 };
 
 	// Nico, silent GCC
 	other = other;
@@ -1798,42 +1851,12 @@ void target_stoptimer_use(gentity_t *self, gentity_t *other, gentity_t *activato
 	{
 		Cmd_SendRecord_f(activator, client->sess.currentTimerun, client->pers.authToken,
 		                 time, client->sess.startSpeed, client->sess.stopSpeed, client->sess.maxSpeed);
+	} else {
+		// Nico, API is not used and/or client is not logged,
+		// we cannnot know if his last time his SB/PB or something
+		// else. So we keep his last demo.
+		saveDemo(activator);
 	}
-
-	// Save run after replacing spaces in run name (in any) by underscores
-	Q_strncpyz(cleanRunName, client->sess.currentTimerun, sizeof(cleanRunName));
-	len = strlen(cleanRunName);
-	for (i = 0; i < len; ++i)
-	{
-		if (cleanRunName[i] == ' ')
-		{
-			cleanRunName[i] = '_';
-		}
-	}
-	switch (physics.integer)
-	{
-	case PHYSICS_MODE_AP_OB:
-	case PHYSICS_MODE_AP_NO_OB:
-		sprintf(physicsName, "AP");
-		break;
-
-	case PHYSICS_MODE_VQ3_OB:
-	case PHYSICS_MODE_VQ3_NO_OB:
-		sprintf(physicsName, "VQ3");
-		break;
-
-	case PHYSICS_MODE_VET:
-		sprintf(physicsName, "VET");
-		break;
-
-	default:
-		sprintf(physicsName, "Unknown");
-		break;
-	}
-	trap_SendServerCommand(activator - g_entities, va("runSave %s[%s]_%02d-%02d-%03d", cleanRunName, physicsName, min, sec, milli));
-
-	// Start recording a new temp demo.
-	trap_SendServerCommand(activator - g_entities, "tempDemoStart 1");
 
 	// Nico, notify the client and its spectators the timerun has stopped
 	notify_timerun_stop(activator, client->sess.timerunLastTime[timerunNum]);

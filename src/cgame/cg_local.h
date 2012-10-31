@@ -1982,6 +1982,7 @@ extern vmCvar_t cg_hideMe;
 
 // Auto demo
 extern vmCvar_t cg_autoDemo;
+extern vmCvar_t cg_keepAllDemos;
 
 // Popups
 extern vmCvar_t cg_numPopups;
