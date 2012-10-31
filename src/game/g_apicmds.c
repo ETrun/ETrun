@@ -117,7 +117,6 @@ void Cmd_Records_f(gentity_t *ent)
 // Nico, load checkpoints command
 void Cmd_LoadCheckpoints_f(gentity_t *ent)
 {
-	char *buf           = NULL;
 	int  argc           = 0;
 	int  runNum         = -1;
 	char arg[MAX_QPATH] = { 0 };
@@ -171,24 +170,36 @@ void Cmd_LoadCheckpoints_f(gentity_t *ent)
 	}
 	else
 	{
-		CP("print \"^1> ^wUsage: loadCheckpoints [run name or id]\n\"");
-		CP("print \"^1> ^wAvailable runs:\n\"");
+		CP("print \"\n  ^8Usage: loadCheckpoints [run name or id]\n\"");
+		CP("print \"  ^8Available runs:\n\"");
 		for (i = 0; i < MAX_TIMERUNS; ++i)
 		{
 			if (level.timerunsNames[i])
 			{
-				CP(va("print \"^1> ^w #%d => %s\n\"", i, level.timerunsNames[i]));
+				CP(va("print \"  ^8#%d => %s\n\"", i, level.timerunsNames[i]));
 			}
 		}
 		runNum = 0;
-		CP("print \"^1> ^wNo run specified, loading checkpoints for run #0...\n\"");
+		CP("print \"  ^8No run specified, loading checkpoints for run #0...\n\n\"");
 	}
+
+	Cmd_LoadCheckpoints_real(ent, runNum);
+}
+
+// Nico, load checkpoints command
+// Does not check anything, it's caller responsability to check:
+// level is timerun
+// API is used
+// player login status
+void Cmd_LoadCheckpoints_real(gentity_t *ent, int runNum)
+{
+	char *buf           = NULL;
 
 	buf = malloc(RESPONSE_MAX_SIZE * sizeof(char));
 
 	if (!buf)
 	{
-		G_Error("Cmd_LoadCheckpoints_f: malloc failed\n");
+		G_Error("Cmd_LoadCheckpoints_real: malloc failed\n");
 	}
 
 	G_API_getPlayerCheckpoints(buf, ent, level.rawmapname, level.timerunsNames[runNum], runNum, ent->client->pers.authToken);

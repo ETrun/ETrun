@@ -1107,7 +1107,7 @@ void ClientUserinfoChanged(int clientNum)
 	Q_strncpyz(oldAuthToken, client->pers.authToken, sizeof(oldAuthToken));
 
 	s = Info_ValueForKey(userinfo, "cg_uinfo");
-	sscanf(s, "%i %i %i %i %s %i %i %i %i %i",
+	sscanf(s, "%i %i %i %i %s %i %i %i %i %i %i",
 	       &client->pers.clientFlags,
 	       &client->pers.clientTimeNudge,
 	       &client->pers.clientMaxPackets,
@@ -1131,7 +1131,10 @@ void ClientUserinfoChanged(int clientNum)
 	       &client->pers.hideme,
 
 	       // Nico, client auto demo record setting
-	       &client->pers.autoDemo
+	       &client->pers.autoDemo,
+
+		   // Automatically load checkpoints
+		   &client->pers.autoLoadCheckpoints
 
 	       );
 
@@ -1464,6 +1467,12 @@ void ClientBegin(int clientNum)
 	{
 		G_LogPrintf("ClientBegin: login client %d via autoLogin\n", clientNum);
 		Cmd_Login_f(ent);
+	}
+
+	// Nico, check for checkpoints auto loading
+	if (g_useAPI.integer && client->pers.autoLoadCheckpoints) {
+		G_LogPrintf("ClientBegin: loading checkpoints for client %d via autoLoadCheckpoints\n", clientNum);
+		Cmd_LoadCheckpoints_real(ent, 0);
 	}
 
 	G_LogPrintf("ClientBegin: %i\n", clientNum);

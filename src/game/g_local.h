@@ -695,6 +695,9 @@ typedef struct
 	// Nico, client auto demo record setting
 	int autoDemo;
 
+	// Nico, autoload checkpoints
+	qboolean autoLoadCheckpoints;
+
 } clientPersistant_t;
 
 typedef struct
@@ -1102,6 +1105,7 @@ void Cmd_Login_f(gentity_t *ent);
 void Cmd_Logout_f(gentity_t *ent);
 void Cmd_Records_f(gentity_t *ent);
 void Cmd_LoadCheckpoints_f(gentity_t *ent);
+void Cmd_LoadCheckpoints_real(gentity_t *ent, int runNum);
 void Cmd_Rank_f(gentity_t *ent);
 
 // Nico, flood protection
