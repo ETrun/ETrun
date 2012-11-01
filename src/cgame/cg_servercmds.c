@@ -61,10 +61,10 @@ static void CG_ParseScore(team_t team)
 	{
 		i = cg.numScores;
 
-		cg.scores[i].client = atoi(CG_Argv(2 + (j * NUM_SCORES)));              // Nico, *7 => *10
+		cg.scores[i].client = atoi(CG_Argv(2 + (j * NUM_SCORES)));
 
-		cg.scores[i].ping = atoi(CG_Argv(3 + (j * NUM_SCORES)));         // Nico, 2 => 1, *7 => *10
-		cg.scores[i].time = atoi(CG_Argv(4 + (j * NUM_SCORES)));         // Nico, 3 => 2, *7 => *10
+		cg.scores[i].ping = atoi(CG_Argv(3 + (j * NUM_SCORES)));
+		cg.scores[i].time = atoi(CG_Argv(4 + (j * NUM_SCORES)));
 
 		// Nico, timerun best time
 		cg.scores[i].timerunBestTime = atoi(CG_Argv(5 + (j * NUM_SCORES)));
