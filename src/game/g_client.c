@@ -1137,7 +1137,7 @@ void ClientUserinfoChanged(int clientNum)
 		   &client->pers.autoLoadCheckpoints,
 
 		   // Nico, persistant specLock
-		   &client->sess.specLocked,
+		   (int *)&client->sess.specLocked,
 
 		   // Nico, keep all demos
 		   &client->pers.keepAllDemos

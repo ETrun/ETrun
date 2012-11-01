@@ -77,24 +77,13 @@ void G_SendScore(gentity_t *ent)
 
 		for (; i < numSorted ; i++)
 		{
-			int ping, playerClass;
+			int ping;
 
 			cl = &level.clients[level.sortedClients[i]];
 
 			if (g_entities[level.sortedClients[i]].r.svFlags & SVF_POW)
 			{
 				continue;
-			}
-
-			// NERVE - SMF - if on same team, send across player class
-			// Gordon: FIXME: remove/move elsewhere?
-			if (cl->ps.persistant[PERS_TEAM] == ent->client->ps.persistant[PERS_TEAM])
-			{
-				playerClass = cl->ps.stats[STAT_PLAYER_CLASS];
-			}
-			else
-			{
-				playerClass = 0;
 			}
 
 			if (cl->pers.connected == CON_CONNECTING)
@@ -108,12 +97,10 @@ void G_SendScore(gentity_t *ent)
 
 			// Nico, added timerun best time, timerun best speed, timerun status, followed client, login status, cgaz, speclocked status
 			// Nico, don't send time and speed while in cup mode
-			Com_sprintf(entry, sizeof(entry), " %i %i %i %i %i %i %i %i %i %i %i %i",
+			Com_sprintf(entry, sizeof(entry), " %i %i %i %i %i %i %i %i %i %i",
 			            level.sortedClients[i],
 			            ping,
 			            (level.time - cl->pers.enterTime) / 60000,
-			            g_entities[level.sortedClients[i]].s.powerups,
-			            playerClass,
 			            g_cupMode.integer > 0 ? 0 : cl->sess.timerunBestTime[cl->sess.currentTimerunNum],
 			            g_cupMode.integer > 0 ? 0 : cl->sess.timerunBestSpeed[cl->sess.currentTimerunNum],
 			            cl->sess.timerunActive ? 1 : 0,

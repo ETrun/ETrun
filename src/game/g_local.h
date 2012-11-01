@@ -694,10 +694,10 @@ typedef struct
 
 	// Nico, client auto demo record setting
 	int autoDemo;
-	qboolean keepAllDemos;
+	int keepAllDemos;
 
 	// Nico, autoload checkpoints
-	qboolean autoLoadCheckpoints;
+	int autoLoadCheckpoints;
 
 } clientPersistant_t;
 

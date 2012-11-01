@@ -44,9 +44,10 @@ CG_ParseScores
 =================
 */
 // Gordon: NOTE: team doesnt actually signify team, think i was on drugs that day.....
+#define NUM_SCORES 10
 static void CG_ParseScore(team_t team)
 {
-	int i, j, powerups;
+	int i, j;
 	int numScores;
 
 	if (team == TEAM_AXIS)
@@ -60,40 +61,36 @@ static void CG_ParseScore(team_t team)
 	{
 		i = cg.numScores;
 
-		cg.scores[i].client = atoi(CG_Argv(2 + (j * 12)));              // Nico, *7 => *12
+		cg.scores[i].client = atoi(CG_Argv(2 + (j * NUM_SCORES)));              // Nico, *7 => *10
 
-		cg.scores[i].ping        = atoi(CG_Argv(3 + (j * 12)));         // Nico, 2 => 1, *7 => *12
-		cg.scores[i].time        = atoi(CG_Argv(4 + (j * 12)));         // Nico, 3 => 2, *7 => *12
-		powerups                 = atoi(CG_Argv(5 + (j * 12)));         // Nico, 4 => 3, *7 => *12
-		cg.scores[i].playerClass = atoi(CG_Argv(6 + (j * 12)));         // Nico, 5 => 4, *7 => *12
+		cg.scores[i].ping = atoi(CG_Argv(3 + (j * NUM_SCORES)));         // Nico, 2 => 1, *7 => *10
+		cg.scores[i].time = atoi(CG_Argv(4 + (j * NUM_SCORES)));         // Nico, 3 => 2, *7 => *10
 
 		// Nico, timerun best time
-		cg.scores[i].timerunBestTime = atoi(CG_Argv(7 + (j * 12)));
+		cg.scores[i].timerunBestTime = atoi(CG_Argv(5 + (j * NUM_SCORES)));
 
 		// Nico, timerun best speed
-		cg.scores[i].timerunBestSpeed = atoi(CG_Argv(8 + (j * 12)));
+		cg.scores[i].timerunBestSpeed = atoi(CG_Argv(6 + (j * NUM_SCORES)));
 
 		// Nico, timerun status
-		cg.scores[i].timerunStatus = atoi(CG_Argv(9 + (j * 12)));
+		cg.scores[i].timerunStatus = atoi(CG_Argv(7 + (j * NUM_SCORES)));
 
 		// Nico, followed client
-		cg.scores[i].followedClient = atoi(CG_Argv(10 + (j * 12)));
+		cg.scores[i].followedClient = atoi(CG_Argv(8 + (j * NUM_SCORES)));
 
 		// Nico, login status
-		cg.scores[i].logged = atoi(CG_Argv(11 + (j * 12)));
+		cg.scores[i].logged = atoi(CG_Argv(9 + (j * NUM_SCORES)));
 
 		// Nico, cgaz setting
-		cg.scores[i].cgaz = atoi(CG_Argv(12 + (j * 12)));
+		cg.scores[i].cgaz = atoi(CG_Argv(10 + (j * NUM_SCORES)));
 
 		// Nico, speclocked status
-		cg.scores[i].speclocked = atoi(CG_Argv(13 + (j * 12)));
+		cg.scores[i].speclocked = atoi(CG_Argv(11 + (j * NUM_SCORES)));
 
 		if (cg.scores[i].client < 0 || cg.scores[i].client >= MAX_CLIENTS)
 		{
 			cg.scores[i].client = 0;
 		}
-
-		cgs.clientinfo[cg.scores[i].client].powerups = powerups;
 
 		cg.scores[i].team = cgs.clientinfo[cg.scores[i].client].team;
 
@@ -107,7 +104,7 @@ CG_ParseTeamInfo
 
 =================
 */
-#define NUMARGS 5
+#define NUMARGS 4
 static void CG_ParseTeamInfo(void)
 {
 	int i;
@@ -123,7 +120,6 @@ static void CG_ParseTeamInfo(void)
 		cgs.clientinfo[client].location[0] = atoi(CG_Argv(i * NUMARGS + 3));
 		cgs.clientinfo[client].location[1] = atoi(CG_Argv(i * NUMARGS + 4));
 		cgs.clientinfo[client].health      = atoi(CG_Argv(i * NUMARGS + 5));
-		cgs.clientinfo[client].powerups    = atoi(CG_Argv(i * NUMARGS + 6));
 	}
 }
 

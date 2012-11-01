@@ -2598,10 +2598,8 @@ static const char *CG_FeederItemText(float feederID, int index, int column, qhan
 			break;
 		case 3:
 			return info->name;
-			break;
 		case 4:
 			return va("%i", info->score);
-			break;
 		case 5:
 			return va("%4i", sp->time);
 			break;

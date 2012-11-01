@@ -486,12 +486,9 @@ typedef struct localEntity_s
 typedef struct
 {
 	int client;
-
 	int ping;
 	int time;
-
 	int team;
-	int playerClass;                    // NERVE - SMF
 
 	// Nico, timerun best time
 	int timerunBestTime;
@@ -536,7 +533,6 @@ typedef struct clientInfo_s
 	int location[2];                // location in 2d for team mode
 	int health;                     // you only get this info about your teammates
 	int curWeapon;
-	int powerups;                   // so can display quad/flag status
 	int breathPuffTime;
 	int cls;
 	int blinkTime;              //----(SA)
