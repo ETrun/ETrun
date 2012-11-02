@@ -16,4 +16,4 @@ xcopy /Y etrun\custommapscripts\* "C:\Users\Nicolas\Desktop\etrun\custommapscrip
 echo Press ENTER to start game...
 pause
 cd ..\
-C:\Users\Nicolas\Desktop\ETDEDd.exe +set fs_basepath "C:\Users\Nicolas\Desktop\" +set fs_game etrun +map braundorf_b4 +set developer 1 +set g_useAPI 0 +set g_APImodulePath "C:\Users\Nicolas\Desktop\etrun\APImodule.dll"
+C:\Users\Nicolas\Desktop\ETDEDd.exe +set fs_basepath "C:\Users\Nicolas\Desktop\" +set fs_game etrun +map test +set developer 1 +set dedicated 1 +set g_useAPI 0 +set g_APImodulePath "C:\Users\Nicolas\Desktop\etrun\APImodule.dll"
