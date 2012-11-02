@@ -3061,7 +3061,7 @@ static void CG_Autodemo()
 
 				if (cg_autoDemo.integer == 1)
 				{
-					CG_AddPMItem(PM_MESSAGE, va("%s^f:^g demo saved!\n", GAME_VERSION_COLORED), cgs.media.voiceChatShader);
+					CG_AddPMItem(PM_MESSAGE, va("%s^w:^g demo saved!\n", GAME_VERSION_COLORED), cgs.media.voiceChatShader);
 				}
 
 				cg.runsave = rs_keep = 0;

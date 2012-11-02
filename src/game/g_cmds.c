@@ -3026,7 +3026,7 @@ static command_t floodProtectedCommands[] =
 	{ "logout",          qtrue,  Cmd_Logout_f,            qtrue,  "Allows you to logout",                      NULL                                           },
 	{ "records",         qtrue,  Cmd_Records_f,           qtrue,  "Displays current map #1 records",           NULL                                           },
 	{ "rank",            qtrue,  Cmd_Rank_f,              qtrue,  "Shows rankings for given options",          "[userName] [mapName] [runName] [physicsName]" },
-	{ "loadCheckpoints", qtrue,  Cmd_LoadCheckpoints_f,   qtrue,  "Loads checkpoints from your PB",            "[run name or id]"                             },
+	{ "loadCheckpoints", qtrue,  Cmd_LoadCheckpoints_f,   qtrue,  "Loads checkpoints from your PB",            "[userName] [run name or id]"                  },
 	{ "h",               qtrue,  Cmd_Help_f,              qtrue,  "Shows help message",                        "[command]"                                    },
 };
 // Nico, end of defines commands that are flood protected or not

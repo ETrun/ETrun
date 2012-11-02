@@ -118,8 +118,9 @@ void Cmd_Records_f(gentity_t *ent)
 void Cmd_LoadCheckpoints_f(gentity_t *ent)
 {
 	int  argc           = 0;
+	char userName[MAX_QPATH]     = { 0 };
+	char runName[MAX_QPATH]     = { 0 };
 	int  runNum         = -1;
-	char arg[MAX_QPATH] = { 0 };
 	int  i              = 0;
 
 	// Check if level is timerun
@@ -143,34 +144,12 @@ void Cmd_LoadCheckpoints_f(gentity_t *ent)
 		return;
 	}
 
+	// Parse options
 	argc = trap_Argc();
 
-	if (argc == 2)
+	if (argc == 1 || argc > 2)
 	{
-		trap_Argv(1, arg, sizeof(arg));
-
-		// Find by run name
-		for (i = 0; i < MAX_TIMERUNS; ++i)
-		{
-			if (!Q_stricmp(level.timerunsNames[i], arg))
-			{
-				runNum = i;
-				break;
-			}
-		}
-
-		if (runNum == -1)  // Not found by name
-		{
-			runNum = atoi(arg);
-			if (runNum < 0 || runNum >= MAX_TIMERUNS || !level.timerunsNames[runNum])
-			{
-				runNum = 0;
-			}
-		}
-	}
-	else
-	{
-		CP("print \"\n  ^8Usage: loadCheckpoints [run name or id]\n\"");
+		CP("print \"\n  ^8Usage: loadCheckpoints [userName] [run name or id]\n\"");
 		CP("print \"  ^8Available runs:\n\"");
 		for (i = 0; i < MAX_TIMERUNS; ++i)
 		{
@@ -180,10 +159,41 @@ void Cmd_LoadCheckpoints_f(gentity_t *ent)
 			}
 		}
 		runNum = 0;
-		CP("print \"  ^8No run specified, loading checkpoints for run #0...\n\n\"");
+		CP("print \"  ^8No run specified, loading your own checkpoints for run #0...\n\n\"");
 	}
 
-	Cmd_LoadCheckpoints_real(ent, runNum);
+	if (argc > 1)
+	{
+		trap_Argv(1, userName, sizeof(userName));
+	}
+	if (strlen(userName) == 0)
+	{
+		sprintf(userName, "0");
+	}
+
+	if (argc > 2)
+	{
+		trap_Argv(2, runName, sizeof(runName));
+		// Find by run name
+		for (i = 0; i < MAX_TIMERUNS; ++i)
+		{
+			if (!Q_stricmp(level.timerunsNames[i], runName))
+			{
+				runNum = i;
+				break;
+			}
+		}
+	}
+	if (runNum == -1)// Not found by name
+	{
+		runNum = atoi(runName);
+		if (runNum < 0 || runNum >= MAX_TIMERUNS || !level.timerunsNames[runNum])
+		{
+			runNum = 0;
+		}
+	}
+
+	Cmd_LoadCheckpoints_real(ent, userName, runNum);
 }
 
 // Nico, load checkpoints command
@@ -191,7 +201,7 @@ void Cmd_LoadCheckpoints_f(gentity_t *ent)
 // level is timerun
 // API is used
 // player login status
-void Cmd_LoadCheckpoints_real(gentity_t *ent, int runNum)
+void Cmd_LoadCheckpoints_real(gentity_t *ent, char *userName, int runNum)
 {
 	char *buf           = NULL;
 
@@ -202,7 +212,7 @@ void Cmd_LoadCheckpoints_real(gentity_t *ent, int runNum)
 		G_Error("Cmd_LoadCheckpoints_real: malloc failed\n");
 	}
 
-	G_API_getPlayerCheckpoints(buf, ent, level.rawmapname, level.timerunsNames[runNum], runNum, ent->client->pers.authToken);
+	G_API_getPlayerCheckpoints(buf, ent, userName, level.rawmapname, level.timerunsNames[runNum], runNum, ent->client->pers.authToken);
 
 	// Do *not* free buf here
 }
@@ -227,7 +237,7 @@ void Cmd_Rank_f(gentity_t *ent)
 
 	// Parse options
 	argc = trap_Argc();
-	if (argc >= 1)
+	if (argc >= 1)// Nico, #fixme, why >= ?
 	{
 		trap_Argv(1, userName, sizeof(userName));
 	}

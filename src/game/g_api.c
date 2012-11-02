@@ -537,10 +537,15 @@ static void *checkpointsHandler(void *data)
 			CP(va("print \"%s^w: error while loading checkpoints\n\"", GAME_VERSION_COLORED));
 		}
 	}
+	else if (code == 0)
+	{
+		clientBigDataPrint(ent, queryStruct->result);
+	}
 	else
 	{
 		CP(va("print \"%s^w: error while loading checkpoints\n\"", GAME_VERSION_COLORED));
 	}
+
 
 	free(queryStruct->result);
 	free(queryStruct);
@@ -555,11 +560,12 @@ static void *checkpointsHandler(void *data)
 /**
  * Checkpoints request command
  */
-void G_API_getPlayerCheckpoints(char *result, gentity_t *ent, char *mapName, char *runName, int runNum, char *authToken)
+void G_API_getPlayerCheckpoints(char *result, gentity_t *ent, char *userName, char *mapName, char *runName, int runNum, char *authToken)
 {
 	char net_port[8]         = { 0 };
 	char bufferRunNum[8]     = { 0 };
 	char encodedMapName[255] = { 0 };
+	char encodedOptUserName[255] = { 0 };
 	char encodedRunName[255] = { 0 };
 	char cphysics[8]         = { 0 };
 
@@ -568,9 +574,10 @@ void G_API_getPlayerCheckpoints(char *result, gentity_t *ent, char *mapName, cha
 	sprintf(cphysics, "%d", physics.integer);
 
 	url_encode(mapName, encodedMapName);
+	url_encode(userName, encodedOptUserName);
 	url_encode(runName, encodedRunName);
 
-	G_callAPI("e", result, ent, 6, encodedMapName, encodedRunName, bufferRunNum, authToken, cphysics, net_port);
+	G_callAPI("e", result, ent, 7, encodedMapName,  encodedOptUserName, encodedRunName, bufferRunNum, authToken, cphysics, net_port);
 
 	APILog("Checkpoints request sent!\n", qfalse);
 }

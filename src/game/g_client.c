@@ -1495,7 +1495,7 @@ void ClientBegin(int clientNum)
 	// Nico, check for checkpoints auto loading
 	if (g_useAPI.integer && client->pers.autoLoadCheckpoints) {
 		G_LogPrintf("ClientBegin: loading checkpoints for client %d via autoLoadCheckpoints\n", clientNum);
-		Cmd_LoadCheckpoints_real(ent, 0);
+		Cmd_LoadCheckpoints_real(ent, "0", 0);// "0" as ignore vlaue, because we load player checkpoints
 	}
 
 	G_LogPrintf("ClientBegin: %i\n", clientNum);
