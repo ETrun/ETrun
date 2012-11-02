@@ -1320,7 +1320,7 @@ char *ClientConnect(int clientNum, qboolean firstTime)
 		return "Bad name: name too long. Please change your name.";
 	}
 	// Avoid ext. ASCII chars in the CS
-	for (i = 0; i < strlen(cs_name); ++i)
+	for (i = 0; i < (int)strlen(cs_name); ++i)
 	{
 		if (cs_name[i] < 0) {// extended ASCII chars have values between -128 and 0 (signed char)
 			return "Bad name: extended ASCII characters. Please change your name.";
