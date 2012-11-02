@@ -343,6 +343,7 @@ int vmMain(int command, int arg0, int arg1, int arg2, int arg3, int arg4, int ar
 #pragma GCC visibility pop
 #endif
 	// Nico, silent GCC
+	arg2 = arg2;
 	arg3 = arg3;
 	arg4 = arg4;
 	arg5 = arg5;
@@ -357,7 +358,7 @@ int vmMain(int command, int arg0, int arg1, int arg2, int arg3, int arg4, int ar
 		G_ShutdownGame(arg0);
 		return 0;
 	case GAME_CLIENT_CONNECT:
-		return (int)ClientConnect(arg0, arg1, arg2);
+		return (int)ClientConnect(arg0, arg1);
 	case GAME_CLIENT_THINK:
 		ClientThink(arg0);
 		return 0;

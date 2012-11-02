@@ -1257,7 +1257,7 @@ to the server machine, but qfalse on map changes and tournement
 restarts.
 ============
 */
-char *ClientConnect(int clientNum, qboolean firstTime, qboolean isBot)
+char *ClientConnect(int clientNum, qboolean firstTime)
 {
 	char      *value;
 	gclient_t *client;
@@ -1268,6 +1268,7 @@ char *ClientConnect(int clientNum, qboolean firstTime, qboolean isBot)
 	int       clientNum2; // Nico, used in connections limit check
 	int       conn_per_ip = 1; // Nico, connections per IP counter
 	char      ip[20], ip2[20]; // Nico, used in connections limit check
+	char      cs_name[MAX_NETNAME];
 
 	ent = &g_entities[clientNum];
 
@@ -1309,10 +1310,27 @@ char *ClientConnect(int clientNum, qboolean firstTime, qboolean isBot)
 	}
 	// Nico, end of check maximum connextions per IP
 
+	// Nico, check name from ET:Legacy
+	value = Info_ValueForKey (userinfo, "name");
+	Q_strncpyz(cs_name, value, sizeof(cs_name));
+
+	// don't permit long names ... - see also MAX_NETNAME
+	if (strlen(cs_name) >= MAX_NAME_LENGTH )
+	{
+		return "Bad name: name too long. Please change your name.";
+	}
+	// Avoid ext. ASCII chars in the CS
+	for (i = 0; i < strlen(cs_name); ++i)
+	{
+		if (cs_name[i] < 0) {// extended ASCII chars have values between -128 and 0 (signed char)
+			return "Bad name: extended ASCII characters. Please change your name.";
+		}
+	}
+
 	// we don't check password for bots and local client
 	// NOTE: local client <-> "ip" "localhost"
 	//   this means this client is not running in our current process
-	if (!isBot && !(ent->r.svFlags & SVF_BOT) && (strcmp(Info_ValueForKey(userinfo, "ip"), "localhost") != 0))
+	if (strcmp(Info_ValueForKey(userinfo, "ip"), "localhost") != 0)
 	{
 		// check for a password
 		value = Info_ValueForKey(userinfo, "password");
@@ -1346,7 +1364,6 @@ char *ClientConnect(int clientNum, qboolean firstTime, qboolean isBot)
 	if (firstTime)
 	{
 		client->pers.initialSpawn = qtrue;              // DHM - Nerve
-
 	}
 	// read or initialize the session data
 	if (firstTime)
