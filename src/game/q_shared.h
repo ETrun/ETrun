@@ -57,28 +57,28 @@ If you have questions concerning this license or the applicable additional terms
 
 #if defined _WIN32 && !defined __GNUC__
 
-#pragma warning(disable : 4018) // signed/unsigned mismatch
-#pragma warning(disable : 4032)
-#pragma warning(disable : 4051)
-#pragma warning(disable : 4057) // slightly different base types
-#pragma warning(disable : 4100) // unreferenced formal parameter
-#pragma warning(disable : 4115)
-#pragma warning(disable : 4125) // decimal digit terminates octal escape sequence
-#pragma warning(disable : 4127) // conditional expression is constant
-#pragma warning(disable : 4136)
-#pragma warning(disable	: 4152) // nonstandard extension, function/data pointer conversion in expression
-#pragma warning(disable : 4201)
-#pragma warning(disable : 4214)
-#pragma warning(disable : 4244)
-#pragma warning(disable : 4305) // truncation from const double to float
-#pragma warning(disable : 4514)
-#pragma warning(disable : 4702) // unreachable code
-#pragma warning(disable : 4711) // selected for automatic inline expansion
-#pragma warning(disable : 4220) // varargs matches remaining parameters
+# pragma warning(disable : 4018) // signed/unsigned mismatch
+# pragma warning(disable : 4032)
+# pragma warning(disable : 4051)
+# pragma warning(disable : 4057) // slightly different base types
+# pragma warning(disable : 4100) // unreferenced formal parameter
+# pragma warning(disable : 4115)
+# pragma warning(disable : 4125) // decimal digit terminates octal escape sequence
+# pragma warning(disable : 4127) // conditional expression is constant
+# pragma warning(disable : 4136)
+# pragma warning(disable	: 4152)// nonstandard extension, function/data pointer conversion in expression
+# pragma warning(disable : 4201)
+# pragma warning(disable : 4214)
+# pragma warning(disable : 4244)
+# pragma warning(disable : 4305) // truncation from const double to float
+# pragma warning(disable : 4514)
+# pragma warning(disable : 4702) // unreachable code
+# pragma warning(disable : 4711) // selected for automatic inline expansion
+# pragma warning(disable : 4220) // varargs matches remaining parameters
 #endif
 
 #if defined(ppc) || defined(__ppc) || defined(__ppc__) || defined(__POWERPC__)
-#define idppc 1
+# define idppc 1
 #endif
 
 /**********************************************************************
@@ -111,9 +111,9 @@ If you have questions concerning this license or the applicable additional terms
 
 // use MSVC inline asm version of C functions
 #if defined _M_IX86
-#define id386   1
+# define id386   1
 #else
-#define id386   0
+# define id386   0
 #endif
 
 // for windows fastcall option
@@ -123,37 +123,37 @@ If you have questions concerning this license or the applicable additional terms
 //bani
 //======================= GNUC DEFINES ==================================
 #ifdef __GNUC__
-#define _attribute(x) __attribute__(x)
+# define _attribute(x) __attribute__(x)
 #else
-#define _attribute(x)
+# define _attribute(x)
 #endif
 
 //======================= WIN32 DEFINES =================================
 
 #ifdef WIN32
 
-#define MAC_STATIC
+# define MAC_STATIC
 
-#undef QDECL
-#define QDECL   __cdecl
+# undef QDECL
+# define QDECL   __cdecl
 
 // buildstring will be incorporated into the version string
-#ifdef NDEBUG
-#ifdef _M_IX86
-#define CPUSTRING   "win-x86"
-#elif defined _M_ALPHA
-#define CPUSTRING   "win-AXP"
-#endif
-#else
-#ifdef _M_IX86
-#define CPUSTRING   "win-x86-debug"
-#elif defined _M_ALPHA
-#define CPUSTRING   "win-AXP-debug"
-#endif
-#endif
+# ifdef NDEBUG
+#  ifdef _M_IX86
+#   define CPUSTRING   "win-x86"
+#  elif defined _M_ALPHA
+#   define CPUSTRING   "win-AXP"
+#  endif
+# else
+#  ifdef _M_IX86
+#   define CPUSTRING   "win-x86-debug"
+#  elif defined _M_ALPHA
+#   define CPUSTRING   "win-AXP-debug"
+#  endif
+# endif
 
 
-#define PATH_SEP '\\'
+# define PATH_SEP '\\'
 
 #endif
 
@@ -161,13 +161,13 @@ If you have questions concerning this license or the applicable additional terms
 
 #if defined(MACOS_X)
 
-#error WTF
+# error WTF
 
-#define MAC_STATIC
+# define MAC_STATIC
 
-#define CPUSTRING   "MacOS_X"
+# define CPUSTRING   "MacOS_X"
 
-#define PATH_SEP    '/'
+# define PATH_SEP    '/'
 
 // Vanilla PPC code, but since PPC has a reciprocal square root estimate instruction,
 // runs *much* faster than calling sqrt(). We'll use two Newton-Raphson
@@ -176,24 +176,22 @@ If you have questions concerning this license or the applicable additional terms
 // This is about 12.4 times faster than sqrt() and according to my testing (not exhaustive)
 // it returns fairly accurate results (error below 1.0e-5 up to 100000.0 in 0.1 increments).
 
-static inline float idSqrt(float x)
-{
+static inline float idSqrt(float x) {
 	const float half = 0.5;
 	const float one  = 1.0;
 	float       B, y0, y1;
 
 	// This'll NaN if it hits frsqrte. Handle both +0.0 and -0.0
-	if (Q_fabs(x) == 0.0)
-	{
+	if (Q_fabs(x) == 0.0) {
 		return x;
 	}
 	B = x;
 
-#ifdef __GNUC__
+# ifdef __GNUC__
 	asm ("frsqrte %0,%1" : "=f" (y0) : "f" (B));
-#else
+# else
 	y0 = __frsqrte(B);
-#endif
+# endif
 	/* First refinement step */
 
 	y1 = y0 + half * y0 * (one - B * y0 * y0);
@@ -206,7 +204,7 @@ static inline float idSqrt(float x)
 	/* Get sqrt(x) from x * 1/sqrt(x) */
 	return x * y1;
 }
-#define sqrt idSqrt
+# define sqrt idSqrt
 
 
 #endif
@@ -215,11 +213,11 @@ static inline float idSqrt(float x)
 
 #ifdef __MACOS__
 
-#define MAC_STATIC
+# define MAC_STATIC
 
-#define CPUSTRING   "OSX-universal"
+# define CPUSTRING   "OSX-universal"
 
-#define PATH_SEP '/'
+# define PATH_SEP '/'
 
 void Sys_PumpEvents(void);
 
@@ -231,17 +229,17 @@ void Sys_PumpEvents(void);
 // just waste space and make big arrays static...
 #ifdef __linux__
 
-#define MAC_STATIC
+# define MAC_STATIC
 
-#ifdef __i386__
-#define CPUSTRING   "linux-i386"
-#elif defined __axp__
-#define CPUSTRING   "linux-alpha"
-#else
-#define CPUSTRING   "linux-other"
-#endif
+# ifdef __i386__
+#  define CPUSTRING   "linux-i386"
+# elif defined __axp__
+#  define CPUSTRING   "linux-alpha"
+# else
+#  define CPUSTRING   "linux-other"
+# endif
 
-#define PATH_SEP '/'
+# define PATH_SEP '/'
 
 #endif
 
@@ -263,7 +261,7 @@ typedef int clipHandle_t;
 
 
 #ifndef NULL
-#define NULL ((void *)0)
+# define NULL ((void *)0)
 #endif
 
 #define MAX_QINT            0x7fffffff
@@ -271,8 +269,8 @@ typedef int clipHandle_t;
 
 // TTimo gcc: was missing, added from Q3 source
 #ifndef max
-#define max(x, y) (((x) > (y)) ? (x) : (y))
-#define min(x, y) (((x) < (y)) ? (x) : (y))
+# define max(x, y) (((x) > (y)) ? (x) : (y))
+# define min(x, y) (((x) < (y)) ? (x) : (y))
 #endif
 
 // angle indexes
@@ -308,16 +306,14 @@ typedef int clipHandle_t;
 
 #define MAX_BINARY_MESSAGE  32768   // max length of binary message
 
-typedef enum
-{
+typedef enum {
 	MESSAGE_EMPTY = 0,
 	MESSAGE_WAITING,        // rate/packet limited
 	MESSAGE_WAITING_OVERFLOW,   // packet too large with message
 } messageStatus_t;
 
 // paramters for command buffer stuffing
-typedef enum
-{
+typedef enum {
 	EXEC_NOW,           // don't return until completed, a VM should NEVER use this,
 	                    // because some commands might cause the VM to be unloaded...
 	EXEC_INSERT,        // insert at current position, but don't run yet
@@ -332,8 +328,7 @@ typedef enum
 
 
 // print levels from renderer (FIXME: set up for game / cgame?)
-typedef enum
-{
+typedef enum {
 	PRINT_ALL,
 	PRINT_DEVELOPER,        // only print when "developer 1"
 	PRINT_WARNING,
@@ -341,8 +336,7 @@ typedef enum
 } printParm_t;
 
 // parameters to the main Error routine
-typedef enum
-{
+typedef enum {
 	ERR_FATAL,                  // exit the entire game with a popup window
 	ERR_VID_FATAL,              // exit the entire game with a popup window and doesn't delete profile.pid
 	ERR_DROP,                   // print to console and disconnect from game
@@ -384,18 +378,17 @@ typedef enum
 #define UI_SMALLFONT75  0x00100000
 
 #if defined(_DEBUG) && !defined(BSPC)
-	#define HUNK_DEBUG
+# define HUNK_DEBUG
 #endif
 
-typedef enum
-{
+typedef enum {
 	h_high,
 	h_low,
 	h_dontcare
 } ha_pref;
 
 #ifdef HUNK_DEBUG
-#define Hunk_Alloc(size, preference)              Hunk_AllocDebug(size, preference, # size, __FILE__, __LINE__)
+# define Hunk_Alloc(size, preference)              Hunk_AllocDebug(size, preference, # size, __FILE__, __LINE__)
 void *Hunk_AllocDebug(int size, ha_pref preference, char *label, char *file, int line);
 #else
 void *Hunk_Alloc(int size, ha_pref preference);
@@ -406,7 +399,7 @@ void *Hunk_Alloc(int size, ha_pref preference);
 // custom Snd_Memset implementation for glibc memset bug workaround
 void Snd_Memset(void *dest, const int val, const size_t count);
 #else
-#define Snd_Memset Com_Memset
+# define Snd_Memset Com_Memset
 #endif
 
 void Com_Memset(void *dest, const int val, const size_t count);
@@ -439,7 +432,7 @@ typedef int fixed8_t;
 typedef int fixed16_t;
 
 #ifndef M_PI
-#define M_PI        3.14159265358979323846f // matches value in gcc v2 math.h
+# define M_PI        3.14159265358979323846f // matches value in gcc v2 math.h
 #endif
 
 #define NUMVERTEXNORMALS    162
@@ -578,10 +571,10 @@ float Q_rsqrt(float f);         // reciprocal square root
 #if id386 && !((defined __linux__ || defined __FreeBSD__ || defined __GNUC__) && (defined __i386__))       // rb010123
 long myftol(float f);
 #elif defined(__MACOS__)
-#define myftol(x) (long)(x)
+# define myftol(x) (long)(x)
 #else
 extern long int lrintf(float x);
-#define myftol(x) lrintf(x)
+# define myftol(x) lrintf(x)
 #endif
 
 signed char ClampChar(int i);
@@ -599,15 +592,14 @@ void ByteToDir(int b, vec3_t dir);
 #define VectorMA(v, s, b, o)    ((o)[0] = (v)[0] + (b)[0] * (s), (o)[1] = (v)[1] + (b)[1] * (s), (o)[2] = (v)[2] + (b)[2] * (s))
 
 #ifdef __LCC__
-#ifdef VectorCopy
-#undef VectorCopy
+# ifdef VectorCopy
+#  undef VectorCopy
 // this is a little hack to get more efficient copies in our interpreter
-typedef struct
-{
+typedef struct {
 	float v[3];
 } vec3struct_t;
-#define VectorCopy(a, b) *(vec3struct_t *)b = *(vec3struct_t *)a;
-#endif
+#  define VectorCopy(a, b) *(vec3struct_t *)b = *(vec3struct_t *)a;
+# endif
 #endif
 
 #define VectorClear(a)              ((a)[0] = (a)[1] = (a)[2] = 0)
@@ -743,15 +735,14 @@ void COM_BitClear(int array[], int bitNum);
 
 #ifndef TT_STRING
 //token types
-#define TT_STRING                   1           // string
-#define TT_LITERAL                  2           // literal
-#define TT_NUMBER                   3           // number
-#define TT_NAME                     4           // name
-#define TT_PUNCTUATION              5           // punctuation
+# define TT_STRING                   1          // string
+# define TT_LITERAL                  2          // literal
+# define TT_NUMBER                   3          // number
+# define TT_NAME                     4          // name
+# define TT_PUNCTUATION              5          // punctuation
 #endif
 
-typedef struct pc_token_s
-{
+typedef struct pc_token_s {
 	int type;
 	int subtype;
 	int intvalue;
@@ -777,16 +768,14 @@ void QDECL Com_sprintf(char *dest, int size, const char *fmt, ...) _attribute((f
 
 
 // mode parm for FS_FOpenFile
-typedef enum
-{
+typedef enum {
 	FS_READ,
 	FS_WRITE,
 	FS_APPEND,
 	FS_APPEND_SYNC
 } fsMode_t;
 
-typedef enum
-{
+typedef enum {
 	FS_SEEK_CUR,
 	FS_SEEK_END,
 	FS_SEEK_SET
@@ -811,9 +800,9 @@ char *Q_strupr(char *s1);
 char *Q_strrchr(const char *string, int c);
 
 #ifdef _WIN32
-#define Q_putenv _putenv
+# define Q_putenv _putenv
 #else
-#define Q_putenv putenv
+# define Q_putenv putenv
 #endif
 
 // buffer size safe library replacements
@@ -901,8 +890,7 @@ default values.
 #define CVAR_SERVERINFO_NOUPDATE        8192    // gordon: WONT automatically send this to clients, but server browsers will see it
 
 // nothing outside the Cvar_*() functions should modify these fields!
-typedef struct cvar_s
-{
+typedef struct cvar_s {
 	char *name;
 	char *string;
 	char *resetString;              // cvar_restart will reset to this value
@@ -922,8 +910,7 @@ typedef int cvarHandle_t;
 
 // the modules that run in the virtual machine can't access the cvar_t directly,
 // so they must ask for structured updates
-typedef struct
-{
+typedef struct {
 	cvarHandle_t handle;
 	int modificationCount;
 	float value;
@@ -961,8 +948,7 @@ PlaneTypeForNormal
 
 // plane_t structure
 // !!! if this is changed, it must be changed in asm code too !!!
-typedef struct cplane_s
-{
+typedef struct cplane_s {
 	vec3_t normal;
 	float dist;
 	byte type;              // for fast side tests: 0,1,2 = axial, 3 = nonaxial
@@ -974,8 +960,7 @@ typedef struct cplane_s
 
 
 // a trace is returned when a box is swept through the world
-typedef struct
-{
+typedef struct {
 	qboolean allsolid;      // if true, plane is not valid
 	qboolean startsolid;    // if true, the initial point was in a solid area
 	float fraction;         // time completed, 1.0 = didn't hit anything
@@ -987,16 +972,14 @@ typedef struct
 } trace_t;
 
 // markfragments are returned by CM_MarkFragments()
-typedef struct
-{
+typedef struct {
 	int firstPoint;
 	int numPoints;
 } markFragment_t;
 
 
 
-typedef struct
-{
+typedef struct {
 	vec3_t origin;
 	vec3_t axis[3];
 } orientation_t;
@@ -1015,8 +998,7 @@ typedef struct
 // sound channels
 // channel 0 never willingly overrides
 // other channels will allways override a playing sound on that channel
-typedef enum
-{
+typedef enum {
 	CHAN_AUTO,
 	CHAN_LOCAL,     // menu sounds, etc
 	CHAN_WEAPON,
@@ -1095,16 +1077,14 @@ typedef enum
 #define RESERVED_CONFIGSTRINGS  2   // game can't modify below this, only the system can
 
 #define MAX_GAMESTATE_CHARS 16000
-typedef struct
-{
+typedef struct {
 	int stringOffsets[MAX_CONFIGSTRINGS];
 	char stringData[MAX_GAMESTATE_CHARS];
 	int dataCount;
 } gameState_t;
 
 // xkan, 1/10/2003 - adapted from original SP
-typedef enum
-{
+typedef enum {
 	AISTATE_RELAXED,
 	AISTATE_QUERY,
 	AISTATE_ALERT,
@@ -1139,8 +1119,7 @@ typedef enum
 // from it.
 //
 // NOTE: all fields in here must be 32 bits (or those within sub-structures)
-typedef struct playerState_s
-{
+typedef struct playerState_s {
 	int commandTime;            // cmd->serverTime of last executed command
 	int pm_type;
 	int bobCycle;               // for view bobbing and footstep generation
@@ -1211,7 +1190,7 @@ typedef struct playerState_s
 	int ammoclip[MAX_WEAPONS];          // ammo in clip
 	int holdable[16];
 	int holding;                        // the current item in holdable[] that is selected (held)
-	int weapons[MAX_WEAPONS / (sizeof(int) * 8)];       // 64 bits for weapons held
+	int weapons[MAX_WEAPONS / (sizeof (int) * 8)];       // 64 bits for weapons held
 
 	// Ridah, allow for individual bounding boxes
 	vec3_t mins, maxs;
@@ -1321,8 +1300,7 @@ typedef struct playerState_s
                                         // then BUTTON_WALKING should be set
 
 // Arnout: doubleTap buttons - DT_NUM can be max 8
-typedef enum
-{
+typedef enum {
 	DT_NONE,
 	DT_MOVELEFT,
 	DT_MOVERIGHT,
@@ -1335,8 +1313,7 @@ typedef enum
 } dtType_t;
 
 // usercmd_t is sent to the server each client frame
-typedef struct usercmd_s
-{
+typedef struct usercmd_s {
 	int serverTime;
 	byte buttons;
 	byte wbuttons;
@@ -1357,8 +1334,7 @@ typedef struct usercmd_s
 // if entityState->solid == SOLID_BMODEL, modelindex is an inline model number
 #define SOLID_BMODEL    0xffffff
 
-typedef enum
-{
+typedef enum {
 	TR_STATIONARY,
 	TR_INTERPOLATE,             // non-parametric, but interpolate between snapshots
 	TR_LINEAR,
@@ -1377,8 +1353,7 @@ typedef enum
 	TR_LINEAR_PATH
 } trType_t;
 
-typedef struct
-{
+typedef struct {
 	trType_t trType;
 	int trTime;
 	int trDuration;             // if non 0, trTime + trDuration = stop time
@@ -1397,8 +1372,7 @@ typedef struct
 //
 // NOTE: all fields in here must be 32 bits (or those within sub-structures)
 
-typedef enum
-{
+typedef enum {
 	ET_GENERAL,
 	ET_PLAYER,
 	ET_ITEM,
@@ -1486,8 +1460,7 @@ typedef enum
 	                        // this avoids having to set eFlags and eventNum
 } entityType_t;
 
-typedef struct entityState_s
-{
+typedef struct entityState_s {
 	int number;                     // entity index
 	entityType_t eType;             // entityType_t
 	int eFlags;
@@ -1550,8 +1523,7 @@ typedef struct entityState_s
 	int animMovetype;       // clients can't derive movetype of other clients for anim scripting system
 } entityState_t;
 
-typedef enum
-{
+typedef enum {
 	CA_UNINITIALIZED,
 	CA_DISCONNECTED,    // not talking to a server
 	CA_AUTHORIZING,     // not used any more, was checking cd key
@@ -1571,8 +1543,7 @@ typedef enum
 #define GLYPH_CHARSTART 32
 #define GLYPH_CHAREND 127
 #define GLYPHS_PER_FONT GLYPH_END - GLYPH_START + 1
-typedef struct
-{
+typedef struct {
 	int height;       // number of scan lines
 	int top;          // top of glyph in buffer
 	int bottom;       // bottom of glyph in buffer
@@ -1588,8 +1559,7 @@ typedef struct
 	char shaderName[32];
 } glyphInfo_t;
 
-typedef struct
-{
+typedef struct {
 	glyphInfo_t glyphs[GLYPHS_PER_FONT];
 	float glyphScale;
 	char name[MAX_QPATH];
@@ -1601,8 +1571,7 @@ typedef struct
 //=============================================
 
 
-typedef struct qtime_s
-{
+typedef struct qtime_s {
 	int tm_sec;     /* seconds after the minute - [0,59] */
 	int tm_min;     /* minutes after the hour - [0,59] */
 	int tm_hour;    /* hours since midnight - [0,23] */
@@ -1621,8 +1590,7 @@ typedef struct qtime_s
 #define AS_FAVORITES    2
 
 // cinematic states
-typedef enum
-{
+typedef enum {
 	FMV_IDLE,
 	FMV_PLAY,       // play
 	FMV_EOF,        // all other conditions, i.e. stop/EOF/abort
@@ -1632,8 +1600,7 @@ typedef enum
 	FMV_ID_WAIT
 } e_status;
 
-typedef enum _flag_status
-{
+typedef enum _flag_status {
 	FLAG_ATBASE = 0,
 	FLAG_TAKEN,         // CTF
 	FLAG_TAKEN_RED,     // One Flag CTF
@@ -1644,8 +1611,7 @@ typedef enum _flag_status
 #define MAX_SERVERSTATUSREQUESTS    16
 
 // NERVE - SMF - localization
-typedef enum
-{
+typedef enum {
 #ifndef __MACOS__   //DAJ USA
 	LANGUAGE_FRENCH = 0,
 	LANGUAGE_GERMAN,
@@ -1656,8 +1622,7 @@ typedef enum
 } languages_t;
 
 // NERVE - SMF - wolf server/game states
-typedef enum
-{
+typedef enum {
 	GS_INITIALIZE = -1,
 	GS_PLAYING,
 	GS_WARMUP_COUNTDOWN,

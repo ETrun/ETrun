@@ -1,13 +1,13 @@
 #ifndef G_API_H_
-# define G_API_H_
+#define G_API_H_
 
-# define API_INTERFACE_NAME "API_query"
-# define API_INIT_NAME "API_init"
-# define API_CLEAN_NAME "API_clean"
-# define RESPONSE_MAX_SIZE 2048
-# define QUERY_MAX_SIZE 1024
-# define CHAR_SEPARATOR "/"
-# define THREADS_MAX 64 // Maximum threads at the same time
+#define API_INTERFACE_NAME "API_query"
+#define API_INIT_NAME "API_init"
+#define API_CLEAN_NAME "API_clean"
+#define RESPONSE_MAX_SIZE 2048
+#define QUERY_MAX_SIZE 1024
+#define CHAR_SEPARATOR "/"
+#define THREADS_MAX 64  // Maximum threads at the same time
 
 void G_callAPI(char *command, char *result, gentity_t *ent, int count, ...);
 void G_loadAPI();
@@ -22,13 +22,12 @@ void G_API_randommap(char *result, gentity_t *ent, char *mapName);
 void G_API_mapRank(char *result, gentity_t *ent, char *mapName, char *optUserName, char *optMapName, char *optRunName, char *optPhysicsName, char *authToken);
 
 #if defined _WIN32
-	# include <windows.h>
-# else
-	# include <dlfcn.h>
-# endif
+# include <windows.h>
+#else
+# include <dlfcn.h>
+#endif
 
-struct query_s
-{
+struct query_s {
 	char cmd[64];
 	char query[QUERY_MAX_SIZE];
 	char *result;
@@ -37,8 +36,7 @@ struct query_s
 
 typedef void * (*handler_t)(void *);
 
-typedef struct
-{
+typedef struct {
 	char *cmd;
 	handler_t handler;
 } api_glue_t;

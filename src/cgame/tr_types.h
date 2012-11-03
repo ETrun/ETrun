@@ -65,22 +65,19 @@ If you have questions concerning this license or the applicable additional terms
 #define RDF_SNOOPERVIEW     (1 << 6)    //----(SA)	added
 
 
-typedef struct
-{
+typedef struct {
 	vec3_t xyz;
 	float st[2];
 	byte modulate[4];
 } polyVert_t;
 
-typedef struct poly_s
-{
+typedef struct poly_s {
 	qhandle_t hShader;
 	int numVerts;
 	polyVert_t *verts;
 } poly_t;
 
-typedef enum
-{
+typedef enum {
 	RT_MODEL,
 	RT_POLY,
 	RT_SPRITE,
@@ -102,8 +99,7 @@ typedef enum
 #define REFLAG_ORIENT_LOD   16  // on LOD switch, align the model to the player's camera
 #define REFLAG_DEAD_LOD     32  // allow the LOD to go lower than recommended
 
-typedef struct
-{
+typedef struct {
 	refEntityType_t reType;
 	int renderfx;
 
@@ -164,8 +160,7 @@ typedef struct
 //                                                                  //
 // WARNING:: synch FOG_SERVER in sv_ccmds.c if you change anything	//
 //                                                                  //
-typedef enum
-{
+typedef enum {
 	FOG_NONE,       //	0
 
 	FOG_SKY,        //	1	fog values to apply to the sky when using density fog for the world (non-distance clipping fog) (only used if(glfogsettings[FOG_MAP].registered) or if(glfogsettings[FOG_MAP].registered))
@@ -188,8 +183,7 @@ typedef enum
 } glfogType_t;
 
 
-typedef struct
-{
+typedef struct {
 	int mode;                   // GL_LINEAR, GL_EXP
 	int hint;                   // GL_DONT_CARE
 	int startTime;              // in ms
@@ -210,8 +204,7 @@ typedef struct
 #define MAX_RENDER_STRINGS          8
 #define MAX_RENDER_STRING_LENGTH    32
 
-typedef struct
-{
+typedef struct {
 	int x, y, width, height;
 	float fov_x, fov_y;
 	vec3_t vieworg;
@@ -237,8 +230,7 @@ typedef struct
 } refdef_t;
 
 
-typedef enum
-{
+typedef enum {
 	STEREO_CENTER,
 	STEREO_LEFT,
 	STEREO_RIGHT
@@ -252,15 +244,13 @@ typedef enum
 ** being run right now.  These are constant once the OpenGL
 ** subsystem is initialized.
 */
-typedef enum
-{
+typedef enum {
 	TC_NONE,
 	TC_S3TC,
 	TC_EXT_COMP_S3TC
 } textureCompression_t;
 
-typedef enum
-{
+typedef enum {
 	GLDRV_ICD,                  // driver is integrated with window system
 	                            // WARNING: there are tests that check for
 	                            // > GLDRV_ICD for minidriverness, so this
@@ -270,8 +260,7 @@ typedef enum
 	GLDRV_VOODOO                // driver is a 3Dfx standalone driver
 } glDriverType_t;
 
-typedef enum
-{
+typedef enum {
 	GLHW_GENERIC,           // where everthing works the way it should
 	GLHW_3DFX_2D3D,         // Voodoo Banshee or Voodoo3, relevant since if this is
 	                        // the hardware type then there can NOT exist a secondary
@@ -281,8 +270,7 @@ typedef enum
 	GLHW_PERMEDIA2          // where you don't have src*dst
 } glHardwareType_t;
 
-typedef struct
-{
+typedef struct {
 	char renderer_string[MAX_STRING_CHARS];
 	char vendor_string[MAX_STRING_CHARS];
 	char version_string[MAX_STRING_CHARS];
@@ -330,15 +318,15 @@ typedef struct
 
 #if !defined _WIN32
 
-#define _3DFX_DRIVER_NAME   "libMesaVoodooGL.so.3.1"
-#define OPENGL_DRIVER_NAME  "libGL.so.1"
+# define _3DFX_DRIVER_NAME   "libMesaVoodooGL.so.3.1"
+# define OPENGL_DRIVER_NAME  "libGL.so.1"
 
 #else
 
-#define _3DFX_DRIVER_NAME   "3dfxvgl"
-#define OPENGL_DRIVER_NAME  "opengl32"
-#define WICKED3D_V5_DRIVER_NAME "gl/openglv5.dll"
-#define WICKED3D_V3_DRIVER_NAME "gl/openglv3.dll"
+# define _3DFX_DRIVER_NAME   "3dfxvgl"
+# define OPENGL_DRIVER_NAME  "opengl32"
+# define WICKED3D_V5_DRIVER_NAME "gl/openglv5.dll"
+# define WICKED3D_V3_DRIVER_NAME "gl/openglv3.dll"
 
 #endif  // !defined _WIN32
 
@@ -348,8 +336,7 @@ typedef struct
 #define MAX_PB_VERTS    1025
 #define MAX_PB_INDICIES (MAX_PB_VERTS * 6)
 
-typedef struct polyBuffer_s
-{
+typedef struct polyBuffer_s {
 	vec4_t xyz[MAX_PB_VERTS];
 	vec2_t st[MAX_PB_VERTS];
 	byte color[MAX_PB_VERTS][4];

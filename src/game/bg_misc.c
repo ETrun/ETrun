@@ -2398,21 +2398,18 @@ model="models/flags/b_flag.md3"
 };
 // END JOSEPH
 
-int bg_numItems = sizeof(bg_itemlist) / sizeof(bg_itemlist[0]) - 1;
+int bg_numItems = sizeof (bg_itemlist) / sizeof (bg_itemlist[0]) - 1;
 
 /*
 ==============
 BG_FindItemForHoldable
 ==============
 */
-gitem_t *BG_FindItemForHoldable(holdable_t pw)
-{
+gitem_t *BG_FindItemForHoldable(holdable_t pw) {
 	int i;
 
-	for (i = 0 ; i < bg_numItems ; i++)
-	{
-		if (bg_itemlist[i].giType == IT_HOLDABLE && bg_itemlist[i].giTag == (int)pw)
-		{
+	for (i = 0 ; i < bg_numItems ; i++) {
+		if (bg_itemlist[i].giType == IT_HOLDABLE && bg_itemlist[i].giTag == (int)pw) {
 			return &bg_itemlist[i];
 		}
 	}
@@ -2427,14 +2424,11 @@ BG_FindItemForWeapon
 
 ===============
 */
-gitem_t *BG_FindItemForWeapon(weapon_t weapon)
-{
+gitem_t *BG_FindItemForWeapon(weapon_t weapon) {
 	gitem_t *it;
 
-	for (it = bg_itemlist + 1 ; it->classname ; it++)
-	{
-		if (it->giType == IT_WEAPON && it->giTag == (int)weapon)
-		{
+	for (it = bg_itemlist + 1 ; it->classname ; it++) {
+		if (it->giType == IT_WEAPON && it->giTag == (int)weapon) {
 			return it;
 		}
 	}
@@ -2453,14 +2447,11 @@ gitem_t *BG_FindItemForWeapon(weapon_t weapon)
 BG_FindClipForWeapon
 ==============
 */
-weapon_t BG_FindClipForWeapon(weapon_t weapon)
-{
+weapon_t BG_FindClipForWeapon(weapon_t weapon) {
 	gitem_t *it;
 
-	for (it = bg_itemlist + 1 ; it->classname ; it++)
-	{
-		if (it->giType == IT_WEAPON && it->giTag == (int)weapon)
-		{
+	for (it = bg_itemlist + 1 ; it->classname ; it++) {
+		if (it->giType == IT_WEAPON && it->giTag == (int)weapon) {
 			return it->giClipIndex;
 		}
 	}
@@ -2475,14 +2466,11 @@ weapon_t BG_FindClipForWeapon(weapon_t weapon)
 BG_FindAmmoForWeapon
 ==============
 */
-weapon_t BG_FindAmmoForWeapon(weapon_t weapon)
-{
+weapon_t BG_FindAmmoForWeapon(weapon_t weapon) {
 	gitem_t *it;
 
-	for (it = bg_itemlist + 1 ; it->classname ; it++)
-	{
-		if (it->giType == IT_WEAPON && it->giTag == (int)weapon)
-		{
+	for (it = bg_itemlist + 1 ; it->classname ; it++) {
+		if (it->giType == IT_WEAPON && it->giTag == (int)weapon) {
 			return it->giAmmoIndex;
 		}
 	}
@@ -2495,29 +2483,24 @@ BG_AkimboFireSequence
     returns 'true' if it's the left hand's turn to fire, 'false' if it's the right hand's turn
 ==============
 */
-qboolean BG_AkimboFireSequence(int weapon, int akimboClip, int mainClip)
-{
-	if (!BG_IsAkimboWeapon(weapon))
-	{
+qboolean BG_AkimboFireSequence(int weapon, int akimboClip, int mainClip) {
+	if (!BG_IsAkimboWeapon(weapon)) {
 		return qfalse;
 	}
 
-	if (!akimboClip)
-	{
+	if (!akimboClip) {
 		return qfalse;
 	}
 
 	// no ammo in main weapon, must be akimbo turn
-	if (!mainClip)
-	{
+	if (!mainClip) {
 		return qtrue;
 	}
 
 	// at this point, both have ammo
 
 	// now check 'cycle'   // (removed old method 11/5/2001)
-	if ((akimboClip + mainClip) & 1)
-	{
+	if ((akimboClip + mainClip) & 1) {
 		return qfalse;
 	}
 
@@ -2529,17 +2512,13 @@ qboolean BG_AkimboFireSequence(int weapon, int akimboClip, int mainClip)
 BG_IsAkimboWeapon
 ==============
 */
-qboolean BG_IsAkimboWeapon(int weaponNum)
-{
+qboolean BG_IsAkimboWeapon(int weaponNum) {
 	if (weaponNum == WP_AKIMBO_COLT ||
 	    weaponNum == WP_AKIMBO_SILENCEDCOLT ||
 	    weaponNum == WP_AKIMBO_LUGER ||
-	    weaponNum == WP_AKIMBO_SILENCEDLUGER)
-	{
+	    weaponNum == WP_AKIMBO_SILENCEDLUGER) {
 		return qtrue;
-	}
-	else
-	{
+	} else {
 		return qfalse;
 	}
 }
@@ -2549,19 +2528,15 @@ qboolean BG_IsAkimboWeapon(int weaponNum)
 BG_IsAkimboSideArm
 ==============
 */
-qboolean BG_IsAkimboSideArm(int weaponNum, playerState_t *ps)
-{
-	switch (weaponNum)
-	{
-	case WP_COLT:   if (ps->weapon == WP_AKIMBO_COLT || ps->weapon == WP_AKIMBO_SILENCEDCOLT)
-		{
+qboolean BG_IsAkimboSideArm(int weaponNum, playerState_t *ps) {
+	switch (weaponNum) {
+	case WP_COLT:   if (ps->weapon == WP_AKIMBO_COLT || ps->weapon == WP_AKIMBO_SILENCEDCOLT) {
 			return qtrue;
-		}
+	}
 		break;
-	case WP_LUGER:  if (ps->weapon == WP_AKIMBO_LUGER || ps->weapon == WP_AKIMBO_SILENCEDLUGER)
-		{
+	case WP_LUGER:  if (ps->weapon == WP_AKIMBO_LUGER || ps->weapon == WP_AKIMBO_SILENCEDLUGER) {
 			return qtrue;
-		}
+	}
 		break;
 	}
 	return qfalse;
@@ -2572,10 +2547,8 @@ qboolean BG_IsAkimboSideArm(int weaponNum, playerState_t *ps)
 BG_AkimboSidearm
 ==============
 */
-int BG_AkimboSidearm(int weaponNum)
-{
-	switch (weaponNum)
-	{
+int BG_AkimboSidearm(int weaponNum) {
+	switch (weaponNum) {
 	case WP_AKIMBO_COLT:            return WP_COLT;             break;
 	case WP_AKIMBO_SILENCEDCOLT:    return WP_COLT; break;
 	case WP_AKIMBO_LUGER:           return WP_LUGER;            break;
@@ -2590,14 +2563,11 @@ int BG_AkimboSidearm(int weaponNum)
 BG_FindItemForAmmo
 ==============
 */
-gitem_t *BG_FindItemForAmmo(int ammo)
-{
+gitem_t *BG_FindItemForAmmo(int ammo) {
 	int i = 0;
 
-	for (; i < bg_numItems; i++)
-	{
-		if (bg_itemlist[i].giType == IT_AMMO && bg_itemlist[i].giAmmoIndex == ammo)
-		{
+	for (; i < bg_numItems; i++) {
+		if (bg_itemlist[i].giType == IT_AMMO && bg_itemlist[i].giAmmoIndex == ammo) {
 			return &bg_itemlist[i];
 		}
 	}
@@ -2612,14 +2582,11 @@ gitem_t *BG_FindItemForAmmo(int ammo)
 BG_FindItem
 ===============
 */
-gitem_t *BG_FindItem(const char *pickupName)
-{
+gitem_t *BG_FindItem(const char *pickupName) {
 	gitem_t *it;
 
-	for (it = bg_itemlist + 1 ; it->classname ; it++)
-	{
-		if (!Q_stricmp(it->pickup_name, pickupName))
-		{
+	for (it = bg_itemlist + 1 ; it->classname ; it++) {
+		if (!Q_stricmp(it->pickup_name, pickupName)) {
 			return it;
 		}
 	}
@@ -2627,14 +2594,11 @@ gitem_t *BG_FindItem(const char *pickupName)
 	return NULL;
 }
 
-gitem_t *BG_FindItemForClassName(const char *className)
-{
+gitem_t *BG_FindItemForClassName(const char *className) {
 	gitem_t *it;
 
-	for (it = bg_itemlist + 1 ; it->classname ; it++)
-	{
-		if (!Q_stricmp(it->classname, className))
-		{
+	for (it = bg_itemlist + 1 ; it->classname ; it++) {
+		if (!Q_stricmp(it->classname, className)) {
 			return it;
 		}
 	}
@@ -2645,10 +2609,8 @@ gitem_t *BG_FindItemForClassName(const char *className)
 
 // DHM - Nerve :: returns qtrue if a weapon is indeed used in multiplayer
 // Gordon: FIXME: er, we shouldnt really need this, just remove all the weapons we dont actually want :)
-qboolean BG_WeaponInWolfMP(int weapon)
-{
-	switch (weapon)
-	{
+qboolean BG_WeaponInWolfMP(int weapon) {
+	switch (weapon) {
 	case WP_KNIFE:
 	case WP_LUGER:
 	case WP_COLT:
@@ -2707,8 +2669,7 @@ Items can be picked up without actually touching their physical bounds to make
 grabbing them easier
 ============
 */
-qboolean BG_PlayerTouchesItem(playerState_t *ps, entityState_t *item, int atTime)
-{
+qboolean BG_PlayerTouchesItem(playerState_t *ps, entityState_t *item, int atTime) {
 	vec3_t origin;
 
 	BG_EvaluateTrajectory(&item->pos, atTime, origin, qfalse, item->effect2Time);
@@ -2719,8 +2680,7 @@ qboolean BG_PlayerTouchesItem(playerState_t *ps, entityState_t *item, int atTime
 	    || ps->origin[1] - origin[1] > 36
 	    || ps->origin[1] - origin[1] < -36
 	    || ps->origin[2] - origin[2] > 36
-	    || ps->origin[2] - origin[2] < -36)
-	{
+	    || ps->origin[2] - origin[2] < -36) {
 		return qfalse;
 	}
 
@@ -2737,10 +2697,8 @@ BG_AddMagicAmmo:
 WARNING: when numOfClips is 0, DO NOT CHANGE ANYTHING under ps.
 =================================
 */
-int BG_GrenadesForClass(int cls)
-{
-	switch (cls)
-	{
+int BG_GrenadesForClass(int cls) {
+	switch (cls) {
 	case PC_MEDIC:
 		return 1;
 	case PC_SOLDIER:
@@ -2756,10 +2714,8 @@ int BG_GrenadesForClass(int cls)
 	return 0;
 }
 
-weapon_t BG_GrenadeTypeForTeam(team_t team)
-{
-	switch (team)
-	{
+weapon_t BG_GrenadeTypeForTeam(team_t team) {
+	switch (team) {
 	case TEAM_AXIS:
 		return WP_GRENADE_LAUNCHER;
 	case TEAM_ALLIES:
@@ -2770,8 +2726,7 @@ weapon_t BG_GrenadeTypeForTeam(team_t team)
 }
 
 // Gordon: setting numOfClips = 0 allows you to check if the client needs ammo, but doesnt give any
-qboolean BG_AddMagicAmmo(playerState_t *ps, int teamNum, int numOfClips)
-{
+qboolean BG_AddMagicAmmo(playerState_t *ps, int teamNum, int numOfClips) {
 	int i, weapon;
 	int ammoAdded = qfalse;
 	int maxammo;
@@ -2783,12 +2738,10 @@ qboolean BG_AddMagicAmmo(playerState_t *ps, int teamNum, int numOfClips)
 	weapon = BG_GrenadeTypeForTeam(teamNum);
 
 	clip = BG_FindClipForWeapon(weapon);
-	if (ps->ammoclip[clip] < i)
-	{
+	if (ps->ammoclip[clip] < i) {
 
 		// Gordon: early out
-		if (!numOfClips)
-		{
+		if (!numOfClips) {
 			return qtrue;
 		}
 
@@ -2798,22 +2751,18 @@ qboolean BG_AddMagicAmmo(playerState_t *ps, int teamNum, int numOfClips)
 
 		COM_BitSet(ps->weapons, weapon);
 
-		if (ps->ammoclip[clip] > i)
-		{
+		if (ps->ammoclip[clip] > i) {
 			ps->ammoclip[clip] = i;
 		}
 	}
 
-	if (COM_BitCheck(ps->weapons, WP_MEDIC_SYRINGE))
-	{
+	if (COM_BitCheck(ps->weapons, WP_MEDIC_SYRINGE)) {
 		i = 10;
 
 		clip = BG_FindClipForWeapon(WP_MEDIC_SYRINGE);
 
-		if (ps->ammoclip[clip] < i)
-		{
-			if (!numOfClips)
-			{
+		if (ps->ammoclip[clip] < i) {
+			if (!numOfClips) {
 				return qtrue;
 			}
 
@@ -2821,81 +2770,62 @@ qboolean BG_AddMagicAmmo(playerState_t *ps, int teamNum, int numOfClips)
 
 			ammoAdded = qtrue;
 
-			if (ps->ammoclip[clip] > i)
-			{
+			if (ps->ammoclip[clip] > i) {
 				ps->ammoclip[clip] = i;
 			}
 		}
 	}
 
 	// Gordon: now other weapons
-	for (i = 0; reloadableWeapons[i] >= 0; i++)
-	{
+	for (i = 0; reloadableWeapons[i] >= 0; i++) {
 		weapon = reloadableWeapons[i];
-		if (COM_BitCheck(ps->weapons, weapon))
-		{
+		if (COM_BitCheck(ps->weapons, weapon)) {
 			maxammo = BG_MaxAmmoForWeapon(weapon);
 
 			// Handle weapons that just use clip, and not ammo
-			if (weapon == WP_FLAMETHROWER)
-			{
+			if (weapon == WP_FLAMETHROWER) {
 				clip = BG_FindAmmoForWeapon(weapon);
-				if (ps->ammoclip[clip] < maxammo)
-				{
+				if (ps->ammoclip[clip] < maxammo) {
 					// early out
-					if (!numOfClips)
-					{
+					if (!numOfClips) {
 						return qtrue;
 					}
 
 					ammoAdded          = qtrue;
 					ps->ammoclip[clip] = maxammo;
 				}
-			}
-			else if (weapon == WP_PANZERFAUST)       //%	|| weapon == WP_MORTAR ) {
-			{
+			} else if (weapon == WP_PANZERFAUST) {     //%	|| weapon == WP_MORTAR ) {
 				clip = BG_FindAmmoForWeapon(weapon);
-				if (ps->ammoclip[clip] < maxammo)
-				{
+				if (ps->ammoclip[clip] < maxammo) {
 					// early out
-					if (!numOfClips)
-					{
+					if (!numOfClips) {
 						return qtrue;
 					}
 
 					ammoAdded           = qtrue;
 					ps->ammoclip[clip] += numOfClips;
-					if (ps->ammoclip[clip] >= maxammo)
-					{
+					if (ps->ammoclip[clip] >= maxammo) {
 						ps->ammoclip[clip] = maxammo;
 					}
 				}
-			}
-			else
-			{
+			} else {
 				clip = BG_FindAmmoForWeapon(weapon);
-				if (ps->ammo[clip] < maxammo)
-				{
+				if (ps->ammo[clip] < maxammo) {
 					// early out
-					if (!numOfClips)
-					{
+					if (!numOfClips) {
 						return qtrue;
 					}
 					ammoAdded = qtrue;
 
-					if (BG_IsAkimboWeapon(weapon))
-					{
+					if (BG_IsAkimboWeapon(weapon)) {
 						weapNumOfClips = numOfClips * 2; // double clips babeh!
-					}
-					else
-					{
+					} else {
 						weapNumOfClips = numOfClips;
 					}
 
 					// add and limit check
 					ps->ammo[clip] += weapNumOfClips * GetAmmoTableData(weapon)->maxclip;
-					if (ps->ammo[clip] > maxammo)
-					{
+					if (ps->ammo[clip] > maxammo) {
 						ps->ammo[clip] = maxammo;
 					}
 				}
@@ -2911,38 +2841,26 @@ BG_CanUseWeapon: can a player of the specified team and class use this weapon?
 ================
 - added by xkan, 01/02/03
 */
-qboolean BG_CanUseWeapon(int classNum, int teamNum, weapon_t weapon)
-{
-	switch (classNum)
-	{
+qboolean BG_CanUseWeapon(int classNum, int teamNum, weapon_t weapon) {
+	switch (classNum) {
 	case PC_ENGINEER:
 		if (weapon == WP_PLIERS
 		    || weapon == WP_DYNAMITE
-		    || weapon == WP_LANDMINE)
-		{
+		    || weapon == WP_LANDMINE) {
 			return qtrue;
-		}
-		else if (weapon == WP_MP40
-		         || weapon == WP_KAR98)
-		{
+		} else if (weapon == WP_MP40
+		           || weapon == WP_KAR98) {
 			return (teamNum == TEAM_AXIS);
-		}
-		else if (weapon == WP_THOMPSON
-		         || weapon == WP_CARBINE)
-		{
+		} else if (weapon == WP_THOMPSON
+		           || weapon == WP_CARBINE) {
 			return (teamNum == TEAM_ALLIES);
 		}
 	case PC_FIELDOPS:
-		if (weapon == WP_STEN)
-		{
+		if (weapon == WP_STEN) {
 			return qtrue;
-		}
-		else if (weapon == WP_MP40)
-		{
+		} else if (weapon == WP_MP40) {
 			return (teamNum == TEAM_AXIS);
-		}
-		else if (weapon == WP_THOMPSON)
-		{
+		} else if (weapon == WP_THOMPSON) {
 			return (teamNum == TEAM_ALLIES);
 		}
 		break;
@@ -2955,32 +2873,22 @@ qboolean BG_CanUseWeapon(int classNum, int teamNum, weapon_t weapon)
 		    || weapon == WP_MOBILE_MG42
 		    || weapon == WP_MOBILE_MG42_SET
 		    || weapon == WP_MORTAR
-		    || weapon == WP_MORTAR_SET)
-		{
+		    || weapon == WP_MORTAR_SET) {
 			return qtrue;
-		}
-		else if (weapon == WP_MP40)
-		{
+		} else if (weapon == WP_MP40) {
 			return (teamNum == TEAM_AXIS);
-		}
-		else if (weapon == WP_THOMPSON)
-		{
+		} else if (weapon == WP_THOMPSON) {
 			return (teamNum == TEAM_ALLIES);
 		}
 		break;
 
 	case PC_MEDIC:
 		if (weapon == WP_MEDIC_SYRINGE
-		    || weapon == WP_MEDKIT)
-		{
+		    || weapon == WP_MEDKIT) {
 			return qtrue;
-		}
-		else if (weapon == WP_MP40)
-		{
+		} else if (weapon == WP_MP40) {
 			return (teamNum == TEAM_AXIS);
-		}
-		else if (weapon == WP_THOMPSON)
-		{
+		} else if (weapon == WP_THOMPSON) {
 			return (teamNum == TEAM_ALLIES);
 		}
 		break;
@@ -2990,16 +2898,11 @@ qboolean BG_CanUseWeapon(int classNum, int teamNum, weapon_t weapon)
 		    || weapon == WP_SATCHEL
 		    || weapon == WP_AMMO
 		    // Gordon: this is a cvt ops weapon in single player too, right?
-		    || weapon == WP_FG42)
-		{
+		    || weapon == WP_FG42) {
 			return qtrue;
-		}
-		else if (weapon == WP_K43)
-		{
+		} else if (weapon == WP_K43) {
 			return (teamNum == TEAM_AXIS);
-		}
-		else if (weapon == WP_GARAND)
-		{
+		} else if (weapon == WP_GARAND) {
 			return (teamNum == TEAM_ALLIES);
 		}
 		break;
@@ -3008,8 +2911,7 @@ qboolean BG_CanUseWeapon(int classNum, int teamNum, weapon_t weapon)
 	if (weapon == WP_NONE
 	    || weapon == WP_KNIFE
 	    || weapon == WP_LUGER
-	    || weapon == WP_COLT)
-	{
+	    || weapon == WP_COLT) {
 		return qtrue;
 	}
 
@@ -3020,29 +2922,24 @@ qboolean BG_CanUseWeapon(int classNum, int teamNum, weapon_t weapon)
 #define AMMOFORWEAP BG_FindAmmoForWeapon(item->giTag)
 
 
-void BG_CalculateSpline_r(splinePath_t *spline, vec3_t out1, vec3_t out2, float tension)
-{
+void BG_CalculateSpline_r(splinePath_t *spline, vec3_t out1, vec3_t out2, float tension) {
 	vec3_t points[18];
 	int    i;
 	int    count = spline->numControls + 2;
 	vec3_t dist;
 
 	VectorCopy(spline->point.origin, points[0]);
-	for (i = 0; i < spline->numControls; i++)
-	{
+	for (i = 0; i < spline->numControls; i++) {
 		VectorCopy(spline->controls[i].origin, points[i + 1]);
 	}
-	if (!spline->next)
-	{
+	if (!spline->next) {
 		return;
 	}
 	VectorCopy(spline->next->point.origin, points[i + 1]);
 
 
-	while (count > 2)
-	{
-		for (i = 0; i < count - 1; i++)
-		{
+	while (count > 2) {
+		for (i = 0; i < count - 1; i++) {
 			VectorSubtract(points[i + 1], points[i], dist);
 			VectorMA(points[i], tension, dist, points[i]);
 		}
@@ -3053,17 +2950,14 @@ void BG_CalculateSpline_r(splinePath_t *spline, vec3_t out1, vec3_t out2, float 
 	VectorCopy(points[1], out2);
 }
 
-qboolean BG_TraverseSpline(float *deltaTime, splinePath_t **pSpline)
-{
+qboolean BG_TraverseSpline(float *deltaTime, splinePath_t **pSpline) {
 	float dist;
 
-	while ((*deltaTime) > 1)
-	{
+	while ((*deltaTime) > 1) {
 		(*deltaTime) -= 1;
 		dist          = (*pSpline)->length * (*deltaTime);
 
-		if (!(*pSpline)->next || !(*pSpline)->next->length)
-		{
+		if (!(*pSpline)->next || !(*pSpline)->next->length) {
 			return qfalse;
 //			Com_Error( ERR_DROP, "Spline path end passed (%s)", (*pSpline)->point.name );
 		}
@@ -3072,12 +2966,10 @@ qboolean BG_TraverseSpline(float *deltaTime, splinePath_t **pSpline)
 		*deltaTime = dist / (*pSpline)->length;
 	}
 
-	while ((*deltaTime) < 0)
-	{
+	while ((*deltaTime) < 0) {
 		dist = -((*pSpline)->length * (*deltaTime));
 
-		if (!(*pSpline)->prev || !(*pSpline)->prev->length)
-		{
+		if (!(*pSpline)->prev || !(*pSpline)->prev->length) {
 			return qfalse;
 //			Com_Error( ERR_DROP, "Spline path end passed (%s)", (*pSpline)->point.name );
 		}
@@ -3096,8 +2988,7 @@ BG_RaySphereIntersection
 ================
 */
 
-qboolean BG_RaySphereIntersection(float radius, vec3_t origin, splineSegment_t *path, float *t0, float *t1)
-{
+qboolean BG_RaySphereIntersection(float radius, vec3_t origin, splineSegment_t *path, float *t0, float *t1) {
 	vec3_t v;
 	float  b, c, d;
 
@@ -3107,8 +2998,7 @@ qboolean BG_RaySphereIntersection(float radius, vec3_t origin, splineSegment_t *
 	c = DotProduct(v, v) - (radius * radius);
 
 	d = (b * b) - (4 * c);
-	if (d < 0)
-	{
+	if (d < 0) {
 		return qfalse;
 	}
 	d = sqrt(d);
@@ -3119,99 +3009,69 @@ qboolean BG_RaySphereIntersection(float radius, vec3_t origin, splineSegment_t *
 	return qtrue;
 }
 
-void BG_LinearPathOrigin2(float radius, splinePath_t **pSpline, float *deltaTime, vec3_t result)
-{
+void BG_LinearPathOrigin2(float radius, splinePath_t **pSpline, float *deltaTime, vec3_t result) {
 	qboolean first = qtrue;
 	float    t     = 0.f;
 	int      i     = floor((*deltaTime) * (MAX_SPLINE_SEGMENTS));
 	float    frac;
 
-	if (i >= MAX_SPLINE_SEGMENTS)
-	{
+	if (i >= MAX_SPLINE_SEGMENTS) {
 		i    = MAX_SPLINE_SEGMENTS - 1;
 		frac = 1.f;
-	}
-	else
-	{
+	} else {
 		frac = (((*deltaTime) * (MAX_SPLINE_SEGMENTS)) - i);
 	}
 
-	while (qtrue)
-	{
+	while (qtrue) {
 		float t0, t1;
 
-		while (qtrue)
-		{
-			if (BG_RaySphereIntersection(radius, result, &(*pSpline)->segments[i], &t0, &t1))
-			{
+		while (qtrue) {
+			if (BG_RaySphereIntersection(radius, result, &(*pSpline)->segments[i], &t0, &t1)) {
 				qboolean found = qfalse;
 
 				t0 /= (*pSpline)->segments[i].length;
 				t1 /= (*pSpline)->segments[i].length;
 
-				if (first)
-				{
-					if (radius < 0)
-					{
-						if (t0 < frac && (t0 >= 0.f && t0 <= 1.f))
-						{
+				if (first) {
+					if (radius < 0) {
+						if (t0 < frac && (t0 >= 0.f && t0 <= 1.f)) {
 							t     = t0;
 							found = qtrue;
+						} else if (t1 < frac) {
+							t     = t1;
+							found = qtrue;
 						}
-						else if (t1 < frac)
-						{
+					} else {
+						if (t0 > frac && (t0 >= 0.f && t0 <= 1.f)) {
+							t     = t0;
+							found = qtrue;
+						} else if (t1 > frac) {
 							t     = t1;
 							found = qtrue;
 						}
 					}
-					else
-					{
-						if (t0 > frac && (t0 >= 0.f && t0 <= 1.f))
-						{
+				} else {
+					if (radius < 0) {
+						if (t0 < t1 && (t0 >= 0.f && t0 <= 1.f)) {
 							t     = t0;
 							found = qtrue;
-						}
-						else if (t1 > frac)
-						{
+						} else {
 							t     = t1;
 							found = qtrue;
 						}
-					}
-				}
-				else
-				{
-					if (radius < 0)
-					{
-						if (t0 < t1 && (t0 >= 0.f && t0 <= 1.f))
-						{
+					} else {
+						if (t0 > t1 && (t0 >= 0.f && t0 <= 1.f)) {
 							t     = t0;
 							found = qtrue;
-						}
-						else
-						{
-							t     = t1;
-							found = qtrue;
-						}
-					}
-					else
-					{
-						if (t0 > t1 && (t0 >= 0.f && t0 <= 1.f))
-						{
-							t     = t0;
-							found = qtrue;
-						}
-						else
-						{
+						} else {
 							t     = t1;
 							found = qtrue;
 						}
 					}
 				}
 
-				if (found)
-				{
-					if (t >= 0.f && t <= 1.f)
-					{
+				if (found) {
+					if (t >= 0.f && t <= 1.f) {
 						*deltaTime = (i / (float)(MAX_SPLINE_SEGMENTS)) + (t / (float)(MAX_SPLINE_SEGMENTS));
 						VectorMA((*pSpline)->segments[i].start, t * (*pSpline)->segments[i].length, (*pSpline)->segments[i].v_norm, result);
 						return;
@@ -3221,39 +3081,29 @@ void BG_LinearPathOrigin2(float radius, splinePath_t **pSpline, float *deltaTime
 			}
 
 			first = qfalse;
-			if (radius < 0)
-			{
+			if (radius < 0) {
 				i--;
-				if (i < 0)
-				{
+				if (i < 0) {
 					i = MAX_SPLINE_SEGMENTS - 1;
 					break;
 				}
-			}
-			else
-			{
+			} else {
 				i++;
-				if (i >= MAX_SPLINE_SEGMENTS)
-				{
+				if (i >= MAX_SPLINE_SEGMENTS) {
 					i = 0;
 					break;
 				}
 			}
 		}
 
-		if (radius < 0)
-		{
-			if (!(*pSpline)->prev)
-			{
+		if (radius < 0) {
+			if (!(*pSpline)->prev) {
 				return;
 //				Com_Error( ERR_DROP, "End of spline reached (%s)\n", start->point.name );
 			}
 			*pSpline = (*pSpline)->prev;
-		}
-		else
-		{
-			if (!(*pSpline)->next)
-			{
+		} else {
+			if (!(*pSpline)->next) {
 				return;
 //				Com_Error( ERR_DROP, "End of spline reached (%s)\n", start->point.name );
 			}
@@ -3262,14 +3112,12 @@ void BG_LinearPathOrigin2(float radius, splinePath_t **pSpline, float *deltaTime
 	}
 }
 
-void BG_ComputeSegments(splinePath_t *pSpline)
-{
+void BG_ComputeSegments(splinePath_t *pSpline) {
 	int    i;
 	float  granularity = 1 / ((float)(MAX_SPLINE_SEGMENTS));
 	vec3_t vec[4];
 
-	for (i = 0; i < MAX_SPLINE_SEGMENTS; i++)
-	{
+	for (i = 0; i < MAX_SPLINE_SEGMENTS; i++) {
 		BG_CalculateSpline_r(pSpline, vec[0], vec[1], i * granularity);
 		VectorSubtract(vec[1], vec[0], pSpline->segments[i].start);
 		VectorMA(vec[0], i * granularity, pSpline->segments[i].start, pSpline->segments[i].start);
@@ -3290,8 +3138,7 @@ BG_EvaluateTrajectory
 
 ================
 */
-void BG_EvaluateTrajectory(const trajectory_t *tr, int atTime, vec3_t result, qboolean isAngle, int splinePath)
-{
+void BG_EvaluateTrajectory(const trajectory_t *tr, int atTime, vec3_t result, qboolean isAngle, int splinePath) {
 	float  deltaTime;
 	float  phase;
 	vec3_t v;
@@ -3301,8 +3148,7 @@ void BG_EvaluateTrajectory(const trajectory_t *tr, int atTime, vec3_t result, qb
 	qboolean     backwards = qfalse;
 	float        deltaTime2;
 
-	switch (tr->trType)
-	{
+	switch (tr->trType) {
 	case TR_STATIONARY:
 	case TR_INTERPOLATE:
 	case TR_GRAVITY_PAUSED: //----(SA)
@@ -3319,13 +3165,11 @@ void BG_EvaluateTrajectory(const trajectory_t *tr, int atTime, vec3_t result, qb
 		break;
 //----(SA)	removed
 	case TR_LINEAR_STOP:
-		if (atTime > tr->trTime + tr->trDuration)
-		{
+		if (atTime > tr->trTime + tr->trDuration) {
 			atTime = tr->trTime + tr->trDuration;
 		}
 		deltaTime = (atTime - tr->trTime) * 0.001;      // milliseconds to seconds
-		if (deltaTime < 0)
-		{
+		if (deltaTime < 0) {
 			deltaTime = 0;
 		}
 		VectorMA(tr->trBase, deltaTime, tr->trDelta, result);
@@ -3351,8 +3195,7 @@ void BG_EvaluateTrajectory(const trajectory_t *tr, int atTime, vec3_t result, qb
 //----(SA)	end
 	// RF, acceleration
 	case TR_ACCELERATE:     // trDelta is the ultimate speed
-		if (atTime > tr->trTime + tr->trDuration)
-		{
+		if (atTime > tr->trTime + tr->trDuration) {
 			atTime = tr->trTime + tr->trDuration;
 		}
 		deltaTime = (atTime - tr->trTime) * 0.001;      // milliseconds to seconds
@@ -3364,8 +3207,7 @@ void BG_EvaluateTrajectory(const trajectory_t *tr, int atTime, vec3_t result, qb
 		VectorMA(tr->trBase, phase * 0.5 * deltaTime * deltaTime, result, result);
 		break;
 	case TR_DECCELERATE:    // trDelta is the starting speed
-		if (atTime > tr->trTime + tr->trDuration)
-		{
+		if (atTime > tr->trTime + tr->trDuration) {
 			atTime = tr->trTime + tr->trDuration;
 		}
 		deltaTime = (atTime - tr->trTime) * 0.001;      // milliseconds to seconds
@@ -3380,24 +3222,19 @@ void BG_EvaluateTrajectory(const trajectory_t *tr, int atTime, vec3_t result, qb
 		break;
 	case TR_SPLINE:
 		pSpline = BG_GetSplineData(splinePath, &backwards);
-		if (!pSpline)
-		{
+		if (!pSpline) {
 			return;
 		}
 
 		deltaTime = tr->trDuration ? (atTime - tr->trTime) / ((float)tr->trDuration) : 0;
 
-		if (deltaTime < 0.f)
-		{
+		if (deltaTime < 0.f) {
 			deltaTime = 0.f;
-		}
-		else if (deltaTime > 1.f)
-		{
+		} else if (deltaTime > 1.f) {
 			deltaTime = 1.f;
 		}
 
-		if (backwards)
-		{
+		if (backwards) {
 			deltaTime = 1 - deltaTime;
 		}
 
@@ -3405,21 +3242,18 @@ void BG_EvaluateTrajectory(const trajectory_t *tr, int atTime, vec3_t result, qb
 
 		BG_CalculateSpline_r(pSpline, vec[0], vec[1], deltaTime);
 
-		if (isAngle)
-		{
+		if (isAngle) {
 			qboolean dampin  = qfalse;
 			qboolean dampout = qfalse;
 			float    base1;
 
-			if (tr->trBase[0])
-			{
+			if (tr->trBase[0]) {
 				vec3_t       result2;
 				splinePath_t *pSp2 = pSpline;
 
 				deltaTime2 += tr->trBase[0] / pSpline->length;
 
-				if (BG_TraverseSpline(&deltaTime2, &pSp2))
-				{
+				if (BG_TraverseSpline(&deltaTime2, &pSp2)) {
 
 					VectorSubtract(vec[1], vec[0], result);
 					VectorMA(vec[0], deltaTime, result, result);
@@ -3429,73 +3263,49 @@ void BG_EvaluateTrajectory(const trajectory_t *tr, int atTime, vec3_t result, qb
 					VectorSubtract(vec[1], vec[0], result2);
 					VectorMA(vec[0], deltaTime2, result2, result2);
 
-					if (tr->trBase[0] < 0)
-					{
+					if (tr->trBase[0] < 0) {
 						VectorSubtract(result, result2, result);
-					}
-					else
-					{
+					} else {
 						VectorSubtract(result2, result, result);
 					}
-				}
-				else
-				{
+				} else {
 					VectorSubtract(vec[1], vec[0], result);
 				}
-			}
-			else
-			{
+			} else {
 				VectorSubtract(vec[1], vec[0], result);
 			}
 
 			vectoangles(result, result);
 
 			base1 = tr->trBase[1];
-			if (base1 >= 10000 || base1 < -10000)
-			{
+			if (base1 >= 10000 || base1 < -10000) {
 				dampin = qtrue;
-				if (base1 < 0)
-				{
+				if (base1 < 0) {
 					base1 += 10000;
-				}
-				else
-				{
+				} else {
 					base1 -= 10000;
 				}
 			}
 
-			if (base1 >= 1000 || base1 < -1000)
-			{
+			if (base1 >= 1000 || base1 < -1000) {
 				dampout = qtrue;
-				if (base1 < 0)
-				{
+				if (base1 < 0) {
 					base1 += 1000;
-				}
-				else
-				{
+				} else {
 					base1 -= 1000;
 				}
 			}
 
-			if (dampin && dampout)
-			{
+			if (dampin && dampout) {
 				result[ROLL] = base1 + ((sin(((deltaTime * 2) - 1) * M_PI * 0.5f) + 1) * 0.5f * tr->trBase[2]);
-			}
-			else if (dampin)
-			{
+			} else if (dampin) {
 				result[ROLL] = base1 + (sin(deltaTime * M_PI * 0.5f) * tr->trBase[2]);
-			}
-			else if (dampout)
-			{
+			} else if (dampout) {
 				result[ROLL] = base1 + ((1 - sin((1 - deltaTime) * M_PI * 0.5f)) * tr->trBase[2]);
-			}
-			else
-			{
+			} else {
 				result[ROLL] = base1 + (deltaTime * tr->trBase[2]);
 			}
-		}
-		else
-		{
+		} else {
 			VectorSubtract(vec[1], vec[0], result);
 			VectorMA(vec[0], deltaTime, result, result);
 		}
@@ -3503,77 +3313,57 @@ void BG_EvaluateTrajectory(const trajectory_t *tr, int atTime, vec3_t result, qb
 		break;
 	case TR_LINEAR_PATH:
 		pSpline = BG_GetSplineData(splinePath, &backwards);
-		if (!pSpline)
-		{
+		if (!pSpline) {
 			return;
 		}
 
 		deltaTime = tr->trDuration ? (atTime - tr->trTime) / ((float)tr->trDuration) : 0;
 
-		if (deltaTime < 0.f)
-		{
+		if (deltaTime < 0.f) {
 			deltaTime = 0.f;
-		}
-		else if (deltaTime > 1.f)
-		{
+		} else if (deltaTime > 1.f) {
 			deltaTime = 1.f;
 		}
 
-		if (backwards)
-		{
+		if (backwards) {
 			deltaTime = 1 - deltaTime;
 		}
 
-		if (isAngle)
-		{
+		if (isAngle) {
 			int   pos = floor(deltaTime * (MAX_SPLINE_SEGMENTS));
 			float frac;
 
-			if (pos >= MAX_SPLINE_SEGMENTS)
-			{
+			if (pos >= MAX_SPLINE_SEGMENTS) {
 				pos  = MAX_SPLINE_SEGMENTS - 1;
 				frac = pSpline->segments[pos].length;
-			}
-			else
-			{
+			} else {
 				frac = ((deltaTime * (MAX_SPLINE_SEGMENTS)) - pos) * pSpline->segments[pos].length;
 			}
 
-			if (tr->trBase[0])
-			{
+			if (tr->trBase[0]) {
 				VectorMA(pSpline->segments[pos].start, frac, pSpline->segments[pos].v_norm, result);
 				VectorCopy(result, v);
 
 				BG_LinearPathOrigin2(tr->trBase[0], &pSpline, &deltaTime, v);
-				if (tr->trBase[0] < 0)
-				{
+				if (tr->trBase[0] < 0) {
 					VectorSubtract(v, result, result);
-				}
-				else
-				{
+				} else {
 					VectorSubtract(result, v, result);
 				}
 
 				vectoangles(result, result);
-			}
-			else
-			{
+			} else {
 				vectoangles(pSpline->segments[pos].v_norm, result);
 			}
 
-		}
-		else
-		{
+		} else {
 			int   pos = floor(deltaTime * (MAX_SPLINE_SEGMENTS));
 			float frac;
 
-			if (pos >= MAX_SPLINE_SEGMENTS)
-			{
+			if (pos >= MAX_SPLINE_SEGMENTS) {
 				pos  = MAX_SPLINE_SEGMENTS - 1;
 				frac = pSpline->segments[pos].length;
-			}
-			else
-			{
+			} else {
 				frac = ((deltaTime * (MAX_SPLINE_SEGMENTS)) - pos) * pSpline->segments[pos].length;
 			}
 
@@ -3595,13 +3385,11 @@ BG_EvaluateTrajectoryDelta
 For determining velocity at a given time
 ================
 */
-void BG_EvaluateTrajectoryDelta(const trajectory_t *tr, int atTime, vec3_t result)
-{
+void BG_EvaluateTrajectoryDelta(const trajectory_t *tr, int atTime, vec3_t result) {
 	float deltaTime;
 	float phase;
 
-	switch (tr->trType)
-	{
+	switch (tr->trType) {
 	case TR_STATIONARY:
 	case TR_INTERPOLATE:
 		VectorClear(result);
@@ -3617,8 +3405,7 @@ void BG_EvaluateTrajectoryDelta(const trajectory_t *tr, int atTime, vec3_t resul
 		break;
 //----(SA)	removed
 	case TR_LINEAR_STOP:
-		if (atTime > tr->trTime + tr->trDuration)
-		{
+		if (atTime > tr->trTime + tr->trDuration) {
 			VectorClear(result);
 			return;
 		}
@@ -3645,8 +3432,7 @@ void BG_EvaluateTrajectoryDelta(const trajectory_t *tr, int atTime, vec3_t resul
 //----(SA)	end
 	// RF, acceleration
 	case TR_ACCELERATE: // trDelta is eventual speed
-		if (atTime > tr->trTime + tr->trDuration)
-		{
+		if (atTime > tr->trTime + tr->trDuration) {
 			VectorClear(result);
 			return;
 		}
@@ -3655,8 +3441,7 @@ void BG_EvaluateTrajectoryDelta(const trajectory_t *tr, int atTime, vec3_t resul
 		VectorScale(tr->trDelta, deltaTime * deltaTime, result);
 		break;
 	case TR_DECCELERATE:    // trDelta is breaking force
-		if (atTime > tr->trTime + tr->trDuration)
-		{
+		if (atTime > tr->trTime + tr->trDuration) {
 			VectorClear(result);
 			return;
 		}
@@ -3683,24 +3468,19 @@ BG_GetMarkDir
   dir is the direction of the projectile or trace that has resulted in a surface being hit
 ============
 */
-void BG_GetMarkDir(const vec3_t dir, const vec3_t normal, vec3_t out)
-{
+void BG_GetMarkDir(const vec3_t dir, const vec3_t normal, vec3_t out) {
 	vec3_t ndir, lnormal;
 	float  minDot = 0.3;
 	int    x      = 0;
 
-	if (dir[0] < 0.001 && dir[1] < 0.001)
-	{
+	if (dir[0] < 0.001 && dir[1] < 0.001) {
 		VectorCopy(dir, out);
 		return;
 	}
 
-	if (VectorLengthSquared(normal) < SQR(1.f))            // this is needed to get rid of (0,0,0) normals (happens with entities?)
-	{
+	if (VectorLengthSquared(normal) < SQR(1.f)) {          // this is needed to get rid of (0,0,0) normals (happens with entities?)
 		VectorSet(lnormal, 0.f, 0.f, 1.f);
-	}
-	else
-	{
+	} else {
 		//VectorCopy( normal, lnormal );
 		//VectorNormalizeFast( lnormal );
 		VectorNormalize2(normal, lnormal);
@@ -3708,14 +3488,12 @@ void BG_GetMarkDir(const vec3_t dir, const vec3_t normal, vec3_t out)
 
 	VectorNegate(dir, ndir);
 	VectorNormalize(ndir);
-	if (normal[2] > .8f)
-	{
+	if (normal[2] > .8f) {
 		minDot = .7f;
 	}
 
 	// make sure it makrs the impact surface
-	while (DotProduct(ndir, lnormal) < minDot && x < 10)
-	{
+	while (DotProduct(ndir, lnormal) < minDot && x < 10) {
 		VectorMA(ndir, .5, lnormal, ndir);
 		VectorNormalize(ndir);
 
@@ -3723,10 +3501,8 @@ void BG_GetMarkDir(const vec3_t dir, const vec3_t normal, vec3_t out)
 	}
 
 #ifdef GAMEDLL
-	if (x >= 10)
-	{
-		if (g_developer.integer)
-		{
+	if (x >= 10) {
+		if (g_developer.integer) {
 			Com_Printf("BG_GetMarkDir loops: %i\n", x);
 		}
 	}
@@ -3880,20 +3656,18 @@ Handles the sequence numbers
 
 void    trap_Cvar_VariableStringBuffer(const char *var_name, char *buffer, int bufsize);
 
-void BG_AddPredictableEventToPlayerstate(int newEvent, int eventParm, playerState_t *ps)
-{
+void BG_AddPredictableEventToPlayerstate(int newEvent, int eventParm, playerState_t *ps) {
 
 #ifdef _DEBUG
 	{
 		char buf[256];
-		trap_Cvar_VariableStringBuffer("showevents", buf, sizeof(buf));
-		if (atof(buf) != 0)
-		{
-#ifdef GAMEDLL
+		trap_Cvar_VariableStringBuffer("showevents", buf, sizeof (buf));
+		if (atof(buf) != 0) {
+# ifdef GAMEDLL
 			Com_Printf("game event svt %5d -> %5d: num = %20s parm %d\n", ps->pmove_framecount /*ps->commandTime*/, ps->eventSequence, eventnames[newEvent], eventParm);
-#else
+# else
 			Com_Printf("Cgame event svt %5d -> %5d: num = %20s parm %d\n", ps->pmove_framecount /*ps->commandTime*/, ps->eventSequence, eventnames[newEvent], eventParm);
-#endif
+# endif
 		}
 	}
 #endif
@@ -3926,20 +3700,14 @@ This is done after each set of usercmd_t on the server,
 and after local prediction on the client
 ========================
 */
-void BG_PlayerStateToEntityState(playerState_t *ps, entityState_t *s, qboolean snap)
-{
+void BG_PlayerStateToEntityState(playerState_t *ps, entityState_t *s, qboolean snap) {
 	int i;
 
-	if (ps->pm_type == PM_SPECTATOR)
-	{
+	if (ps->pm_type == PM_SPECTATOR) {
 		s->eType = ET_INVISIBLE;
-	}
-	else if (ps->stats[STAT_HEALTH] <= GIB_HEALTH)
-	{
+	} else if (ps->stats[STAT_HEALTH] <= GIB_HEALTH) {
 		s->eType = ET_INVISIBLE;
-	}
-	else
-	{
+	} else {
 		s->eType = ET_PLAYER;
 	}
 
@@ -3947,24 +3715,19 @@ void BG_PlayerStateToEntityState(playerState_t *ps, entityState_t *s, qboolean s
 
 	s->pos.trType = TR_INTERPOLATE;
 	VectorCopy(ps->origin, s->pos.trBase);
-	if (snap)
-	{
+	if (snap) {
 		SnapVector(s->pos.trBase);
 	}
 
 	s->apos.trType = TR_INTERPOLATE;
 	VectorCopy(ps->viewangles, s->apos.trBase);
-	if (snap)
-	{
+	if (snap) {
 		SnapVector(s->apos.trBase);
 	}
 
-	if (ps->movementDir > 128)
-	{
+	if (ps->movementDir > 128) {
 		s->angles2[YAW] = (float)ps->movementDir - 256;
-	}
-	else
-	{
+	} else {
 		s->angles2[YAW] = ps->movementDir;
 	}
 
@@ -3975,39 +3738,29 @@ void BG_PlayerStateToEntityState(playerState_t *ps, entityState_t *s, qboolean s
 	// Ridah, let clients know if this person is using a mounted weapon
 	// so they don't show any client muzzle flashes
 
-	if (ps->eFlags & EF_MOUNTEDTANK)
-	{
+	if (ps->eFlags & EF_MOUNTEDTANK) {
 		ps->eFlags &= ~EF_MG42_ACTIVE;
 		ps->eFlags &= ~EF_AAGUN_ACTIVE;
-	}
-	else
-	{
+	} else {
 		SETUP_MOUNTEDGUN_STATUS(ps);
 	}
 
 	s->eFlags = ps->eFlags;
 
-	if (ps->stats[STAT_HEALTH] <= 0)
-	{
+	if (ps->stats[STAT_HEALTH] <= 0) {
 		s->eFlags |= EF_DEAD;
-	}
-	else
-	{
+	} else {
 		s->eFlags &= ~EF_DEAD;
 	}
 
 // from MP
-	if (ps->externalEvent)
-	{
+	if (ps->externalEvent) {
 		s->event     = ps->externalEvent;
 		s->eventParm = ps->externalEventParm;
-	}
-	else if (ps->entityEventSequence < ps->eventSequence)
-	{
+	} else if (ps->entityEventSequence < ps->eventSequence) {
 		int seq;
 
-		if (ps->entityEventSequence < ps->eventSequence - MAX_EVENTS)
-		{
+		if (ps->entityEventSequence < ps->eventSequence - MAX_EVENTS) {
 			ps->entityEventSequence = ps->eventSequence - MAX_EVENTS;
 		}
 		seq          = ps->entityEventSequence & (MAX_EVENTS - 1);
@@ -4019,8 +3772,7 @@ void BG_PlayerStateToEntityState(playerState_t *ps, entityState_t *s, qboolean s
 	// Ridah, now using a circular list of events for all entities
 	// add any new events that have been added to the playerState_t
 	// (possibly overwriting entityState_t events)
-	for (i = ps->oldEventSequence; i != ps->eventSequence; i++)
-	{
+	for (i = ps->oldEventSequence; i != ps->eventSequence; i++) {
 		s->events[s->eventSequence & (MAX_EVENTS - 1)]     = ps->events[i & (MAX_EVENTS - 1)];
 		s->eventParms[s->eventSequence & (MAX_EVENTS - 1)] = ps->eventParms[i & (MAX_EVENTS - 1)];
 		s->eventSequence++;
@@ -4031,10 +3783,8 @@ void BG_PlayerStateToEntityState(playerState_t *ps, entityState_t *s, qboolean s
 	s->groundEntityNum = ps->groundEntityNum;
 
 	s->powerups = 0;
-	for (i = 0 ; i < MAX_POWERUPS ; i++)
-	{
-		if (ps->powerups[i])
-		{
+	for (i = 0 ; i < MAX_POWERUPS ; i++) {
+		if (ps->powerups[i]) {
 			s->powerups |= 1 << i;
 		}
 	}
@@ -4052,20 +3802,14 @@ This is done after each set of usercmd_t on the server,
 and after local prediction on the client
 ========================
 */
-void BG_PlayerStateToEntityStateExtraPolate(playerState_t *ps, entityState_t *s, int time, qboolean snap)
-{
+void BG_PlayerStateToEntityStateExtraPolate(playerState_t *ps, entityState_t *s, int time, qboolean snap) {
 	int i;
 
-	if (ps->pm_type == PM_SPECTATOR)
-	{
+	if (ps->pm_type == PM_SPECTATOR) {
 		s->eType = ET_INVISIBLE;
-	}
-	else if (ps->stats[STAT_HEALTH] <= GIB_HEALTH)
-	{
+	} else if (ps->stats[STAT_HEALTH] <= GIB_HEALTH) {
 		s->eType = ET_INVISIBLE;
-	}
-	else
-	{
+	} else {
 		s->eType = ET_PLAYER;
 	}
 
@@ -4073,8 +3817,7 @@ void BG_PlayerStateToEntityStateExtraPolate(playerState_t *ps, entityState_t *s,
 
 	s->pos.trType = TR_LINEAR_STOP;
 	VectorCopy(ps->origin, s->pos.trBase);
-	if (snap)
-	{
+	if (snap) {
 		SnapVector(s->pos.trBase);
 	}
 	// set the trDelta for flag direction and linear prediction
@@ -4086,8 +3829,7 @@ void BG_PlayerStateToEntityStateExtraPolate(playerState_t *ps, entityState_t *s,
 
 	s->apos.trType = TR_INTERPOLATE;
 	VectorCopy(ps->viewangles, s->apos.trBase);
-	if (snap)
-	{
+	if (snap) {
 		SnapVector(s->apos.trBase);
 	}
 
@@ -4097,37 +3839,27 @@ void BG_PlayerStateToEntityStateExtraPolate(playerState_t *ps, entityState_t *s,
 	s->clientNum    = ps->clientNum;    // ET_PLAYER looks here instead of at number
 	                                    // so corpses can also reference the proper config
 
-	if (ps->eFlags & EF_MOUNTEDTANK)
-	{
+	if (ps->eFlags & EF_MOUNTEDTANK) {
 		ps->eFlags &= ~EF_MG42_ACTIVE;
 		ps->eFlags &= ~EF_AAGUN_ACTIVE;
-	}
-	else
-	{
+	} else {
 		SETUP_MOUNTEDGUN_STATUS(ps);
 	}
 
 	s->eFlags = ps->eFlags;
-	if (ps->stats[STAT_HEALTH] <= 0)
-	{
+	if (ps->stats[STAT_HEALTH] <= 0) {
 		s->eFlags |= EF_DEAD;
-	}
-	else
-	{
+	} else {
 		s->eFlags &= ~EF_DEAD;
 	}
 
-	if (ps->externalEvent)
-	{
+	if (ps->externalEvent) {
 		s->event     = ps->externalEvent;
 		s->eventParm = ps->externalEventParm;
-	}
-	else if (ps->entityEventSequence < ps->eventSequence)
-	{
+	} else if (ps->entityEventSequence < ps->eventSequence) {
 		int seq;
 
-		if (ps->entityEventSequence < ps->eventSequence - MAX_EVENTS)
-		{
+		if (ps->entityEventSequence < ps->eventSequence - MAX_EVENTS) {
 			ps->entityEventSequence = ps->eventSequence - MAX_EVENTS;
 		}
 		seq          = ps->entityEventSequence & (MAX_EVENTS - 1);
@@ -4139,8 +3871,7 @@ void BG_PlayerStateToEntityStateExtraPolate(playerState_t *ps, entityState_t *s,
 	// Ridah, now using a circular list of events for all entities
 	// add any new events that have been added to the playerState_t
 	// (possibly overwriting entityState_t events)
-	for (i = ps->oldEventSequence; i != ps->eventSequence; i++)
-	{
+	for (i = ps->oldEventSequence; i != ps->eventSequence; i++) {
 		s->events[s->eventSequence & (MAX_EVENTS - 1)]     = ps->events[i & (MAX_EVENTS - 1)];
 		s->eventParms[s->eventSequence & (MAX_EVENTS - 1)] = ps->eventParms[i & (MAX_EVENTS - 1)];
 		s->eventSequence++;
@@ -4151,10 +3882,8 @@ void BG_PlayerStateToEntityStateExtraPolate(playerState_t *ps, entityState_t *s,
 	s->groundEntityNum = ps->groundEntityNum;
 
 	s->powerups = 0;
-	for (i = 0 ; i < MAX_POWERUPS ; i++)
-	{
-		if (ps->powerups[i])
-		{
+	for (i = 0 ; i < MAX_POWERUPS ; i++) {
+		if (ps->powerups[i]) {
 			s->powerups |= 1 << i;
 		}
 	}
@@ -4165,10 +3894,8 @@ void BG_PlayerStateToEntityStateExtraPolate(playerState_t *ps, entityState_t *s,
 }
 
 // Gordon: some weapons are duplicated for code puposes.... just want to treat them as a single
-weapon_t BG_DuplicateWeapon(weapon_t weap)
-{
-	switch (weap)
-	{
+weapon_t BG_DuplicateWeapon(weapon_t weap) {
+	switch (weap) {
 	case WP_M7:     return WP_GPG40;
 	case WP_GARAND_SCOPE:       return WP_GARAND;
 	case WP_K43_SCOPE:          return WP_K43;
@@ -4177,12 +3904,10 @@ weapon_t BG_DuplicateWeapon(weapon_t weap)
 	}
 }
 
-gitem_t *BG_ValidStatWeapon(weapon_t weap)
-{
+gitem_t *BG_ValidStatWeapon(weapon_t weap) {
 	weapon_t weap2;
 
-	switch (weap)
-	{
+	switch (weap) {
 	case WP_MEDKIT:
 	case WP_PLIERS:
 	case WP_SMOKETRAIL:
@@ -4194,28 +3919,23 @@ gitem_t *BG_ValidStatWeapon(weapon_t weap)
 		break;
 	}
 
-	if (!BG_WeaponInWolfMP(weap))
-	{
+	if (!BG_WeaponInWolfMP(weap)) {
 		return NULL;
 	}
 
 	weap2 = BG_DuplicateWeapon(weap);
-	if (weap != weap2)
-	{
+	if (weap != weap2) {
 		return NULL;
 	}
 
 	return BG_FindItemForWeapon(weap);
 }
 
-weapon_t BG_WeaponForMOD(int MOD)
-{
+weapon_t BG_WeaponForMOD(int MOD) {
 	weapon_t i;
 
-	for (i = 0; i < WP_NUM_WEAPONS; i++)
-	{
-		if (GetAmmoTableData(i)->mod == MOD)
-		{
+	for (i = 0; i < WP_NUM_WEAPONS; i++) {
+		if (GetAmmoTableData(i)->mod == MOD) {
 			return i;
 		}
 	}
@@ -4227,14 +3947,11 @@ weapon_t BG_WeaponForMOD(int MOD)
 BG_Find_PathCorner
 =============
 */
-pathCorner_t *BG_Find_PathCorner(const char *match)
-{
+pathCorner_t *BG_Find_PathCorner(const char *match) {
 	int i;
 
-	for (i = 0 ; i < numPathCorners; i++)
-	{
-		if (!Q_stricmp(pathCorners[i].name, match))
-		{
+	for (i = 0 ; i < numPathCorners; i++) {
+		if (!Q_stricmp(pathCorners[i].name, match)) {
 			return &pathCorners[i];
 		}
 	}
@@ -4247,10 +3964,8 @@ pathCorner_t *BG_Find_PathCorner(const char *match)
 BG_AddPathCorner
 =============
 */
-void BG_AddPathCorner(const char *name, vec3_t origin)
-{
-	if (numPathCorners >= MAX_PATH_CORNERS)
-	{
+void BG_AddPathCorner(const char *name, vec3_t origin) {
+	if (numPathCorners >= MAX_PATH_CORNERS) {
 		Com_Error(ERR_DROP, "MAX PATH CORNERS (%i) hit", MAX_PATH_CORNERS);
 	}
 
@@ -4264,14 +3979,11 @@ void BG_AddPathCorner(const char *name, vec3_t origin)
 BG_Find_Spline
 =============
 */
-splinePath_t *BG_Find_Spline(const char *match)
-{
+splinePath_t *BG_Find_Spline(const char *match) {
 	int i;
 
-	for (i = 0 ; i < numSplinePaths; i++)
-	{
-		if (!Q_stricmp(splinePaths[i].point.name, match))
-		{
+	for (i = 0 ; i < numSplinePaths; i++) {
+		if (!Q_stricmp(splinePaths[i].point.name, match)) {
 			return &splinePaths[i];
 		}
 	}
@@ -4279,17 +3991,16 @@ splinePath_t *BG_Find_Spline(const char *match)
 	return NULL;
 }
 
-splinePath_t *BG_AddSplinePath(const char *name, const char *target, vec3_t origin)
-{
+splinePath_t *BG_AddSplinePath(const char *name, const char *target, vec3_t origin) {
 	splinePath_t *spline;
-	if (numSplinePaths >= MAX_SPLINE_PATHS)
-	{
+
+	if (numSplinePaths >= MAX_SPLINE_PATHS) {
 		Com_Error(ERR_DROP, "MAX SPLINES (%i) hit", MAX_SPLINE_PATHS);
 	}
 
 	spline = &splinePaths[numSplinePaths];
 
-	memset(spline, 0, sizeof(splinePath_t));
+	memset(spline, 0, sizeof (splinePath_t));
 
 	VectorCopy(origin, spline->point.origin);
 
@@ -4303,10 +4014,8 @@ splinePath_t *BG_AddSplinePath(const char *name, const char *target, vec3_t orig
 	return spline;
 }
 
-void BG_AddSplineControl(splinePath_t *spline, const char *name)
-{
-	if (spline->numControls >= MAX_SPLINE_CONTROLS)
-	{
+void BG_AddSplineControl(splinePath_t *spline, const char *name) {
+	if (spline->numControls >= MAX_SPLINE_CONTROLS) {
 		Com_Error(ERR_DROP, "MAX SPLINE CONTROLS (%i) hit", MAX_SPLINE_CONTROLS);
 	}
 
@@ -4315,8 +4024,7 @@ void BG_AddSplineControl(splinePath_t *spline, const char *name)
 	spline->numControls++;
 }
 
-float BG_SplineLength(splinePath_t *pSpline)
-{
+float BG_SplineLength(splinePath_t *pSpline) {
 	float  i;
 	float  granularity = 0.01f;
 	float  dist        = 0;
@@ -4324,14 +4032,12 @@ float BG_SplineLength(splinePath_t *pSpline)
 	vec3_t lastPoint = { 0 }; // Nico, uninitialized warning fix
 	vec3_t result;
 
-	for (i = 0; i <= 1.f; i += granularity)
-	{
+	for (i = 0; i <= 1.f; i += granularity) {
 		BG_CalculateSpline_r(pSpline, vec[0], vec[1], i);
 		VectorSubtract(vec[1], vec[0], result);
 		VectorMA(vec[0], i, result, result);
 
-		if (i != 0)
-		{
+		if (i != 0) {
 			VectorSubtract(result, lastPoint, vec[0]);
 			dist += VectorLength(vec[0]);
 		}
@@ -4342,38 +4048,30 @@ float BG_SplineLength(splinePath_t *pSpline)
 	return dist;
 }
 
-void BG_BuildSplinePaths()
-{
+void BG_BuildSplinePaths() {
 	int          i, j;
 	pathCorner_t *pnt;
 	splinePath_t *spline, *st;
 
-	for (i = 0; i < numSplinePaths; i++)
-	{
+	for (i = 0; i < numSplinePaths; i++) {
 		spline = &splinePaths[i];
 
-		if (*spline->strTarget)
-		{
-			for (j = 0; j < spline->numControls; j++)
-			{
+		if (*spline->strTarget) {
+			for (j = 0; j < spline->numControls; j++) {
 				pnt = BG_Find_PathCorner(spline->controls[j].name);
 
-				if (!pnt)
-				{
+				if (!pnt) {
 					Com_Printf("^1Cant find control point (%s) for spline (%s)\n", spline->controls[j].name, spline->point.name);
 					// Gordon: Just changing to a warning for now, easier for region compiles...
 					continue;
 
-				}
-				else
-				{
+				} else {
 					VectorCopy(pnt->origin, spline->controls[j].origin);
 				}
 			}
 
 			st = BG_Find_Spline(spline->strTarget);
-			if (!st)
-			{
+			if (!st) {
 				Com_Printf("^1Cant find target point (%s) for spline (%s)\n", spline->strTarget, spline->point.name);
 				// Gordon: Just changing to a warning for now, easier for region compiles...
 				continue;
@@ -4386,42 +4084,33 @@ void BG_BuildSplinePaths()
 		}
 	}
 
-	for (i = 0; i < numSplinePaths; i++)
-	{
+	for (i = 0; i < numSplinePaths; i++) {
 		spline = &splinePaths[i];
 
-		if (spline->next)
-		{
+		if (spline->next) {
 			spline->next->prev = spline;
 		}
 	}
 }
 
-splinePath_t *BG_GetSplineData(int number, qboolean *backwards)
-{
-	if (number < 0)
-	{
+splinePath_t *BG_GetSplineData(int number, qboolean *backwards) {
+	if (number < 0) {
 		*backwards = qtrue;
 		number     = -number;
-	}
-	else
-	{
+	} else {
 		*backwards = qfalse;
 	}
 	number--;
 
-	if (number < 0 || number >= numSplinePaths)
-	{
+	if (number < 0 || number >= numSplinePaths) {
 		return NULL;
 	}
 
 	return &splinePaths[number];
 }
 
-int BG_MaxAmmoForWeapon(weapon_t weaponNum)
-{
-	switch (weaponNum)
-	{
+int BG_MaxAmmoForWeapon(weapon_t weaponNum) {
+	switch (weaponNum) {
 	//case WP_KNIFE:
 	case WP_LUGER:
 	case WP_COLT:
@@ -4460,8 +4149,7 @@ int BG_MaxAmmoForWeapon(weapon_t weaponNum)
 BG_CreateRotationMatrix
 ================
 */
-void BG_CreateRotationMatrix(const vec3_t angles, vec3_t matrix[3])
-{
+void BG_CreateRotationMatrix(const vec3_t angles, vec3_t matrix[3]) {
 	AngleVectors(angles, matrix[0], matrix[1], matrix[2]);
 	VectorInverse(matrix[1]);
 }
@@ -4471,13 +4159,11 @@ void BG_CreateRotationMatrix(const vec3_t angles, vec3_t matrix[3])
 BG_TransposeMatrix
 ================
 */
-void BG_TransposeMatrix(const vec3_t matrix[3], vec3_t transpose[3])
-{
+void BG_TransposeMatrix(const vec3_t matrix[3], vec3_t transpose[3]) {
 	int i, j;
-	for (i = 0; i < 3; i++)
-	{
-		for (j = 0; j < 3; j++)
-		{
+
+	for (i = 0; i < 3; i++) {
+		for (j = 0; j < 3; j++) {
 			transpose[i][j] = matrix[j][i];
 		}
 	}
@@ -4488,8 +4174,7 @@ void BG_TransposeMatrix(const vec3_t matrix[3], vec3_t transpose[3])
 BG_RotatePoint
 ================
 */
-void BG_RotatePoint(vec3_t point, const vec3_t matrix[3])
-{
+void BG_RotatePoint(vec3_t point, const vec3_t matrix[3]) {
 	vec3_t tvec;
 
 	VectorCopy(point, tvec);
@@ -4505,10 +4190,8 @@ void BG_RotatePoint(vec3_t point, const vec3_t matrix[3])
 BG_AdjustAAGunMuzzleForBarrel
 ================
 */
-void BG_AdjustAAGunMuzzleForBarrel(vec_t *origin, vec_t *forward, vec_t *right, vec_t *up, int barrel)
-{
-	switch (barrel)
-	{
+void BG_AdjustAAGunMuzzleForBarrel(vec_t *origin, vec_t *forward, vec_t *right, vec_t *up, int barrel) {
+	switch (barrel) {
 	case 0:
 		VectorMA(origin, 64, forward, origin);
 		VectorMA(origin, 20, right, origin);
@@ -4537,15 +4220,14 @@ void BG_AdjustAAGunMuzzleForBarrel(vec_t *origin, vec_t *forward, vec_t *right, 
 PC_SourceWarning
 =================
 */
-void PC_SourceWarning(int handle, char *format, ...)
-{
+void PC_SourceWarning(int handle, char *format, ...) {
 	int         line;
 	char        filename[128];
 	va_list     argptr;
 	static char string[4096];
 
 	va_start(argptr, format);
-	Q_vsnprintf(string, sizeof(string), format, argptr);
+	Q_vsnprintf(string, sizeof (string), format, argptr);
 	va_end(argptr);
 
 	filename[0] = '\0';
@@ -4560,15 +4242,14 @@ void PC_SourceWarning(int handle, char *format, ...)
 PC_SourceError
 =================
 */
-void PC_SourceError(int handle, char *format, ...)
-{
+void PC_SourceError(int handle, char *format, ...) {
 	int         line;
 	char        filename[128];
 	va_list     argptr;
 	static char string[4096];
 
 	va_start(argptr, format);
-	Q_vsnprintf(string, sizeof(string), format, argptr);
+	Q_vsnprintf(string, sizeof (string), format, argptr);
 	va_end(argptr);
 
 	filename[0] = '\0';
@@ -4587,34 +4268,26 @@ void PC_SourceError(int handle, char *format, ...)
 PC_Float_Parse
 =================
 */
-qboolean PC_Float_Parse(int handle, float *f)
-{
+qboolean PC_Float_Parse(int handle, float *f) {
 	pc_token_t token;
 	int        negative = qfalse;
 
-	if (!trap_PC_ReadToken(handle, &token))
-	{
+	if (!trap_PC_ReadToken(handle, &token)) {
 		return qfalse;
 	}
-	if (token.string[0] == '-')
-	{
-		if (!trap_PC_ReadToken(handle, &token))
-		{
+	if (token.string[0] == '-') {
+		if (!trap_PC_ReadToken(handle, &token)) {
 			return qfalse;
 		}
 		negative = qtrue;
 	}
-	if (token.type != TT_NUMBER)
-	{
+	if (token.type != TT_NUMBER) {
 		PC_SourceError(handle, "expected float but found %s\n", token.string);
 		return qfalse;
 	}
-	if (negative)
-	{
+	if (negative) {
 		*f = -token.floatvalue;
-	}
-	else
-	{
+	} else {
 		*f = token.floatvalue;
 	}
 	return qtrue;
@@ -4625,15 +4298,12 @@ qboolean PC_Float_Parse(int handle, float *f)
 PC_Color_Parse
 =================
 */
-qboolean PC_Color_Parse(int handle, vec4_t *c)
-{
+qboolean PC_Color_Parse(int handle, vec4_t *c) {
 	int   i;
 	float f;
 
-	for (i = 0; i < 4; i++)
-	{
-		if (!PC_Float_Parse(handle, &f))
-		{
+	for (i = 0; i < 4; i++) {
+		if (!PC_Float_Parse(handle, &f)) {
 			return qfalse;
 		}
 		(*c)[i] = f;
@@ -4646,15 +4316,12 @@ qboolean PC_Color_Parse(int handle, vec4_t *c)
 PC_Vec_Parse
 =================
 */
-qboolean PC_Vec_Parse(int handle, vec3_t *c)
-{
+qboolean PC_Vec_Parse(int handle, vec3_t *c) {
 	int   i;
 	float f;
 
-	for (i = 0; i < 3; i++)
-	{
-		if (!PC_Float_Parse(handle, &f))
-		{
+	for (i = 0; i < 3; i++) {
+		if (!PC_Float_Parse(handle, &f)) {
 			return qfalse;
 		}
 		(*c)[i] = f;
@@ -4667,31 +4334,25 @@ qboolean PC_Vec_Parse(int handle, vec3_t *c)
 PC_Int_Parse
 =================
 */
-qboolean PC_Int_Parse(int handle, int *i)
-{
+qboolean PC_Int_Parse(int handle, int *i) {
 	pc_token_t token;
 	int        negative = qfalse;
 
-	if (!trap_PC_ReadToken(handle, &token))
-	{
+	if (!trap_PC_ReadToken(handle, &token)) {
 		return qfalse;
 	}
-	if (token.string[0] == '-')
-	{
-		if (!trap_PC_ReadToken(handle, &token))
-		{
+	if (token.string[0] == '-') {
+		if (!trap_PC_ReadToken(handle, &token)) {
 			return qfalse;
 		}
 		negative = qtrue;
 	}
-	if (token.type != TT_NUMBER)
-	{
+	if (token.type != TT_NUMBER) {
 		PC_SourceError(handle, "expected integer but found %s\n", token.string);
 		return qfalse;
 	}
 	*i = token.intvalue;
-	if (negative)
-	{
+	if (negative) {
 		*i = -*i;
 	}
 	return qtrue;
@@ -4703,12 +4364,11 @@ qboolean PC_Int_Parse(int handle, int *i)
 PC_String_Parse
 =================
 */
-const char *PC_String_Parse(int handle)
-{
+const char *PC_String_Parse(int handle) {
 	static char buf[MAX_TOKEN_CHARS];
 	pc_token_t  token;
-	if (!trap_PC_ReadToken(handle, &token))
-	{
+
+	if (!trap_PC_ReadToken(handle, &token)) {
 		return NULL;
 	}
 
@@ -4721,11 +4381,10 @@ const char *PC_String_Parse(int handle)
 PC_String_Parse
 =================
 */
-qboolean PC_String_Parse(int handle, const char **out)
-{
+qboolean PC_String_Parse(int handle, const char **out) {
 	pc_token_t token;
-	if (!trap_PC_ReadToken(handle, &token))
-	{
+
+	if (!trap_PC_ReadToken(handle, &token)) {
 		return qfalse;
 	}
 
@@ -4741,12 +4400,10 @@ PC_String_ParseNoAlloc
 Same as one above, but uses a static buff and not the string memory pool
 =================
 */
-qboolean PC_String_ParseNoAlloc(int handle, char *out, size_t size)
-{
+qboolean PC_String_ParseNoAlloc(int handle, char *out, size_t size) {
 	pc_token_t token;
 
-	if (!trap_PC_ReadToken(handle, &token))
-	{
+	if (!trap_PC_ReadToken(handle, &token)) {
 		return qfalse;
 	}
 
@@ -4775,16 +4432,14 @@ const voteType_t voteToggles[] =
 	{ "vote_allow_muting",     CV_SVF_MUTING     }
 };
 
-int numVotesAvailable = sizeof(voteToggles) / sizeof(voteType_t);
+int numVotesAvailable = sizeof (voteToggles) / sizeof (voteType_t);
 
 // consts to offset random reinforcement seeds
 const unsigned int aReinfSeeds[MAX_REINFSEEDS] = { 11, 3, 13, 7, 2, 5, 1, 17 };
 
 // Multiview: Convert weaponstate to simpler format
-int BG_simpleWeaponState(int ws)
-{
-	switch (ws)
-	{
+int BG_simpleWeaponState(int ws) {
+	switch (ws) {
 	case WEAPON_READY:
 	case WEAPON_READYING:
 	case WEAPON_RELAXING:
@@ -4807,35 +4462,28 @@ int BG_simpleWeaponState(int ws)
 // Multiview: Reduce hint info to 2 bits.  However, we can really
 // have up to 8 values, as some hints will have a 0 value for
 // cursorHintVal
-int BG_simpleHintsCollapse(int hint, int val)
-{
-	switch (hint)
-	{
+int BG_simpleHintsCollapse(int hint, int val) {
+	switch (hint) {
 	case HINT_DISARM:
-		if (val > 0)
-		{
+		if (val > 0) {
 			return(0);
 		}
 	case HINT_BUILD:
-		if (val > 0)
-		{
+		if (val > 0) {
 			return(1);
 		}
 	case HINT_BREAKABLE:
-		if (val == 0)
-		{
+		if (val == 0) {
 			return(1);
 		}
 	case HINT_DOOR_ROTATING:
 	case HINT_BUTTON:
 	case HINT_MG42:
-		if (val == 0)
-		{
+		if (val == 0) {
 			return(2);
 		}
 	case HINT_BREAKABLE_DYNAMITE:
-		if (val == 0)
-		{
+		if (val == 0) {
 			return(3);
 		}
 	}
@@ -4847,10 +4495,8 @@ int BG_simpleHintsCollapse(int hint, int val)
 // Multiview: Expand the hints.  Because we map a couple hints
 // into a single value, we can't replicate the proper hint back
 // in all cases.
-int BG_simpleHintsExpand(int hint, int val)
-{
-	switch (hint)
-	{
+int BG_simpleHintsExpand(int hint, int val) {
+	switch (hint) {
 	case 0: return((val >= 0) ? HINT_DISARM : 0);
 	case 1: return((val >= 0) ? HINT_BUILD : HINT_BREAKABLE);
 	case 2: return((val >= 0) ? HINT_BUILD : HINT_MG42);
@@ -4861,18 +4507,13 @@ int BG_simpleHintsExpand(int hint, int val)
 }
 
 // Real printable charater count
-int BG_drawStrlen(const char *str)
-{
+int BG_drawStrlen(const char *str) {
 	int cnt = 0;
 
-	while (*str)
-	{
-		if (Q_IsColorString(str))
-		{
+	while (*str) {
+		if (Q_IsColorString(str)) {
 			str += 2;
-		}
-		else
-		{
+		} else {
 			cnt++;
 			str++;
 		}
@@ -4888,19 +4529,15 @@ int BG_drawStrlen(const char *str)
 //		out_max = max size of target buffer
 //
 // Returns size of printable string
-int BG_colorstrncpyz(char *in, char *out, int str_max, int out_max)
-{
+int BG_colorstrncpyz(char *in, char *out, int str_max, int out_max) {
 	int       str_len = 0; // current printable string size
 	int       out_len = 0; // current true string size
 	const int in_len  = strlen(in);
 
 	out_max--;
-	while (*in && out_len < out_max && str_len < str_max)
-	{
-		if (*in == '^')
-		{
-			if (out_len + 2 >= in_len && out_len + 2 >= out_max)
-			{
+	while (*in && out_len < out_max && str_len < str_max) {
+		if (*in == '^') {
+			if (out_len + 2 >= in_len && out_len + 2 >= out_max) {
 				break;
 			}
 
@@ -4920,19 +4557,14 @@ int BG_colorstrncpyz(char *in, char *out, int str_max, int out_max)
 	return(str_len);
 }
 
-int BG_strRelPos(char *in, int index)
-{
+int BG_strRelPos(char *in, int index) {
 	int        cPrintable = 0;
 	const char *ref       = in;
 
-	while (*ref && cPrintable < index)
-	{
-		if (Q_IsColorString(ref))
-		{
+	while (*ref && cPrintable < index) {
+		if (Q_IsColorString(ref)) {
 			ref += 2;
-		}
-		else
-		{
+		} else {
 			ref++;
 			cPrintable++;
 		}
@@ -4943,23 +4575,16 @@ int BG_strRelPos(char *in, int index)
 
 // strip colors and control codes, copying up to dwMaxLength-1 "good" chars and nul-terminating
 // returns the length of the cleaned string
-int BG_cleanName(const char *pszIn, char *pszOut, int dwMaxLength, qboolean fCRLF)
-{
+int BG_cleanName(const char *pszIn, char *pszOut, int dwMaxLength, qboolean fCRLF) {
 	const char *pInCopy     = pszIn;
 	const char *pszOutStart = pszOut;
 
-	while (*pInCopy && (pszOut - pszOutStart < dwMaxLength - 1))
-	{
-		if (*pInCopy == '^')
-		{
+	while (*pInCopy && (pszOut - pszOutStart < dwMaxLength - 1)) {
+		if (*pInCopy == '^') {
 			pInCopy += ((pInCopy[1] == 0) ? 1 : 2);
-		}
-		else if ((*pInCopy < 32 && (!fCRLF || *pInCopy != '\n')) || (*pInCopy > 126))
-		{
+		} else if ((*pInCopy < 32 && (!fCRLF || *pInCopy != '\n')) || (*pInCopy > 126)) {
 			pInCopy++;
-		}
-		else
-		{
+		} else {
 			*pszOut++ = *pInCopy++;
 		}
 	}
@@ -4969,8 +4594,7 @@ int BG_cleanName(const char *pszIn, char *pszOut, int dwMaxLength, qboolean fCRL
 }
 
 // Only used locally
-typedef struct
-{
+typedef struct {
 	char *colorname;
 	vec4_t *color;
 } colorTable_t;
@@ -5001,8 +4625,7 @@ colorTable_t OSP_Colortable[] =
 };
 
 extern void trap_Cvar_Set(const char *var_name, const char *value);
-void BG_setCrosshair(char *colString, float *col, float alpha, char *cvarName)
-{
+void BG_setCrosshair(char *colString, float *col, float alpha, char *cvarName) {
 	char *s = colString;
 
 	col[0] = 1.0f;
@@ -5010,25 +4633,19 @@ void BG_setCrosshair(char *colString, float *col, float alpha, char *cvarName)
 	col[2] = 1.0f;
 	col[3] = (alpha > 1.0f) ? 1.0f : (alpha < 0.0f) ? 0.0f : alpha;
 
-	if (*s == '0' && (*(s + 1) == 'x' || *(s + 1) == 'X'))
-	{
+	if (*s == '0' && (*(s + 1) == 'x' || *(s + 1) == 'X')) {
 		s += 2;
 		//parse rrggbb
-		if (Q_IsHexColorString(s))
-		{
+		if (Q_IsHexColorString(s)) {
 			col[0] = ((float)(gethex(*(s)) * 16 + gethex(*(s + 1)))) / 255.00;
 			col[1] = ((float)(gethex(*(s + 2)) * 16 + gethex(*(s + 3)))) / 255.00;
 			col[2] = ((float)(gethex(*(s + 4)) * 16 + gethex(*(s + 5)))) / 255.00;
 			return;
 		}
-	}
-	else
-	{
+	} else {
 		int i = 0;
-		while (OSP_Colortable[i].colorname != NULL)
-		{
-			if (Q_stricmp(s, OSP_Colortable[i].colorname) == 0)
-			{
+		while (OSP_Colortable[i].colorname != NULL) {
+			if (Q_stricmp(s, OSP_Colortable[i].colorname) == 0) {
 				col[0] = (*OSP_Colortable[i].color)[0];
 				col[1] = (*OSP_Colortable[i].color)[1];
 				col[2] = (*OSP_Colortable[i].color)[2];
@@ -5041,8 +4658,7 @@ void BG_setCrosshair(char *colString, float *col, float alpha, char *cvarName)
 	trap_Cvar_Set(cvarName, "White");
 }
 
-qboolean BG_isLightWeaponSupportingFastReload(int weapon)
-{
+qboolean BG_isLightWeaponSupportingFastReload(int weapon) {
 	if (weapon == WP_LUGER ||
 	    weapon == WP_COLT ||
 	    weapon == WP_MP40 ||
@@ -5050,17 +4666,14 @@ qboolean BG_isLightWeaponSupportingFastReload(int weapon)
 	    weapon == WP_STEN ||
 	    weapon == WP_SILENCER ||
 	    weapon == WP_FG42 ||
-	    weapon == WP_SILENCED_COLT)
-	{
+	    weapon == WP_SILENCED_COLT) {
 		return qtrue;
 	}
 	return qfalse;
 }
 
-qboolean BG_IsScopedWeapon(int weapon)
-{
-	switch (weapon)
-	{
+qboolean BG_IsScopedWeapon(int weapon) {
+	switch (weapon) {
 	case WP_GARAND_SCOPE:
 	case WP_K43_SCOPE:
 	case WP_FG42SCOPE:
@@ -5070,16 +4683,14 @@ qboolean BG_IsScopedWeapon(int weapon)
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-typedef struct locInfo_s
-{
+typedef struct locInfo_s {
 	vec2_t gridStartCoord;
 	vec2_t gridStep;
 } locInfo_t;
 
 static locInfo_t locInfo;
 
-void BG_InitLocations(vec2_t world_mins, vec2_t world_maxs)
-{
+void BG_InitLocations(vec2_t world_mins, vec2_t world_maxs) {
 	// keep this in sync with CG_DrawGrid
 	locInfo.gridStep[0] = 1200.f;
 	locInfo.gridStep[1] = 1200.f;
@@ -5094,8 +4705,7 @@ void BG_InitLocations(vec2_t world_mins, vec2_t world_maxs)
 	locInfo.gridStartCoord[1] = world_mins[1] - .5f * ((((world_mins[1] - world_maxs[1]) / locInfo.gridStep[1]) - ((int)((world_mins[1] - world_maxs[1]) / locInfo.gridStep[1]))) * locInfo.gridStep[1]);
 }
 
-char *BG_GetLocationString(vec_t *pos)
-{
+char *BG_GetLocationString(vec_t *pos) {
 	static char coord[6];
 	int         x, y;
 
@@ -5104,32 +4714,26 @@ char *BG_GetLocationString(vec_t *pos)
 	x = (pos[0] - locInfo.gridStartCoord[0]) / locInfo.gridStep[0];
 	y = (locInfo.gridStartCoord[1] - pos[1]) / locInfo.gridStep[1];
 
-	if (x < 0)
-	{
+	if (x < 0) {
 		x = 0;
 	}
-	if (y < 0)
-	{
+	if (y < 0) {
 		y = 0;
 	}
 
-	Com_sprintf(coord, sizeof(coord), "%c,%i", 'A' + x, y);
+	Com_sprintf(coord, sizeof (coord), "%c,%i", 'A' + x, y);
 
 	return coord;
 }
 
-qboolean BG_BBoxCollision(vec3_t min1, vec3_t max1, vec3_t min2, vec3_t max2)
-{
+qboolean BG_BBoxCollision(vec3_t min1, vec3_t max1, vec3_t min2, vec3_t max2) {
 	int i;
 
-	for (i = 0; i < 3; i++)
-	{
-		if (min1[i] > max2[i])
-		{
+	for (i = 0; i < 3; i++) {
+		if (min1[i] > max2[i]) {
 			return qfalse;
 		}
-		if (min2[i] > max1[i])
-		{
+		if (min2[i] > max1[i]) {
 			return qfalse;
 		}
 	}
@@ -5149,50 +4753,40 @@ weapon_t bg_heavyWeapons[NUM_HEAVY_WEAPONS] =
 
 /////////////////////////
 
-int BG_FootstepForSurface(int surfaceFlags)
-{
-	if (surfaceFlags & SURF_NOSTEPS)
-	{
+int BG_FootstepForSurface(int surfaceFlags) {
+	if (surfaceFlags & SURF_NOSTEPS) {
 		return FOOTSTEP_TOTAL;
 	}
 
-	if (surfaceFlags & SURF_METAL)
-	{
+	if (surfaceFlags & SURF_METAL) {
 		return FOOTSTEP_METAL;
 	}
 
-	if (surfaceFlags & SURF_WOOD)
-	{
+	if (surfaceFlags & SURF_WOOD) {
 		return FOOTSTEP_WOOD;
 	}
 
-	if (surfaceFlags & SURF_GRASS)
-	{
+	if (surfaceFlags & SURF_GRASS) {
 		return FOOTSTEP_GRASS;
 	}
 
-	if (surfaceFlags & SURF_GRAVEL)
-	{
+	if (surfaceFlags & SURF_GRAVEL) {
 		return FOOTSTEP_GRAVEL;
 	}
 
-	if (surfaceFlags & SURF_ROOF)
-	{
+	if (surfaceFlags & SURF_ROOF) {
 		return FOOTSTEP_ROOF;
 	}
 
-	if (surfaceFlags & SURF_SNOW)
-	{
+	if (surfaceFlags & SURF_SNOW) {
 		return FOOTSTEP_SNOW;
 	}
 
-	if (surfaceFlags & SURF_CARPET)
-	{
+	if (surfaceFlags & SURF_CARPET) {
 		return FOOTSTEP_CARPET;
 	}
 
-	if (surfaceFlags & SURF_SPLASH)
-	{
+	if (surfaceFlags & SURF_SPLASH) {
 		return FOOTSTEP_SPLASH;
 	}
 
@@ -5248,14 +4842,12 @@ Special wrapper function for Microsoft's broken _vsnprintf() function.
 MinGW comes with its own snprintf() which is not broken.
 =============
 */
-int Q_vsnprintf(char *str, size_t size, const char *format, va_list ap)
-{
+int Q_vsnprintf(char *str, size_t size, const char *format, va_list ap) {
 	int retval;
 
 	retval = _vsnprintf(str, size, format, ap);
 
-	if (retval < 0 || retval == (int)size)
-	{
+	if (retval < 0 || retval == (int)size) {
 		// Microsoft doesn't adhere to the C99 standard of vsnprintf,
 		// which states that the return value must be the number of
 		// bytes written if the output string had sufficient length.
@@ -5275,15 +4867,13 @@ int Q_vsnprintf(char *str, size_t size, const char *format, va_list ap)
 Q_vsnprintf
 =============
 */
-int Q_vsnprintf(char *str, size_t size, const char *format, va_list ap)
-{
+int Q_vsnprintf(char *str, size_t size, const char *format, va_list ap) {
 	int ret;
 
 	ret = vsnprintf(str, size, format, ap);
 
 	str[size - 1] = '\0';
-	if (ret < 0 || ret >= (int)size)
-	{
+	if (ret < 0 || ret >= (int)size) {
 		return -1;
 	}
 	return ret;
@@ -5295,11 +4885,9 @@ int Q_vsnprintf(char *str, size_t size, const char *format, va_list ap)
 BG_TouchJumpPad
 ========================
 */
-void BG_TouchJumpPad(playerState_t *ps, entityState_t *jumppad)
-{
+void BG_TouchJumpPad(playerState_t *ps, entityState_t *jumppad) {
 	// spectators don't use jumppads
-	if (ps->pm_type != PM_NORMAL)
-	{
+	if (ps->pm_type != PM_NORMAL) {
 		return;
 	}
 
@@ -5308,25 +4896,21 @@ void BG_TouchJumpPad(playerState_t *ps, entityState_t *jumppad)
 }
 
 // Nico, velocity jumppads support
-void BG_TouchVelocityJumpPad(playerState_t *ps, entityState_t *jumppad, float speed, int count)
-{
+void BG_TouchVelocityJumpPad(playerState_t *ps, entityState_t *jumppad, float speed, int count) {
 	vec3_t velocity;
 
-	if (ps->pm_type != PM_NORMAL)
-	{
+	if (ps->pm_type != PM_NORMAL) {
 		return;
 	}
 
 	VectorCopy(ps->velocity, velocity);
 
-	if (VectorLength(velocity) == 0)
-	{
+	if (VectorLength(velocity) == 0) {
 		return;
 	}
 
 	// Nico, check (x,y) velocity
-	if (velocity[0] == 0 && velocity[1] == 0)
-	{
+	if (velocity[0] == 0 && velocity[1] == 0) {
 		return;
 	}
 

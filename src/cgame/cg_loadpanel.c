@@ -210,27 +210,23 @@ panel_button_t *loadpanelButtons[] =
 	NULL,
 };
 
-void CG_DrawConnectScreen(qboolean interactive, qboolean forcerefresh)
-{
+void CG_DrawConnectScreen(qboolean interactive, qboolean forcerefresh) {
 	static qboolean inside = qfalse;
 	char            buffer[1024];
 
 	bg_loadscreeninteractive = interactive;
 
-	if (!DC)
-	{
+	if (!DC) {
 		return;
 	}
 
-	if (inside)
-	{
+	if (inside) {
 		return;
 	}
 
 	inside = qtrue;
 
-	if (!bg_loadscreeninited)
-	{
+	if (!bg_loadscreeninited) {
 		trap_Cvar_Set("ui_connecting", "0");
 
 		DC->registerFont("ariblk", 27, &bg_loadscreenfont1);
@@ -251,14 +247,12 @@ void CG_DrawConnectScreen(qboolean interactive, qboolean forcerefresh)
 
 	BG_PanelButtonsRender(loadpanelButtons);
 
-	if (interactive)
-	{
+	if (interactive) {
 		DC->drawHandlePic(DC->cursorx, DC->cursory, 32, 32, DC->Assets.cursor);
 	}
 
-	DC->getConfigString(CS_SERVERINFO, buffer, sizeof(buffer));
-	if (*buffer)
-	{
+	DC->getConfigString(CS_SERVERINFO, buffer, sizeof (buffer));
+	if (*buffer) {
 		const char *str;
 		float      x, y;
 		int        i;
@@ -273,11 +267,9 @@ void CG_DrawConnectScreen(qboolean interactive, qboolean forcerefresh)
 
 
 		y += 14;
-		for (i = 0; i < MAX_MOTDLINES; i++)
-		{
+		for (i = 0; i < MAX_MOTDLINES; i++) {
 			str = CG_ConfigString(CS_CUSTMOTD + i);
-			if (!str || !*str)
-			{
+			if (!str || !*str) {
 				break;
 			}
 
@@ -289,21 +281,17 @@ void CG_DrawConnectScreen(qboolean interactive, qboolean forcerefresh)
 		y = 417;
 
 		str = Info_ValueForKey(buffer, "g_antilag");
-		if (str && *str && atoi(str))
-		{
+		if (str && *str && atoi(str)) {
 			x = 575;
 			CG_DrawPic(x, y, 16, 16, bg_filter_al);
 		}
 	}
 
-	if (*cgs.rawmapname)
-	{
-		if (!bg_mappic)
-		{
+	if (*cgs.rawmapname) {
+		if (!bg_mappic) {
 			bg_mappic = DC->registerShaderNoMip(va("levelshots/%s", cgs.rawmapname));
 
-			if (!bg_mappic)
-			{
+			if (!bg_mappic) {
 				bg_mappic = DC->registerShaderNoMip("levelshots/unknownmap");
 			}
 		}
@@ -317,97 +305,81 @@ void CG_DrawConnectScreen(qboolean interactive, qboolean forcerefresh)
 		CG_DrawPic(16 + 80, 2 + 6, 20, 20, bg_pin);
 	}
 
-	if (forcerefresh)
-	{
+	if (forcerefresh) {
 		DC->updateScreen();
 	}
 
 	inside = qfalse;
 }
 
-void CG_LoadPanel_RenderLoadingBar(panel_button_t *button)
-{
+void CG_LoadPanel_RenderLoadingBar(panel_button_t *button) {
 	int   hunkused, hunkexpected;
 	float frac;
 
 	trap_GetHunkData(&hunkused, &hunkexpected);
 
-	if (hunkexpected <= 0)
-	{
+	if (hunkexpected <= 0) {
 		return;
 	}
 
 	frac = hunkused / (float)hunkexpected;
-	if (frac < 0.f)
-	{
+	if (frac < 0.f) {
 		frac = 0.f;
 	}
-	if (frac > 1.f)
-	{
+	if (frac > 1.f) {
 		frac = 1.f;
 	}
 
 	CG_DrawPicST(button->rect.x, button->rect.y, button->rect.w * frac, button->rect.h, 0, 0, frac, 1, button->hShaderNormal);
 }
 
-void CG_LoadPanel_RenderMissionDescriptionText(panel_button_t *button)
-{
+void CG_LoadPanel_RenderMissionDescriptionText(panel_button_t *button) {
 	const char *cs;
 	char       *s, *p;
 	char       buffer[1024];
 	float      y;
 
-	if (!cgs.arenaInfoLoaded)
-	{
+	if (!cgs.arenaInfoLoaded) {
 		return;
 	}
 
 	cs = cgs.arenaData.description;
 
-	Q_strncpyz(buffer, cs, sizeof(buffer));
+	Q_strncpyz(buffer, cs, sizeof (buffer));
 	s = strchr(buffer, '*');
-	while (s)
-	{
+	while (s) {
 		*s = '\n';
 		s  = strchr(buffer, '*');
 	}
 
-	BG_FitTextToWidth_Ext(buffer, button->font->scalex, button->rect.w - 16, sizeof(buffer), button->font->font);
+	BG_FitTextToWidth_Ext(buffer, button->font->scalex, button->rect.w - 16, sizeof (buffer), button->font->font);
 
 	y = button->rect.y + 12;
 
 	s = p = buffer;
-	while (*p)
-	{
-		if (*p == '\n')
-		{
+	while (*p) {
+		if (*p == '\n') {
 			*p++ = '\0';
 			DC->drawTextExt(button->rect.x + 4, y, button->font->scalex, button->font->scaley, button->font->colour, s, 0, 0, 0, button->font->font);
 			y += 8;
 			s  = p;
-		}
-		else
-		{
+		} else {
 			p++;
 		}
 	}
 }
 
-void CG_LoadPanel_KeyHandling(int key, qboolean down)
-{
-	if (BG_PanelButtonsKeyEvent(key, down, loadpanelButtons))
-	{
+void CG_LoadPanel_KeyHandling(int key, qboolean down) {
+	if (BG_PanelButtonsKeyEvent(key, down, loadpanelButtons)) {
 		return;
 	}
 }
 
-qboolean CG_LoadPanel_ContinueButtonKeyDown(panel_button_t *button, int key)
-{
+qboolean CG_LoadPanel_ContinueButtonKeyDown(panel_button_t *button, int key) {
 	// Nico, silent GCC
 	button = button;
 
-	if (key == K_MOUSE1)
-	{
+	if (key == K_MOUSE1) {
 		CG_EventHandling(CGAME_EVENT_GAMEVIEW, qfalse);
 		return qtrue;
 	}
@@ -416,19 +388,15 @@ qboolean CG_LoadPanel_ContinueButtonKeyDown(panel_button_t *button, int key)
 }
 
 
-void CG_LoadPanel_DrawPin(const char *text, float px, float py, float sx, float sy, qhandle_t shader, float pinsize, float backheight)
-{
+void CG_LoadPanel_DrawPin(const char *text, float px, float py, float sx, float sy, qhandle_t shader, float pinsize, float backheight) {
 	float  x, y, w, h;
 	vec4_t colourFadedBlack = { 0.f, 0.f, 0.f, 0.4f };
 
 	w = DC->textWidthExt(text, sx, 0, &bg_loadscreenfont2);
-	if (px + 30 + w > 440)
-	{
+	if (px + 30 + w > 440) {
 		DC->fillRect(px - w - 28 + 2, py - (backheight / 2.f) + 2, 28 + w, backheight, colourFadedBlack);
 		DC->fillRect(px - w - 28, py - (backheight / 2.f), 28 + w, backheight, colorBlack);
-	}
-	else
-	{
+	} else {
 		DC->fillRect(px + 2, py - (backheight / 2.f) + 2, 28 + w, backheight, colourFadedBlack);
 		DC->fillRect(px, py - (backheight / 2.f), 28 + w, backheight, colorBlack);
 	}
@@ -440,25 +408,20 @@ void CG_LoadPanel_DrawPin(const char *text, float px, float py, float sx, float 
 
 	DC->drawHandlePic(x, y, w, h, shader);
 
-	if (px + 30 + w > 440)
-	{
+	if (px + 30 + w > 440) {
 		DC->drawTextExt(px - 12 - w - 28, py + 4, sx, sy, colorWhite, text, 0, 0, 0, &bg_loadscreenfont2);
-	}
-	else
-	{
+	} else {
 		DC->drawTextExt(px + 16, py + 4, sx, sy, colorWhite, text, 0, 0, 0, &bg_loadscreenfont2);
 	}
 }
 
-void CG_LoadPanel_RenderCampaignPins(panel_button_t *button)
-{
+void CG_LoadPanel_RenderCampaignPins(panel_button_t *button) {
 	float px, py;
 
 	// Nico, silent GCC
 	button = button;
 
-	if (!cgs.arenaInfoLoaded)
-	{
+	if (!cgs.arenaInfoLoaded) {
 		return;
 	}
 

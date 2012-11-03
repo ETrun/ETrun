@@ -5,8 +5,7 @@
  *
  * @author Nico
  */
-void CG_DrawCheckpoints(void)
-{
+void CG_DrawCheckpoints(void) {
 	char   status[128];
 	int    i     = 0;
 	int    j     = 0;
@@ -17,24 +16,20 @@ void CG_DrawCheckpoints(void)
 	vec4_t color;
 
 	// Nico, checkpoints
-	if (cg_drawCheckPoints.integer)
-	{
+	if (cg_drawCheckPoints.integer) {
 
 		// Nico, printing position
 		x = cg_checkPointsX.value;
 		y = cg_checkPointsY.value;
 
 		// Nico, check cg_maxCheckPoints
-		if (!cg_maxCheckPoints.integer || cg_maxCheckPoints.integer < 0)
-		{
+		if (!cg_maxCheckPoints.integer || cg_maxCheckPoints.integer < 0) {
 			cg_maxCheckPoints.integer = 5;
 		}
 
 		// Nico, print check points if any and respect the printing limit (cg_maxCheckPoints)
-		if (cg.timerunCheckPointChecked > 0)
-		{
-			for (i = cg.timerunCheckPointChecked - 1, j = 0; i >= 0 && j < cg_maxCheckPoints.integer; --i, ++j)
-			{
+		if (cg.timerunCheckPointChecked > 0) {
+			for (i = cg.timerunCheckPointChecked - 1, j = 0; i >= 0 && j < cg_maxCheckPoints.integer; --i, ++j) {
 				cmil  = cg.timerunCheckPointTime[i];
 				cmin  = cmil / 60000;
 				cmil -= cmin * 60000;
@@ -51,26 +46,25 @@ void CG_DrawCheckpoints(void)
 				Vector4Set(color, colorWhite[0], colorWhite[1], colorWhite[2], colorWhite[3]);
 
 				// Nico, print checkpoints
-				switch (cg.timerunCheckStatus[i])
-				{
+				switch (cg.timerunCheckStatus[i]) {
 				case 0:
-					Com_sprintf(status, sizeof(status), "%s", va("%02d:%02d.%03d", cmin, csec, cmil));
+					Com_sprintf(status, sizeof (status), "%s", va("%02d:%02d.%03d", cmin, csec, cmil));
 					break;
 
 				case 1:
-					Com_sprintf(status, sizeof(status), "%s", va("%02d:%02d.%03d", cdmin, cdsec, cdmil));
+					Com_sprintf(status, sizeof (status), "%s", va("%02d:%02d.%03d", cdmin, cdsec, cdmil));
 					break;
 
 				case 2:
 					// Nico, faster check point time
 					Vector4Set(color, colorGreen[0], colorGreen[1], colorGreen[2], colorGreen[3]);
-					Com_sprintf(status, sizeof(status), "%s", va("-%02d:%02d.%03d", cdmin, cdsec, cdmil));
+					Com_sprintf(status, sizeof (status), "%s", va("-%02d:%02d.%03d", cdmin, cdsec, cdmil));
 					break;
 
 				case 3:
 					// Nico, slower check point time
 					Vector4Set(color, colorRed[0], colorRed[1], colorRed[2], colorRed[3]);
-					Com_sprintf(status, sizeof(status), "%s", va("+%02d:%02d.%03d", cdmin, cdsec, cdmil));
+					Com_sprintf(status, sizeof (status), "%s", va("+%02d:%02d.%03d", cdmin, cdsec, cdmil));
 					break;
 				}
 
@@ -90,15 +84,13 @@ void CG_DrawCheckpoints(void)
  *
  * @author Nico
  */
-void CG_DrawSpeedMeter(void)
-{
+void CG_DrawSpeedMeter(void) {
 	char         status[128];
 	float        sizex, sizey;
 	int          x, y, w;
 	static vec_t speed;
 
-	if (!cg_drawSpeedMeter.integer)
-	{
+	if (!cg_drawSpeedMeter.integer) {
 		return;
 	}
 
@@ -109,7 +101,7 @@ void CG_DrawSpeedMeter(void)
 	x = cg_speedMeterX.integer;
 	y = cg_speedMeterY.integer;
 
-	Com_sprintf(status, sizeof(status), "%.0f", speed);
+	Com_sprintf(status, sizeof (status), "%.0f", speed);
 
 	w = CG_Text_Width_Ext(status, sizex, sizey, &cgs.media.limboFont1) / 2;
 
@@ -121,8 +113,7 @@ void CG_DrawSpeedMeter(void)
  *
  * @author Nico
  */
-void CG_DrawOB(void)
-{
+void CG_DrawOB(void) {
 	double  a, b, c;
 	float   psec;
 	int     gravity;
@@ -136,8 +127,7 @@ void CG_DrawOB(void)
 	float   n2;
 	int     n;
 
-	if (!cg_drawOB.integer || cg_thirdPerson.integer || physics.integer & PHYSICS_NO_OVERBOUNCE)
-	{
+	if (!cg_drawOB.integer || cg_thirdPerson.integer || physics.integer & PHYSICS_NO_OVERBOUNCE) {
 		return;
 	}
 
@@ -159,14 +149,12 @@ void CG_DrawOB(void)
 	         cg.predictedPlayerState.clientNum, CONTENTS_SOLID);
 
 	// we didn't hit anything
-	if (trace.fraction == 1.0)
-	{
+	if (trace.fraction == 1.0) {
 		return;
 	}
 
 	// not a floor
-	if (trace.plane.type != 2)
-	{
+	if (trace.plane.type != 2) {
 		return;
 	}
 
@@ -184,14 +172,12 @@ void CG_DrawOB(void)
 	n  = floor(n2);
 	hn = h0 + psec * n * (v0 - gravity * psec / 2 - (n - 1) * rintv / 2);
 	//CG_Printf("h0: %f, v0: %f, n: %d, hn: %f, t: %f\n", h0, v0, n, hn, t);
-	if (n && hn < t + 0.25 && hn > t)
-	{
+	if (n && hn < t + 0.25 && hn > t) {
 		CG_DrawStringExt(320, 220, "F", colorWhite, qfalse, qtrue,
 		                 TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 0);
 	}
 
-	if (cg.predictedPlayerState.groundEntityNum != ENTITYNUM_NONE)
-	{
+	if (cg.predictedPlayerState.groundEntityNum != ENTITYNUM_NONE) {
 		// jump ob
 		v0 += 270; // JUMP_VELOCITY
 		b   = psec * (v0 - gravity * psec / 2 + rintv / 2);
@@ -202,8 +188,7 @@ void CG_DrawOB(void)
 		n  = floor(n2);
 		hn = h0 + psec * n * (v0 - gravity * psec / 2 - (n - 1) * rintv / 2);
 		//CG_Printf("h0: %f, v0: %f, n: %d, hn: %f, t: %f\n", h0, v0, n, hn, t);
-		if (hn < t + 0.25 && hn > t)
-		{
+		if (hn < t + 0.25 && hn > t) {
 			CG_DrawStringExt(330, 220, "J", colorWhite, qfalse, qtrue,
 			                 TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 0);
 		}
@@ -215,8 +200,7 @@ void CG_DrawOB(void)
  *
  * @author Nico
  */
-void CG_DrawTimer(void)
-{
+void CG_DrawTimer(void) {
 	char       status[128];
 	int        min                = 0, sec = 0, milli = 0;
 	int        dmin               = 0, dsec = 0, dmilli = 0;
@@ -229,8 +213,7 @@ void CG_DrawTimer(void)
 	static int needsReset = 0;
 
 	// Nico, if level is not a timer
-	if (!isTimerun.integer)
-	{
+	if (!isTimerun.integer) {
 		return;
 	}
 
@@ -238,14 +221,12 @@ void CG_DrawTimer(void)
 
 	// Nico, check if timer needs reset
 	// note: this should be move somewhere else
-	if (!cg.timerunActive)
-	{
+	if (!cg.timerunActive) {
 		// Nico, timer will be reseted next time timerun becomes active
 		needsReset = 1;
 	}
 
-	if (needsReset && cg.timerunActive)
-	{
+	if (needsReset && cg.timerunActive) {
 		// Nico, reset timer
 		cg.timerunFinishedTime = 0;
 		needsReset             = 0;
@@ -253,8 +234,7 @@ void CG_DrawTimer(void)
 	//
 
 	// Nico, if cg_drawTimer is 0
-	if (!cg_drawTimer.integer)
-	{
+	if (!cg_drawTimer.integer) {
 		return;
 	}
 
@@ -265,18 +245,13 @@ void CG_DrawTimer(void)
 	// Nico, get fixed timerun start time
 	startTime = cg.timerunStartTime - 500;
 
-	if (cg.timerunActive)
-	{
+	if (cg.timerunActive) {
 		// Nico, timerun active, run not finished yet
 		milli = currentTimerunTime = cg.time - startTime;
-	}
-	else if (cg.timerunFinishedTime)
-	{
+	} else if (cg.timerunFinishedTime) {
 		// Nico, timerun inactive, run finished
 		milli = currentTimerunTime = cg.timerunFinishedTime;
-	}
-	else
-	{
+	} else {
 		// Nico, timerun not active, run not finished
 		milli = currentTimerunTime;
 	}
@@ -290,12 +265,10 @@ void CG_DrawTimer(void)
 	// Nico, set timer default color
 	Vector4Set(color, colorWhite[0], colorWhite[1], colorWhite[2], colorWhite[3]);
 
-	if (cg.timerunFinishedTime)
-	{
+	if (cg.timerunFinishedTime) {
 		// Nico, timerun finished
 		// Compare with client rec
-		if (cg.timerunBestTime[timerunNum] > 0 && cg.timerunLastTime[timerunNum] != cg.timerunBestTime[timerunNum])
-		{
+		if (cg.timerunBestTime[timerunNum] > 0 && cg.timerunLastTime[timerunNum] != cg.timerunBestTime[timerunNum]) {
 			// Nico, did a different time, compute the delta
 			dmilli  = abs(cg.timerunLastTime[timerunNum] - cg.timerunBestTime[timerunNum]);
 			dmin    = dmilli / 60000;
@@ -303,41 +276,31 @@ void CG_DrawTimer(void)
 			dsec    = dmilli / 1000;
 			dmilli -= dsec * 1000;
 
-			if (cg.timerunLastTime[timerunNum] < cg.timerunBestTime[timerunNum])
-			{
+			if (cg.timerunLastTime[timerunNum] < cg.timerunBestTime[timerunNum]) {
 				// Nico, did a better time
 				Vector4Set(color, colorGreen[0], colorGreen[1], colorGreen[2], colorGreen[3]);
-				Com_sprintf(status, sizeof(status), "%s", va("%02d:%02d.%03d (-%02d:%02d.%03d)", min, sec, milli, dmin, dsec, dmilli));
-			}
-			else
-			{
+				Com_sprintf(status, sizeof (status), "%s", va("%02d:%02d.%03d (-%02d:%02d.%03d)", min, sec, milli, dmin, dsec, dmilli));
+			} else {
 				// Nico, did a slower time
 				Vector4Set(color, colorRed[0], colorRed[1], colorRed[2], colorRed[3]);
-				Com_sprintf(status, sizeof(status), "%s", va("%02d:%02d.%03d (+%02d:%02d.%03d)", min, sec, milli, dmin, dsec, dmilli));
+				Com_sprintf(status, sizeof (status), "%s", va("%02d:%02d.%03d (+%02d:%02d.%03d)", min, sec, milli, dmin, dsec, dmilli));
 			}
-		}
-		else if (cg.timerunBestTime[timerunNum] > 0)
-		{
+		} else if (cg.timerunBestTime[timerunNum] > 0) {
 			// Nico, did the same time
-			Com_sprintf(status, sizeof(status), "%s", va("%02d:%02d.%03d (+00:00.000)", min, sec, milli));
-		}
-		else
-		{
+			Com_sprintf(status, sizeof (status), "%s", va("%02d:%02d.%03d (+00:00.000)", min, sec, milli));
+		} else {
 			// Nico, first time
-			Com_sprintf(status, sizeof(status), "%s", va("%02d:%02d.%03d", min, sec, milli));
+			Com_sprintf(status, sizeof (status), "%s", va("%02d:%02d.%03d", min, sec, milli));
 		}
-	}
-	else
-	{
+	} else {
 		// Nico, timerun not finished yet
 
 		// Nico, you won't beat the rec this time, turn timer to red color
-		if (cg.timerunBestTime[timerunNum] > 0 && currentTimerunTime > cg.timerunBestTime[timerunNum])
-		{
+		if (cg.timerunBestTime[timerunNum] > 0 && currentTimerunTime > cg.timerunBestTime[timerunNum]) {
 			Vector4Set(color, colorRed[0], colorRed[1], colorRed[2], colorRed[3]);
 		}
 
-		Com_sprintf(status, sizeof(status), "%s", va("%02d:%02d.%03d", min, sec, milli));
+		Com_sprintf(status, sizeof (status), "%s", va("%02d:%02d.%03d", min, sec, milli));
 	}
 
 	// Nico, print the timer
@@ -350,16 +313,13 @@ void CG_DrawTimer(void)
 #define SCREEN_CENTER_Y ((SCREEN_HEIGHT / 2) - 1)
 #define CGAZ3_ANG 20
 
-static void PutPixel(float x, float y)
-{
-	if (x > 0 && x < SCREEN_WIDTH && y > 0 && y < SCREEN_HEIGHT)
-	{
+static void PutPixel(float x, float y) {
+	if (x > 0 && x < SCREEN_WIDTH && y > 0 && y < SCREEN_HEIGHT) {
 		CG_DrawPic(x, y, 1, 1, cgs.media.whiteShader);
 	}
 }
 
-static void DrawLine(float x1, float y1, float x2, float y2, vec4_t color)
-{
+static void DrawLine(float x1, float y1, float x2, float y2, vec4_t color) {
 	float len, stepx, stepy;
 	float i;
 
@@ -368,8 +328,7 @@ static void DrawLine(float x1, float y1, float x2, float y2, vec4_t color)
 	len   = sqrt(len);
 	stepx = (x2 - x1) / len;
 	stepy = (y2 - y1) / len;
-	for (i = 0; i < len; i++)
-	{
+	for (i = 0; i < len; i++) {
 		PutPixel(x1, y1);
 		x1 += stepx;
 		y1 += stepy;
@@ -385,8 +344,7 @@ extern float pm_friction;
 // Nico, AP accel
 extern float pm_accelerate_AP;
 
-typedef struct
-{
+typedef struct {
 	vec3_t forward, right, up;
 	float frametime;
 
@@ -412,8 +370,7 @@ extern pml_t pml;
  *
  * @author Nico
  */
-void CG_DrawCGaz(void)
-{
+void CG_DrawCGaz(void) {
 	float vel_angle; // absolute velocity angle
 	float vel_relang; // relative velocity angle to viewangles[1]
 	float per_angle;
@@ -436,15 +393,13 @@ void CG_DrawCGaz(void)
 	playerState_t *ps;
 
 	// Nico, if cg_drawCGaz is 0
-	if (!cg_drawCGaz.integer)
-	{
+	if (!cg_drawCGaz.integer) {
 		return;
 	}
 
 	ps = &cg.predictedPlayerState;
 
-	if (ps->persistant[PERS_TEAM] == TEAM_SPECTATOR)
-	{
+	if (ps->persistant[PERS_TEAM] == TEAM_SPECTATOR) {
 		return;
 	}
 
@@ -455,26 +410,22 @@ void CG_DrawCGaz(void)
 
 	// for a simplicity water, ladder etc. calculations are omitted
 	// only air, ground and ice movement is important
-	if (pml.walking && !(pml.groundTrace.surfaceFlags & SURF_SLICK))
-	{
+	if (pml.walking && !(pml.groundTrace.surfaceFlags & SURF_SLICK)) {
 		// apply friction
 		float speed, newspeed, control;
 		float drop;
 
 		speed = VectorLength(vel);
-		if (speed > 0)
-		{
+		if (speed > 0) {
 			drop = 0;
 
 			// if getting knocked back, no friction
-			if (!(ps->pm_flags & PMF_TIME_KNOCKBACK))
-			{
+			if (!(ps->pm_flags & PMF_TIME_KNOCKBACK)) {
 				control = speed < pm_stopspeed ? pm_stopspeed : speed;
 				drop   += control * pm_friction * pmove_msec.integer / 1000;
 			}
 			newspeed = speed - drop;
-			if (newspeed < 0)
-			{
+			if (newspeed < 0) {
 				newspeed = 0;
 			}
 			newspeed /= speed;
@@ -484,17 +435,12 @@ void CG_DrawCGaz(void)
 		// on ground
 
 		// Nico, AP or stock accel?
-		if (physics.integer == PHYSICS_MODE_AP_NO_OB || physics.integer == PHYSICS_MODE_AP_OB)
-		{
+		if (physics.integer == PHYSICS_MODE_AP_NO_OB || physics.integer == PHYSICS_MODE_AP_OB) {
 			accel = pm_accelerate_AP;
-		}
-		else
-		{
+		} else {
 			accel = pm_accelerate;
 		}
-	}
-	else
-	{
+	} else {
 		// in air or on ice, no friction
 		accel = pm_airaccelerate;
 	}
@@ -505,12 +451,9 @@ void CG_DrawCGaz(void)
 	// based on PM_CmdScale from bg_pmove.c
 	scale     = ps->stats[STAT_USERCMD_BUTTONS] & (BUTTON_SPRINT << 8) ? ps->sprintSpeedScale : ps->runSpeedScale;
 	per_angle = (ps->speed - accel) / vel_size * scale;
-	if (per_angle < 1)
-	{
+	if (per_angle < 1) {
 		per_angle = RAD2DEG(acos(per_angle));
-	}
-	else
-	{
+	} else {
 		per_angle = ps->viewangles[YAW];
 	}
 
@@ -518,26 +461,19 @@ void CG_DrawCGaz(void)
 	vel_relang = AngleNormalize180(ps->viewangles[YAW] - vel_angle);
 
 	// parse usercmd
-	if (ps->stats[STAT_USERCMD_MOVE] & UMOVE_FORWARD)
-	{
+	if (ps->stats[STAT_USERCMD_MOVE] & UMOVE_FORWARD) {
 		forward = 127;
-	}
-	else if (ps->stats[STAT_USERCMD_MOVE] & UMOVE_BACKWARD)
-	{
+	} else if (ps->stats[STAT_USERCMD_MOVE] & UMOVE_BACKWARD) {
 		forward = -128;
 	}
 
-	if (ps->stats[STAT_USERCMD_MOVE] & UMOVE_RIGHT)
-	{
+	if (ps->stats[STAT_USERCMD_MOVE] & UMOVE_RIGHT) {
 		right = 127;
-	}
-	else if (ps->stats[STAT_USERCMD_MOVE] & UMOVE_LEFT)
-	{
+	} else if (ps->stats[STAT_USERCMD_MOVE] & UMOVE_LEFT) {
 		right = -128;
 	}
 
-	if (cg_drawCGaz.integer == 1)
-	{
+	if (cg_drawCGaz.integer == 1) {
 		VectorCopy(colorBlue, color);
 		CG_FillRect(SCREEN_CENTER_X - w / 2, y, w, h, color);
 		CG_FillRect(SCREEN_CENTER_X - w / 2, y, 1, h, colorWhite);
@@ -546,37 +482,28 @@ void CG_DrawCGaz(void)
 		CG_FillRect(SCREEN_CENTER_X + w / 4, y, 1, h, colorWhite);
 		CG_FillRect(SCREEN_CENTER_X + w / 2, y, 1, h, colorWhite);
 
-		if (vel_size < ps->speed * scale)
-		{
+		if (vel_size < ps->speed * scale) {
 			return;
 		}
 
 		// velocity
-		if (vel_relang > -90 && vel_relang < 90)
-		{
+		if (vel_relang > -90 && vel_relang < 90) {
 			CG_FillRect(SCREEN_CENTER_X + w * vel_relang / 180, y, 1, h, colorOrange);
 		}
 
 		// left/right perfect strafe
-		if (vel_relang > 0)
-		{
+		if (vel_relang > 0) {
 			ang = AngleNormalize180(vel_relang - per_angle);
-			if (ang > -90 && ang < 90)
-			{
+			if (ang > -90 && ang < 90) {
 				CG_FillRect(SCREEN_CENTER_X + w * ang / 180, y, 1, h, colorGreen);
 			}
-		}
-		else
-		{
+		} else {
 			ang = AngleNormalize180(vel_relang + per_angle);
-			if (ang > -90 && ang < 90)
-			{
+			if (ang > -90 && ang < 90) {
 				CG_FillRect(SCREEN_CENTER_X + w * ang / 180, y, 1, h, colorGreen);
 			}
 		}
-	}
-	else if (cg_drawCGaz.integer == 2)
-	{
+	} else if (cg_drawCGaz.integer == 2) {
 		// CGaz 2
 		vel_relang = DEG2RAD(vel_relang);
 		per_angle  = DEG2RAD(per_angle);
@@ -588,8 +515,7 @@ void CG_DrawCGaz(void)
 		DrawLine(SCREEN_CENTER_X, SCREEN_CENTER_Y,
 		         SCREEN_CENTER_X + vel_size * sin(vel_relang),
 		         SCREEN_CENTER_Y - vel_size * cos(vel_relang), colorRed);
-		if (vel_size > SCREEN_HEIGHT / 2)
-		{
+		if (vel_size > SCREEN_HEIGHT / 2) {
 			vel_size = SCREEN_HEIGHT / 2;
 		}
 		vel_size /= 2;
@@ -599,9 +525,7 @@ void CG_DrawCGaz(void)
 		DrawLine(SCREEN_CENTER_X, SCREEN_CENTER_Y,
 		         SCREEN_CENTER_X + vel_size * sin(vel_relang - per_angle),
 		         SCREEN_CENTER_Y - vel_size * cos(vel_relang - per_angle), colorRed);
-	}
-	else if (cg_drawCGaz.integer == 3)
-	{
+	} else if (cg_drawCGaz.integer == 3) {
 		accel_angle = atan2(-right, forward);
 		accel_angle = AngleNormalize180(ps->viewangles[YAW] + RAD2DEG(accel_angle));
 
@@ -609,23 +533,18 @@ void CG_DrawCGaz(void)
 		CG_FillRect(SCREEN_CENTER_X, y, 1, h, colorWhite);
 		CG_FillRect(SCREEN_CENTER_X + w / 2, y, 1, h, colorWhite);
 
-		if (vel_size < ps->speed * scale)
-		{
+		if (vel_size < ps->speed * scale) {
 			return;
 		}
 
 		// first case (consider left strafe)
 		ang = AngleNormalize180(vel_angle + per_angle - accel_angle);
-		if (ang > -CGAZ3_ANG && ang < CGAZ3_ANG)
-		{
+		if (ang > -CGAZ3_ANG && ang < CGAZ3_ANG) {
 			// acceleration "should be on the left side" from velocity
-			if (ang < 0)
-			{
+			if (ang < 0) {
 				VectorCopy(colorGreen, color);
 				CG_FillRect(SCREEN_CENTER_X + w * ang / (2 * CGAZ3_ANG), y, -w * ang / (2 * CGAZ3_ANG), h, color);
-			}
-			else
-			{
+			} else {
 				VectorCopy(colorRed, color);
 				CG_FillRect(SCREEN_CENTER_X, y, w * ang / (2 * CGAZ3_ANG), h, color);
 			}
@@ -633,29 +552,22 @@ void CG_DrawCGaz(void)
 		}
 		// second case (consider right strafe)
 		ang = AngleNormalize180(vel_angle - per_angle - accel_angle);
-		if (ang > -CGAZ3_ANG && ang < CGAZ3_ANG)
-		{
+		if (ang > -CGAZ3_ANG && ang < CGAZ3_ANG) {
 			// acceleration "should be on the right side" from velocity
-			if (ang > 0)
-			{
+			if (ang > 0) {
 				VectorCopy(colorGreen, color);
 				CG_FillRect(SCREEN_CENTER_X, y, w * ang / (2 * CGAZ3_ANG), h, color);
-			}
-			else
-			{
+			} else {
 				VectorCopy(colorRed, color);
 				CG_FillRect(SCREEN_CENTER_X + w * ang / (2 * CGAZ3_ANG), y, -w * ang / (2 * CGAZ3_ANG), h, color);
 			}
 			return;
 		}
-	}
-	else if (cg_drawCGaz.integer == 4)
-	{
+	} else if (cg_drawCGaz.integer == 4) {
 		accel_angle = atan2(-right, forward);
 		accel_angle = AngleNormalize180(ps->viewangles[YAW] + RAD2DEG(accel_angle));
 
-		if (vel_size < ps->speed * scale)
-		{
+		if (vel_size < ps->speed * scale) {
 			return;
 		}
 
@@ -669,8 +581,7 @@ void CG_DrawCGaz(void)
 		// FIXME show proper outside border where you stop accelerating
 		// first case (consider left strafe)
 		ang = AngleNormalize180(vel_angle + per_angle - accel_angle);
-		if (ang < 90 && ang > -90)
-		{
+		if (ang < 90 && ang > -90) {
 			// acceleration "should be on the left side" from velocity
 			CG_FillRect(SCREEN_CENTER_X + w * ang / 180, y, w / 2, h, color);
 			CG_FillRect(SCREEN_CENTER_X + w * ang / 180, y, 1, h, colorGreen);
@@ -679,8 +590,7 @@ void CG_DrawCGaz(void)
 		}
 		// second case (consider right strafe)
 		ang = AngleNormalize180(vel_angle - per_angle - accel_angle);
-		if (ang < 90 && ang > -90)
-		{
+		if (ang < 90 && ang > -90) {
 			// acceleration "should be on the right side" from velocity
 			CG_FillRect(SCREEN_CENTER_X + w * ang / 180 - w / 2, y, w / 2, h, color);
 			CG_FillRect(SCREEN_CENTER_X + w * ang / 180, y, 1, h, colorGreen);
@@ -694,31 +604,25 @@ void CG_DrawCGaz(void)
  *
  * @author Nico
  */
-void CG_DrawKeys(void)
-{
+void CG_DrawKeys(void) {
 	playerState_t *ps;
 	float         x, y, size;
 	int           i;
 	int           skew;
 
-	if (cg_drawKeys.integer <= 0)
-	{
+	if (cg_drawKeys.integer <= 0) {
 		return;
 	}
 
 	// some checks
-	if (cg_keysX.value < 0 || cg_keysY.value < 0 || cg_keysX.value > SCREEN_WIDTH || cg_keysY.value > SCREEN_HEIGHT)
-	{
+	if (cg_keysX.value < 0 || cg_keysY.value < 0 || cg_keysX.value > SCREEN_WIDTH || cg_keysY.value > SCREEN_HEIGHT) {
 		return;
 	}
 
 	// Dini, add in here for any other keysets with skew effect or related.
-	if (cg_drawKeys.value == 1)
-	{
+	if (cg_drawKeys.value == 1) {
 		skew = cg_keysSize.value / 18;
-	}
-	else
-	{
+	} else {
 		skew = 0;
 	}
 
@@ -733,34 +637,25 @@ void CG_DrawKeys(void)
 	// sprint (upper left)
 	x = cg_keysX.value + 2 * skew;
 	y = cg_keysY.value;
-	if (ps->stats[STAT_USERCMD_BUTTONS] & (BUTTON_SPRINT << 8))
-	{
+	if (ps->stats[STAT_USERCMD_BUTTONS] & (BUTTON_SPRINT << 8)) {
 		CG_DrawPic(x, y, size, size, cgs.media.keys[i].SprintPressedShader);
-	}
-	else
-	{
+	} else {
 		CG_DrawPic(x, y, size, size, cgs.media.keys[i].SprintNotPressedShader);
 	}
 
 	// forward
 	x += size;
-	if (ps->stats[STAT_USERCMD_MOVE] & UMOVE_FORWARD)
-	{
+	if (ps->stats[STAT_USERCMD_MOVE] & UMOVE_FORWARD) {
 		CG_DrawPic(x, y, size, size, cgs.media.keys[i].ForwardPressedShader);
-	}
-	else
-	{
+	} else {
 		CG_DrawPic(x, y, size, size, cgs.media.keys[i].ForwardNotPressedShader);
 	}
 
 	// jump (upper right)
 	x += size;
-	if (ps->stats[STAT_USERCMD_MOVE] & UMOVE_UP)
-	{
+	if (ps->stats[STAT_USERCMD_MOVE] & UMOVE_UP) {
 		CG_DrawPic(x, y, size, size, cgs.media.keys[i].JumpPressedShader);
-	}
-	else
-	{
+	} else {
 		CG_DrawPic(x, y, size, size, cgs.media.keys[i].JumpNotPressedShader);
 	}
 
@@ -768,23 +663,17 @@ void CG_DrawKeys(void)
 	// left
 	x  = cg_keysX.value + skew;
 	y += size;
-	if (ps->stats[STAT_USERCMD_MOVE] & UMOVE_LEFT)
-	{
+	if (ps->stats[STAT_USERCMD_MOVE] & UMOVE_LEFT) {
 		CG_DrawPic(x, y, size, size, cgs.media.keys[i].LeftPressedShader);
-	}
-	else
-	{
+	} else {
 		CG_DrawPic(x, y, size, size, cgs.media.keys[i].LeftNotPressedShader);
 	}
 
 	// right
 	x += 2 * size;
-	if (ps->stats[STAT_USERCMD_MOVE] & UMOVE_RIGHT)
-	{
+	if (ps->stats[STAT_USERCMD_MOVE] & UMOVE_RIGHT) {
 		CG_DrawPic(x, y, size, size, cgs.media.keys[i].RightPressedShader);
-	}
-	else
-	{
+	} else {
 		CG_DrawPic(x, y, size, size, cgs.media.keys[i].RightNotPressedShader);
 	}
 
@@ -792,34 +681,25 @@ void CG_DrawKeys(void)
 	x  = cg_keysX.value;
 	y += size;
 	// prone (bottom left)
-	if (ps->stats[STAT_USERCMD_BUTTONS] & WBUTTON_PRONE)
-	{
+	if (ps->stats[STAT_USERCMD_BUTTONS] & WBUTTON_PRONE) {
 		CG_DrawPic(x, y, size, size, cgs.media.keys[i].PronePressedShader);
-	}
-	else
-	{
+	} else {
 		CG_DrawPic(x, y, size, size, cgs.media.keys[i].ProneNotPressedShader);
 	}
 
 	// backward
 	x += size;
-	if (ps->stats[STAT_USERCMD_MOVE] & UMOVE_BACKWARD)
-	{
+	if (ps->stats[STAT_USERCMD_MOVE] & UMOVE_BACKWARD) {
 		CG_DrawPic(x, y, size, size, cgs.media.keys[i].BackwardPressedShader);
-	}
-	else
-	{
+	} else {
 		CG_DrawPic(x, y, size, size, cgs.media.keys[i].BackwardNotPressedShader);
 	}
 
 	// crouch (bottom right)
 	x += size;
-	if (ps->stats[STAT_USERCMD_MOVE] & UMOVE_DOWN)
-	{
+	if (ps->stats[STAT_USERCMD_MOVE] & UMOVE_DOWN) {
 		CG_DrawPic(x, y, size, size, cgs.media.keys[i].CrouchPressedShader);
-	}
-	else
-	{
+	} else {
 		CG_DrawPic(x, y, size, size, cgs.media.keys[i].CrouchNotPressedShader);
 	}
 }
@@ -829,8 +709,7 @@ void CG_DrawKeys(void)
  *
  * @author Nico
  */
-void CG_DrawClock(float x, float y, qboolean shadowed)
-{
+void CG_DrawClock(float x, float y, qboolean shadowed) {
 	char    displayTime[18] = { 0 };
 	qtime_t tm;
 	vec4_t  clr = { 1.0f, 1.0f, 1.0f, 0.8f };
@@ -838,21 +717,18 @@ void CG_DrawClock(float x, float y, qboolean shadowed)
 	trap_RealTime(&tm);
 	displayTime[0] = '\0';
 
-	Q_strcat(displayTime, sizeof(displayTime),
+	Q_strcat(displayTime, sizeof (displayTime),
 	         va("Time: %d:%02d",
 	            ((tm.tm_hour == 0 || tm.tm_hour == 12) ? 12 : tm.tm_hour % 12),
 	            tm.tm_min));
-	Q_strcat(displayTime, sizeof(displayTime),
+	Q_strcat(displayTime, sizeof (displayTime),
 	         va(":%02d", tm.tm_sec));
-	Q_strcat(displayTime, sizeof(displayTime),
+	Q_strcat(displayTime, sizeof (displayTime),
 	         (tm.tm_hour < 12) ? " am" : " pm");
 
-	if (shadowed == qtrue)
-	{
+	if (shadowed == qtrue) {
 		CG_Text_Paint_Ext(x, y, 0.15, 0.15, clr, displayTime, 0, 24, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont2);
-	}
-	else
-	{
+	} else {
 		CG_Text_Paint_Ext(x, y, 0.15, 0.15, clr, displayTime, 0, 24, 0, &cgs.media.limboFont2);
 	}
 }
@@ -863,8 +739,7 @@ void CG_DrawClock(float x, float y, qboolean shadowed)
  *
  * @author Nico
  */
-void CG_DrawBannerPrint(void)
-{
+void CG_DrawBannerPrint(void) {
 	char  *start    = NULL;
 	int   l         = 0;
 	int   x         = 0;
@@ -877,16 +752,14 @@ void CG_DrawBannerPrint(void)
 	int   charHeight;
 	int   bannerShowTime;
 
-	if (!cg.bannerPrintTime)
-	{
+	if (!cg.bannerPrintTime) {
 		return;
 	}
 
 	bannerShowTime = 10000;
 
 	color = CG_FadeColor(cg.bannerPrintTime, bannerShowTime);
-	if (!color)
-	{
+	if (!color) {
 		cg.bannerPrintTime = 0;
 		return;
 	}
@@ -900,19 +773,15 @@ void CG_DrawBannerPrint(void)
 	y          = 20;
 	charHeight = CG_Text_Height_Ext("A", sizey, 0, &cgs.media.limboFont2);
 
-	while (1)
-	{
+	while (1) {
 		char linebuffer[1024];
 		char colorchar = lastcolor;
 
-		for (l = 0; l < (int)strlen(cg.bannerPrint); ++l)
-		{
-			if (!start[l] || start[l] == '\n')
-			{
+		for (l = 0; l < (int)strlen(cg.bannerPrint); ++l) {
+			if (!start[l] || start[l] == '\n') {
 				break;
 			}
-			if (Q_IsColorString(&start[l]))
-			{
+			if (Q_IsColorString(&start[l])) {
 				lastcolor = start[l + 1];
 			}
 			linebuffer[l] = start[l];
@@ -927,12 +796,10 @@ void CG_DrawBannerPrint(void)
 
 		y += charHeight * 2;
 
-		while (*start && *start != '\n')
-		{
+		while (*start && *start != '\n') {
 			start++;
 		}
-		if (!*start)
-		{
+		if (!*start) {
 			break;
 		}
 		start++;

@@ -36,12 +36,10 @@ CG_LoadingString
 
 ======================
 */
-void CG_LoadingString(const char *s)
-{
-	Q_strncpyz(cg.infoScreenText, s, sizeof(cg.infoScreenText));
+void CG_LoadingString(const char *s) {
+	Q_strncpyz(cg.infoScreenText, s, sizeof (cg.infoScreenText));
 
-	if (s && *s)
-	{
+	if (s && *s) {
 		CG_Printf(va("LOADING... %s\n", s));      //----(SA)	added so you can see from the console what's going on
 
 	}
@@ -54,18 +52,15 @@ CG_DrawInformation
 Draw all the status / pacifier stuff during level loading
 ====================
 */
-void CG_DrawInformation(qboolean forcerefresh)
-{
+void CG_DrawInformation(qboolean forcerefresh) {
 	static int lastcalled = 0;
 
-	if (lastcalled && (trap_Milliseconds() - lastcalled < 500))
-	{
+	if (lastcalled && (trap_Milliseconds() - lastcalled < 500)) {
 		return;
 	}
 	lastcalled = trap_Milliseconds();
 
-	if (cg.snap)
-	{
+	if (cg.snap) {
 		return;     // we are in the world, no need to draw information
 	}
 
@@ -73,34 +68,25 @@ void CG_DrawInformation(qboolean forcerefresh)
 }
 
 
-void CG_ShowHelp_On(int *status)
-{
+void CG_ShowHelp_On(int *status) {
 	int milli = trap_Milliseconds();
 
-	if (*status == SHOW_SHUTDOWN && milli < cg.fadeTime)
-	{
+	if (*status == SHOW_SHUTDOWN && milli < cg.fadeTime) {
 		cg.fadeTime = 2 * milli + STATS_FADE_TIME - cg.fadeTime;
-	}
-	else if (*status != SHOW_ON)
-	{
+	} else if (*status != SHOW_ON) {
 		cg.fadeTime = milli + STATS_FADE_TIME;
 	}
 
 	*status = SHOW_ON;
 }
 
-void CG_ShowHelp_Off(int *status)
-{
-	if (*status != SHOW_OFF)
-	{
+void CG_ShowHelp_Off(int *status) {
+	if (*status != SHOW_OFF) {
 		int milli = trap_Milliseconds();
 
-		if (milli < cg.fadeTime)
-		{
+		if (milli < cg.fadeTime) {
 			cg.fadeTime = 2 * milli + STATS_FADE_TIME - cg.fadeTime;
-		}
-		else
-		{
+		} else {
 			cg.fadeTime = milli + STATS_FADE_TIME;
 		}
 
@@ -110,46 +96,36 @@ void CG_ShowHelp_Off(int *status)
 
 
 // Demo playback key catcher support
-void CG_DemoClick(int key, qboolean down)
-{
+void CG_DemoClick(int key, qboolean down) {
 	int milli = trap_Milliseconds();
 
 	// Avoid active console keypress issues
-	if (!down && !cgs.fKeyPressed[key])
-	{
+	if (!down && !cgs.fKeyPressed[key]) {
 		return;
 	}
 
 	cgs.fKeyPressed[key] = down;
 
-	switch (key)
-	{
+	switch (key) {
 	case K_ESCAPE:
 		CG_ShowHelp_Off(&cg.demohelpWindow);
 		CG_keyOff_f();
 		return;
 
 	case K_TAB:
-		if (down)
-		{
+		if (down) {
 			CG_ScoresDown_f();
-		}
-		else
-		{
+		} else {
 			CG_ScoresUp_f();
 		}
 		return;
 
 	// Help info
 	case K_BACKSPACE:
-		if (!down)
-		{
-			if (cg.demohelpWindow != SHOW_ON)
-			{
+		if (!down) {
+			if (cg.demohelpWindow != SHOW_ON) {
 				CG_ShowHelp_On(&cg.demohelpWindow);
-			}
-			else
-			{
+			} else {
 				CG_ShowHelp_Off(&cg.demohelpWindow);
 			}
 		}
@@ -157,14 +133,12 @@ void CG_DemoClick(int key, qboolean down)
 
 	// Screenshot keys
 	case K_F11:
-		if (!down)
-		{
+		if (!down) {
 			trap_SendConsoleCommand(va("screenshot%s\n", ((cg_useScreenshotJPEG.integer) ? "JPEG" : "")));
 		}
 		return;
 	case K_F12:
-		if (!down)
-		{
+		if (!down) {
 			CG_autoScreenShot_f();
 		}
 		return;
@@ -188,14 +162,12 @@ void CG_DemoClick(int key, qboolean down)
 
 	// Third-person controls
 	case K_ENTER:
-		if (!down)
-		{
+		if (!down) {
 			trap_Cvar_Set("cg_thirdperson", ((cg_thirdPerson.integer == 0) ? "1" : "0"));
 		}
 		return;
 	case K_UPARROW:
-		if (milli > cgs.thirdpersonUpdate)
-		{
+		if (milli > cgs.thirdpersonUpdate) {
 			float range = cg_thirdPersonRange.value;
 
 			cgs.thirdpersonUpdate = milli + DEMO_THIRDPERSONUPDATE;
@@ -204,8 +176,7 @@ void CG_DemoClick(int key, qboolean down)
 		}
 		return;
 	case K_DOWNARROW:
-		if (milli > cgs.thirdpersonUpdate)
-		{
+		if (milli > cgs.thirdpersonUpdate) {
 			float range = cg_thirdPersonRange.value;
 
 			cgs.thirdpersonUpdate = milli + DEMO_THIRDPERSONUPDATE;
@@ -214,26 +185,22 @@ void CG_DemoClick(int key, qboolean down)
 		}
 		return;
 	case K_RIGHTARROW:
-		if (milli > cgs.thirdpersonUpdate)
-		{
+		if (milli > cgs.thirdpersonUpdate) {
 			float angle = cg_thirdPersonAngle.value - DEMO_ANGLEDELTA;
 
 			cgs.thirdpersonUpdate = milli + DEMO_THIRDPERSONUPDATE;
-			if (angle < 0)
-			{
+			if (angle < 0) {
 				angle += 360.0f;
 			}
 			trap_Cvar_Set("cg_thirdPersonAngle", va("%f", angle));
 		}
 		return;
 	case K_LEFTARROW:
-		if (milli > cgs.thirdpersonUpdate)
-		{
+		if (milli > cgs.thirdpersonUpdate) {
 			float angle = cg_thirdPersonAngle.value + DEMO_ANGLEDELTA;
 
 			cgs.thirdpersonUpdate = milli + DEMO_THIRDPERSONUPDATE;
-			if (angle >= 360.0f)
-			{
+			if (angle >= 360.0f) {
 				angle -= 360.0f;
 			}
 			trap_Cvar_Set("cg_thirdPersonAngle", va("%f", angle));
@@ -244,26 +211,20 @@ void CG_DemoClick(int key, qboolean down)
 	case K_KP_5:
 	case K_KP_INS:
 	case K_SPACE:
-		if (!down)
-		{
+		if (!down) {
 			trap_Cvar_Set("timescale", "1");
 			cgs.timescaleUpdate = cg.time + 1000;
 		}
 		return;
 	case K_KP_DOWNARROW:
-		if (!down)
-		{
+		if (!down) {
 			float tscale = cg_timescale.value;
 
-			if (tscale <= 1.1f)
-			{
-				if (tscale > 0.1f)
-				{
+			if (tscale <= 1.1f) {
+				if (tscale > 0.1f) {
 					tscale -= 0.1f;
 				}
-			}
-			else
-			{
+			} else {
 				tscale -= 1.0;
 			}
 			trap_Cvar_Set("timescale", va("%f", tscale));
@@ -271,40 +232,33 @@ void CG_DemoClick(int key, qboolean down)
 		}
 		return;
 	case K_MWHEELDOWN:
-		if (!cgs.fKeyPressed[K_SHIFT])
-		{
-			if (!down)
-			{
+		if (!cgs.fKeyPressed[K_SHIFT]) {
+			if (!down) {
 				CG_ZoomOut_f();
 			}
 			return;
 		}       // Roll over into timescale changes
 	case K_KP_LEFTARROW:
-		if (!down && cg_timescale.value > 0.1f)
-		{
+		if (!down && cg_timescale.value > 0.1f) {
 			trap_Cvar_Set("timescale", va("%f", cg_timescale.value - 0.1f));
 			cgs.timescaleUpdate = cg.time + (int)(1000.0f * cg_timescale.value - 0.1f);
 		}
 		return;
 	case K_KP_UPARROW:
-		if (!down)
-		{
+		if (!down) {
 			trap_Cvar_Set("timescale", va("%f", cg_timescale.value + 1.0f));
 			cgs.timescaleUpdate = cg.time + (int)(1000.0f * cg_timescale.value + 1.0f);
 		}
 		return;
 	case K_MWHEELUP:
-		if (!cgs.fKeyPressed[K_SHIFT])
-		{
-			if (!down)
-			{
+		if (!cgs.fKeyPressed[K_SHIFT]) {
+			if (!down) {
 				CG_ZoomIn_f();
 			}
 			return;
 		}       // Roll over into timescale changes
 	case K_KP_RIGHTARROW:
-		if (!down)
-		{
+		if (!down) {
 			trap_Cvar_Set("timescale", va("%f", cg_timescale.value + 0.1f));
 			cgs.timescaleUpdate = cg.time + (int)(1000.0f * cg_timescale.value + 0.1f);
 		}
@@ -312,52 +266,37 @@ void CG_DemoClick(int key, qboolean down)
 
 	// AVI recording controls
 	case K_F1:
-		if (down)
-		{
+		if (down) {
 			cgs.aviDemoRate = demo_avifpsF1.integer;
-		}
-		else
-		{
+		} else {
 			trap_Cvar_Set("cl_avidemo", demo_avifpsF1.string);
 		}
 		return;
 	case K_F2:
-		if (down)
-		{
+		if (down) {
 			cgs.aviDemoRate = demo_avifpsF2.integer;
-		}
-		else
-		{
+		} else {
 			trap_Cvar_Set("cl_avidemo", demo_avifpsF2.string);
 		}
 		return;
 	case K_F3:
-		if (down)
-		{
+		if (down) {
 			cgs.aviDemoRate = demo_avifpsF3.integer;
-		}
-		else
-		{
+		} else {
 			trap_Cvar_Set("cl_avidemo", demo_avifpsF3.string);
 		}
 		return;
 	case K_F4:
-		if (down)
-		{
+		if (down) {
 			cgs.aviDemoRate = demo_avifpsF4.integer;
-		}
-		else
-		{
+		} else {
 			trap_Cvar_Set("cl_avidemo", demo_avifpsF4.string);
 		}
 		return;
 	case K_F5:
-		if (down)
-		{
+		if (down) {
 			cgs.aviDemoRate = demo_avifpsF5.integer;
-		}
-		else
-		{
+		} else {
 			trap_Cvar_Set("cl_avidemo", demo_avifpsF5.string);
 		}
 		return;
@@ -384,15 +323,11 @@ void CG_DemoClick(int key, qboolean down)
 #define DH_Y    -60     // spacing from bottom
 #define DH_W    148
 
-void CG_DemoHelpDraw()
-{
-	if (cg.demohelpWindow == SHOW_OFF)
-	{
+void CG_DemoHelpDraw() {
+	if (cg.demohelpWindow == SHOW_OFF) {
 		return;
 
-	}
-	else
-	{
+	} else {
 		const char *help[] =
 		{
 			"^nTAB       ^mscores",
@@ -441,16 +376,14 @@ void CG_DemoHelpDraw()
 		x = 640 + DH_X - w;
 		h = 2 + tSpacing + 2 +                                  // Header
 		    2 + 1 +
-		    tSpacing * (2 + (sizeof(help)) / sizeof(char *)) +
+		    tSpacing * (2 + (sizeof (help)) / sizeof (char *)) +
 		    2;
 
 		// Fade-in effects
-		if (diff > 0.0f)
-		{
+		if (diff > 0.0f) {
 			float scale = (diff / STATS_FADE_TIME);
 
-			if (cg.demohelpWindow == SHOW_ON)
-			{
+			if (cg.demohelpWindow == SHOW_ON) {
 				scale = 1.0f - scale;
 			}
 
@@ -463,14 +396,10 @@ void CG_DemoHelpDraw()
 
 			y += (DH_Y - h) * scale;
 
-		}
-		else if (cg.demohelpWindow == SHOW_SHUTDOWN)
-		{
+		} else if (cg.demohelpWindow == SHOW_SHUTDOWN) {
 			cg.demohelpWindow = SHOW_OFF;
 			return;
-		}
-		else
-		{
+		} else {
 			y += DH_Y - h;
 		}
 
@@ -492,11 +421,9 @@ void CG_DemoHelpDraw()
 
 
 		// Control info
-		for (i = 0; i < (int)(sizeof(help) / sizeof(char *)); i++)
-		{
+		for (i = 0; i < (int)(sizeof (help) / sizeof (char *)); i++) {
 			y += tSpacing;
-			if (help[i] != NULL)
-			{
+			if (help[i] != NULL) {
 				CG_Text_Paint_Ext(x, y, tScale, tScale, tColor, (char *)help[i], 0.0f, 0, tStyle, tFont);
 			}
 		}
@@ -506,20 +433,16 @@ void CG_DemoHelpDraw()
 	}
 }
 
-char *CG_getBindKeyName(const char *cmd, char *buf, int len)
-{
+char *CG_getBindKeyName(const char *cmd, char *buf, int len) {
 	int j;
 
-	for (j = 0; j < 256; j++)
-	{
+	for (j = 0; j < 256; j++) {
 		trap_Key_GetBindingBuf(j, buf, len);
-		if (*buf == 0)
-		{
+		if (*buf == 0) {
 			continue;
 		}
 
-		if (!Q_stricmp(buf, cmd))
-		{
+		if (!Q_stricmp(buf, cmd)) {
 			trap_Key_KeynumToStringBuf(j, buf, MAX_STRING_TOKENS);
 			Q_strupr(buf);
 			return(buf);
@@ -530,8 +453,7 @@ char *CG_getBindKeyName(const char *cmd, char *buf, int len)
 	return(buf);
 }
 
-typedef struct
-{
+typedef struct {
 	char *cmd;
 	char *info;
 } helpType_t;
@@ -540,15 +462,11 @@ typedef struct
 #define SH_X    2       // spacing from left
 #define SH_Y    155     // spacing from top
 
-void CG_SpecHelpDraw()
-{
-	if (cg.spechelpWindow == SHOW_OFF)
-	{
+void CG_SpecHelpDraw() {
+	if (cg.spechelpWindow == SHOW_OFF) {
 		return;
 
-	}
-	else
-	{
+	} else {
 		const helpType_t help[] =
 		{
 			{ "+zoom",    "hold for pointer"   },
@@ -591,32 +509,24 @@ void CG_SpecHelpDraw()
 
 		// FIXME: Should compute all this stuff beforehand
 		// Compute required width
-		for (i = 0; i < (int)(sizeof(help) / sizeof(helpType_t)); i++)
-		{
-			if (help[i].cmd != NULL)
-			{
-				len = strlen(CG_getBindKeyName(help[i].cmd, buf, sizeof(buf)));
-				if (len > maxlen)
-				{
+		for (i = 0; i < (int)(sizeof (help) / sizeof (helpType_t)); i++) {
+			if (help[i].cmd != NULL) {
+				len = strlen(CG_getBindKeyName(help[i].cmd, buf, sizeof (buf)));
+				if (len > maxlen) {
 					maxlen = len;
 				}
 			}
 		}
 
-		Q_strncpyz(format, va("^2%%%ds ^N%%s", maxlen), sizeof(format));
-		for (i = 0, maxlen = 0; i < (int)(sizeof(help) / sizeof(helpType_t)); i++)
-		{
-			if (help[i].cmd != NULL)
-			{
-				lines[i] = va(format, CG_getBindKeyName(help[i].cmd, buf, sizeof(buf)), help[i].info);
+		Q_strncpyz(format, va("^2%%%ds ^N%%s", maxlen), sizeof (format));
+		for (i = 0, maxlen = 0; i < (int)(sizeof (help) / sizeof (helpType_t)); i++) {
+			if (help[i].cmd != NULL) {
+				lines[i] = va(format, CG_getBindKeyName(help[i].cmd, buf, sizeof (buf)), help[i].info);
 				len      = CG_Text_Width_Ext(lines[i], tScale, 0, FONT_TEXT);
-				if (len > maxlen)
-				{
+				if (len > maxlen) {
 					maxlen = len;
 				}
-			}
-			else
-			{
+			} else {
 				lines[i] = NULL;
 			}
 		}
@@ -626,16 +536,14 @@ void CG_SpecHelpDraw()
 		y = SH_Y;
 		h = 2 + tSpacing + 2 +                                  // Header
 		    2 + 1 +
-		    tSpacing * (sizeof(help) / sizeof(helpType_t)) +
+		    tSpacing * (sizeof (help) / sizeof (helpType_t)) +
 		    2;
 
 		// Fade-in effects
-		if (diff > 0.0f)
-		{
+		if (diff > 0.0f) {
 			float scale = (diff / STATS_FADE_TIME);
 
-			if (cg.spechelpWindow == SHOW_ON)
-			{
+			if (cg.spechelpWindow == SHOW_ON) {
 				scale = 1.0f - scale;
 			}
 
@@ -648,9 +556,7 @@ void CG_SpecHelpDraw()
 
 			x -= w * (1.0f - scale);
 
-		}
-		else if (cg.spechelpWindow == SHOW_SHUTDOWN)
-		{
+		} else if (cg.spechelpWindow == SHOW_SHUTDOWN) {
 			cg.spechelpWindow = SHOW_OFF;
 			return;
 		}
@@ -673,11 +579,9 @@ void CG_SpecHelpDraw()
 
 
 		// Control info
-		for (i = 0; i < (int)(sizeof(help) / sizeof(helpType_t)); i++)
-		{
+		for (i = 0; i < (int)(sizeof (help) / sizeof (helpType_t)); i++) {
 			y += tSpacing;
-			if (lines[i] != NULL)
-			{
+			if (lines[i] != NULL) {
 				CG_Text_Paint_Ext(x, y, tScale, tScale, tColor, lines[i], 0.0f, 0, tStyle, tFont);
 			}
 		}
@@ -685,10 +589,8 @@ void CG_SpecHelpDraw()
 }
 
 
-void CG_DrawOverlays(void)
-{
-	if (cg.demoPlayback)
-	{
+void CG_DrawOverlays(void) {
+	if (cg.demoPlayback) {
 		CG_DemoHelpDraw();
 	}
 }

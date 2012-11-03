@@ -35,7 +35,7 @@ If you have questions concerning this license or the applicable additional terms
 
 
 #include "cg_local.h"
-# include "../libs/sha-1/sha1.h"
+#include "../libs/sha-1/sha1.h"
 
 displayContextDef_t cgDC;
 
@@ -54,12 +54,11 @@ This must be the very first function compiled into the .q3vm file
 ================
 */
 #if __GNUC__ >= 4
-#pragma GCC visibility push(default)
+# pragma GCC visibility push(default)
 #endif
-int vmMain(int command, int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7, int arg8, int arg9, int arg10, int arg11)
-{
+int vmMain(int command, int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7, int arg8, int arg9, int arg10, int arg11) {
 #if __GNUC__ >= 4
-#pragma GCC visibility pop
+# pragma GCC visibility pop
 #endif
 
 	// Nico, silent GCC
@@ -73,8 +72,7 @@ int vmMain(int command, int arg0, int arg1, int arg2, int arg3, int arg4, int ar
 	arg10 = arg10;
 	arg11 = arg11;
 
-	switch (command)
-	{
+	switch (command) {
 	case CG_INIT:
 		CG_Init(arg0, arg1, arg2, arg3);
 		cgs.initing = qfalse;
@@ -354,8 +352,7 @@ vmCvar_t cg_specLock;
 
 // Nico, end of ETrun cvars
 
-typedef struct
-{
+typedef struct {
 	vmCvar_t *vmCvar;
 	char *cvarName;
 	char *defaultString;
@@ -620,15 +617,15 @@ cvarTable_t cvarTable[] =
 	{ &cg_popupFadeTime,         "cg_popupFadeTime",         "2500",  CVAR_ARCHIVE,             0 },
 
 	// Automatically load checkpoints
-	{ &cg_autoLoadCheckpoints,	 "cg_autoLoadCheckpoints",   "0",     CVAR_ARCHIVE,             0 },
+	{ &cg_autoLoadCheckpoints,   "cg_autoLoadCheckpoints",   "0",     CVAR_ARCHIVE,             0 },
 
 	// Persistant speclock
-	{ &cg_specLock,				 "cg_specLock",				 "0",     CVAR_ARCHIVE,             0 }
+	{ &cg_specLock,              "cg_specLock",              "0",     CVAR_ARCHIVE,             0 }
 
 	// Nico, end of ETrun cvars
 };
 
-int      cvarTableSize = sizeof(cvarTable) / sizeof(cvarTable[0]);
+int      cvarTableSize = sizeof (cvarTable) / sizeof (cvarTable[0]);
 qboolean cvarsLoaded   = qfalse;
 void CG_setClientFlags(void);
 
@@ -638,8 +635,7 @@ void CG_setClientFlags(void);
 CG_RegisterCvars
 =================
 */
-void CG_RegisterCvars(void)
-{
+void CG_RegisterCvars(void) {
 	int         i;
 	cvarTable_t *cv;
 	char        var[MAX_TOKEN_CHARS];
@@ -650,25 +646,20 @@ void CG_RegisterCvars(void)
 	trap_Cvar_Set("r_drawfoliage", "0");
 	trap_Cvar_Set("r_wolffog", "0");
 
-	for (i = 0, cv = cvarTable ; i < cvarTableSize ; i++, cv++)
-	{
+	for (i = 0, cv = cvarTable ; i < cvarTableSize ; i++, cv++) {
 		trap_Cvar_Register(cv->vmCvar, cv->cvarName, cv->defaultString, cv->cvarFlags);
-		if (cv->vmCvar != NULL)
-		{
+		if (cv->vmCvar != NULL) {
 			// rain - force the update to range check this cvar on first run
-			if (cv->vmCvar == &cg_errorDecay)
-			{
+			if (cv->vmCvar == &cg_errorDecay) {
 				cv->modificationCount = !cv->vmCvar->modificationCount;
-			}
-			else
-			{
+			} else {
 				cv->modificationCount = cv->vmCvar->modificationCount;
 			}
 		}
 	}
 
 	// see if we are also running the server on this machine
-	trap_Cvar_VariableStringBuffer("sv_running", var, sizeof(var));
+	trap_Cvar_VariableStringBuffer("sv_running", var, sizeof (var));
 	cgs.localServer = atoi(var);
 
 	// Gordon: um, here, why?
@@ -684,24 +675,19 @@ void CG_RegisterCvars(void)
 CG_UpdateCvars
 =================
 */
-void CG_UpdateCvars(void)
-{
+void CG_UpdateCvars(void) {
 	int         i;
 	qboolean    fSetFlags = qfalse;
 	cvarTable_t *cv;
 
-	if (!cvarsLoaded)
-	{
+	if (!cvarsLoaded) {
 		return;
 	}
 
-	for (i = 0, cv = cvarTable ; i < cvarTableSize ; i++, cv++)
-	{
-		if (cv->vmCvar)
-		{
+	for (i = 0, cv = cvarTable ; i < cvarTableSize ; i++, cv++) {
+		if (cv->vmCvar) {
 			trap_Cvar_Update(cv->vmCvar);
-			if (cv->modificationCount != cv->vmCvar->modificationCount)
-			{
+			if (cv->modificationCount != cv->vmCvar->modificationCount) {
 				cv->modificationCount = cv->vmCvar->modificationCount;
 
 				// Check if we need to update any client flags to be sent to the server
@@ -723,54 +709,33 @@ void CG_UpdateCvars(void)
 				    cv->vmCvar == &cg_authToken || cv->vmCvar == &cg_autoLogin ||
 				    cv->vmCvar == &cg_loadViewAngles || cv->vmCvar == &cg_autoLoad ||
 				    cv->vmCvar == &cg_drawCGaz || cv->vmCvar == &cg_hideMe ||
-					cv->vmCvar == &cg_autoDemo || cv->vmCvar == &cg_autoLoadCheckpoints ||
-					cv->vmCvar == &cg_specLock || cv->vmCvar == &cg_keepAllDemos)
-				{
+				    cv->vmCvar == &cg_autoDemo || cv->vmCvar == &cg_autoLoadCheckpoints ||
+				    cv->vmCvar == &cg_specLock || cv->vmCvar == &cg_keepAllDemos) {
 					fSetFlags = qtrue;
-				}
-				else if (cv->vmCvar == &cg_crosshairColor || cv->vmCvar == &cg_crosshairAlpha)
-				{
+				} else if (cv->vmCvar == &cg_crosshairColor || cv->vmCvar == &cg_crosshairAlpha) {
 					BG_setCrosshair(cg_crosshairColor.string, cg.xhairColor, cg_crosshairAlpha.value, "cg_crosshairColor");
-				}
-				else if (cv->vmCvar == &cg_crosshairColorAlt || cv->vmCvar == &cg_crosshairAlphaAlt)
-				{
+				} else if (cv->vmCvar == &cg_crosshairColorAlt || cv->vmCvar == &cg_crosshairAlphaAlt) {
 					BG_setCrosshair(cg_crosshairColorAlt.string, cg.xhairColorAlt, cg_crosshairAlphaAlt.value, "cg_crosshairColorAlt");
-				}
-				else if (cv->vmCvar == &cg_rconPassword && *cg_rconPassword.string)
-				{
+				} else if (cv->vmCvar == &cg_rconPassword && *cg_rconPassword.string) {
 					trap_SendConsoleCommand(va("rconAuth %s", cg_rconPassword.string));
-				}
-				else if (cv->vmCvar == &cg_refereePassword && *cg_refereePassword.string)
-				{
+				} else if (cv->vmCvar == &cg_refereePassword && *cg_refereePassword.string) {
 					trap_SendConsoleCommand(va("ref %s", cg_refereePassword.string));
-				}
-				else if (cv->vmCvar == &demo_infoWindow)
-				{
-					if (demo_infoWindow.integer == 0 && cg.demohelpWindow == SHOW_ON)
-					{
+				} else if (cv->vmCvar == &demo_infoWindow) {
+					if (demo_infoWindow.integer == 0 && cg.demohelpWindow == SHOW_ON) {
+						CG_ShowHelp_On(&cg.demohelpWindow);
+					} else if (demo_infoWindow.integer > 0 && cg.demohelpWindow != SHOW_ON) {
 						CG_ShowHelp_On(&cg.demohelpWindow);
 					}
-					else if (demo_infoWindow.integer > 0 && cg.demohelpWindow != SHOW_ON)
-					{
-						CG_ShowHelp_On(&cg.demohelpWindow);
-					}
-				}
-				else if (cv->vmCvar == &cg_errorDecay)
-				{
+				} else if (cv->vmCvar == &cg_errorDecay) {
 					// rain - cap errordecay because
 					// prediction is EXTREMELY broken
 					// right now.
-					if (cg_errorDecay.value < 0.0)
-					{
+					if (cg_errorDecay.value < 0.0) {
 						trap_Cvar_Set("cg_errorDecay", "0");
-					}
-					else if (cg_errorDecay.value > 500.0)
-					{
+					} else if (cg_errorDecay.value > 500.0) {
 						trap_Cvar_Set("cg_errorDecay", "500");
 					}
-				}
-				else if (cv->vmCvar == &cg_viewLog)
-				{
+				} else if (cv->vmCvar == &cg_viewLog) {
 					trap_Cvar_Set("viewlog", cg_viewLog.string);
 				}
 			}
@@ -778,8 +743,7 @@ void CG_UpdateCvars(void)
 	}
 
 	// Send any relevent updates
-	if (fSetFlags)
-	{
+	if (fSetFlags) {
 		CG_setClientFlags();
 	}
 }
@@ -787,19 +751,15 @@ void CG_UpdateCvars(void)
 // Nico, sha-1 hash function
 // r: result
 // s: source
-static int CG_hash(char *r, char *s)
-{
+static int CG_hash(char *r, char *s) {
 	SHA1Context sha;
 
 	SHA1Reset(&sha);
 	SHA1Input(&sha, (const unsigned char *)s, strlen(s));
 
-	if (!SHA1Result(&sha))
-	{
+	if (!SHA1Result(&sha)) {
 		return 1;
-	}
-	else
-	{
+	} else {
 		sprintf(r, "%08X%08X%08X%08X%08X",
 		        sha.Message_Digest[0],
 		        sha.Message_Digest[1],
@@ -810,21 +770,16 @@ static int CG_hash(char *r, char *s)
 	}
 }
 
-void CG_setClientFlags(void)
-{
+void CG_setClientFlags(void) {
 	char hash[MAX_QPATH] = { 0 };
 
-	if (cg.demoPlayback)
-	{
+	if (cg.demoPlayback) {
 		return;
 	}
 
-	if (strlen(cg_authToken.string) == 0)
-	{
-		Q_strncpyz(hash, "undefined", sizeof(hash));
-	}
-	else if (CG_hash(hash, cg_authToken.string))
-	{
+	if (strlen(cg_authToken.string) == 0) {
+		Q_strncpyz(hash, "undefined", sizeof (hash));
+	} else if (CG_hash(hash, cg_authToken.string)) {
 		CG_Error("ETrun: error setting client auth token\n");
 	}
 
@@ -866,46 +821,40 @@ void CG_setClientFlags(void)
 	                             // Nico, client auto demo record setting
 	                             cg_autoDemo.integer,
 
-								 // Nico, automatically load checkpoints
-								 cg_autoLoadCheckpoints.integer,
+	                             // Nico, automatically load checkpoints
+	                             cg_autoLoadCheckpoints.integer,
 
-								 // Nico, persistant speclock
-								 cg_specLock.integer,
+	                             // Nico, persistant speclock
+	                             cg_specLock.integer,
 
-								 // Nico, keep all demos
-								 cg_keepAllDemos.integer
+	                             // Nico, keep all demos
+	                             cg_keepAllDemos.integer
 
 	                             ));
 }
 
-int CG_CrosshairPlayer(void)
-{
-	if (cg.time > (cg.crosshairClientTime + 1000))
-	{
+int CG_CrosshairPlayer(void) {
+	if (cg.time > (cg.crosshairClientTime + 1000)) {
 		return -1;
 	}
 	return cg.crosshairClientNum;
 }
 
-int CG_LastAttacker(void)
-{
+int CG_LastAttacker(void) {
 	return((!cg.attackerTime) ? -1 : cg.snap->ps.persistant[PERS_ATTACKER]);
 }
 
-void QDECL CG_Printf(const char *msg, ...)
-{
+void QDECL CG_Printf(const char *msg, ...) {
 	va_list argptr;
 	char    text[1024];
 
 	va_start(argptr, msg);
-	Q_vsnprintf(text, sizeof(text), msg, argptr);
+	Q_vsnprintf(text, sizeof (text), msg, argptr);
 	va_end(argptr);
-	if (!Q_strncmp(text, "[cgnotify]", 10))
-	{
+	if (!Q_strncmp(text, "[cgnotify]", 10)) {
 		char buf[1024];
 
-		if (!cg_drawNotifyText.integer)
-		{
+		if (!cg_drawNotifyText.integer) {
 			Q_strncpyz(buf, &text[10], 1013);
 			trap_Print(buf);
 			return;
@@ -920,13 +869,12 @@ void QDECL CG_Printf(const char *msg, ...)
 	trap_Print(text);
 }
 
-void QDECL CG_Error(const char *msg, ...)
-{
+void QDECL CG_Error(const char *msg, ...) {
 	va_list argptr;
 	char    text[1024];
 
 	va_start(argptr, msg);
-	Q_vsnprintf(text, sizeof(text), msg, argptr);
+	Q_vsnprintf(text, sizeof (text), msg, argptr);
 	va_end(argptr);
 
 	trap_Error(text);
@@ -935,8 +883,7 @@ void QDECL CG_Error(const char *msg, ...)
 #ifndef CGAME_HARD_LINKED
 // this is only here so the functions in q_shared.c and bg_*.c can link (FIXME)
 
-void QDECL Com_Error(int level, const char *error, ...)
-{
+void QDECL Com_Error(int level, const char *error, ...) {
 	va_list argptr;
 	char    text[1024];
 
@@ -944,19 +891,18 @@ void QDECL Com_Error(int level, const char *error, ...)
 	level = level;
 
 	va_start(argptr, error);
-	Q_vsnprintf(text, sizeof(text), error, argptr);
+	Q_vsnprintf(text, sizeof (text), error, argptr);
 	va_end(argptr);
 
 	CG_Error("%s", text);
 }
 
-void QDECL Com_Printf(const char *msg, ...)
-{
+void QDECL Com_Printf(const char *msg, ...) {
 	va_list argptr;
 	char    text[1024];
 
 	va_start(argptr, msg);
-	Q_vsnprintf(text, sizeof(text), msg, argptr);
+	Q_vsnprintf(text, sizeof (text), msg, argptr);
 	va_end(argptr);
 
 	CG_Printf("%s", text);
@@ -969,30 +915,25 @@ void QDECL Com_Printf(const char *msg, ...)
 CG_Argv
 ================
 */
-const char *CG_Argv(int arg)
-{
+const char *CG_Argv(int arg) {
 	static char buffer[MAX_STRING_CHARS];
 
-	trap_Argv(arg, buffer, sizeof(buffer));
+	trap_Argv(arg, buffer, sizeof (buffer));
 
 	return buffer;
 }
 
 
 // Cleans a string for filesystem compatibility
-void CG_nameCleanFilename(const char *pszIn, char *pszOut, unsigned int dwOutSize)
-{
+void CG_nameCleanFilename(const char *pszIn, char *pszOut, unsigned int dwOutSize) {
 	unsigned int dwCurrLength = 0;
 
-	while (*pszIn && dwCurrLength < dwOutSize)
-	{
-		if (*pszIn == 27 || *pszIn == '^')
-		{
+	while (*pszIn && dwCurrLength < dwOutSize) {
+		if (*pszIn == 27 || *pszIn == '^') {
 			pszIn++;
 			dwCurrLength++;
 
-			if (*pszIn)
-			{
+			if (*pszIn) {
 				pszIn++;        // skip color code
 				dwCurrLength++;
 				continue;
@@ -1002,15 +943,13 @@ void CG_nameCleanFilename(const char *pszIn, char *pszOut, unsigned int dwOutSiz
 		// Illegal Windows characters
 		if (*pszIn == '\\' || *pszIn == '/' || *pszIn == ':' || *pszIn == '"' ||
 		    *pszIn == '*'  || *pszIn == '?' || *pszIn == '<' || *pszIn == '>' ||
-		    *pszIn == '|'  || *pszIn == '.')
-		{
+		    *pszIn == '|'  || *pszIn == '.') {
 			pszIn++;
 			dwCurrLength++;
 			continue;
 		}
 
-		if (*pszIn <= 32)
-		{
+		if (*pszIn <= 32) {
 			pszIn++;
 			dwCurrLength++;
 			continue;
@@ -1024,8 +963,7 @@ void CG_nameCleanFilename(const char *pszIn, char *pszOut, unsigned int dwOutSiz
 }
 
 // Standard naming for screenshots/demos
-char *CG_generateFilename(void)
-{
+char *CG_generateFilename(void) {
 	qtime_t    ct;
 	const char *pszServerInfo = CG_ConfigString(CS_SERVERINFO);
 
@@ -1037,44 +975,36 @@ char *CG_generateFilename(void)
 	          ""));
 }
 
-int CG_findClientNum(char *s)
-{
+int CG_findClientNum(char *s) {
 	int      id;
 	char     s2[64], n2[64];
 	qboolean fIsNumber = qtrue;
 
 	// See if its a number or string
-	for (id = 0; id < (int)strlen(s) && s[id] != 0; id++)
-	{
-		if (s[id] < '0' || s[id] > '9')
-		{
+	for (id = 0; id < (int)strlen(s) && s[id] != 0; id++) {
+		if (s[id] < '0' || s[id] > '9') {
 			fIsNumber = qfalse;
 			break;
 		}
 	}
 
 	// numeric values are just slot numbers
-	if (fIsNumber)
-	{
+	if (fIsNumber) {
 		id = atoi(s);
-		if (id >= 0 && id < cgs.maxclients && cgs.clientinfo[id].infoValid)
-		{
+		if (id >= 0 && id < cgs.maxclients && cgs.clientinfo[id].infoValid) {
 			return(id);
 		}
 	}
 
 	// check for a name match
-	BG_cleanName(s, s2, sizeof(s2), qfalse);
-	for (id = 0; id < cgs.maxclients; id++)
-	{
-		if (!cgs.clientinfo[id].infoValid)
-		{
+	BG_cleanName(s, s2, sizeof (s2), qfalse);
+	for (id = 0; id < cgs.maxclients; id++) {
+		if (!cgs.clientinfo[id].infoValid) {
 			continue;
 		}
 
-		BG_cleanName(cgs.clientinfo[id].name, n2, sizeof(n2), qfalse);
-		if (!Q_stricmp(n2, s2))
-		{
+		BG_cleanName(cgs.clientinfo[id].name, n2, sizeof (n2), qfalse);
+		if (!Q_stricmp(n2, s2)) {
 			return(id);
 		}
 	}
@@ -1083,108 +1013,85 @@ int CG_findClientNum(char *s)
 	return(-1);
 }
 
-void CG_printConsoleString(char *str)
-{
+void CG_printConsoleString(char *str) {
 	CG_Printf("[skipnotify]%s", str);
 }
 
-void CG_LoadObjectiveData(void)
-{
+void CG_LoadObjectiveData(void) {
 	pc_token_t token, token2;
 	int        handle;
 
 	handle = trap_PC_LoadSource(va("maps/%s.objdata", Q_strlwr(cgs.rawmapname)));
 
-	if (!handle)
-	{
+	if (!handle) {
 		return;
 	}
 
-	while (1)
-	{
-		if (!trap_PC_ReadToken(handle, &token))
-		{
+	while (1) {
+		if (!trap_PC_ReadToken(handle, &token)) {
 			break;
 		}
 
-		if (!Q_stricmp(token.string, "wm_mapdescription"))
-		{
-			if (!trap_PC_ReadToken(handle, &token))
-			{
+		if (!Q_stricmp(token.string, "wm_mapdescription")) {
+			if (!trap_PC_ReadToken(handle, &token)) {
 				CG_Printf("^1ERROR: bad objdata line : team parameter required\n");
 				break;
 			}
 
-			if (!trap_PC_ReadToken(handle, &token2))
-			{
+			if (!trap_PC_ReadToken(handle, &token2)) {
 				CG_Printf("^1ERROR: bad objdata line : description parameter required\n");
 				break;
 			}
 
-			if (!Q_stricmp(token.string, "axis"))
-			{
-				Q_strncpyz(cg.objMapDescription_Axis, token2.string, sizeof(cg.objMapDescription_Axis));
+			if (!Q_stricmp(token.string, "axis")) {
+				Q_strncpyz(cg.objMapDescription_Axis, token2.string, sizeof (cg.objMapDescription_Axis));
+			} else if (!Q_stricmp(token.string, "allied")) {
+				Q_strncpyz(cg.objMapDescription_Allied, token2.string, sizeof (cg.objMapDescription_Allied));
+			} else if (!Q_stricmp(token.string, "neutral")) {
+				Q_strncpyz(cg.objMapDescription_Neutral, token2.string, sizeof (cg.objMapDescription_Neutral));
 			}
-			else if (!Q_stricmp(token.string, "allied"))
-			{
-				Q_strncpyz(cg.objMapDescription_Allied, token2.string, sizeof(cg.objMapDescription_Allied));
-			}
-			else if (!Q_stricmp(token.string, "neutral"))
-			{
-				Q_strncpyz(cg.objMapDescription_Neutral, token2.string, sizeof(cg.objMapDescription_Neutral));
-			}
-		}
-		else if (!Q_stricmp(token.string, "wm_objective_axis_desc"))
-		{
+		} else if (!Q_stricmp(token.string, "wm_objective_axis_desc")) {
 			int i;
 
-			if (!PC_Int_Parse(handle, &i))
-			{
+			if (!PC_Int_Parse(handle, &i)) {
 				CG_Printf("^1ERROR: bad objdata line : number parameter required\n");
 				break;
 			}
 
-			if (!trap_PC_ReadToken(handle, &token))
-			{
+			if (!trap_PC_ReadToken(handle, &token)) {
 				CG_Printf("^1ERROR: bad objdata line :  description parameter required\n");
 				break;
 			}
 
 			i--;
 
-			if (i < 0 || i >= MAX_OBJECTIVES)
-			{
+			if (i < 0 || i >= MAX_OBJECTIVES) {
 				CG_Printf("^1ERROR: bad objdata line : invalid objective number\n");
 				break;
 			}
 
-			Q_strncpyz(cg.objDescription_Axis[i], token.string, sizeof(cg.objDescription_Axis[i]));
-		}
-		else if (!Q_stricmp(token.string, "wm_objective_allied_desc"))
-		{
+			Q_strncpyz(cg.objDescription_Axis[i], token.string, sizeof (cg.objDescription_Axis[i]));
+		} else if (!Q_stricmp(token.string, "wm_objective_allied_desc")) {
 			int i;
 
-			if (!PC_Int_Parse(handle, &i))
-			{
+			if (!PC_Int_Parse(handle, &i)) {
 				CG_Printf("^1ERROR: bad objdata line : number parameter required\n");
 				break;
 			}
 
-			if (!trap_PC_ReadToken(handle, &token))
-			{
+			if (!trap_PC_ReadToken(handle, &token)) {
 				CG_Printf("^1ERROR: bad objdata line :  description parameter required\n");
 				break;
 			}
 
 			i--;
 
-			if (i < 0 || i >= MAX_OBJECTIVES)
-			{
+			if (i < 0 || i >= MAX_OBJECTIVES) {
 				CG_Printf("^1ERROR: bad objdata line : invalid objective number\n");
 				break;
 			}
 
-			Q_strncpyz(cg.objDescription_Allied[i], token.string, sizeof(cg.objDescription_Allied[i]));
+			Q_strncpyz(cg.objDescription_Allied[i], token.string, sizeof (cg.objDescription_Allied[i]));
 		}
 	}
 
@@ -1192,8 +1099,7 @@ void CG_LoadObjectiveData(void)
 }
 
 //========================================================================
-void CG_SetupDlightstyles(void)
-{
+void CG_SetupDlightstyles(void) {
 	int       i, j;
 	char      *str;
 	char      *token;
@@ -1202,11 +1108,9 @@ void CG_SetupDlightstyles(void)
 
 	cg.lightstylesInited = qtrue;
 
-	for (i = 1; i < MAX_DLIGHT_CONFIGSTRINGS; i++)
-	{
+	for (i = 1; i < MAX_DLIGHT_CONFIGSTRINGS; i++) {
 		str = (char *) CG_ConfigString(CS_DLIGHTS + i);
-		if (!strlen(str))
-		{
+		if (!strlen(str)) {
 			break;
 		}
 
@@ -1220,8 +1124,7 @@ void CG_SetupDlightstyles(void)
 		token             = COM_Parse(&str); // offset
 		cent->dl_frame    = atoi(token);
 		cent->dl_oldframe = cent->dl_frame - 1;
-		if (cent->dl_oldframe < 0)
-		{
+		if (cent->dl_oldframe < 0) {
 			cent->dl_oldframe = strlen(cent->dl_stylestring);
 		}
 
@@ -1231,18 +1134,15 @@ void CG_SetupDlightstyles(void)
 		token          = COM_Parse(&str); // attenuation
 		cent->dl_atten = atoi(token);
 
-		for (j = 0; j < (int)strlen(cent->dl_stylestring); j++)
-		{
+		for (j = 0; j < (int)strlen(cent->dl_stylestring); j++) {
 
 			cent->dl_stylestring[j] += cent->dl_atten;  // adjust character for attenuation/amplification
 
 			// clamp result
-			if (cent->dl_stylestring[j] < 'a')
-			{
+			if (cent->dl_stylestring[j] < 'a') {
 				cent->dl_stylestring[j] = 'a';
 			}
-			if (cent->dl_stylestring[j] > 'z')
-			{
+			if (cent->dl_stylestring[j] > 'z') {
 				cent->dl_stylestring[j] = 'z';
 			}
 		}
@@ -1262,8 +1162,7 @@ CG_RegisterItemSounds
 The server says this item is used on this level
 =================
 */
-static void CG_RegisterItemSounds(int itemNum)
-{
+static void CG_RegisterItemSounds(int itemNum) {
 	gitem_t *item;
 	char    data[MAX_QPATH];
 	char    *s, *start;
@@ -1271,42 +1170,35 @@ static void CG_RegisterItemSounds(int itemNum)
 
 	item = &bg_itemlist[itemNum];
 
-	if (item->pickup_sound && *item->pickup_sound)
-	{
+	if (item->pickup_sound && *item->pickup_sound) {
 		trap_S_RegisterSound(item->pickup_sound, qfalse);
 	}
 
 	// parse the space seperated precache string for other media
 	s = item->sounds;
-	if (!s || !s[0])
-	{
+	if (!s || !s[0]) {
 		return;
 	}
 
-	while (*s)
-	{
+	while (*s) {
 		start = s;
-		while (*s && *s != ' ')
-		{
+		while (*s && *s != ' ') {
 			s++;
 		}
 
 		len = s - start;
-		if (len >= MAX_QPATH || len < 5)
-		{
+		if (len >= MAX_QPATH || len < 5) {
 			CG_Error("PrecacheItem: %s has bad precache string",
 			         item->classname);
 			return;
 		}
 		memcpy(data, start, len);
 		data[len] = 0;
-		if (*s)
-		{
+		if (*s) {
 			s++;
 		}
 
-		if (!strcmp(data + len - 3, "wav"))
-		{
+		if (!strcmp(data + len - 3, "wav")) {
 			trap_S_RegisterSound(data, qfalse);
 		}
 	}
@@ -1320,8 +1212,7 @@ CG_RegisterSounds
 called during a precache command
 =================
 */
-static void CG_RegisterSounds(void)
-{
+static void CG_RegisterSounds(void) {
 	int          i;
 	char         name[MAX_QPATH];
 	const char   *soundName;
@@ -1338,8 +1229,7 @@ static void CG_RegisterSounds(void)
 
 	BG_LoadSpeakerScript(va("sound/maps/%s.sps", cgs.rawmapname));
 
-	for (i = 0; i < BG_NumScriptSpeakers(); i++)
-	{
+	for (i = 0; i < BG_NumScriptSpeakers(); i++) {
 		speaker = BG_GetScriptSpeaker(i);
 
 		speaker->noise = trap_S_RegisterSound(speaker->filename, qfalse);
@@ -1361,8 +1251,7 @@ static void CG_RegisterSounds(void)
 	cgs.media.watrGaspSound   = trap_S_RegisterSound("sound/player/gasp.wav", qfalse);
 	cgs.media.underWaterSound = trap_S_RegisterSound("sound/player/underwater.wav", qfalse);
 
-	for (i = 0; i < 2; i++)
-	{
+	for (i = 0; i < 2; i++) {
 		cgs.media.grenadebounce[FOOTSTEP_NORMAL][i]         = \
 		    cgs.media.grenadebounce[FOOTSTEP_GRAVEL][i]     = \
 		        cgs.media.grenadebounce[FOOTSTEP_SPLASH][i] = trap_S_RegisterSound(va("sound/weapons/grenade/bounce_hard%i.wav", i + 1), qfalse);
@@ -1388,60 +1277,52 @@ static void CG_RegisterSounds(void)
 	cgs.media.landSound[FOOTSTEP_SNOW]   = trap_S_RegisterSound("sound/player/footsteps/snow_jump.wav", qfalse);
 	cgs.media.landSound[FOOTSTEP_CARPET] = trap_S_RegisterSound("sound/player/footsteps/carpet_jump.wav", qfalse);
 
-	for (i = 0; i < 4; i++)
-	{
-		Com_sprintf(name, sizeof(name), "sound/player/footsteps/stone%i.wav", i + 1);
+	for (i = 0; i < 4; i++) {
+		Com_sprintf(name, sizeof (name), "sound/player/footsteps/stone%i.wav", i + 1);
 		cgs.media.footsteps[FOOTSTEP_NORMAL][i] = trap_S_RegisterSound(name, qfalse);
 
-		Com_sprintf(name, sizeof(name), "sound/player/footsteps/water%i.wav", i + 1);
+		Com_sprintf(name, sizeof (name), "sound/player/footsteps/water%i.wav", i + 1);
 		cgs.media.footsteps[FOOTSTEP_SPLASH][i] = trap_S_RegisterSound(name, qfalse);
 
-		Com_sprintf(name, sizeof(name), "sound/player/footsteps/metal%i.wav", i + 1);
+		Com_sprintf(name, sizeof (name), "sound/player/footsteps/metal%i.wav", i + 1);
 		cgs.media.footsteps[FOOTSTEP_METAL][i] = trap_S_RegisterSound(name, qfalse);
 
-		Com_sprintf(name, sizeof(name), "sound/player/footsteps/wood%i.wav", i + 1);
+		Com_sprintf(name, sizeof (name), "sound/player/footsteps/wood%i.wav", i + 1);
 		cgs.media.footsteps[FOOTSTEP_WOOD][i] = trap_S_RegisterSound(name, qfalse);
 
-		Com_sprintf(name, sizeof(name), "sound/player/footsteps/grass%i.wav", i + 1);
+		Com_sprintf(name, sizeof (name), "sound/player/footsteps/grass%i.wav", i + 1);
 		cgs.media.footsteps[FOOTSTEP_GRASS][i] = trap_S_RegisterSound(name, qfalse);
 
-		Com_sprintf(name, sizeof(name), "sound/player/footsteps/gravel%i.wav", i + 1);
+		Com_sprintf(name, sizeof (name), "sound/player/footsteps/gravel%i.wav", i + 1);
 		cgs.media.footsteps[FOOTSTEP_GRAVEL][i] = trap_S_RegisterSound(name, qfalse);
 
-		Com_sprintf(name, sizeof(name), "sound/player/footsteps/roof%i.wav", i + 1);
+		Com_sprintf(name, sizeof (name), "sound/player/footsteps/roof%i.wav", i + 1);
 		cgs.media.footsteps[FOOTSTEP_ROOF][i] = trap_S_RegisterSound(name, qfalse);
 
-		Com_sprintf(name, sizeof(name), "sound/player/footsteps/snow%i.wav", i + 1);
+		Com_sprintf(name, sizeof (name), "sound/player/footsteps/snow%i.wav", i + 1);
 		cgs.media.footsteps[FOOTSTEP_SNOW][i] = trap_S_RegisterSound(name, qfalse);
 
-		Com_sprintf(name, sizeof(name), "sound/player/footsteps/carpet%i.wav", i + 1);
+		Com_sprintf(name, sizeof (name), "sound/player/footsteps/carpet%i.wav", i + 1);
 		cgs.media.footsteps[FOOTSTEP_CARPET][i] = trap_S_RegisterSound(name, qfalse);
 	}
 
-	for (i = 1 ; i < bg_numItems ; i++)
-	{
+	for (i = 1 ; i < bg_numItems ; i++) {
 		CG_RegisterItemSounds(i);
 	}
 
-	for (i = 1 ; i < MAX_SOUNDS ; i++)
-	{
+	for (i = 1 ; i < MAX_SOUNDS ; i++) {
 		soundName = CG_ConfigString(CS_SOUNDS + i);
-		if (!soundName[0])
-		{
+		if (!soundName[0]) {
 			break;
 		}
-		if (soundName[0] == '*')
-		{
+		if (soundName[0] == '*') {
 			continue;   // custom sound
 		}
 
 		// Ridah, register sound scripts seperately
-		if (!strstr(soundName, ".wav"))
-		{
+		if (!strstr(soundName, ".wav")) {
 			CG_SoundScriptPrecache(soundName);
-		}
-		else
-		{
+		} else {
 			cgs.gameSounds[i] = trap_S_RegisterSound(soundName, qfalse);    // FIXME: allow option to compress?
 		}
 	}
@@ -1477,8 +1358,7 @@ static void CG_RegisterSounds(void)
 	cgs.media.sfx_rockexpWater   = trap_S_RegisterSound("sound/weapons/grenade/gren_expl_water.wav", qfalse);
 
 
-	for (i = 0; i < 3; i++)
-	{
+	for (i = 0; i < 3; i++) {
 		// Gordon: bouncy shell sounds \o/
 		cgs.media.sfx_brassSound[BRASSSOUND_METAL][i] = trap_S_RegisterSound(va("sound/weapons/misc/shell_metal%i.wav", i + 1), qfalse);
 		cgs.media.sfx_brassSound[BRASSSOUND_SOFT][i]  = trap_S_RegisterSound(va("sound/weapons/misc/shell_soft%i.wav", i + 1), qfalse);
@@ -1492,8 +1372,7 @@ static void CG_RegisterSounds(void)
 	cgs.media.sfx_knifehit[3] = trap_S_RegisterSound("sound/weapons/knife/knife_hit4.wav", qfalse);
 	cgs.media.sfx_knifehit[4] = trap_S_RegisterSound("sound/weapons/knife/knife_hitwall1.wav", qfalse);
 
-	for (i = 0; i < 5; i++)
-	{
+	for (i = 0; i < 5; i++) {
 		cgs.media.sfx_bullet_metalhit[i] = trap_S_RegisterSound(va("sound/weapons/impact/metal%i.wav", i + 1), qfalse);
 		cgs.media.sfx_bullet_woodhit[i]  = trap_S_RegisterSound(va("sound/weapons/impact/wood%i.wav", i + 1), qfalse);
 		cgs.media.sfx_bullet_glasshit[i] = trap_S_RegisterSound(va("sound/weapons/impact/glass%i.wav", i + 1), qfalse);
@@ -1508,8 +1387,7 @@ static void CG_RegisterSounds(void)
 	cgs.media.sndLimboFilter = trap_S_RegisterSound("sound/menu/filter.wav", qfalse);
 	cgs.media.sndLimboCancel = trap_S_RegisterSound("sound/menu/cancel.wav", qfalse);
 
-	if (cg_buildScript.integer)
-	{
+	if (cg_buildScript.integer) {
 		CG_PrecacheFXSounds();
 	}
 }
@@ -1529,8 +1407,7 @@ qboolean CG_RegisterClientSkin(bg_playerclass_t *classInfo);
 qboolean CG_RegisterClientModelname(bg_playerclass_t *classInfo);
 void WM_RegisterWeaponTypeShaders();
 
-static void CG_RegisterGraphics(void)
-{
+static void CG_RegisterGraphics(void) {
 	char        name[1024];
 	int         i;
 	static char *sb_nums[11] =
@@ -1599,8 +1476,7 @@ static void CG_RegisterGraphics(void)
 	trap_R_RemapShader("textures/fueldump/terrain1_2", "my_terrain1_2", "0");
 #endif
 
-	for (i = 0 ; i < 11 ; i++)
-	{
+	for (i = 0 ; i < 11 ; i++) {
 		cgs.media.numberShaders[i] = trap_R_RegisterShader(sb_nums[i]);
 	}
 
@@ -1617,8 +1493,7 @@ static void CG_RegisterGraphics(void)
 	cgs.media.smokePuffShaderb5    = trap_R_RegisterShader("smokePuffblack5");
 	// done
 
-	for (i = 0; i < 16; i++)
-	{
+	for (i = 0; i < 16; i++) {
 		cgs.media.viewFlashFire[i] = trap_R_RegisterShader(va("viewFlashFire%i", i + 1));
 	}
 
@@ -1672,8 +1547,7 @@ static void CG_RegisterGraphics(void)
 
 	cgs.media.uniformHintShader = trap_R_RegisterShaderNoMip("gfx/2d/uniformHint");
 
-	for (i = 0 ; i < NUM_CROSSHAIRS ; i++)
-	{
+	for (i = 0 ; i < NUM_CROSSHAIRS ; i++) {
 		cgs.media.crosshairShader[i] = trap_R_RegisterShader(va("gfx/2d/crosshair%c", 'a' + i));
 		cg.crosshairShaderAlt[i]     = trap_R_RegisterShader(va("gfx/2d/crosshair%c_alt", 'a' + i));
 	}
@@ -1774,14 +1648,13 @@ static void CG_RegisterGraphics(void)
 	cgs.media.shardRubble2 = trap_R_RegisterModel("models/mapobjects/debris/brick001.md3");
 	cgs.media.shardRubble3 = trap_R_RegisterModel("models/mapobjects/debris/brick002.md3");
 
-	for (i = 0; i < MAX_LOCKER_DEBRIS; i++)
-	{
-		Com_sprintf(name, sizeof(name), "models/mapobjects/debris/personal%i.md3", i + 1);
+	for (i = 0; i < MAX_LOCKER_DEBRIS; i++) {
+		Com_sprintf(name, sizeof (name), "models/mapobjects/debris/personal%i.md3", i + 1);
 		cgs.media.shardJunk[i] = trap_R_RegisterModel(name);
 	}
 
-	memset(cg_items, 0, sizeof(cg_items));
-	memset(cg_weapons, 0, sizeof(cg_weapons));
+	memset(cg_items, 0, sizeof (cg_items));
+	memset(cg_weapons, 0, sizeof (cg_weapons));
 
 // TODO: FIXME:  REMOVE REGISTRATION OF EACH MODEL FOR EVERY LEVEL LOAD
 
@@ -1790,18 +1663,15 @@ static void CG_RegisterGraphics(void)
 	//			sometimes and want it to work for sure for this demo)
 
 	CG_LoadingString(" - weapons");
-	for (i = WP_KNIFE; i < WP_NUM_WEAPONS; i++)
-	{
+	for (i = WP_KNIFE; i < WP_NUM_WEAPONS; i++) {
 		// DHM - Nerve :: Only register weapons we use in WolfMP
-		if (BG_WeaponInWolfMP(i))
-		{
+		if (BG_WeaponInWolfMP(i)) {
 			CG_RegisterWeapon(i, qfalse);
 		}
 	}
 
 	CG_LoadingString(" - items");
-	for (i = 1 ; i < bg_numItems ; i++)
-	{
+	for (i = 1 ; i < bg_numItems ; i++) {
 		CG_RegisterItemVisuals(i);
 	}
 
@@ -1835,22 +1705,19 @@ static void CG_RegisterGraphics(void)
 	// register the inline models
 	cgs.numInlineModels = trap_CM_NumInlineModels();
 	// TAT 12/23/2002 - as a safety check, let's not let the number of models exceed MAX_MODELS
-	if (cgs.numInlineModels > MAX_MODELS)
-	{
+	if (cgs.numInlineModels > MAX_MODELS) {
 		CG_Error("CG_RegisterGraphics: Too many inline models: %i\n", cgs.numInlineModels);
 	}
 
-	for (i = 1 ; i < cgs.numInlineModels ; i++)
-	{
+	for (i = 1 ; i < cgs.numInlineModels ; i++) {
 		char   name[10];
 		vec3_t mins, maxs;
 		int    j;
 
-		Com_sprintf(name, sizeof(name), "*%i", i);
+		Com_sprintf(name, sizeof (name), "*%i", i);
 		cgs.inlineDrawModel[i] = trap_R_RegisterModel(name);
 		trap_R_ModelBounds(cgs.inlineDrawModel[i], mins, maxs);
-		for (j = 0 ; j < 3 ; j++)
-		{
+		for (j = 0 ; j < 3 ; j++) {
 			cgs.inlineModelMidpoints[i][j] = mins[j] + 0.5 * (maxs[j] - mins[j]);
 		}
 	}
@@ -1858,61 +1725,51 @@ static void CG_RegisterGraphics(void)
 	CG_LoadingString(" - server models");
 
 	// register all the server specified models
-	for (i = 1 ; i < MAX_MODELS ; i++)
-	{
+	for (i = 1 ; i < MAX_MODELS ; i++) {
 		const char *modelName;
 
 		modelName = CG_ConfigString(CS_MODELS + i);
-		if (!modelName[0])
-		{
+		if (!modelName[0]) {
 			break;
 		}
 		cgs.gameModels[i] = trap_R_RegisterModel(modelName);
 	}
 
-	for (i = 1 ; i < MAX_MODELS ; i++)
-	{
+	for (i = 1 ; i < MAX_MODELS ; i++) {
 		const char *skinName;
 
 		skinName = CG_ConfigString(CS_SKINS + i);
-		if (!skinName[0])
-		{
+		if (!skinName[0]) {
 			break;
 		}
 		cgs.gameModelSkins[i] = trap_R_RegisterSkin(skinName);
 	}
 
-	for (i = 1 ; i < MAX_CS_SHADERS ; i++)
-	{
+	for (i = 1 ; i < MAX_CS_SHADERS ; i++) {
 		const char *shaderName;
 
 		shaderName = CG_ConfigString(CS_SHADERS + i);
-		if (!shaderName[0])
-		{
+		if (!shaderName[0]) {
 			break;
 		}
 		cgs.gameShaders[i] = shaderName[0] == '*' ? trap_R_RegisterShader(shaderName + 1) : trap_R_RegisterShaderNoMip(shaderName);
 		Q_strncpyz(cgs.gameShaderNames[i], shaderName[0] == '*' ? shaderName + 1 : shaderName, MAX_QPATH);
 	}
 
-	for (i = 1 ; i < MAX_CHARACTERS ; i++)
-	{
+	for (i = 1 ; i < MAX_CHARACTERS ; i++) {
 		const char *characterName;
 
 		characterName = CG_ConfigString(CS_CHARACTERS + i);
-		if (!characterName[0])
-		{
+		if (!characterName[0]) {
 			break;
 		}
 
-		if (!BG_FindCharacter(characterName))
-		{
+		if (!BG_FindCharacter(characterName)) {
 			cgs.gameCharacters[i] = BG_FindFreeCharacter(characterName);
 
-			Q_strncpyz(cgs.gameCharacters[i]->characterFile, characterName, sizeof(cgs.gameCharacters[i]->characterFile));
+			Q_strncpyz(cgs.gameCharacters[i]->characterFile, characterName, sizeof (cgs.gameCharacters[i]->characterFile));
 
-			if (!CG_RegisterCharacter(characterName, cgs.gameCharacters[i]))
-			{
+			if (!CG_RegisterCharacter(characterName, cgs.gameCharacters[i])) {
 				CG_Error("ERROR: CG_RegisterGraphics: failed to load character file '%s'\n", characterName);
 			}
 		}
@@ -2013,14 +1870,12 @@ static void CG_RegisterGraphics(void)
 
 	cgs.media.disconnectIcon = trap_R_RegisterShaderNoMip("gfx/2d/net");
 
-	for (i = 0; i < 6; i++)
-	{
+	for (i = 0; i < 6; i++) {
 		cgs.media.fireteamicons[i] = trap_R_RegisterShaderNoMip(va("gfx/hud/fireteam/fireteam%i", i + 1));
 	}
 
 	// Nico, load keysets
-	for (i = 0; i < NUM_KEYS_SETS; ++i)
-	{
+	for (i = 0; i < NUM_KEYS_SETS; ++i) {
 		cgs.media.keys[i].ForwardPressedShader
 		    = trap_R_RegisterShaderNoMip(va("gfx/2d/keyset%d/key_forward_pressed", i + 1));
 		cgs.media.keys[i].ForwardNotPressedShader
@@ -2067,17 +1922,14 @@ CG_RegisterClients
 
 ===================
 */
-static void CG_RegisterClients(void)
-{
+static void CG_RegisterClients(void) {
 	int i;
 
-	for (i = 0 ; i < MAX_CLIENTS ; i++)
-	{
+	for (i = 0 ; i < MAX_CLIENTS ; i++) {
 		const char *clientInfo;
 
 		clientInfo = CG_ConfigString(CS_PLAYERS + i);
-		if (!clientInfo[0])
-		{
+		if (!clientInfo[0]) {
 			continue;
 		}
 		CG_NewClientInfo(i);
@@ -2092,17 +1944,14 @@ CG_ConfigString
 =================
 */
 
-const char *CG_ConfigString(int index)
-{
-	if (index < 0 || index >= MAX_CONFIGSTRINGS)
-	{
+const char *CG_ConfigString(int index) {
+	if (index < 0 || index >= MAX_CONFIGSTRINGS) {
 		CG_Error("CG_ConfigString: bad index: %i", index);
 	}
 	return cgs.gameState.stringData + cgs.gameState.stringOffsets[index];
 }
 
-int CG_ConfigStringCopy(int index, char *buff, int buffsize)
-{
+int CG_ConfigStringCopy(int index, char *buff, int buffsize) {
 	Q_strncpyz(buff, CG_ConfigString(index), buffsize);
 	return strlen(buff);
 }
@@ -2116,18 +1965,16 @@ CG_StartMusic
 
 ======================
 */
-void CG_StartMusic(void)
-{
+void CG_StartMusic(void) {
 	char *s;
 	char parm1[MAX_QPATH], parm2[MAX_QPATH];
 
 	// start the background music
 	s = (char *)CG_ConfigString(CS_MUSIC);
-	Q_strncpyz(parm1, COM_Parse(&s), sizeof(parm1));
-	Q_strncpyz(parm2, COM_Parse(&s), sizeof(parm2));
+	Q_strncpyz(parm1, COM_Parse(&s), sizeof (parm1));
+	Q_strncpyz(parm2, COM_Parse(&s), sizeof (parm2));
 
-	if (strlen(parm1))
-	{
+	if (strlen(parm1)) {
 		trap_S_StartBackgroundTrack(parm1, parm2, 0);
 	}
 }
@@ -2137,14 +1984,13 @@ void CG_StartMusic(void)
 CG_QueueMusic
 ==============
 */
-void CG_QueueMusic(void)
-{
+void CG_QueueMusic(void) {
 	char *s;
 	char parm[MAX_QPATH];
 
 	// prepare the next background track
 	s = (char *)CG_ConfigString(CS_MUSIC_QUEUE);
-	Q_strncpyz(parm, COM_Parse(&s), sizeof(parm));
+	Q_strncpyz(parm, COM_Parse(&s), sizeof (parm));
 
 	// even if no strlen(parm).  we want to be able to clear the queue
 
@@ -2158,42 +2004,33 @@ void CG_QueueMusic(void)
 // new hud stuff ( mission pack )
 // ==============================
 //
-qboolean CG_Asset_Parse(int handle)
-{
+qboolean CG_Asset_Parse(int handle) {
 	pc_token_t token;
 	const char *tempStr;
 
-	if (!trap_PC_ReadToken(handle, &token))
-	{
+	if (!trap_PC_ReadToken(handle, &token)) {
 		return qfalse;
 	}
-	if (Q_stricmp(token.string, "{") != 0)
-	{
+	if (Q_stricmp(token.string, "{") != 0) {
 		return qfalse;
 	}
 
-	while (1)
-	{
-		if (!trap_PC_ReadToken(handle, &token))
-		{
+	while (1) {
+		if (!trap_PC_ReadToken(handle, &token)) {
 			return qfalse;
 		}
 
-		if (Q_stricmp(token.string, "}") == 0)
-		{
+		if (Q_stricmp(token.string, "}") == 0) {
 			return qtrue;
 		}
 
 		// font
-		if (Q_stricmp(token.string, "font") == 0)
-		{
+		if (Q_stricmp(token.string, "font") == 0) {
 			int pointSize, fontIndex;
-			if (!PC_Int_Parse(handle, &fontIndex) || !PC_String_Parse(handle, &tempStr) || !PC_Int_Parse(handle, &pointSize))
-			{
+			if (!PC_Int_Parse(handle, &fontIndex) || !PC_String_Parse(handle, &tempStr) || !PC_Int_Parse(handle, &pointSize)) {
 				return qfalse;
 			}
-			if (fontIndex < 0 || fontIndex >= 6)
-			{
+			if (fontIndex < 0 || fontIndex >= 6) {
 				return qfalse;
 			}
 			cgDC.registerFont(tempStr, pointSize, &cgDC.Assets.fonts[fontIndex]);
@@ -2201,10 +2038,8 @@ qboolean CG_Asset_Parse(int handle)
 		}
 
 		// gradientbar
-		if (Q_stricmp(token.string, "gradientbar") == 0)
-		{
-			if (!PC_String_Parse(handle, &tempStr))
-			{
+		if (Q_stricmp(token.string, "gradientbar") == 0) {
+			if (!PC_String_Parse(handle, &tempStr)) {
 				return qfalse;
 			}
 			cgDC.Assets.gradientBar = trap_R_RegisterShaderNoMip(tempStr);
@@ -2212,10 +2047,8 @@ qboolean CG_Asset_Parse(int handle)
 		}
 
 		// enterMenuSound
-		if (Q_stricmp(token.string, "menuEnterSound") == 0)
-		{
-			if (!PC_String_Parse(handle, &tempStr))
-			{
+		if (Q_stricmp(token.string, "menuEnterSound") == 0) {
+			if (!PC_String_Parse(handle, &tempStr)) {
 				return qfalse;
 			}
 			cgDC.Assets.menuEnterSound = trap_S_RegisterSound(tempStr, qtrue);
@@ -2223,10 +2056,8 @@ qboolean CG_Asset_Parse(int handle)
 		}
 
 		// exitMenuSound
-		if (Q_stricmp(token.string, "menuExitSound") == 0)
-		{
-			if (!PC_String_Parse(handle, &tempStr))
-			{
+		if (Q_stricmp(token.string, "menuExitSound") == 0) {
+			if (!PC_String_Parse(handle, &tempStr)) {
 				return qfalse;
 			}
 			cgDC.Assets.menuExitSound = trap_S_RegisterSound(tempStr, qtrue);
@@ -2234,10 +2065,8 @@ qboolean CG_Asset_Parse(int handle)
 		}
 
 		// itemFocusSound
-		if (Q_stricmp(token.string, "itemFocusSound") == 0)
-		{
-			if (!PC_String_Parse(handle, &tempStr))
-			{
+		if (Q_stricmp(token.string, "itemFocusSound") == 0) {
+			if (!PC_String_Parse(handle, &tempStr)) {
 				return qfalse;
 			}
 			cgDC.Assets.itemFocusSound = trap_S_RegisterSound(tempStr, qtrue);
@@ -2245,75 +2074,59 @@ qboolean CG_Asset_Parse(int handle)
 		}
 
 		// menuBuzzSound
-		if (Q_stricmp(token.string, "menuBuzzSound") == 0)
-		{
-			if (!PC_String_Parse(handle, &tempStr))
-			{
+		if (Q_stricmp(token.string, "menuBuzzSound") == 0) {
+			if (!PC_String_Parse(handle, &tempStr)) {
 				return qfalse;
 			}
 			cgDC.Assets.menuBuzzSound = trap_S_RegisterSound(tempStr, qtrue);
 			continue;
 		}
 
-		if (Q_stricmp(token.string, "cursor") == 0)
-		{
-			if (!PC_String_Parse(handle, &cgDC.Assets.cursorStr))
-			{
+		if (Q_stricmp(token.string, "cursor") == 0) {
+			if (!PC_String_Parse(handle, &cgDC.Assets.cursorStr)) {
 				return qfalse;
 			}
 			cgDC.Assets.cursor = trap_R_RegisterShaderNoMip(cgDC.Assets.cursorStr);
 			continue;
 		}
 
-		if (Q_stricmp(token.string, "fadeClamp") == 0)
-		{
-			if (!PC_Float_Parse(handle, &cgDC.Assets.fadeClamp))
-			{
+		if (Q_stricmp(token.string, "fadeClamp") == 0) {
+			if (!PC_Float_Parse(handle, &cgDC.Assets.fadeClamp)) {
 				return qfalse;
 			}
 			continue;
 		}
 
-		if (Q_stricmp(token.string, "fadeCycle") == 0)
-		{
-			if (!PC_Int_Parse(handle, &cgDC.Assets.fadeCycle))
-			{
+		if (Q_stricmp(token.string, "fadeCycle") == 0) {
+			if (!PC_Int_Parse(handle, &cgDC.Assets.fadeCycle)) {
 				return qfalse;
 			}
 			continue;
 		}
 
-		if (Q_stricmp(token.string, "fadeAmount") == 0)
-		{
-			if (!PC_Float_Parse(handle, &cgDC.Assets.fadeAmount))
-			{
+		if (Q_stricmp(token.string, "fadeAmount") == 0) {
+			if (!PC_Float_Parse(handle, &cgDC.Assets.fadeAmount)) {
 				return qfalse;
 			}
 			continue;
 		}
 
-		if (Q_stricmp(token.string, "shadowX") == 0)
-		{
-			if (!PC_Float_Parse(handle, &cgDC.Assets.shadowX))
-			{
+		if (Q_stricmp(token.string, "shadowX") == 0) {
+			if (!PC_Float_Parse(handle, &cgDC.Assets.shadowX)) {
 				return qfalse;
 			}
 			continue;
 		}
 
-		if (Q_stricmp(token.string, "shadowY") == 0)
-		{
-			if (!PC_Float_Parse(handle, &cgDC.Assets.shadowY))
-			{
+		if (Q_stricmp(token.string, "shadowY") == 0) {
+			if (!PC_Float_Parse(handle, &cgDC.Assets.shadowY)) {
 				return qfalse;
 			}
 			continue;
 		}
 
-		if (Q_stricmp(token.string, "shadowColor") == 0)
-		{
-			if (!PC_Color_Parse(handle, &cgDC.Assets.shadowColor))
-			{
+		if (Q_stricmp(token.string, "shadowColor") == 0) {
+			if (!PC_Color_Parse(handle, &cgDC.Assets.shadowColor)) {
 				return qfalse;
 			}
 			cgDC.Assets.shadowFadeClamp = cgDC.Assets.shadowColor[3];
@@ -2323,25 +2136,20 @@ qboolean CG_Asset_Parse(int handle)
 	//return qfalse;
 }
 
-void CG_ParseMenu(const char *menuFile)
-{
+void CG_ParseMenu(const char *menuFile) {
 	pc_token_t token;
 	int        handle;
 
 	handle = trap_PC_LoadSource(menuFile);
-	if (!handle)
-	{
+	if (!handle) {
 		handle = trap_PC_LoadSource("ui/testhud.menu");
 	}
-	if (!handle)
-	{
+	if (!handle) {
 		return;
 	}
 
-	while (1)
-	{
-		if (!trap_PC_ReadToken(handle, &token))
-		{
+	while (1) {
+		if (!trap_PC_ReadToken(handle, &token)) {
 			break;
 		}
 
@@ -2355,26 +2163,20 @@ void CG_ParseMenu(const char *menuFile)
 		//	break;
 		//}
 
-		if (token.string[0] == '}')
-		{
+		if (token.string[0] == '}') {
 			break;
 		}
 
-		if (Q_stricmp(token.string, "assetGlobalDef") == 0)
-		{
-			if (CG_Asset_Parse(handle))
-			{
+		if (Q_stricmp(token.string, "assetGlobalDef") == 0) {
+			if (CG_Asset_Parse(handle)) {
 				continue;
-			}
-			else
-			{
+			} else {
 				break;
 			}
 		}
 
 
-		if (Q_stricmp(token.string, "menudef") == 0)
-		{
+		if (Q_stricmp(token.string, "menudef") == 0) {
 			// start a new menu
 			Menu_New(handle);
 		}
@@ -2382,29 +2184,24 @@ void CG_ParseMenu(const char *menuFile)
 	trap_PC_FreeSource(handle);
 }
 
-qboolean CG_Load_Menu(char **p)
-{
+qboolean CG_Load_Menu(char **p) {
 	char *token;
 
 	token = COM_ParseExt(p, qtrue);
 
-	if (token[0] != '{')
-	{
+	if (token[0] != '{') {
 		return qfalse;
 	}
 
-	while (1)
-	{
+	while (1) {
 
 		token = COM_ParseExt(p, qtrue);
 
-		if (Q_stricmp(token, "}") == 0)
-		{
+		if (Q_stricmp(token, "}") == 0) {
 			return qtrue;
 		}
 
-		if (!token || token[0] == 0)
-		{
+		if (!token || token[0] == 0) {
 			return qfalse;
 		}
 
@@ -2415,8 +2212,7 @@ qboolean CG_Load_Menu(char **p)
 
 
 
-void CG_LoadMenus(const char *menuFile)
-{
+void CG_LoadMenus(const char *menuFile) {
 	char         *token;
 	char         *p;
 	int          len, start;
@@ -2426,18 +2222,15 @@ void CG_LoadMenus(const char *menuFile)
 	start = trap_Milliseconds();
 
 	len = trap_FS_FOpenFile(menuFile, &f, FS_READ);
-	if (!f)
-	{
+	if (!f) {
 		trap_Error(va(S_COLOR_YELLOW "menu file not found: %s, using default\n", menuFile));
 		len = trap_FS_FOpenFile("ui/hud.txt", &f, FS_READ);
-		if (!f)
-		{
+		if (!f) {
 			trap_Error(S_COLOR_RED "default menu file not found: ui/hud.txt, unable to continue!\n");
 		}
 	}
 
-	if (len >= MAX_MENUDEFFILE)
-	{
+	if (len >= MAX_MENUDEFFILE) {
 		trap_Error(va(S_COLOR_RED "menu file too large: %s is %i, max allowed is %i", menuFile, len, MAX_MENUDEFFILE));
 		trap_FS_FCloseFile(f);
 		return;
@@ -2453,11 +2246,9 @@ void CG_LoadMenus(const char *menuFile)
 
 	p = buf;
 
-	while (1)
-	{
+	while (1) {
 		token = COM_ParseExt(&p, qtrue);
-		if (!token || token[0] == 0 || token[0] == '}')
-		{
+		if (!token || token[0] == 0 || token[0] == '}') {
 			break;
 		}
 
@@ -2471,19 +2262,14 @@ void CG_LoadMenus(const char *menuFile)
 		//	break;
 		//}
 
-		if (Q_stricmp(token, "}") == 0)
-		{
+		if (Q_stricmp(token, "}") == 0) {
 			break;
 		}
 
-		if (Q_stricmp(token, "loadmenu") == 0)
-		{
-			if (CG_Load_Menu(&p))
-			{
+		if (Q_stricmp(token, "loadmenu") == 0) {
+			if (CG_Load_Menu(&p)) {
 				continue;
-			}
-			else
-			{
+			} else {
 				break;
 			}
 		}
@@ -2495,8 +2281,7 @@ void CG_LoadMenus(const char *menuFile)
 
 
 
-static qboolean CG_OwnerDrawHandleKey(int ownerDraw, int flags, float *special, int key)
-{
+static qboolean CG_OwnerDrawHandleKey(int ownerDraw, int flags, float *special, int key) {
 	// Nico, silent GCC
 	ownerDraw = ownerDraw;
 	flags     = flags;
@@ -2507,32 +2292,23 @@ static qboolean CG_OwnerDrawHandleKey(int ownerDraw, int flags, float *special, 
 }
 
 
-static int CG_FeederCount(float feederID)
-{
+static int CG_FeederCount(float feederID) {
 	int i, count;
+
 	count = 0;
-	if (feederID == FEEDER_REDTEAM_LIST)
-	{
-		for (i = 0; i < cg.numScores; i++)
-		{
-			if (cg.scores[i].team == TEAM_AXIS)
-			{
+	if (feederID == FEEDER_REDTEAM_LIST) {
+		for (i = 0; i < cg.numScores; i++) {
+			if (cg.scores[i].team == TEAM_AXIS) {
 				count++;
 			}
 		}
-	}
-	else if (feederID == FEEDER_BLUETEAM_LIST)
-	{
-		for (i = 0; i < cg.numScores; i++)
-		{
-			if (cg.scores[i].team == TEAM_ALLIES)
-			{
+	} else if (feederID == FEEDER_BLUETEAM_LIST) {
+		for (i = 0; i < cg.numScores; i++) {
+			if (cg.scores[i].team == TEAM_ALLIES) {
 				count++;
 			}
 		}
-	}
-	else if (feederID == FEEDER_SCOREBOARD)
-	{
+	} else if (feederID == FEEDER_SCOREBOARD) {
 		return cg.numScores;
 	}
 	return count;
@@ -2544,17 +2320,13 @@ static int CG_FeederCount(float feederID)
 ///////////////////////////
 ///////////////////////////
 
-static clientInfo_t *CG_InfoFromScoreIndex(int index, int team, int *scoreIndex)
-{
+static clientInfo_t *CG_InfoFromScoreIndex(int index, int team, int *scoreIndex) {
 	int i, count;
 
 	count = 0;
-	for (i = 0; i < cg.numScores; i++)
-	{
-		if (cg.scores[i].team == team)
-		{
-			if (count == index)
-			{
+	for (i = 0; i < cg.numScores; i++) {
+		if (cg.scores[i].team == team) {
+			if (count == index) {
 				*scoreIndex = i;
 				return &cgs.clientinfo[cg.scores[i].client];
 			}
@@ -2566,8 +2338,7 @@ static clientInfo_t *CG_InfoFromScoreIndex(int index, int team, int *scoreIndex)
 	return &cgs.clientinfo[cg.scores[index].client];
 }
 
-static const char *CG_FeederItemText(float feederID, int index, int column, qhandle_t *handle, int *numhandles)
-{
+static const char *CG_FeederItemText(float feederID, int index, int column, qhandle_t *handle, int *numhandles) {
 	int          scoreIndex = 0;
 	clientInfo_t *info      = NULL;
 	int          team       = -1;
@@ -2578,22 +2349,17 @@ static const char *CG_FeederItemText(float feederID, int index, int column, qhan
 
 	*handle = -1;
 
-	if (feederID == FEEDER_REDTEAM_LIST)
-	{
+	if (feederID == FEEDER_REDTEAM_LIST) {
 		team = TEAM_AXIS;
-	}
-	else if (feederID == FEEDER_BLUETEAM_LIST)
-	{
+	} else if (feederID == FEEDER_BLUETEAM_LIST) {
 		team = TEAM_ALLIES;
 	}
 
 	info = CG_InfoFromScoreIndex(index, team, &scoreIndex);
 	sp   = &cg.scores[scoreIndex];
 
-	if (info && info->infoValid)
-	{
-		switch (column)
-		{
+	if (info && info->infoValid) {
+		switch (column) {
 		case 0:
 			break;
 		case 3:
@@ -2604,8 +2370,7 @@ static const char *CG_FeederItemText(float feederID, int index, int column, qhan
 			return va("%4i", sp->time);
 			break;
 		case 6:
-			if (sp->ping == -1)
-			{
+			if (sp->ping == -1) {
 				return "connecting";
 			}
 			return va("%4i", sp->ping);
@@ -2616,8 +2381,7 @@ static const char *CG_FeederItemText(float feederID, int index, int column, qhan
 	return "";
 }
 
-static qhandle_t CG_FeederItemImage(float feederID, int index)
-{
+static qhandle_t CG_FeederItemImage(float feederID, int index) {
 	// Nico, silent GCC
 	feederID = feederID;
 	index    = index;
@@ -2625,17 +2389,14 @@ static qhandle_t CG_FeederItemImage(float feederID, int index)
 	return 0;
 }
 
-static void CG_FeederSelection(float feederID, int index)
-{
+static void CG_FeederSelection(float feederID, int index) {
 	int i, count;
 	int team = (feederID == FEEDER_REDTEAM_LIST) ? TEAM_AXIS : TEAM_ALLIES;
+
 	count = 0;
-	for (i = 0; i < cg.numScores; i++)
-	{
-		if (cg.scores[i].team == team)
-		{
-			if (index == count)
-			{
+	for (i = 0; i < cg.numScores; i++) {
+		if (cg.scores[i].team == team) {
+			if (index == count) {
 				cg.selectedScore = i;
 			}
 			count++;
@@ -2643,16 +2404,15 @@ static void CG_FeederSelection(float feederID, int index)
 	}
 }
 
-float CG_Cvar_Get(const char *cvar)
-{
+float CG_Cvar_Get(const char *cvar) {
 	char buff[128];
-	memset(buff, 0, sizeof(buff));
-	trap_Cvar_VariableStringBuffer(cvar, buff, sizeof(buff));
+
+	memset(buff, 0, sizeof (buff));
+	trap_Cvar_VariableStringBuffer(cvar, buff, sizeof (buff));
 	return atof(buff);
 }
 
-void CG_Text_PaintWithCursor(float x, float y, float scale, vec4_t color, const char *text, int cursorPos, char cursor, int limit, int style)
-{
+void CG_Text_PaintWithCursor(float x, float y, float scale, vec4_t color, const char *text, int cursorPos, char cursor, int limit, int style) {
 	// Nico, silent GCC
 	cursor    = cursor;
 	cursorPos = cursorPos;
@@ -2660,37 +2420,31 @@ void CG_Text_PaintWithCursor(float x, float y, float scale, vec4_t color, const 
 	CG_Text_Paint(x, y, scale, color, text, 0, limit, style);
 }
 
-static int CG_OwnerDrawWidth(int ownerDraw, float scale)
-{
+static int CG_OwnerDrawWidth(int ownerDraw, float scale) {
 	// Nico, silent GCC
 	scale = scale;
 
-	switch (ownerDraw)
-	{
+	switch (ownerDraw) {
 	default:
 		break;
 	}
 	return 0;
 }
 
-static int CG_PlayCinematic(const char *name, float x, float y, float w, float h)
-{
+static int CG_PlayCinematic(const char *name, float x, float y, float w, float h) {
 	return trap_CIN_PlayCinematic(name, x, y, w, h, CIN_loop);
 }
 
-static void CG_StopCinematic(int handle)
-{
+static void CG_StopCinematic(int handle) {
 	trap_CIN_StopCinematic(handle);
 }
 
-static void CG_DrawCinematic(int handle, float x, float y, float w, float h)
-{
+static void CG_DrawCinematic(int handle, float x, float y, float w, float h) {
 	trap_CIN_SetExtents(handle, x, y, w, h);
 	trap_CIN_DrawCinematic(handle);
 }
 
-static void CG_RunCinematicFrame(int handle)
-{
+static void CG_RunCinematicFrame(int handle) {
 	trap_CIN_RunCinematic(handle);
 }
 
@@ -2703,8 +2457,7 @@ CG_LoadHudMenu();
 
 =================
 */
-void CG_LoadHudMenu()
-{
+void CG_LoadHudMenu() {
 	cgDC.registerShaderNoMip    = &trap_R_RegisterShaderNoMip;
 	cgDC.setColor               = &trap_R_SetColor;
 	cgDC.drawHandlePic          = &CG_DrawPic;
@@ -2774,8 +2527,7 @@ void CG_LoadHudMenu()
 	CG_Text_SetActiveFont(0);
 }
 
-void CG_AssetCache()
-{
+void CG_AssetCache() {
 	cgDC.Assets.gradientBar         = trap_R_RegisterShaderNoMip(ASSET_GRADIENTBAR);
 	cgDC.Assets.fxBasePic           = trap_R_RegisterShaderNoMip(ART_FX_BASE);
 	cgDC.Assets.fxPic[0]            = trap_R_RegisterShaderNoMip(ART_FX_RED);
@@ -2810,12 +2562,12 @@ Will perform callbacks to make the loading info screen update.
 =================
 */
 #ifdef _DEBUG
-#define DEBUG_INITPROFILE_INIT int elapsed, dbgTime = trap_Milliseconds();
-#define DEBUG_INITPROFILE_EXEC(f) if (developer.integer) { CG_Printf("^5%s passed in %i msec\n", f, elapsed = trap_Milliseconds() - dbgTime);  dbgTime += elapsed; }
+# define DEBUG_INITPROFILE_INIT int elapsed, dbgTime = trap_Milliseconds();
+# define DEBUG_INITPROFILE_EXEC(f) if (developer.integer) { CG_Printf("^5%s passed in %i msec\n", f, elapsed = trap_Milliseconds() - dbgTime);  dbgTime += elapsed; }
 #endif // _DEBUG
-void CG_Init(int serverMessageNum, int serverCommandSequence, int clientNum, qboolean demoPlayback)
-{
+void CG_Init(int serverMessageNum, int serverCommandSequence, int clientNum, qboolean demoPlayback) {
 	const char *s;
+
 #ifdef _DEBUG
 	DEBUG_INITPROFILE_INIT
 #endif // _DEBUG
@@ -2824,11 +2576,11 @@ void CG_Init(int serverMessageNum, int serverCommandSequence, int clientNum, qbo
 	demoPlayback = demoPlayback;
 
 	// clear everything
-	memset(&cgs, 0, sizeof(cgs));
-	memset(&cg, 0, sizeof(cg));
-	memset(cg_entities, 0, sizeof(cg_entities));
-	memset(cg_weapons, 0, sizeof(cg_weapons));
-	memset(cg_items, 0, sizeof(cg_items));
+	memset(&cgs, 0, sizeof (cgs));
+	memset(&cg, 0, sizeof (cg));
+	memset(cg_entities, 0, sizeof (cg_entities));
+	memset(cg_weapons, 0, sizeof (cg_weapons));
+	memset(cg_items, 0, sizeof (cg_items));
 
 	cgs.initing = qtrue;
 
@@ -2892,8 +2644,7 @@ void CG_Init(int serverMessageNum, int serverCommandSequence, int clientNum, qbo
 
 	// check version
 	s = CG_ConfigString(CS_GAME_VERSION);
-	if (strcmp(s, GAME_VERSION))
-	{
+	if (strcmp(s, GAME_VERSION)) {
 		CG_Error("Client/Server game mismatch: '%s/%s'", GAME_VERSION, s);
 	}
 	trap_Cvar_Set("cg_etVersion", GAME_VERSION_DATED);   // So server can check
@@ -3012,22 +2763,18 @@ CG_Shutdown
 Called before every level change or subsystem restart
 =================
 */
-void CG_Shutdown(void)
-{
+void CG_Shutdown(void) {
 	// some mods may need to do cleanup work here,
 	// like closing files or archiving session data
 
 	CG_EventHandling(CGAME_EVENT_NONE, qtrue);
-	if (cg.demoPlayback)
-	{
+	if (cg.demoPlayback) {
 		trap_Cvar_Set("timescale", "1");
 	}
 }
 
-qboolean CG_CheckExecKey(int key)
-{
-	if (!cg.showFireteamMenu)
-	{
+qboolean CG_CheckExecKey(int key) {
+	if (!cg.showFireteamMenu) {
 		return qfalse;
 	}
 
@@ -3035,23 +2782,18 @@ qboolean CG_CheckExecKey(int key)
 }
 
 // Quoted-Printable like encoding
-void CG_EncodeQP(const char *in, char *out, int maxlen)
-{
+void CG_EncodeQP(const char *in, char *out, int maxlen) {
 	char t;
 	char *first = out;
 
 	// sanity check
-	if (maxlen <= 0)
-	{
+	if (maxlen <= 0) {
 		return;
 	}
 
-	while (*in)
-	{
-		if (*in == '"' || *in == '%' || *in == '=' || *((byte *) in) > 127)
-		{
-			if (out - first + 4 >= maxlen)
-			{
+	while (*in) {
+		if (*in == '"' || *in == '%' || *in == '=' || *((byte *) in) > 127) {
+			if (out - first + 4 >= maxlen) {
 				break;
 			}
 			*out++ = '=';
@@ -3060,11 +2802,8 @@ void CG_EncodeQP(const char *in, char *out, int maxlen)
 			t      = *((byte *) in) % 16;
 			*out++ = t <= 9 ? t + '0' : t - 10 + 'A';
 			in++;
-		}
-		else
-		{
-			if (out - first + 1 >= maxlen)
-			{
+		} else {
+			if (out - first + 1 >= maxlen) {
 				break;
 			}
 			*out++ = *in++;
@@ -3074,42 +2813,34 @@ void CG_EncodeQP(const char *in, char *out, int maxlen)
 }
 
 // Quoted-Printable decoding
-void CG_DecodeQP(char *line)
-{
+void CG_DecodeQP(char *line) {
 	char *o = line;
 	char t;
 
-	while (*line)
-	{
-		if (*line == '=')
-		{
+	while (*line) {
+		if (*line == '=') {
 			line++;
 
-			if (!*line || !*(line + 1))
-			{
+			if (!*line || !*(line + 1)) {
 				break;
 			}
 
 			t = 0;
-			if (!isxdigit(*line))
-			{
+			if (!isxdigit(*line)) {
 				line += 2;
 				continue;
 			}
 			t = gethex(*line) * 16;
 
 			line++;
-			if (!isxdigit(*line))
-			{
+			if (!isxdigit(*line)) {
 				line++;
 				continue;
 			}
 			t += gethex(*line);
 			line++;
 			*o++ = t;
-		}
-		else
-		{
+		} else {
 			*o++ = *line++;
 		}
 	}

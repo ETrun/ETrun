@@ -42,25 +42,21 @@ Targets will be fired when someone spawns in on them.
 "nohumans" will prevent non-bots from using this spot.
 If the start position is targeting an entity, the players camera will start out facing that ent (like an info_notnull)
 */
-void SP_info_player_deathmatch(gentity_t *ent)
-{
+void SP_info_player_deathmatch(gentity_t *ent) {
 	int    i;
 	vec3_t dir;
 
 	G_SpawnInt("nobots", "0", &i);
-	if (i)
-	{
+	if (i) {
 		ent->flags |= FL_NO_BOTS;
 	}
 	G_SpawnInt("nohumans", "0", &i);
-	if (i)
-	{
+	if (i) {
 		ent->flags |= FL_NO_HUMANS;
 	}
 
 	ent->enemy = G_PickTarget(ent->target);
-	if (ent->enemy)
-	{
+	if (ent->enemy) {
 		VectorSubtract(ent->enemy->s.origin, ent->s.origin, dir);
 		vectoangles(dir, ent->s.angles);
 	}
@@ -72,8 +68,7 @@ void SP_info_player_deathmatch(gentity_t *ent)
 these are start points /after/ the level start
 the letter (a b c d) designates the checkpoint that needs to be complete in order to use this start position
 */
-void SP_info_player_checkpoint(gentity_t *ent)
-{
+void SP_info_player_checkpoint(gentity_t *ent) {
 	ent->classname = "info_player_checkpoint";
 	SP_info_player_deathmatch(ent);
 }
@@ -84,8 +79,7 @@ void SP_info_player_checkpoint(gentity_t *ent)
 /*QUAKED info_player_start (1 0 0) (-18 -18 -24) (18 18 48)
 equivelant to info_player_deathmatch
 */
-void SP_info_player_start(gentity_t *ent)
-{
+void SP_info_player_start(gentity_t *ent) {
 	ent->classname = "info_player_deathmatch";
 	SP_info_player_deathmatch(ent);
 }
@@ -94,8 +88,7 @@ void SP_info_player_start(gentity_t *ent)
 QUAKED info_player_intermission (1 0 1) (-16 -16 -24) (16 16 32) AXIS ALLIED
 The intermission will be viewed from this point.  Target an info_notnull for the view direction.
 */
-void SP_info_player_intermission(gentity_t *ent)
-{
+void SP_info_player_intermission(gentity_t *ent) {
 	// Nico, silent GCC
 	ent = ent;
 }
@@ -114,8 +107,7 @@ SpotWouldTelefrag
 
 ================
 */
-qboolean SpotWouldTelefrag(gentity_t *spot)
-{
+qboolean SpotWouldTelefrag(gentity_t *spot) {
 	int       i, num;
 	int       touch[MAX_GENTITIES];
 	gentity_t *hit;
@@ -125,11 +117,9 @@ qboolean SpotWouldTelefrag(gentity_t *spot)
 	VectorAdd(spot->r.currentOrigin, playerMaxs, maxs);
 	num = trap_EntitiesInBox(mins, maxs, touch, MAX_GENTITIES);
 
-	for (i = 0 ; i < num ; i++)
-	{
+	for (i = 0 ; i < num ; i++) {
 		hit = &g_entities[touch[i]];
-		if (hit->client && hit->client->ps.stats[STAT_HEALTH] > 0)
-		{
+		if (hit->client && hit->client->ps.stats[STAT_HEALTH] > 0) {
 			return qtrue;
 		}
 
@@ -146,8 +136,7 @@ Find the spot that we DON'T want to use
 ================
 */
 #define MAX_SPAWN_POINTS    128
-gentity_t *SelectNearestDeathmatchSpawnPoint(vec3_t from)
-{
+gentity_t *SelectNearestDeathmatchSpawnPoint(vec3_t from) {
 	gentity_t *spot;
 	vec3_t    delta;
 	float     dist, nearestDist;
@@ -157,13 +146,11 @@ gentity_t *SelectNearestDeathmatchSpawnPoint(vec3_t from)
 	nearestSpot = NULL;
 	spot        = NULL;
 
-	while ((spot = G_Find(spot, FOFS(classname), "info_player_deathmatch")) != NULL)
-	{
+	while ((spot = G_Find(spot, FOFS(classname), "info_player_deathmatch")) != NULL) {
 
 		VectorSubtract(spot->r.currentOrigin, from, delta);
 		dist = VectorLength(delta);
-		if (dist < nearestDist)
-		{
+		if (dist < nearestDist) {
 			nearestDist = dist;
 			nearestSpot = spot;
 		}
@@ -181,8 +168,7 @@ go to a random point that doesn't telefrag
 ================
 */
 #define MAX_SPAWN_POINTS    128
-gentity_t *SelectRandomDeathmatchSpawnPoint(void)
-{
+gentity_t *SelectRandomDeathmatchSpawnPoint(void) {
 	gentity_t *spot;
 	int       count;
 	int       selection;
@@ -191,18 +177,15 @@ gentity_t *SelectRandomDeathmatchSpawnPoint(void)
 	count = 0;
 	spot  = NULL;
 
-	while ((spot = G_Find(spot, FOFS(classname), "info_player_deathmatch")) != NULL)
-	{
-		if (SpotWouldTelefrag(spot))
-		{
+	while ((spot = G_Find(spot, FOFS(classname), "info_player_deathmatch")) != NULL) {
+		if (SpotWouldTelefrag(spot)) {
 			continue;
 		}
 		spots[count] = spot;
 		count++;
 	}
 
-	if (!count)     // no spots that won't telefrag
-	{
+	if (!count) {   // no spots that won't telefrag
 		return G_Find(NULL, FOFS(classname), "info_player_deathmatch");
 	}
 
@@ -218,28 +201,24 @@ SelectSpawnPoint
 Chooses a player start, deathmatch start, etc
 ============
 */
-gentity_t *SelectSpawnPoint(vec3_t avoidPoint, vec3_t origin, vec3_t angles)
-{
+gentity_t *SelectSpawnPoint(vec3_t avoidPoint, vec3_t origin, vec3_t angles) {
 	gentity_t *spot;
 	gentity_t *nearestSpot;
 
 	nearestSpot = SelectNearestDeathmatchSpawnPoint(avoidPoint);
 
 	spot = SelectRandomDeathmatchSpawnPoint();
-	if (spot == nearestSpot)
-	{
+	if (spot == nearestSpot) {
 		// roll again if it would be real close to point of death
 		spot = SelectRandomDeathmatchSpawnPoint();
-		if (spot == nearestSpot)
-		{
+		if (spot == nearestSpot) {
 			// last try
 			spot = SelectRandomDeathmatchSpawnPoint();
 		}
 	}
 
 	// find a single player start spot
-	if (!spot)
-	{
+	if (!spot) {
 		G_Error("Couldn't find a spawn point");
 	}
 
@@ -256,8 +235,7 @@ SelectSpectatorSpawnPoint
 
 ============
 */
-gentity_t *SelectSpectatorSpawnPoint(vec3_t origin, vec3_t angles)
-{
+gentity_t *SelectSpectatorSpawnPoint(vec3_t origin, vec3_t angles) {
 	FindIntermissionPoint();
 
 	VectorCopy(level.intermission_origin, origin);
@@ -281,8 +259,7 @@ BodyUnlink
 Called by BodySink
 =============
 */
-void BodyUnlink(gentity_t *ent)
-{
+void BodyUnlink(gentity_t *ent) {
 	trap_UnlinkEntity(ent);
 	ent->physicsObject = qfalse;
 }
@@ -294,8 +271,7 @@ BodySink
 After sitting around for five seconds, fall into the ground and dissapear
 =============
 */
-void BodySink2(gentity_t *ent)
-{
+void BodySink2(gentity_t *ent) {
 	ent->physicsObject = qfalse;
 	ent->nextthink     = level.time + BODY_TIME(BODY_TEAM(ent)) + 1500;
 	ent->think         = BodyUnlink;
@@ -312,10 +288,8 @@ BodySink
 After sitting around for five seconds, fall into the ground and dissapear
 =============
 */
-void BodySink(gentity_t *ent)
-{
-	if (ent->activator)
-	{
+void BodySink(gentity_t *ent) {
+	if (ent->activator) {
 		ent->activator = NULL;
 	}
 
@@ -330,13 +304,11 @@ SetClientViewAngle
 
 ==================
 */
-void SetClientViewAngle(gentity_t *ent, vec3_t angle)
-{
+void SetClientViewAngle(gentity_t *ent, vec3_t angle) {
 	int i;
 
 	// set the delta angle
-	for (i = 0 ; i < 3 ; i++)
-	{
+	for (i = 0 ; i < 3 ; i++) {
 		int cmdAngle;
 
 		cmdAngle                        = ANGLE2SHORT(angle[i]);
@@ -346,8 +318,7 @@ void SetClientViewAngle(gentity_t *ent, vec3_t angle)
 	VectorCopy(ent->s.angles, ent->client->ps.viewangles);
 }
 
-void SetClientViewAnglePitch(gentity_t *ent, vec_t angle)
-{
+void SetClientViewAnglePitch(gentity_t *ent, vec_t angle) {
 	int cmdAngle;
 
 	cmdAngle                            = ANGLE2SHORT(angle);
@@ -362,21 +333,17 @@ void SetClientViewAnglePitch(gentity_t *ent, vec_t angle)
 limbo
 ================
 */
-void limbo(gentity_t *ent)
-{
+void limbo(gentity_t *ent) {
 	int i;
 	int startclient = ent->client->ps.clientNum;
 
-	if (ent->r.svFlags & SVF_POW)
-	{
+	if (ent->r.svFlags & SVF_POW) {
 		return;
 	}
 
-	if (!(ent->client->ps.pm_flags & PMF_LIMBO))
-	{
+	if (!(ent->client->ps.pm_flags & PMF_LIMBO)) {
 		// DHM - Nerve :: First save off persistant info we'll need for respawn
-		for (i = 0; i < MAX_PERSISTANT; i++)
-		{
+		for (i = 0; i < MAX_PERSISTANT; i++) {
 			ent->client->saved_persistant[i] = ent->client->ps.persistant[i];
 		}
 
@@ -404,24 +371,20 @@ reinforce
 ================
 // -- called when time expires for a team deployment cycle and there is at least one guy ready to go
 */
-void reinforce(gentity_t *ent)
-{
+void reinforce(gentity_t *ent) {
 	int       p, team;
 	gclient_t *rclient;
 	char      userinfo[MAX_INFO_STRING], *respawnStr;
 
-	if (ent->r.svFlags & SVF_BOT)
-	{
-		trap_GetUserinfo(ent->s.number, userinfo, sizeof(userinfo));
+	if (ent->r.svFlags & SVF_BOT) {
+		trap_GetUserinfo(ent->s.number, userinfo, sizeof (userinfo));
 		respawnStr = Info_ValueForKey(userinfo, "respawn");
-		if (!Q_stricmp(respawnStr, "no") || !Q_stricmp(respawnStr, "off"))
-		{
+		if (!Q_stricmp(respawnStr, "no") || !Q_stricmp(respawnStr, "off")) {
 			return; // no respawns
 		}
 	}
 
-	if (!(ent->client->ps.pm_flags & PMF_LIMBO))
-	{
+	if (!(ent->client->ps.pm_flags & PMF_LIMBO)) {
 		G_Printf("player already deployed, skipping\n");
 		return;
 	}
@@ -430,14 +393,9 @@ void reinforce(gentity_t *ent)
 	team = ent->client->sess.sessionTeam;
 
 	// find number active team spawnpoints
-	if (team == TEAM_AXIS)
-	{
-	}
-	else if (team == TEAM_ALLIES)
-	{
-	}
-	else
-	{
+	if (team == TEAM_AXIS) {
+	} else if (team == TEAM_ALLIES) {
+	} else {
 		assert(0);
 	}
 
@@ -457,8 +415,7 @@ void reinforce(gentity_t *ent)
 respawn
 ================
 */
-void respawn(gentity_t *ent)
-{
+void respawn(gentity_t *ent) {
 	ent->client->ps.pm_flags &= ~PMF_LIMBO; // JPW NERVE turns off limbo
 
 	ClientSpawn(ent);
@@ -472,18 +429,14 @@ TeamCount
 Returns number of players on a team
 ================
 */
-team_t TeamCount(int ignoreClientNum, int team)
-{
+team_t TeamCount(int ignoreClientNum, int team) {
 	int i, ref, count = 0;
 
-	for (i = 0; i < level.numConnectedClients; i++)
-	{
-		if ((ref = level.sortedClients[i]) == ignoreClientNum)
-		{
+	for (i = 0; i < level.numConnectedClients; i++) {
+		if ((ref = level.sortedClients[i]) == ignoreClientNum) {
 			continue;
 		}
-		if ((int)level.clients[ref].sess.sessionTeam == team)
-		{
+		if ((int)level.clients[ref].sess.sessionTeam == team) {
 			count++;
 		}
 	}
@@ -498,19 +451,16 @@ PickTeam
 
 ================
 */
-team_t PickTeam(int ignoreClientNum)
-{
+team_t PickTeam(int ignoreClientNum) {
 	int counts[TEAM_NUM_TEAMS] = { 0, 0, 0 };
 
 	counts[TEAM_ALLIES] = TeamCount(ignoreClientNum, TEAM_ALLIES);
 	counts[TEAM_AXIS]   = TeamCount(ignoreClientNum, TEAM_AXIS);
 
-	if (counts[TEAM_ALLIES] > counts[TEAM_AXIS])
-	{
+	if (counts[TEAM_ALLIES] > counts[TEAM_AXIS]) {
 		return(TEAM_AXIS);
 	}
-	if (counts[TEAM_AXIS] > counts[TEAM_ALLIES])
-	{
+	if (counts[TEAM_AXIS] > counts[TEAM_ALLIES]) {
 		return(TEAM_ALLIES);
 	}
 
@@ -518,13 +468,11 @@ team_t PickTeam(int ignoreClientNum)
 	return TEAM_AXIS;
 }
 
-qboolean AddWeaponToPlayer(gclient_t *client, weapon_t weapon, int ammo, int ammoclip, qboolean setcurrent)
-{
+qboolean AddWeaponToPlayer(gclient_t *client, weapon_t weapon, int ammo, int ammoclip, qboolean setcurrent) {
 	COM_BitSet(client->ps.weapons, weapon);
 	client->ps.ammoclip[BG_FindClipForWeapon(weapon)] = ammoclip;
 	client->ps.ammo[BG_FindAmmoForWeapon(weapon)]     = ammo;
-	if (setcurrent)
-	{
+	if (setcurrent) {
 		client->ps.weapon = weapon;
 	}
 
@@ -536,12 +484,10 @@ qboolean AddWeaponToPlayer(gclient_t *client, weapon_t weapon, int ammo, int amm
 SetWolfSpawnWeapons
 ===========
 */
-void SetWolfSpawnWeapons(gclient_t *client)
-{
+void SetWolfSpawnWeapons(gclient_t *client) {
 	int pc = client->sess.playerType;
 
-	if (client->sess.sessionTeam == TEAM_SPECTATOR)
-	{
+	if (client->sess.sessionTeam == TEAM_SPECTATOR) {
 		return;
 	}
 
@@ -555,7 +501,7 @@ void SetWolfSpawnWeapons(gclient_t *client)
 	client->ps.teamNum = pc;
 
 	// JPW NERVE -- zero out all ammo counts
-	memset(client->ps.ammo, 0, MAX_WEAPONS * sizeof(int));
+	memset(client->ps.ammo, 0, MAX_WEAPONS * sizeof (int));
 
 	// All players start with a knife (not OR-ing so that it clears previous weapons)
 	client->ps.weapons[0] = 0;
@@ -566,21 +512,17 @@ void SetWolfSpawnWeapons(gclient_t *client)
 	client->ps.weaponstate = WEAPON_READY;
 
 	// Nico, give binoculars to everyone
-	if (AddWeaponToPlayer(client, WP_BINOCULARS, 1, 0, qfalse))
-	{
+	if (AddWeaponToPlayer(client, WP_BINOCULARS, 1, 0, qfalse)) {
 		client->ps.stats[STAT_KEYS] |= (1 << INV_BINOCS);
 	}
 
-	if (pc == PC_ENGINEER)
-	{
+	if (pc == PC_ENGINEER) {
 
 		// Nico, give pliers
 		AddWeaponToPlayer(client, WP_PLIERS, 0, 1, qfalse);
 
-		if (client->sess.sessionTeam == TEAM_AXIS)
-		{
-			switch (client->sess.playerWeapon)
-			{
+		if (client->sess.sessionTeam == TEAM_AXIS) {
+			switch (client->sess.playerWeapon) {
 			case WP_KAR98:
 				AddWeaponToPlayer(client, WP_KAR98, GetAmmoTableData(WP_KAR98)->defaultStartingAmmo, GetAmmoTableData(WP_KAR98)->defaultStartingClip, qtrue);
 				break;
@@ -589,11 +531,8 @@ void SetWolfSpawnWeapons(gclient_t *client)
 				break;
 			}
 
-		}
-		else
-		{
-			switch (client->sess.playerWeapon)
-			{
+		} else {
+			switch (client->sess.playerWeapon) {
 			case WP_CARBINE:
 				AddWeaponToPlayer(client, WP_CARBINE, GetAmmoTableData(WP_CARBINE)->defaultStartingAmmo, GetAmmoTableData(WP_CARBINE)->defaultStartingClip, qtrue);
 				break;
@@ -602,38 +541,25 @@ void SetWolfSpawnWeapons(gclient_t *client)
 				break;
 			}
 		}
-	}
-	else if (pc == PC_FIELDOPS)
-	{
+	} else if (pc == PC_FIELDOPS) {
 
-		if (client->sess.sessionTeam == TEAM_AXIS)
-		{
+		if (client->sess.sessionTeam == TEAM_AXIS) {
 			AddWeaponToPlayer(client, WP_MP40, GetAmmoTableData(WP_MP40)->defaultStartingAmmo, GetAmmoTableData(WP_MP40)->defaultStartingClip, qtrue);
-		}
-		else
-		{
+		} else {
 			AddWeaponToPlayer(client, WP_THOMPSON, GetAmmoTableData(WP_THOMPSON)->defaultStartingAmmo, GetAmmoTableData(WP_THOMPSON)->defaultStartingClip, qtrue);
 		}
-	}
-	else if (pc == PC_MEDIC)
-	{
+	} else if (pc == PC_MEDIC) {
 
 		AddWeaponToPlayer(client, WP_MEDKIT, GetAmmoTableData(WP_MEDKIT)->defaultStartingAmmo, GetAmmoTableData(WP_MEDKIT)->defaultStartingClip, qfalse);
 
-		if (client->sess.sessionTeam == TEAM_AXIS)
-		{
+		if (client->sess.sessionTeam == TEAM_AXIS) {
 			AddWeaponToPlayer(client, WP_MP40, 0, GetAmmoTableData(WP_MP40)->defaultStartingClip, qtrue);
-		}
-		else
-		{
+		} else {
 			AddWeaponToPlayer(client, WP_THOMPSON, 0, GetAmmoTableData(WP_THOMPSON)->defaultStartingClip, qtrue);
 		}
-	}
-	else if (pc == PC_SOLDIER)
-	{
+	} else if (pc == PC_SOLDIER) {
 
-		switch (client->sess.sessionTeam)
-		{
+		switch (client->sess.sessionTeam) {
 		case TEAM_AXIS:
 			/* Nico, #todo rocket runs support
 			switch ( client->sess.playerWeapon ) {
@@ -669,32 +595,23 @@ void SetWolfSpawnWeapons(gclient_t *client)
 		default:
 			break;
 		}
-	}
-	else if (pc == PC_COVERTOPS)
-	{
-		switch (client->sess.playerWeapon)
-		{
+	} else if (pc == PC_COVERTOPS) {
+		switch (client->sess.playerWeapon) {
 		case WP_K43:
 		case WP_GARAND:
-			if (client->sess.sessionTeam == TEAM_AXIS)
-			{
-				if (AddWeaponToPlayer(client, WP_K43, GetAmmoTableData(WP_K43)->defaultStartingAmmo, GetAmmoTableData(WP_K43)->defaultStartingClip, qtrue))
-				{
+			if (client->sess.sessionTeam == TEAM_AXIS) {
+				if (AddWeaponToPlayer(client, WP_K43, GetAmmoTableData(WP_K43)->defaultStartingAmmo, GetAmmoTableData(WP_K43)->defaultStartingClip, qtrue)) {
 					AddWeaponToPlayer(client, WP_K43_SCOPE, GetAmmoTableData(WP_K43_SCOPE)->defaultStartingAmmo, GetAmmoTableData(WP_K43_SCOPE)->defaultStartingClip, qfalse);
 				}
 				break;
-			}
-			else
-			{
-				if (AddWeaponToPlayer(client, WP_GARAND, GetAmmoTableData(WP_GARAND)->defaultStartingAmmo, GetAmmoTableData(WP_GARAND)->defaultStartingClip, qtrue))
-				{
+			} else {
+				if (AddWeaponToPlayer(client, WP_GARAND, GetAmmoTableData(WP_GARAND)->defaultStartingAmmo, GetAmmoTableData(WP_GARAND)->defaultStartingClip, qtrue)) {
 					AddWeaponToPlayer(client, WP_GARAND_SCOPE, GetAmmoTableData(WP_GARAND_SCOPE)->defaultStartingAmmo, GetAmmoTableData(WP_GARAND_SCOPE)->defaultStartingClip, qfalse);
 				}
 				break;
 			}
 		case WP_FG42:
-			if (AddWeaponToPlayer(client, WP_FG42, GetAmmoTableData(WP_FG42)->defaultStartingAmmo, GetAmmoTableData(WP_FG42)->defaultStartingClip, qtrue))
-			{
+			if (AddWeaponToPlayer(client, WP_FG42, GetAmmoTableData(WP_FG42)->defaultStartingAmmo, GetAmmoTableData(WP_FG42)->defaultStartingClip, qtrue)) {
 				AddWeaponToPlayer(client, WP_FG42SCOPE, GetAmmoTableData(WP_FG42SCOPE)->defaultStartingAmmo, GetAmmoTableData(WP_FG42SCOPE)->defaultStartingClip, qfalse);
 			}
 			break;
@@ -705,11 +622,9 @@ void SetWolfSpawnWeapons(gclient_t *client)
 	}
 
 	// Nico, note: pistols are given here
-	switch (client->sess.sessionTeam)
-	{
+	switch (client->sess.sessionTeam) {
 	case TEAM_AXIS:
-		switch (pc)
-		{
+		switch (pc) {
 		case PC_SOLDIER:
 			AddWeaponToPlayer(client, WP_LUGER, GetAmmoTableData(WP_LUGER)->defaultStartingAmmo, GetAmmoTableData(WP_LUGER)->defaultStartingClip, qfalse);
 			break;
@@ -726,8 +641,7 @@ void SetWolfSpawnWeapons(gclient_t *client)
 		}
 		break;
 	default:
-		switch (pc)
-		{
+		switch (pc) {
 		case PC_SOLDIER:
 			AddWeaponToPlayer(client, WP_COLT, GetAmmoTableData(WP_COLT)->defaultStartingAmmo, GetAmmoTableData(WP_COLT)->defaultStartingClip, qfalse);
 			break;
@@ -745,34 +659,27 @@ void SetWolfSpawnWeapons(gclient_t *client)
 	}
 }
 
-int G_CountTeamMedics(team_t team, qboolean alivecheck)
-{
+int G_CountTeamMedics(team_t team, qboolean alivecheck) {
 	int numMedics = 0;
 	int i, j;
 
-	for (i = 0; i < level.numConnectedClients; i++)
-	{
+	for (i = 0; i < level.numConnectedClients; i++) {
 		j = level.sortedClients[i];
 
-		if (level.clients[j].sess.sessionTeam != team)
-		{
+		if (level.clients[j].sess.sessionTeam != team) {
 			continue;
 		}
 
-		if (level.clients[j].sess.playerType != PC_MEDIC)
-		{
+		if (level.clients[j].sess.playerType != PC_MEDIC) {
 			continue;
 		}
 
-		if (alivecheck)
-		{
-			if (g_entities[j].health <= 0)
-			{
+		if (alivecheck) {
+			if (g_entities[j].health <= 0) {
 				continue;
 			}
 
-			if (level.clients[j].ps.pm_type == PM_DEAD || level.clients[j].ps.pm_flags & PMF_LIMBO)
-			{
+			if (level.clients[j].ps.pm_type == PM_DEAD || level.clients[j].ps.pm_flags & PMF_LIMBO) {
 				continue;
 			}
 		}
@@ -786,15 +693,13 @@ int G_CountTeamMedics(team_t team, qboolean alivecheck)
 //
 // AddMedicTeamBonus
 //
-void AddMedicTeamBonus(gclient_t *client)
-{
+void AddMedicTeamBonus(gclient_t *client) {
 	int numMedics = G_CountTeamMedics(client->sess.sessionTeam, qfalse);
 
 	// compute health mod
 	client->pers.maxHealth = 100 + 10 * numMedics;
 
-	if (client->pers.maxHealth > 125)
-	{
+	if (client->pers.maxHealth > 125) {
 		client->pers.maxHealth = 125;
 	}
 
@@ -806,8 +711,7 @@ void AddMedicTeamBonus(gclient_t *client)
 ClientCheckName
 ============
 */
-static void ClientCleanName(const char *in, char *out, int outSize)
-{
+static void ClientCleanName(const char *in, char *out, int outSize) {
 	int  len, colorlessLen;
 	char ch;
 	char *p;
@@ -822,32 +726,26 @@ static void ClientCleanName(const char *in, char *out, int outSize)
 	*p           = 0;
 	spaces       = 0;
 
-	while (1)
-	{
+	while (1) {
 		ch = *in++;
-		if (!ch)
-		{
+		if (!ch) {
 			break;
 		}
 
 		// don't allow leading spaces
-		if (!*p && ch == ' ')
-		{
+		if (!*p && ch == ' ') {
 			continue;
 		}
 
 		// check colors
-		if (ch == Q_COLOR_ESCAPE)
-		{
+		if (ch == Q_COLOR_ESCAPE) {
 			// solo trailing carat is not a color prefix
-			if (!*in)
-			{
+			if (!*in) {
 				break;
 			}
 
 			// make sure room in dest for both chars
-			if (len > outSize - 2)
-			{
+			if (len > outSize - 2) {
 				break;
 			}
 
@@ -858,21 +756,16 @@ static void ClientCleanName(const char *in, char *out, int outSize)
 		}
 
 		// don't allow too many consecutive spaces
-		if (ch == ' ')
-		{
+		if (ch == ' ') {
 			spaces++;
-			if (spaces > 3)
-			{
+			if (spaces > 3) {
 				continue;
 			}
-		}
-		else
-		{
+		} else {
 			spaces = 0;
 		}
 
-		if (len > outSize - 1)
-		{
+		if (len > outSize - 1) {
 			break;
 		}
 
@@ -883,44 +776,37 @@ static void ClientCleanName(const char *in, char *out, int outSize)
 	*out = 0;
 
 	// don't allow empty names
-	if (*p == 0 || colorlessLen == 0)
-	{
+	if (*p == 0 || colorlessLen == 0) {
 		Q_strncpyz(p, "UnnamedPlayer", outSize);
 	}
 }
 
-void G_StartPlayerAppropriateSound(gentity_t *ent, char *soundType)
-{
+void G_StartPlayerAppropriateSound(gentity_t *ent, char *soundType) {
 	// Nico, silent GCC
 	ent       = ent;
 	soundType = soundType;
 }
 
 // Nico, returns the IP is it's well-formed, NULL otherwise (from ETpub)
-const char *getParsedIp(const char *ipadd)
-{
+const char *getParsedIp(const char *ipadd) {
 	// code by Dan Pop, http://bytes.com/forum/thread212174.html
 	unsigned      b1, b2, b3, b4, port = 0;
 	unsigned char c;
 	int           rc;
 	static char   ipge[20];
 
-	if (!Q_strncmp(ipadd, "localhost", strlen("localhost")))
-	{
+	if (!Q_strncmp(ipadd, "localhost", strlen("localhost"))) {
 		return "localhost";
 	}
 
 	rc = sscanf(ipadd, "%3u.%3u.%3u.%3u:%u%c", &b1, &b2, &b3, &b4, &port, &c);
-	if (rc < 4 || rc > 5)
-	{
+	if (rc < 4 || rc > 5) {
 		return NULL;
 	}
-	if ((b1 | b2 | b3 | b4) > 255 || port > 65535)
-	{
+	if ((b1 | b2 | b3 | b4) > 255 || port > 65535) {
 		return NULL;
 	}
-	if (strspn(ipadd, "0123456789.:") < strlen(ipadd))
-	{
+	if (strspn(ipadd, "0123456789.:") < strlen(ipadd)) {
 		return NULL;
 	}
 	sprintf(ipge, "%u.%u.%u.%u", b1, b2, b3, b4);
@@ -939,8 +825,7 @@ The game can override any of the settings and call trap_SetUserinfo
 if desired.
 ============
 */
-void ClientUserinfoChanged(int clientNum)
-{
+void ClientUserinfoChanged(int clientNum) {
 	gentity_t *ent;
 	char      *s;
 	char      oldname[MAX_STRING_CHARS];
@@ -959,18 +844,16 @@ void ClientUserinfoChanged(int clientNum)
 	client->ps.clientNum = clientNum;
 
 	// Nico, flood protection
-	if (ClientIsFlooding(ent))
-	{
+	if (ClientIsFlooding(ent)) {
 		G_LogPrintf("Dropping client %d: flooded userinfo\n", clientNum);
 		trap_DropClient(clientNum, "^1Flooded userinfo", 0);
 		return;
 	}
 
-	trap_GetUserinfo(clientNum, userinfo, sizeof(userinfo));
+	trap_GetUserinfo(clientNum, userinfo, sizeof (userinfo));
 
 	// check for malformed or illegal info strings
-	if (!Info_Validate(userinfo))
-	{
+	if (!Info_Validate(userinfo)) {
 		// Nico, changing malformed user info is a nonsense, simply drop the client
 		// Q_strncpyz( userinfo, "\\name\\badinfo", sizeof( userinfo ) );
 		G_LogPrintf("Dropping client %d: forbidden character in userinfo\n", clientNum);
@@ -979,132 +862,110 @@ void ClientUserinfoChanged(int clientNum)
 
 	// Nico, check userinfo length (from combinedfixes)
 	len = strlen(userinfo);
-	if (len > MAX_INFO_STRING - 44)
-	{
+	if (len > MAX_INFO_STRING - 44) {
 		G_LogPrintf("Dropping client %d: oversized userinfo\n", clientNum);
 		trap_DropClient(clientNum, "^1Oversized userinfo", 0);
 	}
 
 	// Nico, check userinfo leading backslash (from combinedfixes)
-	if (userinfo[0] != '\\')
-	{
+	if (userinfo[0] != '\\') {
 		G_LogPrintf("Dropping client %d: malformed userinfo (missing leading backslash)\n", clientNum);
 		trap_DropClient(clientNum, "^1Malformed userinfo", 0);
 	}
 
 	// Nico, check userinfo trailing backslash (from combinedfixes)
-	if (len > 0 && userinfo[len - 1] == '\\')
-	{
+	if (len > 0 && userinfo[len - 1] == '\\') {
 		G_LogPrintf("Dropping client %d: malformed userinfo (trailing backslash)\n", clientNum);
 		trap_DropClient(clientNum, "^1Malformed userinfo", 0);
 	}
 
 	// Nico, make sure backslah number is even (from combinedfixes)
-	for (i = 0; i < (int)len; ++i)
-	{
-		if (userinfo[i] == '\\')
-		{
+	for (i = 0; i < (int)len; ++i) {
+		if (userinfo[i] == '\\') {
 			count++;
 		}
 	}
-	if (count % 2 != 0)
-	{
+	if (count % 2 != 0) {
 		G_LogPrintf("Dropping client %d: malformed userinfo (odd number of backslash)\n", clientNum);
 		trap_DropClient(clientNum, "^1Malformed userinfo", 0);
 	}
 
 	// Nico, make sure client ip is not empty or malformed (from combinedfixes)
 	ip = Info_ValueForKey(userinfo, "ip");
-	if (!strcmp(ip, "") || getParsedIp(ip) == NULL)
-	{
+	if (!strcmp(ip, "") || getParsedIp(ip) == NULL) {
 		G_LogPrintf("Dropping client %d: malformed userinfo (empty or malformed ip)\n", clientNum);
 		trap_DropClient(clientNum, "^1Malformed userinfo", 0);
 	}
 
 	// Nico, make sure client name is not empty (from combinedfixes)
 	name = Info_ValueForKey(userinfo, "name");
-	if (!strcmp(name, ""))
-	{
+	if (!strcmp(name, "")) {
 		G_LogPrintf("Dropping client %d: malformed userinfo (empty name)\n", clientNum);
 		trap_DropClient(clientNum, "^1Malformed userinfo", 0);
 	}
 
 	// Nico, one ip in userinfo (from ETpub)
 	count = 0;
-	if (len > 4)
-	{
-		for (i = 0; userinfo[i + 3]; ++i)
-		{
+	if (len > 4) {
+		for (i = 0; userinfo[i + 3]; ++i) {
 			if (userinfo[i] == '\\' && userinfo[i + 1] == 'i' &&
-			    userinfo[i + 2] == 'p' && userinfo[i + 3] == '\\')
-			{
+			    userinfo[i + 2] == 'p' && userinfo[i + 3] == '\\') {
 				count++;
 			}
 		}
 	}
-	if (count > 1)
-	{
+	if (count > 1) {
 		G_LogPrintf("Dropping client %d: malformed userinfo (too many IP fields)\n", clientNum);
 		trap_DropClient(clientNum, "^1Malformed userinfo", 0);
 	}
 
 	// Nico, one cl_guid in userinfo (from ETpub)
 	count = 0;
-	if (len > 9)
-	{
-		for (i = 0; userinfo[i + 8]; ++i)
-		{
+	if (len > 9) {
+		for (i = 0; userinfo[i + 8]; ++i) {
 			if (userinfo[i] == '\\' && userinfo[i + 1] == 'c' &&
 			    userinfo[i + 2] == 'l' && userinfo[i + 3] == '_' &&
 			    userinfo[i + 4] == 'g' && userinfo[i + 5] == 'u' &&
 			    userinfo[i + 6] == 'i' && userinfo[i + 7] == 'd' &&
-			    userinfo[i + 8] == '\\')
-			{
+			    userinfo[i + 8] == '\\') {
 				count++;
 			}
 		}
 	}
-	if (count > 1)
-	{
+	if (count > 1) {
 		G_LogPrintf("Dropping client %d: malformed userinfo (too many cl_guid fields)\n", clientNum);
 		trap_DropClient(clientNum, "^1Malformed userinfo", 0);
 	}
 
 	// Nico, one name in userinfo (from ETpub)
 	count = 0;
-	if (len > 6)
-	{
-		for (i = 0; userinfo[i + 5]; ++i)
-		{
+	if (len > 6) {
+		for (i = 0; userinfo[i + 5]; ++i) {
 			if (userinfo[i] == '\\' && userinfo[i + 1] == 'n' &&
 			    userinfo[i + 2] == 'a' && userinfo[i + 3] == 'm' &&
-			    userinfo[i + 4] == 'e' && userinfo[i + 5] == '\\')
-			{
+			    userinfo[i + 4] == 'e' && userinfo[i + 5] == '\\') {
 				count++;
 			}
 		}
 	}
-	if (count > 1)
-	{
+	if (count > 1) {
 		G_LogPrintf("Dropping client %d: malformed userinfo (too many name fields)\n", clientNum);
 		trap_DropClient(clientNum, "^1Malformed userinfo", 0);
 	}
 
-	if (g_developer.integer || *g_log.string || g_dedicated.integer)
-	{
+	if (g_developer.integer || *g_log.string || g_dedicated.integer) {
 		G_Printf("Userinfo: %s\n", userinfo);
 	}
 
 	// check for local client
-	if (ip && !strcmp(ip, "localhost"))
-	{
+	if (ip && !strcmp(ip, "localhost")) {
 		client->pers.localClient = qtrue;
 		level.fLocalHost         = qtrue;
 		client->sess.referee     = RL_REFEREE;
 	}
 
 	// Nico, backup old auth token
-	Q_strncpyz(oldAuthToken, client->pers.authToken, sizeof(oldAuthToken));
+	Q_strncpyz(oldAuthToken, client->pers.authToken, sizeof (oldAuthToken));
 
 	s = Info_ValueForKey(userinfo, "cg_uinfo");
 	sscanf(s, "%i %i %i %i %s %i %i %i %i %i %i %i %i",
@@ -1133,23 +994,21 @@ void ClientUserinfoChanged(int clientNum)
 	       // Nico, client auto demo record setting
 	       &client->pers.autoDemo,
 
-		   // Nico, automatically load checkpoints
-		   &client->pers.autoLoadCheckpoints,
+	       // Nico, automatically load checkpoints
+	       &client->pers.autoLoadCheckpoints,
 
-		   // Nico, persistant specLock
-		   (int *)&client->sess.specLocked,
+	       // Nico, persistant specLock
+	       (int *)&client->sess.specLocked,
 
-		   // Nico, keep all demos
-		   &client->pers.keepAllDemos
+	       // Nico, keep all demos
+	       &client->pers.keepAllDemos
 
 	       );
 
 	// Nico, check if auth token was changed
-	if (strlen(oldAuthToken) > 0 && Q_stricmp(oldAuthToken, client->pers.authToken))
-	{
+	if (strlen(oldAuthToken) > 0 && Q_stricmp(oldAuthToken, client->pers.authToken)) {
 		// Nico, auth token was changed => logout player if he was logged in
-		if (client->sess.logged)
-		{
+		if (client->sess.logged) {
 			CP("cp \"You are no longer logged in!\n\"");
 			G_LogPrintf("ClientUserinfoChanged: authToken changed for client %d, forcing logout\n", clientNum);
 			ent->client->sess.logged = qfalse;
@@ -1159,13 +1018,10 @@ void ClientUserinfoChanged(int clientNum)
 	client->pers.autoActivate      = (client->pers.clientFlags & CGF_AUTOACTIVATE) ? PICKUP_TOUCH : PICKUP_ACTIVATE;
 	client->pers.predictItemPickup = ((client->pers.clientFlags & CGF_PREDICTITEMS) != 0);
 
-	if (client->pers.clientFlags & CGF_AUTORELOAD)
-	{
+	if (client->pers.clientFlags & CGF_AUTORELOAD) {
 		client->pers.bAutoReloadAux = qtrue;
 		client->pmext.bAutoReload   = qtrue;
-	}
-	else
-	{
+	} else {
 		client->pers.bAutoReloadAux = qfalse;
 		client->pmext.bAutoReload   = qfalse;
 	}
@@ -1177,23 +1033,19 @@ void ClientUserinfoChanged(int clientNum)
 	client->pers.autoLogin = client->pers.clientFlags & CGF_AUTOLOGIN;
 
 	// set name
-	Q_strncpyz(oldname, client->pers.netname, sizeof(oldname));
-	ClientCleanName(name, client->pers.netname, sizeof(client->pers.netname));
+	Q_strncpyz(oldname, client->pers.netname, sizeof (oldname));
+	ClientCleanName(name, client->pers.netname, sizeof (client->pers.netname));
 
-	if (client->pers.connected == CON_CONNECTED && strcmp(oldname, client->pers.netname) != 0)
-	{
+	if (client->pers.connected == CON_CONNECTED && strcmp(oldname, client->pers.netname) != 0) {
 		// Nico, name changes limit
-		if (g_maxNameChanges.integer > -1 && client->pers.nameChanges >= g_maxNameChanges.integer)
-		{
-			Q_strncpyz(client->pers.netname, oldname, sizeof(client->pers.netname));
+		if (g_maxNameChanges.integer > -1 && client->pers.nameChanges >= g_maxNameChanges.integer) {
+			Q_strncpyz(client->pers.netname, oldname, sizeof (client->pers.netname));
 			Info_SetValueForKey(userinfo, "name", oldname);
 			trap_SetUserinfo(clientNum, userinfo);
 			CPx(clientNum, "print \"^1You had too many namechanges\n\"");
 			G_LogPrintf("Client %d name change refused\n", clientNum);
 			return;
-		}
-		else
-		{
+		} else {
 			client->pers.nameChanges++;
 			trap_SendServerCommand(-1, va("print \"[lof]%s" S_COLOR_WHITE " [lon]renamed to[lof] %s\n\"", oldname,
 			                              client->pers.netname));
@@ -1223,12 +1075,11 @@ void ClientUserinfoChanged(int clientNum)
 	       client->pers.hideme // Nico, hideme
 	       );
 
-	trap_GetConfigstring(CS_PLAYERS + clientNum, oldname, sizeof(oldname));
+	trap_GetConfigstring(CS_PLAYERS + clientNum, oldname, sizeof (oldname));
 
 	trap_SetConfigstring(CS_PLAYERS + clientNum, s);
 
-	if (!Q_stricmp(oldname, s))
-	{
+	if (!Q_stricmp(oldname, s)) {
 		return;
 	}
 
@@ -1257,8 +1108,7 @@ to the server machine, but qfalse on map changes and tournement
 restarts.
 ============
 */
-char *ClientConnect(int clientNum, qboolean firstTime)
-{
+char *ClientConnect(int clientNum, qboolean firstTime) {
 	char      *value;
 	gclient_t *client;
 	char      userinfo[MAX_INFO_STRING];
@@ -1272,57 +1122,50 @@ char *ClientConnect(int clientNum, qboolean firstTime)
 
 	ent = &g_entities[clientNum];
 
-	trap_GetUserinfo(clientNum, userinfo, sizeof(userinfo));
+	trap_GetUserinfo(clientNum, userinfo, sizeof (userinfo));
 
 	// IP filtering
 	// show_bug.cgi?id=500
 	// recommanding PB based IP / GUID banning, the builtin system is pretty limited
 	// check to see if they are on the banned IP list
 	value = Info_ValueForKey(userinfo, "ip");
-	if (G_FilterIPBanPacket(value))
-	{
+	if (G_FilterIPBanPacket(value)) {
 		return "You are banned from this server.";
 	}
 
 	// Nico, check maximum connextions per IP (from ETpub)
 	// (prevents fakeplayers DOS http://aluigi.altervista.org/fakep.htm )
 	// note: value is the client ip
-	Q_strncpyz(ip, getParsedIp(value), sizeof(ip));
-	for (i = 0; i < level.numConnectedClients; ++i)
-	{
+	Q_strncpyz(ip, getParsedIp(value), sizeof (ip));
+	for (i = 0; i < level.numConnectedClients; ++i) {
 		clientNum2 = level.sortedClients[i];
-		if (clientNum == clientNum2)
-		{
+		if (clientNum == clientNum2) {
 			continue;
 		}
-		trap_GetUserinfo(clientNum2, userinfo2, sizeof(userinfo2));
+		trap_GetUserinfo(clientNum2, userinfo2, sizeof (userinfo2));
 		value = Info_ValueForKey(userinfo2, "ip");
-		Q_strncpyz(ip2, getParsedIp(value), sizeof(ip2));
-		if (strcmp(ip, ip2) == 0)
-		{
+		Q_strncpyz(ip2, getParsedIp(value), sizeof (ip2));
+		if (strcmp(ip, ip2) == 0) {
 			conn_per_ip++;
 		}
 	}
-	if (conn_per_ip > g_maxConnsPerIP.integer)
-	{
+	if (conn_per_ip > g_maxConnsPerIP.integer) {
 		G_LogPrintf("ETrun: possible DoS attack, rejecting client from %s (%d connections already)\n", ip, g_maxConnsPerIP.integer);
 		return "Too many connections from your IP.";
 	}
 	// Nico, end of check maximum connextions per IP
 
 	// Nico, check name from ET:Legacy
-	value = Info_ValueForKey (userinfo, "name");
-	Q_strncpyz(cs_name, value, sizeof(cs_name));
+	value = Info_ValueForKey(userinfo, "name");
+	Q_strncpyz(cs_name, value, sizeof (cs_name));
 
 	// don't permit long names ... - see also MAX_NETNAME
-	if (strlen(cs_name) >= MAX_NAME_LENGTH )
-	{
+	if (strlen(cs_name) >= MAX_NAME_LENGTH) {
 		return "Bad name: name too long. Please change your name.";
 	}
 	// Avoid ext. ASCII chars in the CS
-	for (i = 0; i < (int)strlen(cs_name); ++i)
-	{
-		if (cs_name[i] < 0) {// extended ASCII chars have values between -128 and 0 (signed char)
+	for (i = 0; i < (int)strlen(cs_name); ++i) {
+		if (cs_name[i] < 0) { // extended ASCII chars have values between -128 and 0 (signed char)
 			return "Bad name: extended ASCII characters. Please change your name.";
 		}
 	}
@@ -1330,14 +1173,11 @@ char *ClientConnect(int clientNum, qboolean firstTime)
 	// we don't check password for bots and local client
 	// NOTE: local client <-> "ip" "localhost"
 	//   this means this client is not running in our current process
-	if (strcmp(Info_ValueForKey(userinfo, "ip"), "localhost") != 0)
-	{
+	if (strcmp(Info_ValueForKey(userinfo, "ip"), "localhost") != 0) {
 		// check for a password
 		value = Info_ValueForKey(userinfo, "password");
-		if (g_password.string[0] && Q_stricmp(g_password.string, "none") && strcmp(g_password.string, value) != 0)
-		{
-			if (!sv_privatepassword.string[0] || strcmp(sv_privatepassword.string, value) != 0)
-			{
+		if (g_password.string[0] && Q_stricmp(g_password.string, "none") && strcmp(g_password.string, value) != 0) {
+			if (!sv_privatepassword.string[0] || strcmp(sv_privatepassword.string, value) != 0) {
 				return "Invalid password";
 			}
 		}
@@ -1345,8 +1185,7 @@ char *ClientConnect(int clientNum, qboolean firstTime)
 
 	// Gordon: porting q3f flag bug fix
 	// If a player reconnects quickly after a disconnect, the client disconnect may never be called, thus flag can get lost in the ether
-	if (ent->inuse)
-	{
+	if (ent->inuse) {
 		G_LogPrintf("Forcing disconnect on active client: %d\n", (int)(ent - g_entities));
 		// so lets just fix up anything that should happen on a disconnect
 		ClientDisconnect(ent - g_entities);
@@ -1356,30 +1195,25 @@ char *ClientConnect(int clientNum, qboolean firstTime)
 	ent->client = level.clients + clientNum;
 	client      = ent->client;
 
-	memset(client, 0, sizeof(*client));
+	memset(client, 0, sizeof (*client));
 
 	client->pers.connected   = CON_CONNECTING;
 	client->pers.connectTime = level.time;          // DHM - Nerve
 
-	if (firstTime)
-	{
+	if (firstTime) {
 		client->pers.initialSpawn = qtrue;              // DHM - Nerve
 	}
 	// read or initialize the session data
-	if (firstTime)
-	{
+	if (firstTime) {
 		G_InitSessionData(client, userinfo);
 		client->pers.enterTime            = level.time;
 		client->ps.persistant[PERS_SCORE] = 0;
-	}
-	else
-	{
+	} else {
 		G_ReadSessionData(client);
 	}
 	client->pers.enterTime = level.time;
 
-	if (firstTime)
-	{
+	if (firstTime) {
 		// force into spectator
 		client->sess.sessionTeam     = TEAM_SPECTATOR;
 		client->sess.spectatorState  = SPECTATOR_FREE;
@@ -1397,8 +1231,7 @@ char *ClientConnect(int clientNum, qboolean firstTime)
 	// don't do the "xxx connected" messages if they were caried over from previous level
 	//		TAT 12/10/2002 - Don't display connected messages in single player
 
-	if (firstTime)
-	{
+	if (firstTime) {
 		trap_SendServerCommand(-1, va("cpm \"%s" S_COLOR_WHITE " connected\n\"", client->pers.netname));
 	}
 
@@ -1417,8 +1250,7 @@ to be placed into the level.  This will happen every level load,
 and on transition between teams, but doesn't happen on respawns
 ============
 */
-void ClientBegin(int clientNum)
-{
+void ClientBegin(int clientNum) {
 	gentity_t *ent;
 	gclient_t *client;
 	int       flags;
@@ -1428,8 +1260,7 @@ void ClientBegin(int clientNum)
 
 	client = level.clients + clientNum;
 
-	if (ent->r.linked)
-	{
+	if (ent->r.linked) {
 		trap_UnlinkEntity(ent);
 	}
 
@@ -1453,7 +1284,7 @@ void ClientBegin(int clientNum)
 	//bani - proper fix for #328
 
 	flags = client->ps.eFlags;
-	memset(&client->ps, 0, sizeof(client->ps));
+	memset(&client->ps, 0, sizeof (client->ps));
 	client->ps.eFlags = flags;
 
 	client->ps.persistant[PERS_SPAWN_COUNT] = spawn_count;
@@ -1463,8 +1294,7 @@ void ClientBegin(int clientNum)
 
 
 	// DHM - Nerve :: Start players in limbo mode if they change teams during the match
-	if (client->sess.sessionTeam != TEAM_SPECTATOR && (level.time - level.startTime > FRAMETIME * GAME_INIT_FRAMES))
-	{
+	if (client->sess.sessionTeam != TEAM_SPECTATOR && (level.time - level.startTime > FRAMETIME * GAME_INIT_FRAMES)) {
 		ent->health     = 0;
 		ent->r.contents = CONTENTS_CORPSE;
 
@@ -1474,8 +1304,7 @@ void ClientBegin(int clientNum)
 		limbo(ent);
 	}
 
-	if (client->sess.sessionTeam != TEAM_SPECTATOR)
-	{
+	if (client->sess.sessionTeam != TEAM_SPECTATOR) {
 		trap_SendServerCommand(-1, va("print \"[lof]%s" S_COLOR_WHITE " [lon]entered the game\n\"", client->pers.netname));
 	}
 
@@ -1486,8 +1315,7 @@ void ClientBegin(int clientNum)
 	ent->surfaceFlags = 0;
 
 	// Nico, check for autologin
-	if (g_useAPI.integer && client->pers.autoLogin && !client->sess.logged)
-	{
+	if (g_useAPI.integer && client->pers.autoLogin && !client->sess.logged) {
 		G_LogPrintf("ClientBegin: login client %d via autoLogin\n", clientNum);
 		Cmd_Login_f(ent);
 	}
@@ -1495,46 +1323,40 @@ void ClientBegin(int clientNum)
 	// Nico, check for checkpoints auto loading
 	if (g_useAPI.integer && client->pers.autoLoadCheckpoints) {
 		G_LogPrintf("ClientBegin: loading checkpoints for client %d via autoLoadCheckpoints\n", clientNum);
-		Cmd_LoadCheckpoints_real(ent, "0", 0);// "0" as ignore vlaue, because we load player checkpoints
+		Cmd_LoadCheckpoints_real(ent, "0", 0); // "0" as ignore vlaue, because we load player checkpoints
 	}
 
 	G_LogPrintf("ClientBegin: %i\n", clientNum);
 }
 
-gentity_t *SelectSpawnPointFromList(char *list, vec3_t spawn_origin, vec3_t spawn_angles)
-{
+gentity_t *SelectSpawnPointFromList(char *list, vec3_t spawn_origin, vec3_t spawn_angles) {
 	char      *pStr, *token;
 	gentity_t *spawnPoint = NULL, *trav;
-	#define MAX_SPAWNPOINTFROMLIST_POINTS   16
+
+#define MAX_SPAWNPOINTFROMLIST_POINTS   16
 	int valid[MAX_SPAWNPOINTFROMLIST_POINTS];
 	int numValid;
 
-	memset(valid, 0, sizeof(valid));
+	memset(valid, 0, sizeof (valid));
 	numValid = 0;
 
 	pStr = list;
-	while ((token = COM_Parse(&pStr)) != NULL && token[0])
-	{
+	while ((token = COM_Parse(&pStr)) != NULL && token[0]) {
 		trav = g_entities + level.maxclients;
-		while ((trav = G_FindByTargetname(trav, token)) != NULL)
-		{
-			if (!spawnPoint)
-			{
+		while ((trav = G_FindByTargetname(trav, token)) != NULL) {
+			if (!spawnPoint) {
 				spawnPoint = trav;
 			}
-			if (!SpotWouldTelefrag(trav))
-			{
+			if (!SpotWouldTelefrag(trav)) {
 				valid[numValid++] = trav->s.number;
-				if (numValid >= MAX_SPAWNPOINTFROMLIST_POINTS)
-				{
+				if (numValid >= MAX_SPAWNPOINTFROMLIST_POINTS) {
 					break;
 				}
 			}
 		}
 	}
 
-	if (numValid)
-	{
+	if (numValid) {
 		spawnPoint = &g_entities[valid[rand() % numValid]];
 
 		// Set the origin of where the bot will spawn
@@ -1557,8 +1379,7 @@ after the first ClientBegin, and after each respawn
 Initializes all non-persistant parts of playerState
 ============
 */
-void ClientSpawn(gentity_t *ent)
-{
+void ClientSpawn(gentity_t *ent) {
 	int                index;
 	vec3_t             spawn_origin, spawn_angles;
 	gclient_t          *client;
@@ -1582,12 +1403,9 @@ void ClientSpawn(gentity_t *ent)
 
 	// Arnout: let's just be sure it does the right thing at all times. (well maybe not the right thing, but at least not the bad thing!)
 	//if( client->sess.sessionTeam == TEAM_SPECTATOR || client->sess.sessionTeam == TEAM_FREE ) {
-	if (client->sess.sessionTeam != TEAM_AXIS && client->sess.sessionTeam != TEAM_ALLIES)
-	{
+	if (client->sess.sessionTeam != TEAM_AXIS && client->sess.sessionTeam != TEAM_ALLIES) {
 		spawnPoint = SelectSpectatorSpawnPoint(spawn_origin, spawn_angles);
-	}
-	else
-	{
+	} else {
 		// RF, if we have requested a specific spawn point, use it (fixme: what if this will place us inside another character?)
 		spawnPoint = SelectCTFSpawnPoint(client->sess.sessionTeam, client->pers.teamState.state, spawn_origin, spawn_angles, client->sess.spawnObjectiveIndex);
 	}
@@ -1603,8 +1421,7 @@ void ClientSpawn(gentity_t *ent)
 	ent->s.eFlags &= ~EF_MOUNTEDTANK;
 
 	// Nico, notify timerun_stop (not if physics is VET and player just selfkilled)
-	if (physics.integer != PHYSICS_MODE_VET || (physics.integer == PHYSICS_MODE_VET && client->sess.lastDieWasASelfkill))
-	{
+	if (physics.integer != PHYSICS_MODE_VET || (physics.integer == PHYSICS_MODE_VET && client->sess.lastDieWasASelfkill)) {
 		notify_timerun_stop(ent, 0);
 		ent->client->sess.timerunActive = qfalse;
 	}
@@ -1614,20 +1431,18 @@ void ClientSpawn(gentity_t *ent)
 	savedPing = client->ps.ping;
 	savedTeam = client->ps.teamNum;
 
-	for (i = 0 ; i < MAX_PERSISTANT ; i++)
-	{
+	for (i = 0 ; i < MAX_PERSISTANT ; i++) {
 		persistant[i] = client->ps.persistant[i];
 	}
 
-	memset(client, 0, sizeof(*client));
+	memset(client, 0, sizeof (*client));
 
 	client->pers       = saved;
 	client->sess       = savedSess;
 	client->ps.ping    = savedPing;
 	client->ps.teamNum = savedTeam;
 
-	for (i = 0 ; i < MAX_PERSISTANT ; i++)
-	{
+	for (i = 0 ; i < MAX_PERSISTANT ; i++) {
 		client->ps.persistant[i] = persistant[i];
 	}
 
@@ -1648,12 +1463,9 @@ void ClientSpawn(gentity_t *ent)
 	ent->client            = &level.clients[index];
 	ent->takedamage        = qtrue;
 	ent->inuse             = qtrue;
-	if (ent->r.svFlags & SVF_BOT)
-	{
+	if (ent->r.svFlags & SVF_BOT) {
 		ent->classname = "bot";
-	}
-	else
-	{
+	} else {
 		ent->classname = "player";
 	}
 	ent->r.contents = CONTENTS_BODY;
@@ -1700,23 +1512,20 @@ void ClientSpawn(gentity_t *ent)
 
 	trap_GetUsercmd(client - level.clients, &ent->client->pers.cmd);    // NERVE - SMF - moved this up here
 
-	if (client->sess.playerType != client->sess.latchPlayerType)
-	{
+	if (client->sess.playerType != client->sess.latchPlayerType) {
 		update = qtrue;
 	}
 
 	client->sess.playerType = client->sess.latchPlayerType;
 
-	if (client->sess.playerWeapon != client->sess.latchPlayerWeapon)
-	{
+	if (client->sess.playerWeapon != client->sess.latchPlayerWeapon) {
 		client->sess.playerWeapon = client->sess.latchPlayerWeapon;
 		update                    = qtrue;
 	}
 
 	client->sess.playerWeapon2 = client->sess.latchPlayerWeapon2;
 
-	if (update)
-	{
+	if (update) {
 		ClientUserinfoChanged(index);
 	}
 
@@ -1748,8 +1557,7 @@ void ClientSpawn(gentity_t *ent)
 
 	SetClientViewAngle(ent, spawn_angles);
 
-	if (ent->client->sess.sessionTeam != TEAM_SPECTATOR)
-	{
+	if (ent->client->sess.sessionTeam != TEAM_SPECTATOR) {
 		trap_LinkEntity(ent);
 	}
 
@@ -1770,8 +1578,7 @@ void ClientSpawn(gentity_t *ent)
 	ClientThink(ent - g_entities);
 
 	// positively link the client, even if the command times are weird
-	if (ent->client->sess.sessionTeam != TEAM_SPECTATOR)
-	{
+	if (ent->client->sess.sessionTeam != TEAM_SPECTATOR) {
 		BG_PlayerStateToEntityState(&client->ps, &ent->s, qtrue);
 		VectorCopy(ent->client->ps.origin, ent->r.currentOrigin);
 		trap_LinkEntity(ent);
@@ -1790,39 +1597,31 @@ void ClientSpawn(gentity_t *ent)
 	G_ResetMarkers(ent);
 
 	// RF, start the scripting system
-	if (client->sess.sessionTeam != TEAM_SPECTATOR)
-	{
+	if (client->sess.sessionTeam != TEAM_SPECTATOR) {
 
 		// RF, call entity scripting event
 		G_Script_ScriptEvent(ent, "playerstart", "");
 	}
 
 	// Nico, autoload position
-	if (ent->client->pers.autoLoad && !ent->client->sess.lastDieWasASelfkill && (ent->client->sess.sessionTeam == TEAM_AXIS || ent->client->sess.sessionTeam == TEAM_ALLIES))
-	{
-		if (ent->client->sess.sessionTeam == TEAM_ALLIES)
-		{
+	if (ent->client->pers.autoLoad && !ent->client->sess.lastDieWasASelfkill && (ent->client->sess.sessionTeam == TEAM_AXIS || ent->client->sess.sessionTeam == TEAM_ALLIES)) {
+		if (ent->client->sess.sessionTeam == TEAM_ALLIES) {
 			pos = ent->client->sess.alliesSaves;
-		}
-		else
-		{
+		} else {
 			pos = ent->client->sess.axisSaves;
 		}
 
-		if (pos->valid)
-		{
+		if (pos->valid) {
 			VectorCopy(pos->origin, ent->client->ps.origin);
 
 			// Nico, load angles if cg_loadViewAngles = 1
-			if (ent->client->pers.loadViewAngles)
-			{
+			if (ent->client->pers.loadViewAngles) {
 				SetClientViewAngle(ent, pos->vangles);
 			}
 
 			VectorClear(ent->client->ps.velocity);
 
-			if (ent->client->ps.stats[STAT_HEALTH] < 100 && ent->client->ps.stats[STAT_HEALTH] > 0)
-			{
+			if (ent->client->ps.stats[STAT_HEALTH] < 100 && ent->client->ps.stats[STAT_HEALTH] > 0) {
 				ent->health = 100;
 			}
 		}
@@ -1842,8 +1641,7 @@ call trap_DropClient(), which will call this and do
 server system housekeeping.
 ============
 */
-void ClientDisconnect(int clientNum)
-{
+void ClientDisconnect(int clientNum) {
 	gentity_t *ent;
 	gentity_t *flag = NULL;
 	gitem_t   *item = NULL;
@@ -1851,8 +1649,7 @@ void ClientDisconnect(int clientNum)
 	int       i;
 
 	ent = g_entities + clientNum;
-	if (!ent->client)
-	{
+	if (!ent->client) {
 		return;
 	}
 
@@ -1861,24 +1658,20 @@ void ClientDisconnect(int clientNum)
 	G_LeaveTank(ent, qfalse);
 
 	// Nico, remove the client from all specInvited lists
-	for (i = 0; i < level.numConnectedClients; ++i)
-	{
+	for (i = 0; i < level.numConnectedClients; ++i) {
 		COM_BitClear(level.clients[level.sortedClients[i]].sess.specInvitedClients, clientNum);
 	}
 
 	// stop any following clients
-	for (i = 0 ; i < level.numConnectedClients ; i++)
-	{
+	for (i = 0 ; i < level.numConnectedClients ; i++) {
 		flag = g_entities + level.sortedClients[i];
 		if (flag->client->sess.sessionTeam == TEAM_SPECTATOR
 		    && flag->client->sess.spectatorState == SPECTATOR_FOLLOW
-		    && flag->client->sess.spectatorClient == clientNum)
-		{
+		    && flag->client->sess.spectatorClient == clientNum) {
 			StopFollowing(flag);
 		}
 		if (flag->client->ps.pm_flags & PMF_LIMBO
-		    && flag->client->sess.spectatorClient == clientNum)
-		{
+		    && flag->client->sess.spectatorClient == clientNum) {
 			Cmd_FollowCycle_f(flag, 1);
 		}
 	}
@@ -1890,19 +1683,16 @@ void ClientDisconnect(int clientNum)
 		mapEntityData_t      *mEnt;
 		mapEntityData_Team_t *teamList;
 
-		for (i = 0; i < 2; i++)
-		{
+		for (i = 0; i < 2; i++) {
 			teamList = &mapEntityData[i];
 
-			if ((mEnt = G_FindMapEntityData(&mapEntityData[0], ent - g_entities)) != NULL)
-			{
+			if ((mEnt = G_FindMapEntityData(&mapEntityData[0], ent - g_entities)) != NULL) {
 				G_FreeMapEntityData(teamList, mEnt);
 			}
 
 			mEnt = G_FindMapEntityDataSingleClient(teamList, NULL, ent->s.number, -1);
 
-			while (mEnt)
-			{
+			while (mEnt) {
 				mapEntityData_t *mEntFree = mEnt;
 
 				mEnt = G_FindMapEntityDataSingleClient(teamList, mEnt, ent->s.number, -1);
@@ -1915,35 +1705,29 @@ void ClientDisconnect(int clientNum)
 	// send effect if they were completely connected
 	if (ent->client->pers.connected == CON_CONNECTED
 	    && ent->client->sess.sessionTeam != TEAM_SPECTATOR
-	    && !(ent->client->ps.pm_flags & PMF_LIMBO))
-	{
+	    && !(ent->client->ps.pm_flags & PMF_LIMBO)) {
 
 		// They don't get to take powerups with them!
 		// Especially important for stuff like CTF flags
 		// New code for tossing flags
-		if (ent->client->ps.powerups[PW_REDFLAG])
-		{
+		if (ent->client->ps.powerups[PW_REDFLAG]) {
 			item = BG_FindItem("Red Flag");
-			if (!item)
-			{
+			if (!item) {
 				item = BG_FindItem("Objective");
 			}
 
 			ent->client->ps.powerups[PW_REDFLAG] = 0;
 		}
-		if (ent->client->ps.powerups[PW_BLUEFLAG])
-		{
+		if (ent->client->ps.powerups[PW_BLUEFLAG]) {
 			item = BG_FindItem("Blue Flag");
-			if (!item)
-			{
+			if (!item) {
 				item = BG_FindItem("Objective");
 			}
 
 			ent->client->ps.powerups[PW_BLUEFLAG] = 0;
 		}
 
-		if (item)
-		{
+		if (item) {
 			// OSP - fix for suicide drop exploit through walls/gates
 			launchvel[0] = 0;    //crandom()*20;
 			launchvel[1] = 0;    //crandom()*20;
@@ -1981,8 +1765,7 @@ void ClientStoreSurfaceFlags
 (
     int clientNum,
     int surfaceFlags
-)
-{
+) {
 	// Store the surface flags
 	g_entities[clientNum].surfaceFlags = surfaceFlags;
 

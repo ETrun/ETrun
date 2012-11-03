@@ -27,9 +27,9 @@ If you have questions concerning this license or the applicable additional terms
 */
 
 #ifdef CGAMEDLL
-#include "../cgame/cg_local.h"
+# include "../cgame/cg_local.h"
 #else
-#include "g_local.h"
+# include "g_local.h"
 #endif
 
 /*
@@ -41,8 +41,7 @@ If you have questions concerning this license or the applicable additional terms
 
 #define TRACEMAP_SIZE               256
 
-typedef struct tracemap_s
-{
+typedef struct tracemap_s {
 	qboolean loaded;
 	float sky[TRACEMAP_SIZE][TRACEMAP_SIZE];
 	float skyground[TRACEMAP_SIZE][TRACEMAP_SIZE];
@@ -57,43 +56,30 @@ static vec2_t one_over_mapgrid_factor;
 
 void etpro_FinalizeTracemapClamp(int *x, int *y);
 
-static void BG_ClampPointToTracemapExtends(vec3_t point, vec2_t out)
-{
+static void BG_ClampPointToTracemapExtends(vec3_t point, vec2_t out) {
 
-	if (point[0] < tracemap.world_mins[0])
-	{
+	if (point[0] < tracemap.world_mins[0]) {
 		out[0] = tracemap.world_mins[0];
-	}
-	else if (point[0] > tracemap.world_maxs[0])
-	{
+	} else if (point[0] > tracemap.world_maxs[0]) {
 		out[0] = tracemap.world_maxs[0];
-	}
-	else
-	{
+	} else {
 		out[0] = point[0];
 	}
 
-	if (point[1] < tracemap.world_maxs[1])
-	{
+	if (point[1] < tracemap.world_maxs[1]) {
 		out[1] = tracemap.world_maxs[1];
-	}
-	else if (point[1] > tracemap.world_mins[1])
-	{
+	} else if (point[1] > tracemap.world_mins[1]) {
 		out[1] = tracemap.world_mins[1];
-	}
-	else
-	{
+	} else {
 		out[1] = point[1];
 	}
 }
 
-float BG_GetSkyHeightAtPoint(vec3_t pos)
-{
+float BG_GetSkyHeightAtPoint(vec3_t pos) {
 	int    i, j;
 	vec2_t point;
 
-	if (!tracemap.loaded)
-	{
+	if (!tracemap.loaded) {
 		return MAX_WORLD_HEIGHT;
 	}
 
@@ -109,13 +95,11 @@ float BG_GetSkyHeightAtPoint(vec3_t pos)
 	return(tracemap.sky[j][i]);
 }
 
-float BG_GetSkyGroundHeightAtPoint(vec3_t pos)
-{
+float BG_GetSkyGroundHeightAtPoint(vec3_t pos) {
 	int    i, j;
 	vec2_t point;
 
-	if (!tracemap.loaded)
-	{
+	if (!tracemap.loaded) {
 		return MAX_WORLD_HEIGHT;
 	}
 
@@ -131,13 +115,11 @@ float BG_GetSkyGroundHeightAtPoint(vec3_t pos)
 	return(tracemap.skyground[j][i]);
 }
 
-float BG_GetGroundHeightAtPoint(vec3_t pos)
-{
+float BG_GetGroundHeightAtPoint(vec3_t pos) {
 	int    i, j;
 	vec2_t point;
 
-	if (!tracemap.loaded)
-	{
+	if (!tracemap.loaded) {
 		return MIN_WORLD_HEIGHT;
 	}
 
@@ -153,10 +135,8 @@ float BG_GetGroundHeightAtPoint(vec3_t pos)
 	return(tracemap.ground[j][i]);
 }
 
-int BG_GetTracemapGroundFloor(void)
-{
-	if (!tracemap.loaded)
-	{
+int BG_GetTracemapGroundFloor(void) {
+	if (!tracemap.loaded) {
 		return MIN_WORLD_HEIGHT;
 	}
 	return tracemap.groundfloor;
@@ -164,23 +144,16 @@ int BG_GetTracemapGroundFloor(void)
 
 // rain - re-clamp the points, because a rounding error can cause
 // them to go outside the array
-void etpro_FinalizeTracemapClamp(int *x, int *y)
-{
-	if (*x < 0)
-	{
+void etpro_FinalizeTracemapClamp(int *x, int *y) {
+	if (*x < 0) {
 		*x = 0;
-	}
-	else if (*x > TRACEMAP_SIZE - 1)
-	{
+	} else if (*x > TRACEMAP_SIZE - 1) {
 		*x = TRACEMAP_SIZE - 1;
 	}
 
-	if (*y < 0)
-	{
+	if (*y < 0) {
 		*y = 0;
-	}
-	else if (*y > TRACEMAP_SIZE - 1)
-	{
+	} else if (*y > TRACEMAP_SIZE - 1) {
 		*y = TRACEMAP_SIZE - 1;
 	}
 }

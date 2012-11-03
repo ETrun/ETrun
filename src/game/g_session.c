@@ -47,8 +47,7 @@ G_WriteClientSessionData
 Called on game shutdown
 ================
 */
-void G_WriteClientSessionData(gclient_t *client, qboolean restart)
-{
+void G_WriteClientSessionData(gclient_t *client, qboolean restart) {
 	int        mvc = 0;
 	const char *s;
 
@@ -88,12 +87,11 @@ G_ReadSessionData
 Called on a reconnect
 ================
 */
-void G_ReadSessionData(gclient_t *client)
-{
+void G_ReadSessionData(gclient_t *client) {
 	int  mvc_l, mvc_h;
 	char s[MAX_STRING_CHARS];
 
-	trap_Cvar_VariableStringBuffer(va("session%d", (int)(client - level.clients)), s, sizeof(s));
+	trap_Cvar_VariableStringBuffer(va("session%d", (int)(client - level.clients)), s, sizeof (s));
 
 	sscanf(s, "%i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i",
 	       (int *)&client->sess.sessionTeam,
@@ -130,8 +128,7 @@ G_InitSessionData
 Called on a first-time connect
 ================
 */
-void G_InitSessionData(gclient_t *client, char *userinfo)
-{
+void G_InitSessionData(gclient_t *client, char *userinfo) {
 	clientSession_t *sess;
 
 	// Nico, silent GCC
@@ -153,7 +150,7 @@ void G_InitSessionData(gclient_t *client, char *userinfo)
 	sess->spawnObjectiveIndex = 0;
 	// dhm - end
 
-	memset(sess->ignoreClients, 0, sizeof(sess->ignoreClients));
+	memset(sess->ignoreClients, 0, sizeof (sess->ignoreClients));
 	sess->muted = qfalse;
 
 	// OSP
@@ -172,25 +169,20 @@ G_InitWorldSession
 
 ==================
 */
-void G_InitWorldSession(void)
-{
+void G_InitWorldSession(void) {
 	char s[MAX_STRING_CHARS];
 	int  i, j;
 
-	for (i = 0; i < MAX_FIRETEAMS; i++)
-	{
+	for (i = 0; i < MAX_FIRETEAMS; i++) {
 		char *p, *c;
 
-		trap_Cvar_VariableStringBuffer(va("fireteam%i", i), s, sizeof(s));
+		trap_Cvar_VariableStringBuffer(va("fireteam%i", i), s, sizeof (s));
 
 		p = Info_ValueForKey(s, "id");
 		j = atoi(p);
-		if (!*p || j == -1)
-		{
+		if (!*p || j == -1) {
 			level.fireTeams[i].inuse = qfalse;
-		}
-		else
-		{
+		} else {
 			level.fireTeams[i].inuse = qtrue;
 		}
 		level.fireTeams[i].ident = j + 1;
@@ -201,15 +193,12 @@ void G_InitWorldSession(void)
 		p = Info_ValueForKey(s, "i");
 
 		j = 0;
-		if (p && *p)
-		{
+		if (p && *p) {
 			c = p;
-			for (c = strchr(c, ' ') + 1; c && *c; )
-			{
+			for (c = strchr(c, ' ') + 1; c && *c; ) {
 				char str[8];
 				char *l = strchr(c, ' ');
-				if (!l)
-				{
+				if (!l) {
 					break;
 				}
 				Q_strncpyz(str, c, l - c + 1);
@@ -219,8 +208,7 @@ void G_InitWorldSession(void)
 			}
 		}
 
-		for ( ; j < MAX_CLIENTS; j++)
-		{
+		for ( ; j < MAX_CLIENTS; j++) {
 			level.fireTeams[i].joinOrder[j] = -1;
 		}
 		G_UpdateFireteamConfigString(&level.fireTeams[i]);
@@ -233,40 +221,32 @@ G_WriteSessionData
 
 ==================
 */
-void G_WriteSessionData(qboolean restart)
-{
+void G_WriteSessionData(qboolean restart) {
 	int  i;
 	char strServerInfo[MAX_INFO_STRING];
 	int  j;
 
-	trap_GetServerinfo(strServerInfo, sizeof(strServerInfo));
+	trap_GetServerinfo(strServerInfo, sizeof (strServerInfo));
 
 	trap_Cvar_Set("session", va("%s",
 	                            Info_ValueForKey(strServerInfo, "mapname")));
 
-	for (i = 0; i < level.numConnectedClients; i++)
-	{
-		if (level.clients[level.sortedClients[i]].pers.connected == CON_CONNECTED)
-		{
+	for (i = 0; i < level.numConnectedClients; i++) {
+		if (level.clients[level.sortedClients[i]].pers.connected == CON_CONNECTED) {
 			G_WriteClientSessionData(&level.clients[level.sortedClients[i]], restart);
 			// For slow connecters and a short warmup
 		}
 	}
 
-	for (i = 0; i < MAX_FIRETEAMS; i++)
-	{
+	for (i = 0; i < MAX_FIRETEAMS; i++) {
 		char buffer[MAX_STRING_CHARS];
-		if (!level.fireTeams[i].inuse)
-		{
+		if (!level.fireTeams[i].inuse) {
 			Com_sprintf(buffer, MAX_STRING_CHARS, "\\id\\-1");
-		}
-		else
-		{
+		} else {
 			char buffer2[MAX_STRING_CHARS];
 
 			*buffer2 = '\0';
-			for (j = 0; j < MAX_CLIENTS; j++)
-			{
+			for (j = 0; j < MAX_CLIENTS; j++) {
 				char p[8];
 				Com_sprintf(p, 8, " %i", level.fireTeams[i].joinOrder[j]);
 				Q_strcat(buffer2, MAX_STRING_CHARS, p);

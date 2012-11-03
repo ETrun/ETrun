@@ -38,8 +38,7 @@ pthread_t globalThreads[4];
 
 level_locals_t level;
 
-typedef struct
-{
+typedef struct {
 	vmCvar_t *vmCvar;
 	char *cvarName;
 	char *defaultString;
@@ -319,7 +318,7 @@ cvarTable_t gameCvarTable[] =
 };
 
 // bk001129 - made static to avoid aliasing
-static int gameCvarTableSize = sizeof(gameCvarTable) / sizeof(gameCvarTable[0]);
+static int gameCvarTableSize = sizeof (gameCvarTable) / sizeof (gameCvarTable[0]);
 
 
 void G_InitGame(int levelTime, int randomSeed);
@@ -335,12 +334,11 @@ This must be the very first function compiled into the .q3vm file
 ================
 */
 #if __GNUC__ >= 4
-#pragma GCC visibility push(default)
+# pragma GCC visibility push(default)
 #endif
-int vmMain(int command, int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6)
-{
+int vmMain(int command, int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6) {
 #if __GNUC__ >= 4
-#pragma GCC visibility pop
+# pragma GCC visibility pop
 #endif
 	// Nico, silent GCC
 	arg2 = arg2;
@@ -349,8 +347,7 @@ int vmMain(int command, int arg0, int arg1, int arg2, int arg3, int arg4, int ar
 	arg5 = arg5;
 	arg6 = arg6;
 
-	switch (command)
-	{
+	switch (command) {
 	case GAME_INIT:
 		G_InitGame(arg0, arg1);
 		return 0;
@@ -389,42 +386,38 @@ int vmMain(int command, int arg0, int arg1, int arg2, int arg3, int arg4, int ar
 	return -1;
 }
 
-void QDECL G_Printf(const char *fmt, ...)
-{
+void QDECL G_Printf(const char *fmt, ...) {
 	va_list argptr;
 	char    text[1024];
 
 	va_start(argptr, fmt);
-	Q_vsnprintf(text, sizeof(text), fmt, argptr);
+	Q_vsnprintf(text, sizeof (text), fmt, argptr);
 	va_end(argptr);
 
 	trap_Printf(text);
 }
 
-void QDECL G_DPrintf(const char *fmt, ...)
-{
+void QDECL G_DPrintf(const char *fmt, ...) {
 	va_list argptr;
 	char    text[1024];
 
-	if (!g_developer.integer)
-	{
+	if (!g_developer.integer) {
 		return;
 	}
 
 	va_start(argptr, fmt);
-	Q_vsnprintf(text, sizeof(text), fmt, argptr);
+	Q_vsnprintf(text, sizeof (text), fmt, argptr);
 	va_end(argptr);
 
 	trap_Printf(text);
 }
 
-void QDECL G_Error(const char *fmt, ...)
-{
+void QDECL G_Error(const char *fmt, ...) {
 	va_list argptr;
 	char    text[1024];
 
 	va_start(argptr, fmt);
-	Q_vsnprintf(text, sizeof(text), fmt, argptr);
+	Q_vsnprintf(text, sizeof (text), fmt, argptr);
 	va_end(argptr);
 
 	trap_Error(text);
@@ -449,103 +442,83 @@ for cursor hint purpose (because the ent may have the designed content type
 but nevertheless should not display any cursor hint)
 ==============
 */
-static qboolean G_CursorHintIgnoreEnt(gentity_t *traceEnt)
-{
+static qboolean G_CursorHintIgnoreEnt(gentity_t *traceEnt) {
 	return (traceEnt->s.eType == ET_OID_TRIGGER || traceEnt->s.eType == ET_TRIGGER_MULTIPLE) ? qtrue : qfalse;
 }
 
-qboolean G_EmplacedGunIsMountable(gentity_t *ent, gentity_t *other)
-{
-	if (Q_stricmp(ent->classname, "misc_mg42") && Q_stricmp(ent->classname, "misc_aagun"))
-	{
+qboolean G_EmplacedGunIsMountable(gentity_t *ent, gentity_t *other) {
+	if (Q_stricmp(ent->classname, "misc_mg42") && Q_stricmp(ent->classname, "misc_aagun")) {
 		return qfalse;
 	}
 
-	if (!other->client)
-	{
+	if (!other->client) {
 		return qfalse;
 	}
 
-	if (BG_IsScopedWeapon(other->client->ps.weapon))
-	{
+	if (BG_IsScopedWeapon(other->client->ps.weapon)) {
 		return qfalse;
 	}
 
-	if (other->client->ps.pm_flags & PMF_DUCKED)
-	{
+	if (other->client->ps.pm_flags & PMF_DUCKED) {
 		return qfalse;
 	}
 
-	if (other->client->ps.persistant[PERS_HWEAPON_USE])
-	{
+	if (other->client->ps.persistant[PERS_HWEAPON_USE]) {
 		return qfalse;
 	}
 
-	if (ent->r.currentOrigin[2] - other->r.currentOrigin[2] >= 40)
-	{
+	if (ent->r.currentOrigin[2] - other->r.currentOrigin[2] >= 40) {
 		return qfalse;
 	}
 
-	if (ent->r.currentOrigin[2] - other->r.currentOrigin[2] < 0)
-	{
+	if (ent->r.currentOrigin[2] - other->r.currentOrigin[2] < 0) {
 		return qfalse;
 	}
 
-	if (ent->s.frame != 0)
-	{
+	if (ent->s.frame != 0) {
 		return qfalse;
 	}
 
-	if (ent->active)
-	{
+	if (ent->active) {
 		return qfalse;
 	}
 
-	if (other->client->ps.grenadeTimeLeft)
-	{
+	if (other->client->ps.grenadeTimeLeft) {
 		return qfalse;
 	}
 
-	if (infront(ent, other))
-	{
+	if (infront(ent, other)) {
 		return qfalse;
 	}
 
 	return qtrue;
 }
 
-qboolean G_EmplacedGunIsRepairable(gentity_t *ent, gentity_t *other)
-{
-	if (Q_stricmp(ent->classname, "misc_mg42") && Q_stricmp(ent->classname, "misc_aagun"))
-	{
+qboolean G_EmplacedGunIsRepairable(gentity_t *ent, gentity_t *other) {
+	if (Q_stricmp(ent->classname, "misc_mg42") && Q_stricmp(ent->classname, "misc_aagun")) {
 		return qfalse;
 	}
 
-	if (!other->client)
-	{
+	if (!other->client) {
 		return qfalse;
 	}
 
-	if (BG_IsScopedWeapon(other->client->ps.weapon))
-	{
+	if (BG_IsScopedWeapon(other->client->ps.weapon)) {
 		return qfalse;
 	}
 
-	if (other->client->ps.persistant[PERS_HWEAPON_USE])
-	{
+	if (other->client->ps.persistant[PERS_HWEAPON_USE]) {
 		return qfalse;
 	}
 
-	if (ent->s.frame == 0)
-	{
+	if (ent->s.frame == 0) {
 		return qfalse;
 	}
 
 	return qtrue;
 }
 
-void G_CheckForCursorHints(gentity_t *ent)
-{
+void G_CheckForCursorHints(gentity_t *ent) {
 	vec3_t        forward, right, up, offset, end;
 	trace_t       *tr;
 	float         dist;
@@ -557,8 +530,7 @@ void G_CheckForCursorHints(gentity_t *ent)
 	int           trace_contents;       // DHM - Nerve
 	int           numOfIgnoredEnts = 0;
 
-	if (!ent->client)
-	{
+	if (!ent->client) {
 		return;
 	}
 
@@ -572,17 +544,13 @@ void G_CheckForCursorHints(gentity_t *ent)
 	offset[2] += ps->viewheight;
 
 	// lean
-	if (ps->leanf)
-	{
+	if (ps->leanf) {
 		VectorMA(offset, ps->leanf, right, offset);
 	}
 
-	if (zooming)
-	{
+	if (zooming) {
 		VectorMA(offset, CH_MAX_DIST_ZOOM, forward, end);
-	}
-	else
-	{
+	} else {
 		VectorMA(offset, chMaxDist, forward, end);
 	}
 
@@ -597,35 +565,28 @@ void G_CheckForCursorHints(gentity_t *ent)
 
 	dist = VectorDistanceSquared(offset, tr->endpos);
 
-	if (zooming)
-	{
+	if (zooming) {
 		hintDist = CH_MAX_DIST_ZOOM;
-	}
-	else
-	{
+	} else {
 		hintDist = chMaxDist;
 	}
 
 	// Arnout: building something - add this here because we don't have anything solid to trace to - quite ugly-ish
-	if (ent->client->touchingTOI && ps->stats[STAT_PLAYER_CLASS] == PC_ENGINEER)
-	{
+	if (ent->client->touchingTOI && ps->stats[STAT_PLAYER_CLASS] == PC_ENGINEER) {
 		gentity_t *constructible;
-		if ((constructible = G_IsConstructible(ent->client->sess.sessionTeam, ent->client->touchingTOI)))
-		{
+		if ((constructible = G_IsConstructible(ent->client->sess.sessionTeam, ent->client->touchingTOI))) {
 			ps->serverCursorHint    = HINT_CONSTRUCTIBLE;
 			ps->serverCursorHintVal = (int)constructible->s.angles2[0];
 			return;
 		}
 	}
 
-	if (tr->fraction == 1)
-	{
+	if (tr->fraction == 1) {
 		return;
 	}
 
 	traceEnt = &g_entities[tr->entityNum];
-	while (G_CursorHintIgnoreEnt(traceEnt) && numOfIgnoredEnts < 10)
-	{
+	while (G_CursorHintIgnoreEnt(traceEnt) && numOfIgnoredEnts < 10) {
 		// xkan, 1/9/2003 - we may hit multiple invalid ents at the same point
 		// count them to prevent too many loops
 		numOfIgnoredEnts++;
@@ -638,85 +599,64 @@ void G_CheckForCursorHints(gentity_t *ent)
 		// xkan, 1/8/2003 - (hintDist - dist) is the actual distance in the above
 		// trap_Trace call. update dist accordingly.
 		dist += VectorDistanceSquared(offset, tr->endpos);
-		if (tr->fraction == 1)
-		{
+		if (tr->fraction == 1) {
 			return;
 		}
 		traceEnt = &g_entities[tr->entityNum];
 	}
 
-	if (tr->entityNum == ENTITYNUM_WORLD)
-	{
-		if ((tr->contents & CONTENTS_WATER) && !(ps->powerups[PW_BREATHER]))
-		{
+	if (tr->entityNum == ENTITYNUM_WORLD) {
+		if ((tr->contents & CONTENTS_WATER) && !(ps->powerups[PW_BREATHER])) {
 			hintDist = CH_WATER_DIST;
 			hintType = HINT_WATER;
-		}
-		else if ((tr->surfaceFlags & SURF_LADDER) && !(ps->pm_flags & PMF_LADDER))           // ladder
-		{
+		} else if ((tr->surfaceFlags & SURF_LADDER) && !(ps->pm_flags & PMF_LADDER)) {         // ladder
 			hintDist = CH_LADDER_DIST;
 			hintType = HINT_LADDER;
 		}
-	}
-	else if (tr->entityNum < MAX_CLIENTS)
-	{
+	} else if (tr->entityNum < MAX_CLIENTS) {
 		// Show medics a syringe if they can revive someone
 
-		if (traceEnt->client && traceEnt->client->sess.sessionTeam == ent->client->sess.sessionTeam)
-		{
-			if (ps->stats[STAT_PLAYER_CLASS] == PC_MEDIC && traceEnt->client->ps.pm_type == PM_DEAD && !(traceEnt->client->ps.pm_flags & PMF_LIMBO))
-			{
+		if (traceEnt->client && traceEnt->client->sess.sessionTeam == ent->client->sess.sessionTeam) {
+			if (ps->stats[STAT_PLAYER_CLASS] == PC_MEDIC && traceEnt->client->ps.pm_type == PM_DEAD && !(traceEnt->client->ps.pm_flags & PMF_LIMBO)) {
 				hintDist = 48;        // JPW NERVE matches weapon_syringe in g_weapon.c
 				hintType = HINT_REVIVE;
 			}
-		}
-		else if (traceEnt->client && traceEnt->client->isCivilian)
-		{
+		} else if (traceEnt->client && traceEnt->client->isCivilian) {
 			// xkan, 1/6/2003 - check for civilian, show neutral cursor (no matter which team)
 			hintType = HINT_PLYR_NEUTRAL;
 			hintDist = CH_FRIENDLY_DIST;    // far, since this will be used to determine whether to shoot bullet weaps or not
 		}
-	}
-	else
-	{
+	} else {
 		checkEnt = traceEnt;
 
 		// Arnout: invisible entities don't show hints
-		if (traceEnt->entstate == STATE_INVISIBLE || traceEnt->entstate == STATE_UNDERCONSTRUCTION)
-		{
+		if (traceEnt->entstate == STATE_INVISIBLE || traceEnt->entstate == STATE_UNDERCONSTRUCTION) {
 			return;
 		}
 
 		// check invisible_users first since you don't want to draw a hint based
 		// on that ent, but rather on what they are targeting.
 		// so find the target and set checkEnt to that to show the proper hint.
-		if (traceEnt->s.eType == ET_GENERAL)
-		{
+		if (traceEnt->s.eType == ET_GENERAL) {
 
 			// ignore trigger_aidoor.  can't just not trace for triggers, since I need invisible_users...
 			// damn, I would like to ignore some of these triggers though.
 
-			if (!Q_stricmp(traceEnt->classname, "trigger_aidoor"))
-			{
+			if (!Q_stricmp(traceEnt->classname, "trigger_aidoor")) {
 				return;
 			}
 
-			if (!Q_stricmp(traceEnt->classname, "func_invisible_user"))
-			{
+			if (!Q_stricmp(traceEnt->classname, "func_invisible_user")) {
 				// indirectHit = qtrue;
 
 				// DHM - Nerve :: Put this back in only in multiplayer
-				if (traceEnt->s.dmgFlags)      // hint icon specified in entity
-				{
+				if (traceEnt->s.dmgFlags) {    // hint icon specified in entity
 					hintType = traceEnt->s.dmgFlags;
 					hintDist = CH_ACTIVATE_DIST;
 					checkEnt = 0;
-				}
-				else     // use target for hint icon
-				{
+				} else {   // use target for hint icon
 					checkEnt = G_FindByTargetname(NULL, traceEnt->target);
-					if (!checkEnt)         // no target found
-					{
+					if (!checkEnt) {       // no target found
 						hintType = HINT_BAD_USER;
 						hintDist = CH_MAX_DIST_ZOOM;    // show this one from super far for debugging
 					}
@@ -725,27 +665,21 @@ void G_CheckForCursorHints(gentity_t *ent)
 		}
 
 
-		if (checkEnt)
-		{
+		if (checkEnt) {
 
 			// TDF This entire function could be the poster boy for converting to OO programming!!!
 			// I'm making this into a switch in a vain attempt to make this readable so I can find which
 			// brackets don't match!!!
 
-			switch (checkEnt->s.eType)
-			{
+			switch (checkEnt->s.eType) {
 			case ET_CORPSE:
-				if (!ent->client->ps.powerups[PW_BLUEFLAG] && !ent->client->ps.powerups[PW_REDFLAG])
-				{
-					if (BODY_TEAM(traceEnt) < 4 && BODY_TEAM(traceEnt) != (int)ent->client->sess.sessionTeam && traceEnt->nextthink == traceEnt->timestamp + BODY_TIME(BODY_TEAM(traceEnt)))
-					{
-						if (ent->client->ps.stats[STAT_PLAYER_CLASS] == PC_COVERTOPS)
-						{
+				if (!ent->client->ps.powerups[PW_BLUEFLAG] && !ent->client->ps.powerups[PW_REDFLAG]) {
+					if (BODY_TEAM(traceEnt) < 4 && BODY_TEAM(traceEnt) != (int)ent->client->sess.sessionTeam && traceEnt->nextthink == traceEnt->timestamp + BODY_TIME(BODY_TEAM(traceEnt))) {
+						if (ent->client->ps.stats[STAT_PLAYER_CLASS] == PC_COVERTOPS) {
 							hintDist = 48;
 							hintType = HINT_UNIFORM;
 							hintVal  = BODY_VALUE(traceEnt);
-							if (hintVal > 255)
-							{
+							if (hintVal > 255) {
 								hintVal = 255;
 							}
 						}
@@ -757,26 +691,19 @@ void G_CheckForCursorHints(gentity_t *ent)
 			case ET_AAGUN:
 				hintType = HINT_FORCENONE;
 
-				if (G_EmplacedGunIsMountable(traceEnt, ent))
-				{
+				if (G_EmplacedGunIsMountable(traceEnt, ent)) {
 					hintDist = CH_ACTIVATE_DIST;
 					hintType = HINT_MG42;
 					hintVal  = 0;
-				}
-				else
-				{
-					if (ps->stats[STAT_PLAYER_CLASS] == PC_ENGINEER && G_EmplacedGunIsRepairable(traceEnt, ent))
-					{
+				} else {
+					if (ps->stats[STAT_PLAYER_CLASS] == PC_ENGINEER && G_EmplacedGunIsRepairable(traceEnt, ent)) {
 						hintType = HINT_BUILD;
 						hintDist = CH_BREAKABLE_DIST;
 						hintVal  = traceEnt->health;
-						if (hintVal > 255)
-						{
+						if (hintVal > 255) {
 							hintVal = 255;
 						}
-					}
-					else
-					{
+					} else {
 						hintDist = 0;
 						hintType = ps->serverCursorHint = HINT_FORCENONE;
 						hintVal  = ps->serverCursorHintVal = 0;
@@ -785,16 +712,12 @@ void G_CheckForCursorHints(gentity_t *ent)
 				break;
 			case ET_EXPLOSIVE:
 			{
-				if (checkEnt->spawnflags & EXPLOSIVE_TANK)
-				{
+				if (checkEnt->spawnflags & EXPLOSIVE_TANK) {
 					hintDist = CH_BREAKABLE_DIST * 2;
 					hintType = HINT_TANK;
 					hintVal  = ps->serverCursorHintVal = 0;         // no health for tank destructibles
-				}
-				else
-				{
-					switch (checkEnt->constructibleStats.weaponclass)
-					{
+				} else {
+					switch (checkEnt->constructibleStats.weaponclass) {
 					case 0:
 						hintDist = CH_BREAKABLE_DIST;
 						hintType = HINT_BREAKABLE;
@@ -810,11 +733,9 @@ void G_CheckForCursorHints(gentity_t *ent)
 						hintType = ps->serverCursorHint = HINT_FORCENONE;
 						hintVal  = ps->serverCursorHintVal = 0;
 
-						if (checkEnt->parent && checkEnt->parent->s.eType == ET_OID_TRIGGER)
-						{
+						if (checkEnt->parent && checkEnt->parent->s.eType == ET_OID_TRIGGER) {
 							if (((ent->client->sess.sessionTeam == TEAM_AXIS) && (checkEnt->parent->spawnflags & ALLIED_OBJECTIVE)) ||
-							    ((ent->client->sess.sessionTeam == TEAM_ALLIES) && (checkEnt->parent->spawnflags & AXIS_OBJECTIVE)))
-							{
+							    ((ent->client->sess.sessionTeam == TEAM_ALLIES) && (checkEnt->parent->spawnflags & AXIS_OBJECTIVE))) {
 								hintDist = CH_BREAKABLE_DIST * 2;
 								hintType = HINT_BREAKABLE_DYNAMITE;
 								hintVal  = ps->serverCursorHintVal = 0;         // no health for dynamite
@@ -822,14 +743,11 @@ void G_CheckForCursorHints(gentity_t *ent)
 						}
 						break;
 					default:
-						if (checkEnt->health > 0)
-						{
+						if (checkEnt->health > 0) {
 							hintDist = CH_BREAKABLE_DIST;
 							hintType = HINT_BREAKABLE;
 							hintVal  = checkEnt->health;            // also send health to client for visualization
-						}
-						else
-						{
+						} else {
 							hintDist = 0;
 							hintType = ps->serverCursorHint = HINT_FORCENONE;
 							hintVal  = ps->serverCursorHintVal = 0;
@@ -841,13 +759,10 @@ void G_CheckForCursorHints(gentity_t *ent)
 				break;
 			}
 			case ET_CONSTRUCTIBLE:
-				if (G_ConstructionIsPartlyBuilt(checkEnt) && !(checkEnt->spawnflags & CONSTRUCTIBLE_INVULNERABLE))
-				{
+				if (G_ConstructionIsPartlyBuilt(checkEnt) && !(checkEnt->spawnflags & CONSTRUCTIBLE_INVULNERABLE)) {
 					// only show hint for players who can blow it up
-					if (checkEnt->s.teamNum != (int)ent->client->sess.sessionTeam)
-					{
-						switch (checkEnt->constructibleStats.weaponclass)
-						{
+					if (checkEnt->s.teamNum != (int)ent->client->sess.sessionTeam) {
+						switch (checkEnt->constructibleStats.weaponclass) {
 						case 0:
 							hintDist = CH_BREAKABLE_DIST;
 							hintType = HINT_BREAKABLE;
@@ -869,9 +784,7 @@ void G_CheckForCursorHints(gentity_t *ent)
 							hintVal  = ps->serverCursorHintVal = 0;
 							break;
 						}
-					}
-					else
-					{
+					} else {
 						hintDist = 0;
 						hintType = ps->serverCursorHint = HINT_FORCENONE;
 						hintVal  = ps->serverCursorHintVal = 0;
@@ -881,8 +794,7 @@ void G_CheckForCursorHints(gentity_t *ent)
 
 				break;
 			case ET_ALARMBOX:
-				if (checkEnt->health > 0)
-				{
+				if (checkEnt->health > 0) {
 					hintType = HINT_ACTIVATE;
 				}
 				break;
@@ -893,8 +805,7 @@ void G_CheckForCursorHints(gentity_t *ent)
 
 				hintDist = CH_ACTIVATE_DIST;
 
-				switch (it->giType)
-				{
+				switch (it->giType) {
 				case IT_HEALTH:
 					hintType = HINT_HEALTH;
 					break;
@@ -904,21 +815,17 @@ void G_CheckForCursorHints(gentity_t *ent)
 				case IT_WEAPON: {
 					qboolean canPickup = COM_BitCheck(ent->client->ps.weapons, it->giTag);
 
-					if (!canPickup)
-					{
-						if (it->giTag == WP_AMMO)
-						{
+					if (!canPickup) {
+						if (it->giTag == WP_AMMO) {
 							canPickup = qtrue;
 						}
 					}
 
-					if (!canPickup)
-					{
+					if (!canPickup) {
 						canPickup = G_CanPickupWeapon(it->giTag, ent);
 					}
 
-					if (canPickup)
-					{
+					if (canPickup) {
 						hintType = HINT_WEAPON;
 					}
 					break;
@@ -936,12 +843,9 @@ void G_CheckForCursorHints(gentity_t *ent)
 					hintType = HINT_INVENTORY;
 					break;
 				case IT_TEAM:
-					if (!Q_stricmp(traceEnt->classname, "team_CTF_redflag") && ent->client->sess.sessionTeam == TEAM_ALLIES)
-					{
+					if (!Q_stricmp(traceEnt->classname, "team_CTF_redflag") && ent->client->sess.sessionTeam == TEAM_ALLIES) {
 						hintType = HINT_POWERUP;
-					}
-					else if (!Q_stricmp(traceEnt->classname, "team_CTF_blueflag") && ent->client->sess.sessionTeam == TEAM_AXIS)
-					{
+					} else if (!Q_stricmp(traceEnt->classname, "team_CTF_blueflag") && ent->client->sess.sessionTeam == TEAM_AXIS) {
 						hintType = HINT_POWERUP;
 					}
 					break;
@@ -953,51 +857,35 @@ void G_CheckForCursorHints(gentity_t *ent)
 				break;
 			}
 			case ET_MOVER:
-				if (!Q_stricmp(checkEnt->classname, "script_mover"))
-				{
-					if (G_TankIsMountable(checkEnt, ent))
-					{
+				if (!Q_stricmp(checkEnt->classname, "script_mover")) {
+					if (G_TankIsMountable(checkEnt, ent)) {
 						hintDist = CH_ACTIVATE_DIST;
 						hintType = HINT_ACTIVATE;
 					}
-				}
-				else if (!Q_stricmp(checkEnt->classname, "func_door_rotating"))
-				{
-					if (checkEnt->moverState == MOVER_POS1ROTATE)        // stationary/closed
-					{
+				} else if (!Q_stricmp(checkEnt->classname, "func_door_rotating")) {
+					if (checkEnt->moverState == MOVER_POS1ROTATE) {      // stationary/closed
 						hintDist = CH_DOOR_DIST;
 						hintType = HINT_DOOR_ROTATING;
-						if (!G_AllowTeamsAllowed(checkEnt, ent))         // locked
-						{
+						if (!G_AllowTeamsAllowed(checkEnt, ent)) {       // locked
 							hintType = HINT_DOOR_ROTATING_LOCKED;
 						}
 					}
-				}
-				else if (!Q_stricmp(checkEnt->classname, "func_door"))
-				{
-					if (checkEnt->moverState == MOVER_POS1)      // stationary/closed
-					{
+				} else if (!Q_stricmp(checkEnt->classname, "func_door")) {
+					if (checkEnt->moverState == MOVER_POS1) {    // stationary/closed
 						hintDist = CH_DOOR_DIST;
 						hintType = HINT_DOOR;
 
-						if (!G_AllowTeamsAllowed(checkEnt, ent))         // locked
-						{
+						if (!G_AllowTeamsAllowed(checkEnt, ent)) {       // locked
 							hintType = HINT_DOOR_LOCKED;
 						}
 					}
-				}
-				else if (!Q_stricmp(checkEnt->classname, "func_button"))
-				{
+				} else if (!Q_stricmp(checkEnt->classname, "func_button")) {
 					hintDist = CH_ACTIVATE_DIST;
 					hintType = HINT_BUTTON;
-				}
-				else if (!Q_stricmp(checkEnt->classname, "props_flamebarrel"))
-				{
+				} else if (!Q_stricmp(checkEnt->classname, "props_flamebarrel")) {
 					hintDist = CH_BREAKABLE_DIST * 2;
 					hintType = HINT_BREAKABLE;
-				}
-				else if (!Q_stricmp(checkEnt->classname, "props_statue"))
-				{
+				} else if (!Q_stricmp(checkEnt->classname, "props_statue")) {
 					hintDist = CH_BREAKABLE_DIST * 2;
 					hintType = HINT_BREAKABLE;
 				}
@@ -1005,13 +893,11 @@ void G_CheckForCursorHints(gentity_t *ent)
 				break;
 			case ET_MISSILE:
 			case ET_BOMB:
-				if (ps->stats[STAT_PLAYER_CLASS] == PC_ENGINEER)
-				{
+				if (ps->stats[STAT_PLAYER_CLASS] == PC_ENGINEER) {
 					hintDist = CH_BREAKABLE_DIST;
 					hintType = HINT_DISARM;
 					hintVal  = checkEnt->health;            // also send health to client for visualization
-					if (hintVal > 255)
-					{
+					if (hintVal > 255) {
 						hintVal = 255;
 					}
 				}
@@ -1019,14 +905,12 @@ void G_CheckForCursorHints(gentity_t *ent)
 
 				// hint icon specified in entity (and proper contact was made, so hintType was set)
 				// first try the checkent...
-				if (checkEnt->s.dmgFlags && hintType)
-				{
+				if (checkEnt->s.dmgFlags && hintType) {
 					hintType = checkEnt->s.dmgFlags;
 				}
 
 				// then the traceent
-				if (traceEnt->s.dmgFlags && hintType)
-				{
+				if (traceEnt->s.dmgFlags && hintType) {
 					hintType = traceEnt->s.dmgFlags;
 				}
 
@@ -1035,13 +919,11 @@ void G_CheckForCursorHints(gentity_t *ent)
 				break;
 			}
 
-			if (zooming)
-			{
+			if (zooming) {
 				hintDist = CH_MAX_DIST_ZOOM;
 
 				// zooming can eat a lot of potential hints
-				switch (hintType)
-				{
+				switch (hintType) {
 
 				// allow while zooming
 				case HINT_PLAYER:
@@ -1062,23 +944,18 @@ void G_CheckForCursorHints(gentity_t *ent)
 		}
 	}
 
-	if (dist <= (float)Square(hintDist))
-	{
+	if (dist <= (float)Square(hintDist)) {
 		ps->serverCursorHint    = hintType;
 		ps->serverCursorHintVal = hintVal;
 	}
 
 }
 
-void G_SetTargetName(gentity_t *ent, char *targetname)
-{
-	if (targetname && *targetname)
-	{
+void G_SetTargetName(gentity_t *ent, char *targetname) {
+	if (targetname && *targetname) {
 		ent->targetname     = targetname;
 		ent->targetnamehash = BG_StringHashValue(targetname);
-	}
-	else
-	{
+	} else {
 		ent->targetnamehash = -1;
 	}
 }
@@ -1094,61 +971,47 @@ All but the first will have the FL_TEAMSLAVE flag set and teammaster field set
 All but the last will have the teamchain field set to the next one
 ================
 */
-void G_FindTeams(void)
-{
+void G_FindTeams(void) {
 	gentity_t *e, *e2;
 	int       i, j;
 	int       c, c2;
 
 	c  = 0;
 	c2 = 0;
-	for (i = 1, e = g_entities + i ; i < level.num_entities ; i++, e++)
-	{
-		if (!e->inuse)
-		{
+	for (i = 1, e = g_entities + i ; i < level.num_entities ; i++, e++) {
+		if (!e->inuse) {
 			continue;
 		}
 
-		if (!e->team)
-		{
+		if (!e->team) {
 			continue;
 		}
 
-		if (e->flags & FL_TEAMSLAVE)
-		{
+		if (e->flags & FL_TEAMSLAVE) {
 			continue;
 		}
 
-		if (!Q_stricmp(e->classname, "func_tramcar"))
-		{
-			if (e->spawnflags & 8)     // leader
-			{
+		if (!Q_stricmp(e->classname, "func_tramcar")) {
+			if (e->spawnflags & 8) {   // leader
 				e->teammaster = e;
-			}
-			else
-			{
+			} else {
 				continue;
 			}
 		}
 
 		c++;
 		c2++;
-		for (j = i + 1, e2 = e + 1 ; j < level.num_entities ; j++, e2++)
-		{
-			if (!e2->inuse)
-			{
+		for (j = i + 1, e2 = e + 1 ; j < level.num_entities ; j++, e2++) {
+			if (!e2->inuse) {
 				continue;
 			}
-			if (!e2->team)
-			{
+			if (!e2->team) {
 				continue;
 			}
-			if (e2->flags & FL_TEAMSLAVE)
-			{
+			if (e2->flags & FL_TEAMSLAVE) {
 				continue;
 			}
-			if (!strcmp(e->team, e2->team))
-			{
+			if (!strcmp(e->team, e2->team)) {
 				c2++;
 				e2->teamchain  = e->teamchain;
 				e->teamchain   = e2;
@@ -1156,21 +1019,18 @@ void G_FindTeams(void)
 //				e2->key = e->key;	// (SA) I can't set the key here since the master door hasn't finished spawning yet and therefore has a key of -1
 				e2->flags |= FL_TEAMSLAVE;
 
-				if (!Q_stricmp(e2->classname, "func_tramcar"))
-				{
+				if (!Q_stricmp(e2->classname, "func_tramcar")) {
 					trap_UnlinkEntity(e2);
 				}
 
 				// make sure that targets only point at the master
-				if (e2->targetname)
-				{
+				if (e2->targetname) {
 					G_SetTargetName(e, e2->targetname);
 
 					// Rafael
 					// note to self: added this because of problems
 					// pertaining to keys and double doors
-					if (Q_stricmp(e2->classname, "func_door_rotating"))
-					{
+					if (Q_stricmp(e2->classname, "func_door_rotating")) {
 						e2->targetname = NULL;
 					}
 				}
@@ -1187,8 +1047,7 @@ void G_FindTeams(void)
 G_RemapTeamShaders
 ==============
 */
-void G_RemapTeamShaders()
-{
+void G_RemapTeamShaders() {
 }
 
 
@@ -1197,19 +1056,16 @@ void G_RemapTeamShaders()
 G_RegisterCvars
 =================
 */
-void G_RegisterCvars(void)
-{
+void G_RegisterCvars(void) {
 	int         i;
 	cvarTable_t *cv;
 	qboolean    remapped = qfalse;
 
 	level.server_settings = 0;
 
-	for (i = 0, cv = gameCvarTable; i < gameCvarTableSize; i++, cv++)
-	{
+	for (i = 0, cv = gameCvarTable; i < gameCvarTableSize; i++, cv++) {
 		trap_Cvar_Register(cv->vmCvar, cv->cvarName, cv->defaultString, cv->cvarFlags);
-		if (cv->vmCvar)
-		{
+		if (cv->vmCvar) {
 			cv->modificationCount = cv->vmCvar->modificationCount;
 			// OSP - Update vote info for clients, if necessary
 			G_checkServerToggle(cv->vmCvar);
@@ -1218,20 +1074,16 @@ void G_RegisterCvars(void)
 		remapped = (remapped || cv->teamShader);
 	}
 
-	if (remapped)
-	{
+	if (remapped) {
 		G_RemapTeamShaders();
 	}
 
 	// OSP
 	trap_SetConfigstring(CS_SERVERTOGGLES, va("%d", level.server_settings));
 
-	if (pmove_msec.integer < 8)
-	{
+	if (pmove_msec.integer < 8) {
 		trap_Cvar_Set("pmove_msec", "8");
-	}
-	else if (pmove_msec.integer > 33)
-	{
+	} else if (pmove_msec.integer > 33) {
 		trap_Cvar_Set("pmove_msec", "33");
 	}
 
@@ -1242,8 +1094,7 @@ void G_RegisterCvars(void)
 G_UpdateCvars
 =================
 */
-void G_UpdateCvars(void)
-{
+void G_UpdateCvars(void) {
 	int         i;
 	cvarTable_t *cv;
 	qboolean    fToggles          = qfalse;
@@ -1251,69 +1102,49 @@ void G_UpdateCvars(void)
 	qboolean    remapped          = qfalse;
 	qboolean    chargetimechanged = qfalse;
 
-	for (i = 0, cv = gameCvarTable ; i < gameCvarTableSize ; i++, cv++)
-	{
-		if (cv->vmCvar)
-		{
+	for (i = 0, cv = gameCvarTable ; i < gameCvarTableSize ; i++, cv++) {
+		if (cv->vmCvar) {
 			trap_Cvar_Update(cv->vmCvar);
 
-			if (cv->modificationCount != cv->vmCvar->modificationCount)
-			{
+			if (cv->modificationCount != cv->vmCvar->modificationCount) {
 				cv->modificationCount = cv->vmCvar->modificationCount;
 
-				if (cv->trackChange && !(cv->cvarFlags & CVAR_LATCH))
-				{
+				if (cv->trackChange && !(cv->cvarFlags & CVAR_LATCH)) {
 					trap_SendServerCommand(-1, va("print \"Server:[lof] %s [lon]changed to[lof] %s\n\"", cv->cvarName, cv->vmCvar->string));
 				}
 
-				if (cv->teamShader)
-				{
+				if (cv->teamShader) {
 					remapped = qtrue;
 				}
 
-				if (cv->vmCvar == &g_filtercams)
-				{
+				if (cv->vmCvar == &g_filtercams) {
 					trap_SetConfigstring(CS_FILTERCAMS, va("%i", g_filtercams.integer));
 				}
 
-				if (cv->vmCvar == &g_soldierChargeTime)
-				{
+				if (cv->vmCvar == &g_soldierChargeTime) {
 					level.soldierChargeTime[0] = g_soldierChargeTime.integer * level.soldierChargeTimeModifier[0];
 					level.soldierChargeTime[1] = g_soldierChargeTime.integer * level.soldierChargeTimeModifier[1];
 					chargetimechanged          = qtrue;
-				}
-				else if (cv->vmCvar == &g_medicChargeTime)
-				{
+				} else if (cv->vmCvar == &g_medicChargeTime) {
 					level.medicChargeTime[0] = g_medicChargeTime.integer * level.medicChargeTimeModifier[0];
 					level.medicChargeTime[1] = g_medicChargeTime.integer * level.medicChargeTimeModifier[1];
 					chargetimechanged        = qtrue;
-				}
-				else if (cv->vmCvar == &g_engineerChargeTime)
-				{
+				} else if (cv->vmCvar == &g_engineerChargeTime) {
 					level.engineerChargeTime[0] = g_engineerChargeTime.integer * level.engineerChargeTimeModifier[0];
 					level.engineerChargeTime[1] = g_engineerChargeTime.integer * level.engineerChargeTimeModifier[1];
 					chargetimechanged           = qtrue;
-				}
-				else if (cv->vmCvar == &g_LTChargeTime)
-				{
+				} else if (cv->vmCvar == &g_LTChargeTime) {
 					level.lieutenantChargeTime[0] = g_LTChargeTime.integer * level.lieutenantChargeTimeModifier[0];
 					level.lieutenantChargeTime[1] = g_LTChargeTime.integer * level.lieutenantChargeTimeModifier[1];
 					chargetimechanged             = qtrue;
-				}
-				else if (cv->vmCvar == &g_covertopsChargeTime)
-				{
+				} else if (cv->vmCvar == &g_covertopsChargeTime) {
 					level.covertopsChargeTime[0] = g_covertopsChargeTime.integer * level.covertopsChargeTimeModifier[0];
 					level.covertopsChargeTime[1] = g_covertopsChargeTime.integer * level.covertopsChargeTimeModifier[1];
 					chargetimechanged            = qtrue;
-				}
-				else if (cv->vmCvar == &pmove_msec)
-				{
-					if (pmove_msec.integer < 8)
-					{
+				} else if (cv->vmCvar == &pmove_msec) {
+					if (pmove_msec.integer < 8) {
 						trap_Cvar_Set(cv->cvarName, "8");
-					}
-					else if (pmove_msec.integer > 33)
-					{
+					} else if (pmove_msec.integer > 33) {
 						trap_Cvar_Set(cv->cvarName, "33");
 					}
 				}
@@ -1324,35 +1155,28 @@ void G_UpdateCvars(void)
 				    cv->vmCvar == &vote_allow_referee       ||
 				    cv->vmCvar == &vote_allow_antilag        ||
 				    cv->vmCvar == &vote_allow_muting
-				    )
-				{
+				    ) {
 					fVoteFlags = qtrue;
-				}
-				else
-				{
+				} else {
 					fToggles = (G_checkServerToggle(cv->vmCvar) || fToggles);
 				}
 			}
 		}
 	}
 
-	if (fVoteFlags)
-	{
+	if (fVoteFlags) {
 		G_voteFlags();
 	}
 
-	if (fToggles)
-	{
+	if (fToggles) {
 		trap_SetConfigstring(CS_SERVERTOGGLES, va("%d", level.server_settings));
 	}
 
-	if (remapped)
-	{
+	if (remapped) {
 		G_RemapTeamShaders();
 	}
 
-	if (chargetimechanged)
-	{
+	if (chargetimechanged) {
 		char cs[MAX_INFO_STRING];
 		cs[0] = '\0';
 		Info_SetValueForKey(cs, "axs_sld", va("%i", level.soldierChargeTime[0]));
@@ -1370,15 +1194,12 @@ void G_UpdateCvars(void)
 }
 
 // Reset particular server variables back to defaults if a config is voted in.
-void G_wipeCvars(void)
-{
+void G_wipeCvars(void) {
 	int         i;
 	cvarTable_t *pCvars;
 
-	for (i = 0, pCvars = gameCvarTable; i < gameCvarTableSize; i++, pCvars++)
-	{
-		if (pCvars->vmCvar && pCvars->fConfigReset)
-		{
+	for (i = 0, pCvars = gameCvarTable; i < gameCvarTableSize; i++, pCvars++) {
+		if (pCvars->vmCvar && pCvars->fConfigReset) {
 			G_Printf("set %s %s\n", pCvars->cvarName, pCvars->defaultString);
 			trap_Cvar_Set(pCvars->cvarName, pCvars->defaultString);
 		}
@@ -1391,24 +1212,18 @@ void G_wipeCvars(void)
 #define SNIPSIZE 250
 
 //copies max num chars from beginning of dest into src and returns pointer to new src
-char *strcut(char *dest, char *src, int num)
-{
+char *strcut(char *dest, char *src, int num) {
 	int i;
 
-	if (!dest || !src || !num)
-	{
+	if (!dest || !src || !num) {
 		return NULL;
 	}
-	for (i = 0 ; i < num ; i++)
-	{
-		if ((char)*src)
-		{
+	for (i = 0 ; i < num ; i++) {
+		if ((char)*src) {
 			*dest = *src;
 			dest++;
 			src++;
-		}
-		else
-		{
+		} else {
 			break;
 		}
 	}
@@ -1422,8 +1237,7 @@ G_InitGame
 
 ============
 */
-void G_InitGame(int levelTime, int randomSeed)
-{
+void G_InitGame(int levelTime, int randomSeed) {
 	int  i;
 	char cs[MAX_INFO_STRING];
 
@@ -1434,12 +1248,11 @@ void G_InitGame(int levelTime, int randomSeed)
 	srand(randomSeed);
 
 	// Nico, load pthread (win32 ony)
-	#if defined _WIN32
-	if (pthread_win32_process_attach_np() != TRUE)
-	{
+#if defined _WIN32
+	if (pthread_win32_process_attach_np() != TRUE) {
 		G_Error("G_InitGame: failed to load pthread library!\n");
 	}
-	#endif
+#endif
 
 	//bani - make sure pak2.pk3 gets referenced on server so pure checks pass
 	trap_FS_FOpenFile("pak2.dat", &i, FS_READ);
@@ -1452,8 +1265,7 @@ void G_InitGame(int levelTime, int randomSeed)
 	G_InitMemory();
 
 	// NERVE - SMF - intialize gamestate
-	if (g_gamestate.integer == GS_INITIALIZE)
-	{
+	if (g_gamestate.integer == GS_INITIALIZE) {
 		// OSP
 		trap_Cvar_Set("gamestate", va("%i", GS_PLAYING));
 	}
@@ -1464,11 +1276,11 @@ void G_InitGame(int levelTime, int randomSeed)
 		qboolean   oldspawning = level.spawning;
 		voteInfo_t votedata;
 
-		memcpy(&votedata, &level.voteInfo, sizeof(voteInfo_t));
+		memcpy(&votedata, &level.voteInfo, sizeof (voteInfo_t));
 
-		memset(&level, 0, sizeof(level));
+		memset(&level, 0, sizeof (level));
 
-		memcpy(&level.voteInfo, &votedata, sizeof(voteInfo_t));
+		memcpy(&level.voteInfo, &votedata, sizeof (voteInfo_t));
 
 		level.spawning = oldspawning;
 	}
@@ -1476,8 +1288,7 @@ void G_InitGame(int levelTime, int randomSeed)
 	level.startTime       = levelTime;
 	level.server_settings = i;
 
-	for (i = 0; i < level.numConnectedClients; i++)
-	{
+	for (i = 0; i < level.numConnectedClients; i++) {
 		level.clients[level.sortedClients[i]].sess.spawnObjectiveIndex = 0;
 	}
 
@@ -1517,69 +1328,57 @@ void G_InitGame(int levelTime, int randomSeed)
 	G_SoundIndex("sound/player/gurp1.wav");
 	G_SoundIndex("sound/player/gurp2.wav");
 
-	trap_GetServerinfo(cs, sizeof(cs));
-	Q_strncpyz(level.rawmapname, Info_ValueForKey(cs, "mapname"), sizeof(level.rawmapname));
+	trap_GetServerinfo(cs, sizeof (cs));
+	Q_strncpyz(level.rawmapname, Info_ValueForKey(cs, "mapname"), sizeof (level.rawmapname));
 
 	trap_SetConfigstring(CS_SCRIPT_MOVER_NAMES, "");     // clear out
 
-	if (g_log.string[0])
-	{
-		if (g_logSync.integer)
-		{
+	if (g_log.string[0]) {
+		if (g_logSync.integer) {
 			trap_FS_FOpenFile(g_log.string, &level.logFile, FS_APPEND_SYNC);
-		}
-		else
-		{
+		} else {
 			trap_FS_FOpenFile(g_log.string, &level.logFile, FS_APPEND);
 		}
-		if (!level.logFile)
-		{
+		if (!level.logFile) {
 			G_Printf("WARNING: Couldn't open logfile: %s\n", g_log.string);
-		}
-		else
-		{
+		} else {
 			G_LogPrintf("------------------------------------------------------------\n");
 			G_LogPrintf("InitGame: %s\n", cs);
 		}
-	}
-	else
-	{
+	} else {
 		G_Printf("Not logging to disk.\n");
 	}
 
 	// Nico, API logging
 	trap_FS_FOpenFile("API.log", &level.APILog, FS_APPEND_SYNC);
-	if (!level.logFile)
-	{
+	if (!level.logFile) {
 		G_Printf("WARNING: Couldn't open logfile: %s\n", "API.log");
 	}
 
 	G_InitWorldSession();
 
 	// DHM - Nerve :: Clear out spawn target config strings
-	trap_GetConfigstring(CS_MULTI_INFO, cs, sizeof(cs));
+	trap_GetConfigstring(CS_MULTI_INFO, cs, sizeof (cs));
 	Info_SetValueForKey(cs, "numspawntargets", "0");
 	trap_SetConfigstring(CS_MULTI_INFO, cs);
 
-	for (i = CS_MULTI_SPAWNTARGETS; i < CS_MULTI_SPAWNTARGETS + MAX_MULTI_SPAWNTARGETS; i++)
-	{
+	for (i = CS_MULTI_SPAWNTARGETS; i < CS_MULTI_SPAWNTARGETS + MAX_MULTI_SPAWNTARGETS; i++) {
 		trap_SetConfigstring(i, "");
 	}
 
 	G_ResetTeamMapData();
 
 	// initialize all entities for this game
-	memset(g_entities, 0, MAX_GENTITIES * sizeof(g_entities[0]));
+	memset(g_entities, 0, MAX_GENTITIES * sizeof (g_entities[0]));
 	level.gentities = g_entities;
 
 	// initialize all clients for this game
 	level.maxclients = g_maxclients.integer;
-	memset(g_clients, 0, MAX_CLIENTS * sizeof(g_clients[0]));
+	memset(g_clients, 0, MAX_CLIENTS * sizeof (g_clients[0]));
 	level.clients = g_clients;
 
 	// set client fields on player ents
-	for (i = 0 ; i < level.maxclients ; i++)
-	{
+	for (i = 0 ; i < level.maxclients ; i++) {
 		g_entities[i].client = level.clients + i;
 	}
 
@@ -1589,8 +1388,8 @@ void G_InitGame(int levelTime, int randomSeed)
 	level.num_entities = MAX_CLIENTS;
 
 	// let the server system know where the entites are
-	trap_LocateGameData(level.gentities, level.num_entities, sizeof(gentity_t),
-	                    &level.clients[0].ps, sizeof(level.clients[0]));
+	trap_LocateGameData(level.gentities, level.num_entities, sizeof (gentity_t),
+	                    &level.clients[0].ps, sizeof (level.clients[0]));
 
 	// load level script
 	G_Script_ScriptLoad();
@@ -1620,8 +1419,7 @@ void G_InitGame(int levelTime, int randomSeed)
 
 	// ===================
 
-	if (!level.gameManager)
-	{
+	if (!level.gameManager) {
 		G_DPrintf("^1ERROR No 'script_multiplayer' found in map\n");
 	}
 
@@ -1650,29 +1448,23 @@ void G_InitGame(int levelTime, int randomSeed)
 	activeThreadsCounter = 0;
 
 	// Nico, flood protection
-	if (g_floodProtect.integer)
-	{
-		if (trap_Cvar_VariableIntegerValue("sv_floodprotect"))
-		{
+	if (g_floodProtect.integer) {
+		if (trap_Cvar_VariableIntegerValue("sv_floodprotect")) {
 			trap_Cvar_Set("sv_floodprotect", "0");
 		}
 	}
 
 	// Nico, is level a timerun?
-	if (!level.isTimerun)
-	{
+	if (!level.isTimerun) {
 		trap_Cvar_Set("isTimerun", "0");
 		G_Printf("%s: No timerun found in map\n", GAME_VERSION);
-	}
-	else
-	{
+	} else {
 		trap_Cvar_Set("isTimerun", "1");
 	}
 
 	// Nico, load API
 	// Note: do not check API here, it could crash
-	if (g_useAPI.integer)
-	{
+	if (g_useAPI.integer) {
 		G_loadAPI();
 	}
 
@@ -1687,15 +1479,13 @@ void G_InitGame(int levelTime, int randomSeed)
 G_ShutdownGame
 =================
 */
-void G_ShutdownGame(int restart)
-{
+void G_ShutdownGame(int restart) {
 	G_Printf("==== ShutdownGame ====\n");
 
 	// Nico, disable delayed map change watcher
 	G_disable_delayed_map_change_watcher();
 
-	if (level.logFile)
-	{
+	if (level.logFile) {
 		G_LogPrintf("ShutdownGame:\n");
 		G_LogPrintf("------------------------------------------------------------\n");
 		trap_FS_FCloseFile(level.logFile);
@@ -1703,15 +1493,13 @@ void G_ShutdownGame(int restart)
 	}
 
 	// Nico, close API log
-	if (level.APILog)
-	{
+	if (level.APILog) {
 		trap_FS_FCloseFile(level.APILog);
 		level.APILog = 0;
 	}
 
 	// Nico, unload API
-	if (g_useAPI.integer)
-	{
+	if (g_useAPI.integer) {
 		G_unloadAPI();
 	}
 
@@ -1719,10 +1507,10 @@ void G_ShutdownGame(int restart)
 	G_WriteSessionData(restart);
 
 	// Nico, unload pthread (win32 ony)
-	#if defined _WIN32
+#if defined _WIN32
 	pthread_win32_process_detach_np();
 	pthread_win32_thread_detach_np();
-	#endif
+#endif
 }
 
 
@@ -1732,8 +1520,7 @@ void G_ShutdownGame(int restart)
 #ifndef GAME_HARD_LINKED
 // this is only here so the functions in q_shared.c and bg_*.c can link
 
-void QDECL Com_Error(int level, const char *error, ...)
-{
+void QDECL Com_Error(int level, const char *error, ...) {
 	va_list argptr;
 	char    text[1024];
 
@@ -1741,19 +1528,18 @@ void QDECL Com_Error(int level, const char *error, ...)
 	level = level;
 
 	va_start(argptr, error);
-	Q_vsnprintf(text, sizeof(text), error, argptr);
+	Q_vsnprintf(text, sizeof (text), error, argptr);
 	va_end(argptr);
 
 	G_Error("%s", text);
 }
 
-void QDECL Com_Printf(const char *msg, ...)
-{
+void QDECL Com_Printf(const char *msg, ...) {
 	va_list argptr;
 	char    text[1024];
 
 	va_start(argptr, msg);
-	Q_vsnprintf(text, sizeof(text), msg, argptr);
+	Q_vsnprintf(text, sizeof (text), msg, argptr);
 	va_end(argptr);
 
 	G_Printf("%s", text);
@@ -1775,53 +1561,43 @@ SortRanks
 
 =============
 */
-int QDECL SortRanks(const void *a, const void *b)
-{
+int QDECL SortRanks(const void *a, const void *b) {
 	gclient_t *ca, *cb;
 
 	ca = &level.clients[*(int *)a];
 	cb = &level.clients[*(int *)b];
 
 	// sort special clients last
-	if (/*ca->sess.spectatorState == SPECTATOR_SCOREBOARD ||*/ ca->sess.spectatorClient < 0)
-	{
+	if (/*ca->sess.spectatorState == SPECTATOR_SCOREBOARD ||*/ ca->sess.spectatorClient < 0) {
 		return 1;
 	}
-	if (/*cb->sess.spectatorState == SPECTATOR_SCOREBOARD ||*/ cb->sess.spectatorClient < 0)
-	{
+	if (/*cb->sess.spectatorState == SPECTATOR_SCOREBOARD ||*/ cb->sess.spectatorClient < 0) {
 		return -1;
 	}
 
 	// then connecting clients
-	if (ca->pers.connected == CON_CONNECTING)
-	{
+	if (ca->pers.connected == CON_CONNECTING) {
 		return 1;
 	}
-	if (cb->pers.connected == CON_CONNECTING)
-	{
+	if (cb->pers.connected == CON_CONNECTING) {
 		return -1;
 	}
 
 
 	// then spectators
-	if (ca->sess.sessionTeam == TEAM_SPECTATOR && cb->sess.sessionTeam == TEAM_SPECTATOR)
-	{
-		if (ca->sess.spectatorTime < cb->sess.spectatorTime)
-		{
+	if (ca->sess.sessionTeam == TEAM_SPECTATOR && cb->sess.sessionTeam == TEAM_SPECTATOR) {
+		if (ca->sess.spectatorTime < cb->sess.spectatorTime) {
 			return -1;
 		}
-		if (ca->sess.spectatorTime > cb->sess.spectatorTime)
-		{
+		if (ca->sess.spectatorTime > cb->sess.spectatorTime) {
 			return 1;
 		}
 		return 0;
 	}
-	if (ca->sess.sessionTeam == TEAM_SPECTATOR)
-	{
+	if (ca->sess.sessionTeam == TEAM_SPECTATOR) {
 		return 1;
 	}
-	if (cb->sess.sessionTeam == TEAM_SPECTATOR)
-	{
+	if (cb->sess.sessionTeam == TEAM_SPECTATOR) {
 		return -1;
 	}
 	return 0;
@@ -1829,8 +1605,7 @@ int QDECL SortRanks(const void *a, const void *b)
 
 //bani - #184
 //(relatively) sane replacement for OSP's Players_Axis/Players_Allies
-void etpro_PlayerInfo(void)
-{
+void etpro_PlayerInfo(void) {
 	//128 bits
 	char      playerinfo[MAX_CLIENTS + 1];
 	gentity_t *e;
@@ -1838,14 +1613,12 @@ void etpro_PlayerInfo(void)
 	int       i;
 	int       lastclient;
 
-	memset(playerinfo, 0, sizeof(playerinfo));
+	memset(playerinfo, 0, sizeof (playerinfo));
 
 	lastclient = -1;
 	e          = &g_entities[0];
-	for (i = 0; i < MAX_CLIENTS; i++, e++)
-	{
-		if (e->client == NULL || e->client->pers.connected == CON_DISCONNECTED)
-		{
+	for (i = 0; i < MAX_CLIENTS; i++, e++) {
+		if (e->client == NULL || e->client->pers.connected == CON_DISCONNECTED) {
 			playerinfo[i] = '-';
 			continue;
 		}
@@ -1853,23 +1626,17 @@ void etpro_PlayerInfo(void)
 		//keep track of highest connected/connecting client
 		lastclient = i;
 
-		if (e->inuse == qfalse)
-		{
+		if (e->inuse == qfalse) {
 			playerteam = 0;
-		}
-		else
-		{
+		} else {
 			playerteam = e->client->sess.sessionTeam;
 		}
 		playerinfo[i] = (char)'0' + playerteam;
 	}
 	//terminate the string, if we have any non-0 clients
-	if (lastclient != -1)
-	{
+	if (lastclient != -1) {
 		playerinfo[lastclient + 1] = (char)0;
-	}
-	else
-	{
+	} else {
 		playerinfo[0] = (char)0;
 	}
 
@@ -1885,8 +1652,7 @@ This will be called on every client connect, begin, disconnect, death,
 and team change.
 ============
 */
-void CalculateRanks(void)
-{
+void CalculateRanks(void) {
 	int  i;
 	char teaminfo[TEAM_NUM_TEAMS][256];     // OSP
 
@@ -1903,58 +1669,47 @@ void CalculateRanks(void)
 	level.voteInfo.numVotingTeamClients[0] = 0;
 	level.voteInfo.numVotingTeamClients[1] = 0;
 
-	for (i = 0; i < TEAM_NUM_TEAMS; i++)
-	{
-		if (i < 2)
-		{
+	for (i = 0; i < TEAM_NUM_TEAMS; i++) {
+		if (i < 2) {
 			level.numTeamClients[i] = 0;
 		}
 		teaminfo[i][0] = 0;         // OSP
 	}
 
-	for (i = 0 ; i < level.maxclients ; i++)
-	{
-		if (level.clients[i].pers.connected != CON_DISCONNECTED)
-		{
+	for (i = 0 ; i < level.maxclients ; i++) {
+		if (level.clients[i].pers.connected != CON_DISCONNECTED) {
 			int team = level.clients[i].sess.sessionTeam;
 
 			level.sortedClients[level.numConnectedClients] = i;
 			level.numConnectedClients++;
 
 			// Nico, count spectators that voted
-			if (team == TEAM_SPECTATOR && level.clients[i].ps.eFlags & EF_VOTED)
-			{
+			if (team == TEAM_SPECTATOR && level.clients[i].ps.eFlags & EF_VOTED) {
 				level.voteInfo.numVotingClients++;
 			}
 
-			if (team != TEAM_SPECTATOR)
-			{
+			if (team != TEAM_SPECTATOR) {
 				level.numNonSpectatorClients++;
 
 				// OSP
-				Q_strcat(teaminfo[team], sizeof(teaminfo[team]) - 1, va("%d ", level.numConnectedClients));
+				Q_strcat(teaminfo[team], sizeof (teaminfo[team]) - 1, va("%d ", level.numConnectedClients));
 
 				// decide if this should be auto-followed
-				if (level.clients[i].pers.connected == CON_CONNECTED)
-				{
+				if (level.clients[i].pers.connected == CON_CONNECTED) {
 					int teamIndex = level.clients[i].sess.sessionTeam == TEAM_AXIS ? 0 : 1;
 					level.numPlayingClients++;
 					level.voteInfo.numVotingClients++;
 
 					if (level.clients[i].sess.sessionTeam == TEAM_AXIS ||
-					    level.clients[i].sess.sessionTeam == TEAM_ALLIES)
-					{
+					    level.clients[i].sess.sessionTeam == TEAM_ALLIES) {
 
 						level.numTeamClients[teamIndex]++;
 						level.voteInfo.numVotingTeamClients[teamIndex]++;
 					}
 
-					if (level.follow1 == -1)
-					{
+					if (level.follow1 == -1) {
 						level.follow1 = i;
-					}
-					else if (level.follow2 == -1)
-					{
+					} else if (level.follow2 == -1) {
 						level.follow2 = i;
 					}
 				}
@@ -1963,16 +1718,14 @@ void CalculateRanks(void)
 	}
 
 	// OSP
-	for (i = 0; i < TEAM_NUM_TEAMS; i++)
-	{
-		if (0 == teaminfo[i][0])
-		{
-			Q_strncpyz(teaminfo[i], "(None)", sizeof(teaminfo[i]));
+	for (i = 0; i < TEAM_NUM_TEAMS; i++) {
+		if (0 == teaminfo[i][0]) {
+			Q_strncpyz(teaminfo[i], "(None)", sizeof (teaminfo[i]));
 		}
 	}
 
 	qsort(level.sortedClients, level.numConnectedClients,
-	      sizeof(level.sortedClients[0]), SortRanks);
+	      sizeof (level.sortedClients[0]), SortRanks);
 
 	//bani - #184
 	etpro_PlayerInfo();
@@ -1995,14 +1748,11 @@ Do this at BeginIntermission time and whenever ranks are recalculated
 due to enters/exits/forced team changes
 ========================
 */
-void SendScoreboardMessageToAllClients(void)
-{
+void SendScoreboardMessageToAllClients(void) {
 	int i;
 
-	for (i = 0; i < level.numConnectedClients; i++)
-	{
-		if (level.clients[level.sortedClients[i]].pers.connected == CON_CONNECTED)
-		{
+	for (i = 0; i < level.numConnectedClients; i++) {
+		if (level.clients[level.sortedClients[i]].pers.connected == CON_CONNECTED) {
 			level.clients[level.sortedClients[i]].wantsscore = qtrue;
 		}
 	}
@@ -2015,8 +1765,7 @@ FindIntermissionPoint
 This is also used for spectator spawns
 ==================
 */
-void FindIntermissionPoint(void)
-{
+void FindIntermissionPoint(void) {
 	gentity_t *ent = NULL, *target;
 	vec3_t    dir;
 
@@ -2024,21 +1773,16 @@ void FindIntermissionPoint(void)
 	// try to find the intermission spawnpoint with no team flags set
 	ent = G_Find(NULL, FOFS(classname), "info_player_intermission");
 
-	for ( ; ent; ent = G_Find(ent, FOFS(classname), "info_player_intermission"))
-	{
-		if (!ent->spawnflags)
-		{
+	for ( ; ent; ent = G_Find(ent, FOFS(classname), "info_player_intermission")) {
+		if (!ent->spawnflags) {
 			break;
 		}
 	}
 
-	if (!ent)
-	{
+	if (!ent) {
 		ent = G_Find(NULL, FOFS(classname), "info_player_intermission");
-		while (ent)
-		{
-			if (ent->spawnflags & TEAM_AXIS)
-			{
+		while (ent) {
+			if (ent->spawnflags & TEAM_AXIS) {
 				break;
 			}
 
@@ -2046,20 +1790,15 @@ void FindIntermissionPoint(void)
 		}
 	}
 
-	if (!ent)        // the map creator forgot to put in an intermission point...
-	{
+	if (!ent) {      // the map creator forgot to put in an intermission point...
 		SelectSpawnPoint(vec3_origin, level.intermission_origin, level.intermission_angle);
-	}
-	else
-	{
+	} else {
 		VectorCopy(ent->s.origin, level.intermission_origin);
 		VectorCopy(ent->s.angles, level.intermission_angle);
 		// if it has a target, look towards it
-		if (ent->target)
-		{
+		if (ent->target) {
 			target = G_PickTarget(ent->target);
-			if (target)
-			{
+			if (target) {
 				VectorSubtract(target->s.origin, level.intermission_origin, dir);
 				vectoangles(dir, level.intermission_angle);
 			}
@@ -2075,8 +1814,7 @@ G_LogPrintf
 Print to the logfile with a time stamp if it is open
 =================
 */
-void QDECL G_LogPrintf(const char *fmt, ...)
-{
+void QDECL G_LogPrintf(const char *fmt, ...) {
 	va_list argptr;
 	char    string[1024];
 	int     min, tens, sec, l;
@@ -2088,21 +1826,19 @@ void QDECL G_LogPrintf(const char *fmt, ...)
 	tens = sec / 10;
 	sec -= tens * 10;
 
-	Com_sprintf(string, sizeof(string), "%i:%i%i ", min, tens, sec);
+	Com_sprintf(string, sizeof (string), "%i:%i%i ", min, tens, sec);
 
 	l = strlen(string);
 
 	va_start(argptr, fmt);
-	Q_vsnprintf(string + l, sizeof(string) - l, fmt, argptr);
+	Q_vsnprintf(string + l, sizeof (string) - l, fmt, argptr);
 	va_end(argptr);
 
-	if (g_dedicated.integer)
-	{
+	if (g_dedicated.integer) {
 		G_Printf("%s", string + l);
 	}
 
-	if (!level.logFile)
-	{
+	if (!level.logFile) {
 		return;
 	}
 
@@ -2114,74 +1850,54 @@ void QDECL G_LogPrintf(const char *fmt, ...)
 CheckVote
 ==================
 */
-void CheckVote(void)
-{
+void CheckVote(void) {
 	gentity_t *other = NULL;
 
-	if (!level.voteInfo.voteTime || level.voteInfo.vote_fn == NULL || level.time - level.voteInfo.voteTime < 1000)
-	{
+	if (!level.voteInfo.voteTime || level.voteInfo.vote_fn == NULL || level.time - level.voteInfo.voteTime < 1000) {
 		return;
 	}
 
 	// Nico, check if the voter switches teams (from TJMod)
 	other = g_entities + level.voteInfo.voter_cn;
-	if (level.voteInfo.voter_team != (int)other->client->sess.sessionTeam)
-	{
+	if (level.voteInfo.voter_team != (int)other->client->sess.sessionTeam) {
 		AP("cpm \"^5Vote canceled^z: voter switched teams\n\"");
 		G_LogPrintf("Vote Failed: %s (voter %s switched teams)\n", level.voteInfo.voteString, other->client->pers.netname);
-	}
-	else if (level.time - level.voteInfo.voteTime >= VOTE_TIME)
-	{
+	} else if (level.time - level.voteInfo.voteTime >= VOTE_TIME) {
 		AP(va("cpm \"^2Vote FAILED! ^3(%s)\n\"", level.voteInfo.voteString));
 		G_LogPrintf("Vote Failed: %s\n", level.voteInfo.voteString);
-	}
-	else
-	{
+	} else {
 		int pcnt = (level.voteInfo.vote_fn == G_StartMatch_v) ? 75 : vote_percent.integer;
 		int total;
 
-		if (pcnt > 99)
-		{
+		if (pcnt > 99) {
 			pcnt = 99;
 		}
-		if (pcnt < 1)
-		{
+		if (pcnt < 1) {
 			pcnt = 1;
 		}
 
-		if (level.voteInfo.vote_fn == G_Kick_v)
-		{
+		if (level.voteInfo.vote_fn == G_Kick_v) {
 			gentity_t *other = &g_entities[atoi(level.voteInfo.vote_value)];
-			if (!other->client || other->client->sess.sessionTeam == TEAM_SPECTATOR)
-			{
+			if (!other->client || other->client->sess.sessionTeam == TEAM_SPECTATOR) {
 				total = level.voteInfo.numVotingClients;
-			}
-			else
-			{
+			} else {
 				total = level.voteInfo.numVotingTeamClients[other->client->sess.sessionTeam == TEAM_AXIS ? 0 : 1];
 			}
-		}
-		else
-		{
+		} else {
 			total = level.voteInfo.numVotingClients;
 		}
 
-		if (level.voteInfo.voteYes > pcnt * total / 100)
-		{
+		if (level.voteInfo.voteYes > pcnt * total / 100) {
 			// execute the command, then remove the vote
-			if (level.voteInfo.voteYes > total + 1)
-			{
+			if (level.voteInfo.voteYes > total + 1) {
 				// Don't announce some votes, as in comp mode, it is generally a ref
 				// who is policing people who shouldn't be joining and players don't want
 				// this sort of spam in the console
-				if (level.voteInfo.vote_fn != G_Kick_v)
-				{
+				if (level.voteInfo.vote_fn != G_Kick_v) {
 					AP(va("cpm \"^5Referee changed setting! ^7(%s)\n\"", level.voteInfo.voteString));
 				}
 				G_LogPrintf("Referee Setting: %s\n", level.voteInfo.voteString);
-			}
-			else
-			{
+			} else {
 				AP("cpm \"^5Vote passed!\n\"");
 				G_LogPrintf("Vote Passed: %s\n", level.voteInfo.voteString);
 			}
@@ -2189,15 +1905,11 @@ void CheckVote(void)
 			// Perform the passed vote
 			level.voteInfo.vote_fn(NULL, 0, NULL, NULL, qfalse);
 
-		}
-		else if (level.voteInfo.voteNo && level.voteInfo.voteNo >= (100 - pcnt) * total / 100)
-		{
+		} else if (level.voteInfo.voteNo && level.voteInfo.voteNo >= (100 - pcnt) * total / 100) {
 			// same behavior as a no response vote
 			AP(va("cpm \"^2Vote FAILED! ^3(%s)\n\"", level.voteInfo.voteString));
 			G_LogPrintf("Vote Failed: %s\n", level.voteInfo.voteString);
-		}
-		else
-		{
+		} else {
 			// still waiting for a majority
 			return;
 		}
@@ -2212,19 +1924,14 @@ void CheckVote(void)
 CheckCvars
 ==================
 */
-void CheckCvars(void)
-{
+void CheckCvars(void) {
 	static int g_password_lastMod = -1;
 
-	if (g_password.modificationCount != g_password_lastMod)
-	{
+	if (g_password.modificationCount != g_password_lastMod) {
 		g_password_lastMod = g_password.modificationCount;
-		if (*g_password.string && Q_stricmp(g_password.string, "none"))
-		{
+		if (*g_password.string && Q_stricmp(g_password.string, "none")) {
 			trap_Cvar_Set("g_needpass", "1");
-		}
-		else
-		{
+		} else {
 			trap_Cvar_Set("g_needpass", "0");
 		}
 	}
@@ -2237,36 +1944,30 @@ G_RunThink
 Runs thinking code for this frame if necessary
 =============
 */
-void G_RunThink(gentity_t *ent)
-{
+void G_RunThink(gentity_t *ent) {
 	float thinktime;
 
 	// OSP - If paused, push nextthink
 	if (level.match_pause != PAUSE_NONE && (ent - g_entities) >= g_maxclients.integer &&
-	    ent->nextthink > level.time && strstr(ent->classname, "DPRINTF_") == NULL)
-	{
+	    ent->nextthink > level.time && strstr(ent->classname, "DPRINTF_") == NULL) {
 		ent->nextthink += level.time - level.previousTime;
 	}
 
 	// RF, run scripting
-	if (ent->s.number >= MAX_CLIENTS)
-	{
+	if (ent->s.number >= MAX_CLIENTS) {
 		G_Script_ScriptRun(ent);
 	}
 
 	thinktime = ent->nextthink;
-	if (thinktime <= 0)
-	{
+	if (thinktime <= 0) {
 		return;
 	}
-	if (thinktime > level.time)
-	{
+	if (thinktime > level.time) {
 		return;
 	}
 
 	ent->nextthink = 0;
-	if (!ent->think)
-	{
+	if (!ent->think) {
 		G_Error("NULL ent->think");
 	}
 	ent->think(ent);
@@ -2279,27 +1980,24 @@ void G_RunEntity(gentity_t *ent, int msec);
 G_PositionEntityOnTag
 ======================
 */
-qboolean G_PositionEntityOnTag(gentity_t *entity, gentity_t *parent, char *tagName)
-{
+qboolean G_PositionEntityOnTag(gentity_t *entity, gentity_t *parent, char *tagName) {
 	int           i;
 	orientation_t tag;
 	vec3_t        axis[3];
+
 	AnglesToAxis(parent->r.currentAngles, axis);
 
 	VectorCopy(parent->r.currentOrigin, entity->r.currentOrigin);
 
-	if (!trap_GetTag(-1, parent->tagNumber, tagName, &tag))
-	{
+	if (!trap_GetTag(-1, parent->tagNumber, tagName, &tag)) {
 		return qfalse;
 	}
 
-	for (i = 0 ; i < 3 ; i++)
-	{
+	for (i = 0 ; i < 3 ; i++) {
 		VectorMA(entity->r.currentOrigin, tag.origin[i], axis[i], entity->r.currentOrigin);
 	}
 
-	if (entity->client && entity->s.eFlags & EF_MOUNTEDTANK)
-	{
+	if (entity->client && entity->s.eFlags & EF_MOUNTEDTANK) {
 		// zinx - moved tank hack to here
 		// bani - fix tank bb
 		// zinx - figured out real values, only tag_player is applied,
@@ -2316,10 +2014,8 @@ qboolean G_PositionEntityOnTag(gentity_t *entity, gentity_t *parent, char *tagNa
 
 	G_SetOrigin(entity, entity->r.currentOrigin);
 
-	if (entity->r.linked && !entity->client)
-	{
-		if (!VectorCompare(entity->oldOrigin, entity->r.currentOrigin))
-		{
+	if (entity->r.linked && !entity->client) {
+		if (!VectorCompare(entity->oldOrigin, entity->r.currentOrigin)) {
 			trap_LinkEntity(entity);
 		}
 	}
@@ -2327,102 +2023,78 @@ qboolean G_PositionEntityOnTag(gentity_t *entity, gentity_t *parent, char *tagNa
 	return qtrue;
 }
 
-void G_TagLinkEntity(gentity_t *ent, int msec)
-{
+void G_TagLinkEntity(gentity_t *ent, int msec) {
 	gentity_t *parent = &g_entities[ent->s.torsoAnim];
 	vec3_t    move, amove;
 	gentity_t *obstacle;
 	vec3_t    origin, angles;
 	vec3_t    v;
 
-	if (ent->linkTagTime >= level.time)
-	{
+	if (ent->linkTagTime >= level.time) {
 		return;
 	}
 
 	G_RunEntity(parent, msec);
 
-	if (!(parent->s.eFlags & EF_PATH_LINK))
-	{
-		if (parent->s.pos.trType == TR_LINEAR_PATH)
-		{
+	if (!(parent->s.eFlags & EF_PATH_LINK)) {
+		if (parent->s.pos.trType == TR_LINEAR_PATH) {
 			int   pos;
 			float frac;
 
-			if ((ent->backspline = BG_GetSplineData(parent->s.effect2Time, &ent->back)) == NULL)
-			{
+			if ((ent->backspline = BG_GetSplineData(parent->s.effect2Time, &ent->back)) == NULL) {
 				return;
 			}
 
 			ent->backdelta = parent->s.pos.trDuration ? (level.time - parent->s.pos.trTime) / ((float)parent->s.pos.trDuration) : 0;
 
-			if (ent->backdelta < 0.f)
-			{
+			if (ent->backdelta < 0.f) {
 				ent->backdelta = 0.f;
-			}
-			else if (ent->backdelta > 1.f)
-			{
+			} else if (ent->backdelta > 1.f) {
 				ent->backdelta = 1.f;
 			}
 
-			if (ent->back)
-			{
+			if (ent->back) {
 				ent->backdelta = 1 - ent->backdelta;
 			}
 
 			pos = floor(ent->backdelta * (MAX_SPLINE_SEGMENTS));
-			if (pos >= MAX_SPLINE_SEGMENTS)
-			{
+			if (pos >= MAX_SPLINE_SEGMENTS) {
 				pos  = MAX_SPLINE_SEGMENTS - 1;
 				frac = ent->backspline->segments[pos].length;
-			}
-			else
-			{
+			} else {
 				frac = ((ent->backdelta * (MAX_SPLINE_SEGMENTS)) - pos) * ent->backspline->segments[pos].length;
 			}
 
 
 			VectorMA(ent->backspline->segments[pos].start, frac, ent->backspline->segments[pos].v_norm, v);
-			if (parent->s.apos.trBase[0])
-			{
+			if (parent->s.apos.trBase[0]) {
 				BG_LinearPathOrigin2(parent->s.apos.trBase[0], &ent->backspline, &ent->backdelta, v);
 			}
 
 			VectorCopy(v, origin);
 
-			if (ent->s.angles2[0])
-			{
+			if (ent->s.angles2[0]) {
 				BG_LinearPathOrigin2(ent->s.angles2[0], &ent->backspline, &ent->backdelta, v);
 			}
 
 			VectorCopy(v, ent->backorigin);
 
-			if (ent->s.angles2[0] < 0)
-			{
+			if (ent->s.angles2[0] < 0) {
 				VectorSubtract(v, origin, v);
 				vectoangles(v, angles);
-			}
-			else if (ent->s.angles2[0] > 0)
-			{
+			} else if (ent->s.angles2[0] > 0) {
 				VectorSubtract(origin, v, v);
 				vectoangles(v, angles);
-			}
-			else
-			{
+			} else {
 				VectorCopy(vec3_origin, origin);
 			}
 
 			ent->moving = qtrue;
-		}
-		else
-		{
+		} else {
 			ent->moving = qfalse;
 		}
-	}
-	else
-	{
-		if (parent->moving)
-		{
+	} else {
+		if (parent->moving) {
 			VectorCopy(parent->backorigin, v);
 
 			ent->back       = parent->back;
@@ -2431,53 +2103,41 @@ void G_TagLinkEntity(gentity_t *ent, int msec)
 
 			VectorCopy(v, origin);
 
-			if (ent->s.angles2[0])
-			{
+			if (ent->s.angles2[0]) {
 				BG_LinearPathOrigin2(ent->s.angles2[0], &ent->backspline, &ent->backdelta, v);
 			}
 
 			VectorCopy(v, ent->backorigin);
 
-			if (ent->s.angles2[0] < 0)
-			{
+			if (ent->s.angles2[0] < 0) {
 				VectorSubtract(v, origin, v);
 				vectoangles(v, angles);
-			}
-			else if (ent->s.angles2[0] > 0)
-			{
+			} else if (ent->s.angles2[0] > 0) {
 				VectorSubtract(origin, v, v);
 				vectoangles(v, angles);
-			}
-			else
-			{
+			} else {
 				VectorCopy(vec3_origin, origin);
 			}
 
 			ent->moving = qtrue;
-		}
-		else
-		{
+		} else {
 			ent->moving = qfalse;
 		}
 	}
 
-	if (ent->moving)
-	{
+	if (ent->moving) {
 		VectorSubtract(origin, ent->r.currentOrigin, move);
 		VectorSubtract(angles, ent->r.currentAngles, amove);
 
-		if (!G_MoverPush(ent, move, amove, &obstacle))
-		{
+		if (!G_MoverPush(ent, move, amove, &obstacle)) {
 			script_mover_blocked(ent, obstacle);
 		}
 
 		VectorCopy(origin, ent->s.pos.trBase);
 		VectorCopy(angles, ent->s.apos.trBase);
-	}
-	else
-	{
-		memset(&ent->s.pos, 0, sizeof(ent->s.pos));
-		memset(&ent->s.apos, 0, sizeof(ent->s.apos));
+	} else {
+		memset(&ent->s.pos, 0, sizeof (ent->s.pos));
+		memset(&ent->s.apos, 0, sizeof (ent->s.apos));
 
 		VectorCopy(ent->r.currentOrigin, ent->s.pos.trBase);
 		VectorCopy(ent->r.currentAngles, ent->s.apos.trBase);
@@ -2486,46 +2146,34 @@ void G_TagLinkEntity(gentity_t *ent, int msec)
 	ent->linkTagTime = level.time;
 }
 
-void G_RunEntity(gentity_t *ent, int msec)
-{
-	if (ent->runthisframe)
-	{
+void G_RunEntity(gentity_t *ent, int msec) {
+	if (ent->runthisframe) {
 		return;
 	}
 
 	ent->runthisframe = qtrue;
 
-	if (!ent->inuse)
-	{
+	if (!ent->inuse) {
 		return;
 	}
 
-	if (ent->tagParent)
-	{
+	if (ent->tagParent) {
 
 		G_RunEntity(ent->tagParent, msec);
 
-		if (ent->tagParent)
-		{
-			if (G_PositionEntityOnTag(ent, ent->tagParent, ent->tagName))
-			{
-				if (!ent->client)
-				{
-					if (!ent->s.density)
-					{
+		if (ent->tagParent) {
+			if (G_PositionEntityOnTag(ent, ent->tagParent, ent->tagName)) {
+				if (!ent->client) {
+					if (!ent->s.density) {
 						BG_EvaluateTrajectory(&ent->s.apos, level.time, ent->r.currentAngles, qtrue, ent->s.effect2Time);
 						VectorAdd(ent->tagParent->r.currentAngles, ent->r.currentAngles, ent->r.currentAngles);
-					}
-					else
-					{
+					} else {
 						BG_EvaluateTrajectory(&ent->s.apos, level.time, ent->r.currentAngles, qtrue, ent->s.effect2Time);
 					}
 				}
 			}
 		}
-	}
-	else if (ent->s.eFlags & EF_PATH_LINK)
-	{
+	} else if (ent->s.eFlags & EF_PATH_LINK) {
 
 		G_TagLinkEntity(ent, msec);
 	}
@@ -2534,34 +2182,25 @@ void G_RunEntity(gentity_t *ent, int msec)
 	VectorCopy(ent->r.currentOrigin, ent->oldOrigin);
 
 	// check EF_NODRAW status for non-clients
-	if (ent - g_entities > level.maxclients)
-	{
-		if (ent->flags & FL_NODRAW)
-		{
+	if (ent - g_entities > level.maxclients) {
+		if (ent->flags & FL_NODRAW) {
 			ent->s.eFlags |= EF_NODRAW;
-		}
-		else
-		{
+		} else {
 			ent->s.eFlags &= ~EF_NODRAW;
 		}
 	}
 
 
 	// clear events that are too old
-	if (level.time - ent->eventTime > EVENT_VALID_MSEC)
-	{
-		if (ent->s.event)
-		{
+	if (level.time - ent->eventTime > EVENT_VALID_MSEC) {
+		if (ent->s.event) {
 			ent->s.event = 0;
 		}
-		if (ent->freeAfterEvent)
-		{
+		if (ent->freeAfterEvent) {
 			// tempEntities or dropped items completely go away after their event
 			G_FreeEntity(ent);
 			return;
-		}
-		else if (ent->unlinkAfterEvent)
-		{
+		} else if (ent->unlinkAfterEvent) {
 			// items that will respawn will hide themselves after their pickup event
 			ent->unlinkAfterEvent = qfalse;
 			trap_UnlinkEntity(ent);
@@ -2569,25 +2208,21 @@ void G_RunEntity(gentity_t *ent, int msec)
 	}
 
 	// temporary entities don't think
-	if (ent->freeAfterEvent)
-	{
+	if (ent->freeAfterEvent) {
 		return;
 	}
 
 	// Arnout: invisible entities don't think
 	// NOTE: hack - constructible one does
-	if (ent->s.eType != ET_CONSTRUCTIBLE && (ent->entstate == STATE_INVISIBLE || ent->entstate == STATE_UNDERCONSTRUCTION))
-	{
+	if (ent->s.eType != ET_CONSTRUCTIBLE && (ent->entstate == STATE_INVISIBLE || ent->entstate == STATE_UNDERCONSTRUCTION)) {
 		// Gordon: we want them still to run scripts tho :p
-		if (ent->s.number >= MAX_CLIENTS)
-		{
+		if (ent->s.number >= MAX_CLIENTS) {
 			G_Script_ScriptRun(ent);
 		}
 		return;
 	}
 
-	if (!ent->r.linked && ent->neverFree)
-	{
+	if (!ent->r.linked && ent->neverFree) {
 		return;
 	}
 
@@ -2597,21 +2232,16 @@ void G_RunEntity(gentity_t *ent, int msec)
 	    || ent->s.eType == ET_FIRE_COLUMN
 	    || ent->s.eType == ET_FIRE_COLUMN_SMOKE
 	    || ent->s.eType == ET_EXPLO_PART
-	    || ent->s.eType == ET_RAMJET)
-	{
+	    || ent->s.eType == ET_RAMJET) {
 
 		// OSP - pausing
-		if (level.match_pause == PAUSE_NONE)
-		{
+		if (level.match_pause == PAUSE_NONE) {
 			G_RunMissile(ent);
-		}
-		else
-		{
+		} else {
 			// During a pause, gotta keep track of stuff in the air
 			ent->s.pos.trTime += level.time - level.previousTime;
 			// Keep pulsing right for dynmamite
-			if (ent->methodOfDeath == MOD_DYNAMITE)
-			{
+			if (ent->methodOfDeath == MOD_DYNAMITE) {
 				ent->s.effect1Time += level.time - level.previousTime;
 			}
 			G_RunThink(ent);
@@ -2622,8 +2252,7 @@ void G_RunEntity(gentity_t *ent, int msec)
 	}
 
 	// DHM - Nerve :: Server-side collision for flamethrower
-	if (ent->s.eType == ET_FLAMETHROWER_CHUNK)
-	{
+	if (ent->s.eType == ET_FLAMETHROWER_CHUNK) {
 		G_RunFlamechunk(ent);
 
 		// ydnar: hack for instantaneous velocity
@@ -2633,8 +2262,7 @@ void G_RunEntity(gentity_t *ent, int msec)
 		return;
 	}
 
-	if (ent->s.eType == ET_ITEM || ent->physicsObject)
-	{
+	if (ent->s.eType == ET_ITEM || ent->physicsObject) {
 		G_RunItem(ent);
 
 		// ydnar: hack for instantaneous velocity
@@ -2644,8 +2272,7 @@ void G_RunEntity(gentity_t *ent, int msec)
 		return;
 	}
 
-	if (ent->s.eType == ET_MOVER || ent->s.eType == ET_PROP)
-	{
+	if (ent->s.eType == ET_MOVER || ent->s.eType == ET_PROP) {
 		G_RunMover(ent);
 
 		// ydnar: hack for instantaneous velocity
@@ -2655,8 +2282,7 @@ void G_RunEntity(gentity_t *ent, int msec)
 		return;
 	}
 
-	if (ent - g_entities < MAX_CLIENTS)
-	{
+	if (ent - g_entities < MAX_CLIENTS) {
 		G_RunClient(ent);
 
 		// ydnar: hack for instantaneous velocity
@@ -2666,8 +2292,7 @@ void G_RunEntity(gentity_t *ent, int msec)
 		return;
 	}
 
-	if ((ent->s.eType == ET_HEALER || ent->s.eType == ET_SUPPLIER) && ent->target_ent)
-	{
+	if ((ent->s.eType == ET_HEALER || ent->s.eType == ET_SUPPLIER) && ent->target_ent) {
 		ent->target_ent->s.onFireStart = ent->health;
 		ent->target_ent->s.onFireEnd   = ent->count;
 	}
@@ -2686,27 +2311,21 @@ G_RunFrame
 Advances the non-player objects in the world
 ================
 */
-void G_RunFrame(int levelTime)
-{
+void G_RunFrame(int levelTime) {
 	int i, msec;
 
 
 	// if we are waiting for the level to restart, do nothing
-	if (level.restarted)
-	{
+	if (level.restarted) {
 		return;
 	}
 
 	// Handling of pause offsets
-	if (level.match_pause == PAUSE_NONE)
-	{
+	if (level.match_pause == PAUSE_NONE) {
 		level.timeCurrent = levelTime - level.timeDelta;
-	}
-	else
-	{
+	} else {
 		level.timeDelta = levelTime - level.timeCurrent;
-		if ((level.time % 500) == 0)
-		{
+		if ((level.time % 500) == 0) {
 			// FIXME: set a PAUSE cs and let the client adjust their local starttimes
 			//        instead of this spam
 			trap_SetConfigstring(CS_LEVEL_START_TIME, va("%i", level.startTime + level.timeDelta));
@@ -2724,32 +2343,27 @@ void G_RunFrame(int levelTime)
 	level.axisBombCounter   -= msec;
 	level.alliedBombCounter -= msec;
 
-	if (level.axisBombCounter < 0)
-	{
+	if (level.axisBombCounter < 0) {
 		level.axisBombCounter = 0;
 	}
-	if (level.alliedBombCounter < 0)
-	{
+	if (level.alliedBombCounter < 0) {
 		level.alliedBombCounter = 0;
 	}
 
 	// get any cvar changes
 	G_UpdateCvars();
 
-	for (i = 0; i < level.num_entities; i++)
-	{
+	for (i = 0; i < level.num_entities; i++) {
 		g_entities[i].runthisframe = qfalse;
 	}
 
 	// go through all allocated objects
-	for (i = 0; i < level.num_entities; i++)
-	{
+	for (i = 0; i < level.num_entities; i++) {
 		G_RunEntity(&g_entities[i], msec);
 	}
 
 
-	for (i = 0; i < level.numConnectedClients; i++)
-	{
+	for (i = 0; i < level.numConnectedClients; i++) {
 		ClientEndFrame(&g_entities[level.sortedClients[i]]);
 	}
 
@@ -2766,35 +2380,29 @@ void G_RunFrame(int levelTime)
 }
 
 // Nico, delayed map change watcher helper functions
-void G_enable_delayed_map_change_watcher()
-{
+void G_enable_delayed_map_change_watcher() {
 	int            rc = 0;
 	pthread_attr_t attr;
 
 	// Create threads as detached
-	if (pthread_attr_init(&attr))
-	{
+	if (pthread_attr_init(&attr)) {
 		G_Error("G_callAPI: error in pthread_attr_init\n");
 	}
-	if (pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED))
-	{
+	if (pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED)) {
 		G_Error("G_callAPI: error in pthread_attr_setdetachstate\n");
 	}
 
 	rc = pthread_create(&globalThreads[DELAYED_MAP_CHANGE_THREAD_ID], &attr, G_delayed_map_change_watcher, NULL);
-	if (rc)
-	{
+	if (rc) {
 		G_Error("G_enable_delayed_map_change_watcher: error in pthread_create: %d\n", rc);
 	}
 
-	if (pthread_attr_destroy(&attr))
-	{
+	if (pthread_attr_destroy(&attr)) {
 		G_Error("G_enable_delayed_map_change_watcher: error in pthread_attr_destroy\n");
 	}
 }
 
-void G_disable_delayed_map_change_watcher()
-{
+void G_disable_delayed_map_change_watcher() {
 	level.delayedMapChange.disabledWatcher = qtrue;
 
 	G_DPrintf("Waiting for delayed map change watcher to end...\n");

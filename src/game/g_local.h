@@ -71,8 +71,7 @@ If you have questions concerning this license or the applicable additional terms
 #define TKFL_MORTAR             0x00000004
 
 // movers are things like doors, plats, buttons, etc
-typedef enum
-{
+typedef enum {
 	MOVER_POS1,
 	MOVER_POS2,
 	MOVER_POS3,
@@ -109,15 +108,13 @@ typedef struct g_serverEntity_s g_serverEntity_t;
 //====================================================================
 //
 // Scripting, these structure are not saved into savegames (parsed each start)
-typedef struct
-{
+typedef struct {
 	char *actionString;
 	qboolean (*actionFunc)(gentity_t *ent, char *params);
 	int hash;
 } g_script_stack_action_t;
 //
-typedef struct
-{
+typedef struct {
 	//
 	// set during script parsing
 	g_script_stack_action_t *action;                // points to an action to perform
@@ -126,21 +123,18 @@ typedef struct
 
 #define G_MAX_SCRIPT_STACK_ITEMS    196
 
-typedef struct
-{
+typedef struct {
 	g_script_stack_item_t items[G_MAX_SCRIPT_STACK_ITEMS];
 	int numItems;
 } g_script_stack_t;
 //
-typedef struct
-{
+typedef struct {
 	int eventNum;                           // index in scriptEvents[]
 	char *params;                           // trigger targetname, etc
 	g_script_stack_t stack;
 } g_script_event_t;
 //
-typedef struct
-{
+typedef struct {
 	char *eventStr;
 	qboolean (*eventMatch)(g_script_event_t *event, char *eventParm);
 	int hash;
@@ -152,8 +146,7 @@ typedef struct
 #define SCFL_FIRST_CALL         0x4
 //
 // Scripting Status (NOTE: this MUST NOT contain any pointer vars)
-typedef struct
-{
+typedef struct {
 	int scriptStackHead, scriptStackChangeTime;
 	int scriptEventIndex;       // current event containing stack of actions to perform
 	// scripting system variables
@@ -168,8 +161,7 @@ typedef struct
 void G_Script_ScriptEvent(gentity_t *ent, char *eventStr, char *params);
 //====================================================================
 
-typedef struct g_constructible_stats_s
-{
+typedef struct g_constructible_stats_s {
 	float chargebarreq;
 	float constructxpbonus;
 	float destructxpbonus;
@@ -193,13 +185,11 @@ int G_GetWeaponClassForMOD(meansOfDeath_t mod);
 
 #define MAX_COMMANDER_TEAM_SOUNDS 16
 
-typedef struct commanderTeamChat_s
-{
+typedef struct commanderTeamChat_s {
 	int index;
 } commanderTeamChat_t;
 
-struct gentity_s
-{
+struct gentity_s {
 	entityState_t s;                // communicated by server to clients
 	entityShared_t r;               // shared by both the server system and game
 
@@ -466,36 +456,31 @@ struct gentity_s
 	char *timerunName;
 };
 
-typedef enum
-{
+typedef enum {
 	CON_DISCONNECTED,
 	CON_CONNECTING,
 	CON_CONNECTED
 } clientConnected_t;
 
-typedef enum
-{
+typedef enum {
 	SPECTATOR_NOT,
 	SPECTATOR_FREE,
 	SPECTATOR_FOLLOW
 } spectatorState_t;
 
-typedef enum
-{
+typedef enum {
 	COMBATSTATE_COLD,
 	COMBATSTATE_DAMAGEDEALT,
 	COMBATSTATE_DAMAGERECEIVED,
 	COMBATSTATE_KILLEDPLAYER
 } combatstate_t;
 
-typedef enum
-{
+typedef enum {
 	TEAM_BEGIN,     // Beginning a team game, spawn at base
 	TEAM_ACTIVE     // Now actively playing
 } playerTeamStateState_t;
 
-typedef struct
-{
+typedef struct {
 	playerTeamStateState_t state;
 
 	int location[2];
@@ -520,8 +505,7 @@ typedef struct
 
 // Nico, position saving structure
 #define MAX_SAVED_POSITIONS 6 // per team
-typedef struct
-{
+typedef struct {
 	qboolean valid;
 	vec3_t origin;
 	vec3_t vangles;
@@ -531,8 +515,7 @@ typedef struct
 // this is achieved by writing all the data to cvar strings at game shutdown
 // time and reading them back at connection time.  Anything added here
 // MUST be dealt with in G_InitSessionData() / G_ReadSessionData() / G_WriteSessionData()
-typedef struct
-{
+typedef struct {
 	team_t sessionTeam;
 	int spectatorTime;              // for determining next-in-line to play
 	spectatorState_t spectatorState;
@@ -544,7 +527,7 @@ typedef struct
 	int latchPlayerType;            // DHM - Nerve :: for GT_WOLF not archived
 	int latchPlayerWeapon;          // DHM - Nerve :: for GT_WOLF not archived
 	int latchPlayerWeapon2;         // Gordon: secondary weapon
-	int ignoreClients[MAX_CLIENTS / (sizeof(int) * 8)];
+	int ignoreClients[MAX_CLIENTS / (sizeof (int) * 8)];
 	qboolean muted;
 
 	// OSP
@@ -599,7 +582,7 @@ typedef struct
 
 	// Nico, speclock
 	qboolean specLocked;
-	int specInvitedClients[MAX_CLIENTS / (sizeof(int) * 8)];
+	int specInvitedClients[MAX_CLIENTS / (sizeof (int) * 8)];
 	qboolean freeSpec;
 
 } clientSession_t;
@@ -608,16 +591,14 @@ typedef struct
 #define PICKUP_TOUCH    1   // pickup items when touched
 #define PICKUP_FORCE    2   // pickup the next item when touched (and reset to PICKUP_ACTIVATE when done)
 
-typedef struct ipFilter_s
-{
+typedef struct ipFilter_s {
 	unsigned mask;
 	unsigned compare;
 } ipFilter_t;
 
 // client data that stays across multiple respawns, but is cleared
 // on each level change or team change at ClientBegin()
-typedef struct
-{
+typedef struct {
 	clientConnected_t connected;
 	usercmd_t cmd;                  // we would lose angles if not persistant
 	usercmd_t oldcmd;               // previous command processed by pmove()
@@ -701,8 +682,7 @@ typedef struct
 
 } clientPersistant_t;
 
-typedef struct
-{
+typedef struct {
 	vec3_t mins;
 	vec3_t maxs;
 
@@ -718,8 +698,7 @@ typedef struct
 #define MEDIC_SPECIAL_PICKUP_MOD    4   // JPW NERVE same thing for medic
 
 // Gordon: debris test
-typedef struct debrisChunk_s
-{
+typedef struct debrisChunk_s {
 	vec3_t origin;
 	int model;
 	vec3_t velocity;
@@ -732,8 +711,7 @@ typedef struct debrisChunk_s
 
 // this structure is cleared on each ClientSpawn(),
 // except for 'client->pers' and 'client->sess'
-struct gclient_s
-{
+struct gclient_s {
 	// ps MUST be the first element, because the server expects it
 	playerState_t ps;               // communicated by server to clients
 
@@ -823,14 +801,12 @@ struct gclient_s
 	qboolean wantsscore;
 };
 
-typedef struct
-{
+typedef struct {
 	char modelname[32];
 	int model;
 } brushmodelInfo_t;
 
-typedef struct limbo_cam_s
-{
+typedef struct limbo_cam_s {
 	qboolean hasEnt;
 	int targetEnt;
 	vec3_t angles;
@@ -851,8 +827,7 @@ typedef struct limbo_cam_s
 
 #define MAX_BUFFERED_CONFIGSTRINGS 128
 
-typedef struct voteInfo_s
-{
+typedef struct voteInfo_s {
 	char voteString[MAX_STRING_CHARS];
 	int voteTime;                       // level.time vote was called
 	int voteYes;
@@ -867,16 +842,14 @@ typedef struct voteInfo_s
 } voteInfo_t;
 
 // Nico, delayed map change
-typedef struct delayedMapChange_s
-{
+typedef struct delayedMapChange_s {
 	char passedVote[VOTE_MAXSTRING];
 	int timeChange;
 	qboolean pendingChange;
 	qboolean disabledWatcher;
 } delayedMapChange_t;
 
-typedef struct
-{
+typedef struct {
 	struct gclient_s *clients;          // [maxclients]
 
 	struct gentity_s *gentities;
@@ -1035,8 +1008,7 @@ typedef struct
 	// Nico, end of timerun level vars
 } level_locals_t;
 
-typedef struct
-{
+typedef struct {
 	char mapnames[MAX_MAPS_PER_CAMPAIGN][MAX_QPATH];
 	int mapCount;
 	int current;
@@ -1110,8 +1082,7 @@ void Cmd_LoadCheckpoints_real(gentity_t *ent, char *userName, int runNum);
 void Cmd_Rank_f(gentity_t *ent);
 
 // Nico, flood protection
-typedef struct
-{
+typedef struct {
 	char *cmd;
 	qboolean isProtected;
 	void (*function)(gentity_t *ent);
@@ -1667,8 +1638,7 @@ void G_Trace(gentity_t *ent, trace_t *results, const vec3_t start, const vec3_t 
 
 #define MAX_FIRE_TEAMS 8
 
-typedef struct
-{
+typedef struct {
 	char name[32];
 	char clientbits[8];
 	char requests[8];
@@ -1685,8 +1655,7 @@ void G_RemoveFromAllIgnoreLists(int clientNum);
 
 //g_teammapdata.c
 
-typedef struct mapEntityData_s
-{
+typedef struct mapEntityData_s {
 	vec3_t org;
 	int yaw;
 	int data;
@@ -1699,8 +1668,7 @@ typedef struct mapEntityData_s
 	struct mapEntityData_s *next, *prev;
 } mapEntityData_t;
 
-typedef struct mapEntityData_Team_s
-{
+typedef struct mapEntityData_Team_s {
 	mapEntityData_t mapEntityData_Team[MAX_GENTITIES];
 	mapEntityData_t *freeMapEntityData;                 // single linked list
 	mapEntityData_t activeMapEntityData;                // double linked list
@@ -1721,8 +1689,7 @@ void G_SetupFrustum(gentity_t *ent);
 void G_SetupFrustum_ForBinoculars(gentity_t *ent);
 qboolean G_VisibleFromBinoculars(gentity_t *viewer, gentity_t *ent, vec3_t origin);
 
-typedef enum
-{
+typedef enum {
 	SM_NEED_MEDIC,
 	SM_NEED_ENGINEER,
 	SM_NEED_LT,
@@ -1752,8 +1719,7 @@ void aagun_fire(gentity_t *other);
 // TAT 11/13/2002
 //		Server only entities
 
-struct g_serverEntity_s
-{
+struct g_serverEntity_s {
 	qboolean inuse;
 
 	char *classname;                // set in QuakeEd
@@ -1821,8 +1787,7 @@ g_serverEntity_t *FindServerEntity(g_serverEntity_t *from, int fieldofs, char *m
 #define EOM_MATCHINFO   0x02    // Dump of match stats at end of match.
 
 // "Delayed Print" ent enumerations
-typedef enum
-{
+typedef enum {
 	DP_PAUSEINFO,       // Print current pause info
 	DP_UNPAUSING,       // Print unpause countdown + unpause
 	DP_CONNECTINFO,     // Display OSP info on connect
@@ -1832,8 +1797,7 @@ typedef enum
 // Remember: Axis = RED, Allies = BLUE ... right?!
 
 // Team extras
-typedef struct
-{
+typedef struct {
 	qboolean team_lock;
 	char team_name[24];
 	int team_score;

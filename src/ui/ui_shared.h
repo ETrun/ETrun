@@ -84,9 +84,9 @@ If you have questions concerning this license or the applicable additional terms
 #define CURSOR_SIZER            0x00000004
 
 #ifdef CGAME
-#define STRING_POOL_SIZE    128 * 1024
+# define STRING_POOL_SIZE    128 * 1024
 #else
-#define STRING_POOL_SIZE    384 * 1024
+# define STRING_POOL_SIZE    384 * 1024
 #endif
 
 #define MAX_STRING_HANDLES  4096
@@ -122,15 +122,13 @@ If you have questions concerning this license or the applicable additional terms
 #define SLIDER_THUMB_HEIGHT 12.0    // 20.0
 #define NUM_CROSSHAIRS      10
 
-typedef struct scriptDef_s
-{
+typedef struct scriptDef_s {
 	const char *command;
 	const char *args[MAX_SCRIPT_ARGS];
 } scriptDef_t;
 
 
-typedef struct rectDef_s
-{
+typedef struct rectDef_s {
 	float x;    // horiz position
 	float y;    // vert position
 	float w;    // width
@@ -138,8 +136,7 @@ typedef struct rectDef_s
 } rectDef_t;
 
 // FIXME: do something to separate text vs window stuff
-typedef struct
-{
+typedef struct {
 	rectDef_t rect;                 // client coord rectangle
 	rectDef_t rectClient;           // screen coord rectangle
 	const char *name;               //
@@ -167,8 +164,7 @@ typedef struct
 typedef windowDef_t Window;
 
 
-typedef struct
-{
+typedef struct {
 	vec4_t color;
 	int type;
 	float low;
@@ -187,15 +183,13 @@ typedef struct
 //
 #define MAX_LB_COLUMNS 16
 
-typedef struct columnInfo_s
-{
+typedef struct columnInfo_s {
 	int pos;
 	int width;
 	int maxChars;
 } columnInfo_t;
 
-typedef struct listBoxDef_s
-{
+typedef struct listBoxDef_s {
 	int startPos;
 	int endPos;
 	int drawPadding;
@@ -210,8 +204,7 @@ typedef struct listBoxDef_s
 	qboolean notselectable;
 } listBoxDef_t;
 
-typedef struct editFieldDef_s
-{
+typedef struct editFieldDef_s {
 	float minVal;                   //	edit field limits
 	float maxVal;                   //
 	float defVal;                   //
@@ -223,8 +216,7 @@ typedef struct editFieldDef_s
 
 #define MAX_MULTI_CVARS 32
 
-typedef struct multiDef_s
-{
+typedef struct multiDef_s {
 	const char *cvarList[MAX_MULTI_CVARS];
 	const char *cvarStr[MAX_MULTI_CVARS];
 	float cvarValue[MAX_MULTI_CVARS];
@@ -233,8 +225,7 @@ typedef struct multiDef_s
 	const char *undefinedStr;
 } multiDef_t;
 
-typedef struct modelDef_s
-{
+typedef struct modelDef_s {
 	int angle;
 	vec3_t origin;
 	float fov_x;
@@ -265,8 +256,7 @@ typedef struct modelDef_s
 
 #define UI_MAX_TEXT_LINES 64
 
-typedef struct itemDef_s
-{
+typedef struct itemDef_s {
 	Window window;                  // common positional, border, style, layout info
 	rectDef_t textRect;             // rectangle the text ( if any ) consumes
 	int type;                       // text, button, radiobutton, checkbox, textfield, listbox, combo
@@ -321,8 +311,7 @@ typedef struct itemDef_s
 
 } itemDef_t;
 
-typedef struct
-{
+typedef struct {
 	Window window;
 	const char *font;               // font
 	qboolean fullScreen;            // covers entire screen
@@ -355,8 +344,7 @@ typedef struct
 	// END - TAT 9/16/2002
 } menuDef_t;
 
-typedef struct
-{
+typedef struct {
 	const char *fontStr;
 	const char *cursorStr;
 	const char *gradientStr;
@@ -398,14 +386,12 @@ typedef struct
 
 } cachedAssets_t;
 
-typedef struct
-{
+typedef struct {
 	const char *name;
 	void (*handler)(itemDef_t *item, qboolean *bAbort, char **args);
 } commandDef_t;
 
-typedef struct
-{
+typedef struct {
 	qhandle_t (*registerShaderNoMip)(const char *p);
 	void (*setColor)(const vec4_t v);
 	void (*drawHandlePic)(float x, float y, float w, float h, qhandle_t asset);
@@ -578,8 +564,7 @@ int         trap_PC_UnReadToken(int handle);
 
 typedef struct panel_button_s panel_button_t;
 
-typedef struct panel_button_text_s
-{
+typedef struct panel_button_text_s {
 	float scalex, scaley;
 	vec4_t colour;
 	int style;
@@ -593,8 +578,7 @@ typedef void (*panel_button_render)(panel_button_t *);
 typedef void (*panel_button_postprocess)(panel_button_t *);
 
 // Button struct
-struct panel_button_s
-{
+struct panel_button_s {
 	// compile time stuff
 	// ======================
 	const char *shaderNormal;

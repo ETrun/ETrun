@@ -140,14 +140,11 @@ CG_DrawConnectScreen
 ================
 */
 static qboolean connect_ownerdraw;
-void UI_DrawLoadPanel(qboolean ownerdraw, qboolean uihack)
-{
+void UI_DrawLoadPanel(qboolean ownerdraw, qboolean uihack) {
 	static qboolean inside = qfalse;
 
-	if (inside)
-	{
-		if (!uihack && trap_Cvar_VariableValue("ui_connecting"))
-		{
+	if (inside) {
+		if (!uihack && trap_Cvar_VariableValue("ui_connecting")) {
 			trap_Cvar_Set("ui_connecting", "0");
 		}
 		return;
@@ -157,8 +154,7 @@ void UI_DrawLoadPanel(qboolean ownerdraw, qboolean uihack)
 
 	inside = qtrue;
 
-	if (!bg_loadscreeninited)
-	{
+	if (!bg_loadscreeninited) {
 		trap_R_RegisterFont("ariblk", 27, &bg_loadscreenfont1);
 		trap_R_RegisterFont("courbd", 30, &bg_loadscreenfont2);
 
@@ -169,8 +165,7 @@ void UI_DrawLoadPanel(qboolean ownerdraw, qboolean uihack)
 
 	BG_PanelButtonsRender(loadpanelButtons);
 
-	if (!uihack && trap_Cvar_VariableValue("ui_connecting"))
-	{
+	if (!uihack && trap_Cvar_VariableValue("ui_connecting")) {
 		trap_Cvar_Set("ui_connecting", "0");
 	}
 
@@ -178,8 +173,7 @@ void UI_DrawLoadPanel(qboolean ownerdraw, qboolean uihack)
 }
 
 #define STARTANGLE 40
-void UI_LoadPanel_RenderPercentageMeter(panel_button_t *button)
-{
+void UI_LoadPanel_RenderPercentageMeter(panel_button_t *button) {
 	float      hunkfrac;
 	float      w, h;
 	vec2_t     org;
@@ -197,8 +191,7 @@ void UI_LoadPanel_RenderPercentageMeter(panel_button_t *button)
 	trap_R_Add2dPolys(verts, 4, button->hShaderNormal);
 }
 
-void MiniAngleToAxis(vec_t angle, vec2_t axes[2])
-{
+void MiniAngleToAxis(vec_t angle, vec2_t axes[2]) {
 	axes[0][0] = (vec_t)sin(-angle);
 	axes[0][1] = -(vec_t)cos(-angle);
 
@@ -206,8 +199,7 @@ void MiniAngleToAxis(vec_t angle, vec2_t axes[2])
 	axes[1][1] = axes[0][0];
 }
 
-void SetupRotatedThing(polyVert_t *verts, vec2_t org, float w, float h, vec_t angle)
-{
+void SetupRotatedThing(polyVert_t *verts, vec2_t org, float w, float h, vec_t angle) {
 	vec2_t axes[2];
 
 	MiniAngleToAxis(angle, axes);
@@ -253,21 +245,17 @@ void SetupRotatedThing(polyVert_t *verts, vec2_t org, float w, float h, vec_t an
 	verts[3].modulate[3] = 255;
 }
 
-void UI_LoadPanel_RenderHeaderText(panel_button_t *button)
-{
+void UI_LoadPanel_RenderHeaderText(panel_button_t *button) {
 	uiClientState_t cstate;
 	char            downloadName[MAX_INFO_VALUE];
 
 	trap_GetClientState(&cstate);
 
-	trap_Cvar_VariableStringBuffer("cl_downloadName", downloadName, sizeof(downloadName));
+	trap_Cvar_VariableStringBuffer("cl_downloadName", downloadName, sizeof (downloadName));
 
-	if ((cstate.connState == CA_DISCONNECTED || cstate.connState == CA_CONNECTED) && *downloadName)
-	{
+	if ((cstate.connState == CA_DISCONNECTED || cstate.connState == CA_CONNECTED) && *downloadName) {
 		button->text = "DOWNLOADING...";
-	}
-	else
-	{
+	} else {
 		button->text = "CONNECTING...";
 	}
 
@@ -275,8 +263,7 @@ void UI_LoadPanel_RenderHeaderText(panel_button_t *button)
 }
 
 #define ESTIMATES 80
-const char *UI_DownloadInfo(const char *downloadName)
-{
+const char *UI_DownloadInfo(const char *downloadName) {
 	static char dlText[]                = "Downloading:";
 	static char etaText[]               = "Estimated time left:";
 	static char xferText[]              = "Transfer rate:";
@@ -295,49 +282,38 @@ const char *UI_DownloadInfo(const char *downloadName)
 	downloadCount = trap_Cvar_VariableValue("cl_downloadCount");
 	downloadTime  = trap_Cvar_VariableValue("cl_downloadTime");
 
-	if (downloadSize > 0)
-	{
+	if (downloadSize > 0) {
 		ds = va("%s (%d%%)", downloadName, (int)((float)downloadCount * 100.0f / (float)downloadSize));
-	}
-	else
-	{
+	} else {
 		ds = downloadName;
 	}
 
 	UI_ReadableSize(dlSizeBuf, sizeof dlSizeBuf, downloadCount);
 	UI_ReadableSize(totalSizeBuf, sizeof totalSizeBuf, downloadSize);
 
-	if (downloadCount < 4096 || !downloadTime)
-	{
+	if (downloadCount < 4096 || !downloadTime) {
 		s = va("%s\n %s\n%s\n\n%s\n estimating...\n\n%s\n\n%s copied", dlText, ds, totalSizeBuf,
 		       etaText,
 		       xferText,
 		       dlSizeBuf);
 		return s;
-	}
-	else
-	{
-		if ((uiInfo.uiDC.realTime - downloadTime) / 1000)
-		{
+	} else {
+		if ((uiInfo.uiDC.realTime - downloadTime) / 1000) {
 			xferRate = downloadCount / ((uiInfo.uiDC.realTime - downloadTime) / 1000);
-		}
-		else
-		{
+		} else {
 			xferRate = 0;
 		}
 		UI_ReadableSize(xferRateBuf, sizeof xferRateBuf, xferRate);
 
 		// Extrapolate estimated completion time
-		if (downloadSize && xferRate)
-		{
+		if (downloadSize && xferRate) {
 			int n        = downloadSize / xferRate; // estimated time for entire d/l in secs
 			int timeleft = 0, i;
 
 			// We do it in K (/1024) because we'd overflow around 4MB
 			tleEstimates[tleIndex] = (n - (((downloadCount / 1024) * n) / (downloadSize / 1024)));
 			tleIndex++;
-			if (tleIndex >= ESTIMATES)
-			{
+			if (tleIndex >= ESTIMATES) {
 				tleIndex = 0;
 			}
 
@@ -347,30 +323,22 @@ const char *UI_DownloadInfo(const char *downloadName)
 			timeleft /= ESTIMATES;
 
 			UI_PrintTime(dlTimeBuf, sizeof dlTimeBuf, timeleft);
-		}
-		else
-		{
+		} else {
 			dlTimeBuf[0] = '\0';
 		}
 
-		if (xferRate)
-		{
+		if (xferRate) {
 			s = va("%s\n %s\n%s\n\n%s\n %s\n\n%s\n %s/sec\n\n%s copied", dlText, ds, totalSizeBuf,
 			       etaText, dlTimeBuf,
 			       xferText, xferRateBuf,
 			       dlSizeBuf);
-		}
-		else
-		{
-			if (downloadSize)
-			{
+		} else {
+			if (downloadSize) {
 				s = va("%s\n %s\n%s\n\n%s\n estimating...\n\n%s\n\n%s copied", dlText, ds, totalSizeBuf,
 				       etaText,
 				       xferText,
 				       dlSizeBuf);
-			}
-			else
-			{
+			} else {
 				s = va("%s\n %s\n\n%s\n estimating...\n\n%s\n\n%s copied", dlText, ds,
 				       etaText,
 				       xferText,
@@ -384,8 +352,7 @@ const char *UI_DownloadInfo(const char *downloadName)
 	return "";
 }
 
-void UI_LoadPanel_RenderLoadingText(panel_button_t *button)
-{
+void UI_LoadPanel_RenderLoadingText(panel_button_t *button) {
 	uiClientState_t cstate;
 	char            downloadName[MAX_INFO_VALUE];
 	char            buff[2560];
@@ -394,16 +361,13 @@ void UI_LoadPanel_RenderLoadingText(panel_button_t *button)
 
 	trap_GetClientState(&cstate);
 
-	Com_sprintf(buff, sizeof(buff), "Connecting to:\n %s^*\n\n%s", cstate.servername, Info_ValueForKey(cstate.updateInfoString, "motd"));
+	Com_sprintf(buff, sizeof (buff), "Connecting to:\n %s^*\n\n%s", cstate.servername, Info_ValueForKey(cstate.updateInfoString, "motd"));
 
-	trap_Cvar_VariableStringBuffer("cl_downloadName", downloadName, sizeof(downloadName));
+	trap_Cvar_VariableStringBuffer("cl_downloadName", downloadName, sizeof (downloadName));
 
-	if (!connect_ownerdraw)
-	{
-		if (!trap_Cvar_VariableValue("ui_connecting"))
-		{
-			switch (cstate.connState)
-			{
+	if (!connect_ownerdraw) {
+		if (!trap_Cvar_VariableValue("ui_connecting")) {
+			switch (cstate.connState) {
 			case CA_CONNECTING:
 				s = va(trap_TranslateString("Awaiting connection...%i"), cstate.connectPacketCount);
 				break;
@@ -412,12 +376,9 @@ void UI_LoadPanel_RenderLoadingText(panel_button_t *button)
 				break;
 			case CA_DISCONNECTED:
 			case CA_CONNECTED:
-				if (*downloadName || cstate.connState == CA_DISCONNECTED)
-				{
+				if (*downloadName || cstate.connState == CA_DISCONNECTED) {
 					s = (char *)UI_DownloadInfo(downloadName);
-				}
-				else
-				{
+				} else {
 					s = trap_TranslateString("Awaiting gamestate...");
 				}
 				break;
@@ -426,38 +387,31 @@ void UI_LoadPanel_RenderLoadingText(panel_button_t *button)
 			default:
 				break;
 			}
-		}
-		else if (trap_Cvar_VariableValue("ui_dl_running"))
-		{
+		} else if (trap_Cvar_VariableValue("ui_dl_running")) {
 			// only toggle during a disconnected download
 			s = (char *)UI_DownloadInfo(downloadName);
 		}
 
-		Q_strcat(buff, sizeof(buff), va("\n\n%s^*", s));
+		Q_strcat(buff, sizeof (buff), va("\n\n%s^*", s));
 
-		if (cstate.connState < CA_CONNECTED && *cstate.messageString)
-		{
-			Q_strcat(buff, sizeof(buff), va("\n\n%s^*", cstate.messageString));
+		if (cstate.connState < CA_CONNECTED && *cstate.messageString) {
+			Q_strcat(buff, sizeof (buff), va("\n\n%s^*", cstate.messageString));
 		}
 	}
 
-	BG_FitTextToWidth_Ext(buff, button->font->scalex, button->rect.w, sizeof(buff), button->font->font);
+	BG_FitTextToWidth_Ext(buff, button->font->scalex, button->rect.w, sizeof (buff), button->font->font);
 
 	y = button->rect.y + 12;
 
 	s = p = buff;
 
-	while (*p)
-	{
-		if (*p == '\n')
-		{
+	while (*p) {
+		if (*p == '\n') {
 			*p++ = '\0';
 			Text_Paint_Ext(button->rect.x + 4, y, button->font->scalex, button->font->scaley, button->font->colour, s, 0, 0, 0, button->font->font);
 			y += 8;
 			s  = p;
-		}
-		else
-		{
+		} else {
 			p++;
 		}
 	}

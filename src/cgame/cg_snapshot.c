@@ -49,8 +49,7 @@ static qboolean oldValid[MAX_GENTITIES];
 CG_ResetEntity
 ==================
 */
-static void CG_ResetEntity(centity_t *cent)
-{
+static void CG_ResetEntity(centity_t *cent) {
 	// if an event is set, assume it is new enough to use
 	// if the event had timed out, it would have been cleared
 	// RF, not needed for wolf
@@ -67,8 +66,7 @@ static void CG_ResetEntity(centity_t *cent)
 
 	VectorCopy(cent->currentState.origin, cent->lerpOrigin);
 	VectorCopy(cent->currentState.angles, cent->lerpAngles);
-	if (cent->currentState.eType == ET_PLAYER)
-	{
+	if (cent->currentState.eType == ET_PLAYER) {
 		CG_ResetPlayerEntity(cent);
 	}
 
@@ -99,12 +97,10 @@ CG_TransitionEntity
 cent->nextState is moved to cent->currentState and events are fired
 ===============
 */
-static void CG_TransitionEntity(centity_t *cent)
-{
+static void CG_TransitionEntity(centity_t *cent) {
 
 	// Ridah, update the fireDir if it's on fire
-	if (CG_EntOnFire(cent))
-	{
+	if (CG_EntOnFire(cent)) {
 		vec3_t newDir, newPos, oldPos;
 		float  adjust;
 		//
@@ -114,16 +110,14 @@ static void CG_TransitionEntity(centity_t *cent)
 		VectorSubtract(oldPos, newPos, newDir);
 		// fire should go upwards if travelling slow
 		newDir[2] += 2;
-		if (VectorNormalize(newDir) < 1)
-		{
+		if (VectorNormalize(newDir) < 1) {
 			VectorClear(newDir);
 			newDir[2] = 1;
 		}
 		// now move towards the newDir
 		adjust = 0.3;
 		VectorMA(cent->fireRiseDir, adjust, newDir, cent->fireRiseDir);
-		if (VectorNormalize(cent->fireRiseDir) <= 0.1)
-		{
+		if (VectorNormalize(cent->fireRiseDir) <= 0.1) {
 			VectorCopy(newDir, cent->fireRiseDir);
 		}
 	}
@@ -132,8 +126,7 @@ static void CG_TransitionEntity(centity_t *cent)
 	cent->currentValid = qtrue;
 
 	// reset if the entity wasn't in the last frame or was teleported
-	if (!cent->interpolate)
-	{
+	if (!cent->interpolate) {
 		CG_ResetEntity(cent);
 	}
 
@@ -156,8 +149,7 @@ CG_TransitionSnapshot instead.
 FIXME: Also called by map_restart?
 ==================
 */
-void CG_SetInitialSnapshot(snapshot_t *snap)
-{
+void CG_SetInitialSnapshot(snapshot_t *snap) {
 	int           i;
 	centity_t     *cent;
 	entityState_t *state;
@@ -176,12 +168,11 @@ void CG_SetInitialSnapshot(snapshot_t *snap)
 	// what the server has indicated the current weapon is
 	CG_Respawn();
 
-	for (i = 0 ; i < cg.snap->numEntities ; i++)
-	{
+	for (i = 0 ; i < cg.snap->numEntities ; i++) {
 		state = &cg.snap->entities[i];
 		cent  = &cg_entities[state->number];
 
-		memcpy(&cent->currentState, state, sizeof(entityState_t));
+		memcpy(&cent->currentState, state, sizeof (entityState_t));
 		//cent->currentState = *state;
 		cent->interpolate  = qfalse;
 		cent->currentValid = qtrue;
@@ -195,30 +186,22 @@ void CG_SetInitialSnapshot(snapshot_t *snap)
 	cg_fxflags = 0;
 
 
-	trap_Cvar_VariableStringBuffer("r_oldMode", buff, sizeof(buff));
-	if (atoi(buff))
-	{
+	trap_Cvar_VariableStringBuffer("r_oldMode", buff, sizeof (buff));
+	if (atoi(buff)) {
 		// Arnout: confirmation screen
 		trap_UI_Popup(UIMENU_INGAME);
-	}
-	else if (cg.demoPlayback)
-	{
+	} else if (cg.demoPlayback) {
 
-	}
-	else
-	{
+	} else {
 		static char prevmap[64] = { 0 };
 		char        curmap[64];
 
 		trap_Cvar_VariableStringBuffer("mapname", curmap, 64);
 
-		if (Q_stricmp(curmap, prevmap))
-		{
+		if (Q_stricmp(curmap, prevmap)) {
 			strcpy(prevmap, curmap);
-			if (cgs.campaignInfoLoaded)
-			{
-				if (!cg.showGameView)
-				{
+			if (cgs.campaignInfoLoaded) {
+				if (!cg.showGameView) {
 					CG_LimboMenu_f();
 				}
 			}
@@ -226,18 +209,15 @@ void CG_SetInitialSnapshot(snapshot_t *snap)
 	}
 
 	// OSP - remove motd window
-	if (cg.motdWindow != NULL)
-	{
+	if (cg.motdWindow != NULL) {
 		CG_windowFree(cg.motdWindow);
 		cg.motdWindow = NULL;
 	}
 
 	// Activate alternate input handler during demo playback
-	if (cg.demoPlayback)
-	{
+	if (cg.demoPlayback) {
 		CG_keyOn_f();
-		if (demo_infoWindow.integer > 0)
-		{
+		if (demo_infoWindow.integer > 0) {
 			CG_ShowHelp_On(&cg.demohelpWindow);
 		}
 	}
@@ -260,18 +240,15 @@ CG_TransitionSnapshot
 The transition point from snap to nextSnap has passed
 ===================
 */
-static void CG_TransitionSnapshot(void)
-{
+static void CG_TransitionSnapshot(void) {
 	centity_t  *cent;
 	snapshot_t *oldFrame;
 	int        i, id;
 
-	if (!cg.snap)
-	{
+	if (!cg.snap) {
 		CG_Error("CG_TransitionSnapshot: NULL cg.snap");
 	}
-	if (!cg.nextSnap)
-	{
+	if (!cg.nextSnap) {
 		CG_Error("CG_TransitionSnapshot: NULL cg.nextSnap");
 	}
 
@@ -280,17 +257,15 @@ static void CG_TransitionSnapshot(void)
 
 	// if we had a map_restart, set everthing with initial
 
-	if (!(cg.snap) || !(cg.nextSnap))
-	{
+	if (!(cg.snap) || !(cg.nextSnap)) {
 		return;
 	}
 
 	// rain - I hate doing things like this for enums.  Oh well.
-	memset(&oldValid, 0, sizeof(oldValid));
+	memset(&oldValid, 0, sizeof (oldValid));
 
 	// clear the currentValid flag for all entities in the existing snapshot
-	for (i = 0 ; i < cg.snap->numEntities ; i++)
-	{
+	for (i = 0 ; i < cg.snap->numEntities ; i++) {
 		cent                                  = &cg_entities[cg.snap->entities[i].number];
 		cent->currentValid                    = qfalse;
 		oldValid[cg.snap->entities[i].number] = qtrue;
@@ -303,16 +278,14 @@ static void CG_TransitionSnapshot(void)
 	BG_PlayerStateToEntityState(&cg.snap->ps, &cg_entities[cg.snap->ps.clientNum].currentState, qfalse);
 	cg_entities[cg.snap->ps.clientNum].interpolate = qfalse;
 
-	for (i = 0 ; i < cg.snap->numEntities ; i++)
-	{
+	for (i = 0 ; i < cg.snap->numEntities ; i++) {
 		id = cg.snap->entities[i].number;
 		CG_TransitionEntity(&cg_entities[id]);
 
 		// rain - #374 - ent doesn't exist in this frame, reset it.
 		// this is to fix the silent landmines bug, which is caused
 		// by a stale miscTime in the cent
-		if (cg_entities[id].currentValid == qfalse && oldValid[id] == qtrue)
-		{
+		if (cg_entities[id].currentValid == qfalse && oldValid[id] == qtrue) {
 			CG_ResetEntity(&cg_entities[id]);
 		}
 	}
@@ -320,23 +293,20 @@ static void CG_TransitionSnapshot(void)
 	cg.nextSnap = NULL;
 
 	// check for playerstate transition events
-	if (oldFrame)
-	{
+	if (oldFrame) {
 		playerState_t *ops, *ps;
 
 		ops = &oldFrame->ps;
 		ps  = &cg.snap->ps;
 		// teleporting checks are irrespective of prediction
-		if ((ps->eFlags ^ ops->eFlags) & EF_TELEPORT_BIT)
-		{
+		if ((ps->eFlags ^ ops->eFlags) & EF_TELEPORT_BIT) {
 			cg.thisFrameTeleport = qtrue;   // will be cleared by prediction code
 		}
 
 		// if we are not doing client side movement prediction for any
 		// reason, then the client events and view changes will be issued now
 		if (cg.demoPlayback || (cg.snap->ps.pm_flags & PMF_FOLLOW)
-		    || cg_nopredict.integer)
-		{
+		    || cg_nopredict.integer) {
 			CG_TransitionPlayerState(ps, ops);
 		}
 	}
@@ -351,8 +321,7 @@ CG_SetNextSnap
 A new snapshot has just been read in from the client system.
 ===================
 */
-static void CG_SetNextSnap(snapshot_t *snap)
-{
+static void CG_SetNextSnap(snapshot_t *snap) {
 	int           num;
 	entityState_t *es;
 	centity_t     *cent;
@@ -363,46 +332,37 @@ static void CG_SetNextSnap(snapshot_t *snap)
 	cg_entities[cg.snap->ps.clientNum].interpolate = qtrue;
 
 	// check for extrapolation errors
-	for (num = 0 ; num < snap->numEntities ; num++)
-	{
+	for (num = 0 ; num < snap->numEntities ; num++) {
 		es   = &snap->entities[num];
 		cent = &cg_entities[es->number];
 
-		memcpy(&cent->nextState, es, sizeof(entityState_t));
+		memcpy(&cent->nextState, es, sizeof (entityState_t));
 		//cent->nextState = *es;
 
 		// if this frame is a teleport, or the entity wasn't in the
 		// previous frame, don't interpolate
-		if (!cent->currentValid || ((cent->currentState.eFlags ^ es->eFlags) & EF_TELEPORT_BIT))
-		{
+		if (!cent->currentValid || ((cent->currentState.eFlags ^ es->eFlags) & EF_TELEPORT_BIT)) {
 			cent->interpolate = qfalse;
-		}
-		else
-		{
+		} else {
 			cent->interpolate = qtrue;
 		}
 	}
 
 	// if the next frame is a teleport for the playerstate, we
 	// can't interpolate during demos
-	if (cg.snap && ((snap->ps.eFlags ^ cg.snap->ps.eFlags) & EF_TELEPORT_BIT))
-	{
+	if (cg.snap && ((snap->ps.eFlags ^ cg.snap->ps.eFlags) & EF_TELEPORT_BIT)) {
 		cg.nextFrameTeleport = qtrue;
-	}
-	else
-	{
+	} else {
 		cg.nextFrameTeleport = qfalse;
 	}
 
 	// if changing follow mode, don't interpolate
-	if (cg.nextSnap->ps.clientNum != cg.snap->ps.clientNum)
-	{
+	if (cg.nextSnap->ps.clientNum != cg.snap->ps.clientNum) {
 		cg.nextFrameTeleport = qtrue;
 	}
 
 	// if changing server restarts, don't interpolate
-	if ((cg.nextSnap->snapFlags ^ cg.snap->snapFlags) & SNAPFLAG_SERVERCOUNT)
-	{
+	if ((cg.nextSnap->snapFlags ^ cg.snap->snapFlags) & SNAPFLAG_SERVERCOUNT) {
 		cg.nextFrameTeleport = qtrue;
 	}
 
@@ -421,26 +381,20 @@ times if the client system fails to return a
 valid snapshot.
 ========================
 */
-static snapshot_t *CG_ReadNextSnapshot(void)
-{
+static snapshot_t *CG_ReadNextSnapshot(void) {
 	qboolean   r;
 	snapshot_t *dest;
 
-	if (cg.latestSnapshotNum > cgs.processedSnapshotNum + 1000)
-	{
+	if (cg.latestSnapshotNum > cgs.processedSnapshotNum + 1000) {
 		CG_Printf("[skipnotify]WARNING: CG_ReadNextSnapshot: way out of range, %i > %i\n",
 		          cg.latestSnapshotNum, cgs.processedSnapshotNum);
 	}
 
-	while (cgs.processedSnapshotNum < cg.latestSnapshotNum)
-	{
+	while (cgs.processedSnapshotNum < cg.latestSnapshotNum) {
 		// decide which of the two slots to load it into
-		if (cg.snap == &cg.activeSnapshots[0])
-		{
+		if (cg.snap == &cg.activeSnapshots[0]) {
 			dest = &cg.activeSnapshots[1];
-		}
-		else
-		{
+		} else {
 			dest = &cg.activeSnapshots[0];
 		}
 
@@ -449,18 +403,15 @@ static snapshot_t *CG_ReadNextSnapshot(void)
 		r = trap_GetSnapshot(cgs.processedSnapshotNum, dest);
 
 		// FIXME: why would trap_GetSnapshot return a snapshot with the same server time
-		if (cg.snap && r && dest->serverTime == cg.snap->serverTime)
-		{
+		if (cg.snap && r && dest->serverTime == cg.snap->serverTime) {
 			//continue;
 		}
 
 		// if it succeeded, return
-		if (r)
-		{
+		if (r) {
 			CG_AddLagometerSnapshotInfo(dest);
 			// server has been restarted
-			if (cg.snap && (dest->snapFlags ^ cg.snap->snapFlags) & SNAPFLAG_SERVERCOUNT)
-			{
+			if (cg.snap && (dest->snapFlags ^ cg.snap->snapFlags) & SNAPFLAG_SERVERCOUNT) {
 				cg.damageTime = 0;
 				cg.duckTime   = -1;
 				cg.landTime   = -1;
@@ -505,17 +456,14 @@ of an interpolating one)
 
 ============
 */
-void CG_ProcessSnapshots(void)
-{
+void CG_ProcessSnapshots(void) {
 	snapshot_t *snap;
 	int        n;
 
 	// see what the latest snapshot the client system has is
 	trap_GetCurrentSnapshotNumber(&n, &cg.latestSnapshotTime);
-	if (n != cg.latestSnapshotNum)
-	{
-		if (n < cg.latestSnapshotNum)
-		{
+	if (n != cg.latestSnapshotNum) {
+		if (n < cg.latestSnapshotNum) {
 			// this should never happen
 			CG_Error("CG_ProcessSnapshots: n < cg.latestSnapshotNum");
 		}
@@ -525,19 +473,16 @@ void CG_ProcessSnapshots(void)
 	// If we have yet to receive a snapshot, check for it.
 	// Once we have gotten the first snapshot, cg.snap will
 	// always have valid data for the rest of the game
-	while (!cg.snap)
-	{
+	while (!cg.snap) {
 		snap = CG_ReadNextSnapshot();
-		if (!snap)
-		{
+		if (!snap) {
 			// we can't continue until we get a snapshot
 			return;
 		}
 
 		// set our weapon selection to what
 		// the playerstate is currently using
-		if (!(snap->snapFlags & SNAPFLAG_NOT_ACTIVE))
-		{
+		if (!(snap->snapFlags & SNAPFLAG_NOT_ACTIVE)) {
 			CG_SetInitialSnapshot(snap);
 		}
 	}
@@ -545,17 +490,14 @@ void CG_ProcessSnapshots(void)
 	// loop until we either have a valid nextSnap with a serverTime
 	// greater than cg.time to interpolate towards, or we run
 	// out of available snapshots
-	do
-	{
+	do {
 		// if we don't have a nextframe, try and read a new one in
-		if (!cg.nextSnap)
-		{
+		if (!cg.nextSnap) {
 			snap = CG_ReadNextSnapshot();
 
 			// if we still don't have a nextframe, we will just have to
 			// extrapolate
-			if (!snap)
-			{
+			if (!snap) {
 				break;
 			}
 
@@ -563,36 +505,30 @@ void CG_ProcessSnapshots(void)
 
 
 			// if time went backwards, we have a level restart
-			if (cg.nextSnap->serverTime < cg.snap->serverTime)
-			{
+			if (cg.nextSnap->serverTime < cg.snap->serverTime) {
 				CG_Error("CG_ProcessSnapshots: Server time went backwards");
 			}
 		}
 
 		// if our time is < nextFrame's, we have a nice interpolating state
-		if (cg.time >= cg.snap->serverTime && cg.time < cg.nextSnap->serverTime)
-		{
+		if (cg.time >= cg.snap->serverTime && cg.time < cg.nextSnap->serverTime) {
 			break;
 		}
 
 		// we have passed the transition from nextFrame to frame
 		CG_TransitionSnapshot();
-	}
-	while (1);
+	} while (1);
 
 	// assert our valid conditions upon exiting
-	if (cg.snap == NULL)
-	{
+	if (cg.snap == NULL) {
 		CG_Error("CG_ProcessSnapshots: cg.snap == NULL");
 	}
-	if (cg.time < cg.snap->serverTime)
-	{
+	if (cg.time < cg.snap->serverTime) {
 		// this can happen right after a vid_restart
 		cg.time       = cg.snap->serverTime;
 		cgDC.realTime = cg.time;
 	}
-	if (cg.nextSnap != NULL && cg.nextSnap->serverTime <= cg.time)
-	{
+	if (cg.nextSnap != NULL && cg.nextSnap->serverTime <= cg.time) {
 		CG_Error("CG_ProcessSnapshots: cg.nextSnap->serverTime <= cg.time");
 	}
 

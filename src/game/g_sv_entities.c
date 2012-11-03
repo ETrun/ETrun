@@ -48,18 +48,15 @@ int              numServerEntities;
 
 
 // clear out all the sp entities
-void InitServerEntities(void)
-{
-	memset(g_serverEntities, 0, sizeof(g_serverEntities));
+void InitServerEntities(void) {
+	memset(g_serverEntities, 0, sizeof (g_serverEntities));
 	numServerEntities = 0;
 }
 
 // get the server entity with the passed in number
-g_serverEntity_t *GetServerEntity(int num)
-{
+g_serverEntity_t *GetServerEntity(int num) {
 	// if it's an invalid number, return null
-	if ((num < MAX_GENTITIES) || (num >= MAX_GENTITIES + numServerEntities))
-	{
+	if ((num < MAX_GENTITIES) || (num >= MAX_GENTITIES + numServerEntities)) {
 		return NULL;
 	}
 
@@ -67,12 +64,10 @@ g_serverEntity_t *GetServerEntity(int num)
 
 }
 
-g_serverEntity_t *GetFreeServerEntity()
-{
+g_serverEntity_t *GetFreeServerEntity() {
 	// NOTE:  this is simplistic because we can't currently free these entities
 	//		if we change this, then we need to be more careful when allocating the entities
-	if (numServerEntities >= MAX_SERVER_ENTITIES)
-	{
+	if (numServerEntities >= MAX_SERVER_ENTITIES) {
 		G_Error("GetFreeServerEntity: Cannot allocate server entity");
 		return NULL;
 	}
@@ -83,27 +78,22 @@ g_serverEntity_t *GetFreeServerEntity()
 }
 
 // Give a gentity_t, create a sp entity, copy all pertinent data, and return it
-g_serverEntity_t *CreateServerEntity(gentity_t *ent)
-{
+g_serverEntity_t *CreateServerEntity(gentity_t *ent) {
 	// get the entity out of our pool
 	g_serverEntity_t *newEnt = GetFreeServerEntity();
 
 	// if we managed to get one, copy over data
-	if (newEnt)
-	{
+	if (newEnt) {
 		// G_NewString crashes if you pass in NULL, so let's check...
-		if (ent->classname)
-		{
+		if (ent->classname) {
 			newEnt->classname = G_NewString(ent->classname);
 		}
 
-		if (ent->targetname)
-		{
+		if (ent->targetname) {
 			newEnt->name = G_NewString(ent->targetname);
 		}
 
-		if (ent->target)
-		{
+		if (ent->target) {
 			newEnt->target = G_NewString(ent->target);
 		}
 
@@ -130,8 +120,7 @@ void CreateMapServerEntities();
 // These server entities don't get to update every frame, but some of them have to set themselves up
 //		after they've all been created
 //		So we want to give each entity the chance to set itself up after it has been created
-void InitialServerEntitySetup()
-{
+void InitialServerEntitySetup() {
 	int              i;
 	g_serverEntity_t *ent;
 
@@ -139,13 +128,11 @@ void InitialServerEntitySetup()
 	//		these are read from an additional file
 	CreateMapServerEntities();
 
-	for (i = 0; i < numServerEntities; i++)
-	{
+	for (i = 0; i < numServerEntities; i++) {
 		ent = &g_serverEntities[i];
 
 		// if this entity is in use and has a setup function
-		if (ent->inuse && ent->setup)
-		{
+		if (ent->inuse && ent->setup) {
 			// call it
 			ent->setup(ent);
 		}
@@ -153,33 +140,25 @@ void InitialServerEntitySetup()
 }
 
 // Like G_Find, but for server entities
-g_serverEntity_t *FindServerEntity(g_serverEntity_t *from, int fieldofs, char *match)
-{
+g_serverEntity_t *FindServerEntity(g_serverEntity_t *from, int fieldofs, char *match) {
 	char             *s;
 	g_serverEntity_t *max = &g_serverEntities[numServerEntities];
 
-	if (!from)
-	{
+	if (!from) {
 		from = g_serverEntities;
-	}
-	else
-	{
+	} else {
 		from++;
 	}
 
-	for ( ; from < max ; from++)
-	{
-		if (!from->inuse)
-		{
+	for ( ; from < max ; from++) {
+		if (!from->inuse) {
 			continue;
 		}
 		s = *( char ** )((byte *)from + fieldofs);
-		if (!s)
-		{
+		if (!s) {
 			continue;
 		}
-		if (!Q_stricmp(s, match))
-		{
+		if (!Q_stricmp(s, match)) {
 			return from;
 		}
 	}
@@ -188,27 +167,22 @@ g_serverEntity_t *FindServerEntity(g_serverEntity_t *from, int fieldofs, char *m
 }
 
 // Create a server entity from some basic data
-void CreateServerEntityFromData(char *classname, char *targetname, char *target, vec3_t origin, int spawnflags, vec3_t angle)
-{
+void CreateServerEntityFromData(char *classname, char *targetname, char *target, vec3_t origin, int spawnflags, vec3_t angle) {
 	// get the entity out of our pool
 	g_serverEntity_t *newEnt = GetFreeServerEntity();
 
 	// if we managed to get one, copy over data
-	if (newEnt)
-	{
+	if (newEnt) {
 		// G_NewString crashes if you pass in NULL, so let's check...
-		if (classname)
-		{
+		if (classname) {
 			newEnt->classname = G_NewString(classname);
 		}
 
-		if (targetname)
-		{
+		if (targetname) {
 			newEnt->name = G_NewString(targetname);
 		}
 
-		if (target)
-		{
+		if (target) {
 			newEnt->target = G_NewString(target);
 		}
 
@@ -226,12 +200,11 @@ void CreateServerEntityFromData(char *classname, char *targetname, char *target,
 }
 
 // TAT - create the server entities for the current map
-void CreateMapServerEntities()
-{
+void CreateMapServerEntities() {
 	char info[1024];
 	char mapname[128];
 
-	trap_GetServerinfo(info, sizeof(info));
+	trap_GetServerinfo(info, sizeof (info));
 
-	Q_strncpyz(mapname, Info_ValueForKey(info, "mapname"), sizeof(mapname));
+	Q_strncpyz(mapname, Info_ValueForKey(info, "mapname"), sizeof (mapname));
 }

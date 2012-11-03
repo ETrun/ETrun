@@ -63,8 +63,7 @@ If you have questions concerning this license or the applicable additional terms
 
 typedef qboolean (*addToSnapshotCallback)(int entityNum, int clientNum);
 
-typedef struct
-{
+typedef struct {
 	qboolean linked;                // qfalse if not in any good cluster
 	int linkcount;
 
@@ -102,8 +101,7 @@ typedef struct
 
 
 // the server looks at a sharedEntity, which is the start of the game's gentity_t structure
-typedef struct
-{
+typedef struct {
 	entityState_t s;                // communicated by server to clients
 	entityShared_t r;               // shared by both the server system and game
 } sharedEntity_t;
@@ -115,8 +113,7 @@ typedef struct
 //
 // system traps provided by the main engine
 //
-typedef enum
-{
+typedef enum {
 	//============== general Quake services ==================
 
 	G_PRINT,        // ( const char *string );
@@ -458,8 +455,7 @@ typedef enum
 //
 // functions exported by the game subsystem
 //
-typedef enum
-{
+typedef enum {
 	GAME_INIT,  // ( int levelTime, int randomSeed, int restart );
 	// init and shutdown will be called every single level
 	// The game should call G_GET_ENTITY_TOKEN to parse through all the

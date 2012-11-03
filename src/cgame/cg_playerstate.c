@@ -42,30 +42,25 @@ CG_CheckAmmo
 If the ammo has gone low enough to generate the warning, play a sound
 ==============
 */
-void CG_CheckAmmo(void)
-{
+void CG_CheckAmmo(void) {
 	int i;
 	int total;
-	int weapons[MAX_WEAPONS / (sizeof(int) * 8)];
+	int weapons[MAX_WEAPONS / (sizeof (int) * 8)];
 
 	// see about how many seconds of ammo we have remaining
-	memcpy(weapons, cg.snap->ps.weapons, sizeof(weapons));
+	memcpy(weapons, cg.snap->ps.weapons, sizeof (weapons));
 
-	if (!weapons[0] && !weapons[1])     // (SA) we start out with no weapons, so don't make a click on startup
-	{
+	if (!weapons[0] && !weapons[1]) {   // (SA) we start out with no weapons, so don't make a click on startup
 		return;
 	}
 
 	total = 0;
 
-	for (i = 0 ; i < WP_NUM_WEAPONS ; i++)
-	{
-		if (!(weapons[0] & (1 << i)))
-		{
+	for (i = 0 ; i < WP_NUM_WEAPONS ; i++) {
+		if (!(weapons[0] & (1 << i))) {
 			continue;
 		}
-		switch (i)
-		{
+		switch (i) {
 		case WP_PANZERFAUST:
 		case WP_GRENADE_LAUNCHER:
 		case WP_GRENADE_PINEAPPLE:
@@ -95,25 +90,20 @@ void CG_CheckAmmo(void)
 			break;
 		}
 
-		if (total >= 5000)
-		{
+		if (total >= 5000) {
 			cg.lowAmmoWarning = 0;
 			return;
 		}
 	}
 
-	if (!cg.lowAmmoWarning)
-	{
+	if (!cg.lowAmmoWarning) {
 		// play a sound on this transition
 		trap_S_StartLocalSound(cgs.media.noAmmoSound, CHAN_LOCAL_SOUND);
 	}
 
-	if (total == 0)
-	{
+	if (total == 0) {
 		cg.lowAmmoWarning = 2;
-	}
-	else
-	{
+	} else {
 		cg.lowAmmoWarning = 1;
 	}
 }
@@ -123,8 +113,7 @@ void CG_CheckAmmo(void)
 CG_DamageFeedback
 ==============
 */
-void CG_DamageFeedback(int yawByte, int pitchByte, int damage)
-{
+void CG_DamageFeedback(int yawByte, int pitchByte, int damage) {
 	float        left, front, up;
 	float        kick;
 	int          health;
@@ -141,51 +130,40 @@ void CG_DamageFeedback(int yawByte, int pitchByte, int damage)
 
 	// the lower on health you are, the greater the view kick will be
 	health = cg.snap->ps.stats[STAT_HEALTH];
-	if (health < 40)
-	{
+	if (health < 40) {
 		scale = 1;
-	}
-	else
-	{
+	} else {
 		scale = 40.0 / health;
 	}
 	kick = damage * scale;
 
-	if (kick < 5)
-	{
+	if (kick < 5) {
 		kick = 5;
 	}
-	if (kick > 10)
-	{
+	if (kick > 10) {
 		kick = 10;
 	}
 
 	// find a free slot
-	for (slot = 0; slot < MAX_VIEWDAMAGE; slot++)
-	{
-		if (cg.viewDamage[slot].damageTime + cg.viewDamage[slot].damageDuration < cg.time)
-		{
+	for (slot = 0; slot < MAX_VIEWDAMAGE; slot++) {
+		if (cg.viewDamage[slot].damageTime + cg.viewDamage[slot].damageDuration < cg.time) {
 			break;
 		}
 	}
 
-	if (slot == MAX_VIEWDAMAGE)
-	{
+	if (slot == MAX_VIEWDAMAGE) {
 		return;     // no free slots, never override or splats will suddenly disappear
 
 	}
 	vd = &cg.viewDamage[slot];
 
 	// if yaw and pitch are both 255, make the damage always centered (falling, etc)
-	if (yawByte == 255 && pitchByte == 255)
-	{
+	if (yawByte == 255 && pitchByte == 255) {
 		vd->damageX    = 0;
 		vd->damageY    = 0;
 		cg.v_dmg_roll  = 0;
 		cg.v_dmg_pitch = -kick;
-	}
-	else
-	{
+	} else {
 		// positional
 		pitch = pitchByte / 255.0 * 360;
 		yaw   = yawByte / 255.0 * 360;
@@ -205,8 +183,7 @@ void CG_DamageFeedback(int yawByte, int pitchByte, int damage)
 		dir[1] = left;
 		dir[2] = 0;
 		dist   = VectorLength(dir);
-		if (dist < 0.1)
-		{
+		if (dist < 0.1) {
 			dist = 0.1;
 		}
 
@@ -214,8 +191,7 @@ void CG_DamageFeedback(int yawByte, int pitchByte, int damage)
 
 		cg.v_dmg_pitch = -kick * front;
 
-		if (front <= 0.1)
-		{
+		if (front <= 0.1) {
 			front = 0.1;
 		}
 		vd->damageX = crandom() * 0.3 + -left / front;
@@ -223,27 +199,22 @@ void CG_DamageFeedback(int yawByte, int pitchByte, int damage)
 	}
 
 	// clamp the position
-	if (vd->damageX > 1.0)
-	{
+	if (vd->damageX > 1.0) {
 		vd->damageX = 1.0;
 	}
-	if (vd->damageX < -1.0)
-	{
+	if (vd->damageX < -1.0) {
 		vd->damageX = -1.0;
 	}
 
-	if (vd->damageY > 1.0)
-	{
+	if (vd->damageY > 1.0) {
 		vd->damageY = 1.0;
 	}
-	if (vd->damageY < -1.0)
-	{
+	if (vd->damageY < -1.0) {
 		vd->damageY = -1.0;
 	}
 
 	// don't let the screen flashes vary as much
-	if (kick > 10)
-	{
+	if (kick > 10) {
 		kick = 10;
 	}
 	vd->damageValue    = kick;
@@ -264,8 +235,7 @@ CG_Respawn
 A respawn happened this snapshot
 ================
 */
-void CG_Respawn()
-{
+void CG_Respawn() {
 	cg.serverRespawning = qfalse;   // Arnout: just in case
 
 	// no error decay on player movement
@@ -296,14 +266,13 @@ void CG_Respawn()
 
 
 	// clear pmext
-	memset(&cg.pmext, 0, sizeof(cg.pmext));
+	memset(&cg.pmext, 0, sizeof (cg.pmext));
 
 	cg.pmext.bAutoReload = (cg_autoReload.integer > 0);
 
 	cgs.limboLoadoutSelected = qfalse;
 
-	if (cg.predictedPlayerState.stats[STAT_PLAYER_CLASS] == PC_COVERTOPS)
-	{
+	if (cg.predictedPlayerState.stats[STAT_PLAYER_CLASS] == PC_COVERTOPS) {
 		cg.pmext.silencedSideArm = 1;
 	}
 
@@ -321,11 +290,11 @@ extern char *eventnames[];
 CG_CheckPlayerstateEvents
 ==============
 */
-void CG_CheckPlayerstateEvents_wolf(playerState_t *ps, playerState_t *ops)
-{
+void CG_CheckPlayerstateEvents_wolf(playerState_t *ps, playerState_t *ops) {
 	int       i;
 	int       event;
 	centity_t *cent;
+
 /*
     if ( ps->externalEvent && ps->externalEvent != ops->externalEvent ) {
         cent = &cg_entities[ ps->clientNum ];
@@ -336,11 +305,9 @@ void CG_CheckPlayerstateEvents_wolf(playerState_t *ps, playerState_t *ops)
 */
 	cent = &cg.predictedPlayerEntity; // cg_entities[ ps->clientNum ];
 	// go through the predictable events buffer
-	for (i = ps->eventSequence - MAX_EVENTS ; i < ps->eventSequence ; i++)
-	{
+	for (i = ps->eventSequence - MAX_EVENTS ; i < ps->eventSequence ; i++) {
 		if (ps->events[i & (MAX_EVENTS - 1)] != ops->events[i & (MAX_EVENTS - 1)]
-		    || i >= ops->eventSequence)
-		{
+		    || i >= ops->eventSequence) {
 			event = ps->events[i & (MAX_EVENTS - 1)];
 
 			cent->currentState.event     = event;
@@ -350,14 +317,12 @@ void CG_CheckPlayerstateEvents_wolf(playerState_t *ps, playerState_t *ops)
 	}
 }
 
-void CG_CheckPlayerstateEvents(playerState_t *ps, playerState_t *ops)
-{
+void CG_CheckPlayerstateEvents(playerState_t *ps, playerState_t *ops) {
 	int       i;
 	int       event;
 	centity_t *cent;
 
-	if (ps->externalEvent && ps->externalEvent != ops->externalEvent)
-	{
+	if (ps->externalEvent && ps->externalEvent != ops->externalEvent) {
 		cent                         = &cg_entities[ps->clientNum];
 		cent->currentState.event     = ps->externalEvent;
 		cent->currentState.eventParm = ps->externalEventParm;
@@ -366,14 +331,12 @@ void CG_CheckPlayerstateEvents(playerState_t *ps, playerState_t *ops)
 
 	cent = &cg.predictedPlayerEntity; // cg_entities[ ps->clientNum ];
 	// go through the predictable events buffer
-	for (i = ps->eventSequence - MAX_EVENTS ; i < ps->eventSequence ; i++)
-	{
+	for (i = ps->eventSequence - MAX_EVENTS ; i < ps->eventSequence ; i++) {
 		// if we have a new predictable event
 		if (i >= ops->eventSequence
 		    // or the server told us to play another event instead of a predicted event we already issued
 		    // or something the server told us changed our prediction causing a different event
-		    || (i > ops->eventSequence - MAX_EVENTS && ps->events[i & (MAX_EVENTS - 1)] != ops->events[i & (MAX_EVENTS - 1)]))
-		{
+		    || (i > ops->eventSequence - MAX_EVENTS && ps->events[i & (MAX_EVENTS - 1)] != ops->events[i & (MAX_EVENTS - 1)])) {
 
 			event                        = ps->events[i & (MAX_EVENTS - 1)];
 			cent->currentState.event     = event;
@@ -392,26 +355,21 @@ void CG_CheckPlayerstateEvents(playerState_t *ps, playerState_t *ops)
 CG_CheckChangedPredictableEvents
 ==================
 */
-void CG_CheckChangedPredictableEvents(playerState_t *ps)
-{
+void CG_CheckChangedPredictableEvents(playerState_t *ps) {
 	int       i;
 	int       event;
 	centity_t *cent;
 
 	cent = &cg.predictedPlayerEntity;
-	for (i = ps->eventSequence - MAX_EVENTS ; i < ps->eventSequence ; i++)
-	{
+	for (i = ps->eventSequence - MAX_EVENTS ; i < ps->eventSequence ; i++) {
 		//
-		if (i >= cg.eventSequence)
-		{
+		if (i >= cg.eventSequence) {
 			continue;
 		}
 		// if this event is not further back in than the maximum predictable events we remember
-		if (i > cg.eventSequence - MAX_PREDICTED_EVENTS)
-		{
+		if (i > cg.eventSequence - MAX_PREDICTED_EVENTS) {
 			// if the new playerstate event is different from a previously predicted one
-			if (ps->events[i & (MAX_EVENTS - 1)] != cg.predictableEvents[i & (MAX_PREDICTED_EVENTS - 1)])
-			{
+			if (ps->events[i & (MAX_EVENTS - 1)] != cg.predictableEvents[i & (MAX_PREDICTED_EVENTS - 1)]) {
 
 				event                        = ps->events[i & (MAX_EVENTS - 1)];
 				cent->currentState.event     = event;
@@ -420,8 +378,7 @@ void CG_CheckChangedPredictableEvents(playerState_t *ps)
 
 				cg.predictableEvents[i & (MAX_PREDICTED_EVENTS - 1)] = event;
 
-				if (cg_showmiss.integer)
-				{
+				if (cg_showmiss.integer) {
 					CG_Printf("WARNING: changed predicted event\n");
 				}
 			}
@@ -434,13 +391,10 @@ void CG_CheckChangedPredictableEvents(playerState_t *ps)
 CG_CheckLocalSounds
 ==================
 */
-void CG_CheckLocalSounds(playerState_t *ps, playerState_t *ops)
-{
+void CG_CheckLocalSounds(playerState_t *ps, playerState_t *ops) {
 	// health changes of more than -1 should make pain sounds
-	if (ps->stats[STAT_HEALTH] < ops->stats[STAT_HEALTH] - 1)
-	{
-		if (ps->stats[STAT_HEALTH] > 0)
-		{
+	if (ps->stats[STAT_HEALTH] < ops->stats[STAT_HEALTH] - 1) {
+		if (ps->stats[STAT_HEALTH] > 0) {
 			CG_PainEvent(&cg.predictedPlayerEntity, ps->stats[STAT_HEALTH]);
 
 			cg.painTime = cg.time;
@@ -454,11 +408,9 @@ CG_TransitionPlayerState
 
 ===============
 */
-void CG_TransitionPlayerState(playerState_t *ps, playerState_t *ops)
-{
+void CG_TransitionPlayerState(playerState_t *ps, playerState_t *ops) {
 	// check for changing follow mode
-	if (ps->clientNum != ops->clientNum)
-	{
+	if (ps->clientNum != ops->clientNum) {
 		cg.thisFrameTeleport = qtrue;
 
 		// clear voicechat
@@ -469,21 +421,16 @@ void CG_TransitionPlayerState(playerState_t *ps, playerState_t *ops)
 		*ops = *ps;
 
 		// DHM - Nerve :: After Limbo, make sure and do a CG_Respawn
-		if (ps->clientNum == cg.clientNum)
-		{
+		if (ps->clientNum == cg.clientNum) {
 			ops->persistant[PERS_SPAWN_COUNT]--;
 		}
 	}
 
-	if (ps->eFlags & EF_FIRING)
-	{
+	if (ps->eFlags & EF_FIRING) {
 		cg.lastFiredWeaponTime = 0;
 		cg.weaponFireTime     += cg.frametime;
-	}
-	else
-	{
-		if (cg.weaponFireTime > 500 && cg.weaponFireTime)
-		{
+	} else {
+		if (cg.weaponFireTime > 500 && cg.weaponFireTime) {
 			cg.lastFiredWeaponTime = cg.time;
 		}
 
@@ -491,19 +438,16 @@ void CG_TransitionPlayerState(playerState_t *ps, playerState_t *ops)
 	}
 
 	// damage events (player is getting wounded)
-	if (ps->damageEvent != ops->damageEvent && ps->damageCount)
-	{
+	if (ps->damageEvent != ops->damageEvent && ps->damageCount) {
 		CG_DamageFeedback(ps->damageYaw, ps->damagePitch, ps->damageCount);
 	}
 
 	// respawning
-	if (ps->persistant[PERS_SPAWN_COUNT] != ops->persistant[PERS_SPAWN_COUNT])
-	{
+	if (ps->persistant[PERS_SPAWN_COUNT] != ops->persistant[PERS_SPAWN_COUNT]) {
 		CG_Respawn();
 	}
 
-	if (cg.mapRestart)
-	{
+	if (cg.mapRestart) {
 		CG_Respawn();
 		cg.mapRestart = qfalse;
 	}
@@ -513,33 +457,25 @@ void CG_TransitionPlayerState(playerState_t *ps, playerState_t *ops)
 	// check for going low on ammo
 	CG_CheckAmmo();
 
-	if (ps->eFlags & EF_PRONE_MOVING)
-	{
-		if (ps->weapon == WP_BINOCULARS)
-		{
-			if (ps->eFlags & EF_ZOOMING)
-			{
+	if (ps->eFlags & EF_PRONE_MOVING) {
+		if (ps->weapon == WP_BINOCULARS) {
+			if (ps->eFlags & EF_ZOOMING) {
 				trap_SendConsoleCommand("-zoom\n");
 			}
 		}
 
-		if (!(ops->eFlags & EF_PRONE_MOVING))
-		{
+		if (!(ops->eFlags & EF_PRONE_MOVING)) {
 			// ydnar: this screws up auto-switching when dynamite planted or grenade thrown/out of ammo
 			//%	CG_FinishWeaponChange( cg.weaponSelect, ps->nextWeapon );
 
 			cg.proneMovingTime = cg.time;
 		}
-	}
-	else if (ops->eFlags & EF_PRONE_MOVING)
-	{
+	} else if (ops->eFlags & EF_PRONE_MOVING) {
 		cg.proneMovingTime = -cg.time;
 	}
 
-	if (!(ps->eFlags & EF_PRONE) && ops->eFlags & EF_PRONE)
-	{
-		if (cg.weaponSelect == WP_MOBILE_MG42_SET)
-		{
+	if (!(ps->eFlags & EF_PRONE) && ops->eFlags & EF_PRONE) {
+		if (cg.weaponSelect == WP_MOBILE_MG42_SET) {
 			CG_FinishWeaponChange(cg.weaponSelect, ps->nextWeapon);
 		}
 	}
@@ -548,8 +484,7 @@ void CG_TransitionPlayerState(playerState_t *ps, playerState_t *ops)
 	CG_CheckPlayerstateEvents(ps, ops);
 
 	// smooth the ducking viewheight change
-	if (ps->viewheight != ops->viewheight)
-	{
+	if (ps->viewheight != ops->viewheight) {
 		cg.duckChange = ps->viewheight - ops->viewheight;
 		cg.duckTime   = cg.time;
 	}

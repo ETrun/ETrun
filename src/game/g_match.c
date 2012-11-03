@@ -33,20 +33,17 @@ If you have questions concerning this license or the applicable additional terms
 #include "../../etrun/ui/menudef.h"
 
 
-void G_initMatch(void)
-{
+void G_initMatch(void) {
 	int i;
 
-	for (i = TEAM_AXIS; i <= TEAM_ALLIES; i++)
-	{
+	for (i = TEAM_AXIS; i <= TEAM_ALLIES; i++) {
 		G_teamReset(i, qfalse);
 	}
 }
 
 
 // Setting initialization
-void G_loadMatchGame(void)
-{
+void G_loadMatchGame(void) {
 	unsigned int i, dwBlueOffset, dwRedOffset;
 	unsigned int aRandomValues[MAX_REINFSEEDS];
 	char         strReinfSeeds[MAX_STRING_CHARS];
@@ -68,8 +65,7 @@ void G_loadMatchGame(void)
 	strcpy(strReinfSeeds, va("%d %d", (dwBlueOffset << REINF_BLUEDELT) + (rand() % (1 << REINF_BLUEDELT)),
 	                         (dwRedOffset << REINF_REDDELT)  + (rand() % (1 << REINF_REDDELT))));
 
-	for (i = 0; i < MAX_REINFSEEDS; i++)
-	{
+	for (i = 0; i < MAX_REINFSEEDS; i++) {
 		aRandomValues[i] = (rand() % REINF_RANGE) * aReinfSeeds[i];
 		strcat(strReinfSeeds, va(" %d", aRandomValues[i]));
 	}
@@ -79,36 +75,30 @@ void G_loadMatchGame(void)
 
 
 // Simple alias for sure-fire print :)
-void G_printFull(char *str, gentity_t *ent)
-{
-	if (ent != NULL)
-	{
+void G_printFull(char *str, gentity_t *ent) {
+	if (ent != NULL) {
 		CP(va("print \"%s\n\"", str));
 		CP(va("cp \"%s\n\"", str));    // #fixme, prints "cp" :o
-	}
-	else
-	{
+	} else {
 		AP(va("print \"%s\n\"", str));
 		AP(va("cp \"%s\n\"", str));
 	}
 }
 
 // Plays specified sound globally.
-void G_globalSound(char *sound)
-{
+void G_globalSound(char *sound) {
 	gentity_t *te = G_TempEntity(level.intermission_origin, EV_GLOBAL_SOUND);
+
 	te->s.eventParm = G_SoundIndex(sound);
 	te->r.svFlags  |= SVF_BROADCAST;
 }
 
 
-void G_delayPrint(gentity_t *dpent)
-{
+void G_delayPrint(gentity_t *dpent) {
 	int      think_next = 0;
 	qboolean fFree      = qtrue;
 
-	switch (dpent->spawnflags)
-	{
+	switch (dpent->spawnflags) {
 	case DP_PAUSEINFO:
 	{
 		break;
@@ -116,18 +106,14 @@ void G_delayPrint(gentity_t *dpent)
 
 	case DP_UNPAUSING:
 	{
-		if (level.match_pause == PAUSE_UNPAUSING)
-		{
+		if (level.match_pause == PAUSE_UNPAUSING) {
 			int cSeconds = 11 * 1000 - (level.time - dpent->timestamp);
 
-			if (cSeconds > 1000)
-			{
+			if (cSeconds > 1000) {
 				AP(va("cp \"^3Match resuming in ^1%d^3 seconds!\n\"", cSeconds / 1000));
 				think_next = level.time + 1000;
 				fFree      = qfalse;
-			}
-			else
-			{
+			} else {
 				level.match_pause = PAUSE_NONE;
 				G_globalSound("sound/osp/fight.wav");
 				G_printFull("^1FIGHT!", NULL);
@@ -144,8 +130,7 @@ void G_delayPrint(gentity_t *dpent)
 	}
 
 	dpent->nextthink = think_next;
-	if (fFree)
-	{
+	if (fFree) {
 		dpent->think = 0;
 		G_FreeEntity(dpent);
 	}
@@ -163,8 +148,7 @@ static char *pszDPInfo[] =
 	"DPRINTF_UNK5"
 };
 
-void G_spawnPrintf(int print_type, int print_time, gentity_t *owner)
-{
+void G_spawnPrintf(int print_type, int print_time, gentity_t *owner) {
 	gentity_t *ent = G_Spawn();
 
 	ent->classname  = pszDPInfo[print_type];
@@ -182,8 +166,7 @@ void G_spawnPrintf(int print_type, int print_time, gentity_t *owner)
 }
 
 // Dumps end-of-match info
-void G_matchInfoDump(unsigned int dwDumpType)
-{
+void G_matchInfoDump(unsigned int dwDumpType) {
 	int       i, ref;
 	gentity_t *ent;
 	gclient_t *cl;
@@ -191,39 +174,30 @@ void G_matchInfoDump(unsigned int dwDumpType)
 	// Nico, silent GCC
 	dwDumpType = dwDumpType;
 
-	for (i = 0; i < level.numConnectedClients; i++)
-	{
+	for (i = 0; i < level.numConnectedClients; i++) {
 		ref = level.sortedClients[i];
 		ent = &g_entities[ref];
 		cl  = ent->client;
 
-		if (cl->pers.connected != CON_CONNECTED)
-		{
+		if (cl->pers.connected != CON_CONNECTED) {
 			continue;
 		}
 	}
 }
 
 // Update configstring for vote info
-int G_checkServerToggle(vmCvar_t *cv)
-{
+int G_checkServerToggle(vmCvar_t *cv) {
 	int nFlag;
 
-	if (cv == &g_antilag)
-	{
+	if (cv == &g_antilag) {
 		nFlag = CV_SVS_ANTILAG;
-	}
-	else
-	{
+	} else {
 		return(qfalse);
 	}
 
-	if (cv->integer > 0)
-	{
+	if (cv->integer > 0) {
 		level.server_settings |= nFlag;
-	}
-	else
-	{
+	} else {
 		level.server_settings &= ~nFlag;
 	}
 

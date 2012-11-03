@@ -2,36 +2,31 @@
 #include "g_api.h"
 
 // Nico, ETrun login command
-void Cmd_Login_f(gentity_t *ent)
-{
+void Cmd_Login_f(gentity_t *ent) {
 	char token[MAX_QPATH];
 	char *result = NULL;
 	int  i       = 0;
 
 	// Check if API is used
-	if (!g_useAPI.integer)
-	{
+	if (!g_useAPI.integer) {
 		CP("cp \"Login is disabled on this server.\n\"");
 		return;
 	}
 
-	if (!ent || !ent->client)
-	{
+	if (!ent || !ent->client) {
 		G_DPrintf("Cmd_Login_f: invalid ent: %d\n", (int)ent);
 		return;
 	}
 
 	// Check if already logged in
-	if (ent->client->sess.logged)
-	{
+	if (ent->client->sess.logged) {
 		CP("cp \"You are already logged in!\n\"");
 		G_DPrintf("Cmd_Login_f: client already logged in\n");
 		return;
 	}
 
 	// Nico, reset saves
-	for (i = 0; i < MAX_SAVED_POSITIONS; ++i)
-	{
+	for (i = 0; i < MAX_SAVED_POSITIONS; ++i) {
 		ent->client->sess.alliesSaves[i].valid  = qfalse;
 		ent->client->sess.axisSaves[i].valid    = qfalse;
 		ent->client->sess.alliesSaves2[i].valid = qfalse;
@@ -39,45 +34,37 @@ void Cmd_Login_f(gentity_t *ent)
 	}
 
 	// Nico, kill player
-	if (ent->client->sess.sessionTeam != TEAM_SPECTATOR)
-	{
+	if (ent->client->sess.sessionTeam != TEAM_SPECTATOR) {
 		player_die(ent, ent, ent, 100000, MOD_SUICIDE);
 	}
 
-	result = malloc(RESPONSE_MAX_SIZE * sizeof(char));
+	result = malloc(RESPONSE_MAX_SIZE * sizeof (char));
 
-	if (!result)
-	{
+	if (!result) {
 		G_Error("Cmd_Login_f: malloc failed\n");
 	}
 
 	Q_strncpyz(token, ent->client->pers.authToken, MAX_QPATH);
 
-	if (strlen(token) == 0)
-	{
+	if (strlen(token) == 0) {
 		CP("cp \"Empty auth token!\n\"");
 		G_DPrintf("Cmd_Login_f: empty_token\n");
 		free(result);
-	}
-	else
-	{
+	} else {
 		G_API_login(result, ent, token);
 		// Do not free result here!
 	}
 }
 
 // Nico, ETrun logout command
-void Cmd_Logout_f(gentity_t *ent)
-{
-	if (!ent || !ent->client)
-	{
+void Cmd_Logout_f(gentity_t *ent) {
+	if (!ent || !ent->client) {
 		G_DPrintf("Cmd_Login_f: invalid ent: %d\n", (int)ent);
 		return;
 	}
 
 	// Check if already logged in
-	if (!ent->client->sess.logged)
-	{
+	if (!ent->client->sess.logged) {
 		CP("cp \"You are not logged in!\n\"");
 		return;
 	}
@@ -91,21 +78,18 @@ void Cmd_Logout_f(gentity_t *ent)
 }
 
 // Nico, records command
-void Cmd_Records_f(gentity_t *ent)
-{
+void Cmd_Records_f(gentity_t *ent) {
 	char *buf = NULL;
 
 	// Check if API is used
-	if (!g_useAPI.integer)
-	{
+	if (!g_useAPI.integer) {
 		CP("cp \"This command is disabled on this server.\n\"");
 		return;
 	}
 
-	buf = malloc(RESPONSE_MAX_SIZE * sizeof(char));
+	buf = malloc(RESPONSE_MAX_SIZE * sizeof (char));
 
-	if (!buf)
-	{
+	if (!buf) {
 		G_Error("Cmd_Records_f: malloc failed\n");
 	}
 
@@ -115,31 +99,27 @@ void Cmd_Records_f(gentity_t *ent)
 }
 
 // Nico, load checkpoints command
-void Cmd_LoadCheckpoints_f(gentity_t *ent)
-{
-	int  argc           = 0;
-	char userName[MAX_QPATH]     = { 0 };
-	char runName[MAX_QPATH]     = { 0 };
-	int  runNum         = -1;
-	int  i              = 0;
+void Cmd_LoadCheckpoints_f(gentity_t *ent) {
+	int  argc                = 0;
+	char userName[MAX_QPATH] = { 0 };
+	char runName[MAX_QPATH]  = { 0 };
+	int  runNum              = -1;
+	int  i                   = 0;
 
 	// Check if level is timerun
-	if (!level.isTimerun)
-	{
+	if (!level.isTimerun) {
 		CP("cp \"There is no timerun on this map.\n\"");
 		return;
 	}
 
 	// Check if API is used
-	if (!g_useAPI.integer)
-	{
+	if (!g_useAPI.integer) {
 		CP("cp \"This command is disabled on this server.\n\"");
 		return;
 	}
 
 	// Check if client is logged in
-	if (!ent->client->sess.logged)
-	{
+	if (!ent->client->sess.logged) {
 		CP("cp \"You must login to use this command.\n\"");
 		return;
 	}
@@ -147,14 +127,11 @@ void Cmd_LoadCheckpoints_f(gentity_t *ent)
 	// Parse options
 	argc = trap_Argc();
 
-	if (argc == 1 || argc > 2)
-	{
+	if (argc == 1 || argc > 2) {
 		CP("print \"\n  ^8Usage: loadCheckpoints [userName] [run name or id]\n\"");
 		CP("print \"  ^8Available runs:\n\"");
-		for (i = 0; i < MAX_TIMERUNS; ++i)
-		{
-			if (level.timerunsNames[i])
-			{
+		for (i = 0; i < MAX_TIMERUNS; ++i) {
+			if (level.timerunsNames[i]) {
 				CP(va("print \"  ^8#%d => %s\n\"", i, level.timerunsNames[i]));
 			}
 		}
@@ -162,33 +139,26 @@ void Cmd_LoadCheckpoints_f(gentity_t *ent)
 		CP("print \"  ^8No run specified, loading your own checkpoints for run #0...\n\n\"");
 	}
 
-	if (argc > 1)
-	{
-		trap_Argv(1, userName, sizeof(userName));
+	if (argc > 1) {
+		trap_Argv(1, userName, sizeof (userName));
 	}
-	if (strlen(userName) == 0)
-	{
+	if (strlen(userName) == 0) {
 		sprintf(userName, "0");
 	}
 
-	if (argc > 2)
-	{
-		trap_Argv(2, runName, sizeof(runName));
+	if (argc > 2) {
+		trap_Argv(2, runName, sizeof (runName));
 		// Find by run name
-		for (i = 0; i < MAX_TIMERUNS; ++i)
-		{
-			if (!Q_stricmp(level.timerunsNames[i], runName))
-			{
+		for (i = 0; i < MAX_TIMERUNS; ++i) {
+			if (!Q_stricmp(level.timerunsNames[i], runName)) {
 				runNum = i;
 				break;
 			}
 		}
 	}
-	if (runNum == -1)// Not found by name
-	{
+	if (runNum == -1) { // Not found by name
 		runNum = atoi(runName);
-		if (runNum < 0 || runNum >= MAX_TIMERUNS || !level.timerunsNames[runNum])
-		{
+		if (runNum < 0 || runNum >= MAX_TIMERUNS || !level.timerunsNames[runNum]) {
 			runNum = 0;
 		}
 	}
@@ -201,14 +171,12 @@ void Cmd_LoadCheckpoints_f(gentity_t *ent)
 // level is timerun
 // API is used
 // player login status
-void Cmd_LoadCheckpoints_real(gentity_t *ent, char *userName, int runNum)
-{
-	char *buf           = NULL;
+void Cmd_LoadCheckpoints_real(gentity_t *ent, char *userName, int runNum) {
+	char *buf = NULL;
 
-	buf = malloc(RESPONSE_MAX_SIZE * sizeof(char));
+	buf = malloc(RESPONSE_MAX_SIZE * sizeof (char));
 
-	if (!buf)
-	{
+	if (!buf) {
 		G_Error("Cmd_LoadCheckpoints_real: malloc failed\n");
 	}
 
@@ -219,8 +187,7 @@ void Cmd_LoadCheckpoints_real(gentity_t *ent, char *userName, int runNum)
 
 // Nico, rank command
 // /rank [userName] [mapName] [runName] [physicsName]
-void Cmd_Rank_f(gentity_t *ent)
-{
+void Cmd_Rank_f(gentity_t *ent) {
 	char *buf                   = NULL;
 	char userName[MAX_QPATH]    = { 0 };
 	char mapName[MAX_QPATH]     = { 0 };
@@ -229,54 +196,44 @@ void Cmd_Rank_f(gentity_t *ent)
 	int  argc                   = 0;
 
 	// Check if API is used
-	if (!g_useAPI.integer)
-	{
+	if (!g_useAPI.integer) {
 		CP("cp \"This command is disabled on this server.\n\"");
 		return;
 	}
 
 	// Parse options
 	argc = trap_Argc();
-	if (argc >= 1)// Nico, #fixme, why >= ?
-	{
-		trap_Argv(1, userName, sizeof(userName));
+	if (argc >= 1) { // Nico, #fixme, why >= ?
+		trap_Argv(1, userName, sizeof (userName));
 	}
-	if (strlen(userName) == 0)
-	{
+	if (strlen(userName) == 0) {
 		sprintf(userName, "0");
 	}
 
-	if (argc >= 2)
-	{
-		trap_Argv(2, mapName, sizeof(mapName));
+	if (argc >= 2) {
+		trap_Argv(2, mapName, sizeof (mapName));
 	}
-	if (strlen(mapName) == 0)
-	{
+	if (strlen(mapName) == 0) {
 		sprintf(mapName, "0");
 	}
 
-	if (argc >= 3)
-	{
-		trap_Argv(3, runName, sizeof(runName));
+	if (argc >= 3) {
+		trap_Argv(3, runName, sizeof (runName));
 	}
-	if (strlen(runName) == 0)
-	{
+	if (strlen(runName) == 0) {
 		sprintf(runName, "0");
 	}
 
-	if (argc >= 4)
-	{
-		trap_Argv(4, physicsName, sizeof(physicsName));
+	if (argc >= 4) {
+		trap_Argv(4, physicsName, sizeof (physicsName));
 	}
-	if (strlen(physicsName) == 0)
-	{
+	if (strlen(physicsName) == 0) {
 		sprintf(physicsName, "0");
 	}
 
-	buf = malloc(RESPONSE_MAX_SIZE * sizeof(char));
+	buf = malloc(RESPONSE_MAX_SIZE * sizeof (char));
 
-	if (!buf)
-	{
+	if (!buf) {
 		G_Error("Cmd_Rank_f: malloc failed\n");
 	}
 

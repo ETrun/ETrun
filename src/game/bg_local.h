@@ -45,8 +45,7 @@ If you have questions concerning this license or the applicable additional terms
 // all of the locals will be zeroed before each
 // pmove, just to make damn sure we don't have
 // any differences when running on client or server
-typedef struct
-{
+typedef struct {
 	vec3_t forward, right, up;
 	float frametime;
 

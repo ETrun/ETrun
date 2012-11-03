@@ -139,8 +139,7 @@ If you have questions concerning this license or the applicable additional terms
 #define WSTATE_SHUTDOWN     0x02    // Window is shutting down with effects
 #define WSTATE_OFF          0x04    // Window is completely shutdown
 
-typedef struct
-{
+typedef struct {
 	vec4_t colorBorder;         // Window border color
 	vec4_t colorBackground;     // Window fill color
 	vec4_t colorBackground2;    // Window fill color2 (for flashing)
@@ -172,14 +171,12 @@ typedef struct
 	                            //    negative values will align the window from the bottom minus the (window height + offset(y))
 } cg_window_t;
 
-typedef struct
-{
+typedef struct {
 	qboolean fActive;
 	char str[MAX_STRING_POOL_LENGTH];
 } cg_string_t;
 
-typedef struct
-{
+typedef struct {
 	int activeWindows[MAX_WINDOW_COUNT];                // List of active windows
 	int numActiveWindows;                               // Number of active windows in use
 	cg_window_t window[MAX_WINDOW_COUNT];           // Static allocation of all windows
@@ -197,8 +194,7 @@ typedef struct
 
 // when changing animation, set animationTime to frameTime + lerping time
 // The current lerp will finish out, then it will lerp to the new animation
-typedef struct
-{
+typedef struct {
 	int oldFrame;
 	int oldFrameTime;               // time when ->oldFrame was exactly on
 	qhandle_t oldFrameModel;
@@ -228,8 +224,7 @@ typedef struct
 
 } lerpFrame_t;
 
-typedef struct
-{
+typedef struct {
 	lerpFrame_t legs, torso;
 	lerpFrame_t head;
 	lerpFrame_t weap;       //----(SA)	autonomous weapon animations
@@ -254,8 +249,7 @@ typedef struct
 
 //=================================================
 
-typedef struct tag_s
-{
+typedef struct tag_s {
 	vec3_t origin;
 	vec3_t axis[3];
 } tag_t;
@@ -263,8 +257,7 @@ typedef struct tag_s
 
 // centity_t have a direct corespondence with gentity_t in the game, but
 // only the entityState_t is directly communicated to the cgame
-typedef struct centity_s
-{
+typedef struct centity_s {
 	entityState_t currentState;     // from cg.frame
 	entityState_t nextState;        // from cg.nextFrame, if available
 	qboolean interpolate;           // true if next is valid to interpolate to
@@ -353,8 +346,7 @@ typedef struct centity_s
 // local entities are created as a result of events or predicted actions,
 // and live independantly from all server transmitted entities
 
-typedef struct markPoly_s
-{
+typedef struct markPoly_s {
 	struct markPoly_s *prevMark, *nextMark;
 	int time;
 	qhandle_t markShader;
@@ -367,8 +359,7 @@ typedef struct markPoly_s
 } markPoly_t;
 
 //----(SA)	moved in from cg_view.c
-typedef enum
-{
+typedef enum {
 	ZOOM_NONE,
 	ZOOM_BINOC,
 	ZOOM_SNIPER,
@@ -378,8 +369,7 @@ typedef enum
 	ZOOM_MAX_ZOOMS
 } EZoom_t;
 
-typedef enum
-{
+typedef enum {
 	ZOOM_OUT,   // widest angle
 	ZOOM_IN // tightest angle (approaching 0)
 } EZoomInOut_t;
@@ -388,8 +378,7 @@ extern float zoomTable[ZOOM_MAX_ZOOMS][2];
 
 //----(SA)	end
 
-typedef enum
-{
+typedef enum {
 	LE_MARK,
 	LE_EXPLOSION,
 	LE_SPRITE_EXPLOSION,
@@ -406,8 +395,7 @@ typedef enum
 	LE_EMITTER
 } leType_t;
 
-typedef enum
-{
+typedef enum {
 	LEF_PUFF_DONT_SCALE = 0x0001            // do not scale size over time
 	, LEF_TUMBLE        = 0x0002            // tumble over time, used for ejecting shells
 	, LEF_NOFADEALPHA   = 0x0004            // Ridah, sparks
@@ -415,14 +403,12 @@ typedef enum
 	, LEF_TUMBLE_SLOW   = 0x0010            // slow down tumble on hitting ground
 } leFlag_t;
 
-typedef enum
-{
+typedef enum {
 	LEMT_NONE,
 	LEMT_BLOOD
 } leMarkType_t;         // fragment local entities can leave marks on walls
 
-typedef enum
-{
+typedef enum {
 	LEBS_NONE,
 	LEBS_BLOOD,
 	LEBS_ROCK,
@@ -432,8 +418,7 @@ typedef enum
 	LEBS_BONE
 } leBounceSoundType_t;  // fragment local entities can make sounds on impacts
 
-typedef struct localEntity_s
-{
+typedef struct localEntity_s {
 	struct localEntity_s *prev, *next;
 	leType_t leType;
 	int leFlags;
@@ -483,8 +468,7 @@ typedef struct localEntity_s
 //======================================================================
 
 
-typedef struct
-{
+typedef struct {
 	int client;
 	int ping;
 	int time;
@@ -519,8 +503,7 @@ typedef struct
 // this is regenerated each time a client's configstring changes,
 // usually as a result of a userinfo (name, model, etc) change
 #define MAX_CUSTOM_SOUNDS   32
-typedef struct clientInfo_s
-{
+typedef struct clientInfo_s {
 	qboolean infoValid;
 
 	int clientNum;
@@ -581,8 +564,7 @@ typedef struct clientInfo_s
 
 } clientInfo_t;
 
-typedef enum
-{
+typedef enum {
 	W_PART_1,
 	W_PART_2,
 	W_PART_3,
@@ -593,23 +575,20 @@ typedef enum
 	W_MAX_PARTS
 } barrelType_t;
 
-typedef enum
-{
+typedef enum {
 	W_TP_MODEL,         //	third person model
 	W_FP_MODEL,         //	first person model
 	W_PU_MODEL,         //	pickup model
 	W_NUM_TYPES
 } modelViewType_t;
 
-typedef struct partModel_s
-{
+typedef struct partModel_s {
 	char tagName[MAX_QPATH];
 	qhandle_t model;
 	qhandle_t skin[3];              // 0: neutral, 1: axis, 2: allied
 } partModel_t;
 
-typedef struct weaponModel_s
-{
+typedef struct weaponModel_s {
 	qhandle_t model;
 	qhandle_t skin[3];              // 0: neutral, 1: axis, 2: allied
 } weaponModel_t;
@@ -617,8 +596,7 @@ typedef struct weaponModel_s
 // each WP_* weapon enum has an associated weaponInfo_t
 // that contains media references necessary to present the
 // weapon and its effects
-typedef struct weaponInfo_s
-{
+typedef struct weaponInfo_s {
 	qboolean registered;
 
 	animation_t weapAnimations[MAX_WP_ANIMATIONS];
@@ -668,22 +646,19 @@ typedef struct weaponInfo_s
 // each IT_* item has an associated itemInfo_t
 // that constains media references necessary to present the
 // item and its effects
-typedef struct
-{
+typedef struct {
 	qboolean registered;
 	qhandle_t models[MAX_ITEM_MODELS];
 	qhandle_t icons[MAX_ITEM_ICONS];
 } itemInfo_t;
 
 
-typedef struct
-{
+typedef struct {
 	int itemNum;
 } powerupInfo_t;
 
 #define MAX_VIEWDAMAGE  8
-typedef struct
-{
+typedef struct {
 	int damageTime, damageDuration;
 	float damageX, damageY, damageValue;
 } viewDamage_t;
@@ -704,14 +679,12 @@ typedef struct
 
 #define MAX_SOUNDSCRIPT_SOUNDS 16
 
-typedef struct soundScriptHandle_s
-{
+typedef struct soundScriptHandle_s {
 	char filename[MAX_QPATH];
 	sfxHandle_t sfxHandle;
 } soundScriptHandle_t;
 
-typedef struct soundScriptSound_s
-{
+typedef struct soundScriptSound_s {
 	soundScriptHandle_t sounds[MAX_SOUNDSCRIPT_SOUNDS];
 
 	int numsounds;
@@ -720,8 +693,7 @@ typedef struct soundScriptSound_s
 	struct soundScriptSound_s *next;
 } soundScriptSound_t;
 
-typedef struct soundScript_s
-{
+typedef struct soundScript_s {
 	int index;
 	char name[MAX_QPATH];
 	int channel;
@@ -735,8 +707,7 @@ typedef struct soundScript_s
 	struct soundScript_s *nextHash;         // next soundScript in our hashTable list position
 } soundScript_t;
 
-typedef struct
-{
+typedef struct {
 	int x, y, z;
 	int yaw;
 	int data;
@@ -750,8 +721,7 @@ typedef struct
 #define MAX_NUM_BUDDY  6
 // END		xkan, 8/29/2002
 
-typedef enum
-{
+typedef enum {
 	SHOW_OFF,
 	SHOW_SHUTDOWN,
 	SHOW_ON
@@ -759,8 +729,7 @@ typedef enum
 
 #define MAX_BACKUP_STATES (CMD_BACKUP + 2)
 
-typedef struct
-{
+typedef struct {
 	int clientFrame;                // incremented each frame
 
 	int clientNum;
@@ -1163,8 +1132,7 @@ typedef struct
 
 // Nico, used to show pressed keys
 #define NUM_KEYS_SETS       3
-typedef struct
-{
+typedef struct {
 	qhandle_t ForwardPressedShader;
 	qhandle_t ForwardNotPressedShader;
 	qhandle_t BackwardPressedShader;
@@ -1187,8 +1155,7 @@ typedef struct
 // loaded at gamestate time are stored in cgMedia_t
 // Other media that can be tied to clients, weapons, or items are
 // stored in the clientInfo_t, itemInfo_t, weaponInfo_t, and powerupInfo_t
-typedef struct
-{
+typedef struct {
 	qhandle_t charsetShader;
 	// JOSEPH 4-17-00
 	qhandle_t menucharsetShader;
@@ -1527,8 +1494,7 @@ typedef struct
 	qhandle_t CGazArrow;
 } cgMedia_t;
 
-typedef struct
-{
+typedef struct {
 	char description[1024];
 	char axiswintext[1024];
 	char alliedwintext[1024];
@@ -1536,8 +1502,7 @@ typedef struct
 	vec2_t mappos;
 } arenaInfo_t;
 
-typedef struct
-{
+typedef struct {
 	char campaignDescription[2048];
 	char campaignName[128];
 	char mapnames[MAX_MAPS_PER_CAMPAIGN][MAX_QPATH];
@@ -1552,16 +1517,14 @@ typedef struct
 
 #define MAX_STATIC_GAMEMODELS   1024
 
-typedef struct cg_gamemodel_s
-{
+typedef struct cg_gamemodel_s {
 	qhandle_t model;
 	vec3_t org;
 	vec3_t axes[3];
 	vec_t radius;
 } cg_gamemodel_t;
 
-typedef struct oidInfo_s
-{
+typedef struct oidInfo_s {
 	int spawnflags;
 	qhandle_t customimageallies;
 	qhandle_t customimageaxis;
@@ -1575,8 +1538,7 @@ typedef struct oidInfo_s
 // loaded or calculated from the gamestate.  It will NOT
 // be cleared when a tournement restart is done, allowing
 // all clients to begin playing instantly
-typedef struct
-{
+typedef struct {
 	gameState_t gameState;              // gamestate from server
 	glconfig_t glconfig;                // rendering configuration
 	float screenXScale;                 // derived from glconfig
@@ -1730,8 +1692,7 @@ typedef struct
 } cgs_t;
 
 // Nico, score structure for scoreboard
-typedef struct
-{
+typedef struct {
 	int scoreId;
 	int clientNum;
 	char name[MAX_QPATH];
@@ -2429,15 +2390,13 @@ qboolean CG_DrawScoreboard(void);
 
 void CG_CommandCentreClick(int key);
 
-typedef struct
-{
+typedef struct {
 	int pendingAnimationTime;
 	const char *pendingTorsoAnim;
 	const char *pendingLegsAnim;
 } pendingAnimation_t;
 
-typedef struct
-{
+typedef struct {
 	lerpFrame_t legs;
 	lerpFrame_t torso;
 
@@ -2455,8 +2414,7 @@ typedef struct
 	int classNum;
 } playerInfo_t;
 
-typedef enum
-{
+typedef enum {
 	ANIM_IDLE,
 	ANIM_RAISE,
 } animType_t;
@@ -2802,8 +2760,7 @@ void CG_LimboMenu_f(void);
 
 animation_t *CG_GetLimboAnimation(playerInfo_t *pi, const char *name);
 
-typedef struct
-{
+typedef struct {
 	weapon_t weapindex;
 	const char *desc;
 } weaponType_t;
@@ -2989,8 +2946,7 @@ weapon_t            CG_LimboPanel_GetSelectedWeaponForSlot(int index);
 // cg_commandmap.c
 //
 // A scissored map always has the player in the center
-typedef struct mapScissor_s
-{
+typedef struct mapScissor_s {
 	qboolean circular;  // if qfalse, rect
 	float zoomFactor;
 	vec2_t tl;

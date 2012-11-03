@@ -48,23 +48,19 @@ int                       numSoundScriptSounds = 0;
 return a hash value for the filename
 ================
 */
-static long generateHashValue(const char *fname)
-{
+static long generateHashValue(const char *fname) {
 	int  i;
 	long hash;
 	char letter;
 
 	hash = 0;
 	i    = 0;
-	while (fname[i] != '\0')
-	{
+	while (fname[i] != '\0') {
 		letter = tolower(fname[i]);
-		if (letter == '.')
-		{
+		if (letter == '.') {
 			break;                          // don't include extension
 		}
-		if (letter == '\\')
-		{
+		if (letter == '\\') {
 			letter = '/';                   // damn path names
 		}
 		hash += (long)(letter) * (i + 119);
@@ -81,34 +77,27 @@ CG_SoundScriptPrecache
   returns the index+1 of the script in the global list, for fast calling
 ==============
 */
-int CG_SoundScriptPrecache(const char *name)
-{
+int CG_SoundScriptPrecache(const char *name) {
 	soundScriptSound_t *scriptSound;
 	long               hash;
 	char               *s;
 	soundScript_t      *sound;
 	int                i;
 
-	if (!name || !name[0])
-	{
+	if (!name || !name[0]) {
 		return 0;
 	}
 
 	hash = generateHashValue(name);
 
 	s = (char *)name;
-	for (sound = hashTable[hash]; sound; sound = sound->nextHash)
-	{
-		if (!Q_stricmp(s, sound->name))
-		{
+	for (sound = hashTable[hash]; sound; sound = sound->nextHash) {
+		if (!Q_stricmp(s, sound->name)) {
 			// found a match, precache these sounds
 			scriptSound = sound->soundList;
-			if (!sound->streaming)
-			{
-				for ( ; scriptSound; scriptSound = scriptSound->next)
-				{
-					for (i = 0; i < scriptSound->numsounds; i++)
-					{
+			if (!sound->streaming) {
+				for ( ; scriptSound; scriptSound = scriptSound->next) {
+					for (i = 0; i < scriptSound->numsounds; i++) {
 						scriptSound->sounds[i].sfxHandle = 0;
 					}
 				}
@@ -125,87 +114,69 @@ int CG_SoundScriptPrecache(const char *name)
 CG_SoundPickOldestRandomSound
 ==============
 */
-int CG_SoundPickOldestRandomSound(soundScript_t *sound, vec3_t org, int entnum)
-{
+int CG_SoundPickOldestRandomSound(soundScript_t *sound, vec3_t org, int entnum) {
 	int                oldestTime = 0; // TTimo: init
 	soundScriptSound_t *oldestSound;
 	soundScriptSound_t *scriptSound;
 
 	oldestSound = NULL;
 	scriptSound = sound->soundList;
-	while (scriptSound)
-	{
-		if (!oldestSound || (scriptSound->lastPlayed < oldestTime))
-		{
+	while (scriptSound) {
+		if (!oldestSound || (scriptSound->lastPlayed < oldestTime)) {
 			oldestTime  = scriptSound->lastPlayed;
 			oldestSound = scriptSound;
 		}
 		scriptSound = scriptSound->next;
 	}
 
-	if (oldestSound)
-	{
+	if (oldestSound) {
 		int pos = rand() % oldestSound->numsounds;
 
 		// play this sound
-		if (!sound->streaming)
-		{
-			if (!oldestSound->sounds[pos].sfxHandle)
-			{
+		if (!sound->streaming) {
+			if (!oldestSound->sounds[pos].sfxHandle) {
 				oldestSound->sounds[pos].sfxHandle = trap_S_RegisterSound(oldestSound->sounds[pos].filename, qfalse);   // FIXME: make compressed settable through the soundscript
 			}
 			trap_S_StartSound(org, entnum, sound->channel, oldestSound->sounds[pos].sfxHandle);
 			return trap_S_GetSoundLength(oldestSound->sounds[pos].sfxHandle);
-		}
-		else
-		{
+		} else {
 			return trap_S_StartStreamingSound(oldestSound->sounds[pos].filename, sound->looping ? oldestSound->sounds[pos].filename : NULL, entnum, sound->channel, sound->attenuation);
 		}
 		oldestSound->lastPlayed = cg.time;
-	}
-	else
-	{
+	} else {
 		CG_Error("Unable to locate a valid sound for soundScript: %s\n", sound->name);
 	}
 
 	return 0;
 }
 
-void CG_AddBufferedSoundScript(soundScript_t *sound)
-{
-	if (cg.numbufferedSoundScripts >= MAX_BUFFERED_SOUNDSCRIPTS)
-	{
+void CG_AddBufferedSoundScript(soundScript_t *sound) {
+	if (cg.numbufferedSoundScripts >= MAX_BUFFERED_SOUNDSCRIPTS) {
 		return;
 	}
 
 	cg.bufferSoundScripts[cg.numbufferedSoundScripts++] = sound;
 
-	if (cg.numbufferedSoundScripts == 1)
-	{
+	if (cg.numbufferedSoundScripts == 1) {
 		cg.bufferedSoundScriptEndTime = cg.time + CG_SoundPickOldestRandomSound(cg.bufferSoundScripts[0], NULL, -1);
 	}
 }
 
-void CG_UpdateBufferedSoundScripts(void)
-{
+void CG_UpdateBufferedSoundScripts(void) {
 	int i;
 
-	if (!cg.numbufferedSoundScripts)
-	{
+	if (!cg.numbufferedSoundScripts) {
 		return;
 	}
 
-	if (cg.time > cg.bufferedSoundScriptEndTime)
-	{
-		for (i = 1; i < MAX_BUFFERED_SOUNDSCRIPTS; i++)
-		{
+	if (cg.time > cg.bufferedSoundScriptEndTime) {
+		for (i = 1; i < MAX_BUFFERED_SOUNDSCRIPTS; i++) {
 			cg.bufferSoundScripts[i - 1] = cg.bufferSoundScripts[i];
 		}
 
 		cg.numbufferedSoundScripts--;
 
-		if (!cg.numbufferedSoundScripts)
-		{
+		if (!cg.numbufferedSoundScripts) {
 			return;
 		}
 
@@ -220,14 +191,12 @@ CG_SoundPlaySoundScript
   returns qtrue is a script is found
 ==============
 */
-int CG_SoundPlaySoundScript(const char *name, vec3_t org, int entnum, qboolean buffer)
-{
+int CG_SoundPlaySoundScript(const char *name, vec3_t org, int entnum, qboolean buffer) {
 	long          hash;
 	char          *s;
 	soundScript_t *sound;
 
-	if (!name || !name[0])
-	{
+	if (!name || !name[0]) {
 		return qfalse;
 	}
 
@@ -235,18 +204,13 @@ int CG_SoundPlaySoundScript(const char *name, vec3_t org, int entnum, qboolean b
 
 	s     = (char *)name;
 	sound = hashTable[hash];
-	while (sound)
-	{
-		if (!Q_stricmp(s, sound->name))
-		{
-			if (buffer)
-			{
+	while (sound) {
+		if (!Q_stricmp(s, sound->name)) {
+			if (buffer) {
 				CG_AddBufferedSoundScript(sound);
 				return 1;
 
-			}
-			else
-			{
+			} else {
 				// found a match, pick the oldest sound
 				return CG_SoundPickOldestRandomSound(sound, org, entnum);
 			}
@@ -265,17 +229,14 @@ CG_SoundPlayIndexedScript
   returns qtrue is a script is found
 ==============
 */
-void CG_SoundPlayIndexedScript(int index, vec3_t org, int entnum)
-{
+void CG_SoundPlayIndexedScript(int index, vec3_t org, int entnum) {
 	soundScript_t *sound;
 
-	if (!index)
-	{
+	if (!index) {
 		return;
 	}
 
-	if (index > numSoundScripts)
-	{
+	if (index > numSoundScripts) {
 		return;
 	}
 
@@ -289,8 +250,7 @@ void CG_SoundPlayIndexedScript(int index, vec3_t org, int entnum)
 CG_SoundParseSounds
 ===============
 */
-static void CG_SoundParseSounds(char *filename, char *buffer)
-{
+static void CG_SoundParseSounds(char *filename, char *buffer) {
 	char               *token, **text;
 	long               hash;
 	soundScript_t      sound;           // the current sound being read
@@ -304,26 +264,20 @@ static void CG_SoundParseSounds(char *filename, char *buffer)
 	// Nico, init vars
 	sound.soundList = NULL;
 
-	while (1)
-	{
+	while (1) {
 		token = COM_ParseExt(text, qtrue);
-		if (!*token)
-		{
-			if (inSound)
-			{
+		if (!*token) {
+			if (inSound) {
 				CG_Error("no concluding '}' in sound %s, file %s\n", sound.name, filename);
 			}
 			return;
 		}
 
-		if (!Q_stricmp(token, "{"))
-		{
-			if (inSound)
-			{
+		if (!Q_stricmp(token, "{")) {
+			if (inSound) {
 				CG_Error("no concluding '}' in sound %s, file %s\n", sound.name, filename);
 			}
-			if (wantSoundName)
-			{
+			if (wantSoundName) {
 				CG_Error("'{' found but not expected, after %s, file %s\n", sound.name, filename);
 			}
 			inSound = qtrue;
@@ -331,8 +285,7 @@ static void CG_SoundParseSounds(char *filename, char *buffer)
 			// grab a free scriptSound
 			scriptSound = &soundScriptSounds[numSoundScriptSounds++];
 
-			if (numSoundScripts == MAX_SOUND_SCRIPT_SOUNDS)
-			{
+			if (numSoundScripts == MAX_SOUND_SCRIPT_SOUNDS) {
 				CG_Error("MAX_SOUND_SCRIPT_SOUNDS exceeded.\nReduce number of sound scripts.\n");
 			}
 
@@ -344,10 +297,8 @@ static void CG_SoundParseSounds(char *filename, char *buffer)
 			continue;
 		}
 
-		if (!Q_stricmp(token, "}"))
-		{
-			if (!inSound)
-			{
+		if (!Q_stricmp(token, "}")) {
+			if (!inSound) {
 				CG_Error("'}' unexpected after sound %s, file %s\n", sound.name, filename);
 			}
 
@@ -357,8 +308,7 @@ static void CG_SoundParseSounds(char *filename, char *buffer)
 			soundScripts[numSoundScripts] = sound;
 			hashTable[hash]               = &soundScripts[numSoundScripts++];
 
-			if (numSoundScripts == MAX_SOUND_SCRIPTS)
-			{
+			if (numSoundScripts == MAX_SOUND_SCRIPTS) {
 				CG_Error("MAX_SOUND_SCRIPTS exceeded.\nReduce number of sound scripts.\n");
 			}
 
@@ -370,15 +320,13 @@ static void CG_SoundParseSounds(char *filename, char *buffer)
 			continue;
 		}
 
-		if (!inSound)
-		{
+		if (!inSound) {
 			// this is the identifier for a new sound
-			if (!wantSoundName)
-			{
+			if (!wantSoundName) {
 				CG_Error("'%s' unexpected after sound %s, file %s\n", token, sound.name, filename);
 			}
-			memset(&sound, 0, sizeof(sound));
-			Q_strncpyz(sound.name, token, sizeof(sound.name));
+			memset(&sound, 0, sizeof (sound));
+			Q_strncpyz(sound.name, token, sizeof (sound.name));
 			wantSoundName = qfalse;
 			sound.index   = numSoundScripts;
 			// setup the new sound defaults
@@ -390,73 +338,54 @@ static void CG_SoundParseSounds(char *filename, char *buffer)
 
 		// we are inside a sound script
 
-		if (!Q_stricmp(token, "channel"))
-		{
+		if (!Q_stricmp(token, "channel")) {
 			// ignore this now, just look for the channel identifiers explicitly
 			continue;
 		}
-		if (!Q_stricmp(token, "local"))
-		{
+		if (!Q_stricmp(token, "local")) {
 			sound.channel = CHAN_LOCAL;
 			continue;
-		}
-		else if (!Q_stricmp(token, "announcer"))
-		{
+		} else if (!Q_stricmp(token, "announcer")) {
 			sound.channel = CHAN_ANNOUNCER;
 			continue;
-		}
-		else if (!Q_stricmp(token, "body"))
-		{
+		} else if (!Q_stricmp(token, "body")) {
 			sound.channel = CHAN_BODY;
 			continue;
-		}
-		else if (!Q_stricmp(token, "voice"))
-		{
+		} else if (!Q_stricmp(token, "voice")) {
 			sound.channel = CHAN_VOICE;
 			continue;
-		}
-		else if (!Q_stricmp(token, "weapon"))
-		{
+		} else if (!Q_stricmp(token, "weapon")) {
 			sound.channel = CHAN_WEAPON;
 			continue;
-		}
-		else if (!Q_stricmp(token, "item"))
-		{
+		} else if (!Q_stricmp(token, "item")) {
 			sound.channel = CHAN_ITEM;
 			continue;
-		}
-		else if (!Q_stricmp(token, "auto"))
-		{
+		} else if (!Q_stricmp(token, "auto")) {
 			sound.channel = CHAN_AUTO;
 			continue;
 		}
-		if (!Q_stricmp(token, "global"))
-		{
+		if (!Q_stricmp(token, "global")) {
 			sound.attenuation = 0;
 			continue;
 		}
-		if (!Q_stricmp(token, "streaming"))
-		{
+		if (!Q_stricmp(token, "streaming")) {
 			sound.streaming = qtrue;
 			continue;
 		}
-		if (!Q_stricmp(token, "looping"))
-		{
+		if (!Q_stricmp(token, "looping")) {
 			sound.looping = qtrue;
 			continue;
 		}
-		if (!Q_stricmp(token, "sound"))
-		{
+		if (!Q_stricmp(token, "sound")) {
 
-			if (scriptSound->numsounds >= MAX_SOUNDSCRIPT_SOUNDS)
-			{
+			if (scriptSound->numsounds >= MAX_SOUNDSCRIPT_SOUNDS) {
 				CG_Error("Too many sounds for soundscript %s\n");
 			}
 
 			token = COM_ParseExt(text, qtrue);
 
 
-			Q_strncpyz(scriptSound->sounds[scriptSound->numsounds].filename, token, sizeof(scriptSound->sounds[0].filename));
+			Q_strncpyz(scriptSound->sounds[scriptSound->numsounds].filename, token, sizeof (scriptSound->sounds[0].filename));
 			scriptSound->numsounds++;
 
 			continue;
@@ -472,8 +401,7 @@ CG_SoundLoadSoundFiles
 extern char bigTextBuffer[100000];  // we got it anyway, might as well use it
 
 #define MAX_SOUND_FILES     128
-static void CG_SoundLoadSoundFiles(void)
-{
+static void CG_SoundLoadSoundFiles(void) {
 	char         soundFiles[MAX_SOUND_FILES][MAX_QPATH];
 	char         *text;
 	char         filename[MAX_QPATH];
@@ -485,14 +413,12 @@ static void CG_SoundLoadSoundFiles(void)
 	// scan for sound files
 	Com_sprintf(filename, MAX_QPATH, "sound/scripts/filelist.txt");
 	len = trap_FS_FOpenFile(filename, &f, FS_READ);
-	if (len <= 0)
-	{
+	if (len <= 0) {
 		CG_Printf(S_COLOR_RED "WARNING: no sound files found (filelist.txt not found in sound/scripts)\n");
 		return;
 	}
-	if (len > (int)sizeof(bigTextBuffer))
-	{
-		CG_Error("%s is too big, make it smaller (max = %i bytes)\n", filename, sizeof(bigTextBuffer));
+	if (len > (int)sizeof (bigTextBuffer)) {
+		CG_Error("%s is too big, make it smaller (max = %i bytes)\n", filename, sizeof (bigTextBuffer));
 	}
 	// load the file into memory
 	trap_FS_Read(bigTextBuffer, len, f);
@@ -501,11 +427,9 @@ static void CG_SoundLoadSoundFiles(void)
 	// parse the list
 	text      = bigTextBuffer;
 	numSounds = 0;
-	while (1)
-	{
+	while (1) {
 		token = COM_ParseExt(&text, qtrue);
-		if (!token[0])
-		{
+		if (!token[0]) {
 			break;
 		}
 		// Nico, string format bug security fix
@@ -515,31 +439,26 @@ static void CG_SoundLoadSoundFiles(void)
 	// add the map specific soundfile
 	Com_sprintf(soundFiles[numSounds++], MAX_QPATH, "%s.sounds", cgs.rawmapname);
 
-	if (!numSounds)
-	{
+	if (!numSounds) {
 		CG_Printf(S_COLOR_RED "WARNING: no sound files found\n");
 		return;
 	}
 
 	// load and parse sound files
-	for (i = 0; i < numSounds; i++)
-	{
-		Com_sprintf(filename, sizeof(filename), "sound/scripts/%s", soundFiles[i]);
+	for (i = 0; i < numSounds; i++) {
+		Com_sprintf(filename, sizeof (filename), "sound/scripts/%s", soundFiles[i]);
 		CG_Printf("...loading '%s'\n", filename);
 		len = trap_FS_FOpenFile(filename, &f, FS_READ);
-		if (len <= 0)
-		{
-			if (i != (numSounds - 1))
-			{
+		if (len <= 0) {
+			if (i != (numSounds - 1)) {
 				CG_Error("Couldn't load %s", filename);
 			}
 			continue;
 		}
-		if (len > (int)sizeof(bigTextBuffer))
-		{
-			CG_Error("%s is too big, make it smaller (max = %i bytes)\n", filename, sizeof(bigTextBuffer));
+		if (len > (int)sizeof (bigTextBuffer)) {
+			CG_Error("%s is too big, make it smaller (max = %i bytes)\n", filename, sizeof (bigTextBuffer));
 		}
-		memset(bigTextBuffer, 0, sizeof(bigTextBuffer));
+		memset(bigTextBuffer, 0, sizeof (bigTextBuffer));
 		trap_FS_Read(bigTextBuffer, len, f);
 		trap_FS_FCloseFile(f);
 		CG_SoundParseSounds(filename, bigTextBuffer);
@@ -551,26 +470,20 @@ static void CG_SoundLoadSoundFiles(void)
 CG_SoundInit
 ==============
 */
-void CG_SoundInit(void)
-{
+void CG_SoundInit(void) {
 
-	if (numSoundScripts)
-	{
+	if (numSoundScripts) {
 		// keep all the information, just reset the vars
 		int i, j;
 
-		for (i = 0; i < numSoundScriptSounds; i++)
-		{
+		for (i = 0; i < numSoundScriptSounds; i++) {
 			soundScriptSounds[i].lastPlayed = 0;
 
-			for (j = 0; j < soundScriptSounds[i].numsounds; j++)
-			{
+			for (j = 0; j < soundScriptSounds[i].numsounds; j++) {
 				soundScriptSounds[i].sounds[j].sfxHandle = 0;
 			}
 		}
-	}
-	else
-	{
+	} else {
 		CG_Printf("\n.........................\n"
 		          "Initializing Sound Scripts\n");
 		CG_SoundLoadSoundFiles();
@@ -585,8 +498,7 @@ void CG_SoundInit(void)
 
 // Editing
 
-typedef struct editHandle_s
-{
+typedef struct editHandle_s {
 	vec3_t origin;
 	vec3_t oldOrigin;
 
@@ -616,15 +528,13 @@ static const char *s_bt_string[] =
 	"nopvs"
 };
 
-qboolean CG_SaveSpeakersToScript(void)
-{
+qboolean CG_SaveSpeakersToScript(void) {
 	int          i;
 	bg_speaker_t *speaker;
 	fileHandle_t fh;
 	char         *s;
 
-	if (trap_FS_FOpenFile(va("sound/maps/%s.sps", cgs.rawmapname), &fh, FS_WRITE) < 0)
-	{
+	if (trap_FS_FOpenFile(va("sound/maps/%s.sps", cgs.rawmapname), &fh, FS_WRITE) < 0) {
 		CG_Printf(S_COLOR_RED "ERROR: failed to save speakers to 'sound/maps/%s.sps'\n", cgs.rawmapname);
 		return qfalse;
 	}
@@ -632,8 +542,7 @@ qboolean CG_SaveSpeakersToScript(void)
 	s = "speakerScript\n{";
 	trap_FS_Write(s, strlen(s), fh);
 
-	for (i = 0; i < BG_NumScriptSpeakers(); i++)
-	{
+	for (i = 0; i < BG_NumScriptSpeakers(); i++) {
 		char filenameStr[96] = "";
 		char originStr[96];
 		char targetnameStr[56] = "";
@@ -646,40 +555,34 @@ qboolean CG_SaveSpeakersToScript(void)
 
 		speaker = BG_GetScriptSpeaker(i);
 
-		if (*speaker->filename)
-		{
-			Com_sprintf(filenameStr, sizeof(filenameStr), "\t\tnoise \"%s\"\n", speaker->filename);
+		if (*speaker->filename) {
+			Com_sprintf(filenameStr, sizeof (filenameStr), "\t\tnoise \"%s\"\n", speaker->filename);
 		}
 
-		Com_sprintf(originStr, sizeof(originStr), "\t\torigin %.2f %.2f %.2f\n", speaker->origin[0], speaker->origin[1], speaker->origin[2]);
+		Com_sprintf(originStr, sizeof (originStr), "\t\torigin %.2f %.2f %.2f\n", speaker->origin[0], speaker->origin[1], speaker->origin[2]);
 
-		if (*speaker->targetname)
-		{
-			Com_sprintf(targetnameStr, sizeof(targetnameStr), "\t\ttargetname \"%s\"\n", speaker->targetname);
+		if (*speaker->targetname) {
+			Com_sprintf(targetnameStr, sizeof (targetnameStr), "\t\ttargetname \"%s\"\n", speaker->targetname);
 		}
 
-		Com_sprintf(loopedStr, sizeof(loopedStr), "\t\tlooped \"%s\"\n", s_lt_string[speaker->loop]);
+		Com_sprintf(loopedStr, sizeof (loopedStr), "\t\tlooped \"%s\"\n", s_lt_string[speaker->loop]);
 
-		Com_sprintf(broadcastStr, sizeof(broadcastStr), "\t\tbroadcast \"%s\"\n", s_bt_string[speaker->broadcast]);
+		Com_sprintf(broadcastStr, sizeof (broadcastStr), "\t\tbroadcast \"%s\"\n", s_bt_string[speaker->broadcast]);
 
-		if (speaker->wait)
-		{
-			Com_sprintf(waitStr, sizeof(waitStr), "\t\twait %i\n", speaker->wait);
+		if (speaker->wait) {
+			Com_sprintf(waitStr, sizeof (waitStr), "\t\twait %i\n", speaker->wait);
 		}
 
-		if (speaker->random)
-		{
-			Com_sprintf(randomStr, sizeof(randomStr), "\t\trandom %i\n", speaker->random);
+		if (speaker->random) {
+			Com_sprintf(randomStr, sizeof (randomStr), "\t\trandom %i\n", speaker->random);
 		}
 
-		if (speaker->volume)
-		{
-			Com_sprintf(volumeStr, sizeof(volumeStr), "\t\tvolume %i\n", speaker->volume);
+		if (speaker->volume) {
+			Com_sprintf(volumeStr, sizeof (volumeStr), "\t\tvolume %i\n", speaker->volume);
 		}
 
-		if (speaker->range)
-		{
-			Com_sprintf(rangeStr, sizeof(rangeStr), "\t\trange %i\n", speaker->range);
+		if (speaker->range) {
+			Com_sprintf(rangeStr, sizeof (rangeStr), "\t\trange %i\n", speaker->range);
 		}
 
 		s = va("\n\tspeakerDef {\n%s%s%s%s%s%s%s%s%s\t}\n",
@@ -706,11 +609,10 @@ qboolean CG_SaveSpeakersToScript(void)
 	return qtrue;
 }
 
-void CG_AddLineToScene(vec3_t start, vec3_t end, vec4_t colour)
-{
+void CG_AddLineToScene(vec3_t start, vec3_t end, vec4_t colour) {
 	refEntity_t re;
 
-	memset(&re, 0, sizeof(re));
+	memset(&re, 0, sizeof (re));
 	re.reType       = RT_RAIL_CORE;
 	re.customShader = cgs.media.railCoreShader;
 	VectorCopy(start, re.origin);
@@ -723,12 +625,10 @@ void CG_AddLineToScene(vec3_t start, vec3_t end, vec4_t colour)
 	trap_R_AddRefEntityToScene(&re);
 }
 
-void CG_SetViewanglesForSpeakerEditor(void)
-{
+void CG_SetViewanglesForSpeakerEditor(void) {
 	vec3_t vec;
 
-	if (!editSpeakerActive)
-	{
+	if (!editSpeakerActive) {
 		return;
 	}
 
@@ -736,8 +636,7 @@ void CG_SetViewanglesForSpeakerEditor(void)
 	vectoangles(vec, cg.refdefViewAngles);
 }
 
-static void CG_RenderScriptSpeakers(void)
-{
+static void CG_RenderScriptSpeakers(void) {
 	int          i, j, closest;
 	float        dist, minDist;
 	vec3_t       vec;
@@ -774,30 +673,21 @@ static void CG_RenderScriptSpeakers(void)
 
 	numSpeakersInPvs = 0;
 
-	for (i = 0; i < BG_NumScriptSpeakers(); i++)
-	{
+	for (i = 0; i < BG_NumScriptSpeakers(); i++) {
 		speaker = BG_GetScriptSpeaker(i);
 
-		if (editSpeakerActive && editSpeaker == speaker)
-		{
+		if (editSpeakerActive && editSpeaker == speaker) {
 			vec4_t colour;
-			for (j = 0; j < 3; j++)
-			{
+			for (j = 0; j < 3; j++) {
 				VectorClear(colour);
 				colour[3] = 1.f;
-				if (editSpeakerHandle.activeAxis >= 0)
-				{
-					if (editSpeakerHandle.activeAxis == j)
-					{
+				if (editSpeakerHandle.activeAxis >= 0) {
+					if (editSpeakerHandle.activeAxis == j) {
 						colour[j] = 1.f;
-					}
-					else
-					{
+					} else {
 						colour[j] = .3f;
 					}
-				}
-				else
-				{
+				} else {
 					colour[j] = 1.f;
 				}
 				VectorClear(vec);
@@ -805,7 +695,7 @@ static void CG_RenderScriptSpeakers(void)
 				VectorMA(editSpeakerHandle.origin, 32, vec, vec);
 				CG_AddLineToScene(editSpeakerHandle.origin, vec, colour);
 
-				memset(&re, 0, sizeof(re));
+				memset(&re, 0, sizeof (re));
 				re.reType = RT_SPRITE;
 				VectorCopy(vec, re.origin);
 				VectorCopy(vec, re.oldorigin);
@@ -818,48 +708,37 @@ static void CG_RenderScriptSpeakers(void)
 				trap_R_AddRefEntityToScene(&re);
 			}
 
-			if (trap_R_inPVS(cg.refdef_current->vieworg, speaker->origin))
-			{
+			if (trap_R_inPVS(cg.refdef_current->vieworg, speaker->origin)) {
 				numSpeakersInPvs++;
 			}
-		}
-		else if (!trap_R_inPVS(cg.refdef_current->vieworg, speaker->origin))
-		{
+		} else if (!trap_R_inPVS(cg.refdef_current->vieworg, speaker->origin)) {
 			continue;
-		}
-		else
-		{
+		} else {
 			numSpeakersInPvs++;
 		}
 
-		memset(&re, 0, sizeof(re));
+		memset(&re, 0, sizeof (re));
 		re.reType = RT_SPRITE;
 		VectorCopy(speaker->origin, re.origin);
 		VectorCopy(speaker->origin, re.oldorigin);
 		re.radius       = 8;
 		re.customShader = speakerShader;
 
-		if (editSpeaker)
-		{
+		if (editSpeaker) {
 			re.customShader = speakerShaderGrayScale;
 
-			if (editSpeaker == speaker)
-			{
+			if (editSpeaker == speaker) {
 				re.shaderRGBA[0] = 0xff;
 				re.shaderRGBA[1] = 0xaa;
 				re.shaderRGBA[2] = 0xaa;
 				re.shaderRGBA[3] = 0xff;
-			}
-			else
-			{
+			} else {
 				re.shaderRGBA[0] = 0x3f;
 				re.shaderRGBA[1] = 0x3f;
 				re.shaderRGBA[2] = 0x3f;
 				re.shaderRGBA[3] = 0xff;
 			}
-		}
-		else
-		{
+		} else {
 			re.customShader = speakerShader;
 
 			re.shaderRGBA[0] = 0xff;
@@ -870,36 +749,29 @@ static void CG_RenderScriptSpeakers(void)
 		trap_R_AddRefEntityToScene(&re);
 
 		// see which one is closest to our cursor
-		if (!editSpeakerActive)
-		{
+		if (!editSpeakerActive) {
 			VectorSubtract(speaker->origin, cg.refdef_current->vieworg, vec);
 			dist = DotProduct(vec, cg.refdef_current->viewaxis[0]);
 			VectorMA(cg.refdef_current->vieworg, dist, cg.refdef_current->viewaxis[0], vec);
 			VectorSubtract(speaker->origin, vec, vec);
 			dist = VectorLengthSquared(vec);
-			if (dist <= minDist)
-			{
+			if (dist <= minDist) {
 				minDist = dist;
 				closest = i;
 			}
 		}
 	}
 
-	if (!editSpeakerActive)
-	{
-		if (closest >= 0)
-		{
+	if (!editSpeakerActive) {
+		if (closest >= 0) {
 			editSpeaker = BG_GetScriptSpeaker(closest);
-		}
-		else
-		{
+		} else {
 			editSpeaker = NULL;
 		}
 	}
 }
 
-void CG_SpeakerInfo_Text(panel_button_t *button)
-{
+void CG_SpeakerInfo_Text(panel_button_t *button) {
 	char   *s, *ptr, *strptr;
 	float  y, wMax, w, h;
 	vec4_t colour;
@@ -913,92 +785,77 @@ void CG_SpeakerInfo_Text(panel_button_t *button)
 	char   volumeStr[32] = "";
 	char   rangeStr[32]  = "";
 
-	if (!button->font)
-	{
+	if (!button->font) {
 		return;
 	}
 
-	Com_sprintf(originStr, sizeof(originStr), "Speaker at %.2f %.2f %.2f\n", editSpeaker->origin[0], editSpeaker->origin[1], editSpeaker->origin[2]);
+	Com_sprintf(originStr, sizeof (originStr), "Speaker at %.2f %.2f %.2f\n", editSpeaker->origin[0], editSpeaker->origin[1], editSpeaker->origin[2]);
 	wMax = CG_Text_Width_Ext(originStr, button->font->scalex, 0, button->font->font);
 	h    = 8.5f;
 
-	if (*editSpeaker->filename)
-	{
-		Com_sprintf(filenameStr, sizeof(filenameStr), "noise: %s\n", editSpeaker->filename);
+	if (*editSpeaker->filename) {
+		Com_sprintf(filenameStr, sizeof (filenameStr), "noise: %s\n", editSpeaker->filename);
 		w = CG_Text_Width_Ext(filenameStr, button->font->scalex, 0, button->font->font);
-		if (w > wMax)
-		{
+		if (w > wMax) {
 			wMax = w;
 		}
 		h += 8.5f;
 	}
 
-	if (*editSpeaker->targetname)
-	{
-		Com_sprintf(targetnameStr, sizeof(targetnameStr), "targetname: %s\n", editSpeaker->targetname);
+	if (*editSpeaker->targetname) {
+		Com_sprintf(targetnameStr, sizeof (targetnameStr), "targetname: %s\n", editSpeaker->targetname);
 		w = CG_Text_Width_Ext(targetnameStr, button->font->scalex, 0, button->font->font);
-		if (w > wMax)
-		{
+		if (w > wMax) {
 			wMax = w;
 		}
 		h += 8.5f;
 	}
 
-	Com_sprintf(loopedStr, sizeof(loopedStr), "looped: %s\n", s_lt_string[editSpeaker->loop]);
+	Com_sprintf(loopedStr, sizeof (loopedStr), "looped: %s\n", s_lt_string[editSpeaker->loop]);
 	w = CG_Text_Width_Ext(loopedStr, button->font->scalex, 0, button->font->font);
-	if (w > wMax)
-	{
+	if (w > wMax) {
 		wMax = w;
 	}
 	h += 8.5f;
 
-	Com_sprintf(broadcastStr, sizeof(broadcastStr), "broadcast: %s\n", s_bt_string[editSpeaker->broadcast]);
+	Com_sprintf(broadcastStr, sizeof (broadcastStr), "broadcast: %s\n", s_bt_string[editSpeaker->broadcast]);
 	w = CG_Text_Width_Ext(broadcastStr, button->font->scalex, 0, button->font->font);
-	if (w > wMax)
-	{
+	if (w > wMax) {
 		wMax = w;
 	}
 	h += 8.5f;
 
-	if (editSpeaker->wait)
-	{
-		Com_sprintf(waitStr, sizeof(waitStr), "wait: %i\n", editSpeaker->wait);
+	if (editSpeaker->wait) {
+		Com_sprintf(waitStr, sizeof (waitStr), "wait: %i\n", editSpeaker->wait);
 		w = CG_Text_Width_Ext(waitStr, button->font->scalex, 0, button->font->font);
-		if (w > wMax)
-		{
+		if (w > wMax) {
 			wMax = w;
 		}
 		h += 8.5f;
 	}
 
-	if (editSpeaker->random)
-	{
-		Com_sprintf(randomStr, sizeof(randomStr), "random: %i\n", editSpeaker->random);
+	if (editSpeaker->random) {
+		Com_sprintf(randomStr, sizeof (randomStr), "random: %i\n", editSpeaker->random);
 		w = CG_Text_Width_Ext(randomStr, button->font->scalex, 0, button->font->font);
-		if (w > wMax)
-		{
+		if (w > wMax) {
 			wMax = w;
 		}
 		h += 8.5f;
 	}
 
-	if (editSpeaker->volume)
-	{
-		Com_sprintf(volumeStr, sizeof(volumeStr), "volume: %i\n", editSpeaker->volume);
+	if (editSpeaker->volume) {
+		Com_sprintf(volumeStr, sizeof (volumeStr), "volume: %i\n", editSpeaker->volume);
 		w = CG_Text_Width_Ext(volumeStr, button->font->scalex, 0, button->font->font);
-		if (w > wMax)
-		{
+		if (w > wMax) {
 			wMax = w;
 		}
 		h += 8.5f;
 	}
 
-	if (editSpeaker->range)
-	{
-		Com_sprintf(rangeStr, sizeof(rangeStr), "range: %i\n", editSpeaker->range);
+	if (editSpeaker->range) {
+		Com_sprintf(rangeStr, sizeof (rangeStr), "range: %i\n", editSpeaker->range);
 		w = CG_Text_Width_Ext(rangeStr, button->font->scalex, 0, button->font->font);
-		if (w > wMax)
-		{
+		if (w > wMax) {
 			wMax = w;
 		}
 		h += 8.5f;
@@ -1023,10 +880,8 @@ void CG_SpeakerInfo_Text(panel_button_t *button)
 
 	y = button->rect.y + 8;
 
-	for (strptr = ptr = s; *ptr; ptr++)
-	{
-		if (*ptr == '\n')
-		{
+	for (strptr = ptr = s; *ptr; ptr++) {
+		if (*ptr == '\n') {
 			*ptr = '\0';
 			CG_Text_Paint_Ext(button->rect.x, y, button->font->scalex, button->font->scaley, button->font->colour, strptr, 0, 0, button->font->style, button->font->font);
 			y     += 8;
@@ -1064,17 +919,13 @@ static panel_button_t *speakerInfoButtons[] =
 };
 
 
-void CG_SpeakerEditor_RenderEdit(panel_button_t *button)
-{
+void CG_SpeakerEditor_RenderEdit(panel_button_t *button) {
 	vec4_t colour;
 
-	if (button == BG_PanelButtons_GetFocusButton())
-	{
+	if (button == BG_PanelButtons_GetFocusButton()) {
 		VectorCopy(colorYellow, colour);
 		colour[3] = .3f;
-	}
-	else
-	{
+	} else {
 		VectorCopy(colorWhite, colour);
 		colour[3] = .3f;
 	}
@@ -1087,23 +938,17 @@ void CG_SpeakerEditor_RenderEdit(panel_button_t *button)
 	button->rect.h += 3.f;
 }
 
-void CG_SpeakerEditor_RenderButton(panel_button_t *button)
-{
+void CG_SpeakerEditor_RenderButton(panel_button_t *button) {
 	vec4_t colour;
 	float  oldX;
 
-	if (button == BG_PanelButtons_GetFocusButton())
-	{
+	if (button == BG_PanelButtons_GetFocusButton()) {
 		VectorCopy(colorMdBlue, colour);
 		colour[3] = .5f;
-	}
-	else if (BG_PanelButtons_GetFocusButton() == NULL && BG_CursorInRect(&button->rect))
-	{
+	} else if (BG_PanelButtons_GetFocusButton() == NULL && BG_CursorInRect(&button->rect)) {
 		VectorCopy(colorWhite, colour);
 		colour[3] = .5f;
-	}
-	else
-	{
+	} else {
 		VectorCopy(colorWhite, colour);
 		colour[3] = .3f;
 	}
@@ -1120,22 +965,18 @@ void CG_SpeakerEditor_RenderButton(panel_button_t *button)
 	button->rect.y -= 9.f;
 }
 
-char *CG_GetStrFromStrArray(const char *in, const int index)
-{
+char *CG_GetStrFromStrArray(const char *in, const int index) {
 	char *ptr, *s;
 	int  i;
 
 	s = ptr = (char *)in;
 	i = 0;
-	while (1)
-	{
-		if (i == index)
-		{
+	while (1) {
+		if (i == index) {
 			return s;
 		}
 
-		while (*ptr)
-		{
+		while (*ptr) {
 			ptr++;
 		}
 		ptr++;
@@ -1145,27 +986,23 @@ char *CG_GetStrFromStrArray(const char *in, const int index)
 	}
 }
 
-void CG_SpeakerEditor_RenderDropdown(panel_button_t *button)
-{
+void CG_SpeakerEditor_RenderDropdown(panel_button_t *button) {
 	vec4_t    colour;
 	float     textboxW;
 	rectDef_t rect;
 	int       i;
 	char      *s;
 
-	memcpy(&rect, &button->rect, sizeof(rect));
+	memcpy(&rect, &button->rect, sizeof (rect));
 
 	textboxW = button->rect.w - button->rect.h;
 	rect.x  += textboxW;
 	rect.w   = rect.h;
 
-	if (button == BG_PanelButtons_GetFocusButton())
-	{
+	if (button == BG_PanelButtons_GetFocusButton()) {
 		VectorCopy(colorYellow, colour);
 		colour[3] = .3f;
-	}
-	else
-	{
+	} else {
 		VectorCopy(colorWhite, colour);
 		colour[3] = .3f;
 	}
@@ -1173,18 +1010,13 @@ void CG_SpeakerEditor_RenderDropdown(panel_button_t *button)
 	VectorCopy(colorBlue, colour);
 	CG_DrawRect(button->rect.x, button->rect.y, textboxW, button->rect.h, 1.f, colour);
 
-	if (button == BG_PanelButtons_GetFocusButton())
-	{
+	if (button == BG_PanelButtons_GetFocusButton()) {
 		VectorCopy(colorYellow, colour);
 		colour[3] = .3f;
-	}
-	else if (BG_PanelButtons_GetFocusButton() == NULL && BG_CursorInRect(&button->rect))
-	{
+	} else if (BG_PanelButtons_GetFocusButton() == NULL && BG_CursorInRect(&button->rect)) {
 		VectorCopy(colorWhite, colour);
 		colour[3] = .5f;
-	}
-	else
-	{
+	} else {
 		VectorCopy(colorWhite, colour);
 		colour[3] = .3f;
 	}
@@ -1218,26 +1050,20 @@ void CG_SpeakerEditor_RenderDropdown(panel_button_t *button)
 	                  button->font->style,
 	                  button->font->font);
 
-	if (button == BG_PanelButtons_GetFocusButton())
-	{
-		memcpy(&rect, &button->rect, sizeof(rect));
+	if (button == BG_PanelButtons_GetFocusButton()) {
+		memcpy(&rect, &button->rect, sizeof (rect));
 
-		for (i = 0; i < button->data[0]; i++)
-		{
-			if (i == button->data[1])
-			{
+		for (i = 0; i < button->data[0]; i++) {
+			if (i == button->data[1]) {
 				continue;
 			}
 
 			rect.y += 12.f;
 
-			if (BG_CursorInRect(&rect))
-			{
+			if (BG_CursorInRect(&rect)) {
 				VectorScale(colorYellow, .3f, colour);
 				colour[3] = 1.f;
-			}
-			else
-			{
+			} else {
 				VectorScale(colorWhite, .3f, colour);
 				colour[3] = 1.f;
 			}
@@ -1264,8 +1090,7 @@ void CG_SpeakerEditor_RenderDropdown(panel_button_t *button)
 	}
 }
 
-void CG_SpeakerEditor_Back(panel_button_t *button)
-{
+void CG_SpeakerEditor_Back(panel_button_t *button) {
 	vec4_t colour;
 
 	VectorCopy(colorMdBlue, colour);
@@ -1275,8 +1100,7 @@ void CG_SpeakerEditor_Back(panel_button_t *button)
 	CG_DrawRect(button->rect.x - 2, button->rect.y - 2, button->rect.w + 4, button->rect.h + 4, 1.f, colour);
 }
 
-void CG_SpeakerEditor_LocInfo(panel_button_t *button)
-{
+void CG_SpeakerEditor_LocInfo(panel_button_t *button) {
 	CG_Text_Paint_Ext(button->rect.x, button->rect.y, button->font->scalex, button->font->scaley, button->font->colour,
 	                  va("Speaker at %.2f %.2f %.2f", editSpeaker->origin[0], editSpeaker->origin[1], editSpeaker->origin[2]),
 	                  0, 0, button->font->style, button->font->font);
@@ -1286,12 +1110,9 @@ static char noiseMatchString[MAX_QPATH];
 static int  noiseMatchCount;
 static int  noiseMatchIndex;
 
-qboolean CG_SpeakerEditor_NoiseEdit_KeyDown(panel_button_t *button, int key)
-{
-	if (button == BG_PanelButtons_GetFocusButton())
-	{
-		if (key == K_TAB)
-		{
+qboolean CG_SpeakerEditor_NoiseEdit_KeyDown(panel_button_t *button, int key) {
+	if (button == BG_PanelButtons_GetFocusButton()) {
+		if (key == K_TAB) {
 			char dirname[MAX_QPATH];
 			char filename[MAX_QPATH];
 			char match[MAX_QPATH];
@@ -1299,36 +1120,31 @@ qboolean CG_SpeakerEditor_NoiseEdit_KeyDown(panel_button_t *button, int key)
 			char *fileptr;
 
 			COM_StripFilename((char *)button->text, dirname);
-			Q_strncpyz(filename, COM_SkipPath((char *)button->text), sizeof(filename));
+			Q_strncpyz(filename, COM_SkipPath((char *)button->text), sizeof (filename));
 
-			if (!Q_stricmp(button->text, dirname))
-			{
+			if (!Q_stricmp(button->text, dirname)) {
 				return qtrue;
 			}
 
-			numfiles = trap_FS_GetFileList(dirname, "", bigTextBuffer, sizeof(bigTextBuffer));
+			numfiles = trap_FS_GetFileList(dirname, "", bigTextBuffer, sizeof (bigTextBuffer));
 			// FIXME: autocomplete directories?
 
 			fileptr = bigTextBuffer;
 
-			if (!*noiseMatchString || Q_stricmpn(noiseMatchString, filename, strlen(noiseMatchString)))
-			{
-				Q_strncpyz(noiseMatchString, filename, sizeof(noiseMatchString));
+			if (!*noiseMatchString || Q_stricmpn(noiseMatchString, filename, strlen(noiseMatchString))) {
+				Q_strncpyz(noiseMatchString, filename, sizeof (noiseMatchString));
 				noiseMatchCount = 0;
 				noiseMatchIndex = 0;
 
-				for (i = 0; i < numfiles; i++, fileptr += filelen + 1)
-				{
+				for (i = 0; i < numfiles; i++, fileptr += filelen + 1) {
 					filelen = strlen(fileptr);
-					if (Q_stricmpn(fileptr, filename, strlen(filename)))
-					{
+					if (Q_stricmpn(fileptr, filename, strlen(filename))) {
 						continue;
 					}
 
 					noiseMatchCount++;
-					if (noiseMatchCount == 1)
-					{
-						Q_strncpyz(match, fileptr, sizeof(match));
+					if (noiseMatchCount == 1) {
+						Q_strncpyz(match, fileptr, sizeof (match));
 						continue;
 					}
 
@@ -1338,34 +1154,25 @@ qboolean CG_SpeakerEditor_NoiseEdit_KeyDown(panel_button_t *button, int key)
 					    continue;
 					}*/
 				}
-			}
-			else
-			{
-				if (noiseMatchCount == 1)
-				{
+			} else {
+				if (noiseMatchCount == 1) {
 					return qtrue;
-				}
-				else
-				{
+				} else {
 					int findMatchIndex = 0;
 
 					noiseMatchIndex++;
-					if (noiseMatchIndex == noiseMatchCount)
-					{
+					if (noiseMatchIndex == noiseMatchCount) {
 						noiseMatchIndex = 0;
 					}
 
-					for (i = 0; i < numfiles; i++, fileptr += filelen + 1)
-					{
+					for (i = 0; i < numfiles; i++, fileptr += filelen + 1) {
 						filelen = strlen(fileptr);
-						if (Q_stricmpn(fileptr, noiseMatchString, strlen(noiseMatchString)))
-						{
+						if (Q_stricmpn(fileptr, noiseMatchString, strlen(noiseMatchString))) {
 							continue;
 						}
 
-						if (findMatchIndex == noiseMatchIndex)
-						{
-							Q_strncpyz(match, fileptr, sizeof(match));
+						if (findMatchIndex == noiseMatchIndex) {
+							Q_strncpyz(match, fileptr, sizeof (match));
 							break;
 						}
 
@@ -1374,8 +1181,7 @@ qboolean CG_SpeakerEditor_NoiseEdit_KeyDown(panel_button_t *button, int key)
 				}
 			}
 
-			if (noiseMatchCount == 0)
-			{
+			if (noiseMatchCount == 0) {
 				noiseMatchString[0] = '\0';
 				return qtrue;
 			}
@@ -1383,15 +1189,11 @@ qboolean CG_SpeakerEditor_NoiseEdit_KeyDown(panel_button_t *button, int key)
 			Com_sprintf((char *)button->text, button->data[0], "%s%s", dirname, match);
 
 			return qtrue;
-		}
-		else
-		{
-			if (key & K_CHAR_FLAG)
-			{
+		} else {
+			if (key & K_CHAR_FLAG) {
 				int localkey = key;
 				localkey &= ~K_CHAR_FLAG;
-				if (localkey == 'h' - 'a' + 1 || localkey >= 32)
-				{
+				if (localkey == 'h' - 'a' + 1 || localkey >= 32) {
 					noiseMatchString[0] = '\0';
 				}
 			}
@@ -1401,29 +1203,22 @@ qboolean CG_SpeakerEditor_NoiseEdit_KeyDown(panel_button_t *button, int key)
 	return BG_PanelButton_EditClick(button, key);
 }
 
-void CG_SpeakerEditor_NoiseEditFinish(panel_button_t *button)
-{
-	Q_strncpyz(editSpeaker->filename, button->text, sizeof(editSpeaker->filename));
+void CG_SpeakerEditor_NoiseEditFinish(panel_button_t *button) {
+	Q_strncpyz(editSpeaker->filename, button->text, sizeof (editSpeaker->filename));
 
-	if (*editSpeaker->filename)
-	{
+	if (*editSpeaker->filename) {
 		editSpeaker->noise = trap_S_RegisterSound(editSpeaker->filename, qfalse);
-	}
-	else
-	{
+	} else {
 		editSpeaker->noise = 0;
 	}
 }
 
-void CG_SpeakerEditor_TargetnameEditFinish(panel_button_t *button)
-{
-	Q_strncpyz(editSpeaker->targetname, button->text, sizeof(editSpeaker->targetname));
+void CG_SpeakerEditor_TargetnameEditFinish(panel_button_t *button) {
+	Q_strncpyz(editSpeaker->targetname, button->text, sizeof (editSpeaker->targetname));
 }
 
-qboolean CG_SpeakerEditor_Dropdown_KeyDown(panel_button_t *button, int key)
-{
-	if (key == K_MOUSE1)
-	{
+qboolean CG_SpeakerEditor_Dropdown_KeyDown(panel_button_t *button, int key) {
+	if (key == K_MOUSE1) {
 		BG_PanelButtons_SetFocusButton(button);
 		return qtrue;
 	}
@@ -1431,39 +1226,30 @@ qboolean CG_SpeakerEditor_Dropdown_KeyDown(panel_button_t *button, int key)
 	return qfalse;
 }
 
-qboolean CG_SpeakerEditor_Looped_KeyUp(panel_button_t *button, int key)
-{
-	if (key == K_MOUSE1)
-	{
-		if (button == BG_PanelButtons_GetFocusButton())
-		{
+qboolean CG_SpeakerEditor_Looped_KeyUp(panel_button_t *button, int key) {
+	if (key == K_MOUSE1) {
+		if (button == BG_PanelButtons_GetFocusButton()) {
 			rectDef_t rect;
 			int       i;
 
-			memcpy(&rect, &button->rect, sizeof(rect));
+			memcpy(&rect, &button->rect, sizeof (rect));
 
-			for (i = 0; i < 3; i++)
-			{
-				if (i == (int)editSpeaker->loop)
-				{
+			for (i = 0; i < 3; i++) {
+				if (i == (int)editSpeaker->loop) {
 					continue;
 				}
 
 				rect.y += 12.f;
 
-				if (BG_CursorInRect(&rect))
-				{
+				if (BG_CursorInRect(&rect)) {
 					button->data[1] = editSpeaker->loop = i;
 					break;
 				}
 			}
 
-			if (editSpeaker->loop == S_LT_LOOPED_ON)
-			{
+			if (editSpeaker->loop == S_LT_LOOPED_ON) {
 				editSpeaker->activated = qtrue;
-			}
-			else
-			{
+			} else {
 				editSpeaker->activated = qfalse;
 			}
 
@@ -1476,28 +1262,22 @@ qboolean CG_SpeakerEditor_Looped_KeyUp(panel_button_t *button, int key)
 	return qfalse;
 }
 
-qboolean CG_SpeakerEditor_Broadcast_KeyUp(panel_button_t *button, int key)
-{
-	if (key == K_MOUSE1)
-	{
-		if (button == BG_PanelButtons_GetFocusButton())
-		{
+qboolean CG_SpeakerEditor_Broadcast_KeyUp(panel_button_t *button, int key) {
+	if (key == K_MOUSE1) {
+		if (button == BG_PanelButtons_GetFocusButton()) {
 			rectDef_t rect;
 			int       i;
 
-			memcpy(&rect, &button->rect, sizeof(rect));
+			memcpy(&rect, &button->rect, sizeof (rect));
 
-			for (i = 0; i < 3; i++)
-			{
-				if (i == (int)editSpeaker->broadcast)
-				{
+			for (i = 0; i < 3; i++) {
+				if (i == (int)editSpeaker->broadcast) {
 					continue;
 				}
 
 				rect.y += 12.f;
 
-				if (BG_CursorInRect(&rect))
-				{
+				if (BG_CursorInRect(&rect)) {
 					button->data[1] = editSpeaker->broadcast = i;
 					break;
 				}
@@ -1512,87 +1292,63 @@ qboolean CG_SpeakerEditor_Broadcast_KeyUp(panel_button_t *button, int key)
 	return qfalse;
 }
 
-void CG_SpeakerEditor_WaitEditFinish(panel_button_t *button)
-{
-	if (*button->text)
-	{
+void CG_SpeakerEditor_WaitEditFinish(panel_button_t *button) {
+	if (*button->text) {
 		editSpeaker->wait = atoi(button->text);
-		if (editSpeaker->wait < 0)
-		{
+		if (editSpeaker->wait < 0) {
 			editSpeaker->wait = 0;
-			Com_sprintf((char *)button->text, sizeof(button->text), "%i", editSpeaker->range);
+			Com_sprintf((char *)button->text, sizeof (button->text), "%i", editSpeaker->range);
 		}
-	}
-	else
-	{
+	} else {
 		editSpeaker->wait = 0;
-		Com_sprintf((char *)button->text, sizeof(button->text), "%i", editSpeaker->wait);
+		Com_sprintf((char *)button->text, sizeof (button->text), "%i", editSpeaker->wait);
 	}
 }
 
-void CG_SpeakerEditor_RandomEditFinish(panel_button_t *button)
-{
-	if (*button->text)
-	{
+void CG_SpeakerEditor_RandomEditFinish(panel_button_t *button) {
+	if (*button->text) {
 		editSpeaker->random = atoi(button->text);
-		if (editSpeaker->random < 0)
-		{
+		if (editSpeaker->random < 0) {
 			editSpeaker->random = 0;
-			Com_sprintf((char *)button->text, sizeof(button->text), "%i", editSpeaker->random);
+			Com_sprintf((char *)button->text, sizeof (button->text), "%i", editSpeaker->random);
 		}
-	}
-	else
-	{
+	} else {
 		editSpeaker->random = 0;
-		Com_sprintf((char *)button->text, sizeof(button->text), "%i", editSpeaker->random);
+		Com_sprintf((char *)button->text, sizeof (button->text), "%i", editSpeaker->random);
 	}
 }
 
-void CG_SpeakerEditor_VolumeEditFinish(panel_button_t *button)
-{
-	if (*button->text)
-	{
+void CG_SpeakerEditor_VolumeEditFinish(panel_button_t *button) {
+	if (*button->text) {
 		editSpeaker->volume = atoi(button->text);
-		if (editSpeaker->volume < 0)
-		{
+		if (editSpeaker->volume < 0) {
 			editSpeaker->volume = 0;
-			Com_sprintf((char *)button->text, sizeof(button->text), "%i", editSpeaker->volume);
-		}
-		else if (editSpeaker->volume > 65535)
-		{
+			Com_sprintf((char *)button->text, sizeof (button->text), "%i", editSpeaker->volume);
+		} else if (editSpeaker->volume > 65535) {
 			editSpeaker->volume = 65535;
-			Com_sprintf((char *)button->text, sizeof(button->text), "%i", editSpeaker->volume);
+			Com_sprintf((char *)button->text, sizeof (button->text), "%i", editSpeaker->volume);
 		}
-	}
-	else
-	{
+	} else {
 		editSpeaker->volume = 127;
-		Com_sprintf((char *)button->text, sizeof(button->text), "%i", editSpeaker->volume);
+		Com_sprintf((char *)button->text, sizeof (button->text), "%i", editSpeaker->volume);
 	}
 }
 
-void CG_SpeakerEditor_RangeEditFinish(panel_button_t *button)
-{
-	if (*button->text)
-	{
+void CG_SpeakerEditor_RangeEditFinish(panel_button_t *button) {
+	if (*button->text) {
 		editSpeaker->range = atoi(button->text);
-		if (editSpeaker->range < 0)
-		{
+		if (editSpeaker->range < 0) {
 			editSpeaker->range = 0;
-			Com_sprintf((char *)button->text, sizeof(button->text), "%i", editSpeaker->range);
+			Com_sprintf((char *)button->text, sizeof (button->text), "%i", editSpeaker->range);
 		}
-	}
-	else
-	{
+	} else {
 		editSpeaker->range = 1250;
-		Com_sprintf((char *)button->text, sizeof(button->text), "%i", editSpeaker->range);
+		Com_sprintf((char *)button->text, sizeof (button->text), "%i", editSpeaker->range);
 	}
 }
 
-qboolean CG_SpeakerEditor_Ok_KeyDown(panel_button_t *button, int key)
-{
-	if (key == K_MOUSE1)
-	{
+qboolean CG_SpeakerEditor_Ok_KeyDown(panel_button_t *button, int key) {
+	if (key == K_MOUSE1) {
 		BG_PanelButtons_SetFocusButton(button);
 		return qtrue;
 	}
@@ -1600,16 +1356,12 @@ qboolean CG_SpeakerEditor_Ok_KeyDown(panel_button_t *button, int key)
 	return qfalse;
 }
 
-qboolean CG_SpeakerEditor_Ok_KeyUp(panel_button_t *button, int key)
-{
-	if (key == K_MOUSE1)
-	{
-		if (button == BG_PanelButtons_GetFocusButton())
-		{
+qboolean CG_SpeakerEditor_Ok_KeyUp(panel_button_t *button, int key) {
+	if (key == K_MOUSE1) {
+		if (button == BG_PanelButtons_GetFocusButton()) {
 			BG_PanelButtons_SetFocusButton(NULL);
 
-			if (BG_CursorInRect(&button->rect))
-			{
+			if (BG_CursorInRect(&button->rect)) {
 				CG_SaveSpeakersToScript();
 
 				editSpeakerActive = qfalse;
@@ -1622,10 +1374,8 @@ qboolean CG_SpeakerEditor_Ok_KeyUp(panel_button_t *button, int key)
 	return qfalse;
 }
 
-qboolean CG_SpeakerEditor_Cancel_KeyDown(panel_button_t *button, int key)
-{
-	if (key == K_MOUSE1)
-	{
+qboolean CG_SpeakerEditor_Cancel_KeyDown(panel_button_t *button, int key) {
+	if (key == K_MOUSE1) {
 		BG_PanelButtons_SetFocusButton(button);
 		return qtrue;
 	}
@@ -1633,17 +1383,13 @@ qboolean CG_SpeakerEditor_Cancel_KeyDown(panel_button_t *button, int key)
 	return qfalse;
 }
 
-qboolean CG_SpeakerEditor_Cancel_KeyUp(panel_button_t *button, int key)
-{
-	if (key == K_MOUSE1)
-	{
-		if (button == BG_PanelButtons_GetFocusButton())
-		{
+qboolean CG_SpeakerEditor_Cancel_KeyUp(panel_button_t *button, int key) {
+	if (key == K_MOUSE1) {
+		if (button == BG_PanelButtons_GetFocusButton()) {
 			BG_PanelButtons_SetFocusButton(NULL);
 
-			if (BG_CursorInRect(&button->rect))
-			{
-				memcpy(editSpeaker, &undoSpeaker, sizeof(*editSpeaker));
+			if (BG_CursorInRect(&button->rect)) {
+				memcpy(editSpeaker, &undoSpeaker, sizeof (*editSpeaker));
 				undoSpeakerIndex  = -2;
 				editSpeaker       = NULL;
 				editSpeakerActive = qfalse;
@@ -1656,10 +1402,8 @@ qboolean CG_SpeakerEditor_Cancel_KeyUp(panel_button_t *button, int key)
 	return qfalse;
 }
 
-qboolean CG_SpeakerEditor_Delete_KeyDown(panel_button_t *button, int key)
-{
-	if (key == K_MOUSE1)
-	{
+qboolean CG_SpeakerEditor_Delete_KeyDown(panel_button_t *button, int key) {
+	if (key == K_MOUSE1) {
 		BG_PanelButtons_SetFocusButton(button);
 		return qtrue;
 	}
@@ -1667,16 +1411,12 @@ qboolean CG_SpeakerEditor_Delete_KeyDown(panel_button_t *button, int key)
 	return qfalse;
 }
 
-qboolean CG_SpeakerEditor_Delete_KeyUp(panel_button_t *button, int key)
-{
-	if (key == K_MOUSE1)
-	{
-		if (button == BG_PanelButtons_GetFocusButton())
-		{
+qboolean CG_SpeakerEditor_Delete_KeyUp(panel_button_t *button, int key) {
+	if (key == K_MOUSE1) {
+		if (button == BG_PanelButtons_GetFocusButton()) {
 			BG_PanelButtons_SetFocusButton(NULL);
 
-			if (BG_CursorInRect(&button->rect))
-			{
+			if (BG_CursorInRect(&button->rect)) {
 				undoSpeakerIndex = -1;
 				BG_SS_DeleteSpeaker(BG_GetIndexForSpeaker(editSpeaker));
 				CG_SaveSpeakersToScript();
@@ -2025,15 +1765,12 @@ static panel_button_t *speakerEditorButtons[] =
 	NULL
 };
 
-void CG_SpeakerEditorDraw(void)
-{
-	if (!cg.editingSpeakers)
-	{
+void CG_SpeakerEditorDraw(void) {
+	if (!cg.editingSpeakers) {
 		return;
 	}
 
-	if (!editSpeakerActive)
-	{
+	if (!editSpeakerActive) {
 		int    bindingkey[2];
 		char   binding[2][32];
 		vec4_t colour;
@@ -2042,12 +1779,9 @@ void CG_SpeakerEditorDraw(void)
 		VectorCopy(colorWhite, colour);
 		colour[3] = .8f;
 
-		if (undoSpeakerIndex == -2)
-		{
+		if (undoSpeakerIndex == -2) {
 			y = 452;
-		}
-		else
-		{
+		} else {
 			y = 442;
 		}
 
@@ -2059,8 +1793,8 @@ void CG_SpeakerEditorDraw(void)
 		                  0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont2);
 
 		trap_Key_KeysForBinding("dumpspeaker", &bindingkey[0], &bindingkey[1]);
-		trap_Key_KeynumToStringBuf(bindingkey[0], binding[0], sizeof(binding[0]));
-		trap_Key_KeynumToStringBuf(bindingkey[1], binding[1], sizeof(binding[1]));
+		trap_Key_KeynumToStringBuf(bindingkey[0], binding[0], sizeof (binding[0]));
+		trap_Key_KeynumToStringBuf(bindingkey[1], binding[1], sizeof (binding[1]));
 		Q_strupr(binding[0]);
 		Q_strupr(binding[1]);
 		CG_Text_Paint_Ext(8, y + 10, .2f, .2f, colour,
@@ -2069,8 +1803,8 @@ void CG_SpeakerEditorDraw(void)
 		                  0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont2);
 
 		trap_Key_KeysForBinding("modifyspeaker", &bindingkey[0], &bindingkey[1]);
-		trap_Key_KeynumToStringBuf(bindingkey[0], binding[0], sizeof(binding[0]));
-		trap_Key_KeynumToStringBuf(bindingkey[1], binding[1], sizeof(binding[1]));
+		trap_Key_KeynumToStringBuf(bindingkey[0], binding[0], sizeof (binding[0]));
+		trap_Key_KeynumToStringBuf(bindingkey[1], binding[1], sizeof (binding[1]));
 		Q_strupr(binding[0]);
 		Q_strupr(binding[1]);
 		CG_Text_Paint_Ext(8, y + 20, .2f, .2f, colour,
@@ -2078,11 +1812,10 @@ void CG_SpeakerEditorDraw(void)
 		                     bindingkey[1] != -1  ? va(" or %s", binding[1]) : ""),
 		                  0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont2);
 
-		if (undoSpeakerIndex != -2)
-		{
+		if (undoSpeakerIndex != -2) {
 			trap_Key_KeysForBinding("undospeaker", &bindingkey[0], &bindingkey[1]);
-			trap_Key_KeynumToStringBuf(bindingkey[0], binding[0], sizeof(binding[0]));
-			trap_Key_KeynumToStringBuf(bindingkey[1], binding[1], sizeof(binding[1]));
+			trap_Key_KeynumToStringBuf(bindingkey[0], binding[0], sizeof (binding[0]));
+			trap_Key_KeynumToStringBuf(bindingkey[1], binding[1], sizeof (binding[1]));
 			Q_strupr(binding[0]);
 			Q_strupr(binding[1]);
 			CG_Text_Paint_Ext(8, y + 30, .2f, .2f, colour,
@@ -2104,23 +1837,19 @@ void CG_SpeakerEditorDraw(void)
 		                      y + 0.5 * (cg.refdef_current->height - h),
 		                      w, h, 0, 0, 1, 1, cgs.media.crosshairShader[cg_drawCrosshair.integer % NUM_CROSSHAIRS]);
 
-		if (cg.crosshairShaderAlt[cg_drawCrosshair.integer % NUM_CROSSHAIRS])
-		{
+		if (cg.crosshairShaderAlt[cg_drawCrosshair.integer % NUM_CROSSHAIRS]) {
 			trap_R_DrawStretchPic(x + 0.5 * (cg.refdef_current->width - w),
 			                      y + 0.5 * (cg.refdef_current->height - h),
 			                      w, h, 0, 0, 1, 1, cg.crosshairShaderAlt[cg_drawCrosshair.integer % NUM_CROSSHAIRS]);
 		}
 
 
-		if (editSpeaker)
-		{
+		if (editSpeaker) {
 			// render interface
 			BG_PanelButtonsRender(speakerInfoButtons);
 		}
 
-	}
-	else
-	{
+	} else {
 		// render interface
 		BG_PanelButtonsRender(speakerEditorButtons);
 
@@ -2130,19 +1859,13 @@ void CG_SpeakerEditorDraw(void)
 	}
 }
 
-void CG_SpeakerEditor_KeyHandling(int key, qboolean down)
-{
-	if (!BG_PanelButtonsKeyEvent(key, down, speakerEditorButtons))
-	{
-		switch (key)
-		{
-		case K_MOUSE1:  if (!down)
-			{
+void CG_SpeakerEditor_KeyHandling(int key, qboolean down) {
+	if (!BG_PanelButtonsKeyEvent(key, down, speakerEditorButtons)) {
+		switch (key) {
+		case K_MOUSE1:  if (!down) {
 				editSpeakerHandle.activeAxis = -1;
 				break;
-			}
-			else if (editSpeakerHandle.activeAxis == -1)
-			{
+		} else if (editSpeakerHandle.activeAxis == -1) {
 				int    i, closest;
 				float  dist, minDist, r, u;
 				vec3_t vec, axisOrg, dir;
@@ -2153,16 +1876,14 @@ void CG_SpeakerEditor_KeyHandling(int key, qboolean down)
 				r = -(cg.refdef_current->fov_x / 90.f) * (float)(cgs.cursorX - 320) / 320;
 				u = -(cg.refdef_current->fov_y / 90.f) * (float)(cgs.cursorY - 240) / 240;
 
-				for (i = 0; i < 3; i++)
-				{
+				for (i = 0; i < 3; i++) {
 					dir[i] = cg.refdef_current->viewaxis[0][i] * 1.f +
 					         cg.refdef_current->viewaxis[1][i] * r +
 					         cg.refdef_current->viewaxis[2][i] * u;
 				}
 				VectorNormalizeFast(dir);
 
-				for (i = 0; i < 3; i++)
-				{
+				for (i = 0; i < 3; i++) {
 					VectorClear(vec);
 					vec[i] = 1.f;
 					VectorMA(editSpeakerHandle.origin, 32, vec, axisOrg);
@@ -2172,8 +1893,7 @@ void CG_SpeakerEditor_KeyHandling(int key, qboolean down)
 					dist = DotProduct(vec, dir);
 					VectorMA(cg.refdef_current->vieworg, dist, dir, vec);
 					dist = DistanceSquared(axisOrg, vec);
-					if (dist <= minDist)
-					{
+					if (dist <= minDist) {
 						minDist = dist;
 						closest = i;
 					}
@@ -2181,12 +1901,11 @@ void CG_SpeakerEditor_KeyHandling(int key, qboolean down)
 
 				editSpeakerHandle.activeAxis = closest;
 
-				if (editSpeakerHandle.activeAxis >= 0)
-				{
+				if (editSpeakerHandle.activeAxis >= 0) {
 					VectorCopy(editSpeakerHandle.origin, editSpeakerHandle.oldOrigin);
 				}
 				;
-			}
+		}
 			break;
 		case K_ESCAPE:  BG_PanelButtons_SetFocusButton(NULL);
 			CG_SaveSpeakersToScript();
@@ -2197,42 +1916,27 @@ void CG_SpeakerEditor_KeyHandling(int key, qboolean down)
 	}
 }
 
-void CG_SpeakerEditorMouseMove_Handling(int x, int y)
-{
-	if (!cg.editingSpeakers)
-	{
+void CG_SpeakerEditorMouseMove_Handling(int x, int y) {
+	if (!cg.editingSpeakers) {
 		return;
 	}
 
-	if (editSpeakerActive)
-	{
-		if (editSpeakerHandle.activeAxis >= 0)
-		{
-			if (editSpeakerHandle.activeAxis == 0)
-			{
+	if (editSpeakerActive) {
+		if (editSpeakerHandle.activeAxis >= 0) {
+			if (editSpeakerHandle.activeAxis == 0) {
 				// this one and the next one are quite nasty, so do it the hacky way
-				if (cgs.cursorX - x < 320)
-				{
+				if (cgs.cursorX - x < 320) {
 					editSpeaker->origin[0] -= x;
-				}
-				else
-				{
+				} else {
 					editSpeaker->origin[0] += x;
 				}
-			}
-			else if (editSpeakerHandle.activeAxis == 1)
-			{
-				if (cgs.cursorX - x < 320)
-				{
+			} else if (editSpeakerHandle.activeAxis == 1) {
+				if (cgs.cursorX - x < 320) {
 					editSpeaker->origin[1] -= x;
-				}
-				else
-				{
+				} else {
 					editSpeaker->origin[1] += x;
 				}
-			}
-			else if (editSpeakerHandle.activeAxis == 2)
-			{
+			} else if (editSpeakerHandle.activeAxis == 2) {
 				// but this one is easy
 				editSpeaker->origin[2] -= y;
 			}
@@ -2246,8 +1950,7 @@ void CG_SpeakerEditorMouseMove_Handling(int x, int y)
 	}
 }
 
-void CG_ActivateEditSoundMode(void)
-{
+void CG_ActivateEditSoundMode(void) {
 	CG_Printf("Activating Speaker Edit mode.\n");
 	cg.editingSpeakers = qtrue;
 
@@ -2256,8 +1959,7 @@ void CG_ActivateEditSoundMode(void)
 	editSpeakerHandle.activeAxis = -1;
 	undoSpeakerIndex             = -2;
 
-	if (!speakerShader)
-	{
+	if (!speakerShader) {
 		speakerShader          = trap_R_RegisterShader("gfx/misc/speaker");
 		speakerShaderGrayScale = trap_R_RegisterShader("gfx/misc/speaker_gs");
 
@@ -2266,13 +1968,11 @@ void CG_ActivateEditSoundMode(void)
 	}
 }
 
-void CG_DeActivateEditSoundMode(void)
-{
+void CG_DeActivateEditSoundMode(void) {
 	CG_Printf("De-activating Speaker Edit mode.\n");
 	cg.editingSpeakers = qfalse;
 
-	if (editSpeakerActive)
-	{
+	if (editSpeakerActive) {
 		CG_EventHandling(-CGAME_EVENT_SPEAKEREDITOR, qtrue);
 	}
 
@@ -2282,54 +1982,44 @@ void CG_DeActivateEditSoundMode(void)
 	undoSpeakerIndex             = -2;
 }
 
-void CG_ModifyEditSpeaker(void)
-{
-	if (!editSpeaker || editSpeakerActive)
-	{
+void CG_ModifyEditSpeaker(void) {
+	if (!editSpeaker || editSpeakerActive) {
 		return;
 	}
 
 	CG_EventHandling(CGAME_EVENT_SPEAKEREDITOR, qfalse);
 
 	editSpeakerActive = qtrue;
-	memcpy(&undoSpeaker, editSpeaker, sizeof(undoSpeaker));
+	memcpy(&undoSpeaker, editSpeaker, sizeof (undoSpeaker));
 	undoSpeakerIndex = BG_GetIndexForSpeaker(editSpeaker);
 
 	VectorCopy(editSpeaker->origin, editSpeakerHandle.origin);
 	VectorCopy(editSpeaker->origin, editSpeakerHandle.oldOrigin);
 
-	Q_strncpyz(noiseEditBuffer, editSpeaker->filename, sizeof(noiseEditBuffer));
-	Q_strncpyz(targetnameEditBuffer, editSpeaker->targetname, sizeof(targetnameEditBuffer));
+	Q_strncpyz(noiseEditBuffer, editSpeaker->filename, sizeof (noiseEditBuffer));
+	Q_strncpyz(targetnameEditBuffer, editSpeaker->targetname, sizeof (targetnameEditBuffer));
 	speakerEditorLoopedDropdown.data[1]    = editSpeaker->loop;
 	speakerEditorBroadcastDropdown.data[1] = editSpeaker->broadcast;
-	Com_sprintf(waitEditBuffer, sizeof(waitEditBuffer), "%i", editSpeaker->wait);
-	Com_sprintf(randomEditBuffer, sizeof(randomEditBuffer), "%i", editSpeaker->random);
-	Com_sprintf(volumeEditBuffer, sizeof(volumeEditBuffer), "%i", editSpeaker->volume);
-	Com_sprintf(rangeEditBuffer, sizeof(rangeEditBuffer), "%i", editSpeaker->range);
+	Com_sprintf(waitEditBuffer, sizeof (waitEditBuffer), "%i", editSpeaker->wait);
+	Com_sprintf(randomEditBuffer, sizeof (randomEditBuffer), "%i", editSpeaker->random);
+	Com_sprintf(volumeEditBuffer, sizeof (volumeEditBuffer), "%i", editSpeaker->volume);
+	Com_sprintf(rangeEditBuffer, sizeof (rangeEditBuffer), "%i", editSpeaker->range);
 }
 
-void CG_UndoEditSpeaker(void)
-{
-	if (undoSpeakerIndex == -2)
-	{
+void CG_UndoEditSpeaker(void) {
+	if (undoSpeakerIndex == -2) {
 		return;
 	}
 
-	if (undoSpeakerIndex == -1)
-	{
-		if (!BG_SS_StoreSpeaker(&undoSpeaker))
-		{
+	if (undoSpeakerIndex == -1) {
+		if (!BG_SS_StoreSpeaker(&undoSpeaker)) {
 			CG_Printf(S_COLOR_YELLOW "UNDO: restoring deleted speaker failed, no storage memory for speaker\n");
-		}
-		else
-		{
+		} else {
 			CG_Printf("UNDO: restored deleted speaker at %.2f %.2f %.2f.\n", undoSpeaker.origin[0], undoSpeaker.origin[1], undoSpeaker.origin[2]);
 		}
-	}
-	else
-	{
+	} else {
 		bg_speaker_t *speaker = BG_GetScriptSpeaker(undoSpeakerIndex);
-		memcpy(speaker, &undoSpeaker, sizeof(*speaker));
+		memcpy(speaker, &undoSpeaker, sizeof (*speaker));
 		CG_Printf("UNDO: restoring modified settings of speaker at %.2f %.2f %.2f.\n", undoSpeaker.origin[0], undoSpeaker.origin[1], undoSpeaker.origin[2]);
 	}
 
@@ -2339,101 +2029,80 @@ void CG_UndoEditSpeaker(void)
 
 // Normal Use
 
-void CG_ToggleActiveOnScriptSpeaker(int index)
-{
+void CG_ToggleActiveOnScriptSpeaker(int index) {
 	bg_speaker_t *speaker = BG_GetScriptSpeaker(index);
 
-	if (speaker)
-	{
+	if (speaker) {
 		speaker->activated = !speaker->activated;
 	}
 }
 
-void CG_UnsetActiveOnScriptSpeaker(int index)
-{
+void CG_UnsetActiveOnScriptSpeaker(int index) {
 	bg_speaker_t *speaker = BG_GetScriptSpeaker(index);
 
-	if (speaker)
-	{
+	if (speaker) {
 		speaker->activated = qfalse;
 	}
 }
 
-void CG_SetActiveOnScriptSpeaker(int index)
-{
+void CG_SetActiveOnScriptSpeaker(int index) {
 	bg_speaker_t *speaker = BG_GetScriptSpeaker(index);
 
-	if (speaker)
-	{
+	if (speaker) {
 		speaker->activated = qtrue;
 	}
 }
 
-static void CG_PlayScriptSpeaker(bg_speaker_t *speaker, qboolean global)
-{
-	switch (speaker->loop)
-	{
-	case S_LT_NOT_LOOPED:   if (global)
-		{
+static void CG_PlayScriptSpeaker(bg_speaker_t *speaker, qboolean global) {
+	switch (speaker->loop) {
+	case S_LT_NOT_LOOPED:   if (global) {
 			trap_S_StartLocalSound(speaker->noise, CHAN_ITEM);
-		}
-		else
-		{
+	} else {
 			trap_S_StartSoundVControl(speaker->origin, -1, CHAN_ITEM, speaker->noise, speaker->volume);
-		}
+	}
 		break;
 	case S_LT_LOOPED_ON:
-	case S_LT_LOOPED_OFF:   if (speaker->soundTime == 0)
-		{
+	case S_LT_LOOPED_OFF:   if (speaker->soundTime == 0) {
 			speaker->soundTime = trap_S_GetCurrentSoundTime();
-		}
+	}
 		trap_S_AddRealLoopingSound(speaker->origin, vec3_origin, speaker->noise, speaker->range, speaker->volume, speaker->soundTime);
 		break;
 	}
 }
 
-void CG_AddScriptSpeakers(void)
-{
+void CG_AddScriptSpeakers(void) {
 	int          i;
 	bg_speaker_t *speaker;
 
-	if (cg.editingSpeakers)
-	{
+	if (cg.editingSpeakers) {
 		CG_RenderScriptSpeakers();
 	}
 
-	for (i = 0; i < BG_NumScriptSpeakers(); i++)
-	{
+	for (i = 0; i < BG_NumScriptSpeakers(); i++) {
 		speaker = BG_GetScriptSpeaker(i);
 
 		// don't bother playing missing sounds
-		if (!speaker->noise)
-		{
+		if (!speaker->noise) {
 			continue;
 		}
 
 		// activate if needed
-		if (speaker->loop == S_LT_NOT_LOOPED)
-		{
-			if (cg.time >= speaker->nextActivateTime && (speaker->wait || speaker->random))
-			{
+		if (speaker->loop == S_LT_NOT_LOOPED) {
+			if (cg.time >= speaker->nextActivateTime && (speaker->wait || speaker->random)) {
 				speaker->activated        = qtrue;
 				speaker->nextActivateTime = cg.time + speaker->wait + speaker->random * crandom();
 			}
 		}
 
-		if (!speaker->activated)
-		{
+		if (!speaker->activated) {
 			speaker->soundTime = 0;
 			continue;
 		}
 
-		switch (speaker->broadcast)
-		{
-		case S_BT_LOCAL:    if (trap_R_inPVS(cg.refdef_current->vieworg, speaker->origin))
-			{
+		switch (speaker->broadcast) {
+		case S_BT_LOCAL:    if (trap_R_inPVS(cg.refdef_current->vieworg, speaker->origin)) {
 				CG_PlayScriptSpeaker(speaker, qfalse);
-			}
+		}
 			break;
 		case S_BT_GLOBAL:   CG_PlayScriptSpeaker(speaker, qtrue);
 			break;
@@ -2441,8 +2110,7 @@ void CG_AddScriptSpeakers(void)
 			break;
 		}
 
-		if (speaker->loop == S_LT_NOT_LOOPED)
-		{
+		if (speaker->loop == S_LT_NOT_LOOPED) {
 			speaker->activated = qfalse;
 		}
 	}

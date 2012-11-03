@@ -36,32 +36,24 @@ void propExplosion(gentity_t *ent);
 alarmbox_updateparts
 ==============
 */
-void alarmbox_updateparts(gentity_t *ent, qboolean matestoo)
-{
+void alarmbox_updateparts(gentity_t *ent, qboolean matestoo) {
 	gentity_t *t, *mate;
 	qboolean  alarming = (ent->s.frame == 1);
 
 	// update teammates
-	if (matestoo)
-	{
-		for (mate = ent->teammaster; mate; mate = mate->teamchain)
-		{
-			if (mate == ent)
-			{
+	if (matestoo) {
+		for (mate = ent->teammaster; mate; mate = mate->teamchain) {
+			if (mate == ent) {
 				continue;
 			}
 
-			if (!(mate->active))       // don't update dead alarm boxes, they stay dead
-			{
+			if (!(mate->active)) {     // don't update dead alarm boxes, they stay dead
 				continue;
 			}
 
-			if (!(ent->active))       // destroyed, so just turn teammates off
-			{
+			if (!(ent->active)) {     // destroyed, so just turn teammates off
 				mate->s.frame = 0;
-			}
-			else
-			{
+			} else {
 				mate->s.frame = ent->s.frame;
 			}
 
@@ -70,46 +62,33 @@ void alarmbox_updateparts(gentity_t *ent, qboolean matestoo)
 	}
 
 	// update lights
-	if (!ent->target)
-	{
+	if (!ent->target) {
 		return;
 	}
 
 	t = NULL;
-	while ((t = G_FindByTargetname(t, ent->target)) != NULL)
-	{
-		if (t == ent)
-		{
+	while ((t = G_FindByTargetname(t, ent->target)) != NULL) {
+		if (t == ent) {
 			G_Printf("WARNING: Entity used itself.\n");
-		}
-		else
-		{
+		} else {
 			// give the dlight the sound
-			if (!Q_stricmp(t->classname, "dlight"))
-			{
+			if (!Q_stricmp(t->classname, "dlight")) {
 				t->soundLoop = ent->soundLoop;
 
-				if (alarming)
-				{
-					if (!(t->r.linked))
-					{
+				if (alarming) {
+					if (!(t->r.linked)) {
 						G_UseEntity(t, ent, 0);
 					}
-				}
-				else
-				{
-					if (t->r.linked)
-					{
+				} else {
+					if (t->r.linked) {
 						G_UseEntity(t, ent, 0);
 					}
 				}
 			}
 			// alarmbox can tell script_trigger about activation
 			// (but don't trigger if dying, only activation)
-			else if (!Q_stricmp(t->classname, "target_script_trigger"))
-			{
-				if (ent->active)     // not dead
-				{
+			else if (!Q_stricmp(t->classname, "target_script_trigger")) {
+				if (ent->active) {   // not dead
 					G_UseEntity(t, ent, 0);
 				}
 			}
@@ -122,28 +101,22 @@ void alarmbox_updateparts(gentity_t *ent, qboolean matestoo)
 alarmbox_use
 ==============
 */
-void alarmbox_use(gentity_t *ent, gentity_t *other, gentity_t *foo)
-{
+void alarmbox_use(gentity_t *ent, gentity_t *other, gentity_t *foo) {
 	// Nico, silent GCC
 	foo = foo;
 
-	if (!(ent->active))
-	{
+	if (!(ent->active)) {
 		return;
 	}
 
-	if (ent->s.frame)
-	{
+	if (ent->s.frame) {
 		ent->s.frame = 0;
-	}
-	else
-	{
+	} else {
 		ent->s.frame = 1;
 	}
 
 	alarmbox_updateparts(ent, qtrue);
-	if (other->client)
-	{
+	if (other->client) {
 		G_AddEvent(ent, EV_GENERAL_SOUND, ent->soundPos3);
 	}
 }
@@ -154,8 +127,7 @@ void alarmbox_use(gentity_t *ent, gentity_t *other, gentity_t *foo)
 alarmbox_die
 ==============
 */
-void alarmbox_die(gentity_t *ent, gentity_t *inflictor, gentity_t *attacker, int damage, int mod)
-{
+void alarmbox_die(gentity_t *ent, gentity_t *inflictor, gentity_t *attacker, int damage, int mod) {
 	// Nico, silent GCC
 	inflictor = inflictor;
 	attacker  = attacker;
@@ -177,8 +149,7 @@ void alarmbox_die(gentity_t *ent, gentity_t *inflictor, gentity_t *attacker, int
 alarmbox_finishspawning
 ==============
 */
-void alarmbox_finishspawning(gentity_t *ent)
-{
+void alarmbox_finishspawning(gentity_t *ent) {
 	gentity_t *mate;
 
 	// make sure they all have the same master (picked arbitrarily.  last spawned)
@@ -206,12 +177,10 @@ alarm sound locations are also placed in the dlights, so wherever you place an a
 model: the model used is "models/mapobjects/electronics/alarmbox.md3"
 place the origin at the center of your trigger box
 */
-void SP_alarm_box(gentity_t *ent)
-{
+void SP_alarm_box(gentity_t *ent) {
 	char *s;
 
-	if (!ent->model)
-	{
+	if (!ent->model) {
 		G_Printf(S_COLOR_RED "alarm_box with NULL model\n");
 		return;
 	}
@@ -221,8 +190,7 @@ void SP_alarm_box(gentity_t *ent)
 	ent->s.modelindex2 = G_ModelIndex("models/mapobjects/electronics/alarmbox.md3");
 
 	// sound
-	if (G_SpawnString("noise", "0", &s))
-	{
+	if (G_SpawnString("noise", "0", &s)) {
 		ent->soundLoop = G_SoundIndex(s);
 	}
 
@@ -235,17 +203,13 @@ void SP_alarm_box(gentity_t *ent)
 	// Gordon: FIXME: temp
 	G_Printf("Alarm: %f %f %f\n", ent->s.origin[0], ent->s.origin[1], ent->s.origin[2]);
 
-	if (!ent->health)
-	{
+	if (!ent->health) {
 		ent->health = 10;
 	}
 
-	if (ent->spawnflags & 1)
-	{
+	if (ent->spawnflags & 1) {
 		ent->s.frame = 1;
-	}
-	else
-	{
+	} else {
 		ent->s.frame = 0;
 	}
 

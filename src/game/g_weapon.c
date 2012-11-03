@@ -46,10 +46,8 @@ qboolean Bullet_Fire_Extended(gentity_t *source, gentity_t *attacker, vec3_t sta
 
 int G_GetWeaponDamage(int weapon);   // JPW
 
-qboolean G_WeaponIsExplosive(meansOfDeath_t mod)
-{
-	switch (mod)
-	{
+qboolean G_WeaponIsExplosive(meansOfDeath_t mod) {
+	switch (mod) {
 	case MOD_GRENADE_LAUNCHER:
 	case MOD_GRENADE_PINEAPPLE:
 	case MOD_PANZERFAUST:
@@ -74,10 +72,8 @@ qboolean G_WeaponIsExplosive(meansOfDeath_t mod)
 	}
 }
 
-int G_GetWeaponClassForMOD(meansOfDeath_t mod)
-{
-	switch (mod)
-	{
+int G_GetWeaponClassForMOD(meansOfDeath_t mod) {
+	switch (mod) {
 	case MOD_GRENADE_LAUNCHER:
 	case MOD_GRENADE_PINEAPPLE:
 	case MOD_PANZERFAUST:
@@ -122,8 +118,7 @@ extern float sAngleBetweenVectors(vec3_t a, vec3_t b);
 Weapon_Knife
 ==============
 */
-void Weapon_Knife(gentity_t *ent)
-{
+void Weapon_Knife(gentity_t *ent) {
 	trace_t   tr;
 	gentity_t *traceEnt, *tent;
 	int       damage, mod;
@@ -138,23 +133,18 @@ void Weapon_Knife(gentity_t *ent)
 	VectorMA(muzzleTrace, KNIFE_DIST, forward, end);
 	G_HistoricalTrace(ent, &tr, muzzleTrace, NULL, NULL, end, ent->s.number, MASK_SHOT);
 
-	if (tr.surfaceFlags & SURF_NOIMPACT)
-	{
+	if (tr.surfaceFlags & SURF_NOIMPACT) {
 		return;
 	}
 
 	// no contact
-	if (tr.fraction == 1.0f)
-	{
+	if (tr.fraction == 1.0f) {
 		return;
 	}
 
-	if (tr.entityNum >= MAX_CLIENTS)       // world brush or non-player entity (no blood)
-	{
+	if (tr.entityNum >= MAX_CLIENTS) {     // world brush or non-player entity (no blood)
 		tent = G_TempEntity(tr.endpos, EV_MISSILE_MISS);
-	}
-	else                                // other player
-	{
+	} else {                              // other player
 		tent = G_TempEntity(tr.endpos, EV_MISSILE_HIT);
 	}
 
@@ -163,33 +153,28 @@ void Weapon_Knife(gentity_t *ent)
 	tent->s.weapon         = ent->s.weapon;
 	tent->s.clientNum      = ent->r.ownerNum;
 
-	if (tr.entityNum == ENTITYNUM_WORLD)     // don't worry about doing any damage
-	{
+	if (tr.entityNum == ENTITYNUM_WORLD) {   // don't worry about doing any damage
 		return;
 	}
 
 	traceEnt = &g_entities[tr.entityNum];
 
-	if (!(traceEnt->takedamage))
-	{
+	if (!(traceEnt->takedamage)) {
 		return;
 	}
 
 	damage = G_GetWeaponDamage(ent->s.weapon);   // JPW		// default knife damage for frontal attacks
 
 	/* CHECK WITH PAUL */
-	if (ent->client->sess.playerType == PC_COVERTOPS)
-	{
+	if (ent->client->sess.playerType == PC_COVERTOPS) {
 		damage *= 2;    // Watch it - you could hurt someone with that thing!
 
 	}
-	if (traceEnt->client)
-	{
+	if (traceEnt->client) {
 		AngleVectors(ent->client->ps.viewangles, pforward, NULL, NULL);
 		AngleVectors(traceEnt->client->ps.viewangles, eforward, NULL, NULL);
 
-		if (DotProduct(eforward, pforward) > 0.6f)           // from behind(-ish)
-		{
+		if (DotProduct(eforward, pforward) > 0.6f) {         // from behind(-ish)
 			damage = 100;   // enough to drop a 'normal' (100 health) human with one jab
 			mod    = MOD_KNIFE;
 		}
@@ -201,8 +186,7 @@ void Weapon_Knife(gentity_t *ent)
 // JPW NERVE
 
 //make it TR_LINEAR so it doesnt chew bandwidth...
-void MagicSink(gentity_t *self)
-{
+void MagicSink(gentity_t *self) {
 	self->clipmask   = 0;
 	self->r.contents = 0;
 
@@ -222,8 +206,7 @@ void MagicSink(gentity_t *self)
 ======================
 */
 // JPW NERVE
-void Weapon_Medic(gentity_t *ent)
-{
+void Weapon_Medic(gentity_t *ent) {
 	gitem_t   *item;
 	gentity_t *ent2;
 	vec3_t    velocity, offset;
@@ -231,8 +214,7 @@ void Weapon_Medic(gentity_t *ent)
 	vec3_t    tosspos, viewpos;
 	trace_t   tr;
 
-	if (level.time - ent->client->ps.classWeaponTime > level.medicChargeTime[ent->client->sess.sessionTeam - 1])
-	{
+	if (level.time - ent->client->ps.classWeaponTime > level.medicChargeTime[ent->client->sess.sessionTeam - 1]) {
 		ent->client->ps.classWeaponTime = level.time - level.medicChargeTime[ent->client->sess.sessionTeam - 1];
 	}
 
@@ -242,12 +224,9 @@ void Weapon_Medic(gentity_t *ent)
 	VectorCopy(ent->client->ps.viewangles, angles);
 
 	// clamp pitch
-	if (angles[PITCH] < -30)
-	{
+	if (angles[PITCH] < -30) {
 		angles[PITCH] = -30;
-	}
-	else if (angles[PITCH] > 30)
-	{
+	} else if (angles[PITCH] > 30) {
 		angles[PITCH] = 30;
 	}
 
@@ -265,8 +244,7 @@ void Weapon_Medic(gentity_t *ent)
 	VectorSet(maxs, (ITEM_RADIUS + 8), (ITEM_RADIUS + 8), 2 * (ITEM_RADIUS + 8));
 
 	trap_EngineerTrace(&tr, viewpos, mins, maxs, tosspos, ent->s.number, MASK_MISSILESHOT);
-	if (tr.startsolid)
-	{
+	if (tr.startsolid) {
 		// Arnout: this code is a bit more solid than the previous code
 		VectorCopy(forward, viewpos);
 		VectorNormalizeFast(viewpos);
@@ -275,9 +253,7 @@ void Weapon_Medic(gentity_t *ent)
 		trap_EngineerTrace(&tr, viewpos, mins, maxs, tosspos, ent->s.number, MASK_MISSILESHOT);
 
 		VectorCopy(tr.endpos, tosspos);
-	}
-	else if (tr.fraction < 1)        // oops, bad launch spot
-	{
+	} else if (tr.fraction < 1) {      // oops, bad launch spot
 		VectorCopy(tr.endpos, tosspos);
 		SnapVectorTowards(tosspos, viewpos);
 	}
@@ -295,8 +271,7 @@ void Weapon_Medic(gentity_t *ent)
 Weapon_MagicAmmo
 ==================
 */
-void Weapon_MagicAmmo(gentity_t *ent)
-{
+void Weapon_MagicAmmo(gentity_t *ent) {
 	gitem_t   *item;
 	gentity_t *ent2;
 	vec3_t    velocity, offset;
@@ -304,8 +279,7 @@ void Weapon_MagicAmmo(gentity_t *ent)
 	vec3_t    angles, mins, maxs;
 	trace_t   tr;
 
-	if (level.time - ent->client->ps.classWeaponTime > level.lieutenantChargeTime[ent->client->sess.sessionTeam - 1])
-	{
+	if (level.time - ent->client->ps.classWeaponTime > level.lieutenantChargeTime[ent->client->sess.sessionTeam - 1]) {
 		ent->client->ps.classWeaponTime = level.time - level.lieutenantChargeTime[ent->client->sess.sessionTeam - 1];
 	}
 	ent->client->ps.classWeaponTime += level.lieutenantChargeTime[ent->client->sess.sessionTeam - 1] * 0.25;
@@ -315,12 +289,9 @@ void Weapon_MagicAmmo(gentity_t *ent)
 	VectorCopy(ent->client->ps.viewangles, angles);
 
 	// clamp pitch
-	if (angles[PITCH] < -30)
-	{
+	if (angles[PITCH] < -30) {
 		angles[PITCH] = -30;
-	}
-	else if (angles[PITCH] > 30)
-	{
+	} else if (angles[PITCH] > 30) {
 		angles[PITCH] = 30;
 	}
 
@@ -338,8 +309,7 @@ void Weapon_MagicAmmo(gentity_t *ent)
 	VectorSet(maxs, (ITEM_RADIUS + 8), (ITEM_RADIUS + 8), 2 * (ITEM_RADIUS + 8));
 
 	trap_EngineerTrace(&tr, viewpos, mins, maxs, tosspos, ent->s.number, MASK_MISSILESHOT);
-	if (tr.startsolid)
-	{
+	if (tr.startsolid) {
 		// Arnout: this code is a bit more solid than the previous code
 		VectorCopy(forward, viewpos);
 		VectorNormalizeFast(viewpos);
@@ -348,9 +318,7 @@ void Weapon_MagicAmmo(gentity_t *ent)
 		trap_EngineerTrace(&tr, viewpos, mins, maxs, tosspos, ent->s.number, MASK_MISSILESHOT);
 
 		VectorCopy(tr.endpos, tosspos);
-	}
-	else if (tr.fraction < 1)        // oops, bad launch spot
-	{
+	} else if (tr.fraction < 1) {      // oops, bad launch spot
 		VectorCopy(tr.endpos, tosspos);
 		SnapVectorTowards(tosspos, viewpos);
 	}
@@ -369,8 +337,7 @@ void G_ExplodeMissile(gentity_t *ent);
 void DynaSink(gentity_t *self);
 
 // Arnout: crude version of G_RadiusDamage to see if the dynamite can damage a func_constructible
-int EntsThatRadiusCanDamage(vec3_t origin, float radius, int *damagedList)
-{
+int EntsThatRadiusCanDamage(vec3_t origin, float radius, int *damagedList) {
 	float     dist;
 	gentity_t *ent;
 	int       entityList[MAX_GENTITIES];
@@ -384,71 +351,53 @@ int EntsThatRadiusCanDamage(vec3_t origin, float radius, int *damagedList)
 	vec3_t    midpoint;
 	int       numDamaged = 0;
 
-	if (radius < 1)
-	{
+	if (radius < 1) {
 		radius = 1;
 	}
 
 	boxradius = 1.41421356 * radius; // radius * sqrt(2) for bounding box enlargement --
 	// bounding box was checking against radius / sqrt(2) if collision is along box plane
-	for (i = 0 ; i < 3 ; i++)
-	{
+	for (i = 0 ; i < 3 ; i++) {
 		mins[i] = origin[i] - boxradius;
 		maxs[i] = origin[i] + boxradius;
 	}
 
 	numListedEntities = trap_EntitiesInBox(mins, maxs, entityList, MAX_GENTITIES);
 
-	for (e = 0 ; e < numListedEntities ; e++)
-	{
+	for (e = 0 ; e < numListedEntities ; e++) {
 		ent = &g_entities[entityList[e]];
 
-		if (!ent->r.bmodel)
-		{
+		if (!ent->r.bmodel) {
 			VectorSubtract(ent->r.currentOrigin, origin, v);
-		}
-		else
-		{
-			for (i = 0 ; i < 3 ; i++)
-			{
-				if (origin[i] < ent->r.absmin[i])
-				{
+		} else {
+			for (i = 0 ; i < 3 ; i++) {
+				if (origin[i] < ent->r.absmin[i]) {
 					v[i] = ent->r.absmin[i] - origin[i];
-				}
-				else if (origin[i] > ent->r.absmax[i])
-				{
+				} else if (origin[i] > ent->r.absmax[i]) {
 					v[i] = origin[i] - ent->r.absmax[i];
-				}
-				else
-				{
+				} else {
 					v[i] = 0;
 				}
 			}
 		}
 
 		dist = VectorLength(v);
-		if (dist >= radius)
-		{
+		if (dist >= radius) {
 			continue;
 		}
 
-		if (CanDamage(ent, origin))
-		{
+		if (CanDamage(ent, origin)) {
 			damagedList[numDamaged++] = entityList[e];
-		}
-		else
-		{
+		} else {
 			VectorAdd(ent->r.absmin, ent->r.absmax, midpoint);
 			VectorScale(midpoint, 0.5, midpoint);
 			VectorCopy(midpoint, dest);
 
 			trap_Trace(&tr, origin, vec3_origin, vec3_origin, dest, ENTITYNUM_NONE, MASK_SOLID);
-			if (tr.fraction < 1.0)
-			{
+			if (tr.fraction < 1.0) {
 				VectorSubtract(dest, origin, dest);
 				dist = VectorLength(dest);
-				if (dist < radius * 0.2f)     // closer than 1/4 dist
-				{
+				if (dist < radius * 0.2f) {   // closer than 1/4 dist
 					damagedList[numDamaged++] = entityList[e];
 				}
 			}
@@ -462,14 +411,11 @@ extern void explosive_indicator_think(gentity_t *ent);
 
 #define MIN_BLOCKINGWARNING_INTERVAL 5000
 
-static void MakeTemporarySolid(gentity_t *ent)
-{
-	if (ent->entstate == STATE_UNDERCONSTRUCTION)
-	{
+static void MakeTemporarySolid(gentity_t *ent) {
+	if (ent->entstate == STATE_UNDERCONSTRUCTION) {
 		ent->clipmask   = ent->realClipmask;
 		ent->r.contents = ent->realContents;
-		if (!ent->realNonSolidBModel)
-		{
+		if (!ent->realNonSolidBModel) {
 			ent->s.eFlags &= ~EF_NONSOLID_BMODEL;
 		}
 	}
@@ -477,20 +423,16 @@ static void MakeTemporarySolid(gentity_t *ent)
 	trap_LinkEntity(ent);
 }
 
-static void UndoTemporarySolid(gentity_t *ent)
-{
+static void UndoTemporarySolid(gentity_t *ent) {
 	ent->entstate     = STATE_UNDERCONSTRUCTION;
 	ent->s.powerups   = STATE_UNDERCONSTRUCTION;
 	ent->realClipmask = ent->clipmask;
 	ent->clipmask     = 0;
 	ent->realContents = ent->r.contents;
 	ent->r.contents   = 0;
-	if (ent->s.eFlags & EF_NONSOLID_BMODEL)
-	{
+	if (ent->s.eFlags & EF_NONSOLID_BMODEL) {
 		ent->realNonSolidBModel = qtrue;
-	}
-	else
-	{
+	} else {
 		ent->s.eFlags |= EF_NONSOLID_BMODEL;
 	}
 
@@ -499,8 +441,7 @@ static void UndoTemporarySolid(gentity_t *ent)
 
 // handleBlockingEnts = kill players, return flags, remove entities
 // warnBlockingPlayers = warn any players that are in the constructible area
-static void HandleEntsThatBlockConstructible(gentity_t *constructor, gentity_t *constructible, qboolean handleBlockingEnts, qboolean warnBlockingPlayers)
-{
+static void HandleEntsThatBlockConstructible(gentity_t *constructor, gentity_t *constructible, qboolean handleBlockingEnts, qboolean warnBlockingPlayers) {
 	// check if something blocks us
 	int       constructibleList[MAX_GENTITIES];
 	int       entityList[MAX_GENTITIES];
@@ -521,8 +462,7 @@ static void HandleEntsThatBlockConstructible(gentity_t *constructor, gentity_t *
 	// ...and restore
 	constructible->clipmask   = constructibleClipmask;
 	constructible->r.contents = constructibleContents;
-	if (!constructibleNonSolidBModel)
-	{
+	if (!constructibleNonSolidBModel) {
 		constructible->s.eFlags &= ~EF_NONSOLID_BMODEL;
 	}
 	trap_LinkEntity(constructible);
@@ -533,8 +473,7 @@ static void HandleEntsThatBlockConstructible(gentity_t *constructor, gentity_t *
 	VectorScale(constructible->s.origin2, 0.5, constructible->s.origin2);
 
 	// get all the entities that make up the constructible
-	if (constructible->track && constructible->track[0])
-	{
+	if (constructible->track && constructible->track[0]) {
 		vec3_t mins, maxs;
 
 		VectorCopy(constructible->r.absmin, mins);
@@ -542,24 +481,19 @@ static void HandleEntsThatBlockConstructible(gentity_t *constructor, gentity_t *
 
 		check = NULL;
 
-		while (1)
-		{
+		while (1) {
 			check = G_Find(check, FOFS(track), constructible->track);
 
-			if (check == constructible)
-			{
+			if (check == constructible) {
 				continue;
 			}
 
-			if (!check)
-			{
+			if (!check) {
 				break;
 			}
 
-			if (constructible->count2)
-			{
-				if (check->partofstage != constructible->grenadeFired)
-				{
+			if (constructible->count2) {
+				if (check->partofstage != constructible->grenadeFired) {
 					continue;
 				}
 			}
@@ -576,17 +510,14 @@ static void HandleEntsThatBlockConstructible(gentity_t *constructor, gentity_t *
 		// make our constructible entities solid so we can check against them
 		//trap_LinkEntity( constructible );
 		MakeTemporarySolid(constructible);
-		for (e = 0; e < constructibleEntities; e++)
-		{
+		for (e = 0; e < constructibleEntities; e++) {
 			check = &g_entities[constructibleList[e]];
 
 			//trap_LinkEntity( check );
 			MakeTemporarySolid(check);
 		}
 
-	}
-	else
-	{
+	} else {
 		// Gordon: changed * to abs*
 		listedEntities = trap_EntitiesInBox(constructible->r.absmin, constructible->r.absmax, entityList, MAX_GENTITIES);
 
@@ -595,35 +526,29 @@ static void HandleEntsThatBlockConstructible(gentity_t *constructor, gentity_t *
 		MakeTemporarySolid(constructible);
 	}
 
-	for (e = 0; e < listedEntities; e++)
-	{
+	for (e = 0; e < listedEntities; e++) {
 		check = &g_entities[entityList[e]];
 
 		// ignore everything but items, players and missiles (grenades too)
-		if (check->s.eType != ET_MISSILE && check->s.eType != ET_ITEM && check->s.eType != ET_PLAYER && !check->physicsObject)
-		{
+		if (check->s.eType != ET_MISSILE && check->s.eType != ET_ITEM && check->s.eType != ET_PLAYER && !check->physicsObject) {
 			continue;
 		}
 
 		// remove any corpses, this includes dynamite
-		if (check->r.contents == CONTENTS_CORPSE)
-		{
+		if (check->r.contents == CONTENTS_CORPSE) {
 			blockingList[blockingEntities++] = entityList[e];
 			continue;
 		}
 
 		// FIXME : dynamite seems to test out of position?
 		// see if the entity is in a solid now
-		if ((block = G_TestEntityPosition(check)) == NULL)
-		{
+		if ((block = G_TestEntityPosition(check)) == NULL) {
 			continue;
 		}
 
 		// the entity is blocked and it is a player, then warn the player
-		if (warnBlockingPlayers && check->s.eType == ET_PLAYER)
-		{
-			if ((level.time - check->client->lastConstructibleBlockingWarnTime) >= MIN_BLOCKINGWARNING_INTERVAL)
-			{
+		if (warnBlockingPlayers && check->s.eType == ET_PLAYER) {
+			if ((level.time - check->client->lastConstructibleBlockingWarnTime) >= MIN_BLOCKINGWARNING_INTERVAL) {
 				trap_SendServerCommand(check->s.number, "cp \"Warning, leave the construction area...\" 1");
 				// Gordon: store the entity num to warn the bot
 				check->client->lastConstructibleBlockingWarnEnt  = constructible - g_entities;
@@ -648,10 +573,8 @@ static void HandleEntsThatBlockConstructible(gentity_t *constructor, gentity_t *
 
 	// undo the temporary solid for our entities
 	UndoTemporarySolid(constructible);
-	if (constructible->track && constructible->track[0])
-	{
-		for (e = 0; e < constructibleEntities; e++)
-		{
+	if (constructible->track && constructible->track[0]) {
+		for (e = 0; e < constructibleEntities; e++) {
 			check = &g_entities[constructibleList[e]];
 
 			//trap_UnlinkEntity( check );
@@ -659,35 +582,25 @@ static void HandleEntsThatBlockConstructible(gentity_t *constructor, gentity_t *
 		}
 	}
 
-	if (handleBlockingEnts)
-	{
-		for (e = 0; e < blockingEntities; e++)
-		{
+	if (handleBlockingEnts) {
+		for (e = 0; e < blockingEntities; e++) {
 			block = &g_entities[blockingList[e]];
 
-			if (block->client || block->s.eType == ET_CORPSE)
-			{
+			if (block->client || block->s.eType == ET_CORPSE) {
 				G_Damage(block, constructible, constructor, NULL, NULL, 9999, DAMAGE_NO_PROTECTION, MOD_CRUSH_CONSTRUCTION);
-			}
-			else if (block->s.eType == ET_ITEM && block->item->giType == IT_TEAM)
-			{
+			} else if (block->s.eType == ET_ITEM && block->item->giType == IT_TEAM) {
 				// see if it's a critical entity, one that we can't just simply kill (basically flags)
 				Team_DroppedFlagThink(block);
-			}
-			else
-			{
+			} else {
 				// remove the landmine from both teamlists
-				if (block->s.eType == ET_MISSILE && block->methodOfDeath == MOD_LANDMINE)
-				{
+				if (block->s.eType == ET_MISSILE && block->methodOfDeath == MOD_LANDMINE) {
 					mapEntityData_t *mEnt;
 
-					if ((mEnt = G_FindMapEntityData(&mapEntityData[0], block - g_entities)) != NULL)
-					{
+					if ((mEnt = G_FindMapEntityData(&mapEntityData[0], block - g_entities)) != NULL) {
 						G_FreeMapEntityData(&mapEntityData[0], mEnt);
 					}
 
-					if ((mEnt = G_FindMapEntityData(&mapEntityData[1], block - g_entities)) != NULL)
-					{
+					if ((mEnt = G_FindMapEntityData(&mapEntityData[1], block - g_entities)) != NULL) {
 						G_FreeMapEntityData(&mapEntityData[1], mEnt);
 					}
 				}
@@ -699,20 +612,16 @@ static void HandleEntsThatBlockConstructible(gentity_t *constructor, gentity_t *
 		}
 	}
 
-	if (constructibleModelindex)
-	{
+	if (constructibleModelindex) {
 		trap_SetBrushModel(constructible, va("*%i", constructibleModelindex));
 		// ...and restore
 		constructible->clipmask   = constructibleClipmask;
 		constructible->r.contents = constructibleContents;
-		if (!constructibleNonSolidBModel)
-		{
+		if (!constructibleNonSolidBModel) {
 			constructible->s.eFlags &= ~EF_NONSOLID_BMODEL;
 		}
 		trap_LinkEntity(constructible);
-	}
-	else
-	{
+	} else {
 		constructible->s.modelindex = 0;
 		//constructible->clipmask = constructibleClipmask;
 		//constructible->r.contents = constructibleContents;
@@ -727,20 +636,17 @@ static void HandleEntsThatBlockConstructible(gentity_t *constructor, gentity_t *
 // !! NOTE !!: if the conditions here of a buildable constructible change, then BotIsConstructible() must reflect those changes
 
 // returns qfalse when it couldn't build
-static qboolean TryConstructing(gentity_t *ent)
-{
+static qboolean TryConstructing(gentity_t *ent) {
 	gentity_t *check;
 	gentity_t *constructible = ent->client->touchingTOI->target_ent;
 	int       i;
 
 	// see if we are in a trigger_objective_info targetting multiple func_constructibles
-	if (constructible->s.eType == ET_CONSTRUCTIBLE && ent->client->touchingTOI->chain)
-	{
+	if (constructible->s.eType == ET_CONSTRUCTIBLE && ent->client->touchingTOI->chain) {
 		gentity_t *otherconstructible = NULL;
 
 		// use the target that has the same team as the player
-		if (constructible->s.teamNum != (int)ent->client->sess.sessionTeam)
-		{
+		if (constructible->s.teamNum != (int)ent->client->sess.sessionTeam) {
 			constructible = ent->client->touchingTOI->chain;
 		}
 
@@ -749,8 +655,7 @@ static qboolean TryConstructing(gentity_t *ent)
 		// make sure the other constructible isn't built/underconstruction/something
 		if (otherconstructible->s.angles2[0] ||
 		    otherconstructible->s.angles2[1] ||
-		    (otherconstructible->count2 && otherconstructible->grenadeFired))
-		{
+		    (otherconstructible->count2 && otherconstructible->grenadeFired)) {
 
 			return(qfalse);
 		}
@@ -758,38 +663,31 @@ static qboolean TryConstructing(gentity_t *ent)
 
 	// see if we are in a trigger_objective_info targetting a func_constructible
 	if (constructible->s.eType == ET_CONSTRUCTIBLE &&
-	    constructible->s.teamNum == (int)ent->client->sess.sessionTeam)
-	{
+	    constructible->s.teamNum == (int)ent->client->sess.sessionTeam) {
 
-		if (constructible->s.angles2[0] >= 250)     // have to do this so we don't score multiple times
-		{
+		if (constructible->s.angles2[0] >= 250) {   // have to do this so we don't score multiple times
 			return(qfalse);
 		}
 
-		if (constructible->s.angles2[1] != 0)
-		{
+		if (constructible->s.angles2[1] != 0) {
 			return(qfalse);
 		}
 
 		// Check if we can construct - updates the classWeaponTime as well
-		if (!ReadyToConstruct(ent, constructible, qtrue))
-		{
+		if (!ReadyToConstruct(ent, constructible, qtrue)) {
 			return qtrue;
 		}
 
 		// try to start building
-		if (constructible->s.angles2[0] <= 0)
-		{
+		if (constructible->s.angles2[0] <= 0) {
 			// wait a bit, this prevents network spam
-			if (level.time - constructible->lastHintCheckTime < CONSTRUCT_POSTDECAY_TIME)
-			{
+			if (level.time - constructible->lastHintCheckTime < CONSTRUCT_POSTDECAY_TIME) {
 				return(qtrue);      // likely will come back soon - so override other plier bits anyway
 
 			}
 
 			// swap brushmodels if staged
-			if (constructible->count2)
-			{
+			if (constructible->count2) {
 				constructible->grenadeFired++;
 				constructible->s.modelindex2 = constructible->conbmodels[constructible->grenadeFired - 1];
 				//trap_SetBrushModel( constructible, va( "*%i", constructible->conbmodels[constructible->grenadeFired-1] ) );
@@ -797,23 +695,16 @@ static qboolean TryConstructing(gentity_t *ent)
 
 			G_SetEntState(constructible, STATE_UNDERCONSTRUCTION);
 
-			if (!constructible->count2)
-			{
+			if (!constructible->count2) {
 				// call script
 				G_Script_ScriptEvent(constructible, "buildstart", "final");
 				constructible->s.frame = 1;
-			}
-			else
-			{
-				if (constructible->grenadeFired == constructible->count2)
-				{
+			} else {
+				if (constructible->grenadeFired == constructible->count2) {
 					G_Script_ScriptEvent(constructible, "buildstart", "final");
 					constructible->s.frame = constructible->grenadeFired;
-				}
-				else
-				{
-					switch (constructible->grenadeFired)
-					{
+				} else {
+					switch (constructible->grenadeFired) {
 					case 1: G_Script_ScriptEvent(constructible, "buildstart", "stage1"); constructible->s.frame = 1; break;
 					case 2: G_Script_ScriptEvent(constructible, "buildstart", "stage2"); constructible->s.frame = 2; break;
 					case 3: G_Script_ScriptEvent(constructible, "buildstart", "stage3"); constructible->s.frame = 3; break;
@@ -832,8 +723,7 @@ static qboolean TryConstructing(gentity_t *ent)
 				te->s.eventParm = G_SoundIndex("sound/world/build.wav");
 			}
 
-			if (ent->client->touchingTOI->chain && ent->client->touchingTOI->count2)
-			{
+			if (ent->client->touchingTOI->chain && ent->client->touchingTOI->count2) {
 				// find the constructible indicator and change team
 				mapEntityData_t      *mEnt;
 				mapEntityData_Team_t *teamList;
@@ -843,14 +733,12 @@ static qboolean TryConstructing(gentity_t *ent)
 
 				// update the map for the other team
 				teamList = indicator->s.teamNum == TEAM_AXIS ? &mapEntityData[1] : &mapEntityData[0]; // inversed
-				if ((mEnt = G_FindMapEntityData(teamList, indicator - g_entities)) != NULL)
-				{
+				if ((mEnt = G_FindMapEntityData(teamList, indicator - g_entities)) != NULL) {
 					G_FreeMapEntityData(teamList, mEnt);
 				}
 			}
 
-			if (!constructible->count2 || constructible->grenadeFired == 1)
-			{
+			if (!constructible->count2 || constructible->grenadeFired == 1) {
 				// link in if we just started building
 				G_UseEntity(constructible, ent->client->touchingTOI, ent);
 			}
@@ -864,13 +752,10 @@ static qboolean TryConstructing(gentity_t *ent)
 
 		// Give health until it is full, don't continue
 		constructible->s.angles2[0] += (255.f / (constructible->constructibleStats.duration / (float)FRAMETIME));
-		if (constructible->s.angles2[0] >= 250)
-		{
+		if (constructible->s.angles2[0] >= 250) {
 			constructible->s.angles2[0] = 0;
 			HandleEntsThatBlockConstructible(ent, constructible, qtrue, qfalse);
-		}
-		else
-		{
+		} else {
 			constructible->lastHintCheckTime = level.time;
 			HandleEntsThatBlockConstructible(ent, constructible, qfalse, qtrue);
 			return(qtrue);      // properly constructed
@@ -880,8 +765,7 @@ static qboolean TryConstructing(gentity_t *ent)
 
 		// eeeh no point in doing this twice
 		//HandleEntsThatBlockConstructible( ent, constructible, qtrue, qfalse );
-		if (constructible->count2)
-		{
+		if (constructible->count2) {
 			// backup...
 			//int constructibleModelindex = constructible->s.modelindex;
 			int constructibleClipmask       = constructible->clipmask;
@@ -894,18 +778,14 @@ static qboolean TryConstructing(gentity_t *ent)
 			// ...and restore
 			constructible->clipmask   = constructibleClipmask;
 			constructible->r.contents = constructibleContents;
-			if (!constructibleNonSolidBModel)
-			{
+			if (!constructibleNonSolidBModel) {
 				constructible->s.eFlags &= ~EF_NONSOLID_BMODEL;
 			}
 
-			if (constructible->grenadeFired == constructible->count2)
-			{
+			if (constructible->grenadeFired == constructible->count2) {
 				constructible->s.angles2[1] = 1;
 			}
-		}
-		else
-		{
+		} else {
 			int constructibleClipmask       = constructible->clipmask;
 			int constructibleContents       = constructible->r.contents;
 			int constructibleNonSolidBModel = (constructible->s.eFlags & EF_NONSOLID_BMODEL);
@@ -916,8 +796,7 @@ static qboolean TryConstructing(gentity_t *ent)
 			// ...and restore
 			constructible->clipmask   = constructibleClipmask;
 			constructible->r.contents = constructibleContents;
-			if (!constructibleNonSolidBModel)
-			{
+			if (!constructibleNonSolidBModel) {
 				constructible->s.eFlags &= ~EF_NONSOLID_BMODEL;
 			}
 
@@ -927,8 +806,7 @@ static qboolean TryConstructing(gentity_t *ent)
 		G_SetEntState(constructible, STATE_DEFAULT);
 
 		// make destructable
-		if (!(constructible->spawnflags & 2))
-		{
+		if (!(constructible->spawnflags & 2)) {
 			constructible->takedamage = qtrue;
 			constructible->health     = constructible->sound1to2;
 		}
@@ -937,21 +815,14 @@ static qboolean TryConstructing(gentity_t *ent)
 		constructible->think     = NULL;
 		constructible->nextthink = 0;
 
-		if (!constructible->count2)
-		{
+		if (!constructible->count2) {
 			// call script
 			G_Script_ScriptEvent(constructible, "built", "final");
-		}
-		else
-		{
-			if (constructible->grenadeFired == constructible->count2)
-			{
+		} else {
+			if (constructible->grenadeFired == constructible->count2) {
 				G_Script_ScriptEvent(constructible, "built", "final");
-			}
-			else
-			{
-				switch (constructible->grenadeFired)
-				{
+			} else {
+				switch (constructible->grenadeFired) {
 				case 1: G_Script_ScriptEvent(constructible, "built", "stage1"); break;
 				case 2: G_Script_ScriptEvent(constructible, "built", "stage2"); break;
 				case 3: G_Script_ScriptEvent(constructible, "built", "stage3"); break;
@@ -960,20 +831,15 @@ static qboolean TryConstructing(gentity_t *ent)
 		}
 
 		// Stop sound
-		if (constructible->parent->spawnflags & 8)
-		{
+		if (constructible->parent->spawnflags & 8) {
 			constructible->parent->s.loopSound = 0;
-		}
-		else
-		{
+		} else {
 			constructible->s.loopSound = 0;
 		}
 
 		// if not invulnerable and dynamite-able, create a 'destructable' marker for the other team
-		if (!(constructible->spawnflags & CONSTRUCTIBLE_INVULNERABLE) && (constructible->constructibleStats.weaponclass >= 1))
-		{
-			if (!constructible->count2 || constructible->grenadeFired == 1)
-			{
+		if (!(constructible->spawnflags & CONSTRUCTIBLE_INVULNERABLE) && (constructible->constructibleStats.weaponclass >= 1)) {
+			if (!constructible->count2 || constructible->grenadeFired == 1) {
 				gentity_t *tent = NULL;
 				gentity_t *e;
 				e = G_Spawn();
@@ -983,12 +849,9 @@ static qboolean TryConstructing(gentity_t *ent)
 				e->s.pos.trType = TR_STATIONARY;
 				e->s.eType      = ET_EXPLOSIVE_INDICATOR;
 
-				while ((tent = G_Find(tent, FOFS(target), constructible->targetname)) != NULL)
-				{
-					if (tent->s.eType == ET_OID_TRIGGER)
-					{
-						if (tent->spawnflags & 8)
-						{
+				while ((tent = G_Find(tent, FOFS(target), constructible->targetname)) != NULL) {
+					if (tent->s.eType == ET_OID_TRIGGER) {
+						if (tent->spawnflags & 8) {
 							e->s.eType = ET_TANK_INDICATOR;
 						}
 					}
@@ -997,21 +860,16 @@ static qboolean TryConstructing(gentity_t *ent)
 				// Find the trigger_objective_info that targets us (if not set before)
 				{
 					gentity_t *tent = NULL;
-					while ((tent = G_Find(tent, FOFS(target), constructible->targetname)) != NULL)
-					{
-						if (tent->s.eType == ET_OID_TRIGGER)
-						{
+					while ((tent = G_Find(tent, FOFS(target), constructible->targetname)) != NULL) {
+						if (tent->s.eType == ET_OID_TRIGGER) {
 							e->parent = tent;
 						}
 					}
 				}
 
-				if (constructible->spawnflags & AXIS_CONSTRUCTIBLE)
-				{
+				if (constructible->spawnflags & AXIS_CONSTRUCTIBLE) {
 					e->s.teamNum = TEAM_AXIS;
-				}
-				else if (constructible->spawnflags & ALLIED_CONSTRUCTIBLE)
-				{
+				} else if (constructible->spawnflags & ALLIED_CONSTRUCTIBLE) {
 					e->s.teamNum = TEAM_ALLIES;
 				}
 
@@ -1022,13 +880,10 @@ static qboolean TryConstructing(gentity_t *ent)
 
 				e->s.effect1Time = constructible->constructibleStats.weaponclass;
 
-				if (constructible->parent->tagParent)
-				{
+				if (constructible->parent->tagParent) {
 					e->tagParent = constructible->parent->tagParent;
 					Q_strncpyz(e->tagName, constructible->parent->tagName, MAX_QPATH);
-				}
-				else
-				{
+				} else {
 					VectorCopy(constructible->r.absmin, e->s.pos.trBase);
 					VectorAdd(constructible->r.absmax, e->s.pos.trBase, e->s.pos.trBase);
 					VectorScale(e->s.pos.trBase, 0.5, e->s.pos.trBase);
@@ -1037,27 +892,19 @@ static qboolean TryConstructing(gentity_t *ent)
 				SnapVector(e->s.pos.trBase);
 
 				trap_LinkEntity(e);
-			}
-			else
-			{
+			} else {
 				// find our marker and update it's coordinates
-				for (i = 0, check = g_entities; i < level.num_entities; i++, check++)
-				{
-					if (check->s.eType != ET_EXPLOSIVE_INDICATOR && check->s.eType != ET_TANK_INDICATOR && check->s.eType != ET_TANK_INDICATOR_DEAD)
-					{
+				for (i = 0, check = g_entities; i < level.num_entities; i++, check++) {
+					if (check->s.eType != ET_EXPLOSIVE_INDICATOR && check->s.eType != ET_TANK_INDICATOR && check->s.eType != ET_TANK_INDICATOR_DEAD) {
 						continue;
 					}
 
-					if (check->r.ownerNum == constructible->s.number)
-					{
+					if (check->r.ownerNum == constructible->s.number) {
 						// found it!
-						if (constructible->parent->tagParent)
-						{
+						if (constructible->parent->tagParent) {
 							check->tagParent = constructible->parent->tagParent;
 							Q_strncpyz(check->tagName, constructible->parent->tagName, MAX_QPATH);
-						}
-						else
-						{
+						} else {
 							VectorCopy(constructible->r.absmin, check->s.pos.trBase);
 							VectorAdd(constructible->r.absmax, check->s.pos.trBase, check->s.pos.trBase);
 							VectorScale(check->s.pos.trBase, 0.5, check->s.pos.trBase);
@@ -1078,14 +925,12 @@ static qboolean TryConstructing(gentity_t *ent)
 	return(qfalse);
 }
 
-void AutoBuildConstruction(gentity_t *constructible)
-{
+void AutoBuildConstruction(gentity_t *constructible) {
 	int       i;
 	gentity_t *check;
 
 	HandleEntsThatBlockConstructible(NULL, constructible, qtrue, qfalse);
-	if (constructible->count2)
-	{
+	if (constructible->count2) {
 		// backup...
 		//int constructibleModelindex = constructible->s.modelindex;
 		int constructibleClipmask       = constructible->clipmask;
@@ -1098,18 +943,14 @@ void AutoBuildConstruction(gentity_t *constructible)
 		// ...and restore
 		constructible->clipmask   = constructibleClipmask;
 		constructible->r.contents = constructibleContents;
-		if (!constructibleNonSolidBModel)
-		{
+		if (!constructibleNonSolidBModel) {
 			constructible->s.eFlags &= ~EF_NONSOLID_BMODEL;
 		}
 
-		if (constructible->grenadeFired == constructible->count2)
-		{
+		if (constructible->grenadeFired == constructible->count2) {
 			constructible->s.angles2[1] = 1;
 		}
-	}
-	else
-	{
+	} else {
 		// backup...
 		//int constructibleModelindex = constructible->s.modelindex;
 		int constructibleClipmask       = constructible->clipmask;
@@ -1122,8 +963,7 @@ void AutoBuildConstruction(gentity_t *constructible)
 		// ...and restore
 		constructible->clipmask   = constructibleClipmask;
 		constructible->r.contents = constructibleContents;
-		if (!constructibleNonSolidBModel)
-		{
+		if (!constructibleNonSolidBModel) {
 			constructible->s.eFlags &= ~EF_NONSOLID_BMODEL;
 		}
 
@@ -1139,8 +979,7 @@ void AutoBuildConstruction(gentity_t *constructible)
 	G_SetEntState(constructible, STATE_DEFAULT);
 
 	// make destructable
-	if (!(constructible->spawnflags & CONSTRUCTIBLE_INVULNERABLE))
-	{
+	if (!(constructible->spawnflags & CONSTRUCTIBLE_INVULNERABLE)) {
 		constructible->takedamage = qtrue;
 		constructible->health     = constructible->constructibleStats.health;
 	}
@@ -1149,21 +988,14 @@ void AutoBuildConstruction(gentity_t *constructible)
 	constructible->think     = NULL;
 	constructible->nextthink = 0;
 
-	if (!constructible->count2)
-	{
+	if (!constructible->count2) {
 		// call script
 		G_Script_ScriptEvent(constructible, "built", "final");
-	}
-	else
-	{
-		if (constructible->grenadeFired == constructible->count2)
-		{
+	} else {
+		if (constructible->grenadeFired == constructible->count2) {
 			G_Script_ScriptEvent(constructible, "built", "final");
-		}
-		else
-		{
-			switch (constructible->grenadeFired)
-			{
+		} else {
+			switch (constructible->grenadeFired) {
 			case 1: G_Script_ScriptEvent(constructible, "built", "stage1"); break;
 			case 2: G_Script_ScriptEvent(constructible, "built", "stage2"); break;
 			case 3: G_Script_ScriptEvent(constructible, "built", "stage3"); break;
@@ -1172,22 +1004,17 @@ void AutoBuildConstruction(gentity_t *constructible)
 	}
 
 	// Stop sound
-	if (constructible->parent->spawnflags & 8)
-	{
+	if (constructible->parent->spawnflags & 8) {
 		constructible->parent->s.loopSound = 0;
-	}
-	else
-	{
+	} else {
 		constructible->s.loopSound = 0;
 	}
 
 	//ent->client->ps.classWeaponTime = level.time; // Out of "ammo"
 
 	// if not invulnerable and dynamite-able, create a 'destructable' marker for the other team
-	if (!(constructible->spawnflags & CONSTRUCTIBLE_INVULNERABLE) && (constructible->constructibleStats.weaponclass >= 1))
-	{
-		if (!constructible->count2 || constructible->grenadeFired == 1)
-		{
+	if (!(constructible->spawnflags & CONSTRUCTIBLE_INVULNERABLE) && (constructible->constructibleStats.weaponclass >= 1)) {
+		if (!constructible->count2 || constructible->grenadeFired == 1) {
 			gentity_t *tent = NULL;
 			gentity_t *e;
 			e = G_Spawn();
@@ -1197,12 +1024,9 @@ void AutoBuildConstruction(gentity_t *constructible)
 			e->s.pos.trType = TR_STATIONARY;
 			e->s.eType      = ET_EXPLOSIVE_INDICATOR;
 
-			while ((tent = G_Find(tent, FOFS(target), constructible->targetname)) != NULL)
-			{
-				if (tent->s.eType == ET_OID_TRIGGER)
-				{
-					if (tent->spawnflags & 8)
-					{
+			while ((tent = G_Find(tent, FOFS(target), constructible->targetname)) != NULL) {
+				if (tent->s.eType == ET_OID_TRIGGER) {
+					if (tent->spawnflags & 8) {
 						e->s.eType = ET_TANK_INDICATOR;
 					}
 				}
@@ -1211,21 +1035,16 @@ void AutoBuildConstruction(gentity_t *constructible)
 			// Find the trigger_objective_info that targets us (if not set before)
 			{
 				gentity_t *tent = NULL;
-				while ((tent = G_Find(tent, FOFS(target), constructible->targetname)) != NULL)
-				{
-					if (tent->s.eType == ET_OID_TRIGGER)
-					{
+				while ((tent = G_Find(tent, FOFS(target), constructible->targetname)) != NULL) {
+					if (tent->s.eType == ET_OID_TRIGGER) {
 						e->parent = tent;
 					}
 				}
 			}
 
-			if (constructible->spawnflags & AXIS_CONSTRUCTIBLE)
-			{
+			if (constructible->spawnflags & AXIS_CONSTRUCTIBLE) {
 				e->s.teamNum = TEAM_AXIS;
-			}
-			else if (constructible->spawnflags & ALLIED_CONSTRUCTIBLE)
-			{
+			} else if (constructible->spawnflags & ALLIED_CONSTRUCTIBLE) {
 				e->s.teamNum = TEAM_ALLIES;
 			}
 
@@ -1236,13 +1055,10 @@ void AutoBuildConstruction(gentity_t *constructible)
 
 			e->s.effect1Time = constructible->constructibleStats.weaponclass;
 
-			if (constructible->parent->tagParent)
-			{
+			if (constructible->parent->tagParent) {
 				e->tagParent = constructible->parent->tagParent;
 				Q_strncpyz(e->tagName, constructible->parent->tagName, MAX_QPATH);
-			}
-			else
-			{
+			} else {
 				VectorCopy(constructible->r.absmin, e->s.pos.trBase);
 				VectorAdd(constructible->r.absmax, e->s.pos.trBase, e->s.pos.trBase);
 				VectorScale(e->s.pos.trBase, 0.5, e->s.pos.trBase);
@@ -1251,27 +1067,19 @@ void AutoBuildConstruction(gentity_t *constructible)
 			SnapVector(e->s.pos.trBase);
 
 			trap_LinkEntity(e);
-		}
-		else
-		{
+		} else {
 			// find our marker and update it's coordinates
-			for (i = 0, check = g_entities; i < level.num_entities; i++, check++)
-			{
-				if (check->s.eType != ET_EXPLOSIVE_INDICATOR && check->s.eType != ET_TANK_INDICATOR && check->s.eType != ET_TANK_INDICATOR_DEAD)
-				{
+			for (i = 0, check = g_entities; i < level.num_entities; i++, check++) {
+				if (check->s.eType != ET_EXPLOSIVE_INDICATOR && check->s.eType != ET_TANK_INDICATOR && check->s.eType != ET_TANK_INDICATOR_DEAD) {
 					continue;
 				}
 
-				if (check->r.ownerNum == constructible->s.number)
-				{
+				if (check->r.ownerNum == constructible->s.number) {
 					// found it!
-					if (constructible->parent->tagParent)
-					{
+					if (constructible->parent->tagParent) {
 						check->tagParent = constructible->parent->tagParent;
 						Q_strncpyz(check->tagName, constructible->parent->tagName, MAX_QPATH);
-					}
-					else
-					{
+					} else {
 						VectorCopy(constructible->r.absmin, check->s.pos.trBase);
 						VectorAdd(constructible->r.absmax, check->s.pos.trBase, check->s.pos.trBase);
 						VectorScale(check->s.pos.trBase, 0.5, check->s.pos.trBase);
@@ -1287,16 +1095,14 @@ void AutoBuildConstruction(gentity_t *constructible)
 	}
 }
 
-void trap_EngineerTrace(trace_t *results, const vec3_t start, const vec3_t mins, const vec3_t maxs, const vec3_t end, int passEntityNum, int contentmask)
-{
+void trap_EngineerTrace(trace_t *results, const vec3_t start, const vec3_t mins, const vec3_t maxs, const vec3_t end, int passEntityNum, int contentmask) {
 	G_TempTraceIgnorePlayersAndBodies();
 	trap_Trace(results, start, mins, maxs, end, passEntityNum, contentmask);
 	G_ResetTempTraceIgnoreEnts();
 }
 
 // DHM - Nerve
-void Weapon_Engineer(gentity_t *ent)
-{
+void Weapon_Engineer(gentity_t *ent) {
 	trace_t   tr;
 	gentity_t *traceEnt, *hit;
 	vec3_t    mins, maxs;   // JPW NERVE
@@ -1306,15 +1112,12 @@ void Weapon_Engineer(gentity_t *ent)
 	vec3_t    origin;
 
 	// DHM - Nerve :: Can't heal an MG42 if you're using one!
-	if (ent->client->ps.persistant[PERS_HWEAPON_USE])
-	{
+	if (ent->client->ps.persistant[PERS_HWEAPON_USE]) {
 		return;
 	}
 
-	if (ent->client->touchingTOI)
-	{
-		if (TryConstructing(ent))
-		{
+	if (ent->client->touchingTOI) {
+		if (TryConstructing(ent)) {
 			return;
 		}
 	}
@@ -1326,50 +1129,40 @@ void Weapon_Engineer(gentity_t *ent)
 	VectorMA(muzzleTrace, 64, forward, end);             // CH_BREAKABLE_DIST
 	trap_EngineerTrace(&tr, muzzleTrace, NULL, NULL, end, ent->s.number, MASK_SHOT | CONTENTS_TRIGGER);
 
-	if (tr.surfaceFlags & SURF_NOIMPACT)
-	{
+	if (tr.surfaceFlags & SURF_NOIMPACT) {
 		return;
 	}
 
 	// no contact
-	if (tr.fraction == 1.0f)
-	{
+	if (tr.fraction == 1.0f) {
 		return;
 	}
 
-	if (tr.entityNum == ENTITYNUM_NONE || tr.entityNum == ENTITYNUM_WORLD)
-	{
+	if (tr.entityNum == ENTITYNUM_NONE || tr.entityNum == ENTITYNUM_WORLD) {
 		return;
 	}
 
 	traceEnt = &g_entities[tr.entityNum];
-	if (G_EmplacedGunIsRepairable(traceEnt, ent))
-	{
+	if (G_EmplacedGunIsRepairable(traceEnt, ent)) {
 		// "Ammo" for this weapon is time based
-		if (ent->client->ps.classWeaponTime + level.engineerChargeTime[ent->client->sess.sessionTeam - 1] < level.time)
-		{
+		if (ent->client->ps.classWeaponTime + level.engineerChargeTime[ent->client->sess.sessionTeam - 1] < level.time) {
 			ent->client->ps.classWeaponTime = level.time - level.engineerChargeTime[ent->client->sess.sessionTeam - 1];
 		}
 		ent->client->ps.classWeaponTime += 150;
 
-		if (ent->client->ps.classWeaponTime > level.time)
-		{
+		if (ent->client->ps.classWeaponTime > level.time) {
 			ent->client->ps.classWeaponTime = level.time;
 			return;     // Out of "ammo"
 		}
 
-		if (traceEnt->health >= 255)
-		{
+		if (traceEnt->health >= 255) {
 			traceEnt->s.frame = 0;
 
-			if (traceEnt->mg42BaseEnt > 0)
-			{
+			if (traceEnt->mg42BaseEnt > 0) {
 				g_entities[traceEnt->mg42BaseEnt].health     = MG42_MULTIPLAYER_HEALTH;
 				g_entities[traceEnt->mg42BaseEnt].takedamage = qtrue;
 				traceEnt->health                             = 0;
-			}
-			else
-			{
+			} else {
 				traceEnt->health = MG42_MULTIPLAYER_HEALTH;
 			}
 
@@ -1380,31 +1173,23 @@ void Weapon_Engineer(gentity_t *ent)
 
 			trap_SendServerCommand(ent - g_entities, "cp \"You have repaired the MG!\n\"");
 			G_AddEvent(ent, EV_MG42_FIXED, 0);
-		}
-		else
-		{
+		} else {
 			traceEnt->health += 3;
 		}
-	}
-	else
-	{
+	} else {
 		trap_EngineerTrace(&tr, muzzleTrace, NULL, NULL, end, ent->s.number, MASK_SHOT);
-		if (tr.surfaceFlags & SURF_NOIMPACT)
-		{
+		if (tr.surfaceFlags & SURF_NOIMPACT) {
 			return;
 		}
-		if (tr.fraction == 1.0f)
-		{
+		if (tr.fraction == 1.0f) {
 			return;
 		}
-		if (tr.entityNum == ENTITYNUM_NONE || tr.entityNum == ENTITYNUM_WORLD)
-		{
+		if (tr.entityNum == ENTITYNUM_NONE || tr.entityNum == ENTITYNUM_WORLD) {
 			return;
 		}
 		traceEnt = &g_entities[tr.entityNum];
 
-		if (traceEnt->methodOfDeath == MOD_LANDMINE)
-		{
+		if (traceEnt->methodOfDeath == MOD_LANDMINE) {
 			trace_t tr2;
 			vec3_t  base;
 			vec3_t  tr_down = { 0, 0, 16 };
@@ -1415,8 +1200,7 @@ void Weapon_Engineer(gentity_t *ent)
 
 			// ydnar: added "surfaceparm landmine" (SURF_LANDMINE) support
 			//%	if(!(tr2.surfaceFlags & (SURF_GRASS | SURF_SNOW | SURF_GRAVEL)) ||
-			if (!(tr2.surfaceFlags & SURF_LANDMINE) || (tr2.entityNum != ENTITYNUM_WORLD && (!g_entities[tr2.entityNum].inuse || g_entities[tr2.entityNum].s.eType != ET_CONSTRUCTIBLE)))
-			{
+			if (!(tr2.surfaceFlags & SURF_LANDMINE) || (tr2.entityNum != ENTITYNUM_WORLD && (!g_entities[tr2.entityNum].inuse || g_entities[tr2.entityNum].s.eType != ET_CONSTRUCTIBLE))) {
 				trap_SendServerCommand(ent - g_entities, "cp \"Landmine cannot be armed here...\" 1");
 
 				G_FreeEntity(traceEnt);
@@ -1428,11 +1212,8 @@ void Weapon_Engineer(gentity_t *ent)
 // rain - #384 - check landmine team so that enemy mines can be disarmed
 // even if you're using all of yours :x
 			}
-		}
-		else if (traceEnt->methodOfDeath == MOD_SATCHEL)
-		{
-			if (traceEnt->health >= 250)     // have to do this so we don't score multiple times
-			{
+		} else if (traceEnt->methodOfDeath == MOD_SATCHEL) {
+			if (traceEnt->health >= 250) {   // have to do this so we don't score multiple times
 				return;
 			}
 
@@ -1441,8 +1222,7 @@ void Weapon_Engineer(gentity_t *ent)
 
 			G_PrintClientSpammyCenterPrint(ent - g_entities, "Disarming satchel charge...");
 
-			if (traceEnt->health >= 250)
-			{
+			if (traceEnt->health >= 250) {
 
 				traceEnt->health    = 255;
 				traceEnt->think     = G_FreeEntity;
@@ -1450,26 +1230,20 @@ void Weapon_Engineer(gentity_t *ent)
 
 				//bani - consistency with dynamite defusing
 				G_PrintClientSpammyCenterPrint(ent - g_entities, "Satchel charge disarmed...");
-			}
-			else
-			{
+			} else {
 				return;
 			}
-		}
-		else
-		if (traceEnt->methodOfDeath == MOD_DYNAMITE)
-		{
+		} else
+		if (traceEnt->methodOfDeath == MOD_DYNAMITE) {
 
 			// Not armed
-			if (traceEnt->s.teamNum >= 4)
-			{
+			if (traceEnt->s.teamNum >= 4) {
 				//bani
 				qboolean friendlyObj = qfalse;
 				qboolean enemyObj    = qfalse;
 
 				// Opposing team cannot accidentally arm it
-				if ((traceEnt->s.teamNum - 4) != (int)ent->client->sess.sessionTeam)
-				{
+				if ((traceEnt->s.teamNum - 4) != (int)ent->client->sess.sessionTeam) {
 					return;
 				}
 
@@ -1490,29 +1264,24 @@ void Weapon_Engineer(gentity_t *ent)
 					numListedEntities = EntsThatRadiusCanDamage(org, traceEnt->splashRadius, entityList);
 					G_ResetTempTraceIgnoreEnts();
 
-					for (e = 0; e < numListedEntities; e++)
-					{
+					for (e = 0; e < numListedEntities; e++) {
 						hit = &g_entities[entityList[e]];
 
-						if (hit->s.eType != ET_CONSTRUCTIBLE)
-						{
+						if (hit->s.eType != ET_CONSTRUCTIBLE) {
 							continue;
 						}
 
 						// invulnerable
-						if (hit->spawnflags & CONSTRUCTIBLE_INVULNERABLE || (hit->parent && hit->parent->spawnflags & 8))
-						{
+						if (hit->spawnflags & CONSTRUCTIBLE_INVULNERABLE || (hit->parent && hit->parent->spawnflags & 8)) {
 							continue;
 						}
 
-						if (!G_ConstructionIsPartlyBuilt(hit))
-						{
+						if (!G_ConstructionIsPartlyBuilt(hit)) {
 							continue;
 						}
 
 						// is it a friendly constructible
-						if (hit->s.teamNum == traceEnt->s.teamNum - 4)
-						{
+						if (hit->s.teamNum == traceEnt->s.teamNum - 4) {
 							friendlyObj = qtrue;
 						}
 					}
@@ -1526,57 +1295,46 @@ void Weapon_Engineer(gentity_t *ent)
 				VectorAdd(origin, traceEnt->r.mins, mins);
 				VectorAdd(origin, traceEnt->r.maxs, maxs);
 
-				for (i = 0 ; i < num ; i++)
-				{
+				for (i = 0 ; i < num ; i++) {
 					hit = &g_entities[touch[i]];
 
-					if (!(hit->r.contents & CONTENTS_TRIGGER))
-					{
+					if (!(hit->r.contents & CONTENTS_TRIGGER)) {
 						continue;
 					}
 
-					if (hit->s.eType == ET_OID_TRIGGER)
-					{
-						if (!(hit->spawnflags & (AXIS_OBJECTIVE | ALLIED_OBJECTIVE)))
-						{
+					if (hit->s.eType == ET_OID_TRIGGER) {
+						if (!(hit->spawnflags & (AXIS_OBJECTIVE | ALLIED_OBJECTIVE))) {
 							continue;
 						}
 
 						// Arnout - only if it targets a func_explosive
-						if (hit->target_ent && Q_stricmp(hit->target_ent->classname, "func_explosive"))
-						{
+						if (hit->target_ent && Q_stricmp(hit->target_ent->classname, "func_explosive")) {
 							continue;
 						}
 
 						if (((hit->spawnflags & AXIS_OBJECTIVE) && (ent->client->sess.sessionTeam == TEAM_AXIS)) ||
-						    ((hit->spawnflags & ALLIED_OBJECTIVE) && (ent->client->sess.sessionTeam == TEAM_ALLIES)))
-						{
+						    ((hit->spawnflags & ALLIED_OBJECTIVE) && (ent->client->sess.sessionTeam == TEAM_ALLIES))) {
 							friendlyObj = qtrue;
 						}
 
 						//bani
 						if (((hit->spawnflags & AXIS_OBJECTIVE) && (ent->client->sess.sessionTeam == TEAM_ALLIES)) ||
-						    ((hit->spawnflags & ALLIED_OBJECTIVE) && (ent->client->sess.sessionTeam == TEAM_AXIS)))
-						{
+						    ((hit->spawnflags & ALLIED_OBJECTIVE) && (ent->client->sess.sessionTeam == TEAM_AXIS))) {
 							enemyObj = qtrue;
 						}
 					}
 				}
 
 				//bani
-				if (friendlyObj && !enemyObj)
-				{
+				if (friendlyObj && !enemyObj) {
 					G_FreeEntity(traceEnt);
 					trap_SendServerCommand(ent - g_entities, "cp \"You cannot arm dynamite near a friendly objective!\" 1");
 					return;
 				}
 
-				if (traceEnt->health >= 250)
-				{
+				if (traceEnt->health >= 250) {
 					traceEnt->health = 255;
-				}
-				else
-				{
+				} else {
 					return;
 				}
 
@@ -1605,47 +1363,36 @@ void Weapon_Engineer(gentity_t *ent)
 				VectorAdd(origin, traceEnt->r.maxs, maxs);
 				num = trap_EntitiesInBox(mins, maxs, touch, MAX_GENTITIES);
 
-				for (i = 0 ; i < num ; i++)
-				{
+				for (i = 0 ; i < num ; i++) {
 					hit = &g_entities[touch[i]];
 
-					if (!(hit->r.contents & CONTENTS_TRIGGER))
-					{
+					if (!(hit->r.contents & CONTENTS_TRIGGER)) {
 						continue;
 					}
-					if (hit->s.eType == ET_OID_TRIGGER)
-					{
+					if (hit->s.eType == ET_OID_TRIGGER) {
 
-						if (!(hit->spawnflags & (AXIS_OBJECTIVE | ALLIED_OBJECTIVE)))
-						{
+						if (!(hit->spawnflags & (AXIS_OBJECTIVE | ALLIED_OBJECTIVE))) {
 							continue;
 						}
 
 						// Arnout - only if it targets a func_explosive
-						if (hit->target_ent && Q_stricmp(hit->target_ent->classname, "func_explosive"))
-						{
+						if (hit->target_ent && Q_stricmp(hit->target_ent->classname, "func_explosive")) {
 							continue;
 						}
 
-						if (hit->spawnflags & AXIS_OBJECTIVE)
-						{
-							if (ent->client->sess.sessionTeam == TEAM_ALLIES)     // transfer score info if this is a bomb scoring objective
-							{
+						if (hit->spawnflags & AXIS_OBJECTIVE) {
+							if (ent->client->sess.sessionTeam == TEAM_ALLIES) {   // transfer score info if this is a bomb scoring objective
 								traceEnt->accuracy = hit->accuracy;
 							}
-						}
-						else if (hit->spawnflags & ALLIED_OBJECTIVE)
-						{
-							if (ent->client->sess.sessionTeam == TEAM_AXIS)     // ditto other team
-							{
+						} else if (hit->spawnflags & ALLIED_OBJECTIVE) {
+							if (ent->client->sess.sessionTeam == TEAM_AXIS) {   // ditto other team
 								traceEnt->accuracy = hit->accuracy;
 							}
 						}
 
 						// rain - spawnflags 128 = disabled (#309)
 						if (!(hit->spawnflags & 128) && (((hit->spawnflags & AXIS_OBJECTIVE) && (ent->client->sess.sessionTeam == TEAM_ALLIES)) ||
-						                                 ((hit->spawnflags & ALLIED_OBJECTIVE) && (ent->client->sess.sessionTeam == TEAM_AXIS))))
-						{
+						                                 ((hit->spawnflags & ALLIED_OBJECTIVE) && (ent->client->sess.sessionTeam == TEAM_AXIS)))) {
 
 							gentity_t *pm = G_PopupMessage(PM_DYNAMITE);
 							pm->s.effect2Time = 0;
@@ -1654,10 +1401,8 @@ void Weapon_Engineer(gentity_t *ent)
 
 							G_Script_ScriptEvent(hit, "dynamited", "");
 
-							if (!(hit->spawnflags & OBJECTIVE_DESTROYED))
-							{
-								if (traceEnt->parent && traceEnt->parent->client)
-								{
+							if (!(hit->spawnflags & OBJECTIVE_DESTROYED)) {
+								if (traceEnt->parent && traceEnt->parent->client) {
 									G_LogPrintf("Dynamite_Plant: %d\n", (int)(traceEnt->parent - g_entities));     // OSP
 								}
 								traceEnt->parent = ent; // give explode score to guy who armed it
@@ -1686,29 +1431,24 @@ void Weapon_Engineer(gentity_t *ent)
 					numListedEntities = EntsThatRadiusCanDamage(org, traceEnt->splashRadius, entityList);
 					G_ResetTempTraceIgnoreEnts();
 
-					for (e = 0; e < numListedEntities; e++)
-					{
+					for (e = 0; e < numListedEntities; e++) {
 						hit = &g_entities[entityList[e]];
 
-						if (hit->s.eType != ET_CONSTRUCTIBLE)
-						{
+						if (hit->s.eType != ET_CONSTRUCTIBLE) {
 							continue;
 						}
 
 						// invulnerable
-						if (hit->spawnflags & CONSTRUCTIBLE_INVULNERABLE)
-						{
+						if (hit->spawnflags & CONSTRUCTIBLE_INVULNERABLE) {
 							continue;
 						}
 
-						if (!G_ConstructionIsPartlyBuilt(hit))
-						{
+						if (!G_ConstructionIsPartlyBuilt(hit)) {
 							continue;
 						}
 
 						// is it a friendly constructible
-						if (hit->s.teamNum == traceEnt->s.teamNum)
-						{
+						if (hit->s.teamNum == traceEnt->s.teamNum) {
 //bani - er, didnt we just pass this check earlier?
 //							G_FreeEntity( traceEnt );
 //							trap_SendServerCommand( ent-g_entities, "cp \"You cannot arm dynamite near a friendly construction!\" 1");
@@ -1717,13 +1457,11 @@ void Weapon_Engineer(gentity_t *ent)
 						}
 
 						// not dynamite-able
-						if (hit->constructibleStats.weaponclass < 1)
-						{
+						if (hit->constructibleStats.weaponclass < 1) {
 							continue;
 						}
 
-						if (hit->parent)
-						{
+						if (hit->parent) {
 							gentity_t *pm = G_PopupMessage(PM_DYNAMITE);
 							pm->s.effect2Time = 0; // 0 = planted
 							pm->s.effect3Time = hit->parent->s.teamNum;
@@ -1732,10 +1470,8 @@ void Weapon_Engineer(gentity_t *ent)
 							G_Script_ScriptEvent(hit, "dynamited", "");
 
 							if ((!(hit->parent->spawnflags & OBJECTIVE_DESTROYED)) &&
-							    hit->s.teamNum && (hit->s.teamNum == (int)ent->client->sess.sessionTeam))       // ==, as it's inverse
-							{
-								if (traceEnt->parent && traceEnt->parent->client)
-								{
+							    hit->s.teamNum && (hit->s.teamNum == (int)ent->client->sess.sessionTeam)) {     // ==, as it's inverse
+								if (traceEnt->parent && traceEnt->parent->client) {
 									G_LogPrintf("Dynamite_Plant: %d\n", (int)(traceEnt->parent - g_entities));     // OSP
 								}
 								traceEnt->parent = ent; // give explode score to guy who armed it
@@ -1746,15 +1482,11 @@ void Weapon_Engineer(gentity_t *ent)
 						return;
 					}
 				}
-			}
-			else
-			{
-				if (traceEnt->timestamp > level.time)
-				{
+			} else {
+				if (traceEnt->timestamp > level.time) {
 					return;
 				}
-				if (traceEnt->health >= 248)     // have to do this so we don't score multiple times
-				{
+				if (traceEnt->health >= 248) {   // have to do this so we don't score multiple times
 					return;
 				}
 				dynamiteDropTeam  = traceEnt->s.teamNum; // set this here since we wack traceent later but want teamnum for scoring
@@ -1762,8 +1494,7 @@ void Weapon_Engineer(gentity_t *ent)
 
 				G_PrintClientSpammyCenterPrint(ent - g_entities, "Defusing dynamite...");
 
-				if (traceEnt->health >= 248)
-				{
+				if (traceEnt->health >= 248) {
 //bani
 					qboolean defusedObj = qfalse;
 
@@ -1780,47 +1511,37 @@ void Weapon_Engineer(gentity_t *ent)
 					num = trap_EntitiesInBox(mins, maxs, touch, MAX_GENTITIES);
 
 					//bani - eh, why was this commented out? it makes sense, and prevents a sploit.
-					if (dynamiteDropTeam == (int)ent->client->sess.sessionTeam)
-					{
+					if (dynamiteDropTeam == (int)ent->client->sess.sessionTeam) {
 						return;
 					}
 
-					for (i = 0 ; i < num ; i++)
-					{
+					for (i = 0 ; i < num ; i++) {
 						hit = &g_entities[touch[i]];
 
-						if (!(hit->r.contents & CONTENTS_TRIGGER))
-						{
+						if (!(hit->r.contents & CONTENTS_TRIGGER)) {
 							continue;
 						}
-						if (hit->s.eType == ET_OID_TRIGGER)
-						{
+						if (hit->s.eType == ET_OID_TRIGGER) {
 
-							if (!(hit->spawnflags & (AXIS_OBJECTIVE | ALLIED_OBJECTIVE)))
-							{
+							if (!(hit->spawnflags & (AXIS_OBJECTIVE | ALLIED_OBJECTIVE))) {
 								continue;
 							}
 
 							// rain - spawnflags 128 = disabled (#309)
-							if (hit->spawnflags & 128)
-							{
+							if (hit->spawnflags & 128) {
 								continue;
 							}
 
 							//bani - prevent plant/defuse exploit near a/h cabinets or non-destroyable locations (bank doors on goldrush)
-							if (!hit->target_ent || hit->target_ent->s.eType != ET_EXPLOSIVE)
-							{
+							if (!hit->target_ent || hit->target_ent->s.eType != ET_EXPLOSIVE) {
 								continue;
 							}
 
-							if (ent->client->sess.sessionTeam == TEAM_AXIS)
-							{
-								if ((hit->spawnflags & AXIS_OBJECTIVE) && (!scored))
-								{
+							if (ent->client->sess.sessionTeam == TEAM_AXIS) {
+								if ((hit->spawnflags & AXIS_OBJECTIVE) && (!scored)) {
 									scored++;
 								}
-								if (hit->target_ent)
-								{
+								if (hit->target_ent) {
 									G_Script_ScriptEvent(hit->target_ent, "defused", "");
 								}
 
@@ -1831,16 +1552,12 @@ void Weapon_Engineer(gentity_t *ent)
 									pm->s.teamNum     = ent->client->sess.sessionTeam;
 								}
 								defusedObj = qtrue;
-							}
-							else     // TEAM_ALLIES
-							{
-								if ((hit->spawnflags & ALLIED_OBJECTIVE) && (!scored))
-								{
+							} else {   // TEAM_ALLIES
+								if ((hit->spawnflags & ALLIED_OBJECTIVE) && (!scored)) {
 									scored++;
 									hit->spawnflags &= ~OBJECTIVE_DESTROYED; // "re-activate" objective since it wasn't destroyed
 								}
-								if (hit->target_ent)
-								{
+								if (hit->target_ent) {
 									G_Script_ScriptEvent(hit->target_ent, "defused", "");
 								}
 
@@ -1856,8 +1573,7 @@ void Weapon_Engineer(gentity_t *ent)
 						}
 					}
 //bani - prevent multiple messages here
-					if (defusedObj)
-					{
+					if (defusedObj) {
 						return;
 					}
 
@@ -1874,12 +1590,10 @@ void Weapon_Engineer(gentity_t *ent)
 
 						numListedEntities = EntsThatRadiusCanDamage(org, traceEnt->splashRadius, entityList);
 
-						for (e = 0; e < numListedEntities; e++)
-						{
+						for (e = 0; e < numListedEntities; e++) {
 							hit = &g_entities[entityList[e]];
 
-							if (hit->s.eType != ET_CONSTRUCTIBLE)
-							{
+							if (hit->s.eType != ET_CONSTRUCTIBLE) {
 								continue;
 							}
 
@@ -1888,22 +1602,18 @@ void Weapon_Engineer(gentity_t *ent)
 							//	continue;
 
 							// invulnerable
-							if (hit->spawnflags & CONSTRUCTIBLE_INVULNERABLE)
-							{
+							if (hit->spawnflags & CONSTRUCTIBLE_INVULNERABLE) {
 								continue;
 							}
 
 							// not dynamite-able
-							if (hit->constructibleStats.weaponclass < 1)
-							{
+							if (hit->constructibleStats.weaponclass < 1) {
 								continue;
 							}
 
 							// we got somthing to destroy
-							if (ent && ent->client && ent->client->sess.sessionTeam == TEAM_AXIS)
-							{
-								if (hit->s.teamNum == TEAM_AXIS && (!scored))
-								{
+							if (ent && ent->client && ent->client->sess.sessionTeam == TEAM_AXIS) {
+								if (hit->s.teamNum == TEAM_AXIS && (!scored)) {
 									G_LogPrintf("Dynamite_Diffuse: %d\n", (int)(ent - g_entities));
 									scored++;
 								}
@@ -1916,13 +1626,9 @@ void Weapon_Engineer(gentity_t *ent)
 									pm->s.teamNum     = ent->client->sess.sessionTeam;
 								}
 
-							}
-							else     // TEAM_ALLIES
-							{
-								if (hit->s.teamNum == TEAM_ALLIES && (!scored))
-								{
-									if (ent && ent->client)
-									{
+							} else {   // TEAM_ALLIES
+								if (hit->s.teamNum == TEAM_ALLIES && (!scored)) {
+									if (ent && ent->client) {
 										G_LogPrintf("Dynamite_Diffuse: %d\n", (int)(ent - g_entities));                    // OSP
 									}
 
@@ -1959,9 +1665,9 @@ extern void G_SayTo(gentity_t *ent, gentity_t *other, int mode, int color, const
 
 void G_RailTrail(vec_t *start, vec_t *end);
 
-void G_GlobalClientEvent(int event, int param, int client)
-{
+void G_GlobalClientEvent(int event, int param, int client) {
 	gentity_t *tent = G_TempEntity(vec3_origin, event);
+
 	tent->s.density      = param;
 	tent->r.singleClient = client;
 	tent->r.svFlags      = SVF_SINGLECLIENT | SVF_BROADCAST;
@@ -1977,35 +1683,26 @@ void G_GlobalClientEvent(int event, int param, int client)
 // xkan, 12/06/2002 - back to the old value 2000, now that it looks like smoke disappears more
 // quickly
 
-void weapon_smokeBombExplode(gentity_t *ent)
-{
+void weapon_smokeBombExplode(gentity_t *ent) {
 	int lived = 0;
 
-	if (!ent->grenadeExplodeTime)
-	{
+	if (!ent->grenadeExplodeTime) {
 		ent->grenadeExplodeTime = level.time;
 	}
 
 	lived          = level.time - ent->grenadeExplodeTime;
 	ent->nextthink = level.time + FRAMETIME;
 
-	if (lived < SMOKEBOMB_GROWTIME)
-	{
+	if (lived < SMOKEBOMB_GROWTIME) {
 		// Just been thrown, increase radius
 		ent->s.effect1Time = 16 + lived * ((640.f - 16.f) / (float)SMOKEBOMB_GROWTIME);
-	}
-	else if (lived < SMOKEBOMB_SMOKETIME + SMOKEBOMB_GROWTIME)
-	{
+	} else if (lived < SMOKEBOMB_SMOKETIME + SMOKEBOMB_GROWTIME) {
 		// Smoking
 		ent->s.effect1Time = 640;
-	}
-	else if (lived < SMOKEBOMB_SMOKETIME + SMOKEBOMB_GROWTIME + SMOKEBOMB_POSTSMOKETIME)
-	{
+	} else if (lived < SMOKEBOMB_SMOKETIME + SMOKEBOMB_GROWTIME + SMOKEBOMB_POSTSMOKETIME) {
 		// Dying out
 		ent->s.effect1Time = -1;
-	}
-	else
-	{
+	} else {
 		// Poof and it's gone
 		G_FreeEntity(ent);
 	}
@@ -2038,18 +1735,13 @@ into a wall.
 //			too far off the target surface causes the the distance between the transmitted impact
 //			point and the actual hit surface larger than the mark radius.  (so nothing shows) )
 
-void SnapVectorTowards(vec3_t v, vec3_t to)
-{
+void SnapVectorTowards(vec3_t v, vec3_t to) {
 	int i;
 
-	for (i = 0 ; i < 3 ; i++)
-	{
-		if (to[i] <= v[i])
-		{
+	for (i = 0 ; i < 3 ; i++) {
+		if (to[i] <= v[i]) {
 			v[i] = floor(v[i]);
-		}
-		else
-		{
+		} else {
 			v[i] = ceil(v[i]);
 		}
 	}
@@ -2062,10 +1754,8 @@ void SnapVectorTowards(vec3_t v, vec3_t to)
 //
 // KLUDGE/FIXME: also modded #defines below to become macros that call this fn for minimal impact elsewhere
 //
-int G_GetWeaponDamage(int weapon)
-{
-	switch (weapon)
-	{
+int G_GetWeaponDamage(int weapon) {
+	switch (weapon) {
 	default:
 		return 1;
 	case WP_KNIFE:
@@ -2117,10 +1807,8 @@ int G_GetWeaponDamage(int weapon)
 }
 
 
-float G_GetWeaponSpread(int weapon)
-{
-	switch (weapon)
-	{
+float G_GetWeaponSpread(int weapon) {
+	switch (weapon) {
 	case WP_LUGER:
 	case WP_SILENCER:
 	case WP_AKIMBO_LUGER:
@@ -2217,8 +1905,7 @@ float G_GetWeaponSpread(int weapon)
 #define K43SCOPE_SPREAD G_GetWeaponSpread(WP_K43_SCOPE)
 #define K43SCOPE_DAMAGE G_GetWeaponDamage(WP_K43_SCOPE)
 
-void RubbleFlagCheck(gentity_t *ent, trace_t tr)
-{
+void RubbleFlagCheck(gentity_t *ent, trace_t tr) {
 	qboolean is_valid = qfalse;
 	int      type     = 0;
 
@@ -2229,27 +1916,20 @@ void RubbleFlagCheck(gentity_t *ent, trace_t tr)
 
 
 
-	if (tr.surfaceFlags & SURF_RUBBLE || tr.surfaceFlags & SURF_GRAVEL)
-	{
+	if (tr.surfaceFlags & SURF_RUBBLE || tr.surfaceFlags & SURF_GRAVEL) {
 		is_valid = qtrue;
 		type     = 4;
-	}
-	else if (tr.surfaceFlags & SURF_METAL)
-	{
+	} else if (tr.surfaceFlags & SURF_METAL) {
 //----(SA)	removed
 //		is_valid = qtrue;
 //		type = 2;
-	}
-	else if (tr.surfaceFlags & SURF_WOOD)
-	{
+	} else if (tr.surfaceFlags & SURF_WOOD) {
 		is_valid = qtrue;
 		type     = 1;
 	}
 
-	if (is_valid && ent->client && (ent->client->ps.persistant[PERS_HWEAPON_USE]))
-	{
-		if (rand() % 100 > 75)
-		{
+	if (is_valid && ent->client && (ent->client->ps.persistant[PERS_HWEAPON_USE])) {
+		if (rand() % 100 > 75) {
 			gentity_t *sfx;
 			vec3_t    start;
 			vec3_t    dir;
@@ -2285,19 +1965,15 @@ EmitterCheck
     see if a new particle emitter should be created at the bullet impact point
 ==============
 */
-void EmitterCheck(gentity_t *ent, gentity_t *attacker, trace_t *tr)
-{
+void EmitterCheck(gentity_t *ent, gentity_t *attacker, trace_t *tr) {
 	gentity_t *tent;
 	vec3_t    origin;
 
 	VectorCopy(tr->endpos, origin);
 	SnapVectorTowards(tr->endpos, attacker->s.origin);
 
-	if (Q_stricmp(ent->classname, "func_explosive") == 0)
-	{
-	}
-	else if (Q_stricmp(ent->classname, "func_leaky") == 0)
-	{
+	if (Q_stricmp(ent->classname, "func_explosive") == 0) {
+	} else if (Q_stricmp(ent->classname, "func_leaky") == 0) {
 
 
 		tent = G_TempEntity(origin, EV_EMITTER);
@@ -2316,8 +1992,7 @@ Bullet_Endpos
     find target end position for bullet trace based on entities weapon and accuracy
 ==============
 */
-void Bullet_Endpos(gentity_t *ent, float spread, vec3_t *end)
-{
+void Bullet_Endpos(gentity_t *ent, float spread, vec3_t *end) {
 	float    r, u;
 	qboolean randSpread = qtrue;
 	int      dist       = 8192;
@@ -2325,8 +2000,7 @@ void Bullet_Endpos(gentity_t *ent, float spread, vec3_t *end)
 	r = crandom() * spread;
 	u = crandom() * spread;
 
-	if (BG_IsScopedWeapon(ent->s.weapon))
-	{
+	if (BG_IsScopedWeapon(ent->s.weapon)) {
 		// aim dir already accounted for sway of scoped weapons in CalcMuzzlePoints()
 		dist      *= 2;
 		randSpread = qfalse;
@@ -2334,8 +2008,7 @@ void Bullet_Endpos(gentity_t *ent, float spread, vec3_t *end)
 
 	VectorMA(muzzleTrace, dist, forward, *end);
 
-	if (randSpread)
-	{
+	if (randSpread) {
 		VectorMA(*end, r, right, *end);
 		VectorMA(*end, u, up, *end);
 	}
@@ -2346,13 +2019,11 @@ void Bullet_Endpos(gentity_t *ent, float spread, vec3_t *end)
 Bullet_Fire
 ==============
 */
-void Bullet_Fire(gentity_t *ent, float spread, int damage, qboolean distance_falloff)
-{
+void Bullet_Fire(gentity_t *ent, float spread, int damage, qboolean distance_falloff) {
 	vec3_t end;
 
 	// Gordon: skill thing should be here Arnout!
-	switch (ent->s.weapon)
-	{
+	switch (ent->s.weapon) {
 	// light weapons
 	case WP_LUGER:
 	case WP_COLT:
@@ -2383,8 +2054,7 @@ Bullet_Fire_Extended
     uses for this include shooting through entities (windows, doors, other players, etc.) and reflecting bullets
 ==============
 */
-qboolean Bullet_Fire_Extended(gentity_t *source, gentity_t *attacker, vec3_t start, vec3_t end, float spread, int damage, qboolean distance_falloff)
-{
+qboolean Bullet_Fire_Extended(gentity_t *source, gentity_t *attacker, vec3_t start, vec3_t end, float spread, int damage, qboolean distance_falloff) {
 	trace_t   tr;
 	gentity_t *tent;
 	gentity_t *traceEnt;
@@ -2395,8 +2065,7 @@ qboolean Bullet_Fire_Extended(gentity_t *source, gentity_t *attacker, vec3_t sta
 	spread = spread;
 
 	//bani - prevent shooting ourselves in the head when prone, firing through a breakable
-	if (g_entities[attacker->s.number].client && g_entities[attacker->s.number].r.linked == qtrue)
-	{
+	if (g_entities[attacker->s.number].client && g_entities[attacker->s.number].r.linked == qtrue) {
 		g_entities[attacker->s.number].r.linked = qfalse;
 		waslinked                               = qtrue;
 	}
@@ -2404,14 +2073,12 @@ qboolean Bullet_Fire_Extended(gentity_t *source, gentity_t *attacker, vec3_t sta
 	G_Trace(source, &tr, start, NULL, NULL, end, source->s.number, MASK_SHOT);
 
 	//bani - prevent shooting ourselves in the head when prone, firing through a breakable
-	if (waslinked == qtrue)
-	{
+	if (waslinked == qtrue) {
 		g_entities[attacker->s.number].r.linked = qtrue;
 	}
 
 	// bullet debugging using Q3A's railtrail
-	if (g_debugBullets.integer & 1)
-	{
+	if (g_debugBullets.integer & 1) {
 		tent = G_TempEntity(start, EV_RAILTRAIL);
 		VectorCopy(tr.endpos, tent->s.origin2);
 		tent->s.otherEntityNum2 = attacker->s.number;
@@ -2426,8 +2093,7 @@ qboolean Bullet_Fire_Extended(gentity_t *source, gentity_t *attacker, vec3_t sta
 	// snap the endpos to integers, but nudged towards the line
 	SnapVectorTowards(tr.endpos, start);
 
-	if (distance_falloff)
-	{
+	if (distance_falloff) {
 		vec_t  dist;
 		vec3_t shotvec;
 		float  scale;
@@ -2438,16 +2104,12 @@ qboolean Bullet_Fire_Extended(gentity_t *source, gentity_t *attacker, vec3_t sta
 
 #if DO_BROKEN_DISTANCEFALLOFF
 		// ~~~___---___
-		if (dist > Square(1500.f))
-		{
+		if (dist > Square(1500.f)) {
 			// reducedDamage = qtrue;
 
-			if (dist > Square(2500.f))
-			{
+			if (dist > Square(2500.f)) {
 				damage *= 0.5f;
-			}
-			else
-			{
+			} else {
 				float scale = 1.f - 0.5f * (Square(1000.f) / (dist - Square(1000.f)));
 
 				damage *= scale;
@@ -2467,12 +2129,9 @@ qboolean Bullet_Fire_Extended(gentity_t *source, gentity_t *attacker, vec3_t sta
 
 		// And, finally, cap it.
 		// reducedDamage = qtrue;
-		if (scale >= 1.0f)
-		{
+		if (scale >= 1.0f) {
 			scale = 1.0f; // reducedDamage = qfalse;
-		}
-		else if (scale < 0.5f)
-		{
+		} else if (scale < 0.5f) {
 			scale = 0.5f;
 		}
 
@@ -2481,18 +2140,15 @@ qboolean Bullet_Fire_Extended(gentity_t *source, gentity_t *attacker, vec3_t sta
 	}
 
 	// send bullet impact
-	if (traceEnt->takedamage && traceEnt->client)
-	{
+	if (traceEnt->takedamage && traceEnt->client) {
 		tent              = G_TempEntity(tr.endpos, EV_BULLET_HIT_FLESH);
 		tent->s.eventParm = traceEnt->s.number;
 
-		if (AccuracyHit(traceEnt, attacker))
-		{
+		if (AccuracyHit(traceEnt, attacker)) {
 			hitClient = qtrue;
 		}
 
-		if (g_debugBullets.integer >= 2)       // show hit player bb
-		{
+		if (g_debugBullets.integer >= 2) {     // show hit player bb
 			gentity_t *bboxEnt;
 			vec3_t    b1, b2;
 			VectorCopy(traceEnt->r.currentOrigin, b1);
@@ -2503,16 +2159,13 @@ qboolean Bullet_Fire_Extended(gentity_t *source, gentity_t *attacker, vec3_t sta
 			VectorCopy(b2, bboxEnt->s.origin2);
 			bboxEnt->s.dmgFlags = 1;
 		}
-	}
-	else
-	{
+	} else {
 		trace_t tr2;
 		// Ridah, bullet impact should reflect off surface
 		vec3_t reflect;
 		float  dot;
 
-		if (g_debugBullets.integer <= -2)      // show hit thing bb
-		{
+		if (g_debugBullets.integer <= -2) {    // show hit thing bb
 			gentity_t *bboxEnt;
 			vec3_t    b1, b2;
 			VectorCopy(traceEnt->r.currentOrigin, b1);
@@ -2528,16 +2181,13 @@ qboolean Bullet_Fire_Extended(gentity_t *source, gentity_t *attacker, vec3_t sta
 
 		G_Trace(source, &tr2, start, NULL, NULL, end, source->s.number, MASK_WATER | MASK_SHOT);
 
-		if ((tr.entityNum != tr2.entityNum && tr2.fraction != 1))
-		{
+		if ((tr.entityNum != tr2.entityNum && tr2.fraction != 1)) {
 			vec3_t v;
 
 			VectorSubtract(tr.endpos, start, v);
 
 			tent->s.origin2[0] = (8192 * tr2.fraction) / VectorLength(v);
-		}
-		else
-		{
+		} else {
 			tent->s.origin2[0] = 0;
 		}
 
@@ -2550,15 +2200,12 @@ qboolean Bullet_Fire_Extended(gentity_t *source, gentity_t *attacker, vec3_t sta
 	}
 	tent->s.otherEntityNum = attacker->s.number;
 
-	if (traceEnt->takedamage)
-	{
+	if (traceEnt->takedamage) {
 		G_Damage(traceEnt, attacker, attacker, forward, tr.endpos, damage, (distance_falloff ? DAMAGE_DISTANCEFALLOFF : 0), GetAmmoTableData(attacker->s.weapon)->mod);
 
 		// allow bullets to "pass through" func_explosives if they break by taking another simultanious shot
-		if (traceEnt->s.eType == ET_EXPLOSIVE)
-		{
-			if (traceEnt->health <= damage)
-			{
+		if (traceEnt->s.eType == ET_EXPLOSIVE) {
+			if (traceEnt->health <= damage) {
 				// start new bullet at position this hit the bmodel and continue to the end position (ignoring shot-through bmodel in next trace)
 				// spread = 0 as this is an extension of an already spread shot
 				return Bullet_Fire_Extended(traceEnt, attacker, tr.endpos, end, 0, damage, distance_falloff);
@@ -2581,8 +2228,7 @@ GRENADE LAUNCHER
 */
 extern void G_ExplodeMissilePoisonGas(gentity_t *ent);
 
-gentity_t *weapon_gpg40_fire(gentity_t *ent, int grenType)
-{
+gentity_t *weapon_gpg40_fire(gentity_t *ent, int grenType) {
 	gentity_t *m /*, *te*/;   // JPW NERVE
 	trace_t   tr;
 	vec3_t    viewpos;
@@ -2602,16 +2248,12 @@ gentity_t *weapon_gpg40_fire(gentity_t *ent, int grenType)
 
 	//bani - to prevent nade-through-teamdoor sploit
 	trap_Trace(&tr, orig_viewpos, tv(-4.f, -4.f, 0.f), tv(4.f, 4.f, 6.f), viewpos, ent->s.number, MASK_MISSILESHOT);
-	if (tr.fraction < 1)     // oops, bad launch spot ) {
-	{
+	if (tr.fraction < 1) {   // oops, bad launch spot ) {
 		VectorCopy(tr.endpos, tosspos);
 		SnapVectorTowards(tosspos, orig_viewpos);
-	}
-	else
-	{
+	} else {
 		trap_Trace(&tr, viewpos, tv(-4.f, -4.f, 0.f), tv(4.f, 4.f, 6.f), tosspos, ent->s.number, MASK_MISSILESHOT);
-		if (tr.fraction < 1)     // oops, bad launch spot
-		{
+		if (tr.fraction < 1) {   // oops, bad launch spot
 			VectorCopy(tr.endpos, tosspos);
 			SnapVectorTowards(tosspos, viewpos);
 		}
@@ -2627,8 +2269,7 @@ gentity_t *weapon_gpg40_fire(gentity_t *ent, int grenType)
 	return m;
 }
 
-gentity_t *weapon_mortar_fire(gentity_t *ent, int grenType)
-{
+gentity_t *weapon_mortar_fire(gentity_t *ent, int grenType) {
 	gentity_t *m;
 	trace_t   tr;
 	vec3_t    launchPos, testPos;
@@ -2649,8 +2290,7 @@ gentity_t *weapon_mortar_fire(gentity_t *ent, int grenType)
 
 	trap_Trace(&tr, testPos, tv(-4.f, -4.f, 0.f), tv(4.f, 4.f, 6.f), launchPos, ent->s.number, MASK_MISSILESHOT);
 
-	if (tr.fraction < 1)     // oops, bad launch spot
-	{
+	if (tr.fraction < 1) {   // oops, bad launch spot
 		VectorCopy(tr.endpos, launchPos);
 		SnapVectorTowards(launchPos, testPos);
 	}
@@ -2660,8 +2300,7 @@ gentity_t *weapon_mortar_fire(gentity_t *ent, int grenType)
 	return m;
 }
 
-gentity_t *weapon_grenadelauncher_fire(gentity_t *ent, int grenType)
-{
+gentity_t *weapon_grenadelauncher_fire(gentity_t *ent, int grenType) {
 	gentity_t *m;
 	trace_t   tr;
 	vec3_t    viewpos;
@@ -2672,14 +2311,11 @@ gentity_t *weapon_grenadelauncher_fire(gentity_t *ent, int grenType)
 	pitch = ent->s.apos.trBase[0];
 
 	// JPW NERVE -- smoke grenades always overhand
-	if (pitch >= 0)
-	{
+	if (pitch >= 0) {
 		forward[2] += 0.5f;
 		// Used later in underhand boost
 		pitch = 1.3f;
-	}
-	else
-	{
+	} else {
 		pitch       = -pitch;
 		pitch       = min(pitch, 30);
 		pitch      /= 30.f;
@@ -2699,37 +2335,26 @@ gentity_t *weapon_grenadelauncher_fire(gentity_t *ent, int grenType)
 	upangle  = upangle / 100.0f;          //				   -0.5 / 0.5
 	upangle += 0.5f;                    //				    0.0 / 1.0
 
-	if (upangle < .1)
-	{
+	if (upangle < .1) {
 		upangle = .1;
 	}
 
 	// pineapples are not thrown as far as mashers // Gordon: um, no?
-	if (grenType == WP_GRENADE_LAUNCHER)
-	{
+	if (grenType == WP_GRENADE_LAUNCHER) {
 		upangle *= 900;
-	}
-	else if (grenType == WP_GRENADE_PINEAPPLE)
-	{
+	} else if (grenType == WP_GRENADE_PINEAPPLE) {
 		upangle *= 900;
-	}
-	else if (grenType == WP_SMOKE_MARKER)
-	{
+	} else if (grenType == WP_SMOKE_MARKER) {
 		upangle *= 900;
-	}
-	else if (grenType == WP_SMOKE_BOMB)
-	{
+	} else if (grenType == WP_SMOKE_BOMB) {
 		upangle *= 900;
-	}
-	else     // WP_DYNAMITE // Gordon: or WP_LANDMINE / WP_SATCHEL
-	{
+	} else {   // WP_DYNAMITE // Gordon: or WP_LANDMINE / WP_SATCHEL
 		upangle *= 400;
 	}
 
 	VectorCopy(muzzleEffect, tosspos);
 
-	if (underhand)
-	{
+	if (underhand) {
 		// move a little bit more away from the player (so underhand tosses don't get caught on nearby lips)
 		VectorMA(muzzleEffect, 8, forward, tosspos);
 		tosspos[2] -= 8;    // lower origin for the underhand throw
@@ -2743,43 +2368,30 @@ gentity_t *weapon_grenadelauncher_fire(gentity_t *ent, int grenType)
 	VectorCopy(ent->s.pos.trBase, viewpos);
 	viewpos[2] += ent->client->ps.viewheight;
 
-	if (grenType == WP_DYNAMITE || grenType == WP_SATCHEL)
-	{
+	if (grenType == WP_DYNAMITE || grenType == WP_SATCHEL) {
 		trap_Trace(&tr, viewpos, tv(-12.f, -12.f, 0.f), tv(12.f, 12.f, 20.f), tosspos, ent->s.number, MASK_MISSILESHOT);
-	}
-	else if (grenType == WP_LANDMINE)
-	{
+	} else if (grenType == WP_LANDMINE) {
 		trap_Trace(&tr, viewpos, tv(-16.f, -16.f, 0.f), tv(16.f, 16.f, 16.f), tosspos, ent->s.number, MASK_MISSILESHOT);
-	}
-	else
-	{
+	} else {
 		trap_Trace(&tr, viewpos, tv(-4.f, -4.f, 0.f), tv(4.f, 4.f, 6.f), tosspos, ent->s.number, MASK_MISSILESHOT);
 	}
 
-	if (tr.startsolid)
-	{
+	if (tr.startsolid) {
 		// Arnout: this code is a bit more solid than the previous code
 		VectorCopy(forward, viewpos);
 		VectorNormalizeFast(viewpos);
 		VectorMA(ent->r.currentOrigin, -24.f, viewpos, viewpos);
 
-		if (grenType == WP_DYNAMITE || grenType == WP_SATCHEL)
-		{
+		if (grenType == WP_DYNAMITE || grenType == WP_SATCHEL) {
 			trap_Trace(&tr, viewpos, tv(-12.f, -12.f, 0.f), tv(12.f, 12.f, 20.f), tosspos, ent->s.number, MASK_MISSILESHOT);
-		}
-		else if (grenType == WP_LANDMINE)
-		{
+		} else if (grenType == WP_LANDMINE) {
 			trap_Trace(&tr, viewpos, tv(-16.f, -16.f, 0.f), tv(16.f, 16.f, 16.f), tosspos, ent->s.number, MASK_MISSILESHOT);
-		}
-		else
-		{
+		} else {
 			trap_Trace(&tr, viewpos, tv(-4.f, -4.f, 0.f), tv(4.f, 4.f, 6.f), tosspos, ent->s.number, MASK_MISSILESHOT);
 		}
 
 		VectorCopy(tr.endpos, tosspos);
-	}
-	else if (tr.fraction < 1)        // oops, bad launch spot
-	{
+	} else if (tr.fraction < 1) {      // oops, bad launch spot
 		VectorCopy(tr.endpos, tosspos);
 		SnapVectorTowards(tosspos, viewpos);
 	}
@@ -2788,28 +2400,22 @@ gentity_t *weapon_grenadelauncher_fire(gentity_t *ent, int grenType)
 
 	m->damage = 0;  // Ridah, grenade's don't explode on contact
 
-	if (grenType == WP_LANDMINE)
-	{
-		if (ent->client->sess.sessionTeam == TEAM_AXIS)     // store team so we can generate red or blue smoke
-		{
+	if (grenType == WP_LANDMINE) {
+		if (ent->client->sess.sessionTeam == TEAM_AXIS) {   // store team so we can generate red or blue smoke
 			m->s.otherEntityNum2 = 1;
-		}
-		else
-		{
+		} else {
 			m->s.otherEntityNum2 = 0;
 		}
 	}
 
 	// Arnout: override for smoke gren
-	if (grenType == WP_SMOKE_BOMB)
-	{
+	if (grenType == WP_SMOKE_BOMB) {
 		m->s.effect1Time = 16;
 		m->think         = weapon_smokeBombExplode;
 	}
 
 	// JPW NERVE
-	if (grenType == WP_SMOKE_MARKER)
-	{
+	if (grenType == WP_SMOKE_MARKER) {
 		m->s.teamNum = ent->client->sess.sessionTeam;   // store team so we can generate red or blue smoke
 		m->count     = 1;
 		m->nextthink = level.time + 2500;
@@ -2828,8 +2434,7 @@ ROCKET
 ======================================================================
 */
 
-void Weapon_Panzerfaust_Fire(gentity_t *ent)
-{
+void Weapon_Panzerfaust_Fire(gentity_t *ent) {
 	fire_rocket(ent, muzzleEffect, forward);
 }
 
@@ -2841,25 +2446,21 @@ LIGHTNING GUN
 ======================================================================
 */
 
-void G_BurnMeGood(gentity_t *self, gentity_t *body)
-{
+void G_BurnMeGood(gentity_t *self, gentity_t *body) {
 	// add the new damage
 	body->flameQuota    += 5;
 	body->flameQuotaTime = level.time;
 
 	// JPW NERVE -- yet another flamethrower damage model, trying to find a feels-good damage combo that isn't overpowered
-	if (body->lastBurnedFrameNumber != level.framenum)
-	{
+	if (body->lastBurnedFrameNumber != level.framenum) {
 		G_Damage(body, self->parent, self->parent, vec3_origin, self->r.currentOrigin, 5, 0, MOD_FLAMETHROWER);   // was 2 dmg in release ver, hit avg. 2.5 times per frame
 		body->lastBurnedFrameNumber = level.framenum;
 	}
 	// jpw
 
 	// make em burn
-	if (body->client && (body->health <= 0 || body->flameQuota > 0))       // JPW NERVE was > FLAME_THRESHOLD
-	{
-		if (body->s.onFireEnd < level.time)
-		{
+	if (body->client && (body->health <= 0 || body->flameQuota > 0)) {     // JPW NERVE was > FLAME_THRESHOLD
+		if (body->s.onFireEnd < level.time) {
 			body->s.onFireStart = level.time;
 		}
 
@@ -2874,8 +2475,7 @@ void G_BurnMeGood(gentity_t *self, gentity_t *body)
 static vec3_t flameChunkMins = { -4, -4, -4 };
 static vec3_t flameChunkMaxs = { 4, 4, 4 };
 
-void Weapon_FlamethrowerFire(gentity_t *ent)
-{
+void Weapon_FlamethrowerFire(gentity_t *ent) {
 	vec3_t  start;
 	vec3_t  trace_start;
 	vec3_t  trace_end;
@@ -2893,16 +2493,13 @@ void Weapon_FlamethrowerFire(gentity_t *ent)
 	// 72 total box height, 18 xy -> 77 trace radius (from view point towards the ground) is enough to cover the area around the feet
 	VectorMA(trace_start, 77.0, forward, trace_end);
 	trap_Trace(&trace, trace_start, flameChunkMins, flameChunkMaxs, trace_end, ent->s.number, MASK_SHOT | MASK_WATER);
-	if (trace.fraction != 1.0)
-	{
+	if (trace.fraction != 1.0) {
 		// additional checks to filter out false positives
-		if (trace.endpos[2] > (ent->r.currentOrigin[2] + ent->r.mins[2] - 8) && trace.endpos[2] < ent->r.currentOrigin[2])
-		{
+		if (trace.endpos[2] > (ent->r.currentOrigin[2] + ent->r.mins[2] - 8) && trace.endpos[2] < ent->r.currentOrigin[2]) {
 			// trigger in a 21 radius around origin
 			trace_start[0] -= trace.endpos[0];
 			trace_start[1] -= trace.endpos[1];
-			if (trace_start[0] * trace_start[0] + trace_start[1] * trace_start[1] < 441)
-			{
+			if (trace_start[0] * trace_start[0] + trace_start[1] * trace_start[1] < 441) {
 				// set self in flames
 				G_BurnMeGood(ent, ent);
 			}
@@ -2921,12 +2518,9 @@ AddLean
     add leaning offset
 ==============
 */
-void AddLean(gentity_t *ent, vec3_t point)
-{
-	if (ent->client)
-	{
-		if (ent->client->ps.leanf)
-		{
+void AddLean(gentity_t *ent, vec3_t point) {
+	if (ent->client) {
+		if (ent->client->ps.leanf) {
 			vec3_t right;
 			AngleVectors(ent->client->ps.viewangles, NULL, right, NULL);
 			VectorMA(point, ent->client->ps.leanf, right, point);
@@ -2939,40 +2533,32 @@ void AddLean(gentity_t *ent, vec3_t point)
 AccuracyHit
 ===============
 */
-qboolean AccuracyHit(gentity_t *target, gentity_t *attacker)
-{
-	if (!target->takedamage)
-	{
+qboolean AccuracyHit(gentity_t *target, gentity_t *attacker) {
+	if (!target->takedamage) {
 		return qfalse;
 	}
 
-	if (!attacker)
-	{
+	if (!attacker) {
 		return qfalse;
 	}
 
-	if (target == attacker)
-	{
+	if (target == attacker) {
 		return qfalse;
 	}
 
-	if (!target->client)
-	{
+	if (!target->client) {
 		return qfalse;
 	}
 
-	if (!attacker->client)
-	{
+	if (!attacker->client) {
 		return qfalse;
 	}
 
-	if (target->client->ps.stats[STAT_HEALTH] <= 0)
-	{
+	if (target->client->ps.stats[STAT_HEALTH] <= 0) {
 		return qfalse;
 	}
 
-	if (OnSameTeam(target, attacker))
-	{
+	if (OnSameTeam(target, attacker)) {
 		return qfalse;
 	}
 
@@ -2987,15 +2573,13 @@ CalcMuzzlePoint
 set muzzle location relative to pivoting eye
 ===============
 */
-void CalcMuzzlePoint(gentity_t *ent, int weapon, vec3_t right, vec3_t up, vec3_t muzzlePoint)
-{
+void CalcMuzzlePoint(gentity_t *ent, int weapon, vec3_t right, vec3_t up, vec3_t muzzlePoint) {
 	VectorCopy(ent->r.currentOrigin, muzzlePoint);
 	muzzlePoint[2] += ent->client->ps.viewheight;
 
 	// Ridah, offset for more realistic firing from actual gun position
 	//----(SA) modified
-	switch (weapon)    // Ridah, changed this so I can predict weapons
-	{
+	switch (weapon) {  // Ridah, changed this so I can predict weapons
 	case WP_PANZERFAUST:
 		VectorMA(muzzlePoint, 10, right, muzzlePoint);
 		break;
@@ -3032,8 +2616,7 @@ void CalcMuzzlePoint(gentity_t *ent, int weapon, vec3_t right, vec3_t up, vec3_t
 }
 
 // Rafael - for activate
-void CalcMuzzlePointForActivate(gentity_t *ent, vec3_t muzzlePoint)
-{
+void CalcMuzzlePointForActivate(gentity_t *ent, vec3_t muzzlePoint) {
 
 	VectorCopy(ent->s.pos.trBase, muzzlePoint);
 	muzzlePoint[2] += ent->client->ps.viewheight;
@@ -3046,8 +2629,7 @@ void CalcMuzzlePointForActivate(gentity_t *ent, vec3_t muzzlePoint)
 // done.
 
 // Ridah
-void CalcMuzzlePoints(gentity_t *ent, int weapon)
-{
+void CalcMuzzlePoints(gentity_t *ent, int weapon) {
 	vec3_t viewang;
 
 	VectorCopy(ent->client->ps.viewangles, viewang);
@@ -3055,19 +2637,15 @@ void CalcMuzzlePoints(gentity_t *ent, int weapon)
 	{   // non ai's take into account scoped weapon 'sway' (just another way aimspread is visualized/utilized)
 		float spreadfrac, phase;
 
-		if (BG_IsScopedWeapon(weapon))
-		{
+		if (BG_IsScopedWeapon(weapon)) {
 			float pitchMinAmp, yawMinAmp;
 
 			spreadfrac = ent->client->currentAimSpreadScale;
 
-			if (weapon == WP_FG42SCOPE)
-			{
+			if (weapon == WP_FG42SCOPE) {
 				pitchMinAmp = 4 * ZOOM_PITCH_MIN_AMPLITUDE;
 				yawMinAmp   = 4 * ZOOM_YAW_MIN_AMPLITUDE;
-			}
-			else
-			{
+			} else {
 				pitchMinAmp = ZOOM_PITCH_MIN_AMPLITUDE;
 				yawMinAmp   = ZOOM_YAW_MIN_AMPLITUDE;
 			}
@@ -3093,8 +2671,7 @@ void CalcMuzzlePoints(gentity_t *ent, int weapon)
 	CalcMuzzlePoint(ent, weapon, right, up, muzzleEffect);
 }
 
-qboolean G_PlayerCanBeSeenByOthers(gentity_t *ent)
-{
+qboolean G_PlayerCanBeSeenByOthers(gentity_t *ent) {
 	int       i;
 	gentity_t *ent2;
 	vec3_t    pos[3];
@@ -3105,37 +2682,29 @@ qboolean G_PlayerCanBeSeenByOthers(gentity_t *ent)
 	VectorCopy(ent->client->ps.origin, pos[2]);
 	pos[2][2] += ent->client->ps.maxs[2];
 
-	for (i = 0, ent2 = g_entities; i < level.maxclients; i++, ent2++)
-	{
-		if (!ent2->inuse || ent2 == ent)
-		{
+	for (i = 0, ent2 = g_entities; i < level.maxclients; i++, ent2++) {
+		if (!ent2->inuse || ent2 == ent) {
 			continue;
 		}
 
-		if (ent2->client->sess.sessionTeam == TEAM_SPECTATOR)
-		{
+		if (ent2->client->sess.sessionTeam == TEAM_SPECTATOR) {
 			continue;
 		}
 
 		if (ent2->health <= 0 ||
-		    ent2->client->sess.sessionTeam == ent->client->sess.sessionTeam)
-		{
+		    ent2->client->sess.sessionTeam == ent->client->sess.sessionTeam) {
 			continue;
 		}
 
-		if (ent2->client->ps.eFlags & EF_ZOOMING)
-		{
+		if (ent2->client->ps.eFlags & EF_ZOOMING) {
 			G_SetupFrustum_ForBinoculars(ent2);
-		}
-		else
-		{
+		} else {
 			G_SetupFrustum(ent2);
 		}
 
 		if (G_VisibleFromBinoculars(ent2, ent, pos[0]) ||
 		    G_VisibleFromBinoculars(ent2, ent, pos[1]) ||
-		    G_VisibleFromBinoculars(ent2, ent, pos[2]))
-		{
+		    G_VisibleFromBinoculars(ent2, ent, pos[2])) {
 			return qtrue;
 		}
 	}
@@ -3148,19 +2717,16 @@ qboolean G_PlayerCanBeSeenByOthers(gentity_t *ent)
 FireWeapon
 ===============
 */
-void FireWeapon(gentity_t *ent)
-{
+void FireWeapon(gentity_t *ent) {
 	float aimSpreadScale;
 
 	// ydnar: dead guys don't fire guns
-	if (ent->client->ps.pm_type == PM_DEAD)
-	{
+	if (ent->client->ps.pm_type == PM_DEAD) {
 		return;
 	}
 
 	// Rafael mg42
-	if (ent->client->ps.persistant[PERS_HWEAPON_USE] && ent->active)
-	{
+	if (ent->client->ps.persistant[PERS_HWEAPON_USE] && ent->active) {
 		return;
 	}
 
@@ -3170,19 +2736,16 @@ void FireWeapon(gentity_t *ent)
 	aimSpreadScale = ent->client->currentAimSpreadScale;
 	// Ridah, add accuracy factor for AI
 	aimSpreadScale += 0.15f; // (SA) just adding a temp /maximum/ accuracy for player (this will be re-visited in greater detail :)
-	if (aimSpreadScale > 1)
-	{
+	if (aimSpreadScale > 1) {
 		aimSpreadScale = 1.0f;  // still cap at 1.0
 	}
 
-	if (ent->client->ps.groundEntityNum == ENTITYNUM_NONE)
-	{
+	if (ent->client->ps.groundEntityNum == ENTITYNUM_NONE) {
 		aimSpreadScale = 2.0f;
 	}
 
 	// fire the specific weapon
-	switch (ent->s.weapon)
-	{
+	switch (ent->s.weapon) {
 	case WP_KNIFE:
 		Weapon_Knife(ent);
 		break;
@@ -3195,8 +2758,7 @@ void FireWeapon(gentity_t *ent)
 		break;
 
 	case WP_SMOKE_MARKER:
-		if (level.time - ent->client->ps.classWeaponTime > level.lieutenantChargeTime[ent->client->sess.sessionTeam - 1])
-		{
+		if (level.time - ent->client->ps.classWeaponTime > level.lieutenantChargeTime[ent->client->sess.sessionTeam - 1]) {
 			ent->client->ps.classWeaponTime = level.time - level.lieutenantChargeTime[ent->client->sess.sessionTeam - 1];
 		}
 
@@ -3257,8 +2819,7 @@ void FireWeapon(gentity_t *ent)
 		Bullet_Fire(ent, GARAND_SPREAD * aimSpreadScale, GARAND_DAMAGE, qfalse);
 		break;
 	case WP_SATCHEL_DET:
-		if (G_ExplodeSatchels(ent))
-		{
+		if (G_ExplodeSatchels(ent)) {
 			ent->client->ps.ammo[WP_SATCHEL_DET]     = 0;
 			ent->client->ps.ammoclip[WP_SATCHEL_DET] = 0;
 			ent->client->ps.ammoclip[WP_SATCHEL]     = 1;
@@ -3273,12 +2834,9 @@ void FireWeapon(gentity_t *ent)
 		break;
 
 	case WP_MOBILE_MG42:
-		if (ent->client->ps.pm_flags & PMF_DUCKED || ent->client->ps.eFlags & EF_PRONE)
-		{
+		if (ent->client->ps.pm_flags & PMF_DUCKED || ent->client->ps.eFlags & EF_PRONE) {
 			Bullet_Fire(ent, MOBILE_MG42_SPREAD * 0.6f * aimSpreadScale, MOBILE_MG42_DAMAGE, qfalse);
-		}
-		else
-		{
+		} else {
 			Bullet_Fire(ent, MOBILE_MG42_SPREAD * aimSpreadScale, MOBILE_MG42_DAMAGE, qfalse);
 		}
 		break;
@@ -3299,15 +2857,13 @@ void FireWeapon(gentity_t *ent)
 		Bullet_Fire(ent, THOMPSON_SPREAD * aimSpreadScale, THOMPSON_DAMAGE, qtrue);
 		break;
 	case WP_PANZERFAUST:
-		if (level.time - ent->client->ps.classWeaponTime > level.soldierChargeTime[ent->client->sess.sessionTeam - 1])
-		{
+		if (level.time - ent->client->ps.classWeaponTime > level.soldierChargeTime[ent->client->sess.sessionTeam - 1]) {
 			ent->client->ps.classWeaponTime = level.time - level.soldierChargeTime[ent->client->sess.sessionTeam - 1];
 		}
 		ent->client->ps.classWeaponTime = level.time;
 
 		Weapon_Panzerfaust_Fire(ent);
-		if (ent->client)
-		{
+		if (ent->client) {
 			vec3_t forward;
 			AngleVectors(ent->client->ps.viewangles, forward, NULL, NULL);
 			VectorMA(ent->client->ps.velocity, -64, forward, ent->client->ps.velocity);
@@ -3315,8 +2871,7 @@ void FireWeapon(gentity_t *ent)
 		break;
 	case WP_GPG40:
 	case WP_M7:
-		if (level.time - ent->client->ps.classWeaponTime > level.engineerChargeTime[ent->client->sess.sessionTeam - 1])
-		{
+		if (level.time - ent->client->ps.classWeaponTime > level.engineerChargeTime[ent->client->sess.sessionTeam - 1]) {
 			ent->client->ps.classWeaponTime = level.time - level.engineerChargeTime[ent->client->sess.sessionTeam - 1];
 		}
 
@@ -3324,8 +2879,7 @@ void FireWeapon(gentity_t *ent)
 		weapon_gpg40_fire(ent, ent->s.weapon);
 		break;
 	case WP_MORTAR_SET:
-		if (level.time - ent->client->ps.classWeaponTime > level.soldierChargeTime[ent->client->sess.sessionTeam - 1])
-		{
+		if (level.time - ent->client->ps.classWeaponTime > level.soldierChargeTime[ent->client->sess.sessionTeam - 1]) {
 			ent->client->ps.classWeaponTime = level.time - level.soldierChargeTime[ent->client->sess.sessionTeam - 1];
 		}
 		ent->client->ps.classWeaponTime += .5f * level.soldierChargeTime[ent->client->sess.sessionTeam - 1];
@@ -3337,28 +2891,22 @@ void FireWeapon(gentity_t *ent)
 	case WP_LANDMINE:
 	case WP_SATCHEL:
 	case WP_SMOKE_BOMB:
-		if (ent->s.weapon == WP_SMOKE_BOMB || ent->s.weapon == WP_SATCHEL)
-		{
-			if (level.time - ent->client->ps.classWeaponTime > level.covertopsChargeTime[ent->client->sess.sessionTeam - 1])
-			{
+		if (ent->s.weapon == WP_SMOKE_BOMB || ent->s.weapon == WP_SATCHEL) {
+			if (level.time - ent->client->ps.classWeaponTime > level.covertopsChargeTime[ent->client->sess.sessionTeam - 1]) {
 				ent->client->ps.classWeaponTime = level.time - level.covertopsChargeTime[ent->client->sess.sessionTeam - 1];
 			}
 			ent->client->ps.classWeaponTime = level.time;
 		}
 
-		if (ent->s.weapon == WP_LANDMINE)
-		{
-			if (level.time - ent->client->ps.classWeaponTime > level.engineerChargeTime[ent->client->sess.sessionTeam - 1])
-			{
+		if (ent->s.weapon == WP_LANDMINE) {
+			if (level.time - ent->client->ps.classWeaponTime > level.engineerChargeTime[ent->client->sess.sessionTeam - 1]) {
 				ent->client->ps.classWeaponTime = level.time - level.engineerChargeTime[ent->client->sess.sessionTeam - 1];
 			}
 			ent->client->ps.classWeaponTime += .5f * level.engineerChargeTime[ent->client->sess.sessionTeam - 1];
 		}
 
-		if (ent->s.weapon == WP_DYNAMITE)
-		{
-			if (level.time - ent->client->ps.classWeaponTime > level.engineerChargeTime[ent->client->sess.sessionTeam - 1])
-			{
+		if (ent->s.weapon == WP_DYNAMITE) {
+			if (level.time - ent->client->ps.classWeaponTime > level.engineerChargeTime[ent->client->sess.sessionTeam - 1]) {
 				ent->client->ps.classWeaponTime = level.time - level.engineerChargeTime[ent->client->sess.sessionTeam - 1];
 			}
 			ent->client->ps.classWeaponTime = level.time;

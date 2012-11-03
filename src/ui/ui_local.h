@@ -172,8 +172,7 @@ extern vmCvar_t ui_autoredirect;
 #define QM_LOSTFOCUS            2
 #define QM_ACTIVATED            3
 
-typedef struct _tag_menuframework
-{
+typedef struct _tag_menuframework {
 	int cursor;
 	int cursor_prev;
 
@@ -192,8 +191,7 @@ typedef struct _tag_menuframework
 	// END JOSEPH
 } menuframework_s;
 
-typedef struct
-{
+typedef struct {
 	int type;
 	const char *name;
 	int id;
@@ -211,8 +209,7 @@ typedef struct
 	void (*ownerdraw)(void *self);
 } menucommon_s;
 
-typedef struct
-{
+typedef struct {
 	int cursor;
 	int scroll;
 	int widthInChars;
@@ -220,14 +217,12 @@ typedef struct
 	int maxchars;
 } mfield_t;
 
-typedef struct
-{
+typedef struct {
 	menucommon_s generic;
 	mfield_t field;
 } menufield_s;
 
-typedef struct
-{
+typedef struct {
 	menucommon_s generic;
 
 	float minvalue;
@@ -237,8 +232,7 @@ typedef struct
 	float range;
 } menuslider_s;
 
-typedef struct
-{
+typedef struct {
 	menucommon_s generic;
 
 	int oldvalue;
@@ -254,19 +248,16 @@ typedef struct
 	int seperation;
 } menulist_s;
 
-typedef struct
-{
+typedef struct {
 	menucommon_s generic;
 } menuaction_s;
 
-typedef struct
-{
+typedef struct {
 	menucommon_s generic;
 	int curvalue;
 } menuradiobutton_s;
 
-typedef struct
-{
+typedef struct {
 	menucommon_s generic;
 	char *focuspic;
 	char *errorpic;
@@ -277,8 +268,7 @@ typedef struct
 	float *focuscolor;
 } menubitmap_s;
 
-typedef struct
-{
+typedef struct {
 	menucommon_s generic;
 	char *string;
 	int style;
@@ -325,8 +315,7 @@ extern void UI_DrawLoadPanel(qboolean ownerdraw, qboolean uihack);
 //
 
 //FIXME ripped from cg_local.h
-typedef struct
-{
+typedef struct {
 	int oldFrame;
 	int oldFrameTime;               // time when ->oldFrame was exactly on
 
@@ -345,8 +334,7 @@ typedef struct
 	int animationTime;              // time when the first frame of the animation will be exact
 } lerpFrame_t;
 
-typedef struct
-{
+typedef struct {
 	// model info
 	qhandle_t legsModel;
 	qhandle_t legsSkin;
@@ -416,8 +404,7 @@ qboolean UI_RegisterClientModelname(playerInfo_t *pi, const char *modelSkinName)
 //
 // ui_atoms.c
 //
-typedef struct
-{
+typedef struct {
 	int frametime;
 	int realtime;
 	int cursorx;
@@ -489,8 +476,7 @@ typedef struct
 
 #define MAX_PROFILES 64
 
-typedef struct
-{
+typedef struct {
 	const char *name;
 	const char *imageName;
 	qhandle_t headImage;
@@ -498,22 +484,19 @@ typedef struct
 } characterInfo;
 
 //----(SA)	added
-typedef struct
-{
+typedef struct {
 	const char *name;
 	qhandle_t sshotImage;
 } savegameInfo;
 //----(SA)	end
 
-typedef struct
-{
+typedef struct {
 	const char *name;
 	const char *ai;
 	const char *action;
 } aliasInfo;
 
-typedef struct
-{
+typedef struct {
 	const char *teamName;
 	const char *imageName;
 	const char *teamMembers[TEAM_MEMBERS];
@@ -523,26 +506,22 @@ typedef struct
 	int cinematic;
 } teamInfo;
 
-typedef struct
-{
+typedef struct {
 	const char *name;
 	const char *dir;
 } profileInfo_t;
 
-typedef struct serverFilter_s
-{
+typedef struct serverFilter_s {
 	const char *description;
 	const char *basedir;
 } serverFilter_t;
 
-typedef struct
-{
+typedef struct {
 	char adrstr[MAX_ADDRESSLENGTH];
 	int start;
 } pinglist_t;
 
-typedef struct serverStatus_s
-{
+typedef struct serverStatus_s {
 	int refreshtime;
 	int sortKey;
 	int sortDir;
@@ -564,8 +543,7 @@ typedef struct serverStatus_s
 } serverStatus_t;
 
 
-typedef struct
-{
+typedef struct {
 	char adrstr[MAX_ADDRESSLENGTH];
 	char name[MAX_ADDRESSLENGTH];
 	int startTime;
@@ -573,14 +551,12 @@ typedef struct
 	qboolean valid;
 } pendingServer_t;
 
-typedef struct
-{
+typedef struct {
 	int num;
 	pendingServer_t server[MAX_SERVERSTATUSREQUESTS];
 } pendingServerStatus_t;
 
-typedef struct
-{
+typedef struct {
 	char address[MAX_ADDRESSLENGTH];
 	char *lines[MAX_SERVERSTATUS_LINES][4];
 	char text[MAX_SERVERSTATUS_TEXT];
@@ -588,14 +564,12 @@ typedef struct
 	int numLines;
 } serverStatusInfo_t;
 
-typedef struct
-{
+typedef struct {
 	const char *modName;
 	const char *modDescr;
 } modInfo_t;
 
-typedef struct
-{
+typedef struct {
 	displayContextDef_t uiDC;
 	int newHighScoreTime;
 	int newBestTime;
@@ -919,8 +893,7 @@ void UI_NetworkOptionsMenu(void);
 //
 // ui_gameinfo.c
 //
-typedef enum
-{
+typedef enum {
 	AWARD_ACCURACY,
 	AWARD_IMPRESSIVE,
 	AWARD_EXCELLENT,

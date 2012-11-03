@@ -45,20 +45,17 @@ CG_ParseScores
 */
 // Gordon: NOTE: team doesnt actually signify team, think i was on drugs that day.....
 #define NUM_SCORES 10
-static void CG_ParseScore(team_t team)
-{
+static void CG_ParseScore(team_t team) {
 	int i, j;
 	int numScores;
 
-	if (team == TEAM_AXIS)
-	{
+	if (team == TEAM_AXIS) {
 		cg.numScores = 0;
 	}
 
 	numScores = atoi(CG_Argv(1));
 
-	for (j = 0; j < numScores; j++)
-	{
+	for (j = 0; j < numScores; j++) {
 		i = cg.numScores;
 
 		cg.scores[i].client = atoi(CG_Argv(2 + (j * NUM_SCORES)));
@@ -87,8 +84,7 @@ static void CG_ParseScore(team_t team)
 		// Nico, speclocked status
 		cg.scores[i].speclocked = atoi(CG_Argv(11 + (j * NUM_SCORES)));
 
-		if (cg.scores[i].client < 0 || cg.scores[i].client >= MAX_CLIENTS)
-		{
+		if (cg.scores[i].client < 0 || cg.scores[i].client >= MAX_CLIENTS) {
 			cg.scores[i].client = 0;
 		}
 
@@ -105,16 +101,14 @@ CG_ParseTeamInfo
 =================
 */
 #define NUMARGS 4
-static void CG_ParseTeamInfo(void)
-{
+static void CG_ParseTeamInfo(void) {
 	int i;
 	int client;
 	int numSortedTeamPlayers;
 
 	numSortedTeamPlayers = atoi(CG_Argv(1));
 
-	for (i = 0 ; i < numSortedTeamPlayers ; i++)
-	{
+	for (i = 0 ; i < numSortedTeamPlayers ; i++) {
 		client = atoi(CG_Argv(i * NUMARGS + 2));
 
 		cgs.clientinfo[client].location[0] = atoi(CG_Argv(i * NUMARGS + 3));
@@ -131,24 +125,22 @@ This is called explicitly when the gamestate is first received,
 and whenever the server updates any serverinfo flagged cvars
 ================
 */
-void CG_ParseServerinfo(void)
-{
+void CG_ParseServerinfo(void) {
 	const char *info;
 	char       *mapname;
 
 	info = CG_ConfigString(CS_SERVERINFO);
 
 	cg_antilag.integer = cgs.antilag = atoi(Info_ValueForKey(info, "g_antilag"));
-	if (!cgs.localServer)
-	{
+	if (!cgs.localServer) {
 		trap_Cvar_Set("g_antilag", va("%i", cgs.antilag));
 		trap_Cvar_Update(&cg_antilag);
 	}
 
 	cgs.maxclients = atoi(Info_ValueForKey(info, "sv_maxclients"));
 	mapname        = Info_ValueForKey(info, "mapname");
-	Q_strncpyz(cgs.rawmapname, mapname, sizeof(cgs.rawmapname));
-	Com_sprintf(cgs.mapname, sizeof(cgs.mapname), "maps/%s.bsp", mapname);
+	Q_strncpyz(cgs.rawmapname, mapname, sizeof (cgs.rawmapname));
+	Com_sprintf(cgs.mapname, sizeof (cgs.mapname), "maps/%s.bsp", mapname);
 
 	cgs.weaponRestrictions = atoi(Info_ValueForKey(info, "g_heavyWeaponRestriction")) * 0.01f;
 
@@ -162,14 +154,11 @@ CG_ParseOIDInfo
 ==================
 */
 
-oidInfo_t *CG_OIDInfoForEntityNum(int num)
-{
+oidInfo_t *CG_OIDInfoForEntityNum(int num) {
 	int i;
 
-	for (i = 0; i < MAX_OID_TRIGGERS; i++)
-	{
-		if (cgs.oidInfo[i].entityNum == num)
-		{
+	for (i = 0; i < MAX_OID_TRIGGERS; i++) {
+		if (cgs.oidInfo[i].entityNum == num) {
 			return &cgs.oidInfo[i];
 		}
 	}
@@ -177,82 +166,69 @@ oidInfo_t *CG_OIDInfoForEntityNum(int num)
 	return NULL;
 }
 
-void CG_ParseOIDInfo(int num)
-{
+void CG_ParseOIDInfo(int num) {
 	const char *info;
 	const char *cs;
 	int        index = num - CS_OID_DATA;
 
 	info = CG_ConfigString(num);
 
-	memset(&cgs.oidInfo[index], 0, sizeof(cgs.oidInfo[0]));
+	memset(&cgs.oidInfo[index], 0, sizeof (cgs.oidInfo[0]));
 
-	if (!info || !*info)
-	{
+	if (!info || !*info) {
 		return;
 	}
 
 	cs = Info_ValueForKey(info, "s");
-	if (cs && *cs)
-	{
+	if (cs && *cs) {
 		cgs.oidInfo[index].spawnflags = atoi(cs);
 	}
 
 	cs = Info_ValueForKey(info, "cia");
-	if (cs && *cs)
-	{
+	if (cs && *cs) {
 		cgs.oidInfo[index].customimageallies = cgs.gameShaders[atoi(cs)];
 	}
 
 	cs = Info_ValueForKey(info, "cix");
-	if (cs && *cs)
-	{
+	if (cs && *cs) {
 		cgs.oidInfo[index].customimageaxis = cgs.gameShaders[atoi(cs)];
 	}
 
 	cs = Info_ValueForKey(info, "o");
-	if (cs && *cs)
-	{
+	if (cs && *cs) {
 		cgs.oidInfo[index].objflags = atoi(cs);
 	}
 
 	cs = Info_ValueForKey(info, "e");
-	if (cs && *cs)
-	{
+	if (cs && *cs) {
 		cgs.oidInfo[index].entityNum = atoi(cs);
 	}
 
 	cs = Info_ValueForKey(info, "n");
-	if (cs && *cs)
-	{
-		Q_strncpyz(cgs.oidInfo[index].name, cs, sizeof(cgs.oidInfo[0].name));
+	if (cs && *cs) {
+		Q_strncpyz(cgs.oidInfo[index].name, cs, sizeof (cgs.oidInfo[0].name));
 	}
 
 	cs = Info_ValueForKey(info, "x");
-	if (cs && *cs)
-	{
+	if (cs && *cs) {
 		cgs.oidInfo[index].origin[0] = atoi(cs);
 	}
 
 	cs = Info_ValueForKey(info, "y");
-	if (cs && *cs)
-	{
+	if (cs && *cs) {
 		cgs.oidInfo[index].origin[1] = atoi(cs);
 	}
 
 	cs = Info_ValueForKey(info, "z");
-	if (cs && *cs)
-	{
+	if (cs && *cs) {
 		cgs.oidInfo[index].origin[2] = atoi(cs);
 	}
 }
 
-void CG_ParseOIDInfos(void)
-{
+void CG_ParseOIDInfos(void) {
 	int i;
 
-	for (i = 0; i < MAX_OID_TRIGGERS; i++)
-	{
+	for (i = 0; i < MAX_OID_TRIGGERS; i++) {
 		CG_ParseOIDInfo(CS_OID_DATA + i);
 	}
 }
@@ -264,8 +240,7 @@ CG_ParseWolfinfo
 NERVE - SMF
 ==================
 */
-void CG_ParseWolfinfo(void)
-{
+void CG_ParseWolfinfo(void) {
 	int        old_gs = cgs.gamestate;
 	const char *info;
 
@@ -274,14 +249,12 @@ void CG_ParseWolfinfo(void)
 	cgs.gamestate = atoi(Info_ValueForKey(info, "gamestate"));
 
 	// OSP - Announce game in progress if we are really playing
-	if (old_gs != GS_PLAYING && cgs.gamestate == GS_PLAYING)
-	{
+	if (old_gs != GS_PLAYING && cgs.gamestate == GS_PLAYING) {
 		Pri("^1FIGHT!\n");
 		CPri("^1FIGHT!\n");
 	}
 
-	if (!cgs.localServer)
-	{
+	if (!cgs.localServer) {
 		trap_Cvar_Set("gamestate", va("%i", cgs.gamestate));
 	}
 }
@@ -291,8 +264,7 @@ void CG_ParseWolfinfo(void)
 CG_ParseSpawns
 ==================
 */
-void CG_ParseSpawns(void)
-{
+void CG_ParseSpawns(void) {
 	const char *info;
 	const char *s;
 	int        i;
@@ -301,8 +273,7 @@ void CG_ParseSpawns(void)
 	info = CG_ConfigString(CS_MULTI_INFO);
 	s    = Info_ValueForKey(info, "numspawntargets");
 
-	if (!s || !strlen(s))
-	{
+	if (!s || !strlen(s)) {
 		return;
 	}
 
@@ -311,38 +282,32 @@ void CG_ParseSpawns(void)
 
 	cg.spawnCount = atoi(s) + 1;
 
-	for (i = 1; i < cg.spawnCount; i++)
-	{
+	for (i = 1; i < cg.spawnCount; i++) {
 		info = CG_ConfigString(CS_MULTI_SPAWNTARGETS + i - 1);
 
 		s = Info_ValueForKey(info, "spawn_targ");
 
-		if (!s || !strlen(s))
-		{
+		if (!s || !strlen(s)) {
 			return;
 		}
 
 		Q_strncpyz(cg.spawnPoints[i], CG_TranslateString(s), MAX_SPAWNDESC);
 
 		s = Info_ValueForKey(info, "x");
-		if (!s || !strlen(s))
-		{
+		if (!s || !strlen(s)) {
 			return;
 		}
 		cg.spawnCoordsUntransformed[i][0] = cg.spawnCoords[i][0] = atof(s);
 
 		s = Info_ValueForKey(info, "y");
-		if (!s || !strlen(s))
-		{
+		if (!s || !strlen(s)) {
 			return;
 		}
 		cg.spawnCoordsUntransformed[i][1] = cg.spawnCoords[i][1] = atof(s);
 
-		if (cgs.ccLayers)
-		{
+		if (cgs.ccLayers) {
 			s = Info_ValueForKey(info, "z");
-			if (!s || !strlen(s))
-			{
+			if (!s || !strlen(s)) {
 				return;
 			}
 			cg.spawnCoordsUntransformed[i][2] = cg.spawnCoords[i][2] = atof(s);
@@ -351,8 +316,7 @@ void CG_ParseSpawns(void)
 		s = Info_ValueForKey(info, "t");
 
 		newteam = atoi(s);
-		if ((int)cg.spawnTeams[i] != newteam)
-		{
+		if ((int)cg.spawnTeams[i] != newteam) {
 			cg.spawnTeams_old[i]        = cg.spawnTeams[i];
 			cg.spawnTeams_changeTime[i] = cg.time;
 			cg.spawnTeams[i]            = newteam;
@@ -368,8 +332,7 @@ void CG_ParseSpawns(void)
 CG_ParseScreenFade
 =====================
 */
-static void CG_ParseScreenFade(void)
-{
+static void CG_ParseScreenFade(void) {
 	const char *info;
 	char       *token;
 
@@ -383,8 +346,7 @@ static void CG_ParseScreenFade(void)
 	token             = COM_Parse((char **)&info);
 	cgs.fadeDuration  = atoi(token);
 
-	if (cgs.fadeStartTime + cgs.fadeDuration < cg.time)
-	{
+	if (cgs.fadeStartTime + cgs.fadeDuration < cg.time) {
 		cgs.fadeAlphaCurrent = cgs.fadeAlpha;
 	}
 }
@@ -400,8 +362,7 @@ CG_ParseFog
     int		time
 ==============
 */
-static void CG_ParseFog(void)
-{
+static void CG_ParseFog(void) {
 	const char *info;
 	char       *token;
 	float      ne, fa, r, g, b, density;
@@ -417,19 +378,15 @@ static void CG_ParseFog(void)
 	token = COM_Parse((char **)&info);    b = atof(token);
 	token = COM_Parse((char **)&info);    time = atoi(token);
 
-	if (fa)        // far of '0' from a target_fog means "return to map fog"
-	{
+	if (fa) {      // far of '0' from a target_fog means "return to map fog"
 		trap_R_SetFog(FOG_SERVER, (int)ne, (int)fa, r, g, b, density + .1);
 		trap_R_SetFog(FOG_CMD_SWITCHFOG, FOG_SERVER, time, 0, 0, 0, 0);
-	}
-	else
-	{
+	} else {
 		trap_R_SetFog(FOG_CMD_SWITCHFOG, FOG_MAP, time, 0, 0, 0, 0);
 	}
 }
 
-static void CG_ParseGlobalFog(void)
-{
+static void CG_ParseGlobalFog(void) {
 	const char *info;
 	char       *token;
 	qboolean   restore;
@@ -441,12 +398,9 @@ static void CG_ParseGlobalFog(void)
 	token = COM_Parse((char **)&info);    restore = atoi(token);
 	token = COM_Parse((char **)&info);    duration = atoi(token);
 
-	if (restore)
-	{
+	if (restore) {
 		trap_R_SetGlobalFog(qtrue, duration, 0.f, 0.f, 0.f, 0);
-	}
-	else
-	{
+	} else {
 		token = COM_Parse((char **)&info);    r = atof(token);
 		token = COM_Parse((char **)&info);    g = atof(token);
 		token = COM_Parse((char **)&info);    b = atof(token);
@@ -457,16 +411,14 @@ static void CG_ParseGlobalFog(void)
 }
 
 // Parse server version info (for demo playback compatibility)
-void CG_ParseServerVersionInfo(const char *pszVersionInfo)
-{
+void CG_ParseServerVersionInfo(const char *pszVersionInfo) {
 	// This will expand to a tokenized string, eventually but for
 	// now we only need to worry about 1 number :)
 	cgs.game_versioninfo = atoi(pszVersionInfo);
 }
 
 // Parse reinforcement offsets
-void CG_ParseReinforcementTimes(const char *pszReinfSeedString)
-{
+void CG_ParseReinforcementTimes(const char *pszReinfSeedString) {
 	const char   *tmp = pszReinfSeedString, *tmp2;
 	unsigned int i, j, dwDummy = 0; // Nico, note, no not remove dwDummy
 	unsigned int dwOffset[TEAM_NUM_TEAMS];
@@ -479,13 +431,10 @@ void CG_ParseReinforcementTimes(const char *pszReinfSeedString)
 	GETVAL(dwOffset[TEAM_AXIS], (1 << REINF_REDDELT));
 	tmp2 = tmp;
 
-	for (i = TEAM_AXIS; i <= TEAM_ALLIES; i++)
-	{
+	for (i = TEAM_AXIS; i <= TEAM_ALLIES; i++) {
 		tmp = tmp2;
-		for (j = 0; j < MAX_REINFSEEDS; j++)
-		{
-			if (j == dwOffset[i])
-			{
+		for (j = 0; j < MAX_REINFSEEDS; j++) {
+			if (j == dwOffset[i]) {
 				GETVAL(cgs.aReinfOffset[i], aReinfSeeds[j]);
 				cgs.aReinfOffset[i] *= 1000;
 				break;
@@ -503,8 +452,7 @@ CG_SetConfigValues
 Called on load to set the initial values from configure strings
 ================
 */
-void CG_SetConfigValues(void)
-{
+void CG_SetConfigValues(void) {
 	cgs.levelStartTime = atoi(CG_ConfigString(CS_LEVEL_START_TIME));
 
 	// rain - set all of this crap in cgs - it won't be set if it doesn't
@@ -517,7 +465,7 @@ void CG_SetConfigValues(void)
 	cgs.voteTime = atoi(CG_ConfigString(CS_VOTE_TIME));
 	cgs.voteYes  = atoi(CG_ConfigString(CS_VOTE_YES));
 	cgs.voteNo   = atoi(CG_ConfigString(CS_VOTE_NO));
-	Q_strncpyz(cgs.voteString, CG_ConfigString(CS_VOTE_STRING), sizeof(cgs.voteString));
+	Q_strncpyz(cgs.voteString, CG_ConfigString(CS_VOTE_STRING), sizeof (cgs.voteString));
 
 	// OSP
 	CG_ParseServerVersionInfo(CG_ConfigString(CS_VERSIONINFO));
@@ -530,8 +478,7 @@ void CG_SetConfigValues(void)
 CG_ShaderStateChanged
 =====================
 */
-void CG_ShaderStateChanged(void)
-{
+void CG_ShaderStateChanged(void) {
 	char       originalShader[MAX_QPATH];
 	char       newShader[MAX_QPATH];
 	char       timeOffset[16];
@@ -539,28 +486,22 @@ void CG_ShaderStateChanged(void)
 	char       *n, *t;
 
 	o = CG_ConfigString(CS_SHADERSTATE);
-	while (o && *o)
-	{
+	while (o && *o) {
 		n = strstr(o, "=");
-		if (n && *n)
-		{
+		if (n && *n) {
 			strncpy(originalShader, o, n - o);
 			originalShader[n - o] = 0;
 			n++;
 			t = strstr(n, ":");
-			if (t && *t)
-			{
+			if (t && *t) {
 				strncpy(newShader, n, t - n);
 				newShader[t - n] = 0;
-			}
-			else
-			{
+			} else {
 				break;
 			}
 			t++;
 			o = strstr(t, "@");
-			if (o)
-			{
+			if (o) {
 				strncpy(timeOffset, t, o - t);
 				timeOffset[o - t] = 0;
 				o++;
@@ -568,9 +509,7 @@ void CG_ShaderStateChanged(void)
 				                   cgs.gameShaderNames[atoi(newShader)],
 				                   timeOffset);
 			}
-		}
-		else
-		{
+		} else {
 			break;
 		}
 	}
@@ -581,8 +520,7 @@ void CG_ShaderStateChanged(void)
 CG_ChargeTimesChanged
 ===============
 */
-void CG_ChargeTimesChanged(void)
-{
+void CG_ChargeTimesChanged(void) {
 	const char *info;
 
 	info = CG_ConfigString(CS_CHARGETIMES);
@@ -605,8 +543,7 @@ CG_ConfigStringModified
 
 ================
 */
-static void CG_ConfigStringModified(void)
-{
+static void CG_ConfigStringModified(void) {
 	const char *str;
 	int        num;
 
@@ -620,146 +557,85 @@ static void CG_ConfigStringModified(void)
 	str = CG_ConfigString(num);
 
 	// do something with it if necessary
-	if (num == CS_MUSIC)
-	{
+	if (num == CS_MUSIC) {
 		CG_StartMusic();
-	}
-	else if (num == CS_MUSIC_QUEUE)
-	{
+	} else if (num == CS_MUSIC_QUEUE) {
 		CG_QueueMusic();
-	}
-	else if (num == CS_SERVERINFO)
-	{
+	} else if (num == CS_SERVERINFO) {
 		CG_ParseServerinfo();
-	}
-	else if (num == CS_WOLFINFO)          // NERVE - SMF
-	{
+	} else if (num == CS_WOLFINFO) {        // NERVE - SMF
 		CG_ParseWolfinfo();
-	}
-	else if (num >= CS_MULTI_SPAWNTARGETS && num < CS_MULTI_SPAWNTARGETS + MAX_MULTI_SPAWNTARGETS)
-	{
+	} else if (num >= CS_MULTI_SPAWNTARGETS && num < CS_MULTI_SPAWNTARGETS + MAX_MULTI_SPAWNTARGETS) {
 		CG_ParseSpawns();
-	}
-	else if (num == CS_VERSIONINFO)
-	{
+	} else if (num == CS_VERSIONINFO) {
 		CG_ParseServerVersionInfo(str);           // OSP - set versioning info for older demo playback
-	}
-	else if (num == CS_REINFSEEDS)
-	{
+	} else if (num == CS_REINFSEEDS) {
 		CG_ParseReinforcementTimes(str);          // OSP - set reinforcement times for each team
-	}
-	else if (num == CS_LEVEL_START_TIME)
-	{
+	} else if (num == CS_LEVEL_START_TIME) {
 		cgs.levelStartTime = atoi(str);
-	}
-	else if (num == CS_VOTE_TIME)
-	{
+	} else if (num == CS_VOTE_TIME) {
 		cgs.voteTime     = atoi(str);
 		cgs.voteModified = qtrue;
-	}
-	else if (num == CS_VOTE_YES)
-	{
+	} else if (num == CS_VOTE_YES) {
 		cgs.voteYes      = atoi(str);
 		cgs.voteModified = qtrue;
-	}
-	else if (num == CS_VOTE_NO)
-	{
+	} else if (num == CS_VOTE_NO) {
 		cgs.voteNo       = atoi(str);
 		cgs.voteModified = qtrue;
-	}
-	else if (num == CS_VOTE_STRING)
-	{
-		Q_strncpyz(cgs.voteString, str, sizeof(cgs.voteString));
-	}
-	else if (num == CS_SCREENFADE)
-	{
+	} else if (num == CS_VOTE_STRING) {
+		Q_strncpyz(cgs.voteString, str, sizeof (cgs.voteString));
+	} else if (num == CS_SCREENFADE) {
 		CG_ParseScreenFade();
-	}
-	else if (num == CS_FOGVARS)
-	{
+	} else if (num == CS_FOGVARS) {
 		CG_ParseFog();
-	}
-	else if (num == CS_GLOBALFOGVARS)
-	{
+	} else if (num == CS_GLOBALFOGVARS) {
 		CG_ParseGlobalFog();
-	}
-	else if (num >= CS_MODELS && num < CS_MODELS + MAX_MODELS)
-	{
+	} else if (num >= CS_MODELS && num < CS_MODELS + MAX_MODELS) {
 		cgs.gameModels[num - CS_MODELS] = trap_R_RegisterModel(str);
-	}
-	else if (num >= CS_SOUNDS && num < CS_SOUNDS + MAX_SOUNDS)
-	{
-		if (str[0] != '*')       // player specific sounds don't register here
-		{   // Ridah, register sound scripts seperately
-			if (!strstr(str, ".wav"))
-			{
+	} else if (num >= CS_SOUNDS && num < CS_SOUNDS + MAX_SOUNDS) {
+		if (str[0] != '*') {     // player specific sounds don't register here
+			// Ridah, register sound scripts seperately
+			if (!strstr(str, ".wav")) {
 				CG_SoundScriptPrecache(str);
-			}
-			else
-			{
+			} else {
 				cgs.gameSounds[num - CS_SOUNDS] = trap_S_RegisterSound(str, qfalse);      //FIXME: add a compress flag?
 			}
 
 		}
-	}
-	else if (num >= CS_SHADERS && num < CS_SHADERS + MAX_CS_SHADERS)
-	{
+	} else if (num >= CS_SHADERS && num < CS_SHADERS + MAX_CS_SHADERS) {
 		cgs.gameShaders[num - CS_SHADERS] = str[0] == '*' ? trap_R_RegisterShader(str + 1) : trap_R_RegisterShaderNoMip(str);
 		Q_strncpyz(cgs.gameShaderNames[num - CS_SHADERS], str[0] == '*' ? str + 1 : str, MAX_QPATH);
-	}
-	else if (num >= CS_SKINS && num < CS_SKINS + MAX_CS_SKINS)
-	{
+	} else if (num >= CS_SKINS && num < CS_SKINS + MAX_CS_SKINS) {
 		cgs.gameModelSkins[num - CS_SKINS] = trap_R_RegisterSkin(str);
-	}
-	else if (num >= CS_CHARACTERS && num < CS_CHARACTERS + MAX_CHARACTERS)
-	{
-		if (!BG_FindCharacter(str))
-		{
+	} else if (num >= CS_CHARACTERS && num < CS_CHARACTERS + MAX_CHARACTERS) {
+		if (!BG_FindCharacter(str)) {
 			cgs.gameCharacters[num - CS_CHARACTERS] = BG_FindFreeCharacter(str);
 
-			Q_strncpyz(cgs.gameCharacters[num - CS_CHARACTERS]->characterFile, str, sizeof(cgs.gameCharacters[num - CS_CHARACTERS]->characterFile));
+			Q_strncpyz(cgs.gameCharacters[num - CS_CHARACTERS]->characterFile, str, sizeof (cgs.gameCharacters[num - CS_CHARACTERS]->characterFile));
 
-			if (!CG_RegisterCharacter(str, cgs.gameCharacters[num - CS_CHARACTERS]))
-			{
+			if (!CG_RegisterCharacter(str, cgs.gameCharacters[num - CS_CHARACTERS])) {
 				CG_Error("ERROR: CG_ConfigStringModified: failed to load character file '%s'\n", str);
 			}
 		}
-	}
-	else if (num >= CS_PLAYERS && num < CS_PLAYERS + MAX_CLIENTS)
-	{
+	} else if (num >= CS_PLAYERS && num < CS_PLAYERS + MAX_CLIENTS) {
 		CG_NewClientInfo(num - CS_PLAYERS);
-	}
-	else if (num >= CS_DLIGHTS && num < CS_DLIGHTS + MAX_DLIGHT_CONFIGSTRINGS)
-	{
+	} else if (num >= CS_DLIGHTS && num < CS_DLIGHTS + MAX_DLIGHT_CONFIGSTRINGS) {
 		// FIXME - dlight changes ignored!
-	}
-	else if (num == CS_SHADERSTATE)
-	{
+	} else if (num == CS_SHADERSTATE) {
 		CG_ShaderStateChanged();
-	}
-	else if (num == CS_CHARGETIMES)
-	{
+	} else if (num == CS_CHARGETIMES) {
 		CG_ChargeTimesChanged();
-	}
-	else if (num >= CS_FIRETEAMS && num < CS_FIRETEAMS + MAX_FIRETEAMS)
-	{
+	} else if (num >= CS_FIRETEAMS && num < CS_FIRETEAMS + MAX_FIRETEAMS) {
 		CG_ParseFireteams();
-	}
-	else if (num == CS_SKYBOXORG)
-	{
+	} else if (num == CS_SKYBOXORG) {
 		CG_ParseSkyBox();
-	}
-	else if (num >= CS_TAGCONNECTS && num < CS_TAGCONNECTS + MAX_TAGCONNECTS)
-	{
+	} else if (num >= CS_TAGCONNECTS && num < CS_TAGCONNECTS + MAX_TAGCONNECTS) {
 		CG_ParseTagConnect(num);
 	}
 
-	if (num == CS_FILTERCAMS)
-	{
+	if (num == CS_FILTERCAMS) {
 		cg.filtercams = atoi(str) ? qtrue : qfalse;
-	}
-	else if (num >= CS_OID_DATA && num < CS_OID_DATA + MAX_OID_TRIGGERS)
-	{
+	} else if (num >= CS_OID_DATA && num < CS_OID_DATA + MAX_OID_TRIGGERS) {
 		CG_ParseOIDInfo(num);
 	}
 }
@@ -770,24 +646,19 @@ CG_AddToTeamChat
 
 =======================
 */
-static void CG_AddToTeamChat(const char *str, int clientnum)
-{
+static void CG_AddToTeamChat(const char *str, int clientnum) {
 	int  len;
 	char *p, *ls;
 	int  lastcolor;
 	int  chatHeight;
 
-	if (cg_teamChatHeight.integer < TEAMCHAT_HEIGHT)
-	{
+	if (cg_teamChatHeight.integer < TEAMCHAT_HEIGHT) {
 		chatHeight = cg_teamChatHeight.integer;
-	}
-	else
-	{
+	} else {
 		chatHeight = TEAMCHAT_HEIGHT;
 	}
 
-	if (chatHeight <= 0 || cg_teamChatTime.integer <= 0)
-	{
+	if (chatHeight <= 0 || cg_teamChatTime.integer <= 0) {
 		// team chat disabled, dump into normal chat
 		cgs.teamChatPos = cgs.teamLastChatPos = 0;
 		return;
@@ -801,12 +672,9 @@ static void CG_AddToTeamChat(const char *str, int clientnum)
 	lastcolor = '7';
 
 	ls = NULL;
-	while (*str)
-	{
-		if (len > TEAMCHAT_WIDTH - 1)
-		{
-			if (ls)
-			{
+	while (*str) {
+		if (len > TEAMCHAT_WIDTH - 1) {
+			if (ls) {
 				str -= (p - ls);
 				str++;
 				p -= (p - ls);
@@ -825,15 +693,13 @@ static void CG_AddToTeamChat(const char *str, int clientnum)
 			ls   = NULL;
 		}
 
-		if (Q_IsColorString(str))
-		{
+		if (Q_IsColorString(str)) {
 			*p++      = *str++;
 			lastcolor = *str;
 			*p++      = *str++;
 			continue;
 		}
-		if (*str == ' ')
-		{
+		if (*str == ' ') {
 			ls = p;
 		}
 		*p++ = *str++;
@@ -845,8 +711,7 @@ static void CG_AddToTeamChat(const char *str, int clientnum)
 	cgs.teamChatMsgTimes[cgs.teamChatPos % chatHeight] = cg.time;
 	cgs.teamChatPos++;
 
-	if (cgs.teamChatPos - cgs.teamLastChatPos > chatHeight)
-	{
+	if (cgs.teamChatPos - cgs.teamLastChatPos > chatHeight) {
 		cgs.teamLastChatPos = cgs.teamChatPos - chatHeight;
 	}
 }
@@ -857,8 +722,7 @@ CG_AddToNotify
 
 =======================
 */
-void CG_AddToNotify(const char *str)
-{
+void CG_AddToNotify(const char *str) {
 	int   len;
 	char  *p, *ls;
 	int   lastcolor;
@@ -866,13 +730,12 @@ void CG_AddToNotify(const char *str)
 	float notifytime;
 	char  var[MAX_TOKEN_CHARS];
 
-	trap_Cvar_VariableStringBuffer("con_notifytime", var, sizeof(var));
+	trap_Cvar_VariableStringBuffer("con_notifytime", var, sizeof (var));
 	notifytime = atof(var) * 1000;
 
 	chatHeight = NOTIFY_HEIGHT;
 
-	if (notifytime <= 0)
-	{
+	if (notifytime <= 0) {
 		// team chat disabled, dump into normal chat
 		cgs.notifyPos = cgs.notifyLastPos = 0;
 		return;
@@ -886,12 +749,9 @@ void CG_AddToNotify(const char *str)
 	lastcolor = '7';
 
 	ls = NULL;
-	while (*str)
-	{
-		if (len > NOTIFY_WIDTH - 1 || (*str == '\n' && (*(str + 1) != 0)))
-		{
-			if (ls)
-			{
+	while (*str) {
+		if (len > NOTIFY_WIDTH - 1 || (*str == '\n' && (*(str + 1) != 0))) {
+			if (ls) {
 				str -= (p - ls);
 				str++;
 				p -= (p - ls);
@@ -909,26 +769,22 @@ void CG_AddToNotify(const char *str)
 			ls   = NULL;
 		}
 
-		if (Q_IsColorString(str))
-		{
+		if (Q_IsColorString(str)) {
 			*p++      = *str++;
 			lastcolor = *str;
 			*p++      = *str++;
 			continue;
 		}
-		if (*str == ' ')
-		{
+		if (*str == ' ') {
 			ls = p;
 		}
-		while (*str == '\n')
-		{
+		while (*str == '\n') {
 			// TTimo gcc warning: value computed is not used
 			// was *str++;
 			str++;
 		}
 
-		if (*str)
-		{
+		if (*str) {
 			*p++ = *str++;
 			len++;
 		}
@@ -938,8 +794,7 @@ void CG_AddToNotify(const char *str)
 	cgs.notifyMsgTimes[cgs.notifyPos % chatHeight] = cg.time;
 	cgs.notifyPos++;
 
-	if (cgs.notifyPos - cgs.notifyLastPos > chatHeight)
-	{
+	if (cgs.notifyPos - cgs.notifyLastPos > chatHeight) {
 		cgs.notifyLastPos = cgs.notifyPos - chatHeight;
 	}
 }
@@ -955,14 +810,12 @@ A tournement restart will clear everything, but doesn't
 require a reload of all the media
 ===============
 */
-static void CG_MapRestart(void)
-{
-	if (cg_showmiss.integer)
-	{
+static void CG_MapRestart(void) {
+	if (cg_showmiss.integer) {
 		CG_Printf("CG_MapRestart\n");
 	}
 
-	memset(&cg.lastWeapSelInBank[0], 0, MAX_WEAP_BANKS_MP * sizeof(int));       // clear weapon bank selections
+	memset(&cg.lastWeapSelInBank[0], 0, MAX_WEAP_BANKS_MP * sizeof (int));       // clear weapon bank selections
 
 	cg.numbufferedSoundScripts = 0;
 
@@ -983,7 +836,7 @@ static void CG_MapRestart(void)
 	trap_R_SetFog(FOG_CMD_SWITCHFOG, FOG_MAP, 20, 0, 0, 0, 0);
 
 	// clear pmext
-	memset(&cg.pmext, 0, sizeof(cg.pmext));
+	memset(&cg.pmext, 0, sizeof (cg.pmext));
 
 	cg.pmext.bAutoReload = (cg_autoReload.integer > 0);
 
@@ -1073,8 +926,7 @@ static void CG_MapRestart(void)
 #define MAX_CHATSIZE        64
 #define MAX_HEADMODELS      64
 
-typedef struct voiceChat_s
-{
+typedef struct voiceChat_s {
 	char id[64];
 	int numSounds;
 	sfxHandle_t sounds[MAX_VOICESOUNDS];
@@ -1082,16 +934,14 @@ typedef struct voiceChat_s
 	qhandle_t sprite[MAX_VOICESOUNDS];          // DHM - Nerve
 } voiceChat_t;
 
-typedef struct voiceChatList_s
-{
+typedef struct voiceChatList_s {
 	char name[64];
 	int gender;
 	int numVoiceChats;
 	voiceChat_t voiceChats[MAX_VOICECHATS];
 } voiceChatList_t;
 
-typedef struct headModelVoiceChat_s
-{
+typedef struct headModelVoiceChat_s {
 	char headmodel[64];
 	int voiceChatNum;
 } headModelVoiceChat_t;
@@ -1104,8 +954,7 @@ headModelVoiceChat_t headModelVoiceChat[MAX_HEADMODELS];
 CG_ParseVoiceChats
 =================
 */
-int CG_ParseVoiceChats(const char *filename, voiceChatList_t *voiceChatList, int maxVoiceChats)
-{
+int CG_ParseVoiceChats(const char *filename, voiceChatList_t *voiceChatList, int maxVoiceChats) {
 	int          len, i;
 	int          current = 0;
 	fileHandle_t f;
@@ -1116,19 +965,16 @@ int CG_ParseVoiceChats(const char *filename, voiceChatList_t *voiceChatList, int
 	qboolean     compress;
 
 	compress = qtrue;
-	if (cg_buildScript.integer)
-	{
+	if (cg_buildScript.integer) {
 		compress = qfalse;
 	}
 
 	len = trap_FS_FOpenFile(filename, &f, FS_READ);
-	if (!f)
-	{
+	if (!f) {
 		trap_Print(va(S_COLOR_RED "voice chat file not found: %s\n", filename));
 		return qfalse;
 	}
-	if (len >= MAX_VOICEFILESIZE)
-	{
+	if (len >= MAX_VOICEFILESIZE) {
 		trap_Print(va(S_COLOR_RED "voice chat file too large: %s is %i, max allowed is %i", filename, len, MAX_VOICEFILESIZE));
 		trap_FS_FCloseFile(f);
 		return qfalse;
@@ -1141,31 +987,22 @@ int CG_ParseVoiceChats(const char *filename, voiceChatList_t *voiceChatList, int
 	ptr = buf;
 	p   = &ptr;
 
-	Com_sprintf(voiceChatList->name, sizeof(voiceChatList->name), "%s", filename);
+	Com_sprintf(voiceChatList->name, sizeof (voiceChatList->name), "%s", filename);
 	voiceChats = voiceChatList->voiceChats;
-	for (i = 0; i < maxVoiceChats; i++)
-	{
+	for (i = 0; i < maxVoiceChats; i++) {
 		voiceChats[i].id[0] = 0;
 	}
 	token = COM_ParseExt(p, qtrue);
-	if (!token || token[0] == 0)
-	{
+	if (!token || token[0] == 0) {
 		return qtrue;
 	}
-	if (!Q_stricmp(token, "female"))
-	{
+	if (!Q_stricmp(token, "female")) {
 		voiceChatList->gender = GENDER_FEMALE;
-	}
-	else if (!Q_stricmp(token, "male"))
-	{
+	} else if (!Q_stricmp(token, "male")) {
 		voiceChatList->gender = GENDER_MALE;
-	}
-	else if (!Q_stricmp(token, "neuter"))
-	{
+	} else if (!Q_stricmp(token, "neuter")) {
 		voiceChatList->gender = GENDER_NEUTER;
-	}
-	else
-	{
+	} else {
 		trap_Print(va(S_COLOR_RED "expected gender not found in voice chat file: %s\n", filename));
 		return qfalse;
 	}
@@ -1175,55 +1012,44 @@ int CG_ParseVoiceChats(const char *filename, voiceChatList_t *voiceChatList, int
 	//		above that clears out all the commands "voiceChats[i].id[0] = 0;"
 	//		We don't even want the MP voice chats in SP, so no need anyway
 	voiceChatList->numVoiceChats = 0;
-	while (1)
-	{
+	while (1) {
 		token = COM_ParseExt(p, qtrue);
-		if (!token || token[0] == 0)
-		{
+		if (!token || token[0] == 0) {
 			return qtrue;
 		}
 
-		Com_sprintf(voiceChats[voiceChatList->numVoiceChats].id, sizeof(voiceChats[voiceChatList->numVoiceChats].id), "%s", token);
+		Com_sprintf(voiceChats[voiceChatList->numVoiceChats].id, sizeof (voiceChats[voiceChatList->numVoiceChats].id), "%s", token);
 		token = COM_ParseExt(p, qtrue);
-		if (Q_stricmp(token, "{"))
-		{
+		if (Q_stricmp(token, "{")) {
 			trap_Print(va(S_COLOR_RED "expected { found %s in voice chat file: %s\n", token, filename));
 			return qfalse;
 		}
 		voiceChats[voiceChatList->numVoiceChats].numSounds = 0;
 		current                                            = voiceChats[voiceChatList->numVoiceChats].numSounds;
 
-		while (1)
-		{
+		while (1) {
 			token = COM_ParseExt(p, qtrue);
-			if (!token || token[0] == 0)
-			{
+			if (!token || token[0] == 0) {
 				return qtrue;
 			}
-			if (!Q_stricmp(token, "}"))
-			{
+			if (!Q_stricmp(token, "}")) {
 				break;
 			}
 			voiceChats[voiceChatList->numVoiceChats].sounds[current] = trap_S_RegisterSound(token, compress);
 			token                                                    = COM_ParseExt(p, qtrue);
-			if (!token || token[0] == 0)
-			{
+			if (!token || token[0] == 0) {
 				return qtrue;
 			}
 			Com_sprintf(voiceChats[voiceChatList->numVoiceChats].chats[current], MAX_CHATSIZE, "%s", token);
 
 			// DHM - Nerve :: Specify sprite shader to show above player's head
 			token = COM_ParseExt(p, qfalse);
-			if (!Q_stricmp(token, "}") || !token || token[0] == 0)
-			{
+			if (!Q_stricmp(token, "}") || !token || token[0] == 0) {
 				voiceChats[voiceChatList->numVoiceChats].sprite[current] = trap_R_RegisterShader("sprites/voiceChat");
 				COM_RestoreParseSession(p);
-			}
-			else
-			{
+			} else {
 				voiceChats[voiceChatList->numVoiceChats].sprite[current] = trap_R_RegisterShader(token);
-				if (voiceChats[voiceChatList->numVoiceChats].sprite[current] == 0)
-				{
+				if (voiceChats[voiceChatList->numVoiceChats].sprite[current] == 0) {
 					voiceChats[voiceChatList->numVoiceChats].sprite[current] = trap_R_RegisterShader("sprites/voiceChat");
 				}
 			}
@@ -1232,15 +1058,13 @@ int CG_ParseVoiceChats(const char *filename, voiceChatList_t *voiceChatList, int
 			voiceChats[voiceChatList->numVoiceChats].numSounds++;
 			current = voiceChats[voiceChatList->numVoiceChats].numSounds;
 
-			if (voiceChats[voiceChatList->numVoiceChats].numSounds >= MAX_VOICESOUNDS)
-			{
+			if (voiceChats[voiceChatList->numVoiceChats].numSounds >= MAX_VOICESOUNDS) {
 				break;
 			}
 		}
 
 		voiceChatList->numVoiceChats++;
-		if (voiceChatList->numVoiceChats >= maxVoiceChats)
-		{
+		if (voiceChatList->numVoiceChats >= maxVoiceChats) {
 			return qtrue;
 		}
 	}
@@ -1252,8 +1076,7 @@ int CG_ParseVoiceChats(const char *filename, voiceChatList_t *voiceChatList, int
 CG_LoadVoiceChats
 =================
 */
-void CG_LoadVoiceChats(void)
-{
+void CG_LoadVoiceChats(void) {
 	int size;
 
 	size                            = trap_MemoryRemaining();
@@ -1271,8 +1094,7 @@ void CG_LoadVoiceChats(void)
 CG_HeadModelVoiceChats
 =================
 */
-int CG_HeadModelVoiceChats(char *filename)
-{
+int CG_HeadModelVoiceChats(char *filename) {
 	int          len, i;
 	fileHandle_t f;
 	char         buf[MAX_VOICEFILESIZE];
@@ -1280,13 +1102,11 @@ int CG_HeadModelVoiceChats(char *filename)
 	char         *token;
 
 	len = trap_FS_FOpenFile(filename, &f, FS_READ);
-	if (!f)
-	{
+	if (!f) {
 		trap_Print(va("voice chat file not found: %s\n", filename));
 		return -1;
 	}
-	if (len >= MAX_VOICEFILESIZE)
-	{
+	if (len >= MAX_VOICEFILESIZE) {
 		trap_Print(va(S_COLOR_RED "voice chat file too large: %s is %i, max allowed is %i", filename, len, MAX_VOICEFILESIZE));
 		trap_FS_FCloseFile(f);
 		return -1;
@@ -1300,15 +1120,12 @@ int CG_HeadModelVoiceChats(char *filename)
 	p   = &ptr;
 
 	token = COM_ParseExt(p, qtrue);
-	if (!token || token[0] == 0)
-	{
+	if (!token || token[0] == 0) {
 		return -1;
 	}
 
-	for (i = 0; i < MAX_VOICEFILES; i++)
-	{
-		if (!Q_stricmp(token, voiceChatLists[i].name))
-		{
+	for (i = 0; i < MAX_VOICEFILES; i++) {
+		if (!Q_stricmp(token, voiceChatLists[i].name)) {
 			return i;
 		}
 	}
@@ -1324,14 +1141,11 @@ int CG_HeadModelVoiceChats(char *filename)
 CG_GetVoiceChat
 =================
 */
-int CG_GetVoiceChat(voiceChatList_t *voiceChatList, const char *id, sfxHandle_t *snd, qhandle_t *sprite, char **chat)
-{
+int CG_GetVoiceChat(voiceChatList_t *voiceChatList, const char *id, sfxHandle_t *snd, qhandle_t *sprite, char **chat) {
 	int i, rnd;
 
-	for (i = 0; i < voiceChatList->numVoiceChats; i++)
-	{
-		if (!Q_stricmp(id, voiceChatList->voiceChats[i].id))
-		{
+	for (i = 0; i < voiceChatList->numVoiceChats; i++) {
+		if (!Q_stricmp(id, voiceChatList->voiceChats[i].id)) {
 			rnd     = random() * voiceChatList->voiceChats[i].numSounds;
 			*snd    = voiceChatList->voiceChats[i].sounds[rnd];
 			*sprite = voiceChatList->voiceChats[i].sprite[rnd];
@@ -1347,22 +1161,17 @@ int CG_GetVoiceChat(voiceChatList_t *voiceChatList, const char *id, sfxHandle_t 
 CG_VoiceChatListForClient
 =================
 */
-voiceChatList_t *CG_VoiceChatListForClient(int clientNum)
-{
-	if (cgs.clientinfo[clientNum].team == TEAM_AXIS)
-	{
+voiceChatList_t *CG_VoiceChatListForClient(int clientNum) {
+	if (cgs.clientinfo[clientNum].team == TEAM_AXIS) {
 		return &voiceChatLists[0];
-	}
-	else
-	{
+	} else {
 		return &voiceChatLists[1];
 	}
 }
 
 #define MAX_VOICECHATBUFFER     32
 
-typedef struct bufferedVoiceChat_s
-{
+typedef struct bufferedVoiceChat_s {
 	int clientNum;
 	sfxHandle_t snd;
 	qhandle_t sprite;
@@ -1379,38 +1188,26 @@ bufferedVoiceChat_t voiceChatBuffer[MAX_VOICECHATBUFFER];
 CG_PlayVoiceChat
 =================
 */
-void CG_PlayVoiceChat(bufferedVoiceChat_t *vchat)
-{
-	if (!cg_noVoiceChats.integer)
-	{
+void CG_PlayVoiceChat(bufferedVoiceChat_t *vchat) {
+	if (!cg_noVoiceChats.integer) {
 		trap_S_StartLocalSound(vchat->snd, CHAN_VOICE);
 
 		// Arnout: don't show icons for the HQ (clientnum -1)
-		if (vchat->clientNum != -1)
-		{
+		if (vchat->clientNum != -1) {
 			// DHM - Nerve :: Show icon above head
-			if (vchat->clientNum == cg.snap->ps.clientNum)
-			{
+			if (vchat->clientNum == cg.snap->ps.clientNum) {
 				cg.predictedPlayerEntity.voiceChatSprite = vchat->sprite;
-				if (vchat->sprite == cgs.media.voiceChatShader)
-				{
+				if (vchat->sprite == cgs.media.voiceChatShader) {
 					cg.predictedPlayerEntity.voiceChatSpriteTime = cg.time + cg_voiceSpriteTime.integer;
-				}
-				else
-				{
+				} else {
 					cg.predictedPlayerEntity.voiceChatSpriteTime = cg.time + cg_voiceSpriteTime.integer * 2;
 				}
-			}
-			else
-			{
+			} else {
 				cg_entities[vchat->clientNum].voiceChatSprite = vchat->sprite;
 				VectorCopy(vchat->origin, cg_entities[vchat->clientNum].lerpOrigin);                // NERVE - SMF
-				if (vchat->sprite == cgs.media.voiceChatShader)
-				{
+				if (vchat->sprite == cgs.media.voiceChatShader) {
 					cg_entities[vchat->clientNum].voiceChatSpriteTime = cg.time + cg_voiceSpriteTime.integer;
-				}
-				else
-				{
+				} else {
 					cg_entities[vchat->clientNum].voiceChatSpriteTime = cg.time + cg_voiceSpriteTime.integer * 2;
 				}
 			}
@@ -1418,8 +1215,7 @@ void CG_PlayVoiceChat(bufferedVoiceChat_t *vchat)
 		}
 
 	}
-	if (!vchat->voiceOnly && !cg_noVoiceText.integer)
-	{
+	if (!vchat->voiceOnly && !cg_noVoiceText.integer) {
 		CG_AddToTeamChat(vchat->message, vchat->clientNum);
 		CG_Printf(va("[skipnotify]: %s\n", vchat->message));     // JPW NERVE
 	}
@@ -1431,12 +1227,9 @@ void CG_PlayVoiceChat(bufferedVoiceChat_t *vchat)
 CG_PlayBufferedVoieChats
 =====================
 */
-void CG_PlayBufferedVoiceChats(void)
-{
-	if (cg.voiceChatTime < cg.time)
-	{
-		if (cg.voiceChatBufferOut != cg.voiceChatBufferIn && voiceChatBuffer[cg.voiceChatBufferOut].snd)
-		{
+void CG_PlayBufferedVoiceChats(void) {
+	if (cg.voiceChatTime < cg.time) {
+		if (cg.voiceChatBufferOut != cg.voiceChatBufferIn && voiceChatBuffer[cg.voiceChatBufferOut].snd) {
 			//
 			CG_PlayVoiceChat(&voiceChatBuffer[cg.voiceChatBufferOut]);
 			//
@@ -1451,10 +1244,9 @@ void CG_PlayBufferedVoiceChats(void)
 CG_AddBufferedVoiceChat
 =====================
 */
-void CG_AddBufferedVoiceChat(bufferedVoiceChat_t *vchat)
-{
+void CG_AddBufferedVoiceChat(bufferedVoiceChat_t *vchat) {
 // JPW NERVE new system doesn't buffer but overwrites vchats FIXME put this on a cvar to choose which to use
-	memcpy(&voiceChatBuffer[0], vchat, sizeof(bufferedVoiceChat_t));
+	memcpy(&voiceChatBuffer[0], vchat, sizeof (bufferedVoiceChat_t));
 	cg.voiceChatBufferIn = 0;
 	CG_PlayVoiceChat(&voiceChatBuffer[0]);
 }
@@ -1464,8 +1256,7 @@ void CG_AddBufferedVoiceChat(bufferedVoiceChat_t *vchat)
 CG_VoiceChatLocal
 =================
 */
-void CG_VoiceChatLocal(int mode, qboolean voiceOnly, int clientNum, int color, const char *cmd, vec3_t origin)
-{
+void CG_VoiceChatLocal(int mode, qboolean voiceOnly, int clientNum, int color, const char *cmd, vec3_t origin) {
 	char                *chat;
 	voiceChatList_t     *voiceChatList;
 	clientInfo_t        *ci;
@@ -1474,8 +1265,7 @@ void CG_VoiceChatLocal(int mode, qboolean voiceOnly, int clientNum, int color, c
 	bufferedVoiceChat_t vchat;
 	const char          *loc = " ";  // NERVE - SMF
 
-	if (clientNum < 0 || clientNum >= MAX_CLIENTS)
-	{
+	if (clientNum < 0 || clientNum >= MAX_CLIENTS) {
 		clientNum = 0;
 	}
 	ci = &cgs.clientinfo[clientNum];
@@ -1484,41 +1274,32 @@ void CG_VoiceChatLocal(int mode, qboolean voiceOnly, int clientNum, int color, c
 
 	voiceChatList = CG_VoiceChatListForClient(clientNum);
 
-	if (CG_GetVoiceChat(voiceChatList, cmd, &snd, &sprite, &chat))
-	{
+	if (CG_GetVoiceChat(voiceChatList, cmd, &snd, &sprite, &chat)) {
 		//
-		if (mode == SAY_TEAM || !cg_teamChatsOnly.integer)
-		{
+		if (mode == SAY_TEAM || !cg_teamChatsOnly.integer) {
 			vchat.clientNum = clientNum;
 			vchat.snd       = snd;
 			vchat.sprite    = sprite;
 			vchat.voiceOnly = voiceOnly;
 			VectorCopy(origin, vchat.origin);       // NERVE - SMF
-			Q_strncpyz(vchat.cmd, cmd, sizeof(vchat.cmd));
+			Q_strncpyz(vchat.cmd, cmd, sizeof (vchat.cmd));
 
-			if (mode != SAY_ALL)
-			{
+			if (mode != SAY_ALL) {
 				// NERVE - SMF - get location
 				loc = BG_GetLocationString(origin);
-				if (!loc || !*loc)
-				{
+				if (!loc || !*loc) {
 					loc = " ";
 				}
 			}
 
-			if (mode == SAY_TEAM)
-			{
-				Com_sprintf(vchat.message, sizeof(vchat.message), "(%s)%c%c(%s): %c%c%s",
+			if (mode == SAY_TEAM) {
+				Com_sprintf(vchat.message, sizeof (vchat.message), "(%s)%c%c(%s): %c%c%s",
 				            ci->name, Q_COLOR_ESCAPE, COLOR_YELLOW, loc, Q_COLOR_ESCAPE, color, CG_TranslateString(chat));
-			}
-			else if (mode == SAY_BUDDY)
-			{
-				Com_sprintf(vchat.message, sizeof(vchat.message), "<%s>%c%c<%s>: %c%c%s",
+			} else if (mode == SAY_BUDDY) {
+				Com_sprintf(vchat.message, sizeof (vchat.message), "<%s>%c%c<%s>: %c%c%s",
 				            ci->name, Q_COLOR_ESCAPE, COLOR_YELLOW, loc, Q_COLOR_ESCAPE, color, CG_TranslateString(chat));
-			}
-			else
-			{
-				Com_sprintf(vchat.message, sizeof(vchat.message), "%s%c%c: %c%c%s",
+			} else {
+				Com_sprintf(vchat.message, sizeof (vchat.message), "%s%c%c: %c%c%s",
 				            ci->name, Q_COLOR_ESCAPE, COLOR_YELLOW, Q_COLOR_ESCAPE, color, CG_TranslateString(chat));
 			}
 			CG_AddBufferedVoiceChat(&vchat);
@@ -1531,8 +1312,7 @@ void CG_VoiceChatLocal(int mode, qboolean voiceOnly, int clientNum, int color, c
 CG_VoiceChat
 =================
 */
-void CG_VoiceChat(int mode)
-{
+void CG_VoiceChat(int mode) {
 	const char *cmd;
 	int        clientNum, color;
 	qboolean   voiceOnly;
@@ -1542,8 +1322,7 @@ void CG_VoiceChat(int mode)
 	clientNum = atoi(CG_Argv(2));
 	color     = atoi(CG_Argv(3));
 
-	if (mode != SAY_ALL)
-	{
+	if (mode != SAY_ALL) {
 		// NERVE - SMF - added origin
 		origin[0] = atoi(CG_Argv(5));
 		origin[1] = atoi(CG_Argv(6));
@@ -1552,12 +1331,10 @@ void CG_VoiceChat(int mode)
 
 	cmd = CG_Argv(4);
 
-	if (cg_noTaunt.integer != 0)
-	{
+	if (cg_noTaunt.integer != 0) {
 		if (!strcmp(cmd, VOICECHAT_KILLINSULT)  || !strcmp(cmd, VOICECHAT_TAUNT) || \
 		    !strcmp(cmd, VOICECHAT_DEATHINSULT) || !strcmp(cmd, VOICECHAT_KILLGAUNTLET) || \
-		    !strcmp(cmd, VOICECHAT_PRAISE))
-		{
+		    !strcmp(cmd, VOICECHAT_PRAISE)) {
 			return;
 		}
 	}
@@ -1571,15 +1348,12 @@ void CG_VoiceChat(int mode)
 CG_RemoveChatEscapeChar
 =================
 */
-static void CG_RemoveChatEscapeChar(char *text)
-{
+static void CG_RemoveChatEscapeChar(char *text) {
 	int i, l;
 
 	l = 0;
-	for (i = 0; text[i]; i++)
-	{
-		if (text[i] == '\x19')
-		{
+	for (i = 0; text[i]; i++) {
+		if (text[i] == '\x19') {
 			continue;
 		}
 		text[l++] = text[i];
@@ -1598,44 +1372,35 @@ NERVE - SMF - localize string sent from server
 - use [lon] in string to turn back ON
 =================
 */
-const char *CG_LocalizeServerCommand(const char *buf)
-{
+const char *CG_LocalizeServerCommand(const char *buf) {
 	static char token[MAX_TOKEN_CHARS];
 	char        temp[MAX_TOKEN_CHARS];
 	qboolean    togloc = qtrue;
 	const char  *s;
 	int         i, prev;
 
-	memset(token, 0, sizeof(token));
+	memset(token, 0, sizeof (token));
 	s    = buf;
 	prev = 0;
 
-	for (i = 0; *s; i++, s++)
-	{
+	for (i = 0; *s; i++, s++) {
 		// TTimo:
 		// line was: if ( *s == '[' && !Q_strncmp( s, "[lon]", 5 ) || !Q_strncmp( s, "[lof]", 5 ) ) {
 		// || prevails on &&, gcc warning was 'suggest parentheses around && within ||'
 		// modified to the correct behaviour
-		if (*s == '[' && (!Q_strncmp(s, "[lon]", 5) || !Q_strncmp(s, "[lof]", 5)))
-		{
+		if (*s == '[' && (!Q_strncmp(s, "[lon]", 5) || !Q_strncmp(s, "[lof]", 5))) {
 
-			if (togloc)
-			{
-				memset(temp, 0, sizeof(temp));
+			if (togloc) {
+				memset(temp, 0, sizeof (temp));
 				strncpy(temp, buf + prev, i - prev);
 				strcat(token, CG_TranslateString(temp));
-			}
-			else
-			{
+			} else {
 				strncat(token, buf + prev, i - prev);
 			}
 
-			if (s[3] == 'n')
-			{
+			if (s[3] == 'n') {
 				togloc = qtrue;
-			}
-			else
-			{
+			} else {
 				togloc = qfalse;
 			}
 
@@ -1645,14 +1410,11 @@ const char *CG_LocalizeServerCommand(const char *buf)
 		}
 	}
 
-	if (togloc)
-	{
-		memset(temp, 0, sizeof(temp));
+	if (togloc) {
+		memset(temp, 0, sizeof (temp));
 		strncpy(temp, buf + prev, i - prev);
 		strcat(token, CG_TranslateString(temp));
-	}
-	else
-	{
+	} else {
 		strncat(token, buf + prev, i - prev);
 	}
 
@@ -1667,83 +1429,71 @@ const char *CG_LocalizeServerCommand(const char *buf)
  * @author Nico
  */
 #define BP_LINEWIDTH 80
-static void CG_BannerPrint(const char *str)
-{
+static void CG_BannerPrint(const char *str) {
 	char     buff[MAX_STRING_CHARS] = { 0 };
 	int      i                      = 0;
 	int      len                    = 0;
 	int      textlen                = 0;
 	qboolean neednewline            = qfalse;
 
-	Q_strncpyz(cg.bannerPrint, str, sizeof(cg.bannerPrint));
+	Q_strncpyz(cg.bannerPrint, str, sizeof (cg.bannerPrint));
 
 	// turn spaces into newlines, if we've run over the linewidth
 	len = strlen(cg.bannerPrint);
-	for (i = 0, textlen = 0; i < len; ++i, ++textlen)
-	{
+	for (i = 0, textlen = 0; i < len; ++i, ++textlen) {
 
 		// "\n" in center/banner prints are seen as new lines.
 		// kw: this is also done serverside in etpub
-		if (cg.bannerPrint[i] == '\\' && cg.bannerPrint[i + 1] == 'n')
-		{
-			Q_strncpyz(buff, &cg.bannerPrint[i + 2], sizeof(buff));
+		if (cg.bannerPrint[i] == '\\' && cg.bannerPrint[i + 1] == 'n') {
+			Q_strncpyz(buff, &cg.bannerPrint[i + 2], sizeof (buff));
 			cg.bannerPrint[i]     = '\n';
 			cg.bannerPrint[i + 1] = 0;
-			Q_strcat(cg.bannerPrint, sizeof(cg.bannerPrint), buff);
+			Q_strcat(cg.bannerPrint, sizeof (cg.bannerPrint), buff);
 		}
 
-		if (cg.bannerPrint[i] == '\n')
-		{
+		if (cg.bannerPrint[i] == '\n') {
 			textlen = 0;
 		}
 
-		if (Q_IsColorString(&cg.bannerPrint[i]))
-		{
+		if (Q_IsColorString(&cg.bannerPrint[i])) {
 			textlen -= 2;
 		}
 
 		// NOTE: subtracted a few chars here so long words still
 		// get displayed properly
-		if (textlen % (BP_LINEWIDTH - 10) == 0 && textlen > 0)
-		{
+		if (textlen % (BP_LINEWIDTH - 10) == 0 && textlen > 0) {
 			neednewline = qtrue;
 		}
 
-		if (cg.bannerPrint[i] == ' ' && neednewline)
-		{
+		if (cg.bannerPrint[i] == ' ' && neednewline) {
 			cg.bannerPrint[i] = '\n';
 			textlen           = 0;
 			neednewline       = qfalse;
 		}
 
 		// if still to long just cut it at BP_LINEWIDTH
-		if (textlen % BP_LINEWIDTH == 0 && textlen > 0)
-		{
-			Q_strncpyz(buff, &cg.bannerPrint[i], sizeof(buff));
+		if (textlen % BP_LINEWIDTH == 0 && textlen > 0) {
+			Q_strncpyz(buff, &cg.bannerPrint[i], sizeof (buff));
 			cg.bannerPrint[i]     = '\n';
 			cg.bannerPrint[i + 1] = 0;
-			Q_strcat(cg.bannerPrint, sizeof(cg.bannerPrint), buff);
+			Q_strcat(cg.bannerPrint, sizeof (cg.bannerPrint), buff);
 			textlen     = 0;
 			neednewline = qfalse;
 		}
 	}
 
 	// post-editing to print text correctly into the console
-	for (i = 0, len = 0; i < (int)strlen(cg.bannerPrint); ++i)
-	{
+	for (i = 0, len = 0; i < (int)strlen(cg.bannerPrint); ++i) {
 		// replace newlines with spaces
-		if (cg.bannerPrint[i] == '\n')
-		{
-			if (len != 0 && buff[len - 1] != ' ')
-			{
+		if (cg.bannerPrint[i] == '\n') {
+			if (len != 0 && buff[len - 1] != ' ') {
 				buff[len] = ' ';
 				len++;
 			}
 			continue;
 		}
 		// no spaces at the beginning of the string
-		if (len == 0 && cg.bannerPrint[i] == ' ')
-		{
+		if (len == 0 && cg.bannerPrint[i] == ' ') {
 			continue;
 		}
 		buff[len] = cg.bannerPrint[i];
@@ -1764,8 +1514,7 @@ The string has been tokenized and can be retrieved with
 Cmd_Argc() / Cmd_Argv()
 =================
 */
-static void CG_ServerCommand(void)
-{
+static void CG_ServerCommand(void) {
 	const char *cmd;
 	char       text[MAX_SAY_TEXT];
 	qboolean   enc         = qfalse; // used for enc_chat, enc_tchat
@@ -1773,109 +1522,87 @@ static void CG_ServerCommand(void)
 
 	cmd = CG_Argv(0);
 
-	if (!cmd[0])
-	{
+	if (!cmd[0]) {
 		// server claimed the command
 		return;
 	}
 
-	if (!strcmp(cmd, "tinfo"))
-	{
+	if (!strcmp(cmd, "tinfo")) {
 		CG_ParseTeamInfo();
 		return;
 	}
-	if (!strcmp(cmd, "sc0"))
-	{
+	if (!strcmp(cmd, "sc0")) {
 		CG_ParseScore(TEAM_AXIS);
 		return;
-	}
-	else if (!strcmp(cmd, "sc1"))
-	{
+	} else if (!strcmp(cmd, "sc1")) {
 		CG_ParseScore(TEAM_ALLIES);
 		return;
 	}
 
-	if (!Q_stricmp(cmd, "cpm"))
-	{
+	if (!Q_stricmp(cmd, "cpm")) {
 		CG_AddPMItem(PM_MESSAGE, CG_LocalizeServerCommand(CG_Argv(1)), cgs.media.voiceChatShader);
 		return;
 	}
 
-	if (!Q_stricmp(cmd, "cp"))
-	{
+	if (!Q_stricmp(cmd, "cp")) {
 		// NERVE - SMF
 		int  args = trap_Argc();
 		char *s;
 
-		if (args >= 3)
-		{
+		if (args >= 3) {
 			s = CG_TranslateString(CG_Argv(1));
 
-			if (args == 4)
-			{
+			if (args == 4) {
 				s = va("%s%s", CG_Argv(3), s);
 			}
 
 			// OSP - for client logging
-			if (cg_printObjectiveInfo.integer > 0 && (args == 4 || atoi(CG_Argv(2)) > 1))
-			{
+			if (cg_printObjectiveInfo.integer > 0 && (args == 4 || atoi(CG_Argv(2)) > 1)) {
 				CG_Printf("[cgnotify]*** ^3INFO: ^5%s\n", CG_LocalizeServerCommand(CG_Argv(1)));
 			}
 			CG_PriorityCenterPrint(s, SCREEN_HEIGHT - (SCREEN_HEIGHT * 0.20), SMALLCHAR_WIDTH, atoi(CG_Argv(2)));
-		}
-		else
-		{
+		} else {
 			CG_CenterPrint(CG_LocalizeServerCommand(CG_Argv(1)), SCREEN_HEIGHT - (SCREEN_HEIGHT * 0.20), SMALLCHAR_WIDTH);          //----(SA)	modified
 		}
 		return;
 	}
 
-	if (!Q_stricmp(cmd, "reqforcespawn"))
-	{
+	if (!Q_stricmp(cmd, "reqforcespawn")) {
 		return;
 	}
 
-	if (!Q_stricmp(cmd, "sdbg"))
-	{
+	if (!Q_stricmp(cmd, "sdbg")) {
 		CG_StatsDebugAddText(CG_Argv(1));
 		return;
 	}
 
-	if (!Q_stricmp(cmd, "cs"))
-	{
+	if (!Q_stricmp(cmd, "cs")) {
 		CG_ConfigStringModified();
 		return;
 	}
 
-	if (!Q_stricmp(cmd, "print"))
-	{
+	if (!Q_stricmp(cmd, "print")) {
 		CG_Printf("[cgnotify]%s", CG_LocalizeServerCommand(CG_Argv(1)));
 		return;
 	}
 
 	enc = !Q_stricmp(cmd, "enc_chat");
-	if (!Q_stricmp(cmd, "chat") || enc)
-	{
+	if (!Q_stricmp(cmd, "chat") || enc) {
 		const char *s;
 
-		if (cg_teamChatsOnly.integer)
-		{
+		if (cg_teamChatsOnly.integer) {
 			return;
 		}
 
-		if (atoi(CG_Argv(3)))
-		{
+		if (atoi(CG_Argv(3))) {
 			s = CG_LocalizeServerCommand(CG_Argv(1));
-		}
-		else
-		{
+		} else {
 			s = CG_Argv(1);
 		}
 
 		Q_strncpyz(text, s, MAX_SAY_TEXT);
 		CG_RemoveChatEscapeChar(text);
-		if (enc)
-		{
+		if (enc) {
 			CG_DecodeQP(text);
 		}
 		CG_AddToTeamChat(text, atoi(CG_Argv(2)));
@@ -1885,23 +1612,18 @@ static void CG_ServerCommand(void)
 	}
 
 	enc = !Q_stricmp(cmd, "enc_tchat");
-	if (!Q_stricmp(cmd, "tchat") || enc)
-	{
+	if (!Q_stricmp(cmd, "tchat") || enc) {
 		const char *s;
 
-		if (atoi(CG_Argv(3)))
-		{
+		if (atoi(CG_Argv(3))) {
 			s = CG_LocalizeServerCommand(CG_Argv(1));
-		}
-		else
-		{
+		} else {
 			s = CG_Argv(1);
 		}
 
 		Q_strncpyz(text, s, MAX_SAY_TEXT);
 		CG_RemoveChatEscapeChar(text);
-		if (enc)
-		{
+		if (enc) {
 			CG_DecodeQP(text);
 		}
 		CG_AddToTeamChat(text, atoi(CG_Argv(2)));
@@ -1910,95 +1632,80 @@ static void CG_ServerCommand(void)
 		return;
 	}
 
-	if (!Q_stricmp(cmd, "vchat"))
-	{
+	if (!Q_stricmp(cmd, "vchat")) {
 		CG_VoiceChat(SAY_ALL);              // NERVE - SMF - enabled support
 		return;
 	}
 
-	if (!Q_stricmp(cmd, "vtchat"))
-	{
+	if (!Q_stricmp(cmd, "vtchat")) {
 		CG_VoiceChat(SAY_TEAM);             // NERVE - SMF - enabled support
 		return;
 	}
 
-	if (!Q_stricmp(cmd, "vbchat"))
-	{
+	if (!Q_stricmp(cmd, "vbchat")) {
 		CG_VoiceChat(SAY_BUDDY);
 		return;
 	}
 
-	if (!Q_stricmp(cmd, "map_restart"))
-	{
+	if (!Q_stricmp(cmd, "map_restart")) {
 		CG_MapRestart();
 		return;
 	}
 
-	if (!Q_stricmp(cmd, "startCam"))
-	{
+	if (!Q_stricmp(cmd, "startCam")) {
 		CG_StartCamera(CG_Argv(1), atoi(CG_Argv(2)));
 		return;
 	}
 
-	if (!Q_stricmp(cmd, "SetInitialCamera"))
-	{
+	if (!Q_stricmp(cmd, "SetInitialCamera")) {
 		CG_SetInitialCamera(CG_Argv(1), atoi(CG_Argv(2)));
 		return;
 	}
 
-	if (!Q_stricmp(cmd, "stopCam"))
-	{
+	if (!Q_stricmp(cmd, "stopCam")) {
 		CG_StopCamera();
 		return;
 	}
 
-	if (!Q_stricmp(cmd, "setspawnpt"))
-	{
+	if (!Q_stricmp(cmd, "setspawnpt")) {
 		cg.selectedSpawnPoint = atoi(CG_Argv(1)) + 1;
 		return;
 	}
 
-	if (!strcmp(cmd, "rockandroll"))         // map loaded, game is ready to begin.
-	{
+	if (!strcmp(cmd, "rockandroll")) {       // map loaded, game is ready to begin.
 		trap_S_FadeAllSound(1.0f, 1000, qfalse);      // fade sound up
 
 		return;
 	}
 
-	if (!Q_stricmp(cmd, "application"))
-	{
+	if (!Q_stricmp(cmd, "application")) {
 		cgs.applicationEndTime = cg.time + 20000;
 		cgs.applicationClient  = atoi(CG_Argv(1));
 
-		if (cgs.applicationClient < 0)
-		{
+		if (cgs.applicationClient < 0) {
 			cgs.applicationEndTime = cg.time + 10000;
 		}
 
 		return;
 	}
 
-	if (!Q_stricmp(cmd, "invitation"))
-	{
+	if (!Q_stricmp(cmd, "invitation")) {
 		cgs.invitationEndTime = cg.time + 20000;
 		cgs.invitationClient  = atoi(CG_Argv(1));
 
-		if (cgs.invitationClient < 0)
-		{
+		if (cgs.invitationClient < 0) {
 			cgs.invitationEndTime = cg.time + 10000;
 		}
 
 		return;
 	}
 
-	if (!Q_stricmp(cmd, "proposition"))
-	{
+	if (!Q_stricmp(cmd, "proposition")) {
 		cgs.propositionEndTime = cg.time + 20000;
 		cgs.propositionClient  = atoi(CG_Argv(1));
 		cgs.propositionClient2 = atoi(CG_Argv(2));
 
-		if (cgs.propositionClient < 0)
-		{
+		if (cgs.propositionClient < 0) {
 			cgs.propositionEndTime = cg.time + 10000;
 		}
 
@@ -2007,17 +1714,15 @@ static void CG_ServerCommand(void)
 
 	// Nico, remapShader bugfix
 	// source: http://www.lucasforums.com/showthread.php?t=140104
-	if (Q_stricmp(cmd, "remapShader") == 0)
-	{
-		if (trap_Argc() == 4)
-		{
+	if (Q_stricmp(cmd, "remapShader") == 0) {
+		if (trap_Argc() == 4) {
 			char shader1[MAX_QPATH];
 			char shader2[MAX_QPATH];
 			char shader3[MAX_QPATH];
 
-			Q_strncpyz(shader1, CG_Argv(1), sizeof(shader1));
-			Q_strncpyz(shader2, CG_Argv(2), sizeof(shader2));
-			Q_strncpyz(shader3, CG_Argv(3), sizeof(shader3));
+			Q_strncpyz(shader1, CG_Argv(1), sizeof (shader1));
+			Q_strncpyz(shader2, CG_Argv(2), sizeof (shader2));
+			Q_strncpyz(shader3, CG_Argv(3), sizeof (shader3));
 
 			trap_R_RemapShader(shader1, shader2, shader3);
 		}
@@ -2029,14 +1734,12 @@ static void CG_ServerCommand(void)
 	//
 
 	// loops \/
-	if (!Q_stricmp(cmd, "mu_start"))         // has optional parameter for fade-up time
-	{
+	if (!Q_stricmp(cmd, "mu_start")) {       // has optional parameter for fade-up time
 		int fadeTime = 0;   // default to instant start
 
 		Q_strncpyz(text, CG_Argv(2), MAX_SAY_TEXT);
 		// Nico, always true warning fix
-		if (text != NULL && strlen(text))
-		{
+		if (text != NULL && strlen(text)) {
 			fadeTime = atoi(text);
 		}
 
@@ -2044,14 +1747,12 @@ static void CG_ServerCommand(void)
 		return;
 	}
 	// plays once then back to whatever the loop was \/
-	if (!Q_stricmp(cmd, "mu_play"))          // has optional parameter for fade-up time
-	{
+	if (!Q_stricmp(cmd, "mu_play")) {        // has optional parameter for fade-up time
 		int fadeTime = 0;   // default to instant start
 
 		Q_strncpyz(text, CG_Argv(2), MAX_SAY_TEXT);
 		// Nico, always true warning fix
-		if (text != NULL && strlen(text))
-		{
+		if (text != NULL && strlen(text)) {
 			fadeTime = atoi(text);
 		}
 
@@ -2059,14 +1760,12 @@ static void CG_ServerCommand(void)
 		return;
 	}
 
-	if (!Q_stricmp(cmd, "mu_stop"))          // has optional parameter for fade-down time
-	{
+	if (!Q_stricmp(cmd, "mu_stop")) {        // has optional parameter for fade-down time
 		int fadeTime = 0;   // default to instant stop
 
 		Q_strncpyz(text, CG_Argv(1), MAX_SAY_TEXT);
 		// Nico, always true warning fix
-		if (text != NULL && strlen(text))
-		{
+		if (text != NULL && strlen(text)) {
 			fadeTime = atoi(text);
 		}
 
@@ -2074,33 +1773,28 @@ static void CG_ServerCommand(void)
 		trap_S_StartBackgroundTrack("", "", -2);   // '-2' for 'queue looping track' (QUEUED_PLAY_LOOPED)
 		return;
 	}
-	if (!Q_stricmp(cmd, "mu_fade"))
-	{
+	if (!Q_stricmp(cmd, "mu_fade")) {
 		trap_S_FadeBackgroundTrack(atof(CG_Argv(1)), atoi(CG_Argv(2)), 0);
 		return;
 	}
 
-	if (!Q_stricmp(cmd, "snd_fade"))
-	{
+	if (!Q_stricmp(cmd, "snd_fade")) {
 		trap_S_FadeAllSound(atof(CG_Argv(1)), atoi(CG_Argv(2)), atoi(CG_Argv(3)));
 		return;
 	}
 
-	if (!Q_stricmp(cmd, "ftCommands"))
-	{
+	if (!Q_stricmp(cmd, "ftCommands")) {
 		char info[MAX_INFO_STRING];
-		trap_Argv(1, info, sizeof(info));
+		trap_Argv(1, info, sizeof (info));
 
 		return;
 	}
 
 	// ensure a file gets into a build (mainly for scripted music calls)
-	if (!Q_stricmp(cmd, "addToBuild"))
-	{
+	if (!Q_stricmp(cmd, "addToBuild")) {
 		fileHandle_t f;
 
-		if (!cg_buildScript.integer)
-		{
+		if (!cg_buildScript.integer) {
 			return;
 		}
 
@@ -2112,8 +1806,7 @@ static void CG_ServerCommand(void)
 	}
 
 	// ydnar: bug 267: server sends this command when it's about to kill the current server, before the client can reconnect
-	if (!Q_stricmp(cmd, "spawnserver"))
-	{
+	if (!Q_stricmp(cmd, "spawnserver")) {
 		// print message informing player the server is restarting with a new map
 		CG_PriorityCenterPrint(va("%s", CG_TranslateString("^3Server Restarting")), SCREEN_HEIGHT - (SCREEN_HEIGHT * 0.25), SMALLCHAR_WIDTH, 999999);
 
@@ -2127,73 +1820,63 @@ static void CG_ServerCommand(void)
 	}
 
 	// Nico, pmove_fixed
-	if (!Q_stricmp(cmd, "pmoveon"))
-	{
+	if (!Q_stricmp(cmd, "pmoveon")) {
 		trap_SendConsoleCommand("set pmove_fixed 1\n");
 		CG_AddPMItem(PM_MESSAGE, "pmove_fixed has been set to 1\n", cgs.media.voiceChatShader);
 		return;
 	}
 
 	// Nico, force max FPS
-	if (!Q_stricmp(cmd, "resetMaxFPS"))
-	{
+	if (!Q_stricmp(cmd, "resetMaxFPS")) {
 		trap_SendConsoleCommand("set com_maxfps 125\n");
 		CG_AddPMItem(PM_MESSAGE, "com_maxfps has been set to 125\n", cgs.media.voiceChatShader);
 		return;
 	}
 
 	// Nico, force auto demo record
-	if (!Q_stricmp(cmd, "autoDemoOn"))
-	{
+	if (!Q_stricmp(cmd, "autoDemoOn")) {
 		trap_SendConsoleCommand("set cg_autoDemo 1\n");
 		CG_AddPMItem(PM_MESSAGE, "cg_autoDemo has been set to 1\n", cgs.media.voiceChatShader);
 		return;
 	}
 
 	// Nico, force hideMe ON
-	if (!Q_stricmp(cmd, "hideMeOn"))
-	{
+	if (!Q_stricmp(cmd, "hideMeOn")) {
 		trap_SendConsoleCommand("set cg_hideMe 1\n");
 		CG_AddPMItem(PM_MESSAGE, "cg_hideMe has been set to 1\n", cgs.media.voiceChatShader);
 		return;
 	}
 
 	// Nico, force CGaz off
-	if (!Q_stricmp(cmd, "CGazOff"))
-	{
+	if (!Q_stricmp(cmd, "CGazOff")) {
 		trap_SendConsoleCommand("set cg_drawCGaz 0\n");
 		CG_AddPMItem(PM_MESSAGE, "cg_drawCGaz has been set to 0\n", cgs.media.voiceChatShader);
 		return;
 	}
 
 	// Nico, update specLock
-	if (!Q_stricmp(cmd, "updateSpecLockStatus"))
-	{
+	if (!Q_stricmp(cmd, "updateSpecLockStatus")) {
 		trap_SendConsoleCommand(va("set cg_specLock %d\n", atoi(CG_Argv(1))));
 		return;
 	}
 
 	// Nico, timer start/stop/check related
 
-	if (!Q_stricmp(cmd, "timerun_start"))
-	{
+	if (!Q_stricmp(cmd, "timerun_start")) {
 		cg.timerunActive            = 1;
 		cg.timerunCheckPointChecked = 0;
 		cg.currentTimerun           = atoi(CG_Argv(1));
 		cg.timerunStartTime         = atoi(CG_Argv(2));
 
-		if (!cg.timerunBestTime[cg.currentTimerun] || cg.timerunLastTime[cg.currentTimerun] < cg.timerunBestTime[cg.currentTimerun])
-		{
+		if (!cg.timerunBestTime[cg.currentTimerun] || cg.timerunLastTime[cg.currentTimerun] < cg.timerunBestTime[cg.currentTimerun]) {
 			cg.timerunBestTime[cg.currentTimerun] = cg.timerunLastTime[cg.currentTimerun];
 		}
 		return;
 	}
 
-	if (!Q_stricmp(cmd, "timerun_start_spec"))
-	{
+	if (!Q_stricmp(cmd, "timerun_start_spec")) {
 		// Nico, only for specs
-		if (cgs.clientinfo[cg.clientNum].team != TEAM_SPECTATOR)
-		{
+		if (cgs.clientinfo[cg.clientNum].team != TEAM_SPECTATOR) {
 			return;
 		}
 		cg.timerunActive            = 1;
@@ -2201,66 +1884,55 @@ static void CG_ServerCommand(void)
 		cg.currentTimerun           = atoi(CG_Argv(1));
 		cg.timerunStartTime         = atoi(CG_Argv(2));
 
-		if (!cg.timerunBestTime[cg.currentTimerun] || cg.timerunLastTime[cg.currentTimerun] < cg.timerunBestTime[cg.currentTimerun])
-		{
+		if (!cg.timerunBestTime[cg.currentTimerun] || cg.timerunLastTime[cg.currentTimerun] < cg.timerunBestTime[cg.currentTimerun]) {
 			cg.timerunBestTime[cg.currentTimerun] = cg.timerunLastTime[cg.currentTimerun];
 		}
 		return;
 	}
 
-	if (!Q_stricmp(cmd, "timerun_check"))
-	{
+	if (!Q_stricmp(cmd, "timerun_check")) {
 		cg.timerunCheckPointDiff[cg.timerunCheckPointChecked] = atoi(CG_Argv(1));
 		cg.timerunCheckPointTime[cg.timerunCheckPointChecked] = atoi(CG_Argv(2));
 		cg.timerunCheckStatus[cg.timerunCheckPointChecked++]  = atoi(CG_Argv(3));
 
-		if (cg.timerunCheckPointChecked > MAX_TIMERUN_CHECKPOINTS)
-		{
+		if (cg.timerunCheckPointChecked > MAX_TIMERUN_CHECKPOINTS) {
 			CG_Error("MAX_TIMERUN_CHECKPOINTS limit reached\n");
 		}
 		return;
 	}
 
-	if (!Q_stricmp(cmd, "timerun_check_spec"))
-	{
+	if (!Q_stricmp(cmd, "timerun_check_spec")) {
 		// Nico, only for specs
-		if (cgs.clientinfo[cg.clientNum].team != TEAM_SPECTATOR)
-		{
+		if (cgs.clientinfo[cg.clientNum].team != TEAM_SPECTATOR) {
 			return;
 		}
 		cg.timerunCheckPointDiff[cg.timerunCheckPointChecked] = atoi(CG_Argv(1));
 		cg.timerunCheckPointTime[cg.timerunCheckPointChecked] = atoi(CG_Argv(2));
 		cg.timerunCheckStatus[cg.timerunCheckPointChecked++]  = atoi(CG_Argv(3));
 
-		if (cg.timerunCheckPointChecked > MAX_TIMERUN_CHECKPOINTS)
-		{
+		if (cg.timerunCheckPointChecked > MAX_TIMERUN_CHECKPOINTS) {
 			CG_Error("MAX_TIMERUN_CHECKPOINTS limit reached\n");
 		}
 		return;
 	}
 
-	if (!Q_stricmp(cmd, "timerun_stop"))
-	{
+	if (!Q_stricmp(cmd, "timerun_stop")) {
 		cg.timerunActive = 0;
 
-		if (atoi(CG_Argv(2)))
-		{
+		if (atoi(CG_Argv(2))) {
 			cg.timerunLastTime[atoi(CG_Argv(1))] = cg.timerunFinishedTime = atoi(CG_Argv(2));
 		}
 		return;
 	}
 
-	if (!Q_stricmp(cmd, "timerun_stop_spec"))
-	{
+	if (!Q_stricmp(cmd, "timerun_stop_spec")) {
 		// Nico, only for specs
-		if (cgs.clientinfo[cg.clientNum].team != TEAM_SPECTATOR)
-		{
+		if (cgs.clientinfo[cg.clientNum].team != TEAM_SPECTATOR) {
 			return;
 		}
 		cg.timerunActive = 0;
 
-		if (atoi(CG_Argv(2)))
-		{
+		if (atoi(CG_Argv(2))) {
 			cg.timerunLastTime[atoi(CG_Argv(1))] = cg.timerunFinishedTime = atoi(CG_Argv(2));
 		}
 		return;
@@ -2268,49 +1940,39 @@ static void CG_ServerCommand(void)
 	// Nico, end of timer start/stop/check related
 
 	// Nico, auto demo related
-	if (!Q_stricmp(cmd, "runSave"))
-	{
-		if (!cg_autoDemo.integer || cg.demoPlayback)
-		{
+	if (!Q_stricmp(cmd, "runSave")) {
+		if (!cg_autoDemo.integer || cg.demoPlayback) {
 			return;
 		}
 
 		cg.startedNewDemo = 0;
 		cg.runsave        = 1;
-		Com_sprintf(cg.runsavename, sizeof(cg.runsavename), "%s", CG_Argv(1));
+		Com_sprintf(cg.runsavename, sizeof (cg.runsavename), "%s", CG_Argv(1));
 		cg.currentdemo = currentdemo;
 		return;
 	}
 
-	if (!Q_stricmp(cmd, "tempDemoStart"))
-	{
-		if (!cg_autoDemo.integer || cg.demoPlayback)
-		{
+	if (!Q_stricmp(cmd, "tempDemoStart")) {
+		if (!cg_autoDemo.integer || cg.demoPlayback) {
 			return;
 		}
 
-		if (currentdemo > 20)
-		{
+		if (currentdemo > 20) {
 			currentdemo = 1;
 		}
 
 		// Sent from stoptimer, do a 1 sec delay.
-		if (trap_Argc() > 1)
-		{
+		if (trap_Argc() > 1) {
 			currentdemo++;
 			cg.startedNewDemo = currentdemo + 1;
 			ignoreNextStart   = 1;
-		}
-		else if (!ignoreNextStart)
-		{
+		} else if (!ignoreNextStart) {
 			currentdemo++;
 			cg.startedNewDemo = 1;
 			trap_SendConsoleCommand(va("stoprecord\n"));
 			trap_SendConsoleCommand(va("record temp_%i\n", currentdemo));
 			ignoreNextStart = 1;
-		}
-		else
-		{
+		} else {
 			ignoreNextStart = 0;
 		}
 		return;
@@ -2318,22 +1980,19 @@ static void CG_ServerCommand(void)
 	// Nico, end of auto demo related
 
 	// Nico, banner printing
-	if (!Q_stricmp(cmd, "bp"))
-	{
+	if (!Q_stricmp(cmd, "bp")) {
 		CG_BannerPrint(CG_LocalizeServerCommand(CG_Argv(1)));
 		return;
 	}
 	// Nico, end of banner printing
 
 	// Nico, login notifications
-	if (!Q_stricmp(cmd, "client_login"))
-	{
+	if (!Q_stricmp(cmd, "client_login")) {
 		cg.isLogged = 1;
 		return;
 	}
 
-	if (!Q_stricmp(cmd, "client_logout"))
-	{
+	if (!Q_stricmp(cmd, "client_logout")) {
 		cg.isLogged = 0;
 		return;
 	}
@@ -2351,12 +2010,9 @@ Execute all of the server commands that were received along
 with this this snapshot.
 ====================
 */
-void CG_ExecuteNewServerCommands(int latestSequence)
-{
-	while (cgs.serverCommandSequence < latestSequence)
-	{
-		if (trap_GetServerCommand(++cgs.serverCommandSequence))
-		{
+void CG_ExecuteNewServerCommands(int latestSequence) {
+	while (cgs.serverCommandSequence < latestSequence) {
+		if (trap_GetServerCommand(++cgs.serverCommandSequence)) {
 			CG_ServerCommand();
 		}
 	}
