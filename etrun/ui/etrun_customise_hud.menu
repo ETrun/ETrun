@@ -81,6 +81,16 @@ menuDef {
 	MULTI( 6+(SUBWINDOW_WIDTH)+6+2, 84, (SUBWINDOW_WIDTH)-4, 10, "Popup fade time:", .2, 8, "cg_popupFadeTime", cvarFloatList { "0 sec" 0 "1 sec" 1000 "2 secs" 2000 "3 secs" 3000 "4 secs" 4000 "5 secs" 5000}, "Time that popups take to fade out" )
 	YESNO( 6+(SUBWINDOW_WIDTH)+6+2, 96, (SUBWINDOW_WIDTH)-4, 10, "Small popup icons:", .2, 8, "cg_drawSmallPopupIcons", "" )
 
+	//
+	// Info panel
+	//
+	SUBWINDOW( 6+(SUBWINDOW_WIDTH)+6, 118, (SUBWINDOW_WIDTH), 60, "Info panel" )
+	YESNO( 6+(SUBWINDOW_WIDTH)+6+2, 134, (SUBWINDOW_WIDTH)-4, 10, "Show info panel:", .2, 8, "cg_drawInfoPanel", "" )
+	SLIDER( 6+(SUBWINDOW_WIDTH)+6+2, 146, (SUBWINDOW_WIDTH)-4, 10, "Panel X-position:", .2, 8, "cg_infoPanelX" 535 0 640, "Use the slider to move the info panel" )
+	CVARFLOATLABEL( 6+(SUBWINDOW_WIDTH)+6+2, 146, (SUBWINDOW_WIDTH)-4, 10, "cg_infoPanelX", .2, ITEM_ALIGN_RIGHT, $evalfloat((SUBWINDOW_WIDTH)-4), 8 )
+	SLIDER( 6+(SUBWINDOW_WIDTH)+6+2, 158, (SUBWINDOW_WIDTH)-4, 10, "Panel Y-position:", .2, 8, "cg_infoPanelY" 20 0 480, "Use the slider to move the info panel" )
+	CVARFLOATLABEL( 6+(SUBWINDOW_WIDTH)+6+2, 158, (SUBWINDOW_WIDTH)-4, 10, "cg_infoPanelY", .2, ITEM_ALIGN_RIGHT, $evalfloat((SUBWINDOW_WIDTH)-4), 8 )
+
 	// Buttons //
 	BUTTON( 6, WINDOW_HEIGHT-24, WINDOW_WIDTH-12, 18, "Back", .3, 14, close etrun_customise_hud ; open etrun )
 }
