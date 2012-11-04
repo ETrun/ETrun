@@ -8,6 +8,7 @@ libcgame_la_LDFLAGS = -avoid-version
 
 # Source files
 libcgame_la_SOURCES = \
+../libs/sha-1/sha1.c \
 ../game/bg_animation.c \
 ../game/bg_animgroup.c \
 ../game/bg_character.c \
@@ -20,7 +21,8 @@ libcgame_la_SOURCES = \
 ../game/bg_weapons.c \
 ../game/q_math.c \
 ../game/q_shared.c \
-../ui/ui_shared.c cg_atmospheric.c \
+../ui/ui_shared.c \
+cg_atmospheric.c \
 cg_character.c \
 cg_consolecmds.c \
 cg_draw.c \
@@ -55,5 +57,4 @@ cg_trails.c \
 cg_view.c \
 cg_weapons.c \
 cg_window.c \
-cg_timerun_draw.c \
-../libs/sha-1/sha1.c
+cg_timerun_draw.c
