@@ -2487,6 +2487,9 @@ static void CG_Draw2D(void) {
 		// Nico, draw banners
 		CG_DrawBannerPrint();
 
+		// Nico, draw info panel
+		CG_DrawInfoPanel();
+
 		CG_DrawSpectatorMessage();
 	} else {
 		if ((int)cgs.eventHandling != (int)CGAME_EVENT_NONE) {

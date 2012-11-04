@@ -1123,6 +1123,14 @@ typedef struct {
 	// Client side login status
 	int isLogged;
 
+	// Infos
+	int timerunStartSpeed;
+	int timerunStopSpeed;
+	int runMaxSpeed;
+	int overallMaxSpeed;
+	int timerunJumpCounter;
+	int timerunJumpSpeeds[256];
+
 	// Nico, end of ETrun client variables
 } cg_t;
 
@@ -1953,6 +1961,11 @@ extern vmCvar_t cg_autoLoadCheckpoints;
 // Persistant speclock
 extern vmCvar_t cg_specLock;
 
+// Info panel
+extern vmCvar_t cg_drawInfoPanel;
+extern vmCvar_t cg_infoPanelX;
+extern vmCvar_t cg_infoPanelY;
+
 // Nico, end of ETrun cvars
 
 //
@@ -2124,6 +2137,7 @@ void CG_DrawCGaz(void);
 void CG_DrawKeys(void);
 void CG_DrawClock(float x, float y, qboolean shadowed);
 void CG_DrawBannerPrint(void);
+void CG_DrawInfoPanel(void);
 
 //
 // cg_players.c

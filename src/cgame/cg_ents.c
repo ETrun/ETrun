@@ -404,7 +404,6 @@ static void CG_General(centity_t *cent) {
 		if (cent->currentState.otherEntityNum == cg.snap->ps.clientNum && cg.snap->ps.viewlocked) {
 			AnglesToAxis(cg.predictedPlayerState.viewangles, ent.axis);
 		} else {
-			//AnglesToAxis( cg_entities[cent->currentState.otherEntityNum].lerpAngles, ent.axis );
 			AnglesToAxis(cent->lerpAngles, ent.axis);
 		}
 	} else {

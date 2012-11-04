@@ -350,6 +350,11 @@ vmCvar_t cg_autoLoadCheckpoints;
 // Persistant speclock
 vmCvar_t cg_specLock;
 
+// Info panel
+vmCvar_t cg_drawInfoPanel;
+vmCvar_t cg_infoPanelX;
+vmCvar_t cg_infoPanelY;
+
 // Nico, end of ETrun cvars
 
 typedef struct {
@@ -620,7 +625,12 @@ cvarTable_t cvarTable[] =
 	{ &cg_autoLoadCheckpoints,   "cg_autoLoadCheckpoints",   "0",     CVAR_ARCHIVE,             0 },
 
 	// Persistant speclock
-	{ &cg_specLock,              "cg_specLock",              "0",     CVAR_ARCHIVE,             0 }
+	{ &cg_specLock,              "cg_specLock",              "0",     CVAR_ARCHIVE,             0 },
+
+	// Info panel
+	{ &cg_drawInfoPanel,         "cg_drawInfoPanel",         "1",     CVAR_ARCHIVE,             0 },
+	{ &cg_infoPanelX,			 "cg_infoPanelX",			 "555",   CVAR_ARCHIVE,             0 },
+	{ &cg_infoPanelY,			 "cg_infoPanelY",			 "20",    CVAR_ARCHIVE,             0 }
 
 	// Nico, end of ETrun cvars
 };

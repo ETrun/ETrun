@@ -520,6 +520,11 @@ static qboolean PM_CheckJump(void) {
 	}
 	// Nico, end of add doublejump support
 
+	// Nico, update jump counter
+	if (pm->timerunActive) {
+		pm->ps->identifyClientHealth++;
+	}
+
 	if (pm->cmd.forwardmove >= 0) {
 		BG_AnimScriptEvent(pm->ps, pm->character->animModelInfo, ANIM_ET_JUMP, qfalse, qtrue);
 		pm->ps->pm_flags &= ~PMF_BACKWARDS_JUMP;

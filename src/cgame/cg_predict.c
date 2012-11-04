@@ -802,7 +802,6 @@ void CG_PredictPlayerState(void) {
 
 	cg.predictedPlayerState = cg.snap->ps;
 	cg.physicsTime          = cg.snap->serverTime;
-//	}
 
 	if (pmove_msec.integer < 8) {
 		trap_Cvar_Set("pmove_msec", "8");
@@ -867,8 +866,6 @@ void CG_PredictPlayerState(void) {
 					CG_Printf("PredictionTeleport\n");
 				}
 				cg.thisFrameTeleport = qfalse;
-				/* Nico, render while in limbo
-				} else if ( !cg.showGameView ) {*/
 			} else {
 				vec3_t adjusted;
 				CG_AdjustPositionForMover(cg.predictedPlayerState.origin, cg.predictedPlayerState.groundEntityNum, cg.physicsTime, cg.oldTime, adjusted, deltaAngles);
@@ -962,15 +959,10 @@ void CG_PredictPlayerState(void) {
 	// restore pmext
 	memcpy(&cg.pmext, &pmext, sizeof (pmoveExt_t));
 
-	/* Nico, render while in limbo
-	if ( !cg.showGameView ) {*/
-	// adjust for the movement of the groundentity
 	CG_AdjustPositionForMover(cg.predictedPlayerState.origin, cg.predictedPlayerState.groundEntityNum, cg.physicsTime, cg.time, cg.predictedPlayerState.origin, deltaAngles);
-	// }
 
 	// fire events and other transition triggered things
 	CG_TransitionPlayerState(&cg.predictedPlayerState, &oldPlayerState);
-
 
 	// ydnar: shake player view here, rather than fiddle with view angles
 	if (cg.time > cg.cameraShakeTime) {

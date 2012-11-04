@@ -1271,7 +1271,7 @@ static void notify_timerun_start(gentity_t *activator) {
 
 	// Nico, notify the client itself first
 	G_DPrintf("notify_timerun_start(%d)\n", activator->client->ps.clientNum);
-	trap_SendServerCommand(activator - g_entities, va("timerun_start %i %i", timerunNum, activator->client->sess.timerunStartTime + 500));
+	trap_SendServerCommand(activator - g_entities, va("timerun_start %i %i %i", timerunNum, activator->client->sess.timerunStartTime + 500, (int)activator->client->sess.startSpeed));
 
 	// Nico, notify its spectators
 	for (; i < level.numConnectedClients; ++i) {
@@ -1291,7 +1291,7 @@ static void notify_timerun_start(gentity_t *activator) {
 
 		if (o->client->sess.spectatorClient == activator - g_entities) {
 			G_DPrintf("Sending a timerun_start_spec to client %d\n", (int)(o - g_entities));
-			trap_SendServerCommand(o - g_entities, va("timerun_start_spec %i %i", timerunNum, activator->client->sess.timerunStartTime + 500));
+			trap_SendServerCommand(o - g_entities, va("timerun_start_spec %i %i %i", timerunNum, activator->client->sess.timerunStartTime + 500, (int)activator->client->sess.startSpeed));
 		}
 	}
 }
@@ -1348,6 +1348,9 @@ void target_starttimer_use(gentity_t *self, gentity_t *other, gentity_t *activat
 	// Nico, reset max speed of the run
 	client->sess.maxSpeed = 0;
 
+	// Nico, reset jump counter (cause prediction error?)
+	client->ps.identifyClientHealth = 0;
+
 	// Nico, reset saves if physics is VET
 	if (physics.integer == PHYSICS_MODE_VET) {
 		for (i = 0; i < MAX_SAVED_POSITIONS; ++i) {
@@ -1402,7 +1405,7 @@ void notify_timerun_stop(gentity_t *activator, int finishTime) {
 	timerunNum = activator->client->sess.currentTimerunNum;
 
 	// Nico, notify the client itself first
-	trap_SendServerCommand(activator - g_entities, va("timerun_stop %i %i", timerunNum, finishTime));
+	trap_SendServerCommand(activator - g_entities, va("timerun_stop %i %i %i %i", timerunNum, finishTime, (int)activator->client->sess.stopSpeed, (int)activator->client->sess.maxSpeed));
 
 	// Nico, notify its spectators
 	for (; i < level.numConnectedClients; ++i) {
@@ -1422,7 +1425,7 @@ void notify_timerun_stop(gentity_t *activator, int finishTime) {
 
 		if (o->client->sess.spectatorClient == activator - g_entities) {
 			G_DPrintf("Sending a timerun_stop_spec to client %d\n", (int)(o - g_entities));
-			trap_SendServerCommand(o - g_entities, va("timerun_stop_spec %i %i", timerunNum, finishTime));
+			trap_SendServerCommand(o - g_entities, va("timerun_stop_spec %i %i %i %i", timerunNum, finishTime, (int)activator->client->sess.stopSpeed, (int)activator->client->sess.maxSpeed));
 		}
 	}
 }

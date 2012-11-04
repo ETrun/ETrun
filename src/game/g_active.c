@@ -366,18 +366,6 @@ void SpectatorThink(gentity_t *ent, usercmd_t *ucmd) {
 	// something completely bogus
 	crosshairEnt = &g_entities[ent->client->ps.identifyClient];
 
-	if (crosshairEnt->inuse && crosshairEnt->client &&
-	    (ent->client->sess.sessionTeam == crosshairEnt->client->sess.sessionTeam)) {
-
-		// rain - identifyClientHealth sent as unsigned char, so we
-		// can't transmit negative numbers
-		if (crosshairEnt->health >= 0) {
-			ent->client->ps.identifyClientHealth = crosshairEnt->health;
-		} else {
-			ent->client->ps.identifyClientHealth = 0;
-		}
-	}
-
 	if (client->sess.spectatorState != SPECTATOR_FOLLOW) {
 		client->ps.pm_type = PM_SPECTATOR;
 		client->ps.speed   = SPECTATOR_SPEED; // was: 400 // faster than normal
@@ -887,10 +875,8 @@ void ClientThink_real(gentity_t *ent) {
 	}
 
 	if (g_entities[ent->client->ps.identifyClient].team == ent->team && g_entities[ent->client->ps.identifyClient].client) {
-		ent->client->ps.identifyClientHealth = g_entities[ent->client->ps.identifyClient].health;
 	} else {
 		ent->client->ps.identifyClient       = -1;
-		ent->client->ps.identifyClientHealth = 0;
 	}
 
 	// check for respawning

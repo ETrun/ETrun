@@ -1256,7 +1256,11 @@ typedef struct playerState_s {
 	int weapHeat[MAX_WEAPONS];          // some weapons can overheat.  this tracks (server-side) how hot each weapon currently is.
 	int curWeapHeat;                    // value for the currently selected weapon (for transmission to client)		// Arnout : DOES get send over the network
 	int identifyClient;                 // NERVE - SMF
-	int identifyClientHealth;
+
+
+	// Nico, as I cnanot add fields in this struct,
+	// I will use an existing one as jump counter
+	int identifyClientHealth;// Nico, jump counter
 
 	aistateEnum_t aiState;          // xkan, 1/10/2003
 } playerState_t;

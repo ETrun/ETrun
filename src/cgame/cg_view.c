@@ -601,8 +601,6 @@ static void CG_OffsetFirstPersonView(void) {
 	// RF, add new weapon kick angles
 	CG_KickAngles();
 	VectorAdd(angles, cg.kickAngles, angles);
-	// RF, pitch is already added
-	//angles[0] -= cg.kickAngles[PITCH];
 
 	// add angles based on damage kick
 	if (cg.damageTime) {
@@ -1622,9 +1620,6 @@ void CG_DrawActiveFrame(int serverTime, stereoFrame_t stereoView, qboolean demoP
 	memcpy(cg.refdef.areamask, cg.snap->areamask, sizeof (cg.refdef.areamask));
 
 	DEBUGTIME
-
-	// warning sounds when powerup is wearing off
-	//CG_PowerupTimerSounds();
 
 	// make sure the lagometerSample and frame timing isn't done twice when in stereo
 	if (stereoView != STEREO_RIGHT) {
