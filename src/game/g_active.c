@@ -358,13 +358,8 @@ SpectatorThink
 void SpectatorThink(gentity_t *ent, usercmd_t *ucmd) {
 	pmove_t   pm;
 	gclient_t *client;
-	gentity_t *crosshairEnt = NULL; // rain - #480
 
 	client = ent->client;
-
-	// rain - #480 - sanity check - check .active in case the client sends us
-	// something completely bogus
-	crosshairEnt = &g_entities[ent->client->ps.identifyClient];
 
 	if (client->sess.spectatorState != SPECTATOR_FOLLOW) {
 		client->ps.pm_type = PM_SPECTATOR;

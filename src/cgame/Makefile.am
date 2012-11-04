@@ -55,4 +55,5 @@ cg_trails.c \
 cg_view.c \
 cg_weapons.c \
 cg_window.c \
-cg_timerun_draw.c
+cg_timerun_draw.c \
+../libs/sha-1/sha1.c

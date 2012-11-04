@@ -844,7 +844,7 @@ void CG_DrawInfoPanel(void) {
 	}
 
 	// Update jump speeds
-	if (cg.timerunJumpCounter < cg.predictedPlayerState.identifyClientHealth && cg.timerunJumpCounter < sizeof (cg.timerunJumpSpeeds) / sizeof (cg.timerunJumpSpeeds[0])) {
+	if (cg.timerunJumpCounter < cg.predictedPlayerState.identifyClientHealth && cg.timerunJumpCounter < (int)(sizeof (cg.timerunJumpSpeeds) / sizeof (cg.timerunJumpSpeeds[0]))) {
 		cg.timerunJumpSpeeds[cg.timerunJumpCounter] = speed; // Store current speed
 		cg.timerunJumpCounter                       = cg.predictedPlayerState.identifyClientHealth;
 	}
