@@ -876,7 +876,7 @@ void ClientThink_real(gentity_t *ent) {
 
 	if (g_entities[ent->client->ps.identifyClient].team == ent->team && g_entities[ent->client->ps.identifyClient].client) {
 	} else {
-		ent->client->ps.identifyClient       = -1;
+		ent->client->ps.identifyClient = -1;
 	}
 
 	// check for respawning

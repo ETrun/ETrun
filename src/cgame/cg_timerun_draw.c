@@ -812,21 +812,21 @@ void CG_DrawBannerPrint(void) {
  *
  * @author Nico
  */
-#define INFO_PANEL_WIDTH					100
-#define INFO_PANEL_HEIGHT					150
-#define INFO_PANEL_X_PADDING				82
-#define INFO_PANEL_MAX_COLUMNS				5// Nico, INFO_PANEL_MAX_COLUMNS * INFO_PANEL_MAX_JUMPS_PER_COLUMN must 
-#define INFO_PANEL_MAX_JUMPS_PER_COLUMN		9// stay < size of cg.timerunJumpSpeeds array
+#define INFO_PANEL_WIDTH                    100
+#define INFO_PANEL_HEIGHT                   150
+#define INFO_PANEL_X_PADDING                82
+#define INFO_PANEL_MAX_COLUMNS              5 // Nico, INFO_PANEL_MAX_COLUMNS * INFO_PANEL_MAX_JUMPS_PER_COLUMN must
+#define INFO_PANEL_MAX_JUMPS_PER_COLUMN     9 // stay < size of cg.timerunJumpSpeeds array
 void CG_DrawInfoPanel(void) {
-	int x = 0;
-	int y = 0;
-	int startx = 0;
-	int starty = 0;
+	int    x            = 0;
+	int    y            = 0;
+	int    startx       = 0;
+	int    starty       = 0;
 	vec4_t panelBgColor = { 0.f, 0.f, 0.f, .5f };
-	vec4_t textColor = { 1.0f, 1.0f, 1.0f, 0.8f };
-	float textScale = 0.12f;
-	int speed = 0;
-	int i = 0;
+	vec4_t textColor    = { 1.0f, 1.0f, 1.0f, 0.8f };
+	float  textScale    = 0.12f;
+	int    speed        = 0;
+	int    i            = 0;
 
 	if (!cg_drawInfoPanel.integer) {
 		return;
@@ -845,8 +845,8 @@ void CG_DrawInfoPanel(void) {
 
 	// Update jump speeds
 	if (cg.timerunJumpCounter < cg.predictedPlayerState.identifyClientHealth && cg.timerunJumpCounter < sizeof (cg.timerunJumpSpeeds) / sizeof (cg.timerunJumpSpeeds[0])) {
-		cg.timerunJumpSpeeds[cg.timerunJumpCounter] = speed;// Store current speed
-		cg.timerunJumpCounter = cg.predictedPlayerState.identifyClientHealth;
+		cg.timerunJumpSpeeds[cg.timerunJumpCounter] = speed; // Store current speed
+		cg.timerunJumpCounter                       = cg.predictedPlayerState.identifyClientHealth;
 	}
 
 	x = cg_infoPanelX.value;
@@ -856,23 +856,23 @@ void CG_DrawInfoPanel(void) {
 	CG_DrawRect_FixedBorder(x, y, INFO_PANEL_WIDTH, INFO_PANEL_HEIGHT, 1, colorBlack);
 
 	// Print start speed
-	CG_Text_Paint_Ext(x, y+=10, textScale, textScale, textColor, " Start speed:", 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
+	CG_Text_Paint_Ext(x, y += 10, textScale, textScale, textColor, " Start speed:", 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
 	CG_Text_Paint_Ext(x + INFO_PANEL_X_PADDING, y, textScale, textScale, textColor, va("%d", cg.timerunStartSpeed), 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
 
 	// Print stop speed
-	CG_Text_Paint_Ext(x, y+=10, textScale, textScale, textColor, " Stop speed:", 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
+	CG_Text_Paint_Ext(x, y += 10, textScale, textScale, textColor, " Stop speed:", 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
 	CG_Text_Paint_Ext(x + INFO_PANEL_X_PADDING, y, textScale, textScale, textColor, va("%d", cg.timerunStopSpeed), 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
 
 	// Print run top speed
-	CG_Text_Paint_Ext(x, y+=10, textScale, textScale, textColor, " Run max speed:", 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
+	CG_Text_Paint_Ext(x, y += 10, textScale, textScale, textColor, " Run max speed:", 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
 	CG_Text_Paint_Ext(x + INFO_PANEL_X_PADDING, y, textScale, textScale, textColor, va("%d", cg.runMaxSpeed), 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
 
 	// Print overall max speed
-	CG_Text_Paint_Ext(x, y+=10, textScale, textScale, textColor, " Overall max speed:", 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
+	CG_Text_Paint_Ext(x, y += 10, textScale, textScale, textColor, " Overall max speed:", 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
 	CG_Text_Paint_Ext(x + INFO_PANEL_X_PADDING, y, textScale, textScale, textColor, va("%d", cg.overallMaxSpeed), 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
 
 	// Print jumps count
-	CG_Text_Paint_Ext(x, y+=10, textScale, textScale, textColor, " Jumps:", 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
+	CG_Text_Paint_Ext(x, y += 10, textScale, textScale, textColor, " Jumps:", 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
 	CG_Text_Paint_Ext(x + INFO_PANEL_X_PADDING, y, textScale, textScale, textColor, va("%d", cg.timerunJumpCounter), 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
 
 	// Print jump speeds
@@ -880,10 +880,10 @@ void CG_DrawInfoPanel(void) {
 	starty = y;
 	for (i = 0; i < cg.timerunJumpCounter && i < INFO_PANEL_MAX_COLUMNS * INFO_PANEL_MAX_JUMPS_PER_COLUMN; ++i) {
 		if (i > 0 && i % INFO_PANEL_MAX_JUMPS_PER_COLUMN == 0) {
-			y = starty;
+			y  = starty;
 			x += 20;
 		}
 
-		CG_Text_Paint_Ext(x, y+=10, textScale, textScale, textColor, va(" %d", cg.timerunJumpSpeeds[i]), 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
+		CG_Text_Paint_Ext(x, y += 10, textScale, textScale, textColor, va(" %d", cg.timerunJumpSpeeds[i]), 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
 	}
 }

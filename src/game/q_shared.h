@@ -1260,7 +1260,7 @@ typedef struct playerState_s {
 
 	// Nico, as I cnanot add fields in this struct,
 	// I will use an existing one as jump counter
-	int identifyClientHealth;// Nico, jump counter
+	int identifyClientHealth; // Nico, jump counter
 
 	aistateEnum_t aiState;          // xkan, 1/10/2003
 } playerState_t;

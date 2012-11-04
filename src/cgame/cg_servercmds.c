@@ -1865,13 +1865,13 @@ static void CG_ServerCommand(void) {
 	if (!Q_stricmp(cmd, "timerun_start")) {
 		cg.timerunActive            = 1;
 		cg.timerunCheckPointChecked = 0;
-		cg.currentTimerun           = atoi(CG_Argv(1));// Timerun num
-		cg.timerunStartTime         = atoi(CG_Argv(2));// Start time
-		cg.timerunStartSpeed				= atoi(CG_Argv(3));// Start speed
+		cg.currentTimerun           = atoi(CG_Argv(1)); // Timerun num
+		cg.timerunStartTime         = atoi(CG_Argv(2)); // Start time
+		cg.timerunStartSpeed        = atoi(CG_Argv(3));        // Start speed
 
 		// Reset run stop speed & run max speed
-		cg.runMaxSpeed				= 0;
-		cg.timerunStopSpeed			= 0;
+		cg.runMaxSpeed      = 0;
+		cg.timerunStopSpeed = 0;
 
 		// Reset jump counter & jump speeds
 		cg.timerunJumpCounter = 0;
@@ -1890,13 +1890,13 @@ static void CG_ServerCommand(void) {
 		}
 		cg.timerunActive            = 1;
 		cg.timerunCheckPointChecked = 0;
-		cg.currentTimerun           = atoi(CG_Argv(1));// Timerun num
-		cg.timerunStartTime         = atoi(CG_Argv(2));// Start time
-		cg.timerunStartSpeed		= atoi(CG_Argv(3));// Start speed
+		cg.currentTimerun           = atoi(CG_Argv(1)); // Timerun num
+		cg.timerunStartTime         = atoi(CG_Argv(2)); // Start time
+		cg.timerunStartSpeed        = atoi(CG_Argv(3)); // Start speed
 
 		// Reset run stop speed & run max speed
-		cg.runMaxSpeed				= 0;
-		cg.timerunStopSpeed			= 0;
+		cg.runMaxSpeed      = 0;
+		cg.timerunStopSpeed = 0;
 
 		// Reset jump counter & jump speeds
 		cg.timerunJumpCounter = 0;
@@ -1939,8 +1939,8 @@ static void CG_ServerCommand(void) {
 
 		if (atoi(CG_Argv(2))) {
 			cg.timerunLastTime[atoi(CG_Argv(1))] = cg.timerunFinishedTime = atoi(CG_Argv(2));
-			cg.timerunStopSpeed = atoi(CG_Argv(3));// Stop speed
-			cg.runMaxSpeed = atoi(CG_Argv(4));// Run max speed
+			cg.timerunStopSpeed                  = atoi(CG_Argv(3)); // Stop speed
+			cg.runMaxSpeed                       = atoi(CG_Argv(4)); // Run max speed
 		}
 		return;
 	}
@@ -1954,8 +1954,8 @@ static void CG_ServerCommand(void) {
 
 		if (atoi(CG_Argv(2))) {
 			cg.timerunLastTime[atoi(CG_Argv(1))] = cg.timerunFinishedTime = atoi(CG_Argv(2));
-			cg.timerunStopSpeed = atoi(CG_Argv(3));// Stop speed
-			cg.runMaxSpeed = atoi(CG_Argv(4));// Run max speed
+			cg.timerunStopSpeed                  = atoi(CG_Argv(3)); // Stop speed
+			cg.runMaxSpeed                       = atoi(CG_Argv(4)); // Run max speed
 		}
 		return;
 	}
