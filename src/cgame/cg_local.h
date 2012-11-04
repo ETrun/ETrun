@@ -1744,7 +1744,6 @@ extern vmCvar_t cg_drawCrosshairPickups;
 extern vmCvar_t cg_useWeapsForZoom;
 extern vmCvar_t cg_weaponCycleDelay;            //----(SA)	added
 extern vmCvar_t cg_cycleAllWeaps;
-extern vmCvar_t cg_drawTeamOverlay;
 extern vmCvar_t cg_crosshairX;
 extern vmCvar_t cg_crosshairY;
 extern vmCvar_t cg_crosshairSize;
@@ -1777,15 +1776,8 @@ extern vmCvar_t cg_tracerSpeed;
 extern vmCvar_t cg_autoswitch;
 extern vmCvar_t cg_ignore;
 extern vmCvar_t cg_fov;
-extern vmCvar_t cg_zoomFov;
-extern vmCvar_t cg_zoomDefaultBinoc;
 extern vmCvar_t cg_zoomDefaultSniper;
-extern vmCvar_t cg_zoomDefaultFG;
-extern vmCvar_t cg_zoomDefaultSnooper;
-extern vmCvar_t cg_zoomStepBinoc;
 extern vmCvar_t cg_zoomStepSniper;
-extern vmCvar_t cg_zoomStepSnooper;
-extern vmCvar_t cg_zoomStepFG;
 extern vmCvar_t cg_thirdPersonRange;
 extern vmCvar_t cg_thirdPersonAngle;
 extern vmCvar_t cg_thirdPerson;
@@ -1794,42 +1786,30 @@ extern vmCvar_t cg_lagometer;
 extern vmCvar_t cg_teamChatTime;
 extern vmCvar_t cg_teamChatHeight;
 extern vmCvar_t cg_stats;
-extern vmCvar_t cg_forceModel;
 extern vmCvar_t cg_coronafardist;
 extern vmCvar_t cg_coronas;
 extern vmCvar_t cg_buildScript;
 extern vmCvar_t cg_paused;
 extern vmCvar_t cg_predictItems;
-extern vmCvar_t cg_deferPlayers;
 extern vmCvar_t cg_teamChatsOnly;
 extern vmCvar_t cg_noVoiceChats;                    // NERVE - SMF
 extern vmCvar_t cg_noVoiceText;                     // NERVE - SMF
 extern vmCvar_t cg_enableBreath;
 extern vmCvar_t cg_autoactivate;
-extern vmCvar_t cg_smoothClients;
 extern vmCvar_t pmove_fixed;
 extern vmCvar_t pmove_msec;
-
-extern vmCvar_t cg_cameraOrbit;
-extern vmCvar_t cg_cameraOrbitDelay;
-extern vmCvar_t cg_timescaleFadeEnd;
-extern vmCvar_t cg_timescaleFadeSpeed;
 extern vmCvar_t cg_timescale;
-extern vmCvar_t cg_cameraMode;
 extern vmCvar_t cg_smallFont;
 extern vmCvar_t cg_bigFont;
 extern vmCvar_t cg_noTaunt;             // NERVE - SMF
 extern vmCvar_t cg_voiceSpriteTime;             // DHM - Nerve
-extern vmCvar_t cg_blinktime;           //----(SA)	added
 // Rafael - particle switch
 extern vmCvar_t cg_wolfparticles;
 // done
 extern vmCvar_t cg_norender;
 extern vmCvar_t cg_skybox;
-extern vmCvar_t cg_animState;
 extern vmCvar_t cg_drawNotifyText;
 extern vmCvar_t cg_quickMessageAlt;
-extern vmCvar_t cg_popupLimboMenu;
 extern vmCvar_t cg_descriptiveText;
 extern vmCvar_t cg_antilag;
 extern vmCvar_t developer;
@@ -1843,16 +1823,12 @@ extern vmCvar_t cg_crosshairAlphaAlt;
 extern vmCvar_t cg_crosshairColor;
 extern vmCvar_t cg_crosshairColorAlt;
 extern vmCvar_t cg_crosshairPulse;
-extern vmCvar_t cg_drawReinforcementTime;
 extern vmCvar_t cg_drawWeaponIconFlash;
-extern vmCvar_t cg_muzzleFlash;
 extern vmCvar_t cg_noAmmoAutoSwitch;
 extern vmCvar_t cg_printObjectiveInfo;
 extern vmCvar_t cg_specHelp;
-extern vmCvar_t cg_specSwing;
 extern vmCvar_t cg_uinfo;
 extern vmCvar_t cg_useScreenshotJPEG;
-extern vmCvar_t ch_font;
 extern vmCvar_t demo_avifpsF1;
 extern vmCvar_t demo_avifpsF2;
 extern vmCvar_t demo_avifpsF3;
@@ -1864,9 +1840,6 @@ extern vmCvar_t demo_infoWindow;
 // engine mappings
 extern vmCvar_t int_cl_maxpackets;
 extern vmCvar_t int_cl_timenudge;
-extern vmCvar_t int_m_pitch;
-extern vmCvar_t int_sensitivity;
-extern vmCvar_t int_ui_blackout;
 // -OSP
 
 extern vmCvar_t cg_rconPassword;
@@ -1876,9 +1849,6 @@ extern vmCvar_t cg_atmosphericEffects;
 extern vmCvar_t cg_debugSkills;
 extern vmCvar_t cg_drawFireteamOverlay;
 extern vmCvar_t cg_drawSmallPopupIcons;
-
-// Gordon: some optimization cvars
-extern vmCvar_t cg_fastSolids;
 
 // bani - demo recording cvars
 extern vmCvar_t cl_demorecording;

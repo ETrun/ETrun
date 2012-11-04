@@ -317,16 +317,8 @@ static float CG_DrawFPS(float y) {
 	return y + 12 + 4;
 }
 
-/*
-=================
-CG_DrawTeamOverlay
-=================
-*/
-
+// Nico, #fixme, is this global needed?
 int maxCharsBeforeOverlay;
-
-#define TEAM_OVERLAY_MAXNAME_WIDTH  16
-#define TEAM_OVERLAY_MAXLOCATION_WIDTH  20
 
 /*
 =====================

@@ -174,15 +174,8 @@ vmCvar_t cg_tracerSpeed;
 vmCvar_t cg_autoswitch;
 vmCvar_t cg_ignore;
 vmCvar_t cg_fov;
-vmCvar_t cg_zoomFov;
-vmCvar_t cg_zoomStepBinoc;
 vmCvar_t cg_zoomStepSniper;
-vmCvar_t cg_zoomStepSnooper;
-vmCvar_t cg_zoomStepFG;         //----(SA)	added
-vmCvar_t cg_zoomDefaultBinoc;
 vmCvar_t cg_zoomDefaultSniper;
-vmCvar_t cg_zoomDefaultSnooper;
-vmCvar_t cg_zoomDefaultFG;      //----(SA)	added
 vmCvar_t cg_thirdPerson;
 vmCvar_t cg_thirdPersonRange;
 vmCvar_t cg_thirdPersonAngle;
@@ -196,12 +189,8 @@ vmCvar_t cg_coronafardist;
 vmCvar_t cg_coronas;
 vmCvar_t cg_paused;
 vmCvar_t cg_predictItems;
-vmCvar_t cg_deferPlayers;
-vmCvar_t cg_drawTeamOverlay;
 vmCvar_t cg_enableBreath;
 vmCvar_t cg_autoactivate;
-vmCvar_t cg_blinktime;      //----(SA)	added
-vmCvar_t cg_smoothClients;
 vmCvar_t pmove_fixed;
 vmCvar_t pmove_msec;
 vmCvar_t cg_wolfparticles;
@@ -211,20 +200,13 @@ vmCvar_t cg_message;
 vmCvar_t cg_messageType;
 vmCvar_t cg_messagePlayer;
 vmCvar_t cg_messagePlayerName;
-vmCvar_t cg_cameraMode;
-vmCvar_t cg_cameraOrbit;
-vmCvar_t cg_cameraOrbitDelay;
-vmCvar_t cg_timescaleFadeEnd;
-vmCvar_t cg_timescaleFadeSpeed;
 vmCvar_t cg_timescale;
 vmCvar_t cg_smallFont;
 vmCvar_t cg_bigFont;
 vmCvar_t cg_noTaunt;                // NERVE - SMF
 vmCvar_t cg_voiceSpriteTime;    // DHM - Nerve
-vmCvar_t cg_animState;
 vmCvar_t cg_drawNotifyText;
 vmCvar_t cg_quickMessageAlt;
-vmCvar_t cg_popupLimboMenu;
 vmCvar_t cg_descriptiveText;
 vmCvar_t cg_antilag;
 vmCvar_t developer;
@@ -236,14 +218,12 @@ vmCvar_t cg_crosshairAlphaAlt;
 vmCvar_t cg_crosshairColor;
 vmCvar_t cg_crosshairColorAlt;
 vmCvar_t cg_crosshairPulse;
-vmCvar_t cg_drawReinforcementTime;
 vmCvar_t cg_drawWeaponIconFlash;
 vmCvar_t cg_noAmmoAutoSwitch;
 vmCvar_t cg_printObjectiveInfo;
 vmCvar_t cg_specHelp;
 vmCvar_t cg_uinfo;
 vmCvar_t cg_useScreenshotJPEG;
-vmCvar_t ch_font;
 vmCvar_t demo_avifpsF1;
 vmCvar_t demo_avifpsF2;
 vmCvar_t demo_avifpsF3;
@@ -253,14 +233,10 @@ vmCvar_t demo_drawTimeScale;
 vmCvar_t demo_infoWindow;
 vmCvar_t int_cl_maxpackets;
 vmCvar_t int_cl_timenudge;
-vmCvar_t int_m_pitch;
-vmCvar_t int_sensitivity;
 vmCvar_t int_timescale;
-vmCvar_t int_ui_blackout;
 vmCvar_t cg_rconPassword;
 vmCvar_t cg_refereePassword;
 vmCvar_t cg_atmosphericEffects;
-vmCvar_t cg_fastSolids;
 vmCvar_t cg_debugSkills;
 vmCvar_t cg_drawFireteamOverlay;
 vmCvar_t cg_drawSmallPopupIcons;
@@ -372,15 +348,8 @@ cvarTable_t cvarTable[] =
 	{ &cg_drawGun,               "cg_drawGun",               "1",     CVAR_ARCHIVE,             0 },
 	{ &cg_gun_frame,             "cg_gun_frame",             "0",     CVAR_TEMP,                0 },
 	{ &cg_cursorHints,           "cg_cursorHints",           "1",     CVAR_ARCHIVE,             0 },
-	{ &cg_zoomFov,               "cg_zoomfov",               "22.5",  CVAR_ARCHIVE,             0 },
-	{ &cg_zoomDefaultBinoc,      "cg_zoomDefaultBinoc",      "22.5",  CVAR_ARCHIVE,             0 },
 	{ &cg_zoomDefaultSniper,     "cg_zoomDefaultSniper",     "20",    CVAR_ARCHIVE,             0 }, // JPW NERVE changed per atvi req
-	{ &cg_zoomDefaultSnooper,    "cg_zoomDefaultSnooper",    "40",    CVAR_ARCHIVE,             0 }, // JPW NERVE made temp
-	{ &cg_zoomDefaultFG,         "cg_zoomDefaultFG",         "55",    CVAR_ARCHIVE,             0 }, //----(SA)	added // JPW NERVE made temp
-	{ &cg_zoomStepBinoc,         "cg_zoomStepBinoc",         "3",     CVAR_ARCHIVE,             0 },
 	{ &cg_zoomStepSniper,        "cg_zoomStepSniper",        "2",     CVAR_ARCHIVE,             0 },
-	{ &cg_zoomStepSnooper,       "cg_zoomStepSnooper",       "5",     CVAR_ARCHIVE,             0 },
-	{ &cg_zoomStepFG,            "cg_zoomStepFG",            "10",    CVAR_ARCHIVE,             0 }, //----(SA)	added
 	{ &cg_fov,                   "cg_fov",                   "90",    CVAR_ARCHIVE,             0 },
 	{ &cg_letterbox,             "cg_letterbox",             "0",     CVAR_TEMP,                0 }, //----(SA)	added
 	{ &cg_stereoSeparation,      "cg_stereoSeparation",      "0.4",   CVAR_ARCHIVE,             0 },
@@ -451,18 +420,10 @@ cvarTable_t cvarTable[] =
 	{ &cg_coronafardist,         "cg_coronafardist",         "1536",  CVAR_ARCHIVE,             0 },
 	{ &cg_coronas,               "cg_coronas",               "1",     CVAR_ARCHIVE,             0 },
 	{ &cg_predictItems,          "cg_predictItems",          "1",     CVAR_ARCHIVE,             0 },
-	{ &cg_deferPlayers,          "cg_deferPlayers",          "1",     CVAR_ARCHIVE,             0 },
-	{ &cg_drawTeamOverlay,       "cg_drawTeamOverlay",       "2",     CVAR_ARCHIVE,             0 },
 	{ &cg_stats,                 "cg_stats",                 "0",     0,                        0 },
-	{ &cg_blinktime,             "cg_blinktime",             "100",   CVAR_ARCHIVE,             0 }, //----(SA)	added
 
 	{ &cg_enableBreath,          "cg_enableBreath",          "1",     CVAR_SERVERINFO,          0 },
-	{ &cg_cameraOrbit,           "cg_cameraOrbit",           "0",     CVAR_CHEAT,               0 },
-	{ &cg_cameraOrbitDelay,      "cg_cameraOrbitDelay",      "50",    CVAR_ARCHIVE,             0 },
-	{ &cg_timescaleFadeEnd,      "cg_timescaleFadeEnd",      "1",     0,                        0 },
-	{ &cg_timescaleFadeSpeed,    "cg_timescaleFadeSpeed",    "0",     0,                        0 },
 	{ &cg_timescale,             "timescale",                "1",     0,                        0 },
-	{ &cg_cameraMode,            "com_cameraMode",           "0",     CVAR_CHEAT,               0 },
 
 	{ &pmove_fixed,              "pmove_fixed",              "1",     0,                        0 },
 	{ &pmove_msec,               "pmove_msec",               "8",     CVAR_CHEAT,               0 },
@@ -487,11 +448,8 @@ cvarTable_t cvarTable[] =
 
 	{ &cg_norender,              "cg_norender",              "0",     0,                        0 }, // only used during single player, to suppress rendering until the server is ready
 
-	{ &cg_animState,             "cg_animState",             "0",     CVAR_CHEAT,               0 },
-
 	{ &cg_drawNotifyText,        "cg_drawNotifyText",        "1",     CVAR_ARCHIVE,             0 },
 	{ &cg_quickMessageAlt,       "cg_quickMessageAlt",       "0",     CVAR_ARCHIVE,             0 },
-	{ &cg_popupLimboMenu,        "cg_popupLimboMenu",        "1",     CVAR_ARCHIVE,             0 },
 	{ &cg_descriptiveText,       "cg_descriptiveText",       "1",     CVAR_ARCHIVE,             0 },
 	{ &cg_antilag,               "g_antilag",                "1",     0,                        0 },
 	{ &developer,                "developer",                "0",     CVAR_CHEAT,               0 },
@@ -504,7 +462,6 @@ cvarTable_t cvarTable[] =
 	{ &cg_crosshairColor,        "cg_crosshairColor",        "White", CVAR_ARCHIVE,             0 },
 	{ &cg_crosshairColorAlt,     "cg_crosshairColorAlt",     "White", CVAR_ARCHIVE,             0 },
 	{ &cg_crosshairPulse,        "cg_crosshairPulse",        "1",     CVAR_ARCHIVE,             0 },
-	{ &cg_drawReinforcementTime, "cg_drawReinforcementTime", "1",     CVAR_ARCHIVE,             0 },
 	{ &cg_drawWeaponIconFlash,   "cg_drawWeaponIconFlash",   "0",     CVAR_ARCHIVE,             0 },
 	{ &cg_noAmmoAutoSwitch,      "cg_noAmmoAutoSwitch",      "1",     CVAR_ARCHIVE,             0 },
 	{ &cg_printObjectiveInfo,    "cg_printObjectiveInfo",    "1",     CVAR_ARCHIVE,             0 },
@@ -523,9 +480,6 @@ cvarTable_t cvarTable[] =
 	// Engine mappings
 	{ &int_cl_maxpackets,        "cl_maxpackets",            "30",    CVAR_ARCHIVE,             0 },
 	{ &int_cl_timenudge,         "cl_timenudge",             "0",     CVAR_ARCHIVE,             0 },
-	{ &int_m_pitch,              "m_pitch",                  "0.022", CVAR_ARCHIVE,             0 },
-	{ &int_sensitivity,          "sensitivity",              "5",     CVAR_ARCHIVE,             0 },
-	{ &int_ui_blackout,          "ui_blackout",              "0",     CVAR_ROM,                 0 },
 	// -OSP
 
 	{ &cg_atmosphericEffects,    "cg_atmosphericEffects",    "1",     CVAR_ARCHIVE,             0 },
@@ -533,9 +487,6 @@ cvarTable_t cvarTable[] =
 
 	{ &cg_rconPassword,          "auth_rconPassword",        "",      CVAR_TEMP,                0 },
 	{ &cg_refereePassword,       "auth_refereePassword",     "",      CVAR_TEMP,                0 },
-
-	// Gordon: optimization cvars: 18/12/02 enabled by default now
-	{ &cg_fastSolids,            "cg_fastSolids",            "1",     CVAR_ARCHIVE,             0 },
 
 	{ &cg_debugSkills,           "cg_debugSkills",           "0",     0,                        0 },
 	{ NULL,                      "cg_etVersion",             "",      CVAR_USERINFO | CVAR_ROM, 0 },
