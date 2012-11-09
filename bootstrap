@@ -126,9 +126,13 @@ if [ $? != 0 ]; then
   exit
 fi
 
-strip -x src/cgame/.libs/libcgame.dylib
-strip -x src/game/.libs/libgame.dylib
-strip -x src/ui/.libs/libui.dylib
+# Strip if debug mode is OFF
+if [ $debug -eq 0 ]; then
+  strip -x src/cgame/.libs/libcgame.dylib
+  strip -x src/game/.libs/libgame.dylib
+  strip -x src/ui/.libs/libui.dylib
+fi
+
 mv src/cgame/.libs/libcgame.dylib $BUILD_DIR/$CGAME_LIB
 mv src/game/.libs/libgame.dylib $BUILD_DIR/$QAGAME_LIB
 mv src/ui/.libs/libui.dylib $BUILD_DIR/$UI_LIB
@@ -187,9 +191,13 @@ if [ $? != 0 ]; then
   exit
 fi
 
-strip -s src/cgame/.libs/libcgame.so
-strip -s src/game/.libs/libgame.so
-strip -s src/ui/.libs/libui.so
+# Strip if debug mode is OFF
+if [ $debug -eq 0 ]; then
+  strip -s src/cgame/.libs/libcgame.so
+  strip -s src/game/.libs/libgame.so
+  strip -s src/ui/.libs/libui.so
+fi
+
 mv src/cgame/.libs/libcgame.so $BUILD_DIR/cgame.mp.i386.so
 mv src/game/.libs/libgame.so $BUILD_DIR/qagame.mp.i386.so
 mv src/ui/.libs/libui.so $BUILD_DIR/ui.mp.i386.so' > linux_compile.sh
@@ -338,10 +346,14 @@ if [ $? != 0 ]; then
   exit
 fi
 
-strip -x src/cgame/.libs/libcgame.dylib
-strip -x src/game/.libs/libgame.dylib
-strip -x src/ui/.libs/libui.dylib
-strip -x src/APImodule/.libs/libapi.dylib
+# Strip if debug mode is OFF
+if [ $debug -eq 0 ]; then
+  strip -x src/cgame/.libs/libcgame.dylib
+  strip -x src/game/.libs/libgame.dylib
+  strip -x src/ui/.libs/libui.dylib
+  strip -x src/APImodule/.libs/libapi.dylib
+fi
+
 mv src/cgame/.libs/libcgame.dylib $BUILD_DIR/$CGAME_LIB
 mv src/game/.libs/libgame.dylib $BUILD_DIR/$QAGAME_LIB
 mv src/ui/.libs/libui.dylib $BUILD_DIR/$UI_LIB
@@ -444,10 +456,14 @@ if [ $? != 0 ]; then
   exit
 fi
 
-strip -s src/cgame/.libs/libcgame.so
-strip -s src/game/.libs/libgame.so
-strip -s src/ui/.libs/libui.so
-strip -s src/APImodule/.libs/libapi.so
+# Strip if debug mode is OFF
+if [ $debug -eq 0 ]; then
+  strip -s src/cgame/.libs/libcgame.so
+  strip -s src/game/.libs/libgame.so
+  strip -s src/ui/.libs/libui.so
+  strip -s src/APImodule/.libs/libapi.so
+fi
+
 mv src/cgame/.libs/libcgame.so $BUILD_DIR/cgame.mp.i386.so
 mv src/game/.libs/libgame.so $BUILD_DIR/qagame.mp.i386.so
 mv src/ui/.libs/libui.so $BUILD_DIR/ui.mp.i386.so
