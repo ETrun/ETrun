@@ -1874,6 +1874,9 @@ static void CG_RegisterGraphics(void) {
 	// Nico, load CGaz arrow
 	cgs.media.CGazArrow = trap_R_RegisterShaderNoMip("gfx/2d/cgaz_arrow");
 
+	// Nico, ETrun logo
+	cgs.media.modLogo = trap_R_RegisterShaderNoMip("gfx/2d/ETrun_logo_256");
+
 	CG_LoadingString(" - game media done");
 }
 

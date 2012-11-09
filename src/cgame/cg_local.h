@@ -1500,6 +1500,9 @@ typedef struct {
 
 	// Nico, CGaz arrow
 	qhandle_t CGazArrow;
+
+	// Nico, ETrun logo
+	qhandle_t modLogo;
 } cgMedia_t;
 
 typedef struct {

@@ -100,26 +100,20 @@ static char *WM_ETrun_coloredPing(int ping) {
  *
  * @author Nico
  */
+#define MOD_LOGO_SIZE	128
 static void WM_ETrun_DrawHeader(int *y, fontInfo_t *font) {
 	const char *s;
 
 	// ETrun x.x
-	s = GAME_VERSION_COLORED " " MOD_VERSION_COLORED " " MOD_STATUS_COLORED;
-	WM_ETrun_center_print(s, font, 0.3f, *y, qtrue);
+	CG_DrawPic(SCREEN_WIDTH / 2 - MOD_LOGO_SIZE / 2, *y - MOD_LOGO_SIZE / 2, MOD_LOGO_SIZE, MOD_LOGO_SIZE, cgs.media.modLogo);
 
-	WM_ETrun_newlines(2, y, SMALLCHAR_HEIGHT);
+	WM_ETrun_newlines(4, y, SMALLCHAR_HEIGHT);
 
 	// Map
 	s = va("%s", CG_TranslateString(va("Map: ^w%s", cgs.rawmapname)));
 	WM_ETrun_center_print(s, font, 0.25f, *y, qtrue);
 
-	WM_ETrun_newlines(2, y, SMALLCHAR_HEIGHT);
-
-	// www.timeruns.net
-	s = SHORT_MOD_URL;
-	WM_ETrun_center_print(s, font, 0.25f, *y, qtrue);
-
-	WM_ETrun_newlines(2, y, SMALLCHAR_HEIGHT);
+	WM_ETrun_newlines(3, y, SMALLCHAR_HEIGHT);
 }
 
 /* New ETrun draw players function
@@ -473,6 +467,9 @@ qboolean CG_DrawScoreboard(void) {
 	}
 
 	WM_ETrun_print(va("Physics: %s", physicsName), &cgs.media.limboFont2, 0.15, 540, 20, qtrue, 0);
+
+	// Nico, print mod version
+	WM_ETrun_print(va("Version: %s %s", MOD_VERSION, MOD_STATUS), &cgs.media.limboFont2, 0.15, 540, 30, qtrue, 0);
 
 	// Nico, draw scoreboard header
 	y = 30; // Start drawing from y = 30
