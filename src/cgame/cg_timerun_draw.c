@@ -820,7 +820,6 @@ void CG_DrawBannerPrint(void) {
 void CG_DrawInfoPanel(void) {
 	int    x            = 0;
 	int    y            = 0;
-	int    startx       = 0;
 	int    starty       = 0;
 	vec4_t panelBgColor = { 0.f, 0.f, 0.f, .5f };
 	vec4_t textColor    = { 1.0f, 1.0f, 1.0f, 0.8f };
@@ -876,7 +875,6 @@ void CG_DrawInfoPanel(void) {
 	CG_Text_Paint_Ext(x + INFO_PANEL_X_PADDING, y, textScale, textScale, textColor, va("%d", cg.timerunJumpCounter), 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
 
 	// Print jump speeds
-	startx = x;
 	starty = y;
 	for (i = 0; i < cg.timerunJumpCounter && i < INFO_PANEL_MAX_COLUMNS * INFO_PANEL_MAX_JUMPS_PER_COLUMN; ++i) {
 		if (i > 0 && i % INFO_PANEL_MAX_JUMPS_PER_COLUMN == 0) {
