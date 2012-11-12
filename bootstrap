@@ -39,7 +39,7 @@ AC_CONFIG_AUX_DIR([build-aux])
 
 AC_CONFIG_MACRO_DIR([m4])
 
-AM_INIT_AUTOMAKE([ETrun], [1.0])
+AM_INIT_AUTOMAKE
 
 # Init libtool and disable static library creation
 LT_INIT(disable-static)
@@ -214,7 +214,7 @@ AC_CONFIG_AUX_DIR([build-aux])
 
 AC_CONFIG_MACRO_DIR([m4])
 
-AM_INIT_AUTOMAKE([ETrun], [1.0])
+AM_INIT_AUTOMAKE
 
 # Init libtool and disable static library creation
 LT_INIT(disable-static)
@@ -286,7 +286,7 @@ done
 
 # Build libcurl & c-ares
 if [ $build_curl -eq 1 ]; then
-  cd src/libs/c-ares
+  cd libs/c-ares
   ./buildconf && ./configure CFLAGS="-m32" --disable-shared && make && make install
   cd ../curl
   ./buildconf && ./configure CFLAGS="-m32" --without-ssl \
@@ -315,11 +315,11 @@ if [ $build_curl -eq 1 ]; then
   --disable-gopher && make
 
   if [ $? != 0 ]; then
-    cd ../../..
+    cd ../..
     exit
   fi
 
-  cd ../../..
+  cd ../..
 fi
 
 # Clean
@@ -400,7 +400,7 @@ done
 
 # Build libcurl & c-ares
 if [ $build_curl -eq 1 ]; then
-  cd src/libs/c-ares
+  cd libs/c-ares
   ./buildconf && ./configure --prefix="$HOME/c-ares" --disable-shared && make && make install
   cd ../curl
   ./buildconf && ./configure --without-ssl \
@@ -429,11 +429,11 @@ if [ $build_curl -eq 1 ]; then
   --disable-gopher && make
 
   if [ $? != 0 ]; then
-    cd ../../..
+    cd ../..
     exit
   fi
 
-  cd ../../..
+  cd ../..
 fi
 
 # Clean ETrun

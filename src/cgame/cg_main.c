@@ -35,7 +35,7 @@ If you have questions concerning this license or the applicable additional terms
 
 
 #include "cg_local.h"
-#include "../libs/sha-1/sha1.h"
+#include "../../libs/sha-1/sha1.h"
 
 displayContextDef_t cgDC;
 

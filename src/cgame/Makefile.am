@@ -8,7 +8,7 @@ libcgame_la_LDFLAGS = -avoid-version
 
 # Source files
 libcgame_la_SOURCES = \
-../libs/sha-1/sha1.c \
+../../libs/sha-1/sha1.c \
 ../game/bg_animation.c \
 ../game/bg_animgroup.c \
 ../game/bg_character.c \
