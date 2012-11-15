@@ -3,3 +3,12 @@
 *.lastbuildstate
 *.pdb
 *.res
+
+*.opensdf
+*.sdf
+*.suo
+*.filters
+*.user
+Release/
+Debug/
+*.idb

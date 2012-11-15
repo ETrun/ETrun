@@ -37,6 +37,8 @@ ipch/
 *.opensdf
 *.ncb
 *.suo
+*.user
+*.filters
 
 # Xcode related
 src/*.xcodeproj/project.xcworkspace
