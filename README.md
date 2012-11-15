@@ -20,6 +20,8 @@ Key features
 * New scoreboard
 * No overbounce mode
 * Slick control
+* Introduced [ETrun client commands](https://github.com/boutetnico/ETrun/wiki/ETrun-client-commands)
+* more... ([ChangeLog](https://github.com/boutetnico/ETrun/wiki/ChangeLog))
 
 Credits
 -------
@@ -47,7 +49,14 @@ On *OSX*, make sure to have:
 
 You can install them via [homebrew](http://mxcl.github.com/homebrew).
 
-Then, run the bootstrap script:
+Then, you have to get ETrun submodules:
+
+<pre>
+$ git submodule init
+$ git submodule update
+</pre>
+
+Finally, run the bootstrap script:
 
 <pre>
 $ ./bootstrap
