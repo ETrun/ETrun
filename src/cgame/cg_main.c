@@ -580,8 +580,8 @@ cvarTable_t cvarTable[] =
 
 	// Info panel
 	{ &cg_drawInfoPanel,        "cg_drawInfoPanel",        "1",     CVAR_ARCHIVE,             0 },
-	{ &cg_infoPanelX,           "cg_infoPanelX",           "535",   CVAR_ARCHIVE,             0 },
-	{ &cg_infoPanelY,           "cg_infoPanelY",           "20",    CVAR_ARCHIVE,             0 }
+	{ &cg_infoPanelX,           "cg_infoPanelX",           "537",   CVAR_ARCHIVE,             0 },
+	{ &cg_infoPanelY,           "cg_infoPanelY",           "2",    CVAR_ARCHIVE,             0 }
 
 	// Nico, end of ETrun cvars
 };

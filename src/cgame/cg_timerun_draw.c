@@ -709,7 +709,7 @@ void CG_DrawKeys(void) {
  *
  * @author Nico
  */
-void CG_DrawClock(float x, float y, qboolean shadowed) {
+void CG_DrawClock(float x, float y, float scale, qboolean shadowed) {
 	char    displayTime[18] = { 0 };
 	qtime_t tm;
 	vec4_t  clr = { 1.0f, 1.0f, 1.0f, 0.8f };
@@ -727,9 +727,9 @@ void CG_DrawClock(float x, float y, qboolean shadowed) {
 	         (tm.tm_hour < 12) ? " am" : " pm");
 
 	if (shadowed == qtrue) {
-		CG_Text_Paint_Ext(x, y, 0.15, 0.15, clr, displayTime, 0, 24, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont2);
+		CG_Text_Paint_Ext(x, y, scale, scale, clr, displayTime, 0, 24, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
 	} else {
-		CG_Text_Paint_Ext(x, y, 0.15, 0.15, clr, displayTime, 0, 24, 0, &cgs.media.limboFont2);
+		CG_Text_Paint_Ext(x, y, scale, scale, clr, displayTime, 0, 24, 0, &cgs.media.limboFont1);
 	}
 }
 
@@ -813,7 +813,7 @@ void CG_DrawBannerPrint(void) {
  * @author Nico
  */
 #define INFO_PANEL_WIDTH                    100
-#define INFO_PANEL_HEIGHT                   150
+#define INFO_PANEL_HEIGHT                   145
 #define INFO_PANEL_X_PADDING                82
 #define INFO_PANEL_MAX_COLUMNS              5 // Nico, INFO_PANEL_MAX_COLUMNS * INFO_PANEL_MAX_JUMPS_PER_COLUMN must
 #define INFO_PANEL_MAX_JUMPS_PER_COLUMN     9 // stay < size of cg.timerunJumpSpeeds array

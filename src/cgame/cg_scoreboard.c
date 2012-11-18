@@ -334,6 +334,57 @@ static void WM_ETrun_DrawSpectators(int *x, int *y, fontInfo_t *font, s_timerunS
 	}
 }
 
+/* ETrun draw scoreboard info like clock, physics and mod version
+ *
+ * @author Nico
+ */
+#define SB_INFO_X		550
+#define SB_INFO_Y		9
+static void WM_ETrun_DrawInfo() {
+	int x = SB_INFO_X;
+	int y = SB_INFO_Y;
+	char physicsName[MAX_QPATH] = { 0 };
+	float textScale = 0.12;
+
+	// Nico, draw time
+	CG_DrawClock(x, y, textScale, qtrue);
+
+	// Nico, draw physics
+	// #todo: move this elsewhere
+	switch (physics.integer) {
+	case PHYSICS_MODE_AP_OB:
+		sprintf(physicsName, "AP (with OB)");
+		break;
+
+	case PHYSICS_MODE_AP_NO_OB:
+		sprintf(physicsName, "AP (no OB)");
+		break;
+
+	case PHYSICS_MODE_VQ3_OB:
+		sprintf(physicsName, "VQ3 (with OB)");
+		break;
+
+	case PHYSICS_MODE_VQ3_NO_OB:
+		sprintf(physicsName, "VQ3 (no OB)");
+		break;
+
+	case PHYSICS_MODE_VET:
+		sprintf(physicsName, "VET");
+		break;
+
+	default:
+		sprintf(physicsName, "^1Unknown!");
+		break;
+	}
+
+	y += 10;
+	WM_ETrun_print(va("Physics: %s", physicsName), &cgs.media.limboFont1, textScale, x, y, qtrue, 0);
+
+	y += 10;
+	// Nico, print mod version
+	WM_ETrun_print(va("Version: %s %s", MOD_VERSION, MOD_STATUS), &cgs.media.limboFont1, textScale, x, y, qtrue, 0);
+}
+
 /*
 =================
 CG_DrawScoreboard
@@ -352,7 +403,6 @@ qboolean CG_DrawScoreboard(void) {
 	int             yCopy              = 0;
 	int             numScores          = cg.numScores;
 	int             teamPlayers[TEAM_NUM_TEAMS];
-	char            physicsName[MAX_QPATH] = { 0 };
 
 	// don't draw anything if the menu or console is up
 	if (cg_paused.integer) {
@@ -435,41 +485,8 @@ qboolean CG_DrawScoreboard(void) {
 		teamPlayers[orderedScores[i].team]++;
 	}
 
-	// Nico, draw time
-	CG_DrawClock(540, 10, qtrue);
-
-	// Nico, draw physics
-	// #todo: move this elsewhere
-	switch (physics.integer) {
-	case PHYSICS_MODE_AP_OB:
-		sprintf(physicsName, "AP (with OB)");
-		break;
-
-	case PHYSICS_MODE_AP_NO_OB:
-		sprintf(physicsName, "AP (no OB)");
-		break;
-
-	case PHYSICS_MODE_VQ3_OB:
-		sprintf(physicsName, "VQ3 (with OB)");
-		break;
-
-	case PHYSICS_MODE_VQ3_NO_OB:
-		sprintf(physicsName, "VQ3 (no OB)");
-		break;
-
-	case PHYSICS_MODE_VET:
-		sprintf(physicsName, "VET");
-		break;
-
-	default:
-		sprintf(physicsName, "^1Unknown!");
-		break;
-	}
-
-	WM_ETrun_print(va("Physics: %s", physicsName), &cgs.media.limboFont2, 0.15, 540, 20, qtrue, 0);
-
-	// Nico, print mod version
-	WM_ETrun_print(va("Version: %s %s", MOD_VERSION, MOD_STATUS), &cgs.media.limboFont2, 0.15, 540, 30, qtrue, 0);
+	// Nico, draw info like mod version, clock and physics
+	WM_ETrun_DrawInfo();
 
 	// Nico, draw scoreboard header
 	y = 30; // Start drawing from y = 30

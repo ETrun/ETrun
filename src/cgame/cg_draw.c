@@ -2357,6 +2357,7 @@ void CG_DrawDemoRecording(void) {
 
 	Com_sprintf(status, sizeof (status), "recording%s%s", demostatus, wavestatus);
 
+	// Nico, add recording red dot
 	CG_Text_Paint_Ext(0, cg_recording_statusline.integer, 0.5f, 0.5f, clrUiRed, ".", 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont2);
 	CG_Text_Paint_Ext(14, cg_recording_statusline.integer, 0.15f, 0.15f, clrUiWhite, status, 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont2);
 }

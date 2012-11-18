@@ -1822,41 +1822,42 @@ static void CG_ServerCommand(void) {
 	// Nico, pmove_fixed
 	if (!Q_stricmp(cmd, "pmoveon")) {
 		trap_SendConsoleCommand("set pmove_fixed 1\n");
-		CG_AddPMItem(PM_MESSAGE, "pmove_fixed has been set to 1\n", cgs.media.voiceChatShader);
+		CG_AddPMItem(PM_MESSAGE, va("%s^w: pmove_fixed has been set to 1\n", GAME_VERSION_COLORED), cgs.media.voiceChatShader);
 		return;
 	}
 
 	// Nico, force max FPS
 	if (!Q_stricmp(cmd, "resetMaxFPS")) {
 		trap_SendConsoleCommand("set com_maxfps 125\n");
-		CG_AddPMItem(PM_MESSAGE, "com_maxfps has been set to 125\n", cgs.media.voiceChatShader);
+		CG_AddPMItem(PM_MESSAGE, va("%s^w: com_maxfps has been set to 125\n", GAME_VERSION_COLORED), cgs.media.voiceChatShader);
 		return;
 	}
 
 	// Nico, force auto demo record
 	if (!Q_stricmp(cmd, "autoDemoOn")) {
 		trap_SendConsoleCommand("set cg_autoDemo 1\n");
-		CG_AddPMItem(PM_MESSAGE, "cg_autoDemo has been set to 1\n", cgs.media.voiceChatShader);
+		CG_AddPMItem(PM_MESSAGE, va("%s^w: cg_autoDemo has been set to 1\n", GAME_VERSION_COLORED), cgs.media.voiceChatShader);
 		return;
 	}
 
 	// Nico, force hideMe ON
 	if (!Q_stricmp(cmd, "hideMeOn")) {
 		trap_SendConsoleCommand("set cg_hideMe 1\n");
-		CG_AddPMItem(PM_MESSAGE, "cg_hideMe has been set to 1\n", cgs.media.voiceChatShader);
+		CG_AddPMItem(PM_MESSAGE, va("%s^w: cg_hideMe has been set to 1\n", GAME_VERSION_COLORED), cgs.media.voiceChatShader);
 		return;
 	}
 
 	// Nico, force CGaz off
 	if (!Q_stricmp(cmd, "CGazOff")) {
 		trap_SendConsoleCommand("set cg_drawCGaz 0\n");
-		CG_AddPMItem(PM_MESSAGE, "cg_drawCGaz has been set to 0\n", cgs.media.voiceChatShader);
+		CG_AddPMItem(PM_MESSAGE, va("%s^w: cg_drawCGaz has been set to 0\n", GAME_VERSION_COLORED), cgs.media.voiceChatShader);
 		return;
 	}
 
 	// Nico, update specLock
 	if (!Q_stricmp(cmd, "updateSpecLockStatus")) {
 		trap_SendConsoleCommand(va("set cg_specLock %d\n", atoi(CG_Argv(1))));
+		CG_AddPMItem(PM_MESSAGE, va("%s^w: cg_specLock has been set to %d\n", GAME_VERSION_COLORED, atoi(CG_Argv(1))), cgs.media.voiceChatShader);
 		return;
 	}
 
