@@ -1610,6 +1610,7 @@ static void CG_DrawSpectatorMessage(void) {
 	const char *str, *str2;
 	float      y;
 	static int lastconfigGet = 0;
+	float textScale = 0.14;
 
 	if (!cg_descriptiveText.integer) {
 		return;
@@ -1634,11 +1635,13 @@ static void CG_DrawSpectatorMessage(void) {
 		str2 = "ESCAPE";
 	}
 	str = va(CG_TranslateString("Press %s to open Limbo Menu"), str2);
-	CG_DrawStringExt(8, 154, str, colorWhite, qtrue, qtrue, TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 0);
+	// Nico, better text drawing
+	CG_Text_Paint_Ext(8, 154, textScale, textScale, colorWhite, str, 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
 
 	str2 = BindingFromName("+attack");
 	str  = va(CG_TranslateString("Press %s to follow next player"), str2);
-	CG_DrawStringExt(8, 172, str, colorWhite, qtrue, qtrue, TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 0);
+	// Nico, better text drawing
+	CG_Text_Paint_Ext(8, 172, textScale, textScale, colorWhite, str, 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
 }
 
 #define INFOTEXT_STARTX 8
@@ -2359,7 +2362,7 @@ void CG_DrawDemoRecording(void) {
 
 	// Nico, add recording red dot
 	CG_Text_Paint_Ext(0, cg_recording_statusline.integer, 0.5f, 0.5f, clrUiRed, ".", 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont2);
-	CG_Text_Paint_Ext(14, cg_recording_statusline.integer, 0.15f, 0.15f, clrUiWhite, status, 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont2);
+	CG_Text_Paint_Ext(14, cg_recording_statusline.integer, 0.14f, 0.14f, clrUiWhite, status, 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
 }
 
 /*
@@ -2605,7 +2608,7 @@ static void CG_Autodemo() {
 		if (cg.runsave) {
 			if (!rs_keep) {
 				if (cg_autoDemo.integer == 1) {
-					CG_AddPMItem(PM_MESSAGE, va("%s^f:^g stopping and saving demo..\n", GAME_VERSION_COLORED), cgs.media.voiceChatShader);
+					CG_AddPMItem(PM_MESSAGE, va("%s^w: ^gstopping and saving demo..\n", GAME_VERSION_COLORED), cgs.media.voiceChatShader);
 				}
 				rs_time = cg.time;
 				rs_keep = 1;
