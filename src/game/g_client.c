@@ -788,30 +788,152 @@ void G_StartPlayerAppropriateSound(gentity_t *ent, char *soundType) {
 }
 
 // Nico, returns the IP is it's well-formed, NULL otherwise (from ETpub)
-const char *getParsedIp(const char *ipadd) {
-	// code by Dan Pop, http://bytes.com/forum/thread212174.html
+// @source: http://bytes.com/forum/thread212174.html
+qboolean getParsedIp(const char *ipadd, char *parsedIp) {
 	unsigned      b1, b2, b3, b4, port = 0;
 	unsigned char c;
 	int           rc;
-	static char   ipge[20];
 
 	if (!Q_strncmp(ipadd, "localhost", strlen("localhost"))) {
-		return "localhost";
+		return qtrue;
 	}
 
 	rc = sscanf(ipadd, "%3u.%3u.%3u.%3u:%u%c", &b1, &b2, &b3, &b4, &port, &c);
 	if (rc < 4 || rc > 5) {
-		return NULL;
+		return qfalse;
 	}
 	if ((b1 | b2 | b3 | b4) > 255 || port > 65535) {
-		return NULL;
+		return qfalse;
 	}
 	if (strspn(ipadd, "0123456789.:") < strlen(ipadd)) {
-		return NULL;
+		return qfalse;
 	}
-	sprintf(ipge, "%u.%u.%u.%u", b1, b2, b3, b4);
+	sprintf(parsedIp, "%u.%u.%u.%u", b1, b2, b3, b4);
 
-	return ipge;
+	return qtrue;
+}
+
+/**
+ * Validate userinfo string
+ * @autor: Nico
+ */
+static qboolean checkUserinfoString(int clientNum, char *userinfo) {
+	size_t len = 0;
+	int count = 0;
+	int i = 0;
+	char *ip   = NULL;
+	char parsedIp[MAX_QPATH] = {0};
+	char *name = NULL;
+
+	// check for malformed or illegal info strings
+	if (!Info_Validate(userinfo)) {
+		// Nico, drop the client
+		G_LogPrintf("Dropping client %d: forbidden character in userinfo\n", clientNum);
+		trap_DropClient(clientNum, "^1Forbidden character in userinfo", 0);
+		return qfalse;
+	}
+	// Nico, check userinfo length (from combinedfixes)
+	len = strlen(userinfo);
+	if (len > MAX_INFO_STRING - 44) {
+		G_LogPrintf("Dropping client %d: oversized userinfo\n", clientNum);
+		trap_DropClient(clientNum, "^1Oversized userinfo", 0);
+		return qfalse;
+	}
+
+	// Nico, check userinfo leading backslash (from combinedfixes)
+	if (userinfo[0] != '\\') {
+		G_LogPrintf("Dropping client %d: malformed userinfo (missing leading backslash)\n", clientNum);
+		trap_DropClient(clientNum, "^1Malformed userinfo", 0);
+		return qfalse;
+	}
+
+	// Nico, check userinfo trailing backslash (from combinedfixes)
+	if (len > 0 && userinfo[len - 1] == '\\') {
+		G_LogPrintf("Dropping client %d: malformed userinfo (trailing backslash)\n", clientNum);
+		trap_DropClient(clientNum, "^1Malformed userinfo", 0);
+		return qfalse;
+	}
+
+	// Nico, make sure backslah number is even (from combinedfixes)
+	for (i = 0; i < (int)len; ++i) {
+		if (userinfo[i] == '\\') {
+			count++;
+		}
+	}
+	if (count % 2 != 0) {
+		G_LogPrintf("Dropping client %d: malformed userinfo (odd number of backslash)\n", clientNum);
+		trap_DropClient(clientNum, "^1Malformed userinfo", 0);
+		return qfalse;
+	}
+
+	// Nico, make sure client ip is not empty or malformed (from combinedfixes)
+	ip = Info_ValueForKey(userinfo, "ip");
+	if (!strcmp(ip, "") || !getParsedIp(ip, parsedIp)) {
+		G_LogPrintf("Dropping client %d: malformed userinfo (empty or malformed ip)\n", clientNum);
+		trap_DropClient(clientNum, "^1Malformed userinfo", 0);
+		return qfalse;
+	}
+
+	// Nico, make sure client name is not empty (from combinedfixes)
+	name = Info_ValueForKey(userinfo, "name");
+	if (!strcmp(name, "")) {
+		G_LogPrintf("Dropping client %d: malformed userinfo (empty name)\n", clientNum);
+		trap_DropClient(clientNum, "^1Malformed userinfo", 0);
+		return qfalse;
+	}
+
+	// Nico, one ip in userinfo (from ETpub)
+	count = 0;
+	if (len > 4) {
+		for (i = 0; userinfo[i + 3]; ++i) {
+			if (userinfo[i] == '\\' && userinfo[i + 1] == 'i' &&
+			    userinfo[i + 2] == 'p' && userinfo[i + 3] == '\\') {
+				count++;
+			}
+		}
+	}
+	if (count > 1) {
+		G_LogPrintf("Dropping client %d: malformed userinfo (too many IP fields)\n", clientNum);
+		trap_DropClient(clientNum, "^1Malformed userinfo", 0);
+		return qfalse;
+	}
+
+	// Nico, one cl_guid in userinfo (from ETpub)
+	count = 0;
+	if (len > 9) {
+		for (i = 0; userinfo[i + 8]; ++i) {
+			if (userinfo[i] == '\\' && userinfo[i + 1] == 'c' &&
+			    userinfo[i + 2] == 'l' && userinfo[i + 3] == '_' &&
+			    userinfo[i + 4] == 'g' && userinfo[i + 5] == 'u' &&
+			    userinfo[i + 6] == 'i' && userinfo[i + 7] == 'd' &&
+			    userinfo[i + 8] == '\\') {
+				count++;
+			}
+		}
+	}
+	if (count > 1) {
+		G_LogPrintf("Dropping client %d: malformed userinfo (too many cl_guid fields)\n", clientNum);
+		trap_DropClient(clientNum, "^1Malformed userinfo", 0);
+		return qfalse;
+	}
+
+	// Nico, one name in userinfo (from ETpub)
+	count = 0;
+	if (len > 6) {
+		for (i = 0; userinfo[i + 5]; ++i) {
+			if (userinfo[i] == '\\' && userinfo[i + 1] == 'n' &&
+			    userinfo[i + 2] == 'a' && userinfo[i + 3] == 'm' &&
+			    userinfo[i + 4] == 'e' && userinfo[i + 5] == '\\') {
+				count++;
+			}
+		}
+	}
+	if (count > 1) {
+		G_LogPrintf("Dropping client %d: malformed userinfo (too many name fields)\n", clientNum);
+		trap_DropClient(clientNum, "^1Malformed userinfo", 0);
+		return qfalse;
+	}
+	return qtrue;
 }
 
 /*
@@ -831,9 +953,6 @@ void ClientUserinfoChanged(int clientNum) {
 	char      oldname[MAX_STRING_CHARS];
 	char      userinfo[MAX_INFO_STRING];
 	gclient_t *client;
-	size_t    len   = 0; // Nico, userinfo length
-	int       count = 0; // Nico, used in userinfo backslash count
-	int       i     = 0;
 	char      *ip   = NULL; // Nico, used to store client ip.
 	char      *name = NULL; // Nico, used to store client name
 	char      oldAuthToken[MAX_QPATH]; // Nico, used to see if auth token was changed
@@ -852,105 +971,9 @@ void ClientUserinfoChanged(int clientNum) {
 
 	trap_GetUserinfo(clientNum, userinfo, sizeof (userinfo));
 
-	// check for malformed or illegal info strings
-	if (!Info_Validate(userinfo)) {
-		// Nico, changing malformed user info is a nonsense, simply drop the client
-		// Q_strncpyz( userinfo, "\\name\\badinfo", sizeof( userinfo ) );
-		G_LogPrintf("Dropping client %d: forbidden character in userinfo\n", clientNum);
-		trap_DropClient(clientNum, "^1Forbidden character in userinfo", 0);
-	}
-
-	// Nico, check userinfo length (from combinedfixes)
-	len = strlen(userinfo);
-	if (len > MAX_INFO_STRING - 44) {
-		G_LogPrintf("Dropping client %d: oversized userinfo\n", clientNum);
-		trap_DropClient(clientNum, "^1Oversized userinfo", 0);
-	}
-
-	// Nico, check userinfo leading backslash (from combinedfixes)
-	if (userinfo[0] != '\\') {
-		G_LogPrintf("Dropping client %d: malformed userinfo (missing leading backslash)\n", clientNum);
-		trap_DropClient(clientNum, "^1Malformed userinfo", 0);
-	}
-
-	// Nico, check userinfo trailing backslash (from combinedfixes)
-	if (len > 0 && userinfo[len - 1] == '\\') {
-		G_LogPrintf("Dropping client %d: malformed userinfo (trailing backslash)\n", clientNum);
-		trap_DropClient(clientNum, "^1Malformed userinfo", 0);
-	}
-
-	// Nico, make sure backslah number is even (from combinedfixes)
-	for (i = 0; i < (int)len; ++i) {
-		if (userinfo[i] == '\\') {
-			count++;
-		}
-	}
-	if (count % 2 != 0) {
-		G_LogPrintf("Dropping client %d: malformed userinfo (odd number of backslash)\n", clientNum);
-		trap_DropClient(clientNum, "^1Malformed userinfo", 0);
-	}
-
-	// Nico, make sure client ip is not empty or malformed (from combinedfixes)
-	ip = Info_ValueForKey(userinfo, "ip");
-	if (!strcmp(ip, "") || getParsedIp(ip) == NULL) {
-		G_LogPrintf("Dropping client %d: malformed userinfo (empty or malformed ip)\n", clientNum);
-		trap_DropClient(clientNum, "^1Malformed userinfo", 0);
-	}
-
-	// Nico, make sure client name is not empty (from combinedfixes)
-	name = Info_ValueForKey(userinfo, "name");
-	if (!strcmp(name, "")) {
-		G_LogPrintf("Dropping client %d: malformed userinfo (empty name)\n", clientNum);
-		trap_DropClient(clientNum, "^1Malformed userinfo", 0);
-	}
-
-	// Nico, one ip in userinfo (from ETpub)
-	count = 0;
-	if (len > 4) {
-		for (i = 0; userinfo[i + 3]; ++i) {
-			if (userinfo[i] == '\\' && userinfo[i + 1] == 'i' &&
-			    userinfo[i + 2] == 'p' && userinfo[i + 3] == '\\') {
-				count++;
-			}
-		}
-	}
-	if (count > 1) {
-		G_LogPrintf("Dropping client %d: malformed userinfo (too many IP fields)\n", clientNum);
-		trap_DropClient(clientNum, "^1Malformed userinfo", 0);
-	}
-
-	// Nico, one cl_guid in userinfo (from ETpub)
-	count = 0;
-	if (len > 9) {
-		for (i = 0; userinfo[i + 8]; ++i) {
-			if (userinfo[i] == '\\' && userinfo[i + 1] == 'c' &&
-			    userinfo[i + 2] == 'l' && userinfo[i + 3] == '_' &&
-			    userinfo[i + 4] == 'g' && userinfo[i + 5] == 'u' &&
-			    userinfo[i + 6] == 'i' && userinfo[i + 7] == 'd' &&
-			    userinfo[i + 8] == '\\') {
-				count++;
-			}
-		}
-	}
-	if (count > 1) {
-		G_LogPrintf("Dropping client %d: malformed userinfo (too many cl_guid fields)\n", clientNum);
-		trap_DropClient(clientNum, "^1Malformed userinfo", 0);
-	}
-
-	// Nico, one name in userinfo (from ETpub)
-	count = 0;
-	if (len > 6) {
-		for (i = 0; userinfo[i + 5]; ++i) {
-			if (userinfo[i] == '\\' && userinfo[i + 1] == 'n' &&
-			    userinfo[i + 2] == 'a' && userinfo[i + 3] == 'm' &&
-			    userinfo[i + 4] == 'e' && userinfo[i + 5] == '\\') {
-				count++;
-			}
-		}
-	}
-	if (count > 1) {
-		G_LogPrintf("Dropping client %d: malformed userinfo (too many name fields)\n", clientNum);
-		trap_DropClient(clientNum, "^1Malformed userinfo", 0);
+	// Nico, perform security checks on userinfo string
+	if (!checkUserinfoString(clientNum, userinfo)) {
+		return;
 	}
 
 	if (g_developer.integer || *g_log.string || g_dedicated.integer) {
@@ -958,6 +981,7 @@ void ClientUserinfoChanged(int clientNum) {
 	}
 
 	// check for local client
+	ip = Info_ValueForKey(userinfo, "ip");
 	if (ip && !strcmp(ip, "localhost")) {
 		client->pers.localClient = qtrue;
 		level.fLocalHost         = qtrue;
@@ -1034,6 +1058,7 @@ void ClientUserinfoChanged(int clientNum) {
 
 	// set name
 	Q_strncpyz(oldname, client->pers.netname, sizeof (oldname));
+	name = Info_ValueForKey(userinfo, "name");
 	ClientCleanName(name, client->pers.netname, sizeof (client->pers.netname));
 
 	if (client->pers.connected == CON_CONNECTED && strcmp(oldname, client->pers.netname) != 0) {
@@ -1118,6 +1143,7 @@ char *ClientConnect(int clientNum, qboolean firstTime) {
 	int       clientNum2; // Nico, used in connections limit check
 	int       conn_per_ip = 1; // Nico, connections per IP counter
 	char      ip[20], ip2[20]; // Nico, used in connections limit check
+	char      parsedIp[20], parsedIp2[20]; // Nico, used in connections limit check
 	char      cs_name[MAX_NETNAME];
 
 	ent = &g_entities[clientNum];
@@ -1136,7 +1162,10 @@ char *ClientConnect(int clientNum, qboolean firstTime) {
 	// Nico, check maximum connextions per IP (from ETpub)
 	// (prevents fakeplayers DOS http://aluigi.altervista.org/fakep.htm )
 	// note: value is the client ip
-	Q_strncpyz(ip, getParsedIp(value), sizeof (ip));
+	if (!getParsedIp(value, parsedIp)) {
+		return "Invalid IP address";
+	}
+	Q_strncpyz(ip, parsedIp, sizeof (ip));
 	for (i = 0; i < level.numConnectedClients; ++i) {
 		clientNum2 = level.sortedClients[i];
 		if (clientNum == clientNum2) {
@@ -1144,13 +1173,16 @@ char *ClientConnect(int clientNum, qboolean firstTime) {
 		}
 		trap_GetUserinfo(clientNum2, userinfo2, sizeof (userinfo2));
 		value = Info_ValueForKey(userinfo2, "ip");
-		Q_strncpyz(ip2, getParsedIp(value), sizeof (ip2));
+		if (!getParsedIp(value, parsedIp2)) {
+			continue;
+		}
+		Q_strncpyz(ip2, parsedIp2, sizeof (ip2));
 		if (strcmp(ip, ip2) == 0) {
 			conn_per_ip++;
 		}
 	}
 	if (conn_per_ip > g_maxConnsPerIP.integer) {
-		G_LogPrintf("ETrun: possible DoS attack, rejecting client from %s (%d connections already)\n", ip, g_maxConnsPerIP.integer);
+		G_LogPrintf("%s: possible DoS attack, rejecting client from %s (%d connections already)\n", GAME_VERSION, ip, g_maxConnsPerIP.integer);
 		return "Too many connections from your IP.";
 	}
 	// Nico, end of check maximum connextions per IP
