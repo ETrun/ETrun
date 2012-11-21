@@ -1610,7 +1610,7 @@ static void CG_DrawSpectatorMessage(void) {
 	const char *str, *str2;
 	float      y;
 	static int lastconfigGet = 0;
-	float textScale = 0.14;
+	float      textScale     = 0.14;
 
 	if (!cg_descriptiveText.integer) {
 		return;

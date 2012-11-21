@@ -100,7 +100,7 @@ static char *WM_ETrun_coloredPing(int ping) {
  *
  * @author Nico
  */
-#define MOD_LOGO_SIZE	128
+#define MOD_LOGO_SIZE   128
 static void WM_ETrun_DrawHeader(int *y, fontInfo_t *font) {
 	const char *s;
 
@@ -338,13 +338,13 @@ static void WM_ETrun_DrawSpectators(int *x, int *y, fontInfo_t *font, s_timerunS
  *
  * @author Nico
  */
-#define SB_INFO_X		550
-#define SB_INFO_Y		9
+#define SB_INFO_X       550
+#define SB_INFO_Y       9
 static void WM_ETrun_DrawInfo() {
-	int x = SB_INFO_X;
-	int y = SB_INFO_Y;
-	char physicsName[MAX_QPATH] = { 0 };
-	float textScale = 0.12;
+	int   x                      = SB_INFO_X;
+	int   y                      = SB_INFO_Y;
+	char  physicsName[MAX_QPATH] = { 0 };
+	float textScale              = 0.12;
 
 	// Nico, draw time
 	CG_DrawClock(x, y, textScale, qtrue);

@@ -2342,11 +2342,11 @@ void PM_UpdateViewAngles(playerState_t *ps, pmoveExt_t *pmext, usercmd_t *cmd, v
 			ps->delta_angles[PITCH] = ANGLE2SHORT(ps->viewangles[PITCH]) - cmd->angles[PITCH];
 		}
 	} else if (ps->eFlags & EF_PRONE) {
-		float			oldYaw;
-		trace_t         traceres; // rain - renamed
-		int             newDeltaAngle = ps->delta_angles[YAW];
-		float           pitchMax      = 40.f;
-		float           yawDiff, pitchDiff;
+		float   oldYaw;
+		trace_t traceres;         // rain - renamed
+		int     newDeltaAngle = ps->delta_angles[YAW];
+		float   pitchMax      = 40.f;
+		float   yawDiff, pitchDiff;
 
 		oldYaw = oldViewAngles[YAW];
 

@@ -2720,8 +2720,8 @@ static void UI_LoadProfiles() {
 	int  numdirs;
 	char dirlist[2048];
 	char *dirptr;
-	int i;
-	int dirlen;
+	int  i;
+	int  dirlen;
 
 	uiInfo.profileCount = 0;
 	uiInfo.profileIndex = -1;

@@ -818,12 +818,12 @@ qboolean getParsedIp(const char *ipadd, char *parsedIp) {
  * @autor: Nico
  */
 static qboolean checkUserinfoString(int clientNum, char *userinfo) {
-	size_t len = 0;
-	int count = 0;
-	int i = 0;
-	char *ip   = NULL;
-	char parsedIp[MAX_QPATH] = {0};
-	char *name = NULL;
+	size_t len                 = 0;
+	int    count               = 0;
+	int    i                   = 0;
+	char   *ip                 = NULL;
+	char   parsedIp[MAX_QPATH] = { 0 };
+	char   *name               = NULL;
 
 	// check for malformed or illegal info strings
 	if (!Info_Validate(userinfo)) {

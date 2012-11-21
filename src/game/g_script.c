@@ -366,8 +366,8 @@ void G_Script_ScriptLoad(void) {
 	char         filename[MAX_QPATH];
 	char         toLowerFilename[MAX_QPATH];
 	vmCvar_t     mapname;
-	fileHandle_t f = 0;
-	int          len = 0;
+	fileHandle_t f     = 0;
+	int          len   = 0;
 	qboolean     found = qfalse;
 
 	trap_Cvar_Register(&g_scriptDebug, "g_scriptDebug", "0", 0);
@@ -500,15 +500,15 @@ G_Script_ScriptParse
 ==============
 */
 void G_Script_ScriptParse(gentity_t *ent) {
-	char             *pScript;
-	char             *token;
-	qboolean         wantName;
-	qboolean         inScript;
-	int              eventNum;
-	g_script_event_t events[G_MAX_SCRIPT_STACK_ITEMS];
-	int              numEventItems;
-	g_script_event_t *curEvent;
-	char params[MAX_INFO_STRING];
+	char                    *pScript;
+	char                    *token;
+	qboolean                wantName;
+	qboolean                inScript;
+	int                     eventNum;
+	g_script_event_t        events[G_MAX_SCRIPT_STACK_ITEMS];
+	int                     numEventItems;
+	g_script_event_t        *curEvent;
+	char                    params[MAX_INFO_STRING];
 	g_script_stack_action_t *action;
 	int                     i;
 	int                     bracketLevel;
