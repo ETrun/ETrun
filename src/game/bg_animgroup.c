@@ -206,7 +206,7 @@ static qboolean BG_RAG_ParseAnimFile(int handle, animModelInfo_t *animModelInfo)
 		animation = BG_RAG_FindFreeAnimation(mdxFile, token.string);
 		if (!animation) {
 #else
-		if (!(animation = BG_RAG_FindFreeAnimation(mdxFileName, token.string))) {
+		if ((animation = BG_RAG_FindFreeAnimation(mdxFileName, token.string)) == NULL) {
 #endif // CGAMEDLL
 			return BG_RAG_ParseError(handle, "out of animation storage space");
 		}

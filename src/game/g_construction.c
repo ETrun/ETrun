@@ -72,7 +72,7 @@ gentity_t *G_IsConstructible(team_t team, gentity_t *toi) {
 		return NULL;
 	}
 
-	if (!(ent = G_ConstructionForTeam(toi, team))) {
+	if ((ent = G_ConstructionForTeam(toi, team)) == NULL) {
 		return NULL;
 	}
 

@@ -683,7 +683,7 @@ void G_KillEnts(const char *target, gentity_t *ignore, gentity_t *killer, meansO
 	// Nico, silent GCC
 	mod = mod;
 
-	while ((targ = G_FindByTargetname(targ, target))) {
+	while ((targ = G_FindByTargetname(targ, target)) != NULL) {
 
 		// make sure it isn't going to respawn or show any events
 		targ->nextthink = 0;

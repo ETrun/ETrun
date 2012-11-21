@@ -79,7 +79,7 @@
       <AssemblerListingLocation>..\..\_build\ui/</AssemblerListingLocation>
       <ObjectFileName>..\..\_build\ui/</ObjectFileName>
       <ProgramDataBaseFileName>..\..\_build\ui/</ProgramDataBaseFileName>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level4</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
     </ClCompile>
     <ResourceCompile>
@@ -126,7 +126,7 @@
       <ObjectFileName>..\..\_build\ui/</ObjectFileName>
       <ProgramDataBaseFileName>..\..\_build\ui/</ProgramDataBaseFileName>
       <BrowseInformation>true</BrowseInformation>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level4</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
     </ClCompile>

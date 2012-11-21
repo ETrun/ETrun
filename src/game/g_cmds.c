@@ -2552,7 +2552,7 @@ void ClientCommand(int clientNum) {
 
 	trap_Argv(0, cmd, sizeof (cmd));
 
-	if (!Q_stricmp(cmd, "say") || (enc = !Q_stricmp(cmd, "enc_say"))) {
+	if (!Q_stricmp(cmd, "say") || (enc = !Q_stricmp(cmd, "enc_say")) != 0) {
 
 		// Nico, flood protection
 		if (ClientIsFlooding(ent)) {
@@ -2566,7 +2566,7 @@ void ClientCommand(int clientNum) {
 		return;
 	}
 
-	if (!Q_stricmp(cmd, "say_team") || (enc = !Q_stricmp(cmd, "enc_say_team"))) {
+	if (!Q_stricmp(cmd, "say_team") || (enc = !Q_stricmp(cmd, "enc_say_team")) != 0) {
 		// Nico, flood protection
 		if (ClientIsFlooding(ent)) {
 			CP("print \"^1Spam Protection: ^7dropping say_team\n\"");
@@ -2600,7 +2600,7 @@ void ClientCommand(int clientNum) {
 			Cmd_Voice_f(ent, SAY_TEAM, qfalse, qfalse);
 		}
 		return;
-	} else if (!Q_stricmp(cmd, "say_buddy") || (enc = !Q_stricmp(cmd, "enc_say_buddy"))) {
+	} else if (!Q_stricmp(cmd, "say_buddy") || (enc = !Q_stricmp(cmd, "enc_say_buddy")) != 0) {
 
 		// Nico, flood protection
 		if (ClientIsFlooding(ent)) {

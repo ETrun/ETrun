@@ -366,8 +366,8 @@ void G_Script_ScriptLoad(void) {
 	char         filename[MAX_QPATH];
 	char         toLowerFilename[MAX_QPATH];
 	vmCvar_t     mapname;
-	fileHandle_t f;
-	int          len;
+	fileHandle_t f = 0;
+	int          len = 0;
 	qboolean     found = qfalse;
 
 	trap_Cvar_Register(&g_scriptDebug, "g_scriptDebug", "0", 0);
@@ -633,7 +633,7 @@ void G_Script_ScriptParse(gentity_t *ent) {
 						COM_ParseError("'{' expected, found: %s.\n", token);
 					}
 
-					while ((token = COM_Parse(&pScript)) && (token[0] != '}')) {
+					while ((token = COM_Parse(&pScript)) != NULL && (token[0] != '}')) {
 						if (strlen(params)) {     // add a space between each param
 							Q_strcat(params, sizeof (params), " ");
 						}
@@ -915,7 +915,7 @@ void mountedmg42_fire(gentity_t *other) {
 	vec3_t    muzzle;
 	gentity_t *self;
 
-	if (!(self = other->tankLink)) {
+	if ((self = other->tankLink) == NULL) {
 		return;
 	}
 

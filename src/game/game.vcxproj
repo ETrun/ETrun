@@ -79,7 +79,7 @@
       <ObjectFileName>..\..\_build\game/</ObjectFileName>
       <ProgramDataBaseFileName>..\..\_build\game/</ProgramDataBaseFileName>
       <BrowseInformation>true</BrowseInformation>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level4</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
     </ClCompile>
@@ -131,7 +131,7 @@
       <AssemblerListingLocation>..\..\_build\game/</AssemblerListingLocation>
       <ObjectFileName>..\..\_build\game/</ObjectFileName>
       <ProgramDataBaseFileName>..\..\_build\game/</ProgramDataBaseFileName>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level4</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>

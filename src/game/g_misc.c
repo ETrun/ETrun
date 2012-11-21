@@ -1735,7 +1735,7 @@ void mg42_stopusing(gentity_t *self) {
 
 void mg42_die(gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int damage, int mod) {
 	gentity_t *gun;
-	gentity_t *owner;
+	gentity_t *owner = NULL;
 	trace_t   tr;
 
 	// Nico, silent GCC

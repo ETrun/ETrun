@@ -246,7 +246,7 @@ void G_SetupFrustum_ForBinoculars(gentity_t *ent) {
 	float  ang;
 	vec3_t axis[3];
 	vec3_t vieworg;
-	float  baseAngle;
+	float  baseAngle = 0;
 
 	if (ent->r.svFlags & SVF_BOT) {
 

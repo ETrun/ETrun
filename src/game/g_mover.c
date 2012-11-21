@@ -4898,7 +4898,7 @@ void G_LinkDamageParents(void) {
 			continue;
 		}
 
-		if (!(g_entities[i].dmgparent = G_FindByTargetname(NULL, g_entities[i].damageparent))) {
+		if ((g_entities[i].dmgparent = G_FindByTargetname(NULL, g_entities[i].damageparent)) == NULL) {
 			G_Error("Error: Failed to find damageparent: %s\n", g_entities[i].damageparent);
 		}
 	}

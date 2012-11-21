@@ -2736,7 +2736,7 @@ static void UI_LoadProfiles() {
 			int        handle;
 			pc_token_t token;
 
-			if (!(handle = trap_PC_LoadSource(va("profiles/%s/profile.dat", dirptr)))) {
+			if ((handle = trap_PC_LoadSource(va("profiles/%s/profile.dat", dirptr))) == 0) {
 				dirptr += dirlen;
 				continue;
 			}
