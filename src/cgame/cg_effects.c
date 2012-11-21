@@ -935,8 +935,6 @@ static qboolean CG_SmokeSpritePhysics(smokesprite_t *smokesprite, const float di
 	trace_t tr;
 	vec3_t  oldpos;
 
-	//vec3_t mins, maxs;
-
 	VectorCopy(smokesprite->pos, oldpos);
 	VectorMA(oldpos, dist, smokesprite->dir, smokesprite->pos);
 
@@ -944,30 +942,14 @@ static qboolean CG_SmokeSpritePhysics(smokesprite_t *smokesprite, const float di
 
 	smokesprite->size += 1.25f * dist;
 
-	// see if we hit a solid
-	// FIXME: use mins and max with smoke sprite  minimum radius and then expand to max possible distance or real current sprite size?
-	// would definately look nice I think
-	//VectorSet( maxs, .3f * smokesprite->size, .3f * smokesprite->size, .3f * smokesprite->size );
-	//VectorNegate( maxs, mins );
-	//CG_Trace( &tr, oldpos, mins, maxs, smokesprite->pos, -1, CONTENTS_SOLID );
 	CG_Trace(&tr, oldpos, NULL, NULL, smokesprite->pos, -1, CONTENTS_SOLID);
 
 	if (tr.fraction != 1.f) {
-		//float dot;
-
 		if (smokesprite->dist < 24.f) {
 			return(qfalse);
 		}
 		VectorCopy(tr.endpos, smokesprite->pos);
-
-		// bounce off
-		//dot = DotProduct( smokesprite->dir, tr.plane.normal );
-		//VectorMA( smokesprite->dir, -2*dot, tr.plane.normal, smokesprite->dir );
-		//VectorScale( smokesprite->dir, .25f, smokesprite->dir );
-	} // else {
-	  //	smokesprite->size += 1.25f * dist;
-	  //}
-
+	}
 	return(qtrue);
 }
 
@@ -976,13 +958,11 @@ qboolean CG_SpawnSmokeSprite(centity_t *cent, float dist) {
 
 	if (smokesprite) {
 		smokesprite->smokebomb = cent;
-		//VectorCopy( cent->lerpOrigin, smokesprite->pos );
-		//smokesprite->pos[2] += 32;
 		VectorCopy(cent->origin2, smokesprite->pos);
 		VectorCopy(bytedirs[rand() % NUMVERTEXNORMALS], smokesprite->dir);
 		smokesprite->dir[2]   *= .5f;
 		smokesprite->size      = 16.f;
-		smokesprite->colour[0] = .35f; // + crandom() * .1f;
+		smokesprite->colour[0] = .35f;
 		smokesprite->colour[1] = smokesprite->colour[0];
 		smokesprite->colour[2] = smokesprite->colour[0];
 		smokesprite->colour[3] = .8f;
@@ -1000,7 +980,6 @@ qboolean CG_SpawnSmokeSprite(centity_t *cent, float dist) {
 }
 
 void CG_RenderSmokeGrenadeSmoke(centity_t *cent, const weaponInfo_t *weapon) {
-	//int numSpritesForRadius, numNewSpritesNeeded = 0;
 	int           spritesNeeded = 0;
 	smokesprite_t *smokesprite;
 	float         spawnrate = (1.f / SMOKEBOMB_SPAWNRATE) * 1000.f;

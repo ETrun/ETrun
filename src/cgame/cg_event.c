@@ -2203,7 +2203,6 @@ void CG_EntityEvent(centity_t *cent, vec3_t position) {
 	{
 		int numsparks;
 		int speed;
-		//int	count;
 
 		numsparks = cent->currentState.density;
 		speed     = cent->currentState.angles2[2];

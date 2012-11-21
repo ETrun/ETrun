@@ -2720,7 +2720,6 @@ static void UI_LoadProfiles() {
 	int  numdirs;
 	char dirlist[2048];
 	char *dirptr;
-	//char	*descptr;
 	int i;
 	int dirlen;
 

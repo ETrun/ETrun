@@ -761,13 +761,7 @@ static qboolean TryConstructing(gentity_t *ent) {
 			return(qtrue);      // properly constructed
 		}
 
-		//trap_SendServerCommand( ent-g_entities, "cp \"Job's done!\" 1");
-
-		// eeeh no point in doing this twice
-		//HandleEntsThatBlockConstructible( ent, constructible, qtrue, qfalse );
 		if (constructible->count2) {
-			// backup...
-			//int constructibleModelindex = constructible->s.modelindex;
 			int constructibleClipmask       = constructible->clipmask;
 			int constructibleContents       = constructible->r.contents;
 			int constructibleNonSolidBModel = (constructible->s.eFlags & EF_NONSOLID_BMODEL);
@@ -931,8 +925,6 @@ void AutoBuildConstruction(gentity_t *constructible) {
 
 	HandleEntsThatBlockConstructible(NULL, constructible, qtrue, qfalse);
 	if (constructible->count2) {
-		// backup...
-		//int constructibleModelindex = constructible->s.modelindex;
 		int constructibleClipmask       = constructible->clipmask;
 		int constructibleContents       = constructible->r.contents;
 		int constructibleNonSolidBModel = (constructible->s.eFlags & EF_NONSOLID_BMODEL);
@@ -951,8 +943,6 @@ void AutoBuildConstruction(gentity_t *constructible) {
 			constructible->s.angles2[1] = 1;
 		}
 	} else {
-		// backup...
-		//int constructibleModelindex = constructible->s.modelindex;
 		int constructibleClipmask       = constructible->clipmask;
 		int constructibleContents       = constructible->r.contents;
 		int constructibleNonSolidBModel = (constructible->s.eFlags & EF_NONSOLID_BMODEL);

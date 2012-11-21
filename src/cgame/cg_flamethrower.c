@@ -201,8 +201,6 @@ void CG_FireFlameChunks(centity_t *cent, vec3_t origin, vec3_t angles, float spe
 	trace_t         trace;
 	vec3_t          parentFwd;
 
-	//float frametime, dot;
-
 	centInfo = &centFlameInfo[cent->currentState.number];
 
 	// for any other character or in 3rd person view, use entity angles for friction

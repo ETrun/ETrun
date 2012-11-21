@@ -687,8 +687,6 @@ static qboolean PM_CheckProne(void) {
 	}
 
 	if (pm->ps->eFlags & EF_PRONE) {
-		//float frac;
-
 		// See if we are moving
 		float    spd       = VectorLength(pm->ps->velocity);
 		qboolean userinput = abs(pm->cmd.forwardmove) + abs(pm->cmd.rightmove) > 10 ? qtrue : qfalse;
@@ -2344,8 +2342,7 @@ void PM_UpdateViewAngles(playerState_t *ps, pmoveExt_t *pmext, usercmd_t *cmd, v
 			ps->delta_angles[PITCH] = ANGLE2SHORT(ps->viewangles[PITCH]) - cmd->angles[PITCH];
 		}
 	} else if (ps->eFlags & EF_PRONE) {
-		//float degsSec = 60.f;
-		float /*yaw, */ oldYaw;
+		float			oldYaw;
 		trace_t         traceres; // rain - renamed
 		int             newDeltaAngle = ps->delta_angles[YAW];
 		float           pitchMax      = 40.f;

@@ -508,10 +508,7 @@ void G_Script_ScriptParse(gentity_t *ent) {
 	g_script_event_t events[G_MAX_SCRIPT_STACK_ITEMS];
 	int              numEventItems;
 	g_script_event_t *curEvent;
-	// DHM - Nerve :: Some of our multiplayer script commands have longer parameters
-	//char		params[MAX_QPATH];
 	char params[MAX_INFO_STRING];
-	// dhm - end
 	g_script_stack_action_t *action;
 	int                     i;
 	int                     bracketLevel;
