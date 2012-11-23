@@ -16,4 +16,4 @@ xcopy /Y etrun\custommapscripts\* "C:\Users\Nicolas\Desktop\etrun\custommapscrip
 echo Press ENTER to start game...
 pause
 cd ..\
-C:\Users\Nicolas\Desktop\ET.exe +set fs_basepath "C:\Users\Nicolas\Desktop\" +set fs_game etrun +set dedicated 0
+C:\Users\Nicolas\Desktop\ET.exe +set fs_basepath "C:\Users\Nicolas\Desktop\" +set fs_game etrun +set dedicated 0 +set com_hunkMegs 128
