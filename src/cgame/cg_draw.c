@@ -2608,7 +2608,7 @@ static void CG_Autodemo() {
 		if (cg.runsave) {
 			if (!rs_keep) {
 				if (cg_autoDemo.integer == 1) {
-					CG_AddPMItem(PM_MESSAGE, va("%s^w: ^gstopping and saving demo..\n", GAME_VERSION_COLORED), cgs.media.voiceChatShader);
+					CG_AddPMItem(PM_MESSAGE, va("%s^w: stopping and saving demo..\n", GAME_VERSION_COLORED), cgs.media.voiceChatShader);
 				}
 				rs_time = cg.time;
 				rs_keep = 1;
@@ -2649,7 +2649,7 @@ static void CG_Autodemo() {
 				CG_Printf("^3Demo saved as:^7 %s\n", name);
 
 				if (cg_autoDemo.integer == 1) {
-					CG_AddPMItem(PM_MESSAGE, va("%s^w:^g demo saved!\n", GAME_VERSION_COLORED), cgs.media.voiceChatShader);
+					CG_AddPMItem(PM_MESSAGE, va("%s^w: demo saved!\n", GAME_VERSION_COLORED), cgs.media.voiceChatShader);
 				}
 
 				cg.runsave = rs_keep = 0;

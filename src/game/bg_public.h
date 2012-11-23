@@ -43,7 +43,7 @@ If you have questions concerning this license or the applicable additional terms
 # define GAME_VERSION            "ETrun"
 # define GAME_VERSION_COLORED    "^ZET^Drun"
 # define MOD_VERSION             "1.0.0"
-# define MOD_VERSION_COLORED     "^g1.0.0"
+# define MOD_VERSION_COLORED     "^Z1.0.0"
 # define MOD_STATUS              "Beta11"
 # define MOD_STATUS_COLORED      "^1Beta11"
 # define MOD_URL                 "http://www.timeruns.net"
