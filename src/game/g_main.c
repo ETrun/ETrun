@@ -349,10 +349,14 @@ int vmMain(int command, int arg0, int arg1, int arg2, int arg3, int arg4, int ar
 
 	switch (command) {
 	case GAME_INIT:
+		// Nico, init crash handler
+		EnableStackTrace();
 		G_InitGame(arg0, arg1);
 		return 0;
 	case GAME_SHUTDOWN:
 		G_ShutdownGame(arg0);
+		// Nico, disable crash handler
+		DisableStackTrace();
 		return 0;
 	case GAME_CLIENT_CONNECT:
 		return (int)ClientConnect(arg0, arg1);

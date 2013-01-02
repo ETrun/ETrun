@@ -1428,6 +1428,10 @@ int GetTimerunNum(char *name);
 void notify_timerun_stop(gentity_t *activator, int finishTime);
 void saveDemo(gentity_t *ent);
 
+// Nico, g_crash.c
+void EnableStackTrace();
+void DisableStackTrace();
+
 #include "g_team.h" // teamplay specific stuff
 
 // Nico, active threads counter

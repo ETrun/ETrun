@@ -56,4 +56,5 @@ q_shared.c \
 g_buddy_list.c \
 g_construction.c \
 g_api.c \
-g_apicmds.c
+g_apicmds.c \
+g_crash.c
