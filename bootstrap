@@ -288,6 +288,11 @@ done
 if [ $build_curl -eq 1 ]; then
   cd libs/c-ares
   ./buildconf && ./configure CFLAGS="-m32" --disable-shared && make && make install
+  if [ $? != 0 ]; then
+    echo "Building c-ares failed"
+    exit
+  fi
+
   cd ../curl
   ./buildconf && ./configure CFLAGS="-m32" --without-ssl \
   --disable-shared \
@@ -402,6 +407,11 @@ done
 if [ $build_curl -eq 1 ]; then
   cd libs/c-ares
   ./buildconf && ./configure --prefix="$HOME/c-ares" --disable-shared && make && make install
+  if [ $? != 0 ]; then
+    echo "Building c-ares failed"
+    exit
+  fi
+
   cd ../curl
   ./buildconf && ./configure --without-ssl \
   --disable-shared \
