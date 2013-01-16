@@ -550,8 +550,14 @@ static void *randommapHandler(void *data) {
 		if (!f) {
 			AP(va("print \"^1Error:^7 the map ^3%s^7 is not on the server.\n\"", queryStruct->result));
 		} else {
-			// Nico, delay the map change
-			G_delay_map_change(queryStruct->result);
+			// Check from where the map change come
+			// randommap vote or timelimit?
+			if (g_timelimit.integer > 0) {
+				G_delay_map_change(queryStruct->result, g_timelimit.integer);
+			} else {
+				// Nico, delay the map change
+				G_delay_map_change(queryStruct->result, 0);
+			}
 		}
 	} else {
 		CP(va("print \"%s^w: error while getting a random map!\n\"", GAME_VERSION_COLORED));
@@ -685,10 +691,11 @@ void G_callAPI(char *command, char *result, gentity_t *ent, int count, ...) {
 	pthread_t      thread;
 	pthread_attr_t attr;
 	int            returnCode = 0;
-	void           *(*handler)(void *) = NULL;
-	va_list        ap   = NULL;
-	int            i    = 0;
-	char           *arg = NULL;
+
+	void    *(*handler)(void *) = NULL;
+	va_list ap   = NULL;
+	int     i    = 0;
+	char    *arg = NULL;
 
 	if (api_module == NULL || API_query == NULL) {
 		G_Error("G_callAPI: API module is not loaded.");

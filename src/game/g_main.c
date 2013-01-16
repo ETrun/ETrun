@@ -67,6 +67,7 @@ vmCvar_t g_debugAlloc;
 vmCvar_t g_debugBullets;    //----(SA)	added
 vmCvar_t g_motd;
 vmCvar_t g_gamestate;
+vmCvar_t g_gametype;
 // -NERVE - SMF
 
 vmCvar_t g_restarted;
@@ -126,9 +127,6 @@ vmCvar_t g_debugConstruct;
 // enabled in bot scripts and regular scripts.
 // Added by Mad Doctor I, 8/23/2002
 vmCvar_t g_scriptDebugLevel;
-vmCvar_t mod_url;
-vmCvar_t url;
-
 vmCvar_t g_debugSkills;
 
 // Nico, beginning of ETrun server cvars
@@ -172,6 +170,9 @@ vmCvar_t g_mapScriptDirectory;
 // Cup mode
 vmCvar_t g_cupMode;
 
+// Timelimit mode
+vmCvar_t g_timelimit;
+
 // Nico, end of ETrun cvars
 
 cvarTable_t gameCvarTable[] =
@@ -193,6 +194,7 @@ cvarTable_t gameCvarTable[] =
 	{ &g_maxclients,           "sv_maxclients",          "20",                         CVAR_SERVERINFO | CVAR_LATCH | CVAR_ARCHIVE,                   0,      qfalse, qfalse, qfalse }, // NERVE - SMF - made 20 from 8
 
 	{ &g_gamestate,            "gamestate",              "-1",                         CVAR_WOLFINFO | CVAR_ROM,                                      0,      qfalse, qfalse, qfalse },
+	{ &g_gametype,             "g_gametype",             "2",                          CVAR_SERVERINFO | CVAR_ROM,                                    0,      qfalse, qfalse, qfalse },
 	// -NERVE - SMF
 
 	{ &g_log,                  "g_log",                  "",                           CVAR_ARCHIVE,                                                  0,      qfalse, qfalse, qfalse },
@@ -263,12 +265,12 @@ cvarTable_t gameCvarTable[] =
 	{ &g_scriptDebugLevel,     "g_scriptDebugLevel",     "0",                          CVAR_CHEAT,                                                    0,      qfalse, qfalse, qfalse },
 
 	// points to the URL for mod information, should not be modified by server admin
-	{ &mod_url,                "mod_url",                SHORT_MOD_URL,                CVAR_SERVERINFO | CVAR_ROM,                                    0,      qfalse, qfalse, qfalse },
+	{ NULL,                    "mod_url",                SHORT_MOD_URL,                CVAR_SERVERINFO | CVAR_ROM,                                    0,      qfalse, qfalse, qfalse },
 
-	{ &mod_url,                "mod_version",            MOD_VERSION,                  CVAR_SERVERINFO | CVAR_ROM,                                    0,      qfalse, qfalse, qfalse },
+	{ NULL,                    "mod_version",            MOD_VERSION,                  CVAR_SERVERINFO | CVAR_ROM,                                    0,      qfalse, qfalse, qfalse },
 
 	// configured by the server admin, points to the web pages for the server
-	{ &url,                    "URL",                    SHORT_MOD_URL,                CVAR_SERVERINFO | CVAR_ARCHIVE,                                0,      qfalse, qfalse, qfalse },
+	{ NULL,                    "URL",                    SHORT_MOD_URL,                CVAR_SERVERINFO | CVAR_ARCHIVE,                                0,      qfalse, qfalse, qfalse },
 
 	{ &g_debugSkills,          "g_debugSkills",          "0",                          0,                                                             qfalse, qfalse, qfalse, qfalse },
 
@@ -312,14 +314,16 @@ cvarTable_t gameCvarTable[] =
 	{ &g_mapScriptDirectory,   "g_mapScriptDirectory",   "custommapscripts",           CVAR_ARCHIVE | CVAR_LATCH,                                     qfalse, qfalse, qfalse, qfalse },
 
 	// Cup mode
-	{ &g_cupMode,              "g_cupMode",              "0",                          CVAR_ARCHIVE | CVAR_LATCH,                                     qfalse, qfalse, qfalse, qfalse }
+	{ &g_cupMode,              "g_cupMode",              "0",                          CVAR_ARCHIVE | CVAR_LATCH,                                     qfalse, qfalse, qfalse, qfalse },
+
+	// Timelimit mode
+	{ &g_timelimit,            "timelimit",              "0",                          CVAR_SERVERINFO | CVAR_ARCHIVE | CVAR_LATCH,                   qfalse, qfalse, qfalse, qfalse },
 
 	// Nico, end of ETrun cvars
 };
 
 // bk001129 - made static to avoid aliasing
 static int gameCvarTableSize = sizeof (gameCvarTable) / sizeof (gameCvarTable[0]);
-
 
 void G_InitGame(int levelTime, int randomSeed);
 void G_RunFrame(int levelTime);
@@ -1472,6 +1476,9 @@ void G_InitGame(int levelTime, int randomSeed) {
 		G_loadAPI();
 	}
 
+	// Nico, install timelimit
+	G_install_timelimit();
+
 	// Nico, enabled delayed map change watcher
 	G_enable_delayed_map_change_watcher();
 }
@@ -1659,12 +1666,8 @@ void CalculateRanks(void) {
 	level.follow1                   = -1;
 	level.follow2                   = -1;
 	level.numConnectedClients       = 0;
-	level.numNonSpectatorClients    = 0;
 	level.numPlayingClients         = 0;
 	level.voteInfo.numVotingClients = 0;        // don't count bots
-
-	level.numFinalDead[0] = 0;      // NERVE - SMF
-	level.numFinalDead[1] = 0;      // NERVE - SMF
 
 	level.voteInfo.numVotingTeamClients[0] = 0;
 	level.voteInfo.numVotingTeamClients[1] = 0;
@@ -1689,8 +1692,6 @@ void CalculateRanks(void) {
 			}
 
 			if (team != TEAM_SPECTATOR) {
-				level.numNonSpectatorClients++;
-
 				// OSP
 				Q_strcat(teaminfo[team], sizeof (teaminfo[team]) - 1, va("%d ", level.numConnectedClients));
 
@@ -2407,4 +2408,51 @@ void G_disable_delayed_map_change_watcher() {
 
 	G_DPrintf("Waiting for delayed map change watcher to end...\n");
 	my_sleep(1000);
+}
+// Nico, end of delayed map change watcher helper functions
+
+// Nico, timelimit function
+void G_install_timelimit() {
+	// Nico, set default gametype to "map-voting"
+	trap_Cvar_Set("g_gametype", "6");
+
+	if (g_timelimit.integer == 0) {
+		G_DPrintf("No timelimit set (g_timelimit)\n");
+		return;
+	}
+
+	// Check it's valid
+	if (g_timelimit.integer < 1) {
+		G_DPrintf("Timelimit to low: %d min(s)!\n", g_timelimit.integer);
+		return;
+	}
+
+	// Update gametype to campaign mode
+	trap_Cvar_Set("g_gametype", "4");
+
+	G_DPrintf("Timelimit set to %d min(s) (g_timelimit)\n", g_timelimit.integer);
+	G_randommap(NULL);
+}
+
+/**
+ * Get a random map
+ */
+int G_randommap(gentity_t *ent) {
+	char *result = NULL;
+
+	// Nico, check if API is used
+	if (!g_useAPI.integer) {
+		G_Printf("API is disabled on this server.\n");
+		return G_INVALID;
+	}
+
+	result = malloc(RESPONSE_MAX_SIZE * sizeof (char));
+
+	if (!result) {
+		G_Error("G_Randommap_v: malloc failed\n");
+	}
+
+	G_API_randommap(result, ent, level.rawmapname);
+
+	return(G_OK);
 }

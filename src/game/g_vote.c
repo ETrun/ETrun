@@ -390,8 +390,13 @@ int G_UnMute_v(gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, 
 	return(G_OK);
 }
 
-// Nico, function to delay a map change
-void G_delay_map_change(char *mapName) {
+/**
+ * Nico, function to delay a map change
+ * @arg string map name
+ * @arg int delay in minutes before map change
+ *
+ */
+void G_delay_map_change(char *mapName, int delay) {
 	int       i               = 0;
 	int       activeRunsCount = 0;
 	gclient_t *cl             = NULL;
@@ -406,11 +411,11 @@ void G_delay_map_change(char *mapName) {
 			activeRunsCount++;
 		}
 	}
-	if (level.numConnectedClients > 1 && activeRunsCount > 0) {
+	if (delay == 0 && level.numConnectedClients > 1 && activeRunsCount > 0) {
 		level.delayedMapChange.timeChange = level.time + MAP_CHANGE_DELAY * 1000;
-		AP(va("cpm \"^5Map will be changed in %dsecs\n\"", MAP_CHANGE_DELAY));
+		AP(va("cpm \"^5Map will be changed in %d secs to: %s\n\"", MAP_CHANGE_DELAY, mapName));
 	} else {
-		level.delayedMapChange.timeChange = level.time + 1000;
+		level.delayedMapChange.timeChange = level.time + (delay * 60 * 1000) + 1000;
 	}
 
 	level.delayedMapChange.pendingChange = qtrue;
@@ -418,8 +423,9 @@ void G_delay_map_change(char *mapName) {
 
 // Nico, delayed map change check function (thread)
 void *G_delayed_map_change_watcher(void *arg) {
-	int count = 0;
-	int limit = 10; // Nico, in seconds
+	int count    = 0;
+	int limit    = 10; // Nico, in seconds
+	int timeLeft = 0;
 
 	// Nico, silent GCC
 	arg = arg;
@@ -446,11 +452,34 @@ void *G_delayed_map_change_watcher(void *arg) {
 				trap_SendConsoleCommand(EXEC_APPEND, va("map %s\n", level.delayedMapChange.passedVote));
 				break;
 			} else {
-				// Print remaining time each sec
-				G_DPrintf("Map change in: %d msecs\n", level.delayedMapChange.timeChange - level.time);
+				timeLeft = (level.delayedMapChange.timeChange - level.time) / 1000;
+
+				// Print incomming map change every 5 secs
+				if (timeLeft % 5 == 0) {
+					G_DPrintf("Map change to %s in %d secs\n", level.delayedMapChange.passedVote, timeLeft);
+				}
+
+				// Announce incomming map to players
+				switch (timeLeft) {
+				case 600:
+					AP(va("cpm \"%s^w: map will be changed to ^Z%s ^win ^D10 ^wmins\n\"", GAME_VERSION_COLORED, level.delayedMapChange.passedVote));
+					break;
+				case 300:
+					AP(va("cpm \"%s^w: map will be changed to ^Z%s ^win ^D5 ^wmins\n\"", GAME_VERSION_COLORED, level.delayedMapChange.passedVote));
+					break;
+				case 120:
+					AP(va("cpm \"%s^w: map will be changed to ^Z%s ^win ^D2 ^wmins\n\"", GAME_VERSION_COLORED, level.delayedMapChange.passedVote));
+					break;
+				case 60:
+					AP(va("cpm \"%s^w: map will be changed to ^Z%s ^win ^D1 ^wmin\n\"", GAME_VERSION_COLORED, level.delayedMapChange.passedVote));
+					break;
+				case 30:
+					AP(va("cpm \"%s^w: map will be changed to ^Z%s ^win ^D30 ^wsecs\n\"", GAME_VERSION_COLORED, level.delayedMapChange.passedVote));
+					break;
+				}
 			}
 		}
-		my_sleep(500);
+		my_sleep(999);
 	}
 	return NULL;
 }
@@ -476,7 +505,7 @@ int G_Map_v(gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qbo
 		// Vote action (vote has passed)
 	} else {
 		// Nico, delay the map change
-		G_delay_map_change(level.voteInfo.vote_value);
+		G_delay_map_change(level.voteInfo.vote_value, 0);
 	}
 
 	return(G_OK);
@@ -529,7 +558,7 @@ int G_MatchReset_v(gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *ar
 }
 
 /**
- * Random map
+ * Random map vote
  */
 int G_Randommap_v(gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd) {
 	char *result = NULL;

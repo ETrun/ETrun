@@ -873,13 +873,9 @@ typedef struct {
 
 	int lastTeamLocationTime;           // last time of client team location update
 
-	qboolean newSession;                // don't use any old session data, because
-	                                    // we changed gametype
-
 	qboolean restarted;                 // waiting for a map_restart to fire
 
 	int numConnectedClients;
-	int numNonSpectatorClients;         // includes connecting clients
 	int numPlayingClients;              // connected, non-spectators
 	int sortedClients[MAX_CLIENTS];             // sorted by score
 	int follow1, follow2;               // clientNums for auto-follow spectators
@@ -899,16 +895,10 @@ typedef struct {
 	int numSpawnVarChars;
 	char spawnVarChars[MAX_SPAWN_VARS_CHARS];
 
-	char *changemap;
-
 	// Nico, note: keep these 2 vars
 	vec3_t intermission_origin;         // also used for spectator spawns
 	vec3_t intermission_angle;
 
-	int portalSequence;
-	// Ridah
-
-	int redNumWaiting, blueNumWaiting;         // number of reinforcements in queue
 	vec3_t spawntargets[MAX_MULTI_SPAWNTARGETS];      // coordinates of spawn targets
 	int numspawntargets;         // # spawntargets in this map
 
@@ -918,7 +908,6 @@ typedef struct {
 	// player/AI model scripting (server repository)
 	animScriptData_t animScriptData;
 
-	int numFinalDead[2];                // DHM - Nerve :: unable to respawn and in limbo (per team)
 	int numOidTriggers;                 // DHM - Nerve
 
 	int globalAccumBuffer[MAX_SCRIPT_ACCUM_BUFFERS];
@@ -927,13 +916,9 @@ typedef struct {
 	int medicChargeTime[2];
 	int engineerChargeTime[2];
 	int lieutenantChargeTime[2];
-
 	int covertopsChargeTime[2];
 
 	int lastMapEntityUpdate;
-	int objectiveStatsAllies[MAX_OBJECTIVES];
-	int objectiveStatsAxis[MAX_OBJECTIVES];
-
 	int lastSystemMsgTime[2];
 
 	float soldierChargeTimeModifier[2];
@@ -960,7 +945,6 @@ typedef struct {
 	int match_pause;                        // Paused state of the match
 
 	int server_settings;
-	int sortedStats[MAX_CLIENTS];           // sorted by weapon stat
 	int timeCurrent;                        // Real game clock
 	int timeDelta;                          // Offset from internal clock - used to calculate real match time
 	// OSP
@@ -987,8 +971,6 @@ typedef struct {
 	int numLimboCams;
 
 	commanderTeamChat_t commanderSounds[2][MAX_COMMANDER_TEAM_SOUNDS];
-	int commanderSoundInterval[2];
-	int commanderLastSoundTime[2];
 
 	qboolean tempTraceIgnoreEnts[MAX_GENTITIES];
 
@@ -1350,6 +1332,8 @@ void QDECL G_Error(const char *fmt, ...) _attribute((format(printf, 1, 2)));
 void G_ShutdownGame(int restart);
 void G_enable_delayed_map_change_watcher();
 void G_disable_delayed_map_change_watcher();
+void G_install_timelimit();
+int G_randommap(gentity_t *ent);
 
 //
 // g_client.c
@@ -1489,6 +1473,7 @@ extern vmCvar_t g_debugConstruct;
 extern vmCvar_t g_scriptDebugLevel;
 
 extern vmCvar_t g_gamestate;
+extern vmCvar_t g_gametype;
 // -NERVE - SMF
 
 //Gordon
@@ -1562,6 +1547,9 @@ extern vmCvar_t g_mapScriptDirectory;
 // Cup mode
 extern vmCvar_t g_cupMode;
 
+// Timelimit mode
+extern vmCvar_t g_timelimit;
+
 // Nico, end of ETrun cvars
 
 void    trap_Printf(const char *fmt);
@@ -1609,7 +1597,7 @@ qboolean trap_EntityContact(const vec3_t mins, const vec3_t maxs, const gentity_
 qboolean trap_EntityContactCapsule(const vec3_t mins, const vec3_t maxs, const gentity_t *ent);
 void    trap_GetUsercmd(int clientNum, usercmd_t *cmd);
 qboolean    trap_GetEntityToken(char *buffer, int bufferSize);
-qboolean trap_GetTag(int clientNum, int tagFileNumber, char *tagName, orientation_t *or);
+qboolean trap_GetTag(int clientNum, int tagFileNumber, char *tagName, orientation_t * or);
 qboolean trap_LoadTag(const char *filename);
 
 int     trap_RealTime(qtime_t *qtime);
@@ -1887,7 +1875,7 @@ void G_playersMessage(gentity_t *ent);
 int G_Kick_v(gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd);
 int G_Mute_v(gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd);
 int G_UnMute_v(gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd);
-void G_delay_map_change(char *mapName); // Nico, function to delay a map change
+void G_delay_map_change(char *mapName, int delay); // Nico, function to delay a map change
 void *G_delayed_map_change_watcher(void *arg); // Nico, thread used to check map changes
 int G_Map_v(gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd);
 int G_MapRestart_v(gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd);
