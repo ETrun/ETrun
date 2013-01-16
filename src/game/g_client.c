@@ -706,6 +706,28 @@ void AddMedicTeamBonus(gclient_t *client) {
 	client->ps.stats[STAT_MAX_HEALTH] = client->pers.maxHealth;
 }
 
+/**
+ * Check a player name
+ * @author Nico
+ */
+static qboolean CheckName(const char *name) {
+	unsigned int i = 0;
+
+	// Nico, check name lenght
+	if (strlen(name) >= MAX_NAME_LENGTH) {
+		return qfalse;
+	}
+
+	// Nico, check characters in name are printable
+	for (; i < strlen(name); ++i) {
+		if (isprint(name[i]) == 0) {
+			return qfalse;
+		}
+	}
+
+	return qtrue;
+}
+
 /*
 ===========
 ClientCheckName
@@ -1056,26 +1078,51 @@ void ClientUserinfoChanged(int clientNum) {
 	// Nico, autologin
 	client->pers.autoLogin = client->pers.clientFlags & CGF_AUTOLOGIN;
 
-	// set name
+	//
+	// Nico, name handling
+	//
+
+	// Backup old name
 	Q_strncpyz(oldname, client->pers.netname, sizeof (oldname));
+
+	// Get new name from userinfo string
 	name = Info_ValueForKey(userinfo, "name");
+
+	// Clean the new name
 	ClientCleanName(name, client->pers.netname, sizeof (client->pers.netname));
 
-	if (client->pers.connected == CON_CONNECTED && strcmp(oldname, client->pers.netname) != 0) {
-		// Nico, name changes limit
-		if (g_maxNameChanges.integer > -1 && client->pers.nameChanges >= g_maxNameChanges.integer) {
-			Q_strncpyz(client->pers.netname, oldname, sizeof (client->pers.netname));
-			Info_SetValueForKey(userinfo, "name", oldname);
-			trap_SetUserinfo(clientNum, userinfo);
-			CPx(clientNum, "print \"^1You had too many namechanges\n\"");
-			G_LogPrintf("Client %d name change refused\n", clientNum);
-			return;
-		} else {
-			client->pers.nameChanges++;
-			trap_SendServerCommand(-1, va("print \"[lof]%s" S_COLOR_WHITE " [lon]renamed to[lof] %s\n\"", oldname,
-			                              client->pers.netname));
+	// Check it's valid
+	if (CheckName(client->pers.netname) != qtrue) {
+		// Invalid name, restore old name
+		Q_strncpyz(client->pers.netname, oldname, sizeof (client->pers.netname));
+		Info_SetValueForKey(userinfo, "name", oldname);
+		trap_SetUserinfo(clientNum, userinfo);
+		CPx(clientNum, "print \"^1Invalid name, name change refused\n\"");
+		G_LogPrintf("Client %d name change refused\n", clientNum);
+	} else {
+		// Name is valid
+		// Now, check if name was changed or not
+		if (client->pers.connected == CON_CONNECTED && strcmp(oldname, client->pers.netname) != 0) {
+			// Name was changed
+			// Now, check name changes limit
+			if (g_maxNameChanges.integer > -1 && client->pers.nameChanges >= g_maxNameChanges.integer) {
+				// Nico, limit reached, forbid name change
+				Q_strncpyz(client->pers.netname, oldname, sizeof (client->pers.netname));
+				Info_SetValueForKey(userinfo, "name", oldname);
+				trap_SetUserinfo(clientNum, userinfo);
+				CPx(clientNum, "print \"^1You had too many namechanges\n\"");
+				G_LogPrintf("Client %d name change refused\n", clientNum);
+				return;
+			} else {
+				client->pers.nameChanges++;
+				trap_SendServerCommand(-1, va("print \"%s" S_COLOR_WHITE " renamed to %s\n\"", oldname, client->pers.netname));
+			}
 		}
 	}
+
+	//
+	// Nico, end of name handling
+	//
 
 	client->ps.stats[STAT_MAX_HEALTH] = client->pers.maxHealth;
 
@@ -1159,7 +1206,7 @@ char *ClientConnect(int clientNum, qboolean firstTime) {
 		return "You are banned from this server.";
 	}
 
-	// Nico, check maximum connextions per IP (from ETpub)
+	// Nico, check maximum connections per IP (from ETpub)
 	// (prevents fakeplayers DOS http://aluigi.altervista.org/fakep.htm )
 	// note: value is the client ip
 	if (!getParsedIp(value, parsedIp)) {
@@ -1185,21 +1232,13 @@ char *ClientConnect(int clientNum, qboolean firstTime) {
 		G_LogPrintf("%s: possible DoS attack, rejecting client from %s (%d connections already)\n", GAME_VERSION, ip, g_maxConnsPerIP.integer);
 		return "Too many connections from your IP.";
 	}
-	// Nico, end of check maximum connextions per IP
+	// Nico, end of check maximum connections per IP
 
-	// Nico, check name from ET:Legacy
+	// Nico, check name
 	value = Info_ValueForKey(userinfo, "name");
 	Q_strncpyz(cs_name, value, sizeof (cs_name));
-
-	// don't permit long names ... - see also MAX_NETNAME
-	if (strlen(cs_name) >= MAX_NAME_LENGTH) {
-		return "Bad name: name too long. Please change your name.";
-	}
-	// Avoid ext. ASCII chars in the CS
-	for (i = 0; i < (int)strlen(cs_name); ++i) {
-		if (cs_name[i] < 0) { // extended ASCII chars have values between -128 and 0 (signed char)
-			return "Bad name: extended ASCII characters. Please change your name.";
-		}
+	if (CheckName(cs_name) != qtrue) {
+		return "Bad name: extended ASCII characters or too long name. Please change your name.";
 	}
 
 	// we don't check password for bots and local client
