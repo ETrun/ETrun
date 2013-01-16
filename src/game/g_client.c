@@ -1353,7 +1353,8 @@ void ClientBegin(int clientNum) {
 	}
 
 	// Nico, check for checkpoints auto loading
-	if (g_useAPI.integer && client->pers.autoLoadCheckpoints) {
+	// if client is not spectator
+	if (g_useAPI.integer && client->pers.autoLoadCheckpoints && client->sess.sessionTeam != TEAM_SPECTATOR) {
 		G_LogPrintf("ClientBegin: loading checkpoints for client %d via autoLoadCheckpoints\n", clientNum);
 		Cmd_LoadCheckpoints_real(ent, "0", 0); // "0" as ignore vlaue, because we load player checkpoints
 	}
