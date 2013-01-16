@@ -4,8 +4,8 @@
 
 #define WINDOW_X		16
 #define WINDOW_Y		16
-#define WINDOW_WIDTH	252
-#define WINDOW_HEIGHT	152
+#define WINDOW_WIDTH	552
+#define WINDOW_HEIGHT	452
 #define GROUP_NAME		"grpViewReplay"
 
 // Macros //
@@ -32,14 +32,14 @@ menuDef {
 
 // Window //
 
-	WINDOW( "REPLAYS", 150 )
+	WINDOW( "REPLAYS", 450 )
 
 // Demo List //
 
 	itemDef {
 		name			"demoList"
 		group			GROUP_NAME
-		rect			6 32 240 90
+		rect			6 32 540 390
 		type			ITEM_TYPE_LISTBOX
 		textfont		UI_FONT_COURBD_21
 		textscale		.2
@@ -52,7 +52,7 @@ menuDef {
 		elementtype		LISTBOX_TEXT
 		elementwidth	200
 		elementheight	12
-		columns			1 0 200 33
+		columns			1 0 200 75
 		visible			1
 		tooltip			"Select the replay to view or delete"
 		
