@@ -746,7 +746,6 @@ void G_callAPI(char *command, char *result, gentity_t *ent, int count, ...) {
 	}
 
 	APILog(va("Calling API with command: %s, query: %s\n", command, queryStruct->query), qfalse);
-	G_LogPrintf("Calling API with command: %s, query: %s\n", command, queryStruct->query);
 
 	// Create threads as detached as they will never be joined
 	if (pthread_attr_init(&attr)) {
