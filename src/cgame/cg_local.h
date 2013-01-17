@@ -735,7 +735,6 @@ typedef struct {
 	int clientNum;
 
 	qboolean demoPlayback;
-	qboolean loading;               // don't defer players at initial startup
 
 	// there are only one or two snapshot_t that are relevent at a time
 	int latestSnapshotNum;          // the number of snapshots the client system has received

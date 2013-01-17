@@ -2626,8 +2626,6 @@ void CG_Init(int serverMessageNum, int serverCommandSequence, int clientNum, qbo
 
 	String_Init();
 
-	cg.loading = qtrue;     // force players to load instead of defer
-
 	CG_LoadingString("sounds");
 
 	CG_RegisterSounds();
@@ -2655,8 +2653,6 @@ void CG_Init(int serverMessageNum, int serverCommandSequence, int clientNum, qbo
 #ifdef _DEBUG
 	DEBUG_INITPROFILE_EXEC("clients")
 #endif // DEBUG
-
-	cg.loading = qfalse;    // future players will be deferred
 
 	CG_InitLocalEntities();
 
