@@ -1352,6 +1352,7 @@ static void CG_DrawCrosshairNames(void) {
 	float    zChange;
 	qboolean hitClient = qfalse;
 	float    dist      = 0;
+	int clientNum = 0;
 
 	if (cg_drawCrosshair.integer < 0) {
 		return;
@@ -1365,8 +1366,8 @@ static void CG_DrawCrosshairNames(void) {
 	// scan the known entities to see if the crosshair is sighted on one
 	dist = CG_ScanForCrosshairEntity(&zChange, &hitClient);
 
-	// Nico, don't draw if hiding others is enabled and distance to the player is < cg_hideRange
-	if (cg_hideOthers.integer && dist < cg_hideRange.integer) {
+	// Nico, don't draw if client is not close to crosshair
+	if (dist <= 512) {
 		return;
 	}
 
@@ -1396,6 +1397,14 @@ static void CG_DrawCrosshairNames(void) {
 		return;
 	}
 
+	// Nico, don't draw if hiding others is enabled and distance to the player is < cg_hideRange
+	clientNum = cg.crosshairClientNum;
+	if (clientNum >= 0 && clientNum < MAX_CLIENTS &&
+		cg_hideOthers.integer && clientNum != cg.clientNum &&
+		Distance((&cg_entities[cg.clientNum])->lerpOrigin, (&cg_entities[clientNum])->lerpOrigin) < cg_hideRange.integer) {
+		return;
+	}
+
 	s = va("%s", cgs.clientinfo[cg.crosshairClientNum].name);
 
 	w = (float)CG_Text_Width_Ext(s, 0.2f, 0.2f, &cgs.media.limboFont1) / 2;
@@ -1404,8 +1413,6 @@ static void CG_DrawCrosshairNames(void) {
 
 	trap_R_SetColor(NULL);
 }
-
-
 
 //==============================================================================
 
