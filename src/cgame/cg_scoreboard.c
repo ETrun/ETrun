@@ -110,7 +110,7 @@ static void WM_ETrun_DrawHeader(int *y, fontInfo_t *font) {
 	WM_ETrun_newlines(4, y, SMALLCHAR_HEIGHT);
 
 	// Map
-	s = va("%s", CG_TranslateString(va("Map: ^w%s", cgs.rawmapname)));
+	s = va("%s", va("Map: ^w%s", cgs.rawmapname));
 	WM_ETrun_center_print(s, font, 0.25f, *y, qtrue);
 
 	WM_ETrun_newlines(3, y, SMALLCHAR_HEIGHT);

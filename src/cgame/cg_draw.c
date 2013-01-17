@@ -1197,8 +1197,6 @@ static float CG_ScanForCrosshairEntity(float *zChange, qboolean *hitClient) {
 	VectorCopy(cg.refdef.vieworg, start);
 	VectorMA(start, 8192, cg.refdef.viewaxis[0], end);      //----(SA)	changed from 8192
 
-	cg.crosshairClientNoShoot = qfalse;
-
 	CG_Trace(&trace, start, NULL, NULL, end, cg.snap->ps.clientNum, CONTENTS_SOLID | CONTENTS_BODY | CONTENTS_ITEM);
 
 	// How far from start to end of trace?
@@ -1227,9 +1225,6 @@ static float CG_ScanForCrosshairEntity(float *zChange, qboolean *hitClient) {
 
 		return dist;
 	}
-
-	// Reset the draw time for the SP crosshair
-	cg.crosshairSPClientTime = cg.time;
 
 	// Default: We're not looking at a client
 	cg.crosshairNotLookingAtClient = qfalse;
@@ -1606,9 +1601,10 @@ static void CG_DrawVote(void) {
 CG_DrawSpectatorMessage
 =================
 */
+#define INFOTEXT_STARTX 8
+#define INFOTEXT_STARTY 100
 static void CG_DrawSpectatorMessage(void) {
-	const char *str, *str2;
-	float      y;
+	const char *str2;
 	static int lastconfigGet = 0;
 	float      textScale     = 0.14;
 
@@ -1622,29 +1618,21 @@ static void CG_DrawSpectatorMessage(void) {
 
 	if (cg.time - lastconfigGet > 1000) {
 		Controls_GetConfig();
-
 		lastconfigGet = cg.time;
 	}
-
-	y = 408;
-
-	y -= 2 * TINYCHAR_HEIGHT;
 
 	str2 = BindingFromName("openlimbomenu");
 	if (!Q_stricmp(str2, "(openlimbomenu)")) {
 		str2 = "ESCAPE";
 	}
-	str = va(CG_TranslateString("Press %s to open Limbo Menu"), str2);
-	// Nico, better text drawing
-	CG_Text_Paint_Ext(8, 154, textScale, textScale, colorWhite, str, 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
+
+	CG_Text_Paint_Ext(INFOTEXT_STARTX, INFOTEXT_STARTY, textScale, textScale, colorWhite, va("Press %s to open Limbo Menu", str2), 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
 
 	str2 = BindingFromName("+attack");
-	str  = va(CG_TranslateString("Press %s to follow next player"), str2);
-	// Nico, better text drawing
-	CG_Text_Paint_Ext(8, 172, textScale, textScale, colorWhite, str, 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
+	CG_Text_Paint_Ext(INFOTEXT_STARTX, INFOTEXT_STARTY + 18, textScale, textScale, colorWhite, va("Press %s to follow next player", str2), 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
 }
 
-#define INFOTEXT_STARTX 8
+
 
 /*
 =================
@@ -1652,30 +1640,15 @@ CG_DrawFollow
 =================
 */
 static qboolean CG_DrawFollow(void) {
-	char deploytime[128];
+	float scale = 0.18f;
 
 	if (!(cg.snap->ps.pm_flags & PMF_FOLLOW)) {
-		return(qfalse);
+		return qfalse;
 	}
 
-	// if in limbo, show different follow message
-	if (cg.snap->ps.pm_flags & PMF_LIMBO) {
+	CG_Text_Paint_Ext(INFOTEXT_STARTX, INFOTEXT_STARTY, scale, scale, colorWhite, va("^Z>> ^w%s", cgs.clientinfo[cg.snap->ps.clientNum].name), 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
 
-		// Don't display if you're following yourself
-		if (cg.snap->ps.clientNum != cg.clientNum) {
-			sprintf(deploytime, "(%s %s)", CG_TranslateString("Following"),
-			        cgs.clientinfo[cg.snap->ps.clientNum].name);
-
-			CG_DrawStringExt(INFOTEXT_STARTX, 136, deploytime, colorWhite, qtrue, qtrue, SMALLCHAR_WIDTH, SMALLCHAR_HEIGHT, 80);
-		}
-	} else {
-		CG_DrawStringExt(INFOTEXT_STARTX, 118, CG_TranslateString("Following"), colorWhite, qtrue, qtrue, BIGCHAR_WIDTH / 2, BIGCHAR_HEIGHT, 0);
-		CG_DrawStringExt(84, 118, va("%s",
-		                             cgs.clientinfo[cg.snap->ps.clientNum].name),
-		                 colorWhite, qtrue, qtrue, BIGCHAR_WIDTH / 2, BIGCHAR_HEIGHT, 0);
-	}
-
-	return(qtrue);
+	return qtrue;
 }
 //==================================================================================
 
@@ -1870,7 +1843,6 @@ void CG_ObjectivePrint(const char *str, int charWidth) {
 	// -NERVE - SMF
 
 	cg.oidPrintTime      = cg.time;
-	cg.oidPrintY         = OID_TOP;
 	cg.oidPrintCharWidth = charWidth;
 
 	// count the number of lines for oiding

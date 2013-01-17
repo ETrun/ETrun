@@ -733,8 +733,6 @@ typedef struct {
 	int clientFrame;                // incremented each frame
 
 	int clientNum;
-	int xp;
-	int xpChangeTime;
 
 	qboolean demoPlayback;
 	qboolean loading;               // don't defer players at initial startup
@@ -807,7 +805,6 @@ typedef struct {
 	float zoomSensitivity;
 	float zoomval;
 
-
 	// information screen text during loading
 	char infoScreenText[MAX_STRING_CHARS];
 
@@ -820,15 +817,7 @@ typedef struct {
 	qboolean showScores;
 	qboolean scoreBoardShowing;
 	int scoreFadeTime;
-
-	char spectatorList[MAX_STRING_CHARS];                   // list of names
-	int spectatorLen;                                                           // length of list
-	float spectatorWidth;                                                   // width in device units
 	int spectatorTime;                                                      // next time to offset
-	int spectatorPaintX;                                                    // current paint x
-	int spectatorPaintX2;                                                   // current paint x
-	int spectatorOffset;                                                    // current offset from start
-	int spectatorPaintLen;                                              // current offset from start
 
 	qboolean lightstylesInited;
 
@@ -846,10 +835,6 @@ typedef struct {
 	vec4_t fadeColor1;
 	vec4_t fadeColor2;
 
-	// game stats
-	int exitStatsTime;
-	int exitStatsFade;
-
 	// low ammo warning state
 	int lowAmmoWarning;             // 1 = low, 2 = empty
 
@@ -858,15 +843,8 @@ typedef struct {
 	int crosshairClientTime;
 
 	qboolean crosshairNotLookingAtClient;
-	int crosshairSPClientTime;
-	int crosshairVerticalShift;
-	qboolean crosshairClientNoShoot;
-	qboolean crosshairTerrain;
 
 	qboolean filtercams;
-
-	int crosshairPowerupNum;
-	int crosshairPowerupTime;
 
 	int identifyClientRequest;              // NERVE - SMF
 
@@ -878,28 +856,16 @@ typedef struct {
 	int cursorHintValue;
 //----(SA)	end
 
-	// powerup active flashing
-	int powerupActive;
-	int powerupTime;
-
 	// attacking player
 	int attackerTime;
 	int voiceTime;
 	//==========================
 
-	int itemPickup;
-	int itemPickupTime;
-	int itemPickupBlendTime;            // the pulse around the crosshair is timed seperately
-
 	int weaponSelectTime;
-	int weaponAnimation;
-	int weaponAnimationTime;
 
 	// blend blobs
 	viewDamage_t viewDamage[MAX_VIEWDAMAGE];
 	float damageTime;           // last time any kind of damage was recieved
-	int damageIndex;            // slot that was filled in
-	float damageX, damageY, damageValue;
 
 	int grenLastTime;
 
@@ -908,23 +874,11 @@ typedef struct {
 	int lastFiredWeaponTime;
 	int painTime;
 	int weaponFireTime;
-	int nextIdleTime;
-	int lastIdleTimeEnd;
-	int idleAnim;
+
 	int lastWeapSelInBank[MAX_WEAP_BANKS_MP];           // remember which weapon was last selected in a bank for 'weaponbank' commands //----(SA)	added
 // JPW FIXME NOTE: max_weap_banks > max_weap_banks_mp so this should be OK, but if that changes, change this too
 
-	// status bar head
-	float headYaw;
-	float headEndPitch;
-	float headEndYaw;
-	int headEndTime;
-	float headStartPitch;
-	float headStartYaw;
-	int headStartTime;
-
 	// view movement
-	float v_dmg_time;
 	float v_dmg_pitch;
 	float v_dmg_roll;
 
@@ -932,8 +886,7 @@ typedef struct {
 	vec3_t kick_origin;
 
 	// RF, view flames when getting burnt
-	int v_fireTime, v_noFireTime;
-	vec3_t v_fireRiseDir;
+	int v_noFireTime;
 
 	// temp working variables for player view
 	float bobfracsin;
@@ -941,7 +894,6 @@ typedef struct {
 	float lastvalidBobfracsin;
 	int lastvalidBobcycle;
 	float xyspeed;
-	int nextOrbitTime;
 
 	// development tool
 	refEntity_t testModelEntity;
@@ -962,10 +914,8 @@ typedef struct {
 	qboolean cameraMode;        // if rendering from a camera
 	// Duffy end
 
-	int oidTeam;
 	int oidPrintTime;
 	int oidPrintCharWidth;
-	int oidPrintY;
 	char oidPrint[1024];
 	int oidPrintLines;
 
@@ -982,8 +932,6 @@ typedef struct {
 	float cameraShakeScale;
 	float cameraShakeLength;
 
-	qboolean latchAutoActions;
-	qboolean latchVictorySound;
 	// -NERVE - SMF
 
 	// spawn variables
@@ -995,7 +943,6 @@ typedef struct {
 
 	vec2_t mapcoordsMins;
 	vec2_t mapcoordsMaxs;
-	vec2_t mapcoordsScale;
 	qboolean mapcoordsValid;
 
 	int numMiscGameModels;
@@ -1007,11 +954,7 @@ typedef struct {
 	vec3_t spawnCoordsUntransformed[MAX_SPAWNPOINTS];
 	vec3_t spawnCoords[MAX_SPAWNPOINTS];
 	team_t spawnTeams[MAX_SPAWNPOINTS];
-	team_t spawnTeams_old[MAX_SPAWNPOINTS];
-	int spawnTeams_changeTime[MAX_SPAWNPOINTS];
-	int spawnPlayerCounts[MAX_SPAWNPOINTS];
 	int spawnCount;
-	int selectedSpawnPoint;
 
 	cg_string_t aStringPool[MAX_STRINGS];
 	int demohelpWindow;
@@ -1020,8 +963,6 @@ typedef struct {
 	refdef_t *refdef_current;                   // Handling of some drawing elements for MV
 
 	int spechelpWindow;
-	int statsRequestTime;
-	cg_window_t *statsWindow;
 	cg_window_t *windowCurrent;                 // Current window to update.. a bit of a hack :p
 	cg_windowHandler_t winHandler;
 	vec4_t xhairColor;
@@ -2819,10 +2760,6 @@ void CG_DrawFireTeamOverlay(rectDef_t *rect);
 clientInfo_t *CG_SortedFireTeamPlayerForPosition(int pos, int max);
 qboolean CG_FireteamHasClass(int classnum, qboolean selectedonly);
 const char *CG_BuildSelectedFirteamString(void);
-
-// OSP
-#define Pri(x) CG_Printf("[cgnotify]%s", CG_LocalizeServerCommand(x))
-#define CPri(x) CG_CenterPrint(CG_LocalizeServerCommand(x), SCREEN_HEIGHT - (SCREEN_HEIGHT * 0.2), SMALLCHAR_WIDTH);
 
 // cg_window.c
 qboolean CG_addString(cg_window_t *w, char *buf);

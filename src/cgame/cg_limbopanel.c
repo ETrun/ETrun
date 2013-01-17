@@ -995,7 +995,6 @@ int CG_LimboPanel_RenderCounter_ValueForButton(panel_button_t *button) {
 		}
 		return count;
 	case 2:     // xp
-		return cg.xp;
 	case 3:     // respawn time
 		return 0;
 	case 4:     // skills

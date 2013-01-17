@@ -218,11 +218,9 @@ void CG_DamageFeedback(int yawByte, int pitchByte, int damage) {
 		kick = 10;
 	}
 	vd->damageValue    = kick;
-	cg.v_dmg_time      = cg.time + DAMAGE_TIME;
 	vd->damageTime     = cg.snap->serverTime;
 	vd->damageDuration = kick * 50 * (1 + 2 * (!vd->damageX && !vd->damageY));
 	cg.damageTime      = cg.snap->serverTime;
-	cg.damageIndex     = slot;
 }
 
 

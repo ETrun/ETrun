@@ -92,8 +92,6 @@ void CG_windowInit(void) {
 	for (i = 0; i < MAX_WINDOW_COUNT; i++) {
 		cg.winHandler.window[i].inuse = qfalse;
 	}
-
-	cg.statsWindow = NULL;
 }
 
 

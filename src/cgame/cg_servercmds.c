@@ -241,18 +241,11 @@ NERVE - SMF
 ==================
 */
 void CG_ParseWolfinfo(void) {
-	int        old_gs = cgs.gamestate;
 	const char *info;
 
 	info = CG_ConfigString(CS_WOLFINFO);
 
 	cgs.gamestate = atoi(Info_ValueForKey(info, "gamestate"));
-
-	// OSP - Announce game in progress if we are really playing
-	if (old_gs != GS_PLAYING && cgs.gamestate == GS_PLAYING) {
-		Pri("^1FIGHT!\n");
-		CPri("^1FIGHT!\n");
-	}
 
 	if (!cgs.localServer) {
 		trap_Cvar_Set("gamestate", va("%i", cgs.gamestate));
@@ -317,13 +310,8 @@ void CG_ParseSpawns(void) {
 
 		newteam = atoi(s);
 		if ((int)cg.spawnTeams[i] != newteam) {
-			cg.spawnTeams_old[i]        = cg.spawnTeams[i];
-			cg.spawnTeams_changeTime[i] = cg.time;
 			cg.spawnTeams[i]            = newteam;
 		}
-
-		s                       = Info_ValueForKey(info, "c");
-		cg.spawnPlayerCounts[i] = atoi(s);
 	}
 }
 
@@ -820,7 +808,6 @@ static void CG_MapRestart(void) {
 	cg.numbufferedSoundScripts = 0;
 
 	cg.centerPrintTime = 0; // reset centerprint counter so previous messages don't re-appear
-	cg.itemPickupTime  = 0; // reset item pickup counter so previous messages don't re-appear
 	cg.cursorHintFade  = 0; // reset cursor hint timer
 
 	// (SA) clear zoom (so no warpies)
@@ -884,16 +871,12 @@ static void CG_MapRestart(void) {
 	// ydnar
 	trap_R_ClearDecals();
 
-	cg.latchAutoActions  = qfalse;
-	cg.latchVictorySound = qfalse;          // NERVE - SMF
 // JPW NERVE -- reset render flags
 	cg_fxflags = 0;
 // jpw
 
 	// we really should clear more parts of cg here and stop sounds
-	cg.v_dmg_time   = 0;
 	cg.v_noFireTime = 0;
-	cg.v_fireTime   = 0;
 
 	cg.filtercams = atoi(CG_ConfigString(CS_FILTERCAMS)) ? qtrue : qfalse;
 
@@ -1668,7 +1651,6 @@ static void CG_ServerCommand(void) {
 	}
 
 	if (!Q_stricmp(cmd, "setspawnpt")) {
-		cg.selectedSpawnPoint = atoi(CG_Argv(1)) + 1;
 		return;
 	}
 
@@ -1798,8 +1780,6 @@ static void CG_ServerCommand(void) {
 			return;
 		}
 
-		// just open the file so it gets copied to the build dir
-		//CG_FileTouchForBuild(CG_Argv(1));
 		trap_FS_FOpenFile(CG_Argv(1), &f, FS_READ);
 		trap_FS_FCloseFile(f);
 		return;
@@ -1812,9 +1792,6 @@ static void CG_ServerCommand(void) {
 
 		// hack here
 		cg.serverRespawning = qtrue;
-
-		// fade out over the course of 5 seconds, should be enough (nuking: atvi bug 3793)
-		//%	CG_Fade( 0, 0, 0, 255, cg.time, 5000 );
 
 		return;
 	}
