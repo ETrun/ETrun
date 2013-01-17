@@ -882,6 +882,11 @@ void CG_DrawInfoPanel(void) {
 			x += 20;
 		}
 
-		CG_Text_Paint_Ext(x, y += 10, textScale, textScale, textColor, va(" %d", cg.timerunJumpSpeeds[i]), 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
+		// If speed at jump n is slower than speed at jump n - 1, use red color
+		if (i > 0 && cg.timerunJumpSpeeds[i] < cg.timerunJumpSpeeds[i - 1]) {
+			CG_Text_Paint_Ext(x, y += 10, textScale, textScale, textColor, va(" ^1%d", cg.timerunJumpSpeeds[i]), 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
+		} else {
+			CG_Text_Paint_Ext(x, y += 10, textScale, textScale, textColor, va(" %d", cg.timerunJumpSpeeds[i]), 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
+		}
 	}
 }
