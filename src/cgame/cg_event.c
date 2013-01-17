@@ -1275,7 +1275,7 @@ void CG_Debris(centity_t *cent, vec3_t origin, vec3_t dir) {
 }
 // ===================
 
-void CG_MortarImpact(centity_t *cent, vec3_t origin, int sfx, qboolean dist) {
+void CG_MortarImpact(vec3_t origin, int sfx, qboolean dist) {
 	if (sfx >= 0) {
 		trap_S_StartSound(origin, -1, CHAN_AUTO, cgs.media.sfx_mortarexp[sfx]);
 	}
@@ -1831,9 +1831,9 @@ void CG_EntityEvent(centity_t *cent, vec3_t position) {
 		CG_MissileHitPlayer(es->weapon, position, dir);
 		if (es->weapon == WP_MORTAR_SET) {
 			if (!es->legsAnim) {
-				CG_MortarImpact(cent, position, 3, qtrue);
+				CG_MortarImpact(position, 3, qtrue);
 			} else {
-				CG_MortarImpact(cent, position, -1, qtrue);
+				CG_MortarImpact(position, -1, qtrue);
 			}
 		}
 		break;
@@ -1850,9 +1850,9 @@ void CG_EntityEvent(centity_t *cent, vec3_t position) {
 		CG_MissileHitWall(es->weapon, 0, position, dir, 0);     // (SA) modified to send missilehitwall surface parameters
 		if (es->weapon == WP_MORTAR_SET) {
 			if (!es->legsAnim) {
-				CG_MortarImpact(cent, position, 3, qtrue);
+				CG_MortarImpact(position, 3, qtrue);
 			} else {
-				CG_MortarImpact(cent, position, -1, qtrue);
+				CG_MortarImpact(position, -1, qtrue);
 			}
 		}
 		break;
@@ -1868,7 +1868,7 @@ void CG_EntityEvent(centity_t *cent, vec3_t position) {
 
 	case EV_MORTAR_IMPACT:
 		DEBUGNAME("EV_MORTAR_IMPACT");
-		CG_MortarImpact(cent, position, rand() % 3, qfalse);
+		CG_MortarImpact(position, rand() % 3, qfalse);
 		break;
 	case EV_MORTAR_MISS:
 		DEBUGNAME("EV_MORTAR_MISS");
