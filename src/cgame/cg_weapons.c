@@ -2999,8 +2999,6 @@ void CG_FinishWeaponChange(int lastweap, int newweap) {
 		return;
 	}
 
-	cg.mortarImpactTime = -2;
-
 	switch (newweap) {
 	case WP_LUGER:
 		if ((cg.pmext.silencedSideArm & 1) && lastweap != WP_SILENCER) {
@@ -4256,14 +4254,6 @@ void CG_FireWeapon(centity_t *cent) {
 	// RF, kick angles
 	if (ent->number == cg.snap->ps.clientNum) {
 		CG_WeaponFireRecoil(ent->weapon);
-	}
-
-	if (ent->weapon == WP_MORTAR_SET) {
-		if (ent->clientNum == cg.snap->ps.clientNum) {
-			cg.mortarImpactTime        = -1;
-			cg.mortarFireAngles[PITCH] = cg.predictedPlayerState.viewangles[PITCH];
-			cg.mortarFireAngles[YAW]   = cg.predictedPlayerState.viewangles[YAW];
-		}
 	}
 
 	// lightning gun only does this this on initial press

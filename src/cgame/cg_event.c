@@ -1291,24 +1291,6 @@ void CG_MortarImpact(centity_t *cent, vec3_t origin, int sfx, qboolean dist) {
 			// sfx2range is variable to give us minimum volume control different explosion sizes (see mortar, panzerfaust, and grenade)
 			trap_S_StartSoundEx(gorg, -1, CHAN_WEAPON, cgs.media.sfx_mortarexpDist, SND_NOCUT);
 		}
-
-		if (cent->currentState.clientNum == cg.snap->ps.clientNum && cg.mortarImpactTime != -2) {
-			VectorCopy(origin, cg.mortarImpactPos);
-			cg.mortarImpactTime     = cg.time;
-			cg.mortarImpactOutOfMap = qfalse;
-		}
-	}
-}
-
-void CG_MortarMiss(centity_t *cent, vec3_t origin) {
-	if (cent->currentState.clientNum == cg.snap->ps.clientNum && cg.mortarImpactTime != -2) {
-		VectorCopy(origin, cg.mortarImpactPos);
-		cg.mortarImpactTime = cg.time;
-		if (cent->currentState.density) {
-			cg.mortarImpactOutOfMap = qtrue;
-		} else {
-			cg.mortarImpactOutOfMap = qfalse;
-		}
 	}
 }
 
@@ -1890,7 +1872,6 @@ void CG_EntityEvent(centity_t *cent, vec3_t position) {
 		break;
 	case EV_MORTAR_MISS:
 		DEBUGNAME("EV_MORTAR_MISS");
-		CG_MortarMiss(cent, position);
 		break;
 
 	case EV_MG42BULLET_HIT_WALL:

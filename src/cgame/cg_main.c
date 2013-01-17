@@ -1003,14 +1003,6 @@ void CG_LoadObjectiveData(void) {
 				CG_Printf("^1ERROR: bad objdata line : description parameter required\n");
 				break;
 			}
-
-			if (!Q_stricmp(token.string, "axis")) {
-				Q_strncpyz(cg.objMapDescription_Axis, token2.string, sizeof (cg.objMapDescription_Axis));
-			} else if (!Q_stricmp(token.string, "allied")) {
-				Q_strncpyz(cg.objMapDescription_Allied, token2.string, sizeof (cg.objMapDescription_Allied));
-			} else if (!Q_stricmp(token.string, "neutral")) {
-				Q_strncpyz(cg.objMapDescription_Neutral, token2.string, sizeof (cg.objMapDescription_Neutral));
-			}
 		} else if (!Q_stricmp(token.string, "wm_objective_axis_desc")) {
 			int i;
 
@@ -1030,8 +1022,6 @@ void CG_LoadObjectiveData(void) {
 				CG_Printf("^1ERROR: bad objdata line : invalid objective number\n");
 				break;
 			}
-
-			Q_strncpyz(cg.objDescription_Axis[i], token.string, sizeof (cg.objDescription_Axis[i]));
 		} else if (!Q_stricmp(token.string, "wm_objective_allied_desc")) {
 			int i;
 
@@ -1051,8 +1041,6 @@ void CG_LoadObjectiveData(void) {
 				CG_Printf("^1ERROR: bad objdata line : invalid objective number\n");
 				break;
 			}
-
-			Q_strncpyz(cg.objDescription_Allied[i], token.string, sizeof (cg.objDescription_Allied[i]));
 		}
 	}
 
@@ -1394,8 +1382,6 @@ static void CG_RegisterGraphics(void) {
 
 	numSplinePaths = 0;
 	numPathCorners = 0;
-
-	cg.numOIDtriggers2 = 0;
 
 	BG_ClearAnimationPool();
 

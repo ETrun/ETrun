@@ -231,15 +231,7 @@ void SP_misc_gamemodel(void) {
 }
 
 void SP_trigger_objective_info(void) {
-	char *temp;
 
-	CG_SpawnString("infoAllied", "^1No Text Supplied", &temp);
-	Q_strncpyz(cg.oidTriggerInfoAllies[cg.numOIDtriggers2], temp, 256);
-
-	CG_SpawnString("infoAxis", "^1No Text Supplied", &temp);
-	Q_strncpyz(cg.oidTriggerInfoAxis[cg.numOIDtriggers2], temp, 256);
-
-	cg.numOIDtriggers2++;
 }
 
 typedef struct {
@@ -399,84 +391,6 @@ void SP_worldspawn(void) {
 
 	CG_SpawnString("atmosphere", "", &s);
 	CG_EffectParse(s);
-
-	cg.fiveMinuteSound_g[0]                       = \
-	    cg.fiveMinuteSound_a[0]                   = \
-	        cg.twoMinuteSound_g[0]                = \
-	            cg.twoMinuteSound_a[0]            = \
-	                cg.thirtySecondSound_g[0]     = \
-	                    cg.thirtySecondSound_a[0] = '\0';
-
-	// Nico, bugfix: there was a typo, replaced twoMinuteSound by fiveMinuteSound
-	// http://games.chruker.dk/enemy_territory/modding_project_bugfix.php?bug_id=092
-	CG_SpawnString("fiveMinuteSound_axis", "axis_hq_5minutes", &s);
-	Q_strncpyz(cg.fiveMinuteSound_g, s, sizeof (cg.fiveMinuteSound_g));
-	CG_SpawnString("fiveMinuteSound_allied", "allies_hq_5minutes", &s);
-	Q_strncpyz(cg.fiveMinuteSound_a, s, sizeof (cg.fiveMinuteSound_a));
-
-	CG_SpawnString("twoMinuteSound_axis", "axis_hq_2minutes", &s);
-	Q_strncpyz(cg.twoMinuteSound_g, s, sizeof (cg.twoMinuteSound_g));
-	CG_SpawnString("twoMinuteSound_allied", "allies_hq_2minutes", &s);
-	Q_strncpyz(cg.twoMinuteSound_a, s, sizeof (cg.twoMinuteSound_a));
-
-	CG_SpawnString("thirtySecondSound_axis", "axis_hq_30seconds", &s);
-	Q_strncpyz(cg.thirtySecondSound_g, s, sizeof (cg.thirtySecondSound_g));
-	CG_SpawnString("thirtySecondSound_allied", "allies_hq_30seconds", &s);
-	Q_strncpyz(cg.thirtySecondSound_a, s, sizeof (cg.thirtySecondSound_a));
-
-	// 5 minute axis
-	if (!*cg.fiveMinuteSound_g) {
-		cgs.media.fiveMinuteSound_g = 0;
-	} else if (strstr(cg.fiveMinuteSound_g, ".wav")) {
-		cgs.media.fiveMinuteSound_g = trap_S_RegisterSound(cg.fiveMinuteSound_g, qtrue);
-	} else {
-		cgs.media.fiveMinuteSound_g = -1;
-	}
-
-	// 5 minute allied
-	if (!*cg.fiveMinuteSound_a) {
-		cgs.media.fiveMinuteSound_a = 0;
-	} else if (strstr(cg.fiveMinuteSound_a, ".wav")) {
-		cgs.media.fiveMinuteSound_a = trap_S_RegisterSound(cg.fiveMinuteSound_a, qtrue);
-	} else {
-		cgs.media.fiveMinuteSound_a = -1;
-	}
-
-	// 2 minute axis
-	if (!*cg.twoMinuteSound_g) {
-		cgs.media.twoMinuteSound_g = 0;
-	} else if (strstr(cg.twoMinuteSound_g, ".wav")) {
-		cgs.media.twoMinuteSound_g = trap_S_RegisterSound(cg.twoMinuteSound_g, qtrue);
-	} else {
-		cgs.media.twoMinuteSound_g = -1;
-	}
-
-	// 2 minute allied
-	if (!*cg.twoMinuteSound_a) {
-		cgs.media.twoMinuteSound_a = 0;
-	} else if (strstr(cg.twoMinuteSound_a, ".wav")) {
-		cgs.media.twoMinuteSound_a = trap_S_RegisterSound(cg.twoMinuteSound_a, qtrue);
-	} else {
-		cgs.media.twoMinuteSound_a = -1;
-	}
-
-	// 30 seconds axis
-	if (!*cg.thirtySecondSound_g) {
-		cgs.media.thirtySecondSound_g = 0;
-	} else if (strstr(cg.thirtySecondSound_g, ".wav")) {
-		cgs.media.thirtySecondSound_g = trap_S_RegisterSound(cg.thirtySecondSound_g, qtrue);
-	} else {
-		cgs.media.thirtySecondSound_g = -1;
-	}
-
-	// 30 seconds allied
-	if (!*cg.thirtySecondSound_a) {
-		cgs.media.thirtySecondSound_a = 0;
-	} else if (strstr(cg.thirtySecondSound_a, ".wav")) {
-		cgs.media.thirtySecondSound_a = trap_S_RegisterSound(cg.thirtySecondSound_a, qtrue);
-	} else {
-		cgs.media.thirtySecondSound_a = -1;
-	}
 }
 
 /*

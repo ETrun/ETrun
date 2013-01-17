@@ -829,7 +829,6 @@ static void CG_MapRestart(void) {
 
 	numSplinePaths     = 0;
 	numPathCorners     = 0;
-	cg.numOIDtriggers2 = 0;
 
 	cgs.fadeStartTime = 0;
 	cgs.fadeAlpha     = 0;

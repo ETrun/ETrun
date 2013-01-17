@@ -634,8 +634,6 @@ static void CG_TouchTriggerPrediction(void) {
 }
 
 #define RESET_PREDICTION                        \
-	cg.lastPredictedCommand = 0;                \
-	cg.backupStateTail      = cg.backupStateTop;     \
 	useCommand              = current - CMD_BACKUP + 1;
 
 

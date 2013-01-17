@@ -968,19 +968,7 @@ typedef struct {
 	vec4_t xhairColor;
 	vec4_t xhairColorAlt;
 
-	// Arnout: allow overriding of countdown sounds
-	char fiveMinuteSound_g[MAX_QPATH];
-	char fiveMinuteSound_a[MAX_QPATH];
-	char twoMinuteSound_g[MAX_QPATH];
-	char twoMinuteSound_a[MAX_QPATH];
-	char thirtySecondSound_g[MAX_QPATH];
-	char thirtySecondSound_a[MAX_QPATH];
-
 	pmoveExt_t pmext;
-
-	int numOIDtriggers2;
-	char oidTriggerInfoAllies[MAX_OID_TRIGGERS][256];
-	char oidTriggerInfoAxis[MAX_OID_TRIGGERS][256];
 
 	int ltChargeTime[2];
 	int soldierChargeTime[2];
@@ -992,18 +980,7 @@ typedef struct {
 	int proneMovingTime;
 	fireteamData_t fireTeams[32];
 
-	// START Mad Doc - TDF
-	int orderFade;
-	int orderTime;
-	// END Mad Doc - TDF
-
 	centity_t *satchelCharge;
-
-	playerState_t backupStates[MAX_BACKUP_STATES];
-	int backupStateTop;
-	int backupStateTail;
-	int lastPredictedCommand;
-	int lastPhysicsTime;
 
 	qboolean skyboxEnabled;
 	vec3_t skyboxViewOrg;
@@ -1015,21 +992,9 @@ typedef struct {
 
 	qboolean serverRespawning;
 
-	// mortar hud
-	vec2_t mortarFireAngles;
-	int mortarImpactTime;
-	vec3_t mortarImpactPos;
-	qboolean mortarImpactOutOfMap;
-
 	soundScript_t *bufferSoundScripts[MAX_BUFFERED_SOUNDSCRIPTS];
 	int bufferedSoundScriptEndTime;
 	int numbufferedSoundScripts;
-
-	char objMapDescription_Axis[384];
-	char objMapDescription_Allied[384];
-	char objMapDescription_Neutral[384];
-	char objDescription_Axis[MAX_OBJECTIVES][256];
-	char objDescription_Allied[MAX_OBJECTIVES][256];
 
 	int waterundertime;
 
@@ -1317,10 +1282,6 @@ typedef struct {
 	sfxHandle_t noAmmoSound;
 	sfxHandle_t landSound[FOOTSTEP_TOTAL];
 	sfxHandle_t gibSound;
-
-	sfxHandle_t fiveMinuteSound_g, fiveMinuteSound_a;
-	sfxHandle_t twoMinuteSound_g, twoMinuteSound_a;
-	sfxHandle_t thirtySecondSound_g, thirtySecondSound_a;
 
 	sfxHandle_t watrInSound;
 	sfxHandle_t watrOutSound;
