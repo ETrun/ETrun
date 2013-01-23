@@ -44,15 +44,13 @@ If you have questions concerning this license or the applicable additional terms
 # define GAME_VERSION_COLORED    "^ZET^Drun"
 # define MOD_VERSION             "1.0.0"
 # define MOD_VERSION_COLORED     "^Z1.0.0"
-# define MOD_STATUS              "Beta11"
-# define MOD_STATUS_COLORED      "^1Beta11"
 # define MOD_URL                 "http://www.timeruns.net"
 # define SHORT_MOD_URL           "www.timeruns.net"
 
 # if defined(_DEBUG)
 #  define GAME_VERSION_DATED          GAME_VERSION
 # else
-#  define GAME_VERSION_DATED          (GAME_VERSION "_" MOD_VERSION "_" MOD_STATUS)     // Nico ( GAME_VERSION ", " Q3_VERSION )
+#  define GAME_VERSION_DATED          (GAME_VERSION "_" MOD_VERSION)
 # endif
 
 //bani

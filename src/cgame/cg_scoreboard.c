@@ -382,7 +382,7 @@ static void WM_ETrun_DrawInfo() {
 
 	y += 10;
 	// Nico, print mod version
-	WM_ETrun_print(va("Version: %s %s", MOD_VERSION, MOD_STATUS), &cgs.media.limboFont1, textScale, x, y, qtrue, 0);
+	WM_ETrun_print(va("Version: %s", MOD_VERSION), &cgs.media.limboFont1, textScale, x, y, qtrue, 0);
 }
 
 /*
