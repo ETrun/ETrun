@@ -1,5 +1,32 @@
 #include "g_local.h"
 
+/**
+ * Log (and print) an crash message
+ */
+void CrashLog(const char *s, qboolean printIt) {
+	char       string[1024] = { 0 };
+	const char *aMonths[12] =
+	{
+		"Jan", "Feb", "Mar", "Apr", "May", "Jun",
+		"Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+	};
+	qtime_t ct;
+
+	trap_RealTime(&ct);
+
+	if (printIt) {
+		G_Printf("%s", s);
+	}
+
+	Com_sprintf(string, sizeof (string), "[%s%02d-%02d %02d:%02d:%02d] %s", aMonths[ct.tm_mon], ct.tm_mday, 1900 + ct.tm_year, ct.tm_hour, ct.tm_min, ct.tm_sec, s);
+
+	if (level.CrashLog) {
+		trap_FS_Write(string, strlen(string), level.CrashLog);
+	} else {
+		G_Printf("CrashLog: error while logging\n");
+	}
+}
+
 #if defined __linux__
 
 # include <string.h>
@@ -53,62 +80,57 @@ void installinthandler() {
 }
 
 void linux_siginfo(int signal, siginfo_t *siginfo) {
-	G_LogPrintf("Signal: %s (%d)\n", strsignal(signal), signal);
-	G_LogPrintf("Siginfo: %p\n", siginfo);
+	CrashLog(va("Signal: %s (%d)\n", strsignal(signal), signal), qtrue);
+	CrashLog(va("Siginfo: %p\n", siginfo), qtrue);
 	if (siginfo) {
-		G_LogPrintf("Code: %d\n", siginfo->si_code);
-		G_LogPrintf("Faulting Memory Ref/Instruction: %p\n", siginfo->si_addr);
+		CrashLog(va("Code: %d\n", siginfo->si_code), qtrue);
+		CrashLog(va("Faulting Memory Ref/Instruction: %p\n", siginfo->si_addr), qtrue);
 	}
 }
 
-// tjw: i'm disabling etpub_dsnoinfo() because it depends on
-//      glibc 2.3.3 only  (it also won't build on earlier glibc 2.3
-//      versions).
-//      We're only doing glibc 2.1.3 release builds anyway.
-
-/* Nico, commenting because it won't compile
+/* Nico, commenting because it won't compile*/
 void linux_dsoinfo() {
     struct link_map *linkmap = NULL;
-    ElfW(Ehdr)      * ehdr = (ElfW(Ehdr) *)0x08048000;
-    ElfW(Phdr)      * phdr;
-    ElfW(Dyn) *dyn;
-    struct r_debug *rdebug = NULL;
+    ElfW(Ehdr)      *ehdr = (ElfW(Ehdr) *)0x08048000;
+    ElfW(Phdr)      *phdr;
+    ElfW(Dyn) 		*dyn;
+    struct r_debug 	*rdebug = NULL;
 
     phdr = (ElfW(Phdr) *)((char *)ehdr + ehdr->e_phoff);
 
-    while (phdr++<(ElfW(Phdr) *)((char *)phdr + (ehdr->e_phnum * sizeof(ElfW(Phdr)))))
-        if (phdr->p_type == PT_DYNAMIC)
+    while (phdr < (ElfW(Phdr) *)((char *)phdr + (ehdr->e_phnum * sizeof(ElfW(Phdr)))) && phdr++) {
+        if (phdr->p_type == PT_DYNAMIC) {
             break;
+        }
+    }
 
-    for (dyn = (ElfW(Dyn) *)phdr->p_vaddr; dyn->d_tag != DT_NULL; dyn++)
+    for (dyn = (ElfW(Dyn) *)phdr->p_vaddr; dyn->d_tag != DT_NULL; dyn++) {
         if (dyn->d_tag == DT_DEBUG) {
             rdebug = (void *)dyn->d_un.d_ptr;
             break;
         }
+    }
 
     linkmap = rdebug->r_map;
 
     //rewind to top item.
-    while(linkmap->l_prev)
-                linkmap=linkmap->l_prev;
+    while (linkmap->l_prev) {
+        linkmap=linkmap->l_prev;
+	}
 
-    G_LogPrintf("DSO Information:\n");
+    CrashLog("DSO Information:\n", qtrue);
 
-    while(linkmap) {
-
-        if(linkmap->l_addr) {
-
-            if(strcmp(linkmap->l_name,"")==0)
-                G_LogPrintf("0x%08x\t(unknown)\n", linkmap->l_addr);
-            else
-                G_LogPrintf("0x%08x\t%s\n", linkmap->l_addr, linkmap->l_name);
-
+    while (linkmap) {
+        if (linkmap->l_addr) {
+            if (strcmp(linkmap->l_name, "") == 0) {
+                CrashLog(va("0x%08x\t(unknown)\n", linkmap->l_addr), qtrue);
+			} else {
+                CrashLog(va("0x%08x\t%s\n", linkmap->l_addr, linkmap->l_name), qtrue);
+            }
         }
-
-        linkmap=linkmap->l_next;
-
+        linkmap = linkmap->l_next;
     }
-}*/
+}
 
 void linux_backtrace(ucontext_t *ctx) {
 
@@ -132,28 +154,28 @@ void linux_backtrace(ucontext_t *ctx) {
 	//Set the actual calling address for accurate stack traces.
 	//If we don't do this stack traces are less accurate.
 # ifdef GLIBC_21
-	G_LogPrintf("Stack frames: %Zd entries\n", size - 1);
+	CrashLog(va("Stack frames: %Zd entries\n", size - 1), qtrue);
 #  ifndef __x86_64__
 	array[1] = (void *)ctx->uc_mcontext.gregs[EIP];
 #  else
 	array[1] = (void *)ctx->uc_mcontext.gregs[RIP];
 #  endif
 # else
-	G_LogPrintf("Stack frames: %zd entries\n", size - 1);
+	CrashLog(va("Stack frames: %zd entries\n", size - 1), qtrue);
 #  ifndef __x86_64__
 	array[1] = (void *)ctx->uc_mcontext.gregs[REG_EIP];
 #  else
 	array[1] = (void *)ctx->uc_mcontext.gregs[REG_RIP];
 #  endif
 # endif
-	G_LogPrintf("Backtrace:\n");
+	CrashLog("Backtrace:\n", qtrue);
 
 	strings = (char **)backtrace_symbols(array, (int)size);
 
 	//Start at one and climb up.
 	//The first entry points back to this function.
 	for (i = 1; i < (int)size; i++)
-		G_LogPrintf("(%i) %s\n", i, strings[i]);
+		CrashLog(va("(%i) %s\n", i, strings[i]), qtrue);
 
 	free(strings);
 }
@@ -163,9 +185,9 @@ __sighandler_t INTHandler(int signal, struct sigcontext ctx) {
 	signal = signal;
 	ctx    = ctx;
 
-	G_LogPrintf("------------------------------------------------\n");
-	G_LogPrintf("Ctrl-C is not the proper way to kill the server.\n");
-	G_LogPrintf("------------------------------------------------\n");
+	CrashLog("------------------------------------------------\n", qtrue);
+	CrashLog("Ctrl-C is not the proper way to kill the server.\n", qtrue);
+	CrashLog("------------------------------------------------\n", qtrue);
 	return 0;
 }
 
@@ -179,16 +201,15 @@ void CrashHandler(int signal, siginfo_t *siginfo, ucontext_t *ctx) {
 	}
 
 	if (segvloop < 2) {
-		G_LogPrintf("-8<------- Crash Information ------->8-\n");
-		G_LogPrintf("---------------------------------------\n");
-		G_LogPrintf("Version: %s %s Linux\n", GAME_VERSION, MOD_VERSION);
-		G_LogPrintf("Map: %s\n", level.rawmapname);
+		CrashLog("-8<------- Crash Information ------->8-\n", qtrue);
+		CrashLog("---------------------------------------\n", qtrue);
+		CrashLog(va("Version: %s %s Linux\n", GAME_VERSION, MOD_VERSION), qtrue);
+		CrashLog(va("Map: %s\n", level.rawmapname), qtrue);
 		linux_siginfo(signal, siginfo);
-		// Nico, #fixme
-		// linux_dsoinfo();
+		linux_dsoinfo();
 		linux_backtrace(ctx);
-		G_LogPrintf("-8<--------------------------------->8-\n\n");
-		G_LogPrintf("Attempting to clean up.\n");
+		CrashLog("-8<--------------------------------->8-\n\n", qtrue);
+		CrashLog("Attempting to clean up.\n", qtrue);
 		G_ShutdownGame(0);
 		//pass control to the default handler.
 		if (signal == SIGSEGV) {
@@ -241,7 +262,7 @@ PFNSYMFUNCTIONTABLEACCESS pfnSymFunctionTableAccess = NULL;
 */
 
 BOOL CALLBACK EnumModules(LPSTR ModuleName, DWORD BaseOfDll, PVOID UserContext) {
-	G_LogPrintf("0x%08x\t%s\n", BaseOfDll, ModuleName);
+	CrashLog(va("0x%08x\t%s\n", BaseOfDll, ModuleName), qtrue);
 	return TRUE;
 }
 
@@ -275,12 +296,12 @@ char *ExceptionName(DWORD exceptioncode) {
 }
 
 void win32_exceptioninfo(LPEXCEPTION_POINTERS e) {
-	G_LogPrintf("Exception: %s (0x%08x)\n", ExceptionName(e->ExceptionRecord->ExceptionCode), e->ExceptionRecord->ExceptionCode);
-	G_LogPrintf("Exception Address: 0x%08x\n", e->ExceptionRecord->ExceptionAddress);
+	CrashLog(va("Exception: %s (0x%08x)\n", ExceptionName(e->ExceptionRecord->ExceptionCode), e->ExceptionRecord->ExceptionCode), qtrue);
+	CrashLog(va("Exception Address: 0x%08x\n", e->ExceptionRecord->ExceptionAddress), qtrue);
 }
 
 void win32_dllinfo() {
-	G_LogPrintf("DLL Information:\n");
+	CrashLog("DLL Information:\n", qtrue);
 	pfnSymEnumerateModules(GetCurrentProcess(), (PSYM_ENUMMODULES_CALLBACK)EnumModules, NULL);
 }
 
@@ -306,7 +327,7 @@ void win32_backtrace(LPEXCEPTION_POINTERS e) {
 	process = GetCurrentProcess();
 	thread  = GetCurrentThread();
 
-	G_LogPrintf("Backtrace:\n");
+	CrashLog("Backtrace:\n", qtrue);
 
 	while (1) {
 
@@ -338,9 +359,9 @@ void win32_backtrace(LPEXCEPTION_POINTERS e) {
 		pSym->MaxNameLength = MAX_PATH;
 
 		if (pfnSymGetSymFromAddr(process, sf.AddrPC.Offset, &Disp, pSym)) {
-			G_LogPrintf("(%d) %s(%s+%#0x) [0x%08x]\n", cnt, modname, pSym->Name, Disp, sf.AddrPC.Offset);
+			CrashLog(va("(%d) %s(%s+%#0x) [0x%08x]\n", cnt, modname, pSym->Name, Disp, sf.AddrPC.Offset), qtrue);
 		} else {
-			G_LogPrintf("(%d) %s [0x%08x]\n", cnt, modname, sf.AddrPC.Offset);
+			CrashLog(va("(%d) %s [0x%08x]\n", cnt, modname, sf.AddrPC.Offset), qtrue);
 		}
 
 		cnt++;
@@ -357,15 +378,15 @@ LONG CALLBACK win32_exception_handler(LPEXCEPTION_POINTERS e) {
 	trap_Cvar_VariableStringBuffer("fs_basepath", basepath, sizeof (basepath));
 	trap_Cvar_VariableStringBuffer("fs_game", gamepath, sizeof (gamepath));
 	pfnSymInitialize(GetCurrentProcess(), va("%s\\%s", basepath, gamepath), TRUE);
-	G_LogPrintf("-8<------- Crash Information ------->8-\n");
-	G_LogPrintf("---------------------------------------\n");
-	G_LogPrintf("Version: %s %s Win32\n", GAME_VERSION, MOD_VERSION);
-	G_LogPrintf("Map: %s\n", level.rawmapname);
+	CrashLog("-8<------- Crash Information ------->8-\n", qtrue);
+	CrashLog("---------------------------------------\n", qtrue);
+	CrashLog(va("Version: %s %s Win32\n", GAME_VERSION, MOD_VERSION), qtrue);
+	CrashLog(va("Map: %s\n", level.rawmapname), qtrue);
 	win32_exceptioninfo(e);
 	win32_dllinfo();
 	win32_backtrace(e);
-	G_LogPrintf("-8<--------------------------------->8-\n\n");
-	G_LogPrintf("Attempting to clean up.\n");
+	CrashLog("-8<--------------------------------->8-\n\n", qtrue);
+	CrashLog("Attempting to clean up.\n", qtrue);
 	G_ShutdownGame(0);
 	pfnSymCleanup(GetCurrentProcess());
 	return 1;
@@ -375,7 +396,7 @@ void win32_initialize_handler(void) {
 
 	imagehlp = LoadLibrary("IMAGEHLP.DLL");
 	if (!imagehlp) {
-		G_LogPrintf("imagehlp.dll unavailable\n");
+		CrashLog("imagehlp.dll unavailable\n", qtrue);
 		return;
 	}
 
@@ -397,7 +418,7 @@ void win32_initialize_handler(void) {
 	    !pfnSymFunctionTableAccess
 	    ) {
 		FreeLibrary(imagehlp);
-		G_LogPrintf("imagehlp.dll missing exports.\n");
+		CrashLog("imagehlp.dll missing exports.\n", qtrue);
 		return;
 	}
 

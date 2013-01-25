@@ -858,6 +858,7 @@ typedef struct {
 
 	fileHandle_t logFile;
 	fileHandle_t APILog; // Nico, API log
+	fileHandle_t CrashLog; // Nico, creash log
 
 	char rawmapname[MAX_QPATH];
 

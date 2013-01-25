@@ -1359,8 +1359,14 @@ void G_InitGame(int levelTime, int randomSeed) {
 
 	// Nico, API logging
 	trap_FS_FOpenFile("API.log", &level.APILog, FS_APPEND_SYNC);
-	if (!level.logFile) {
-		G_Printf("WARNING: Couldn't open logfile: %s\n", "API.log");
+	if (!level.APILog) {
+		G_Printf("WARNING: Couldn't open API.log\n");
+	}
+
+	// Nico, crash logging
+	trap_FS_FOpenFile("crash.log", &level.CrashLog, FS_APPEND_SYNC);
+	if (!level.CrashLog) {
+		G_Printf("WARNING: Couldn't open crash.log\n");
 	}
 
 	G_InitWorldSession();
@@ -1507,6 +1513,12 @@ void G_ShutdownGame(int restart) {
 	if (level.APILog) {
 		trap_FS_FCloseFile(level.APILog);
 		level.APILog = 0;
+	}
+
+	// Nico, close crash log
+	if (level.CrashLog) {
+		trap_FS_FCloseFile(level.CrashLog);
+		level.CrashLog = 0;
 	}
 
 	// Nico, unload API
