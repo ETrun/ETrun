@@ -2416,13 +2416,6 @@ void G_install_timelimit() {
 	// Nico, set default gametype to "map-voting"
 	trap_Cvar_Set("g_gametype", "6");
 
-	// Check API is available
-	if (!g_useAPI.integer) {
-		G_DPrintf("API is required in order to use a timelimit. No timelimit set!\n");
-		return;
-	}
-
-
 	if (g_timelimit.integer == 0) {
 		G_DPrintf("No timelimit set (g_timelimit)\n");
 		return;
@@ -2430,7 +2423,15 @@ void G_install_timelimit() {
 
 	// Check it's valid
 	if (g_timelimit.integer < 1) {
-		G_DPrintf("Timelimit to low: %d min(s)!\n", g_timelimit.integer);
+		G_DPrintf("Timelimit too low: %d min(s)!\n", g_timelimit.integer);
+		trap_Cvar_Set("timelimit", "0");
+		return;
+	}
+
+	// Check API is available
+	if (!g_useAPI.integer) {
+		G_DPrintf("API is required in order to use a timelimit. No timelimit set!\n");
+		trap_Cvar_Set("timelimit", "0");
 		return;
 	}
 
