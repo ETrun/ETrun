@@ -235,7 +235,7 @@ static void *loginHandler(void *data) {
 
 	// Decrease global active thread counter
 	activeThreadsCounter--;
-	G_DPrintf("Decreasing threads counter to %d\n", activeThreadsCounter);
+	G_DPrintf("%s: decreasing threads counter to %d\n", GAME_VERSION, activeThreadsCounter);
 
 	return NULL;
 }
@@ -279,7 +279,7 @@ static void *mapRecordsHandler(void *data) {
 
 	// Decrease global active thread counter
 	activeThreadsCounter--;
-	G_DPrintf("Decreasing threads counter to %d\n", activeThreadsCounter);
+	G_DPrintf("%s: decreasing threads counter to %d\n", GAME_VERSION, activeThreadsCounter);
 
 	return NULL;
 }
@@ -329,7 +329,7 @@ static void *checkAPIHandler(void *data) {
 
 	// Decrease global active thread counter
 	activeThreadsCounter--;
-	G_DPrintf("Decreasing threads counter to %d\n", activeThreadsCounter);
+	G_DPrintf("%s: decreasing threads counter to %d\n", GAME_VERSION, activeThreadsCounter);
 
 	return NULL;
 }
@@ -413,7 +413,7 @@ static void *recordHandler(void *data) {
 
 	// Decrease global active thread counter
 	activeThreadsCounter--;
-	G_DPrintf("Decreasing threads counter to %d\n", activeThreadsCounter);
+	G_DPrintf("%s: decreasing threads counter to %d\n", GAME_VERSION, activeThreadsCounter);
 
 	return NULL;
 }
@@ -493,7 +493,7 @@ static void *checkpointsHandler(void *data) {
 
 	// Decrease global active thread counter
 	activeThreadsCounter--;
-	G_DPrintf("Decreasing threads counter to %d\n", activeThreadsCounter);
+	G_DPrintf("%s: decreasing threads counter to %d\n", GAME_VERSION, activeThreadsCounter);
 
 	return NULL;
 }
@@ -568,7 +568,7 @@ static void *randommapHandler(void *data) {
 
 	// Decrease global active thread counter
 	activeThreadsCounter--;
-	G_DPrintf("Decreasing threads counter to %d\n", activeThreadsCounter);
+	G_DPrintf("%s: decreasing threads counter to %d\n", GAME_VERSION, activeThreadsCounter);
 
 	return NULL;
 }
@@ -617,7 +617,7 @@ static void *mapRankHandler(void *data) {
 
 	// Decrease global active thread counter
 	activeThreadsCounter--;
-	G_DPrintf("Decreasing threads counter to %d\n", activeThreadsCounter);
+	G_DPrintf("%s: decreasing threads counter to %d\n", GAME_VERSION, activeThreadsCounter);
 
 	return NULL;
 }
@@ -762,7 +762,7 @@ void G_callAPI(char *command, char *result, gentity_t *ent, int count, ...) {
 	} else {
 		// Nico, increase active threads counter
 		activeThreadsCounter++;
-		G_DPrintf("Increasing threads counter to %d\n", activeThreadsCounter);
+		G_DPrintf("%s: increasing threads counter to %d\n", GAME_VERSION, activeThreadsCounter);
 	}
 
 	if (pthread_attr_destroy(&attr)) {
@@ -797,7 +797,7 @@ void G_loadAPI() {
 
 void G_unloadAPI() {
 	if (api_module == NULL) {
-		G_DPrintf("G_callAPI: API module is not loaded.\n");
+		G_DPrintf("%s: API module is not loaded (G_unloadAPI).\n", GAME_VERSION);
 	} else {
 
 		API_clean();
@@ -808,6 +808,6 @@ void G_unloadAPI() {
 		dlclose(api_module);
 #endif
 
-		G_Printf("ETrun: API module unloaded!\n");
+		G_Printf("%s: API module unloaded!\n", GAME_VERSION);
 	}
 }

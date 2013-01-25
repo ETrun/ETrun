@@ -1250,8 +1250,7 @@ void G_InitGame(int levelTime, int randomSeed) {
 	char cs[MAX_INFO_STRING];
 
 	G_Printf("------- Game Initialization -------\n");
-	G_Printf("gamename: %s\n", GAME_VERSION);
-	G_Printf("gamedate: %s\n", __DATE__);
+	G_Printf("Mod: %s - %s\n", GAME_VERSION, __DATE__);
 
 	srand(randomSeed);
 
@@ -1434,7 +1433,7 @@ void G_InitGame(int levelTime, int randomSeed) {
 	// ===================
 
 	if (!level.gameManager) {
-		G_DPrintf("^1ERROR No 'script_multiplayer' found in map\n");
+		G_DPrintf("WARNING: no 'script_multiplayer' found in map\n");
 	}
 
 	// Link all the splines up
@@ -2418,7 +2417,7 @@ void G_enable_delayed_map_change_watcher() {
 void G_disable_delayed_map_change_watcher() {
 	level.delayedMapChange.disabledWatcher = qtrue;
 
-	G_DPrintf("Waiting for delayed map change watcher to end...\n");
+	G_DPrintf("%s: waiting for delayed map change watcher to end...\n", GAME_VERSION);
 	my_sleep(1000);
 }
 // Nico, end of delayed map change watcher helper functions
@@ -2429,20 +2428,20 @@ void G_install_timelimit() {
 	trap_Cvar_Set("g_gametype", "6");
 
 	if (g_timelimit.integer == 0) {
-		G_DPrintf("No timelimit set (g_timelimit)\n");
+		G_DPrintf("%s: no timelimit set. (timelimit = 0)\n", GAME_VERSION);
 		return;
 	}
 
 	// Check it's valid
 	if (g_timelimit.integer < 1) {
-		G_DPrintf("Timelimit too low: %d min(s)!\n", g_timelimit.integer);
+		G_DPrintf("%s: timelimit too low! (%d min%s)\n", GAME_VERSION, g_timelimit.integer, g_timelimit.integer > 1 ? "s" : "");
 		trap_Cvar_Set("timelimit", "0");
 		return;
 	}
 
 	// Check API is available
 	if (!g_useAPI.integer) {
-		G_DPrintf("API is required in order to use a timelimit. No timelimit set!\n");
+		G_DPrintf("%s: API is required in order to use a timelimit. No timelimit set!\n", GAME_VERSION);
 		trap_Cvar_Set("timelimit", "0");
 		return;
 	}
@@ -2450,7 +2449,7 @@ void G_install_timelimit() {
 	// Update gametype to campaign mode
 	trap_Cvar_Set("g_gametype", "4");
 
-	G_DPrintf("Timelimit set to %d min(s) (g_timelimit)\n", g_timelimit.integer);
+	G_DPrintf("%s: timelimit set to %d min%s (timelimit = %d)\n", GAME_VERSION, g_timelimit.integer, g_timelimit.integer > 1 ? "s" : "", g_timelimit.integer);
 	G_randommap(NULL);
 }
 

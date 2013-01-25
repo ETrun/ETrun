@@ -14,14 +14,14 @@ void Cmd_Login_f(gentity_t *ent) {
 	}
 
 	if (!ent || !ent->client) {
-		G_DPrintf("Cmd_Login_f: invalid ent: %d\n", (int)ent);
+		G_DPrintf("%s: Cmd_Login_f, invalid ent: %d\n", GAME_VERSION, (int)ent);
 		return;
 	}
 
 	// Check if already logged in
 	if (ent->client->sess.logged) {
 		CP("cp \"You are already logged in!\n\"");
-		G_DPrintf("Cmd_Login_f: client already logged in\n");
+		G_DPrintf("%s: Cmd_Login_f, client is already logged in\n", GAME_VERSION);
 		return;
 	}
 
@@ -48,7 +48,7 @@ void Cmd_Login_f(gentity_t *ent) {
 
 	if (strlen(token) == 0) {
 		CP("cp \"Empty auth token!\n\"");
-		G_DPrintf("Cmd_Login_f: empty_token\n");
+		G_DPrintf("%s: Cmd_Login_f, empty_token\n", GAME_VERSION);
 		free(result);
 	} else {
 		G_API_login(result, ent, token);
@@ -59,7 +59,7 @@ void Cmd_Login_f(gentity_t *ent) {
 // Nico, ETrun logout command
 void Cmd_Logout_f(gentity_t *ent) {
 	if (!ent || !ent->client) {
-		G_DPrintf("Cmd_Login_f: invalid ent: %d\n", (int)ent);
+		G_DPrintf("%s: Cmd_Logout_f, invalid ent: %d\n", (int)ent, GAME_VERSION);
 		return;
 	}
 

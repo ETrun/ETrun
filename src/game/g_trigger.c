@@ -178,7 +178,7 @@ void SP_trigger_multiple(gentity_t *ent) {
 			if (!Q_stricmp(target->classname, "target_startTimer")
 			    || !Q_stricmp(target->classname, "target_stopTimer")
 			    || !Q_stricmp(target->classname, "target_checkpoint")) {
-				G_DPrintf("SP_trigger_multiple linked to %s, wait found = %f, overrided to 0.5\n", target->classname, ent->wait);
+				G_DPrintf("%s: SP_trigger_multiple linked to %s, wait found = %f, overrided to 0.5\n", GAME_VERSION, target->classname, ent->wait);
 				ent->wait = 0.5;
 			}
 		}

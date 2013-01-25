@@ -943,7 +943,7 @@ G_SetEntState
 */
 void G_SetEntState(gentity_t *ent, entState_t state) {
 	if (ent->entstate == state) {
-		G_DPrintf("entity %i already in desired state [%i]\n", ent->s.number, state);
+		// G_DPrintf("entity %i already in desired state [%i]\n", ent->s.number, state);
 		return;
 	}
 

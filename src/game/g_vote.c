@@ -439,15 +439,15 @@ void *G_delayed_map_change_watcher(void *arg) {
 
 				// Nico, do we have to wait for some threads to finish their work?
 				while (activeThreadsCounter > 0 && count < limit) {
-					G_DPrintf("Waiting for %d thread(s) before changing map\n", activeThreadsCounter);
+					G_DPrintf("%s: waiting for %d thread%s before changing map\n", GAME_VERSION, activeThreadsCounter, activeThreadsCounter > 1 ? "s" : "");
 					my_sleep(1000); // Nico, sleep for 1sec
 					count++;
 				}
 
 				if (count >= limit) {
-					G_Error("Warning: threads waiting timeout reached (threads: %d)", activeThreadsCounter);
+					G_Error("%s: warning, threads waiting timeout reached (threads: %d)", GAME_VERSION, activeThreadsCounter);
 				}
-				G_DPrintf("Changing map now!\n");
+				G_DPrintf("%s: changing map now!\n", GAME_VERSION);
 				Svcmd_ResetMatch_f(qtrue, qfalse);
 				trap_SendConsoleCommand(EXEC_APPEND, va("map %s\n", level.delayedMapChange.passedVote));
 				break;
@@ -456,7 +456,7 @@ void *G_delayed_map_change_watcher(void *arg) {
 
 				// Print incomming map change every 5 secs
 				if (timeLeft % 5 == 0) {
-					G_DPrintf("Map change to %s in %d secs\n", level.delayedMapChange.passedVote, timeLeft);
+					G_DPrintf("%s: map change to %s in %d sec%s\n", GAME_VERSION, level.delayedMapChange.passedVote, timeLeft, timeLeft > 1 ? "s" : "");
 				}
 
 				// Announce incomming map to players
