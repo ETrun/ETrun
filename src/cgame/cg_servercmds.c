@@ -310,7 +310,7 @@ void CG_ParseSpawns(void) {
 
 		newteam = atoi(s);
 		if ((int)cg.spawnTeams[i] != newteam) {
-			cg.spawnTeams[i]            = newteam;
+			cg.spawnTeams[i] = newteam;
 		}
 	}
 }
@@ -827,8 +827,8 @@ static void CG_MapRestart(void) {
 
 	cg.pmext.bAutoReload = (cg_autoReload.integer > 0);
 
-	numSplinePaths     = 0;
-	numPathCorners     = 0;
+	numSplinePaths = 0;
+	numPathCorners = 0;
 
 	cgs.fadeStartTime = 0;
 	cgs.fadeAlpha     = 0;

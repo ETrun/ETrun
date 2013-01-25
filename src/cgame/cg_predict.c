@@ -634,7 +634,7 @@ static void CG_TouchTriggerPrediction(void) {
 }
 
 #define RESET_PREDICTION                        \
-	useCommand              = current - CMD_BACKUP + 1;
+	useCommand = current - CMD_BACKUP + 1;
 
 
 /*

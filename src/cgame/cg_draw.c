@@ -1352,7 +1352,7 @@ static void CG_DrawCrosshairNames(void) {
 	float    zChange;
 	qboolean hitClient = qfalse;
 	float    dist      = 0;
-	int clientNum = 0;
+	int      clientNum = 0;
 
 	if (cg_drawCrosshair.integer < 0) {
 		return;
@@ -1400,8 +1400,8 @@ static void CG_DrawCrosshairNames(void) {
 	// Nico, don't draw if hiding others is enabled and distance to the player is < cg_hideRange
 	clientNum = cg.crosshairClientNum;
 	if (clientNum >= 0 && clientNum < MAX_CLIENTS &&
-		cg_hideOthers.integer && clientNum != cg.clientNum &&
-		Distance((&cg_entities[cg.clientNum])->lerpOrigin, (&cg_entities[clientNum])->lerpOrigin) < cg_hideRange.integer) {
+	    cg_hideOthers.integer && clientNum != cg.clientNum &&
+	    Distance((&cg_entities[cg.clientNum])->lerpOrigin, (&cg_entities[clientNum])->lerpOrigin) < cg_hideRange.integer) {
 		return;
 	}
 
