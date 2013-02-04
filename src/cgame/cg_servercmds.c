@@ -154,18 +154,6 @@ CG_ParseOIDInfo
 ==================
 */
 
-oidInfo_t *CG_OIDInfoForEntityNum(int num) {
-	int i;
-
-	for (i = 0; i < MAX_OID_TRIGGERS; i++) {
-		if (cgs.oidInfo[i].entityNum == num) {
-			return &cgs.oidInfo[i];
-		}
-	}
-
-	return NULL;
-}
-
 void CG_ParseOIDInfo(int num) {
 	const char *info;
 	const char *cs;
@@ -398,41 +386,6 @@ static void CG_ParseGlobalFog(void) {
 	}
 }
 
-// Parse server version info (for demo playback compatibility)
-void CG_ParseServerVersionInfo(const char *pszVersionInfo) {
-	// This will expand to a tokenized string, eventually but for
-	// now we only need to worry about 1 number :)
-	cgs.game_versioninfo = atoi(pszVersionInfo);
-}
-
-// Parse reinforcement offsets
-void CG_ParseReinforcementTimes(const char *pszReinfSeedString) {
-	const char   *tmp = pszReinfSeedString, *tmp2;
-	unsigned int i, j, dwDummy = 0; // Nico, note, no not remove dwDummy
-	unsigned int dwOffset[TEAM_NUM_TEAMS];
-
-	dwDummy = dwDummy; // Nico, ugly fix to calm down GCC
-
-#define GETVAL(x, y) if ((tmp = strchr(tmp, ' ')) == NULL) { return; } x = atoi(++tmp) / y;
-
-	dwOffset[TEAM_ALLIES] = atoi(pszReinfSeedString) >> REINF_BLUEDELT;
-	GETVAL(dwOffset[TEAM_AXIS], (1 << REINF_REDDELT));
-	tmp2 = tmp;
-
-	for (i = TEAM_AXIS; i <= TEAM_ALLIES; i++) {
-		tmp = tmp2;
-		for (j = 0; j < MAX_REINFSEEDS; j++) {
-			if (j == dwOffset[i]) {
-				GETVAL(cgs.aReinfOffset[i], aReinfSeeds[j]);
-				cgs.aReinfOffset[i] *= 1000;
-				break;
-			}
-			GETVAL(dwDummy, 1);
-		}
-	}
-}
-
-
 /*
 ================
 CG_SetConfigValues
@@ -454,11 +407,6 @@ void CG_SetConfigValues(void) {
 	cgs.voteYes  = atoi(CG_ConfigString(CS_VOTE_YES));
 	cgs.voteNo   = atoi(CG_ConfigString(CS_VOTE_NO));
 	Q_strncpyz(cgs.voteString, CG_ConfigString(CS_VOTE_STRING), sizeof (cgs.voteString));
-
-	// OSP
-	CG_ParseServerVersionInfo(CG_ConfigString(CS_VERSIONINFO));
-	CG_ParseReinforcementTimes(CG_ConfigString(CS_REINFSEEDS));
-	// OSP
 }
 
 /*
@@ -555,10 +503,6 @@ static void CG_ConfigStringModified(void) {
 		CG_ParseWolfinfo();
 	} else if (num >= CS_MULTI_SPAWNTARGETS && num < CS_MULTI_SPAWNTARGETS + MAX_MULTI_SPAWNTARGETS) {
 		CG_ParseSpawns();
-	} else if (num == CS_VERSIONINFO) {
-		CG_ParseServerVersionInfo(str);           // OSP - set versioning info for older demo playback
-	} else if (num == CS_REINFSEEDS) {
-		CG_ParseReinforcementTimes(str);          // OSP - set reinforcement times for each team
 	} else if (num == CS_LEVEL_START_TIME) {
 		cgs.levelStartTime = atoi(str);
 	} else if (num == CS_VOTE_TIME) {

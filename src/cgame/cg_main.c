@@ -2602,10 +2602,6 @@ void CG_Init(int serverMessageNum, int serverCommandSequence, int clientNum, qbo
 	s                  = CG_ConfigString(CS_LEVEL_START_TIME);
 	cgs.levelStartTime = atoi(s);
 
-	// OSP
-	CG_ParseServerVersionInfo(CG_ConfigString(CS_VERSIONINFO));
-	CG_ParseReinforcementTimes(CG_ConfigString(CS_REINFSEEDS));
-
 	CG_initStrings();
 	CG_windowInit();
 

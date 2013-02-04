@@ -324,45 +324,6 @@ int CG_GetOriginForTag(refEntity_t *parent, char *tagName, int startIndex, vec3_
 	return retval;
 }
 
-/*
-==============
-CG_SparklerSparks
-==============
-*/
-void CG_SparklerSparks(vec3_t origin, int count) {
-// these effect the look of the, umm, effect
-	int FUSE_SPARK_LIFE   = 100;
-	int FUSE_SPARK_LENGTH = 30;
-// these are calculated from the above
-	int FUSE_SPARK_SPEED = (FUSE_SPARK_LENGTH * 1000 / FUSE_SPARK_LIFE);
-
-	int           i;
-	localEntity_t *le;
-	refEntity_t   *re;
-
-	for (i = 0; i < count; i++) {
-
-		// spawn the spark
-		le = CG_AllocLocalEntity();
-		re = &le->refEntity;
-
-		le->leType        = LE_FUSE_SPARK;
-		le->startTime     = cg.time;
-		le->endTime       = cg.time + FUSE_SPARK_LIFE;
-		le->lastTrailTime = cg.time;
-
-		VectorCopy(origin, re->origin);
-
-		le->pos.trType = TR_GRAVITY;
-		VectorCopy(origin, le->pos.trBase);
-		VectorSet(le->pos.trDelta, crandom(), crandom(), crandom());
-		VectorNormalize(le->pos.trDelta);
-		VectorScale(le->pos.trDelta, FUSE_SPARK_SPEED, le->pos.trDelta);
-		le->pos.trTime = cg.time;
-
-	}
-}
-
 // just a bunch of numbers we can use for pseudo-randomizing based on time
 #define NUMRANDTABLE 257
 unsigned short randtable[NUMRANDTABLE] =
@@ -411,39 +372,6 @@ float lt_random(int thisrandseed, int t) {
 float lt_crandom(int thisrandseed, int t) {
 	return ((2.0 * ((float)randtable[(thisrandseed + t + (cg.time / LT_MS) * (cg.time / LT_MS)) % NUMRANDTABLE] / (float)LT_RANDMAX)) - 1.0);
 }
-
-/*
-================
-CG_ProjectedSpotLight
-================
-*/
-void CG_ProjectedSpotLight(vec3_t start, vec3_t dir) {
-	vec3_t  end;
-	trace_t tr;
-	float   alpha, radius;
-	vec4_t  projection;
-
-
-	VectorMA(start, 1000, dir, end);
-	CG_Trace(&tr, start, NULL, NULL, end, -1, CONTENTS_SOLID);
-	if (tr.fraction == 1.0) {
-		return;
-	}
-	//
-	alpha = (1.0 - tr.fraction);
-	if (alpha > 1.0) {
-		alpha = 1.0;
-	}
-	//
-	radius = 32 + 64 * tr.fraction;
-	//%	VectorNegate( dir, projection );
-	//%	CG_ImpactMark( cgs.media.spotLightShader, tr.endpos, projection, 0, alpha, alpha, alpha, 1.0, qfalse, radius, qtrue, -2 );
-
-	VectorCopy(dir, projection);
-	projection[3] = radius * 2.0f;
-	CG_ImpactMark(cgs.media.spotLightShader, tr.endpos, projection, radius, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, -1);
-}
-
 
 #define MAX_SPOT_SEGS 20
 #define MAX_SPOT_RANGE 2000

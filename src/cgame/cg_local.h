@@ -1570,10 +1570,7 @@ typedef struct {
 
 	// OSP
 	int aviDemoRate;                                    // Demo playback recording
-	int aReinfOffset[TEAM_NUM_TEAMS];                   // Team reinforcement offsets
 	int cursorUpdate;                                   // Timeout for mouse pointer view
-
-	int game_versioninfo;                               // game base version
 
 	qboolean fResize;                                   // MV window "resize" status
 	qboolean fSelect;                                   // MV window "select" status
@@ -2222,9 +2219,7 @@ localEntity_t *CG_MakeExplosion(vec3_t origin, vec3_t dir,
                                 qhandle_t hModel, qhandle_t shader, int msec,
                                 qboolean isSprite);
 // Ridah
-void CG_SparklerSparks(vec3_t origin, int count);
 void CG_ClearFlameChunks(void);
-void CG_ProjectedSpotLight(vec3_t start, vec3_t dir);
 // done.
 
 //----(SA)
@@ -2265,7 +2260,6 @@ void        CG_ParseEntitiesFromString(void);
 // cg_info.c
 //
 void CG_LoadingString(const char *s);
-void CG_LoadingClient(int clientNum);
 void CG_DrawInformation(qboolean forcerefresh);
 void CG_DemoClick(int key, qboolean down);
 void CG_ShowHelp_Off(int *status);
@@ -2275,8 +2269,6 @@ void CG_ShowHelp_On(int *status);
 // cg_scoreboard.c
 //
 qboolean CG_DrawScoreboard(void);
-
-void CG_CommandCentreClick(int key);
 
 typedef struct {
 	int pendingAnimationTime;
@@ -2307,10 +2299,8 @@ typedef enum {
 	ANIM_RAISE,
 } animType_t;
 
-qboolean CG_DrawGameView(void);
 void CG_ParseFireteams(void);
 void CG_ParseOIDInfos(void);
-oidInfo_t *CG_OIDInfoForEntityNum(int num);
 
 //
 // cg_consolecmds.c
@@ -2324,7 +2314,6 @@ void CG_autoRecord_f(void);
 void CG_autoScreenShot_f(void);
 void CG_keyOn_f(void);
 void CG_keyOff_f(void);
-void CG_toggleSwing_f(void);
 
 //
 // cg_servercmds.c
@@ -2333,8 +2322,6 @@ void CG_ExecuteNewServerCommands(int latestSequence);
 void CG_ParseServerinfo(void);
 void CG_ParseWolfinfo(void);            // NERVE - SMF
 void CG_ParseSpawns(void);
-void CG_ParseServerVersionInfo(const char *pszVersionInfo);
-void CG_ParseReinforcementTimes(const char *pszReinfSeedString);
 void CG_SetConfigValues(void);
 void CG_ShaderStateChanged(void);
 void CG_ChargeTimesChanged(void);
