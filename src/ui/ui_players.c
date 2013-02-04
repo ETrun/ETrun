@@ -38,8 +38,6 @@ If you have questions concerning this license or the applicable additional terms
 #define UI_TIMER_MUZZLE_FLASH   20
 #define UI_TIMER_WEAPON_DELAY   250
 
-#define JUMP_HEIGHT             56
-
 #define SWINGSPEED              0.3
 
 #define SPIN_SPEED              0.9

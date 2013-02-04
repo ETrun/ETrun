@@ -2624,9 +2624,6 @@ int         CG_LoadCamera(const char *name);
 void        CG_FreeCamera(int camNum);
 //----(SA)	end
 
-bg_playerclass_t *CG_PlayerClassForClientinfo(clientInfo_t *ci, centity_t *cent);
-
-void CG_LocateCampaign(void);
 void CG_LocateArena(void);
 const char *CG_DescriptionForCampaign(void);
 const char *CG_NameForCampaign(void);
@@ -2643,53 +2640,7 @@ typedef struct {
 extern weaponType_t weaponTypes[];
 weaponType_t *WM_FindWeaponTypeForWeapon(weapon_t weapon);
 
-extern animation_t *lastTorsoAnim;
-extern animation_t *lastLegsAnim;
-
-void CG_MenuCheckPendingAnimation(playerInfo_t *pi);
-void CG_MenuPendingAnimation(playerInfo_t *pi, const char *legsAnim, const char *torsoAnim, int delay);
-void CG_MenuSetAnimation(playerInfo_t *pi, const char *legsAnim, const char *torsoAnim, qboolean force, qboolean clearpending);
-
-#define CC_FILTER_AXIS          (1 << 0)
-#define CC_FILTER_ALLIES        (1 << 1)
-#define CC_FILTER_SPAWNS        (1 << 2)
-#define CC_FILTER_CMDPOST       (1 << 3)
-#define CC_FILTER_HACABINETS    (1 << 4)
-#define CC_FILTER_CONSTRUCTIONS (1 << 5)
-#define CC_FILTER_DESTRUCTIONS  (1 << 6)
-#define CC_FILTER_OBJECTIVES    (1 << 7)
-
-#define TAB_LEFT_WIDTH 178
-#define TAB_LEFT_EDGE (640 - TAB_LEFT_WIDTH)
-
 fireteamData_t *CG_IsOnSameFireteam(int clientNum, int clientNum2);
-
-
-// START Mad Doc - TDF
-
-#define MAX_SQUAD_SIZE 6
-
-//
-// merged the common UI elements
-//
-#define UI_CAMPAIGN_BRIEFING 0
-#define UI_COMMAND_MAP 1
-#define UI_SQUAD_SELECT 2
-
-
-void CG_DrawUITabs();
-void CG_DrawUICurrentSquad();
-qboolean CG_UICommonClick();
-void CG_DrawUISelectedSoldier(void);
-void CG_UICurrentSquadSetup(void);
-void CG_CampaignBriefingSetup(void);
-
-
-#define ORDER_ICON_FADE_TIME 3500
-
-void CG_AddToJournal(char *text);
-
-// END Mad Doc - TDF
 
 // Gordon: Fireteam stuff
 
