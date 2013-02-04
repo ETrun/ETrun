@@ -1357,9 +1357,11 @@ void G_InitGame(int levelTime, int randomSeed) {
 	}
 
 	// Nico, API logging
-	trap_FS_FOpenFile("API.log", &level.APILog, FS_APPEND_SYNC);
-	if (!level.APILog) {
-		G_Printf("WARNING: Couldn't open API.log\n");
+	if (g_useAPI.integer) {
+		trap_FS_FOpenFile("API.log", &level.APILog, FS_APPEND_SYNC);
+		if (!level.APILog) {
+			G_Printf("WARNING: Couldn't open API.log\n");
+		}
 	}
 
 	// Nico, crash logging
