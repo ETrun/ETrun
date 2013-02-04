@@ -36,44 +36,6 @@ If you have questions concerning this license or the applicable additional terms
 
 extern pmove_t cg_pmove;        // cg_predict.c
 
-vec4_t colorClear = { 0.0f, 0.0f, 0.0f, 0.0f };     // Transparent
-vec4_t colorBrown1 = { 0.3f, 0.2f, 0.1f, 0.9f };    // Brown
-vec4_t colorGreen1 = { 0.21f, 0.3f, 0.0f, 0.9f };   // Greenish (darker)
-vec4_t colorGreen2 = { 0.305f, 0.475f, 0.305f, 0.48f }; // Slightly off from default fill
-
-void CG_createMOTDWindow(void) {
-	const char *str = CG_ConfigString(CS_CUSTMOTD + 0);
-
-	if (str != NULL && *str != 0) {
-		int         i;
-		cg_window_t *sw = CG_windowAlloc(WFX_TEXTSIZING | WFX_FADEIN, 500);
-
-		cg.motdWindow = sw;
-		if (sw == NULL) {
-			return;
-		}
-
-		// Window specific
-		sw->id            = WID_MOTD;
-		sw->fontScaleX    = 1.0f;
-		sw->fontScaleY    = 1.0f;
-		sw->x             = 10;
-		sw->y             = -36;
-		sw->flashMidpoint = sw->flashPeriod * 0.8f;
-		memcpy(&sw->colorBackground2, &colorGreen2, sizeof (vec4_t));
-
-		// Copy all MOTD info into the window
-		cg.windowCurrent = sw;
-		for (i = 0; i < MAX_MOTDLINES; i++) {
-			str = CG_ConfigString(CS_CUSTMOTD + i);
-			if (str != NULL && *str != 0) {
-				CG_printWindow((char *)str);
-			} else {
-				break;
-			}
-		}
-	}
-}
 
 //////////////////////////////////////////////
 //////////////////////////////////////////////
@@ -117,30 +79,6 @@ void CG_windowReset(cg_window_t *w, int fx, int startupLength) {
 	memcpy(&w->colorBorder, &colorGeneralBorder, sizeof (vec4_t));
 	memcpy(&w->colorBackground, &colorGeneralFill, sizeof (vec4_t));
 }
-
-// Reserve a window
-cg_window_t *CG_windowAlloc(int fx, int startupLength) {
-	int                i;
-	cg_window_t        *w;
-	cg_windowHandler_t *wh = &cg.winHandler;
-
-	if (wh->numActiveWindows == MAX_WINDOW_COUNT) {
-		return(NULL);
-	}
-
-	for (i = 0; i < MAX_WINDOW_COUNT; i++) {
-		w = &wh->window[i];
-		if (w->inuse == qfalse) {
-			CG_windowReset(w, fx, startupLength);
-			wh->activeWindows[wh->numActiveWindows++] = i;
-			return(w);
-		}
-	}
-
-	// Fail if we're a full airplane
-	return(NULL);
-}
-
 
 // Free up a window reservation
 void CG_windowFree(cg_window_t *w) {
@@ -386,43 +324,6 @@ void CG_windowNormalizeOnText(cg_window_t *w) {
 		w->y += 480 - w->h;
 	}
 }
-
-
-void CG_printWindow(char *str) {
-	int         pos = 0, pos2 = 0;
-	char        buf[MAX_STRING_CHARS];
-	cg_window_t *w = cg.windowCurrent;
-
-	if (w == NULL) {
-		return;
-	}
-
-	// Silly logic for a strict format
-	Q_strncpyz(buf, str, MAX_STRING_CHARS);
-	while (buf[pos] > 0 && w->lineCount < MAX_WINDOW_LINES) {
-		if (buf[pos] == '\n') {
-			if (pos2 == pos) {
-				if (!CG_addString(w, " ")) {
-					return;
-				}
-			} else {
-				buf[pos] = 0;
-				if (!CG_addString(w, buf + pos2)) {
-					return;
-				}
-			}
-			pos2 = ++pos;
-			continue;
-		}
-		pos++;
-	}
-
-	if (pos2 < pos) {
-		CG_addString(w, buf + pos2);
-	}
-}
-
-
 
 //
 // String buffer handling

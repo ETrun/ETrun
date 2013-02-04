@@ -431,10 +431,6 @@ bg_character_t *CG_CharacterForClientinfo(clientInfo_t *ci, centity_t *cent) {
 	return BG_GetCharacter(ci->team, ci->cls);
 }
 
-bg_character_t *CG_CharacterForPlayerstate(playerState_t *ps) {
-	return BG_GetCharacter(cgs.clientinfo[ps->clientNum].team, cgs.clientinfo[ps->clientNum].cls);
-}
-
 /*
 ========================
 CG_RegisterPlayerClasses

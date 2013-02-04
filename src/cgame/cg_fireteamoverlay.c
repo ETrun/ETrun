@@ -152,63 +152,6 @@ fireteamData_t *CG_IsFireTeamLeader(int clientNum) {
 	return f ;
 }
 
-// Client, not on a fireteam, not sorted, but on your team
-clientInfo_t *CG_ClientInfoForPosition(int pos, int max) {
-	int i, cnt = 0;
-
-	for (i = 0; i < MAX_CLIENTS && cnt < max; i++) {
-		if (cg.clientNum != i && cgs.clientinfo[i].infoValid && !CG_IsOnFireteam(i)) {
-			if (cnt == pos) {
-				return &cgs.clientinfo[i];
-			}
-			cnt++;
-		}
-	}
-
-	return NULL;
-}
-
-// Fireteam, that's on your same team
-fireteamData_t *CG_FireTeamForPosition(int pos, int max) {
-	int i, cnt = 0;
-
-	for (i = 0; i < MAX_FIRETEAMS && cnt < max; i++) {
-		if (cg.fireTeams[i].inuse) {
-			if (cnt == pos) {
-				return &cg.fireTeams[i];
-			}
-			cnt++;
-		}
-	}
-
-	return NULL;
-}
-
-// Client, not sorted by rank, on CLIENT'S fireteam
-clientInfo_t *CG_FireTeamPlayerForPosition(int pos, int max) {
-	int            i, cnt = 0;
-	fireteamData_t *f = CG_IsOnFireteam(cg.clientNum);
-
-	if (!f) {
-		return NULL;
-	}
-
-	for (i = 0; i < MAX_CLIENTS && cnt < max; i++) {
-		if (cgs.clientinfo[i].infoValid) {
-			if (!(f == CG_IsOnFireteam(i))) {
-				continue;
-			}
-
-			if (cnt == pos) {
-				return &cgs.clientinfo[i];
-			}
-			cnt++;
-		}
-	}
-
-	return NULL;
-}
-
 // Client, sorted by rank, on CLIENT'S fireteam
 clientInfo_t *CG_SortedFireTeamPlayerForPosition(int pos, int max) {
 	int            i, cnt = 0;

@@ -2640,17 +2640,12 @@ typedef struct {
 extern weaponType_t weaponTypes[];
 weaponType_t *WM_FindWeaponTypeForWeapon(weapon_t weapon);
 
-fireteamData_t *CG_IsOnSameFireteam(int clientNum, int clientNum2);
+
 
 // Gordon: Fireteam stuff
-
 #define CG_IsOnFireteam(clientNum) cgs.clientinfo[clientNum].fireteamData
 fireteamData_t *CG_IsOnSameFireteam(int clientNum, int clientNum2);
 fireteamData_t *CG_IsFireTeamLeader(int clientNum);
-
-clientInfo_t *CG_ClientInfoForPosition(int pos, int max);
-fireteamData_t *CG_FireTeamForPosition(int pos, int max);
-clientInfo_t *CG_FireTeamPlayerForPosition(int pos, int max);
 
 void CG_SortClientFireteam();
 
@@ -2661,14 +2656,9 @@ const char *CG_BuildSelectedFirteamString(void);
 
 // cg_window.c
 qboolean CG_addString(cg_window_t *w, char *buf);
-void CG_createStatsWindow(void);
-
-void CG_createMOTDWindow(void);
 
 void CG_initStrings(void);
-void CG_printWindow(char *str);
 void CG_removeStrings(cg_window_t *w);
-cg_window_t *CG_windowAlloc(int fx, int startupLength);
 void CG_windowDraw(void);
 void CG_windowFree(cg_window_t *w);
 void CG_windowInit(void);
@@ -2694,7 +2684,6 @@ void CG_AttachBitsToTank(centity_t *tank, refEntity_t *mg42base, refEntity_t *mg
 
 qboolean CG_RegisterCharacter(const char *characterFile, bg_character_t *character);
 bg_character_t *CG_CharacterForClientinfo(clientInfo_t *ci, centity_t *cent);
-bg_character_t *CG_CharacterForPlayerstate(playerState_t *ps);
 void CG_RegisterPlayerClasses(void);
 
 //
@@ -2775,15 +2764,10 @@ typedef struct mapScissor_s {
 	vec2_t br;
 } mapScissor_t;
 
-void CG_DrawMap(float x, float y, float w, float h, int mEntFilter, mapScissor_t *scissor, qboolean interactive, float alpha, qboolean borderblend);
-int CG_DrawSpawnPointInfo(int px, int py, int pw, int ph, qboolean draw, mapScissor_t *scissor, int expand);
-
 #define LIMBO_3D_X  0 // Nico, 287 -> 0 //%	280
 #define LIMBO_3D_Y  0 // Nico, 382 -> 0
 #define LIMBO_3D_W  440 // Nico, 128 -> 440
 #define LIMBO_3D_H  480 // Nico, 96 -> 480  //%	94
-
-void CG_DrawPlayerHead(rectDef_t *rect, bg_character_t *character, bg_character_t *headcharacter, float yaw, float pitch, qboolean drawHat, hudHeadAnimNumber_t animation, qhandle_t painSkin, int rank, qboolean spectator);
 
 //
 // cg_popupmessages.c
