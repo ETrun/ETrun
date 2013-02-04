@@ -44,10 +44,6 @@ void G_initMatch(void) {
 
 // Setting initialization
 void G_loadMatchGame(void) {
-	unsigned int i, dwBlueOffset, dwRedOffset;
-	unsigned int aRandomValues[MAX_REINFSEEDS];
-	char         strReinfSeeds[MAX_STRING_CHARS];
-
 	G_Printf("Setting MOTD...\n");
 	trap_SetConfigstring(CS_CUSTMOTD + 0, server_motd0.string);
 	trap_SetConfigstring(CS_CUSTMOTD + 1, server_motd1.string);
@@ -58,19 +54,6 @@ void G_loadMatchGame(void) {
 
 	// Voting flags
 	G_voteFlags();
-
-	// Set up the random reinforcement seeds for both teams and send to clients
-	dwBlueOffset = rand() % MAX_REINFSEEDS;
-	dwRedOffset  = rand() % MAX_REINFSEEDS;
-	strcpy(strReinfSeeds, va("%d %d", (dwBlueOffset << REINF_BLUEDELT) + (rand() % (1 << REINF_BLUEDELT)),
-	                         (dwRedOffset << REINF_REDDELT)  + (rand() % (1 << REINF_REDDELT))));
-
-	for (i = 0; i < MAX_REINFSEEDS; i++) {
-		aRandomValues[i] = (rand() % REINF_RANGE) * aReinfSeeds[i];
-		strcat(strReinfSeeds, va(" %d", aRandomValues[i]));
-	}
-
-	trap_SetConfigstring(CS_REINFSEEDS, strReinfSeeds);
 }
 
 

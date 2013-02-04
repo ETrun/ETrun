@@ -372,7 +372,7 @@ reinforce
 // -- called when time expires for a team deployment cycle and there is at least one guy ready to go
 */
 void reinforce(gentity_t *ent) {
-	int       p, team;
+	int       p;
 	gclient_t *rclient;
 	char      userinfo[MAX_INFO_STRING], *respawnStr;
 
@@ -387,16 +387,6 @@ void reinforce(gentity_t *ent) {
 	if (!(ent->client->ps.pm_flags & PMF_LIMBO)) {
 		G_Printf("player already deployed, skipping\n");
 		return;
-	}
-
-	// get team to deploy from passed entity
-	team = ent->client->sess.sessionTeam;
-
-	// find number active team spawnpoints
-	if (team == TEAM_AXIS) {
-	} else if (team == TEAM_ALLIES) {
-	} else {
-		assert(0);
 	}
 
 	// DHM - Nerve :: restore persistant data now that we're out of Limbo

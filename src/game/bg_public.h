@@ -252,13 +252,6 @@ typedef struct {
 	int typeBits;
 } campaignInfo_t;
 
-// Random reinforcement seed settings
-# define MAX_REINFSEEDS  8
-# define REINF_RANGE     16     // (0 to n-1 second offset)
-# define REINF_BLUEDELT  3      // Allies shift offset
-# define REINF_REDDELT   2      // Axis shift offset
-extern const unsigned int aReinfSeeds[MAX_REINFSEEDS];
-
 // Client flags for server processing
 # define CGF_AUTORELOAD      0x01
 # define CGF_STATSDUMP       0x02   // Nico, note: unused
@@ -318,7 +311,6 @@ extern const unsigned int aReinfSeeds[MAX_REINFSEEDS];
 # define CS_CONSTRUCTION_NAMES           29
 
 # define CS_VERSIONINFO                  30     // Versioning info for demo playback compatibility
-# define CS_REINFSEEDS                   31     // Reinforcement seeds
 # define CS_SERVERTOGGLES                32     // Shows current enable/disabled settings (for voting UI)
 # define CS_GLOBALFOGVARS                33
 
