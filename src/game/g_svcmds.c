@@ -804,10 +804,12 @@ static void Svcmd_CheckAPI_f(void) {
 		G_Error("Svcmd_CheckAPI_f: malloc failed\n");
 	}
 
-	G_API_check(result, NULL);
+	if (!G_API_check(result, NULL)) {
+		G_Error("Svcmd_CheckAPI_f: G_API_check failed\n");
+	}
 }
 
-char *ConcatArgs(int start);
+extern char *ConcatArgs(int start);
 
 /*
 =================

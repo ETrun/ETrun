@@ -7,19 +7,19 @@
 #define RESPONSE_MAX_SIZE 2048
 #define QUERY_MAX_SIZE 1024
 #define CHAR_SEPARATOR "/"
-#define THREADS_MAX 64  // Maximum threads at the same time
+#define THREADS_MAX 32  // Maximum threads at the same time
 
-void G_callAPI(char *command, char *result, gentity_t *ent, int count, ...);
+qboolean G_callAPI(char *command, char *result, gentity_t *ent, int count, ...);
 void G_loadAPI();
 void G_unloadAPI();
-void G_API_login(char *result, gentity_t *ent, char *authToken);
-void G_API_mapRecords(char *result, gentity_t *ent, char *mapName);
-void G_API_check(char *result, gentity_t *ent);
-void G_API_sendRecord(char *result, gentity_t *ent, char *mapName, char *runName,
+qboolean G_API_login(char *result, gentity_t *ent, char *authToken);
+qboolean G_API_mapRecords(char *result, gentity_t *ent, char *mapName);
+qboolean G_API_check(char *result, gentity_t *ent);
+qboolean G_API_sendRecord(char *result, gentity_t *ent, char *mapName, char *runName,
                       char *authToken, char *data, char *etrunVersion);
-void G_API_getPlayerCheckpoints(char *result, gentity_t *ent, char *userName, char *mapName, char *runName, int runNum, char *authToken);
-void G_API_randommap(char *result, gentity_t *ent, char *mapName);
-void G_API_mapRank(char *result, gentity_t *ent, char *mapName, char *optUserName, char *optMapName, char *optRunName, char *optPhysicsName, char *authToken);
+qboolean G_API_getPlayerCheckpoints(char *result, gentity_t *ent, char *userName, char *mapName, char *runName, int runNum, char *authToken);
+qboolean G_API_randommap(char *result, gentity_t *ent, char *mapName);
+qboolean G_API_mapRank(char *result, gentity_t *ent, char *mapName, char *optUserName, char *optMapName, char *optRunName, char *optPhysicsName, char *authToken);
 
 #if defined _WIN32
 # include <windows.h>

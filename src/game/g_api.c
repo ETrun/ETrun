@@ -111,10 +111,22 @@ static char to_hex(char code) {
 
 /**
  * Function used to encode an url
+ *
+ * note: dst must be already allocated and have the required size
  */
-void url_encode(char *str, char *dst) {
+qboolean url_encode(char *str, char *dst) {
 	char *pstr = str;
 	int  i     = 0;
+
+	if (!str) {
+		LDE("str is NULL");
+		return qfalse;
+	}
+
+	if (!dst) {
+		LDE("dst is NULL");
+		return qfalse;
+	}
 
 	while (*pstr) {
 		if (isalnum(*pstr) || *pstr == '-' || *pstr == '_' || *pstr == '.' || *pstr == '~') {
@@ -128,14 +140,25 @@ void url_encode(char *str, char *dst) {
 		i++;
 	}
 	dst[i] = '\0';
+	return qtrue;
 }
 
 /**
  * Function used to decode an url
  */
-void url_decode(char *str, char *dst) {
+qboolean url_decode(char *str, char *dst) {
 	char *pstr = str;
 	int  i     = 0;
+
+	if (!str) {
+		LDE("str is NULL");
+		return qfalse;
+	}
+
+	if (!dst) {
+		LDE("dst is NULL");
+		return qfalse;
+	}
 
 	while (*pstr) {
 		if (*pstr == '%' && pstr[1] && pstr[2]) {
@@ -148,6 +171,7 @@ void url_decode(char *str, char *dst) {
 		i++;
 	}
 	dst[i] = '\0';
+	return qtrue;
 }
 
 /**
@@ -168,33 +192,6 @@ static qboolean checkAPIResult(char *result) {
 }
 
 /**
- * Log (and print) an API message
- */
-void APILog(const char *s, qboolean printIt) {
-	char       string[1024] = { 0 };
-	const char *aMonths[12] =
-	{
-		"Jan", "Feb", "Mar", "Apr", "May", "Jun",
-		"Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
-	};
-	qtime_t ct;
-
-	trap_RealTime(&ct);
-
-	if (printIt) {
-		G_Printf("%s", s);
-	}
-
-	Com_sprintf(string, sizeof (string), "[%s%02d-%02d %02d:%02d:%02d] %s", aMonths[ct.tm_mon], ct.tm_mday, 1900 + ct.tm_year, ct.tm_hour, ct.tm_min, ct.tm_sec, s);
-
-	if (level.APILog) {
-		trap_FS_Write(string, strlen(string), level.APILog);
-	} else {
-		G_Printf("APILog: error while logging\n");
-	}
-}
-
-/**
  * Login handler
  */
 static void *loginHandler(void *data) {
@@ -209,8 +206,6 @@ static void *loginHandler(void *data) {
 	code = API_query(queryStruct->cmd, queryStruct->result, queryStruct->query, sizeof (queryStruct->query));
 
 	len = strlen(queryStruct->result);
-
-	APILog(va("Login: code = %d, result = %s\n", code, queryStruct->result), qfalse);
 
 	if (code == 0) {
 		if (len > 0 && ent && ent->client) {
@@ -243,14 +238,12 @@ static void *loginHandler(void *data) {
 /**
  * Login request command
  */
-void G_API_login(char *result, gentity_t *ent, char *authToken) {
+qboolean G_API_login(char *result, gentity_t *ent, char *authToken) {
 	char net_port[8] = { 0 };
 
 	sprintf(net_port, "%d", trap_Cvar_VariableIntegerValue("net_port"));
 
-	G_callAPI("l", result, ent, 2, authToken, net_port);
-
-	APILog("Login request sent!\n", qfalse);
+	return G_callAPI("l", result, ent, 2, authToken, net_port);
 }
 
 /**
@@ -265,8 +258,6 @@ static void *mapRecordsHandler(void *data) {
 	ent         = queryStruct->ent;
 
 	code = API_query(queryStruct->cmd, queryStruct->result, queryStruct->query, sizeof (queryStruct->query));
-
-	APILog(va("mapRecords: code = %d\n", code), qfalse);
 
 	if (code == 0) {
 		clientBigDataPrint(ent, queryStruct->result);
@@ -287,7 +278,7 @@ static void *mapRecordsHandler(void *data) {
 /**
  * Map records request command
  */
-void G_API_mapRecords(char *result, gentity_t *ent, char *mapName) {
+qboolean G_API_mapRecords(char *result, gentity_t *ent, char *mapName) {
 	char net_port[8]         = { 0 };
 	char cphysics[8]         = { 0 };
 	char encodedMapName[255] = { 0 };
@@ -295,11 +286,11 @@ void G_API_mapRecords(char *result, gentity_t *ent, char *mapName) {
 	sprintf(net_port, "%d", trap_Cvar_VariableIntegerValue("net_port"));
 	sprintf(cphysics, "%d", physics.integer);
 
-	url_encode(mapName, encodedMapName);
+	if (url_encode(mapName, encodedMapName) == qfalse) {
+		return qfalse;
+	}
 
-	G_callAPI("m", result, ent, 3, encodedMapName, cphysics, net_port);
-
-	APILog("Map records request sent!\n", qfalse);
+	return G_callAPI("m", result, ent, 3, encodedMapName, cphysics, net_port);
 }
 
 /**
@@ -313,15 +304,10 @@ static void *checkAPIHandler(void *data) {
 
 	code = API_query(queryStruct->cmd, queryStruct->result, queryStruct->query, sizeof (queryStruct->query));
 
-	APILog(va("checkAPI: code = %d, result = %s\n", code, queryStruct->result), qfalse);
-
 	if (code == 0) {
 		G_Printf("%s: %s\n", GAME_VERSION, queryStruct->result);
 	} else {
 		G_Printf("%s: failed to check API (code: %d, result: %s)\n", GAME_VERSION, code, queryStruct->result);
-
-		// Nico, disable use of API
-		// trap_Cvar_Set("g_useAPI", "0");
 	}
 
 	free(queryStruct->result);
@@ -337,16 +323,14 @@ static void *checkAPIHandler(void *data) {
 /**
  * Check API command
  */
-void G_API_check(char *result, gentity_t *ent) {
+qboolean G_API_check(char *result, gentity_t *ent) {
 	char net_port[8] = { 0 };
 	char cphysics[8] = { 0 };
 
 	sprintf(net_port, "%d", trap_Cvar_VariableIntegerValue("net_port"));
 	sprintf(cphysics, "%d", physics.integer);
 
-	G_callAPI("c", result, ent, 2, cphysics, net_port);
-
-	APILog("Check API request sent!\n", qfalse);
+	return G_callAPI("c", result, ent, 2, cphysics, net_port);
 }
 
 /**
@@ -362,8 +346,6 @@ static void *recordHandler(void *data) {
 	ent         = queryStruct->ent;
 
 	code = API_query(queryStruct->cmd, queryStruct->result, queryStruct->query, sizeof (queryStruct->query));
-
-	APILog(va("Record: code = %d, result = %s\n", code, queryStruct->result), qfalse);
 
 	timerunNum = ent->client->sess.currentTimerunNum;
 
@@ -421,7 +403,7 @@ static void *recordHandler(void *data) {
 /**
  * Record send command
  */
-void G_API_sendRecord(char *result, gentity_t *ent, char *mapName, char *runName,
+qboolean G_API_sendRecord(char *result, gentity_t *ent, char *mapName, char *runName,
                       char *authToken, char *data, char *etrunVersion) {
 	char net_port[8]         = { 0 };
 	char encodedMapName[255] = { 0 };
@@ -429,12 +411,12 @@ void G_API_sendRecord(char *result, gentity_t *ent, char *mapName, char *runName
 
 	sprintf(net_port, "%d", trap_Cvar_VariableIntegerValue("net_port"));
 
-	url_encode(mapName, encodedMapName);
-	url_encode(runName, encodedRunName);
+	if (url_encode(mapName, encodedMapName) == qfalse ||
+		url_encode(runName, encodedRunName) == qfalse) {
+		return qfalse;
+	}
 
-	G_callAPI("d", result, ent, 6, encodedMapName, encodedRunName, authToken, data, etrunVersion, net_port);
-
-	APILog("Map record send request sent!\n", qfalse);
+	return G_callAPI("d", result, ent, 6, encodedMapName, encodedRunName, authToken, data, etrunVersion, net_port);
 }
 
 /**
@@ -452,8 +434,6 @@ static void *checkpointsHandler(void *data) {
 	ent         = queryStruct->ent;
 
 	code = API_query(queryStruct->cmd, queryStruct->result, queryStruct->query, sizeof (queryStruct->query));
-
-	APILog(va("Checkpoints: code = %d, result = %s\n", code, queryStruct->result), qfalse);
 
 	if (code >= 1000) {
 
@@ -501,7 +481,7 @@ static void *checkpointsHandler(void *data) {
 /**
  * Checkpoints request command
  */
-void G_API_getPlayerCheckpoints(char *result, gentity_t *ent, char *userName, char *mapName, char *runName, int runNum, char *authToken) {
+qboolean G_API_getPlayerCheckpoints(char *result, gentity_t *ent, char *userName, char *mapName, char *runName, int runNum, char *authToken) {
 	char net_port[8]             = { 0 };
 	char bufferRunNum[8]         = { 0 };
 	char encodedMapName[255]     = { 0 };
@@ -513,13 +493,13 @@ void G_API_getPlayerCheckpoints(char *result, gentity_t *ent, char *userName, ch
 	sprintf(bufferRunNum, "%d", runNum);
 	sprintf(cphysics, "%d", physics.integer);
 
-	url_encode(mapName, encodedMapName);
-	url_encode(userName, encodedOptUserName);
-	url_encode(runName, encodedRunName);
+	if (url_encode(mapName, encodedMapName) == qfalse ||
+		url_encode(userName, encodedOptUserName) == qfalse ||
+		url_encode(runName, encodedRunName) == qfalse) {
+		return qfalse;
+	}
 
-	G_callAPI("e", result, ent, 7, encodedMapName, encodedOptUserName, encodedRunName, bufferRunNum, authToken, cphysics, net_port);
-
-	APILog("Checkpoints request sent!\n", qfalse);
+	return G_callAPI("e", result, ent, 7, encodedMapName, encodedOptUserName, encodedRunName, bufferRunNum, authToken, cphysics, net_port);
 }
 
 /**
@@ -533,11 +513,9 @@ static void *randommapHandler(void *data) {
 	fileHandle_t   f;
 
 	queryStruct = (struct query_s *)data;
-	ent         = queryStruct->ent;
+	ent         = queryStruct->ent;// Nico, note: this is NULL is randomMap was asked by server (timelimit)
 
 	code = API_query(queryStruct->cmd, queryStruct->result, queryStruct->query, sizeof (queryStruct->query));
-
-	APILog(va("Randommap: code = %d, result = %s\n", code, queryStruct->result), qfalse);
 
 	if (code == 0 && queryStruct->result && checkAPIResult(queryStruct->result)) {
 
@@ -576,7 +554,7 @@ static void *randommapHandler(void *data) {
 /**
  * Checkpoints request command
  */
-void G_API_randommap(char *result, gentity_t *ent, char *mapName) {
+qboolean G_API_randommap(char *result, gentity_t *ent, char *mapName) {
 	char net_port[8]         = { 0 };
 	char encodedMapName[255] = { 0 };
 	char cphysics[8]         = { 0 };
@@ -584,11 +562,11 @@ void G_API_randommap(char *result, gentity_t *ent, char *mapName) {
 	sprintf(net_port, "%d", trap_Cvar_VariableIntegerValue("net_port"));
 	sprintf(cphysics, "%d", physics.integer);
 
-	url_encode(mapName, encodedMapName);
+	if (url_encode(mapName, encodedMapName) == qfalse) {
+		return qfalse;
+	}
 
-	G_callAPI("f", result, ent, 3, encodedMapName, cphysics, net_port);
-
-	APILog("Random map request sent!\n", qfalse);
+	return G_callAPI("f", result, ent, 3, encodedMapName, cphysics, net_port);
 }
 
 /**
@@ -603,8 +581,6 @@ static void *mapRankHandler(void *data) {
 	ent         = queryStruct->ent;
 
 	code = API_query(queryStruct->cmd, queryStruct->result, queryStruct->query, sizeof (queryStruct->query));
-
-	APILog(va("mapRank: code = %d\n", code), qfalse);
 
 	if (code == 0) {
 		clientBigDataPrint(ent, queryStruct->result);
@@ -625,7 +601,7 @@ static void *mapRankHandler(void *data) {
 /**
  * Map rank request command
  */
-void G_API_mapRank(char *result, gentity_t *ent, char *mapName, char *optUserName, char *optMapName, char *optRunName, char *optPhysicsName, char *authToken) {
+qboolean G_API_mapRank(char *result, gentity_t *ent, char *mapName, char *optUserName, char *optMapName, char *optRunName, char *optPhysicsName, char *authToken) {
 	char net_port[8]             = { 0 };
 	char cphysics[8]             = { 0 };
 	char encodedMapName[255]     = { 0 };
@@ -636,14 +612,14 @@ void G_API_mapRank(char *result, gentity_t *ent, char *mapName, char *optUserNam
 	sprintf(net_port, "%d", trap_Cvar_VariableIntegerValue("net_port"));
 	sprintf(cphysics, "%d", physics.integer);
 
-	url_encode(mapName, encodedMapName);
-	url_encode(optUserName, encodedOptUserName);
-	url_encode(optMapName, encodedOptMapName);
-	url_encode(optRunName, encodedOptRunName);
+	if (url_encode(mapName, encodedMapName) == qfalse ||
+		url_encode(optUserName, encodedOptUserName) == qfalse ||
+		url_encode(optMapName, encodedOptMapName) == qfalse ||
+		url_encode(optRunName, encodedOptRunName) == qfalse) {
+		return qfalse;
+	}
 
-	G_callAPI("r", result, ent, 8, encodedOptUserName, encodedOptMapName, encodedOptRunName, optPhysicsName, encodedMapName, authToken, cphysics, net_port);
-
-	APILog("Map rank request sent!\n", qfalse);
+	return G_callAPI("r", result, ent, 8, encodedOptUserName, encodedOptMapName, encodedOptRunName, optPhysicsName, encodedMapName, authToken, cphysics, net_port);
 }
 
 // Commands handler binding
@@ -686,30 +662,41 @@ static handler_t getHandlerForCommand(char *cmd) {
  * ent: entity who made the request
  * count: number of variadic arguments
  */
-void G_callAPI(char *command, char *result, gentity_t *ent, int count, ...) {
+qboolean G_callAPI(char *command, char *result, gentity_t *ent, int count, ...) {
 	struct query_s *queryStruct;
 	pthread_t      thread;
 	pthread_attr_t attr;
 	int            returnCode = 0;
-
 	void    *(*handler)(void *) = NULL;
 	va_list ap   = NULL;
 	int     i    = 0;
 	char    *arg = NULL;
 
 	if (api_module == NULL || API_query == NULL) {
-		G_Error("G_callAPI: API module is not loaded.");
+		LDE("API module is not loaded\n");
+		return qfalse;
+	}
+
+	// Check if thread limit is reached
+	if (activeThreadsCounter >= THREADS_MAX) {
+		LDE("threads limit (%d) reached: %d\n", THREADS_MAX, activeThreadsCounter);
+		return qfalse;
+	}
+
+	// Check number of arguments in ... (=count)
+	if (count <= 0) {
+		LDE("invalid argument count %d\n", count);
+		return qfalse;
 	}
 
 	queryStruct = malloc(sizeof (struct query_s));
 
 	if (queryStruct == NULL) {
-		G_Error("G_callAPI: malloc failed\n");
+		LDE("failed to allocate memory\n");
+		return qfalse;
 	}
 
-	if (count > 0) {
-		va_start(ap, count);
-	}
+	va_start(ap, count);
 
 	// Init query buffer
 	memset(queryStruct->query, 0, QUERY_MAX_SIZE);
@@ -718,9 +705,11 @@ void G_callAPI(char *command, char *result, gentity_t *ent, int count, ...) {
 		arg = va_arg(ap, char *);
 
 		if (!arg) {
-			G_Error("G_callAPI: empty arg %d\n", i);
+			LDE("empty argument %d with command '%s'\n", i, command);
+			free(queryStruct);
+			va_end(ap);
+			return qfalse;
 		}
-		// G_Printf("arg : %s\n", arg);
 
 		Q_strcat(queryStruct->query, QUERY_MAX_SIZE, arg);
 
@@ -729,6 +718,9 @@ void G_callAPI(char *command, char *result, gentity_t *ent, int count, ...) {
 			Q_strcat(queryStruct->query, QUERY_MAX_SIZE, CHAR_SEPARATOR);
 		}
 	}
+
+	va_end(ap);
+
 	Q_strncpyz(queryStruct->cmd, command, sizeof (queryStruct->cmd));
 	queryStruct->result = result;
 	queryStruct->ent    = ent;
@@ -737,41 +729,44 @@ void G_callAPI(char *command, char *result, gentity_t *ent, int count, ...) {
 	handler = getHandlerForCommand(command);
 
 	if (!handler) {
-		G_Error("G_callAPI: no handler for command: %s\n", command);
+		LDE("no handler for command '%s'\n", command);
+		free(queryStruct);
+		return qfalse;
 	}
 
-	// Check if thread limit is reached
-	if (activeThreadsCounter >= THREADS_MAX) {
-		G_Error("G_callAPI: threads limit (%d) reached: %d\n", THREADS_MAX, activeThreadsCounter);
-	}
-
-	APILog(va("Calling API with command: %s, query: %s\n", command, queryStruct->query), qfalse);
+	LDI("calling API with command: '%s', query '%s'\n", command, queryStruct->query);
 
 	// Create threads as detached as they will never be joined
 	if (pthread_attr_init(&attr)) {
-		G_Error("G_callAPI: error in pthread_attr_init\n");
+		LDE("error in pthread_attr_init\n");
+		free(queryStruct);
+		return qfalse;
 	}
 	if (pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED)) {
-		G_Error("G_callAPI: error in pthread_attr_setdetachstate\n");
+		LDE("error in pthread_attr_setdetachstate\n");
+		free(queryStruct);
+		return qfalse;
 	}
 
 	returnCode = pthread_create(&thread, &attr, handler, (void *)queryStruct);
 
 	if (returnCode) {
-		G_Error("G_callAPI: error in pthread_create: %d\n", returnCode);
-	} else {
-		// Nico, increase active threads counter
-		activeThreadsCounter++;
-		G_DPrintf("%s: increasing threads counter to %d\n", GAME_VERSION, activeThreadsCounter);
+		LDE("error in pthread_create, return value is %d\n", returnCode);
+		free(queryStruct);
+		return qfalse;
 	}
+
+	// Nico, increase active threads counter
+	activeThreadsCounter++;
+	G_DPrintf("%s: increasing threads counter to %d\n", GAME_VERSION, activeThreadsCounter);
 
 	if (pthread_attr_destroy(&attr)) {
-		G_Error("G_callAPI: error in pthread_attr_destroy\n");
+		LDE("error in pthread_attr_destroy\n");
+		// Nico, note: I don't free querystruct because it's used in the thread
+		return qfalse;
 	}
 
-	if (count > 0) {
-		va_end(ap);
-	}
+	return qtrue;
 }
 
 void G_loadAPI() {
@@ -792,7 +787,7 @@ void G_loadAPI() {
 		G_Error("Error calling API_init()");
 	}
 
-	G_Printf("ETrun: API module loaded!\n");
+	G_Printf("%s: API module loaded!\n", GAME_VERSION);
 }
 
 void G_unloadAPI() {

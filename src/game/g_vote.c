@@ -592,7 +592,9 @@ int G_Randommap_v(gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg
 			G_Error("G_Randommap_v: malloc failed\n");
 		}
 
-		G_API_randommap(result, ent, level.rawmapname);
+		if (!G_API_randommap(result, ent, level.rawmapname)) {
+			// #todo: inform somebody it failed
+		}
 	}
 	return(G_OK);
 }

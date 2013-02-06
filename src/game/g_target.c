@@ -1270,7 +1270,6 @@ static void notify_timerun_start(gentity_t *activator) {
 	timerunNum = activator->client->sess.currentTimerunNum;
 
 	// Nico, notify the client itself first
-	// G_DPrintf("notify_timerun_start(%d)\n", activator->client->ps.clientNum);
 	trap_SendServerCommand(activator - g_entities, va("timerun_start %i %i %i", timerunNum, activator->client->sess.timerunStartTime + 500, (int)activator->client->sess.startSpeed));
 
 	// Nico, notify its spectators
@@ -1290,7 +1289,6 @@ static void notify_timerun_start(gentity_t *activator) {
 		}
 
 		if (o->client->sess.spectatorClient == activator - g_entities) {
-			// G_DPrintf("Sending a timerun_start_spec to client %d\n", (int)(o - g_entities));
 			trap_SendServerCommand(o - g_entities, va("timerun_start_spec %i %i %i", timerunNum, activator->client->sess.timerunStartTime + 500, (int)activator->client->sess.startSpeed));
 		}
 	}
@@ -1310,10 +1308,7 @@ void target_starttimer_use(gentity_t *self, gentity_t *other, gentity_t *activat
 
 	client = activator->client;
 
-	// G_DPrintf("target_starttimer_use: client = %d\n", client->ps.clientNum);
-
 	if (client->sess.timerunActive) {
-		// G_DPrintf("target_starttimer_use: timerun already active for client %d\n", client->ps.clientNum);
 		return;
 	}
 
@@ -1394,11 +1389,8 @@ void notify_timerun_stop(gentity_t *activator, int finishTime) {
 	gentity_t *o         = NULL;
 	int       timerunNum = 0;
 
-	// G_DPrintf("notify_timerun_stop(%d, %d)\n", activator->client->ps.clientNum, finishTime);
-
 	// Nico, check if timerun is active
 	if (!activator->client->sess.timerunActive) {
-		// G_DPrintf("notify_timerun_stop canceled because timerun wasn't active\n");
 		return;
 	}
 
@@ -1424,7 +1416,6 @@ void notify_timerun_stop(gentity_t *activator, int finishTime) {
 		}
 
 		if (o->client->sess.spectatorClient == activator - g_entities) {
-			// G_DPrintf("Sending a timerun_stop_spec to client %d\n", (int)(o - g_entities));
 			trap_SendServerCommand(o - g_entities, va("timerun_stop_spec %i %i %i %i", timerunNum, finishTime, (int)activator->client->sess.stopSpeed, (int)activator->client->sess.maxSpeed));
 		}
 	}
@@ -1457,7 +1448,9 @@ static void Cmd_SendRecord_f(gentity_t *ent, char *runName, char *authToken, int
 		i++;
 	}
 
-	G_API_sendRecord(buf, ent, level.rawmapname, runName, authToken, data, GAME_VERSION_DATED);
+	if (!G_API_sendRecord(buf, ent, level.rawmapname, runName, authToken, data, GAME_VERSION_DATED)) {
+		CP(va("print \"%s^w: error while sending record!\n\"", GAME_VERSION_COLORED));
+	}
 
 	// Do *not* free buf here
 }
@@ -1534,16 +1527,12 @@ void target_stoptimer_use(gentity_t *self, gentity_t *other, gentity_t *activato
 
 	client = activator->client;
 
-	// G_DPrintf("target_stoptimer_use: client = %d\n", client->ps.clientNum);
-
 	if (!client->sess.timerunActive) {
-		// G_DPrintf("target_stoptimer_use: ignored because timerun wasn't active for client %d\n", client->ps.clientNum);
 		return;
 	}
 
 	// don't stop the time if this isn't a corresponding stoptimer
 	if (Q_stricmp(self->timerunName, client->sess.currentTimerun)) {
-		// G_DPrintf("target_stoptimer_use: ignored because started run (%s) != ended run (%s) for client %d\n", client->sess.currentTimerun, self->timerunName, client->ps.clientNum);
 		return;
 	}
 
@@ -1653,7 +1642,6 @@ static void notify_timerun_check(gentity_t *activator, int deltaTime, int time, 
 	}
 
 	// Nico, notify the client itself first
-	// G_DPrintf("Sending a timerun_check to client %d\n", (int)(activator - g_entities));
 	trap_SendServerCommand(activator - g_entities, va("timerun_check %i %i %i", deltaTime, time, status));
 
 	// Nico, notify its spectators
@@ -1673,7 +1661,6 @@ static void notify_timerun_check(gentity_t *activator, int deltaTime, int time, 
 		}
 
 		if (o->client->sess.spectatorClient == activator - g_entities) {
-			// G_DPrintf("Sending a timerun_check_spec to client %d\n", (int)(o - g_entities));
 			trap_SendServerCommand(o - g_entities, va("timerun_check_spec %i %i %i", deltaTime, time, status));
 		}
 	}

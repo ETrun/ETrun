@@ -20,8 +20,8 @@ void CrashLog(const char *s, qboolean printIt) {
 
 	Com_sprintf(string, sizeof (string), "[%s%02d-%02d %02d:%02d:%02d] %s", aMonths[ct.tm_mon], ct.tm_mday, 1900 + ct.tm_year, ct.tm_hour, ct.tm_min, ct.tm_sec, s);
 
-	if (level.CrashLog) {
-		trap_FS_Write(string, strlen(string), level.CrashLog);
+	if (level.crashLog) {
+		trap_FS_Write(string, strlen(string), level.crashLog);
 	} else {
 		G_Printf("CrashLog: error while logging\n");
 	}

@@ -173,6 +173,9 @@ vmCvar_t g_cupMode;
 // Timelimit mode
 vmCvar_t g_timelimit;
 
+// Debug log
+vmCvar_t g_debugLog;
+
 // Nico, end of ETrun cvars
 
 cvarTable_t gameCvarTable[] =
@@ -318,6 +321,9 @@ cvarTable_t gameCvarTable[] =
 
 	// Timelimit mode
 	{ &g_timelimit,            "timelimit",              "0",                          CVAR_SERVERINFO | CVAR_ARCHIVE | CVAR_LATCH,                   qfalse, qfalse, qfalse, qfalse },
+
+	// Debug log
+	{ &g_debugLog,             "g_debugLog",              "0",                         CVAR_ARCHIVE | CVAR_LATCH, 									  qfalse, qfalse, qfalse, qfalse }
 
 	// Nico, end of ETrun cvars
 };
@@ -1357,16 +1363,16 @@ void G_InitGame(int levelTime, int randomSeed) {
 	}
 
 	// Nico, API logging
-	if (g_useAPI.integer) {
-		trap_FS_FOpenFile("API.log", &level.APILog, FS_APPEND_SYNC);
-		if (!level.APILog) {
-			G_Printf("WARNING: Couldn't open API.log\n");
+	if (g_debugLog.integer) {
+		trap_FS_FOpenFile("debug.log", &level.debugLogFile, FS_APPEND_SYNC);
+		if (!level.debugLogFile) {
+			G_Printf("WARNING: Couldn't open debug.log\n");
 		}
 	}
 
 	// Nico, crash logging
-	trap_FS_FOpenFile("crash.log", &level.CrashLog, FS_APPEND_SYNC);
-	if (!level.CrashLog) {
+	trap_FS_FOpenFile("crash.log", &level.crashLog, FS_APPEND_SYNC);
+	if (!level.crashLog) {
 		G_Printf("WARNING: Couldn't open crash.log\n");
 	}
 
@@ -1510,16 +1516,16 @@ void G_ShutdownGame(int restart) {
 		level.logFile = 0;
 	}
 
-	// Nico, close API log
-	if (level.APILog) {
-		trap_FS_FCloseFile(level.APILog);
-		level.APILog = 0;
+	// Nico, close debug log
+	if (level.debugLogFile) {
+		trap_FS_FCloseFile(level.debugLogFile);
+		level.debugLogFile = 0;
 	}
 
 	// Nico, close crash log
-	if (level.CrashLog) {
-		trap_FS_FCloseFile(level.CrashLog);
-		level.CrashLog = 0;
+	if (level.crashLog) {
+		trap_FS_FCloseFile(level.crashLog);
+		level.crashLog = 0;
 	}
 
 	// Nico, unload API
@@ -1857,6 +1863,41 @@ void QDECL G_LogPrintf(const char *fmt, ...) {
 	}
 
 	trap_FS_Write(string, strlen(string), level.logFile);
+}
+
+/*
+=================
+G_LogPrintf
+
+Print to the logfile with a time stamp if it is open
+=================
+*/
+void QDECL G_LogDebug(const char *functionName, const char *severity, const char *fmt, ...) {
+	va_list argptr;
+	char    string[1024] = {0};
+	const char *aMonths[12] = {
+		"Jan", "Feb", "Mar", "Apr", "May", "Jun",
+		"Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+    };
+    qtime_t ct;
+    int l = 0;
+
+    trap_RealTime(&ct);
+
+	Com_sprintf(string, sizeof (string), "[%s%02d-%02d %02d:%02d:%02d] [%s] [%s] ",
+		aMonths[ct.tm_mon], ct.tm_mday, 1900 + ct.tm_year, ct.tm_hour, ct.tm_min, ct.tm_sec, functionName, severity);
+
+	l = strlen(string);
+
+	va_start(argptr, fmt);
+	Q_vsnprintf(string + l, sizeof (string) - l, fmt, argptr);
+	va_end(argptr);
+
+	if (!level.debugLogFile) {
+		return;
+	}
+
+	trap_FS_Write(string, strlen(string), level.debugLogFile);
 }
 
 /*
@@ -2400,10 +2441,10 @@ void G_enable_delayed_map_change_watcher() {
 
 	// Create threads as detached
 	if (pthread_attr_init(&attr)) {
-		G_Error("G_callAPI: error in pthread_attr_init\n");
+		G_Error("G_enable_delayed_map_change_watcher: error in pthread_attr_init\n");
 	}
 	if (pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED)) {
-		G_Error("G_callAPI: error in pthread_attr_setdetachstate\n");
+		G_Error("G_enable_delayed_map_change_watcher: error in pthread_attr_setdetachstate\n");
 	}
 
 	rc = pthread_create(&globalThreads[DELAYED_MAP_CHANGE_THREAD_ID], &attr, G_delayed_map_change_watcher, NULL);
@@ -2452,13 +2493,13 @@ void G_install_timelimit() {
 	trap_Cvar_Set("g_gametype", "4");
 
 	G_DPrintf("%s: timelimit set to %d min%s (timelimit = %d)\n", GAME_VERSION, g_timelimit.integer, g_timelimit.integer > 1 ? "s" : "", g_timelimit.integer);
-	G_randommap(NULL);
+	G_randommap();
 }
 
 /**
  * Get a random map
  */
-int G_randommap(gentity_t *ent) {
+int G_randommap() {
 	char *result = NULL;
 
 	// Nico, check if API is used
@@ -2473,7 +2514,9 @@ int G_randommap(gentity_t *ent) {
 		G_Error("G_Randommap_v: malloc failed\n");
 	}
 
-	G_API_randommap(result, ent, level.rawmapname);
+	if (!G_API_randommap(result, NULL, level.rawmapname)) {
+		// #todo: inform somebody it failed
+	}
 
 	return(G_OK);
 }

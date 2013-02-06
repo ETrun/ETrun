@@ -41,7 +41,8 @@ void Cmd_Login_f(gentity_t *ent) {
 	result = malloc(RESPONSE_MAX_SIZE * sizeof (char));
 
 	if (!result) {
-		G_Error("Cmd_Login_f: malloc failed\n");
+		LDE("failed to allocate memory\n");
+		return;
 	}
 
 	Q_strncpyz(token, ent->client->pers.authToken, MAX_QPATH);
@@ -51,7 +52,9 @@ void Cmd_Login_f(gentity_t *ent) {
 		G_DPrintf("%s: Cmd_Login_f, empty_token\n", GAME_VERSION);
 		free(result);
 	} else {
-		G_API_login(result, ent, token);
+		if (!G_API_login(result, ent, token)) {
+			CP(va("print \"%s^w: error while login\n\"", GAME_VERSION_COLORED));
+		}
 		// Do not free result here!
 	}
 }
@@ -90,10 +93,13 @@ void Cmd_Records_f(gentity_t *ent) {
 	buf = malloc(RESPONSE_MAX_SIZE * sizeof (char));
 
 	if (!buf) {
-		G_Error("Cmd_Records_f: malloc failed\n");
+		LDE("failed to allocate memory\n");
+		return;
 	}
 
-	G_API_mapRecords(buf, ent, level.rawmapname);
+	if (!G_API_mapRecords(buf, ent, level.rawmapname)) {
+		CP(va("print \"%s^w: error while requesting records\n\"", GAME_VERSION_COLORED));
+	}
 
 	// Do *not* free buf here
 }
@@ -177,10 +183,13 @@ void Cmd_LoadCheckpoints_real(gentity_t *ent, char *userName, int runNum) {
 	buf = malloc(RESPONSE_MAX_SIZE * sizeof (char));
 
 	if (!buf) {
-		G_Error("Cmd_LoadCheckpoints_real: malloc failed\n");
+		LDE("failed to allocate memory\n");
+		return;
 	}
 
-	G_API_getPlayerCheckpoints(buf, ent, userName, level.rawmapname, level.timerunsNames[runNum], runNum, ent->client->pers.authToken);
+	if (!G_API_getPlayerCheckpoints(buf, ent, userName, level.rawmapname, level.timerunsNames[runNum], runNum, ent->client->pers.authToken)) {
+		CP(va("print \"%s^w: error while requesting checkpoints\n\"", GAME_VERSION_COLORED));
+	}
 
 	// Do *not* free buf here
 }
@@ -234,12 +243,15 @@ void Cmd_Rank_f(gentity_t *ent) {
 	buf = malloc(RESPONSE_MAX_SIZE * sizeof (char));
 
 	if (!buf) {
-		G_Error("Cmd_Rank_f: malloc failed\n");
+		LDE("failed to allocate memory\n");
+		return;
 	}
 
 	// Parse options
 
-	G_API_mapRank(buf, ent, level.rawmapname, userName, mapName, runName, physicsName, ent->client->pers.authToken);
+	if (!G_API_mapRank(buf, ent, level.rawmapname, userName, mapName, runName, physicsName, ent->client->pers.authToken)) {
+		CP(va("print \"%s^w: error while requesting rank\n\"", GAME_VERSION_COLORED));
+	}
 
 	// Do *not* free buf here
 }

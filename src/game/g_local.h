@@ -856,9 +856,9 @@ typedef struct {
 	int gentitySize;
 	int num_entities;               // current number, <= MAX_GENTITIES
 
-	fileHandle_t logFile;
-	fileHandle_t APILog; // Nico, API log
-	fileHandle_t CrashLog; // Nico, creash log
+	fileHandle_t logFile;// Nico, note: this is for g_log
+	fileHandle_t debugLogFile; // Nico, debug log
+	fileHandle_t crashLog; // Nico, creash log
 
 	char rawmapname[MAX_QPATH];
 
@@ -1321,11 +1321,11 @@ void G_BurnMeGood(gentity_t *self, gentity_t *body);
 //
 // g_main.c
 //
-// Nico, note: this function is needed
-void FindIntermissionPoint(void);
 
+void FindIntermissionPoint(void);// Nico, note: this function is needed
 void G_RunThink(gentity_t *ent);
 void QDECL G_LogPrintf(const char *fmt, ...) _attribute((format(printf, 1, 2)));
+void QDECL G_LogDebug(const char *functionName, const char *severity, const char *fmt, ...) _attribute((format(printf, 3, 4)));
 void SendScoreboardMessageToAllClients(void);
 void QDECL G_Printf(const char *fmt, ...) _attribute((format(printf, 1, 2)));
 void QDECL G_DPrintf(const char *fmt, ...) _attribute((format(printf, 1, 2)));
@@ -1334,7 +1334,7 @@ void G_ShutdownGame(int restart);
 void G_enable_delayed_map_change_watcher();
 void G_disable_delayed_map_change_watcher();
 void G_install_timelimit();
-int G_randommap(gentity_t *ent);
+int G_randommap(void);
 
 //
 // g_client.c
@@ -1550,6 +1550,9 @@ extern vmCvar_t g_cupMode;
 
 // Timelimit mode
 extern vmCvar_t g_timelimit;
+
+// Debug log
+extern vmCvar_t g_debugLog;
 
 // Nico, end of ETrun cvars
 
@@ -1768,6 +1771,10 @@ g_serverEntity_t *FindServerEntity(g_serverEntity_t *from, int fieldofs, char *m
 #define AP(x) trap_SendServerCommand(-1, x)                     // Print to all
 #define CP(x) trap_SendServerCommand(ent - g_entities, x)         // Print to an ent
 #define CPx(x, y) trap_SendServerCommand(x, y)                  // Print to id = x
+
+// Nico, log debug macro with function name
+#define LDI(format, args...) G_LogDebug(__FUNCTION__, "INFO", format, ## args)// Nico, note: info
+#define LDE(format, args...) G_LogDebug(__FUNCTION__, "ERROR", format, ## args)// Nico, note: error
 
 #define PAUSE_NONE      0x00    // Match is NOT paused.
 #define PAUSE_UNPAUSING 0x01    // Pause is about to expire
