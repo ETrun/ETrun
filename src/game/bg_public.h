@@ -1378,20 +1378,14 @@ gitem_t *BG_FindItem(const char *pickupName);
 gitem_t *BG_FindItemForClassName(const char *className);
 gitem_t *BG_FindItemForWeapon(weapon_t weapon);
 gitem_t *BG_FindItemForPowerup(powerup_t pw);
-gitem_t *BG_FindItemForHoldable(holdable_t pw);
-gitem_t *BG_FindItemForAmmo(int weapon);
-//gitem_t *BG_FindItemForKey		( wkey_t k, int *index );
 weapon_t BG_FindAmmoForWeapon(weapon_t weapon);
 weapon_t BG_FindClipForWeapon(weapon_t weapon);
 
 qboolean BG_AkimboFireSequence(int weapon, int akimboClip, int mainClip);
 qboolean BG_IsAkimboWeapon(int weaponNum);
-qboolean BG_IsAkimboSideArm(int weaponNum, playerState_t *ps);
 int BG_AkimboSidearm(int weaponNum);
 
 # define ITEM_INDEX(x) ((x) - bg_itemlist)
-
-qboolean BG_CanUseWeapon(int classNum, int teamNum, weapon_t weapon);
 
 // content masks
 # define MASK_ALL                (-1)
@@ -1480,13 +1474,9 @@ void BG_TouchVelocityJumpPad(playerState_t *ps, entityState_t *jumppad, float sp
 void    BG_PlayerStateToEntityState(playerState_t *ps, entityState_t *s, qboolean snap);
 void    BG_PlayerStateToEntityStateExtraPolate(playerState_t *ps, entityState_t *s, int time, qboolean snap);
 weapon_t BG_DuplicateWeapon(weapon_t weap);
-gitem_t *BG_ValidStatWeapon(weapon_t weap);
-weapon_t BG_WeaponForMOD(int MOD);
 
-qboolean    BG_WeaponInWolfMP(int weapon);
 qboolean    BG_PlayerTouchesItem(playerState_t *ps, entityState_t *item, int atTime);
 qboolean    BG_PlayerSeesItem(playerState_t *ps, entityState_t *item, int atTime);
-qboolean    BG_AddMagicAmmo(playerState_t *ps, int teamNum, int numOfClips);
 
 # define OVERCLIP        1.001
 
@@ -2001,7 +1991,6 @@ int trap_PC_SourceFileAndLine(int handle, char *filename, int *line);
 int trap_PC_UnReadToken(int handle);
 
 void PC_SourceError(int handle, char *format, ...);
-void PC_SourceWarning(int handle, char *format, ...);
 
 # ifdef GAMEDLL
 const char *PC_String_Parse(int handle);
@@ -2046,20 +2035,13 @@ void BG_AdjustAAGunMuzzleForBarrel(vec_t *origin, vec_t *forward, vec_t *right, 
 
 int BG_ClassTextToClass(char *token);
 
-qboolean BG_isLightWeaponSupportingFastReload(int weapon);
 qboolean BG_IsScopedWeapon(int weapon);
 
 int BG_FootstepForSurface(int surfaceFlags);
 
-// Multiview support
-int BG_simpleHintsCollapse(int hint, int val);
-int BG_simpleHintsExpand(int hint, int val);
 int BG_simpleWeaponState(int ws);
 
 // Color escape handling
-int BG_colorstrncpyz(char *in, char *out, int str_max, int out_max);
-int BG_drawStrlen(const char *str);
-int BG_strRelPos(char *in, int index);
 int BG_cleanName(const char *pszIn, char *pszOut, int dwMaxLength, qboolean fCRLF);
 
 // Crosshair support

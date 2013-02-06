@@ -1611,10 +1611,7 @@ static void CG_RegisterGraphics(void) {
 
 	CG_LoadingString(" - weapons");
 	for (i = WP_KNIFE; i < WP_NUM_WEAPONS; i++) {
-		// DHM - Nerve :: Only register weapons we use in WolfMP
-		if (BG_WeaponInWolfMP(i)) {
-			CG_RegisterWeapon(i, qfalse);
-		}
+		CG_RegisterWeapon(i, qfalse);
 	}
 
 	CG_LoadingString(" - items");
