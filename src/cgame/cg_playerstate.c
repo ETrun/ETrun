@@ -463,9 +463,6 @@ void CG_TransitionPlayerState(playerState_t *ps, playerState_t *ops) {
 		}
 
 		if (!(ops->eFlags & EF_PRONE_MOVING)) {
-			// ydnar: this screws up auto-switching when dynamite planted or grenade thrown/out of ammo
-			//%	CG_FinishWeaponChange( cg.weaponSelect, ps->nextWeapon );
-
 			cg.proneMovingTime = cg.time;
 		}
 	} else if (ops->eFlags & EF_PRONE_MOVING) {

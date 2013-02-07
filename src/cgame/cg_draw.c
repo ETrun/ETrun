@@ -31,14 +31,9 @@ If you have questions concerning this license or the applicable additional terms
 
 #include "cg_local.h"
 
-#define STATUSBARHEIGHT 452
-char *BindingFromName(const char *cvar);
-void Controls_GetConfig(void);
-void SetHeadOrigin(clientInfo_t *ci, playerInfo_t *pi);
-void CG_DrawOverlays();
+extern char *BindingFromName(const char *cvar);// Nico, note: thie function is defined in ui_shared.c
+extern void Controls_GetConfig(void);// Nico, note: thie function is defined in ui_shared.c
 int activeFont;
-
-#define TEAM_OVERLAY_TIME 1000
 
 ////////////////////////
 ////////////////////////
@@ -940,7 +935,6 @@ CG_DrawWeapReticle
 ==============
 */
 static void CG_DrawWeapReticle(void) {
-	vec4_t   color = { 0, 0, 0, 1 };
 	qboolean fg, garand, k43;
 
 	// DHM - Nerve :: So that we will draw reticle
@@ -956,8 +950,8 @@ static void CG_DrawWeapReticle(void) {
 
 	if (fg) {
 		// sides
-		CG_FillRect(0, 0, 80, 480, color);
-		CG_FillRect(560, 0, 80, 480, color);
+		CG_FillRect(0, 0, 80, 480, colorBlack);
+		CG_FillRect(560, 0, 80, 480, colorBlack);
 
 		// center
 		if (cgs.media.reticleShaderSimple) {
@@ -965,20 +959,20 @@ static void CG_DrawWeapReticle(void) {
 		}
 
 		// hairs
-		CG_FillRect(84, 239, 150, 3, color);     // left
-		CG_FillRect(234, 240, 173, 1, color);    // horiz center
-		CG_FillRect(407, 239, 150, 3, color);    // right
+		CG_FillRect(84, 239, 150, 3, colorBlack);     // left
+		CG_FillRect(234, 240, 173, 1, colorBlack);    // horiz center
+		CG_FillRect(407, 239, 150, 3, colorBlack);    // right
 
 
-		CG_FillRect(319, 2, 3, 151, color);      // top center top
-		CG_FillRect(320, 153, 1, 114, color);    // top center bot
+		CG_FillRect(319, 2, 3, 151, colorBlack);      // top center top
+		CG_FillRect(320, 153, 1, 114, colorBlack);    // top center bot
 
-		CG_FillRect(320, 241, 1, 87, color);     // bot center top
-		CG_FillRect(319, 327, 3, 151, color);    // bot center bot
+		CG_FillRect(320, 241, 1, 87, colorBlack);     // bot center top
+		CG_FillRect(319, 327, 3, 151, colorBlack);    // bot center bot
 	} else if (garand) {
 		// sides
-		CG_FillRect(0, 0, 80, 480, color);
-		CG_FillRect(560, 0, 80, 480, color);
+		CG_FillRect(0, 0, 80, 480, colorBlack);
+		CG_FillRect(560, 0, 80, 480, colorBlack);
 
 		// center
 		if (cgs.media.reticleShaderSimple) {
@@ -986,14 +980,14 @@ static void CG_DrawWeapReticle(void) {
 		}
 
 		// hairs
-		CG_FillRect(84, 239, 177, 2, color);     // left
-		CG_FillRect(320, 242, 1, 58, color);     // center top
-		CG_FillRect(319, 300, 2, 178, color);    // center bot
-		CG_FillRect(380, 239, 177, 2, color);    // right
+		CG_FillRect(84, 239, 177, 2, colorBlack);     // left
+		CG_FillRect(320, 242, 1, 58, colorBlack);     // center top
+		CG_FillRect(319, 300, 2, 178, colorBlack);    // center bot
+		CG_FillRect(380, 239, 177, 2, colorBlack);    // right
 	} else if (k43) {
 		// sides
-		CG_FillRect(0, 0, 80, 480, color);
-		CG_FillRect(560, 0, 80, 480, color);
+		CG_FillRect(0, 0, 80, 480, colorBlack);
+		CG_FillRect(560, 0, 80, 480, colorBlack);
 
 		// center
 		if (cgs.media.reticleShaderSimple) {
@@ -1001,10 +995,10 @@ static void CG_DrawWeapReticle(void) {
 		}
 
 		// hairs
-		CG_FillRect(84, 239, 177, 2, color);     // left
-		CG_FillRect(320, 242, 1, 58, color);     // center top
-		CG_FillRect(319, 300, 2, 178, color);    // center bot
-		CG_FillRect(380, 239, 177, 2, color);    // right
+		CG_FillRect(84, 239, 177, 2, colorBlack);     // left
+		CG_FillRect(320, 242, 1, 58, colorBlack);     // center top
+		CG_FillRect(319, 300, 2, 178, colorBlack);    // center bot
+		CG_FillRect(380, 239, 177, 2, colorBlack);    // right
 	}
 }
 
@@ -1014,29 +1008,19 @@ CG_DrawBinocReticle
 ==============
 */
 static void CG_DrawBinocReticle(void) {
-	// an alternative.  This gives nice sharp lines at the expense of a few extra polys
-	vec4_t color;
-
-	color[0] = color[1] = color[2] = 0;
-	color[3] = 1;
-
 	if (cgs.media.binocShaderSimple) {
 		CG_DrawPic(0, 0, 640, 480, cgs.media.binocShaderSimple);
 	}
 
-	CG_FillRect(146, 239, 348, 1, color);
-
-	CG_FillRect(188, 234, 1, 13, color);     // ll
-	CG_FillRect(234, 226, 1, 29, color);     // l
-	CG_FillRect(274, 234, 1, 13, color);     // lr
-	CG_FillRect(320, 213, 1, 55, color);     // center
-	CG_FillRect(360, 234, 1, 13, color);     // rl
-	CG_FillRect(406, 226, 1, 29, color);     // r
-	CG_FillRect(452, 234, 1, 13, color);     // rr
+	CG_FillRect(146, 239, 348, 1, colorBlack);
+	CG_FillRect(188, 234, 1, 13, colorBlack);     // ll
+	CG_FillRect(234, 226, 1, 29, colorBlack);     // l
+	CG_FillRect(274, 234, 1, 13, colorBlack);     // lr
+	CG_FillRect(320, 213, 1, 55, colorBlack);     // center
+	CG_FillRect(360, 234, 1, 13, colorBlack);     // rl
+	CG_FillRect(406, 226, 1, 29, colorBlack);     // r
+	CG_FillRect(452, 234, 1, 13, colorBlack);     // rr
 }
-
-void CG_FinishWeaponChange(int lastweap, int newweap);   // JPW NERVE
-
 
 /*
 =================
@@ -1424,7 +1408,6 @@ CG_DrawVote
 static void CG_DrawVote(void) {
 	char  *s;
 	char  str1[32], str2[32];
-	float color[4] = { 1, 1, 0, 1 };
 	int   sec;
 
 	if (cgs.applicationEndTime > cg.time && cgs.applicationClient >= 0) {
@@ -1432,10 +1415,10 @@ static void CG_DrawVote(void) {
 		Q_strncpyz(str2, BindingFromName("vote no"), 32);
 
 		s = va(CG_TranslateString("Accept %s's application to join your fireteam?"), cgs.clientinfo[cgs.applicationClient].name);
-		CG_DrawStringExt(8, 200, s, color, qtrue, qtrue, TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 80);
+		CG_DrawStringExt(8, 200, s, colorYellow, qtrue, qtrue, TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 80);
 
 		s = va(CG_TranslateString("Press '%s' for YES, or '%s' for No"), str1, str2);
-		CG_DrawStringExt(8, 214, s, color, qtrue, qtrue, TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 80);
+		CG_DrawStringExt(8, 214, s, colorYellow, qtrue, qtrue, TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 80);
 		return;
 	}
 
@@ -1444,10 +1427,10 @@ static void CG_DrawVote(void) {
 		Q_strncpyz(str2, BindingFromName("vote no"), 32);
 
 		s = va(CG_TranslateString("Accept %s's proposition to invite %s to join your fireteam?"), cgs.clientinfo[cgs.propositionClient2].name, cgs.clientinfo[cgs.propositionClient].name);
-		CG_DrawStringExt(8, 200, s, color, qtrue, qtrue, TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 80);
+		CG_DrawStringExt(8, 200, s, colorYellow, qtrue, qtrue, TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 80);
 
 		s = va(CG_TranslateString("Press '%s' for YES, or '%s' for No"), str1, str2);
-		CG_DrawStringExt(8, 214, s, color, qtrue, qtrue, TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 80);
+		CG_DrawStringExt(8, 214, s, colorYellow, qtrue, qtrue, TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 80);
 		return;
 	}
 
@@ -1456,10 +1439,10 @@ static void CG_DrawVote(void) {
 		Q_strncpyz(str2, BindingFromName("vote no"), 32);
 
 		s = va(CG_TranslateString("Accept %s's invitation to join their fireteam?"), cgs.clientinfo[cgs.invitationClient].name);
-		CG_DrawStringExt(8, 200, s, color, qtrue, qtrue, TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 80);
+		CG_DrawStringExt(8, 200, s, colorYellow, qtrue, qtrue, TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 80);
 
 		s = va(CG_TranslateString("Press '%s' for YES, or '%s' for No"), str1, str2);
-		CG_DrawStringExt(8, 214, s, color, qtrue, qtrue, TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 80);
+		CG_DrawStringExt(8, 214, s, colorYellow, qtrue, qtrue, TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 80);
 		return;
 	}
 
@@ -1500,7 +1483,7 @@ static void CG_DrawVote(void) {
 
 		if (!(cg.snap->ps.eFlags & EF_VOTED)) {
 			s = va(CG_TranslateString("VOTE(%i): %s"), sec, cgs.voteString);
-			CG_DrawStringExt(8, 200, s, color, qtrue, qtrue, TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 80);
+			CG_DrawStringExt(8, 200, s, colorYellow, qtrue, qtrue, TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 80);
 
 			/* Nico, spectators can also vote
 			if ( cgs.clientinfo[cg.clientNum].team != TEAM_AXIS && cgs.clientinfo[cg.clientNum].team != TEAM_ALLIES ) {
@@ -1508,14 +1491,14 @@ static void CG_DrawVote(void) {
 			} else {*/
 			s = va(CG_TranslateString("YES(%s):%i, NO(%s):%i"), str1, cgs.voteYes, str2, cgs.voteNo);
 			// }
-			CG_DrawStringExt(8, 214, s, color, qtrue, qtrue, TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 60);
+			CG_DrawStringExt(8, 214, s, colorYellow, qtrue, qtrue, TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 60);
 			return;
 		} else {
 			s = va(CG_TranslateString("YOU VOTED ON: %s"), cgs.voteString);
-			CG_DrawStringExt(8, 200, s, color, qtrue, qtrue, TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 80);
+			CG_DrawStringExt(8, 200, s, colorYellow, qtrue, qtrue, TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 80);
 
 			s = va(CG_TranslateString("Y:%i, N:%i"), cgs.voteYes, cgs.voteNo);
-			CG_DrawStringExt(8, 214, s, color, qtrue, qtrue, TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 20);
+			CG_DrawStringExt(8, 214, s, colorYellow, qtrue, qtrue, TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 20);
 			return;
 		}
 	}
@@ -1523,25 +1506,25 @@ static void CG_DrawVote(void) {
 	if (cgs.applicationEndTime > cg.time && cgs.applicationClient < 0) {
 		if (cgs.applicationClient == -1) {
 			s = "Your application has been submitted";
-			CG_DrawStringExt(8, 200, CG_TranslateString(s), color, qtrue, qtrue, TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 80);
+			CG_DrawStringExt(8, 200, CG_TranslateString(s), colorYellow, qtrue, qtrue, TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 80);
 			return;
 		}
 
 		if (cgs.applicationClient == -2) {
 			s = "Your application failed";
-			CG_DrawStringExt(8, 200, CG_TranslateString(s), color, qtrue, qtrue, TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 80);
+			CG_DrawStringExt(8, 200, CG_TranslateString(s), colorYellow, qtrue, qtrue, TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 80);
 			return;
 		}
 
 		if (cgs.applicationClient == -3) {
 			s = "Your application has been approved";
-			CG_DrawStringExt(8, 200, CG_TranslateString(s), color, qtrue, qtrue, TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 80);
+			CG_DrawStringExt(8, 200, CG_TranslateString(s), colorYellow, qtrue, qtrue, TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 80);
 			return;
 		}
 
 		if (cgs.applicationClient == -4) {
 			s = "Your application reply has been sent";
-			CG_DrawStringExt(8, 200, CG_TranslateString(s), color, qtrue, qtrue, TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 80);
+			CG_DrawStringExt(8, 200, CG_TranslateString(s), colorYellow, qtrue, qtrue, TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 80);
 			return;
 		}
 	}
@@ -1549,25 +1532,25 @@ static void CG_DrawVote(void) {
 	if (cgs.propositionEndTime > cg.time && cgs.propositionClient < 0) {
 		if (cgs.propositionClient == -1) {
 			s = "Your proposition has been submitted";
-			CG_DrawStringExt(8, 200, CG_TranslateString(s), color, qtrue, qtrue, TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 80);
+			CG_DrawStringExt(8, 200, CG_TranslateString(s), colorYellow, qtrue, qtrue, TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 80);
 			return;
 		}
 
 		if (cgs.propositionClient == -2) {
 			s = "Your proposition was rejected";
-			CG_DrawStringExt(8, 200, CG_TranslateString(s), color, qtrue, qtrue, TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 80);
+			CG_DrawStringExt(8, 200, CG_TranslateString(s), colorYellow, qtrue, qtrue, TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 80);
 			return;
 		}
 
 		if (cgs.propositionClient == -3) {
 			s = "Your proposition was accepted";
-			CG_DrawStringExt(8, 200, CG_TranslateString(s), color, qtrue, qtrue, TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 80);
+			CG_DrawStringExt(8, 200, CG_TranslateString(s), colorYellow, qtrue, qtrue, TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 80);
 			return;
 		}
 
 		if (cgs.propositionClient == -4) {
 			s = "Your proposition reply has been sent";
-			CG_DrawStringExt(8, 200, CG_TranslateString(s), color, qtrue, qtrue, TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 80);
+			CG_DrawStringExt(8, 200, CG_TranslateString(s), colorYellow, qtrue, qtrue, TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 80);
 			return;
 		}
 	}
@@ -1575,25 +1558,25 @@ static void CG_DrawVote(void) {
 	if (cgs.invitationEndTime > cg.time && cgs.invitationClient < 0) {
 		if (cgs.invitationClient == -1) {
 			s = "Your invitation has been submitted";
-			CG_DrawStringExt(8, 200, CG_TranslateString(s), color, qtrue, qfalse, TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 80);
+			CG_DrawStringExt(8, 200, CG_TranslateString(s), colorYellow, qtrue, qfalse, TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 80);
 			return;
 		}
 
 		if (cgs.invitationClient == -2) {
 			s = "Your invitation was rejected";
-			CG_DrawStringExt(8, 200, CG_TranslateString(s), color, qtrue, qfalse, TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 80);
+			CG_DrawStringExt(8, 200, CG_TranslateString(s), colorYellow, qtrue, qfalse, TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 80);
 			return;
 		}
 
 		if (cgs.invitationClient == -3) {
 			s = "Your invitation was accepted";
-			CG_DrawStringExt(8, 200, CG_TranslateString(s), color, qtrue, qfalse, TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 80);
+			CG_DrawStringExt(8, 200, CG_TranslateString(s), colorYellow, qtrue, qfalse, TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 80);
 			return;
 		}
 
 		if (cgs.invitationClient == -4) {
 			s = "Your invitation reply has been sent";
-			CG_DrawStringExt(8, 200, CG_TranslateString(s), color, qtrue, qfalse, TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 80);
+			CG_DrawStringExt(8, 200, CG_TranslateString(s), colorYellow, qtrue, qfalse, TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 80);
 			return;
 		}
 
@@ -1909,14 +1892,12 @@ static void CG_DrawObjectiveInfo(void) {
 		linebuffer[l] = 0;
 
 		w = cg.oidPrintCharWidth * CG_DrawStrlen(linebuffer) + 10;
-// JPW NERVE
 		if (320 - w / 2 < x1) {
 			x1 = 320 - w / 2;
 			x2 = 320 + w / 2;
 		}
 
 		x = 320 - w / 2;
-// jpw
 		y += cg.oidPrintCharWidth * 1.5;
 
 		while (*start && (*start != '\n')) {
@@ -2280,33 +2261,6 @@ static void CG_DrawPlayerStats(void) {
 	w   = CG_Text_Width_Ext(str, 0.25f, 0, &cgs.media.limboFont1);
 	CG_Text_Paint_Ext(42 - w, 474, 0.25f, 0.25f, colorWhite, str, 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
 	CG_Text_Paint_Ext(44, 474, 0.2f, 0.2f, colorWhite, "HP", 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
-}
-
-static char statsDebugStrings[6][512];
-static int  statsDebugTime[6];
-static int  statsDebugTextWidth[6];
-static int  statsDebugPos;
-
-void CG_InitStatsDebug(void) {
-	memset(&statsDebugStrings, 0, sizeof (statsDebugStrings));
-	memset(&statsDebugTime, 0, sizeof (statsDebugTime));
-	statsDebugPos = -1;
-}
-
-void CG_StatsDebugAddText(const char *text) {
-	if (cg_debugSkills.integer) {
-		statsDebugPos++;
-
-		if (statsDebugPos >= 6) {
-			statsDebugPos = 0;
-		}
-
-		Q_strncpyz(statsDebugStrings[statsDebugPos], text, 512);
-		statsDebugTime[statsDebugPos]      = cg.time;
-		statsDebugTextWidth[statsDebugPos] = CG_Text_Width_Ext(text, .15f, 0, &cgs.media.limboFont2);
-
-		CG_Printf("%s\n", text);
-	}
 }
 
 //bani

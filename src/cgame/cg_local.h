@@ -1963,9 +1963,6 @@ void CG_ReloadTranslation();
 //
 extern char cg_fxflags;  // JPW NERVE
 
-void CG_InitStatsDebug(void);
-void CG_StatsDebugAddText(const char *text);
-
 void CG_AddLagometerFrameInfo(void);
 void CG_AddLagometerSnapshotInfo(snapshot_t *snap);
 void CG_CenterPrint(const char *str, int y, int charWidth);
@@ -2264,6 +2261,7 @@ void CG_DrawInformation(qboolean forcerefresh);
 void CG_DemoClick(int key, qboolean down);
 void CG_ShowHelp_Off(int *status);
 void CG_ShowHelp_On(int *status);
+void CG_DrawOverlays(void);
 
 //
 // cg_scoreboard.c

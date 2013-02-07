@@ -1497,11 +1497,6 @@ static void CG_ServerCommand(void) {
 		return;
 	}
 
-	if (!Q_stricmp(cmd, "sdbg")) {
-		CG_StatsDebugAddText(CG_Argv(1));
-		return;
-	}
-
 	if (!Q_stricmp(cmd, "cs")) {
 		CG_ConfigStringModified();
 		return;
