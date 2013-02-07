@@ -375,8 +375,6 @@ typedef enum {
 #define UI_MENUFULL     0x00080000
 // END JOSEPH
 
-#define UI_SMALLFONT75  0x00100000
-
 #if defined(_DEBUG) && !defined(BSPC)
 # define HUNK_DEBUG
 #endif

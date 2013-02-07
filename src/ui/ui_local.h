@@ -36,57 +36,17 @@ If you have questions concerning this license or the applicable additional terms
 #include "../game/bg_public.h"
 #include "ui_shared.h"
 
-extern vmCvar_t ui_team_friendly;
-extern vmCvar_t ui_ctf_capturelimit;
-extern vmCvar_t ui_ctf_friendly;
-extern vmCvar_t ui_arenasFile;
-extern vmCvar_t ui_spScores1;
-extern vmCvar_t ui_spScores2;
-extern vmCvar_t ui_spScores3;
-extern vmCvar_t ui_spScores4;
-extern vmCvar_t ui_spScores5;
-extern vmCvar_t ui_spAwards;
-extern vmCvar_t ui_spVideos;
-extern vmCvar_t ui_spSkill;
-
-extern vmCvar_t ui_spSelection;
-extern vmCvar_t ui_master;
-
 extern vmCvar_t ui_brassTime;
 extern vmCvar_t ui_drawCrosshair;
 extern vmCvar_t ui_drawCrosshairNames;
-extern vmCvar_t ui_drawCrosshairPickups;    //----(SA) added
+extern vmCvar_t ui_drawCrosshairPickups;
 extern vmCvar_t ui_marks;
-// JOSEPH 12-3-99
 extern vmCvar_t ui_autoactivate;
-// END JOSEPH
 
-extern vmCvar_t ui_server1;
-extern vmCvar_t ui_server2;
-extern vmCvar_t ui_server3;
-extern vmCvar_t ui_server4;
-extern vmCvar_t ui_server5;
-extern vmCvar_t ui_server6;
-extern vmCvar_t ui_server7;
-extern vmCvar_t ui_server8;
-extern vmCvar_t ui_server9;
-extern vmCvar_t ui_server10;
-extern vmCvar_t ui_server11;
-extern vmCvar_t ui_server12;
-extern vmCvar_t ui_server13;
-extern vmCvar_t ui_server14;
-extern vmCvar_t ui_server15;
-extern vmCvar_t ui_server16;
-
-extern vmCvar_t ui_smallFont;
-extern vmCvar_t ui_bigFont;
 extern vmCvar_t ui_selectedPlayer;
-extern vmCvar_t ui_selectedPlayerName;
 extern vmCvar_t ui_netSource;
 extern vmCvar_t ui_menuFiles;
 extern vmCvar_t ui_dedicated;
-extern vmCvar_t ui_notebookCurrentPage;
-extern vmCvar_t ui_clipboardName;
 
 // NERVE - SMF - multiplayer cvars
 extern vmCvar_t ui_serverFilterType;
@@ -94,14 +54,10 @@ extern vmCvar_t ui_currentNetMap;
 extern vmCvar_t ui_currentMap;
 extern vmCvar_t ui_mapIndex;
 
-extern vmCvar_t ui_browserMaster;
-extern vmCvar_t ui_browserSortKey;
 extern vmCvar_t ui_browserShowEmptyOrFull;
 extern vmCvar_t ui_browserShowPasswordProtected;
 extern vmCvar_t ui_browserShowAntilag;
 extern vmCvar_t ui_serverStatusTimeOut;
-extern vmCvar_t ui_limboOptions;
-
 extern vmCvar_t ui_isSpectator;
 // -NERVE - SMF
 
@@ -291,6 +247,7 @@ mapInfo *UI_FindMapInfoByMapname(const char *name);
 void            UI_ReadableSize(char *buf, int bufsize, int value);
 void            UI_PrintTime(char *buf, int bufsize, int time);
 void            Text_Paint_Ext(float x, float y, float scalex, float scaley, vec4_t color, const char *text, float adjust, int limit, int style, fontInfo_t *font);
+void 			UI_DrawConnectScreen(qboolean overlay);
 
 #define GLINFO_LINES        128
 
@@ -299,11 +256,6 @@ void            Text_Paint_Ext(float x, float y, float scalex, float scaley, vec
 //
 extern void UI_RegisterCvars(void);
 extern void UI_UpdateCvars(void);
-
-//
-// ui_connect.c
-//
-extern void UI_DrawConnectScreen(qboolean overlay);
 
 //
 // ui_loadpanel.c
@@ -573,13 +525,11 @@ typedef struct {
 	displayContextDef_t uiDC;
 	int newHighScoreTime;
 	int newBestTime;
-	int showPostGameTime;
 	qboolean newHighScore;
 	qboolean demoAvailable;
 	qboolean soundHighScore;
 
 	int characterCount;
-	int botIndex;
 	characterInfo characterList[MAX_HEADS];
 
 	int aliasCount;
@@ -605,15 +555,9 @@ typedef struct {
 	int mapCount;
 	mapInfo mapList[MAX_MAPS];
 
-	campaignInfo_t campaignList[MAX_CAMPAIGNS];
-
-	cpsFile_t campaignStatus;
-
 	profileInfo_t profileList[MAX_PROFILES];
 	int profileCount;
 	int profileIndex;
-
-	int skillIndex;
 
 	modInfo_t modList[MAX_MODS];
 	int modCount;
@@ -629,7 +573,6 @@ typedef struct {
 	int previewMovie;
 
 //----(SA)	added
-//	const char		*savegameList[MAX_SAVEGAMES];
 	savegameInfo savegameList[MAX_SAVEGAMES];
 	int savegameCount;
 	int savegameIndex;
@@ -658,13 +601,8 @@ typedef struct {
 	int q3HeadCount;
 	char q3HeadNames[MAX_PLAYERMODELS][64];
 	qhandle_t q3HeadIcons[MAX_PLAYERMODELS];
-	int q3SelectedHead;
 
 	int effectsColor;
-
-	qboolean inGameLoad;
-
-	int selectedObjective;
 
 	int activeFont;
 
@@ -718,31 +656,6 @@ extern void         UI_Refresh(int time);
 extern void         UI_KeyEvent(int key);
 extern qboolean   m_entersound;
 extern uiStatic_t uis;
-
-//
-// ui_spLevel.c
-//
-void UI_SPLevelMenu_Cache(void);
-void UI_SPLevelMenu(void);
-void UI_SPLevelMenu_f(void);
-void UI_SPLevelMenu_ReInit(void);
-
-//
-// ui_spArena.c
-//
-void UI_SPArena_Start(const char *arenaInfo);
-
-//
-// ui_spPostgame.c
-//
-void UI_SPPostgameMenu_Cache(void);
-void UI_SPPostgameMenu_f(void);
-
-//
-// ui_spSkill.c
-//
-void UI_SPSkillMenu(const char *arenaInfo);
-void UI_SPSkillMenu_Cache(void);
 
 //
 // ui_syscalls.c
@@ -852,75 +765,5 @@ void            trap_GetHunkData(int *hunkused, int *hunkexpected);
 
 
 char *trap_TranslateString(const char *string);                         // NERVE - SMF - localization
-
-//
-// ui_teamorders.c
-//
-extern void UI_TeamOrdersMenu(void);
-extern void UI_TeamOrdersMenu_f(void);
-extern void UI_TeamOrdersMenu_Cache(void);
-
-//
-// ui_loadconfig.c
-//
-void UI_LoadConfig_Cache(void);
-void UI_LoadConfigMenu(void);
-
-//
-// ui_saveconfig.c
-//
-void UI_SaveConfigMenu_Cache(void);
-void UI_SaveConfigMenu(void);
-
-//
-// ui_display.c
-//
-void UI_DisplayOptionsMenu_Cache(void);
-void UI_DisplayOptionsMenu(void);
-
-//
-// ui_sound.c
-//
-void UI_SoundOptionsMenu_Cache(void);
-void UI_SoundOptionsMenu(void);
-
-//
-// ui_network.c
-//
-void UI_NetworkOptionsMenu_Cache(void);
-void UI_NetworkOptionsMenu(void);
-
-//
-// ui_gameinfo.c
-//
-typedef enum {
-	AWARD_ACCURACY,
-	AWARD_IMPRESSIVE,
-	AWARD_EXCELLENT,
-	AWARD_GAUNTLET,
-	AWARD_FRAGS,
-	AWARD_PERFECT
-} awardType_t;
-
-const char *UI_GetArenaInfoByNumber(int num);
-const char *UI_GetArenaInfoByMap(const char *map);
-const char *UI_GetSpecialArenaInfo(const char *tag);
-int UI_GetNumArenas(void);
-int UI_GetNumSPArenas(void);
-int UI_GetNumSPTiers(void);
-
-void UI_GetBestScore(int level, int *score, int *skill);
-void UI_SetBestScore(int level, int score);
-int UI_TierCompleted(int levelWon);
-qboolean UI_ShowTierVideo(int tier);
-qboolean UI_CanShowTierVideo(int tier);
-int  UI_GetCurrentGame(void);
-void UI_NewGame(void);
-void UI_LogAwardData(int award, int data);
-int UI_GetAwardLevel(int award);
-
-void UI_SPUnlock_f(void);
-
-void UI_InitGameinfo(void);
 
 #endif

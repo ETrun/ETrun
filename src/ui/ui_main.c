@@ -93,54 +93,8 @@ qboolean    UI_CheckExecKey(int key);
 itemDef_t *Menu_FindItemByName(menuDef_t *menu, const char *p);
 void Menu_ShowItemByName(menuDef_t *menu, const char *p, qboolean bShow);
 
-#define ITEM_GRENADES       1
-#define ITEM_MEDKIT         2
-
-#define ITEM_PISTOL         1
-
-#define DEFAULT_PISTOL
-
-#define PT_KNIFE            (1)
-#define PT_PISTOL           (1 << 2)
-#define PT_RIFLE            (1 << 3)
-#define PT_LIGHTONLY        (1 << 4)
-#define PT_GRENADES         (1 << 5)
-#define PT_EXPLOSIVES       (1 << 6)
-#define PT_MEDKIT           (1 << 7)
-
 // TTimo
 static char translated_yes[4], translated_no[4];
-
-typedef struct {
-	const char *name;
-	int items;
-} playerType_t;
-
-static playerType_t playerTypes[] =
-{
-	{ "player_window_soldier",    PT_KNIFE | PT_PISTOL | PT_RIFLE | PT_GRENADES     },
-	{ "player_window_medic",      PT_KNIFE | PT_PISTOL | PT_MEDKIT                  },
-	{ "player_window_engineer",   PT_KNIFE | PT_PISTOL | PT_LIGHTONLY | PT_GRENADES },
-	{ "player_window_lieutenant", PT_KNIFE | PT_PISTOL | PT_RIFLE | PT_EXPLOSIVES   },
-	{ "player_window_covertops",  PT_KNIFE | PT_PISTOL | PT_GRENADES                }
-};
-
-int numPlayerTypes = sizeof (playerTypes) / sizeof (playerTypes[0]);
-
-#define ENG_WEAPMASK_1 (0 | 1 | 2)
-#define ENG_WEAPMASK_2 (4 | 8)
-
-typedef struct {
-	char *name;
-	int flags;
-	char *shader;
-} uiitemType_t;
-
-#define UI_KNIFE_PIC    "window_knife_pic"
-#define UI_PISTOL_PIC   "window_pistol_pic"
-#define UI_WEAPON_PIC   "window_weapon_pic"
-#define UI_ITEM1_PIC    "window_item1_pic"
-#define UI_ITEM2_PIC    "window_item2_pic"
 
 extern displayContextDef_t *DC;
 
@@ -151,9 +105,6 @@ vmMain
 This is the only way control passes into the module.
 ================
 */
-vmCvar_t ui_new;
-vmCvar_t ui_debug;
-vmCvar_t ui_initialized;
 vmCvar_t ui_teamArenaFirstRun;
 
 extern itemDef_t *g_bindItem;
@@ -938,8 +889,6 @@ void _UI_Shutdown(void) {
 	trap_LAN_SaveCachedServers();
 }
 
-char *defaultMenu = NULL;
-
 char *GetMenuBuffer(const char *filename) {
 	int          len;
 	fileHandle_t f;
@@ -948,12 +897,12 @@ char *GetMenuBuffer(const char *filename) {
 	len = trap_FS_FOpenFile(filename, &f, FS_READ);
 	if (!f) {
 		trap_Print(va(S_COLOR_RED "menu file not found: %s, using default\n", filename));
-		return defaultMenu;
+		return NULL;
 	}
 	if (len >= MAX_MENUFILE) {
 		trap_Print(va(S_COLOR_RED "menu file too large: %s is %i, max allowed is %i", filename, len, MAX_MENUFILE));
 		trap_FS_FCloseFile(f);
-		return defaultMenu;
+		return NULL;
 	}
 
 	trap_FS_Read(buf, len, f);
@@ -1193,8 +1142,6 @@ void UI_LoadMenus(const char *menuFile, qboolean reset) {
 			trap_Error(S_COLOR_RED "default menu file not found: ui_mp/menus.txt, unable to continue!\n");
 		}
 	}
-
-	ui_new.integer = 1;
 
 	if (reset) {
 		Menu_Reset();
@@ -5287,7 +5234,6 @@ void UI_LoadNonIngame() {
 		menuSet = "ui/menus.txt";
 	}
 	UI_LoadMenus(menuSet, qfalse);
-	uiInfo.inGameLoad = qfalse;
 }
 
 
@@ -5522,60 +5468,21 @@ typedef struct {
 	int modificationCount;          // for tracking changes
 } cvarTable_t;
 
-vmCvar_t ui_team_friendly;
-vmCvar_t ui_ctf_capturelimit;
-vmCvar_t ui_ctf_friendly;
-vmCvar_t ui_arenasFile;
-vmCvar_t ui_spScores1;
-vmCvar_t ui_spScores2;
-vmCvar_t ui_spScores3;
-vmCvar_t ui_spScores4;
-vmCvar_t ui_spScores5;
-vmCvar_t ui_spAwards;
-vmCvar_t ui_spVideos;
-vmCvar_t ui_spSkill;
-
-vmCvar_t ui_spSelection;
-vmCvar_t ui_master;
-
 vmCvar_t ui_brassTime;
 vmCvar_t ui_drawCrosshair;
 vmCvar_t ui_drawCrosshairNames;
-vmCvar_t ui_drawCrosshairPickups;       //----(SA) added
+vmCvar_t ui_drawCrosshairPickups;
 vmCvar_t ui_marks;
-// JOSEPH 12-3-99
 vmCvar_t ui_autoactivate;
-// END JOSEPH
-vmCvar_t ui_server1;
-vmCvar_t ui_server2;
-vmCvar_t ui_server3;
-vmCvar_t ui_server4;
-vmCvar_t ui_server5;
-vmCvar_t ui_server6;
-vmCvar_t ui_server7;
-vmCvar_t ui_server8;
-vmCvar_t ui_server9;
-vmCvar_t ui_server10;
-vmCvar_t ui_server11;
-vmCvar_t ui_server12;
-vmCvar_t ui_server13;
-vmCvar_t ui_server14;
-vmCvar_t ui_server15;
-vmCvar_t ui_server16;
+
 vmCvar_t ui_selectedPlayer;
-vmCvar_t ui_selectedPlayerName;
 vmCvar_t ui_netSource;
 vmCvar_t ui_menuFiles;
 vmCvar_t ui_dedicated;
-vmCvar_t ui_clipboardName;          // the name of the group for the current clipboard item //----(SA)	added
-vmCvar_t ui_notebookCurrentPage;        //----(SA)	added
-vmCvar_t ui_clipboardName;          // the name of the group for the current clipboard item //----(SA)	added
 vmCvar_t ui_serverFilterType;
 vmCvar_t ui_currentNetMap;
 vmCvar_t ui_currentMap;
 vmCvar_t ui_mapIndex;
-vmCvar_t ui_browserMaster;
-vmCvar_t ui_browserSortKey;
 vmCvar_t ui_browserShowEmptyOrFull;
 vmCvar_t ui_browserShowPasswordProtected;
 vmCvar_t ui_browserShowAntilag;     // TTimo
@@ -5583,18 +5490,10 @@ vmCvar_t ui_serverStatusTimeOut;
 vmCvar_t ui_Q3Model;
 vmCvar_t ui_headModel;
 vmCvar_t ui_model;
-vmCvar_t ui_limboOptions;
-vmCvar_t ui_limboPrevOptions;
 vmCvar_t ui_limboObjective;
-vmCvar_t ui_cmd;
 vmCvar_t ui_prevTeam;
 vmCvar_t ui_prevClass;
 vmCvar_t ui_prevWeapon;
-vmCvar_t ui_limboMode;
-vmCvar_t ui_objective;
-vmCvar_t ui_team;
-vmCvar_t ui_class;
-vmCvar_t ui_weapon;
 vmCvar_t ui_isSpectator;
 vmCvar_t ui_glCustom;    // JPW NERVE missing from q3ta
 vmCvar_t cl_profile;
@@ -5619,69 +5518,24 @@ cvarTable_t cvarTable[] =
 {
 
 	{ &ui_glCustom,                     "ui_glCustom",                     "4",                          CVAR_ARCHIVE,                   0 }, // JPW NERVE missing from q3ta
-	{ &ui_team_friendly,                "ui_team_friendly",                "1",                          CVAR_ARCHIVE,                   0 },
-	{ &ui_ctf_capturelimit,             "ui_ctf_capturelimit",             "8",                          CVAR_ARCHIVE,                   0 },
-	{ &ui_ctf_friendly,                 "ui_ctf_friendly",                 "0",                          CVAR_ARCHIVE,                   0 },
-
-	{ &ui_arenasFile,                   "g_arenasFile",                    "",                           CVAR_INIT | CVAR_ROM,           0 },
-	{ &ui_spScores1,                    "g_spScores1",                     "",                           CVAR_ARCHIVE | CVAR_ROM,        0 },
-	{ &ui_spScores2,                    "g_spScores2",                     "",                           CVAR_ARCHIVE | CVAR_ROM,        0 },
-	{ &ui_spScores3,                    "g_spScores3",                     "",                           CVAR_ARCHIVE | CVAR_ROM,        0 },
-	{ &ui_spScores4,                    "g_spScores4",                     "",                           CVAR_ARCHIVE | CVAR_ROM,        0 },
-	{ &ui_spScores5,                    "g_spScores5",                     "",                           CVAR_ARCHIVE | CVAR_ROM,        0 },
-	{ &ui_spAwards,                     "g_spAwards",                      "",                           CVAR_ARCHIVE | CVAR_ROM,        0 },
-	{ &ui_spVideos,                     "g_spVideos",                      "",                           CVAR_ARCHIVE | CVAR_ROM,        0 },
-	{ &ui_spSkill,                      "g_spSkill",                       "2",                          CVAR_ARCHIVE | CVAR_LATCH,      0 },
-
-// JPW NERVE
 	{ &ui_teamArenaFirstRun,            "ui_teamArenaFirstRun",            "0",                          CVAR_ARCHIVE,                   0 }, // so sound stuff latches, strange as that seems
-// jpw
-
-	{ &ui_spSelection,                  "ui_spSelection",                  "",                           CVAR_ROM,                       0 },
-	{ &ui_master,                       "ui_master",                       "0",                          CVAR_ARCHIVE,                   0 },
-
 	{ &ui_brassTime,                    "cg_brassTime",                    "2500",                       CVAR_ARCHIVE,                   0 }, // JPW NERVE
 	{ &ui_drawCrosshair,                "cg_drawCrosshair",                "4",                          CVAR_ARCHIVE,                   0 },
 	{ &ui_drawCrosshairNames,           "cg_drawCrosshairNames",           "1",                          CVAR_ARCHIVE,                   0 },
 	{ &ui_drawCrosshairPickups,         "cg_drawCrosshairPickups",         "1",                          CVAR_ARCHIVE,                   0 }, //----(SA) added
 	{ &ui_marks,                        "cg_marktime",                     "20000",                      CVAR_ARCHIVE,                   0 },
-	// JOSEPH 12-2-99
 	{ &ui_autoactivate,                 "cg_autoactivate",                 "1",                          CVAR_ARCHIVE,                   0 },
-	// END JOSEPH
-
-	{ &ui_server1,                      "server1",                         "",                           CVAR_ARCHIVE,                   0 },
-	{ &ui_server2,                      "server2",                         "",                           CVAR_ARCHIVE,                   0 },
-	{ &ui_server3,                      "server3",                         "",                           CVAR_ARCHIVE,                   0 },
-	{ &ui_server4,                      "server4",                         "",                           CVAR_ARCHIVE,                   0 },
-	{ &ui_server5,                      "server5",                         "",                           CVAR_ARCHIVE,                   0 },
-	{ &ui_server6,                      "server6",                         "",                           CVAR_ARCHIVE,                   0 },
-	{ &ui_server7,                      "server7",                         "",                           CVAR_ARCHIVE,                   0 },
-	{ &ui_server8,                      "server8",                         "",                           CVAR_ARCHIVE,                   0 },
-	{ &ui_server9,                      "server9",                         "",                           CVAR_ARCHIVE,                   0 },
-	{ &ui_server10,                     "server10",                        "",                           CVAR_ARCHIVE,                   0 },
-	{ &ui_server11,                     "server11",                        "",                           CVAR_ARCHIVE,                   0 },
-	{ &ui_server12,                     "server12",                        "",                           CVAR_ARCHIVE,                   0 },
-	{ &ui_server13,                     "server13",                        "",                           CVAR_ARCHIVE,                   0 },
-	{ &ui_server14,                     "server14",                        "",                           CVAR_ARCHIVE,                   0 },
-	{ &ui_server15,                     "server15",                        "",                           CVAR_ARCHIVE,                   0 },
-	{ &ui_server16,                     "server16",                        "",                           CVAR_ARCHIVE,                   0 },
 
 	{ &ui_dedicated,                    "ui_dedicated",                    "0",                          CVAR_ARCHIVE,                   0 },
 	{ &ui_selectedPlayer,               "cg_selectedPlayer",               "0",                          CVAR_ARCHIVE,                   0 },
-	{ &ui_selectedPlayerName,           "cg_selectedPlayerName",           "",                           CVAR_ARCHIVE,                   0 },
 	{ &ui_netSource,                    "ui_netSource",                    "1",                          CVAR_ARCHIVE,                   0 },
 	{ &ui_menuFiles,                    "ui_menuFiles",                    "ui/menus.txt",               CVAR_ARCHIVE,                   0 },
-
-	{ &ui_notebookCurrentPage,          "ui_notebookCurrentPage",          "1",                          CVAR_ROM,                       0 },
-	{ &ui_clipboardName,                "cg_clipboardName",                "",                           CVAR_ROM,                       0 },
 
 	// NERVE - SMF - multiplayer cvars
 	{ &ui_mapIndex,                     "ui_mapIndex",                     "0",                          CVAR_ARCHIVE,                   0 },
 	{ &ui_currentMap,                   "ui_currentMap",                   "0",                          CVAR_ARCHIVE,                   0 },
 	{ &ui_currentNetMap,                "ui_currentNetMap",                "0",                          CVAR_ARCHIVE,                   0 },
 
-	{ &ui_browserMaster,                "ui_browserMaster",                "0",                          CVAR_ARCHIVE,                   0 },
-	{ &ui_browserSortKey,               "ui_browserSortKey",               "4",                          CVAR_ARCHIVE,                   0 },
 	{ &ui_browserShowEmptyOrFull,       "ui_browserShowEmptyOrFull",       "0",                          CVAR_ARCHIVE,                   0 },
 	{ &ui_browserShowPasswordProtected, "ui_browserShowPasswordProtected", "0",                          CVAR_ARCHIVE,                   0 },
 	{ &ui_browserShowAntilag,           "ui_browserShowAntilag",           "0",                          CVAR_ARCHIVE,                   0 },
@@ -5690,21 +5544,11 @@ cvarTable_t cvarTable[] =
 	{ &ui_Q3Model,                      "ui_Q3Model",                      "1",                          0,                              0 },
 	{ &ui_headModel,                    "headModel",                       "",                           0,                              0 },
 
-	{ &ui_limboOptions,                 "ui_limboOptions",                 "0",                          0,                              0 },
-	{ &ui_limboPrevOptions,             "ui_limboPrevOptions",             "0",                          0,                              0 },
 	{ &ui_limboObjective,               "ui_limboObjective",               "0",                          0,                              0 },
-	{ &ui_cmd,                          "ui_cmd",                          "",                           0,                              0 },
 
 	{ &ui_prevTeam,                     "ui_prevTeam",                     "-1",                         0,                              0 },
 	{ &ui_prevClass,                    "ui_prevClass",                    "-1",                         0,                              0 },
 	{ &ui_prevWeapon,                   "ui_prevWeapon",                   "-1",                         0,                              0 },
-
-	{ &ui_limboMode,                    "ui_limboMode",                    "0",                          0,                              0 },
-	{ &ui_objective,                    "ui_objective",                    "",                           0,                              0 },
-
-	{ &ui_team,                         "ui_team",                         "Axis",                       0,                              0 },
-	{ &ui_class,                        "ui_class",                        "Soldier",                    0,                              0 },
-	{ &ui_weapon,                       "ui_weapon",                       "MP 40",                      0,                              0 },
 
 	{ &ui_isSpectator,                  "ui_isSpectator",                  "1",                          0,                              0 },
 	// -NERVE - SMF
