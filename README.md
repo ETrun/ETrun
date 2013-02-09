@@ -35,16 +35,11 @@ Bootstrapping
 On *Linux*, make sure you have the following packages installed:
 
 * gcc
-* autoconf
-* automake
-* libtool
 * zlib dev package
 * libidn dev package
 
 On *OSX*, make sure to have:
 
-* autoconf
-* libtool
 * libidn
 
 You can install them via [homebrew](http://mxcl.github.com/homebrew).
@@ -56,13 +51,7 @@ $ git submodule init
 $ git submodule update
 </pre>
 
-Finally, run the bootstrap script:
-
-<pre>
-$ ./bootstrap
-</pre>
-
-or run bootstrap.bat if you are running Windows.
+If you are running Windows, run `bootstrap.bat`.
 
 Compiling for Windows
 ---------------------
@@ -81,7 +70,7 @@ On Windows: not supported.
 On Linux (32-bit only), run:
 
 <pre>
-$ ./linux_compile.sh
+$ ./build.sh
 </pre>
 
 Compiling for OSX
@@ -90,7 +79,7 @@ Compiling for OSX
 On OSX, run:
 
 <pre>
-$ ./osx_compile.sh
+$ ./build.sh
 </pre>
 
 You can also use Xcode projects located in src directory.

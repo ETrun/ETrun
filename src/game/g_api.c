@@ -668,7 +668,7 @@ qboolean G_callAPI(char *command, char *result, gentity_t *ent, int count, ...) 
 	pthread_attr_t attr;
 	int            returnCode = 0;
 	void    *(*handler)(void *) = NULL;
-	va_list ap   = NULL;
+	va_list ap;
 	int     i    = 0;
 	char    *arg = NULL;
 

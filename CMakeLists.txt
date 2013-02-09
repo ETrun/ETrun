@@ -21,6 +21,9 @@ include_directories("${PROJECT_SOURCE_DIR}/src")
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake")
 include(Build)
 
+# Verbose output
+set(CMAKE_VERBOSE_MAKEFILE "0")
+
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/etrun)
 
 # Used to store real system processor when we overwrite CMAKE_SYSTEM_PROCESSOR for cross-compile builds
@@ -29,29 +32,10 @@ set(SYSTEM_PROCESSOR ${CMAKE_SYSTEM_PROCESSOR}) # See IS_64_BIT_BUILD_SYSTEM
 # has to be set to "", otherwise CMake will pass -rdynamic resulting in a client crash
 set(CMAKE_SHARED_LIBRARY_LINK_C_FLAGS "")
 
-# no support for 32 bit binaries on OpenBSD/amd64
-if(CMAKE_SYSTEM MATCHES "OpenBSD*")
-	option(CROSS_COMPILE32 "Compile 32-bit version of ET:L (64bit is incompatible with 2.60b)" OFF)
-else()
-	option(CROSS_COMPILE32 "Compile 32-bit version of ET:L (64bit is incompatible with 2.60b)" ON)
-endif()
-
 
 #-----------------------------------------------------------------
 # Platform-specific settings
 #-----------------------------------------------------------------
-
-if(UNIX AND CROSS_COMPILE32) # 32-bit build
-	message(STATUS "System: ${CMAKE_SYSTEM} (${SYSTEM_PROCESSOR})")
-	set(CMAKE_SYSTEM_PROCESSOR i386)
-	message(STATUS "Forcing ${CMAKE_SYSTEM_PROCESSOR} to cross compile 32bit")
-	set_property(GLOBAL PROPERTY FIND_LIBRARY_USE_LIB64_PATHS OFF)
-
-	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -m32")
-
-	set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -m32")
-	set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -m32")
-endif(UNIX AND CROSS_COMPILE32)
 
 if(UNIX)
 
@@ -61,15 +45,11 @@ if(UNIX)
 	set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -Wall -Wextra -Werror")
 
 	if(CMAKE_SYSTEM MATCHES "OpenBSD*")
-		set(OS_LIBRARIES m pthread)
 		set(LIB_SUFFIX ".mp.obsd.")
 	elseif(CMAKE_SYSTEM MATCHES "Darwin")
-		set(OS_LIBRARIES dl m)
-		set(CMAKE_INCLUDE_SYSTEM_FLAG_C "-isystem")
 		set(LIB_SUFFIX "_mac")
 		set(CMAKE_SHARED_MODULE_SUFFIX "")
 	else()
-		set(OS_LIBRARIES dl m rt pthread)
 		set(LIB_SUFFIX ".mp.")
 	endif()
 
@@ -164,7 +144,12 @@ set_target_properties(qagame${LIB_SUFFIX}${ARCH}
 	PROPERTIES COMPILE_DEFINITIONS "GAMEDLL"
 	PREFIX ""
 )
-target_link_libraries (qagame${LIB_SUFFIX}${ARCH} ${CMAKE_THREAD_LIBS_INIT})
+
+# qagame requires pthreads but OSX already includes pthread, so linking is not needed on this OS
+if(NOT CMAKE_SYSTEM MATCHES "Darwin")
+	target_link_libraries (qagame${LIB_SUFFIX}${ARCH} "pthread -D_REENTRANT")
+endif()
+
 add_custom_command(
 	TARGET qagame${LIB_SUFFIX}${ARCH} POST_BUILD
 	COMMAND ./makebundle.sh ${CMAKE_BINARY_DIR}/etrun/qagame${LIB_SUFFIX}${ARCH}
