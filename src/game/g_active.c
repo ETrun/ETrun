@@ -773,8 +773,6 @@ void ClientThink_real(gentity_t *ent) {
 
 	pm.covertopsChargeTime = level.covertopsChargeTime[client->sess.sessionTeam - 1];
 
-	pm.leadership = qfalse;
-
 	// Gordon: bit hacky, stop the slight lag from client -> server even on locahost, switching back to the weapon you were holding
 	//			and then back to what weapon you should have, became VERY noticible for the kar98/carbine + gpg40, esp now i've added the
 	//			animation locking

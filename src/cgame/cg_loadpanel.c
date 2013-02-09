@@ -259,7 +259,7 @@ void CG_DrawConnectScreen(qboolean interactive, qboolean forcerefresh) {
 		vec4_t     clr3 = { 1.f, 1.f, 1.f, .6f };
 
 		y = 322;
-		CG_Text_Paint_Centred_Ext(540, y, 0.22f, 0.22f, clr3, GAME_VERSION_COLORED " " MOD_VERSION_COLORED, 0, 0, 0, &bg_loadscreenfont1);
+		CG_Text_Paint_Centred_Ext(540, y, 0.22f, 0.22f, clr3, "GAME_VERSION_COLORED ^Z MOD_VERSION", 0, 0, 0, &bg_loadscreenfont1);
 
 		y   = 340;
 		str = Info_ValueForKey(buffer, "sv_hostname");

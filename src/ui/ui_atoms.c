@@ -36,57 +36,6 @@ If you have questions concerning this license or the applicable additional terms
 uiStatic_t uis;
 qboolean   m_entersound;            // after a frame, so caching won't disrupt the sound
 
-// these are here so the functions in q_shared.c can link
-#ifndef UI_HARD_LINKED
-
-
-// JPW NERVE added Com_DPrintf
-# define MAXPRINTMSG 4096
-void QDECL Com_DPrintf(const char *fmt, ...) {
-	va_list argptr;
-	char    msg[MAXPRINTMSG];
-	int     developer;
-
-	developer = trap_Cvar_VariableValue("developer");
-	if (!developer) {
-		return;
-	}
-
-	va_start(argptr, fmt);
-	Q_vsnprintf(msg, sizeof (msg), fmt, argptr);
-	va_end(argptr);
-
-	Com_Printf("%s", msg);
-}
-// jpw
-
-void QDECL Com_Error(int level, const char *error, ...) {
-	va_list argptr;
-	char    text[1024];
-
-	// Nico, silent GCC
-	level = level;
-
-	va_start(argptr, error);
-	Q_vsnprintf(text, sizeof (text), error, argptr);
-	va_end(argptr);
-
-	trap_Error(va("%s", text));
-}
-
-void QDECL Com_Printf(const char *msg, ...) {
-	va_list argptr;
-	char    text[1024];
-
-	va_start(argptr, msg);
-	Q_vsnprintf(text, sizeof (text), msg, argptr);
-	va_end(argptr);
-
-	trap_Print(va("%s", text));
-}
-
-#endif
-
 /*
 =================
 UI_ClampCvar

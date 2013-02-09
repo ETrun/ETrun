@@ -40,11 +40,11 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
     <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)_build\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)_build\$(ProjectName)\</IntDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)build\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)build\$(ProjectName)\</IntDir>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)_build\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)_build\$(ProjectName)\</IntDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)build\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)build\$(ProjectName)\</IntDir>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</LinkIncremental>
     <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">AllRules.ruleset</CodeAnalysisRuleSet>
     <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" />
@@ -75,10 +75,10 @@
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
-      <PrecompiledHeaderOutputFile>..\..\_build\ui/ui.pch</PrecompiledHeaderOutputFile>
-      <AssemblerListingLocation>..\..\_build\ui/</AssemblerListingLocation>
-      <ObjectFileName>..\..\_build\ui/</ObjectFileName>
-      <ProgramDataBaseFileName>..\..\_build\ui/</ProgramDataBaseFileName>
+      <PrecompiledHeaderOutputFile>..\..\build\ui/ui.pch</PrecompiledHeaderOutputFile>
+      <AssemblerListingLocation>..\..\build\ui/</AssemblerListingLocation>
+      <ObjectFileName>..\..\build\ui/</ObjectFileName>
+      <ProgramDataBaseFileName>..\..\build\ui/</ProgramDataBaseFileName>
       <WarningLevel>Level4</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
     </ClCompile>
@@ -89,7 +89,7 @@
     <Link>
       <AdditionalOptions>/MACHINE:I386 %(AdditionalOptions)</AdditionalOptions>
       <AdditionalDependencies>odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>$(SolutionDir)_build\$(TargetFileName)</OutputFile>
+      <OutputFile>$(SolutionDir)build\$(TargetFileName)</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <ModuleDefinitionFile>.\ui.def</ModuleDefinitionFile>
       <ProgramDatabaseFile>$(IntDir)$(TargetName).pdb</ProgramDatabaseFile>
@@ -100,7 +100,7 @@
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <DataExecutionPrevention>
       </DataExecutionPrevention>
-      <ImportLibrary>..\..\_build\ui/ui_mp_x86.lib</ImportLibrary>
+      <ImportLibrary>..\..\build\ui/ui_mp_x86.lib</ImportLibrary>
     </Link>
     <PostBuildEvent>
       <Command>
@@ -121,10 +121,10 @@
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
-      <PrecompiledHeaderOutputFile>..\..\_build\ui/ui.pch</PrecompiledHeaderOutputFile>
-      <AssemblerListingLocation>..\..\_build\ui/</AssemblerListingLocation>
-      <ObjectFileName>..\..\_build\ui/</ObjectFileName>
-      <ProgramDataBaseFileName>..\..\_build\ui/</ProgramDataBaseFileName>
+      <PrecompiledHeaderOutputFile>..\..\build\ui/ui.pch</PrecompiledHeaderOutputFile>
+      <AssemblerListingLocation>..\..\build\ui/</AssemblerListingLocation>
+      <ObjectFileName>..\..\build\ui/</ObjectFileName>
+      <ProgramDataBaseFileName>..\..\build\ui/</ProgramDataBaseFileName>
       <BrowseInformation>true</BrowseInformation>
       <WarningLevel>Level4</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -137,7 +137,7 @@
     <Link>
       <AdditionalOptions>/MACHINE:I386 %(AdditionalOptions)</AdditionalOptions>
       <AdditionalDependencies>odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>..\..\_build/ui_mp_x86.dll</OutputFile>
+      <OutputFile>..\..\build/ui_mp_x86.dll</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <ModuleDefinitionFile>.\ui.def</ModuleDefinitionFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -149,7 +149,7 @@
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <DataExecutionPrevention>
       </DataExecutionPrevention>
-      <ImportLibrary>..\..\_build\ui/ui_mp_x86.lib</ImportLibrary>
+      <ImportLibrary>..\..\build\ui/ui_mp_x86.lib</ImportLibrary>
     </Link>
     <PostBuildEvent>
       <Command>

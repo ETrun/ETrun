@@ -903,6 +903,42 @@ char *Q_CleanDirName(char *dirname) {
 	return dirname;
 }
 
+void QDECL Com_Error(int level, const char *error, ...) {
+	va_list argptr;
+	char    text[1024];
+
+	// Nico, silent GCC
+	level = level;
+
+	va_start(argptr, error);
+	Q_vsnprintf(text, sizeof (text), error, argptr);
+	va_end(argptr);
+
+# ifdef CGAMEDLL
+	CG_Error("%s", text);
+# elif defined GAMEDLL
+	G_Error("%s", text);
+# else
+	trap_Error(va("%s", text));
+#endif
+}
+
+void QDECL Com_Printf(const char *msg, ...) {
+	va_list argptr;
+	char    text[1024];
+
+	va_start(argptr, msg);
+	Q_vsnprintf(text, sizeof (text), msg, argptr);
+	va_end(argptr);
+
+# ifdef CGAMEDLL
+	CG_Printf("%s", text);
+# elif defined GAMEDLL
+	G_Printf("%s", text);
+# else
+	trap_Print(va("%s", text));
+#endif
+}
 
 void QDECL Com_sprintf(char *dest, int size, const char *fmt, ...) {
 	int     ret;

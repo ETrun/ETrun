@@ -1053,7 +1053,23 @@ void UI_Report() {
 	String_Report();
 }
 
-void QDECL Com_DPrintf(const char *fmt, ...);
+static void QDECL Com_DPrintf(const char *fmt, ...) {
+	va_list argptr;
+	char    msg[4096];
+	int     developer;
+
+	developer = trap_Cvar_VariableValue("developer");
+	if (!developer) {
+		return;
+	}
+
+	va_start(argptr, fmt);
+	Q_vsnprintf(msg, sizeof (msg), fmt, argptr);
+	va_end(argptr);
+
+	Com_Printf("%s", msg);
+}
+
 qboolean UI_ParseMenu(const char *menuFile) {
 	int        handle;
 	pc_token_t token;

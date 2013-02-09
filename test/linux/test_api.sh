@@ -15,8 +15,8 @@ ui_name='ui.mp.i386.so'
 
 path_to_api="$homepath/$mod_name/$apimodule_name"
 
-cp -rf _build/$cgame_name $mod_name/
-cp -rf _build/$ui_name $mod_name/
+cp -rf build/$mod_name/$cgame_name $mod_name/
+cp -rf build/$mod_name/$ui_name $mod_name/
 
 rm -f $pk3name
 cd etrun
@@ -29,8 +29,8 @@ cd ..
 mkdir "$homepath/$mod_name"
 cp -f $pk3_name "$homepath/$mod_name"
 rm -f $pk3_name
-cp -rf _build/$qagame_name "$homepath/$mod_name"
-cp -rf _build/$apimodule_name "$homepath/$mod_name"
+cp -rf build/$mod_name/$qagame_name "$homepath/$mod_name"
+cp -rf build/$mod_name/$apimodule_name "$homepath/$mod_name"
 
 mkdir "$homepath/$mod_name/custommapscripts"
 cp -rf etrun/custommapscripts/* "$homepath/$mod_name/custommapscripts/"

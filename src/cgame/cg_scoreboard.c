@@ -379,7 +379,7 @@ static void WM_ETrun_DrawInfo() {
 
 	y += 10;
 	WM_ETrun_print(va("Physics: %s", physicsName), &cgs.media.limboFont1, textScale, x, y, qtrue, 0);
-
+#include "../game/bg_version.h"
 	y += 10;
 	// Nico, print mod version
 	WM_ETrun_print(va("Version: %s", MOD_VERSION), &cgs.media.limboFont1, textScale, x, y, qtrue, 0);

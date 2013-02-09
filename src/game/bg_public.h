@@ -39,19 +39,15 @@ If you have questions concerning this license or the applicable additional terms
 #ifndef __BG_PUBLIC_H__
 # define __BG_PUBLIC_H__
 
-// Nico, game version
-# define GAME_VERSION            "ETrun"
-# define GAME_VERSION_COLORED    "^ZET^Drun"
-# define MOD_VERSION             "1.0.0"
-# define MOD_VERSION_COLORED     "^Z1.0.0"
-# define MOD_URL                 "http://www.timeruns.net"
-# define SHORT_MOD_URL           "www.timeruns.net"
+# include "bg_version.h"
 
-# if defined(_DEBUG)
-#  define GAME_VERSION_DATED          GAME_VERSION
-# else
-#  define GAME_VERSION_DATED          (GAME_VERSION "_" MOD_VERSION)
-# endif
+// Nico, game version
+# define GAME_VERSION           "ETrun"
+# define GAME_VERSION_COLORED   "^ZET^Drun"
+# define MOD_URL        		"http://www.timeruns.net"
+# define SHORT_MOD_URL			"www.timeruns.net"
+
+# define GAME_VERSION_DATED		"GAME_VERSION_MOD_VERSION"
 
 //bani
 # ifdef __GNUC__
@@ -475,10 +471,6 @@ typedef struct {
 	float xyspeed;
 
 	int *skill;                     // player skills
-
-# ifdef GAMEDLL // the whole stamina thing is only in qagame
-	qboolean leadership;            // within 512 units of a player with level 5 Signals skill (that player has to be in PVS as well to make sue we can predict it)
-# endif // GAMEDLL
 
 	// for fixed msec Pmove
 	int pmove_fixed;

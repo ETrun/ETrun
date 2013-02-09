@@ -762,8 +762,15 @@ void Parse1DMatrix(char **buf_p, int x, float *m);
 void Parse2DMatrix(char **buf_p, int y, int x, float *m);
 void Parse3DMatrix(char **buf_p, int z, int y, int x, float *m);
 
+extern void trap_Error(const char *fmt);
+extern void QDECL CG_Error(const char *msg, ...);
+extern void QDECL G_Error(const char *msg, ...);
+void QDECL Com_Error(int level, const char *error, ...) _attribute((format(printf, 2, 3)));
+extern void trap_Print(const char *fmt);
+extern void QDECL CG_Printf(const char *msg, ...);
+extern void QDECL G_Printf(const char *msg, ...);
+void QDECL Com_Printf(const char *msg, ...) _attribute((format(printf, 1, 2)));
 void QDECL Com_sprintf(char *dest, int size, const char *fmt, ...) _attribute((format(printf, 3, 4)));
-
 
 // mode parm for FS_FOpenFile
 typedef enum {
@@ -833,10 +840,6 @@ void Info_SetValueForKey(char *s, const char *key, const char *value);
 void Info_SetValueForKey_Big(char *s, const char *key, const char *value);
 qboolean Info_Validate(const char *s);
 void Info_NextPair(const char **s, char *key, char *value);
-
-// this is only here so the functions in q_shared.c and bg_*.c can link
-void QDECL Com_Error(int level, const char *error, ...) _attribute((format(printf, 2, 3)));
-void QDECL Com_Printf(const char *msg, ...) _attribute((format(printf, 1, 2)));
 
 /*
 ==========================================================

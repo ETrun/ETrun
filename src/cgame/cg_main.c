@@ -841,36 +841,6 @@ void QDECL CG_Error(const char *msg, ...) {
 	trap_Error(text);
 }
 
-#ifndef CGAME_HARD_LINKED
-// this is only here so the functions in q_shared.c and bg_*.c can link (FIXME)
-
-void QDECL Com_Error(int level, const char *error, ...) {
-	va_list argptr;
-	char    text[1024];
-
-	// Nico, silent GCC
-	level = level;
-
-	va_start(argptr, error);
-	Q_vsnprintf(text, sizeof (text), error, argptr);
-	va_end(argptr);
-
-	CG_Error("%s", text);
-}
-
-void QDECL Com_Printf(const char *msg, ...) {
-	va_list argptr;
-	char    text[1024];
-
-	va_start(argptr, msg);
-	Q_vsnprintf(text, sizeof (text), msg, argptr);
-	va_end(argptr);
-
-	CG_Printf("%s", text);
-}
-
-#endif
-
 /*
 ================
 CG_Argv

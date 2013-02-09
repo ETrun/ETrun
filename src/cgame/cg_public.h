@@ -76,8 +76,6 @@ functions imported from the main executable
 ==================================================================
 */
 
-#define CGAME_IMPORT_API_VERSION    3
-
 typedef enum {
 	CG_PRINT,
 	CG_ERROR,
