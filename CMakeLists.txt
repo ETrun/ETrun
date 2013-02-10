@@ -18,8 +18,8 @@ include_directories("${PROJECT_SOURCE_DIR}/src")
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake")
 
-# Verbose output
-set(CMAKE_VERBOSE_MAKEFILE "0")
+# Uncomment to enable verbose output
+# set(CMAKE_VERBOSE_MAKEFILE "1")
 
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/etrun)
 
@@ -38,10 +38,9 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Wextra -Wno-self-assign -Werror")
 
 if(UNIX)
 
-	# optimization/debug flags
-	# Note/FIXME: check this for Darwin, explore Win optimizations options
-	set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -s -ffast-math")
-	set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG}")
+	# Configuration settings for Debug/Release
+	set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE}")
+	set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -ggdb")
 
 	if(CMAKE_SYSTEM MATCHES "OpenBSD*")
 		set(LIB_SUFFIX ".mp.obsd.")
@@ -129,11 +128,6 @@ set_target_properties(cgame${LIB_SUFFIX}${ARCH}
 	PROPERTIES COMPILE_DEFINITIONS "CGAMEDLL"
 	PREFIX ""
 )
-add_custom_command(
-	TARGET cgame${LIB_SUFFIX}${ARCH} POST_BUILD
-	COMMAND ./makebundle.sh ${CMAKE_BINARY_DIR}/etrun/cgame${LIB_SUFFIX}${ARCH}
-	WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-)
 
 #
 # qagame
@@ -149,12 +143,6 @@ if(NOT CMAKE_SYSTEM MATCHES "Darwin")
 	target_link_libraries (qagame${LIB_SUFFIX}${ARCH} "pthread -D_REENTRANT")
 endif()
 
-add_custom_command(
-	TARGET qagame${LIB_SUFFIX}${ARCH} POST_BUILD
-	COMMAND ./makebundle.sh ${CMAKE_BINARY_DIR}/etrun/qagame${LIB_SUFFIX}${ARCH}
-	WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-)
-
 #
 # ui
 #
@@ -162,9 +150,4 @@ add_library(ui${LIB_SUFFIX}${ARCH} MODULE ${UI_SRC})
 set_target_properties(ui${LIB_SUFFIX}${ARCH}
 	PROPERTIES
 	PREFIX ""
-)
-add_custom_command(
-	TARGET ui${LIB_SUFFIX}${ARCH} POST_BUILD
-	COMMAND ./makebundle.sh ${CMAKE_BINARY_DIR}/etrun/ui${LIB_SUFFIX}${ARCH}
-	WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
 )
