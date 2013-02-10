@@ -370,7 +370,7 @@
 				PRODUCT_NAME = qagame_mac;
 				SDKROOT = macosx;
 				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = static;
-				SYMROOT = ../_build/game;
+				SYMROOT = ../build/game;
 			};
 			name = Development;
 		};
@@ -385,7 +385,7 @@
 				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = static;
 				STRIP_INSTALLED_PRODUCT = YES;
 				STRIP_STYLE = "non-global";
-				SYMROOT = ../_build/game;
+				SYMROOT = ../build/game;
 			};
 			name = Deployment;
 		};

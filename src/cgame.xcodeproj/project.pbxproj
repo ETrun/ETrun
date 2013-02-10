@@ -376,7 +376,7 @@
 				PRODUCT_NAME = cgame_mac;
 				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = static;
 				STRIP_INSTALLED_PRODUCT = NO;
-				SYMROOT = ../_build/cgame;
+				SYMROOT = ../build/cgame;
 			};
 			name = Development;
 		};
@@ -391,7 +391,7 @@
 				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = static;
 				STRIP_INSTALLED_PRODUCT = NO;
 				STRIP_STYLE = "non-global";
-				SYMROOT = ../_build/cgame;
+				SYMROOT = ../build/cgame;
 			};
 			name = Deployment;
 		};

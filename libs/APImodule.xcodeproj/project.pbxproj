@@ -198,7 +198,7 @@
 				PRODUCT_NAME = api_mac;
 				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = static;
 				STRIP_INSTALLED_PRODUCT = NO;
-				SYMROOT = ../_build/APImodule;
+				SYMROOT = ../build/APImodule;
 			};
 			name = Development;
 		};
@@ -215,7 +215,7 @@
 				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = static;
 				STRIP_INSTALLED_PRODUCT = NO;
 				STRIP_STYLE = "non-global";
-				SYMROOT = ../_build/APImodule;
+				SYMROOT = ../build/APImodule;
 			};
 			name = Deployment;
 		};

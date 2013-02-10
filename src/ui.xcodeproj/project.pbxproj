@@ -218,7 +218,7 @@
 				PRODUCT_NAME = ui_mac;
 				SDKROOT = macosx;
 				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = static;
-				SYMROOT = ../_build/ui;
+				SYMROOT = ../build/ui;
 			};
 			name = Development;
 		};
@@ -231,7 +231,7 @@
 				PRODUCT_NAME = ui_mac;
 				SDKROOT = macosx;
 				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = static;
-				SYMROOT = ../_build/ui;
+				SYMROOT = ../build/ui;
 			};
 			name = Deployment;
 		};

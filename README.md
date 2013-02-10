@@ -32,19 +32,9 @@ Credits
 Bootstrapping
 -------------
 
-On *Linux*, make sure you have the following packages installed:
+You will need `cmake` to compile this project.
 
-* gcc
-* zlib dev package
-* libidn dev package
-
-On *OSX*, make sure to have:
-
-* libidn
-
-You can install them via [homebrew](http://mxcl.github.com/homebrew).
-
-Then, you have to get ETrun submodules:
+Get ETrun submodules:
 
 <pre>
 $ git submodule init
