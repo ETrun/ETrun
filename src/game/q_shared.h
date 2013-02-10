@@ -52,11 +52,7 @@ If you have questions concerning this license or the applicable additional terms
 
 #define CONFIG_NAME     "etconfig.cfg"
 
-#define NEW_ANIMS
-#define MAX_TEAMNAME    32
-
 #if defined _WIN32 && !defined __GNUC__
-
 # pragma warning(disable : 4018) // signed/unsigned mismatch
 # pragma warning(disable : 4032)
 # pragma warning(disable : 4051)
@@ -66,7 +62,7 @@ If you have questions concerning this license or the applicable additional terms
 # pragma warning(disable : 4125) // decimal digit terminates octal escape sequence
 # pragma warning(disable : 4127) // conditional expression is constant
 # pragma warning(disable : 4136)
-# pragma warning(disable	: 4152)// nonstandard extension, function/data pointer conversion in expression
+# pragma warning(disable : 4152)// nonstandard extension, function/data pointer conversion in expression
 # pragma warning(disable : 4201)
 # pragma warning(disable : 4214)
 # pragma warning(disable : 4244)
@@ -142,28 +138,8 @@ If you have questions concerning this license or the applicable additional terms
 
 #ifdef WIN32
 
-# define MAC_STATIC
-
 # undef QDECL
 # define QDECL   __cdecl
-
-// buildstring will be incorporated into the version string
-# ifdef NDEBUG
-#  ifdef _M_IX86
-#   define CPUSTRING   "win-x86"
-#  elif defined _M_ALPHA
-#   define CPUSTRING   "win-AXP"
-#  endif
-# else
-#  ifdef _M_IX86
-#   define CPUSTRING   "win-x86-debug"
-#  elif defined _M_ALPHA
-#   define CPUSTRING   "win-AXP-debug"
-#  endif
-# endif
-
-
-# define PATH_SEP '\\'
 
 #endif
 
@@ -172,12 +148,6 @@ If you have questions concerning this license or the applicable additional terms
 #if defined(MACOS_X)
 
 # error WTF
-
-# define MAC_STATIC
-
-# define CPUSTRING   "MacOS_X"
-
-# define PATH_SEP    '/'
 
 // Vanilla PPC code, but since PPC has a reciprocal square root estimate instruction,
 // runs *much* faster than calling sqrt(). We'll use two Newton-Raphson
@@ -219,43 +189,6 @@ static inline float idSqrt(float x) {
 
 #endif
 
-//======================= MAC DEFINES =================================
-
-#ifdef __MACOS__
-
-# define MAC_STATIC
-
-# define CPUSTRING   "OSX-universal"
-
-# define PATH_SEP '/'
-
-void Sys_PumpEvents(void);
-
-#endif
-
-//======================= LINUX DEFINES =================================
-
-// the mac compiler can't handle >32k of locals, so we
-// just waste space and make big arrays static...
-#ifdef __linux__
-
-# define MAC_STATIC
-
-# ifdef __i386__
-#  define CPUSTRING   "linux-i386"
-# elif defined __axp__
-#  define CPUSTRING   "linux-alpha"
-# else
-#  define CPUSTRING   "linux-other"
-# endif
-
-# define PATH_SEP '/'
-
-#endif
-
-//=============================================================
-
-
 typedef unsigned char byte;
 
 typedef enum { qfalse, qtrue }    qboolean;
@@ -288,9 +221,6 @@ typedef int clipHandle_t;
 #define YAW                 1       // left / right
 #define ROLL                2       // fall over
 
-// RF, this is just here so different elements of the engine can be aware of this setting as it changes
-#define MAX_SP_CLIENTS      64      // increasing this will increase memory usage significantly
-
 // the game guarantees that no string from the network will ever
 // exceed MAX_STRING_CHARS
 #define MAX_STRING_CHARS    1024    // max length of a string passed to Cmd_TokenizeString
@@ -314,8 +244,6 @@ typedef int clipHandle_t;
 
 #define MAX_SAY_TEXT        150
 
-#define MAX_BINARY_MESSAGE  32768   // max length of binary message
-
 typedef enum {
 	MESSAGE_EMPTY = 0,
 	MESSAGE_WAITING,        // rate/packet limited
@@ -335,15 +263,6 @@ typedef enum {
 // these aren't needed by any of the VMs.  put in another header?
 //
 #define MAX_MAP_AREA_BYTES      32      // bit vector of area visibility
-
-
-// print levels from renderer (FIXME: set up for game / cgame?)
-typedef enum {
-	PRINT_ALL,
-	PRINT_DEVELOPER,        // only print when "developer 1"
-	PRINT_WARNING,
-	PRINT_ERROR
-} printParm_t;
 
 // parameters to the main Error routine
 typedef enum {
