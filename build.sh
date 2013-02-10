@@ -104,10 +104,12 @@ function build() {
 		cd ../libs/APImodule
 
 		if [ $DEBUG -eq 1 ]; then
-			./build.sh -d
-		else
-			./build.sh
+			APIMODULE_BUILD_PARAMS='-d'
 		fi
+		if [ $VERBOSE -eq 1 ]; then
+			APIMODULE_BUILD_PARAMS="$APIMODULE_BUILD_PARAMS -v"
+		fi
+		./build.sh $APIMODULE_BUILD_PARAMS
 
 		cd ../../$BUILD_DIR
 	fi
