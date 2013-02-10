@@ -1,0 +1,112 @@
+#
+# ETrun OSX test config file example
+#
+# How to use it?
+#
+# 1) Make a copy of this example file and
+# rename it to "osx.config" so that it
+#
+# 2) Edit your copy and set correct values
+# according to your system
+#
+# 3) Save your copy and run test.sh script
+# Your config will be automatically loaded
+#
+
+#
+# Mod name
+#
+mod_name='etrun'
+
+#
+# Mod pk3 archive name
+#
+pk3_name="$mod_name.pk3"
+
+#
+# Mod modules names
+#
+qagame_name='qagame_mac'
+cgame_name='cgame_mac'
+ui_name='ui_mac'
+
+#
+# Default map
+#
+default_map='goldrush'
+
+
+
+#################################################
+###           W:ET install settings           ###
+#################################################
+#
+# Path to your game install directory
+#
+et_base_path='/Applications/ET'
+
+#
+# Path to your game directory in your home
+#
+et_home_path='/Users/nico/.etwolf'
+
+#
+# Path to your ET dedicated binary
+#
+et_dedicated_binary_path="$et_base_path/ET.app/Contents/MacOS/ET"
+
+#
+# Path to your ET binary
+#
+et_binary_path="$et_base_path/ET.app/Contents/MacOS/ET"
+#################################################
+
+
+
+#################################################
+###        ET: Legacy install settings        ###
+###        (ignore if you don't use it)       ###
+#################################################
+#
+# Path to your game install directory
+#
+etl_base_path='/usr/local/share/etlegacy'
+
+#
+# Path to your ET: Legacy game directory in your home
+#
+etl_home_path='/Users/nico/.etlwolf'
+
+#
+# Path to your ET: Legacy dedicated binary
+#
+etl_dedicated_binary_path='/usr/local/bin/etlded'
+
+#
+# Path to your ET: Legacy binary
+#
+etl_binary_path='/usr/local/bin/etl'
+#################################################
+
+
+
+#################################################
+### API settings, ignore if you don't use API ###
+#################################################
+#
+# APImodule name
+#
+APImodule_name='APImodule.dylib'
+#################################################
+
+
+
+#################################################
+###             Valgrind options              ###
+###     (ignore if you don't use Valgrind)    ###
+#################################################
+#
+# Valgrind command line
+#
+valgrind_command_line='valgrind --leak-check=full --track-origin=yes'
+#################################################

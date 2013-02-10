@@ -1,0 +1,114 @@
+#
+# ETrun test config file example
+#
+# *This file is for other OS than OSX and Linux.*
+#
+# How to use it?
+#
+# 1) Make a copy of this example file and
+# rename it to "other.config" so that it
+#
+# 2) Edit your copy and set correct values
+# according to your system
+#
+# 3) Save your copy and run test.sh script
+# Your config will be automatically loaded
+#
+
+#
+# Mod name
+#
+mod_name='etrun'
+
+#
+# Mod pk3 archive name
+#
+pk3_name="$mod_name.pk3"
+
+#
+# Mod modules names
+#
+qagame_name=''
+cgame_name=''
+ui_name=''
+
+#
+# Default map
+#
+default_map='goldrush'
+
+
+
+#################################################
+###           W:ET install settings           ###
+#################################################
+#
+# Path to your game install directory
+#
+et_base_path=''
+
+#
+# Path to your game directory in your home
+#
+et_home_path=''
+
+#
+# Path to your ET dedicated binary
+#
+et_dedicated_binary_path=''
+
+#
+# Path to your ET binary
+#
+et_binary_path=''
+#################################################
+
+
+
+#################################################
+###        ET: Legacy install settings        ###
+###        (ignore if you don't use it)       ###
+#################################################
+#
+# Path to your game install directory
+#
+etl_base_path=''
+
+#
+# Path to your ET: Legacy game directory in your home
+#
+etl_home_path=''
+
+#
+# Path to your ET: Legacy dedicated binary
+#
+etl_dedicated_binary_path=''
+
+#
+# Path to your ET: Legacy binary
+#
+etl_binary_path=''
+#################################################
+
+
+
+#################################################
+### API settings, ignore if you don't use API ###
+#################################################
+#
+# APImodule name
+#
+APImodule_name=''
+#################################################
+
+
+
+#################################################
+###             Valgrind options              ###
+###     (ignore if you don't use Valgrind)    ###
+#################################################
+#
+# Valgrind command line
+#
+valgrind_command_line=''
+#################################################
