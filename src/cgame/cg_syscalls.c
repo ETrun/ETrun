@@ -31,15 +31,9 @@ If you have questions concerning this license or the applicable additional terms
 
 static int (QDECL *syscall)(int arg, ...) = (int ( QDECL * )(int, ...)) - 1;
 
-#if __GNUC__ >= 4
-# pragma GCC visibility push(default)
-#endif
-void dllEntry(int (QDECL *syscallptr)(int arg, ...)) {
+Q_EXPORT void dllEntry(int (QDECL *syscallptr)(int arg, ...)) {
 	syscall = syscallptr;
 }
-#if __GNUC__ >= 4
-# pragma GCC visibility pop
-#endif
 
 #define PASSFLOAT(x) (*(int *)&x)
 
