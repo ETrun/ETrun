@@ -18,9 +18,6 @@ include_directories("${PROJECT_SOURCE_DIR}/src")
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake")
 
-# Uncomment to enable verbose output
-# set(CMAKE_VERBOSE_MAKEFILE "1")
-
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/etrun)
 
 # Used to store real system processor when we overwrite CMAKE_SYSTEM_PROCESSOR for cross-compile builds

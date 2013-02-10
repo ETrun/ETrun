@@ -15,12 +15,13 @@ BUILD_DIR=build
 MOD_NAME='etrun'
 CMAKE=cmake
 BUILD_API=0
+VERBOSE=0
 
 #
 # Parse options
 #
 function parse_options() {
-	while getopts ":had" opt; do
+	while getopts ":hadv" opt; do
 	  	case $opt in
 		  	h)
 				show_usage
@@ -31,6 +32,9 @@ function parse_options() {
 				;;
 			d)
 				DEBUG=1
+				;;
+			v)
+				VERBOSE=1
 				;;
 		    \?)
 				echo "Invalid option: -$OPTARG"
@@ -55,6 +59,7 @@ function show_usage() {
 	echo ' -a		Build API'
 	echo ' -d		Turn ON debug mode'
 	echo ' -h		Show this help'
+	echo ' -v		Enable verbose build'
 }
 
 #
@@ -74,10 +79,14 @@ function build() {
 
 	# Run CMake
 	if [ $DEBUG -eq 1 ]; then
-		$CMAKE -D CMAKE_BUILD_TYPE=Debug ..
+		CMAKE_PARAMS='-D CMAKE_BUILD_TYPE=Debug'
 	else
-		$CMAKE -D CMAKE_BUILD_TYPE=Release ..
+		CMAKE_PARAMS='-D CMAKE_BUILD_TYPE=Release'
 	fi
+	if [ $VERBOSE -eq 1 ]; then
+		CMAKE_PARAMS="$CMAKE_PARAMS -D CMAKE_VERBOSE_MAKEFILE=TRUE"
+	fi
+	$CMAKE $CMAKE_PARAMS ..
 	if [ $? -eq 1 ]; then
 		echo 'An error occured while running CMake'
 		exit 1
