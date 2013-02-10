@@ -27,14 +27,13 @@ set(SYSTEM_PROCESSOR ${CMAKE_SYSTEM_PROCESSOR}) # See IS_64_BIT_BUILD_SYSTEM
 set(CMAKE_SHARED_LIBRARY_LINK_C_FLAGS "")
 
 # Strict mode
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Wextra -Wno-self-assign -Werror")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -m32 -Wall -Wextra -Wno-self-assign -Werror")
 
 #-----------------------------------------------------------------
 # Platform-specific settings
 #-----------------------------------------------------------------
 
 if(UNIX)
-
 	# Configuration settings for Debug/Release
 	set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE}")
 	set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -ggdb")
@@ -59,26 +58,11 @@ if(UNIX)
 	endif(NOT MSYS)
 
 elseif(WIN32)
+	# Test&fix this
 	add_definitions(-DWINVER=0x501)
 	set(OS_LIBRARIES ws2_32 psapi winmm)
 	set(LIB_SUFFIX "_mp_")
 endif()
-
-# Get the system architecture
-if(NOT CMAKE_SYSTEM MATCHES "Darwin")
-	if("${CMAKE_SYSTEM_PROCESSOR}" STREQUAL "i686" OR "${CMAKE_SYSTEM_PROCESSOR}" STREQUAL "i386" OR "${CMAKE_SYSTEM_PROCESSOR}" STREQUAL "x86")
-		if(WIN32)
-			set(ARCH "x86")
-		else()
-			set(ARCH "i386")
-		endif()
-	elseif("${CMAKE_SYSTEM_PROCESSOR}" STREQUAL "x86_64" OR "${CMAKE_SYSTEM_PROCESSOR}" STREQUAL "AMD64")
-		set(ARCH "x86_64")
-	else()
-		set(ARCH "${CMAKE_SYSTEM_PROCESSOR}")
-		message(STATUS "Warning: processor architecture not recognised (${CMAKE_SYSTEM_PROCESSOR})")
-	endif()
-endif(NOT CMAKE_SYSTEM MATCHES "Darwin")
 
 #-----------------------------------------------------------------
 # Sources
