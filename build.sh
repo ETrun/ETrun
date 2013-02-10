@@ -87,14 +87,14 @@ function build() {
 		CMAKE_PARAMS="$CMAKE_PARAMS -D CMAKE_VERBOSE_MAKEFILE=TRUE"
 	fi
 	$CMAKE $CMAKE_PARAMS ..
-	if [ $? -eq 1 ]; then
+	if [ $? -ne 0 ]; then
 		echo 'An error occured while running CMake'
 		exit 1
 	fi
 
 	# Run make
 	make
-	if [ $? -eq 1 ]; then
+	if [ $? -ne 0 ]; then
 		echo 'An error occured while running make'
 		exit 1
 	fi
