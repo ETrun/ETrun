@@ -29,6 +29,22 @@ set(CMAKE_SHARED_LIBRARY_LINK_C_FLAGS "")
 # Strict mode
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -m32 -Wall -Wextra -Wno-self-assign -Werror")
 
+# Get the system architecture
+if(NOT CMAKE_SYSTEM MATCHES "Darwin")
+	if("${CMAKE_SYSTEM_PROCESSOR}" STREQUAL "i686" OR "${CMAKE_SYSTEM_PROCESSOR}" STREQUAL "i386" OR "${CMAKE_SYSTEM_PROCESSOR}" STREQUAL "x86")
+		if(WIN32)
+			set(ARCH "x86")
+		else()
+			set(ARCH "i386")
+		endif()
+	elseif("${CMAKE_SYSTEM_PROCESSOR}" STREQUAL "x86_64" OR "${CMAKE_SYSTEM_PROCESSOR}" STREQUAL "AMD64")
+		set(ARCH "x86_64")
+	else()
+		set(ARCH "${CMAKE_SYSTEM_PROCESSOR}")
+		message(STATUS "Warning: processor architecture not recognised (${CMAKE_SYSTEM_PROCESSOR})")
+	endif()
+endif(NOT CMAKE_SYSTEM MATCHES "Darwin")
+
 #-----------------------------------------------------------------
 # Platform-specific settings
 #-----------------------------------------------------------------
