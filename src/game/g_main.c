@@ -340,7 +340,6 @@ void G_ShutdownGame(int restart);
 vmMain
 
 This is the only way control passes into the module.
-This must be the very first function compiled into the .q3vm file
 ================
 */
 Q_EXPORT int vmMain(int command, int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6) {
