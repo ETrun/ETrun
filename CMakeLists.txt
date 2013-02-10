@@ -1,8 +1,6 @@
 #
 # ETrun CMakeLists.txt
 #
-#
-
 
 cmake_minimum_required (VERSION 2.6)
 
@@ -19,7 +17,6 @@ configure_file (
 include_directories("${PROJECT_SOURCE_DIR}/src")
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake")
-include(Build)
 
 # Verbose output
 set(CMAKE_VERBOSE_MAKEFILE "0")
@@ -32,6 +29,8 @@ set(SYSTEM_PROCESSOR ${CMAKE_SYSTEM_PROCESSOR}) # See IS_64_BIT_BUILD_SYSTEM
 # has to be set to "", otherwise CMake will pass -rdynamic resulting in a client crash
 set(CMAKE_SHARED_LIBRARY_LINK_C_FLAGS "")
 
+# Strict mode
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Wextra -Wno-self-assign -Werror")
 
 #-----------------------------------------------------------------
 # Platform-specific settings
@@ -42,7 +41,7 @@ if(UNIX)
 	# optimization/debug flags
 	# Note/FIXME: check this for Darwin, explore Win optimizations options
 	set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -s -ffast-math")
-	set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -Wall -Wextra -Werror")
+	set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG}")
 
 	if(CMAKE_SYSTEM MATCHES "OpenBSD*")
 		set(LIB_SUFFIX ".mp.obsd.")
