@@ -79,12 +79,14 @@ function read_config() {
 		echo -n " Unkown OS, loading $OTHER_CONFIG_FILE..."
 		CONFIG_FILE=$OTHER_CONFIG_FILE
 	fi
-	echo '[ok]'
 
 	if [ ! -f $WD/$CONFIG_FILE ]; then
 		echo "[ko] Make sure $PWD/$CONFIG_FILE exists"
 		exit 1
 	fi
+	echo '[ok]'
+
+	# Load file
 	source $WD/$CONFIG_FILE
 
 	# Set game binary
