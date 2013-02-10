@@ -88,23 +88,6 @@ function read_config() {
 
 	# Load file
 	source $WD/$CONFIG_FILE
-
-	# Set game binary
-	if [ $USE_ETL -eq 1 ]; then
-		BASEPATH=$etl_base_path
-		if [ $DEDICATED -eq 1 ]; then
-			GAME_PATH=$etl_dedicated_binary_path
-		else
-			GAME_PATH=$etl_binary_path
-		fi
-	else
-		BASEPATH=$et_base_path
-		if [ $DEDICATED -eq 1 ]; then
-			GAME_PATH=$et_dedicated_binary_path
-		else
-			GAME_PATH=$et_binary_path
-		fi
-	fi
 }
 
 #
@@ -138,10 +121,23 @@ function make_pk3() {
 # Install mod function
 #
 function install() {
+	# Set game binary
 	if [ $USE_ETL -eq 1 ]; then
 		HOMEPATH=$etl_home_path
+		BASEPATH=$etl_base_path
+		if [ $DEDICATED -eq 1 ]; then
+			GAME_PATH=$etl_dedicated_binary_path
+		else
+			GAME_PATH=$etl_binary_path
+		fi
 	else
 		HOMEPATH=$et_home_path
+		BASEPATH=$et_base_path
+		if [ $DEDICATED -eq 1 ]; then
+			GAME_PATH=$et_dedicated_binary_path
+		else
+			GAME_PATH=$et_binary_path
+		fi
 	fi
 
 	# Make etrun/ dir
@@ -236,9 +232,9 @@ function start_game() {
 #
 # Main
 #
-parse_options "$@"
-
 read_config
+
+parse_options "$@"
 
 echo -n ' Cleaning game...'
 clean_game
