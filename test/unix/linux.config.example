@@ -102,11 +102,16 @@ APImodule_name='APImodule.so'
 
 
 #################################################
-###             Valgrind options              ###
+###             Debugging options             ###
 ###     (ignore if you don't use Valgrind)    ###
 #################################################
 #
 # Valgrind command line
 #
 valgrind_command_line='valgrind --leak-check=full --track-origin=yes'
+
+#
+# Debugger command line
+#
+debugger_command_line='gdb --args'
 #################################################

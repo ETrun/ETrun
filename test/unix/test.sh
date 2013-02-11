@@ -11,12 +11,13 @@ LINUX_CONFIG_FILE='linux.config'
 OTHER_CONFIG_FILE='other.config'
 USE_ETL=0
 USE_VALGRIND=0
+USE_DEBUGGER=0
 
 #
 # Parse options
 #
 function parse_options() {
-	while getopts ":ahdm:cvl" opt; do
+	while getopts ":ahdm:cvlg" opt; do
 	  	case $opt in
 		  	h)
 				show_usage
@@ -30,6 +31,9 @@ function parse_options() {
 				;;
 			d)
 				DEVELOPER=1
+				;;
+			g)
+				USE_DEBUGGER=1
 				;;
 			l)
 				USE_ETL=1
@@ -56,9 +60,10 @@ function show_usage() {
 	echo ' -a 		Use API'
 	echo ' -c		Start game in client mode'
 	echo ' -d 		Enable DEVELOPER mode'
+	echo ' -g 		Start game with a debugger'
 	echo ' -h		Show this help'
 	echo ' -l		Use ET: Legacy'
-	echo ' -m NAPNAME	Set map'
+	echo ' -m MAPNAME	Set map'
 	echo ' -v 		Use Valgrind to check memory leaks'
 }
 
@@ -188,44 +193,38 @@ function print_summary() {
 	if [ $USE_API -eq 0 ]; then
 		echo 'API: no'
 	else
-		echo 'API: yes'
+		echo 'API: YES'
 	fi
 
 	if [ $DEVELOPER -eq 0 ]; then
-		echo 'Developper mode: DISABLED'
+		echo 'Developper mode: disabled'
 	else
 		echo 'Developper mode: ENABLED'
 	fi
 
 	if [ $USE_VALGRIND -eq 0 ]; then
-		echo 'Valgrind: DISABLED'
+		echo 'Valgrind: disabled'
 	else
 		echo 'Valgrind: ENABLED'
+	fi
+
+	if [ $USE_DEBUGGER -eq 0 ]; then
+		echo 'Debugger: disabled'
+	else
+		echo 'Debugger: ENABLED'
 	fi
 	echo '###################################'
 }
 
 function start_game() {
+	GAME_ARGS="+set fs_game $mod_name +set fs_basePath $BASEPATH +set fs_homePath $HOMEPATH +set dedicated $DEDICATED +set g_useAPI $USE_API +set g_APImodulePath $HOMEPATH/$mod_name/$APImodule_name +set developer $DEVELOPER +map $default_map"
+
 	if [ $USE_VALGRIND -eq 1 ]; then
-		$valgrind_command_line $GAME_PATH \
-		+set fs_game $mod_name \
-		+set fs_basePath $BASEPATH \
-		+set fs_homePath $HOMEPATH \
-		+set dedicated $DEDICATED \
-		+set g_useAPI $USE_API \
-		+set g_APImodulePath $HOMEPATH/$mod_name/$APImodule_name \
-		+set developer $DEVELOPER \
-		+map $default_map
+		$valgrind_command_line $GAME_PATH $GAME_ARGS
+	elif [ $USE_DEBUGGER -eq 1 ]; then
+		$debugger_command_line $GAME_PATH $GAME_ARGS
 	else
-		$GAME_PATH \
-		+set fs_game $mod_name \
-		+set fs_basePath $BASEPATH \
-		+set fs_homePath $HOMEPATH \
-		+set dedicated $DEDICATED \
-		+set g_useAPI $USE_API \
-		+set g_APImodulePath $HOMEPATH/$mod_name/$APImodule_name \
-		+set developer $DEVELOPER \
-		+map $default_map
+		$GAME_PATH $GAME_ARGS
 	fi
 }
 
