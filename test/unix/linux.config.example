@@ -53,12 +53,12 @@ et_home_path='/home/vm/.etwolf'
 #
 # Path to your ET dedicated binary
 #
-et_dedicated_binary_path="$et_base_path/etded"
+et_dedicated_binary_path="$et_base_path/etded.x86"
 
 #
 # Path to your ET binary
 #
-et_binary_path="$et_base_path/et"
+et_binary_path="$et_base_path/et.x86"
 #################################################
 
 
@@ -113,5 +113,5 @@ valgrind_command_line='valgrind --leak-check=full --track-origin=yes'
 #
 # Debugger command line
 #
-debugger_command_line='gdb --args'
+debugger_command_line="$(export LD_PRELOAD=/lib/i386-linux-gnu/libpthread.so.0) gdb --args"
 #################################################
