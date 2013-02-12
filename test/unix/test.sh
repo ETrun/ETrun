@@ -217,7 +217,7 @@ function print_summary() {
 }
 
 function start_game() {
-	GAME_ARGS="+set fs_game $mod_name +set fs_basePath $BASEPATH +set fs_homePath $HOMEPATH +set dedicated $DEDICATED +set g_useAPI $USE_API +set g_APImodulePath $HOMEPATH/$mod_name/$APImodule_name +set developer $DEVELOPER +map $default_map"
+	GAME_ARGS="+set fs_game $mod_name +set fs_basePath $BASEPATH +set fs_homePath $HOMEPATH +set dedicated $DEDICATED +set g_useAPI $USE_API +set g_APImodulePath $HOMEPATH/$mod_name/$APImodule_name +set developer $DEVELOPER +map $default_map +set com_hunkMegs 128"
 
 	if [ $USE_VALGRIND -eq 1 ]; then
 		$valgrind_command_line $GAME_PATH $GAME_ARGS
