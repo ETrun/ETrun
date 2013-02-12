@@ -658,6 +658,17 @@ qboolean COM_BitCheck(const int array[], int bitNum);
 void COM_BitSet(int array[], int bitNum);
 void COM_BitClear(int array[], int bitNum);
 
+// Nico, unions for fix against strict-aliasing rule break
+typedef union {
+	float f;
+	int i;
+} float_int_u;
+
+typedef union {
+	float f;
+	long l;
+} float_long_u;
+
 int PASSFLOAT(float x);
 
 #define MAX_TOKENLENGTH     1024

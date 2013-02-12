@@ -530,26 +530,32 @@ void VectorRotate(vec3_t in, vec3_t matrix[3], vec3_t out) {
 
 /*
 ** float q_rsqrt( float number )
+* (strict-aliasing rule break fixed by Nico)
+*
 */
 float Q_rsqrt(float number) {
 	long        i;
 	float       x2, y;
-	const float threehalfs = 1.5F;
+	float_long_u number_u = {number};
+	float_long_u i_u;
 
-	x2 = number * 0.5F;
-	y  = number;
-	i  = *( long * ) &y;                        // evil floating point bit level hacking
-	i  = 0x5f3759df - (i >> 1);                 // what the fuck?
-	y  = *( float * ) &i;
-	y  = y * (threehalfs - (x2 * y * y));       // 1st iteration
+	x2 = number_u.f * 0.5F;
+	i  = *( long * ) &number_u.l;		// evil floating point bit level hacking
+	i_u.l  = 0x5f3759df - (i >> 1);		// what the fuck?
+	y  = *( float * ) &i_u.f;
+	y  = y * (1.5F - (x2 * y * y));		// 1st iteration
 
 	return y;
 }
 
+// Nico, strict-aliasing rule break fixed
 float Q_fabs(float f) {
-	int tmp = (*(int *)&f) & 0x7FFFFFFF;
+	float_int_u f_u = {f};
+	float_int_u tmp_u;
 
-	return *(float *)&tmp;
+	tmp_u.i = (*(int *)&f_u.i) & 0x7FFFFFFF;
+
+	return *(float *)&tmp_u.f;
 }
 
 #if id386 && !((defined __linux__ || defined __FreeBSD__ || defined __GNUC__) && (defined __i386__))       // rb010123
