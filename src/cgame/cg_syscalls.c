@@ -35,8 +35,6 @@ Q_EXPORT void dllEntry(int (QDECL *syscallptr)(int arg, ...)) {
 	syscall = syscallptr;
 }
 
-#define PASSFLOAT(x) (*(int *)&x)
-
 void trap_PumpEventLoop(void) {
 	if (!cgs.initing) {
 		return;

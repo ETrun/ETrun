@@ -36,13 +36,6 @@ Q_EXPORT void dllEntry(int (QDECL *syscallptr)(int arg, ...)) {
 	syscall = syscallptr;
 }
 
-int PASSFLOAT(float x) {
-	float floatTemp;
-
-	floatTemp = x;
-	return *(int *)&floatTemp;
-}
-
 void trap_Print(const char *string) {
 	syscall(UI_PRINT, string);
 }
