@@ -2,6 +2,7 @@
 #include "cg_local.h"
 
 // Colors
+// #todo: move this elsewhere
 vec4_t clrUiBack = { 0.f, 0.f, 0.f, .5f };
 vec4_t clrUiYou = { 0.2f, 0.1f, 0.1f, .5f };
 
