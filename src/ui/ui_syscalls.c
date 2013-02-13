@@ -60,11 +60,12 @@ void trap_Cvar_Set(const char *var_name, const char *value) {
 	syscall(UI_CVAR_SET, var_name, value);
 }
 
+// Nico, fixed strict-aliasing rules break
 float trap_Cvar_VariableValue(const char *var_name) {
-	int temp;
+	float_int_u temp_u;
 
-	temp = syscall(UI_CVAR_VARIABLEVALUE, var_name);
-	return (*(float *)&temp);
+	temp_u.i = syscall(UI_CVAR_VARIABLEVALUE, var_name);
+	return (*(float *)&temp_u.f);
 }
 
 void trap_Cvar_VariableStringBuffer(const char *var_name, char *buffer, int bufsize) {
