@@ -70,10 +70,6 @@ still, you should rely on PB for banning instead
 ==============================================================================
 */
 
-typedef struct ipGUID_s {
-	char compare[33];
-} ipGUID_t;
-
 #define MAX_IPFILTERS   1024
 
 typedef struct ipFilterList_s {
@@ -129,8 +125,11 @@ qboolean StringToFilter(const char *s, ipFilter_t *f) {
 		s++;
 	}
 
-	f->mask    = *(unsigned *)m;
-	f->compare = *(unsigned *)b;
+	// Nico, fix for strict-aliasing rule break
+	f->mask = ((m[0] << 24) | (m[1] << 16) | (m[2] << 8) | (m[3]));
+	f->compare = ((b[0] << 24) | (b[1] << 16) | (b[2] << 8) | (b[3]));
+	//f->mask    = *(unsigned *)m;
+	//f->compare = *(unsigned *)b;
 
 	return qtrue;
 }
@@ -153,8 +152,18 @@ static void UpdateIPBans(ipFilterList_t *ipFilterList) {
 			continue;
 		}
 
-		*(unsigned *)b = ipFilterList->ipFilters[i].compare;
-		*(unsigned *)m = ipFilterList->ipFilters[i].mask;
+		// Nico, strict-aliasing rule break fix
+		b[0] = (ipFilterList->ipFilters[i].compare >> 24) & 0xFF;
+		b[1] = (ipFilterList->ipFilters[i].compare >> 16) & 0xFF;
+		b[2] = (ipFilterList->ipFilters[i].compare >> 8) & 0xFF;
+		b[3] = ipFilterList->ipFilters[i].compare & 0xFF;
+		m[0] = (ipFilterList->ipFilters[i].mask >> 24) & 0xFF;
+		m[1] = (ipFilterList->ipFilters[i].mask >> 16) & 0xFF;
+		m[2] = (ipFilterList->ipFilters[i].mask >> 8) & 0xFF;
+		m[3] = ipFilterList->ipFilters[i].mask & 0xFF;
+		//*(unsigned *)b = ipFilterList->ipFilters[i].compare;
+		//*(unsigned *)m = ipFilterList->ipFilters[i].mask;
+
 		*ip            = 0;
 		for (j = 0; j < 4 ; j++) {
 			if (m[j] != 255) {
@@ -200,7 +209,9 @@ qboolean G_FilterPacket(ipFilterList_t *ipFilterList, char *from) {
 		i++, p++;
 	}
 
-	in = *(unsigned *)m;
+	// Nico, fix against strict-aliasing rule break
+	in = ((m[0] << 24) | (m[1] << 16) | (m[2] << 8) | (m[3]));
+	//in = *(unsigned *)m;
 
 	for (i = 0; i < ipFilterList->numIPFilters; i++)
 		if ((in & ipFilterList->ipFilters[i].mask) == ipFilterList->ipFilters[i].compare) {
