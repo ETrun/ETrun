@@ -854,7 +854,6 @@ typedef struct voiceChat_s {
 
 typedef struct voiceChatList_s {
 	char name[64];
-	int gender;
 	int numVoiceChats;
 	voiceChat_t voiceChats[MAX_VOICECHATS];
 } voiceChatList_t;
@@ -913,16 +912,6 @@ int CG_ParseVoiceChats(const char *filename, voiceChatList_t *voiceChatList, int
 	token = COM_ParseExt(p, qtrue);
 	if (!token || token[0] == 0) {
 		return qtrue;
-	}
-	if (!Q_stricmp(token, "female")) {
-		voiceChatList->gender = GENDER_FEMALE;
-	} else if (!Q_stricmp(token, "male")) {
-		voiceChatList->gender = GENDER_MALE;
-	} else if (!Q_stricmp(token, "neuter")) {
-		voiceChatList->gender = GENDER_NEUTER;
-	} else {
-		trap_Print(va(S_COLOR_RED "expected gender not found in voice chat file: %s\n", filename));
-		return qfalse;
 	}
 
 	// Gordon: setting before call so we can load multiple files into one list

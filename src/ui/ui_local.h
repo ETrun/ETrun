@@ -336,7 +336,6 @@ typedef struct {
 
 	// NERVE - SMF - added fields so it will work with wolf's skeletal animation system
 	// parsed from the start of the cfg file
-	gender_t gender;
 	footstep_t footsteps;
 	vec3_t headOffset;
 	int version;
@@ -451,7 +450,6 @@ typedef struct {
 typedef struct {
 	const char *teamName;
 	const char *imageName;
-	const char *teamMembers[TEAM_MEMBERS];
 	qhandle_t teamIcon;
 	qhandle_t teamIcon_Metal;
 	qhandle_t teamIcon_Name;

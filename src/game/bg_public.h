@@ -164,10 +164,6 @@ typedef struct {
 	int typeBits;
 	int cinematic;
 
-	// Gordon: FIXME: remove
-	const char *opponentName;
-	int teamMembers;
-
 	qhandle_t levelShot;
 	qboolean active;
 
@@ -186,60 +182,6 @@ typedef struct {
 // changed this from 6 to 10
 # define MAX_MAPS_PER_CAMPAIGN   10
 // END Mad Doc - TDF
-
-# define CPS_IDENT   (('S' << 24) + ('P' << 16) + ('C' << 8) + 'I')
-# define CPS_VERSION 1
-
-typedef struct {
-	int mapnameHash;
-} cpsMap_t;
-
-typedef struct {
-	int shortnameHash;
-	int progress;
-
-	cpsMap_t maps[MAX_MAPS_PER_CAMPAIGN];
-} cpsCampaign_t;
-
-typedef struct {
-	int ident;
-	int version;
-
-	int numCampaigns;
-	int profileHash;
-} cpsHeader_t;
-
-typedef struct {
-	cpsHeader_t header;
-	cpsCampaign_t campaigns[MAX_CAMPAIGNS];
-} cpsFile_t;
-
-qboolean BG_LoadCampaignSave(const char *filename, cpsFile_t *file, const char *profile);
-qboolean BG_StoreCampaignSave(const char *filename, cpsFile_t *file, const char *profile);
-
-typedef struct {
-	const char *campaignShortName;
-	const char *campaignName;
-	const char *campaignDescription;
-	const char *nextCampaignShortName;
-	const char *maps;
-	int mapCount;
-	mapInfo *mapInfos[MAX_MAPS_PER_CAMPAIGN];
-	vec2_t mapTC[2];
-	cpsCampaign_t *cpsCampaign;   // if this campaign was found in the campaignsave, more detailed info can be found here
-
-	const char *campaignShotName;
-	int campaignCinematic;
-	qhandle_t campaignShot;
-
-	qboolean unlocked;
-	int progress;
-
-	qboolean initial;
-	int order;
-
-	int typeBits;
-} campaignInfo_t;
 
 // Client flags for server processing
 # define CGF_AUTORELOAD      0x01
@@ -335,8 +277,6 @@ typedef struct {
 # if (CS_MAX) > MAX_CONFIGSTRINGS
 #  error overflow: (CS_MAX) > MAX_CONFIGSTRINGS
 # endif
-
-typedef enum { GENDER_MALE, GENDER_FEMALE, GENDER_NEUTER } gender_t;
 
 /*
 ===================================================================================
@@ -555,7 +495,6 @@ typedef enum {
 	// Rafael wolfkick
 	PERS_WOLFKICK
 } persEnum_t;
-
 
 // entityState_t->eFlags
 # define EF_DEAD             0x00000001     // don't draw a foe marker over players with EF_DEAD
@@ -1362,15 +1301,12 @@ extern int     bg_numItems;
 gitem_t *BG_FindItem(const char *pickupName);
 gitem_t *BG_FindItemForClassName(const char *className);
 gitem_t *BG_FindItemForWeapon(weapon_t weapon);
-gitem_t *BG_FindItemForPowerup(powerup_t pw);
 weapon_t BG_FindAmmoForWeapon(weapon_t weapon);
 weapon_t BG_FindClipForWeapon(weapon_t weapon);
 
 qboolean BG_AkimboFireSequence(int weapon, int akimboClip, int mainClip);
 qboolean BG_IsAkimboWeapon(int weaponNum);
 int BG_AkimboSidearm(int weaponNum);
-
-# define ITEM_INDEX(x) ((x) - bg_itemlist)
 
 // content masks
 # define MASK_ALL                (-1)
@@ -1442,8 +1378,6 @@ typedef enum {
 	HINT_NUM_HINTS
 } hintType_t;
 
-
-
 void    BG_EvaluateTrajectory(const trajectory_t *tr, int atTime, vec3_t result, qboolean isAngle, int splinePath);
 void BG_EvaluateTrajectoryDelta(const trajectory_t *tr, int atTime, vec3_t result);
 void    BG_GetMarkDir(const vec3_t dir, const vec3_t normal, vec3_t out);
@@ -1470,8 +1404,6 @@ void PM_ClipVelocity(vec3_t in, vec3_t normal, vec3_t out, float overbounce);
 
 # define MAX_ARENAS          64
 # define MAX_ARENAS_TEXT     8192
-
-# define MAX_CAMPAIGNS_TEXT  8192
 
 typedef enum {
 	FOOTSTEP_NORMAL,
@@ -1537,7 +1469,6 @@ typedef enum {
 	ANIM_MT_PRONEBK,
 	ANIM_MT_IDLEPRONE,
 	ANIM_MT_FLAILING,
-//	ANIM_MT_TALK,
 	ANIM_MT_SNEAK,
 	ANIM_MT_AFTERBATTLE,            // xkan, 1/8/2003, just finished battle
 
@@ -1656,7 +1587,6 @@ typedef struct {
 	char animationScript[MAX_QPATH];
 
 	// parsed from the start of the cfg file (this is basically obsolete now - need to get rid of it)
-	gender_t gender;
 	footstep_t footsteps;
 	vec3_t headOffset;
 	int version;
@@ -1763,10 +1693,6 @@ typedef enum {
 	ACC_MAX         // this is bound by network limits, must change network stream to increase this
 } accType_t;
 
-# define ACC_NUM_MOUTH 3 // matches the above count
-
-# define MAX_GIB_MODELS      16
-
 # define MAX_WEAPS_PER_CLASS 10
 
 typedef struct {
@@ -1794,8 +1720,6 @@ typedef struct bg_character_s {
 
 	qhandle_t accModels[ACC_MAX];
 	qhandle_t accSkins[ACC_MAX];
-
-	qhandle_t gibModels[MAX_GIB_MODELS];
 
 	qhandle_t undressedCorpseModel;
 	qhandle_t undressedCorpseSkin;
@@ -1827,13 +1751,9 @@ SAVE
 ==============================================================
 */
 
-# define SAVE_VERSION            31
-# define SAVE_INFOSTRING_LENGTH  256
-
 //------------------------------------------------------------------
 // Global Function Decs
 
-//animModelInfo_t *BG_ModelInfoForModelname( char *modelname );
 void BG_InitWeaponStrings(void);
 void BG_AnimParseAnimScript(animModelInfo_t *modelInfo, animScriptData_t *scriptData, const char *filename, char *input);
 int BG_AnimScriptAnimation(playerState_t *ps, animModelInfo_t *modelInfo, scriptAnimMoveTypes_t movetype, qboolean isContinue);

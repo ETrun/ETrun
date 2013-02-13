@@ -231,7 +231,6 @@ qboolean BG_R_RegisterAnimationGroup(const char *filename, animModelInfo_t *anim
 
 	animModelInfo->numAnimations = 0;
 	animModelInfo->footsteps     = FOOTSTEP_NORMAL;
-	animModelInfo->gender        = GENDER_MALE;
 	animModelInfo->isSkeletal    = qtrue;
 	animModelInfo->version       = 3;
 	animModelInfo->numHeadAnims  = 0;

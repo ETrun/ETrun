@@ -600,8 +600,6 @@ void RotateAroundDirection(vec3_t axis[3], float yaw);
 void MakeNormalVectors(const vec3_t forward, vec3_t right, vec3_t up);
 // perpendicular vector could be replaced by this
 
-int PlaneTypeForNormal(vec3_t normal);
-
 void MatrixMultiply(float in1[3][3], float in2[3][3], float out[3][3]);
 void AngleVectors(const vec3_t angles, vec3_t forward, vec3_t right, vec3_t up);
 void PerpendicularVector(vec3_t dst, const vec3_t src);
@@ -853,24 +851,6 @@ COLLISION DETECTION
 
 #include "surfaceflags.h"            // shared with the q3map utility
 
-// plane types are used to speed some tests
-// 0-2 are axial planes
-#define PLANE_X             0
-#define PLANE_Y             1
-#define PLANE_Z             2
-#define PLANE_NON_AXIAL     3
-#define PLANE_NON_PLANAR    4
-
-
-/*
-=================
-PlaneTypeForNormal
-=================
-*/
-
-#define PlaneTypeForNormal(x) (x[0] == 1.0 ? PLANE_X : (x[1] == 1.0 ? PLANE_Y : (x[2] == 1.0 ? PLANE_Z : (x[0] == 0.f && x[1] == 0.f && x[2] == 0.f ? PLANE_NON_PLANAR : PLANE_NON_AXIAL))))
-
-
 // plane_t structure
 // !!! if this is changed, it must be changed in asm code too !!!
 typedef struct cplane_s {
@@ -880,9 +860,6 @@ typedef struct cplane_s {
 	byte signbits;          // signx + (signy<<1) + (signz<<2), used as lookup during collision
 	byte pad[2];
 } cplane_t;
-
-#define CPLANE
-
 
 // a trace is returned when a box is swept through the world
 typedef struct {
@@ -902,8 +879,6 @@ typedef struct {
 	int numPoints;
 } markFragment_t;
 
-
-
 typedef struct {
 	vec3_t origin;
 	vec3_t axis[3];
@@ -914,11 +889,8 @@ typedef struct {
 
 // in order from highest priority to lowest
 // if none of the catchers are active, bound key strings will be executed
-#define KEYCATCH_CONSOLE        0x0001
 #define KEYCATCH_UI             0x0002
-#define KEYCATCH_MESSAGE        0x0004
 #define KEYCATCH_CGAME          0x0008
-
 
 // sound channels
 // channel 0 never willingly overrides

@@ -724,7 +724,6 @@ static qboolean AnimParseAnimConfig(playerInfo_t *animModelInfo, const char *inp
 
 	animModelInfo->footsteps = FOOTSTEP_NORMAL;
 	VectorClear(animModelInfo->headOffset);
-	animModelInfo->gender     = GENDER_MALE;
 	animModelInfo->isSkeletal = qfalse;
 	animModelInfo->version    = 0;
 
@@ -750,19 +749,6 @@ static qboolean AnimParseAnimConfig(playerInfo_t *animModelInfo, const char *inp
 					break;
 				}
 				animModelInfo->headOffset[i] = atof(token);
-			}
-			continue;
-		} else if (!Q_stricmp(token, "sex")) {
-			token = COM_Parse(&text_p);
-			if (!token) {
-				break;
-			}
-			if (token[0] == 'f' || token[0] == 'F') {
-				animModelInfo->gender = GENDER_FEMALE;
-			} else if (token[0] == 'n' || token[0] == 'N') {
-				animModelInfo->gender = GENDER_NEUTER;
-			} else {
-				animModelInfo->gender = GENDER_MALE;
 			}
 			continue;
 		} else if (!Q_stricmp(token, "version")) {
