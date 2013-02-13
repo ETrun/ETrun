@@ -940,18 +940,6 @@ void G_Damage(gentity_t *targ, gentity_t *inflictor, gentity_t *attacker, vec3_t
 			VectorSubtract(point, muzzleTrace, shotvec);
 			dist = VectorLength(shotvec);
 
-#if DO_BROKEN_DISTANCEFALLOFF
-			// ~~~___---___
-			if (dist > 1500.f) {
-				if (dist > 2500.f) {
-					take *= 0.2f;
-				} else {
-					float scale = 1.f - 0.2f * (1000.f / (dist - 1000.f));
-
-					take *= scale;
-				}
-			}
-#else
 			// ~~~---______
 			// zinx - start at 100% at 1500 units (and before),
 			// and go to 20% at 2500 units (and after)
@@ -971,7 +959,6 @@ void G_Damage(gentity_t *targ, gentity_t *inflictor, gentity_t *attacker, vec3_t
 			}
 
 			take *= scale;
-#endif
 		}
 
 		if (!(targ->client->ps.eFlags & EF_HEADSHOT)) {        // only toss hat on first headshot

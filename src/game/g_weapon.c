@@ -2092,20 +2092,6 @@ qboolean Bullet_Fire_Extended(gentity_t *source, gentity_t *attacker, vec3_t sta
 		VectorSubtract(tr.endpos, muzzleTrace, shotvec);
 		dist = VectorLengthSquared(shotvec);
 
-#if DO_BROKEN_DISTANCEFALLOFF
-		// ~~~___---___
-		if (dist > Square(1500.f)) {
-			// reducedDamage = qtrue;
-
-			if (dist > Square(2500.f)) {
-				damage *= 0.5f;
-			} else {
-				float scale = 1.f - 0.5f * (Square(1000.f) / (dist - Square(1000.f)));
-
-				damage *= scale;
-			}
-		}
-#else
 		// ~~~---______
 		// zinx - start at 100% at 1500 units (and before),
 		// and go to 50% at 2500 units (and after)
@@ -2126,7 +2112,6 @@ qboolean Bullet_Fire_Extended(gentity_t *source, gentity_t *attacker, vec3_t sta
 		}
 
 		damage *= scale;
-#endif
 	}
 
 	// send bullet impact

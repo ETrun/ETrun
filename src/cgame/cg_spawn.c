@@ -361,14 +361,11 @@ qboolean CG_ParseSpawnVars(void) {
 
 void SP_worldspawn(void) {
 	char *s;
-	int  i;
 
 	CG_SpawnString("classname", "", &s);
 	if (Q_stricmp(s, "worldspawn")) {
 		CG_Error("SP_worldspawn: The first entity isn't 'worldspawn'");
 	}
-
-	cgs.ccLayers = 0;
 
 	if (CG_SpawnVector2D("mapcoordsmins", "-128 128", cg.mapcoordsMins) &&     // top left
 	    CG_SpawnVector2D("mapcoordsmaxs", "128 -128", cg.mapcoordsMaxs)) {     // bottom right
@@ -378,14 +375,6 @@ void SP_worldspawn(void) {
 	}
 
 	CG_ParseSpawns();
-
-	CG_SpawnString("cclayers", "0", &s);
-	cgs.ccLayers = atoi(s);
-
-	for (i = 0; i < cgs.ccLayers; i++) {
-		CG_SpawnString(va("cclayerceil%i", i), "0", &s);
-		cgs.ccLayerCeils[i] = atoi(s);
-	}
 
 	BG_InitLocations(cg.mapcoordsMins, cg.mapcoordsMaxs);
 

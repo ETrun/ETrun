@@ -1552,10 +1552,6 @@ typedef struct {
 
 	centity_t *gameManager;
 
-	int ccLayers;
-	int ccLayerCeils[MAX_COMMANDMAP_LAYERS];
-	float ccZoomFactor;
-
 	int invitationClient;
 	int invitationEndTime;
 

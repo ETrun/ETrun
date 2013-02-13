@@ -2493,8 +2493,6 @@ void CG_Init(int serverMessageNum, int serverCommandSequence, int clientNum, qbo
 
 	cgs.initing = qtrue;
 
-	cgs.ccZoomFactor = 1.f;
-
 	// OSP - sync to main refdef
 	cg.refdef_current = &cg.refdef;
 

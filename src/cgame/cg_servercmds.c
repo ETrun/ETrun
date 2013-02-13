@@ -286,14 +286,6 @@ void CG_ParseSpawns(void) {
 		}
 		cg.spawnCoordsUntransformed[i][1] = cg.spawnCoords[i][1] = atof(s);
 
-		if (cgs.ccLayers) {
-			s = Info_ValueForKey(info, "z");
-			if (!s || !strlen(s)) {
-				return;
-			}
-			cg.spawnCoordsUntransformed[i][2] = cg.spawnCoords[i][2] = atof(s);
-		}
-
 		s = Info_ValueForKey(info, "t");
 
 		newteam = atoi(s);

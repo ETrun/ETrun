@@ -3999,7 +3999,7 @@ static void UI_BuildServerDisplayList(qboolean force) {
 	trap_Cvar_VariableStringBuffer("cl_motdString", uiInfo.serverStatus.motd, sizeof (uiInfo.serverStatus.motd));
 	len = strlen(uiInfo.serverStatus.motd);
 	if (len == 0) {
-		strcpy(uiInfo.serverStatus.motd, va("Enemy Territory - Version: %s", Q3_VERSION));
+		strcpy(uiInfo.serverStatus.motd, va("Enemy Territory - Mod: %s", GAME_VERSION));
 		len = strlen(uiInfo.serverStatus.motd);
 	}
 	if (len != uiInfo.serverStatus.motdLen) {

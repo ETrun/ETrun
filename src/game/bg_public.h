@@ -47,7 +47,7 @@ If you have questions concerning this license or the applicable additional terms
 # define MOD_URL        		"http://www.timeruns.net"
 # define SHORT_MOD_URL			"www.timeruns.net"
 
-# define GAME_VERSION_DATED		"GAME_VERSION_MOD_VERSION"
+# define GAME_VERSION_DATED		GAME_VERSION"_"MOD_VERSION
 
 //bani
 # ifdef __GNUC__
@@ -67,19 +67,14 @@ If you have questions concerning this license or the applicable additional terms
 # define FORCE_LIMBO_HEALTH  -75 // JPW NERVE
 
 # define GIB_HEALTH          -175 // JPW NERVE
-# define ARMOR_PROTECTION    0.66
 
 # define HOLDBREATHTIME      12000
 
 # define MAX_ITEMS           256
 
-# define RANK_TIED_FLAG      0x4000
-
 # define ITEM_RADIUS     10 // Rafael changed the radius so that the items would fit in the 3 new containers
 
 # define FLAMETHROWER_RANGE  2500       // DHM - Nerve :: multiplayer range, was 850 in SP
-
-# define SCORE_NOT_PRESENT   -9999  // for the CS_SCORES[12] when only one player is present
 
 # define VOTE_TIME           30000  // 30 seconds before vote times out
 
@@ -91,8 +86,6 @@ If you have questions concerning this license or the applicable additional terms
 
 extern vec3_t playerlegsProneMins;
 extern vec3_t playerlegsProneMaxs;
-
-# define MAX_COMMANDMAP_LAYERS   4
 
 # define DEFAULT_MODEL       "multi"
 # define DEFAULT_HEAD        "default"   // technically the default head skin.  this means "head_default.skin" for the head
