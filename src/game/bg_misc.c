@@ -3308,9 +3308,9 @@ void BG_AddPredictableEventToPlayerstate(int newEvent, int eventParm, playerStat
 		trap_Cvar_VariableStringBuffer("showevents", buf, sizeof (buf));
 		if (atof(buf) != 0) {
 # ifdef GAMEDLL
-			Com_Printf("game event svt %5d -> %5d: num = %20s parm %d\n", ps->pmove_framecount /*ps->commandTime*/, ps->eventSequence, eventnames[newEvent], eventParm);
+			Com_Printf("game event svt %5d -> %5d: num = %20s parm %d\n", ps->pmove_framecount, ps->eventSequence, eventnames[newEvent], eventParm);
 # else
-			Com_Printf("Cgame event svt %5d -> %5d: num = %20s parm %d\n", ps->pmove_framecount /*ps->commandTime*/, ps->eventSequence, eventnames[newEvent], eventParm);
+			Com_Printf("Cgame event svt %5d -> %5d: num = %20s parm %d\n", ps->pmove_framecount, ps->eventSequence, eventnames[newEvent], eventParm);
 # endif
 		}
 	}
@@ -3537,17 +3537,6 @@ void BG_PlayerStateToEntityStateExtraPolate(playerState_t *ps, entityState_t *s,
 	s->aiState    = ps->aiState;    // xkan, 1/10/2003
 }
 
-// Gordon: some weapons are duplicated for code puposes.... just want to treat them as a single
-weapon_t BG_DuplicateWeapon(weapon_t weap) {
-	switch (weap) {
-	case WP_M7:     return WP_GPG40;
-	case WP_GARAND_SCOPE:       return WP_GARAND;
-	case WP_K43_SCOPE:          return WP_K43;
-	case WP_GRENADE_PINEAPPLE:  return WP_GRENADE_LAUNCHER;
-	default:                    return weap;
-	}
-}
-
 /*
 =============
 BG_Find_PathCorner
@@ -3716,37 +3705,7 @@ splinePath_t *BG_GetSplineData(int number, qboolean *backwards) {
 }
 
 int BG_MaxAmmoForWeapon(weapon_t weaponNum) {
-	switch (weaponNum) {
-	case WP_LUGER:
-	case WP_COLT:
-	case WP_STEN:
-	case WP_SILENCER:
-	case WP_CARBINE:
-	case WP_KAR98:
-	case WP_SILENCED_COLT:
-		return(GetAmmoTableData(weaponNum)->maxammo);
-	case WP_MP40:
-	case WP_THOMPSON:
-		return(GetAmmoTableData(weaponNum)->maxammo);
-	case WP_M7:
-	case WP_GPG40:
-		return(GetAmmoTableData(weaponNum)->maxammo);
-	case WP_GRENADE_PINEAPPLE:
-	case WP_GRENADE_LAUNCHER:
-		return(GetAmmoTableData(weaponNum)->maxammo);
-	case WP_MEDIC_SYRINGE:
-		return(GetAmmoTableData(weaponNum)->maxammo);
-	case WP_GARAND:
-	case WP_K43:
-	case WP_FG42:
-		return(GetAmmoTableData(weaponNum)->maxammo);
-	case WP_GARAND_SCOPE:
-	case WP_K43_SCOPE:
-	case WP_FG42SCOPE:
-		return(GetAmmoTableData(weaponNum)->maxammo);
-	default:
-		return(GetAmmoTableData(weaponNum)->maxammo);
-	}
+	return(GetAmmoTableData(weaponNum)->maxammo);
 }
 
 /*

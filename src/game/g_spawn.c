@@ -303,7 +303,6 @@ void SP_misc_gamemodel(gentity_t *ent);
 void SP_misc_portal_camera(gentity_t *ent);
 void SP_misc_portal_surface(gentity_t *ent);
 void SP_misc_light_surface(gentity_t *ent);
-void SP_misc_grabber_trap(gentity_t *ent);
 void SP_misc_spotlight(gentity_t *ent);   //----(SA)	added
 
 void SP_misc_commandmap_marker(gentity_t *ent);
@@ -546,7 +545,6 @@ spawn_t spawns[] =
 	{ "misc_vis_dummy",            SP_misc_vis_dummy            },
 	{ "misc_vis_dummy_multiple",   SP_misc_vis_dummy_multiple   },
 	{ "misc_light_surface",        SP_misc_light_surface        },
-	{ "misc_grabber_trap",         SP_misc_grabber_trap         },
 	{ "misc_spotlight",            SP_misc_spotlight            },
 
 

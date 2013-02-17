@@ -116,7 +116,6 @@ char *modNames[] =
 	"MOD_MAPMORTAR_SPLASH",
 
 	"MOD_KICKED",
-	"MOD_GRABBER",
 
 	"MOD_DYNAMITE",
 	"MOD_AIRSTRIKE",                         // JPW NERVE
