@@ -75,32 +75,28 @@ Compiling
 
 <table>
 	<tr>
-		<th></th>
 		<th>Target \ Host</th>
 		<th>Windows</th>
 		<th>Linux (32-bit only)</th>
 		<th>OSX</th>
 	</tr>
 	<tr>
-		<th></th>
 		<th>Windows</th>
-		<th>Use ETrun.sln with MSVC</th>
-		<th>Not supported</th>
-		<th>Not supported</th>
+		<td>Use ETrun.sln with MSVC</td>
+		<td>Not supported</td>
+		<td>Not supported</td>
 	</tr>
 	<tr>
-		<th></th>
 		<th>Linux</th>
-		<th>Not supported</th>
-		<th>./build.sh</th>
-		<th>Not supported</th>
+		<td>Not supported</td>
+		<td>./build.sh</td>
+		<td>Not supported</td>
 	</tr>
 	<tr>
-		<th></th>
 		<th>OSX</th>
-		<th>Not supported</th>
-		<th>Not supported</th>
-		<th>./build.sh</th>
+		<td>Not supported</td>
+		<td>Not supported</td>
+		<td>./build.sh</td>
 	</tr>
 </table>
 
