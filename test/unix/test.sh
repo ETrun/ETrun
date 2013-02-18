@@ -100,8 +100,10 @@ function read_config() {
 #
 function clean_game() {
 	if [ $USE_ETL -eq 1 ]; then
+		rm -rf $etl_base_path/$mod_name
 		rm -rf $etl_home_path/$mod_name
 	else
+		rm -rf $et_base_path/$mod_name
 		rm -rf $et_home_path/$mod_name
 	fi
 }
