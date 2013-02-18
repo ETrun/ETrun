@@ -148,10 +148,11 @@ function make_bundle() {
 	fi
 
 	echo -n "Making bundle for $1..."
-	mkdir $MOD_NAME/$1_mac.bundle
-	mkdir $MOD_NAME/$1_mac.bundle/Contents
-	mkdir $MOD_NAME/$1_mac.bundle/Contents/MacOS
-	cp $MOD_NAME/$1_mac $MOD_NAME/$1_mac.bundle/Contents/MacOS/$1_mac
+	cd $MOD_NAME
+	mkdir $1_mac.bundle
+	mkdir $1_mac.bundle/Contents
+	mkdir $1_mac.bundle/Contents/MacOS
+	cp $1_mac $1_mac.bundle/Contents/MacOS/$1_mac
 
 	echo '<?xml version="1.0" encoding="UTF-8"?>
 	<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
@@ -192,18 +193,24 @@ function make_bundle() {
 	  <key>CFPlugInUnloadFunction</key>
 	  <string></string>
 	</dict>
-	</plist>' > $MOD_NAME/$1_mac.bundle/Contents/Info.plist
+	</plist>' > $1_mac.bundle/Contents/Info.plist
 
-	rm -f $MOD_NAME/$1_mac.zip
-	zip -r9 -q $MOD_NAME/$1_mac.zip $MOD_NAME/$1_mac.bundle
+	# Special case for qagame
+	# (qagame is not compressed)
+	if [ $1 != 'qagame' ]; then
+		rm -f $1_mac.zip
+		zip -r9 -q $1_mac.zip $1_mac.bundle
 
-	if [ $? -ne 0 ]; then
-	  echo "An error occured while making bundle for $1"
-	  exit 1
+		if [ $? -ne 0 ]; then
+		  echo "An error occured while making bundle for $1"
+		  exit 1
+		fi
+
+		mv $1_mac.zip $1_mac
 	fi
 
-	mv $MOD_NAME/$1_mac.zip $MOD_NAME/$1_mac
 	echo "[done]"
+	cd ..
 }
 
 #
