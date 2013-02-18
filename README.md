@@ -35,20 +35,20 @@ Compatibility
 Windows
 -------
 
-Windows server module (qagame_mp_x86.dll) requires [Microsoft Visual C++ 2010 Redistributable Package](http://www.microsoft.com/en-us/download/details.aspx?id=5555) to run properly.
-Works (tested) on XP/7 with ET 2.60b
+Windows server module `qagame_mp_x86.dll` requires [Microsoft Visual C++ 2010 Redistributable Package](http://www.microsoft.com/en-us/download/details.aspx?id=5555) to run properly.
+Works (tested) on `XP/7` with `ET 2.60b`.
 
 Linux
 -----
 
-Requires GLIBC >= 2.7
-Works (tested) on Debian 6, Linux Mint 12 with ET 2.60b and ET: Legacy.
+Requires `GLIBC >= 2.7`.
+Works (tested) on `Debian 6`, `Linux Mint 12` with `ET 2.60b` and `ET: Legacy`.
 
 OSX
 ---
 
-Not compatible with ET 2.60d.
-Works (tested) on OSX 10.8 with ET: Legacy.
+Not compatible with `ET 2.60d`.
+Works (tested) on `OSX 10.8` with `ET: Legacy.
 
 Bootstrapping
 =============
@@ -76,38 +76,31 @@ Compiling
 <table>
 	<tr>
 		<th></th>
-		<th>Host</th>
+		<th>Target \ Host</th>
 		<th>Windows</th>
-		<th>Linux</th>
+		<th>Linux (32-bit only)</th>
 		<th>OSX</th>
 	</tr>
 	<tr>
 		<th></th>
-		<th>Target</th>
-		<th></th>
-		<th></th>
-		<th></th>
-	</tr>
-	<tr>
-		<th></th>
 		<th>Windows</th>
-		<th></th>
-		<th></th>
-		<th></th>
+		<th>Use ETrun.sln with MSVC</th>
+		<th>Not supported</th>
+		<th>Not supported</th>
 	</tr>
 	<tr>
 		<th></th>
 		<th>Linux</th>
-		<th></th>
-		<th></th>
-		<th></th>
+		<th>Not supported</th>
+		<th>./build.sh</th>
+		<th>Not supported</th>
 	</tr>
 	<tr>
 		<th></th>
 		<th>OSX</th>
-		<th></th>
-		<th></th>
-		<th></th>
+		<th>Not supported</th>
+		<th>Not supported</th>
+		<th>./build.sh</th>
 	</tr>
 </table>
 
