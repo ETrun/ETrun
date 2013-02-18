@@ -73,6 +73,9 @@ You need Microsoft Visual studio 2010 or newer.
 Compiling
 =========
 
+Host refers to the OS used to compile.
+Target refers to the OS where the game will be executed.
+
 <table>
 	<tr>
 		<th>Target \ Host</th>
@@ -96,33 +99,6 @@ Compiling
 		<th>OSX</th>
 		<td>Not supported</td>
 		<td>Not supported</td>
-		<td>./build.sh</td>
+		<td>./build.sh or Xcode projets</td>
 	</tr>
 </table>
-
-
-On Windows: use MSVC compiler with `ETrun.sln`.
-
-On Linux, not supported.
-
-Compiling for Linux (32-bit)
-============================
-
-On Windows: not supported.
-
-On Linux (32-bit only), run:
-
-<pre>
-$ ./build.sh
-</pre>
-
-Compiling for OSX
-=================
-
-On OSX, run:
-
-<pre>
-$ ./build.sh
-</pre>
-
-You can also use Xcode projects located in src directory.
