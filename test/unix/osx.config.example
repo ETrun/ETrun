@@ -108,7 +108,7 @@ APImodule_name='APImodule.dylib'
 #
 # Valgrind command line
 #
-valgrind_command_line='valgrind --leak-check=full --track-origin=yes'
+valgrind_command_line='valgrind --leak-check=full --track-origins=yes'
 
 #
 # Debugger command line
