@@ -50,10 +50,6 @@ endif(NOT CMAKE_SYSTEM MATCHES "Darwin")
 #-----------------------------------------------------------------
 
 if(UNIX)
-	# Configuration settings for Debug/Release
-	set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE}")
-	set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -ggdb")
-
 	if(CMAKE_SYSTEM MATCHES "OpenBSD*")
 		set(LIB_SUFFIX ".mp.obsd.")
 	elseif(CMAKE_SYSTEM MATCHES "Darwin")
