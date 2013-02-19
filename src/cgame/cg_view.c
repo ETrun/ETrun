@@ -121,7 +121,6 @@ void CG_TestGun_f(void) {
 	cg.testModelEntity.renderfx = RF_MINLIGHT | RF_DEPTHHACK | RF_FIRST_PERSON;
 }
 
-
 void CG_TestModelNextFrame_f(void) {
 	cg.testModelEntity.frame++;
 	CG_Printf("frame %i\n", cg.testModelEntity.frame);
@@ -180,15 +179,6 @@ static void CG_AddTestModel(void) {
 
 //============================================================================
 
-
-/*
-=================
-CG_CalcVrect
-
-Sets the coordinates of the rendered window
-=================
-*/
-
 void CG_Letterbox(float xsize, float ysize, qboolean center) {
 // normal aspect is xx:xx
 // letterbox is yy:yy  (85% of 'normal' height)
@@ -217,29 +207,6 @@ void CG_Letterbox(float xsize, float ysize, qboolean center) {
 		cg.refdef.x = (cgs.glconfig.vidWidth - cg.refdef.width) / 2;
 		cg.refdef.y = (cgs.glconfig.vidHeight - cg.refdef.height) / 2;
 	}
-}
-
-static void CG_CalcVrect(void) {
-	/* Nico, render while in limbo
-	if ( cg.showGameView ) {
-	    float x, y, w, h;
-	    x = LIMBO_3D_X;
-	    y = LIMBO_3D_Y;
-	    w = LIMBO_3D_W;
-	    h = LIMBO_3D_H;
-
-	    CG_AdjustFrom640( &x, &y, &w, &h );
-
-	    cg.refdef.x = x;
-	    cg.refdef.y = y;
-	    cg.refdef.width = w;
-	    cg.refdef.height = h;
-
-	    CG_Letterbox( ( LIMBO_3D_W / 640.f ) * 100, ( LIMBO_3D_H / 480.f ) * 100, qfalse );
-	    return;
-	}*/
-
-	CG_Letterbox(100, 100, qtrue);
 }
 
 //==============================================================================
@@ -990,8 +957,7 @@ int CG_CalcViewValues(void) {
 
 	memset(cg.refdef_current, 0, sizeof (cg.refdef));
 
-	// calculate size of 3D view
-	CG_CalcVrect();
+	CG_Letterbox(100, 100, qtrue);
 
 	ps = &cg.predictedPlayerState;
 

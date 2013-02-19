@@ -188,10 +188,8 @@ vmCvar_t pmove_msec;
 vmCvar_t cg_wolfparticles;
 vmCvar_t cg_norender;
 vmCvar_t cg_skybox;
-vmCvar_t cg_message;
 vmCvar_t cg_messageType;
 vmCvar_t cg_messagePlayer;
-vmCvar_t cg_messagePlayerName;
 vmCvar_t cg_timescale;
 vmCvar_t cg_smallFont;
 vmCvar_t cg_bigFont;
@@ -386,10 +384,8 @@ cvarTable_t cvarTable[] =
 	// done.
 
 	// ydnar: say, team say, etc.
-	{ &cg_message,              "cg_message",              "1",     CVAR_TEMP,                0 },
 	{ &cg_messageType,          "cg_messageType",          "1",     CVAR_TEMP,                0 },
 	{ &cg_messagePlayer,        "cg_messagePlayer",        "",      CVAR_TEMP,                0 },
-	{ &cg_messagePlayerName,    "cg_messagePlayerName",    "",      CVAR_TEMP,                0 },
 
 	{ &cg_animSpeed,            "cg_animspeed",            "1",     CVAR_CHEAT,               0 },
 	{ &cg_debugAnim,            "cg_debuganim",            "0",     CVAR_CHEAT,               0 },
@@ -1360,31 +1356,6 @@ static void CG_RegisterGraphics(void) {
 
 	CG_LoadingString(" - textures");
 
-//bani - dynamic shader api example
-//replaces a fueldump texture with a dynamically generated one.
-#ifdef TEST_API_DYNAMICSHADER
-	trap_R_LoadDynamicShader("my_terrain1_2",
-	                         "my_terrain1_2\n\
-{\n\
-	qer_editorimage textures/stone/mxsnow3.tga\n\
-	q3map_baseshader textures/fueldump/terrain_base\n\
-	{\n\
-		map textures/stone/mxrock1aa.tga\n\
-		rgbGen identity\n\
-		tcgen environment\n\
-	}\n\
-	{\n\
-		lightmap $lightmap\n\
-		blendFunc GL_DST_COLOR GL_ZERO\n\
-		rgbgen identity\n\
-	}\n\
-}\n\
-");
-
-	trap_R_RegisterShader("my_terrain1_2");
-	trap_R_RemapShader("textures/fueldump/terrain1_2", "my_terrain1_2", "0");
-#endif
-
 	for (i = 0 ; i < 11 ; i++) {
 		cgs.media.numberShaders[i] = trap_R_RegisterShader(sb_nums[i]);
 	}
@@ -2062,16 +2033,6 @@ void CG_ParseMenu(const char *menuFile) {
 			break;
 		}
 
-		//if ( Q_stricmp( token, "{" ) ) {
-		//	Com_Printf( "Missing { in menu file\n" );
-		//	break;
-		//}
-
-		//if ( menuCount == MAX_MENUS ) {
-		//	Com_Printf( "Too many menus!\n" );
-		//	break;
-		//}
-
 		if (token.string[0] == '}') {
 			break;
 		}
@@ -2119,8 +2080,6 @@ qboolean CG_Load_Menu(char **p) {
 	return qfalse;
 }
 
-
-
 void CG_LoadMenus(const char *menuFile) {
 	char         *token;
 	char         *p;
@@ -2161,16 +2120,6 @@ void CG_LoadMenus(const char *menuFile) {
 			break;
 		}
 
-		//if ( Q_stricmp( token, "{" ) ) {
-		//	Com_Printf( "Missing { in menu file\n" );
-		//	break;
-		//}
-
-		//if ( menuCount == MAX_MENUS ) {
-		//	Com_Printf( "Too many menus!\n" );
-		//	break;
-		//}
-
 		if (Q_stricmp(token, "}") == 0) {
 			break;
 		}
@@ -2187,8 +2136,6 @@ void CG_LoadMenus(const char *menuFile) {
 	Com_Printf("UI menu load time = %d milli seconds\n", trap_Milliseconds() - start);
 
 }
-
-
 
 static qboolean CG_OwnerDrawHandleKey(int ownerDraw, int flags, float *special, int key) {
 	// Nico, silent GCC
