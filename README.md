@@ -48,7 +48,7 @@ OSX
 ---
 
 Not compatible with `ET 2.60d`.
-Works (tested) on `OSX 10.8` with `ET: Legacy.
+Works (tested) on `OSX 10.8` with `ET: Legacy`.
 
 Bootstrapping
 =============
@@ -73,8 +73,8 @@ You need Microsoft Visual studio 2010 or newer.
 Compiling
 =========
 
-Host refers to the OS used to compile.
-Target refers to the OS where the game will be executed.
+`Host`: OS used to compile.
+`Target`: OS where the game will be executed.
 
 <table>
 	<tr>
