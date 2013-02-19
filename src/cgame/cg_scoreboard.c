@@ -232,7 +232,7 @@ static void WM_ETrun_DrawPlayers(int *x, int *y, fontInfo_t *font, s_timerunScor
 		if (orderedScores[i].speclocked == 1) {
 			Q_strcat(status, sizeof (status), "^bS ");
 		}
-		if (strlen(status) == 0) {
+		if (status[0] == '\0') {
 			Q_strncpyz(status, "-", sizeof (status));
 		}
 

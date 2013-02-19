@@ -1303,7 +1303,7 @@ void CG_CheckForCursorHints(void) {
 
 	} else if (trace.entityNum < MAX_CLIENTS) {     // people
 		// knife
-		if (trace.entityNum < MAX_CLIENTS && (cg.snap->ps.weapon == WP_KNIFE)) {
+		if (cg.snap->ps.weapon == WP_KNIFE) {
 			if (dist <= CH_KNIFE_DIST) {
 
 				AngleVectors(cg.snap->ps.viewangles, pforward, NULL, NULL);

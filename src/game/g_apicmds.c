@@ -47,7 +47,7 @@ void Cmd_Login_f(gentity_t *ent) {
 
 	Q_strncpyz(token, ent->client->pers.authToken, MAX_QPATH);
 
-	if (strlen(token) == 0) {
+	if (token[0] == '\0') {
 		CP("cp \"Empty auth token!\n\"");
 		G_DPrintf("%s: Cmd_Login_f, empty_token\n", GAME_VERSION);
 		free(result);
@@ -148,7 +148,7 @@ void Cmd_LoadCheckpoints_f(gentity_t *ent) {
 	if (argc > 1) {
 		trap_Argv(1, userName, sizeof (userName));
 	}
-	if (strlen(userName) == 0) {
+	if (userName[0] == '\0') {
 		sprintf(userName, "0");
 	}
 
@@ -215,28 +215,28 @@ void Cmd_Rank_f(gentity_t *ent) {
 	if (argc >= 1) { // Nico, #fixme, why >= ?
 		trap_Argv(1, userName, sizeof (userName));
 	}
-	if (strlen(userName) == 0) {
+	if (userName[0] == '\0') {
 		sprintf(userName, "0");
 	}
 
 	if (argc >= 2) {
 		trap_Argv(2, mapName, sizeof (mapName));
 	}
-	if (strlen(mapName) == 0) {
+	if (mapName[0] == '\0') {
 		sprintf(mapName, "0");
 	}
 
 	if (argc >= 3) {
 		trap_Argv(3, runName, sizeof (runName));
 	}
-	if (strlen(runName) == 0) {
+	if (runName[0] == '\0') {
 		sprintf(runName, "0");
 	}
 
 	if (argc >= 4) {
 		trap_Argv(4, physicsName, sizeof (physicsName));
 	}
-	if (strlen(physicsName) == 0) {
+	if (physicsName[0] == '\0') {
 		sprintf(physicsName, "0");
 	}
 

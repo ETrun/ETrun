@@ -375,7 +375,7 @@ void G_Script_ScriptLoad(void) {
 	level.scriptEntity = NULL;
 
 	trap_Cvar_VariableStringBuffer("g_scriptName", filename, sizeof (filename));
-	if (strlen(filename) > 0) {
+	if (filename[0] != '\0') {
 		trap_Cvar_Register(&mapname, "g_scriptName", "", CVAR_CHEAT);
 	} else {
 		trap_Cvar_Register(&mapname, "mapname", "", CVAR_SERVERINFO | CVAR_ROM);

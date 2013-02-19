@@ -726,7 +726,7 @@ void CG_setClientFlags(void) {
 		return;
 	}
 
-	if (strlen(cg_authToken.string) == 0) {
+	if (cg_authToken.string[0] == '\0') {
 		Q_strncpyz(hash, "undefined", sizeof (hash));
 	} else if (CG_hash(hash, cg_authToken.string)) {
 		CG_Error("ETrun: error setting client auth token\n");

@@ -1772,9 +1772,16 @@ g_serverEntity_t *FindServerEntity(g_serverEntity_t *from, int fieldofs, char *m
 #define CP(x) trap_SendServerCommand(ent - g_entities, x)         // Print to an ent
 #define CPx(x, y) trap_SendServerCommand(x, y)                  // Print to id = x
 
-// Nico, log debug macro with function name
-#define LDI(format, args...) G_LogDebug(__FUNCTION__, "INFO", format, ## args)// Nico, note: info
-#define LDE(format, args...) G_LogDebug(__FUNCTION__, "ERROR", format, ## args)// Nico, note: error
+// Nico, log macros with function name
+// LDI -> Log Debug Info
+// LDE -> Log Debug Error
+#if defined _WIN32
+# define LDI(format, ...) G_LogDebug(__FUNCTION__, "INFO", format, __VA_ARGS__)
+# define LDE(format, ...) G_LogDebug(__FUNCTION__, "ERROR", format, __VA_ARGS__)
+#else
+# define LDI(format, args...) G_LogDebug(__FUNCTION__, "INFO", format, ## args)
+# define LDE(format, args...) G_LogDebug(__FUNCTION__, "ERROR", format, ## args)
+#endif
 
 #define PAUSE_NONE      0x00    // Match is NOT paused.
 #define PAUSE_UNPAUSING 0x01    // Pause is about to expire

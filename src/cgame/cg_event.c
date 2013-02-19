@@ -1000,7 +1000,7 @@ void CG_Effect(centity_t *cent, vec3_t origin, vec3_t dir) {
 		}
 
 		s = CG_ConfigString(CS_TARGETEFFECT);   // see if ent has a shader specified
-		if (s && strlen(s) > 0) {
+		if (s && s[0] != '\0') {
 			sh = trap_R_RegisterShader(va("textures/%s", s));        // FIXME: don't do this here.  only for testing
 
 		}

@@ -1042,7 +1042,7 @@ void ClientUserinfoChanged(int clientNum) {
 	       );
 
 	// Nico, check if auth token was changed
-	if (strlen(oldAuthToken) > 0 && Q_stricmp(oldAuthToken, client->pers.authToken)) {
+	if (oldAuthToken[0] != '\0' > 0 && Q_stricmp(oldAuthToken, client->pers.authToken)) {
 		// Nico, auth token was changed => logout player if he was logged in
 		if (client->sess.logged) {
 			CP("cp \"You are no longer logged in!\n\"");

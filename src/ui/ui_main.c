@@ -3271,7 +3271,7 @@ void UI_RunMenuScript(char **args) {
 				name[0] = addr[0] = '\0';
 				Q_strncpyz(name, Info_ValueForKey(buff, "hostname"), MAX_NAME_LENGTH);
 				Q_strncpyz(addr, Info_ValueForKey(buff, "addr"), MAX_NAME_LENGTH);
-				if (strlen(name) > 0 && strlen(addr) > 0) {
+				if (name[0] != '\0' && addr[0] != '\0') {
 					res = trap_LAN_AddServer(AS_FAVORITES, name, addr);
 					if (res == 0) {
 						// server already in the list
@@ -3293,7 +3293,7 @@ void UI_RunMenuScript(char **args) {
 				trap_LAN_GetServerInfo(ui_netSource.integer, uiInfo.serverStatus.displayServers[uiInfo.serverStatus.currentServer], buff, MAX_STRING_CHARS);
 				addr[0] = '\0';
 				Q_strncpyz(addr, Info_ValueForKey(buff, "addr"), MAX_NAME_LENGTH);
-				if (strlen(addr) > 0) {
+				if (addr[0] != '\0') {
 					trap_LAN_RemoveServer(AS_FAVORITES, addr);
 				}
 			}
@@ -3306,7 +3306,7 @@ void UI_RunMenuScript(char **args) {
 				name[0] = addr[0] = '\0';
 				Q_strncpyz(name, UI_Cvar_VariableString("ui_favoriteName"), MAX_NAME_LENGTH);
 				Q_strncpyz(addr, UI_Cvar_VariableString("ui_favoriteAddress"), MAX_NAME_LENGTH);
-				if (strlen(name) > 0 && strlen(addr) > 0) {
+				if (name[0] != '\0' && addr[0] != '\0') {
 					res = trap_LAN_AddServer(AS_FAVORITES, name, addr);
 					if (res == 0) {
 						// server already in the list
@@ -4941,7 +4941,7 @@ qboolean UI_FeederSelectionClick(itemDef_t *item) {
 				trap_LAN_GetServerInfo(ui_netSource.integer, uiInfo.serverStatus.displayServers[uiInfo.serverStatus.currentServer], buff, MAX_STRING_CHARS);
 				addr[0] = '\0';
 				Q_strncpyz(addr, Info_ValueForKey(buff, "addr"), MAX_NAME_LENGTH);
-				if (strlen(addr) > 0) {
+				if (addr[0] != '\0') {
 					trap_LAN_RemoveServer(AS_FAVORITES, addr);
 					if (ui_netSource.integer == AS_FAVORITES) {
 						UI_BuildServerDisplayList(qtrue);
@@ -5413,19 +5413,18 @@ qboolean _UI_IsFullscreen(void) {
 	return Menus_AnyFullScreenVisible();
 }
 
-
-
-//static connstate_t	lastConnState;
-//static char			lastLoadingText[MAX_INFO_VALUE];
-
 void UI_ReadableSize(char *buf, int bufsize, int value) {
+	int len = 0;
+
 	if (value > 1024 * 1024 * 1024) {   // gigs
 		Com_sprintf(buf, bufsize, "%d", value / (1024 * 1024 * 1024));
-		Com_sprintf(buf + strlen(buf), bufsize - strlen(buf), ".%02d GB",
+		len = strlen(buf);
+		Com_sprintf(buf + len, bufsize - len, ".%02d GB",
 		            (value % (1024 * 1024 * 1024)) * 100 / (1024 * 1024 * 1024));
 	} else if (value > 1024 * 1024) {     // megs
 		Com_sprintf(buf, bufsize, "%d", value / (1024 * 1024));
-		Com_sprintf(buf + strlen(buf), bufsize - strlen(buf), ".%02d MB",
+		len = strlen(buf);
+		Com_sprintf(buf + len, bufsize - len, ".%02d MB",
 		            (value % (1024 * 1024)) * 100 / (1024 * 1024));
 	} else if (value > 1024) {     // kilos
 		Com_sprintf(buf, bufsize, "%d KB", value / 1024);
