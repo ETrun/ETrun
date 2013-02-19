@@ -1486,7 +1486,9 @@ void G_InitGame(int levelTime, int randomSeed) {
 	G_install_timelimit();
 
 	// Nico, enabled delayed map change watcher
-	G_enable_delayed_map_change_watcher();
+	if (!G_enable_delayed_map_change_watcher()) {
+		G_Error("Error while installing delayed map change watcher\n");
+	}
 }
 
 
@@ -2398,26 +2400,32 @@ void G_RunFrame(int levelTime) {
 }
 
 // Nico, delayed map change watcher helper functions
-void G_enable_delayed_map_change_watcher() {
+qboolean G_enable_delayed_map_change_watcher() {
 	int            rc = 0;
 	pthread_attr_t attr;
 
 	// Create threads as detached
 	if (pthread_attr_init(&attr)) {
-		G_Error("G_enable_delayed_map_change_watcher: error in pthread_attr_init\n");
+		LDE("error in pthread_attr_init\n");
+		return false;
 	}
 	if (pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED)) {
-		G_Error("G_enable_delayed_map_change_watcher: error in pthread_attr_setdetachstate\n");
+		LDE("error in pthread_attr_setdetachstate\n");
+		return false;
 	}
 
 	rc = pthread_create(&globalThreads[DELAYED_MAP_CHANGE_THREAD_ID], &attr, G_delayed_map_change_watcher, NULL);
 	if (rc) {
-		G_Error("G_enable_delayed_map_change_watcher: error in pthread_create: %d\n", rc);
+		LDE("error in pthread_create: %d\n", rc);
+		return false;
 	}
 
 	if (pthread_attr_destroy(&attr)) {
-		G_Error("G_enable_delayed_map_change_watcher: error in pthread_attr_destroy\n");
+		LDE("error in pthread_attr_destroy\n");
+		return false;
 	}
+
+	return true;
 }
 
 void G_disable_delayed_map_change_watcher() {

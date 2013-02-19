@@ -1331,7 +1331,7 @@ void QDECL G_Printf(const char *fmt, ...) _attribute((format(printf, 1, 2)));
 void QDECL G_DPrintf(const char *fmt, ...) _attribute((format(printf, 1, 2)));
 void QDECL G_Error(const char *fmt, ...) _attribute((format(printf, 1, 2)));
 void G_ShutdownGame(int restart);
-void G_enable_delayed_map_change_watcher();
+qboolean G_enable_delayed_map_change_watcher();
 void G_disable_delayed_map_change_watcher();
 void G_install_timelimit();
 int G_randommap(void);
