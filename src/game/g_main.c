@@ -2407,25 +2407,25 @@ qboolean G_enable_delayed_map_change_watcher() {
 	// Create threads as detached
 	if (pthread_attr_init(&attr)) {
 		LDE("error in pthread_attr_init\n");
-		return false;
+		return qfalse;
 	}
 	if (pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED)) {
 		LDE("error in pthread_attr_setdetachstate\n");
-		return false;
+		return qfalse;
 	}
 
 	rc = pthread_create(&globalThreads[DELAYED_MAP_CHANGE_THREAD_ID], &attr, G_delayed_map_change_watcher, NULL);
 	if (rc) {
 		LDE("error in pthread_create: %d\n", rc);
-		return false;
+		return qfalse;
 	}
 
 	if (pthread_attr_destroy(&attr)) {
 		LDE("error in pthread_attr_destroy\n");
-		return false;
+		return qfalse;
 	}
 
-	return true;
+	return qtrue;
 }
 
 void G_disable_delayed_map_change_watcher() {
