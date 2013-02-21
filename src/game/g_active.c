@@ -343,10 +343,6 @@ void    G_TouchTriggers(gentity_t *ent) {
 		if (hit->touch) {
 			hit->touch(hit, ent, &trace);
 		}
-
-		if ((ent->r.svFlags & SVF_BOT) && (ent->touch)) {
-			ent->touch(ent, hit, &trace);
-		}
 	}
 }
 
@@ -789,8 +785,7 @@ void ClientThink_real(gentity_t *ent) {
 	// end
 
 	// server cursor hints
-	// TAT 1/10/2003 - bots don't need to check for cursor hints
-	if (!(ent->r.svFlags & SVF_BOT) && ent->lastHintCheckTime < level.time) {
+	if (ent->lastHintCheckTime < level.time) {
 		G_CheckForCursorHints(ent);
 
 		ent->lastHintCheckTime = level.time + FRAMETIME;

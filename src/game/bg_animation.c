@@ -826,9 +826,6 @@ static animStringItem_t animParseModesStr[] =
 
 void BG_AnimParseAnimScript(animModelInfo_t *animModelInfo, animScriptData_t *scriptData, const char *filename, char *input) {
 #define MAX_INDENT_LEVELS   3
-
-	// FIXME: change this to use the botlib parser
-
 	char                  *text_p, *token;
 	animScriptParseMode_t parseMode;
 	animScript_t          *currentScript;

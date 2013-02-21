@@ -187,7 +187,6 @@ void G_players_cmd(gentity_t *ent, unsigned int dwCommand, qboolean fValue) {
 	int       i, idnum, max_rate, cnt = 0, tteam;
 	int       user_rate, user_snaps;
 	gclient_t *cl;
-	gentity_t *cl_ent;
 	char      n2[MAX_NETNAME], ready[16], ref[16], rate[256];
 	char      *s, *tc, *coach, userinfo[MAX_INFO_STRING];
 
@@ -218,7 +217,6 @@ void G_players_cmd(gentity_t *ent, unsigned int dwCommand, qboolean fValue) {
 	for (i = 0; i < level.numConnectedClients; i++) {
 		idnum  = level.sortedClients[i]; //level.sortedNames[i];
 		cl     = &level.clients[idnum];
-		cl_ent = g_entities + idnum;
 
 		SanitizeString(cl->pers.netname, n2, qtrue);
 		n2[26]   = 0;
@@ -226,9 +224,7 @@ void G_players_cmd(gentity_t *ent, unsigned int dwCommand, qboolean fValue) {
 		ready[0] = 0;
 
 		// Rate info
-		if (cl_ent->r.svFlags & SVF_BOT) {
-			strcpy(rate, va("%s%s%s%s", "[BOT]", " -----", "       --", "     --"));
-		} else if (cl->pers.connected == CON_CONNECTING) {
+		if (cl->pers.connected == CON_CONNECTING) {
 			strcpy(rate, va("%s", "^3>>> CONNECTING <<<"));
 		} else {
 			trap_GetUserinfo(idnum, userinfo, sizeof (userinfo));
@@ -243,7 +239,7 @@ void G_players_cmd(gentity_t *ent, unsigned int dwCommand, qboolean fValue) {
 		if (g_gamestate.integer != GS_PLAYING) {
 			if (cl->sess.sessionTeam == TEAM_SPECTATOR || cl->pers.connected == CON_CONNECTING) {
 				strcpy(ready, ((ent) ? "^5--------^1 :" : "-------- :"));
-			} else if (cl->pers.ready || (g_entities[idnum].r.svFlags & SVF_BOT)) {
+			} else if (cl->pers.ready) {
 				strcpy(ready, ((ent) ? "^3(READY)^1  :" : "(READY)  :"));
 			} else {
 				strcpy(ready, ((ent) ? "NOTREADY^1 :" : "NOTREADY :"));

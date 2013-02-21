@@ -653,33 +653,15 @@ static void Svcmd_Kick_f(void) {
 
 					// use engine banning system, mods may choose to use their own banlist
 					if (USE_ENGINE_BANLIST) {
-
-						// kick but dont ban bots, they arent that lame
-						if ((g_entities[cl->ps.clientNum].r.svFlags & SVF_BOT)) {
-							timeout = 0;
-						}
-
 						trap_DropClient(cl->ps.clientNum, "player kicked", timeout);
 					} else {
 						trap_DropClient(cl->ps.clientNum, "player kicked", 0);
-
-						// kick but dont ban bots, they arent that lame
-						if (!(g_entities[cl->ps.clientNum].r.svFlags & SVF_BOT)) {
-							AddIPBan(ip);
-						}
+						AddIPBan(ip);
 					}
 
 				} else {
 					trap_DropClient(cl->ps.clientNum, "player kicked", 0);
 				}
-			}
-		} else if (!Q_stricmp(name, "allbots")) {
-			for (i = 0, cl = level.clients; i < level.numConnectedClients; i++, cl++) {
-				if (!(g_entities[cl->ps.clientNum].r.svFlags & SVF_BOT)) {
-					continue;
-				}
-				// kick but dont ban bots, they arent that lame
-				trap_DropClient(cl->ps.clientNum, "player kicked", 0);
 			}
 		}
 		return;
@@ -699,19 +681,10 @@ static void Svcmd_Kick_f(void) {
 
 			// use engine banning system, mods may choose to use their own banlist
 			if (USE_ENGINE_BANLIST) {
-
-				// kick but dont ban bots, they arent that lame
-				if ((g_entities[cl->ps.clientNum].r.svFlags & SVF_BOT)) {
-					timeout = 0;
-				}
 				trap_DropClient(cl->ps.clientNum, "player kicked", timeout);
 			} else {
 				trap_DropClient(cl->ps.clientNum, "player kicked", 0);
-
-				// kick but dont ban bots, they arent that lame
-				if (!(g_entities[cl->ps.clientNum].r.svFlags & SVF_BOT)) {
-					AddIPBan(ip);
-				}
+				AddIPBan(ip);
 			}
 
 		} else {
@@ -770,19 +743,10 @@ static void Svcmd_KickNum_f(void) {
 	ip = Info_ValueForKey(userinfo, "ip");
 	// use engine banning system, mods may choose to use their own banlist
 	if (USE_ENGINE_BANLIST) {
-
-		// kick but dont ban bots, they arent that lame
-		if ((g_entities[cl->ps.clientNum].r.svFlags & SVF_BOT)) {
-			timeout = 0;
-		}
 		trap_DropClient(cl->ps.clientNum, "player kicked", timeout);
 	} else {
 		trap_DropClient(cl->ps.clientNum, "player kicked", 0);
-
-		// kick but dont ban bots, they arent that lame
-		if (!(g_entities[cl->ps.clientNum].r.svFlags & SVF_BOT)) {
-			AddIPBan(ip);
-		}
+		AddIPBan(ip);
 	}
 }
 

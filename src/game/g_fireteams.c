@@ -332,12 +332,6 @@ void G_RemoveClientFromFireteams(int entityNum, qboolean update, qboolean print)
 		return;
 	}
 
-	if (ft->joinOrder[0] != -1) {
-		if (g_entities[(int)ft->joinOrder[0]].r.svFlags & SVF_BOT) {
-			G_RemoveClientFromFireteams(ft->joinOrder[0], qfalse, qfalse);
-		}
-	}
-
 	if (print) {
 		for (i = 0; i < MAX_CLIENTS; i++) {
 			if (ft->joinOrder[i] == -1) {
@@ -373,15 +367,10 @@ void G_InviteToFireTeam(int entityNum, int otherEntityNum) {
 		G_ClientPrintAndReturn(entityNum, "The other player is already on a fireteam");
 	}
 
-	if (g_entities[otherEntityNum].r.svFlags & SVF_BOT) {
-		// Gordon: bots auto join
-		G_AddClientToFireteam(otherEntityNum, entityNum);
-	} else {
-		trap_SendServerCommand(entityNum, va("invitation -1"));
-		trap_SendServerCommand(otherEntityNum, va("invitation %i", entityNum));
-		g_entities[otherEntityNum].client->pers.invitationClient  = entityNum;
-		g_entities[otherEntityNum].client->pers.invitationEndTime = level.time + 20500;
-	}
+	trap_SendServerCommand(entityNum, va("invitation -1"));
+	trap_SendServerCommand(otherEntityNum, va("invitation %i", entityNum));
+	g_entities[otherEntityNum].client->pers.invitationClient  = entityNum;
+	g_entities[otherEntityNum].client->pers.invitationEndTime = level.time + 20500;
 }
 
 void G_DestroyFireteam(int entityNum) {

@@ -104,16 +104,8 @@ void Touch_Multi(gentity_t *self, gentity_t *other, trace_t *trace) {
 		}
 	}
 
-	if (self->spawnflags & 4) {
-		if (other->r.svFlags & SVF_BOT) {
-			return;
-		}
-	}
-
 	if (self->spawnflags & 8) {
-		if (!(other->r.svFlags & SVF_BOT)) {
-			return;
-		}
+		return;
 	}
 
 	// START Mad Doc - TDF

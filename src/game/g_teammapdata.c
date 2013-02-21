@@ -238,8 +238,6 @@ void G_SetupFrustum(gentity_t *ent) {
 }
 
 void G_SetupFrustum_ForBinoculars(gentity_t *ent) {
-// TAT 12/26/2002 - Give bots a larger view angle through binoculars than players get - this should help the
-//		landmine detection...
 #define BINOCULAR_ANGLE 10.0f
 	int    i;
 	float  xs, xc;
@@ -248,11 +246,7 @@ void G_SetupFrustum_ForBinoculars(gentity_t *ent) {
 	vec3_t vieworg;
 	float  baseAngle = 0;
 
-	if (ent->r.svFlags & SVF_BOT) {
-
-	} else {
-		baseAngle = BINOCULAR_ANGLE;
-	}
+	baseAngle = BINOCULAR_ANGLE;
 
 	ang = (baseAngle / 180.f) * M_PI * 0.5f;
 	xs  = sin(ang);

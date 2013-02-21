@@ -1448,14 +1448,14 @@ qboolean G_ScriptAction_Trigger(gentity_t *ent, char *params) {
 				continue;
 			}
 			found = qtrue;
-			if (!(trent->r.svFlags & SVF_BOT)) {
-				oldId = trent->scriptStatus.scriptId;
-				G_Script_ScriptEvent(trent, "trigger", trigger);
-				// if the script changed, return false so we don't muck with it's variables
-				if ((trent == ent) && (oldId != trent->scriptStatus.scriptId)) {
-					terminate = qtrue;
-				}
+
+			oldId = trent->scriptStatus.scriptId;
+			G_Script_ScriptEvent(trent, "trigger", trigger);
+			// if the script changed, return false so we don't muck with it's variables
+			if ((trent == ent) && (oldId != trent->scriptStatus.scriptId)) {
+				terminate = qtrue;
 			}
+
 			//
 			if (terminate) {
 				return qfalse;
@@ -1481,13 +1481,11 @@ qboolean G_ScriptAction_Trigger(gentity_t *ent, char *params) {
 		trent = NULL;
 		while ((trent = G_Find(trent, FOFS(scriptName), name)) != NULL) {
 			found = qtrue;
-			if (!(trent->r.svFlags & SVF_BOT)) {
-				oldId = trent->scriptStatus.scriptId;
-				G_Script_ScriptEvent(trent, "trigger", trigger);
-				// if the script changed, return false so we don't muck with it's variables
-				if ((trent == ent) && (oldId != trent->scriptStatus.scriptId)) {
-					terminate = qtrue;
-				}
+			oldId = trent->scriptStatus.scriptId;
+			G_Script_ScriptEvent(trent, "trigger", trigger);
+			// if the script changed, return false so we don't muck with it's variables
+			if ((trent == ent) && (oldId != trent->scriptStatus.scriptId)) {
+				terminate = qtrue;
 			}
 		}
 		//

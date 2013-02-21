@@ -374,15 +374,6 @@ reinforce
 void reinforce(gentity_t *ent) {
 	int       p;
 	gclient_t *rclient;
-	char      userinfo[MAX_INFO_STRING], *respawnStr;
-
-	if (ent->r.svFlags & SVF_BOT) {
-		trap_GetUserinfo(ent->s.number, userinfo, sizeof (userinfo));
-		respawnStr = Info_ValueForKey(userinfo, "respawn");
-		if (!Q_stricmp(respawnStr, "no") || !Q_stricmp(respawnStr, "off")) {
-			return; // no respawns
-		}
-	}
 
 	if (!(ent->client->ps.pm_flags & PMF_LIMBO)) {
 		G_Printf("player already deployed, skipping\n");
@@ -1525,13 +1516,8 @@ void ClientSpawn(gentity_t *ent) {
 	ent->client            = &level.clients[index];
 	ent->takedamage        = qtrue;
 	ent->inuse             = qtrue;
-	if (ent->r.svFlags & SVF_BOT) {
-		ent->classname = "bot";
-	} else {
-		ent->classname = "player";
-	}
+	ent->classname = "player";
 	ent->r.contents = CONTENTS_BODY;
-
 	ent->clipmask = MASK_PLAYERSOLID;
 
 	// DHM - Nerve :: Init to -1 on first spawn;
