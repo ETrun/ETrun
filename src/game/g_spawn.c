@@ -996,7 +996,6 @@ Parses textual entity definitions out of an entstring and spawns gentities.
 */
 void G_SpawnEntitiesFromString(void) {
 	// allow calls to G_Spawn*()
-	G_Printf("Enable spawning!\n");
 	level.spawning     = qtrue;
 	level.numSpawnVars = 0;
 
@@ -1013,6 +1012,5 @@ void G_SpawnEntitiesFromString(void) {
 		G_SpawnGEntityFromSpawnVars();
 	}
 
-	G_Printf("Disable spawning!\n");
 	level.spawning = qfalse;            // any future calls to G_Spawn*() will be errors
 }
