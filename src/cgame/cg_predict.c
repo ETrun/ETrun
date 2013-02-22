@@ -280,28 +280,8 @@ void    CG_FTTrace(trace_t *result, const vec3_t start, const vec3_t mins, const
 	*result = t;
 }
 
-
-/*
-================
-CG_TraceCapsule
-================
-*/
-void CG_TraceCapsule(trace_t *result, const vec3_t start, const vec3_t mins, const vec3_t maxs, const vec3_t end, int skipNumber, int mask) {
-	trace_t t;
-
-	trap_CM_CapsuleTrace(&t, start, end, mins, maxs, 0, mask);
-	t.entityNum = t.fraction != 1.0 ? ENTITYNUM_WORLD : ENTITYNUM_NONE;
-	// check all other solid models
-
-	/* Nico, trace players
-	CG_ClipMoveToEntities( start, mins, maxs, end, skipNumber, mask, qtrue, &t );*/
-	CG_ClipMoveToEntities(start, mins, maxs, end, skipNumber, mask, qtrue, qtrue, &t);
-
-	*result = t;
-}
-
 /* Nico, from TJMod
- * CG_TraceCapsule() that doesn't trace players but other entities with
+ * This function doesn't trace players but other entities with
  * CONTENTS_BODY (content of a temporary box brush) are still traced.
  */
 void CG_TraceCapsuleNoPlayers(trace_t *result, const vec3_t start, const vec3_t mins,

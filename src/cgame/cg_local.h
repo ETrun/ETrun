@@ -2265,12 +2265,6 @@ void CG_DrawOverlays(void);
 qboolean CG_DrawScoreboard(void);
 
 typedef struct {
-	int pendingAnimationTime;
-	const char *pendingTorsoAnim;
-	const char *pendingLegsAnim;
-} pendingAnimation_t;
-
-typedef struct {
 	lerpFrame_t legs;
 	lerpFrame_t torso;
 
@@ -2279,7 +2273,6 @@ typedef struct {
 	vec3_t viewAngles;
 	vec3_t moveAngles;
 
-	pendingAnimation_t pendingAnimations[4];
 	int numPendingAnimations;
 
 	float y, z;
@@ -2738,30 +2731,11 @@ void                CG_LimboPanel_SetSelectedWeaponNum(int number);
 bg_playerclass_t *CG_LimboPanel_GetPlayerClass(void);
 weapon_t            CG_LimboPanel_GetSelectedWeapon(void);
 weapon_t            CG_LimboPanel_GetWeaponForNumber(int number, int slot, qboolean ignoreDisabled);
-
 qboolean            CG_LimboPanel_WeaponIsDisabled(int weap);
 qboolean            CG_LimboPanel_RealWeaponIsDisabled(weapon_t weap);
 int                 CG_LimboPanel_GetWeaponNumberForPos(int pos);
-
-
 void                CG_LimboPanel_SetSelectedWeaponNumForSlot(int index, int number);
 weapon_t            CG_LimboPanel_GetSelectedWeaponForSlot(int index);
-
-//
-// cg_commandmap.c
-//
-// A scissored map always has the player in the center
-typedef struct mapScissor_s {
-	qboolean circular;  // if qfalse, rect
-	float zoomFactor;
-	vec2_t tl;
-	vec2_t br;
-} mapScissor_t;
-
-#define LIMBO_3D_X  0 // Nico, 287 -> 0 //%	280
-#define LIMBO_3D_Y  0 // Nico, 382 -> 0
-#define LIMBO_3D_W  440 // Nico, 128 -> 440
-#define LIMBO_3D_H  480 // Nico, 96 -> 480  //%	94
 
 //
 // cg_popupmessages.c

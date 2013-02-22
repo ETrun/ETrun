@@ -40,9 +40,6 @@ localEntity_t cg_localEntities[MAX_LOCAL_ENTITIES];
 localEntity_t cg_activeLocalEntities;       // double linked list
 localEntity_t *cg_freeLocalEntities;        // single linked list
 
-// Ridah, debugging
-int localEntCount = 0;
-
 /*
 ===================
 CG_InitLocalEntities
@@ -60,9 +57,6 @@ void    CG_InitLocalEntities(void) {
 	for (i = 0 ; i < MAX_LOCAL_ENTITIES - 1 ; i++) {
 		cg_localEntities[i].next = &cg_localEntities[i + 1];
 	}
-
-	// Ridah, debugging
-	localEntCount = 0;
 }
 
 
@@ -75,10 +69,6 @@ void CG_FreeLocalEntity(localEntity_t *le) {
 	if (!le->prev) {
 		CG_Error("CG_FreeLocalEntity: not active");
 	}
-
-	// Ridah, debugging
-	localEntCount--;
-	// done.
 
 	// remove from the doubly linked active list
 	le->prev->next = le->next;
@@ -104,10 +94,6 @@ localEntity_t *CG_AllocLocalEntity(void) {
 		// remove the oldest active entity
 		CG_FreeLocalEntity(cg_activeLocalEntities.prev);
 	}
-
-	// Ridah, debugging
-	localEntCount++;
-	// done.
 
 	le                   = cg_freeLocalEntities;
 	cg_freeLocalEntities = cg_freeLocalEntities->next;
@@ -646,77 +632,6 @@ void CG_AddDebrisElements(localEntity_t *le) {
 	}
 
 }
-
-// Rafael Shrapnel
-/*
-===============
-CG_AddShrapnel
-===============
-*/
-void CG_AddShrapnel(localEntity_t *le) {
-	vec3_t  newOrigin;
-	trace_t trace;
-
-	if (le->pos.trType == TR_STATIONARY) {
-		// sink into the ground if near the removal time
-		int   t;
-		float oldZ;
-
-		t = le->endTime - cg.time;
-		if (t < SINK_TIME) {
-			// we must use an explicit lighting origin, otherwise the
-			// lighting would be lost as soon as the origin went
-			// into the ground
-			VectorCopy(le->refEntity.origin, le->refEntity.lightingOrigin);
-			le->refEntity.renderfx  |= RF_LIGHTING_ORIGIN;
-			oldZ                     = le->refEntity.origin[2];
-			le->refEntity.origin[2] -= 16 * (1.0 - (float)t / SINK_TIME);
-			trap_R_AddRefEntityToScene(&le->refEntity);
-			le->refEntity.origin[2] = oldZ;
-		} else {
-			trap_R_AddRefEntityToScene(&le->refEntity);
-		}
-
-		return;
-	}
-
-	// calculate new position
-	BG_EvaluateTrajectory(&le->pos, cg.time, newOrigin, qfalse, -1);
-
-	// trace a line from previous position to new position
-	CG_Trace(&trace, le->refEntity.origin, NULL, NULL, newOrigin, -1, CONTENTS_SOLID);
-	if (trace.fraction == 1.0) {
-		// still in free fall
-		VectorCopy(newOrigin, le->refEntity.origin);
-
-		if (le->leFlags & LEF_TUMBLE) {
-			vec3_t angles;
-
-			BG_EvaluateTrajectory(&le->angles, cg.time, angles, qtrue, -1);
-			AnglesToAxis(angles, le->refEntity.axis);
-		}
-
-		trap_R_AddRefEntityToScene(&le->refEntity);
-		return;
-	}
-
-	// if it is in a nodrop zone, remove it
-	// this keeps gibs from waiting at the bottom of pits of death
-	// and floating levels
-	if (CG_PointContents(trace.endpos, 0) & CONTENTS_NODROP) {
-		CG_FreeLocalEntity(le);
-		return;
-	}
-
-	// do a bouncy sound
-	CG_FragmentBounceSound(le, &trace);
-
-	// reflect the velocity on the trace plane
-	CG_ReflectVelocity(le, &trace);
-
-	trap_R_AddRefEntityToScene(&le->refEntity);
-}
-// done.
 
 /*
 =====================================================================

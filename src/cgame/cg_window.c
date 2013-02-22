@@ -56,30 +56,6 @@ void CG_windowInit(void) {
 	}
 }
 
-
-// Window stuct "constructor" with some common defaults
-void CG_windowReset(cg_window_t *w, int fx, int startupLength) {
-	vec4_t colorGeneralBorder = { 0.5f, 0.35f, 0.25f, 0.5f };
-	vec4_t colorGeneralFill   = { 0.3f, 0.45f, 0.3f, 0.5f };
-
-	w->effects       = fx;
-	w->fontScaleX    = 0.25;
-	w->fontScaleY    = 0.25;
-	w->flashPeriod   = 1000;
-	w->flashMidpoint = w->flashPeriod / 2;
-	w->id            = WID_NONE;
-	w->inuse         = qtrue;
-	w->lineCount     = 0;
-	w->state         = (fx >= WFX_FADEIN) ? WSTATE_START : WSTATE_COMPLETE;
-	w->targetTime    = (startupLength > 0) ? startupLength : 0;
-	w->time          = trap_Milliseconds();
-	w->x             = 0;
-	w->y             = 0;
-
-	memcpy(&w->colorBorder, &colorGeneralBorder, sizeof (vec4_t));
-	memcpy(&w->colorBackground, &colorGeneralFill, sizeof (vec4_t));
-}
-
 // Free up a window reservation
 void CG_windowFree(cg_window_t *w) {
 	int                i, j;

@@ -1006,38 +1006,6 @@ void CG_AddFlameToScene(flameChunk_t *fHead) {
 }
 
 /*
-=============
-CG_GenerateShaders
-
-  A util to create a bunch of shaders in a unique shader file, which represent an animation
-=============
-*/
-void CG_GenerateShaders(char *filename, char *shaderName, char *dir, int numFrames, char *srcBlend, char *dstBlend, char *extras, qboolean compressedVersionAvailable, qboolean nomipmap) {
-	fileHandle_t f;
-	int          b, c, d, lastNumber;
-	char         str[512];
-	int          i;
-
-	trap_FS_FOpenFile(filename, &f, FS_WRITE);
-	for (i = 0; i < numFrames; i++) {
-		lastNumber  = i;
-		b           = lastNumber / 100;
-		lastNumber -= b * 100;
-		c           = lastNumber / 10;
-		lastNumber -= c * 10;
-		d           = lastNumber;
-
-		if (compressedVersionAvailable) {
-			Com_sprintf(str, sizeof (str), "%s%i\n{\n\tnofog%s\n\tallowCompress\n\tcull none\n\t{\n\t\tmapcomp sprites/%s_lg/spr%i%i%i.tga\n\t\tmapnocomp sprites/%s/spr%i%i%i.tga\n\t\tblendFunc %s %s\n%s\t}\n}\n", shaderName, i + 1, nomipmap ? "\n\tnomipmaps" : "", dir, b, c, d, dir, b, c, d, srcBlend, dstBlend, extras);
-		} else {
-			Com_sprintf(str, sizeof (str), "%s%i\n{\n\tnofog%s\n\tallowCompress\n\tcull none\n\t{\n\t\tmap sprites/%s/spr%i%i%i.tga\n\t\tblendFunc %s %s\n%s\t}\n}\n", shaderName, i + 1, nomipmap ? "\n\tnomipmap" : "", dir, b, c, d, srcBlend, dstBlend, extras);
-		}
-		trap_FS_Write(str, strlen(str), f);
-	}
-	trap_FS_FCloseFile(f);
-}
-
-/*
 ===============
 CG_InitFlameChunks
 ===============

@@ -592,17 +592,6 @@ void CG_keyOff_f(void) {
 	}
 	CG_EventHandling(CGAME_EVENT_NONE, qfalse);
 }
-
-
-void CG_toggleSpecHelp_f(void) {
-	if (!cg.demoPlayback) {
-		if (cg.spechelpWindow != SHOW_ON && cg_specHelp.integer > 0) {
-			CG_ShowHelp_On(&cg.spechelpWindow);
-		} else if (cg.spechelpWindow == SHOW_ON) {
-			CG_ShowHelp_Off(&cg.spechelpWindow);
-		}
-	}
-}
 // -OSP
 
 static void CG_EditSpeakers_f(void) {

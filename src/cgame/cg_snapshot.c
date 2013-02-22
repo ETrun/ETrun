@@ -32,13 +32,6 @@ If you have questions concerning this license or the applicable additional terms
 
 
 #include "cg_local.h"
-/*
-#if __MACOS__
-#ifdef GAMERANGER
-#include "GameRanger SDK/GameRanger.h"
-#endif
-#endif
-*/
 
 // rain - minor optimization - we only want to reset ents that were valid
 // in the last frame
@@ -221,15 +214,6 @@ void CG_SetInitialSnapshot(snapshot_t *snap) {
 			CG_ShowHelp_On(&cg.demohelpWindow);
 		}
 	}
-	// OSP
-	/*
-	#if __MACOS__
-	#ifdef GAMERANGER
-	// LBO 12/13/04. Add support for GameRanger team voice IDs
-	GRSetMyTeamID(cg.snap->ps.persistant[PERS_TEAM]);
-	#endif
-	#endif
-	*/
 }
 
 
@@ -337,7 +321,6 @@ static void CG_SetNextSnap(snapshot_t *snap) {
 		cent = &cg_entities[es->number];
 
 		memcpy(&cent->nextState, es, sizeof (entityState_t));
-		//cent->nextState = *es;
 
 		// if this frame is a teleport, or the entity wasn't in the
 		// previous frame, don't interpolate
@@ -531,5 +514,4 @@ void CG_ProcessSnapshots(void) {
 	if (cg.nextSnap != NULL && cg.nextSnap->serverTime <= cg.time) {
 		CG_Error("CG_ProcessSnapshots: cg.nextSnap->serverTime <= cg.time");
 	}
-
 }

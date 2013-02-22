@@ -149,14 +149,6 @@ CG_PainEvent
 Also called by playerstate transition
 ================
 */
-typedef struct {
-	char *tag;
-	int refEntOfs;
-	int anim;
-} painAnimForTag_t;
-
-#define PEFOFS(x) ((int)&(((playerEntity_t *)0)->x))
-
 void CG_PainEvent(centity_t *cent, int health) {
 	char *snd;
 
@@ -181,20 +173,6 @@ void CG_PainEvent(centity_t *cent, int health) {
 	cent->pe.painTime       = cg.time;
 	cent->pe.painDirection ^= 1;
 }
-
-
-
-
-
-/*
-==============
-CG_Explode
-
-
-    if (cent->currentState.angles2[0] || cent->currentState.angles2[1] || cent->currentState.angles2[2])
-
-==============
-*/
 
 #define POSSIBLE_PIECES 6
 
@@ -247,7 +225,6 @@ void CG_Explode(centity_t *cent, vec3_t origin, vec3_t dir, qhandle_t shader) {
 	// (SA) FIXME: do this at spawn time rather than explode time so any new necessary shaders are created earlier
 	if (cent->currentState.eFlags & EF_INHERITSHADER) {
 		if (!shader) {
-//			inheritmodel = cent->currentState.modelindex;
 			inheritmodel = cgs.inlineDrawModel[cent->currentState.modelindex];  // okay, this should be better.
 			if (inheritmodel) {
 				shader = trap_R_GetShaderFromModel(inheritmodel, 0, 0);
@@ -309,7 +286,6 @@ void CG_Rubble(centity_t *cent, vec3_t origin, vec3_t dir, qhandle_t shader) {
 	// (SA) FIXME: do this at spawn time rather than explode time so any new necessary shaders are created earlier
 	if (cent->currentState.eFlags & EF_INHERITSHADER) {
 		if (!shader) {
-//			inheritmodel = cent->currentState.modelindex;
 			inheritmodel = cgs.inlineDrawModel[cent->currentState.modelindex];  // okay, this should be better.
 			if (inheritmodel) {
 				shader = trap_R_GetShaderFromModel(inheritmodel, 0, 0);

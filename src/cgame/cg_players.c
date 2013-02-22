@@ -1189,8 +1189,6 @@ Returns the Z component of the surface being shadowed
 typedef struct {
 	char *tagname;
 	float size;
-	float maxdist;
-	float maxalpha;
 	qhandle_t shader;
 } shadowPart_t;
 
@@ -1203,10 +1201,10 @@ static qboolean CG_PlayerShadow(centity_t *cent, float *shadowPlane) {
 	vec4_t       projection    = { 0, 0, -1, 64 };
 	shadowPart_t shadowParts[] =
 	{
-		{ "tag_footleft",  10, 4,  1.0, 0 },
-		{ "tag_footright", 10, 4,  1.0, 0 },
-		{ "tag_torso",     18, 96, 0.8, 0 },
-		{ NULL,            0,  0,  0,   0 }
+		{ "tag_footleft",  10, 0 },
+		{ "tag_footright", 10, 0 },
+		{ "tag_torso",     18, 0 },
+		{ NULL,            0,  0 }
 	};
 
 	shadowParts[0].shader = cgs.media.shadowFootShader;     //DAJ pulled out of initliization
@@ -1464,21 +1462,6 @@ void CG_AddRefEntityWithPowerups(refEntity_t *ent, entityState_t *es, const vec3
 
 	*ent = backupRefEnt;
 }
-
-char *vtosf(const vec3_t v) {
-	static int  index;
-	static char str[8][64];
-	char        *s;
-
-	// use an array so that multiple vtos won't collide
-	s     = str[index];
-	index = (index + 1) & 7;
-
-	Com_sprintf(s, 64, "(%f %f %f)", v[0], v[1], v[2]);
-
-	return s;
-}
-
 
 /*
 ===============
@@ -2067,103 +2050,4 @@ void WM_RegisterWeaponTypeShaders() {
 	while (w->weapindex) {
 		w++;
 	}
-}
-
-void CG_SetHudHeadLerpFrameAnimation(bg_character_t *ch, lerpFrame_t *lf, int newAnimation) {
-	animation_t *anim;
-
-	lf->animationNumber = newAnimation;
-	newAnimation       &= ~ANIM_TOGGLEBIT;
-
-	if (newAnimation < 0 || newAnimation >= MAX_HD_ANIMATIONS) {
-		CG_Error("Bad animation number (CG_SetHudHeadLerpFrameAnimation): %i", newAnimation);
-	}
-
-	anim = &ch->hudheadanimations[newAnimation];
-
-	lf->animation     = anim;
-	lf->animationTime = lf->frameTime + anim->initialLerp;
-}
-
-void CG_ClearHudHeadLerpFrame(bg_character_t *ch, lerpFrame_t *lf, int animationNumber) {
-	lf->frameTime = lf->oldFrameTime = cg.time;
-	CG_SetHudHeadLerpFrameAnimation(ch, lf, animationNumber);
-	lf->oldFrame      = lf->frame = lf->animation->firstFrame;
-	lf->oldFrameModel = lf->frameModel = lf->animation->mdxFile;
-}
-
-void CG_RunHudHeadLerpFrame(bg_character_t *ch, lerpFrame_t *lf, int newAnimation, float speedScale) {
-	int         f;
-	animation_t *anim;
-
-
-
-	// see if the animation sequence is switching
-	if (!lf->animation) {
-		CG_ClearHudHeadLerpFrame(ch, lf, newAnimation);
-	} else if (newAnimation != lf->animationNumber) {
-		CG_SetHudHeadLerpFrameAnimation(ch, lf, newAnimation);
-	}
-
-	// if we have passed the current frame, move it to
-	// oldFrame and calculate a new frame
-	if (cg.time >= lf->frameTime) {
-		lf->oldFrame      = lf->frame;
-		lf->oldFrameTime  = lf->frameTime;
-		lf->oldFrameModel = lf->frameModel;
-
-		// get the next frame based on the animation
-		anim = lf->animation;
-		if (!anim->frameLerp) {
-			return;     // shouldn't happen
-		}
-		if (cg.time < lf->animationTime) {
-			lf->frameTime = lf->animationTime;      // initial lerp
-		} else {
-			lf->frameTime = lf->oldFrameTime + anim->frameLerp;
-		}
-		f  = (lf->frameTime - lf->animationTime) / anim->frameLerp;
-		f *= speedScale;        // adjust for haste, etc
-		if (f >= anim->numFrames) {
-			f -= anim->numFrames;
-			if (anim->loopFrames) {
-				f %= anim->loopFrames;
-				f += anim->numFrames - anim->loopFrames;
-			} else {
-				f = anim->numFrames - 1;
-				// the animation is stuck at the end, so it
-				// can immediately transition to another sequence
-				lf->frameTime = cg.time;
-			}
-		}
-		lf->frame      = anim->firstFrame + f;
-		lf->frameModel = anim->mdxFile;
-		if (cg.time > lf->frameTime) {
-			lf->frameTime = cg.time;
-		}
-	}
-
-	if (lf->frameTime > cg.time + 200) {
-		lf->frameTime = cg.time;
-	}
-
-	if (lf->oldFrameTime > cg.time) {
-		lf->oldFrameTime = cg.time;
-	}
-	// calculate current lerp value
-	if (lf->frameTime == lf->oldFrameTime) {
-		lf->backlerp = 0;
-	} else {
-		lf->backlerp = 1.0 - (float)(cg.time - lf->oldFrameTime) / (lf->frameTime - lf->oldFrameTime);
-	}
-}
-
-void CG_HudHeadAnimation(bg_character_t *ch, lerpFrame_t *lf, int *oldframe, int *frame, float *backlerp, hudHeadAnimNumber_t animation) {
-//	centity_t *cent = &cg.predictedPlayerEntity;
-
-	CG_RunHudHeadLerpFrame(ch, lf, (int)animation, 1.f);
-
-	*oldframe = lf->oldFrame;
-	*frame    = lf->frame;
-	*backlerp = lf->backlerp;
 }

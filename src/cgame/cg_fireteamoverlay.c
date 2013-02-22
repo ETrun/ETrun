@@ -244,31 +244,6 @@ void CG_DrawFireTeamOverlay(rectDef_t *rect) {
 	}
 }
 
-qboolean CG_FireteamGetBoxNeedsButtons() {
-	if (cgs.applicationEndTime > cg.time) {
-		if (cgs.applicationClient < 0) {
-			return qfalse;
-		}
-		return qtrue;
-	}
-
-	if (cgs.invitationEndTime > cg.time) {
-		if (cgs.invitationClient < 0) {
-			return qfalse;
-		}
-		return qtrue;
-	}
-
-	if (cgs.propositionEndTime > cg.time) {
-		if (cgs.propositionClient < 0) {
-			return qfalse;
-		}
-		return qtrue;
-	}
-
-	return qfalse;
-}
-
 const char *CG_FireteamGetBoxText() {
 	if (cgs.applicationEndTime > cg.time) {
 		if (cgs.applicationClient == -1) {

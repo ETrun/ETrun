@@ -31,8 +31,8 @@ If you have questions concerning this license or the applicable additional terms
 
 #include "cg_local.h"
 
-extern char *BindingFromName(const char *cvar);// Nico, note: thie function is defined in ui_shared.c
-extern void Controls_GetConfig(void);// Nico, note: thie function is defined in ui_shared.c
+extern char *BindingFromName(const char *cvar);// Nico, note: this function is defined in ui_shared.c
+extern void Controls_GetConfig(void);// Nico, note: this function is defined in ui_shared.c
 int activeFont;
 
 ////////////////////////
