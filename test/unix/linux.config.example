@@ -48,7 +48,7 @@ et_base_path='/usr/local/games/enemy-territory'
 #
 # Path to your game directory in your home
 #
-et_home_path='/home/vm/.etwolf'
+et_home_path="/home/$USER/.etwolf"
 
 #
 # Path to your ET dedicated binary
@@ -75,7 +75,7 @@ etl_base_path='/usr/local/share/etlegacy'
 #
 # Path to your ET: Legacy game directory in your home
 #
-etl_home_path='/home/vm/.etlwolf'
+etl_home_path="/home/$USER/.etlwolf"
 
 #
 # Path to your ET: Legacy dedicated binary
