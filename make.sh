@@ -3,8 +3,6 @@
 #
 # ETrun build script
 #
-# TODO: provide a debug option
-#
 #
 
 #
@@ -15,13 +13,15 @@ BUILD_DIR=build
 MOD_NAME='etrun'
 CMAKE=cmake
 BUILD_API=0
+MAKE_PK3=0
+PK3_NAME="$MOD_NAME.pk3"
 VERBOSE=0
 
 #
 # Parse options
 #
 function parse_options() {
-	while getopts ":hadv" opt; do
+	while getopts ":hadvp" opt; do
 	  	case $opt in
 		  	h)
 				show_usage
@@ -32,6 +32,9 @@ function parse_options() {
 				;;
 			d)
 				DEBUG=1
+				;;
+			p)
+				MAKE_PK3=1
 				;;
 			v)
 				VERBOSE=1
@@ -54,11 +57,12 @@ function clean() {
 # Show usage
 #
 function show_usage() {
-	echo 'Usage: '`basename $0` ' [options...]'
+	echo 'Usage: '`basename $0` ' [options...]'
 	echo 'Options:'
 	echo ' -a		Build API'
 	echo ' -d		Turn ON debug mode'
 	echo ' -h		Show this help'
+	echo ' -p		Make a pk3 archive'
 	echo ' -v		Enable verbose build'
 }
 
@@ -214,6 +218,19 @@ function make_bundle() {
 }
 
 #
+# Make pk3 in $BUILD_DIR
+#
+function make_pk3() {
+	# Copy assets next to game modules
+	cp -rf ../$MOD_NAME/* $MOD_NAME
+	# Delete previous pk3 if any
+	rm -f $PK3_NAME
+	cd $MOD_NAME
+	zip -9qr ../$PK3_NAME * -x custommapscripts\* qagame\*
+	cd ../..
+}
+
+#
 # Main
 #
 parse_options "$@"
@@ -224,3 +241,7 @@ strip_modules
 make_bundle qagame
 make_bundle cgame
 make_bundle ui
+# pwd: build/
+if [ $MAKE_PK3 -eq 1 ]; then
+	make_pk3
+fi
