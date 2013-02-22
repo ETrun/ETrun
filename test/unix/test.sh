@@ -107,22 +107,9 @@ function read_config() {
 }
 
 #
-# Function used to clean game
+# Init some variables
 #
-function clean_game() {
-	if [ $USE_ETL -eq 1 ]; then
-		rm -rf $etl_base_path/$mod_name
-		rm -rf $etl_home_path/$mod_name
-	else
-		rm -rf $et_base_path/$mod_name
-		rm -rf $et_home_path/$mod_name
-	fi
-}
-
-#
-# Install mod function
-#
-function install() {
+function init() {
 	# Set game binary
 	if [ $USE_ETL -eq 1 ]; then
 		HOMEPATH=$etl_home_path
@@ -141,52 +128,65 @@ function install() {
 			GAME_PATH=$et_binary_path
 		fi
 	fi
+}
+
+#
+# Install pk3, qagame and custommapscripts
+#
+function install() {
+	# Check argument
+	if [ ! -f build/$INSTALL_FILES ]; then
+		echo '[ko]'
+		echo "Error: cannot find build/$INSTALL_FILES"
+		exit 1
+	fi
+
+	# Clean homepath and basepath
+	if [ $USE_ETL -eq 1 ]; then
+		rm -rf $etl_base_path/$mod_name
+		rm -rf $etl_home_path/$mod_name
+	else
+		rm -rf $et_base_path/$mod_name
+		rm -rf $et_home_path/$mod_name
+	fi
 
 	# Make etrun/ dir in homepath
 	mkdir -p $HOMEPATH/$mod_name
 
-	# Install pk3, qagame and custommapscripts
-	if [ ! -z $INSTALL_FILES ]; then
-		# Check argument
-		if [ ! -f build/$INSTALL_FILES ]; then
-			echo '[ko]'
-			echo "Error: cannot find build/$INSTALL_FILES"
-			exit 1
-		fi
-
-		# Install pk3 into homepath
-		cp -f build/$INSTALL_FILES $HOMEPATH/$mod_name
-		if [ $? -ne 0 ]; then
-			echo '[ko]'
-			echo "Error: failed to install build/$INSTALL_FILES into $HOMEPATH/$mod_name"
-			exit 1
-		fi
-
-		# Install qagame into homepath
-		cp -f build/$mod_name/$qagame_name $HOMEPATH/$mod_name
-		if [ $? -ne 0 ]; then
-			echo '[ko]'
-			echo "Error: failed to install build/$mod_name/$qagame_name into $HOMEPATH/$mod_name"
-			exit 1
-		fi
-		# Install custom mapscripts into homepath
-		mkdir -p $HOMEPATH/$mod_name/custommapscripts
-		cp -f $mod_name/custommapscripts/* $HOMEPATH/$mod_name/custommapscripts
+	# Install pk3 into homepath
+	cp -f build/$INSTALL_FILES $HOMEPATH/$mod_name
+	if [ $? -ne 0 ]; then
+		echo '[ko]'
+		echo "Error: failed to install build/$INSTALL_FILES into $HOMEPATH/$mod_name"
+		exit 1
 	fi
 
-	# Install API
-	if [ $USE_API -eq 1 ]; then
-		cp -f build/$mod_name/$APImodule_name $HOMEPATH/$mod_name 2> /dev/null
-		if [ $? -ne 0 ]; then
-			echo '[ko]'
-			echo "Error: failed to copy build/$mod_name/$APImodule_name to $HOMEPATH/$mod_name"
-			exit 1
-		fi
+	# Install qagame into homepath
+	cp -f build/$mod_name/$qagame_name $HOMEPATH/$mod_name
+	if [ $? -ne 0 ]; then
+		echo '[ko]'
+		echo "Error: failed to install build/$mod_name/$qagame_name into $HOMEPATH/$mod_name"
+		exit 1
+	fi
+	# Install custom mapscripts into homepath
+	mkdir -p $HOMEPATH/$mod_name/custommapscripts
+	cp -f $mod_name/custommapscripts/* $HOMEPATH/$mod_name/custommapscripts
+}
+
+#
+# Install API
+#
+function install_API() {
+	cp -f build/$mod_name/$APImodule_name $HOMEPATH/$mod_name 2> /dev/null
+	if [ $? -ne 0 ]; then
+		echo '[ko]'
+		echo "Error: failed to copy build/$mod_name/$APImodule_name to $HOMEPATH/$mod_name"
+		exit 1
 	fi
 }
 
 #
-#
+# Print summary of all options before starting game
 #
 function print_summary() {
 	echo '###################################'
@@ -230,8 +230,16 @@ function print_summary() {
 	echo '###################################'
 }
 
+#
+# Function to start game
+#
 function start_game() {
-	GAME_ARGS="+set fs_game $mod_name +set fs_basePath $BASEPATH +set fs_homePath $HOMEPATH +set g_useAPI $USE_API +set g_APImodulePath $HOMEPATH/$mod_name/$APImodule_name +set developer $DEVELOPER +map $default_map +set com_hunkMegs 128"
+	# Prepare game args for et/etded
+	if [ $CLIENT_MODE -eq 0 ]; then
+		GAME_ARGS="+set fs_game $mod_name +set fs_basePath $BASEPATH +set fs_homePath $HOMEPATH +set g_useAPI $USE_API +set g_APImodulePath $HOMEPATH/$mod_name/$APImodule_name +set developer $DEVELOPER +map $default_map"
+	else
+		GAME_ARGS="+set fs_game $mod_name +set fs_basePath $BASEPATH +set fs_homePath $HOMEPATH +set developer $DEVELOPER +set com_hunkMegs 128"
+	fi
 
 	# Workaround for OSX where there isn't ETDED binary
 	if [[ $OS == "Darwin" && $CLIENT_MODE -eq 0 ]]; then
@@ -243,6 +251,7 @@ function start_game() {
 	elif [ $USE_DEBUGGER -eq 1 ]; then
 		$debugger_command_line $GAME_PATH $GAME_ARGS
 	else
+		echo $GAME_PATH $GAME_ARGS
 		$GAME_PATH $GAME_ARGS
 	fi
 }
@@ -254,13 +263,19 @@ read_config
 
 parse_options "$@"
 
-echo -n ' Cleaning game...'
-clean_game
-echo '[ok]'
+init
 
-echo -n ' Installing files...'
-install
-echo '[ok]'
+if [ ! -z $INSTALL_FILES ]; then
+	echo -n ' Installing files...'
+	install
+	echo '[ok]'
+fi
+
+if [ $USE_API -eq 1 ]; then
+	echo -n ' Installing API...'
+	install_API
+	echo '[ok]'
+fi
 
 print_summary
 
