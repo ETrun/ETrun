@@ -2493,17 +2493,6 @@ void Item_MouseLeave(itemDef_t *item) {
 	}
 }
 
-itemDef_t *Menu_HitTest(menuDef_t *menu, float x, float y) {
-	int i;
-
-	for (i = 0; i < menu->itemCount; i++) {
-		if (Rect_ContainsPoint(&menu->items[i]->window.rect, x, y)) {
-			return menu->items[i];
-		}
-	}
-	return NULL;
-}
-
 void Item_SetMouseOver(itemDef_t *item, qboolean focus) {
 	if (item) {
 		if (focus) {
@@ -3722,10 +3711,6 @@ void ToWindowCoords(float *x, float *y, windowDef_t *window) {
 	*y += window->rect.y;
 }
 
-void Rect_ToWindowCoords(rectDef_t *rect, windowDef_t *window) {
-	ToWindowCoords(&rect->x, &rect->y, window);
-}
-
 void Item_SetTextExtents(itemDef_t *item, int *width, int *height, const char *text) {
 	const char *textPtr = (text) ? text : item->text;
 
@@ -4632,14 +4617,6 @@ void Item_Model_Paint(itemDef_t *item) {
 
 }
 
-
-void Item_Image_Paint(itemDef_t *item) {
-	if (item == NULL) {
-		return;
-	}
-	DC->drawHandlePic(item->window.rect.x + 1, item->window.rect.y + 1, item->window.rect.w - 2, item->window.rect.h - 2, item->asset);
-}
-
 void Item_ListBox_Paint(itemDef_t *item) {
 	float        x, y, size, count, i, thumb;
 	qhandle_t    image;
@@ -5076,19 +5053,6 @@ void Menu_Init(menuDef_t *menu) {
 	menu->itemHotkeyMode = qfalse;
 	// END - TAT 9/16/2002
 	Window_Init(&menu->window);
-}
-
-itemDef_t *Menu_GetFocusedItem(menuDef_t *menu) {
-	int i;
-
-	if (menu) {
-		for (i = 0; i < menu->itemCount; i++) {
-			if (menu->items[i]->window.flags & WINDOW_HASFOCUS) {
-				return menu->items[i];
-			}
-		}
-	}
-	return NULL;
 }
 
 menuDef_t *Menu_GetFocused() {
@@ -7275,24 +7239,6 @@ static qboolean Menu_OverActiveItem(menuDef_t *menu, float x, float y) {
 		}
 	}
 	return qfalse;
-}
-
-/*
-=================
-PC_String_Parse_Trans
-
-NERVE - SMF - translates string
-=================
-*/
-qboolean PC_String_Parse_Trans(int handle, const char **out) {
-	pc_token_t token;
-
-	if (!trap_PC_ReadToken(handle, &token)) {
-		return qfalse;
-	}
-
-	*(out) = String_Alloc(DC->translateString(token.string));
-	return qtrue;
 }
 
 /*

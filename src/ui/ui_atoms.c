@@ -180,20 +180,6 @@ void UI_DrawHandlePic(float x, float y, float w, float h, qhandle_t hShader) {
 
 /*
 ================
-UI_DrawRotatedPic
-
-Coordinates are 640*480 virtual values
-=================
-*/
-void UI_DrawRotatedPic(float x, float y, float width, float height, qhandle_t hShader, float angle) {
-
-	UI_AdjustFrom640(&x, &y, &width, &height);
-
-	trap_R_DrawRotatedPic(x, y, width, height, 0, 0, 1, 1, hShader, angle);
-}
-
-/*
-================
 UI_FillRect
 
 Coordinates are 640*480 virtual values

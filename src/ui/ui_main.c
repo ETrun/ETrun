@@ -495,154 +495,6 @@ void Text_Paint(float x, float y, float scale, vec4_t color, const char *text, f
 	Text_Paint_Ext(x, y, scale, scale, color, text, adjust, limit, style, font);
 }
 
-// copied over from Text_Paint
-// we use the bulk of Text_Paint to determine were we will hit the max width
-// can be used for actual text printing, or dummy run to get the number of lines
-// returns the next char to be printed after wrap, or the ending \0 of the string
-// NOTE: this is clearly non-optimal implementation, see Item_Text_AutoWrap_Paint for one
-// if color_save != NULL, use to keep track of the current color between wraps
-char *Text_AutoWrap_Paint_Chunk(float x, float y, int width, float scale, vec4_t color, char *text, float adjust, int limit, int style, qboolean dummy, vec4_t color_save) {
-	int         len, count;
-	vec4_t      newColor;
-	glyphInfo_t *glyph;
-	float       useScale;
-	fontInfo_t  *font = &uiInfo.uiDC.Assets.fonts[uiInfo.activeFont];
-	int         index;
-	char        *wrap_point = NULL;
-
-	float wrap_x = x + width;
-
-	useScale = scale * font->glyphScale;
-
-	if (text) {
-		char *s = text;
-		trap_R_SetColor(color);
-		memcpy(&newColor[0], &color[0], sizeof (vec4_t));
-		len = strlen(text);
-		if (limit > 0 && len > limit) {
-			len = limit;
-		}
-		count = 0;
-		while (s && *s && count < len) {
-			index = (unsigned char)*s;
-			if (*s == ' ' || *s == '\t' || *s == '\n') {
-				wrap_point = s;
-			}
-
-			// NERVE - SMF - don't draw tabs and newlines
-			if (index < 20) {
-				s++;
-				count++;
-				continue;
-			}
-
-			glyph = &font->glyphs[index];           // NERVE - SMF - this needs to be an unsigned cast for localization
-			if (Q_IsColorString(s)) {
-				if (*(s + 1) == COLOR_NULL) {
-					memcpy(&newColor[0], &color[0], sizeof (vec4_t));
-				} else {
-					memcpy(newColor, g_color_table[ColorIndex(*(s + 1))], sizeof (newColor));
-					newColor[3] = color[3];
-				}
-				if (!dummy) {
-					trap_R_SetColor(newColor);
-				}
-				if (color_save) {
-					memcpy(&color_save[0], &newColor[0], sizeof (vec4_t));
-				}
-				s += 2;
-				continue;
-			} else {
-				float yadj = useScale * glyph->top;
-
-				if (x + (glyph->xSkip * useScale) + adjust > wrap_x) {
-					if (wrap_point) {
-						return wrap_point + 1; // the next char to be printed after line wrap
-					}
-					// we haven't found the wrap point .. cut
-					return s;
-				}
-
-				if (!dummy) {
-					if (style == ITEM_TEXTSTYLE_SHADOWED || style == ITEM_TEXTSTYLE_SHADOWEDMORE) {
-						int ofs = style == ITEM_TEXTSTYLE_SHADOWED ? 1 : 2;
-						colorBlack[3] = newColor[3];
-						trap_R_SetColor(colorBlack);
-						Text_PaintChar(x + ofs, y - yadj + ofs,
-						               glyph->imageWidth,
-						               glyph->imageHeight,
-						               useScale,
-						               glyph->s,
-						               glyph->t,
-						               glyph->s2,
-						               glyph->t2,
-						               glyph->glyph);
-						trap_R_SetColor(newColor);
-						colorBlack[3] = 1.0;
-					}
-					Text_PaintChar(x, y - yadj,
-					               glyph->imageWidth,
-					               glyph->imageHeight,
-					               useScale,
-					               glyph->s,
-					               glyph->t,
-					               glyph->s2,
-					               glyph->t2,
-					               glyph->glyph);
-				}
-
-				x += (glyph->xSkip * useScale) + adjust;
-				s++;
-				count++;
-			}
-		}
-		if (!dummy) {
-			trap_R_SetColor(NULL);
-		}
-	}
-	return text + strlen(text);
-}
-
-// count the lines that we will need to have to print with the given wrap parameters
-int Count_Text_AutoWrap_Paint(float x, float y, int width, float scale, vec4_t color, const char *text, float adjust, int style) {
-	const char *ret, *end;
-	int        i = 0;
-
-	ret = text;
-	end = text + strlen(text);
-
-	do {
-		ret = Text_AutoWrap_Paint_Chunk(x, y, width, scale, color, (char *)ret, adjust, 0, style, qtrue, NULL);
-		i++;
-	} while (ret < end);
-
-	return i;
-}
-
-void Text_AutoWrap_Paint(float x, float y, int width, int height, float scale, vec4_t color, const char *l_text, float adjust, int style) {
-	char   text[1024];
-	char   *ret, *end, *next;
-	char   s;
-	vec4_t aux_color, next_color;
-
-	Q_strncpyz(text, l_text, sizeof (text) - 1);
-	ret = text;
-	end = text + strlen(text);
-	memcpy(&aux_color[0], &color[0], sizeof (vec4_t));
-
-	do {
-		// one run to get the word wrap
-		next = Text_AutoWrap_Paint_Chunk(x, y, width, scale, aux_color, ret, adjust, 0, style, qtrue, next_color);
-		// now print - hack around a bit to avoid the word wrapped chars
-		s = *next; *next = '\0';
-		Text_Paint(x, y, scale, aux_color, ret, adjust, 0, style);
-		*next = s;
-		ret   = next;
-		memcpy(&aux_color[0], &next_color[0], sizeof (vec4_t));
-		y += height;
-	} while (ret < end);
-}
-
 void Text_PaintWithCursor(float x, float y, float scale, vec4_t color, const char *text, int cursorPos, char cursor, int limit, int style) {
 	int         len, count;
 	vec4_t      newColor;
@@ -802,14 +654,6 @@ _UI_Refresh
 =================
 */
 
-void UI_DrawCenteredPic(qhandle_t image, int w, int h) {
-	int x, y;
-
-	x = (SCREEN_WIDTH - w) / 2;
-	y = (SCREEN_HEIGHT - h) / 2;
-	UI_DrawHandlePic(x, y, w, h, image);
-}
-
 int frameCount = 0;
 int startTime;
 
@@ -881,29 +725,6 @@ _UI_Shutdown
 */
 void _UI_Shutdown(void) {
 	trap_LAN_SaveCachedServers();
-}
-
-char *GetMenuBuffer(const char *filename) {
-	int          len;
-	fileHandle_t f;
-	static char  buf[MAX_MENUFILE];
-
-	len = trap_FS_FOpenFile(filename, &f, FS_READ);
-	if (!f) {
-		trap_Print(va(S_COLOR_RED "menu file not found: %s, using default\n", filename));
-		return NULL;
-	}
-	if (len >= MAX_MENUFILE) {
-		trap_Print(va(S_COLOR_RED "menu file too large: %s is %i, max allowed is %i", filename, len, MAX_MENUFILE));
-		trap_FS_FCloseFile(f);
-		return NULL;
-	}
-
-	trap_FS_Read(buf, len, f);
-	buf[len] = 0;
-	trap_FS_FCloseFile(f);
-	return buf;
-
 }
 
 qboolean Asset_Parse(int handle) {
@@ -5236,16 +5057,6 @@ void _UI_MouseEvent(int dx, int dy) {
 	}
 
 }
-
-void UI_LoadNonIngame() {
-	const char *menuSet = UI_Cvar_VariableString("ui_menuFiles");
-
-	if (menuSet == NULL || menuSet[0] == '\0') {
-		menuSet = "ui/menus.txt";
-	}
-	UI_LoadMenus(menuSet, qfalse);
-}
-
 
 //----(SA)	added
 static uiMenuCommand_t menutype = UIMENU_NONE;
