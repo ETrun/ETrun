@@ -1,10 +1,15 @@
 #! /bin/bash
 
 #
+# TODO
+# -check script is started from etrun root dir
+#
+
+#
 # Settings (do not edit)
 #
 USE_API=0
-DEDICATED=1
+CLIENT_MODE=0
 DEVELOPER=0
 OSX_CONFIG_FILE='osx.config'
 LINUX_CONFIG_FILE='linux.config'
@@ -12,12 +17,13 @@ OTHER_CONFIG_FILE='other.config'
 USE_ETL=0
 USE_VALGRIND=0
 USE_DEBUGGER=0
+INSTALL_FILES=''
 
 #
 # Parse options
 #
 function parse_options() {
-	while getopts ":ahdm:cvlg" opt; do
+	while getopts ":ahdm:cvlgi:" opt; do
 	  	case $opt in
 		  	h)
 				show_usage
@@ -27,13 +33,17 @@ function parse_options() {
 				USE_API=1
 				;;
 			c)
-				DEDICATED=0
+				CLIENT_MODE=1
 				;;
 			d)
 				DEVELOPER=1
 				;;
 			g)
 				USE_DEBUGGER=1
+				;;
+			i)
+				INSTALL_FILES=$OPTARG
+				echo "INSTALL_FILES = $INSTALL_FILES"
 				;;
 			l)
 				USE_ETL=1
@@ -55,13 +65,14 @@ function parse_options() {
 # Show usage
 #
 function show_usage() {
-	echo 'Usage: '`basename $0` ' [options...]'
+	echo 'Usage: '`basename $0` ' [options...]'
 	echo 'Options:'
 	echo ' -a 		Use API'
 	echo ' -c		Start game in client mode'
 	echo ' -d 		Enable DEVELOPER mode'
 	echo ' -g 		Start game with a debugger'
 	echo ' -h		Show this help'
+	echo ' -i PK3NAME	Install the pk3 given in argument, qagame and custommapscripts into homepath'
 	echo ' -l		Use ET: Legacy'
 	echo ' -m MAPNAME	Set map'
 	echo ' -v 		Use Valgrind to check memory leaks'
@@ -109,22 +120,6 @@ function clean_game() {
 }
 
 #
-# Make pk3 function
-#
-function make_pk3() {
-	cp -f build/$mod_name/$cgame_name $mod_name
-	cp -f build/$mod_name/$ui_name $mod_name
-	rm -f $pk3_name
-	cd $mod_name
-	zip -qr ../$pk3_name *
-	rm -f $cgame_name
-	rm -f $ui_name
-	rm -f $qagame_name
-	rm -f $APImodule_name
-	cd ..
-}
-
-#
 # Install mod function
 #
 function install() {
@@ -132,7 +127,7 @@ function install() {
 	if [ $USE_ETL -eq 1 ]; then
 		HOMEPATH=$etl_home_path
 		BASEPATH=$etl_base_path
-		if [ $DEDICATED -eq 1 ]; then
+		if [ $CLIENT_MODE -eq 0 ]; then
 			GAME_PATH=$etl_dedicated_binary_path
 		else
 			GAME_PATH=$etl_binary_path
@@ -140,22 +135,46 @@ function install() {
 	else
 		HOMEPATH=$et_home_path
 		BASEPATH=$et_base_path
-		if [ $DEDICATED -eq 1 ]; then
+		if [ $CLIENT_MODE -eq 0 ]; then
 			GAME_PATH=$et_dedicated_binary_path
 		else
 			GAME_PATH=$et_binary_path
 		fi
 	fi
 
-	# Make etrun/ dir
+	# Make etrun/ dir in homepath
 	mkdir -p $HOMEPATH/$mod_name
 
-	# Install client files
-	cp -f $pk3_name $HOMEPATH/$mod_name
+	# Install pk3, qagame and custommapscripts
+	if [ ! -z $INSTALL_FILES ]; then
+		# Check argument
+		if [ ! -f build/$INSTALL_FILES ]; then
+			echo '[ko]'
+			echo "Error: cannot find build/$INSTALL_FILES"
+			exit 1
+		fi
 
-	# Install server files
-	cp -f build/$mod_name/$qagame_name $HOMEPATH/$mod_name
+		# Install pk3 into homepath
+		cp -f build/$INSTALL_FILES $HOMEPATH/$mod_name
+		if [ $? -ne 0 ]; then
+			echo '[ko]'
+			echo "Error: failed to install build/$INSTALL_FILES into $HOMEPATH/$mod_name"
+			exit 1
+		fi
 
+		# Install qagame into homepath
+		cp -f build/$mod_name/$qagame_name $HOMEPATH/$mod_name
+		if [ $? -ne 0 ]; then
+			echo '[ko]'
+			echo "Error: failed to install build/$mod_name/$qagame_name into $HOMEPATH/$mod_name"
+			exit 1
+		fi
+		# Install custom mapscripts into homepath
+		mkdir -p $HOMEPATH/$mod_name/custommapscripts
+		cp -f $mod_name/custommapscripts/* $HOMEPATH/$mod_name/custommapscripts
+	fi
+
+	# Install API
 	if [ $USE_API -eq 1 ]; then
 		cp -f build/$mod_name/$APImodule_name $HOMEPATH/$mod_name 2> /dev/null
 		if [ $? -ne 0 ]; then
@@ -164,13 +183,6 @@ function install() {
 			exit 1
 		fi
 	fi
-
-	# Clean
-	rm -f $pk3_name
-
-	# Install custom mapscripts
-	mkdir -p $HOMEPATH/$mod_name/custommapscripts
-	cp -f $mod_name/custommapscripts/* $HOMEPATH/$mod_name/custommapscripts
 }
 
 #
@@ -184,7 +196,7 @@ function print_summary() {
 	echo "Base path: $BASEPATH"
 	echo "Home path: $HOMEPATH"
 
-	if [ $DEDICATED -eq 0 ]; then
+	if [ $CLIENT_MODE -eq 1 ]; then
 		echo 'Game mode: CLIENT'
 	else
 		echo 'Game mode: SERVER'
@@ -219,7 +231,12 @@ function print_summary() {
 }
 
 function start_game() {
-	GAME_ARGS="+set fs_game $mod_name +set fs_basePath $BASEPATH +set fs_homePath $HOMEPATH +set dedicated $DEDICATED +set g_useAPI $USE_API +set g_APImodulePath $HOMEPATH/$mod_name/$APImodule_name +set developer $DEVELOPER +map $default_map +set com_hunkMegs 128"
+	GAME_ARGS="+set fs_game $mod_name +set fs_basePath $BASEPATH +set fs_homePath $HOMEPATH +set g_useAPI $USE_API +set g_APImodulePath $HOMEPATH/$mod_name/$APImodule_name +set developer $DEVELOPER +map $default_map +set com_hunkMegs 128"
+
+	# Workaround for OSX where there isn't ETDED binary
+	if [[ $OS == "Darwin" && $CLIENT_MODE -eq 0 ]]; then
+		GAME_ARGS="$GAME_ARGS +set dedicated 1"
+	fi
 
 	if [ $USE_VALGRIND -eq 1 ]; then
 		$valgrind_command_line $GAME_PATH $GAME_ARGS
@@ -239,10 +256,6 @@ parse_options "$@"
 
 echo -n ' Cleaning game...'
 clean_game
-echo '[ok]'
-
-echo -n ' Building pk3...'
-make_pk3
 echo '[ok]'
 
 echo -n ' Installing files...'
