@@ -1819,8 +1819,6 @@ void PM_Weapon(void) {
 		break;      // no animation
 
 	default:
-		// RF, testing
-//			PM_ContinueWeaponAnim(weapattackanim);
 		PM_StartWeaponAnim(weapattackanim);
 		break;
 	}
