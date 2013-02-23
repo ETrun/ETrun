@@ -4,7 +4,7 @@
 #define API_INTERFACE_NAME "API_query"
 #define API_INIT_NAME "API_init"
 #define API_CLEAN_NAME "API_clean"
-#define RESPONSE_MAX_SIZE 2048
+#define RESPONSE_MAX_SIZE 4096// Nico, note: 2048 is too low for maps like shorties
 #define QUERY_MAX_SIZE 1024
 #define CHAR_SEPARATOR "/"
 #define THREADS_MAX 32  // Maximum threads at the same time
