@@ -43,7 +43,6 @@ function parse_options() {
 				;;
 			i)
 				INSTALL_FILES=$OPTARG
-				echo "INSTALL_FILES = $INSTALL_FILES"
 				;;
 			l)
 				USE_ETL=1
