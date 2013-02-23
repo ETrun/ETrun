@@ -1444,7 +1444,12 @@ void CG_RegisterWeapon(int weaponNum, qboolean force) {
 	case WP_AKIMBO_COLT:            filename = "akimbo_colt.weap"; break;
 	case WP_AKIMBO_SILENCEDCOLT:    filename = "akimbo_silenced_colt.weap"; break;
 	case WP_MAPMORTAR:              filename = "mapmortar.weap"; break;     // do we really need this?
-	case WP_ARTY:                   return;     // to shut the game up
+	case WP_ARTY:// 13
+	case VERYBIGEXPLOSION:// 18
+	case WP_TRIPMINE:// 29
+	case WP_DUMMY_MG42:// 34
+	case WP_LOCKPICK:// 36
+	return;     // to shut the game up
 	default:                        CG_Printf(S_COLOR_RED "WARNING: trying to register weapon %i but there is no weapon file entry for it.\n", weaponNum); return;
 	}
 
