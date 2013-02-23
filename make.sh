@@ -113,7 +113,7 @@ function build() {
 		if [ $VERBOSE -eq 1 ]; then
 			APIMODULE_BUILD_PARAMS="$APIMODULE_BUILD_PARAMS -v"
 		fi
-		./build.sh $APIMODULE_BUILD_PARAMS
+		./make.sh $APIMODULE_BUILD_PARAMS
 
 		cd ../../$BUILD_DIR
 	fi
@@ -226,7 +226,7 @@ function make_pk3() {
 	# Delete previous pk3 if any
 	rm -f $PK3_NAME
 	cd $MOD_NAME
-	zip -9qr ../$PK3_NAME * -x custommapscripts\* qagame\*
+	zip -9qr ../$PK3_NAME * -x custommapscripts\* qagame\* APImodule\*
 	cd ../..
 }
 
