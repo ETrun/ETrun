@@ -251,7 +251,8 @@ function start_game() {
 		$debugger_command_line $GAME_PATH $GAME_ARGS
 	else
 		echo $GAME_PATH $GAME_ARGS
-		$GAME_PATH $GAME_ARGS
+		read -p 'Press ENTER to start game...'
+		eval "$GAME_PATH $GAME_ARGS"
 	fi
 }
 
@@ -278,5 +279,4 @@ fi
 
 print_summary
 
-read -p 'Press ENTER to start game...'
 start_game
