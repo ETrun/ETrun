@@ -183,68 +183,6 @@ gentity_t *G_TestEntityPosition(gentity_t *ent) {
 }
 
 /*
-============
-G_TestEntityDropToFloor
-
-============
-*/
-void G_TestEntityDropToFloor(gentity_t *ent, float maxdrop) {
-	trace_t tr;
-	int     mask;
-	vec3_t  endpos;
-
-	if (ent->clipmask) {
-		mask = ent->clipmask;
-	} else {
-		mask = MASK_SOLID;
-	}
-	if (ent->client) {
-		VectorCopy(ent->client->ps.origin, endpos);
-	} else {
-		VectorCopy(ent->s.pos.trBase, endpos);
-	}
-
-	endpos[2] -= maxdrop;
-	if (ent->client) {
-		trap_TraceCapsule(&tr, ent->client->ps.origin, ent->r.mins, ent->r.maxs, endpos, ent->s.number, mask);
-	} else {
-		trap_Trace(&tr, ent->s.pos.trBase, ent->r.mins, ent->r.maxs, endpos, ent->s.number, mask);
-	}
-
-	VectorCopy(tr.endpos, ent->s.pos.trBase);
-	if (ent->client) {
-		VectorCopy(tr.endpos, ent->client->ps.origin);
-	}
-}
-
-/*
-============
-G_TestEntityMoveTowardsPos
-
-============
-*/
-void G_TestEntityMoveTowardsPos(gentity_t *ent, vec3_t pos) {
-	trace_t tr;
-	int     mask;
-
-	if (ent->clipmask) {
-		mask = ent->clipmask;
-	} else {
-		mask = MASK_SOLID;
-	}
-	if (ent->client) {
-		trap_TraceCapsule(&tr, ent->client->ps.origin, ent->r.mins, ent->r.maxs, pos, ent->s.number, mask);
-	} else {
-		trap_Trace(&tr, ent->s.pos.trBase, ent->r.mins, ent->r.maxs, pos, ent->s.number, mask);
-	}
-
-	VectorCopy(tr.endpos, ent->s.pos.trBase);
-	if (ent->client) {
-		VectorCopy(tr.endpos, ent->client->ps.origin);
-	}
-}
-
-/*
 ==================
 G_TryPushingEntity
 
@@ -3676,8 +3614,6 @@ void SP_target_effect(gentity_t *ent) {
 	}
 }
 
-
-
 /*
 ===============================================================================
 
@@ -3686,20 +3622,6 @@ EXPLOSIVE
   Will move.
 ===============================================================================
 */
-
-
-/*
-==============
-ThrowDebris
-==============
-*/
-void ThrowDebris(gentity_t *self, char *modelname, float speed, vec3_t origin) {
-	// Nico, silent GCC
-	self      = self;
-	modelname = modelname;
-	speed     = speed;
-	origin    = origin;
-}
 
 /*
 ==============
@@ -3717,8 +3639,6 @@ void BecomeExplosion(gentity_t *self) {
 
 	G_FreeEntity(self);
 }
-
-
 
 /*
 ==============

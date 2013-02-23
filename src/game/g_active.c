@@ -1035,56 +1035,6 @@ void SpectatorClientEndFrame(gentity_t *ent) {
 	}
 }
 
-
-// DHM - Nerve :: After reviving a player, their contents stay CONTENTS_CORPSE until it is determined
-//					to be safe to return them to PLAYERSOLID
-
-qboolean StuckInClient(gentity_t *self) {
-	int       i;
-	vec3_t    hitmin, hitmax;
-	vec3_t    selfmin, selfmax;
-	gentity_t *hit;
-
-	for (i = 0; i < level.numConnectedClients; i++) {
-		hit = g_entities + level.sortedClients[i];
-
-		if (!hit->inuse || hit == self || !hit->client ||
-		    !hit->s.solid || hit->health <= 0) {
-			continue;
-		}
-
-		VectorAdd(hit->r.currentOrigin, hit->r.mins, hitmin);
-		VectorAdd(hit->r.currentOrigin, hit->r.maxs, hitmax);
-		VectorAdd(self->r.currentOrigin, self->r.mins, selfmin);
-		VectorAdd(self->r.currentOrigin, self->r.maxs, selfmax);
-
-		if (hitmin[0] > selfmax[0]) {
-			continue;
-		}
-		if (hitmax[0] < selfmin[0]) {
-			continue;
-		}
-		if (hitmin[1] > selfmax[1]) {
-			continue;
-		}
-		if (hitmax[1] < selfmin[1]) {
-			continue;
-		}
-		if (hitmin[2] > selfmax[2]) {
-			continue;
-		}
-		if (hitmax[2] < selfmin[2]) {
-			continue;
-		}
-
-		return(qtrue);
-	}
-
-	return(qfalse);
-}
-
-extern vec3_t playerMins, playerMaxs;
-
 /*
 ==============
 ClientEndFrame

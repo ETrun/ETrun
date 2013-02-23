@@ -1129,16 +1129,7 @@ Returns qtrue if the inflictor can directly damage the target.  Used for
 explosions and melee attacks.
 ============
 */
-
-void G_RailTrail(vec_t *start, vec_t *end) {
-	gentity_t *temp = G_TempEntity(start, EV_RAILTRAIL);
-
-	VectorCopy(end, temp->s.origin2);
-	temp->s.dmgFlags = 0;
-}
-
 #define MASK_CAN_DAMAGE     (CONTENTS_SOLID | CONTENTS_BODY)
-
 qboolean CanDamage(gentity_t *targ, vec3_t origin) {
 	vec3_t  dest;
 	trace_t tr;

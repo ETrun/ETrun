@@ -45,7 +45,6 @@ void CrashLog(const char *s, qboolean printIt) {
 extern char *strsignal(int __sig) __THROW;
 
 //use sigaction instead.
-__sighandler_t INTHandler(int signal, struct sigcontext ctx);
 void CrashHandler(int signal, siginfo_t *siginfo, ucontext_t *ctx);
 void             (*OldHandler)(int signal);
 struct sigaction oldact[NSIG];
@@ -72,11 +71,6 @@ void installcrashhandler() {
 
 void restorecrashhandler() {
 	sigaction(SIGSEGV, &oldact[SIGSEGV], NULL);
-}
-
-void installinthandler() {
-	// Trap Ctrl-C
-	signal(SIGINT, (void *)INTHandler);
 }
 
 void linux_siginfo(int signal, siginfo_t *siginfo) {
@@ -111,14 +105,19 @@ void linux_dsoinfo() {
         }
     }
 
+    CrashLog("DSO Information:\n", qtrue);
+
+    if (rdebug == NULL) {
+    	CrashLog("rdebug = NULL\n", qtrue);
+    	return;
+    }
+
     linkmap = rdebug->r_map;
 
     //rewind to top item.
     while (linkmap->l_prev) {
         linkmap=linkmap->l_prev;
 	}
-
-    CrashLog("DSO Information:\n", qtrue);
 
     while (linkmap) {
         if (linkmap->l_addr) {
@@ -178,17 +177,6 @@ void linux_backtrace(ucontext_t *ctx) {
 		CrashLog(va("(%i) %s\n", i, strings[i]), qtrue);
 
 	free(strings);
-}
-
-__sighandler_t INTHandler(int signal, struct sigcontext ctx) {
-	// Nico, silent GCC
-	signal = signal;
-	ctx    = ctx;
-
-	CrashLog("------------------------------------------------\n", qtrue);
-	CrashLog("Ctrl-C is not the proper way to kill the server.\n", qtrue);
-	CrashLog("------------------------------------------------\n", qtrue);
-	return 0;
 }
 
 void CrashHandler(int signal, siginfo_t *siginfo, ucontext_t *ctx) {

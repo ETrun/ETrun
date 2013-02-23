@@ -33,17 +33,6 @@ If you have questions concerning this license or the applicable additional terms
 #include "../../etrun/ui/menudef.h" // For vote options
 #include "g_api.h"
 
-#define T_FFA   0x01
-#define T_1V1   0x02
-#define T_SP    0x04
-#define T_TDM   0x08
-#define T_CTF   0x10
-#define T_WLF   0x20
-#define T_WSW   0x40
-#define T_WCP   0x80
-#define T_WCH   0x100
-
-
 static const char *ACTIVATED   = "ACTIVATED";
 static const char *DEACTIVATED = "DEACTIVATED";
 static const char *ENABLED     = "ENABLED";
@@ -55,7 +44,6 @@ static const char *DISABLED    = "DISABLED";
 //	2. Add implementation for attempt and success (see an existing command for an example)
 //
 typedef struct {
-	unsigned int dwGameTypes;
 	const char *pszVoteName;
 	int (*pVoteCommand)(gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd);
 	const char *pszVoteMessage;
@@ -65,18 +53,18 @@ typedef struct {
 // VC optimizes for dup strings :)
 static const vote_reference_t aVoteInfo[] =
 {
-	{ 0x1ff, "kick",       G_Kick_v,       "KICK",            " <player_id>^7\n  Attempts to kick player from server"             },
-	{ 0x1ff, "mute",       G_Mute_v,       "MUTE",            " <player_id>^7\n  Removes the chat capabilities of a player"       },
-	{ 0x1ff, "unmute",     G_UnMute_v,     "UN-MUTE",         " <player_id>^7\n  Restores the chat capabilities of a player"      },
-	{ 0x1ff, "map",        G_Map_v,        "Change map to",   " <mapname>^7\n  Votes for a new map to be loaded"                  },
-	{ 0x1ff, "maprestart", G_MapRestart_v, "Map Restart",     "^7\n  Restarts the current map in progress"                        },
-	{ 0x1ff, "matchreset", G_MatchReset_v, "Match Reset",     "^7\n  Resets the entire match"                                     },
-	{ 0x1ff, "randommap",  G_Randommap_v,  "Load Random Map", "^7\n  Loads a random map"                                          },
-	{ 0x1ff, "referee",    G_Referee_v,    "Referee",         " <player_id>^7\n  Elects a player to have admin abilities"         },
-	{ 0x1ff, "startmatch", G_StartMatch_v, "Start Match",     " ^7\n  Sets all players to \"ready\" status to start the match"    },
-	{ 0x1ff, "unreferee",  G_Unreferee_v,  "UNReferee",       " <player_id>^7\n  Elects a player to have admin abilities removed" },
-	{ 0x1ff, "antilag",    G_AntiLag_v,    "Anti-Lag",        " <0|1>^7\n  Toggles Anit-Lag on the server"                        },
-	{ 0,     0,            NULL,           0,                 NULL                                                                }
+	{ "kick",       G_Kick_v,       "KICK",            " <player_id>^7\n  Attempts to kick player from server"             },
+	{ "mute",       G_Mute_v,       "MUTE",            " <player_id>^7\n  Removes the chat capabilities of a player"       },
+	{ "unmute",     G_UnMute_v,     "UN-MUTE",         " <player_id>^7\n  Restores the chat capabilities of a player"      },
+	{ "map",        G_Map_v,        "Change map to",   " <mapname>^7\n  Votes for a new map to be loaded"                  },
+	{ "maprestart", G_MapRestart_v, "Map Restart",     "^7\n  Restarts the current map in progress"                        },
+	{ "matchreset", G_MatchReset_v, "Match Reset",     "^7\n  Resets the entire match"                                     },
+	{ "randommap",  G_Randommap_v,  "Load Random Map", "^7\n  Loads a random map"                                          },
+	{ "referee",    G_Referee_v,    "Referee",         " <player_id>^7\n  Elects a player to have admin abilities"         },
+	{ "startmatch", G_StartMatch_v, "Start Match",     " ^7\n  Sets all players to \"ready\" status to start the match"    },
+	{ "unreferee",  G_Unreferee_v,  "UNReferee",       " <player_id>^7\n  Elects a player to have admin abilities removed" },
+	{ "antilag",    G_AntiLag_v,    "Anti-Lag",        " <0|1>^7\n  Toggles Anit-Lag on the server"                        },
+	{ 0,            NULL,           0,                 NULL                                                                }
 };
 
 
@@ -238,19 +226,7 @@ int G_voteProcessOnOff(gentity_t *ent, char *arg, char *arg2, qboolean fRefereeC
 //
 void G_voteSetOnOff(const char *desc, const char *cvar) {
 	AP(va("cpm \"^3%s is: ^5%s\n\"", desc, (atoi(level.voteInfo.vote_value)) ? ENABLED : DISABLED));
-	//trap_SendConsoleCommand(EXEC_APPEND, va("%s %s\n", cvar, level.voteInfo.vote_value));
 	trap_Cvar_Set(cvar, level.voteInfo.vote_value);
-}
-
-void G_voteSetValue(const char *desc, const char *cvar) {
-	AP(va("cpm \"^3%s set to: ^5%s\n\"", desc, level.voteInfo.vote_value));
-	//trap_SendConsoleCommand(EXEC_APPEND, va("%s %s\n", cvar, level.voteInfo.vote_value));
-	trap_Cvar_Set(cvar, level.voteInfo.vote_value);
-}
-
-void G_voteSetVoteString(const char *desc) {
-	AP(va("print \"^3%s set to: ^5%s\n\"", desc, level.voteInfo.vote_value));
-	trap_SendConsoleCommand(EXEC_APPEND, va("%s\n", level.voteInfo.voteString));
 }
 
 // *** Player Kick ***

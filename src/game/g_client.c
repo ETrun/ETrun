@@ -253,52 +253,6 @@ BODYQUE
 */
 
 /*
-=============
-BodyUnlink
-
-Called by BodySink
-=============
-*/
-void BodyUnlink(gentity_t *ent) {
-	trap_UnlinkEntity(ent);
-	ent->physicsObject = qfalse;
-}
-
-/*
-=============
-BodySink
-
-After sitting around for five seconds, fall into the ground and dissapear
-=============
-*/
-void BodySink2(gentity_t *ent) {
-	ent->physicsObject = qfalse;
-	ent->nextthink     = level.time + BODY_TIME(BODY_TEAM(ent)) + 1500;
-	ent->think         = BodyUnlink;
-	ent->s.pos.trType  = TR_LINEAR;
-	ent->s.pos.trTime  = level.time;
-	VectorCopy(ent->r.currentOrigin, ent->s.pos.trBase);
-	VectorSet(ent->s.pos.trDelta, 0, 0, -8);
-}
-
-/*
-=============
-BodySink
-
-After sitting around for five seconds, fall into the ground and dissapear
-=============
-*/
-void BodySink(gentity_t *ent) {
-	if (ent->activator) {
-		ent->activator = NULL;
-	}
-
-	BodySink2(ent);
-}
-//======================================================================
-
-
-/*
 ==================
 SetClientViewAngle
 
@@ -315,16 +269,6 @@ void SetClientViewAngle(gentity_t *ent, vec3_t angle) {
 		ent->client->ps.delta_angles[i] = cmdAngle - ent->client->pers.cmd.angles[i];
 	}
 	VectorCopy(angle, ent->s.angles);
-	VectorCopy(ent->s.angles, ent->client->ps.viewangles);
-}
-
-void SetClientViewAnglePitch(gentity_t *ent, vec_t angle) {
-	int cmdAngle;
-
-	cmdAngle                            = ANGLE2SHORT(angle);
-	ent->client->ps.delta_angles[PITCH] = cmdAngle - ent->client->pers.cmd.angles[PITCH];
-
-	ent->s.angles[PITCH] = 0;
 	VectorCopy(ent->s.angles, ent->client->ps.viewangles);
 }
 
@@ -1380,47 +1324,6 @@ void ClientBegin(int clientNum) {
 	}
 
 	G_LogPrintf("ClientBegin: %i\n", clientNum);
-}
-
-gentity_t *SelectSpawnPointFromList(char *list, vec3_t spawn_origin, vec3_t spawn_angles) {
-	char      *pStr, *token;
-	gentity_t *spawnPoint = NULL, *trav;
-
-#define MAX_SPAWNPOINTFROMLIST_POINTS   16
-	int valid[MAX_SPAWNPOINTFROMLIST_POINTS];
-	int numValid;
-
-	memset(valid, 0, sizeof (valid));
-	numValid = 0;
-
-	pStr = list;
-	while ((token = COM_Parse(&pStr)) != NULL && token[0]) {
-		trav = g_entities + level.maxclients;
-		while ((trav = G_FindByTargetname(trav, token)) != NULL) {
-			if (!spawnPoint) {
-				spawnPoint = trav;
-			}
-			if (!SpotWouldTelefrag(trav)) {
-				valid[numValid++] = trav->s.number;
-				if (numValid >= MAX_SPAWNPOINTFROMLIST_POINTS) {
-					break;
-				}
-			}
-		}
-	}
-
-	if (numValid) {
-		spawnPoint = &g_entities[valid[rand() % numValid]];
-
-		// Set the origin of where the bot will spawn
-		VectorCopy(spawnPoint->r.currentOrigin, spawn_origin);
-		spawn_origin[2] += 9;
-
-		// Set the angle we'll spawn in to
-		VectorCopy(spawnPoint->s.angles, spawn_angles);
-	}
-
-	return spawnPoint;
 }
 
 /*

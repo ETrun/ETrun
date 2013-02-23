@@ -1215,29 +1215,6 @@ void G_wipeCvars(void) {
 	G_UpdateCvars();
 }
 
-//bani - #113
-#define SNIPSIZE 250
-
-//copies max num chars from beginning of dest into src and returns pointer to new src
-char *strcut(char *dest, char *src, int num) {
-	int i;
-
-	if (!dest || !src || !num) {
-		return NULL;
-	}
-	for (i = 0 ; i < num ; i++) {
-		if ((char)*src) {
-			*dest = *src;
-			dest++;
-			src++;
-		} else {
-			break;
-		}
-	}
-	*dest = (char)0;
-	return src;
-}
-
 /*
 ============
 G_InitGame

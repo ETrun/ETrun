@@ -642,12 +642,6 @@ void target_relay_use(gentity_t *self, gentity_t *other, gentity_t *activator) {
 	G_UseTargets(self, activator);
 }
 
-
-void relay_AIScript_AlertEntity(gentity_t *self) {
-	G_UseEntity(self, NULL, NULL);
-}
-
-
 /*
 ==============
 SP_target_relay

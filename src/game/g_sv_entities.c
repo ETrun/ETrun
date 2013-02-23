@@ -166,39 +166,6 @@ g_serverEntity_t *FindServerEntity(g_serverEntity_t *from, int fieldofs, char *m
 	return NULL;
 }
 
-// Create a server entity from some basic data
-void CreateServerEntityFromData(char *classname, char *targetname, char *target, vec3_t origin, int spawnflags, vec3_t angle) {
-	// get the entity out of our pool
-	g_serverEntity_t *newEnt = GetFreeServerEntity();
-
-	// if we managed to get one, copy over data
-	if (newEnt) {
-		// G_NewString crashes if you pass in NULL, so let's check...
-		if (classname) {
-			newEnt->classname = G_NewString(classname);
-		}
-
-		if (targetname) {
-			newEnt->name = G_NewString(targetname);
-		}
-
-		if (target) {
-			newEnt->target = G_NewString(target);
-		}
-
-		newEnt->spawnflags = spawnflags;
-		//newEnt->team = ent->aiTeam;
-		VectorCopy(origin, newEnt->origin);
-		VectorCopy(angle, newEnt->angles);
-		// DON'T set the number - that should have been set when it was spawned
-
-		// set the areanum to -1, which means we haven't calculated it yet
-		//		these don't move, so we should only have to calc it once, the first
-		//		time someone asks for it
-		newEnt->areaNum = -1;
-	}
-}
-
 // TAT - create the server entities for the current map
 void CreateMapServerEntities() {
 	char info[1024];

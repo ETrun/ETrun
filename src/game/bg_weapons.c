@@ -7,12 +7,6 @@
 
 #include "bg_local.h"
 
-// JPW NERVE -- stuck this here so it can be seen client & server side
-float Com_GetFlamethrowerRange(void) {
-	return 2500; // multiplayer range is longer for balance
-}
-// jpw
-
 int PM_IdleAnimForWeapon(int weapon) {
 	switch (weapon) {
 	case WP_GPG40:

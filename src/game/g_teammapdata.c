@@ -30,37 +30,6 @@ If you have questions concerning this license or the applicable additional terms
 
 /*
 ===================
-G_PushMapEntityToBuffer
-===================
-*/
-void G_PushMapEntityToBuffer(char *buffer, int size, mapEntityData_t *mEnt) {
-	char buf[32];
-
-	if (level.ccLayers) {
-		Com_sprintf(buf, sizeof (buf), "%i %i %i", ((int)mEnt->org[0]) / 128, ((int)mEnt->org[1]) / 128, ((int)mEnt->org[2]) / 128);
-	} else {
-		Com_sprintf(buf, sizeof (buf), "%i %i", ((int)mEnt->org[0]) / 128, ((int)mEnt->org[1]) / 128);
-	}
-
-	switch (mEnt->type) {
-	case ME_CONSTRUCT:     // Gordon: these ones don't need much info
-	case ME_DESTRUCT:
-	case ME_DESTRUCT_2:
-	case ME_COMMANDMAP_MARKER:
-		Q_strcat(buffer, size, va(" %i %i", mEnt->type, mEnt->data));
-		break;
-	case ME_TANK:
-	case ME_TANK_DEAD:
-		Q_strcat(buffer, size, va(" %i %s %i", mEnt->type, buf, mEnt->data));
-		break;
-	default:
-		Q_strcat(buffer, size, va(" %i %s %i %i", mEnt->type, buf, mEnt->yaw, mEnt->data));
-		break;
-	}
-}
-
-/*
-===================
 G_InitMapEntityData
 ===================
 */

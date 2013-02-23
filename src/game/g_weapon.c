@@ -960,12 +960,6 @@ void AutoBuildConstruction(gentity_t *constructible) {
 		constructible->s.angles2[1] = 1;
 	}
 
-	// unlink the objective info to get rid of the indicator for now
-	// Arnout: don't unlink, we still want the location popup. Instead, constructible_indicator_think got changed to free
-	// the indicator when the constructible is constructed
-//			if( constructible->parent )
-//				trap_UnlinkEntity( constructible->parent );
-
 	G_SetEntState(constructible, STATE_DEFAULT);
 
 	// make destructable
@@ -999,8 +993,6 @@ void AutoBuildConstruction(gentity_t *constructible) {
 	} else {
 		constructible->s.loopSound = 0;
 	}
-
-	//ent->client->ps.classWeaponTime = level.time; // Out of "ammo"
 
 	// if not invulnerable and dynamite-able, create a 'destructable' marker for the other team
 	if (!(constructible->spawnflags & CONSTRUCTIBLE_INVULNERABLE) && (constructible->constructibleStats.weaponclass >= 1)) {
@@ -1653,8 +1645,6 @@ extern void G_ExplodeMissile(gentity_t *ent);
 #define BOMBSPREAD 150
 extern void G_SayTo(gentity_t *ent, gentity_t *other, int mode, int color, const char *name, const char *message, qboolean localize, qboolean encoded);
 
-void G_RailTrail(vec_t *start, vec_t *end);
-
 void G_GlobalClientEvent(int event, int param, int client) {
 	gentity_t *tent = G_TempEntity(vec3_origin, event);
 
@@ -1895,60 +1885,6 @@ float G_GetWeaponSpread(int weapon) {
 #define K43SCOPE_SPREAD G_GetWeaponSpread(WP_K43_SCOPE)
 #define K43SCOPE_DAMAGE G_GetWeaponDamage(WP_K43_SCOPE)
 
-void RubbleFlagCheck(gentity_t *ent, trace_t tr) {
-	qboolean is_valid = qfalse;
-	int      type     = 0;
-
-	// (SA) moving client-side
-
-	return;
-
-
-
-
-	if (tr.surfaceFlags & SURF_RUBBLE || tr.surfaceFlags & SURF_GRAVEL) {
-		is_valid = qtrue;
-		type     = 4;
-	} else if (tr.surfaceFlags & SURF_METAL) {
-//----(SA)	removed
-//		is_valid = qtrue;
-//		type = 2;
-	} else if (tr.surfaceFlags & SURF_WOOD) {
-		is_valid = qtrue;
-		type     = 1;
-	}
-
-	if (is_valid && ent->client && (ent->client->ps.persistant[PERS_HWEAPON_USE])) {
-		if (rand() % 100 > 75) {
-			gentity_t *sfx;
-			vec3_t    start;
-			vec3_t    dir;
-
-			sfx = G_Spawn();
-
-			sfx->s.density = type;
-
-			VectorCopy(tr.endpos, start);
-
-			VectorCopy(muzzleTrace, dir);
-			VectorNegate(dir, dir);
-
-			G_SetOrigin(sfx, start);
-			G_SetAngle(sfx, dir);
-
-			G_AddEvent(sfx, EV_SHARD, DirToByte(dir));
-
-			sfx->think     = G_FreeEntity;
-			sfx->nextthink = level.time + 1000;
-
-			sfx->s.frame = 3 + (rand() % 3) ;
-
-			trap_LinkEntity(sfx);
-
-		}
-	}
-}
-
 /*
 ==============
 EmitterCheck
@@ -2073,8 +2009,6 @@ qboolean Bullet_Fire_Extended(gentity_t *source, gentity_t *attacker, vec3_t sta
 		VectorCopy(tr.endpos, tent->s.origin2);
 		tent->s.otherEntityNum2 = attacker->s.number;
 	}
-
-	RubbleFlagCheck(attacker, tr);
 
 	traceEnt = &g_entities[tr.entityNum];
 
@@ -2644,47 +2578,6 @@ void CalcMuzzlePoints(gentity_t *ent, int weapon) {
 //			they came out of the weap.
 	CalcMuzzlePointForActivate(ent, muzzleTrace);
 	CalcMuzzlePoint(ent, weapon, right, up, muzzleEffect);
-}
-
-qboolean G_PlayerCanBeSeenByOthers(gentity_t *ent) {
-	int       i;
-	gentity_t *ent2;
-	vec3_t    pos[3];
-
-	VectorCopy(ent->client->ps.origin, pos[0]);
-	pos[0][2] += ent->client->ps.mins[2];
-	VectorCopy(ent->client->ps.origin, pos[1]);
-	VectorCopy(ent->client->ps.origin, pos[2]);
-	pos[2][2] += ent->client->ps.maxs[2];
-
-	for (i = 0, ent2 = g_entities; i < level.maxclients; i++, ent2++) {
-		if (!ent2->inuse || ent2 == ent) {
-			continue;
-		}
-
-		if (ent2->client->sess.sessionTeam == TEAM_SPECTATOR) {
-			continue;
-		}
-
-		if (ent2->health <= 0 ||
-		    ent2->client->sess.sessionTeam == ent->client->sess.sessionTeam) {
-			continue;
-		}
-
-		if (ent2->client->ps.eFlags & EF_ZOOMING) {
-			G_SetupFrustum_ForBinoculars(ent2);
-		} else {
-			G_SetupFrustum(ent2);
-		}
-
-		if (G_VisibleFromBinoculars(ent2, ent, pos[0]) ||
-		    G_VisibleFromBinoculars(ent2, ent, pos[1]) ||
-		    G_VisibleFromBinoculars(ent2, ent, pos[2])) {
-			return qtrue;
-		}
-	}
-
-	return qfalse;
 }
 
 /*

@@ -472,7 +472,6 @@ G_GetPlayerByNum
 gclient_t *G_GetPlayerByNum(int clientNum) {
 	gclient_t *cl;
 
-
 	// make sure server is running
 	if (!G_Is_SV_Running()) {
 		return NULL;
@@ -489,19 +488,17 @@ gclient_t *G_GetPlayerByNum(int clientNum) {
 	}
 
 	cl = &level.clients[clientNum];
+
+	if (!cl) {
+		G_Printf("User %d is not on the server\n", clientNum);
+		return NULL;
+	}
+
 	if (cl->pers.connected == CON_DISCONNECTED) {
 		G_Printf("Client %i is not connected\n", clientNum);
 		return NULL;
 	}
-
-	if (cl) {
-		return cl;
-	}
-
-
-	G_Printf("User %d is not on the server\n", clientNum);
-
-	return NULL;
+	return cl;
 }
 
 /*

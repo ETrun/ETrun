@@ -560,58 +560,6 @@ void StopFollowing(gentity_t *ent) {
 	}
 }
 
-int G_NumPlayersWithWeapon(weapon_t weap, team_t team) {
-	int i, j, cnt = 0;
-
-	for (i = 0; i < level.numConnectedClients; i++) {
-		j = level.sortedClients[i];
-
-		if (level.clients[j].sess.playerType != PC_SOLDIER) {
-			continue;
-		}
-
-		if ((int)level.clients[j].sess.sessionTeam != (int)team) {
-			continue;
-		}
-
-		if (level.clients[j].sess.latchPlayerWeapon != (int)weap && level.clients[j].sess.playerWeapon != (int)weap) {
-			continue;
-		}
-
-		cnt++;
-	}
-
-	return cnt;
-}
-
-int G_NumPlayersOnTeam(team_t team) {
-	int i, j, cnt = 0;
-
-	for (i = 0; i < level.numConnectedClients; i++) {
-		j = level.sortedClients[i];
-
-		if (level.clients[j].sess.sessionTeam != team) {
-			continue;
-		}
-
-		cnt++;
-	}
-
-	return cnt;
-}
-
-qboolean G_IsHeavyWeapon(weapon_t weap) {
-	int i;
-
-	for (i = 0; i < NUM_HEAVY_WEAPONS; i++) {
-		if (bg_heavyWeapons[i] == weap) {
-			return qtrue;
-		}
-	}
-
-	return qfalse;
-}
-
 int G_TeamCount(gentity_t *ent, weapon_t weap) {
 	int i, j, cnt;
 
@@ -1612,16 +1560,6 @@ void Cmd_Vote_f(gentity_t *ent) {
 	// a majority will be determined in G_CheckVote, which will also account
 	// for players entering or leaving
 }
-
-
-qboolean G_canPickupMelee(gentity_t *ent) {
-// JPW NERVE -- no "melee" weapons in net play
-	// Nico, silent GCC
-	ent = ent;
-
-	return qfalse;
-}
-// jpw
 
 /*
 =================

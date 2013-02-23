@@ -286,7 +286,6 @@ void G_AddClientToFireteam(int entityNum, int leaderNum) {
 
 		if (i >= 6) {
 			G_ClientPrintAndReturn(entityNum, "Too many players already on this Fireteam");
-			return;
 		}
 
 		if (ft->joinOrder[i] == -1) {

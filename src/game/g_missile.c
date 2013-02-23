@@ -405,25 +405,6 @@ void G_ExplodeMissile(gentity_t *ent) {
 
 /*
 ================
-G_MissileDie
-================
-*/
-void G_MissileDie(gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int damage, int mod) {
-	// Nico, silent GCC
-	attacker = attacker;
-	damage   = damage;
-	mod      = mod;
-
-	if (inflictor == self) {
-		return;
-	}
-	self->takedamage = qfalse;
-	self->think      = G_ExplodeMissile;
-	self->nextthink  = level.time + 10;
-}
-
-/*
-================
 G_RunBomb
 ================
 */

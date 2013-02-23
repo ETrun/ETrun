@@ -64,7 +64,6 @@ typedef qboolean (*addToSnapshotCallback)(int entityNum, int clientNum);
 
 typedef struct {
 	qboolean linked;                // qfalse if not in any good cluster
-	int linkcount;
 
 	int svFlags;                    // SVF_NOCLIENT, SVF_BROADCAST, etc
 	int singleClient;               // only send to this client when SVF_SINGLECLIENT is set

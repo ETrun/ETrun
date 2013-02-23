@@ -40,126 +40,6 @@ If you have questions concerning this license or the applicable additional terms
 
 #include "g_local.h"
 
-
-
-#define RESPAWN_SP          -1
-#define RESPAWN_KEY         4
-#define RESPAWN_ARMOR       25
-#define RESPAWN_TEAM_WEAPON 30
-#define RESPAWN_HEALTH      35
-#define RESPAWN_AMMO        40
-#define RESPAWN_HOLDABLE    60
-#define RESPAWN_MEGAHEALTH  120
-#define RESPAWN_POWERUP     120
-#define RESPAWN_PARTIAL     998     // for multi-stage ammo/health
-#define RESPAWN_PARTIAL_DONE 999    // for multi-stage ammo/health
-
-
-//======================================================================
-
-int Pickup_Powerup(gentity_t *ent, gentity_t *other) {
-	int       quantity;
-	int       i;
-	gclient_t *client;
-
-	if (!other->client->ps.powerups[ent->item->giTag]) {
-		other->client->ps.powerups[ent->item->giTag] = level.time - (level.time % 1000);
-	}
-
-	// if an amount was specified in the ent, use it
-	if (ent->count) {
-		quantity = ent->count;
-	} else {
-		quantity = ent->item->quantity;
-	}
-
-	other->client->ps.powerups[ent->item->giTag] += quantity * 1000;
-
-	// give any nearby players a "denied" anti-reward
-	for (i = 0 ; i < level.maxclients ; i++) {
-		vec3_t  delta;
-		float   len;
-		vec3_t  forward;
-		trace_t tr;
-
-		client = &level.clients[i];
-		if (client == other->client) {
-			continue;
-		}
-		if (client->pers.connected == CON_DISCONNECTED) {
-			continue;
-		}
-		if (client->ps.stats[STAT_HEALTH] <= 0) {
-			continue;
-		}
-
-		// if too far away, no sound
-		VectorSubtract(ent->s.pos.trBase, client->ps.origin, delta);
-		len = VectorNormalize(delta);
-		if (len > 192) {
-			continue;
-		}
-
-		// if not facing, no sound
-		AngleVectors(client->ps.viewangles, forward, NULL, NULL);
-		if (DotProduct(delta, forward) < 0.4) {
-			continue;
-		}
-
-		// if not line of sight, no sound
-		trap_Trace(&tr, client->ps.origin, NULL, NULL, ent->s.pos.trBase, ENTITYNUM_NONE, CONTENTS_SOLID);
-		if (tr.fraction != 1.0) {
-			continue;
-		}
-	}
-
-	if (ent->s.density == 2) {     // multi-stage health first stage
-		return RESPAWN_PARTIAL;
-	} else if (ent->s.density == 1) {        // last stage, leave the plate
-		return RESPAWN_PARTIAL_DONE;
-	}
-
-	return RESPAWN_POWERUP;
-}
-
-//----(SA) Wolf keys
-//======================================================================
-int Pickup_Key(gentity_t *ent, gentity_t *other) {
-	other->client->ps.stats[STAT_KEYS] |= (1 << ent->item->giTag);
-	return RESPAWN_KEY;
-}
-
-/*
-==============
-Pickup_Clipboard
-==============
-*/
-int Pickup_Clipboard(gentity_t *ent, gentity_t *other) {
-	// Nico, silent GCC
-	other = other;
-
-	if (ent->spawnflags & 4) {
-		return 0;   // leave in world
-
-	}
-	return -1;
-}
-
-
-/*
-==============
-Pickup_Treasure
-==============
-*/
-int Pickup_Treasure(gentity_t *ent, gentity_t *other) {
-	// Nico, silent GCC
-	other = other;
-	ent   = ent;
-
-	return -1;
-}
-
-
 /*
 ==============
 UseHoldableItem
@@ -206,17 +86,6 @@ void UseHoldableItem(gentity_t *ent, int item) {
 	case HI_BOOK3:
 		break;
 	}
-}
-
-
-//======================================================================
-
-int Pickup_Holdable(gentity_t *ent, gentity_t *other) {
-	// Nico, silent GCC
-	other = other;
-	ent   = ent;
-
-	return RESPAWN_HOLDABLE;
 }
 
 // xkan, 10/26/2002
@@ -327,24 +196,6 @@ int Add_Ammo(gentity_t *ent, int weapon, int count, qboolean fillClip) {
 	}
 
 	return (ent->client->ps.ammo[ammoweap] > originalCount);
-}
-
-
-
-/*
-==============
-Pickup_Ammo
-==============
-*/
-int Pickup_Ammo(gentity_t *ent, gentity_t *other) {
-	// added some ammo pickups, so I'll use ent->item->quantity if no ent->count
-	if (ent->count) {
-		Add_Ammo(other, ent->item->giTag, ent->count, qfalse);
-	} else {
-		Add_Ammo(other, ent->item->giTag, ent->item->quantity, qfalse);
-	}
-
-	return RESPAWN_AMMO;
 }
 
 weapon_t G_GetPrimaryWeaponForClient(gclient_t *client) {
@@ -501,7 +352,7 @@ int Pickup_Weapon(gentity_t *ent, gentity_t *other) {
 				// extracted code originally here into AddMagicAmmo -xkan, 9/18/2002
 				// add 1 clip of magic ammo for any two-handed weapon
 			}
-			return RESPAWN_SP;
+			return -1;
 		}
 	}
 

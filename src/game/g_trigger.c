@@ -43,13 +43,6 @@ void InitTrigger(gentity_t *self) {
 	self->r.svFlags  = SVF_NOCLIENT;
 }
 
-
-// the wait time has passed, so set back up for another activation
-void multi_wait(gentity_t *ent) {
-	ent->nextthink = 0;
-}
-
-
 // the trigger was just activated
 // ent->activator should be set to the activator so it can be held through a delay
 // so wait for the delay time before firing
@@ -272,13 +265,6 @@ void AimAtTarget(gentity_t *self) {
 	VectorScale(self->s.origin2, forward, self->s.origin2);
 
 	self->s.origin2[2] = time * gravity;
-}
-
-void trigger_push_use(gentity_t *self, gentity_t *other, gentity_t *activator) {
-	// Nico, silent GCC
-	self      = self;
-	other     = other;
-	activator = activator;
 }
 
 /*QUAKED trigger_push (.5 .5 .5) ? TOGGLE REMOVEAFTERTOUCH PUSHPLAYERONLY
@@ -1490,17 +1476,11 @@ void SP_trigger_objective_info(gentity_t *ent) {
 // JPW NERVE -- field which is acted upon (cgame side) by screenshakes to drop dust particles
 void trigger_concussive_touch(gentity_t *ent, gentity_t *other, trace_t *trace) {
 	// Nico, silent GCC
+	ent = ent;
 	other = other;
 	trace = trace;
 
-	return; // FIXME this should be NULLed out in SP_trigger_concussive_dust after everything works
-	G_Printf("hit concussive ent %d mins=%f,%f,%f maxs=%f,%f,%f\n", (int)(ent - g_entities),
-	         ent->r.mins[0],
-	         ent->r.mins[1],
-	         ent->r.mins[2],
-	         ent->r.maxs[0],
-	         ent->r.maxs[1],
-	         ent->r.maxs[2]);
+	return;
 }
 
 /*QUAKED trigger_concussive_dust (.5 .5 .5) ?

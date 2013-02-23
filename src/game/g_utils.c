@@ -443,19 +443,6 @@ char *vtos(const vec3_t v) {
 
 	return s;
 }
-char *vtosf(const vec3_t v) {
-	static int  index;
-	static char str[8][64];
-	char        *s;
-
-	// use an array so that multiple vtos won't collide
-	s     = str[index];
-	index = (index + 1) & 7;
-
-	Com_sprintf(s, 64, "(%f %f %f)", v[0], v[1], v[2]);
-
-	return s;
-}
 
 
 /*
@@ -562,26 +549,6 @@ gentity_t *G_Spawn(void) {
 
 	G_InitGentity(e);
 	return e;
-}
-
-/*
-=================
-G_EntitiesFree
-=================
-*/
-qboolean G_EntitiesFree(void) {
-	int       i;
-	gentity_t *e;
-
-	e = &g_entities[MAX_CLIENTS];
-	for (i = MAX_CLIENTS; i < level.num_entities; i++, e++) {
-		if (e->inuse) {
-			continue;
-		}
-		// slot available
-		return qtrue;
-	}
-	return qfalse;
 }
 
 /*
@@ -893,45 +860,6 @@ void G_ProcessTagConnect(gentity_t *ent, qboolean clearAngles) {
 		VectorClear(ent->s.apos.trDelta);
 		VectorClear(ent->r.currentAngles);
 	}
-}
-
-/*
-================
-DebugLine
-
-  debug polygons only work when running a local game
-  with r_debugSurface set to 2
-================
-*/
-int DebugLine(vec3_t start, vec3_t end, int color) {
-	vec3_t points[4], dir, cross, up = { 0, 0, 1 };
-	float  dot;
-
-	VectorCopy(start, points[0]);
-	VectorCopy(start, points[1]);
-	//points[1][2] -= 2;
-	VectorCopy(end, points[2]);
-	//points[2][2] -= 2;
-	VectorCopy(end, points[3]);
-
-
-	VectorSubtract(end, start, dir);
-	VectorNormalize(dir);
-	dot = DotProduct(dir, up);
-	if (dot > 0.99 || dot < -0.99) {
-		VectorSet(cross, 1, 0, 0);
-	} else {
-		CrossProduct(dir, up, cross);
-	}
-
-	VectorNormalize(cross);
-
-	VectorMA(points[0], 2, cross, points[0]);
-	VectorMA(points[1], -2, cross, points[1]);
-	VectorMA(points[2], -2, cross, points[2]);
-	VectorMA(points[3], 2, cross, points[3]);
-
-	return trap_DebugPolygonCreate(color, 4, points);
 }
 
 /*

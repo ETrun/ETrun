@@ -99,9 +99,12 @@ static void clientBigDataPrint(gentity_t *ent, char *data) {
 	}
 }
 
+/*
+ *
+ * @unused
 static char from_hex(char ch) {
 	return isdigit(ch) ? ch - '0' : tolower(ch) - 'A' + 10;
-}
+}*/
 
 static char to_hex(char code) {
 	char hex[] = "0123456789ABCDEF";
@@ -145,7 +148,8 @@ qboolean url_encode(char *str, char *dst) {
 
 /**
  * Function used to decode an url
- */
+ *
+ * @unused
 qboolean url_decode(char *str, char *dst) {
 	char *pstr = str;
 	int  i     = 0;
@@ -172,7 +176,7 @@ qboolean url_decode(char *str, char *dst) {
 	}
 	dst[i] = '\0';
 	return qtrue;
-}
+}*/
 
 /**
  * Check for errors in API string result

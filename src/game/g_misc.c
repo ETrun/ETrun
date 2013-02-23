@@ -849,24 +849,6 @@ void SP_dlight(gentity_t *ent) {
 }
 // done (SA)
 
-
-
-void flakPuff(vec3_t origin) {
-	gentity_t *tent;
-	vec3_t    point;
-
-	VectorCopy(origin, point);
-	tent = G_TempEntity(point, EV_SMOKE);
-	VectorCopy(point, tent->s.origin);
-	VectorSet(tent->s.origin2, 0, 0, 32);
-	tent->s.time       = 500;
-	tent->s.time2      = 250;
-	tent->s.density    = 0;
-	tent->s.angles2[0] = 24;
-	tent->s.angles2[1] = 32;
-	tent->s.angles2[2] = 10;
-}
-
 /*
 ==============
 Fire_Lead
@@ -1129,22 +1111,6 @@ void aagun_think(gentity_t *self) {
 	self->nextthink = level.time + 50;
 
 	SnapVector(self->s.apos.trDelta);
-}
-
-void aagun_stopusing(gentity_t *self) {
-	gentity_t *owner;
-
-	owner = &g_entities[self->r.ownerNum];
-
-	if (owner && owner->client) {
-		owner->client->ps.eFlags                      &= ~EF_AAGUN_ACTIVE;
-		owner->client->ps.persistant[PERS_HWEAPON_USE] = 0;
-		owner->client->ps.viewlocked                   = 0;
-		owner->active                                  = qfalse;
-
-		self->r.ownerNum = self->s.number;
-		self->active     = qfalse;
-	}
 }
 
 void aagun_fire(gentity_t *other) {
@@ -1689,57 +1655,6 @@ void SP_mg42(gentity_t *self) {
 		self->damage = 25;
 	}
 }
-
-#define FLAK_SPREAD 100
-#define FLAK_DAMAGE 36
-
-#define GUN1_IDLE   0
-#define GUN2_IDLE   4
-#define GUN3_IDLE   8
-#define GUN4_IDLE   12
-
-#define GUN1_LASTFIRE   3
-#define GUN2_LASTFIRE   7
-#define GUN3_LASTFIRE   11
-#define GUN4_LASTFIRE   15
-
-void Flak_Animate(gentity_t *ent) {
-	//G_Printf ("frame %i\n", ent->s.frame);
-
-	if (ent->s.frame == GUN1_IDLE
-	    || ent->s.frame == GUN2_IDLE
-	    || ent->s.frame == GUN3_IDLE
-	    || ent->s.frame == GUN4_IDLE) {
-		return;
-	}
-
-	if (ent->count == 1) {
-		if (ent->s.frame == GUN1_LASTFIRE) {
-			ent->s.frame = GUN2_IDLE;
-		} else if (ent->s.frame > GUN1_IDLE) {
-			ent->s.frame++;
-		}
-	} else if (ent->count == 2) {
-		if (ent->s.frame == GUN2_LASTFIRE) {
-			ent->s.frame = GUN3_IDLE;
-		} else if (ent->s.frame > GUN2_IDLE) {
-			ent->s.frame++;
-		}
-	} else if (ent->count == 3) {
-		if (ent->s.frame == GUN3_LASTFIRE) {
-			ent->s.frame = GUN4_IDLE;
-		} else if (ent->s.frame > GUN3_IDLE) {
-			ent->s.frame++;
-		}
-	} else if (ent->count == 4) {
-		if (ent->s.frame == GUN4_LASTFIRE) {
-			ent->s.frame = GUN1_IDLE;
-		} else if (ent->s.frame > GUN4_IDLE) {
-			ent->s.frame++;
-		}
-	}
-}
-
 
 void flak_spawn(gentity_t *ent) {
 	gentity_t *gun;

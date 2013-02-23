@@ -228,38 +228,6 @@ void SP_props_box_64(gentity_t *self) {
 }
 // END JOSEPH
 
-// Rafael
-
-void Psmoke_think(gentity_t *ent) {
-	gentity_t *tent;
-
-	ent->count++;
-
-	if (ent->count == 30) {
-		ent->think = G_FreeEntity;
-	}
-
-	tent = G_TempEntity(ent->s.origin, EV_SMOKE);
-	VectorCopy(ent->s.origin, tent->s.origin);
-	tent->s.time       = 3000;
-	tent->s.time2      = 100;
-	tent->s.density    = 0;
-	tent->s.angles2[0] = 4;
-	tent->s.angles2[1] = 32;
-	tent->s.angles2[2] = 50;
-
-	ent->nextthink = level.time + FRAMETIME;
-}
-
-void prop_smoke(gentity_t *ent) {
-	gentity_t *Psmoke;
-
-	Psmoke = G_Spawn();
-	VectorCopy(ent->r.currentOrigin, Psmoke->s.origin);
-	Psmoke->think     = Psmoke_think;
-	Psmoke->nextthink = level.time + FRAMETIME;
-}
-
 /*QUAKED props_sparks (.8 .46 .16) (-8 -8 -8) (8 8 8) ELECTRIC
 the default direction is strait up use info_no_null for alt direction
 
@@ -516,38 +484,6 @@ void SP_Dust(gentity_t *ent) {
 //////////////////////////////////////////////////////////
 
 extern void G_ExplodeMissile(gentity_t *ent);
-
-void propExplosionLarge(gentity_t *ent) {
-	gentity_t *bolt;
-
-	bolt = G_Spawn();
-
-	// Gordon: for explosion type
-	bolt->accuracy = 2;
-
-	bolt->classname = "props_explosion_large";
-	bolt->nextthink = level.time + FRAMETIME;
-	bolt->think     = G_ExplodeMissile;
-	bolt->s.eType   = ET_MISSILE;
-	bolt->r.svFlags = 0;
-
-	bolt->s.weapon = WP_NONE;
-
-	bolt->s.eFlags            = EF_BOUNCE_HALF;
-	bolt->r.ownerNum          = ent->s.number;
-	bolt->parent              = ent;
-	bolt->damage              = ent->health;
-	bolt->splashDamage        = ent->health;
-	bolt->splashRadius        = ent->health * 1.5;
-	bolt->methodOfDeath       = MOD_GRENADE;
-	bolt->splashMethodOfDeath = MOD_GRENADE;
-	bolt->clipmask            = MASK_SHOT;
-
-	VectorCopy(ent->r.currentOrigin, bolt->s.pos.trBase);
-	VectorCopy(ent->r.currentOrigin, bolt->r.currentOrigin);
-}
-
-void G_ExplodeMissile(gentity_t *ent);
 
 void propExplosion(gentity_t *ent) {
 	gentity_t *bolt;
@@ -1793,35 +1729,6 @@ void Props_Barrel_Animate(gentity_t *ent) {
 
 }
 
-void barrel_smoke(gentity_t *ent) {
-	gentity_t *tent;
-	vec3_t    point;
-
-	VectorCopy(ent->r.currentOrigin, point);
-
-	tent = G_TempEntity(point, EV_SMOKE);
-	VectorCopy(point, tent->s.origin);
-	tent->s.time       = 4000;
-	tent->s.time2      = 1000;
-	tent->s.density    = 0;
-	tent->s.angles2[0] = 8;
-	tent->s.angles2[1] = 64;
-	tent->s.angles2[2] = 50;
-
-}
-
-void smoker_think(gentity_t *ent) {
-	ent->count--;
-
-	if (!ent->count) {
-		G_FreeEntity(ent);
-	} else {
-		barrel_smoke(ent);
-		ent->nextthink = level.time + FRAMETIME;
-	}
-
-}
-
 void SP_OilSlick(gentity_t *ent) {
 	gentity_t *tent;
 
@@ -1851,45 +1758,6 @@ void OilParticles_think(gentity_t *ent) {
 	} else {
 		G_FreeEntity(ent);
 	}
-}
-
-void Delayed_Leak_Think(gentity_t *ent) {
-	vec3_t    point;
-	gentity_t *tent;
-
-	VectorCopy(ent->r.currentOrigin, point);
-
-	tent = G_TempEntity(point, EV_OILSLICK);
-	VectorCopy(point, tent->s.origin);
-
-	tent->s.angles2[0] = 0;
-	tent->s.angles2[1] = 0;
-	tent->s.angles2[2] = 2000;
-	tent->s.density    = ent->count;
-}
-
-qboolean validOilSlickSpawnPoint(vec3_t point, gentity_t *ent) {
-	trace_t   tr;
-	vec3_t    end;
-	gentity_t *traceEnt;
-
-	VectorCopy(point, end);
-	end[2] -= 9999;
-
-	trap_Trace(&tr, point, NULL, NULL, end, ent->s.number, MASK_SHOT);
-
-	traceEnt = &g_entities[tr.entityNum];
-
-	if (traceEnt && traceEnt->classname) {
-		if (!Q_stricmp(traceEnt->classname, "worldspawn")) {
-			if (tr.plane.normal[0] == 0 && tr.plane.normal[1] == 0 && tr.plane.normal[2] == 1) {
-				return qtrue;
-			}
-		}
-	}
-
-	return qfalse;
-
 }
 
 void SP_OilParticles(gentity_t *ent) {
@@ -2340,34 +2208,6 @@ void flippy_table_use(gentity_t *ent, gentity_t *other, gentity_t *activator) {
 		Use_BinaryMover(ent, other, other);
 	}
 
-}
-
-void flippy_table_animate(gentity_t *ent) {
-	return;
-
-	if (ent->s.frame == 9) {
-		G_UseTargets(ent, NULL);
-		ent->think     = G_FreeEntity;
-		ent->nextthink = level.time + 2000;
-	} else {
-		ent->s.frame++;
-		ent->nextthink = level.time + (FRAMETIME / 2);
-	}
-}
-
-void props_flippy_table_die(gentity_t *ent, gentity_t *inflictor, gentity_t *attacker, int damage, int mod) {
-	// Nico, silent GCC
-	inflictor = inflictor;
-	attacker  = attacker;
-	damage    = damage;
-	mod       = mod;
-
-	ent->think     = flippy_table_animate;
-	ent->nextthink = level.time + FRAMETIME;
-
-	ent->takedamage = qfalse;
-
-	G_UseTargets(ent, NULL);
 }
 
 void props_flippy_blocked(gentity_t *ent, gentity_t *other) {
@@ -3389,37 +3229,6 @@ void SP_props_statueBRUSH(gentity_t *self) {
 void init_locker(gentity_t *ent);
 void props_locker_death(gentity_t *ent, gentity_t *inflictor, gentity_t *attacker, int damage, int mod);
 //////////////////////////////////////////////////
-#define MAX_LOCKER_DEBRIS       5
-
-int locker_debris_model[MAX_LOCKER_DEBRIS];
-//////////////////////////////////////////////////
-
-void Spawn_Junk(gentity_t *ent) {
-	gentity_t *sfx;
-	vec3_t    dir, start;
-
-	VectorCopy(ent->r.currentOrigin, start);
-
-	start[0] += crandom() * 32;
-	start[1] += crandom() * 32;
-	start[2] += 16;
-
-	VectorSubtract(start, ent->r.currentOrigin, dir);
-	VectorNormalize(dir);
-
-	sfx = G_Spawn();
-
-	G_SetOrigin(sfx, start);
-	G_SetAngle(sfx, ent->r.currentAngles);
-
-	G_AddEvent(sfx, EV_JUNK, DirToByte(dir));
-
-	sfx->think = G_FreeEntity;
-
-	sfx->nextthink = level.time + 1000;
-
-	trap_LinkEntity(sfx);
-}
 
 /*
 ==============
@@ -3506,36 +3315,6 @@ void props_locker_spawn_item(gentity_t *ent) {
 		G_Printf("-----> WARNING <-------\n");
 		G_Printf("props_locker_spawn_item at %s failed!\n", vtos(ent->r.currentOrigin));
 	}
-}
-
-extern qhandle_t    trap_R_GetShaderFromModel(qhandle_t modelid, int surfnum, int withlightmap);
-
-void props_locker_mass(gentity_t *ent) {
-	gentity_t *tent;
-	vec3_t    start;
-	vec3_t    dir;
-
-	VectorCopy(ent->r.currentOrigin, start);
-
-	start[0] += crandom() * 32;
-	start[1] += crandom() * 32;
-	start[2] += 16;
-
-	VectorSubtract(start, ent->r.currentOrigin, dir);
-	VectorNormalize(dir);
-
-	tent = G_TempEntity(ent->r.currentOrigin, EV_EFFECT);
-	VectorCopy(ent->r.currentOrigin, tent->s.origin);
-	VectorCopy(dir, tent->s.angles2);
-
-	tent->s.dl_intensity = 0;
-
-	trap_SetConfigstring(CS_TARGETEFFECT, ent->dl_shader);      //----(SA)	allow shader to be set from entity
-
-	tent->s.frame = ent->key;
-
-	tent->s.eventParm = 8;
-	tent->s.density   = 100;
 }
 
 /*QUAKED props_footlocker (.6 .7 .3) (-12 -21 -12) (12 21 12) ? NO_JUNK

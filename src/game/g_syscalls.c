@@ -220,14 +220,6 @@ qboolean trap_EntityContactCapsule(const vec3_t mins, const vec3_t maxs, const g
 	return syscall(G_ENTITY_CONTACTCAPSULE, mins, maxs, ent);
 }
 
-int trap_GetSoundLength(sfxHandle_t sfxHandle) {
-	return syscall(G_GET_SOUND_LENGTH, sfxHandle);
-}
-
-sfxHandle_t trap_RegisterSound(const char *sample, qboolean compressed) {
-	return syscall(G_REGISTERSOUND, sample, compressed);
-}
-
 #ifdef DEBUG
 //#define FAKELAG
 # ifdef FAKELAG

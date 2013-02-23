@@ -47,7 +47,7 @@ typedef struct tracemap_s {
 	float skyground[TRACEMAP_SIZE][TRACEMAP_SIZE];
 	float ground[TRACEMAP_SIZE][TRACEMAP_SIZE];
 	vec2_t world_mins, world_maxs;
-	int groundfloor, groundceil;
+	int groundfloor;
 } tracemap_t;
 
 static tracemap_t tracemap;

@@ -1249,33 +1249,6 @@ void SP_script_model_med(gentity_t *ent) {
 	script_model_med_spawn(ent);
 }
 
-//..............................................................................
-
-/*QUAKED script_camera (1.0 0.25 1.0) (-8 -8 -8) (8 8 8) TriggerSpawn
-
-  This is a camera entity. Used by the scripting to show cinematics, via special
-  camera commands. See scripting documentation.
-
-"scriptname" name used for scripting purposes (like aiName in AI scripting)
-*/
-void SP_script_camera(gentity_t *ent) {
-	if (!ent->scriptName) {
-		G_Error("%s must have a \"scriptname\"\n", ent->classname);
-	}
-
-	ent->s.eType           = ET_CAMERA;
-	ent->s.apos.trType     = TR_STATIONARY;
-	ent->s.apos.trTime     = 0;
-	ent->s.apos.trDuration = 0;
-	VectorCopy(ent->s.angles, ent->s.apos.trBase);
-	VectorClear(ent->s.apos.trDelta);
-
-	ent->s.frame = 0;
-
-	ent->r.svFlags |= SVF_NOCLIENT;     // only broadcast when in use
-}
-
-
 /*QUAKED script_multiplayer (1.0 0.25 1.0) (-8 -8 -8) (8 8 8)
 
   This is used to script multiplayer maps.  Entity not displayed in game.

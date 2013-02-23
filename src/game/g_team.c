@@ -31,17 +31,6 @@ If you have questions concerning this license or the applicable additional terms
 #include "../../etrun/ui/menudef.h"
 #include "g_local.h"
 
-typedef struct teamgame_s {
-	float last_flag_capture;
-	int last_capture_team;
-} teamgame_t;
-
-teamgame_t teamgame;
-
-void Team_InitGame(void) {
-	memset(&teamgame, 0, sizeof teamgame);
-}
-
 int OtherTeam(int team) {
 	if (team == TEAM_AXIS) {
 		return TEAM_ALLIES;
@@ -302,20 +291,6 @@ void Team_ResetFlag(gentity_t *ent) {
 	}
 }
 
-void Team_ResetFlags(void) {
-	gentity_t *ent;
-
-	ent = NULL;
-	while ((ent = G_Find(ent, FOFS(classname), "team_CTF_redflag")) != NULL) {
-		Team_ResetFlag(ent);
-	}
-
-	ent = NULL;
-	while ((ent = G_Find(ent, FOFS(classname), "team_CTF_blueflag")) != NULL) {
-		Team_ResetFlag(ent);
-	}
-}
-
 void Team_ReturnFlagSound(gentity_t *ent, int team) {
 	// play powerup spawn sound to all clients
 	gentity_t *pm;
@@ -487,58 +462,6 @@ int Pickup_Team(gentity_t *ent, gentity_t *other) {
 }
 
 /*---------------------------------------------------------------------------*/
-
-// JPW NERVE
-/*
-=======================
-FindFarthestObjectiveIndex
-
-pick MP objective farthest from passed in vector, return table index
-=======================
-*/
-int FindFarthestObjectiveIndex(vec3_t source) {
-	int    i, j = 0;
-	float  dist = 0, tdist;
-	vec3_t tmp;
-
-	for (i = 0; i < level.numspawntargets; i++) {
-		VectorSubtract(level.spawntargets[i], source, tmp);
-		tdist = VectorLength(tmp);
-		if (tdist > dist) {
-			dist = tdist;
-			j    = i;
-		}
-	}
-
-	return j;
-}
-// jpw
-
-// NERVE - SMF
-/*
-=======================
-FindClosestObjectiveIndex
-
-NERVE - SMF - pick MP objective closest to the passed in vector, return table index
-=======================
-*/
-int FindClosestObjectiveIndex(vec3_t source) {
-	int    i, j = 0;
-	float  dist = 10E20, tdist;
-	vec3_t tmp;
-
-	for (i = 0; i < level.numspawntargets; i++) {
-		VectorSubtract(level.spawntargets[i], source, tmp);
-		tdist = VectorLength(tmp);
-		if (tdist < dist) {
-			dist = tdist;
-			j    = i;
-		}
-	}
-
-	return j;
-}
-// -NERVE - SMF
 
 /*
 ================
@@ -772,18 +695,6 @@ void CheckTeamStatus(void) {
 }
 
 /*-----------------------------------------------------------------*/
-
-void Use_Team_InitialSpawnpoint(gentity_t *ent, gentity_t *other, gentity_t *activator) {
-	// Nico, silent GCC
-	other     = other;
-	activator = activator;
-
-	if (ent->spawnflags & 4) {
-		ent->spawnflags &= ~4;
-	} else {
-		ent->spawnflags |= 4;
-	}
-}
 
 void Use_Team_Spawnpoint(gentity_t *ent, gentity_t *other, gentity_t *activator) {
 	// Nico, silent GCC
@@ -1073,20 +984,6 @@ void checkpoint_use(gentity_t *ent, gentity_t *other, gentity_t *activator) {
 }
 
 void checkpoint_spawntouch(gentity_t *self, gentity_t *other, trace_t *trace);   // JPW NERVE
-
-// JPW NERVE
-void checkpoint_hold_think(gentity_t *self) {
-	switch (self->s.frame) {
-	case WCP_ANIM_RAISE_AXIS:
-	case WCP_ANIM_AXIS_RAISED:
-	case WCP_ANIM_RAISE_AMERICAN:
-	case WCP_ANIM_AMERICAN_RAISED:
-	default:
-		break;
-	}
-	self->nextthink = level.time + 5000;
-}
-// jpw
 
 void checkpoint_think(gentity_t *self) {
 

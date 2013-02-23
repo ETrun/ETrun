@@ -148,26 +148,6 @@ void G_spawnPrintf(int print_type, int print_time, gentity_t *owner) {
 	ent->think     = G_delayPrint;
 }
 
-// Dumps end-of-match info
-void G_matchInfoDump(unsigned int dwDumpType) {
-	int       i, ref;
-	gentity_t *ent;
-	gclient_t *cl;
-
-	// Nico, silent GCC
-	dwDumpType = dwDumpType;
-
-	for (i = 0; i < level.numConnectedClients; i++) {
-		ref = level.sortedClients[i];
-		ent = &g_entities[ref];
-		cl  = ent->client;
-
-		if (cl->pers.connected != CON_CONNECTED) {
-			continue;
-		}
-	}
-}
-
 // Update configstring for vote info
 int G_checkServerToggle(vmCvar_t *cv) {
 	int nFlag;

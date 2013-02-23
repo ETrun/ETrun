@@ -1839,7 +1839,6 @@ int G_checkServerToggle(vmCvar_t *cv);
 void G_globalSound(char *sound);
 void G_initMatch(void);
 void G_loadMatchGame(void);
-void G_matchInfoDump(unsigned int dwDumpType);
 void G_printFull(char *str, gentity_t *ent);
 void G_spawnPrintf(int print_type, int print_time, gentity_t *owner);
 
