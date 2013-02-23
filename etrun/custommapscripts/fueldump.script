@@ -35,7 +35,7 @@ game_manager
 			maxs "90 90 25"
 			model "models/mapobjects/timerun/start_1.md3"
 			fps "12"
-			frames "26"
+			frames "25"
 			start "0"
 			spawnflags "2"
 		}
@@ -66,7 +66,7 @@ game_manager
 			maxs "90 90 25"
 			model "models/mapobjects/timerun/stop_1.md3"
 			fps "12"
-			frames "26"
+			frames "25"
 			start "0"
 			spawnflags "2"
 		}
@@ -98,7 +98,7 @@ game_manager
 			maxs "90 90 25"
 			model "models/mapobjects/timerun/start_2.md3"
 			fps "12"
-			frames "26"
+			frames "25"
 			start "0"
 			spawnflags "2"
 		}
@@ -127,7 +127,7 @@ game_manager
 			maxs "90 90 25"
 			model "models/mapobjects/timerun/stop_2.md3"
 			fps "12"
-			frames "26"
+			frames "25"
 			start "0"
 			spawnflags "2"
 		}
@@ -159,7 +159,7 @@ game_manager
 			maxs "90 90 25"
 			model "models/mapobjects/timerun/start_3.md3"
 			fps "12"
-			frames "26"
+			frames "25"
 			start "0"
 			spawnflags "2"
 		}
@@ -188,7 +188,7 @@ game_manager
 			maxs "90 90 25"
 			model "models/mapobjects/timerun/stop_3.md3"
 			fps "12"
-			frames "26"
+			frames "25"
 			start "0"
 			spawnflags "2"
 		}
