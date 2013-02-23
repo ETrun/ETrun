@@ -43,7 +43,7 @@ default_map='goldrush'
 #
 # Path to your game install directory
 #
-et_base_path='/Applications/ET'
+et_base_path='/Applications/Wolfenstein\ ET'
 
 #
 # Path to your game directory in your home
@@ -53,12 +53,12 @@ et_home_path='/Users/nico/.etwolf'
 #
 # Path to your ET dedicated binary
 #
-et_dedicated_binary_path="$et_base_path/ET.app/Contents/MacOS/ET"
+et_dedicated_binary_path="$et_base_path/Wolfenstein\ ET.app/Contents/MacOS/Wolfenstein\ ET"
 
 #
 # Path to your ET binary
 #
-et_binary_path="$et_base_path/ET.app/Contents/MacOS/ET"
+et_binary_path="$et_base_path/Wolfenstein\ ET.app/Contents/MacOS/Wolfenstein\ ET"
 #################################################
 
 
