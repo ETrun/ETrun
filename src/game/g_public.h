@@ -62,8 +62,10 @@ If you have questions concerning this license or the applicable additional terms
 
 typedef qboolean (*addToSnapshotCallback)(int entityNum, int clientNum);
 
+// Nico, WARNING: do not modify this struct
 typedef struct {
 	qboolean linked;                // qfalse if not in any good cluster
+	int linkcount;
 
 	int svFlags;                    // SVF_NOCLIENT, SVF_BROADCAST, etc
 	int singleClient;               // only send to this client when SVF_SINGLECLIENT is set
@@ -96,15 +98,11 @@ typedef struct {
 	qboolean snapshotCallback;
 } entityShared_t;
 
-
-
 // the server looks at a sharedEntity, which is the start of the game's gentity_t structure
 typedef struct {
 	entityState_t s;                // communicated by server to clients
 	entityShared_t r;               // shared by both the server system and game
 } sharedEntity_t;
-
-
 
 //===============================================================
 
