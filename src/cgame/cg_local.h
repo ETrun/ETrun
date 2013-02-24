@@ -1987,7 +1987,7 @@ void CG_DrawCursorhint(rectDef_t *rect);
 void CG_DrawWeapStability(rectDef_t *rect);
 void CG_DrawWeapHeat(rectDef_t *rect, int align);
 void CG_DrawPlayerWeaponIcon(rectDef_t *rect, int align, vec4_t *refcolor);
-void CG_Fade(int r, int g, int b, int a, int time, int duration);
+void CG_Fade(int a, int time, int duration);
 const char *CG_PickupItemText(int item);
 
 // Nico
@@ -2207,7 +2207,6 @@ localEntity_t *CG_SmokePuff(const vec3_t p,
                             qhandle_t hShader);
 
 void CG_BubbleTrail(vec3_t start, vec3_t end, float size, float spacing);
-void CG_SpawnEffect(vec3_t org);
 localEntity_t *CG_MakeExplosion(vec3_t origin, vec3_t dir,
                                 qhandle_t hModel, qhandle_t shader, int msec,
                                 qboolean isSprite);

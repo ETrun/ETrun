@@ -197,7 +197,7 @@ void CG_StartCamera(const char *name, qboolean startBlack) {
 	if (trap_loadCamera(CAM_PRIMARY, va("cameras/%s", lname))) {
 		cg.cameraMode = qtrue;                  // camera on in cgame
 		if (startBlack) {
-			CG_Fade(0, 0, 0, 255, cg.time, 0);    // go black
+			CG_Fade(255, cg.time, 0);    // go black
 		}
 		trap_Cvar_Set("cg_letterbox", "1");   // go letterbox
 		trap_startCamera(CAM_PRIMARY, cg.time);   // camera on in client
@@ -206,7 +206,7 @@ void CG_StartCamera(const char *name, qboolean startBlack) {
 		cg.cameraMode = qfalse;                 // camera off in cgame
 		trap_SendClientCommand("stopCamera");      // camera off in game
 		trap_stopCamera(CAM_PRIMARY);             // camera off in client
-		CG_Fade(0, 0, 0, 0, cg.time, 0);          // ensure fadeup
+		CG_Fade(0, cg.time, 0);          // ensure fadeup
 		trap_Cvar_Set("cg_letterbox", "0");
 		CG_Printf("Unable to load camera %s\n", lname);
 	}
@@ -242,27 +242,24 @@ void CG_StopCamera(void) {
 	trap_Cvar_Set("cg_letterbox", "0");
 
 	// fade back into world
-	CG_Fade(0, 0, 0, 255, 0, 0);
-	CG_Fade(0, 0, 0, 0, cg.time + 500, 2000);
+	CG_Fade(255, 0, 0);
+	CG_Fade(0, cg.time + 500, 2000);
 
 }
 
 static void CG_Fade_f(void) {
-	int   r, g, b, a;
+	int   a;
 	float duration;
 
 	if (trap_Argc() < 6) {
 		return;
 	}
 
-	r = atof(CG_Argv(1));
-	g = atof(CG_Argv(2));
-	b = atof(CG_Argv(3));
 	a = atof(CG_Argv(4));
 
 	duration = atof(CG_Argv(5)) * 1000;
 
-	CG_Fade(r, g, b, a, cg.time, duration);
+	CG_Fade(a, cg.time, duration);
 }
 
 void CG_QuickMessage_f(void) {

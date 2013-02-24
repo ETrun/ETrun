@@ -920,32 +920,6 @@ void SP_trigger_once(gentity_t *ent) {
 
 //---- end
 
-// Mad Doc - TDF
-// put this back in and modifyed for single player bots
-
-void trigger_aidoor_stayopen(gentity_t *ent, gentity_t *other, trace_t *trace) {
-	// Nico, silent GCC
-	ent   = ent;
-	other = other;
-	trace = trace;
-
-	return;
-}
-
-
-
-void SP_trigger_aidoor(gentity_t *ent) {
-	if (!ent->targetname) {
-		G_Printf("trigger_aidoor at loc %s does not have a targetname for ai_marker assignments\n", vtos(ent->s.origin));
-	}
-
-	ent->touch = trigger_aidoor_stayopen;
-	InitTrigger(ent);
-	trap_LinkEntity(ent);
-}
-
-
-
 /*QUAKED test_gas (0 0.5 0) (-4 -4 -4) (4 4 4)
 */
 void SP_gas(gentity_t *self) {

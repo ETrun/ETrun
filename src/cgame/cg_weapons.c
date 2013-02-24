@@ -4627,11 +4627,6 @@ void CG_MissileHitWall(int weapon, int clientNum, vec3_t origin, vec3_t dir, int
 			CG_WaterRipple(cgs.media.wakeMarkShaderAnim, origin, 32, 1000);
 			CG_AddDirtBulletParticles(origin, dir, 190, 900, 5, 0.5, 80, 16, 0.125, cgs.media.dirtParticle2Shader);
 			break;
-
-			// play a water splash
-			mod      = cgs.media.waterSplashModel;
-			shader   = cgs.media.waterSplashShader;
-			duration = 250;
 		}
 
 		// Ridah, optimization, only spawn the bullet hole if we are close

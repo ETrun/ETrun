@@ -356,7 +356,6 @@ void SP_gas(gentity_t *ent);
 void SP_target_rumble(gentity_t *ent);
 
 // Rafael
-//void SP_trigger_aidoor (gentity_t *ent);
 void SP_SmokeDust(gentity_t *ent);
 void SP_Dust(gentity_t *ent);
 void SP_props_sparks(gentity_t *ent);

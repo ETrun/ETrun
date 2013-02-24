@@ -436,93 +436,15 @@ const char *CG_PickupItemText(int item) {
 		if (bg_itemlist[item].world_model[2]) {        // this is a multi-stage item
 			// FIXME: print the correct amount for multi-stage
 			return va("a %s", bg_itemlist[item].pickup_name);
-		} else {
-			return va("%i %s", bg_itemlist[item].quantity, bg_itemlist[item].pickup_name);
 		}
+		return va("%i %s", bg_itemlist[item].quantity, bg_itemlist[item].pickup_name);
 	} else if (bg_itemlist[item].giType == IT_TEAM) {
 		return "an Objective";
 	} else {
 		if (bg_itemlist[item].pickup_name[0] == 'a' ||  bg_itemlist[item].pickup_name[0] == 'A') {
 			return va("an %s", bg_itemlist[item].pickup_name);
-		} else {
-			return va("a %s", bg_itemlist[item].pickup_name);
 		}
-	}
-}
-
-/*
-=================
-CG_DrawNotify
-=================
-*/
-#define NOTIFYLOC_Y 42 // bottom end
-#define NOTIFYLOC_X 0
-#define NOTIFYLOC_Y_SP 128
-
-static void CG_DrawNotify(void) {
-	int    w;
-	int    i, len;
-	vec4_t hcolor;
-	int    chatHeight;
-	float  alphapercent;
-	char   var[MAX_TOKEN_CHARS];
-	float  notifytime = 1.0f;
-	int    yLoc;
-
-	return;
-
-	yLoc = NOTIFYLOC_Y;
-
-	trap_Cvar_VariableStringBuffer("con_notifytime", var, sizeof (var));
-	notifytime = atof(var) * 1000;
-
-	if (notifytime <= 100.f) {
-		notifytime = 100.0f;
-	}
-
-	chatHeight = NOTIFY_HEIGHT;
-
-	if (cgs.notifyLastPos != cgs.notifyPos) {
-		if (cg.time - cgs.notifyMsgTimes[cgs.notifyLastPos % chatHeight] > notifytime) {
-			cgs.notifyLastPos++;
-		}
-
-		w = 0;
-
-		for (i = cgs.notifyLastPos; i < cgs.notifyPos; i++) {
-			len = CG_DrawStrlen(cgs.notifyMsgs[i % chatHeight]);
-			if (len > w) {
-				w = len;
-			}
-		}
-		w *= TINYCHAR_WIDTH;
-		w += TINYCHAR_WIDTH * 2;
-
-		if (maxCharsBeforeOverlay <= 0) {
-			maxCharsBeforeOverlay = 80;
-		}
-
-		for (i = cgs.notifyPos - 1; i >= cgs.notifyLastPos; i--) {
-			alphapercent = 1.0f - ((cg.time - cgs.notifyMsgTimes[i % chatHeight]) / notifytime);
-			if (alphapercent > 0.5f) {
-				alphapercent = 1.0f;
-			} else {
-				alphapercent *= 2;
-			}
-
-			if (alphapercent < 0.f) {
-				alphapercent = 0.f;
-			}
-
-			hcolor[0] = hcolor[1] = hcolor[2] = 1.0;
-			hcolor[3] = alphapercent;
-			trap_R_SetColor(hcolor);
-
-			CG_DrawStringExt(NOTIFYLOC_X + TINYCHAR_WIDTH,
-			                 yLoc - (cgs.notifyPos - i) * TINYCHAR_HEIGHT,
-			                 cgs.notifyMsgs[i % chatHeight], hcolor, qfalse, qfalse,
-			                 TINYCHAR_WIDTH, TINYCHAR_HEIGHT, maxCharsBeforeOverlay);
-		}
+		return va("a %s", bg_itemlist[item].pickup_name);
 	}
 }
 
@@ -1981,7 +1903,7 @@ void CG_DrawTimedMenus() {
 CG_Fade
 =================
 */
-void CG_Fade(int r, int g, int b, int a, int time, int duration) {
+void CG_Fade(int a, int time, int duration) {
 
 	// incorporate this into the current fade scheme
 
@@ -1993,20 +1915,6 @@ void CG_Fade(int r, int g, int b, int a, int time, int duration) {
 		cgs.fadeAlphaCurrent = cgs.fadeAlpha;
 	}
 	return;
-
-
-	if (time <= 0) {    // do instantly
-		cg.fadeRate = 1;
-		cg.fadeTime = cg.time - 1;  // set cg.fadeTime behind cg.time so it will start out 'done'
-	} else {
-		cg.fadeRate = 1.0f / time;
-		cg.fadeTime = cg.time + time;
-	}
-
-	cg.fadeColor2[0] = ( float )r / 255.0f;
-	cg.fadeColor2[1] = ( float )g / 255.0f;
-	cg.fadeColor2[2] = ( float )b / 255.0f;
-	cg.fadeColor2[3] = ( float )a / 255.0f;
 }
 
 /*
@@ -2390,8 +2298,6 @@ static void CG_Draw2D(void) {
 		CG_DrawPMItemsBig();
 
 		CG_DrawFollow();
-
-		CG_DrawNotify();
 
 		CG_DrawObjectiveInfo();
 

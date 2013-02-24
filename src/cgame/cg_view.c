@@ -988,8 +988,8 @@ int CG_CalcViewValues(void) {
 			trap_SendClientCommand("stopCamera");
 			trap_stopCamera(CAM_PRIMARY);                 // camera off in client
 
-			CG_Fade(0, 0, 0, 255, 0, 0);                  // go black
-			CG_Fade(0, 0, 0, 0, cg.time + 200, 1500);     // then fadeup
+			CG_Fade(255, 0, 0);                  // go black
+			CG_Fade(0, cg.time + 200, 1500);     // then fadeup
 		}
 	}
 
