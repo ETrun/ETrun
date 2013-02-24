@@ -116,7 +116,7 @@ Linux / OSX
 -----------
 
 Linux and OSX got a dedicated script located in `test/unix`.
-Before using them you need to setup your config file. Make a copy of the `*.config.example file corresponding to your OS and run the following command to know all available opions:
+Before using them you need to setup your config file. Make a copy of the `*.config.example` file corresponding to your OS and run the following command to know all available opions:
 <pre>
 $ ./test/unix/test.sh -h
 </pre>
