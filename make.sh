@@ -238,9 +238,9 @@ clean
 detect_os
 build
 strip_modules
-make_bundle qagame
-make_bundle cgame
-make_bundle ui
+#make_bundle qagame
+#make_bundle cgame
+#make_bundle ui
 # pwd: build/
 if [ $MAKE_PK3 -eq 1 ]; then
 	make_pk3
