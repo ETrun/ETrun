@@ -73,8 +73,7 @@ You need Microsoft Visual studio 2010 or newer.
 Compiling
 =========
 
-`Host`: OS used to compile.
-`Target`: OS where the game will be executed.
+`Host` is the OS used to compile, `Target` is the OS where the game will be executed.
 
 <table>
 	<tr>
@@ -92,13 +91,32 @@ Compiling
 	<tr>
 		<th>Linux</th>
 		<td>Not supported</td>
-		<td>./build.sh</td>
+		<td>./make.sh</td>
 		<td>Not supported</td>
 	</tr>
 	<tr>
 		<th>OSX</th>
 		<td>Not supported</td>
 		<td>Not supported</td>
-		<td>./build.sh or Xcode projets</td>
+		<td>./make.sh or Xcode projets</td>
 	</tr>
 </table>
+
+Testing
+=======
+
+There are test scripts for Windows and Linux / OSX.
+
+Windows
+-------
+
+Windows test scripts are located in `test/win32`, you may have to edit some paths according to your ET directory location.
+
+Linux / OSX
+-----------
+
+Linux and OSX got a dedicated script located in `test/unix`.
+Before using them you need to setup your config file. Make a copy of the `*.config.example file corresponding to your OS and run the following command to know all available opions:
+<pre>
+$ ./test/unix/test.sh -h
+</pre>
