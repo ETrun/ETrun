@@ -511,14 +511,14 @@ static qboolean PM_CheckJump(void) {
 
 	pm->ps->groundEntityNum = ENTITYNUM_NONE;
 
-	// Nico, add doublejump support
+	// Nico, add rampbounce support
 	if (pm->physics & PHYSICS_RAMPBOUNCE && pm->ps->velocity[2] > 0) {
 		PM_AddEvent(EV_JUMP);
 		pm->ps->velocity[2] += JUMP_VELOCITY;
 	} else {
 		pm->ps->velocity[2] = JUMP_VELOCITY;
 	}
-	// Nico, end of add doublejump support
+	// Nico, end of add rampbounce support
 
 	// Nico, update jump counter
 	if (pm->timerunActive) {
