@@ -112,14 +112,14 @@ menuDef {
 
 	itemDef {
 		name		"filtericonAntilag"
-		rect		$evalfloat(8+.5*((FILTERS_WIDTH)-6)+2+2) 104 10 10
+		rect		10 116 10 10
 		style		WINDOW_STYLE_SHADER
 		background	"ui/assets/filter_antilag"
 		forecolor	1 1 1 1
 		visible		1
 		decoration
 	}
-	TRICHECKBOXACTIONMULTI( 8+.5*((FILTERS_WIDTH)-6)+2+2+12, 104, .5*((FILTERS_WIDTH)-6)-14, 10, .2, 8, "ui_browserShowAntilag", cvarFloatList { "Filter Disabled" 0 "Only show..." 1 "Don't show..." 2 }, uiScript RefreshFilter ; setcvar ui_filterdescription "Filter affecting Anti-Lag Servers", "Includes or excludes servers with support for modem players, from the server list" )
+	TRICHECKBOXACTIONMULTI( 10+12, 116, .5*((FILTERS_WIDTH)-6)-14, 10, .2, 8, "ui_browserShowAntilag", cvarFloatList { "Filter Disabled" 0 "Only show..." 1 "Don't show..." 2 }, uiScript RefreshFilter ; setcvar ui_filterdescription "Filter affecting Anti-Lag Servers", "Includes or excludes servers with support for modem players, from the server list" )
 
 	itemDef {
 		name			"descriptionFilters"
