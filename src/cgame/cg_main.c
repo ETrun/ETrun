@@ -1252,7 +1252,6 @@ static void CG_RegisterSounds(void) {
 
 	cgs.media.sndLimboSelect = trap_S_RegisterSound("sound/menu/select.wav", qfalse);
 	cgs.media.sndLimboFocus  = trap_S_RegisterSound("sound/menu/focus.wav", qfalse);
-	cgs.media.sndLimboFilter = trap_S_RegisterSound("sound/menu/filter.wav", qfalse);
 	cgs.media.sndLimboCancel = trap_S_RegisterSound("sound/menu/cancel.wav", qfalse);
 
 	if (cg_buildScript.integer) {

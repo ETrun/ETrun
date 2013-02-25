@@ -48,7 +48,6 @@ If you have questions concerning this license or the applicable additional terms
 #define FADE_TIME           200
 #define DAMAGE_DEFLECT_TIME 100
 #define DAMAGE_RETURN_TIME  400
-#define DAMAGE_TIME         500
 #define LAND_DEFLECT_TIME   150
 #define LAND_RETURN_TIME    300
 #define STEP_TIME           200
@@ -56,33 +55,19 @@ If you have questions concerning this license or the applicable additional terms
 #define PAIN_TWITCH_TIME    200
 #define ZOOM_TIME           150
 #define MUZZLE_FLASH_TIME   30
-#define SINK_TIME           1000        // time for fragments to sink into ground before going away
 
 #define PRONE_TIME          500
-
-#define PULSE_SCALE         1.5         // amount to scale up the icons when activating
 
 #define MAX_STEP_CHANGE     32
 
 #define MAX_VERTS_ON_POLY   10
 #define MAX_MARK_POLYS      256 // JPW NERVE was 1024
 
-#define STAT_MINUS          10  // num frame for '-' stats digit
-
-#define ICON_SIZE           48
-#define CHAR_WIDTH          32
-#define CHAR_HEIGHT         48
-#define TEXT_ICON_SPACE     4
-
 #define TEAMCHAT_WIDTH      70
 #define TEAMCHAT_HEIGHT     8
 
 #define NOTIFY_WIDTH        80
 #define NOTIFY_HEIGHT       5
-
-// very large characters
-#define GIANT_WIDTH         32
-#define GIANT_HEIGHT        48
 
 #define NUM_CROSSHAIRS      10
 
@@ -100,10 +85,6 @@ If you have questions concerning this license or the applicable additional terms
 
 // OSP
 
-// Cursor
-#define CURSOR_OFFSETX  13
-#define CURSOR_OFFSETY  12
-
 // Demo controls
 #define DEMO_THIRDPERSONUPDATE  0
 #define DEMO_RANGEDELTA         6
@@ -119,20 +100,13 @@ If you have questions concerning this license or the applicable additional terms
 #define WINDOW_FONTHEIGHT   8       // For non-true-type: height to scale from
 
 #define WID_NONE            0x00    // General window
-#define WID_STATS           0x01    // Stats (reusable due to scroll effect)
-
-#define WID_MOTD            0x04    // MOTD
 
 #define WFX_TEXTSIZING      0x01    // Size the window based on text/font setting
 #define WFX_FLASH           0x02    // Alternate between bg and b2 every half second
 #define WFX_TRUETYPE        0x04    // Use truetype fonts for text
-#define WFX_MULTIVIEW       0x08    // Multiview window
 // These need to be last
 #define WFX_FADEIN          0x10    // Fade the window in (and back out when closing)
 #define WFX_SCROLLUP        0x20    // Scroll window up from the bottom (and back down when closing)
-#define WFX_SCROLLDOWN      0x40    // Scroll window down from the top (and back up when closing)
-#define WFX_SCROLLLEFT      0x80    // Scroll window in from the left (and back right when closing)
-#define WFX_SCROLLRIGHT     0x100   // Scroll window in from the right (and back left when closing)
 
 #define WSTATE_COMPLETE     0x00    // Window is up with startup effects complete
 #define WSTATE_START        0x01    // Window is "initializing" w/effects
@@ -1319,7 +1293,6 @@ typedef struct {
 
 	sfxHandle_t sndLimboSelect;
 	sfxHandle_t sndLimboFocus;
-	sfxHandle_t sndLimboFilter;
 	sfxHandle_t sndLimboCancel;
 
 	qhandle_t hWeaponSnd;

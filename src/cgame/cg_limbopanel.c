@@ -32,7 +32,6 @@ If you have questions concerning this license or the applicable additional terms
 
 #define SOUND_SELECT    SOUNDEVENT(cgs.media.sndLimboSelect)
 #define SOUND_FOCUS     SOUNDEVENT(cgs.media.sndLimboFocus)
-#define SOUND_FILTER    SOUNDEVENT(cgs.media.sndLimboFilter)
 #define SOUND_CANCEL    SOUNDEVENT(cgs.media.sndLimboCancel)
 
 void CG_DrawBorder(float x, float y, float w, float h, qboolean fill, qboolean drawMouseOver);
