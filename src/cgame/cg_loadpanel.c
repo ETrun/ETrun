@@ -32,16 +32,11 @@ If you have questions concerning this license or the applicable additional terms
 extern displayContextDef_t *DC;
 
 qboolean   bg_loadscreeninited = qfalse;
-qboolean   bg_loadscreeninteractive;
 fontInfo_t bg_loadscreenfont1;
 fontInfo_t bg_loadscreenfont2;
-qhandle_t  bg_axispin;
-qhandle_t  bg_alliedpin;
 qhandle_t  bg_neutralpin;
 qhandle_t  bg_pin;
-
 qhandle_t bg_filter_al;
-
 qhandle_t bg_mappic;
 
 panel_button_text_t missiondescriptionTxt =
@@ -57,22 +52,6 @@ panel_button_text_t missiondescriptionHeaderTxt =
 	0.2f,                0.2f,
 	{ 0.0f,              0.0f,             0.0f,    0.8f },
 	0,                   ITEM_ALIGN_CENTER,
-	&bg_loadscreenfont2,
-};
-
-panel_button_text_t campaignpheaderTxt =
-{
-	0.2f,                0.2f,
-	{ 1.0f,              1.0f,1.0f,    0.6f },
-	0,                   0,
-	&bg_loadscreenfont2,
-};
-
-panel_button_text_t campaignpTxt =
-{
-	0.30f,               0.30f,
-	{ 1.0f,              1.0f, 1.0f,  0.6f },
-	0,                   0,
 	&bg_loadscreenfont2,
 };
 
@@ -214,8 +193,6 @@ void CG_DrawConnectScreen(qboolean interactive, qboolean forcerefresh) {
 	static qboolean inside = qfalse;
 	char            buffer[1024];
 
-	bg_loadscreeninteractive = interactive;
-
 	if (!DC) {
 		return;
 	}
@@ -232,8 +209,6 @@ void CG_DrawConnectScreen(qboolean interactive, qboolean forcerefresh) {
 		DC->registerFont("ariblk", 27, &bg_loadscreenfont1);
 		DC->registerFont("courbd", 30, &bg_loadscreenfont2);
 
-		bg_axispin    = DC->registerShaderNoMip("gfx/loading/pin_axis");
-		bg_alliedpin  = DC->registerShaderNoMip("gfx/loading/pin_allied");
 		bg_neutralpin = DC->registerShaderNoMip("gfx/loading/pin_neutral");
 		bg_pin        = DC->registerShaderNoMip("gfx/loading/pin_shot");
 		bg_filter_al  = DC->registerShaderNoMip("ui/assets/filter_antilag");

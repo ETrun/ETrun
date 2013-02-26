@@ -35,30 +35,11 @@ fontInfo_t bg_loadscreenfont2;
 
 void UI_LoadPanel_RenderHeaderText(panel_button_t *button);
 void UI_LoadPanel_RenderLoadingText(panel_button_t *button);
-void UI_LoadPanel_RenderPercentageMeter(panel_button_t *button);
-
-// panel_button_text_t FONTNAME = { SCALEX, SCALEY, COLOUR, STYLE, FONT };
 
 panel_button_text_t missiondescriptionTxt =
 {
 	0.2f,                0.2f,
 	{ 0.0f,              0.0f,0.0f,    1.f },
-	0,                   0,
-	&bg_loadscreenfont2,
-};
-
-panel_button_text_t missiondescriptionHeaderTxt =
-{
-	0.2f,                0.2f,
-	{ 0.0f,              0.0f,             0.0f,    0.8f },
-	0,                   ITEM_ALIGN_CENTER,
-	&bg_loadscreenfont2,
-};
-
-panel_button_text_t campaignpheaderTxt =
-{
-	0.2f,                0.2f,
-	{ 1.0f,              1.0f,1.0f,    0.6f },
 	0,                   0,
 	&bg_loadscreenfont2,
 };
@@ -170,79 +151,6 @@ void UI_DrawLoadPanel(qboolean ownerdraw, qboolean uihack) {
 	}
 
 	inside = qfalse;
-}
-
-#define STARTANGLE 40
-void UI_LoadPanel_RenderPercentageMeter(panel_button_t *button) {
-	float      hunkfrac;
-	float      w, h;
-	vec2_t     org;
-	polyVert_t verts[4];
-
-	org[0] = button->rect.x;
-	org[1] = button->rect.y;
-	w      = button->rect.w;
-	h      = button->rect.h;
-
-	hunkfrac = 0.f;
-	AdjustFrom640(&org[0], &org[1], &w, &h);
-	SetupRotatedThing(verts, org, w, h, DEG2RAD((180 - STARTANGLE) - ((180 - (2 * STARTANGLE)) * hunkfrac)));
-
-	trap_R_Add2dPolys(verts, 4, button->hShaderNormal);
-}
-
-void MiniAngleToAxis(vec_t angle, vec2_t axes[2]) {
-	axes[0][0] = (vec_t)sin(-angle);
-	axes[0][1] = -(vec_t)cos(-angle);
-
-	axes[1][0] = -axes[0][1];
-	axes[1][1] = axes[0][0];
-}
-
-void SetupRotatedThing(polyVert_t *verts, vec2_t org, float w, float h, vec_t angle) {
-	vec2_t axes[2];
-
-	MiniAngleToAxis(angle, axes);
-
-	verts[0].xyz[0]      = org[0] - (w * 0.5f) * axes[0][0];
-	verts[0].xyz[1]      = org[1] - (w * 0.5f) * axes[0][1];
-	verts[0].xyz[2]      = 0;
-	verts[0].st[0]       = 0;
-	verts[0].st[1]       = 1;
-	verts[0].modulate[0] = 255;
-	verts[0].modulate[1] = 255;
-	verts[0].modulate[2] = 255;
-	verts[0].modulate[3] = 255;
-
-	verts[1].xyz[0]      = verts[0].xyz[0] + w * axes[0][0];
-	verts[1].xyz[1]      = verts[0].xyz[1] + w * axes[0][1];
-	verts[1].xyz[2]      = 0;
-	verts[1].st[0]       = 1;
-	verts[1].st[1]       = 1;
-	verts[1].modulate[0] = 255;
-	verts[1].modulate[1] = 255;
-	verts[1].modulate[2] = 255;
-	verts[1].modulate[3] = 255;
-
-	verts[2].xyz[0]      = verts[1].xyz[0] + h * axes[1][0];
-	verts[2].xyz[1]      = verts[1].xyz[1] + h * axes[1][1];
-	verts[2].xyz[2]      = 0;
-	verts[2].st[0]       = 1;
-	verts[2].st[1]       = 0;
-	verts[2].modulate[0] = 255;
-	verts[2].modulate[1] = 255;
-	verts[2].modulate[2] = 255;
-	verts[2].modulate[3] = 255;
-
-	verts[3].xyz[0]      = verts[2].xyz[0] - w * axes[0][0];
-	verts[3].xyz[1]      = verts[2].xyz[1] - w * axes[0][1];
-	verts[3].xyz[2]      = 0;
-	verts[3].st[0]       = 0;
-	verts[3].st[1]       = 0;
-	verts[3].modulate[0] = 255;
-	verts[3].modulate[1] = 255;
-	verts[3].modulate[2] = 255;
-	verts[3].modulate[3] = 255;
 }
 
 void UI_LoadPanel_RenderHeaderText(panel_button_t *button) {

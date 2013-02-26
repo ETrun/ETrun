@@ -34,7 +34,6 @@ If you have questions concerning this license or the applicable additional terms
 #include "ui_local.h"
 
 uiStatic_t uis;
-qboolean   m_entersound;            // after a frame, so caching won't disrupt the sound
 
 /*
 =================

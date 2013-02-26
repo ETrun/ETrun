@@ -390,33 +390,18 @@ typedef struct {
 } uiStatic_t;
 
 // new ui stuff
-#define UI_NUMFX 7
 #define MAX_HEADS 64
 #define MAX_ALIASES 64
-#define MAX_HEADNAME  32
 #define MAX_TEAMS 64
 #define MAX_MAPS 128
-#define MAX_SPMAPS 16
-#define PLAYERS_PER_TEAM 5
-#define MAX_PINGREQUESTS        16
 #define MAX_ADDRESSLENGTH       64
-#define MAX_HOSTNAMELENGTH      22
 #define MAX_MAPNAMELENGTH       16
-#define MAX_STATUSLENGTH        64
-#define MAX_LISTBOXWIDTH        59
-#define UI_FONT_THRESHOLD       0.1
 #define MAX_DISPLAY_SERVERS     2048
 #define MAX_SERVERSTATUS_LINES  128
 #define MAX_SERVERSTATUS_TEXT   2048
 #define MAX_FOUNDPLAYER_SERVERS 16
-#define TEAM_MEMBERS 5
-#define GAMES_ALL           0
-#define GAMES_FFA           1
-#define GAMES_TEAMPLAY      2
-#define GAMES_TOURNEY       3
-#define GAMES_CTF           4
 #define MAX_MODS 64
-#define MAX_DEMOS 256
+#define MAX_DEMOS 256// Nico, #todo: increase?
 #define MAX_MOVIES 256
 #define MAX_PLAYERMODELS 256
 #define MAX_SAVEGAMES 256
@@ -651,7 +636,6 @@ extern char *UI_Argv(int arg);
 extern char *UI_Cvar_VariableString(const char *var_name);
 extern void         UI_Refresh(int time);
 extern void         UI_KeyEvent(int key);
-extern qboolean   m_entersound;
 extern uiStatic_t uis;
 
 //
