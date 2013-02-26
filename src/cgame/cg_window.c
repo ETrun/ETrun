@@ -34,9 +34,6 @@ If you have questions concerning this license or the applicable additional terms
 #include "cg_local.h"
 #include "../ui/ui_shared.h"
 
-extern pmove_t cg_pmove;        // cg_predict.c
-
-
 //////////////////////////////////////////////
 //////////////////////////////////////////////
 //

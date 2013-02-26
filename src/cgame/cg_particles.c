@@ -141,6 +141,8 @@ vec3_t   rforward, rright, rup;
 
 float oldtime;
 
+char cg_fxflags;
+
 /*
 ===============
 CL_ClearParticles

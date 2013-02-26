@@ -30,10 +30,6 @@ If you have questions concerning this license or the applicable additional terms
 // for a 3D rendering
 #include "cg_local.h"
 
-//========================
-extern pmove_t cg_pmove;
-//========================
-
 /*
 =============================================================================
 
