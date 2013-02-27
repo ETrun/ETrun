@@ -933,8 +933,6 @@ record
     	{
 	        constructible_class 1
 	        constructible_chargebarreq 0.3
-		constructible_constructxpbonus 0
-		constructible_destructxpbonus 0
 		constructible_health 10
 		constructible_weaponclass 1
 		constructible_duration 2500

@@ -1346,7 +1346,6 @@ truck_construct
 		kill truck
 		
 		constructible_class 2
-		constructible_constructxpbonus 10
 	}
 
 	built final

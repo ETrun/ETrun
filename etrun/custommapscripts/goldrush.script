@@ -1838,8 +1838,6 @@ tank_construct
 
 		constructible_class 2
 		constructible_health 1200
-		constructible_constructxpbonus 10
-		constructible_destructxpbonus 10
 	}
 
 	built final
@@ -2179,8 +2177,6 @@ truck_construct
 	{
 		constructible_class 2
 		constructible_health 1050
-		constructible_constructxpbonus 10
-		constructible_destructxpbonus 10
 	}
 
 	built final

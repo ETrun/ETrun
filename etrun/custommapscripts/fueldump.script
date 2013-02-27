@@ -3667,8 +3667,6 @@ tank_construct
 
 	trigger final_pos
 	{
-		constructible_constructxpbonus 3
-		constructible_destructxpbonus 3
 	}
 }
 
