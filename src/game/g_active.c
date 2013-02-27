@@ -683,7 +683,7 @@ void ClientThink_real(gentity_t *ent) {
 		ucmd->wbuttons    = 0;
 		ucmd->doubleTap   = 0;
 
-		// freeze player (RELOAD_FAILED still allowed to move/look)
+		// freeze player
 		if (level.match_pause != PAUSE_NONE) {
 			client->ps.pm_type = PM_FREEZE;
 		} else if ((client->ps.eFlags & EF_VIEWING_CAMERA)) {
@@ -1124,9 +1124,6 @@ void ClientEndFrame(gentity_t *ent) {
 		ent->client->lastBurnTime                      += time_delta;
 		ent->client->pers.connectTime                  += time_delta;
 		ent->client->pers.enterTime                    += time_delta;
-		ent->client->pers.teamState.lastreturnedflag   += time_delta;
-		ent->client->pers.teamState.lasthurtcarrier    += time_delta;
-		ent->client->pers.teamState.lastfraggedcarrier += time_delta;
 		ent->client->ps.classWeaponTime                += time_delta;
 		ent->lastHintCheckTime                         += time_delta;
 		ent->pain_debounce_time                        += time_delta;

@@ -766,21 +766,6 @@ void Info_NextPair(const char **s, char *key, char *value);
 /*
 ==========================================================
 
-  RELOAD STATES
-
-==========================================================
-*/
-
-#define RELOAD_SAVEGAME         0x01
-#define RELOAD_NEXTMAP          0x02
-#define RELOAD_NEXTMAP_WAITING  0x04
-#define RELOAD_FAILED           0x08
-#define RELOAD_ENDGAME          0x10
-
-
-/*
-==========================================================
-
 CVARS (console variables)
 
 Many variables can be used for cheating purposes, so when

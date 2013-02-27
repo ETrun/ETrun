@@ -330,11 +330,10 @@ typedef enum {
 # define PMF_RESPAWNED       512    // clear after attack and jump buttons come up
 # define PMF_FLAILING        2048
 # define PMF_FOLLOW          4096   // spectate following another player
-# define PMF_TIME_LOAD       8192   // hold for this time after a load game, and prevent large thinks
 # define PMF_LIMBO           16384  // JPW NERVE limbo state, pm_time is time until reinforce
 # define PMF_TIME_LOCKPLAYER 32768  // DHM - Nerve :: Lock all movement and view changes
 
-# define PMF_ALL_TIMES   (PMF_TIME_WATERJUMP | PMF_TIME_LAND | PMF_TIME_KNOCKBACK | PMF_TIME_LOCKPLAYER /*|PMF_TIME_LOAD*/)
+# define PMF_ALL_TIMES   (PMF_TIME_WATERJUMP | PMF_TIME_LAND | PMF_TIME_KNOCKBACK | PMF_TIME_LOCKPLAYER)
 
 typedef struct {
 	qboolean bAutoReload;           // do we predict autoreload of weapons
@@ -499,7 +498,7 @@ typedef enum {
 // entityState_t->eFlags
 # define EF_DEAD             0x00000001     // don't draw a foe marker over players with EF_DEAD
 # define EF_NONSOLID_BMODEL  0x00000002     // bmodel is visible, but not solid
-# define EF_FORCE_END_FRAME  EF_NONSOLID_BMODEL // force client to end of current animation (after loading a savegame)
+# define EF_FORCE_END_FRAME  EF_NONSOLID_BMODEL // force client to end of current animation
 # define EF_TELEPORT_BIT     0x00000004     // toggled every time the origin abruptly changes
 # define EF_READY            0x00000008     // player is ready
 
@@ -1729,25 +1728,6 @@ typedef struct bg_character_s {
 
 	animModelInfo_t *animModelInfo;
 } bg_character_t;
-
-/*
-==============================================================
-
-SAVE
-
-    12 -
-    13 - (SA) added 'episode' tracking to savegame
-    14 - RF added 'skill'
-    15 - (SA) moved time info above the main game reading
-    16 - (SA) added fog
-    17 - (SA) rats, changed fog.
-    18 - TTimo targetdeath fix
-       show_bug.cgi?id=434
-    30 - Arnout: initial Enemy Territory implementation
-    31 - Arnout: added new global fog
-
-==============================================================
-*/
 
 //------------------------------------------------------------------
 // Global Function Decs

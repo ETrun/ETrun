@@ -173,9 +173,6 @@ field_t fields[] =
 	{ "delay",        FOFS(delay),          F_FLOAT,     0 },
 	{ "radius",       FOFS(radius),         F_INT,       0 },
 
-	// Ridah, for reloading savegames at correct mission spot
-	{ "missionlevel", FOFS(missionLevel),   F_INT,       0 },
-
 	// Rafel
 	{ "start_size",   FOFS(start_size),     F_INT,       0 },
 	{ "end_size",     FOFS(end_size),       F_INT,       0 },

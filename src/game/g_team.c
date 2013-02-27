@@ -31,15 +31,6 @@ If you have questions concerning this license or the applicable additional terms
 #include "../../etrun/ui/menudef.h"
 #include "g_local.h"
 
-int OtherTeam(int team) {
-	if (team == TEAM_AXIS) {
-		return TEAM_ALLIES;
-	} else if (team == TEAM_ALLIES) {
-		return TEAM_AXIS;
-	}
-	return team;
-}
-
 const char *TeamName(int team) {
 	if (team == TEAM_AXIS) {
 		return "RED";
@@ -49,28 +40,6 @@ const char *TeamName(int team) {
 		return "SPECTATOR";
 	}
 	return "FREE";
-}
-
-const char *OtherTeamName(int team) {
-	if (team == TEAM_AXIS) {
-		return "BLUE";
-	} else if (team == TEAM_ALLIES) {
-		return "RED";
-	} else if (team == TEAM_SPECTATOR) {
-		return "SPECTATOR";
-	}
-	return "FREE";
-}
-
-const char *TeamColorString(int team) {
-	if (team == TEAM_AXIS) {
-		return S_COLOR_RED;
-	} else if (team == TEAM_ALLIES) {
-		return S_COLOR_BLUE;
-	} else if (team == TEAM_SPECTATOR) {
-		return S_COLOR_YELLOW;
-	}
-	return S_COLOR_WHITE;
 }
 
 // NULL for everyone
@@ -121,161 +90,6 @@ qboolean OnSameTeam(gentity_t *ent1, gentity_t *ent2) {
 #define WCP_ANIM_AXIS_FALLING       7
 #define WCP_ANIM_AMERICAN_FALLING   8
 // jpw
-
-/*
-================
-Team_FragBonuses
-
-Calculate the bonuses for flag defense, flag carrier defense, etc.
-Note that bonuses are not cumlative.  You get one, they are in importance
-order.
-================
-*/
-void Team_FragBonuses(gentity_t *targ, gentity_t *inflictor, gentity_t *attacker) {
-	int       i;
-	gentity_t *ent;
-	int       flag_pw, enemy_flag_pw;
-	int       otherteam;
-	gentity_t *flag, *carrier = NULL;
-	char      *c;
-	vec3_t    v1, v2;
-	int       team;
-
-	// Nico, silent GCC
-	inflictor = inflictor;
-
-	// no bonus for fragging yourself
-	if (!targ->client || !attacker->client || targ == attacker) {
-		return;
-	}
-
-	team      = targ->client->sess.sessionTeam;
-	otherteam = OtherTeam(targ->client->sess.sessionTeam);
-	if (otherteam < 0) {
-		return; // whoever died isn't on a team
-
-	}
-// JPW NERVE -- no bonuses for fragging friendlies, penalties scored elsewhere
-	if (team == (int)attacker->client->sess.sessionTeam) {
-		return;
-	}
-// jpw
-
-	// same team, if the flag at base, check to he has the enemy flag
-	if (team == TEAM_AXIS) {
-		flag_pw       = PW_REDFLAG;
-		enemy_flag_pw = PW_BLUEFLAG;
-	} else {
-		flag_pw       = PW_BLUEFLAG;
-		enemy_flag_pw = PW_REDFLAG;
-	}
-
-	// did the attacker frag the flag carrier?
-	if (targ->client->ps.powerups[enemy_flag_pw]) {
-		attacker->client->pers.teamState.lastfraggedcarrier = level.time;
-		attacker->client->pers.teamState.fragcarrier++;
-
-		// the target had the flag, clear the hurt carrier
-		// field on the other team
-		for (i = 0; i < g_maxclients.integer; i++) {
-			ent = g_entities + i;
-			if (ent->inuse && (int)ent->client->sess.sessionTeam == otherteam) {
-				ent->client->pers.teamState.lasthurtcarrier = 0;
-			}
-		}
-		return;
-	}
-	// flag and flag carrier area defense bonuses
-
-	// we have to find the flag and carrier entities
-
-	// find the flag
-	switch (attacker->client->sess.sessionTeam) {
-	case TEAM_AXIS:
-		c = "team_CTF_redflag";
-		break;
-	case TEAM_ALLIES:
-		c = "team_CTF_blueflag";
-		break;
-	default:
-		return;
-	}
-
-	flag = NULL;
-	while ((flag = G_Find(flag, FOFS(classname), c)) != NULL) {
-		if (!(flag->flags & FL_DROPPED_ITEM)) {
-			break;
-		}
-	}
-
-	if (flag) {   // JPW NERVE -- added some more stuff after this fn
-		//		return; // can't find attacker's flag
-
-		// find attacker's team's flag carrier
-		for (i = 0; i < g_maxclients.integer; i++) {
-			carrier = g_entities + i;
-			if (carrier->inuse && carrier->client->ps.powerups[flag_pw]) {
-				break;
-			}
-			carrier = NULL;
-		}
-
-		// ok we have the attackers flag and a pointer to the carrier
-
-		// check to see if we are defending the base's flag
-		VectorSubtract(targ->client->ps.origin, flag->s.origin, v1);
-		VectorSubtract(attacker->client->ps.origin, flag->s.origin, v2);
-
-		if ((VectorLengthSquared(v1) < SQR(CTF_TARGET_PROTECT_RADIUS) ||
-		     VectorLengthSquared(v2) < SQR(CTF_TARGET_PROTECT_RADIUS) ||
-		     CanDamage(flag, targ->client->ps.origin) || CanDamage(flag, attacker->client->ps.origin)) &&
-		    attacker->client->sess.sessionTeam != targ->client->sess.sessionTeam) {
-			// we defended the base flag
-			// JPW NERVE FIXME -- don't report flag defense messages, change to gooder message
-			attacker->client->pers.teamState.basedefense++;
-			return;
-		}
-	} // JPW NERVE
-
-// JPW NERVE -- look for nearby checkpoints and spawnpoints
-	flag = NULL;
-	while ((flag = G_Find(flag, FOFS(classname), "team_WOLF_checkpoint")) != NULL) {
-		VectorSubtract(targ->client->ps.origin, flag->s.origin, v1);
-		if ((flag->s.frame != WCP_ANIM_NOFLAG) && (flag->count == (int)attacker->client->sess.sessionTeam)) {
-			if (VectorLengthSquared(v1) < SQR(WOLF_CP_PROTECT_RADIUS)) {
-			}
-		}
-	}
-// jpw
-
-}
-
-/*
-================
-Team_CheckHurtCarrier
-
-Check to see if attacker hurt the flag carrier.  Needed when handing out bonuses for assistance to flag
-carrier defense.
-================
-*/
-void Team_CheckHurtCarrier(gentity_t *targ, gentity_t *attacker) {
-	int flag_pw;
-
-	if (!targ->client || !attacker->client) {
-		return;
-	}
-
-	if (targ->client->sess.sessionTeam == TEAM_AXIS) {
-		flag_pw = PW_BLUEFLAG;
-	} else {
-		flag_pw = PW_REDFLAG;
-	}
-
-	if (targ->client->ps.powerups[flag_pw] &&
-	    targ->client->sess.sessionTeam != attacker->client->sess.sessionTeam) {
-		attacker->client->pers.teamState.lasthurtcarrier = level.time;
-	}
-}
 
 void Team_ResetFlag(gentity_t *ent) {
 	if (ent->flags & FL_DROPPED_ITEM) {
@@ -368,8 +182,6 @@ int Team_TouchOurFlag(gentity_t *ent, gentity_t *other, int team) {
 		}
 		// dhm
 // jpw 800 672 2420
-		other->client->pers.teamState.flagrecovery++;
-		other->client->pers.teamState.lastreturnedflag = level.time;
 		//ResetFlag will remove this entity!  We must return zero
 		Team_ReturnFlagSound(ent, team);
 		Team_ResetFlag(ent);
@@ -425,8 +237,6 @@ int Team_TouchEnemyFlag(gentity_t *ent, gentity_t *other, int team) {
 	} else {
 		cl->flagParent = ent->s.number;
 	}
-
-	cl->pers.teamState.flagsince = level.time;
 
 	other->client->speedScale = ent->splashDamage; // Alter player speed
 
@@ -576,32 +386,8 @@ gentity_t *SelectRandomTeamSpawnPoint(int teamstate, team_t team, int spawnObjec
 }
 
 
-
-/*
-===========
-SelectCTFSpawnPoint
-
-============
-*/
-gentity_t *SelectCTFSpawnPoint(team_t team, int teamstate, vec3_t origin, vec3_t angles, int spawnObjective) {
-	gentity_t *spot;
-
-	spot = SelectRandomTeamSpawnPoint(teamstate, team, spawnObjective);
-
-	if (!spot) {
-		return SelectSpawnPoint(vec3_origin, origin, angles);
-	}
-
-	VectorCopy(spot->s.origin, origin);
-	origin[2] += 9;
-	VectorCopy(spot->s.angles, angles);
-
-	return spot;
-}
-
 /*---------------------------------------------------------------------------*/
 
-void GetBotAutonomies(int clientNum, int *weapAutonomy, int *moveAutonomy);
 /*
 ==================
 TeamplayLocationsMessage

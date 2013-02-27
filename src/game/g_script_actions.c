@@ -3581,22 +3581,11 @@ G_ScriptAction_ConstructibleConstructXPBonus
 ===================
 */
 qboolean G_ScriptAction_ConstructibleConstructXPBonus(gentity_t *ent, char *params) {
-	char *pString, *token;
-	int  value;
+	// Nico, silent GCC
+	ent    = ent;
+	params = params;
 
-	pString = params;
-	if ((token = COM_ParseExt(&pString, qfalse)) == NULL) {
-		G_Error("G_Scripting: \"constructible_constructxpbonus\" must have a xppoints value\n");
-	}
-
-	value = atoi(token);
-
-	if (value < 0) {
-		G_Error("G_Scripting: \"constructible_constructxpbonus\" has a bad value %i\n", value);
-	}
-
-	ent->constructibleStats.constructxpbonus = value;
-
+	G_Printf("Warning: G_ScriptAction_ConstructibleConstructXPBonus ignored\n");
 	return qtrue;
 }
 
@@ -3608,22 +3597,11 @@ G_ScriptAction_ConstructibleDestructXPBonus
 ===================
 */
 qboolean G_ScriptAction_ConstructibleDestructXPBonus(gentity_t *ent, char *params) {
-	char *pString, *token;
-	int  value;
+	// Nico, silent GCC
+	ent    = ent;
+	params = params;
 
-	pString = params;
-	if ((token = COM_ParseExt(&pString, qfalse)) == NULL) {
-		G_Error("G_Scripting: \"constructible_destructxpbonus\" must have a xppoints value\n");
-	}
-
-	value = atoi(token);
-
-	if (value < 0) {
-		G_Error("G_Scripting: \"constructible_destructxpbonus\" has a bad value %i\n", value);
-	}
-
-	ent->constructibleStats.destructxpbonus = value;
-
+	G_Printf("Warning: G_ScriptAction_ConstructibleDestructXPBonus ignored\n");
 	return qtrue;
 }
 

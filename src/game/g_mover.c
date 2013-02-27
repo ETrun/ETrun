@@ -3941,11 +3941,9 @@ void SP_func_explosive(gentity_t *ent) {
 	if (i > 0 && i <= NUM_CONSTRUCTIBLE_CLASSES) {
 		ent->constructibleStats = g_constructible_classes[i];
 
-		G_SpawnFloat("constructible_destructxpbonus", va("%f", ent->constructibleStats.destructxpbonus), &ent->constructibleStats.destructxpbonus);
 		G_SpawnInt("constructible_health", va("%i", ent->constructibleStats.health), &ent->constructibleStats.health);
 		G_SpawnInt("constructible_weaponclass", va("%i", ent->constructibleStats.weaponclass), &ent->constructibleStats.weaponclass);
 	} else {
-		G_SpawnFloat("constructible_destructxpbonus", "0", &ent->constructibleStats.destructxpbonus);
 		G_SpawnInt("constructible_health", "-1", &ent->constructibleStats.health);
 		G_SpawnInt("constructible_weaponclass", "0", &ent->constructibleStats.weaponclass);
 	}
@@ -4696,9 +4694,9 @@ NO_AAS_BLOCKING : dont interact with AAS at all
 
 g_constructible_stats_t g_constructible_classes[NUM_CONSTRUCTIBLE_CLASSES] =
 {
-	{ .5f,  5,    5,    350, 1, 2500 },
-	{ 1.f,  7.5f, 7.5f, 100, 2, 5000 },
-	{ 1.5f, 10,   10,   100, 3, 7500 }
+	{ .5f,    350, 1, 2500 },
+	{ 1.f, 100, 2, 5000 },
+	{ 1.5f,   100, 3, 7500 }
 };
 
 void SP_func_constructible(gentity_t *ent) {
@@ -4720,15 +4718,11 @@ void SP_func_constructible(gentity_t *ent) {
 		ent->constructibleStats = g_constructible_classes[i];
 
 		G_SpawnFloat("constructible_chargebarreq", va("%f", ent->constructibleStats.chargebarreq), &ent->constructibleStats.chargebarreq);
-		G_SpawnFloat("constructible_constructxpbonus", va("%f", ent->constructibleStats.constructxpbonus), &ent->constructibleStats.constructxpbonus);
-		G_SpawnFloat("constructible_destructxpbonus", va("%f", ent->constructibleStats.destructxpbonus), &ent->constructibleStats.destructxpbonus);
 		G_SpawnInt("constructible_health", va("%i", ent->constructibleStats.health), &ent->constructibleStats.health);
 		G_SpawnInt("constructible_weaponclass", va("%i", ent->constructibleStats.weaponclass), &ent->constructibleStats.weaponclass);
 		G_SpawnInt("constructible_duration", va("%i", ent->constructibleStats.duration), &ent->constructibleStats.duration);
 	} else {
 		G_SpawnFloat("constructible_chargebarreq", "1", &ent->constructibleStats.chargebarreq);
-		G_SpawnFloat("constructible_constructxpbonus", "0", &ent->constructibleStats.constructxpbonus);
-		G_SpawnFloat("constructible_destructxpbonus", "0", &ent->constructibleStats.destructxpbonus);
 		G_SpawnInt("constructible_health", "100", &ent->constructibleStats.health);
 		G_SpawnInt("constructible_weaponclass", "0", &ent->constructibleStats.weaponclass);
 		G_SpawnInt("constructible_duration", "5000", &ent->constructibleStats.duration);

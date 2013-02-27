@@ -410,14 +410,6 @@ float CG_GetValue(int ownerDraw, int type) {
 	return -1;
 }
 
-qboolean CG_OtherTeamHasFlag() {
-	return qfalse;
-}
-
-qboolean CG_YourTeamHasFlag() {
-	return qfalse;
-}
-
 // THINKABOUTME: should these be exclusive or inclusive..
 //
 qboolean CG_OwnerDrawVisible(int flags) {

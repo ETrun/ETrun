@@ -107,7 +107,6 @@ typedef struct g_serverEntity_s g_serverEntity_t;
 
 //====================================================================
 //
-// Scripting, these structure are not saved into savegames (parsed each start)
 typedef struct {
 	char *actionString;
 	qboolean (*actionFunc)(gentity_t *ent, char *params);
@@ -163,8 +162,6 @@ void G_Script_ScriptEvent(gentity_t *ent, char *eventStr, char *params);
 
 typedef struct g_constructible_stats_s {
 	float chargebarreq;
-	float constructxpbonus;
-	float destructxpbonus;
 	int health;
 	int weaponclass;
 	int duration;
@@ -356,9 +353,6 @@ struct gentity_s {
 
 	int props_frame_state;
 
-	// Ridah
-	int missionLevel;               // mission we are currently trying to complete
-	                                // gets reset each new level
 	int start_size;
 	int end_size;
 
@@ -484,18 +478,6 @@ typedef struct {
 	playerTeamStateState_t state;
 
 	int location[2];
-
-	int captures;
-	int basedefense;
-	int carrierdefense;
-	int flagrecovery;
-	int fragcarrier;
-	int assists;
-
-	float lasthurtcarrier;
-	float lastreturnedflag;
-	float flagsince;
-	float lastfraggedcarrier;
 } playerTeamState_t;
 
 // the auto following clients don't follow a specific client
@@ -1909,12 +1891,10 @@ void G_KillEnts(const char *target, gentity_t *ignore, gentity_t *killer, meansO
 void trap_EngineerTrace(trace_t *results, const vec3_t start, const vec3_t mins, const vec3_t maxs, const vec3_t end, int passEntityNum, int contentmask);
 
 qboolean G_ConstructionIsPartlyBuilt(gentity_t *ent);
-
-int G_CountTeamMedics(team_t team, qboolean alivecheck);
 qboolean G_TankIsOccupied(gentity_t *ent);
 qboolean G_TankIsMountable(gentity_t *ent, gentity_t *other);
 
-// Nico, prototypes of functions in g_construction;c
+// Nico, prototypes of functions in g_construction.c
 qboolean G_ConstructionBegun(gentity_t *ent);
 qboolean G_ConstructionIsFullyBuilt(gentity_t *ent);
 qboolean G_ConstructionIsPartlyBuilt(gentity_t *ent);

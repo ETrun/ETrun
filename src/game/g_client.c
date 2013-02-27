@@ -584,50 +584,12 @@ void SetWolfSpawnWeapons(gclient_t *client) {
 	}
 }
 
-int G_CountTeamMedics(team_t team, qboolean alivecheck) {
-	int numMedics = 0;
-	int i, j;
-
-	for (i = 0; i < level.numConnectedClients; i++) {
-		j = level.sortedClients[i];
-
-		if (level.clients[j].sess.sessionTeam != team) {
-			continue;
-		}
-
-		if (level.clients[j].sess.playerType != PC_MEDIC) {
-			continue;
-		}
-
-		if (alivecheck) {
-			if (g_entities[j].health <= 0) {
-				continue;
-			}
-
-			if (level.clients[j].ps.pm_type == PM_DEAD || level.clients[j].ps.pm_flags & PMF_LIMBO) {
-				continue;
-			}
-		}
-
-		numMedics++;
-	}
-
-	return numMedics;
-}
-
 //
 // AddMedicTeamBonus
 //
 void AddMedicTeamBonus(gclient_t *client) {
-	int numMedics = G_CountTeamMedics(client->sess.sessionTeam, qfalse);
-
 	// compute health mod
-	client->pers.maxHealth = 100 + 10 * numMedics;
-
-	if (client->pers.maxHealth > 125) {
-		client->pers.maxHealth = 125;
-	}
-
+	client->pers.maxHealth = 125;
 	client->ps.stats[STAT_MAX_HEALTH] = client->pers.maxHealth;
 }
 
@@ -1327,6 +1289,26 @@ void ClientBegin(int clientNum) {
 }
 
 /*
+ * Select a spawn point for a player
+ * @author: Nico
+ */
+static gentity_t *SelectPlayerSpawnPoint(team_t team, int teamstate, vec3_t origin, vec3_t angles, int spawnObjective) {
+	gentity_t *spot;
+
+	spot = SelectRandomTeamSpawnPoint(teamstate, team, spawnObjective);
+
+	if (!spot) {
+		return SelectSpawnPoint(vec3_origin, origin, angles);
+	}
+
+	VectorCopy(spot->s.origin, origin);
+	origin[2] += 9;
+	VectorCopy(spot->s.angles, angles);
+
+	return spot;
+}
+
+/*
 ===========
 ClientSpawn
 
@@ -1357,13 +1339,10 @@ void ClientSpawn(gentity_t *ent) {
 
 	client->pers.lastSpawnTime = level.time;
 
-	// Arnout: let's just be sure it does the right thing at all times. (well maybe not the right thing, but at least not the bad thing!)
-	//if( client->sess.sessionTeam == TEAM_SPECTATOR || client->sess.sessionTeam == TEAM_FREE ) {
 	if (client->sess.sessionTeam != TEAM_AXIS && client->sess.sessionTeam != TEAM_ALLIES) {
 		spawnPoint = SelectSpectatorSpawnPoint(spawn_origin, spawn_angles);
 	} else {
-		// RF, if we have requested a specific spawn point, use it (fixme: what if this will place us inside another character?)
-		spawnPoint = SelectCTFSpawnPoint(client->sess.sessionTeam, client->pers.teamState.state, spawn_origin, spawn_angles, client->sess.spawnObjectiveIndex);
+		spawnPoint = SelectPlayerSpawnPoint(client->sess.sessionTeam, client->pers.teamState.state, spawn_origin, spawn_angles, client->sess.spawnObjectiveIndex);
 	}
 
 	client->pers.teamState.state = TEAM_ACTIVE;
@@ -1494,9 +1473,6 @@ void ClientSpawn(gentity_t *ent) {
 
 	client->pers.cmd.weapon = ent->client->ps.weapon;
 // dhm - end
-
-	// JPW NERVE ***NOTE*** the following line is order-dependent and must *FOLLOW* SetWolfSpawnWeapons() in multiplayer
-	// AddMedicTeamBonus() now adds medic team bonus and stores in ps.stats[STAT_MAX_HEALTH].
 
 	ent->health = client->ps.stats[STAT_HEALTH] = client->ps.stats[STAT_MAX_HEALTH];
 

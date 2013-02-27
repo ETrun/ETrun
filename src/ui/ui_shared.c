@@ -1647,27 +1647,17 @@ void Script_ClearFocus(itemDef_t *item, qboolean *bAbort, char **args) {
 }
 
 void Script_SetPlayerModel(itemDef_t *item, qboolean *bAbort, char **args) {
-	const char *name = NULL;
-
 	// Nico, silent GCC
 	item   = item;
 	bAbort = bAbort;
-
-	if (String_Parse(args, &name)) {
-		DC->setCVar("team_model", name);
-	}
+	args = args;
 }
 
 void Script_SetPlayerHead(itemDef_t *item, qboolean *bAbort, char **args) {
-	const char *name = NULL;
-
 	// Nico, silent GCC
 	item   = item;
 	bAbort = bAbort;
-
-	if (String_Parse(args, &name)) {
-		DC->setCVar("team_headmodel", name);
-	}
+	args = args;
 }
 
 // ATVI Wolfenstein Misc #304
@@ -1771,9 +1761,6 @@ void Script_AddListItem(itemDef_t *item, qboolean *bAbort, char **args) {
 
 	if (String_Parse(args, &itemname) && String_Parse(args, &val) && String_Parse(args, &name)) {
 		t = Menu_FindItemByName(item->parent, itemname);
-		if (t && t->special) {
-			DC->feederAddItem(t->special, name, atoi(val));
-		}
 	}
 }
 // -NERVE - SMF
@@ -4501,7 +4488,6 @@ qboolean Item_Bind_HandleKey(itemDef_t *item, int key, qboolean down) {
 
 
 void AdjustFrom640(float *x, float *y, float *w, float *h) {
-	//*x = *x * DC->scale + DC->bias;
 	*x *= DC->xscale;
 	*y *= DC->yscale;
 	*w *= DC->xscale;
@@ -4509,7 +4495,7 @@ void AdjustFrom640(float *x, float *y, float *w, float *h) {
 }
 
 void Item_Model_Paint(itemDef_t *item) {
-	float       x, y, w, h; //,xx;
+	float       x, y, w, h;
 	refdef_t    refdef;
 	qhandle_t   hModel;
 	refEntity_t ent;

@@ -404,7 +404,6 @@ typedef struct {
 #define MAX_DEMOS 256// Nico, #todo: increase?
 #define MAX_MOVIES 256
 #define MAX_PLAYERMODELS 256
-#define MAX_SAVEGAMES 256
 #define MAX_SPAWNPOINTS 128     // NERVE - SMF
 #define MAX_SPAWNDESC   128     // NERVE - SMF
 #define MAX_PBLINES     128     // DHM - Nerve
@@ -418,13 +417,6 @@ typedef struct {
 	qhandle_t headImage;
 	qboolean female;
 } characterInfo;
-
-//----(SA)	added
-typedef struct {
-	const char *name;
-	qhandle_t sshotImage;
-} savegameInfo;
-//----(SA)	end
 
 typedef struct {
 	const char *name;
@@ -509,7 +501,6 @@ typedef struct {
 	int newHighScoreTime;
 	int newBestTime;
 	qboolean newHighScore;
-	qboolean demoAvailable;
 	qboolean soundHighScore;
 
 	int characterCount;
@@ -555,12 +546,6 @@ typedef struct {
 	int movieIndex;
 	int previewMovie;
 
-//----(SA)	added
-	savegameInfo savegameList[MAX_SAVEGAMES];
-	int savegameCount;
-	int savegameIndex;
-//----(SA)	end
-
 	serverStatus_t serverStatus;
 
 	// for the showing the status of a server
@@ -580,10 +565,6 @@ typedef struct {
 	int currentCrosshair;
 	int startPostGameTime;
 	sfxHandle_t newHighScoreSound;
-
-	int q3HeadCount;
-	char q3HeadNames[MAX_PLAYERMODELS][64];
-	qhandle_t q3HeadIcons[MAX_PLAYERMODELS];
 
 	int effectsColor;
 

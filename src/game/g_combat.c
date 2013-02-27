@@ -292,9 +292,6 @@ void player_die(gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int 
 		}
 	}
 
-	// Add team bonuses
-	Team_FragBonuses(self, inflictor, attacker);
-
 	// drop flag regardless
 	if (self->client->ps.powerups[PW_REDFLAG]) {
 		item = BG_FindItem("Red Flag");
