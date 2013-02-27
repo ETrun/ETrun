@@ -58,7 +58,6 @@ static void UI_LoadArenasFromFile(char *filename) {
 		return;
 	}
 
-	uiInfo.mapList[uiInfo.mapCount].cinematic = -1;
 	uiInfo.mapList[uiInfo.mapCount].levelShot = -1;
 	uiInfo.mapList[uiInfo.mapCount].typeBits  = 0;
 

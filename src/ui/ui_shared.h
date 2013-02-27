@@ -142,8 +142,6 @@ typedef struct {
 	const char *name;               //
 	const char *model;              //
 	const char *group;              // if it belongs to a group
-	const char *cinematicName;      // cinematic name
-	int cinematic;                  // cinematic handle
 	int style;                      //
 	int border;                     //
 	int ownerDraw;                  // ownerDraw style
@@ -453,10 +451,6 @@ typedef struct {
 	sfxHandle_t (*registerSound)(const char *name, qboolean compressed);
 	void (*startBackgroundTrack)(const char *intro, const char *loop, int fadeupTime);
 	void (*stopBackgroundTrack)();
-	int (*playCinematic)(const char *name, float x, float y, float w, float h);
-	void (*stopCinematic)(int handle);
-	void (*drawCinematic)(int handle, float x, float y, float w, float h);
-	void (*runCinematicFrame)(int handle);
 
 	// Gordon: campaign stuffs
 	const char * (*descriptionForCampaign)(void);

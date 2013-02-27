@@ -494,7 +494,6 @@ void Window_Init(Window *w) {
 	memset(w, 0, sizeof (windowDef_t));
 	w->borderSize   = 1;
 	w->foreColor[0] = w->foreColor[1] = w->foreColor[2] = w->foreColor[3] = 1.0;
-	w->cinematic    = -1;
 }
 
 void Fade(int *flags, float *f, float clamp, int *nextTime, int offsetTime, qboolean bFlags, float fadeAmount) {
@@ -569,17 +568,6 @@ void Window_Paint(Window *w, float fadeAmount, float fadeClamp, float fadeCycle)
 		if (DC->getTeamColor) {
 			DC->getTeamColor(&color);
 			DC->fillRect(fillRect.x, fillRect.y, fillRect.w, fillRect.h, color);
-		}
-	} else if (w->style == WINDOW_STYLE_CINEMATIC) {
-		if (w->cinematic == -1) {
-			w->cinematic = DC->playCinematic(w->cinematicName, fillRect.x, fillRect.y, fillRect.w, fillRect.h);
-			if (w->cinematic == -1) {
-				w->cinematic = -2;
-			}
-		}
-		if (w->cinematic >= 0) {
-			DC->runCinematicFrame(w->cinematic);
-			DC->drawCinematic(w->cinematic, fillRect.x, fillRect.y, fillRect.w, fillRect.h);
 		}
 	}
 
@@ -1003,12 +991,6 @@ void Menu_ShowItemByName(menuDef_t *menu, const char *p, qboolean bShow) {
 				}
 
 				item->window.flags &= ~WINDOW_VISIBLE;
-
-				// stop cinematics playing in the window
-				if (item->window.cinematic >= 0) {
-					DC->stopCinematic(item->window.cinematic);
-					item->window.cinematic = -1;
-				}
 			}
 		}
 	}
@@ -3352,35 +3334,6 @@ itemDef_t *Menu_SetNextCursorItem(menuDef_t *menu) {
 	return NULL;
 }
 
-
-static void Window_CloseCinematic(windowDef_t *window) {
-	if (window->style == WINDOW_STYLE_CINEMATIC && window->cinematic >= 0) {
-		DC->stopCinematic(window->cinematic);
-		window->cinematic = -1;
-	}
-}
-
-static void Menu_CloseCinematics(menuDef_t *menu) {
-	if (menu) {
-		int i;
-		Window_CloseCinematic(&menu->window);
-		for (i = 0; i < menu->itemCount; i++) {
-			Window_CloseCinematic(&menu->items[i]->window);
-			if (menu->items[i]->type == ITEM_TYPE_OWNERDRAW) {
-				DC->stopCinematic(0 - menu->items[i]->window.ownerDraw);
-			}
-		}
-	}
-}
-
-static void Display_CloseCinematics() {
-	int i;
-
-	for (i = 0; i < menuCount; i++) {
-		Menu_CloseCinematics(&Menus[i]);
-	}
-}
-
 void  Menus_Activate(menuDef_t *menu) {
 	int i;
 
@@ -3402,9 +3355,6 @@ void  Menus_Activate(menuDef_t *menu) {
 	if (menu->soundName && *menu->soundName) {
 		DC->startBackgroundTrack(menu->soundName, menu->soundName, 0);
 	}
-
-	Display_CloseCinematics();
-
 }
 
 qboolean Menus_CaptureFuncActive(void) {
@@ -3453,7 +3403,6 @@ void Menus_HandleOOBClick(menuDef_t *menu, int key, qboolean down) {
 				DC->Pause(qfalse);
 			}
 		}
-		Display_CloseCinematics();
 	}
 }
 
@@ -5121,7 +5070,6 @@ menuDef_t *Menus_ActivateByName(const char *p, qboolean modalStack) {
 			Menus[i].window.flags &= ~(WINDOW_HASFOCUS | WINDOW_MOUSEOVER);
 		}
 	}
-	Display_CloseCinematics();
 	return m;
 }
 
@@ -5911,10 +5859,11 @@ qboolean ItemParse_background(itemDef_t *item, int handle) {
 }
 
 qboolean ItemParse_cinematic(itemDef_t *item, int handle) {
-	if (!PC_String_Parse(handle, &item->window.cinematicName)) {
-		return qfalse;
-	}
-	return qtrue;
+	// Nico, silent GCC
+	item = item;
+	handle = handle;
+
+	return qfalse;
 }
 
 qboolean ItemParse_doubleClick(itemDef_t *item, int handle) {
@@ -6742,12 +6691,11 @@ qboolean MenuParse_background(itemDef_t *item, int handle) {
 }
 
 qboolean MenuParse_cinematic(itemDef_t *item, int handle) {
-	menuDef_t *menu = (menuDef_t *)item;
+	// Nico, silent GCC
+	item = item;
+	handle = handle;
 
-	if (!PC_String_Parse(handle, &menu->window.cinematicName)) {
-		return qfalse;
-	}
-	return qtrue;
+	return qfalse;
 }
 
 qboolean MenuParse_ownerdrawFlag(itemDef_t *item, int handle) {
@@ -7154,31 +7102,9 @@ void Display_HandleKey(int key, qboolean down, int x, int y) {
 	}
 }
 
-static void Window_CacheContents(windowDef_t *window) {
-	if (window) {
-		if (window->cinematicName) {
-			int cin = DC->playCinematic(window->cinematicName, 0, 0, 0, 0);
-			DC->stopCinematic(cin);
-		}
-	}
-}
-
-
-static void Item_CacheContents(itemDef_t *item) {
-	if (item) {
-		Window_CacheContents(&item->window);
-	}
-
-}
 
 static void Menu_CacheContents(menuDef_t *menu) {
 	if (menu) {
-		int i;
-		Window_CacheContents(&menu->window);
-		for (i = 0; i < menu->itemCount; i++) {
-			Item_CacheContents(menu->items[i]);
-		}
-
 		if (menu->soundName && *menu->soundName) {
 			DC->registerSound(menu->soundName, qtrue);
 		}

@@ -2541,10 +2541,6 @@ void trap_Key_KeynumToStringBuf(int keynum, char *buf, int buflen);
 
 void trap_TranslateString(const char *string, char *buf);       // NERVE - SMF - localization
 
-int trap_CIN_PlayCinematic(const char *arg0, int xpos, int ypos, int width, int height, int bits);
-e_status trap_CIN_StopCinematic(int handle);
-e_status trap_CIN_RunCinematic(int handle);
-void trap_CIN_DrawCinematic(int handle);
 void trap_CIN_SetExtents(int handle, int x, int y, int w, int h);
 
 void trap_SnapVector(float *v);

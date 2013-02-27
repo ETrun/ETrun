@@ -1112,38 +1112,6 @@ void UI_DrawNetMapPreview(rectDef_t *rect) {
 	}
 }
 
-
-static void UI_DrawMapCinematic(rectDef_t *rect, float scale, qboolean net) {
-
-	int map = (net) ? ui_currentNetMap.integer : ui_currentMap.integer;
-
-	if (map < 0 || map > uiInfo.mapCount) {
-		if (net) {
-			ui_currentNetMap.integer = 0;
-			trap_Cvar_Set("ui_currentNetMap", "0");
-		} else {
-			ui_currentMap.integer = 0;
-			trap_Cvar_Set("ui_currentMap", "0");
-		}
-		map = 0;
-	}
-
-	if (uiInfo.mapList[map].cinematic >= -1) {
-		if (uiInfo.mapList[map].cinematic == -1) {
-			uiInfo.mapList[map].cinematic = trap_CIN_PlayCinematic(va("%s.roq", uiInfo.mapList[map].mapLoadName), 0, 0, 0, 0, (CIN_loop | CIN_silent));
-		}
-		if (uiInfo.mapList[map].cinematic >= 0) {
-			trap_CIN_RunCinematic(uiInfo.mapList[map].cinematic);
-			trap_CIN_SetExtents(uiInfo.mapList[map].cinematic, rect->x, rect->y, rect->w, rect->h);
-			trap_CIN_DrawCinematic(uiInfo.mapList[map].cinematic);
-		} else {
-			uiInfo.mapList[map].cinematic = -2;
-		}
-	} else {
-		UI_DrawMapPreview(rect, scale, net);
-	}
-}
-
 static void UI_DrawMissionBriefingMap(rectDef_t *rect) {
 	char             buffer[64];
 	static qhandle_t image = -1;
@@ -1594,12 +1562,6 @@ static void UI_OwnerDraw(float x, float y, float w, float h, float text_x, float
 		break;
 	case UI_NETMAPPREVIEW:
 		UI_DrawNetMapPreview(&rect);
-		break;
-	case UI_MAPCINEMATIC:
-		UI_DrawMapCinematic(&rect, scale, qfalse);
-		break;
-	case UI_STARTMAPCINEMATIC:
-		UI_DrawMapCinematic(&rect, scale, qtrue);
 		break;
 	case UI_MB_MAP:
 		UI_DrawMissionBriefingMap(&rect);
@@ -2253,11 +2215,6 @@ void UI_RunMenuScript(char **args) {
 			UI_LoadMovies();
 		} else if (Q_stricmp(name, "LoadMods") == 0) {
 			UI_LoadMods();
-		} else if (Q_stricmp(name, "playMovie") == 0) {
-			if (uiInfo.previewMovie >= 0) {
-				trap_CIN_StopCinematic(uiInfo.previewMovie);
-			}
-			trap_Cmd_ExecuteText(EXEC_APPEND, va("cinematic %s.roq 2\n", uiInfo.movieList[uiInfo.movieIndex]));
 		} else if (Q_stricmp(name, "RunMod") == 0) {
 			trap_Cvar_Set("fs_game", uiInfo.modList[uiInfo.modIndex].modName);
 			trap_Cmd_ExecuteText(EXEC_APPEND, "vid_restart;");
@@ -3703,9 +3660,7 @@ UI_FeederCount
 ==================
 */
 static int UI_FeederCount(float feederID) {
-	if (feederID == FEEDER_CINEMATICS) {
-		return uiInfo.movieCount;
-	} else if (feederID == FEEDER_MAPS || feederID == FEEDER_ALLMAPS) {
+	if (feederID == FEEDER_MAPS || feederID == FEEDER_ALLMAPS) {
 		return UI_MapCountByGameType(feederID == FEEDER_MAPS ? qtrue : qfalse);
 	} else if (feederID == FEEDER_GLINFO) {
 		return uiInfo.numGlInfoLines;
@@ -3911,10 +3866,6 @@ const char *UI_FeederItemText(float feederID, int index, int column, qhandle_t *
 				return uiInfo.modList[index].modName;
 			}
 		}
-	} else if (feederID == FEEDER_CINEMATICS) {
-		if (index >= 0 && index < uiInfo.movieCount) {
-			return uiInfo.movieList[index];
-		}
 	} else if (feederID == FEEDER_DEMOS) {
 		if (index >= 0 && index < uiInfo.demoCount) {
 			return uiInfo.demoList[index];
@@ -4019,12 +3970,6 @@ void UI_FeederSelection(float feederID, int index) {
 		uiInfo.teamIndex = index;
 	} else if (feederID == FEEDER_MODS) {
 		uiInfo.modIndex = index;
-	} else if (feederID == FEEDER_CINEMATICS) {
-		uiInfo.movieIndex = index;
-		if (uiInfo.previewMovie >= 0) {
-			trap_CIN_StopCinematic(uiInfo.previewMovie);
-		}
-		uiInfo.previewMovie = -1;
 	} else if (feederID == FEEDER_DEMOS) {
 		uiInfo.demoIndex = index;
 	} else if (feederID == FEEDER_PROFILES) {
@@ -4094,38 +4039,6 @@ static void UI_Pause(qboolean b) {
 		trap_Key_ClearStates();
 		trap_Cvar_Set("cl_paused", "0");
 	}
-}
-
-static int UI_PlayCinematic(const char *name, float x, float y, float w, float h) {
-	return trap_CIN_PlayCinematic(name, x, y, w, h, (CIN_loop | CIN_silent));
-}
-
-static void UI_StopCinematic(int handle) {
-	if (handle >= 0) {
-		trap_CIN_StopCinematic(handle);
-	} else {
-		handle = abs(handle);
-		if (handle == UI_MAPCINEMATIC) {
-			if (uiInfo.mapList[ui_currentMap.integer].cinematic >= 0) {
-				trap_CIN_StopCinematic(uiInfo.mapList[ui_currentMap.integer].cinematic);
-				uiInfo.mapList[ui_currentMap.integer].cinematic = -1;
-			}
-		} else if (handle == UI_NETMAPCINEMATIC) {
-			if (uiInfo.serverStatus.currentServerCinematic >= 0) {
-				trap_CIN_StopCinematic(uiInfo.serverStatus.currentServerCinematic);
-				uiInfo.serverStatus.currentServerCinematic = -1;
-			}
-		}
-	}
-}
-
-static void UI_DrawCinematic(int handle, float x, float y, float w, float h) {
-	trap_CIN_SetExtents(handle, x, y, w, h);
-	trap_CIN_DrawCinematic(handle);
-}
-
-static void UI_RunCinematicFrame(int handle) {
-	trap_CIN_RunCinematic(handle);
 }
 
 /*
@@ -4214,10 +4127,6 @@ void _UI_Init(void) {
 	uiInfo.uiDC.registerSound        = &trap_S_RegisterSound;
 	uiInfo.uiDC.startBackgroundTrack = &trap_S_StartBackgroundTrack;
 	uiInfo.uiDC.stopBackgroundTrack  = &trap_S_StopBackgroundTrack;
-	uiInfo.uiDC.playCinematic        = &UI_PlayCinematic;
-	uiInfo.uiDC.stopCinematic        = &UI_StopCinematic;
-	uiInfo.uiDC.drawCinematic        = &UI_DrawCinematic;
-	uiInfo.uiDC.runCinematicFrame    = &UI_RunCinematicFrame;
 	uiInfo.uiDC.translateString      = &trap_TranslateString;       // NERVE - SMF
 	uiInfo.uiDC.checkAutoUpdate      = &trap_CheckAutoUpdate;       // DHM - Nerve
 	uiInfo.uiDC.getAutoUpdate        = &trap_GetAutoUpdate;         // DHM - Nerve
@@ -4261,9 +4170,6 @@ void _UI_Init(void) {
 	uiInfo.effectsColor     = gamecodetoui[x];
 	uiInfo.currentCrosshair = (int)trap_Cvar_VariableValue("cg_drawCrosshair");
 	trap_Cvar_Set("ui_mousePitch", (trap_Cvar_VariableValue("m_pitch") >= 0) ? "0" : "1");
-
-	uiInfo.serverStatus.currentServerCinematic = -1;
-	uiInfo.previewMovie                        = -1;
 
 	if (trap_Cvar_VariableValue("ui_TeamArenaFirstRun") == 0) {
 		trap_Cvar_Set("s_volume", "0.8");

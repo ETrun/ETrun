@@ -162,8 +162,6 @@ typedef struct {
 	const char *imageName;
 
 	int typeBits;
-	int cinematic;
-
 	qhandle_t levelShot;
 	qboolean active;
 

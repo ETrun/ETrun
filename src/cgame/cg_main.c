@@ -2247,26 +2247,6 @@ static int CG_OwnerDrawWidth(int ownerDraw, float scale) {
 	return 0;
 }
 
-static int CG_PlayCinematic(const char *name, float x, float y, float w, float h) {
-	return trap_CIN_PlayCinematic(name, x, y, w, h, CIN_loop);
-}
-
-static void CG_StopCinematic(int handle) {
-	trap_CIN_StopCinematic(handle);
-}
-
-static void CG_DrawCinematic(int handle, float x, float y, float w, float h) {
-	trap_CIN_SetExtents(handle, x, y, w, h);
-	trap_CIN_DrawCinematic(handle);
-}
-
-static void CG_RunCinematicFrame(int handle) {
-	trap_CIN_RunCinematic(handle);
-}
-
-
-
-
 /*
 =================
 CG_LoadHudMenu();
@@ -2322,10 +2302,6 @@ void CG_LoadHudMenu() {
 	cgDC.registerSound          = &trap_S_RegisterSound;
 	cgDC.startBackgroundTrack   = &trap_S_StartBackgroundTrack;
 	cgDC.stopBackgroundTrack    = &trap_S_StopBackgroundTrack;
-	cgDC.playCinematic          = &CG_PlayCinematic;
-	cgDC.stopCinematic          = &CG_StopCinematic;
-	cgDC.drawCinematic          = &CG_DrawCinematic;
-	cgDC.runCinematicFrame      = &CG_RunCinematicFrame;
 	cgDC.descriptionForCampaign = &CG_DescriptionForCampaign;
 	cgDC.nameForCampaign        = &CG_NameForCampaign;
 	cgDC.add2dPolys             = &trap_R_Add2dPolys;

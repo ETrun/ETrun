@@ -430,7 +430,6 @@ typedef struct {
 	qhandle_t teamIcon;
 	qhandle_t teamIcon_Metal;
 	qhandle_t teamIcon_Name;
-	int cinematic;
 } teamInfo;
 
 typedef struct {
@@ -459,7 +458,6 @@ typedef struct serverStatus_s {
 	int numPlayersOnServers;
 	int nextDisplayRefresh;
 	qhandle_t currentServerPreview;
-	int currentServerCinematic;
 	int motdLen;
 	int motdWidth;
 	int motdPaintX;
@@ -711,10 +709,6 @@ void            trap_R_RegisterFont(const char *pFontname, int pointSize, fontIn
 void            trap_S_StopBackgroundTrack(void);
 void            trap_S_StartBackgroundTrack(const char *intro, const char *loop, int fadeupTime);
 void            trap_S_FadeAllSound(float targetvol, int time, qboolean stopsound);
-int             trap_CIN_PlayCinematic(const char *arg0, int xpos, int ypos, int width, int height, int bits);
-e_status        trap_CIN_StopCinematic(int handle);
-e_status        trap_CIN_RunCinematic(int handle);
-void            trap_CIN_DrawCinematic(int handle);
 void            trap_CIN_SetExtents(int handle, int x, int y, int w, int h);
 int             trap_RealTime(qtime_t *qtime);
 void            trap_R_RemapShader(const char *oldShader, const char *newShader, const char *timeOffset);
