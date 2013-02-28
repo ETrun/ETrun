@@ -191,8 +191,6 @@ vmCvar_t cg_skybox;
 vmCvar_t cg_messageType;
 vmCvar_t cg_messagePlayer;
 vmCvar_t cg_timescale;
-vmCvar_t cg_smallFont;
-vmCvar_t cg_bigFont;
 vmCvar_t cg_noTaunt;                // NERVE - SMF
 vmCvar_t cg_voiceSpriteTime;    // DHM - Nerve
 vmCvar_t cg_drawNotifyText;
@@ -418,9 +416,6 @@ cvarTable_t cvarTable[] =
 
 	{ &cg_noTaunt,              "cg_noTaunt",              "0",     CVAR_ARCHIVE,             0 }, // NERVE - SMF
 	{ &cg_voiceSpriteTime,      "cg_voiceSpriteTime",      "6000",  CVAR_ARCHIVE,             0 }, // DHM - Nerve
-
-	{ &cg_smallFont,            "ui_smallFont",            "0.25",  CVAR_ARCHIVE,             0 },
-	{ &cg_bigFont,              "ui_bigFont",              "0.4",   CVAR_ARCHIVE,             0 },
 
 	{ &cg_teamChatsOnly,        "cg_teamChatsOnly",        "0",     CVAR_ARCHIVE,             0 },
 	{ &cg_noVoiceChats,         "cg_noVoiceChats",         "0",     CVAR_ARCHIVE,             0 }, // NERVE - SMF

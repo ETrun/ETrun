@@ -1669,8 +1669,6 @@ extern vmCvar_t cg_autoactivate;
 extern vmCvar_t pmove_fixed;
 extern vmCvar_t pmove_msec;
 extern vmCvar_t cg_timescale;
-extern vmCvar_t cg_smallFont;
-extern vmCvar_t cg_bigFont;
 extern vmCvar_t cg_noTaunt;             // NERVE - SMF
 extern vmCvar_t cg_voiceSpriteTime;             // DHM - Nerve
 // Rafael - particle switch

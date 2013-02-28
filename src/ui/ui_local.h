@@ -598,7 +598,6 @@ extern void         UI_DrawSides(float x, float y, float w, float h);
 extern void         UI_UpdateScreen(void);
 extern void         UI_SetColor(const float *rgba);
 extern void         UI_LerpColor(vec4_t a, vec4_t b, vec4_t c, float t);
-extern float        UI_ProportionalSizeScale(int style);
 extern void         UI_DrawProportionalString(int x, int y, const char *str, int style, vec4_t color);
 extern int          UI_ProportionalStringWidth(const char *str);
 extern void         UI_DrawString(int x, int y, const char *str, int style, vec4_t color);
