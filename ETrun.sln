@@ -12,7 +12,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "APImodule", "libs\APImodule
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libcurl", "libs\curl\lib\libcurl.vcxproj", "{176E3365-0B5D-4A08-8DA6-77E8DB098DAF}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pthread", "libs\pthreads-w32-2-9-1\pthread.vcxproj", "{D66C8F3C-C4D4-4A63-98D2-46D71BA3E9AE}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pthread", "libs\pthreads-win32\pthread.vcxproj", "{D66C8F3C-C4D4-4A63-98D2-46D71BA3E9AE}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "cgame", "src\cgame\cgame.vcxproj", "{68A804FC-00C3-44E2-A479-3DB3D20F943D}"
 EndProject

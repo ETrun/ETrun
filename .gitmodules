@@ -10,3 +10,6 @@
 [submodule "libs/c-ares"]
 	path = libs/c-ares
 	url = git@github.com:boutetnico/c-ares.git
+[submodule "libs/pthreads-win32"]
+	path = libs/pthreads-win32
+	url = git@github.com:boutetnico/pthreads-win32.git
