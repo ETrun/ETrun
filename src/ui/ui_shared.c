@@ -1736,13 +1736,12 @@ void Script_playLooped(itemDef_t *item, qboolean *bAbort, char **args) {
 // NERVE - SMF
 void Script_AddListItem(itemDef_t *item, qboolean *bAbort, char **args) {
 	const char *itemname = NULL, *val = NULL, *name = NULL;
-	itemDef_t  *t;
 
 	// Nico, silent GCC
 	bAbort = bAbort;
 
 	if (String_Parse(args, &itemname) && String_Parse(args, &val) && String_Parse(args, &name)) {
-		t = Menu_FindItemByName(item->parent, itemname);
+		Menu_FindItemByName(item->parent, itemname);
 	}
 }
 // -NERVE - SMF
@@ -3422,13 +3421,8 @@ static rectDef_t *Item_CorrectedTextRect(itemDef_t *item) {
 void Menu_HandleKey(menuDef_t *menu, int key, qboolean down) {
 	int       i;
 	itemDef_t *item     = NULL;
-	qboolean  inHandler = qfalse;
 
 	Menu_HandleMouseMove(menu, DC->cursorx, DC->cursory);       // NERVE - SMF - fix for focus not resetting on unhidden buttons
-
-	if (inHandler) {
-		return;
-	}
 
 	// ydnar: enter key handling for the window supercedes item enter handling
 	if (down && ((key == K_ENTER || key == K_KP_ENTER) && menu->onEnter)) {
@@ -3438,10 +3432,8 @@ void Menu_HandleKey(menuDef_t *menu, int key, qboolean down) {
 		return;
 	}
 
-	inHandler = qtrue;
 	if (g_waitingForKey && down) {
 		Item_Bind_HandleKey(g_bindItem, key, down);
-		inHandler = qfalse;
 		return;
 	}
 
@@ -3449,7 +3441,6 @@ void Menu_HandleKey(menuDef_t *menu, int key, qboolean down) {
 		if (!Item_TextField_HandleKey(g_editItem, key)) {
 			g_editingField = qfalse;
 			g_editItem     = NULL;
-			inHandler      = qfalse;
 			return;
 		} else if (key == K_MOUSE1 || key == K_MOUSE2 || key == K_MOUSE3) {
 			g_editingField = qfalse;
@@ -3461,7 +3452,6 @@ void Menu_HandleKey(menuDef_t *menu, int key, qboolean down) {
 	}
 
 	if (menu == NULL) {
-		inHandler = qfalse;
 		return;
 	}
 
@@ -3473,7 +3463,6 @@ void Menu_HandleKey(menuDef_t *menu, int key, qboolean down) {
 			inHandleKey = qtrue;
 			Menus_HandleOOBClick(menu, key, down);
 			inHandleKey = qfalse;
-			inHandler   = qfalse;
 			return;
 		}
 	}
@@ -3488,13 +3477,11 @@ void Menu_HandleKey(menuDef_t *menu, int key, qboolean down) {
 	if (item != NULL) {
 		if (Item_HandleKey(item, key, down)) {
 			Item_Action(item);
-			inHandler = qfalse;
 			return;
 		}
 	}
 
 	if (!down) {
-		inHandler = qfalse;
 		return;
 	}
 
@@ -3639,7 +3626,6 @@ void Menu_HandleKey(menuDef_t *menu, int key, qboolean down) {
 	case K_AUX16:
 		break;
 	}
-	inHandler = qfalse;
 }
 
 void ToWindowCoords(float *x, float *y, windowDef_t *window) {
@@ -4768,13 +4754,8 @@ void Item_OwnerDraw_Paint(itemDef_t *item) {
 	}
 }
 
-
 void Item_Paint(itemDef_t *item) {
-	vec4_t    red;
 	menuDef_t *parent = NULL;
-
-	red[0] = red[3] = 1;
-	red[1] = red[2] = 0;
 
 	if (item == NULL) {
 		return;

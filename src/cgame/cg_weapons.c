@@ -511,8 +511,6 @@ void CG_RocketTrail(centity_t *ent) {
 		step = 30;
 	} else if (ent->currentState.eType == ET_FP_PARTS) {
 		step = 50;
-	} else if (ent->currentState.eType == ET_RAMJET) {
-		step = 10;
 	} else {
 		step = 10;
 	}

@@ -503,36 +503,20 @@ static void CG_OffsetFirstPersonView(void) {
 	angles = cg.refdefViewAngles;
 
 	if (cg.snap->ps.weapon == WP_MOBILE_MG42_SET) {
-		float  yawDiff = cg.refdefViewAngles[YAW] - cg.pmext.mountedWeaponAngles[YAW];
 		vec3_t forward, point;
 		float  oldZ = origin[2];
 
 		AngleVectors(cg.pmext.mountedWeaponAngles, forward, NULL, NULL);
-
-		if (yawDiff > 180) {
-			yawDiff -= 360;
-		} else if (yawDiff < -180) {
-			yawDiff += 360;
-		}
-
 		VectorMA(origin, 31, forward, point);
 		AngleVectors(cg.refdefViewAngles, forward, NULL, NULL);
 		VectorMA(point, -32, forward, origin);
 
 		origin[2] = oldZ;
 	} else if (cg.snap->ps.weapon == WP_MORTAR_SET) {
-		float  yawDiff = cg.refdefViewAngles[YAW] - cg.pmext.mountedWeaponAngles[YAW];
 		vec3_t forward, point;
 		float  oldZ = origin[2];
 
 		AngleVectors(cg.pmext.mountedWeaponAngles, forward, NULL, NULL);
-
-		if (yawDiff > 180) {
-			yawDiff -= 360;
-		} else if (yawDiff < -180) {
-			yawDiff += 360;
-		}
-
 		VectorMA(origin, 31, forward, point);
 		AngleVectors(cg.refdefViewAngles, forward, NULL, NULL);
 		VectorMA(point, -32, forward, origin);
@@ -1365,14 +1349,6 @@ qboolean CG_CullPointAndRadius(const vec3_t pt, vec_t radius) {
 
 extern void CG_SetupDlightstyles(void);
 
-
-//#define DEBUGTIME_ENABLED
-#ifdef DEBUGTIME_ENABLED
-# define DEBUGTIME elapsed = (trap_Milliseconds() - dbgTime); if (dbgCnt++ == 1) { CG_Printf("t%i:%i ", dbgCnt, elapsed = (trap_Milliseconds() - dbgTime)); } dbgTime += elapsed;
-#else
-# define DEBUGTIME
-#endif
-
 #ifdef _DEBUG
 //#define FAKELAG
 # ifdef FAKELAG
@@ -1391,11 +1367,6 @@ Generates and draws a game scene and status information at the given time.
 void CG_DrawActiveFrame(int serverTime, stereoFrame_t stereoView, qboolean demoPlayback) {
 	int inwater;
 
-#ifdef DEBUGTIME_ENABLED
-	int dbgTime = trap_Milliseconds(), elapsed;
-	int dbgCnt  = 0;
-#endif
-
 	cg.time         = serverTime;
 	cgDC.realTime   = cg.time;
 	cg.demoPlayback = demoPlayback;
@@ -1404,16 +1375,8 @@ void CG_DrawActiveFrame(int serverTime, stereoFrame_t stereoView, qboolean demoP
 	cg.time -= snapshotDelayTime;
 #endif // _DEBUG
 
-
-#ifdef DEBUGTIME_ENABLED
-	CG_Printf("\n");
-#endif
-	DEBUGTIME
-
 	// update cvars
 	CG_UpdateCvars();
-
-	DEBUGTIME
 
 	// if we are only updating the screen as a loading
 	// pacifier, don't even try to read snapshots
@@ -1432,12 +1395,8 @@ void CG_DrawActiveFrame(int serverTime, stereoFrame_t stereoView, qboolean demoP
 
 	CG_UpdateBufferedSoundScripts();
 
-	DEBUGTIME
-
 	// set up cg.snap and possibly cg.nextSnap
 	CG_ProcessSnapshots();
-
-	DEBUGTIME
 
 	// if we haven't received any snapshots yet, all
 	// we can draw is the information screen
@@ -1463,13 +1422,9 @@ void CG_DrawActiveFrame(int serverTime, stereoFrame_t stereoView, qboolean demoP
 		}
 	}
 
-	DEBUGTIME
-
 	if (!cg.lightstylesInited) {
 		CG_SetupDlightstyles();
 	}
-
-	DEBUGTIME
 
 	// if we have been told not to render, don't
 	if (cg_norender.integer) {
@@ -1482,59 +1437,37 @@ void CG_DrawActiveFrame(int serverTime, stereoFrame_t stereoView, qboolean demoP
 	// update cg.predictedPlayerState
 	CG_PredictPlayerState();
 
-	DEBUGTIME
-
 	// clear all the render lists
 	trap_R_ClearScene();
 
-	DEBUGTIME
-
 	// decide on third person view
-	/* Nico, render while in limbo
-	cg.renderingThirdPerson = cg_thirdPerson.integer || ( cg.snap->ps.stats[STAT_HEALTH] <= 0 ) || cg.showGameView;*/
 	cg.renderingThirdPerson = cg_thirdPerson.integer || (cg.snap->ps.stats[STAT_HEALTH] <= 0);
 
 	// build cg.refdef
 	inwater = CG_CalcViewValues();
 	CG_SetupFrustum();
 
-	DEBUGTIME
-
 	// RF, draw the skyboxportal
 	CG_DrawSkyBoxPortal(qtrue);
-
-	DEBUGTIME
 
 	if (inwater) {
 		CG_UnderwaterSounds();
 	}
-
-	DEBUGTIME
 
 	// build the render lists
 	if (!cg.hyperspace) {
 		CG_AddPacketEntities();         // adter calcViewValues, so predicted player state is correct
 		CG_AddMarks();
 
-		DEBUGTIME
-
 		CG_AddScriptSpeakers();
-
-		DEBUGTIME
 
 		// Rafael particles
 		CG_AddParticles();
 		// done.
 
-		DEBUGTIME
-
 		CG_AddLocalEntities();
 
-		DEBUGTIME
-
 		CG_AddSmokeSprites();
-
-		DEBUGTIME
 
 		CG_AddAtmosphericEffects();
 	}
@@ -1564,7 +1497,6 @@ void CG_DrawActiveFrame(int serverTime, stereoFrame_t stereoView, qboolean demoP
 	// NERVE - SMF - play buffered voice chats
 	CG_PlayBufferedVoiceChats();
 
-	DEBUGTIME
 	// Ridah, trails
 	if (!cg.hyperspace) {
 		CG_AddFlameChunks();
@@ -1572,16 +1504,12 @@ void CG_DrawActiveFrame(int serverTime, stereoFrame_t stereoView, qboolean demoP
 	}
 	// done.
 
-	DEBUGTIME
-
 	// finish up the rest of the refdef
 	if (cg.testModelEntity.hModel) {
 		CG_AddTestModel();
 	}
 	cg.refdef.time = cg.time;
 	memcpy(cg.refdef.areamask, cg.snap->areamask, sizeof (cg.refdef.areamask));
-
-	DEBUGTIME
 
 	// make sure the lagometerSample and frame timing isn't done twice when in stereo
 	if (stereoView != STEREO_RIGHT) {
@@ -1593,17 +1521,11 @@ void CG_DrawActiveFrame(int serverTime, stereoFrame_t stereoView, qboolean demoP
 		CG_AddLagometerFrameInfo();
 	}
 
-	DEBUGTIME
-
-	DEBUGTIME
-
 	// DHM - Nerve :: let client system know our predicted origin
 	trap_SetClientLerpOrigin(cg.refdef.vieworg[0], cg.refdef.vieworg[1], cg.refdef.vieworg[2]);
 
 	// actually issue the rendering calls
 	CG_DrawActive(stereoView);
-
-	DEBUGTIME
 
 	// update audio positions
 	trap_S_Respatialize(cg.snap->ps.clientNum, cg.refdef.vieworg, cg.refdef.viewaxis, inwater);
@@ -1611,8 +1533,6 @@ void CG_DrawActiveFrame(int serverTime, stereoFrame_t stereoView, qboolean demoP
 	if (cg_stats.integer) {
 		CG_Printf("cg.clientFrame:%i\n", cg.clientFrame);
 	}
-
-	DEBUGTIME
 
 	// let the client system know what our weapon, holdable item and zoom settings are
 	trap_SetUserCmdValue(cg.weaponSelect, 0x00, cg.zoomSensitivity, cg.identifyClientRequest);

@@ -1728,7 +1728,7 @@ This is also used for spectator spawns
 ==================
 */
 void FindIntermissionPoint(void) {
-	gentity_t *ent = NULL, *target;
+	gentity_t *ent, *target;
 	vec3_t    dir;
 
 	// NERVE - SMF - if the match hasn't ended yet, and we're just a spectator

@@ -3804,7 +3804,7 @@ void InitExplosive(gentity_t *ent) {
 
 void target_explosion_use(gentity_t *self, gentity_t *other, gentity_t *attacker) {
 	vec3_t    dir   = { 0, 0, 1 };
-	gentity_t *tent = NULL;
+	gentity_t *tent;
 
 	// Nico, silent GCC
 	other = other;

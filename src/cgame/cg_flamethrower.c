@@ -321,8 +321,6 @@ void CG_FireFlameChunks(centity_t *cent, vec3_t origin, vec3_t angles, float spe
 
 		VectorCopy(thisOrg, org);
 		VectorCopy(thisFwd, fwd);
-		VectorCopy(thisUp, up);
-		VectorCopy(thisRight, right);
 
 		f->timeStart = cg.time;
 		f->timeEnd   = cg.time + FLAME_LIFETIME * (1.0 / (0.5 + 0.5 * speedScale));
@@ -996,9 +994,6 @@ void CG_AddFlameToScene(flameChunk_t *fHead) {
 	VectorScale(lightOrg, 1.0 / lightFlameCount, lightOrg);
 	// if it's only a nozzle, make it blue
 	if (fHead->ignitionOnly) {
-		if (lightSize > 80) {
-			lightSize = 80;
-		}
 		trap_R_AddLightToScene(lightOrg, 80, alpha, 0.2, 0.21, 0.5, 0, 0);
 	} else if (isClientFlame || (fHead->ownerCent == cg.snap->ps.clientNum)) {
 		trap_R_AddLightToScene(lightOrg, 320, alpha, 1.000000, 0.603922, 0.207843, 0, 0);

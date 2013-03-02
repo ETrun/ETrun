@@ -835,7 +835,6 @@ static void CG_AddPainTwitch(centity_t *cent, vec3_t torsoAngles) {
 	int   t;
 	float f;
 	int   duration;
-	float direction;
 
 	if (!cent->pe.animSpeed) {
 		// we need to inititialize this stuff
@@ -856,14 +855,6 @@ static void CG_AddPainTwitch(centity_t *cent, vec3_t torsoAngles) {
 	} else {
 		duration = PAIN_TWITCH_TIME;
 	}
-	direction = (float)duration * 0.085;
-	if (direction > 30) {
-		direction = 30;
-	}
-	if (direction < 10) {
-		direction = 10;
-	}
-	direction *= (float)(cent->pe.painDirection * 2) - 1;
 
 	t = cg.time - cent->pe.painTime;
 	if (t >= duration) {

@@ -1174,7 +1174,7 @@ void G_Voice(gentity_t *ent, gentity_t *target, int mode, const char *id, qboole
 
 	if (mode == SAY_BUDDY) {
 		char     buffer[32];
-		int      cls = -1, i, cnt, num;
+		int      cls, i, cnt, num;
 		qboolean allowclients[MAX_CLIENTS];
 
 		memset(allowclients, 0, sizeof (allowclients));
@@ -2731,7 +2731,7 @@ void Cmd_SpecInvite_f(gentity_t *ent, unsigned int dwCommand, qboolean invite) {
  * @source: ETpub
  */
 static char *Q_SayConcatArgs(int start) {
-	char *s = NULL;
+	char *s;
 	int  c  = 0;
 
 	s = ConcatArgs(0);

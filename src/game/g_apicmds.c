@@ -178,7 +178,7 @@ void Cmd_LoadCheckpoints_f(gentity_t *ent) {
 // API is used
 // player login status
 void Cmd_LoadCheckpoints_real(gentity_t *ent, char *userName, int runNum) {
-	char *buf = NULL;
+	char *buf;
 
 	buf = malloc(RESPONSE_MAX_SIZE * sizeof (char));
 

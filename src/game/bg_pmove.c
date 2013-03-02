@@ -1852,7 +1852,7 @@ static void PM_Footsteps(void) {
 
 	// if no anim found yet, then just use the idle as default
 	if (animResult < 0) {
-		animResult = BG_AnimScriptAnimation(pm->ps, pm->character->animModelInfo, ANIM_MT_IDLE, qtrue);
+		BG_AnimScriptAnimation(pm->ps, pm->character->animModelInfo, ANIM_MT_IDLE, qtrue);
 	}
 
 	// check for footstep / splash sounds

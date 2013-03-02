@@ -1294,13 +1294,11 @@ static void notify_timerun_start(gentity_t *activator) {
  * "name"	timerun name
  */
 void target_starttimer_use(gentity_t *self, gentity_t *other, gentity_t *activator) {
-	gclient_t *client = NULL;
+	gclient_t *client = activator->client;
 	int       i       = 0;
 
 	// Nico, silent GCC
 	other = other;
-
-	client = activator->client;
 
 	if (client->sess.timerunActive) {
 		return;
@@ -1513,13 +1511,11 @@ void target_stoptimer_use(gentity_t *self, gentity_t *other, gentity_t *activato
 	int       min, sec, milli;
 	int       delta, dmin, dsec, dmilli;
 	int       time;
-	gclient_t *client = NULL;
+	gclient_t *client = activator->client;
 	int       timerunNum;
 
 	// Nico, silent GCC
 	other = other;
-
-	client = activator->client;
 
 	if (!client->sess.timerunActive) {
 		return;
@@ -1668,14 +1664,12 @@ static void notify_timerun_check(gentity_t *activator, int deltaTime, int time, 
 void target_checkpoint_use(gentity_t *self, gentity_t *other, gentity_t *activator) {
 	int       delta      = 0;
 	int       time       = 0;
-	gclient_t *client    = NULL;
+	gclient_t *client = activator->client;
 	int       timerunNum = 0;
 	int       status     = 0;
 
 	// Nico, silent GCC
 	other = other;
-
-	client = activator->client;
 
 	if (!client->sess.timerunActive) {
 		return;

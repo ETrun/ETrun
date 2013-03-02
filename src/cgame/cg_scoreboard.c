@@ -122,7 +122,7 @@ static void WM_ETrun_DrawHeader(int *y, fontInfo_t *font) {
  * @author Nico
  */
 static void WM_ETrun_DrawPlayers(int *x, int *y, fontInfo_t *font, s_timerunScores *orderedScores, int numScores) {
-	char  *s       = NULL;
+	char  *s;
 	int   tempx    = 0;
 	float fontsize = 0.16f;
 	int   i        = 0;
@@ -247,7 +247,7 @@ static void WM_ETrun_DrawPlayers(int *x, int *y, fontInfo_t *font, s_timerunScor
  * @author Nico
  */
 static void WM_ETrun_DrawSpectators(int *x, int *y, fontInfo_t *font, s_timerunScores *orderedScores, int numScores) {
-	char  *s       = NULL;
+	char  *s;
 	int   tempx    = 0;
 	float fontsize = 0.16f;
 	int   i        = 0;

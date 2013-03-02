@@ -2348,16 +2348,8 @@ Called after every level change or subsystem restart
 Will perform callbacks to make the loading info screen update.
 =================
 */
-#ifdef _DEBUG
-# define DEBUG_INITPROFILE_INIT int elapsed, dbgTime = trap_Milliseconds();
-# define DEBUG_INITPROFILE_EXEC(f) if (developer.integer) { CG_Printf("^5%s passed in %i msec\n", f, elapsed = trap_Milliseconds() - dbgTime);  dbgTime += elapsed; }
-#endif // _DEBUG
 void CG_Init(int serverMessageNum, int serverCommandSequence, int clientNum, qboolean demoPlayback) {
 	const char *s;
-
-#ifdef _DEBUG
-	DEBUG_INITPROFILE_INIT
-#endif // _DEBUG
 
 	// Nico, silent GCC
 	demoPlayback = demoPlayback;
@@ -2440,28 +2432,16 @@ void CG_Init(int serverMessageNum, int serverCommandSequence, int clientNum, qbo
 
 	cgs.smokeWindDir = crandom();
 
-#ifdef _DEBUG
-	DEBUG_INITPROFILE_EXEC("initialization")
-#endif // DEBUG
-
 	// load the new map
 	CG_LoadingString("collision map");
 
 	trap_CM_LoadMap(cgs.mapname);
-
-#ifdef _DEBUG
-	DEBUG_INITPROFILE_EXEC("loadmap")
-#endif // DEBUG
 
 	String_Init();
 
 	CG_LoadingString("sounds");
 
 	CG_RegisterSounds();
-
-#ifdef _DEBUG
-	DEBUG_INITPROFILE_EXEC("sounds")
-#endif // DEBUG
 
 	CG_LoadingString("graphics");
 
@@ -2471,17 +2451,9 @@ void CG_Init(int serverMessageNum, int serverCommandSequence, int clientNum, qbo
 
 	CG_InitFlameChunks();       // RF, register and clear all flamethrower resources
 
-#ifdef _DEBUG
-	DEBUG_INITPROFILE_EXEC("graphics")
-#endif // DEBUG
-
 	CG_LoadingString("clients");
 
 	CG_RegisterClients();       // if low on memory, some clients will be deferred
-
-#ifdef _DEBUG
-	DEBUG_INITPROFILE_EXEC("clients")
-#endif // DEBUG
 
 	CG_InitLocalEntities();
 
@@ -2519,10 +2491,6 @@ void CG_Init(int serverMessageNum, int serverCommandSequence, int clientNum, qbo
 	CG_ParseSpawns();
 
 	CG_ParseTagConnects();
-
-#ifdef _DEBUG
-	DEBUG_INITPROFILE_EXEC("misc")
-#endif // DEBUG
 
 	CG_ParseSkyBox();
 

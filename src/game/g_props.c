@@ -1638,25 +1638,6 @@ void SP_OilSlick(gentity_t *ent) {
 
 }
 
-void OilParticles_think(gentity_t *ent) {
-	gentity_t *tent;
-	gentity_t *owner;
-
-	owner = &g_entities[ent->s.density];
-
-	if (owner && owner->takedamage && ent->count2 > level.time - 5000) {
-		ent->nextthink = (level.time + FRAMETIME / 2);
-
-		tent = G_TempEntity(ent->r.currentOrigin, EV_OILPARTICLES);
-		VectorCopy(ent->r.currentOrigin, tent->s.origin);
-		tent->s.time    = ent->count2;
-		tent->s.density = ent->s.density;
-		VectorCopy(ent->rotate, tent->s.origin2);
-	} else {
-		G_FreeEntity(ent);
-	}
-}
-
 void Props_Barrel_Pain(gentity_t *ent, gentity_t *attacker, int damage, vec3_t point) {
 	// Nico, silent GCC
 	attacker = attacker;

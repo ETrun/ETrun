@@ -1227,7 +1227,6 @@ static qboolean updateModel = qtrue;
 static void UI_DrawPlayerModel(rectDef_t *rect) {
 	static playerInfo_t info;
 	char                model[MAX_QPATH];
-	char                team[256];
 	vec3_t              viewangles;
 	static vec3_t       moveangles = { 0, 0, 0 };
 
@@ -1241,8 +1240,6 @@ static void UI_DrawPlayerModel(rectDef_t *rect) {
 		strcpy(model, "multi_axis");
 	}
 	// -NERVE - SMF
-
-	team[0] = '\0';
 
 	moveangles[YAW] += 1;       // NERVE - SMF - TEMPORARY
 
@@ -1285,7 +1282,6 @@ static void UI_DrawPlayerModel(rectDef_t *rect) {
 	}
 
 	UI_DrawPlayer(rect->x, rect->y, rect->w, rect->h, &info, uiInfo.uiDC.realTime / 2);
-
 }
 
 static void UI_DrawNetFilter(rectDef_t *rect, float scale, vec4_t color, int textStyle) {
@@ -3941,7 +3937,7 @@ void UI_FeederSelection(float feederID, int index) {
 	} else if (feederID == FEEDER_GLINFO) {
 		//
 	} else if (feederID == FEEDER_SERVERS) {
-		const char *mapName = NULL;
+		const char *mapName;
 
 		uiInfo.serverStatus.currentServer = index;
 		trap_LAN_GetServerInfo(ui_netSource.integer, uiInfo.serverStatus.displayServers[index], info, MAX_STRING_CHARS);
@@ -4266,9 +4262,6 @@ void _UI_SetActiveMenu(uiMenuCommand_t menu) {
 	// this should be the ONLY way the menu system is brought up
 	// enusure minumum menu data is cached
 	if (Menu_Count() > 0) {
-		vec3_t v;
-		v[0] = v[1] = v[2] = 0;
-
 		menutype = menu;    //----(SA)	added
 
 		switch (menu) {

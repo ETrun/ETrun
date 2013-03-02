@@ -188,7 +188,7 @@ void CG_DrawFireTeamOverlay(rectDef_t *rect) {
 	float          h;
 	clientInfo_t   *ci = NULL;
 	char           buffer[64];
-	fireteamData_t *f = NULL;
+	fireteamData_t *f;
 	int            i;
 	vec4_t         clr1        = { .16f, .2f, .17f, .8f };
 	vec4_t         tclr        = { 0.6f, 0.6f, 0.6f, 1.0f };

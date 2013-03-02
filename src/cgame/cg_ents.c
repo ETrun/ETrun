@@ -861,8 +861,6 @@ static void CG_Smoker(centity_t *cent) {
 			CG_ParticleSmoke(cgs.gameShaders[cent->currentState.modelindex2], cent);
 		} else if (cent->currentState.density == 3) {     // cannon
 			CG_ParticleSmoke(cgs.media.smokePuffShaderdirty, cent);
-		} else if (!(cent->currentState.density)) {
-			CG_ParticleSmoke(cgs.media.smokePuffShader, cent);
 		} else {
 			CG_ParticleSmoke(cgs.media.smokePuffShader, cent);
 		}

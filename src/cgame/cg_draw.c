@@ -2461,7 +2461,7 @@ static void CG_Autodemo() {
 			if (cg.time > rs_time + 2000) {
 				int          len = 0;
 				fileHandle_t temp, demo;
-				char         *name = NULL;
+				char         *name;
 				int          i     = 0;
 
 				len = trap_FS_FOpenFile(va("demos/temp_%i.dm_84", cg.currentdemo), &temp, FS_READ);

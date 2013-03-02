@@ -322,7 +322,6 @@ void CG_DrawPMItems(void) {
 }
 
 void CG_DrawPMItemsBig(void) {
-	vec4_t colour     = { 0.f, 0.f, 0.f, 1.f };
 	vec4_t colourText = { 1.f, 1.f, 1.f, 1.f };
 	float  t;
 	float  y = 270;
@@ -334,7 +333,7 @@ void CG_DrawPMItemsBig(void) {
 
 	t = cg_pmWaitingListBig->time + cg_popupTime.integer + cg_popupStayTime.integer;
 	if (cg.time > t) {
-		colourText[3] = colour[3] = 1 - ((cg.time - t) / (float)cg_popupFadeTime.integer);
+		colourText[3] = 1 - ((cg.time - t) / (float)cg_popupFadeTime.integer);
 	}
 
 	trap_R_SetColor(colourText);

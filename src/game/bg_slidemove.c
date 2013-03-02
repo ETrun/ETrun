@@ -322,22 +322,15 @@ void PM_StepSlideMove(qboolean gravity) {
 
 			if (trace.fraction == 1.0 && DotProduct(trace.plane.normal, up) == 0) {
 				if (pm->ps->stats[STAT_DOUBLEJUMP_TIME] < pml.msec) {
-					// Com_Printf("DJ!\n");
 				} else {
-					// Com_Printf("DJ not allowed yet\n");
 					return;
 				}
 			} else {
-				// Com_Printf("No DJ because of surface: trace.friction = %f, dotproduct = %f\n", trace.fraction, DotProduct( trace.plane.normal, up ));
 				// Nico, disable DJ for 1 sec
 				pm->ps->stats[STAT_DOUBLEJUMP_TIME] = pml.msec + 1000;
 				return;
 			}
-		} else if (!(pm->physics & PHYSICS_DOUBLEJUMP)) {
-			// Com_Printf("DJ is disabled\n");
-			return;
 		} else {
-			// Com_Printf("No DJ, too high z-speed (%f)\n", pm->ps->velocity[2]);
 			return;
 		}
 	}

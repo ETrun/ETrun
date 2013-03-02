@@ -1725,9 +1725,8 @@ spawnitem
 */
 
 void misc_spawner_think(gentity_t *ent) {
-
 	gitem_t   *item;
-	gentity_t *drop = NULL;
+	gentity_t *drop;
 
 	item = BG_FindItem(ent->spawnitem);
 

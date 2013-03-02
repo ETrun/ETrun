@@ -4029,7 +4029,7 @@ static void G_SpawnGEntityFromSpawnVars(void) {
  */
 qboolean G_ScriptAction_Create(gentity_t *ent, char *params) {
 	char *token               = NULL;
-	char *p                   = NULL;
+	char *p = params;
 	char key[MAX_TOKEN_CHARS] = { 0 };
 
 	// Nico, silent GCC
@@ -4039,8 +4039,6 @@ qboolean G_ScriptAction_Create(gentity_t *ent, char *params) {
 	// them
 	level.numSpawnVars     = 0;
 	level.numSpawnVarChars = 0;
-
-	p = params;
 
 	// get each key/value pair
 	while (1) {
@@ -4077,14 +4075,12 @@ qboolean G_ScriptAction_Create(gentity_t *ent, char *params) {
  */
 qboolean G_ScriptAction_Delete(gentity_t *ent, char *params) {
 	char      *token               = NULL;
-	char      *p                   = NULL;
+	char      *p                   = params;
 	char      key[MAX_TOKEN_CHARS] = { 0 };
 	gentity_t *entity              = NULL;
 
 	// Nico, silent GCC
 	ent = ent;
-
-	p = params;
 
 	// get each key/value pair
 	while (1) {
