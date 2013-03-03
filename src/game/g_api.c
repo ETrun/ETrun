@@ -199,13 +199,10 @@ static qboolean checkAPIResult(char *result) {
  * Login handler
  */
 static void *loginHandler(void *data) {
-	int            code         = -1;
+	int            code;
 	int            len          = 0;
-	gentity_t      *ent         = NULL;
-	struct query_s *queryStruct = NULL;
-
-	queryStruct = (struct query_s *)data;
-	ent         = queryStruct->ent;
+	struct query_s *queryStruct = (struct query_s *)data;
+	gentity_t      *ent         = queryStruct->ent;
 
 	code = API_query(queryStruct->cmd, queryStruct->result, queryStruct->query, sizeof (queryStruct->query));
 
@@ -254,12 +251,9 @@ qboolean G_API_login(char *result, gentity_t *ent, char *authToken) {
  * Map records handler
  */
 static void *mapRecordsHandler(void *data) {
-	int            code         = -1;
-	gentity_t      *ent         = NULL;
-	struct query_s *queryStruct = NULL;
-
-	queryStruct = (struct query_s *)data;
-	ent         = queryStruct->ent;
+	int            code;
+	struct query_s *queryStruct = (struct query_s *)data;
+	gentity_t      *ent         = queryStruct->ent;
 
 	code = API_query(queryStruct->cmd, queryStruct->result, queryStruct->query, sizeof (queryStruct->query));
 
@@ -301,10 +295,8 @@ qboolean G_API_mapRecords(char *result, gentity_t *ent, char *mapName) {
  * Check API handler
  */
 static void *checkAPIHandler(void *data) {
-	int            code         = -1;
-	struct query_s *queryStruct = NULL;
-
-	queryStruct = (struct query_s *)data;
+	int            code;
+	struct query_s *queryStruct = (struct query_s *)data;
 
 	code = API_query(queryStruct->cmd, queryStruct->result, queryStruct->query, sizeof (queryStruct->query));
 
@@ -341,13 +333,10 @@ qboolean G_API_check(char *result, gentity_t *ent) {
  * Record handler
  */
 static void *recordHandler(void *data) {
-	int            code         = -1;
-	struct query_s *queryStruct = NULL;
-	gentity_t      *ent         = NULL;
-	int            timerunNum   = 0;
-
-	queryStruct = (struct query_s *)data;
-	ent         = queryStruct->ent;
+	int            code;
+	struct query_s *queryStruct = (struct query_s *)data;
+	gentity_t      *ent         = queryStruct->ent;
+	int            timerunNum;
 
 	code = API_query(queryStruct->cmd, queryStruct->result, queryStruct->query, sizeof (queryStruct->query));
 
@@ -427,15 +416,12 @@ qboolean G_API_sendRecord(char *result, gentity_t *ent, char *mapName, char *run
  * Get checkpoints handler
  */
 static void *checkpointsHandler(void *data) {
-	int            code         = -1;
-	struct query_s *queryStruct = NULL;
-	gentity_t      *ent         = NULL;
+	int            code;
+	struct query_s *queryStruct = (struct query_s *)data;
+	gentity_t      *ent         = queryStruct->ent;
 	char           *pch         = NULL;
 	int            i            = 0;
 	int            timerunNum   = 0;
-
-	queryStruct = (struct query_s *)data;
-	ent         = queryStruct->ent;
 
 	code = API_query(queryStruct->cmd, queryStruct->result, queryStruct->query, sizeof (queryStruct->query));
 
@@ -510,14 +496,11 @@ qboolean G_API_getPlayerCheckpoints(char *result, gentity_t *ent, char *userName
  * Random map handler
  */
 static void *randommapHandler(void *data) {
-	int            code               = -1;
-	struct query_s *queryStruct       = NULL;
-	gentity_t      *ent               = NULL;
+	int            code;
+	struct query_s *queryStruct       = (struct query_s *)data;
+	gentity_t      *ent               = queryStruct->ent;// Nico, note: this is NULL is randomMap was asked by server (timelimit)
 	char           mapfile[MAX_QPATH] = { 0 };
 	fileHandle_t   f;
-
-	queryStruct = (struct query_s *)data;
-	ent         = queryStruct->ent;// Nico, note: this is NULL is randomMap was asked by server (timelimit)
 
 	code = API_query(queryStruct->cmd, queryStruct->result, queryStruct->query, sizeof (queryStruct->query));
 
@@ -577,12 +560,9 @@ qboolean G_API_randommap(char *result, gentity_t *ent, char *mapName) {
  * Map rank command handler
  */
 static void *mapRankHandler(void *data) {
-	int            code         = -1;
-	gentity_t      *ent         = NULL;
-	struct query_s *queryStruct = NULL;
-
-	queryStruct = (struct query_s *)data;
-	ent         = queryStruct->ent;
+	int            code;
+	struct query_s *queryStruct = (struct query_s *)data;
+	gentity_t      *ent         = queryStruct->ent;
 
 	code = API_query(queryStruct->cmd, queryStruct->result, queryStruct->query, sizeof (queryStruct->query));
 

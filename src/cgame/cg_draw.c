@@ -360,8 +360,7 @@ CG_DrawTeamInfo
 =================
 */
 static void CG_DrawTeamInfo(void) {
-	int    w;
-	int    i, len;
+	int    i;
 	vec4_t hcolor;
 	int    chatHeight;
 	float  alphapercent;
@@ -384,16 +383,9 @@ static void CG_DrawTeamInfo(void) {
 			cgs.teamLastChatPos++;
 		}
 
-		w = 0;
-
 		for (i = cgs.teamLastChatPos; i < cgs.teamChatPos; i++) {
-			len = CG_Text_Width_Ext(cgs.teamChatMsgs[i % chatHeight], 0.2f, 0, &cgs.media.limboFont2);
-			if (len > w) {
-				w = len;
-			}
+			CG_Text_Width_Ext(cgs.teamChatMsgs[i % chatHeight], 0.2f, 0, &cgs.media.limboFont2);
 		}
-		w *= TINYCHAR_WIDTH;
-		w += TINYCHAR_WIDTH * 2;
 
 		for (i = cgs.teamChatPos - 1; i >= cgs.teamLastChatPos; i--) {
 			alphapercent = 1.0f - (cg.time - cgs.teamChatMsgTimes[i % chatHeight]) / (float)(cg_teamChatTime.integer);

@@ -1544,7 +1544,6 @@ void target_stoptimer_use(gentity_t *self, gentity_t *other, gentity_t *activato
 	min    = milli / 60000;
 	milli -= min * 60000;
 	sec    = milli / 1000;
-	milli -= sec * 1000;
 
 	delta = abs(time - client->sess.timerunBestTime[timerunNum]);
 	if (!client->sess.timerunBestTime[timerunNum] || time < client->sess.timerunBestTime[timerunNum]) {
@@ -1570,7 +1569,6 @@ void target_stoptimer_use(gentity_t *self, gentity_t *other, gentity_t *activato
 	dmin    = dmilli / 60000;
 	dmilli -= dmin * 60000;
 	dsec    = dmilli / 1000;
-	dmilli -= dsec * 1000;
 
 	// Nico, stop speed
 	client->sess.stopSpeed = (int)sqrt(client->ps.velocity[0] * client->ps.velocity[0] + client->ps.velocity[1] * client->ps.velocity[1]);

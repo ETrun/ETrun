@@ -1254,7 +1254,7 @@ CG_Efx
 ==============
 */
 static void CG_SpotlightEfx(centity_t *cent) {
-	vec3_t targetpos, normalized_direction, direction;
+	vec3_t targetpos, normalized_direction;
 	float  dist, fov = 90;
 	vec4_t color        = { 1, 1, 1, .1 };
 	int    splinetarget = 0;
@@ -1284,9 +1284,9 @@ static void CG_SpotlightEfx(centity_t *cent) {
 	}
 
 
-	normalized_direction[0] = direction[0] = targetpos[0] - cent->currentState.origin[0];
-	normalized_direction[1] = direction[1] = targetpos[1] - cent->currentState.origin[1];
-	normalized_direction[2] = direction[2] = targetpos[2] - cent->currentState.origin[2];
+	normalized_direction[0] = targetpos[0] - cent->currentState.origin[0];
+	normalized_direction[1] = targetpos[1] - cent->currentState.origin[1];
+	normalized_direction[2] = targetpos[2] - cent->currentState.origin[2];
 
 	dist = VectorNormalize(normalized_direction);
 
