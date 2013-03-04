@@ -1233,10 +1233,6 @@ const char *CG_LocalizeServerCommand(const char *buf) {
 	prev = 0;
 
 	for (i = 0; *s; i++, s++) {
-		// TTimo:
-		// line was: if ( *s == '[' && !Q_strncmp( s, "[lon]", 5 ) || !Q_strncmp( s, "[lof]", 5 ) ) {
-		// || prevails on &&, gcc warning was 'suggest parentheses around && within ||'
-		// modified to the correct behaviour
 		if (*s == '[' && (!Q_strncmp(s, "[lon]", 5) || !Q_strncmp(s, "[lof]", 5))) {
 
 			if (togloc) {
