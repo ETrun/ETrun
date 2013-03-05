@@ -312,9 +312,6 @@ static float CG_DrawFPS(float y) {
 	return y + 12 + 4;
 }
 
-// Nico, #fixme, is this global needed?
-int maxCharsBeforeOverlay;
-
 /*
 =====================
 CG_DrawUpperRight

@@ -1349,13 +1349,6 @@ qboolean CG_CullPointAndRadius(const vec3_t pt, vec_t radius) {
 
 extern void CG_SetupDlightstyles(void);
 
-#ifdef _DEBUG
-//#define FAKELAG
-# ifdef FAKELAG
-extern int snapshotDelayTime;
-# endif // FAKELAG
-#endif // _DEBUG
-
 /*
 =================
 CG_DrawActiveFrame
@@ -1370,10 +1363,6 @@ void CG_DrawActiveFrame(int serverTime, stereoFrame_t stereoView, qboolean demoP
 	cg.time         = serverTime;
 	cgDC.realTime   = cg.time;
 	cg.demoPlayback = demoPlayback;
-
-#ifdef FAKELAG
-	cg.time -= snapshotDelayTime;
-#endif // _DEBUG
 
 	// update cvars
 	CG_UpdateCvars();

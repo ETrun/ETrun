@@ -387,100 +387,12 @@ void        trap_GetGameState(gameState_t *gamestate) {
 	syscall(CG_GETGAMESTATE, gamestate);
 }
 
-#ifdef _DEBUG
-//#define FAKELAG
-# ifdef FAKELAG
-#  define MAX_SNAPSHOT_BACKUP 256
-#  define MAX_SNAPSHOT_MASK   (MAX_SNAPSHOT_BACKUP - 1)
-
-static snapshot_t snaps[MAX_SNAPSHOT_BACKUP];
-static int        curSnapshotNumber;
-int               snapshotDelayTime;
-static qboolean   skiponeget;
-# endif // FAKELAG
-#endif // _DEBUG
-
 void        trap_GetCurrentSnapshotNumber(int *snapshotNumber, int *serverTime) {
 	syscall(CG_GETCURRENTSNAPSHOTNUMBER, snapshotNumber, serverTime);
-
-#ifdef FAKELAG
-	{
-		char s[MAX_STRING_CHARS];
-		int  fakeLag;
-
-		trap_Cvar_VariableStringBuffer("g_fakelag", s, sizeof (s));
-		fakeLag = atoi(s);
-		if (fakeLag < 0) {
-			fakeLag = 0;
-		}
-
-		if (fakeLag) {
-			if (curSnapshotNumber < cg.latestSnapshotNum) {
-				*snapshotNumber   = cg.latestSnapshotNum + 1;
-				curSnapshotNumber = cg.latestSnapshotNum + 2;   // skip one ahead and we're good to go on the next frame
-				skiponeget        = qtrue;
-			} else {
-				*snapshotNumber = curSnapshotNumber;
-			}
-		}
-	}
-#endif // FAKELAG
 }
 
 qboolean    trap_GetSnapshot(int snapshotNumber, snapshot_t *snapshot) {
-#ifndef FAKELAG
 	return syscall(CG_GETSNAPSHOT, snapshotNumber, snapshot);
-#else
-	{
-		char s[MAX_STRING_CHARS];
-		int  fakeLag;
-
-		if (skiponeget) {
-			syscall(CG_GETSNAPSHOT, snapshotNumber, snapshot);
-		}
-
-		trap_Cvar_VariableStringBuffer("g_fakelag", s, sizeof (s));
-		fakeLag = atoi(s);
-		if (fakeLag < 0) {
-			fakeLag = 0;
-		}
-
-		if (fakeLag) {
-			int i;
-			int realsnaptime, thissnaptime;
-
-			// store our newest usercmd
-			curSnapshotNumber++;
-			memcpy(&snaps[curSnapshotNumber & MAX_SNAPSHOT_MASK], snapshot, sizeof (snapshot_t));
-
-			// find a usercmd that is fakeLag msec behind
-			i            = curSnapshotNumber & MAX_SNAPSHOT_MASK;
-			realsnaptime = snaps[i].serverTime;
-			i--;
-			do {
-				thissnaptime = snaps[i & MAX_SNAPSHOT_MASK].serverTime;
-
-				if (realsnaptime - thissnaptime > fakeLag) {
-					// found the right one
-					snapshotDelayTime = realsnaptime - thissnaptime;
-					snapshot          = &snaps[i & MAX_SNAPSHOT_MASK];
-					//*snapshotNumber = i & MAX_SNAPSHOT_MASK;
-					return qtrue;
-				}
-
-				i--;
-			} while ((i & MAX_SNAPSHOT_MASK) != (curSnapshotNumber & MAX_SNAPSHOT_MASK));
-
-			// didn't find a proper one, just use the oldest one we have
-			snapshotDelayTime = realsnaptime - thissnaptime;
-			snapshot          = &snaps[(curSnapshotNumber - 1) & MAX_SNAPSHOT_MASK];
-			//*snapshotNumber = (curSnapshotNumber - 1) & MAX_SNAPSHOT_MASK;
-			return qtrue;
-		} else {
-			return syscall(CG_GETSNAPSHOT, snapshotNumber, snapshot);
-		}
-	}
-#endif // FAKELAG
 }
 
 qboolean    trap_GetServerCommand(int serverCommandNumber) {

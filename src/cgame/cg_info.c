@@ -406,8 +406,6 @@ void CG_DemoHelpDraw() {
 		CG_DrawRect(x, y, w, h, 1, borderColor);
 		CG_FillRect(x, y, w, h, bgColor);
 
-
-
 		// Header
 		CG_FillRect(x, y, w, tSpacing + 4, bgColorTitle);
 		CG_DrawRect(x, y, w, tSpacing + 4, 1, borderColorTitle);
@@ -417,8 +415,6 @@ void CG_DemoHelpDraw() {
 		y += tSpacing;
 		CG_Text_Paint_Ext(x, y, hScale, hScaleY, hdrColor2, "DEMO CONTROLS", 0.0f, 0, hStyle, hFont);
 		y += 3;
-
-
 
 		// Control info
 		for (i = 0; i < (int)(sizeof (help) / sizeof (char *)); i++) {

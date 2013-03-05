@@ -2674,8 +2674,6 @@ void CG_LimboPanel_WeaponPanel(panel_button_t *button);
 void CG_LimboPanel_Border_Draw(panel_button_t *button);
 
 void CG_LimboPanel_RenderCounter(panel_button_t *button);
-void CG_LimboPanelRenderText_NoLMS(panel_button_t *button);
-
 void CG_LimboPanel_NameEditFinish(panel_button_t *button);
 
 void CG_LimboPanel_Setup(void);

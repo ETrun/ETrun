@@ -1146,10 +1146,6 @@ void CG_LimboPanel_RenderCounter_GetShaders(panel_button_t *button, qhandle_t *s
 	}
 }
 
-void CG_LimboPanelRenderText_NoLMS(panel_button_t *button) {
-	BG_PanelButtonsRender_Text(button);
-}
-
 #define MAX_ROLLERS 8
 #define COUNTER_ROLLTOTAL (cg.time - button->data[4])
 // Gordon: this function is mental, i love it :)

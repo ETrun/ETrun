@@ -220,61 +220,8 @@ qboolean trap_EntityContactCapsule(const vec3_t mins, const vec3_t maxs, const g
 	return syscall(G_ENTITY_CONTACTCAPSULE, mins, maxs, ent);
 }
 
-#ifdef DEBUG
-//#define FAKELAG
-# ifdef FAKELAG
-#  define MAX_USERCMD_BACKUP  256
-#  define MAX_USERCMD_MASK    (MAX_USERCMD_BACKUP - 1)
-
-static usercmd_t cmds[MAX_CLIENTS][MAX_USERCMD_BACKUP];
-static int       cmdNumber[MAX_CLIENTS];
-# endif // FAKELAG
-#endif // DEBUG
-
 void trap_GetUsercmd(int clientNum, usercmd_t *cmd) {
 	syscall(G_GET_USERCMD, clientNum, cmd);
-
-#ifdef FAKELAG
-	{
-		char s[MAX_STRING_CHARS];
-		int  fakeLag;
-
-		trap_Cvar_VariableStringBuffer("g_fakelag", s, sizeof (s));
-		fakeLag = atoi(s);
-		if (fakeLag < 0) {
-			fakeLag = 0;
-		}
-
-		if (fakeLag) {
-			int i;
-			int realcmdtime, thiscmdtime;
-
-			// store our newest usercmd
-			cmdNumber[clientNum]++;
-			memcpy(&cmds[clientNum][cmdNumber[clientNum] & MAX_USERCMD_MASK], cmd, sizeof (usercmd_t));
-
-			// find a usercmd that is fakeLag msec behind
-			i           = cmdNumber[clientNum] & MAX_USERCMD_MASK;
-			realcmdtime = cmds[clientNum][i].serverTime;
-			i--;
-			do {
-				thiscmdtime = cmds[clientNum][i & MAX_USERCMD_MASK].serverTime;
-
-				if (realcmdtime - thiscmdtime > fakeLag) {
-					// found the right one
-					cmd = &cmds[clientNum][i & MAX_USERCMD_MASK];
-					return;
-				}
-
-				i--;
-			} while ((i & MAX_USERCMD_MASK) != (cmdNumber[clientNum] & MAX_USERCMD_MASK));
-
-			// didn't find a proper one, just use the oldest one we have
-			cmd = &cmds[clientNum][(cmdNumber[clientNum] - 1) & MAX_USERCMD_MASK];
-			return;
-		}
-	}
-#endif // FAKELAG
 }
 
 qboolean trap_GetEntityToken(char *buffer, int bufferSize) {

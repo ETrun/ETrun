@@ -64,8 +64,6 @@ trailJunc_t *headTrails;
 
 qboolean initTrails = qfalse;
 
-int numTrailsInuse;
-
 /*
 ===============
 CG_ClearTrails
@@ -99,7 +97,6 @@ void CG_ClearTrails(void) {
 	trailJuncs[MAX_TRAILJUNCS - 1].nextGlobal = NULL;
 
 	initTrails     = qtrue;
-	numTrailsInuse = 0;
 }
 
 /*
@@ -162,8 +159,6 @@ trailJunc_t *CG_SpawnTrailJunc(trailJunc_t *headJunc) {
 	headTrails  = j;
 
 	j->nextJunc = headJunc; // if headJunc is NULL, then we'll just be the end of the list
-
-	numTrailsInuse++;
 
 	return j;
 }
@@ -410,8 +405,6 @@ void CG_FreeTrailJunc(trailJunc_t *junc) {
 		freeTrails->prevGlobal = junc;
 	}
 	freeTrails = junc;
-
-	numTrailsInuse--;
 }
 
 /*
@@ -643,7 +636,6 @@ void CG_AddTrailToScene(trailJunc_t *trail, int iteration, int numJuncs) {
 		if (trail->sType == STYPE_REPEAT) {
 			s = jNext->sTex;
 		} else {
-			//s += sInc;
 			s += VectorDistance(j->pos, jNext->pos) / sInc;
 			if (s > 1.0) {
 				s = 1.0;
@@ -759,7 +751,6 @@ void CG_AddTrails(void) {
 		CG_ClearTrails();
 	}
 
-	//AngleVectors( cg.snap->ps.viewangles, vforward, vright, vup );
 	VectorCopy(cg.refdef_current->viewaxis[0], vforward);
 	VectorCopy(cg.refdef_current->viewaxis[1], vright);
 	VectorCopy(cg.refdef_current->viewaxis[2], vup);
