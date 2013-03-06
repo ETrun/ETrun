@@ -10,3 +10,6 @@ before_install:
 
 script:
   - ./make.sh
+
+git:
+  submodules: false
