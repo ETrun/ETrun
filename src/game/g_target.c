@@ -1508,8 +1508,6 @@ void saveDemo(gentity_t *ent) {
  * "minCheckpoints"		minimal passed checkpoints to activate this stoptimer
  */
 void target_stoptimer_use(gentity_t *self, gentity_t *other, gentity_t *activator) {
-	int       min, sec, milli;
-	int       delta, dmin, dsec, dmilli;
 	int       time;
 	gclient_t *client = activator->client;
 	int       timerunNum;
@@ -1539,13 +1537,6 @@ void target_stoptimer_use(gentity_t *self, gentity_t *other, gentity_t *activato
 
 	time = client->sess.timerunLastTime[timerunNum] = client->ps.commandTime - client->sess.timerunStartTime;
 
-	// convert time into MM:SS:mmm
-	milli  = time;
-	min    = milli / 60000;
-	milli -= min * 60000;
-	sec    = milli / 1000;
-
-	delta = abs(time - client->sess.timerunBestTime[timerunNum]);
 	if (!client->sess.timerunBestTime[timerunNum] || time < client->sess.timerunBestTime[timerunNum]) {
 		// best personal for this session
 		if (client->sess.logged) {
@@ -1563,12 +1554,6 @@ void target_stoptimer_use(gentity_t *self, gentity_t *other, gentity_t *activato
 			memcpy(client->sess.timerunBestCheckpointTimes[timerunNum], client->sess.timerunCheckpointTimes, sizeof (client->sess.timerunCheckpointTimes));
 		}
 	}
-
-	// extract MM:SS:mmm from delta
-	dmilli  = delta;
-	dmin    = dmilli / 60000;
-	dmilli -= dmin * 60000;
-	dsec    = dmilli / 1000;
 
 	// Nico, stop speed
 	client->sess.stopSpeed = (int)sqrt(client->ps.velocity[0] * client->ps.velocity[0] + client->ps.velocity[1] * client->ps.velocity[1]);
