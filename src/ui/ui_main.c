@@ -81,7 +81,7 @@ static void UI_StopServerRefresh(void);
 static void UI_DoServerRefresh(void);
 static void UI_FeederSelection(float feederID, int index);
 qboolean UI_FeederSelectionClick(itemDef_t *item);
-static void UI_BuildServerDisplayList(qboolean force);
+static void UI_BuildServerDisplayList(int force);
 static void UI_BuildServerStatus(qboolean force);
 static void UI_BuildFindPlayerList(qboolean force);
 static int QDECL UI_ServersQsortCompare(const void *arg1, const void *arg2);
@@ -1748,7 +1748,7 @@ static qboolean UI_NetFilter_HandleKey(int key) {
 		} else if (ui_serverFilterType.integer < 0) {
 			ui_serverFilterType.integer = numServerFilters - 1;
 		}
-		UI_BuildServerDisplayList(qtrue);
+		UI_BuildServerDisplayList(1);
 		return qtrue;
 	}
 	return qfalse;
@@ -2201,10 +2201,10 @@ void UI_RunMenuScript(char **args) {
 			trap_Cvar_Set("com_missingFiles", "");
 		} else if (Q_stricmp(name, "RefreshServers") == 0) {
 			UI_StartServerRefresh(qtrue);
-			UI_BuildServerDisplayList(qtrue);
+			UI_BuildServerDisplayList(1);
 		} else if (Q_stricmp(name, "RefreshFilter") == 0) {
 			UI_StartServerRefresh(uiInfo.serverStatus.numDisplayServers ? qfalse : qtrue);      // if we don't have any valid servers, it's kinda safe to assume we would like to get a full new list
-			UI_BuildServerDisplayList(qtrue);
+			UI_BuildServerDisplayList(1);
 		} else if (Q_stricmp(name, "LoadDemos") == 0) {
 			UI_LoadDemos();
 		} else if (Q_stricmp(name, "LoadMovies") == 0) {
@@ -2228,7 +2228,7 @@ void UI_RunMenuScript(char **args) {
 				uiInfo.serverStatus.nextDisplayRefresh = 0;
 				uiInfo.nextServerStatusRefresh         = 0;
 				uiInfo.nextFindPlayerRefresh           = 0;
-				UI_BuildServerDisplayList(qtrue);
+				UI_BuildServerDisplayList(1);
 			} else {
 				Menus_CloseByName("joinserver");
 				Menus_OpenByName("main");
@@ -2243,7 +2243,7 @@ void UI_RunMenuScript(char **args) {
 			if (ui_netSource.integer == AS_LOCAL || !uiInfo.serverStatus.numDisplayServers) {
 				UI_StartServerRefresh(qtrue);
 			}
-			UI_BuildServerDisplayList(qtrue);
+			UI_BuildServerDisplayList(1);
 			UI_FeederSelection(FEEDER_SERVERS, 0);
 		} else if (Q_stricmp(name, "check_ServerStatus") == 0) {
 			s    = UI_Cvar_VariableString("com_errorDiagnoseIP");
@@ -3123,7 +3123,7 @@ static void UI_BinaryServerInsertion(int num) {
 UI_BuildServerDisplayList
 ==================
 */
-static void UI_BuildServerDisplayList(qboolean force) {
+static void UI_BuildServerDisplayList(int force) {
 	int        i, count, clients, maxClients, ping, len, antilag, password;
 	char       info[MAX_STRING_CHARS];
 	static int numinvisible;
@@ -4000,7 +4000,7 @@ qboolean UI_FeederSelectionClick(itemDef_t *item) {
 				if (addr[0] != '\0') {
 					trap_LAN_RemoveServer(AS_FAVORITES, addr);
 					if (ui_netSource.integer == AS_FAVORITES) {
-						UI_BuildServerDisplayList(qtrue);
+						UI_BuildServerDisplayList(1);
 						UI_FeederSelection(FEEDER_SERVERS, 0);
 					}
 				}
@@ -4737,8 +4737,7 @@ static void UI_DoServerRefresh(void) {
 		// stop the refresh
 		UI_StopServerRefresh();
 	}
-	//
-	UI_BuildServerDisplayList(qfalse);
+	UI_BuildServerDisplayList(0);
 }
 
 /*
