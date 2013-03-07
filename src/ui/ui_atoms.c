@@ -119,14 +119,6 @@ qboolean UI_ConsoleCommand(int realTime) {
 }
 
 /*
-=================
-UI_Shutdown
-=================
-*/
-void UI_Shutdown(void) {
-}
-
-/*
 ================
 UI_AdjustFrom640
 

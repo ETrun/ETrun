@@ -178,14 +178,9 @@ panel_button_t loadScreenMeterBackText =
 panel_button_t *loadpanelButtons[] =
 {
 	&loadScreenMap,               &loadScreenBack,
-
-
 	&missiondescriptionPanelText, &missiondescriptionPanelHeaderText,
-
 	&loadScreenMeterBack,         &loadScreenMeterBack2,             &loadScreenMeterBackText,
-
 	&loadScreenPins,
-
 	NULL,
 };
 
@@ -345,9 +340,7 @@ void CG_LoadPanel_RenderMissionDescriptionText(panel_button_t *button) {
 }
 
 void CG_LoadPanel_KeyHandling(int key, qboolean down) {
-	if (BG_PanelButtonsKeyEvent(key, down, loadpanelButtons)) {
-		return;
-	}
+	BG_PanelButtonsKeyEvent(key, down, loadpanelButtons);
 }
 
 qboolean CG_LoadPanel_ContinueButtonKeyDown(panel_button_t *button, int key) {
@@ -361,7 +354,6 @@ qboolean CG_LoadPanel_ContinueButtonKeyDown(panel_button_t *button, int key) {
 
 	return qfalse;
 }
-
 
 void CG_LoadPanel_DrawPin(const char *text, float px, float py, float sx, float sy, qhandle_t shader, float pinsize, float backheight) {
 	float  x, y, w, h;

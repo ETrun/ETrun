@@ -28,14 +28,6 @@ If you have questions concerning this license or the applicable additional terms
 
 #include "cg_local.h"
 
-const char *CG_DescriptionForCampaign(void) {
-	return cgs.campaignInfoLoaded ? cgs.campaignData.campaignDescription : NULL;
-}
-
-const char *CG_NameForCampaign(void) {
-	return cgs.campaignInfoLoaded ? cgs.campaignData.campaignName : NULL;
-}
-
 qboolean CG_FindArenaInfo(char *filename, char *mapname, arenaInfo_t *info) {
 	int        handle;
 	pc_token_t token;

@@ -2258,8 +2258,6 @@ void CG_LoadHudMenu() {
 	cgDC.registerSound          = &trap_S_RegisterSound;
 	cgDC.startBackgroundTrack   = &trap_S_StartBackgroundTrack;
 	cgDC.stopBackgroundTrack    = &trap_S_StopBackgroundTrack;
-	cgDC.descriptionForCampaign = &CG_DescriptionForCampaign;
-	cgDC.nameForCampaign        = &CG_NameForCampaign;
 	cgDC.add2dPolys             = &trap_R_Add2dPolys;
 	cgDC.updateScreen           = &trap_UpdateScreen;
 	cgDC.getHunkData            = &trap_GetHunkData;

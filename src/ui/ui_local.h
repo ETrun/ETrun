@@ -582,7 +582,6 @@ extern uiInfo_t uiInfo;
 
 
 extern void         UI_Init(void);
-extern void         UI_Shutdown(void);
 extern void         UI_KeyEvent(int key);
 extern void         UI_MouseEvent(int dx, int dy);
 extern void         UI_Refresh(int realtime);

@@ -2574,8 +2574,6 @@ void        CG_FreeCamera(int camNum);
 //----(SA)	end
 
 void CG_LocateArena(void);
-const char *CG_DescriptionForCampaign(void);
-const char *CG_NameForCampaign(void);
 void CG_CloseMenus();
 void CG_LimboMenu_f(void);
 

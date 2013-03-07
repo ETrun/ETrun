@@ -451,13 +451,10 @@ typedef struct {
 	void (*stopBackgroundTrack)();
 
 	// Gordon: campaign stuffs
-	const char * (*descriptionForCampaign)(void);
-	const char * (*nameForCampaign)(void);
 	void (*add2dPolys)(polyVert_t *verts, int numverts, qhandle_t hShader);
 	void (*updateScreen)(void);
 	void (*getHunkData)(int *hunkused, int *hunkexpected);
 	int (*getConfigString)(int index, char *buff, int buffsize);
-
 
 	float yscale;
 	float xscale;
