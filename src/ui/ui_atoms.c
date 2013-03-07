@@ -92,7 +92,7 @@ qboolean UI_ConsoleCommand(int realTime) {
 	}
 
 	if (Q_stricmp(cmd, "ui_report") == 0) {
-		UI_Report();
+		String_Report();
 		return qtrue;
 	}
 

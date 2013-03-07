@@ -235,7 +235,6 @@ typedef struct {
 //
 // ui_main.c
 //
-void            UI_Report();
 void            UI_Load();
 void            UI_LoadMenus(const char *menuFile, qboolean reset);
 void            _UI_SetActiveMenu(uiMenuCommand_t menu);

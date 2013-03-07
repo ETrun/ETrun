@@ -414,10 +414,8 @@ typedef struct {
 	void (*renderScene)(const refdef_t *fd);
 	void (*registerFont)(const char *pFontname, int pointSize, fontInfo_t *font);
 	void (*ownerDrawItem)(float x, float y, float w, float h, float text_x, float text_y, int ownerDraw, int ownerDrawFlags, int align, float special, float scale, vec4_t color, qhandle_t shader, int textStyle);
-	float (*getValue)(int ownerDraw, int type);
 	qboolean (*ownerDrawVisible)(int flags);
 	void (*runScript)(char **p);
-	void (*getTeamColor)(vec4_t *color);
 	void (*getCVarString)(const char *cvar, char *buffer, int bufsize);
 	float (*getCVarValue)(const char *cvar);
 	void (*setCVar)(const char *cvar, const char *value);

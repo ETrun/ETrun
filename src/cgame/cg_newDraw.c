@@ -97,8 +97,6 @@ void CG_DrawPlayerWeaponIcon(rectDef_t *rect, int align, vec4_t *refcolor) {
 		icon = cg_weapons[realweap].weaponIcon[1];
 	}
 
-
-
 	// pulsing grenade icon to help the player 'count' in their head
 	if (cg.predictedPlayerState.grenadeTimeLeft) {     // grenades and dynamite set this
 		// these time differently
@@ -132,7 +130,6 @@ void CG_DrawPlayerWeaponIcon(rectDef_t *rect, int align, vec4_t *refcolor) {
 	} else {
 		scale = halfScale = 0;
 	}
-
 
 	if (icon) {
 		float x, y, w, h;
@@ -169,8 +166,6 @@ void CG_DrawPlayerWeaponIcon(rectDef_t *rect, int align, vec4_t *refcolor) {
 	}
 }
 
-#define CURSORHINT_SCALE    10
-
 /*
 ==============
 CG_DrawCursorHints
@@ -188,7 +183,6 @@ void CG_DrawCursorhint(rectDef_t *rect) {
 	float     *color;
 	qhandle_t icon = 0, icon2 = 0;
 	float     scale, halfscale;
-	//qboolean	redbar = qfalse;
 	qboolean yellowbar = qfalse;
 
 	if (!cg_cursorHints.integer) {
@@ -239,14 +233,6 @@ void CG_DrawCursorhint(rectDef_t *rect) {
 
 	case HINT_CHAIR:
 		icon = cgs.media.notUsableHintShader;
-
-		// only show 'pickupable' if you're not armed, or are armed with a single handed weapon
-
-		// rain - WEAPS_ONE_HANDED isn't valid anymore, because
-		// WP_SILENCED_COLT uses a bit >31 (and, therefore, is too large
-		// to be shifted in the way WEAPS_ONE_HANDED does on a 32-bit
-		// system.) If you want to use HINT_CHAIR, you'll need to fix
-		// this.
 		break;
 	case HINT_ALARM:
 		icon = cgs.media.alarmHintShader;
@@ -258,8 +244,6 @@ void CG_DrawCursorhint(rectDef_t *rect) {
 		icon = cgs.media.treasureHintShader;
 		break;
 	case HINT_KNIFE:
-		// Nico, useless
-		// icon = cgs.media.knifeHintShader;
 		break;
 	case HINT_LADDER:
 		icon = cgs.media.ladderHintShader;
@@ -346,11 +330,9 @@ void CG_DrawCursorhint(rectDef_t *rect) {
 		break;
 	}
 
-
 	if (!icon) {
 		return;
 	}
-
 
 	// color
 	color = CG_FadeColor(cg.cursorHintTime, cg.cursorHintFade);
@@ -363,7 +345,6 @@ void CG_DrawCursorhint(rectDef_t *rect) {
 		color[3] *= 0.5 + 0.5 * sin((float)cg.time / 150.0);
 	}
 
-
 	// size
 	if (cg_cursorHints.integer >= 3) {     // no size pulsing
 		scale = halfscale = 0;
@@ -371,8 +352,7 @@ void CG_DrawCursorhint(rectDef_t *rect) {
 		if (cg_cursorHints.integer == 2) {
 			scale = (float)((cg.cursorHintTime) % 1000) / 100.0f;     // one way size pulse
 		} else {
-			scale = CURSORHINT_SCALE * (0.5 + 0.5 * sin((float)cg.time / 150.0));     // sin pulse
-
+			scale = 10 * (0.5 + 0.5 * sin((float)cg.time / 150.0));     // sin pulse
 		}
 		halfscale = scale * 0.5f;
 	}
@@ -396,18 +376,6 @@ void CG_DrawCursorhint(rectDef_t *rect) {
 		}
 		CG_FilledBar(rect->x, rect->y + rect->h + 4, rect->w, 8, color, NULL, NULL, (float)cg.cursorHintValue / 255.0f, 0);
 	}
-
-}
-
-float CG_GetValue(int ownerDraw, int type) {
-	// Nico, silent GCC
-	type = type;
-
-	switch (ownerDraw) {
-	default:
-		break;
-	}
-	return -1;
 }
 
 // THINKABOUTME: should these be exclusive or inclusive..
@@ -659,22 +627,6 @@ void CG_KeyEvent(int key, qboolean down) {
 			return;
 		}
 		break;
-	}
-}
-
-void CG_GetTeamColor(vec4_t *color) {
-	if (cg.snap->ps.persistant[PERS_TEAM] == TEAM_AXIS) {
-		(*color)[0] = 1;
-		(*color)[3] = .25f;
-		(*color)[1] = (*color)[2] = 0;
-	} else if (cg.snap->ps.persistant[PERS_TEAM] == TEAM_ALLIES) {
-		(*color)[0] = (*color)[1] = 0;
-		(*color)[2] = 1;
-		(*color)[3] = .25f;
-	} else {
-		(*color)[0] = (*color)[2] = 0;
-		(*color)[1] = .17f;
-		(*color)[3] = .25f;
 	}
 }
 

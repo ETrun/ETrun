@@ -863,10 +863,6 @@ qboolean Asset_Parse(int handle) {
 	return qfalse;
 }
 
-void UI_Report() {
-	String_Report();
-}
-
 static void QDECL Com_DPrintf(const char *fmt, ...) {
 	va_list argptr;
 	char    msg[4096];
@@ -1781,8 +1777,6 @@ static qboolean UI_Crosshair_HandleKey(int key) {
 	return qfalse;
 }
 
-
-
 static qboolean UI_SelectedPlayer_HandleKey(int key) {
 	if (key == K_MOUSE1 || key == K_MOUSE2 || key == K_ENTER || key == K_KP_ENTER) {
 		int selected;
@@ -1815,7 +1809,6 @@ static qboolean UI_SelectedPlayer_HandleKey(int key) {
 	return qfalse;
 }
 
-
 static qboolean UI_OwnerDrawHandleKey(int ownerDraw, int flags, float *special, int key) {
 	// Nico, silent GCC
 	flags   = flags;
@@ -1844,15 +1837,6 @@ static qboolean UI_OwnerDrawHandleKey(int ownerDraw, int flags, float *special, 
 	}
 
 	return qfalse;
-}
-
-
-static float UI_GetValue(int ownerDraw, int type) {
-	// Nico, silent GCC
-	ownerDraw = ownerDraw;
-	type      = type;
-
-	return 0;
 }
 
 /*
@@ -2154,7 +2138,6 @@ void UI_Update(const char *name) {
 		}
 	}
 }
-
 
 /*
 ==============
@@ -3014,11 +2997,6 @@ void UI_RunMenuScript(char **args) {
 			Com_Printf("^3WARNING: unknown UI script %s\n", name);
 		}
 	}
-}
-
-static void UI_GetTeamColor(vec4_t *color) {
-	// Nico, silent GCC
-	color = color;
 }
 
 /*
@@ -4092,10 +4070,8 @@ void _UI_Init(void) {
 	uiInfo.uiDC.renderScene          = &trap_R_RenderScene;
 	uiInfo.uiDC.registerFont         = &trap_R_RegisterFont;
 	uiInfo.uiDC.ownerDrawItem        = &UI_OwnerDraw;
-	uiInfo.uiDC.getValue             = &UI_GetValue;
 	uiInfo.uiDC.ownerDrawVisible     = &UI_OwnerDrawVisible;
 	uiInfo.uiDC.runScript            = &UI_RunMenuScript;
-	uiInfo.uiDC.getTeamColor         = &UI_GetTeamColor;
 	uiInfo.uiDC.setCVar              = trap_Cvar_Set;
 	uiInfo.uiDC.getCVarString        = trap_Cvar_VariableStringBuffer;
 	uiInfo.uiDC.getCVarValue         = trap_Cvar_VariableValue;

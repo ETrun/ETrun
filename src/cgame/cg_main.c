@@ -1968,7 +1968,6 @@ qboolean CG_Asset_Parse(int handle) {
 			continue;
 		}
 	}
-	//return qfalse;
 }
 
 void CG_ParseMenu(const char *menuFile) {
@@ -2092,17 +2091,6 @@ void CG_LoadMenus(const char *menuFile) {
 
 }
 
-static qboolean CG_OwnerDrawHandleKey(int ownerDraw, int flags, float *special, int key) {
-	// Nico, silent GCC
-	ownerDraw = ownerDraw;
-	flags     = flags;
-	special   = special;
-	key       = key;
-
-	return qfalse;
-}
-
-
 static int CG_FeederCount(float feederID) {
 	int i, count;
 
@@ -2124,9 +2112,6 @@ static int CG_FeederCount(float feederID) {
 	}
 	return count;
 }
-
-
-
 
 ///////////////////////////
 ///////////////////////////
@@ -2192,14 +2177,6 @@ static const char *CG_FeederItemText(float feederID, int index, int column, qhan
 	return "";
 }
 
-static qhandle_t CG_FeederItemImage(float feederID, int index) {
-	// Nico, silent GCC
-	feederID = feederID;
-	index    = index;
-
-	return 0;
-}
-
 static void CG_FeederSelection(float feederID, int index) {
 	int i, count;
 	int team = (feederID == FEEDER_REDTEAM_LIST) ? TEAM_AXIS : TEAM_ALLIES;
@@ -2231,17 +2208,6 @@ void CG_Text_PaintWithCursor(float x, float y, float scale, vec4_t color, const 
 	CG_Text_Paint(x, y, scale, color, text, 0, limit, style);
 }
 
-static int CG_OwnerDrawWidth(int ownerDraw, float scale) {
-	// Nico, silent GCC
-	scale = scale;
-
-	switch (ownerDraw) {
-	default:
-		break;
-	}
-	return 0;
-}
-
 /*
 =================
 CG_LoadHudMenu();
@@ -2270,10 +2236,8 @@ void CG_LoadHudMenu() {
 	cgDC.addRefEntityToScene    = &trap_R_AddRefEntityToScene;
 	cgDC.renderScene            = &trap_R_RenderScene;
 	cgDC.registerFont           = &trap_R_RegisterFont;
-	cgDC.getValue               = &CG_GetValue;
 	cgDC.ownerDrawVisible       = &CG_OwnerDrawVisible;
 	cgDC.runScript              = &CG_RunMenuScript;
-	cgDC.getTeamColor           = &CG_GetTeamColor;
 	cgDC.setCVar                = trap_Cvar_Set;
 	cgDC.getCVarString          = trap_Cvar_VariableStringBuffer;
 	cgDC.getCVarValue           = CG_Cvar_Get;
@@ -2281,9 +2245,7 @@ void CG_LoadHudMenu() {
 	cgDC.setOverstrikeMode      = &trap_Key_SetOverstrikeMode;
 	cgDC.getOverstrikeMode      = &trap_Key_GetOverstrikeMode;
 	cgDC.startLocalSound        = &trap_S_StartLocalSound;
-	cgDC.ownerDrawHandleKey     = &CG_OwnerDrawHandleKey;
 	cgDC.feederCount            = &CG_FeederCount;
-	cgDC.feederItemImage        = &CG_FeederItemImage;
 	cgDC.feederItemText         = &CG_FeederItemText;
 	cgDC.feederSelection        = &CG_FeederSelection;
 	cgDC.setBinding             = &trap_Key_SetBinding;     // NERVE - SMF
@@ -2293,7 +2255,6 @@ void CG_LoadHudMenu() {
 	cgDC.translateString        = &CG_TranslateString;      // NERVE - SMF
 	cgDC.Error                  = &Com_Error;
 	cgDC.Print                  = &Com_Printf;
-	cgDC.ownerDrawWidth         = &CG_OwnerDrawWidth;
 	cgDC.registerSound          = &trap_S_RegisterSound;
 	cgDC.startBackgroundTrack   = &trap_S_StartBackgroundTrack;
 	cgDC.stopBackgroundTrack    = &trap_S_StopBackgroundTrack;

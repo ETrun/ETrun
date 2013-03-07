@@ -564,11 +564,6 @@ void Window_Paint(Window *w, float fadeAmount, float fadeClamp, float fadeCycle)
 		}
 		DC->drawHandlePic(fillRect.x, fillRect.y, fillRect.w, fillRect.h, w->background);
 		DC->setColor(NULL);
-	} else if (w->style == WINDOW_STYLE_TEAMCOLOR) {
-		if (DC->getTeamColor) {
-			DC->getTeamColor(&color);
-			DC->fillRect(fillRect.x, fillRect.y, fillRect.w, fillRect.h, color);
-		}
 	}
 
 	if (w->border == WINDOW_BORDER_FULL) {
@@ -865,17 +860,9 @@ itemDef_t *Menu_FindItemByName(menuDef_t *menu, const char *p) {
 
 void Script_SetTeamColor(itemDef_t *item, qboolean *bAbort, char **args) {
 	// Nico, silent GCC
+	item = item;
 	bAbort = bAbort;
 	args   = args;
-
-	if (DC->getTeamColor) {
-		int    i;
-		vec4_t color;
-		DC->getTeamColor(&color);
-		for (i = 0; i < 4; i++) {
-			item->window.backColor[i] = color[i];
-		}
-	}
 }
 
 void Script_SetItemColor(itemDef_t *item, qboolean *bAbort, char **args) {
@@ -4709,17 +4696,6 @@ void Item_OwnerDraw_Paint(itemDef_t *item) {
 		vec4_t color, lowLight;
 		Fade(&item->window.flags, &item->window.foreColor[3], parent->fadeClamp, &item->window.nextTime, parent->fadeCycle, qtrue, parent->fadeAmount);
 		memcpy(&color, &item->window.foreColor, sizeof (color));
-		if (item->numColors > 0 && DC->getValue) {
-			// if the value is within one of the ranges then set color to that, otherwise leave at default
-			int   i;
-			float f = DC->getValue(item->window.ownerDraw, item->colorRangeType);
-			for (i = 0; i < item->numColors; i++) {
-				if (f >= item->colorRanges[i].low && f <= item->colorRanges[i].high) {
-					memcpy(&color, &item->colorRanges[i].color, sizeof (color));
-					break;
-				}
-			}
-		}
 
 		if (item->window.flags & WINDOW_HASFOCUS && item->window.flags & WINDOW_FOCUSPULSE) {
 			lowLight[0] = 0.8 * parent->focusColor[0];
