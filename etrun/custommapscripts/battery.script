@@ -81,14 +81,14 @@ game_manager
 			mins "-48 -8 -48"
 			maxs "48 8 48"
 			classname "trigger_multiple"
-			target "starttimer1"
+			target "starttimer2"
 			contents "1073741824"
 		}
 		create
 		{
 			origin "4068 -2794 1185"
 			classname "target_startTimer"
-			targetname "starttimer1"
+			targetname "starttimer2"
 			name "Path to backdoor"
 		}
 		create
@@ -110,7 +110,7 @@ game_manager
 			mins "-128 -48 -128"
 			maxs "128 48 128"
 			classname "trigger_multiple"
-			target "stoptimer1"
+			target "stoptimer2"
 			contents "1073741824"
 		}
 
@@ -118,7 +118,7 @@ game_manager
 		{
 			origin "4614 -4634 1088"
 			classname "target_stopTimer"
-			targetname "stoptimer1"
+			targetname "stoptimer2"
 			name "Path to backdoor"
 		}
 		create
@@ -144,14 +144,14 @@ game_manager
 			mins "-50 -50 -50"
 			maxs "50 50 50"
 			classname "trigger_multiple"
-			target "starttimer1"
+			target "starttimer3"
 			contents "1073741824"
 		}
 		create
 		{
 			origin "4043 -2366 1071"
 			classname "target_startTimer"
-			targetname "starttimer1"
+			targetname "starttimer3"
 			name "Path to Allies 2nd"
 		}
 		create
@@ -173,7 +173,7 @@ game_manager
 			mins "-128 -48 -128"
 			maxs "128 48 128"
 			classname "trigger_multiple"
-			target "stoptimer1"
+			target "stoptimer3"
 			contents "1073741824"
 		}
 
@@ -181,7 +181,7 @@ game_manager
 		{
 			origin "951 -2650 1076"
 			classname "target_stopTimer"
-			targetname "stoptimer1"
+			targetname "stoptimer3"
 			name "Path to Allies 2nd"
 		}
 		create
@@ -208,14 +208,14 @@ game_manager
 			mins "-48 -8 -48"
 			maxs "48 8 48"
 			classname "trigger_multiple"
-			target "starttimer1"
+			target "starttimer4"
 			contents "1073741824"
 		}
 		create
 		{
 			origin "791 -3411 1168"
 			classname "target_startTimer"
-			targetname "starttimer1"
+			targetname "starttimer4"
 			name "Radar to Gun"
 		}
 		create
@@ -237,7 +237,7 @@ game_manager
 			mins "-128 -48 -128"
 			maxs "128 48 128"
 			classname "trigger_multiple"
-			target "stoptimer1"
+			target "stoptimer4"
 			contents "1073741824"
 		}
 
@@ -245,7 +245,7 @@ game_manager
 		{
 			origin "3074 -2836 970"
 			classname "target_stopTimer"
-			targetname "stoptimer1"
+			targetname "stoptimer4"
 			name "Radar to Gun"
 		}
 		create
