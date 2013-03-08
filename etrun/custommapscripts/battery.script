@@ -262,10 +262,7 @@ game_manager
 		}
         
 		// Game rules
-		wm_axis_respawntime	0
-		wm_allied_respawntime	0
 		wm_number_of_objectives 6
-		wm_set_round_timelimit	60
 
 		// Objectives
 
@@ -299,13 +296,6 @@ game_manager
 		setautospawn	"West Bunker"	0
 
 		setstate eastbunker_wobj invisible
-
-		// Stopwatch mode defending team (0=Axis, 1=Allies)
-		wm_set_defending_team	0
-
-		// If the round timer expires, the Axis have won, so set the current winning team
-		// Set the round winner:  0 == AXIS, 1 == ALLIED
-		wm_setwinner 0
 
 		// Set doors to operable at game start (0 = operable, 1 = disabled)
 		globalaccum 1 set 0
@@ -382,12 +372,6 @@ game_manager
 	trigger checkgame
 	{
 		accum 1 abort_if_not_equal 1
-
-		// Set the round winner:  0 == AXIS, 1 == ALLIED
-		wm_setwinner 1
-
-		// End the round
-		wm_endround
 	}
 
 	trigger opendoors
