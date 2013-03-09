@@ -188,7 +188,7 @@ void G_players_cmd(gentity_t *ent, unsigned int dwCommand, qboolean fValue) {
 	int       user_rate, user_snaps;
 	gclient_t *cl;
 	char      n2[MAX_NETNAME], ready[16], ref[16], rate[256];
-	char      *s, *tc, *coach, userinfo[MAX_INFO_STRING];
+	char      *s, *tc, userinfo[MAX_INFO_STRING];
 
 	// Nico, silent GCC
 	dwCommand = dwCommand;
@@ -250,13 +250,7 @@ void G_players_cmd(gentity_t *ent, unsigned int dwCommand, qboolean fValue) {
 			strcpy(ref, "REF");
 		}
 
-		if (cl->sess.coach_team) {
-			tteam = cl->sess.coach_team;
-			coach = (ent) ? "^3C" : "C";
-		} else {
-			tteam = cl->sess.sessionTeam;
-			coach = " ";
-		}
+		tteam = cl->sess.sessionTeam;
 
 		tc = (ent) ? "^7 " : " ";
 		if (tteam == TEAM_AXIS) {
@@ -267,9 +261,9 @@ void G_players_cmd(gentity_t *ent, unsigned int dwCommand, qboolean fValue) {
 		}
 
 		if (ent) {
-			CP(va("print \"%s%s%2d%s^1:%s %-26s^7%s  ^3%s\n\"", ready, tc, idnum, coach, ((ref[0]) ? "^3" : "^7"), n2, rate, ref));
+			CP(va("print \"%s%s%2d^1:%s %-26s^7%s  ^3%s\n\"", ready, tc, idnum, ((ref[0]) ? "^3" : "^7"), n2, rate, ref));
 		} else {
-			G_Printf("%s%s%2d%s: %-26s%s  %s\n", ready, tc, idnum, coach, n2, rate, ref);
+			G_Printf("%s%s%2d: %-26s%s  %s\n", ready, tc, idnum, n2, rate, ref);
 		}
 
 		cnt++;

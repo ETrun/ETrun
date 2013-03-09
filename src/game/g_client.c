@@ -330,21 +330,11 @@ void reinforce(gentity_t *ent) {
 		rclient->ps.persistant[p] = rclient->saved_persistant[p];
 	// dhm
 
-	respawn(ent);
-}
-// jpw
-
-
-/*
-================
-respawn
-================
-*/
-void respawn(gentity_t *ent) {
+	// Respawn client
 	ent->client->ps.pm_flags &= ~PMF_LIMBO; // JPW NERVE turns off limbo
-
 	ClientSpawn(ent);
 }
+// jpw
 
 // NERVE - SMF - merge from team arena
 /*
@@ -1156,11 +1146,7 @@ char *ClientConnect(int clientNum, qboolean firstTime) {
 	memset(client, 0, sizeof (*client));
 
 	client->pers.connected   = CON_CONNECTING;
-	client->pers.connectTime = level.time;          // DHM - Nerve
 
-	if (firstTime) {
-		client->pers.initialSpawn = qtrue;              // DHM - Nerve
-	}
 	// read or initialize the session data
 	if (firstTime) {
 		G_InitSessionData(client, userinfo);
@@ -1491,9 +1477,6 @@ void ClientSpawn(gentity_t *ent) {
 	client->inactivityTime   = level.time + g_inactivity.integer * 1000;
 	client->latched_buttons  = 0;
 	client->latched_wbuttons = 0;   //----(SA)	added
-
-	// xkan, 1/13/2003 - reset death time
-	client->deathTime = 0;
 
 	// fire the targets of the spawn point
 	G_UseTargets(spawnPoint, ent);

@@ -51,7 +51,7 @@ void G_WriteClientSessionData(gclient_t *client, qboolean restart) {
 	int        mvc = 0;
 	const char *s;
 
-	s = va("%i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i",
+	s = va("%i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i",
 	       client->sess.sessionTeam,
 	       client->sess.spectatorTime,
 	       client->sess.spectatorState,
@@ -62,7 +62,6 @@ void G_WriteClientSessionData(gclient_t *client, qboolean restart) {
 	       client->sess.latchPlayerType,    // DHM - Nerve
 	       client->sess.latchPlayerWeapon,  // DHM - Nerve
 	       client->sess.latchPlayerWeapon2,
-	       client->sess.coach_team,
 	       client->sess.referee,
 	       client->sess.spec_team,
 	       (mvc & 0xFFFF),
@@ -93,7 +92,7 @@ void G_ReadSessionData(gclient_t *client) {
 
 	trap_Cvar_VariableStringBuffer(va("session%d", (int)(client - level.clients)), s, sizeof (s));
 
-	sscanf(s, "%i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i",
+	sscanf(s, "%i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i",
 	       (int *)&client->sess.sessionTeam,
 	       &client->sess.spectatorTime,
 	       (int *)&client->sess.spectatorState,
@@ -104,7 +103,6 @@ void G_ReadSessionData(gclient_t *client) {
 	       &client->sess.latchPlayerType, // DHM - Nerve
 	       &client->sess.latchPlayerWeapon, // DHM - Nerve
 	       &client->sess.latchPlayerWeapon2,
-	       &client->sess.coach_team,
 	       &client->sess.referee,
 	       &client->sess.spec_team,
 	       &mvc_l,
@@ -154,7 +152,6 @@ void G_InitSessionData(gclient_t *client, char *userinfo) {
 	sess->muted = qfalse;
 
 	// OSP
-	sess->coach_team = 0;
 	sess->referee    = (client->pers.localClient) ? RL_REFEREE : RL_NONE;
 	sess->spec_team  = 0;
 	// OSP

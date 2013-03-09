@@ -551,21 +551,8 @@ static void HandleEntsThatBlockConstructible(gentity_t *constructor, gentity_t *
 			if ((level.time - check->client->lastConstructibleBlockingWarnTime) >= MIN_BLOCKINGWARNING_INTERVAL) {
 				trap_SendServerCommand(check->s.number, "cp \"Warning, leave the construction area...\" 1");
 				// Gordon: store the entity num to warn the bot
-				check->client->lastConstructibleBlockingWarnEnt  = constructible - g_entities;
 				check->client->lastConstructibleBlockingWarnTime = level.time;
 			}
-
-			// unlink our entities again
-			/*trap_UnlinkEntity( constructible );
-
-			if( constructible->track && constructible->track[0] ) {
-			    for( e = 0; e < constructibleEntities; e++ ) {
-			        check = &g_entities[constructibleList[e]];
-
-			        trap_UnlinkEntity( check );
-			    }
-			}
-			return;*/
 		}
 
 		blockingList[blockingEntities++] = entityList[e];

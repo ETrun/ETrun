@@ -628,10 +628,6 @@ void G_CheckForCursorHints(gentity_t *ent) {
 				hintDist = 48;        // JPW NERVE matches weapon_syringe in g_weapon.c
 				hintType = HINT_REVIVE;
 			}
-		} else if (traceEnt->client && traceEnt->client->isCivilian) {
-			// xkan, 1/6/2003 - check for civilian, show neutral cursor (no matter which team)
-			hintType = HINT_PLYR_NEUTRAL;
-			hintDist = CH_FRIENDLY_DIST;    // far, since this will be used to determine whether to shoot bullet weaps or not
 		}
 	} else {
 		checkEnt = traceEnt;

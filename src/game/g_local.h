@@ -513,7 +513,6 @@ typedef struct {
 	qboolean muted;
 
 	// OSP
-	int coach_team;
 	int referee;
 	int spec_team;
 	// OSP
@@ -585,7 +584,6 @@ typedef struct {
 	usercmd_t cmd;                  // we would lose angles if not persistant
 	usercmd_t oldcmd;               // previous command processed by pmove()
 	qboolean localClient;           // true if "ip" info key is "localhost"
-	qboolean initialSpawn;          // the first spawn should be at a cool location
 	qboolean predictItemPickup;     // based on cg_predictItems userinfo
 	qboolean pmoveFixed;            //
 	char netname[MAX_NETNAME];
@@ -594,7 +592,6 @@ typedef struct {
 
 	int maxHealth;                  // for handicapping
 	int enterTime;                  // level.time the client entered the game
-	int connectTime;                // DHM - Nerve :: level.time the client first connected to the server
 	playerTeamState_t teamState;    // status in teamplay games
 	int voteCount;                  // to prevent people from constantly calling votes
 	int teamVoteCount;              // to prevent people from constantly calling votes
@@ -722,10 +719,6 @@ struct gclient_s {
 	vec3_t damage_from;             // origin for vector calculation
 	qboolean damage_fromWorld;      // if true, don't use the damage_from vector
 
-	//
-	int lasthurt_client;            // last client that damaged this client
-	int lasthurt_mod;               // type of damage the client did
-
 	// timers
 
 	int inactivityTime;             // kick players when time > this
@@ -753,7 +746,6 @@ struct gclient_s {
 	gentity_t *touchingTOI;     // Arnout: the trigger_objective_info a player is touching this frame
 
 	int lastConstructibleBlockingWarnTime;
-	int lastConstructibleBlockingWarnEnt;
 
 	int speedScale;
 
@@ -772,13 +764,9 @@ struct gclient_s {
 
 	int lastSpammyCentrePrintTime;
 	pmoveExt_t pmext;
-	qboolean isCivilian;            // whether this is a civilian
-	int deathTime;                  // if we are dead, when did we die
 
 	int lastHealTimes[2];
 	int lastAmmoTimes[2];
-
-	float acc;
 
 	qboolean wantsscore;
 };
@@ -1251,7 +1239,6 @@ team_t TeamCount(int ignoreClientNum, int team);            // NERVE - SMF - mer
 team_t PickTeam(int ignoreClientNum);
 void SetClientViewAngle(gentity_t *ent, vec3_t angle);
 gentity_t *SelectSpawnPoint(vec3_t avoidPoint, vec3_t origin, vec3_t angles);
-void respawn(gentity_t *ent);
 void InitClientPersistant(gclient_t *client);
 void InitClientResp(gclient_t *client);
 void ClientSpawn(gentity_t *ent);
@@ -1856,7 +1843,6 @@ extern team_info teamInfo[TEAM_NUM_TEAMS];
 qboolean G_AllowFollow(gentity_t *ent, gentity_t *other);
 qboolean G_DesiredFollow(gentity_t *ent, gentity_t *other);
 qboolean G_teamJoinCheck(int team_num, gentity_t *ent);
-int  G_teamID(gentity_t *ent);
 void G_teamReset(int team_num, qboolean fClearSpecLock);
 
 

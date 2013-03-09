@@ -1019,12 +1019,6 @@ void G_Damage(gentity_t *targ, gentity_t *inflictor, gentity_t *attacker, vec3_t
 		}
 	}
 
-	if (targ->client) {
-		// set the last client who damaged the target
-		targ->client->lasthurt_client = attacker->s.number;
-		targ->client->lasthurt_mod    = mod;
-	}
-
 	// do the damage
 	if (take) {
 		targ->health -= take;
@@ -1043,11 +1037,6 @@ void G_Damage(gentity_t *targ, gentity_t *inflictor, gentity_t *attacker, vec3_t
 				targ->flags |= FL_NO_KNOCKBACK;
 				if ((targ->health < FORCE_LIMBO_HEALTH)) {
 					limbo(targ);
-				}
-
-				// xkan, 1/13/2003 - record the time we died.
-				if (!client->deathTime) {
-					client->deathTime = level.time;
 				}
 			} else {
 

@@ -438,12 +438,6 @@ qboolean SetTeam(gentity_t *ent, char *s, qboolean force, weapon_t w1, weapon_t 
 		return qfalse;
 	}
 
-	// DHM - Nerve
-	// OSP
-	if (team != TEAM_SPECTATOR) {
-		client->pers.initialSpawn = qfalse;
-	}
-
 	if (oldTeam != TEAM_SPECTATOR) {
 		if (!(ent->client->ps.pm_flags & PMF_LIMBO)) {
 			// Kill him (makes sure he loses flags, etc)
@@ -616,8 +610,6 @@ void G_SetClientWeapons(gentity_t *ent, weapon_t w1, weapon_t w2, qboolean updat
 Cmd_Team_f
 =================
 */
-// Nico, flood protection
-// void Cmd_Team_f( gentity_t *ent, unsigned int dwCommand, qboolean fValue ) {
 void Cmd_Team_f(gentity_t *ent) {
 	char     s[MAX_TOKEN_CHARS];
 	char     ptype[4];
@@ -2068,48 +2060,6 @@ void Cmd_SetSpawnPoint_f(gentity_t *ent) {
 	}
 }
 
-void Cmd_SelectedObjective_f(gentity_t *ent) {
-	int   i, val;
-	char  buffer[16];
-	vec_t dist, neardist = 0;
-	int   nearest = -1;
-
-
-	if (!ent || !ent->client) {
-		return;
-	}
-
-	if (trap_Argc() != 2) {
-		return;
-	}
-	trap_Argv(1, buffer, 16);
-	val = atoi(buffer) + 1;
-
-
-	for (i = 0; i < level.numLimboCams; i++) {
-		if (!level.limboCams[i].spawn && level.limboCams[i].info == val) {
-			if (!level.limboCams[i].hasEnt) {
-				VectorCopy(level.limboCams[i].origin, ent->s.origin2);
-				ent->r.svFlags |= SVF_SELF_PORTAL_EXCLUSIVE;
-				break;
-			} else {
-				dist = VectorDistanceSquared(level.limboCams[i].origin, g_entities[level.limboCams[i].targetEnt].r.currentOrigin);
-				if (nearest == -1 || dist < neardist) {
-					nearest  = i;
-					neardist = dist;
-				}
-			}
-		}
-	}
-
-	if (nearest != -1) {
-		i = nearest;
-
-		VectorCopy(level.limboCams[i].origin, ent->s.origin2);
-		ent->r.svFlags |= SVF_SELF_PORTAL_EXCLUSIVE;
-	}
-}
-
 void Cmd_Ignore_f(gentity_t *ent) {
 	char cmd[MAX_TOKEN_CHARS];
 	int  cnum;
@@ -2439,7 +2389,6 @@ static command_t floodProtectedCommands[] =
 	{ "rconauth",        qfalse, Cmd_AuthRcon_f,          qfalse, NULL,                                        NULL                                           },
 	{ "ignore",          qfalse, Cmd_Ignore_f,            qfalse, NULL,                                        NULL                                           },
 	{ "unignore",        qfalse, Cmd_UnIgnore_f,          qfalse, NULL,                                        NULL                                           },
-	{ "obj",             qfalse, Cmd_SelectedObjective_f, qfalse, NULL,                                        NULL                                           },
 	{ "rs",              qfalse, Cmd_ResetSetup_f,        qfalse, NULL,                                        NULL                                           },
 	{ "noclip",          qfalse, Cmd_Noclip_f,            qfalse, NULL,                                        NULL                                           },
 	{ "kill",            qtrue,  Cmd_Kill_f,              qfalse, NULL,                                        NULL                                           },

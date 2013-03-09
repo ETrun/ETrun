@@ -1076,14 +1076,6 @@ void G_teamReset(int team_num, qboolean fClearSpecLock) {
 	teamInfo[team_num].team_score   = 0;
 }
 
-// Returns player's "real" team.
-int G_teamID(gentity_t *ent) {
-	if (ent->client->sess.coach_team) {
-		return(ent->client->sess.coach_team);
-	}
-	return(ent->client->sess.sessionTeam);
-}
-
 // Checks to see if a specified team is allowing players to join.
 qboolean G_teamJoinCheck(int team_num, gentity_t *ent) {
 	int cnt = TeamCount(-1, team_num);
