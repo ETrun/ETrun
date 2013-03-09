@@ -210,10 +210,6 @@ game_manager
 		// 6: Allied command post
 		// 7: Axis command post
 
-		// Current main objectives for each team (0=Axis, 1=Allies)
-		wm_set_main_objective		1	0
-		wm_set_main_objective		1	1
-
 		wm_objective_status 1 0 0
 		wm_objective_status 1 1 0
 		wm_objective_status 2 0 0
@@ -228,9 +224,6 @@ game_manager
 		wm_objective_status 6 1 0
 		wm_objective_status 7 0 0
 		wm_objective_status 7 1 0
-
-		wm_set_main_objective		1	0
-		wm_set_main_objective		1	1
 
 		wait 500
 		setautospawn	"Tank Depot"	0
@@ -288,8 +281,6 @@ game_manager
 		setautospawn	"Tank Depot"	1
 
 		accum 4 set 1
-		wm_set_main_objective		2	0
-		wm_set_main_objective		2	1
 
 		trigger game_manager allies_steal_tank_allied_msg
 		trigger game_manager allies_steal_tank_axis_msg
@@ -1899,9 +1890,6 @@ tank_turret
 		wm_objective_status 3 0 2
 		wm_objective_status 3 1 1
 
-		wm_set_main_objective		4	0
-		wm_set_main_objective		4	1
-
 		wait 100
 		trigger bank_door2_damaged bankbackboom
 
@@ -2264,9 +2252,6 @@ truck
 
 		wm_objective_status 4 0 2
 		wm_objective_status 4 1 1
-
-		wm_set_main_objective 5 0
-		wm_set_main_objective 5 1
 
 		setstate goldbars_toi invisible
 		setstate goldbars_cm_marker invisible

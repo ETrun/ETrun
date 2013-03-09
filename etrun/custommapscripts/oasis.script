@@ -416,10 +416,6 @@ game_manager
 		// 7: Allied command post
 		// 8: Axis command post
 
-		// Current main objectives for each team (0=Axis, 1=Allies)
-		wm_set_main_objective		3	0
-		wm_set_main_objective		3	1
-
 		// Objective overview status indicators
 		//wm_objective_status <objective> <team (0=Axis, 1=Allies)> <status (0=neutral 1=complete 2=failed)>
 		wm_objective_status 1 1 0
@@ -657,9 +653,6 @@ oldcitywall //Broken section of Old City wall
 
 		wm_objective_status 		3 0 2
 		wm_objective_status 		3 1 1
-
-		wm_set_main_objective	1 0
-		wm_set_main_objective	1 1
 	}
 }
 
@@ -1121,9 +1114,6 @@ pak75_clip_1
 
 		wm_objective_status 		1 0 2
 		wm_objective_status 		1 1 1
-
-		wm_set_main_objective	2 0
-		wm_set_main_objective	2 1
 
 		// Update game manager counter for objectives
 		trigger game_manager 75mm_gun_counter

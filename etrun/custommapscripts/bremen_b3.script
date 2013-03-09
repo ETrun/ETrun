@@ -322,10 +322,6 @@ game_manager
 		wm_objective_status 8 1 0
 		wm_objective_status 8 0 0
 		
-		//main objective is to cap docs
-		wm_set_main_objective 1 1
-		wm_set_main_objective 1 0
-		
 		// Cap obj
 		accum 1 set 0
 		//Blow door

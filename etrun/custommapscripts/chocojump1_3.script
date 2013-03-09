@@ -5479,8 +5479,6 @@ game_manager
 		wm_objective_status 2 1 0
 		wm_objective_status 3 0 0
 		wm_objective_status 3 1 0
-		wm_set_main_objective 3 0
-		wm_set_main_objective 3 1
 		setstate allied_flag_objective1 invisible
 		setstate allied_flag_objective2 invisible
 		setstate allied_flag_objective3 invisible

@@ -419,9 +419,6 @@ game_manager
 		wm_objective_status 7 0 0
 		wm_objective_status 7 1 0
 		
-		wm_set_main_objective		2	0
-		wm_set_main_objective		2	1
-
 		//Accum values
 		accum 1 set 0 //Overall Allied status
 		accum 2 set 2 //set 2 = null value

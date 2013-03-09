@@ -418,10 +418,6 @@ game_manager
 		// 7: Allied command post
 		// 8: Axis command post
 
-		// Current main objectives for each team (0=Axis, 1=Allies)
-		wm_set_main_objective		1	0
-		wm_set_main_objective		1	1
-
 		// Objective overview status indicators
 		//wm_objective_status <objective> <team (0=Axis, 1=Allies)> <status (0=neutral 1=complete 2=failed)>
 		wm_objective_status 1 1 0
@@ -492,9 +488,6 @@ game_manager
 
 		wm_objective_status	4 1 2
 		wm_objective_status	4 0 1
-
-		wm_set_main_objective	5 0
-		wm_set_main_objective	5 1
 	}
 
 	trigger axis_win
@@ -1655,9 +1648,6 @@ train1
 
 		wm_objective_status	2 1 2
 		wm_objective_status	2 0 1
-
-		wm_set_main_objective	3 0
-		wm_set_main_objective	3 1
 
 		trigger crane2_controller startcrane
 	}
@@ -3400,9 +3390,6 @@ train1
 
 		wm_objective_status	1 1 2
 		wm_objective_status	1 0 1
-
-		wm_set_main_objective	2 0
-		wm_set_main_objective	2 1
 	}
 }
 
@@ -5929,9 +5916,6 @@ train2
 
 		wm_objective_status	3 1 2
 		wm_objective_status	3 0 1
-
-		wm_set_main_objective	4 0
-		wm_set_main_objective	4 1
 	}
 
 	trigger update_counter_axis

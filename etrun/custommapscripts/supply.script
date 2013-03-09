@@ -343,10 +343,6 @@ game_manager {
                 // 7: Secondary2 : Eastern Depot wall
                 // 8: Secondary3 : Command Post
 
-                // Current main objectives for each team (0=Axis, 1=Allies)
-                wm_set_main_objective        1 0
-                wm_set_main_objective        1 1
-
                 // Objective overview status indicators
                 // wm_objective_status <objective> <team (0=Axis, 1=Allies)> <status (0=neutral 1=complete 2=failed)>
                 wm_objective_status 1 1 0
@@ -466,8 +462,6 @@ forwardgate {
                 wm_announce "The Allies have breached the Forward Bunker Gate!"
                 wm_objective_status         1 0 2
                 wm_objective_status         1 1 1
-                wm_set_main_objective        2 0
-                wm_set_main_objective        2 1
 
                 // *----------------------------------- vo ------------------------------------------*
                 wm_teamvoiceannounce 0 "axis_entrance1_destroyed"
@@ -972,8 +966,6 @@ crane_enabler {
             wait 100
                 wm_objective_status         4 0 2
                 wm_objective_status         4 1 1
-                wm_set_main_objective        5 0
-                wm_set_main_objective        5 1
 
                 // *----------------------------------- vo ------------------------------------------*
                 wm_teamvoiceannounce 0 "axis_gold_secured"
@@ -997,8 +989,6 @@ crane_enabler {
 
                 wm_objective_status         3 0 2
                 wm_objective_status         3 1 1
-                wm_set_main_objective        4 0
-                wm_set_main_objective        4 1
         }
         trigger controlsbuilt {
                 accum 2 set 1

@@ -327,10 +327,6 @@ wm_objective_status 4 0 0
 wm_objective_status 5 1 0
 wm_objective_status 5 0 1
 
-//main opjective is to cap docs
-wm_set_main_objective 2 1
-wm_set_main_objective 2 0
-
 // Cap docs
 accum 1 set 0
 //Take docs

@@ -96,9 +96,6 @@ game_manager
 		// 5: Axis Field Command
 		// 6: Allies Base of Operations
 
-		wm_set_main_objective		1	0
-		wm_set_main_objective		1	1
-
 		// Objective overview status indicators
 		//wm_objective_status <objective> <team (0=Axis, 1=Allies)> <status (0=neutral 1=complete 2=failed)>
 		wm_objective_status 1 1 0
