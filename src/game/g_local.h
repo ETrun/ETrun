@@ -1599,8 +1599,6 @@ void G_Trace(gentity_t *ent, trace_t *results, const vec3_t start, const vec3_t 
 #define BODY_CLASS(ENT) ENT->s.modelindex2
 #define BODY_CHARACTER(ENT) ENT->s.onFireStart
 
-//g_buddy_list.c
-
 #define MAX_FIRE_TEAMS 8
 
 typedef struct {
@@ -1613,10 +1611,6 @@ typedef struct {
 } fireteam_t;
 
 void Cmd_FireTeam_MP_f(gentity_t *ent);
-int G_IsOnAFireTeam(int clientNum);
-
-void G_RemoveFromAllIgnoreLists(int clientNum);
-
 
 //g_teammapdata.c
 

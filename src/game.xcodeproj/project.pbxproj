@@ -24,7 +24,6 @@
 		B72E634A0B47155A0006C962 /* g_active.c in Sources */ = {isa = PBXBuildFile; fileRef = B72E63160B47155A0006C962 /* g_active.c */; };
 		B72E634B0B47155A0006C962 /* g_alarm.c in Sources */ = {isa = PBXBuildFile; fileRef = B72E63170B47155A0006C962 /* g_alarm.c */; };
 		B72E634C0B47155A0006C962 /* g_antilag.c in Sources */ = {isa = PBXBuildFile; fileRef = B72E63180B47155A0006C962 /* g_antilag.c */; };
-		B72E634E0B47155A0006C962 /* g_buddy_list.c in Sources */ = {isa = PBXBuildFile; fileRef = B72E631A0B47155A0006C962 /* g_buddy_list.c */; };
 		B72E634F0B47155A0006C962 /* g_character.c in Sources */ = {isa = PBXBuildFile; fileRef = B72E631B0B47155A0006C962 /* g_character.c */; };
 		B72E63500B47155A0006C962 /* g_client.c in Sources */ = {isa = PBXBuildFile; fileRef = B72E631C0B47155A0006C962 /* g_client.c */; };
 		B72E63510B47155A0006C962 /* g_cmds_ext.c in Sources */ = {isa = PBXBuildFile; fileRef = B72E631D0B47155A0006C962 /* g_cmds_ext.c */; };
@@ -78,7 +77,6 @@
 		B72E63160B47155A0006C962 /* g_active.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = g_active.c; path = ./game/g_active.c; sourceTree = SOURCE_ROOT; };
 		B72E63170B47155A0006C962 /* g_alarm.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = g_alarm.c; path = ./game/g_alarm.c; sourceTree = SOURCE_ROOT; };
 		B72E63180B47155A0006C962 /* g_antilag.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = g_antilag.c; path = ./game/g_antilag.c; sourceTree = SOURCE_ROOT; };
-		B72E631A0B47155A0006C962 /* g_buddy_list.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = g_buddy_list.c; path = ./game/g_buddy_list.c; sourceTree = SOURCE_ROOT; };
 		B72E631B0B47155A0006C962 /* g_character.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = g_character.c; path = ./game/g_character.c; sourceTree = SOURCE_ROOT; };
 		B72E631C0B47155A0006C962 /* g_client.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = g_client.c; path = ./game/g_client.c; sourceTree = SOURCE_ROOT; };
 		B72E631D0B47155A0006C962 /* g_cmds_ext.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = g_cmds_ext.c; path = ./game/g_cmds_ext.c; sourceTree = SOURCE_ROOT; };
@@ -169,7 +167,6 @@
 				B72E63160B47155A0006C962 /* g_active.c */,
 				B72E63170B47155A0006C962 /* g_alarm.c */,
 				B72E63180B47155A0006C962 /* g_antilag.c */,
-				B72E631A0B47155A0006C962 /* g_buddy_list.c */,
 				B72E631B0B47155A0006C962 /* g_character.c */,
 				B72E631C0B47155A0006C962 /* g_client.c */,
 				B72E631D0B47155A0006C962 /* g_cmds_ext.c */,
@@ -286,7 +283,6 @@
 				B72E634A0B47155A0006C962 /* g_active.c in Sources */,
 				B72E634B0B47155A0006C962 /* g_alarm.c in Sources */,
 				B72E634C0B47155A0006C962 /* g_antilag.c in Sources */,
-				B72E634E0B47155A0006C962 /* g_buddy_list.c in Sources */,
 				B72E634F0B47155A0006C962 /* g_character.c in Sources */,
 				B72E63500B47155A0006C962 /* g_client.c in Sources */,
 				B72E63510B47155A0006C962 /* g_cmds_ext.c in Sources */,

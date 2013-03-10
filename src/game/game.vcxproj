@@ -179,7 +179,6 @@
     <ClCompile Include="g_alarm.c" />
     <ClCompile Include="g_antilag.c" />
     <ClCompile Include="g_apicmds.c" />
-    <ClCompile Include="g_buddy_list.c" />
     <ClCompile Include="g_character.c" />
     <ClCompile Include="g_client.c" />
     <ClCompile Include="g_cmds.c" />
