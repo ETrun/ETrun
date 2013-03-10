@@ -58,8 +58,7 @@ Bootstrapping
 Get ETrun submodules:
 
 <pre>
-$ git submodule init
-$ git submodule update
+$ git submodule update --init
 </pre>
 
 Linux / OSX
