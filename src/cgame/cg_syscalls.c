@@ -552,12 +552,12 @@ void trap_TranslateString(const char *string, char *buf) {
 #ifdef _DEBUG
 # define DEBUG_REGISTERPROFILE_INIT int dbgTime = trap_Milliseconds();
 # define DEBUG_REGISTERPROFILE_EXEC(f, n) if (developer.integer) { CG_Printf("%s : loaded %s in %i msec\n", f, n, trap_Milliseconds() - dbgTime); }
-sfxHandle_t trap_S_RegisterSound(const char *sample, qboolean compressed) {
+sfxHandle_t trap_S_RegisterSound(const char *sample) {
 	sfxHandle_t snd;
 
 	DEBUG_REGISTERPROFILE_INIT
 	CG_DrawInformation(qtrue);
-	snd = syscall(CG_S_REGISTERSOUND, sample, qfalse /* compressed */);
+	snd = syscall(CG_S_REGISTERSOUND, sample, qfalse);
 	if (!*sample) {
 		Com_Printf("^1Warning: Null Sample filename\n");
 	}
@@ -637,10 +637,7 @@ void    trap_R_LoadWorldMap(const char *mapname) {
 	trap_PumpEventLoop();
 }
 #else
-sfxHandle_t trap_S_RegisterSound(const char *sample, qboolean compressed) {
-	// Nico, silent GCC
-	compressed = compressed;
-
+sfxHandle_t trap_S_RegisterSound(const char *sample) {
 	CG_DrawInformation(qtrue);
 	trap_PumpEventLoop();
 	return syscall(CG_S_REGISTERSOUND, sample, qfalse);

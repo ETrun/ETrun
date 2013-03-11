@@ -1034,7 +1034,7 @@ static void CG_RegisterItemSounds(int itemNum) {
 	item = &bg_itemlist[itemNum];
 
 	if (item->pickup_sound && *item->pickup_sound) {
-		trap_S_RegisterSound(item->pickup_sound, qfalse);
+		trap_S_RegisterSound(item->pickup_sound);
 	}
 
 	// parse the space seperated precache string for other media
@@ -1062,7 +1062,7 @@ static void CG_RegisterItemSounds(int itemNum) {
 		}
 
 		if (!strcmp(data + len - 3, "wav")) {
-			trap_S_RegisterSound(data, qfalse);
+			trap_S_RegisterSound(data);
 		}
 	}
 }
@@ -1095,78 +1095,78 @@ static void CG_RegisterSounds(void) {
 	for (i = 0; i < BG_NumScriptSpeakers(); i++) {
 		speaker = BG_GetScriptSpeaker(i);
 
-		speaker->noise = trap_S_RegisterSound(speaker->filename, qfalse);
+		speaker->noise = trap_S_RegisterSound(speaker->filename);
 	}
 
-	cgs.media.noAmmoSound      = trap_S_RegisterSound("sound/weapons/misc/fire_dry.wav", qfalse);
-	cgs.media.noFireUnderwater = trap_S_RegisterSound("sound/weapons/misc/fire_water.wav", qfalse);
-	cgs.media.selectSound      = trap_S_RegisterSound("sound/weapons/misc/change.wav", qfalse);
-	cgs.media.landHurt         = trap_S_RegisterSound("sound/player/land_hurt.wav", qfalse);
+	cgs.media.noAmmoSound      = trap_S_RegisterSound("sound/weapons/misc/fire_dry.wav");
+	cgs.media.noFireUnderwater = trap_S_RegisterSound("sound/weapons/misc/fire_water.wav");
+	cgs.media.selectSound      = trap_S_RegisterSound("sound/weapons/misc/change.wav");
+	cgs.media.landHurt         = trap_S_RegisterSound("sound/player/land_hurt.wav");
 
 	// Nico, new gib sound
-	// cgs.media.gibSound =			trap_S_RegisterSound( "sound/player/gib.wav", qfalse );
-	cgs.media.gibSound        = trap_S_RegisterSound("sound/teleport1.wav", qfalse);
-	cgs.media.dynamitebounce1 = trap_S_RegisterSound("sound/weapons/dynamite/dynamite_bounce.wav", qfalse);
-	cgs.media.satchelbounce1  = trap_S_RegisterSound("sound/weapons/satchel/satchel_bounce.wav", qfalse);
-	cgs.media.watrInSound     = trap_S_RegisterSound("sound/player/water_in.wav", qfalse);
-	cgs.media.watrOutSound    = trap_S_RegisterSound("sound/player/water_out.wav", qfalse);
-	cgs.media.watrUnSound     = trap_S_RegisterSound("sound/player/water_un.wav", qfalse);
-	cgs.media.watrGaspSound   = trap_S_RegisterSound("sound/player/gasp.wav", qfalse);
-	cgs.media.underWaterSound = trap_S_RegisterSound("sound/player/underwater.wav", qfalse);
+	// cgs.media.gibSound =			trap_S_RegisterSound("sound/player/gib.wav");
+	cgs.media.gibSound        = trap_S_RegisterSound("sound/teleport1.wav");
+	cgs.media.dynamitebounce1 = trap_S_RegisterSound("sound/weapons/dynamite/dynamite_bounce.wav");
+	cgs.media.satchelbounce1  = trap_S_RegisterSound("sound/weapons/satchel/satchel_bounce.wav");
+	cgs.media.watrInSound     = trap_S_RegisterSound("sound/player/water_in.wav");
+	cgs.media.watrOutSound    = trap_S_RegisterSound("sound/player/water_out.wav");
+	cgs.media.watrUnSound     = trap_S_RegisterSound("sound/player/water_un.wav");
+	cgs.media.watrGaspSound   = trap_S_RegisterSound("sound/player/gasp.wav");
+	cgs.media.underWaterSound = trap_S_RegisterSound("sound/player/underwater.wav");
 
 	for (i = 0; i < 2; i++) {
 		cgs.media.grenadebounce[FOOTSTEP_NORMAL][i]         = \
 		    cgs.media.grenadebounce[FOOTSTEP_GRAVEL][i]     = \
-		        cgs.media.grenadebounce[FOOTSTEP_SPLASH][i] = trap_S_RegisterSound(va("sound/weapons/grenade/bounce_hard%i.wav", i + 1), qfalse);
+		        cgs.media.grenadebounce[FOOTSTEP_SPLASH][i] = trap_S_RegisterSound(va("sound/weapons/grenade/bounce_hard%i.wav", i + 1));
 
 		cgs.media.grenadebounce[FOOTSTEP_METAL][i]    = \
-		    cgs.media.grenadebounce[FOOTSTEP_ROOF][i] = trap_S_RegisterSound(va("sound/weapons/grenade/bounce_metal%i.wav", i + 1), qfalse);
+		    cgs.media.grenadebounce[FOOTSTEP_ROOF][i] = trap_S_RegisterSound(va("sound/weapons/grenade/bounce_metal%i.wav", i + 1));
 
-		cgs.media.grenadebounce[FOOTSTEP_WOOD][i] = trap_S_RegisterSound(va("sound/weapons/grenade/bounce_wood%i.wav", i + 1), qfalse);
+		cgs.media.grenadebounce[FOOTSTEP_WOOD][i] = trap_S_RegisterSound(va("sound/weapons/grenade/bounce_wood%i.wav", i + 1));
 
 		cgs.media.grenadebounce[FOOTSTEP_GRASS][i]          = \
 		    cgs.media.grenadebounce[FOOTSTEP_SNOW][i]       = \
-		        cgs.media.grenadebounce[FOOTSTEP_CARPET][i] = trap_S_RegisterSound(va("sound/weapons/grenade/bounce_soft%i.wav", i + 1), qfalse);
+		        cgs.media.grenadebounce[FOOTSTEP_CARPET][i] = trap_S_RegisterSound(va("sound/weapons/grenade/bounce_soft%i.wav", i + 1));
 
 	}
 
-	cgs.media.landSound[FOOTSTEP_NORMAL] = trap_S_RegisterSound("sound/player/footsteps/stone_jump.wav", qfalse);
-	cgs.media.landSound[FOOTSTEP_SPLASH] = trap_S_RegisterSound("sound/player/footsteps/water_jump.wav", qfalse);
-	cgs.media.landSound[FOOTSTEP_METAL]  = trap_S_RegisterSound("sound/player/footsteps/metal_jump.wav", qfalse);
-	cgs.media.landSound[FOOTSTEP_WOOD]   = trap_S_RegisterSound("sound/player/footsteps/wood_jump.wav", qfalse);
-	cgs.media.landSound[FOOTSTEP_GRASS]  = trap_S_RegisterSound("sound/player/footsteps/grass_jump.wav", qfalse);
-	cgs.media.landSound[FOOTSTEP_GRAVEL] = trap_S_RegisterSound("sound/player/footsteps/gravel_jump.wav", qfalse);
-	cgs.media.landSound[FOOTSTEP_ROOF]   = trap_S_RegisterSound("sound/player/footsteps/roof_jump.wav", qfalse);
-	cgs.media.landSound[FOOTSTEP_SNOW]   = trap_S_RegisterSound("sound/player/footsteps/snow_jump.wav", qfalse);
-	cgs.media.landSound[FOOTSTEP_CARPET] = trap_S_RegisterSound("sound/player/footsteps/carpet_jump.wav", qfalse);
+	cgs.media.landSound[FOOTSTEP_NORMAL] = trap_S_RegisterSound("sound/player/footsteps/stone_jump.wav");
+	cgs.media.landSound[FOOTSTEP_SPLASH] = trap_S_RegisterSound("sound/player/footsteps/water_jump.wav");
+	cgs.media.landSound[FOOTSTEP_METAL]  = trap_S_RegisterSound("sound/player/footsteps/metal_jump.wav");
+	cgs.media.landSound[FOOTSTEP_WOOD]   = trap_S_RegisterSound("sound/player/footsteps/wood_jump.wav");
+	cgs.media.landSound[FOOTSTEP_GRASS]  = trap_S_RegisterSound("sound/player/footsteps/grass_jump.wav");
+	cgs.media.landSound[FOOTSTEP_GRAVEL] = trap_S_RegisterSound("sound/player/footsteps/gravel_jump.wav");
+	cgs.media.landSound[FOOTSTEP_ROOF]   = trap_S_RegisterSound("sound/player/footsteps/roof_jump.wav");
+	cgs.media.landSound[FOOTSTEP_SNOW]   = trap_S_RegisterSound("sound/player/footsteps/snow_jump.wav");
+	cgs.media.landSound[FOOTSTEP_CARPET] = trap_S_RegisterSound("sound/player/footsteps/carpet_jump.wav");
 
 	for (i = 0; i < 4; i++) {
 		Com_sprintf(name, sizeof (name), "sound/player/footsteps/stone%i.wav", i + 1);
-		cgs.media.footsteps[FOOTSTEP_NORMAL][i] = trap_S_RegisterSound(name, qfalse);
+		cgs.media.footsteps[FOOTSTEP_NORMAL][i] = trap_S_RegisterSound(name);
 
 		Com_sprintf(name, sizeof (name), "sound/player/footsteps/water%i.wav", i + 1);
-		cgs.media.footsteps[FOOTSTEP_SPLASH][i] = trap_S_RegisterSound(name, qfalse);
+		cgs.media.footsteps[FOOTSTEP_SPLASH][i] = trap_S_RegisterSound(name);
 
 		Com_sprintf(name, sizeof (name), "sound/player/footsteps/metal%i.wav", i + 1);
-		cgs.media.footsteps[FOOTSTEP_METAL][i] = trap_S_RegisterSound(name, qfalse);
+		cgs.media.footsteps[FOOTSTEP_METAL][i] = trap_S_RegisterSound(name);
 
 		Com_sprintf(name, sizeof (name), "sound/player/footsteps/wood%i.wav", i + 1);
-		cgs.media.footsteps[FOOTSTEP_WOOD][i] = trap_S_RegisterSound(name, qfalse);
+		cgs.media.footsteps[FOOTSTEP_WOOD][i] = trap_S_RegisterSound(name);
 
 		Com_sprintf(name, sizeof (name), "sound/player/footsteps/grass%i.wav", i + 1);
-		cgs.media.footsteps[FOOTSTEP_GRASS][i] = trap_S_RegisterSound(name, qfalse);
+		cgs.media.footsteps[FOOTSTEP_GRASS][i] = trap_S_RegisterSound(name);
 
 		Com_sprintf(name, sizeof (name), "sound/player/footsteps/gravel%i.wav", i + 1);
-		cgs.media.footsteps[FOOTSTEP_GRAVEL][i] = trap_S_RegisterSound(name, qfalse);
+		cgs.media.footsteps[FOOTSTEP_GRAVEL][i] = trap_S_RegisterSound(name);
 
 		Com_sprintf(name, sizeof (name), "sound/player/footsteps/roof%i.wav", i + 1);
-		cgs.media.footsteps[FOOTSTEP_ROOF][i] = trap_S_RegisterSound(name, qfalse);
+		cgs.media.footsteps[FOOTSTEP_ROOF][i] = trap_S_RegisterSound(name);
 
 		Com_sprintf(name, sizeof (name), "sound/player/footsteps/snow%i.wav", i + 1);
-		cgs.media.footsteps[FOOTSTEP_SNOW][i] = trap_S_RegisterSound(name, qfalse);
+		cgs.media.footsteps[FOOTSTEP_SNOW][i] = trap_S_RegisterSound(name);
 
 		Com_sprintf(name, sizeof (name), "sound/player/footsteps/carpet%i.wav", i + 1);
-		cgs.media.footsteps[FOOTSTEP_CARPET][i] = trap_S_RegisterSound(name, qfalse);
+		cgs.media.footsteps[FOOTSTEP_CARPET][i] = trap_S_RegisterSound(name);
 	}
 
 	for (i = 1 ; i < bg_numItems ; i++) {
@@ -1186,68 +1186,68 @@ static void CG_RegisterSounds(void) {
 		if (!strstr(soundName, ".wav")) {
 			CG_SoundScriptPrecache(soundName);
 		} else {
-			cgs.gameSounds[i] = trap_S_RegisterSound(soundName, qfalse);    // FIXME: allow option to compress?
+			cgs.gameSounds[i] = trap_S_RegisterSound(soundName);    // FIXME: allow option to compress?
 		}
 	}
 
-	cgs.media.flameSound         = trap_S_RegisterSound("sound/weapons/flamethrower/flame_burn.wav", qfalse);
-	cgs.media.flameBlowSound     = trap_S_RegisterSound("sound/weapons/flamethrower/flame_pilot.wav", qfalse);
-	cgs.media.flameStartSound    = trap_S_RegisterSound("sound/weapons/flamethrower/flame_up.wav", qfalse);
-	cgs.media.flameStreamSound   = trap_S_RegisterSound("sound/weapons/flamethrower/flame_fire.wav", qfalse);
-	cgs.media.flameCrackSound    = 0;  // -trap_S_RegisterSound( "sound/world/firecrack1.wav", qfalse );
-	cgs.media.grenadePulseSound4 = trap_S_RegisterSound("sound/weapons/grenade/gren_timer4.wav", qfalse);
-	cgs.media.grenadePulseSound3 = trap_S_RegisterSound("sound/weapons/grenade/gren_timer3.wav", qfalse);
-	cgs.media.grenadePulseSound2 = trap_S_RegisterSound("sound/weapons/grenade/gren_timer2.wav", qfalse);
-	cgs.media.grenadePulseSound1 = trap_S_RegisterSound("sound/weapons/grenade/gren_timer1.wav", qfalse);
+	cgs.media.flameSound         = trap_S_RegisterSound("sound/weapons/flamethrower/flame_burn.wav");
+	cgs.media.flameBlowSound     = trap_S_RegisterSound("sound/weapons/flamethrower/flame_pilot.wav");
+	cgs.media.flameStartSound    = trap_S_RegisterSound("sound/weapons/flamethrower/flame_up.wav");
+	cgs.media.flameStreamSound   = trap_S_RegisterSound("sound/weapons/flamethrower/flame_fire.wav");
+	cgs.media.flameCrackSound    = 0;
+	cgs.media.grenadePulseSound4 = trap_S_RegisterSound("sound/weapons/grenade/gren_timer4.wav");
+	cgs.media.grenadePulseSound3 = trap_S_RegisterSound("sound/weapons/grenade/gren_timer3.wav");
+	cgs.media.grenadePulseSound2 = trap_S_RegisterSound("sound/weapons/grenade/gren_timer2.wav");
+	cgs.media.grenadePulseSound1 = trap_S_RegisterSound("sound/weapons/grenade/gren_timer1.wav");
 
 
-	cgs.media.boneBounceSound = trap_S_RegisterSound("sound/world/boardbreak.wav", qfalse);          // TODO: need a real sound for this
+	cgs.media.boneBounceSound = trap_S_RegisterSound("sound/world/boardbreak.wav");          // TODO: need a real sound for this
 
-	cgs.media.sfx_rockexp     = trap_S_RegisterSound("sound/weapons/rocket/rocket_expl.wav", qfalse);
-	cgs.media.sfx_rockexpDist = trap_S_RegisterSound("sound/weapons/rocket/rocket_expl_far.wav", qfalse);
+	cgs.media.sfx_rockexp     = trap_S_RegisterSound("sound/weapons/rocket/rocket_expl.wav");
+	cgs.media.sfx_rockexpDist = trap_S_RegisterSound("sound/weapons/rocket/rocket_expl_far.wav");
 
-	cgs.media.sfx_dynamiteexp     = trap_S_RegisterSound("sound/weapons/dynamite/dynamite_expl.wav", qfalse);
-	cgs.media.sfx_dynamiteexpDist = trap_S_RegisterSound("sound/weapons/dynamite/dynamite_expl_far.wav", qfalse);
+	cgs.media.sfx_dynamiteexp     = trap_S_RegisterSound("sound/weapons/dynamite/dynamite_expl.wav");
+	cgs.media.sfx_dynamiteexpDist = trap_S_RegisterSound("sound/weapons/dynamite/dynamite_expl_far.wav");
 
-	cgs.media.sfx_satchelexp     = trap_S_RegisterSound("sound/weapons/satchel/satchel_expl.wav", qfalse);
-	cgs.media.sfx_satchelexpDist = trap_S_RegisterSound("sound/weapons/satchel/satchel_expl_far.wav", qfalse);
-	cgs.media.sfx_mortarexp[0]   = trap_S_RegisterSound("sound/weapons/mortar/mortar_expl1.wav", qfalse);
-	cgs.media.sfx_mortarexp[1]   = trap_S_RegisterSound("sound/weapons/mortar/mortar_expl2.wav", qfalse);
-	cgs.media.sfx_mortarexp[2]   = trap_S_RegisterSound("sound/weapons/mortar/mortar_expl3.wav", qfalse);
-	cgs.media.sfx_mortarexp[3]   = trap_S_RegisterSound("sound/weapons/mortar/mortar_expl.wav", qfalse);
-	cgs.media.sfx_mortarexpDist  = trap_S_RegisterSound("sound/weapons/mortar/mortar_expl_far.wav", qfalse);
-	cgs.media.sfx_grenexp        = trap_S_RegisterSound("sound/weapons/grenade/gren_expl.wav", qfalse);
-	cgs.media.sfx_grenexpDist    = trap_S_RegisterSound("sound/weapons/grenade/gren_expl_far.wav", qfalse);
-	cgs.media.sfx_rockexpWater   = trap_S_RegisterSound("sound/weapons/grenade/gren_expl_water.wav", qfalse);
+	cgs.media.sfx_satchelexp     = trap_S_RegisterSound("sound/weapons/satchel/satchel_expl.wav");
+	cgs.media.sfx_satchelexpDist = trap_S_RegisterSound("sound/weapons/satchel/satchel_expl_far.wav");
+	cgs.media.sfx_mortarexp[0]   = trap_S_RegisterSound("sound/weapons/mortar/mortar_expl1.wav");
+	cgs.media.sfx_mortarexp[1]   = trap_S_RegisterSound("sound/weapons/mortar/mortar_expl2.wav");
+	cgs.media.sfx_mortarexp[2]   = trap_S_RegisterSound("sound/weapons/mortar/mortar_expl3.wav");
+	cgs.media.sfx_mortarexp[3]   = trap_S_RegisterSound("sound/weapons/mortar/mortar_expl.wav");
+	cgs.media.sfx_mortarexpDist  = trap_S_RegisterSound("sound/weapons/mortar/mortar_expl_far.wav");
+	cgs.media.sfx_grenexp        = trap_S_RegisterSound("sound/weapons/grenade/gren_expl.wav");
+	cgs.media.sfx_grenexpDist    = trap_S_RegisterSound("sound/weapons/grenade/gren_expl_far.wav");
+	cgs.media.sfx_rockexpWater   = trap_S_RegisterSound("sound/weapons/grenade/gren_expl_water.wav");
 
 
 	for (i = 0; i < 3; i++) {
 		// Gordon: bouncy shell sounds \o/
-		cgs.media.sfx_brassSound[BRASSSOUND_METAL][i] = trap_S_RegisterSound(va("sound/weapons/misc/shell_metal%i.wav", i + 1), qfalse);
-		cgs.media.sfx_brassSound[BRASSSOUND_SOFT][i]  = trap_S_RegisterSound(va("sound/weapons/misc/shell_soft%i.wav", i + 1), qfalse);
-		cgs.media.sfx_brassSound[BRASSSOUND_STONE][i] = trap_S_RegisterSound(va("sound/weapons/misc/shell_stone%i.wav", i + 1), qfalse);
-		cgs.media.sfx_brassSound[BRASSSOUND_WOOD][i]  = trap_S_RegisterSound(va("sound/weapons/misc/shell_wood%i.wav", i + 1), qfalse);
-		cgs.media.sfx_rubbleBounce[i]                 = trap_S_RegisterSound(va("sound/world/debris%i.wav", i + 1), qfalse);
+		cgs.media.sfx_brassSound[BRASSSOUND_METAL][i] = trap_S_RegisterSound(va("sound/weapons/misc/shell_metal%i.wav", i + 1));
+		cgs.media.sfx_brassSound[BRASSSOUND_SOFT][i]  = trap_S_RegisterSound(va("sound/weapons/misc/shell_soft%i.wav", i + 1));
+		cgs.media.sfx_brassSound[BRASSSOUND_STONE][i] = trap_S_RegisterSound(va("sound/weapons/misc/shell_stone%i.wav", i + 1));
+		cgs.media.sfx_brassSound[BRASSSOUND_WOOD][i]  = trap_S_RegisterSound(va("sound/weapons/misc/shell_wood%i.wav", i + 1));
+		cgs.media.sfx_rubbleBounce[i]                 = trap_S_RegisterSound(va("sound/world/debris%i.wav", i + 1));
 	}
-	cgs.media.sfx_knifehit[0] = trap_S_RegisterSound("sound/weapons/knife/knife_hit1.wav", qfalse);
-	cgs.media.sfx_knifehit[1] = trap_S_RegisterSound("sound/weapons/knife/knife_hit2.wav", qfalse);
-	cgs.media.sfx_knifehit[2] = trap_S_RegisterSound("sound/weapons/knife/knife_hit3.wav", qfalse);
-	cgs.media.sfx_knifehit[3] = trap_S_RegisterSound("sound/weapons/knife/knife_hit4.wav", qfalse);
-	cgs.media.sfx_knifehit[4] = trap_S_RegisterSound("sound/weapons/knife/knife_hitwall1.wav", qfalse);
+	cgs.media.sfx_knifehit[0] = trap_S_RegisterSound("sound/weapons/knife/knife_hit1.wav");
+	cgs.media.sfx_knifehit[1] = trap_S_RegisterSound("sound/weapons/knife/knife_hit2.wav");
+	cgs.media.sfx_knifehit[2] = trap_S_RegisterSound("sound/weapons/knife/knife_hit3.wav");
+	cgs.media.sfx_knifehit[3] = trap_S_RegisterSound("sound/weapons/knife/knife_hit4.wav");
+	cgs.media.sfx_knifehit[4] = trap_S_RegisterSound("sound/weapons/knife/knife_hitwall1.wav");
 
 	for (i = 0; i < 5; i++) {
-		cgs.media.sfx_bullet_metalhit[i] = trap_S_RegisterSound(va("sound/weapons/impact/metal%i.wav", i + 1), qfalse);
-		cgs.media.sfx_bullet_woodhit[i]  = trap_S_RegisterSound(va("sound/weapons/impact/wood%i.wav", i + 1), qfalse);
-		cgs.media.sfx_bullet_glasshit[i] = trap_S_RegisterSound(va("sound/weapons/impact/glass%i.wav", i + 1), qfalse);
-		cgs.media.sfx_bullet_stonehit[i] = trap_S_RegisterSound(va("sound/weapons/impact/stone%i.wav", i + 1), qfalse);
-		cgs.media.sfx_bullet_waterhit[i] = trap_S_RegisterSound(va("sound/weapons/impact/water%i.wav", i + 1), qfalse);
+		cgs.media.sfx_bullet_metalhit[i] = trap_S_RegisterSound(va("sound/weapons/impact/metal%i.wav", i + 1));
+		cgs.media.sfx_bullet_woodhit[i]  = trap_S_RegisterSound(va("sound/weapons/impact/wood%i.wav", i + 1));
+		cgs.media.sfx_bullet_glasshit[i] = trap_S_RegisterSound(va("sound/weapons/impact/glass%i.wav", i + 1));
+		cgs.media.sfx_bullet_stonehit[i] = trap_S_RegisterSound(va("sound/weapons/impact/stone%i.wav", i + 1));
+		cgs.media.sfx_bullet_waterhit[i] = trap_S_RegisterSound(va("sound/weapons/impact/water%i.wav", i + 1));
 	}
 
-	cgs.media.buildDecayedSound = trap_S_RegisterSound("sound/world/build_abort.wav", qfalse);
+	cgs.media.buildDecayedSound = trap_S_RegisterSound("sound/world/build_abort.wav");
 
-	cgs.media.sndLimboSelect = trap_S_RegisterSound("sound/menu/select.wav", qfalse);
-	cgs.media.sndLimboFocus  = trap_S_RegisterSound("sound/menu/focus.wav", qfalse);
-	cgs.media.sndLimboCancel = trap_S_RegisterSound("sound/menu/cancel.wav", qfalse);
+	cgs.media.sndLimboSelect = trap_S_RegisterSound("sound/menu/select.wav");
+	cgs.media.sndLimboFocus  = trap_S_RegisterSound("sound/menu/focus.wav");
+	cgs.media.sndLimboCancel = trap_S_RegisterSound("sound/menu/cancel.wav");
 
 	if (cg_buildScript.integer) {
 		CG_PrecacheFXSounds();
@@ -1509,15 +1509,15 @@ static void CG_RegisterGraphics(void) {
 
 	cgs.media.rocketExplosionShader = trap_R_RegisterShader("rocketExplosion");
 
-	cgs.media.hWeaponSnd     = trap_S_RegisterSound("sound/weapons/mg42/mg42_fire.wav", qfalse);
-	cgs.media.hWeaponEchoSnd = trap_S_RegisterSound("sound/weapons/mg42/mg42_far.wav", qfalse);
-	cgs.media.hWeaponHeatSnd = trap_S_RegisterSound("sound/weapons/mg42/mg42_heat.wav", qfalse);
+	cgs.media.hWeaponSnd     = trap_S_RegisterSound("sound/weapons/mg42/mg42_fire.wav");
+	cgs.media.hWeaponEchoSnd = trap_S_RegisterSound("sound/weapons/mg42/mg42_far.wav");
+	cgs.media.hWeaponHeatSnd = trap_S_RegisterSound("sound/weapons/mg42/mg42_heat.wav");
 
-	cgs.media.hWeaponSnd_2     = trap_S_RegisterSound("sound/weapons/browning/browning_fire.wav", qfalse);
-	cgs.media.hWeaponEchoSnd_2 = trap_S_RegisterSound("sound/weapons/browning/browning_far.wav", qfalse);
-	cgs.media.hWeaponHeatSnd_2 = trap_S_RegisterSound("sound/weapons/browning/browning_heat.wav", qfalse);
+	cgs.media.hWeaponSnd_2     = trap_S_RegisterSound("sound/weapons/browning/browning_fire.wav");
+	cgs.media.hWeaponEchoSnd_2 = trap_S_RegisterSound("sound/weapons/browning/browning_far.wav");
+	cgs.media.hWeaponHeatSnd_2 = trap_S_RegisterSound("sound/weapons/browning/browning_heat.wav");
 
-	cgs.media.minePrimedSound = trap_S_RegisterSound("sound/weapons/landmine/mine_on.wav", qfalse);
+	cgs.media.minePrimedSound = trap_S_RegisterSound("sound/weapons/landmine/mine_on.wav");
 
 	// wall marks
 	cgs.media.bulletMarkShader   = trap_R_RegisterShaderNoMip("gfx/damage/bullet_mrk");
@@ -1886,7 +1886,7 @@ qboolean CG_Asset_Parse(int handle) {
 			if (!PC_String_Parse(handle, &tempStr)) {
 				return qfalse;
 			}
-			cgDC.Assets.menuEnterSound = trap_S_RegisterSound(tempStr, qtrue);
+			cgDC.Assets.menuEnterSound = trap_S_RegisterSound(tempStr);
 			continue;
 		}
 
@@ -1895,7 +1895,7 @@ qboolean CG_Asset_Parse(int handle) {
 			if (!PC_String_Parse(handle, &tempStr)) {
 				return qfalse;
 			}
-			cgDC.Assets.menuExitSound = trap_S_RegisterSound(tempStr, qtrue);
+			cgDC.Assets.menuExitSound = trap_S_RegisterSound(tempStr);
 			continue;
 		}
 
@@ -1904,7 +1904,7 @@ qboolean CG_Asset_Parse(int handle) {
 			if (!PC_String_Parse(handle, &tempStr)) {
 				return qfalse;
 			}
-			cgDC.Assets.itemFocusSound = trap_S_RegisterSound(tempStr, qtrue);
+			cgDC.Assets.itemFocusSound = trap_S_RegisterSound(tempStr);
 			continue;
 		}
 
@@ -1913,7 +1913,7 @@ qboolean CG_Asset_Parse(int handle) {
 			if (!PC_String_Parse(handle, &tempStr)) {
 				return qfalse;
 			}
-			cgDC.Assets.menuBuzzSound = trap_S_RegisterSound(tempStr, qtrue);
+			cgDC.Assets.menuBuzzSound = trap_S_RegisterSound(tempStr);
 			continue;
 		}
 

@@ -655,9 +655,9 @@ void            trap_R_DrawStretchPic(float x, float y, float w, float h, float 
 void            trap_R_DrawRotatedPic(float x, float y, float w, float h, float s1, float t1, float s2, float t2, qhandle_t hShader, float angle);
 void            trap_R_ModelBounds(clipHandle_t model, vec3_t mins, vec3_t maxs);
 void            trap_UpdateScreen(void);
-int             trap_CM_LerpTag(orientation_t *tag, const refEntity_t *refent, const char *tagName, int startIndex);
+int             trap_CM_LerpTag(orientation_t *tag, const refEntity_t *refent, const char *tagName);
 void            trap_S_StartLocalSound(sfxHandle_t sfx, int channelNum);
-sfxHandle_t     trap_S_RegisterSound(const char *sample, qboolean compressed);
+sfxHandle_t     trap_S_RegisterSound(const char *sample);
 void            trap_Key_KeynumToStringBuf(int keynum, char *buf, int buflen);
 void            trap_Key_GetBindingBuf(int keynum, char *buf, int buflen);
 void            trap_Key_KeysForBinding(const char *binding, int *key1, int *key2);

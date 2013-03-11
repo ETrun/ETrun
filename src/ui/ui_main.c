@@ -777,7 +777,7 @@ qboolean Asset_Parse(int handle) {
 			if (!PC_String_Parse(handle, &tempStr)) {
 				return qfalse;
 			}
-			uiInfo.uiDC.Assets.menuEnterSound = trap_S_RegisterSound(tempStr, qtrue);
+			uiInfo.uiDC.Assets.menuEnterSound = trap_S_RegisterSound(tempStr);
 			continue;
 		}
 
@@ -786,7 +786,7 @@ qboolean Asset_Parse(int handle) {
 			if (!PC_String_Parse(handle, &tempStr)) {
 				return qfalse;
 			}
-			uiInfo.uiDC.Assets.menuExitSound = trap_S_RegisterSound(tempStr, qtrue);
+			uiInfo.uiDC.Assets.menuExitSound = trap_S_RegisterSound(tempStr);
 			continue;
 		}
 
@@ -795,7 +795,7 @@ qboolean Asset_Parse(int handle) {
 			if (!PC_String_Parse(handle, &tempStr)) {
 				return qfalse;
 			}
-			uiInfo.uiDC.Assets.itemFocusSound = trap_S_RegisterSound(tempStr, qtrue);
+			uiInfo.uiDC.Assets.itemFocusSound = trap_S_RegisterSound(tempStr);
 			continue;
 		}
 
@@ -804,7 +804,7 @@ qboolean Asset_Parse(int handle) {
 			if (!PC_String_Parse(handle, &tempStr)) {
 				return qfalse;
 			}
-			uiInfo.uiDC.Assets.menuBuzzSound = trap_S_RegisterSound(tempStr, qtrue);
+			uiInfo.uiDC.Assets.menuBuzzSound = trap_S_RegisterSound(tempStr);
 			continue;
 		}
 

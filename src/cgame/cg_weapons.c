@@ -1161,7 +1161,7 @@ static qboolean CG_RW_ParseClient(int handle, weaponInfo_t *weaponInfo) {
 			} else {
 				for (i = 0; i < 4; i++) {
 					if (!weaponInfo->flashSound[i]) {
-						weaponInfo->flashSound[i] = trap_S_RegisterSound(filename, qfalse);
+						weaponInfo->flashSound[i] = trap_S_RegisterSound(filename);
 						break;
 					}
 				}
@@ -1175,7 +1175,7 @@ static qboolean CG_RW_ParseClient(int handle, weaponInfo_t *weaponInfo) {
 			} else {
 				for (i = 0; i < 4; i++) {
 					if (!weaponInfo->flashEchoSound[i]) {
-						weaponInfo->flashEchoSound[i] = trap_S_RegisterSound(filename, qfalse);
+						weaponInfo->flashEchoSound[i] = trap_S_RegisterSound(filename);
 						break;
 					}
 				}
@@ -1189,7 +1189,7 @@ static qboolean CG_RW_ParseClient(int handle, weaponInfo_t *weaponInfo) {
 			} else {
 				for (i = 0; i < 4; i++) {
 					if (!weaponInfo->lastShotSound[i]) {
-						weaponInfo->lastShotSound[i] = trap_S_RegisterSound(filename, qfalse);
+						weaponInfo->lastShotSound[i] = trap_S_RegisterSound(filename);
 						break;
 					}
 				}
@@ -1201,49 +1201,49 @@ static qboolean CG_RW_ParseClient(int handle, weaponInfo_t *weaponInfo) {
 			if (!PC_String_ParseNoAlloc(handle, filename, sizeof (filename))) {
 				return CG_RW_ParseError(handle, "expected readySound filename");
 			} else {
-				weaponInfo->readySound = trap_S_RegisterSound(filename, qfalse);
+				weaponInfo->readySound = trap_S_RegisterSound(filename);
 			}
 		} else if (!Q_stricmp(token.string, "firingSound")) {
 			if (!PC_String_ParseNoAlloc(handle, filename, sizeof (filename))) {
 				return CG_RW_ParseError(handle, "expected firingSound filename");
 			} else {
-				weaponInfo->firingSound = trap_S_RegisterSound(filename, qfalse);
+				weaponInfo->firingSound = trap_S_RegisterSound(filename);
 			}
 		} else if (!Q_stricmp(token.string, "overheatSound")) {
 			if (!PC_String_ParseNoAlloc(handle, filename, sizeof (filename))) {
 				return CG_RW_ParseError(handle, "expected overheatSound filename");
 			} else {
-				weaponInfo->overheatSound = trap_S_RegisterSound(filename, qfalse);
+				weaponInfo->overheatSound = trap_S_RegisterSound(filename);
 			}
 		} else if (!Q_stricmp(token.string, "reloadSound")) {
 			if (!PC_String_ParseNoAlloc(handle, filename, sizeof (filename))) {
 				return CG_RW_ParseError(handle, "expected reloadSound filename");
 			} else {
-				weaponInfo->reloadSound = trap_S_RegisterSound(filename, qfalse);
+				weaponInfo->reloadSound = trap_S_RegisterSound(filename);
 			}
 		} else if (!Q_stricmp(token.string, "reloadFastSound")) {
 			if (!PC_String_ParseNoAlloc(handle, filename, sizeof (filename))) {
 				return CG_RW_ParseError(handle, "expected reloadFastSound filename");
 			} else {
-				weaponInfo->reloadFastSound = trap_S_RegisterSound(filename, qfalse);
+				weaponInfo->reloadFastSound = trap_S_RegisterSound(filename);
 			}
 		} else if (!Q_stricmp(token.string, "spinupSound")) {
 			if (!PC_String_ParseNoAlloc(handle, filename, sizeof (filename))) {
 				return CG_RW_ParseError(handle, "expected spinupSound filename");
 			} else {
-				weaponInfo->spinupSound = trap_S_RegisterSound(filename, qfalse);
+				weaponInfo->spinupSound = trap_S_RegisterSound(filename);
 			}
 		} else if (!Q_stricmp(token.string, "spindownSound")) {
 			if (!PC_String_ParseNoAlloc(handle, filename, sizeof (filename))) {
 				return CG_RW_ParseError(handle, "expected spindownSound filename");
 			} else {
-				weaponInfo->spindownSound = trap_S_RegisterSound(filename, qfalse);
+				weaponInfo->spindownSound = trap_S_RegisterSound(filename);
 			}
 		} else if (!Q_stricmp(token.string, "switchSound")) {
 			if (!PC_String_ParseNoAlloc(handle, filename, sizeof (filename))) {
 				return CG_RW_ParseError(handle, "expected switchSound filename");
 			} else {
-				weaponInfo->switchSound = trap_S_RegisterSound(filename, qfalse);
+				weaponInfo->switchSound = trap_S_RegisterSound(filename);
 			}
 		} else if (!Q_stricmp(token.string, "weaponIcon")) {
 			if (!PC_String_ParseNoAlloc(handle, filename, sizeof (filename))) {
@@ -1279,7 +1279,7 @@ static qboolean CG_RW_ParseClient(int handle, weaponInfo_t *weaponInfo) {
 			if (!PC_String_ParseNoAlloc(handle, filename, sizeof (filename))) {
 				return CG_RW_ParseError(handle, "expected missileSound filename");
 			} else {
-				weaponInfo->missileSound = trap_S_RegisterSound(filename, qfalse);
+				weaponInfo->missileSound = trap_S_RegisterSound(filename);
 			}
 		} else if (!Q_stricmp(token.string, "missileTrailFunc")) {
 			if (!PC_String_ParseNoAlloc(handle, filename, sizeof (filename))) {

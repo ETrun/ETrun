@@ -197,10 +197,7 @@ void trap_UpdateScreen(void) {
 	syscall(UI_UPDATESCREEN);
 }
 
-int trap_CM_LerpTag(orientation_t *tag, const refEntity_t *refent, const char *tagName, int startIndex) {
-	// Nico, silent GCC
-	startIndex = startIndex;
-
+int trap_CM_LerpTag(orientation_t *tag, const refEntity_t *refent, const char *tagName) {
 	return syscall(UI_CM_LERPTAG, tag, refent, tagName, 0);             // NEFVE - SMF - fixed
 }
 
@@ -208,11 +205,8 @@ void trap_S_StartLocalSound(sfxHandle_t sfx, int channelNum) {
 	syscall(UI_S_STARTLOCALSOUND, sfx, channelNum, 127 /* Gordon: default volume always for the moment*/);
 }
 
-sfxHandle_t trap_S_RegisterSound(const char *sample, qboolean compressed) {
+sfxHandle_t trap_S_RegisterSound(const char *sample) {
 	int i = syscall(UI_S_REGISTERSOUND, sample, qfalse);
-
-	// Nico, silent GCC
-	compressed = compressed;
 
 #ifdef DEBUG
 	if (i == 0) {

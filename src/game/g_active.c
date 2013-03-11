@@ -457,7 +457,7 @@ qboolean ClientInactivityTimer(gclient_t *client) {
 			// trap_DropClient( client - level.clients, "Dropped due to inactivity", 0 );
 
 			AP(va("cpm \"%s ^7removed from teams due to inactivity! ^z(%i seconds) \n\"", client->pers.netname, g_inactivity.integer));
-			SetTeam(g_entities + (client - level.clients), "s", qtrue, -1, -1, qfalse);
+			SetTeam(g_entities + (client - level.clients), "s", -1, -1, qfalse);
 
 			return(qfalse);
 		}
@@ -884,21 +884,21 @@ void ClientThink_real(gentity_t *ent) {
 	if (!client->pers.pmoveFixed) {
 		CP(va("cpm \"%s^w: ^1you were removed from teams because you can not use pmove_fixed 0\n\"", GAME_VERSION_COLORED));
 		trap_SendServerCommand(ent - g_entities, "pmoveon");
-		SetTeam(ent, "s", qtrue, -1, -1, qfalse);
+		SetTeam(ent, "s", -1, -1, qfalse);
 	}
 
 	// Nico, check max FPS
 	if (client->pers.maxFPS < 40) {
 		CP(va("cpm \"%s^w: ^1you were removed from teams because you must use com_maxfps > 40\n\"", GAME_VERSION_COLORED));
 		trap_SendServerCommand(ent - g_entities, "resetMaxFPS");
-		SetTeam(ent, "s", qtrue, -1, -1, qfalse);
+		SetTeam(ent, "s", -1, -1, qfalse);
 	}
 
 	// Nico, force auto demo record in cup mode
 	if (g_cupMode.integer != 0 && client->pers.autoDemo == 0) {
 		CP(va("cpm \"%s^w: ^1you were removed from teams because you must use cg_autoDemo 1\n\"", GAME_VERSION_COLORED));
 		trap_SendServerCommand(ent - g_entities, "autoDemoOn");
-		SetTeam(ent, "s", qtrue, -1, -1, qfalse);
+		SetTeam(ent, "s", -1, -1, qfalse);
 	}
 
 	// Nico, check ping
@@ -913,21 +913,21 @@ void ClientThink_real(gentity_t *ent) {
 	if (client->pers.clientMaxPackets < 30) {
 		CP(va("cpm \"%s^w: ^1cl_maxpackets is too low, must be >= 30\n\"", GAME_VERSION_COLORED));
 		trap_SendServerCommand(ent - g_entities, "resetMaxpackets");
-		SetTeam(ent, "s", qtrue, -1, -1, qfalse);
+		SetTeam(ent, "s", -1, -1, qfalse);
 	}
 
 	// Nico, force hide me in cup mode
 	if (g_cupMode.integer != 0 && client->pers.hideme == 0) {
 		CP(va("cpm \"%s^w: ^1you were removed from teams because you must use cg_hideMe 1\n\"", GAME_VERSION_COLORED));
 		trap_SendServerCommand(ent - g_entities, "hideMeOn");
-		SetTeam(ent, "s", qtrue, -1, -1, qfalse);
+		SetTeam(ent, "s", -1, -1, qfalse);
 	}
 
 	// Nico, force CGaz 0 in cup mode
 	if (g_cupMode.integer != 0 && client->pers.cgaz != 0) {
 		CP(va("cpm \"%s^w: ^1you were removed from teams because you must use cg_drawCGaz 0\n\"", GAME_VERSION_COLORED));
 		trap_SendServerCommand(ent - g_entities, "CGazOff");
-		SetTeam(ent, "s", qtrue, -1, -1, qfalse);
+		SetTeam(ent, "s", -1, -1, qfalse);
 	}
 }
 

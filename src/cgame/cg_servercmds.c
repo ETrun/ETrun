@@ -517,7 +517,7 @@ static void CG_ConfigStringModified(void) {
 			if (!strstr(str, ".wav")) {
 				CG_SoundScriptPrecache(str);
 			} else {
-				cgs.gameSounds[num - CS_SOUNDS] = trap_S_RegisterSound(str, qfalse);      //FIXME: add a compress flag?
+				cgs.gameSounds[num - CS_SOUNDS] = trap_S_RegisterSound(str);      //FIXME: add a compress flag?
 			}
 
 		}
@@ -931,7 +931,7 @@ int CG_ParseVoiceChats(const char *filename, voiceChatList_t *voiceChatList, int
 			if (!Q_stricmp(token, "}")) {
 				break;
 			}
-			voiceChats[voiceChatList->numVoiceChats].sounds[current] = trap_S_RegisterSound(token, compress);
+			voiceChats[voiceChatList->numVoiceChats].sounds[current] = trap_S_RegisterSound(token);
 			token                                                    = COM_ParseExt(p, qtrue);
 			if (!token || token[0] == 0) {
 				return qtrue;

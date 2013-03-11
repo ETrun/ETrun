@@ -402,15 +402,12 @@ void G_TeamDataForString(const char *teamstr, int clientNum, team_t *team, spect
 SetTeam
 =================
 */
-qboolean SetTeam(gentity_t *ent, char *s, qboolean force, weapon_t w1, weapon_t w2, qboolean setweapons) {
+qboolean SetTeam(gentity_t *ent, char *s, weapon_t w1, weapon_t w2, qboolean setweapons) {
 	team_t           team, oldTeam;
 	gclient_t        *client;
 	int              clientNum;
 	spectatorState_t specState;
 	int              specClient;
-
-	// Nico, silent GCC
-	force = force;
 
 	//
 	// see what change is requested
@@ -543,7 +540,7 @@ void StopFollowing(gentity_t *ent) {
 		VectorCopy(client->ps.origin, pos);
 		VectorCopy(client->ps.viewangles, angle);
 		// Need this as it gets spec mode reset properly
-		SetTeam(ent, "s", qtrue, -1, -1, qfalse);
+		SetTeam(ent, "s", -1, -1, qfalse);
 		VectorCopy(pos, client->ps.origin);
 		SetClientViewAngle(ent, angle);
 	} else {
@@ -656,7 +653,7 @@ void Cmd_Team_f(gentity_t *ent) {
 		ent->client->sess.latchPlayerType = PC_SOLDIER;
 	}
 
-	if (!SetTeam(ent, s, qfalse, w, w2, qtrue)) {
+	if (!SetTeam(ent, s, w, w2, qtrue)) {
 		G_SetClientWeapons(ent, w, w2, qtrue);
 	}
 }
@@ -840,7 +837,7 @@ void Cmd_Follow_f(gentity_t *ent, unsigned int dwCommand, qboolean fValue) {
 
 	// first set them to spectator
 	if (ent->client->sess.sessionTeam != TEAM_SPECTATOR) {
-		SetTeam(ent, "spectator", qfalse, -1, -1, qfalse);
+		SetTeam(ent, "spectator", -1, -1, qfalse);
 	}
 
 	ent->client->sess.spectatorState  = SPECTATOR_FOLLOW;
@@ -858,7 +855,7 @@ void Cmd_FollowCycle_f(gentity_t *ent, int dir) {
 
 	// first set them to spectator
 	if ((ent->client->sess.spectatorState == SPECTATOR_NOT) && (!(ent->client->ps.pm_flags & PMF_LIMBO))) {         // JPW NERVE for limbo state
-		SetTeam(ent, "spectator", qfalse, -1, -1, qfalse);
+		SetTeam(ent, "spectator", -1, -1, qfalse);
 	}
 
 	if (dir != 1 && dir != -1) {

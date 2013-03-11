@@ -203,7 +203,7 @@ void CG_PrecacheFXSounds(void) {
 
 	for (i = 0; i < POSSIBLE_PIECES; i++) {
 		for (j = 0; j < fxSounds[i].max; j++) {
-			fxSounds[i].sound[j] = trap_S_RegisterSound(fxSounds[i].soundfile[j], qfalse);
+			fxSounds[i].sound[j] = trap_S_RegisterSound(fxSounds[i].soundfile[j]);
 		}
 	}
 }
@@ -238,7 +238,7 @@ void CG_Explode(centity_t *cent, vec3_t origin, vec3_t dir, qhandle_t shader) {
 		sound = random() * fxSounds[cent->currentState.frame].max;
 
 		if (fxSounds[cent->currentState.frame].sound[sound] == -1) {
-			fxSounds[cent->currentState.frame].sound[sound] = trap_S_RegisterSound(fxSounds[cent->currentState.frame].soundfile[sound], qfalse);
+			fxSounds[cent->currentState.frame].sound[sound] = trap_S_RegisterSound(fxSounds[cent->currentState.frame].soundfile[sound]);
 		}
 
 		sound = fxSounds[cent->currentState.frame].sound[sound];
@@ -299,7 +299,7 @@ void CG_Rubble(centity_t *cent, vec3_t origin, vec3_t dir, qhandle_t shader) {
 		sound = random() * fxSounds[cent->currentState.frame].max;
 
 		if (fxSounds[cent->currentState.frame].sound[sound] == -1) {
-			fxSounds[cent->currentState.frame].sound[sound] = trap_S_RegisterSound(fxSounds[cent->currentState.frame].soundfile[sound], qfalse);
+			fxSounds[cent->currentState.frame].sound[sound] = trap_S_RegisterSound(fxSounds[cent->currentState.frame].soundfile[sound]);
 		}
 
 		sound = fxSounds[cent->currentState.frame].sound[sound];
@@ -1557,9 +1557,9 @@ void CG_EntityEvent(centity_t *cent, vec3_t position) {
 				// powerups and team items will have a separate global sound, this one
 				// will be played at prediction time
 				if (item->giType == IT_TEAM) {
-					trap_S_StartSound(NULL, es->number, CHAN_AUTO, trap_S_RegisterSound("sound/misc/w_pkup.wav", qfalse));
+					trap_S_StartSound(NULL, es->number, CHAN_AUTO, trap_S_RegisterSound("sound/misc/w_pkup.wav"));
 				} else {
-					trap_S_StartSound(NULL, es->number, CHAN_AUTO, trap_S_RegisterSound(item->pickup_sound, qfalse));
+					trap_S_StartSound(NULL, es->number, CHAN_AUTO, trap_S_RegisterSound(item->pickup_sound));
 				}
 			}
 
@@ -1584,7 +1584,7 @@ void CG_EntityEvent(centity_t *cent, vec3_t position) {
 			item = &bg_itemlist[index];
 			if (*item->pickup_sound) {
 				// powerup pickups are global
-				trap_S_StartSound(NULL, cg.snap->ps.clientNum, CHAN_AUTO, trap_S_RegisterSound(item->pickup_sound, qfalse));        // FIXME: precache
+				trap_S_StartSound(NULL, cg.snap->ps.clientNum, CHAN_AUTO, trap_S_RegisterSound(item->pickup_sound));        // FIXME: precache
 			}
 
 			// show icon and name on status bar
@@ -1910,7 +1910,7 @@ void CG_EntityEvent(centity_t *cent, vec3_t position) {
 		sound = random() * fxSounds[es->eventParm].max;
 
 		if (fxSounds[es->eventParm].sound[sound] == -1) {
-			fxSounds[es->eventParm].sound[sound] = trap_S_RegisterSound(fxSounds[es->eventParm].soundfile[sound], qfalse);
+			fxSounds[es->eventParm].sound[sound] = trap_S_RegisterSound(fxSounds[es->eventParm].soundfile[sound]);
 		}
 
 		sound = fxSounds[es->eventParm].sound[sound];

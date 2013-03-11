@@ -135,7 +135,7 @@ int CG_SoundPickOldestRandomSound(soundScript_t *sound, vec3_t org, int entnum) 
 		// play this sound
 		if (!sound->streaming) {
 			if (!oldestSound->sounds[pos].sfxHandle) {
-				oldestSound->sounds[pos].sfxHandle = trap_S_RegisterSound(oldestSound->sounds[pos].filename, qfalse);   // FIXME: make compressed settable through the soundscript
+				oldestSound->sounds[pos].sfxHandle = trap_S_RegisterSound(oldestSound->sounds[pos].filename);   // FIXME: make compressed settable through the soundscript
 			}
 			trap_S_StartSound(org, entnum, sound->channel, oldestSound->sounds[pos].sfxHandle);
 			return trap_S_GetSoundLength(oldestSound->sounds[pos].sfxHandle);
@@ -1207,7 +1207,7 @@ void CG_SpeakerEditor_NoiseEditFinish(panel_button_t *button) {
 	Q_strncpyz(editSpeaker->filename, button->text, sizeof (editSpeaker->filename));
 
 	if (*editSpeaker->filename) {
-		editSpeaker->noise = trap_S_RegisterSound(editSpeaker->filename, qfalse);
+		editSpeaker->noise = trap_S_RegisterSound(editSpeaker->filename);
 	} else {
 		editSpeaker->noise = 0;
 	}

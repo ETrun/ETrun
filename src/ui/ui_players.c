@@ -158,7 +158,7 @@ static void UI_PositionEntityOnTag(refEntity_t *entity, const refEntity_t *paren
 	orientation_t lerped;
 
 	// lerp the tag
-	trap_CM_LerpTag(&lerped, (const refEntity_t *)parent, (const char *)tagName, 0);
+	trap_CM_LerpTag(&lerped, (const refEntity_t *)parent, (const char *)tagName);
 
 	// FIXME: allow origin offsets along tag?
 	VectorCopy(parent->origin, entity->origin);
@@ -183,7 +183,7 @@ static void UI_PositionRotatedEntityOnTag(refEntity_t *entity, const refEntity_t
 	vec3_t        tempAxis[3];
 
 	// lerp the tag
-	trap_CM_LerpTag(&lerped, parent, tagName, 0);
+	trap_CM_LerpTag(&lerped, parent, tagName);
 
 	// FIXME: allow origin offsets along tag?
 	VectorCopy(parent->origin, entity->origin);
@@ -436,7 +436,7 @@ void UI_DrawPlayer(float x, float y, float w, float h, playerInfo_t *pi, int tim
 		pi->pendingWeapon = -1;
 		pi->weaponTimer   = 0;
 		if (pi->currentWeapon != pi->weapon) {
-			trap_S_StartLocalSound(trap_S_RegisterSound("sound/weapons/change.wav", qfalse), CHAN_LOCAL);
+			trap_S_StartLocalSound(trap_S_RegisterSound("sound/weapons/change.wav"), CHAN_LOCAL);
 		}
 	}
 

@@ -85,7 +85,7 @@ CG_CustomSound
 */
 sfxHandle_t CG_CustomSound(const char *soundName) {
 	if (soundName[0] != '*') {
-		return trap_S_RegisterSound(soundName, qfalse);
+		return trap_S_RegisterSound(soundName);
 	}
 
 	return 0;
