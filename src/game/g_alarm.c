@@ -103,7 +103,7 @@ alarmbox_use
 */
 void alarmbox_use(gentity_t *ent, gentity_t *other, gentity_t *foo) {
 	// Nico, silent GCC
-	foo = foo;
+	(void)foo;
 
 	if (!(ent->active)) {
 		return;
@@ -129,10 +129,10 @@ alarmbox_die
 */
 void alarmbox_die(gentity_t *ent, gentity_t *inflictor, gentity_t *attacker, int damage, int mod) {
 	// Nico, silent GCC
-	inflictor = inflictor;
-	attacker  = attacker;
-	damage    = damage;
-	mod       = mod;
+	(void)inflictor;
+	(void)attacker;
+	(void)damage;
+	(void)mod;
 
 	propExplosion(ent);
 	ent->s.frame    = 2;

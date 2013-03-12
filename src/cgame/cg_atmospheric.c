@@ -338,7 +338,7 @@ static qboolean CG_SnowParticleGenerate(cg_atmosphericParticle_t *particle, vec3
 	float groundHeight, skyHeight;
 
 	// Nico, silent GCC
-	currweight = currweight;
+	(void)currweight;
 
 	angle    = random() * 2 * M_PI;
 	distance = 20 + MAX_ATMOSPHERIC_DISTANCE * random();

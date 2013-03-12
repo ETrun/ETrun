@@ -768,8 +768,8 @@ void Cmd_Follow_f(gentity_t *ent, unsigned int dwCommand, qboolean fValue) {
 	char arg[MAX_TOKEN_CHARS];
 
 	// Nico, silent GCC
-	dwCommand = dwCommand;
-	fValue    = fValue;
+	(void)dwCommand;
+	(void)fValue;
 
 	if (trap_Argc() != 2) {
 		if (ent->client->sess.spectatorState == SPECTATOR_FOLLOW) {
@@ -1253,7 +1253,7 @@ qboolean Cmd_CallVote_f(gentity_t *ent, unsigned int dwCommand, qboolean fRefCom
 	int  waitTime = 0;
 
 	// Nico, silent GCC
-	dwCommand = dwCommand;
+	(void)dwCommand;
 
 	// Normal checks, if its not being issued as a referee command
 	// Nico, moved 'callvote' command erros from popup messages to center print and console
@@ -1757,7 +1757,7 @@ qboolean Do_Activate_f(gentity_t *ent, gentity_t *traceEnt) {
 			if (walking) {
 				traceEnt->flags |= FL_SOFTACTIVATE;     // no noise
 			}
-			G_TryDoor(traceEnt, ent, ent);        // (door,other,activator)
+			G_TryDoor(traceEnt, ent);        // (door,other,activator)
 			found = qtrue;
 		} else if ((Q_stricmp(traceEnt->classname, "team_WOLF_checkpoint") == 0)) {
 			if (traceEnt->count != (int)ent->client->sess.sessionTeam) {
@@ -2569,7 +2569,7 @@ void Cmd_SpecLock_f(gentity_t *ent, unsigned int dwCommand, qboolean lock) {
 	gentity_t *other = NULL;
 
 	// Nico, silent GCC
-	dwCommand = dwCommand;
+	(void)dwCommand;
 
 	if (ent->client->sess.specLocked == lock) {
 		CP(va("print \"You are already %slocked from spectators!\n\"", lock ? "" : "un"));
@@ -2621,7 +2621,7 @@ void Cmd_SpecInvite_f(gentity_t *ent, unsigned int dwCommand, qboolean invite) {
 	char      arg[MAX_TOKEN_CHARS] = { 0 };
 
 	// Nico, silent GCC
-	dwCommand = dwCommand;
+	(void)dwCommand;
 
 	if (ClientIsFlooding(ent)) {
 		CP("print \"^1Spam Protection:^7 Specinvite ignored\n\"");

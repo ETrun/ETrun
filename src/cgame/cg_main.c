@@ -39,7 +39,7 @@ If you have questions concerning this license or the applicable additional terms
 
 displayContextDef_t cgDC;
 
-void CG_Init(int serverMessageNum, int serverCommandSequence, int clientNum, qboolean demoPlayback);
+void CG_Init(int serverMessageNum, int serverCommandSequence, int clientNum);
 void CG_Shutdown(void);
 qboolean CG_CheckExecKey(int key);
 extern itemDef_t *g_bindItem;
@@ -54,19 +54,20 @@ This is the only way control passes into the module.
 */
 Q_EXPORT int vmMain(int command, int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7, int arg8, int arg9, int arg10, int arg11) {
 	// Nico, silent GCC
-	arg4  = arg4;
-	arg5  = arg5;
-	arg6  = arg6;
-	arg6  = arg6;
-	arg7  = arg7;
-	arg8  = arg8;
-	arg9  = arg9;
-	arg10 = arg10;
-	arg11 = arg11;
+	(void)arg3;
+	(void)arg4;
+	(void)arg5;
+	(void)arg6;
+	(void)arg6;
+	(void)arg7;
+	(void)arg8;
+	(void)arg9;
+	(void)arg10;
+	(void)arg11;
 
 	switch (command) {
 	case CG_INIT:
-		CG_Init(arg0, arg1, arg2, arg3);
+		CG_Init(arg0, arg1, arg2);
 		cgs.initing = qfalse;
 		return 0;
 	case CG_SHUTDOWN:
@@ -2141,7 +2142,7 @@ static const char *CG_FeederItemText(float feederID, int index, int column, qhan
 	score_t      *sp        = NULL;
 
 	// Nico, silent GCC
-	numhandles = numhandles;
+	(void)numhandles;
 
 	*handle = -1;
 
@@ -2202,8 +2203,8 @@ float CG_Cvar_Get(const char *cvar) {
 
 void CG_Text_PaintWithCursor(float x, float y, float scale, vec4_t color, const char *text, int cursorPos, char cursor, int limit, int style) {
 	// Nico, silent GCC
-	cursor    = cursor;
-	cursorPos = cursorPos;
+	(void)cursor;
+	(void)cursorPos;
 
 	CG_Text_Paint(x, y, scale, color, text, 0, limit, style);
 }
@@ -2307,11 +2308,8 @@ Called after every level change or subsystem restart
 Will perform callbacks to make the loading info screen update.
 =================
 */
-void CG_Init(int serverMessageNum, int serverCommandSequence, int clientNum, qboolean demoPlayback) {
+void CG_Init(int serverMessageNum, int serverCommandSequence, int clientNum) {
 	const char *s;
-
-	// Nico, silent GCC
-	demoPlayback = demoPlayback;
 
 	// clear everything
 	memset(&cgs, 0, sizeof (cgs));

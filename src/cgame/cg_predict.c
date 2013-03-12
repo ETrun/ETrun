@@ -300,7 +300,7 @@ void CG_TraceCapsule_World(trace_t *result, const vec3_t start, const vec3_t min
 	trace_t t;
 
 	// Nico, silent GCC
-	skipNumber = skipNumber;
+	(void)skipNumber;
 
 	trap_CM_CapsuleTrace(&t, start, end, mins, maxs, 0, mask);
 

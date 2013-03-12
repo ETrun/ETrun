@@ -444,7 +444,7 @@ void CG_LimboPanel_NameEditFinish(panel_button_t *button) {
 
 qboolean CG_LimboPanel_CancelButton_KeyDown(panel_button_t *button, int key) {
 	// Nico, silent GCC
-	button = button;
+	(void)button;
 
 	if (key == K_MOUSE1) {
 		SOUND_CANCEL;
@@ -534,7 +534,7 @@ void CG_LimboPanel_SendSetupMsg(qboolean forceteam) {
 
 qboolean CG_LimboPanel_OkButton_KeyDown(panel_button_t *button, int key) {
 	// Nico, silent GCC
-	button = button;
+	(void)button;
 
 	if (key == K_MOUSE1) {
 		SOUND_SELECT;

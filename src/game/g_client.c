@@ -90,7 +90,7 @@ The intermission will be viewed from this point.  Target an info_notnull for the
 */
 void SP_info_player_intermission(gentity_t *ent) {
 	// Nico, silent GCC
-	ent = ent;
+	(void)ent;
 }
 
 /*
@@ -678,12 +678,6 @@ static void ClientCleanName(const char *in, char *out, int outSize) {
 	if (*p == 0 || colorlessLen == 0) {
 		Q_strncpyz(p, "UnnamedPlayer", outSize);
 	}
-}
-
-void G_StartPlayerAppropriateSound(gentity_t *ent, char *soundType) {
-	// Nico, silent GCC
-	ent       = ent;
-	soundType = soundType;
 }
 
 // Nico, returns the IP is it's well-formed, NULL otherwise (from ETpub)

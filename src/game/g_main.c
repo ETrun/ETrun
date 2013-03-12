@@ -344,11 +344,11 @@ This is the only way control passes into the module.
 */
 Q_EXPORT int vmMain(int command, int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6) {
 	// Nico, silent GCC
-	arg2 = arg2;
-	arg3 = arg3;
-	arg4 = arg4;
-	arg5 = arg5;
-	arg6 = arg6;
+	(void)arg2;
+	(void)arg3;
+	(void)arg4;
+	(void)arg5;
+	(void)arg6;
 
 	switch (command) {
 	case GAME_INIT:

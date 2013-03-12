@@ -549,7 +549,7 @@ void Touch_Item(gentity_t *ent, gentity_t *other, trace_t *trace) {
 	int makenoise = EV_ITEM_PICKUP;
 
 	// Nico, silent GCC
-	trace = trace;
+	(void)trace;
 
 	// only activated items can be picked up
 	if (!ent->active) {
@@ -771,8 +771,8 @@ Respawn the item
 */
 void Use_Item(gentity_t *ent, gentity_t *other, gentity_t *activator) {
 	// Nico, silent GCC
-	other     = other;
-	activator = activator;
+	(void)other;
+	(void)activator;
 
 	RespawnItem(ent);
 }

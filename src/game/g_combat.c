@@ -183,7 +183,7 @@ void player_die(gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int 
 	qboolean  killedintank = qfalse;
 
 	// Nico, silent GCC
-	damage = damage;
+	(void)damage;
 
 	// Start recording a new temp demo.
 	trap_SendServerCommand(self - g_entities, "tempDemoStart");
@@ -654,12 +654,9 @@ qboolean IsLegShot(gentity_t *targ, vec3_t dir, vec3_t point, int mod) {
 	return qfalse;
 }
 
-qboolean IsArmShot(gentity_t *targ, gentity_t *ent, vec3_t point, int mod) {
+qboolean IsArmShot(gentity_t *targ, vec3_t point, int mod) {
 	vec3_t path, view;
 	vec_t  dot;
-
-	// Nico, silent GCC
-	ent = ent;
 
 	if (!(targ->client)) {
 		return qfalse;
@@ -980,7 +977,7 @@ void G_Damage(gentity_t *targ, gentity_t *inflictor, gentity_t *attacker, vec3_t
 		if (g_debugBullets.integer) {
 			trap_SendServerCommand(attacker - g_entities, "print \"Leg Shot\n\"\n");
 		}
-	} else if (IsArmShot(targ, attacker, point, mod)) {
+	} else if (IsArmShot(targ, point, mod)) {
 
 		hr = HR_ARMS;
 		if (g_debugBullets.integer) {

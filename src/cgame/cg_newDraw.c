@@ -382,7 +382,7 @@ void CG_DrawCursorhint(rectDef_t *rect) {
 //
 qboolean CG_OwnerDrawVisible(int flags) {
 	// Nico, silent GCC
-	flags = flags;
+	(void)flags;
 
 	return qfalse;
 }
@@ -632,5 +632,5 @@ void CG_KeyEvent(int key, qboolean down) {
 
 void CG_RunMenuScript(char **args) {
 	// Nico, silent GCC
-	args = args;
+	(void)args;
 }

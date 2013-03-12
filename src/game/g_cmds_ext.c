@@ -146,8 +146,8 @@ void G_commands_cmd(gentity_t *ent, unsigned int dwCommand, qboolean fValue) {
 	int i, rows, num_cmds = sizeof (aCommandInfo) / sizeof (aCommandInfo[0]) - 1;
 
 	// Nico, silent GCC
-	dwCommand = dwCommand;
-	fValue    = fValue;
+	(void)dwCommand;
+	(void)fValue;
 
 	rows = num_cmds / HELP_COLUMNS;
 	if (num_cmds % HELP_COLUMNS) {
@@ -191,8 +191,8 @@ void G_players_cmd(gentity_t *ent, unsigned int dwCommand, qboolean fValue) {
 	char      *s, *tc, userinfo[MAX_INFO_STRING];
 
 	// Nico, silent GCC
-	dwCommand = dwCommand;
-	fValue    = fValue;
+	(void)dwCommand;
+	(void)fValue;
 
 	if (g_gamestate.integer == GS_PLAYING) {
 		if (ent) {

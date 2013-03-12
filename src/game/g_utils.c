@@ -409,7 +409,7 @@ void G_UseTargets(gentity_t *ent, gentity_t *activator) {
 				    )
 				    ) {
 					// check door usage rules before allowing any entity to trigger a door open
-					G_TryDoor(t, ent, activator);         // (door,other,activator)
+					G_TryDoor(t, activator);         // (door,other,activator)
 				} else {
 					G_UseEntity(t, ent, activator);
 				}

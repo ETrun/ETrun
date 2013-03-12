@@ -345,7 +345,7 @@ void CG_LoadPanel_KeyHandling(int key, qboolean down) {
 
 qboolean CG_LoadPanel_ContinueButtonKeyDown(panel_button_t *button, int key) {
 	// Nico, silent GCC
-	button = button;
+	(void)button;
 
 	if (key == K_MOUSE1) {
 		CG_EventHandling(CGAME_EVENT_GAMEVIEW, qfalse);
@@ -386,7 +386,7 @@ void CG_LoadPanel_RenderCampaignPins(panel_button_t *button) {
 	float px, py;
 
 	// Nico, silent GCC
-	button = button;
+	(void)button;
 
 	if (!cgs.arenaInfoLoaded) {
 		return;

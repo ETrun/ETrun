@@ -1187,7 +1187,7 @@ qboolean G_MoverPush(gentity_t *pusher, vec3_t move, vec3_t amove, gentity_t **o
 void Use_BinaryMover(gentity_t *ent, gentity_t *other, gentity_t *activator);
 void G_Activate(gentity_t *ent, gentity_t *activator);
 
-void G_TryDoor(gentity_t *ent, gentity_t *other, gentity_t *activator);   //----(SA)	added
+void G_TryDoor(gentity_t *ent, gentity_t *activator);   //----(SA)	added
 
 void InitMoverRotate(gentity_t *ent);
 
@@ -1246,7 +1246,6 @@ void player_die(gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int 
 void CalculateRanks(void);
 qboolean SpotWouldTelefrag(gentity_t *spot);
 qboolean G_CheckForExistingModelInfo(bg_playerclass_t *classInfo, const char *modelName, animModelInfo_t **modelInfo);
-void G_StartPlayerAppropriateSound(gentity_t *ent, char *soundType);
 void SetWolfSpawnWeapons(gclient_t *client);
 void limbo(gentity_t *ent);
 void reinforce(gentity_t *ent);   // JPW NERVE

@@ -1671,12 +1671,9 @@ void Blocked_Door(gentity_t *ent, gentity_t *other) {
 Touch_DoorTriggerSpectator
 ================
 */
-static void Touch_DoorTriggerSpectator(gentity_t *ent, gentity_t *other, trace_t *trace) {
+static void Touch_DoorTriggerSpectator(gentity_t *ent, gentity_t *other) {
 	int    i, axis;
 	vec3_t origin, dir, angles;
-
-	// Nico, silent GCC
-	trace = trace;
 
 	axis = ent->count;
 	VectorClear(dir);
@@ -1755,11 +1752,14 @@ Touch_DoorTrigger
 ================
 */
 void Touch_DoorTrigger(gentity_t *ent, gentity_t *other, trace_t *trace) {
+	// Nico, silent GCC
+	(void)trace;
+
 	if (other->client && other->client->sess.sessionTeam == TEAM_SPECTATOR) {
 		// if the door is not open and not opening
 		if (ent->parent->moverState != MOVER_1TO2 &&
 		    ent->parent->moverState != MOVER_POS2) {
-			Touch_DoorTriggerSpectator(ent, other, trace);
+			Touch_DoorTriggerSpectator(ent, other);
 		}
 	} else if (ent->parent->moverState != MOVER_1TO2) {
 		Use_BinaryMover(ent->parent, ent, other);
@@ -1939,10 +1939,7 @@ DoorSetSounds
     (used by SP_func_door() and SP_func_door_rotating() )
 ==============
 */
-void DoorSetSounds(gentity_t *ent, int doortype, qboolean isRotating) {
-	// Nico, silent GCC
-	isRotating = isRotating;
-
+void DoorSetSounds(gentity_t *ent, int doortype) {
 	ent->sound1to2 = G_SoundIndex(va("sound/movers/doors/door%i_open.wav", doortype));           // opening
 	ent->soundPos2 = G_SoundIndex(va("sound/movers/doors/door%i_endo.wav", doortype));           // open
 	ent->sound2to1 = G_SoundIndex(va("sound/movers/doors/door%i_close.wav", doortype));          // closing
@@ -1966,11 +1963,8 @@ G_TryDoor
     regular rules of doors.
 ==============
 */
-void G_TryDoor(gentity_t *ent, gentity_t *other, gentity_t *activator) {
+void G_TryDoor(gentity_t *ent, gentity_t *activator) {
 	qboolean walking = qfalse;
-
-	// Nico, silent GCC
-	other = other;
 
 	walking = (qboolean)(ent->flags & FL_SOFTACTIVATE);
 
@@ -2063,7 +2057,7 @@ void SP_func_door(gentity_t *ent) {
 	G_SpawnInt("type", "0", &doortype);
 
 	if (doortype) {   // /*why on earthy did this check for <=8?*/ && doortype <= 8)	// no doortype = silent
-		DoorSetSounds(ent, doortype, qfalse);
+		DoorSetSounds(ent, doortype);
 	}
 
 	ent->blocked = Blocked_Door;
@@ -2259,7 +2253,7 @@ Don't allow decent if a living player is on it
 */
 void Touch_Plat(gentity_t *ent, gentity_t *other, trace_t *trace) {
 	// Nico, silent GCC
-	trace = trace;
+	(void)trace;
 
 	if (!other->client || other->client->ps.stats[STAT_HEALTH] <= 0) {
 		return;
@@ -2280,7 +2274,7 @@ If the plat is at the bottom position, start it going up
 */
 void Touch_PlatCenterTrigger(gentity_t *ent, gentity_t *other, trace_t *trace) {
 	// Nico, silent GCC
-	trace = trace;
+	(void)trace;
 
 	if (!other->client) {
 		return;
@@ -2407,7 +2401,7 @@ Touch_Button
 */
 void Touch_Button(gentity_t *ent, gentity_t *other, trace_t *trace) {
 	// Nico, silent GCC
-	trace = trace;
+	(void)trace;
 
 	if (!other->client) {
 		return;
@@ -3075,8 +3069,8 @@ Use_Static
 */
 void Use_Static(gentity_t *ent, gentity_t *other, gentity_t *activator) {
 	// Nico, silent GCC
-	other     = other;
-	activator = activator;
+	(void)other;
+	(void)activator;
 
 	if (ent->r.linked) {
 		trap_UnlinkEntity(ent);
@@ -3089,8 +3083,8 @@ void Static_Pain(gentity_t *ent, gentity_t *attacker, int damage, vec3_t point) 
 	vec3_t temp;
 
 	// Nico, silent GCC
-	damage = damage;
-	point  = point;
+	(void)damage;
+	(void)point;
 
 	if (ent->spawnflags & 4) {
 		if (level.time > ent->wait + ent->delay + rand() % 1000 + 500) {
@@ -3245,8 +3239,8 @@ check either the X_AXIS or Y_AXIS box to change that.
 
 void Use_Func_Rotate(gentity_t *ent, gentity_t *other, gentity_t *activator) {
 	// Nico, silent GCC
-	other     = other;
-	activator = activator;
+	(void)other;
+	(void)activator;
 
 	if (ent->spawnflags & 4) {
 		ent->s.apos.trDelta[2] = ent->speed;
@@ -3446,9 +3440,8 @@ void SP_func_door_rotating(gentity_t *ent) {
 	G_SpawnInt("type", "0", &doortype);
 
 	if (doortype) {   // /*why on earthy did this check for <=8?*/ && doortype <= 8)	// no doortype = silent
-		DoorSetSounds(ent, doortype, qtrue);
+		DoorSetSounds(ent, doortype);
 	}
-
 
 	// set the duration
 	if (!ent->speed) {
@@ -3545,7 +3538,7 @@ void target_effect(gentity_t *self, gentity_t *other, gentity_t *activator) {
 	gentity_t *tent;
 
 	// Nico, silent GCC
-	activator = activator;
+	(void)activator;
 
 	tent = G_TempEntity(self->r.currentOrigin, EV_EFFECT);
 	VectorCopy(self->r.currentOrigin, tent->s.origin);
@@ -3653,9 +3646,9 @@ void func_explosive_explode(gentity_t *self, gentity_t *inflictor, gentity_t *at
 	gentity_t *tent = 0;
 
 	// Nico, silent GCC
-	inflictor = inflictor;
-	damage    = damage;
-	mod       = mod;
+	(void)inflictor;
+	(void)damage;
+	(void)mod;
 
 	self->takedamage = qfalse;          // don't allow anything try to hurt me now that i'm exploding
 
@@ -3728,7 +3721,7 @@ func_explosive_touch
 */
 void func_explosive_touch(gentity_t *self, gentity_t *other, trace_t *trace) {
 	// Nico, silent GCC
-	trace = trace;
+	(void)trace;
 
 	func_explosive_explode(self, self, other, self->damage, 0);
 }
@@ -3741,7 +3734,7 @@ func_explosive_use
 */
 void func_explosive_use(gentity_t *self, gentity_t *other, gentity_t *activator) {
 	// Nico, silent GCC
-	activator = activator;
+	(void)activator;
 
 	G_Script_ScriptEvent(self, "death", "");   // JPW NERVE used to trigger script stuff for MP
 	func_explosive_explode(self, self, other, self->damage, 0);
@@ -3763,8 +3756,8 @@ func_explosive_spawn
 */
 void func_explosive_spawn(gentity_t *self, gentity_t *other, gentity_t *activator) {
 	// Nico, silent GCC
-	other     = other;
-	activator = activator;
+	(void)other;
+	(void)activator;
 
 	trap_LinkEntity(self);
 	self->use = func_explosive_use;
@@ -3807,7 +3800,7 @@ void target_explosion_use(gentity_t *self, gentity_t *other, gentity_t *attacker
 	gentity_t *tent;
 
 	// Nico, silent GCC
-	other = other;
+	(void)other;
 
 	tent = G_TempEntity(self->r.currentOrigin, EV_RUBBLE);
 
@@ -4014,7 +4007,7 @@ void SP_func_explosive(gentity_t *ent) {
 
 void use_invisible_user(gentity_t *ent, gentity_t *other, gentity_t *activator) {
 	// Nico, silent GCC
-	activator = activator;
+	(void)activator;
 
 	if (ent->wait < level.time) {
 		ent->wait = level.time + ent->delay;
@@ -4165,8 +4158,8 @@ void func_constructible_use(gentity_t *self, gentity_t *other, gentity_t *activa
 	self->s.modelindex = 0;
 
 	// Nico, silent GCC
-	other     = other;
-	activator = activator;
+	(void)other;
+	(void)activator;
 
 	if (!self->count2) {
 		self->s.modelindex2 = atoi(self->model + 1);
@@ -4234,8 +4227,8 @@ func_constructible_spawn
 */
 void func_constructible_spawn(gentity_t *self, gentity_t *other, gentity_t *activator) {
 	// Nico, silent GCC
-	other     = other;
-	activator = activator;
+	(void)other;
+	(void)activator;
 
 	trap_LinkEntity(self);
 	self->use = func_constructible_use;
@@ -4248,7 +4241,7 @@ func_constructible_explode
 */
 void func_constructible_explode(gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int damage, int mod) {
 	// Nico, silent GCC
-	damage = damage;
+	(void)damage;
 
 	if (self->desstages) {
 		if (self->grenadeFired > 1) {
