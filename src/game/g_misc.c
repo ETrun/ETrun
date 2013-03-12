@@ -1057,9 +1057,6 @@ void aagun_think(gentity_t *self) {
 	}
 
 	if (owner->client) {
-		vec3_t dang;
-		int    i;
-
 		VectorSubtract(self->r.currentOrigin, owner->r.currentOrigin, vec);
 
 		if (VectorLengthSquared(vec) < SQR(96) && owner->active && owner->health > 0) {
@@ -1068,10 +1065,6 @@ void aagun_think(gentity_t *self) {
 			aagun_track(self, owner);
 			self->nextthink = level.time + 50;
 			self->timestamp = level.time + 1000;
-
-			for (i = 0; i < 3; i++) {
-				dang[i] = SHORT2ANGLE(owner->client->pers.cmd.angles[i]);
-			}
 
 			// now tell the client to lock the view in the direction of the gun
 			owner->client->ps.viewlocked        = 3;
@@ -1184,9 +1177,6 @@ void SP_aagun(gentity_t *self) {
 }
 
 void mg42_touch(gentity_t *self, gentity_t *other, trace_t *trace) {
-	vec3_t dang;
-	int    i;
-
 	// Nico, silent GCC
 	(void)trace;
 
@@ -1195,9 +1185,6 @@ void mg42_touch(gentity_t *self, gentity_t *other, trace_t *trace) {
 	}
 
 	if (other->active) {
-		for (i = 0; i < 3; i++)
-			dang[i] = SHORT2ANGLE(other->client->pers.cmd.angles[i]);
-
 		// now tell the client to lock the view in the direction of the gun
 		other->client->ps.viewlocked        = 3;
 		other->client->ps.viewlocked_entNum = self->s.number;
