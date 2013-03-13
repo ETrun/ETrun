@@ -37,7 +37,7 @@ void G_initMatch(void) {
 	int i;
 
 	for (i = TEAM_AXIS; i <= TEAM_ALLIES; i++) {
-		G_teamReset(i, qfalse);
+		G_teamReset(i);
 	}
 }
 

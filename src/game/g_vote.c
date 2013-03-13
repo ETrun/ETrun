@@ -195,10 +195,7 @@ void G_voteCurrentSetting(gentity_t *ent, const char *cmd, const char *setting) 
 
 
 // Vote toggling
-int G_voteProcessOnOff(gentity_t *ent, char *arg, char *arg2, qboolean fRefereeCmd, int curr_setting, int vote_allow, int vote_type) {
-	// Nico, silent GCC
-	arg = arg;
-
+int G_voteProcessOnOff(gentity_t *ent, char *arg2, qboolean fRefereeCmd, int curr_setting, int vote_allow, int vote_type) {
 	if (!vote_allow && ent && !ent->client->sess.referee) {
 		G_voteDisableMessage(ent, aVoteInfo[vote_type].pszVoteName);
 		G_voteCurrentSetting(ent, aVoteInfo[vote_type].pszVoteName, ((curr_setting) ? ENABLED : DISABLED));
@@ -404,7 +401,7 @@ void *G_delayed_map_change_watcher(void *arg) {
 	int timeLeft = 0;
 
 	// Nico, silent GCC
-	arg = arg;
+	(void)arg;
 
 	while (!level.delayedMapChange.disabledWatcher) {
 		if (level.time && level.delayedMapChange.timeChange) {
@@ -424,7 +421,7 @@ void *G_delayed_map_change_watcher(void *arg) {
 					G_Error("%s: warning, threads waiting timeout reached (threads: %d)", GAME_VERSION, activeThreadsCounter);
 				}
 				G_DPrintf("%s: changing map now!\n", GAME_VERSION);
-				Svcmd_ResetMatch_f(qtrue, qfalse);
+				Svcmd_ResetMatch_f(qfalse);
 				trap_SendConsoleCommand(EXEC_APPEND, va("map %s\n", level.delayedMapChange.passedVote));
 				break;
 			} else {
@@ -501,7 +498,7 @@ int G_MapRestart_v(gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *ar
 		// Vote action (vote has passed)
 	} else {
 		// Restart the map back to warmup
-		Svcmd_ResetMatch_f(qfalse, qtrue);
+		Svcmd_ResetMatch_f(qtrue);
 		AP("cp \"^1*** Level Restarted! ***\n\"");
 	}
 
@@ -512,7 +509,7 @@ int G_MapRestart_v(gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *ar
 // *** Match Restart ***
 int G_MatchReset_v(gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd) {
 	// Nico, silent GCC
-	arg2 = arg2;
+	(void)arg2;
 
 	// Vote request (vote is being initiated)
 	if (arg) {
@@ -526,7 +523,7 @@ int G_MatchReset_v(gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *ar
 		// Vote action (vote has passed)
 	} else {
 		// Restart the map back to warmup
-		Svcmd_ResetMatch_f(qtrue, qtrue);
+		Svcmd_ResetMatch_f(qtrue);
 		AP("cp \"^1*** Match Reset! ***\n\"");
 	}
 
@@ -540,7 +537,7 @@ int G_Randommap_v(gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg
 	char *result = NULL;
 
 	// Nico, silent GCC
-	arg2 = arg2;
+	(void)arg2;
 
 	// Nico, check if API is used
 	if (!g_useAPI.integer) {
@@ -651,7 +648,7 @@ int G_StartMatch_v(gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *ar
 int G_AntiLag_v(gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd) {
 	// Vote request (vote is being initiated)
 	if (arg) {
-		return(G_voteProcessOnOff(ent, arg, arg2, fRefereeCmd,
+		return(G_voteProcessOnOff(ent, arg2, fRefereeCmd,
 		                          !!(g_antilag.integer),
 		                          vote_allow_antilag.integer,
 		                          dwVoteIndex));

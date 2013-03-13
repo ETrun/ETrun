@@ -915,7 +915,7 @@ void QDECL Com_Error(int level, const char *error, ...) {
 	char    text[1024];
 
 	// Nico, silent GCC
-	level = level;
+	(void)level;
 
 	va_start(argptr, error);
 	Q_vsnprintf(text, sizeof (text), error, argptr);

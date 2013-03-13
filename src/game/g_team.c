@@ -281,7 +281,7 @@ go to a random point that doesn't telefrag
 ================
 */
 #define MAX_TEAM_SPAWN_POINTS   256
-gentity_t *SelectRandomTeamSpawnPoint(int teamstate, team_t team, int spawnObjective) {
+gentity_t *SelectRandomTeamSpawnPoint(team_t team, int spawnObjective) {
 	gentity_t *spot;
 	gentity_t *spots[MAX_TEAM_SPAWN_POINTS];
 	int       count, closest;
@@ -290,9 +290,6 @@ gentity_t *SelectRandomTeamSpawnPoint(int teamstate, team_t team, int spawnObjec
 	float     shortest, tmp;
 	vec3_t    target;
 	vec3_t    farthest;
-
-	// Nico, silent GCC
-	teamstate = teamstate;
 
 	if (team == TEAM_AXIS) {
 		classname = "team_CTF_redspawn";
@@ -484,8 +481,8 @@ void CheckTeamStatus(void) {
 
 void Use_Team_Spawnpoint(gentity_t *ent, gentity_t *other, gentity_t *activator) {
 	// Nico, silent GCC
-	other     = other;
-	activator = activator;
+	(void)other;
+	(void)activator;
 
 	if (ent->spawnflags & 2) {
 		ent->spawnflags &= ~2;
@@ -614,8 +611,8 @@ void team_wolf_objective_use(gentity_t *self, gentity_t *other, gentity_t *activ
 	char cs[MAX_STRING_CHARS];
 
 	// Nico, silent GCC
-	other     = other;
-	activator = activator;
+	(void)other;
+	(void)activator;
 
 	// Gordon 256 is a disabled flag
 	if ((self->count2 & ~256) == TEAM_AXIS) {
@@ -713,7 +710,7 @@ void checkpoint_use(gentity_t *ent, gentity_t *other, gentity_t *activator) {
 	int time;
 
 	// Nico, silent GCC
-	other = other;
+	(void)other;
 
 	if (!activator->client) {
 		return;
@@ -816,7 +813,7 @@ void checkpoint_think(gentity_t *self) {
 
 void checkpoint_touch(gentity_t *self, gentity_t *other, trace_t *trace) {
 	// Nico, silent GCC
-	trace = trace;
+	(void)trace;
 
 	if (self->count == (int)other->client->sess.sessionTeam) {
 		return;
@@ -873,7 +870,7 @@ void checkpoint_spawntouch(gentity_t *self, gentity_t *other, trace_t *trace) {
 	qboolean  firsttime = qfalse;
 
 	// Nico, silent GCC
-	trace = trace;
+	(void)trace;
 
 	if (self->count == (int)other->client->sess.sessionTeam) {
 		return;
@@ -1067,10 +1064,7 @@ team_info teamInfo[TEAM_NUM_TEAMS];
 
 
 // Resets a team's settings
-void G_teamReset(int team_num, qboolean fClearSpecLock) {
-	// Nico, silent GCC
-	fClearSpecLock = fClearSpecLock;
-
+void G_teamReset(int team_num) {
 	teamInfo[team_num].team_lock    = qfalse;
 	teamInfo[team_num].team_name[0] = 0;
 	teamInfo[team_num].team_score   = 0;
@@ -1082,7 +1076,7 @@ qboolean G_teamJoinCheck(int team_num, gentity_t *ent) {
 
 	// Sanity check
 	if (cnt == 0) {
-		G_teamReset(team_num, qtrue);
+		G_teamReset(team_num);
 		teamInfo[team_num].team_lock = qfalse;
 	}
 

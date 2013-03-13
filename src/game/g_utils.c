@@ -750,7 +750,7 @@ void G_AnimScriptSound(int soundIndex, vec3_t org, int client) {
 	gentity_t *e;
 
 	// Nico, silent GCC
-	org = org;
+	(void)org;
 
 	e = &g_entities[client];
 	G_AddEvent(e, EV_GENERAL_SOUND, soundIndex);

@@ -117,16 +117,16 @@ qboolean _UI_IsFullscreen(void);
 
 Q_EXPORT int vmMain(int command, int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7, int arg8, int arg9, int arg10, int arg11) {
 	// Nico, silent GCC
-	arg2  = arg2;
-	arg3  = arg3;
-	arg4  = arg4;
-	arg5  = arg5;
-	arg6  = arg6;
-	arg7  = arg7;
-	arg8  = arg8;
-	arg9  = arg9;
-	arg10 = arg10;
-	arg11 = arg11;
+	(void)arg2;
+	(void)arg3;
+	(void)arg4;
+	(void)arg5;
+	(void)arg6;
+	(void)arg7;
+	(void)arg8;
+	(void)arg9;
+	(void)arg10;
+	(void)arg11;
 
 	switch (command) {
 	case UI_GETAPIVERSION:
@@ -1531,9 +1531,9 @@ static void UI_OwnerDraw(float x, float y, float w, float h, float text_x, float
 	rectDef_t rect;
 
 	// Nico, silent GCC
-	ownerDrawFlags = ownerDrawFlags;
-	special        = special;
-	shader         = shader;
+	(void)ownerDrawFlags;
+	(void)special;
+	(void)shader;
 
 	rect.x = x + text_x;
 	rect.y = y + text_y;
@@ -1811,8 +1811,8 @@ static qboolean UI_SelectedPlayer_HandleKey(int key) {
 
 static qboolean UI_OwnerDrawHandleKey(int ownerDraw, int flags, float *special, int key) {
 	// Nico, silent GCC
-	flags   = flags;
-	special = special;
+	(void)flags;
+	(void)special;
 
 	switch (ownerDraw) {
 	case UI_EFFECTS:

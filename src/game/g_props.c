@@ -119,7 +119,7 @@ void touch_props_box_32(gentity_t *self, gentity_t *other, trace_t *trace) {
 	vec3_t v;
 
 	// Nico, silent GCC
-	trace = trace;
+	(void)trace;
 
 	if (other->r.currentOrigin[2] > (self->r.currentOrigin[2] + 10 + 15)) {
 		return;
@@ -156,7 +156,7 @@ void touch_props_box_48(gentity_t *self, gentity_t *other, trace_t *trace) {
 	vec3_t v;
 
 	// Nico, silent GCC
-	trace = trace;
+	(void)trace;
 
 	if (other->r.currentOrigin[2] > (self->r.currentOrigin[2] + 10 + 23)) {
 		return;
@@ -193,7 +193,7 @@ void touch_props_box_64(gentity_t *self, gentity_t *other, trace_t *trace) {
 	vec3_t v;
 
 	// Nico, silent GCC
-	trace = trace;
+	(void)trace;
 
 	if (other->r.currentOrigin[2] > (self->r.currentOrigin[2] + 10 + 31)) {
 		return;
@@ -246,8 +246,8 @@ void PGUNsparks_use(gentity_t *ent, gentity_t *self, gentity_t *activator) {
 	gentity_t *tent;
 
 	// Nico, silent GCC
-	self      = self;
-	activator = activator;
+	(void)self;
+	(void)activator;
 
 	tent = G_TempEntity(ent->r.currentOrigin, EV_GUNSPARKS);
 	VectorCopy(ent->r.currentOrigin, tent->s.origin);
@@ -259,7 +259,7 @@ void PGUNsparks_use(gentity_t *ent, gentity_t *self, gentity_t *activator) {
 
 void Psparks_think(gentity_t *ent) {
 	// Nico, silent GCC
-	ent      = ent;
+	(void)ent;
 }
 
 void sparks_angles_think(gentity_t *ent) {
@@ -293,7 +293,6 @@ void sparks_angles_think(gentity_t *ent) {
 void SP_props_sparks(gentity_t *ent) {
 	// (SA) don't use in multiplayer right now since it makes decyphering net messages almost impossible
 	ent->think = G_FreeEntity;
-	return;
 }
 
 /*QUAKED props_gunsparks (.8 .46 .16) (-8 -8 -8) (8 8 8)
@@ -335,8 +334,8 @@ void smokedust_use(gentity_t *ent, gentity_t *self, gentity_t *activator) {
 	vec3_t    forward;
 
 	// Nico, silent GCC
-	self      = self;
-	activator = activator;
+	(void)self;
+	(void)activator;
 
 	AngleVectors(ent->r.currentAngles, forward, NULL, NULL);
 
@@ -375,8 +374,8 @@ void dust_use(gentity_t *ent, gentity_t *self, gentity_t *activator) {
 	vec3_t    forward;
 
 	// Nico, silent GCC
-	self      = self;
-	activator = activator;
+	(void)self;
+	(void)activator;
 
 	if (ent->target) {
 		tent = G_TempEntity(ent->r.currentOrigin, EV_DUST);
@@ -542,10 +541,10 @@ void props_bench_think(gentity_t *ent) {
 
 void props_bench_die(gentity_t *ent, gentity_t *inflictor, gentity_t *attacker, int damage, int mod) {
 	// Nico, silent GCC
-	inflictor = inflictor;
-	attacker  = attacker;
-	damage    = damage;
-	mod       = mod;
+	(void)inflictor;
+	(void)attacker;
+	(void)damage;
+	(void)mod;
 
 	ent->think     = props_bench_think;
 	ent->nextthink = level.time + FRAMETIME;
@@ -576,10 +575,10 @@ void SP_Props_Bench(gentity_t *ent) {
 
 void props_radio_die(gentity_t *ent, gentity_t *inflictor, gentity_t *attacker, int damage, int mod) {
 	// Nico, silent GCC
-	inflictor = inflictor;
-	attacker  = attacker;
-	damage    = damage;
-	mod       = mod;
+	(void)inflictor;
+	(void)attacker;
+	(void)damage;
+	(void)mod;
 
 	propExplosion(ent);
 
@@ -622,9 +621,9 @@ void props_radio_dieSEVEN(gentity_t *ent, gentity_t *inflictor, gentity_t *attac
 	int i;
 
 	// Nico, silent GCC
-	attacker = attacker;
-	damage   = damage;
-	mod      = mod;
+	(void)attacker;
+	(void)damage;
+	(void)mod;
 
 	propExplosion(ent);
 
@@ -696,10 +695,10 @@ void locker_tall_think(gentity_t *ent) {
 
 void props_locker_tall_die(gentity_t *ent, gentity_t *inflictor, gentity_t *attacker, int damage, int mod) {
 	// Nico, silent GCC
-	inflictor = inflictor;
-	attacker  = attacker;
-	damage    = damage;
-	mod       = mod;
+	(void)inflictor;
+	(void)attacker;
+	(void)damage;
+	(void)mod;
 
 	ent->think     = locker_tall_think;
 	ent->nextthink = level.time + FRAMETIME;
@@ -1078,7 +1077,7 @@ void Props_Chair_Touch(gentity_t *self, gentity_t *other, trace_t *trace) {
 	qboolean has_moved;
 
 	// Nico, silent GCC
-	trace = trace;
+	(void)trace;
 
 	if (!other->client) {
 		return;
@@ -1241,8 +1240,8 @@ void Props_Chair_Die(gentity_t *ent, gentity_t *inflictor, gentity_t *attacker, 
 	int type;
 
 	// Nico, silent GCC
-	attacker = attacker;
-	mod      = mod;
+	(void)attacker;
+	(void)mod;
 
 	ent->think     = Props_Chair_Animate;
 	ent->nextthink = level.time + FRAMETIME;
@@ -1502,8 +1501,8 @@ void Use_DamageInflictor(gentity_t *ent, gentity_t *other, gentity_t *activator)
 	gentity_t *daent;
 
 	// Nico, silent GCC
-	other     = other;
-	activator = activator;
+	(void)other;
+	(void)activator;
 
 	daent = NULL;
 	while ((daent = G_FindByTargetname(daent, daent->target)) != NULL) {
@@ -1598,10 +1597,9 @@ the default is in the middle of the barrel on the floor
 */
 void Props_Barrel_Touch(gentity_t *self, gentity_t *other, trace_t *trace) {
 	// Nico, silent GCC
-	self = self;
-	other = other;
-	trace = trace;
-	return; // barrels cant move
+	(void)self;
+	(void)other;
+	(void)trace;
 }
 
 void Props_Barrel_Animate(gentity_t *ent) {
@@ -1640,9 +1638,9 @@ void SP_OilSlick(gentity_t *ent) {
 
 void Props_Barrel_Pain(gentity_t *ent, gentity_t *attacker, int damage, vec3_t point) {
 	// Nico, silent GCC
-	attacker = attacker;
-	damage   = damage;
-	point    = point;
+	(void)attacker;
+	(void)damage;
+	(void)point;
 
 	if (ent->health <= 0) {
 		return;
@@ -1680,8 +1678,8 @@ void Props_Barrel_Die(gentity_t *ent, gentity_t *inflictor, gentity_t *attacker,
 	vec3_t dir;
 
 	// Nico, silent GCC
-	attacker = attacker;
-	mod      = mod;
+	(void)attacker;
+	(void)mod;
 
 	if (ent->spawnflags & 1) {
 		ent->s.eFlags = EF_SMOKINGBLACK;
@@ -1798,7 +1796,7 @@ void touch_crate_64(gentity_t *self, gentity_t *other, trace_t *trace) {
 	vec3_t v;
 
 	// Nico, silent GCC
-	trace = trace;
+	(void)trace;
 
 	if (other->r.currentOrigin[2] > (self->r.currentOrigin[2] + 10 + 31)) {
 		return;
@@ -1828,9 +1826,9 @@ void crate_die(gentity_t *ent, gentity_t *inflictor, gentity_t *attacker, int da
 	int type;
 
 	// Nico, silent GCC
-	attacker = attacker;
-	damage   = damage;
-	mod      = mod;
+	(void)attacker;
+	(void)damage;
+	(void)mod;
 
 	quantity = ent->wait;
 	type     = ent->count;
@@ -1953,10 +1951,10 @@ void props_crate32x64_think(gentity_t *ent) {
 
 void props_crate32x64_die(gentity_t *ent, gentity_t *inflictor, gentity_t *attacker, int damage, int mod) {
 	// Nico, silent GCC
-	inflictor = inflictor;
-	attacker  = attacker;
-	damage    = damage;
-	mod       = mod;
+	(void)inflictor;
+	(void)attacker;
+	(void)damage;
+	(void)mod;
 
 	ent->think     = props_crate32x64_think;
 	ent->nextthink = level.time + FRAMETIME;
@@ -1993,7 +1991,7 @@ void flippy_table_use(gentity_t *ent, gentity_t *other, gentity_t *activator) {
 	gentity_t *slave;
 
 	// Nico, silent GCC
-	activator = activator;
+	(void)activator;
 
 	// it would be odd to flip a table if your standing on it
 	if (other && other->s.groundEntityNum == ent->s.number) {
@@ -2175,10 +2173,10 @@ void props_58x112tablew_think(gentity_t *ent) {
 
 void props_58x112tablew_die(gentity_t *ent, gentity_t *inflictor, gentity_t *attacker, int damage, int mod) {
 	// Nico, silent GCC
-	inflictor = inflictor;
-	attacker  = attacker;
-	damage    = damage;
-	mod       = mod;
+	(void)inflictor;
+	(void)attacker;
+	(void)damage;
+	(void)mod;
 
 	ent->think      = props_58x112tablew_think;
 	ent->nextthink  = level.time + FRAMETIME;
@@ -2255,8 +2253,8 @@ void props_snowGenerator_think(gentity_t *ent) {
 
 void props_snowGenerator_use(gentity_t *ent, gentity_t *other, gentity_t *activator) {
 	// Nico, silent GCC
-	other     = other;
-	activator = activator;
+	(void)other;
+	(void)activator;
 
 	if (!(ent->spawnflags & 1)) {
 		ent->spawnflags |= 1;
@@ -2372,9 +2370,9 @@ void props_decoration_animate(gentity_t *ent) {
 
 void props_decoration_death(gentity_t *ent, gentity_t *inflictor, gentity_t *attacker, int damage, int mod) {
 	// Nico, silent GCC
-	attacker = attacker;
-	damage   = damage;
-	mod      = mod;
+	(void)attacker;
+	(void)damage;
+	(void)mod;
 
 	if (!(ent->spawnflags & 8)) {
 		ent->clipmask   = 0;
@@ -2403,8 +2401,8 @@ void props_decoration_death(gentity_t *ent, gentity_t *inflictor, gentity_t *att
 
 void Use_props_decoration(gentity_t *ent, gentity_t *self, gentity_t *activator) {
 	// Nico, silent GCC
-	self      = self;
-	activator = activator;
+	(void)self;
+	(void)activator;
 
 	if (ent->spawnflags & 1) {
 		trap_LinkEntity(ent);
@@ -2421,7 +2419,7 @@ void Use_props_decoration(gentity_t *ent, gentity_t *self, gentity_t *activator)
 
 void props_touch(gentity_t *self, gentity_t *other, trace_t *trace) {
 	// Nico, silent GCC
-	trace = trace;
+	(void)trace;
 
 	if (self->spawnflags & 16) {
 		props_decoration_death(self, other, other, 9999, MOD_CRUSH);
@@ -2784,9 +2782,9 @@ void props_statue_animate(gentity_t *ent) {
 
 void props_statue_death(gentity_t *ent, gentity_t *inflictor, gentity_t *attacker, int damage, int mod) {
 	// Nico, silent GCC
-	attacker = attacker;
-	damage   = damage;
-	mod      = mod;
+	(void)attacker;
+	(void)damage;
+	(void)mod;
 
 	ent->timestamp = level.time;
 
@@ -2819,7 +2817,7 @@ void props_statue_death(gentity_t *ent, gentity_t *inflictor, gentity_t *attacke
 
 void props_statue_touch(gentity_t *self, gentity_t *other, trace_t *trace) {
 	// Nico, silent GCC
-	trace = trace;
+	(void)trace;
 
 	props_statue_death(self, other, other, 9999, MOD_CRUSH);
 }
@@ -2991,8 +2989,8 @@ void props_locker_endrattle(gentity_t *ent) {
 
 void props_locker_use(gentity_t *ent, gentity_t *other, gentity_t *activator) {
 	// Nico, silent GCC
-	other     = other;
-	activator = activator;
+	(void)other;
+	(void)activator;
 
 	if (!ent->delay) {
 		ent->s.frame = 1;   // rattle when pain starts
@@ -3004,8 +3002,8 @@ void props_locker_use(gentity_t *ent, gentity_t *other, gentity_t *activator) {
 
 void props_locker_pain(gentity_t *ent, gentity_t *attacker, int damage, vec3_t point) {
 	// Nico, silent GCC
-	damage = damage;
-	point  = point;
+	(void)damage;
+	(void)point;
 
 	props_locker_use(ent, attacker, attacker);
 }
@@ -3098,10 +3096,10 @@ props_locker_death
 */
 void props_locker_death(gentity_t *ent, gentity_t *inflictor, gentity_t *attacker, int damage, int mod) {
 	// Nico, silent GCC
-	inflictor = inflictor;
-	attacker  = attacker;
-	damage    = damage;
-	mod       = mod;
+	(void)inflictor;
+	(void)attacker;
+	(void)damage;
+	(void)mod;
 
 	ent->takedamage = qfalse;
 	ent->s.frame    = 2; // opening animation
@@ -3260,8 +3258,8 @@ void props_flamethrower_use(gentity_t *ent, gentity_t *other, gentity_t *activat
 	int rnd;
 
 	// Nico, silent GCC
-	other     = other;
-	activator = activator;
+	(void)other;
+	(void)activator;
 
 	if (ent->spawnflags & 2) {
 		ent->spawnflags &= ~2;

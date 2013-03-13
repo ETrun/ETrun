@@ -42,7 +42,7 @@ vec3_t muzzleTrace;
 
 // forward dec
 void Bullet_Fire(gentity_t *ent, float spread, int damage, qboolean distance_falloff);
-qboolean Bullet_Fire_Extended(gentity_t *source, gentity_t *attacker, vec3_t start, vec3_t end, float spread, int damage, qboolean distance_falloff);
+qboolean Bullet_Fire_Extended(gentity_t *source, gentity_t *attacker, vec3_t start, vec3_t end, int damage, qboolean distance_falloff);
 
 int G_GetWeaponDamage(int weapon);   // JPW
 
@@ -1952,7 +1952,7 @@ void Bullet_Fire(gentity_t *ent, float spread, int damage, qboolean distance_fal
 
 	G_HistoricalTraceBegin(ent);
 
-	Bullet_Fire_Extended(ent, ent, muzzleTrace, end, spread, damage, distance_falloff);
+	Bullet_Fire_Extended(ent, ent, muzzleTrace, end, damage, distance_falloff);
 
 	G_HistoricalTraceEnd(ent);
 }
@@ -1967,15 +1967,12 @@ Bullet_Fire_Extended
     uses for this include shooting through entities (windows, doors, other players, etc.) and reflecting bullets
 ==============
 */
-qboolean Bullet_Fire_Extended(gentity_t *source, gentity_t *attacker, vec3_t start, vec3_t end, float spread, int damage, qboolean distance_falloff) {
+qboolean Bullet_Fire_Extended(gentity_t *source, gentity_t *attacker, vec3_t start, vec3_t end, int damage, qboolean distance_falloff) {
 	trace_t   tr;
 	gentity_t *tent;
 	gentity_t *traceEnt;
 	qboolean  hitClient = qfalse;
 	qboolean  waslinked = qfalse;
-
-	// Nico, silent GCC
-	spread = spread;
 
 	//bani - prevent shooting ourselves in the head when prone, firing through a breakable
 	if (g_entities[attacker->s.number].client && g_entities[attacker->s.number].r.linked == qtrue) {
@@ -2104,7 +2101,7 @@ qboolean Bullet_Fire_Extended(gentity_t *source, gentity_t *attacker, vec3_t sta
 			if (traceEnt->health <= damage) {
 				// start new bullet at position this hit the bmodel and continue to the end position (ignoring shot-through bmodel in next trace)
 				// spread = 0 as this is an extension of an already spread shot
-				return Bullet_Fire_Extended(traceEnt, attacker, tr.endpos, end, 0, damage, distance_falloff);
+				return Bullet_Fire_Extended(traceEnt, attacker, tr.endpos, end, damage, distance_falloff);
 			}
 		}
 	}

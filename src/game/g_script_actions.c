@@ -1066,7 +1066,7 @@ qboolean G_ScriptAction_Kill(gentity_t *ent, char *params) {
 		G_Error("G_Scripting: kill must have a target\n");
 	}
 
-	G_KillEnts(token, NULL, ent->enemy, ent->deathType);
+	G_KillEnts(token, NULL, ent->enemy);
 
 	return qtrue;
 }

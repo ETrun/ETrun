@@ -1143,7 +1143,7 @@ char *ClientConnect(int clientNum, qboolean firstTime) {
 
 	// read or initialize the session data
 	if (firstTime) {
-		G_InitSessionData(client, userinfo);
+		G_InitSessionData(client);
 		client->pers.enterTime            = level.time;
 		client->ps.persistant[PERS_SCORE] = 0;
 	} else {
@@ -1272,10 +1272,10 @@ void ClientBegin(int clientNum) {
  * Select a spawn point for a player
  * @author: Nico
  */
-static gentity_t *SelectPlayerSpawnPoint(team_t team, int teamstate, vec3_t origin, vec3_t angles, int spawnObjective) {
+static gentity_t *SelectPlayerSpawnPoint(team_t team, vec3_t origin, vec3_t angles, int spawnObjective) {
 	gentity_t *spot;
 
-	spot = SelectRandomTeamSpawnPoint(teamstate, team, spawnObjective);
+	spot = SelectRandomTeamSpawnPoint(team, spawnObjective);
 
 	if (!spot) {
 		return SelectSpawnPoint(vec3_origin, origin, angles);
@@ -1322,7 +1322,7 @@ void ClientSpawn(gentity_t *ent) {
 	if (client->sess.sessionTeam != TEAM_AXIS && client->sess.sessionTeam != TEAM_ALLIES) {
 		spawnPoint = SelectSpectatorSpawnPoint(spawn_origin, spawn_angles);
 	} else {
-		spawnPoint = SelectPlayerSpawnPoint(client->sess.sessionTeam, client->pers.teamState.state, spawn_origin, spawn_angles, client->sess.spawnObjectiveIndex);
+		spawnPoint = SelectPlayerSpawnPoint(client->sess.sessionTeam, spawn_origin, spawn_angles, client->sess.spawnObjectiveIndex);
 	}
 
 	client->pers.teamState.state = TEAM_ACTIVE;

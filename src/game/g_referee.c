@@ -107,8 +107,8 @@ void G_ref_cmd(gentity_t *ent, unsigned int dwCommand, qboolean fValue) {
 	char arg[MAX_TOKEN_CHARS];
 
 	// Nico, silent GCC
-	dwCommand = dwCommand;
-	fValue    = fValue;
+	(void)dwCommand;
+	(void)fValue;
 
 	// Roll through ref commands if already a ref
 	if (ent == NULL || ent->client->sess.referee) {

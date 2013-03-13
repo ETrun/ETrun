@@ -74,14 +74,14 @@ void multi_trigger(gentity_t *ent, gentity_t *activator) {
 
 void Use_Multi(gentity_t *ent, gentity_t *other, gentity_t *activator) {
 	// Nico, silent GCC
-	other = other;
+	(void)other;
 
 	multi_trigger(ent, activator);
 }
 
 void Touch_Multi(gentity_t *self, gentity_t *other, trace_t *trace) {
 	// Nico, silent GCC
-	trace = trace;
+	(void)trace;
 
 	if (!other->client) {
 		return;
@@ -213,7 +213,7 @@ trigger_push
 
 void trigger_push_touch(gentity_t *self, gentity_t *other, trace_t *trace) {
 	// Nico, silent GCC
-	trace = trace;
+	(void)trace;
 
 	// Nico, jumppads support
 	if (!(g_enableMapEntities.integer & MAP_JUMPPADS) || !other->client) {
@@ -288,7 +288,7 @@ void SP_trigger_push(gentity_t *self) {
 
 void Use_target_push(gentity_t *self, gentity_t *other, gentity_t *activator) {
 	// Nico, silent GCC
-	other = other;
+	(void)other;
 
 	if (!activator->client) {
 		return;
@@ -345,7 +345,7 @@ void trigger_teleporter_touch(gentity_t *self, gentity_t *other, trace_t *trace)
 	gentity_t *dest;
 
 	// Nico, silent GCC
-	trace = trace;
+	(void)trace;
 
 	if (!other->client) {
 		return;
@@ -413,7 +413,7 @@ void hurt_touch(gentity_t *self, gentity_t *other, trace_t *trace) {
 	int dflags;
 
 	// Nico, silent GCC
-	trace = trace;
+	(void)trace;
 
 	if (!other->takedamage) {
 		return;
@@ -459,8 +459,8 @@ void hurt_think(gentity_t *ent) {
 
 void hurt_use(gentity_t *self, gentity_t *other, gentity_t *activator) {
 	// Nico, silent GCC
-	other     = other;
-	activator = activator;
+	(void)other;
+	(void)activator;
 
 	if (self->touch) {
 		self->touch = NULL;
@@ -551,7 +551,7 @@ void heal_touch(gentity_t *self, gentity_t *other, trace_t *trace) {
 	int       healvalue;
 
 	// Nico, silent GCC
-	trace = trace;
+	(void)trace;
 
 	memset(touchClients, 0, sizeof (touchClients));
 
@@ -721,7 +721,7 @@ void ammo_touch(gentity_t *self, gentity_t *other, trace_t *trace) {
 	gentity_t *touchClients[MAX_CLIENTS];
 
 	// Nico, silent GCC
-	trace = trace;
+	(void)trace;
 
 	memset(touchClients, 0, sizeof (touchClients));
 
@@ -864,7 +864,7 @@ void func_timer_think(gentity_t *self) {
 
 void func_timer_use(gentity_t *self, gentity_t *other, gentity_t *activator) {
 	// Nico, silent GCC
-	other = other;
+	(void)other;
 
 	self->activator = activator;
 
@@ -924,7 +924,7 @@ void SP_trigger_once(gentity_t *ent) {
 */
 void SP_gas(gentity_t *self) {
 	// Nico, silent GCC
-	self = self;
+	(void)self;
 }
 
 
@@ -937,7 +937,7 @@ void Touch_flagonly(gentity_t *ent, gentity_t *other, trace_t *trace) {
 	gentity_t *tmp;
 
 	// Nico, silent GCC
-	trace = trace;
+	(void)trace;
 
 	if (!other->client) {
 		return;
@@ -991,7 +991,7 @@ void Touch_flagonly_multiple(gentity_t *ent, gentity_t *other, trace_t *trace) {
 	gentity_t *tmp;
 
 	// Nico, silent GCC
-	trace = trace;
+	(void)trace;
 
 	if (!other->client) {
 		return;
@@ -1183,7 +1183,7 @@ void G_SetConfigStringValue(int num, const char *key, const char *value) {
 
 void Touch_ObjectiveInfo(gentity_t *ent, gentity_t *other, trace_t *trace) {
 	// Nico, silent GCC
-	trace = trace;
+	(void)trace;
 
 	if (!other->client) {
 		return;
@@ -1450,11 +1450,9 @@ void SP_trigger_objective_info(gentity_t *ent) {
 // JPW NERVE -- field which is acted upon (cgame side) by screenshakes to drop dust particles
 void trigger_concussive_touch(gentity_t *ent, gentity_t *other, trace_t *trace) {
 	// Nico, silent GCC
-	ent = ent;
-	other = other;
-	trace = trace;
-
-	return;
+	(void)ent;
+	(void)other;
+	(void)trace;
 }
 
 /*QUAKED trigger_concussive_dust (.5 .5 .5) ?
@@ -1475,7 +1473,7 @@ void SP_trigger_concussive_dust(gentity_t *self) {
 
 void trigger_push_velocity_touch(gentity_t *self, gentity_t *other, trace_t *trace) {
 	// Nico, silent GCC
-	trace = trace;
+	(void)trace;
 
 	// Nico, jumppads support
 	if (!(g_enableMapEntities.integer & MAP_VELOCITY_JUMPPADS) || !other->client) {

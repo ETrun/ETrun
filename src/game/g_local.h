@@ -1345,7 +1345,7 @@ void Svcmd_GameMem_f(void);
 // g_session.c
 //
 void G_ReadSessionData(gclient_t *client);
-void G_InitSessionData(gclient_t *client, char *userinfo);
+void G_InitSessionData(gclient_t *client);
 
 void G_InitWorldSession(void);
 void G_WriteSessionData(qboolean restart);
@@ -1556,7 +1556,6 @@ void    trap_SetBrushModel(gentity_t *ent, const char *name);
 void    trap_Trace(trace_t *results, const vec3_t start, const vec3_t mins, const vec3_t maxs, const vec3_t end, int passEntityNum, int contentmask);
 void    trap_TraceCapsule(trace_t *results, const vec3_t start, const vec3_t mins, const vec3_t maxs, const vec3_t end, int passEntityNum, int contentmask);
 void    trap_TraceCapsuleNoEnts(trace_t *results, const vec3_t start, const vec3_t mins, const vec3_t maxs, const vec3_t end, int passEntityNum, int contentmask);
-void    trap_TraceNoEnts(trace_t *results, const vec3_t start, const vec3_t mins, const vec3_t maxs, const vec3_t end, int passEntityNum, int contentmask);
 int     trap_PointContents(const vec3_t point, int passEntityNum);
 qboolean trap_InPVS(const vec3_t p1, const vec3_t p2);
 qboolean trap_InPVSIgnorePortals(const vec3_t p1, const vec3_t p2);
@@ -1582,7 +1581,7 @@ void        trap_SendMessage(int clientNum, char *buf, int buflen);
 messageStatus_t trap_MessageStatus(int clientNum);
 
 void G_ExplodeMissile(gentity_t *ent);
-void Svcmd_ResetMatch_f(qboolean fDoReset, qboolean fDoRestart);
+void Svcmd_ResetMatch_f(qboolean fDoRestart);
 
 // g_antilag.c
 void G_StoreClientPosition(gentity_t *ent);
@@ -1836,7 +1835,7 @@ extern team_info teamInfo[TEAM_NUM_TEAMS];
 qboolean G_AllowFollow(gentity_t *ent, gentity_t *other);
 qboolean G_DesiredFollow(gentity_t *ent, gentity_t *other);
 qboolean G_teamJoinCheck(int team_num, gentity_t *ent);
-void G_teamReset(int team_num, qboolean fClearSpecLock);
+void G_teamReset(int team_num);
 
 
 ///////////////////////
@@ -1866,7 +1865,7 @@ int EntsThatRadiusCanDamage(vec3_t origin, float radius, int *damagedList);
 gentity_t *G_FindSmokeBomb(gentity_t *start);
 gentity_t *G_FindDynamite(gentity_t *start);
 void G_SetTargetName(gentity_t *ent, char *targetname);
-void G_KillEnts(const char *target, gentity_t *ignore, gentity_t *killer, meansOfDeath_t mod);
+void G_KillEnts(const char *target, gentity_t *ignore, gentity_t *killer);
 void trap_EngineerTrace(trace_t *results, const vec3_t start, const vec3_t mins, const vec3_t maxs, const vec3_t end, int passEntityNum, int contentmask);
 
 qboolean G_ConstructionIsPartlyBuilt(gentity_t *ent);

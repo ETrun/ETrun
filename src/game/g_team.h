@@ -44,7 +44,7 @@ If you have questions concerning this license or the applicable additional terms
 // Prototypes
 const char *TeamName(int team);
 void Team_DroppedFlagThink(gentity_t *ent);
-gentity_t *SelectRandomTeamSpawnPoint(int teamstate, team_t team, int spawnObjective);
+gentity_t *SelectRandomTeamSpawnPoint(team_t team, int spawnObjective);
 void Team_ReturnFlag(gentity_t *ent);
 void TeamplayInfoMessage(team_t team);
 void CheckTeamStatus(void);

@@ -938,10 +938,10 @@ void script_linkentity(gentity_t *ent) {
 
 void script_mover_die(gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int damage, int mod) {
 	// Nico, silent GCC
-	inflictor = inflictor;
-	attacker  = attacker;
-	damage    = damage;
-	mod       = mod;
+	(void)inflictor;
+	(void)attacker;
+	(void)damage;
+	(void)mod;
 
 	G_Script_ScriptEvent(self, "death", "");
 
@@ -1018,8 +1018,8 @@ void script_mover_spawn(gentity_t *ent) {
 
 void script_mover_use(gentity_t *ent, gentity_t *other, gentity_t *activator) {
 	// Nico, silent GCC
-	other     = other;
-	activator = activator;
+	(void)other;
+	(void)activator;
 
 	if (ent->spawnflags & 8) {
 		if (ent->count) {
@@ -1212,8 +1212,8 @@ void script_model_med_spawn(gentity_t *ent) {
 
 void script_model_med_use(gentity_t *ent, gentity_t *other, gentity_t *activator) {
 	// Nico, silent GCC
-	other     = other;
-	activator = activator;
+	(void)other;
+	(void)activator;
 
 	script_model_med_spawn(ent);
 }

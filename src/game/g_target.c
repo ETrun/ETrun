@@ -46,7 +46,7 @@ void Use_Target_Give(gentity_t *ent, gentity_t *other, gentity_t *activator) {
 	trace_t   trace;
 
 	// Nico, silent GCC
-	other = other;
+	(void)other;
 
 	if (!activator->client) {
 		return;
@@ -83,8 +83,8 @@ Used to drop flight powerups into death puts.
 */
 void Use_target_remove_powerups(gentity_t *ent, gentity_t *other, gentity_t *activator) {
 	// Nico, silent GCC
-	ent   = ent;
-	other = other;
+	(void)ent;
+	(void)other;
 
 	if (!activator->client) {
 		return;
@@ -114,7 +114,7 @@ void Think_Target_Delay(gentity_t *ent) {
 
 void Use_Target_Delay(gentity_t *ent, gentity_t *other, gentity_t *activator) {
 	// Nico, silent GCC
-	other = other;
+	(void)other;
 
 	ent->nextthink = level.time + (ent->wait + ent->random * crandom()) * 1000;
 	ent->think     = Think_Target_Delay;
@@ -143,9 +143,9 @@ The activator is given this many points.
 */
 void Use_Target_Score(gentity_t *ent, gentity_t *other, gentity_t *activator) {
 	// Nico, silent GCC
-	ent       = ent;
-	other     = other;
-	activator = activator;
+	(void)ent;
+	(void)other;
+	(void)activator;
 }
 
 void SP_target_score(gentity_t *ent) {
@@ -165,7 +165,7 @@ If "private", only the activator gets the message.  If no checks, all clients ge
 */
 void Use_Target_Print(gentity_t *ent, gentity_t *other, gentity_t *activator) {
 	// Nico, silent GCC
-	other = other;
+	(void)other;
 
 	if ((ent->spawnflags & 4)) {
 		if (!activator) {
@@ -215,7 +215,7 @@ NO_PVS - this sound will not turn off when not in the player's PVS
 */
 void Use_Target_Speaker(gentity_t *ent, gentity_t *other, gentity_t *activator) {
 	// Nico, silent GCC
-	other = other;
+	(void)other;
 
 	if (ent->spawnflags & 3) {    // looping sound toggles
 		if (ent->s.loopSound) {
@@ -506,7 +506,7 @@ void target_laser_off(gentity_t *self) {
 
 void target_laser_use(gentity_t *self, gentity_t *other, gentity_t *activator) {
 	// Nico, silent GCC
-	other = other;
+	(void)other;
 
 	self->activator = activator;
 	if (self->nextthink > 0) {
@@ -564,7 +564,7 @@ void target_teleporter_use(gentity_t *self, gentity_t *other, gentity_t *activat
 	gentity_t *dest;
 
 	// Nico, silent GCC
-	other = other;
+	(void)other;
 
 	if (!activator->client) {
 		return;
@@ -606,7 +606,7 @@ NO_LOCKED_NOISE specifies that it will be silent if activated without proper key
 */
 void target_relay_use(gentity_t *self, gentity_t *other, gentity_t *activator) {
 	// Nico, silent GCC
-	other = other;
+	(void)other;
 
 	if ((self->spawnflags & 1) && activator && activator->client
 	    && activator->client->sess.sessionTeam != TEAM_AXIS) {
@@ -671,11 +671,8 @@ If targets, they will be killed when this is fired
 "kill_user_too" will still kill the activator when this ent has targets (default is only kill targets, not activator)
 */
 
-void G_KillEnts(const char *target, gentity_t *ignore, gentity_t *killer, meansOfDeath_t mod) {
+void G_KillEnts(const char *target, gentity_t *ignore, gentity_t *killer) {
 	gentity_t *targ = NULL;
-
-	// Nico, silent GCC
-	mod = mod;
 
 	while ((targ = G_FindByTargetname(targ, target)) != NULL) {
 
@@ -708,14 +705,14 @@ void G_KillEnts(const char *target, gentity_t *ignore, gentity_t *killer, meansO
 
 void target_kill_use(gentity_t *self, gentity_t *other, gentity_t *activator) {
 	// Nico, silent GCC
-	other = other;
+	(void)other;
 
 	// Nico, if kill triggers are enabled, kill activator (=player) too
 	if (g_enableMapEntities.integer & MAP_KILL_ENTITIES || self->spawnflags & 1) {  // kill usertoo
 		G_Damage(activator, NULL, NULL, NULL, NULL, 100000, DAMAGE_NO_PROTECTION, MOD_TELEFRAG);
 	}
 
-	G_KillEnts(self->target, activator, self, MOD_UNKNOWN);
+	G_KillEnts(self->target, activator, self);
 }
 
 void SP_target_kill(gentity_t *self) {
@@ -754,7 +751,7 @@ Use_Target_Counter
 */
 void Use_Target_Counter(gentity_t *ent, gentity_t *other, gentity_t *activator) {
 	// Nico, silent GCC
-	activator = activator;
+	(void)activator;
 
 	if (ent->count < 0) {   // if the count has already been hit, ignore this
 		return;
@@ -776,13 +773,12 @@ void Use_Target_Lock(gentity_t *ent, gentity_t *other, gentity_t *activator) {
 	gentity_t *t = 0;
 
 	// Nico, silent GCC
-	other     = other;
-	activator = activator;
+	(void)other;
+	(void)activator;
 
 	while ((t = G_Find(t, FOFS(targetname), ent->target)) != NULL) {
 		t->key = ent->key;
 	}
-
 }
 
 //==========================================================
@@ -794,8 +790,8 @@ Use_target_fog
 */
 void Use_target_fog(gentity_t *ent, gentity_t *other, gentity_t *activator) {
 	// Nico, silent GCC
-	other     = other;
-	activator = activator;
+	(void)other;
+	(void)activator;
 
 //	CS_FOGVARS reads:
 //		near
@@ -871,7 +867,7 @@ void SP_target_lock(gentity_t *ent) {
 
 void Use_Target_Alarm(gentity_t *ent, gentity_t *other, gentity_t *activator) {
 	// Nico, silent GCC
-	activator = activator;
+	(void)activator;
 
 	G_UseTargets(ent, other);
 }
@@ -915,8 +911,8 @@ void smoke_think(gentity_t *ent) {
 
 void smoke_toggle(gentity_t *ent, gentity_t *self, gentity_t *activator) {
 	// Nico, silent GCC
-	self      = self;
-	activator = activator;
+	(void)self;
+	(void)activator;
 
 	if (ent->spawnflags & 4) {   // smoke is on turn it off
 		ent->spawnflags &= ~4;
@@ -1039,7 +1035,7 @@ void target_script_trigger_use(gentity_t *ent, gentity_t *other, gentity_t *acti
 	gentity_t *trent = NULL;
 
 	// Nico, silent GCC
-	activator = activator;
+	(void)activator;
 
 	// Are we using ainame to find another ent instead of using scriptname for this one?
 	if (ent->aiName) {
@@ -1153,8 +1149,8 @@ void target_rumble_think(gentity_t *ent) {
 
 void target_rumble_use(gentity_t *ent, gentity_t *other, gentity_t *activator) {
 	// Nico, silent GCC
-	other     = other;
-	activator = activator;
+	(void)other;
+	(void)activator;
 
 	if (ent->spawnflags & 1) {
 		ent->spawnflags &= ~1;
@@ -1298,7 +1294,7 @@ void target_starttimer_use(gentity_t *self, gentity_t *other, gentity_t *activat
 	int       i       = 0;
 
 	// Nico, silent GCC
-	other = other;
+	(void)other;
 
 	if (client->sess.timerunActive) {
 		return;
@@ -1513,7 +1509,7 @@ void target_stoptimer_use(gentity_t *self, gentity_t *other, gentity_t *activato
 	int       timerunNum;
 
 	// Nico, silent GCC
-	other = other;
+	(void)other;
 
 	if (!client->sess.timerunActive) {
 		return;
@@ -1652,7 +1648,7 @@ void target_checkpoint_use(gentity_t *self, gentity_t *other, gentity_t *activat
 	int       status     = 0;
 
 	// Nico, silent GCC
-	other = other;
+	(void)other;
 
 	if (!client->sess.timerunActive) {
 		return;
@@ -1730,7 +1726,7 @@ void SP_rocketrun(gentity_t *ent) {
 	int count;
 
 	// Nico, silent GCC
-	ent = ent;
+	(void)ent;
 
 	// Don't add if already added from one?
 	if (!level.rocketRun) {
