@@ -82,62 +82,47 @@ static void CG_ItemPickup(int itemNum) {
 	CG_AddPMItem(PM_MESSAGE, va("Picked up %s", CG_PickupItemText(itemNum)), cgs.media.pmImages[PM_MESSAGE]);
 
 	// see if it should be the grabbed weapon
-	if (bg_itemlist[itemNum].giType == IT_WEAPON) {
+	if (bg_itemlist[itemNum].giType == IT_WEAPON &&
+		cg_autoswitch.integer && cg.predictedPlayerState.weaponstate != WEAPON_RELOADING &&
+		itemid != WP_FG42SCOPE && itemid != WP_GARAND_SCOPE && itemid != WP_K43_SCOPE && itemid != WP_AMMO) {     //----(SA)	modified
+		//	0 - "Off"
+		//	1 - "Always Switch"
+		//	2 - "If New"
+		//	3 - "If Better"
+		//	4 - "New or Better"
 
-		if (cg_autoswitch.integer && cg.predictedPlayerState.weaponstate != WEAPON_RELOADING) {
+		// don't ever autoswitch to secondary fire weapons
+		// Gordon: Leave autoswitch to secondary kar/carbine as they use alt ammo and arent zoomed: Note, not that it would do this anyway as it isnt in a bank....
+		// no weap currently selected, always just select the new one
+		if (!cg.weaponSelect) {
+			cg.weaponSelectTime = cg.time;
+			cg.weaponSelect     = itemid;
+		}
+		// 1 - always switch to new weap (Q3A default)
+		else if (cg_autoswitch.integer == 1) {
+			cg.weaponSelectTime = cg.time;
+			cg.weaponSelect     = itemid;
+		} else {
+			// 2 - switch to weap if it's not already in the player's inventory (Wolf default)
+			// 4 - both 2 and 3
 
-			//	0 - "Off"
-			//	1 - "Always Switch"
-			//	2 - "If New"
-			//	3 - "If Better"
-			//	4 - "New or Better"
+			// FIXME:	this works fine for predicted pickups (when you walk over the weapon), but not for
+			//			manual pickups (activate item)
+			if ((cg_autoswitch.integer == 2 || cg_autoswitch.integer == 4) && !COM_BitCheck(cg.snap->ps.weapons, itemid)) {
+				cg.weaponSelectTime = cg.time;
+				cg.weaponSelect     = itemid;
+			}   // end 2
 
-			// don't ever autoswitch to secondary fire weapons
-			// Gordon: Leave autoswitch to secondary kar/carbine as they use alt ammo and arent zoomed: Note, not that it would do this anyway as it isnt in a bank....
-			if (itemid != WP_FG42SCOPE && itemid != WP_GARAND_SCOPE && itemid != WP_K43_SCOPE && itemid != WP_AMMO) {     //----(SA)	modified
-				// no weap currently selected, always just select the new one
-				if (!cg.weaponSelect) {
+			// 3 - switch to weap if it's in a bank greater than the current weap
+			// 4 - both 2 and 3
+			if ((cg_autoswitch.integer == 3 || cg_autoswitch.integer == 4) &&
+				CG_WeaponIndex(cg.weaponSelect, &wpbank_cur, NULL) &&
+				CG_WeaponIndex(itemid, &wpbank_pickup, NULL) &&
+				wpbank_pickup > wpbank_cur) {
 					cg.weaponSelectTime = cg.time;
 					cg.weaponSelect     = itemid;
-				}
-				// 1 - always switch to new weap (Q3A default)
-				else if (cg_autoswitch.integer == 1) {
-					cg.weaponSelectTime = cg.time;
-					cg.weaponSelect     = itemid;
-				} else {
-
-					// 2 - switch to weap if it's not already in the player's inventory (Wolf default)
-					// 4 - both 2 and 3
-
-					// FIXME:	this works fine for predicted pickups (when you walk over the weapon), but not for
-					//			manual pickups (activate item)
-					if (cg_autoswitch.integer == 2 || cg_autoswitch.integer == 4) {
-						if (!COM_BitCheck(cg.snap->ps.weapons, itemid)) {
-							cg.weaponSelectTime = cg.time;
-							cg.weaponSelect     = itemid;
-						}
-					}   // end 2
-
-					// 3 - switch to weap if it's in a bank greater than the current weap
-					// 4 - both 2 and 3
-					if (cg_autoswitch.integer == 3 || cg_autoswitch.integer == 4) {
-						// switch away only if a primary weapon is selected (read: don't switch away if current weap is a secondary mode)
-						if (CG_WeaponIndex(cg.weaponSelect, &wpbank_cur, NULL)) {
-							if (CG_WeaponIndex(itemid, &wpbank_pickup, NULL)) {
-								if (wpbank_pickup > wpbank_cur) {
-									cg.weaponSelectTime = cg.time;
-									cg.weaponSelect     = itemid;
-								}
-							}
-						}
-					}   // end 3
-
-				}   // end cg_autoswitch.integer != 1
-
-			}
-
-		}   // end cg_autoswitch.integer
-
+			}   // end 3
+		}   // end cg_autoswitch.integer != 1
 	}   // end bg_itemlist[itemNum].giType == IT_WEAPON
 }
 
@@ -223,12 +208,10 @@ void CG_Explode(centity_t *cent, vec3_t origin, vec3_t dir, qhandle_t shader) {
 
 	// inherit shader
 	// (SA) FIXME: do this at spawn time rather than explode time so any new necessary shaders are created earlier
-	if (cent->currentState.eFlags & EF_INHERITSHADER) {
-		if (!shader) {
-			inheritmodel = cgs.inlineDrawModel[cent->currentState.modelindex];  // okay, this should be better.
-			if (inheritmodel) {
-				shader = trap_R_GetShaderFromModel(inheritmodel, 0, 0);
-			}
+	if (cent->currentState.eFlags & EF_INHERITSHADER && !shader) {
+		inheritmodel = cgs.inlineDrawModel[cent->currentState.modelindex];  // okay, this should be better.
+		if (inheritmodel) {
+			shader = trap_R_GetShaderFromModel(inheritmodel, 0, 0);
 		}
 	}
 
@@ -284,12 +267,10 @@ void CG_Rubble(centity_t *cent, vec3_t origin, vec3_t dir, qhandle_t shader) {
 
 	// inherit shader
 	// (SA) FIXME: do this at spawn time rather than explode time so any new necessary shaders are created earlier
-	if (cent->currentState.eFlags & EF_INHERITSHADER) {
-		if (!shader) {
-			inheritmodel = cgs.inlineDrawModel[cent->currentState.modelindex];  // okay, this should be better.
-			if (inheritmodel) {
-				shader = trap_R_GetShaderFromModel(inheritmodel, 0, 0);
-			}
+	if (cent->currentState.eFlags & EF_INHERITSHADER && !shader) {
+		inheritmodel = cgs.inlineDrawModel[cent->currentState.modelindex];  // okay, this should be better.
+		if (inheritmodel) {
+			shader = trap_R_GetShaderFromModel(inheritmodel, 0, 0);
 		}
 	}
 
@@ -1835,8 +1816,7 @@ void CG_EntityEvent(centity_t *cent, vec3_t position) {
 	case EV_MISSILE_MISS_LARGE:
 		DEBUGNAME("EV_MISSILE_MISS_LARGE");
 		ByteToDir(es->eventParm, dir);
-		if (es->weapon == WP_ARTY || es->weapon == WP_SMOKE_MARKER) {
-		} else {
+		if (es->weapon != WP_ARTY && es->weapon != WP_SMOKE_MARKER) {
 			CG_MissileHitWall(VERYBIGEXPLOSION, 0, position, dir, 0);    // (SA) modified to send missilehitwall surface parameters
 		}
 		break;

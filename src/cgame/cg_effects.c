@@ -179,11 +179,9 @@ qhandle_t getTestShader(void) {
 	switch (rand() % 2) {
 	case 0:
 		return cgs.media.nerveTestShader;
-		break;
-	case 1:
+
 	default:
 		return cgs.media.idTestShader;
-		break;
 	}
 }
 
@@ -405,10 +403,8 @@ void CG_Spotlight(centity_t *cent, float *color, vec3_t realstart, vec3_t lightD
 	}
 
 
-	if (flags & SL_LOCKUV) {
-		if (beamLen < range) {
-			endAlpha = 255.0f * (color[3] - (color[3] * beamLen / range));
-		}
+	if (flags & SL_LOCKUV && beamLen < range) {
+		endAlpha = 255.0f * (color[3] - (color[3] * beamLen / range));
 	}
 
 
@@ -551,28 +547,22 @@ void CG_Spotlight(centity_t *cent, float *color, vec3_t realstart, vec3_t lightD
 
 	trap_R_AddPolysToScene(cgs.media.spotLightBeamShader, 4, &verts[0], segs);
 
-
 	// plug up the start circle
 	if (capStart) {
 		trap_R_AddPolyToScene(cgs.media.spotLightBeamShader, segs, &plugVerts[0]);
 	}
 
-
 	// show the endpoint
 
-	if (!(flags & SL_NOIMPACT)) {
-		if (hitDist) {
-			VectorMA(startvec, hitDist, conevec, endvec);
+	if (!(flags & SL_NOIMPACT) && hitDist) {
+		VectorMA(startvec, hitDist, conevec, endvec);
 
-			radius = coreEndRadius * (hitDist / beamLen);
+		radius = coreEndRadius * (hitDist / beamLen);
 
-			VectorCopy(lightDir, projection);
-			projection[3] = radius * 2.0f;
-			CG_ImpactMark(cgs.media.spotLightShader, tr.endpos, projection, radius, colorNorm[0], colorNorm[1], colorNorm[2], 1.0f, 1.0f, -1);
-		}
+		VectorCopy(lightDir, projection);
+		projection[3] = radius * 2.0f;
+		CG_ImpactMark(cgs.media.spotLightShader, tr.endpos, projection, radius, colorNorm[0], colorNorm[1], colorNorm[2], 1.0f, 1.0f, -1);
 	}
-
-
 
 	// add d light at end
 	if (!(flags & SL_NODLIGHT)) {
@@ -580,8 +570,6 @@ void CG_Spotlight(centity_t *cent, float *color, vec3_t realstart, vec3_t lightD
 		VectorMA(tr.endpos, 0, lightDir, dlightLoc);      // back away from the hit
 		trap_R_AddLightToScene(dlightLoc, radius * 2, 0.3, 1.0, 1.0, 1.0, 0, 0);
 	}
-
-
 
 	// draw flare at source
 	if (!(flags & SL_NOFLARE)) {
@@ -815,9 +803,8 @@ qboolean CG_SpawnSmokeSprite(centity_t *cent, float dist) {
 		if (!CG_SmokeSpritePhysics(smokesprite, dist)) {
 			DeAllocSmokeSprite(smokesprite);
 			return(qfalse);
-		} else {
-			cent->miscTime++;
 		}
+		cent->miscTime++;
 	}
 
 	return(qtrue);
@@ -889,18 +876,15 @@ void CG_RenderSmokeGrenadeSmoke(centity_t *cent, const weaponInfo_t *weapon) {
 				}
 			}
 		}
-	} else if (cent->currentState.effect1Time == -1) {
+	} else if (cent->currentState.effect1Time == -1 && cent->miscTime > 0) {
 		// unlink smokesprites from smokebomb
-		if (cent->miscTime > 0) {
-			smokesprite = lastusedsmokesprite;
-			while (smokesprite) {
-				if (smokesprite->smokebomb == cent) {
-					smokesprite->smokebomb = NULL;
-					cent->miscTime--;
-				}
-
-				smokesprite = smokesprite->prev;
+		smokesprite = lastusedsmokesprite;
+		while (smokesprite) {
+			if (smokesprite->smokebomb == cent) {
+				smokesprite->smokebomb = NULL;
+				cent->miscTime--;
 			}
+			smokesprite = smokesprite->prev;
 		}
 	}
 }

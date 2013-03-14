@@ -113,7 +113,7 @@ void CG_FilledBar(float x, float y, float w, float h, float *startColor, float *
 	}
 
 	// background
-	if ((flags & BAR_BG)) {
+	if (flags & BAR_BG) {
 		// draw background at full size and shrink the remaining box to fit inside with a border.  (alternate border may be specified by a BAR_BGSPACING_xx)
 		CG_FillRect(x,
 		            y,
@@ -121,13 +121,12 @@ void CG_FilledBar(float x, float y, float w, float h, float *startColor, float *
 		            h,
 		            backgroundcolor);
 
-		if (flags & BAR_BGSPACING_X0Y0) {            // fill the whole box (no border)
-		} else if (flags & BAR_BGSPACING_X0Y5) {       // spacing created for weapon heat
+		if (!(flags & BAR_BGSPACING_X0Y0) && flags & BAR_BGSPACING_X0Y5) {       // spacing created for weapon heat
 			indent *= 3;
 			y      += indent;
 			h      -= (2 * indent);
 
-		} else {                                  // default spacing of 2 units on each side
+		} else if (!(flags & BAR_BGSPACING_X0Y0)) {                                  // default spacing of 2 units on each side
 			x += indent;
 			y += indent;
 			w -= (2 * indent);
