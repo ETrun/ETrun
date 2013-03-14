@@ -139,13 +139,10 @@ int CG_SoundPickOldestRandomSound(soundScript_t *sound, vec3_t org, int entnum) 
 			}
 			trap_S_StartSound(org, entnum, sound->channel, oldestSound->sounds[pos].sfxHandle);
 			return trap_S_GetSoundLength(oldestSound->sounds[pos].sfxHandle);
-		} else {
-			return trap_S_StartStreamingSound(oldestSound->sounds[pos].filename, sound->looping ? oldestSound->sounds[pos].filename : NULL, entnum, sound->channel, sound->attenuation);
 		}
-		oldestSound->lastPlayed = cg.time;
-	} else {
-		CG_Error("Unable to locate a valid sound for soundScript: %s\n", sound->name);
+		return trap_S_StartStreamingSound(oldestSound->sounds[pos].filename, sound->looping ? oldestSound->sounds[pos].filename : NULL, entnum, sound->channel, sound->attenuation);
 	}
+	CG_Error("Unable to locate a valid sound for soundScript: %s\n", sound->name);
 
 	return 0;
 }
@@ -209,11 +206,9 @@ int CG_SoundPlaySoundScript(const char *name, vec3_t org, int entnum, qboolean b
 			if (buffer) {
 				CG_AddBufferedSoundScript(sound);
 				return 1;
-
-			} else {
-				// found a match, pick the oldest sound
-				return CG_SoundPickOldestRandomSound(sound, org, entnum);
 			}
+			// found a match, pick the oldest sound
+			return CG_SoundPickOldestRandomSound(sound, org, entnum);
 		}
 		sound = sound->nextHash;
 	}
@@ -1147,37 +1142,30 @@ qboolean CG_SpeakerEditor_NoiseEdit_KeyDown(panel_button_t *button, int key) {
 						Q_strncpyz(match, fileptr, sizeof (match));
 						continue;
 					}
-
-					/*if( strlen(fileptr) < strlen(match) ) {
-					    Q_strncpyz( match, fileptr, sizeof(match) );
-					    noiseMatchIndex++;
-					    continue;
-					}*/
 				}
 			} else {
 				if (noiseMatchCount == 1) {
 					return qtrue;
-				} else {
-					int findMatchIndex = 0;
+				}
+				int findMatchIndex = 0;
 
-					noiseMatchIndex++;
-					if (noiseMatchIndex == noiseMatchCount) {
-						noiseMatchIndex = 0;
+				noiseMatchIndex++;
+				if (noiseMatchIndex == noiseMatchCount) {
+					noiseMatchIndex = 0;
+				}
+
+				for (i = 0; i < numfiles; i++, fileptr += filelen + 1) {
+					filelen = strlen(fileptr);
+					if (Q_stricmpn(fileptr, noiseMatchString, strlen(noiseMatchString))) {
+						continue;
 					}
 
-					for (i = 0; i < numfiles; i++, fileptr += filelen + 1) {
-						filelen = strlen(fileptr);
-						if (Q_stricmpn(fileptr, noiseMatchString, strlen(noiseMatchString))) {
-							continue;
-						}
-
-						if (findMatchIndex == noiseMatchIndex) {
-							Q_strncpyz(match, fileptr, sizeof (match));
-							break;
-						}
-
-						findMatchIndex++;
+					if (findMatchIndex == noiseMatchIndex) {
+						Q_strncpyz(match, fileptr, sizeof (match));
+						break;
 					}
+
+					findMatchIndex++;
 				}
 			}
 
@@ -1189,13 +1177,12 @@ qboolean CG_SpeakerEditor_NoiseEdit_KeyDown(panel_button_t *button, int key) {
 			Com_sprintf((char *)button->text, button->data[0], "%s%s", dirname, match);
 
 			return qtrue;
-		} else {
-			if (key & K_CHAR_FLAG) {
-				int localkey = key;
-				localkey &= ~K_CHAR_FLAG;
-				if (localkey == 'h' - 'a' + 1 || localkey >= 32) {
-					noiseMatchString[0] = '\0';
-				}
+		}
+		if (key & K_CHAR_FLAG) {
+			int localkey = key;
+			localkey &= ~K_CHAR_FLAG;
+			if (localkey == 'h' - 'a' + 1 || localkey >= 32) {
+				noiseMatchString[0] = '\0';
 			}
 		}
 	}
@@ -1227,66 +1214,62 @@ qboolean CG_SpeakerEditor_Dropdown_KeyDown(panel_button_t *button, int key) {
 }
 
 qboolean CG_SpeakerEditor_Looped_KeyUp(panel_button_t *button, int key) {
-	if (key == K_MOUSE1) {
-		if (button == BG_PanelButtons_GetFocusButton()) {
-			rectDef_t rect;
-			int       i;
+	if (key == K_MOUSE1 && button == BG_PanelButtons_GetFocusButton()) {
+		rectDef_t rect;
+		int       i;
 
-			memcpy(&rect, &button->rect, sizeof (rect));
+		memcpy(&rect, &button->rect, sizeof (rect));
 
-			for (i = 0; i < 3; i++) {
-				if (i == (int)editSpeaker->loop) {
-					continue;
-				}
-
-				rect.y += 12.f;
-
-				if (BG_CursorInRect(&rect)) {
-					button->data[1] = editSpeaker->loop = i;
-					break;
-				}
+		for (i = 0; i < 3; i++) {
+			if (i == (int)editSpeaker->loop) {
+				continue;
 			}
 
-			if (editSpeaker->loop == S_LT_LOOPED_ON) {
-				editSpeaker->activated = qtrue;
-			} else {
-				editSpeaker->activated = qfalse;
+			rect.y += 12.f;
+
+			if (BG_CursorInRect(&rect)) {
+				button->data[1] = editSpeaker->loop = i;
+				break;
 			}
-
-			BG_PanelButtons_SetFocusButton(NULL);
-
-			return qtrue;
 		}
+
+		if (editSpeaker->loop == S_LT_LOOPED_ON) {
+			editSpeaker->activated = qtrue;
+		} else {
+			editSpeaker->activated = qfalse;
+		}
+
+		BG_PanelButtons_SetFocusButton(NULL);
+
+		return qtrue;
 	}
 
 	return qfalse;
 }
 
 qboolean CG_SpeakerEditor_Broadcast_KeyUp(panel_button_t *button, int key) {
-	if (key == K_MOUSE1) {
-		if (button == BG_PanelButtons_GetFocusButton()) {
-			rectDef_t rect;
-			int       i;
+	if (key == K_MOUSE1 && button == BG_PanelButtons_GetFocusButton()) {
+		rectDef_t rect;
+		int       i;
 
-			memcpy(&rect, &button->rect, sizeof (rect));
+		memcpy(&rect, &button->rect, sizeof (rect));
 
-			for (i = 0; i < 3; i++) {
-				if (i == (int)editSpeaker->broadcast) {
-					continue;
-				}
-
-				rect.y += 12.f;
-
-				if (BG_CursorInRect(&rect)) {
-					button->data[1] = editSpeaker->broadcast = i;
-					break;
-				}
+		for (i = 0; i < 3; i++) {
+			if (i == (int)editSpeaker->broadcast) {
+				continue;
 			}
 
-			BG_PanelButtons_SetFocusButton(NULL);
+			rect.y += 12.f;
 
-			return qtrue;
+			if (BG_CursorInRect(&rect)) {
+				button->data[1] = editSpeaker->broadcast = i;
+				break;
+			}
 		}
+
+		BG_PanelButtons_SetFocusButton(NULL);
+
+		return qtrue;
 	}
 
 	return qfalse;
@@ -1357,18 +1340,16 @@ qboolean CG_SpeakerEditor_Ok_KeyDown(panel_button_t *button, int key) {
 }
 
 qboolean CG_SpeakerEditor_Ok_KeyUp(panel_button_t *button, int key) {
-	if (key == K_MOUSE1) {
-		if (button == BG_PanelButtons_GetFocusButton()) {
-			BG_PanelButtons_SetFocusButton(NULL);
+	if (key == K_MOUSE1 && button == BG_PanelButtons_GetFocusButton()) {
+		BG_PanelButtons_SetFocusButton(NULL);
 
-			if (BG_CursorInRect(&button->rect)) {
-				CG_SaveSpeakersToScript();
+		if (BG_CursorInRect(&button->rect)) {
+			CG_SaveSpeakersToScript();
 
-				editSpeakerActive = qfalse;
-				CG_EventHandling(-CGAME_EVENT_SPEAKEREDITOR, qtrue);
-			}
-			return qtrue;
+			editSpeakerActive = qfalse;
+			CG_EventHandling(-CGAME_EVENT_SPEAKEREDITOR, qtrue);
 		}
+		return qtrue;
 	}
 
 	return qfalse;
@@ -1384,19 +1365,17 @@ qboolean CG_SpeakerEditor_Cancel_KeyDown(panel_button_t *button, int key) {
 }
 
 qboolean CG_SpeakerEditor_Cancel_KeyUp(panel_button_t *button, int key) {
-	if (key == K_MOUSE1) {
-		if (button == BG_PanelButtons_GetFocusButton()) {
-			BG_PanelButtons_SetFocusButton(NULL);
+	if (key == K_MOUSE1 && button == BG_PanelButtons_GetFocusButton()) {
+		BG_PanelButtons_SetFocusButton(NULL);
 
-			if (BG_CursorInRect(&button->rect)) {
-				memcpy(editSpeaker, &undoSpeaker, sizeof (*editSpeaker));
-				undoSpeakerIndex  = -2;
-				editSpeaker       = NULL;
-				editSpeakerActive = qfalse;
-				CG_EventHandling(-CGAME_EVENT_SPEAKEREDITOR, qtrue);
-			}
-			return qtrue;
+		if (BG_CursorInRect(&button->rect)) {
+			memcpy(editSpeaker, &undoSpeaker, sizeof (*editSpeaker));
+			undoSpeakerIndex  = -2;
+			editSpeaker       = NULL;
+			editSpeakerActive = qfalse;
+			CG_EventHandling(-CGAME_EVENT_SPEAKEREDITOR, qtrue);
 		}
+		return qtrue;
 	}
 
 	return qfalse;
@@ -1412,20 +1391,18 @@ qboolean CG_SpeakerEditor_Delete_KeyDown(panel_button_t *button, int key) {
 }
 
 qboolean CG_SpeakerEditor_Delete_KeyUp(panel_button_t *button, int key) {
-	if (key == K_MOUSE1) {
-		if (button == BG_PanelButtons_GetFocusButton()) {
-			BG_PanelButtons_SetFocusButton(NULL);
+	if (key == K_MOUSE1 && button == BG_PanelButtons_GetFocusButton()) {
+		BG_PanelButtons_SetFocusButton(NULL);
 
-			if (BG_CursorInRect(&button->rect)) {
-				undoSpeakerIndex = -1;
-				BG_SS_DeleteSpeaker(BG_GetIndexForSpeaker(editSpeaker));
-				CG_SaveSpeakersToScript();
-				editSpeaker       = NULL;
-				editSpeakerActive = qfalse;
-				CG_EventHandling(-CGAME_EVENT_SPEAKEREDITOR, qtrue);
-			}
-			return qtrue;
+		if (BG_CursorInRect(&button->rect)) {
+			undoSpeakerIndex = -1;
+			BG_SS_DeleteSpeaker(BG_GetIndexForSpeaker(editSpeaker));
+			CG_SaveSpeakersToScript();
+			editSpeaker       = NULL;
+			editSpeakerActive = qfalse;
+			CG_EventHandling(-CGAME_EVENT_SPEAKEREDITOR, qtrue);
 		}
+		return qtrue;
 	}
 
 	return qfalse;
@@ -1921,32 +1898,30 @@ void CG_SpeakerEditorMouseMove_Handling(int x, int y) {
 		return;
 	}
 
-	if (editSpeakerActive) {
-		if (editSpeakerHandle.activeAxis >= 0) {
-			if (editSpeakerHandle.activeAxis == 0) {
-				// this one and the next one are quite nasty, so do it the hacky way
-				if (cgs.cursorX - x < 320) {
-					editSpeaker->origin[0] -= x;
-				} else {
-					editSpeaker->origin[0] += x;
-				}
-			} else if (editSpeakerHandle.activeAxis == 1) {
-				if (cgs.cursorX - x < 320) {
-					editSpeaker->origin[1] -= x;
-				} else {
-					editSpeaker->origin[1] += x;
-				}
-			} else if (editSpeakerHandle.activeAxis == 2) {
-				// but this one is easy
-				editSpeaker->origin[2] -= y;
+	if (editSpeakerActive && editSpeakerHandle.activeAxis >= 0) {
+		if (editSpeakerHandle.activeAxis == 0) {
+			// this one and the next one are quite nasty, so do it the hacky way
+			if (cgs.cursorX - x < 320) {
+				editSpeaker->origin[0] -= x;
+			} else {
+				editSpeaker->origin[0] += x;
 			}
-
-			cgs.cursorX -= x;
-			cgs.cursorY -= y;
-
-			VectorCopy(editSpeakerHandle.origin, editSpeakerHandle.oldOrigin);
-			VectorCopy(editSpeaker->origin, editSpeakerHandle.origin);
+		} else if (editSpeakerHandle.activeAxis == 1) {
+			if (cgs.cursorX - x < 320) {
+				editSpeaker->origin[1] -= x;
+			} else {
+				editSpeaker->origin[1] += x;
+			}
+		} else if (editSpeakerHandle.activeAxis == 2) {
+			// but this one is easy
+			editSpeaker->origin[2] -= y;
 		}
+
+		cgs.cursorX -= x;
+		cgs.cursorY -= y;
+
+		VectorCopy(editSpeakerHandle.origin, editSpeakerHandle.oldOrigin);
+		VectorCopy(editSpeaker->origin, editSpeakerHandle.origin);
 	}
 }
 
@@ -2087,11 +2062,9 @@ void CG_AddScriptSpeakers(void) {
 		}
 
 		// activate if needed
-		if (speaker->loop == S_LT_NOT_LOOPED) {
-			if (cg.time >= speaker->nextActivateTime && (speaker->wait || speaker->random)) {
-				speaker->activated        = qtrue;
-				speaker->nextActivateTime = cg.time + speaker->wait + speaker->random * crandom();
-			}
+		if (speaker->loop == S_LT_NOT_LOOPED && cg.time >= speaker->nextActivateTime && (speaker->wait || speaker->random)) {
+			speaker->activated        = qtrue;
+			speaker->nextActivateTime = cg.time + speaker->wait + speaker->random * crandom();
 		}
 
 		if (!speaker->activated) {

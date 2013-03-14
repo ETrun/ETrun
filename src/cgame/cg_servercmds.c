@@ -1007,9 +1007,8 @@ CG_VoiceChatListForClient
 voiceChatList_t *CG_VoiceChatListForClient(int clientNum) {
 	if (cgs.clientinfo[clientNum].team == TEAM_AXIS) {
 		return &voiceChatLists[0];
-	} else {
-		return &voiceChatLists[1];
 	}
+	return &voiceChatLists[1];
 }
 
 #define MAX_VOICECHATBUFFER     32

@@ -321,12 +321,9 @@ CG_CheckLocalSounds
 */
 void CG_CheckLocalSounds(playerState_t *ps, playerState_t *ops) {
 	// health changes of more than -1 should make pain sounds
-	if (ps->stats[STAT_HEALTH] < ops->stats[STAT_HEALTH] - 1) {
-		if (ps->stats[STAT_HEALTH] > 0) {
-			CG_PainEvent(&cg.predictedPlayerEntity, ps->stats[STAT_HEALTH]);
-
-			cg.painTime = cg.time;
-		}
+	if (ps->stats[STAT_HEALTH] < ops->stats[STAT_HEALTH] - 1 && ps->stats[STAT_HEALTH] > 0) {
+		CG_PainEvent(&cg.predictedPlayerEntity, ps->stats[STAT_HEALTH]);
+		cg.painTime = cg.time;
 	}
 }
 
@@ -386,10 +383,8 @@ void CG_TransitionPlayerState(playerState_t *ps, playerState_t *ops) {
 	CG_CheckAmmo();
 
 	if (ps->eFlags & EF_PRONE_MOVING) {
-		if (ps->weapon == WP_BINOCULARS) {
-			if (ps->eFlags & EF_ZOOMING) {
-				trap_SendConsoleCommand("-zoom\n");
-			}
+		if (ps->weapon == WP_BINOCULARS && ps->eFlags & EF_ZOOMING) {
+			trap_SendConsoleCommand("-zoom\n");
 		}
 
 		if (!(ops->eFlags & EF_PRONE_MOVING)) {
@@ -399,10 +394,8 @@ void CG_TransitionPlayerState(playerState_t *ps, playerState_t *ops) {
 		cg.proneMovingTime = -cg.time;
 	}
 
-	if (!(ps->eFlags & EF_PRONE) && ops->eFlags & EF_PRONE) {
-		if (cg.weaponSelect == WP_MOBILE_MG42_SET) {
-			CG_FinishWeaponChange(cg.weaponSelect, ps->nextWeapon);
-		}
+	if (!(ps->eFlags & EF_PRONE) && ops->eFlags & EF_PRONE && cg.weaponSelect == WP_MOBILE_MG42_SET) {
+		CG_FinishWeaponChange(cg.weaponSelect, ps->nextWeapon);
 	}
 
 	// run events

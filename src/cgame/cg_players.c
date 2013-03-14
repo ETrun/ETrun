@@ -37,8 +37,7 @@ If you have questions concerning this license or the applicable additional terms
 
 #define SWING_RIGHT 1
 #define SWING_LEFT  2
-
-#define SWINGSPEED              0.3
+#define SWINGSPEED  0.3
 
 /*
 ================
@@ -51,11 +50,9 @@ qboolean CG_EntOnFire(centity_t *cent) {
 		//		so make sure onFireStart is not 0
 		return  (cg.snap->ps.onFireStart
 		         && (cg.snap->ps.onFireStart < cg.time)
-		         && ((cg.snap->ps.onFireStart + 2000) > cg.time));
-	} else {
-		return  ((cent->currentState.onFireStart < cg.time) &&
-		         (cent->currentState.onFireEnd > cg.time));
+		         && (cg.snap->ps.onFireStart + 2000) > cg.time);
 	}
+	return  (cent->currentState.onFireStart < cg.time) && (cent->currentState.onFireEnd > cg.time);
 }
 
 /*

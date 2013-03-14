@@ -97,7 +97,7 @@ void CG_UpdatePMLists(void) {
 
 	listItem = cg_pmWaitingList;
 	if (listItem) {
-		int t = (listItem->time + cg_popupTime.integer);
+		int t = listItem->time + cg_popupTime.integer;
 		if (cg.time > t) {
 			if (listItem->next) {
 				// there's another item waiting to come on, so move to old list
@@ -119,7 +119,7 @@ void CG_UpdatePMLists(void) {
 	listItem = cg_pmOldList;
 	lastItem = NULL;
 	while (listItem) {
-		int t = (listItem->time + cg_popupTime.integer + cg_popupStayTime.integer + cg_popupFadeTime.integer);
+		int t = listItem->time + cg_popupTime.integer + cg_popupStayTime.integer + cg_popupFadeTime.integer;
 		if (cg.time > t) {
 			// nuke this, and everything below it (though there shouldn't BE anything below us anyway)
 			pmListItem_t *next;
@@ -197,10 +197,9 @@ pmListItem_t *CG_FindFreePMItem(void) {
 		listItem->inuse = qfalse;
 
 		return listItem;
-	} else {
-		// there is no old list... PANIC!
-		return NULL;
 	}
+	// there is no old list... PANIC!
+	return NULL;
 }
 
 void CG_AddPMItem(popupMessageType_t type, const char *message, qhandle_t shader) {

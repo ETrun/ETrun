@@ -183,9 +183,7 @@ void CG_SetInitialSnapshot(snapshot_t *snap) {
 	if (atoi(buff)) {
 		// Arnout: confirmation screen
 		trap_UI_Popup(UIMENU_INGAME);
-	} else if (cg.demoPlayback) {
-
-	} else {
+	} else if (!cg.demoPlayback) {
 		static char prevmap[64] = { 0 };
 		char        curmap[64];
 
@@ -384,11 +382,6 @@ static snapshot_t *CG_ReadNextSnapshot(void) {
 		// try to read the snapshot from the client system
 		cgs.processedSnapshotNum++;
 		r = trap_GetSnapshot(cgs.processedSnapshotNum, dest);
-
-		// FIXME: why would trap_GetSnapshot return a snapshot with the same server time
-		if (cg.snap && r && dest->serverTime == cg.snap->serverTime) {
-			//continue;
-		}
 
 		// if it succeeded, return
 		if (r) {
