@@ -91,24 +91,6 @@ static void CG_AddPolyToPool(qhandle_t shader, const polyVert_t *verts) {
 	pPolyBuffer->numVerts    += 3;
 }
 
-/*
-**	CG_AtmosphericKludge
-*/
-
-static qboolean kludgeChecked, kludgeResult;
-qboolean CG_AtmosphericKludge() {
-	// Activate rain for specified kludge maps that don't
-	// have it specified for them.
-
-	if (kludgeChecked) {
-		return(kludgeResult);
-	}
-	kludgeChecked = qtrue;
-	kludgeResult  = qfalse;
-
-	return(kludgeResult = qfalse);
-}
-
 typedef enum {
 	ACT_NOT,
 	ACT_FALLING
@@ -585,15 +567,11 @@ static void CG_EP_ParseInts(char *intstr, int *i1, int *i2) {
 void CG_EffectParse(const char *effectstr) {
 	// Split the string into it's component parts.
 
-	float       bmin, bmax, cmin, cmax, gmin, gmax, bdrop, gdrop /*, wsplash, lsplash*/;
+	float       bmin, bmax, cmin, cmax, gmin, gmax, bdrop, gdrop;
 	int         count, bheight;
 	char        *startptr, *eqptr, *endptr;
 	char        workbuff[128];
 	atmFXType_t atmFXType = ATM_NONE;
-
-	if (CG_AtmosphericKludge()) {
-		return;
-	}
 
 	// Set up some default values
 	cg_atmFx.baseVec[0] = cg_atmFx.baseVec[1] = 0;
