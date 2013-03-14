@@ -324,109 +324,105 @@ void CG_DemoClick(int key, qboolean down) {
 #define DH_W    148
 
 void CG_DemoHelpDraw() {
+	const char *help[] =
+	{
+		"^nTAB       ^mscores",
+		"^nF1-F5     ^mavidemo record",
+		"^nF11-F12   ^mscreenshot",
+		NULL,
+		"^nKP_DOWN   ^mslow down (--)",
+		"^nKP_LEFT   ^mslow down (-)",
+		"^nKP_UP     ^mspeed up (++)",
+		"^nKP_RIGHT  ^mspeed up (+)",
+		"^nSPACE     ^mnormal speed",
+		NULL,
+		"^nENTER     ^mExternal view",
+		"^nLFT/RGHT  ^mChange angle",
+		"^nUP/DOWN   ^mMove in/out"
+	};
+	int i, x, y = 480, w, h;
+
+	vec4_t bgColor     = COLOR_BG;              // window
+	vec4_t borderColor = COLOR_BORDER;          // window
+
+	vec4_t bgColorTitle     = COLOR_BG_TITLE;       // titlebar
+	vec4_t borderColorTitle = COLOR_BORDER_TITLE;   // titlebar
+
+	// Main header
+	int        hStyle    = ITEM_TEXTSTYLE_SHADOWED;
+	float      hScale    = 0.16f;
+	float      hScaleY   = 0.21f;
+	fontInfo_t *hFont    = FONT_HEADER;
+	vec4_t     hdrColor2 = COLOR_HDR2;  // text
+
+	// Text settings
+	int        tStyle   = ITEM_TEXTSTYLE_SHADOWED;
+	int        tSpacing = 9;        // Should derive from CG_Text_Height_Ext
+	float      tScale   = 0.19f;
+	fontInfo_t *tFont   = FONT_TEXT;
+	vec4_t     tColor   = COLOR_TEXT;   // text
+
+	float diff = cg.fadeTime - trap_Milliseconds();
+
 	if (cg.demohelpWindow == SHOW_OFF) {
 		return;
-
-	} else {
-		const char *help[] =
-		{
-			"^nTAB       ^mscores",
-			"^nF1-F5     ^mavidemo record",
-			"^nF11-F12   ^mscreenshot",
-			NULL,
-			"^nKP_DOWN   ^mslow down (--)",
-			"^nKP_LEFT   ^mslow down (-)",
-			"^nKP_UP     ^mspeed up (++)",
-			"^nKP_RIGHT  ^mspeed up (+)",
-			"^nSPACE     ^mnormal speed",
-			NULL,
-			"^nENTER     ^mExternal view",
-			"^nLFT/RGHT  ^mChange angle",
-			"^nUP/DOWN   ^mMove in/out"
-		};
-
-
-		int i, x, y = 480, w, h;
-
-		vec4_t bgColor     = COLOR_BG;              // window
-		vec4_t borderColor = COLOR_BORDER;          // window
-
-		vec4_t bgColorTitle     = COLOR_BG_TITLE;       // titlebar
-		vec4_t borderColorTitle = COLOR_BORDER_TITLE;   // titlebar
-
-		// Main header
-		int        hStyle    = ITEM_TEXTSTYLE_SHADOWED;
-		float      hScale    = 0.16f;
-		float      hScaleY   = 0.21f;
-		fontInfo_t *hFont    = FONT_HEADER;
-		vec4_t     hdrColor2 = COLOR_HDR2;  // text
-
-		// Text settings
-		int        tStyle   = ITEM_TEXTSTYLE_SHADOWED;
-		int        tSpacing = 9;        // Should derive from CG_Text_Height_Ext
-		float      tScale   = 0.19f;
-		fontInfo_t *tFont   = FONT_TEXT;
-		vec4_t     tColor   = COLOR_TEXT;   // text
-
-		float diff = cg.fadeTime - trap_Milliseconds();
-
-
-		// FIXME: Should compute this beforehand
-		w = DH_W;
-		x = 640 + DH_X - w;
-		h = 2 + tSpacing + 2 +                                  // Header
-		    2 + 1 +
-		    tSpacing * (2 + (sizeof (help)) / sizeof (char *)) +
-		    2;
-
-		// Fade-in effects
-		if (diff > 0.0f) {
-			float scale = (diff / STATS_FADE_TIME);
-
-			if (cg.demohelpWindow == SHOW_ON) {
-				scale = 1.0f - scale;
-			}
-
-			bgColor[3]          *= scale;
-			bgColorTitle[3]     *= scale;
-			borderColor[3]      *= scale;
-			borderColorTitle[3] *= scale;
-			hdrColor2[3]        *= scale;
-			tColor[3]           *= scale;
-
-			y += (DH_Y - h) * scale;
-
-		} else if (cg.demohelpWindow == SHOW_SHUTDOWN) {
-			cg.demohelpWindow = SHOW_OFF;
-			return;
-		} else {
-			y += DH_Y - h;
-		}
-
-		CG_DrawRect(x, y, w, h, 1, borderColor);
-		CG_FillRect(x, y, w, h, bgColor);
-
-		// Header
-		CG_FillRect(x, y, w, tSpacing + 4, bgColorTitle);
-		CG_DrawRect(x, y, w, tSpacing + 4, 1, borderColorTitle);
-
-		x += 4;
-		y += 1;
-		y += tSpacing;
-		CG_Text_Paint_Ext(x, y, hScale, hScaleY, hdrColor2, "DEMO CONTROLS", 0.0f, 0, hStyle, hFont);
-		y += 3;
-
-		// Control info
-		for (i = 0; i < (int)(sizeof (help) / sizeof (char *)); i++) {
-			y += tSpacing;
-			if (help[i] != NULL) {
-				CG_Text_Paint_Ext(x, y, tScale, tScale, tColor, (char *)help[i], 0.0f, 0, tStyle, tFont);
-			}
-		}
-
-		y += tSpacing * 2;
-		CG_Text_Paint_Ext(x, y, tScale, tScale, tColor, "^nBACKSPACE ^mhelp on/off", 0.0f, 0, tStyle, tFont);
 	}
+
+	// FIXME: Should compute this beforehand
+	w = DH_W;
+	x = 640 + DH_X - w;
+	h = 2 + tSpacing + 2 +                                  // Header
+	    2 + 1 +
+	    tSpacing * (2 + (sizeof (help)) / sizeof (char *)) +
+	    2;
+
+	// Fade-in effects
+	if (diff > 0.0f) {
+		float scale = diff / STATS_FADE_TIME;
+
+		if (cg.demohelpWindow == SHOW_ON) {
+			scale = 1.0f - scale;
+		}
+
+		bgColor[3]          *= scale;
+		bgColorTitle[3]     *= scale;
+		borderColor[3]      *= scale;
+		borderColorTitle[3] *= scale;
+		hdrColor2[3]        *= scale;
+		tColor[3]           *= scale;
+
+		y += (DH_Y - h) * scale;
+
+	} else if (cg.demohelpWindow == SHOW_SHUTDOWN) {
+		cg.demohelpWindow = SHOW_OFF;
+		return;
+	} else {
+		y += DH_Y - h;
+	}
+
+	CG_DrawRect(x, y, w, h, 1, borderColor);
+	CG_FillRect(x, y, w, h, bgColor);
+
+	// Header
+	CG_FillRect(x, y, w, tSpacing + 4, bgColorTitle);
+	CG_DrawRect(x, y, w, tSpacing + 4, 1, borderColorTitle);
+
+	x += 4;
+	y += 1;
+	y += tSpacing;
+	CG_Text_Paint_Ext(x, y, hScale, hScaleY, hdrColor2, "DEMO CONTROLS", 0.0f, 0, hStyle, hFont);
+	y += 3;
+
+	// Control info
+	for (i = 0; i < (int)(sizeof (help) / sizeof (char *)); i++) {
+		y += tSpacing;
+		if (help[i] != NULL) {
+			CG_Text_Paint_Ext(x, y, tScale, tScale, tColor, (char *)help[i], 0.0f, 0, tStyle, tFont);
+		}
+	}
+
+	y += tSpacing * 2;
+	CG_Text_Paint_Ext(x, y, tScale, tScale, tColor, "^nBACKSPACE ^mhelp on/off", 0.0f, 0, tStyle, tFont);
 }
 
 void CG_DrawOverlays(void) {

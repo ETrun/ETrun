@@ -810,12 +810,11 @@ void CG_AddFlameToScene(flameChunk_t *fHead) {
 		// update the "blow" sound volume (louder as we sway it)
 		vdist = Distance(cg.refdef_current->vieworg, f->org);   // NOTE: this needs to be here or the flameSound code further below won't work
 		if (lastBlowChunk && (centFlameStatus[f->ownerCent].blowVolume < 1.0) &&
-		    ((bdot = DotProduct(lastBlowChunk->startVelDir, f->startVelDir)) < 1.0)) {
-			if (vdist < FLAME_SOUND_RANGE) {
-				centFlameStatus[f->ownerCent].blowVolume += 500.0 * (1.0 - bdot) * (1.0 - (vdist / FLAME_SOUND_RANGE));
-				if (centFlameStatus[f->ownerCent].blowVolume > 1.0) {
-					centFlameStatus[f->ownerCent].blowVolume = 1.0;
-				}
+		    ((bdot = DotProduct(lastBlowChunk->startVelDir, f->startVelDir)) < 1.0) &&
+		    vdist < FLAME_SOUND_RANGE) {
+			centFlameStatus[f->ownerCent].blowVolume += 500.0 * (1.0 - bdot) * (1.0 - (vdist / FLAME_SOUND_RANGE));
+			if (centFlameStatus[f->ownerCent].blowVolume > 1.0) {
+				centFlameStatus[f->ownerCent].blowVolume = 1.0;
 			}
 		}
 		lastBlowChunk = f;

@@ -749,37 +749,34 @@ qboolean CG_LimboPanel_WeaponPanel_KeyUp(panel_button_t *button, int key) {
 		return qfalse;
 	}
 
-	if (key == K_MOUSE1) {
-		if (BG_PanelButtons_GetFocusButton() == button) {
+	if (key == K_MOUSE1 && BG_PanelButtons_GetFocusButton() == button) {
+		memcpy(&rect, &button->rect, sizeof (rect));
+		rect.y -= rect.h;
 
-			memcpy(&rect, &button->rect, sizeof (rect));
-			rect.y -= rect.h;
+		cnt = CG_LimboPanel_WeaponCount();
+		for (i = 1; i < cnt; i++, rect.y -= rect.h) {
 
-			cnt = CG_LimboPanel_WeaponCount();
-			for (i = 1; i < cnt; i++, rect.y -= rect.h) {
-
-				if (!BG_CursorInRect(&rect)) {
-					continue;
-				}
-
-				if (!CG_LimboPanel_GetSelectedWeaponNum()) {
-					CG_LimboPanel_SetSelectedWeaponNum(i);
-					CG_LimboPanel_SendSetupMsg(qfalse);
-				} else {
-					if (i <= CG_LimboPanel_GetSelectedWeaponNum()) {
-						CG_LimboPanel_SetSelectedWeaponNum(i - 1);
-						CG_LimboPanel_SendSetupMsg(qfalse);
-					} else {
-						CG_LimboPanel_SetSelectedWeaponNum(i);
-						CG_LimboPanel_SendSetupMsg(qfalse);
-					}
-				}
+			if (!BG_CursorInRect(&rect)) {
+				continue;
 			}
 
-			BG_PanelButtons_SetFocusButton(NULL);
-
-			return qtrue;
+			if (!CG_LimboPanel_GetSelectedWeaponNum()) {
+				CG_LimboPanel_SetSelectedWeaponNum(i);
+				CG_LimboPanel_SendSetupMsg(qfalse);
+			} else {
+				if (i <= CG_LimboPanel_GetSelectedWeaponNum()) {
+					CG_LimboPanel_SetSelectedWeaponNum(i - 1);
+					CG_LimboPanel_SendSetupMsg(qfalse);
+				} else {
+					CG_LimboPanel_SetSelectedWeaponNum(i);
+					CG_LimboPanel_SendSetupMsg(qfalse);
+				}
+			}
 		}
+
+		BG_PanelButtons_SetFocusButton(NULL);
+
+		return qtrue;
 	}
 
 	return qfalse;
@@ -904,12 +901,9 @@ void CG_LimboPanel_WeaponPanel(panel_button_t *button) {
 		memcpy(&rect, &button->rect, sizeof (rect));
 
 		CG_LimboPanel_WeaponPanel_DrawWeapon(&rect, weap, qtrue, va("%iof%i", CG_LimboPanel_GetSelectedWeaponNum() + 1, cnt), CG_LimboPanel_RealWeaponIsDisabled(weap));
-		if (BG_CursorInRect(&rect)) {
-			if (button->data[7] != 0) {
-				SOUND_FOCUS;
-
-				button->data[7] = 0;
-			}
+		if (BG_CursorInRect(&rect) && button->data[7] != 0) {
+			SOUND_FOCUS;
+			button->data[7] = 0;
 		}
 		rect.y -= rect.h;
 
@@ -919,12 +913,9 @@ void CG_LimboPanel_WeaponPanel(panel_button_t *button) {
 			if (cycleWeap != weap) {
 				CG_LimboPanel_WeaponPanel_DrawWeapon(&rect, cycleWeap, qtrue, va("%iof%i", i + 1, cnt), CG_LimboPanel_RealWeaponIsDisabled(cycleWeap));
 
-				if (BG_CursorInRect(&rect)) {
-					if (button->data[7] != x) {
-						SOUND_FOCUS;
-
-						button->data[7] = x;
-					}
+				if (BG_CursorInRect(&rect) && button->data[7] != x) {
+					SOUND_FOCUS;
+					button->data[7] = x;
 				}
 
 				rect.y -= rect.h;
@@ -993,22 +984,10 @@ int CG_LimboPanel_RenderCounter_ValueForButton(panel_button_t *button) {
 			count++;
 		}
 		return count;
-	case 2:     // xp
-	case 3:     // respawn time
-		return 0;
 	case 4:     // skills
-		switch (button->data[1]) {
-		case 0:
-			break;
-		case 1:
-			break;
-		case 2:
-			break;
-		}
-
 		return (1 << count) - 1;
-	case 5:     // clock
-		return 0;
+	default:
+		break;
 	}
 
 	return 0;
@@ -1029,9 +1008,8 @@ int CG_LimboPanel_RenderCounter_RollTimeForButton(panel_button_t *button) {
 		diff = Q_fabs(button->data[3] - CG_LimboPanel_RenderCounter_ValueForButton(button));
 		if (diff < 5) {
 			return 200.f / diff;
-		} else {
-			return 50.f;
 		}
+		return 50.f;
 
 	case 5:     // clock
 	case 3:     // respawn time
@@ -1169,7 +1147,7 @@ void CG_LimboPanel_RenderCounter(panel_button_t *button) {
 
 	if (COUNTER_ROLLTOTAL < counter_rolltime) {
 		// we're rolling
-		float frac = (COUNTER_ROLLTOTAL / counter_rolltime);
+		float frac = COUNTER_ROLLTOTAL / counter_rolltime;
 
 		for (i = 0, j = 1; i < num; i++, j *= numimages) {
 			int valueOld = (button->data[3] / j) % numimages;
@@ -1256,11 +1234,9 @@ void CG_LimboPanel_Setup(void) {
 	for ( ; *buttons; buttons++) {
 		button = (*buttons);
 
-		if (button->onDraw == CG_LimboPanel_RenderCounter) {
-			if (CG_LimboPanel_RenderCounter_StartSet(button)) {
-				button->data[3] = button->data[5] = CG_LimboPanel_RenderCounter_ValueForButton(button);
-				button->data[4] = 0;
-			}
+		if (button->onDraw == CG_LimboPanel_RenderCounter && CG_LimboPanel_RenderCounter_StartSet(button)) {
+			button->data[3] = button->data[5] = CG_LimboPanel_RenderCounter_ValueForButton(button);
+			button->data[4] = 0;
 		}
 	}
 
@@ -1493,9 +1469,8 @@ int CG_LimboPanel_WeaponCount_ForSlot(int number) {
 			cnt++;
 		}
 		return cnt;
-	} else {
-		return 1;
 	}
+	return 1;
 }
 
 int CG_LimboPanel_GetWeaponNumberForPos(int pos) {
@@ -1535,23 +1510,20 @@ weapon_t CG_LimboPanel_GetWeaponForNumber(int number, int slot, qboolean ignoreD
 			if (!number) {
 				CG_Error("ERROR: Class weapon 0 disabled\n");
 				return WP_NONE;
-			} else {
-				return classInfo->classWeapons[0];
 			}
+			return classInfo->classWeapons[0];
 		}
 
 		return classInfo->classWeapons[number];
-	} else {
-		if (number == 0) {
-			if (CG_LimboPanel_GetClass() == PC_COVERTOPS) {
-				return CG_LimboPanel_GetTeam() == TEAM_AXIS ? WP_SILENCER : WP_SILENCED_COLT;
-			} else {
-				return CG_LimboPanel_GetTeam() == TEAM_AXIS ? WP_LUGER : WP_COLT;
-			}
-		}
-
-		return 0;
 	}
+	if (number == 0) {
+		if (CG_LimboPanel_GetClass() == PC_COVERTOPS) {
+			return CG_LimboPanel_GetTeam() == TEAM_AXIS ? WP_SILENCER : WP_SILENCED_COLT;
+		}
+		return CG_LimboPanel_GetTeam() == TEAM_AXIS ? WP_LUGER : WP_COLT;
+	}
+
+	return 0;
 }
 
 weapon_t CG_LimboPanel_GetSelectedWeaponForSlot(int index) {
@@ -1614,10 +1586,8 @@ int CG_LimboPanel_TeamCount(weapon_t weap) {
 			continue;
 		}
 
-		if ((int)weap != -1) {
-			if (cgs.clientinfo[i].weapon != (int)weap && cgs.clientinfo[i].latchedweapon != (int)weap) {
-				continue;
-			}
+		if ((int)weap != -1 && cgs.clientinfo[i].weapon != (int)weap && cgs.clientinfo[i].latchedweapon != (int)weap) {
+			continue;
 		}
 
 		cnt++;
