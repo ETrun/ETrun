@@ -405,14 +405,12 @@ void CG_PyroSmokeTrail(centity_t *ent) {
 		if (ent->currentState.teamNum < 8) {
 			ent->miscTime = 0;
 			return;
-		} else if (ent->currentState.teamNum < 12) {
-			if (!ent->miscTime) {
-				ent->trailTime = cg.time;
-				ent->miscTime  = cg.time;
+		} else if (ent->currentState.teamNum < 12 && !ent->miscTime) {
+			ent->trailTime = cg.time;
+			ent->miscTime  = cg.time;
 
-				// Arnout: play the armed sound - weird place to do it but saves us sending an event
-				trap_S_StartSound(NULL, ent->currentState.number, CHAN_WEAPON, cgs.media.minePrimedSound);
-			}
+			// Arnout: play the armed sound - weird place to do it but saves us sending an event
+			trap_S_StartSound(NULL, ent->currentState.number, CHAN_WEAPON, cgs.media.minePrimedSound);
 		}
 
 		if (cg.time - ent->miscTime > 1000) {
@@ -962,27 +960,23 @@ static qboolean CG_RW_ParseWeaponLinkPart(int handle, weaponInfo_t *weaponInfo, 
 		} else if (!Q_stricmp(token.string, "model")) {
 			if (!PC_String_ParseNoAlloc(handle, filename, sizeof (filename))) {
 				return CG_RW_ParseError(handle, "expected model filename");
-			} else {
-				partModel->model = trap_R_RegisterModel(filename);
 			}
+			partModel->model = trap_R_RegisterModel(filename);
 		} else if (!Q_stricmp(token.string, "skin")) {
 			if (!PC_String_ParseNoAlloc(handle, filename, sizeof (filename))) {
 				return CG_RW_ParseError(handle, "expected skin filename");
-			} else {
-				partModel->skin[0] = trap_R_RegisterSkin(filename);
 			}
+			partModel->skin[0] = trap_R_RegisterSkin(filename);
 		} else if (!Q_stricmp(token.string, "axisSkin")) {
 			if (!PC_String_ParseNoAlloc(handle, filename, sizeof (filename))) {
 				return CG_RW_ParseError(handle, "expected skin filename");
-			} else {
-				partModel->skin[TEAM_AXIS] = trap_R_RegisterSkin(filename);
 			}
+			partModel->skin[TEAM_AXIS] = trap_R_RegisterSkin(filename);
 		} else if (!Q_stricmp(token.string, "alliedSkin")) {
 			if (!PC_String_ParseNoAlloc(handle, filename, sizeof (filename))) {
 				return CG_RW_ParseError(handle, "expected skin filename");
-			} else {
-				partModel->skin[TEAM_ALLIES] = trap_R_RegisterSkin(filename);
 			}
+			partModel->skin[TEAM_ALLIES] = trap_R_RegisterSkin(filename);
 		} else {
 			return CG_RW_ParseError(handle, "unknown token '%s'", token.string);
 		}
@@ -1039,33 +1033,28 @@ static qboolean CG_RW_ParseViewType(int handle, weaponInfo_t *weaponInfo, modelV
 		if (!Q_stricmp(token.string, "model")) {
 			if (!PC_String_ParseNoAlloc(handle, filename, sizeof (filename))) {
 				return CG_RW_ParseError(handle, "expected model filename");
-			} else {
-				weaponInfo->weaponModel[viewType].model = trap_R_RegisterModel(filename);
 			}
+			weaponInfo->weaponModel[viewType].model = trap_R_RegisterModel(filename);
 		} else if (!Q_stricmp(token.string, "skin")) {
 			if (!PC_String_ParseNoAlloc(handle, filename, sizeof (filename))) {
 				return CG_RW_ParseError(handle, "expected skin filename");
-			} else {
-				weaponInfo->weaponModel[viewType].skin[0] = trap_R_RegisterSkin(filename);
 			}
+			weaponInfo->weaponModel[viewType].skin[0] = trap_R_RegisterSkin(filename);
 		} else if (!Q_stricmp(token.string, "axisSkin")) {
 			if (!PC_String_ParseNoAlloc(handle, filename, sizeof (filename))) {
 				return CG_RW_ParseError(handle, "expected skin filename");
-			} else {
-				weaponInfo->weaponModel[viewType].skin[TEAM_AXIS] = trap_R_RegisterSkin(filename);
 			}
+			weaponInfo->weaponModel[viewType].skin[TEAM_AXIS] = trap_R_RegisterSkin(filename);
 		} else if (!Q_stricmp(token.string, "alliedSkin")) {
 			if (!PC_String_ParseNoAlloc(handle, filename, sizeof (filename))) {
 				return CG_RW_ParseError(handle, "expected skin filename");
-			} else {
-				weaponInfo->weaponModel[viewType].skin[TEAM_ALLIES] = trap_R_RegisterSkin(filename);
 			}
+			weaponInfo->weaponModel[viewType].skin[TEAM_ALLIES] = trap_R_RegisterSkin(filename);
 		} else if (!Q_stricmp(token.string, "flashModel")) {
 			if (!PC_String_ParseNoAlloc(handle, filename, sizeof (filename))) {
 				return CG_RW_ParseError(handle, "expected flashModel filename");
-			} else {
-				weaponInfo->flashModel[viewType] = trap_R_RegisterModel(filename);
 			}
+			weaponInfo->flashModel[viewType] = trap_R_RegisterModel(filename);
 		} else if (!Q_stricmp(token.string, "weaponLink")) {
 			if (!CG_RW_ParseWeaponLink(handle, weaponInfo, viewType)) {
 				return qfalse;
@@ -1092,12 +1081,11 @@ static qboolean CG_RW_ParseModModel(int handle, weaponInfo_t *weaponInfo) {
 
 	if (!PC_String_ParseNoAlloc(handle, filename, sizeof (filename))) {
 		return CG_RW_ParseError(handle, "expected model filename");
-	} else {
-		weaponInfo->modModels[mod] = trap_R_RegisterModel(filename);
-		if (!weaponInfo->modModels[mod]) {
-			// maybe it's a shader
-			weaponInfo->modModels[mod] = trap_R_RegisterShader(filename);
-		}
+	}
+	weaponInfo->modModels[mod] = trap_R_RegisterModel(filename);
+	if (!weaponInfo->modModels[mod]) {
+		// maybe it's a shader
+		weaponInfo->modModels[mod] = trap_R_RegisterShader(filename);
 	}
 
 	return qtrue;
@@ -1124,17 +1112,15 @@ static qboolean CG_RW_ParseClient(int handle, weaponInfo_t *weaponInfo) {
 		if (!Q_stricmp(token.string, "standModel")) {
 			if (!PC_String_ParseNoAlloc(handle, filename, sizeof (filename))) {
 				return CG_RW_ParseError(handle, "expected standModel filename");
-			} else {
-				weaponInfo->standModel = trap_R_RegisterModel(filename);
 			}
+			weaponInfo->standModel = trap_R_RegisterModel(filename);
 		} else if (!Q_stricmp(token.string, "droppedAnglesHack")) {
 			weaponInfo->droppedAnglesHack = qtrue;
 		} else if (!Q_stricmp(token.string, "pickupModel")) {
 			if (!PC_String_ParseNoAlloc(handle, filename, sizeof (filename))) {
 				return CG_RW_ParseError(handle, "expected pickupModel filename");
-			} else {
-				weaponInfo->weaponModel[W_PU_MODEL].model = trap_R_RegisterModel(filename);
 			}
+			weaponInfo->weaponModel[W_PU_MODEL].model = trap_R_RegisterModel(filename);
 		} else if (!Q_stricmp(token.string, "pickupSound")) {
 			if (!PC_String_ParseNoAlloc(handle, filename, sizeof (filename))) {
 				return CG_RW_ParseError(handle, "expected pickupSound filename");
@@ -1142,15 +1128,13 @@ static qboolean CG_RW_ParseClient(int handle, weaponInfo_t *weaponInfo) {
 		} else if (!Q_stricmp(token.string, "weaponConfig")) {
 			if (!PC_String_ParseNoAlloc(handle, filename, sizeof (filename))) {
 				return CG_RW_ParseError(handle, "expected weaponConfig filename");
-			} else {
-				CG_ParseWeaponConfig(filename, weaponInfo);
 			}
+			CG_ParseWeaponConfig(filename, weaponInfo);
 		} else if (!Q_stricmp(token.string, "handsModel")) {
 			if (!PC_String_ParseNoAlloc(handle, filename, sizeof (filename))) {
 				return CG_RW_ParseError(handle, "expected handsModel filename");
-			} else {
-				weaponInfo->handsModel = trap_R_RegisterModel(filename);
 			}
+			weaponInfo->handsModel = trap_R_RegisterModel(filename);
 		} else if (!Q_stricmp(token.string, "flashDlightColor")) {
 			if (!PC_Vec_Parse(handle, &weaponInfo->flashDlightColor)) {
 				return CG_RW_ParseError(handle, "expected flashDlightColor as r g b");
@@ -1158,142 +1142,124 @@ static qboolean CG_RW_ParseClient(int handle, weaponInfo_t *weaponInfo) {
 		} else if (!Q_stricmp(token.string, "flashSound")) {
 			if (!PC_String_ParseNoAlloc(handle, filename, sizeof (filename))) {
 				return CG_RW_ParseError(handle, "expected flashSound filename");
-			} else {
-				for (i = 0; i < 4; i++) {
-					if (!weaponInfo->flashSound[i]) {
-						weaponInfo->flashSound[i] = trap_S_RegisterSound(filename);
-						break;
-					}
+			}
+			for (i = 0; i < 4; i++) {
+				if (!weaponInfo->flashSound[i]) {
+					weaponInfo->flashSound[i] = trap_S_RegisterSound(filename);
+					break;
 				}
-				if (i == 4) {
-					CG_Printf(S_COLOR_YELLOW "WARNING: only up to 4 flashSounds supported per weapon\n");
-				}
+			}
+			if (i == 4) {
+				CG_Printf(S_COLOR_YELLOW "WARNING: only up to 4 flashSounds supported per weapon\n");
 			}
 		} else if (!Q_stricmp(token.string, "flashEchoSound")) {
 			if (!PC_String_ParseNoAlloc(handle, filename, sizeof (filename))) {
 				return CG_RW_ParseError(handle, "expected flashEchoSound filename");
-			} else {
-				for (i = 0; i < 4; i++) {
-					if (!weaponInfo->flashEchoSound[i]) {
-						weaponInfo->flashEchoSound[i] = trap_S_RegisterSound(filename);
-						break;
-					}
+			}
+			for (i = 0; i < 4; i++) {
+				if (!weaponInfo->flashEchoSound[i]) {
+					weaponInfo->flashEchoSound[i] = trap_S_RegisterSound(filename);
+					break;
 				}
-				if (i == 4) {
-					CG_Printf(S_COLOR_YELLOW "WARNING: only up to 4 flashEchoSounds supported per weapon\n");
-				}
+			}
+			if (i == 4) {
+				CG_Printf(S_COLOR_YELLOW "WARNING: only up to 4 flashEchoSounds supported per weapon\n");
 			}
 		} else if (!Q_stricmp(token.string, "lastShotSound")) {
 			if (!PC_String_ParseNoAlloc(handle, filename, sizeof (filename))) {
 				return CG_RW_ParseError(handle, "expected lastShotSound filename");
-			} else {
-				for (i = 0; i < 4; i++) {
-					if (!weaponInfo->lastShotSound[i]) {
-						weaponInfo->lastShotSound[i] = trap_S_RegisterSound(filename);
-						break;
-					}
+			}
+			for (i = 0; i < 4; i++) {
+				if (!weaponInfo->lastShotSound[i]) {
+					weaponInfo->lastShotSound[i] = trap_S_RegisterSound(filename);
+					break;
 				}
-				if (i == 4) {
-					CG_Printf(S_COLOR_YELLOW "WARNING: only up to 4 lastShotSound supported per weapon\n");
-				}
+			}
+			if (i == 4) {
+				CG_Printf(S_COLOR_YELLOW "WARNING: only up to 4 lastShotSound supported per weapon\n");
 			}
 		} else if (!Q_stricmp(token.string, "readySound")) {
 			if (!PC_String_ParseNoAlloc(handle, filename, sizeof (filename))) {
 				return CG_RW_ParseError(handle, "expected readySound filename");
-			} else {
-				weaponInfo->readySound = trap_S_RegisterSound(filename);
 			}
+			weaponInfo->readySound = trap_S_RegisterSound(filename);
 		} else if (!Q_stricmp(token.string, "firingSound")) {
 			if (!PC_String_ParseNoAlloc(handle, filename, sizeof (filename))) {
 				return CG_RW_ParseError(handle, "expected firingSound filename");
-			} else {
-				weaponInfo->firingSound = trap_S_RegisterSound(filename);
 			}
+			weaponInfo->firingSound = trap_S_RegisterSound(filename);
 		} else if (!Q_stricmp(token.string, "overheatSound")) {
 			if (!PC_String_ParseNoAlloc(handle, filename, sizeof (filename))) {
 				return CG_RW_ParseError(handle, "expected overheatSound filename");
-			} else {
-				weaponInfo->overheatSound = trap_S_RegisterSound(filename);
 			}
+			weaponInfo->overheatSound = trap_S_RegisterSound(filename);
 		} else if (!Q_stricmp(token.string, "reloadSound")) {
 			if (!PC_String_ParseNoAlloc(handle, filename, sizeof (filename))) {
 				return CG_RW_ParseError(handle, "expected reloadSound filename");
-			} else {
-				weaponInfo->reloadSound = trap_S_RegisterSound(filename);
 			}
+			weaponInfo->reloadSound = trap_S_RegisterSound(filename);
 		} else if (!Q_stricmp(token.string, "reloadFastSound")) {
 			if (!PC_String_ParseNoAlloc(handle, filename, sizeof (filename))) {
 				return CG_RW_ParseError(handle, "expected reloadFastSound filename");
-			} else {
-				weaponInfo->reloadFastSound = trap_S_RegisterSound(filename);
 			}
+			weaponInfo->reloadFastSound = trap_S_RegisterSound(filename);
 		} else if (!Q_stricmp(token.string, "spinupSound")) {
 			if (!PC_String_ParseNoAlloc(handle, filename, sizeof (filename))) {
 				return CG_RW_ParseError(handle, "expected spinupSound filename");
-			} else {
-				weaponInfo->spinupSound = trap_S_RegisterSound(filename);
 			}
+			weaponInfo->spinupSound = trap_S_RegisterSound(filename);
 		} else if (!Q_stricmp(token.string, "spindownSound")) {
 			if (!PC_String_ParseNoAlloc(handle, filename, sizeof (filename))) {
 				return CG_RW_ParseError(handle, "expected spindownSound filename");
-			} else {
-				weaponInfo->spindownSound = trap_S_RegisterSound(filename);
 			}
+			weaponInfo->spindownSound = trap_S_RegisterSound(filename);
 		} else if (!Q_stricmp(token.string, "switchSound")) {
 			if (!PC_String_ParseNoAlloc(handle, filename, sizeof (filename))) {
 				return CG_RW_ParseError(handle, "expected switchSound filename");
-			} else {
-				weaponInfo->switchSound = trap_S_RegisterSound(filename);
 			}
+			weaponInfo->switchSound = trap_S_RegisterSound(filename);
 		} else if (!Q_stricmp(token.string, "weaponIcon")) {
 			if (!PC_String_ParseNoAlloc(handle, filename, sizeof (filename))) {
 				return CG_RW_ParseError(handle, "expected weaponIcon filename");
-			} else {
-				weaponInfo->weaponIcon[0] = trap_R_RegisterShader(filename);
 			}
+			weaponInfo->weaponIcon[0] = trap_R_RegisterShader(filename);
 		} else if (!Q_stricmp(token.string, "weaponSelectedIcon")) {
 			if (!PC_String_ParseNoAlloc(handle, filename, sizeof (filename))) {
 				return CG_RW_ParseError(handle, "expected weaponSelectedIcon filename");
-			} else {
-				weaponInfo->weaponIcon[1] = trap_R_RegisterShader(filename);
 			}
+			weaponInfo->weaponIcon[1] = trap_R_RegisterShader(filename);
 		} else if (!Q_stricmp(token.string, "missileModel")) {
 			if (!PC_String_ParseNoAlloc(handle, filename, sizeof (filename))) {
 				return CG_RW_ParseError(handle, "expected missileModel filename");
-			} else {
-				weaponInfo->missileModel = trap_R_RegisterModel(filename);
 			}
+			weaponInfo->missileModel = trap_R_RegisterModel(filename);
 		} else if (!Q_stricmp(token.string, "missileAlliedSkin")) {
 			if (!PC_String_ParseNoAlloc(handle, filename, sizeof (filename))) {
 				return CG_RW_ParseError(handle, "expected skin filename");
-			} else {
-				weaponInfo->missileAlliedSkin = trap_R_RegisterSkin(filename);
 			}
+			weaponInfo->missileAlliedSkin = trap_R_RegisterSkin(filename);
 		} else if (!Q_stricmp(token.string, "missileAxisSkin")) {
 			if (!PC_String_ParseNoAlloc(handle, filename, sizeof (filename))) {
 				return CG_RW_ParseError(handle, "expected skin filename");
-			} else {
-				weaponInfo->missileAxisSkin = trap_R_RegisterSkin(filename);
 			}
+			weaponInfo->missileAxisSkin = trap_R_RegisterSkin(filename);
 		} else if (!Q_stricmp(token.string, "missileSound")) {
 			if (!PC_String_ParseNoAlloc(handle, filename, sizeof (filename))) {
 				return CG_RW_ParseError(handle, "expected missileSound filename");
-			} else {
-				weaponInfo->missileSound = trap_S_RegisterSound(filename);
 			}
+			weaponInfo->missileSound = trap_S_RegisterSound(filename);
 		} else if (!Q_stricmp(token.string, "missileTrailFunc")) {
 			if (!PC_String_ParseNoAlloc(handle, filename, sizeof (filename))) {
 				return CG_RW_ParseError(handle, "expected missileTrailFunc");
-			} else {
-				if (!Q_stricmp(filename, "GrenadeTrail")) {
-					weaponInfo->missileTrailFunc = CG_GrenadeTrail;
-				} else if (!Q_stricmp(filename, "RocketTrail")) {
-					weaponInfo->missileTrailFunc = CG_RocketTrail;
-				} else if (!Q_stricmp(filename, "PyroSmokeTrail")) {
-					weaponInfo->missileTrailFunc = CG_PyroSmokeTrail;
-				} else if (!Q_stricmp(filename, "DynamiteTrail")) {
-					weaponInfo->missileTrailFunc = CG_DynamiteTrail;
-				}
+			}
+			if (!Q_stricmp(filename, "GrenadeTrail")) {
+				weaponInfo->missileTrailFunc = CG_GrenadeTrail;
+			} else if (!Q_stricmp(filename, "RocketTrail")) {
+				weaponInfo->missileTrailFunc = CG_RocketTrail;
+			} else if (!Q_stricmp(filename, "PyroSmokeTrail")) {
+				weaponInfo->missileTrailFunc = CG_PyroSmokeTrail;
+			} else if (!Q_stricmp(filename, "DynamiteTrail")) {
+				weaponInfo->missileTrailFunc = CG_DynamiteTrail;
 			}
 		} else if (!Q_stricmp(token.string, "missileDlight")) {
 			if (!PC_Float_Parse(handle, &weaponInfo->missileDlight)) {
@@ -1306,12 +1272,11 @@ static qboolean CG_RW_ParseClient(int handle, weaponInfo_t *weaponInfo) {
 		} else if (!Q_stricmp(token.string, "ejectBrassFunc")) {
 			if (!PC_String_ParseNoAlloc(handle, filename, sizeof (filename))) {
 				return CG_RW_ParseError(handle, "expected ejectBrassFunc");
-			} else {
-				if (!Q_stricmp(filename, "MachineGunEjectBrass")) {
-					weaponInfo->ejectBrassFunc = CG_MachineGunEjectBrass;
-				} else if (!Q_stricmp(filename, "PanzerFaustEjectBrass")) {
-					weaponInfo->ejectBrassFunc = CG_PanzerFaustEjectBrass;
-				}
+			}
+			if (!Q_stricmp(filename, "MachineGunEjectBrass")) {
+				weaponInfo->ejectBrassFunc = CG_MachineGunEjectBrass;
+			} else if (!Q_stricmp(filename, "PanzerFaustEjectBrass")) {
+				weaponInfo->ejectBrassFunc = CG_PanzerFaustEjectBrass;
 			}
 		} else if (!Q_stricmp(token.string, "modModel")) {
 			if (!CG_RW_ParseModModel(handle, weaponInfo)) {
@@ -1863,7 +1828,7 @@ sound should only be done on the world model case.
 =============
 */
 static qboolean debuggingweapon = qfalse;
-
+#define BARREL_SMOKE_TIME 1000
 void CG_AddPlayerWeapon(refEntity_t *parent, playerState_t *ps, centity_t *cent) {
 
 	refEntity_t  gun;
@@ -1897,16 +1862,12 @@ void CG_AddPlayerWeapon(refEntity_t *parent, playerState_t *ps, centity_t *cent)
 	}
 
 	// don't draw weapon stuff when looking through a scope
-	if (weaponNum == WP_FG42SCOPE || weaponNum == WP_GARAND_SCOPE || weaponNum == WP_K43_SCOPE) {
-		if (isPlayer && !cg.renderingThirdPerson) {
-			return;
-		}
+	if ((weaponNum == WP_FG42SCOPE || weaponNum == WP_GARAND_SCOPE || weaponNum == WP_K43_SCOPE) && isPlayer && !cg.renderingThirdPerson) {
+		return;
 	}
 
-	if (weaponNum == WP_GRENADE_PINEAPPLE || weaponNum == WP_GRENADE_LAUNCHER) {
-		if (ps && !ps->ammoclip[weaponNum]) {
-			return;
-		}
+	if ((weaponNum == WP_GRENADE_PINEAPPLE || weaponNum == WP_GRENADE_LAUNCHER) && ps && !ps->ammoclip[weaponNum]) {
+		return;
 	}
 
 	// no weapon when on mg_42
@@ -2075,10 +2036,9 @@ void CG_AddPlayerWeapon(refEntity_t *parent, playerState_t *ps, centity_t *cent)
 		qboolean spunpart;
 
 		for (i = W_PART_1; i < W_MAX_PARTS; i++) {
-			if (weaponNum == WP_MORTAR_SET && (i == W_PART_4 || i == W_PART_5)) {
-				if (ps && !cg.renderingThirdPerson && cg.predictedPlayerState.weaponstate != WEAPON_RAISING) {
-					continue;
-				}
+			if ((weaponNum == WP_MORTAR_SET && (i == W_PART_4 || i == W_PART_5)) &&
+				ps && !cg.renderingThirdPerson && cg.predictedPlayerState.weaponstate != WEAPON_RAISING) {
+				continue;
 			}
 
 			spunpart      = qfalse;
@@ -2091,15 +2051,11 @@ void CG_AddPlayerWeapon(refEntity_t *parent, playerState_t *ps, centity_t *cent)
 						angles[ROLL]  = .8f * AngleNormalize180(cg.pmext.mountedWeaponAngles[YAW] - ps->viewangles[YAW]);
 						spunpart      = qtrue;
 					}
-				} else if (i == W_PART_1 || i == W_PART_2) {
-					if (ps && !cg.renderingThirdPerson && cg.predictedPlayerState.weaponstate != WEAPON_RAISING) {
-						angles[YAW]   = angles[ROLL] = 0.f;
-						angles[PITCH] = -.4f * AngleNormalize180(cg.pmext.mountedWeaponAngles[PITCH] - ps->viewangles[PITCH]);
-						spunpart      = qtrue;
-					}
+				} else if ((i == W_PART_1 || i == W_PART_2) && ps && !cg.renderingThirdPerson && cg.predictedPlayerState.weaponstate != WEAPON_RAISING) {
+					angles[YAW]   = angles[ROLL] = 0.f;
+					angles[PITCH] = -.4f * AngleNormalize180(cg.pmext.mountedWeaponAngles[PITCH] - ps->viewangles[PITCH]);
+					spunpart      = qtrue;
 				}
-			} else if (weaponNum == WP_MOBILE_MG42_SET) {
-
 			}
 
 			if (spunpart) {
@@ -2115,10 +2071,8 @@ void CG_AddPlayerWeapon(refEntity_t *parent, playerState_t *ps, centity_t *cent)
 
 				drawpart = CG_GetPartFramesFromWeap(cent, &barrel, parent, i, weapon);
 
-				if (weaponNum == WP_MORTAR_SET && (i == W_PART_1 || i == W_PART_2)) {
-					if (ps && !cg.renderingThirdPerson && cg.predictedPlayerState.weaponstate != WEAPON_RAISING) {
-						VectorMA(barrel.origin, .5f * angles[PITCH], cg.refdef_current->viewaxis[0], barrel.origin);
-					}
+				if ((weaponNum == WP_MORTAR_SET && (i == W_PART_1 || i == W_PART_2)) && ps && !cg.renderingThirdPerson && cg.predictedPlayerState.weaponstate != WEAPON_RAISING) {
+					VectorMA(barrel.origin, .5f * angles[PITCH], cg.refdef_current->viewaxis[0], barrel.origin);
 				}
 
 				if (drawpart) {
@@ -2174,23 +2128,21 @@ void CG_AddPlayerWeapon(refEntity_t *parent, playerState_t *ps, centity_t *cent)
 						CG_PositionRotatedEntityOnTag(&satchelDetPart, &barrel, "tag_needle");
 						satchelDetPart.customShader = weapon->modModels[2];
 						CG_AddWeaponWithPowerups(&satchelDetPart);
-					} else if (weaponNum == WP_MORTAR_SET && i == W_PART_3) {
-						if (ps && !cg.renderingThirdPerson && cg.predictedPlayerState.weaponstate != WEAPON_RAISING) {
-							refEntity_t bipodLeg;
+					} else if (weaponNum == WP_MORTAR_SET && i == W_PART_3 && ps && !cg.renderingThirdPerson && cg.predictedPlayerState.weaponstate != WEAPON_RAISING) {
+						refEntity_t bipodLeg;
 
-							memset(&bipodLeg, 0, sizeof (bipodLeg));
-							VectorCopy(parent->lightingOrigin, bipodLeg.lightingOrigin);
-							bipodLeg.shadowPlane = parent->shadowPlane;
-							bipodLeg.renderfx    = parent->renderfx;
+						memset(&bipodLeg, 0, sizeof (bipodLeg));
+						VectorCopy(parent->lightingOrigin, bipodLeg.lightingOrigin);
+						bipodLeg.shadowPlane = parent->shadowPlane;
+						bipodLeg.renderfx    = parent->renderfx;
 
-							bipodLeg.hModel = weapon->partModels[W_FP_MODEL][3].model;
-							CG_PositionEntityOnTag(&bipodLeg, &barrel, "tag_barrel4", 0, NULL);
-							CG_AddWeaponWithPowerups(&bipodLeg);
+						bipodLeg.hModel = weapon->partModels[W_FP_MODEL][3].model;
+						CG_PositionEntityOnTag(&bipodLeg, &barrel, "tag_barrel4", 0, NULL);
+						CG_AddWeaponWithPowerups(&bipodLeg);
 
-							bipodLeg.hModel = weapon->partModels[W_FP_MODEL][4].model;
-							CG_PositionEntityOnTag(&bipodLeg, &barrel, "tag_barrel5", 0, NULL);
-							CG_AddWeaponWithPowerups(&bipodLeg);
-						}
+						bipodLeg.hModel = weapon->partModels[W_FP_MODEL][4].model;
+						CG_PositionEntityOnTag(&bipodLeg, &barrel, "tag_barrel5", 0, NULL);
+						CG_AddWeaponWithPowerups(&bipodLeg);
 					}
 				}
 			}
@@ -2200,7 +2152,7 @@ void CG_AddPlayerWeapon(refEntity_t *parent, playerState_t *ps, centity_t *cent)
 	// add the scope model to the rifle if you've got it
 	if (isPlayer && !cg.renderingThirdPerson) {          // (SA) for now just do it on the first person weapons
 		if (weaponNum == WP_CARBINE || weaponNum == WP_KAR98 || weaponNum == WP_GPG40 || weaponNum == WP_M7) {
-			if ((cg.snap->ps.ammo[BG_FindAmmoForWeapon(WP_GPG40)] || cg.snap->ps.ammo[BG_FindAmmoForWeapon(WP_M7)] || cg.snap->ps.ammoclip[BG_FindAmmoForWeapon(WP_GPG40)] || cg.snap->ps.ammoclip[BG_FindAmmoForWeapon(WP_M7)])) {
+			if (cg.snap->ps.ammo[BG_FindAmmoForWeapon(WP_GPG40)] || cg.snap->ps.ammo[BG_FindAmmoForWeapon(WP_M7)] || cg.snap->ps.ammoclip[BG_FindAmmoForWeapon(WP_GPG40)] || cg.snap->ps.ammoclip[BG_FindAmmoForWeapon(WP_M7)]) {
 				int anim = cg.snap->ps.weapAnim & ~ANIM_TOGGLEBIT;
 				if (anim == PM_AltSwitchFromForWeapon(weaponNum) || anim == PM_AltSwitchToForWeapon(weaponNum) || anim == PM_IdleAnimForWeapon(weaponNum)) {
 					barrel.hModel = weapon->modModels[0];
@@ -2316,52 +2268,35 @@ void CG_AddPlayerWeapon(refEntity_t *parent, playerState_t *ps, centity_t *cent)
 	cent->pe.gunRefEnt      = gun;
 	cent->pe.gunRefEntFrame = cg.clientFrame;
 
-	if ((weaponNum == WP_FLAMETHROWER) && (nonPredictedCent->currentState.eFlags & EF_FIRING)) {
-		// continuous flash
-
-	} else {
-
+	if (!((weaponNum == WP_FLAMETHROWER) && (nonPredictedCent->currentState.eFlags & EF_FIRING))) {
 		// continuous smoke after firing
-#define BARREL_SMOKE_TIME 1000
-
 		if (ps || cg.renderingThirdPerson || !isPlayer) {
 			if (weaponNum == WP_STEN || weaponNum == WP_MOBILE_MG42 || weaponNum == WP_MOBILE_MG42_SET) {
 				// hot smoking gun
-				if (cg.time - cent->overheatTime < 3000) {
-					if (!(rand() % 3)) {
-						float alpha;
-						alpha  = 1.0f - ((float)(cg.time - cent->overheatTime) / 3000.0f);
-						alpha *= 0.25f;     // .25 max alpha
-						CG_ParticleImpactSmokePuffExtended(cgs.media.smokeParticleShader, flash.origin, 1000, 8, 20, 30, alpha, 8.f);
-					}
+				if (cg.time - cent->overheatTime < 3000 && !(rand() % 3)) {
+					float alpha;
+					alpha  = 1.0f - ((float)(cg.time - cent->overheatTime) / 3000.0f);
+					alpha *= 0.25f;     // .25 max alpha
+					CG_ParticleImpactSmokePuffExtended(cgs.media.smokeParticleShader, flash.origin, 1000, 8, 20, 30, alpha, 8.f);
 				}
 
-			} else if (weaponNum == WP_PANZERFAUST) {
-				if (cg.time - cent->muzzleFlashTime < BARREL_SMOKE_TIME) {
-					if (!(rand() % 5)) {
-						float alpha;
-						alpha  = 1.0f - ((float)(cg.time - cent->muzzleFlashTime) / (float)BARREL_SMOKE_TIME);    // what fraction of BARREL_SMOKE_TIME are we at
-						alpha *= 0.25f;     // .25 max alpha
-						CG_ParticleImpactSmokePuffExtended(cgs.media.smokeParticleShader, flash.origin, 1000, 8, 20, 30, alpha, 8.f);
-					}
-				}
+			} else if (weaponNum == WP_PANZERFAUST && cg.time - cent->muzzleFlashTime < BARREL_SMOKE_TIME && !(rand() % 5)) {
+				float alpha;
+				alpha  = 1.0f - ((float)(cg.time - cent->muzzleFlashTime) / (float)BARREL_SMOKE_TIME);    // what fraction of BARREL_SMOKE_TIME are we at
+				alpha *= 0.25f;     // .25 max alpha
+				CG_ParticleImpactSmokePuffExtended(cgs.media.smokeParticleShader, flash.origin, 1000, 8, 20, 30, alpha, 8.f);
 			}
 		}
 
-		if (weaponNum == WP_MORTAR_SET) {
-			if (ps && !cg.renderingThirdPerson && cg.time - cent->muzzleFlashTime < 800) {
-				CG_ParticleImpactSmokePuffExtended(cgs.media.smokeParticleShader, flash.origin, 700, 16, 20, 30, .12f, 4.f);
-			}
+		if (weaponNum == WP_MORTAR_SET && ps && !cg.renderingThirdPerson && cg.time - cent->muzzleFlashTime < 800) {
+			CG_ParticleImpactSmokePuffExtended(cgs.media.smokeParticleShader, flash.origin, 700, 16, 20, 30, .12f, 4.f);
 		}
 
 		// impulse flash
-		if (cg.time - cent->muzzleFlashTime > MUZZLE_FLASH_TIME) {
+		if (cg.time - cent->muzzleFlashTime > MUZZLE_FLASH_TIME && weaponNum != WP_FLAMETHROWER) {
 			// Ridah, blue ignition flame if not firing flamer
-			if (weaponNum != WP_FLAMETHROWER) {
-				return;
-			}
+			return;
 		}
-
 	}
 
 	// weapons that don't need to go any further as they have no flash or light
@@ -2383,21 +2318,14 @@ void CG_AddPlayerWeapon(refEntity_t *parent, playerState_t *ps, centity_t *cent)
 	}
 
 	// weaps with barrel smoke
-	if (ps || cg.renderingThirdPerson || !isPlayer) {
-		if (weaponNum == WP_STEN) {
-			if (cg.time - cent->muzzleFlashTime < 100) {
-				CG_ParticleImpactSmokePuffExtended(cgs.media.smokeParticleShader, flash.origin, 500, 8, 20, 30, 0.25f, 8.f);
-			}
-		}
+	if ((ps || cg.renderingThirdPerson || !isPlayer) && weaponNum == WP_STEN && cg.time - cent->muzzleFlashTime < 100) {
+		CG_ParticleImpactSmokePuffExtended(cgs.media.smokeParticleShader, flash.origin, 500, 8, 20, 30, 0.25f, 8.f);
 	}
 
-	if (flash.hModel) {
-		if (weaponNum != WP_FLAMETHROWER) {   //Ridah, hide the flash also for now
-			// RF, changed this so the muzzle flash stays onscreen for long enough to be seen
-			if (cg.time - cent->muzzleFlashTime < MUZZLE_FLASH_TIME) {
-				trap_R_AddRefEntityToScene(&flash);
-			}
-		}
+	if (flash.hModel && weaponNum != WP_FLAMETHROWER && cg.time - cent->muzzleFlashTime < MUZZLE_FLASH_TIME) {
+		//Ridah, hide the flash also for now
+		// RF, changed this so the muzzle flash stays onscreen for long enough to be seen
+		trap_R_AddRefEntityToScene(&flash);
 	}
 
 	if (ps || cg.renderingThirdPerson || !isPlayer) {
@@ -2459,7 +2387,7 @@ void CG_AddViewWeapon(playerState_t *ps) {
 	}
 
 	// allow the gun to be completely removed
-	if ((!cg_drawGun.integer)) {
+	if (!cg_drawGun.integer) {
 		vec3_t origin;
 
 		//bani - #589
@@ -2484,7 +2412,6 @@ void CG_AddViewWeapon(playerState_t *ps) {
 				if (cg.binocZoomTime + 500 < cg.time) {
 					trap_SendConsoleCommand("+zoom\n");
 					cg.binocZoomTime = 0;
-				} else {
 				}
 			}
 		}
@@ -2534,13 +2461,11 @@ void CG_AddViewWeapon(playerState_t *ps) {
 
 		CG_AddWeaponWithPowerups(&hand);
 
-		if (cg.time - cg.predictedPlayerEntity.overheatTime < 3000) {
-			if (!(rand() % 3)) {
-				float alpha;
-				alpha  = 1.0f - ((float)(cg.time - cg.predictedPlayerEntity.overheatTime) / 3000.0f);
-				alpha *= 0.25f;     // .25 max alpha
-				CG_ParticleImpactSmokePuffExtended(cgs.media.smokeParticleShader, cg.tankflashorg, 1000, 8, 20, 30, alpha, 8.f);
-			}
+		if (cg.time - cg.predictedPlayerEntity.overheatTime < 3000 && !(rand() % 3)) {
+			float alpha;
+			alpha  = 1.0f - ((float)(cg.time - cg.predictedPlayerEntity.overheatTime) / 3000.0f);
+			alpha *= 0.25f;     // .25 max alpha
+			CG_ParticleImpactSmokePuffExtended(cgs.media.smokeParticleShader, cg.tankflashorg, 1000, 8, 20, 30, alpha, 8.f);
 		}
 
 		{
@@ -2747,9 +2672,9 @@ static int getNextWeapInBank(int bank, int cycle) {
 
 	if (weapBanksMultiPlayer[bank][cycle]) {        // return next weapon in bank if there is one
 		return weapBanksMultiPlayer[bank][cycle];
-	} else {                                  // return first in bank
-		return weapBanksMultiPlayer[bank][0];
 	}
+	// return first in bank
+	return weapBanksMultiPlayer[bank][0];
 }
 
 static int getNextWeapInBankBynum(int weapnum) {
@@ -2815,9 +2740,8 @@ static int getNextBankWeap(int bank, int cycle, qboolean sameBankPosition) {
 
 	if (sameBankPosition && weapBanksMultiPlayer[bank][cycle]) {
 		return weapBanksMultiPlayer[bank][cycle];
-	} else {
-		return weapBanksMultiPlayer[bank][0];
 	}
+	return weapBanksMultiPlayer[bank][0];
 }
 
 /*
@@ -2841,16 +2765,16 @@ static int getPrevBankWeap(int bank, int cycle, qboolean sameBankPosition) {
 
 	if (sameBankPosition && weapBanksMultiPlayer[bank][cycle]) {
 		return weapBanksMultiPlayer[bank][cycle];
-	} else {   // find highest weap in bank
-		for (i = MAX_WEAPS_IN_BANK_MP - 1; i >= 0; i--) {
-			if (weapBanksMultiPlayer[bank][i]) {
-				return weapBanksMultiPlayer[bank][i];
-			}
-		}
-
-		// if it gets to here, no valid weaps in this bank, go down another bank
-		return getPrevBankWeap(bank, cycle, sameBankPosition);
 	}
+	// find highest weap in bank
+	for (i = MAX_WEAPS_IN_BANK_MP - 1; i >= 0; i--) {
+		if (weapBanksMultiPlayer[bank][i]) {
+			return weapBanksMultiPlayer[bank][i];
+		}
+	}
+
+	// if it gets to here, no valid weaps in this bank, go down another bank
+	return getPrevBankWeap(bank, cycle, sameBankPosition);
 }
 
 /*
@@ -3119,7 +3043,7 @@ void CG_AltWeapon_f(void) {
 	}
 
 	// Overload for spec mode when following
-	if ((cg.snap->ps.pm_flags & PMF_FOLLOW)) {
+	if (cg.snap->ps.pm_flags & PMF_FOLLOW) {
 		return;
 	}
 
@@ -3156,10 +3080,8 @@ void CG_AltWeapon_f(void) {
 		if (contents & MASK_WATER) {
 			return;
 		}
-	} else if (cg.weaponSelect == WP_MOBILE_MG42) {
-		if (!(cg.predictedPlayerState.eFlags & EF_PRONE)) {
-			return;
-		}
+	} else if (cg.weaponSelect == WP_MOBILE_MG42 && !(cg.predictedPlayerState.eFlags & EF_PRONE)) {
+		return;
 	}
 
 	if (cg.time - cg.weaponSelectTime < cg_weaponCycleDelay.integer) {
@@ -3958,12 +3880,10 @@ void CG_OutOfAmmoChange(qboolean allowforceswitch) {
 		}
 
 		// JPW NERVE -- early out if we just dropped dynamite, go to pliers
-		if (cg.weaponSelect == WP_DYNAMITE) {
-			if (CG_WeaponSelectable(WP_PLIERS)) {
-				cg.weaponSelect = WP_PLIERS;
-				CG_FinishWeaponChange(cg.predictedPlayerState.weapon, WP_PLIERS);
-				return;
-			}
+		if (cg.weaponSelect == WP_DYNAMITE && CG_WeaponSelectable(WP_PLIERS)) {
+			cg.weaponSelect = WP_PLIERS;
+			CG_FinishWeaponChange(cg.predictedPlayerState.weapon, WP_PLIERS);
+			return;
 		}
 
 		// JPW NERVE -- early out if we just fired Panzerfaust, go to pistola, then grenades
@@ -4222,8 +4142,7 @@ void CG_FireWeapon(centity_t *cent) {
 
 	// Rafael - mg42
 	if (BG_PlayerMounted(cent->currentState.eFlags)) {
-		if (cent->currentState.eFlags & EF_AAGUN_ACTIVE) {
-		} else {
+		if (!(cent->currentState.eFlags & EF_AAGUN_ACTIVE)) {
 			trap_S_StartSound(NULL, cent->currentState.number, CHAN_WEAPON, cgs.media.hWeaponSnd);
 		}
 
@@ -4263,28 +4182,24 @@ void CG_FireWeapon(centity_t *cent) {
 		if (cent->pe.lightningFiring) {
 			return;
 		}
-	} else if (ent->weapon == WP_GRENADE_LAUNCHER ||
-	           ent->weapon == WP_GRENADE_PINEAPPLE ||
-	           ent->weapon == WP_DYNAMITE ||
-	           ent->weapon == WP_SMOKE_MARKER
-	           || ent->weapon == WP_LANDMINE
-	           || ent->weapon == WP_SATCHEL
-	           || ent->weapon == WP_TRIPMINE
-	           || ent->weapon == WP_SMOKE_BOMB
-	           ) {    // JPW NERVE
-		if (ent->apos.trBase[0] > 0) {   // underhand
-			return;
-		}
+	} else if ((ent->weapon == WP_GRENADE_LAUNCHER ||
+		ent->weapon == WP_GRENADE_PINEAPPLE ||
+		ent->weapon == WP_DYNAMITE ||
+		ent->weapon == WP_SMOKE_MARKER
+		|| ent->weapon == WP_LANDMINE
+		|| ent->weapon == WP_SATCHEL
+		|| ent->weapon == WP_TRIPMINE
+		|| ent->weapon == WP_SMOKE_BOMB) &&
+		ent->apos.trBase[0] > 0) {   // underhand
+		return;
 	}
 
 	if (ent->weapon == WP_GPG40) {
 		if (ent->clientNum == cg.snap->ps.clientNum) {
 			cg.weaponSelect = WP_KAR98;
 		}
-	} else if (ent->weapon == WP_M7) {
-		if (ent->clientNum == cg.snap->ps.clientNum) {
-			cg.weaponSelect = WP_CARBINE;
-		}
+	} else if (ent->weapon == WP_M7 && ent->clientNum == cg.snap->ps.clientNum) {
+		cg.weaponSelect = WP_CARBINE;
 	}
 
 	if ((cent->currentState.event & ~EV_EVENT_BITS) == EV_FIRE_WEAPON_LASTSHOT) {
@@ -4510,6 +4425,7 @@ Caused by an EV_MISSILE_MISS event, or directly by local bullet tracing
 ClientNum is a dummy field used to define what sort of effect to spawn
 =================
 */
+#define MAX_IMPACT_SOUNDS 5
 void CG_MissileHitWall(int weapon, int clientNum, vec3_t origin, vec3_t dir, int surfFlags) {   //	(SA) modified to send missilehitwall surface parameters
 	qhandle_t     mod, mark, shader;
 	sfxHandle_t   sfx, sfx2;
@@ -4597,7 +4513,7 @@ void CG_MissileHitWall(int weapon, int clientNum, vec3_t origin, vec3_t dir, int
 			d[2] += 16;
 
 			// DHM - Nerve :: use dirt images
-			if ((surfFlags & SURF_GRASS || surfFlags & SURF_GRAVEL || surfFlags & SURF_SNOW)) {     // JPW NERVE added SURF_SNOW
+			if (surfFlags & SURF_GRASS || surfFlags & SURF_GRAVEL || surfFlags & SURF_SNOW) {     // JPW NERVE added SURF_SNOW
 				// some debris particles
 				// JPW NERVE added surf_snow
 				if (surfFlags & SURF_SNOW) {
@@ -4630,32 +4546,29 @@ void CG_MissileHitWall(int weapon, int clientNum, vec3_t origin, vec3_t dir, int
 		// enough to see it, this way we can leave other marks around a lot
 		// longer, since most of the time we can't actually see the bullet holes
 // (SA) small modification.  only do this for non-rifles (so you can see your shots hitting when you're zooming with a rifle scope)
-		if (weapon == WP_FG42SCOPE || weapon == WP_GARAND_SCOPE || weapon == WP_K43_SCOPE || (Distance(cg.refdef_current->vieworg, origin) < 384)) {
-			if (clientNum) {
-				// mark and sound can potentially use the surface for override values
+		if ((weapon == WP_FG42SCOPE || weapon == WP_GARAND_SCOPE || weapon == WP_K43_SCOPE || (Distance(cg.refdef_current->vieworg, origin) < 384)) && clientNum) {
+			// mark and sound can potentially use the surface for override values
 
-				mark   = cgs.media.bulletMarkShader; // default
-				radius = 1.0f + 0.5f * (rand() % 2);
+			mark   = cgs.media.bulletMarkShader; // default
+			radius = 1.0f + 0.5f * (rand() % 2);
 
-#define MAX_IMPACT_SOUNDS 5
-				if (surfFlags & SURF_METAL || surfFlags & SURF_ROOF) {
-					sfx  = cgs.media.sfx_bullet_metalhit[rand() % MAX_IMPACT_SOUNDS];
-					mark = cgs.media.bulletMarkShaderMetal;
-				} else if (surfFlags & SURF_WOOD) {
-					sfx     = cgs.media.sfx_bullet_woodhit[rand() % MAX_IMPACT_SOUNDS];
-					mark    = cgs.media.bulletMarkShaderWood;
-					radius += 0.4f; // experimenting with different mark sizes per surface
-				} else if (surfFlags & SURF_GLASS) {
-					sfx  = cgs.media.sfx_bullet_glasshit[rand() % MAX_IMPACT_SOUNDS];
-					mark = cgs.media.bulletMarkShaderGlass;
-				} else {
-					sfx  = cgs.media.sfx_bullet_stonehit[rand() % MAX_IMPACT_SOUNDS];
-					mark = cgs.media.bulletMarkShader;
-				}
-
-				// ydnar: set mark duration
-				markDuration = cg_markTime.integer;
+			if (surfFlags & SURF_METAL || surfFlags & SURF_ROOF) {
+				sfx  = cgs.media.sfx_bullet_metalhit[rand() % MAX_IMPACT_SOUNDS];
+				mark = cgs.media.bulletMarkShaderMetal;
+			} else if (surfFlags & SURF_WOOD) {
+				sfx     = cgs.media.sfx_bullet_woodhit[rand() % MAX_IMPACT_SOUNDS];
+				mark    = cgs.media.bulletMarkShaderWood;
+				radius += 0.4f; // experimenting with different mark sizes per surface
+			} else if (surfFlags & SURF_GLASS) {
+				sfx  = cgs.media.sfx_bullet_glasshit[rand() % MAX_IMPACT_SOUNDS];
+				mark = cgs.media.bulletMarkShaderGlass;
+			} else {
+				sfx  = cgs.media.sfx_bullet_stonehit[rand() % MAX_IMPACT_SOUNDS];
+				mark = cgs.media.bulletMarkShader;
 			}
+
+			// ydnar: set mark duration
+			markDuration = cg_markTime.integer;
 		}
 		break;
 
@@ -5000,18 +4913,15 @@ void CG_SpawnTracer(int sourceEnt, vec3_t pstart, vec3_t pend) {
 
 	if (dist < 2.0 * cg_tracerLength.value) {
 		return; // segment isnt long enough, dont bother
-
 	}
-	if (sourceEnt < cgs.maxclients) {
-		// for visual purposes, find the actual tag_weapon for this client
-		// and offset the start and end accordingly
-		if (!(cg_entities[sourceEnt].currentState.eFlags & EF_MG42_ACTIVE || cg_entities[sourceEnt].currentState.eFlags & EF_AAGUN_ACTIVE)) {        // not MG42
-			if (CG_GetWeaponTag(sourceEnt, "tag_flash", &or)) {
-				VectorSubtract(or.origin, start, ofs);
-				if (VectorLength(ofs) < 64) {
-					VectorAdd(start, ofs, start);
-				}
-			}
+	// for visual purposes, find the actual tag_weapon for this client
+	// and offset the start and end accordingly
+	if (sourceEnt < cgs.maxclients &&
+		(!(cg_entities[sourceEnt].currentState.eFlags & EF_MG42_ACTIVE || cg_entities[sourceEnt].currentState.eFlags & EF_AAGUN_ACTIVE)) &&
+		CG_GetWeaponTag(sourceEnt, "tag_flash", &or)) {
+		VectorSubtract(or.origin, start, ofs);
+		if (VectorLength(ofs) < 64) {
+			VectorAdd(start, ofs, start);
 		}
 	}
 
@@ -5292,15 +5202,14 @@ void CG_Bullet(vec3_t end, int sourceEntityNum, qboolean flesh, int fleshEntityN
 		// do a complete bubble trail if necessary
 		if ((sourceContentType == destContentType) && (sourceContentType & CONTENTS_WATER)) {
 			CG_BubbleTrail(start, end, .5, 8);
-		} else if ((sourceContentType & CONTENTS_WATER)) {       // bubble trail from water into air
+		} else if (sourceContentType & CONTENTS_WATER) {       // bubble trail from water into air
 			trap_CM_BoxTrace(&trace, end, start, NULL, NULL, 0, CONTENTS_WATER);
 			CG_BubbleTrail(start, trace.endpos, .5, 8);
-		} else if ((destContentType & CONTENTS_WATER)) {       // bubble trail from air into water
+		} else if (destContentType & CONTENTS_WATER && Distance(cg.snap->ps.origin, end) < 1024) {
+			// bubble trail from air into water
 			// only add bubbles if effect is close to viewer
-			if (Distance(cg.snap->ps.origin, end) < 1024) {
-				trap_CM_BoxTrace(&trace, start, end, NULL, NULL, 0, CONTENTS_WATER);
-				CG_BubbleTrail(end, trace.endpos, .5, 8);
-			}
+			trap_CM_BoxTrace(&trace, start, end, NULL, NULL, 0, CONTENTS_WATER);
+			CG_BubbleTrail(end, trace.endpos, .5, 8);
 		}
 
 		// if not flesh, then do a moving tracer

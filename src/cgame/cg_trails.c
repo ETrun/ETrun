@@ -240,7 +240,7 @@ int CG_AddTrailJunc(int headJuncIndex, void *usedby, qhandle_t shader, int spawn
 		}
 	}
 
-	return ((int)(j - trailJuncs) + 1);
+	return (int)(j - trailJuncs) + 1;
 }
 
 /*
@@ -293,7 +293,7 @@ int CG_AddSparkJunc(int headJuncIndex, void *usedby, qhandle_t shader, vec3_t po
 	j->widthStart = startWidth;
 	j->widthEnd   = endWidth;
 
-	return ((int)(j - trailJuncs) + 1);
+	return (int)(j - trailJuncs) + 1;
 }
 
 /*
@@ -356,7 +356,7 @@ int CG_AddSmokeJunc(int headJuncIndex, void *usedby, qhandle_t shader, vec3_t po
 		j->alphaEnd   = 0.0;
 	}
 
-	return ((int)(j - trailJuncs) + 1);
+	return (int)(j - trailJuncs) + 1;
 }
 
 void CG_KillTrail(trailJunc_t *t);
@@ -730,10 +730,8 @@ void CG_AddTrailToScene(trailJunc_t *trail, int iteration, int numJuncs) {
 	}
 
 	// do we need to make another pass?
-	if (trail->flags & TJFL_CROSSOVER) {
-		if (iteration < 2) {
-			CG_AddTrailToScene(trail, iteration + 1, numJuncs);
-		}
+	if (trail->flags & TJFL_CROSSOVER && iteration < 2) {
+		CG_AddTrailToScene(trail, iteration + 1, numJuncs);
 	}
 
 }

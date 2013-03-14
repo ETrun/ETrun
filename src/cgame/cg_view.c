@@ -230,13 +230,11 @@ void CG_OffsetThirdPersonView(void) {
 	VectorCopy(cg.refdefViewAngles, focusAngles);
 
 	// rain - if dead, look at medic or allow freelook if none in range
-	if (cg.predictedPlayerState.stats[STAT_HEALTH] <= 0) {
+	if (cg.predictedPlayerState.stats[STAT_HEALTH] <= 0 && cg.snap->ps.viewlocked != 7) {
 		// rain - #254 - force yaw to 0 if we're tracking a medic
-		if (cg.snap->ps.viewlocked != 7) {
-			// rain - do short2angle AFTER the network part
-			focusAngles[YAW]         = SHORT2ANGLE(cg.predictedPlayerState.stats[STAT_DEAD_YAW]);
-			cg.refdefViewAngles[YAW] = SHORT2ANGLE(cg.predictedPlayerState.stats[STAT_DEAD_YAW]);
-		}
+		// rain - do short2angle AFTER the network part
+		focusAngles[YAW]         = SHORT2ANGLE(cg.predictedPlayerState.stats[STAT_DEAD_YAW]);
+		cg.refdefViewAngles[YAW] = SHORT2ANGLE(cg.predictedPlayerState.stats[STAT_DEAD_YAW]);
 	}
 
 	if (focusAngles[PITCH] > 45) {
@@ -959,16 +957,14 @@ int CG_CalcViewValues(void) {
 			// FIXME: this is really really bad
 			trap_SendClientCommand(va("setCameraOrigin %f %f %f", origin[0], origin[1], origin[2]));
 			return 0;
-
-		} else {
-			cg.cameraMode = qfalse;
-			trap_Cvar_Set("cg_letterbox", "0");
-			trap_SendClientCommand("stopCamera");
-			trap_stopCamera(CAM_PRIMARY);                 // camera off in client
-
-			CG_Fade(255, 0, 0);                  // go black
-			CG_Fade(0, cg.time + 200, 1500);     // then fadeup
 		}
+		cg.cameraMode = qfalse;
+		trap_Cvar_Set("cg_letterbox", "0");
+		trap_SendClientCommand("stopCamera");
+		trap_stopCamera(CAM_PRIMARY);                 // camera off in client
+
+		CG_Fade(255, 0, 0);                  // go black
+		CG_Fade(0, cg.time + 200, 1500);     // then fadeup
 	}
 
 	if (cg.bobfracsin > 0 && !ps->bobCycle) {
