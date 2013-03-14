@@ -804,42 +804,32 @@ void CG_AddParticles(void) {
 			continue;
 		}
 
-		if (p->type == P_SMOKE || p->type == P_ANIM || p->type == P_DLIGHT_ANIM || p->type == P_SMOKE_IMPACT) {
-			if (cg.time > p->endtime) {
-				p->next        = free_particles;
-				free_particles = p;
-				p->type        = 0;
-				p->color       = 0;
-				p->alpha       = 0;
-
-				continue;
-			}
-
+		if ((p->type == P_SMOKE || p->type == P_ANIM || p->type == P_DLIGHT_ANIM || p->type == P_SMOKE_IMPACT) && cg.time > p->endtime) {
+			p->next        = free_particles;
+			free_particles = p;
+			p->type        = 0;
+			p->color       = 0;
+			p->alpha       = 0;
+			continue;
 		}
 
-		if (p->type == P_WEATHER_FLURRY) {
-			if (cg.time > p->endtime) {
-				p->next        = free_particles;
-				free_particles = p;
-				p->type        = 0;
-				p->color       = 0;
-				p->alpha       = 0;
-
-				continue;
-			}
+		if (p->type == P_WEATHER_FLURRY && cg.time > p->endtime) {
+			p->next        = free_particles;
+			free_particles = p;
+			p->type        = 0;
+			p->color       = 0;
+			p->alpha       = 0;
+			continue;
 		}
 
 
-		if (p->type == P_FLAT_SCALEUP_FADE) {
-			if (cg.time > p->endtime) {
+		if (p->type == P_FLAT_SCALEUP_FADE && cg.time > p->endtime) {
 				p->next        = free_particles;
 				free_particles = p;
 				p->type        = 0;
 				p->color       = 0;
 				p->alpha       = 0;
 				continue;
-			}
-
 		}
 
 		if (p->type == P_SPRITE && p->endtime < 0) {
@@ -1394,7 +1384,7 @@ int CG_NewParticleArea(int num) {
 
 	str = (char *) CG_ConfigString(num);
 	if (!str[0]) {
-		return (0);
+		return 0;
 	}
 
 	// returns type 128 64 or 32
@@ -1447,7 +1437,7 @@ int CG_NewParticleArea(int num) {
 		}
 	}
 
-	return (1);
+	return 1;
 }
 
 void    CG_SnowLink(centity_t *cent, qboolean particleOn) {
@@ -1459,16 +1449,13 @@ void    CG_SnowLink(centity_t *cent, qboolean particleOn) {
 	for (p = active_particles ; p ; p = next) {
 		next = p->next;
 
-		if (p->type == P_WEATHER || p->type == P_WEATHER_TURBULENT) {
-			if (p->snum == id) {
-				if (particleOn) {
-					p->link = qtrue;
-				} else {
-					p->link = qfalse;
-				}
+		if ((p->type == P_WEATHER || p->type == P_WEATHER_TURBULENT) && p->snum == id) {
+			if (particleOn) {
+				p->link = qtrue;
+			} else {
+				p->link = qfalse;
 			}
 		}
-
 	}
 }
 
@@ -1663,15 +1650,11 @@ void CG_OilSlickRemove(centity_t *cent) {
 	for (p = active_particles ; p ; p = next) {
 		next = p->next;
 
-		if (p->type == P_FLAT_SCALEUP) {
-			if (p->snum == id) {
-				p->endtime   = cg.time + 100;
-				p->startfade = p->endtime;
-				p->type      = P_FLAT_SCALEUP_FADE;
-
-			}
+		if (p->type == P_FLAT_SCALEUP && p->snum == id) {
+			p->endtime   = cg.time + 100;
+			p->startfade = p->endtime;
+			p->type      = P_FLAT_SCALEUP_FADE;
 		}
-
 	}
 }
 

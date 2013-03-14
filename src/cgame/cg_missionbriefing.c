@@ -81,18 +81,16 @@ qboolean CG_FindArenaInfo(char *filename, char *mapname, arenaInfo_t *info) {
 				trap_Print(va(S_COLOR_RED "unexpected end of file inside: %s\n", filename));
 				trap_PC_FreeSource(handle);
 				return qfalse;
-			} else {
-				Q_strncpyz(info->longname, dummy, 128);
 			}
+			Q_strncpyz(info->longname, dummy, 128);
 		} else if (!Q_stricmp(token.string, "map")) {
 			if (!PC_String_Parse(handle, &dummy)) {
 				trap_Print(va(S_COLOR_RED "unexpected end of file inside: %s\n", filename));
 				trap_PC_FreeSource(handle);
 				return qfalse;
-			} else {
-				if (!Q_stricmp(dummy, mapname)) {
-					found = qtrue;
-				}
+			}
+			if (!Q_stricmp(dummy, mapname)) {
+				found = qtrue;
 			}
 		}
 
@@ -101,25 +99,22 @@ qboolean CG_FindArenaInfo(char *filename, char *mapname, arenaInfo_t *info) {
 				trap_Print(va(S_COLOR_RED "unexpected end of file inside: %s\n", filename));
 				trap_PC_FreeSource(handle);
 				return qfalse;
-			} else {
-				Q_strncpyz(info->description, dummy, sizeof (info->description));
 			}
+			Q_strncpyz(info->description, dummy, sizeof (info->description));
 		} else if (!Q_stricmp(token.string, "alliedwintext")) {
 			if (!PC_String_Parse(handle, &dummy)) {
 				trap_Print(va(S_COLOR_RED "unexpected end of file inside: %s\n", filename));
 				trap_PC_FreeSource(handle);
 				return qfalse;
-			} else {
-				Q_strncpyz(info->alliedwintext, dummy, sizeof (info->description));
 			}
+			Q_strncpyz(info->alliedwintext, dummy, sizeof (info->description));
 		} else if (!Q_stricmp(token.string, "axiswintext")) {
 			if (!PC_String_Parse(handle, &dummy)) {
 				trap_Print(va(S_COLOR_RED "unexpected end of file inside: %s\n", filename));
 				trap_PC_FreeSource(handle);
 				return qfalse;
-			} else {
-				Q_strncpyz(info->axiswintext, dummy, sizeof (info->description));
 			}
+			Q_strncpyz(info->axiswintext, dummy, sizeof (info->description));
 		} else if (!Q_stricmp(token.string, "mapposition_x")) {
 			vec_t x;
 

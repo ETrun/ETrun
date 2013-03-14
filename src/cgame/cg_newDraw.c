@@ -544,12 +544,9 @@ void CG_EventHandling(int type, qboolean fForced) {
 
 			trap_S_StopStreamingSound(-1);
 
-			if (fForced) {
-				if (cgs.limboLoadoutModified) {
-					trap_SendClientCommand("rs");
-
-					cgs.limboLoadoutSelected = qfalse;
-				}
+			if (fForced && cgs.limboLoadoutModified) {
+				trap_SendClientCommand("rs");
+				cgs.limboLoadoutSelected = qfalse;
 			}
 		} else if ((int)cgs.eventHandling == CGAME_EVENT_SPEAKEREDITOR) {
 			if (type == -CGAME_EVENT_SPEAKEREDITOR) {
@@ -620,8 +617,8 @@ void CG_KeyEvent(int key, qboolean down) {
 			return;
 		}
 
-		if ((cg.predictedPlayerState.pm_type == PM_NORMAL ||
-		     (cg.predictedPlayerState.pm_type == PM_SPECTATOR && cg.showScores == qfalse))) {
+		if (cg.predictedPlayerState.pm_type == PM_NORMAL ||
+		     (cg.predictedPlayerState.pm_type == PM_SPECTATOR && cg.showScores == qfalse)) {
 
 			CG_EventHandling(CGAME_EVENT_NONE, qfalse);
 			return;

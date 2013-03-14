@@ -173,9 +173,10 @@ void CG_ReflectVelocity(localEntity_t *le, trace_t *trace) {
 
 
 	// check for stop, making sure that even on low FPS systems it doesn't bobble
-
 	if (le->leMarkType == LEMT_BLOOD && trace->startsolid) {
-	} else if (trace->allsolid || (trace->plane.normal[2] > 0 && (le->pos.trDelta[2] < 40 || le->pos.trDelta[2] < -cg.frametime * le->pos.trDelta[2]))) {         //-V584
+		return;
+	}
+	if (trace->allsolid || (trace->plane.normal[2] > 0 && (le->pos.trDelta[2] < 40 || le->pos.trDelta[2] < -cg.frametime * le->pos.trDelta[2]))) {         //-V584
 		if (le->leType == LE_FRAGMENT && trace->entityNum < (MAX_ENTITIES - 1)) {
 			le->pos.trType = TR_GRAVITY_PAUSED;
 		} else {
@@ -438,10 +439,8 @@ void CG_AddFragment(localEntity_t *le) {
 			CG_Explodef(org, dir, sizeScale * 50, 0, 0, qfalse, trap_R_GetShaderFromModel(le->refEntity.hModel, 0, 0));
 
 			CG_FreeLocalEntity(le);
-			return;
-		} else {
-			return;
 		}
+		return;
 	}
 
 	// Ridah, add the flame

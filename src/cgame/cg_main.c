@@ -704,15 +704,14 @@ static int CG_hash(char *r, char *s) {
 
 	if (!SHA1Result(&sha)) {
 		return 1;
-	} else {
-		sprintf(r, "%08X%08X%08X%08X%08X",
-		        sha.Message_Digest[0],
-		        sha.Message_Digest[1],
-		        sha.Message_Digest[2],
-		        sha.Message_Digest[3],
-		        sha.Message_Digest[4]);
-		return 0;
 	}
+	sprintf(r, "%08X%08X%08X%08X%08X",
+	        sha.Message_Digest[0],
+	        sha.Message_Digest[1],
+	        sha.Message_Digest[2],
+	        sha.Message_Digest[3],
+	        sha.Message_Digest[4]);
+	return 0;
 }
 
 void CG_setClientFlags(void) {
@@ -786,7 +785,7 @@ int CG_CrosshairPlayer(void) {
 }
 
 int CG_LastAttacker(void) {
-	return((!cg.attackerTime) ? -1 : cg.snap->ps.persistant[PERS_ATTACKER]);
+	return !cg.attackerTime ? -1 : cg.snap->ps.persistant[PERS_ATTACKER];
 }
 
 void QDECL CG_Printf(const char *msg, ...) {
@@ -844,11 +843,11 @@ char *CG_generateFilename(void) {
 	const char *pszServerInfo = CG_ConfigString(CS_SERVERINFO);
 
 	trap_RealTime(&ct);
-	return(va("%d-%02d-%02d-%02d%02d%02d-%s%s",
+	return va("%d-%02d-%02d-%02d%02d%02d-%s%s",
 	          1900 + ct.tm_year, ct.tm_mon + 1, ct.tm_mday,
 	          ct.tm_hour, ct.tm_min, ct.tm_sec,
 	          Info_ValueForKey(pszServerInfo, "mapname"),
-	          ""));
+	          "");
 }
 
 int CG_findClientNum(char *s) {
@@ -886,7 +885,7 @@ int CG_findClientNum(char *s) {
 	}
 
 	CG_Printf("[cgnotify]%s ^3%s^7 %s.\n", CG_TranslateString("User"), s, CG_TranslateString("is not on the server"));
-	return(-1);
+	return -1;
 }
 
 void CG_printConsoleString(char *str) {
@@ -2171,7 +2170,6 @@ static const char *CG_FeederItemText(float feederID, int index, int column, qhan
 				return "connecting";
 			}
 			return va("%4i", sp->ping);
-			break;
 		}
 	}
 
