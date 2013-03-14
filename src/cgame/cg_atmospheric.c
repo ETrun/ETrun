@@ -131,7 +131,6 @@ typedef struct cg_atmosphericEffect_s {
 
 static cg_atmosphericEffect_t cg_atmFx;
 
-
 static qboolean CG_SetParticleActive(cg_atmosphericParticle_t *particle, active_t active) {
 	particle->active = active;
 	return active ? qtrue : qfalse;
@@ -166,13 +165,11 @@ static qboolean CG_RainParticleGenerate(cg_atmosphericParticle_t *particle, vec3
 	particle->pos[2] = groundHeight + random() * (skyHeight - groundHeight);
 
 	// make sure it doesn't fall from too far cause it then will go over our heads ('lower the ceiling')
-	if (cg_atmFx.baseHeightOffset > 0) {
-		if (particle->pos[2] - cg.refdef_current->vieworg[2] > cg_atmFx.baseHeightOffset) {
-			particle->pos[2] = cg.refdef_current->vieworg[2] + cg_atmFx.baseHeightOffset;
+	if (cg_atmFx.baseHeightOffset > 0 && (particle->pos[2] - cg.refdef_current->vieworg[2] > cg_atmFx.baseHeightOffset)) {
+		particle->pos[2] = cg.refdef_current->vieworg[2] + cg_atmFx.baseHeightOffset;
 
-			if (particle->pos[2] < groundHeight) {
-				return qfalse;
-			}
+		if (particle->pos[2] < groundHeight) {
+			return qfalse;
 		}
 	}
 
@@ -340,12 +337,10 @@ static qboolean CG_SnowParticleGenerate(cg_atmosphericParticle_t *particle, vec3
 	particle->pos[2] = groundHeight + random() * (skyHeight - groundHeight);
 
 	// make sure it doesn't fall from too far cause it then will go over our heads ('lower the ceiling')
-	if (cg_atmFx.baseHeightOffset > 0) {
-		if (particle->pos[2] - cg.refdef_current->vieworg[2] > cg_atmFx.baseHeightOffset) {
-			particle->pos[2] = cg.refdef_current->vieworg[2] + cg_atmFx.baseHeightOffset;
-			if (particle->pos[2] < groundHeight) {
-				return qfalse;
-			}
+	if (cg_atmFx.baseHeightOffset > 0 && (particle->pos[2] - cg.refdef_current->vieworg[2] > cg_atmFx.baseHeightOffset)) {
+		particle->pos[2] = cg.refdef_current->vieworg[2] + cg_atmFx.baseHeightOffset;
+		if (particle->pos[2] < groundHeight) {
+			return qfalse;
 		}
 	}
 

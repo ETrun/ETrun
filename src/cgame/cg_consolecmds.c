@@ -153,11 +153,9 @@ int CG_LoadCamera(const char *name) {
 	int i;
 
 	for (i = 1; i < MAX_CAMERAS; i++) {      // start at '1' since '0' is always taken by the cutscene camera
-		if (!cameraInuse[i]) {
-			if (trap_loadCamera(i, name)) {
-				cameraInuse[i] = qtrue;
-				return i;
-			}
+		if (!cameraInuse[i] && trap_loadCamera(i, name)) {
+			cameraInuse[i] = qtrue;
+			return i;
 		}
 	}
 	return -1;

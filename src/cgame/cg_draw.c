@@ -321,13 +321,9 @@ CG_DrawUpperRight
 static void CG_DrawUpperRight(void) {
 	float y = 20 + 100 + 32;
 
-	// Nico, bugfix: round timer and respawn timer gone when cg_drawFireteamOverlay
-	// http://games.chruker.dk/enemy_territory/modding_project_bugfix.php?bug_id=008
-	if (cg_drawFireteamOverlay.integer) {
-		if (CG_IsOnFireteam(cg.clientNum)) {
-			rectDef_t rect = { 10, 10, 100, 100 };
-			CG_DrawFireTeamOverlay(&rect);
-		}
+	if (cg_drawFireteamOverlay.integer && CG_IsOnFireteam(cg.clientNum)) {
+		rectDef_t rect = { 10, 10, 100, 100 };
+		CG_DrawFireTeamOverlay(&rect);
 	}
 
 	if (cg_drawFPS.integer) {
@@ -429,12 +425,11 @@ const char *CG_PickupItemText(int item) {
 		return va("%i %s", bg_itemlist[item].quantity, bg_itemlist[item].pickup_name);
 	} else if (bg_itemlist[item].giType == IT_TEAM) {
 		return "an Objective";
-	} else {
-		if (bg_itemlist[item].pickup_name[0] == 'a' ||  bg_itemlist[item].pickup_name[0] == 'A') {
-			return va("an %s", bg_itemlist[item].pickup_name);
-		}
-		return va("a %s", bg_itemlist[item].pickup_name);
 	}
+	if (bg_itemlist[item].pickup_name[0] == 'a' ||  bg_itemlist[item].pickup_name[0] == 'A') {
+		return va("an %s", bg_itemlist[item].pickup_name);
+	}
+	return va("a %s", bg_itemlist[item].pickup_name);
 }
 
 /*
@@ -1202,31 +1197,21 @@ void CG_CheckForCursorHints(void) {
 	// world
 	//
 	if (trace.entityNum == ENTITYNUM_WORLD) {
-		if ((trace.surfaceFlags & SURF_LADDER) && !(cg.snap->ps.pm_flags & PMF_LADDER)) {
-			if (dist <= CH_LADDER_DIST) {
-				cg.cursorHintIcon  = HINT_LADDER;
-				cg.cursorHintTime  = cg.time;
-				cg.cursorHintFade  = 500;
-				cg.cursorHintValue = 0;
-			}
+		if ((trace.surfaceFlags & SURF_LADDER) && !(cg.snap->ps.pm_flags & PMF_LADDER) && (dist <= CH_LADDER_DIST)) {
+			cg.cursorHintIcon  = HINT_LADDER;
+			cg.cursorHintTime  = cg.time;
+			cg.cursorHintFade  = 500;
+			cg.cursorHintValue = 0;
 		}
+	} else if (trace.entityNum < MAX_CLIENTS && cg.snap->ps.weapon == WP_KNIFE && dist <= CH_KNIFE_DIST) {
+		AngleVectors(cg.snap->ps.viewangles, pforward, NULL, NULL);
+		AngleVectors(tracent->lerpAngles, eforward, NULL, NULL);
 
-
-	} else if (trace.entityNum < MAX_CLIENTS) {     // people
-		// knife
-		if (cg.snap->ps.weapon == WP_KNIFE) {
-			if (dist <= CH_KNIFE_DIST) {
-
-				AngleVectors(cg.snap->ps.viewangles, pforward, NULL, NULL);
-				AngleVectors(tracent->lerpAngles, eforward, NULL, NULL);
-
-				if (DotProduct(eforward, pforward) > 0.6f) {         // from behind(-ish)
-					cg.cursorHintIcon  = HINT_KNIFE;
-					cg.cursorHintTime  = cg.time;
-					cg.cursorHintFade  = 100;
-					cg.cursorHintValue = 0;
-				}
-			}
+		if (DotProduct(eforward, pforward) > 0.6f) {         // from behind(-ish)
+			cg.cursorHintIcon  = HINT_KNIFE;
+			cg.cursorHintTime  = cg.time;
+			cg.cursorHintFade  = 100;
+			cg.cursorHintValue = 0;
 		}
 	}
 }
@@ -1371,23 +1356,21 @@ static void CG_DrawVote(void) {
 			sec = 0;
 		}
 
-		if (!Q_stricmpn(cgs.voteString, "kick", 4)) {
-			if (strlen(cgs.voteString) > 5) {
-				int  nameindex;
-				char buffer[128];
-				Q_strncpyz(buffer, cgs.voteString + 5, sizeof (buffer));
-				Q_CleanStr(buffer);
+		if (!Q_stricmpn(cgs.voteString, "kick", 4) && strlen(cgs.voteString) > 5) {
+			int  nameindex;
+			char buffer[128];
+			Q_strncpyz(buffer, cgs.voteString + 5, sizeof (buffer));
+			Q_CleanStr(buffer);
 
-				for (nameindex = 0; nameindex < MAX_CLIENTS; nameindex++) {
-					if (!cgs.clientinfo[nameindex].infoValid) {
-						continue;
-					}
+			for (nameindex = 0; nameindex < MAX_CLIENTS; nameindex++) {
+				if (!cgs.clientinfo[nameindex].infoValid) {
+					continue;
+				}
 
-					if (!Q_stricmp(cgs.clientinfo[nameindex].cleanname, buffer)) {
-						if (cgs.clientinfo[nameindex].team != TEAM_SPECTATOR && cgs.clientinfo[nameindex].team != cgs.clientinfo[cg.clientNum].team) {
-							return;
-						}
-					}
+				if (!Q_stricmp(cgs.clientinfo[nameindex].cleanname, buffer)
+					&& cgs.clientinfo[nameindex].team != TEAM_SPECTATOR
+					&& cgs.clientinfo[nameindex].team != cgs.clientinfo[cg.clientNum].team) {
+					return;
 				}
 			}
 		}
@@ -1395,23 +1378,15 @@ static void CG_DrawVote(void) {
 		if (!(cg.snap->ps.eFlags & EF_VOTED)) {
 			s = va(CG_TranslateString("VOTE(%i): %s"), sec, cgs.voteString);
 			CG_DrawStringExt(8, 200, s, colorYellow, qtrue, qtrue, TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 80);
-
-			/* Nico, spectators can also vote
-			if ( cgs.clientinfo[cg.clientNum].team != TEAM_AXIS && cgs.clientinfo[cg.clientNum].team != TEAM_ALLIES ) {
-			    s = CG_TranslateString( "Cannot vote as Spectator" );
-			} else {*/
 			s = va(CG_TranslateString("YES(%s):%i, NO(%s):%i"), str1, cgs.voteYes, str2, cgs.voteNo);
-			// }
 			CG_DrawStringExt(8, 214, s, colorYellow, qtrue, qtrue, TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 60);
 			return;
-		} else {
-			s = va(CG_TranslateString("YOU VOTED ON: %s"), cgs.voteString);
-			CG_DrawStringExt(8, 200, s, colorYellow, qtrue, qtrue, TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 80);
-
-			s = va(CG_TranslateString("Y:%i, N:%i"), cgs.voteYes, cgs.voteNo);
-			CG_DrawStringExt(8, 214, s, colorYellow, qtrue, qtrue, TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 20);
-			return;
 		}
+		s = va(CG_TranslateString("YOU VOTED ON: %s"), cgs.voteString);
+		CG_DrawStringExt(8, 200, s, colorYellow, qtrue, qtrue, TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 80);
+		s = va(CG_TranslateString("Y:%i, N:%i"), cgs.voteYes, cgs.voteNo);
+		CG_DrawStringExt(8, 214, s, colorYellow, qtrue, qtrue, TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 20);
+		return;
 	}
 
 	if (cgs.applicationEndTime > cg.time && cgs.applicationClient < 0) {
@@ -1699,7 +1674,7 @@ CG_DrawFlashBlend
 */
 static void CG_DrawFlashBlend(void) {
 	// Gordon: no flash blends if in limbo or spectator, and in the limbo menu
-	if ((cg.snap->ps.pm_flags & PMF_LIMBO || cgs.clientinfo[cg.clientNum].team == TEAM_SPECTATOR)) {
+	if (cg.snap->ps.pm_flags & PMF_LIMBO || cgs.clientinfo[cg.clientNum].team == TEAM_SPECTATOR) {
 		return;
 	}
 
@@ -2384,10 +2359,8 @@ void CG_DrawMiscGamemodels(void) {
 	ent.renderfx = RF_NOSHADOW;
 
 	for (i = 0; i < cg.numMiscGameModels; i++) {
-		if (cgs.miscGameModels[i].radius) {
-			if (CG_CullPointAndRadius(cgs.miscGameModels[i].org, cgs.miscGameModels[i].radius)) {
-				continue;
-			}
+		if (cgs.miscGameModels[i].radius && CG_CullPointAndRadius(cgs.miscGameModels[i].org, cgs.miscGameModels[i].radius)) {
+			continue;
 		}
 
 		if (!trap_R_inPVS(cg.refdef_current->vieworg, cgs.miscGameModels[i].org)) {
