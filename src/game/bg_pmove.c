@@ -255,14 +255,11 @@ static void PM_Friction(void) {
 	}
 
 	// apply ground friction
-	if (pm->waterlevel <= 1) {
-		if (pml.walking && !(pml.groundTrace.surfaceFlags & SURF_SLICK)) {
-			// if getting knocked back, no friction
-			if (!(pm->ps->pm_flags & PMF_TIME_KNOCKBACK)) {
-				control = speed < pm_stopspeed ? pm_stopspeed : speed;
-				drop   += control * pm_friction * pml.frametime;
-			}
-		}
+	if (pm->waterlevel <= 1 && pml.walking &&
+		!(pml.groundTrace.surfaceFlags & SURF_SLICK) &&
+		!(pm->ps->pm_flags & PMF_TIME_KNOCKBACK)) {
+		control = speed < pm_stopspeed ? pm_stopspeed : speed;
+		drop   += control * pm_friction * pml.frametime;
 	}
 
 	// apply water friction even if just wading
@@ -293,10 +290,8 @@ static void PM_Friction(void) {
 	// rain - if we're barely moving and barely slowing down, we want to
 	// help things along--we don't want to end up getting snapped back to
 	// our previous speed
-	if (pm->ps->pm_type == PM_SPECTATOR || pm->ps->pm_type == PM_NOCLIP) {
-		if (drop < 1.0f && speed < 3.0f) {
-			newspeed = 0.0;
-		}
+	if ((pm->ps->pm_type == PM_SPECTATOR || pm->ps->pm_type == PM_NOCLIP) && drop < 1.0f && speed < 3.0f) {
+		newspeed = 0.0;
 	}
 
 	// rain - used VectorScale instead of multiplying by hand
@@ -403,10 +398,8 @@ static float PM_CmdScale(usercmd_t *cmd, qboolean horizontalOnly) {
 		scale *= 0.5;
 	}
 
-	if (pm->ps->weapon == WP_FLAMETHROWER) {   // trying some different balance for the FT
-		if (pm->cmd.buttons & BUTTON_ATTACK) {
-			scale *= 0.7;
-		}
+	if (pm->ps->weapon == WP_FLAMETHROWER && pm->cmd.buttons & BUTTON_ATTACK) {
+		scale *= 0.7;
 	}
 
 	if (horizontalOnly) {
@@ -645,44 +638,42 @@ static qboolean PM_CheckProne(void) {
 		}
 	}
 
-	if (pm->ps->eFlags & EF_PRONE) {
-		if (pm->waterlevel > 1 ||
-		    pm->ps->pm_type == PM_DEAD ||
-		    pm->ps->eFlags & EF_MOUNTEDTANK ||
-		    ((pm->cmd.doubleTap == DT_BACK || pm->cmd.upmove > 10 || pm->cmd.wbuttons & WBUTTON_PRONE) && pm->cmd.serverTime - pm->pmext->proneTime > 750)) {
-			trace_t trace;
+	if (pm->ps->eFlags & EF_PRONE && (pm->waterlevel > 1 ||
+	    pm->ps->pm_type == PM_DEAD ||
+	    pm->ps->eFlags & EF_MOUNTEDTANK ||
+	    ((pm->cmd.doubleTap == DT_BACK || pm->cmd.upmove > 10 || pm->cmd.wbuttons & WBUTTON_PRONE) && pm->cmd.serverTime - pm->pmext->proneTime > 750))) {
+		trace_t trace;
 
-			// see if we have the space to stop prone
-			pm->mins[0] = pm->ps->mins[0];
-			pm->mins[1] = pm->ps->mins[1];
+		// see if we have the space to stop prone
+		pm->mins[0] = pm->ps->mins[0];
+		pm->mins[1] = pm->ps->mins[1];
 
-			pm->maxs[0] = pm->ps->maxs[0];
-			pm->maxs[1] = pm->ps->maxs[1];
+		pm->maxs[0] = pm->ps->maxs[0];
+		pm->maxs[1] = pm->ps->maxs[1];
 
-			pm->mins[2] = pm->ps->mins[2];
-			pm->maxs[2] = pm->ps->crouchMaxZ;
+		pm->mins[2] = pm->ps->mins[2];
+		pm->maxs[2] = pm->ps->crouchMaxZ;
 
-			pm->ps->eFlags &= ~EF_PRONE;
-			PM_TraceAll(&trace, pm->ps->origin, pm->ps->origin);
-			pm->ps->eFlags |= EF_PRONE;
+		pm->ps->eFlags &= ~EF_PRONE;
+		PM_TraceAll(&trace, pm->ps->origin, pm->ps->origin);
+		pm->ps->eFlags |= EF_PRONE;
 
-			if (!trace.allsolid) {
-				// crouch for a bit
-				pm->ps->pm_flags |= PMF_DUCKED;
+		if (!trace.allsolid) {
+			// crouch for a bit
+			pm->ps->pm_flags |= PMF_DUCKED;
 
-				// stop prone
-				pm->ps->eFlags      &= ~EF_PRONE;
-				pm->ps->eFlags      &= ~EF_PRONE_MOVING;
-				pm->pmext->proneTime = -pm->cmd.serverTime; // timestamp 'stop prone'
+			// stop prone
+			pm->ps->eFlags      &= ~EF_PRONE;
+			pm->ps->eFlags      &= ~EF_PRONE_MOVING;
+			pm->pmext->proneTime = -pm->cmd.serverTime; // timestamp 'stop prone'
 
-				if (pm->ps->weapon == WP_MOBILE_MG42_SET) {
-					PM_BeginWeaponChange(WP_MOBILE_MG42_SET, WP_MOBILE_MG42, qfalse);
-				}
-
-				// don't jump for a bit
-				pm->pmext->jumpTime = pm->cmd.serverTime - 650;
-				pm->ps->jumpTime    = pm->cmd.serverTime - 650;
+			if (pm->ps->weapon == WP_MOBILE_MG42_SET) {
+				PM_BeginWeaponChange(WP_MOBILE_MG42_SET, WP_MOBILE_MG42, qfalse);
 			}
+
+			// don't jump for a bit
+			pm->pmext->jumpTime = pm->cmd.serverTime - 650;
+			pm->ps->jumpTime    = pm->cmd.serverTime - 650;
 		}
 	}
 
@@ -1069,10 +1060,8 @@ static void PM_WalkMove(void) {
 		if (wishspeed > pm->ps->speed * pm_proneSpeedScale) {
 			wishspeed = pm->ps->speed * pm_proneSpeedScale;
 		}
-	} else if (pm->ps->pm_flags & PMF_DUCKED) {     // clamp the speed lower if ducking
-		if (wishspeed > pm->ps->speed * pm->ps->crouchSpeedScale) {
-			wishspeed = pm->ps->speed * pm->ps->crouchSpeedScale;
-		}
+	} else if (pm->ps->pm_flags & PMF_DUCKED && wishspeed > pm->ps->speed * pm->ps->crouchSpeedScale) {
+		wishspeed = pm->ps->speed * pm->ps->crouchSpeedScale;
 	}
 
 	// clamp the speed lower if wading or walking on the bottom
@@ -1273,10 +1262,8 @@ static void PM_CrashLand(void) {
 	float a, b, c, den;
 
 	// Ridah, only play this if coming down hard
-	if (!pm->ps->legsTimer) {
-		if (pml.previous_velocity[2] < -220) {
-			BG_AnimScriptEvent(pm->ps, pm->character->animModelInfo, ANIM_ET_LAND, qfalse, qtrue);
-		}
+	if (!pm->ps->legsTimer && pml.previous_velocity[2] < -220) {
+		BG_AnimScriptEvent(pm->ps, pm->character->animModelInfo, ANIM_ET_LAND, qfalse, qtrue);
 	}
 
 	// calculate the exact velocity on landing
@@ -1483,10 +1470,8 @@ static void PM_GroundTrace(void) {
 	pml.groundTrace = trace;
 
 	// do something corrective if the trace starts in a solid...
-	if (trace.allsolid && !(pm->ps->eFlags & EF_MOUNTEDTANK)) {
-		if (!PM_CorrectAllSolid(&trace)) {
-			return;
-		}
+	if (trace.allsolid && !(pm->ps->eFlags & EF_MOUNTEDTANK) && !PM_CorrectAllSolid(&trace)) {
+		return;
 	}
 
 	// if the trace didn't hit anything, we are in free fall
@@ -1863,7 +1848,6 @@ static void PM_Footsteps(void) {
 	if (iswalking) {
 		// sounds much more natural this way
 		if (old > pm->ps->bobCycle) {
-
 			if (pm->waterlevel == 0) {
 				if (footstep && !pm->noFootsteps) {
 					PM_AddEventExt(EV_FOOTSTEP, PM_FootstepForSurface());
@@ -1874,10 +1858,7 @@ static void PM_Footsteps(void) {
 			} else if (pm->waterlevel == 2) {
 				// wading / swimming at surface
 				PM_AddEvent(EV_SWIM);
-			} else if (pm->waterlevel == 3) {
-				// no sound when completely underwater
 			}
-
 		}
 	} else if (((old + 64) ^ (pm->ps->bobCycle + 64)) & 128) {
 
@@ -1892,9 +1873,6 @@ static void PM_Footsteps(void) {
 		} else if (pm->waterlevel == 2) {
 			// wading / swimming at surface
 			PM_AddEvent(EV_SWIM);
-		} else if (pm->waterlevel == 3) {
-			// no sound when completely underwater
-
 		}
 	}
 }
@@ -2181,13 +2159,11 @@ void PM_UpdateViewAngles(playerState_t *ps, pmoveExt_t *pmext, usercmd_t *cmd, v
 				// Set delta_angles properly
 				ps->delta_angles[YAW] = ANGLE2SHORT(ps->viewangles[YAW]) - cmd->angles[YAW];
 			}
-		} else if (oldYaw > yaw) {
-			if (oldYaw - yaw > degsSec * pml.frametime) {
-				ps->viewangles[YAW] = oldYaw - degsSec * pml.frametime;
+		} else if (oldYaw > yaw && oldYaw - yaw > degsSec * pml.frametime) {
+			ps->viewangles[YAW] = oldYaw - degsSec * pml.frametime;
 
-				// Set delta_angles properly
-				ps->delta_angles[YAW] = ANGLE2SHORT(ps->viewangles[YAW]) - cmd->angles[YAW];
-			}
+			// Set delta_angles properly
+			ps->delta_angles[YAW] = ANGLE2SHORT(ps->viewangles[YAW]) - cmd->angles[YAW];
 		}
 
 		// limit harc and varc
@@ -2265,13 +2241,11 @@ void PM_UpdateViewAngles(playerState_t *ps, pmoveExt_t *pmext, usercmd_t *cmd, v
 				// Set delta_angles properly
 				ps->delta_angles[YAW] = ANGLE2SHORT(ps->viewangles[YAW]) - cmd->angles[YAW];
 			}
-		} else if (oldYaw > yaw) {
-			if (oldYaw - yaw > degsSec * pml.frametime) {
-				ps->viewangles[YAW] = oldYaw - degsSec * pml.frametime;
+		} else if (oldYaw > yaw && oldYaw - yaw > degsSec * pml.frametime) {
+			ps->viewangles[YAW] = oldYaw - degsSec * pml.frametime;
 
-				// Set delta_angles properly
-				ps->delta_angles[YAW] = ANGLE2SHORT(ps->viewangles[YAW]) - cmd->angles[YAW];
-			}
+			// Set delta_angles properly
+			ps->delta_angles[YAW] = ANGLE2SHORT(ps->viewangles[YAW]) - cmd->angles[YAW];
 		}
 
 		pitch    = ps->viewangles[PITCH];
@@ -2291,13 +2265,11 @@ void PM_UpdateViewAngles(playerState_t *ps, pmoveExt_t *pmext, usercmd_t *cmd, v
 				// Set delta_angles properly
 				ps->delta_angles[PITCH] = ANGLE2SHORT(ps->viewangles[PITCH]) - cmd->angles[PITCH];
 			}
-		} else if (oldPitch > pitch) {
-			if (oldPitch - pitch > degsSec * pml.frametime) {
-				ps->viewangles[PITCH] = oldPitch - degsSec * pml.frametime;
+		} else if (oldPitch > pitch && oldPitch - pitch > degsSec * pml.frametime) {
+			ps->viewangles[PITCH] = oldPitch - degsSec * pml.frametime;
 
-				// Set delta_angles properly
-				ps->delta_angles[PITCH] = ANGLE2SHORT(ps->viewangles[PITCH]) - cmd->angles[PITCH];
-			}
+			// Set delta_angles properly
+			ps->delta_angles[PITCH] = ANGLE2SHORT(ps->viewangles[PITCH]) - cmd->angles[PITCH];
 		}
 
 		// yaw
@@ -2504,13 +2476,9 @@ void PM_CheckLadderMove(void) {
 	}
 
 	// create some up/down velocity if touching ladder
-	if (pml.ladder) {
-		if (pml.walking) {
-			// we are currently on the ground, only go up and prevent X/Y if we are pushing forwards
-			if (pm->cmd.forwardmove <= 0) {
-				pml.ladder = qfalse;
-			}
-		}
+	if (pml.ladder && pml.walking && pm->cmd.forwardmove <= 0) {
+		// we are currently on the ground, only go up and prevent X/Y if we are pushing forwards
+		pml.ladder = qfalse;
 	}
 
 	// if we have just dismounted the ladder at the top, play dismount
@@ -2690,15 +2658,14 @@ void PmoveSingle(pmove_t *pmove) {
 	pm->ps->eFlags &= ~(EF_FIRING | EF_ZOOMING);
 
 	if (pm->cmd.wbuttons & WBUTTON_ZOOM && pm->ps->stats[STAT_HEALTH] >= 0 && !(pm->ps->weaponDelay)) {
-		if (pm->ps->stats[STAT_KEYS] & (1 << INV_BINOCS)) {        // (SA) binoculars are an inventory item (inventory==keys)
-			if (!BG_IsScopedWeapon(pm->ps->weapon) &&          // don't allow binocs if using the sniper scope
-			    !BG_PlayerMounted(pm->ps->eFlags) &&        // or if mounted on a weapon
-			    // rain - #215 - don't allow binocs w/ mounted mob. MG42 or mortar either.
-			    pm->ps->weapon != WP_MOBILE_MG42_SET &&
-			    pm->ps->weapon != WP_MORTAR_SET) {
+		if (pm->ps->stats[STAT_KEYS] & (1 << INV_BINOCS) &&        // (SA) binoculars are an inventory item (inventory==keys)
+			BG_IsScopedWeapon(pm->ps->weapon) &&          // don't allow binocs if using the sniper scope
+			!BG_PlayerMounted(pm->ps->eFlags) &&        // or if mounted on a weapon
+		    // rain - #215 - don't allow binocs w/ mounted mob. MG42 or mortar either.
+		    pm->ps->weapon != WP_MOBILE_MG42_SET &&
+		    pm->ps->weapon != WP_MORTAR_SET) {
 
-				pm->ps->eFlags |= EF_ZOOMING;
-			}
+			pm->ps->eFlags |= EF_ZOOMING;
 		}
 
 		// don't allow binocs if in the middle of throwing grenade
@@ -2707,31 +2674,18 @@ void PmoveSingle(pmove_t *pmove) {
 		}
 	}
 
-	if (!(pm->ps->pm_flags & PMF_RESPAWNED)) {
-
-		// check for ammo
-		if (PM_WeaponAmmoAvailable(pm->ps->weapon)) {
-			// check if zooming
-			// DHM - Nerve :: Let's use the same flag we just checked above, Ok?
-			if (!(pm->ps->eFlags & EF_ZOOMING)) {
-				if (!pm->ps->leanf) {
-					if (pm->ps->weaponstate == WEAPON_READY || pm->ps->weaponstate == WEAPON_FIRING) {
-
-						// all clear, fire!
-						if (pm->cmd.buttons & BUTTON_ATTACK && !(pm->cmd.buttons & BUTTON_TALK)) {
-							pm->ps->eFlags |= EF_FIRING;
-						}
-					}
-				}
-			}
-		}
+	if (!(pm->ps->pm_flags & PMF_RESPAWNED) &&
+		PM_WeaponAmmoAvailable(pm->ps->weapon) &&
+		!(pm->ps->eFlags & EF_ZOOMING) &&
+		!pm->ps->leanf &&
+		(pm->ps->weaponstate == WEAPON_READY || pm->ps->weaponstate == WEAPON_FIRING) &&
+		pm->cmd.buttons & BUTTON_ATTACK && !(pm->cmd.buttons & BUTTON_TALK)) {
+		// all clear, fire!
+		pm->ps->eFlags |= EF_FIRING;
 	}
 
-
-	if (pm->ps->pm_flags & PMF_RESPAWNED) {
-		if (pm->ps->stats[STAT_PLAYER_CLASS] == PC_COVERTOPS) {
-			pm->pmext->silencedSideArm |= 1;
-		}
+	if (pm->ps->pm_flags & PMF_RESPAWNED && pm->ps->stats[STAT_PLAYER_CLASS] == PC_COVERTOPS) {
+		pm->pmext->silencedSideArm |= 1;
 	}
 
 	// clear the respawned flag if attack and use are cleared
@@ -2783,12 +2737,8 @@ void PmoveSingle(pmove_t *pmove) {
 	pml.frametime = pml.msec * 0.001;
 
 	// update the viewangles
-	if (pm->ps->pm_type != PM_FREEZE) {   // Arnout: added PM_FREEZE
-		if (!(pm->ps->pm_flags & PMF_LIMBO)) {     // JPW NERVE
-			// rain - added tracemask
-			PM_UpdateViewAngles(pm->ps, pm->pmext, &pm->cmd, pm->trace, pm->tracemask);     //----(SA)	modified
-
-		}
+	if (pm->ps->pm_type != PM_FREEZE && !(pm->ps->pm_flags & PMF_LIMBO)) {
+		PM_UpdateViewAngles(pm->ps, pm->pmext, &pm->cmd, pm->trace, pm->tracemask);
 	}
 	AngleVectors(pm->ps->viewangles, pml.forward, pml.right, pml.up);
 
@@ -2852,21 +2802,17 @@ void PmoveSingle(pmove_t *pmove) {
 			pm->ps->weapon = WP_MORTAR;
 		}
 	} else {
-		if (pm->ps->weapon == WP_MOBILE_MG42_SET) {
-			if (!(pm->ps->eFlags & EF_PRONE)) {
-				PM_BeginWeaponChange(WP_MOBILE_MG42_SET, WP_MOBILE_MG42, qfalse);
+		if (pm->ps->weapon == WP_MOBILE_MG42_SET && !(pm->ps->eFlags & EF_PRONE)) {
+			PM_BeginWeaponChange(WP_MOBILE_MG42_SET, WP_MOBILE_MG42, qfalse);
 #ifdef CGAMEDLL
-				cg.weaponSelect = WP_MOBILE_MG42;
+			cg.weaponSelect = WP_MOBILE_MG42;
 #endif // CGAMEDLL
-			}
 		}
-		if (pm->ps->weapon == WP_SATCHEL_DET) {
-			if (!(pm->ps->ammoclip[WP_SATCHEL_DET])) {
-				PM_BeginWeaponChange(WP_SATCHEL_DET, WP_SATCHEL, qtrue);
+		if (pm->ps->weapon == WP_SATCHEL_DET && !(pm->ps->ammoclip[WP_SATCHEL_DET])) {
+			PM_BeginWeaponChange(WP_SATCHEL_DET, WP_SATCHEL, qtrue);
 #ifdef CGAMEDLL
-				cg.weaponSelect = WP_SATCHEL;
+			cg.weaponSelect = WP_SATCHEL;
 #endif // CGAMEDLL
-			}
 		}
 	}
 
@@ -2932,7 +2878,7 @@ int Pmove(pmove_t *pmove) {
 	finalTime = pmove->cmd.serverTime;
 
 	if (finalTime < pmove->ps->commandTime) {
-		return (0);   // should not happen
+		return 0;   // should not happen
 	}
 
 	if (finalTime > pmove->ps->commandTime + 1000) {
@@ -2982,9 +2928,7 @@ int Pmove(pmove_t *pmove) {
 	}
 
 	if ((pm->ps->stats[STAT_HEALTH] <= 0 || pm->ps->pm_type == PM_DEAD) && pml.groundTrace.surfaceFlags & SURF_MONSTERSLICK) {
-		return (pml.groundTrace.surfaceFlags);
-	} else {
-		return (0);
+		return pml.groundTrace.surfaceFlags;
 	}
-
+	return 0;
 }
