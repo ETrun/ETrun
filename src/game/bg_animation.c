@@ -1346,10 +1346,6 @@ int BG_AnimScriptAnimation(playerState_t *ps, animModelInfo_t *animModelInfo, sc
 		return -1;
 	}
 
-#ifdef DBGANIMS
-	Com_Printf("script anim: cl %i, mt %s, ", ps->clientNum, animMoveTypesStr[movetype]);
-#endif
-
 	// xkan, 1/10/2003 - adapted from original SP source
 	// try finding a match in all states ABOVE the given state
 	while (!scriptItem && state < MAX_AISTATES) {
@@ -1368,9 +1364,6 @@ int BG_AnimScriptAnimation(playerState_t *ps, animModelInfo_t *animModelInfo, sc
 
 	//
 	if (!scriptItem) {
-#ifdef DBGANIMS
-		Com_Printf("no valid conditions\n");
-#endif
 		return -1;
 	}
 	// save this as our current movetype
@@ -1378,18 +1371,8 @@ int BG_AnimScriptAnimation(playerState_t *ps, animModelInfo_t *animModelInfo, sc
 	// pick the correct animation for this character (animations must be constant for each character, otherwise they'll constantly change)
 	scriptCommand = &scriptItem->commands[ps->clientNum % scriptItem->numCommands];
 
-#ifdef DBGANIMS
-	if (scriptCommand->bodyPart[0]) {
-		Com_Printf("anim0 (%s): %s", animBodyPartsStr[scriptCommand->bodyPart[0]].string, animModelInfo->animations[scriptCommand->animIndex[0]]->name);
-	}
-	if (scriptCommand->bodyPart[1]) {
-		Com_Printf("anim1 (%s): %s", animBodyPartsStr[scriptCommand->bodyPart[1]].string, animModelInfo->animations[scriptCommand->animIndex[1]]->name);
-	}
-	Com_Printf("\n");
-#endif
-
 	// run it
-	return(BG_ExecuteCommand(ps, animModelInfo, scriptCommand, qfalse, isContinue, qfalse) != -1);
+	return BG_ExecuteCommand(ps, animModelInfo, scriptCommand, qfalse, isContinue, qfalse) != -1;
 }
 
 /*
@@ -1504,21 +1487,16 @@ void BG_UpdateConditionValue(int client, int condition, int value, qboolean chec
 	// rain - fixed checkConversion brained-damagedness, which would try
 	// to BitSet an insane value if checkConversion was false but this
 	// anim was ANIM_CONDTYPE_BITFLAGS
-	if (checkConversion == qtrue) {
-		if (animConditionsTable[condition].type == ANIM_CONDTYPE_BITFLAGS) {
+	if (checkConversion == qtrue && animConditionsTable[condition].type == ANIM_CONDTYPE_BITFLAGS) {
+		// we may need to convert to bitflags
+		// DHM - Nerve :: We want to set the ScriptData to the explicit value passed in.
+		//				COM_BitSet will OR values on top of each other, so clear it first.
+		globalScriptData->clientConditions[client][condition][0] = 0;
+		globalScriptData->clientConditions[client][condition][1] = 0;
+		// dhm - end
 
-			// we may need to convert to bitflags
-			// DHM - Nerve :: We want to set the ScriptData to the explicit value passed in.
-			//				COM_BitSet will OR values on top of each other, so clear it first.
-			globalScriptData->clientConditions[client][condition][0] = 0;
-			globalScriptData->clientConditions[client][condition][1] = 0;
-			// dhm - end
-
-			COM_BitSet(globalScriptData->clientConditions[client][condition], value);
-			return;
-		}
-		// rain - we must fall through here because a bunch of non-bitflag
-		// conditions are set with checkConversion == qtrue
+		COM_BitSet(globalScriptData->clientConditions[client][condition], value);
+		return;
 	}
 	globalScriptData->clientConditions[client][condition][0] = value;
 }
@@ -1540,14 +1518,11 @@ int BG_GetConditionValue(int client, int condition, qboolean checkConversion) {
 			}
 			// nothing found
 			return 0;
-		} else {
-			// xkan, 1/14/2003 - must use COM_BitCheck on the result.
-			return (int)globalScriptData->clientConditions[client][condition];
 		}
-		//BG_AnimParseError( "BG_GetConditionValue: internal error" );
-	} else {
-		return globalScriptData->clientConditions[client][condition][0];
+		// xkan, 1/14/2003 - must use COM_BitCheck on the result.
+		return (int)globalScriptData->clientConditions[client][condition];
 	}
+	return globalScriptData->clientConditions[client][condition][0];
 }
 
 /*====================
@@ -1555,10 +1530,9 @@ BG_GetConditionBitFlag: returns whether the specified bit flag is set
 ====================*/
 qboolean BG_GetConditionBitFlag(int client, int condition, int bitNumber) {
 	if (animConditionsTable[condition].type == ANIM_CONDTYPE_BITFLAGS) {
-		return (COM_BitCheck(globalScriptData->clientConditions[client][condition], bitNumber));
-	} else {
-		Com_Error(ERR_DROP, "BG_GetConditionBitFlag: animation condition %i is not a bitflag condition", animConditionsTable[condition].type);
+		return COM_BitCheck(globalScriptData->clientConditions[client][condition], bitNumber);
 	}
+	Com_Error(ERR_DROP, "BG_GetConditionBitFlag: animation condition %i is not a bitflag condition", animConditionsTable[condition].type);
 	return qfalse;
 }
 

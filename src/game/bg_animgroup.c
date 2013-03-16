@@ -55,7 +55,7 @@ static animation_t * BG_RAG_FindFreeAnimation(const char *mdxFileName, const cha
 #else
 		if (*animationPool[i].mdxFileName && !Q_stricmp(animationPool[i].mdxFileName, mdxFileName) && !Q_stricmp(animationPool[i].name, name)) {
 #endif // CGAMEDLL
-			return(&animationPool[i]);
+			return &animationPool[i];
 		}
 	}
 
@@ -68,7 +68,7 @@ static animation_t * BG_RAG_FindFreeAnimation(const char *mdxFileName, const cha
 			Q_strncpyz(animationPool[i].mdxFileName, mdxFileName, sizeof (animationPool[i].mdxFileName));
 #endif // CGAMEDLL
 			Q_strncpyz(animationPool[i].name, name, sizeof (animationPool[i].name));
-			return(&animationPool[i]);
+			return &animationPool[i];
 		}
 	}
 

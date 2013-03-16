@@ -2497,9 +2497,8 @@ qboolean BG_IsAkimboWeapon(int weaponNum) {
 	    weaponNum == WP_AKIMBO_LUGER ||
 	    weaponNum == WP_AKIMBO_SILENCEDLUGER) {
 		return qtrue;
-	} else {
-		return qfalse;
 	}
+	return qfalse;
 }
 
 /*
@@ -2718,12 +2717,10 @@ void BG_LinearPathOrigin2(float radius, splinePath_t **pSpline, float *deltaTime
 					}
 				}
 
-				if (found) {
-					if (t >= 0.f && t <= 1.f) {
-						*deltaTime = (i / (float)(MAX_SPLINE_SEGMENTS)) + (t / (float)(MAX_SPLINE_SEGMENTS));
-						VectorMA((*pSpline)->segments[i].start, t * (*pSpline)->segments[i].length, (*pSpline)->segments[i].v_norm, result);
-						return;
-					}
+				if (found && t >= 0.f && t <= 1.f) {
+					*deltaTime = (i / (float)(MAX_SPLINE_SEGMENTS)) + (t / (float)(MAX_SPLINE_SEGMENTS));
+					VectorMA((*pSpline)->segments[i].start, t * (*pSpline)->segments[i].length, (*pSpline)->segments[i].v_norm, result);
+					return;
 				}
 				found = qfalse;
 			}
@@ -3981,19 +3978,19 @@ int BG_simpleWeaponState(int ws) {
 	case WEAPON_READY:
 	case WEAPON_READYING:
 	case WEAPON_RELAXING:
-		return(WSTATE_IDLE);
+		return WSTATE_IDLE;
 	case WEAPON_RAISING:
 	case WEAPON_DROPPING:
 	case WEAPON_DROPPING_TORELOAD:
-		return(WSTATE_SWITCH);
+		return WSTATE_SWITCH;
 	case WEAPON_FIRING:
 	case WEAPON_FIRINGALT:
-		return(WSTATE_FIRE);
+		return WSTATE_FIRE;
 	case WEAPON_RELOADING:
-		return(WSTATE_RELOAD);
+		return WSTATE_RELOAD;
 	}
 
-	return(WSTATE_IDLE);
+	return WSTATE_IDLE;
 }
 
 // strip colors and control codes, copying up to dwMaxLength-1 "good" chars and nul-terminating
