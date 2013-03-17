@@ -1144,10 +1144,11 @@ qboolean CG_SpeakerEditor_NoiseEdit_KeyDown(panel_button_t *button, int key) {
 					}
 				}
 			} else {
+				int findMatchIndex = 0;
+
 				if (noiseMatchCount == 1) {
 					return qtrue;
 				}
-				int findMatchIndex = 0;
 
 				noiseMatchIndex++;
 				if (noiseMatchIndex == noiseMatchCount) {

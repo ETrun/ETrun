@@ -694,10 +694,11 @@ void CG_Fireteams_MenuText_Draw(panel_button_t *button) {
 				y += button->rect.h;
 			}
 		} else {
+			const char **strings = ftMenuStrings[cgs.ftMenuPos];
+
 			if (cgs.ftMenuPos < 0 || cgs.ftMenuPos > 4) {
 				return;
 			}
-			const char **strings = ftMenuStrings[cgs.ftMenuPos];
 
 			for (i = 0; strings[i]; i++) {
 				const char *str;
