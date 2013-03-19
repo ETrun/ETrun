@@ -51,19 +51,19 @@ void multi_trigger(gentity_t *ent, gentity_t *activator) {
 	ent->activator = activator;
 	G_Script_ScriptEvent(ent, "activate", NULL);
 
+	// Nico, #todo: handle case when ent->triggerTime[activator->client->ps.clientNum] = 0
 	if (ent->wait > 0) {
 		if (activator->client && ent->triggerTime[activator->client->ps.clientNum] + ent->wait * 1000 > level.time) {
 			// Client has to wait before triggering this entity!
 			return;
 		}
-
 		G_UseTargets(ent, ent->activator);
 		if (activator->client) {
 			ent->triggerTime[activator->client->ps.clientNum] = level.time;
 		}
 	} else {
+		// Nico, #todo: update ent->triggerTime[activator->client->ps.clientNum]???
 		G_UseTargets(ent, ent->activator);
-
 		// we can't just remove (self) here, because this is a touch function
 		// called while looping through area links...
 		ent->touch     = 0;
