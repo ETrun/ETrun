@@ -622,7 +622,6 @@ typedef struct {
 
 	int panzerDropTime;                 // Time which a player dropping panzer still "has it" if limiting panzer counts
 	int panzerSelectTime;               // *when* a client selected a panzer as spawn weapon
-	qboolean ready;                     // Ready state to begin play
 	// OSP
 
 	bg_character_t *character;
@@ -843,8 +842,6 @@ typedef struct {
 	int startTime;                      // level.time the map was started
 
 	int lastTeamLocationTime;           // last time of client team location update
-
-	qboolean restarted;                 // waiting for a map_restart to fire
 
 	int numConnectedClients;
 	int numPlayingClients;              // connected, non-spectators
@@ -1466,7 +1463,6 @@ extern vmCvar_t team_nocontrols;
 //
 extern vmCvar_t vote_allow_kick;
 extern vmCvar_t vote_allow_map;
-extern vmCvar_t vote_allow_matchreset;
 extern vmCvar_t vote_allow_randommap;
 extern vmCvar_t vote_allow_referee;
 extern vmCvar_t vote_allow_antilag;
@@ -1581,7 +1577,6 @@ void        trap_SendMessage(int clientNum, char *buf, int buflen);
 messageStatus_t trap_MessageStatus(int clientNum);
 
 void G_ExplodeMissile(gentity_t *ent);
-void Svcmd_ResetMatch_f(qboolean fDoRestart);
 
 // g_antilag.c
 void G_StoreClientPosition(gentity_t *ent);
@@ -1852,8 +1847,6 @@ int G_UnMute_v(gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, 
 void G_delay_map_change(char *mapName, int delay); // Nico, function to delay a map change
 void *G_delayed_map_change_watcher(void *arg); // Nico, thread used to check map changes
 int G_Map_v(gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd);
-int G_MapRestart_v(gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd);
-int G_MatchReset_v(gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd);
 int G_Randommap_v(gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd);
 int G_Referee_v(gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd);
 int G_StartMatch_v(gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd);

@@ -372,11 +372,6 @@ void CG_TransitionPlayerState(playerState_t *ps, playerState_t *ops) {
 		CG_Respawn();
 	}
 
-	if (cg.mapRestart) {
-		CG_Respawn();
-		cg.mapRestart = qfalse;
-	}
-
 	CG_CheckLocalSounds(ps, ops);
 
 	// check for going low on ammo

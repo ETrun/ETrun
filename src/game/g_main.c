@@ -112,7 +112,6 @@ vmCvar_t server_motd4;
 vmCvar_t server_motd5;
 vmCvar_t vote_allow_kick;
 vmCvar_t vote_allow_map;
-vmCvar_t vote_allow_matchreset;
 vmCvar_t vote_allow_randommap;
 vmCvar_t vote_allow_referee;
 vmCvar_t vote_allow_antilag;
@@ -251,7 +250,6 @@ cvarTable_t gameCvarTable[] =
 
 	{ &vote_allow_kick,        "vote_allow_kick",        "0",                          0,                                                             0,      qfalse, qfalse, qfalse },
 	{ &vote_allow_map,         "vote_allow_map",         "1",                          0,                                                             0,      qfalse, qfalse, qfalse },
-	{ &vote_allow_matchreset,  "vote_allow_matchreset",  "1",                          0,                                                             0,      qfalse, qfalse, qfalse },
 	{ &vote_allow_randommap,   "vote_allow_randommap",   "1",                          0,                                                             0,      qfalse, qfalse, qfalse },
 	{ &vote_allow_referee,     "vote_allow_referee",     "0",                          0,                                                             0,      qfalse, qfalse, qfalse },
 	{ &vote_allow_antilag,     "vote_allow_antilag",     "0",                          0,                                                             0,      qfalse, qfalse, qfalse },
@@ -1153,7 +1151,6 @@ void G_UpdateCvars(void) {
 				}
 				// OSP - Update vote info for clients, if necessary
 				if (cv->vmCvar == &vote_allow_kick          || cv->vmCvar == &vote_allow_map            ||
-				    cv->vmCvar == &vote_allow_matchreset    ||
 				    cv->vmCvar == &vote_allow_randommap        ||
 				    cv->vmCvar == &vote_allow_referee       ||
 				    cv->vmCvar == &vote_allow_antilag        ||
@@ -2306,12 +2303,6 @@ Advances the non-player objects in the world
 */
 void G_RunFrame(int levelTime) {
 	int i, msec;
-
-
-	// if we are waiting for the level to restart, do nothing
-	if (level.restarted) {
-		return;
-	}
 
 	// Handling of pause offsets
 	if (level.match_pause == PAUSE_NONE) {

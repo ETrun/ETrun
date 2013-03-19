@@ -483,7 +483,6 @@ qboolean SetTeam(gentity_t *ent, char *s, weapon_t w1, weapon_t w2, qboolean set
 	client->sess.sessionTeam     = team;
 	client->sess.spectatorState  = specState;
 	client->sess.spectatorClient = specClient;
-	client->pers.ready           = qfalse;
 
 	// (l)users will spam spec messages... honest!
 	if (team != oldTeam) {

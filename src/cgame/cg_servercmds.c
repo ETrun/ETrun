@@ -718,115 +718,6 @@ void CG_AddToNotify(const char *str) {
 	}
 }
 
-/*
-===============
-CG_MapRestart
-
-The server has issued a map_restart, so the next snapshot
-is completely new and should not be interpolated to.
-
-A tournement restart will clear everything, but doesn't
-require a reload of all the media
-===============
-*/
-static void CG_MapRestart(void) {
-	if (cg_showmiss.integer) {
-		CG_Printf("CG_MapRestart\n");
-	}
-
-	memset(&cg.lastWeapSelInBank[0], 0, MAX_WEAP_BANKS_MP * sizeof (int));       // clear weapon bank selections
-
-	cg.numbufferedSoundScripts = 0;
-
-	cg.centerPrintTime = 0; // reset centerprint counter so previous messages don't re-appear
-	cg.cursorHintFade  = 0; // reset cursor hint timer
-
-	// (SA) clear zoom (so no warpies)
-	cg.zoomedBinoc         = qfalse;
-	cg.zoomedScope         = qfalse;
-	cg.zoomTime            = 0;
-	cg.zoomval             = 0;
-	cgs.invitationEndTime  = 0;
-	cgs.applicationEndTime = 0;
-	cgs.propositionEndTime = 0;
-
-	// reset fog to world fog (if present)
-	trap_R_SetFog(FOG_CMD_SWITCHFOG, FOG_MAP, 20, 0, 0, 0, 0);
-
-	// clear pmext
-	memset(&cg.pmext, 0, sizeof (cg.pmext));
-
-	cg.pmext.bAutoReload = (cg_autoReload.integer > 0);
-
-	numSplinePaths = 0;
-	numPathCorners = 0;
-
-	cgs.fadeStartTime = 0;
-	cgs.fadeAlpha     = 0;
-	trap_Cvar_Set("cg_letterbox", "0");
-
-	CG_ParseWolfinfo();
-
-	CG_ParseEntitiesFromString();
-
-	CG_LoadObjectiveData();
-
-	CG_InitLocalEntities();
-	CG_InitMarkPolys();
-
-	cg.editingSpeakers = qfalse;
-
-	BG_BuildSplinePaths();
-
-	InitSmokeSprites();
-
-	//Rafael particles
-	CG_ClearParticles();
-
-	// Ridah
-	CG_ClearFlameChunks();
-	CG_SoundInit();
-	// done.
-
-	cg.lightstylesInited = qfalse;
-	cg.mapRestart        = qtrue;
-
-	cgs.voteTime = 0;
-
-	CG_StartMusic();
-
-	trap_S_ClearLoopingSounds();
-	trap_S_ClearSounds(qfalse);
-
-	// ydnar
-	trap_R_ClearDecals();
-
-// JPW NERVE -- reset render flags
-	cg_fxflags = 0;
-// jpw
-
-	// we really should clear more parts of cg here and stop sounds
-	cg.v_noFireTime = 0;
-
-	cg.filtercams = atoi(CG_ConfigString(CS_FILTERCAMS)) ? qtrue : qfalse;
-
-	CG_ChargeTimesChanged();
-
-	CG_ParseFireteams();
-
-	CG_ParseOIDInfos();
-
-	CG_InitPM();
-
-	CG_ParseSpawns();
-
-	CG_ParseTagConnects();
-
-	trap_Cvar_Set("cg_thirdPerson", "0");
-}
-// NERVE - SMF
-
-
 #define MAX_VOICEFILES      8
 
 // TAT - 10/28/2002 we've got some really big VO files now
@@ -1477,11 +1368,6 @@ static void CG_ServerCommand(void) {
 
 	if (!Q_stricmp(cmd, "vbchat")) {
 		CG_VoiceChat(SAY_BUDDY);
-		return;
-	}
-
-	if (!Q_stricmp(cmd, "map_restart")) {
-		CG_MapRestart();
 		return;
 	}
 

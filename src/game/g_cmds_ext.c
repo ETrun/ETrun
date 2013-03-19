@@ -239,10 +239,6 @@ void G_players_cmd(gentity_t *ent, unsigned int dwCommand, qboolean fValue) {
 		if (g_gamestate.integer != GS_PLAYING) {
 			if (cl->sess.sessionTeam == TEAM_SPECTATOR || cl->pers.connected == CON_CONNECTING) {
 				strcpy(ready, ((ent) ? "^5--------^1 :" : "-------- :"));
-			} else if (cl->pers.ready) {
-				strcpy(ready, ((ent) ? "^3(READY)^1  :" : "(READY)  :"));
-			} else {
-				strcpy(ready, ((ent) ? "NOTREADY^1 :" : "NOTREADY :"));
 			}
 		}
 

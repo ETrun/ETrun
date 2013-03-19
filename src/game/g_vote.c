@@ -57,8 +57,6 @@ static const vote_reference_t aVoteInfo[] =
 	{ "mute",       G_Mute_v,       "MUTE",            " <player_id>^7\n  Removes the chat capabilities of a player"       },
 	{ "unmute",     G_UnMute_v,     "UN-MUTE",         " <player_id>^7\n  Restores the chat capabilities of a player"      },
 	{ "map",        G_Map_v,        "Change map to",   " <mapname>^7\n  Votes for a new map to be loaded"                  },
-	{ "maprestart", G_MapRestart_v, "Map Restart",     "^7\n  Restarts the current map in progress"                        },
-	{ "matchreset", G_MatchReset_v, "Match Reset",     "^7\n  Resets the entire match"                                     },
 	{ "randommap",  G_Randommap_v,  "Load Random Map", "^7\n  Loads a random map"                                          },
 	{ "referee",    G_Referee_v,    "Referee",         " <player_id>^7\n  Elects a player to have admin abilities"         },
 	{ "startmatch", G_StartMatch_v, "Start Match",     " ^7\n  Sets all players to \"ready\" status to start the match"    },
@@ -421,7 +419,6 @@ void *G_delayed_map_change_watcher(void *arg) {
 					G_Error("%s: warning, threads waiting timeout reached (threads: %d)", GAME_VERSION, activeThreadsCounter);
 				}
 				G_DPrintf("%s: changing map now!\n", GAME_VERSION);
-				Svcmd_ResetMatch_f(qfalse);
 				trap_SendConsoleCommand(EXEC_APPEND, va("map %s\n", level.delayedMapChange.passedVote));
 				break;
 			} else {
@@ -479,52 +476,6 @@ int G_Map_v(gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qbo
 	} else {
 		// Nico, delay the map change
 		G_delay_map_change(level.voteInfo.vote_value, 0);
-	}
-
-	return(G_OK);
-}
-
-// *** Map Restart ***
-int G_MapRestart_v(gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd) {
-	// Vote request (vote is being initiated)
-	if (arg) {
-		if (trap_Argc() > 2) {
-			if (!Q_stricmp(arg2, "?")) {
-				G_refPrintf(ent, "Usage: ^3%s %s%s\n", ((fRefereeCmd) ? "\\ref" : "\\callvote"), arg, aVoteInfo[dwVoteIndex].pszVoteHelp);
-				return(G_INVALID);
-			}
-		}
-
-		// Vote action (vote has passed)
-	} else {
-		// Restart the map back to warmup
-		Svcmd_ResetMatch_f(qtrue);
-		AP("cp \"^1*** Level Restarted! ***\n\"");
-	}
-
-	return(G_OK);
-}
-
-
-// *** Match Restart ***
-int G_MatchReset_v(gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd) {
-	// Nico, silent GCC
-	(void)arg2;
-
-	// Vote request (vote is being initiated)
-	if (arg) {
-		if (!vote_allow_matchreset.integer && ent && !ent->client->sess.referee) {
-			G_voteDisableMessage(ent, arg);
-			return(G_INVALID);
-		} else if (trap_Argc() != 2 && G_voteDescription(ent, fRefereeCmd, dwVoteIndex)) {
-			return(G_INVALID);
-		}
-
-		// Vote action (vote has passed)
-	} else {
-		// Restart the map back to warmup
-		Svcmd_ResetMatch_f(qtrue);
-		AP("cp \"^1*** Match Reset! ***\n\"");
 	}
 
 	return(G_OK);

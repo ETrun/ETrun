@@ -572,25 +572,6 @@ void Svcmd_ForceTeam_f(void) {
 
 /*
 ==================
-Svcmd_ResetMatch_f
-
-OSP - multiuse now for both map restarts and total match resets
-==================
-*/
-void Svcmd_ResetMatch_f(qboolean fDoRestart) {
-	int i;
-
-	for (i = 0; i < level.numConnectedClients; i++) {
-		g_entities[level.sortedClients[i]].client->pers.ready = 0;
-	}
-
-	if (fDoRestart) {
-		trap_SendConsoleCommand(EXEC_APPEND, va("map_restart 0 %i\n", GS_RESET));
-	}
-}
-
-/*
-==================
 Svcmd_Kick_f
 
 Kick a user off of the server

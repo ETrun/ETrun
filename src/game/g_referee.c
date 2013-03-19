@@ -249,7 +249,6 @@ void G_refPlayerPut_cmd(gentity_t *ent, int team_id) {
 	}
 
 	player->client->pers.invite = team_id;
-	player->client->pers.ready  = qfalse;
 
 	if (team_id == TEAM_AXIS) {
 		SetTeam(player, "red", -1, -1, qfalse);

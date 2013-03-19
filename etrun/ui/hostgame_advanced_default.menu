@@ -33,7 +33,6 @@
 							setcvar vote_percent 50 ;				\
 							setcvar vote_allow_kick 1 ;				\
 							setcvar vote_allow_map 1 ;				\
-							setcvar vote_allow_matchreset 1 ;		\
 							setcvar vote_allow_mutespecs 1 ;		\
 							setcvar vote_allow_randommap 1 ;		\
 							setcvar vote_allow_referee 0 ;			\
