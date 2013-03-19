@@ -8,7 +8,7 @@ project (ETrun C)
 
 find_package (Threads)
 
-set (ETrun_VERSION "1.0.1")
+set (ETrun_VERSION "1.0.2")
 
 configure_file (
 	"${PROJECT_SOURCE_DIR}/src/game/bg_version.h.in"
