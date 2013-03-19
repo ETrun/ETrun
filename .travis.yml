@@ -5,9 +5,9 @@ compiler:
   - clang
 
 before_install:
-  - sudo apt-get update -q
-  - sudo apt-get upgrade -q
-  - sudo apt-get install gcc-multilib -q
+  - sudo apt-get update -qY
+  - sudo apt-get upgrade -qY
+  - sudo apt-get install gcc-multilib -qY
 
 script:
   - ./make.sh
