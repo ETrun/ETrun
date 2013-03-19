@@ -50,7 +50,6 @@ If you have questions concerning this license or the applicable additional terms
 # pragma warning(disable : 4244)
 # pragma warning(disable : 4305) // truncation from const double to float
 # pragma warning(disable : 4514)
-# pragma warning(disable : 4702) // unreachable code
 # pragma warning(disable : 4711) // selected for automatic inline expansion
 # pragma warning(disable : 4220) // varargs matches remaining parameters
 #endif

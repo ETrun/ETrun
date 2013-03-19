@@ -256,8 +256,6 @@ const char *UI_DownloadInfo(const char *downloadName) {
 
 		return s;
 	}
-
-	return "";
 }
 
 void UI_LoadPanel_RenderLoadingText(panel_button_t *button) {
