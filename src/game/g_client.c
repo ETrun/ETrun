@@ -1335,11 +1335,9 @@ void ClientSpawn(gentity_t *ent) {
 
 	ent->s.eFlags &= ~EF_MOUNTEDTANK;
 
-	// Nico, notify timerun_stop (not if physics is VET and player just selfkilled)
-	if (physics.integer != PHYSICS_MODE_VET || (physics.integer == PHYSICS_MODE_VET && client->sess.lastDieWasASelfkill)) {
-		notify_timerun_stop(ent, 0);
-		ent->client->sess.timerunActive = qfalse;
-	}
+	// Nico, notify timerun_stop
+	notify_timerun_stop(ent, 0);
+	ent->client->sess.timerunActive = qfalse;
 
 	saved     = client->pers;
 	savedSess = client->sess;
