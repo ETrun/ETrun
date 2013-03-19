@@ -188,7 +188,7 @@ void player_die(gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int 
 	// Start recording a new temp demo.
 	trap_SendServerCommand(self - g_entities, "tempDemoStart");
 
-	if (attacker == self) {
+	if (meansOfDeath == MOD_SUICIDE) {
 		// Nico, do not automatically load player position on /kill
 		self->client->sess.lastDieWasASelfkill = qtrue;
 	} else {
@@ -271,8 +271,6 @@ void player_die(gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int 
 	ent->r.svFlags         = SVF_BROADCAST; // send to everyone
 
 	self->enemy = attacker;
-
-	self->client->ps.persistant[PERS_KILLED]++;
 
 	// JPW NERVE -- if player is holding ticking grenade, drop it
 	if ((self->client->ps.grenadeTimeLeft) && (self->s.weapon != WP_DYNAMITE) && (self->s.weapon != WP_LANDMINE) && (self->s.weapon != WP_SATCHEL) && (self->s.weapon != WP_TRIPMINE)) {
