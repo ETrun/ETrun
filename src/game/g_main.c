@@ -1856,7 +1856,7 @@ void CheckVote(void) {
 		AP(va("cpm \"^2Vote FAILED! ^3(%s)\n\"", level.voteInfo.voteString));
 		G_LogPrintf("Vote Failed: %s\n", level.voteInfo.voteString);
 	} else {
-		int pcnt = (level.voteInfo.vote_fn == G_StartMatch_v) ? 75 : vote_percent.integer;
+		int pcnt = vote_percent.integer;
 		int total;
 
 		if (pcnt > 99) {

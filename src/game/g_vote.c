@@ -59,7 +59,6 @@ static const vote_reference_t aVoteInfo[] =
 	{ "map",        G_Map_v,        "Change map to",   " <mapname>^7\n  Votes for a new map to be loaded"                  },
 	{ "randommap",  G_Randommap_v,  "Load Random Map", "^7\n  Loads a random map"                                          },
 	{ "referee",    G_Referee_v,    "Referee",         " <player_id>^7\n  Elects a player to have admin abilities"         },
-	{ "startmatch", G_StartMatch_v, "Start Match",     " ^7\n  Sets all players to \"ready\" status to start the match"    },
 	{ "unreferee",  G_Unreferee_v,  "UNReferee",       " <player_id>^7\n  Elects a player to have admin abilities removed" },
 	{ "antilag",    G_AntiLag_v,    "Anti-Lag",        " <0|1>^7\n  Toggles Anit-Lag on the server"                        },
 	{ 0,            NULL,           0,                 NULL                                                                }
@@ -571,27 +570,6 @@ int G_Referee_v(gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2,
 			ClientUserinfoChanged(atoi(level.voteInfo.vote_value));
 		}
 	}
-	return(G_OK);
-}
-
-// *** Start Match ***
-int G_StartMatch_v(gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd) {
-	// Vote request (vote is being initiated)
-	if (arg) {
-		if (trap_Argc() > 2) {
-			if (!Q_stricmp(arg2, "?")) {
-				G_refPrintf(ent, "Usage: ^3%s %s%s\n", ((fRefereeCmd) ? "\\ref" : "\\callvote"), arg, aVoteInfo[dwVoteIndex].pszVoteHelp);
-				return(G_INVALID);
-			}
-		}
-
-		if (g_gamestate.integer == GS_PLAYING) {
-			G_refPrintf(ent, "^3Match is already in progress!");
-			return(G_INVALID);
-		}
-		// Vote action (vote has passed)
-	}
-
 	return(G_OK);
 }
 
