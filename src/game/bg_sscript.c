@@ -130,37 +130,34 @@ static qboolean BG_SS_ParseSpeaker(int handle) {
 		} else if (!Q_stricmp(token.string, "targetname")) {
 			if (!PC_String_ParseNoAlloc(handle, speaker.targetname, sizeof (speaker.targetname))) {
 				return BG_SS_ParseError(handle, "expected targetname string");
-			} else {
-				speaker.targetnamehash = BG_StringHashValue(speaker.targetname);
 			}
+			speaker.targetnamehash = BG_StringHashValue(speaker.targetname);
 		} else if (!Q_stricmp(token.string, "looped")) {
 			if (!trap_PC_ReadToken(handle, &token)) {
 				return BG_SS_ParseError(handle, "expected loop value");
+			}
+			if (!Q_stricmp(token.string, "no")) {
+				speaker.loop = S_LT_NOT_LOOPED;
+			} else if (!Q_stricmp(token.string, "on")) {
+				speaker.loop      = S_LT_LOOPED_ON;
+				speaker.activated = qtrue;
+			} else if (!Q_stricmp(token.string, "off")) {
+				speaker.loop = S_LT_LOOPED_OFF;
 			} else {
-				if (!Q_stricmp(token.string, "no")) {
-					speaker.loop = S_LT_NOT_LOOPED;
-				} else if (!Q_stricmp(token.string, "on")) {
-					speaker.loop      = S_LT_LOOPED_ON;
-					speaker.activated = qtrue;
-				} else if (!Q_stricmp(token.string, "off")) {
-					speaker.loop = S_LT_LOOPED_OFF;
-				} else {
-					return BG_SS_ParseError(handle, "unknown loop value '%s'", token.string);
-				}
+				return BG_SS_ParseError(handle, "unknown loop value '%s'", token.string);
 			}
 		} else if (!Q_stricmp(token.string, "broadcast")) {
 			if (!trap_PC_ReadToken(handle, &token)) {
 				return BG_SS_ParseError(handle, "expected broadcast value");
+			}
+			if (!Q_stricmp(token.string, "no")) {
+				speaker.broadcast = S_BT_LOCAL;
+			} else if (!Q_stricmp(token.string, "global")) {
+				speaker.broadcast = S_BT_GLOBAL;
+			} else if (!Q_stricmp(token.string, "nopvs")) {
+				speaker.broadcast = S_BT_NOPVS;
 			} else {
-				if (!Q_stricmp(token.string, "no")) {
-					speaker.broadcast = S_BT_LOCAL;
-				} else if (!Q_stricmp(token.string, "global")) {
-					speaker.broadcast = S_BT_GLOBAL;
-				} else if (!Q_stricmp(token.string, "nopvs")) {
-					speaker.broadcast = S_BT_NOPVS;
-				} else {
-					return BG_SS_ParseError(handle, "unknown broadcast value '%s'", token.string);
-				}
+				return BG_SS_ParseError(handle, "unknown broadcast value '%s'", token.string);
 			}
 		} else if (!Q_stricmp(token.string, "wait")) {
 			if (!PC_Int_Parse(handle, &speaker.wait)) {

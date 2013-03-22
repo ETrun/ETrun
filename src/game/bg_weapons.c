@@ -647,8 +647,6 @@ void PM_CheckForReload(int weapon) {
 			PM_BeginWeaponChange(weapon, weapAlts[weapon], !(pm->ps->ammo[ammoWeap]) ? qfalse : qtrue);
 		}
 		return;
-	default:
-		break;
 	}
 
 	if (pm->ps->weaponTime <= 0) {
@@ -661,21 +659,18 @@ void PM_CheckForReload(int weapon) {
 				}
 
 				// akimbo should also check other weapon status
-				if (BG_IsAkimboWeapon(weapon)) {
-					if (pm->ps->ammoclip[BG_FindClipForWeapon(BG_AkimboSidearm(weapon))] < GetAmmoTableData(BG_FindClipForWeapon(BG_AkimboSidearm(weapon)))->maxclip) {
-						doReload = qtrue;
-					}
-				}
-			}
-		} else if (autoreload) {
-			if (!pm->ps->ammoclip[clipWeap] && pm->ps->ammo[ammoWeap]) {
-				if (BG_IsAkimboWeapon(weapon)) {
-					if (!pm->ps->ammoclip[BG_FindClipForWeapon(BG_AkimboSidearm(weapon))]) {
-						doReload = qtrue;
-					}
-				} else {
+				if (BG_IsAkimboWeapon(weapon) &&
+					pm->ps->ammoclip[BG_FindClipForWeapon(BG_AkimboSidearm(weapon))] < GetAmmoTableData(BG_FindClipForWeapon(BG_AkimboSidearm(weapon)))->maxclip) {
 					doReload = qtrue;
 				}
+			}
+		} else if (autoreload && !pm->ps->ammoclip[clipWeap] && pm->ps->ammo[ammoWeap]) {
+			if (BG_IsAkimboWeapon(weapon)) {
+				if (!pm->ps->ammoclip[BG_FindClipForWeapon(BG_AkimboSidearm(weapon))]) {
+					doReload = qtrue;
+				}
+			} else {
+				doReload = qtrue;
 			}
 		}
 
@@ -742,10 +737,8 @@ void PM_WeaponUseAmmo(int wp, int amount) {
 	} else {
 		takeweapon = BG_FindClipForWeapon(wp);
 
-		if (BG_IsAkimboWeapon(wp)) {
-			if (!BG_AkimboFireSequence(wp, pm->ps->ammoclip[BG_FindClipForWeapon(wp)], pm->ps->ammoclip[BG_FindClipForWeapon(BG_AkimboSidearm(wp))])) {
-				takeweapon = BG_AkimboSidearm(wp);
-			}
+		if (BG_IsAkimboWeapon(wp) && !BG_AkimboFireSequence(wp, pm->ps->ammoclip[BG_FindClipForWeapon(wp)], pm->ps->ammoclip[BG_FindClipForWeapon(BG_AkimboSidearm(wp))])) {
+			takeweapon = BG_AkimboSidearm(wp);
 		}
 
 		pm->ps->ammoclip[takeweapon] -= amount;
@@ -764,17 +757,14 @@ int PM_WeaponAmmoAvailable(int wp) {
 
 	if (pm->noWeapClips) {
 		return pm->ps->ammo[BG_FindAmmoForWeapon(wp)];
-	} else {
-		takeweapon = BG_FindClipForWeapon(wp);
-
-		if (BG_IsAkimboWeapon(wp)) {
-			if (!BG_AkimboFireSequence(wp, pm->ps->ammoclip[BG_FindClipForWeapon(wp)], pm->ps->ammoclip[BG_FindClipForWeapon(BG_AkimboSidearm(wp))])) {
-				takeweapon = BG_AkimboSidearm(wp);
-			}
-		}
-
-		return pm->ps->ammoclip[takeweapon];
 	}
+	takeweapon = BG_FindClipForWeapon(wp);
+
+	if (BG_IsAkimboWeapon(wp) && !BG_AkimboFireSequence(wp, pm->ps->ammoclip[BG_FindClipForWeapon(wp)], pm->ps->ammoclip[BG_FindClipForWeapon(BG_AkimboSidearm(wp))])) {
+		takeweapon = BG_AkimboSidearm(wp);
+	}
+
+	return pm->ps->ammoclip[takeweapon];
 }
 
 /*
@@ -809,15 +799,12 @@ void PM_CoolWeapons(void) {
 	for (wp = 0; wp < WP_NUM_WEAPONS; wp++) {
 
 		// if you have the weapon
-		if (COM_BitCheck(pm->ps->weapons, wp)) {
+		if (COM_BitCheck(pm->ps->weapons, wp) && pm->ps->weapHeat[wp]) {
 			// and it's hot
-			if (pm->ps->weapHeat[wp]) {
-				pm->ps->weapHeat[wp] -= ((float)GetAmmoTableData(wp)->coolRate * pml.frametime);
+			pm->ps->weapHeat[wp] -= ((float)GetAmmoTableData(wp)->coolRate * pml.frametime);
 
-				if (pm->ps->weapHeat[wp] < 0) {
-					pm->ps->weapHeat[wp] = 0;
-				}
-
+			if (pm->ps->weapHeat[wp] < 0) {
+				pm->ps->weapHeat[wp] = 0;
 			}
 		}
 	}
@@ -1219,48 +1206,50 @@ void PM_Weapon(void) {
 
 	delayedFire = qfalse;
 
-	if (pm->ps->weapon == WP_GRENADE_LAUNCHER || pm->ps->weapon == WP_GRENADE_PINEAPPLE || pm->ps->weapon == WP_DYNAMITE || pm->ps->weapon == WP_SMOKE_BOMB) {
-		if (pm->ps->grenadeTimeLeft > 0) {
-			qboolean forcethrow = qfalse;
+	if ((pm->ps->weapon == WP_GRENADE_LAUNCHER ||
+		pm->ps->weapon == WP_GRENADE_PINEAPPLE ||
+		pm->ps->weapon == WP_DYNAMITE ||
+		pm->ps->weapon == WP_SMOKE_BOMB) &&
+		pm->ps->grenadeTimeLeft > 0) {
+		qboolean forcethrow = qfalse;
 
-			if (pm->ps->weapon == WP_DYNAMITE) {
-				pm->ps->grenadeTimeLeft += pml.msec;
+		if (pm->ps->weapon == WP_DYNAMITE) {
+			pm->ps->grenadeTimeLeft += pml.msec;
 
-				// JPW NERVE -- in multiplayer, dynamite becomes strategic, so start timer @ 30 seconds
-				if (pm->ps->grenadeTimeLeft < 5000) {
-					pm->ps->grenadeTimeLeft = 5000;
-				}
-
-			} else {
-				pm->ps->grenadeTimeLeft -= pml.msec;
-
-				if (pm->ps->grenadeTimeLeft <= 100) {   // give two frames advance notice so there's time to launch and detonate
-					forcethrow = qtrue;
-
-					pm->ps->grenadeTimeLeft = 100;
-				}
+			// JPW NERVE -- in multiplayer, dynamite becomes strategic, so start timer @ 30 seconds
+			if (pm->ps->grenadeTimeLeft < 5000) {
+				pm->ps->grenadeTimeLeft = 5000;
 			}
 
-			if (!(pm->cmd.buttons & BUTTON_ATTACK) || forcethrow || pm->ps->eFlags & EF_PRONE_MOVING) {
-				if (pm->ps->weaponDelay == GetAmmoTableData(pm->ps->weapon)->fireDelayTime || forcethrow) {
-					// released fire button.  Fire!!!
-					if (pm->ps->eFlags & EF_PRONE) {
-						if (akimboFire) {
-							BG_AnimScriptEvent(pm->ps, pm->character->animModelInfo, ANIM_ET_FIREWEAPON2PRONE, qfalse, qtrue);
-						} else {
-							BG_AnimScriptEvent(pm->ps, pm->character->animModelInfo, ANIM_ET_FIREWEAPONPRONE, qfalse, qtrue);
-						}
+		} else {
+			pm->ps->grenadeTimeLeft -= pml.msec;
+
+			if (pm->ps->grenadeTimeLeft <= 100) {   // give two frames advance notice so there's time to launch and detonate
+				forcethrow = qtrue;
+
+				pm->ps->grenadeTimeLeft = 100;
+			}
+		}
+
+		if (!(pm->cmd.buttons & BUTTON_ATTACK) || forcethrow || pm->ps->eFlags & EF_PRONE_MOVING) {
+			if (pm->ps->weaponDelay == GetAmmoTableData(pm->ps->weapon)->fireDelayTime || forcethrow) {
+				// released fire button.  Fire!!!
+				if (pm->ps->eFlags & EF_PRONE) {
+					if (akimboFire) {
+						BG_AnimScriptEvent(pm->ps, pm->character->animModelInfo, ANIM_ET_FIREWEAPON2PRONE, qfalse, qtrue);
 					} else {
-						if (akimboFire) {
-							BG_AnimScriptEvent(pm->ps, pm->character->animModelInfo, ANIM_ET_FIREWEAPON2, qfalse, qtrue);
-						} else {
-							BG_AnimScriptEvent(pm->ps, pm->character->animModelInfo, ANIM_ET_FIREWEAPON, qfalse, qtrue);
-						}
+						BG_AnimScriptEvent(pm->ps, pm->character->animModelInfo, ANIM_ET_FIREWEAPONPRONE, qfalse, qtrue);
+					}
+				} else {
+					if (akimboFire) {
+						BG_AnimScriptEvent(pm->ps, pm->character->animModelInfo, ANIM_ET_FIREWEAPON2, qfalse, qtrue);
+					} else {
+						BG_AnimScriptEvent(pm->ps, pm->character->animModelInfo, ANIM_ET_FIREWEAPON, qfalse, qtrue);
 					}
 				}
-			} else {
-				return;
 			}
+		} else {
+			return;
 		}
 	}
 
@@ -1323,15 +1312,12 @@ void PM_Weapon(void) {
 		}
 	}
 
-
 	// check for weapon change
 	// can't change if weapon is firing, but can change
 	// again if lowering or raising
-
-	if ((pm->ps->weaponTime <= 0 || (!weaponstateFiring && pm->ps->weaponDelay <= 0)) && !delayedFire) {
-		if (pm->ps->weapon != pm->cmd.weapon) {
-			PM_BeginWeaponChange(pm->ps->weapon, pm->cmd.weapon, qfalse);   //----(SA)	modified
-		}
+	if (((pm->ps->weaponTime <= 0 || (!weaponstateFiring && pm->ps->weaponDelay <= 0)) && !delayedFire) &&
+		pm->ps->weapon != pm->cmd.weapon) {
+		PM_BeginWeaponChange(pm->ps->weapon, pm->cmd.weapon, qfalse);   //----(SA)	modified
 	}
 
 	if (pm->ps->weaponDelay > 0) {
@@ -1385,10 +1371,9 @@ void PM_Weapon(void) {
 		}
 	}
 
-	if (pm->ps->weapon == WP_GPG40 || pm->ps->weapon == WP_M7) {
-		if (pm->cmd.serverTime - pm->ps->classWeaponTime < (pm->engineerChargeTime * 0.5f)) {
-			return;
-		}
+	if ((pm->ps->weapon == WP_GPG40 || pm->ps->weapon == WP_M7) &&
+		(pm->cmd.serverTime - pm->ps->classWeaponTime < (pm->engineerChargeTime * 0.5f))) {
+		return;
 	}
 
 	if (pm->ps->weapon == WP_MORTAR_SET) {
@@ -1401,53 +1386,46 @@ void PM_Weapon(void) {
 		}
 	}
 
-	if (pm->ps->weapon == WP_SMOKE_BOMB || pm->ps->weapon == WP_SATCHEL) {
-		if (pm->cmd.serverTime - pm->ps->classWeaponTime < pm->covertopsChargeTime) {
-			return;
-		}
+	if ((pm->ps->weapon == WP_SMOKE_BOMB || pm->ps->weapon == WP_SATCHEL) &&
+		pm->cmd.serverTime - pm->ps->classWeaponTime < pm->covertopsChargeTime) {
+		return;
 	}
 
-	if (pm->ps->weapon == WP_LANDMINE) {
-		if (pm->cmd.serverTime - pm->ps->classWeaponTime < (pm->engineerChargeTime * 0.5f)) {
-			return;
-		}
+	if (pm->ps->weapon == WP_LANDMINE &&
+		pm->cmd.serverTime - pm->ps->classWeaponTime < (pm->engineerChargeTime * 0.5f)) {
+		return;
 	}
 
-	if (pm->ps->weapon == WP_DYNAMITE) {
-		if (pm->cmd.serverTime - pm->ps->classWeaponTime < pm->engineerChargeTime) {
-			return;
-		}
+	if (pm->ps->weapon == WP_DYNAMITE &&
+		pm->cmd.serverTime - pm->ps->classWeaponTime < pm->engineerChargeTime) {
+		return;
 	}
 
-	if (pm->ps->weapon == WP_AMMO) {
-		if (pm->cmd.serverTime - pm->ps->classWeaponTime < (pm->ltChargeTime * 0.25f)) {
-			// rain - #202 - ^^ properly check ltChargeTime here, not medicChargeTime
-			if (pm->cmd.buttons & BUTTON_ATTACK) {
-				BG_AnimScriptEvent(pm->ps, pm->character->animModelInfo, ANIM_ET_NOPOWER, qtrue, qfalse);
-			}
-			return;
+	if (pm->ps->weapon == WP_AMMO &&
+		pm->cmd.serverTime - pm->ps->classWeaponTime < (pm->ltChargeTime * 0.25f)) {
+		// rain - #202 - ^^ properly check ltChargeTime here, not medicChargeTime
+		if (pm->cmd.buttons & BUTTON_ATTACK) {
+			BG_AnimScriptEvent(pm->ps, pm->character->animModelInfo, ANIM_ET_NOPOWER, qtrue, qfalse);
 		}
+		return;
 	}
 
-	if (pm->ps->weapon == WP_MEDKIT) {
-		if (pm->cmd.serverTime - pm->ps->classWeaponTime < (pm->medicChargeTime * 0.25f)) {
-			if (pm->cmd.buttons & BUTTON_ATTACK) {
-				BG_AnimScriptEvent(pm->ps, pm->character->animModelInfo, ANIM_ET_NOPOWER, qtrue, qfalse);
-			}
-			return;
+	if (pm->ps->weapon == WP_MEDKIT &&
+		pm->cmd.serverTime - pm->ps->classWeaponTime < (pm->medicChargeTime * 0.25f)) {
+		if (pm->cmd.buttons & BUTTON_ATTACK) {
+			BG_AnimScriptEvent(pm->ps, pm->character->animModelInfo, ANIM_ET_NOPOWER, qtrue, qfalse);
 		}
+		return;
 	}
 
-	if (pm->ps->weapon == WP_SMOKE_MARKER) {
-		if (pm->cmd.serverTime - pm->ps->classWeaponTime < pm->ltChargeTime) {
-			return;
-		}
+	if (pm->ps->weapon == WP_SMOKE_MARKER &&
+		pm->cmd.serverTime - pm->ps->classWeaponTime < pm->ltChargeTime) {
+		return;
 	}
 
-	if (pm->ps->weapon == WP_MEDIC_ADRENALINE) {
-		if (pm->cmd.serverTime - pm->ps->classWeaponTime < pm->medicChargeTime) {
-			return;
-		}
+	if (pm->ps->weapon == WP_MEDIC_ADRENALINE &&
+		pm->cmd.serverTime - pm->ps->classWeaponTime < pm->medicChargeTime) {
+		return;
 	}
 
 	// check for fire
@@ -1484,19 +1462,18 @@ void PM_Weapon(void) {
 	}
 
 	// player is underwater - no fire
-	if (pm->waterlevel == 3) {
-		if (pm->ps->weapon != WP_KNIFE &&
-		    pm->ps->weapon != WP_GRENADE_LAUNCHER &&
-		    pm->ps->weapon != WP_GRENADE_PINEAPPLE &&
-		    pm->ps->weapon != WP_DYNAMITE &&
-		    pm->ps->weapon != WP_LANDMINE &&
-		    pm->ps->weapon != WP_TRIPMINE &&
-		    pm->ps->weapon != WP_SMOKE_BOMB) {
-			PM_AddEvent(EV_NOFIRE_UNDERWATER);      // event for underwater 'click' for nofire
-			pm->ps->weaponTime  = 500;
-			pm->ps->weaponDelay = 0;                // avoid insta-fire after water exit on delayed weapon attacks
-			return;
-		}
+	if (pm->waterlevel == 3 &&
+		pm->ps->weapon != WP_KNIFE &&
+	    pm->ps->weapon != WP_GRENADE_LAUNCHER &&
+	    pm->ps->weapon != WP_GRENADE_PINEAPPLE &&
+	    pm->ps->weapon != WP_DYNAMITE &&
+	    pm->ps->weapon != WP_LANDMINE &&
+	    pm->ps->weapon != WP_TRIPMINE &&
+	    pm->ps->weapon != WP_SMOKE_BOMB) {
+		PM_AddEvent(EV_NOFIRE_UNDERWATER);      // event for underwater 'click' for nofire
+		pm->ps->weaponTime  = 500;
+		pm->ps->weaponDelay = 0;                // avoid insta-fire after water exit on delayed weapon attacks
+		return;
 	}
 
 	// start the animation even if out of ammo
@@ -1754,11 +1731,11 @@ void PM_Weapon(void) {
 	}
 
 	// take an ammo away if not infinite
-	if (PM_WeaponAmmoAvailable(pm->ps->weapon) != -1) {
+	if (PM_WeaponAmmoAvailable(pm->ps->weapon) != -1 &&
+		!pm->ps->persistant[PERS_HWEAPON_USE] &&
+		!pm->ps->eFlags & EF_MOUNTEDTANK) {
 		// Rafael - check for being mounted on mg42
-		if (!(pm->ps->persistant[PERS_HWEAPON_USE]) && !(pm->ps->eFlags & EF_MOUNTEDTANK)) {
-			PM_WeaponUseAmmo(pm->ps->weapon, ammoNeeded);
-		}
+		PM_WeaponUseAmmo(pm->ps->weapon, ammoNeeded);
 	}
 
 
@@ -1906,10 +1883,8 @@ void PM_Weapon(void) {
 			if (!akimboFire) {
 				addTime = 2 * GetAmmoTableData(pm->ps->weapon)->nextShotTime;
 			}
-		} else if (!pm->ps->ammoclip[BG_FindClipForWeapon(BG_AkimboSidearm(pm->ps->weapon))]) {
-			if (akimboFire) {
-				addTime = 2 * GetAmmoTableData(pm->ps->weapon)->nextShotTime;
-			}
+		} else if (!pm->ps->ammoclip[BG_FindClipForWeapon(BG_AkimboSidearm(pm->ps->weapon))] && akimboFire) {
+			addTime = 2 * GetAmmoTableData(pm->ps->weapon)->nextShotTime;
 		}
 
 		aimSpreadScaleAdd = 20;
@@ -1927,10 +1902,8 @@ void PM_Weapon(void) {
 			if (!akimboFire) {
 				addTime = 2 * GetAmmoTableData(pm->ps->weapon)->nextShotTime;
 			}
-		} else if (!pm->ps->ammoclip[BG_FindClipForWeapon(BG_AkimboSidearm(pm->ps->weapon))]) {
-			if (akimboFire) {
-				addTime = 2 * GetAmmoTableData(pm->ps->weapon)->nextShotTime;
-			}
+		} else if (!pm->ps->ammoclip[BG_FindClipForWeapon(BG_AkimboSidearm(pm->ps->weapon))] && akimboFire) {
+			addTime = 2 * GetAmmoTableData(pm->ps->weapon)->nextShotTime;
 		}
 
 // rain - colt and luger are supposed to be balanced
@@ -2058,13 +2031,12 @@ void PM_Weapon(void) {
 	// check for overheat
 
 	// the weapon can overheat, and it's hot
-	if (GetAmmoTableData(pm->ps->weapon)->maxHeat && pm->ps->weapHeat[pm->ps->weapon]) {
+	if (GetAmmoTableData(pm->ps->weapon)->maxHeat && pm->ps->weapHeat[pm->ps->weapon] &&
+		pm->ps->weapHeat[pm->ps->weapon] >= GetAmmoTableData(pm->ps->weapon)->maxHeat) {
 		// it is overheating
-		if (pm->ps->weapHeat[pm->ps->weapon] >= GetAmmoTableData(pm->ps->weapon)->maxHeat) {
-			pm->ps->weapHeat[pm->ps->weapon] = GetAmmoTableData(pm->ps->weapon)->maxHeat;     // cap heat to max
-			PM_AddEvent(EV_WEAP_OVERHEAT);
-			addTime = 2000;     // force "heat recovery minimum" to 2 sec right now
-		}
+		pm->ps->weapHeat[pm->ps->weapon] = GetAmmoTableData(pm->ps->weapon)->maxHeat;     // cap heat to max
+		PM_AddEvent(EV_WEAP_OVERHEAT);
+		addTime = 2000;     // force "heat recovery minimum" to 2 sec right now
 	}
 
 	pm->ps->aimSpreadScaleFloat += 3.0 * aimSpreadScaleAdd;
