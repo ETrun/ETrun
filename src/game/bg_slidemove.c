@@ -319,18 +319,12 @@ void PM_StepSlideMove(qboolean gravity) {
 	// Nico, no DJ if too much Z-speed (300) prevents DJ bugs after jumppads (on ghost-afu for example)
 	if (pm->ps->velocity[2] > 0 && (trace.fraction == 1.0 || DotProduct(trace.plane.normal, up) < 0.7)) {
 		if (pm->physics & PHYSICS_DOUBLEJUMP && pm->ps->velocity[2] < 300) {
-
-			if (trace.fraction == 1.0 && DotProduct(trace.plane.normal, up) == 0) {
-				if (pm->ps->stats[STAT_DOUBLEJUMP_TIME] < pml.msec) {
-				} else {
-					return;
-				}
-			} else {
-				// Nico, disable DJ for 1 sec
-				pm->ps->stats[STAT_DOUBLEJUMP_TIME] = pml.msec + 1000;
+			if (trace.fraction != 1.0 || DotProduct(trace.plane.normal, up) != 0) {
+				// Nico, DJ not allowed because of surface
 				return;
 			}
 		} else {
+			// Nico, DJ not allowed because Z-seed or server physics setting
 			return;
 		}
 	}

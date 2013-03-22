@@ -454,7 +454,6 @@ typedef enum {
 	STAT_XP,                        // Gordon: "realtime" version of xp that doesnt need to go thru the scoreboard
 	STAT_USERCMD_BUTTONS,           // Nico, keys pressed (high byte contains buttons, low byte contains wbuttons)
 	STAT_USERCMD_MOVE,              // Nico, keys pressed (see UMOVE_* for flags)
-	STAT_DOUBLEJUMP_TIME            // Nico, DJ
 } statIndex_t;
 
 // Nico, keys pressed
