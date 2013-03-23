@@ -139,23 +139,24 @@ void G_MissileImpact(gentity_t *ent, trace_t *trace, int impactDamage) {
 	other = &g_entities[trace->entityNum];
 
 	// handle func_explosives
-	if (other->classname && Q_stricmp(other->classname, "func_explosive") == 0) {
+	if (other->classname &&
+		Q_stricmp(other->classname, "func_explosive") == 0 &&
+		other->health &&
+		impactDamage >= other->health) {
 		// the damage is sufficient to "break" the ent (health == 0 is non-breakable)
-		if (other->health && impactDamage >= other->health) {
-			// check for other->takedamage needs to be inside the health check since it is
-			// likely that, if successfully destroyed by the missile, in the next runmissile()
-			// update takedamage would be set to '0' and the func_explosive would not be
-			// removed yet, causing a bounce.
-			if (other->takedamage) {
-				BG_EvaluateTrajectoryDelta(&ent->s.pos, level.time, velocity);
-				G_Damage(other, ent, &g_entities[ent->r.ownerNum], velocity, ent->s.origin, impactDamage, 0, ent->methodOfDeath);
-			}
+		// check for other->takedamage needs to be inside the health check since it is
+		// likely that, if successfully destroyed by the missile, in the next runmissile()
+		// update takedamage would be set to '0' and the func_explosive would not be
+		// removed yet, causing a bounce.
+		if (other->takedamage) {
+			BG_EvaluateTrajectoryDelta(&ent->s.pos, level.time, velocity);
+			G_Damage(other, ent, &g_entities[ent->r.ownerNum], velocity, ent->s.origin, impactDamage, 0, ent->methodOfDeath);
+		}
 
-			// its possible of the func_explosive not to die from this and it
-			// should reflect the missile or explode it not vanish into oblivion
-			if (other->health <= 0) {
-				return;
-			}
+		// its possible of the func_explosive not to die from this and it
+		// should reflect the missile or explode it not vanish into oblivion
+		if (other->health <= 0) {
+			return;
 		}
 	}
 
@@ -173,8 +174,6 @@ void G_MissileImpact(gentity_t *ent, trace_t *trace, int impactDamage) {
 	// impact damage
 	if (other->takedamage || other->dmgparent) {
 		if (ent->damage) {
-			if (AccuracyHit(other, &g_entities[ent->r.ownerNum])) {
-			}
 			BG_EvaluateTrajectoryDelta(&ent->s.pos, level.time, velocity);
 			if (!VectorLengthSquared(velocity)) {
 				velocity[2] = 1;    // stepped on a grenade
@@ -361,7 +360,7 @@ void G_ExplodeMissile(gentity_t *ent) {
 					continue;
 				}
 
-				if ((hit->s.eType != ET_OID_TRIGGER)) {
+				if (hit->s.eType != ET_OID_TRIGGER) {
 					continue;
 				}
 
@@ -381,9 +380,6 @@ void G_ExplodeMissile(gentity_t *ent) {
 				}
 
 				if (((hit->spawnflags & AXIS_OBJECTIVE) && (ent->s.teamNum == TEAM_ALLIES)) || ((hit->spawnflags & ALLIED_OBJECTIVE) && (ent->s.teamNum == TEAM_AXIS))) {
-					if (ent->parent->client && G_GetWeaponClassForMOD(MOD_DYNAMITE) >= hit->target_ent->constructibleStats.weaponclass) {
-					}
-
 					G_UseTargets(hit, ent);
 					hit->think     = G_FreeEntity;
 					hit->nextthink = level.time + FRAMETIME;
@@ -424,27 +420,30 @@ void G_RunMissile(gentity_t *ent) {
 	vec3_t  origin;
 	trace_t tr;
 	int     impactDamage;
+	float skyHeight;
 
-	if (ent->s.weapon == WP_LANDMINE || ent->s.weapon == WP_DYNAMITE || ent->s.weapon == WP_SATCHEL) {
-		if (ent->s.groundEntityNum == -1) {
-			if (ent->s.pos.trType != TR_GRAVITY) {
-				ent->s.pos.trType = TR_GRAVITY;
-				ent->s.pos.trTime = level.time;
-			}
-		}
+	if ((ent->s.weapon == WP_LANDMINE || ent->s.weapon == WP_DYNAMITE || ent->s.weapon == WP_SATCHEL) &&
+		ent->s.groundEntityNum == -1 && ent->s.pos.trType != TR_GRAVITY) {
+		ent->s.pos.trType = TR_GRAVITY;
+		ent->s.pos.trTime = level.time;
 	}
 
 	// get current position
 	BG_EvaluateTrajectory(&ent->s.pos, level.time, origin, qfalse, ent->s.effect2Time);
 
-	if ((ent->clipmask & CONTENTS_BODY) && (ent->s.weapon == WP_DYNAMITE || ent->s.weapon == WP_ARTY || ent->s.weapon == WP_SMOKE_MARKER
-	                                        || ent->s.weapon == WP_GRENADE_LAUNCHER || ent->s.weapon == WP_GRENADE_PINEAPPLE
-	                                        || ent->s.weapon == WP_LANDMINE || ent->s.weapon == WP_SATCHEL || ent->s.weapon == WP_SMOKE_BOMB
-	                                        )) {
-
-		if (!ent->s.pos.trDelta[0] && !ent->s.pos.trDelta[1] && !ent->s.pos.trDelta[2]) {
-			ent->clipmask &= ~CONTENTS_BODY;
-		}
+	if ((ent->clipmask & CONTENTS_BODY) &&
+		(ent->s.weapon == WP_DYNAMITE ||
+		ent->s.weapon == WP_ARTY ||
+		ent->s.weapon == WP_SMOKE_MARKER ||
+		ent->s.weapon == WP_GRENADE_LAUNCHER ||
+		ent->s.weapon == WP_GRENADE_PINEAPPLE ||
+		ent->s.weapon == WP_LANDMINE ||
+		ent->s.weapon == WP_SATCHEL ||
+		ent->s.weapon == WP_SMOKE_BOMB) &&
+		!ent->s.pos.trDelta[0] &&
+		!ent->s.pos.trDelta[1] &&
+		!ent->s.pos.trDelta[2]) {
+		ent->clipmask &= ~CONTENTS_BODY;
 	}
 
 	if (level.tracemapLoaded &&
@@ -467,38 +466,37 @@ void G_RunMissile(gentity_t *ent) {
 
 				G_FreeEntity(ent);
 				return;
-			} else {
-				float skyHeight = BG_GetSkyHeightAtPoint(origin);
-
-				if (origin[2] < BG_GetTracemapGroundFloor()) {
-					gentity_t *tent;
-
-					tent              = G_TempEntity(ent->r.currentOrigin, EV_MORTAR_MISS);
-					tent->s.clientNum = ent->r.ownerNum;
-					tent->r.svFlags  |= SVF_BROADCAST;
-					tent->s.density   = 0;  // direct
-
-					G_FreeEntity(ent);
-					return;
-				}
-
-				// are we in worldspace again - or did we hit a ceiling from the outside of the world
-				if (skyHeight == 65536) {
-					G_RunThink(ent);
-					VectorCopy(origin, ent->r.currentOrigin);
-					return;     // keep flying
-				}
-
-				if (skyHeight <= origin[2]) {
-					G_RunThink(ent);
-					return; // keep flying
-				}
-
-				// back in the world, keep going like normal
-				VectorCopy(origin, ent->r.currentOrigin);
-				ent->count  = 0;
-				ent->count2 = 1;
 			}
+			skyHeight = BG_GetSkyHeightAtPoint(origin);
+
+			if (origin[2] < BG_GetTracemapGroundFloor()) {
+				gentity_t *tent;
+
+				tent              = G_TempEntity(ent->r.currentOrigin, EV_MORTAR_MISS);
+				tent->s.clientNum = ent->r.ownerNum;
+				tent->r.svFlags  |= SVF_BROADCAST;
+				tent->s.density   = 0;  // direct
+
+				G_FreeEntity(ent);
+				return;
+			}
+
+			// are we in worldspace again - or did we hit a ceiling from the outside of the world
+			if (skyHeight == 65536) {
+				G_RunThink(ent);
+				VectorCopy(origin, ent->r.currentOrigin);
+				return;     // keep flying
+			}
+
+			if (skyHeight <= origin[2]) {
+				G_RunThink(ent);
+				return; // keep flying
+			}
+
+			// back in the world, keep going like normal
+			VectorCopy(origin, ent->r.currentOrigin);
+			ent->count  = 0;
+			ent->count2 = 1;
 		} else if (!ent->count2 && BG_GetSkyHeightAtPoint(origin) - BG_GetGroundHeightAtPoint(origin) > 512) {
 			vec3_t delta;
 
@@ -513,29 +511,30 @@ void G_RunMissile(gentity_t *ent) {
 	// ignoring interactions with the missile owner
 	trap_Trace(&tr, ent->r.currentOrigin, ent->r.mins, ent->r.maxs, origin, ent->r.ownerNum, ent->clipmask);
 
-	if (ent->s.weapon == WP_MORTAR_SET && ent->count2 == 1) {
-		if (ent->r.currentOrigin[2] > origin[2] && origin[2] - BG_GetGroundHeightAtPoint(origin) < 512) {
-			vec3_t  impactpos;
-			trace_t mortar_tr;
+	if (ent->s.weapon == WP_MORTAR_SET &&
+		ent->count2 == 1 &&
+		ent->r.currentOrigin[2] > origin[2] &&
+		origin[2] - BG_GetGroundHeightAtPoint(origin) < 512) {
+		vec3_t  impactpos;
+		trace_t mortar_tr;
 
-			VectorSubtract(origin, ent->r.currentOrigin, impactpos);
-			VectorMA(origin, 8, impactpos, impactpos);
+		VectorSubtract(origin, ent->r.currentOrigin, impactpos);
+		VectorMA(origin, 8, impactpos, impactpos);
 
-			trap_Trace(&mortar_tr, origin, ent->r.mins, ent->r.maxs, impactpos,
-			           ent->r.ownerNum, ent->clipmask);
+		trap_Trace(&mortar_tr, origin, ent->r.mins, ent->r.maxs, impactpos,
+		           ent->r.ownerNum, ent->clipmask);
 
-			if (mortar_tr.fraction != 1) {
-				gentity_t *tent;
+		if (mortar_tr.fraction != 1) {
+			gentity_t *tent;
 
-				impactpos[2] = BG_GetGroundHeightAtPoint(impactpos);
+			impactpos[2] = BG_GetGroundHeightAtPoint(impactpos);
 
-				tent              = G_TempEntity(impactpos, EV_MORTAR_IMPACT);
-				tent->s.clientNum = ent->r.ownerNum;
-				tent->r.svFlags  |= SVF_BROADCAST;
+			tent              = G_TempEntity(impactpos, EV_MORTAR_IMPACT);
+			tent->s.clientNum = ent->r.ownerNum;
+			tent->r.svFlags  |= SVF_BROADCAST;
 
-				ent->count2     = 2;
-				ent->s.legsAnim = 1;
-			}
+			ent->count2     = 2;
+			ent->s.legsAnim = 1;
 		}
 	}
 
@@ -700,9 +699,9 @@ int G_PredictMissile(gentity_t *ent, int duration, vec3_t endPos, qboolean allow
 	//
 	if (allowBounce && (ent->s.eFlags & (EF_BOUNCE | EF_BOUNCE_HALF))) {
 		return ent->nextthink;
-	} else {      // it will probably explode before it times out
-		return time;
 	}
+	// it will probably explode before it times out
+	return time;
 }
 
 //=============================================================================

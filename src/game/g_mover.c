@@ -220,13 +220,11 @@ qboolean G_TryPushingEntity(gentity_t *check, gentity_t *pusher, vec3_t move, ve
 
 	// try moving the contacted entity
 	VectorAdd(check->s.pos.trBase, move, check->s.pos.trBase);
-	if (check->client) {
+	if (check->client && ((check->client->ps.eFlags & EF_PRONE) || check->s.weapon == WP_MORTAR_SET)) {
 		// make sure the client's view rotates when on a rotating mover
 		// RF, this is done client-side now
 		// ydnar: only do this if player is prone or using set mortar
-		if ((check->client->ps.eFlags & EF_PRONE) || check->s.weapon == WP_MORTAR_SET) {
-			check->client->ps.delta_angles[YAW] += ANGLE2SHORT(amove[YAW]);
-		}
+		check->client->ps.delta_angles[YAW] += ANGLE2SHORT(amove[YAW]);
 	}
 
 	// figure movement due to the pusher's amove
@@ -573,20 +571,16 @@ void G_MoverTeam(gentity_t *ent) {
 
 		// opening/closing sliding door
 		if (part->s.pos.trType == TR_LINEAR_STOP) {
-			if (level.time >= part->s.pos.trTime + part->s.pos.trDuration) {
-				if (part->reached) {
-					part->reached(part);
-				}
+			if (level.time >= part->s.pos.trTime + part->s.pos.trDuration && part->reached) {
+				part->reached(part);
 			}
 		}
 //----(SA)	removed
 		// opening or closing rotating door
-		else if (part->s.apos.trType == TR_LINEAR_STOP) {
-			if (level.time >= part->s.apos.trTime + part->s.apos.trDuration) {
-				if (part->reached) {
-					part->reached(part);
-				}
-			}
+		else if (part->s.apos.trType == TR_LINEAR_STOP &&
+			level.time >= part->s.apos.trTime + part->s.apos.trDuration &&
+			part->reached) {
+			part->reached(part);
 		}
 	}
 }
@@ -1052,10 +1046,8 @@ qboolean IsBinaryMoverBlocked(gentity_t *ent, gentity_t *other, gentity_t *activ
 
 		if (dot >= 0) {
 			return qtrue;
-		} else {
-			return qfalse;
 		}
-
+		return qfalse;
 	}
 
 	return qfalse;
@@ -1968,31 +1960,31 @@ void G_TryDoor(gentity_t *ent, gentity_t *activator) {
 
 	walking = (qboolean)(ent->flags & FL_SOFTACTIVATE);
 
-	if ((ent->s.apos.trType == TR_STATIONARY && ent->s.pos.trType == TR_STATIONARY)) {
-		if (ent->active == qfalse) {
-			if (!G_AllowTeamsAllowed(ent, activator)
-			    ) { // door force locked
-				G_AddEvent(ent, EV_GENERAL_SOUND, ent->soundPos3);
-				return;
+	if (ent->s.apos.trType == TR_STATIONARY &&
+		ent->s.pos.trType == TR_STATIONARY &&
+		ent->active == qfalse) {
+		if (!G_AllowTeamsAllowed(ent, activator)
+		    ) { // door force locked
+			G_AddEvent(ent, EV_GENERAL_SOUND, ent->soundPos3);
+			return;
+		}
+
+		if (ent->teammaster && ent->team && ent != ent->teammaster) {
+			ent->teammaster->active = qtrue;
+			if (walking) {
+				ent->teammaster->flags |= FL_SOFTACTIVATE;      // no noise generated
 			}
 
-			if (ent->teammaster && ent->team && ent != ent->teammaster) {
-				ent->teammaster->active = qtrue;
-				if (walking) {
-					ent->teammaster->flags |= FL_SOFTACTIVATE;      // no noise generated
-				}
-
-				Use_BinaryMover(ent->teammaster, activator, activator);
-				G_UseTargets(ent->teammaster, activator);
-			} else {
-				ent->active = qtrue;
-				if (walking) {
-					ent->flags |= FL_SOFTACTIVATE;      // no noise
-				}
-
-				Use_BinaryMover(ent, activator, activator);
-				G_UseTargets(ent, activator);
+			Use_BinaryMover(ent->teammaster, activator, activator);
+			G_UseTargets(ent->teammaster, activator);
+		} else {
+			ent->active = qtrue;
+			if (walking) {
+				ent->flags |= FL_SOFTACTIVATE;      // no noise
 			}
+
+			Use_BinaryMover(ent, activator, activator);
+			G_UseTargets(ent, activator);
 		}
 	}
 }
@@ -2766,11 +2758,9 @@ void info_limbo_camera_setup(gentity_t *self) {
 }
 
 void SP_info_limbo_camera(gentity_t *self) {
-	if (!(self->spawnflags & 2)) {
-		if ((self->spawnflags & 1)) {
-			G_FreeEntity(self);
-			return;
-		}
+	if (!(self->spawnflags & 2) && (self->spawnflags & 1)) {
+		G_FreeEntity(self);
+		return;
 	}
 
 	self->think     = info_limbo_camera_setup;
@@ -3694,20 +3684,12 @@ void func_explosive_explode(gentity_t *self, gentity_t *inflictor, gentity_t *at
 	}
 
 	// if a valid target entity was not found, check for a specified 'angle' for the explosion direction
-	if (!tent) {
-		if (self->s.angles[1]) {
-			// up
-			if (self->s.angles[1] == -1) {
-				// it's 'up' by default
-			}
-			// down
-			else if (self->s.angles[1] == -2) {
-				dir[2] = -1;
-			}
-			// yawed
-			else {
-				RotatePointAroundVector(dir, dir, tv(1, 0, 0), self->s.angles[1]);
-			}
+	if (!tent && self->s.angles[1] && self->s.angles[1] != -1) {
+		// it's 'up' by default
+		if (self->s.angles[1] == -2) {// down
+			dir[2] = -1;
+		} else {// yawed
+			RotatePointAroundVector(dir, dir, tv(1, 0, 0), self->s.angles[1]);
 		}
 	}
 
@@ -4172,7 +4154,7 @@ void func_constructible_use(gentity_t *self, gentity_t *other, gentity_t *activa
 		int constructibleModelindex     = self->s.modelindex;
 		int constructibleClipmask       = self->clipmask;
 		int constructibleContents       = self->r.contents;
-		int constructibleNonSolidBModel = (self->s.eFlags & EF_NONSOLID_BMODEL);
+		int constructibleNonSolidBModel = self->s.eFlags & EF_NONSOLID_BMODEL;
 
 		// RF, AAS areas are now unusable
 		if (!self->count2) {
@@ -4242,6 +4224,7 @@ func_constructible_explode
 void func_constructible_explode(gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int damage, int mod) {
 	// Nico, silent GCC
 	(void)damage;
+	(void)mod;
 
 	if (self->desstages) {
 		if (self->grenadeFired > 1) {
@@ -4283,7 +4266,7 @@ void func_constructible_explode(gentity_t *self, gentity_t *inflictor, gentity_t
 			{
 				int constructibleClipmask       = self->clipmask;
 				int constructibleContents       = self->r.contents;
-				int constructibleNonSolidBModel = (self->s.eFlags & EF_NONSOLID_BMODEL);
+				int constructibleNonSolidBModel = self->s.eFlags & EF_NONSOLID_BMODEL;
 
 				trap_SetBrushModel(self, va("*%i", self->desbmodels[self->grenadeFired - 1]));
 
@@ -4340,43 +4323,10 @@ void func_constructible_explode(gentity_t *self, gentity_t *inflictor, gentity_t
 					G_FreeEntity(check);
 				}
 			}
-
-			// Skills stuff
-			if (G_GetWeaponClassForMOD(mod) >= self->constructibleStats.weaponclass) {
-			}
 		} else {
 
-			if (!(self->spawnflags & CONSTRUCTIBLE_NO_AAS_BLOCKING)) {
-				// RF, update blocking status
-				if (!(self->spawnflags & CONSTRUCTIBLE_BLOCK_PATHS_WHEN_BUILD)) {
-					// RF, AAS areas are now unusable
-					if (!self->count2) {
-						trap_SetBrushModel(self, self->model);
-					} else {
-						trap_SetBrushModel(self, va("*%i", self->conbmodels[self->count2 - 1]));       // set the final stage
-					}
-					trap_LinkEntity(self);
-					if (!self->count2) {
-						trap_SetBrushModel(self, self->model);
-					} else {
-						trap_SetBrushModel(self, va("*%i", self->conbmodels[self->grenadeFired]));       // set the final stage
-					}
-					trap_UnlinkEntity(self);
-				}
-			}
-
-			G_Script_ScriptEvent(self, "death", "");
-
-			// Skills stuff
-			if (G_GetWeaponClassForMOD(mod) >= self->constructibleStats.weaponclass) {
-			}
-
-			// unlink
-			G_UseEntity(self, inflictor, attacker);     // this will unlink (call func_constructible_use), if another function is used something is VERY wrong
-		}
-	} else {
-		if (!(self->spawnflags & CONSTRUCTIBLE_NO_AAS_BLOCKING)) {
-			if (!(self->spawnflags & CONSTRUCTIBLE_BLOCK_PATHS_WHEN_BUILD)) {
+			if (!(self->spawnflags & CONSTRUCTIBLE_NO_AAS_BLOCKING) &&
+				!(self->spawnflags & CONSTRUCTIBLE_BLOCK_PATHS_WHEN_BUILD)) {
 				// RF, AAS areas are now unusable
 				if (!self->count2) {
 					trap_SetBrushModel(self, self->model);
@@ -4391,10 +4341,28 @@ void func_constructible_explode(gentity_t *self, gentity_t *inflictor, gentity_t
 				}
 				trap_UnlinkEntity(self);
 			}
-		}
 
-		// Skills stuff
-		if (G_GetWeaponClassForMOD(mod) >= self->constructibleStats.weaponclass) {
+			G_Script_ScriptEvent(self, "death", "");
+
+			// unlink
+			G_UseEntity(self, inflictor, attacker);     // this will unlink (call func_constructible_use), if another function is used something is VERY wrong
+		}
+	} else {
+		if (!(self->spawnflags & CONSTRUCTIBLE_NO_AAS_BLOCKING) &&
+			!(self->spawnflags & CONSTRUCTIBLE_BLOCK_PATHS_WHEN_BUILD)) {
+			// RF, AAS areas are now unusable
+			if (!self->count2) {
+				trap_SetBrushModel(self, self->model);
+			} else {
+				trap_SetBrushModel(self, va("*%i", self->conbmodels[self->count2 - 1]));       // set the final stage
+			}
+			trap_LinkEntity(self);
+			if (!self->count2) {
+				trap_SetBrushModel(self, self->model);
+			} else {
+				trap_SetBrushModel(self, va("*%i", self->conbmodels[self->grenadeFired]));       // set the final stage
+			}
+			trap_UnlinkEntity(self);
 		}
 
 		// unlink
@@ -4610,10 +4578,8 @@ void func_constructiblespawn(gentity_t *ent) {
 					e->s.eType = ET_EXPLOSIVE_INDICATOR;
 
 					while ((tent = G_Find(tent, FOFS(target), ent->targetname)) != NULL) {
-						if (tent->s.eType == ET_OID_TRIGGER) {
-							if (tent->spawnflags & 8) {
-								e->s.eType = ET_TANK_INDICATOR;
-							}
+						if (tent->s.eType == ET_OID_TRIGGER && tent->spawnflags & 8) {
+							e->s.eType = ET_TANK_INDICATOR;
 						}
 					}
 
