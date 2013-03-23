@@ -155,7 +155,7 @@ int G_checkServerToggle(vmCvar_t *cv) {
 	if (cv == &g_antilag) {
 		nFlag = CV_SVS_ANTILAG;
 	} else {
-		return(qfalse);
+		return qfalse;
 	}
 
 	if (cv->integer > 0) {
@@ -164,5 +164,5 @@ int G_checkServerToggle(vmCvar_t *cv) {
 		level.server_settings &= ~nFlag;
 	}
 
-	return(qtrue);
+	return qtrue;
 }

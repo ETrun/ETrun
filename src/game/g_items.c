@@ -112,11 +112,9 @@ int AddToClip(
 		ammomove = maxclip - inclip;
 	}
 
-	if (outOfReserve) {
+	if (outOfReserve && ammomove > ps->ammo[ammoweap]) {
 		// cap move amount if it's more than you've got in reserve
-		if (ammomove > ps->ammo[ammoweap]) {
-			ammomove = ps->ammo[ammoweap];
-		}
+		ammomove = ps->ammo[ammoweap];
 	}
 
 	if (ammomove) {
@@ -195,7 +193,7 @@ int Add_Ammo(gentity_t *ent, int weapon, int count, qboolean fillClip) {
 		ent->client->ps.ammo[ammoweap] = count;
 	}
 
-	return (ent->client->ps.ammo[ammoweap] > originalCount);
+	return ent->client->ps.ammo[ammoweap] > originalCount;
 }
 
 weapon_t G_GetPrimaryWeaponForClient(gclient_t *client) {
@@ -338,22 +336,21 @@ int Pickup_Weapon(gentity_t *ent, gentity_t *other) {
 	qboolean alreadyHave = qfalse;
 
 	// JPW NERVE -- magic ammo for any two-handed weapon
-	if (ent->item->giTag == WP_AMMO) {
+	if (ent->item->giTag == WP_AMMO && other->client->ps.stats[STAT_PLAYER_CLASS] != PC_FIELDOPS) {
 		// if LT isn't giving ammo to self or another LT or the enemy, give him some props
-		if (other->client->ps.stats[STAT_PLAYER_CLASS] != PC_FIELDOPS) {
-			if (ent->parent && ent->parent->client && other->client->sess.sessionTeam == ent->parent->client->sess.sessionTeam) {
-				if (!(ent->parent->client->PCSpecialPickedUpCount % LT_SPECIAL_PICKUP_MOD)) {
-					if (ent->parent && ent->parent->client) {
-						G_LogPrintf("Ammo_Pack: %d %d\n", (int)(ent->parent - g_entities), (int)(other - g_entities));    // OSP
-					}
-				}
-				ent->parent->client->PCSpecialPickedUpCount++;
-
-				// extracted code originally here into AddMagicAmmo -xkan, 9/18/2002
-				// add 1 clip of magic ammo for any two-handed weapon
+		if (ent->parent &&
+			ent->parent->client &&
+			other->client->sess.sessionTeam == ent->parent->client->sess.sessionTeam) {
+			if (!(ent->parent->client->PCSpecialPickedUpCount % LT_SPECIAL_PICKUP_MOD) &&
+				ent->parent && ent->parent->client) {
+				G_LogPrintf("Ammo_Pack: %d %d\n", (int)(ent->parent - g_entities), (int)(other - g_entities));
 			}
-			return -1;
+			ent->parent->client->PCSpecialPickedUpCount++;
+
+			// extracted code originally here into AddMagicAmmo -xkan, 9/18/2002
+			// add 1 clip of magic ammo for any two-handed weapon
 		}
+		return -1;
 	}
 
 	quantity = ent->count;
@@ -445,14 +442,14 @@ int Pickup_Health(gentity_t *ent, gentity_t *other) {
 	int max;
 
 	// if medic isn't giving ammo to self or another medic or the enemy, give him some props
-	if (other->client->ps.stats[STAT_PLAYER_CLASS] != PC_MEDIC) {
-		if (ent->parent && ent->parent->client && other->client->sess.sessionTeam == ent->parent->client->sess.sessionTeam) {
-			if (!(ent->parent->client->PCSpecialPickedUpCount % MEDIC_SPECIAL_PICKUP_MOD)) {
-				G_LogPrintf("Health_Pack: %d %d\n", (int)(ent->parent - g_entities), (int)(other - g_entities));      // OSP
-			}
-
-			ent->parent->client->PCSpecialPickedUpCount++;
+	if (other->client->ps.stats[STAT_PLAYER_CLASS] != PC_MEDIC &&
+		ent->parent && ent->parent->client &&
+		other->client->sess.sessionTeam == ent->parent->client->sess.sessionTeam) {
+		if (!(ent->parent->client->PCSpecialPickedUpCount % MEDIC_SPECIAL_PICKUP_MOD)) {
+			G_LogPrintf("Health_Pack: %d %d\n", (int)(ent->parent - g_entities), (int)(other - g_entities));      // OSP
 		}
+
+		ent->parent->client->PCSpecialPickedUpCount++;
 	}
 
 	max = other->client->ps.stats[STAT_MAX_HEALTH];
@@ -523,12 +520,10 @@ void Touch_Item_Auto(gentity_t *ent, gentity_t *other, trace_t *trace) {
 		return;
 	}
 
-	if (!ent->active && ent->item->giType == IT_WEAPON) {
-		if (ent->item->giTag != WP_AMMO) {
-			if (!COM_BitCheck(other->client->ps.weapons, ent->item->giTag)) {
-				return; // force activate only
-			}
-		}
+	if (!ent->active && ent->item->giType == IT_WEAPON &&
+		ent->item->giTag != WP_AMMO &&
+		!COM_BitCheck(other->client->ps.weapons, ent->item->giTag)) {
+		return; // force activate only
 	}
 
 	ent->active = qtrue;
@@ -554,10 +549,10 @@ void Touch_Item(gentity_t *ent, gentity_t *other, trace_t *trace) {
 	// only activated items can be picked up
 	if (!ent->active) {
 		return;
-	} else {
-		// need to set active to false if player is maxed out
-		ent->active = qfalse;
 	}
+
+	// need to set active to false if player is maxed out
+	ent->active = qfalse;
 
 	if (!other->client) {
 		return;
@@ -1023,11 +1018,9 @@ void G_RunItem(gentity_t *ent) {
 	int     mask;
 
 	// if groundentity has been set to -1, it may have been pushed off an edge
-	if (ent->s.groundEntityNum == -1) {
-		if (ent->s.pos.trType != TR_GRAVITY) {
-			ent->s.pos.trType = TR_GRAVITY;
-			ent->s.pos.trTime = level.time;
-		}
+	if (ent->s.groundEntityNum == -1 && ent->s.pos.trType != TR_GRAVITY) {
+		ent->s.pos.trType = TR_GRAVITY;
+		ent->s.pos.trTime = level.time;
 	}
 
 	if (ent->s.pos.trType == TR_STATIONARY || ent->s.pos.trType == TR_GRAVITY_PAUSED) {   //----(SA)

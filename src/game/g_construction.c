@@ -36,9 +36,8 @@ qboolean G_ConstructionIsPartlyBuilt(gentity_t *ent) {
 	if (ent->count2) {
 		if (!ent->grenadeFired) {
 			return qfalse;
-		} else {
-			return qtrue;
 		}
+		return qtrue;
 	}
 
 	return qfalse;

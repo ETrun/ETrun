@@ -621,11 +621,13 @@ void G_CheckForCursorHints(gentity_t *ent) {
 	} else if (tr->entityNum < MAX_CLIENTS) {
 		// Show medics a syringe if they can revive someone
 
-		if (traceEnt->client && traceEnt->client->sess.sessionTeam == ent->client->sess.sessionTeam) {
-			if (ps->stats[STAT_PLAYER_CLASS] == PC_MEDIC && traceEnt->client->ps.pm_type == PM_DEAD && !(traceEnt->client->ps.pm_flags & PMF_LIMBO)) {
-				hintDist = 48;        // JPW NERVE matches weapon_syringe in g_weapon.c
-				hintType = HINT_REVIVE;
-			}
+		if (traceEnt->client &&
+			traceEnt->client->sess.sessionTeam == ent->client->sess.sessionTeam &&
+			ps->stats[STAT_PLAYER_CLASS] == PC_MEDIC &&
+			traceEnt->client->ps.pm_type == PM_DEAD &&
+			!(traceEnt->client->ps.pm_flags & PMF_LIMBO)) {
+			hintDist = 48;        // JPW NERVE matches weapon_syringe in g_weapon.c
+			hintType = HINT_REVIVE;
 		}
 	} else {
 		checkEnt = traceEnt;
@@ -674,16 +676,17 @@ void G_CheckForCursorHints(gentity_t *ent) {
 
 			switch (checkEnt->s.eType) {
 			case ET_CORPSE:
-				if (!ent->client->ps.powerups[PW_BLUEFLAG] && !ent->client->ps.powerups[PW_REDFLAG]) {
-					if (BODY_TEAM(traceEnt) < 4 && BODY_TEAM(traceEnt) != (int)ent->client->sess.sessionTeam && traceEnt->nextthink == traceEnt->timestamp + BODY_TIME(BODY_TEAM(traceEnt))) {
-						if (ent->client->ps.stats[STAT_PLAYER_CLASS] == PC_COVERTOPS) {
-							hintDist = 48;
-							hintType = HINT_UNIFORM;
-							hintVal  = BODY_VALUE(traceEnt);
-							if (hintVal > 255) {
-								hintVal = 255;
-							}
-						}
+				if (!ent->client->ps.powerups[PW_BLUEFLAG] &&
+					!ent->client->ps.powerups[PW_REDFLAG] &&
+					BODY_TEAM(traceEnt) < 4 &&
+					BODY_TEAM(traceEnt) != (int)ent->client->sess.sessionTeam &&
+					traceEnt->nextthink == traceEnt->timestamp + BODY_TIME(BODY_TEAM(traceEnt)) &&
+					ent->client->ps.stats[STAT_PLAYER_CLASS] == PC_COVERTOPS) {
+					hintDist = 48;
+					hintType = HINT_UNIFORM;
+					hintVal  = BODY_VALUE(traceEnt);
+					if (hintVal > 255) {
+						hintVal = 255;
 					}
 				}
 				break;
@@ -734,13 +737,12 @@ void G_CheckForCursorHints(gentity_t *ent) {
 						hintType = ps->serverCursorHint = HINT_FORCENONE;
 						hintVal  = ps->serverCursorHintVal = 0;
 
-						if (checkEnt->parent && checkEnt->parent->s.eType == ET_OID_TRIGGER) {
-							if (((ent->client->sess.sessionTeam == TEAM_AXIS) && (checkEnt->parent->spawnflags & ALLIED_OBJECTIVE)) ||
-							    ((ent->client->sess.sessionTeam == TEAM_ALLIES) && (checkEnt->parent->spawnflags & AXIS_OBJECTIVE))) {
-								hintDist = CH_BREAKABLE_DIST * 2;
-								hintType = HINT_BREAKABLE_DYNAMITE;
-								hintVal  = ps->serverCursorHintVal = 0;         // no health for dynamite
-							}
+						if (checkEnt->parent && checkEnt->parent->s.eType == ET_OID_TRIGGER &&
+							(((ent->client->sess.sessionTeam == TEAM_AXIS) && (checkEnt->parent->spawnflags & ALLIED_OBJECTIVE)) ||
+						    ((ent->client->sess.sessionTeam == TEAM_ALLIES) && (checkEnt->parent->spawnflags & AXIS_OBJECTIVE)))) {
+							hintDist = CH_BREAKABLE_DIST * 2;
+							hintType = HINT_BREAKABLE_DYNAMITE;
+							hintVal  = ps->serverCursorHintVal = 0;         // no health for dynamite
 						}
 						break;
 					default:
@@ -816,10 +818,8 @@ void G_CheckForCursorHints(gentity_t *ent) {
 				case IT_WEAPON: {
 					qboolean canPickup = COM_BitCheck(ent->client->ps.weapons, it->giTag);
 
-					if (!canPickup) {
-						if (it->giTag == WP_AMMO) {
-							canPickup = qtrue;
-						}
+					if (!canPickup && it->giTag == WP_AMMO) {
+						canPickup = qtrue;
 					}
 
 					if (!canPickup) {
@@ -1432,10 +1432,8 @@ void G_InitGame(int levelTime, int randomSeed) {
 	activeThreadsCounter = 0;
 
 	// Nico, flood protection
-	if (g_floodProtect.integer) {
-		if (trap_Cvar_VariableIntegerValue("sv_floodprotect")) {
-			trap_Cvar_Set("sv_floodprotect", "0");
-		}
+	if (g_floodProtect.integer && trap_Cvar_VariableIntegerValue("sv_floodprotect")) {
+		trap_Cvar_Set("sv_floodprotect", "0");
 	}
 
 	// Nico, is level a timerun?
@@ -2004,10 +2002,10 @@ qboolean G_PositionEntityOnTag(gentity_t *entity, gentity_t *parent, char *tagNa
 
 	G_SetOrigin(entity, entity->r.currentOrigin);
 
-	if (entity->r.linked && !entity->client) {
-		if (!VectorCompare(entity->oldOrigin, entity->r.currentOrigin)) {
-			trap_LinkEntity(entity);
-		}
+	if (entity->r.linked &&
+		!entity->client &&
+		!VectorCompare(entity->oldOrigin, entity->r.currentOrigin)) {
+		trap_LinkEntity(entity);
 	}
 
 	return qtrue;
@@ -2151,20 +2149,17 @@ void G_RunEntity(gentity_t *ent, int msec) {
 
 		G_RunEntity(ent->tagParent, msec);
 
-		if (ent->tagParent) {
-			if (G_PositionEntityOnTag(ent, ent->tagParent, ent->tagName)) {
-				if (!ent->client) {
-					if (!ent->s.density) {
-						BG_EvaluateTrajectory(&ent->s.apos, level.time, ent->r.currentAngles, qtrue, ent->s.effect2Time);
-						VectorAdd(ent->tagParent->r.currentAngles, ent->r.currentAngles, ent->r.currentAngles);
-					} else {
-						BG_EvaluateTrajectory(&ent->s.apos, level.time, ent->r.currentAngles, qtrue, ent->s.effect2Time);
-					}
-				}
+		if (ent->tagParent &&
+			G_PositionEntityOnTag(ent, ent->tagParent, ent->tagName) &&
+			!ent->client) {
+			if (!ent->s.density) {
+				BG_EvaluateTrajectory(&ent->s.apos, level.time, ent->r.currentAngles, qtrue, ent->s.effect2Time);
+				VectorAdd(ent->tagParent->r.currentAngles, ent->r.currentAngles, ent->r.currentAngles);
+			} else {
+				BG_EvaluateTrajectory(&ent->s.apos, level.time, ent->r.currentAngles, qtrue, ent->s.effect2Time);
 			}
 		}
 	} else if (ent->s.eFlags & EF_PATH_LINK) {
-
 		G_TagLinkEntity(ent, msec);
 	}
 
@@ -2453,5 +2448,5 @@ int G_randommap() {
 		// #todo: inform somebody it failed
 	}
 
-	return(G_OK);
+	return G_OK;
 }

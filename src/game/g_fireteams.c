@@ -315,8 +315,6 @@ void G_RemoveClientFromFireteams(int entityNum, qboolean update, qboolean print)
 					if (ft->joinOrder[1] == -1) {
 						ft->inuse = qfalse;
 						ft->ident = -1;
-					} else {
-						// TODO: Inform client of promotion to leader
 					}
 				}
 				for (j = i; j < MAX_CLIENTS - 1; j++) {

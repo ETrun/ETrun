@@ -265,9 +265,7 @@ void SP_misc_gamemodel(gentity_t *ent) {
 		G_SpawnInt("frames", "0", &num_frames);
 		G_SpawnInt("start", "0", &start_frame);
 		G_SpawnInt("fps", "20", &fps);
-		if (G_SpawnString("reverse", "", &dummy)) {
-			//  reverse = qtrue;
-		}
+		G_SpawnString("reverse", "", &dummy);
 
 		if (num_frames == 0) {
 			G_Error("'misc_model' with ANIMATE spawnflag set has 'frames' set to 0\n");
@@ -291,10 +289,9 @@ void SP_misc_gamemodel(gentity_t *ent) {
 		ent->tagNumber = trap_LoadTag(tagname);
 	}
 
-	if (!G_SpawnVector("modelscale_vec", "1 1 1", vScale)) {
-		if (G_SpawnFloat("modelscale", "1", &scale)) {
-			VectorSet(vScale, scale, scale, scale);
-		}
+	if (!G_SpawnVector("modelscale_vec", "1 1 1", vScale) &&
+		G_SpawnFloat("modelscale", "1", &scale)) {
+		VectorSet(vScale, scale, scale, scale);
 	}
 
 	G_SpawnInt("trunk", "0", &trunksize);
@@ -574,11 +571,6 @@ if FLASH_FX is checked a muzzle flash effect will play at the origin of this ent
 void SP_shooter_mortar(gentity_t *ent) {
 	// (SA) TODO: must have a self->target.  Do a check/print if this is not the case.
 	InitShooter(ent, WP_MAPMORTAR);
-
-	if (ent->spawnflags & 1) {     // smoke at source
-	}
-	if (ent->spawnflags & 2) {     // muzzle flash at source
-	}
 }
 
 /*QUAKED shooter_rocket (1 0 0) (-16 -16 -16) (16 16 16)
@@ -801,13 +793,14 @@ void SP_dlight(gentity_t *ent) {
 		ent->soundLoop = G_SoundIndex(snd);
 	}
 
-	if (ent->dl_stylestring && strlen(ent->dl_stylestring)) {        // if they're specified in a string, use em
-	} else if (style) {
-		style               = max(1, style);                      // clamp to predefined range
-		style               = min(19, style);
-		ent->dl_stylestring = predef_lightstyles[style - 1];    // these are input as 1-20
-	} else {
-		ent->dl_stylestring = "mmmaaa";                          // default to a strobe to call attention to this not being set
+	if (!ent->dl_stylestring || !strlen(ent->dl_stylestring)) {        // if they're specified in a string, use em
+		if (style) {
+			style               = max(1, style);                      // clamp to predefined range
+			style               = min(19, style);
+			ent->dl_stylestring = predef_lightstyles[style - 1];    // these are input as 1-20
+		} else {
+			ent->dl_stylestring = "mmmaaa";                          // default to a strobe to call attention to this not being set
+		}
 	}
 
 	ent->count = strlen(ent->dl_stylestring);
