@@ -91,10 +91,8 @@ void Touch_Multi(gentity_t *self, gentity_t *other, trace_t *trace) {
 		if (other->client->sess.sessionTeam != TEAM_AXIS) {
 			return;
 		}
-	} else if (self->spawnflags & 2) {
-		if (other->client->sess.sessionTeam != TEAM_ALLIES) {
-			return;
-		}
+	} else if ((self->spawnflags & 2) && other->client->sess.sessionTeam != TEAM_ALLIES) {
+		return;
 	}
 
 	if (self->spawnflags & 8) {
@@ -102,34 +100,24 @@ void Touch_Multi(gentity_t *self, gentity_t *other, trace_t *trace) {
 	}
 
 	// START Mad Doc - TDF
-	if (self->spawnflags & 16) {
-		if (!(other->client->sess.playerType == PC_SOLDIER)) {
-			return;
-		}
+	if ((self->spawnflags & 16) && !(other->client->sess.playerType == PC_SOLDIER)) {
+		return;
 	}
 
-	if (self->spawnflags & 32) {
-		if (!(other->client->sess.playerType == PC_FIELDOPS)) {
-			return;
-		}
+	if ((self->spawnflags & 32) && !(other->client->sess.playerType == PC_FIELDOPS)) {
+		return;
 	}
 
-	if (self->spawnflags & 64) {
-		if (!(other->client->sess.playerType == PC_MEDIC)) {
-			return;
-		}
+	if ((self->spawnflags & 64) && !(other->client->sess.playerType == PC_MEDIC)) {
+		return;
 	}
 
-	if (self->spawnflags & 128) {
-		if (!(other->client->sess.playerType == PC_ENGINEER)) {
-			return;
-		}
+	if ((self->spawnflags & 128) && !(other->client->sess.playerType == PC_ENGINEER)) {
+		return;
 	}
 
-	if (self->spawnflags & 256) {
-		if (!(other->client->sess.playerType == PC_COVERTOPS)) {
-			return;
-		}
+	if ((self->spawnflags & 256) && !(other->client->sess.playerType == PC_COVERTOPS)) {
+		return;
 	}
 	// END Mad Doc - TDF
 
@@ -159,17 +147,15 @@ void SP_trigger_multiple(gentity_t *ent) {
 	// Note, this test is in case the start/stop timer or checkpoint entity was defined before the trigger multiple
 	if (g_forceTimerReset.integer) {
 		target = G_FindByTargetname(NULL, ent->target);
-		if (target && ent->wait != 0.5) {
-			if (!Q_stricmp(target->classname, "target_startTimer")
-			    || !Q_stricmp(target->classname, "target_stopTimer")
-			    || !Q_stricmp(target->classname, "target_checkpoint")) {
-				G_DPrintf("%s: SP_trigger_multiple linked to %s, wait found = %f, overrided to 0.5\n", GAME_VERSION, target->classname, ent->wait);
-				ent->wait = 0.5;
-			}
+		if (target &&
+			ent->wait != 0.5 &&
+			(!Q_stricmp(target->classname, "target_startTimer")
+		    || !Q_stricmp(target->classname, "target_stopTimer")
+		    || !Q_stricmp(target->classname, "target_checkpoint"))) {
+			G_DPrintf("%s: SP_trigger_multiple linked to %s, wait found = %f, overrided to 0.5\n", GAME_VERSION, target->classname, ent->wait);
+			ent->wait = 0.5;
 		}
 	}
-
-
 
 #ifdef VISIBLE_TRIGGERS
 	ent->r.svFlags &= ~SVF_NOCLIENT;
@@ -1130,11 +1116,9 @@ void constructible_indicator_think(gentity_t *ent) {
 	parent        = &g_entities[ent->r.ownerNum];
 	constructible = parent->target_ent;
 
-	if (parent->chain) {
+	if (parent->chain && constructible->s.teamNum != ent->s.teamNum) {
 		// use the target that has the same team as the indicator
-		if (constructible->s.teamNum != ent->s.teamNum) {
-			constructible = parent->chain;
-		}
+		constructible = parent->chain;
 	}
 
 	// Arnout: why are we checking for the classname?
@@ -1290,8 +1274,7 @@ void Think_SetupObjectiveInfo(gentity_t *ent) {
 		}
 
 		// if already constructed (in case of START_BUILT)
-		if (constructibles[0]->s.angles2[1] != 0) {
-		} else {
+		if (constructibles[0]->s.angles2[1] == 0) {
 			// Arnout: spawn a constructible icon - this is for compass usage
 			gentity_t *e;
 			e = G_Spawn();
@@ -1368,10 +1351,8 @@ void SP_trigger_objective_info(gentity_t *ent) {
 		G_Error("'trigger_objective_info' does not have a 'track' \n");
 	}
 
-	if (ent->spawnflags & MESSAGE_OVERRIDE) {
-		if (!ent->spawnitem) {
-			G_Error("'trigger_objective_info' has override flag set but no override text\n");
-		}
+	if ((ent->spawnflags & MESSAGE_OVERRIDE) && !ent->spawnitem) {
+		G_Error("'trigger_objective_info' has override flag set but no override text\n");
 	}
 
 	// Gordon: for specifying which commandmap objectives this entity "belongs" to
