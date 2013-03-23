@@ -287,9 +287,8 @@ G_Script_EventMatch_StringEqual
 qboolean G_Script_EventMatch_StringEqual(g_script_event_t *event, char *eventParm) {
 	if (eventParm && !Q_stricmp(event->params, eventParm)) {
 		return qtrue;
-	} else {
-		return qfalse;
 	}
+	return qfalse;
 }
 
 /*
@@ -312,9 +311,8 @@ qboolean G_Script_EventMatch_IntInRange(g_script_event_t *event, char *eventParm
 
 	if (eventParm && eInt > int1 && eInt <= int2) {
 		return qtrue;
-	} else {
-		return qfalse;
 	}
+	return qfalse;
 }
 
 /*
@@ -663,22 +661,18 @@ void G_Script_ScriptParse(gentity_t *ent) {
 								G_SoundIndex(token);
 							} else if (!Q_stricmp(action->actionString, "changemodel")) {
 								G_ModelIndex(token);
-							} else if (buildScript && (
-							               !Q_stricmp(action->actionString, "mu_start") ||
-							               !Q_stricmp(action->actionString, "mu_play") ||
-							               !Q_stricmp(action->actionString, "mu_queue") ||
-							               !Q_stricmp(action->actionString, "startcam"))
-							           ) {
-								if (strlen(token)) {     // we know there's a [0], but don't know if it's '0'
-									trap_SendServerCommand(-1, va("addToBuild %s\n", token));
-								}
+							} else if (buildScript &&
+								(!Q_stricmp(action->actionString, "mu_start") ||
+								!Q_stricmp(action->actionString, "mu_play") ||
+								!Q_stricmp(action->actionString, "mu_queue") ||
+								!Q_stricmp(action->actionString, "startcam")) &&
+								strlen(token)) {
+								trap_SendServerCommand(-1, va("addToBuild %s\n", token));
 							}
 						}
 
-						if (i == 0 || i == 1) {
-							if (!Q_stricmp(action->actionString, "remapshader")) {
-								G_ShaderIndex(token);
-							}
+						if ((i == 0 || i == 1) && !Q_stricmp(action->actionString, "remapshader")) {
+							G_ShaderIndex(token);
 						}
 
 						if (strrchr(token, ' ')) {    // need to wrap this param in quotes since it has more than one word
@@ -715,10 +709,8 @@ void G_Script_ScriptParse(gentity_t *ent) {
 					G_Error("G_Script_ScriptParse(), Error (line %d): '}' expected, end of script found.\n", COM_GetCurrentParseLine());
 				} else if (token[0] == '{') {
 					bracketLevel++;
-				} else if (token[0] == '}') {
-					if (!--bracketLevel) {
-						break;
-					}
+				} else if (token[0] == '}' && !--bracketLevel) {
+					break;
 				}
 			}
 		}
@@ -806,10 +798,11 @@ int G_Script_GetEventIndex(gentity_t *ent, char *eventStr, char *params) {
 
 	// see if this entity has this event
 	for (i = 0; i < ent->numScriptEvents; i++) {
-		if (ent->scriptEvents[i].eventNum == eventNum) {
-			if ((!ent->scriptEvents[i].params) || (!gScriptEvents[eventNum].eventMatch || gScriptEvents[eventNum].eventMatch(&ent->scriptEvents[i], params))) {
-				return i;
-			}
+		if (ent->scriptEvents[i].eventNum == eventNum &&
+			(!ent->scriptEvents[i].params ||
+			(!gScriptEvents[eventNum].eventMatch ||
+			gScriptEvents[eventNum].eventMatch(&ent->scriptEvents[i], params)))) {
+			return i;
 		}
 	}
 
@@ -869,10 +862,10 @@ qboolean G_Script_ScriptRun(gentity_t *ent) {
 	}
 	//
 	// show debugging info
-	if (g_scriptDebug.integer && ent->scriptStatus.scriptStackChangeTime == level.time) {
-		if (ent->scriptStatus.scriptStackHead < stack->numItems) {
-			G_Printf("%i : (%s) GScript command: %s %s\n", level.time, ent->scriptName, stack->items[ent->scriptStatus.scriptStackHead].action->actionString, (stack->items[ent->scriptStatus.scriptStackHead].params ? stack->items[ent->scriptStatus.scriptStackHead].params : ""));
-		}
+	if (g_scriptDebug.integer &&
+		ent->scriptStatus.scriptStackChangeTime == level.time &&
+		ent->scriptStatus.scriptStackHead < stack->numItems) {
+		G_Printf("%i : (%s) GScript command: %s %s\n", level.time, ent->scriptName, stack->items[ent->scriptStatus.scriptStackHead].action->actionString, (stack->items[ent->scriptStatus.scriptStackHead].params ? stack->items[ent->scriptStatus.scriptStackHead].params : ""));
 	}
 	//
 	while (ent->scriptStatus.scriptStackHead < stack->numItems) {
@@ -892,10 +885,8 @@ qboolean G_Script_ScriptRun(gentity_t *ent) {
 		//
 		ent->scriptStatus.scriptFlags |= SCFL_FIRST_CALL;
 		// show debugging info
-		if (g_scriptDebug.integer) {
-			if (ent->scriptStatus.scriptStackHead < stack->numItems) {
-				G_Printf("%i : (%s) GScript command: %s %s\n", level.time, ent->scriptName, stack->items[ent->scriptStatus.scriptStackHead].action->actionString, (stack->items[ent->scriptStatus.scriptStackHead].params ? stack->items[ent->scriptStatus.scriptStackHead].params : ""));
-			}
+		if (g_scriptDebug.integer && ent->scriptStatus.scriptStackHead < stack->numItems) {
+			G_Printf("%i : (%s) GScript command: %s %s\n", level.time, ent->scriptName, stack->items[ent->scriptStatus.scriptStackHead].action->actionString, (stack->items[ent->scriptStatus.scriptStackHead].params ? stack->items[ent->scriptStatus.scriptStackHead].params : ""));
 		}
 	}
 
@@ -961,22 +952,20 @@ void script_mover_aas_blocking(gentity_t *ent) {
 		ent->timestamp = level.time + 500;
 	}
 
-	if (ent->spawnflags & 128) {
-		if (!ent->tankLink) {
-			if (ent->mg42weapHeat) {
-				ent->mg42weapHeat -= (300.f * FRAMETIME * 0.001);
+	if (ent->spawnflags & 128 && !ent->tankLink) {
+		if (ent->mg42weapHeat) {
+			ent->mg42weapHeat -= (300.f * FRAMETIME * 0.001);
 
-				if (ent->mg42weapHeat < 0) {
-					ent->mg42weapHeat = 0;
-				}
+			if (ent->mg42weapHeat < 0) {
+				ent->mg42weapHeat = 0;
 			}
+		}
 
-			if (ent->backupWeaponTime) {
-				ent->backupWeaponTime -= FRAMETIME;
+		if (ent->backupWeaponTime) {
+			ent->backupWeaponTime -= FRAMETIME;
 
-				if (ent->backupWeaponTime < 0) {
-					ent->backupWeaponTime = 0;
-				}
+			if (ent->backupWeaponTime < 0) {
+				ent->backupWeaponTime = 0;
 			}
 		}
 	}
@@ -1177,10 +1166,8 @@ void SP_script_mover(gentity_t *ent) {
 		ent->s.density |= 4;
 		ent->waterlevel = 0;
 
-		if (G_SpawnString("gun", "", &modelname)) {
-			if (!Q_stricmp(modelname, "browning")) {
-				ent->s.density |= 8;
-			}
+		if (G_SpawnString("gun", "", &modelname) && !Q_stricmp(modelname, "browning")) {
+			ent->s.density |= 8;
 		}
 
 		G_SpawnString("tagent", "", &tagent);

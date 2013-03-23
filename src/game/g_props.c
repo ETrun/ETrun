@@ -742,6 +742,8 @@ void Props_Chair_Die(gentity_t *ent, gentity_t *inflictor, gentity_t *attacker, 
 void Just_Got_Thrown(gentity_t *self) {
 	float  len;
 	vec3_t vec;
+	trace_t trace;
+	vec3_t  end;
 
 	len = 0;
 
@@ -757,25 +759,18 @@ void Just_Got_Thrown(gentity_t *self) {
 		}
 
 		return;
-	} else {
-		G_AddEvent(self, EV_GENERAL_SOUND, snd_chairhitground);
-		VectorSubtract(self->r.currentOrigin, self->s.origin2, vec);
-		len = VectorLength(vec);
+	}
+	G_AddEvent(self, EV_GENERAL_SOUND, snd_chairhitground);
+	VectorSubtract(self->r.currentOrigin, self->s.origin2, vec);
+	len = VectorLength(vec);
 
-		{
-			trace_t trace;
-			vec3_t  end;
+	VectorCopy(self->r.currentOrigin, end);
+	end[2] += 1;
 
-			VectorCopy(self->r.currentOrigin, end);
-			end[2] += 1;
+	trap_Trace(&trace, self->r.currentOrigin, self->r.mins, self->r.maxs, end, self->s.number, MASK_SHOT);
 
-			trap_Trace(&trace, self->r.currentOrigin, self->r.mins, self->r.maxs, end, self->s.number, MASK_SHOT);
-
-			if (trace.startsolid) {
-				len = 9999;
-			}
-		}
-
+	if (trace.startsolid) {
+		len = 9999;
 	}
 
 	self->think      = Props_Chair_Think;
@@ -795,11 +790,9 @@ void Just_Got_Thrown(gentity_t *self) {
 }
 
 void Props_TurnLightsOff(gentity_t *self) {
-	if (!Q_stricmp(self->classname, "props_desklamp")) {
-		if (self->target) {
-			G_UseTargets(self, NULL);
-			self->target = NULL;
-		}
+	if (!Q_stricmp(self->classname, "props_desklamp") && self->target) {
+		G_UseTargets(self, NULL);
+		self->target = NULL;
 	}
 }
 
@@ -905,17 +898,16 @@ void Props_Activated(gentity_t *self) {
 		G_FreeEntity(self);
 
 		return;
-	} else {
-		if (!Q_stricmp(self->classname, "props_chair_hiback")) {
-			self->s.frame   = 23;
-			self->s.density = 1;
-		} else if (!Q_stricmp(self->classname, "props_chair")) {
-			self->s.frame   = 28;
-			self->s.density = 1;
-		} else if (!Q_stricmp(self->classname, "props_chair_side")) {
-			self->s.frame   = 23;
-			self->s.density = 1;
-		}
+	}
+	if (!Q_stricmp(self->classname, "props_chair_hiback")) {
+		self->s.frame   = 23;
+		self->s.density = 1;
+	} else if (!Q_stricmp(self->classname, "props_chair")) {
+		self->s.frame   = 28;
+		self->s.density = 1;
+	} else if (!Q_stricmp(self->classname, "props_chair_side")) {
+		self->s.frame   = 23;
+		self->s.density = 1;
 	}
 
 	trap_UnlinkEntity(self);
@@ -1098,21 +1090,14 @@ void Props_Chair_Touch(gentity_t *self, gentity_t *other, trace_t *trace) {
 	Prop_Check_Ground(self);
 
 	if (level.time > self->random && has_moved) {
-		// RF, alert AI of sound event
-//		AICast_AudibleEvent( self->s.number, self->r.currentOrigin, 384 );
-
 		G_AddEvent(self, EV_GENERAL_SOUND, snd_chaircreak);
 		self->random = level.time + 1000 + (rand() % 200);
 	}
 
-	if (!Q_stricmp(self->classname, "props_desklamp")) {
-		// player may have picked it up before
-		if (self->target) {
-			G_UseTargets(self, NULL);
-			self->target = NULL;
-		}
+	if (!Q_stricmp(self->classname, "props_desklamp") && self->target) {
+		G_UseTargets(self, NULL);
+		self->target = NULL;
 	}
-
 }
 
 void Props_Chair_Animate(gentity_t *ent) {
@@ -1128,9 +1113,8 @@ void Props_Chair_Animate(gentity_t *ent) {
 			ent->s.time    = level.time;
 			ent->s.time2   = level.time + 2000;
 			return;
-		} else {
-			ent->nextthink = level.time + (FRAMETIME / 2);
 		}
+		ent->nextthink = level.time + (FRAMETIME / 2);
 	} else if (
 	    (!Q_stricmp(ent->classname, "props_chair_side")) ||
 	    (!Q_stricmp(ent->classname, "props_chair_chat")) ||
@@ -1145,9 +1129,8 @@ void Props_Chair_Animate(gentity_t *ent) {
 			ent->s.time    = level.time;
 			ent->s.time2   = level.time + 2000;
 			return;
-		} else {
-			ent->nextthink = level.time + (FRAMETIME / 2);
 		}
+		ent->nextthink = level.time + (FRAMETIME / 2);
 	} else if (!Q_stricmp(ent->classname, "props_desklamp")) {
 		if (ent->s.frame >= 11) {
 			// player may have picked it up before
@@ -1160,9 +1143,8 @@ void Props_Chair_Animate(gentity_t *ent) {
 			ent->s.time    = level.time;
 			ent->s.time2   = level.time + 2000;
 			return;
-		} else {
-			ent->nextthink = level.time + (FRAMETIME / 2);
 		}
+		ent->nextthink = level.time + (FRAMETIME / 2);
 	}
 
 	ent->s.frame++;
@@ -1610,9 +1592,8 @@ void Props_Barrel_Animate(gentity_t *ent) {
 		ent->think     = G_FreeEntity;
 		ent->nextthink = level.time + 25000;
 		return;
-	} else {
-		ent->nextthink = level.time + (FRAMETIME / 2);
 	}
+	ent->nextthink = level.time + (FRAMETIME / 2);
 
 	ent->s.frame++;
 
@@ -2280,16 +2261,15 @@ void SP_props_snowGenerator(gentity_t *ent) {
 	if (!ent->target) {
 		G_Printf("snowGenerator at loc %s does not have a target\n", vtos(center));
 		return;
-	} else {
-		target = G_Find(target, FOFS(targetname), ent->target);
-		if (!target) {
-			G_Printf("error snowGenerator at loc %s does cant find target %s\n", vtos(center), ent->target);
-			return;
-		}
-
-		VectorSubtract(target->s.origin, ent->s.origin, ent->movedir);
-		VectorNormalize(ent->movedir);
 	}
+	target = G_Find(target, FOFS(targetname), ent->target);
+	if (!target) {
+		G_Printf("error snowGenerator at loc %s does cant find target %s\n", vtos(center), ent->target);
+		return;
+	}
+
+	VectorSubtract(target->s.origin, ent->s.origin, ent->movedir);
+	VectorNormalize(ent->movedir);
 
 	ent->r.contents = CONTENTS_TRIGGER;
 	ent->r.svFlags  = SVF_NOCLIENT;
@@ -3266,9 +3246,8 @@ void props_flamethrower_use(gentity_t *ent, gentity_t *other, gentity_t *activat
 		ent->think       = NULL; // (SA) wasn't working
 		ent->nextthink   = 0;
 		return;
-	} else {
-		ent->spawnflags |= 2;
 	}
+	ent->spawnflags |= 2;
 
 	if (ent->random) {
 		rval = ent->random * 1000;

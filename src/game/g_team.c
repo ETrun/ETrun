@@ -242,9 +242,8 @@ int Team_TouchEnemyFlag(gentity_t *ent, gentity_t *other, int team) {
 
 	if (ent->s.density > 0) {
 		return 1; // We have more flags to give out, spawn back quickly
-	} else {
-		return -1; // Do not respawn this automatically, but do delete it if it was FL_DROPPED
 	}
+	return -1; // Do not respawn this automatically, but do delete it if it was FL_DROPPED
 }
 
 int Pickup_Team(gentity_t *ent, gentity_t *other) {
@@ -343,43 +342,42 @@ gentity_t *SelectRandomTeamSpawnPoint(team_t team, int spawnObjective) {
 		return G_Find(NULL, FOFS(classname), classname);
 	}
 
-	if ((!level.numspawntargets)) {
+	if (!level.numspawntargets) {
 		G_Error("No spawnpoints found\n");
 		return NULL;
-	} else {
-		// Gordon: adding ability to set autospawn
-		if (!spawnObjective) {
-			switch (team) {
-			case TEAM_AXIS:
-				spawnObjective = level.axisAutoSpawn + 1;
-				break;
-			case TEAM_ALLIES:
-				spawnObjective = level.alliesAutoSpawn + 1;
-				break;
-			default:
-				break;
-			}
-		}
-
-		i = spawnObjective - 1;
-
-		VectorCopy(level.spawntargets[i], farthest);
-
-		// now that we've got farthest vector, figure closest spawnpoint to it
-		VectorSubtract(farthest, spots[0]->s.origin, target);
-		shortest = VectorLength(target);
-		closest  = 0;
-		for (i = 0; i < count; i++) {
-			VectorSubtract(farthest, spots[i]->s.origin, target);
-			tmp = VectorLength(target);
-
-			if (tmp < shortest) {
-				shortest = tmp;
-				closest  = i;
-			}
-		}
-		return spots[closest];
 	}
+	// Gordon: adding ability to set autospawn
+	if (!spawnObjective) {
+		switch (team) {
+		case TEAM_AXIS:
+			spawnObjective = level.axisAutoSpawn + 1;
+			break;
+		case TEAM_ALLIES:
+			spawnObjective = level.alliesAutoSpawn + 1;
+			break;
+		default:
+			break;
+		}
+	}
+
+	i = spawnObjective - 1;
+
+	VectorCopy(level.spawntargets[i], farthest);
+
+	// now that we've got farthest vector, figure closest spawnpoint to it
+	VectorSubtract(farthest, spots[0]->s.origin, target);
+	shortest = VectorLength(target);
+	closest  = 0;
+	for (i = 0; i < count; i++) {
+		VectorSubtract(farthest, spots[i]->s.origin, target);
+		tmp = VectorLength(target);
+
+		if (tmp < shortest) {
+			shortest = tmp;
+			closest  = i;
+		}
+	}
+	return spots[closest];
 }
 
 
@@ -450,10 +448,8 @@ void TeamplayInfoMessage(team_t team) {
 
 	for (i = 0; i < level.numConnectedClients; i++) {
 		player = g_entities + level.sortedClients[i];
-		if (player->inuse && player->client->sess.sessionTeam == team) {
-			if (player->client->pers.connected == CON_CONNECTED) {
-				trap_SendServerCommand(player - g_entities, tinfo);
-			}
+		if (player->inuse && player->client->sess.sessionTeam == team && player->client->pers.connected == CON_CONNECTED) {
+			trap_SendServerCommand(player - g_entities, tinfo);
 		}
 	}
 }
@@ -1081,7 +1077,7 @@ qboolean G_teamJoinCheck(int team_num, gentity_t *ent) {
 	}
 
 	// Check for locked teams
-	if ((team_num == TEAM_AXIS || team_num == TEAM_ALLIES)) {
+	if (team_num == TEAM_AXIS || team_num == TEAM_ALLIES) {
 		if ((int)ent->client->sess.sessionTeam == team_num) {
 			return(qtrue);
 		}

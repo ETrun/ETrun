@@ -121,15 +121,13 @@ void G_ref_cmd(gentity_t *ent, unsigned int dwCommand, qboolean fValue) {
 		if (Cmd_CallVote_f(ent, 0, qtrue)) {
 			memcpy(&level.voteInfo, &votedata, sizeof (voteInfo_t));
 			return;
-		} else {
-			memcpy(&level.voteInfo, &votedata, sizeof (voteInfo_t));
-
-			if (G_refCommandCheck(ent, arg)) {
-				return;
-			} else {
-				G_refHelp_cmd(ent);
-			}
 		}
+		memcpy(&level.voteInfo, &votedata, sizeof (voteInfo_t));
+
+		if (G_refCommandCheck(ent, arg)) {
+			return;
+		}
+		G_refHelp_cmd(ent);
 		return;
 	}
 
@@ -502,20 +500,20 @@ int G_refClientnumForName(gentity_t *ent, const char *name) {
 	int  i;
 
 	if (!*name) {
-		return(MAX_CLIENTS);
+		return MAX_CLIENTS;
 	}
 
 	for (i = 0; i < level.numConnectedClients; i++) {
 		Q_strncpyz(cleanName, level.clients[level.sortedClients[i]].pers.netname, sizeof (cleanName));
 		Q_CleanStr(cleanName);
 		if (!Q_stricmp(cleanName, name)) {
-			return(level.sortedClients[i]);
+			return level.sortedClients[i];
 		}
 	}
 
 	G_refPrintf(ent, "Client not on server.");
 
-	return(MAX_CLIENTS);
+	return MAX_CLIENTS;
 }
 
 void G_refPrintf(gentity_t *ent, const char *fmt, ...) {

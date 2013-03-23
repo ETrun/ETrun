@@ -222,7 +222,7 @@ qboolean G_FilterPacket(ipFilterList_t *ipFilterList, char *from) {
 }
 
 qboolean G_FilterIPBanPacket(char *from) {
-	return(G_FilterPacket(&ipFilters, from));
+	return G_FilterPacket(&ipFilters, from);
 }
 
 /*
@@ -640,31 +640,30 @@ static void Svcmd_Kick_f(void) {
 			}
 		}
 		return;
-	} else {
-		// dont kick localclients ...
-		if (cl->pers.localClient) {
-			G_Printf("Cannot kick host player\n");
-			return;
-		}
+	}
+	// dont kick localclients ...
+	if (cl->pers.localClient) {
+		G_Printf("Cannot kick host player\n");
+		return;
+	}
 
-		if (timeout != -1) {
-			char *ip;
-			char userinfo[MAX_INFO_STRING];
+	if (timeout != -1) {
+		char *ip;
+		char userinfo[MAX_INFO_STRING];
 
-			trap_GetUserinfo(cl->ps.clientNum, userinfo, sizeof (userinfo));
-			ip = Info_ValueForKey(userinfo, "ip");
+		trap_GetUserinfo(cl->ps.clientNum, userinfo, sizeof (userinfo));
+		ip = Info_ValueForKey(userinfo, "ip");
 
-			// use engine banning system, mods may choose to use their own banlist
-			if (USE_ENGINE_BANLIST) {
-				trap_DropClient(cl->ps.clientNum, "player kicked", timeout);
-			} else {
-				trap_DropClient(cl->ps.clientNum, "player kicked", 0);
-				AddIPBan(ip);
-			}
-
+		// use engine banning system, mods may choose to use their own banlist
+		if (USE_ENGINE_BANLIST) {
+			trap_DropClient(cl->ps.clientNum, "player kicked", timeout);
 		} else {
 			trap_DropClient(cl->ps.clientNum, "player kicked", 0);
+			AddIPBan(ip);
 		}
+
+	} else {
+		trap_DropClient(cl->ps.clientNum, "player kicked", 0);
 	}
 }
 

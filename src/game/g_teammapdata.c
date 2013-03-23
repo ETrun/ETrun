@@ -291,12 +291,10 @@ qboolean G_VisibleFromBinoculars(gentity_t *viewer, gentity_t *ent, vec3_t origi
 		if (ent) {
 			if (trace.entityNum != ent->s.number) {
 				return qfalse;
-			} else {
-				return qtrue;
 			}
-		} else {
-			return qfalse;
+			return qtrue;
 		}
+		return qfalse;
 	}
 
 	return qtrue;
@@ -352,7 +350,6 @@ void G_UpdateTeamMapData_Construct(gentity_t *ent) {
 		mEnt->type      = ME_CONSTRUCT;
 		mEnt->startTime = level.time;
 		mEnt->yaw       = 0;
-	} else {
 	}
 
 	if (ent->s.teamNum == TEAM_ALLIES) {
@@ -367,7 +364,6 @@ void G_UpdateTeamMapData_Construct(gentity_t *ent) {
 		mEnt->type      = ME_CONSTRUCT;
 		mEnt->startTime = level.time;
 		mEnt->yaw       = 0;
-	} else {
 	}
 }
 
@@ -427,20 +423,20 @@ void G_UpdateTeamMapData_Destruct(gentity_t *ent) {
 		mEnt->type      = ME_DESTRUCT;
 		mEnt->yaw       = 0;
 	} else {
-		if (ent->parent->target_ent && (ent->parent->target_ent->s.eType == ET_CONSTRUCTIBLE || ent->parent->target_ent->s.eType == ET_EXPLOSIVE)) {
-			if (ent->parent->spawnflags & ((1 << 6) | (1 << 4))) {
-				teamList = &mapEntityData[1];   // inverted
-				mEnt     = G_FindMapEntityData(teamList, num);
-				if (!mEnt) {
-					mEnt         = G_AllocMapEntityData(teamList);
-					mEnt->entNum = num;
-				}
-				VectorCopy(ent->s.pos.trBase, mEnt->org);
-				mEnt->data      = mEnt->entNum; //ent->s.modelindex2;
-				mEnt->startTime = level.time;
-				mEnt->type      = ME_DESTRUCT_2;
-				mEnt->yaw       = 0;
+		if (ent->parent->target_ent &&
+			(ent->parent->target_ent->s.eType == ET_CONSTRUCTIBLE || ent->parent->target_ent->s.eType == ET_EXPLOSIVE) &&
+			(ent->parent->spawnflags & ((1 << 6) | (1 << 4)))) {
+			teamList = &mapEntityData[1];   // inverted
+			mEnt     = G_FindMapEntityData(teamList, num);
+			if (!mEnt) {
+				mEnt         = G_AllocMapEntityData(teamList);
+				mEnt->entNum = num;
 			}
+			VectorCopy(ent->s.pos.trBase, mEnt->org);
+			mEnt->data      = mEnt->entNum; //ent->s.modelindex2;
+			mEnt->startTime = level.time;
+			mEnt->type      = ME_DESTRUCT_2;
+			mEnt->yaw       = 0;
 		}
 	}
 
@@ -457,20 +453,20 @@ void G_UpdateTeamMapData_Destruct(gentity_t *ent) {
 		mEnt->type      = ME_DESTRUCT;
 		mEnt->yaw       = 0;
 	} else {
-		if (ent->parent->target_ent && (ent->parent->target_ent->s.eType == ET_CONSTRUCTIBLE || ent->parent->target_ent->s.eType == ET_EXPLOSIVE)) {
-			if (ent->parent->spawnflags & ((1 << 6) | (1 << 4))) {
-				teamList = &mapEntityData[0];   // inverted
-				mEnt     = G_FindMapEntityData(teamList, num);
-				if (!mEnt) {
-					mEnt         = G_AllocMapEntityData(teamList);
-					mEnt->entNum = num;
-				}
-				VectorCopy(ent->s.pos.trBase, mEnt->org);
-				mEnt->data      = mEnt->entNum; //ent->s.modelindex2;
-				mEnt->startTime = level.time;
-				mEnt->type      = ME_DESTRUCT_2;
-				mEnt->yaw       = 0;
+		if (ent->parent->target_ent &&
+			(ent->parent->target_ent->s.eType == ET_CONSTRUCTIBLE || ent->parent->target_ent->s.eType == ET_EXPLOSIVE) &&
+			(ent->parent->spawnflags & ((1 << 6) | (1 << 4)))) {
+			teamList = &mapEntityData[0];   // inverted
+			mEnt     = G_FindMapEntityData(teamList, num);
+			if (!mEnt) {
+				mEnt         = G_AllocMapEntityData(teamList);
+				mEnt->entNum = num;
 			}
+			VectorCopy(ent->s.pos.trBase, mEnt->org);
+			mEnt->data      = mEnt->entNum; //ent->s.modelindex2;
+			mEnt->startTime = level.time;
+			mEnt->type      = ME_DESTRUCT_2;
+			mEnt->yaw       = 0;
 		}
 	}
 }
@@ -635,12 +631,71 @@ void G_UpdateTeamMapData(void) {
 		if (!ent->inuse || !ent->client) {
 			continue;
 		}
-		if (ent->client->sess.playerType == PC_COVERTOPS) {
-			if (ent->health > 0) {
-				f1 = ent->client->sess.sessionTeam == TEAM_ALLIES ? qtrue : qfalse;
-				f2 = ent->client->sess.sessionTeam == TEAM_AXIS ?   qtrue : qfalse;
+		if (ent->client->sess.playerType == PC_COVERTOPS && ent->health > 0) {
+			f1 = ent->client->sess.sessionTeam == TEAM_ALLIES ? qtrue : qfalse;
+			f2 = ent->client->sess.sessionTeam == TEAM_AXIS ?   qtrue : qfalse;
 
-				G_SetupFrustum(ent);
+			G_SetupFrustum(ent);
+
+			for (j = 0, ent2 = g_entities; j < level.num_entities; j++, ent2++) {
+				if (!ent2->inuse || ent2 == ent) {
+					continue;
+				}
+
+				switch (ent2->s.eType) {
+				case ET_PLAYER:
+				{
+					vec3_t pos[3];
+					VectorCopy(ent2->client->ps.origin, pos[0]);
+					pos[0][2] += ent2->client->ps.mins[2];
+					VectorCopy(ent2->client->ps.origin, pos[1]);
+					VectorCopy(ent2->client->ps.origin, pos[2]);
+					pos[2][2] += ent2->client->ps.maxs[2];
+					if (ent2->health > 0 && (G_VisibleFromBinoculars(ent, ent2, pos[0]) ||
+					                         G_VisibleFromBinoculars(ent, ent2, pos[1]) ||
+					                         G_VisibleFromBinoculars(ent, ent2, pos[2]))) {
+						if (ent2->client->sess.sessionTeam != ent->client->sess.sessionTeam) {
+							int k;
+
+							switch (ent2->client->sess.sessionTeam) {
+							case TEAM_AXIS:
+								mEnt = G_FindMapEntityData(&mapEntityData[0], ent2 - g_entities);
+								if (mEnt && level.time - mEnt->startTime > 5000) {
+									for (k = 0; k < MAX_CLIENTS; k++) {
+										if (g_entities[k].inuse && g_entities[k].client && g_entities[k].client->sess.sessionTeam == ent->client->sess.sessionTeam) {
+											trap_SendServerCommand(k, va("tt \"ENEMY SPOTTED <STOP> CHECK COMMAND MAP FOR DETAILS <STOP>\"\n"));
+										}
+									}
+								}
+								break;
+
+							case TEAM_ALLIES:
+								mEnt = G_FindMapEntityData(&mapEntityData[1], ent2 - g_entities);
+								if (mEnt && level.time - mEnt->startTime > 5000) {
+									for (k = 0; k < MAX_CLIENTS; k++) {
+										if (g_entities[k].inuse && g_entities[k].client && g_entities[k].client->sess.sessionTeam == ent->client->sess.sessionTeam) {
+											trap_SendServerCommand(k, va("tt \"ENEMY SPOTTED <STOP> CHECK COMMAND MAP FOR DETAILS <STOP>\"\n"));
+										}
+									}
+								}
+								break;
+
+							default:
+								break;
+							}
+						}
+
+						G_UpdateTeamMapData_Player(ent2, f1, f2);
+					}
+					break;
+				}
+				default:
+					break;
+				}
+			}
+
+			if (ent->client->ps.eFlags & EF_ZOOMING) {
+				G_SetupFrustum_ForBinoculars(ent);
 
 				for (j = 0, ent2 = g_entities; j < level.num_entities; j++, ent2++) {
 					if (!ent2->inuse || ent2 == ent) {
@@ -648,71 +703,10 @@ void G_UpdateTeamMapData(void) {
 					}
 
 					switch (ent2->s.eType) {
-					case ET_PLAYER:
-					{
-						vec3_t pos[3];
-						VectorCopy(ent2->client->ps.origin, pos[0]);
-						pos[0][2] += ent2->client->ps.mins[2];
-						VectorCopy(ent2->client->ps.origin, pos[1]);
-						VectorCopy(ent2->client->ps.origin, pos[2]);
-						pos[2][2] += ent2->client->ps.maxs[2];
-						if (ent2->health > 0 && (G_VisibleFromBinoculars(ent, ent2, pos[0]) ||
-						                         G_VisibleFromBinoculars(ent, ent2, pos[1]) ||
-						                         G_VisibleFromBinoculars(ent, ent2, pos[2]))) {
-							if (ent2->client->sess.sessionTeam != ent->client->sess.sessionTeam) {
-								int k;
-
-								switch (ent2->client->sess.sessionTeam) {
-								case TEAM_AXIS:
-									mEnt = G_FindMapEntityData(&mapEntityData[0], ent2 - g_entities);
-									if (mEnt && level.time - mEnt->startTime > 5000) {
-										for (k = 0; k < MAX_CLIENTS; k++) {
-											if (g_entities[k].inuse && g_entities[k].client && g_entities[k].client->sess.sessionTeam == ent->client->sess.sessionTeam) {
-												trap_SendServerCommand(k, va("tt \"ENEMY SPOTTED <STOP> CHECK COMMAND MAP FOR DETAILS <STOP>\"\n"));
-											}
-										}
-									}
-									break;
-
-								case TEAM_ALLIES:
-									mEnt = G_FindMapEntityData(&mapEntityData[1], ent2 - g_entities);
-									if (mEnt && level.time - mEnt->startTime > 5000) {
-										for (k = 0; k < MAX_CLIENTS; k++) {
-											if (g_entities[k].inuse && g_entities[k].client && g_entities[k].client->sess.sessionTeam == ent->client->sess.sessionTeam) {
-												trap_SendServerCommand(k, va("tt \"ENEMY SPOTTED <STOP> CHECK COMMAND MAP FOR DETAILS <STOP>\"\n"));
-											}
-										}
-									}
-									break;
-
-								default:
-									break;
-								}
-							}
-
-							G_UpdateTeamMapData_Player(ent2, f1, f2);
-						}
+					case ET_MISSILE:
 						break;
-					}
 					default:
 						break;
-					}
-				}
-
-				if (ent->client->ps.eFlags & EF_ZOOMING) {
-					G_SetupFrustum_ForBinoculars(ent);
-
-					for (j = 0, ent2 = g_entities; j < level.num_entities; j++, ent2++) {
-						if (!ent2->inuse || ent2 == ent) {
-							continue;
-						}
-
-						switch (ent2->s.eType) {
-						case ET_MISSILE:
-							break;
-						default:
-							break;
-						}
 					}
 				}
 			}

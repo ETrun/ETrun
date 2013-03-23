@@ -1020,10 +1020,8 @@ qboolean G_ScriptAction_AddTankAmmo(gentity_t *ent, char *params) {
 	tank->s.effect1Time += atoi(token);
 
 	token = COM_ParseExt(&pString, qfalse);
-	if (*token) {
-		if (tank->s.effect1Time > atoi(token)) {
-			tank->s.effect1Time = atoi(token);
-		}
+	if (*token && tank->s.effect1Time > atoi(token)) {
+		tank->s.effect1Time = atoi(token);
 	}
 
 	return qtrue;
@@ -1774,9 +1772,8 @@ qboolean G_ScriptAction_PlayAnim(gentity_t *ent, char *params) {
 		if (!token || !token[0]) {
 			G_Printf("G_Scripting: syntax error\n\nplayanim <startframe> <endframe> [LOOPING <duration>]\n");
 			return qtrue;
-		} else {
-			Q_strncpyz(tokens[i], token, sizeof (tokens[i]));
 		}
+		Q_strncpyz(tokens[i], token, sizeof (tokens[i]));
 	}
 
 	startframe = atoi(tokens[0]);
@@ -2641,9 +2638,8 @@ qboolean G_ScriptAction_Halt(gentity_t *ent, char *params) {
 		script_linkentity(ent);
 
 		return qfalse;  // kill any currently running script
-	} else {
-		return qtrue;
 	}
+	return qtrue;
 }
 
 /*
@@ -3909,10 +3905,8 @@ qboolean etpro_ScriptAction_SetValues(gentity_t *ent, char *params) {
 			G_Printf("%d : (%s) %s: set [%s] [%s] [%s]\n", level.time, ent->scriptName, GAME_VERSION, ent->scriptName, key, value);
 		}
 
-		if (!Q_stricmp(key, "classname")) {
-			if (Q_stricmp(value, ent->classname)) {
-				classchanged = 1;
-			}
+		if (!Q_stricmp(key, "classname") && Q_stricmp(value, ent->classname)) {
+			classchanged = 1;
 		}
 
 		// rain - add spawn var so that spawn functions can use them

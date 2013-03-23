@@ -167,7 +167,7 @@ void Use_Target_Print(gentity_t *ent, gentity_t *other, gentity_t *activator) {
 	// Nico, silent GCC
 	(void)other;
 
-	if ((ent->spawnflags & 4)) {
+	if (ent->spawnflags & 4) {
 		if (!activator) {
 			G_Error("G_scripting: call to client only target_print with no activator\n");
 		}
@@ -627,16 +627,12 @@ void target_relay_use(gentity_t *self, gentity_t *other, gentity_t *activator) {
 		return;
 	}
 
-	if (activator) {   // activator can be NULL if called from script
-		if (self->key) {
-
-			if (self->key == -1) {   // relay permanently locked
-				if (self->soundPos1) {
-					G_Sound(self, self->soundPos1);      //----(SA)	added
-				}
-				return;
-			}
+	// activator can be NULL if called from script
+	if (activator && self->key && self->key == -1) {   // relay permanently locked
+		if (self->soundPos1) {
+			G_Sound(self, self->soundPos1);      //----(SA)	added
 		}
+		return;
 	}
 
 	G_UseTargets(self, activator);
@@ -814,17 +810,13 @@ void SP_target_fog(gentity_t *ent) {
 	ent->use = Use_target_fog;
 
 	// ent->s.density will carry the 'distance' value
-	if (G_SpawnInt("distance", "0", &dist)) {
-		if (dist >= 0) {
-			ent->s.density = dist;
-		}
+	if (G_SpawnInt("distance", "0", &dist) && dist >= 0) {
+		ent->s.density = dist;
 	}
 
 	// ent->s.time will carry the 'time' value
-	if (G_SpawnFloat("time", "0.5", &ftime)) {
-		if (ftime >= 0) {
-			ent->s.time = ftime * 1000; // sec to ms
-		}
+	if (G_SpawnFloat("time", "0.5", &ftime) && ftime >= 0) {
+		ent->s.time = ftime * 1000; // sec to ms
 	}
 }
 
@@ -1055,10 +1047,8 @@ void target_script_trigger_use(gentity_t *ent, gentity_t *other, gentity_t *acti
 	} // if (ent->aiName)...
 
 	// Use the old method if we didn't find an entity with the ainame
-	if (!found) {
-		if (ent->scriptName) {
-			G_Script_ScriptEvent(ent, "trigger", ent->target);
-		}
+	if (!found && ent->scriptName) {
+		G_Script_ScriptEvent(ent, "trigger", ent->target);
 	}
 
 	G_UseTargets(ent, other);
@@ -1300,12 +1290,10 @@ void target_starttimer_use(gentity_t *self, gentity_t *other, gentity_t *activat
 		return;
 	}
 
-	if (self->spawnflags & 1) {
-		if (VectorLength(client->ps.velocity) > 600) {
-			// Server or clientside? cvar to toggle whether or not to reset speed in these cases?
-			CPx(activator - g_entities, "cpm \"^1Timerun not started, no prejump allowed!\n\"");
-			return;
-		}
+	if ((self->spawnflags & 1) && VectorLength(client->ps.velocity) > 600) {
+		// Server or clientside? cvar to toggle whether or not to reset speed in these cases?
+		CPx(activator - g_entities, "cpm \"^1Timerun not started, no prejump allowed!\n\"");
+		return;
 	}
 
 	if (client->ps.pm_type != PM_NORMAL || client->ps.stats[STAT_HEALTH] <= 0) {
@@ -1352,11 +1340,9 @@ void SP_target_starttimer(gentity_t *ent) {
 	// Nico, override wait -1 or wait 9999 on trigger_multiple where target is start timer
 	if (g_forceTimerReset.integer && ent) {
 		parent = G_FindByTarget(NULL, ent->targetname);
-		if (parent && parent->wait != 0.5) {
-			if (!Q_stricmp(parent->classname, "trigger_multiple")) {
-				G_DPrintf("%s: SP_target_starttimer, wait found = %f, overrided to 0.5\n", GAME_VERSION, parent->wait);
-				G_SpawnFloat("wait", "0.5", &parent->wait);
-			}
+		if (parent && parent->wait != 0.5 && !Q_stricmp(parent->classname, "trigger_multiple")) {
+			G_DPrintf("%s: SP_target_starttimer, wait found = %f, overrided to 0.5\n", GAME_VERSION, parent->wait);
+			G_SpawnFloat("wait", "0.5", &parent->wait);
 		}
 	}
 
@@ -1580,11 +1566,9 @@ void SP_target_stoptimer(gentity_t *ent) {
 	// Nico, override wait -1 or wait 9999 on stop timer entities
 	if (g_forceTimerReset.integer && ent) {
 		parent = G_FindByTarget(NULL, ent->targetname);
-		if (parent && parent->wait != 0.5) {
-			if (!Q_stricmp(parent->classname, "trigger_multiple")) {
-				G_DPrintf("%s: SP_target_stoptimer, wait found = %f, overrided to 0.5\n", GAME_VERSION, parent->wait);
-				G_SpawnFloat("wait", "0.5", &parent->wait);
-			}
+		if (parent && parent->wait != 0.5 && !Q_stricmp(parent->classname, "trigger_multiple")) {
+			G_DPrintf("%s: SP_target_stoptimer, wait found = %f, overrided to 0.5\n", GAME_VERSION, parent->wait);
+			G_SpawnFloat("wait", "0.5", &parent->wait);
 		}
 	}
 
@@ -1695,11 +1679,9 @@ void SP_target_checkpoint(gentity_t *ent) {
 	// Nico, override wait -1 or wait 9999 on timer check entities
 	if (g_forceTimerReset.integer && ent) {
 		parent = G_FindByTarget(NULL, ent->targetname);
-		if (parent && parent->wait != 0.5) {
-			if (!Q_stricmp(parent->classname, "trigger_multiple")) {
-				G_DPrintf("%s: SP_target_checkpoint, wait found = %f, overrided to 0.5\n", GAME_VERSION, parent->wait);
-				G_SpawnFloat("wait", "0.5", &parent->wait);
-			}
+		if (parent && parent->wait != 0.5 && !Q_stricmp(parent->classname, "trigger_multiple")) {
+			G_DPrintf("%s: SP_target_checkpoint, wait found = %f, overrided to 0.5\n", GAME_VERSION, parent->wait);
+			G_SpawnFloat("wait", "0.5", &parent->wait);
 		}
 	}
 
