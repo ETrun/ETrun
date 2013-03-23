@@ -236,10 +236,9 @@ void G_players_cmd(gentity_t *ent, unsigned int dwCommand, qboolean fValue) {
 			strcpy(rate, va("%5d%6d%9d%7d", cl->pers.clientTimeNudge, user_rate, cl->pers.clientMaxPackets, user_snaps));
 		}
 
-		if (g_gamestate.integer != GS_PLAYING) {
-			if (cl->sess.sessionTeam == TEAM_SPECTATOR || cl->pers.connected == CON_CONNECTING) {
-				strcpy(ready, ((ent) ? "^5--------^1 :" : "-------- :"));
-			}
+		if (g_gamestate.integer != GS_PLAYING &&
+			(cl->sess.sessionTeam == TEAM_SPECTATOR || cl->pers.connected == CON_CONNECTING)) {
+			strcpy(ready, ((ent) ? "^5--------^1 :" : "-------- :"));
 		}
 
 		if (cl->sess.referee) {

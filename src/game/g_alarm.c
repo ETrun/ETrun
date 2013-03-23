@@ -87,10 +87,8 @@ void alarmbox_updateparts(gentity_t *ent, qboolean matestoo) {
 			}
 			// alarmbox can tell script_trigger about activation
 			// (but don't trigger if dying, only activation)
-			else if (!Q_stricmp(t->classname, "target_script_trigger")) {
-				if (ent->active) {   // not dead
-					G_UseEntity(t, ent, 0);
-				}
+			else if (!Q_stricmp(t->classname, "target_script_trigger") && ent->active) {   // not dead
+				G_UseEntity(t, ent, 0);
 			}
 		}
 	}

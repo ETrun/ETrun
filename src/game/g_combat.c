@@ -395,9 +395,7 @@ void player_die(gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int 
 
 	CalculateRanks();
 
-	if (killedintank /*Gordon: automatically go to limbo from tank*/) {
-		limbo(self);   // but no corpse
-	} else if ((meansOfDeath == MOD_SUICIDE && g_gamestate.integer == GS_PLAYING)) {
+	if (killedintank || (meansOfDeath == MOD_SUICIDE && g_gamestate.integer == GS_PLAYING)) {
 		limbo(self);
 	}
 }
@@ -777,20 +775,18 @@ void G_Damage(gentity_t *targ, gentity_t *inflictor, gentity_t *attacker, vec3_t
 			return;
 		}
 	} else if (targ->s.eType == ET_MISSILE && targ->methodOfDeath == MOD_LANDMINE) {
-		if (targ->s.modelindex2) {
-			if (G_WeaponIsExplosive(mod)) {
-				mapEntityData_t *mEnt;
+		if (targ->s.modelindex2 && G_WeaponIsExplosive(mod)) {
+			mapEntityData_t *mEnt;
 
-				if ((mEnt = G_FindMapEntityData(&mapEntityData[0], targ - g_entities)) != NULL) {
-					G_FreeMapEntityData(&mapEntityData[0], mEnt);
-				}
-
-				if ((mEnt = G_FindMapEntityData(&mapEntityData[1], targ - g_entities)) != NULL) {
-					G_FreeMapEntityData(&mapEntityData[1], mEnt);
-				}
-
-				G_ExplodeMissile(targ);
+			if ((mEnt = G_FindMapEntityData(&mapEntityData[0], targ - g_entities)) != NULL) {
+				G_FreeMapEntityData(&mapEntityData[0], mEnt);
 			}
+
+			if ((mEnt = G_FindMapEntityData(&mapEntityData[1], targ - g_entities)) != NULL) {
+				G_FreeMapEntityData(&mapEntityData[1], mEnt);
+			}
+
+			G_ExplodeMissile(targ);
 		}
 		return;
 	} else if (targ->s.eType == ET_CONSTRUCTIBLE) {
@@ -803,19 +799,15 @@ void G_Damage(gentity_t *targ, gentity_t *inflictor, gentity_t *attacker, vec3_t
 			return;
 		}
 		//bani - fix #238
-		if (mod == MOD_DYNAMITE) {
-			if (!(inflictor->etpro_misc_1 & 1)) {
-				return;
-			}
+		if (mod == MOD_DYNAMITE && !(inflictor->etpro_misc_1 & 1)) {
+			return;
 		}
 	}
 
 	client = targ->client;
 
-	if (client) {
-		if (client->noclip || client->ps.powerups[PW_INVULNERABLE]) {
-			return;
-		}
+	if (client && (client->noclip || client->ps.powerups[PW_INVULNERABLE])) {
+		return;
 	}
 
 	// check for godmode
@@ -890,15 +882,13 @@ void G_Damage(gentity_t *targ, gentity_t *inflictor, gentity_t *attacker, vec3_t
 	}
 
 	// check for completely getting out of the damage
-	if (!(dflags & DAMAGE_NO_PROTECTION)) {
-
-		// Nico, disable damage between players
-		if (targ->client && attacker->client &&
-		    (OnSameTeam(targ, attacker) ||
-		     (targ->client->sess.sessionTeam == TEAM_AXIS && attacker->client->sess.sessionTeam == TEAM_ALLIES) ||
-		     (targ->client->sess.sessionTeam == TEAM_ALLIES && attacker->client->sess.sessionTeam == TEAM_AXIS))) {
-			return;
-		}
+	// Nico, disable damage between players
+	if (!(dflags & DAMAGE_NO_PROTECTION) &&
+		(targ->client && attacker->client &&
+	    (OnSameTeam(targ, attacker) ||
+	    (targ->client->sess.sessionTeam == TEAM_AXIS && attacker->client->sess.sessionTeam == TEAM_ALLIES) ||
+	    (targ->client->sess.sessionTeam == TEAM_ALLIES && attacker->client->sess.sessionTeam == TEAM_AXIS)))) {
+		return;
 	}
 
 	// add to the attacker's hit counter
@@ -1030,25 +1020,18 @@ void G_Damage(gentity_t *targ, gentity_t *inflictor, gentity_t *attacker, vec3_t
 		if (targ->health <= 0) {
 			if (client && !wasAlive) {
 				targ->flags |= FL_NO_KNOCKBACK;
-				if ((targ->health < FORCE_LIMBO_HEALTH)) {
+				if (targ->health < FORCE_LIMBO_HEALTH) {
 					limbo(targ);
 				}
 			} else {
-
 
 				targ->sound1to2 = hr;
 				targ->sound2to1 = mod;
 				targ->sound2to3 = (dflags & DAMAGE_RADIUS) ? 1 : 0;
 
-				if (client) {
-					if (G_GetTeamFromEntity(inflictor) != G_GetTeamFromEntity(targ)) {
-					}
-				}
-
 				if (targ->health < -999) {
 					targ->health = -999;
 				}
-
 
 				targ->enemy     = attacker;
 				targ->deathType = mod;
@@ -1071,11 +1054,11 @@ void G_Damage(gentity_t *targ, gentity_t *inflictor, gentity_t *attacker, vec3_t
 				}
 
 				// RF, entity scripting
-				if (targ->health <= 0) {     // might have revived itself in death function
-					if ((targ->s.eType != ET_CONSTRUCTIBLE && targ->s.eType != ET_EXPLOSIVE) ||
-					    (targ->s.eType == ET_CONSTRUCTIBLE && !targ->desstages)) {             // call manually if using desstages
-						G_Script_ScriptEvent(targ, "death", "");
-					}
+				// might have revived itself in death function
+				if (targ->health <= 0 &&
+					((targ->s.eType != ET_CONSTRUCTIBLE && targ->s.eType != ET_EXPLOSIVE) ||
+					(targ->s.eType == ET_CONSTRUCTIBLE && !targ->desstages))) {             // call manually if using desstages
+					G_Script_ScriptEvent(targ, "death", "");
 				}
 			}
 

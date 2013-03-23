@@ -286,7 +286,7 @@ int ClientNumberFromString(gentity_t *to, char *s) {
 
 		SanitizeString(cl->pers.netname, n2, qtrue);
 		if (!strcmp(n2, s2)) {
-			return(idnum);
+			return idnum;
 		}
 	}
 
@@ -303,11 +303,11 @@ int ClientNumberFromString(gentity_t *to, char *s) {
 			CPx(to - g_entities, va("print \"Client[lof] %i [lon]is not active\n\"", idnum));
 			return -1;
 		}
-		return(idnum);
+		return idnum;
 	}
 
 	CPx(to - g_entities, va("print \"User [lof]%s [lon]is not on the server\n\"", s));
-	return(-1);
+	return -1;
 }
 
 /*
@@ -419,12 +419,10 @@ qboolean SetTeam(gentity_t *ent, char *s, weapon_t w1, weapon_t w2, qboolean set
 
 	G_TeamDataForString(s, client - level.clients, &team, &specState, &specClient);
 
-	if (team != TEAM_SPECTATOR) {
-		// Ensure the player can join
-		if (!G_teamJoinCheck(team, ent)) {
-			// Leave them where they were before the command was issued
-			return(qfalse);
-		}
+	// Ensure the player can join
+	if (team != TEAM_SPECTATOR && !G_teamJoinCheck(team, ent)) {
+		// Leave them where they were before the command was issued
+		return qfalse;
 	}
 
 	//
@@ -435,13 +433,11 @@ qboolean SetTeam(gentity_t *ent, char *s, weapon_t w1, weapon_t w2, qboolean set
 		return qfalse;
 	}
 
-	if (oldTeam != TEAM_SPECTATOR) {
-		if (!(ent->client->ps.pm_flags & PMF_LIMBO)) {
-			// Kill him (makes sure he loses flags, etc)
-			ent->flags                        &= ~FL_GODMODE;
-			ent->client->ps.stats[STAT_HEALTH] = ent->health = 0;
-			player_die(ent, ent, ent, 100000, MOD_SWITCHTEAM);
-		}
+	if (oldTeam != TEAM_SPECTATOR && !(ent->client->ps.pm_flags & PMF_LIMBO)) {
+		// Kill him (makes sure he loses flags, etc)
+		ent->flags                        &= ~FL_GODMODE;
+		ent->client->ps.stats[STAT_HEALTH] = ent->health = 0;
+		player_die(ent, ent, ent, 100000, MOD_SWITCHTEAM);
 	}
 	// they go to the end of the line for tournements
 	if (team == TEAM_SPECTATOR) {
@@ -570,10 +566,10 @@ int G_TeamCount(gentity_t *ent, weapon_t weap) {
 			continue;
 		}
 
-		if ((int)weap != -1) {
-			if (level.clients[j].sess.playerWeapon != (int)weap && level.clients[j].sess.latchPlayerWeapon != (int)weap) {
-				continue;
-			}
+		if ((int)weap != -1 &&
+			level.clients[j].sess.playerWeapon != (int)weap &&
+			level.clients[j].sess.latchPlayerWeapon != (int)weap) {
+			continue;
 		}
 
 		cnt++;
@@ -969,29 +965,27 @@ void G_SayTo(gentity_t *ent, gentity_t *other, int mode, int color, const char *
 	if (ent->client->sess.referee == 0 &&    // OSP
 	    ((ent->client->sess.sessionTeam == TEAM_FREE && other->client->sess.sessionTeam != TEAM_FREE))) {
 		return;
-	} else {
-		if (mode == SAY_BUDDY) {    // send only to people who have the sender on their buddy list
-			if (ent->s.clientNum != other->s.clientNum) {
-				fireteamData_t *ft1, *ft2;
-				if (!G_IsOnFireteam(other - g_entities, &ft1)) {
-					return;
-				}
-				if (!G_IsOnFireteam(ent - g_entities, &ft2)) {
-					return;
-				}
-				if (ft1 != ft2) {
-					return;
-				}
-			}
-		}
-
-		if (encoded) {
-			cmd = mode == SAY_TEAM || mode == SAY_BUDDY ? "enc_tchat" : "enc_chat";
-		} else {
-			cmd = mode == SAY_TEAM || mode == SAY_BUDDY ? "tchat" : "chat";
-		}
-		trap_SendServerCommand(other - g_entities, va("%s \"%s%c%c%s\" %d %i", cmd, name, Q_COLOR_ESCAPE, color, message, (int)(ent - g_entities), localize));
 	}
+	// send only to people who have the sender on their buddy list
+	if (mode == SAY_BUDDY && ent->s.clientNum != other->s.clientNum) {
+		fireteamData_t *ft1, *ft2;
+		if (!G_IsOnFireteam(other - g_entities, &ft1)) {
+			return;
+		}
+		if (!G_IsOnFireteam(ent - g_entities, &ft2)) {
+			return;
+		}
+		if (ft1 != ft2) {
+			return;
+		}
+	}
+
+	if (encoded) {
+		cmd = mode == SAY_TEAM || mode == SAY_BUDDY ? "enc_tchat" : "enc_chat";
+	} else {
+		cmd = mode == SAY_TEAM || mode == SAY_BUDDY ? "tchat" : "chat";
+	}
+	trap_SendServerCommand(other - g_entities, va("%s \"%s%c%c%s\" %d %i", cmd, name, Q_COLOR_ESCAPE, color, message, (int)(ent - g_entities), localize));
 }
 
 void G_Say(gentity_t *ent, gentity_t *target, int mode, qboolean encoded, const char *chatText) {
@@ -1087,18 +1081,16 @@ void G_VoiceTo(gentity_t *ent, gentity_t *other, int mode, const char *id, qbool
 	}
 
 	// send only to people who have the sender on their buddy list
-	if (mode == SAY_BUDDY) {
-		if (ent->s.clientNum != other->s.clientNum) {
-			fireteamData_t *ft1, *ft2;
-			if (!G_IsOnFireteam(other - g_entities, &ft1)) {
-				return;
-			}
-			if (!G_IsOnFireteam(ent - g_entities, &ft2)) {
-				return;
-			}
-			if (ft1 != ft2) {
-				return;
-			}
+	if (mode == SAY_BUDDY && ent->s.clientNum != other->s.clientNum) {
+		fireteamData_t *ft1, *ft2;
+		if (!G_IsOnFireteam(other - g_entities, &ft1)) {
+			return;
+		}
+		if (!G_IsOnFireteam(ent - g_entities, &ft2)) {
+			return;
+		}
+		if (ft1 != ft2) {
+			return;
 		}
 	}
 
@@ -1189,16 +1181,14 @@ void G_Voice(gentity_t *ent, gentity_t *target, int mode, const char *id, qboole
 
 		for (j = 0; j < level.numConnectedClients; j++) {
 
-			if (level.sortedClients[j] != ent->s.clientNum) {
-				if (cls != -1 && cls != level.clients[level.sortedClients[j]].sess.playerType) {
-					continue;
-				}
+			if (level.sortedClients[j] != ent->s.clientNum &&
+				cls != -1 &&
+				cls != level.clients[level.sortedClients[j]].sess.playerType) {
+				continue;
 			}
 
-			if (cnt) {
-				if (!allowclients[level.sortedClients[j]]) {
-					continue;
-				}
+			if (cnt && !allowclients[level.sortedClients[j]]) {
+				continue;
 			}
 
 			G_VoiceTo(ent, &g_entities[level.sortedClients[j]], mode, id, voiceonly);
@@ -1332,17 +1322,16 @@ qboolean Cmd_CallVote_f(gentity_t *ent, unsigned int dwCommand, qboolean fRefCom
 	if (trap_Argc() > 1 && (i = G_voteCmdCheck(ent, arg1, arg2, fRefCommand)) != G_NOTFOUND) {         //  --OSP
 		if (i != G_OK) {
 			if (i == G_NOTFOUND) {
-				return(qfalse);                 // Command error
-			} else {
-				return(qtrue);
+				return qfalse;                 // Command error
 			}
+			return qtrue;
 		}
 	} else {
 		if (!fRefCommand) {
 			CP(va("print \"\n^3>>> Unknown vote command: ^7%s %s\n\"", arg1, arg2));
 			G_voteHelp(ent, qtrue);
 		}
-		return(qfalse);
+		return qfalse;
 	}
 
 	Com_sprintf(level.voteInfo.voteString, sizeof (level.voteInfo.voteString), "%s %s", arg1, arg2);
@@ -1752,13 +1741,13 @@ qboolean Do_Activate_f(gentity_t *ent, gentity_t *traceEnt) {
 
 			G_UseTargets(traceEnt, ent);     //----(SA)	added for Mike so mounting an MG42 can be a trigger event (let me know if there's any issues with this)
 			found = qtrue;
-		} else if (((Q_stricmp(traceEnt->classname, "func_door") == 0) || (Q_stricmp(traceEnt->classname, "func_door_rotating") == 0))) {
+		} else if ((Q_stricmp(traceEnt->classname, "func_door") == 0) || (Q_stricmp(traceEnt->classname, "func_door_rotating") == 0)) {
 			if (walking) {
 				traceEnt->flags |= FL_SOFTACTIVATE;     // no noise
 			}
 			G_TryDoor(traceEnt, ent);        // (door,other,activator)
 			found = qtrue;
-		} else if ((Q_stricmp(traceEnt->classname, "team_WOLF_checkpoint") == 0)) {
+		} else if (Q_stricmp(traceEnt->classname, "team_WOLF_checkpoint") == 0) {
 			if (traceEnt->count != (int)ent->client->sess.sessionTeam) {
 				traceEnt->health++;
 			}

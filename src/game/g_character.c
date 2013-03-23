@@ -124,11 +124,10 @@ qboolean G_RegisterCharacter(const char *characterFile, bg_character_t *characte
 	}
 
 	// Parse Animation Files
-	if (!G_CheckForExistingAnimModelInfo(characterDef.animationGroup, characterDef.animationScript, &character->animModelInfo)) {
-		if (!G_ParseAnimationFiles(character, characterDef.animationGroup, characterDef.animationScript)) {
-			G_Printf(S_COLOR_YELLOW "WARNING: failed to load animation files referenced from '%s'\n", characterFile);
-			return qfalse;
-		}
+	if (!G_CheckForExistingAnimModelInfo(characterDef.animationGroup, characterDef.animationScript, &character->animModelInfo) &&
+		!G_ParseAnimationFiles(character, characterDef.animationGroup, characterDef.animationScript)) {
+		G_Printf(S_COLOR_YELLOW "WARNING: failed to load animation files referenced from '%s'\n", characterFile);
+		return qfalse;
 	}
 
 	return qtrue;

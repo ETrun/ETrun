@@ -923,13 +923,13 @@ void ClientUserinfoChanged(int clientNum) {
 	       );
 
 	// Nico, check if auth token was changed
-	if (oldAuthToken[0] != '\0' && Q_stricmp(oldAuthToken, client->pers.authToken)) {
+	if (oldAuthToken[0] != '\0' &&
+		Q_stricmp(oldAuthToken, client->pers.authToken) &&
+		client->sess.logged) {
 		// Nico, auth token was changed => logout player if he was logged in
-		if (client->sess.logged) {
-			CP("cp \"You are no longer logged in!\n\"");
-			G_LogPrintf("ClientUserinfoChanged: authToken changed for client %d, forcing logout\n", clientNum);
-			ent->client->sess.logged = qfalse;
-		}
+		CP("cp \"You are no longer logged in!\n\"");
+		G_LogPrintf("ClientUserinfoChanged: authToken changed for client %d, forcing logout\n", clientNum);
+		ent->client->sess.logged = qfalse;
 	}
 
 	client->pers.autoActivate      = (client->pers.clientFlags & CGF_AUTOACTIVATE) ? PICKUP_TOUCH : PICKUP_ACTIVATE;
@@ -984,10 +984,9 @@ void ClientUserinfoChanged(int clientNum) {
 				CPx(clientNum, "print \"^1You had too many namechanges\n\"");
 				G_LogPrintf("Client %d name change refused\n", clientNum);
 				return;
-			} else {
-				client->pers.nameChanges++;
-				trap_SendServerCommand(-1, va("print \"%s" S_COLOR_WHITE " renamed to %s\n\"", oldname, client->pers.netname));
 			}
+			client->pers.nameChanges++;
+			trap_SendServerCommand(-1, va("print \"%s" S_COLOR_WHITE " renamed to %s\n\"", oldname, client->pers.netname));
 		}
 	}
 
@@ -1118,10 +1117,11 @@ char *ClientConnect(int clientNum, qboolean firstTime) {
 	if (strcmp(Info_ValueForKey(userinfo, "ip"), "localhost") != 0) {
 		// check for a password
 		value = Info_ValueForKey(userinfo, "password");
-		if (g_password.string[0] && Q_stricmp(g_password.string, "none") && strcmp(g_password.string, value) != 0) {
-			if (!sv_privatepassword.string[0] || strcmp(sv_privatepassword.string, value) != 0) {
-				return "Invalid password";
-			}
+		if (g_password.string[0] &&
+			Q_stricmp(g_password.string, "none") &&
+			strcmp(g_password.string, value) != 0 &&
+			(!sv_privatepassword.string[0] || strcmp(sv_privatepassword.string, value) != 0)) {
+			return "Invalid password";
 		}
 	}
 
