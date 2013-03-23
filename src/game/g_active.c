@@ -155,35 +155,27 @@ void P_WorldEffects(gentity_t *ent) {
 	//
 	// check for sizzle damage (move to pmove?)
 	//
-	if (waterlevel && (ent->watertype & CONTENTS_LAVA)) {
-		if (ent->health > 0 && ent->pain_debounce_time <= level.time) {
-
-			if (ent->watertype & CONTENTS_LAVA) {
-				G_Damage(ent, NULL, NULL, NULL, NULL,
-				         30 * waterlevel, 0, MOD_LAVA);
-			}
-
-		}
+	if (waterlevel && (ent->watertype & CONTENTS_LAVA) &&
+		ent->health > 0 && ent->pain_debounce_time <= level.time &&
+		(ent->watertype & CONTENTS_LAVA)) {
+		G_Damage(ent, NULL, NULL, NULL, NULL, 30 * waterlevel, 0, MOD_LAVA);
 	}
 
 	//
 	// check for burning from flamethrower
 	//
 	// JPW NERVE MP way
-	if (ent->s.onFireEnd && ent->client) {
-		if (level.time - ent->client->lastBurnTime >= MIN_BURN_INTERVAL) {
+	if (ent->s.onFireEnd && ent->client && level.time - ent->client->lastBurnTime >= MIN_BURN_INTERVAL) {
+		// JPW NERVE server-side incremental damage routine / player damage/health is int (not float)
+		// so I can't allocate 1.5 points per server tick, and 1 is too weak and 2 is too strong.
+		// solution: allocate damage far less often (MIN_BURN_INTERVAL often) and do more damage.
+		// That way minimum resolution (1 point) damage changes become less critical.
 
-			// JPW NERVE server-side incremental damage routine / player damage/health is int (not float)
-			// so I can't allocate 1.5 points per server tick, and 1 is too weak and 2 is too strong.
-			// solution: allocate damage far less often (MIN_BURN_INTERVAL often) and do more damage.
-			// That way minimum resolution (1 point) damage changes become less critical.
-
-			ent->client->lastBurnTime = level.time;
-			if ((ent->s.onFireEnd > level.time) && (ent->health > 0)) {
-				gentity_t *attacker;
-				attacker = g_entities + ent->flameBurnEnt;
-				G_Damage(ent, attacker, attacker, NULL, NULL, 5, DAMAGE_NO_KNOCKBACK, MOD_FLAMETHROWER);   // JPW NERVE was 7
-			}
+		ent->client->lastBurnTime = level.time;
+		if ((ent->s.onFireEnd > level.time) && (ent->health > 0)) {
+			gentity_t *attacker;
+			attacker = g_entities + ent->flameBurnEnt;
+			G_Damage(ent, attacker, attacker, NULL, NULL, 5, DAMAGE_NO_KNOCKBACK, MOD_FLAMETHROWER);   // JPW NERVE was 7
 		}
 	}
 	// jpw
@@ -318,10 +310,8 @@ void    G_TouchTriggers(gentity_t *ent) {
 		}
 
 		// ignore most entities if a spectator
-		if (ent->client->sess.sessionTeam == TEAM_SPECTATOR) {
-			if (hit->s.eType != ET_TELEPORT_TRIGGER) {
-				continue;
-			}
+		if (ent->client->sess.sessionTeam == TEAM_SPECTATOR && hit->s.eType != ET_TELEPORT_TRIGGER) {
+			continue;
 		}
 
 		// use seperate code for determining if an item is picked up
@@ -686,7 +676,7 @@ void ClientThink_real(gentity_t *ent) {
 		// freeze player
 		if (level.match_pause != PAUSE_NONE) {
 			client->ps.pm_type = PM_FREEZE;
-		} else if ((client->ps.eFlags & EF_VIEWING_CAMERA)) {
+		} else if (client->ps.eFlags & EF_VIEWING_CAMERA) {
 			VectorClear(client->ps.velocity);
 			client->ps.pm_type = PM_FREEZE;
 		}
@@ -862,8 +852,8 @@ void ClientThink_real(gentity_t *ent) {
 		Cmd_Activate_f(ent);
 	}
 
-	if (g_entities[ent->client->ps.identifyClient].team == ent->team && g_entities[ent->client->ps.identifyClient].client) {
-	} else {
+	if (g_entities[ent->client->ps.identifyClient].team != ent->team ||
+		!g_entities[ent->client->ps.identifyClient].client) {
 		ent->client->ps.identifyClient = -1;
 	}
 
@@ -959,10 +949,8 @@ void G_RunClient(gentity_t *ent) {
 		Cmd_Activate2_f(ent);
 	}
 
-	if (ent->health <= 0 && ent->client->ps.pm_flags & PMF_LIMBO) {
-		if (ent->r.linked) {
-			trap_UnlinkEntity(ent);
-		}
+	if (ent->health <= 0 && ent->client->ps.pm_flags & PMF_LIMBO && ent->r.linked) {
+		trap_UnlinkEntity(ent);
 	}
 }
 
@@ -986,7 +974,7 @@ void SpectatorClientEndFrame(gentity_t *ent) {
 		}
 
 		// Limbos aren't following while in MV
-		if ((ent->client->ps.pm_flags & PMF_LIMBO)) {
+		if (ent->client->ps.pm_flags & PMF_LIMBO) {
 			return;
 		}
 
@@ -1024,12 +1012,11 @@ void SpectatorClientEndFrame(gentity_t *ent) {
 				ent->client->ps.ping   = ping;
 
 				return;
-			} else {
-				// drop them to free spectators unless they are dedicated camera followers
-				if (ent->client->sess.spectatorClient >= 0) {
-					ent->client->sess.spectatorState = SPECTATOR_FREE;
-					ClientBegin(ent->client - level.clients);
-				}
+			}
+			// drop them to free spectators unless they are dedicated camera followers
+			if (ent->client->sess.spectatorClient >= 0) {
+				ent->client->sess.spectatorState = SPECTATOR_FREE;
+				ClientBegin(ent->client - level.clients);
 			}
 		}
 	}

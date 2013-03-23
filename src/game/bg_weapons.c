@@ -1733,7 +1733,7 @@ void PM_Weapon(void) {
 	// take an ammo away if not infinite
 	if (PM_WeaponAmmoAvailable(pm->ps->weapon) != -1 &&
 		!pm->ps->persistant[PERS_HWEAPON_USE] &&
-		!pm->ps->eFlags & EF_MOUNTEDTANK) {
+		!(pm->ps->eFlags & EF_MOUNTEDTANK)) {
 		// Rafael - check for being mounted on mg42
 		PM_WeaponUseAmmo(pm->ps->weapon, ammoNeeded);
 	}
