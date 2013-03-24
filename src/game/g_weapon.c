@@ -455,7 +455,7 @@ static void HandleEntsThatBlockConstructible(gentity_t *constructor, gentity_t *
 	int constructibleModelindex     = constructible->s.modelindex;
 	int constructibleClipmask       = constructible->clipmask;
 	int constructibleContents       = constructible->r.contents;
-	int constructibleNonSolidBModel = (constructible->s.eFlags & EF_NONSOLID_BMODEL);
+	int constructibleNonSolidBModel = constructible->s.eFlags & EF_NONSOLID_BMODEL;
 
 	trap_SetBrushModel(constructible, va("*%i", constructible->s.modelindex2));
 
@@ -492,10 +492,8 @@ static void HandleEntsThatBlockConstructible(gentity_t *constructor, gentity_t *
 				break;
 			}
 
-			if (constructible->count2) {
-				if (check->partofstage != constructible->grenadeFired) {
-					continue;
-				}
+			if (constructible->count2 && check->partofstage != constructible->grenadeFired) {
+				continue;
 			}
 
 			// get the bounding box of all entities in the constructible together
@@ -547,12 +545,12 @@ static void HandleEntsThatBlockConstructible(gentity_t *constructor, gentity_t *
 		}
 
 		// the entity is blocked and it is a player, then warn the player
-		if (warnBlockingPlayers && check->s.eType == ET_PLAYER) {
-			if ((level.time - check->client->lastConstructibleBlockingWarnTime) >= MIN_BLOCKINGWARNING_INTERVAL) {
-				trap_SendServerCommand(check->s.number, "cp \"Warning, leave the construction area...\" 1");
-				// Gordon: store the entity num to warn the bot
-				check->client->lastConstructibleBlockingWarnTime = level.time;
-			}
+		if (warnBlockingPlayers &&
+			check->s.eType == ET_PLAYER &&
+			(level.time - check->client->lastConstructibleBlockingWarnTime) >= MIN_BLOCKINGWARNING_INTERVAL) {
+			trap_SendServerCommand(check->s.number, "cp \"Warning, leave the construction area...\" 1");
+			// Gordon: store the entity num to warn the bot
+			check->client->lastConstructibleBlockingWarnTime = level.time;
 		}
 
 		blockingList[blockingEntities++] = entityList[e];
@@ -751,7 +749,7 @@ static qboolean TryConstructing(gentity_t *ent) {
 		if (constructible->count2) {
 			int constructibleClipmask       = constructible->clipmask;
 			int constructibleContents       = constructible->r.contents;
-			int constructibleNonSolidBModel = (constructible->s.eFlags & EF_NONSOLID_BMODEL);
+			int constructibleNonSolidBModel = constructible->s.eFlags & EF_NONSOLID_BMODEL;
 
 			constructible->s.modelindex2 = 0;
 			trap_SetBrushModel(constructible, va("*%i", constructible->conbmodels[constructible->grenadeFired - 1]));
@@ -769,7 +767,7 @@ static qboolean TryConstructing(gentity_t *ent) {
 		} else {
 			int constructibleClipmask       = constructible->clipmask;
 			int constructibleContents       = constructible->r.contents;
-			int constructibleNonSolidBModel = (constructible->s.eFlags & EF_NONSOLID_BMODEL);
+			int constructibleNonSolidBModel = constructible->s.eFlags & EF_NONSOLID_BMODEL;
 
 			constructible->s.modelindex2 = 0;
 			trap_SetBrushModel(constructible, constructible->model);
@@ -831,10 +829,8 @@ static qboolean TryConstructing(gentity_t *ent) {
 				e->s.eType      = ET_EXPLOSIVE_INDICATOR;
 
 				while ((tent = G_Find(tent, FOFS(target), constructible->targetname)) != NULL) {
-					if (tent->s.eType == ET_OID_TRIGGER) {
-						if (tent->spawnflags & 8) {
-							e->s.eType = ET_TANK_INDICATOR;
-						}
+					if (tent->s.eType == ET_OID_TRIGGER && (tent->spawnflags & 8)) {
+						e->s.eType = ET_TANK_INDICATOR;
 					}
 				}
 
@@ -914,7 +910,7 @@ void AutoBuildConstruction(gentity_t *constructible) {
 	if (constructible->count2) {
 		int constructibleClipmask       = constructible->clipmask;
 		int constructibleContents       = constructible->r.contents;
-		int constructibleNonSolidBModel = (constructible->s.eFlags & EF_NONSOLID_BMODEL);
+		int constructibleNonSolidBModel = constructible->s.eFlags & EF_NONSOLID_BMODEL;
 
 		constructible->s.modelindex2 = 0;
 		trap_SetBrushModel(constructible, va("*%i", constructible->conbmodels[constructible->grenadeFired - 1]));
@@ -932,7 +928,7 @@ void AutoBuildConstruction(gentity_t *constructible) {
 	} else {
 		int constructibleClipmask       = constructible->clipmask;
 		int constructibleContents       = constructible->r.contents;
-		int constructibleNonSolidBModel = (constructible->s.eFlags & EF_NONSOLID_BMODEL);
+		int constructibleNonSolidBModel = constructible->s.eFlags & EF_NONSOLID_BMODEL;
 
 		constructible->s.modelindex2 = 0;
 		trap_SetBrushModel(constructible, constructible->model);
@@ -994,10 +990,8 @@ void AutoBuildConstruction(gentity_t *constructible) {
 			e->s.eType      = ET_EXPLOSIVE_INDICATOR;
 
 			while ((tent = G_Find(tent, FOFS(target), constructible->targetname)) != NULL) {
-				if (tent->s.eType == ET_OID_TRIGGER) {
-					if (tent->spawnflags & 8) {
-						e->s.eType = ET_TANK_INDICATOR;
-					}
+				if (tent->s.eType == ET_OID_TRIGGER && (tent->spawnflags & 8)) {
+					e->s.eType = ET_TANK_INDICATOR;
 				}
 			}
 
@@ -1085,10 +1079,8 @@ void Weapon_Engineer(gentity_t *ent) {
 		return;
 	}
 
-	if (ent->client->touchingTOI) {
-		if (TryConstructing(ent)) {
-			return;
-		}
+	if (ent->client->touchingTOI && TryConstructing(ent)) {
+		return;
 	}
 
 	AngleVectors(ent->client->ps.viewangles, forward, right, up);
@@ -1353,10 +1345,9 @@ void Weapon_Engineer(gentity_t *ent) {
 							if (ent->client->sess.sessionTeam == TEAM_ALLIES) {   // transfer score info if this is a bomb scoring objective
 								traceEnt->accuracy = hit->accuracy;
 							}
-						} else if (hit->spawnflags & ALLIED_OBJECTIVE) {
-							if (ent->client->sess.sessionTeam == TEAM_AXIS) {   // ditto other team
-								traceEnt->accuracy = hit->accuracy;
-							}
+						} else if ((hit->spawnflags & ALLIED_OBJECTIVE) &&
+							ent->client->sess.sessionTeam == TEAM_AXIS) {   // ditto other team
+							traceEnt->accuracy = hit->accuracy;
 						}
 
 						// rain - spawnflags 128 = disabled (#309)
@@ -1886,15 +1877,14 @@ void EmitterCheck(gentity_t *ent, gentity_t *attacker, trace_t *tr) {
 	SnapVectorTowards(tr->endpos, attacker->s.origin);
 
 	if (Q_stricmp(ent->classname, "func_explosive") == 0) {
-	} else if (Q_stricmp(ent->classname, "func_leaky") == 0) {
-
-
+		return;
+	}
+	if (Q_stricmp(ent->classname, "func_leaky") == 0) {
 		tent = G_TempEntity(origin, EV_EMITTER);
 		VectorCopy(origin, tent->s.origin);
 		tent->s.time    = 1234;
 		tent->s.density = 9876;
 		VectorCopy(tr->plane.normal, tent->s.origin2);
-
 	}
 }
 
@@ -2074,7 +2064,7 @@ qboolean Bullet_Fire_Extended(gentity_t *source, gentity_t *attacker, vec3_t sta
 
 		G_Trace(source, &tr2, start, NULL, NULL, end, source->s.number, MASK_WATER | MASK_SHOT);
 
-		if ((tr.entityNum != tr2.entityNum && tr2.fraction != 1)) {
+		if (tr.entityNum != tr2.entityNum && tr2.fraction != 1) {
 			vec3_t v;
 
 			VectorSubtract(tr.endpos, start, v);
@@ -2097,12 +2087,10 @@ qboolean Bullet_Fire_Extended(gentity_t *source, gentity_t *attacker, vec3_t sta
 		G_Damage(traceEnt, attacker, attacker, forward, tr.endpos, damage, (distance_falloff ? DAMAGE_DISTANCEFALLOFF : 0), GetAmmoTableData(attacker->s.weapon)->mod);
 
 		// allow bullets to "pass through" func_explosives if they break by taking another simultanious shot
-		if (traceEnt->s.eType == ET_EXPLOSIVE) {
-			if (traceEnt->health <= damage) {
-				// start new bullet at position this hit the bmodel and continue to the end position (ignoring shot-through bmodel in next trace)
-				// spread = 0 as this is an extension of an already spread shot
-				return Bullet_Fire_Extended(traceEnt, attacker, tr.endpos, end, damage, distance_falloff);
-			}
+		if (traceEnt->s.eType == ET_EXPLOSIVE && traceEnt->health <= damage) {
+			// start new bullet at position this hit the bmodel and continue to the end position (ignoring shot-through bmodel in next trace)
+			// spread = 0 as this is an extension of an already spread shot
+			return Bullet_Fire_Extended(traceEnt, attacker, tr.endpos, end, damage, distance_falloff);
 		}
 	}
 	return hitClient;
@@ -2386,16 +2374,15 @@ void Weapon_FlamethrowerFire(gentity_t *ent) {
 	// 72 total box height, 18 xy -> 77 trace radius (from view point towards the ground) is enough to cover the area around the feet
 	VectorMA(trace_start, 77.0, forward, trace_end);
 	trap_Trace(&trace, trace_start, flameChunkMins, flameChunkMaxs, trace_end, ent->s.number, MASK_SHOT | MASK_WATER);
-	if (trace.fraction != 1.0) {
-		// additional checks to filter out false positives
-		if (trace.endpos[2] > (ent->r.currentOrigin[2] + ent->r.mins[2] - 8) && trace.endpos[2] < ent->r.currentOrigin[2]) {
-			// trigger in a 21 radius around origin
-			trace_start[0] -= trace.endpos[0];
-			trace_start[1] -= trace.endpos[1];
-			if (trace_start[0] * trace_start[0] + trace_start[1] * trace_start[1] < 441) {
-				// set self in flames
-				G_BurnMeGood(ent, ent);
-			}
+	if (trace.fraction != 1.0 &&
+		trace.endpos[2] > (ent->r.currentOrigin[2] + ent->r.mins[2] - 8) &&
+		trace.endpos[2] < ent->r.currentOrigin[2]) {
+		// trigger in a 21 radius around origin
+		trace_start[0] -= trace.endpos[0];
+		trace_start[1] -= trace.endpos[1];
+		if (trace_start[0] * trace_start[0] + trace_start[1] * trace_start[1] < 441) {
+			// set self in flames
+			G_BurnMeGood(ent, ent);
 		}
 	}
 
@@ -2412,12 +2399,10 @@ AddLean
 ==============
 */
 void AddLean(gentity_t *ent, vec3_t point) {
-	if (ent->client) {
-		if (ent->client->ps.leanf) {
-			vec3_t right;
-			AngleVectors(ent->client->ps.viewangles, NULL, right, NULL);
-			VectorMA(point, ent->client->ps.leanf, right, point);
-		}
+	if (ent->client && ent->client->ps.leanf) {
+		vec3_t right;
+		AngleVectors(ent->client->ps.viewangles, NULL, right, NULL);
+		VectorMA(point, ent->client->ps.leanf, right, point);
 	}
 }
 

@@ -167,10 +167,8 @@ void G_TeamCommand(team_t team, char *cmd) {
 	int i;
 
 	for (i = 0 ; i < level.maxclients ; i++) {
-		if (level.clients[i].pers.connected == CON_CONNECTED) {
-			if (level.clients[i].sess.sessionTeam == team) {
-				trap_SendServerCommand(i, va("%s", cmd));
-			}
+		if (level.clients[i].pers.connected == CON_CONNECTED && level.clients[i].sess.sessionTeam == team) {
+			trap_SendServerCommand(i, va("%s", cmd));
 		}
 	}
 }
@@ -333,13 +331,13 @@ gentity_t *G_PickTarget(char *targetname) {
 }
 
 qboolean G_AllowTeamsAllowed(gentity_t *ent, gentity_t *activator) {
-	if (ent->allowteams && activator && activator->client) {
-		if (activator->client->sess.sessionTeam != TEAM_SPECTATOR) {
-			int checkTeam = activator->client->sess.sessionTeam;
+	if (ent->allowteams &&
+		activator && activator->client &&
+		activator->client->sess.sessionTeam != TEAM_SPECTATOR) {
+		int checkTeam = activator->client->sess.sessionTeam;
 
-			if (!(ent->allowteams & checkTeam)) {
-				return qfalse;
-			}
+		if (!(ent->allowteams & checkTeam)) {
+			return qfalse;
 		}
 	}
 
@@ -1039,12 +1037,11 @@ void G_PrintClientSpammyCenterPrint(int entityNum, char *text) {
 
 team_t G_GetTeamFromEntity(gentity_t *ent) {
 	switch (ent->s.eType) {
-	case ET_PLAYER:     if (ent->client) {
-			return(ent->client->sess.sessionTeam);
-	} else {
-			return(TEAM_FREE);
-	}
-		break;
+	case ET_PLAYER:
+		if (ent->client) {
+			return ent->client->sess.sessionTeam;
+		}
+		return TEAM_FREE;
 	case ET_MISSILE:
 	case ET_GENERAL:    switch (ent->methodOfDeath) {
 		case MOD_GRENADE_LAUNCHER:
