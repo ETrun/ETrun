@@ -98,14 +98,6 @@ static void UI_LoadArenasFromFile(char *filename) {
 				trap_PC_FreeSource(handle);
 				return;
 			}
-		} else if (!Q_stricmp(token.string, "lmsbriefing")) {
-
-		} else if (!Q_stricmp(token.string, "timelimit")) {
-
-		} else if (!Q_stricmp(token.string, "axisrespawntime")) {
-
-		} else if (!Q_stricmp(token.string, "alliedrespawntime")) {
-
 		} else if (!Q_stricmp(token.string, "type")) {
 			if (!trap_PC_ReadToken(handle, &token)) {
 				trap_Print(va(S_COLOR_RED "unexpected end of file inside: %s\n", filename));
@@ -118,17 +110,15 @@ static void UI_LoadArenasFromFile(char *filename) {
 				trap_PC_FreeSource(handle);
 				return;
 			}
-		} else if (!Q_stricmp(token.string, "mapposition_y")) {
-			if (!PC_Float_Parse(handle, &uiInfo.mapList[uiInfo.mapCount].mappos[1])) {
-				trap_Print(va(S_COLOR_RED "unexpected end of file inside: %s\n", filename));
-				trap_PC_FreeSource(handle);
-				return;
-			}
+		} else if (!Q_stricmp(token.string, "mapposition_y") &&
+			!PC_Float_Parse(handle, &uiInfo.mapList[uiInfo.mapCount].mappos[1])) {
+			trap_Print(va(S_COLOR_RED "unexpected end of file inside: %s\n", filename));
+			trap_PC_FreeSource(handle);
+			return;
 		}
 	}
 
 	trap_PC_FreeSource(handle);
-	return;
 }
 
 /*

@@ -321,9 +321,8 @@ int Multiline_Text_Width(const char *text, float scale, int limit) {
 		}
 
 		return widest;
-	} else {
-		return out * scale * font->glyphScale;
 	}
+	return out * scale * font->glyphScale;
 }
 
 int Text_Height_Ext(const char *text, float scale, int limit, fontInfo_t *font) {
@@ -407,9 +406,8 @@ int Multiline_Text_Height(const char *text, float scale, int limit) {
 		}
 		totalheight += max;
 		return totalheight * scale * font->glyphScale;
-	} else {
-		return max * scale * font->glyphScale;
 	}
+	return max * scale * font->glyphScale;
 }
 
 void Text_PaintCharExt(float x, float y, float w, float h, float scalex, float scaley, float s, float t, float s2, float t2, qhandle_t hShader) {
@@ -1624,11 +1622,10 @@ qboolean UI_OwnerDrawVisible(int flags) {
 		}
 		if (flags & UI_SHOW_NOTLEADER) {
 			// these need to show when this client is assigning their own status or they are NOT the leader
-			if (uiInfo.teamLeader) {
-				// if not showing yourself
-				if (!(ui_selectedPlayer.integer < uiInfo.myTeamCount && uiInfo.teamClientNums[ui_selectedPlayer.integer] == uiInfo.playerNumber)) {
-					vis = qfalse;
-				}
+			if (uiInfo.teamLeader &&
+				!(ui_selectedPlayer.integer < uiInfo.myTeamCount &&
+				uiInfo.teamClientNums[ui_selectedPlayer.integer] == uiInfo.playerNumber)) {
+				vis = qfalse;
 			}
 			flags &= ~UI_SHOW_NOTLEADER;
 		}
@@ -1664,12 +1661,10 @@ qboolean UI_OwnerDrawVisible(int flags) {
 			if (uiInfo.newHighScoreTime < uiInfo.uiDC.realTime) {
 				vis = qfalse;
 			} else {
-				if (uiInfo.soundHighScore) {
-					if (trap_Cvar_VariableValue("sv_killserver") == 0) {
-						// wait on server to go down before playing sound
-						trap_S_StartLocalSound(uiInfo.newHighScoreSound, CHAN_ANNOUNCER);
-						uiInfo.soundHighScore = qfalse;
-					}
+				if (uiInfo.soundHighScore && trap_Cvar_VariableValue("sv_killserver") == 0) {
+					// wait on server to go down before playing sound
+					trap_S_StartLocalSound(uiInfo.newHighScoreSound, CHAN_ANNOUNCER);
+					uiInfo.soundHighScore = qfalse;
 				}
 			}
 			flags &= ~UI_SHOW_NEWHIGHSCORE;
@@ -1856,10 +1851,8 @@ UI_ServersSort
 */
 void UI_ServersSort(int column, qboolean force) {
 
-	if (!force) {
-		if (uiInfo.serverStatus.sortKey == column) {
-			return;
-		}
+	if (!force && uiInfo.serverStatus.sortKey == column) {
+		return;
 	}
 
 	uiInfo.serverStatus.sortKey = column;
@@ -2049,10 +2042,8 @@ qboolean UI_CheckExecKey(int key) {
 	}
 
 	if (!menu) {
-		if (cl_bypassMouseInput.integer) {
-			if (!trap_Key_GetCatcher()) {
-				trap_Cvar_Set("cl_bypassMouseInput", "0");
-			}
+		if (cl_bypassMouseInput.integer && !trap_Key_GetCatcher()) {
+			trap_Cvar_Set("cl_bypassMouseInput", "0");
 		}
 		return qfalse;
 	}
@@ -3492,44 +3483,40 @@ static void UI_BuildFindPlayerList(qboolean force) {
 	}
 	for (i = 0; i < MAX_SERVERSTATUSREQUESTS; i++) {
 		// if this pending server is valid
-		if (uiInfo.pendingServerStatus.server[i].valid) {
-			// try to get the server status for this server
-			if (UI_GetServerStatusInfo(uiInfo.pendingServerStatus.server[i].adrstr, &info)) {
-				//
-				numFound++;
-				// parse through the server status lines
-				for (j = 0; j < info.numLines; j++) {
-					// should have ping info
-					if (!info.lines[j][2] || !info.lines[j][2][0]) {
-						continue;
-					}
-					// clean string first
-					Q_strncpyz(name, info.lines[j][3], sizeof (name));
-					Q_CleanStr(name);
-					// if the player name is a substring
-					if (stristr(name, uiInfo.findPlayerName)) {
-						// add to found server list if we have space (always leave space for a line with the number found)
-						if (uiInfo.numFoundPlayerServers < MAX_FOUNDPLAYER_SERVERS - 1) {
-							//
-							Q_strncpyz(uiInfo.foundPlayerServerAddresses[uiInfo.numFoundPlayerServers - 1],
-							           uiInfo.pendingServerStatus.server[i].adrstr,
-							           sizeof (uiInfo.foundPlayerServerAddresses[0]));
-							Q_strncpyz(uiInfo.foundPlayerServerNames[uiInfo.numFoundPlayerServers - 1],
-							           uiInfo.pendingServerStatus.server[i].name,
-							           sizeof (uiInfo.foundPlayerServerNames[0]));
-							uiInfo.numFoundPlayerServers++;
-						} else {
-							// can't add any more so we're done
-							uiInfo.pendingServerStatus.num = uiInfo.serverStatus.numDisplayServers;
-						}
+		if (uiInfo.pendingServerStatus.server[i].valid && UI_GetServerStatusInfo(uiInfo.pendingServerStatus.server[i].adrstr, &info)) {
+			numFound++;
+			// parse through the server status lines
+			for (j = 0; j < info.numLines; j++) {
+				// should have ping info
+				if (!info.lines[j][2] || !info.lines[j][2][0]) {
+					continue;
+				}
+				// clean string first
+				Q_strncpyz(name, info.lines[j][3], sizeof (name));
+				Q_CleanStr(name);
+				// if the player name is a substring
+				if (stristr(name, uiInfo.findPlayerName)) {
+					// add to found server list if we have space (always leave space for a line with the number found)
+					if (uiInfo.numFoundPlayerServers < MAX_FOUNDPLAYER_SERVERS - 1) {
+						//
+						Q_strncpyz(uiInfo.foundPlayerServerAddresses[uiInfo.numFoundPlayerServers - 1],
+						           uiInfo.pendingServerStatus.server[i].adrstr,
+						           sizeof (uiInfo.foundPlayerServerAddresses[0]));
+						Q_strncpyz(uiInfo.foundPlayerServerNames[uiInfo.numFoundPlayerServers - 1],
+						           uiInfo.pendingServerStatus.server[i].name,
+						           sizeof (uiInfo.foundPlayerServerNames[0]));
+						uiInfo.numFoundPlayerServers++;
+					} else {
+						// can't add any more so we're done
+						uiInfo.pendingServerStatus.num = uiInfo.serverStatus.numDisplayServers;
 					}
 				}
-				Com_sprintf(uiInfo.foundPlayerServerNames[uiInfo.numFoundPlayerServers - 1],
-				            sizeof (uiInfo.foundPlayerServerNames[uiInfo.numFoundPlayerServers - 1]),
-				            "searching %d/%d...", uiInfo.pendingServerStatus.num, numFound);
-				// retrieved the server status so reuse this spot
-				uiInfo.pendingServerStatus.server[i].valid = qfalse;
 			}
+			Com_sprintf(uiInfo.foundPlayerServerNames[uiInfo.numFoundPlayerServers - 1],
+			            sizeof (uiInfo.foundPlayerServerNames[uiInfo.numFoundPlayerServers - 1]),
+			            "searching %d/%d...", uiInfo.pendingServerStatus.num, numFound);
+			// retrieved the server status so reuse this spot
+			uiInfo.pendingServerStatus.server[i].valid = qfalse;
 		}
 		// if empty pending slot or timed out
 		if (!uiInfo.pendingServerStatus.server[i].valid ||
@@ -3615,10 +3602,9 @@ static void UI_BuildServerStatus(qboolean force) {
 		// reset all server status requests
 		trap_LAN_ServerStatus(NULL, NULL, 0);
 	}
-	if (cstate.connState < CA_CONNECTED) {
-		if (uiInfo.serverStatus.currentServer < 0 || uiInfo.serverStatus.currentServer > uiInfo.serverStatus.numDisplayServers || uiInfo.serverStatus.numDisplayServers == 0) {
-			return;
-		}
+	if (cstate.connState < CA_CONNECTED &&
+		(uiInfo.serverStatus.currentServer < 0 || uiInfo.serverStatus.currentServer > uiInfo.serverStatus.numDisplayServers || uiInfo.serverStatus.numDisplayServers == 0)) {
+		return;
 	}
 	if (UI_GetServerStatusInfo(uiInfo.serverStatusAddress, &uiInfo.serverStatusInfo)) {
 		uiInfo.nextServerStatusRefresh = 0;
@@ -3677,9 +3663,8 @@ static const char *UI_SelectedMap(int index, int *actual) {
 			if (c == index) {
 				*actual = i;
 				return uiInfo.mapList[i].mapName;
-			} else {
-				c++;
 			}
+			c++;
 		}
 	}
 
@@ -3732,9 +3717,8 @@ const char *UI_FeederItemText(float feederID, int index, int column, qhandle_t *
 			return va("Pixelformat: color(%d-bits) Z(%d-bits) stencil(%d-bits)", uiInfo.uiDC.glconfig.colorBits, uiInfo.uiDC.glconfig.depthBits, uiInfo.uiDC.glconfig.stencilBits);
 		} else if (index >= 4 && index < uiInfo.numGlInfoLines) {
 			return uiInfo.glInfoLines[index - 4];
-		} else {
-			return "";
 		}
+		return "";
 	} else if (feederID == FEEDER_SERVERS) {
 		if (index >= 0 && index < uiInfo.serverStatus.numDisplayServers) {
 			int ping, antilag, needpass, serverload;
@@ -3748,16 +3732,14 @@ const char *UI_FeederItemText(float feederID, int index, int column, qhandle_t *
 			case SORT_HOST:
 				if (ping <= 0) {
 					return Info_ValueForKey(info, "addr");
-				} else {
-					if (ui_netSource.integer == AS_LOCAL) {
-						Com_sprintf(hostname, sizeof (hostname), "%s [%s]",
-						            Info_ValueForKey(info, "hostname"),
-						            netnames[atoi(Info_ValueForKey(info, "nettype"))]);
-						return hostname;
-					} else {
-						return Info_ValueForKey(info, "hostname");
-					}
 				}
+				if (ui_netSource.integer == AS_LOCAL) {
+					Com_sprintf(hostname, sizeof (hostname), "%s [%s]",
+					            Info_ValueForKey(info, "hostname"),
+					            netnames[atoi(Info_ValueForKey(info, "nettype"))]);
+					return hostname;
+				}
+				return Info_ValueForKey(info, "hostname");
 			case SORT_MAP:
 				return Info_ValueForKey(info, "mapname");
 			case SORT_CLIENTS:
@@ -3766,42 +3748,39 @@ const char *UI_FeederItemText(float feederID, int index, int column, qhandle_t *
 			case SORT_PING:
 				if (ping <= 0) {
 					return "...";
-				} else {
-					serverload = atoi(Info_ValueForKey(info, "serverload"));
-					if (serverload == -1) {
-						Com_sprintf(pingstr, sizeof (pingstr), " %3i", ping);
-					} else if (serverload > 75) {
-						Com_sprintf(pingstr, sizeof (pingstr), "^1 %3i", ping);
-					} else if (serverload > 40) {
-						Com_sprintf(pingstr, sizeof (pingstr), "^3 %3i", ping);
-					} else {
-						Com_sprintf(pingstr, sizeof (pingstr), "^2 %3i", ping);
-					}
-					return pingstr;
 				}
+				serverload = atoi(Info_ValueForKey(info, "serverload"));
+				if (serverload == -1) {
+					Com_sprintf(pingstr, sizeof (pingstr), " %3i", ping);
+				} else if (serverload > 75) {
+					Com_sprintf(pingstr, sizeof (pingstr), "^1 %3i", ping);
+				} else if (serverload > 40) {
+					Com_sprintf(pingstr, sizeof (pingstr), "^3 %3i", ping);
+				} else {
+					Com_sprintf(pingstr, sizeof (pingstr), "^2 %3i", ping);
+				}
+				return pingstr;
 			case SORT_FILTERS:
 				if (ping <= 0) {
 					*numhandles = 0;
 					return "";
-				} else {
-					*numhandles = 3;
-					needpass    = atoi(Info_ValueForKey(info, "needpass"));
-					antilag     = atoi(Info_ValueForKey(info, "g_antilag"));
-
-					if (needpass) {
-						handles[0] = uiInfo.passwordFilter;
-					} else {
-						handles[0] = -1;
-					}
-					handles[1] = -1; // Nico, removed pb
-					if (antilag) {
-						handles[2] = uiInfo.antiLagFilter;
-					} else {
-						handles[2] = -1;
-					}
-
-					return "";
 				}
+				*numhandles = 3;
+				needpass    = atoi(Info_ValueForKey(info, "needpass"));
+				antilag     = atoi(Info_ValueForKey(info, "g_antilag"));
+
+				if (needpass) {
+					handles[0] = uiInfo.passwordFilter;
+				} else {
+					handles[0] = -1;
+				}
+				handles[1] = -1; // Nico, removed pb
+				if (antilag) {
+					handles[2] = uiInfo.antiLagFilter;
+				} else {
+					handles[2] = -1;
+				}
+				return "";
 			case SORT_FAVOURITES:
 				*numhandles = 1;
 
@@ -3814,10 +3793,8 @@ const char *UI_FeederItemText(float feederID, int index, int column, qhandle_t *
 			}
 		}
 	} else if (feederID == FEEDER_SERVERSTATUS) {
-		if (index >= 0 && index < uiInfo.serverStatusInfo.numLines) {
-			if (column >= 0 && column < 4) {
-				return uiInfo.serverStatusInfo.lines[index][column];
-			}
+		if (index >= 0 && index < uiInfo.serverStatusInfo.numLines && column >= 0 && column < 4) {
+			return uiInfo.serverStatusInfo.lines[index][column];
 		}
 	} else if (feederID == FEEDER_FINDPLAYER) {
 		if (index >= 0 && index < uiInfo.numFoundPlayerServers) {
@@ -3836,39 +3813,33 @@ const char *UI_FeederItemText(float feederID, int index, int column, qhandle_t *
 		if (index >= 0 && index < uiInfo.modCount) {
 			if (uiInfo.modList[index].modDescr && *uiInfo.modList[index].modDescr) {
 				return uiInfo.modList[index].modDescr;
-			} else {
-				return uiInfo.modList[index].modName;
 			}
+			return uiInfo.modList[index].modName;
 		}
 	} else if (feederID == FEEDER_DEMOS) {
 		if (index >= 0 && index < uiInfo.demoCount) {
 			return uiInfo.demoList[index];
 		}
-	} else if (feederID == FEEDER_PROFILES) {
-		if (index >= 0 && index < uiInfo.profileCount) {
-			char buff[MAX_CVAR_VALUE_STRING];
+	} else if (feederID == FEEDER_PROFILES && index >= 0 && index < uiInfo.profileCount) {
+		char buff[MAX_CVAR_VALUE_STRING];
 
-			Q_strncpyz(buff, uiInfo.profileList[index].name, sizeof (buff));
-			Q_CleanStr(buff);
-			Q_CleanDirName(buff);
+		Q_strncpyz(buff, uiInfo.profileList[index].name, sizeof (buff));
+		Q_CleanStr(buff);
+		Q_CleanDirName(buff);
 
-			if (!Q_stricmp(buff, cl_profile.string)) {
-				if (!Q_stricmp(buff, cl_defaultProfile.string)) {
-					return(va("^7(Default) %s", uiInfo.profileList[index].name));
-				} else {
-					return(va("^7%s", uiInfo.profileList[index].name));
-				}
-			} else if (!Q_stricmp(buff, cl_defaultProfile.string)) {
-				return(va("(Default) %s", uiInfo.profileList[index].name));
-			} else {
-				return uiInfo.profileList[index].name;
+		if (!Q_stricmp(buff, cl_profile.string)) {
+			if (!Q_stricmp(buff, cl_defaultProfile.string)) {
+				return(va("^7(Default) %s", uiInfo.profileList[index].name));
 			}
+			return va("^7%s", uiInfo.profileList[index].name);
+		} else if (!Q_stricmp(buff, cl_defaultProfile.string)) {
+			return va("(Default) %s", uiInfo.profileList[index].name);
 		}
+		return uiInfo.profileList[index].name;
 	}
 	// -NERVE - SMF
 	return "";
 }
-
 
 static qhandle_t UI_FeederItemImage(float feederID, int index) {
 	if (feederID == FEEDER_ALLMAPS || feederID == FEEDER_MAPS) {
@@ -3912,8 +3883,6 @@ void UI_FeederSelection(float feederID, int index) {
 			ui_currentNetMap.integer = actual;
 			trap_Cvar_Set("ui_currentNetMap", va("%d", actual));
 		}
-	} else if (feederID == FEEDER_GLINFO) {
-		//
 	} else if (feederID == FEEDER_SERVERS) {
 		const char *mapName;
 
@@ -3927,8 +3896,6 @@ void UI_FeederSelection(float feederID, int index) {
 		} else {
 			uiInfo.serverStatus.currentServerPreview = trap_R_RegisterShaderNoMip("levelshots/unknownmap");
 		}
-	} else if (feederID == FEEDER_SERVERSTATUS) {
-		//
 	} else if (feederID == FEEDER_FINDPLAYER) {
 		uiInfo.currentFoundPlayerServer = index;
 		//
@@ -4181,10 +4148,8 @@ void _UI_KeyEvent(int key, qboolean down) {
 				trap_Key_ClearStates();
 			}
 
-			if (cl_bypassMouseInput.integer) {
-				if (!trap_Key_GetCatcher()) {
-					trap_Cvar_Set("cl_bypassMouseInput", 0);
-				}
+			if (cl_bypassMouseInput.integer && !trap_Key_GetCatcher()) {
+				trap_Cvar_Set("cl_bypassMouseInput", 0);
 			}
 
 			bypassKeyClear = qfalse;
@@ -4698,10 +4663,8 @@ static void UI_DoServerRefresh(void) {
 		}
 	}
 
-	if (uiInfo.uiDC.realTime < uiInfo.serverStatus.refreshtime) {
-		if (wait) {
-			return;
-		}
+	if (uiInfo.uiDC.realTime < uiInfo.serverStatus.refreshtime && wait) {
+		return;
 	}
 
 	// if still trying to retrieve pings

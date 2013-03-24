@@ -726,12 +726,10 @@ static qboolean AnimParseAnimConfig(playerInfo_t *animModelInfo, const char *inp
 			continue;
 		}
 
-		if (animModelInfo->version < 2) {
-			// if it is a number, start parsing animations
-			if (token[0] >= '0' && token[0] <= '9') {
-				text_p -= strlen(token);      // unget the token
-				break;
-			}
+		// if it is a number, start parsing animations
+		if (animModelInfo->version < 2 && token[0] >= '0' && token[0] <= '9') {
+			text_p -= strlen(token);      // unget the token
+			break;
 		}
 
 		// STARTANIMS marks the start of the animations
@@ -785,8 +783,6 @@ static qboolean AnimParseAnimConfig(playerInfo_t *animModelInfo, const char *inp
 		animations[i].loopFrames = atoi(token);
 
 		token = COM_ParseExt(&text_p, qfalse);
-		if (!token || !token[0]) {
-		}
 		fps = atof(token);
 		if (fps == 0) {
 			fps = 1;
@@ -1007,11 +1003,9 @@ qboolean UI_RegisterClientModelname(playerInfo_t *pi, const char *modelSkinName)
 	}
 
 	// if any skins failed to load, fall back to default
-	if (!UI_RegisterClientSkin(pi, modelName, skinName)) {
-		if (!UI_RegisterClientSkin(pi, modelName, "default")) {
-			Com_Printf("Failed to load skin file: %s : %s\n", modelName, skinName);
-			return qfalse;
-		}
+	if (!UI_RegisterClientSkin(pi, modelName, skinName) && !UI_RegisterClientSkin(pi, modelName, "default")) {
+		Com_Printf("Failed to load skin file: %s : %s\n", modelName, skinName);
+		return qfalse;
 	}
 
 	// load the animations

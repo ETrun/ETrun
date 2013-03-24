@@ -205,57 +205,56 @@ const char *UI_DownloadInfo(const char *downloadName) {
 		       xferText,
 		       dlSizeBuf);
 		return s;
+	}
+	if ((uiInfo.uiDC.realTime - downloadTime) / 1000) {
+		xferRate = downloadCount / ((uiInfo.uiDC.realTime - downloadTime) / 1000);
 	} else {
-		if ((uiInfo.uiDC.realTime - downloadTime) / 1000) {
-			xferRate = downloadCount / ((uiInfo.uiDC.realTime - downloadTime) / 1000);
-		} else {
-			xferRate = 0;
-		}
-		UI_ReadableSize(xferRateBuf, sizeof xferRateBuf, xferRate);
+		xferRate = 0;
+	}
+	UI_ReadableSize(xferRateBuf, sizeof xferRateBuf, xferRate);
 
-		// Extrapolate estimated completion time
-		if (downloadSize && xferRate) {
-			int n        = downloadSize / xferRate; // estimated time for entire d/l in secs
-			int timeleft = 0, i;
+	// Extrapolate estimated completion time
+	if (downloadSize && xferRate) {
+		int n        = downloadSize / xferRate; // estimated time for entire d/l in secs
+		int timeleft = 0, i;
 
-			// We do it in K (/1024) because we'd overflow around 4MB
-			tleEstimates[tleIndex] = (n - (((downloadCount / 1024) * n) / (downloadSize / 1024)));
-			tleIndex++;
-			if (tleIndex >= ESTIMATES) {
-				tleIndex = 0;
-			}
-
-			for (i = 0; i < ESTIMATES; i++)
-				timeleft += tleEstimates[i];
-
-			timeleft /= ESTIMATES;
-
-			UI_PrintTime(dlTimeBuf, sizeof dlTimeBuf, timeleft);
-		} else {
-			dlTimeBuf[0] = '\0';
+		// We do it in K (/1024) because we'd overflow around 4MB
+		tleEstimates[tleIndex] = (n - (((downloadCount / 1024) * n) / (downloadSize / 1024)));
+		tleIndex++;
+		if (tleIndex >= ESTIMATES) {
+			tleIndex = 0;
 		}
 
-		if (xferRate) {
-			s = va("%s\n %s\n%s\n\n%s\n %s\n\n%s\n %s/sec\n\n%s copied", dlText, ds, totalSizeBuf,
-			       etaText, dlTimeBuf,
-			       xferText, xferRateBuf,
+		for (i = 0; i < ESTIMATES; i++)
+			timeleft += tleEstimates[i];
+
+		timeleft /= ESTIMATES;
+
+		UI_PrintTime(dlTimeBuf, sizeof dlTimeBuf, timeleft);
+	} else {
+		dlTimeBuf[0] = '\0';
+	}
+
+	if (xferRate) {
+		s = va("%s\n %s\n%s\n\n%s\n %s\n\n%s\n %s/sec\n\n%s copied", dlText, ds, totalSizeBuf,
+		       etaText, dlTimeBuf,
+		       xferText, xferRateBuf,
+		       dlSizeBuf);
+	} else {
+		if (downloadSize) {
+			s = va("%s\n %s\n%s\n\n%s\n estimating...\n\n%s\n\n%s copied", dlText, ds, totalSizeBuf,
+			       etaText,
+			       xferText,
 			       dlSizeBuf);
 		} else {
-			if (downloadSize) {
-				s = va("%s\n %s\n%s\n\n%s\n estimating...\n\n%s\n\n%s copied", dlText, ds, totalSizeBuf,
-				       etaText,
-				       xferText,
-				       dlSizeBuf);
-			} else {
-				s = va("%s\n %s\n\n%s\n estimating...\n\n%s\n\n%s copied", dlText, ds,
-				       etaText,
-				       xferText,
-				       dlSizeBuf);
-			}
+			s = va("%s\n %s\n\n%s\n estimating...\n\n%s\n\n%s copied", dlText, ds,
+			       etaText,
+			       xferText,
+			       dlSizeBuf);
 		}
-
-		return s;
 	}
+
+	return s;
 }
 
 void UI_LoadPanel_RenderLoadingText(panel_button_t *button) {
