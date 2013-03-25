@@ -323,9 +323,8 @@ qboolean Float_Parse(char **p, float *f) {
 	if (token && token[0] != 0) {
 		*f = atof(token);
 		return qtrue;
-	} else {
-		return qfalse;
 	}
+	return qfalse;
 }
 
 /*
@@ -359,9 +358,8 @@ qboolean Int_Parse(char **p, int *i) {
 	if (token && token[0] != 0) {
 		*i = atoi(token);
 		return qtrue;
-	} else {
-		return qfalse;
 	}
+	return qfalse;
 }
 
 /*
@@ -370,14 +368,11 @@ Rect_Parse
 =================
 */
 qboolean Rect_Parse(char **p, rectDef_t *r) {
-	if (Float_Parse(p, &r->x)) {
-		if (Float_Parse(p, &r->y)) {
-			if (Float_Parse(p, &r->w)) {
-				if (Float_Parse(p, &r->h)) {
-					return qtrue;
-				}
-			}
-		}
+	if (Float_Parse(p, &r->x) &&
+		Float_Parse(p, &r->y) &&
+		Float_Parse(p, &r->w) &&
+		Float_Parse(p, &r->h)) {
+		return qtrue;
 	}
 	return qfalse;
 }
@@ -497,21 +492,19 @@ void Window_Init(Window *w) {
 }
 
 void Fade(int *flags, float *f, float clamp, int *nextTime, int offsetTime, qboolean bFlags, float fadeAmount) {
-	if (*flags & (WINDOW_FADINGOUT | WINDOW_FADINGIN)) {
-		if (DC->realTime > *nextTime) {
-			*nextTime = DC->realTime + offsetTime;
-			if (*flags & WINDOW_FADINGOUT) {
-				*f -= fadeAmount;
-				if (bFlags && *f <= 0.0) {
-					*flags &= ~(WINDOW_FADINGOUT | WINDOW_VISIBLE);
-				}
-			} else {
-				*f += fadeAmount;
-				if (*f >= clamp) {
-					*f = clamp;
-					if (bFlags) {
-						*flags &= ~WINDOW_FADINGIN;
-					}
+	if ((*flags & (WINDOW_FADINGOUT | WINDOW_FADINGIN)) && DC->realTime > *nextTime) {
+		*nextTime = DC->realTime + offsetTime;
+		if (*flags & WINDOW_FADINGOUT) {
+			*f -= fadeAmount;
+			if (bFlags && *f <= 0.0) {
+				*flags &= ~(WINDOW_FADINGOUT | WINDOW_VISIBLE);
+			}
+		} else {
+			*f += fadeAmount;
+			if (*f >= clamp) {
+				*f = clamp;
+				if (bFlags) {
+					*flags &= ~WINDOW_FADINGIN;
 				}
 			}
 		}
@@ -710,14 +703,16 @@ itemDef_t *Menu_ClearFocus(menuDef_t *menu) {
 }
 
 qboolean IsVisible(int flags) {
-	return (flags & WINDOW_VISIBLE && !(flags & WINDOW_FADINGOUT));
+	return flags & WINDOW_VISIBLE && !(flags & WINDOW_FADINGOUT);
 }
 
 qboolean Rect_ContainsPoint(rectDef_t *rect, float x, float y) {
-	if (rect) {
-		if (x > rect->x && x < rect->x + rect->w && y > rect->y && y < rect->y + rect->h) {
-			return qtrue;
-		}
+	if (rect &&
+		x > rect->x &&
+		x < rect->x + rect->w &&
+		y > rect->y &&
+		y < rect->y + rect->h) {
+		return qtrue;
 	}
 	return qfalse;
 }
@@ -814,17 +809,10 @@ void Script_SetColor(itemDef_t *item, qboolean *bAbort, char **args) {
 }
 
 void Script_SetAsset(itemDef_t *item, qboolean *bAbort, char **args) {
-	const char *name;
-
 	// Nico, silent GCC
+	(void)item;
 	(void)bAbort;
-
-	// expecting name to set asset to
-	if (String_Parse(args, &name)) {
-		// check for a model
-		if (item->type == ITEM_TYPE_MODEL) {
-		}
-	}
+	(void)args;
 }
 
 void Script_SetBackground(itemDef_t *item, qboolean *bAbort, char **args) {
@@ -838,9 +826,6 @@ void Script_SetBackground(itemDef_t *item, qboolean *bAbort, char **args) {
 		item->window.background = DC->registerShaderNoMip(name);
 	}
 }
-
-
-
 
 itemDef_t *Menu_FindItemByName(menuDef_t *menu, const char *p) {
 	int i;
@@ -1528,7 +1513,6 @@ void Menu_TransitionItemByName(menuDef_t *menu, const char *p, rectDef_t rectFro
 	}
 }
 
-
 void Script_Transition(itemDef_t *item, qboolean *bAbort, char **args) {
 	const char *name = NULL;
 	rectDef_t  rectFrom, rectTo;
@@ -1538,13 +1522,14 @@ void Script_Transition(itemDef_t *item, qboolean *bAbort, char **args) {
 	// Nico, silent GCC
 	(void)bAbort;
 
-	if (String_Parse(args, &name)) {
-		if (Rect_Parse(args, &rectFrom) && Rect_Parse(args, &rectTo) && Int_Parse(args, &time) && Float_Parse(args, &amt)) {
-			Menu_TransitionItemByName(item->parent, name, rectFrom, rectTo, time, amt);
-		}
+	if (String_Parse(args, &name) &&
+		Rect_Parse(args, &rectFrom) &&
+		Rect_Parse(args, &rectTo) &&
+		Int_Parse(args, &time) &&
+		Float_Parse(args, &amt)) {
+		Menu_TransitionItemByName(item->parent, name, rectFrom, rectTo, time, amt);
 	}
 }
-
 
 void Menu_OrbitItemByName(menuDef_t *menu, const char *p, float x, float y, float cx, float cy, int time) {
 	itemDef_t *item;
@@ -1565,7 +1550,6 @@ void Menu_OrbitItemByName(menuDef_t *menu, const char *p, float x, float y, floa
 	}
 }
 
-
 void Script_Orbit(itemDef_t *item, qboolean *bAbort, char **args) {
 	const char *name = NULL;
 	float      cx    = 0.0f, cy = 0.0f, x = 0.0f, y = 0.0f;
@@ -1574,14 +1558,15 @@ void Script_Orbit(itemDef_t *item, qboolean *bAbort, char **args) {
 	// Nico, silent GCC
 	(void)bAbort;
 
-	if (String_Parse(args, &name)) {
-		if (Float_Parse(args, &x) && Float_Parse(args, &y) && Float_Parse(args, &cx) && Float_Parse(args, &cy) && Int_Parse(args, &time)) {
-			Menu_OrbitItemByName(item->parent, name, x, y, cx, cy, time);
-		}
+	if (String_Parse(args, &name) &&
+		Float_Parse(args, &x) &&
+		Float_Parse(args, &y) &&
+		Float_Parse(args, &cx) &&
+		Float_Parse(args, &cy) &&
+		Int_Parse(args, &time)) {
+		Menu_OrbitItemByName(item->parent, name, x, y, cx, cy, time);
 	}
 }
-
-
 
 void Script_SetFocus(itemDef_t *item, qboolean *bAbort, char **args) {
 	const char *name = NULL;
@@ -1772,10 +1757,9 @@ qboolean FileExists(char *filename) {
 	if (trap_FS_FOpenFile(filename, &f, FS_READ) < 0) {
 		trap_FS_FCloseFile(f);
 		return qfalse;
-	} else {
-		trap_FS_FCloseFile(f);
-		return qtrue;
 	}
+	trap_FS_FCloseFile(f);
+	return qtrue;
 }
 
 qboolean Script_CheckProfile(char *profile_path) {
@@ -2177,17 +2161,16 @@ int Item_ListBox_ThumbPosition(itemDef_t *item) {
 		}
 		pos *= listPtr->startPos;
 		return item->window.rect.x + 1 + SCROLLBAR_SIZE + pos;
-	} else {
-		size = item->window.rect.h - (SCROLLBAR_SIZE * 2) - 2;
-		if (max > 0) {
-			pos = (size - SCROLLBAR_SIZE) / (float) max;
-		} else {
-			pos = 0;
-		}
-		pos *= listPtr->startPos;
-
-		return item->window.rect.y + 1 + SCROLLBAR_SIZE + pos;
 	}
+	size = item->window.rect.h - (SCROLLBAR_SIZE * 2) - 2;
+	if (max > 0) {
+		pos = (size - SCROLLBAR_SIZE) / (float) max;
+	} else {
+		pos = 0;
+	}
+	pos *= listPtr->startPos;
+
+	return item->window.rect.y + 1 + SCROLLBAR_SIZE + pos;
 }
 
 int Item_ListBox_ThumbDrawPosition(itemDef_t *item) {
@@ -2199,21 +2182,16 @@ int Item_ListBox_ThumbDrawPosition(itemDef_t *item) {
 			max = item->window.rect.x + item->window.rect.w - 2 * SCROLLBAR_SIZE - 1;
 			if (DC->cursorx >= min + SCROLLBAR_SIZE / 2 && DC->cursorx <= max + SCROLLBAR_SIZE / 2) {
 				return DC->cursorx - SCROLLBAR_SIZE / 2;
-			} else {
-				return Item_ListBox_ThumbPosition(item);
 			}
 		} else {
 			min = item->window.rect.y + SCROLLBAR_SIZE + 1;
 			max = item->window.rect.y + item->window.rect.h - 2 * SCROLLBAR_SIZE - 1;
 			if (DC->cursory >= min + SCROLLBAR_SIZE / 2 && DC->cursory <= max + SCROLLBAR_SIZE / 2) {
 				return DC->cursory - SCROLLBAR_SIZE / 2;
-			} else {
-				return Item_ListBox_ThumbPosition(item);
 			}
 		}
-	} else {
-		return Item_ListBox_ThumbPosition(item);
 	}
+	return Item_ListBox_ThumbPosition(item);
 }
 
 float Item_Slider_ThumbPosition(itemDef_t *item) {
@@ -2339,7 +2317,6 @@ int Item_ListBox_OverLB(itemDef_t *item, float x, float y) {
 	return 0;
 }
 
-
 void Item_ListBox_MouseEnter(itemDef_t *item, float x, float y, qboolean click) {
 	rectDef_t    r;
 	listBoxDef_t *listPtr = (listBoxDef_t *)item->typeData;
@@ -2349,21 +2326,17 @@ void Item_ListBox_MouseEnter(itemDef_t *item, float x, float y, qboolean click) 
 
 	if (click) {
 		if (item->window.flags & WINDOW_HORIZONTAL) {
-			if (!(item->window.flags & (WINDOW_LB_LEFTARROW | WINDOW_LB_RIGHTARROW | WINDOW_LB_THUMB | WINDOW_LB_PGUP | WINDOW_LB_PGDN | WINDOW_LB_SOMEWHERE))) {
-				// check for selection hit as we have exausted buttons and thumb
-				if (listPtr->elementStyle == LISTBOX_IMAGE) {
-					r.x = item->window.rect.x;
-					r.y = item->window.rect.y;
-					r.h = item->window.rect.h - SCROLLBAR_SIZE;
-					r.w = item->window.rect.w - listPtr->drawPadding;
-					if (Rect_ContainsPoint(&r, x, y)) {
-						listPtr->cursorPos = (int)((x - r.x) / listPtr->elementWidth)  + listPtr->startPos;
-						if (listPtr->cursorPos >= listPtr->endPos) {
-							listPtr->cursorPos = listPtr->endPos;
-						}
+			if (!(item->window.flags & (WINDOW_LB_LEFTARROW | WINDOW_LB_RIGHTARROW | WINDOW_LB_THUMB | WINDOW_LB_PGUP | WINDOW_LB_PGDN | WINDOW_LB_SOMEWHERE)) &&
+				listPtr->elementStyle == LISTBOX_IMAGE) {
+				r.x = item->window.rect.x;
+				r.y = item->window.rect.y;
+				r.h = item->window.rect.h - SCROLLBAR_SIZE;
+				r.w = item->window.rect.w - listPtr->drawPadding;
+				if (Rect_ContainsPoint(&r, x, y)) {
+					listPtr->cursorPos = (int)((x - r.x) / listPtr->elementWidth)  + listPtr->startPos;
+					if (listPtr->cursorPos >= listPtr->endPos) {
+						listPtr->cursorPos = listPtr->endPos;
 					}
-				} else {
-					// text hit..
 				}
 			}
 		} else if (!(item->window.flags & (WINDOW_LB_LEFTARROW | WINDOW_LB_RIGHTARROW | WINDOW_LB_THUMB | WINDOW_LB_PGUP | WINDOW_LB_PGDN | WINDOW_LB_SOMEWHERE))) {
@@ -2691,37 +2664,38 @@ qboolean Item_ListBox_HandleKey(itemDef_t *item, int key, qboolean force) {
 }
 
 qboolean Item_CheckBox_HandleKey(itemDef_t *item, int key) {
-	if (Rect_ContainsPoint(&item->window.rect, DC->cursorx, DC->cursory) && item->window.flags & WINDOW_HASFOCUS && item->cvar) {
-		if (key == K_MOUSE1 || key == K_ENTER || key == K_MOUSE2 || key == K_MOUSE3) {
-			// ATVI Wolfenstein Misc #462
-			// added the flag to toggle via action script only
-			if (!(item->cvarFlags & CVAR_NOTOGGLE)) {
-				if (item->type == ITEM_TYPE_TRICHECKBOX) {
-					int curvalue = DC->getCVarValue(item->cvar) + 1;
-					if (curvalue > 2) {
-						curvalue = 0;
-					}
-					DC->setCVar(item->cvar, va("%i", curvalue));
-				} else {
-					DC->setCVar(item->cvar, va("%i", !DC->getCVarValue(item->cvar)));
+	if (Rect_ContainsPoint(&item->window.rect, DC->cursorx, DC->cursory) &&
+		item->window.flags & WINDOW_HASFOCUS &&
+		item->cvar && (key == K_MOUSE1 || key == K_ENTER || key == K_MOUSE2 || key == K_MOUSE3)) {
+		// ATVI Wolfenstein Misc #462
+		// added the flag to toggle via action script only
+		if (!(item->cvarFlags & CVAR_NOTOGGLE)) {
+			if (item->type == ITEM_TYPE_TRICHECKBOX) {
+				int curvalue = DC->getCVarValue(item->cvar) + 1;
+				if (curvalue > 2) {
+					curvalue = 0;
 				}
+				DC->setCVar(item->cvar, va("%i", curvalue));
+			} else {
+				DC->setCVar(item->cvar, va("%i", !DC->getCVarValue(item->cvar)));
 			}
-			return qtrue;
 		}
+		return qtrue;
 	}
 	return qfalse;
 }
 
 qboolean Item_YesNo_HandleKey(itemDef_t *item, int key) {
-	if (Rect_ContainsPoint(&item->window.rect, DC->cursorx, DC->cursory) && item->window.flags & WINDOW_HASFOCUS && item->cvar) {
-		if (key == K_MOUSE1 || key == K_ENTER || key == K_MOUSE2 || key == K_MOUSE3) {
-			// ATVI Wolfenstein Misc #462
-			// added the flag to toggle via action script only
-			if (!(item->cvarFlags & CVAR_NOTOGGLE)) {
-				DC->setCVar(item->cvar, va("%i", !DC->getCVarValue(item->cvar)));
-			}
-			return qtrue;
+	if (Rect_ContainsPoint(&item->window.rect, DC->cursorx, DC->cursory) &&
+		item->window.flags & WINDOW_HASFOCUS &&
+		item->cvar &&
+		(key == K_MOUSE1 || key == K_ENTER || key == K_MOUSE2 || key == K_MOUSE3)) {
+		// ATVI Wolfenstein Misc #462
+		// added the flag to toggle via action script only
+		if (!(item->cvarFlags & CVAR_NOTOGGLE)) {
+			DC->setCVar(item->cvar, va("%i", !DC->getCVarValue(item->cvar)));
 		}
+		return qtrue;
 	}
 	return qfalse;
 }
@@ -2788,44 +2762,43 @@ const char *Item_Multi_Setting(itemDef_t *item) {
 	}
 	if (multiPtr->undefinedStr) {
 		return multiPtr->undefinedStr;
-	} else {
-		return((multiPtr->count == 0) ? "None Defined" : "Custom");
 	}
+	return (multiPtr->count == 0) ? "None Defined" : "Custom";
 }
 
 qboolean Item_Multi_HandleKey(itemDef_t *item, int key) {
 	multiDef_t *multiPtr = (multiDef_t *)item->typeData;
 
-	if (multiPtr) {
-		if (Rect_ContainsPoint(&item->window.rect, DC->cursorx, DC->cursory) && item->window.flags & WINDOW_HASFOCUS && item->cvar) {
-			if (key == K_MOUSE1 || key == K_ENTER || key == K_MOUSE2 || key == K_MOUSE3) {
-				int current = Item_Multi_FindCvarByValue(item);
-				int max     = Item_Multi_CountSettings(item);
+	if (multiPtr &&
+		Rect_ContainsPoint(&item->window.rect, DC->cursorx, DC->cursory) &&
+		item->window.flags & WINDOW_HASFOCUS &&
+		item->cvar &&
+		(key == K_MOUSE1 || key == K_ENTER || key == K_MOUSE2 || key == K_MOUSE3)) {
+		int current = Item_Multi_FindCvarByValue(item);
+		int max     = Item_Multi_CountSettings(item);
 
-				if (key == K_MOUSE2) {
-					current--;
-				} else {
-					current++;
-				}
+		if (key == K_MOUSE2) {
+			current--;
+		} else {
+			current++;
+		}
 
-				if (current < 0) {
-					current = max - 1;
-				} else if (current >= max) {
-					current = 0;
-				}
-				if (multiPtr->strDef) {
-					DC->setCVar(item->cvar, multiPtr->cvarStr[current]);
-				} else {
-					float value = multiPtr->cvarValue[current];
-					if (((float)((int) value)) == value) {
-						DC->setCVar(item->cvar, va("%i", (int) value));
-					} else {
-						DC->setCVar(item->cvar, va("%f", value));
-					}
-				}
-				return qtrue;
+		if (current < 0) {
+			current = max - 1;
+		} else if (current >= max) {
+			current = 0;
+		}
+		if (multiPtr->strDef) {
+			DC->setCVar(item->cvar, multiPtr->cvarStr[current]);
+		} else {
+			float value = multiPtr->cvarValue[current];
+			if (((float)((int) value)) == value) {
+				DC->setCVar(item->cvar, va("%i", (int) value));
+			} else {
+				DC->setCVar(item->cvar, va("%f", value));
 			}
 		}
+		return qtrue;
 	}
 	return qfalse;
 }
@@ -2877,10 +2850,9 @@ qboolean Item_TextField_HandleKey(itemDef_t *item, int key) {
 				return qtrue;
 			}
 
-			if (item->type == ITEM_TYPE_NUMERICFIELD) {
-				if ((key < '0' || key > '9') && key != '.') {
-					return qfalse;
-				}
+			if (item->type == ITEM_TYPE_NUMERICFIELD &&
+				((key < '0' || key > '9') && key != '.')) {
+				return qfalse;
 			}
 
 			if (DC->getOverstrikeMode && !DC->getOverstrikeMode()) {
@@ -2973,10 +2945,8 @@ qboolean Item_TextField_HandleKey(itemDef_t *item, int key) {
 		}
 
 		// NERVE - SMF
-		if (key == K_ENTER || key == K_KP_ENTER) {
-			if (item->onAccept) {
-				Item_RunScript(item, NULL, item->onAccept);
-			}
+		if ((key == K_ENTER || key == K_KP_ENTER) && item->onAccept) {
+			Item_RunScript(item, NULL, item->onAccept);
 		}
 		// -NERVE - SMF
 
@@ -3146,37 +3116,37 @@ void Item_StartCapture(itemDef_t *item, int key) {
 qboolean Item_Slider_HandleKey(itemDef_t *item, int key) {
 	float x, value, width, work;
 
-	if (item->window.flags & WINDOW_HASFOCUS && item->cvar && Rect_ContainsPoint(&item->window.rect, DC->cursorx, DC->cursory)) {
-		if (key == K_MOUSE1 || key == K_ENTER || key == K_MOUSE2 || key == K_MOUSE3) {
-			editFieldDef_t *editDef = item->typeData;
-			if (editDef) {
-				rectDef_t testRect;
-				width = SLIDER_WIDTH;
-				if (item->text) {
-					x = item->textRect.x + item->textRect.w + 8;
-				} else {
-					x = item->window.rect.x;
-				}
+	if (item->window.flags & WINDOW_HASFOCUS &&
+		item->cvar &&
+		Rect_ContainsPoint(&item->window.rect, DC->cursorx, DC->cursory) &&
+		(key == K_MOUSE1 || key == K_ENTER || key == K_MOUSE2 || key == K_MOUSE3)) {
+		editFieldDef_t *editDef = item->typeData;
+		if (editDef) {
+			rectDef_t testRect;
+			width = SLIDER_WIDTH;
+			if (item->text) {
+				x = item->textRect.x + item->textRect.w + 8;
+			} else {
+				x = item->window.rect.x;
+			}
 
-				testRect    = item->window.rect;
-				testRect.x  = x;
-				value       = (float)SLIDER_THUMB_WIDTH / 2;
-				testRect.x -= value;
-				testRect.w  = (SLIDER_WIDTH + (float)SLIDER_THUMB_WIDTH / 2);
-				if (Rect_ContainsPoint(&testRect, DC->cursorx, DC->cursory)) {
-					work   = DC->cursorx - x;
-					value  = work / width;
-					value *= (editDef->maxVal - editDef->minVal);
-					value += editDef->minVal;
-					DC->setCVar(item->cvar, va("%f", value));
-					return qtrue;
-				}
+			testRect    = item->window.rect;
+			testRect.x  = x;
+			value       = (float)SLIDER_THUMB_WIDTH / 2;
+			testRect.x -= value;
+			testRect.w  = (SLIDER_WIDTH + (float)SLIDER_THUMB_WIDTH / 2);
+			if (Rect_ContainsPoint(&testRect, DC->cursorx, DC->cursory)) {
+				work   = DC->cursorx - x;
+				value  = work / width;
+				value *= (editDef->maxVal - editDef->minVal);
+				value += editDef->minVal;
+				DC->setCVar(item->cvar, va("%f", value));
+				return qtrue;
 			}
 		}
 	}
 	return qfalse;
 }
-
 
 qboolean Item_HandleKey(itemDef_t *item, int key, qboolean down) {
 	int realKey;
@@ -3343,9 +3313,8 @@ void  Menus_Activate(menuDef_t *menu) {
 qboolean Menus_CaptureFuncActive(void) {
 	if (captureFunc) {
 		return qtrue;
-	} else {
-		return qfalse;
 	}
+	return qfalse;
 }
 
 int Display_VisibleMenuCount() {
@@ -3381,10 +3350,8 @@ void Menus_HandleOOBClick(menuDef_t *menu, int key, qboolean down) {
 			}
 		}
 
-		if (Display_VisibleMenuCount() == 0) {
-			if (DC->Pause) {
-				DC->Pause(qfalse);
-			}
+		if (Display_VisibleMenuCount() == 0 && DC->Pause) {
+			DC->Pause(qfalse);
 		}
 	}
 }
@@ -3458,11 +3425,9 @@ void Menu_HandleKey(menuDef_t *menu, int key, qboolean down) {
 		}
 	}
 
-	if (item != NULL) {
-		if (Item_HandleKey(item, key, down)) {
-			Item_Action(item);
-			return;
-		}
+	if (item != NULL && Item_HandleKey(item, key, down)) {
+		Item_Action(item);
+		return;
 	}
 
 	if (!down) {
@@ -3686,10 +3651,13 @@ void Item_TextColor(itemDef_t *item, vec4_t *newColor) {
 		// items can be enabled and disabled based on cvars
 	}
 
-	if (item->enableCvar && *item->enableCvar && item->cvarTest && *item->cvarTest) {
-		if (item->cvarFlags & (CVAR_ENABLE | CVAR_DISABLE) && !Item_EnableShowViaCvar(item, CVAR_ENABLE)) {
-			memcpy(newColor, &parent->disableColor, sizeof (vec4_t));
-		}
+	if (item->enableCvar &&
+		*item->enableCvar &&
+		item->cvarTest &&
+		*item->cvarTest &&
+		item->cvarFlags & (CVAR_ENABLE | CVAR_DISABLE) &&
+		!Item_EnableShowViaCvar(item, CVAR_ENABLE)) {
+		memcpy(newColor, &parent->disableColor, sizeof (vec4_t));
 	}
 }
 
@@ -3708,10 +3676,9 @@ void Item_Text_AutoWrapped_Paint(itemDef_t *item) {
 	if (item->text == NULL) {
 		if (item->cvar == NULL) {
 			return;
-		} else {
-			DC->getCVarString(item->cvar, text, sizeof (text));
-			textPtr = text;
 		}
+		DC->getCVarString(item->cvar, text, sizeof (text));
+		textPtr = text;
 	} else {
 		textPtr = item->text;
 	}
@@ -3791,10 +3758,9 @@ void Item_Text_Wrapped_Paint(itemDef_t *item) {
 	if (item->text == NULL) {
 		if (item->cvar == NULL) {
 			return;
-		} else {
-			DC->getCVarString(item->cvar, text, sizeof (text));
-			textPtr = text;
 		}
+		DC->getCVarString(item->cvar, text, sizeof (text));
+		textPtr = text;
 	} else {
 		textPtr = item->text;
 	}
@@ -3840,18 +3806,17 @@ void Item_Text_Paint(itemDef_t *item) {
 	if (item->text == NULL) {
 		if (item->cvar == NULL) {
 			return;
-		} else {
-			DC->getCVarString(item->cvar, text, sizeof (text));
-			if (item->window.flags & WINDOW_TEXTASINT) {
-				COM_StripExtension(text, text);
-				item->textRect.w = 0;   // force recalculation
-			} else if (item->window.flags & WINDOW_TEXTASFLOAT) {
-				char *s = va("%.2f", atof(text));
-				Q_strncpyz(text, s, sizeof (text));
-				item->textRect.w = 0;   // force recalculation
-			}
-			textPtr = text;
 		}
+		DC->getCVarString(item->cvar, text, sizeof (text));
+		if (item->window.flags & WINDOW_TEXTASINT) {
+			COM_StripExtension(text, text);
+			item->textRect.w = 0;   // force recalculation
+		} else if (item->window.flags & WINDOW_TEXTASFLOAT) {
+			char *s = va("%.2f", atof(text));
+			Q_strncpyz(text, s, sizeof (text));
+			item->textRect.w = 0;   // force recalculation
+		}
+		textPtr = text;
 	} else {
 		textPtr = item->text;
 	}
@@ -4323,38 +4288,36 @@ qboolean Item_Bind_HandleKey(itemDef_t *item, int key, qboolean down) {
 			g_waitingForKey = qtrue;
 			g_bindItem      = item;
 			return qtrue;
-		} else {
-			return qfalse;
 		}
-	} else {
-		if (!g_waitingForKey || g_bindItem == NULL) {
-			return qfalse;
+		return qfalse;
+	}
+	if (!g_waitingForKey || g_bindItem == NULL) {
+		return qfalse;
+	}
+
+	if (key & K_CHAR_FLAG) {
+		return qtrue;
+	}
+
+	switch (key) {
+	case K_ESCAPE:
+		g_waitingForKey = qfalse;
+		g_bindItem      = NULL;
+		return qtrue;
+
+	case K_BACKSPACE:
+		id = BindingIDFromName(item->cvar);
+		if (id != -1) {
+			g_bindings[id].bind1 = -1;
+			g_bindings[id].bind2 = -1;
 		}
+		Controls_SetConfig(qtrue);
+		g_waitingForKey = qfalse;
+		g_bindItem      = NULL;
+		return qtrue;
 
-		if (key & K_CHAR_FLAG) {
-			return qtrue;
-		}
-
-		switch (key) {
-		case K_ESCAPE:
-			g_waitingForKey = qfalse;
-			g_bindItem      = NULL;
-			return qtrue;
-
-		case K_BACKSPACE:
-			id = BindingIDFromName(item->cvar);
-			if (id != -1) {
-				g_bindings[id].bind1 = -1;
-				g_bindings[id].bind2 = -1;
-			}
-			Controls_SetConfig(qtrue);
-			g_waitingForKey = qfalse;
-			g_bindItem      = NULL;
-			return qtrue;
-
-		case '`':
-			return qtrue;
-		}
+	case '`':
+		return qtrue;
 	}
 
 	if (key != -1) {
@@ -4414,7 +4377,7 @@ void AdjustFrom640(float *x, float *y, float *w, float *h) {
 }
 
 void Item_Model_Paint(itemDef_t *item) {
-	float       x, y, w, h;
+	float       x, y, w, h, len;
 	refdef_t    refdef;
 	qhandle_t   hModel;
 	refEntity_t ent;
@@ -4455,12 +4418,8 @@ void Item_Model_Paint(itemDef_t *item) {
 	origin[1] = 0.5 * (mins[1] + maxs[1]);
 
 	// calculate distance so the model nearly fills the box
-	if (qtrue) {
-		float len = 0.5 * (maxs[2] - mins[2]);
-		origin[0] = len / 0.268;
-	} else {
-		origin[0] = item->textscale;
-	}
+	len = 0.5 * (maxs[2] - mins[2]);
+	origin[0] = len / 0.268;
 
 	refdef.fov_x = (modelPtr->fov_x) ? modelPtr->fov_x : w;
 	refdef.fov_y = (modelPtr->fov_y) ? modelPtr->fov_y : h;
@@ -4474,11 +4433,9 @@ void Item_Model_Paint(itemDef_t *item) {
 	memset(&ent, 0, sizeof (ent));
 
 	// use item storage to track
-	if (modelPtr->rotationSpeed) {
-		if (DC->realTime > item->window.nextTime) {
-			item->window.nextTime = DC->realTime + modelPtr->rotationSpeed;
-			modelPtr->angle       = (int)(modelPtr->angle + 1) % 360;
-		}
+	if (modelPtr->rotationSpeed && DC->realTime > item->window.nextTime) {
+		item->window.nextTime = DC->realTime + modelPtr->rotationSpeed;
+		modelPtr->angle       = (int)(modelPtr->angle + 1) % 360;
 	}
 	VectorSet(angles, 0, modelPtr->angle, 0);
 	AnglesToAxis(angles, ent.axis);
@@ -4657,8 +4614,7 @@ void Item_ListBox_Paint(itemDef_t *item) {
 					}
 				} else {
 					text = DC->feederItemText(item->special, i, 0, optionalImages, &numOptionalImages);
-					if (numOptionalImages >= 0) {
-					} else if (text) {
+					if (numOptionalImages < 0 && text) {
 						DC->drawText(x + 4 + item->textalignx, y + listPtr->elementHeight + item->textaligny, item->textscale, item->window.foreColor, text, 0, 0, item->textStyle);
 					}
 				}
@@ -4678,7 +4634,6 @@ void Item_ListBox_Paint(itemDef_t *item) {
 		}
 	}
 }
-
 
 void Item_OwnerDraw_Paint(itemDef_t *item) {
 	menuDef_t *parent;
@@ -4740,107 +4695,100 @@ void Item_Paint(itemDef_t *item) {
 		DC->textFont(item->font);
 	}
 
-	if (item->window.flags & WINDOW_ORBITING) {
-		if (DC->realTime > item->window.nextTime) {
-			float rx, ry, a, c, s, w, h;
+	if (item->window.flags & WINDOW_ORBITING && DC->realTime > item->window.nextTime) {
+		float rx, ry, a, c, s, w, h;
 
-			item->window.nextTime = DC->realTime + item->window.offsetTime;
-			// translate
-			w                         = item->window.rectClient.w / 2;
-			h                         = item->window.rectClient.h / 2;
-			rx                        = item->window.rectClient.x + w - item->window.rectEffects.x;
-			ry                        = item->window.rectClient.y + h - item->window.rectEffects.y;
-			a                         = 3 * M_PI / 180;
-			c                         = cos(a);
-			s                         = sin(a);
-			item->window.rectClient.x = (rx * c - ry * s) + item->window.rectEffects.x - w;
-			item->window.rectClient.y = (rx * s + ry * c) + item->window.rectEffects.y - h;
-			Item_UpdatePosition(item);
-
-		}
+		item->window.nextTime = DC->realTime + item->window.offsetTime;
+		// translate
+		w                         = item->window.rectClient.w / 2;
+		h                         = item->window.rectClient.h / 2;
+		rx                        = item->window.rectClient.x + w - item->window.rectEffects.x;
+		ry                        = item->window.rectClient.y + h - item->window.rectEffects.y;
+		a                         = 3 * M_PI / 180;
+		c                         = cos(a);
+		s                         = sin(a);
+		item->window.rectClient.x = (rx * c - ry * s) + item->window.rectEffects.x - w;
+		item->window.rectClient.y = (rx * s + ry * c) + item->window.rectEffects.y - h;
+		Item_UpdatePosition(item);
 	}
 
-
-	if (item->window.flags & WINDOW_INTRANSITION) {
-		if (DC->realTime > item->window.nextTime) {
-			int done = 0;
-			item->window.nextTime = DC->realTime + item->window.offsetTime;
-			// transition the x,y
-			if (item->window.rectClient.x == item->window.rectEffects.x) {
-				done++;
+	if (item->window.flags & WINDOW_INTRANSITION && DC->realTime > item->window.nextTime) {
+		int done = 0;
+		item->window.nextTime = DC->realTime + item->window.offsetTime;
+		// transition the x,y
+		if (item->window.rectClient.x == item->window.rectEffects.x) {
+			done++;
+		} else {
+			if (item->window.rectClient.x < item->window.rectEffects.x) {
+				item->window.rectClient.x += item->window.rectEffects2.x;
+				if (item->window.rectClient.x > item->window.rectEffects.x) {
+					item->window.rectClient.x = item->window.rectEffects.x;
+					done++;
+				}
 			} else {
+				item->window.rectClient.x -= item->window.rectEffects2.x;
 				if (item->window.rectClient.x < item->window.rectEffects.x) {
-					item->window.rectClient.x += item->window.rectEffects2.x;
-					if (item->window.rectClient.x > item->window.rectEffects.x) {
-						item->window.rectClient.x = item->window.rectEffects.x;
-						done++;
-					}
-				} else {
-					item->window.rectClient.x -= item->window.rectEffects2.x;
-					if (item->window.rectClient.x < item->window.rectEffects.x) {
-						item->window.rectClient.x = item->window.rectEffects.x;
-						done++;
-					}
+					item->window.rectClient.x = item->window.rectEffects.x;
+					done++;
 				}
 			}
-			if (item->window.rectClient.y == item->window.rectEffects.y) {
-				done++;
+		}
+		if (item->window.rectClient.y == item->window.rectEffects.y) {
+			done++;
+		} else {
+			if (item->window.rectClient.y < item->window.rectEffects.y) {
+				item->window.rectClient.y += item->window.rectEffects2.y;
+				if (item->window.rectClient.y > item->window.rectEffects.y) {
+					item->window.rectClient.y = item->window.rectEffects.y;
+					done++;
+				}
 			} else {
+				item->window.rectClient.y -= item->window.rectEffects2.y;
 				if (item->window.rectClient.y < item->window.rectEffects.y) {
-					item->window.rectClient.y += item->window.rectEffects2.y;
-					if (item->window.rectClient.y > item->window.rectEffects.y) {
-						item->window.rectClient.y = item->window.rectEffects.y;
-						done++;
-					}
-				} else {
-					item->window.rectClient.y -= item->window.rectEffects2.y;
-					if (item->window.rectClient.y < item->window.rectEffects.y) {
-						item->window.rectClient.y = item->window.rectEffects.y;
-						done++;
-					}
+					item->window.rectClient.y = item->window.rectEffects.y;
+					done++;
 				}
 			}
-			if (item->window.rectClient.w == item->window.rectEffects.w) {
-				done++;
+		}
+		if (item->window.rectClient.w == item->window.rectEffects.w) {
+			done++;
+		} else {
+			if (item->window.rectClient.w < item->window.rectEffects.w) {
+				item->window.rectClient.w += item->window.rectEffects2.w;
+				if (item->window.rectClient.w > item->window.rectEffects.w) {
+					item->window.rectClient.w = item->window.rectEffects.w;
+					done++;
+				}
 			} else {
+				item->window.rectClient.w -= item->window.rectEffects2.w;
 				if (item->window.rectClient.w < item->window.rectEffects.w) {
-					item->window.rectClient.w += item->window.rectEffects2.w;
-					if (item->window.rectClient.w > item->window.rectEffects.w) {
-						item->window.rectClient.w = item->window.rectEffects.w;
-						done++;
-					}
-				} else {
-					item->window.rectClient.w -= item->window.rectEffects2.w;
-					if (item->window.rectClient.w < item->window.rectEffects.w) {
-						item->window.rectClient.w = item->window.rectEffects.w;
-						done++;
-					}
+					item->window.rectClient.w = item->window.rectEffects.w;
+					done++;
 				}
 			}
-			if (item->window.rectClient.h == item->window.rectEffects.h) {
-				done++;
+		}
+		if (item->window.rectClient.h == item->window.rectEffects.h) {
+			done++;
+		} else {
+			if (item->window.rectClient.h < item->window.rectEffects.h) {
+				item->window.rectClient.h += item->window.rectEffects2.h;
+				if (item->window.rectClient.h > item->window.rectEffects.h) {
+					item->window.rectClient.h = item->window.rectEffects.h;
+					done++;
+				}
 			} else {
+				item->window.rectClient.h -= item->window.rectEffects2.h;
 				if (item->window.rectClient.h < item->window.rectEffects.h) {
-					item->window.rectClient.h += item->window.rectEffects2.h;
-					if (item->window.rectClient.h > item->window.rectEffects.h) {
-						item->window.rectClient.h = item->window.rectEffects.h;
-						done++;
-					}
-				} else {
-					item->window.rectClient.h -= item->window.rectEffects2.h;
-					if (item->window.rectClient.h < item->window.rectEffects.h) {
-						item->window.rectClient.h = item->window.rectEffects.h;
-						done++;
-					}
+					item->window.rectClient.h = item->window.rectEffects.h;
+					done++;
 				}
 			}
+		}
 
-			Item_UpdatePosition(item);
+		Item_UpdatePosition(item);
 
-			if (done == 4) {
-				item->window.flags &= ~WINDOW_INTRANSITION;
-			}
-
+		if (done == 4) {
+			item->window.flags &= ~WINDOW_INTRANSITION;
 		}
 	}
 
@@ -4852,10 +4800,8 @@ void Item_Paint(itemDef_t *item) {
 		}
 	}
 
-	if (item->cvarFlags & (CVAR_SHOW | CVAR_HIDE)) {
-		if (!Item_EnableShowViaCvar(item, CVAR_SHOW)) {
-			return;
-		}
+	if (item->cvarFlags & (CVAR_SHOW | CVAR_HIDE) && !Item_EnableShowViaCvar(item, CVAR_SHOW)) {
+		return;
 	}
 
 	// OSP
@@ -4864,9 +4810,6 @@ void Item_Paint(itemDef_t *item) {
 	}
 	if (item->voteFlag != 0 && !Item_SettingShow(item, qtrue)) {
 		return;
-	}
-
-	if (item->window.flags & WINDOW_TIMEDVISIBLE) {
 	}
 
 	if (!(item->window.flags & WINDOW_VISIBLE)) {
@@ -5051,15 +4994,12 @@ void Menu_HandleMouseMove(menuDef_t *menu, float x, float y) {
 		return;
 	}
 
-	if (itemCapture) {
-		if (itemCapture->type == ITEM_TYPE_LISTBOX) {
-			// NERVE - SMF - lose capture if out of client rect
-			if (!Rect_ContainsPoint(&itemCapture->window.rect, x, y)) {
-				itemCapture = NULL;
-				captureFunc = NULL;
-				captureData = NULL;
-			}
-
+	if (itemCapture && itemCapture->type == ITEM_TYPE_LISTBOX) {
+		// NERVE - SMF - lose capture if out of client rect
+		if (!Rect_ContainsPoint(&itemCapture->window.rect, x, y)) {
+			itemCapture = NULL;
+			captureFunc = NULL;
+			captureData = NULL;
 		}
 		return;
 	}
@@ -5097,10 +5037,10 @@ void Menu_HandleMouseMove(menuDef_t *menu, float x, float y) {
 			if (Rect_ContainsPoint(&menu->items[i]->window.rect, x, y)) {
 				if (pass == 1) {
 					overItem = menu->items[i];
-					if (overItem->type == ITEM_TYPE_TEXT && overItem->text) {
-						if (!Rect_ContainsPoint(Item_CorrectedTextRect(overItem), x, y)) {
-							continue;
-						}
+					if (overItem->type == ITEM_TYPE_TEXT &&
+						overItem->text &&
+						!Rect_ContainsPoint(Item_CorrectedTextRect(overItem), x, y)) {
+						continue;
 					}
 					// if we are over an item
 					if (IsVisible(overItem->window.flags)) {
@@ -5203,10 +5143,8 @@ void Item_ValidateTypeData(itemDef_t *item) {
 	} else if (item->type == ITEM_TYPE_EDITFIELD || item->type == ITEM_TYPE_NUMERICFIELD || item->type == ITEM_TYPE_YESNO || item->type == ITEM_TYPE_BIND || item->type == ITEM_TYPE_SLIDER || item->type == ITEM_TYPE_TEXT) {
 		item->typeData = UI_Alloc(sizeof (editFieldDef_t));
 		memset(item->typeData, 0, sizeof (editFieldDef_t));
-		if (item->type == ITEM_TYPE_EDITFIELD) {
-			if (!((editFieldDef_t *) item->typeData)->maxPaintChars) {
-				((editFieldDef_t *) item->typeData)->maxPaintChars = MAX_EDITFIELD;
-			}
+		if (item->type == ITEM_TYPE_EDITFIELD && !((editFieldDef_t *) item->typeData)->maxPaintChars) {
+			((editFieldDef_t *) item->typeData)->maxPaintChars = MAX_EDITFIELD;
 		}
 	} else if (item->type == ITEM_TYPE_MULTI || item->type == ITEM_TYPE_CHECKBOX || item->type == ITEM_TYPE_TRICHECKBOX) {
 		item->typeData = UI_Alloc(sizeof (multiDef_t));
@@ -5383,12 +5321,10 @@ qboolean ItemParse_model_origin(itemDef_t *item, int handle) {
 	Item_ValidateTypeData(item);
 	modelPtr = (modelDef_t *)item->typeData;
 
-	if (PC_Float_Parse(handle, &modelPtr->origin[0])) {
-		if (PC_Float_Parse(handle, &modelPtr->origin[1])) {
-			if (PC_Float_Parse(handle, &modelPtr->origin[2])) {
-				return qtrue;
-			}
-		}
+	if (PC_Float_Parse(handle, &modelPtr->origin[0]) &&
+		PC_Float_Parse(handle, &modelPtr->origin[1]) &&
+		PC_Float_Parse(handle, &modelPtr->origin[2])) {
+		return qtrue;
 	}
 	return qfalse;
 }
@@ -5477,7 +5413,7 @@ qboolean ItemParse_model_animplay(itemDef_t *item, int handle) {
 
 // rect <rectangle>
 qboolean ItemParse_rect(itemDef_t *item, int handle) {
-	return(PC_Rect_Parse(handle, &item->window.rectClient));
+	return PC_Rect_Parse(handle, &item->window.rectClient);
 }
 
 // NERVE - SMF
@@ -6233,7 +6169,7 @@ qboolean ItemParse_settingDisabled(itemDef_t *item, int handle) {
 	if (fResult) {
 		item->settingFlags = SVS_DISABLED_SHOW;
 	}
-	return(fResult);
+	return fResult;
 }
 
 qboolean ItemParse_settingEnabled(itemDef_t *item, int handle) {
@@ -6242,23 +6178,23 @@ qboolean ItemParse_settingEnabled(itemDef_t *item, int handle) {
 	if (fResult) {
 		item->settingFlags = SVS_ENABLED_SHOW;
 	}
-	return(fResult);
+	return fResult;
 }
 
 qboolean ItemParse_tooltip(itemDef_t *item, int handle) {
-	return(Item_ValidateTooltipData(item) && PC_String_Parse(handle, &item->toolTipData->text));
+	return Item_ValidateTooltipData(item) && PC_String_Parse(handle, &item->toolTipData->text);
 }
 
 qboolean ItemParse_tooltipalignx(itemDef_t *item, int handle) {
-	return(Item_ValidateTooltipData(item) && PC_Float_Parse(handle, &item->toolTipData->textalignx));
+	return Item_ValidateTooltipData(item) && PC_Float_Parse(handle, &item->toolTipData->textalignx);
 }
 
 qboolean ItemParse_tooltipaligny(itemDef_t *item, int handle) {
-	return(Item_ValidateTooltipData(item) && PC_Float_Parse(handle, &item->toolTipData->textaligny));
+	return Item_ValidateTooltipData(item) && PC_Float_Parse(handle, &item->toolTipData->textaligny);
 }
 
 qboolean ItemParse_voteFlag(itemDef_t *item, int handle) {
-	return(PC_Int_Parse(handle, &item->voteFlag));
+	return PC_Int_Parse(handle, &item->voteFlag);
 }
 
 keywordHash_t itemParseKeywords[] =
@@ -6453,7 +6389,7 @@ qboolean MenuParse_fullscreen(itemDef_t *item, int handle) {
 qboolean MenuParse_rect(itemDef_t *item, int handle) {
 	menuDef_t *menu = (menuDef_t *)item;
 
-	return(PC_Rect_Parse(handle, &menu->window.rect));
+	return PC_Rect_Parse(handle, &menu->window.rect);
 }
 
 qboolean MenuParse_style(itemDef_t *item, int handle) {
@@ -6945,9 +6881,8 @@ int Menu_Count() {
 menuDef_t *Menu_Get(int handle) {
 	if (handle >= 0 && handle < menuCount) {
 		return &Menus[handle];
-	} else {
-		return NULL;
 	}
+	return NULL;
 }
 
 void Menu_PaintAll() {
@@ -7004,11 +6939,9 @@ qboolean Display_MouseMove(void *p, int x, int y) {
 
 	if (menu == NULL) {
 		menu = Menu_GetFocused();
-		if (menu) {
-			if (menu->window.flags & WINDOW_POPUP) {
-				Menu_HandleMouseMove(menu, x, y);
-				return qtrue;
-			}
+		if (menu && menu->window.flags & WINDOW_POPUP) {
+			Menu_HandleMouseMove(menu, x, y);
+			return qtrue;
 		}
 		for (i = 0; i < menuCount; i++) {
 			Menu_HandleMouseMove(&Menus[i], x, y);
@@ -7019,7 +6952,6 @@ qboolean Display_MouseMove(void *p, int x, int y) {
 		Menu_UpdatePosition(menu);
 	}
 	return qtrue;
-
 }
 
 int Display_CursorType(int x, int y) {
@@ -7049,12 +6981,9 @@ void Display_HandleKey(int key, qboolean down, int x, int y) {
 }
 
 static void Menu_CacheContents(menuDef_t *menu) {
-	if (menu) {
-		if (menu->soundName && *menu->soundName) {
-			DC->registerSound(menu->soundName);
-		}
+	if (menu && menu->soundName && *menu->soundName) {
+		DC->registerSound(menu->soundName);
 	}
-
 }
 
 void Display_CacheAll() {
@@ -7066,32 +6995,29 @@ void Display_CacheAll() {
 }
 
 static qboolean Menu_OverActiveItem(menuDef_t *menu, float x, float y) {
-	if (menu && menu->window.flags & (WINDOW_VISIBLE | WINDOW_FORCED)) {
-		if (Rect_ContainsPoint(&menu->window.rect, x, y)) {
-			int i;
-			for (i = 0; i < menu->itemCount; i++) {
-				if (!(menu->items[i]->window.flags & (WINDOW_VISIBLE | WINDOW_FORCED))) {
-					continue;
-				}
-
-				if (menu->items[i]->window.flags & WINDOW_DECORATION) {
-					continue;
-				}
-
-				if (Rect_ContainsPoint(&menu->items[i]->window.rect, x, y)) {
-					itemDef_t *overItem = menu->items[i];
-					if (overItem->type == ITEM_TYPE_TEXT && overItem->text) {
-						if (Rect_ContainsPoint(Item_CorrectedTextRect(overItem), x, y)) {
-							return qtrue;
-						} else {
-							continue;
-						}
-					} else {
-						return qtrue;
-					}
-				}
+	if (menu && menu->window.flags & (WINDOW_VISIBLE | WINDOW_FORCED) &&
+		Rect_ContainsPoint(&menu->window.rect, x, y)) {
+		int i;
+		for (i = 0; i < menu->itemCount; i++) {
+			if (!(menu->items[i]->window.flags & (WINDOW_VISIBLE | WINDOW_FORCED))) {
+				continue;
 			}
 
+			if (menu->items[i]->window.flags & WINDOW_DECORATION) {
+				continue;
+			}
+
+			if (Rect_ContainsPoint(&menu->items[i]->window.rect, x, y)) {
+				itemDef_t *overItem = menu->items[i];
+				if (overItem->type == ITEM_TYPE_TEXT && overItem->text) {
+					if (Rect_ContainsPoint(Item_CorrectedTextRect(overItem), x, y)) {
+						return qtrue;
+					}
+					continue;
+				} else {
+					return qtrue;
+				}
+			}
 		}
 	}
 	return qfalse;
@@ -7103,14 +7029,11 @@ PC_Rect_Parse
 =================
 */
 qboolean PC_Rect_Parse(int handle, rectDef_t *r) {
-	if (PC_Float_Parse(handle, &r->x)) {
-		if (PC_Float_Parse(handle, &r->y)) {
-			if (PC_Float_Parse(handle, &r->w)) {
-				if (PC_Float_Parse(handle, &r->h)) {
-					return qtrue;
-				}
-			}
-		}
+	if (PC_Float_Parse(handle, &r->x) &&
+		PC_Float_Parse(handle, &r->y) &&
+		PC_Float_Parse(handle, &r->w) &&
+		PC_Float_Parse(handle, &r->h)) {
+		return qtrue;
 	}
 	return qfalse;
 }
@@ -7189,79 +7112,74 @@ qboolean BG_PanelButton_EditClick(panel_button_t *button, int key) {
 				button->onFinish(button);
 			}
 			return qfalse;
-		} else {
-			BG_PanelButtons_SetFocusButton(button);
-			return qtrue;
 		}
+		BG_PanelButtons_SetFocusButton(button);
+		return qtrue;
 	} else if (BG_PanelButtons_GetFocusButton() != button) {
 		return qfalse;
+	}
+	char     buffer[256];
+	char     *s = NULL;
+	int      len, maxlen;
+	qboolean useCvar = button->data[0] ? qfalse : qtrue;
+
+	if (useCvar) {
+		maxlen = sizeof (buffer);
+		DC->getCVarString(button->text, buffer, sizeof (buffer));
+		len = strlen(buffer);
 	} else {
-		char     buffer[256];
-		char     *s = NULL;
-		int      len, maxlen;
-		qboolean useCvar = button->data[0] ? qfalse : qtrue;
+		maxlen = button->data[0];
+		s      = (char *)button->text;
+		len    = strlen(s);
+	}
 
-		if (useCvar) {
-			maxlen = sizeof (buffer);
-			DC->getCVarString(button->text, buffer, sizeof (buffer));
-			len = strlen(buffer);
-		} else {
-			maxlen = button->data[0];
-			s      = (char *)button->text;
-			len    = strlen(s);
-		}
+	if (key & K_CHAR_FLAG) {
+		key &= ~K_CHAR_FLAG;
 
-		if (key & K_CHAR_FLAG) {
-			key &= ~K_CHAR_FLAG;
-
-			if (key == 'h' - 'a' + 1) {        // ctrl-h is backspace
-				if (len) {
-					if (useCvar) {
-						buffer[len - 1] = '\0';
-						DC->setCVar(button->text, buffer);
-					} else {
-						s[len - 1] = '\0';
-					}
+		if (key == 'h' - 'a' + 1) {        // ctrl-h is backspace
+			if (len) {
+				if (useCvar) {
+					buffer[len - 1] = '\0';
+					DC->setCVar(button->text, buffer);
+				} else {
+					s[len - 1] = '\0';
 				}
-				return qtrue;
-			}
-
-			if (key < 32) {
-				return qtrue;
-			}
-
-			if (button->data[1]) {
-				if (key < '0' || key > '9') {
-					if (button->data[1] == 2) {
-						return qtrue;
-					} else if (!(len == 0 && key == '-')) {
-						return qtrue;
-					}
-				}
-			}
-
-			if (len >= maxlen - 1) {
-				return qtrue;
-			}
-
-			if (useCvar) {
-				buffer[len]     = key;
-				buffer[len + 1] = '\0';
-				trap_Cvar_Set(button->text, buffer);
-			} else {
-				s[len]     = key;
-				s[len + 1] = '\0';
 			}
 			return qtrue;
-		} else {
-			if (key == K_ENTER || key == K_KP_ENTER) {
-				if (button->onFinish) {
-					button->onFinish(button);
-				}
-				BG_PanelButtons_SetFocusButton(NULL);
-				return qfalse;
+		}
+
+		if (key < 32) {
+			return qtrue;
+		}
+
+		if (button->data[1] && (key < '0' || key > '9')) {
+			if (button->data[1] == 2) {
+				return qtrue;
+			} else if (!(len == 0 && key == '-')) {
+				return qtrue;
 			}
 		}
+
+		if (len >= maxlen - 1) {
+			return qtrue;
+		}
+
+		if (useCvar) {
+			buffer[len]     = key;
+			buffer[len + 1] = '\0';
+			trap_Cvar_Set(button->text, buffer);
+		} else {
+			s[len]     = key;
+			s[len + 1] = '\0';
+		}
+		return qtrue;
+	}
+	if (key == K_ENTER || key == K_KP_ENTER) {
+		if (button->onFinish) {
+			button->onFinish(button);
+		}
+		BG_PanelButtons_SetFocusButton(NULL);
+		return qfalse;
 	}
 
 	return qtrue;
@@ -7301,22 +7219,20 @@ qboolean BG_PanelButtonsKeyEvent(int key, qboolean down, panel_button_t **button
 		for ( ; *buttons; buttons++) {
 			button = (*buttons);
 
-			if (button->onKeyDown) {
-				if (BG_CursorInRect(&button->rect)) {
-					if (button->onKeyDown(button, key)) {
-						return qtrue;
-					}
-				}
+			if (button->onKeyDown &&
+				BG_CursorInRect(&button->rect) &&
+				button->onKeyDown(button, key)) {
+				return qtrue;
 			}
 		}
 	} else {
 		for ( ; *buttons; buttons++) {
 			button = (*buttons);
 
-			if (button->onKeyUp && BG_CursorInRect(&button->rect)) {
-				if (button->onKeyUp(button, key)) {
-					return qtrue;
-				}
+			if (button->onKeyUp &&
+				BG_CursorInRect(&button->rect) &&
+				button->onKeyUp(button, key)) {
+				return qtrue;
 			}
 		}
 	}
