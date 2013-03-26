@@ -1232,33 +1232,16 @@ static void CG_DrawCrosshairNames(void) {
 	float    zChange;
 	qboolean hitClient = qfalse;
 	float    dist      = 0;
-	int      clientNum = 0;
+	int      clientNum = cg.crosshairClientNum;
 
-	if (cg_drawCrosshair.integer < 0) {
-		return;
-	}
-
-	// Nico, don't draw crosshair names if scoreboard is up
-	if (cg.showScores) {
+	if (clientNum < 0 || clientNum >= MAX_CLIENTS || !cg_drawCrosshair.integer ||
+		!cg_drawCrosshairNames.integer || cg.showScores || cg.renderingThirdPerson ||
+		cgs.clientinfo[clientNum].hideme || cgs.clientinfo[clientNum].clientNum != clientNum) {
 		return;
 	}
 
 	// scan the known entities to see if the crosshair is sighted on one
-	dist = CG_ScanForCrosshairEntity(&zChange, &hitClient);
-
-	// Nico, don't draw if client is not close to crosshair
-	if (dist <= 512) {
-		return;
-	}
-
-	// Nico, don't draw if client has hideme turned on
-	if (cgs.clientinfo[cg.crosshairClientNum].hideme) {
-		return;
-	}
-
-	if (cg.renderingThirdPerson) {
-		return;
-	}
+	CG_ScanForCrosshairEntity(&zChange, &hitClient);
 
 	// draw the name of the player being looked at
 	color = CG_FadeColor(cg.crosshairClientTime, 500);
@@ -1268,24 +1251,15 @@ static void CG_DrawCrosshairNames(void) {
 		return;
 	}
 
-	if (!cg_drawCrosshairNames.integer) {
-		return;
-	}
-
-	// Nico, only display valid clientnum players
-	if (cgs.clientinfo[cg.crosshairClientNum].clientNum != cg.crosshairClientNum) {
-		return;
-	}
-
 	// Nico, don't draw if hiding others is enabled and distance to the player is < cg_hideRange
-	clientNum = cg.crosshairClientNum;
-	if (clientNum >= 0 && clientNum < MAX_CLIENTS &&
-	    cg_hideOthers.integer && clientNum != cg.clientNum &&
-	    Distance((&cg_entities[cg.clientNum])->lerpOrigin, (&cg_entities[clientNum])->lerpOrigin) < cg_hideRange.integer) {
-		return;
+	if (cg_hideOthers.integer && clientNum != cg.clientNum) {
+	    dist = Distance((&cg_entities[cg.clientNum])->lerpOrigin, (&cg_entities[clientNum])->lerpOrigin);
+		if (dist < cg_hideRange.integer) {
+			return;
+		}
 	}
 
-	s = va("%s", cgs.clientinfo[cg.crosshairClientNum].name);
+	s = va("%s", cgs.clientinfo[clientNum].name);
 
 	w = (float)CG_Text_Width_Ext(s, 0.2f, 0, &cgs.media.limboFont1) / 2;
 
