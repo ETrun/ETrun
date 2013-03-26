@@ -341,8 +341,7 @@ int Pickup_Weapon(gentity_t *ent, gentity_t *other) {
 		if (ent->parent &&
 			ent->parent->client &&
 			other->client->sess.sessionTeam == ent->parent->client->sess.sessionTeam) {
-			if (!(ent->parent->client->PCSpecialPickedUpCount % LT_SPECIAL_PICKUP_MOD) &&
-				ent->parent && ent->parent->client) {
+			if (!(ent->parent->client->PCSpecialPickedUpCount % LT_SPECIAL_PICKUP_MOD)) {
 				G_LogPrintf("Ammo_Pack: %d %d\n", (int)(ent->parent - g_entities), (int)(other - g_entities));
 			}
 			ent->parent->client->PCSpecialPickedUpCount++;

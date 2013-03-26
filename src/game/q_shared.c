@@ -202,7 +202,9 @@ void COM_BitClear(int array[], int bitNum) {
 
 // Nico, fixed version that doesn't break C strict-aliasing rules
 int PASSFLOAT(float x) {
-	float_int_u v = { x };
+	float_int_u v;
+
+	v.f = x;
 
 	return v.i;
 }

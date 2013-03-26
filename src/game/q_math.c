@@ -536,9 +536,10 @@ void VectorRotate(vec3_t in, vec3_t matrix[3], vec3_t out) {
 float Q_rsqrt(float number) {
 	long        i;
 	float       x2, y;
-	float_long_u number_u = {number};
+	float_long_u number_u;
 	float_long_u i_u;
 
+	number_u.f = number;
 	x2 = number_u.f * 0.5F;
 	i  = *( long * ) &number_u.l;		// evil floating point bit level hacking
 	i_u.l  = 0x5f3759df - (i >> 1);		// what the fuck?
@@ -550,9 +551,10 @@ float Q_rsqrt(float number) {
 
 // Nico, strict-aliasing rule break fixed
 float Q_fabs(float f) {
-	float_int_u f_u = {f};
+	float_int_u f_u;
 	float_int_u tmp_u;
 
+	f_u.f = f;
 	tmp_u.i = (*(int *)&f_u.i) & 0x7FFFFFFF;
 
 	return *(float *)&tmp_u.f;

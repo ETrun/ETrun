@@ -7105,6 +7105,11 @@ void BG_PanelButton_RenderEdit(panel_button_t *button) {
 }
 
 qboolean BG_PanelButton_EditClick(panel_button_t *button, int key) {
+	char     buffer[256];
+	char     *s = NULL;
+	int      len, maxlen;
+	qboolean useCvar = button->data[0] ? qfalse : qtrue;
+
 	if (key == K_MOUSE1) {
 		if (!BG_CursorInRect(&button->rect) && BG_PanelButtons_GetFocusButton() == button) {
 			BG_PanelButtons_SetFocusButton(NULL);
@@ -7118,10 +7123,6 @@ qboolean BG_PanelButton_EditClick(panel_button_t *button, int key) {
 	} else if (BG_PanelButtons_GetFocusButton() != button) {
 		return qfalse;
 	}
-	char     buffer[256];
-	char     *s = NULL;
-	int      len, maxlen;
-	qboolean useCvar = button->data[0] ? qfalse : qtrue;
 
 	if (useCvar) {
 		maxlen = sizeof (buffer);

@@ -156,8 +156,7 @@ void P_WorldEffects(gentity_t *ent) {
 	// check for sizzle damage (move to pmove?)
 	//
 	if (waterlevel && (ent->watertype & CONTENTS_LAVA) &&
-		ent->health > 0 && ent->pain_debounce_time <= level.time &&
-		(ent->watertype & CONTENTS_LAVA)) {
+		ent->health > 0 && ent->pain_debounce_time <= level.time) {
 		G_Damage(ent, NULL, NULL, NULL, NULL, 30 * waterlevel, 0, MOD_LAVA);
 	}
 
