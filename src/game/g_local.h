@@ -491,6 +491,7 @@ typedef struct {
 	qboolean valid;
 	vec3_t origin;
 	vec3_t vangles;
+	int weapon;
 } save_position_t;
 
 // client data that stays across multiple levels or tournament restarts
@@ -499,7 +500,6 @@ typedef struct {
 // MUST be dealt with in G_InitSessionData() / G_ReadSessionData() / G_WriteSessionData()
 typedef struct {
 	team_t sessionTeam;
-	int spectatorTime;              // for determining next-in-line to play
 	spectatorState_t spectatorState;
 	int spectatorClient;            // for chasecam and follow mode
 	int playerType;                 // DHM - Nerve :: for GT_WOLF

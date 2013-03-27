@@ -788,7 +788,6 @@ typedef struct {
 	qboolean showScores;
 	qboolean scoreBoardShowing;
 	int scoreFadeTime;
-	int spectatorTime;                                                      // next time to offset
 
 	qboolean lightstylesInited;
 

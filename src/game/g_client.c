@@ -1437,7 +1437,6 @@ void ClientSpawn(gentity_t *ent) {
 		ClientUserinfoChanged(index);
 	}
 
-
 	G_UpdateCharacter(client);
 
 	SetWolfSpawnWeapons(client);
