@@ -962,8 +962,6 @@ Generates weapon events and modifes the weapon counter
 ==============
 */
 
-//#define DO_WEAPON_DBG 1
-
 void PM_Weapon(void) {
 	int      addTime = 0;    // TTimo: init
 	int      ammoNeeded;
@@ -971,10 +969,6 @@ void PM_Weapon(void) {
 	int      aimSpreadScaleAdd;
 	int      weapattackanim;
 	qboolean akimboFire;
-
-#ifdef DO_WEAPON_DBG
-	static int weaponstate_last = -1;
-#endif
 
 	// don't allow attack until all buttons are up
 	if (pm->ps->pm_flags & PMF_RESPAWNED) {
@@ -992,14 +986,12 @@ void PM_Weapon(void) {
 			PM_CoolWeapons();
 		}
 
-		//pm->ps->weapon = WP_NONE;
 		return;
 	}
 
 	// special mounted mg42 handling
 	switch (pm->ps->persistant[PERS_HWEAPON_USE]) {
 	case 1:
-//			PM_CoolWeapons(); // Gordon: Arnout says this is how it's wanted ( bleugh ) no cooldown on weaps while using mg42, but need to update heat on mg42 itself
 		if (pm->ps->weapHeat[WP_DUMMY_MG42]) {
 			pm->ps->weapHeat[WP_DUMMY_MG42] -= (300.f * pml.frametime);
 
@@ -1113,51 +1105,6 @@ void PM_Weapon(void) {
 	} else {
 		akimboFire = qfalse;
 	}
-
-	// TTimo
-	// show_bug.cgi?id=416
-#ifdef DO_WEAPON_DBG
-	if (pm->ps->weaponstate != weaponstate_last) {
-# ifdef CGAMEDLL
-		Com_Printf(" CGAMEDLL\n");
-# else
-		Com_Printf("!CGAMEDLL\n");
-# endif
-		switch (pm->ps->weaponstate) {
-		case WEAPON_READY:
-			Com_Printf(" -- WEAPON_READY\n");
-			break;
-		case WEAPON_RAISING:
-			Com_Printf(" -- WEAPON_RAISING\n");
-			break;
-		case WEAPON_RAISING_TORELOAD:
-			Com_Printf(" -- WEAPON_RAISING_TORELOAD\n");
-			break;
-		case WEAPON_DROPPING:
-			Com_Printf(" -- WEAPON_DROPPING\n");
-			break;
-		case WEAPON_READYING:
-			Com_Printf(" -- WEAPON_READYING\n");
-			break;
-		case WEAPON_RELAXING:
-			Com_Printf(" -- WEAPON_RELAXING\n");
-			break;
-		case WEAPON_DROPPING_TORELOAD:
-			Com_Printf(" -- WEAPON_DROPPING_TORELOAD\n");
-			break;
-		case WEAPON_FIRING:
-			Com_Printf(" -- WEAPON_FIRING\n");
-			break;
-		case WEAPON_FIRINGALT:
-			Com_Printf(" -- WEAPON_FIRINGALT\n");
-			break;
-		case WEAPON_RELOADING:
-			Com_Printf(" -- WEAPON_RELOADING\n");
-			break;
-		}
-		weaponstate_last = pm->ps->weaponstate;
-	}
-#endif
 
 	// weapon cool down
 	PM_CoolWeapons();
@@ -1820,7 +1767,6 @@ void PM_Weapon(void) {
 
 	if (pm->ps->weapon == WP_MORTAR_SET && !pm->ps->ammo[WP_MORTAR]) {
 		PM_AddEvent(EV_NOAMMO);
-		//PM_BeginWeaponChange( WP_MORTAR_SET, WP_MORTAR, qfalse );
 	}
 
 	if (BG_IsAkimboWeapon(pm->ps->weapon)) {

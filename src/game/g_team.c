@@ -1093,7 +1093,7 @@ qboolean G_teamJoinCheck(int team_num, gentity_t *ent) {
 		}
 	}
 
-	return(qtrue);
+	return qtrue;
 }
 
 // Nico, check if ew can follow a given client

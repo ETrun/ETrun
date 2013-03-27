@@ -2844,9 +2844,6 @@ void PmoveSingle(pmove_t *pmove) {
 		BG_AnimScriptAnimation(pm->ps, pm->character->animModelInfo, ANIM_MT_IDLE, qtrue);
 	}
 
-	/* Nico, this function does nothing because there is no more fatigue
-	PM_Sprint();*/
-
 	// set groundentity, watertype, and waterlevel
 	PM_GroundTrace();
 	PM_SetWaterLevel();

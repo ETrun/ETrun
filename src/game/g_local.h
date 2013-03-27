@@ -642,6 +642,9 @@ typedef struct {
 	// Nico, load view angles on load
 	int loadViewAngles;
 
+	// Nico, load weapon on load
+	int loadWeapon;
+
 	// Nico, automatically load player position when he gets killed (except /kill)
 	int autoLoad;
 

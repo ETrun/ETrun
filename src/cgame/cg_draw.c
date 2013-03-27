@@ -962,7 +962,6 @@ static void CG_DrawCrosshair(void) {
 		weapnum = cg.weaponSelect;
 	}
 
-
 	switch (weapnum) {
 
 	// weapons that get no reticle

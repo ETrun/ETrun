@@ -101,9 +101,8 @@ void        PM_StepSlideMove(qboolean gravity);
 qboolean    PM_SlideMoveProne(qboolean gravity);
 void        PM_StepSlideMoveProne(qboolean gravity);
 
-void PM_BeginWeaponChange(int oldweapon, int newweapon, qboolean reload);
-
 // Nico, bg_weapons.c
+void PM_BeginWeaponChange(int oldweapon, int newweapon, qboolean reload);
 int PM_ReloadAnimForWeapon(int weapon);
 int PM_WeaponAmmoAvailable(int wp);
 void PM_Weapon(void);

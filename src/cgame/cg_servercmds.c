@@ -1734,6 +1734,13 @@ static void CG_ServerCommand(void) {
 	}
 	// Nico, end of login notifications
 
+	// Nico, detect wepaon change asked by the server
+	if (!Q_stricmp(cmd, "weaponUpdate")) {
+		cg.weaponSelect = atoi(CG_Argv(1));
+		return;
+	}
+	// Nico, end of detect wepaon change asked by the server
+
 	CG_Printf("Unknown client game command: %s\n", cmd);
 }
 

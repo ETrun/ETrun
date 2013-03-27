@@ -284,6 +284,9 @@ vmCvar_t cg_drawCGaz;
 // Load view angles on load
 vmCvar_t cg_loadViewAngles;
 
+// Load weapon on load
+vmCvar_t cg_loadWeapon;
+
 // Show pressed keys
 vmCvar_t cg_drawKeys;
 vmCvar_t cg_keysX;
@@ -531,6 +534,9 @@ cvarTable_t cvarTable[] =
 	// Load view angles on load
 	{ &cg_loadViewAngles,       "cg_loadViewAngles",       "1",     CVAR_ARCHIVE,             0 },
 
+	// Load weapon on load
+	{ &cg_loadWeapon,			"cg_loadWeapon",		   "1",     CVAR_ARCHIVE,             0 },
+
 	// Show pressed keys
 	{ &cg_drawKeys,             "cg_drawKeys",             "1",     CVAR_ARCHIVE,             0 },
 	{ &cg_keysX,                "cg_keysX",                "550",   CVAR_ARCHIVE,             0 },
@@ -636,17 +642,6 @@ void CG_UpdateCvars(void) {
 				cv->modificationCount = cv->vmCvar->modificationCount;
 
 				// Check if we need to update any client flags to be sent to the server
-				// Nico, added pmove_fixed
-				// Nico, added com_maxfps
-				// Nico, added auth token & auto login
-				// Nico, added load view angles
-				// Nico, added auto load
-				// Nico, added cgaz
-				// Nico, added hideme
-				// Nico, added autoDemo
-				// Nico, added autoloadCheckpoints
-				// Nico, added persistant specLock
-				// Nico, added keepAllDemos
 				if (cv->vmCvar == &cg_autoAction || cv->vmCvar == &cg_autoReload ||
 				    cv->vmCvar == &int_cl_timenudge || cv->vmCvar == &int_cl_maxpackets ||
 				    cv->vmCvar == &cg_autoactivate || cv->vmCvar == &cg_predictItems ||
@@ -655,7 +650,8 @@ void CG_UpdateCvars(void) {
 				    cv->vmCvar == &cg_loadViewAngles || cv->vmCvar == &cg_autoLoad ||
 				    cv->vmCvar == &cg_drawCGaz || cv->vmCvar == &cg_hideMe ||
 				    cv->vmCvar == &cg_autoDemo || cv->vmCvar == &cg_autoLoadCheckpoints ||
-				    cv->vmCvar == &cg_specLock || cv->vmCvar == &cg_keepAllDemos) {
+				    cv->vmCvar == &cg_specLock || cv->vmCvar == &cg_keepAllDemos ||
+					cv->vmCvar == &cg_loadWeapon) {
 					fSetFlags = qtrue;
 				} else if (cv->vmCvar == &cg_crosshairColor || cv->vmCvar == &cg_crosshairAlpha) {
 					BG_setCrosshair(cg_crosshairColor.string, cg.xhairColor, cg_crosshairAlpha.value, "cg_crosshairColor");
@@ -728,7 +724,7 @@ void CG_setClientFlags(void) {
 	}
 
 	cg.pmext.bAutoReload = (cg_autoReload.integer > 0);
-	trap_Cvar_Set("cg_uinfo", va("%d %d %d %d %s %d %d %d %d %d %d %d %d",
+	trap_Cvar_Set("cg_uinfo", va("%d %d %d %d %s %d %d %d %d %d %d %d %d %d",
 	                             // Client Flags
 	                             (
 	                                 ((cg_autoReload.integer > 0) ? CGF_AUTORELOAD : 0) |
@@ -753,6 +749,9 @@ void CG_setClientFlags(void) {
 	                             // Nico, load view angles on load
 	                             cg_loadViewAngles.integer,
 
+								 // Nico, load weapon on load
+								 cg_loadWeapon.integer,
+
 	                             // Nico, automatically load player position when he gets killed (except /kill)
 	                             cg_autoLoad.integer,
 
@@ -773,7 +772,6 @@ void CG_setClientFlags(void) {
 
 	                             // Nico, keep all demos
 	                             cg_keepAllDemos.integer
-
 	                             ));
 }
 

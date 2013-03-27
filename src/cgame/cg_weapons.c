@@ -2192,9 +2192,7 @@ void CG_AddPlayerWeapon(refEntity_t *parent, playerState_t *ps, centity_t *cent)
 			CG_PositionEntityOnTag(&barrel, &gun, "tag_flash", 0, NULL);
 			CG_AddWeaponWithPowerups(&barrel);
 
-			// the grenade - have to always enabled it, no means of telling if another person has a grenade loaded or not atm :/
-			//if( cg.snap->ps.weaponstate != WEAPON_FIRING && cg.snap->ps.weaponstate != WEAPON_RELOADING ) {
-			if (weaponNum == WP_M7 /*|| weaponNum == WP_CARBINE*/) {
+			if (weaponNum == WP_M7) {
 				barrel.hModel = weapon->missileModel;
 				CG_PositionEntityOnTag(&barrel, &barrel, "tag_prj", 0, NULL);
 				CG_AddWeaponWithPowerups(&barrel);

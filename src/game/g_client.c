@@ -574,15 +574,6 @@ void SetWolfSpawnWeapons(gclient_t *client) {
 	}
 }
 
-//
-// AddMedicTeamBonus
-//
-void AddMedicTeamBonus(gclient_t *client) {
-	// compute health mod
-	client->pers.maxHealth = 125;
-	client->ps.stats[STAT_MAX_HEALTH] = client->pers.maxHealth;
-}
-
 /**
  * Check a player name
  * @author Nico
@@ -885,7 +876,7 @@ void ClientUserinfoChanged(int clientNum) {
 	Q_strncpyz(oldAuthToken, client->pers.authToken, sizeof (oldAuthToken));
 
 	s = Info_ValueForKey(userinfo, "cg_uinfo");
-	sscanf(s, "%i %i %i %i %s %i %i %i %i %i %i %i %i",
+	sscanf(s, "%i %i %i %i %s %i %i %i %i %i %i %i %i %i",
 	       &client->pers.clientFlags,
 	       &client->pers.clientTimeNudge,
 	       &client->pers.clientMaxPackets,
@@ -898,6 +889,9 @@ void ClientUserinfoChanged(int clientNum) {
 
 	       // Nico, load view angles on load
 	       &client->pers.loadViewAngles,
+
+		   // Nico, load weapon on load
+	       &client->pers.loadWeapon,
 
 	       // Nico, load position when player dies
 	       &client->pers.autoLoad,
@@ -1441,12 +1435,8 @@ void ClientSpawn(gentity_t *ent) {
 
 	SetWolfSpawnWeapons(client);
 
-	// START	Mad Doctor I changes, 8/17/2002
-
-	// JPW NERVE -- increases stats[STAT_MAX_HEALTH] based on # of medics in game
-	AddMedicTeamBonus(client);
-
-	// END		Mad Doctor I changes, 8/17/2002
+	client->pers.maxHealth = 125;
+	client->ps.stats[STAT_MAX_HEALTH] = client->pers.maxHealth;
 
 	client->pers.cmd.weapon = ent->client->ps.weapon;
 // dhm - end
@@ -1518,6 +1508,12 @@ void ClientSpawn(gentity_t *ent) {
 			// Nico, load angles if cg_loadViewAngles = 1
 			if (ent->client->pers.loadViewAngles) {
 				SetClientViewAngle(ent, pos->vangles);
+			}
+
+			// Nico, load saved weapon if cg_loadWeapon = 1
+			if (ent->client->pers.loadWeapon) {
+				G_Printf("Autoload: settings weapon from %d to %d\n", ent->client->ps.weapon, pos->weapon);
+				ent->client->ps.weapon = pos->weapon;
 			}
 
 			VectorClear(ent->client->ps.velocity);

@@ -1765,6 +1765,9 @@ extern vmCvar_t cg_drawCGaz;
 // Load view angles on load
 extern vmCvar_t cg_loadViewAngles;
 
+// Load weapon on load
+extern vmCvar_t cg_loadWeapon;
+
 // Show pressed keys
 extern vmCvar_t cg_drawKeys;
 extern vmCvar_t cg_keysX;

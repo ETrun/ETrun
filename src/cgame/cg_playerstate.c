@@ -262,7 +262,6 @@ void CG_Respawn() {
 	trap_SendConsoleCommand("-zoom\n");
 	cg.binocZoomTime = 0;
 
-
 	// clear pmext
 	memset(&cg.pmext, 0, sizeof (cg.pmext));
 

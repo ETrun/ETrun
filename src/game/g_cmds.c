@@ -2133,6 +2133,13 @@ void Cmd_Load_f(gentity_t *ent) {
 			SetClientViewAngle(ent, pos->vangles);
 		}
 
+		// Nico, load saved weapon if cg_loadWeapon = 1
+		if (ent->client->pers.loadWeapon) {
+			ent->client->ps.weapon = pos->weapon;
+			// Nico, inform client the need to change weapon
+			trap_SendServerCommand(ent - g_entities, va("weaponUpdate %d", pos->weapon));
+		}
+
 		VectorClear(ent->client->ps.velocity);
 
 		if (ent->client->ps.stats[STAT_HEALTH] < 100 && ent->client->ps.stats[STAT_HEALTH] > 0) {
@@ -2210,6 +2217,13 @@ void Cmd_Load2_f(gentity_t *ent) {
 			SetClientViewAngle(ent, pos->vangles);
 		}
 
+		// Nico, load saved weapon if cg_loadWeapon = 1
+		if (ent->client->pers.loadWeapon) {
+			ent->client->ps.weapon = pos->weapon;
+			// Nico, inform client the need to change weapon
+			trap_SendServerCommand(ent - g_entities, va("weaponUpdate %d", pos->weapon));
+		}
+
 		VectorClear(ent->client->ps.velocity);
 
 		if (ent->client->ps.stats[STAT_HEALTH] < 100 && ent->client->ps.stats[STAT_HEALTH] > 0) {
@@ -2278,7 +2292,6 @@ void Cmd_Save_f(gentity_t *ent) {
 		return;
 	}
 
-
 	if (ent->client->sess.sessionTeam == TEAM_ALLIES) {
 		pos = ent->client->sess.alliesSaves + posNum;
 	} else {
@@ -2288,6 +2301,9 @@ void Cmd_Save_f(gentity_t *ent) {
 	VectorCopy(ent->client->ps.origin, pos->origin);
 	VectorCopy(ent->client->ps.viewangles, pos->vangles);
 	pos->valid = qtrue;
+
+	// Nico, save player weapon
+	pos->weapon = ent->client->ps.weapon;
 
 	if (posNum == 0) {
 		CP("cp \"Saved\n\"");
@@ -2356,6 +2372,9 @@ void Cmd_Save2_f(gentity_t *ent) {
 	VectorCopy(ent->client->ps.origin, pos->origin);
 	VectorCopy(ent->client->ps.viewangles, pos->vangles);
 	pos->valid = qtrue;
+
+	// Nico, save player weapon
+	pos->weapon = ent->client->ps.weapon;
 
 	if (posNum == 0) {
 		CP("cp \"Saved\n\"");
