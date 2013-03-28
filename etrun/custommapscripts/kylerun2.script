@@ -3,7 +3,7 @@
 
 fake_game_manager
 {
-	spawn
+	trigger
 	{
 		// Remove trigger associated with secret start timer
 		delete
