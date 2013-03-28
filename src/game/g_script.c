@@ -420,8 +420,6 @@ void G_Script_ScriptLoad(void) {
 
 	// END Mad Doc - TDF
 	// Arnout: make sure we terminate the script with a '\0' to prevent parser from choking
-	//level.scriptEntity = G_Alloc( len );
-	//trap_FS_Read( level.scriptEntity, len, f );
 	level.scriptEntity = G_Alloc(len + 1);
 	trap_FS_Read(level.scriptEntity, len, f);
 	*(level.scriptEntity + len) = '\0';

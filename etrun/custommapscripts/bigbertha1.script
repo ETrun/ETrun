@@ -1,0 +1,20 @@
+// Created by Nico for ETrun
+// Last update 28 03 2012
+
+fake_game_manager
+{
+	trigger
+	{
+		// Remove trigger associated with secret start timer
+		delete
+		{
+			target "t17"
+		}
+
+		// Remove trigger associated with secret stop timer
+		delete
+		{
+			target "t18"
+		}
+	}
+}

@@ -4254,7 +4254,6 @@ void func_constructible_explode(gentity_t *self, gentity_t *inflictor, gentity_t
 				G_Script_ScriptEvent(self, "destroyed", "final");
 			} else {
 				switch (self->grenadeFired) {
-				//case 1: G_Script_ScriptEvent( self, "destroyed", "stage1" ); break;
 				case 2: G_Script_ScriptEvent(self, "destroyed", "stage2"); break;
 				case 3: G_Script_ScriptEvent(self, "destroyed", "stage3"); break;
 				}

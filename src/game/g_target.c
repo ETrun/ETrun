@@ -1052,7 +1052,6 @@ void target_script_trigger_use(gentity_t *ent, gentity_t *other, gentity_t *acti
 	}
 
 	G_UseTargets(ent, other);
-
 }
 
 void SP_target_script_trigger(gentity_t *ent) {

@@ -1017,7 +1017,6 @@ void G_FindTeams(void) {
 				e2->teamchain  = e->teamchain;
 				e->teamchain   = e2;
 				e2->teammaster = e;
-//				e2->key = e->key;	// (SA) I can't set the key here since the master door hasn't finished spawning yet and therefore has a key of -1
 				e2->flags |= FL_TEAMSLAVE;
 
 				if (!Q_stricmp(e2->classname, "func_tramcar")) {
@@ -1206,6 +1205,19 @@ void G_wipeCvars(void) {
 	}
 
 	G_UpdateCvars();
+}
+
+// Nico, this function is called when map doesn't have a game_manager (i.e. no script_multiplayer)
+// this is the case with q3 maps
+static void G_loadFakeGameManager(void) {
+	gentity_t *ent;
+
+	// get the next free entity
+	level.spawning = qtrue;
+	ent = G_Spawn();
+	ent->scriptName = "fake_game_manager";
+	G_Script_ScriptParse(ent);
+	G_Script_ScriptEvent(ent, "trigger", "");
 }
 
 /*
@@ -1405,6 +1417,9 @@ void G_InitGame(int levelTime, int randomSeed) {
 
 	if (!level.gameManager) {
 		G_DPrintf("WARNING: no 'script_multiplayer' found in map\n");
+
+		// Nico, load fake game manager
+		G_loadFakeGameManager();
 	}
 
 	// Link all the splines up

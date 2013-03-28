@@ -1512,7 +1512,6 @@ void ClientSpawn(gentity_t *ent) {
 
 			// Nico, load saved weapon if cg_loadWeapon = 1
 			if (ent->client->pers.loadWeapon) {
-				G_Printf("Autoload: settings weapon from %d to %d\n", ent->client->ps.weapon, pos->weapon);
 				ent->client->ps.weapon = pos->weapon;
 			}
 

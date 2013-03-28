@@ -202,7 +202,6 @@ field_t fields[] =
 	{ NULL,           0,                    0,           0 }
 };
 
-
 typedef struct {
 	char *name;
 	void (*spawn)(gentity_t *ent);

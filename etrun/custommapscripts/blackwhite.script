@@ -1,0 +1,14 @@
+// Created by Nico for ETrun
+// Last update 28 03 2012
+
+fake_game_manager
+{
+	trigger
+	{
+		// Remove trigger associated with secret teleporter
+		delete
+		{
+			targetname "trigger_teleport1"
+		}
+	}
+}
