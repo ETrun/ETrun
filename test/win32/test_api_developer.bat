@@ -12,6 +12,7 @@ del /Q etrun.pk3
 xcopy /Y build\*.dll C:\Users\Nicolas\Desktop\etrun\
 
 xcopy /Y etrun\custommapscripts\* "C:\Users\Nicolas\Desktop\etrun\custommapscripts\"
+xcopy /Y libs\geoip\GeoIP.dat "C:\Users\Nicolas\Desktop\etrun\"
 
 echo Press ENTER to start game...
 pause

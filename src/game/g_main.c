@@ -175,6 +175,10 @@ vmCvar_t g_timelimit;
 // Debug log
 vmCvar_t g_debugLog;
 
+// GeoIP
+vmCvar_t g_useGeoIP;
+vmCvar_t g_geoIPDbPath;
+
 // Nico, end of ETrun cvars
 
 cvarTable_t gameCvarTable[] =
@@ -321,7 +325,11 @@ cvarTable_t gameCvarTable[] =
 	{ &g_timelimit,            "timelimit",              "0",                          CVAR_SERVERINFO | CVAR_ARCHIVE | CVAR_LATCH,                   qfalse, qfalse, qfalse, qfalse },
 
 	// Debug log
-	{ &g_debugLog,             "g_debugLog",              "0",                         CVAR_ARCHIVE | CVAR_LATCH, 									  qfalse, qfalse, qfalse, qfalse }
+	{ &g_debugLog,             "g_debugLog",             "0",                          CVAR_ARCHIVE | CVAR_LATCH, 									  qfalse, qfalse, qfalse, qfalse },
+
+	// GeoIP
+	{ &g_useGeoIP,             "g_useGeoIP",             "1",						   CVAR_ARCHIVE | CVAR_LATCH,                                     qfalse, qfalse, qfalse, qfalse },
+	{ &g_geoIPDbPath,        "g_geoIPDbPath",			 "GeoIP.dat",                  CVAR_ARCHIVE | CVAR_LATCH,                                     qfalse, qfalse, qfalse, qfalse },
 
 	// Nico, end of ETrun cvars
 };
@@ -1465,6 +1473,11 @@ void G_InitGame(int levelTime, int randomSeed) {
 		G_loadAPI();
 	}
 
+	// Nico, load GeoIP databse
+	if (g_useGeoIP.integer) {
+		GeoIP_open(g_geoIPDbPath.string);
+	}
+
 	// Nico, install timelimit
 	G_install_timelimit();
 
@@ -1509,6 +1522,11 @@ void G_ShutdownGame(int restart) {
 	// Nico, unload API
 	if (g_useAPI.integer) {
 		G_unloadAPI();
+	}
+
+	// Nico, unload GeoIP databse
+	if (g_useGeoIP.integer) {
+		GeoIP_close();
 	}
 
 	// write all the client session data so we can get it back

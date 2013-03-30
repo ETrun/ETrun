@@ -34,6 +34,7 @@ If you have questions concerning this license or the applicable additional terms
 #include "bg_public.h"
 #include "g_public.h"
 #include <pthread.h>
+#include "../../libs/geoip/geoip.h"
 
 //==================================================================
 
@@ -565,6 +566,9 @@ typedef struct {
 	qboolean specLocked;
 	int specInvitedClients[MAX_CLIENTS / (sizeof (int) * 8)];
 	qboolean freeSpec;
+
+	// Nico, country code (GeoIP)
+	unsigned int countryCode;
 
 } clientSession_t;
 
@@ -1520,6 +1524,10 @@ extern vmCvar_t g_timelimit;
 
 // Debug log
 extern vmCvar_t g_debugLog;
+
+// GeoIP
+extern vmCvar_t g_useGeoIP;
+extern vmCvar_t g_geoIPDbPath;
 
 // Nico, end of ETrun cvars
 

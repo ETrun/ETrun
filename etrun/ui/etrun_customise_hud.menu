@@ -91,6 +91,12 @@ menuDef {
 	SLIDER( 6+(SUBWINDOW_WIDTH)+6+2, 158, (SUBWINDOW_WIDTH)-4, 10, "Panel Y-position:", .2, 8, "cg_infoPanelY" 20 0 480, "Use the slider to move the info panel" )
 	CVARFLOATLABEL( 6+(SUBWINDOW_WIDTH)+6+2, 158, (SUBWINDOW_WIDTH)-4, 10, "cg_infoPanelY", .2, ITEM_ALIGN_RIGHT, $evalfloat((SUBWINDOW_WIDTH)-4), 8 )
 
+	//
+	// Scoreboard
+	//
+	SUBWINDOW( 6+(SUBWINDOW_WIDTH)+6, 180, (SUBWINDOW_WIDTH), 30, "Scoreboard" )
+	YESNO( 6+(SUBWINDOW_WIDTH)+6+2, 196, (SUBWINDOW_WIDTH)-4, 10, "Draw country flags:", .2, 8, "cg_countryFlags", "" )
+
 	// Buttons //
 	BUTTON( 6, WINDOW_HEIGHT-24, WINDOW_WIDTH-12, 18, "Back", .3, 14, close etrun_customise_hud ; open etrun )
 }

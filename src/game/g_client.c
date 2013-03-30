@@ -997,7 +997,7 @@ void ClientUserinfoChanged(int clientNum) {
 	// send over a subset of the userinfo keys so other clients can
 	// print scoreboards, display models, and play custom sounds
 
-	s = va("n\\%s\\t\\%i\\c\\%i\\w\\%i\\lw\\%i\\sw\\%i\\mu\\%i\\ref\\%i\\pm\\%i\\l\\%i\\h\\%i",
+	s = va("n\\%s\\t\\%i\\c\\%i\\w\\%i\\lw\\%i\\sw\\%i\\mu\\%i\\ref\\%i\\pm\\%i\\l\\%i\\h\\%i\\cc\\%i",
 	       client->pers.netname,
 	       client->sess.sessionTeam,
 	       client->sess.playerType,
@@ -1008,7 +1008,8 @@ void ClientUserinfoChanged(int clientNum) {
 	       client->sess.referee,
 	       client->pers.pmoveFixed ? 1 : 0, // Nico, pmove_fixed
 	       client->sess.logged ? 1 : 0, // Nico, login status
-	       client->pers.hideme // Nico, hideme
+	       client->pers.hideme, // Nico, hideme
+		   client->sess.countryCode// Nico, country code (GeoIP)
 	       );
 
 	trap_GetConfigstring(CS_PLAYERS + clientNum, oldname, sizeof (oldname));
@@ -1154,6 +1155,33 @@ char *ClientConnect(int clientNum, qboolean firstTime) {
 		// unlink the entity - just in case they were already connected
 		trap_UnlinkEntity(ent);
 	}
+
+	// Nico, GeoIP
+	if (gidb != NULL) {
+		value = Info_ValueForKey (userinfo, "ip");
+		if (!strcmp(value, "localhost")) {
+			client->sess.countryCode = 0;
+		} else {
+			unsigned long ip = GeoIP_addr_to_num(value);
+			if (((ip & 0xFF000000) == 0x0A000000) ||
+				((ip & 0xFFF00000) == 0xAC100000) ||
+				((ip & 0xFFFF0000) == 0xC0A80000) ||
+				( ip == 0x7F000001) ) {
+				client->sess.countryCode = 246;
+			} else {
+				unsigned int ret = GeoIP_seek_record(gidb,ip);
+				if (ret > 0) {
+					client->sess.countryCode = ret;
+				} else {
+					client->sess.countryCode = 246;
+					G_LogPrintf("GeoIP: This IP:%s cannot be located\n",value);
+				}
+			}
+		}
+	} else {
+		client->sess.countryCode = 255;
+	}
+	// Nico, end of GeoIP
 
 	// get and distribute relevent paramters
 	G_LogPrintf("ClientConnect: %i\n", clientNum);

@@ -323,6 +323,9 @@ vmCvar_t cg_drawInfoPanel;
 vmCvar_t cg_infoPanelX;
 vmCvar_t cg_infoPanelY;
 
+// Country flags
+vmCvar_t cg_countryFlags;
+
 // Nico, end of ETrun cvars
 
 typedef struct {
@@ -571,7 +574,10 @@ cvarTable_t cvarTable[] =
 	// Info panel
 	{ &cg_drawInfoPanel,        "cg_drawInfoPanel",        "1",     CVAR_ARCHIVE,             0 },
 	{ &cg_infoPanelX,           "cg_infoPanelX",           "537",   CVAR_ARCHIVE,             0 },
-	{ &cg_infoPanelY,           "cg_infoPanelY",           "2",     CVAR_ARCHIVE,             0 }
+	{ &cg_infoPanelY,           "cg_infoPanelY",           "2",     CVAR_ARCHIVE,             0 },
+
+	// Country flags
+	{ &cg_countryFlags,         "cg_countryFlags",         "0",     CVAR_ARCHIVE,             0 },
 
 	// Nico, end of ETrun cvars
 };
@@ -1745,6 +1751,9 @@ static void CG_RegisterGraphics(void) {
 
 	// Nico, ETrun logo
 	cgs.media.modLogo = trap_R_RegisterShaderNoMip("gfx/2d/ETrun_logo_256");
+
+	// Nico, world flags for GeoIP
+	cgs.media.worldFlags = trap_R_RegisterShaderNoMip("gfx/2d/world_flags");
 
 	CG_LoadingString(" - game media done");
 }

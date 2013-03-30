@@ -201,6 +201,10 @@ void CG_NewClientInfo(int clientNum) {
 	v              = Info_ValueForKey(configstring, "h");
 	newInfo.hideme = (atoi(v) == 1) ? qtrue : qfalse;
 
+	// Nico, country code
+	v                  = Info_ValueForKey(configstring, "cc");
+	newInfo.countryCode = atoi(v);
+
 	// Gordon: detect rank/skill changes client side
 	if (clientNum == cg.clientNum) {
 		trap_Cvar_Set("authLevel", va("%i", newInfo.refStatus));

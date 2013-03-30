@@ -536,6 +536,9 @@ typedef struct clientInfo_s {
 	// Nico, hideme
 	qboolean hideme;
 
+	// Nico, country code (GeoIP)
+	unsigned int countryCode;
+
 } clientInfo_t;
 
 typedef enum {
@@ -1374,6 +1377,9 @@ typedef struct {
 
 	// Nico, ETrun logo
 	qhandle_t modLogo;
+
+	// Nico, world flags
+	qhandle_t worldFlags;
 } cgMedia_t;
 
 typedef struct {
@@ -1582,6 +1588,7 @@ typedef struct {
 	int followedClient;
 	char followedClientName[MAX_QPATH];
 	int speclocked;
+	int countryCode;
 } s_timerunScores;
 
 //==============================================================================
@@ -1803,6 +1810,9 @@ extern vmCvar_t cg_specLock;
 extern vmCvar_t cg_drawInfoPanel;
 extern vmCvar_t cg_infoPanelX;
 extern vmCvar_t cg_infoPanelY;
+
+// Country flags
+extern vmCvar_t cg_countryFlags;
 
 // Nico, end of ETrun cvars
 

@@ -102,6 +102,7 @@ FILE(GLOB CGAME_SRC
 FILE(GLOB QAGAME_SRC
 	"src/game/*.c"
 	"src/game/*.h"
+	"libs/geoip/geoip.c"
 )
 
 FILE(GLOB UI_SRC

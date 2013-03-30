@@ -97,6 +97,30 @@ static char *WM_ETrun_coloredPing(int ping) {
 	return s;
 }
 
+/* Draw country flags
+ *
+ * @source: ETpub
+ */
+static qboolean WM_ETrun_drawCountryFlag(float x, float y,  unsigned int countryCode) {
+	float alpha[4];
+    float flag_step = 32;
+    unsigned int flag_sd = 512;
+
+    if (countryCode < 255) {
+        float x1 = (float)((countryCode * (unsigned int)flag_step) % flag_sd);
+        float y1 = (float)(floor((countryCode * flag_step) / flag_sd) * flag_step);
+        float x2 = x1 + flag_step;
+        float y2 = y1 + flag_step;
+        alpha[0] = alpha[1] = alpha[2] = alpha[3]= 1.0;
+
+        trap_R_SetColor(alpha);
+		CG_DrawPicST(x - 8, y - 19, flag_step, flag_step, x1 / flag_sd, y1 / flag_sd, x2 / flag_sd , y2 / flag_sd, cgs.media.worldFlags);
+        trap_R_SetColor(NULL);
+        return qtrue;
+	}
+	return qfalse;
+}
+
 /* New ETrun draw header function
  *
  * @author Nico
@@ -163,6 +187,7 @@ static void WM_ETrun_DrawPlayers(int *x, int *y, fontInfo_t *font, s_timerunScor
 	tempx += INFO_STATE_WIDTH;
 
 	for (i = 0; i < numScores; ++i) {
+		qboolean drawFlag = qfalse;
 
 		// Ignore spectators
 		if (orderedScores[i].team == TEAM_SPECTATOR) {
@@ -177,9 +202,17 @@ static void WM_ETrun_DrawPlayers(int *x, int *y, fontInfo_t *font, s_timerunScor
 		CG_DrawRect_FixedBorder(*x, *y, INFO_TOTAL_WIDTH, INFO_LINE_HEIGHT, 1, colorBlack);
 		*y += INFO_LINE_HEIGHT - 2;
 
+		// Nico, draw country flag
+		if (cg_countryFlags.integer) {
+			if (WM_ETrun_drawCountryFlag(tempx, *y, orderedScores[i].countryCode)) {
+				tempx += 16;
+				drawFlag = qtrue;
+			}
+		}
+
 		// Nico, draw player name
-		WM_ETrun_print(orderedScores[i].name, font, fontsize, tempx, *y, qtrue, NAME_MAX_LENGHT);
-		tempx += INFO_PLAYER_WIDTH;
+		WM_ETrun_print(orderedScores[i].name, font, fontsize, tempx, *y, qtrue, drawFlag == qfalse ? NAME_MAX_LENGHT : NAME_MAX_LENGHT - 3);
+		tempx += drawFlag == qfalse ? INFO_PLAYER_WIDTH : INFO_PLAYER_WIDTH - 32;
 
 		// Nico, draw team
 		if (orderedScores[i].team == TEAM_AXIS) {
@@ -283,6 +316,7 @@ static void WM_ETrun_DrawSpectators(int *x, int *y, fontInfo_t *font, s_timerunS
 	tempx += INFO_SPEC_LATENCY_WIDTH;
 
 	for (i = 0; i < numScores; ++i) {
+		qboolean drawFlag = qfalse;
 
 		// Ignore non-spectators
 		if (orderedScores[i].team != TEAM_SPECTATOR) {
@@ -297,9 +331,17 @@ static void WM_ETrun_DrawSpectators(int *x, int *y, fontInfo_t *font, s_timerunS
 		CG_DrawRect_FixedBorder(*x, *y, INFO_SPEC_TOTAL_WIDTH, INFO_LINE_HEIGHT, 1, colorBlack);
 		*y += INFO_LINE_HEIGHT - 2;
 
+		// Nico, draw country flag
+		if (cg_countryFlags.integer) {
+			if (WM_ETrun_drawCountryFlag(tempx, *y, orderedScores[i].countryCode)) {
+				tempx += 16;
+				drawFlag = qtrue;
+			}
+		}
+
 		// Nico, draw player name
-		WM_ETrun_print(orderedScores[i].name, font, fontsize, tempx, *y, qtrue, NAME_MAX_LENGHT);
-		tempx += INFO_SPEC_PLAYER_WIDTH;
+		WM_ETrun_print(orderedScores[i].name, font, fontsize, tempx, *y, qtrue, drawFlag == qfalse ? NAME_MAX_LENGHT : NAME_MAX_LENGHT - 3);
+		tempx += drawFlag == qfalse ? INFO_PLAYER_WIDTH : INFO_PLAYER_WIDTH - 32;
 
 		// Nico, draw followed client name
 		if (orderedScores[i].clientNum != orderedScores[i].followedClient) {
@@ -439,6 +481,7 @@ qboolean CG_DrawScoreboard(void) {
 		orderedScores[i].followedClient   = cg.scores[i].followedClient; // Followed client
 		Q_strncpyz(orderedScores[i].followedClientName, cgs.clientinfo[cg.scores[i].followedClient].name, MAX_QPATH); // Followed client name
 		orderedScores[i].speclocked = cg.scores[i].speclocked; // Speclock status
+		orderedScores[i].countryCode = cgs.clientinfo[cg.scores[i].client].countryCode;
 	}
 
 	// Nico, fake test data
@@ -458,6 +501,7 @@ qboolean CG_DrawScoreboard(void) {
 		orderedScores[j].ping             = rand() % 800;
 		orderedScores[j].followedClient   = 0; // Followed client
 		Q_strncpyz(orderedScores[j].followedClientName, "none", MAX_QPATH); // Followed client name
+		orderedScores[i].countryCode = rand() % 255;
 	}
 #endif
 
@@ -511,7 +555,6 @@ qboolean CG_DrawScoreboard(void) {
 		}
 	} else {
 		// Nico, 2-columns scoreboard
-
 
 		if (teamPlayers[TEAM_ALLIES] != 0 || teamPlayers[TEAM_AXIS] != 0) {
 			thereArePlayers = qtrue;

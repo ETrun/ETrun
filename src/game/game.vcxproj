@@ -164,6 +164,7 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\libs\geoip\geoip.c" />
     <ClCompile Include="g_api.c" />
     <ClCompile Include="bg_animation.c" />
     <ClCompile Include="bg_animgroup.c" />
@@ -219,6 +220,7 @@
     <None Include="Themes\Generic.xaml" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\libs\geoip\geoip.h" />
     <ClInclude Include="g_api.h" />
     <ClInclude Include="bg_local.h" />
     <ClInclude Include="bg_public.h" />
