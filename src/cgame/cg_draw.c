@@ -2382,7 +2382,7 @@ static void CG_Autodemo() {
 		if (cg.runsave) {
 			if (!rs_keep) {
 				if (cg_autoDemo.integer == 1) {
-					CG_AddPMItem(PM_MESSAGE, va("%s^w: stopping and saving demo..\n", GAME_VERSION_COLORED), cgs.media.voiceChatShader);
+					CG_AddPMItem(PM_MESSAGE, va("%s^w: stopping and saving demo...\n", GAME_VERSION_COLORED), cgs.media.voiceChatShader);
 				}
 				rs_time = cg.time;
 				rs_keep = 1;
