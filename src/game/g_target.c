@@ -1443,7 +1443,8 @@ void saveDemo(gentity_t *ent) {
 
 	len = strlen(cleanRunName);
 	for (i = 0; i < len; ++i) {
-		if (cleanRunName[i] == ' ') {
+		// Nico, only alphanumeric characters, the rest is replaced by an '_'
+		if (!isalnum(cleanRunName[i])) {
 			cleanRunName[i] = '_';
 		}
 	}
