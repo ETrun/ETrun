@@ -62,9 +62,7 @@ vmCvar_t g_maxclients;
 vmCvar_t g_dedicated;
 vmCvar_t g_inactivity;
 vmCvar_t g_debugMove;
-vmCvar_t g_debugDamage;
 vmCvar_t g_debugAlloc;
-vmCvar_t g_debugBullets;    //----(SA)	added
 vmCvar_t g_motd;
 vmCvar_t g_gamestate;
 vmCvar_t g_gametype;
@@ -218,9 +216,7 @@ cvarTable_t gameCvarTable[] =
 
 	{ &g_inactivity,           "g_inactivity",           "120",                        0,                                                             0,      qtrue,  qfalse, qfalse }, // Nico, set to 120 secs (default was 0)
 	{ &g_debugMove,            "g_debugMove",            "0",                          0,                                                             0,      qfalse, qfalse, qfalse },
-	{ &g_debugDamage,          "g_debugDamage",          "0",                          CVAR_CHEAT,                                                    0,      qfalse, qfalse, qfalse },
 	{ &g_debugAlloc,           "g_debugAlloc",           "0",                          0,                                                             0,      qfalse, qfalse, qfalse },
-	{ &g_debugBullets,         "g_debugBullets",         "0",                          CVAR_CHEAT,                                                    0,      qfalse, qfalse, qfalse }, //----(SA)	added
 	{ &g_motd,                 "g_motd",                 "",                           CVAR_ARCHIVE,                                                  0,      qfalse, qfalse, qfalse },
 	{ &voteFlags,              "voteFlags",              "0",                          CVAR_TEMP | CVAR_ROM | CVAR_SERVERINFO,                        0,      qfalse, qfalse, qfalse },
 	{ &g_filtercams,           "g_filtercams",           "0",                          CVAR_ARCHIVE,                                                  0,      qfalse, qfalse, qfalse },

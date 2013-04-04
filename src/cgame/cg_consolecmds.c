@@ -242,7 +242,6 @@ void CG_StopCamera(void) {
 	// fade back into world
 	CG_Fade(255, 0, 0);
 	CG_Fade(0, cg.time + 500, 2000);
-
 }
 
 static void CG_Fade_f(void) {
@@ -389,7 +388,6 @@ static void CG_BuddyVoiceChat_f(void) {
 
 	trap_SendConsoleCommand(va("cmd vsay_buddy -1 %s %s\n", CG_BuildSelectedFirteamString(), chatCmd));
 }
-
 
 // ydnar: say, team say, etc
 static void CG_MessageMode_f(void) {
