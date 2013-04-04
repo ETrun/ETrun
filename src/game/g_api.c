@@ -186,7 +186,7 @@ static qboolean checkAPIResult(char *result) {
 		return qfalse;
 	}
 
-	if (!Q_stricmp(result, "timemout")) {
+	if (!Q_stricmp(result, "timeout")) {
 		return qfalse;
 	}
 	if (!Q_stricmp(result, "error")) {
