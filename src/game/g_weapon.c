@@ -1977,13 +1977,6 @@ qboolean Bullet_Fire_Extended(gentity_t *source, gentity_t *attacker, vec3_t sta
 		g_entities[attacker->s.number].r.linked = qtrue;
 	}
 
-	// bullet debugging using Q3A's railtrail
-	if (g_debugBullets.integer & 1) {
-		tent = G_TempEntity(start, EV_RAILTRAIL);
-		VectorCopy(tr.endpos, tent->s.origin2);
-		tent->s.otherEntityNum2 = attacker->s.number;
-	}
-
 	traceEnt = &g_entities[tr.entityNum];
 
 	EmitterCheck(traceEnt, attacker, &tr);
@@ -2030,35 +2023,11 @@ qboolean Bullet_Fire_Extended(gentity_t *source, gentity_t *attacker, vec3_t sta
 		if (AccuracyHit(traceEnt, attacker)) {
 			hitClient = qtrue;
 		}
-
-		if (g_debugBullets.integer >= 2) {     // show hit player bb
-			gentity_t *bboxEnt;
-			vec3_t    b1, b2;
-			VectorCopy(traceEnt->r.currentOrigin, b1);
-			VectorCopy(traceEnt->r.currentOrigin, b2);
-			VectorAdd(b1, traceEnt->r.mins, b1);
-			VectorAdd(b2, traceEnt->r.maxs, b2);
-			bboxEnt = G_TempEntity(b1, EV_RAILTRAIL);
-			VectorCopy(b2, bboxEnt->s.origin2);
-			bboxEnt->s.dmgFlags = 1;
-		}
 	} else {
 		trace_t tr2;
 		// Ridah, bullet impact should reflect off surface
 		vec3_t reflect;
 		float  dot;
-
-		if (g_debugBullets.integer <= -2) {    // show hit thing bb
-			gentity_t *bboxEnt;
-			vec3_t    b1, b2;
-			VectorCopy(traceEnt->r.currentOrigin, b1);
-			VectorCopy(traceEnt->r.currentOrigin, b2);
-			VectorAdd(b1, traceEnt->r.mins, b1);
-			VectorAdd(b2, traceEnt->r.maxs, b2);
-			bboxEnt = G_TempEntity(b1, EV_RAILTRAIL);
-			VectorCopy(b2, bboxEnt->s.origin2);
-			bboxEnt->s.dmgFlags = 1;    // ("type")
-		}
 
 		tent = G_TempEntity(tr.endpos, EV_BULLET_HIT_WALL);
 

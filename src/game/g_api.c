@@ -87,13 +87,14 @@ static void printError() {
  */
 static void clientBigDataPrint(gentity_t *ent, char *data) {
 	int  len       = 0;
-	char buf[1000] = { 0 };
+	char buf[1000];
 	int  count     = 0;
 
 	len = strlen(data);
 
 	while (count < len) {
-		Q_strncpyz(buf, data + count * sizeof (char), sizeof (buf) + 1);
+		memset(buf, 0, sizeof (buf));
+		Q_strncpyz(buf, data + count * sizeof (char), sizeof (buf));
 		count += sizeof (buf);
 		CP(va("print \"%s\"", buf));
 	}
@@ -456,7 +457,6 @@ static void *checkpointsHandler(void *data) {
 	} else {
 		CP(va("print \"%s^w: error while loading checkpoints\n\"", GAME_VERSION_COLORED));
 	}
-
 
 	free(queryStruct->result);
 	free(queryStruct);

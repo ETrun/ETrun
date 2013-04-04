@@ -551,27 +551,6 @@ qboolean IsHeadShot(gentity_t *targ, vec3_t dir, vec3_t point, int mod) {
 	VectorMA(start, 64, dir, end);
 	trap_Trace(&tr, start, NULL, NULL, end, targ->s.number, MASK_SHOT);
 
-	if (g_debugBullets.integer >= 3) {   // show hit player head bb
-		gentity_t *tent;
-		vec3_t    b1, b2;
-		VectorCopy(head->r.currentOrigin, b1);
-		VectorCopy(head->r.currentOrigin, b2);
-		VectorAdd(b1, head->r.mins, b1);
-		VectorAdd(b2, head->r.maxs, b2);
-		tent = G_TempEntity(b1, EV_RAILTRAIL);
-		VectorCopy(b2, tent->s.origin2);
-		tent->s.dmgFlags = 1;
-
-		// show headshot trace
-		// end the headshot trace at the head box if it hits
-		if (tr.fraction != 1) {
-			VectorMA(start, (tr.fraction * 64), dir, end);
-		}
-		tent = G_TempEntity(start, EV_RAILTRAIL);
-		VectorCopy(end, tent->s.origin2);
-		tent->s.dmgFlags = 0;
-	}
-
 	G_FreeEntity(head);
 
 	return qfalse;
@@ -611,27 +590,6 @@ qboolean IsLegShot(gentity_t *targ, vec3_t dir, vec3_t point, int mod) {
 		trap_Trace(&tr, start, NULL, NULL, end, targ->s.number, MASK_SHOT);
 
 		traceEnt = &g_entities[tr.entityNum];
-
-		if (g_debugBullets.integer >= 3) {   // show hit player head bb
-			gentity_t *tent;
-			vec3_t    b1, b2;
-			VectorCopy(leg->r.currentOrigin, b1);
-			VectorCopy(leg->r.currentOrigin, b2);
-			VectorAdd(b1, leg->r.mins, b1);
-			VectorAdd(b2, leg->r.maxs, b2);
-			tent = G_TempEntity(b1, EV_RAILTRAIL);
-			VectorCopy(b2, tent->s.origin2);
-			tent->s.dmgFlags = 1;
-
-			// show headshot trace
-			// end the headshot trace at the head box if it hits
-			if (tr.fraction != 1) {
-				VectorMA(start, (tr.fraction * 64), dir, end);
-			}
-			tent = G_TempEntity(start, EV_RAILTRAIL);
-			VectorCopy(end, tent->s.origin2);
-			tent->s.dmgFlags = 0;
-		}
 
 		G_FreeEntity(leg);
 
@@ -950,37 +908,14 @@ void G_Damage(gentity_t *targ, gentity_t *inflictor, gentity_t *attacker, vec3_t
 				take *= .8f;    // helmet gives us some protection
 			}
 		}
-
 		targ->client->ps.eFlags |= EF_HEADSHOT;
-
-		// OSP - Record the headshot
-		if (g_debugBullets.integer) {
-			trap_SendServerCommand(attacker - g_entities, "print \"Head Shot\n\"\n");
-		}
-
 		hr = HR_HEAD;
 	} else if (IsLegShot(targ, dir, point, mod)) {
-
 		hr = HR_LEGS;
-		if (g_debugBullets.integer) {
-			trap_SendServerCommand(attacker - g_entities, "print \"Leg Shot\n\"\n");
-		}
 	} else if (IsArmShot(targ, point, mod)) {
-
 		hr = HR_ARMS;
-		if (g_debugBullets.integer) {
-			trap_SendServerCommand(attacker - g_entities, "print \"Arm Shot\n\"\n");
-		}
 	} else if (targ->client && targ->health > 0 && IsHeadShotWeapon(mod)) {
-
 		hr = HR_BODY;
-		if (g_debugBullets.integer) {
-			trap_SendServerCommand(attacker - g_entities, "print \"Body Shot\n\"\n");
-		}
-	}
-
-	if (g_debugDamage.integer) {
-		G_Printf("client:%i health:%i damage:%i mod:%s\n", targ->s.number, targ->health, take, modNames[mod]);
 	}
 
 	// add to the damage inflicted on a player this frame

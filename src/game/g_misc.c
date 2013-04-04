@@ -870,13 +870,6 @@ void Fire_Lead_Ext(gentity_t *ent, gentity_t *activator, float spread, int damag
 	// the weapon itself (e.g. for mg42s)
 	G_HistoricalTrace(activator, &tr, muzzle, NULL, NULL, end, ent->s.number, MASK_SHOT);
 
-	// bullet debugging using Q3A's railtrail
-	if (g_debugBullets.integer & 1) {
-		tent = G_TempEntity(muzzle, EV_RAILTRAIL);
-		VectorCopy(tr.endpos, tent->s.origin2);
-		tent->s.otherEntityNum2 = activator->s.number;
-	}
-
 	if (tr.surfaceFlags & SURF_NOIMPACT) {
 
 		tent                    = G_TempEntity(tr.endpos, EV_MG42BULLET_HIT_WALL);

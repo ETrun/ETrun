@@ -905,23 +905,6 @@ void G_RunFlamechunk(gentity_t *ent) {
 		G_FlameDamage(ent, ignoreent);
 	}
 
-	// Show debugging bbox
-	if (g_debugBullets.integer > 3) {
-		gentity_t *bboxEnt;
-		float     size = ent->speed / 2;
-		vec3_t    b1, b2;
-		vec3_t    temp;
-		VectorSet(temp, -size, -size, -size);
-		VectorCopy(ent->r.currentOrigin, b1);
-		VectorCopy(ent->r.currentOrigin, b2);
-		VectorAdd(b1, temp, b1);
-		VectorSet(temp, size, size, size);
-		VectorAdd(b2, temp, b2);
-		bboxEnt = G_TempEntity(b1, EV_RAILTRAIL);
-		VectorCopy(b2, bboxEnt->s.origin2);
-		bboxEnt->s.dmgFlags = 1;    // ("type")
-	}
-
 	// Adjust the size
 	if (ent->speed < FLAME_START_MAX_SIZE) {
 		ent->speed += 10.f;

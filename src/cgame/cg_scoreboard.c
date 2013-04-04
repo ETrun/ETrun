@@ -212,7 +212,7 @@ static void WM_ETrun_DrawPlayers(int *x, int *y, fontInfo_t *font, s_timerunScor
 
 		// Nico, draw player name
 		WM_ETrun_print(orderedScores[i].name, font, fontsize, tempx, *y, qtrue, drawFlag == qfalse ? NAME_MAX_LENGHT : NAME_MAX_LENGHT - 3);
-		tempx += drawFlag == qfalse ? INFO_PLAYER_WIDTH : INFO_PLAYER_WIDTH - 32;
+		tempx += drawFlag == qfalse ? INFO_PLAYER_WIDTH : INFO_PLAYER_WIDTH - 16;
 
 		// Nico, draw team
 		if (orderedScores[i].team == TEAM_AXIS) {
@@ -341,7 +341,7 @@ static void WM_ETrun_DrawSpectators(int *x, int *y, fontInfo_t *font, s_timerunS
 
 		// Nico, draw player name
 		WM_ETrun_print(orderedScores[i].name, font, fontsize, tempx, *y, qtrue, drawFlag == qfalse ? NAME_MAX_LENGHT : NAME_MAX_LENGHT - 3);
-		tempx += drawFlag == qfalse ? INFO_PLAYER_WIDTH : INFO_PLAYER_WIDTH - 32;
+		tempx += drawFlag == qfalse ? INFO_PLAYER_WIDTH : INFO_PLAYER_WIDTH - 16;
 
 		// Nico, draw followed client name
 		if (orderedScores[i].clientNum != orderedScores[i].followedClient) {

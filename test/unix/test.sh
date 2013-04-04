@@ -167,9 +167,13 @@ function install() {
 		echo "Error: failed to install build/$mod_name/$qagame_name into $HOMEPATH/$mod_name"
 		exit 1
 	fi
+
 	# Install custom mapscripts into homepath
 	mkdir -p $HOMEPATH/$mod_name/custommapscripts
 	cp -f $mod_name/custommapscripts/* $HOMEPATH/$mod_name/custommapscripts
+
+	# Install GeoIP
+	cp libs/geoip/GeoIP.dat $HOMEPATH/$mod_name/
 }
 
 #
