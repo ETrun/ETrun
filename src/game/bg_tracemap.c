@@ -92,7 +92,7 @@ float BG_GetSkyHeightAtPoint(vec3_t pos) {
 	// them to go outside the array
 	etpro_FinalizeTracemapClamp(&i, &j);
 
-	return(tracemap.sky[j][i]);
+	return tracemap.sky[j][i];
 }
 
 float BG_GetSkyGroundHeightAtPoint(vec3_t pos) {
@@ -112,7 +112,7 @@ float BG_GetSkyGroundHeightAtPoint(vec3_t pos) {
 	// them to go outside the array
 	etpro_FinalizeTracemapClamp(&i, &j);
 
-	return(tracemap.skyground[j][i]);
+	return tracemap.skyground[j][i];
 }
 
 float BG_GetGroundHeightAtPoint(vec3_t pos) {
@@ -132,7 +132,7 @@ float BG_GetGroundHeightAtPoint(vec3_t pos) {
 	// them to go outside the array
 	etpro_FinalizeTracemapClamp(&i, &j);
 
-	return(tracemap.ground[j][i]);
+	return tracemap.ground[j][i];
 }
 
 int BG_GetTracemapGroundFloor(void) {

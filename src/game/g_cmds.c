@@ -1277,7 +1277,7 @@ qboolean Cmd_CallVote_f(gentity_t *ent, unsigned int dwCommand, qboolean fRefCom
 		char *strCmdBase = (!fRefCommand) ? "vote" : "ref command";
 
 		G_refPrintf(ent, "Invalid %s string.", strCmdBase);
-		return(qfalse);
+		return qfalse;
 	}
 
 	// Nico, perform common checks here
@@ -1381,7 +1381,7 @@ qboolean Cmd_CallVote_f(gentity_t *ent, unsigned int dwCommand, qboolean fRefCom
 	// Nico, need to recompute
 	CalculateRanks();
 
-	return(qtrue);
+	return qtrue;
 }
 
 qboolean StringToFilter(const char *s, ipFilter_t *f);

@@ -1079,17 +1079,17 @@ qboolean G_teamJoinCheck(int team_num, gentity_t *ent) {
 	// Check for locked teams
 	if (team_num == TEAM_AXIS || team_num == TEAM_ALLIES) {
 		if ((int)ent->client->sess.sessionTeam == team_num) {
-			return(qtrue);
+			return qtrue;
 		}
 		// Check for full teams
 		if (team_maxplayers.integer > 0 && team_maxplayers.integer <= cnt) {
 			G_printFull(va("The %s team is full!", aTeams[team_num]), ent);
-			return(qfalse);
+			return qfalse;
 
 			// Check for locked teams
 		} else if (teamInfo[team_num].team_lock && (!(ent->client->pers.invite & team_num))) {
 			G_printFull(va("The %s team is LOCKED!", aTeams[team_num]), ent);
-			return(qfalse);
+			return qfalse;
 		}
 	}
 

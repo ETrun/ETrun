@@ -871,7 +871,7 @@ int CG_findClientNum(char *s) {
 	if (fIsNumber) {
 		id = atoi(s);
 		if (id >= 0 && id < cgs.maxclients && cgs.clientinfo[id].infoValid) {
-			return(id);
+			return id;
 		}
 	}
 
@@ -884,7 +884,7 @@ int CG_findClientNum(char *s) {
 
 		BG_cleanName(cgs.clientinfo[id].name, n2, sizeof (n2), qfalse);
 		if (!Q_stricmp(n2, s2)) {
-			return(id);
+			return id;
 		}
 	}
 

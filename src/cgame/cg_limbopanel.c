@@ -682,9 +682,9 @@ void CG_LimboPanel_RenderClassButton(panel_button_t *button) {
 qboolean CG_LimboPanel_RenderLight_GetValue(panel_button_t *button) {
 	switch (button->data[0]) {
 	case 0:
-		return (CG_LimboPanel_GetClass() == button->data[1]) ? qtrue : qfalse;
+		return CG_LimboPanel_GetClass() == button->data[1] ? qtrue : qfalse;
 	case 1:
-		return (CG_LimboPanel_GetTeam() == teamOrder[button->data[1]]) ? qtrue : qfalse;
+		return CG_LimboPanel_GetTeam() == teamOrder[button->data[1]] ? qtrue : qfalse;
 	}
 
 	return qfalse;

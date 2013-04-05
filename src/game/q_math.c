@@ -585,7 +585,7 @@ float LerpAngle(float from, float to, float frac) {
 		to += 360;
 	}
 
-	return(from + frac * (to - from));
+	return from + frac * (to - from);
 }
 
 /*
@@ -630,7 +630,7 @@ void AnglesSubtract(vec3_t v1, vec3_t v2, vec3_t v3) {
 
 
 float AngleMod(float a) {
-	return((360.0 / 65536) * ((int)(a * (65536 / 360.0)) & 65535));
+	return (360.0 / 65536) * ((int)(a * (65536 / 360.0)) & 65535);
 }
 
 /*

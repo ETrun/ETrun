@@ -680,7 +680,7 @@ itemDef_t *Menu_ClearFocus(menuDef_t *menu) {
 	itemDef_t *ret = NULL;
 
 	if (menu == NULL) {
-		return(NULL);
+		return NULL;
 	}
 
 	for (i = 0; i < menu->itemCount; i++) {
@@ -699,7 +699,7 @@ itemDef_t *Menu_ClearFocus(menuDef_t *menu) {
 		}
 	}
 
-	return(ret);
+	return ret;
 }
 
 qboolean IsVisible(int flags) {
@@ -2037,19 +2037,19 @@ qboolean Item_SettingShow(itemDef_t *item, qboolean fVoteTest) {
 
 	if (fVoteTest) {
 		trap_Cvar_VariableStringBuffer("cg_ui_voteFlags", info, sizeof (info));
-		return((atoi(info) & item->voteFlag) != item->voteFlag);
+		return (atoi(info) & item->voteFlag) != item->voteFlag;
 	}
 
 	DC->getConfigString(CS_SERVERTOGGLES, info, sizeof (info));
 
 	if (item->settingFlags & SVS_ENABLED_SHOW) {
-		return(atoi(info) & item->settingTest);
+		return atoi(info) & item->settingTest;
 	}
 	if (item->settingFlags & SVS_DISABLED_SHOW) {
-		return(!(atoi(info) & item->settingTest));
+		return !(atoi(info) & item->settingTest);
 	}
 
-	return(qtrue);
+	return qtrue;
 }
 
 
@@ -2080,10 +2080,10 @@ qboolean Item_SetFocus(itemDef_t *item, float x, float y) {
 
 	// OSP
 	if ((item->settingFlags & (SVS_ENABLED_SHOW | SVS_DISABLED_SHOW)) && !Item_SettingShow(item, qfalse)) {
-		return(qfalse);
+		return qfalse;
 	}
 	if (item->voteFlag != 0 && !Item_SettingShow(item, qtrue)) {
-		return(qfalse);
+		return qfalse;
 	}
 
 	oldFocus = Menu_ClearFocus(item->parent);
@@ -5162,18 +5162,18 @@ Item_ValidateTooltipData
 */
 qboolean Item_ValidateTooltipData(itemDef_t *item) {
 	if (item->toolTipData != NULL) {
-		return(qtrue);
+		return qtrue;
 	}
 
 	item->toolTipData = UI_Alloc(sizeof (itemDef_t));
 	if (item->toolTipData == NULL) {
-		return(qfalse);
+		return qfalse;
 	}
 
 	Item_Init(item->toolTipData);
 	Tooltip_Initialize(item->toolTipData);
 
-	return(qtrue);
+	return qtrue;
 }
 
 /*

@@ -3701,7 +3701,7 @@ splinePath_t *BG_GetSplineData(int number, qboolean *backwards) {
 }
 
 int BG_MaxAmmoForWeapon(weapon_t weaponNum) {
-	return(GetAmmoTableData(weaponNum)->maxammo);
+	return GetAmmoTableData(weaponNum)->maxammo;
 }
 
 /*
@@ -4009,7 +4009,7 @@ int BG_cleanName(const char *pszIn, char *pszOut, int dwMaxLength, qboolean fCRL
 	}
 
 	*pszOut = 0;
-	return(pszOut - pszOutStart);
+	return pszOut - pszOutStart;
 }
 
 // Only used locally

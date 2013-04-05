@@ -489,15 +489,6 @@ void CG_RubbleFx(vec3_t origin, vec3_t dir, int mass, int type, sfxHandle_t soun
 
 			le->endTime = (le->startTime + 5000 + random() * 5000) + endtime;
 
-			// as it turns out, i'm not sure if setting the re->axis here will actually do anything
-			//			AxisClear(re->axis);
-			//			re->axis[0][0] =
-			//			re->axis[1][1] =
-			//			re->axis[2][2] = scale;
-			//
-			//			if(scale != 1.0)
-			//				re->nonNormalizedAxes = qtrue;
-
 			le->sizeScale = scale * sizescale;
 
 			if (type == 1) {   // glass
@@ -556,7 +547,6 @@ void CG_RubbleFx(vec3_t origin, vec3_t dir, int mass, int type, sfxHandle_t soun
 				break;
 			}
 
-
 			// rotation
 			le->angles.trType     = TR_LINEAR;
 			le->angles.trTime     = cg.time;
@@ -566,11 +556,6 @@ void CG_RubbleFx(vec3_t origin, vec3_t dir, int mass, int type, sfxHandle_t soun
 			le->angles.trDelta[0] = ((100 + (rand() & 500)) - 300) * materialmul;
 			le->angles.trDelta[1] = ((100 + (rand() & 500)) - 300) * materialmul;
 			le->angles.trDelta[2] = ((100 + (rand() & 500)) - 300) * materialmul;
-
-
-			//			if(type == 6)	// fabric
-			//				materialmul = 1;		// translation speed
-
 
 			VectorCopy(origin, le->pos.trBase);
 			VectorNormalize(dir);
@@ -776,15 +761,6 @@ void CG_Explodef(vec3_t origin, vec3_t dir, int mass, int type, qhandle_t sound,
 
 			le->endTime = (le->startTime + 5000 + random() * 5000) + endtime;
 
-			// as it turns out, i'm not sure if setting the re->axis here will actually do anything
-			//			AxisClear(re->axis);
-			//			re->axis[0][0] =
-			//			re->axis[1][1] =
-			//			re->axis[2][2] = scale;
-			//
-			//			if(scale != 1.0)
-			//				re->nonNormalizedAxes = qtrue;
-
 			le->sizeScale = scale;
 
 			if (type == 1) {   // glass
@@ -843,7 +819,6 @@ void CG_Explodef(vec3_t origin, vec3_t dir, int mass, int type, qhandle_t sound,
 				break;
 			}
 
-
 			// rotation
 			le->angles.trType     = TR_LINEAR;
 			le->angles.trTime     = cg.time;
@@ -854,17 +829,10 @@ void CG_Explodef(vec3_t origin, vec3_t dir, int mass, int type, qhandle_t sound,
 			le->angles.trDelta[1] = ((100 + (rand() & 500)) - 300) * materialmul;
 			le->angles.trDelta[2] = ((100 + (rand() & 500)) - 300) * materialmul;
 
-
-			//			if(type == 6)	// fabric
-			//				materialmul = 1;		// translation speed
-
-
 			VectorCopy(origin, le->pos.trBase);
 			VectorNormalize(dir);
 			le->pos.trTime = cg.time;
 
-			// (SA) hoping that was just intended to represent randomness
-			//			if (cent->currentState.angles2[0] || cent->currentState.angles2[1] || cent->currentState.angles2[2])
 			if (le->angles.trBase[0] == 1 || le->angles.trBase[1] == 1 || le->angles.trBase[2] == 1) {
 				le->pos.trType = TR_GRAVITY;
 				VectorScale(dir, 10 * 8, le->pos.trDelta);

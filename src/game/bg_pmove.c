@@ -702,19 +702,13 @@ static qboolean PM_CheckProne(void) {
 
 		pm->mins[2] = pm->ps->mins[2];
 
-		//frac = (pm->cmd.serverTime - pm->pmext->proneTime) / 500.f;
-		//if( frac > 1.f )
-		//	frac = 1.f;
-
-		//pm->maxs[2] = pm->ps->maxs[2] - (frac * (pm->ps->standViewHeight - PRONE_VIEWHEIGHT));
-		//pm->ps->viewheight = DEFAULT_VIEWHEIGHT - (frac * (DEFAULT_VIEWHEIGHT - PRONE_VIEWHEIGHT));	// default - prone to get a positive which is subtracted from default
 		pm->maxs[2]        = pm->ps->maxs[2] - pm->ps->standViewHeight - PRONE_VIEWHEIGHT;
 		pm->ps->viewheight = PRONE_VIEWHEIGHT;
 
-		return(qtrue);
+		return qtrue;
 	}
 
-	return(qfalse);
+	return qfalse;
 }
 //============================================================================
 

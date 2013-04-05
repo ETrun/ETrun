@@ -404,7 +404,7 @@ int EntsThatRadiusCanDamage(vec3_t origin, float radius, int *damagedList) {
 		}
 	}
 
-	return(numDamaged);
+	return numDamaged;
 }
 
 extern void explosive_indicator_think(gentity_t *ent);
@@ -608,10 +608,6 @@ static void HandleEntsThatBlockConstructible(gentity_t *constructor, gentity_t *
 		trap_LinkEntity(constructible);
 	} else {
 		constructible->s.modelindex = 0;
-		//constructible->clipmask = constructibleClipmask;
-		//constructible->r.contents = constructibleContents;
-		//if( !constructibleNonSolidBModel )
-		//	constructible->s.eFlags &= ~EF_NONSOLID_BMODEL;
 		trap_LinkEntity(constructible);
 	}
 }
@@ -642,7 +638,7 @@ static qboolean TryConstructing(gentity_t *ent) {
 		    otherconstructible->s.angles2[1] ||
 		    (otherconstructible->count2 && otherconstructible->grenadeFired)) {
 
-			return(qfalse);
+			return qfalse;
 		}
 	}
 
@@ -651,11 +647,11 @@ static qboolean TryConstructing(gentity_t *ent) {
 	    constructible->s.teamNum == (int)ent->client->sess.sessionTeam) {
 
 		if (constructible->s.angles2[0] >= 250) {   // have to do this so we don't score multiple times
-			return(qfalse);
+			return qfalse;
 		}
 
 		if (constructible->s.angles2[1] != 0) {
-			return(qfalse);
+			return qfalse;
 		}
 
 		// Check if we can construct - updates the classWeaponTime as well
@@ -667,7 +663,7 @@ static qboolean TryConstructing(gentity_t *ent) {
 		if (constructible->s.angles2[0] <= 0) {
 			// wait a bit, this prevents network spam
 			if (level.time - constructible->lastHintCheckTime < CONSTRUCT_POSTDECAY_TIME) {
-				return(qtrue);      // likely will come back soon - so override other plier bits anyway
+				return qtrue;      // likely will come back soon - so override other plier bits anyway
 
 			}
 
@@ -675,7 +671,6 @@ static qboolean TryConstructing(gentity_t *ent) {
 			if (constructible->count2) {
 				constructible->grenadeFired++;
 				constructible->s.modelindex2 = constructible->conbmodels[constructible->grenadeFired - 1];
-				//trap_SetBrushModel( constructible, va( "*%i", constructible->conbmodels[constructible->grenadeFired-1] ) );
 			}
 
 			G_SetEntState(constructible, STATE_UNDERCONSTRUCTION);
@@ -743,7 +738,7 @@ static qboolean TryConstructing(gentity_t *ent) {
 		} else {
 			constructible->lastHintCheckTime = level.time;
 			HandleEntsThatBlockConstructible(ent, constructible, qfalse, qtrue);
-			return(qtrue);      // properly constructed
+			return qtrue;      // properly constructed
 		}
 
 		if (constructible->count2) {
@@ -896,10 +891,10 @@ static qboolean TryConstructing(gentity_t *ent) {
 			}
 		}
 
-		return(qtrue);      // building
+		return qtrue;      // building
 	}
 
-	return(qfalse);
+	return qfalse;
 }
 
 void AutoBuildConstruction(gentity_t *constructible) {
@@ -1159,8 +1154,6 @@ void Weapon_Engineer(gentity_t *ent) {
 
 			trap_EngineerTrace(&tr2, traceEnt->s.pos.trBase, NULL, NULL, base, traceEnt->s.number, MASK_SHOT);
 
-			// ydnar: added "surfaceparm landmine" (SURF_LANDMINE) support
-			//%	if(!(tr2.surfaceFlags & (SURF_GRASS | SURF_SNOW | SURF_GRAVEL)) ||
 			if (!(tr2.surfaceFlags & SURF_LANDMINE) || (tr2.entityNum != ENTITYNUM_WORLD && (!g_entities[tr2.entityNum].inuse || g_entities[tr2.entityNum].s.eType != ET_CONSTRUCTIBLE))) {
 				trap_SendServerCommand(ent - g_entities, "cp \"Landmine cannot be armed here...\" 1");
 
@@ -1556,10 +1549,6 @@ void Weapon_Engineer(gentity_t *ent) {
 							if (hit->s.eType != ET_CONSTRUCTIBLE) {
 								continue;
 							}
-
-							// not completely build yet - NOTE: don't do this, in case someone places dynamite before construction is complete
-							//if( hit->s.angles2[0] < 255 )
-							//	continue;
 
 							// invulnerable
 							if (hit->spawnflags & CONSTRUCTIBLE_INVULNERABLE) {

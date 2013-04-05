@@ -717,7 +717,7 @@ static smokesprite_t *AllocSmokeSprite(void) {
 	smokesprite_t *alloc;
 
 	if (SmokeSpriteCount >= MAX_SMOKESPRITES) {
-		return(NULL);
+		return NULL;
 	}
 
 	alloc = firstfreesmokesprite;
@@ -733,7 +733,7 @@ static smokesprite_t *AllocSmokeSprite(void) {
 	lastusedsmokesprite = alloc;
 
 	SmokeSpriteCount++;
-	return(alloc);
+	return alloc;
 }
 
 // Returns previous alloced smokesprite in list (or NULL when there are no more alloced smokesprites left)
@@ -760,7 +760,7 @@ static smokesprite_t *DeAllocSmokeSprite(smokesprite_t *dealloc) {
 	firstfreesmokesprite = dealloc;
 
 	SmokeSpriteCount--;
-	return(ret_smokesprite);
+	return ret_smokesprite;
 }
 
 static qboolean CG_SmokeSpritePhysics(smokesprite_t *smokesprite, const float dist) {
@@ -778,11 +778,11 @@ static qboolean CG_SmokeSpritePhysics(smokesprite_t *smokesprite, const float di
 
 	if (tr.fraction != 1.f) {
 		if (smokesprite->dist < 24.f) {
-			return(qfalse);
+			return qfalse;
 		}
 		VectorCopy(tr.endpos, smokesprite->pos);
 	}
-	return(qtrue);
+	return qtrue;
 }
 
 qboolean CG_SpawnSmokeSprite(centity_t *cent, float dist) {
@@ -802,12 +802,12 @@ qboolean CG_SpawnSmokeSprite(centity_t *cent, float dist) {
 		// Advance sprite
 		if (!CG_SmokeSpritePhysics(smokesprite, dist)) {
 			DeAllocSmokeSprite(smokesprite);
-			return(qfalse);
+			return qfalse;
 		}
 		cent->miscTime++;
 	}
 
-	return(qtrue);
+	return qtrue;
 }
 
 void CG_RenderSmokeGrenadeSmoke(centity_t *cent, const weaponInfo_t *weapon) {

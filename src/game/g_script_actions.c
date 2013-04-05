@@ -1836,7 +1836,7 @@ qboolean G_ScriptAction_PlayAnim(gentity_t *ent, char *params) {
 		return qtrue;   // continue to the next command
 	}
 
-	return (endtime <= level.time);
+	return endtime <= level.time;
 };
 
 /*

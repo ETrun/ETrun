@@ -3710,7 +3710,7 @@ const char *UI_FeederItemText(float feederID, int index, int column, qhandle_t *
 		return UI_SelectedMap(index, &actual);
 	} else if (feederID == FEEDER_GLINFO) {
 		if (index == 0) {
-			return(va("Vendor: %s", uiInfo.uiDC.glconfig.vendor_string));
+			return va("Vendor: %s", uiInfo.uiDC.glconfig.vendor_string);
 		} else if (index == 1) {
 			return va("Version: %s: %s", uiInfo.uiDC.glconfig.version_string, uiInfo.uiDC.glconfig.renderer_string);
 		} else if (index == 2) {
@@ -3829,7 +3829,7 @@ const char *UI_FeederItemText(float feederID, int index, int column, qhandle_t *
 
 		if (!Q_stricmp(buff, cl_profile.string)) {
 			if (!Q_stricmp(buff, cl_defaultProfile.string)) {
-				return(va("^7(Default) %s", uiInfo.profileList[index].name));
+				return va("^7(Default) %s", uiInfo.profileList[index].name);
 			}
 			return va("^7%s", uiInfo.profileList[index].name);
 		} else if (!Q_stricmp(buff, cl_defaultProfile.string)) {

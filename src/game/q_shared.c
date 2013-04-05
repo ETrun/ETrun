@@ -33,11 +33,11 @@ If you have questions concerning this license or the applicable additional terms
 
 #ifdef MACOS_X
 int qmax(int x, int y) {
-	return (((x) > (y)) ? (x) : (y));
+	return ((x) > (y)) ? (x) : (y);
 }
 
 int qmin(int x, int y) {
-	return (((x) < (y)) ? (x) : (y));
+	return ((x) < (y)) ? (x) : (y);
 }
 #endif
 
@@ -158,7 +158,7 @@ qboolean COM_BitCheck(const int array[], int bitNum) {
 		bitNum -= 32;
 	}
 
-	return ((array[i] & (1 << bitNum)) != 0);        // (SA) heh, whoops. :)
+	return (array[i] & (1 << bitNum)) != 0;        // (SA) heh, whoops. :)
 }
 
 /*
@@ -658,52 +658,52 @@ int Com_ParseInfos(char *buf, int max, char infos[][MAX_INFO_STRING]) {
 
 int Q_isprint(int c) {
 	if (c >= 0x20 && c <= 0x7E) {
-		return (1);
+		return 1;
 	}
-	return (0);
+	return 0;
 }
 
 int Q_islower(int c) {
 	if (c >= 'a' && c <= 'z') {
-		return (1);
+		return 1;
 	}
-	return (0);
+	return 0;
 }
 
 int Q_isupper(int c) {
 	if (c >= 'A' && c <= 'Z') {
-		return (1);
+		return 1;
 	}
-	return (0);
+	return 0;
 }
 
 int Q_isalpha(int c) {
 	if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')) {
-		return (1);
+		return 1;
 	}
-	return (0);
+	return 0;
 }
 
 int Q_isnumeric(int c) {
 	if (c >= '0' && c <= '9') {
-		return (1);
+		return 1;
 	}
-	return (0);
+	return 0;
 }
 
 int Q_isalphanumeric(int c) {
 	if (Q_isalpha(c) ||
 	    Q_isnumeric(c)) {
-		return(1);
+		return 1;
 	}
-	return (0);
+	return 0;
 }
 
 int Q_isforfilename(int c) {
 	if ((Q_isalphanumeric(c) || c == '_') && c != ' ') {       // space not allowed in filename
-		return(1);
+		return 1;
 	}
-	return (0);
+	return 0;
 }
 
 char *Q_strrchr(const char *string, int c) {

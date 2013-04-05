@@ -65,10 +65,10 @@ qboolean G_refCommandCheck(gentity_t *ent, char *cmd) {
 	} else if (!Q_stricmp(cmd, "unmute")) {
 		G_refMute_cmd(ent, qfalse);
 	} else {
-		return(qfalse);
+		return qfalse;
 	}
 
-	return(qtrue);
+	return qtrue;
 }
 
 
@@ -383,7 +383,6 @@ void G_PlayerBan() {
 	bannum = G_refClientnumForName(NULL, cmd);
 
 	if (bannum != MAX_CLIENTS) {
-//		if( level.clients[bannum].sess.referee != RL_RCON ) {
 		const char *value;
 		char       userinfo[MAX_INFO_STRING];
 

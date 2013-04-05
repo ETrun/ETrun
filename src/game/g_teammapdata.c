@@ -71,7 +71,7 @@ mapEntityData_t *G_FreeMapEntityData(mapEntityData_Team_t *teamList, mapEntityDa
 	mEnt->next                  = teamList->freeMapEntityData;
 	teamList->freeMapEntityData = mEnt;
 
-	return(ret);
+	return ret;
 }
 
 /*
@@ -115,12 +115,12 @@ mapEntityData_t *G_FindMapEntityData(mapEntityData_Team_t *teamList, int entNum)
 			continue;
 		}
 		if (entNum == mEnt->entNum) {
-			return(mEnt);
+			return mEnt;
 		}
 	}
 
 	// not found
-	return(NULL);
+	return NULL;
 }
 
 /*
@@ -146,12 +146,12 @@ mapEntityData_t *G_FindMapEntityDataSingleClient(mapEntityData_Team_t *teamList,
 			continue;
 		}
 		if (entNum == mEnt->entNum) {
-			return(mEnt);
+			return mEnt;
 		}
 	}
 
 	// not found
-	return(NULL);
+	return NULL;
 }
 
 ////////////////////////////////////////////////////////////////////
@@ -263,11 +263,11 @@ static qboolean G_CullPointAndRadius(vec3_t pt, float radius) {
 
 		dist = DotProduct(pt, frust->normal) - frust->dist;
 		if (dist < -radius || dist <= radius) {
-			return(qfalse);
+			return qfalse;
 		}
 	}
 
-	return(qtrue);
+	return qtrue;
 }
 
 qboolean G_VisibleFromBinoculars(gentity_t *viewer, gentity_t *ent, vec3_t origin) {

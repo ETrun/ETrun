@@ -849,7 +849,7 @@ qboolean    ConsoleCommand(void) {
 			if (!G_refCommandCheck(NULL, cmd)) {
 				G_refHelp_cmd(NULL);
 			}
-			return(qtrue);
+			return qtrue;
 		}
 
 		// prints to the console instead now

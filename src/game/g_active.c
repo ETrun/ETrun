@@ -448,7 +448,7 @@ qboolean ClientInactivityTimer(gclient_t *client) {
 			AP(va("cpm \"%s ^7removed from teams due to inactivity! ^z(%i seconds) \n\"", client->pers.netname, g_inactivity.integer));
 			SetTeam(g_entities + (client - level.clients), "s", -1, -1, qfalse);
 
-			return(qfalse);
+			return qfalse;
 		}
 
 		if (!client->inactivityWarning && level.time > client->inactivityTime - 10000) {

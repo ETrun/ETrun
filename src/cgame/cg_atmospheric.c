@@ -196,7 +196,7 @@ static qboolean CG_RainParticleGenerate(cg_atmosphericParticle_t *particle, vec3
 	particle->weight       = currweight;
 	particle->effectshader = &cg_atmFx.effectshaders[0];
 
-	return(qtrue);
+	return qtrue;
 }
 
 static qboolean CG_RainParticleCheckVisible(cg_atmosphericParticle_t *particle) {
@@ -206,7 +206,7 @@ static qboolean CG_RainParticleCheckVisible(cg_atmosphericParticle_t *particle) 
 	vec2_t distance;
 
 	if (!particle || particle->active == ACT_NOT) {
-		return(qfalse);
+		return qfalse;
 	}
 
 	moved = (cg.time - cg_atmFx.lastRainTime) * 0.001;    // Units moved since last frame
@@ -222,7 +222,7 @@ static qboolean CG_RainParticleCheckVisible(cg_atmosphericParticle_t *particle) 
 		return CG_SetParticleActive(particle, ACT_NOT);
 	}
 
-	return(qtrue);
+	return qtrue;
 }
 
 static void CG_RainParticleRender(cg_atmosphericParticle_t *particle) {
@@ -352,7 +352,7 @@ static qboolean CG_SnowParticleGenerate(cg_atmosphericParticle_t *particle, vec3
 	particle->height       = ATMOSPHERIC_SNOW_HEIGHT + random() * 2;
 	particle->weight       = particle->height * 0.5f;
 	particle->effectshader = &cg_atmFx.effectshaders[0];
-	return(qtrue);
+	return qtrue;
 }
 
 static qboolean CG_SnowParticleCheckVisible(cg_atmosphericParticle_t *particle) {
@@ -362,7 +362,7 @@ static qboolean CG_SnowParticleCheckVisible(cg_atmosphericParticle_t *particle) 
 	vec2_t distance;
 
 	if (!particle || particle->active == ACT_NOT) {
-		return(qfalse);
+		return qfalse;
 	}
 
 	moved = (cg.time - cg_atmFx.lastRainTime) * 0.001;    // Units moved since last frame
@@ -378,7 +378,7 @@ static qboolean CG_SnowParticleCheckVisible(cg_atmosphericParticle_t *particle) 
 		return CG_SetParticleActive(particle, ACT_NOT);
 	}
 
-	return(qtrue);
+	return qtrue;
 }
 
 static void CG_SnowParticleRender(cg_atmosphericParticle_t *particle) {
@@ -516,11 +516,11 @@ static qboolean CG_EffectGustCurrent(vec3_t curr, float *weight, int *num) {
 			*weight = cg_atmFx.baseWeight + (cg_atmFx.gustWeight - cg_atmFx.baseWeight) * frac;
 			*num    = cg_atmFx.baseDrops + ((float)(cg_atmFx.gustDrops - cg_atmFx.baseDrops)) * frac;
 			if (cg.time >= cg_atmFx.baseStartTime) {
-				return(qtrue);
+				return qtrue;
 			}
 		}
 	}
-	return(qfalse);
+	return qfalse;
 }
 
 static void CG_EP_ParseFloats(char *floatstr, float *f1, float *f2) {

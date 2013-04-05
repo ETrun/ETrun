@@ -641,31 +641,6 @@ static void CG_RenderScriptSpeakers(void) {
 	closest = -1;
 	minDist = Square(8.f);
 
-	/*{
-	    float	r, u;
-	    vec3_t	axisOrg, dir;
-
-	    closest = -1;
-	    minDist = Square( 32.f );
-
-	    r = -(cg.refdef_current->fov_x / 90.f) * (float)(cgs.cursorX - 320) / 320;
-	    u = -(cg.refdef_current->fov_y / 90.f) * (float)(cgs.cursorY - 240) / 240;
-
-	    for( i = 0; i < 3; i++ ) {
-	        dir[i] = cg.refdef_current->viewaxis[0][i] * 1.f +
-	                 cg.refdef_current->viewaxis[1][i] * r +
-	                 cg.refdef_current->viewaxis[2][i] * u;
-	    }
-	    VectorNormalizeFast( dir );
-
-	    VectorMA( cg.refdef_current->vieworg, 512, dir, vec );
-	    //VectorCopy( cg.refdef_current->vieworg, axisOrg );
-	    //axisOrg[2]+=.1f;
-	    VectorMA( cg.refdef_current->vieworg, .1f, cg.refdef_current->viewaxis[0], axisOrg );
-	    CG_AddLineToScene( vec, axisOrg, colorOrange );
-
-	}*/
-
 	numSpeakersInPvs = 0;
 
 	for (i = 0; i < BG_NumScriptSpeakers(); i++) {

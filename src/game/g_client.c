@@ -356,7 +356,7 @@ team_t TeamCount(int ignoreClientNum, int team) {
 		}
 	}
 
-	return(count);
+	return count;
 }
 // -NERVE - SMF
 
@@ -373,10 +373,10 @@ team_t PickTeam(int ignoreClientNum) {
 	counts[TEAM_AXIS]   = TeamCount(ignoreClientNum, TEAM_AXIS);
 
 	if (counts[TEAM_ALLIES] > counts[TEAM_AXIS]) {
-		return(TEAM_AXIS);
+		return TEAM_AXIS;
 	}
 	if (counts[TEAM_AXIS] > counts[TEAM_ALLIES]) {
-		return(TEAM_ALLIES);
+		return TEAM_ALLIES;
 	}
 
 	// Nico, let's pick axis team, why not ? :)
