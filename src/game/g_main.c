@@ -124,7 +124,6 @@ vmCvar_t g_debugConstruct;
 // enabled in bot scripts and regular scripts.
 // Added by Mad Doctor I, 8/23/2002
 vmCvar_t g_scriptDebugLevel;
-vmCvar_t g_debugSkills;
 
 // Nico, beginning of ETrun server cvars
 
@@ -272,8 +271,6 @@ cvarTable_t gameCvarTable[] =
 
 	// configured by the server admin, points to the web pages for the server
 	{ NULL,                    "URL",                    SHORT_MOD_URL,                CVAR_SERVERINFO | CVAR_ARCHIVE,                                0,      qfalse, qfalse, qfalse },
-
-	{ &g_debugSkills,          "g_debugSkills",          "0",                          0,                                                             qfalse, qfalse, qfalse, qfalse },
 
 	// Nico, beginning of ETrun server cvars
 

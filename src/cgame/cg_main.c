@@ -226,7 +226,6 @@ vmCvar_t int_timescale;
 vmCvar_t cg_rconPassword;
 vmCvar_t cg_refereePassword;
 vmCvar_t cg_atmosphericEffects;
-vmCvar_t cg_debugSkills;
 vmCvar_t cg_drawFireteamOverlay;
 vmCvar_t cg_drawSmallPopupIcons;
 
@@ -478,7 +477,6 @@ cvarTable_t cvarTable[] =
 	{ &cg_rconPassword,         "auth_rconPassword",       "",      CVAR_TEMP,                0 },
 	{ &cg_refereePassword,      "auth_refereePassword",    "",      CVAR_TEMP,                0 },
 
-	{ &cg_debugSkills,          "cg_debugSkills",          "0",     0,                        0 },
 	{ NULL,                     "cg_etVersion",            "",      CVAR_USERINFO | CVAR_ROM, 0 },
 	{ &cg_drawFireteamOverlay,  "cg_drawFireteamOverlay",  "1",     CVAR_ARCHIVE,             0 },
 	{ &cg_drawSmallPopupIcons,  "cg_drawSmallPopupIcons",  "0",     CVAR_ARCHIVE,             0 },

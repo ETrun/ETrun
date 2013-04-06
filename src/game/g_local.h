@@ -1474,7 +1474,6 @@ extern vmCvar_t vote_allow_antilag;
 extern vmCvar_t vote_allow_muting;
 extern vmCvar_t vote_limit;
 extern vmCvar_t vote_percent;
-extern vmCvar_t g_debugSkills;
 
 // Nico, beginning of ETrun server cvars
 

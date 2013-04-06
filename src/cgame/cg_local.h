@@ -1717,8 +1717,6 @@ extern vmCvar_t int_cl_timenudge;
 extern vmCvar_t cg_rconPassword;
 extern vmCvar_t cg_refereePassword;
 extern vmCvar_t cg_atmosphericEffects;
-
-extern vmCvar_t cg_debugSkills;
 extern vmCvar_t cg_drawFireteamOverlay;
 extern vmCvar_t cg_drawSmallPopupIcons;
 
