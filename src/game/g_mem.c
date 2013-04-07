@@ -43,10 +43,6 @@ static int  allocPoint;
 void *G_Alloc(int size) {
 	char *p;
 
-	if (g_debugAlloc.integer) {
-		G_Printf("G_Alloc of %i bytes (%i left)\n", size, POOLSIZE - allocPoint - ((size + 31) & ~31));
-	}
-
 	if (allocPoint + size > POOLSIZE) {
 		G_Error("G_Alloc: failed on allocation of %u bytes\n", size);
 		return NULL;

@@ -1411,7 +1411,6 @@ extern vmCvar_t g_password;
 extern vmCvar_t sv_privatepassword;
 extern vmCvar_t g_inactivity;
 extern vmCvar_t g_debugMove;
-extern vmCvar_t g_debugAlloc;
 extern vmCvar_t g_motd;
 extern vmCvar_t voteFlags;
 extern vmCvar_t g_filtercams;
