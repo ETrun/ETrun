@@ -117,7 +117,6 @@ vmCvar_t vote_limit;
 vmCvar_t vote_percent;
 vmCvar_t g_covertopsChargeTime;
 vmCvar_t refereePassword;
-vmCvar_t g_debugConstruct;
 
 // Variable for setting the current level of debug printing/logging
 // enabled in bot scripts and regular scripts.
@@ -255,8 +254,6 @@ cvarTable_t gameCvarTable[] =
 	{ &vote_percent,           "vote_percent",           "50",                         0,                                                             0,      qfalse, qfalse, qfalse },
 
 	// state vars
-	{ &g_debugConstruct,       "g_debugConstruct",       "0",                          CVAR_CHEAT,                                                    0,      qfalse, qfalse, qfalse },
-
 	{ &g_scriptDebug,          "g_scriptDebug",          "0",                          CVAR_CHEAT,                                                    0,      qfalse, qfalse, qfalse },
 
 	// What level of detail do we want script printing to go to.

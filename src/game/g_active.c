@@ -202,11 +202,7 @@ qboolean ReadyToConstruct(gentity_t *ent, gentity_t *constructible, qboolean upd
 		weaponTime = level.time - level.engineerChargeTime[ent->client->sess.sessionTeam - 1];
 	}
 
-	if (g_debugConstruct.integer) {
-		weaponTime += 0.5f * ((float)level.engineerChargeTime[ent->client->sess.sessionTeam - 1] / (constructible->constructibleStats.duration / (float)FRAMETIME));
-	} else {
-		weaponTime += constructible->constructibleStats.chargebarreq * ((float)level.engineerChargeTime[ent->client->sess.sessionTeam - 1] / (constructible->constructibleStats.duration / (float)FRAMETIME));
-	}
+	weaponTime += constructible->constructibleStats.chargebarreq * ((float)level.engineerChargeTime[ent->client->sess.sessionTeam - 1] / (constructible->constructibleStats.duration / (float)FRAMETIME));
 
 	// if the time is in the future, we have NO energy left
 	if (weaponTime > level.time) {

@@ -1437,7 +1437,6 @@ extern vmCvar_t g_soldierChargeTime;
 // jpw
 
 extern vmCvar_t g_covertopsChargeTime;
-extern vmCvar_t g_debugConstruct;
 
 // What level of detail do we want script printing to go to.
 extern vmCvar_t g_scriptDebugLevel;
