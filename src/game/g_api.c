@@ -583,6 +583,29 @@ static void *mapRankHandler(void *data) {
 }
 
 /**
+ * Function used to check an user input string
+ *
+ * note: dst must be already allocated and have the required size
+ */
+static qboolean check_string(char *str) {
+	char *pstr = str;
+
+	if (!str) {
+		LDE("str is NULL");
+		return qfalse;
+	}
+
+	while (*pstr) {
+		if (*pstr == '/') {
+			return qfalse;
+		}
+		pstr++;
+	}
+
+	return qtrue;
+}
+
+/**
  * Map rank request command
  */
 qboolean G_API_mapRank(char *result, gentity_t *ent, char *mapName, char *optUserName, char *optMapName, char *optRunName, char *optPhysicsName, char *authToken) {
@@ -595,6 +618,10 @@ qboolean G_API_mapRank(char *result, gentity_t *ent, char *mapName, char *optUse
 
 	sprintf(net_port, "%d", trap_Cvar_VariableIntegerValue("net_port"));
 	sprintf(cphysics, "%d", physics.integer);
+
+	if (!check_string(optUserName) || !check_string(optMapName) || !check_string(optRunName) || !check_string(optPhysicsName)) {
+		return qfalse;
+	}
 
 	if (url_encode(mapName, encodedMapName) == qfalse ||
 		url_encode(optUserName, encodedOptUserName) == qfalse ||
