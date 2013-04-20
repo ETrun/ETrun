@@ -1983,7 +1983,7 @@ void CG_EntityEvent(centity_t *cent, vec3_t position) {
 
 	// JPW NERVE -- swiped from SP/Sherman
 	case EV_STOPSTREAMINGSOUND:
-		DEBUGNAME("EV_STOPLOOPINGSOUND");
+		DEBUGNAME("EV_STOPSTREAMINGSOUND");
 		trap_S_StartSoundEx(NULL, es->number, CHAN_WEAPON, 0, SND_CUTOFF_ALL);      // kill weapon sound (could be reloading)
 		break;
 
