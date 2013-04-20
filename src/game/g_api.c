@@ -242,10 +242,12 @@ static void *loginHandler(void *data) {
  */
 qboolean G_API_login(char *result, gentity_t *ent, char *authToken) {
 	char net_port[8] = { 0 };
+	char cphysics[8] = { 0 };
 
 	sprintf(net_port, "%d", trap_Cvar_VariableIntegerValue("net_port"));
+	sprintf(cphysics, "%d", physics.integer);
 
-	return G_callAPI("l", result, ent, 2, authToken, net_port);
+	return G_callAPI("l", result, ent, 3, authToken, cphysics, net_port);
 }
 
 /**
@@ -400,17 +402,19 @@ static void *recordHandler(void *data) {
 qboolean G_API_sendRecord(char *result, gentity_t *ent, char *mapName, char *runName,
                       char *authToken, char *data, char *etrunVersion) {
 	char net_port[8]         = { 0 };
+	char cphysics[8]         = { 0 };
 	char encodedMapName[255] = { 0 };
 	char encodedRunName[255] = { 0 };
 
 	sprintf(net_port, "%d", trap_Cvar_VariableIntegerValue("net_port"));
+	sprintf(cphysics, "%d", physics.integer);
 
 	if (url_encode(mapName, encodedMapName) == qfalse ||
 		url_encode(runName, encodedRunName) == qfalse) {
 		return qfalse;
 	}
 
-	return G_callAPI("d", result, ent, 6, encodedMapName, encodedRunName, authToken, data, etrunVersion, net_port);
+	return G_callAPI("d", result, ent, 7, encodedMapName, encodedRunName, authToken, data, etrunVersion, cphysics, net_port);
 }
 
 /**
