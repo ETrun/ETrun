@@ -239,7 +239,7 @@ function print_summary() {
 function start_game() {
 	# Prepare game args for et/etded
 	if [ $CLIENT_MODE -eq 0 ]; then
-		GAME_ARGS="+set fs_game $mod_name +set fs_basePath $BASEPATH +set fs_homePath $HOMEPATH +set g_useAPI $USE_API +set g_APImodulePath $HOMEPATH/$mod_name/$APImodule_name +set developer $DEVELOPER +map $default_map"
+		GAME_ARGS="+set fs_game $mod_name +set fs_basePath $BASEPATH +set fs_homePath $HOMEPATH +set g_useAPI $USE_API +set g_APImoduleName $APImodule_name +set developer $DEVELOPER +map $default_map"
 	else
 		GAME_ARGS="+set fs_game $mod_name +set fs_basePath $BASEPATH +set fs_homePath $HOMEPATH +set developer $DEVELOPER +set com_hunkMegs 128"
 	fi
