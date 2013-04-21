@@ -13,3 +13,6 @@
 [submodule "libs/pthreads-win32"]
 	path = libs/pthreads-win32
 	url = git@github.com:boutetnico/pthreads-win32.git
+[submodule "libs/crc32"]
+	path = libs/crc32
+	url = git@github.com:boutetnico/crc32.git
