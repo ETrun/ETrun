@@ -150,7 +150,7 @@ vmCvar_t g_maxNameChanges;
 
 // API module
 vmCvar_t g_useAPI;
-vmCvar_t g_APImodulePath;
+vmCvar_t g_APImoduleName;
 
 // Hold doors open
 vmCvar_t g_holdDoorsOpen;
@@ -295,7 +295,7 @@ cvarTable_t gameCvarTable[] =
 
 	// API module
 	{ &g_useAPI,               "g_useAPI",               "0",                          CVAR_ARCHIVE | CVAR_LATCH,                                     qfalse, qfalse, qfalse, qfalse },
-	{ &g_APImodulePath,        "g_APImodulePath",        "",                           CVAR_ARCHIVE | CVAR_LATCH,                                     qfalse, qfalse, qfalse, qfalse },
+	{ &g_APImoduleName,        "g_APImoduleName",        "timeruns.mod",               CVAR_ARCHIVE | CVAR_LATCH,                                     qfalse, qfalse, qfalse, qfalse },
 
 	// Hold doors open
 	{ &g_holdDoorsOpen,        "g_holdDoorsOpen",        "1",                          CVAR_ARCHIVE | CVAR_LATCH,                                     qfalse, qfalse, qfalse, qfalse },

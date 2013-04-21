@@ -7,7 +7,7 @@
 #if defined _WIN32
 typedef int (*API_query_t)(char *, char *, char *, int);
 API_query_t API_query;
-typedef int (*API_init_t)(void);
+typedef int (*API_init_t)(char *, char *, char *);
 API_init_t API_init;
 typedef void (*API_clean_t)(void);
 API_clean_t API_clean;
@@ -15,23 +15,42 @@ HMODULE     api_module;
 #else
 void *api_module;
 int  (*API_query)(char *, char *, char *, int);
-int  (*API_init)(void);
+int  (*API_init)(char *, char *, char *);
 void (*API_clean)(void);
 #endif
 
 /**
  * Module loading
  */
-static qboolean loadModule() {
+static qboolean loadModule(char *basepath, char *homepath) {
+	char searchPath[512];
+
+	// Try opening module in basepath
 #if defined _WIN32
-	api_module = LoadLibraryA(g_APImodulePath.string);
+	sprintf(searchPath, "%s\\etrun\\%s", basepath, g_APImoduleName.string);
+	api_module = LoadLibraryA(searchPath);
 #else
-	api_module = dlopen(g_APImodulePath.string, RTLD_LAZY);
+	sprintf(searchPath, "%s/etrun/%s", basepath, g_APImoduleName.string);
+	api_module = dlopen(searchPath, RTLD_LAZY);
 #endif
+
+	if (api_module != NULL) {
+		return qtrue;
+	}
+
+	// Try opening module form homepath
+	#if defined _WIN32
+		sprintf(searchPath, "%s\\etrun\\%s", homepath, g_APImoduleName.string);
+		api_module = LoadLibraryA(searchPath);
+	#else
+		sprintf(searchPath, "%s/etrun/%s", homepath, g_APImoduleName.string);
+		api_module = dlopen(searchPath, RTLD_LAZY);
+	#endif
 
 	if (api_module == NULL) {
 		return qfalse;
 	}
+
 	return qtrue;
 }
 
@@ -785,20 +804,25 @@ qboolean G_callAPI(char *command, char *result, gentity_t *ent, int count, ...) 
 }
 
 void G_loadAPI() {
+	char homepath[512];
+	char basepath[512];
+
+	trap_Cvar_VariableStringBuffer("fs_homepath", homepath, sizeof (homepath));
+	trap_Cvar_VariableStringBuffer("fs_basepath", basepath, sizeof (basepath));
 
 	// Load the module
-	if (!loadModule()) {
+	if (!loadModule(basepath, homepath)) {
 		printError();
-		G_Error("Error loading %s\n", g_APImodulePath.string);
+		G_Error("Error loading %s\n", g_APImoduleName.string);
 	}
 
 	// Load the APIquery function
 	if (!loadAPISymbols()) {
 		printError();
-		G_Error("Error loading symbols from %s\n", g_APImodulePath.string);
+		G_Error("Error loading symbols from %s\n", g_APImoduleName.string);
 	}
 
-	if (API_init() != 0) {
+	if (API_init(homepath, basepath, g_APImoduleName.string) != 0) {
 		G_Error("Error calling API_init()");
 	}
 
