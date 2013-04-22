@@ -837,7 +837,9 @@ void ClientUserinfoChanged(int clientNum) {
 	char      oldname[MAX_STRING_CHARS];
 	char      userinfo[MAX_INFO_STRING];
 	gclient_t *client;
-	char      *ip   = NULL; // Nico, used to store client ip.
+	char      *ip   = NULL; // Nico, used to store client ip
+	char      *rate   = NULL; // Nico, used to store client rate
+	char      *snaps   = NULL; // Nico, used to store client snaps
 	char      *name = NULL; // Nico, used to store client name
 	char      oldAuthToken[MAX_QPATH]; // Nico, used to see if auth token was changed
 
@@ -866,11 +868,18 @@ void ClientUserinfoChanged(int clientNum) {
 
 	// check for local client
 	ip = Info_ValueForKey(userinfo, "ip");
+	Q_strncpyz(client->pers.ip, ip, IP_MAX_LENGTH);
 	if (ip && !strcmp(ip, "localhost")) {
 		client->pers.localClient = qtrue;
 		level.fLocalHost         = qtrue;
 		client->sess.referee     = RL_REFEREE;
 	}
+
+	// Nico, store rate and snaps
+	rate = Info_ValueForKey(userinfo, "rate");
+	client->pers.rate = atoi(rate);
+	snaps = Info_ValueForKey(userinfo, "snaps");
+	client->pers.snaps = atoi(snaps);
 
 	// Nico, backup old auth token
 	Q_strncpyz(oldAuthToken, client->pers.authToken, sizeof (oldAuthToken));

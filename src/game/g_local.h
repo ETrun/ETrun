@@ -631,6 +631,15 @@ typedef struct {
 	bg_character_t *character;
 	int characterIndex;
 
+	// Nico, IP address
+	char ip[IP_MAX_LENGTH];
+
+	// Nico, player max rate
+	unsigned int rate;
+
+	// Nico, player snaps
+	unsigned int snaps;
+
 	// Nico, max FPS
 	int maxFPS;
 

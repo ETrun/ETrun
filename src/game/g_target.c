@@ -1395,7 +1395,8 @@ void notify_timerun_stop(gentity_t *activator, int finishTime) {
 }
 
 // Nico, records command
-static void Cmd_SendRecord_f(gentity_t *ent, char *runName, char *authToken, int time, int startSpeed, int stopSpeed, int maxSpeed) {
+static void Cmd_SendRecord_f(gentity_t *ent, char *runName, char *authToken, int time, int startSpeed, int stopSpeed, int maxSpeed, int jumpsCount, char *ip, int maxFPS,
+							 unsigned int timenudge, unsigned int rate, unsigned int maxPackets, unsigned int snaps) {
 	char *buf                    = NULL;
 	char data[RESPONSE_MAX_SIZE] = { 0 };
 	int  i                       = 0;
@@ -1547,7 +1548,10 @@ void target_stoptimer_use(gentity_t *self, gentity_t *other, gentity_t *activato
 	// Nico, send record if needed
 	if (g_useAPI.integer && client->sess.logged) {
 		Cmd_SendRecord_f(activator, client->sess.currentTimerun, client->pers.authToken,
-		                 time, client->sess.startSpeed, client->sess.stopSpeed, client->sess.maxSpeed);
+		                 time, client->sess.startSpeed, client->sess.stopSpeed, client->sess.maxSpeed,
+						 client->ps.identifyClientHealth,// Nico, this is used as a jumps counter
+						 client->pers.ip, client->pers.maxFPS,
+						 client->pers.clientTimeNudge, client->pers.rate, client->pers.clientMaxPackets, client->pers.snaps);
 	} else {
 		// Nico, API is not used and/or client is not logged,
 		// we cannnot know if his last time his SB/PB or something

@@ -2077,3 +2077,7 @@ void PM_TraceAll(trace_t *trace, vec3_t start, vec3_t end);
 #define PHYSICS_MODE_VQ3_NO_OB      19
 #define PHYSICS_MODE_VQ3_OB         3
 #define PHYSICS_MODE_VET            0
+
+
+// Nico, IP max length
+#define IP_MAX_LENGTH				46
