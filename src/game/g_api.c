@@ -512,6 +512,11 @@ qboolean G_API_getPlayerCheckpoints(char *result, gentity_t *ent, char *userName
 		return qfalse;
 	}
 
+	// Check authtoken emptiness
+	if (authToken[0] == '\0') {
+		Q_strncpyz(authToken, "undefined", MAX_QPATH);
+	}
+
 	return G_callAPI("e", result, ent, 7, encodedMapName, encodedOptUserName, encodedRunName, bufferRunNum, authToken, cphysics, net_port);
 }
 
@@ -651,6 +656,11 @@ qboolean G_API_mapRank(char *result, gentity_t *ent, char *mapName, char *optUse
 		url_encode(optMapName, encodedOptMapName) == qfalse ||
 		url_encode(optRunName, encodedOptRunName) == qfalse) {
 		return qfalse;
+	}
+
+	// Check authtoken emptiness
+	if (authToken[0] == '\0') {
+		Q_strncpyz(authToken, "undefined", MAX_QPATH);
 	}
 
 	return G_callAPI("r", result, ent, 8, encodedOptUserName, encodedOptMapName, encodedOptRunName, optPhysicsName, encodedMapName, authToken, cphysics, net_port);

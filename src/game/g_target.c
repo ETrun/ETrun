@@ -1421,10 +1421,14 @@ static void Cmd_SendRecord_f(gentity_t *ent, char *runName, char *authToken, int
 		i++;
 	}
 
+	// Check authtoken emptiness
+	if (authToken[0] == '\0') {
+		Q_strncpyz(authToken, "undefined", MAX_QPATH);
+	}
+
 	if (!G_API_sendRecord(buf, ent, level.rawmapname, runName, authToken, data, GAME_VERSION_DATED)) {
 		CP(va("print \"%s^w: error while sending record!\n\"", GAME_VERSION_COLORED));
 	}
-
 	// Do *not* free buf here
 }
 
