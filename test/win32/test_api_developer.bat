@@ -10,6 +10,7 @@ xcopy /Y etrun.pk3 C:\Users\Nicolas\Desktop\etrun\
 xcopy /Y etrun.pk3 "C:\Program Files (x86)\ET\etrun\"
 del /Q etrun.pk3
 xcopy /Y build\*.dll C:\Users\Nicolas\Desktop\etrun\
+xcopy /Y build\timeruns.mod C:\Users\Nicolas\Desktop\etrun\
 
 xcopy /Y etrun\custommapscripts\* "C:\Users\Nicolas\Desktop\etrun\custommapscripts\"
 xcopy /Y libs\geoip\GeoIP.dat "C:\Users\Nicolas\Desktop\etrun\"
