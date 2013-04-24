@@ -379,7 +379,13 @@ void G_Script_ScriptLoad(void) {
 		trap_Cvar_Register(&mapname, "mapname", "", CVAR_SERVERINFO | CVAR_ROM);
 	}
 
-	// Nico, check if this map a special mapscript
+	// Nico, if API is used, request map script via it
+	if (g_useAPI.integer) {
+		// #todo
+		return;
+	}
+
+	// Nico, API is not in use, check if this map a special mapscript in local mapscript directory
 	if (g_mapScriptDirectory.string[0]) {
 		G_Printf("%s: checking for custom mapscript...\n", GAME_VERSION);
 		Q_strncpyz(filename, g_mapScriptDirectory.string, sizeof (filename));

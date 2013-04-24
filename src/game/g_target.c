@@ -1414,7 +1414,7 @@ static void Cmd_SendRecord_f(gentity_t *ent, char *runName, char *authToken, int
 		G_Error("Cmd_SendRecord_f: malloc failed\n");
 	}
 
-	sprintf(data, "%d/%d/%d/%d/%d/%d/%s/%d/%d/%d/%d/%d/O", time, physics.integer, startSpeed, stopSpeed, maxSpeed, jumpsCount, ip, maxFPS, timenudge, rate, maxPackets, snaps);
+	sprintf(data, "%d/%d/%d/%d/%d/%s/%d/%d/%d/%d/%d/O", time, startSpeed, stopSpeed, maxSpeed, jumpsCount, ip, maxFPS, timenudge, rate, maxPackets, snaps);
 
 	while (i < MAX_TIMERUN_CHECKPOINTS && ent->client->sess.timerunCheckpointTimes[i] != 0) {
 		sprintf(temp, "%dO", ent->client->sess.timerunCheckpointTimes[i]);

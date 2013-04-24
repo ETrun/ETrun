@@ -9,7 +9,8 @@
 #define CHAR_SEPARATOR "/"
 #define THREADS_MAX 32  // Maximum threads at the same time
 
-qboolean G_callAPI(char *command, char *result, gentity_t *ent, int count, ...);
+qboolean G_AsyncAPICall(char *command, char *result, gentity_t *ent, int count, ...);
+qboolean G_SyncAPICall(char *command, char *result, gentity_t *ent, int count, ...);
 void G_loadAPI();
 void G_unloadAPI();
 qboolean G_API_login(char *result, gentity_t *ent, char *authToken);

@@ -1347,6 +1347,12 @@ void G_InitGame(int levelTime, int randomSeed) {
 		G_Printf("WARNING: Couldn't open crash.log\n");
 	}
 
+	// Nico, load API
+	// Note: do not check API here, it could crash
+	if (g_useAPI.integer) {
+		G_loadAPI();
+	}
+
 	G_InitWorldSession();
 
 	// DHM - Nerve :: Clear out spawn target config strings
@@ -1453,12 +1459,6 @@ void G_InitGame(int levelTime, int randomSeed) {
 		G_Printf("%s: No timerun found in map\n", GAME_VERSION);
 	} else {
 		trap_Cvar_Set("isTimerun", "1");
-	}
-
-	// Nico, load API
-	// Note: do not check API here, it could crash
-	if (g_useAPI.integer) {
-		G_loadAPI();
 	}
 
 	// Nico, load GeoIP databse

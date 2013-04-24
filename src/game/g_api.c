@@ -266,7 +266,7 @@ qboolean G_API_login(char *result, gentity_t *ent, char *authToken) {
 	sprintf(net_port, "%d", trap_Cvar_VariableIntegerValue("net_port"));
 	sprintf(cphysics, "%d", physics.integer);
 
-	return G_callAPI("l", result, ent, 3, authToken, cphysics, net_port);
+	return G_AsyncAPICall("l", result, ent, 3, authToken, cphysics, net_port);
 }
 
 /**
@@ -310,7 +310,7 @@ qboolean G_API_mapRecords(char *result, gentity_t *ent, char *mapName) {
 		return qfalse;
 	}
 
-	return G_callAPI("m", result, ent, 3, encodedMapName, cphysics, net_port);
+	return G_AsyncAPICall("m", result, ent, 3, encodedMapName, cphysics, net_port);
 }
 
 /**
@@ -348,7 +348,7 @@ qboolean G_API_check(char *result, gentity_t *ent) {
 	sprintf(net_port, "%d", trap_Cvar_VariableIntegerValue("net_port"));
 	sprintf(cphysics, "%d", physics.integer);
 
-	return G_callAPI("c", result, ent, 2, cphysics, net_port);
+	return G_AsyncAPICall("c", result, ent, 2, cphysics, net_port);
 }
 
 /**
@@ -433,7 +433,7 @@ qboolean G_API_sendRecord(char *result, gentity_t *ent, char *mapName, char *run
 		return qfalse;
 	}
 
-	return G_callAPI("d", result, ent, 7, encodedMapName, encodedRunName, authToken, data, etrunVersion, cphysics, net_port);
+	return G_AsyncAPICall("d", result, ent, 7, encodedMapName, encodedRunName, authToken, data, etrunVersion, cphysics, net_port);
 }
 
 /**
@@ -517,7 +517,7 @@ qboolean G_API_getPlayerCheckpoints(char *result, gentity_t *ent, char *userName
 		Q_strncpyz(authToken, "undefined", MAX_QPATH);
 	}
 
-	return G_callAPI("e", result, ent, 7, encodedMapName, encodedOptUserName, encodedRunName, bufferRunNum, authToken, cphysics, net_port);
+	return G_AsyncAPICall("e", result, ent, 7, encodedMapName, encodedOptUserName, encodedRunName, bufferRunNum, authToken, cphysics, net_port);
 }
 
 /**
@@ -581,7 +581,7 @@ qboolean G_API_randommap(char *result, gentity_t *ent, char *mapName) {
 		return qfalse;
 	}
 
-	return G_callAPI("f", result, ent, 3, encodedMapName, cphysics, net_port);
+	return G_AsyncAPICall("f", result, ent, 3, encodedMapName, cphysics, net_port);
 }
 
 /**
@@ -663,7 +663,7 @@ qboolean G_API_mapRank(char *result, gentity_t *ent, char *mapName, char *optUse
 		Q_strncpyz(authToken, "undefined", MAX_QPATH);
 	}
 
-	return G_callAPI("r", result, ent, 8, encodedOptUserName, encodedOptMapName, encodedOptRunName, optPhysicsName, encodedMapName, authToken, cphysics, net_port);
+	return G_AsyncAPICall("r", result, ent, 8, encodedOptUserName, encodedOptMapName, encodedOptRunName, optPhysicsName, encodedMapName, authToken, cphysics, net_port);
 }
 
 // Commands handler binding
@@ -699,14 +699,14 @@ static handler_t getHandlerForCommand(char *cmd) {
 }
 
 /**
- * APImodule entry point
+ * Asynchronous (using pthreads) API call function
  *
  * command: must be a command in apiCommands
  * result: pointer to an *already allocated* buffer for storing result
  * ent: entity who made the request
  * count: number of variadic arguments
  */
-qboolean G_callAPI(char *command, char *result, gentity_t *ent, int count, ...) {
+qboolean G_AsyncAPICall(char *command, char *result, gentity_t *ent, int count, ...) {
 	struct query_s *queryStruct;
 	pthread_t      thread;
 	pthread_attr_t attr;
@@ -778,7 +778,7 @@ qboolean G_callAPI(char *command, char *result, gentity_t *ent, int count, ...) 
 		return qfalse;
 	}
 
-	LDI("calling API with command: '%s', query '%s'\n", command, queryStruct->query);
+	LDI("asynchronous API call with command: '%s', query '%s'\n", command, queryStruct->query);
 
 	// Create threads as detached as they will never be joined
 	if (pthread_attr_init(&attr)) {
@@ -809,6 +809,84 @@ qboolean G_callAPI(char *command, char *result, gentity_t *ent, int count, ...) 
 		// Nico, note: I don't free querystruct because it's used in the thread
 		return qfalse;
 	}
+
+	return qtrue;
+}
+
+/**
+ * Synchronous API call function
+ *
+ * command: must be a command in apiCommands
+ * result: pointer to an *already allocated* buffer for storing result
+ * ent: entity who made the request
+ * count: number of variadic arguments
+ */
+qboolean G_SyncAPICall(char *command, char *result, gentity_t *ent, int count, ...) {
+	struct query_s *queryStruct;
+	void    *(*handler)(void *) = NULL;
+	va_list ap;
+	int     i    = 0;
+	char    *arg = NULL;
+
+	if (api_module == NULL || API_query == NULL) {
+		LDE("API module is not loaded\n");
+		return qfalse;
+	}
+
+	// Check number of arguments in ... (=count)
+	if (count <= 0) {
+		LDE("invalid argument count %d\n", count);
+		return qfalse;
+	}
+
+	queryStruct = malloc(sizeof (struct query_s));
+
+	if (queryStruct == NULL) {
+		LDE("failed to allocate memory\n");
+		return qfalse;
+	}
+
+	va_start(ap, count);
+
+	// Init query buffer
+	memset(queryStruct->query, 0, QUERY_MAX_SIZE);
+
+	for (i = 0; i < count; ++i) {
+		arg = va_arg(ap, char *);
+
+		if (!arg) {
+			LDE("empty argument %d with command '%s'\n", i, command);
+			free(queryStruct);
+			va_end(ap);
+			return qfalse;
+		}
+
+		Q_strcat(queryStruct->query, QUERY_MAX_SIZE, arg);
+
+		// No trailing /
+		if (i + 1 < count) {
+			Q_strcat(queryStruct->query, QUERY_MAX_SIZE, CHAR_SEPARATOR);
+		}
+	}
+
+	va_end(ap);
+
+	Q_strncpyz(queryStruct->cmd, command, sizeof (queryStruct->cmd));
+	queryStruct->result = result;
+	queryStruct->ent    = ent;
+
+	// Get the command handler
+	handler = getHandlerForCommand(command);
+
+	if (!handler) {
+		LDE("no handler for command '%s'\n", command);
+		free(queryStruct);
+		return qfalse;
+	}
+
+	LDI("synchronous API call with command: '%s', query '%s'\n", command, queryStruct->query);
+
+	handler(queryStruct);
 
 	return qtrue;
 }
