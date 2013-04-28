@@ -16,3 +16,6 @@
 [submodule "libs/crc32"]
 	path = libs/crc32
 	url = git@github.com:boutetnico/crc32.git
+[submodule "libs/openssl-win32"]
+	path = libs/openssl-win32
+	url = git@github.com:boutetnico/openssl-win32.git
