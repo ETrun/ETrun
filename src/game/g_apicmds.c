@@ -90,6 +90,12 @@ void Cmd_Records_f(gentity_t *ent) {
 		return;
 	}
 
+	// Check cup mode
+	if (g_cupMode.integer != 0) {
+		CP("cp \"This command is disabled in cup mode.\n\"");
+		return;
+	}
+
 	buf = malloc(RESPONSE_MAX_SIZE * sizeof (char));
 
 	if (!buf) {
@@ -127,6 +133,12 @@ void Cmd_LoadCheckpoints_f(gentity_t *ent) {
 	// Check if client is logged in
 	if (!ent->client->sess.logged) {
 		CP("cp \"You must login to use this command.\n\"");
+		return;
+	}
+
+	// Check cup mode
+	if (g_cupMode.integer != 0) {
+		CP("cp \"This command is disabled in cup mode.\n\"");
 		return;
 	}
 
@@ -207,6 +219,12 @@ void Cmd_Rank_f(gentity_t *ent) {
 	// Check if API is used
 	if (!g_useAPI.integer) {
 		CP("cp \"This command is disabled on this server.\n\"");
+		return;
+	}
+
+	// Check cup mode
+	if (g_cupMode.integer != 0) {
+		CP("cp \"This command is disabled in cup mode.\n\"");
 		return;
 	}
 
