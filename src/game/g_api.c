@@ -142,12 +142,12 @@ qboolean url_encode(char *str, char *dst) {
 	int  i     = 0;
 
 	if (!str) {
-		LDE("str is NULL");
+		LDE("str is NULL\n");
 		return qfalse;
 	}
 
 	if (!dst) {
-		LDE("dst is NULL");
+		LDE("dst is NULL\n");
 		return qfalse;
 	}
 
@@ -175,12 +175,12 @@ qboolean url_decode(char *str, char *dst) {
 	int  i     = 0;
 
 	if (!str) {
-		LDE("str is NULL");
+		LDE("str is NULL\n");
 		return qfalse;
 	}
 
 	if (!dst) {
-		LDE("dst is NULL");
+		LDE("dst is NULL\n");
 		return qfalse;
 	}
 
@@ -344,11 +344,17 @@ static void *checkAPIHandler(void *data) {
 qboolean G_API_check(char *result, gentity_t *ent) {
 	char net_port[8] = { 0 };
 	char cphysics[8] = { 0 };
+	char cupMode[8]  = { 0 };
+	char cupKey[255] = { 0 };
 
 	sprintf(net_port, "%d", trap_Cvar_VariableIntegerValue("net_port"));
 	sprintf(cphysics, "%d", physics.integer);
+	sprintf(cupMode, "%d", g_cupMode.integer);
 
-	return G_AsyncAPICall("c", result, ent, 2, cphysics, net_port);
+	// Check cupKey value
+	sprintf(cupKey, "%s", g_cupKey.string[0] == '\0' ? "0" : g_cupKey.string);
+
+	return G_AsyncAPICall("c", result, ent, 4, cupMode, cupKey, cphysics, net_port);
 }
 
 /**
@@ -419,7 +425,7 @@ static void *recordHandler(void *data) {
  * Record send command
  */
 qboolean G_API_sendRecord(char *result, gentity_t *ent, char *mapName, char *runName,
-                      char *authToken, char *data, char *etrunVersion) {
+						  char *authToken, char *data, char *etrunVersion) {
 	char net_port[8]         = { 0 };
 	char cphysics[8]         = { 0 };
 	char encodedMapName[255] = { 0 };
@@ -619,7 +625,7 @@ static qboolean check_string(char *str) {
 	char *pstr = str;
 
 	if (!str) {
-		LDE("str is NULL");
+		LDE("str is NULL\n");
 		return qfalse;
 	}
 
@@ -666,6 +672,81 @@ qboolean G_API_mapRank(char *result, gentity_t *ent, char *mapName, char *optUse
 	return G_AsyncAPICall("r", result, ent, 8, encodedOptUserName, encodedOptMapName, encodedOptRunName, optPhysicsName, encodedMapName, authToken, cphysics, net_port);
 }
 
+/**
+ * Event record handler
+ */
+static void *eventRecordHandler(void *data) {
+	int            code;
+	struct query_s *queryStruct = (struct query_s *)data;
+	gentity_t      *ent         = queryStruct->ent;
+	int            timerunNum;
+
+	code = API_query(queryStruct->cmd, queryStruct->result, queryStruct->query, sizeof (queryStruct->query));
+
+	timerunNum = ent->client->sess.currentTimerunNum;
+
+	switch (code) {
+	case 1001: // PB
+		if (ent->client->sess.timerunCheckpointWereLoaded[timerunNum]) {
+			memcpy(ent->client->sess.timerunBestCheckpointTimes[timerunNum], ent->client->sess.timerunCheckpointTimes, sizeof (ent->client->sess.timerunCheckpointTimes));
+		}
+		CP(va("print \"%s^w: %s\n\"", GAME_VERSION_COLORED, queryStruct->result));
+
+		// Nico, keep this demo if autodemo is enabled
+		if (ent->client->pers.autoDemo) {
+			saveDemo(ent);
+		}
+		break;
+
+	case 1005: // Slow time
+		CP(va("print \"%s^w: %s\n\"", GAME_VERSION_COLORED, queryStruct->result));
+
+		// Nico, check player keepDemo setting to see if we keep this one or not
+		if (ent->client->pers.autoDemo && ent->client->pers.keepAllDemos) {
+			saveDemo(ent);
+		}
+		break;
+
+	default: // Error
+		CP(va("print \"%s^w: error: %s\n\"", GAME_VERSION_COLORED, queryStruct->result));
+		break;
+	}
+
+	free(queryStruct->result);
+	free(queryStruct);
+
+	// Decrease global active thread counter
+	activeThreadsCounter--;
+	G_DPrintf("%s: decreasing threads counter to %d\n", GAME_VERSION, activeThreadsCounter);
+
+	return NULL;
+}
+
+/**
+ * Event record send command
+ */
+qboolean G_API_sendEventRecord(char *result, gentity_t *ent, char *mapName, char *runName,
+							   char *authToken, char *data, char *etrunVersion) {
+	char net_port[8]         = { 0 };
+	char cphysics[8]         = { 0 };
+	char encodedMapName[255] = { 0 };
+	char encodedRunName[255] = { 0 };
+	char cupKey[255]		 = { 0 };
+
+	sprintf(net_port, "%d", trap_Cvar_VariableIntegerValue("net_port"));
+	sprintf(cphysics, "%d", physics.integer);
+
+	if (url_encode(mapName, encodedMapName) == qfalse ||
+		url_encode(runName, encodedRunName) == qfalse) {
+		return qfalse;
+	}
+
+	// Check cupKey value
+	sprintf(cupKey, "%s", g_cupKey.string[0] == '\0' ? "0" : g_cupKey.string);
+
+	return G_AsyncAPICall("v", result, ent, 8, cupKey, encodedMapName, encodedRunName, authToken, data, etrunVersion, cphysics, net_port);
+}
+
 // Commands handler binding
 static const api_glue_t APICommands[] =
 {
@@ -675,7 +756,8 @@ static const api_glue_t APICommands[] =
 	{ "d", recordHandler      },
 	{ "e", checkpointsHandler },
 	{ "f", randommapHandler   },
-	{ "r", mapRankHandler     }
+	{ "r", mapRankHandler     },
+	{ "v", eventRecordHandler }
 };
 
 /**
