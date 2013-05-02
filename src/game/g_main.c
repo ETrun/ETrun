@@ -163,6 +163,7 @@ vmCvar_t g_mapScriptDirectory;
 
 // Cup mode
 vmCvar_t g_cupMode;
+vmCvar_t g_cupKey;
 
 // Timelimit mode
 vmCvar_t g_timelimit;
@@ -307,7 +308,8 @@ cvarTable_t gameCvarTable[] =
 	{ &g_mapScriptDirectory,   "g_mapScriptDirectory",   "custommapscripts",           CVAR_ARCHIVE | CVAR_LATCH,                                     qfalse, qfalse, qfalse, qfalse },
 
 	// Cup mode
-	{ &g_cupMode,              "g_cupMode",              "0",                          CVAR_ARCHIVE | CVAR_LATCH,                                     qfalse, qfalse, qfalse, qfalse },
+	{ &g_cupMode,              "g_cupMode",              "0",                          CVAR_ARCHIVE,												  qfalse, qfalse, qfalse, qfalse },
+	{ &g_cupKey,               "g_cupKey",               "",                           CVAR_ARCHIVE,												  qfalse, qfalse, qfalse, qfalse },
 
 	// Timelimit mode
 	{ &g_timelimit,            "timelimit",              "0",                          CVAR_SERVERINFO | CVAR_ARCHIVE | CVAR_LATCH,                   qfalse, qfalse, qfalse, qfalse },
@@ -317,7 +319,7 @@ cvarTable_t gameCvarTable[] =
 
 	// GeoIP
 	{ &g_useGeoIP,             "g_useGeoIP",             "1",						   CVAR_ARCHIVE | CVAR_LATCH,                                     qfalse, qfalse, qfalse, qfalse },
-	{ &g_geoIPDbPath,        "g_geoIPDbPath",			 "GeoIP.dat",                  CVAR_ARCHIVE | CVAR_LATCH,                                     qfalse, qfalse, qfalse, qfalse },
+	{ &g_geoIPDbPath,          "g_geoIPDbPath",			 "GeoIP.dat",                  CVAR_ARCHIVE | CVAR_LATCH,                                     qfalse, qfalse, qfalse, qfalse },
 
 	// Nico, end of ETrun cvars
 };

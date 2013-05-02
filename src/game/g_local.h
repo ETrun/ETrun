@@ -1522,6 +1522,7 @@ extern vmCvar_t g_mapScriptDirectory;
 
 // Cup mode
 extern vmCvar_t g_cupMode;
+extern vmCvar_t g_cupKey;
 
 // Timelimit mode
 extern vmCvar_t g_timelimit;

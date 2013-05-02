@@ -1402,12 +1402,6 @@ static void Cmd_SendRecord_f(gentity_t *ent, char *runName, char *authToken, int
 	int  i                       = 0;
 	char temp[MAX_QPATH]         = { 0 };
 
-	// Check if API is used
-	if (!g_useAPI.integer) {
-		CP("cp \"This command is disabled on this server.\n\"");
-		return;
-	}
-
 	buf = malloc(RESPONSE_MAX_SIZE * sizeof (char));
 
 	if (!buf) {
@@ -1427,8 +1421,15 @@ static void Cmd_SendRecord_f(gentity_t *ent, char *runName, char *authToken, int
 		Q_strncpyz(authToken, "undefined", MAX_QPATH);
 	}
 
-	if (!G_API_sendRecord(buf, ent, level.rawmapname, runName, authToken, data, GAME_VERSION_DATED)) {
-		CP(va("print \"%s^w: error while sending record!\n\"", GAME_VERSION_COLORED));
+	// Do we send a cup record?
+	if (g_cupMode.integer) {
+		if (!G_API_sendEventRecord(buf, ent, level.rawmapname, runName, authToken, data, GAME_VERSION_DATED)) {
+			CP(va("print \"%s^w: error while sending an event record!\n\"", GAME_VERSION_COLORED));
+		}
+	} else {
+		if (!G_API_sendRecord(buf, ent, level.rawmapname, runName, authToken, data, GAME_VERSION_DATED)) {
+			CP(va("print \"%s^w: error while sending record!\n\"", GAME_VERSION_COLORED));
+		}
 	}
 	// Do *not* free buf here
 }
