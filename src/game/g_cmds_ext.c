@@ -215,7 +215,7 @@ void G_players_cmd(gentity_t *ent, unsigned int dwCommand, qboolean fValue) {
 	max_rate = trap_Cvar_VariableIntegerValue("sv_maxrate");
 
 	for (i = 0; i < level.numConnectedClients; i++) {
-		idnum  = level.sortedClients[i]; //level.sortedNames[i];
+		idnum  = level.sortedClients[i];
 		cl     = &level.clients[idnum];
 
 		SanitizeString(cl->pers.netname, n2, qtrue);
