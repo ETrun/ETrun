@@ -378,7 +378,7 @@ void G_Script_ScriptLoad(void) {
 
 	// Nico, if API is used and if a mapscript was sent for this map don't load any local script
 	if (g_useAPI.integer && level.useAPImapscript) {
-		G_Printf("%s: using custom mapscript from API!\n", GAME_VERSION, strlen(level.scriptEntity));
+		G_Printf("%s: using custom mapscript from API!\n", GAME_VERSION);
 		return;
 	}
 
