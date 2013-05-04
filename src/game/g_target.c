@@ -704,7 +704,7 @@ void target_kill_use(gentity_t *self, gentity_t *other, gentity_t *activator) {
 	(void)other;
 
 	// Nico, if kill triggers are enabled, kill activator (=player) too
-	if (g_enableMapEntities.integer & MAP_KILL_ENTITIES || self->spawnflags & 1) {  // kill usertoo
+	if (g_enableMapEntities.integer & MAP_KILL_ENTITIES && self->spawnflags & 1) {  // kill usertoo
 		G_Damage(activator, NULL, NULL, NULL, NULL, 100000, DAMAGE_NO_PROTECTION, MOD_TELEFRAG);
 	}
 

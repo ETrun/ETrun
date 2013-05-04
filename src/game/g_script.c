@@ -369,9 +369,6 @@ void G_Script_ScriptLoad(void) {
 	qboolean     found = qfalse;
 
 	trap_Cvar_Register(&g_scriptDebug, "g_scriptDebug", "0", 0);
-
-	level.scriptEntity = NULL;
-
 	trap_Cvar_VariableStringBuffer("g_scriptName", filename, sizeof (filename));
 	if (filename[0] != '\0') {
 		trap_Cvar_Register(&mapname, "g_scriptName", "", CVAR_CHEAT);
@@ -379,15 +376,15 @@ void G_Script_ScriptLoad(void) {
 		trap_Cvar_Register(&mapname, "mapname", "", CVAR_SERVERINFO | CVAR_ROM);
 	}
 
-	// Nico, if API is used, request map script via it
-	if (g_useAPI.integer) {
-		// #todo
+	// Nico, if API is used and if a mapscript was sent for this map don't load any local script
+	if (g_useAPI.integer && level.useAPImapscript) {
+		G_Printf("%s: using custom mapscript from API!\n", GAME_VERSION, strlen(level.scriptEntity));
 		return;
 	}
 
 	// Nico, API is not in use, check if this map a special mapscript in local mapscript directory
 	if (g_mapScriptDirectory.string[0]) {
-		G_Printf("%s: checking for custom mapscript...\n", GAME_VERSION);
+		G_Printf("%s: checking for local custom mapscript...\n", GAME_VERSION);
 		Q_strncpyz(filename, g_mapScriptDirectory.string, sizeof (filename));
 		Q_strcat(filename, sizeof (filename), "/");
 		Q_strcat(filename, sizeof (filename), mapname.string);
@@ -395,7 +392,7 @@ void G_Script_ScriptLoad(void) {
 		len = trap_FS_FOpenFile(filename, &f, FS_READ);
 		if (len > 0) {
 			found = qtrue;
-			G_Printf("%s: loaded custom mapscript!\n", GAME_VERSION);
+			G_Printf("%s: loaded local custom mapscript!\n", GAME_VERSION);
 		}
 
 		// Nico, try to load lowercased script name
@@ -403,7 +400,7 @@ void G_Script_ScriptLoad(void) {
 			strtolower(filename, toLowerFilename, sizeof (toLowerFilename));
 			if (len > 0) {
 				found = qtrue;
-				G_Printf("%s: loaded custom mapscript!\n", GAME_VERSION);
+				G_Printf("%s: loaded local custom mapscript!\n", GAME_VERSION);
 			}
 		}
 	}
@@ -414,7 +411,7 @@ void G_Script_ScriptLoad(void) {
 		Q_strcat(filename, sizeof (filename), mapname.string);
 		Q_strcat(filename, sizeof (filename), ".script");
 		len = trap_FS_FOpenFile(filename, &f, FS_READ);
-		G_Printf("%s: no custom mapscript, using default!\n", GAME_VERSION);
+		G_Printf("%s: no local custom mapscript, using default!\n", GAME_VERSION);
 	}
 
 	// make sure we clear out the temporary scriptname
@@ -426,6 +423,7 @@ void G_Script_ScriptLoad(void) {
 
 	// END Mad Doc - TDF
 	// Arnout: make sure we terminate the script with a '\0' to prevent parser from choking
+	level.scriptEntity = NULL;
 	level.scriptEntity = G_Alloc(len + 1);
 	trap_FS_Read(level.scriptEntity, len, f);
 	*(level.scriptEntity + len) = '\0';

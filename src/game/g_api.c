@@ -747,6 +747,121 @@ qboolean G_API_sendEventRecord(char *result, gentity_t *ent, char *mapName, char
 	return G_AsyncAPICall("v", result, ent, 8, cupKey, encodedMapName, encodedRunName, authToken, data, etrunVersion, cphysics, net_port);
 }
 
+/**
+ * Get config handler
+ */
+static void *getConfigHandler(void *data) {
+	int            code;
+	struct query_s *queryStruct = (struct query_s *)data;
+	int	config_strictSaveLoad;
+	int	config_physics;
+	int	config_disableDrowning;
+	int	config_holdDoorsOpen;
+	int	config_enableMapEntities;
+	int config_script_size;
+	int len;
+
+	code = API_query(queryStruct->cmd, queryStruct->result, queryStruct->query, sizeof (queryStruct->query));
+
+	if (code != 0) {
+		G_Error("%s: error #1 while getting config from API!\n", GAME_VERSION);
+	}
+
+	code = sscanf(queryStruct->result, "%d %d %d %d %d %d %*s",// Nico, last field is ignored for the moment
+		&config_strictSaveLoad,
+		&config_physics,
+		&config_disableDrowning,
+		&config_holdDoorsOpen,
+		&config_enableMapEntities,
+		&config_script_size);
+
+	if (code != 6) {
+		G_Error("%s: error #2 while getting config from API!\n", GAME_VERSION);
+	}
+
+	if (config_script_size != 0) {
+		level.useAPImapscript = qtrue;
+
+		level.scriptEntity = G_Alloc(config_script_size + 1);
+		code = sscanf(queryStruct->result, "%*d %*d %*d %*d %*d %*d %512000c", level.scriptEntity);
+
+		if (code != 1) {
+			G_Error("%s: error #3 while getting config from API!\n", GAME_VERSION);
+		}
+		*(level.scriptEntity + config_script_size) = '\0';
+
+		// Nico, check script len
+		len = strlen(level.scriptEntity);
+		if (len != config_script_size) {
+			G_Error("%s: error #4 while getting config from API (%d != %d)!\n", GAME_VERSION, config_script_size, len);
+		}
+
+		// Nico, do the same as G_Script_ScriptLoad do when loading from a local file
+		trap_Cvar_Set("g_scriptName", "");
+		G_Script_EventStringInit();
+	}
+
+	// Nico, check cvars from API
+	//if (config_strictSaveLoad != g_strictSaveLoad.integer) {
+	//	G_Printf("%s: updating g_strictSaveLoad from %d to %d\n", GAME_VERSION, g_strictSaveLoad.integer, config_strictSaveLoad);
+	//	trap_Cvar_Set("g_strictSaveLoad", va("%d", config_physics));
+	//}
+	if (config_physics != physics.integer) {
+		G_DPrintf("%s: updating physics from %d to %d\n", GAME_VERSION, physics.integer, config_physics);
+		trap_Cvar_Set("physics", va("%d", config_physics));
+	}
+	if (config_disableDrowning != g_disableDrowning.integer) {
+		G_DPrintf("%s: updating g_disableDrowning from %d to %d\n", GAME_VERSION, g_disableDrowning.integer, config_disableDrowning);
+		// Nico, update the cvar (ugly way but trap_Cvar_Set does not work here)
+		g_disableDrowning.integer = config_disableDrowning;
+		g_disableDrowning.modificationCount++;
+	}
+	if (config_holdDoorsOpen != g_holdDoorsOpen.integer) {
+		G_DPrintf("%s: updating g_holdDoorsOpen from %d to %d\n", GAME_VERSION, g_holdDoorsOpen.integer, config_holdDoorsOpen);
+		// Nico, update the cvar (ugly way but trap_Cvar_Set does not work here)
+		g_holdDoorsOpen.integer = config_holdDoorsOpen;
+		g_holdDoorsOpen.modificationCount++;
+	}
+
+	if (config_enableMapEntities != g_enableMapEntities.integer) {
+		G_DPrintf("%s: updating g_enableMapEntities from %d to %d\n", GAME_VERSION, g_enableMapEntities.integer, config_enableMapEntities);
+		// Nico, update the cvar (ugly way but trap_Cvar_Set does not work here)
+		g_enableMapEntities.integer = config_enableMapEntities;
+		g_enableMapEntities.modificationCount++;
+	}
+
+	free(queryStruct->result);
+	free(queryStruct);
+
+	return NULL;
+}
+
+/**
+ * Get config command
+ */
+qboolean G_API_getConfig(void) {
+	char *buf				 = NULL;
+	char net_port[8]         = { 0 };
+	char cphysics[8]         = { 0 };
+	char encodedMapName[255] = { 0 };
+
+	buf = malloc(LARGE_RESPONSE_MAX_SIZE * sizeof (char));
+
+	if (!buf) {
+		LDE("failed to allocate memory\n");
+		return qfalse;
+	}
+
+	sprintf(net_port, "%d", trap_Cvar_VariableIntegerValue("net_port"));
+	sprintf(cphysics, "%d", physics.integer);
+
+	if (url_encode(level.rawmapname, encodedMapName) == qfalse) {
+		return qfalse;
+	}
+
+	return G_SyncAPICall("o", buf, NULL, 4, encodedMapName, GAME_VERSION_DATED, cphysics, net_port);
+}
+
 // Commands handler binding
 static const api_glue_t APICommands[] =
 {
@@ -757,7 +872,8 @@ static const api_glue_t APICommands[] =
 	{ "e", checkpointsHandler },
 	{ "f", randommapHandler   },
 	{ "r", mapRankHandler     },
-	{ "v", eventRecordHandler }
+	{ "v", eventRecordHandler },
+	{ "o", getConfigHandler   }
 };
 
 /**

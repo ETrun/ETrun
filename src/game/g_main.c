@@ -1353,6 +1353,10 @@ void G_InitGame(int levelTime, int randomSeed) {
 	// Note: do not check API here, it could crash
 	if (g_useAPI.integer) {
 		G_loadAPI();
+
+		if (!G_API_getConfig()) {
+			G_Error("%s: failed to get config from API!\n", GAME_VERSION);
+		}
 	}
 
 	G_InitWorldSession();

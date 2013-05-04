@@ -487,9 +487,8 @@ void SP_trigger_hurt(gentity_t *self) {
 
 	self->use = hurt_use;
 
-	// link in to the world if starting active
 	// Nico, enable hurt entity if needed
-	if (g_enableMapEntities.integer & MAP_HURT_ENTITIES || !(self->spawnflags & 1)) {
+	if (g_enableMapEntities.integer & MAP_HURT_ENTITIES && !(self->spawnflags & 1)) {
 		self->touch = hurt_touch;
 	}
 
