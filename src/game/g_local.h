@@ -887,6 +887,7 @@ typedef struct {
 	int numspawntargets;         // # spawntargets in this map
 
 	// RF, entity scripting
+	qboolean useAPImapscript;// Nico, if API has a script for the current maps, this will be set to true
 	char *scriptEntity;
 
 	// player/AI model scripting (server repository)

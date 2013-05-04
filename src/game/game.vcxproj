@@ -221,6 +221,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\libs\geoip\geoip.h" />
+    <ClInclude Include="bg_version.h" />
     <ClInclude Include="g_api.h" />
     <ClInclude Include="bg_local.h" />
     <ClInclude Include="bg_public.h" />
