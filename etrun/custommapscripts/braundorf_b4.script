@@ -650,7 +650,7 @@ forward_spawn
 }
 
 // -------------------------------------------------
-// COMMAND POST CODE:  Copied from sock's online LDR
+// COMMAND POST CODE:  Copied from sock online LDR
 // -------------------------------------------------
 
 // ================================================
@@ -930,6 +930,3 @@ cpspawn_wobj
 		setstate cp_spawn invisible
 	}
 }
-
-
-

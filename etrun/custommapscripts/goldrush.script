@@ -1586,14 +1586,14 @@ tank
 
 	trigger stopcheck_setup
 	{
-		accum 1 bitset 6			// stop if we're stuck/no-one's pushing :)
+		accum 1 bitset 6			// stop if we are stuck/no-one is pushing :)
 
 		accum 1 abort_if_bitset 8		// no one in the trigger, abort
 
 		trigger self stuck_check		// call the stop check function
-		accum 1 abort_if_bitset 3		// we're stuck so break out
+		accum 1 abort_if_bitset 3		// we are stuck so break out
 
-		accum 1 bitreset 6			// we're free to move
+		accum 1 bitreset 6			// we are free to move
 	}
 
 	trigger stopcheck
@@ -1679,8 +1679,8 @@ tank
 
 	rebirth
 	{
-		accum 1 bitreset 9 // we're visibly alive
-		accum 1 bitreset 7 // we're alive again
+		accum 1 bitreset 9 // we are visibly alive
+		accum 1 bitreset 7 // we are alive again
 
 		trigger self script_lockout
 
@@ -1716,7 +1716,7 @@ tank
 		accum 1 abort_if_bitset 2		// are we not following a spline?
 		accum 5 abort_if_not_equal 0	// are we not in a script lockout?
 
-		accum 1 bitset 9				// we're now visibly dead
+		accum 1 bitset 9				// we are now visibly dead
 
 		trigger self deathcheck_message
 		accum 1 bitset 4
@@ -2175,7 +2175,7 @@ truck_construct
 	}
 }
 
-// digibob: ok, for once i'm gonna PLAN this one, so NOTHING WILL BREAK EVAR
+// digibob: ok, for once i am gonna PLAN this one, so NOTHING WILL BREAK EVAR
 // ============================================================================
 // accum 0, gold bars collected
 // accum 1
@@ -2690,14 +2690,14 @@ truck
 
 	trigger stopcheck_setup
 	{
-		accum 1 bitset 6				// stop if we're stuck/no-one's pushing :)
+		accum 1 bitset 6				// stop if we are stuck/no-one is pushing :)
 
 		accum 1 abort_if_bitset 8		// no one in the trigger, abort
 
 		trigger truck stuck_check		// call the stop check function
-		accum 1 abort_if_bitset 3		// we're stuck so break out
+		accum 1 abort_if_bitset 3		// we are stuck so break out
 
-		accum 1 bitreset 6				// we're free to keep going
+		accum 1 bitreset 6				// we are free to keep going
 	}
 
 	trigger stopcheck
@@ -2780,8 +2780,8 @@ truck
 
 	rebirth
 	{
-		accum 1 bitreset 7 // we're alive again
-		accum 1 bitreset 9 // we're visibly alive
+		accum 1 bitreset 7 // we are alive again
+		accum 1 bitreset 9 // we are visibly alive
 
 		changemodel models/mapobjects/blitz_sd/blitzbody.md3
 
@@ -2808,7 +2808,7 @@ truck
 		accum 1 abort_if_bitset 2		// are we not following a spline?
 		accum 1 abort_if_bitset 4		// are we not in a script lockout?
 
-		accum 1 bitset 9				// we're now visibly dead
+		accum 1 bitset 9				// we are now visibly dead
 
 		wm_announce "The Truck has been damaged!"
 
@@ -2822,7 +2822,7 @@ truck
 		kill truck_construct
 
 		trigger truck_engine sound_death
-		//trigger truck tracks_stop		// truck with tracks? i don't think so
+		//trigger truck tracks_stop		// truck with tracks? i do not think so
 		trigger truck wheels_stop
 		// <<<< stop anim goes here
 

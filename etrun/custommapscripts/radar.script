@@ -884,7 +884,7 @@ circuit2_radartop
 		accum 1 set 0	// 0:Down 1:Up
 		accum 2 set 0	// 0:Stationary 1:Moving
 		accum 3 set 0	// requested direction
-		wait 2500	// Offset so both radar's don't start at the same time
+		wait 2500	// Offset so both radars do not start at the same time
 		trigger circuit2_radartop up
 	}
 

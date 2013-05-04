@@ -3458,14 +3458,14 @@ tank
 
 	trigger stopcheck_setup
 	{
-		accum 1 bitset 6			// stop if we're stuck/no-one's pushing :)
+		accum 1 bitset 6			// stop if we are stuck/no-one is pushing :)
 
 		accum 1 abort_if_bitset 8		// no one in the trigger, abort
 
 		trigger self stuck_check		// call the stop check function
-		accum 1 abort_if_bitset 3		// we're stuck so break out
+		accum 1 abort_if_bitset 3		// we are stuck so break out
 
-		accum 1 bitreset 6			// we're free to move
+		accum 1 bitreset 6			// we are free to move
 	}
 
 	trigger stopcheck
@@ -3526,8 +3526,8 @@ tank
 
 	rebirth
 	{
-		accum 1 bitreset 9 // we're visibly alive
-		accum 1 bitreset 7 // we're alive again
+		accum 1 bitreset 9 // we are visibly alive
+		accum 1 bitreset 7 // we are alive again
 
 		trigger self script_lockout
 
@@ -3560,7 +3560,7 @@ tank
 		accum 1 abort_if_bitset 2		// are we not following a spline?
 		accum 5 abort_if_not_equal 0	// are we not in a script lockout?
 
-		accum 1 bitset 9				// we're now visibly dead
+		accum 1 bitset 9				// we are now visibly dead
 
 		// *----------------------------------- vo ------------------------------------------*
 		wm_teamvoiceannounce 0 "axis_hq_tank_damaged"

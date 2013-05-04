@@ -373,7 +373,7 @@ game_manager
 
 	trigger opendoors
 	{
-		// Generator is down, but emergency systems haven't kicked in yet
+		// Generator is down, but emergency systems have not kicked in yet
 		globalaccum 1 set 1
 
 		// Horrible messy check to make sure the backup generator

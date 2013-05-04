@@ -503,7 +503,7 @@ game_manager
 
 	trigger water_pumps_destroyed
 	{
-		accum 6 abort_if_equal 0		// Can't damage pumps before they're repaired
+		accum 6 abort_if_equal 0		// Can not damage pumps before they are repaired
 		accum 6 inc -1				// Decrease game counter
 
 		accum 6 abort_if_not_equal 0

@@ -161,8 +161,8 @@ secret1
 
 	trigger enable
 	{
-		accum 0 abort_if_not_equal 0		//only continue if isn't bussy yet
-		accum 0 set 1				//set check to 1 (tells it's busy already)
+		accum 0 abort_if_not_equal 0		//only continue if is not bussy yet
+		accum 0 set 1				//set check to 1 (tells it is busy already)
 		setstate secret_teleporter default	//trigger appears
 		wait 10000				//figure that out yourself :P
 		setstate secret_teleporter invisible	//trigger disappears

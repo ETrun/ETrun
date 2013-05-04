@@ -493,7 +493,7 @@ game_manager
 	trigger axis_win
 	{
 		accum 2 abort_if_not_equal 1
-		// disable the button so it can't be retriggered
+		// disable the button so it can not be retriggered
 		trigger trigger_end disable
 		// set associated objective image
 		wm_announce "Axis fired the Rail Gun!"
@@ -533,7 +533,7 @@ train1
 		accum 3 set -72 // prestage - first ammo loaded stage is 0
 		accum 4 set 0 // is moving? (1 = moving)
 		accum 5 set 0 // switch state
-		accum 6 set 0 // who's got the tug? (0 = axis / 1 = allies)
+		accum 6 set 0 // who has got the tug? (0 = axis / 1 = allies)
 
 		wait 200
 		followspline globalaccum 1 spln67 200 wait length 224
@@ -3349,7 +3349,7 @@ train1
 		accum 1 set 1
 
 		accum 4 trigger_if_equal 0 train1 sound_idle
-		// Gordon: This shouldn't be here Tim, as this isnt when the train actually stops
+		// Gordon: This should not be here Tim, as this isnt when the train actually stops
 		// Tim: i know, but it does the trick for now :E
 	}
 
