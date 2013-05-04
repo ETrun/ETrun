@@ -96,6 +96,12 @@ void CG_DrawSpeedMeter(void) {
 
 	speed = sqrt(cg.predictedPlayerState.velocity[0] * cg.predictedPlayerState.velocity[0] + cg.predictedPlayerState.velocity[1] * cg.predictedPlayerState.velocity[1]);
 
+	// Nico, cg.predictedPlayerState.velocity is sometimes NaN (example on asdarun1), so check it
+	// http://stackoverflow.com/questions/570669/checking-if-a-double-or-float-is-nan-in-c
+	if (speed != speed) {
+		speed = 0;
+	}
+
 	sizex = sizey = 0.25f;
 
 	x = cg_speedMeterX.integer;
@@ -838,6 +844,12 @@ void CG_DrawInfoPanel(void) {
 
 	// Update overall max speed
 	speed = sqrt(cg.predictedPlayerState.velocity[0] * cg.predictedPlayerState.velocity[0] + cg.predictedPlayerState.velocity[1] * cg.predictedPlayerState.velocity[1]);
+
+	// Nico, as cg.predictedPlayerState.velocity is sometimes NaN, sanatize speed value
+	if (speed < 0 || speed >= 10000) {
+		speed = 0;
+	}
+
 	if (speed > cg.overallMaxSpeed) {
 		cg.overallMaxSpeed = speed;
 	}
