@@ -1321,8 +1321,8 @@ void target_starttimer_use(gentity_t *self, gentity_t *other, gentity_t *activat
 	// Nico, reset jump counter (cause prediction error?)
 	client->ps.identifyClientHealth = 0;
 
-	// Nico, reset saves if physics is VET
-	if (physics.integer == PHYSICS_MODE_VET) {
+	// Nico, reset saves if physics is VET and strict save/load mod isa DISABLED
+	if (physics.integer == PHYSICS_MODE_VET && g_strictSaveLoad.integer != 1) {
 		for (i = 0; i < MAX_SAVED_POSITIONS; ++i) {
 			client->sess.alliesSaves[i].valid = qfalse;
 			client->sess.axisSaves[i].valid   = qfalse;

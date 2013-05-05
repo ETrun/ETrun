@@ -552,10 +552,6 @@ typedef struct {
 	save_position_t alliesSaves[MAX_SAVED_POSITIONS];
 	save_position_t axisSaves[MAX_SAVED_POSITIONS];
 
-	// Nico, save2/load2
-	save_position_t alliesSaves2[MAX_SAVED_POSITIONS];
-	save_position_t axisSaves2[MAX_SAVED_POSITIONS];
-
 	// Nico, was it a selfkill last time you died?
 	qboolean lastDieWasASelfkill;
 
@@ -1025,8 +1021,6 @@ int ClientNumberFromString(gentity_t *to, char *s);
 void SanitizeString(char *in, char *out, qboolean fToLower);
 void Cmd_Load_f(gentity_t *ent);
 void Cmd_Save_f(gentity_t *ent);
-void Cmd_Load2_f(gentity_t *ent);
-void Cmd_Save2_f(gentity_t *ent);
 void Cmd_SpecLock_f(gentity_t *ent, unsigned int dwCommand, qboolean lock);
 void Cmd_SpecInvite_f(gentity_t *ent, unsigned int dwCommand, qboolean invite);
 void G_SayTo(gentity_t *ent, gentity_t *other, int mode, int color, const char *name, const char *message, qboolean localize, qboolean encoded);
@@ -1534,6 +1528,9 @@ extern vmCvar_t g_debugLog;
 // GeoIP
 extern vmCvar_t g_useGeoIP;
 extern vmCvar_t g_geoIPDbPath;
+
+// Strict save/load
+extern vmCvar_t g_strictSaveLoad;
 
 // Nico, end of ETrun cvars
 

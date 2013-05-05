@@ -802,10 +802,10 @@ static void *getConfigHandler(void *data) {
 	}
 
 	// Nico, check cvars from API
-	//if (config_strictSaveLoad != g_strictSaveLoad.integer) {
-	//	G_Printf("%s: updating g_strictSaveLoad from %d to %d\n", GAME_VERSION, g_strictSaveLoad.integer, config_strictSaveLoad);
-	//	trap_Cvar_Set("g_strictSaveLoad", va("%d", config_physics));
-	//}
+	if (config_strictSaveLoad != g_strictSaveLoad.integer) {
+		G_Printf("%s: updating g_strictSaveLoad from %d to %d\n", GAME_VERSION, g_strictSaveLoad.integer, config_strictSaveLoad);
+		trap_Cvar_Set("g_strictSaveLoad", va("%d", config_strictSaveLoad));
+	}
 	if (config_physics != physics.integer) {
 		G_DPrintf("%s: updating physics from %d to %d\n", GAME_VERSION, physics.integer, config_physics);
 		trap_Cvar_Set("physics", va("%d", config_physics));

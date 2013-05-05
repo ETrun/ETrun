@@ -175,6 +175,9 @@ vmCvar_t g_debugLog;
 vmCvar_t g_useGeoIP;
 vmCvar_t g_geoIPDbPath;
 
+// Strict save/load
+vmCvar_t g_strictSaveLoad;
+
 // Nico, end of ETrun cvars
 
 cvarTable_t gameCvarTable[] =
@@ -320,6 +323,9 @@ cvarTable_t gameCvarTable[] =
 	// GeoIP
 	{ &g_useGeoIP,             "g_useGeoIP",             "1",						   CVAR_ARCHIVE | CVAR_LATCH,                                     qfalse, qfalse, qfalse, qfalse },
 	{ &g_geoIPDbPath,          "g_geoIPDbPath",			 "GeoIP.dat",                  CVAR_ARCHIVE | CVAR_LATCH,                                     qfalse, qfalse, qfalse, qfalse },
+
+	// Strict save/load
+	{ &g_strictSaveLoad,       "g_strictSaveLoad",		 "0",						   CVAR_ARCHIVE | CVAR_LATCH,                                     qfalse, qfalse, qfalse, qfalse }
 
 	// Nico, end of ETrun cvars
 };
