@@ -189,6 +189,7 @@ void G_players_cmd(gentity_t *ent, unsigned int dwCommand, qboolean fValue) {
 	gclient_t *cl;
 	char      n2[MAX_NETNAME], ready[16], ref[16], rate[256];
 	char      *s, *tc, userinfo[MAX_INFO_STRING];
+	int ip1, ip2, ip3;//Nico, parts of IP
 
 	// Nico, silent GCC
 	(void)dwCommand;
@@ -196,11 +197,11 @@ void G_players_cmd(gentity_t *ent, unsigned int dwCommand, qboolean fValue) {
 
 	if (g_gamestate.integer == GS_PLAYING) {
 		if (ent) {
-			CP("print \"\n^3 ID^1 : ^3Player                    Nudge  Rate  MaxPkts  Snaps\n\"");
-			CP("print \"^1-----------------------------------------------------------^7\n\"");
+			CP("print \"\n^3 ID^1 : ^3Player                    Nudge  Rate  MaxPkts  Snaps FPS   IP\n\"");
+			CP("print \"^1------------------------------------------------------------------------------------^7\n\"");
 		} else {
-			G_Printf(" ID : Player                    Nudge  Rate  MaxPkts  Snaps\n");
-			G_Printf("-----------------------------------------------------------\n");
+			G_Printf(" ID : Player                    Nudge  Rate  MaxPkts  Snaps  FPS   IP\n");
+			G_Printf("------------------------------------------------------------------------------------\n");
 		}
 	} else {
 		if (ent) {
@@ -217,6 +218,9 @@ void G_players_cmd(gentity_t *ent, unsigned int dwCommand, qboolean fValue) {
 	for (i = 0; i < level.numConnectedClients; i++) {
 		idnum  = level.sortedClients[i];
 		cl     = &level.clients[idnum];
+		ip1 = 0;
+		ip2 = 0;
+		ip3 = 0;
 
 		SanitizeString(cl->pers.netname, n2, qtrue);
 		n2[26]   = 0;
@@ -232,6 +236,8 @@ void G_players_cmd(gentity_t *ent, unsigned int dwCommand, qboolean fValue) {
 			user_rate  = (max_rate > 0 && atoi(s) > max_rate) ? max_rate : atoi(s);
 			s          = Info_ValueForKey(userinfo, "snaps");
 			user_snaps = atoi(s);
+			s = Info_ValueForKey( userinfo, "ip" );
+			sscanf(s, "%i.%i.%i", &ip1, &ip2, &ip3);
 
 			strcpy(rate, va("%5d%6d%9d%7d", cl->pers.clientTimeNudge, user_rate, cl->pers.clientMaxPackets, user_snaps));
 		}
@@ -256,7 +262,7 @@ void G_players_cmd(gentity_t *ent, unsigned int dwCommand, qboolean fValue) {
 		}
 
 		if (ent) {
-			CP(va("print \"%s%s%2d^1:%s %-26s^7%s  ^3%s\n\"", ready, tc, idnum, ((ref[0]) ? "^3" : "^7"), n2, rate, ref));
+			CP(va("print \"%s%s%2d^1:%s %-26s^7%s  %i   %i.%i.%i.*  ^3%s\n\"", ready, tc, idnum, ((ref[0]) ? "^3" : "^7"), n2, rate, cl->pers.maxFPS, ip1, ip2, ip3, ref));
 		} else {
 			G_Printf("%s%s%2d: %-26s%s  %s\n", ready, tc, idnum, n2, rate, ref);
 		}
