@@ -812,22 +812,25 @@ static void *getConfigHandler(void *data) {
 	}
 	if (config_disableDrowning != g_disableDrowning.integer) {
 		G_DPrintf("%s: updating g_disableDrowning from %d to %d\n", GAME_VERSION, g_disableDrowning.integer, config_disableDrowning);
-		// Nico, update the cvar (ugly way but trap_Cvar_Set does not work here)
+		// Nico, update the cvar
 		g_disableDrowning.integer = config_disableDrowning;
 		g_disableDrowning.modificationCount++;
+		trap_Cvar_Set("g_disableDrowning", va("%d", config_disableDrowning));
 	}
 	if (config_holdDoorsOpen != g_holdDoorsOpen.integer) {
 		G_DPrintf("%s: updating g_holdDoorsOpen from %d to %d\n", GAME_VERSION, g_holdDoorsOpen.integer, config_holdDoorsOpen);
-		// Nico, update the cvar (ugly way but trap_Cvar_Set does not work here)
+		// Nico, update this way to make sure the cvar value is updated earlier enough when map elements get spawned
 		g_holdDoorsOpen.integer = config_holdDoorsOpen;
 		g_holdDoorsOpen.modificationCount++;
+		trap_Cvar_Set("g_holdDoorsOpen", va("%d", config_holdDoorsOpen));
 	}
 
 	if (config_enableMapEntities != g_enableMapEntities.integer) {
-		G_DPrintf("%s: updating g_enableMapEntities from %d to %d\n", GAME_VERSION, g_enableMapEntities.integer, config_enableMapEntities);
-		// Nico, update the cvar (ugly way but trap_Cvar_Set does not work here)
+		G_Printf("%s: updating g_enableMapEntities from %d to %d\n", GAME_VERSION, g_enableMapEntities.integer, config_enableMapEntities);
+		// Nico, update this way to make sure the cvar value is updated earlier enough when map elements get spawned
 		g_enableMapEntities.integer = config_enableMapEntities;
 		g_enableMapEntities.modificationCount++;
+		trap_Cvar_Set("g_enableMapEntities", va("%d", config_enableMapEntities));
 	}
 
 	free(queryStruct->result);

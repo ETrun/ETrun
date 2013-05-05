@@ -4334,7 +4334,6 @@ void _UI_SetActiveMenu(uiMenuCommand_t menu) {
 
 		// ydnar: say, team say, etc
 		case UIMENU_INGAME_MESSAGEMODE:
-			//trap_Cvar_Set( "cl_paused", "1" );
 			trap_Key_SetCatcher(KEYCATCH_UI);
 			Menus_OpenByName("ingame_messagemode");
 			return;
