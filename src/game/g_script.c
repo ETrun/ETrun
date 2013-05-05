@@ -383,7 +383,7 @@ void G_Script_ScriptLoad(void) {
 	}
 
 	// Nico, API is not in use, check if this map a special mapscript in local mapscript directory
-	if (g_mapScriptDirectory.string[0]) {
+	if (!g_useAPI.integer && g_mapScriptDirectory.string[0]) {
 		G_Printf("%s: checking for local custom mapscript...\n", GAME_VERSION);
 		Q_strncpyz(filename, g_mapScriptDirectory.string, sizeof (filename));
 		Q_strcat(filename, sizeof (filename), "/");
@@ -411,7 +411,7 @@ void G_Script_ScriptLoad(void) {
 		Q_strcat(filename, sizeof (filename), mapname.string);
 		Q_strcat(filename, sizeof (filename), ".script");
 		len = trap_FS_FOpenFile(filename, &f, FS_READ);
-		G_Printf("%s: no local custom mapscript, using default!\n", GAME_VERSION);
+		G_Printf("%s: using default mapscript!\n", GAME_VERSION);
 	}
 
 	// make sure we clear out the temporary scriptname
