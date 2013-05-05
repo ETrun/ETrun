@@ -1396,7 +1396,7 @@ void notify_timerun_stop(gentity_t *activator, int finishTime) {
 
 // Nico, records command
 static void Cmd_SendRecord_f(gentity_t *ent, char *runName, char *authToken, int time, int startSpeed, int stopSpeed, int maxSpeed, int jumpsCount, char *ip, int maxFPS,
-							 unsigned int timenudge, unsigned int rate, unsigned int maxPackets, unsigned int snaps) {
+							 unsigned int timenudge, unsigned int rate, unsigned int maxPackets, unsigned int snaps, int strictSaveLoad, int disableDrowning, int holdDoorsOpen, int enableMapEntities) {
 	char *buf                    = NULL;
 	char data[RESPONSE_MAX_SIZE] = { 0 };
 	int  i                       = 0;
@@ -1408,7 +1408,7 @@ static void Cmd_SendRecord_f(gentity_t *ent, char *runName, char *authToken, int
 		G_Error("Cmd_SendRecord_f: malloc failed\n");
 	}
 
-	sprintf(data, "%d/%d/%d/%d/%d/%s/%d/%d/%d/%d/%d/O", time, startSpeed, stopSpeed, maxSpeed, jumpsCount, ip, maxFPS, timenudge, rate, maxPackets, snaps);
+	sprintf(data, "%d/%d/%d/%d/%d/%s/%d/%d/%d/%d/%d/%d/%d/%d/%d/O", time, startSpeed, stopSpeed, maxSpeed, jumpsCount, ip, maxFPS, timenudge, rate, maxPackets, snaps, strictSaveLoad, disableDrowning, holdDoorsOpen, enableMapEntities);
 
 	while (i < MAX_TIMERUN_CHECKPOINTS && ent->client->sess.timerunCheckpointTimes[i] != 0) {
 		sprintf(temp, "%dO", ent->client->sess.timerunCheckpointTimes[i]);
@@ -1552,7 +1552,8 @@ void target_stoptimer_use(gentity_t *self, gentity_t *other, gentity_t *activato
 		                 time, client->sess.startSpeed, client->sess.stopSpeed, client->sess.maxSpeed,
 						 client->ps.identifyClientHealth,// Nico, this is used as a jumps counter
 						 client->pers.ip, client->pers.maxFPS,
-						 client->pers.clientTimeNudge, client->pers.rate, client->pers.clientMaxPackets, client->pers.snaps);
+						 client->pers.clientTimeNudge, client->pers.rate, client->pers.clientMaxPackets, client->pers.snaps,
+						 g_strictSaveLoad.integer, g_disableDrowning.integer, g_holdDoorsOpen.integer, g_enableMapEntities.integer);
 	} else {
 		// Nico, API is not used and/or client is not logged,
 		// we cannnot know if his last time his SB/PB or something
