@@ -2653,7 +2653,7 @@ void PmoveSingle(pmove_t *pmove) {
 
 	if (pm->cmd.wbuttons & WBUTTON_ZOOM && pm->ps->stats[STAT_HEALTH] >= 0 && !(pm->ps->weaponDelay)) {
 		if (pm->ps->stats[STAT_KEYS] & (1 << INV_BINOCS) &&        // (SA) binoculars are an inventory item (inventory==keys)
-			BG_IsScopedWeapon(pm->ps->weapon) &&          // don't allow binocs if using the sniper scope
+			!BG_IsScopedWeapon(pm->ps->weapon) &&          // don't allow binocs if using the sniper scope
 			!BG_PlayerMounted(pm->ps->eFlags) &&        // or if mounted on a weapon
 		    // rain - #215 - don't allow binocs w/ mounted mob. MG42 or mortar either.
 		    pm->ps->weapon != WP_MOBILE_MG42_SET &&
