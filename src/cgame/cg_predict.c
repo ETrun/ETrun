@@ -701,13 +701,6 @@ void CG_PredictPlayerState(void) {
 		// get the previous command
 		trap_GetUserCmd(cmdNum - 1, &cg_pmove.oldcmd);
 
-
-		/* Nico, prone bug fix
-		if ( cg_pmove.pmove_fixed ) {
-		    // rain - added tracemask
-		    PM_UpdateViewAngles( cg_pmove.ps, cg_pmove.pmext, &cg_pmove.cmd, CG_Trace, cg_pmove.tracemask );
-		}*/
-
 		// don't do anything if the time is before the snapshot player time
 		if (cg_pmove.cmd.serverTime <= cg.predictedPlayerState.commandTime) {
 			continue;

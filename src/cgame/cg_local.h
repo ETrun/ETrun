@@ -981,9 +981,9 @@ typedef struct {
 
 	// Timer related vars
 	int timerunStartTime;
-	int timerunFinishedTime;
-	int timerunBestTime[MAX_TIMERUNS];
-	int timerunLastTime[MAX_TIMERUNS];
+	int timerunFinishedTime[MAX_CLIENTS];
+	int timerunBestTime[MAX_CLIENTS][MAX_TIMERUNS];
+	int timerunLastTime[MAX_CLIENTS][MAX_TIMERUNS];
 
 	// Timerun vars
 	int timerunActive;

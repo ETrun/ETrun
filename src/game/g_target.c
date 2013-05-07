@@ -1268,7 +1268,7 @@ static void notify_timerun_start(gentity_t *activator) {
 		}
 
 		if (o->client->sess.spectatorClient == activator - g_entities) {
-			trap_SendServerCommand(o - g_entities, va("timerun_start_spec %i %i %i", timerunNum, activator->client->sess.timerunStartTime + 500, (int)activator->client->sess.startSpeed));
+			trap_SendServerCommand(o - g_entities, va("timerun_start_spec %i %i %i %i", timerunNum,  activator->client->ps.clientNum, activator->client->sess.timerunStartTime + 500, (int)activator->client->sess.startSpeed));
 		}
 	}
 }
@@ -1389,7 +1389,7 @@ void notify_timerun_stop(gentity_t *activator, int finishTime) {
 		}
 
 		if (o->client->sess.spectatorClient == activator - g_entities) {
-			trap_SendServerCommand(o - g_entities, va("timerun_stop_spec %i %i %i %i", timerunNum, finishTime, (int)activator->client->sess.stopSpeed, (int)activator->client->sess.maxSpeed));
+			trap_SendServerCommand(o - g_entities, va("timerun_stop_spec %i %i %i %i %i", timerunNum, activator->client->ps.clientNum, finishTime, (int)activator->client->sess.stopSpeed, (int)activator->client->sess.maxSpeed));
 		}
 	}
 }

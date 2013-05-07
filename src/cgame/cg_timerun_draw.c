@@ -211,11 +211,14 @@ void CG_DrawTimer(void) {
 	int        min                = 0, sec = 0, milli = 0;
 	int        dmin               = 0, dsec = 0, dmilli = 0;
 	int        x                  = 0, y = 0, w = 0;
-	int        timerunNum         = 0;
+	int        timerunNum         = cg.currentTimerun;
 	int        startTime          = 0;
 	int        currentTimerunTime = 0;
 	float      sizex              = 0.25f, sizey = 0.25f;
 	vec4_t     color;
+	int		   runBestTime;
+	int		   runLastTime;
+	int		   clientNum = cg.clientNum;// Nico, player client num or spectated player client num
 	static int needsReset = 0;
 
 	// Nico, if level is not a timer
@@ -223,10 +226,21 @@ void CG_DrawTimer(void) {
 		return;
 	}
 
-	timerunNum = cg.currentTimerun;
+	// Nico, if cg_drawTimer is 0
+	if (!cg_drawTimer.integer) {
+		return;
+	}
+
+	// Nico, should we display spectated player values or real player values?
+	if (cgs.clientinfo[cg.clientNum].team == TEAM_SPECTATOR) {
+		clientNum = cg.snap->ps.clientNum;
+	}
+
+	runBestTime = cg.timerunBestTime[clientNum][timerunNum];
+	runLastTime = cg.timerunLastTime[clientNum][timerunNum];
 
 	// Nico, check if timer needs reset
-	// note: this should be move somewhere else
+	// note: this should be moved somewhere else
 	if (!cg.timerunActive) {
 		// Nico, timer will be reseted next time timerun becomes active
 		needsReset = 1;
@@ -234,15 +248,10 @@ void CG_DrawTimer(void) {
 
 	if (needsReset && cg.timerunActive) {
 		// Nico, reset timer
-		cg.timerunFinishedTime = 0;
+		cg.timerunFinishedTime[clientNum] = 0;
 		needsReset             = 0;
 	}
 	//
-
-	// Nico, if cg_drawTimer is 0
-	if (!cg_drawTimer.integer) {
-		return;
-	}
 
 	// Nico, set timer position
 	x = cg_timerX.integer;
@@ -254,9 +263,9 @@ void CG_DrawTimer(void) {
 	if (cg.timerunActive) {
 		// Nico, timerun active, run not finished yet
 		milli = currentTimerunTime = cg.time - startTime;
-	} else if (cg.timerunFinishedTime) {
+	} else if (cg.timerunFinishedTime[clientNum]) {
 		// Nico, timerun inactive, run finished
-		milli = currentTimerunTime = cg.timerunFinishedTime;
+		milli = currentTimerunTime = cg.timerunFinishedTime[clientNum];
 	} else {
 		// Nico, timerun not active, run not finished
 		milli = currentTimerunTime;
@@ -271,18 +280,19 @@ void CG_DrawTimer(void) {
 	// Nico, set timer default color
 	Vector4Set(color, colorWhite[0], colorWhite[1], colorWhite[2], colorWhite[3]);
 
-	if (cg.timerunFinishedTime) {
+	if (cg.timerunFinishedTime[clientNum]) {
 		// Nico, timerun finished
+
 		// Compare with client rec
-		if (cg.timerunBestTime[timerunNum] > 0 && cg.timerunLastTime[timerunNum] != cg.timerunBestTime[timerunNum]) {
+		if (runBestTime > 0 && runLastTime != runBestTime) {
 			// Nico, did a different time, compute the delta
-			dmilli  = abs(cg.timerunLastTime[timerunNum] - cg.timerunBestTime[timerunNum]);
+			dmilli  = abs(runLastTime - runBestTime);
 			dmin    = dmilli / 60000;
 			dmilli -= dmin * 60000;
 			dsec    = dmilli / 1000;
 			dmilli -= dsec * 1000;
 
-			if (cg.timerunLastTime[timerunNum] < cg.timerunBestTime[timerunNum]) {
+			if (runLastTime < runBestTime) {
 				// Nico, did a better time
 				Vector4Set(color, colorGreen[0], colorGreen[1], colorGreen[2], colorGreen[3]);
 				Com_sprintf(status, sizeof (status), "%s", va("%02d:%02d.%03d (-%02d:%02d.%03d)", min, sec, milli, dmin, dsec, dmilli));
@@ -291,7 +301,7 @@ void CG_DrawTimer(void) {
 				Vector4Set(color, colorRed[0], colorRed[1], colorRed[2], colorRed[3]);
 				Com_sprintf(status, sizeof (status), "%s", va("%02d:%02d.%03d (+%02d:%02d.%03d)", min, sec, milli, dmin, dsec, dmilli));
 			}
-		} else if (cg.timerunBestTime[timerunNum] > 0) {
+		} else if (runBestTime > 0) {
 			// Nico, did the same time
 			Com_sprintf(status, sizeof (status), "%s", va("%02d:%02d.%03d (+00:00.000)", min, sec, milli));
 		} else {
@@ -302,7 +312,7 @@ void CG_DrawTimer(void) {
 		// Nico, timerun not finished yet
 
 		// Nico, you won't beat the rec this time, turn timer to red color
-		if (cg.timerunBestTime[timerunNum] > 0 && currentTimerunTime > cg.timerunBestTime[timerunNum]) {
+		if (runBestTime > 0 && currentTimerunTime > runBestTime) {
 			Vector4Set(color, colorRed[0], colorRed[1], colorRed[2], colorRed[3]);
 		}
 
