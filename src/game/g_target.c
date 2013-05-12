@@ -1251,24 +1251,26 @@ static void notify_timerun_start(gentity_t *activator) {
 	// Nico, notify the client itself first
 	trap_SendServerCommand(activator - g_entities, va("timerun_start %i %i %i", timerunNum, activator->client->sess.timerunStartTime + 500, (int)activator->client->sess.startSpeed));
 
-	// Nico, notify its spectators
-	for (; i < level.numConnectedClients; ++i) {
-		o = g_entities + level.sortedClients[i];
+	// Nico, notify its spectators if cupmode is DISABLED
+	if (g_cupMode.integer == 0) {
+		for (; i < level.numConnectedClients; ++i) {
+			o = g_entities + level.sortedClients[i];
 
-		if (!o->client) {
-			continue;
-		}
+			if (!o->client) {
+				continue;
+			}
 
-		if (o == activator) {
-			continue;
-		}
+			if (o == activator) {
+				continue;
+			}
 
-		if (o->client->sess.sessionTeam != TEAM_SPECTATOR) {
-			continue;
-		}
+			if (o->client->sess.sessionTeam != TEAM_SPECTATOR) {
+				continue;
+			}
 
-		if (o->client->sess.spectatorClient == activator - g_entities) {
-			trap_SendServerCommand(o - g_entities, va("timerun_start_spec %i %i %i %i", timerunNum,  activator->client->ps.clientNum, activator->client->sess.timerunStartTime + 500, (int)activator->client->sess.startSpeed));
+			if (o->client->sess.spectatorClient == activator - g_entities) {
+				trap_SendServerCommand(o - g_entities, va("timerun_start_spec %i %i %i %i", timerunNum,  activator->client->ps.clientNum, activator->client->sess.timerunStartTime + 500, (int)activator->client->sess.startSpeed));
+			}
 		}
 	}
 }
@@ -1372,24 +1374,26 @@ void notify_timerun_stop(gentity_t *activator, int finishTime) {
 	// Nico, notify the client itself first
 	trap_SendServerCommand(activator - g_entities, va("timerun_stop %i %i %i %i", timerunNum, finishTime, (int)activator->client->sess.stopSpeed, (int)activator->client->sess.maxSpeed));
 
-	// Nico, notify its spectators
-	for (; i < level.numConnectedClients; ++i) {
-		o = g_entities + level.sortedClients[i];
+	// Nico, notify its spectators if cupmode is DISABLED
+	if (g_cupMode.integer == 0) {
+		for (; i < level.numConnectedClients; ++i) {
+			o = g_entities + level.sortedClients[i];
 
-		if (!o->client) {
-			continue;
-		}
+			if (!o->client) {
+				continue;
+			}
 
-		if (o == activator) {
-			continue;
-		}
+			if (o == activator) {
+				continue;
+			}
 
-		if (o->client->sess.sessionTeam != TEAM_SPECTATOR) {
-			continue;
-		}
+			if (o->client->sess.sessionTeam != TEAM_SPECTATOR) {
+				continue;
+			}
 
-		if (o->client->sess.spectatorClient == activator - g_entities) {
-			trap_SendServerCommand(o - g_entities, va("timerun_stop_spec %i %i %i %i %i", timerunNum, activator->client->ps.clientNum, finishTime, (int)activator->client->sess.stopSpeed, (int)activator->client->sess.maxSpeed));
+			if (o->client->sess.spectatorClient == activator - g_entities) {
+				trap_SendServerCommand(o - g_entities, va("timerun_stop_spec %i %i %i %i %i", timerunNum, activator->client->ps.clientNum, finishTime, (int)activator->client->sess.stopSpeed, (int)activator->client->sess.maxSpeed));
+			}
 		}
 	}
 }
@@ -1607,24 +1611,26 @@ static void notify_timerun_check(gentity_t *activator, int deltaTime, int time, 
 	// Nico, notify the client itself first
 	trap_SendServerCommand(activator - g_entities, va("timerun_check %i %i %i", deltaTime, time, status));
 
-	// Nico, notify its spectators
-	for (; i < level.numConnectedClients; ++i) {
-		o = g_entities + level.sortedClients[i];
+	// Nico, notify its spectators if cupmode is DISABLED
+	if (g_cupMode.integer == 0) {
+		for (; i < level.numConnectedClients; ++i) {
+			o = g_entities + level.sortedClients[i];
 
-		if (!o->client) {
-			continue;
-		}
+			if (!o->client) {
+				continue;
+			}
 
-		if (o == activator) {
-			continue;
-		}
+			if (o == activator) {
+				continue;
+			}
 
-		if (o->client->sess.sessionTeam != TEAM_SPECTATOR) {
-			continue;
-		}
+			if (o->client->sess.sessionTeam != TEAM_SPECTATOR) {
+				continue;
+			}
 
-		if (o->client->sess.spectatorClient == activator - g_entities) {
-			trap_SendServerCommand(o - g_entities, va("timerun_check_spec %i %i %i", deltaTime, time, status));
+			if (o->client->sess.spectatorClient == activator - g_entities) {
+				trap_SendServerCommand(o - g_entities, va("timerun_check_spec %i %i %i", deltaTime, time, status));
+			}
 		}
 	}
 }
