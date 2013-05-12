@@ -92,11 +92,11 @@ void G_SendScore(gentity_t *ent) {
 			            (level.time - cl->pers.enterTime) / 60000,
 			            g_cupMode.integer > 0 ? 0 : cl->sess.timerunBestTime[cl->sess.currentTimerunNum],
 			            g_cupMode.integer > 0 ? 0 : cl->sess.timerunBestSpeed[cl->sess.currentTimerunNum],
-			            cl->sess.timerunActive ? 1 : 0,
+			            g_cupMode.integer > 0 ? 0 : (cl->sess.timerunActive ? 1 : 0),
 			            cl->ps.clientNum,
 			            cl->sess.logged ? 1 : 0,
 			            cl->pers.cgaz > 0 ? 1 : 0,
-			            cl->sess.specLocked ? 1 : 0
+			            g_cupMode.integer > 0 ? 1 : (cl->sess.specLocked ? 1 : 0)
 			            );
 
 			if (size + strlen(entry) > 1000) {
