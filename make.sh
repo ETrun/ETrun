@@ -226,7 +226,7 @@ function make_pk3() {
 	# Delete previous pk3 if any
 	rm -f $PK3_NAME
 	cd $MOD_NAME
-	zip -9qr ../$PK3_NAME * -x custommapscripts\* qagame\* APImodule\*
+	zip -9qr ../$PK3_NAME * -x custommapscripts\* qagame\* timeruns.mod
 	cd ../..
 }
 
