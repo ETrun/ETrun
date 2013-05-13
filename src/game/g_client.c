@@ -1171,19 +1171,26 @@ char *ClientConnect(int clientNum, qboolean firstTime) {
 		if (!strcmp(value, "localhost")) {
 			client->sess.countryCode = 0;
 		} else {
-			unsigned long ip = GeoIP_addr_to_num(value);
+			char realIP[IP_MAX_LENGTH] = {0};// Nico, used to store IP without :port
+			unsigned long ip;
+
+			// Nico, remove :port from IP
+			sscanf(value, "%15[0-9.]:%*d", realIP);
+
+			ip = GeoIP_addr_to_num(value);
+
 			if (((ip & 0xFF000000) == 0x0A000000) ||
 				((ip & 0xFFF00000) == 0xAC100000) ||
 				((ip & 0xFFFF0000) == 0xC0A80000) ||
 				( ip == 0x7F000001) ) {
 				client->sess.countryCode = 246;
 			} else {
-				unsigned int ret = GeoIP_seek_record(gidb,ip);
+				unsigned int ret = GeoIP_seek_record(gidb, ip);
 				if (ret > 0) {
 					client->sess.countryCode = ret;
 				} else {
 					client->sess.countryCode = 246;
-					G_LogPrintf("GeoIP: This IP:%s cannot be located\n",value);
+					G_LogPrintf("GeoIP: This IP:%s cannot be located\n", realIP);
 				}
 			}
 		}
