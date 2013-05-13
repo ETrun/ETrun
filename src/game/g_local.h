@@ -1908,8 +1908,9 @@ void G_TempTraceIgnorePlayersAndBodies(void);
 qboolean G_CanPickupWeapon(weapon_t weapon, gentity_t *ent);
 
 // Nico, flags enabling map entities
-#define MAP_KILL_ENTITIES       1
-#define MAP_HURT_ENTITIES       2
-#define MAP_JUMPPADS            4
-#define MAP_VELOCITY_JUMPPADS   8
-#define MAP_LOCATION_JUMPPADS   16
+#define MAP_FORCE_KILL_ENTITIES			1
+#define MAP_FORCE_HURT_ENTITIES			2
+#define MAP_JUMPPADS				4
+#define MAP_VELOCITY_JUMPPADS		8
+#define MAP_LOCATION_JUMPPADS		16
+#define MAP_DISABLE_HURT_ENTITIES   32
