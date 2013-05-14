@@ -1177,7 +1177,7 @@ char *ClientConnect(int clientNum, qboolean firstTime) {
 			// Nico, remove :port from IP
 			sscanf(value, "%15[0-9.]:%*d", realIP);
 
-			ip = GeoIP_addr_to_num(value);
+			ip = GeoIP_addr_to_num(realIP);
 
 			if (((ip & 0xFF000000) == 0x0A000000) ||
 				((ip & 0xFFF00000) == 0xAC100000) ||
