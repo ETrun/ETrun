@@ -643,12 +643,13 @@ static qboolean check_string(char *str) {
  * Map rank request command
  */
 qboolean G_API_mapRank(char *result, gentity_t *ent, char *mapName, char *optUserName, char *optMapName, char *optRunName, char *optPhysicsName, char *authToken) {
-	char net_port[8]             = { 0 };
-	char cphysics[8]             = { 0 };
-	char encodedMapName[255]     = { 0 };
-	char encodedOptUserName[255] = { 0 };
-	char encodedOptMapName[255]  = { 0 };
-	char encodedOptRunName[255]  = { 0 };
+	char net_port[8]				 = { 0 };
+	char cphysics[8]				 = { 0 };
+	char encodedMapName[255]		 = { 0 };
+	char encodedOptUserName[255]	 = { 0 };
+	char encodedOptMapName[255]		 = { 0 };
+	char encodedOptRunName[255]		 = { 0 };
+	char encodedOptPhysicsName[255]  = { 0 };
 
 	sprintf(net_port, "%d", trap_Cvar_VariableIntegerValue("net_port"));
 	sprintf(cphysics, "%d", physics.integer);
@@ -660,7 +661,8 @@ qboolean G_API_mapRank(char *result, gentity_t *ent, char *mapName, char *optUse
 	if (url_encode(mapName, encodedMapName) == qfalse ||
 		url_encode(optUserName, encodedOptUserName) == qfalse ||
 		url_encode(optMapName, encodedOptMapName) == qfalse ||
-		url_encode(optRunName, encodedOptRunName) == qfalse) {
+		url_encode(optRunName, encodedOptRunName) == qfalse ||
+		url_encode(optPhysicsName, encodedOptPhysicsName) == qfalse) {
 		return qfalse;
 	}
 
@@ -669,7 +671,7 @@ qboolean G_API_mapRank(char *result, gentity_t *ent, char *mapName, char *optUse
 		Q_strncpyz(authToken, "undefined", MAX_QPATH);
 	}
 
-	return G_AsyncAPICall("r", result, ent, 8, encodedOptUserName, encodedOptMapName, encodedOptRunName, optPhysicsName, encodedMapName, authToken, cphysics, net_port);
+	return G_AsyncAPICall("r", result, ent, 8, encodedOptUserName, encodedOptMapName, encodedOptRunName, encodedOptPhysicsName, encodedMapName, authToken, cphysics, net_port);
 }
 
 /**
