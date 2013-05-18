@@ -1537,8 +1537,10 @@ void target_stoptimer_use(gentity_t *self, gentity_t *other, gentity_t *activato
 			// Nico, update best speed of run
 			client->sess.timerunBestSpeed[timerunNum] = client->sess.maxSpeed;
 
-			// Nico, set score so that xfire can see it
-			client->ps.persistant[PERS_SCORE] = client->sess.timerunLastTime[timerunNum];
+			// Nico, set score so that xfire can see it (only if cup mode is DISABLED)
+			if (g_cupMode.integer != 1) {
+				client->ps.persistant[PERS_SCORE] = client->sess.timerunLastTime[timerunNum];
+			}
 		}
 
 		// CP are updated here if API is not used or if CP were note loaded
