@@ -713,28 +713,28 @@ static qboolean checkUserinfoString(int clientNum, char *userinfo) {
 	if (!Info_Validate(userinfo)) {
 		// Nico, drop the client
 		G_LogPrintf("Dropping client %d: forbidden character in userinfo\n", clientNum);
-		trap_DropClient(clientNum, "^1Forbidden character in userinfo", 0);
+		trap_DropClient(clientNum, "^1You were kicked because of forbidden character in userinfo", 0);
 		return qfalse;
 	}
 	// Nico, check userinfo length (from combinedfixes)
 	len = strlen(userinfo);
 	if (len > MAX_INFO_STRING - 44) {
 		G_LogPrintf("Dropping client %d: oversized userinfo\n", clientNum);
-		trap_DropClient(clientNum, "^1Oversized userinfo", 0);
+		trap_DropClient(clientNum, "^1You were kicked because of oversized userinfo", 0);
 		return qfalse;
 	}
 
 	// Nico, check userinfo leading backslash (from combinedfixes)
 	if (userinfo[0] != '\\') {
 		G_LogPrintf("Dropping client %d: malformed userinfo (missing leading backslash)\n", clientNum);
-		trap_DropClient(clientNum, "^1Malformed userinfo", 0);
+		trap_DropClient(clientNum, "^1You were kicked because of malformed userinfo", 0);
 		return qfalse;
 	}
 
 	// Nico, check userinfo trailing backslash (from combinedfixes)
 	if (len > 0 && userinfo[len - 1] == '\\') {
 		G_LogPrintf("Dropping client %d: malformed userinfo (trailing backslash)\n", clientNum);
-		trap_DropClient(clientNum, "^1Malformed userinfo", 0);
+		trap_DropClient(clientNum, "^1You were kicked because of malformed userinfo", 0);
 		return qfalse;
 	}
 
@@ -746,7 +746,7 @@ static qboolean checkUserinfoString(int clientNum, char *userinfo) {
 	}
 	if (count % 2 != 0) {
 		G_LogPrintf("Dropping client %d: malformed userinfo (odd number of backslash)\n", clientNum);
-		trap_DropClient(clientNum, "^1Malformed userinfo", 0);
+		trap_DropClient(clientNum, "^1You were kicked because of malformed userinfo", 0);
 		return qfalse;
 	}
 
@@ -754,7 +754,7 @@ static qboolean checkUserinfoString(int clientNum, char *userinfo) {
 	ip = Info_ValueForKey(userinfo, "ip");
 	if (!strcmp(ip, "") || !getParsedIp(ip, parsedIp)) {
 		G_LogPrintf("Dropping client %d: malformed userinfo (empty or malformed ip)\n", clientNum);
-		trap_DropClient(clientNum, "^1Malformed userinfo", 0);
+		trap_DropClient(clientNum, "^1You were kicked because of malformed userinfo", 0);
 		return qfalse;
 	}
 
@@ -762,7 +762,7 @@ static qboolean checkUserinfoString(int clientNum, char *userinfo) {
 	name = Info_ValueForKey(userinfo, "name");
 	if (!strcmp(name, "")) {
 		G_LogPrintf("Dropping client %d: malformed userinfo (empty name)\n", clientNum);
-		trap_DropClient(clientNum, "^1Malformed userinfo", 0);
+		trap_DropClient(clientNum, "^1You were kicked because of malformed userinfo", 0);
 		return qfalse;
 	}
 
@@ -778,7 +778,7 @@ static qboolean checkUserinfoString(int clientNum, char *userinfo) {
 	}
 	if (count > 1) {
 		G_LogPrintf("Dropping client %d: malformed userinfo (too many IP fields)\n", clientNum);
-		trap_DropClient(clientNum, "^1Malformed userinfo", 0);
+		trap_DropClient(clientNum, "^1You were kicked because of malformed userinfo", 0);
 		return qfalse;
 	}
 
@@ -797,7 +797,7 @@ static qboolean checkUserinfoString(int clientNum, char *userinfo) {
 	}
 	if (count > 1) {
 		G_LogPrintf("Dropping client %d: malformed userinfo (too many cl_guid fields)\n", clientNum);
-		trap_DropClient(clientNum, "^1Malformed userinfo", 0);
+		trap_DropClient(clientNum, "^1You were kicked because of malformed userinfo", 0);
 		return qfalse;
 	}
 
@@ -814,7 +814,7 @@ static qboolean checkUserinfoString(int clientNum, char *userinfo) {
 	}
 	if (count > 1) {
 		G_LogPrintf("Dropping client %d: malformed userinfo (too many name fields)\n", clientNum);
-		trap_DropClient(clientNum, "^1Malformed userinfo", 0);
+		trap_DropClient(clientNum, "^1You were kicked because of malformed userinfo", 0);
 		return qfalse;
 	}
 	return qtrue;
@@ -851,7 +851,7 @@ void ClientUserinfoChanged(int clientNum) {
 	// Nico, flood protection
 	if (ClientIsFlooding(ent)) {
 		G_LogPrintf("Dropping client %d: flooded userinfo\n", clientNum);
-		trap_DropClient(clientNum, "^1Flooded userinfo", 0);
+		trap_DropClient(clientNum, "^1You were kicked because of flooded userinfo", 0);
 		return;
 	}
 
