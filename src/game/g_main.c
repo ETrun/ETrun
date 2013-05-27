@@ -1540,6 +1540,54 @@ void G_ShutdownGame(int restart) {
 }
 
 /*
+=============
+SortRanks
+
+=============
+*/
+int QDECL SortRanks(const void *a, const void *b) {
+	gclient_t *ca, *cb;
+
+	ca = &level.clients[*(int *)a];
+	cb = &level.clients[*(int *)b];
+
+	// sort special clients last
+	if (ca->sess.spectatorClient < 0) {
+		return 1;
+	}
+	if (cb->sess.spectatorClient < 0) {
+		return -1;
+	}
+
+	// then connecting clients
+	if (ca->pers.connected == CON_CONNECTING) {
+		return 1;
+	}
+	if (cb->pers.connected == CON_CONNECTING) {
+		return -1;
+	}
+
+
+	// then spectators
+	if (ca->sess.sessionTeam == TEAM_SPECTATOR && cb->sess.sessionTeam == TEAM_SPECTATOR) {
+		if (ca->sess.spectatorTime < cb->sess.spectatorTime) {
+			return -1;
+		}
+		if (ca->sess.spectatorTime > cb->sess.spectatorTime) {
+			return 1;
+		}
+		return 0;
+	}
+	if (ca->sess.sessionTeam == TEAM_SPECTATOR) {
+		return 1;
+	}
+	if (cb->sess.sessionTeam == TEAM_SPECTATOR) {
+		return -1;
+	}
+	return 0;
+}
+
+/*
 ========================================================================
 
 PLAYER COUNTING / SCORE SORTING
@@ -1661,6 +1709,8 @@ void CalculateRanks(void) {
 			Q_strncpyz(teaminfo[i], "(None)", sizeof (teaminfo[i]));
 		}
 	}
+
+	qsort(level.sortedClients, level.numConnectedClients, sizeof (level.sortedClients[0]), SortRanks);
 
 	//bani - #184
 	etpro_PlayerInfo();

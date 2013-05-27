@@ -51,8 +51,9 @@ void G_WriteClientSessionData(gclient_t *client, qboolean restart) {
 	int        mvc = 0;
 	const char *s;
 
-	s = va("%i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %u",
+	s = va("%i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %u",
 	       client->sess.sessionTeam,
+		   client->sess.spectatorTime,
 	       client->sess.spectatorState,
 	       client->sess.spectatorClient,
 	       client->sess.playerType,         // DHM - Nerve
@@ -92,8 +93,9 @@ void G_ReadSessionData(gclient_t *client) {
 
 	trap_Cvar_VariableStringBuffer(va("session%d", (int)(client - level.clients)), s, sizeof (s));
 
-	sscanf(s, "%i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %u",
+	sscanf(s, "%i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %u",
 	       (int *)&client->sess.sessionTeam,
+		   &client->sess.spectatorTime,
 	       (int *)&client->sess.spectatorState,
 	       &client->sess.spectatorClient,
 	       &client->sess.playerType, // DHM - Nerve
@@ -135,6 +137,7 @@ void G_InitSessionData(gclient_t *client) {
 	sess->sessionTeam = TEAM_SPECTATOR;
 
 	sess->spectatorState = SPECTATOR_FREE;
+	sess->spectatorTime  = level.time;
 
 	// DHM - Nerve
 	sess->latchPlayerType    = sess->playerType = 0;

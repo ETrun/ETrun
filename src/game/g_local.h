@@ -501,6 +501,7 @@ typedef struct {
 // MUST be dealt with in G_InitSessionData() / G_ReadSessionData() / G_WriteSessionData()
 typedef struct {
 	team_t sessionTeam;
+	int spectatorTime;              // Nico, note: don't remove (refs #43)
 	spectatorState_t spectatorState;
 	int spectatorClient;            // for chasecam and follow mode
 	int playerType;                 // DHM - Nerve :: for GT_WOLF

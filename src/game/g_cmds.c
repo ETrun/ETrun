@@ -441,6 +441,7 @@ qboolean SetTeam(gentity_t *ent, char *s, weapon_t w1, weapon_t w2, qboolean set
 	}
 	// they go to the end of the line for tournements
 	if (team == TEAM_SPECTATOR) {
+		client->sess.spectatorTime = level.time;
 		if (!client->sess.referee) {
 			client->pers.invite = 0;
 		}
