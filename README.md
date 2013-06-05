@@ -30,6 +30,7 @@ Credits
 
 * TJMod developpers
 * Racesow project
+* I add a line as example
 
 Compatibility
 =============
