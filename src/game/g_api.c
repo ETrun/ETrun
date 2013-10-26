@@ -28,7 +28,7 @@ static qboolean loadModule(char *basepath, char *homepath) {
 	// Try opening module in basepath
 #if defined _WIN32
 	sprintf(searchPath, "%s\\etrun\\%s", basepath, g_APImoduleName.string);
-	api_module = LoadLibraryA(searchPath);
+	api_module = LoadLibrary(searchPath);
 #else
 	sprintf(searchPath, "%s/etrun/%s", basepath, g_APImoduleName.string);
 	api_module = dlopen(searchPath, RTLD_LAZY);
@@ -41,7 +41,7 @@ static qboolean loadModule(char *basepath, char *homepath) {
 	// Try opening module form homepath
 	#if defined _WIN32
 		sprintf(searchPath, "%s\\etrun\\%s", homepath, g_APImoduleName.string);
-		api_module = LoadLibraryA(searchPath);
+		api_module = LoadLibrary(searchPath);
 	#else
 		sprintf(searchPath, "%s/etrun/%s", homepath, g_APImoduleName.string);
 		api_module = dlopen(searchPath, RTLD_LAZY);
