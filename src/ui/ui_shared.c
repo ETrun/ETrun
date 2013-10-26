@@ -3439,7 +3439,7 @@ void Menu_HandleKey(menuDef_t *menu, int key, qboolean down) {
 	if (!menu->itemHotkeyMode) {
 		// END - TAT 9/16/2002
 
-		if (key > 0 && key <= 255 && menu->onKey[key]) {
+		if (key > 0 && key < 255 && menu->onKey[key]) {
 			itemDef_t it;
 			it.parent = menu;
 			Item_RunScript(&it, NULL, menu->onKey[key]);
