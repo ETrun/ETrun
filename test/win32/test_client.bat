@@ -6,16 +6,16 @@ cd etrun
 ..\test\win32\zip.exe -r ..\etrun.pk3 *
 del /Q *.dll
 cd ..\
-xcopy /Y etrun.pk3 C:\Users\Nicolas\Desktop\etrun\
+xcopy /Y etrun.pk3 C:\GameDev\ETtest\etrun\
 xcopy /Y etrun.pk3 "C:\Program Files (x86)\ET\etrun\"
 del /Q etrun.pk3
-xcopy /Y build\qagame_mp_x86.dll C:\Users\Nicolas\Desktop\etrun\
-xcopy /Y build\timeruns.mod C:\Users\Nicolas\Desktop\etrun\
+xcopy /Y build\qagame_mp_x86.dll C:\GameDev\ETtest\etrun\
+xcopy /Y build\timeruns.mod C:\GameDev\ETtest\etrun\
 
-xcopy /Y etrun\custommapscripts\* "C:\Users\Nicolas\Desktop\etrun\custommapscripts\"
-xcopy /Y libs\geoip\GeoIP.dat "C:\Users\Nicolas\Desktop\etrun\"
+xcopy /Y etrun\custommapscripts\* "C:\GameDev\ETtest\etrun\custommapscripts\"
+xcopy /Y libs\geoip\GeoIP.dat "C:\GameDev\ETtest\etrun\"
 
 echo Press ENTER to start game...
 pause
 cd ..\
-C:\Users\Nicolas\Desktop\ET.exe +set fs_basepath "C:\Users\Nicolas\Desktop\" +set fs_game etrun +set dedicated 0 +set com_hunkMegs 128
+C:\GameDev\ETtest\ET.exe +set fs_basepath "C:\GameDev\ETtest\" +set fs_game etrun +set dedicated 0 +set com_hunkMegs 128
