@@ -2005,13 +2005,15 @@ static void UI_LoadDemos() {
 	char demolist[30000];
 	char demoExt[32];
 	char *demoname;
-	int  i, len;
+	int  i, len , demoExtLen = 0;
 
 	Com_sprintf(demoExt, sizeof (demoExt), "dm_%d", (int)trap_Cvar_VariableValue("protocol"));
 
 	uiInfo.demoCount = trap_FS_GetFileList("demos", demoExt, demolist, sizeof (demolist));
 
 	Com_sprintf(demoExt, sizeof (demoExt), ".dm_%d", (int)trap_Cvar_VariableValue("protocol"));
+
+	demoExtLen = strlen(demoExt);
 
 	if (uiInfo.demoCount) {
 		if (uiInfo.demoCount > MAX_DEMOS) {
@@ -2020,8 +2022,8 @@ static void UI_LoadDemos() {
 		demoname = demolist;
 		for (i = 0; i < uiInfo.demoCount; i++) {
 			len = strlen(demoname);
-			if (!Q_stricmp(demoname +  len - strlen(demoExt), demoExt)) {
-				demoname[len - strlen(demoExt)] = '\0';
+			if (!Q_stricmp(demoname +  len - demoExtLen, demoExt)) {
+				demoname[len - demoExtLen] = '\0';
 			}
 			uiInfo.demoList[i] = String_Alloc(demoname);
 			demoname          += len + 1;
