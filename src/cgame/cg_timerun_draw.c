@@ -767,6 +767,7 @@ void CG_DrawBannerPrint(void) {
 	char  lastcolor = COLOR_WHITE;
 	int   charHeight;
 	int   bannerShowTime;
+	int	  len = 0;
 
 	if (!cg.bannerPrintTime) {
 		return;
@@ -789,11 +790,13 @@ void CG_DrawBannerPrint(void) {
 	y          = 20;
 	charHeight = CG_Text_Height_Ext("A", sizey, 0, &cgs.media.limboFont2);
 
+	len = strlen(cg.bannerPrint);
+
 	while (1) {
 		char linebuffer[1024];
 		char colorchar = lastcolor;
 
-		for (l = 0; l < (int)strlen(cg.bannerPrint); ++l) {
+		for (l = 0; l < len; ++l) {
 			if (!start[l] || start[l] == '\n') {
 				break;
 			}
