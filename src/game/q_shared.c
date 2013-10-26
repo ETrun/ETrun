@@ -51,15 +51,6 @@ float Com_Clamp(float min, float max, float value) {
 	return value;
 }
 
-void COM_FixPath(char *pathname) {
-	while (*pathname) {
-		if (*pathname == '\\') {
-			*pathname = '/';
-		}
-		pathname++;
-	}
-}
-
 /*
 ============
 COM_SkipPath
@@ -90,55 +81,12 @@ void COM_StripExtension(const char *in, char *out) {
 	*out = 0;
 }
 
-/*
-============
-COM_StripExtension2
-a safer version
-============
-*/
-void COM_StripExtension2(const char *in, char *out, int destsize) {
-	int len = 0;
-
-	while (len < destsize - 1 && *in && *in != '.') {
-		*out++ = *in++;
-		len++;
-	}
-	*out = 0;
-}
-
 void COM_StripFilename(char *in, char *out) {
 	char *end;
 
 	Q_strncpyz(out, in, strlen(in) + 1);
 	end  = COM_SkipPath(out);
 	*end = 0;
-}
-
-
-/*
-==================
-COM_DefaultExtension
-==================
-*/
-void COM_DefaultExtension(char *path, int maxSize, const char *extension) {
-	char oldPath[MAX_QPATH];
-	char *src;
-
-//
-// if path doesn't have a .EXT, append extension
-// (extension should include the .)
-//
-	src = path + strlen(path) - 1;
-
-	while (*src != '/' && src != path) {
-		if (*src == '.') {
-			return;                 // it has an extension
-		}
-		src--;
-	}
-
-	Q_strncpyz(oldPath, path, sizeof (oldPath));
-	Com_sprintf(path, maxSize, "%s%s", oldPath, extension);
 }
 
 //============================================================================
@@ -239,10 +187,6 @@ void COM_RestoreParseSession(char **data_p) {
 	*data_p   = backup_text;
 }
 
-void COM_SetCurrentParseLine(int line) {
-	com_lines = line;
-}
-
 int COM_GetCurrentParseLine(void) {
 	return com_lines;
 }
@@ -260,17 +204,6 @@ void COM_ParseError(char *format, ...) {
 	va_end(argptr);
 
 	Com_Printf("ERROR: %s, line %d: %s\n", com_parsename, com_lines, string);
-}
-
-void COM_ParseWarning(char *format, ...) {
-	va_list     argptr;
-	static char string[4096];
-
-	va_start(argptr, format);
-	Q_vsnprintf(string, sizeof (string), format, argptr);
-	va_end(argptr);
-
-	Com_Printf("WARNING: %s, line %d: %s\n", com_parsename, com_lines, string);
 }
 
 /*

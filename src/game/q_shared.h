@@ -37,7 +37,6 @@ If you have questions concerning this license or the applicable additional terms
 #if defined _WIN32 && !defined __GNUC__
 # pragma warning(disable : 4018) // signed/unsigned mismatch
 # pragma warning(disable : 4051) // type conversion; possible loss of data
-# pragma warning(disable : 4100) // unreferenced formal parameter
 # pragma warning(disable : 4127) // conditional expression is constant
 # pragma warning(disable : 4244) // 'conversion' conversion from 'type1' to 'type2', possible loss of data
 # pragma warning(disable : 4305) // truncation from const double to float
@@ -563,12 +562,8 @@ void AxisToAngles(/*const*/ vec3_t axis[3], vec3_t angles);
 float VectorDistance(vec3_t v1, vec3_t v2);
 float VectorDistanceSquared(vec3_t v1, vec3_t v2);
 
-
 void AxisClear(vec3_t axis[3]);
 void AxisCopy(vec3_t in[3], vec3_t out[3]);
-
-void SetPlaneSignbits(struct cplane_s *out);
-int BoxOnPlaneSide(vec3_t emins, vec3_t emaxs, struct cplane_s *plane);
 
 float   AngleMod(float a);
 float   LerpAngle(float from, float to, float frac);
@@ -605,21 +600,15 @@ float DistanceFromVectorSquared(vec3_t p, vec3_t lp1, vec3_t lp2);
 float Com_Clamp(float min, float max, float value);
 
 char *COM_SkipPath(char *pathname);
-void    COM_FixPath(char *pathname);
 void    COM_StripExtension(const char *in, char *out);
-void    COM_StripExtension2(const char *in, char *out, int destsize);
 void    COM_StripFilename(char *in, char *out);
-void    COM_DefaultExtension(char *path, int maxSize, const char *extension);
-
 void    COM_BeginParseSession(const char *name);
 void    COM_RestoreParseSession(char **data_p);
-void    COM_SetCurrentParseLine(int line);
 int     COM_GetCurrentParseLine(void);
 char *COM_Parse(char **data_p);
 char *COM_ParseExt(char **data_p, qboolean allowLineBreak);
 int     COM_Compress(char *data_p);
 void    COM_ParseError(char *format, ...) _attribute((format(printf, 1, 2)));
-void    COM_ParseWarning(char *format, ...) _attribute((format(printf, 1, 2)));
 int Com_ParseInfos(char *buf, int max, char infos[][MAX_INFO_STRING]);
 
 qboolean COM_BitCheck(const int array[], int bitNum);
