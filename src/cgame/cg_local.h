@@ -1824,8 +1824,6 @@ const char *CG_Argv(int arg);
 float CG_Cvar_Get(const char *cvar);
 
 char *CG_generateFilename(void);
-int CG_findClientNum(char *s);
-void CG_printConsoleString(char *str);
 
 void CG_LoadObjectiveData(void);
 

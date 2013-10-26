@@ -852,48 +852,6 @@ char *CG_generateFilename(void) {
 	          "");
 }
 
-int CG_findClientNum(char *s) {
-	int      id;
-	char     s2[64], n2[64];
-	qboolean fIsNumber = qtrue;
-
-	// See if its a number or string
-	for (id = 0; id < (int)strlen(s) && s[id] != 0; id++) {
-		if (s[id] < '0' || s[id] > '9') {
-			fIsNumber = qfalse;
-			break;
-		}
-	}
-
-	// numeric values are just slot numbers
-	if (fIsNumber) {
-		id = atoi(s);
-		if (id >= 0 && id < cgs.maxclients && cgs.clientinfo[id].infoValid) {
-			return id;
-		}
-	}
-
-	// check for a name match
-	BG_cleanName(s, s2, sizeof (s2), qfalse);
-	for (id = 0; id < cgs.maxclients; id++) {
-		if (!cgs.clientinfo[id].infoValid) {
-			continue;
-		}
-
-		BG_cleanName(cgs.clientinfo[id].name, n2, sizeof (n2), qfalse);
-		if (!Q_stricmp(n2, s2)) {
-			return id;
-		}
-	}
-
-	CG_Printf("[cgnotify]%s ^3%s^7 %s.\n", CG_TranslateString("User"), s, CG_TranslateString("is not on the server"));
-	return -1;
-}
-
-void CG_printConsoleString(char *str) {
-	CG_Printf("[skipnotify]%s", str);
-}
-
 void CG_LoadObjectiveData(void) {
 	pc_token_t token, token2;
 	int        handle;
