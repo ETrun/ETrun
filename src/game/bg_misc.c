@@ -2554,7 +2554,7 @@ grabbing them easier
 ============
 */
 qboolean BG_PlayerTouchesItem(playerState_t *ps, entityState_t *item, int atTime) {
-	vec3_t origin;
+	vec3_t origin = { 0, 0, 0 };
 
 	BG_EvaluateTrajectory(&item->pos, atTime, origin, qfalse, item->effect2Time);
 
