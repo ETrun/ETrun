@@ -208,11 +208,13 @@ int ClientNumbersFromString(char *s, int *plist) {
 	char      n2[MAX_STRING_CHARS] = { 0 };
 	char      *m                   = NULL;
 	qboolean  is_slot              = qtrue;
+	int		  len				   = 0;
 
 	*plist = -1;
 
 	// if a number is provided, it might be a slot #
-	for (i = 0; i < (int)strlen(s); ++i) {
+	len = strlen(s);
+	for (i = 0; i < len; ++i) {
 		if (s[i] < '0' || s[i] > '9') {
 			is_slot = qfalse;
 			break;
@@ -268,9 +270,11 @@ int ClientNumberFromString(gentity_t *to, char *s) {
 	char      s2[MAX_STRING_CHARS];
 	char      n2[MAX_STRING_CHARS];
 	qboolean  fIsNumber = qtrue;
+	int		  len = 0;
 
 	// See if its a number or string
-	for (idnum = 0; idnum < (int)strlen(s) && s[idnum] != 0; idnum++) {
+	len = strlen(s);
+	for (idnum = 0; idnum < len && s[idnum] != 0; idnum++) {
 		if (s[idnum] < '0' || s[idnum] > '9') {
 			fIsNumber = qfalse;
 			break;

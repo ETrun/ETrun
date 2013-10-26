@@ -580,6 +580,7 @@ void SetWolfSpawnWeapons(gclient_t *client) {
  */
 static qboolean CheckName(const char *name) {
 	unsigned int i = 0;
+	int len = 0;
 
 	// Nico, check name lenght
 	if (strlen(name) >= MAX_NAME_LENGTH) {
@@ -587,7 +588,8 @@ static qboolean CheckName(const char *name) {
 	}
 
 	// Nico, check characters in name are printable
-	for (; i < strlen(name); ++i) {
+	len = strlen(name);
+	for (; i < len; ++i) {
 		if (isprint(name[i]) == 0) {
 			return qfalse;
 		}
