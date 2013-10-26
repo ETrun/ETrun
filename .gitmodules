@@ -1,6 +1,3 @@
-[submodule "libs/APImodule"]
-	path = libs/APImodule
-	url = git@bitbucket.org:boutetnico/etrun_apimodule.git
 [submodule "wiki"]
 	path = wiki
 	url = git@github.com:boutetnico/ETrun.wiki.git
