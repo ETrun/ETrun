@@ -1212,7 +1212,8 @@ static void CG_BannerPrint(const char *str) {
 	}
 
 	// post-editing to print text correctly into the console
-	for (i = 0, len = 0; i < (int)strlen(cg.bannerPrint); ++i) {
+	textlen = strlen(cg.bannerPrint);
+	for (i = 0, len = 0; i < textlen; ++i) {
 		// replace newlines with spaces
 		if (cg.bannerPrint[i] == '\n') {
 			if (len != 0 && buff[len - 1] != ' ') {
