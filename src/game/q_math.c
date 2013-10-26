@@ -775,7 +775,6 @@ int BoxOnPlaneSide(vec3_t emins, vec3_t emaxs, struct cplane_s *p) {
 }
 
 # else
-#  pragma warning( disable: 4035 )
 
 __inline __declspec(naked) int BoxOnPlaneSide_fast(vec3_t emins, vec3_t emaxs, struct cplane_s *p) {
 	static int bops_initialized;
@@ -1021,8 +1020,6 @@ int BoxOnPlaneSide(vec3_t emins, vec3_t emaxs, struct cplane_s *p) {
 
 	return BoxOnPlaneSide_fast(emins, emaxs, p);
 }
-
-#  pragma warning( default: 4035 )
 
 # endif
 #endif
