@@ -38,10 +38,6 @@ If you have questions concerning this license or the applicable additional terms
 # pragma warning(disable : 4244) // 'conversion' conversion from 'type1' to 'type2', possible loss of data
 #endif
 
-#if defined(ppc) || defined(__ppc) || defined(__ppc__) || defined(__POWERPC__)
-# define idppc 1
-#endif
-
 #if (defined _MSC_VER)
 # define Q_EXPORT __declspec(dllexport)
 #elif (defined __SUNPRO_C)
@@ -167,7 +163,6 @@ typedef int clipHandle_t;
 #define     SND_NOCUT           0x010   // Don't cut off.  Always let finish (overridden by SND_CUTOFF_ALL)
 #define     SND_NO_ATTENUATION  0x020   // don't attenuate (even though the sound is in voice channel, for example)
 
-
 #ifndef NULL
 # define NULL ((void *)0)
 #endif
@@ -269,40 +264,11 @@ typedef enum {
 #define UI_MENUFULL     0x00080000
 // END JOSEPH
 
-#if defined(_DEBUG) && !defined(BSPC)
-# define HUNK_DEBUG
-#endif
-
 typedef enum {
 	h_high,
 	h_low,
 	h_dontcare
 } ha_pref;
-
-#ifdef HUNK_DEBUG
-# define Hunk_Alloc(size, preference)              Hunk_AllocDebug(size, preference, # size, __FILE__, __LINE__)
-void *Hunk_AllocDebug(int size, ha_pref preference, char *label, char *file, int line);
-#else
-void *Hunk_Alloc(int size, ha_pref preference);
-#endif
-
-#ifdef __linux__
-// show_bug.cgi?id=371
-// custom Snd_Memset implementation for glibc memset bug workaround
-void Snd_Memset(void *dest, const int val, const size_t count);
-#else
-# define Snd_Memset Com_Memset
-#endif
-
-void Com_Memset(void *dest, const int val, const size_t count);
-void Com_Memcpy(void *dest, const void *src, const size_t count);
-
-#define CIN_system  1
-#define CIN_loop    2
-#define CIN_hold    4
-#define CIN_silent  8
-#define CIN_shader  16
-
 
 /*
 ==============================================================
@@ -311,7 +277,6 @@ MATHLIB
 
 ==============================================================
 */
-
 
 typedef float vec_t;
 typedef vec_t vec2_t[2];
@@ -450,14 +415,8 @@ struct cplane_s;
 extern vec3_t vec3_origin;
 extern vec3_t axisDefault[3];
 
-#define nanmask (255 << 23)
-
-#define IS_NAN(x) (((*(int *)&x) & nanmask) == nanmask)
-
 float Q_fabs(float f);
 float Q_rsqrt(float f);         // reciprocal square root
-
-#define SQRTFAST(x) (1.0f / Q_rsqrt(x))
 
 // fast float to int conversion
 #if id386 && !((defined __linux__ || defined __FreeBSD__ || defined __GNUC__) && (defined __i386__))       // rb010123
@@ -468,9 +427,6 @@ long myftol(float f);
 extern long int lrintf(float x);
 # define myftol(x) lrintf(x)
 #endif
-
-signed char ClampChar(int i);
-signed short ClampShort(int i);
 
 // this isn't a real cheap function to call!
 int DirToByte(vec3_t dir);
@@ -536,11 +492,6 @@ vec_t VectorNormalize(vec3_t v);         // returns vector length
 void VectorNormalizeFast(vec3_t v);       // does NOT return vector length, uses rsqrt approximation
 vec_t VectorNormalize2(const vec3_t v, vec3_t out);
 void VectorInverse(vec3_t v);
-void Vector4Scale(const vec4_t in, vec_t scale, vec4_t out);
-void VectorRotate(vec3_t in, vec3_t matrix[3], vec3_t out);
-int Q_log2(int val);
-
-float Q_acos(float c);
 
 int     Q_rand(int *seed);
 float   Q_random(int *seed);
@@ -552,9 +503,7 @@ float   Q_crandom(int *seed);
 void vectoangles(const vec3_t value1, vec3_t angles);
 float vectoyaw(const vec3_t vec);
 void AnglesToAxis(const vec3_t angles, vec3_t axis[3]);
-// TTimo: const vec_t ** would require explicit casts for ANSI C conformance
-// see unix/const-arg.c
-void AxisToAngles(/*const*/ vec3_t axis[3], vec3_t angles);
+void AxisToAngles(vec3_t axis[3], vec3_t angles);
 float VectorDistance(vec3_t v1, vec3_t v2);
 float VectorDistanceSquared(vec3_t v1, vec3_t v2);
 
@@ -572,11 +521,9 @@ float AngleNormalize360(float angle);
 float AngleNormalize180(float angle);
 float AngleDelta(float angle1, float angle2);
 
-qboolean PlaneFromPoints(vec4_t plane, const vec3_t a, const vec3_t b, const vec3_t c);
 void ProjectPointOnPlane(vec3_t dst, const vec3_t p, const vec3_t normal);
 void RotatePointAroundVector(vec3_t dst, const vec3_t dir, const vec3_t point, float degrees);
 void RotateAroundDirection(vec3_t axis[3], float yaw);
-void MakeNormalVectors(const vec3_t forward, vec3_t right, vec3_t up);
 // perpendicular vector could be replaced by this
 
 void MatrixMultiply(float in1[3][3], float in2[3][3], float out[3][3]);
@@ -586,9 +533,6 @@ void PerpendicularVector(vec3_t dst, const vec3_t src);
 // Ridah
 void GetPerpendicularViewVector(const vec3_t point, const vec3_t p1, const vec3_t p2, vec3_t up);
 void ProjectPointOntoVector(vec3_t point, vec3_t vStart, vec3_t vEnd, vec3_t vProj);
-void ProjectPointOntoVectorBounded(vec3_t point, vec3_t vStart, vec3_t vEnd, vec3_t vProj);
-float DistanceFromLineSquared(vec3_t p, vec3_t lp1, vec3_t lp2);
-float DistanceFromVectorSquared(vec3_t p, vec3_t lp1, vec3_t lp2);
 // done.
 
 //=============================================
@@ -650,12 +594,10 @@ typedef struct pc_token_s {
 void    COM_MatchToken(char **buf_p, char *match);
 
 void SkipBracedSection(char **program);
-void SkipBracedSection_Depth(char **program, int depth);   // start at given depth if already
 void SkipRestOfLine(char **data);
 
 void Parse1DMatrix(char **buf_p, int x, float *m);
 void Parse2DMatrix(char **buf_p, int y, int x, float *m);
-void Parse3DMatrix(char **buf_p, int z, int y, int x, float *m);
 
 extern void trap_Error(const char *fmt);
 extern void QDECL CG_Error(const char *msg, ...);
@@ -683,13 +625,10 @@ typedef enum {
 
 //=============================================
 
-int Q_isprint(int c);
-int Q_islower(int c);
 int Q_isupper(int c);
 int Q_isalpha(int c);
 int Q_isnumeric(int c);
 int Q_isalphanumeric(int c);
-int Q_isforfilename(int c);
 
 // portable case insensitive compare
 int     Q_stricmp(const char *s1, const char *s2);
@@ -697,20 +636,11 @@ int     Q_strncmp(const char *s1, const char *s2, int n);
 int     Q_stricmpn(const char *s1, const char *s2, int n);
 char *Q_strlwr(char *s1);
 char *Q_strupr(char *s1);
-char *Q_strrchr(const char *string, int c);
-
-#ifdef _WIN32
-# define Q_putenv _putenv
-#else
-# define Q_putenv putenv
-#endif
 
 // buffer size safe library replacements
 void    Q_strncpyz(char *dest, const char *src, int destsize);
 void    Q_strcat(char *dest, int size, const char *src);
 
-// strlen that discounts Quake color sequences
-int Q_PrintStrlen(const char *string);
 // removes color sequences from string
 char *Q_CleanStr(char *string);
 // removes whitespaces and other bad directory characters
@@ -730,11 +660,8 @@ float *tv(float x, float y, float z);
 //
 char *Info_ValueForKey(const char *s, const char *key);
 void Info_RemoveKey(char *s, const char *key);
-void Info_RemoveKey_big(char *s, const char *key);
 void Info_SetValueForKey(char *s, const char *key, const char *value);
-void Info_SetValueForKey_Big(char *s, const char *key, const char *value);
 qboolean Info_Validate(const char *s);
-void Info_NextPair(const char **s, char *key, char *value);
 
 /*
 ==========================================================

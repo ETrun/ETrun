@@ -204,27 +204,6 @@ float   Q_crandom(int *seed) {
 
 //=======================================================
 
-signed char ClampChar(int i) {
-	if (i < -128) {
-		return -128;
-	}
-	if (i > 127) {
-		return 127;
-	}
-	return i;
-}
-
-signed short ClampShort(int i) {
-	if (i < -32768) {
-		return -32768;
-	}
-	if (i > 0x7fff) {
-		return 0x7fff;
-	}
-	return i;
-}
-
-
 // this isn't a real cheap function to call!
 int DirToByte(vec3_t dir) {
 	int   i, best;
@@ -296,29 +275,6 @@ float NormalizeColor(const vec3_t in, vec3_t out) {
 		out[2] = in[2] / max;
 	}
 	return max;
-}
-
-
-/*
-=====================
-PlaneFromPoints
-
-Returns false if the triangle is degenrate.
-The normal will point out of the clock for clockwise ordered points
-=====================
-*/
-qboolean PlaneFromPoints(vec4_t plane, const vec3_t a, const vec3_t b, const vec3_t c) {
-	vec3_t d1, d2;
-
-	VectorSubtract(b, a, d1);
-	VectorSubtract(c, a, d2);
-	CrossProduct(d2, d1, plane);
-	if (VectorNormalize(plane) == 0) {
-		return qfalse;
-	}
-
-	plane[3] = DotProduct(a, plane);
-	return qtrue;
 }
 
 /*
@@ -492,36 +448,6 @@ void ProjectPointOnPlane(vec3_t dst, const vec3_t p, const vec3_t normal) {
 	dst[0] = p[0] - d * n[0];
 	dst[1] = p[1] - d * n[1];
 	dst[2] = p[2] - d * n[2];
-}
-
-/*
-================
-MakeNormalVectors
-
-Given a normalized forward vector, create two
-other perpendicular vectors
-================
-*/
-void MakeNormalVectors(const vec3_t forward, vec3_t right, vec3_t up) {
-	float d;
-
-	// this rotate and negate guarantees a vector
-	// not colinear with the original
-	right[1] = -forward[0];
-	right[2] = forward[1];
-	right[0] = forward[2];
-
-	d = DotProduct(right, forward);
-	VectorMA(right, -d, forward, right);
-	VectorNormalize(right);
-	CrossProduct(right, forward, up);
-}
-
-
-void VectorRotate(vec3_t in, vec3_t matrix[3], vec3_t out) {
-	out[0] = DotProduct(in, matrix[0]);
-	out[1] = DotProduct(in, matrix[1]);
-	out[2] = DotProduct(in, matrix[2]);
 }
 
 //============================================================================
@@ -886,24 +812,6 @@ void VectorInverse(vec3_t v) {
 	v[2] = -v[2];
 }
 
-void Vector4Scale(const vec4_t in, vec_t scale, vec4_t out) {
-	out[0] = in[0] * scale;
-	out[1] = in[1] * scale;
-	out[2] = in[2] * scale;
-	out[3] = in[3] * scale;
-}
-
-
-int Q_log2(int val) {
-	int answer;
-
-	answer = 0;
-	while ((val >>= 1) != 0) {
-		answer++;
-	}
-	return answer;
-}
-
 /*
 ================
 MatrixMultiply
@@ -1023,75 +931,6 @@ void ProjectPointOntoVector(vec3_t point, vec3_t vStart, vec3_t vEnd, vec3_t vPr
 	VectorNormalize(vec);
 	// project onto the directional vector for this segment
 	VectorMA(vStart, DotProduct(pVec, vec), vec, vProj);
-}
-
-/*
-================
-ProjectPointOntoVectorBounded
-================
-*/
-void ProjectPointOntoVectorBounded(vec3_t point, vec3_t vStart, vec3_t vEnd, vec3_t vProj) {
-	vec3_t pVec, vec;
-	int    j;
-
-	VectorSubtract(point, vStart, pVec);
-	VectorSubtract(vEnd, vStart, vec);
-	VectorNormalize(vec);
-	// project onto the directional vector for this segment
-	VectorMA(vStart, DotProduct(pVec, vec), vec, vProj);
-	// check bounds
-	for (j = 0; j < 3; j++)
-		if ((vProj[j] > vStart[j] && vProj[j] > vEnd[j]) ||
-		    (vProj[j] < vStart[j] && vProj[j] < vEnd[j])) {
-			break;
-		}
-	if (j < 3) {
-		if (Q_fabs(vProj[j] - vStart[j]) < Q_fabs(vProj[j] - vEnd[j])) {
-			VectorCopy(vStart, vProj);
-		} else {
-			VectorCopy(vEnd, vProj);
-		}
-	}
-}
-
-/*
-================
-DistanceFromLineSquared
-================
-*/
-float DistanceFromLineSquared(vec3_t p, vec3_t lp1, vec3_t lp2) {
-	vec3_t proj, t;
-	int    j;
-
-	ProjectPointOntoVector(p, lp1, lp2, proj);
-	for (j = 0; j < 3; j++)
-		if ((proj[j] > lp1[j] && proj[j] > lp2[j]) ||
-		    (proj[j] < lp1[j] && proj[j] < lp2[j])) {
-			break;
-		}
-	if (j < 3) {
-		if (Q_fabs(proj[j] - lp1[j]) < Q_fabs(proj[j] - lp2[j])) {
-			VectorSubtract(p, lp1, t);
-		} else {
-			VectorSubtract(p, lp2, t);
-		}
-		return VectorLengthSquared(t);
-	}
-	VectorSubtract(p, proj, t);
-	return VectorLengthSquared(t);
-}
-
-/*
-================
-DistanceFromVectorSquared
-================
-*/
-float DistanceFromVectorSquared(vec3_t p, vec3_t lp1, vec3_t lp2) {
-	vec3_t proj, t;
-
-	ProjectPointOntoVector(p, lp1, lp2, proj);
-	VectorSubtract(p, proj, t);
-	return VectorLengthSquared(t);
 }
 
 float vectoyaw(const vec3_t vec) {

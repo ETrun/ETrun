@@ -425,27 +425,6 @@ void COM_MatchToken(char **buf_p, char *match) {
 
 /*
 =================
-SkipBracedSection_Depth
-
-=================
-*/
-void SkipBracedSection_Depth(char **program, int depth) {
-	char *token;
-
-	do {
-		token = COM_ParseExt(program, qtrue);
-		if (token[1] == 0) {
-			if (token[0] == '{') {
-				depth++;
-			} else if (token[0] == '}') {
-				depth--;
-			}
-		}
-	} while (depth && *program);
-}
-
-/*
-=================
 SkipBracedSection
 
 The next token should be an open brace.
@@ -517,19 +496,6 @@ void Parse2DMatrix(char **buf_p, int y, int x, float *m) {
 	COM_MatchToken(buf_p, ")");
 }
 
-void Parse3DMatrix(char **buf_p, int z, int y, int x, float *m) {
-	int i;
-
-	COM_MatchToken(buf_p, "(");
-
-	for (i = 0 ; i < z ; i++) {
-		Parse2DMatrix(buf_p, y, x, m + i * x * y);
-	}
-
-	COM_MatchToken(buf_p, ")");
-}
-
-
 /*
 ===============
 Com_ParseInfos
@@ -589,20 +555,6 @@ int Com_ParseInfos(char *buf, int max, char infos[][MAX_INFO_STRING]) {
 ============================================================================
 */
 
-int Q_isprint(int c) {
-	if (c >= 0x20 && c <= 0x7E) {
-		return 1;
-	}
-	return 0;
-}
-
-int Q_islower(int c) {
-	if (c >= 'a' && c <= 'z') {
-		return 1;
-	}
-	return 0;
-}
-
 int Q_isupper(int c) {
 	if (c >= 'A' && c <= 'Z') {
 		return 1;
@@ -630,33 +582,6 @@ int Q_isalphanumeric(int c) {
 		return 1;
 	}
 	return 0;
-}
-
-int Q_isforfilename(int c) {
-	if ((Q_isalphanumeric(c) || c == '_') && c != ' ') {       // space not allowed in filename
-		return 1;
-	}
-	return 0;
-}
-
-char *Q_strrchr(const char *string, int c) {
-	char cc = c;
-	char *s;
-	char *sp = (char *)0;
-
-	s = (char *)string;
-
-	while (*s) {
-		if (*s == cc) {
-			sp = s;
-		}
-		s++;
-	}
-	if (cc == 0) {
-		sp = s;
-	}
-
-	return sp;
 }
 
 /*
@@ -763,30 +688,6 @@ void Q_strcat(char *dest, int size, const char *src) {
 	}
 	Q_strncpyz(dest + l1, src, size - l1);
 }
-
-
-int Q_PrintStrlen(const char *string) {
-	int        len;
-	const char *p;
-
-	if (!string) {
-		return 0;
-	}
-
-	len = 0;
-	p   = string;
-	while (*p) {
-		if (Q_IsColorString(p)) {
-			p += 2;
-			continue;
-		}
-		p++;
-		len++;
-	}
-
-	return len;
-}
-
 
 char *Q_CleanStr(char *string) {
 	char *d;
@@ -1009,48 +910,6 @@ char *Info_ValueForKey(const char *s, const char *key) {
 	return "";
 }
 
-
-/*
-===================
-Info_NextPair
-
-Used to itterate through all the key/value pairs in an info string
-===================
-*/
-void Info_NextPair(const char **head, char *key, char *value) {
-	char       *o;
-	const char *s;
-
-	s = *head;
-
-	if (*s == '\\') {
-		s++;
-	}
-	key[0]   = 0;
-	value[0] = 0;
-
-	o = key;
-	while (*s != '\\') {
-		if (!*s) {
-			*o    = 0;
-			*head = s;
-			return;
-		}
-		*o++ = *s++;
-	}
-	*o = 0;
-	s++;
-
-	o = value;
-	while (*s != '\\' && *s) {
-		*o++ = *s++;
-	}
-	*o = 0;
-
-	*head = s;
-}
-
-
 /*
 ===================
 Info_RemoveKey
@@ -1107,64 +966,6 @@ void Info_RemoveKey(char *s, const char *key) {
 	}
 
 }
-
-/*
-===================
-Info_RemoveKey_Big
-===================
-*/
-void Info_RemoveKey_Big(char *s, const char *key) {
-	char *start;
-	char pkey[BIG_INFO_KEY];
-	char value[BIG_INFO_VALUE];
-	char *o;
-
-	if (strlen(s) >= BIG_INFO_STRING) {
-		Com_Error(ERR_DROP, "Info_RemoveKey_Big: oversize infostring [%s] [%s]", s, key);
-	}
-
-	if (strchr(key, '\\')) {
-		return;
-	}
-
-	for (;;) {
-		start = s;
-		if (*s == '\\') {
-			s++;
-		}
-		o = pkey;
-		while (*s != '\\') {
-			if (!*s) {
-				return;
-			}
-			*o++ = *s++;
-		}
-		*o = 0;
-		s++;
-
-		o = value;
-		while (*s != '\\' && *s) {
-			if (!*s) {
-				return;
-			}
-			*o++ = *s++;
-		}
-		*o = 0;
-
-		if (!Q_stricmp(key, pkey)) {
-			strcpy(start, s);    // remove this part
-			return;
-		}
-
-		if (!*s) {
-			return;
-		}
-	}
-
-}
-
-
-
 
 /*
 ==================
@@ -1228,47 +1029,4 @@ void Info_SetValueForKey(char *s, const char *key, const char *value) {
 	strcat(s, newi);
 }
 
-/*
-==================
-Info_SetValueForKey_Big
-
-Changes or adds a key/value pair
-==================
-*/
-void Info_SetValueForKey_Big(char *s, const char *key, const char *value) {
-	char newi[BIG_INFO_STRING];
-
-	if (strlen(s) >= BIG_INFO_STRING) {
-		Com_Error(ERR_DROP, "Info_SetValueForKey: oversize infostring [%s] [%s] [%s]", s, key, value);
-	}
-
-	if (strchr(key, '\\') || strchr(value, '\\')) {
-		Com_Printf("Can't use keys or values with a \\\n");
-		return;
-	}
-
-	if (strchr(key, ';') || strchr(value, ';')) {
-		Com_Printf("Can't use keys or values with a semicolon\n");
-		return;
-	}
-
-	if (strchr(key, '\"') || strchr(value, '\"')) {
-		Com_Printf("Can't use keys or values with a \"\n");
-		return;
-	}
-
-	Info_RemoveKey_Big(s, key);
-	if (!value || !strlen(value)) {
-		return;
-	}
-
-	Com_sprintf(newi, sizeof (newi), "\\%s\\%s", key, value);
-
-	if (strlen(newi) + strlen(s) > BIG_INFO_STRING) {
-		Com_Printf("BIG Info string length exceeded\n");
-		return;
-	}
-
-	strcat(s, newi);
-}
 //====================================================================
