@@ -72,6 +72,8 @@ void CG_windowFree(cg_window_t *w) {
 		if (w == &wh->window[wh->activeWindows[i]]) {
 			for (j = i; j < wh->numActiveWindows; j++) {
 				if (j + 1 < wh->numActiveWindows) {
+					// Nico, #fixme: GCC 4.8.2 with optimization says
+					// warning: array subscript is above array bounds
 					wh->activeWindows[j] = wh->activeWindows[j + 1];
 				}
 			}

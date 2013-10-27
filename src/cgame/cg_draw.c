@@ -2393,7 +2393,9 @@ static void CG_Autodemo() {
 			cg.rs_keep = 2;
 		}
 
-		if (cg.time > cg.rs_time + AUTODEMO_RUN_SAVE_DELAY + 500) {
+		// Nico, #fixme: GCC 4.8.2 with optimization says
+		// warning: assuming signed overflow does not occur when assuming that (X + c) < X is always false
+		if (cg.time > cg.rs_time + AUTODEMO_RUN_SAVE_DELAY + 500) {// Nico, wait 500ms to be sure demo recording is finished
 			int          len = 0;
 			fileHandle_t temp, demo;
 			char         *name;
