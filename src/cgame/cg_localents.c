@@ -491,7 +491,7 @@ void CG_AddSparkElements(localEntity_t *le) {
 
 	time = (float)(cg.time - cg.frametime);
 
-	while (1) {
+	for (;;) {
 		// calculate new position
 		BG_EvaluateTrajectory(&le->pos, cg.time, newOrigin, qfalse, -1);
 

@@ -618,7 +618,7 @@ static void ClientCleanName(const char *in, char *out, int outSize) {
 	*p           = 0;
 	spaces       = 0;
 
-	while (1) {
+	for (;;) {
 		ch = *in++;
 		if (!ch) {
 			break;

@@ -691,7 +691,7 @@ static qboolean AnimParseAnimConfig(playerInfo_t *animModelInfo, const char *inp
 	animModelInfo->version    = 0;
 
 	// read optional parameters
-	while (1) {
+	for (;;) {
 		token = COM_Parse(&text_p);
 		if (!token) {
 			break;

@@ -463,7 +463,7 @@ void CG_ProcessSnapshots(void) {
 	// loop until we either have a valid nextSnap with a serverTime
 	// greater than cg.time to interpolate towards, or we run
 	// out of available snapshots
-	do {
+	for (;;) {
 		// if we don't have a nextframe, try and read a new one in
 		if (!cg.nextSnap) {
 			snap = CG_ReadNextSnapshot();
@@ -490,7 +490,7 @@ void CG_ProcessSnapshots(void) {
 
 		// we have passed the transition from nextFrame to frame
 		CG_TransitionSnapshot();
-	} while (1);
+	}
 
 	// assert our valid conditions upon exiting
 	if (cg.snap == NULL) {

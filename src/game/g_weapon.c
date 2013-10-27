@@ -481,7 +481,7 @@ static void HandleEntsThatBlockConstructible(gentity_t *constructor, gentity_t *
 
 		check = NULL;
 
-		while (1) {
+		for (;;) {
 			check = G_Find(check, FOFS(track), constructible->track);
 
 			if (check == constructible) {

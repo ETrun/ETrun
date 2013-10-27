@@ -259,7 +259,7 @@ static void CG_SoundParseSounds(char *filename, char *buffer) {
 	// Nico, init vars
 	sound.soundList = NULL;
 
-	while (1) {
+	for (;;) {
 		token = COM_ParseExt(text, qtrue);
 		if (!*token) {
 			if (inSound) {
@@ -422,7 +422,7 @@ static void CG_SoundLoadSoundFiles(void) {
 	// parse the list
 	text      = bigTextBuffer;
 	numSounds = 0;
-	while (1) {
+	for (;;) {
 		token = COM_ParseExt(&text, qtrue);
 		if (!token[0]) {
 			break;
@@ -941,7 +941,7 @@ char *CG_GetStrFromStrArray(const char *in, const int index) {
 
 	s = ptr = (char *)in;
 	i = 0;
-	while (1) {
+	for (;;) {
 		if (i == index) {
 			return s;
 		}

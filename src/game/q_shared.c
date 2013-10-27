@@ -301,7 +301,7 @@ char *COM_ParseExt(char **data_p, qboolean allowLineBreaks) {
 	// RF, backup the session data so we can unget easily
 	COM_BackupParseSession(data_p);
 
-	while (1) {
+	for (;;) {
 		// skip whitespace
 		data = SkipWhitespace(data, &hasNewLines);
 		if (!data) {
@@ -339,7 +339,7 @@ char *COM_ParseExt(char **data_p, qboolean allowLineBreaks) {
 	// handle quoted strings
 	if (c == '\"') {
 		data++;
-		while (1) {
+		for (;;) {
 			c = *data++;
 			if (c == '\\' && *(data) == '\"') {
 				// Arnout: string-in-string
@@ -349,7 +349,7 @@ char *COM_ParseExt(char **data_p, qboolean allowLineBreaks) {
 				}
 				data++;
 
-				while (1) {
+				for (;;) {
 					c = *data++;
 
 					if (!c) {
@@ -542,7 +542,7 @@ int Com_ParseInfos(char *buf, int max, char infos[][MAX_INFO_STRING]) {
 
 	count = 0;
 
-	while (1) {
+	for (;;) {
 		token = COM_Parse(&buf);
 		if (!token[0]) {
 			break;
@@ -558,7 +558,7 @@ int Com_ParseInfos(char *buf, int max, char infos[][MAX_INFO_STRING]) {
 		}
 
 		infos[count][0] = 0;
-		while (1) {
+		for (;;) {
 			token = COM_Parse(&buf);
 			if (!token[0]) {
 				Com_Printf("Unexpected end of info file\n");
@@ -978,7 +978,7 @@ char *Info_ValueForKey(const char *s, const char *key) {
 	if (*s == '\\') {
 		s++;
 	}
-	while (1) {
+	for (;;) {
 		o = pkey;
 		while (*s != '\\') {
 			if (!*s) {
@@ -1070,7 +1070,7 @@ void Info_RemoveKey(char *s, const char *key) {
 		return;
 	}
 
-	while (1) {
+	for (;;) {
 		start = s;
 		if (*s == '\\') {
 			s++;
@@ -1127,7 +1127,7 @@ void Info_RemoveKey_Big(char *s, const char *key) {
 		return;
 	}
 
-	while (1) {
+	for (;;) {
 		start = s;
 		if (*s == '\\') {
 			s++;

@@ -431,7 +431,7 @@ qboolean PC_Script_Parse(int handle, const char **out) {
 		return qfalse;
 	}
 
-	while (1) {
+	for (;;) {
 		if (!trap_PC_ReadToken(handle, &token)) {
 			return qfalse;
 		}
@@ -448,7 +448,6 @@ qboolean PC_Script_Parse(int handle, const char **out) {
 		}
 		Q_strcat(script, 4096, " ");
 	}
-	return qfalse;  // bk001105 - LCC   missing return value
 }
 
 // display, window, menu, item code
@@ -1953,7 +1952,7 @@ void Item_RunScript(itemDef_t *item, qboolean *bAbort, const char *s) {
 	if (item && s && s[0]) {
 		Q_strcat(script, 4096, s);
 		p = script;
-		while (1) {
+		for (;;) {
 			const char *command = NULL;
 			// expect command then arguments, ; ends command, NULL ends script
 			if (!String_Parse(&p, &command)) {
@@ -1998,7 +1997,7 @@ qboolean Item_EnableShowViaCvar(itemDef_t *item, int flag) {
 
 		Q_strcat(script, 1024, item->enableCvar);
 		p = script;
-		while (1) {
+		for (;;) {
 			const char *val = NULL;
 			// expect value then ; or NULL, NULL ends list
 			if (!String_Parse(&p, &val)) {
@@ -2022,7 +2021,6 @@ qboolean Item_EnableShowViaCvar(itemDef_t *item, int flag) {
 			}
 
 		}
-		return (item->cvarFlags & flag) ? qfalse : qtrue;
 	}
 	return qtrue;
 }
@@ -5963,7 +5961,7 @@ qboolean ItemParse_cvarStrList(itemDef_t *item, int handle) {
 	}
 
 	pass = 0;
-	while (1) {
+	for (;;) {
 		if (!trap_PC_ReadToken(handle, &token)) {
 			PC_SourceError(handle, "end of file inside menu item\n");
 			return qfalse;
@@ -5988,9 +5986,7 @@ qboolean ItemParse_cvarStrList(itemDef_t *item, int handle) {
 				return qfalse;
 			}
 		}
-
 	}
-	return qfalse;  // bk001205 - LCC missing return value
 }
 
 qboolean ItemParse_cvarFloatList(itemDef_t *item, int handle) {
@@ -6012,7 +6008,7 @@ qboolean ItemParse_cvarFloatList(itemDef_t *item, int handle) {
 		return qfalse;
 	}
 
-	while (1) {
+	for (;;) {
 		if (!trap_PC_ReadToken(handle, &token)) {
 			PC_SourceError(handle, "end of file inside menu item\n");
 			return qfalse;
@@ -6035,9 +6031,7 @@ qboolean ItemParse_cvarFloatList(itemDef_t *item, int handle) {
 		if (multiPtr->count >= MAX_MULTI_CVARS) {
 			return qfalse;
 		}
-
 	}
-	return qfalse;  // bk001205 - LCC missing return value
 }
 
 qboolean ItemParse_cvarListUndefined(itemDef_t *item, int handle) {
@@ -6317,7 +6311,7 @@ qboolean Item_Parse(int handle, itemDef_t *item) {
 	if (*token.string != '{') {
 		return qfalse;
 	}
-	while (1) {
+	for (;;) {
 		if (!trap_PC_ReadToken(handle, &token)) {
 			PC_SourceError(handle, "end of file inside menu item\n");
 			return qfalse;
@@ -6337,7 +6331,6 @@ qboolean Item_Parse(int handle, itemDef_t *item) {
 			return qfalse;
 		}
 	}
-	return qfalse;  // bk001205 - LCC missing return value
 }
 
 
@@ -6832,8 +6825,7 @@ qboolean Menu_Parse(int handle, menuDef_t *menu) {
 		return qfalse;
 	}
 
-	while (1) {
-
+	for (;;) {
 		memset(&token, 0, sizeof (pc_token_t));
 		if (!trap_PC_ReadToken(handle, &token)) {
 			PC_SourceError(handle, "end of file inside menu\n");
@@ -6854,7 +6846,6 @@ qboolean Menu_Parse(int handle, menuDef_t *menu) {
 			return qfalse;
 		}
 	}
-	return qfalse;  // bk001205 - LCC missing return value
 }
 
 /*

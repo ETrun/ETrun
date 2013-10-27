@@ -330,7 +330,7 @@ qboolean CG_ParseSpawnVars(void) {
 	}
 
 	// go through all the key / value pairs
-	while (1) {
+	for (;;) {
 		// parse key
 		if (!trap_GetEntityToken(keyname, sizeof (keyname))) {
 			CG_Error("CG_ParseSpawnVars: EOF without closing brace");

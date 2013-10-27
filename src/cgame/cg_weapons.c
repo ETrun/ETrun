@@ -804,7 +804,7 @@ static qboolean CG_ParseWeaponConfig(const char *filename, weaponInfo_t *wi) {
 	text_p = text;
 
 	// read optional parameters
-	while (1) {
+	for (;;) {
 		prev  = text_p; // so we can unget
 		token = COM_Parse(&text_p);
 		if (!token) {                       // get the variable
@@ -944,7 +944,7 @@ static qboolean CG_RW_ParseWeaponLinkPart(int handle, weaponInfo_t *weaponInfo, 
 		return CG_RW_ParseError(handle, "expected '{'");
 	}
 
-	while (1) {
+	for (;;) {
 		if (!trap_PC_ReadToken(handle, &token)) {
 			break;
 		}
@@ -992,7 +992,7 @@ static qboolean CG_RW_ParseWeaponLink(int handle, weaponInfo_t *weaponInfo, mode
 		return CG_RW_ParseError(handle, "expected '{'");
 	}
 
-	while (1) {
+	for (;;) {
 		if (!trap_PC_ReadToken(handle, &token)) {
 			break;
 		}
@@ -1021,7 +1021,7 @@ static qboolean CG_RW_ParseViewType(int handle, weaponInfo_t *weaponInfo, modelV
 		return CG_RW_ParseError(handle, "expected '{'");
 	}
 
-	while (1) {
+	for (;;) {
 		if (!trap_PC_ReadToken(handle, &token)) {
 			break;
 		}
@@ -1100,7 +1100,7 @@ static qboolean CG_RW_ParseClient(int handle, weaponInfo_t *weaponInfo) {
 		return CG_RW_ParseError(handle, "expected '{'");
 	}
 
-	while (1) {
+	for (;;) {
 		if (!trap_PC_ReadToken(handle, &token)) {
 			break;
 		}
@@ -1316,7 +1316,7 @@ static qboolean CG_RegisterWeaponFromWeaponFile(const char *filename, weaponInfo
 		return CG_RW_ParseError(handle, "expected '{'");
 	}
 
-	while (1) {
+	for (;;) {
 		if (!trap_PC_ReadToken(handle, &token)) {
 			break;
 		}

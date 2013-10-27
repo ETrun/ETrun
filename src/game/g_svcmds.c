@@ -578,10 +578,6 @@ Kick a user off of the server
 ==================
 */
 
-// change into qfalse if you want to use the qagame banning system
-// which makes it possible to unban IP addresses
-#define USE_ENGINE_BANLIST qtrue
-
 static void Svcmd_Kick_f(void) {
 	gclient_t *cl;
 	int       i;
@@ -626,14 +622,7 @@ static void Svcmd_Kick_f(void) {
 					trap_GetUserinfo(cl->ps.clientNum, userinfo, sizeof (userinfo));
 					ip = Info_ValueForKey(userinfo, "ip");
 
-					// use engine banning system, mods may choose to use their own banlist
-					if (USE_ENGINE_BANLIST) {
-						trap_DropClient(cl->ps.clientNum, "player kicked", timeout);
-					} else {
-						trap_DropClient(cl->ps.clientNum, "player kicked", 0);
-						AddIPBan(ip);
-					}
-
+					trap_DropClient(cl->ps.clientNum, "player kicked", timeout);
 				} else {
 					trap_DropClient(cl->ps.clientNum, "player kicked", 0);
 				}
@@ -654,14 +643,7 @@ static void Svcmd_Kick_f(void) {
 		trap_GetUserinfo(cl->ps.clientNum, userinfo, sizeof (userinfo));
 		ip = Info_ValueForKey(userinfo, "ip");
 
-		// use engine banning system, mods may choose to use their own banlist
-		if (USE_ENGINE_BANLIST) {
-			trap_DropClient(cl->ps.clientNum, "player kicked", timeout);
-		} else {
-			trap_DropClient(cl->ps.clientNum, "player kicked", 0);
-			AddIPBan(ip);
-		}
-
+		trap_DropClient(cl->ps.clientNum, "player kicked", timeout);
 	} else {
 		trap_DropClient(cl->ps.clientNum, "player kicked", 0);
 	}
@@ -715,13 +697,7 @@ static void Svcmd_KickNum_f(void) {
 
 	trap_GetUserinfo(cl->ps.clientNum, userinfo, sizeof (userinfo));
 	ip = Info_ValueForKey(userinfo, "ip");
-	// use engine banning system, mods may choose to use their own banlist
-	if (USE_ENGINE_BANLIST) {
-		trap_DropClient(cl->ps.clientNum, "player kicked", timeout);
-	} else {
-		trap_DropClient(cl->ps.clientNum, "player kicked", 0);
-		AddIPBan(ip);
-	}
+	trap_DropClient(cl->ps.clientNum, "player kicked", timeout);
 }
 
 // -fretn

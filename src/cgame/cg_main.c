@@ -862,7 +862,7 @@ void CG_LoadObjectiveData(void) {
 		return;
 	}
 
-	while (1) {
+	for (;;) {
 		if (!trap_PC_ReadToken(handle, &token)) {
 			break;
 		}
@@ -1813,7 +1813,7 @@ qboolean CG_Asset_Parse(int handle) {
 		return qfalse;
 	}
 
-	while (1) {
+	for (;;) {
 		if (!trap_PC_ReadToken(handle, &token)) {
 			return qfalse;
 		}
@@ -1945,7 +1945,7 @@ void CG_ParseMenu(const char *menuFile) {
 		return;
 	}
 
-	while (1) {
+	for (;;) {
 		if (!trap_PC_ReadToken(handle, &token)) {
 			break;
 		}
@@ -1980,7 +1980,7 @@ qboolean CG_Load_Menu(char **p) {
 		return qfalse;
 	}
 
-	while (1) {
+	for (;;) {
 
 		token = COM_ParseExt(p, qtrue);
 
@@ -1994,7 +1994,6 @@ qboolean CG_Load_Menu(char **p) {
 
 		CG_ParseMenu(token);
 	}
-	return qfalse;
 }
 
 void CG_LoadMenus(const char *menuFile) {
@@ -2031,7 +2030,7 @@ void CG_LoadMenus(const char *menuFile) {
 
 	p = buf;
 
-	while (1) {
+	for (;;) {
 		token = COM_ParseExt(&p, qtrue);
 		if (!token || token[0] == 0 || token[0] == '}') {
 			break;

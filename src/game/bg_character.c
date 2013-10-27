@@ -75,7 +75,7 @@ qboolean BG_ParseCharacterFile(const char *filename, bg_characterDef_t *characte
 		return BG_PCF_ParseError(handle, "expected '{'");
 	}
 
-	while (1) {
+	for (;;) {
 		if (!trap_PC_ReadToken(handle, &token)) {
 			break;
 		}

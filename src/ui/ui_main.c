@@ -735,8 +735,7 @@ qboolean Asset_Parse(int handle) {
 		return qfalse;
 	}
 
-	while (1) {
-
+	for (;;) {
 		memset(&token, 0, sizeof (pc_token_t));
 
 		if (!trap_PC_ReadToken(handle, &token)) {
@@ -858,7 +857,6 @@ qboolean Asset_Parse(int handle) {
 		}
 
 	}
-	return qfalse;
 }
 
 static void QDECL Com_DPrintf(const char *fmt, ...) {
@@ -889,7 +887,7 @@ qboolean UI_ParseMenu(const char *menuFile) {
 		return qfalse;
 	}
 
-	while (1) {
+	for (;;) {
 		memset(&token, 0, sizeof (pc_token_t));
 		if (!trap_PC_ReadToken(handle, &token)) {
 			break;
@@ -926,8 +924,7 @@ qboolean Load_Menu(int handle) {
 		return qfalse;
 	}
 
-	while (1) {
-
+	for (;;) {
 		if (!trap_PC_ReadToken(handle, &token)) {
 			return qfalse;
 		}
@@ -942,7 +939,6 @@ qboolean Load_Menu(int handle) {
 
 		UI_ParseMenu(token.string);
 	}
-	return qfalse;
 }
 
 void UI_LoadMenus(const char *menuFile, qboolean reset) {
@@ -971,7 +967,7 @@ void UI_LoadMenus(const char *menuFile, qboolean reset) {
 		Menu_Reset();
 	}
 
-	while (1) {
+	for (;;) {
 		if (!trap_PC_ReadToken(handle, &token)) {
 			break;
 		}

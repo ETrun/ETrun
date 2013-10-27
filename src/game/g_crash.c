@@ -320,8 +320,7 @@ void win32_backtrace(LPEXCEPTION_POINTERS e) {
 
 	CrashLog("Backtrace:\n", qtrue);
 
-	while (1) {
-
+	for (;;) {
 		more = pfnStackWalk(
 		    IMAGE_FILE_MACHINE_I386,
 		    process,

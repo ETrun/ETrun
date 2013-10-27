@@ -792,7 +792,7 @@ void CG_DrawBannerPrint(void) {
 
 	len = strlen(cg.bannerPrint);
 
-	while (1) {
+	for (;;) {
 		char linebuffer[1024];
 		char colorchar = lastcolor;
 
