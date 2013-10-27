@@ -9,7 +9,7 @@ before_install:
   - sudo apt-get install gcc-multilib -q
 
 script:
-  - ./make.sh
+  - ./make.sh -t x86
 
 git:
   submodules: false
