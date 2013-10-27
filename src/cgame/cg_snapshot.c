@@ -236,7 +236,7 @@ static void CG_TransitionSnapshot(void) {
 
 	// if we had a map_restart, set everthing with initial
 
-	if (!(cg.snap) || !(cg.nextSnap)) {
+	if (!cg.snap || !cg.nextSnap) {
 		return;
 	}
 

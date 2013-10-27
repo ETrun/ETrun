@@ -1156,13 +1156,9 @@ static void CG_Trap(centity_t *cent) {
 
 	// initial setup
 	if (!traplf->oldFrameTime) {
-		traplf->frameTime        =
-		    traplf->oldFrameTime = cg.time;
-
+		traplf->frameTime = traplf->oldFrameTime = cg.time;
 		CG_TrapSetAnim(cent, traplf);
-
-		traplf->frame        =
-		    traplf->oldFrame = traplf->animation->firstFrame;
+		traplf->frame = traplf->oldFrame = traplf->animation->firstFrame;
 	}
 
 	// transition to new anim if requested
