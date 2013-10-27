@@ -20,30 +20,47 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake")
 
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/etrun)
 
-# Used to store real system processor when we overwrite CMAKE_SYSTEM_PROCESSOR for cross-compile builds
-set(SYSTEM_PROCESSOR ${CMAKE_SYSTEM_PROCESSOR}) # See IS_64_BIT_BUILD_SYSTEM
-
 # has to be set to "", otherwise CMake will pass -rdynamic resulting in a client crash
 set(CMAKE_SHARED_LIBRARY_LINK_C_FLAGS "")
 
 # Strict mode
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -m32 -Wall -Wextra -Wno-self-assign -Werror")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Wextra -Wno-self-assign -Werror")
+
+# Check if a target architecture was given in CMake invocation
+if("${TARGET_ARCHITECTURE}" STREQUAL "")
+	set(TARGET_ARCHITECTURE "${CMAKE_SYSTEM_PROCESSOR}")
+endif()
+
+# Print architecture we are going to use
+message(STATUS "#############################################")
+message(STATUS "###       Target architecture: ${TARGET_ARCHITECTURE}       ###")
+message(STATUS "#############################################")
 
 # Get the system architecture
-if(NOT CMAKE_SYSTEM MATCHES "Darwin")
-	if("${CMAKE_SYSTEM_PROCESSOR}" STREQUAL "i686" OR "${CMAKE_SYSTEM_PROCESSOR}" STREQUAL "i386" OR "${CMAKE_SYSTEM_PROCESSOR}" STREQUAL "x86")
-		if(WIN32)
-			set(ARCH "x86")
-		else()
-			set(ARCH "i386")
-		endif()
-	elseif("${CMAKE_SYSTEM_PROCESSOR}" STREQUAL "x86_64" OR "${CMAKE_SYSTEM_PROCESSOR}" STREQUAL "AMD64")
-		set(ARCH "x86_64")
+if("${TARGET_ARCHITECTURE}" STREQUAL "i686" OR "${TARGET_ARCHITECTURE}" STREQUAL "i386" OR "${TARGET_ARCHITECTURE}" STREQUAL "x86")
+	if(WIN32)
+		set(ARCH "x86")
+	elseif(NOT CMAKE_SYSTEM MATCHES "Darwin")
+		set(ARCH "i386")
+		set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -m32")
 	else()
-		set(ARCH "${CMAKE_SYSTEM_PROCESSOR}")
-		message(STATUS "Warning: processor architecture not recognised (${CMAKE_SYSTEM_PROCESSOR})")
+		set(ARCH "")
+		set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -m32")
 	endif()
-endif(NOT CMAKE_SYSTEM MATCHES "Darwin")
+elseif("${TARGET_ARCHITECTURE}" STREQUAL "x86_64" OR "${TARGET_ARCHITECTURE}" STREQUAL "AMD64")
+	if(WIN32)
+		set(ARCH "x86_64")
+	elseif(NOT CMAKE_SYSTEM MATCHES "Darwin")
+		set(ARCH "x86_64")
+		set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -m64")
+	else()
+		set(ARCH "")
+		set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -m64")
+	endif()
+else()
+	set(ARCH "${TARGET_ARCHITECTURE}")
+	message(STATUS "Warning: processor architecture not recognised (${TARGET_ARCHITECTURE})")
+endif()
 
 #-----------------------------------------------------------------
 # Platform-specific settings
