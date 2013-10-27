@@ -616,12 +616,6 @@ static void Svcmd_Kick_f(void) {
 				}
 
 				if (timeout != -1) {
-					char *ip;
-					char userinfo[MAX_INFO_STRING];
-
-					trap_GetUserinfo(cl->ps.clientNum, userinfo, sizeof (userinfo));
-					ip = Info_ValueForKey(userinfo, "ip");
-
 					trap_DropClient(cl->ps.clientNum, "player kicked", timeout);
 				} else {
 					trap_DropClient(cl->ps.clientNum, "player kicked", 0);
