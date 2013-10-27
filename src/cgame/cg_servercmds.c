@@ -744,7 +744,7 @@ typedef struct voiceChatList_s {
 	voiceChat_t voiceChats[MAX_VOICECHATS];
 } voiceChatList_t;
 
-voiceChatList_t      voiceChatLists[MAX_VOICEFILES];
+voiceChatList_t voiceChatLists[MAX_VOICEFILES];
 
 /*
 =================
@@ -793,7 +793,7 @@ int CG_ParseVoiceChats(const char *filename, voiceChatList_t *voiceChatList, int
 	//		above that clears out all the commands "voiceChats[i].id[0] = 0;"
 	//		We don't even want the MP voice chats in SP, so no need anyway
 	voiceChatList->numVoiceChats = 0;
-	for (;;) {
+	for (;; ) {
 		token = COM_ParseExt(p, qtrue);
 		if (!token || token[0] == 0) {
 			return qtrue;
@@ -808,7 +808,7 @@ int CG_ParseVoiceChats(const char *filename, voiceChatList_t *voiceChatList, int
 		voiceChats[voiceChatList->numVoiceChats].numSounds = 0;
 		current                                            = voiceChats[voiceChatList->numVoiceChats].numSounds;
 
-		for (;;) {
+		for (;; ) {
 			token = COM_ParseExt(p, qtrue);
 			if (!token || token[0] == 0) {
 				return qtrue;
@@ -1580,7 +1580,7 @@ static void CG_ServerCommand(void) {
 		cg.timerunActive            = 1;
 		cg.timerunCheckPointChecked = 0;
 		cg.currentTimerun           = atoi(CG_Argv(1)); // Timerun num
-		cg.timerunStartTime	        = atoi(CG_Argv(2)); // Start time
+		cg.timerunStartTime         = atoi(CG_Argv(2)); // Start time
 		cg.timerunStartSpeed        = atoi(CG_Argv(3)); // Start speed
 
 		// Reset run stop speed & run max speed
@@ -1606,12 +1606,12 @@ static void CG_ServerCommand(void) {
 		if (cgs.clientinfo[cg.clientNum].team != TEAM_SPECTATOR) {
 			return;
 		}
-		clientNum = atoi(CG_Argv(2));// Nico, client num of spectated player
+		clientNum = atoi(CG_Argv(2)); // Nico, client num of spectated player
 
 		cg.timerunActive            = 1;
 		cg.timerunCheckPointChecked = 0;
 		cg.currentTimerun           = atoi(CG_Argv(1)); // Timerun num
-		cg.timerunStartTime			= atoi(CG_Argv(3)); // Start time
+		cg.timerunStartTime         = atoi(CG_Argv(3)); // Start time
 		cg.timerunStartSpeed        = atoi(CG_Argv(4)); // Start speed
 
 		// Reset run stop speed & run max speed
@@ -1661,8 +1661,8 @@ static void CG_ServerCommand(void) {
 
 		if (atoi(CG_Argv(2))) {
 			cg.timerunLastTime[cg.clientNum][atoi(CG_Argv(1))] = cg.timerunFinishedTime[cg.clientNum] = atoi(CG_Argv(2));
-			cg.timerunStopSpeed                  = atoi(CG_Argv(3)); // Stop speed
-			cg.runMaxSpeed                       = atoi(CG_Argv(4)); // Run max speed
+			cg.timerunStopSpeed                                = atoi(CG_Argv(3)); // Stop speed
+			cg.runMaxSpeed                                     = atoi(CG_Argv(4)); // Run max speed
 		}
 		return;
 	}
@@ -1674,13 +1674,13 @@ static void CG_ServerCommand(void) {
 		if (cgs.clientinfo[cg.clientNum].team != TEAM_SPECTATOR) {
 			return;
 		}
-		clientNum = atoi(CG_Argv(2));// Nico, client num of spectated player
+		clientNum        = atoi(CG_Argv(2)); // Nico, client num of spectated player
 		cg.timerunActive = 0;
 
-		if (atoi(CG_Argv(3))) {// Nico, argv[3] is run time
+		if (atoi(CG_Argv(3))) { // Nico, argv[3] is run time
 			cg.timerunLastTime[clientNum][atoi(CG_Argv(1))] = cg.timerunFinishedTime[clientNum] = atoi(CG_Argv(3));
-			cg.timerunStopSpeed                  = atoi(CG_Argv(4)); // Stop speed
-			cg.runMaxSpeed                       = atoi(CG_Argv(5)); // Run max speed
+			cg.timerunStopSpeed                             = atoi(CG_Argv(4)); // Stop speed
+			cg.runMaxSpeed                                  = atoi(CG_Argv(5)); // Run max speed
 		}
 		return;
 	}

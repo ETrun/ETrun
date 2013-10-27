@@ -156,7 +156,7 @@ void P_WorldEffects(gentity_t *ent) {
 	// check for sizzle damage (move to pmove?)
 	//
 	if (waterlevel && (ent->watertype & CONTENTS_LAVA) &&
-		ent->health > 0 && ent->pain_debounce_time <= level.time) {
+	    ent->health > 0 && ent->pain_debounce_time <= level.time) {
 		G_Damage(ent, NULL, NULL, NULL, NULL, 30 * waterlevel, 0, MOD_LAVA);
 	}
 
@@ -848,7 +848,7 @@ void ClientThink_real(gentity_t *ent) {
 	}
 
 	if (g_entities[ent->client->ps.identifyClient].team != ent->team ||
-		!g_entities[ent->client->ps.identifyClient].client) {
+	    !g_entities[ent->client->ps.identifyClient].client) {
 		ent->client->ps.identifyClient = -1;
 	}
 
@@ -1101,14 +1101,14 @@ void ClientEndFrame(gentity_t *ent) {
 	if (level.match_pause != PAUSE_NONE) {
 		int time_delta = level.time - level.previousTime;
 
-		ent->client->airOutTime                        += time_delta;
-		ent->client->inactivityTime                    += time_delta;
-		ent->client->lastBurnTime                      += time_delta;
-		ent->client->pers.enterTime                    += time_delta;
-		ent->client->ps.classWeaponTime                += time_delta;
-		ent->lastHintCheckTime                         += time_delta;
-		ent->pain_debounce_time                        += time_delta;
-		ent->s.onFireEnd                               += time_delta;
+		ent->client->airOutTime         += time_delta;
+		ent->client->inactivityTime     += time_delta;
+		ent->client->lastBurnTime       += time_delta;
+		ent->client->pers.enterTime     += time_delta;
+		ent->client->ps.classWeaponTime += time_delta;
+		ent->lastHintCheckTime          += time_delta;
+		ent->pain_debounce_time         += time_delta;
+		ent->s.onFireEnd                += time_delta;
 	}
 
 	//

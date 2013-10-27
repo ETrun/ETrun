@@ -424,8 +424,8 @@ void G_UpdateTeamMapData_Destruct(gentity_t *ent) {
 		mEnt->yaw       = 0;
 	} else {
 		if (ent->parent->target_ent &&
-			(ent->parent->target_ent->s.eType == ET_CONSTRUCTIBLE || ent->parent->target_ent->s.eType == ET_EXPLOSIVE) &&
-			(ent->parent->spawnflags & ((1 << 6) | (1 << 4)))) {
+		    (ent->parent->target_ent->s.eType == ET_CONSTRUCTIBLE || ent->parent->target_ent->s.eType == ET_EXPLOSIVE) &&
+		    (ent->parent->spawnflags & ((1 << 6) | (1 << 4)))) {
 			teamList = &mapEntityData[1];   // inverted
 			mEnt     = G_FindMapEntityData(teamList, num);
 			if (!mEnt) {
@@ -454,8 +454,8 @@ void G_UpdateTeamMapData_Destruct(gentity_t *ent) {
 		mEnt->yaw       = 0;
 	} else {
 		if (ent->parent->target_ent &&
-			(ent->parent->target_ent->s.eType == ET_CONSTRUCTIBLE || ent->parent->target_ent->s.eType == ET_EXPLOSIVE) &&
-			(ent->parent->spawnflags & ((1 << 6) | (1 << 4)))) {
+		    (ent->parent->target_ent->s.eType == ET_CONSTRUCTIBLE || ent->parent->target_ent->s.eType == ET_EXPLOSIVE) &&
+		    (ent->parent->spawnflags & ((1 << 6) | (1 << 4)))) {
 			teamList = &mapEntityData[0];   // inverted
 			mEnt     = G_FindMapEntityData(teamList, num);
 			if (!mEnt) {

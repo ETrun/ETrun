@@ -137,7 +137,7 @@ finds worst trace of body/legs, for collision.
 ==================
 */
 
-void PM_TraceLegs(trace_t *trace, float *legsOffset, vec3_t start, vec3_t end, trace_t *bodytrace, vec3_t viewangles, void(tracefunc) (trace_t * results, const vec3_t start, const vec3_t mins, const vec3_t maxs, const vec3_t end, int passEntityNum, int contentMask), int ignoreent, int tracemask) {
+void PM_TraceLegs(trace_t *trace, float *legsOffset, vec3_t start, vec3_t end, trace_t *bodytrace, vec3_t viewangles, void (tracefunc) (trace_t *results, const vec3_t start, const vec3_t mins, const vec3_t maxs, const vec3_t end, int passEntityNum, int contentMask), int ignoreent, int tracemask) {
 	trace_t steptrace;
 	vec3_t  ofs, org, point;
 	vec3_t  flatforward;
@@ -256,8 +256,8 @@ static void PM_Friction(void) {
 
 	// apply ground friction
 	if (pm->waterlevel <= 1 && pml.walking &&
-		!(pml.groundTrace.surfaceFlags & SURF_SLICK) &&
-		!(pm->ps->pm_flags & PMF_TIME_KNOCKBACK)) {
+	    !(pml.groundTrace.surfaceFlags & SURF_SLICK) &&
+	    !(pm->ps->pm_flags & PMF_TIME_KNOCKBACK)) {
 		control = speed < pm_stopspeed ? pm_stopspeed : speed;
 		drop   += control * pm_friction * pml.frametime;
 	}
@@ -639,9 +639,9 @@ static qboolean PM_CheckProne(void) {
 	}
 
 	if (pm->ps->eFlags & EF_PRONE && (pm->waterlevel > 1 ||
-	    pm->ps->pm_type == PM_DEAD ||
-	    pm->ps->eFlags & EF_MOUNTEDTANK ||
-	    ((pm->cmd.doubleTap == DT_BACK || pm->cmd.upmove > 10 || pm->cmd.wbuttons & WBUTTON_PRONE) && pm->cmd.serverTime - pm->pmext->proneTime > 750))) {
+	                                  pm->ps->pm_type == PM_DEAD ||
+	                                  pm->ps->eFlags & EF_MOUNTEDTANK ||
+	                                  ((pm->cmd.doubleTap == DT_BACK || pm->cmd.upmove > 10 || pm->cmd.wbuttons & WBUTTON_PRONE) && pm->cmd.serverTime - pm->pmext->proneTime > 750))) {
 		trace_t trace;
 
 		// see if we have the space to stop prone
@@ -2090,7 +2090,7 @@ are being updated isntead of a full move
 ================
 */
 // rain - take a tracemask as well - we can't use anything out of pm
-void PM_UpdateViewAngles(playerState_t *ps, pmoveExt_t *pmext, usercmd_t *cmd, void(trace) (trace_t * results, const vec3_t start, const vec3_t mins, const vec3_t maxs, const vec3_t end, int passEntityNum, int contentMask), int tracemask) {      //----(SA)	modified
+void PM_UpdateViewAngles(playerState_t *ps, pmoveExt_t *pmext, usercmd_t *cmd, void (trace) (trace_t *results, const vec3_t start, const vec3_t mins, const vec3_t maxs, const vec3_t end, int passEntityNum, int contentMask), int tracemask) {      //----(SA)	modified
 	short   temp;
 	int     i;
 	pmove_t tpm;
@@ -2653,8 +2653,8 @@ void PmoveSingle(pmove_t *pmove) {
 
 	if (pm->cmd.wbuttons & WBUTTON_ZOOM && pm->ps->stats[STAT_HEALTH] >= 0 && !(pm->ps->weaponDelay)) {
 		if (pm->ps->stats[STAT_KEYS] & (1 << INV_BINOCS) &&        // (SA) binoculars are an inventory item (inventory==keys)
-			!BG_IsScopedWeapon(pm->ps->weapon) &&          // don't allow binocs if using the sniper scope
-			!BG_PlayerMounted(pm->ps->eFlags) &&        // or if mounted on a weapon
+		    !BG_IsScopedWeapon(pm->ps->weapon) &&          // don't allow binocs if using the sniper scope
+		    !BG_PlayerMounted(pm->ps->eFlags) &&        // or if mounted on a weapon
 		    // rain - #215 - don't allow binocs w/ mounted mob. MG42 or mortar either.
 		    pm->ps->weapon != WP_MOBILE_MG42_SET &&
 		    pm->ps->weapon != WP_MORTAR_SET) {
@@ -2669,11 +2669,11 @@ void PmoveSingle(pmove_t *pmove) {
 	}
 
 	if (!(pm->ps->pm_flags & PMF_RESPAWNED) &&
-		PM_WeaponAmmoAvailable(pm->ps->weapon) &&
-		!(pm->ps->eFlags & EF_ZOOMING) &&
-		!pm->ps->leanf &&
-		(pm->ps->weaponstate == WEAPON_READY || pm->ps->weaponstate == WEAPON_FIRING) &&
-		pm->cmd.buttons & BUTTON_ATTACK && !(pm->cmd.buttons & BUTTON_TALK)) {
+	    PM_WeaponAmmoAvailable(pm->ps->weapon) &&
+	    !(pm->ps->eFlags & EF_ZOOMING) &&
+	    !pm->ps->leanf &&
+	    (pm->ps->weaponstate == WEAPON_READY || pm->ps->weaponstate == WEAPON_FIRING) &&
+	    pm->cmd.buttons & BUTTON_ATTACK && !(pm->cmd.buttons & BUTTON_TALK)) {
 		// all clear, fire!
 		pm->ps->eFlags |= EF_FIRING;
 	}

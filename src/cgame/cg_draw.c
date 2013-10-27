@@ -31,8 +31,8 @@ If you have questions concerning this license or the applicable additional terms
 
 #include "cg_local.h"
 
-extern char *BindingFromName(const char *cvar);// Nico, note: this function is defined in ui_shared.c
-extern void Controls_GetConfig(void);// Nico, note: this function is defined in ui_shared.c
+extern char *BindingFromName(const char *cvar); // Nico, note: this function is defined in ui_shared.c
+extern void Controls_GetConfig(void); // Nico, note: this function is defined in ui_shared.c
 int activeFont;
 
 ////////////////////////
@@ -794,7 +794,7 @@ static void CG_DrawCenterString(void) {
 
 	y = cg.centerPrintY - cg.centerPrintLines * BIGCHAR_HEIGHT / 2;
 
-	for (;;) {
+	for (;; ) {
 		char linebuffer[1024];
 
 		for (l = 0; l < CP_LINEWIDTH; l++) {            // NERVE - SMF - added CP_LINEWIDTH
@@ -1234,8 +1234,8 @@ static void CG_DrawCrosshairNames(void) {
 	int      clientNum = cg.crosshairClientNum;
 
 	if (clientNum < 0 || clientNum >= MAX_CLIENTS || !cg_drawCrosshair.integer ||
-		!cg_drawCrosshairNames.integer || cg.showScores || cg.renderingThirdPerson ||
-		cgs.clientinfo[clientNum].hideme || cgs.clientinfo[clientNum].clientNum != clientNum) {
+	    !cg_drawCrosshairNames.integer || cg.showScores || cg.renderingThirdPerson ||
+	    cgs.clientinfo[clientNum].hideme || cgs.clientinfo[clientNum].clientNum != clientNum) {
 		return;
 	}
 
@@ -1252,7 +1252,7 @@ static void CG_DrawCrosshairNames(void) {
 
 	// Nico, don't draw if hiding others is enabled and distance to the player is < cg_hideRange
 	if (cg_hideOthers.integer && clientNum != cg.clientNum) {
-	    dist = Distance((&cg_entities[cg.clientNum])->lerpOrigin, (&cg_entities[clientNum])->lerpOrigin);
+		dist = Distance((&cg_entities[cg.clientNum])->lerpOrigin, (&cg_entities[clientNum])->lerpOrigin);
 		if (dist < cg_hideRange.integer) {
 			return;
 		}
@@ -1275,9 +1275,9 @@ CG_DrawVote
 =================
 */
 static void CG_DrawVote(void) {
-	char  *s;
-	char  str1[32], str2[32];
-	int   sec;
+	char *s;
+	char str1[32], str2[32];
+	int  sec;
 
 	if (cgs.applicationEndTime > cg.time && cgs.applicationClient >= 0) {
 		Q_strncpyz(str1, BindingFromName("vote yes"), 32);
@@ -1341,8 +1341,8 @@ static void CG_DrawVote(void) {
 				}
 
 				if (!Q_stricmp(cgs.clientinfo[nameindex].cleanname, buffer)
-					&& cgs.clientinfo[nameindex].team != TEAM_SPECTATOR
-					&& cgs.clientinfo[nameindex].team != cgs.clientinfo[cg.clientNum].team) {
+				    && cgs.clientinfo[nameindex].team != TEAM_SPECTATOR
+				    && cgs.clientinfo[nameindex].team != cgs.clientinfo[cg.clientNum].team) {
 					return;
 				}
 			}
@@ -1739,7 +1739,7 @@ static void CG_DrawObjectiveInfo(void) {
 	x2 = 321;
 
 	// first just find the bounding rect
-	for (;;) {
+	for (;; ) {
 		char linebuffer[1024];
 
 		for (l = 0; l < CP_LINEWIDTH; l++) {
@@ -1756,7 +1756,7 @@ static void CG_DrawObjectiveInfo(void) {
 			x2 = 320 + w / 2;
 		}
 
-		x = 320 - w / 2;
+		x  = 320 - w / 2;
 		y += cg.oidPrintCharWidth * 1.5;
 
 		while (*start && (*start != '\n')) {
@@ -1786,7 +1786,7 @@ static void CG_DrawObjectiveInfo(void) {
 	start = cg.oidPrint;
 	y     = 400 - cg.oidPrintLines * BIGCHAR_HEIGHT / 2; // JPW NERVE
 
-	for (;;) {
+	for (;; ) {
 		char linebuffer[1024];
 
 		for (l = 0; l < CP_LINEWIDTH; l++) {
@@ -2396,7 +2396,7 @@ static void CG_Autodemo() {
 				int          len = 0;
 				fileHandle_t temp, demo;
 				char         *name;
-				int          i     = 0;
+				int          i = 0;
 
 				len = trap_FS_FOpenFile(va("demos/temp_%i.dm_84", cg.currentdemo), &temp, FS_READ);
 

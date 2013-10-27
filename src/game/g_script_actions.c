@@ -1219,7 +1219,7 @@ qboolean G_ScriptAction_GotoMarker(gentity_t *ent, char *params) {
 				} else if (!Q_stricmp(token, "relative")) {
 					gentity_t    *target2;
 					pathCorner_t *pPathCorner2;
-					vec3_t       vec2 = {0};
+					vec3_t       vec2 = { 0 };
 
 					token = COM_ParseExt(&pString, qfalse);
 
@@ -1862,7 +1862,7 @@ qboolean G_ScriptAction_AlertEntity(gentity_t *ent, char *params) {
 	hash = BG_StringHashValue(params);
 
 	// find this targetname
-	for (;;) {
+	for (;; ) {
 		alertent = G_FindByTargetnameFast(alertent, params, hash);
 		if (!alertent) {
 			if (!foundalertent) {
@@ -3262,7 +3262,7 @@ qboolean G_ScriptAction_SetState(gentity_t *ent, char *params) {
 	// look for an entities
 	target = &g_entities[MAX_CLIENTS - 1];
 	hash   = BG_StringHashValue(name);
-	for (;;) {
+	for (;; ) {
 		target = G_FindByTargetnameFast(target, name, hash);
 
 		if (!target) {
@@ -3885,7 +3885,7 @@ qboolean etpro_ScriptAction_SetValues(gentity_t *ent, char *params) {
 	p = params;
 
 	// Get each key/value pair
-	for (;;) {
+	for (;; ) {
 		token = COM_ParseExt(&p, qfalse);
 		if (!token[0]) {
 			break;
@@ -4006,7 +4006,7 @@ static void G_SpawnGEntityFromSpawnVars(void) {
  */
 qboolean G_ScriptAction_Create(gentity_t *ent, char *params) {
 	char *token               = NULL;
-	char *p = params;
+	char *p                   = params;
 	char key[MAX_TOKEN_CHARS] = { 0 };
 
 	// Nico, silent GCC
@@ -4018,7 +4018,7 @@ qboolean G_ScriptAction_Create(gentity_t *ent, char *params) {
 	level.numSpawnVarChars = 0;
 
 	// get each key/value pair
-	for (;;) {
+	for (;; ) {
 		token = COM_ParseExt(&p, qfalse);
 		if (!token[0]) {
 			break;
@@ -4060,7 +4060,7 @@ qboolean G_ScriptAction_Delete(gentity_t *ent, char *params) {
 	(void)ent;
 
 	// get each key/value pair
-	for (;;) {
+	for (;; ) {
 		token = COM_ParseExt(&p, qfalse);
 		if (!token[0]) {
 			break;

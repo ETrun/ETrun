@@ -311,21 +311,21 @@ cvarTable_t gameCvarTable[] =
 	{ &g_mapScriptDirectory,   "g_mapScriptDirectory",   "custommapscripts",           CVAR_ARCHIVE | CVAR_LATCH,                                     qfalse, qfalse, qfalse, qfalse },
 
 	// Cup mode
-	{ &g_cupMode,              "g_cupMode",              "0",                          CVAR_ARCHIVE,												  qfalse, qfalse, qfalse, qfalse },
-	{ &g_cupKey,               "g_cupKey",               "",                           CVAR_ARCHIVE,												  qfalse, qfalse, qfalse, qfalse },
+	{ &g_cupMode,              "g_cupMode",              "0",                          CVAR_ARCHIVE,                                                  qfalse, qfalse, qfalse, qfalse },
+	{ &g_cupKey,               "g_cupKey",               "",                           CVAR_ARCHIVE,                                                  qfalse, qfalse, qfalse, qfalse },
 
 	// Timelimit mode
 	{ &g_timelimit,            "timelimit",              "0",                          CVAR_SERVERINFO | CVAR_ARCHIVE | CVAR_LATCH,                   qfalse, qfalse, qfalse, qfalse },
 
 	// Debug log
-	{ &g_debugLog,             "g_debugLog",             "0",                          CVAR_ARCHIVE | CVAR_LATCH, 									  qfalse, qfalse, qfalse, qfalse },
+	{ &g_debugLog,             "g_debugLog",             "0",                          CVAR_ARCHIVE | CVAR_LATCH,                                     qfalse, qfalse, qfalse, qfalse },
 
 	// GeoIP
-	{ &g_useGeoIP,             "g_useGeoIP",             "1",						   CVAR_ARCHIVE | CVAR_LATCH,                                     qfalse, qfalse, qfalse, qfalse },
-	{ &g_geoIPDbPath,          "g_geoIPDbPath",			 "GeoIP.dat",                  CVAR_ARCHIVE | CVAR_LATCH,                                     qfalse, qfalse, qfalse, qfalse },
+	{ &g_useGeoIP,             "g_useGeoIP",             "1",                          CVAR_ARCHIVE | CVAR_LATCH,                                     qfalse, qfalse, qfalse, qfalse },
+	{ &g_geoIPDbPath,          "g_geoIPDbPath",          "GeoIP.dat",                  CVAR_ARCHIVE | CVAR_LATCH,                                     qfalse, qfalse, qfalse, qfalse },
 
 	// Strict save/load
-	{ &g_strictSaveLoad,       "g_strictSaveLoad",		 "0",						   CVAR_ARCHIVE | CVAR_LATCH,                                     qfalse, qfalse, qfalse, qfalse }
+	{ &g_strictSaveLoad,       "g_strictSaveLoad",       "0",                          CVAR_ARCHIVE | CVAR_LATCH,                                     qfalse, qfalse, qfalse, qfalse }
 
 	// Nico, end of ETrun cvars
 };
@@ -626,10 +626,10 @@ void G_CheckForCursorHints(gentity_t *ent) {
 		// Show medics a syringe if they can revive someone
 
 		if (traceEnt->client &&
-			traceEnt->client->sess.sessionTeam == ent->client->sess.sessionTeam &&
-			ps->stats[STAT_PLAYER_CLASS] == PC_MEDIC &&
-			traceEnt->client->ps.pm_type == PM_DEAD &&
-			!(traceEnt->client->ps.pm_flags & PMF_LIMBO)) {
+		    traceEnt->client->sess.sessionTeam == ent->client->sess.sessionTeam &&
+		    ps->stats[STAT_PLAYER_CLASS] == PC_MEDIC &&
+		    traceEnt->client->ps.pm_type == PM_DEAD &&
+		    !(traceEnt->client->ps.pm_flags & PMF_LIMBO)) {
 			hintDist = 48;        // JPW NERVE matches weapon_syringe in g_weapon.c
 			hintType = HINT_REVIVE;
 		}
@@ -681,11 +681,11 @@ void G_CheckForCursorHints(gentity_t *ent) {
 			switch (checkEnt->s.eType) {
 			case ET_CORPSE:
 				if (!ent->client->ps.powerups[PW_BLUEFLAG] &&
-					!ent->client->ps.powerups[PW_REDFLAG] &&
-					BODY_TEAM(traceEnt) < 4 &&
-					BODY_TEAM(traceEnt) != (int)ent->client->sess.sessionTeam &&
-					traceEnt->nextthink == traceEnt->timestamp + BODY_TIME(BODY_TEAM(traceEnt)) &&
-					ent->client->ps.stats[STAT_PLAYER_CLASS] == PC_COVERTOPS) {
+				    !ent->client->ps.powerups[PW_REDFLAG] &&
+				    BODY_TEAM(traceEnt) < 4 &&
+				    BODY_TEAM(traceEnt) != (int)ent->client->sess.sessionTeam &&
+				    traceEnt->nextthink == traceEnt->timestamp + BODY_TIME(BODY_TEAM(traceEnt)) &&
+				    ent->client->ps.stats[STAT_PLAYER_CLASS] == PC_COVERTOPS) {
 					hintDist = 48;
 					hintType = HINT_UNIFORM;
 					hintVal  = BODY_VALUE(traceEnt);
@@ -742,8 +742,8 @@ void G_CheckForCursorHints(gentity_t *ent) {
 						hintVal  = ps->serverCursorHintVal = 0;
 
 						if (checkEnt->parent && checkEnt->parent->s.eType == ET_OID_TRIGGER &&
-							(((ent->client->sess.sessionTeam == TEAM_AXIS) && (checkEnt->parent->spawnflags & ALLIED_OBJECTIVE)) ||
-						    ((ent->client->sess.sessionTeam == TEAM_ALLIES) && (checkEnt->parent->spawnflags & AXIS_OBJECTIVE)))) {
+						    (((ent->client->sess.sessionTeam == TEAM_AXIS) && (checkEnt->parent->spawnflags & ALLIED_OBJECTIVE)) ||
+						     ((ent->client->sess.sessionTeam == TEAM_ALLIES) && (checkEnt->parent->spawnflags & AXIS_OBJECTIVE)))) {
 							hintDist = CH_BREAKABLE_DIST * 2;
 							hintType = HINT_BREAKABLE_DYNAMITE;
 							hintVal  = ps->serverCursorHintVal = 0;         // no health for dynamite
@@ -1021,7 +1021,7 @@ void G_FindTeams(void) {
 				e2->teamchain  = e->teamchain;
 				e->teamchain   = e2;
 				e2->teammaster = e;
-				e2->flags |= FL_TEAMSLAVE;
+				e2->flags     |= FL_TEAMSLAVE;
 
 				if (!Q_stricmp(e2->classname, "func_tramcar")) {
 					trap_UnlinkEntity(e2);
@@ -1217,8 +1217,8 @@ static void G_loadFakeGameManager(void) {
 	gentity_t *ent;
 
 	// get the next free entity
-	level.spawning = qtrue;
-	ent = G_Spawn();
+	level.spawning  = qtrue;
+	ent             = G_Spawn();
 	ent->scriptName = "fake_game_manager";
 	G_Script_ScriptParse(ent);
 	G_Script_ScriptEvent(ent, "trigger", "");
@@ -1838,19 +1838,20 @@ Print to the logfile with a time stamp if it is open
 =================
 */
 void QDECL G_LogDebug(const char *functionName, const char *severity, const char *fmt, ...) {
-	va_list argptr;
-	char    string[1024] = {0};
-	const char *aMonths[12] = {
+	va_list    argptr;
+	char       string[1024] = { 0 };
+	const char *aMonths[12] =
+	{
 		"Jan", "Feb", "Mar", "Apr", "May", "Jun",
 		"Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
-    };
-    qtime_t ct;
-    int l = 0;
+	};
+	qtime_t ct;
+	int     l = 0;
 
-    trap_RealTime(&ct);
+	trap_RealTime(&ct);
 
 	Com_sprintf(string, sizeof (string), "[%s%02d-%02d %02d:%02d:%02d] [%s] [%s] ",
-		aMonths[ct.tm_mon], ct.tm_mday, 1900 + ct.tm_year, ct.tm_hour, ct.tm_min, ct.tm_sec, functionName, severity);
+	            aMonths[ct.tm_mon], ct.tm_mday, 1900 + ct.tm_year, ct.tm_hour, ct.tm_min, ct.tm_sec, functionName, severity);
 
 	l = strlen(string);
 
@@ -2035,8 +2036,8 @@ qboolean G_PositionEntityOnTag(gentity_t *entity, gentity_t *parent, char *tagNa
 	G_SetOrigin(entity, entity->r.currentOrigin);
 
 	if (entity->r.linked &&
-		!entity->client &&
-		!VectorCompare(entity->oldOrigin, entity->r.currentOrigin)) {
+	    !entity->client &&
+	    !VectorCompare(entity->oldOrigin, entity->r.currentOrigin)) {
 		trap_LinkEntity(entity);
 	}
 
@@ -2182,8 +2183,8 @@ void G_RunEntity(gentity_t *ent, int msec) {
 		G_RunEntity(ent->tagParent, msec);
 
 		if (ent->tagParent &&
-			G_PositionEntityOnTag(ent, ent->tagParent, ent->tagName) &&
-			!ent->client) {
+		    G_PositionEntityOnTag(ent, ent->tagParent, ent->tagName) &&
+		    !ent->client) {
 			if (!ent->s.density) {
 				BG_EvaluateTrajectory(&ent->s.apos, level.time, ent->r.currentAngles, qtrue, ent->s.effect2Time);
 				VectorAdd(ent->tagParent->r.currentAngles, ent->r.currentAngles, ent->r.currentAngles);

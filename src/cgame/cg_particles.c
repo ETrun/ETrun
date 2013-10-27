@@ -824,12 +824,12 @@ void CG_AddParticles(void) {
 
 
 		if (p->type == P_FLAT_SCALEUP_FADE && cg.time > p->endtime) {
-				p->next        = free_particles;
-				free_particles = p;
-				p->type        = 0;
-				p->color       = 0;
-				p->alpha       = 0;
-				continue;
+			p->next        = free_particles;
+			free_particles = p;
+			p->type        = 0;
+			p->color       = 0;
+			p->alpha       = 0;
+			continue;
 		}
 
 		if (p->type == P_SPRITE && p->endtime < 0) {

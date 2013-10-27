@@ -536,7 +536,7 @@ cvarTable_t cvarTable[] =
 	{ &cg_loadViewAngles,       "cg_loadViewAngles",       "1",     CVAR_ARCHIVE,             0 },
 
 	// Load weapon on load
-	{ &cg_loadWeapon,			"cg_loadWeapon",		   "1",     CVAR_ARCHIVE,             0 },
+	{ &cg_loadWeapon,           "cg_loadWeapon",           "1",     CVAR_ARCHIVE,             0 },
 
 	// Show pressed keys
 	{ &cg_drawKeys,             "cg_drawKeys",             "1",     CVAR_ARCHIVE,             0 },
@@ -655,7 +655,7 @@ void CG_UpdateCvars(void) {
 				    cv->vmCvar == &cg_drawCGaz || cv->vmCvar == &cg_hideMe ||
 				    cv->vmCvar == &cg_autoDemo || cv->vmCvar == &cg_autoLoadCheckpoints ||
 				    cv->vmCvar == &cg_specLock || cv->vmCvar == &cg_keepAllDemos ||
-					cv->vmCvar == &cg_loadWeapon) {
+				    cv->vmCvar == &cg_loadWeapon) {
 					fSetFlags = qtrue;
 				} else if (cv->vmCvar == &cg_crosshairColor || cv->vmCvar == &cg_crosshairAlpha) {
 					BG_setCrosshair(cg_crosshairColor.string, cg.xhairColor, cg_crosshairAlpha.value, "cg_crosshairColor");
@@ -753,8 +753,8 @@ void CG_setClientFlags(void) {
 	                             // Nico, load view angles on load
 	                             cg_loadViewAngles.integer,
 
-								 // Nico, load weapon on load
-								 cg_loadWeapon.integer,
+	                             // Nico, load weapon on load
+	                             cg_loadWeapon.integer,
 
 	                             // Nico, automatically load player position when he gets killed (except /kill)
 	                             cg_autoLoad.integer,
@@ -862,7 +862,7 @@ void CG_LoadObjectiveData(void) {
 		return;
 	}
 
-	for (;;) {
+	for (;; ) {
 		if (!trap_PC_ReadToken(handle, &token)) {
 			break;
 		}
@@ -1813,7 +1813,7 @@ qboolean CG_Asset_Parse(int handle) {
 		return qfalse;
 	}
 
-	for (;;) {
+	for (;; ) {
 		if (!trap_PC_ReadToken(handle, &token)) {
 			return qfalse;
 		}
@@ -1945,7 +1945,7 @@ void CG_ParseMenu(const char *menuFile) {
 		return;
 	}
 
-	for (;;) {
+	for (;; ) {
 		if (!trap_PC_ReadToken(handle, &token)) {
 			break;
 		}
@@ -1980,7 +1980,7 @@ qboolean CG_Load_Menu(char **p) {
 		return qfalse;
 	}
 
-	for (;;) {
+	for (;; ) {
 
 		token = COM_ParseExt(p, qtrue);
 
@@ -2030,7 +2030,7 @@ void CG_LoadMenus(const char *menuFile) {
 
 	p = buf;
 
-	for (;;) {
+	for (;; ) {
 		token = COM_ParseExt(&p, qtrue);
 		if (!token || token[0] == 0 || token[0] == '}') {
 			break;
@@ -2176,53 +2176,53 @@ CG_LoadHudMenu();
 =================
 */
 void CG_LoadHudMenu() {
-	cgDC.registerShaderNoMip    = &trap_R_RegisterShaderNoMip;
-	cgDC.setColor               = &trap_R_SetColor;
-	cgDC.drawHandlePic          = &CG_DrawPic;
-	cgDC.drawStretchPic         = &trap_R_DrawStretchPic;
-	cgDC.drawText               = &CG_Text_Paint;
-	cgDC.drawTextExt            = &CG_Text_Paint_Ext;
-	cgDC.textWidth              = &CG_Text_Width;
-	cgDC.textWidthExt           = &CG_Text_Width_Ext;
-	cgDC.textHeight             = &CG_Text_Height;
-	cgDC.textHeightExt          = &CG_Text_Height_Ext;
-	cgDC.textFont               = &CG_Text_SetActiveFont;
-	cgDC.registerModel          = &trap_R_RegisterModel;
-	cgDC.modelBounds            = &trap_R_ModelBounds;
-	cgDC.fillRect               = &CG_FillRect;
-	cgDC.drawRect               = &CG_DrawRect;
-	cgDC.drawSides              = &CG_DrawSides;
-	cgDC.drawTopBottom          = &CG_DrawTopBottom;
-	cgDC.clearScene             = &trap_R_ClearScene;
-	cgDC.addRefEntityToScene    = &trap_R_AddRefEntityToScene;
-	cgDC.renderScene            = &trap_R_RenderScene;
-	cgDC.registerFont           = &trap_R_RegisterFont;
-	cgDC.ownerDrawVisible       = &CG_OwnerDrawVisible;
-	cgDC.runScript              = &CG_RunMenuScript;
-	cgDC.setCVar                = trap_Cvar_Set;
-	cgDC.getCVarString          = trap_Cvar_VariableStringBuffer;
-	cgDC.getCVarValue           = CG_Cvar_Get;
-	cgDC.drawTextWithCursor     = &CG_Text_PaintWithCursor;
-	cgDC.setOverstrikeMode      = &trap_Key_SetOverstrikeMode;
-	cgDC.getOverstrikeMode      = &trap_Key_GetOverstrikeMode;
-	cgDC.startLocalSound        = &trap_S_StartLocalSound;
-	cgDC.feederCount            = &CG_FeederCount;
-	cgDC.feederItemText         = &CG_FeederItemText;
-	cgDC.feederSelection        = &CG_FeederSelection;
-	cgDC.setBinding             = &trap_Key_SetBinding;     // NERVE - SMF
-	cgDC.getBindingBuf          = &trap_Key_GetBindingBuf;  // NERVE - SMF
-	cgDC.getKeysForBinding      = &trap_Key_KeysForBinding;
-	cgDC.keynumToStringBuf      = &trap_Key_KeynumToStringBuf; // NERVE - SMF
-	cgDC.translateString        = &CG_TranslateString;      // NERVE - SMF
-	cgDC.Error                  = &Com_Error;
-	cgDC.Print                  = &Com_Printf;
-	cgDC.registerSound          = &trap_S_RegisterSound;
-	cgDC.startBackgroundTrack   = &trap_S_StartBackgroundTrack;
-	cgDC.stopBackgroundTrack    = &trap_S_StopBackgroundTrack;
-	cgDC.add2dPolys             = &trap_R_Add2dPolys;
-	cgDC.updateScreen           = &trap_UpdateScreen;
-	cgDC.getHunkData            = &trap_GetHunkData;
-	cgDC.getConfigString        = &CG_ConfigStringCopy;
+	cgDC.registerShaderNoMip  = &trap_R_RegisterShaderNoMip;
+	cgDC.setColor             = &trap_R_SetColor;
+	cgDC.drawHandlePic        = &CG_DrawPic;
+	cgDC.drawStretchPic       = &trap_R_DrawStretchPic;
+	cgDC.drawText             = &CG_Text_Paint;
+	cgDC.drawTextExt          = &CG_Text_Paint_Ext;
+	cgDC.textWidth            = &CG_Text_Width;
+	cgDC.textWidthExt         = &CG_Text_Width_Ext;
+	cgDC.textHeight           = &CG_Text_Height;
+	cgDC.textHeightExt        = &CG_Text_Height_Ext;
+	cgDC.textFont             = &CG_Text_SetActiveFont;
+	cgDC.registerModel        = &trap_R_RegisterModel;
+	cgDC.modelBounds          = &trap_R_ModelBounds;
+	cgDC.fillRect             = &CG_FillRect;
+	cgDC.drawRect             = &CG_DrawRect;
+	cgDC.drawSides            = &CG_DrawSides;
+	cgDC.drawTopBottom        = &CG_DrawTopBottom;
+	cgDC.clearScene           = &trap_R_ClearScene;
+	cgDC.addRefEntityToScene  = &trap_R_AddRefEntityToScene;
+	cgDC.renderScene          = &trap_R_RenderScene;
+	cgDC.registerFont         = &trap_R_RegisterFont;
+	cgDC.ownerDrawVisible     = &CG_OwnerDrawVisible;
+	cgDC.runScript            = &CG_RunMenuScript;
+	cgDC.setCVar              = trap_Cvar_Set;
+	cgDC.getCVarString        = trap_Cvar_VariableStringBuffer;
+	cgDC.getCVarValue         = CG_Cvar_Get;
+	cgDC.drawTextWithCursor   = &CG_Text_PaintWithCursor;
+	cgDC.setOverstrikeMode    = &trap_Key_SetOverstrikeMode;
+	cgDC.getOverstrikeMode    = &trap_Key_GetOverstrikeMode;
+	cgDC.startLocalSound      = &trap_S_StartLocalSound;
+	cgDC.feederCount          = &CG_FeederCount;
+	cgDC.feederItemText       = &CG_FeederItemText;
+	cgDC.feederSelection      = &CG_FeederSelection;
+	cgDC.setBinding           = &trap_Key_SetBinding;       // NERVE - SMF
+	cgDC.getBindingBuf        = &trap_Key_GetBindingBuf;    // NERVE - SMF
+	cgDC.getKeysForBinding    = &trap_Key_KeysForBinding;
+	cgDC.keynumToStringBuf    = &trap_Key_KeynumToStringBuf;   // NERVE - SMF
+	cgDC.translateString      = &CG_TranslateString;        // NERVE - SMF
+	cgDC.Error                = &Com_Error;
+	cgDC.Print                = &Com_Printf;
+	cgDC.registerSound        = &trap_S_RegisterSound;
+	cgDC.startBackgroundTrack = &trap_S_StartBackgroundTrack;
+	cgDC.stopBackgroundTrack  = &trap_S_StopBackgroundTrack;
+	cgDC.add2dPolys           = &trap_R_Add2dPolys;
+	cgDC.updateScreen         = &trap_UpdateScreen;
+	cgDC.getHunkData          = &trap_GetHunkData;
+	cgDC.getConfigString      = &CG_ConfigStringCopy;
 
 	cgDC.xscale = cgs.screenXScale;
 	cgDC.yscale = cgs.screenYScale;

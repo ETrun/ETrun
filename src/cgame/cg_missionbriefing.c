@@ -151,7 +151,7 @@ void CG_LocateArena(void) {
 
 	Com_sprintf(filename, sizeof (filename), "scripts/%s.arena", cgs.rawmapname);
 
-	if ( !CG_FindArenaInfo(filename, cgs.rawmapname, &cgs.arenaData)) {
+	if (!CG_FindArenaInfo(filename, cgs.rawmapname, &cgs.arenaData)) {
 		return;
 	}
 

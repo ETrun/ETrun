@@ -838,7 +838,7 @@ typedef struct {
 	int gentitySize;
 	int num_entities;               // current number, <= MAX_GENTITIES
 
-	fileHandle_t logFile;// Nico, note: this is for g_log
+	fileHandle_t logFile; // Nico, note: this is for g_log
 	fileHandle_t debugLogFile; // Nico, debug log
 	fileHandle_t crashLog; // Nico, creash log
 
@@ -884,7 +884,7 @@ typedef struct {
 	int numspawntargets;         // # spawntargets in this map
 
 	// RF, entity scripting
-	qboolean useAPImapscript;// Nico, if API has a script for the current maps, this will be set to true
+	qboolean useAPImapscript; // Nico, if API has a script for the current maps, this will be set to true
 	char *scriptEntity;
 
 	// player/AI model scripting (server repository)
@@ -1299,7 +1299,7 @@ void G_BurnMeGood(gentity_t *self, gentity_t *body);
 // g_main.c
 //
 
-void FindIntermissionPoint(void);// Nico, note: this function is needed
+void FindIntermissionPoint(void); // Nico, note: this function is needed
 void G_RunThink(gentity_t *ent);
 void QDECL G_LogPrintf(const char *fmt, ...) _attribute((format(printf, 1, 2)));
 void QDECL G_LogDebug(const char *functionName, const char *severity, const char *fmt, ...) _attribute((format(printf, 3, 4)));
@@ -1750,8 +1750,8 @@ g_serverEntity_t *FindServerEntity(g_serverEntity_t *from, int fieldofs, char *m
 # define LDI(format, ...) G_LogDebug(__FUNCTION__, "INFO", format, __VA_ARGS__)
 # define LDE(format, ...) G_LogDebug(__FUNCTION__, "ERROR", format, __VA_ARGS__)
 #else
-# define LDI(format, args...) G_LogDebug(__FUNCTION__, "INFO", format, ## args)
-# define LDE(format, args...) G_LogDebug(__FUNCTION__, "ERROR", format, ## args)
+# define LDI(format, args ...) G_LogDebug(__FUNCTION__, "INFO", format, ## args)
+# define LDE(format, args ...) G_LogDebug(__FUNCTION__, "ERROR", format, ## args)
 #endif
 
 #define PAUSE_NONE      0x00    // Match is NOT paused.
@@ -1909,9 +1909,9 @@ void G_TempTraceIgnorePlayersAndBodies(void);
 qboolean G_CanPickupWeapon(weapon_t weapon, gentity_t *ent);
 
 // Nico, flags enabling map entities
-#define MAP_FORCE_KILL_ENTITIES			1
-#define MAP_FORCE_HURT_ENTITIES			2
-#define MAP_JUMPPADS				4
-#define MAP_VELOCITY_JUMPPADS		8
-#define MAP_LOCATION_JUMPPADS		16
+#define MAP_FORCE_KILL_ENTITIES         1
+#define MAP_FORCE_HURT_ENTITIES         2
+#define MAP_JUMPPADS                4
+#define MAP_VELOCITY_JUMPPADS       8
+#define MAP_LOCATION_JUMPPADS       16
 #define MAP_DISABLE_HURT_ENTITIES   32

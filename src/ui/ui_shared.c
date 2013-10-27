@@ -369,9 +369,9 @@ Rect_Parse
 */
 qboolean Rect_Parse(char **p, rectDef_t *r) {
 	if (Float_Parse(p, &r->x) &&
-		Float_Parse(p, &r->y) &&
-		Float_Parse(p, &r->w) &&
-		Float_Parse(p, &r->h)) {
+	    Float_Parse(p, &r->y) &&
+	    Float_Parse(p, &r->w) &&
+	    Float_Parse(p, &r->h)) {
 		return qtrue;
 	}
 	return qfalse;
@@ -431,7 +431,7 @@ qboolean PC_Script_Parse(int handle, const char **out) {
 		return qfalse;
 	}
 
-	for (;;) {
+	for (;; ) {
 		if (!trap_PC_ReadToken(handle, &token)) {
 			return qfalse;
 		}
@@ -707,10 +707,10 @@ qboolean IsVisible(int flags) {
 
 qboolean Rect_ContainsPoint(rectDef_t *rect, float x, float y) {
 	if (rect &&
-		x > rect->x &&
-		x < rect->x + rect->w &&
-		y > rect->y &&
-		y < rect->y + rect->h) {
+	    x > rect->x &&
+	    x < rect->x + rect->w &&
+	    y > rect->y &&
+	    y < rect->y + rect->h) {
 		return qtrue;
 	}
 	return qfalse;
@@ -1522,10 +1522,10 @@ void Script_Transition(itemDef_t *item, qboolean *bAbort, char **args) {
 	(void)bAbort;
 
 	if (String_Parse(args, &name) &&
-		Rect_Parse(args, &rectFrom) &&
-		Rect_Parse(args, &rectTo) &&
-		Int_Parse(args, &time) &&
-		Float_Parse(args, &amt)) {
+	    Rect_Parse(args, &rectFrom) &&
+	    Rect_Parse(args, &rectTo) &&
+	    Int_Parse(args, &time) &&
+	    Float_Parse(args, &amt)) {
 		Menu_TransitionItemByName(item->parent, name, rectFrom, rectTo, time, amt);
 	}
 }
@@ -1558,11 +1558,11 @@ void Script_Orbit(itemDef_t *item, qboolean *bAbort, char **args) {
 	(void)bAbort;
 
 	if (String_Parse(args, &name) &&
-		Float_Parse(args, &x) &&
-		Float_Parse(args, &y) &&
-		Float_Parse(args, &cx) &&
-		Float_Parse(args, &cy) &&
-		Int_Parse(args, &time)) {
+	    Float_Parse(args, &x) &&
+	    Float_Parse(args, &y) &&
+	    Float_Parse(args, &cx) &&
+	    Float_Parse(args, &cy) &&
+	    Int_Parse(args, &time)) {
 		Menu_OrbitItemByName(item->parent, name, x, y, cx, cy, time);
 	}
 }
@@ -1952,7 +1952,7 @@ void Item_RunScript(itemDef_t *item, qboolean *bAbort, const char *s) {
 	if (item && s && s[0]) {
 		Q_strcat(script, 4096, s);
 		p = script;
-		for (;;) {
+		for (;; ) {
 			const char *command = NULL;
 			// expect command then arguments, ; ends command, NULL ends script
 			if (!String_Parse(&p, &command)) {
@@ -1997,7 +1997,7 @@ qboolean Item_EnableShowViaCvar(itemDef_t *item, int flag) {
 
 		Q_strcat(script, 1024, item->enableCvar);
 		p = script;
-		for (;;) {
+		for (;; ) {
 			const char *val = NULL;
 			// expect value then ; or NULL, NULL ends list
 			if (!String_Parse(&p, &val)) {
@@ -2325,7 +2325,7 @@ void Item_ListBox_MouseEnter(itemDef_t *item, float x, float y, qboolean click) 
 	if (click) {
 		if (item->window.flags & WINDOW_HORIZONTAL) {
 			if (!(item->window.flags & (WINDOW_LB_LEFTARROW | WINDOW_LB_RIGHTARROW | WINDOW_LB_THUMB | WINDOW_LB_PGUP | WINDOW_LB_PGDN | WINDOW_LB_SOMEWHERE)) &&
-				listPtr->elementStyle == LISTBOX_IMAGE) {
+			    listPtr->elementStyle == LISTBOX_IMAGE) {
 				r.x = item->window.rect.x;
 				r.y = item->window.rect.y;
 				r.h = item->window.rect.h - SCROLLBAR_SIZE;
@@ -2663,8 +2663,8 @@ qboolean Item_ListBox_HandleKey(itemDef_t *item, int key, qboolean force) {
 
 qboolean Item_CheckBox_HandleKey(itemDef_t *item, int key) {
 	if (Rect_ContainsPoint(&item->window.rect, DC->cursorx, DC->cursory) &&
-		item->window.flags & WINDOW_HASFOCUS &&
-		item->cvar && (key == K_MOUSE1 || key == K_ENTER || key == K_MOUSE2 || key == K_MOUSE3)) {
+	    item->window.flags & WINDOW_HASFOCUS &&
+	    item->cvar && (key == K_MOUSE1 || key == K_ENTER || key == K_MOUSE2 || key == K_MOUSE3)) {
 		// ATVI Wolfenstein Misc #462
 		// added the flag to toggle via action script only
 		if (!(item->cvarFlags & CVAR_NOTOGGLE)) {
@@ -2685,9 +2685,9 @@ qboolean Item_CheckBox_HandleKey(itemDef_t *item, int key) {
 
 qboolean Item_YesNo_HandleKey(itemDef_t *item, int key) {
 	if (Rect_ContainsPoint(&item->window.rect, DC->cursorx, DC->cursory) &&
-		item->window.flags & WINDOW_HASFOCUS &&
-		item->cvar &&
-		(key == K_MOUSE1 || key == K_ENTER || key == K_MOUSE2 || key == K_MOUSE3)) {
+	    item->window.flags & WINDOW_HASFOCUS &&
+	    item->cvar &&
+	    (key == K_MOUSE1 || key == K_ENTER || key == K_MOUSE2 || key == K_MOUSE3)) {
 		// ATVI Wolfenstein Misc #462
 		// added the flag to toggle via action script only
 		if (!(item->cvarFlags & CVAR_NOTOGGLE)) {
@@ -2768,10 +2768,10 @@ qboolean Item_Multi_HandleKey(itemDef_t *item, int key) {
 	multiDef_t *multiPtr = (multiDef_t *)item->typeData;
 
 	if (multiPtr &&
-		Rect_ContainsPoint(&item->window.rect, DC->cursorx, DC->cursory) &&
-		item->window.flags & WINDOW_HASFOCUS &&
-		item->cvar &&
-		(key == K_MOUSE1 || key == K_ENTER || key == K_MOUSE2 || key == K_MOUSE3)) {
+	    Rect_ContainsPoint(&item->window.rect, DC->cursorx, DC->cursory) &&
+	    item->window.flags & WINDOW_HASFOCUS &&
+	    item->cvar &&
+	    (key == K_MOUSE1 || key == K_ENTER || key == K_MOUSE2 || key == K_MOUSE3)) {
 		int current = Item_Multi_FindCvarByValue(item);
 		int max     = Item_Multi_CountSettings(item);
 
@@ -2849,7 +2849,7 @@ qboolean Item_TextField_HandleKey(itemDef_t *item, int key) {
 			}
 
 			if (item->type == ITEM_TYPE_NUMERICFIELD &&
-				((key < '0' || key > '9') && key != '.')) {
+			    ((key < '0' || key > '9') && key != '.')) {
 				return qfalse;
 			}
 
@@ -3115,9 +3115,9 @@ qboolean Item_Slider_HandleKey(itemDef_t *item, int key) {
 	float x, value, width, work;
 
 	if (item->window.flags & WINDOW_HASFOCUS &&
-		item->cvar &&
-		Rect_ContainsPoint(&item->window.rect, DC->cursorx, DC->cursory) &&
-		(key == K_MOUSE1 || key == K_ENTER || key == K_MOUSE2 || key == K_MOUSE3)) {
+	    item->cvar &&
+	    Rect_ContainsPoint(&item->window.rect, DC->cursorx, DC->cursory) &&
+	    (key == K_MOUSE1 || key == K_ENTER || key == K_MOUSE2 || key == K_MOUSE3)) {
 		editFieldDef_t *editDef = item->typeData;
 		if (editDef) {
 			rectDef_t testRect;
@@ -3369,7 +3369,7 @@ static rectDef_t *Item_CorrectedTextRect(itemDef_t *item) {
 
 void Menu_HandleKey(menuDef_t *menu, int key, qboolean down) {
 	int       i;
-	itemDef_t *item     = NULL;
+	itemDef_t *item = NULL;
 
 	Menu_HandleMouseMove(menu, DC->cursorx, DC->cursory);       // NERVE - SMF - fix for focus not resetting on unhidden buttons
 
@@ -3650,11 +3650,11 @@ void Item_TextColor(itemDef_t *item, vec4_t *newColor) {
 	}
 
 	if (item->enableCvar &&
-		*item->enableCvar &&
-		item->cvarTest &&
-		*item->cvarTest &&
-		item->cvarFlags & (CVAR_ENABLE | CVAR_DISABLE) &&
-		!Item_EnableShowViaCvar(item, CVAR_ENABLE)) {
+	    *item->enableCvar &&
+	    item->cvarTest &&
+	    *item->cvarTest &&
+	    item->cvarFlags & (CVAR_ENABLE | CVAR_DISABLE) &&
+	    !Item_EnableShowViaCvar(item, CVAR_ENABLE)) {
 		memcpy(newColor, &parent->disableColor, sizeof (vec4_t));
 	}
 }
@@ -4416,7 +4416,7 @@ void Item_Model_Paint(itemDef_t *item) {
 	origin[1] = 0.5 * (mins[1] + maxs[1]);
 
 	// calculate distance so the model nearly fills the box
-	len = 0.5 * (maxs[2] - mins[2]);
+	len       = 0.5 * (maxs[2] - mins[2]);
 	origin[0] = len / 0.268;
 
 	refdef.fov_x = (modelPtr->fov_x) ? modelPtr->fov_x : w;
@@ -5036,8 +5036,8 @@ void Menu_HandleMouseMove(menuDef_t *menu, float x, float y) {
 				if (pass == 1) {
 					overItem = menu->items[i];
 					if (overItem->type == ITEM_TYPE_TEXT &&
-						overItem->text &&
-						!Rect_ContainsPoint(Item_CorrectedTextRect(overItem), x, y)) {
+					    overItem->text &&
+					    !Rect_ContainsPoint(Item_CorrectedTextRect(overItem), x, y)) {
 						continue;
 					}
 					// if we are over an item
@@ -5320,8 +5320,8 @@ qboolean ItemParse_model_origin(itemDef_t *item, int handle) {
 	modelPtr = (modelDef_t *)item->typeData;
 
 	if (PC_Float_Parse(handle, &modelPtr->origin[0]) &&
-		PC_Float_Parse(handle, &modelPtr->origin[1]) &&
-		PC_Float_Parse(handle, &modelPtr->origin[2])) {
+	    PC_Float_Parse(handle, &modelPtr->origin[1]) &&
+	    PC_Float_Parse(handle, &modelPtr->origin[2])) {
 		return qtrue;
 	}
 	return qfalse;
@@ -5961,7 +5961,7 @@ qboolean ItemParse_cvarStrList(itemDef_t *item, int handle) {
 	}
 
 	pass = 0;
-	for (;;) {
+	for (;; ) {
 		if (!trap_PC_ReadToken(handle, &token)) {
 			PC_SourceError(handle, "end of file inside menu item\n");
 			return qfalse;
@@ -6008,7 +6008,7 @@ qboolean ItemParse_cvarFloatList(itemDef_t *item, int handle) {
 		return qfalse;
 	}
 
-	for (;;) {
+	for (;; ) {
 		if (!trap_PC_ReadToken(handle, &token)) {
 			PC_SourceError(handle, "end of file inside menu item\n");
 			return qfalse;
@@ -6311,7 +6311,7 @@ qboolean Item_Parse(int handle, itemDef_t *item) {
 	if (*token.string != '{') {
 		return qfalse;
 	}
-	for (;;) {
+	for (;; ) {
 		if (!trap_PC_ReadToken(handle, &token)) {
 			PC_SourceError(handle, "end of file inside menu item\n");
 			return qfalse;
@@ -6825,7 +6825,7 @@ qboolean Menu_Parse(int handle, menuDef_t *menu) {
 		return qfalse;
 	}
 
-	for (;;) {
+	for (;; ) {
 		memset(&token, 0, sizeof (pc_token_t));
 		if (!trap_PC_ReadToken(handle, &token)) {
 			PC_SourceError(handle, "end of file inside menu\n");
@@ -6987,7 +6987,7 @@ void Display_CacheAll() {
 
 static qboolean Menu_OverActiveItem(menuDef_t *menu, float x, float y) {
 	if (menu && menu->window.flags & (WINDOW_VISIBLE | WINDOW_FORCED) &&
-		Rect_ContainsPoint(&menu->window.rect, x, y)) {
+	    Rect_ContainsPoint(&menu->window.rect, x, y)) {
 		int i;
 		for (i = 0; i < menu->itemCount; i++) {
 			if (!(menu->items[i]->window.flags & (WINDOW_VISIBLE | WINDOW_FORCED))) {
@@ -7021,9 +7021,9 @@ PC_Rect_Parse
 */
 qboolean PC_Rect_Parse(int handle, rectDef_t *r) {
 	if (PC_Float_Parse(handle, &r->x) &&
-		PC_Float_Parse(handle, &r->y) &&
-		PC_Float_Parse(handle, &r->w) &&
-		PC_Float_Parse(handle, &r->h)) {
+	    PC_Float_Parse(handle, &r->y) &&
+	    PC_Float_Parse(handle, &r->w) &&
+	    PC_Float_Parse(handle, &r->h)) {
 		return qtrue;
 	}
 	return qfalse;
@@ -7212,8 +7212,8 @@ qboolean BG_PanelButtonsKeyEvent(int key, qboolean down, panel_button_t **button
 			button = (*buttons);
 
 			if (button->onKeyDown &&
-				BG_CursorInRect(&button->rect) &&
-				button->onKeyDown(button, key)) {
+			    BG_CursorInRect(&button->rect) &&
+			    button->onKeyDown(button, key)) {
 				return qtrue;
 			}
 		}
@@ -7222,8 +7222,8 @@ qboolean BG_PanelButtonsKeyEvent(int key, qboolean down, panel_button_t **button
 			button = (*buttons);
 
 			if (button->onKeyUp &&
-				BG_CursorInRect(&button->rect) &&
-				button->onKeyUp(button, key)) {
+			    BG_CursorInRect(&button->rect) &&
+			    button->onKeyUp(button, key)) {
 				return qtrue;
 			}
 		}

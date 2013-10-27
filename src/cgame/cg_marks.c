@@ -85,8 +85,7 @@ void CG_FreeMarkPoly(markPoly_t *le) {
 	cg_freeMarkPolys = le;
 }
 
-void CG_ImpactMark(qhandle_t markShader, vec3_t origin, vec4_t projection, float radius, float orientation, float r, float g, float b, float a, int lifeTime)
-{
+void CG_ImpactMark(qhandle_t markShader, vec3_t origin, vec4_t projection, float radius, float orientation, float r, float g, float b, float a, int lifeTime) {
 	int    i;
 	vec3_t pushedOrigin, axis[3];
 	vec4_t color;

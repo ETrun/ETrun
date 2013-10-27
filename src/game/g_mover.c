@@ -578,8 +578,8 @@ void G_MoverTeam(gentity_t *ent) {
 //----(SA)	removed
 		// opening or closing rotating door
 		else if (part->s.apos.trType == TR_LINEAR_STOP &&
-			level.time >= part->s.apos.trTime + part->s.apos.trDuration &&
-			part->reached) {
+		         level.time >= part->s.apos.trTime + part->s.apos.trDuration &&
+		         part->reached) {
 			part->reached(part);
 		}
 	}
@@ -1961,8 +1961,8 @@ void G_TryDoor(gentity_t *ent, gentity_t *activator) {
 	walking = (qboolean)(ent->flags & FL_SOFTACTIVATE);
 
 	if (ent->s.apos.trType == TR_STATIONARY &&
-		ent->s.pos.trType == TR_STATIONARY &&
-		ent->active == qfalse) {
+	    ent->s.pos.trType == TR_STATIONARY &&
+	    ent->active == qfalse) {
 		if (!G_AllowTeamsAllowed(ent, activator)
 		    ) { // door force locked
 			G_AddEvent(ent, EV_GENERAL_SOUND, ent->soundPos3);
@@ -3666,7 +3666,7 @@ void func_explosive_explode(gentity_t *self, gentity_t *inflictor, gentity_t *at
 
 		// since the explosive might need to fire the target rather than
 		// aim at it, only aim at 'info_notnull' ents
-		for (;;) {
+		for (;; ) {
 			tent = G_FindByTargetname(tent, self->target);
 			if (!tent) {
 				break;
@@ -3686,9 +3686,9 @@ void func_explosive_explode(gentity_t *self, gentity_t *inflictor, gentity_t *at
 	// if a valid target entity was not found, check for a specified 'angle' for the explosion direction
 	if (!tent && self->s.angles[1] && self->s.angles[1] != -1) {
 		// it's 'up' by default
-		if (self->s.angles[1] == -2) {// down
+		if (self->s.angles[1] == -2) { // down
 			dir[2] = -1;
-		} else {// yawed
+		} else { // yawed
 			RotatePointAroundVector(dir, dir, tv(1, 0, 0), self->s.angles[1]);
 		}
 	}
@@ -3778,7 +3778,7 @@ void InitExplosive(gentity_t *ent) {
 */
 
 void target_explosion_use(gentity_t *self, gentity_t *other, gentity_t *attacker) {
-	vec3_t    dir   = { 0, 0, 1 };
+	vec3_t    dir = { 0, 0, 1 };
 	gentity_t *tent;
 
 	// Nico, silent GCC
@@ -4325,7 +4325,7 @@ void func_constructible_explode(gentity_t *self, gentity_t *inflictor, gentity_t
 		} else {
 
 			if (!(self->spawnflags & CONSTRUCTIBLE_NO_AAS_BLOCKING) &&
-				!(self->spawnflags & CONSTRUCTIBLE_BLOCK_PATHS_WHEN_BUILD)) {
+			    !(self->spawnflags & CONSTRUCTIBLE_BLOCK_PATHS_WHEN_BUILD)) {
 				// RF, AAS areas are now unusable
 				if (!self->count2) {
 					trap_SetBrushModel(self, self->model);
@@ -4348,7 +4348,7 @@ void func_constructible_explode(gentity_t *self, gentity_t *inflictor, gentity_t
 		}
 	} else {
 		if (!(self->spawnflags & CONSTRUCTIBLE_NO_AAS_BLOCKING) &&
-			!(self->spawnflags & CONSTRUCTIBLE_BLOCK_PATHS_WHEN_BUILD)) {
+		    !(self->spawnflags & CONSTRUCTIBLE_BLOCK_PATHS_WHEN_BUILD)) {
 			// RF, AAS areas are now unusable
 			if (!self->count2) {
 				trap_SetBrushModel(self, self->model);
@@ -4652,9 +4652,9 @@ NO_AAS_BLOCKING : dont interact with AAS at all
 
 g_constructible_stats_t g_constructible_classes[NUM_CONSTRUCTIBLE_CLASSES] =
 {
-	{ .5f,    350, 1, 2500 },
-	{ 1.f, 100, 2, 5000 },
-	{ 1.5f,   100, 3, 7500 }
+	{ .5f,  350, 1, 2500 },
+	{ 1.f,  100, 2, 5000 },
+	{ 1.5f, 100, 3, 7500 }
 };
 
 void SP_func_constructible(gentity_t *ent) {

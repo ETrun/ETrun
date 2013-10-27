@@ -44,10 +44,10 @@ If you have questions concerning this license or the applicable additional terms
 // Nico, game version
 # define GAME_VERSION           "ETrun"
 # define GAME_VERSION_COLORED   "^ZET^Drun"
-# define MOD_URL        		"http://www.timeruns.net"
-# define SHORT_MOD_URL			"www.timeruns.net"
+# define MOD_URL                "http://www.timeruns.net"
+# define SHORT_MOD_URL          "www.timeruns.net"
 
-# define GAME_VERSION_DATED		GAME_VERSION"_"MOD_VERSION
+# define GAME_VERSION_DATED     GAME_VERSION "_"MOD_VERSION
 
 //bani
 # ifdef __GNUC__
@@ -423,7 +423,7 @@ typedef struct {
 
 
 // if a full pmove isn't done on the client, you can just update the angles
-void PM_UpdateViewAngles(playerState_t * ps, pmoveExt_t * pmext, usercmd_t * cmd, void(trace) (trace_t * results, const vec3_t start, const vec3_t mins, const vec3_t maxs, const vec3_t end, int passEntityNum, int contentMask), int tracemask);
+void PM_UpdateViewAngles(playerState_t * ps, pmoveExt_t * pmext, usercmd_t * cmd, void (trace) (trace_t *results, const vec3_t start, const vec3_t mins, const vec3_t maxs, const vec3_t end, int passEntityNum, int contentMask), int tracemask);
 int Pmove(pmove_t *pmove);
 
 //===================================================================================
@@ -2054,7 +2054,7 @@ extern weapon_t bg_heavyWeapons[NUM_HEAVY_WEAPONS];
 int PM_AltSwitchFromForWeapon(int weapon);
 int PM_AltSwitchToForWeapon(int weapon);
 
-void PM_TraceLegs(trace_t * trace, float *legsOffset, vec3_t start, vec3_t end, trace_t * bodytrace, vec3_t viewangles, void(tracefunc) (trace_t * results, const vec3_t start, const vec3_t mins, const vec3_t maxs, const vec3_t end, int passEntityNum, int contentMask), int ignoreent, int tracemask);
+void PM_TraceLegs(trace_t * trace, float *legsOffset, vec3_t start, vec3_t end, trace_t * bodytrace, vec3_t viewangles, void (tracefunc) (trace_t *results, const vec3_t start, const vec3_t mins, const vec3_t maxs, const vec3_t end, int passEntityNum, int contentMask), int ignoreent, int tracemask);
 void PM_TraceAllLegs(trace_t *trace, float *legsOffset, vec3_t start, vec3_t end);
 void PM_TraceAll(trace_t *trace, vec3_t start, vec3_t end);
 
@@ -2080,4 +2080,4 @@ void PM_TraceAll(trace_t *trace, vec3_t start, vec3_t end);
 
 
 // Nico, IP max length
-#define IP_MAX_LENGTH				46
+#define IP_MAX_LENGTH               46

@@ -804,7 +804,7 @@ static qboolean CG_ParseWeaponConfig(const char *filename, weaponInfo_t *wi) {
 	text_p = text;
 
 	// read optional parameters
-	for (;;) {
+	for (;; ) {
 		prev  = text_p; // so we can unget
 		token = COM_Parse(&text_p);
 		if (!token) {                       // get the variable
@@ -944,7 +944,7 @@ static qboolean CG_RW_ParseWeaponLinkPart(int handle, weaponInfo_t *weaponInfo, 
 		return CG_RW_ParseError(handle, "expected '{'");
 	}
 
-	for (;;) {
+	for (;; ) {
 		if (!trap_PC_ReadToken(handle, &token)) {
 			break;
 		}
@@ -992,7 +992,7 @@ static qboolean CG_RW_ParseWeaponLink(int handle, weaponInfo_t *weaponInfo, mode
 		return CG_RW_ParseError(handle, "expected '{'");
 	}
 
-	for (;;) {
+	for (;; ) {
 		if (!trap_PC_ReadToken(handle, &token)) {
 			break;
 		}
@@ -1021,7 +1021,7 @@ static qboolean CG_RW_ParseViewType(int handle, weaponInfo_t *weaponInfo, modelV
 		return CG_RW_ParseError(handle, "expected '{'");
 	}
 
-	for (;;) {
+	for (;; ) {
 		if (!trap_PC_ReadToken(handle, &token)) {
 			break;
 		}
@@ -1100,7 +1100,7 @@ static qboolean CG_RW_ParseClient(int handle, weaponInfo_t *weaponInfo) {
 		return CG_RW_ParseError(handle, "expected '{'");
 	}
 
-	for (;;) {
+	for (;; ) {
 		if (!trap_PC_ReadToken(handle, &token)) {
 			break;
 		}
@@ -1316,7 +1316,7 @@ static qboolean CG_RegisterWeaponFromWeaponFile(const char *filename, weaponInfo
 		return CG_RW_ParseError(handle, "expected '{'");
 	}
 
-	for (;;) {
+	for (;; ) {
 		if (!trap_PC_ReadToken(handle, &token)) {
 			break;
 		}
@@ -1406,12 +1406,12 @@ void CG_RegisterWeapon(int weaponNum, qboolean force) {
 	case WP_AKIMBO_COLT:            filename = "akimbo_colt.weap"; break;
 	case WP_AKIMBO_SILENCEDCOLT:    filename = "akimbo_silenced_colt.weap"; break;
 	case WP_MAPMORTAR:              filename = "mapmortar.weap"; break;     // do we really need this?
-	case WP_ARTY:// 13
-	case VERYBIGEXPLOSION:// 18
-	case WP_TRIPMINE:// 29
-	case WP_DUMMY_MG42:// 34
-	case WP_LOCKPICK:// 36
-	return;     // to shut the game up
+	case WP_ARTY: // 13
+	case VERYBIGEXPLOSION: // 18
+	case WP_TRIPMINE: // 29
+	case WP_DUMMY_MG42: // 34
+	case WP_LOCKPICK: // 36
+		return; // to shut the game up
 	default:                        CG_Printf(S_COLOR_RED "WARNING: trying to register weapon %i but there is no weapon file entry for it.\n", weaponNum); return;
 	}
 
@@ -2037,7 +2037,7 @@ void CG_AddPlayerWeapon(refEntity_t *parent, playerState_t *ps, centity_t *cent)
 
 		for (i = W_PART_1; i < W_MAX_PARTS; i++) {
 			if ((weaponNum == WP_MORTAR_SET && (i == W_PART_4 || i == W_PART_5)) &&
-				ps && !cg.renderingThirdPerson && cg.predictedPlayerState.weaponstate != WEAPON_RAISING) {
+			    ps && !cg.renderingThirdPerson && cg.predictedPlayerState.weaponstate != WEAPON_RAISING) {
 				continue;
 			}
 
@@ -3836,7 +3836,7 @@ The current weapon has just run out of ammo
 */
 void CG_OutOfAmmoChange(qboolean allowforceswitch) {
 	int i;
-	int bank = 0, cycle = 0;
+	int bank  = 0, cycle = 0;
 	int equiv = WP_NONE;
 
 	//
@@ -4181,14 +4181,14 @@ void CG_FireWeapon(centity_t *cent) {
 			return;
 		}
 	} else if ((ent->weapon == WP_GRENADE_LAUNCHER ||
-		ent->weapon == WP_GRENADE_PINEAPPLE ||
-		ent->weapon == WP_DYNAMITE ||
-		ent->weapon == WP_SMOKE_MARKER
-		|| ent->weapon == WP_LANDMINE
-		|| ent->weapon == WP_SATCHEL
-		|| ent->weapon == WP_TRIPMINE
-		|| ent->weapon == WP_SMOKE_BOMB) &&
-		ent->apos.trBase[0] > 0) {   // underhand
+	            ent->weapon == WP_GRENADE_PINEAPPLE ||
+	            ent->weapon == WP_DYNAMITE ||
+	            ent->weapon == WP_SMOKE_MARKER
+	            || ent->weapon == WP_LANDMINE
+	            || ent->weapon == WP_SATCHEL
+	            || ent->weapon == WP_TRIPMINE
+	            || ent->weapon == WP_SMOKE_BOMB) &&
+	           ent->apos.trBase[0] > 0) { // underhand
 		return;
 	}
 
@@ -4752,7 +4752,7 @@ void CG_MissileHitWall(int weapon, int clientNum, vec3_t origin, vec3_t dir, int
 
 	if (sfx2) {    // distant sounds for weapons with a broadcast fire sound (so you /always/ hear dynamite explosions)
 		vec3_t porg, gorg, norm;    // player/gun origin
-		float gdist;
+		float  gdist;
 
 		VectorCopy(origin, gorg);
 		VectorCopy(cg.refdef_current->vieworg, porg);
@@ -4797,19 +4797,19 @@ CG_MissileHitWallSmall
 ==============
 */
 void CG_MissileHitWallSmall(vec3_t origin, vec3_t dir) {
-	qhandle_t mod    = 0;
-	qhandle_t mark   = 0;
-	qhandle_t shader = 0;
-	sfxHandle_t sfx  = 0;
-	float radius     = 80;
-	float light      = 300;
-	vec3_t lightColor;
+	qhandle_t     mod    = 0;
+	qhandle_t     mark   = 0;
+	qhandle_t     shader = 0;
+	sfxHandle_t   sfx    = 0;
+	float         radius = 80;
+	float         light  = 300;
+	vec3_t        lightColor;
 	localEntity_t *le;
-	qboolean isSprite = qtrue;
-	int duration      = 1000;
-	int lightOverdraw = 0;
-	vec3_t sprOrg, sprVel;
-	vec4_t projection, color;
+	qboolean      isSprite      = qtrue;
+	int           duration      = 1000;
+	int           lightOverdraw = 0;
+	vec3_t        sprOrg, sprVel;
+	vec4_t        projection, color;
 
 	shader        = cgs.media.rocketExplosionShader; // copied from RL
 	sfx           = cgs.media.sfx_rockexp;
@@ -4893,10 +4893,10 @@ CG_SpawnTracer
 */
 void CG_SpawnTracer(int sourceEnt, vec3_t pstart, vec3_t pend) {
 	localEntity_t *le;
-	float dist;
-	vec3_t dir, ofs;
+	float         dist;
+	vec3_t        dir, ofs;
 	orientation_t or;
-	vec3_t start, end;
+	vec3_t        start, end;
 
 	VectorCopy(pstart, start);
 	VectorCopy(pend, end);
@@ -4915,8 +4915,8 @@ void CG_SpawnTracer(int sourceEnt, vec3_t pstart, vec3_t pend) {
 	// for visual purposes, find the actual tag_weapon for this client
 	// and offset the start and end accordingly
 	if (sourceEnt < cgs.maxclients &&
-		(!(cg_entities[sourceEnt].currentState.eFlags & EF_MG42_ACTIVE || cg_entities[sourceEnt].currentState.eFlags & EF_AAGUN_ACTIVE)) &&
-		CG_GetWeaponTag(sourceEnt, "tag_flash", &or)) {
+	    (!(cg_entities[sourceEnt].currentState.eFlags & EF_MG42_ACTIVE || cg_entities[sourceEnt].currentState.eFlags & EF_AAGUN_ACTIVE)) &&
+	    CG_GetWeaponTag(sourceEnt, "tag_flash", &or)) {
 		VectorSubtract(or.origin, start, ofs);
 		if (VectorLength(ofs) < 64) {
 			VectorAdd(start, ofs, start);
@@ -4944,9 +4944,9 @@ CG_DrawTracer
 ===============
 */
 void CG_DrawTracer(vec3_t start, vec3_t finish) {
-	vec3_t forward, right;
+	vec3_t     forward, right;
 	polyVert_t verts[4];
-	vec3_t line;
+	vec3_t     line;
 
 	VectorSubtract(finish, start, forward);
 
@@ -4998,7 +4998,7 @@ CG_Tracer
 ===============
 */
 void CG_Tracer(vec3_t source, vec3_t dest, int sparks) {
-	float len, begin, end;
+	float  len, begin, end;
 	vec3_t start, finish;
 	vec3_t forward;
 
@@ -5028,21 +5028,21 @@ CG_CalcMuzzlePoint
 ======================
 */
 void CG_CalcMuzzlePoint(int entityNum, vec3_t muzzle) {
-	vec3_t forward, right, up;
+	vec3_t    forward, right, up;
 	centity_t *cent;
 
 	if (entityNum == cg.snap->ps.clientNum) {
 		// Arnout: see if we're attached to a gun
 		if (cg.snap->ps.eFlags & EF_MG42_ACTIVE) {
 			centity_t *mg42 = &cg_entities[cg.snap->ps.viewlocked_entNum];
-			vec3_t forward;
+			vec3_t    forward;
 
 			AngleVectors(cg.snap->ps.viewangles, forward, NULL, NULL);
 			VectorMA(mg42->currentState.pos.trBase, 40, forward, muzzle);       // wsa -36, made 40 to be in sync with the actual muzzleflash drawing
 			muzzle[2] += cg.snap->ps.viewheight;
 		} else if (cg.snap->ps.eFlags & EF_AAGUN_ACTIVE) {
 			centity_t *aagun = &cg_entities[cg.snap->ps.viewlocked_entNum];
-			vec3_t forward, right, up;
+			vec3_t    forward, right, up;
 
 			AngleVectors(cg.snap->ps.viewangles, forward, right, up);
 			VectorCopy(aagun->lerpOrigin, muzzle);                      // Gordon: modelindex2 will already have been incremented on the server, so work out what it WAS then
@@ -5097,7 +5097,7 @@ void CG_CalcMuzzlePoint(int entityNum, vec3_t muzzle) {
 		VectorCopy(tank->mountedMG42Flash.origin, muzzle);
 	} else if (cent->currentState.eFlags & EF_AAGUN_ACTIVE) {
 		centity_t *aagun;
-		int num;
+		int       num;
 
 		// find the mg42 we're attached to
 		for (num = 0; num < cg.snap->numEntities; num++) {
@@ -5151,10 +5151,10 @@ Renders bullet effects.
 ======================
 */
 void CG_Bullet(vec3_t end, int sourceEntityNum, qboolean flesh, int fleshEntityNum, int otherEntNum2, float waterfraction, int seed) {
-	trace_t trace, trace2;
-	int sourceContentType, destContentType;
-	vec3_t dir;
-	vec3_t start;
+	trace_t   trace, trace2;
+	int       sourceContentType, destContentType;
+	vec3_t    dir;
+	vec3_t    start;
 	centity_t *cent;
 
 	cent = &cg_entities[fleshEntityNum];
@@ -5166,8 +5166,8 @@ void CG_Bullet(vec3_t end, int sourceEntityNum, qboolean flesh, int fleshEntityN
 
 	// Arnout: snap tracers for MG42 to viewangle of client when antilag is enabled
 	if (cgs.antilag && otherEntNum2 == cg.snap->ps.clientNum && cg_entities[otherEntNum2].currentState.eFlags & EF_MG42_ACTIVE) {
-		vec3_t muzzle, forward, right, up;
-		float r, u;
+		vec3_t  muzzle, forward, right, up;
+		float   r, u;
 		trace_t tr;
 
 		AngleVectors(cg.predictedPlayerState.viewangles, forward, right, up);
@@ -5228,9 +5228,9 @@ void CG_Bullet(vec3_t end, int sourceEntityNum, qboolean flesh, int fleshEntityN
 	// impact splash and mark
 	if (flesh) {
 		vec3_t origin;
-		float rnd, tmpf; // JPW NERVE
+		float  rnd, tmpf; // JPW NERVE
 		vec3_t smokedir, tmpv, tmpv2; // JPW NERVE
-		int i;
+		int    i;
 
 		// JPW NERVE smoke puffs (sometimes with some blood)
 		VectorSubtract(end, start, smokedir); // get a nice "through the body" vector

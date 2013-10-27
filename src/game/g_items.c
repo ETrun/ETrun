@@ -339,8 +339,8 @@ int Pickup_Weapon(gentity_t *ent, gentity_t *other) {
 	if (ent->item->giTag == WP_AMMO && other->client->ps.stats[STAT_PLAYER_CLASS] != PC_FIELDOPS) {
 		// if LT isn't giving ammo to self or another LT or the enemy, give him some props
 		if (ent->parent &&
-			ent->parent->client &&
-			other->client->sess.sessionTeam == ent->parent->client->sess.sessionTeam) {
+		    ent->parent->client &&
+		    other->client->sess.sessionTeam == ent->parent->client->sess.sessionTeam) {
 			if (!(ent->parent->client->PCSpecialPickedUpCount % LT_SPECIAL_PICKUP_MOD)) {
 				G_LogPrintf("Ammo_Pack: %d %d\n", (int)(ent->parent - g_entities), (int)(other - g_entities));
 			}
@@ -442,8 +442,8 @@ int Pickup_Health(gentity_t *ent, gentity_t *other) {
 
 	// if medic isn't giving ammo to self or another medic or the enemy, give him some props
 	if (other->client->ps.stats[STAT_PLAYER_CLASS] != PC_MEDIC &&
-		ent->parent && ent->parent->client &&
-		other->client->sess.sessionTeam == ent->parent->client->sess.sessionTeam) {
+	    ent->parent && ent->parent->client &&
+	    other->client->sess.sessionTeam == ent->parent->client->sess.sessionTeam) {
 		if (!(ent->parent->client->PCSpecialPickedUpCount % MEDIC_SPECIAL_PICKUP_MOD)) {
 			G_LogPrintf("Health_Pack: %d %d\n", (int)(ent->parent - g_entities), (int)(other - g_entities));      // OSP
 		}
@@ -520,8 +520,8 @@ void Touch_Item_Auto(gentity_t *ent, gentity_t *other, trace_t *trace) {
 	}
 
 	if (!ent->active && ent->item->giType == IT_WEAPON &&
-		ent->item->giTag != WP_AMMO &&
-		!COM_BitCheck(other->client->ps.weapons, ent->item->giTag)) {
+	    ent->item->giTag != WP_AMMO &&
+	    !COM_BitCheck(other->client->ps.weapons, ent->item->giTag)) {
 		return; // force activate only
 	}
 

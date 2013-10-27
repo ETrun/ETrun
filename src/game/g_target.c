@@ -1269,7 +1269,7 @@ static void notify_timerun_start(gentity_t *activator) {
 			}
 
 			if (o->client->sess.spectatorClient == activator - g_entities) {
-				trap_SendServerCommand(o - g_entities, va("timerun_start_spec %i %i %i %i", timerunNum,  activator->client->ps.clientNum, activator->client->sess.timerunStartTime + 500, (int)activator->client->sess.startSpeed));
+				trap_SendServerCommand(o - g_entities, va("timerun_start_spec %i %i %i %i", timerunNum, activator->client->ps.clientNum, activator->client->sess.timerunStartTime + 500, (int)activator->client->sess.startSpeed));
 			}
 		}
 	}
@@ -1400,7 +1400,7 @@ void notify_timerun_stop(gentity_t *activator, int finishTime) {
 
 // Nico, records command
 static void Cmd_SendRecord_f(gentity_t *ent, char *runName, char *authToken, int time, int startSpeed, int stopSpeed, int maxSpeed, int jumpsCount, char *ip, int maxFPS,
-							 unsigned int timenudge, unsigned int rate, unsigned int maxPackets, unsigned int snaps, int strictSaveLoad, int disableDrowning, int holdDoorsOpen, int enableMapEntities) {
+                             unsigned int timenudge, unsigned int rate, unsigned int maxPackets, unsigned int snaps, int strictSaveLoad, int disableDrowning, int holdDoorsOpen, int enableMapEntities) {
 	char *buf                    = NULL;
 	char data[RESPONSE_MAX_SIZE] = { 0 };
 	int  i                       = 0;
@@ -1556,10 +1556,10 @@ void target_stoptimer_use(gentity_t *self, gentity_t *other, gentity_t *activato
 	if (g_useAPI.integer && client->sess.logged) {
 		Cmd_SendRecord_f(activator, client->sess.currentTimerun, client->pers.authToken,
 		                 time, client->sess.startSpeed, client->sess.stopSpeed, client->sess.maxSpeed,
-						 client->ps.identifyClientHealth,// Nico, this is used as a jumps counter
-						 client->pers.ip, client->pers.maxFPS,
-						 client->pers.clientTimeNudge, client->pers.rate, client->pers.clientMaxPackets, client->pers.snaps,
-						 g_strictSaveLoad.integer, g_disableDrowning.integer, g_holdDoorsOpen.integer, g_enableMapEntities.integer);
+		                 client->ps.identifyClientHealth, // Nico, this is used as a jumps counter
+		                 client->pers.ip, client->pers.maxFPS,
+		                 client->pers.clientTimeNudge, client->pers.rate, client->pers.clientMaxPackets, client->pers.snaps,
+		                 g_strictSaveLoad.integer, g_disableDrowning.integer, g_holdDoorsOpen.integer, g_enableMapEntities.integer);
 	} else {
 		// Nico, API is not used and/or client is not logged,
 		// we cannnot know if his last time his SB/PB or something
@@ -1645,7 +1645,7 @@ static void notify_timerun_check(gentity_t *activator, int deltaTime, int time, 
 void target_checkpoint_use(gentity_t *self, gentity_t *other, gentity_t *activator) {
 	int       delta      = 0;
 	int       time       = 0;
-	gclient_t *client = activator->client;
+	gclient_t *client    = activator->client;
 	int       timerunNum = 0;
 	int       status     = 0;
 

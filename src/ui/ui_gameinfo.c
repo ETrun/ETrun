@@ -111,7 +111,7 @@ static void UI_LoadArenasFromFile(char *filename) {
 				return;
 			}
 		} else if (!Q_stricmp(token.string, "mapposition_y") &&
-			!PC_Float_Parse(handle, &uiInfo.mapList[uiInfo.mapCount].mappos[1])) {
+		           !PC_Float_Parse(handle, &uiInfo.mapList[uiInfo.mapCount].mappos[1])) {
 			trap_Print(va(S_COLOR_RED "unexpected end of file inside: %s\n", filename));
 			trap_PC_FreeSource(handle);
 			return;

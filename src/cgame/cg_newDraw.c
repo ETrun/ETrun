@@ -183,7 +183,7 @@ void CG_DrawCursorhint(rectDef_t *rect) {
 	float     *color;
 	qhandle_t icon = 0, icon2 = 0;
 	float     scale, halfscale;
-	qboolean yellowbar = qfalse;
+	qboolean  yellowbar = qfalse;
 
 	if (!cg_cursorHints.integer) {
 		return;
@@ -618,7 +618,7 @@ void CG_KeyEvent(int key, qboolean down) {
 		}
 
 		if (cg.predictedPlayerState.pm_type == PM_NORMAL ||
-		     (cg.predictedPlayerState.pm_type == PM_SPECTATOR && cg.showScores == qfalse)) {
+		    (cg.predictedPlayerState.pm_type == PM_SPECTATOR && cg.showScores == qfalse)) {
 
 			CG_EventHandling(CGAME_EVENT_NONE, qfalse);
 			return;

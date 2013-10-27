@@ -216,9 +216,9 @@ void CG_DrawTimer(void) {
 	int        currentTimerunTime = 0;
 	float      sizex              = 0.25f, sizey = 0.25f;
 	vec4_t     color;
-	int		   runBestTime;
-	int		   runLastTime;
-	int		   clientNum = cg.clientNum;// Nico, player client num or spectated player client num
+	int        runBestTime;
+	int        runLastTime;
+	int        clientNum  = cg.clientNum; // Nico, player client num or spectated player client num
 	static int needsReset = 0;
 
 	// Nico, if level is not a timer
@@ -249,7 +249,7 @@ void CG_DrawTimer(void) {
 	if (needsReset && cg.timerunActive) {
 		// Nico, reset timer
 		cg.timerunFinishedTime[clientNum] = 0;
-		needsReset             = 0;
+		needsReset                        = 0;
 	}
 	//
 
@@ -767,7 +767,7 @@ void CG_DrawBannerPrint(void) {
 	char  lastcolor = COLOR_WHITE;
 	int   charHeight;
 	int   bannerShowTime;
-	int	  len = 0;
+	int   len = 0;
 
 	if (!cg.bannerPrintTime) {
 		return;
@@ -792,7 +792,7 @@ void CG_DrawBannerPrint(void) {
 
 	len = strlen(cg.bannerPrint);
 
-	for (;;) {
+	for (;; ) {
 		char linebuffer[1024];
 		char colorchar = lastcolor;
 

@@ -101,22 +101,22 @@ static char *WM_ETrun_coloredPing(int ping) {
  *
  * @source: ETpub
  */
-static qboolean WM_ETrun_drawCountryFlag(float x, float y,  unsigned int countryCode) {
-	float alpha[4];
-    float flag_step = 32;
-    unsigned int flag_sd = 512;
+static qboolean WM_ETrun_drawCountryFlag(float x, float y, unsigned int countryCode) {
+	float        alpha[4];
+	float        flag_step = 32;
+	unsigned int flag_sd   = 512;
 
-    if (countryCode < 255) {
-        float x1 = (float)((countryCode * (unsigned int)flag_step) % flag_sd);
-        float y1 = (float)(floor((countryCode * flag_step) / flag_sd) * flag_step);
-        float x2 = x1 + flag_step;
-        float y2 = y1 + flag_step;
-        alpha[0] = alpha[1] = alpha[2] = alpha[3]= 1.0;
+	if (countryCode < 255) {
+		float x1 = (float)((countryCode * (unsigned int)flag_step) % flag_sd);
+		float y1 = (float)(floor((countryCode * flag_step) / flag_sd) * flag_step);
+		float x2 = x1 + flag_step;
+		float y2 = y1 + flag_step;
+		alpha[0] = alpha[1] = alpha[2] = alpha[3] = 1.0;
 
-        trap_R_SetColor(alpha);
-		CG_DrawPicST(x - 8, y - 19, flag_step, flag_step, x1 / flag_sd, y1 / flag_sd, x2 / flag_sd , y2 / flag_sd, cgs.media.worldFlags);
-        trap_R_SetColor(NULL);
-        return qtrue;
+		trap_R_SetColor(alpha);
+		CG_DrawPicST(x - 8, y - 19, flag_step, flag_step, x1 / flag_sd, y1 / flag_sd, x2 / flag_sd, y2 / flag_sd, cgs.media.worldFlags);
+		trap_R_SetColor(NULL);
+		return qtrue;
 	}
 	return qfalse;
 }
@@ -205,7 +205,7 @@ static void WM_ETrun_DrawPlayers(int *x, int *y, fontInfo_t *font, s_timerunScor
 		// Nico, draw country flag
 		if (cg_countryFlags.integer) {
 			if (WM_ETrun_drawCountryFlag(tempx, *y, orderedScores[i].countryCode)) {
-				tempx += 16;
+				tempx   += 16;
 				drawFlag = qtrue;
 			}
 		}
@@ -334,7 +334,7 @@ static void WM_ETrun_DrawSpectators(int *x, int *y, fontInfo_t *font, s_timerunS
 		// Nico, draw country flag
 		if (cg_countryFlags.integer) {
 			if (WM_ETrun_drawCountryFlag(tempx, *y, orderedScores[i].countryCode)) {
-				tempx += 16;
+				tempx   += 16;
 				drawFlag = qtrue;
 			}
 		}
@@ -480,7 +480,7 @@ qboolean CG_DrawScoreboard(void) {
 		orderedScores[i].ping             = cg.scores[i].ping;
 		orderedScores[i].followedClient   = cg.scores[i].followedClient; // Followed client
 		Q_strncpyz(orderedScores[i].followedClientName, cgs.clientinfo[cg.scores[i].followedClient].name, MAX_QPATH); // Followed client name
-		orderedScores[i].speclocked = cg.scores[i].speclocked; // Speclock status
+		orderedScores[i].speclocked  = cg.scores[i].speclocked; // Speclock status
 		orderedScores[i].countryCode = cgs.clientinfo[cg.scores[i].client].countryCode;
 	}
 

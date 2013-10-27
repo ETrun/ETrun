@@ -660,7 +660,7 @@ void PM_CheckForReload(int weapon) {
 
 				// akimbo should also check other weapon status
 				if (BG_IsAkimboWeapon(weapon) &&
-					pm->ps->ammoclip[BG_FindClipForWeapon(BG_AkimboSidearm(weapon))] < GetAmmoTableData(BG_FindClipForWeapon(BG_AkimboSidearm(weapon)))->maxclip) {
+				    pm->ps->ammoclip[BG_FindClipForWeapon(BG_AkimboSidearm(weapon))] < GetAmmoTableData(BG_FindClipForWeapon(BG_AkimboSidearm(weapon)))->maxclip) {
 					doReload = qtrue;
 				}
 			}
@@ -1154,10 +1154,10 @@ void PM_Weapon(void) {
 	delayedFire = qfalse;
 
 	if ((pm->ps->weapon == WP_GRENADE_LAUNCHER ||
-		pm->ps->weapon == WP_GRENADE_PINEAPPLE ||
-		pm->ps->weapon == WP_DYNAMITE ||
-		pm->ps->weapon == WP_SMOKE_BOMB) &&
-		pm->ps->grenadeTimeLeft > 0) {
+	     pm->ps->weapon == WP_GRENADE_PINEAPPLE ||
+	     pm->ps->weapon == WP_DYNAMITE ||
+	     pm->ps->weapon == WP_SMOKE_BOMB) &&
+	    pm->ps->grenadeTimeLeft > 0) {
 		qboolean forcethrow = qfalse;
 
 		if (pm->ps->weapon == WP_DYNAMITE) {
@@ -1263,7 +1263,7 @@ void PM_Weapon(void) {
 	// can't change if weapon is firing, but can change
 	// again if lowering or raising
 	if (((pm->ps->weaponTime <= 0 || (!weaponstateFiring && pm->ps->weaponDelay <= 0)) && !delayedFire) &&
-		pm->ps->weapon != pm->cmd.weapon) {
+	    pm->ps->weapon != pm->cmd.weapon) {
 		PM_BeginWeaponChange(pm->ps->weapon, pm->cmd.weapon, qfalse);   //----(SA)	modified
 	}
 
@@ -1319,7 +1319,7 @@ void PM_Weapon(void) {
 	}
 
 	if ((pm->ps->weapon == WP_GPG40 || pm->ps->weapon == WP_M7) &&
-		(pm->cmd.serverTime - pm->ps->classWeaponTime < (pm->engineerChargeTime * 0.5f))) {
+	    (pm->cmd.serverTime - pm->ps->classWeaponTime < (pm->engineerChargeTime * 0.5f))) {
 		return;
 	}
 
@@ -1334,22 +1334,22 @@ void PM_Weapon(void) {
 	}
 
 	if ((pm->ps->weapon == WP_SMOKE_BOMB || pm->ps->weapon == WP_SATCHEL) &&
-		pm->cmd.serverTime - pm->ps->classWeaponTime < pm->covertopsChargeTime) {
+	    pm->cmd.serverTime - pm->ps->classWeaponTime < pm->covertopsChargeTime) {
 		return;
 	}
 
 	if (pm->ps->weapon == WP_LANDMINE &&
-		pm->cmd.serverTime - pm->ps->classWeaponTime < (pm->engineerChargeTime * 0.5f)) {
+	    pm->cmd.serverTime - pm->ps->classWeaponTime < (pm->engineerChargeTime * 0.5f)) {
 		return;
 	}
 
 	if (pm->ps->weapon == WP_DYNAMITE &&
-		pm->cmd.serverTime - pm->ps->classWeaponTime < pm->engineerChargeTime) {
+	    pm->cmd.serverTime - pm->ps->classWeaponTime < pm->engineerChargeTime) {
 		return;
 	}
 
 	if (pm->ps->weapon == WP_AMMO &&
-		pm->cmd.serverTime - pm->ps->classWeaponTime < (pm->ltChargeTime * 0.25f)) {
+	    pm->cmd.serverTime - pm->ps->classWeaponTime < (pm->ltChargeTime * 0.25f)) {
 		// rain - #202 - ^^ properly check ltChargeTime here, not medicChargeTime
 		if (pm->cmd.buttons & BUTTON_ATTACK) {
 			BG_AnimScriptEvent(pm->ps, pm->character->animModelInfo, ANIM_ET_NOPOWER, qtrue, qfalse);
@@ -1358,7 +1358,7 @@ void PM_Weapon(void) {
 	}
 
 	if (pm->ps->weapon == WP_MEDKIT &&
-		pm->cmd.serverTime - pm->ps->classWeaponTime < (pm->medicChargeTime * 0.25f)) {
+	    pm->cmd.serverTime - pm->ps->classWeaponTime < (pm->medicChargeTime * 0.25f)) {
 		if (pm->cmd.buttons & BUTTON_ATTACK) {
 			BG_AnimScriptEvent(pm->ps, pm->character->animModelInfo, ANIM_ET_NOPOWER, qtrue, qfalse);
 		}
@@ -1366,12 +1366,12 @@ void PM_Weapon(void) {
 	}
 
 	if (pm->ps->weapon == WP_SMOKE_MARKER &&
-		pm->cmd.serverTime - pm->ps->classWeaponTime < pm->ltChargeTime) {
+	    pm->cmd.serverTime - pm->ps->classWeaponTime < pm->ltChargeTime) {
 		return;
 	}
 
 	if (pm->ps->weapon == WP_MEDIC_ADRENALINE &&
-		pm->cmd.serverTime - pm->ps->classWeaponTime < pm->medicChargeTime) {
+	    pm->cmd.serverTime - pm->ps->classWeaponTime < pm->medicChargeTime) {
 		return;
 	}
 
@@ -1410,7 +1410,7 @@ void PM_Weapon(void) {
 
 	// player is underwater - no fire
 	if (pm->waterlevel == 3 &&
-		pm->ps->weapon != WP_KNIFE &&
+	    pm->ps->weapon != WP_KNIFE &&
 	    pm->ps->weapon != WP_GRENADE_LAUNCHER &&
 	    pm->ps->weapon != WP_GRENADE_PINEAPPLE &&
 	    pm->ps->weapon != WP_DYNAMITE &&
@@ -1679,8 +1679,8 @@ void PM_Weapon(void) {
 
 	// take an ammo away if not infinite
 	if (PM_WeaponAmmoAvailable(pm->ps->weapon) != -1 &&
-		!pm->ps->persistant[PERS_HWEAPON_USE] &&
-		!(pm->ps->eFlags & EF_MOUNTEDTANK)) {
+	    !pm->ps->persistant[PERS_HWEAPON_USE] &&
+	    !(pm->ps->eFlags & EF_MOUNTEDTANK)) {
 		// Rafael - check for being mounted on mg42
 		PM_WeaponUseAmmo(pm->ps->weapon, ammoNeeded);
 	}
@@ -1978,7 +1978,7 @@ void PM_Weapon(void) {
 
 	// the weapon can overheat, and it's hot
 	if (GetAmmoTableData(pm->ps->weapon)->maxHeat && pm->ps->weapHeat[pm->ps->weapon] &&
-		pm->ps->weapHeat[pm->ps->weapon] >= GetAmmoTableData(pm->ps->weapon)->maxHeat) {
+	    pm->ps->weapHeat[pm->ps->weapon] >= GetAmmoTableData(pm->ps->weapon)->maxHeat) {
 		// it is overheating
 		pm->ps->weapHeat[pm->ps->weapon] = GetAmmoTableData(pm->ps->weapon)->maxHeat;     // cap heat to max
 		PM_AddEvent(EV_WEAP_OVERHEAT);

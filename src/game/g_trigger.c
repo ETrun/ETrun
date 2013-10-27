@@ -148,10 +148,10 @@ void SP_trigger_multiple(gentity_t *ent) {
 	if (g_forceTimerReset.integer) {
 		target = G_FindByTargetname(NULL, ent->target);
 		if (target &&
-			ent->wait != 0.5 &&
-			(!Q_stricmp(target->classname, "target_startTimer")
-		    || !Q_stricmp(target->classname, "target_stopTimer")
-		    || !Q_stricmp(target->classname, "target_checkpoint"))) {
+		    ent->wait != 0.5 &&
+		    (!Q_stricmp(target->classname, "target_startTimer")
+		     || !Q_stricmp(target->classname, "target_stopTimer")
+		     || !Q_stricmp(target->classname, "target_checkpoint"))) {
 			G_DPrintf("%s: SP_trigger_multiple linked to %s, wait found = %f, overrided to 0.5\n", GAME_VERSION, target->classname, ent->wait);
 			ent->wait = 0.5;
 		}
@@ -1235,7 +1235,7 @@ void Think_SetupObjectiveInfo(gentity_t *ent) {
 		}
 	} else if (ent->target_ent->s.eType == ET_CONSTRUCTIBLE) {
 		gentity_t *constructibles[2];
-		int       team[2] = {0};
+		int       team[2] = { 0 };
 
 		ent->target_ent->parent = ent;
 

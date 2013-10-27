@@ -290,7 +290,7 @@ void SP_misc_gamemodel(gentity_t *ent) {
 	}
 
 	if (!G_SpawnVector("modelscale_vec", "1 1 1", vScale) &&
-		G_SpawnFloat("modelscale", "1", &scale)) {
+	    G_SpawnFloat("modelscale", "1", &scale)) {
 		VectorSet(vScale, scale, scale, scale);
 	}
 
@@ -1444,9 +1444,9 @@ void mg42_use(gentity_t *ent, gentity_t *other, gentity_t *activator) {
 		ent->s.otherEntityNum                          = ent->s.number;
 		owner->client->ps.viewlocked                   = 0; // let them look around
 		owner->active                                  = qfalse;
-		other->client->ps.weapHeat[WP_DUMMY_MG42] = ent->mg42weapHeat;
-		ent->backupWeaponTime                     = owner->client->ps.weaponTime;
-		owner->backupWeaponTime                   = owner->client->ps.weaponTime;
+		other->client->ps.weapHeat[WP_DUMMY_MG42]      = ent->mg42weapHeat;
+		ent->backupWeaponTime                          = owner->client->ps.weaponTime;
+		owner->backupWeaponTime                        = owner->client->ps.weaponTime;
 	}
 
 	trap_LinkEntity(ent);

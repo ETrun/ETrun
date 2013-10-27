@@ -83,8 +83,8 @@ static void CG_ItemPickup(int itemNum) {
 
 	// see if it should be the grabbed weapon
 	if (bg_itemlist[itemNum].giType == IT_WEAPON &&
-		cg_autoswitch.integer && cg.predictedPlayerState.weaponstate != WEAPON_RELOADING &&
-		itemid != WP_FG42SCOPE && itemid != WP_GARAND_SCOPE && itemid != WP_K43_SCOPE && itemid != WP_AMMO) {     //----(SA)	modified
+	    cg_autoswitch.integer && cg.predictedPlayerState.weaponstate != WEAPON_RELOADING &&
+	    itemid != WP_FG42SCOPE && itemid != WP_GARAND_SCOPE && itemid != WP_K43_SCOPE && itemid != WP_AMMO) {     //----(SA)	modified
 		//	0 - "Off"
 		//	1 - "Always Switch"
 		//	2 - "If New"
@@ -116,11 +116,11 @@ static void CG_ItemPickup(int itemNum) {
 			// 3 - switch to weap if it's in a bank greater than the current weap
 			// 4 - both 2 and 3
 			if ((cg_autoswitch.integer == 3 || cg_autoswitch.integer == 4) &&
-				CG_WeaponIndex(cg.weaponSelect, &wpbank_cur, NULL) &&
-				CG_WeaponIndex(itemid, &wpbank_pickup, NULL) &&
-				wpbank_pickup > wpbank_cur) {
-					cg.weaponSelectTime = cg.time;
-					cg.weaponSelect     = itemid;
+			    CG_WeaponIndex(cg.weaponSelect, &wpbank_cur, NULL) &&
+			    CG_WeaponIndex(itemid, &wpbank_pickup, NULL) &&
+			    wpbank_pickup > wpbank_cur) {
+				cg.weaponSelectTime = cg.time;
+				cg.weaponSelect     = itemid;
 			}   // end 3
 		}   // end cg_autoswitch.integer != 1
 	}   // end bg_itemlist[itemNum].giType == IT_WEAPON

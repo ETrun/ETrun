@@ -53,15 +53,15 @@ typedef struct {
 // VC optimizes for dup strings :)
 static const vote_reference_t aVoteInfo[] =
 {
-	{ "kick",       G_Kick_v,       "KICK",            " <player_id>^7\n  Attempts to kick player from server"             },
-	{ "mute",       G_Mute_v,       "MUTE",            " <player_id>^7\n  Removes the chat capabilities of a player"       },
-	{ "unmute",     G_UnMute_v,     "UN-MUTE",         " <player_id>^7\n  Restores the chat capabilities of a player"      },
-	{ "map",        G_Map_v,        "Change map to",   " <mapname>^7\n  Votes for a new map to be loaded"                  },
-	{ "randommap",  G_Randommap_v,  "Load Random Map", "^7\n  Loads a random map"                                          },
-	{ "referee",    G_Referee_v,    "Referee",         " <player_id>^7\n  Elects a player to have admin abilities"         },
-	{ "unreferee",  G_Unreferee_v,  "UNReferee",       " <player_id>^7\n  Elects a player to have admin abilities removed" },
-	{ "antilag",    G_AntiLag_v,    "Anti-Lag",        " <0|1>^7\n  Toggles Anit-Lag on the server"                        },
-	{ 0,            NULL,           0,                 NULL                                                                }
+	{ "kick",      G_Kick_v,      "KICK",            " <player_id>^7\n  Attempts to kick player from server"             },
+	{ "mute",      G_Mute_v,      "MUTE",            " <player_id>^7\n  Removes the chat capabilities of a player"       },
+	{ "unmute",    G_UnMute_v,    "UN-MUTE",         " <player_id>^7\n  Restores the chat capabilities of a player"      },
+	{ "map",       G_Map_v,       "Change map to",   " <mapname>^7\n  Votes for a new map to be loaded"                  },
+	{ "randommap", G_Randommap_v, "Load Random Map", "^7\n  Loads a random map"                                          },
+	{ "referee",   G_Referee_v,   "Referee",         " <player_id>^7\n  Elects a player to have admin abilities"         },
+	{ "unreferee", G_Unreferee_v, "UNReferee",       " <player_id>^7\n  Elects a player to have admin abilities removed" },
+	{ "antilag",   G_AntiLag_v,   "Anti-Lag",        " <0|1>^7\n  Toggles Anit-Lag on the server"                        },
+	{ 0,           NULL,          0,                 NULL                                                                }
 };
 
 
@@ -244,9 +244,9 @@ int G_Kick_v(gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qb
 		}
 
 		if (!fRefereeCmd &&
-			ent &&
-			level.clients[pid].sess.sessionTeam != TEAM_SPECTATOR &&
-			level.clients[pid].sess.sessionTeam != ent->client->sess.sessionTeam) {
+		    ent &&
+		    level.clients[pid].sess.sessionTeam != TEAM_SPECTATOR &&
+		    level.clients[pid].sess.sessionTeam != ent->client->sess.sessionTeam) {
 			G_refPrintf(ent, "Can't vote to kick players on opposing team!");
 			return G_INVALID;
 		}

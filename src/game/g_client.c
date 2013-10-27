@@ -579,7 +579,7 @@ void SetWolfSpawnWeapons(gclient_t *client) {
  * @author Nico
  */
 static qboolean CheckName(const char *name) {
-	unsigned int i = 0;
+	unsigned int i   = 0;
 	unsigned int len = 0;
 
 	// Nico, check name lenght
@@ -618,7 +618,7 @@ static void ClientCleanName(const char *in, char *out, int outSize) {
 	*p           = 0;
 	spaces       = 0;
 
-	for (;;) {
+	for (;; ) {
 		ch = *in++;
 		if (!ch) {
 			break;
@@ -839,10 +839,10 @@ void ClientUserinfoChanged(int clientNum) {
 	char      oldname[MAX_STRING_CHARS];
 	char      userinfo[MAX_INFO_STRING];
 	gclient_t *client;
-	char      *ip   = NULL; // Nico, used to store client ip
-	char      *rate   = NULL; // Nico, used to store client rate
-	char      *snaps   = NULL; // Nico, used to store client snaps
-	char      *name = NULL; // Nico, used to store client name
+	char      *ip    = NULL; // Nico, used to store client ip
+	char      *rate  = NULL;  // Nico, used to store client rate
+	char      *snaps = NULL;   // Nico, used to store client snaps
+	char      *name  = NULL; // Nico, used to store client name
 	char      oldAuthToken[MAX_QPATH]; // Nico, used to see if auth token was changed
 
 	ent    = g_entities + clientNum;
@@ -878,9 +878,9 @@ void ClientUserinfoChanged(int clientNum) {
 	}
 
 	// Nico, store rate and snaps
-	rate = Info_ValueForKey(userinfo, "rate");
-	client->pers.rate = atoi(rate);
-	snaps = Info_ValueForKey(userinfo, "snaps");
+	rate               = Info_ValueForKey(userinfo, "rate");
+	client->pers.rate  = atoi(rate);
+	snaps              = Info_ValueForKey(userinfo, "snaps");
 	client->pers.snaps = atoi(snaps);
 
 	// Nico, backup old auth token
@@ -901,7 +901,7 @@ void ClientUserinfoChanged(int clientNum) {
 	       // Nico, load view angles on load
 	       &client->pers.loadViewAngles,
 
-		   // Nico, load weapon on load
+	       // Nico, load weapon on load
 	       &client->pers.loadWeapon,
 
 	       // Nico, load position when player dies
@@ -929,8 +929,8 @@ void ClientUserinfoChanged(int clientNum) {
 
 	// Nico, check if auth token was changed
 	if (oldAuthToken[0] != '\0' &&
-		Q_stricmp(oldAuthToken, client->pers.authToken) &&
-		client->sess.logged) {
+	    Q_stricmp(oldAuthToken, client->pers.authToken) &&
+	    client->sess.logged) {
 		// Nico, auth token was changed => logout player if he was logged in
 		CP("cp \"You are no longer logged in!\n\"");
 		G_LogPrintf("ClientUserinfoChanged: authToken changed for client %d, forcing logout\n", clientNum);
@@ -1020,7 +1020,7 @@ void ClientUserinfoChanged(int clientNum) {
 	       client->pers.pmoveFixed ? 1 : 0, // Nico, pmove_fixed
 	       client->sess.logged ? 1 : 0, // Nico, login status
 	       client->pers.hideme, // Nico, hideme
-		   client->sess.countryCode// Nico, country code (GeoIP)
+	       client->sess.countryCode // Nico, country code (GeoIP)
 	       );
 
 	trap_GetConfigstring(CS_PLAYERS + clientNum, oldname, sizeof (oldname));
@@ -1124,9 +1124,9 @@ char *ClientConnect(int clientNum, qboolean firstTime) {
 		// check for a password
 		value = Info_ValueForKey(userinfo, "password");
 		if (g_password.string[0] &&
-			Q_stricmp(g_password.string, "none") &&
-			strcmp(g_password.string, value) != 0 &&
-			(!sv_privatepassword.string[0] || strcmp(sv_privatepassword.string, value) != 0)) {
+		    Q_stricmp(g_password.string, "none") &&
+		    strcmp(g_password.string, value) != 0 &&
+		    (!sv_privatepassword.string[0] || strcmp(sv_privatepassword.string, value) != 0)) {
 			return "Invalid password";
 		}
 	}
@@ -1145,7 +1145,7 @@ char *ClientConnect(int clientNum, qboolean firstTime) {
 
 	memset(client, 0, sizeof (*client));
 
-	client->pers.connected   = CON_CONNECTING;
+	client->pers.connected = CON_CONNECTING;
 
 	// read or initialize the session data
 	if (firstTime) {
@@ -1169,11 +1169,11 @@ char *ClientConnect(int clientNum, qboolean firstTime) {
 
 	// Nico, GeoIP
 	if (gidb != NULL) {
-		value = Info_ValueForKey (userinfo, "ip");
+		value = Info_ValueForKey(userinfo, "ip");
 		if (!strcmp(value, "localhost")) {
 			client->sess.countryCode = 0;
 		} else {
-			char realIP[IP_MAX_LENGTH] = {0};// Nico, used to store IP without :port
+			char          realIP[IP_MAX_LENGTH] = { 0 }; // Nico, used to store IP without :port
 			unsigned long ip;
 
 			// Nico, remove :port from IP
@@ -1182,9 +1182,9 @@ char *ClientConnect(int clientNum, qboolean firstTime) {
 			ip = GeoIP_addr_to_num(realIP);
 
 			if (((ip & 0xFF000000) == 0x0A000000) ||
-				((ip & 0xFFF00000) == 0xAC100000) ||
-				((ip & 0xFFFF0000) == 0xC0A80000) ||
-				( ip == 0x7F000001) ) {
+			    ((ip & 0xFFF00000) == 0xAC100000) ||
+			    ((ip & 0xFFFF0000) == 0xC0A80000) ||
+			    (ip == 0x7F000001)) {
 				client->sess.countryCode = 246;
 			} else {
 				unsigned int ret = GeoIP_seek_record(gidb, ip);
@@ -1416,9 +1416,9 @@ void ClientSpawn(gentity_t *ent) {
 	ent->client            = &level.clients[index];
 	ent->takedamage        = qtrue;
 	ent->inuse             = qtrue;
-	ent->classname = "player";
-	ent->r.contents = CONTENTS_BODY;
-	ent->clipmask = MASK_PLAYERSOLID;
+	ent->classname         = "player";
+	ent->r.contents        = CONTENTS_BODY;
+	ent->clipmask          = MASK_PLAYERSOLID;
 
 	// DHM - Nerve :: Init to -1 on first spawn;
 	ent->props_frame_state = -1;
@@ -1481,7 +1481,7 @@ void ClientSpawn(gentity_t *ent) {
 
 	SetWolfSpawnWeapons(client);
 
-	client->pers.maxHealth = 125;
+	client->pers.maxHealth            = 125;
 	client->ps.stats[STAT_MAX_HEALTH] = client->pers.maxHealth;
 
 	client->pers.cmd.weapon = ent->client->ps.weapon;

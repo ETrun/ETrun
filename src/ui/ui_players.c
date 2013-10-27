@@ -691,7 +691,7 @@ static qboolean AnimParseAnimConfig(playerInfo_t *animModelInfo, const char *inp
 	animModelInfo->version    = 0;
 
 	// read optional parameters
-	for (;;) {
+	for (;; ) {
 		token = COM_Parse(&text_p);
 		if (!token) {
 			break;
@@ -783,7 +783,7 @@ static qboolean AnimParseAnimConfig(playerInfo_t *animModelInfo, const char *inp
 		animations[i].loopFrames = atoi(token);
 
 		token = COM_ParseExt(&text_p, qfalse);
-		fps = atof(token);
+		fps   = atof(token);
 		if (fps == 0) {
 			fps = 1;
 		}

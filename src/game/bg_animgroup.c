@@ -193,7 +193,7 @@ static qboolean BG_RAG_ParseAnimFile(int handle, animModelInfo_t *animModelInfo)
 		return BG_RAG_ParseError(handle, "expected '{'");
 	}
 
-	for (;;) {
+	for (;; ) {
 		if (!trap_PC_ReadToken(handle, &token)) {
 			return BG_RAG_ParseError(handle, "unexpected EOF");
 		}
@@ -249,7 +249,7 @@ qboolean BG_R_RegisterAnimationGroup(const char *filename, animModelInfo_t *anim
 		return BG_RAG_ParseError(handle, "expected '{'");
 	}
 
-	for (;;) {
+	for (;; ) {
 		if (!trap_PC_ReadToken(handle, &token)) {
 			break;
 		}

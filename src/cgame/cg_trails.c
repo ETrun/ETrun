@@ -96,7 +96,7 @@ void CG_ClearTrails(void) {
 	}
 	trailJuncs[MAX_TRAILJUNCS - 1].nextGlobal = NULL;
 
-	initTrails     = qtrue;
+	initTrails = qtrue;
 }
 
 /*

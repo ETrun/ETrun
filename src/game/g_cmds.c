@@ -208,7 +208,7 @@ int ClientNumbersFromString(char *s, int *plist) {
 	char      n2[MAX_STRING_CHARS] = { 0 };
 	char      *m                   = NULL;
 	qboolean  is_slot              = qtrue;
-	int		  len				   = 0;
+	int       len                  = 0;
 
 	*plist = -1;
 
@@ -270,7 +270,7 @@ int ClientNumberFromString(gentity_t *to, char *s) {
 	char      s2[MAX_STRING_CHARS];
 	char      n2[MAX_STRING_CHARS];
 	qboolean  fIsNumber = qtrue;
-	int		  len = 0;
+	int       len       = 0;
 
 	// See if its a number or string
 	len = strlen(s);
@@ -571,8 +571,8 @@ int G_TeamCount(gentity_t *ent, weapon_t weap) {
 		}
 
 		if ((int)weap != -1 &&
-			level.clients[j].sess.playerWeapon != (int)weap &&
-			level.clients[j].sess.latchPlayerWeapon != (int)weap) {
+		    level.clients[j].sess.playerWeapon != (int)weap &&
+		    level.clients[j].sess.latchPlayerWeapon != (int)weap) {
 			continue;
 		}
 
@@ -1186,8 +1186,8 @@ void G_Voice(gentity_t *ent, gentity_t *target, int mode, const char *id, qboole
 		for (j = 0; j < level.numConnectedClients; j++) {
 
 			if (level.sortedClients[j] != ent->s.clientNum &&
-				cls != -1 &&
-				cls != level.clients[level.sortedClients[j]].sess.playerType) {
+			    cls != -1 &&
+			    cls != level.clients[level.sortedClients[j]].sess.playerType) {
 				continue;
 			}
 
@@ -2243,35 +2243,35 @@ void Cmd_Save_f(gentity_t *ent) {
 // Nico, defines commands that are flood protected or not
 static command_t floodProtectedCommands[] =
 {
-	{ "score",           qfalse, Cmd_Score_f,             qfalse, NULL,                                        NULL                                           },
-	{ "vote",            qtrue,  Cmd_Vote_f,              qfalse, NULL,                                        NULL                                           },
-	{ "fireteam",        qfalse, Cmd_FireTeam_MP_f,       qfalse, NULL,                                        NULL                                           },
-	{ "rconauth",        qfalse, Cmd_AuthRcon_f,          qfalse, NULL,                                        NULL                                           },
-	{ "ignore",          qfalse, Cmd_Ignore_f,            qfalse, NULL,                                        NULL                                           },
-	{ "unignore",        qfalse, Cmd_UnIgnore_f,          qfalse, NULL,                                        NULL                                           },
-	{ "rs",              qfalse, Cmd_ResetSetup_f,        qfalse, NULL,                                        NULL                                           },
-	{ "noclip",          qfalse, Cmd_Noclip_f,            qfalse, NULL,                                        NULL                                           },
-	{ "kill",            qtrue,  Cmd_Kill_f,              qfalse, NULL,                                        NULL                                           },
-	{ "team",            qtrue,  Cmd_Team_f,              qfalse, NULL,                                        NULL                                           },
-	{ "stopcamera",      qfalse, Cmd_StopCamera_f,        qfalse, NULL,                                        NULL                                           },
-	{ "setcameraorigin", qfalse, Cmd_SetCameraOrigin_f,   qfalse, NULL,                                        NULL                                           },
-	{ "setspawnpt",      qfalse, Cmd_SetSpawnPoint_f,     qtrue,  "Allows you to choose a spawn point",        "spawnId"                                      },
-	{ "load",            qfalse, Cmd_Load_f,              qtrue,  "Allows you to load a saved position",       "[slot]"                                       },
-	{ "save",            qfalse, Cmd_Save_f,              qtrue,  "Allows you to save your current position",  "[slot]"                                       },
+	{ "score",           qfalse, Cmd_Score_f,           qfalse, NULL,                                       NULL                                           },
+	{ "vote",            qtrue,  Cmd_Vote_f,            qfalse, NULL,                                       NULL                                           },
+	{ "fireteam",        qfalse, Cmd_FireTeam_MP_f,     qfalse, NULL,                                       NULL                                           },
+	{ "rconauth",        qfalse, Cmd_AuthRcon_f,        qfalse, NULL,                                       NULL                                           },
+	{ "ignore",          qfalse, Cmd_Ignore_f,          qfalse, NULL,                                       NULL                                           },
+	{ "unignore",        qfalse, Cmd_UnIgnore_f,        qfalse, NULL,                                       NULL                                           },
+	{ "rs",              qfalse, Cmd_ResetSetup_f,      qfalse, NULL,                                       NULL                                           },
+	{ "noclip",          qfalse, Cmd_Noclip_f,          qfalse, NULL,                                       NULL                                           },
+	{ "kill",            qtrue,  Cmd_Kill_f,            qfalse, NULL,                                       NULL                                           },
+	{ "team",            qtrue,  Cmd_Team_f,            qfalse, NULL,                                       NULL                                           },
+	{ "stopcamera",      qfalse, Cmd_StopCamera_f,      qfalse, NULL,                                       NULL                                           },
+	{ "setcameraorigin", qfalse, Cmd_SetCameraOrigin_f, qfalse, NULL,                                       NULL                                           },
+	{ "setspawnpt",      qfalse, Cmd_SetSpawnPoint_f,   qtrue,  "Allows you to choose a spawn point",       "spawnId"                                      },
+	{ "load",            qfalse, Cmd_Load_f,            qtrue,  "Allows you to load a saved position",      "[slot]"                                       },
+	{ "save",            qfalse, Cmd_Save_f,            qtrue,  "Allows you to save your current position", "[slot]"                                       },
 
 	// Nico, class command
-	{ "class",           qtrue,  Cmd_Class_f,             qtrue,  "Allows you to change your current class",   "class [weapon1] [weapon2]"                    },
+	{ "class",           qtrue,  Cmd_Class_f,           qtrue,  "Allows you to change your current class",  "class [weapon1] [weapon2]"                    },
 
 	// Nico, private messages
-	{ "m",               qtrue,  Cmd_PrivateMessage_f,    qtrue,  "Allows you send private messages",          "dest message"                                 },
+	{ "m",               qtrue,  Cmd_PrivateMessage_f,  qtrue,  "Allows you send private messages",         "dest message"                                 },
 
 	// ETrun specific commands
-	{ "login",           qtrue,  Cmd_Login_f,             qtrue,  "Allows you to login via timeruns.net",      NULL                                           },
-	{ "logout",          qtrue,  Cmd_Logout_f,            qtrue,  "Allows you to logout",                      NULL                                           },
-	{ "records",         qtrue,  Cmd_Records_f,           qtrue,  "Displays current map #1 records",           NULL                                           },
-	{ "rank",            qtrue,  Cmd_Rank_f,              qtrue,  "Shows rankings for given options",          "[userName] [mapName] [runName] [physicsName]" },
-	{ "loadCheckpoints", qtrue,  Cmd_LoadCheckpoints_f,   qtrue,  "Loads checkpoints from your PB",            "[userName] [run name or id]"                  },
-	{ "h",               qtrue,  Cmd_Help_f,              qtrue,  "Shows help message",                        "[command]"                                    },
+	{ "login",           qtrue,  Cmd_Login_f,           qtrue,  "Allows you to login via timeruns.net",     NULL                                           },
+	{ "logout",          qtrue,  Cmd_Logout_f,          qtrue,  "Allows you to logout",                     NULL                                           },
+	{ "records",         qtrue,  Cmd_Records_f,         qtrue,  "Displays current map #1 records",          NULL                                           },
+	{ "rank",            qtrue,  Cmd_Rank_f,            qtrue,  "Shows rankings for given options",         "[userName] [mapName] [runName] [physicsName]" },
+	{ "loadCheckpoints", qtrue,  Cmd_LoadCheckpoints_f, qtrue,  "Loads checkpoints from your PB",           "[userName] [run name or id]"                  },
+	{ "h",               qtrue,  Cmd_Help_f,            qtrue,  "Shows help message",                       "[command]"                                    },
 };
 // Nico, end of defines commands that are flood protected or not
 
@@ -2535,7 +2535,7 @@ void Cmd_SpecInvite_f(gentity_t *ent, unsigned int dwCommand, qboolean invite) {
  */
 static char *Q_SayConcatArgs(int start) {
 	char *s;
-	int  c  = 0;
+	int  c = 0;
 
 	s = ConcatArgs(0);
 	while (*s) {

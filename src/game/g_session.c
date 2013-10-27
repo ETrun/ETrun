@@ -53,7 +53,7 @@ void G_WriteClientSessionData(gclient_t *client, qboolean restart) {
 
 	s = va("%i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %u",
 	       client->sess.sessionTeam,
-		   client->sess.spectatorTime,
+	       client->sess.spectatorTime,
 	       client->sess.spectatorState,
 	       client->sess.spectatorClient,
 	       client->sess.playerType,         // DHM - Nerve
@@ -74,7 +74,7 @@ void G_WriteClientSessionData(gclient_t *client, qboolean restart) {
 	       client->sess.specLocked,
 	       client->sess.specInvitedClients[0],
 	       client->sess.specInvitedClients[1],
-		   client->sess.countryCode// Nico, GeoIP
+	       client->sess.countryCode // Nico, GeoIP
 	       );
 
 	trap_Cvar_Set(va("session%d", (int)(client - level.clients)), s);
@@ -95,7 +95,7 @@ void G_ReadSessionData(gclient_t *client) {
 
 	sscanf(s, "%i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %u",
 	       (int *)&client->sess.sessionTeam,
-		   &client->sess.spectatorTime,
+	       &client->sess.spectatorTime,
 	       (int *)&client->sess.spectatorState,
 	       &client->sess.spectatorClient,
 	       &client->sess.playerType, // DHM - Nerve
@@ -116,7 +116,7 @@ void G_ReadSessionData(gclient_t *client) {
 	       (int *) &client->sess.specLocked,
 	       &client->sess.specInvitedClients[0],
 	       &client->sess.specInvitedClients[1],
-		   &client->sess.countryCode// Nico, GeoIP
+	       &client->sess.countryCode // Nico, GeoIP
 	       );
 }
 
@@ -151,8 +151,8 @@ void G_InitSessionData(gclient_t *client) {
 	sess->muted = qfalse;
 
 	// OSP
-	sess->referee    = (client->pers.localClient) ? RL_REFEREE : RL_NONE;
-	sess->spec_team  = 0;
+	sess->referee   = (client->pers.localClient) ? RL_REFEREE : RL_NONE;
+	sess->spec_team = 0;
 	// OSP
 
 	// Nico, init GeoIP

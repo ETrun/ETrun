@@ -481,7 +481,7 @@ static void HandleEntsThatBlockConstructible(gentity_t *constructor, gentity_t *
 
 		check = NULL;
 
-		for (;;) {
+		for (;; ) {
 			check = G_Find(check, FOFS(track), constructible->track);
 
 			if (check == constructible) {
@@ -546,8 +546,8 @@ static void HandleEntsThatBlockConstructible(gentity_t *constructor, gentity_t *
 
 		// the entity is blocked and it is a player, then warn the player
 		if (warnBlockingPlayers &&
-			check->s.eType == ET_PLAYER &&
-			(level.time - check->client->lastConstructibleBlockingWarnTime) >= MIN_BLOCKINGWARNING_INTERVAL) {
+		    check->s.eType == ET_PLAYER &&
+		    (level.time - check->client->lastConstructibleBlockingWarnTime) >= MIN_BLOCKINGWARNING_INTERVAL) {
 			trap_SendServerCommand(check->s.number, "cp \"Warning, leave the construction area...\" 1");
 			// Gordon: store the entity num to warn the bot
 			check->client->lastConstructibleBlockingWarnTime = level.time;
@@ -1339,7 +1339,7 @@ void Weapon_Engineer(gentity_t *ent) {
 								traceEnt->accuracy = hit->accuracy;
 							}
 						} else if ((hit->spawnflags & ALLIED_OBJECTIVE) &&
-							ent->client->sess.sessionTeam == TEAM_AXIS) {   // ditto other team
+						           ent->client->sess.sessionTeam == TEAM_AXIS) { // ditto other team
 							traceEnt->accuracy = hit->accuracy;
 						}
 
@@ -2333,8 +2333,8 @@ void Weapon_FlamethrowerFire(gentity_t *ent) {
 	VectorMA(trace_start, 77.0, forward, trace_end);
 	trap_Trace(&trace, trace_start, flameChunkMins, flameChunkMaxs, trace_end, ent->s.number, MASK_SHOT | MASK_WATER);
 	if (trace.fraction != 1.0 &&
-		trace.endpos[2] > (ent->r.currentOrigin[2] + ent->r.mins[2] - 8) &&
-		trace.endpos[2] < ent->r.currentOrigin[2]) {
+	    trace.endpos[2] > (ent->r.currentOrigin[2] + ent->r.mins[2] - 8) &&
+	    trace.endpos[2] < ent->r.currentOrigin[2]) {
 		// trigger in a 21 radius around origin
 		trace_start[0] -= trace.endpos[0];
 		trace_start[1] -= trace.endpos[1];

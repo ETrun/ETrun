@@ -4,8 +4,8 @@
 #define API_INTERFACE_NAME "API_query"
 #define API_INIT_NAME "API_init"
 #define API_CLEAN_NAME "API_clean"
-#define RESPONSE_MAX_SIZE 4096// Nico, note: 2048 is too low for maps like shorties
-#define LARGE_RESPONSE_MAX_SIZE 512000// Nico, for get config
+#define RESPONSE_MAX_SIZE 4096 // Nico, note: 2048 is too low for maps like shorties
+#define LARGE_RESPONSE_MAX_SIZE 512000 // Nico, for get config
 #define QUERY_MAX_SIZE 1024
 #define CHAR_SEPARATOR "/"
 #define THREADS_MAX 32  // Maximum threads at the same time
@@ -23,7 +23,7 @@ qboolean G_API_getPlayerCheckpoints(char *result, gentity_t *ent, char *userName
 qboolean G_API_randommap(char *result, gentity_t *ent, char *mapName);
 qboolean G_API_mapRank(char *result, gentity_t *ent, char *mapName, char *optUserName, char *optMapName, char *optRunName, char *optPhysicsName, char *authToken);
 qboolean G_API_sendEventRecord(char *result, gentity_t *ent, char *mapName, char *runName,
-							   char *authToken, char *data, char *etrunVersion);
+                               char *authToken, char *data, char *etrunVersion);
 qboolean G_API_getConfig(void);
 
 #if defined _WIN32

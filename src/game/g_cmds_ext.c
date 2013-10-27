@@ -189,7 +189,7 @@ void G_players_cmd(gentity_t *ent, unsigned int dwCommand, qboolean fValue) {
 	gclient_t *cl;
 	char      n2[MAX_NETNAME], ready[16], ref[16], rate[256];
 	char      *s, *tc, userinfo[MAX_INFO_STRING];
-	int ip1, ip2, ip3;//Nico, parts of IP
+	int       ip1, ip2, ip3; //Nico, parts of IP
 
 	// Nico, silent GCC
 	(void)dwCommand;
@@ -216,11 +216,11 @@ void G_players_cmd(gentity_t *ent, unsigned int dwCommand, qboolean fValue) {
 	max_rate = trap_Cvar_VariableIntegerValue("sv_maxrate");
 
 	for (i = 0; i < level.numConnectedClients; i++) {
-		idnum  = level.sortedClients[i];
-		cl     = &level.clients[idnum];
-		ip1 = 0;
-		ip2 = 0;
-		ip3 = 0;
+		idnum = level.sortedClients[i];
+		cl    = &level.clients[idnum];
+		ip1   = 0;
+		ip2   = 0;
+		ip3   = 0;
 
 		SanitizeString(cl->pers.netname, n2, qtrue);
 		n2[26]   = 0;
@@ -236,14 +236,14 @@ void G_players_cmd(gentity_t *ent, unsigned int dwCommand, qboolean fValue) {
 			user_rate  = (max_rate > 0 && atoi(s) > max_rate) ? max_rate : atoi(s);
 			s          = Info_ValueForKey(userinfo, "snaps");
 			user_snaps = atoi(s);
-			s = Info_ValueForKey( userinfo, "ip" );
+			s          = Info_ValueForKey(userinfo, "ip");
 			sscanf(s, "%i.%i.%i", &ip1, &ip2, &ip3);
 
 			strcpy(rate, va("%5d%6d%9d%7d", cl->pers.clientTimeNudge, user_rate, cl->pers.clientMaxPackets, user_snaps));
 		}
 
 		if (g_gamestate.integer != GS_PLAYING &&
-			(cl->sess.sessionTeam == TEAM_SPECTATOR || cl->pers.connected == CON_CONNECTING)) {
+		    (cl->sess.sessionTeam == TEAM_SPECTATOR || cl->pers.connected == CON_CONNECTING)) {
 			strcpy(ready, ((ent) ? "^5--------^1 :" : "-------- :"));
 		}
 

@@ -301,7 +301,7 @@ char *COM_ParseExt(char **data_p, qboolean allowLineBreaks) {
 	// RF, backup the session data so we can unget easily
 	COM_BackupParseSession(data_p);
 
-	for (;;) {
+	for (;; ) {
 		// skip whitespace
 		data = SkipWhitespace(data, &hasNewLines);
 		if (!data) {
@@ -339,7 +339,7 @@ char *COM_ParseExt(char **data_p, qboolean allowLineBreaks) {
 	// handle quoted strings
 	if (c == '\"') {
 		data++;
-		for (;;) {
+		for (;; ) {
 			c = *data++;
 			if (c == '\\' && *(data) == '\"') {
 				// Arnout: string-in-string
@@ -349,7 +349,7 @@ char *COM_ParseExt(char **data_p, qboolean allowLineBreaks) {
 				}
 				data++;
 
-				for (;;) {
+				for (;; ) {
 					c = *data++;
 
 					if (!c) {
@@ -508,7 +508,7 @@ int Com_ParseInfos(char *buf, int max, char infos[][MAX_INFO_STRING]) {
 
 	count = 0;
 
-	for (;;) {
+	for (;; ) {
 		token = COM_Parse(&buf);
 		if (!token[0]) {
 			break;
@@ -524,7 +524,7 @@ int Com_ParseInfos(char *buf, int max, char infos[][MAX_INFO_STRING]) {
 		}
 
 		infos[count][0] = 0;
-		for (;;) {
+		for (;; ) {
 			token = COM_Parse(&buf);
 			if (!token[0]) {
 				Com_Printf("Unexpected end of info file\n");
@@ -757,11 +757,11 @@ void QDECL Com_Error(int level, const char *error, ...) {
 	Q_vsnprintf(text, sizeof (text), error, argptr);
 	va_end(argptr);
 
-# ifdef CGAMEDLL
+#ifdef CGAMEDLL
 	CG_Error("%s", text);
-# elif defined GAMEDLL
+#elif defined GAMEDLL
 	G_Error("%s", text);
-# else
+#else
 	trap_Error(va("%s", text));
 #endif
 }
@@ -774,11 +774,11 @@ void QDECL Com_Printf(const char *msg, ...) {
 	Q_vsnprintf(text, sizeof (text), msg, argptr);
 	va_end(argptr);
 
-# ifdef CGAMEDLL
+#ifdef CGAMEDLL
 	CG_Printf("%s", text);
-# elif defined GAMEDLL
+#elif defined GAMEDLL
 	G_Printf("%s", text);
-# else
+#else
 	trap_Print(va("%s", text));
 #endif
 }
@@ -879,7 +879,7 @@ char *Info_ValueForKey(const char *s, const char *key) {
 	if (*s == '\\') {
 		s++;
 	}
-	for (;;) {
+	for (;; ) {
 		o = pkey;
 		while (*s != '\\') {
 			if (!*s) {
@@ -929,7 +929,7 @@ void Info_RemoveKey(char *s, const char *key) {
 		return;
 	}
 
-	for (;;) {
+	for (;; ) {
 		start = s;
 		if (*s == '\\') {
 			s++;

@@ -29,7 +29,7 @@ If you have questions concerning this license or the applicable additional terms
 // cg_syscalls.c -- this file is only included when building a dll
 #include "cg_local.h"
 
-static int (QDECL *syscall)(int arg, ...) = (int ( QDECL * )(int, ...)) - 1;
+static int (QDECL *syscall)(int arg, ...) = (int (QDECL *)(int, ...)) - 1;
 
 Q_EXPORT void dllEntry(int (QDECL *syscallptr)(int arg, ...)) {
 	syscall = syscallptr;

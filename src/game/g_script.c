@@ -532,7 +532,7 @@ void G_Script_ScriptParse(gentity_t *ent) {
 
 	memset(events, 0, sizeof (events));
 
-	for (;;) {
+	for (;; ) {
 		token = COM_Parse(&pScript);
 
 		if (!token[0]) {
@@ -664,11 +664,11 @@ void G_Script_ScriptParse(gentity_t *ent) {
 							} else if (!Q_stricmp(action->actionString, "changemodel")) {
 								G_ModelIndex(token);
 							} else if (buildScript &&
-								(!Q_stricmp(action->actionString, "mu_start") ||
-								!Q_stricmp(action->actionString, "mu_play") ||
-								!Q_stricmp(action->actionString, "mu_queue") ||
-								!Q_stricmp(action->actionString, "startcam")) &&
-								strlen(token)) {
+							           (!Q_stricmp(action->actionString, "mu_start") ||
+							            !Q_stricmp(action->actionString, "mu_play") ||
+							            !Q_stricmp(action->actionString, "mu_queue") ||
+							            !Q_stricmp(action->actionString, "startcam")) &&
+							           strlen(token)) {
 								trap_SendServerCommand(-1, va("addToBuild %s\n", token));
 							}
 						}
@@ -801,9 +801,9 @@ int G_Script_GetEventIndex(gentity_t *ent, char *eventStr, char *params) {
 	// see if this entity has this event
 	for (i = 0; i < ent->numScriptEvents; i++) {
 		if (ent->scriptEvents[i].eventNum == eventNum &&
-			(!ent->scriptEvents[i].params ||
-			(!gScriptEvents[eventNum].eventMatch ||
-			gScriptEvents[eventNum].eventMatch(&ent->scriptEvents[i], params)))) {
+		    (!ent->scriptEvents[i].params ||
+		     (!gScriptEvents[eventNum].eventMatch ||
+		      gScriptEvents[eventNum].eventMatch(&ent->scriptEvents[i], params)))) {
 			return i;
 		}
 	}
@@ -865,8 +865,8 @@ qboolean G_Script_ScriptRun(gentity_t *ent) {
 	//
 	// show debugging info
 	if (g_scriptDebug.integer &&
-		ent->scriptStatus.scriptStackChangeTime == level.time &&
-		ent->scriptStatus.scriptStackHead < stack->numItems) {
+	    ent->scriptStatus.scriptStackChangeTime == level.time &&
+	    ent->scriptStatus.scriptStackHead < stack->numItems) {
 		G_Printf("%i : (%s) GScript command: %s %s\n", level.time, ent->scriptName, stack->items[ent->scriptStatus.scriptStackHead].action->actionString, (stack->items[ent->scriptStatus.scriptStackHead].params ? stack->items[ent->scriptStatus.scriptStackHead].params : ""));
 	}
 	//

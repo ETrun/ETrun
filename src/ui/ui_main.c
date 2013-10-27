@@ -735,7 +735,7 @@ qboolean Asset_Parse(int handle) {
 		return qfalse;
 	}
 
-	for (;;) {
+	for (;; ) {
 		memset(&token, 0, sizeof (pc_token_t));
 
 		if (!trap_PC_ReadToken(handle, &token)) {
@@ -887,7 +887,7 @@ qboolean UI_ParseMenu(const char *menuFile) {
 		return qfalse;
 	}
 
-	for (;;) {
+	for (;; ) {
 		memset(&token, 0, sizeof (pc_token_t));
 		if (!trap_PC_ReadToken(handle, &token)) {
 			break;
@@ -924,7 +924,7 @@ qboolean Load_Menu(int handle) {
 		return qfalse;
 	}
 
-	for (;;) {
+	for (;; ) {
 		if (!trap_PC_ReadToken(handle, &token)) {
 			return qfalse;
 		}
@@ -967,7 +967,7 @@ void UI_LoadMenus(const char *menuFile, qboolean reset) {
 		Menu_Reset();
 	}
 
-	for (;;) {
+	for (;; ) {
 		if (!trap_PC_ReadToken(handle, &token)) {
 			break;
 		}
@@ -1222,6 +1222,7 @@ static void UI_DrawPlayerModel(rectDef_t *rect) {
 
 	// NERVE - SMF
 	int teamval;
+
 	teamval = trap_Cvar_VariableValue("mp_team");
 
 	if (teamval == ALLIES_TEAM) {
@@ -1619,8 +1620,8 @@ qboolean UI_OwnerDrawVisible(int flags) {
 		if (flags & UI_SHOW_NOTLEADER) {
 			// these need to show when this client is assigning their own status or they are NOT the leader
 			if (uiInfo.teamLeader &&
-				!(ui_selectedPlayer.integer < uiInfo.myTeamCount &&
-				uiInfo.teamClientNums[ui_selectedPlayer.integer] == uiInfo.playerNumber)) {
+			    !(ui_selectedPlayer.integer < uiInfo.myTeamCount &&
+			      uiInfo.teamClientNums[ui_selectedPlayer.integer] == uiInfo.playerNumber)) {
 				vis = qfalse;
 			}
 			flags &= ~UI_SHOW_NOTLEADER;
@@ -2001,7 +2002,7 @@ static void UI_LoadDemos() {
 	char demolist[30000];
 	char demoExt[32];
 	char *demoname;
-	int  i, len , demoExtLen = 0;
+	int  i, len, demoExtLen = 0;
 
 	Com_sprintf(demoExt, sizeof (demoExt), "dm_%d", (int)trap_Cvar_VariableValue("protocol"));
 
@@ -3601,7 +3602,7 @@ static void UI_BuildServerStatus(qboolean force) {
 		trap_LAN_ServerStatus(NULL, NULL, 0);
 	}
 	if (cstate.connState < CA_CONNECTED &&
-		(uiInfo.serverStatus.currentServer < 0 || uiInfo.serverStatus.currentServer > uiInfo.serverStatus.numDisplayServers || uiInfo.serverStatus.numDisplayServers == 0)) {
+	    (uiInfo.serverStatus.currentServer < 0 || uiInfo.serverStatus.currentServer > uiInfo.serverStatus.numDisplayServers || uiInfo.serverStatus.numDisplayServers == 0)) {
 		return;
 	}
 	if (UI_GetServerStatusInfo(uiInfo.serverStatusAddress, &uiInfo.serverStatusInfo)) {

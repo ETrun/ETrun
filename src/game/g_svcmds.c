@@ -126,7 +126,7 @@ qboolean StringToFilter(const char *s, ipFilter_t *f) {
 	}
 
 	// Nico, fix for strict-aliasing rule break
-	f->mask = ((m[0] << 24) | (m[1] << 16) | (m[2] << 8) | (m[3]));
+	f->mask    = ((m[0] << 24) | (m[1] << 16) | (m[2] << 8) | (m[3]));
 	f->compare = ((b[0] << 24) | (b[1] << 16) | (b[2] << 8) | (b[3]));
 	//f->mask    = *(unsigned *)m;
 	//f->compare = *(unsigned *)b;
@@ -164,7 +164,7 @@ static void UpdateIPBans(ipFilterList_t *ipFilterList) {
 		//*(unsigned *)b = ipFilterList->ipFilters[i].compare;
 		//*(unsigned *)m = ipFilterList->ipFilters[i].mask;
 
-		*ip            = 0;
+		*ip = 0;
 		for (j = 0; j < 4 ; j++) {
 			if (m[j] != 255) {
 				Q_strcat(ip, sizeof (ip), "*");

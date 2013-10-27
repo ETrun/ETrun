@@ -140,9 +140,9 @@ void G_MissileImpact(gentity_t *ent, trace_t *trace, int impactDamage) {
 
 	// handle func_explosives
 	if (other->classname &&
-		Q_stricmp(other->classname, "func_explosive") == 0 &&
-		other->health &&
-		impactDamage >= other->health) {
+	    Q_stricmp(other->classname, "func_explosive") == 0 &&
+	    other->health &&
+	    impactDamage >= other->health) {
 		// the damage is sufficient to "break" the ent (health == 0 is non-breakable)
 		// check for other->takedamage needs to be inside the health check since it is
 		// likely that, if successfully destroyed by the missile, in the next runmissile()
@@ -420,10 +420,10 @@ void G_RunMissile(gentity_t *ent) {
 	vec3_t  origin;
 	trace_t tr;
 	int     impactDamage;
-	float skyHeight;
+	float   skyHeight;
 
 	if ((ent->s.weapon == WP_LANDMINE || ent->s.weapon == WP_DYNAMITE || ent->s.weapon == WP_SATCHEL) &&
-		ent->s.groundEntityNum == -1 && ent->s.pos.trType != TR_GRAVITY) {
+	    ent->s.groundEntityNum == -1 && ent->s.pos.trType != TR_GRAVITY) {
 		ent->s.pos.trType = TR_GRAVITY;
 		ent->s.pos.trTime = level.time;
 	}
@@ -432,17 +432,17 @@ void G_RunMissile(gentity_t *ent) {
 	BG_EvaluateTrajectory(&ent->s.pos, level.time, origin, qfalse, ent->s.effect2Time);
 
 	if ((ent->clipmask & CONTENTS_BODY) &&
-		(ent->s.weapon == WP_DYNAMITE ||
-		ent->s.weapon == WP_ARTY ||
-		ent->s.weapon == WP_SMOKE_MARKER ||
-		ent->s.weapon == WP_GRENADE_LAUNCHER ||
-		ent->s.weapon == WP_GRENADE_PINEAPPLE ||
-		ent->s.weapon == WP_LANDMINE ||
-		ent->s.weapon == WP_SATCHEL ||
-		ent->s.weapon == WP_SMOKE_BOMB) &&
-		!ent->s.pos.trDelta[0] &&
-		!ent->s.pos.trDelta[1] &&
-		!ent->s.pos.trDelta[2]) {
+	    (ent->s.weapon == WP_DYNAMITE ||
+	     ent->s.weapon == WP_ARTY ||
+	     ent->s.weapon == WP_SMOKE_MARKER ||
+	     ent->s.weapon == WP_GRENADE_LAUNCHER ||
+	     ent->s.weapon == WP_GRENADE_PINEAPPLE ||
+	     ent->s.weapon == WP_LANDMINE ||
+	     ent->s.weapon == WP_SATCHEL ||
+	     ent->s.weapon == WP_SMOKE_BOMB) &&
+	    !ent->s.pos.trDelta[0] &&
+	    !ent->s.pos.trDelta[1] &&
+	    !ent->s.pos.trDelta[2]) {
 		ent->clipmask &= ~CONTENTS_BODY;
 	}
 
@@ -512,9 +512,9 @@ void G_RunMissile(gentity_t *ent) {
 	trap_Trace(&tr, ent->r.currentOrigin, ent->r.mins, ent->r.maxs, origin, ent->r.ownerNum, ent->clipmask);
 
 	if (ent->s.weapon == WP_MORTAR_SET &&
-		ent->count2 == 1 &&
-		ent->r.currentOrigin[2] > origin[2] &&
-		origin[2] - BG_GetGroundHeightAtPoint(origin) < 512) {
+	    ent->count2 == 1 &&
+	    ent->r.currentOrigin[2] > origin[2] &&
+	    origin[2] - BG_GetGroundHeightAtPoint(origin) < 512) {
 		vec3_t  impactpos;
 		trace_t mortar_tr;
 

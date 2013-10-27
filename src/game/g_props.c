@@ -740,8 +740,8 @@ void Props_Chair_Touch(gentity_t *self, gentity_t *other, trace_t *trace);
 void Props_Chair_Die(gentity_t *ent, gentity_t *inflictor, gentity_t *attacker, int damage, int mod);
 
 void Just_Got_Thrown(gentity_t *self) {
-	float  len;
-	vec3_t vec;
+	float   len;
+	vec3_t  vec;
 	trace_t trace;
 	vec3_t  end;
 

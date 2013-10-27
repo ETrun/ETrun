@@ -84,51 +84,52 @@ void linux_siginfo(int signal, siginfo_t *siginfo) {
 
 /* Nico, commenting because it won't compile*/
 void linux_dsoinfo() {
-    struct link_map *linkmap = NULL;
-    ElfW(Ehdr)      *ehdr = (ElfW(Ehdr) *)0x08048000;
-    ElfW(Phdr)      *phdr;
-    ElfW(Dyn) 		*dyn;
-    struct r_debug 	*rdebug = NULL;
+	struct link_map *linkmap = NULL;
 
-    phdr = (ElfW(Phdr) *)((char *)ehdr + ehdr->e_phoff);
+	ElfW(Ehdr)      * ehdr = (ElfW(Ehdr) *) 0x08048000;
+	ElfW(Phdr)      * phdr;
+	ElfW(Dyn)       * dyn;
+	struct r_debug *rdebug = NULL;
 
-    while (phdr < (ElfW(Phdr) *)((char *)phdr + (ehdr->e_phnum * sizeof(ElfW(Phdr)))) && phdr++) {
-        if (phdr->p_type == PT_DYNAMIC) {
-            break;
-        }
-    }
+	phdr = (ElfW(Phdr) *)((char *)ehdr + ehdr->e_phoff);
 
-    for (dyn = (ElfW(Dyn) *)phdr->p_vaddr; dyn->d_tag != DT_NULL; dyn++) {
-        if (dyn->d_tag == DT_DEBUG) {
-            rdebug = (void *)dyn->d_un.d_ptr;
-            break;
-        }
-    }
-
-    CrashLog("DSO Information:\n", qtrue);
-
-    if (rdebug == NULL) {
-    	CrashLog("rdebug = NULL\n", qtrue);
-    	return;
-    }
-
-    linkmap = rdebug->r_map;
-
-    //rewind to top item.
-    while (linkmap->l_prev) {
-        linkmap=linkmap->l_prev;
+	while (phdr < (ElfW(Phdr) *)((char *)phdr + (ehdr->e_phnum * sizeof (ElfW(Phdr)))) && phdr++) {
+		if (phdr->p_type == PT_DYNAMIC) {
+			break;
+		}
 	}
 
-    while (linkmap) {
-        if (linkmap->l_addr) {
-            if (strcmp(linkmap->l_name, "") == 0) {
-                CrashLog(va("0x%08x\t(unknown)\n", linkmap->l_addr), qtrue);
+	for (dyn = (ElfW(Dyn) *)phdr->p_vaddr; dyn->d_tag != DT_NULL; dyn++) {
+		if (dyn->d_tag == DT_DEBUG) {
+			rdebug = (void *)dyn->d_un.d_ptr;
+			break;
+		}
+	}
+
+	CrashLog("DSO Information:\n", qtrue);
+
+	if (rdebug == NULL) {
+		CrashLog("rdebug = NULL\n", qtrue);
+		return;
+	}
+
+	linkmap = rdebug->r_map;
+
+	//rewind to top item.
+	while (linkmap->l_prev) {
+		linkmap = linkmap->l_prev;
+	}
+
+	while (linkmap) {
+		if (linkmap->l_addr) {
+			if (strcmp(linkmap->l_name, "") == 0) {
+				CrashLog(va("0x%08x\t(unknown)\n", linkmap->l_addr), qtrue);
 			} else {
-                CrashLog(va("0x%08x\t%s\n", linkmap->l_addr, linkmap->l_name), qtrue);
-            }
-        }
-        linkmap = linkmap->l_next;
-    }
+				CrashLog(va("0x%08x\t%s\n", linkmap->l_addr, linkmap->l_name), qtrue);
+			}
+		}
+		linkmap = linkmap->l_next;
+	}
 }
 
 void linux_backtrace(ucontext_t *ctx) {
@@ -320,7 +321,7 @@ void win32_backtrace(LPEXCEPTION_POINTERS e) {
 
 	CrashLog("Backtrace:\n", qtrue);
 
-	for (;;) {
+	for (;; ) {
 		more = pfnStackWalk(
 		    IMAGE_FILE_MACHINE_I386,
 		    process,

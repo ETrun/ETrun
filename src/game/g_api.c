@@ -39,13 +39,13 @@ static qboolean loadModule(char *basepath, char *homepath) {
 	}
 
 	// Try opening module form homepath
-	#if defined _WIN32
-		sprintf(searchPath, "%s\\etrun\\%s", homepath, g_APImoduleName.string);
-		api_module = LoadLibrary(searchPath);
-	#else
-		sprintf(searchPath, "%s/etrun/%s", homepath, g_APImoduleName.string);
-		api_module = dlopen(searchPath, RTLD_LAZY);
-	#endif
+#if defined _WIN32
+	sprintf(searchPath, "%s\\etrun\\%s", homepath, g_APImoduleName.string);
+	api_module = LoadLibrary(searchPath);
+#else
+	sprintf(searchPath, "%s/etrun/%s", homepath, g_APImoduleName.string);
+	api_module = dlopen(searchPath, RTLD_LAZY);
+#endif
 
 	if (api_module == NULL) {
 		return qfalse;
@@ -105,9 +105,9 @@ static void printError() {
  * Function used to print large buffers (> 1022) to client
  */
 static void clientBigDataPrint(gentity_t *ent, char *data) {
-	int  len       = 0;
+	int  len = 0;
 	char buf[1000];
-	int  count     = 0;
+	int  count = 0;
 
 	len = strlen(data);
 
@@ -123,7 +123,7 @@ static void clientBigDataPrint(gentity_t *ent, char *data) {
  *
  * @unused
 static char from_hex(char ch) {
-	return isdigit(ch) ? ch - '0' : tolower(ch) - 'A' + 10;
+    return isdigit(ch) ? ch - '0' : tolower(ch) - 'A' + 10;
 }*/
 
 static char to_hex(char code) {
@@ -171,31 +171,31 @@ qboolean url_encode(char *str, char *dst) {
  *
  * @unused
 qboolean url_decode(char *str, char *dst) {
-	char *pstr = str;
-	int  i     = 0;
+    char *pstr = str;
+    int  i     = 0;
 
-	if (!str) {
-		LDE("str is NULL\n");
-		return qfalse;
-	}
+    if (!str) {
+        LDE("str is NULL\n");
+        return qfalse;
+    }
 
-	if (!dst) {
-		LDE("dst is NULL\n");
-		return qfalse;
-	}
+    if (!dst) {
+        LDE("dst is NULL\n");
+        return qfalse;
+    }
 
-	while (*pstr) {
-		if (*pstr == '%' && pstr[1] && pstr[2]) {
-			dst[i] = from_hex(pstr[1]) << 4 | from_hex(pstr[2]);
-			pstr  += 2;
-		} else {
-			dst[i] = *pstr;
-		}
-		pstr++;
-		i++;
-	}
-	dst[i] = '\0';
-	return qtrue;
+    while (*pstr) {
+        if (*pstr == '%' && pstr[1] && pstr[2]) {
+            dst[i] = from_hex(pstr[1]) << 4 | from_hex(pstr[2]);
+            pstr  += 2;
+        } else {
+            dst[i] = *pstr;
+        }
+        pstr++;
+        i++;
+    }
+    dst[i] = '\0';
+    return qtrue;
 }*/
 
 /**
@@ -425,7 +425,7 @@ static void *recordHandler(void *data) {
  * Record send command
  */
 qboolean G_API_sendRecord(char *result, gentity_t *ent, char *mapName, char *runName,
-						  char *authToken, char *data, char *etrunVersion) {
+                          char *authToken, char *data, char *etrunVersion) {
 	char net_port[8]         = { 0 };
 	char cphysics[8]         = { 0 };
 	char encodedMapName[255] = { 0 };
@@ -435,7 +435,7 @@ qboolean G_API_sendRecord(char *result, gentity_t *ent, char *mapName, char *run
 	sprintf(cphysics, "%d", physics.integer);
 
 	if (url_encode(mapName, encodedMapName) == qfalse ||
-		url_encode(runName, encodedRunName) == qfalse) {
+	    url_encode(runName, encodedRunName) == qfalse) {
 		return qfalse;
 	}
 
@@ -513,8 +513,8 @@ qboolean G_API_getPlayerCheckpoints(char *result, gentity_t *ent, char *userName
 	sprintf(cphysics, "%d", physics.integer);
 
 	if (url_encode(mapName, encodedMapName) == qfalse ||
-		url_encode(userName, encodedOptUserName) == qfalse ||
-		url_encode(runName, encodedRunName) == qfalse) {
+	    url_encode(userName, encodedOptUserName) == qfalse ||
+	    url_encode(runName, encodedRunName) == qfalse) {
 		return qfalse;
 	}
 
@@ -532,7 +532,7 @@ qboolean G_API_getPlayerCheckpoints(char *result, gentity_t *ent, char *userName
 static void *randommapHandler(void *data) {
 	int            code;
 	struct query_s *queryStruct       = (struct query_s *)data;
-	gentity_t      *ent               = queryStruct->ent;// Nico, note: this is NULL is randomMap was asked by server (timelimit)
+	gentity_t      *ent               = queryStruct->ent; // Nico, note: this is NULL is randomMap was asked by server (timelimit)
 	char           mapfile[MAX_QPATH] = { 0 };
 	fileHandle_t   f;
 
@@ -643,13 +643,13 @@ static qboolean check_string(char *str) {
  * Map rank request command
  */
 qboolean G_API_mapRank(char *result, gentity_t *ent, char *mapName, char *optUserName, char *optMapName, char *optRunName, char *optPhysicsName, char *authToken) {
-	char net_port[8]				 = { 0 };
-	char cphysics[8]				 = { 0 };
-	char encodedMapName[255]		 = { 0 };
-	char encodedOptUserName[255]	 = { 0 };
-	char encodedOptMapName[255]		 = { 0 };
-	char encodedOptRunName[255]		 = { 0 };
-	char encodedOptPhysicsName[255]  = { 0 };
+	char net_port[8]                = { 0 };
+	char cphysics[8]                = { 0 };
+	char encodedMapName[255]        = { 0 };
+	char encodedOptUserName[255]    = { 0 };
+	char encodedOptMapName[255]     = { 0 };
+	char encodedOptRunName[255]     = { 0 };
+	char encodedOptPhysicsName[255] = { 0 };
 
 	sprintf(net_port, "%d", trap_Cvar_VariableIntegerValue("net_port"));
 	sprintf(cphysics, "%d", physics.integer);
@@ -659,10 +659,10 @@ qboolean G_API_mapRank(char *result, gentity_t *ent, char *mapName, char *optUse
 	}
 
 	if (url_encode(mapName, encodedMapName) == qfalse ||
-		url_encode(optUserName, encodedOptUserName) == qfalse ||
-		url_encode(optMapName, encodedOptMapName) == qfalse ||
-		url_encode(optRunName, encodedOptRunName) == qfalse ||
-		url_encode(optPhysicsName, encodedOptPhysicsName) == qfalse) {
+	    url_encode(optUserName, encodedOptUserName) == qfalse ||
+	    url_encode(optMapName, encodedOptMapName) == qfalse ||
+	    url_encode(optRunName, encodedOptRunName) == qfalse ||
+	    url_encode(optPhysicsName, encodedOptPhysicsName) == qfalse) {
 		return qfalse;
 	}
 
@@ -728,18 +728,18 @@ static void *eventRecordHandler(void *data) {
  * Event record send command
  */
 qboolean G_API_sendEventRecord(char *result, gentity_t *ent, char *mapName, char *runName,
-							   char *authToken, char *data, char *etrunVersion) {
+                               char *authToken, char *data, char *etrunVersion) {
 	char net_port[8]         = { 0 };
 	char cphysics[8]         = { 0 };
 	char encodedMapName[255] = { 0 };
 	char encodedRunName[255] = { 0 };
-	char cupKey[255]		 = { 0 };
+	char cupKey[255]         = { 0 };
 
 	sprintf(net_port, "%d", trap_Cvar_VariableIntegerValue("net_port"));
 	sprintf(cphysics, "%d", physics.integer);
 
 	if (url_encode(mapName, encodedMapName) == qfalse ||
-		url_encode(runName, encodedRunName) == qfalse) {
+	    url_encode(runName, encodedRunName) == qfalse) {
 		return qfalse;
 	}
 
@@ -755,13 +755,13 @@ qboolean G_API_sendEventRecord(char *result, gentity_t *ent, char *mapName, char
 static void *getConfigHandler(void *data) {
 	int            code;
 	struct query_s *queryStruct = (struct query_s *)data;
-	int	config_strictSaveLoad;
-	int	config_physics;
-	int	config_disableDrowning;
-	int	config_holdDoorsOpen;
-	int	config_enableMapEntities;
-	int config_script_size;
-	int len;
+	int            config_strictSaveLoad;
+	int            config_physics;
+	int            config_disableDrowning;
+	int            config_holdDoorsOpen;
+	int            config_enableMapEntities;
+	int            config_script_size;
+	int            len;
 
 	code = API_query(queryStruct->cmd, queryStruct->result, queryStruct->query, sizeof (queryStruct->query));
 
@@ -769,13 +769,13 @@ static void *getConfigHandler(void *data) {
 		G_Error("%s: error #1 while getting config from API!\n", GAME_VERSION);
 	}
 
-	code = sscanf(queryStruct->result, "%d %d %d %d %d %d %*s",// Nico, last field is ignored for the moment
-		&config_strictSaveLoad,
-		&config_physics,
-		&config_disableDrowning,
-		&config_holdDoorsOpen,
-		&config_enableMapEntities,
-		&config_script_size);
+	code = sscanf(queryStruct->result, "%d %d %d %d %d %d %*s", // Nico, last field is ignored for the moment
+	              &config_strictSaveLoad,
+	              &config_physics,
+	              &config_disableDrowning,
+	              &config_holdDoorsOpen,
+	              &config_enableMapEntities,
+	              &config_script_size);
 
 	if (code != 6) {
 		G_Error("%s: error #2 while getting config from API!\n", GAME_VERSION);
@@ -785,7 +785,7 @@ static void *getConfigHandler(void *data) {
 		level.useAPImapscript = qtrue;
 
 		level.scriptEntity = G_Alloc(config_script_size + 1);
-		code = sscanf(queryStruct->result, "%*d %*d %*d %*d %*d %*d %512000c", level.scriptEntity);
+		code               = sscanf(queryStruct->result, "%*d %*d %*d %*d %*d %*d %512000c", level.scriptEntity);
 
 		if (code != 1) {
 			G_Error("%s: error #3 while getting config from API!\n", GAME_VERSION);
@@ -845,7 +845,7 @@ static void *getConfigHandler(void *data) {
  * Get config command
  */
 qboolean G_API_getConfig(void) {
-	char *buf				 = NULL;
+	char *buf                = NULL;
 	char net_port[8]         = { 0 };
 	char cphysics[8]         = { 0 };
 	char encodedMapName[255] = { 0 };
@@ -914,10 +914,10 @@ qboolean G_AsyncAPICall(char *command, char *result, gentity_t *ent, int count, 
 	pthread_t      thread;
 	pthread_attr_t attr;
 	int            returnCode = 0;
-	void    *(*handler)(void *) = NULL;
-	va_list ap;
-	int     i    = 0;
-	char    *arg = NULL;
+	void           *(*handler)(void *) = NULL;
+	va_list        ap;
+	int            i    = 0;
+	char           *arg = NULL;
 
 	if (api_module == NULL || API_query == NULL) {
 		LDE("API module is not loaded\n");
@@ -1026,10 +1026,10 @@ qboolean G_AsyncAPICall(char *command, char *result, gentity_t *ent, int count, 
  */
 qboolean G_SyncAPICall(char *command, char *result, gentity_t *ent, int count, ...) {
 	struct query_s *queryStruct;
-	void    *(*handler)(void *) = NULL;
-	va_list ap;
-	int     i    = 0;
-	char    *arg = NULL;
+	void           *(*handler)(void *) = NULL;
+	va_list        ap;
+	int            i    = 0;
+	char           *arg = NULL;
 
 	if (api_module == NULL || API_query == NULL) {
 		LDE("API module is not loaded\n");

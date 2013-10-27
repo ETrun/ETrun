@@ -311,7 +311,7 @@ gentity_t *G_PickTarget(char *targetname) {
 		return NULL;
 	}
 
-	for (;;) {
+	for (;; ) {
 		ent = G_FindByTargetname(ent, targetname);
 		if (!ent) {
 			break;
@@ -332,8 +332,8 @@ gentity_t *G_PickTarget(char *targetname) {
 
 qboolean G_AllowTeamsAllowed(gentity_t *ent, gentity_t *activator) {
 	if (ent->allowteams &&
-		activator && activator->client &&
-		activator->client->sess.sessionTeam != TEAM_SPECTATOR) {
+	    activator && activator->client &&
+	    activator->client->sess.sessionTeam != TEAM_SPECTATOR) {
 		int checkTeam = activator->client->sess.sessionTeam;
 
 		if (!(ent->allowteams & checkTeam)) {

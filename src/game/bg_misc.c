@@ -2669,10 +2669,10 @@ void BG_LinearPathOrigin2(float radius, splinePath_t **pSpline, float *deltaTime
 		frac = (((*deltaTime) * (MAX_SPLINE_SEGMENTS)) - i);
 	}
 
-	for (;;) {
+	for (;; ) {
 		float t0, t1;
 
-		for (;;) {
+		for (;; ) {
 			if (BG_RaySphereIntersection(radius, result, &(*pSpline)->segments[i], &t0, &t1)) {
 				qboolean found = qfalse;
 
@@ -3961,12 +3961,12 @@ const char *bg_fireteamNames[MAX_FIRETEAMS] =
 
 const voteType_t voteToggles[] =
 {
-	{ "vote_allow_kick",       CV_SVF_KICK       },
-	{ "vote_allow_map",        CV_SVF_MAP        },
-	{ "vote_allow_randommap",  CV_SVF_RANDOMMAP  }, // Nico, random map voting
-	{ "vote_allow_referee",    CV_SVF_REFEREE    },
-	{ "vote_allow_antilag",    CV_SVF_ANTILAG    },
-	{ "vote_allow_muting",     CV_SVF_MUTING     }
+	{ "vote_allow_kick",      CV_SVF_KICK      },
+	{ "vote_allow_map",       CV_SVF_MAP       },
+	{ "vote_allow_randommap", CV_SVF_RANDOMMAP }, // Nico, random map voting
+	{ "vote_allow_referee",   CV_SVF_REFEREE   },
+	{ "vote_allow_antilag",   CV_SVF_ANTILAG   },
+	{ "vote_allow_muting",    CV_SVF_MUTING    }
 };
 
 int numVotesAvailable = sizeof (voteToggles) / sizeof (voteType_t);

@@ -52,7 +52,7 @@ qboolean CG_EntOnFire(centity_t *cent) {
 		         && (cg.snap->ps.onFireStart < cg.time)
 		         && (cg.snap->ps.onFireStart + 2000) > cg.time);
 	}
-	return  (cent->currentState.onFireStart < cg.time) && (cent->currentState.onFireEnd > cg.time);
+	return (cent->currentState.onFireStart < cg.time) && (cent->currentState.onFireEnd > cg.time);
 }
 
 /*
@@ -202,7 +202,7 @@ void CG_NewClientInfo(int clientNum) {
 	newInfo.hideme = (atoi(v) == 1) ? qtrue : qfalse;
 
 	// Nico, country code
-	v                  = Info_ValueForKey(configstring, "cc");
+	v                   = Info_ValueForKey(configstring, "cc");
 	newInfo.countryCode = atoi(v);
 
 	// Gordon: detect rank/skill changes client side
@@ -1525,7 +1525,7 @@ void CG_Player(centity_t *cent) {
 	refEntity_t    body;
 	refEntity_t    head;
 	refEntity_t    acc;
-	vec3_t         playerOrigin = {0, 0, 0};
+	vec3_t         playerOrigin = { 0, 0, 0 };
 	vec3_t         lightorigin;
 	int            clientNum, i;
 	int            renderfx;

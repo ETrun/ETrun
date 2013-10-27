@@ -246,7 +246,7 @@ mapInfo *UI_FindMapInfoByMapname(const char *name);
 void            UI_ReadableSize(char *buf, int bufsize, int value);
 void            UI_PrintTime(char *buf, int bufsize, int time);
 void            Text_Paint_Ext(float x, float y, float scalex, float scaley, vec4_t color, const char *text, float adjust, int limit, int style, fontInfo_t *font);
-void 			UI_DrawConnectScreen(qboolean overlay);
+void            UI_DrawConnectScreen(qboolean overlay);
 
 #define GLINFO_LINES        128
 
@@ -400,7 +400,7 @@ typedef struct {
 #define MAX_SERVERSTATUS_TEXT   2048
 #define MAX_FOUNDPLAYER_SERVERS 16
 #define MAX_MODS 64
-#define MAX_DEMOS 256// Nico, #todo: increase?
+#define MAX_DEMOS 256 // Nico, #todo: increase?
 #define MAX_MOVIES 256
 #define MAX_PLAYERMODELS 256
 #define MAX_SPAWNPOINTS 128     // NERVE - SMF

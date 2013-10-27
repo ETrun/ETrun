@@ -842,10 +842,10 @@ void G_Damage(gentity_t *targ, gentity_t *inflictor, gentity_t *attacker, vec3_t
 	// check for completely getting out of the damage
 	// Nico, disable damage between players
 	if (!(dflags & DAMAGE_NO_PROTECTION) &&
-		(targ->client && attacker->client &&
-	    (OnSameTeam(targ, attacker) ||
-	    (targ->client->sess.sessionTeam == TEAM_AXIS && attacker->client->sess.sessionTeam == TEAM_ALLIES) ||
-	    (targ->client->sess.sessionTeam == TEAM_ALLIES && attacker->client->sess.sessionTeam == TEAM_AXIS)))) {
+	    (targ->client && attacker->client &&
+	     (OnSameTeam(targ, attacker) ||
+	      (targ->client->sess.sessionTeam == TEAM_AXIS && attacker->client->sess.sessionTeam == TEAM_ALLIES) ||
+	      (targ->client->sess.sessionTeam == TEAM_ALLIES && attacker->client->sess.sessionTeam == TEAM_AXIS)))) {
 		return;
 	}
 
@@ -909,7 +909,7 @@ void G_Damage(gentity_t *targ, gentity_t *inflictor, gentity_t *attacker, vec3_t
 			}
 		}
 		targ->client->ps.eFlags |= EF_HEADSHOT;
-		hr = HR_HEAD;
+		hr                       = HR_HEAD;
 	} else if (IsLegShot(targ, dir, point, mod)) {
 		hr = HR_LEGS;
 	} else if (IsArmShot(targ, point, mod)) {
@@ -991,8 +991,8 @@ void G_Damage(gentity_t *targ, gentity_t *inflictor, gentity_t *attacker, vec3_t
 				// RF, entity scripting
 				// might have revived itself in death function
 				if (targ->health <= 0 &&
-					((targ->s.eType != ET_CONSTRUCTIBLE && targ->s.eType != ET_EXPLOSIVE) ||
-					(targ->s.eType == ET_CONSTRUCTIBLE && !targ->desstages))) {             // call manually if using desstages
+				    ((targ->s.eType != ET_CONSTRUCTIBLE && targ->s.eType != ET_EXPLOSIVE) ||
+				     (targ->s.eType == ET_CONSTRUCTIBLE && !targ->desstages))) {            // call manually if using desstages
 					G_Script_ScriptEvent(targ, "death", "");
 				}
 			}
