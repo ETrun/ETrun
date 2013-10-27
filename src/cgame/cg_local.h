@@ -994,6 +994,11 @@ typedef struct {
 	char runsavename[MAX_TOKEN_CHARS];
 	int currentdemo;
 	int startedNewDemo;
+	qboolean ignoreNextStart;
+	int rs_time;
+	int rs_keep;
+	int nd_time;
+	int nd_keep;
 
 	// Banner printing
 	int bannerPrintTime;

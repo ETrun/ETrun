@@ -1247,7 +1247,6 @@ static void CG_ServerCommand(void) {
 	const char *cmd;
 	char       text[MAX_SAY_TEXT];
 	qboolean   enc         = qfalse; // used for enc_chat, enc_tchat
-	static int currentdemo = 0, ignoreNextStart = 0;
 
 	cmd = CG_Argv(0);
 
@@ -1695,7 +1694,6 @@ static void CG_ServerCommand(void) {
 		cg.startedNewDemo = 0;
 		cg.runsave        = 1;
 		Com_sprintf(cg.runsavename, sizeof (cg.runsavename), "%s", CG_Argv(1));
-		cg.currentdemo = currentdemo;
 		return;
 	}
 
@@ -1704,23 +1702,23 @@ static void CG_ServerCommand(void) {
 			return;
 		}
 
-		if (currentdemo > 20) {
-			currentdemo = 1;
+		if (cg.currentdemo > 20) {
+			cg.currentdemo = 1;
 		}
 
 		// Sent from stoptimer, do a 1 sec delay.
 		if (trap_Argc() > 1) {
-			currentdemo++;
-			cg.startedNewDemo = currentdemo + 1;
-			ignoreNextStart   = 1;
-		} else if (!ignoreNextStart) {
-			currentdemo++;
+			cg.currentdemo++;
+			cg.startedNewDemo = cg.currentdemo + 1;
+			cg.ignoreNextStart   = qtrue;
+		} else if (!cg.ignoreNextStart) {
+			cg.currentdemo++;
 			cg.startedNewDemo = 1;
 			trap_SendConsoleCommand(va("stoprecord\n"));
-			trap_SendConsoleCommand(va("record temp_%i\n", currentdemo));
-			ignoreNextStart = 1;
+			trap_SendConsoleCommand(va("record temp_%i\n", cg.currentdemo));
+			cg.ignoreNextStart = qtrue;
 		} else {
-			ignoreNextStart = 0;
+			cg.ignoreNextStart = qfalse;
 		}
 		return;
 	}

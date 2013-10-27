@@ -2355,81 +2355,72 @@ void CG_DrawMiscGamemodels(void) {
 }
 
 /**
- * @source: TJMod
+ * Autodemo function
+ *
+ * @source: TJMod (modified by Nico)
  */
+#define AUTODEMO_NEW_DEMO_DELAY 1000
+#define AUTODEMO_RUN_SAVE_DELAY 1500
 static void CG_Autodemo() {
-	static int rs_time = 0, rs_keep = 0, nd_time = 0, nd_keep = 0;
-
-	// Start recording a new demo automatically when hitting stoptimer with 1sec delay
-	// Don't run any of this during demoplayback, same goes for initiating commands.
 	if (cg_autoDemo.integer && !cg.demoPlayback) {
-		if (cg.startedNewDemo > 1) {
-			if (!nd_keep) {
-				nd_time = cg.time;
-				nd_keep = 1;
-			}
+		return;
+	}
 
-			if (cg.time > nd_time + 1000) {
-				trap_SendConsoleCommand("stoprecord\n");
-				trap_SendConsoleCommand(va("record temp_%i\n", cg.startedNewDemo - 1));
-				cg.startedNewDemo = 1;
-			}
-		} else {
-			nd_time = nd_keep = 0;
+	if (cg.startedNewDemo > 1) {
+		if (!cg.nd_keep) {
+			cg.nd_time = cg.time;
+			cg.nd_keep = 1;
 		}
 
-		if (cg.runsave) {
-			if (!rs_keep) {
-				if (cg_autoDemo.integer == 1) {
-					CG_AddPMItem(PM_MESSAGE, va("%s^w: stopping and saving demo...\n", GAME_VERSION_COLORED), cgs.media.voiceChatShader);
-				}
-				rs_time = cg.time;
-				rs_keep = 1;
-			}
-
-			if (cg.time > rs_time + 1500 && rs_keep == 1 && !cg.startedNewDemo) {
-				trap_SendConsoleCommand("stoprecord\n");
-				rs_keep = 2;
-			}
-
-			if (cg.time > rs_time + 2000) {
-				int          len = 0;
-				fileHandle_t temp, demo;
-				char         *name;
-				int          i = 0;
-
-				len = trap_FS_FOpenFile(va("demos/temp_%i.dm_84", cg.currentdemo), &temp, FS_READ);
-
-				name = va("demos/%s_%s.dm_84", cgs.rawmapname, cg.runsavename);
-
-				trap_FS_FOpenFile(name, &demo, FS_WRITE);
-
-				//
-				// BUG: Something > max msglen or something like that,
-				// NO IDEA what causes it, since its for both source and copy of the demo..
-				// COULD possibly be because both have been opened, but that seems weird.
-				//
-				for (i = 0; i < len; ++i) {
-					byte b = 0;
-
-					trap_FS_Read(&b, 1, temp);
-					trap_FS_Write(&b, 1, demo);
-				}
-
-				trap_FS_FCloseFile(temp);
-				trap_FS_FCloseFile(demo);
-
-				CG_Printf("^3Demo saved as:^7 %s\n", name);
-
-				if (cg_autoDemo.integer == 1) {
-					CG_AddPMItem(PM_MESSAGE, va("%s^w: demo saved!\n", GAME_VERSION_COLORED), cgs.media.voiceChatShader);
-				}
-
-				cg.runsave = rs_keep = 0;
-			}
-		} else {
-			rs_time = rs_keep = 0;
+		if (cg.time > cg.nd_time + AUTODEMO_NEW_DEMO_DELAY) {
+			trap_SendConsoleCommand("stoprecord\n");
+			trap_SendConsoleCommand(va("record temp_%i\n", cg.startedNewDemo - 1));
+			cg.startedNewDemo = 1;
 		}
+	} else {
+		cg.nd_time = cg.nd_keep = 0;
+	}
+
+	if (cg.runsave) {
+		if (!cg.rs_keep) {
+			CG_AddPMItem(PM_MESSAGE, va("%s^w: stopping and saving demo...\n", GAME_VERSION_COLORED), cgs.media.voiceChatShader);
+			cg.rs_time = cg.time;
+			cg.rs_keep = 1;
+		}
+
+		if (cg.time > cg.rs_time + AUTODEMO_RUN_SAVE_DELAY && cg.rs_keep == 1 && !cg.startedNewDemo) {
+			trap_SendConsoleCommand("stoprecord\n");
+			cg.rs_keep = 2;
+		}
+
+		if (cg.time > cg.rs_time + AUTODEMO_RUN_SAVE_DELAY + 500) {
+			int          len = 0;
+			fileHandle_t temp, demo;
+			char         *name;
+			int          i = 0;
+
+			len = trap_FS_FOpenFile(va("demos/temp_%i.dm_84", cg.currentdemo), &temp, FS_READ);
+			name = va("demos/%s_%s.dm_84", cgs.rawmapname, cg.runsavename);
+
+			trap_FS_FOpenFile(name, &demo, FS_WRITE);
+
+			for (i = 0; i < len; ++i) {
+				byte b = 0;
+
+				trap_FS_Read(&b, 1, temp);
+				trap_FS_Write(&b, 1, demo);
+			}
+
+			trap_FS_FCloseFile(temp);
+			trap_FS_FCloseFile(demo);
+
+			CG_Printf("^3Demo saved as:^7 %s\n", name);
+			CG_AddPMItem(PM_MESSAGE, va("%s^w: demo saved!\n", GAME_VERSION_COLORED), cgs.media.voiceChatShader);
+
+			cg.runsave = cg.rs_keep = 0;
+		}
+	} else {
+		cg.rs_time = cg.rs_keep = 0;
 	}
 }
 
