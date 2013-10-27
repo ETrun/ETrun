@@ -3112,7 +3112,7 @@ BG_GetMarkDir
 */
 void BG_GetMarkDir(const vec3_t dir, const vec3_t normal, vec3_t out) {
 	vec3_t ndir, lnormal;
-	float  minDot = 0.3;
+	float  minDot = 0.3f;
 	int    x      = 0;
 
 	if (dir[0] < 0.001 && dir[1] < 0.001) {

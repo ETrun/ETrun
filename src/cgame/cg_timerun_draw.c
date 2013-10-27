@@ -419,7 +419,7 @@ void CG_DrawCGaz(void) {
 		return;
 	}
 
-	a        = 0.15;
+	a        = 0.15f;
 	a        = (a > 1.0f) ? 1.0f : (a < 0.0f) ? 0.0f : a;
 	color[3] = a;
 	VectorCopy(ps->velocity, vel);

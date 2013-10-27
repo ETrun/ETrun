@@ -426,7 +426,7 @@ void CG_AddFragment(localEntity_t *le) {
 			// make it smaller
 			sizeScale = le->sizeScale * 0.8;
 			if (sizeScale < 0.7) {
-				sizeScale = 0.7;
+				sizeScale = 0.7f;
 			}
 
 			// move us a bit

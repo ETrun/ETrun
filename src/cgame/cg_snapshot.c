@@ -108,7 +108,7 @@ static void CG_TransitionEntity(centity_t *cent) {
 			newDir[2] = 1;
 		}
 		// now move towards the newDir
-		adjust = 0.3;
+		adjust = 0.3f;
 		VectorMA(cent->fireRiseDir, adjust, newDir, cent->fireRiseDir);
 		if (VectorNormalize(cent->fireRiseDir) <= 0.1) {
 			VectorCopy(newDir, cent->fireRiseDir);

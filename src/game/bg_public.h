@@ -1391,7 +1391,7 @@ void    BG_PlayerStateToEntityStateExtraPolate(playerState_t *ps, entityState_t 
 qboolean    BG_PlayerTouchesItem(playerState_t *ps, entityState_t *item, int atTime);
 qboolean    BG_PlayerSeesItem(playerState_t *ps, entityState_t *item, int atTime);
 
-# define OVERCLIP        1.001
+# define OVERCLIP        1.001f
 
 //----(SA)	removed PM_ammoNeeded 11/27/00
 void PM_ClipVelocity(vec3_t in, vec3_t normal, vec3_t out, float overbounce);

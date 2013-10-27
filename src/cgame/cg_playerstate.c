@@ -184,7 +184,7 @@ void CG_DamageFeedback(int yawByte, int pitchByte, int damage) {
 		dir[2] = 0;
 		dist   = VectorLength(dir);
 		if (dist < 0.1) {
-			dist = 0.1;
+			dist = 0.1f;
 		}
 
 		cg.v_dmg_roll = kick * left;
@@ -192,7 +192,7 @@ void CG_DamageFeedback(int yawByte, int pitchByte, int damage) {
 		cg.v_dmg_pitch = -kick * front;
 
 		if (front <= 0.1) {
-			front = 0.1;
+			front = 0.1f;
 		}
 		vd->damageX = crandom() * 0.3 + -left / front;
 		vd->damageY = crandom() * 0.3 + up / dist;

@@ -1441,8 +1441,8 @@ void ClientSpawn(gentity_t *ent) {
 
 	client->ps.crouchMaxZ = client->ps.maxs[2] - (client->ps.standViewHeight - client->ps.crouchViewHeight);
 
-	client->ps.runSpeedScale    = 0.8;
-	client->ps.sprintSpeedScale = 1.1;
+	client->ps.runSpeedScale    = 0.8f;
+	client->ps.sprintSpeedScale = 1.1f;
 	client->ps.crouchSpeedScale = 0.25;
 	client->ps.weaponstate      = WEAPON_READY;
 

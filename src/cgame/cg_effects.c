@@ -568,7 +568,7 @@ void CG_Spotlight(centity_t *cent, float *color, vec3_t realstart, vec3_t lightD
 	if (!(flags & SL_NODLIGHT)) {
 		vec3_t dlightLoc;
 		VectorMA(tr.endpos, 0, lightDir, dlightLoc);      // back away from the hit
-		trap_R_AddLightToScene(dlightLoc, radius * 2, 0.3, 1.0, 1.0, 1.0, 0, 0);
+		trap_R_AddLightToScene(dlightLoc, radius * 2, 0.3f, 1.0, 1.0, 1.0, 0, 0);
 	}
 
 	// draw flare at source

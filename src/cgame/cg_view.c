@@ -348,7 +348,7 @@ void CG_KickAngles(void) {
 				// add the kickAVel to the kickAngles
 				kickChange = cg.kickAVel[i] * ft;
 				if (cg.kickAngles[i] && (cg.kickAngles[i] < 0) != (kickChange < 0)) {       // slower when returning to center
-					kickChange *= 0.06;
+					kickChange *= 0.06f;
 				}
 				// check for crossing back over the center point
 				if (!cg.kickAngles[i] || ((cg.kickAngles[i] + kickChange) < 0) == (cg.kickAngles[i] < 0)) {

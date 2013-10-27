@@ -189,7 +189,7 @@ void CG_AddLightstyle(centity_t *cent) {
 	lightval = (lastch * (1.0 - cent->dl_backlerp)) + (nextch * cent->dl_backlerp);
 
 	// ydnar: dlight values go from 0-1.5ish
-	lightval *= 0.071429;
+	lightval *= 0.071429f;
 	lightval  = max(0.0f, lightval);
 	lightval  = min(20.0f, lightval);
 
@@ -320,7 +320,7 @@ static void CG_EntityEffects(centity_t *cent) {
 				dir[2] += 10;
 			}
 			CG_SmokePuff(cent->lerpOrigin, dir, 15 + (random() * 10),
-			             0.3 + rnd, 0.3 + rnd, 0.3 + rnd, 0.4, 1500 + (rand() % 500),
+			             0.3f + rnd, 0.3f + rnd, 0.3f + rnd, 0.4f, 1500 + (rand() % 500),
 			             cg.time, cg.time + 500, 0, cgs.media.smokePuffShader);
 		}
 	}
@@ -741,11 +741,11 @@ static void CG_Item(centity_t *cent) {
 			highlight = qtrue;
 
 			if (item->giType == IT_TREASURE) {
-				trap_R_AddCoronaToScene(cent->highlightOrigin, 1, 0.85, 0.5, 2, cent->currentState.number, qtrue);   //----(SA)	add corona to treasure
+				trap_R_AddCoronaToScene(cent->highlightOrigin, 1, 0.85f, 0.5f, 2, cent->currentState.number, qtrue);   //----(SA)	add corona to treasure
 			}
 		} else {
 			if (item->giType == IT_TREASURE) {
-				trap_R_AddCoronaToScene(cent->highlightOrigin, 1, 0.85, 0.5, 2, cent->currentState.number, qfalse);      //----(SA)	"empty corona" for proper fades
+				trap_R_AddCoronaToScene(cent->highlightOrigin, 1, 0.85f, 0.5f, 2, cent->currentState.number, qfalse);      //----(SA)	"empty corona" for proper fades
 			}
 		}
 
@@ -1252,7 +1252,7 @@ CG_Efx
 static void CG_SpotlightEfx(centity_t *cent) {
 	vec3_t targetpos, normalized_direction;
 	float  dist, fov = 90;
-	vec4_t color        = { 1, 1, 1, .1 };
+	vec4_t color        = { 1, 1, 1, .1f };
 	int    splinetarget = 0;
 	char   *cs;
 

@@ -387,7 +387,7 @@ static void WM_ETrun_DrawInfo() {
 	int   x                      = SB_INFO_X;
 	int   y                      = SB_INFO_Y;
 	char  physicsName[MAX_QPATH] = { 0 };
-	float textScale              = 0.12;
+	float textScale              = 0.12f;
 
 	// Nico, draw time
 	CG_DrawClock(x, y, textScale, qtrue);

@@ -766,10 +766,10 @@ CG_TeamColor
 ================
 */
 float *CG_TeamColor(int team) {
-	static vec4_t red       = { 1, 0.2, 0.2, 1 };
-	static vec4_t blue      = { 0.2, 0.2, 1, 1 };
+	static vec4_t red       = { 1, 0.2f, 0.2f, 1 };
+	static vec4_t blue      = { 0.2f, 0.2f, 1, 1 };
 	static vec4_t other     = { 1, 1, 1, 1 };
-	static vec4_t spectator = { 0.7, 0.7, 0.7, 1 };
+	static vec4_t spectator = { 0.7f, 0.7f, 0.7f, 1 };
 
 	switch (team) {
 	case TEAM_AXIS:
@@ -1042,13 +1042,13 @@ UI_ProportionalSizeScale
 */
 float UI_ProportionalSizeScale(int style) {
 	if (style & UI_SMALLFONT) {
-		return 0.75;
+		return 0.75f;
 	}
 	if (style & UI_EXSMALLFONT) {
-		return 0.4;
+		return 0.4f;
 	}
 
-	return 1.00;
+	return 1.0f;
 }
 
 

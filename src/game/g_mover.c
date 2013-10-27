@@ -2886,7 +2886,7 @@ void Reached_Train_rotating(gentity_t *ent) {
 	frames = floor(ent->s.pos.trDuration / 100);
 
 	if (!frames) {
-		frames = 0.001;
+		frames = 0.001f;
 	}
 
 	ent->s.apos.trType = TR_LINEAR;

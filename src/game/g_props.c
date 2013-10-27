@@ -822,7 +822,7 @@ void Props_Activated(gentity_t *self) {
 		owner->melee = NULL;
 
 		self->physicsObject = qtrue;
-		self->physicsBounce = 0.2;
+		self->physicsBounce = 0.2f;
 
 		self->s.groundEntityNum = -1;
 
@@ -859,7 +859,7 @@ void Props_Activated(gentity_t *self) {
 		VectorSet(prop->r.maxs, 12, 12, 48);
 
 		prop->physicsObject = qtrue;
-		prop->physicsBounce = 0.2;
+		prop->physicsBounce = 0.2f;
 
 		VectorCopy(owner->client->ps.origin, prop->s.pos.trBase);
 
@@ -970,7 +970,7 @@ void Props_Chair_Think(gentity_t *self) {
 	if (self->s.groundEntityNum == -1) {
 
 		self->physicsObject = qtrue;
-		self->physicsBounce = 0.2;
+		self->physicsBounce = 0.2f;
 
 		self->s.pos.trDelta[2] -= 200;
 

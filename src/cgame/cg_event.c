@@ -540,10 +540,10 @@ void CG_RubbleFx(vec3_t origin, vec3_t dir, int mass, int type, sfxHandle_t soun
 			switch (type) {
 			case 6: // fabric
 				le->bounceFactor = 0.0;
-				materialmul      = 0.3;     // rotation speed
+				materialmul      = 0.3f;     // rotation speed
 				break;
 			default:
-				le->bounceFactor = 0.4;
+				le->bounceFactor = 0.4f;
 				break;
 			}
 
@@ -812,10 +812,10 @@ void CG_Explodef(vec3_t origin, vec3_t dir, int mass, int type, qhandle_t sound,
 			switch (type) {
 			case 6: // fabric
 				le->bounceFactor = 0.0;
-				materialmul      = 0.3;     // rotation speed
+				materialmul      = 0.3f;     // rotation speed
 				break;
 			default:
-				le->bounceFactor = 0.4;
+				le->bounceFactor = 0.4f;
 				break;
 			}
 
@@ -957,7 +957,7 @@ void CG_Effect(centity_t *cent, vec3_t origin, vec3_t dir) {
 
 		le->pos.trTime = cg.time;
 
-		le->bounceFactor = 0.3;
+		le->bounceFactor = 0.3f;
 
 		le->leBounceSoundType = LEBS_BLOOD;
 		le->leMarkType        = LEMT_BLOOD;
@@ -1023,7 +1023,7 @@ void CG_Shard(centity_t *cent, vec3_t origin, vec3_t dir) {
 
 		le->lifeRate     = 1.0 / (le->endTime - le->startTime);
 		le->leFlags      = LEF_TUMBLE;
-		le->bounceFactor = 0.4;
+		le->bounceFactor = 0.4f;
 		// le->leBounceSoundType	= LEBS_WOOD;
 		le->leMarkType = 0;
 
@@ -1129,7 +1129,7 @@ void CG_ShardJunk(vec3_t origin, vec3_t dir) {
 
 	le->lifeRate     = 1.0 / (le->endTime - le->startTime);
 	le->leFlags      = LEF_TUMBLE;
-	le->bounceFactor = 0.4;
+	le->bounceFactor = 0.4f;
 	le->leMarkType   = 0;
 
 	VectorCopy(origin, re->origin);
@@ -1173,7 +1173,7 @@ void CG_Debris(centity_t *cent, vec3_t origin, vec3_t dir) {
 
 	le->lifeRate     = 1.0 / (le->endTime - le->startTime);
 	le->leFlags      = LEF_TUMBLE | LEF_TUMBLE_SLOW;
-	le->bounceFactor = 0.4;
+	le->bounceFactor = 0.4f;
 	le->leMarkType   = 0;
 	le->breakCount   = 1;
 	le->sizeScale    = 0.5;
@@ -2014,7 +2014,7 @@ void CG_EntityEvent(centity_t *cent, vec3_t position) {
 		break;
 
 	case EV_FLAMETHROWER_EFFECT:
-		CG_FireFlameChunks(cent, cent->currentState.origin, cent->currentState.apos.trBase, 0.6, 2);
+		CG_FireFlameChunks(cent, cent->currentState.origin, cent->currentState.apos.trBase, 0.6f, 2);
 		break;
 
 	case EV_DUST:

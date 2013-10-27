@@ -711,7 +711,7 @@ int G_PredictMissile(gentity_t *ent, int duration, vec3_t endPos, qboolean allow
 // copied from cg_flamethrower.c
 #define FLAME_START_SIZE        1.0
 #define FLAME_START_MAX_SIZE    100.0   // when the flame is spawned, it should endevour to reach this size
-#define FLAME_START_SPEED       1200.0  // speed of flame as it leaves the nozzle
+#define FLAME_START_SPEED       1200.0f  // speed of flame as it leaves the nozzle
 #define FLAME_MIN_SPEED         60.0
 
 // these are calculated (don't change)

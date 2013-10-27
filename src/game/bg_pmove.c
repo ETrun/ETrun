@@ -48,12 +48,12 @@ pml_t   pml;
 float pm_stopspeed = 100;
 
 //----(SA)	modified
-float pm_waterSwimScale = 0.5;
-float pm_waterWadeScale = 0.70;
-float pm_slagSwimScale  = 0.30;
-float pm_slagWadeScale  = 0.70;
+float pm_waterSwimScale = 0.50f;
+float pm_waterWadeScale = 0.70f;
+float pm_slagSwimScale  = 0.30f;
+float pm_slagWadeScale  = 0.70f;
 
-float pm_proneSpeedScale = 0.21;    // was: 0.18 (too slow) then: 0.24 (too fast)
+float pm_proneSpeedScale = 0.21f;    // was: 0.18 (too slow) then: 0.24 (too fast)
 
 float pm_accelerate      = 10;
 float pm_airaccelerate   = 1;
@@ -399,7 +399,7 @@ static float PM_CmdScale(usercmd_t *cmd, qboolean horizontalOnly) {
 	}
 
 	if (pm->ps->weapon == WP_FLAMETHROWER && pm->cmd.buttons & BUTTON_ATTACK) {
-		scale *= 0.7;
+		scale *= 0.7f;
 	}
 
 	if (horizontalOnly) {
@@ -1753,7 +1753,7 @@ static void PM_Footsteps(void) {
 
 
 	if (pm->ps->eFlags & EF_PRONE) {
-		bobmove = 0.2;  // prone characters bob slower
+		bobmove = 0.2f;  // prone characters bob slower
 		if (pm->ps->pm_flags & PMF_BACKWARDS_RUN) {
 			animResult = BG_AnimScriptAnimation(pm->ps, pm->character->animModelInfo, ANIM_MT_PRONEBK, qtrue);
 		} else {
@@ -1770,7 +1770,7 @@ static void PM_Footsteps(void) {
 		// ducked characters never play footsteps
 	} else if (pm->ps->pm_flags & PMF_BACKWARDS_RUN) {
 		if (!(pm->cmd.buttons & BUTTON_WALKING)) {
-			bobmove  = 0.4; // faster speeds bob faster
+			bobmove  = 0.4f; // faster speeds bob faster
 			footstep = qtrue;
 			// check for strafing
 			if (pm->cmd.rightmove && !pm->cmd.forwardmove) {
@@ -1784,7 +1784,7 @@ static void PM_Footsteps(void) {
 				animResult = BG_AnimScriptAnimation(pm->ps, pm->character->animModelInfo, ANIM_MT_RUNBK, qtrue);
 			}
 		} else {
-			bobmove = 0.3;
+			bobmove = 0.3f;
 			// check for strafing
 			if (pm->cmd.rightmove && !pm->cmd.forwardmove) {
 				if (pm->cmd.rightmove > 0) {
@@ -1801,7 +1801,7 @@ static void PM_Footsteps(void) {
 	} else {
 
 		if (!(pm->cmd.buttons & BUTTON_WALKING)) {
-			bobmove  = 0.4; // faster speeds bob faster
+			bobmove  = 0.4f; // faster speeds bob faster
 			footstep = qtrue;
 			// check for strafing
 			if (pm->cmd.rightmove && !pm->cmd.forwardmove) {
@@ -1815,7 +1815,7 @@ static void PM_Footsteps(void) {
 				animResult = BG_AnimScriptAnimation(pm->ps, pm->character->animModelInfo, ANIM_MT_RUN, qtrue);
 			}
 		} else {
-			bobmove = 0.3;  // walking bobs slow
+			bobmove = 0.3f;  // walking bobs slow
 			if (pm->cmd.rightmove && !pm->cmd.forwardmove) {
 				if (pm->cmd.rightmove > 0) {
 					animResult = BG_AnimScriptAnimation(pm->ps, pm->character->animModelInfo, ANIM_MT_STRAFERIGHT, qtrue);

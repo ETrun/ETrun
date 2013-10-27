@@ -1455,7 +1455,7 @@ CG_DrawSpectatorMessage
 static void CG_DrawSpectatorMessage(void) {
 	const char *str2;
 	static int lastconfigGet = 0;
-	float      textScale     = 0.14;
+	float      textScale     = 0.14f;
 
 	if (!cg_descriptiveText.integer) {
 		return;
@@ -2041,7 +2041,7 @@ static void CG_DrawWeapRecharge(rectDef_t *rect) {
 
 	if (fade) {
 		bgcolor[3] *= 0.4f;
-		color[3]   *= 0.4;
+		color[3]   *= 0.4f;
 	}
 
 	CG_FilledBar(rect->x, rect->y + (rect->h * 0.1f), rect->w, rect->h * 0.84f, color, NULL, bgcolor, barFrac, flags);

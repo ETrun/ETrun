@@ -471,8 +471,8 @@ void CG_RunLerpFrameRate(clientInfo_t *ci, lerpFrame_t *lf, int newAnimation, ce
 	animation_t *otherAnim = NULL;
 	qboolean    isLadderAnim;
 
-#define ANIM_SCALEMAX_LOW   1.1
-#define ANIM_SCALEMAX_HIGH  1.6
+#define ANIM_SCALEMAX_LOW   1.1f
+#define ANIM_SCALEMAX_HIGH  1.6f
 
 #define ANIM_SPEEDMAX_LOW   100
 #define ANIM_SPEEDMAX_HIGH  20
@@ -792,7 +792,7 @@ static void CG_SwingAngles(float destination, float swingTolerance, float clampT
 	// so it doesn't seem so linear
 	swing  = AngleSubtract(destination, *angle);
 	scale  = fabs(swing);
-	scale *= 0.05;
+	scale *= 0.05f;
 	if (scale < 0.5) {
 		scale = 0.5;
 	}
@@ -978,7 +978,7 @@ static void CG_PlayerAngles(centity_t *cent, vec3_t legs[3], vec3_t torso[3], ve
 	if (cent->currentState.eFlags & EF_PRONE) {
 		torsoAngles[PITCH] = legsAngles[PITCH] - 3;
 	} else {
-		CG_SwingAngles(dest, 15, 30, 0.1, &cent->pe.torso.pitchAngle, &cent->pe.torso.pitching);
+		CG_SwingAngles(dest, 15, 30, 0.1f, &cent->pe.torso.pitchAngle, &cent->pe.torso.pitching);
 		torsoAngles[PITCH] = cent->pe.torso.pitchAngle;
 	}
 
@@ -993,7 +993,7 @@ static void CG_PlayerAngles(centity_t *cent, vec3_t legs[3], vec3_t torso[3], ve
 		vec3_t axis[3];
 		float  side;
 
-		speed *= 0.05;
+		speed *= 0.05f;
 
 		AnglesToAxis(legsAngles, axis);
 		side              = speed * DotProduct(velocity, axis[1]);
@@ -1103,7 +1103,7 @@ static void CG_PlayerFloatSprite(centity_t *cent, qhandle_t shader, int height) 
 
 	ent.reType        = RT_SPRITE;
 	ent.customShader  = shader;
-	ent.radius        = 6.66;
+	ent.radius        = 6.66f;
 	ent.renderfx      = rf;
 	ent.shaderRGBA[0] = 255;
 	ent.shaderRGBA[1] = 255;

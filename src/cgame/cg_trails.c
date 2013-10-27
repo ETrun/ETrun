@@ -338,7 +338,7 @@ int CG_AddSmokeJunc(int headJuncIndex, void *usedby, qhandle_t shader, vec3_t po
 	j->spawnTime = cg.time;
 	j->endTime   = cg.time + trailLife;
 
-	VectorSet(j->colorStart, 0.7, 0.7, 0.7);
+	VectorSet(j->colorStart, 0.7f, 0.7f, 0.7f);
 	VectorSet(j->colorEnd, 0.0, 0.0, 0.0);
 
 	j->alphaStart = alpha;
@@ -545,7 +545,7 @@ void CG_AddTrailToScene(trailJunc_t *trail, int iteration, int numJuncs) {
 
 	s = 0;
 	if (trail->sType == STYPE_STRETCH) {
-		s = 0.05;
+		s = 0.05f;
 	} else if (trail->sType == STYPE_REPEAT) {
 		s = trail->sTex;
 	}

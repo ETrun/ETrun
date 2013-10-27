@@ -2175,7 +2175,7 @@ gentity_t *weapon_grenadelauncher_fire(gentity_t *ent, int grenType) {
 	upangle += 0.5f;                    //				    0.0 / 1.0
 
 	if (upangle < .1) {
-		upangle = .1;
+		upangle = .1f;
 	}
 
 	// pineapples are not thrown as far as mashers // Gordon: um, no?

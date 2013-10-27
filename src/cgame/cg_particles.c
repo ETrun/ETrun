@@ -398,11 +398,11 @@ void CG_AddParticleToScene(cparticle_t *p, vec3_t org) {
 		}
 
 		if (p->color == MUSTARD) {
-			VectorSet(color, 0.42, 0.33, 0.19);
+			VectorSet(color, 0.42f, 0.33f, 0.19f);
 		} else if (p->color == BLOODRED) {
-			VectorSet(color, 0.22, 0, 0);
+			VectorSet(color, 0.22f, 0, 0);
 		} else if (p->color == ZOMBIE) {
-			VectorSet(color, 0.4, 0.28, 0.23);
+			VectorSet(color, 0.4f, 0.28f, 0.23f);
 		} else if (p->color == GREY75) {
 			float len;
 			float greyit;
@@ -643,11 +643,11 @@ void CG_AddParticleToScene(cparticle_t *p, vec3_t org) {
 		time2 = p->endtime - p->time;
 		ratio = time / time2;
 		if (ratio >= 1.0) {
-			ratio = 0.9999;
+			ratio = 0.9999f;
 		} else if (ratio < 0.0) {
 			// rain - make sure that ratio isn't negative or
 			// we'll walk out of bounds when j is calculated below
-			ratio = 0.0001;
+			ratio = 0.0001f;
 		}
 
 		width  = p->width + (ratio * (p->endwidth - p->width));
@@ -657,7 +657,7 @@ void CG_AddParticleToScene(cparticle_t *p, vec3_t org) {
 		if (p->type == P_DLIGHT_ANIM) {
 			// fixme: support arbitrary color
 			trap_R_AddLightToScene(org, 320,    //%	1.5 * (width > height ? width : height),
-			                       1.25 * (1.0 - ratio), 1.0, 0.95, 0.85, 0, 0);
+			                       1.25f * (1.0f - ratio), 1.0f, 0.95f, 0.85f, 0, 0);
 		}
 
 		// if we are "inside" this sprite, don't draw
@@ -889,7 +889,7 @@ void CG_ParticleSnowFlurry(qhandle_t pshader, centity_t *cent) {
 	active_particles = p;
 	p->time          = cg.time;
 	p->color         = 0;
-	p->alpha         = 0.90;
+	p->alpha         = 0.90f;
 	p->alphavel      = 0;
 
 	p->start = cent->currentState.origin2[0];
@@ -903,7 +903,7 @@ void CG_ParticleSnowFlurry(qhandle_t pshader, centity_t *cent) {
 	if (rand() % 100 > 90) {
 		p->height = 32;
 		p->width  = 32;
-		p->alpha  = 0.10;
+		p->alpha  = 0.10f;
 	} else {
 		p->height = 1;
 		p->width  = 1;
@@ -950,7 +950,7 @@ void CG_ParticleSnow(qhandle_t pshader, vec3_t origin, vec3_t origin2, int turb,
 	active_particles = p;
 	p->time          = cg.time;
 	p->color         = 0;
-	p->alpha         = 0.40;
+	p->alpha         = 0.40f;
 	p->alphavel      = 0;
 	p->start         = origin[2];
 	p->end           = origin2[2];
@@ -1005,7 +1005,7 @@ void CG_ParticleBubble(qhandle_t pshader, vec3_t origin, vec3_t origin2, int tur
 	active_particles = p;
 	p->time          = cg.time;
 	p->color         = 0;
-	p->alpha         = 0.40;
+	p->alpha         = 0.40f;
 	p->alphavel      = 0;
 	p->start         = origin[2];
 	p->end           = origin2[2];
@@ -1238,10 +1238,10 @@ void CG_ParticleDirtBulletDebris(vec3_t org, vec3_t vel, int duration) {
 	p->alpha    = 1.0;
 	p->alphavel = 0;
 
-	p->height    = 1.2;
-	p->width     = 1.2;
-	p->endheight = 4.5;
-	p->endwidth  = 4.5;
+	p->height    = 1.2f;
+	p->width     = 1.2f;
+	p->endheight = 4.5f;
+	p->endwidth  = 4.5f;
 
 	if (r == 0) {
 		p->pshader = cgs.media.dirtParticle1Shader;
@@ -1674,7 +1674,7 @@ void CG_ParticleSparks(vec3_t org, vec3_t vel, int duration, float x, float y, f
 	p->startfade = (float)(cg.time + duration / 2);
 
 	p->color    = EMISIVEFADE;
-	p->alpha    = 0.4;
+	p->alpha    = 0.4f;
 	p->alphavel = 0;
 
 	p->height    = 0.5;

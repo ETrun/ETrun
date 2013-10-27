@@ -35,9 +35,7 @@ If you have questions concerning this license or the applicable additional terms
 #define CONFIG_NAME     "etconfig.cfg"
 
 #if defined _WIN32 && !defined __GNUC__
-//# pragma warning(disable : 4127) // conditional expression is constant
 # pragma warning(disable : 4244) // 'conversion' conversion from 'type1' to 'type2', possible loss of data
-# pragma warning(disable : 4305) // truncation from const double to float
 #endif
 
 #if defined(ppc) || defined(__ppc) || defined(__ppc__) || defined(__POWERPC__)

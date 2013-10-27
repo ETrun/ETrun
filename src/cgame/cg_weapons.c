@@ -120,7 +120,7 @@ void CG_MachineGunEjectBrassNew(centity_t *cent) {
 	VectorCopy(re->origin, le->pos.trBase);
 
 	if (CG_PointContents(re->origin, -1) & (CONTENTS_WATER | CONTENTS_SLIME)) {       //----(SA)	modified since slime is no longer deadly
-		waterScale = 0.10;
+		waterScale = 0.10f;
 	}
 
 	xvelocity[0] = velocity[0] * v[0][0] + velocity[1] * v[1][0] + velocity[2] * v[2][0];
@@ -262,7 +262,7 @@ void CG_MachineGunEjectBrass(centity_t *cent) {
 	VectorCopy(re->origin, le->pos.trBase);
 
 	if (CG_PointContents(re->origin, -1) & (CONTENTS_WATER | CONTENTS_SLIME)) {       //----(SA)	modified since slime is no longer deadly
-		waterScale = 0.10;
+		waterScale = 0.10f;
 	}
 
 	xvelocity[0] = velocity[0] * v[0][0] + velocity[1] * v[1][0] + velocity[2] * v[2][0];
@@ -339,7 +339,7 @@ static void CG_PanzerFaustEjectBrass(centity_t *cent) {
 	VectorCopy(re->origin, le->pos.trBase);
 
 	if (CG_PointContents(re->origin, -1) & (CONTENTS_WATER | CONTENTS_SLIME)) {
-		waterScale = 0.10;
+		waterScale = 0.10f;
 	}
 
 	xvelocity[0] = velocity[0] * v[0][0] + velocity[1] * v[1][0] + velocity[2] * v[2][0];
@@ -678,7 +678,7 @@ static void CG_GrenadeTrail(centity_t *ent) {
 		                                     ent,    // rain - zinx's trail fix
 		                                     cgs.media.smokeTrailShader,
 		                                     origin,
-		                                     1000, 0.3, 2, 20);
+		                                     1000, 0.3f, 2, 20);
 		ent->lastTrailTime = cg.time;
 	}
 //----(SA)	end
@@ -1887,7 +1887,7 @@ void CG_AddPlayerWeapon(refEntity_t *parent, playerState_t *ps, centity_t *cent)
 			trap_R_AddRefEntityToScene(&flash);
 
 			// ydnar: add dynamic light
-			trap_R_AddLightToScene(flash.origin, 320, 1.25 + (rand() & 31) / 128, 1.0, 0.6, 0.23, 0, 0);
+			trap_R_AddLightToScene(flash.origin, 320, 1.25f + (rand() & 31) / 128, 1.0f, 0.6f, 0.23f, 0, 0);
 		}
 		return;
 	}
@@ -4000,8 +4000,8 @@ void CG_MG42EFX(centity_t *cent) {
 			trap_R_AddRefEntityToScene(&flash);
 
 			// ydnar: add dynamic light
-			trap_R_AddLightToScene(flash.origin, 320, 1.25 + (rand() & 31) / 128,
-			                       1.0, 0.6, 0.23, 0, 0);
+			trap_R_AddLightToScene(flash.origin, 320, 1.25f + (rand() & 31) / 128,
+			                       1.0f, 0.6f, 0.23f, 0, 0);
 
 			return;
 		}
@@ -4076,7 +4076,7 @@ void CG_WeaponFireRecoil(int weapon) {
 		break;
 	case WP_GARAND_SCOPE:
 	case WP_K43_SCOPE:
-		pitchAdd = 0.3;
+		pitchAdd = 0.3f;
 		break;
 	case WP_FG42SCOPE:
 	case WP_FG42:
@@ -4087,8 +4087,8 @@ void CG_WeaponFireRecoil(int weapon) {
 	case WP_STEN:
 		pitchAdd   = 1 + rand() % 3;
 		yawRandom  = 2;
-		pitchAdd  *= 0.3;
-		yawRandom *= 0.3;
+		pitchAdd  *= 0.3f;
+		yawRandom *= 0.3f;
 		break;
 	case WP_PANZERFAUST:
 		// push the player back instead
@@ -4295,7 +4295,7 @@ void CG_AddSparks(vec3_t origin, vec3_t dir, int speed, int duration, int count,
 
 		le->refEntity.customShader = cgs.media.sparkParticleShader;
 
-		le->bounceFactor = 0.9;
+		le->bounceFactor = 0.9f;
 	}
 }
 /*
@@ -4503,7 +4503,7 @@ void CG_MissileHitWall(int weapon, int clientNum, vec3_t origin, vec3_t dir, int
 
 		if (!clientNum) {
 			// RF, why is this here? we need sparks if clientNum = 0, used for warzombie
-			CG_AddSparks(origin, dir, 350, 200, 15 + rand() % 7, 0.2);
+			CG_AddSparks(origin, dir, 350, 200, 15 + rand() % 7, 0.2f);
 		} else if (clientNum == 1) {     // just do a little smoke puff
 			vec3_t d, o;
 			VectorMA(origin, 12, dir, o);
@@ -4582,7 +4582,7 @@ void CG_MissileHitWall(int weapon, int clientNum, vec3_t origin, vec3_t dir, int
 		duration      = 1000;
 		lightColor[0] = 0.75;
 		lightColor[1] = 0.5;
-		lightColor[2] = 0.1;
+		lightColor[2] = 0.1f;
 
 		VectorScale(dir, 16, sprVel);
 		if (CG_PointContents(origin, 0) & CONTENTS_WATER) {
@@ -4629,7 +4629,7 @@ void CG_MissileHitWall(int weapon, int clientNum, vec3_t origin, vec3_t dir, int
 		duration      = 1000;
 		lightColor[0] = 0.75;
 		lightColor[1] = 0.5;
-		lightColor[2] = 0.1;
+		lightColor[2] = 0.1f;
 
 // JPW NERVE
 // biggie dynamite explosions that mean it -- dynamite is biggest explode, so it gets extra crap thrown on
@@ -4704,7 +4704,7 @@ void CG_MissileHitWall(int weapon, int clientNum, vec3_t origin, vec3_t dir, int
 		duration      = 1000;
 		lightColor[0] = 0.75;
 		lightColor[1] = 0.5;
-		lightColor[2] = 0.1;
+		lightColor[2] = 0.1f;
 
 		// Ridah, explosion sprite animation
 		VectorMA(origin, 16, dir, sprOrg);
@@ -4816,7 +4816,7 @@ void CG_MissileHitWallSmall(vec3_t origin, vec3_t dir) {
 	mark          = cgs.media.burnMarkShader;
 	lightColor[0] = 0.75;
 	lightColor[1] = 0.5;
-	lightColor[2] = 0.1;
+	lightColor[2] = 0.1f;
 
 	// Ridah, explosion sprite animation
 	VectorMA(origin, 16, dir, sprOrg);

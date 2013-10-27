@@ -38,7 +38,7 @@ If you have questions concerning this license or the applicable additional terms
 #define UI_TIMER_MUZZLE_FLASH   20
 #define UI_TIMER_WEAPON_DELAY   250
 
-#define SWINGSPEED              0.3
+#define SWINGSPEED              0.3f
 
 #define SPIN_SPEED              0.9
 #define COAST_TIME              1000
@@ -104,11 +104,11 @@ tryagain:
 
 	switch (weaponNum) {
 	case WP_GRENADE_LAUNCHER:
-		MAKERGB(pi->flashDlightColor, 1, 0.7, 0.5);
+		MAKERGB(pi->flashDlightColor, 1, 0.7f, 0.5f);
 		break;
 
 	case WP_FLAMETHROWER:
-		MAKERGB(pi->flashDlightColor, 0.6, 0.6, 1);
+		MAKERGB(pi->flashDlightColor, 0.6f, 0.6f, 1);
 		break;
 
 	default:
@@ -349,7 +349,7 @@ static void UI_PlayerAngles(playerInfo_t *pi, vec3_t legs[3], vec3_t torso[3], v
 	} else {
 		dest = headAngles[PITCH] * 0.75;
 	}
-	UI_SwingAngles(dest, 15, 30, 0.1, &pi->torso.pitchAngle, &pi->torso.pitching);
+	UI_SwingAngles(dest, 15, 30, 0.1f, &pi->torso.pitchAngle, &pi->torso.pitching);
 	torsoAngles[PITCH] = pi->torso.pitchAngle;
 
 	// pull the angles back out of the hierarchial chain
