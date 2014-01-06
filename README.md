@@ -55,10 +55,10 @@ Works (tested) on `OSX 10.8` with `ET: Legacy`.
 Bootstrapping
 =============
 
-Get ETrun submodules:
+Get ETrun source code:
 
 <pre>
-$ git submodule update --init
+$ git clone --recursive git@github.com:ETrun/ETrun.git
 </pre>
 
 Linux / OSX
