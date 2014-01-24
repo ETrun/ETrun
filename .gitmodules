@@ -1,18 +1,3 @@
-[submodule "wiki"]
-	path = wiki
-	url = git@github.com:boutetnico/ETrun.wiki.git
-[submodule "libs/curl"]
-	path = libs/curl
-	url = git@github.com:boutetnico/curl.git
-[submodule "libs/c-ares"]
-	path = libs/c-ares
-	url = git@github.com:boutetnico/c-ares.git
 [submodule "libs/pthreads-win32"]
 	path = libs/pthreads-win32
-	url = git@github.com:boutetnico/pthreads-win32.git
-[submodule "libs/crc32"]
-	path = libs/crc32
-	url = git@github.com:boutetnico/crc32.git
-[submodule "libs/openssl-win32"]
-	path = libs/openssl-win32
-	url = git@github.com:boutetnico/openssl-win32.git
+	url = git@github.com:ETrun/pthreads-win32.git
