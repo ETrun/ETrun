@@ -142,12 +142,12 @@ qboolean url_encode(char *str, char *dst) {
 	int  i     = 0;
 
 	if (!str) {
-		LDE("str is NULL\n");
+		LDE("%s\n", "str is NULL");
 		return qfalse;
 	}
 
 	if (!dst) {
-		LDE("dst is NULL\n");
+		LDE("%s\n", "dst is NULL");
 		return qfalse;
 	}
 
@@ -625,7 +625,7 @@ static qboolean check_string(char *str) {
 	char *pstr = str;
 
 	if (!str) {
-		LDE("str is NULL\n");
+		LDE("%s\n", "str is NULL");
 		return qfalse;
 	}
 
@@ -853,7 +853,8 @@ qboolean G_API_getConfig(void) {
 	buf = malloc(LARGE_RESPONSE_MAX_SIZE * sizeof (char));
 
 	if (!buf) {
-		LDE("failed to allocate memory\n");
+		LDE("%s\n", "failed to allocate memory");
+
 		return qfalse;
 	}
 
@@ -920,7 +921,7 @@ qboolean G_AsyncAPICall(char *command, char *result, gentity_t *ent, int count, 
 	char           *arg = NULL;
 
 	if (api_module == NULL || API_query == NULL) {
-		LDE("API module is not loaded\n");
+		LDE("%s\n", "API module is not loaded");
 		return qfalse;
 	}
 
@@ -939,7 +940,8 @@ qboolean G_AsyncAPICall(char *command, char *result, gentity_t *ent, int count, 
 	queryStruct = malloc(sizeof (struct query_s));
 
 	if (queryStruct == NULL) {
-		LDE("failed to allocate memory\n");
+		LDE("%s\n", "failed to allocate memory");
+
 		return qfalse;
 	}
 
@@ -985,12 +987,12 @@ qboolean G_AsyncAPICall(char *command, char *result, gentity_t *ent, int count, 
 
 	// Create threads as detached as they will never be joined
 	if (pthread_attr_init(&attr)) {
-		LDE("error in pthread_attr_init\n");
+		LDE("%s\n", "error in pthread_attr_init");
 		free(queryStruct);
 		return qfalse;
 	}
 	if (pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED)) {
-		LDE("error in pthread_attr_setdetachstate\n");
+		LDE("%s\n", "error in pthread_attr_setdetachstate");
 		free(queryStruct);
 		return qfalse;
 	}
@@ -1008,7 +1010,7 @@ qboolean G_AsyncAPICall(char *command, char *result, gentity_t *ent, int count, 
 	G_DPrintf("%s: increasing threads counter to %d\n", GAME_VERSION, activeThreadsCounter);
 
 	if (pthread_attr_destroy(&attr)) {
-		LDE("error in pthread_attr_destroy\n");
+		LDE("%s\n", "error in pthread_attr_destroy");
 		// Nico, note: I don't free querystruct because it's used in the thread
 		return qfalse;
 	}
@@ -1032,7 +1034,7 @@ qboolean G_SyncAPICall(char *command, char *result, gentity_t *ent, int count, .
 	char           *arg = NULL;
 
 	if (api_module == NULL || API_query == NULL) {
-		LDE("API module is not loaded\n");
+		LDE("%s\n", "API module is not loaded");
 		return qfalse;
 	}
 
@@ -1045,7 +1047,8 @@ qboolean G_SyncAPICall(char *command, char *result, gentity_t *ent, int count, .
 	queryStruct = malloc(sizeof (struct query_s));
 
 	if (queryStruct == NULL) {
-		LDE("failed to allocate memory\n");
+		LDE("%s\n", "failed to allocate memory");
+
 		return qfalse;
 	}
 

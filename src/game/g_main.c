@@ -2398,11 +2398,11 @@ qboolean G_enable_delayed_map_change_watcher() {
 
 	// Create threads as detached
 	if (pthread_attr_init(&attr)) {
-		LDE("error in pthread_attr_init\n");
+		LDE("%s\n", "error in pthread_attr_init");
 		return qfalse;
 	}
 	if (pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED)) {
-		LDE("error in pthread_attr_setdetachstate\n");
+		LDE("%s\n", "error in pthread_attr_setdetachstate");
 		return qfalse;
 	}
 
@@ -2413,7 +2413,7 @@ qboolean G_enable_delayed_map_change_watcher() {
 	}
 
 	if (pthread_attr_destroy(&attr)) {
-		LDE("error in pthread_attr_destroy\n");
+		LDE("%s\n", "error in pthread_attr_destroy");
 		return qfalse;
 	}
 

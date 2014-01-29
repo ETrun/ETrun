@@ -1746,13 +1746,8 @@ g_serverEntity_t *FindServerEntity(g_serverEntity_t *from, int fieldofs, char *m
 // Nico, log macros with function name
 // LDI -> Log Debug Info
 // LDE -> Log Debug Error
-#if defined _WIN32
-# define LDI(format, ...) G_LogDebug(__FUNCTION__, "INFO", format, __VA_ARGS__)
-# define LDE(format, ...) G_LogDebug(__FUNCTION__, "ERROR", format, __VA_ARGS__)
-#else
-# define LDI(format, args ...) G_LogDebug(__FUNCTION__, "INFO", format, ## args)
-# define LDE(format, args ...) G_LogDebug(__FUNCTION__, "ERROR", format, ## args)
-#endif
+#define LDI(format, ...) G_LogDebug(__FUNCTION__, "INFO", format, __VA_ARGS__)
+#define LDE(format, ...) G_LogDebug(__FUNCTION__, "ERROR", format, __VA_ARGS__)
 
 #define PAUSE_NONE      0x00    // Match is NOT paused.
 #define PAUSE_UNPAUSING 0x01    // Pause is about to expire

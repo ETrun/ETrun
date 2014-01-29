@@ -39,7 +39,8 @@ void Cmd_Login_f(gentity_t *ent) {
 	result = malloc(RESPONSE_MAX_SIZE * sizeof (char));
 
 	if (!result) {
-		LDE("failed to allocate memory\n");
+		LDE("%s\n", "failed to allocate memory");
+
 		return;
 	}
 
@@ -97,7 +98,8 @@ void Cmd_Records_f(gentity_t *ent) {
 	buf = malloc(RESPONSE_MAX_SIZE * sizeof (char));
 
 	if (!buf) {
-		LDE("failed to allocate memory\n");
+		LDE("%s\n", "failed to allocate memory");
+
 		return;
 	}
 
@@ -193,7 +195,8 @@ void Cmd_LoadCheckpoints_real(gentity_t *ent, char *userName, int runNum) {
 	buf = malloc(RESPONSE_MAX_SIZE * sizeof (char));
 
 	if (!buf) {
-		LDE("failed to allocate memory\n");
+		LDE("%s\n", "failed to allocate memory");
+
 		return;
 	}
 
@@ -259,7 +262,8 @@ void Cmd_Rank_f(gentity_t *ent) {
 	buf = malloc(RESPONSE_MAX_SIZE * sizeof (char));
 
 	if (!buf) {
-		LDE("failed to allocate memory\n");
+		LDE("%s\n", "failed to allocate memory");
+
 		return;
 	}
 

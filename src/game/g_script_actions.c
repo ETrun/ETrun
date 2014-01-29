@@ -1837,7 +1837,7 @@ qboolean G_ScriptAction_PlayAnim(gentity_t *ent, char *params) {
 	}
 
 	return endtime <= level.time;
-};
+}
 
 /*
 =================
