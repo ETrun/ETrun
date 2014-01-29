@@ -983,8 +983,8 @@ void aagun_use(gentity_t *ent, gentity_t *other, gentity_t *activator) {
 	gentity_t *owner = &g_entities[ent->r.ownerNum];
 
 	// Nico, silent GCC
-	other     = other,
-	activator = activator;
+	(void)other,
+	(void)activator;
 
 	if (owner && owner->client) {
 		ent->r.ownerNum       = ent->s.number;
