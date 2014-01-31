@@ -1,9 +1,4 @@
 # CMake build script for the ETrun project
-#
-# Building (out of source build):
-# > mkdir build && cd build
-# > cmake .. [-DSETTINGS=VALUE]
-# > cmake --build .
 
 cmake_minimum_required(VERSION 2.6)
 project(ETrun C)
@@ -19,13 +14,47 @@ configure_file(
 
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/etrun)
 
-# has to be set to "", otherwise CMake will pass -rdynamic resulting in a client crash
-# set(CMAKE_SHARED_LIBRARY_LINK_C_FLAGS "")
+# Determine architecture of the machine
+if(CMAKE_SIZEOF_VOID_P EQUAL 8)
+	add_definitions(-DETRUN_ARCH_64)
+	message(STATUS "Current architecture: x86_64")
+elseif(CMAKE_SIZEOF_VOID_P EQUAL 4)
+    add_definitions(-DETRUN_ARCH_32)
+    message(STATUS "Current architecture: x86")
+else()
+    message(FATAL_ERROR "Unsupported architecture")
+endif()
+
+# Check if a target architecture was given in CMake invocation
+if("${TARGET_ARCHITECTURE}" STREQUAL "")
+	if("${DETRUN_ARCH_32}")
+		# x86 build
+		if(WIN32)
+	            set(ARCH "x86")
+	    elseif(APPLE)
+	            set(ARCH "")
+	    else()
+	            set(ARCH "")
+	            set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -m32")
+	    endif()
+	    message(STATUS "Target architecture: x86")
+	else()
+		# x86_64 build
+		if(WIN32)
+	            set(ARCH "x86_64")
+	    elseif(APPLE)
+	            set(ARCH "")
+	    else()
+	            set(ARCH "")
+	            set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -m64")
+	    endif()
+	    message(STATUS "Target architecture: x86_64")
+	endif()
+endif()
 
 #-----------------------------------------------------------------
 # Sources
 #-----------------------------------------------------------------
-
 FILE(GLOB CGAME_SRC
 	"src/cgame/*.c"
 	"src/cgame/*.h"
@@ -61,73 +90,67 @@ FILE(GLOB UI_SRC
 	"src/game/bg_misc.c"
 )
 
-#
-# cgame
-#
-add_library(cgame${LIB_SUFFIX}${ARCH} MODULE ${CGAME_SRC})
-set_target_properties(cgame${LIB_SUFFIX}${ARCH}
+#-----------------------------------------------------------------
+# Set targets
+#-----------------------------------------------------------------
+add_library(cgame MODULE ${CGAME_SRC})
+set_target_properties(cgame
 	PROPERTIES COMPILE_DEFINITIONS "CGAMEDLL"
 	PREFIX ""
+	OSX_ARCHITECTURES "i386;x86_64"
 )
 
-#
-# qagame
-#
-add_library(qagame${LIB_SUFFIX}${ARCH} MODULE ${QAGAME_SRC})
-set_target_properties(qagame${LIB_SUFFIX}${ARCH}
+add_library(qagame MODULE ${QAGAME_SRC})
+set_target_properties(qagame
 	PROPERTIES COMPILE_DEFINITIONS "GAMEDLL"
 	PREFIX ""
 )
 
-#
-# ui
-#
-add_library(ui${LIB_SUFFIX}${ARCH} MODULE ${UI_SRC})
-set_target_properties(ui${LIB_SUFFIX}${ARCH}
+add_library(ui MODULE ${UI_SRC})
+set_target_properties(ui
 	PROPERTIES
 	PREFIX ""
+	OSX_ARCHITECTURES "i386;x86_64"
 )
 
 #-----------------------------------------------------------------
 # Platform-specific settings
 #-----------------------------------------------------------------
-
 if(UNIX)
 	# On unix, use system threads
 	find_package(Threads)
 
 	# Strict mode
-	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Wextra -Wno-self-assign -Werror")
+	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Wextra -std=c99 -pedantic")
 
 	if(CMAKE_SYSTEM MATCHES "OpenBSD*")
+		set(OS_LIBRARIES m pthread)
 		set(LIB_SUFFIX ".mp.obsd.")
+	elseif(CMAKE_SYSTEM MATCHES "FreeBSD")
+		set(OS_LIBRARIES m pthread)
+		set(LIB_SUFFIX ".mp.fbsd.")
 	elseif(APPLE)
+		set(OS_LIBRARIES dl m)
 		set(LIB_SUFFIX "_mac")
 		set(CMAKE_SHARED_MODULE_SUFFIX "")
 	else()
+		set(OS_LIBRARIES dl m rt pthread)
 		set(LIB_SUFFIX ".mp.")
 	endif()
-
-	if(NOT MSYS)
-		include(CheckCCompilerFlag)
-		check_c_compiler_flag("-fvisibility=hidden" SUPPORT_VISIBILITY)
-		if(SUPPORT_VISIBILITY)
-			# note: visibility support starts with  __GNUC__ >= 4
-			message(STATUS "Compiling with -fvisibility=hidden")
-			set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fvisibility=hidden")
-		endif(SUPPORT_VISIBILITY)
-	endif(NOT MSYS)
-
 elseif(WIN32)
 	if(MSVC)
 		# Link with pthreads-win32
 		add_subdirectory("${PROJECT_SOURCE_DIR}/libs/pthreads-win32")
 		include_directories("${PROJECT_SOURCE_DIR}/libs/pthreads-win32/pthreads.2")
-		target_link_libraries(qagame${LIB_SUFFIX}${ARCH} debug "${CMAKE_BINARY_DIR}/libs/pthreads-win32/Debug/pthreadsVC2d.lib")
-		target_link_libraries(qagame${LIB_SUFFIX}${ARCH} optimized "${CMAKE_BINARY_DIR}/libs/pthreads-win32/Release/pthreadsVC2.lib")
+		target_link_libraries(qagame debug "${CMAKE_BINARY_DIR}/libs/pthreads-win32/Debug/pthreadsVC2d.lib")
+		target_link_libraries(qagame optimized "${CMAKE_BINARY_DIR}/libs/pthreads-win32/Release/pthreadsVC2.lib")
 
 		add_definitions(-D_CRT_SECURE_NO_WARNINGS)
 		set(OS_LIBRARIES ws2_32 psapi winmm)
 		set(LIB_SUFFIX "_mp_")
 	endif()
 endif()
+
+set_target_properties(cgame PROPERTIES OUTPUT_NAME cgame${LIB_SUFFIX}${ARCH})
+set_target_properties(qagame PROPERTIES OUTPUT_NAME qagame${LIB_SUFFIX}${ARCH})
+set_target_properties(ui PROPERTIES OUTPUT_NAME ui${LIB_SUFFIX}${ARCH})

@@ -12,7 +12,6 @@ DEBUG=0
 BUILD_DIR=build
 MOD_NAME='etrun'
 CMAKE=cmake
-BUILD_API=0
 MAKE_PK3=0
 PK3_NAME="$MOD_NAME.pk3"
 VERBOSE=0
@@ -22,14 +21,11 @@ TARGET_ARCHITECTURE=''
 # Parse options
 #
 function parse_options() {
-  while getopts ":hadvt:p" opt; do
+  while getopts ":hdvt:p" opt; do
       case $opt in
         h)
         show_usage
         exit 0
-        ;;
-      a)
-        BUILD_API=1
         ;;
       d)
         DEBUG=1
@@ -63,11 +59,10 @@ function clean() {
 function show_usage() {
   echo 'Usage: '`basename $0` ' [options...]'
   echo 'Options:'
-  echo '  -a               Build API'
   echo '  -d               Turn ON debug mode'
   echo '  -h               Show this help'
   echo '  -p               Make a pk3 archive'
-  echo '  -t ARCHITECTURE  Specify architecture to build for (x86, x86_64)'
+  echo '  -t ARCHITECTURE  Specify target architecture to build for (x86, x86_64)'
   echo '  -v               Enable verbose build'
 }
 
@@ -113,21 +108,6 @@ function build() {
   if [ $? -ne 0 ]; then
     echo 'An error occured while running make'
     exit 1
-  fi
-
-  # Build API if asked
-  if [ $BUILD_API -eq 1 ]; then
-    cd ../libs/APImodule
-
-    if [ $DEBUG -eq 1 ]; then
-      APIMODULE_BUILD_PARAMS='-d'
-    fi
-    if [ $VERBOSE -eq 1 ]; then
-      APIMODULE_BUILD_PARAMS="$APIMODULE_BUILD_PARAMS -v"
-    fi
-    ./make.sh $APIMODULE_BUILD_PARAMS
-
-    cd ../../$BUILD_DIR
   fi
 }
 
