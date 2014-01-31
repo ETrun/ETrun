@@ -1,7 +1,12 @@
 #include "g_local.h"
 
+/*
+ Crash handler for Windows only, on coredump
+ should be enabled and used to track any bug.
+*/
+
 /**
- * Log (and print) an crash message
+ * Log (and print) a crash message
  */
 void CrashLog(const char *s, qboolean printIt) {
 	char       string[1024] = { 0 };
@@ -27,198 +32,7 @@ void CrashLog(const char *s, qboolean printIt) {
 	}
 }
 
-#if defined __linux__
-
-# include <string.h>
-# include <unistd.h>
-# include <execinfo.h>
-# define __USE_GNU
-# include <link.h>
-# include <sys/ucontext.h>
-# include <signal.h>
-# include <features.h>
-
-# if __GLIBC__ == 2 && __GLIBC_MINOR__ == 1
-#  define GLIBC_21
-# endif
-
-extern char *strsignal(int __sig) __THROW;
-
-//use sigaction instead.
-void CrashHandler(int signal, siginfo_t *siginfo, ucontext_t *ctx);
-void             (*OldHandler)(int signal);
-struct sigaction oldact[NSIG];
-
-
-int segvloop = 0;
-
-void installcrashhandler() {
-
-	struct sigaction act;
-
-	memset(&act, 0, sizeof (act));
-	memset(&oldact, 0, sizeof (oldact));
-	act.sa_sigaction = (void *)CrashHandler;
-	sigemptyset(&act.sa_mask);
-	act.sa_flags = SA_SIGINFO;
-
-	sigaction(SIGSEGV, &act, &oldact[SIGSEGV]);
-	sigaction(SIGILL, &act, &oldact[SIGILL]);
-	sigaction(SIGFPE, &act, &oldact[SIGFPE]);
-	sigaction(SIGBUS, &act, &oldact[SIGBUS]);
-
-}
-
-void restorecrashhandler() {
-	sigaction(SIGSEGV, &oldact[SIGSEGV], NULL);
-}
-
-void linux_siginfo(int signal, siginfo_t *siginfo) {
-	CrashLog(va("Signal: %s (%d)\n", strsignal(signal), signal), qtrue);
-	CrashLog(va("Siginfo: %p\n", siginfo), qtrue);
-	if (siginfo) {
-		CrashLog(va("Code: %d\n", siginfo->si_code), qtrue);
-		CrashLog(va("Faulting Memory Ref/Instruction: %p\n", siginfo->si_addr), qtrue);
-	}
-}
-
-/* Nico, commenting because it won't compile*/
-void linux_dsoinfo() {
-	struct link_map *linkmap = NULL;
-
-	ElfW(Ehdr)      * ehdr = (ElfW(Ehdr) *) 0x08048000;
-	ElfW(Phdr)      * phdr;
-	ElfW(Dyn)       * dyn;
-	struct r_debug *rdebug = NULL;
-
-	phdr = (ElfW(Phdr) *)((char *)ehdr + ehdr->e_phoff);
-
-	while (phdr < (ElfW(Phdr) *)((char *)phdr + (ehdr->e_phnum * sizeof (ElfW(Phdr)))) && phdr++) {
-		if (phdr->p_type == PT_DYNAMIC) {
-			break;
-		}
-	}
-
-	for (dyn = (ElfW(Dyn) *)phdr->p_vaddr; dyn->d_tag != DT_NULL; dyn++) {
-		if (dyn->d_tag == DT_DEBUG) {
-			rdebug = (void *)dyn->d_un.d_ptr;
-			break;
-		}
-	}
-
-	CrashLog("DSO Information:\n", qtrue);
-
-	if (rdebug == NULL) {
-		CrashLog("rdebug = NULL\n", qtrue);
-		return;
-	}
-
-	linkmap = rdebug->r_map;
-
-	//rewind to top item.
-	while (linkmap->l_prev) {
-		linkmap = linkmap->l_prev;
-	}
-
-	while (linkmap) {
-		if (linkmap->l_addr) {
-			if (strcmp(linkmap->l_name, "") == 0) {
-				CrashLog(va("0x%08x\t(unknown)\n", linkmap->l_addr), qtrue);
-			} else {
-				CrashLog(va("0x%08x\t%s\n", linkmap->l_addr, linkmap->l_name), qtrue);
-			}
-		}
-		linkmap = linkmap->l_next;
-	}
-}
-
-void linux_backtrace(ucontext_t *ctx) {
-
-	// See <asm/sigcontext.h>
-
-	// ctx.eip contains the actual value of eip
-	// when the signal was generated.
-
-	// ctx.cr2 contains the value of the cr2 register
-	// when the signal was generated.
-
-	// the cr2 register on i386 contains the address
-	// that caused the page fault if there was one.
-
-	int i;
-
-	char   **strings;
-	void   *array[1024];
-	size_t size = (size_t)backtrace(array, 1024);
-
-	//Set the actual calling address for accurate stack traces.
-	//If we don't do this stack traces are less accurate.
-# ifdef GLIBC_21
-	CrashLog(va("Stack frames: %Zd entries\n", size - 1), qtrue);
-#  ifndef __x86_64__
-	array[1] = (void *)ctx->uc_mcontext.gregs[EIP];
-#  else
-	array[1] = (void *)ctx->uc_mcontext.gregs[RIP];
-#  endif
-# else
-	CrashLog(va("Stack frames: %zd entries\n", size - 1), qtrue);
-#  ifndef __x86_64__
-	array[1] = (void *)ctx->uc_mcontext.gregs[REG_EIP];
-#  else
-	array[1] = (void *)ctx->uc_mcontext.gregs[REG_RIP];
-#  endif
-# endif
-	CrashLog("Backtrace:\n", qtrue);
-
-	strings = (char **)backtrace_symbols(array, (int)size);
-
-	//Start at one and climb up.
-	//The first entry points back to this function.
-	for (i = 1; i < (int)size; i++)
-		CrashLog(va("(%i) %s\n", i, strings[i]), qtrue);
-
-	free(strings);
-}
-
-void CrashHandler(int signal, siginfo_t *siginfo, ucontext_t *ctx) {
-
-	//we are real cautious here.
-	restorecrashhandler();
-
-	if (signal == SIGSEGV) {
-		segvloop++;
-	}
-
-	if (segvloop < 2) {
-		CrashLog("-8<------- Crash Information ------->8-\n", qtrue);
-		CrashLog("---------------------------------------\n", qtrue);
-		CrashLog(va("Version: %s %s Linux\n", GAME_VERSION, MOD_VERSION), qtrue);
-		CrashLog(va("Map: %s\n", level.rawmapname), qtrue);
-		linux_siginfo(signal, siginfo);
-		linux_dsoinfo();
-		linux_backtrace(ctx);
-		CrashLog("-8<--------------------------------->8-\n\n", qtrue);
-		CrashLog("Attempting to clean up.\n", qtrue);
-		G_ShutdownGame(0);
-		//pass control to the default handler.
-		if (signal == SIGSEGV) {
-			OldHandler = (void *)oldact[SIGSEGV].sa_sigaction;
-			(*OldHandler)(signal);
-		} else {
-			exit(1);
-		}
-	} else {
-		//end this madness we are looping.
-		G_Error("Recursive segfault. Bailing out.");
-		OldHandler = (void *)oldact[SIGSEGV].sa_sigaction;
-		(*OldHandler)(signal);
-	}
-
-	return;
-
-}
-
-#elif defined WIN32
+#if defined WIN32
 # include <windows.h>
 # include <process.h>
 # include <imagehlp.h>
@@ -429,27 +243,16 @@ void win32_deinitialize_handler(void) {
 	pfnSymFunctionTableAccess = NULL;
 	FreeLibrary(imagehlp);
 }
-
-#else //other platforms
-//FIXME: Get rich, buy a mac, figure out how to do this on OSX.
 #endif
 
 void EnableStackTrace() {
-#if defined __linux__
-	installcrashhandler();
-#elif defined WIN32
+#if defined WIN32
 	win32_initialize_handler();
-#else
-
 #endif
 }
 
 void DisableStackTrace() {
-#if defined __linux__
-	restorecrashhandler();
-#elif defined WIN32
+#if defined WIN32
 	win32_deinitialize_handler();
-#else
-
 #endif
 }
