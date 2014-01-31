@@ -1,35 +1,17 @@
-[![Build Status](https://travis-ci.org/boutetnico/ETrun.png)](https://travis-ci.org/boutetnico/ETrun)
+ETrun - The W:ET timerun mod
+============================
 
-ETrun
-=====
+[![Build Status](https://travis-ci.org/ETrun/ETrun.png?branch=newstructure)](https://travis-ci.org/ETrun/ETrun)
 
 ETrun is a Wolfenstein: Enemy Territory game modification based on ET-GPL.
 The objective of this mod is to bring timeruns support to it.
-ETrun is currently under development.
 
 **Visit www.timeruns.net for more information.**
 
-Key features
-============
+Video
+=====
 
-* Many bugfixes and exploit fixes
-* Support of +forward turning
-* Doublejump
-* Timer reset fix
-* Velocity jumppads & location jumppads support
-* Fixed kill & hurt triggers
-* Introduced [ETrun cvars](https://github.com/boutetnico/ETrun/wiki/ETrun-cvars)
-* New scoreboard
-* No overbounce mode
-* Slick control
-* Introduced [ETrun client commands](https://github.com/boutetnico/ETrun/wiki/ETrun-client-commands)
-* more... ([ChangeLog](https://github.com/boutetnico/ETrun/wiki/ChangeLog))
-
-Credits
-=======
-
-* TJMod developpers
-* Racesow project
+[![Link to the video](http://img.youtube.com/vi/asMrNNIT0e0/0.jpg)](http://www.youtube.com/watch?v=asMrNNIT0e0)
 
 Compatibility
 =============
@@ -52,56 +34,18 @@ OSX
 Not compatible with `ET 2.60d`.
 Works (tested) on `OSX 10.8` with `ET: Legacy`.
 
-Bootstrapping
-=============
+Building ETrun - Using CMake
+============================
 
-Get ETrun source code:
+Get ETrun source code with its submodule:
 
-<pre>
-$ git clone --recursive git@github.com:ETrun/ETrun.git
-</pre>
+	$ git clone --recursive git@github.com:ETrun/ETrun.git
 
-Linux / OSX
------------
+Then run the build script:
 
-You will need `cmake` to compile this project.
+	$ ./make.sh
 
-Windows
--------
-
-You need Microsoft Visual studio 2010 or newer.
-
-Compiling
-=========
-
-`Host` is the OS used to compile, `Target` is the OS where the game will be executed.
-
-<table>
-	<tr>
-		<th>Target \ Host</th>
-		<th>Windows</th>
-		<th>Linux (32-bit only)</th>
-		<th>OSX</th>
-	</tr>
-	<tr>
-		<th>Windows</th>
-		<td>Use ETrun.sln with MSVC</td>
-		<td>Not supported</td>
-		<td>Not supported</td>
-	</tr>
-	<tr>
-		<th>Linux</th>
-		<td>Not supported</td>
-		<td>./make.sh</td>
-		<td>Not supported</td>
-	</tr>
-	<tr>
-		<th>OSX</th>
-		<td>Not supported</td>
-		<td>Not supported</td>
-		<td>./make.sh or Xcode projets</td>
-	</tr>
-</table>
+Alternatively you can point the CMake GUI tool to the CMakeLists.txt file and generate platform specific build project or IDE workspace.
 
 Testing
 =======
@@ -118,6 +62,11 @@ Linux / OSX
 
 Linux and OSX got a dedicated script located in `test/unix`.
 Before using them you need to setup your config file. Make a copy of the `*.config.example` file corresponding to your OS and run the following command to know all available opions:
-<pre>
-$ ./test/unix/test.sh -h
-</pre>
+
+	$ ./test/unix/test.sh -h
+
+Credits
+=======
+
+* TJMod developpers
+* Racesow project
