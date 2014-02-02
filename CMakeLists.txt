@@ -26,29 +26,31 @@ else()
 endif()
 
 # Check if a target architecture was given in CMake invocation
-if("${TARGET_ARCHITECTURE}" STREQUAL "")
-	if(ETRUN_ARCH_32)
-		# x86 build
-		if(WIN32)
-	            set(ARCH "x86")
-	    elseif(APPLE)
-	            set(ARCH "")
-	    else()
-	            set(ARCH "i386")
-	            set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -m32")
-	    endif()
-	    message(STATUS "Target architecture: x86")
-	else()
-		# x86_64 build
-		if(WIN32)
-	            set(ARCH "x86_64")
-	    elseif(APPLE)
-	            set(ARCH "")
-	    else()
-	            set(ARCH "x86_64")
-	            set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -m64")
-	    endif()
-	    message(STATUS "Target architecture: x86_64")
+if(APPLE)
+	# Build universal binaries
+	set(ARCH "")
+	message(STATUS "Target architecture: x86 and x86_64 (Universal binaries)")
+else()
+	if("${TARGET_ARCHITECTURE}" STREQUAL "")
+		if(ETRUN_ARCH_32)
+			# x86 build
+			if(WIN32)
+		            set(ARCH "x86")
+		    else()
+		            set(ARCH "i386")
+		            set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -m32")
+		    endif()
+		    message(STATUS "Target architecture: x86")
+		else()
+			# x86_64 build
+			if(WIN32)
+		            set(ARCH "x86_64")
+		    else()
+		            set(ARCH "x86_64")
+		            set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -m64")
+		    endif()
+		    message(STATUS "Target architecture: x86_64")
+		endif()
 	endif()
 endif()
 
@@ -104,6 +106,7 @@ add_library(qagame MODULE ${QAGAME_SRC})
 set_target_properties(qagame
 	PROPERTIES COMPILE_DEFINITIONS "GAMEDLL"
 	PREFIX ""
+	OSX_ARCHITECTURES "i386;x86_64"
 )
 
 add_library(ui MODULE ${UI_SRC})
@@ -154,3 +157,29 @@ endif()
 set_target_properties(cgame PROPERTIES OUTPUT_NAME cgame${LIB_SUFFIX}${ARCH})
 set_target_properties(qagame PROPERTIES OUTPUT_NAME qagame${LIB_SUFFIX}${ARCH})
 set_target_properties(ui PROPERTIES OUTPUT_NAME ui${LIB_SUFFIX}${ARCH})
+
+#-----------------------------------------------------------------
+# Pk3 (from etlegacy)
+#-----------------------------------------------------------------
+find_program(ZIP_EXECUTABLE zip PATHS ${CMAKE_BINARY_DIR})
+if(NOT ZIP_EXECUTABLE AND WIN32)
+	message(STATUS "Downloading zip.exe to " ${CMAKE_BINARY_DIR}/zip.exe)
+	file(DOWNLOAD http://stahlworks.com/dev/zip.exe ${CMAKE_BINARY_DIR}/zip.exe SHOW_PROGRESS TIMEOUT 10)
+	find_program(ZIP_EXECUTABLE zip PATHS ${CMAKE_BINARY_DIR})
+endif()
+find_program(UNZIP_EXECUTABLE unzip PATHS ${CMAKE_BINARY_DIR})
+if(NOT UNZIP_EXECUTABLE AND WIN32)
+	message(STATUS "Downloading unzip.exe to " ${CMAKE_BINARY_DIR}/unzip.exe)
+	file(DOWNLOAD http://stahlworks.com/dev/unzip.exe ${CMAKE_BINARY_DIR}/unzip.exe SHOW_PROGRESS TIMEOUT 10)
+	find_program(UNZIP_EXECUTABLE unzip PATHS ${CMAKE_BINARY_DIR})
+endif()
+add_custom_target(pk3 ALL DEPENDS etrun/ETrun-${ETrun_VERSION}.pk3)
+add_custom_command(
+	OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/etrun/ETrun-${ETrun_VERSION}.pk3
+	COMMAND ${ZIP_EXECUTABLE} ETrun-${ETrun_VERSION}.pk3 cgame${LIB_SUFFIX}${ARCH}* ui${LIB_SUFFIX}${ARCH}*
+	DEPENDS cgame ui
+	WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/etrun/
+)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/etrun/ETrun-${ETrun_VERSION}.pk3
+	DESTINATION "${INSTALL_DEFAULT_MODDIR}/etrun"
+)

@@ -93,7 +93,12 @@ function build() {
 
   # Target architecture
   if [ ! $TARGET_ARCHITECTURE == '' ]; then
-    CMAKE_PARAMS="$CMAKE_PARAMS -D TARGET_ARCHITECTURE=$TARGET_ARCHITECTURE"
+    # This option should be ignored on OSX because we build universal binaries
+    if [ $OS == 'Darwin' ]; then
+      echo "-t $TARGET_ARCHITECTURE ignored on OSX because universal binaries are being built"
+    else
+      CMAKE_PARAMS="$CMAKE_PARAMS -D TARGET_ARCHITECTURE=$TARGET_ARCHITECTURE"
+    fi
   fi
 
   # Run CMake
