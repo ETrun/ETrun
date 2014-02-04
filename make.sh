@@ -3,7 +3,6 @@
 #
 # ETrun build script
 #
-#
 
 #
 # Settings
@@ -12,8 +11,6 @@ DEBUG=0
 BUILD_DIR=build
 MOD_NAME='etrun'
 CMAKE=cmake
-MAKE_PK3=0
-PK3_NAME="$MOD_NAME.pk3"
 VERBOSE=0
 TARGET_ARCHITECTURE=''
 
@@ -29,9 +26,6 @@ function parse_options() {
         ;;
       d)
         DEBUG=1
-        ;;
-      p)
-        MAKE_PK3=1
         ;;
       t)
         TARGET_ARCHITECTURE=$OPTARG
@@ -61,7 +55,6 @@ function show_usage() {
   echo 'Options:'
   echo '  -d               Turn ON debug mode'
   echo '  -h               Show this help'
-  echo '  -p               Make a pk3 archive'
   echo '  -t ARCHITECTURE  Specify target architecture to build for (x86, x86_64)'
   echo '  -v               Enable verbose build'
 }
@@ -101,18 +94,27 @@ function build() {
     fi
   fi
 
-  # Run CMake
-  $CMAKE $CMAKE_PARAMS ..
+  # For Windows, specify Visual studio version to use
+  if [[ $OS == MINGW* ]]; then
+    # Run CMake
+    $CMAKE $CMAKE_PARAMS -G "Visual Studio 10" ..
+  else
+    # Run CMake
+    $CMAKE $CMAKE_PARAMS ..
+  fi
+
   if [ $? -ne 0 ]; then
     echo 'An error occured while running CMake'
     exit 1
   fi
 
-  # Run make
-  make
-  if [ $? -ne 0 ]; then
-    echo 'An error occured while running make'
-    exit 1
+  # Run make except on Windows
+  if [[ ! $OS == MINGW* ]]; then
+    make
+    if [ $? -ne 0 ]; then
+      echo 'An error occured while running make'
+      exit 1
+    fi
   fi
 }
 
@@ -139,106 +141,11 @@ function strip_modules() {
 }
 
 #
-# Function used to make OSX bundles
-# arg1: module name (cgame, qagame or ui)
-#
-function make_bundle() {
-  # Check current OS
-  if [ $OS != "Darwin" ]; then
-    return
-  fi
-
-  echo -n "Making bundle for $1..."
-  cd $MOD_NAME
-  mkdir $1_mac.bundle
-  mkdir $1_mac.bundle/Contents
-  mkdir $1_mac.bundle/Contents/MacOS
-  cp $1_mac $1_mac.bundle/Contents/MacOS/$1_mac
-
-  echo '<?xml version="1.0" encoding="UTF-8"?>
-  <!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-  <plist version="1.0">
-  <dict>
-    <key>CFBundleDevelopmentRegion</key>
-    <string>English</string>
-    <key>CFBundleExecutable</key>
-    <string>$1_mac</string>
-    <key>CFBundleInfoDictionaryVersion</key>
-    <string>6.0</string>
-    <key>CFBundleName</key>
-    <string>$1</string>
-    <key>CFBundlePackageType</key>
-    <string>BNDL</string>
-    <key>CFBundleShortVersionString</key>
-    <string>1.01c</string>
-    <key>CFBundleSignature</key>
-    <string>JKAm</string>
-    <key>CFBundleVersion</key>
-    <string>1.0.0</string>
-    <key>CFPlugInDynamicRegisterFunction</key>
-    <string></string>
-    <key>CFPlugInDynamicRegistration</key>
-    <string>NO</string>
-    <key>CFPlugInFactories</key>
-    <dict>
-      <key>00000000-0000-0000-0000-000000000000</key>
-      <string>MyFactoryFunction</string>
-    </dict>
-    <key>CFPlugInTypes</key>
-    <dict>
-      <key>00000000-0000-0000-0000-000000000000</key>
-      <array>
-        <string>00000000-0000-0000-0000-000000000000</string>
-      </array>
-    </dict>
-    <key>CFPlugInUnloadFunction</key>
-    <string></string>
-  </dict>
-  </plist>' > $1_mac.bundle/Contents/Info.plist
-
-  # Special case for qagame
-  # (qagame is not compressed)
-  if [ $1 != 'qagame' ]; then
-    rm -f $1_mac.zip
-    zip -r9 -q $1_mac.zip $1_mac.bundle
-
-    if [ $? -ne 0 ]; then
-      echo "An error occured while making bundle for $1"
-      exit 1
-    fi
-
-    mv $1_mac.zip $1_mac
-  fi
-
-  echo "[done]"
-  cd ..
-}
-
-#
-# Make pk3 in $BUILD_DIR
-#
-function make_pk3() {
-  # Copy assets next to game modules
-  cp -rf ../$MOD_NAME/* $MOD_NAME
-  # Delete previous pk3 if any
-  rm -f $PK3_NAME
-  cd $MOD_NAME
-  zip -9qr ../$PK3_NAME * -x custommapscripts\* qagame\* timeruns.mod
-  cd ../..
-}
-
-#
 # Main
 #
 parse_options "$@"
 clean
 detect_os
 build
-strip_modules
-# We don't make bundle anymore as they are not needed by ET: Legacy
-#make_bundle qagame
-#make_bundle cgame
-#make_bundle ui
-if [ $MAKE_PK3 -eq 1 ]; then
-  make_pk3
-fi
+# Useless to strip after pk3 creation, should be done before
+#strip_modules

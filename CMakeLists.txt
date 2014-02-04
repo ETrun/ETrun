@@ -143,6 +143,7 @@ if(UNIX)
 elseif(WIN32)
 	if(MSVC)
 		# Link with pthreads-win32
+		# Fixme: qagame compilation should be dependant on pthreads-win32 compilation
 		add_subdirectory("${PROJECT_SOURCE_DIR}/libs/pthreads-win32")
 		include_directories("${PROJECT_SOURCE_DIR}/libs/pthreads-win32/pthreads.2")
 		target_link_libraries(qagame debug "${CMAKE_BINARY_DIR}/libs/pthreads-win32/Debug/pthreadsVC2d.lib")
@@ -151,6 +152,14 @@ elseif(WIN32)
 		add_definitions(-D_CRT_SECURE_NO_WARNINGS)
 		set(OS_LIBRARIES ws2_32 psapi winmm)
 		set(LIB_SUFFIX "_mp_")
+
+		# Set outpout path
+		set_target_properties(cgame PROPERTIES LIBRARY_OUTPUT_DIRECTORY_DEBUG "${CMAKE_BINARY_DIR}/etrun")
+		set_target_properties(cgame PROPERTIES LIBRARY_OUTPUT_DIRECTORY_RELEASE "${CMAKE_BINARY_DIR}/etrun")
+		set_target_properties(qagame PROPERTIES LIBRARY_OUTPUT_DIRECTORY_DEBUG "${CMAKE_BINARY_DIR}/etrun")
+		set_target_properties(qagame PROPERTIES LIBRARY_OUTPUT_DIRECTORY_RELEASE "${CMAKE_BINARY_DIR}/etrun")
+		set_target_properties(ui PROPERTIES LIBRARY_OUTPUT_DIRECTORY_DEBUG "${CMAKE_BINARY_DIR}/etrun")
+		set_target_properties(ui PROPERTIES LIBRARY_OUTPUT_DIRECTORY_RELEASE "${CMAKE_BINARY_DIR}/etrun")
 	endif()
 endif()
 
