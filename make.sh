@@ -13,14 +13,15 @@ MOD_NAME='etrun'
 CMAKE=cmake
 VERBOSE=0
 TARGET_ARCHITECTURE=''
+UNIVERSAL_BINARIES=0
 
 #
 # Parse options
 #
 function parse_options() {
-  while getopts ":hdvt:p" opt; do
-      case $opt in
-        h)
+  while getopts ":hdt:vu" opt; do
+    case $opt in
+      h)
         show_usage
         exit 0
         ;;
@@ -33,10 +34,13 @@ function parse_options() {
       v)
         VERBOSE=1
         ;;
-        \?)
+      u)
+        UNIVERSAL_BINARIES=1
+        ;;
+      \?)
         echo "Invalid option: -$OPTARG"
         ;;
-      esac
+    esac
   done
 }
 
@@ -57,6 +61,7 @@ function show_usage() {
   echo '  -h               Show this help'
   echo '  -t ARCHITECTURE  Specify target architecture to build for (x86, x86_64)'
   echo '  -v               Enable verbose build'
+  echo '  -u               Build universal binaries (OSX only)'
 }
 
 #
@@ -84,14 +89,21 @@ function build() {
     CMAKE_PARAMS="$CMAKE_PARAMS -D CMAKE_VERBOSE_MAKEFILE=TRUE"
   fi
 
-  # Target architecture
-  if [ ! $TARGET_ARCHITECTURE == '' ]; then
-    # This option should be ignored on OSX because we build universal binaries
-    if [ $OS == 'Darwin' ]; then
-      echo "-t $TARGET_ARCHITECTURE ignored on OSX because universal binaries are being built"
-    else
-      CMAKE_PARAMS="$CMAKE_PARAMS -D TARGET_ARCHITECTURE=$TARGET_ARCHITECTURE"
+  # Check -u and -t were not both provided
+  if [ ! $TARGET_ARCHITECTURE == '' ] && [ $UNIVERSAL_BINARIES -eq 1 ]; then
+    echo "-t and -u cannot be used at the same time"
+    exit 1
+  fi
+
+  # Check if we are running OSX if -u is provided
+  if [ $UNIVERSAL_BINARIES -eq 1 ]; then
+    if [ ! $OS == 'Darwin' ]; then
+      echo "-u is only available on OSX"
+      exit 1
     fi
+    CMAKE_PARAMS="$CMAKE_PARAMS -D OSX_UNIVERSAL_BINARIES=ON"
+  else
+    CMAKE_PARAMS="$CMAKE_PARAMS -D TARGET_ARCHITECTURE=$TARGET_ARCHITECTURE"
   fi
 
   # For Windows, specify Visual studio version to use

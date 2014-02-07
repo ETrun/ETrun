@@ -14,46 +14,6 @@ configure_file(
 
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/etrun)
 
-# Determine architecture of the machine
-if(CMAKE_SIZEOF_VOID_P EQUAL 8)
-	set(ETRUN_ARCH_64 ON)
-	message(STATUS "Current architecture: x86_64")
-elseif(CMAKE_SIZEOF_VOID_P EQUAL 4)
-    set(ETRUN_ARCH_32 ON)
-    message(STATUS "Current architecture: x86")
-else()
-    message(FATAL_ERROR "Unsupported architecture")
-endif()
-
-# Check if a target architecture was given in CMake invocation
-if(APPLE)
-	# Build universal binaries
-	set(ARCH "")
-	message(STATUS "Target architecture: x86 and x86_64 (Universal binaries)")
-else()
-	if("${TARGET_ARCHITECTURE}" STREQUAL "")
-		if(ETRUN_ARCH_32)
-			# x86 build
-			if(WIN32)
-		            set(ARCH "x86")
-		    else()
-		            set(ARCH "i386")
-		            set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -m32")
-		    endif()
-		    message(STATUS "Target architecture: x86")
-		else()
-			# x86_64 build
-			if(WIN32)
-		            set(ARCH "x86_64")
-		    else()
-		            set(ARCH "x86_64")
-		            set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -m64")
-		    endif()
-		    message(STATUS "Target architecture: x86_64")
-		endif()
-	endif()
-endif()
-
 #-----------------------------------------------------------------
 # Sources
 #-----------------------------------------------------------------
@@ -99,22 +59,75 @@ add_library(cgame MODULE ${CGAME_SRC})
 set_target_properties(cgame
 	PROPERTIES COMPILE_DEFINITIONS "CGAMEDLL"
 	PREFIX ""
-	OSX_ARCHITECTURES "i386;x86_64"
 )
 
 add_library(qagame MODULE ${QAGAME_SRC})
 set_target_properties(qagame
 	PROPERTIES COMPILE_DEFINITIONS "GAMEDLL"
 	PREFIX ""
-	OSX_ARCHITECTURES "i386;x86_64"
 )
 
 add_library(ui MODULE ${UI_SRC})
 set_target_properties(ui
 	PROPERTIES
 	PREFIX ""
-	OSX_ARCHITECTURES "i386;x86_64"
 )
+
+#-----------------------------------------------------------------
+# Architecture stuff
+#-----------------------------------------------------------------
+# Determine architecture of the machine
+if(CMAKE_SIZEOF_VOID_P EQUAL 8)
+	set(ETRUN_ARCH_64 ON)
+	message(STATUS "Current architecture: x86_64")
+elseif(CMAKE_SIZEOF_VOID_P EQUAL 4)
+    set(ETRUN_ARCH_32 ON)
+    message(STATUS "Current architecture: x86")
+else()
+    message(FATAL_ERROR "Unsupported architecture")
+endif()
+
+# Check if we should build OSX universal binaries
+if(OSX_UNIVERSAL_BINARIES)
+	set(ARCH "")
+	set_target_properties(cgame PROPERTIES OSX_ARCHITECTURES "i386;x86_64")
+	set_target_properties(qagame PROPERTIES OSX_ARCHITECTURES "i386;x86_64")
+	set_target_properties(ui PROPERTIES OSX_ARCHITECTURES "i386;x86_64")
+	message(STATUS "Target architecture: x86 and x86_64 (Universal binaries)")
+else()
+	# Check if a target architecture was specified
+	if("${TARGET_ARCHITECTURE}" STREQUAL "x86")
+		set(ETRUN_ARCH_32 ON)
+	elseif("${TARGET_ARCHITECTURE}" STREQUAL "x86_64")
+		set(ETRUN_ARCH_64 ON)
+	endif()
+
+	if(ETRUN_ARCH_32)
+		# x86 build
+		if(WIN32)
+	        set(ARCH "x86")
+	    elseif(APPLE)
+			set(ARCH "")
+			set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -arch i386")
+	    else()
+	        set(ARCH "i386")
+	        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -arch i386")
+	    endif()
+	    message(STATUS "Target architecture: x86")
+	else()
+		# x86_64 build
+		if(WIN32)
+	        set(ARCH "x86_64")
+	    elseif(APPLE)
+			set(ARCH "")
+			set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -arch x86_64")
+	    else()
+	        set(ARCH "x86_64")
+	        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -arch x86_64")
+	    endif()
+	    message(STATUS "Target architecture: x86_64")
+	endif()
+endif()
 
 #-----------------------------------------------------------------
 # Platform-specific settings
