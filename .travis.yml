@@ -5,8 +5,7 @@ compiler:
   - clang
 
 script:
-  - ./make.sh -t x86
-  - ./make.sh -t x86_64
+  - ./make.sh
 
 git:
   submodules: false
