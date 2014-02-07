@@ -375,7 +375,7 @@ float Q_rsqrt(float f);         // reciprocal square root
 // fast float to int conversion
 #if id386 && !((defined __linux__ || defined __FreeBSD__ || defined __GNUC__) && (defined __i386__))       // rb010123
 long myftol(float f);
-#elif defined(__MACOS__)
+#elif defined(__APPLE__)
 # define myftol(x) (long)(x)
 #else
 extern long int lrintf(float x);
@@ -1338,17 +1338,6 @@ typedef enum _flag_status {
 } flagStatus_t;
 
 #define MAX_SERVERSTATUSREQUESTS    16
-
-// NERVE - SMF - localization
-typedef enum {
-#ifndef __MACOS__   //DAJ USA
-	LANGUAGE_FRENCH = 0,
-	LANGUAGE_GERMAN,
-	LANGUAGE_ITALIAN,
-	LANGUAGE_SPANISH,
-#endif
-	MAX_LANGUAGES
-} languages_t;
 
 // NERVE - SMF - wolf server/game states
 typedef enum {
