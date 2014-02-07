@@ -439,17 +439,6 @@ void ByteToDir(int b, vec3_t dir);
 #define VectorScale(v, s, o)    ((o)[0] = (v)[0] * (s), (o)[1] = (v)[1] * (s), (o)[2] = (v)[2] * (s))
 #define VectorMA(v, s, b, o)    ((o)[0] = (v)[0] + (b)[0] * (s), (o)[1] = (v)[1] + (b)[1] * (s), (o)[2] = (v)[2] + (b)[2] * (s))
 
-#ifdef __LCC__
-# ifdef VectorCopy
-#  undef VectorCopy
-// this is a little hack to get more efficient copies in our interpreter
-typedef struct {
-	float v[3];
-} vec3struct_t;
-#  define VectorCopy(a, b) *(vec3struct_t *)b = *(vec3struct_t *)a;
-# endif
-#endif
-
 #define VectorClear(a)              ((a)[0] = (a)[1] = (a)[2] = 0)
 #define VectorNegate(a, b)           ((b)[0] = -(a)[0], (b)[1] = -(a)[1], (b)[2] = -(a)[2])
 #define VectorSet(v, x, y, z)       ((v)[0] = (x), (v)[1] = (y), (v)[2] = (z))
