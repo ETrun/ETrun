@@ -275,17 +275,10 @@ CG_DrawFPS
 */
 #define FPS_FRAMES  4
 static float CG_DrawFPS(float y) {
-	char       *s;
-	int        w;
 	static int previousTimes[FPS_FRAMES];
 	static int index;
-	int        i, total;
-	int        fps;
 	static int previous;
 	int        t, frameTime;
-	vec4_t     timerBackground = { 0.16f, 0.2f, 0.17f, 0.8f };
-	vec4_t     timerBorder     = { 0.5f, 0.5f, 0.5f, 0.5f };
-	vec4_t     tclr            = { 0.625f, 0.625f, 0.6f, 1.0f };
 
 	// don't use serverTime, because that will be drifting to
 	// correct for internet lag changes, timescales, timedemos, etc
@@ -296,6 +289,14 @@ static float CG_DrawFPS(float y) {
 	previousTimes[index % FPS_FRAMES] = frameTime;
 	index++;
 	if (index > FPS_FRAMES) {
+		char       *s;
+		int        w;
+		int        i, total;
+		int        fps;
+		vec4_t     timerBackground = { 0.16f, 0.2f, 0.17f, 0.8f };
+		vec4_t     timerBorder     = { 0.5f, 0.5f, 0.5f, 0.5f };
+		vec4_t     tclr            = { 0.625f, 0.625f, 0.6f, 1.0f };
+
 		// average multiple frames together to smooth changes out a bit
 		total = 0;
 		for (i = 0 ; i < FPS_FRAMES ; i++) {
@@ -359,13 +360,8 @@ CG_DrawTeamInfo
 =================
 */
 static void CG_DrawTeamInfo(void) {
-	int    i;
 	vec4_t hcolor;
 	int    chatHeight;
-	float  alphapercent;
-	float  lineHeight = 9.f;
-
-	int chatWidth = 640 - CHATLOC_X - 100;
 
 	if (cg_teamChatHeight.integer < TEAMCHAT_HEIGHT) {
 		chatHeight = cg_teamChatHeight.integer;
@@ -378,6 +374,11 @@ static void CG_DrawTeamInfo(void) {
 	}
 
 	if (cgs.teamLastChatPos != cgs.teamChatPos) {
+		int    i;
+		float  alphapercent;
+		float  lineHeight = 9.f;
+		int chatWidth = 640 - CHATLOC_X - 100;
+
 		if (cg.time - cgs.teamChatMsgTimes[cgs.teamLastChatPos % chatHeight] > cg_teamChatTime.integer) {
 			cgs.teamLastChatPos++;
 		}
@@ -780,7 +781,7 @@ CG_DrawCenterString
 static void CG_DrawCenterString(void) {
 	char  *start;
 	int   l;
-	int   x, y, w;
+	int   y;
 	float *color;
 
 	if (!cg.centerPrintTime) {
@@ -801,6 +802,7 @@ static void CG_DrawCenterString(void) {
 	y = cg.centerPrintY - cg.centerPrintLines * BIGCHAR_HEIGHT / 2;
 
 	for (;; ) {
+		float x, w;
 		char linebuffer[1024];
 
 		for (l = 0; l < CP_LINEWIDTH; l++) {            // NERVE - SMF - added CP_LINEWIDTH
@@ -1157,7 +1159,6 @@ void CG_CheckForCursorHints(void) {
 	trace_t   trace;
 	vec3_t    start, end;
 	centity_t *tracent;
-	vec3_t    pforward, eforward;
 	float     dist;
 
 
@@ -1209,6 +1210,8 @@ void CG_CheckForCursorHints(void) {
 			cg.cursorHintValue = 0;
 		}
 	} else if (trace.entityNum < MAX_CLIENTS && cg.snap->ps.weapon == WP_KNIFE && dist <= CH_KNIFE_DIST) {
+		vec3_t    pforward, eforward;
+
 		AngleVectors(cg.snap->ps.viewangles, pforward, NULL, NULL);
 		AngleVectors(tracent->lerpAngles, eforward, NULL, NULL);
 
@@ -1236,7 +1239,6 @@ static void CG_DrawCrosshairNames(void) {
 	// Distance to the entity under the crosshair
 	float    zChange;
 	qboolean hitClient = qfalse;
-	float    dist      = 0;
 	int      clientNum = cg.crosshairClientNum;
 
 	if (clientNum < 0 || clientNum >= MAX_CLIENTS || !cg_drawCrosshair.integer ||
@@ -1258,6 +1260,8 @@ static void CG_DrawCrosshairNames(void) {
 
 	// Nico, don't draw if hiding others is enabled and distance to the player is < cg_hideRange
 	if (cg_hideOthers.integer && clientNum != cg.clientNum) {
+		float    dist;
+
 		dist = Distance((&cg_entities[cg.clientNum])->lerpOrigin, (&cg_entities[clientNum])->lerpOrigin);
 		if (dist < cg_hideRange.integer) {
 			return;
@@ -1283,7 +1287,6 @@ CG_DrawVote
 static void CG_DrawVote(void) {
 	char *s;
 	char str1[32], str2[32];
-	int  sec;
 
 	if (cgs.applicationEndTime > cg.time && cgs.applicationClient >= 0) {
 		Q_strncpyz(str1, BindingFromName("vote yes"), 32);
@@ -1322,6 +1325,8 @@ static void CG_DrawVote(void) {
 	}
 
 	if (cgs.voteTime) {
+		int  sec;
+
 		Q_strncpyz(str1, BindingFromName("vote yes"), 32);
 		Q_strncpyz(str2, BindingFromName("vote no"), 32);
 
@@ -1513,12 +1518,12 @@ CG_DrawFlashFade
 =================
 */
 static void CG_DrawFlashFade(void) {
-	static int lastTime;
-	int        elapsed, time;
-
 	if (cgs.fadeStartTime + cgs.fadeDuration < cg.time) {
 		cgs.fadeAlphaCurrent = cgs.fadeAlpha;
 	} else if (cgs.fadeAlphaCurrent != cgs.fadeAlpha) {
+		static int lastTime;
+		int        elapsed, time;
+
 		elapsed  = (time = trap_Milliseconds()) - lastTime;   // we need to use trap_Milliseconds() here since the cg.time gets modified upon reloading
 		lastTime = time;
 		if (elapsed < 500 && elapsed > 0) {
@@ -1548,7 +1553,6 @@ CG_DrawFlashZoomTransition
 ==============
 */
 static void CG_DrawFlashZoomTransition(void) {
-	vec4_t color;
 	float  frac;
 	int    fadeTime;
 
@@ -1572,6 +1576,8 @@ static void CG_DrawFlashZoomTransition(void) {
 	frac = cg.time - cg.zoomTime;
 
 	if (frac < fadeTime) {
+		vec4_t color;
+
 		frac = frac / (float)fadeTime;
 		Vector4Set(color, 0, 0, 0, 1.0f - frac);
 		CG_FillRect(-10, -10, 650, 490, color);
@@ -1584,8 +1590,7 @@ CG_DrawFlashFire
 =================
 */
 static void CG_DrawFlashFire(void) {
-	vec4_t col = { 1, 1, 1, 1 };
-	float  alpha, max, f;
+	float  alpha;
 
 	if (!cg.snap) {
 		return;
@@ -1602,6 +1607,9 @@ static void CG_DrawFlashFire(void) {
 
 	alpha = (float)((FIRE_FLASH_TIME - 1000) - (cg.time - cg.snap->ps.onFireStart)) / (FIRE_FLASH_TIME - 1000);
 	if (alpha > 0) {
+		vec4_t col;
+		float  max, f;
+
 		if (alpha >= 1.0) {
 			alpha = 1.0;
 		}
@@ -1866,9 +1874,6 @@ CG_ScreenFade
 */
 static void CG_ScreenFade(void) {
 	int    msec;
-	int    i;
-	float  t, invt;
-	vec4_t color;
 
 	if (!cg.fadeRate) {
 		return;
@@ -1889,7 +1894,11 @@ static void CG_ScreenFade(void) {
 		CG_FillRect(0, 0, 640, 480, cg.fadeColor1);
 
 	} else {
-		t    = ( float )msec * cg.fadeRate;
+		int    i;
+		float  t, invt;
+		vec4_t color;
+
+		t    = (float)msec * cg.fadeRate;
 		invt = 1.0f - t;
 
 		for (i = 0; i < 4; i++) {
