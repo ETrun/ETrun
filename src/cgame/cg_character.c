@@ -320,8 +320,6 @@ qboolean CG_RegisterCharacter(const char *characterFile, bg_character_t *charact
 	bg_characterDef_t characterDef;
 	char              *filename;
 	char              buf[MAX_QPATH];
-	char              accessoryname[MAX_QPATH];
-	int               i;
 
 	memset(&characterDef, 0, sizeof (characterDef));
 
@@ -342,6 +340,9 @@ qboolean CG_RegisterCharacter(const char *characterFile, bg_character_t *charact
 	if (!character->skin) {
 		CG_Printf(S_COLOR_YELLOW "WARNING: failed to register skin '%s' referenced from '%s'\n", filename, characterFile);
 	} else {
+		char              accessoryname[MAX_QPATH];
+		int               i;
+
 		for (i = 0; i < cg_numAccessories; i++) {
 			if (trap_R_GetSkinModel(character->skin, cg_accessories[i].type, accessoryname)) {
 				if (!CG_RegisterAcc(accessoryname, &character->accModels[cg_accessories[i].index], characterDef.skin, &character->accSkins[cg_accessories[i].index])) {

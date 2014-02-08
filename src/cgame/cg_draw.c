@@ -46,13 +46,13 @@ void CG_Text_SetActiveFont(int font) {
 }
 
 int CG_Text_Width_Ext(const char *text, float scale, int limit, fontInfo_t *font) {
-	int         count, len;
-	glyphInfo_t *glyph;
 	const char  *s = text;
 	float       out, useScale = scale * font->glyphScale;
 
 	out = 0;
 	if (text) {
+		int         count, len;
+
 		len = strlen(text);
 		if (limit > 0 && len > limit) {
 			len = limit;
@@ -63,6 +63,8 @@ int CG_Text_Width_Ext(const char *text, float scale, int limit, fontInfo_t *font
 				s += 2;
 				continue;
 			} else {
+				glyphInfo_t *glyph;
+
 				glyph = &font->glyphs[(unsigned char)*s];
 				out  += glyph->xSkip;
 				s++;
@@ -81,15 +83,15 @@ int CG_Text_Width(const char *text, float scale, int limit) {
 }
 
 int CG_Text_Height_Ext(const char *text, float scale, int limit, fontInfo_t *font) {
-	int         len, count;
 	float       max;
-	glyphInfo_t *glyph;
 	float       useScale;
 	const char  *s = text;
 
 	useScale = scale * font->glyphScale;
 	max      = 0;
 	if (text) {
+		int         len, count;
+
 		len = strlen(text);
 		if (limit > 0 && len > limit) {
 			len = limit;
@@ -100,6 +102,8 @@ int CG_Text_Height_Ext(const char *text, float scale, int limit, fontInfo_t *fon
 				s += 2;
 				continue;
 			} else {
+				glyphInfo_t *glyph;
+
 				glyph = &font->glyphs[(unsigned char)*s];
 				if (max < glyph->height) {
 					max = glyph->height;
@@ -141,15 +145,15 @@ void CG_Text_Paint_Centred_Ext(float x, float y, float scalex, float scaley, vec
 }
 
 void CG_Text_Paint_Ext(float x, float y, float scalex, float scaley, vec4_t color, const char *text, float adjust, int limit, int style, fontInfo_t *font) {
-	int         len, count;
 	vec4_t      newColor;
-	glyphInfo_t *glyph;
 
 	scalex *= font->glyphScale;
 	scaley *= font->glyphScale;
 
 	if (text) {
-		const char *s = text;
+		int         len, count;
+		const char 	*s = text;
+
 		trap_R_SetColor(color);
 		memcpy(&newColor[0], &color[0], sizeof (vec4_t));
 		len = strlen(text);
@@ -158,6 +162,8 @@ void CG_Text_Paint_Ext(float x, float y, float scalex, float scaley, vec4_t colo
 		}
 		count = 0;
 		while (s && *s && count < len) {
+			glyphInfo_t *glyph;
+
 			glyph = &font->glyphs[(unsigned char)*s]; //-V595
 			if (Q_IsColorString(s)) {
 				if (*(s + 1) == COLOR_NULL) {
