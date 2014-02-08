@@ -194,7 +194,6 @@ CG_ParseAnimationFiles
 ======================
 */
 static qboolean CG_ParseAnimationFiles(bg_character_t *character, const char *animationGroup, const char *animationScript) {
-	char         filename[MAX_QPATH];
 	fileHandle_t f;
 	int          len;
 
@@ -213,7 +212,7 @@ static qboolean CG_ParseAnimationFiles(bg_character_t *character, const char *an
 		return qfalse;
 	}
 	if (len >= (int)sizeof (bigTextBuffer) - 1) {
-		CG_Printf("File %s is too long\n", filename);
+		CG_Printf("File %s is too long\n", animationScript);
 		return qfalse;
 	}
 	trap_FS_Read(bigTextBuffer, len, f);
