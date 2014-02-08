@@ -491,15 +491,14 @@ static void CG_EffectGust() {
 
 static qboolean CG_EffectGustCurrent(vec3_t curr, float *weight, int *num) {
 	// Calculate direction for new drops.
-
-	vec3_t temp;
-	float  frac;
-
 	if (cg.time < cg_atmFx.baseEndTime) {
 		VectorCopy(cg_atmFx.baseVec, curr);
 		*weight = cg_atmFx.baseWeight;
 		*num    = cg_atmFx.baseDrops;
 	} else {
+		vec3_t temp;
+		float  frac;
+
 		VectorSubtract(cg_atmFx.gustVec, cg_atmFx.baseVec, temp);
 		if (cg.time < cg_atmFx.gustStartTime) {
 			frac = ((float)(cg.time - cg_atmFx.baseEndTime)) / ((float)(cg_atmFx.gustStartTime - cg_atmFx.baseEndTime));
@@ -710,7 +709,6 @@ void CG_AddAtmosphericEffects() {
 	// Add atmospheric effects (e.g. rain, snow etc.) to view
 
 	int                      curr, max, currnum;
-	cg_atmosphericParticle_t *particle;
 	vec3_t                   currvec;
 	float                    currweight;
 
@@ -732,6 +730,8 @@ void CG_AddAtmosphericEffects() {
 	VectorSet(cg_atmFx.viewDir, cg.refdef_current->viewaxis[0][0], cg.refdef_current->viewaxis[0][1], 0.f);
 
 	for (curr = 0; curr < max; curr++) {
+		cg_atmosphericParticle_t *particle;
+
 		particle = &cg_atmFx.particles[curr];
 		if (!cg_atmFx.ParticleCheckVisible(particle)) {
 			if (!cg_atmFx.ParticleGenerate(particle, currvec, currweight)) {

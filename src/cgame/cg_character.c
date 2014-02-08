@@ -43,8 +43,6 @@ static qboolean CG_ParseHudHeadConfig(const char *filename, animation_t *hha) {
 	char         *text_p;
 	int          len;
 	int          i;
-	float        fps;
-	char         *token;
 	fileHandle_t f;
 
 	// load the file
@@ -66,6 +64,9 @@ static qboolean CG_ParseHudHeadConfig(const char *filename, animation_t *hha) {
 	text_p = bigTextBuffer;
 
 	for (i = 0 ; i < MAX_HD_ANIMATIONS ; i++) {
+		float        fps;
+		char         *token;
+
 		token = COM_Parse(&text_p);     // first frame
 		if (!token) {
 			break;
