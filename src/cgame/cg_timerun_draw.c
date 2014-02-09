@@ -6,75 +6,77 @@
  * @author Nico
  */
 void CG_DrawCheckpoints(void) {
-	char   status[128];
-	int    i     = 0;
-	int    j     = 0;
-	int    cmin  = 0, csec = 0, cmil = 0;
-	int    cdmin = 0, cdsec = 0, cdmil = 0;
-	float  sizex = 0.2f, sizey = 0.2f;
-	int    x     = 0, y = 0, w = 0;
-	vec4_t color;
+	int    x = 0, y = 0;
 
-	// Nico, checkpoints
-	if (cg_drawCheckPoints.integer) {
+	if (!cg_drawCheckPoints.integer) {
+		return;
+	}
 
-		// Nico, printing position
-		x = cg_checkPointsX.value;
-		y = cg_checkPointsY.value;
+	// Nico, printing position
+	x = cg_checkPointsX.value;
+	y = cg_checkPointsY.value;
 
-		// Nico, check cg_maxCheckPoints
-		if (!cg_maxCheckPoints.integer || cg_maxCheckPoints.integer < 0) {
-			cg_maxCheckPoints.integer = 5;
-		}
+	// Nico, check cg_maxCheckPoints
+	if (!cg_maxCheckPoints.integer || cg_maxCheckPoints.integer < 0) {
+		cg_maxCheckPoints.integer = 5;
+	}
 
-		// Nico, print check points if any and respect the printing limit (cg_maxCheckPoints)
-		if (cg.timerunCheckPointChecked > 0) {
-			for (i = cg.timerunCheckPointChecked - 1, j = 0; i >= 0 && j < cg_maxCheckPoints.integer; --i, ++j) {
-				cmil  = cg.timerunCheckPointTime[i];
-				cmin  = cmil / 60000;
-				cmil -= cmin * 60000;
-				csec  = cmil / 1000;
-				cmil -= csec * 1000;
+	// Nico, print check points if any and respect the printing limit (cg_maxCheckPoints)
+	if (cg.timerunCheckPointChecked > 0) {
+		int i, j;
 
-				cdmil  = cg.timerunCheckPointDiff[i];
-				cdmin  = cdmil / 60000;
-				cdmil -= cdmin * 60000;
-				cdsec  = cdmil / 1000;
-				cdmil -= cdsec * 1000;
+		for (i = cg.timerunCheckPointChecked - 1, j = 0; i >= 0 && j < cg_maxCheckPoints.integer; --i, ++j) {
+			char   status[128];
+			int    cmin, csec, cmil;
+			int    cdmin, cdsec, cdmil;
+			float  sizex = 0.2f, sizey = 0.2f;
+			int    w;
+			vec4_t color;
 
-				// Nico, set checkpoint default color
-				Vector4Set(color, colorWhite[0], colorWhite[1], colorWhite[2], colorWhite[3]);
+			cmil  = cg.timerunCheckPointTime[i];
+			cmin  = cmil / 60000;
+			cmil -= cmin * 60000;
+			csec  = cmil / 1000;
+			cmil -= csec * 1000;
 
-				// Nico, print checkpoints
-				switch (cg.timerunCheckStatus[i]) {
-				case 0:
-					Com_sprintf(status, sizeof (status), "%s", va("%02d:%02d.%03d", cmin, csec, cmil));
-					break;
+			cdmil  = cg.timerunCheckPointDiff[i];
+			cdmin  = cdmil / 60000;
+			cdmil -= cdmin * 60000;
+			cdsec  = cdmil / 1000;
+			cdmil -= cdsec * 1000;
 
-				case 1:
-					Com_sprintf(status, sizeof (status), "%s", va("%02d:%02d.%03d", cdmin, cdsec, cdmil));
-					break;
+			// Nico, set checkpoint default color
+			Vector4Set(color, colorWhite[0], colorWhite[1], colorWhite[2], colorWhite[3]);
 
-				case 2:
-					// Nico, faster check point time
-					Vector4Set(color, colorGreen[0], colorGreen[1], colorGreen[2], colorGreen[3]);
-					Com_sprintf(status, sizeof (status), "%s", va("-%02d:%02d.%03d", cdmin, cdsec, cdmil));
-					break;
+			// Nico, print checkpoints
+			switch (cg.timerunCheckStatus[i]) {
+			case 0:
+				Com_sprintf(status, sizeof (status), "%s", va("%02d:%02d.%03d", cmin, csec, cmil));
+				break;
 
-				case 3:
-					// Nico, slower check point time
-					Vector4Set(color, colorRed[0], colorRed[1], colorRed[2], colorRed[3]);
-					Com_sprintf(status, sizeof (status), "%s", va("+%02d:%02d.%03d", cdmin, cdsec, cdmil));
-					break;
-				}
+			case 1:
+				Com_sprintf(status, sizeof (status), "%s", va("%02d:%02d.%03d", cdmin, cdsec, cdmil));
+				break;
 
-				// Nico, print the check point
-				w = CG_Text_Width_Ext(status, sizex, sizey, &cgs.media.limboFont1) / 2;
-				CG_Text_Paint_Ext(x - w, y, sizex, sizey, color, status, 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
+			case 2:
+				// Nico, faster check point time
+				Vector4Set(color, colorGreen[0], colorGreen[1], colorGreen[2], colorGreen[3]);
+				Com_sprintf(status, sizeof (status), "%s", va("-%02d:%02d.%03d", cdmin, cdsec, cdmil));
+				break;
 
-				// Nico, line jump
-				y += 10;
+			case 3:
+				// Nico, slower check point time
+				Vector4Set(color, colorRed[0], colorRed[1], colorRed[2], colorRed[3]);
+				Com_sprintf(status, sizeof (status), "%s", va("+%02d:%02d.%03d", cdmin, cdsec, cdmil));
+				break;
 			}
+
+			// Nico, print the check point
+			w = CG_Text_Width_Ext(status, sizex, sizey, &cgs.media.limboFont1) / 2;
+			CG_Text_Paint_Ext(x - w, y, sizex, sizey, color, status, 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
+
+			// Nico, line jump
+			y += 10;
 		}
 	}
 }
@@ -209,7 +211,6 @@ void CG_DrawOB(void) {
 void CG_DrawTimer(void) {
 	char       status[128];
 	int        min                = 0, sec = 0, milli = 0;
-	int        dmin               = 0, dsec = 0, dmilli = 0;
 	int        x                  = 0, y = 0, w = 0;
 	int        timerunNum         = cg.currentTimerun;
 	int        startTime          = 0;
@@ -285,6 +286,8 @@ void CG_DrawTimer(void) {
 
 		// Compare with client rec
 		if (runBestTime > 0 && runLastTime != runBestTime) {
+			int dmin, dsec, dmilli;
+
 			// Nico, did a different time, compute the delta
 			dmilli  = abs(runLastTime - runBestTime);
 			dmin    = dmilli / 60000;
@@ -428,11 +431,12 @@ void CG_DrawCGaz(void) {
 	// only air, ground and ice movement is important
 	if (pml.walking && !(pml.groundTrace.surfaceFlags & SURF_SLICK)) {
 		// apply friction
-		float speed, newspeed, control;
-		float drop;
+		float speed;
 
 		speed = VectorLength(vel);
 		if (speed > 0) {
+			float newspeed, control, drop;
+
 			drop = 0;
 
 			// if getting knocked back, no friction
@@ -756,24 +760,19 @@ void CG_DrawClock(float x, float y, float scale, qboolean shadowed) {
  * @author Nico
  */
 void CG_DrawBannerPrint(void) {
-	char  *start    = NULL;
+	char  *start    = cg.bannerPrint;
 	int   l         = 0;
-	int   x         = 0;
-	int   y         = 0;
-	int   w         = 0;
-	float *color    = NULL;
-	float sizex     = 0;
-	float sizey     = 0;
+	int   y         = 20;
+	float *color;
+	float sizex     = 0.2f, sizey = 0.2f;
 	char  lastcolor = COLOR_WHITE;
 	int   charHeight;
-	int   bannerShowTime;
-	int   len = 0;
+	int   bannerShowTime = 10000;
+	int   len;
 
 	if (!cg.bannerPrintTime) {
 		return;
 	}
-
-	bannerShowTime = 10000;
 
 	color = CG_FadeColor(cg.bannerPrintTime, bannerShowTime);
 	if (!color) {
@@ -783,11 +782,6 @@ void CG_DrawBannerPrint(void) {
 
 	trap_R_SetColor(color);
 
-	start = cg.bannerPrint;
-
-	sizex = sizey = 0.2f;
-
-	y          = 20;
 	charHeight = CG_Text_Height_Ext("A", sizey, 0, &cgs.media.limboFont2);
 
 	len = strlen(cg.bannerPrint);
@@ -795,6 +789,7 @@ void CG_DrawBannerPrint(void) {
 	for (;; ) {
 		char linebuffer[1024];
 		char colorchar = lastcolor;
+		int  x, w;
 
 		for (l = 0; l < len; ++l) {
 			if (!start[l] || start[l] == '\n') {

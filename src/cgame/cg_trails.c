@@ -444,7 +444,7 @@ static polyVert_t verts[MAX_TRAIL_VERTS];
 static polyVert_t outVerts[MAX_TRAIL_VERTS * 3];
 
 void CG_AddTrailToScene(trailJunc_t *trail, int iteration, int numJuncs) {
-	int         k, i, n, l, numOutVerts;
+	int         k, i;
 	polyVert_t  mid;
 	float       mod[4];
 	float       sInc, s;
@@ -671,16 +671,20 @@ void CG_AddTrailToScene(trailJunc_t *trail, int iteration, int numJuncs) {
 	}
 
 	if (trail->flags & TJFL_FIXDISTORT) {
+		int numOutVerts;
+
 		// build the list of outVerts, by dividing up the QUAD's into 4 Tri's each, so as to allow
 		//	any shaped (convex) Quad without bilinear distortion
 		for (k = 0, numOutVerts = 0; k < i; k += 4) {
+			int n, l;
+
 			VectorCopy(verts[k].xyz, mid.xyz);
 			mid.st[0] = verts[k].st[0];
 			mid.st[1] = verts[k].st[1];
 			for (l = 0; l < 4; l++) {
 				mod[l] = (float)verts[k].modulate[l];
 			}
-			for (n = 1; n < 4; n++) {
+			for (n = 1; n < 4; ++n) {
 				VectorAdd(verts[k + n].xyz, mid.xyz, mid.xyz);
 				mid.st[0] += verts[k + n].st[0];
 				mid.st[1] += verts[k + n].st[1];
@@ -691,12 +695,12 @@ void CG_AddTrailToScene(trailJunc_t *trail, int iteration, int numJuncs) {
 			VectorScale(mid.xyz, 0.25, mid.xyz);
 			mid.st[0] *= 0.25;
 			mid.st[1] *= 0.25;
-			for (l = 0; l < 4; l++) {
+			for (l = 0; l < 4; ++l) {
 				mid.modulate[l] = ( unsigned char )(mod[l] / 4.0);
 			}
 
 			// now output the tri's
-			for (n = 0; n < 4; n++) {
+			for (n = 0; n < 4; ++n) {
 				outVerts[numOutVerts++] = verts[k + n];
 				outVerts[numOutVerts++] = mid;
 				if (n < 3) {
@@ -742,7 +746,6 @@ CG_AddTrails
 ===============
 */
 void CG_AddTrails(void) {
-	float       lifeFrac;
 	trailJunc_t *j, *jNext;
 
 	if (!initTrails) {
@@ -756,7 +759,8 @@ void CG_AddTrails(void) {
 	// update the settings for each junc
 	j = activeTrails;
 	while (j) {
-		lifeFrac = (float)(cg.time - j->spawnTime) / (float)(j->endTime - j->spawnTime);
+		float lifeFrac = (float)(cg.time - j->spawnTime) / (float)(j->endTime - j->spawnTime);
+
 		if (lifeFrac >= 1.0) {
 			j->inuse = qfalse;          // flag it as dead
 			j->width = j->widthEnd;
