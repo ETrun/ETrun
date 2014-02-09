@@ -566,8 +566,6 @@ qboolean CG_LimboPanel_TeamButton_KeyDown(panel_button_t *button, int key) {
 }
 
 void CG_LimboPanel_RenderTeamButton(panel_button_t *button) {
-	vec4_t clr2 = { 1.f, 1.f, 1.f, 0.4f };
-
 	qhandle_t shader;
 
 	trap_R_SetColor(colorBlack);
@@ -579,6 +577,8 @@ void CG_LimboPanel_RenderTeamButton(panel_button_t *button) {
 	if (CG_LimboPanel_GetTeam() == teamOrder[button->data[0]]) {
 		CG_DrawPic(button->rect.x, button->rect.y, button->rect.w, button->rect.h, cgs.media.limboTeamButtonBack_on);
 	} else if (BG_CursorInRect(&button->rect)) {
+		vec4_t clr2 = { 1.f, 1.f, 1.f, 0.4f };
+
 		trap_R_SetColor(clr2);
 		CG_DrawPic(button->rect.x, button->rect.y, button->rect.w, button->rect.h, cgs.media.limboTeamButtonBack_on);
 		trap_R_SetColor(NULL);
@@ -655,15 +655,14 @@ void CG_LimboPanel_ClassBar_Draw(panel_button_t *button) {
 }
 
 void CG_LimboPanel_RenderClassButton(panel_button_t *button) {
-	vec4_t clr  = { 1.f, 1.f, 1.f, 0.4f };
-	vec4_t clr2 = { 1.f, 1.f, 1.f, 0.75f };
-
 	CG_DrawPic(button->rect.x, button->rect.y, button->rect.w, button->rect.h, cgs.media.limboClassButton2Back_off);
 
 	if (CG_LimboPanel_GetTeam() != TEAM_SPECTATOR) {
 		if (button->data[1] == CG_LimboPanel_GetClass()) {
 			CG_DrawPic(button->rect.x, button->rect.y, button->rect.w, button->rect.h, cgs.media.limboClassButton2Back_on);
 		} else if (BG_CursorInRect(&button->rect)) {
+			vec4_t clr  = { 1.f, 1.f, 1.f, 0.4f };
+
 			trap_R_SetColor(clr);
 			CG_DrawPic(button->rect.x, button->rect.y, button->rect.w, button->rect.h, cgs.media.limboClassButton2Back_on);
 			trap_R_SetColor(NULL);
@@ -673,6 +672,8 @@ void CG_LimboPanel_RenderClassButton(panel_button_t *button) {
 	if (CG_LimboPanel_GetTeam() != TEAM_SPECTATOR && button->data[1] == CG_LimboPanel_GetClass()) {
 		CG_DrawPic(button->rect.x, button->rect.y, button->rect.w, button->rect.h, cgs.media.limboClassButtons2[button->data[1]]);
 	} else {
+		vec4_t clr2 = { 1.f, 1.f, 1.f, 0.75f };
+
 		trap_R_SetColor(clr2);
 		CG_DrawPic(button->rect.x, button->rect.y, button->rect.w, button->rect.h, cgs.media.limboClassButtons2[button->data[1]]);
 		trap_R_SetColor(NULL);
@@ -742,7 +743,6 @@ qboolean CG_LimboPanel_WeaponPanel_KeyDown(panel_button_t *button, int key) {
 }
 
 qboolean CG_LimboPanel_WeaponPanel_KeyUp(panel_button_t *button, int key) {
-	int       cnt, i;
 	rectDef_t rect;
 
 	if (CG_LimboPanel_GetTeam() == TEAM_SPECTATOR) {
@@ -750,6 +750,8 @@ qboolean CG_LimboPanel_WeaponPanel_KeyUp(panel_button_t *button, int key) {
 	}
 
 	if (key == K_MOUSE1 && BG_PanelButtons_GetFocusButton() == button) {
+		int       cnt, i;
+
 		memcpy(&rect, &button->rect, sizeof (rect));
 		rect.y -= rect.h;
 
@@ -832,9 +834,6 @@ void CG_LimboPanel_WeaponPanel_DrawWeapon(rectDef_t *rect, weapon_t weap, qboole
 
 #define BRDRSIZE 4
 void CG_DrawBorder(float x, float y, float w, float h, qboolean fill, qboolean drawMouseOver) {
-	vec4_t clrBack  = { 0.1f, 0.1f, 0.1f, 1.f };
-	vec4_t clrBack2 = { 0.2f, 0.2f, 0.2f, 1.f };
-
 	// top / bottom
 	CG_DrawPic(x, y - BRDRSIZE, w, BRDRSIZE, cgs.media.limboWeaponCardSurroundH);
 	CG_DrawPicST(x, y + h, w, BRDRSIZE, 0.f, 1.f, 1.f, 0.f, cgs.media.limboWeaponCardSurroundH);
@@ -848,6 +847,8 @@ void CG_DrawBorder(float x, float y, float w, float h, qboolean fill, qboolean d
 	CG_DrawPicST(x - BRDRSIZE, y + h, BRDRSIZE, BRDRSIZE, 0.f, 1.f, 1.f, 0.f, cgs.media.limboWeaponCardSurroundC);
 
 	if (fill) {
+		vec4_t clrBack  = { 0.1f, 0.1f, 0.1f, 1.f };
+
 		if (drawMouseOver) {
 			rectDef_t rect;
 
@@ -857,6 +858,8 @@ void CG_DrawBorder(float x, float y, float w, float h, qboolean fill, qboolean d
 			rect.h = h;
 
 			if (BG_CursorInRect(&rect)) {
+				vec4_t clrBack2 = { 0.2f, 0.2f, 0.2f, 1.f };
+
 				CG_FillRect(x, y, w, h, clrBack2);
 			} else {
 				CG_FillRect(x, y, w, h, clrBack);
@@ -926,12 +929,13 @@ void CG_LimboPanel_WeaponPanel(panel_button_t *button) {
 		CG_DrawBorder(button->rect.x, button->rect.y - ((cnt - 1) * button->rect.h), button->rect.w, button->rect.h * cnt, qfalse, qfalse);
 	} else {
 		vec4_t clr  = { 0.f, 0.f, 0.f, 0.4f };
-		vec4_t clr2 = { 1.f, 1.f, 1.f, 0.4f };
 
 		// render in normal mode
 		CG_LimboPanel_WeaponPanel_DrawWeapon(&button->rect, weap, cnt > 1 ? qtrue : qfalse, va("%iof%i", CG_LimboPanel_GetSelectedWeaponNum() + 1, cnt), CG_LimboPanel_RealWeaponIsDisabled(weap));
 
 		if (cnt <= 1 || !BG_CursorInRect(&button->rect)) {
+			vec4_t clr2 = { 1.f, 1.f, 1.f, 0.4f };
+
 			trap_R_SetColor(clr2);
 		}
 		CG_DrawPic(button->rect.x + button->rect.w - 20, button->rect.y + 4, 16, 12, cgs.media.limboWeaponCardArrow);
@@ -1223,7 +1227,6 @@ void CG_LimboPanel_Setup(void) {
 	panel_button_t *button;
 	panel_button_t **buttons = limboPanelButtons;
 	clientInfo_t   *ci       = &cgs.clientinfo[cg.clientNum];
-	int            i;
 	char           buffer[256];
 
 	cgs.limboLoadoutModified = qfalse;
@@ -1241,6 +1244,7 @@ void CG_LimboPanel_Setup(void) {
 	}
 
 	if (!cgs.limboLoadoutSelected) {
+		int              i;
 		bg_playerclass_t *classInfo = CG_LimboPanel_GetPlayerClass();
 
 		for (i = 0; i < MAX_WEAPS_PER_CLASS; i++) {

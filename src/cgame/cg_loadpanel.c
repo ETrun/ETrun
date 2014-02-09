@@ -224,7 +224,7 @@ void CG_DrawConnectScreen(qboolean interactive, qboolean forcerefresh) {
 	DC->getConfigString(CS_SERVERINFO, buffer, sizeof (buffer));
 	if (*buffer) {
 		const char *str;
-		float      x, y;
+		float      y;
 		int        i;
 		vec4_t     clr3 = { 1.f, 1.f, 1.f, .6f };
 
@@ -237,7 +237,7 @@ void CG_DrawConnectScreen(qboolean interactive, qboolean forcerefresh) {
 
 
 		y += 14;
-		for (i = 0; i < MAX_MOTDLINES; i++) {
+		for (i = 0; i < MAX_MOTDLINES; ++i) {
 			str = CG_ConfigString(CS_CUSTMOTD + i);
 			if (!str || !*str) {
 				break;
@@ -252,8 +252,7 @@ void CG_DrawConnectScreen(qboolean interactive, qboolean forcerefresh) {
 
 		str = Info_ValueForKey(buffer, "g_antilag");
 		if (str && *str && atoi(str)) {
-			x = 575;
-			CG_DrawPic(x, y, 16, 16, bg_filter_al);
+			CG_DrawPic(575, y, 16, 16, bg_filter_al);
 		}
 	}
 

@@ -925,13 +925,14 @@ void CG_LoadObjectiveData(void) {
 void CG_SetupDlightstyles(void) {
 	int       i, j;
 	char      *str;
-	char      *token;
-	int       entnum;
 	centity_t *cent;
 
 	cg.lightstylesInited = qtrue;
 
-	for (i = 1; i < MAX_DLIGHT_CONFIGSTRINGS; i++) {
+	for (i = 1; i < MAX_DLIGHT_CONFIGSTRINGS; ++i) {
+		char      *token;
+		int       entnum;
+
 		str = (char *) CG_ConfigString(CS_DLIGHTS + i);
 		if (!strlen(str)) {
 			break;
@@ -988,8 +989,7 @@ The server says this item is used on this level
 static void CG_RegisterItemSounds(int itemNum) {
 	gitem_t *item;
 	char    data[MAX_QPATH];
-	char    *s, *start;
-	int     len;
+	char    *s;
 
 	item = &bg_itemlist[itemNum];
 
@@ -1004,7 +1004,9 @@ static void CG_RegisterItemSounds(int itemNum) {
 	}
 
 	while (*s) {
-		start = s;
+		char *start = s;
+		int  len;
+
 		while (*s && *s != ' ') {
 			s++;
 		}
@@ -1038,8 +1040,6 @@ called during a precache command
 static void CG_RegisterSounds(void) {
 	int          i;
 	char         name[MAX_QPATH];
-	const char   *soundName;
-	bg_speaker_t *speaker;
 
 	// NERVE - SMF - voice commands
 	CG_LoadVoiceChats();
@@ -1052,7 +1052,9 @@ static void CG_RegisterSounds(void) {
 
 	BG_LoadSpeakerScript(va("sound/maps/%s.sps", cgs.rawmapname));
 
-	for (i = 0; i < BG_NumScriptSpeakers(); i++) {
+	for (i = 0; i < BG_NumScriptSpeakers(); ++i) {
+		bg_speaker_t *speaker;
+
 		speaker = BG_GetScriptSpeaker(i);
 
 		speaker->noise = trap_S_RegisterSound(speaker->filename);
@@ -1129,11 +1131,13 @@ static void CG_RegisterSounds(void) {
 		cgs.media.footsteps[FOOTSTEP_CARPET][i] = trap_S_RegisterSound(name);
 	}
 
-	for (i = 1 ; i < bg_numItems ; i++) {
+	for (i = 1 ; i < bg_numItems ; ++i) {
 		CG_RegisterItemSounds(i);
 	}
 
-	for (i = 1 ; i < MAX_SOUNDS ; i++) {
+	for (i = 1 ; i < MAX_SOUNDS ; ++i) {
+		const char   *soundName;
+
 		soundName = CG_ConfigString(CS_SOUNDS + i);
 		if (!soundName[0]) {
 			break;
@@ -1997,7 +2001,6 @@ qboolean CG_Load_Menu(char **p) {
 }
 
 void CG_LoadMenus(const char *menuFile) {
-	char         *token;
 	char         *p;
 	int          len, start;
 	fileHandle_t f;
@@ -2031,6 +2034,8 @@ void CG_LoadMenus(const char *menuFile) {
 	p = buf;
 
 	for (;; ) {
+		char         *token;
+
 		token = COM_ParseExt(&p, qtrue);
 		if (!token || token[0] == 0 || token[0] == '}') {
 			break;

@@ -223,7 +223,6 @@ void CG_AddFragment(localEntity_t *le) {
 	float       flameAlpha = 0.0;     // TTimo: init
 	vec3_t      flameDir;
 	qboolean    hasFlame = qfalse;
-	int         i;
 
 	// Ridah
 	re = &le->refEntity;
@@ -252,7 +251,6 @@ void CG_AddFragment(localEntity_t *le) {
 
 //----(SA)	added
 	if (le->leFlags & LEF_SMOKING) {
-		float       alpha;
 		refEntity_t flash;
 
 		// create a little less smoke
@@ -260,6 +258,8 @@ void CG_AddFragment(localEntity_t *le) {
 		//	TODO: FIXME: this is not quite right, because it'll become fps dependant - in a bad way.
 		//		the slower the fps, the /more/ smoke there'll be, probably driving the fps lower.
 		if (!(rand() % 5)) {
+			float       alpha;
+
 			alpha  = 1.0 - ((float)(cg.time - le->startTime) / (float)(le->endTime - le->startTime));
 			alpha *= 0.25f;
 			memset(&flash, 0, sizeof (flash));
@@ -354,6 +354,8 @@ void CG_AddFragment(localEntity_t *le) {
 	// trace a line from previous position to new position
 	CG_Trace(&trace, le->refEntity.origin, NULL, NULL, newOrigin, -1, CONTENTS_SOLID);
 	if (trace.fraction == 1.0) {
+		int         i;
+
 		// still in free fall
 		VectorCopy(newOrigin, le->refEntity.origin);
 
@@ -363,7 +365,7 @@ void CG_AddFragment(localEntity_t *le) {
 			BG_EvaluateTrajectory(&le->angles, cg.time, angles, qtrue, -1);
 			AnglesToAxis(angles, le->refEntity.axis);
 			if (le->sizeScale && le->sizeScale != 1.0) {
-				for (i = 0; i < 3; i++) {
+				for (i = 0; i < 3; ++i) {
 					VectorScale(le->refEntity.axis[i], le->sizeScale, le->refEntity.axis[i]);
 				}
 				le->refEntity.nonNormalizedAxes = qtrue;
@@ -371,7 +373,7 @@ void CG_AddFragment(localEntity_t *le) {
 		} else {
 			AnglesToAxis(le->angles.trBase, le->refEntity.axis);
 			if (le->sizeScale && le->sizeScale != 1.0) {
-				for (i = 0; i < 3; i++) {
+				for (i = 0; i < 3; ++i) {
 					VectorScale(le->refEntity.axis[i], le->sizeScale, le->refEntity.axis[i]);
 				}
 				le->refEntity.nonNormalizedAxes = qtrue;
@@ -487,11 +489,12 @@ void CG_AddSparkElements(localEntity_t *le) {
 	vec3_t  newOrigin;
 	trace_t trace;
 	float   time;
-	float   lifeFrac;
 
 	time = (float)(cg.time - cg.frametime);
 
 	for (;; ) {
+		float   lifeFrac;
+
 		// calculate new position
 		BG_EvaluateTrajectory(&le->pos, cg.time, newOrigin, qfalse, -1);
 
@@ -542,29 +545,25 @@ CG_AddFuseSparkElements
 ================
 */
 void CG_AddFuseSparkElements(localEntity_t *le) {
-
 	float FUSE_SPARK_WIDTH = 1.0;
-
 	int           step = 10;
 	float         time;
-	float         lifeFrac;
 	static vec3_t whiteColor = { 1, 1, 1 };
 
 	time = (float)(le->lastTrailTime);
 
 	while (time < cg.time) {
+		float         lifeFrac;
 
 		// calculate new position
 		BG_EvaluateTrajectory(&le->pos, time, le->refEntity.origin, qfalse, -1);
 
 		lifeFrac = (float)(time - le->startTime) / (float)(le->endTime - le->startTime);
 
-		//if (lifeFrac > 0.2) {
 		// add a trail
 		// rain - added le for zinx's trail fix
 		le->headJuncIndex = CG_AddTrailJunc(le->headJuncIndex, le, cgs.media.sparkParticleShader, time, STYPE_STRETCH, le->refEntity.origin, (int)(lifeFrac * (float)(le->endTime - le->startTime) / 2.0),
-		                                    1.0 /*(1.0 - lifeFrac)*/, 0.0, FUSE_SPARK_WIDTH * (1.0 - lifeFrac), FUSE_SPARK_WIDTH * (1.0 - lifeFrac), TJFL_SPARKHEADFLARE, whiteColor, whiteColor, 0, 0);
-		//}
+		                                    1.0, 0.0, FUSE_SPARK_WIDTH * (1.0 - lifeFrac), FUSE_SPARK_WIDTH * (1.0 - lifeFrac), TJFL_SPARKHEADFLARE, whiteColor, whiteColor, 0, 0);
 
 		time += step;
 
@@ -581,10 +580,11 @@ CG_AddDebrisElements
 void CG_AddDebrisElements(localEntity_t *le) {
 	vec3_t  newOrigin;
 	trace_t trace;
-	float   lifeFrac;
 	int     t, step = 50;
 
 	for (t = le->lastTrailTime + step; t < cg.time; t += step) {
+		float   lifeFrac;
+
 		// calculate new position
 		BG_EvaluateTrajectory(&le->pos, t, newOrigin, qfalse, -1);
 
