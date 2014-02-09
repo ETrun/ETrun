@@ -91,21 +91,18 @@ void CG_windowFree(cg_window_t *w) {
 	}
 }
 
-
 void CG_windowCleanup(void) {
 	int                i;
-	cg_window_t        *w;
 	cg_windowHandler_t *wh = &cg.winHandler;
 
-	for (i = 0; i < wh->numActiveWindows; i++) {
-		w = &wh->window[wh->activeWindows[i]];
+	for (i = 0; i < wh->numActiveWindows; ++i) {
+		cg_window_t *w = &wh->window[wh->activeWindows[i]];
 		if (!w->inuse || w->state == WSTATE_OFF) {
 			CG_windowFree(w);
 			i--;
 		}
 	}
 }
-
 
 void CG_demoAviFPSDraw(void) {
 	qboolean fKeyDown = cgs.fKeyPressed[K_F1] | cgs.fKeyPressed[K_F2] | cgs.fKeyPressed[K_F3] | cgs.fKeyPressed[K_F4] | cgs.fKeyPressed[K_F5];

@@ -398,7 +398,6 @@ void CG_PyroSmokeTrail(centity_t *ent) {
 	int           startTime;
 	entityState_t *es;
 	int           t;
-	float         rnd;
 	team_t        team;
 
 	if (ent->currentState.weapon == WP_LANDMINE) {
@@ -441,6 +440,7 @@ void CG_PyroSmokeTrail(centity_t *ent) {
 
 	// drop fire trail sprites
 	for ( ; t <= ent->trailTime ; t += step) {
+		float         rnd;
 
 		BG_EvaluateTrajectory(&es->pos, t, lastPos, qfalse, es->effect2Time);
 
@@ -779,7 +779,6 @@ static qboolean CG_ParseWeaponConfig(const char *filename, weaponInfo_t *wi) {
 	char         *text_p, *prev;
 	int          len;
 	int          i;
-	float        fps;
 	char         *token;
 	qboolean     newfmt = qfalse;   //----(SA)
 	char         text[20000];
@@ -825,7 +824,8 @@ static qboolean CG_ParseWeaponConfig(const char *filename, weaponInfo_t *wi) {
 	}
 
 
-	for (i = 0 ; i < MAX_WP_ANIMATIONS  ; i++) {
+	for (i = 0 ; i < MAX_WP_ANIMATIONS  ; ++i) {
+		float  fps;
 
 		token = COM_Parse(&text_p);     // first frame
 		if (!token) {
@@ -895,7 +895,6 @@ static qboolean CG_ParseWeaponConfig(const char *filename, weaponInfo_t *wi) {
 		CG_Printf("Error parsing weapon animation file: %s", filename);
 		return qfalse;
 	}
-
 
 	return qtrue;
 }
@@ -1565,7 +1564,6 @@ cg.time should be between oldFrameTime and frameTime after exit
 ===============
 */
 static void CG_RunWeapLerpFrame(weaponInfo_t *wi, lerpFrame_t *lf, int newAnimation, float speedScale) {
-	int         f;
 	animation_t *anim;
 
 	// debugging tool to get no animations
@@ -1588,6 +1586,8 @@ static void CG_RunWeapLerpFrame(weaponInfo_t *wi, lerpFrame_t *lf, int newAnimat
 	// if we have passed the current frame, move it to
 	// oldFrame and calculate a new frame
 	if (cg.time >= lf->frameTime) {
+		int         f;
+
 		lf->oldFrame      = lf->frame;
 		lf->oldFrameTime  = lf->frameTime;
 		lf->oldFrameModel = lf->frameModel;
@@ -1685,7 +1685,6 @@ CG_CalculateWeaponPosition
 static void CG_CalculateWeaponPosition(vec3_t origin, vec3_t angles) {
 	float scale;
 	int   delta;
-	float fracsin;
 
 	VectorCopy(cg.refdef_current->vieworg, origin);
 	VectorCopy(cg.refdefViewAngles, angles);
@@ -1775,10 +1774,9 @@ static void CG_CalculateWeaponPosition(vec3_t origin, vec3_t angles) {
 
 	// idle drift
 	if ((!(cg.predictedPlayerState.eFlags & EF_MOUNTEDTANK)) && (cg.predictedPlayerState.weapon != WP_MORTAR_SET) && (cg.predictedPlayerState.weapon != WP_MOBILE_MG42_SET)) {
-		//----(SA) adjustment for MAX KAUFMAN
-		//	scale = cg.xyspeed + 40;
+		float fracsin;
+
 		scale = 80;
-		//----(SA)	end
 		fracsin        = sin(cg.time * 0.001);
 		angles[ROLL]  += scale * fracsin * 0.01;
 		angles[YAW]   += scale * fracsin * 0.01;
@@ -1830,7 +1828,6 @@ sound should only be done on the world model case.
 static qboolean debuggingweapon = qfalse;
 #define BARREL_SMOKE_TIME 1000
 void CG_AddPlayerWeapon(refEntity_t *parent, playerState_t *ps, centity_t *cent) {
-
 	refEntity_t  gun;
 	refEntity_t  barrel;
 	refEntity_t  flash;
@@ -1840,9 +1837,7 @@ void CG_AddPlayerWeapon(refEntity_t *parent, playerState_t *ps, centity_t *cent)
 	centity_t    *nonPredictedCent;
 	qboolean     firing; // Ridah
 	qboolean     akimboFire = qfalse;
-
 	qboolean drawpart;
-	int      i;
 	qboolean isPlayer;
 
 	BG_GetPlayerClassInfo(cgs.clientinfo[cent->currentState.clientNum].team, cgs.clientinfo[cent->currentState.clientNum].cls);
@@ -2034,8 +2029,9 @@ void CG_AddPlayerWeapon(refEntity_t *parent, playerState_t *ps, centity_t *cent)
 
 	if (ps) {
 		qboolean spunpart;
+		int i;
 
-		for (i = W_PART_1; i < W_MAX_PARTS; i++) {
+		for (i = W_PART_1; i < W_MAX_PARTS; ++i) {
 			if ((weaponNum == WP_MORTAR_SET && (i == W_PART_4 || i == W_PART_5)) &&
 			    ps && !cg.renderingThirdPerson && cg.predictedPlayerState.weaponstate != WEAPON_RAISING) {
 				continue;
@@ -2386,10 +2382,10 @@ void CG_AddViewWeapon(playerState_t *ps) {
 
 	// allow the gun to be completely removed
 	if (!cg_drawGun.integer) {
-		vec3_t origin;
-
 		//bani - #589
 		if (cg.predictedPlayerState.eFlags & EF_FIRING && !(cg.predictedPlayerState.eFlags & (EF_MG42_ACTIVE | EF_MOUNTEDTANK))) {
+			vec3_t origin;
+
 			// special hack for flamethrower...
 			VectorCopy(cg.refdef_current->vieworg, origin);
 
@@ -3133,7 +3129,7 @@ void CG_NextWeap(qboolean switchBanks) {
 	int      bank = 0, cycle = 0, newbank = 0, newcycle = 0;
 	int      num, curweap;
 	qboolean nextbank = qfalse;     // need to switch to the next bank of weapons?
-	int      i, j;
+	int      i;
 
 	num = curweap = cg.weaponSelect;
 
@@ -3171,7 +3167,7 @@ void CG_NextWeap(qboolean switchBanks) {
 	}
 
 	if (cg_cycleAllWeaps.integer || !switchBanks) {
-		for (i = 0; i < MAX_WEAPS_IN_BANK_MP; i++) {
+		for (i = 0; i < MAX_WEAPS_IN_BANK_MP; ++i) {
 			num = getNextWeapInBankBynum(num);
 
 			CG_WeaponIndex(num, NULL, &newcycle);         // get cycle of new weapon.  if it's lower than the original, then it cycled around
@@ -3216,7 +3212,9 @@ void CG_NextWeap(qboolean switchBanks) {
 	}
 
 	if (nextbank) {
-		for (i = 0; i < MAX_WEAP_BANKS_MP; i++) {
+		for (i = 0; i < MAX_WEAP_BANKS_MP; ++i) {
+			int j;
+
 			if (cg_cycleAllWeaps.integer) {
 				num = getNextBankWeap(bank + i, cycle, qfalse);     // cycling all weaps always starts the next bank at the bottom
 			} else {
@@ -3257,7 +3255,7 @@ void CG_NextWeap(qboolean switchBanks) {
 
 			CG_WeaponIndex(num, &newbank, &newcycle);     // get the bank of the new weap
 
-			for (j = newcycle; j < MAX_WEAPS_IN_BANK_MP; j++) {
+			for (j = newcycle; j < MAX_WEAPS_IN_BANK_MP; ++j) {
 				num = getNextWeapInBank(newbank, j);
 
 				if (CG_WeaponSelectable(num)) {     // found selectable weapon
@@ -3309,7 +3307,7 @@ void CG_PrevWeap(qboolean switchBanks) {
 	int      bank = 0, cycle = 0, newbank = 0, newcycle = 0;
 	int      num, curweap;
 	qboolean prevbank = qfalse;     // need to switch to the next bank of weapons?
-	int      i, j;
+	int      i;
 
 	num = curweap = cg.weaponSelect;
 
@@ -3398,7 +3396,9 @@ void CG_PrevWeap(qboolean switchBanks) {
 	//			else: use base weap in bank
 
 	if (prevbank) {
-		for (i = 0; i < MAX_WEAP_BANKS_MP; i++) {
+		for (i = 0; i < MAX_WEAP_BANKS_MP; ++i) {
+			int j;
+
 			if (cg_cycleAllWeaps.integer) {
 				num = getPrevBankWeap(bank - i, cycle, qfalse);     // cycling all weaps always starts the next bank at the bottom
 			} else {
@@ -3435,7 +3435,7 @@ void CG_PrevWeap(qboolean switchBanks) {
 
 			CG_WeaponIndex(num, &newbank, &newcycle);     // get the bank of the new weap
 
-			for (j = MAX_WEAPS_IN_BANK_MP; j > 0; j--) {
+			for (j = MAX_WEAPS_IN_BANK_MP; j > 0; --j) {
 				num = getPrevWeapInBank(newbank, j);
 
 				if (CG_WeaponSelectable(num)) {     // found selectable weapon
@@ -3973,14 +3973,14 @@ WEAPON EVENTS
 
 void CG_MG42EFX(centity_t *cent) {
 	// Arnout: complete overhaul of this one
-	centity_t   *mg42;
 	int         num;
 	vec3_t      forward, point;
 	refEntity_t flash;
 
 	// find the mg42 we're attached to
 	for (num = 0 ; num < cg.snap->numEntities ; num++) {
-		mg42 = &cg_entities[cg.snap->entities[num].number];
+		centity_t *mg42 = &cg_entities[cg.snap->entities[num].number];
+
 		if (mg42->currentState.eType == ET_MG42_BARREL &&
 		    mg42->currentState.otherEntityNum == cent->currentState.number) {
 			// found it, clamp behind gun
@@ -4268,11 +4268,12 @@ CG_AddSparks
 */
 void CG_AddSparks(vec3_t origin, vec3_t dir, int speed, int duration, int count, float randScale) {
 	localEntity_t *le;
-	refEntity_t   *re;
 	vec3_t        velocity;
 	int           i;
 
-	for (i = 0; i < count; i++) {
+	for (i = 0; i < count; ++i) {
+		refEntity_t   *re;
+
 		le = CG_AllocLocalEntity();
 		re = &le->refEntity;
 
@@ -4348,12 +4349,13 @@ CG_AddDebris
 */
 void CG_AddDebris(vec3_t origin, vec3_t dir, int speed, int duration, int count) {
 	localEntity_t *le;
-	refEntity_t   *re;
 	vec3_t        velocity, unitvel;
-	float         timeAdd;
 	int           i;
 
-	for (i = 0; i < count; i++) {
+	for (i = 0; i < count; ++i) {
+		refEntity_t   *re;
+		float         timeAdd;
+
 		le = CG_AllocLocalEntity();
 		re = &le->refEntity;
 
@@ -4425,33 +4427,16 @@ ClientNum is a dummy field used to define what sort of effect to spawn
 */
 #define MAX_IMPACT_SOUNDS 5
 void CG_MissileHitWall(int weapon, int clientNum, vec3_t origin, vec3_t dir, int surfFlags) {   //	(SA) modified to send missilehitwall surface parameters
-	qhandle_t     mod, mark, shader;
-	sfxHandle_t   sfx, sfx2;
-	localEntity_t *le;
-	qboolean      isSprite;
-	int           duration, lightOverdraw, i, j, markDuration, volume;
+	qhandle_t     mod = 0, mark = 0, shader = 0;
+	sfxHandle_t   sfx = 0, sfx2 = 0;
+	qboolean      isSprite = qfalse;
+	int           duration = 600, lightOverdraw = 0, i, j, markDuration = -1, volume = 127;
 	trace_t       trace;
 	vec3_t        lightColor, tmpv, tmpv2, sprOrg, sprVel;
-	float         radius, light, sfx2range = 0;
-	vec4_t        projection, color;
-	vec3_t        markOrigin;
+	float         radius = 32, light = 0, sfx2range = 0;
+	vec4_t        projection, markOrigin;
 
-	mark   = 0;
-	radius = 32;
-	sfx    = 0;
-	sfx2   = 0;
-	mod    = 0;
-	shader = 0;
-	light  = 0;
 	VectorSet(lightColor, 1, 1, 0);
-	// Ridah
-	lightOverdraw = 0;
-	volume        = 127;
-
-	// set defaults
-	isSprite     = qfalse;
-	duration     = 600;
-	markDuration = -1;
 
 	if (surfFlags & SURF_SKY) {
 		return;
@@ -4766,6 +4751,8 @@ void CG_MissileHitWall(int weapon, int clientNum, vec3_t origin, vec3_t dir, int
 	}
 
 	if (mod) {
+		localEntity_t *le;
+
 		le                = CG_MakeExplosion(origin, dir, mod, shader, duration, isSprite);
 		le->light         = light;
 		le->lightOverdraw = lightOverdraw;
@@ -4774,6 +4761,8 @@ void CG_MissileHitWall(int weapon, int clientNum, vec3_t origin, vec3_t dir, int
 
 	// ydnar: omnidirectional explosion marks
 	if (mark == cgs.media.burnMarkShader) {
+		vec4_t color;
+
 		VectorSet(projection, 0, 0, -1);
 		projection[3] = radius;
 		Vector4Set(color, 1.0f, 1.0f, 1.0f, 1.0f);
