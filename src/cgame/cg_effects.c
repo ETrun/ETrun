@@ -193,10 +193,9 @@ CG_MakeExplosion
 localEntity_t *CG_MakeExplosion(vec3_t origin, vec3_t dir,
                                 qhandle_t hModel, qhandle_t shader,
                                 int msec, qboolean isSprite) {
-	float         ang;
 	localEntity_t *ex;
 	int           offset;
-	vec3_t        tmpVec, newOrigin;
+	vec3_t        newOrigin;
 
 	if (msec <= 0) {
 		CG_Error("CG_MakeExplosion: msec = %i", msec);
@@ -207,6 +206,8 @@ localEntity_t *CG_MakeExplosion(vec3_t origin, vec3_t dir,
 
 	ex = CG_AllocLocalEntity();
 	if (isSprite) {
+		vec3_t        tmpVec;
+
 		ex->leType = LE_SPRITE_EXPLOSION;
 
 		// randomly rotate sprite orientation
@@ -221,6 +222,8 @@ localEntity_t *CG_MakeExplosion(vec3_t origin, vec3_t dir,
 		if (!dir) {
 			AxisClear(ex->refEntity.axis);
 		} else {
+			float         ang;
+
 			ang = rand() % 360;
 			VectorCopy(dir, ex->refEntity.axis[0]);
 			RotateAroundDirection(ex->refEntity.axis, ang);
@@ -319,14 +322,12 @@ CG_Spotlight
 */
 
 void CG_Spotlight(centity_t *cent, float *color, vec3_t realstart, vec3_t lightDir, int segs, float range, int startWidth, float coneAngle, int flags) {
-	int         i, j;
+	int         i;
 	vec3_t      start, traceEnd;
 	vec3_t      right, up;
-	vec3_t      v1, v2;
 	vec3_t      startvec, endvec;   // the vectors to rotate around lightDir to create the circles
 	vec3_t      conevec;
 	vec3_t      start_points[MAX_SPOT_SEGS], end_points[MAX_SPOT_SEGS];
-	vec3_t      coreright;
 	polyVert_t  verts[MAX_SPOT_SEGS * 4]; // x4 for 4 verts per poly
 	polyVert_t  plugVerts[MAX_SPOT_SEGS];
 	vec3_t      endCenter;
@@ -340,8 +341,6 @@ void CG_Spotlight(centity_t *cent, float *color, vec3_t realstart, vec3_t lightD
 	float       endAlpha = 0.0;
 	vec4_t      colorNorm;  // normalized color vector
 	refEntity_t ent;
-	vec3_t      angles;
-	vec4_t      projection;
 
 	// Nico, init vars
 	tr.endpos[0] = 0;
@@ -418,6 +417,8 @@ void CG_Spotlight(centity_t *cent, float *color, vec3_t realstart, vec3_t lightD
 
 // model at base
 	if (cent->currentState.modelindex) {
+		vec3_t      angles;
+
 		memset(&ent, 0, sizeof (ent));
 		ent.frame    = 0;
 		ent.oldframe = 0;
@@ -454,6 +455,9 @@ void CG_Spotlight(centity_t *cent, float *color, vec3_t realstart, vec3_t lightD
 //	generate the flat beam 'core'
 //
 	if (!(flags & SL_NOCORE)) {
+		vec3_t      v1, v2;
+		vec3_t      coreright;
+
 		VectorSubtract(start, cg.refdef_current->vieworg, v1);
 		VectorNormalize(v1);
 		VectorSubtract(traceEnd, cg.refdef_current->vieworg, v2);
@@ -496,6 +500,7 @@ void CG_Spotlight(centity_t *cent, float *color, vec3_t realstart, vec3_t lightD
 	}
 
 	for (i = 0; i < segs; i++) {
+		int j;
 
 		j = (i * 4);
 
@@ -555,6 +560,8 @@ void CG_Spotlight(centity_t *cent, float *color, vec3_t realstart, vec3_t lightD
 	// show the endpoint
 
 	if (!(flags & SL_NOIMPACT) && hitDist) {
+		vec4_t      projection;
+
 		VectorMA(startvec, hitDist, conevec, endvec);
 
 		radius = coreEndRadius * (hitDist / beamLen);
@@ -811,9 +818,7 @@ qboolean CG_SpawnSmokeSprite(centity_t *cent, float dist) {
 }
 
 void CG_RenderSmokeGrenadeSmoke(centity_t *cent, const weaponInfo_t *weapon) {
-	int           spritesNeeded = 0;
 	smokesprite_t *smokesprite;
-	float         spawnrate = (1.f / SMOKEBOMB_SPAWNRATE) * 1000.f;
 
 	if (cent->currentState.effect1Time == 16) {
 		cent->miscTime          = 0;
@@ -824,7 +829,9 @@ void CG_RenderSmokeGrenadeSmoke(centity_t *cent, const weaponInfo_t *weapon) {
 	}
 
 	if (cent->currentState.effect1Time > 16) {
+		int           spritesNeeded = 0;
 		int volume = 16 + ((cent->currentState.effect1Time / 640.f) * (100 - 16));
+		float         spawnrate = (1.f / SMOKEBOMB_SPAWNRATE) * 1000.f;
 
 		if (!cent->dl_atten ||
 		    cent->currentState.pos.trType != TR_STATIONARY ||

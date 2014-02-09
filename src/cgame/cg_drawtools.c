@@ -95,7 +95,6 @@ flags:
 
 void CG_FilledBar(float x, float y, float w, float h, float *startColor, float *endColor, const float *bgColor, float frac, int flags) {
 	vec4_t backgroundcolor = { 1, 1, 1, 0.25f }, colorAtPos;  // colorAtPos is the lerped color if necessary
-	int    indent          = BAR_BORDERSIZE;
 
 	if (frac > 1) {
 		frac = 1.f;
@@ -114,6 +113,8 @@ void CG_FilledBar(float x, float y, float w, float h, float *startColor, float *
 
 	// background
 	if (flags & BAR_BG) {
+		int    indent          = BAR_BORDERSIZE;
+
 		// draw background at full size and shrink the remaining box to fit inside with a border.  (alternate border may be specified by a BAR_BGSPACING_xx)
 		CG_FillRect(x,
 		            y,
@@ -973,13 +974,14 @@ static int propMap[128][3] =
 
 int UI_ProportionalStringWidth(const char *str) {
 	const char *s;
-	int        ch;
-	int        charWidth;
 	int        width;
 
 	s     = str;
 	width = 0;
 	while (*s) {
+		int        ch;
+		int        charWidth;
+
 		ch        = *s & 127;
 		charWidth = propMap[ch][2];
 		if (charWidth != -1) {
@@ -995,7 +997,6 @@ int UI_ProportionalStringWidth(const char *str) {
 
 static void UI_DrawProportionalString2(int x, int y, const char *str, vec4_t color, float sizeScale, qhandle_t charset) {
 	const char    *s;
-	unsigned char ch;
 	float         ax;
 	float         ay;
 	float         aw;
@@ -1013,6 +1014,8 @@ static void UI_DrawProportionalString2(int x, int y, const char *str, vec4_t col
 
 	s = str;
 	while (*s) {
+		unsigned char ch;
+
 		ch = *s & 127;
 		if (ch == ' ') {
 			aw = (float)PROP_SPACE_WIDTH * cgs.screenXScale * sizeScale;

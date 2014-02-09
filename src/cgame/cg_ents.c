@@ -264,12 +264,12 @@ static void CG_EntityEffects(centity_t *cent) {
 	// constant light glow
 	if (cent->currentState.constantLight) {
 		int cl;
-		int i, r, g, b;
-
 
 		if (cent->dl_stylestring[0] != 0) {    // it's probably a dlight
 			CG_AddLightstyle(cent);
 		} else {
+			int i, r, g, b;
+
 			cl = cent->currentState.constantLight;
 			r  = cl & 255;
 			g  = (cl >> 8) & 255;
@@ -583,7 +583,6 @@ static void CG_Item(centity_t *cent) {
 	entityState_t *es;
 	gitem_t       *item;
 	qboolean      hasStand, highlight;
-	float         highlightFadeScale = 1.0f;
 
 	es = &cent->currentState;
 
@@ -731,7 +730,7 @@ static void CG_Item(centity_t *cent) {
 
 	// highlighting items the player looks at
 	if (cg_drawCrosshairPickups.integer) {
-
+		float         highlightFadeScale = 1.0f;
 
 		if (cg_drawCrosshairPickups.integer == 2) {    // '2' is 'force highlights'
 			highlight = qtrue;
@@ -1195,9 +1194,7 @@ static void CG_Corona(centity_t *cent) {
 	trace_t  tr;
 	int      r, g, b;
 	int      dli;
-	qboolean visible = qfalse,
-	         behind  = qfalse,
-	         toofar  = qfalse;
+	qboolean behind  = qfalse, toofar  = qfalse;
 
 	float  dot, dist;
 	vec3_t dir;
@@ -1231,8 +1228,9 @@ static void CG_Corona(centity_t *cent) {
 		toofar = qfalse;
 	}
 
-
 	if (!behind && !toofar) {
+		qboolean visible = qfalse;
+
 		CG_Trace(&tr, cg.refdef_current->vieworg, NULL, NULL, cent->lerpOrigin, -1, MASK_SOLID | CONTENTS_BODY);      // added blockage by players.  not sure how this is going to be since this is their bb, not their model (too much blockage)
 
 		if (tr.fraction == 1) {
@@ -1254,14 +1252,14 @@ static void CG_SpotlightEfx(centity_t *cent) {
 	float  dist, fov = 90;
 	vec4_t color        = { 1, 1, 1, .1f };
 	int    splinetarget = 0;
-	char   *cs;
-
 
 	VectorCopy(cent->currentState.origin2, targetpos);
 
 	splinetarget = cent->overheatTime;
 
 	if (!splinetarget) {
+		char   *cs;
+
 		cs                 = (char *)CG_ConfigString(CS_SPLINES + cent->currentState.density);
 		cent->overheatTime = splinetarget = CG_LoadCamera(va("cameras/%s.camera", cs));
 		if (splinetarget != -1) {
@@ -1675,7 +1673,6 @@ static void CG_Prop(centity_t *cent) {
 	refEntity_t   ent;
 	entityState_t *s1;
 	vec3_t        angles;
-	float         scale;
 
 	s1 = &cent->currentState;
 
@@ -1690,6 +1687,8 @@ static void CG_Prop(centity_t *cent) {
 		ent.oldframe = ent.frame;
 		ent.backlerp = 0;
 	} else {
+		float         scale;
+
 		VectorCopy(cg.refdef_current->vieworg, ent.origin);
 		VectorCopy(cg.refdefViewAngles, angles);
 
@@ -1897,8 +1896,8 @@ Also called by client movement prediction code
 */
 void CG_AdjustPositionForMover(const vec3_t in, int moverNum, int fromTime, int toTime, vec3_t out, vec3_t outDeltaAngles) {
 	centity_t *cent;
-	vec3_t    oldOrigin, origin, deltaOrigin;
-	vec3_t    oldAngles, angles, deltaAngles;
+	vec3_t    oldOrigin, deltaOrigin;
+	vec3_t    oldAngles, deltaAngles;
 	vec3_t    transpose[3];
 	vec3_t    matrix[3];
 	vec3_t    move, org, org2;
@@ -1920,6 +1919,8 @@ void CG_AdjustPositionForMover(const vec3_t in, int moverNum, int fromTime, int 
 	}
 
 	if (!(cent->currentState.eFlags & EF_PATH_LINK)) {
+		vec3_t origin, angles;
+
 		BG_EvaluateTrajectory(&cent->currentState.pos, fromTime, oldOrigin, qfalse, cent->currentState.effect2Time);
 		BG_EvaluateTrajectory(&cent->currentState.apos, fromTime, oldAngles, qtrue, cent->currentState.effect2Time);
 
@@ -2497,7 +2498,6 @@ void CGTagToRefEntity(refEntity_t *ent, tag_t *tag) {
 void CG_AttachBitsToTank(centity_t *tank, refEntity_t *mg42base, refEntity_t *mg42upper, refEntity_t *mg42gun, refEntity_t *player, refEntity_t *flash, vec_t *playerangles, const char *tagName, qboolean browning) {
 	refEntity_t ent;
 	vec3_t      angles;
-	int         i;
 
 	memset(mg42base, 0, sizeof (refEntity_t));
 	memset(mg42gun, 0, sizeof (refEntity_t));
@@ -2518,6 +2518,8 @@ void CG_AttachBitsToTank(centity_t *tank, refEntity_t *mg42base, refEntity_t *mg
 	}
 
 	if (tank->tankframe != cg.clientFrame) {
+		int         i;
+
 		tank->tankframe = cg.clientFrame;
 
 		memset(&ent, 0, sizeof (refEntity_t));
