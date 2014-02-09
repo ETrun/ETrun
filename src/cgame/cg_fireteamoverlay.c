@@ -79,17 +79,19 @@ void CG_SortClientFireteam() {
 
 // Parses fireteam servercommand
 void CG_ParseFireteams() {
-	int        i, j;
+	int        i;
 	char       *s;
-	const char *p;
 	int        clnts[2];
 
-	for (i = 0; i < MAX_CLIENTS; i++) {
+	for (i = 0; i < MAX_CLIENTS; ++i) {
 		cgs.clientinfo[i].fireteamData = NULL;
 	}
 
-	for (i = 0; i < MAX_FIRETEAMS; i++) {
+	for (i = 0; i < MAX_FIRETEAMS; ++i) {
+		int j;
+		const char *p;
 		char hexbuffer[11] = "0x00000000";
+
 		p = CG_ConfigString(CS_FIRETEAMS + i);
 
 		j = atoi(Info_ValueForKey(p, "id"));
@@ -354,12 +356,13 @@ qboolean CG_FireteamHasClass(int classnum, qboolean selectedonly) {
 
 const char *CG_BuildSelectedFirteamString(void) {
 	char         buffer[256];
-	clientInfo_t *ci;
 	int          cnt = 0;
 	int          i;
 
 	*buffer = '\0';
-	for (i = 0; i < 6; i++) {
+	for (i = 0; i < 6; ++i) {
+		clientInfo_t *ci;
+
 		ci = CG_SortedFireTeamPlayerForPosition(i, 6);
 		if (!ci) {
 			break;

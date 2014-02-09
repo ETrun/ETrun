@@ -584,9 +584,11 @@ int CG_PlayerNFFromPos(int pos, int *pageofs) {
 void CG_DrawPlayerSF(panel_button_t *button, int *pageofs) {
 	float      y = button->rect.y;
 	const char *str;
-	int        i, x;
+	int        i;
 
-	for (i = 0; i < 8; i++) {
+	for (i = 0; i < 8; ++i) {
+		int x;
+
 		x = CG_PlayerSFFromPos(i, pageofs);
 		if (x == -1) {
 			break;
@@ -628,9 +630,11 @@ void CG_DrawPlayerSF(panel_button_t *button, int *pageofs) {
 void CG_DrawPlayerNF(panel_button_t *button, int *pageofs) {
 	float      y = button->rect.y;
 	const char *str;
-	int        i, x;
+	int        i;
 
-	for (i = 0; i < 8; i++) {
+	for (i = 0; i < 8; ++i) {
+		int x;
+
 		x = CG_PlayerNFFromPos(i, pageofs);
 		if (x == -1) {
 			break;
@@ -877,9 +881,9 @@ qboolean CG_FireteamCheckExecKey(int key, qboolean doaction) {
 					return qtrue;
 				}
 			} else {
-				int i;
-
 				if (key >= 'a' || key <= 'z') {
+					int i;
+
 					for (i = 0; ftMenuRootStrings[i]; i++) {
 						if (key == tolower(*ftMenuRootStringsAlphachars[i])) {
 							if (i < 5 && !CG_FireteamHasClass(i, qtrue)) {
@@ -925,10 +929,11 @@ qboolean CG_FireteamCheckExecKey(int key, qboolean doaction) {
 					}
 				}
 			} else {
-				int        i;
 				const char **strings = ftMenuStrings[cgs.ftMenuPos];
 
 				if (key >= 'a' || key <= 'z') {
+					int        i;
+
 					for (i = 0; strings[i]; i++) {
 						if (key == tolower(*ftMenuStringsAlphachars[cgs.ftMenuPos][i])) {
 
@@ -946,7 +951,7 @@ qboolean CG_FireteamCheckExecKey(int key, qboolean doaction) {
 		break;
 	case 1:
 	{
-		int i = -1, x;
+		int i = -1;
 
 		if (cg_quickMessageAlt.integer) {
 			if (key >= '0' && key <= '9') {
@@ -966,6 +971,8 @@ qboolean CG_FireteamCheckExecKey(int key, qboolean doaction) {
 			}
 
 			if (key >= 'a' || key <= 'z') {
+				int x;
+
 				for (x = 0; strings[x]; x++) {
 					if (key == tolower(*strings[x])) {
 						i = x;

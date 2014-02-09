@@ -191,13 +191,10 @@ CG_FireFlameChunks
 void CG_FireFlameChunks(centity_t *cent, vec3_t origin, vec3_t angles, float speedScale, qboolean firing) {
 	centFlameInfo_t *centInfo;
 	flameChunk_t    *f, *of;
-	vec3_t          lastFwd, thisFwd, fwd;
-	vec3_t          lastUp, thisUp, up;
-	vec3_t          lastRight, thisRight, right;
-	vec3_t          thisOrg, lastOrg, org;
-	double          timeInc, backLerp, fracInc;
-	int             t, numFrameChunks;
-	double          ft;
+	vec3_t          thisFwd, fwd;
+	vec3_t          thisUp;
+	vec3_t          thisRight;
+	vec3_t          thisOrg, org;
 	trace_t         trace;
 	vec3_t          parentFwd;
 
@@ -217,6 +214,10 @@ void CG_FireFlameChunks(centity_t *cent, vec3_t origin, vec3_t angles, float spe
 	// fired over the last frame
 	if ((centInfo->lastClientFrame == cent->currentState.frame) &&
 	    (centInfo->lastFlameChunk && centInfo->lastFiring == firing)) {
+		vec3_t lastFwd, lastUp, lastRight, lastOrg;
+		double timeInc, backLerp, fracInc, ft;
+		int t, numFrameChunks;
+
 		AngleVectors(centInfo->lastAngles, lastFwd, lastRight, lastUp);
 		VectorCopy(centInfo->lastOrigin, lastOrg);
 		centInfo->lastFiring = firing;
@@ -231,6 +232,8 @@ void CG_FireFlameChunks(centity_t *cent, vec3_t origin, vec3_t angles, float spe
 		numFrameChunks = 0;         // CHANGE: id
 
 		while (t <= cg.time) {
+			vec3_t up, right;
+
 			// spawn a new chunk
 			CG_FlameLerpVec(lastOrg, thisOrg, backLerp, org);
 
@@ -559,7 +562,6 @@ CG_MoveFlameChunk
 void CG_MoveFlameChunk(flameChunk_t *f) {
 	vec3_t  newOrigin, sOrg;
 	trace_t trace;
-	float   dot;
 
 	// subtract friction from speed
 	if (f->velSpeed > 1 && f->lastFrictionTake < cg.time - 50) {
@@ -583,6 +585,8 @@ void CG_MoveFlameChunk(flameChunk_t *f) {
 
 	VectorCopy(f->baseOrg, sOrg);
 	while (f->velSpeed > 1 && f->baseOrgTime != cg.time) {
+		float   dot;
+
 		CG_FlameCalcOrg(f, cg.time, newOrigin);
 
 		// trace a line from previous position to new position
@@ -765,14 +769,12 @@ void CG_AddFlameToScene(flameChunk_t *fHead) {
 	static vec3_t whiteColor    = { 1, 1, 1 };
 	vec3_t        c;
 	float         alpha;
-	float         lived;
 	int           headTimeStart;
-	float         vdist, bdot;
 	flameChunk_t  *lastBlowChunk = NULL;
 	qboolean      isClientFlame;
 	int           shader;
 	flameChunk_t  *lastBlueChunk = NULL;
-	qboolean      skip           = qfalse, droppedTrail;
+	qboolean      skip           = qfalse;
 	vec3_t        v;
 	vec3_t        lightOrg;         // origin to place light at
 	float         lightSize;
@@ -795,6 +797,8 @@ void CG_AddFlameToScene(flameChunk_t *fHead) {
 
 	f = fHead;
 	while (f) {
+		float    lived, vdist, bdot;
+		qboolean droppedTrail;
 
 		if (f->nextFlameChunk && f->nextFlameChunk->dead) {
 			// kill it

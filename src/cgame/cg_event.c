@@ -203,12 +203,11 @@ CG_Explode
 ==============
 */
 void CG_Explode(centity_t *cent, vec3_t origin, vec3_t dir, qhandle_t shader) {
-
-	qhandle_t inheritmodel = 0;
-
 	// inherit shader
 	// (SA) FIXME: do this at spawn time rather than explode time so any new necessary shaders are created earlier
 	if (cent->currentState.eFlags & EF_INHERITSHADER && !shader) {
+		qhandle_t inheritmodel = 0;
+
 		inheritmodel = cgs.inlineDrawModel[cent->currentState.modelindex];  // okay, this should be better.
 		if (inheritmodel) {
 			shader = trap_R_GetShaderFromModel(inheritmodel, 0, 0);
@@ -262,12 +261,11 @@ CG_Explode
 ==============
 */
 void CG_Rubble(centity_t *cent, vec3_t origin, vec3_t dir, qhandle_t shader) {
-
-	qhandle_t inheritmodel = 0;
-
 	// inherit shader
 	// (SA) FIXME: do this at spawn time rather than explode time so any new necessary shaders are created earlier
 	if (cent->currentState.eFlags & EF_INHERITSHADER && !shader) {
+		qhandle_t inheritmodel = 0;
+
 		inheritmodel = cgs.inlineDrawModel[cent->currentState.modelindex];  // okay, this should be better.
 		if (inheritmodel) {
 			shader = trap_R_GetShaderFromModel(inheritmodel, 0, 0);
@@ -868,11 +866,8 @@ CG_Effect
 */
 void CG_Effect(centity_t *cent, vec3_t origin, vec3_t dir) {
 	localEntity_t *le;
-	refEntity_t   *re;
-	vec4_t        projection, color;
 
 	VectorSet(dir, 0, 0, 1);      // straight up.
-
 
 	if (cent->currentState.eventParm & 1) {    // fire
 		CG_MissileHitWall(WP_DYNAMITE, 0, origin, dir, 0);
@@ -893,9 +888,10 @@ void CG_Effect(centity_t *cent, vec3_t origin, vec3_t dir) {
 		}
 	}
 
-
 	if (cent->currentState.eventParm & 2) {    // explode
+		vec4_t        projection, color;
 		vec3_t sprVel, sprOrg;
+
 		trap_S_StartSound(origin, -1, CHAN_AUTO, cgs.media.sfx_rockexp);
 
 		// new explode	(from rl)
@@ -936,6 +932,8 @@ void CG_Effect(centity_t *cent, vec3_t origin, vec3_t dir) {
 
 
 	if (cent->currentState.eventParm & 16) {   // gore
+		refEntity_t   *re;
+
 		le = CG_AllocLocalEntity();
 		re = &le->refEntity;
 
@@ -986,7 +984,6 @@ CG_Shard
 */
 void CG_Shard(centity_t *cent, vec3_t origin, vec3_t dir) {
 	localEntity_t *le;
-	refEntity_t   *re;
 	int           type;
 	int           howmany;
 	int           i;
@@ -997,7 +994,9 @@ void CG_Shard(centity_t *cent, vec3_t origin, vec3_t dir) {
 	type    = cent->currentState.density;
 	howmany = cent->currentState.frame;
 
-	for (i = 0; i < howmany; i++) {
+	for (i = 0; i < howmany; ++i) {
+		refEntity_t   *re;
+
 		le = CG_AllocLocalEntity();
 		re = &le->refEntity;
 
@@ -1206,12 +1205,14 @@ void CG_MortarImpact(vec3_t origin, int sfx, qboolean dist) {
 	}
 
 	if (dist) {
-		vec3_t gorg, norm;
+		vec3_t norm;
 		float  gdist;
 
 		VectorSubtract(origin, cg.refdef_current->vieworg, norm);
 		gdist = VectorNormalize(norm);
 		if (gdist > 1200 && gdist < 8000) {    // 1200 is max cam shakey dist (2*600) use gorg as the new sound origin
+			vec3_t gorg;
+
 			VectorMA(cg.refdef_current->vieworg, 800, norm, gorg);   // non-distance falloff makes more sense; sfx2range was gdist*0.2
 			// sfx2range is variable to give us minimum volume control different explosion sizes (see mortar, panzerfaust, and grenade)
 			trap_S_StartSoundEx(gorg, -1, CHAN_WEAPON, cgs.media.sfx_mortarexpDist, SND_NOCUT);
