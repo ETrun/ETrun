@@ -194,10 +194,8 @@ void CG_AddParticleToScene(cparticle_t *p, vec3_t org) {
 	float      height;
 	float      time, time2;
 	float      ratio;
-	float      invratio;
 	vec3_t     color;
 	polyVert_t TRIverts[3];
-	vec3_t     rright2, rup2;
 
 	if (p->type == P_WEATHER || p->type == P_WEATHER_TURBULENT || p->type == P_WEATHER_FLURRY
 	    || p->type == P_BUBBLE || p->type == P_BUBBLE_TURBULENT) {   // create a front facing polygon
@@ -393,6 +391,9 @@ void CG_AddParticleToScene(cparticle_t *p, vec3_t org) {
 		verts[3].modulate[2] = 255;
 		verts[3].modulate[3] = 255;
 	} else if (p->type == P_SMOKE || p->type == P_SMOKE_IMPACT) {         // create a front rotating facing polygon
+		float      invratio;
+		vec3_t     rright2, rup2;
+
 		if (p->type == P_SMOKE_IMPACT && VectorDistanceSquared(cg.snap->ps.origin, org) > SQR(1024)) {
 			return;
 		}
@@ -765,8 +766,7 @@ CG_AddParticles
 */
 void CG_AddParticles(void) {
 	cparticle_t *p, *next;
-	float       alpha;
-	float       time, time2;
+	float       time2;
 	vec3_t      org;
 	cparticle_t *active, *tail;
 	vec3_t      rotate_ang;
@@ -790,10 +790,10 @@ void CG_AddParticles(void) {
 	tail   = NULL;
 
 	for (p = active_particles ; p ; p = next) {
+		float alpha, time;
+
 		next = p->next;
-
 		time = (cg.time - p->time) * 0.001;
-
 		alpha = p->alpha + time * p->alphavel;
 		if (alpha <= 0) {   // faded out
 			p->next        = free_particles;

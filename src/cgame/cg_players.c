@@ -292,7 +292,6 @@ cg.time should be between oldFrameTime and frameTime after exit
 ===============
 */
 void CG_RunLerpFrame(centity_t *cent, clientInfo_t *ci, lerpFrame_t *lf, int newAnimation, float speedScale) {
-	int         f;
 	animation_t *anim;
 
 	// debugging tool to get no animations
@@ -309,6 +308,8 @@ void CG_RunLerpFrame(centity_t *cent, clientInfo_t *ci, lerpFrame_t *lf, int new
 	// if we have passed the current frame, move it to
 	// oldFrame and calculate a new frame
 	if (cg.time >= lf->frameTime) {
+		int         f;
+
 		lf->oldFrame      = lf->frame;
 		lf->oldFrameTime  = lf->frameTime;
 		lf->oldFrameModel = lf->frameModel;
@@ -387,7 +388,6 @@ may include ANIM_TOGGLEBIT
 */
 void CG_SetLerpFrameAnimationRate(centity_t *cent, clientInfo_t *ci, lerpFrame_t *lf, int newAnimation) {
 	animation_t *anim, *oldanim;
-	int         transitionMin = -1;
 	int         oldAnimNum;
 	qboolean    firstAnim = qfalse;
 
@@ -417,6 +417,8 @@ void CG_SetLerpFrameAnimationRate(centity_t *cent, clientInfo_t *ci, lerpFrame_t
 	lf->animationTime = lf->frameTime + anim->initialLerp;
 
 	if (!(anim->flags & ANIMFL_FIRINGANIM) || (lf != &cent->pe.torso)) {
+		int         transitionMin = -1;
+
 		if ((lf == &cent->pe.legs) && (CG_IsCrouchingAnim(character->animModelInfo, newAnimation) != CG_IsCrouchingAnim(character->animModelInfo, oldAnimNum))) {
 			if (anim->moveSpeed || (anim->movetype & ((1 << ANIM_MT_TURNLEFT) | (1 << ANIM_MT_TURNRIGHT)))) {           // if unknown movetype, go there faster
 				transitionMin = lf->frameTime + 200;    // slowly raise/drop
@@ -466,9 +468,7 @@ cg.time should be between oldFrameTime and frameTime after exit
 ===============
 */
 void CG_RunLerpFrameRate(clientInfo_t *ci, lerpFrame_t *lf, int newAnimation, centity_t *cent, int recursion) {
-	int         f;
 	animation_t *anim, *oldAnim;
-	animation_t *otherAnim = NULL;
 	qboolean    isLadderAnim;
 
 #define ANIM_SCALEMAX_LOW   1.1f
@@ -508,10 +508,10 @@ void CG_RunLerpFrameRate(clientInfo_t *ci, lerpFrame_t *lf, int newAnimation, ce
 	}
 
 	if (anim->moveSpeed && lf->oldFrameSnapshotTime) {
-		float moveSpeed;
-
 		// calculate the speed at which we moved over the last frame
 		if (cg.latestSnapshotTime != lf->oldFrameSnapshotTime && cg.nextSnap) {
+			float moveSpeed;
+
 			if (cent->currentState.number == cg.snap->ps.clientNum) {
 				if (isLadderAnim) {   // only use Z axis for speed
 					lf->oldFramePos[0] = cent->lerpOrigin[0];
@@ -543,6 +543,9 @@ void CG_RunLerpFrameRate(clientInfo_t *ci, lerpFrame_t *lf, int newAnimation, ce
 	// if we have passed the current frame, move it to
 	// oldFrame and calculate a new frame
 	if (cg.time >= lf->frameTime) {
+		int         f;
+		animation_t *otherAnim = NULL;
+
 		lf->oldFrame      = lf->frame;
 		lf->oldFrameTime  = lf->frameTime;
 		lf->oldFrameModel = lf->frameModel;
@@ -710,7 +713,7 @@ CG_PlayerAnimation
 static void CG_PlayerAnimation(centity_t *cent, refEntity_t *body) {
 	clientInfo_t   *ci;
 	int            clientNum;
-	int            animIndex, tempIndex;
+	int            animIndex;
 	bg_character_t *character;
 
 	clientNum = cent->currentState.clientNum;
@@ -733,6 +736,8 @@ static void CG_PlayerAnimation(centity_t *cent, refEntity_t *body) {
 
 	// do the shuffle turn frames locally
 	if (!(cent->currentState.eFlags & EF_DEAD) && cent->pe.legs.yawing) {
+		int tempIndex;
+
 		//CG_Printf("turn: %i\n", cg.time );
 		tempIndex = BG_GetAnimScriptAnimation(clientNum, character->animModelInfo, cent->currentState.aiState, (cent->pe.legs.yawing == SWING_RIGHT ? ANIM_MT_TURNRIGHT : ANIM_MT_TURNLEFT));
 		if (tempIndex > -1) {
@@ -889,7 +894,6 @@ static void CG_PlayerAngles(centity_t *cent, vec3_t legs[3], vec3_t torso[3], ve
 	float          dest;
 	vec3_t         velocity;
 	float          speed;
-	float          clampTolerance;
 	int            legsSet;
 	clientInfo_t   *ci;
 	bg_character_t *character;
@@ -931,6 +935,8 @@ static void CG_PlayerAngles(centity_t *cent, vec3_t legs[3], vec3_t torso[3], ve
 		// don't let dead bodies twitch
 		legsAngles[YAW] = headAngles[YAW];
 	} else {
+		float          clampTolerance;
+
 		legsAngles[YAW] = headAngles[YAW] + cent->currentState.angles2[YAW];
 
 		if (!(cent->currentState.eFlags & EF_FIRING)) {
@@ -1188,8 +1194,7 @@ static qboolean CG_PlayerShadow(centity_t *cent, float *shadowPlane) {
 	vec3_t       end;
 	trace_t      trace;
 	float        dist, distFade;
-	int          tagIndex, subIndex;
-	vec3_t       origin, angles, axis[3];
+	vec3_t       origin;
 	vec4_t       projection    = { 0, 0, -1, 64 };
 	shadowPart_t shadowParts[] =
 	{
@@ -1256,21 +1261,23 @@ static qboolean CG_PlayerShadow(centity_t *cent, float *shadowPlane) {
 		// ydnar: add a bit of height so foot shadows don't clip into sloped geometry as much
 		origin[2] += 18.0f;
 
-		//%	alpha *= distFade;
-
-		// ydnar: decal remix
-		//%	CG_ImpactMark( cgs.media.shadowTorsoShader, trace.endpos, trace.plane.normal,
-		//%		0, alpha,alpha,alpha,1, qfalse, 16, qtrue, -1 );
 		CG_ImpactMark(cgs.media.shadowTorsoShader, origin, projection, 18.0f,
 		              cent->lerpAngles[YAW], distFade, distFade, distFade, distFade, -1);
 		return qtrue;
 	}
 
 	if (dist < SHADOW_MAX_DIST) {     // show more detail
+		int          tagIndex;
+
 		// now add shadows for the various body parts
-		for (tagIndex = 0; shadowParts[tagIndex].tagname; tagIndex++) {
+		for (tagIndex = 0; shadowParts[tagIndex].tagname; ++tagIndex) {
+			int subIndex;
+			vec3_t axis[3];
+
 			// grab each tag with this name
 			for (subIndex = 0; (subIndex = CG_GetOriginForTag(&cent->pe.bodyRefEnt, shadowParts[tagIndex].tagname, subIndex, origin, axis)) >= 0; subIndex++) {
+				vec3_t angles;
+
 				// project it onto the shadow plane
 				if (origin[2] < *shadowPlane) {
 					origin[2] = *shadowPlane;
@@ -1280,13 +1287,6 @@ static qboolean CG_PlayerShadow(centity_t *cent, float *shadowPlane) {
 				origin[2] += 5.0f;
 
 				AxisToAngles(axis, angles);
-
-				// ydnar: decal remix
-				//%	CG_ImpactMark( shadowParts[tagIndex].shader, origin, trace.plane.normal,
-				//%		angles[YAW]/*cent->pe.legs.yawAngle*/, alpha,alpha,alpha,1, qfalse, shadowParts[tagIndex].size, qtrue, -1 );
-
-				//%	CG_ImpactMark( shadowParts[ tagIndex ].shader, origin, up,
-				//%			cent->lerpAngles[ YAW ], 1.0f, 1.0f, 1.0f, 1.0f, qfalse, shadowParts[ tagIndex ].size, qtrue, -1 );
 				CG_ImpactMark(shadowParts[tagIndex].shader, origin, projection, shadowParts[tagIndex].size,
 				              angles[YAW], distFade, distFade, distFade, distFade, -1);
 			}
@@ -1398,7 +1398,6 @@ void CG_AddRefEntityWithPowerups(refEntity_t *ent, entityState_t *es, const vec3
 	refEntity_t backupRefEnt; //, parentEnt;
 	qboolean    onFire = qfalse;
 	float       alpha  = 0.0;
-	float       fireStart, fireEnd;
 
 	cent = &cg_entities[es->number];
 
@@ -1413,6 +1412,8 @@ void CG_AddRefEntityWithPowerups(refEntity_t *ent, entityState_t *es, const vec3
 	trap_R_AddRefEntityToScene(ent);
 
 	if (CG_EntOnFire(&cg_entities[es->number])) {
+		float       fireStart, fireEnd;
+
 		onFire = qtrue;
 		// set the alpha
 		if (ent->entityNum == cg.snap->ps.clientNum) {
@@ -1574,12 +1575,12 @@ void CG_Player(centity_t *cent) {
 	if (cent->currentState.eFlags & EF_MOUNTEDTANK) {
 		VectorCopy(cg_entities[cg_entities[cent->currentState.clientNum].tagParent].mountedMG42Player.origin, playerOrigin);
 	} else if (cent->currentState.eFlags & EF_MG42_ACTIVE || cent->currentState.eFlags & EF_AAGUN_ACTIVE) {        // Arnout: see if we're attached to a gun
-		centity_t *mg42;
 		int       num;
 
 		// find the mg42 we're attached to
-		for (num = 0 ; num < cg.snap->numEntities ; num++) {
-			mg42 = &cg_entities[cg.snap->entities[num].number];
+		for (num = 0 ; num < cg.snap->numEntities ; ++num) {
+			centity_t *mg42 = &cg_entities[cg.snap->entities[num].number];
+
 			if (mg42->currentState.eType == ET_MG42_BARREL &&
 			    mg42->currentState.otherEntityNum == cent->currentState.number) {
 				// found it, clamp behind gun
