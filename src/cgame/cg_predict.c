@@ -57,7 +57,6 @@ void CG_BuildSolidList(void) {
 	int           i;
 	centity_t     *cent;
 	snapshot_t    *snap;
-	entityState_t *ent;
 
 	cg_numSolidEntities   = 0;
 	cg_numSolidFTEntities = 0;
@@ -69,7 +68,9 @@ void CG_BuildSolidList(void) {
 		snap = cg.snap;
 	}
 
-	for (i = 0 ; i < snap->numEntities ; i++) {
+	for (i = 0 ; i < snap->numEntities ; ++i) {
+		entityState_t *ent;
+
 		cent = &cg_entities[snap->entities[i].number];
 		ent  = &cent->currentState;
 
@@ -314,14 +315,15 @@ CG_PointContents
 */
 int     CG_PointContents(const vec3_t point, int passEntityNum) {
 	int           i;
-	entityState_t *ent;
 	centity_t     *cent;
 	clipHandle_t  cmodel;
 	int           contents;
 
 	contents = trap_CM_PointContents(point, 0);
 
-	for (i = 0 ; i < cg_numSolidEntities ; i++) {
+	for (i = 0 ; i < cg_numSolidEntities ; ++i) {
+		entityState_t *ent;
+
 		cent = cg_solidEntities[i];
 
 		ent = &cent->currentState;
@@ -415,7 +417,6 @@ Predict push triggers and items
 */
 static void CG_TouchTriggerPrediction(void) {
 	int           i;
-	entityState_t *ent;
 	clipHandle_t  cmodel;
 	centity_t     *cent;
 	qboolean      spectator;
@@ -432,7 +433,9 @@ static void CG_TouchTriggerPrediction(void) {
 		return;
 	}
 
-	for (i = 0 ; i < cg_numTriggerEntities ; i++) {
+	for (i = 0 ; i < cg_numTriggerEntities ; ++i) {
+		entityState_t *ent;
+
 		cent = cg_triggerEntities[i];
 		ent  = &cent->currentState;
 
@@ -717,9 +720,6 @@ void CG_PredictPlayerState(void) {
 		// to predict several commands to get to the point
 		// we want to compare
 		if (cg.predictedPlayerState.commandTime == oldPlayerState.commandTime) {
-			vec3_t delta;
-			float  len;
-
 			if (BG_PlayerMounted(cg_pmove.ps->eFlags)) {
 				// no prediction errors here, we're locked in place
 				VectorClear(cg.predictedError);
@@ -731,7 +731,9 @@ void CG_PredictPlayerState(void) {
 				}
 				cg.thisFrameTeleport = qfalse;
 			} else {
-				vec3_t adjusted;
+				vec3_t adjusted, delta;
+				float  len;
+
 				CG_AdjustPositionForMover(cg.predictedPlayerState.origin, cg.predictedPlayerState.groundEntityNum, cg.physicsTime, cg.oldTime, adjusted, deltaAngles);
 				// RF, add the deltaAngles (fixes jittery view while riding trains)
 				// ydnar: only do this if player is prone or using set mortar

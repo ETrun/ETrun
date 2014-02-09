@@ -103,10 +103,10 @@ static char *WM_ETrun_coloredPing(int ping) {
  */
 static qboolean WM_ETrun_drawCountryFlag(float x, float y, unsigned int countryCode) {
 	float        alpha[4];
-	float        flag_step = 32;
-	unsigned int flag_sd   = 512;
 
 	if (countryCode < 255) {
+		float flag_step = 32;
+		unsigned int flag_sd   = 512;
 		float x1 = (float)((countryCode * (unsigned int)flag_step) % flag_sd);
 		float y1 = (float)(floor((countryCode * flag_step) / flag_sd) * flag_step);
 		float x2 = x1 + flag_step;
@@ -441,9 +441,6 @@ qboolean CG_DrawScoreboard(void) {
 	s_timerunScores orderedScores[MAX_CLIENTS];
 	int             i                  = 0;
 	int             j                  = 0;
-	qboolean        thereArePlayers    = qfalse;
-	qboolean        thereAreSpectators = qfalse;
-	int             yCopy              = 0;
 	int             numScores          = cg.numScores;
 	int             teamPlayers[TEAM_NUM_TEAMS];
 
@@ -553,8 +550,9 @@ qboolean CG_DrawScoreboard(void) {
 		if (teamPlayers[TEAM_SPECTATOR] != 0) {
 			WM_ETrun_DrawSpectators(&x, &y, &cgs.media.limboFont1, orderedScores, numScores);
 		}
-	} else {
-		// Nico, 2-columns scoreboard
+	} else {// Nico, 2-columns scoreboard
+		qboolean        thereArePlayers    = qfalse, thereAreSpectators = qfalse;
+		int             yCopy              = 0;
 
 		if (teamPlayers[TEAM_ALLIES] != 0 || teamPlayers[TEAM_AXIS] != 0) {
 			thereArePlayers = qtrue;

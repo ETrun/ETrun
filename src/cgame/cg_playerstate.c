@@ -114,14 +114,9 @@ CG_DamageFeedback
 ==============
 */
 void CG_DamageFeedback(int yawByte, int pitchByte, int damage) {
-	float        left, front, up;
 	float        kick;
 	int          health;
 	float        scale;
-	vec3_t       dir;
-	vec3_t       angles;
-	float        dist;
-	float        yaw, pitch;
 	int          slot;
 	viewDamage_t *vd;
 
@@ -164,6 +159,9 @@ void CG_DamageFeedback(int yawByte, int pitchByte, int damage) {
 		cg.v_dmg_roll  = 0;
 		cg.v_dmg_pitch = -kick;
 	} else {
+		float        left, front, up, dist, yaw, pitch;
+		vec3_t       dir, angles;
+
 		// positional
 		pitch = pitchByte / 255.0 * 360;
 		yaw   = yawByte / 255.0 * 360;

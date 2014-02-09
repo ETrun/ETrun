@@ -41,7 +41,7 @@ CG_ParseScores
 // Gordon: NOTE: team doesnt actually signify team, think i was on drugs that day.....
 #define NUM_SCORES 10
 static void CG_ParseScore(team_t team) {
-	int i, j;
+	int j;
 	int numScores;
 
 	if (team == TEAM_AXIS) {
@@ -50,8 +50,8 @@ static void CG_ParseScore(team_t team) {
 
 	numScores = atoi(CG_Argv(1));
 
-	for (j = 0; j < numScores; j++) {
-		i = cg.numScores;
+	for (j = 0; j < numScores; ++j) {
+		int i = cg.numScores;
 
 		cg.scores[i].client = atoi(CG_Argv(2 + (j * NUM_SCORES)));
 
@@ -98,14 +98,14 @@ CG_ParseTeamInfo
 #define NUMARGS 4
 static void CG_ParseTeamInfo(void) {
 	int i;
-	int client;
 	int numSortedTeamPlayers;
 
 	numSortedTeamPlayers = atoi(CG_Argv(1));
 
-	for (i = 0 ; i < numSortedTeamPlayers ; i++) {
-		client = atoi(CG_Argv(i * NUMARGS + 2));
+	for (i = 0 ; i < numSortedTeamPlayers ; ++i) {
+		int client;
 
+		client = atoi(CG_Argv(i * NUMARGS + 2));
 		cgs.clientinfo[client].location[0] = atoi(CG_Argv(i * NUMARGS + 3));
 		cgs.clientinfo[client].location[1] = atoi(CG_Argv(i * NUMARGS + 4));
 		cgs.clientinfo[client].health      = atoi(CG_Argv(i * NUMARGS + 5));
@@ -244,7 +244,6 @@ void CG_ParseSpawns(void) {
 	const char *info;
 	const char *s;
 	int        i;
-	int        newteam;
 
 	info = CG_ConfigString(CS_MULTI_INFO);
 	s    = Info_ValueForKey(info, "numspawntargets");
@@ -258,7 +257,9 @@ void CG_ParseSpawns(void) {
 
 	cg.spawnCount = atoi(s) + 1;
 
-	for (i = 1; i < cg.spawnCount; i++) {
+	for (i = 1; i < cg.spawnCount; ++i) {
+		int        newteam;
+
 		info = CG_ConfigString(CS_MULTI_SPAWNTARGETS + i - 1);
 
 		s = Info_ValueForKey(info, "spawn_targ");
@@ -353,7 +354,6 @@ static void CG_ParseGlobalFog(void) {
 	const char *info;
 	char       *token;
 	qboolean   restore;
-	float      r, g, b, depthForOpaque;
 	int        duration;
 
 	info = CG_ConfigString(CS_GLOBALFOGVARS);
@@ -364,6 +364,8 @@ static void CG_ParseGlobalFog(void) {
 	if (restore) {
 		trap_R_SetGlobalFog(qtrue, duration, 0.f, 0.f, 0.f, 0);
 	} else {
+		float r, g, b, depthForOpaque;
+
 		token = COM_Parse((char **)&info);    r = atof(token);
 		token = COM_Parse((char **)&info);    g = atof(token);
 		token = COM_Parse((char **)&info);    b = atof(token);
@@ -406,10 +408,12 @@ void CG_ShaderStateChanged(void) {
 	char       newShader[MAX_QPATH];
 	char       timeOffset[16];
 	const char *o;
-	char       *n, *t;
+	char       *t;
 
 	o = CG_ConfigString(CS_SHADERSTATE);
 	while (o && *o) {
+		char       *n;
+
 		n = strstr(o, "=");
 		if (n && *n) {
 			strncpy(originalShader, o, n - o);
@@ -753,7 +757,6 @@ CG_ParseVoiceChats
 */
 int CG_ParseVoiceChats(const char *filename, voiceChatList_t *voiceChatList, int maxVoiceChats) {
 	int          len, i;
-	int          current = 0;
 	fileHandle_t f;
 	char         buf[MAX_VOICEFILESIZE];
 	char         **p, *ptr;
@@ -794,6 +797,8 @@ int CG_ParseVoiceChats(const char *filename, voiceChatList_t *voiceChatList, int
 	//		We don't even want the MP voice chats in SP, so no need anyway
 	voiceChatList->numVoiceChats = 0;
 	for (;; ) {
+		int current;
+
 		token = COM_ParseExt(p, qtrue);
 		if (!token || token[0] == 0) {
 			return qtrue;
@@ -995,7 +1000,6 @@ void CG_VoiceChatLocal(int mode, qboolean voiceOnly, int clientNum, int color, c
 	sfxHandle_t         snd;
 	qhandle_t           sprite;
 	bufferedVoiceChat_t vchat;
-	const char          *loc = " ";  // NERVE - SMF
 
 	if (clientNum < 0 || clientNum >= MAX_CLIENTS) {
 		clientNum = 0;
@@ -1007,8 +1011,9 @@ void CG_VoiceChatLocal(int mode, qboolean voiceOnly, int clientNum, int color, c
 	voiceChatList = CG_VoiceChatListForClient(clientNum);
 
 	if (CG_GetVoiceChat(voiceChatList, cmd, &snd, &sprite, &chat)) {
-		//
 		if (mode == SAY_TEAM || !cg_teamChatsOnly.integer) {
+			const char          *loc = " ";
+
 			vchat.clientNum = clientNum;
 			vchat.snd       = snd;
 			vchat.sprite    = sprite;
@@ -1275,9 +1280,10 @@ static void CG_ServerCommand(void) {
 	if (!Q_stricmp(cmd, "cp")) {
 		// NERVE - SMF
 		int  args = trap_Argc();
-		char *s;
 
 		if (args >= 3) {
+			char *s;
+
 			s = CG_TranslateString(CG_Argv(1));
 
 			if (args == 4) {

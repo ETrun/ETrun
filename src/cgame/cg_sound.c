@@ -51,11 +51,12 @@ return a hash value for the filename
 static long generateHashValue(const char *fname) {
 	int  i;
 	long hash;
-	char letter;
 
 	hash = 0;
 	i    = 0;
 	while (fname[i] != '\0') {
+		char letter;
+
 		letter = tolower(fname[i]);
 		if (letter == '.') {
 			break;                          // don't include extension
@@ -160,14 +161,14 @@ void CG_AddBufferedSoundScript(soundScript_t *sound) {
 }
 
 void CG_UpdateBufferedSoundScripts(void) {
-	int i;
-
 	if (!cg.numbufferedSoundScripts) {
 		return;
 	}
 
 	if (cg.time > cg.bufferedSoundScriptEndTime) {
-		for (i = 1; i < MAX_BUFFERED_SOUNDSCRIPTS; i++) {
+		int i;
+
+		for (i = 1; i < MAX_BUFFERED_SOUNDSCRIPTS; ++i) {
 			cg.bufferSoundScripts[i - 1] = cg.bufferSoundScripts[i];
 		}
 
@@ -246,7 +247,7 @@ CG_SoundParseSounds
 ===============
 */
 static void CG_SoundParseSounds(char *filename, char *buffer) {
-	char               *token, **text;
+	char               **text;
 	long               hash;
 	soundScript_t      sound;           // the current sound being read
 	soundScriptSound_t *scriptSound = NULL;
@@ -260,6 +261,8 @@ static void CG_SoundParseSounds(char *filename, char *buffer) {
 	sound.soundList = NULL;
 
 	for (;; ) {
+		char *token;
+
 		token = COM_ParseExt(text, qtrue);
 		if (!*token) {
 			if (inSound) {
@@ -403,7 +406,6 @@ static void CG_SoundLoadSoundFiles(void) {
 	fileHandle_t f;
 	int          numSounds;
 	int          i, len;
-	char         *token;
 
 	// scan for sound files
 	Com_sprintf(filename, MAX_QPATH, "sound/scripts/filelist.txt");
@@ -423,6 +425,8 @@ static void CG_SoundLoadSoundFiles(void) {
 	text      = bigTextBuffer;
 	numSounds = 0;
 	for (;; ) {
+		char *token;
+
 		token = COM_ParseExt(&text, qtrue);
 		if (!token[0]) {
 			break;
@@ -525,7 +529,6 @@ static const char *s_bt_string[] =
 
 qboolean CG_SaveSpeakersToScript(void) {
 	int          i;
-	bg_speaker_t *speaker;
 	fileHandle_t fh;
 	char         *s;
 
@@ -547,6 +550,7 @@ qboolean CG_SaveSpeakersToScript(void) {
 		char randomStr[32] = "";
 		char volumeStr[32] = "";
 		char rangeStr[32]  = "";
+		bg_speaker_t *speaker;
 
 		speaker = BG_GetScriptSpeaker(i);
 
@@ -636,14 +640,15 @@ static void CG_RenderScriptSpeakers(void) {
 	float        dist, minDist;
 	vec3_t       vec;
 	refEntity_t  re;
-	bg_speaker_t *speaker;
 
 	closest = -1;
 	minDist = Square(8.f);
 
 	numSpeakersInPvs = 0;
 
-	for (i = 0; i < BG_NumScriptSpeakers(); i++) {
+	for (i = 0; i < BG_NumScriptSpeakers(); ++i) {
+		bg_speaker_t *speaker;
+
 		speaker = BG_GetScriptSpeaker(i);
 
 		if (editSpeakerActive && editSpeaker == speaker) {
@@ -960,7 +965,6 @@ void CG_SpeakerEditor_RenderDropdown(panel_button_t *button) {
 	vec4_t    colour;
 	float     textboxW;
 	rectDef_t rect;
-	int       i;
 	char      *s;
 
 	memcpy(&rect, &button->rect, sizeof (rect));
@@ -1021,9 +1025,11 @@ void CG_SpeakerEditor_RenderDropdown(panel_button_t *button) {
 	                  button->font->font);
 
 	if (button == BG_PanelButtons_GetFocusButton()) {
+		int       i;
+
 		memcpy(&rect, &button->rect, sizeof (rect));
 
-		for (i = 0; i < button->data[0]; i++) {
+		for (i = 0; i < button->data[0]; ++i) {
 			if (i == button->data[1]) {
 				continue;
 			}
@@ -1820,7 +1826,7 @@ void CG_SpeakerEditor_KeyHandling(int key, qboolean down) {
 				break;
 		} else if (editSpeakerHandle.activeAxis == -1) {
 				int    i, closest;
-				float  dist, minDist, r, u;
+				float  minDist, r, u;
 				vec3_t vec, axisOrg, dir;
 
 				closest = -1;
@@ -1836,7 +1842,9 @@ void CG_SpeakerEditor_KeyHandling(int key, qboolean down) {
 				}
 				VectorNormalizeFast(dir);
 
-				for (i = 0; i < 3; i++) {
+				for (i = 0; i < 3; ++i) {
+					float dist;
+
 					VectorClear(vec);
 					vec[i] = 1.f;
 					VectorMA(editSpeakerHandle.origin, 32, vec, axisOrg);
@@ -2023,13 +2031,14 @@ static void CG_PlayScriptSpeaker(bg_speaker_t *speaker, qboolean global) {
 
 void CG_AddScriptSpeakers(void) {
 	int          i;
-	bg_speaker_t *speaker;
 
 	if (cg.editingSpeakers) {
 		CG_RenderScriptSpeakers();
 	}
 
-	for (i = 0; i < BG_NumScriptSpeakers(); i++) {
+	for (i = 0; i < BG_NumScriptSpeakers(); ++i) {
+		bg_speaker_t *speaker;
+
 		speaker = BG_GetScriptSpeaker(i);
 
 		// don't bother playing missing sounds
