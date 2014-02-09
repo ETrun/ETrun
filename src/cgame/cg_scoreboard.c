@@ -552,7 +552,6 @@ qboolean CG_DrawScoreboard(void) {
 		}
 	} else {// Nico, 2-columns scoreboard
 		qboolean        thereArePlayers    = qfalse, thereAreSpectators = qfalse;
-		int             yCopy              = 0;
 
 		if (teamPlayers[TEAM_ALLIES] != 0 || teamPlayers[TEAM_AXIS] != 0) {
 			thereArePlayers = qtrue;
@@ -562,12 +561,11 @@ qboolean CG_DrawScoreboard(void) {
 			thereAreSpectators = qtrue;
 		}
 
-		if (thereArePlayers && thereAreSpectators) {
-			// Nico, 2-columns
+		if (thereArePlayers && thereAreSpectators) {// Nico, 2-columns
+			int yCopy = y;
 
 			// Nico, draw players on a first column
 			x     = (SCREEN_WIDTH / 2 - INFO_TOTAL_WIDTH) / 2; // Nico, center horizontally
-			yCopy = y;
 			WM_ETrun_DrawPlayers(&x, &y, &cgs.media.limboFont1, orderedScores, numScores);
 
 			// Nico, draw spectators on a second column

@@ -2030,6 +2030,7 @@ void CG_PositionRotatedEntityOnTag(refEntity_t *entity, const refEntity_t *paren
 //
 // cg_weapons.c
 //
+void CG_GetWindVector(vec3_t dir);
 void CG_LastWeaponUsed_f(void);       //----(SA)	added
 void CG_NextWeaponInBank_f(void);     //----(SA)	added
 void CG_PrevWeaponInBank_f(void);     //----(SA)	added

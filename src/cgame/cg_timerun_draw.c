@@ -435,13 +435,13 @@ void CG_DrawCGaz(void) {
 
 		speed = VectorLength(vel);
 		if (speed > 0) {
-			float newspeed, control, drop;
+			float newspeed, drop;
 
 			drop = 0;
 
 			// if getting knocked back, no friction
 			if (!(ps->pm_flags & PMF_TIME_KNOCKBACK)) {
-				control = speed < pm_stopspeed ? pm_stopspeed : speed;
+				float control = speed < pm_stopspeed ? pm_stopspeed : speed;
 				drop   += control * pm_friction * pmove_msec.integer / 1000;
 			}
 			newspeed = speed - drop;

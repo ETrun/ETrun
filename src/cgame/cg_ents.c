@@ -214,9 +214,6 @@ void CG_AddLightstyle(centity_t *cent) {
 	}
 }
 
-
-void CG_GetWindVector(vec3_t dir);   // JPW NERVE
-
 /*
 ==================
 CG_EntityEffects
@@ -263,12 +260,10 @@ static void CG_EntityEffects(centity_t *cent) {
 
 	// constant light glow
 	if (cent->currentState.constantLight) {
-		int cl;
-
 		if (cent->dl_stylestring[0] != 0) {    // it's probably a dlight
 			CG_AddLightstyle(cent);
 		} else {
-			int i, r, g, b;
+			int i, r, g, b, cl;
 
 			cl = cent->currentState.constantLight;
 			r  = cl & 255;

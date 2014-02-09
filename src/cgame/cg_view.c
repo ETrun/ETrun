@@ -144,8 +144,6 @@ void CG_TestModelPrevSkin_f(void) {
 }
 
 static void CG_AddTestModel(void) {
-	int i;
-
 	// re-register the model, because the level may have changed
 	cg.testModelEntity.hModel = trap_R_RegisterModel(cg.testModelName);
 	if (!cg.testModelEntity.hModel) {
@@ -155,13 +153,15 @@ static void CG_AddTestModel(void) {
 
 	// if testing a gun, set the origin reletive to the view origin
 	if (cg.testGun) {
+		int i;
+
 		VectorCopy(cg.refdef.vieworg, cg.testModelEntity.origin);
 		VectorCopy(cg.refdef.viewaxis[0], cg.testModelEntity.axis[0]);
 		VectorCopy(cg.refdef.viewaxis[1], cg.testModelEntity.axis[1]);
 		VectorCopy(cg.refdef.viewaxis[2], cg.testModelEntity.axis[2]);
 
 		// allow the position to be adjusted
-		for (i = 0 ; i < 3 ; i++) {
+		for (i = 0 ; i < 3 ; ++i) {
 			cg.testModelEntity.origin[i] += cg.refdef.viewaxis[0][i] * cg_gun_x.value;
 			cg.testModelEntity.origin[i] += cg.refdef.viewaxis[1][i] * cg_gun_y.value;
 			cg.testModelEntity.origin[i] += cg.refdef.viewaxis[2][i] * cg_gun_z.value;
@@ -318,7 +318,6 @@ void CG_KickAngles(void) {
 	const vec3_t maxKickAngles      = { 10, 10, 10 };
 	float        idealCenterSpeed, kickChange;
 	int          i, frametime, t;
-	float        ft;
 
 #define STEP 20
 	char buf[32];               // NERVE - SMF
@@ -327,6 +326,8 @@ void CG_KickAngles(void) {
 	//cg.kickAngles[PITCH] = 0;
 	cg.recoilPitchAngle = 0;
 	for (t = cg.frametime; t > 0; t -= STEP) {
+		float        ft;
+
 		if (t > STEP) {
 			frametime = STEP;
 		} else {
@@ -407,17 +408,10 @@ void CG_KickAngles(void) {
 CG_Concussive
 */
 void CG_Concussive(centity_t *cent) {
-	float  length;
-	vec3_t vec;
-
-	float  pitchRecoilAdd, pitchAdd;
-	float  yawRandom;
-	vec3_t recoil;
-
 	if (!cg.renderingThirdPerson && cent->currentState.density == cg.snap->ps.clientNum) {
-		pitchRecoilAdd = 0;
-		pitchAdd       = 0;
-		yawRandom      = 0;
+		vec3_t vec;
+		float  pitchRecoilAdd = 0, pitchAdd = 0, yawRandom = 0, length;
+		vec3_t recoil;
 
 		VectorSubtract(cg.snap->ps.origin, cent->currentState.origin, vec);
 		length = VectorLength(vec);
@@ -489,7 +483,6 @@ static void CG_OffsetFirstPersonView(void) {
 	float    *origin;
 	float    *angles;
 	float    bob;
-	float    ratio;
 	float    delta;
 	float    speed;
 	float    f;
@@ -549,7 +542,8 @@ static void CG_OffsetFirstPersonView(void) {
 
 	// add angles based on damage kick
 	if (cg.damageTime) {
-		ratio = cg.time - cg.damageTime;
+		float ratio = cg.time - cg.damageTime;
+
 		if (ratio < DAMAGE_DEFLECT_TIME) {
 			ratio         /= DAMAGE_DEFLECT_TIME;
 			angles[PITCH] += ratio * cg.v_dmg_pitch;
@@ -797,14 +791,9 @@ Fixed fov at intermissions, otherwise account for fov variable and zooms.
 #define WAVE_FREQUENCY  0.4
 
 static int CG_CalcFov(void) {
-	static float lastfov = 90;      // for transitions back from zoomed in modes
 	float        x;
-	float        phase;
-	float        v;
 	int          contents;
 	float        fov_x, fov_y;
-	float        zoomFov;
-	float        f;
 	int          inwater;
 
 	CG_Zoom();
@@ -825,6 +814,9 @@ static int CG_CalcFov(void) {
 	}
 
 	if (!cg.renderingThirdPerson || developer.integer) {
+		static float lastfov = 90;      // for transitions back from zoomed in modes
+		float zoomFov, f;
+
 		// account for zooms
 		if (cg.zoomval) {
 			zoomFov = cg.zoomval;   // (SA) use user scrolled amount
@@ -876,7 +868,8 @@ static int CG_CalcFov(void) {
 
 	contents = CG_PointContents(cg.refdef.vieworg, -1);
 	if (contents & (CONTENTS_WATER | CONTENTS_SLIME | CONTENTS_LAVA)) {
-		phase                       = cg.time / 1000.0 * WAVE_FREQUENCY * M_PI * 2;
+		float v, phase = cg.time / 1000.0 * WAVE_FREQUENCY * M_PI * 2;
+
 		v                           = WAVE_AMPLITUDE * sin(phase);
 		fov_x                      += v;
 		fov_y                      -= v;
@@ -940,9 +933,10 @@ int CG_CalcViewValues(void) {
 	if (cg.cameraMode) {
 		vec3_t origin, angles;
 		float  fov = 90;
-		float  x;
 
 		if (trap_getCameraInfo(CAM_PRIMARY, cg.time, &origin, &angles, &fov)) {
+			float  x;
+
 			VectorCopy(origin, cg.refdef_current->vieworg);
 			angles[ROLL]  = 0;
 			angles[PITCH] = -angles[PITCH];     // (SA) compensate for reversed pitch (this makes the game match the editor, however I'm guessing the real fix is to be done there)
@@ -1086,9 +1080,7 @@ char *CG_MustParse(char **pString, const char *pErrorMsg) {
 }
 
 void CG_ParseSkyBox(void) {
-	int    fogStart, fogEnd;
 	char   *cstr, *token;
-	vec4_t fogColor;
 
 	cstr = (char *)CG_ConfigString(CS_SKYBOXORG);
 
@@ -1116,6 +1108,9 @@ void CG_ParseSkyBox(void) {
 	// setup fog the first time, ignore this part of the configstring after that
 	token = CG_MustParse(&cstr, "CG_ParseSkyBox: error parsing skybox configstring.  No fog state\n");
 	if (atoi(token)) {       // this camera has fog
+		int fogStart, fogEnd;
+		vec4_t fogColor;
+
 		token       = CG_MustParse(&cstr, "CG_DrawSkyBoxPortal: error parsing skybox configstring.  No fog[0]\n");
 		fogColor[0] = atof(token);
 
@@ -1186,8 +1181,6 @@ CG_DrawSkyBoxPortal
 */
 void CG_DrawSkyBoxPortal(qboolean fLocalView) {
 	refdef_t     rd;
-	static float lastfov = 90;      // for transitions back from zoomed in modes
-
 
 	if (!cg_skybox.integer || !cg.skyboxEnabled) {
 		return;
@@ -1197,11 +1190,8 @@ void CG_DrawSkyBoxPortal(qboolean fLocalView) {
 	VectorCopy(cg.skyboxViewOrg, rd.vieworg);
 
 	if (fLocalView) {
-		float fov_x;
-		float fov_y;
-		float x;
-		float zoomFov;
-		float f;
+		float fov_x, fov_y, x, zoomFov, f;
+		static float lastfov = 90;      // for transitions back from zoomed in modes
 
 		// user selectable
 		fov_x = cg_fov.value;
@@ -1309,11 +1299,10 @@ void CG_SetupFrustum(void) {
 //
 qboolean CG_CullPoint(vec3_t pt) {
 	int     i;
-	plane_t *frust;
 
 	// check against frustum planes
-	for (i = 0 ; i < 4 ; i++) {
-		frust = &frustum[i];
+	for (i = 0 ; i < 4 ; ++i) {
+		plane_t *frust = &frustum[i];
 
 		if ((DotProduct(pt, frust->normal) - frust->dist) < 0) {
 			return qtrue;
@@ -1325,11 +1314,10 @@ qboolean CG_CullPoint(vec3_t pt) {
 
 qboolean CG_CullPointAndRadius(const vec3_t pt, vec_t radius) {
 	int     i;
-	plane_t *frust;
 
 	// check against frustum planes
-	for (i = 0 ; i < 4 ; i++) {
-		frust = &frustum[i];
+	for (i = 0 ; i < 4 ; ++i) {
+		plane_t *frust = &frustum[i];
 
 		if ((DotProduct(pt, frust->normal) - frust->dist) < -radius) {
 			return qtrue;
