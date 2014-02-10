@@ -375,7 +375,6 @@ static void CG_DrawTeamInfo(void) {
 
 	if (cgs.teamLastChatPos != cgs.teamChatPos) {
 		int    i;
-		float  alphapercent;
 		float  lineHeight = 9.f;
 		int chatWidth = 640 - CHATLOC_X - 100;
 
@@ -387,8 +386,9 @@ static void CG_DrawTeamInfo(void) {
 			CG_Text_Width_Ext(cgs.teamChatMsgs[i % chatHeight], 0.2f, 0, &cgs.media.limboFont2);
 		}
 
-		for (i = cgs.teamChatPos - 1; i >= cgs.teamLastChatPos; i--) {
-			alphapercent = 1.0f - (cg.time - cgs.teamChatMsgTimes[i % chatHeight]) / (float)(cg_teamChatTime.integer);
+		for (i = cgs.teamChatPos - 1; i >= cgs.teamLastChatPos; --i) {
+			float alphapercent = 1.0f - (cg.time - cgs.teamChatMsgTimes[i % chatHeight]) / (float)(cg_teamChatTime.integer);
+
 			if (alphapercent > 1.0f) {
 				alphapercent = 1.0f;
 			} else if (alphapercent < 0.f) {

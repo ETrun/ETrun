@@ -4430,7 +4430,7 @@ void CG_MissileHitWall(int weapon, int clientNum, vec3_t origin, vec3_t dir, int
 	qhandle_t     mod = 0, mark = 0, shader = 0;
 	sfxHandle_t   sfx = 0, sfx2 = 0;
 	qboolean      isSprite = qfalse;
-	int           duration = 600, lightOverdraw = 0, i, j, markDuration = -1, volume = 127;
+	int           duration = 600, i, j, markDuration = -1, volume = 127;
 	trace_t       trace;
 	vec3_t        lightColor, tmpv, tmpv2, sprOrg, sprVel;
 	float         radius = 32, light = 0, sfx2range = 0;
@@ -4755,7 +4755,7 @@ void CG_MissileHitWall(int weapon, int clientNum, vec3_t origin, vec3_t dir, int
 
 		le                = CG_MakeExplosion(origin, dir, mod, shader, duration, isSprite);
 		le->light         = light;
-		le->lightOverdraw = lightOverdraw;
+		le->lightOverdraw = 0;
 		VectorCopy(lightColor, le->lightColor);
 	}
 
@@ -4791,12 +4791,7 @@ void CG_MissileHitWallSmall(vec3_t origin, vec3_t dir) {
 	qhandle_t     shader = 0;
 	sfxHandle_t   sfx    = 0;
 	float         radius = 80;
-	float         light  = 300;
 	vec3_t        lightColor;
-	localEntity_t *le;
-	qboolean      isSprite      = qtrue;
-	int           duration      = 1000;
-	int           lightOverdraw = 0;
 	vec3_t        sprOrg, sprVel;
 	vec4_t        projection, color;
 
@@ -4817,7 +4812,6 @@ void CG_MissileHitWallSmall(vec3_t origin, vec3_t dir) {
 	CG_AddDebris(origin, dir,
 	             280,           // speed
 	             1400,          // duration
-	             // 15 + rand()%5 );	// count
 	             7 + rand() % 2);       // count
 
 	if (sfx) {
@@ -4828,10 +4822,13 @@ void CG_MissileHitWallSmall(vec3_t origin, vec3_t dir) {
 	// create the explosion
 	//
 	if (mod) {
-		le        = CG_MakeExplosion(origin, dir, mod, shader, duration, isSprite);
-		le->light = light;
+		localEntity_t *le;
+		qboolean      isSprite      = qtrue;
+
+		le        = CG_MakeExplosion(origin, dir, mod, shader, 1000, isSprite);
+		le->light = 300;
 		// Ridah
-		le->lightOverdraw = lightOverdraw;
+		le->lightOverdraw = 0;
 		VectorCopy(lightColor, le->lightColor);
 	}
 
@@ -4883,7 +4880,7 @@ CG_SpawnTracer
 void CG_SpawnTracer(int sourceEnt, vec3_t pstart, vec3_t pend) {
 	localEntity_t *le;
 	float         dist;
-	vec3_t        dir, ofs;
+	vec3_t        dir;
 	orientation_t or;
 	vec3_t        start, end;
 
@@ -4906,6 +4903,8 @@ void CG_SpawnTracer(int sourceEnt, vec3_t pstart, vec3_t pend) {
 	if (sourceEnt < cgs.maxclients &&
 	    (!(cg_entities[sourceEnt].currentState.eFlags & EF_MG42_ACTIVE || cg_entities[sourceEnt].currentState.eFlags & EF_AAGUN_ACTIVE)) &&
 	    CG_GetWeaponTag(sourceEnt, "tag_flash", &or)) {
+		vec3_t ofs;
+
 		VectorSubtract(or.origin, start, ofs);
 		if (VectorLength(ofs) < 64) {
 			VectorAdd(start, ofs, start);
@@ -5085,12 +5084,12 @@ void CG_CalcMuzzlePoint(int entityNum, vec3_t muzzle) {
 
 		VectorCopy(tank->mountedMG42Flash.origin, muzzle);
 	} else if (cent->currentState.eFlags & EF_AAGUN_ACTIVE) {
-		centity_t *aagun;
 		int       num;
 
 		// find the mg42 we're attached to
-		for (num = 0; num < cg.snap->numEntities; num++) {
-			aagun = &cg_entities[cg.snap->entities[num].number];
+		for (num = 0; num < cg.snap->numEntities; ++num) {
+			centity_t *aagun = &cg_entities[cg.snap->entities[num].number];
+
 			if (aagun->currentState.eType == ET_AAGUN && aagun->currentState.otherEntityNum == cent->currentState.number) {
 				// found it
 				vec3_t forward, right, up;
@@ -5141,8 +5140,6 @@ Renders bullet effects.
 */
 void CG_Bullet(vec3_t end, int sourceEntityNum, qboolean flesh, int fleshEntityNum, int otherEntNum2, float waterfraction, int seed) {
 	trace_t   trace, trace2;
-	int       sourceContentType, destContentType;
-	vec3_t    dir;
 	vec3_t    start;
 	centity_t *cent;
 
@@ -5181,6 +5178,8 @@ void CG_Bullet(vec3_t end, int sourceEntityNum, qboolean flesh, int fleshEntityN
 	// if the shooter is currently valid, calc a source point and possibly
 	// do trail effects
 	if (sourceEntityNum >= 0 && cg_tracerChance.value > 0) {
+		int       sourceContentType, destContentType;
+
 		CG_CalcMuzzlePoint(sourceEntityNum, start);
 
 		sourceContentType = CG_PointContents(start, 0);
@@ -5217,7 +5216,7 @@ void CG_Bullet(vec3_t end, int sourceEntityNum, qboolean flesh, int fleshEntityN
 	// impact splash and mark
 	if (flesh) {
 		vec3_t origin;
-		float  rnd, tmpf; // JPW NERVE
+		float  tmpf; // JPW NERVE
 		vec3_t smokedir, tmpv, tmpv2; // JPW NERVE
 		int    i;
 
@@ -5236,7 +5235,9 @@ void CG_Bullet(vec3_t end, int sourceEntityNum, qboolean flesh, int fleshEntityN
 		VectorSubtract(tmpv, origin, tmpv2);
 
 		// puff out the front (more dust no blood)
-		for (i = 0; i < 10; i++) {
+		for (i = 0; i < 10; ++i) {
+			float  rnd;
+
 			rnd = random();
 			VectorScale(smokedir, -35.0 + random() * 25, tmpv);
 			tmpv[0] += crandom() * 25.0f;
@@ -5282,6 +5283,7 @@ void CG_Bullet(vec3_t end, int sourceEntityNum, qboolean flesh, int fleshEntityN
 				CG_MissileHitWall(fromweap, 2, end2, dir, 0);
 				CG_MissileHitWall(fromweap, 1, end, trace.plane.normal, 0);
 			} else {
+				vec3_t    dir;
 
 				// Arnout: but this does!
 				VectorSubtract(end, start, dir);
