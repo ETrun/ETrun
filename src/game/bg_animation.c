@@ -384,12 +384,12 @@ BG_AnimationIndexForString
 */
 static int BG_AnimationIndexForString(char *string, animModelInfo_t *animModelInfo) {
 	int         i, hash;
-	animation_t *anim;
 
 	hash = BG_StringHashValue(string);
 
-	for (i = 0; i < animModelInfo->numAnimations; i++) {
-		anim = animModelInfo->animations[i];
+	for (i = 0; i < animModelInfo->numAnimations; ++i) {
+		animation_t *anim = animModelInfo->animations[i];
+
 		if ((hash == anim->nameHash) && !Q_stricmp(string, anim->name)) {
 			// found a match
 			return i;
@@ -407,12 +407,12 @@ BG_AnimationForString
 */
 animation_t *BG_AnimationForString(char *string, animModelInfo_t *animModelInfo) {
 	int         i, hash;
-	animation_t *anim;
 
 	hash = BG_StringHashValue(string);
 
-	for (i = 0; i < animModelInfo->numAnimations; i++) {
-		anim = animModelInfo->animations[i];
+	for (i = 0; i < animModelInfo->numAnimations; ++i) {
+		animation_t *anim = animModelInfo->animations[i];
+
 		if ((hash == anim->nameHash) && !Q_stricmp(string, anim->name)) {
 			// found a match
 			return anim;
@@ -523,13 +523,13 @@ void BG_ParseConditionBits(char **text_pp, animStringItem_t *stringTable, int co
 	int      tempBits[2];
 	char     currentString[MAX_QPATH];
 	qboolean minus = qfalse;
-	char     *token;
 
 	currentString[0] = '\0';
 	memset(result, 0, sizeof (result[0]) * RESULT_SIZE);
 	memset(tempBits, 0, sizeof (tempBits));
 
 	while (!endFlag) {
+		char     *token;
 
 		token = COM_ParseExt(text_pp, qfalse);
 		if (!token || !token[0]) {
@@ -630,13 +630,12 @@ BG_ParseConditions
 =================
 */
 qboolean BG_ParseConditions(char **text_pp, animScriptItem_t *scriptItem) {
-	int  conditionIndex, conditionValue[2];
-	char *token;
-
-	conditionValue[0] = 0;
-	conditionValue[1] = 0;
+	int  conditionValue[2] = {0};
 
 	for (;; ) {
+		int conditionIndex;
+		char *token;
+
 		token = COM_ParseExt(text_pp, qfalse);
 		if (!token || !token[0]) {
 			break;
@@ -692,12 +691,12 @@ BG_ParseCommands
 =================
 */
 static void BG_ParseCommands(char **input, animScriptItem_t *scriptItem, animModelInfo_t *animModelInfo) {
-	char *token;
-	// TTimo gcc: might be used uninitialized
 	animScriptCommand_t *command  = NULL;
 	int                 partIndex = 0;
 
 	for (;; ) {
+		char *token;
+
 		// parse the body part
 		token = COM_ParseExt(input, (partIndex < 1));
 		if (!token || !*token) {
@@ -825,13 +824,13 @@ static animStringItem_t animParseModesStr[] =
 
 void BG_AnimParseAnimScript(animModelInfo_t *animModelInfo, animScriptData_t *scriptData, const char *filename, char *input) {
 #define MAX_INDENT_LEVELS   3
-	char                  *text_p, *token;
+	char                  *text_p;
 	animScriptParseMode_t parseMode;
 	animScript_t          *currentScript;
 	animScriptItem_t      tempScriptItem;
 	// TTimo gcc: might be used unitialized
 	animScriptItem_t *currentScriptItem = NULL;
-	int              indexes[MAX_INDENT_LEVELS], indentLevel, /*oldState,*/ newParseMode;
+	int              indexes[MAX_INDENT_LEVELS], indentLevel;
 	int              i, defineType;
 
 	// the scriptData passed into here must be the one this binary is using
@@ -847,7 +846,7 @@ void BG_AnimParseAnimScript(animModelInfo_t *animModelInfo, animScriptData_t *sc
 	memset(numDefines, 0, sizeof (numDefines));
 	defineStringsOffset = 0;
 
-	for (i = 0; i < MAX_INDENT_LEVELS; i++)
+	for (i = 0; i < MAX_INDENT_LEVELS; ++i)
 		indexes[i] = -1;
 	indentLevel   = 0;
 	currentScript = NULL;
@@ -857,6 +856,9 @@ void BG_AnimParseAnimScript(animModelInfo_t *animModelInfo, animScriptData_t *sc
 
 	// read in the weapon defines
 	for (;; ) {
+		char *token;
+		int newParseMode;
+
 		token = COM_Parse(&text_p);
 		if (!token || !*token) {
 			if (indentLevel) {
@@ -1335,7 +1337,6 @@ BG_AnimScriptAnimation
 ================
 */
 int BG_AnimScriptAnimation(playerState_t *ps, animModelInfo_t *animModelInfo, scriptAnimMoveTypes_t movetype, qboolean isContinue) {
-	animScript_t        *script        = NULL;
 	animScriptItem_t    *scriptItem    = NULL;
 	animScriptCommand_t *scriptCommand = NULL;
 	int                 state          = ps->aiState;
@@ -1348,7 +1349,8 @@ int BG_AnimScriptAnimation(playerState_t *ps, animModelInfo_t *animModelInfo, sc
 	// xkan, 1/10/2003 - adapted from original SP source
 	// try finding a match in all states ABOVE the given state
 	while (!scriptItem && state < MAX_AISTATES) {
-		script = &animModelInfo->scriptAnims[state][movetype];
+		animScript_t *script = &animModelInfo->scriptAnims[state][movetype];
+
 		if (!script->numItems) {
 			state++;
 			continue;
@@ -1506,11 +1508,11 @@ BG_GetConditionValue
 ==============
 */
 int BG_GetConditionValue(int client, int condition, qboolean checkConversion) {
-	int i;
-
 	if (animConditionsTable[condition].type == ANIM_CONDTYPE_BITFLAGS) {
 		if (checkConversion) {
-			for (i = 0; i < 8 * (int)sizeof (globalScriptData->clientConditions[0][0]); i++) {
+			int i;
+
+			for (i = 0; i < 8 * (int)sizeof (globalScriptData->clientConditions[0][0]); ++i) {
 				if (COM_BitCheck(globalScriptData->clientConditions[client][condition], i)) {
 					return i;
 				}
@@ -1551,7 +1553,6 @@ BG_GetAnimScriptAnimation
 ================
 */
 int BG_GetAnimScriptAnimation(int client, animModelInfo_t *animModelInfo, aistateEnum_t aistate, scriptAnimMoveTypes_t movetype) {
-	animScript_t        *script;
 	animScriptItem_t    *scriptItem = NULL;
 	animScriptCommand_t *scriptCommand;
 	int                 state = aistate;
@@ -1559,7 +1560,8 @@ int BG_GetAnimScriptAnimation(int client, animModelInfo_t *animModelInfo, aistat
 	// xkan, 1/10/2003 - adapted from the original SP source code
 	// try finding a match in all states ABOVE the given state
 	while (!scriptItem && state < MAX_AISTATES) {
-		script = &animModelInfo->scriptAnims[state][movetype];
+		animScript_t *script = &animModelInfo->scriptAnims[state][movetype];
+
 		if (!script->numItems) {
 			state++;
 			continue;

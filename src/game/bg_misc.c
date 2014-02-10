@@ -2891,12 +2891,12 @@ void BG_EvaluateTrajectory(const trajectory_t *tr, int atTime, vec3_t result, qb
 			float    base1;
 
 			if (tr->trBase[0]) {
-				vec3_t       result2;
 				splinePath_t *pSp2 = pSpline;
 
 				deltaTime2 += tr->trBase[0] / pSpline->length;
 
 				if (BG_TraverseSpline(&deltaTime2, &pSp2)) {
+					vec3_t       result2;
 
 					VectorSubtract(vec[1], vec[0], result);
 					VectorMA(vec[0], deltaTime, result, result);

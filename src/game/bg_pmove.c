@@ -227,7 +227,7 @@ Handles both ground friction and water friction
 static void PM_Friction(void) {
 	vec3_t vec;
 	float  *vel;
-	float  speed, newspeed, control;
+	float  speed, newspeed;
 	float  drop;
 
 	vel = pm->ps->velocity;
@@ -258,7 +258,8 @@ static void PM_Friction(void) {
 	if (pm->waterlevel <= 1 && pml.walking &&
 	    !(pml.groundTrace.surfaceFlags & SURF_SLICK) &&
 	    !(pm->ps->pm_flags & PMF_TIME_KNOCKBACK)) {
-		control = speed < pm_stopspeed ? pm_stopspeed : speed;
+		float control = speed < pm_stopspeed ? pm_stopspeed : speed;
+
 		drop   += control * pm_friction * pml.frametime;
 	}
 
@@ -422,7 +423,6 @@ static void PM_SetMovementDir(void) {
 // Ridah, changed this for more realistic angles (at the cost of more network traffic?)
 	float  speed;
 	vec3_t moved;
-	int    moveyaw;
 
 	VectorSubtract(pm->ps->origin, pml.previous_origin, moved);
 
@@ -431,6 +431,7 @@ static void PM_SetMovementDir(void) {
 	    &&  (speed = VectorLength(moved))
 	    &&  (speed > pml.frametime * 5)) {        // if moving slower than 20 units per second, just face head angles
 		vec3_t dir;
+		int    moveyaw;
 
 		VectorNormalize2(moved, dir);
 		vectoangles(dir, dir);
@@ -739,12 +740,10 @@ PM_WaterMove
 ===================
 */
 static void PM_WaterMove(void) {
-	int    i;
 	vec3_t wishvel;
 	float  wishspeed;
 	vec3_t wishdir;
 	float  scale;
-	float  vel;
 
 	if (PM_CheckWaterJump()) {
 		PM_WaterJumpMove();
@@ -761,7 +760,9 @@ static void PM_WaterMove(void) {
 		wishvel[1] = 0;
 		wishvel[2] = -60;       // sink towards bottom
 	} else {
-		for (i = 0 ; i < 3 ; i++)
+		int    i;
+
+		for (i = 0 ; i < 3 ; ++i)
 			wishvel[i] = scale * pml.forward[i] * pm->cmd.forwardmove + scale * pml.right[i] * pm->cmd.rightmove;
 
 		wishvel[2] += scale * pm->cmd.upmove;
@@ -787,6 +788,8 @@ static void PM_WaterMove(void) {
 
 	// make sure we can go up slopes easily under water
 	if (pml.groundPlane && DotProduct(pm->ps->velocity, pml.groundTrace.plane.normal) < 0) {
+		float  vel;
+
 		vel = VectorLength(pm->ps->velocity);
 		// slide along the ground plane
 		PM_ClipVelocity(pm->ps->velocity, pml.groundTrace.plane.normal,
@@ -807,7 +810,6 @@ Only with the flight powerup
 ===================
 */
 static void PM_FlyMove(void) {
-	int    i;
 	vec3_t wishvel;
 	float  wishspeed;
 	vec3_t wishdir;
@@ -826,7 +828,9 @@ static void PM_FlyMove(void) {
 		wishvel[1] = 0;
 		wishvel[2] = 0;
 	} else {
-		for (i = 0 ; i < 3 ; i++) {
+		int    i;
+
+		for (i = 0 ; i < 3 ; ++i) {
 			wishvel[i] = scale * pml.forward[i] * pm->cmd.forwardmove + scale * pml.right[i] * pm->cmd.rightmove;
 		}
 
@@ -896,10 +900,6 @@ static void PM_AirMove(void) {
 	float     scale;
 	usercmd_t cmd;
 
-	// Nico, air control vars
-	float wishspeed2;
-	float accel;
-
 	PM_Friction();
 
 	fmove = pm->cmd.forwardmove;
@@ -940,7 +940,8 @@ static void PM_AirMove(void) {
 		PM_Accelerate(wishdir, wishspeed, pm_airaccelerate);
 	} else {
 		// Air Control
-		wishspeed2 = wishspeed;
+		float wishspeed2 = wishspeed, accel;
+
 		if (DotProduct(pm->ps->velocity, wishdir) < 0) {
 			accel = pm_airstopaccelerate;
 		} else {
@@ -1164,7 +1165,7 @@ PM_NoclipMove
 ===============
 */
 static void PM_NoclipMove(void) {
-	float  speed, drop, friction, control, newspeed;
+	float  speed;
 	int    i;
 	vec3_t wishvel;
 	float  fmove, smove;
@@ -1180,14 +1181,11 @@ static void PM_NoclipMove(void) {
 	if (speed < 1) {
 		VectorCopy(vec3_origin, pm->ps->velocity);
 	} else {
-		drop = 0;
+		float friction = pm_friction * 1.5; // extra friction
+		float control  = speed < pm_stopspeed ? pm_stopspeed : speed;
+		float drop     = control * friction * pml.frametime;
+		float newspeed = speed - drop;// scale the velocity
 
-		friction = pm_friction * 1.5; // extra friction
-		control  = speed < pm_stopspeed ? pm_stopspeed : speed;
-		drop    += control * friction * pml.frametime;
-
-		// scale the velocity
-		newspeed = speed - drop;
 		if (newspeed < 0) {
 			newspeed = 0;
 		}
@@ -1558,8 +1556,6 @@ PM_SetWaterLevel	FIXME: avoid this twice?  certainly if not moving
 static void PM_SetWaterLevel(void) {
 	vec3_t point;
 	int    cont;
-	int    sample1;
-	int    sample2;
 
 	//
 	// get waterlevel, accounting for ducking
@@ -1574,8 +1570,8 @@ static void PM_SetWaterLevel(void) {
 	cont     = pm->pointcontents(point, pm->ps->clientNum);
 
 	if (cont & MASK_WATER) {
-		sample2 = pm->ps->viewheight - pm->ps->mins[2];
-		sample1 = sample2 / 2;
+		int sample2 = pm->ps->viewheight - pm->ps->mins[2];
+		int sample1 = sample2 / 2;
 
 		pm->watertype  = cont;
 		pm->waterlevel = 1;
@@ -1594,7 +1590,6 @@ static void PM_SetWaterLevel(void) {
 
 	// UNDERWATER
 	BG_UpdateConditionValue(pm->ps->clientNum, ANIM_COND_UNDERWATER, (pm->waterlevel > 2), qtrue);
-
 }
 
 /*
@@ -1973,7 +1968,7 @@ PM_CalcLean
 ==============
 */
 void PM_UpdateLean(playerState_t *ps, usercmd_t *cmd, pmove_t *tpm) {
-	vec3_t  start, end, tmins, tmaxs, right;
+	vec3_t  start;
 	int     leaning = 0;        // -1 left, 1 right
 	float   leanofs = 0;
 	vec3_t  viewangles;
@@ -2050,6 +2045,8 @@ void PM_UpdateLean(playerState_t *ps, usercmd_t *cmd, pmove_t *tpm) {
 	ps->leanf = leanofs;
 
 	if (leaning) {
+		vec3_t end, tmins, tmaxs, right;
+
 		VectorCopy(ps->origin, start);
 		start[2] += ps->viewheight;
 
@@ -2312,16 +2309,15 @@ void PM_UpdateViewAngles(playerState_t *ps, pmoveExt_t *pmext, usercmd_t *cmd, v
 		trace_t traceres;         // rain - renamed
 		int     newDeltaAngle = ps->delta_angles[YAW];
 		float   pitchMax      = 40.f;
-		float   yawDiff, pitchDiff;
+		float   pitchDiff;
 
 		oldYaw = oldViewAngles[YAW];
 
 		// Check if we are allowed to rotate to there
 		if (ps->weapon == WP_MOBILE_MG42_SET) {
-			pitchMax = 20.f;
+			float yawDiff = ps->viewangles[YAW] - pmext->mountedWeaponAngles[YAW];
 
-			// yaw
-			yawDiff = ps->viewangles[YAW] - pmext->mountedWeaponAngles[YAW];
+			pitchMax = 20.f;
 
 			if (yawDiff > 180) {
 				yawDiff -= 360;
