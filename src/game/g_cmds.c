@@ -43,9 +43,7 @@ void G_SendScore(gentity_t *ent) {
 	int       i;
 	gclient_t *cl;
 	int       numSorted;
-	int       team, size, count;
-	char      buffer[1024];
-	char      startbuffer[32];
+	int       team;
 
 	// send the latest information on all clients
 	numSorted = level.numConnectedClients;
@@ -58,16 +56,16 @@ void G_SendScore(gentity_t *ent) {
 
 	i = 0;
 	// Gordon: team doesnt actually mean team, ignore...
-	for (team = 0; team < 2; team++) {
-		*buffer      = '\0';
-		*startbuffer = '\0';
+	for (team = 0; team < 2; ++team) {
+		int size, count = 0;
+		char      buffer[1024] = {0}, startbuffer[32] = {0};
+
 		if (team == 0) {
 			Q_strncpyz(startbuffer, "sc0", 32);
 		} else {
 			Q_strncpyz(startbuffer, "sc1", 32);
 		}
 		size  = strlen(startbuffer) + 1;
-		count = 0;
 
 		for (; i < numSorted ; i++) {
 			int ping;
@@ -135,14 +133,16 @@ ConcatArgs
 ==================
 */
 char *ConcatArgs(int start) {
-	int         i, c, tlen;
+	int         i, c;
 	static char line[MAX_STRING_CHARS];
 	int         len;
 	char        arg[MAX_STRING_CHARS];
 
 	len = 0;
 	c   = trap_Argc();
-	for (i = start ; i < c ; i++) {
+	for (i = start ; i < c ; ++i) {
+		int tlen;
+
 		trap_Argv(i, arg, sizeof (arg));
 		tlen = strlen(arg);
 		if (len + tlen >= MAX_STRING_CHARS - 1) {
@@ -459,10 +459,9 @@ qboolean SetTeam(gentity_t *ent, char *s, weapon_t w1, weapon_t w2, qboolean set
 	{
 		int                  i;
 		mapEntityData_t      *mEnt;
-		mapEntityData_Team_t *teamList;
 
-		for (i = 0; i < 2; i++) {
-			teamList = &mapEntityData[i];
+		for (i = 0; i < 2; ++i) {
+			mapEntityData_Team_t *teamList = &mapEntityData[i];
 
 			if ((mEnt = G_FindMapEntityData(&mapEntityData[0], ent - g_entities)) != NULL) {
 				G_FreeMapEntityData(teamList, mEnt);
@@ -551,7 +550,7 @@ void StopFollowing(gentity_t *ent) {
 }
 
 int G_TeamCount(gentity_t *ent, weapon_t weap) {
-	int i, j, cnt;
+	int i, cnt;
 
 	if ((int)weap == -1) {   // we aint checking for a weapon, so always include ourselves
 		cnt = 1;
@@ -559,8 +558,8 @@ int G_TeamCount(gentity_t *ent, weapon_t weap) {
 		cnt = 0;
 	}
 
-	for (i = 0; i < level.numConnectedClients; i++) {
-		j = level.sortedClients[i];
+	for (i = 0; i < level.numConnectedClients; ++i) {
+		int j = level.sortedClients[i];
 
 		if (j == ent - g_entities) {
 			continue;
@@ -994,7 +993,6 @@ void G_SayTo(gentity_t *ent, gentity_t *other, int mode, int color, const char *
 
 void G_Say(gentity_t *ent, gentity_t *target, int mode, qboolean encoded, const char *chatText) {
 	int       j;
-	gentity_t *other;
 	int       color;
 	char      name[64];
 	// don't let text be too long for malicious reasons
@@ -1045,8 +1043,9 @@ void G_Say(gentity_t *ent, gentity_t *target, int mode, qboolean encoded, const 
 	}
 
 	// send it to all the apropriate clients
-	for (j = 0; j < level.numConnectedClients; j++) {
-		other = &g_entities[level.sortedClients[j]];
+	for (j = 0; j < level.numConnectedClients; ++j) {
+		gentity_t *other = &g_entities[level.sortedClients[j]];
+
 		if (!COM_BitCheck(other->client->sess.ignoreClients, ent - g_entities)) {
 			G_SayTo(ent, other, mode, color, name, text, localize, encoded);
 		}
@@ -1154,7 +1153,7 @@ void G_Voice(gentity_t *ent, gentity_t *target, int mode, const char *id, qboole
 
 	if (mode == SAY_BUDDY) {
 		char     buffer[32];
-		int      cls, i, cnt, num;
+		int      cls, i, cnt;
 		qboolean allowclients[MAX_CLIENTS];
 
 		memset(allowclients, 0, sizeof (allowclients));
@@ -1169,7 +1168,9 @@ void G_Voice(gentity_t *ent, gentity_t *target, int mode, const char *id, qboole
 			cnt = MAX_CLIENTS;
 		}
 
-		for (i = 0; i < cnt; i++) {
+		for (i = 0; i < cnt; ++i) {
+			int num;
+
 			trap_Argv(3 + i, buffer, 32);
 
 			num = atoi(buffer);
@@ -1183,8 +1184,7 @@ void G_Voice(gentity_t *ent, gentity_t *target, int mode, const char *id, qboole
 			allowclients[num] = qtrue;
 		}
 
-		for (j = 0; j < level.numConnectedClients; j++) {
-
+		for (j = 0; j < level.numConnectedClients; ++j) {
 			if (level.sortedClients[j] != ent->s.clientNum &&
 			    cls != -1 &&
 			    cls != level.clients[level.sortedClients[j]].sess.playerType) {
@@ -1198,9 +1198,8 @@ void G_Voice(gentity_t *ent, gentity_t *target, int mode, const char *id, qboole
 			G_VoiceTo(ent, &g_entities[level.sortedClients[j]], mode, id, voiceonly);
 		}
 	} else {
-
 		// send it to all the apropriate clients
-		for (j = 0; j < level.numConnectedClients; j++) {
+		for (j = 0; j < level.numConnectedClients; ++j) {
 			G_VoiceTo(ent, &g_entities[level.sortedClients[j]], mode, id, voiceonly);
 		}
 	}
@@ -1243,7 +1242,6 @@ qboolean Cmd_CallVote_f(gentity_t *ent, unsigned int dwCommand, qboolean fRefCom
 	int  i;
 	char arg1[MAX_STRING_TOKENS];
 	char arg2[MAX_STRING_TOKENS];
-	int  waitTime = 0;
 
 	// Nico, silent GCC
 	(void)dwCommand;
@@ -1287,6 +1285,8 @@ qboolean Cmd_CallVote_f(gentity_t *ent, unsigned int dwCommand, qboolean fRefCom
 
 	// Nico, perform common checks here
 	if (!Q_stricmp(arg1, "map") || !Q_stricmp(arg1, "randommap")) {
+		int  waitTime;
+
 		// Check if there is a pending map vote
 		if (level.delayedMapChange.pendingChange) {
 			CP("print \"^1Callvote:^7 there is a pending map change.\n\"");
@@ -1652,7 +1652,6 @@ qboolean G_TankIsMountable(gentity_t *ent, gentity_t *other) {
 qboolean Do_Activate_f(gentity_t *ent, gentity_t *traceEnt) {
 	qboolean found   = qfalse;
 	qboolean walking = qfalse;
-	vec3_t   forward;       //, offset, end;
 
 	// Arnout: invisible entities can't be used
 
@@ -1713,7 +1712,7 @@ qboolean Do_Activate_f(gentity_t *ent, gentity_t *traceEnt) {
 			found = qtrue;
 		} else if (G_EmplacedGunIsMountable(traceEnt, ent)) {
 			gclient_t *cl = &level.clients[ent->s.clientNum];
-			vec3_t    point;
+			vec3_t    point, forward;
 
 			AngleVectors(traceEnt->s.apos.trBase, forward, NULL, NULL);
 			VectorMA(traceEnt->r.currentOrigin, -36, forward, point);
@@ -1777,10 +1776,6 @@ qboolean Do_Activate_f(gentity_t *ent, gentity_t *traceEnt) {
 
 void G_LeaveTank(gentity_t *ent, qboolean position) {
 	gentity_t *tank;
-
-	// found our tank (or whatever)
-	vec3_t  axis[3];
-	vec3_t  pos;
 	trace_t tr;
 
 	tank = ent->tankLink;
@@ -1789,9 +1784,9 @@ void G_LeaveTank(gentity_t *ent, qboolean position) {
 	}
 
 	if (position) {
+		vec3_t  axis[3], pos;
 
 		AnglesToAxis(tank->s.angles, axis);
-
 		VectorMA(ent->client->ps.origin, 128, axis[1], pos);
 		trap_Trace(&tr, pos, playerMins, playerMaxs, pos, -1, CONTENTS_SOLID);
 
@@ -1821,7 +1816,6 @@ void G_LeaveTank(gentity_t *ent, qboolean position) {
 		VectorClear(ent->client->ps.velocity);   // Gordon: dont want them to fly away ;D
 		TeleportPlayer(ent, pos, ent->client->ps.viewangles);
 	}
-
 
 	tank->mg42weapHeat         = ent->client->ps.weapHeat[WP_DUMMY_MG42];
 	tank->backupWeaponTime     = ent->client->ps.weaponTime;
@@ -1963,15 +1957,15 @@ tryagain:
 void G_UpdateSpawnCounts(void) {
 	int  i, j;
 	char cs[MAX_STRING_CHARS];
-	int  current, count, team;
 
-	for (i = 0; i < level.numspawntargets; i++) {
+	for (i = 0; i < level.numspawntargets; ++i) {
+		int  current, count = 0, team;
+
 		trap_GetConfigstring(CS_MULTI_SPAWNTARGETS + i, cs, sizeof (cs));
 
 		current = atoi(Info_ValueForKey(cs, "c"));
 		team    = atoi(Info_ValueForKey(cs, "t")) & ~256;
 
-		count = 0;
 		for (j = 0; j < level.numConnectedClients; j++) {
 			gclient_t *client = &level.clients[level.sortedClients[j]];
 
@@ -2086,7 +2080,6 @@ void Cmd_UnIgnore_f(gentity_t *ent) {
 }
 
 void Cmd_Load_f(gentity_t *ent) {
-	char            cmd[MAX_TOKEN_CHARS];
 	int             argc;
 	int             posNum;
 	save_position_t *pos;
@@ -2097,6 +2090,8 @@ void Cmd_Load_f(gentity_t *ent) {
 	if (argc == 1) {
 		posNum = 0;
 	} else if (argc == 2) {
+		char cmd[MAX_TOKEN_CHARS];
+
 		trap_Argv(1, cmd, sizeof (cmd));
 		if ((posNum = atoi(cmd)) < 0 || posNum >= MAX_SAVED_POSITIONS) {
 			CP("print \"Invalid position!\n\"");
@@ -2170,7 +2165,6 @@ void Cmd_Load_f(gentity_t *ent) {
 }
 
 void Cmd_Save_f(gentity_t *ent) {
-	char            cmd[MAX_TOKEN_CHARS];
 	int             argc;
 	int             posNum;
 	save_position_t *pos;
@@ -2181,6 +2175,8 @@ void Cmd_Save_f(gentity_t *ent) {
 	if (argc == 1) {
 		posNum = 0;
 	} else if (argc == 2) {
+		char cmd[MAX_TOKEN_CHARS];
+
 		trap_Argv(1, cmd, sizeof (cmd));
 		if ((posNum = atoi(cmd)) < 0 || posNum >= MAX_SAVED_POSITIONS) {
 			CP("print \"Invalid position!\n\"");
@@ -2427,7 +2423,6 @@ qboolean ClientIsFlooding(gentity_t *ent) {
  */
 void Cmd_SpecLock_f(gentity_t *ent, unsigned int dwCommand, qboolean lock) {
 	int       i      = 0;
-	gentity_t *other = NULL;
 
 	// Nico, silent GCC
 	(void)dwCommand;
@@ -2453,8 +2448,8 @@ void Cmd_SpecLock_f(gentity_t *ent, unsigned int dwCommand, qboolean lock) {
 	CP("cpm \"Use ^3specinvite^7 to invite people to spectate.\n\"");
 
 	// update following players
-	for (i = 0; i < level.numConnectedClients; i++) {
-		other = g_entities + level.sortedClients[i];
+	for (i = 0; i < level.numConnectedClients; ++i) {
+		gentity_t *other = g_entities + level.sortedClients[i];
 
 		if (other->client->sess.referee) {
 			continue;
@@ -2571,7 +2566,6 @@ void Cmd_PrivateMessage_f(gentity_t *ent) {
 	char      *msg                     = NULL;
 	int       pcount                   = 0;
 	int       i                        = 0;
-	gentity_t *tmpent                  = NULL;
 
 	trap_Argv(0, cmd, sizeof (cmd));
 
@@ -2593,7 +2587,7 @@ void Cmd_PrivateMessage_f(gentity_t *ent) {
 	Q_strncpyz(str, va("^3sent to %i player%s: ^7", pcount, pcount == 1 ? "" : "s"), sizeof (str));
 
 	for (i = 0; i < pcount; ++i) {
-		tmpent = &g_entities[pids[i]];
+		gentity_t *tmpent = &g_entities[pids[i]];
 
 		if (i > 0) {
 			Q_strcat(str, sizeof (str), "^7, ");
@@ -2629,7 +2623,6 @@ void Cmd_PrivateMessage_f(gentity_t *ent) {
 void Cmd_Help_f(gentity_t *ent) {
 	int  argc              = 0;
 	int  i                 = 0;
-	char option[MAX_QPATH] = { 0 };
 
 	// Parse options
 	argc = trap_Argc();
@@ -2643,6 +2636,8 @@ void Cmd_Help_f(gentity_t *ent) {
 		}
 		CP("print \"-------------------------------------------------------------------\n\"");
 	} else {
+		char option[MAX_QPATH] = { 0 };
+
 		trap_Argv(1, option, sizeof (option));
 		for (i = 0 ; i < (int)(sizeof (floodProtectedCommands) / sizeof (floodProtectedCommands[0])) ; ++i) {
 			if (!Q_stricmp(option, floodProtectedCommands[i].cmd)) {

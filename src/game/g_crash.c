@@ -66,7 +66,7 @@ PFNSYMFUNCTIONTABLEACCESS pfnSymFunctionTableAccess = NULL;
 
 BOOL CALLBACK EnumModules(LPSTR ModuleName, DWORD BaseOfDll, PVOID UserContext) {
 	// Nico, unused variable trick fix
-	UserContext = UserContext;
+	(void)UserContext;
 
 	CrashLog(va("0x%08x\t%s\n", BaseOfDll, ModuleName), qtrue);
 	return TRUE;

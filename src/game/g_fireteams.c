@@ -115,13 +115,13 @@ int G_CountFireteams() {
 
 void G_UpdateFireteamConfigString(fireteamData_t *ft) {
 	char buffer[128];
-	int  i;
-	int  clnts[2] = { 0, 0 };
 
 	if (!ft->inuse) {
 		Com_sprintf(buffer, 128, "\\id\\-1");
 	} else {
-		for (i = 0; i < MAX_CLIENTS; i++) {
+		int i, clnts[2] = { 0 };
+
+		for (i = 0; i < MAX_CLIENTS; ++i) {
 			if (ft->joinOrder[i] != -1) {
 				COM_BitSet(clnts, ft->joinOrder[i]);
 			}
@@ -302,22 +302,24 @@ void G_AddClientToFireteam(int entityNum, int leaderNum) {
 // The only way a client should be removed from a fireteam
 void G_RemoveClientFromFireteams(int entityNum, qboolean update, qboolean print) {
 	fireteamData_t *ft;
-	int            i, j;
+	int            i;
 
 	if ((entityNum < 0 || entityNum >= MAX_CLIENTS) || !g_entities[entityNum].client) {
 		G_Error("G_RemoveClientFromFireteams: invalid client");
 	}
 
 	if (G_IsOnFireteam(entityNum, &ft)) {
-		for (i = 0; i < MAX_CLIENTS; i++) {
+		for (i = 0; i < MAX_CLIENTS; ++i) {
 			if (ft->joinOrder[i] == entityNum) {
+				int j;
+
 				if (i == 0) {
 					if (ft->joinOrder[1] == -1) {
 						ft->inuse = qfalse;
 						ft->ident = -1;
 					}
 				}
-				for (j = i; j < MAX_CLIENTS - 1; j++) {
+				for (j = i; j < MAX_CLIENTS - 1; ++j) {
 					ft->joinOrder[j] = ft->joinOrder[j + 1];
 				}
 				ft->joinOrder[MAX_CLIENTS - 1] = -1;

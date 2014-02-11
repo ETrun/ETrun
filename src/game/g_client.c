@@ -44,7 +44,6 @@ If the start position is targeting an entity, the players camera will start out 
 */
 void SP_info_player_deathmatch(gentity_t *ent) {
 	int    i;
-	vec3_t dir;
 
 	G_SpawnInt("nobots", "0", &i);
 	if (i) {
@@ -57,6 +56,8 @@ void SP_info_player_deathmatch(gentity_t *ent) {
 
 	ent->enemy = G_PickTarget(ent->target);
 	if (ent->enemy) {
+		vec3_t dir;
+
 		VectorSubtract(ent->enemy->s.origin, ent->s.origin, dir);
 		vectoangles(dir, ent->s.angles);
 	}
@@ -110,15 +111,15 @@ SpotWouldTelefrag
 qboolean SpotWouldTelefrag(gentity_t *spot) {
 	int       i, num;
 	int       touch[MAX_GENTITIES];
-	gentity_t *hit;
 	vec3_t    mins, maxs;
 
 	VectorAdd(spot->r.currentOrigin, playerMins, mins);
 	VectorAdd(spot->r.currentOrigin, playerMaxs, maxs);
 	num = trap_EntitiesInBox(mins, maxs, touch, MAX_GENTITIES);
 
-	for (i = 0 ; i < num ; i++) {
-		hit = &g_entities[touch[i]];
+	for (i = 0 ; i < num ; ++i) {
+		gentity_t *hit = &g_entities[touch[i]];
+
 		if (hit->client && hit->client->ps.stats[STAT_HEALTH] > 0) {
 			return qtrue;
 		}
@@ -139,7 +140,7 @@ Find the spot that we DON'T want to use
 gentity_t *SelectNearestDeathmatchSpawnPoint(vec3_t from) {
 	gentity_t *spot;
 	vec3_t    delta;
-	float     dist, nearestDist;
+	float     nearestDist;
 	gentity_t *nearestSpot;
 
 	nearestDist = 999999;
@@ -147,6 +148,7 @@ gentity_t *SelectNearestDeathmatchSpawnPoint(vec3_t from) {
 	spot        = NULL;
 
 	while ((spot = G_Find(spot, FOFS(classname), "info_player_deathmatch")) != NULL) {
+		float dist;
 
 		VectorSubtract(spot->r.currentOrigin, from, delta);
 		dist = VectorLength(delta);
@@ -278,7 +280,6 @@ limbo
 ================
 */
 void limbo(gentity_t *ent) {
-	int i;
 	int startclient = ent->client->ps.clientNum;
 
 	if (ent->r.svFlags & SVF_POW) {
@@ -286,8 +287,10 @@ void limbo(gentity_t *ent) {
 	}
 
 	if (!(ent->client->ps.pm_flags & PMF_LIMBO)) {
+		int i;
+
 		// DHM - Nerve :: First save off persistant info we'll need for respawn
-		for (i = 0; i < MAX_PERSISTANT; i++) {
+		for (i = 0; i < MAX_PERSISTANT; ++i) {
 			ent->client->saved_persistant[i] = ent->client->ps.persistant[i];
 		}
 
@@ -345,9 +348,11 @@ Returns number of players on a team
 ================
 */
 team_t TeamCount(int ignoreClientNum, int team) {
-	int i, ref, count = 0;
+	int i, count = 0;
 
-	for (i = 0; i < level.numConnectedClients; i++) {
+	for (i = 0; i < level.numConnectedClients; ++i) {
+		int ref;
+
 		if ((ref = level.sortedClients[i]) == ignoreClientNum) {
 			continue;
 		}
@@ -605,7 +610,6 @@ ClientCheckName
 */
 static void ClientCleanName(const char *in, char *out, int outSize) {
 	int  len, colorlessLen;
-	char ch;
 	char *p;
 	int  spaces;
 
@@ -619,7 +623,8 @@ static void ClientCleanName(const char *in, char *out, int outSize) {
 	spaces       = 0;
 
 	for (;; ) {
-		ch = *in++;
+		char ch = *in++;
+
 		if (!ch) {
 			break;
 		}
@@ -1063,7 +1068,6 @@ char *ClientConnect(int clientNum, qboolean firstTime) {
 	gentity_t *ent;
 	char      userinfo2[MAX_INFO_STRING]; // Nico, used in connections limit check
 	int       i = 0;
-	int       clientNum2; // Nico, used in connections limit check
 	int       conn_per_ip = 1; // Nico, connections per IP counter
 	char      ip[20], ip2[20]; // Nico, used in connections limit check
 	char      parsedIp[20], parsedIp2[20]; // Nico, used in connections limit check
@@ -1090,7 +1094,8 @@ char *ClientConnect(int clientNum, qboolean firstTime) {
 	}
 	Q_strncpyz(ip, parsedIp, sizeof (ip));
 	for (i = 0; i < level.numConnectedClients; ++i) {
-		clientNum2 = level.sortedClients[i];
+		int clientNum2 = level.sortedClients[i];
+
 		if (clientNum == clientNum2) {
 			continue;
 		}
@@ -1593,8 +1598,6 @@ server system housekeeping.
 void ClientDisconnect(int clientNum) {
 	gentity_t *ent;
 	gentity_t *flag = NULL;
-	gitem_t   *item = NULL;
-	vec3_t    launchvel;
 	int       i;
 
 	ent = g_entities + clientNum;
@@ -1630,10 +1633,9 @@ void ClientDisconnect(int clientNum) {
 	// remove ourself from teamlists
 	{
 		mapEntityData_t      *mEnt;
-		mapEntityData_Team_t *teamList;
 
-		for (i = 0; i < 2; i++) {
-			teamList = &mapEntityData[i];
+		for (i = 0; i < 2; ++i) {
+			mapEntityData_Team_t *teamList = &mapEntityData[i];
 
 			if ((mEnt = G_FindMapEntityData(&mapEntityData[0], ent - g_entities)) != NULL) {
 				G_FreeMapEntityData(teamList, mEnt);
@@ -1655,6 +1657,7 @@ void ClientDisconnect(int clientNum) {
 	if (ent->client->pers.connected == CON_CONNECTED
 	    && ent->client->sess.sessionTeam != TEAM_SPECTATOR
 	    && !(ent->client->ps.pm_flags & PMF_LIMBO)) {
+		gitem_t   *item = NULL;
 
 		// They don't get to take powerups with them!
 		// Especially important for stuff like CTF flags
@@ -1677,10 +1680,7 @@ void ClientDisconnect(int clientNum) {
 		}
 
 		if (item) {
-			// OSP - fix for suicide drop exploit through walls/gates
-			launchvel[0] = 0;    //crandom()*20;
-			launchvel[1] = 0;    //crandom()*20;
-			launchvel[2] = 0;    //10+random()*10;
+			vec3_t    launchvel = {0};
 
 			flag                = LaunchItem(item, ent->r.currentOrigin, launchvel, ent - g_entities);
 			flag->s.modelindex2 = ent->s.otherEntityNum2;    // JPW NERVE FIXME set player->otherentitynum2 with old modelindex2 from flag and restore here

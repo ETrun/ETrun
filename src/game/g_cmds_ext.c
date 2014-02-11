@@ -184,11 +184,11 @@ void G_commands_cmd(gentity_t *ent, unsigned int dwCommand, qboolean fValue) {
 //
 // Show client info
 void G_players_cmd(gentity_t *ent, unsigned int dwCommand, qboolean fValue) {
-	int       i, idnum, max_rate, cnt = 0, tteam;
+	int       i, max_rate, cnt = 0;
 	int       user_rate, user_snaps;
 	gclient_t *cl;
 	char      n2[MAX_NETNAME], ready[16], ref[16], rate[256];
-	char      *s, *tc, userinfo[MAX_INFO_STRING];
+	char      *s, userinfo[MAX_INFO_STRING];
 	int       ip1, ip2, ip3; //Nico, parts of IP
 
 	// Nico, silent GCC
@@ -215,8 +215,10 @@ void G_players_cmd(gentity_t *ent, unsigned int dwCommand, qboolean fValue) {
 
 	max_rate = trap_Cvar_VariableIntegerValue("sv_maxrate");
 
-	for (i = 0; i < level.numConnectedClients; i++) {
-		idnum = level.sortedClients[i];
+	for (i = 0; i < level.numConnectedClients; ++i) {
+		int idnum = level.sortedClients[i], tteam;
+		char *tc;
+
 		cl    = &level.clients[idnum];
 		ip1   = 0;
 		ip2   = 0;

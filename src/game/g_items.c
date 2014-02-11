@@ -656,8 +656,7 @@ Spawns an item and tosses it forward
 gentity_t *LaunchItem(gitem_t *item, vec3_t origin, vec3_t velocity, int ownerNum) {
 	gentity_t *dropped;
 	trace_t   tr;
-	vec3_t    vec, temp;
-	int       i;
+	vec3_t    temp;
 
 	dropped = G_Spawn();
 
@@ -677,10 +676,14 @@ gentity_t *LaunchItem(gitem_t *item, vec3_t origin, vec3_t velocity, int ownerNu
 
 	trap_Trace(&tr, origin, dropped->r.mins, dropped->r.maxs, origin, ownerNum, MASK_SOLID);
 	if (tr.startsolid) {
+		int i;
+
 		VectorSubtract(g_entities[ownerNum].s.origin, origin, temp);
 		VectorNormalize(temp);
 
 		for (i = 16; i <= 48; i += 16) {
+			vec3_t vec;
+
 			VectorScale(temp, i, vec);
 			VectorAdd(origin, vec, origin);
 
@@ -783,7 +786,6 @@ free fall from their spawn points
 */
 void FinishSpawningItem(gentity_t *ent) {
 	trace_t tr;
-	vec3_t  dest;
 	vec3_t  maxs;
 
 	if (ent->spawnflags & 1) {   // suspended
@@ -825,6 +827,7 @@ void FinishSpawningItem(gentity_t *ent) {
 	if (ent->spawnflags & 1) {      // suspended
 		G_SetOrigin(ent, ent->s.origin);
 	} else {
+		vec3_t  dest;
 
 		VectorSet(dest, ent->s.origin[0], ent->s.origin[1], ent->s.origin[2] - 4096);
 		trap_Trace(&tr, ent->s.origin, ent->r.mins, maxs, dest, ent->s.number, MASK_SOLID);

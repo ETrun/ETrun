@@ -1751,8 +1751,7 @@ This is also used for spectator spawns
 ==================
 */
 void FindIntermissionPoint(void) {
-	gentity_t *ent, *target;
-	vec3_t    dir;
+	gentity_t *ent;
 
 	// NERVE - SMF - if the match hasn't ended yet, and we're just a spectator
 	// try to find the intermission spawnpoint with no team flags set
@@ -1782,8 +1781,12 @@ void FindIntermissionPoint(void) {
 		VectorCopy(ent->s.angles, level.intermission_angle);
 		// if it has a target, look towards it
 		if (ent->target) {
+			gentity_t *target;
+
 			target = G_PickTarget(ent->target);
 			if (target) {
+				vec3_t    dir;
+
 				VectorSubtract(target->s.origin, level.intermission_origin, dir);
 				vectoangles(dir, level.intermission_angle);
 			}
@@ -2046,7 +2049,6 @@ qboolean G_PositionEntityOnTag(gentity_t *entity, gentity_t *parent, char *tagNa
 
 void G_TagLinkEntity(gentity_t *ent, int msec) {
 	gentity_t *parent = &g_entities[ent->s.torsoAnim];
-	vec3_t    move, amove;
 	gentity_t *obstacle;
 	vec3_t    origin, angles;
 	vec3_t    v;
@@ -2147,6 +2149,8 @@ void G_TagLinkEntity(gentity_t *ent, int msec) {
 	}
 
 	if (ent->moving) {
+		vec3_t move, amove;
+
 		VectorSubtract(origin, ent->r.currentOrigin, move);
 		VectorSubtract(angles, ent->r.currentAngles, amove);
 
