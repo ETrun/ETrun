@@ -507,7 +507,6 @@ but any server game effects are handled here
 */
 void ClientEvents(gentity_t *ent, int oldEventSequence) {
 	int       i;
-	int       event;
 	gclient_t *client;
 	int       damage;
 
@@ -516,8 +515,8 @@ void ClientEvents(gentity_t *ent, int oldEventSequence) {
 	if (oldEventSequence < client->ps.eventSequence - MAX_EVENTS) {
 		oldEventSequence = client->ps.eventSequence - MAX_EVENTS;
 	}
-	for (i = oldEventSequence ; i < client->ps.eventSequence ; i++) {
-		event = client->ps.events[i & (MAX_EVENTS - 1)];
+	for (i = oldEventSequence ; i < client->ps.eventSequence ; ++i) {
+		int event = client->ps.events[i & (MAX_EVENTS - 1)];
 
 		switch (event) {
 		case EV_FALL_NDIE:
@@ -1029,9 +1028,6 @@ while a slow client may have multiple ClientEndFrame between ClientThink.
 void ClientEndFrame(gentity_t *ent) {
 	int i;
 
-	// Nico, timerun stats
-	float currentSpeed = 0;
-
 	// Nico, flood protection
 	if (level.time >= (ent->client->sess.nextReliableTime + 1000) &&
 	    ent->client->sess.numReliableCmds) {
@@ -1045,6 +1041,8 @@ void ClientEndFrame(gentity_t *ent) {
 
 	// Nico, update best speeds
 	if (ent->client->sess.timerunActive) {
+		float currentSpeed;
+
 		currentSpeed = sqrt(ent->client->ps.velocity[0] * ent->client->ps.velocity[0] + ent->client->ps.velocity[1] * ent->client->ps.velocity[1]);
 
 		// Nico, update overall max speed

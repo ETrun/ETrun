@@ -154,7 +154,6 @@ Slide off of the impacting surface
 */
 void PM_ClipVelocity(vec3_t in, vec3_t normal, vec3_t out, float overbounce) {
 	float backoff;
-	float change;
 	int   i;
 
 	backoff = DotProduct(in, normal);
@@ -165,8 +164,9 @@ void PM_ClipVelocity(vec3_t in, vec3_t normal, vec3_t out, float overbounce) {
 		backoff /= overbounce;
 	}
 
-	for (i = 0 ; i < 3 ; i++) {
-		change = normal[i] * backoff;
+	for (i = 0 ; i < 3 ; ++i) {
+		float change = normal[i] * backoff;
+
 		out[i] = in[i] - change;
 	}
 }
@@ -730,11 +730,11 @@ PM_WeaponUseAmmo
 ==============
 */
 void PM_WeaponUseAmmo(int wp, int amount) {
-	int takeweapon;
-
 	if (pm->noWeapClips) {
 		pm->ps->ammo[BG_FindAmmoForWeapon(wp)] -= amount;
 	} else {
+		int takeweapon;
+
 		takeweapon = BG_FindClipForWeapon(wp);
 
 		if (BG_IsAkimboWeapon(wp) && !BG_AkimboFireSequence(wp, pm->ps->ammoclip[BG_FindClipForWeapon(wp)], pm->ps->ammoclip[BG_FindClipForWeapon(BG_AkimboSidearm(wp))])) {
@@ -794,9 +794,9 @@ PM_CoolWeapons
 ==============
 */
 void PM_CoolWeapons(void) {
-	int wp, maxHeat;
+	int wp;
 
-	for (wp = 0; wp < WP_NUM_WEAPONS; wp++) {
+	for (wp = 0; wp < WP_NUM_WEAPONS; ++wp) {
 
 		// if you have the weapon
 		if (COM_BitCheck(pm->ps->weapons, wp) && pm->ps->weapHeat[wp]) {
@@ -815,6 +815,8 @@ void PM_CoolWeapons(void) {
 			// rain - floor to prevent 8-bit wrap
 			pm->ps->curWeapHeat = floor((((float)pm->ps->weapHeat[WP_DUMMY_MG42] / MAX_MG42_HEAT)) * 255.0f);
 		} else {
+			int maxHeat;
+
 			// rain - #172 - don't divide by 0
 			maxHeat = GetAmmoTableData(pm->ps->weapon)->maxHeat;
 
@@ -840,9 +842,8 @@ PM_AdjustAimSpreadScale
 #define AIMSPREAD_VIEWRATE_RANGE    120.0f      // degrees per second
 
 void PM_AdjustAimSpreadScale(void) {
-	int   i;
 	float increase, decrease;       // (SA) was losing lots of precision on slower weapons (scoped)
-	float viewchange, cmdTime, wpnScale;
+	float cmdTime, wpnScale;
 
 	// all weapons are very inaccurate in zoomed mode
 	if (pm->ps->eFlags & EF_ZOOMING) {
@@ -899,6 +900,8 @@ void PM_AdjustAimSpreadScale(void) {
 	}
 
 	if (wpnScale) {
+		int i;
+		float viewchange = 0;
 
 		// JPW NERVE crouched players recover faster (mostly useful for snipers)
 		if (pm->ps->eFlags & EF_CROUCHING || pm->ps->eFlags & EF_PRONE) {
@@ -907,16 +910,15 @@ void PM_AdjustAimSpreadScale(void) {
 
 		decrease = (cmdTime * AIMSPREAD_DECREASE_RATE) / wpnScale;
 
-		viewchange = 0;
 		// take player movement into account (even if only for the scoped weapons)
 		// TODO: also check for jump/crouch and adjust accordingly
 		if (BG_IsScopedWeapon(pm->ps->weapon)) {
-			for (i = 0; i < 2; i++) {
+			for (i = 0; i < 2; ++i) {
 				viewchange += fabs(pm->ps->velocity[i]);
 			}
 		} else {
 			// take player view rotation into account
-			for (i = 0; i < 2; i++) {
+			for (i = 0; i < 2; ++i) {
 				viewchange += fabs(SHORT2ANGLE(pm->cmd.angles[i]) - SHORT2ANGLE(pm->oldcmd.angles[i]));
 			}
 		}
@@ -1592,11 +1594,12 @@ void PM_Weapon(void) {
 
 	if (pm->ps->weapon) {
 		int      ammoAvailable;
-		qboolean reloading, playswitchsound = qtrue;
 
 		ammoAvailable = PM_WeaponAmmoAvailable(pm->ps->weapon);
 
 		if (ammoNeeded > ammoAvailable) {
+			qboolean reloading, playswitchsound = qtrue;
+
 			// you have ammo for this, just not in the clip
 			reloading = (qboolean)(ammoNeeded <= pm->ps->ammo[BG_FindAmmoForWeapon(pm->ps->weapon)]);
 

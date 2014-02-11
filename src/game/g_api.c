@@ -449,17 +449,15 @@ static void *checkpointsHandler(void *data) {
 	int            code;
 	struct query_s *queryStruct = (struct query_s *)data;
 	gentity_t      *ent         = queryStruct->ent;
-	char           *pch         = NULL;
-	int            i            = 0;
-	int            timerunNum   = 0;
 
 	code = API_query(queryStruct->cmd, queryStruct->result, queryStruct->query, sizeof (queryStruct->query));
 
 	if (code >= 1000) {
-
-		timerunNum = code - 1000;
-
+		int timerunNum = code - 1000;
 		if (queryStruct->result && checkAPIResult(queryStruct->result) && timerunNum >= 0 && timerunNum < MAX_TIMERUNS) {
+			char *pch;
+			int  i = 0;
+
 			// No error, no timeout
 
 			// Reset client checkpoints
@@ -533,12 +531,12 @@ static void *randommapHandler(void *data) {
 	int            code;
 	struct query_s *queryStruct       = (struct query_s *)data;
 	gentity_t      *ent               = queryStruct->ent; // Nico, note: this is NULL is randomMap was asked by server (timelimit)
-	char           mapfile[MAX_QPATH] = { 0 };
 	fileHandle_t   f;
 
 	code = API_query(queryStruct->cmd, queryStruct->result, queryStruct->query, sizeof (queryStruct->query));
 
 	if (code == 0 && queryStruct->result && checkAPIResult(queryStruct->result)) {
+		char mapfile[MAX_QPATH] = { 0 };
 
 		Com_sprintf(mapfile, sizeof (mapfile), "maps/%s.bsp", queryStruct->result);
 
@@ -761,7 +759,6 @@ static void *getConfigHandler(void *data) {
 	int            config_holdDoorsOpen;
 	int            config_enableMapEntities;
 	int            config_script_size;
-	int            len;
 
 	code = API_query(queryStruct->cmd, queryStruct->result, queryStruct->query, sizeof (queryStruct->query));
 
@@ -782,6 +779,8 @@ static void *getConfigHandler(void *data) {
 	}
 
 	if (config_script_size != 0) {
+		int len;
+
 		level.useAPImapscript = qtrue;
 
 		level.scriptEntity = G_Alloc(config_script_size + 1);
@@ -887,14 +886,14 @@ static const api_glue_t APICommands[] =
  */
 static handler_t getHandlerForCommand(char *cmd) {
 	unsigned int     i, cCommands = sizeof (APICommands) / sizeof (APICommands[0]);
-	const api_glue_t *element;
 
 	if (!cmd) {
 		return NULL;
 	}
 
 	for (i = 0; i < cCommands; ++i) {
-		element = &APICommands[i];
+		const api_glue_t *element = &APICommands[i];
+
 		if (element && element->cmd && !Q_stricmp(cmd, element->cmd)) {
 			return element->handler;
 		}
@@ -918,7 +917,6 @@ qboolean G_AsyncAPICall(char *command, char *result, gentity_t *ent, int count, 
 	void           *(*handler)(void *) = NULL;
 	va_list        ap;
 	int            i    = 0;
-	char           *arg = NULL;
 
 	if (api_module == NULL || API_query == NULL) {
 		LDE("%s\n", "API module is not loaded");
@@ -951,6 +949,8 @@ qboolean G_AsyncAPICall(char *command, char *result, gentity_t *ent, int count, 
 	memset(queryStruct->query, 0, QUERY_MAX_SIZE);
 
 	for (i = 0; i < count; ++i) {
+		char *arg;
+
 		arg = va_arg(ap, char *);
 
 		if (!arg) {
@@ -1031,7 +1031,6 @@ qboolean G_SyncAPICall(char *command, char *result, gentity_t *ent, int count, .
 	void           *(*handler)(void *) = NULL;
 	va_list        ap;
 	int            i    = 0;
-	char           *arg = NULL;
 
 	if (api_module == NULL || API_query == NULL) {
 		LDE("%s\n", "API module is not loaded");
@@ -1058,6 +1057,8 @@ qboolean G_SyncAPICall(char *command, char *result, gentity_t *ent, int count, .
 	memset(queryStruct->query, 0, QUERY_MAX_SIZE);
 
 	for (i = 0; i < count; ++i) {
+		char *arg;
+
 		arg = va_arg(ap, char *);
 
 		if (!arg) {
