@@ -193,7 +193,6 @@ qboolean G_TryPushingEntity(gentity_t *check, gentity_t *pusher, vec3_t move, ve
 	vec3_t    org, org2, move2;
 	gentity_t *block;
 	vec3_t    matrix[3], transpose[3];
-	float     x, fx, y, fy, z, fz;
 
 #define JITTER_INC  4
 #define JITTER_MAX  (check->r.maxs[0] / 2.0)
@@ -278,12 +277,18 @@ qboolean G_TryPushingEntity(gentity_t *check, gentity_t *pusher, vec3_t move, ve
 
 	// RF, if still not valid, move them around to see if we can find a good spot
 	if (JITTER_MAX > JITTER_INC) {
+		float z;
+
 		VectorCopy(check->s.pos.trBase, org);
 		if (check->client) {
 			VectorCopy(check->client->ps.origin, org);
 		}
-		for (z = 0; z < JITTER_MAX; z += JITTER_INC)
+		for (z = 0; z < JITTER_MAX; z += JITTER_INC) {
+			float fz;
+
 			for (fz = -z; fz <= z; fz += 2 * z) {
+				float x, fx, y, fy;
+
 				for (x = JITTER_INC; x < JITTER_MAX; x += JITTER_INC)
 					for (fx = -x; fx <= x; fx += 2 * x) {
 						for (y = JITTER_INC; y < JITTER_MAX; y += JITTER_INC)
@@ -313,6 +318,7 @@ qboolean G_TryPushingEntity(gentity_t *check, gentity_t *pusher, vec3_t move, ve
 					break;
 				}
 			}
+		}
 		// didnt work, so set the position back
 		VectorCopy(org, check->s.pos.trBase);
 		if (check->client) {
@@ -996,15 +1002,13 @@ IsBinaryMoverBlocked
 ================
 */
 qboolean IsBinaryMoverBlocked(gentity_t *ent, gentity_t *other, gentity_t *activator) {
-
-	vec3_t   dir, angles;
-	vec3_t   pos;
-	vec3_t   vec;
-	float    dot;
-	vec3_t   forward;
-	qboolean is_relay = qfalse;
+	vec3_t   angles;
 
 	if (Q_stricmp(ent->classname, "func_door_rotating") == 0) {
+		vec3_t dir, pos, vec, forward;
+		float  dot;
+		qboolean is_relay = qfalse;
+
 		if (ent->spawnflags & 32) {
 			return qfalse;
 		}
@@ -1620,7 +1624,6 @@ Blocked_Door
 */
 void Blocked_Door(gentity_t *ent, gentity_t *other) {
 	gentity_t *slave;
-	int       time;
 
 	// remove anything other than a client
 	if (other) {
@@ -1646,7 +1649,7 @@ void Blocked_Door(gentity_t *ent, gentity_t *other) {
 
 	// reverse direction
 	for (slave = ent ; slave ; slave = slave->teamchain) {
-		time = level.time - (slave->s.pos.trDuration - (level.time - slave->s.pos.trTime));
+		int time = level.time - (slave->s.pos.trDuration - (level.time - slave->s.pos.trTime));
 
 		if (slave->moverState == MOVER_1TO2) {
 			SetMoverState(slave, MOVER_2TO1, time);
@@ -1696,9 +1699,7 @@ Blocked_DoorRotate
 #define DOORPUSHBACK    16
 
 void Blocked_DoorRotate(gentity_t *ent, gentity_t *other) {
-
 	gentity_t *slave;
-	int       time;
 
 	// remove anything other than a client
 	if (other) {
@@ -1722,9 +1723,7 @@ void Blocked_DoorRotate(gentity_t *ent, gentity_t *other) {
 	}
 
 	for (slave = ent ; slave ; slave = slave->teamchain) {
-		// RF, trying to fix "stuck in door" bug
-		time = level.time - (slave->s.apos.trDuration - (level.time - slave->s.apos.trTime));
-		//time = level.time - slave->s.apos.trTime;
+		int time = level.time - (slave->s.apos.trDuration - (level.time - slave->s.apos.trTime));
 
 		if (slave->moverState == MOVER_1TO2ROTATE) {
 			SetMoverState(slave, MOVER_2TO1ROTATE, time);
@@ -2089,7 +2088,6 @@ void SP_func_door(gentity_t *ent) {
 
 	if (ent->spawnflags & 1) {      // START_OPEN - reverse position 1 and 2
 		vec3_t temp;
-		int    tempi;
 
 		VectorCopy(ent->pos2, temp);
 		VectorCopy(ent->s.origin, ent->pos2);
@@ -2097,7 +2095,8 @@ void SP_func_door(gentity_t *ent) {
 
 		// swap speeds if door has 'closespeed'
 		if (ent->closespeed) {
-			tempi           = ent->speed;
+			int tempi = ent->speed;
+
 			ent->speed      = ent->closespeed;
 			ent->closespeed = tempi;
 		}
@@ -2699,7 +2698,6 @@ Camera for limbo menu, target at an appropriate entity (spawn flag, script mover
 void info_limbo_camera_setup(gentity_t *self) {
 	limbo_cam_t *caminfo;
 	gentity_t   *target;
-	vec3_t      vec;
 
 	if (level.numLimboCams >= MAX_LIMBO_CAMS) {
 		// Nico, removed G_Error here
@@ -2749,6 +2747,8 @@ void info_limbo_camera_setup(gentity_t *self) {
 	}
 
 	if (!caminfo->hasEnt) {
+		vec3_t vec;
+
 		VectorSubtract(target->s.origin, caminfo->origin, vec);
 		VectorNormalize(vec);
 		vectoangles(vec, caminfo->angles);
@@ -3070,8 +3070,6 @@ void Use_Static(gentity_t *ent, gentity_t *other, gentity_t *activator) {
 }
 
 void Static_Pain(gentity_t *ent, gentity_t *attacker, int damage, vec3_t point) {
-	vec3_t temp;
-
 	// Nico, silent GCC
 	(void)damage;
 	(void)point;
@@ -3088,6 +3086,7 @@ void Static_Pain(gentity_t *ent, gentity_t *attacker, int damage, vec3_t point) 
 		    && (attacker->s.weapon == WP_GRENADE_LAUNCHER
 		        || attacker->s.weapon == WP_PANZERFAUST
 		        || attacker->client->ps.persistant[PERS_HWEAPON_USE])) {
+			vec3_t temp;
 
 			VectorCopy(ent->r.currentOrigin, temp);
 			VectorCopy(ent->pos3, ent->r.currentOrigin);
@@ -3803,7 +3802,6 @@ void target_explosion_use(gentity_t *self, gentity_t *other, gentity_t *attacker
 void SP_target_explosion(gentity_t *ent) {
 	char *type;
 	char *s;
-	char buffer[MAX_QPATH];
 
 	if (ent->spawnflags & 1) {    // force lowgravity
 		ent->duration = 1;
@@ -3845,6 +3843,8 @@ void SP_target_explosion(gentity_t *ent) {
 	ent->s.dl_intensity = 0;
 	if (G_SpawnString("noise", "NOSOUND", &s)) {
 		if (Q_stricmp(s, "nosound")) {
+			char buffer[MAX_QPATH];
+
 			Q_strncpyz(buffer, s, sizeof (buffer));
 			ent->s.dl_intensity = G_SoundIndex(buffer);
 		} else {
@@ -3879,7 +3879,6 @@ the default sounds are:
 */
 void SP_func_explosive(gentity_t *ent) {
 	int  health, mass, dam, i;
-	char buffer[MAX_QPATH];
 	char *s;
 	char *type;
 	char *cursorhint;
@@ -3894,7 +3893,6 @@ void SP_func_explosive(gentity_t *ent) {
 		ent->use                  = func_explosive_use;
 		ent->AIScript_AlertEntity = func_explosive_alert;
 	}
-
 
 	if (ent->spawnflags & EXPLOSIVE_TOUCHABLE) {   // touchable
 		ent->touch = func_explosive_touch;
@@ -3963,6 +3961,8 @@ void SP_func_explosive(gentity_t *ent) {
 
 	if (G_SpawnString("noise", "NOSOUND", &s)) {
 		if (Q_stricmp(s, "nosound")) {
+			char buffer[MAX_QPATH];
+
 			Q_strncpyz(buffer, s, sizeof (buffer));
 			ent->s.dl_intensity = G_SoundIndex(buffer);
 		} else {
@@ -3976,7 +3976,7 @@ void SP_func_explosive(gentity_t *ent) {
 
 	if (G_SpawnString("cursorhint", "0", &cursorhint)) {
 
-		for (i = 0; i < HINT_NUM_HINTS; i++) {
+		for (i = 0; i < HINT_NUM_HINTS; ++i) {
 			if (!Q_stricmp(cursorhint, hintStrings[i])) {
 				ent->s.dmgFlags = i;
 			}
@@ -4029,7 +4029,6 @@ void use_invisible_user(gentity_t *ent, gentity_t *other, gentity_t *activator) 
 
 
 void SP_func_invisible_user(gentity_t *ent) {
-	int  i;
 	char *sound;
 	char *cursorhint;
 
@@ -4051,18 +4050,15 @@ void SP_func_invisible_user(gentity_t *ent) {
 
 	ent->use = use_invisible_user;
 
-
-//----(SA)	added
 	if (G_SpawnString("cursorhint", "0", &cursorhint)) {
+		int i;
 
-		for (i = 0; i < HINT_NUM_HINTS; i++) {
+		for (i = 0; i < HINT_NUM_HINTS; ++i) {
 			if (!Q_stricmp(cursorhint, hintStrings[i])) {
 				ent->s.dmgFlags = i;
 			}
 		}
 	}
-//----(SA)	end
-
 
 	if (!(ent->spawnflags & 4)) {        // !NO_OFF_NOISE
 		if (G_SpawnString("offnoise", "0", &sound)) {
@@ -4071,8 +4067,6 @@ void SP_func_invisible_user(gentity_t *ent) {
 			ent->soundPos1 = G_SoundIndex("sound/movers/doors/default_door_locked.wav");
 		}
 	}
-
-
 }
 
 /*
@@ -4231,7 +4225,7 @@ void func_constructible_explode(gentity_t *self, gentity_t *inflictor, gentity_t
 			// swap back one stage
 			int       listedEntities, e;
 			int       entityList[MAX_GENTITIES];
-			gentity_t *check, *block;
+			gentity_t *block;
 
 			self->s.angles2[0] = 0;
 
@@ -4280,8 +4274,8 @@ void func_constructible_explode(gentity_t *self, gentity_t *inflictor, gentity_t
 			// deal with any entities in the solid
 			listedEntities = trap_EntitiesInBox(self->r.absmin, self->r.absmax, entityList, MAX_GENTITIES);
 
-			for (e = 0; e < listedEntities; e++) {
-				check = &g_entities[entityList[e]];
+			for (e = 0; e < listedEntities; ++e) {
+				gentity_t *check = &g_entities[entityList[e]];
 
 				// ignore everything but items, players and missiles (grenades too)
 				if (check->s.eType != ET_MISSILE && check->s.eType != ET_ITEM && check->s.eType != ET_PLAYER && !check->physicsObject) {
@@ -4777,11 +4771,12 @@ void G_LinkDamageParents(void) {
 }
 
 void G_LinkDebris(void) {
-	float     speed;
 	int       i;
-	gentity_t *target;
 
-	for (i = 0; i < level.numDebrisChunks; i++) {
+	for (i = 0; i < level.numDebrisChunks; ++i) {
+		gentity_t *target;
+		float     speed;
+
 		debrisChunk_t *debris = &level.debrisChunks[i];
 
 		target = G_FindByTargetname(NULL, debris->target);

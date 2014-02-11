@@ -170,10 +170,11 @@ G_InitWorldSession
 */
 void G_InitWorldSession(void) {
 	char s[MAX_STRING_CHARS];
-	int  i, j;
+	int  i;
 
-	for (i = 0; i < MAX_FIRETEAMS; i++) {
-		char *p, *c;
+	for (i = 0; i < MAX_FIRETEAMS; ++i) {
+		char *p;
+		int  j;
 
 		trap_Cvar_VariableStringBuffer(va("fireteam%i", i), s, sizeof (s));
 
@@ -193,7 +194,8 @@ void G_InitWorldSession(void) {
 
 		j = 0;
 		if (p && *p) {
-			c = p;
+			char *c = p;
+
 			for (c = strchr(c, ' ') + 1; c && *c; ) {
 				char str[8];
 				char *l = strchr(c, ' ');
@@ -207,7 +209,7 @@ void G_InitWorldSession(void) {
 			}
 		}
 
-		for ( ; j < MAX_CLIENTS; j++) {
+		for ( ; j < MAX_CLIENTS; ++j) {
 			level.fireTeams[i].joinOrder[j] = -1;
 		}
 		G_UpdateFireteamConfigString(&level.fireTeams[i]);
@@ -230,7 +232,7 @@ void G_WriteSessionData(qboolean restart) {
 	trap_Cvar_Set("session", va("%s",
 	                            Info_ValueForKey(strServerInfo, "mapname")));
 
-	for (i = 0; i < level.numConnectedClients; i++) {
+	for (i = 0; i < level.numConnectedClients; ++i) {
 		if (level.clients[level.sortedClients[i]].pers.connected == CON_CONNECTED) {
 			G_WriteClientSessionData(&level.clients[level.sortedClients[i]], restart);
 			// For slow connecters and a short warmup

@@ -95,7 +95,6 @@ qboolean G_ScriptAction_SetModelFromBrushmodel(gentity_t *ent, char *params) {
 qboolean G_ScriptAction_SetPosition(gentity_t *ent, char *params) {
 	pathCorner_t *pPathCorner;
 	char         *pString, *token;
-	gentity_t    *target;
 
 	pString = params;
 	token   = COM_ParseExt(&pString, qfalse);
@@ -106,6 +105,8 @@ qboolean G_ScriptAction_SetPosition(gentity_t *ent, char *params) {
 	if ((pPathCorner = BG_Find_PathCorner(token)) != NULL) {
 		G_SetOrigin(ent, pPathCorner->origin);
 	} else {
+		gentity_t *target;
+
 		// find the entity with the given "targetname"
 		target = G_FindByTargetname(NULL, token);
 		if (!target) {
@@ -226,13 +227,7 @@ qboolean G_ScriptAction_ShaderRemapFlush(gentity_t *ent, char *params) {
 }
 
 qboolean G_ScriptAction_FollowPath(gentity_t *ent, char *params) {
-	char     *pString, *token;
-	float    speed;
-	qboolean wait = qfalse;
-	int      backward;
-	float    length = 0;
-	float    dist;
-	int      i;
+	char     *pString;
 
 	if (params && (ent->scriptStatus.scriptFlags & SCFL_GOING_TO_MARKER)) {
 		// we can't process a new movement until the last one has finished
@@ -267,6 +262,10 @@ qboolean G_ScriptAction_FollowPath(gentity_t *ent, char *params) {
 		}
 	} else {      // we have just started this command
 		splinePath_t *pSpline;
+		char         *token;
+		float        speed, length = 0, dist = 0;
+		qboolean     wait = qfalse;
+		int          backward, i;
 
 		pString = params;
 
@@ -305,7 +304,6 @@ qboolean G_ScriptAction_FollowPath(gentity_t *ent, char *params) {
 					if (!token[0]) {
 						G_Error("G_Scripting: length must have a value\n");
 					}
-
 					length = atoi(token);
 				}
 			}
@@ -321,8 +319,7 @@ qboolean G_ScriptAction_FollowPath(gentity_t *ent, char *params) {
 
 		VectorClear(ent->s.pos.trDelta);
 
-		dist = 0;
-		for (i = 0; i < MAX_SPLINE_SEGMENTS; i++) {
+		for (i = 0; i < MAX_SPLINE_SEGMENTS; ++i) {
 			dist += pSpline->segments[i].length;
 		}
 
@@ -517,7 +514,6 @@ qboolean G_ScriptAction_SetRotation(gentity_t *ent, char *params) {
 	vec3_t angles;
 	char   *pString;
 	int    i;
-	char   *token;
 
 	BG_EvaluateTrajectory(&ent->s.apos, level.time, ent->r.currentAngles, qtrue, ent->s.effect2Time);
 	VectorCopy(ent->r.currentAngles, ent->s.apos.trBase);
@@ -526,7 +522,9 @@ qboolean G_ScriptAction_SetRotation(gentity_t *ent, char *params) {
 	ent->s.apos.trTime = level.time;
 
 	pString = params;
-	for (i = 0; i < 3; i++) {
+	for (i = 0; i < 3; ++i) {
+		char *token;
+
 		token = COM_Parse(&pString);
 		if (!token || !token[0]) {
 			G_Error("G_Scripting: syntax: setrotation <pitchspeed> <yawspeed> <rollspeed>\n");
@@ -566,11 +564,7 @@ G_ScriptAction_FollowSpline
 */
 
 qboolean G_ScriptAction_FollowSpline(gentity_t *ent, char *params) {
-	char     *pString, *token;
-	float    speed;
-	qboolean wait = qfalse;
-	int      backward;
-	float    length  = 0;
+	char     *pString;
 	float    roll[2] = { 0, 0 };
 
 	if (params && (ent->scriptStatus.scriptFlags & SCFL_GOING_TO_MARKER)) {
@@ -606,6 +600,10 @@ qboolean G_ScriptAction_FollowSpline(gentity_t *ent, char *params) {
 		}
 	} else {      // we have just started this command
 		splinePath_t *pSpline;
+		char     *token;
+		float    speed, length = 0;
+		qboolean wait = qfalse;
+		int      backward;
 
 		pString = params;
 
@@ -1134,15 +1132,8 @@ G_ScriptAction_GotoMarker
 ===============
 */
 qboolean G_ScriptAction_GotoMarker(gentity_t *ent, char *params) {
-	char      *pString, *token;
-	gentity_t *target = NULL;
-	vec3_t    vec;
-	float     speed, dist;
-	qboolean  wait = qfalse, turntotarget = qfalse;
-	int       trType;
-	int       duration, i;
+	char      *pString;
 	vec3_t    diff;
-	vec3_t    angles;
 
 	if (params && (ent->scriptStatus.scriptFlags & SCFL_GOING_TO_MARKER)) {
 		// we can't process a new movement until the last one has finished
@@ -1177,6 +1168,12 @@ qboolean G_ScriptAction_GotoMarker(gentity_t *ent, char *params) {
 		}
 	} else {      // we have just started this command
 		pathCorner_t *pPathCorner;
+		char      *token;
+		gentity_t *target = NULL;
+		vec3_t    vec, angles;
+		float     speed, dist;
+		qboolean  wait = qfalse, turntotarget = qfalse;
+		int       trType, duration, i;
 
 		pString = params;
 		token   = COM_ParseExt(&pString, qfalse);
@@ -1902,7 +1899,6 @@ qboolean G_ScriptAction_ToggleSpeaker(gentity_t *ent, char *params) {
 	int          i;
 	long         hash;
 	gentity_t    *tent;
-	bg_speaker_t *speaker;
 
 	// Nico, silent GCC
 	(void)ent;
@@ -1914,7 +1910,9 @@ qboolean G_ScriptAction_ToggleSpeaker(gentity_t *ent, char *params) {
 	hash = BG_StringHashValue(params);
 
 	// find this targetname
-	for (i = 0; i < BG_NumScriptSpeakers(); i++) {
+	for (i = 0; i < BG_NumScriptSpeakers(); ++i) {
+		bg_speaker_t *speaker;
+
 		speaker = BG_GetScriptSpeaker(i);
 
 		if (hash != speaker->targetnamehash && Q_stricmp(params, speaker->targetname)) {
@@ -1941,7 +1939,6 @@ qboolean G_ScriptAction_DisableSpeaker(gentity_t *ent, char *params) {
 	int          i;
 	long         hash;
 	gentity_t    *tent;
-	bg_speaker_t *speaker;
 
 	// Nico, silent GCC
 	(void)ent;
@@ -1953,7 +1950,9 @@ qboolean G_ScriptAction_DisableSpeaker(gentity_t *ent, char *params) {
 	hash = BG_StringHashValue(params);
 
 	// find this targetname
-	for (i = 0; i < BG_NumScriptSpeakers(); i++) {
+	for (i = 0; i < BG_NumScriptSpeakers(); ++i) {
+		bg_speaker_t *speaker;
+
 		speaker = BG_GetScriptSpeaker(i);
 
 		if (hash != speaker->targetnamehash && Q_stricmp(params, speaker->targetname)) {
@@ -1980,7 +1979,6 @@ qboolean G_ScriptAction_EnableSpeaker(gentity_t *ent, char *params) {
 	int          i;
 	long         hash;
 	gentity_t    *tent;
-	bg_speaker_t *speaker;
 
 	// Nico, silent GCC
 	(void)ent;
@@ -1992,7 +1990,9 @@ qboolean G_ScriptAction_EnableSpeaker(gentity_t *ent, char *params) {
 	hash = BG_StringHashValue(params);
 
 	// find this targetname
-	for (i = 0; i < BG_NumScriptSpeakers(); i++) {
+	for (i = 0; i < BG_NumScriptSpeakers(); ++i) {
+		bg_speaker_t *speaker;
+
 		speaker = BG_GetScriptSpeaker(i);
 
 		if (hash != speaker->targetnamehash && Q_stricmp(params, speaker->targetname)) {
@@ -2037,11 +2037,8 @@ G_ScriptAction_Accum
 */
 
 qboolean G_ScriptAction_Accum(gentity_t *ent, char *params) {
-	char     *pString, *token, lastToken[MAX_QPATH], name[MAX_QPATH];
+	char     *pString = params, *token, lastToken[MAX_QPATH];
 	int      bufferIndex;
-	qboolean terminate, found;
-
-	pString = params;
 
 	token = COM_ParseExt(&pString, qfalse);
 	if (!token[0]) {
@@ -2142,8 +2139,8 @@ qboolean G_ScriptAction_Accum(gentity_t *ent, char *params) {
 		}
 		if (ent->scriptAccumBuffer[bufferIndex] == atoi(token)) {
 			gentity_t *trent;
-			int       oldId;
-//			qboolean loop = qfalse;
+			char      name[MAX_QPATH];
+			qboolean  terminate = qfalse, found = qfalse;
 
 			token = COM_ParseExt(&pString, qfalse);
 			Q_strncpyz(lastToken, token, sizeof (lastToken));
@@ -2156,29 +2153,25 @@ qboolean G_ScriptAction_Accum(gentity_t *ent, char *params) {
 			if (!*name) {
 				G_Error("G_Scripting: trigger must have a name and an identifier: %s\n", params);
 			}
-			//
-			terminate = qfalse;
-			found     = qfalse;
+
 			// for all entities/bots with this scriptName
 			trent = NULL;
 			while ((trent = G_Find(trent, FOFS(scriptName), lastToken)) != NULL) {
+				int oldId = trent->scriptStatus.scriptId;
+
 				found = qtrue;
-				oldId = trent->scriptStatus.scriptId;
 				G_Script_ScriptEvent(trent, "trigger", name);
 				// if the script changed, return false so we don't muck with it's variables
 				if ((trent == ent) && (oldId != trent->scriptStatus.scriptId)) {
 					terminate = qtrue;
 				}
 			}
-			//
 			if (terminate) {
 				return qfalse;
 			}
 			if (found) {
 				return qtrue;
 			}
-			//
-//			G_Error( "G_Scripting: trigger has unknown name: %s\n", name );
 			G_Printf("G_Scripting: trigger has unknown name: %s\n", name);
 			return qtrue;
 		}
@@ -2236,11 +2229,8 @@ G_ScriptAction_GlobalAccum
 // http://games.chruker.dk/enemy_territory/modding_project_bugfix.php?bug_id=056
 */
 qboolean G_ScriptAction_GlobalAccum(gentity_t *ent, char *params) {
-	char     *pString, *token, lastToken[MAX_QPATH], name[MAX_QPATH];
+	char     *pString = params, *token, lastToken[MAX_QPATH];
 	int      bufferIndex;
-	qboolean terminate, found;
-
-	pString = params;
 
 	token = COM_ParseExt(&pString, qfalse);
 	if (!token[0]) {
@@ -2341,8 +2331,9 @@ qboolean G_ScriptAction_GlobalAccum(gentity_t *ent, char *params) {
 			G_Error("Scripting: globalaccum %s requires a parameter\n", lastToken);
 		}
 		if (level.globalAccumBuffer[bufferIndex] == atoi(token)) {
-			gentity_t *trent;
-			int       oldId;
+			gentity_t *trent = NULL;
+			char      name[MAX_QPATH];
+			qboolean  terminate = qfalse, found = qfalse;
 
 			token = COM_ParseExt(&pString, qfalse);
 			Q_strncpyz(lastToken, token, sizeof (lastToken));
@@ -2356,20 +2347,17 @@ qboolean G_ScriptAction_GlobalAccum(gentity_t *ent, char *params) {
 				G_Error("G_Scripting: trigger must have a name and an identifier: %s\n", params);
 			}
 
-			terminate = qfalse;
-			found     = qfalse;
 			// for all entities/bots with this scriptName
-			trent = NULL;
 			while ((trent = G_Find(trent, FOFS(scriptName), lastToken)) != NULL) {
+				int oldId = trent->scriptStatus.scriptId;
+
 				found = qtrue;
-				oldId = trent->scriptStatus.scriptId;
 				G_Script_ScriptEvent(trent, "trigger", name);
 				// if the script changed, return false so we don't muck with it's variables
 				if ((trent == ent) && (oldId != trent->scriptStatus.scriptId)) {
 					terminate = qtrue;
 				}
 			}
-			//
 			if (terminate) {
 				return qfalse;
 			}
@@ -2448,19 +2436,20 @@ G_ScriptAction_FaceAngles
 =================
 */
 qboolean G_ScriptAction_FaceAngles(gentity_t *ent, char *params) {
-	char   *pString, *token;
-	int    duration, i;
+	char   *pString;
 	vec3_t diff;
-	vec3_t angles;
-	int    trType = TR_LINEAR_STOP;
 
 	if (!params || !params[0]) {
 		G_Error("G_Scripting: syntax: faceangles <pitch> <yaw> <roll> <duration/GOTOTIME>\n");
 	}
 
 	if (ent->scriptStatus.scriptStackChangeTime == level.time) {
+		char *token;
+		int  duration, i, trType = TR_LINEAR_STOP;
+		vec3_t angles;
+
 		pString = params;
-		for (i = 0; i < 3; i++) {
+		for (i = 0; i < 3; ++i) {
 			token = COM_Parse(&pString);
 			if (!token || !token[0]) {
 				G_Error("G_Scripting: syntax: faceangles <pitch> <yaw> <roll> <duration/GOTOTIME>\n");
@@ -2508,7 +2497,7 @@ qboolean G_ScriptAction_FaceAngles(gentity_t *ent, char *params) {
 
 		if (trType != TR_LINEAR_STOP) {   // accel / deccel logic
 			// calc the speed from duration and start/end delta
-			for (i = 0; i < 3; i++) {
+			for (i = 0; i < 3; ++i) {
 				ent->s.apos.trDelta[i] = 2.0 * 1000.0 * diff[i] / (float)duration;
 			}
 			ent->s.apos.trType = trType;
@@ -2828,7 +2817,6 @@ qboolean G_ScriptAction_ObjectiveStatus(gentity_t *ent, char *params) {
 
 qboolean G_ScriptAction_SetDebugLevel(gentity_t *ent, char *params) {
 	char *pString, *token;
-	int  debugLevel = 0;
 
 	// Nico, silent GCC
 	(void)ent;
@@ -2840,9 +2828,10 @@ qboolean G_ScriptAction_SetDebugLevel(gentity_t *ent, char *params) {
 	// Start parsing at the beginning of the string
 	pString = params;
 
-
 	// See if the first parameter is a /N, where N is a number
 	if ((token = COM_ParseExt(&pString, qfalse)) != NULL && token[0]) {
+		int  debugLevel;
+
 		// Get the integer version of the debug level
 		debugLevel = atoi(token);
 
@@ -2851,7 +2840,6 @@ qboolean G_ScriptAction_SetDebugLevel(gentity_t *ent, char *params) {
 	}
 
 	return qtrue;
-
 }
 
 
@@ -3675,11 +3663,8 @@ G_ScriptAction_Cvar
 ===================
 */
 qboolean G_ScriptAction_Cvar(gentity_t *ent, char *params) {
-	char     *pString, *token, lastToken[MAX_QPATH], name[MAX_QPATH], cvarName[MAX_QPATH];
+	char     *pString = params, *token, lastToken[MAX_QPATH], cvarName[MAX_QPATH];
 	int      cvarValue;
-	qboolean terminate, found;
-
-	pString = params;
 
 	token = COM_ParseExt(&pString, qfalse);
 	if (!token[0]) {
@@ -3776,7 +3761,8 @@ qboolean G_ScriptAction_Cvar(gentity_t *ent, char *params) {
 		}
 		if (cvarValue == atoi(token)) {
 			gentity_t *trent;
-			int       oldId;
+			char      name[MAX_QPATH];
+			qboolean  terminate = qfalse, found = qfalse;
 
 			token = COM_ParseExt(&pString, qfalse);
 			Q_strncpyz(lastToken, token, sizeof (lastToken));
@@ -3790,13 +3776,12 @@ qboolean G_ScriptAction_Cvar(gentity_t *ent, char *params) {
 				G_Error("G_Scripting: trigger must have a name and an identifier: %s\n", params);
 			}
 
-			terminate = qfalse;
-			found     = qfalse;
 			// for all entities/bots with this scriptName
 			trent = NULL;
 			while ((trent = G_Find(trent, FOFS(scriptName), lastToken)) != NULL) {
+				int oldId = trent->scriptStatus.scriptId;
+
 				found = qtrue;
-				oldId = trent->scriptStatus.scriptId;
 				G_Script_ScriptEvent(trent, "trigger", name);
 				// if the script changed, return false so we don't muck with it's variables
 				if ((trent == ent) && (oldId != trent->scriptStatus.scriptId)) {
@@ -3872,7 +3857,6 @@ available fields can be found in field_t of g_spawn.c, it is quite simple to add
 ===================
 */
 qboolean etpro_ScriptAction_SetValues(gentity_t *ent, char *params) {
-	char *token;
 	char *p;
 	char key[MAX_TOKEN_CHARS], value[MAX_TOKEN_CHARS];
 	int  classchanged = 0;
@@ -3886,6 +3870,8 @@ qboolean etpro_ScriptAction_SetValues(gentity_t *ent, char *params) {
 
 	// Get each key/value pair
 	for (;; ) {
+		char *token;
+
 		token = COM_ParseExt(&p, qfalse);
 		if (!token[0]) {
 			break;
@@ -4005,7 +3991,6 @@ static void G_SpawnGEntityFromSpawnVars(void) {
  * @source: TJMod
  */
 qboolean G_ScriptAction_Create(gentity_t *ent, char *params) {
-	char *token               = NULL;
 	char *p                   = params;
 	char key[MAX_TOKEN_CHARS] = { 0 };
 
@@ -4019,6 +4004,8 @@ qboolean G_ScriptAction_Create(gentity_t *ent, char *params) {
 
 	// get each key/value pair
 	for (;; ) {
+		char *token;
+
 		token = COM_ParseExt(&p, qfalse);
 		if (!token[0]) {
 			break;
@@ -4051,7 +4038,6 @@ qboolean G_ScriptAction_Create(gentity_t *ent, char *params) {
  * @author: Nico
  */
 qboolean G_ScriptAction_Delete(gentity_t *ent, char *params) {
-	char      *token               = NULL;
 	char      *p                   = params;
 	char      key[MAX_TOKEN_CHARS] = { 0 };
 	gentity_t *entity              = NULL;
@@ -4061,6 +4047,8 @@ qboolean G_ScriptAction_Delete(gentity_t *ent, char *params) {
 
 	// get each key/value pair
 	for (;; ) {
+		char *token;
+
 		token = COM_ParseExt(&p, qfalse);
 		if (!token[0]) {
 			break;

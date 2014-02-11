@@ -45,7 +45,7 @@ G_BounceMissile
 ================
 */
 void G_BounceMissile(gentity_t *ent, trace_t *trace) {
-	vec3_t    velocity, relativeDelta;
+	vec3_t    velocity;
 	float     dot;
 	int       hitTime;
 	gentity_t *ground;
@@ -84,6 +84,8 @@ void G_BounceMissile(gentity_t *ent, trace_t *trace) {
 	}
 
 	if (ent->s.eFlags & EF_BOUNCE_HALF) {
+		vec3_t relativeDelta;
+
 		if (ent->s.eFlags & EF_BOUNCE) {       // both flags marked, do a third type of bounce
 			VectorScale(ent->s.pos.trDelta, 0.35, ent->s.pos.trDelta);
 		} else {
@@ -345,7 +347,6 @@ void G_ExplodeMissile(gentity_t *ent) {
 			// check if dynamite is in trigger_objective_info field
 			vec3_t    mins, maxs;
 			int       i, num, touch[MAX_GENTITIES];
-			gentity_t *hit;
 
 			ent->free = NULL; // Gordon: no defused tidy up if we exploded
 
@@ -354,8 +355,9 @@ void G_ExplodeMissile(gentity_t *ent) {
 			VectorAdd(ent->r.currentOrigin, ent->r.maxs, maxs);
 			num = trap_EntitiesInBox(mins, maxs, touch, MAX_GENTITIES);
 
-			for (i = 0; i < num; i++) {
-				hit = &g_entities[touch[i]];
+			for (i = 0; i < num; ++i) {
+				gentity_t *hit = &g_entities[touch[i]];
+
 				if (!hit->target) {
 					continue;
 				}
@@ -419,8 +421,6 @@ G_RunMissile
 void G_RunMissile(gentity_t *ent) {
 	vec3_t  origin;
 	trace_t tr;
-	int     impactDamage;
-	float   skyHeight;
 
 	if ((ent->s.weapon == WP_LANDMINE || ent->s.weapon == WP_DYNAMITE || ent->s.weapon == WP_SATCHEL) &&
 	    ent->s.groundEntityNum == -1 && ent->s.pos.trType != TR_GRAVITY) {
@@ -453,6 +453,8 @@ void G_RunMissile(gentity_t *ent) {
 	     ent->s.weapon == WP_GRENADE_LAUNCHER ||
 	     ent->s.weapon == WP_GRENADE_PINEAPPLE)) {
 		if (ent->count) {
+			float skyHeight;
+
 			if (ent->r.currentOrigin[0] < level.mapcoordsMins[0] ||
 			    ent->r.currentOrigin[1] > level.mapcoordsMins[1] ||
 			    ent->r.currentOrigin[0] > level.mapcoordsMaxs[0] ||
@@ -547,6 +549,8 @@ void G_RunMissile(gentity_t *ent) {
 	trap_LinkEntity(ent);
 
 	if (tr.fraction != 1) {
+		int     impactDamage;
+
 		if (level.tracemapLoaded &&
 		    (ent->s.weapon == WP_MORTAR_SET ||
 		     ent->s.weapon == WP_GPG40 ||
@@ -724,7 +728,6 @@ int G_PredictMissile(gentity_t *ent, int duration, vec3_t endPos, qboolean allow
 #define FLAME_THRESHOLD 50
 
 void G_BurnTarget(gentity_t *self, gentity_t *body, qboolean directhit) {
-	int     i;
 	float   radius, dist;
 	vec3_t  point, v;
 	trace_t tr;
@@ -762,7 +765,9 @@ void G_BurnTarget(gentity_t *self, gentity_t *body, qboolean directhit) {
 		}
 		VectorSubtract(point, self->r.currentOrigin, v);
 	} else {
-		for (i = 0 ; i < 3 ; i++) {
+		int i;
+
+		for (i = 0 ; i < 3 ; ++i) {
 			if (self->s.origin[i] < body->r.absmin[i]) {
 				v[i] = body->r.absmin[i] - self->r.currentOrigin[i];
 			} else if (self->r.currentOrigin[i] > body->r.absmax[i]) {
@@ -813,7 +818,6 @@ void G_BurnTarget(gentity_t *self, gentity_t *body, qboolean directhit) {
 }
 
 void G_FlameDamage(gentity_t *self, gentity_t *ignoreent) {
-	gentity_t *body;
 	int       entityList[MAX_GENTITIES];
 	int       i, e, numListedEntities;
 	float     radius, boxradius;
@@ -829,8 +833,8 @@ void G_FlameDamage(gentity_t *self, gentity_t *ignoreent) {
 
 	numListedEntities = trap_EntitiesInBox(mins, maxs, entityList, MAX_GENTITIES);
 
-	for (e = 0 ; e < numListedEntities ; e++) {
-		body = &g_entities[entityList[e]];
+	for (e = 0 ; e < numListedEntities ; ++e) {
+		gentity_t *body = &g_entities[entityList[e]];
 
 		if (body == ignoreent) {
 			continue;
@@ -844,7 +848,7 @@ void G_RunFlamechunk(gentity_t *ent) {
 	vec3_t    vel, add;
 	vec3_t    neworg;
 	trace_t   tr;
-	float     speed, dot;
+	float     speed;
 	gentity_t *ignoreent = NULL;
 
 	// TAT 11/12/2002
@@ -881,8 +885,9 @@ void G_RunFlamechunk(gentity_t *ent) {
 		VectorClear(ent->s.pos.trDelta);
 		ent->count2++;
 	} else if (tr.fraction != 1.0f && !(tr.surfaceFlags & SURF_NOIMPACT)) {
-		VectorCopy(tr.endpos, ent->r.currentOrigin);
+		float dot;
 
+		VectorCopy(tr.endpos, ent->r.currentOrigin);
 		dot = DotProduct(vel, tr.plane.normal);
 		VectorMA(vel, -2 * dot, tr.plane.normal, vel);
 		VectorNormalize(vel);
@@ -998,7 +1003,6 @@ void DynaFree(gentity_t *self) {
 	int       numListedEntities;
 	int       e;
 	vec3_t    org;
-	gentity_t *hit;
 
 	self->free = NULL;
 
@@ -1011,8 +1015,8 @@ void DynaFree(gentity_t *self) {
 
 	numListedEntities = EntsThatRadiusCanDamage(org, self->splashRadius, entityList);
 
-	for (e = 0; e < numListedEntities; e++) {
-		hit = &g_entities[entityList[e]];
+	for (e = 0; e < numListedEntities; ++e) {
+		gentity_t *hit = &g_entities[entityList[e]];
 
 		if (hit->s.eType != ET_CONSTRUCTIBLE) {
 			continue;

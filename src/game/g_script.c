@@ -362,7 +362,6 @@ G_Script_ScriptLoad
 */
 void G_Script_ScriptLoad(void) {
 	char         filename[MAX_QPATH];
-	char         toLowerFilename[MAX_QPATH];
 	vmCvar_t     mapname;
 	fileHandle_t f     = 0;
 	int          len   = 0;
@@ -397,7 +396,10 @@ void G_Script_ScriptLoad(void) {
 
 		// Nico, try to load lowercased script name
 		if (!found) {
+			char toLowerFilename[MAX_QPATH];
+
 			strtolower(filename, toLowerFilename, sizeof (toLowerFilename));
+			// #fixme: some code seems to be missing here
 			if (len > 0) {
 				found = qtrue;
 				G_Printf("%s: loaded local custom mapscript!\n", GAME_VERSION);
@@ -501,7 +503,6 @@ G_Script_ScriptParse
 */
 void G_Script_ScriptParse(gentity_t *ent) {
 	char                    *pScript;
-	char                    *token;
 	qboolean                wantName;
 	qboolean                inScript;
 	int                     eventNum;
@@ -533,6 +534,8 @@ void G_Script_ScriptParse(gentity_t *ent) {
 	memset(events, 0, sizeof (events));
 
 	for (;; ) {
+		char *token;
+
 		token = COM_Parse(&pScript);
 
 		if (!token[0]) {
@@ -835,7 +838,6 @@ G_Script_ScriptRun
 */
 qboolean G_Script_ScriptRun(gentity_t *ent) {
 	g_script_stack_t *stack;
-	int              oldScriptId;
 
 	if (!ent->scriptEvents) {
 		ent->scriptStatus.scriptEventIndex = -1;
@@ -871,7 +873,8 @@ qboolean G_Script_ScriptRun(gentity_t *ent) {
 	}
 	//
 	while (ent->scriptStatus.scriptStackHead < stack->numItems) {
-		oldScriptId = ent->scriptStatus.scriptId;
+		int oldScriptId = ent->scriptStatus.scriptId;
+
 		if (!stack->items[ent->scriptStatus.scriptStackHead].action->actionFunc(ent, stack->items[ent->scriptStatus.scriptStackHead].params)) {
 			ent->scriptStatus.scriptFlags &= ~SCFL_FIRST_CALL;
 			return qfalse;
@@ -1060,13 +1063,10 @@ Scripted brush entity. A simplified means of moving brushes around based on even
 "description" used with health, if the entity is damagable, it draws a healthbar with this description above it.
 */
 void SP_script_mover(gentity_t *ent) {
-
 	float  scale[3] = { 1, 1, 1 };
 	vec3_t scalevec;
-	char   tagname[MAX_QPATH];
 	char   *modelname;
 	char   *tagent;
-	char   cs[MAX_INFO_STRING];
 	char   *s;
 
 	if (!ent->model) {
@@ -1123,6 +1123,8 @@ void SP_script_mover(gentity_t *ent) {
 
 	G_SpawnInt("health", "0", &ent->health);
 	if (ent->health) {
+		char cs[MAX_INFO_STRING];
+
 		ent->takedamage = qtrue;
 		ent->count      = ent->health;
 
@@ -1147,6 +1149,8 @@ void SP_script_mover(gentity_t *ent) {
 	}
 
 	if (G_SpawnString("model2", "", &modelname)) {
+		char tagname[MAX_QPATH];
+
 		COM_StripExtension(modelname, tagname);
 		Q_strcat(tagname, MAX_QPATH, ".tag");
 

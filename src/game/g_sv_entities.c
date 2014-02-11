@@ -114,22 +114,27 @@ g_serverEntity_t *CreateServerEntity(gentity_t *ent) {
 }
 
 // TAT - create the server entities for the current map
-void CreateMapServerEntities();
+static void CreateMapServerEntities() {
+	char info[1024];
+	char mapname[128];
 
+	trap_GetServerinfo(info, sizeof (info));
+
+	Q_strncpyz(mapname, Info_ValueForKey(info, "mapname"), sizeof (mapname));
+}
 
 // These server entities don't get to update every frame, but some of them have to set themselves up
 //		after they've all been created
 //		So we want to give each entity the chance to set itself up after it has been created
 void InitialServerEntitySetup() {
 	int              i;
-	g_serverEntity_t *ent;
 
 	// TAT - create the server entities for the current map
 	//		these are read from an additional file
 	CreateMapServerEntities();
 
-	for (i = 0; i < numServerEntities; i++) {
-		ent = &g_serverEntities[i];
+	for (i = 0; i < numServerEntities; ++i) {
+		g_serverEntity_t *ent = &g_serverEntities[i];
 
 		// if this entity is in use and has a setup function
 		if (ent->inuse && ent->setup) {
@@ -164,14 +169,4 @@ g_serverEntity_t *FindServerEntity(g_serverEntity_t *from, int fieldofs, char *m
 	}
 
 	return NULL;
-}
-
-// TAT - create the server entities for the current map
-void CreateMapServerEntities() {
-	char info[1024];
-	char mapname[128];
-
-	trap_GetServerinfo(info, sizeof (info));
-
-	Q_strncpyz(mapname, Info_ValueForKey(info, "mapname"), sizeof (mapname));
 }

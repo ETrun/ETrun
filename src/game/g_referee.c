@@ -182,10 +182,11 @@ void G_refLockTeams_cmd(gentity_t *ent, qboolean fLock) {
 
 // Pause/unpause a match.
 void G_refPause_cmd(gentity_t *ent, qboolean fPause) {
-	char *status[2] = { "^5UN", "^1" };
 	char *referee   = (ent) ? "Referee" : "ref";
 
 	if ((PAUSE_UNPAUSING >= level.match_pause && !fPause) || (PAUSE_NONE != level.match_pause && fPause)) {
+		char *status[2] = { "^5UN", "^1" };
+
 		// Nico, removed unneeded linebreak
 		// http://games.chruker.dk/enemy_territory/modding_project_bugfix.php?bug_id=047
 		G_refPrintf(ent, "The match is already %sPAUSED!", status[fPause]);

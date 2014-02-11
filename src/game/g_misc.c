@@ -151,8 +151,6 @@ void SP_misc_teleporter_dest(gentity_t *ent) {
 }
 
 void use_spotlight(gentity_t *ent, gentity_t *other, gentity_t *activator) {
-	gentity_t *tent;
-
 	// Nico, silent GCC
 	(void)other;
 	(void)activator;
@@ -160,6 +158,8 @@ void use_spotlight(gentity_t *ent, gentity_t *other, gentity_t *activator) {
 	if (ent->r.linked) {
 		trap_UnlinkEntity(ent);
 	} else {
+		gentity_t *tent;
+
 		tent = G_PickTarget(ent->target);
 		VectorCopy(tent->s.origin, ent->s.origin2);
 
@@ -246,7 +246,6 @@ void SP_misc_gamemodel(gentity_t *ent) {
 	vec_t  scale;
 	vec3_t vScale;
 	int    trunksize, trunkheight;
-	char   tagname[MAX_QPATH];
 	char   *dummy; // Nico, note, keep this
 	int    num_frames, start_frame, fps;
 
@@ -283,6 +282,8 @@ void SP_misc_gamemodel(gentity_t *ent) {
 	}
 
 	if (ent->model) {
+		char tagname[MAX_QPATH];
+
 		COM_StripExtension(ent->model, tagname);
 		Q_strcat(tagname, MAX_QPATH, ".tag");
 
@@ -1031,7 +1032,6 @@ void aagun_track(gentity_t *self, gentity_t *other) {
 void aagun_think(gentity_t *self) {
 	vec3_t    vec;
 	gentity_t *owner;
-	int       i;
 
 	VectorClear(vec);
 
@@ -1073,11 +1073,13 @@ void aagun_think(gentity_t *self) {
 	self->s.otherEntityNum = self->s.number;
 
 	if (self->timestamp > level.time) {
+		int i;
+
 		// slowly rotate back to position
 		clamp_hweapontofirearc(self, vec);
 		// move to the position over the next frame
 		VectorSubtract(vec, self->s.apos.trBase, self->s.apos.trDelta);
-		for (i = 0; i < 3; i++) {
+		for (i = 0; i < 3; ++i) {
 			self->s.apos.trDelta[i] = AngleNormalize180(self->s.apos.trDelta[i]);
 		}
 		VectorScale(self->s.apos.trDelta, 1000 / 50, self->s.apos.trDelta);
@@ -1209,16 +1211,16 @@ void mg42_fire(gentity_t *other) {
 }
 
 void mg42_track(gentity_t *self, gentity_t *other) {
-	int i;
-
 	if (!self->active) {
 		return;
 	}
 
 	if (other->active) {
+		int i;
+
 		// move to the position over the next frame
 		VectorSubtract(other->client->ps.viewangles, self->s.apos.trBase, self->s.apos.trDelta);
-		for (i = 0; i < 3; i++) {
+		for (i = 0; i < 3; ++i) {
 			self->s.apos.trDelta[i] = AngleNormalize180(self->s.apos.trDelta[i]);
 		}
 		VectorScale(self->s.apos.trDelta, 1000 / 50, self->s.apos.trDelta);
@@ -1232,9 +1234,6 @@ void mg42_track(gentity_t *self, gentity_t *other) {
 void mg42_think(gentity_t *self) {
 	vec3_t    vec;
 	gentity_t *owner;
-	int       i;
-	float     len;
-	float     usedist;
 
 	VectorClear(vec);
 
@@ -1267,10 +1266,10 @@ void mg42_think(gentity_t *self) {
 	}
 
 	if (owner->client) {
+		float len, usedist = 128;
+
 		VectorSubtract(self->r.currentOrigin, owner->r.currentOrigin, vec);
 		len = VectorLength(vec);
-
-		usedist = 128;
 
 		if (len < usedist && owner->active && owner->health > 0) {
 			// ATVI Wolfenstein Misc #433
@@ -1320,11 +1319,13 @@ void mg42_think(gentity_t *self) {
 	self->s.otherEntityNum = self->s.number;
 
 	if (self->timestamp > level.time) {
+		int i;
+
 		// slowly rotate back to position
 		clamp_hweapontofirearc(self, vec);
 		// move to the position over the next frame
 		VectorSubtract(vec, self->s.apos.trBase, self->s.apos.trDelta);
-		for (i = 0; i < 3; i++) {
+		for (i = 0; i < 3; ++i) {
 			self->s.apos.trDelta[i] = AngleNormalize180(self->s.apos.trDelta[i]);
 		}
 		VectorScale(self->s.apos.trDelta, 1000 / 50, self->s.apos.trDelta);

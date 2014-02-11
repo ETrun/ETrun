@@ -263,9 +263,7 @@ void Psparks_think(gentity_t *ent) {
 }
 
 void sparks_angles_think(gentity_t *ent) {
-
 	gentity_t *target = NULL;
-	vec3_t    vec;
 
 	if (ent->target) {
 		target = G_FindByTargetname(NULL, ent->target);
@@ -274,6 +272,8 @@ void sparks_angles_think(gentity_t *ent) {
 	if (!target) {
 		VectorSet(ent->r.currentAngles, 0, 0, 1);
 	} else {
+		vec3_t vec;
+
 		VectorSubtract(ent->s.origin, target->s.origin, vec);
 		VectorNormalize(vec);
 		VectorCopy(vec, ent->r.currentAngles);
@@ -330,7 +330,6 @@ health = how many pieces 16 is default
 
 void smokedust_use(gentity_t *ent, gentity_t *self, gentity_t *activator) {
 	int       i;
-	gentity_t *tent;
 	vec3_t    forward;
 
 	// Nico, silent GCC
@@ -339,7 +338,9 @@ void smokedust_use(gentity_t *ent, gentity_t *self, gentity_t *activator) {
 
 	AngleVectors(ent->r.currentAngles, forward, NULL, NULL);
 
-	for (i = 0; i < ent->health; i++) {
+	for (i = 0; i < ent->health; ++i) {
+		gentity_t *tent;
+
 		tent = G_TempEntity(ent->r.currentOrigin, EV_SMOKE);
 		VectorCopy(ent->r.currentOrigin, tent->s.origin);
 		VectorCopy(forward, tent->s.origin2);
@@ -371,7 +372,6 @@ or you could set its angles in the editor
 
 void dust_use(gentity_t *ent, gentity_t *self, gentity_t *activator) {
 	gentity_t *tent;
-	vec3_t    forward;
 
 	// Nico, silent GCC
 	(void)self;
@@ -385,6 +385,7 @@ void dust_use(gentity_t *ent, gentity_t *self, gentity_t *activator) {
 			tent->s.density = 1;
 		}
 	} else {
+		vec3_t forward;
 
 		AngleVectors(ent->r.currentAngles, forward, NULL, NULL);
 
@@ -801,13 +802,7 @@ void Props_Activated(gentity_t *self) {
 	vec3_t dest;
 	vec3_t forward, right;
 	vec3_t velocity;
-	vec3_t prop_ang;
-
-	gentity_t *prop;
-
-	gentity_t *owner;
-
-	owner = &g_entities[self->r.ownerNum];
+	gentity_t *owner = &g_entities[self->r.ownerNum];
 
 	self->nextthink = level.time + 50;
 
@@ -818,6 +813,8 @@ void Props_Activated(gentity_t *self) {
 	Props_TurnLightsOff(self);
 
 	if (owner->active == qfalse) {
+		vec3_t 	  prop_ang;
+		gentity_t *prop;
 
 		owner->melee = NULL;
 
@@ -1585,9 +1582,6 @@ void Props_Barrel_Touch(gentity_t *self, gentity_t *other, trace_t *trace) {
 }
 
 void Props_Barrel_Animate(gentity_t *ent) {
-	float  ratio;
-	vec3_t v;
-
 	if (ent->s.frame == 14) {
 		ent->think     = G_FreeEntity;
 		ent->nextthink = level.time + 25000;
@@ -1598,7 +1592,9 @@ void Props_Barrel_Animate(gentity_t *ent) {
 	ent->s.frame++;
 
 	if (!(ent->spawnflags & 1)) {
-		ratio = 2.5;
+		float ratio = 2.5;
+		vec3_t v;
+
 		VectorSubtract(ent->r.currentOrigin, ent->enemy->r.currentOrigin, v);
 		moveit(ent, vectoyaw(v), (ent->delay * ratio * FRAMETIME) * .001);
 	}
@@ -2197,7 +2193,6 @@ duration is how long the effect will last 1 is 1 second
 */
 
 void props_snowGenerator_think(gentity_t *ent) {
-	gentity_t *tent;
 	float     high, wide, deep;
 	int       i;
 	vec3_t    point;
@@ -2210,7 +2205,9 @@ void props_snowGenerator_think(gentity_t *ent) {
 	wide = ent->r.maxs[1] - ent->r.mins[1];
 	deep = ent->r.maxs[0] - ent->r.mins[0];
 
-	for (i = 0; i < ent->count; i++) {
+	for (i = 0; i < ent->count; ++i) {
+		gentity_t *tent;
+
 		VectorCopy(ent->pos1, point);
 
 		// we need to randomize to the extent of the brush
@@ -2415,8 +2412,6 @@ void SP_props_decoration(gentity_t *ent) {
 	char     *high;
 	char     *wide;
 	char     *frames;
-	float    height;
-	float    width;
 	float    num_frames;
 
 	char *loop;
@@ -2465,6 +2460,8 @@ void SP_props_decoration(gentity_t *ent) {
 	}
 
 	if (ent->health) {
+		float height, width;
+
 		ent->isProp     = qtrue;
 		ent->takedamage = qtrue;
 		ent->die        = props_decoration_death;
@@ -2673,8 +2670,6 @@ void props_statue_blocked(gentity_t *ent) {
 	vec3_t    forward;
 	float     dist;
 	gentity_t *traceEnt;
-	float     grav = 128;
-	vec3_t    kvel;
 
 	if (!Q_stricmp(ent->classname, "props_statueBRUSH")) {
 		return;
@@ -2703,6 +2698,9 @@ void props_statue_blocked(gentity_t *ent) {
 	traceEnt = &g_entities[trace.entityNum];
 
 	if (traceEnt->takedamage && traceEnt->client) {
+		float  grav = 128;
+		vec3_t kvel;
+
 		G_Damage(traceEnt, ent, ent, NULL, trace.endpos, ent->damage, 0, MOD_CRUSH);
 
 		// TBD: push client back a bit
@@ -3169,7 +3167,6 @@ needs to aim at a info_notnull
 NOSOUND - silent (duh)
 */
 void props_flamethrower_think(gentity_t *ent) {
-	vec3_t    vec, angles;
 	gentity_t *target = NULL;
 	// TAT - actually create flamechunks that do damage in this direction
 	vec3_t flameDir;
@@ -3184,6 +3181,8 @@ void props_flamethrower_think(gentity_t *ent) {
 			// TAT - try that for the flame too
 			VectorSet(flameDir, 0, 0, 1);
 		} else {
+			vec3_t vec, angles;
+
 			VectorSubtract(target->s.origin, ent->s.origin, vec);
 			VectorNormalize(vec);
 			vectoangles(vec, angles);
@@ -3217,11 +3216,11 @@ void props_flamethrower_think(gentity_t *ent) {
 		fire_flamechunk(ent, ent->r.currentOrigin, flameDir);
 
 		{
-			int rval;
 			int rnd;
 
 			if (ent->random) {
-				rval = ent->random * 1000;
+				int rval = ent->random * 1000;
+
 				rnd  = rand() % rval;
 			} else {
 				rnd = 0;
@@ -3234,7 +3233,6 @@ void props_flamethrower_think(gentity_t *ent) {
 }
 
 void props_flamethrower_use(gentity_t *ent, gentity_t *other, gentity_t *activator) {
-	int rval;
 	int rnd;
 
 	// Nico, silent GCC
@@ -3250,7 +3248,8 @@ void props_flamethrower_use(gentity_t *ent, gentity_t *other, gentity_t *activat
 	ent->spawnflags |= 2;
 
 	if (ent->random) {
-		rval = ent->random * 1000;
+		int rval = ent->random * 1000;
+
 		rnd  = rand() % rval;
 	} else {
 		rnd = 0;
@@ -3265,8 +3264,6 @@ void props_flamethrower_use(gentity_t *ent, gentity_t *other, gentity_t *activat
 
 void props_flamethrower_init(gentity_t *ent) {
 	gentity_t *target = NULL;
-	vec3_t    vec;
-	vec3_t    angles;
 
 	if (ent->target) {
 		target = G_FindByTargetname(NULL, ent->target);
@@ -3275,6 +3272,8 @@ void props_flamethrower_init(gentity_t *ent) {
 	if (!target) {
 		VectorSet(ent->s.apos.trBase, 0, 0, 1);
 	} else {
+		vec3_t vec, angles;
+
 		VectorSubtract(target->s.origin, ent->s.origin, vec);
 		VectorNormalize(vec);
 		vectoangles(vec, angles);
