@@ -465,10 +465,11 @@ When triggered, fires a laser.  You can either set a target or a direction.
 void target_laser_think(gentity_t *self) {
 	vec3_t  end;
 	trace_t tr;
-	vec3_t  point;
 
 	// if pointed at another entity, set movedir to point at it
 	if (self->enemy) {
+		vec3_t point;
+
 		VectorMA(self->enemy->s.origin, 0.5, self->enemy->r.mins, point);
 		VectorMA(point, 0.5, self->enemy->r.maxs, point);
 		VectorSubtract(point, self->s.origin, self->movedir);
@@ -916,13 +917,13 @@ void smoke_toggle(gentity_t *ent, gentity_t *self, gentity_t *activator) {
 }
 
 void smoke_init(gentity_t *ent) {
-	gentity_t *target;
-	vec3_t    vec;
-
 	ent->think     = smoke_think;
 	ent->nextthink = level.time + FRAMETIME;
 
 	if (ent->target) {
+		gentity_t *target;
+		vec3_t    vec;
+
 		target = G_Find(NULL, FOFS(targetname), ent->target);
 		if (target) {
 			VectorSubtract(target->s.origin, ent->s.origin, vec);
@@ -1023,14 +1024,13 @@ void target_script_trigger_use(gentity_t *ent, gentity_t *other, gentity_t *acti
 // START	Mad Doctor I changes, 8/16/2002
 	qboolean found = qfalse;
 
-	// for all entities/bots with this ainame
-	gentity_t *trent = NULL;
-
 	// Nico, silent GCC
 	(void)activator;
 
 	// Are we using ainame to find another ent instead of using scriptname for this one?
 	if (ent->aiName) {
+		gentity_t *trent = NULL;
+
 		// Find the first entity with this name
 		trent = G_Find(trent, FOFS(scriptName), ent->aiName);
 
@@ -1079,9 +1079,7 @@ wait = default is 2 seconds = time the entity will enable rumble effect
 int rumble_snd;
 
 void target_rumble_think(gentity_t *ent) {
-	gentity_t *tent;
 	float     ratio;
-	float     time, time2;
 	float     dapitch, dayaw;
 	qboolean  validrumble = qtrue;
 
@@ -1102,6 +1100,8 @@ void target_rumble_think(gentity_t *ent) {
 	ratio   = 1.0f;
 
 	if (ent->start_size) {
+		float time, time2;
+
 		if (level.time < (ent->timestamp + ent->start_size)) {
 			time  = level.time - ent->timestamp;
 			time2 = (ent->timestamp + ent->start_size) - ent->timestamp;
@@ -1116,8 +1116,9 @@ void target_rumble_think(gentity_t *ent) {
 	}
 
 	if (validrumble) {
-		tent = G_TempEntity(ent->r.currentOrigin, EV_RUMBLE_EFX);
+		gentity_t *tent;
 
+		tent = G_TempEntity(ent->r.currentOrigin, EV_RUMBLE_EFX);
 		tent->s.angles[0] = dapitch * ratio;
 		tent->s.angles[1] = dayaw * ratio;
 	}
@@ -1242,19 +1243,17 @@ int GetTimerunNum(char *name) {
 
 // Nico, function used to notify the client his timerun has started and also the spectators of this client
 static void notify_timerun_start(gentity_t *activator) {
-	int       i          = 0;
-	gentity_t *o         = NULL;
-	int       timerunNum = 0;
-
-	timerunNum = activator->client->sess.currentTimerunNum;
+	int       timerunNum = activator->client->sess.currentTimerunNum;
 
 	// Nico, notify the client itself first
 	trap_SendServerCommand(activator - g_entities, va("timerun_start %i %i %i", timerunNum, activator->client->sess.timerunStartTime + 500, (int)activator->client->sess.startSpeed));
 
 	// Nico, notify its spectators if cupmode is DISABLED
 	if (g_cupMode.integer == 0) {
-		for (; i < level.numConnectedClients; ++i) {
-			o = g_entities + level.sortedClients[i];
+		int i;
+
+		for (i = 0; i < level.numConnectedClients; ++i) {
+			gentity_t *o = g_entities + level.sortedClients[i];
 
 			if (!o->client) {
 				continue;
@@ -1282,7 +1281,6 @@ static void notify_timerun_start(gentity_t *activator) {
  */
 void target_starttimer_use(gentity_t *self, gentity_t *other, gentity_t *activator) {
 	gclient_t *client = activator->client;
-	int       i       = 0;
 
 	// Nico, silent GCC
 	(void)other;
@@ -1325,6 +1323,8 @@ void target_starttimer_use(gentity_t *self, gentity_t *other, gentity_t *activat
 
 	// Nico, reset saves if physics is VET and strict save/load mod isa DISABLED
 	if (physics.integer == PHYSICS_MODE_VET && g_strictSaveLoad.integer != 1) {
+		int i;
+
 		for (i = 0; i < MAX_SAVED_POSITIONS; ++i) {
 			client->sess.alliesSaves[i].valid = qfalse;
 			client->sess.axisSaves[i].valid   = qfalse;
@@ -1360,24 +1360,22 @@ void SP_target_starttimer(gentity_t *ent) {
 // Nico, function used to notify the client his timerun has stopped and also the spectators of this client
 // note: it is called when client loads a position, or gets killed
 void notify_timerun_stop(gentity_t *activator, int finishTime) {
-	int       i          = 0;
-	gentity_t *o         = NULL;
-	int       timerunNum = 0;
+	int       timerunNum = activator->client->sess.currentTimerunNum;
 
 	// Nico, check if timerun is active
 	if (!activator->client->sess.timerunActive) {
 		return;
 	}
 
-	timerunNum = activator->client->sess.currentTimerunNum;
-
 	// Nico, notify the client itself first
 	trap_SendServerCommand(activator - g_entities, va("timerun_stop %i %i %i %i", timerunNum, finishTime, (int)activator->client->sess.stopSpeed, (int)activator->client->sess.maxSpeed));
 
 	// Nico, notify its spectators if cupmode is DISABLED
 	if (g_cupMode.integer == 0) {
-		for (; i < level.numConnectedClients; ++i) {
-			o = g_entities + level.sortedClients[i];
+		int i;
+
+		for (i = 0; i < level.numConnectedClients; ++i) {
+			gentity_t *o = g_entities + level.sortedClients[i];
 
 			if (!o->client) {
 				continue;
@@ -1602,9 +1600,6 @@ void SP_target_stoptimer(gentity_t *ent) {
 
 // Nico, function used to notify the client he has reached a check point and also the spectators of this client
 static void notify_timerun_check(gentity_t *activator, int deltaTime, int time, int status) {
-	int       i  = 0;
-	gentity_t *o = NULL;
-
 	// Nico, check if timerun is active
 	if (!activator->client->sess.timerunActive) {
 		return;
@@ -1615,8 +1610,10 @@ static void notify_timerun_check(gentity_t *activator, int deltaTime, int time, 
 
 	// Nico, notify its spectators if cupmode is DISABLED
 	if (g_cupMode.integer == 0) {
-		for (; i < level.numConnectedClients; ++i) {
-			o = g_entities + level.sortedClients[i];
+		int i;
+
+		for (i = 0; i < level.numConnectedClients; ++i) {
+			gentity_t *o = g_entities + level.sortedClients[i];
 
 			if (!o->client) {
 				continue;

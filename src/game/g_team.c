@@ -281,12 +281,12 @@ go to a random point that doesn't telefrag
 */
 #define MAX_TEAM_SPAWN_POINTS   256
 gentity_t *SelectRandomTeamSpawnPoint(team_t team, int spawnObjective) {
-	gentity_t *spot;
+	gentity_t *spot = NULL;
 	gentity_t *spots[MAX_TEAM_SPAWN_POINTS];
-	int       count, closest;
+	int       count = 0, closest;
 	int       i = 0;
 	char      *classname;
-	float     shortest, tmp;
+	float     shortest;
 	vec3_t    target;
 	vec3_t    farthest;
 
@@ -297,10 +297,6 @@ gentity_t *SelectRandomTeamSpawnPoint(team_t team, int spawnObjective) {
 	} else {
 		return NULL;
 	}
-
-	count = 0;
-
-	spot = NULL;
 
 	while ((spot = G_Find(spot, FOFS(classname), classname)) != NULL) {
 		if (SpotWouldTelefrag(spot)) {
@@ -368,7 +364,9 @@ gentity_t *SelectRandomTeamSpawnPoint(team_t team, int spawnObjective) {
 	VectorSubtract(farthest, spots[0]->s.origin, target);
 	shortest = VectorLength(target);
 	closest  = 0;
-	for (i = 0; i < count; i++) {
+	for (i = 0; i < count; ++i) {
+		float tmp;
+
 		VectorSubtract(farthest, spots[i]->s.origin, target);
 		tmp = VectorLength(target);
 
@@ -455,13 +453,13 @@ void TeamplayInfoMessage(team_t team) {
 }
 
 void CheckTeamStatus(void) {
-	int       i;
-	gentity_t *ent;
-
 	if (level.time - level.lastTeamLocationTime > TEAM_LOCATION_UPDATE_TIME) {
+		int i;
+
 		level.lastTeamLocationTime = level.time;
-		for (i = 0; i < level.numConnectedClients; i++) {
-			ent = g_entities + level.sortedClients[i];
+		for (i = 0; i < level.numConnectedClients; ++i) {
+			gentity_t *ent = g_entities + level.sortedClients[i];
+
 			if (ent->inuse && (ent->client->sess.sessionTeam == TEAM_AXIS || ent->client->sess.sessionTeam == TEAM_ALLIES)) {
 				ent->client->pers.teamState.location[0] = (int)ent->r.currentOrigin[0];
 				ent->client->pers.teamState.location[1] = (int)ent->r.currentOrigin[1];
@@ -534,10 +532,11 @@ If target is set, point spawnpoint toward target activation
 */
 void SP_team_CTF_redspawn(gentity_t *ent) {
 // JPW NERVE
-	vec3_t dir;
 
 	ent->enemy = G_PickTarget(ent->target);
 	if (ent->enemy) {
+		vec3_t dir;
+
 		VectorSubtract(ent->enemy->s.origin, ent->s.origin, dir);
 		vectoangles(dir, ent->s.angles);
 	}
@@ -568,10 +567,11 @@ If target is set, point spawnpoint toward target activation
 */
 void SP_team_CTF_bluespawn(gentity_t *ent) {
 // JPW NERVE
-	vec3_t dir;
 
 	ent->enemy = G_PickTarget(ent->target);
 	if (ent->enemy) {
+		vec3_t dir;
+
 		VectorSubtract(ent->enemy->s.origin, ent->s.origin, dir);
 		vectoangles(dir, ent->s.angles);
 	}

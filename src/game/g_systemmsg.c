@@ -46,7 +46,7 @@ const char *systemMessages[SM_NUM_SYS_MSGS] =
 int G_GetSysMessageNumber(const char *sysMsg) {
 	int i;
 
-	for (i = 0; i < SM_NUM_SYS_MSGS; i++) {
+	for (i = 0; i < SM_NUM_SYS_MSGS; ++i) {
 		if (!Q_stricmp(systemMessages[i], sysMsg)) {
 			return i;
 		}
@@ -56,7 +56,6 @@ int G_GetSysMessageNumber(const char *sysMsg) {
 }
 
 void G_SendSystemMessage(sysMsg_t message, int team) {
-	gentity_t *other;
 	int       *time;
 	int       j;
 
@@ -68,8 +67,8 @@ void G_SendSystemMessage(sysMsg_t message, int team) {
 
 	*time = level.time;
 
-	for (j = 0; j < level.maxclients; j++) {
-		other = &g_entities[j];
+	for (j = 0; j < level.maxclients; ++j) {
+		gentity_t *other = &g_entities[j];
 
 		if (!other->client || !other->inuse) {
 			continue;

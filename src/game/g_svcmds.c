@@ -420,10 +420,9 @@ void    Svcmd_EntityList_f(void) {
 gclient_t *ClientForString(const char *s) {
 	gclient_t *cl;
 	int       i;
-	int       idnum;
 
 	// check for a name match
-	for (i = 0 ; i < level.maxclients ; i++) {
+	for (i = 0 ; i < level.maxclients ; ++i) {
 		cl = &level.clients[i];
 		if (cl->pers.connected == CON_DISCONNECTED) {
 			continue;
@@ -435,6 +434,8 @@ gclient_t *ClientForString(const char *s) {
 
 	// numeric values are just slot numbers
 	if (s[0] >= '0' && s[0] <= '9') {
+		int idnum;
+
 		idnum = atoi(s);
 		if (idnum < 0 || idnum >= level.maxclients) {
 			Com_Printf("Bad client slot: %i\n", idnum);
@@ -507,9 +508,7 @@ G_GetPlayerByName
 ==================
 */
 gclient_t *G_GetPlayerByName(char *name) {
-
 	int       i;
-	gclient_t *cl;
 	char      cleanName[64];
 
 	// make sure server is running
@@ -522,11 +521,10 @@ gclient_t *G_GetPlayerByName(char *name) {
 		return NULL;
 	}
 
-	for (i = 0; i < level.numConnectedClients; i++) {
-
+	for (i = 0; i < level.numConnectedClients; ++i) {
 		// Nico, bugfix: kick command is not able to kick some players by name
 		// http://games.chruker.dk/enemy_territory/modding_project_bugfix.php?bug_id=097
-		cl = &level.clients[level.sortedClients[i]];
+		gclient_t *cl = &level.clients[level.sortedClients[i]];
 
 		if (!Q_stricmp(cl->pers.netname, name)) {
 			return cl;
@@ -580,9 +578,7 @@ Kick a user off of the server
 
 static void Svcmd_Kick_f(void) {
 	gclient_t *cl;
-	int       i;
 	int       timeout = -1;
-	char      sTimeout[MAX_TOKEN_CHARS];
 	char      name[MAX_TOKEN_CHARS];
 
 	// make sure server is running
@@ -597,6 +593,8 @@ static void Svcmd_Kick_f(void) {
 	}
 
 	if (trap_Argc() == 3) {
+		char sTimeout[MAX_TOKEN_CHARS];
+
 		trap_Argv(2, sTimeout, sizeof (sTimeout));
 		timeout = atoi(sTimeout);
 	} else {
@@ -608,7 +606,9 @@ static void Svcmd_Kick_f(void) {
 
 	if (!cl) {
 		if (!Q_stricmp(name, "all")) {
-			for (i = 0, cl = level.clients; i < level.numConnectedClients; i++, cl++) {
+			int i;
+
+			for (i = 0, cl = level.clients; i < level.numConnectedClients; ++i, ++cl) {
 
 				// dont kick localclients ...
 				if (cl->pers.localClient) {
@@ -647,7 +647,6 @@ Kick a user off of the server
 static void Svcmd_KickNum_f(void) {
 	gclient_t *cl;
 	int       timeout = -1;
-	char      sTimeout[MAX_TOKEN_CHARS];
 	char      name[MAX_TOKEN_CHARS];
 	int       clientNum;
 
@@ -663,6 +662,8 @@ static void Svcmd_KickNum_f(void) {
 	}
 
 	if (trap_Argc() == 3) {
+		char sTimeout[MAX_TOKEN_CHARS];
+
 		trap_Argv(2, sTimeout, sizeof (sTimeout));
 		timeout = atoi(sTimeout);
 	} else {
