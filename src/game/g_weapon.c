@@ -121,12 +121,8 @@ Weapon_Knife
 void Weapon_Knife(gentity_t *ent) {
 	trace_t   tr;
 	gentity_t *traceEnt, *tent;
-	int       damage, mod;
-	vec3_t    pforward, eforward;
-
+	int       damage, mod = MOD_KNIFE;
 	vec3_t end;
-
-	mod = MOD_KNIFE;
 
 	AngleVectors(ent->client->ps.viewangles, forward, right, up);
 	CalcMuzzlePoint(ent, ent->s.weapon, right, up, muzzleTrace);
@@ -171,6 +167,8 @@ void Weapon_Knife(gentity_t *ent) {
 
 	}
 	if (traceEnt->client) {
+		vec3_t pforward, eforward;
+
 		AngleVectors(ent->client->ps.viewangles, pforward, NULL, NULL);
 		AngleVectors(traceEnt->client->ps.viewangles, eforward, NULL, NULL);
 
@@ -338,8 +336,6 @@ void DynaSink(gentity_t *self);
 
 // Arnout: crude version of G_RadiusDamage to see if the dynamite can damage a func_constructible
 int EntsThatRadiusCanDamage(vec3_t origin, float radius, int *damagedList) {
-	float     dist;
-	gentity_t *ent;
 	int       entityList[MAX_GENTITIES];
 	int       numListedEntities;
 	vec3_t    mins, maxs;
@@ -357,20 +353,21 @@ int EntsThatRadiusCanDamage(vec3_t origin, float radius, int *damagedList) {
 
 	boxradius = 1.41421356 * radius; // radius * sqrt(2) for bounding box enlargement --
 	// bounding box was checking against radius / sqrt(2) if collision is along box plane
-	for (i = 0 ; i < 3 ; i++) {
+	for (i = 0 ; i < 3 ; ++i) {
 		mins[i] = origin[i] - boxradius;
 		maxs[i] = origin[i] + boxradius;
 	}
 
 	numListedEntities = trap_EntitiesInBox(mins, maxs, entityList, MAX_GENTITIES);
 
-	for (e = 0 ; e < numListedEntities ; e++) {
-		ent = &g_entities[entityList[e]];
+	for (e = 0 ; e < numListedEntities ; ++e) {
+		float     dist;
+		gentity_t *ent = &g_entities[entityList[e]];
 
 		if (!ent->r.bmodel) {
 			VectorSubtract(ent->r.currentOrigin, origin, v);
 		} else {
-			for (i = 0 ; i < 3 ; i++) {
+			for (i = 0 ; i < 3 ; ++i) {
 				if (origin[i] < ent->r.absmin[i]) {
 					v[i] = ent->r.absmin[i] - origin[i];
 				} else if (origin[i] > ent->r.absmax[i]) {
@@ -618,9 +615,7 @@ static void HandleEntsThatBlockConstructible(gentity_t *constructor, gentity_t *
 
 // returns qfalse when it couldn't build
 static qboolean TryConstructing(gentity_t *ent) {
-	gentity_t *check;
 	gentity_t *constructible = ent->client->touchingTOI->target_ent;
-	int       i;
 
 	// see if we are in a trigger_objective_info targetting multiple func_constructibles
 	if (constructible->s.eType == ET_CONSTRUCTIBLE && ent->client->touchingTOI->chain) {
@@ -865,8 +860,11 @@ static qboolean TryConstructing(gentity_t *ent) {
 
 				trap_LinkEntity(e);
 			} else {
+				gentity_t *check;
+				int       i;
+
 				// find our marker and update it's coordinates
-				for (i = 0, check = g_entities; i < level.num_entities; i++, check++) {
+				for (i = 0, check = g_entities; i < level.num_entities; ++i, ++check) {
 					if (check->s.eType != ET_EXPLOSIVE_INDICATOR && check->s.eType != ET_TANK_INDICATOR && check->s.eType != ET_TANK_INDICATOR_DEAD) {
 						continue;
 					}
@@ -898,9 +896,6 @@ static qboolean TryConstructing(gentity_t *ent) {
 }
 
 void AutoBuildConstruction(gentity_t *constructible) {
-	int       i;
-	gentity_t *check;
-
 	HandleEntsThatBlockConstructible(NULL, constructible, qtrue, qfalse);
 	if (constructible->count2) {
 		int constructibleClipmask       = constructible->clipmask;
@@ -1026,8 +1021,11 @@ void AutoBuildConstruction(gentity_t *constructible) {
 
 			trap_LinkEntity(e);
 		} else {
+			gentity_t *check;
+			int       i;
+
 			// find our marker and update it's coordinates
-			for (i = 0, check = g_entities; i < level.num_entities; i++, check++) {
+			for (i = 0, check = g_entities; i < level.num_entities; ++i, ++check) {
 				if (check->s.eType != ET_EXPLOSIVE_INDICATOR && check->s.eType != ET_TANK_INDICATOR && check->s.eType != ET_TANK_INDICATOR_DEAD) {
 					continue;
 				}
@@ -1063,11 +1061,7 @@ void trap_EngineerTrace(trace_t *results, const vec3_t start, const vec3_t mins,
 void Weapon_Engineer(gentity_t *ent) {
 	trace_t   tr;
 	gentity_t *traceEnt, *hit;
-	vec3_t    mins, maxs;   // JPW NERVE
-	int       i, num, touch[MAX_GENTITIES], scored = 0;   // JPW NERVE
-	int       dynamiteDropTeam;
 	vec3_t    end;
-	vec3_t    origin;
 
 	// DHM - Nerve :: Can't heal an MG42 if you're using one!
 	if (ent->client->ps.persistant[PERS_HWEAPON_USE]) {
@@ -1189,6 +1183,8 @@ void Weapon_Engineer(gentity_t *ent) {
 			}
 		} else
 		if (traceEnt->methodOfDeath == MOD_DYNAMITE) {
+			vec3_t mins, maxs, origin;
+			int    i, num, touch[MAX_GENTITIES], scored = 0;   // JPW NERVE
 
 			// Not armed
 			if (traceEnt->s.teamNum >= 4) {
@@ -1218,7 +1214,7 @@ void Weapon_Engineer(gentity_t *ent) {
 					numListedEntities = EntsThatRadiusCanDamage(org, traceEnt->splashRadius, entityList);
 					G_ResetTempTraceIgnoreEnts();
 
-					for (e = 0; e < numListedEntities; e++) {
+					for (e = 0; e < numListedEntities; ++e) {
 						hit = &g_entities[entityList[e]];
 
 						if (hit->s.eType != ET_CONSTRUCTIBLE) {
@@ -1249,7 +1245,7 @@ void Weapon_Engineer(gentity_t *ent) {
 				VectorAdd(origin, traceEnt->r.mins, mins);
 				VectorAdd(origin, traceEnt->r.maxs, maxs);
 
-				for (i = 0 ; i < num ; i++) {
+				for (i = 0 ; i < num ; ++i) {
 					hit = &g_entities[touch[i]];
 
 					if (!(hit->r.contents & CONTENTS_TRIGGER)) {
@@ -1317,7 +1313,7 @@ void Weapon_Engineer(gentity_t *ent) {
 				VectorAdd(origin, traceEnt->r.maxs, maxs);
 				num = trap_EntitiesInBox(mins, maxs, touch, MAX_GENTITIES);
 
-				for (i = 0 ; i < num ; i++) {
+				for (i = 0 ; i < num ; ++i) {
 					hit = &g_entities[touch[i]];
 
 					if (!(hit->r.contents & CONTENTS_TRIGGER)) {
@@ -1436,6 +1432,8 @@ void Weapon_Engineer(gentity_t *ent) {
 					}
 				}
 			} else {
+				int dynamiteDropTeam;
+
 				if (traceEnt->timestamp > level.time) {
 					return;
 				}
@@ -1859,7 +1857,6 @@ EmitterCheck
 ==============
 */
 void EmitterCheck(gentity_t *ent, gentity_t *attacker, trace_t *tr) {
-	gentity_t *tent;
 	vec3_t    origin;
 
 	VectorCopy(tr->endpos, origin);
@@ -1869,6 +1866,8 @@ void EmitterCheck(gentity_t *ent, gentity_t *attacker, trace_t *tr) {
 		return;
 	}
 	if (Q_stricmp(ent->classname, "func_leaky") == 0) {
+		gentity_t *tent;
+
 		tent = G_TempEntity(origin, EV_EMITTER);
 		VectorCopy(origin, tent->s.origin);
 		tent->s.time    = 1234;
@@ -2470,31 +2469,24 @@ void CalcMuzzlePoints(gentity_t *ent, int weapon) {
 
 	VectorCopy(ent->client->ps.viewangles, viewang);
 
-	{   // non ai's take into account scoped weapon 'sway' (just another way aimspread is visualized/utilized)
-		float spreadfrac, phase;
+	if (BG_IsScopedWeapon(weapon)) {
+		float pitchMinAmp, yawMinAmp, phase, spreadfrac = ent->client->currentAimSpreadScale;
 
-		if (BG_IsScopedWeapon(weapon)) {
-			float pitchMinAmp, yawMinAmp;
-
-			spreadfrac = ent->client->currentAimSpreadScale;
-
-			if (weapon == WP_FG42SCOPE) {
-				pitchMinAmp = 4 * ZOOM_PITCH_MIN_AMPLITUDE;
-				yawMinAmp   = 4 * ZOOM_YAW_MIN_AMPLITUDE;
-			} else {
-				pitchMinAmp = ZOOM_PITCH_MIN_AMPLITUDE;
-				yawMinAmp   = ZOOM_YAW_MIN_AMPLITUDE;
-			}
-
-			// rotate 'forward' vector by the sway
-			phase           = level.time / 1000.0 * ZOOM_PITCH_FREQUENCY * M_PI * 2;
-			viewang[PITCH] += ZOOM_PITCH_AMPLITUDE * sin(phase) * (spreadfrac + pitchMinAmp);
-
-			phase         = level.time / 1000.0 * ZOOM_YAW_FREQUENCY * M_PI * 2;
-			viewang[YAW] += ZOOM_YAW_AMPLITUDE * sin(phase) * (spreadfrac + yawMinAmp);
+		if (weapon == WP_FG42SCOPE) {
+			pitchMinAmp = 4 * ZOOM_PITCH_MIN_AMPLITUDE;
+			yawMinAmp   = 4 * ZOOM_YAW_MIN_AMPLITUDE;
+		} else {
+			pitchMinAmp = ZOOM_PITCH_MIN_AMPLITUDE;
+			yawMinAmp   = ZOOM_YAW_MIN_AMPLITUDE;
 		}
-	}
 
+		// rotate 'forward' vector by the sway
+		phase           = level.time / 1000.0 * ZOOM_PITCH_FREQUENCY * M_PI * 2;
+		viewang[PITCH] += ZOOM_PITCH_AMPLITUDE * sin(phase) * (spreadfrac + pitchMinAmp);
+
+		phase         = level.time / 1000.0 * ZOOM_YAW_FREQUENCY * M_PI * 2;
+		viewang[YAW] += ZOOM_YAW_AMPLITUDE * sin(phase) * (spreadfrac + yawMinAmp);
+	}
 
 	// set aiming directions
 	AngleVectors(viewang, forward, right, up);

@@ -207,7 +207,7 @@ float   Q_crandom(int *seed) {
 // this isn't a real cheap function to call!
 int DirToByte(vec3_t dir) {
 	int   i, best;
-	float d, bestd;
+	float bestd;
 
 	if (!dir) {
 		return 0;
@@ -215,7 +215,9 @@ int DirToByte(vec3_t dir) {
 
 	bestd = 0;
 	best  = 0;
-	for (i = 0 ; i < NUMVERTEXNORMALS ; i++) {
+	for (i = 0 ; i < NUMVERTEXNORMALS ; ++i) {
+		float d;
+
 		d = DotProduct(dir, bytedirs[i]);
 		if (d > bestd) {
 			bestd = d;
@@ -366,7 +368,6 @@ void RotateAroundDirection(vec3_t axis[3], float yaw) {
 
 
 void vectoangles(const vec3_t value1, vec3_t angles) {
-	float forward;
 	float yaw, pitch;
 
 	if (value1[1] == 0 && value1[0] == 0) {
@@ -377,6 +378,8 @@ void vectoangles(const vec3_t value1, vec3_t angles) {
 			pitch = 270;
 		}
 	} else {
+		float forward;
+
 		if (value1[0]) {
 			yaw = (atan2(value1[1], value1[0]) * 180 / M_PI);
 		} else if (value1[1] > 0) {
@@ -618,9 +621,10 @@ RadiusFromBounds
 float RadiusFromBounds(const vec3_t mins, const vec3_t maxs) {
 	int    i;
 	vec3_t corner;
-	float  a, b;
 
-	for (i = 0 ; i < 3 ; i++) {
+	for (i = 0 ; i < 3 ; ++i) {
+		float a, b;
+
 		a         = Q_fabs(mins[i]);
 		b         = Q_fabs(maxs[i]);
 		corner[i] = a > b ? a : b;
@@ -694,13 +698,13 @@ int VectorCompare(const vec3_t v1, const vec3_t v2) {
 
 
 vec_t VectorNormalize(vec3_t v) {
-	float length, ilength;
+	float length = v[0] * v[0] + v[1] * v[1] + v[2] * v[2];
 
-	length = v[0] * v[0] + v[1] * v[1] + v[2] * v[2];
 	length = sqrt(length);
 
 	if (length) {
-		ilength = 1 / length;
+		float ilength = 1 / length;
+
 		v[0]   *= ilength;
 		v[1]   *= ilength;
 		v[2]   *= ilength;
@@ -724,13 +728,13 @@ void VectorNormalizeFast(vec3_t v) {
 }
 
 vec_t VectorNormalize2(const vec3_t v, vec3_t out) {
-	float length, ilength;
+	float length = v[0] * v[0] + v[1] * v[1] + v[2] * v[2];
 
-	length = v[0] * v[0] + v[1] * v[1] + v[2] * v[2];
 	length = sqrt(length);
 
 	if (length) {
-		ilength = 1 / length;
+		float ilength = 1 / length;
+
 		out[0]  = v[0] * ilength;
 		out[1]  = v[1] * ilength;
 		out[2]  = v[2] * ilength;

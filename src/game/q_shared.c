@@ -224,13 +224,13 @@ static char *SkipWhitespace(char *data, qboolean *hasNewLines) {
 }
 
 int COM_Compress(char *data_p) {
-	char     *datai, *datao;
-	int      c, size;
-	qboolean ws = qfalse;
+	char     *datai = data_p, *datao = data_p;
+	int      size = 0;
 
-	size  = 0;
-	datai = datao = data_p;
 	if (datai) {
+		int      c;
+		qboolean ws = qfalse;
+
 		while ((c = *datai) != 0) {
 			if (c == 13 || c == 10) {
 				*datao = c;
@@ -421,11 +421,12 @@ Internal brace depths are properly skipped.
 =================
 */
 void SkipBracedSection(char **program) {
-	char *token;
 	int  depth;
 
 	depth = 0;
 	do {
+		char *token;
+
 		token = COM_ParseExt(program, qtrue);
 		if (token[1] == 0) {
 			if (token[0] == '{') {
@@ -459,12 +460,13 @@ void SkipRestOfLine(char **data) {
 
 
 void Parse1DMatrix(char **buf_p, int x, float *m) {
-	char *token;
 	int  i;
 
 	COM_MatchToken(buf_p, "(");
 
-	for (i = 0 ; i < x ; i++) {
+	for (i = 0 ; i < x ; ++i) {
+		char *token;
+
 		token = COM_Parse(buf_p);
 		m[i]  = atof(token);
 	}
@@ -477,7 +479,7 @@ void Parse2DMatrix(char **buf_p, int y, int x, float *m) {
 
 	COM_MatchToken(buf_p, "(");
 
-	for (i = 0 ; i < y ; i++) {
+	for (i = 0 ; i < y ; ++i) {
 		Parse1DMatrix(buf_p, x, m + i * x);
 	}
 
@@ -490,13 +492,14 @@ Com_ParseInfos
 ===============
 */
 int Com_ParseInfos(char *buf, int max, char infos[][MAX_INFO_STRING]) {
-	const char *token;
 	int        count;
 	char       key[MAX_TOKEN_CHARS];
 
 	count = 0;
 
 	for (;; ) {
+		const char *token;
+
 		token = COM_Parse(&buf);
 		if (!token[0]) {
 			break;
@@ -592,9 +595,11 @@ void Q_strncpyz(char *dest, const char *src, int destsize) {
 }
 
 int Q_stricmpn(const char *s1, const char *s2, int n) {
-	int c1, c2;
+	int c1;
 
 	do {
+		int c2;
+
 		c1 = *s1++;
 		c2 = *s2++;
 
@@ -619,9 +624,11 @@ int Q_stricmpn(const char *s1, const char *s2, int n) {
 }
 
 int Q_strncmp(const char *s1, const char *s2, int n) {
-	int c1, c2;
+	int c1;
 
 	do {
+		int c2;
+
 		c1 = *s1++;
 		c2 = *s2++;
 
@@ -853,7 +860,6 @@ char *Info_ValueForKey(const char *s, const char *key) {
 	static char value[2][BIG_INFO_VALUE];   // use two buffers so compares
 	                                        // work without stomping on each other
 	static int valueindex = 0;
-	char       *o;
 
 	if (!s || !key) {
 		return "";
@@ -868,7 +874,8 @@ char *Info_ValueForKey(const char *s, const char *key) {
 		s++;
 	}
 	for (;; ) {
-		o = pkey;
+		char *o = pkey;
+
 		while (*s != '\\') {
 			if (!*s) {
 				return "";
@@ -904,10 +911,8 @@ Info_RemoveKey
 ===================
 */
 void Info_RemoveKey(char *s, const char *key) {
-	char *start;
 	char pkey[MAX_INFO_KEY];
 	char value[MAX_INFO_VALUE];
-	char *o;
 
 	if (strlen(s) >= MAX_INFO_STRING) {
 		Com_Error(ERR_DROP, "Info_RemoveKey: oversize infostring [%s] [%s]", s, key);
@@ -918,7 +923,8 @@ void Info_RemoveKey(char *s, const char *key) {
 	}
 
 	for (;; ) {
-		start = s;
+		char *start = s, *o;
+
 		if (*s == '\\') {
 			s++;
 		}
