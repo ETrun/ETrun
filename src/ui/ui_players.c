@@ -652,11 +652,12 @@ return a hash value for the given string
 static long UI_StringHashValue(const char *fname) {
 	int  i;
 	long hash;
-	char letter;
 
 	hash = 0;
 	i    = 0;
 	while (fname[i] != '\0') {
+		char letter;
+
 		letter = tolower(fname[i]);
 		hash  += (long)(letter) * (i + 119);
 		i++;
@@ -677,7 +678,7 @@ AnimParseAnimConfig
 static qboolean AnimParseAnimConfig(playerInfo_t *animModelInfo, const char *input) {
 	char        *text_p, *token;
 	animation_t *animations;
-	int         i, fps, skip = -1;
+	int         i, skip = -1;
 
 	animations                   = animModelInfo->animations;
 	animModelInfo->numAnimations = 0;
@@ -739,7 +740,8 @@ static qboolean AnimParseAnimConfig(playerInfo_t *animModelInfo, const char *inp
 	}
 
 	// read information for each frame
-	for (i = 0 ; (animModelInfo->version > 1) || (i < MAX_ANIMATIONS) ; i++) {
+	for (i = 0 ; (animModelInfo->version > 1) || (i < MAX_ANIMATIONS) ; ++i) {
+		int fps;
 
 		token = COM_Parse(&text_p);
 		if (!token) {

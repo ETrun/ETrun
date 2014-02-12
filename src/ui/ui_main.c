@@ -247,12 +247,12 @@ void Text_SetActiveFont(int font) {
 }
 
 int Text_Width_Ext(const char *text, float scale, int limit, fontInfo_t *font) {
-	int         count, len;
 	float       out = 0;
-	glyphInfo_t *glyph;
 	const char  *s = text;
 
 	if (text) {
+		int count, len;
+
 		len = strlen(text);
 		if (limit > 0 && len > limit) {
 			len = limit;
@@ -263,7 +263,8 @@ int Text_Width_Ext(const char *text, float scale, int limit, fontInfo_t *font) {
 				s += 2;
 				continue;
 			} else {
-				glyph = &font->glyphs[(unsigned char)*s];
+				glyphInfo_t *glyph = &font->glyphs[(unsigned char)*s];
+
 				out  += glyph->xSkip;
 				s++;
 				count++;
@@ -280,14 +281,14 @@ int Text_Width(const char *text, float scale, int limit) {
 }
 
 int Multiline_Text_Width(const char *text, float scale, int limit) {
-	int         count, len;
 	float       out = 0;
 	float       width, widest = 0;
-	glyphInfo_t *glyph;
 	const char  *s    = text;
 	fontInfo_t  *font = &uiInfo.uiDC.Assets.fonts[uiInfo.activeFont];
 
 	if (text) {
+		int count, len;
+
 		len = strlen(text);
 		if (limit > 0 && len > limit) {
 			len = limit;
@@ -305,7 +306,8 @@ int Multiline_Text_Width(const char *text, float scale, int limit) {
 					}
 					out = 0;
 				} else {
-					glyph = &font->glyphs[(unsigned char)*s];
+					glyphInfo_t *glyph = &font->glyphs[(unsigned char)*s];
+
 					out  += glyph->xSkip;
 				}
 				s++;
@@ -326,13 +328,14 @@ int Multiline_Text_Width(const char *text, float scale, int limit) {
 }
 
 int Text_Height_Ext(const char *text, float scale, int limit, fontInfo_t *font) {
-	int         len, count;
 	float       max;
 	glyphInfo_t *glyph;
 	const char  *s = text;
 
 	max = 0;
 	if (text) {
+		int len, count;
+
 		len = strlen(text);
 		if (limit > 0 && len > limit) {
 			len = limit;
@@ -363,7 +366,6 @@ int Text_Height(const char *text, float scale, int limit) {
 }
 
 int Multiline_Text_Height(const char *text, float scale, int limit) {
-	int         len, count;
 	float       max;
 	float       totalheight = 0;
 	glyphInfo_t *glyph;
@@ -372,6 +374,8 @@ int Multiline_Text_Height(const char *text, float scale, int limit) {
 
 	max = 0;
 	if (text) {
+		int len, count;
+
 		len = strlen(text);
 		if (limit > 0 && len > limit) {
 			len = limit;
@@ -425,16 +429,15 @@ void Text_PaintChar(float x, float y, float w, float h, float scale, float s, fl
 }
 
 void Text_Paint_Ext(float x, float y, float scalex, float scaley, vec4_t color, const char *text, float adjust, int limit, int style, fontInfo_t *font) {
-	int         len, count;
 	vec4_t      newColor;
-	glyphInfo_t *glyph;
-	int         index;
 
 	scalex *= font->glyphScale;
 	scaley *= font->glyphScale;
 
 	if (text) {
 		const char *s = text;
+		int        len, count;
+
 		trap_R_SetColor(color);
 		memcpy(&newColor[0], &color[0], sizeof (vec4_t));
 		len = strlen(text);
@@ -443,7 +446,8 @@ void Text_Paint_Ext(float x, float y, float scalex, float scaley, vec4_t color, 
 		}
 		count = 0;
 		while (s && *s && count < len) {
-			index = (unsigned char)*s;
+			glyphInfo_t *glyph;
+			int         index = (unsigned char)*s;
 
 			// NERVE - SMF - don't draw tabs and newlines
 			if (index < 20) {
@@ -493,17 +497,18 @@ void Text_Paint(float x, float y, float scale, vec4_t color, const char *text, f
 }
 
 void Text_PaintWithCursor(float x, float y, float scale, vec4_t color, const char *text, int cursorPos, char cursor, int limit, int style) {
-	int         len, count;
 	vec4_t      newColor;
-	glyphInfo_t *glyph, *glyph2;
-	float       yadj;
 	float       useScale;
 	fontInfo_t  *font = &uiInfo.uiDC.Assets.fonts[uiInfo.activeFont];
 
 	useScale = scale * font->glyphScale;
 
 	if (text) {
-		const char *s = text;
+		const char  *s = text;
+		int         len, count;
+		glyphInfo_t *glyph2;
+		float       yadj;
+
 		trap_R_SetColor(color);
 		memcpy(&newColor[0], &color[0], sizeof (vec4_t));
 		len = strlen(text);
@@ -513,7 +518,8 @@ void Text_PaintWithCursor(float x, float y, float scale, vec4_t color, const cha
 		count  = 0;
 		glyph2 = &font->glyphs[(unsigned char)cursor];
 		while (s && *s && count < len) {
-			glyph = &font->glyphs[(unsigned char)*s];           // NERVE - SMF - this needs to be an unsigned cast for localization
+			glyphInfo_t *glyph = &font->glyphs[(unsigned char)*s];           // NERVE - SMF - this needs to be an unsigned cast for localization
+
 			{
 				yadj = useScale * glyph->top;
 				if (style == ITEM_TEXTSTYLE_SHADOWED || style == ITEM_TEXTSTYLE_SHADOWEDMORE) {
@@ -581,26 +587,22 @@ void Text_PaintWithCursor(float x, float y, float scale, vec4_t color, const cha
 
 
 static void Text_Paint_Limit(float *maxX, float x, float y, float scale, vec4_t color, const char *text, float adjust, int limit) {
-	int         len, count;
-	vec4_t      newColor;
-	glyphInfo_t *glyph;
-
 	if (text) {
 		const char *s  = text;
 		float      max = *maxX;
-		float      useScale;
 		fontInfo_t *font = &uiInfo.uiDC.Assets.fonts[uiInfo.activeFont];
-
-		useScale = scale * font->glyphScale;
+		float      useScale = scale * font->glyphScale;
+		int        len, count = 0;
+		vec4_t     newColor;
 
 		trap_R_SetColor(color);
 		len = strlen(text);
 		if (limit > 0 && len > limit) {
 			len = limit;
 		}
-		count = 0;
 		while (s && *s && count < len) {
-			glyph = &font->glyphs[(unsigned char)*s];           // NERVE - SMF - this needs to be an unsigned cast for localization
+			glyphInfo_t *glyph = &font->glyphs[(unsigned char)*s];           // NERVE - SMF - this needs to be an unsigned cast for localization
+
 			if (Q_IsColorString(s)) {
 				if (*(s + 1) == COLOR_NULL) {
 					memcpy(&newColor[0], &color[0], sizeof (vec4_t));
@@ -1103,10 +1105,11 @@ void UI_DrawNetMapPreview(rectDef_t *rect) {
 }
 
 static void UI_DrawMissionBriefingMap(rectDef_t *rect) {
-	char             buffer[64];
 	static qhandle_t image = -1;
 
 	if (image == -1) {
+		char buffer[64];
+
 		trap_Cvar_VariableStringBuffer("mapname", buffer, 64);
 		image = trap_R_RegisterShaderNoMip(va("levelshots/%s_cc.tga", buffer));
 	}
@@ -1217,7 +1220,6 @@ static qboolean updateModel = qtrue;
 static void UI_DrawPlayerModel(rectDef_t *rect) {
 	static playerInfo_t info;
 	char                model[MAX_QPATH];
-	vec3_t              viewangles;
 	static vec3_t       moveangles = { 0, 0, 0 };
 
 	// NERVE - SMF
@@ -1261,6 +1263,8 @@ static void UI_DrawPlayerModel(rectDef_t *rect) {
 	}
 
 	if (updateModel) {      // NERVE - SMF - TEMPORARY
+		vec3_t viewangles;
+
 		memset(&info, 0, sizeof (playerInfo_t));
 		viewangles[YAW]   = 180 - 10;
 		viewangles[PITCH] = 0;
@@ -1405,10 +1409,10 @@ static void UI_DrawSelectedPlayer(rectDef_t *rect, float scale, vec4_t color, in
 }
 
 static void UI_DrawServerRefreshDate(rectDef_t *rect, float scale, vec4_t color, int textStyle) {
-	int serverCount;            // NERVE - SMF
-
 	if (uiInfo.serverStatus.refreshActive) {
 		vec4_t lowLight, newColor;
+		int    serverCount;
+
 		lowLight[0] = 0.8 * color[0];
 		lowLight[1] = 0.8 * color[1];
 		lowLight[2] = 0.8 * color[2];
@@ -1423,6 +1427,7 @@ static void UI_DrawServerRefreshDate(rectDef_t *rect, float scale, vec4_t color,
 		}
 	} else {
 		char buff[64];
+
 		Q_strncpyz(buff, UI_Cvar_VariableString(va("ui_lastServerRefresh_%i", ui_netSource.integer)), 64);
 		Text_Paint(rect->x, rect->y, scale, color, va(trap_TranslateString("Refresh Time: %s"), buff), 0, 0, textStyle);
 	}
@@ -1865,14 +1870,15 @@ static void UI_LoadMods() {
 	int  numdirs;
 	char dirlist[2048];
 	char *dirptr;
-	char *descptr;
 	int  i;
-	int  dirlen;
 
 	uiInfo.modCount = 0;
 	numdirs         = trap_FS_GetFileList("$modlist", "", dirlist, sizeof (dirlist));
 	dirptr          = dirlist;
-	for (i = 0; i < numdirs; i++) {
+	for (i = 0; i < numdirs; ++i) {
+		char *descptr;
+		int  dirlen;
+
 		dirlen                                   = strlen(dirptr) + 1;
 		descptr                                  = dirptr + dirlen;
 		uiInfo.modList[uiInfo.modCount].modName  = String_Alloc(dirptr);
@@ -1895,14 +1901,15 @@ static void UI_LoadProfiles() {
 	char dirlist[2048];
 	char *dirptr;
 	int  i;
-	int  dirlen;
 
 	uiInfo.profileCount = 0;
 	uiInfo.profileIndex = -1;
 	numdirs             = trap_FS_GetFileList("profiles", "/", dirlist, sizeof (dirlist));
 	dirptr              = dirlist;
 
-	for (i = 0; i < numdirs; i++) {
+	for (i = 0; i < numdirs; ++i) {
+		int  dirlen;
+
 		dirlen = strlen(dirptr) + 1;
 
 		if (dirptr[0] && Q_stricmp(dirptr, ".") && Q_stricmp(dirptr, "..")) {
@@ -1971,16 +1978,19 @@ UI_LoadMovies
 static void UI_LoadMovies() {
 	char movielist[4096];
 	char *moviename;
-	int  i, len;
 
 	uiInfo.movieCount = trap_FS_GetFileList("video", "roq", movielist, 4096);
 
 	if (uiInfo.movieCount) {
+		int  i;
+
 		if (uiInfo.movieCount > MAX_MOVIES) {
 			uiInfo.movieCount = MAX_MOVIES;
 		}
 		moviename = movielist;
-		for (i = 0; i < uiInfo.movieCount; i++) {
+		for (i = 0; i < uiInfo.movieCount; ++i) {
+			int len;
+
 			len = strlen(moviename);
 			if (!Q_stricmp(moviename +  len - 4, ".roq")) {
 				moviename[len - 4] = '\0';
@@ -2002,7 +2012,7 @@ static void UI_LoadDemos() {
 	char demolist[30000];
 	char demoExt[32];
 	char *demoname;
-	int  i, len, demoExtLen = 0;
+	int  demoExtLen = 0;
 
 	Com_sprintf(demoExt, sizeof (demoExt), "dm_%d", (int)trap_Cvar_VariableValue("protocol"));
 
@@ -2013,11 +2023,15 @@ static void UI_LoadDemos() {
 	demoExtLen = strlen(demoExt);
 
 	if (uiInfo.demoCount) {
+		int i;
+
 		if (uiInfo.demoCount > MAX_DEMOS) {
 			uiInfo.demoCount = MAX_DEMOS;
 		}
 		demoname = demolist;
-		for (i = 0; i < uiInfo.demoCount; i++) {
+		for (i = 0; i < uiInfo.demoCount; ++i) {
+			int len;
+
 			len = strlen(demoname);
 			if (!Q_stricmp(demoname +  len - demoExtLen, demoExt)) {
 				demoname[len - demoExtLen] = '\0';
@@ -2136,11 +2150,11 @@ UI_RunMenuScript
 */
 void UI_RunMenuScript(char **args) {
 	const char *name, *name2;
-	char       *s;
-	char       buff[1024];
-	menuDef_t  *menu;
 
 	if (String_Parse(args, &name)) {
+		char       *s;
+		char       buff[1024];
+		menuDef_t  *menu;
 
 		if (Q_stricmp(name, "StartServer") == 0) {
 			trap_Cvar_Set("ui_connecting", "1");
@@ -2380,13 +2394,14 @@ void UI_RunMenuScript(char **args) {
 			if (ui_netSource.integer != AS_FAVORITES) {
 				char name[MAX_NAME_LENGTH];
 				char addr[MAX_NAME_LENGTH];
-				int  res;
 
 				trap_LAN_GetServerInfo(ui_netSource.integer, uiInfo.serverStatus.displayServers[uiInfo.serverStatus.currentServer], buff, MAX_STRING_CHARS);
 				name[0] = addr[0] = '\0';
 				Q_strncpyz(name, Info_ValueForKey(buff, "hostname"), MAX_NAME_LENGTH);
 				Q_strncpyz(addr, Info_ValueForKey(buff, "addr"), MAX_NAME_LENGTH);
 				if (name[0] != '\0' && addr[0] != '\0') {
+					int  res;
+
 					res = trap_LAN_AddServer(AS_FAVORITES, name, addr);
 					if (res == 0) {
 						// server already in the list
@@ -2416,12 +2431,13 @@ void UI_RunMenuScript(char **args) {
 			if (ui_netSource.integer == AS_FAVORITES) {
 				char name[MAX_NAME_LENGTH];
 				char addr[MAX_NAME_LENGTH];
-				int  res;
 
 				name[0] = addr[0] = '\0';
 				Q_strncpyz(name, UI_Cvar_VariableString("ui_favoriteName"), MAX_NAME_LENGTH);
 				Q_strncpyz(addr, UI_Cvar_VariableString("ui_favoriteAddress"), MAX_NAME_LENGTH);
 				if (name[0] != '\0' && addr[0] != '\0') {
+					int  res;
+
 					res = trap_LAN_AddServer(AS_FAVORITES, name, addr);
 					if (res == 0) {
 						// server already in the list
@@ -2677,7 +2693,6 @@ void UI_RunMenuScript(char **args) {
 			trap_Cvar_Set("ui_profile_renameto", ui_profile.string);
 		} else if (Q_stricmp(name, "renameProfile") == 0) {
 			fileHandle_t f, f2;
-			int          len;
 			char         buff[MAX_CVAR_VALUE_STRING];
 			char         ui_renameprofileto[MAX_CVAR_VALUE_STRING];
 			char         uiprofile[MAX_CVAR_VALUE_STRING];
@@ -2698,11 +2713,13 @@ void UI_RunMenuScript(char **args) {
 
 			// FIXME: make this copying handle all files in the profiles directory
 			if (Q_stricmp(uiprofile, buff)) {
+				int len;
+
 				if (trap_FS_FOpenFile(va("profiles/%s/%s", buff, CONFIG_NAME), &f, FS_WRITE) >= 0) {
 					if ((len = trap_FS_FOpenFile(va("profiles/%s/%s", uiprofile, CONFIG_NAME), &f2, FS_READ)) >= 0) {
 						int i;
 
-						for (i = 0; i < len; i++) {
+						for (i = 0; i < len; ++i) {
 							byte b;
 
 							trap_FS_Read(&b, 1, f2);
@@ -2717,7 +2734,7 @@ void UI_RunMenuScript(char **args) {
 					if ((len = trap_FS_FOpenFile(va("profiles/%s/servercache.dat", cl_profile.string), &f2, FS_READ)) >= 0) {
 						int i;
 
-						for (i = 0; i < len; i++) {
+						for (i = 0; i < len; ++i) {
 							byte b;
 
 							trap_FS_Read(&b, 1, f2);
@@ -3253,8 +3270,8 @@ static void UI_SortServerStatusInfo(serverStatusInfo_t *info) {
 	// replace the gametype number by FFA, CTF etc.
 	//
 	index = 0;
-	for (i = 0; serverStatusCvars[i].name; i++) {
-		for (j = 0; j < info->numLines; j++) {
+	for (i = 0; serverStatusCvars[i].name; ++i) {
+		for (j = 0; j < info->numLines; ++j) {
 			if (!info->lines[j][1] || info->lines[j][1][0]) {
 				continue;
 			}
@@ -3282,9 +3299,7 @@ UI_GetServerStatusInfo
 ==================
 */
 static int UI_GetServerStatusInfo(const char *serverAddress, serverStatusInfo_t *info) {
-	char      *p, *score, *ping, *name, *p_val = NULL, *p_name = NULL;
-	menuDef_t *menu, *menu2; // we use the URL buttons in several menus
-	int       i, len;
+	char *p, *score, *ping, *name, *p_name = NULL;
 
 	if (!info) {
 		trap_LAN_ServerStatus(serverAddress, NULL, 0);
@@ -3292,6 +3307,7 @@ static int UI_GetServerStatusInfo(const char *serverAddress, serverStatusInfo_t 
 	}
 	memset(info, 0, sizeof (*info));
 	if (trap_LAN_ServerStatus(serverAddress, info->text, sizeof (info->text))) {
+		menuDef_t *menu, *menu2; // we use the URL buttons in several menus
 
 		menu  = Menus_FindByName("serverinfo_popmenu");
 		menu2 = Menus_FindByName("popupError");
@@ -3309,6 +3325,8 @@ static int UI_GetServerStatusInfo(const char *serverAddress, serverStatusInfo_t 
 		trap_Cvar_Set("ui_modURL", "");
 		// get the cvars
 		while (p && *p) {
+			char *p_val = NULL;
+
 			p = strchr(p, '\\');
 			if (!p) {
 				break;
@@ -3355,6 +3373,8 @@ static int UI_GetServerStatusInfo(const char *serverAddress, serverStatusInfo_t 
 		}
 		// get the player list
 		if (info->numLines < MAX_SERVERSTATUS_LINES - 3) {
+			int len = 0, i = 0;
+
 			// empty line
 			info->lines[info->numLines][0] = "";
 			info->lines[info->numLines][1] = "";
@@ -3368,8 +3388,6 @@ static int UI_GetServerStatusInfo(const char *serverAddress, serverStatusInfo_t 
 			info->lines[info->numLines][3] = "name";
 			info->numLines++;
 			// parse players
-			i   = 0;
-			len = 0;
 			while (p && *p) {
 				if (*p == '\\') {
 					*p++ = '\0';
@@ -3444,7 +3462,7 @@ UI_BuildFindPlayerList
 */
 static void UI_BuildFindPlayerList(qboolean force) {
 	static int         numFound, numTimeOuts;
-	int                i, j, resend;
+	int                i, j;
 	serverStatusInfo_t info;
 	char               name[MAX_NAME_LENGTH + 2];
 	char               infoString[MAX_STRING_CHARS];
@@ -3454,6 +3472,8 @@ static void UI_BuildFindPlayerList(qboolean force) {
 			return;
 		}
 	} else {
+		int resend;
+
 		memset(&uiInfo.pendingServerStatus, 0, sizeof (uiInfo.pendingServerStatus));
 		uiInfo.numFoundPlayerServers    = 0;
 		uiInfo.currentFoundPlayerServer = 0;
@@ -3480,12 +3500,12 @@ static void UI_BuildFindPlayerList(qboolean force) {
 		numFound = 0;
 		numTimeOuts++;
 	}
-	for (i = 0; i < MAX_SERVERSTATUSREQUESTS; i++) {
+	for (i = 0; i < MAX_SERVERSTATUSREQUESTS; ++i) {
 		// if this pending server is valid
 		if (uiInfo.pendingServerStatus.server[i].valid && UI_GetServerStatusInfo(uiInfo.pendingServerStatus.server[i].adrstr, &info)) {
 			numFound++;
 			// parse through the server status lines
-			for (j = 0; j < info.numLines; j++) {
+			for (j = 0; j < info.numLines; ++j) {
 				// should have ping info
 				if (!info.lines[j][2] || !info.lines[j][2][0]) {
 					continue;
@@ -3542,7 +3562,7 @@ static void UI_BuildFindPlayerList(qboolean force) {
 			}
 		}
 	}
-	for (i = 0; i < MAX_SERVERSTATUSREQUESTS; i++) {
+	for (i = 0; i < MAX_SERVERSTATUSREQUESTS; ++i) {
 		if (uiInfo.pendingServerStatus.server[i].valid) {
 			break;
 		}
@@ -3571,7 +3591,6 @@ UI_BuildServerStatus
 ==================
 */
 static void UI_BuildServerStatus(qboolean force) {
-	menuDef_t       *menu;
 	uiClientState_t cstate;
 
 	trap_GetClientState(&cstate);
@@ -3584,6 +3603,8 @@ static void UI_BuildServerStatus(qboolean force) {
 			return;
 		}
 	} else {
+		menuDef_t *menu;
+
 		Menu_SetFeederSelection(NULL, FEEDER_SERVERSTATUS, 0, NULL);
 		uiInfo.serverStatusInfo.numLines = 0;
 		// TTimo - reset the server URL / mod URL till we get the new ones
@@ -3657,7 +3678,7 @@ static const char *UI_SelectedMap(int index, int *actual) {
 	c       = 0;
 	*actual = 0;
 
-	for (i = 0; i < uiInfo.mapCount; i++) {
+	for (i = 0; i < uiInfo.mapCount; ++i) {
 		if (uiInfo.mapList[i].active) {
 			if (c == index) {
 				*actual = i;
@@ -3696,13 +3717,6 @@ static const char *UI_FileText(char *fileName) {
 
 
 const char *UI_FeederItemText(float feederID, int index, int column, qhandle_t *handles, int *numhandles) {
-	static char info[MAX_STRING_CHARS];
-	static char hostname[1024];
-	static char clientBuff[32];
-	static char pingstr[10];
-	static int  lastColumn = -1;
-	static int  lastTime   = 0;
-
 	*numhandles = 0;
 	if (feederID == FEEDER_MAPS || feederID == FEEDER_ALLMAPS) {
 		int actual;
@@ -3721,6 +3735,13 @@ const char *UI_FeederItemText(float feederID, int index, int column, qhandle_t *
 	} else if (feederID == FEEDER_SERVERS) {
 		if (index >= 0 && index < uiInfo.serverStatus.numDisplayServers) {
 			int ping, antilag, needpass, serverload;
+			static char info[MAX_STRING_CHARS];
+			static char hostname[1024];
+			static char clientBuff[32];
+			static char pingstr[10];
+			static int  lastColumn = -1;
+			static int  lastTime   = 0;
+
 			if (lastColumn != column || lastTime > uiInfo.uiDC.realTime + 5000) {
 				trap_LAN_GetServerInfo(ui_netSource.integer, uiInfo.serverStatus.displayServers[index], info, MAX_STRING_CHARS);
 				lastColumn = column;
@@ -3859,8 +3880,6 @@ static qhandle_t UI_FeederItemImage(float feederID, int index) {
 }
 
 void UI_FeederSelection(float feederID, int index) {
-	static char info[MAX_STRING_CHARS];
-
 	if (feederID == FEEDER_MAPS || feederID == FEEDER_ALLMAPS) {
 		int actual;
 
@@ -3884,6 +3903,7 @@ void UI_FeederSelection(float feederID, int index) {
 		}
 	} else if (feederID == FEEDER_SERVERS) {
 		const char *mapName;
+		static char info[MAX_STRING_CHARS];
 
 		uiInfo.serverStatus.currentServer = index;
 		trap_LAN_GetServerInfo(ui_netSource.integer, uiInfo.serverStatus.displayServers[index], info, MAX_STRING_CHARS);
@@ -4129,10 +4149,10 @@ UI_KeyEvent
 =================
 */
 void _UI_KeyEvent(int key, qboolean down) {
-	static qboolean bypassKeyClear = qfalse;
-
 	if (Menu_Count() > 0) {
-		menuDef_t *menu = Menu_GetFocused();
+		menuDef_t       *menu = Menu_GetFocused();
+		static qboolean bypassKeyClear = qfalse;
+
 		if (menu) {
 			if (trap_Cvar_VariableValue("cl_bypassMouseInput")) {
 				bypassKeyClear = qtrue;
@@ -4196,12 +4216,11 @@ uiMenuCommand_t _UI_GetActiveMenu(void) {
 #define MISSING_FILES_MSG "The following packs are missing:"
 
 void _UI_SetActiveMenu(uiMenuCommand_t menu) {
-	char buf[4096]; // com_errorMessage can go up to 4096
-	char *missing_files;
-
 	// this should be the ONLY way the menu system is brought up
 	// enusure minumum menu data is cached
 	if (Menu_Count() > 0) {
+		char buf[4096]; // com_errorMessage can go up to 4096
+
 		menutype = menu;    //----(SA)	added
 
 		switch (menu) {
@@ -4253,6 +4272,8 @@ void _UI_SetActiveMenu(uiMenuCommand_t menu) {
 					// text printing limitations force us to keep it all in a single message
 					// NOTE: this works thanks to flip flop in UI_Cvar_VariableString
 					if (UI_Cvar_VariableString("com_errorDiagnoseIP")[0]) {
+						char *missing_files;
+
 						missing_files = UI_Cvar_VariableString("com_missingFiles");
 						if (missing_files[0]) {
 							trap_Cvar_Set("com_errorMessage",
@@ -4593,7 +4614,7 @@ void UI_UpdateCvars(void) {
 	int         i;
 	cvarTable_t *cv;
 
-	for (i = 0, cv = cvarTable ; i < cvarTableSize ; i++, cv++) {
+	for (i = 0, cv = cvarTable ; i < cvarTableSize ; ++i, ++cv) {
 		if (cv->vmCvar) {
 			trap_Cvar_Update(cv->vmCvar);
 			if (cv->modificationCount != cv->vmCvar->modificationCount) {
@@ -4683,7 +4704,6 @@ UI_StartServerRefresh
 =================
 */
 static void UI_StartServerRefresh(qboolean full) {
-	char *ptr;
 	char buff[64];
 
 	qtime_t q;
@@ -4716,6 +4736,8 @@ static void UI_StartServerRefresh(qboolean full) {
 
 	uiInfo.serverStatus.refreshtime = uiInfo.uiDC.realTime + 5000;
 	if (ui_netSource.integer == AS_GLOBAL) {
+		char *ptr;
+
 		ptr = UI_Cvar_VariableString("debug_protocol");
 		if (*ptr) {
 			trap_Cmd_ExecuteText(EXEC_APPEND, va("globalservers %d %s\n", 0, ptr));

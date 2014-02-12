@@ -175,12 +175,6 @@ const char *UI_DownloadInfo(const char *downloadName) {
 	static char dlText[]                = "Downloading:";
 	static char etaText[]               = "Estimated time left:";
 	static char xferText[]              = "Transfer rate:";
-	static int  tleEstimates[ESTIMATES] = { 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60,
-		                                    60,  60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60,
-		                                    60,  60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60,
-		                                    60,  60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60 };
-	static int  tleIndex = 0;
-
 	char       dlSizeBuf[64], totalSizeBuf[64], xferRateBuf[64], dlTimeBuf[64];
 	int        downloadSize, downloadCount, downloadTime;
 	int        xferRate;
@@ -217,6 +211,12 @@ const char *UI_DownloadInfo(const char *downloadName) {
 	if (downloadSize && xferRate) {
 		int n        = downloadSize / xferRate; // estimated time for entire d/l in secs
 		int timeleft = 0, i;
+		static int  tleEstimates[ESTIMATES] = { 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60,
+		                                    60,  60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60,
+		                                    60,  60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60,
+		                                    60,  60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60 };
+		static int  tleIndex = 0;
+
 
 		// We do it in K (/1024) because we'd overflow around 4MB
 		tleEstimates[tleIndex] = (n - (((downloadCount / 1024) * n) / (downloadSize / 1024)));
@@ -225,7 +225,7 @@ const char *UI_DownloadInfo(const char *downloadName) {
 			tleIndex = 0;
 		}
 
-		for (i = 0; i < ESTIMATES; i++)
+		for (i = 0; i < ESTIMATES; ++i)
 			timeleft += tleEstimates[i];
 
 		timeleft /= ESTIMATES;
