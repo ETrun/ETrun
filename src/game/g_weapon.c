@@ -1184,7 +1184,7 @@ void Weapon_Engineer(gentity_t *ent) {
 		} else
 		if (traceEnt->methodOfDeath == MOD_DYNAMITE) {
 			vec3_t mins, maxs, origin;
-			int    i, num, touch[MAX_GENTITIES], scored = 0;   // JPW NERVE
+			int    i, num, touch[MAX_GENTITIES];   // JPW NERVE
 
 			// Not armed
 			if (traceEnt->s.teamNum >= 4) {
@@ -1446,7 +1446,7 @@ void Weapon_Engineer(gentity_t *ent) {
 				G_PrintClientSpammyCenterPrint(ent - g_entities, "Defusing dynamite...");
 
 				if (traceEnt->health >= 248) {
-//bani
+					int      scored = 0;
 					qboolean defusedObj = qfalse;
 
 					traceEnt->health = 255;

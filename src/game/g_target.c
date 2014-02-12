@@ -922,10 +922,11 @@ void smoke_init(gentity_t *ent) {
 
 	if (ent->target) {
 		gentity_t *target;
-		vec3_t    vec;
 
 		target = G_Find(NULL, FOFS(targetname), ent->target);
 		if (target) {
+			vec3_t vec;
+
 			VectorSubtract(target->s.origin, ent->s.origin, vec);
 			VectorCopy(vec, ent->s.origin2);
 		} else {

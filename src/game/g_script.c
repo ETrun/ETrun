@@ -1123,8 +1123,6 @@ void SP_script_mover(gentity_t *ent) {
 
 	G_SpawnInt("health", "0", &ent->health);
 	if (ent->health) {
-		char cs[MAX_INFO_STRING];
-
 		ent->takedamage = qtrue;
 		ent->count      = ent->health;
 
@@ -1133,6 +1131,8 @@ void SP_script_mover(gentity_t *ent) {
 		ent->s.dl_intensity = 255;
 
 		if (G_SpawnString("description", "", &s)) {
+			char cs[MAX_INFO_STRING];
+
 			trap_GetConfigstring(CS_SCRIPT_MOVER_NAMES, cs, sizeof (cs));
 			Info_SetValueForKey(cs, va("%d", (int)(ent - g_entities)), s);
 			trap_SetConfigstring(CS_SCRIPT_MOVER_NAMES, cs);
