@@ -370,14 +370,14 @@ int G_UnMute_v(gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, 
 void G_delay_map_change(char *mapName, int delay) {
 	int       i               = 0;
 	int       activeRunsCount = 0;
-	gclient_t *cl             = NULL;
 
 	Q_strncpyz(level.delayedMapChange.passedVote, mapName, VOTE_MAXSTRING);
 
 	// Nico, if no timerun is currenlty active or if player is alone on the server
 	// change the map in 1 sec, otherwise wait MAP_CHANGE_DELAY
 	for (i = 0; i < level.numConnectedClients; ++i) {
-		cl = &level.clients[level.sortedClients[i]];
+		gclient_t *cl = &level.clients[level.sortedClients[i]];
+
 		if ((cl->sess.sessionTeam == TEAM_ALLIES || cl->sess.sessionTeam == TEAM_AXIS) && cl->sess.timerunActive) {
 			activeRunsCount++;
 		}
@@ -485,8 +485,6 @@ int G_Map_v(gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qbo
  * Random map vote
  */
 int G_Randommap_v(gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd) {
-	char *result = NULL;
-
 	// Nico, silent GCC
 	(void)arg2;
 
@@ -508,6 +506,8 @@ int G_Randommap_v(gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg
 
 		// Vote action (vote has passed)
 	} else {
+		char *result = NULL;
+
 		AP("cp \"Loading a random map!\n\"");
 
 		result = malloc(RESPONSE_MAX_SIZE * sizeof (char));

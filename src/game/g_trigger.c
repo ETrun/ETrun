@@ -133,8 +133,6 @@ so, the basic time between firing is a random time between
 (wait - random) and (wait + random)
 */
 void SP_trigger_multiple(gentity_t *ent) {
-	gentity_t *target = NULL;
-
 	G_SpawnFloat("wait", "0.5", &ent->wait);
 
 	ent->touch   = Touch_Multi;
@@ -146,6 +144,8 @@ void SP_trigger_multiple(gentity_t *ent) {
 	// Nico, override wait -1 or wait 9999 on trigger_multiple where target is start timer
 	// Note, this test is in case the start/stop timer or checkpoint entity was defined before the trigger multiple
 	if (g_forceTimerReset.integer) {
+		gentity_t *target;
+
 		target = G_FindByTargetname(NULL, ent->target);
 		if (target &&
 		    ent->wait != 0.5 &&
@@ -533,7 +533,6 @@ qboolean G_IsAllowedHeal(gentity_t *ent) {
 void heal_touch(gentity_t *self, gentity_t *other, trace_t *trace) {
 	int       i, clientcount = 0;
 	gentity_t *touchClients[MAX_CLIENTS];
-	int       healvalue;
 
 	// Nico, silent GCC
 	(void)trace;
@@ -549,7 +548,7 @@ void heal_touch(gentity_t *self, gentity_t *other, trace_t *trace) {
 	}
 	self->timestamp = level.time + 1000;
 
-	for (i = 0; i < level.numConnectedClients; i++) {
+	for (i = 0; i < level.numConnectedClients; ++i) {
 		int j = level.sortedClients[i];
 
 		if (level.clients[j].ps.stats[STAT_MAX_HEALTH] > g_entities[j].health && trap_EntityContactCapsule(g_entities[j].r.absmin, g_entities[j].r.absmax, self) && G_IsAllowedHeal(&g_entities[j])) {
@@ -562,7 +561,9 @@ void heal_touch(gentity_t *self, gentity_t *other, trace_t *trace) {
 		return;
 	}
 
-	for (i = 0; i < clientcount; i++) {
+	for (i = 0; i < clientcount; ++i) {
+		int healvalue;
+
 		healvalue = min(touchClients[i]->client->ps.stats[STAT_MAX_HEALTH] - touchClients[i]->health, self->damage);
 		if (self->health != -9999) {
 			healvalue = min(healvalue, self->health);
@@ -1109,11 +1110,8 @@ void explosive_indicator_think(gentity_t *ent) {
 
 // Arnout: spawn a constructible indicator
 void constructible_indicator_think(gentity_t *ent) {
-	gentity_t *parent;
-	gentity_t *constructible;
-
-	parent        = &g_entities[ent->r.ownerNum];
-	constructible = parent->target_ent;
+	gentity_t *parent = &g_entities[ent->r.ownerNum];
+	gentity_t *constructible = parent->target_ent;
 
 	if (parent->chain && constructible->s.teamNum != ent->s.teamNum) {
 		// use the target that has the same team as the indicator
@@ -1125,7 +1123,6 @@ void constructible_indicator_think(gentity_t *ent) {
 		// update our map
 		{
 			mapEntityData_t      *mEnt;
-			mapEntityData_Team_t *teamList;
 
 			if (parent->spawnflags & 8) {
 				if ((mEnt = G_FindMapEntityData(&mapEntityData[0], ent - g_entities)) != NULL) {
@@ -1135,7 +1132,7 @@ void constructible_indicator_think(gentity_t *ent) {
 					G_FreeMapEntityData(&mapEntityData[1], mEnt);
 				}
 			} else {
-				teamList = ent->s.teamNum == TEAM_AXIS ? &mapEntityData[0] : &mapEntityData[1];
+				mapEntityData_Team_t *teamList = ent->s.teamNum == TEAM_AXIS ? &mapEntityData[0] : &mapEntityData[1];
 				if ((mEnt = G_FindMapEntityData(teamList, ent - g_entities)) != NULL) {
 					G_FreeMapEntityData(teamList, mEnt);
 				}

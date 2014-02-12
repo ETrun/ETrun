@@ -455,13 +455,15 @@ instead of an orientation.
 */
 void G_SetMovedir(vec3_t angles, vec3_t movedir) {
 	static vec3_t VEC_UP       = { 0, -1, 0 };
-	static vec3_t MOVEDIR_UP   = { 0, 0, 1 };
 	static vec3_t VEC_DOWN     = { 0, -2, 0 };
-	static vec3_t MOVEDIR_DOWN = { 0, 0, -1 };
 
 	if (VectorCompare(angles, VEC_UP)) {
+		static vec3_t MOVEDIR_UP   = { 0, 0, 1 };
+
 		VectorCopy(MOVEDIR_UP, movedir);
 	} else if (VectorCompare(angles, VEC_DOWN)) {
+		static vec3_t MOVEDIR_DOWN = { 0, 0, -1 };
+
 		VectorCopy(MOVEDIR_DOWN, movedir);
 	} else {
 		AngleVectors(angles, movedir, NULL, NULL);
@@ -649,15 +651,15 @@ of ent.  Ent should be unlinked before calling this!
 void G_KillBox(gentity_t *ent) {
 	int       i, num;
 	int       touch[MAX_GENTITIES];
-	gentity_t *hit;
 	vec3_t    mins, maxs;
 
 	VectorAdd(ent->client->ps.origin, ent->r.mins, mins);
 	VectorAdd(ent->client->ps.origin, ent->r.maxs, maxs);
 	num = trap_EntitiesInBox(mins, maxs, touch, MAX_GENTITIES);
 
-	for (i = 0 ; i < num ; i++) {
-		hit = &g_entities[touch[i]];
+	for (i = 0 ; i < num ; ++i) {
+		gentity_t *hit = &g_entities[touch[i]];
+
 		if (!hit->client) {
 			continue;
 		}
@@ -666,10 +668,8 @@ void G_KillBox(gentity_t *ent) {
 		}
 
 		// nail it
-		G_Damage(hit, ent, ent, NULL, NULL,
-		         100000, DAMAGE_NO_PROTECTION, MOD_TELEFRAG);
+		G_Damage(hit, ent, ent, NULL, NULL, 100000, DAMAGE_NO_PROTECTION, MOD_TELEFRAG);
 	}
-
 }
 
 //==============================================================================
@@ -901,12 +901,12 @@ void G_SetEntState(gentity_t *ent, entState_t state) {
 		{
 			int       listedEntities, e;
 			int       entityList[MAX_GENTITIES];
-			gentity_t *check, *block;
+			gentity_t *block;
 
 			listedEntities = trap_EntitiesInBox(ent->r.absmin, ent->r.absmax, entityList, MAX_GENTITIES);
 
-			for (e = 0; e < listedEntities; e++) {
-				check = &g_entities[entityList[e]];
+			for (e = 0; e < listedEntities; ++e) {
+				gentity_t *check = &g_entities[entityList[e]];
 
 				// ignore everything but items, players and missiles (grenades too)
 				if (check->s.eType != ET_MISSILE && check->s.eType != ET_ITEM && check->s.eType != ET_PLAYER && !check->physicsObject) {

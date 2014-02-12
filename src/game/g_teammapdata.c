@@ -254,12 +254,11 @@ G_CullPointAndRadius - returns true if not culled
 */
 static qboolean G_CullPointAndRadius(vec3_t pt, float radius) {
 	int     i;
-	float   dist;
-	plane_t *frust;
 
 	// check against frustum planes
-	for (i = 0 ; i < 4 ; i++) {
-		frust = &frustum[i];
+	for (i = 0 ; i < 4 ; ++i) {
+		plane_t *frust = &frustum[i];
+		float   dist;
 
 		dist = DotProduct(pt, frust->normal) - frust->dist;
 		if (dist < -radius || dist <= radius) {
@@ -626,18 +625,17 @@ void G_UpdateTeamMapData(void) {
 		}
 	}
 
-	for (i = 0, ent = g_entities; i < level.num_entities; i++, ent++) {
-		qboolean f1, f2;
+	for (i = 0, ent = g_entities; i < level.num_entities; ++i, ++ent) {
 		if (!ent->inuse || !ent->client) {
 			continue;
 		}
 		if (ent->client->sess.playerType == PC_COVERTOPS && ent->health > 0) {
-			f1 = ent->client->sess.sessionTeam == TEAM_ALLIES ? qtrue : qfalse;
-			f2 = ent->client->sess.sessionTeam == TEAM_AXIS ?   qtrue : qfalse;
+			qboolean f1 = ent->client->sess.sessionTeam == TEAM_ALLIES ? qtrue : qfalse;
+			qboolean f2 = ent->client->sess.sessionTeam == TEAM_AXIS ?   qtrue : qfalse;
 
 			G_SetupFrustum(ent);
 
-			for (j = 0, ent2 = g_entities; j < level.num_entities; j++, ent2++) {
+			for (j = 0, ent2 = g_entities; j < level.num_entities; ++j, ++ent2) {
 				if (!ent2->inuse || ent2 == ent) {
 					continue;
 				}
@@ -697,7 +695,7 @@ void G_UpdateTeamMapData(void) {
 			if (ent->client->ps.eFlags & EF_ZOOMING) {
 				G_SetupFrustum_ForBinoculars(ent);
 
-				for (j = 0, ent2 = g_entities; j < level.num_entities; j++, ent2++) {
+				for (j = 0, ent2 = g_entities; j < level.num_entities; ++j, ++ent2) {
 					if (!ent2->inuse || ent2 == ent) {
 						continue;
 					}
