@@ -5070,10 +5070,10 @@ void CG_CalcMuzzlePoint(int entityNum, vec3_t muzzle) {
 	cent = &cg_entities[entityNum];
 
 	if (cent->currentState.eFlags & EF_MG42_ACTIVE) {
-		vec3_t forward;
-
 		// ydnar: this is silly--the entity is a mg42 barrel, so just use itself
 		if (cent->currentState.eType == ET_MG42_BARREL) {
+			vec3_t forward;
+
 			VectorCopy(cent->currentState.pos.trBase, muzzle);
 			AngleVectors(cent->lerpAngles, forward, NULL, NULL);
 			VectorMA(muzzle, 40, forward, muzzle);
