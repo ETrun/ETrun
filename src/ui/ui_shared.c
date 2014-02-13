@@ -6907,17 +6907,6 @@ void Menu_Reset() {
 	menuCount = 0;
 }
 
-void *Display_CaptureItem(int x, int y) {
-	int i;
-
-	for (i = 0; i < menuCount; ++i) {
-		if (Rect_ContainsPoint(&Menus[i].window.rect, x, y)) {
-			return &Menus[i];
-		}
-	}
-	return NULL;
-}
-
 // FIXME:
 qboolean Display_MouseMove(void *p, int x, int y) {
 	menuDef_t *menu = p;

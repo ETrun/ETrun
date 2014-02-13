@@ -202,7 +202,7 @@ void CG_DrawTopBottom_NoScale(float x, float y, float w, float h, float size) {
 
 /*
 ================
-UI_DrawRect
+CG_DrawRect
 
 Coordinates are 640*480 virtual values
 =================
@@ -499,86 +499,6 @@ void CG_DrawStringExt2(int x, int y, const char *string, const float *setColor,
 	CG_DrawStringExt_Shadow(x, y, string, setColor, forceColor, shadow ? 2 : 0, charWidth, charHeight, maxChars);
 }
 
-/*==================
-CG_DrawStringExt3
-
-Draws a multi-colored string with a drop shadow, optionally forcing
-to a fixed color.
-
-Coordinates are at 640 by 480 virtual resolution
-==================
-*/
-void CG_DrawStringExt3(int x, int y, const char *string, const float *setColor,
-                       qboolean forceColor, qboolean shadow, int charWidth, int charHeight, int maxChars) {
-	vec4_t     color;
-	const char *s;
-	int        xx;
-	int        cnt;
-
-	if (maxChars <= 0) {
-		maxChars = 32767; // do them all!
-
-	}
-	s  = string;
-	xx = 0;
-
-	while (*s) {
-		xx += charWidth;
-		s++;
-	}
-
-	x -= xx;
-
-	s  = string;
-	xx = x;
-
-	// draw the drop shadow
-	if (shadow) {
-		color[0] = color[1] = color[2] = 0;
-		color[3] = setColor[3];
-		trap_R_SetColor(color);
-		s   = string;
-		xx  = x;
-		cnt = 0;
-		while (*s && cnt < maxChars) {
-			if (Q_IsColorString(s)) {
-				s += 2;
-				continue;
-			}
-			CG_DrawChar2(xx + ((charWidth < 12) ? 1 : 2), y + ((charHeight < 12) ? 1 : 2), charWidth, charHeight, *s);
-			cnt++;
-			xx += charWidth;
-			s++;
-		}
-	}
-
-	// draw the colored text
-	s   = string;
-	xx  = x;
-	cnt = 0;
-	trap_R_SetColor(setColor);
-	while (*s && cnt < maxChars) {
-		if (Q_IsColorString(s)) {
-			if (!forceColor) {
-				if (*(s + 1) == COLOR_NULL) {
-					memcpy(color, setColor, sizeof (color));
-				} else {
-					memcpy(color, g_color_table[ColorIndex(*(s + 1))], sizeof (color));
-					color[3] = setColor[3];
-				}
-				trap_R_SetColor(color);
-			}
-			s += 2;
-			continue;
-		}
-		CG_DrawChar2(xx, y, charWidth, charHeight, *s);
-		xx += charWidth;
-		cnt++;
-		s++;
-	}
-	trap_R_SetColor(NULL);
-}
-
 void CG_DrawBigString(int x, int y, const char *s, float alpha) {
 	float color[4];
 
@@ -736,22 +656,6 @@ void CG_ColorForHealth(vec4_t hcolor) {
 	} else {
 		hcolor[1] = (health - 30) / 30.0;
 	}
-}
-
-/*
-=================
-UI_ProportionalSizeScale
-=================
-*/
-float UI_ProportionalSizeScale(int style) {
-	if (style & UI_SMALLFONT) {
-		return 0.75f;
-	}
-	if (style & UI_EXSMALLFONT) {
-		return 0.4f;
-	}
-
-	return 1.0f;
 }
 
 #define MAX_VA_STRING       32000

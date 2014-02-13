@@ -1975,31 +1975,6 @@ void CG_ParseMenu(const char *menuFile) {
 	trap_PC_FreeSource(handle);
 }
 
-qboolean CG_Load_Menu(char **p) {
-	char *token;
-
-	token = COM_ParseExt(p, qtrue);
-
-	if (token[0] != '{') {
-		return qfalse;
-	}
-
-	for (;; ) {
-
-		token = COM_ParseExt(p, qtrue);
-
-		if (Q_stricmp(token, "}") == 0) {
-			return qtrue;
-		}
-
-		if (!token || token[0] == 0) {
-			return qfalse;
-		}
-
-		CG_ParseMenu(token);
-	}
-}
-
 static int CG_FeederCount(float feederID) {
 	int i, count;
 

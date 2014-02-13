@@ -53,19 +53,6 @@ void InitServerEntities(void) {
 	numServerEntities = 0;
 }
 
-g_serverEntity_t *GetFreeServerEntity() {
-	// NOTE:  this is simplistic because we can't currently free these entities
-	//		if we change this, then we need to be more careful when allocating the entities
-	if (numServerEntities >= MAX_SERVER_ENTITIES) {
-		G_Error("GetFreeServerEntity: Cannot allocate server entity");
-		return NULL;
-	}
-
-	g_serverEntities[numServerEntities].number = MAX_GENTITIES + numServerEntities;
-	g_serverEntities[numServerEntities].inuse  = qtrue;
-	return &g_serverEntities[numServerEntities++];
-}
-
 // TAT - create the server entities for the current map
 static void CreateMapServerEntities() {
 	char info[1024];

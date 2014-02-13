@@ -1957,7 +1957,6 @@ typedef struct bg_characterDef_s {
 
 qboolean BG_ParseCharacterFile(const char *filename, bg_characterDef_t *characterDef);
 bg_character_t *BG_GetCharacter(int team, int cls);
-bg_character_t *BG_GetCharacterForPlayerstate(playerState_t *ps);
 void BG_ClearCharacterPool(void);
 bg_character_t *BG_FindFreeCharacter(const char *characterFile);
 bg_character_t *BG_FindCharacter(const char *characterFile);

@@ -547,43 +547,6 @@ void G_RunMissile(gentity_t *ent) {
 	G_RunThink(ent);
 }
 
-/*
-================
-G_PredictBounceMissile
-
-================
-*/
-void G_PredictBounceMissile(gentity_t *ent, trajectory_t *pos, trace_t *trace, int time) {
-	vec3_t velocity, origin;
-	float  dot;
-	int    hitTime;
-
-	BG_EvaluateTrajectory(pos, time, origin, qfalse, ent->s.effect2Time);
-
-	// reflect the velocity on the trace plane
-	hitTime = time;
-	BG_EvaluateTrajectoryDelta(pos, hitTime, velocity);
-	dot = DotProduct(velocity, trace->plane.normal);
-	VectorMA(velocity, -2 * dot, trace->plane.normal, pos->trDelta);
-
-	if (ent->s.eFlags & EF_BOUNCE_HALF) {
-		if (ent->s.eFlags & EF_BOUNCE) {       // both flags marked, do a third type of bounce
-			VectorScale(pos->trDelta, 0.35, pos->trDelta);
-		} else {
-			VectorScale(pos->trDelta, 0.65, pos->trDelta);
-		}
-
-		// check for stop
-		if (trace->plane.normal[2] > 0.2 && VectorLengthSquared(pos->trDelta) < SQR(40)) {
-			VectorCopy(trace->endpos, pos->trBase);
-			return;
-		}
-	}
-
-	VectorAdd(origin, trace->plane.normal, pos->trBase);
-	pos->trTime = time;
-}
-
 //=============================================================================
 // DHM - Nerve :: Server side Flamethrower
 //=============================================================================

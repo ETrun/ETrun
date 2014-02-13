@@ -474,7 +474,6 @@ void    COM_RestoreParseSession(char **data_p);
 int     COM_GetCurrentParseLine(void);
 char *COM_Parse(char **data_p);
 char *COM_ParseExt(char **data_p, qboolean allowLineBreak);
-int     COM_Compress(char *data_p);
 void    COM_ParseError(char *format, ...) _attribute((format(printf, 1, 2)));
 
 qboolean COM_BitCheck(const int array[], int bitNum);
@@ -551,8 +550,6 @@ typedef enum {
 //=============================================
 
 int Q_isupper(int c);
-int Q_isalpha(int c);
-int Q_isnumeric(int c);
 
 // portable case insensitive compare
 int     Q_stricmp(const char *s1, const char *s2);

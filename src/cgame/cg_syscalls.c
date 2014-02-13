@@ -415,14 +415,6 @@ void        trap_SetClientLerpOrigin(float x, float y, float z) {
 	syscall(CG_SETCLIENTLERPORIGIN, PASSFLOAT(x), PASSFLOAT(y), PASSFLOAT(z));
 }
 
-void        testPrintInt(char *string, int i) {
-	syscall(CG_TESTPRINTINT, string, i);
-}
-
-void        testPrintFloat(char *string, float f) {
-	syscall(CG_TESTPRINTFLOAT, string, PASSFLOAT(f));
-}
-
 int trap_MemoryRemaining(void) {
 	return syscall(CG_MEMORY_REMAINING);
 }

@@ -588,7 +588,6 @@ extern void         UI_Refresh(int realtime);
 extern qboolean     UI_ConsoleCommand(int realTime);
 extern void         UI_DrawHandlePic(float x, float y, float w, float h, qhandle_t hShader);
 extern void         UI_FillRect(float x, float y, float width, float height, const float *color);
-extern void         UI_DrawRect(float x, float y, float width, float height, const float *color);
 extern void         UI_DrawTopBottom(float x, float y, float w, float h);
 extern void         UI_DrawSides(float x, float y, float w, float h);
 extern void         UI_SetColor(const float *rgba);

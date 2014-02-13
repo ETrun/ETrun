@@ -140,17 +140,6 @@ bg_character_t *BG_GetCharacter(int team, int cls) {
 	}
 }
 
-bg_character_t *BG_GetCharacterForPlayerstate(playerState_t *ps) {
-	// FIXME: add disguise?
-	switch (ps->persistant[PERS_TEAM]) {
-	default:
-	case TEAM_AXIS:
-		return &axisClassCharacters[ps->stats[STAT_PLAYER_CLASS]];
-	case TEAM_ALLIES:
-		return &alliedClassCharacters[ps->stats[STAT_PLAYER_CLASS]];
-	}
-}
-
 //
 // Character Pool - used for custom characters
 //

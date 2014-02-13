@@ -223,54 +223,6 @@ static char *SkipWhitespace(char *data, qboolean *hasNewLines) {
 	return data;
 }
 
-int COM_Compress(char *data_p) {
-	char     *datai = data_p, *datao = data_p;
-	int      size = 0;
-
-	if (datai) {
-		int      c;
-		qboolean ws = qfalse;
-
-		while ((c = *datai) != 0) {
-			if (c == 13 || c == 10) {
-				*datao = c;
-				datao++;
-				ws = qfalse;
-				datai++;
-				size++;
-				// skip double slash comments
-			} else if (c == '/' && datai[1] == '/') {
-				while (*datai && *datai != '\n') {
-					datai++;
-				}
-				ws = qfalse;
-				// skip /* */ comments
-			} else if (c == '/' && datai[1] == '*') {
-				datai += 2; // Arnout: skip over '/*'
-				while (*datai && (*datai != '*' || datai[1] != '/')) {
-					datai++;
-				}
-				if (*datai) {
-					datai += 2;
-				}
-				ws = qfalse;
-			} else {
-				if (ws) {
-					*datao = ' ';
-					datao++;
-				}
-				*datao = c;
-				datao++;
-				datai++;
-				ws = qfalse;
-				size++;
-			}
-		}
-	}
-	*datao = 0;
-	return size;
-}
-
 char *COM_ParseExt(char **data_p, qboolean allowLineBreaks) {
 	int      c           = 0, len;
 	qboolean hasNewLines = qfalse;
@@ -484,20 +436,6 @@ void Parse1DMatrix(char **buf_p, int x, float *m) {
 
 int Q_isupper(int c) {
 	if (c >= 'A' && c <= 'Z') {
-		return 1;
-	}
-	return 0;
-}
-
-int Q_isalpha(int c) {
-	if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')) {
-		return 1;
-	}
-	return 0;
-}
-
-int Q_isnumeric(int c) {
-	if (c >= '0' && c <= '9') {
 		return 1;
 	}
 	return 0;

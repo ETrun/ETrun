@@ -2079,7 +2079,6 @@ void    CG_ImpactMark(qhandle_t markShader,
 //
 void    CG_ClearParticles(void);
 void    CG_AddParticles(void);
-void    CG_ParticleSnow(qhandle_t pshader, vec3_t origin, vec3_t origin2, int turb, float range, int snum);
 void    CG_ParticleSmoke(qhandle_t pshader, centity_t *cent);
 void    CG_ParticleSnowFlurry(qhandle_t pshader, centity_t *cent);
 void    CG_ParticleBulletDebris(vec3_t org, vec3_t vel, int duration);
@@ -2500,11 +2499,6 @@ qboolean    trap_GetUserCmd(int cmdNumber, usercmd_t *ucmd);
 // used for the weapon/holdable select and zoom
 void        trap_SetUserCmdValue(int stateValue, int flags, float sensitivityScale, int mpIdentClient);
 void        trap_SetClientLerpOrigin(float x, float y, float z);        // DHM - Nerve
-
-// aids for VM testing
-void        testPrintInt(char *string, int i);
-void        testPrintFloat(char *string, float f);
-
 int         trap_MemoryRemaining(void);
 void        trap_R_RegisterFont(const char *fontName, int pointSize, fontInfo_t *font);
 qboolean    trap_Key_IsDown(int keynum);
