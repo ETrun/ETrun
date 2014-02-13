@@ -67,10 +67,6 @@ int     trap_FS_Write(const void *buffer, int len, fileHandle_t f) {
 	return syscall(G_FS_WRITE, buffer, len, f);
 }
 
-int     trap_FS_Rename(const char *from, const char *to) {
-	return syscall(G_FS_RENAME, from, to);
-}
-
 void    trap_FS_FCloseFile(fileHandle_t f) {
 	syscall(G_FS_FCLOSE_FILE, f);
 }
@@ -101,10 +97,6 @@ int trap_Cvar_VariableIntegerValue(const char *var_name) {
 
 void trap_Cvar_VariableStringBuffer(const char *var_name, char *buffer, int bufsize) {
 	syscall(G_CVAR_VARIABLE_STRING_BUFFER, var_name, buffer, bufsize);
-}
-
-void trap_Cvar_LatchedVariableStringBuffer(const char *var_name, char *buffer, int bufsize) {
-	syscall(G_CVAR_LATCHEDVARIABLESTRINGBUFFER, var_name, buffer, bufsize);
 }
 
 void trap_LocateGameData(gentity_t *gEnts, int numGEntities, int sizeofGEntity_t,
@@ -175,21 +167,12 @@ int trap_PointContents(const vec3_t point, int passEntityNum) {
 	return syscall(G_POINT_CONTENTS, point, passEntityNum);
 }
 
-
 qboolean trap_InPVS(const vec3_t p1, const vec3_t p2) {
 	return syscall(G_IN_PVS, p1, p2);
 }
 
-qboolean trap_InPVSIgnorePortals(const vec3_t p1, const vec3_t p2) {
-	return syscall(G_IN_PVS_IGNORE_PORTALS, p1, p2);
-}
-
 void trap_AdjustAreaPortalState(gentity_t *ent, qboolean open) {
 	syscall(G_ADJUST_AREA_PORTAL_STATE, ent, open);
-}
-
-qboolean trap_AreasConnected(int area1, int area2) {
-	return syscall(G_AREAS_CONNECTED, area1, area2);
 }
 
 void trap_LinkEntity(gentity_t *ent) {
@@ -200,13 +183,8 @@ void trap_UnlinkEntity(gentity_t *ent) {
 	syscall(G_UNLINKENTITY, ent);
 }
 
-
 int trap_EntitiesInBox(const vec3_t mins, const vec3_t maxs, int *list, int maxcount) {
 	return syscall(G_ENTITIES_IN_BOX, mins, maxs, list, maxcount);
-}
-
-qboolean trap_EntityContact(const vec3_t mins, const vec3_t maxs, const gentity_t *ent) {
-	return syscall(G_ENTITY_CONTACT, mins, maxs, ent);
 }
 
 qboolean trap_EntityContactCapsule(const vec3_t mins, const vec3_t maxs, const gentity_t *ent) {
@@ -219,14 +197,6 @@ void trap_GetUsercmd(int clientNum, usercmd_t *cmd) {
 
 qboolean trap_GetEntityToken(char *buffer, int bufferSize) {
 	return syscall(G_GET_ENTITY_TOKEN, buffer, bufferSize);
-}
-
-int trap_DebugPolygonCreate(int color, int numPoints, vec3_t *points) {
-	return syscall(G_DEBUG_POLYGON_CREATE, color, numPoints, points);
-}
-
-void trap_DebugPolygonDelete(int id) {
-	syscall(G_DEBUG_POLYGON_DELETE, id);
 }
 
 int trap_RealTime(qtime_t *qtime) {
@@ -264,16 +234,4 @@ int trap_PC_ReadToken(int handle, pc_token_t *pc_token) {
 
 int trap_PC_SourceFileAndLine(int handle, char *filename, int *line) {
 	return syscall(BOTLIB_PC_SOURCE_FILE_AND_LINE, handle, filename, line);
-}
-
-int trap_PC_UnReadToken(int handle) {
-	return syscall(BOTLIB_PC_UNREAD_TOKEN, handle);
-}
-
-void trap_SendMessage(int clientNum, char *buf, int buflen) {
-	syscall(G_SENDMESSAGE, clientNum, buf, buflen);
-}
-
-messageStatus_t trap_MessageStatus(int clientNum) {
-	return syscall(G_MESSAGESTATUS, clientNum);
 }

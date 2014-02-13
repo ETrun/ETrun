@@ -71,10 +71,6 @@ void trap_Cvar_VariableStringBuffer(const char *var_name, char *buffer, int bufs
 	syscall(CG_CVAR_VARIABLESTRINGBUFFER, var_name, buffer, bufsize);
 }
 
-void trap_Cvar_LatchedVariableStringBuffer(const char *var_name, char *buffer, int bufsize) {
-	syscall(CG_CVAR_LATCHEDVARIABLESTRINGBUFFER, var_name, buffer, bufsize);
-}
-
 int trap_Argc(void) {
 	return syscall(CG_ARGC);
 }
@@ -139,10 +135,6 @@ clipHandle_t trap_CM_TempBoxModel(const vec3_t mins, const vec3_t maxs) {
 	return syscall(CG_CM_TEMPBOXMODEL, mins, maxs);
 }
 
-clipHandle_t trap_CM_TempCapsuleModel(const vec3_t mins, const vec3_t maxs) {
-	return syscall(CG_CM_TEMPCAPSULEMODEL, mins, maxs);
-}
-
 int     trap_CM_PointContents(const vec3_t p, clipHandle_t model) {
 	return syscall(CG_CM_POINTCONTENTS, p, model);
 }
@@ -177,22 +169,10 @@ void    trap_CM_TransformedCapsuleTrace(trace_t *results, const vec3_t start, co
 	syscall(CG_CM_TRANSFORMEDCAPSULETRACE, results, start, end, mins, maxs, model, brushmask, origin, angles);
 }
 
-int     trap_CM_MarkFragments(int numPoints, const vec3_t *points,
-                              const vec3_t projection,
-                              int maxPoints, vec3_t pointBuffer,
-                              int maxFragments, markFragment_t *fragmentBuffer) {
-	return syscall(CG_CM_MARKFRAGMENTS, numPoints, points, projection, maxPoints, pointBuffer, maxFragments, fragmentBuffer);
-}
-
 // ydnar
 void        trap_R_ProjectDecal(qhandle_t hShader, int numPoints, vec3_t *points, vec4_t projection, vec4_t color, int lifeTime, int fadeTime) {
 	syscall(CG_R_PROJECTDECAL, hShader, numPoints, points, projection, color, lifeTime, fadeTime);
 }
-
-void        trap_R_ClearDecals(void) {
-	syscall(CG_R_CLEARDECALS);
-}
-
 
 void    trap_S_StartSound(vec3_t origin, int entityNum, int entchannel, sfxHandle_t sfx) {
 	syscall(CG_S_STARTSOUND, origin, entityNum, entchannel, sfx, 127 /* Gordon: default volume always for the moment*/);
@@ -207,10 +187,6 @@ void    trap_S_StartSoundEx(vec3_t origin, int entityNum, int entchannel, sfxHan
 	syscall(CG_S_STARTSOUNDEX, origin, entityNum, entchannel, sfx, flags, 127 /* Gordon: default volume always for the moment*/);
 }
 //----(SA)	end
-
-void    trap_S_StartSoundExVControl(vec3_t origin, int entityNum, int entchannel, sfxHandle_t sfx, int flags, int volume) {
-	syscall(CG_S_STARTSOUNDEX, origin, entityNum, entchannel, sfx, flags, volume);
-}
 
 void    trap_S_StartLocalSound(sfxHandle_t sfx, int channelNum) {
 	syscall(CG_S_STARTLOCALSOUND, sfx, channelNum, 127 /* Gordon: default volume always for the moment*/);
@@ -239,12 +215,6 @@ void    trap_S_StopStreamingSound(int entityNum) {
 void    trap_S_UpdateEntityPosition(int entityNum, const vec3_t origin) {
 	syscall(CG_S_UPDATEENTITYPOSITION, entityNum, origin);
 }
-
-// Ridah, talking animations
-int     trap_S_GetVoiceAmplitude(int entityNum) {
-	return syscall(CG_S_GETVOICEAMPLITUDE, entityNum);
-}
-// done.
 
 void    trap_S_Respatialize(int entityNum, const vec3_t origin, vec3_t axis[3], int inwater) {
 	syscall(CG_S_RESPATIALIZE, entityNum, origin, axis, inwater);
@@ -332,16 +302,6 @@ void    trap_R_RenderScene(const refdef_t *fd) {
 	syscall(CG_R_RENDERSCENE, fd);
 }
 
-// Mad Doctor I, 11/4/2002.
-void    trap_R_SaveViewParms() {
-	syscall(CG_R_SAVEVIEWPARMS);
-}
-
-// Mad Doctor I, 11/4/2002.
-void    trap_R_RestoreViewParms() {
-	syscall(CG_R_RESTOREVIEWPARMS);
-}
-
 void    trap_R_SetColor(const float *rgba) {
 	syscall(CG_R_SETCOLOR, rgba);
 }
@@ -349,17 +309,6 @@ void    trap_R_SetColor(const float *rgba) {
 void    trap_R_DrawStretchPic(float x, float y, float w, float h,
                               float s1, float t1, float s2, float t2, qhandle_t hShader) {
 	syscall(CG_R_DRAWSTRETCHPIC, PASSFLOAT(x), PASSFLOAT(y), PASSFLOAT(w), PASSFLOAT(h), PASSFLOAT(s1), PASSFLOAT(t1), PASSFLOAT(s2), PASSFLOAT(t2), hShader);
-}
-
-void    trap_R_DrawRotatedPic(float x, float y, float w, float h,
-                              float s1, float t1, float s2, float t2, qhandle_t hShader, float angle) {
-	syscall(CG_R_DRAWROTATEDPIC, PASSFLOAT(x), PASSFLOAT(y), PASSFLOAT(w), PASSFLOAT(h), PASSFLOAT(s1), PASSFLOAT(t1), PASSFLOAT(s2), PASSFLOAT(t2), hShader, PASSFLOAT(angle));
-}
-
-void    trap_R_DrawStretchPicGradient(float x, float y, float w, float h,
-                                      float s1, float t1, float s2, float t2, qhandle_t hShader,
-                                      const float *gradientColor, int gradientType) {
-	syscall(CG_R_DRAWSTRETCHPIC_GRADIENT, PASSFLOAT(x), PASSFLOAT(y), PASSFLOAT(w), PASSFLOAT(h), PASSFLOAT(s1), PASSFLOAT(t1), PASSFLOAT(s2), PASSFLOAT(t2), hShader, gradientColor, gradientType);
 }
 
 void trap_R_Add2dPolys(polyVert_t *verts, int numverts, qhandle_t hShader) {
@@ -460,10 +409,6 @@ void trap_Key_SetCatcher(int catcher) {
 	syscall(CG_KEY_SETCATCHER, catcher);
 }
 
-int trap_Key_GetKey(const char *binding) {
-	return syscall(CG_KEY_GETKEY, binding);
-}
-
 int trap_PC_AddGlobalDefine(char *define) {
 	return syscall(CG_PC_ADD_GLOBAL_DEFINE, define);
 }
@@ -484,10 +429,6 @@ int trap_PC_SourceFileAndLine(int handle, char *filename, int *line) {
 	return syscall(CG_PC_SOURCE_FILE_AND_LINE, handle, filename, line);
 }
 
-int trap_PC_UnReadToken(int handle) {
-	return syscall(CG_PC_UNREAD_TOKEN, handle);
-}
-
 void    trap_S_StopBackgroundTrack(void) {
 	syscall(CG_S_STOPBACKGROUNDTRACK);
 }
@@ -500,11 +441,6 @@ void trap_SnapVector(float *v) {
 	syscall(CG_SNAPVECTOR, v);
 }
 
-// allows you to resize the animation dynamically
-void trap_CIN_SetExtents(int handle, int x, int y, int w, int h) {
-	syscall(CG_CIN_SETEXTENTS, handle, x, y, w, h);
-}
-
 qboolean trap_GetEntityToken(char *buffer, int bufferSize) {
 	return syscall(CG_GET_ENTITY_TOKEN, buffer, bufferSize);
 }
@@ -515,10 +451,6 @@ extern void Menus_OpenByName(const char *p);
 
 void trap_UI_Popup(int arg0) {
 	syscall(CG_INGAME_POPUP, arg0);
-}
-
-void trap_UI_ClosePopup(const char *arg0) {
-	syscall(CG_INGAME_CLOSEPOPUP, arg0);
 }
 
 void trap_Key_GetBindingBuf(int keynum, char *buf, int buflen) {
@@ -682,32 +614,4 @@ qboolean trap_R_inPVS(const vec3_t p1, const vec3_t p2) {
 
 void trap_GetHunkData(int *hunkused, int *hunkexpected) {
 	syscall(CG_GETHUNKDATA, hunkused, hunkexpected);
-}
-
-//zinx - binary message channel
-void trap_SendMessage(char *buf, int buflen) {
-	syscall(CG_SENDMESSAGE, buf, buflen);
-}
-
-messageStatus_t trap_MessageStatus(void) {
-	return syscall(CG_MESSAGESTATUS);
-}
-
-//bani - dynamic shaders
-qboolean trap_R_LoadDynamicShader(const char *shadername, const char *shadertext) {
-	return syscall(CG_R_LOADDYNAMICSHADER, shadername, shadertext);
-}
-
-// fretn - render to texture
-void trap_R_RenderToTexture(int textureid, int x, int y, int w, int h) {
-	syscall(CG_R_RENDERTOTEXTURE, textureid, x, y, w, h);
-}
-
-int trap_R_GetTextureId(const char *name) {
-	return syscall(CG_R_GETTEXTUREID, name);
-}
-
-// bani - sync rendering
-void trap_R_Finish(void) {
-	syscall(CG_R_FINISH);
 }

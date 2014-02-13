@@ -318,7 +318,6 @@ void    G_TouchTriggers(gentity_t *ent) {
 		} else {
 			// MrE: always use capsule for player
 			if (!trap_EntityContactCapsule(mins, maxs, hit)) {
-				//if ( !trap_EntityContact( mins, maxs, hit ) ) {
 				continue;
 			}
 		}

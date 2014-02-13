@@ -72,24 +72,8 @@ void trap_Cvar_VariableStringBuffer(const char *var_name, char *buffer, int bufs
 	syscall(UI_CVAR_VARIABLESTRINGBUFFER, var_name, buffer, bufsize);
 }
 
-void trap_Cvar_LatchedVariableStringBuffer(const char *var_name, char *buffer, int bufsize) {
-	syscall(UI_CVAR_LATCHEDVARIABLESTRINGBUFFER, var_name, buffer, bufsize);
-}
-
 void trap_Cvar_SetValue(const char *var_name, float value) {
 	syscall(UI_CVAR_SETVALUE, var_name, PASSFLOAT(value));
-}
-
-void trap_Cvar_Reset(const char *name) {
-	syscall(UI_CVAR_RESET, name);
-}
-
-void trap_Cvar_Create(const char *var_name, const char *var_value, int flags) {
-	syscall(UI_CVAR_CREATE, var_name, var_value, flags);
-}
-
-void trap_Cvar_InfoStringBuffer(int bit, char *buffer, int bufsize) {
-	syscall(UI_CVAR_INFOSTRINGBUFFER, bit, buffer, bufsize);
 }
 
 int trap_Argc(void) {
@@ -185,10 +169,6 @@ void trap_R_DrawStretchPic(float x, float y, float w, float h, float s1, float t
 	syscall(UI_R_DRAWSTRETCHPIC, PASSFLOAT(x), PASSFLOAT(y), PASSFLOAT(w), PASSFLOAT(h), PASSFLOAT(s1), PASSFLOAT(t1), PASSFLOAT(s2), PASSFLOAT(t2), hShader);
 }
 
-void trap_R_DrawRotatedPic(float x, float y, float w, float h, float s1, float t1, float s2, float t2, qhandle_t hShader, float angle) {
-	syscall(UI_R_DRAWROTATEDPIC, PASSFLOAT(x), PASSFLOAT(y), PASSFLOAT(w), PASSFLOAT(h), PASSFLOAT(s1), PASSFLOAT(t1), PASSFLOAT(s2), PASSFLOAT(t2), hShader, PASSFLOAT(angle));
-}
-
 void trap_R_ModelBounds(clipHandle_t model, vec3_t mins, vec3_t maxs) {
 	syscall(UI_R_MODELBOUNDS, model, mins, maxs);
 }
@@ -265,10 +245,6 @@ void trap_Key_SetCatcher(int catcher) {
 	syscall(UI_KEY_SETCATCHER, catcher);
 }
 
-void trap_GetClipboardData(char *buf, int bufsize) {
-	syscall(UI_GETCLIPBOARDDATA, buf, bufsize);
-}
-
 void trap_GetClientState(uiClientState_t *state) {
 	syscall(UI_GETCLIENTSTATE, state);
 }
@@ -279,38 +255,6 @@ void trap_GetGlconfig(glconfig_t *glconfig) {
 
 int trap_GetConfigString(int index, char *buff, int buffsize) {
 	return syscall(UI_GETCONFIGSTRING, index, buff, buffsize);
-}
-
-int trap_LAN_GetLocalServerCount(void) {
-	return syscall(UI_LAN_GETLOCALSERVERCOUNT);
-}
-
-void trap_LAN_GetLocalServerAddressString(int n, char *buf, int buflen) {
-	syscall(UI_LAN_GETLOCALSERVERADDRESSSTRING, n, buf, buflen);
-}
-
-int trap_LAN_GetGlobalServerCount(void) {
-	return syscall(UI_LAN_GETGLOBALSERVERCOUNT);
-}
-
-void trap_LAN_GetGlobalServerAddressString(int n, char *buf, int buflen) {
-	syscall(UI_LAN_GETGLOBALSERVERADDRESSSTRING, n, buf, buflen);
-}
-
-int trap_LAN_GetPingQueueCount(void) {
-	return syscall(UI_LAN_GETPINGQUEUECOUNT);
-}
-
-void trap_LAN_ClearPing(int n) {
-	syscall(UI_LAN_CLEARPING, n);
-}
-
-void trap_LAN_GetPing(int n, char *buf, int buflen, int *pingtime) {
-	syscall(UI_LAN_GETPING, n, buf, buflen, pingtime);
-}
-
-void trap_LAN_GetPingInfo(int n, char *buf, int buflen) {
-	syscall(UI_LAN_GETPINGINFO, n, buf, buflen);
 }
 
 // NERVE - SMF
@@ -403,10 +347,6 @@ int trap_PC_SourceFileAndLine(int handle, char *filename, int *line) {
 	return syscall(UI_PC_SOURCE_FILE_AND_LINE, handle, filename, line);
 }
 
-int trap_PC_UnReadToken(int handle) {
-	return syscall(UI_PC_UNREAD_TOKEN, handle);
-}
-
 void trap_S_StopBackgroundTrack(void) {
 	syscall(UI_S_STOPBACKGROUNDTRACK);
 }
@@ -419,19 +359,8 @@ int trap_RealTime(qtime_t *qtime) {
 	return syscall(UI_REAL_TIME, qtime);
 }
 
-// allows you to resize the animation dynamically
-void trap_CIN_SetExtents(int handle, int x, int y, int w, int h) {
-	syscall(UI_CIN_SETEXTENTS, handle, x, y, w, h);
-}
-
-
 void    trap_R_RemapShader(const char *oldShader, const char *newShader, const char *timeOffset) {
 	syscall(UI_R_REMAP_SHADER, oldShader, newShader, timeOffset);
-}
-
-// NERVE - SMF
-qboolean trap_GetLimboString(int index, char *buf) {
-	return syscall(UI_CL_GETLIMBOSTRING, index, buf);
 }
 
 #define MAX_VA_STRING       32000

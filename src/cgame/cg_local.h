@@ -2311,8 +2311,6 @@ void        trap_Cvar_Register(vmCvar_t *vmCvar, const char *varName, const char
 void        trap_Cvar_Update(vmCvar_t *vmCvar);
 void        trap_Cvar_Set(const char *var_name, const char *value);
 void        trap_Cvar_VariableStringBuffer(const char *var_name, char *buffer, int bufsize);
-void        trap_Cvar_LatchedVariableStringBuffer(const char *var_name, char *buffer, int bufsize);
-
 
 // ServerCommand and ConsoleCommand parameter access
 int         trap_Argc(void);
@@ -2349,7 +2347,6 @@ void        trap_CM_LoadMap(const char *mapname);
 int         trap_CM_NumInlineModels(void);
 clipHandle_t trap_CM_InlineModel(int index);        // 0 = world, 1+ = bmodels
 clipHandle_t trap_CM_TempBoxModel(const vec3_t mins, const vec3_t maxs);
-clipHandle_t trap_CM_TempCapsuleModel(const vec3_t mins, const vec3_t maxs);
 int         trap_CM_PointContents(const vec3_t p, clipHandle_t model);
 int         trap_CM_TransformedPointContents(const vec3_t p, clipHandle_t model, const vec3_t origin, const vec3_t angles);
 void        trap_CM_BoxTrace(trace_t *results, const vec3_t start, const vec3_t end,
@@ -2368,22 +2365,14 @@ void        trap_CM_TransformedCapsuleTrace(trace_t *results, const vec3_t start
                                             clipHandle_t model, int brushmask,
                                             const vec3_t origin, const vec3_t angles);
 
-// Returns the projection of a polygon onto the solid brushes in the world
-int         trap_CM_MarkFragments(int numPoints, const vec3_t *points,
-                                  const vec3_t projection,
-                                  int maxPoints, vec3_t pointBuffer,
-                                  int maxFragments, markFragment_t *fragmentBuffer);
-
 // ydnar: projects a decal onto brush model surfaces
 void        trap_R_ProjectDecal(qhandle_t hShader, int numPoints, vec3_t *points, vec4_t projection, vec4_t color, int lifeTime, int fadeTime);
-void        trap_R_ClearDecals(void);
 
 // normal sounds will have their volume dynamically changed as their entity
 // moves and the listener moves
 void        trap_S_StartSound(vec3_t origin, int entityNum, int entchannel, sfxHandle_t sfx);
 void        trap_S_StartSoundVControl(vec3_t origin, int entityNum, int entchannel, sfxHandle_t sfx, int volume);
 void        trap_S_StartSoundEx(vec3_t origin, int entityNum, int entchannel, sfxHandle_t sfx, int flags);
-void        trap_S_StartSoundExVControl(vec3_t origin, int entityNum, int entchannel, sfxHandle_t sfx, int flags, int volume);
 void        trap_S_StopStreamingSound(int entnum);    // usually AI.  character is talking and needs to be shut up /now/
 int         trap_S_GetSoundLength(sfxHandle_t sfx);
 int         trap_S_GetCurrentSoundTime(void);   // ydnar
@@ -2395,10 +2384,6 @@ void        trap_S_ClearSounds(qboolean killmusic);
 void        trap_S_AddLoopingSound(const vec3_t origin, const vec3_t velocity, sfxHandle_t sfx, int volume, int soundTime);
 void        trap_S_AddRealLoopingSound(const vec3_t origin, const vec3_t velocity, sfxHandle_t sfx, int range, int volume, int soundTime);
 void        trap_S_UpdateEntityPosition(int entityNum, const vec3_t origin);
-
-// Ridah, talking animations
-int         trap_S_GetVoiceAmplitude(int entityNum);
-// done.
 
 // repatialize recalculates the volumes of sound as they should be heard by the
 // given entityNum and position
@@ -2440,25 +2425,10 @@ void        trap_R_RenderScene(const refdef_t *fd);
 void        trap_R_SetColor(const float *rgba);     // NULL = 1,1,1,1
 void        trap_R_DrawStretchPic(float x, float y, float w, float h,
                                   float s1, float t1, float s2, float t2, qhandle_t hShader);
-void        trap_R_DrawRotatedPic(float x, float y, float w, float h,
-                                  float s1, float t1, float s2, float t2, qhandle_t hShader, float angle);      // NERVE - SMF
-void        trap_R_DrawStretchPicGradient(float x, float y, float w, float h, float s1, float t1, float s2, float t2, qhandle_t hShader, const float *gradientColor, int gradientType);
 void        trap_R_Add2dPolys(polyVert_t *verts, int numverts, qhandle_t hShader);
 void        trap_R_ModelBounds(clipHandle_t model, vec3_t mins, vec3_t maxs);
 int         trap_R_LerpTag(orientation_t *tag, const refEntity_t *refent, const char *tagName, int startIndex);
 void        trap_R_RemapShader(const char *oldShader, const char *newShader, const char *timeOffset);
-
-// Save out the old render info so we don't kill the LOD system here
-void trap_R_SaveViewParms();
-
-// Reset the view parameters
-void trap_R_RestoreViewParms();
-
-// Save out the old render info so we don't kill the LOD system here
-void trap_R_SaveViewParms();
-
-// Reset the view parameters
-void trap_R_RestoreViewParms();
 
 // Set fog
 void    trap_R_SetFog(int fogvar, int var1, int var2, float r, float g, float b, float density);
@@ -2505,7 +2475,6 @@ qboolean    trap_Key_IsDown(int keynum);
 int         trap_Key_GetCatcher(void);
 void        trap_Key_SetCatcher(int catcher);
 void        trap_Key_KeysForBinding(const char *binding, int *key1, int *key2);
-int         trap_Key_GetKey(const char *binding);
 qboolean    trap_Key_GetOverstrikeMode(void);
 void        trap_Key_SetOverstrikeMode(qboolean state);
 
@@ -2516,7 +2485,6 @@ void trap_UI_Popup(int arg0);
 
 // NERVE - SMF
 qhandle_t getTestShader(void);   // JPW NERVE shhh
-void trap_UI_ClosePopup(const char *arg0);
 void trap_Key_GetBindingBuf(int keynum, char *buf, int buflen);
 void trap_Key_SetBinding(int keynum, const char *binding);
 void trap_Key_KeynumToStringBuf(int keynum, char *buf, int buflen);
@@ -2524,25 +2492,11 @@ void trap_Key_KeynumToStringBuf(int keynum, char *buf, int buflen);
 
 void trap_TranslateString(const char *string, char *buf);       // NERVE - SMF - localization
 
-void trap_CIN_SetExtents(int handle, int x, int y, int w, int h);
-
 void trap_SnapVector(float *v);
 
 qboolean    trap_GetEntityToken(char *buffer, int bufferSize);
 qboolean    trap_R_inPVS(const vec3_t p1, const vec3_t p2);
 void        trap_GetHunkData(int *hunkused, int *hunkexpected);
-
-//zinx - binary message channel
-void        trap_SendMessage(char *buf, int buflen);
-messageStatus_t trap_MessageStatus(void);
-
-//bani - dynamic shaders
-qboolean    trap_R_LoadDynamicShader(const char *shadername, const char *shadertext);
-//fretn - render to texture
-void    trap_R_RenderToTexture(int textureid, int x, int y, int w, int h);
-int trap_R_GetTextureId(const char *name);
-//bani - flush rendering buffer
-void    trap_R_Finish(void);
 
 // Duffy, camera stuff
 #define CAM_PRIMARY 0   // the main camera for cutscenes, etc.

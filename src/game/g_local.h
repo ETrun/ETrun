@@ -1531,7 +1531,6 @@ void    trap_Args(char *buffer, int bufferLength);
 int     trap_FS_FOpenFile(const char *qpath, fileHandle_t *f, fsMode_t mode);
 void    trap_FS_Read(void *buffer, int len, fileHandle_t f);
 int     trap_FS_Write(const void *buffer, int len, fileHandle_t f);
-int     trap_FS_Rename(const char *from, const char *to);
 void    trap_FS_FCloseFile(fileHandle_t f);
 int     trap_FS_GetFileList(const char *path, const char *extension, char *listbuf, int bufsize);
 void    trap_SendConsoleCommand(int exec_when, const char *text);
@@ -1541,7 +1540,6 @@ void    trap_Cvar_Set(const char *var_name, const char *value);
 int     trap_Cvar_VariableIntegerValue(const char *var_name);
 float   trap_Cvar_VariableValue(const char *var_name);
 void    trap_Cvar_VariableStringBuffer(const char *var_name, char *buffer, int bufsize);
-void    trap_Cvar_LatchedVariableStringBuffer(const char *var_name, char *buffer, int bufsize);
 void    trap_LocateGameData(gentity_t *gEnts, int numGEntities, int sizeofGEntity_t, playerState_t *gameClients, int sizeofGameClient);
 void    trap_DropClient(int clientNum, const char *reason, int length);
 void    trap_SendServerCommand(int clientNum, const char *text);
@@ -1556,27 +1554,17 @@ void    trap_TraceCapsule(trace_t *results, const vec3_t start, const vec3_t min
 void    trap_TraceCapsuleNoEnts(trace_t *results, const vec3_t start, const vec3_t mins, const vec3_t maxs, const vec3_t end, int passEntityNum, int contentmask);
 int     trap_PointContents(const vec3_t point, int passEntityNum);
 qboolean trap_InPVS(const vec3_t p1, const vec3_t p2);
-qboolean trap_InPVSIgnorePortals(const vec3_t p1, const vec3_t p2);
 void    trap_AdjustAreaPortalState(gentity_t *ent, qboolean open);
-qboolean trap_AreasConnected(int area1, int area2);
 void    trap_LinkEntity(gentity_t *ent);
 void    trap_UnlinkEntity(gentity_t *ent);
 int     trap_EntitiesInBox(const vec3_t mins, const vec3_t maxs, int *entityList, int maxcount);
-qboolean trap_EntityContact(const vec3_t mins, const vec3_t maxs, const gentity_t *ent);
 qboolean trap_EntityContactCapsule(const vec3_t mins, const vec3_t maxs, const gentity_t *ent);
 void    trap_GetUsercmd(int clientNum, usercmd_t *cmd);
 qboolean    trap_GetEntityToken(char *buffer, int bufferSize);
 qboolean trap_GetTag(int clientNum, int tagFileNumber, char *tagName, orientation_t *or);
 qboolean trap_LoadTag(const char *filename);
-
 int     trap_RealTime(qtime_t *qtime);
-
-int     trap_DebugPolygonCreate(int color, int numPoints, vec3_t *points);
-void    trap_DebugPolygonDelete(int id);
 void    trap_SnapVector(float *v);
-
-void        trap_SendMessage(int clientNum, char *buf, int buflen);
-messageStatus_t trap_MessageStatus(int clientNum);
 
 void G_ExplodeMissile(gentity_t *ent);
 

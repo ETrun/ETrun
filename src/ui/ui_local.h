@@ -617,11 +617,7 @@ void            trap_Cvar_Update(vmCvar_t *vmCvar);
 void            trap_Cvar_Set(const char *var_name, const char *value);
 float           trap_Cvar_VariableValue(const char *var_name);
 void            trap_Cvar_VariableStringBuffer(const char *var_name, char *buffer, int bufsize);
-void            trap_Cvar_LatchedVariableStringBuffer(const char *var_name, char *buffer, int bufsize);
 void            trap_Cvar_SetValue(const char *var_name, float value);
-void            trap_Cvar_Reset(const char *name);
-void            trap_Cvar_Create(const char *var_name, const char *var_value, int flags);
-void            trap_Cvar_InfoStringBuffer(int bit, char *buffer, int bufsize);
 int             trap_Argc(void);
 void            trap_Argv(int n, char *buffer, int bufferLength);
 void            trap_Cmd_ExecuteText(int exec_when, const char *text);      // don't use EXEC_NOW!
@@ -644,7 +640,6 @@ void            trap_R_RenderScene(const refdef_t *fd);
 void            trap_R_SetColor(const float *rgba);
 void            trap_R_Add2dPolys(polyVert_t *verts, int numverts, qhandle_t hShader);
 void            trap_R_DrawStretchPic(float x, float y, float w, float h, float s1, float t1, float s2, float t2, qhandle_t hShader);
-void            trap_R_DrawRotatedPic(float x, float y, float w, float h, float s1, float t1, float s2, float t2, qhandle_t hShader, float angle);
 void            trap_R_ModelBounds(clipHandle_t model, vec3_t mins, vec3_t maxs);
 void            trap_UpdateScreen(void);
 int             trap_CM_LerpTag(orientation_t *tag, const refEntity_t *refent, const char *tagName);
@@ -660,19 +655,10 @@ void            trap_Key_SetOverstrikeMode(qboolean state);
 void            trap_Key_ClearStates(void);
 int             trap_Key_GetCatcher(void);
 void            trap_Key_SetCatcher(int catcher);
-void            trap_GetClipboardData(char *buf, int bufsize);
 void            trap_GetClientState(uiClientState_t *state);
 void            trap_GetGlconfig(glconfig_t *glconfig);
 int             trap_GetConfigString(int index, char *buff, int buffsize);
 int             trap_LAN_GetServerCount(int source);            // NERVE - SMF
-int             trap_LAN_GetLocalServerCount(void);
-void            trap_LAN_GetLocalServerAddressString(int n, char *buf, int buflen);
-int             trap_LAN_GetGlobalServerCount(void);
-void            trap_LAN_GetGlobalServerAddressString(int n, char *buf, int buflen);
-int             trap_LAN_GetPingQueueCount(void);
-void            trap_LAN_ClearPing(int n);
-void            trap_LAN_GetPing(int n, char *buf, int buflen, int *pingtime);
-void            trap_LAN_GetPingInfo(int n, char *buf, int buflen);
 int             trap_MemoryRemaining(void);
 
 // NERVE - SMF - multiplayer traps
@@ -698,10 +684,8 @@ void            trap_R_RegisterFont(const char *pFontname, int pointSize, fontIn
 void            trap_S_StopBackgroundTrack(void);
 void            trap_S_StartBackgroundTrack(const char *intro, const char *loop, int fadeupTime);
 void            trap_S_FadeAllSound(float targetvol, int time, qboolean stopsound);
-void            trap_CIN_SetExtents(int handle, int x, int y, int w, int h);
 int             trap_RealTime(qtime_t *qtime);
 void            trap_R_RemapShader(const char *oldShader, const char *newShader, const char *timeOffset);
-qboolean        trap_GetLimboString(int index, char *buf);              // NERVE - SMF
 void            trap_CheckAutoUpdate(void);                             // DHM - Nerve
 void            trap_GetAutoUpdate(void);                               // DHM - Nerve
 

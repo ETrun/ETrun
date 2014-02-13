@@ -536,8 +536,6 @@ int         trap_PC_LoadSource(const char *filename);
 int         trap_PC_FreeSource(int handle);
 int         trap_PC_ReadToken(int handle, pc_token_t *pc_token);
 int         trap_PC_SourceFileAndLine(int handle, char *filename, int *line);
-int         trap_PC_UnReadToken(int handle);
-
 
 //
 // panelhandling
