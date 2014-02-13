@@ -129,15 +129,6 @@ void CG_Text_PaintChar_Ext(float x, float y, float w, float h, float scalex, flo
 	trap_R_DrawStretchPic(x, y, w, h, s, t, s2, t2, hShader);
 }
 
-void CG_Text_PaintChar(float x, float y, float width, float height, float scale, float s, float t, float s2, float t2, qhandle_t hShader) {
-	float w, h;
-
-	w = width * scale;
-	h = height * scale;
-	CG_AdjustFrom640(&x, &y, &w, &h);
-	trap_R_DrawStretchPic(x, y, w, h, s, t, s2, t2, hShader);
-}
-
 void CG_Text_Paint_Centred_Ext(float x, float y, float scalex, float scaley, vec4_t color, const char *text, float adjust, int limit, int style, fontInfo_t *font) {
 	x -= CG_Text_Width_Ext(text, scalex, limit, font) * 0.5f;
 
@@ -199,46 +190,6 @@ void CG_Text_Paint(float x, float y, float scale, vec4_t color, const char *text
 	fontInfo_t *font = &cgDC.Assets.fonts[activeFont];
 
 	CG_Text_Paint_Ext(x, y, scale, scale, color, text, adjust, limit, style, font);
-}
-
-/*
-================
-CG_Draw3DModel
-
-================
-*/
-void CG_Draw3DModel(float x, float y, float w, float h, qhandle_t model, qhandle_t skin, vec3_t origin, vec3_t angles) {
-	refdef_t    refdef;
-	refEntity_t ent;
-
-	CG_AdjustFrom640(&x, &y, &w, &h);
-
-	memset(&refdef, 0, sizeof (refdef));
-
-	memset(&ent, 0, sizeof (ent));
-	AnglesToAxis(angles, ent.axis);
-	VectorCopy(origin, ent.origin);
-	ent.hModel     = model;
-	ent.customSkin = skin;
-	ent.renderfx   = RF_NOSHADOW;   // no stencil shadows
-
-	refdef.rdflags = RDF_NOWORLDMODEL;
-
-	AxisClear(refdef.viewaxis);
-
-	refdef.fov_x = 30;
-	refdef.fov_y = 30;
-
-	refdef.x      = x;
-	refdef.y      = y;
-	refdef.width  = w;
-	refdef.height = h;
-
-	refdef.time = cg.time;
-
-	trap_R_ClearScene();
-	trap_R_AddRefEntityToScene(&ent);
-	trap_R_RenderScene(&refdef);
 }
 
 /*

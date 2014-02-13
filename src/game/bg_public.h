@@ -1732,11 +1732,8 @@ typedef struct bg_character_s {
 void BG_InitWeaponStrings(void);
 void BG_AnimParseAnimScript(animModelInfo_t *modelInfo, animScriptData_t *scriptData, const char *filename, char *input);
 int BG_AnimScriptAnimation(playerState_t *ps, animModelInfo_t *modelInfo, scriptAnimMoveTypes_t movetype, qboolean isContinue);
-int BG_AnimScriptCannedAnimation(playerState_t *ps, animModelInfo_t *modelInfo);
 int BG_AnimScriptEvent(playerState_t *ps, animModelInfo_t *modelInfo, scriptAnimEventTypes_t event, qboolean isContinue, qboolean force);
 int BG_IndexForString(char *token, animStringItem_t *strings, qboolean allowFail);
-int BG_PlayAnimName(playerState_t *ps, animModelInfo_t *animModelInfo, char *animName, animBodyPart_t bodyPart, qboolean setTimer, qboolean isContinue, qboolean force);
-void BG_ClearAnimTimer(playerState_t *ps, animBodyPart_t bodyPart);
 qboolean BG_ValidAnimScript(int clientNum);
 char *BG_GetAnimString(animModelInfo_t *animModelInfo, int anim);
 void BG_UpdateConditionValue(int client, int condition, int value, qboolean checkConversion);
@@ -1746,9 +1743,7 @@ void BG_SetConditionBitFlag(int client, int condition, int bitNumber);
 void BG_ClearConditionBitFlag(int client, int condition, int bitNumber);
 int BG_GetAnimScriptAnimation(int client, animModelInfo_t *animModelInfo, aistateEnum_t aistate, scriptAnimMoveTypes_t movetype);
 void BG_AnimUpdatePlayerStateConditions(pmove_t *pmove);
-animation_t *BG_AnimationForString(char *string, animModelInfo_t *animModelInfo);
 animation_t *BG_GetAnimationForIndex(animModelInfo_t *animModelInfo, int index);
-int BG_GetAnimScriptEvent(playerState_t *ps, scriptAnimEventTypes_t event);
 int PM_IdleAnimForWeapon(int weapon);
 int PM_RaiseAnimForWeapon(int weapon);
 void PM_ContinueWeaponAnim(int anim);
@@ -1757,7 +1752,6 @@ extern animStringItem_t animStateStr[];
 extern animStringItem_t animBodyPartsStr[];
 
 bg_playerclass_t *BG_GetPlayerClassInfo(int team, int cls);
-bg_playerclass_t *BG_PlayerClassForPlayerState(playerState_t *ps);
 qboolean BG_ClassHasWeapon(bg_playerclass_t *classInfo, weapon_t weap);
 qboolean BG_WeaponIsPrimaryForClassAndTeam(int classnum, team_t team, weapon_t weapon);
 int BG_ClassWeaponCount(bg_playerclass_t *classInfo, team_t team);
@@ -1913,16 +1907,11 @@ typedef enum {
 
 void BG_AdjustAAGunMuzzleForBarrel(vec_t *origin, vec_t *forward, vec_t *right, vec_t *up, int barrel);
 
-int BG_ClassTextToClass(char *token);
-
 qboolean BG_IsScopedWeapon(int weapon);
 
 int BG_FootstepForSurface(int surfaceFlags);
 
 int BG_simpleWeaponState(int ws);
-
-// Color escape handling
-int BG_cleanName(const char *pszIn, char *pszOut, int dwMaxLength, qboolean fCRLF);
 
 // Crosshair support
 void BG_setCrosshair(char *colString, float *col, float alpha, char *cvarName);

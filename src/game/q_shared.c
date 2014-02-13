@@ -474,70 +474,6 @@ void Parse1DMatrix(char **buf_p, int x, float *m) {
 	COM_MatchToken(buf_p, ")");
 }
 
-void Parse2DMatrix(char **buf_p, int y, int x, float *m) {
-	int i;
-
-	COM_MatchToken(buf_p, "(");
-
-	for (i = 0 ; i < y ; ++i) {
-		Parse1DMatrix(buf_p, x, m + i * x);
-	}
-
-	COM_MatchToken(buf_p, ")");
-}
-
-/*
-===============
-Com_ParseInfos
-===============
-*/
-int Com_ParseInfos(char *buf, int max, char infos[][MAX_INFO_STRING]) {
-	int        count;
-	char       key[MAX_TOKEN_CHARS];
-
-	count = 0;
-
-	for (;; ) {
-		const char *token;
-
-		token = COM_Parse(&buf);
-		if (!token[0]) {
-			break;
-		}
-		if (strcmp(token, "{") != 0) {
-			Com_Printf("Missing { in info file\n");
-			break;
-		}
-
-		if (count == max) {
-			Com_Printf("Max infos exceeded\n");
-			break;
-		}
-
-		infos[count][0] = 0;
-		for (;; ) {
-			token = COM_Parse(&buf);
-			if (!token[0]) {
-				Com_Printf("Unexpected end of info file\n");
-				break;
-			}
-			if (!strcmp(token, "}")) {
-				break;
-			}
-			Q_strncpyz(key, token, sizeof (key));
-
-			token = COM_ParseExt(&buf, qfalse);
-			if (!token[0]) {
-				token = "<NULL>";
-			}
-			Info_SetValueForKey(infos[count], key, token);
-		}
-		count++;
-	}
-
-	return count;
-}
-
 /*
 ============================================================================
 
@@ -562,14 +498,6 @@ int Q_isalpha(int c) {
 
 int Q_isnumeric(int c) {
 	if (c >= '0' && c <= '9') {
-		return 1;
-	}
-	return 0;
-}
-
-int Q_isalphanumeric(int c) {
-	if (Q_isalpha(c) ||
-	    Q_isnumeric(c)) {
 		return 1;
 	}
 	return 0;

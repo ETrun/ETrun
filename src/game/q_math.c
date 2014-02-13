@@ -236,49 +236,6 @@ void ByteToDir(int b, vec3_t dir) {
 	VectorCopy(bytedirs[b], dir);
 }
 
-
-unsigned ColorBytes3(float r, float g, float b) {
-	unsigned i = 0;
-
-	((byte *)&i)[0] = r * 255;
-	((byte *)&i)[1] = g * 255;
-	((byte *)&i)[2] = b * 255;
-
-	return i;
-}
-
-unsigned ColorBytes4(float r, float g, float b, float a) {
-	unsigned i = 0;
-
-	((byte *)&i)[0] = r * 255;
-	((byte *)&i)[1] = g * 255;
-	((byte *)&i)[2] = b * 255;
-	((byte *)&i)[3] = a * 255;
-
-	return i;
-}
-
-float NormalizeColor(const vec3_t in, vec3_t out) {
-	float max;
-
-	max = in[0];
-	if (in[1] > max) {
-		max = in[1];
-	}
-	if (in[2] > max) {
-		max = in[2];
-	}
-
-	if (!max) {
-		VectorClear(out);
-	} else {
-		out[0] = in[0] / max;
-		out[1] = in[1] / max;
-		out[2] = in[2] / max;
-	}
-	return max;
-}
-
 /*
 ===============
 RotatePointAroundVector
@@ -562,17 +519,6 @@ float AngleMod(float a) {
 
 /*
 =================
-AngleNormalize2Pi
-
-returns angle normalized to the range [0 <= angle < 2*M_PI]
-=================
-*/
-float AngleNormalize2Pi(float angle) {
-	return DEG2RAD(AngleNormalize360(RAD2DEG(angle)));
-}
-
-/*
-=================
 AngleNormalize360
 
 returns angle normalized to the range [0 <= angle < 360]
@@ -633,12 +579,6 @@ float RadiusFromBounds(const vec3_t mins, const vec3_t maxs) {
 	return VectorLength(corner);
 }
 
-
-void ClearBounds(vec3_t mins, vec3_t maxs) {
-	mins[0] = mins[1] = mins[2] = 99999;
-	maxs[0] = maxs[1] = maxs[2] = -99999;
-}
-
 void AddPointToBounds(const vec3_t v, vec3_t mins, vec3_t maxs) {
 	if (v[0] < mins[0]) {
 		mins[0] = v[0];
@@ -661,32 +601,6 @@ void AddPointToBounds(const vec3_t v, vec3_t mins, vec3_t maxs) {
 		maxs[2] = v[2];
 	}
 }
-
-qboolean PointInBounds(const vec3_t v, const vec3_t mins, const vec3_t maxs) {
-	if (v[0] < mins[0]) {
-		return qfalse;
-	}
-	if (v[0] > maxs[0]) {
-		return qfalse;
-	}
-
-	if (v[1] < mins[1]) {
-		return qfalse;
-	}
-	if (v[1] > maxs[1]) {
-		return qfalse;
-	}
-
-	if (v[2] < mins[2]) {
-		return qfalse;
-	}
-	if (v[2] > maxs[2]) {
-		return qfalse;
-	}
-
-	return qtrue;
-}
-
 
 int VectorCompare(const vec3_t v1, const vec3_t v2) {
 	if (v1[0] != v2[0] || v1[1] != v2[1] || v1[2] != v2[2]) {
@@ -746,41 +660,6 @@ vec_t VectorNormalize2(const vec3_t v, vec3_t out) {
 
 }
 
-void _VectorMA(const vec3_t veca, float scale, const vec3_t vecb, vec3_t vecc) {
-	vecc[0] = veca[0] + scale * vecb[0];
-	vecc[1] = veca[1] + scale * vecb[1];
-	vecc[2] = veca[2] + scale * vecb[2];
-}
-
-
-vec_t _DotProduct(const vec3_t v1, const vec3_t v2) {
-	return v1[0] * v2[0] + v1[1] * v2[1] + v1[2] * v2[2];
-}
-
-void _VectorSubtract(const vec3_t veca, const vec3_t vecb, vec3_t out) {
-	out[0] = veca[0] - vecb[0];
-	out[1] = veca[1] - vecb[1];
-	out[2] = veca[2] - vecb[2];
-}
-
-void _VectorAdd(const vec3_t veca, const vec3_t vecb, vec3_t out) {
-	out[0] = veca[0] + vecb[0];
-	out[1] = veca[1] + vecb[1];
-	out[2] = veca[2] + vecb[2];
-}
-
-void _VectorCopy(const vec3_t in, vec3_t out) {
-	out[0] = in[0];
-	out[1] = in[1];
-	out[2] = in[2];
-}
-
-void _VectorScale(const vec3_t in, vec_t scale, vec3_t out) {
-	out[0] = in[0] * scale;
-	out[1] = in[1] * scale;
-	out[2] = in[2] * scale;
-}
-
 void CrossProduct(const vec3_t v1, const vec3_t v2, vec3_t cross) {
 	cross[0] = v1[1] * v2[2] - v1[2] * v2[1];
 	cross[1] = v1[2] * v2[0] - v1[0] * v2[2];
@@ -808,7 +687,6 @@ vec_t DistanceSquared(const vec3_t p1, const vec3_t p2) {
 	VectorSubtract(p2, p1, v);
 	return v[0] * v[0] + v[1] * v[1] + v[2] * v[2];
 }
-
 
 void VectorInverse(vec3_t v) {
 	v[0] = -v[0];

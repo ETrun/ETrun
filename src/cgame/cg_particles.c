@@ -1216,54 +1216,6 @@ void CG_ParticleBulletDebris(vec3_t org, vec3_t vel, int duration) {
 
 }
 
-// DHM - Nerve :: bullets hitting dirt
-
-void CG_ParticleDirtBulletDebris(vec3_t org, vec3_t vel, int duration) {
-	int         r = rand() % 3;
-	cparticle_t *p;
-
-	if (!free_particles) {
-		return;
-	}
-	p                = free_particles;
-	free_particles   = p->next;
-	p->next          = active_particles;
-	active_particles = p;
-	p->time          = cg.time;
-
-	p->endtime   = cg.time + duration;
-	p->startfade = (float)(cg.time + duration / 2);
-
-	p->color    = EMISIVEFADE;
-	p->alpha    = 1.0;
-	p->alphavel = 0;
-
-	p->height    = 1.2f;
-	p->width     = 1.2f;
-	p->endheight = 4.5f;
-	p->endwidth  = 4.5f;
-
-	if (r == 0) {
-		p->pshader = cgs.media.dirtParticle1Shader;
-	} else if (r == 1) {
-		p->pshader = cgs.media.dirtParticle2Shader;
-	} else {
-		p->pshader = cgs.media.dirtParticle3Shader;
-	}
-
-	p->type = P_SMOKE;
-
-	VectorCopy(org, p->org);
-
-	p->vel[0]   = vel[0];
-	p->vel[1]   = vel[1];
-	p->vel[2]   = vel[2];
-	p->accel[0] = p->accel[1] = 0;
-
-	p->accel[2] = -330;
-	p->vel[2]  += -20;
-}
-
 // NERVE - SMF :: the core of the dirt explosion
 void CG_ParticleDirtBulletDebris_Core(vec3_t org, vec3_t vel, int duration, float width, float height, float alpha, qhandle_t shader) {
 	cparticle_t *p;
@@ -1368,76 +1320,6 @@ void CG_ParticleExplosion(char *animStr, vec3_t origin, vec3_t vel, int duration
 	VectorCopy(vel, p->vel);
 	VectorClear(p->accel);
 
-}
-
-int CG_NewParticleArea(int num) {
-	// const char *str;
-	char   *str;
-	char   *token;
-	int    type;
-	vec3_t origin, origin2;
-	int    i;
-	float  range = 0;
-	int    turb;
-	int    numparticles;
-	int    snum;
-
-	str = (char *) CG_ConfigString(num);
-	if (!str[0]) {
-		return 0;
-	}
-
-	// returns type 128 64 or 32
-	token = COM_Parse(&str);
-	type  = atoi(token);
-
-	if (type == 1) {
-		range = 128;
-	} else if (type == 2) {
-		range = 64;
-	} else if (type == 3) {
-		range = 32;
-	} else if (type == 0) {
-		range = 256;
-	} else if (type == 4) {
-		range = 8;
-	} else if (type == 5) {
-		range = 16;
-	} else if (type == 6) {
-		range = 32;
-	} else if (type == 7) {
-		range = 64;
-	}
-
-
-	for (i = 0; i < 3; i++) {
-		token     = COM_Parse(&str);
-		origin[i] = atof(token);
-	}
-
-	for (i = 0; i < 3; i++) {
-		token      = COM_Parse(&str);
-		origin2[i] = atof(token);
-	}
-
-	token        = COM_Parse(&str);
-	numparticles = atoi(token);
-
-	token = COM_Parse(&str);
-	turb  = atoi(token);
-
-	token = COM_Parse(&str);
-	snum  = atoi(token);
-
-	for (i = 0; i < numparticles; i++) {
-		if (type >= 4) {
-			CG_ParticleBubble(cgs.media.waterBubbleShader, origin, origin2, turb, range, snum);
-		} else {
-			CG_ParticleSnow(cgs.media.snowShader, origin, origin2, turb, range, snum);
-		}
-	}
-
-	return 1;
 }
 
 void    CG_SnowLink(centity_t *cent, qboolean particleOn) {

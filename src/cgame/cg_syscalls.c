@@ -443,7 +443,6 @@ qboolean trap_getCameraInfo(int camNum, int time, vec3_t *origin, vec3_t *angles
 	return syscall(CG_GETCAMERAINFO, camNum, time, origin, angles, fov);
 }
 
-
 qboolean trap_Key_IsDown(int keynum) {
 	return syscall(CG_KEY_ISDOWN, keynum);
 }
@@ -472,7 +471,6 @@ void trap_Key_SetCatcher(int catcher) {
 int trap_Key_GetKey(const char *binding) {
 	return syscall(CG_KEY_GETKEY, binding);
 }
-
 
 int trap_PC_AddGlobalDefine(char *define) {
 	return syscall(CG_PC_ADD_GLOBAL_DEFINE, define);

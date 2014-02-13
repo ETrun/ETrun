@@ -441,57 +441,6 @@ void G_RemoveReferee() {
 	}
 }
 
-void G_MuteClient() {
-	char cmd[MAX_TOKEN_CHARS];
-	int  cnum;
-
-	trap_Argv(1, cmd, sizeof (cmd));
-
-	if (!*cmd) {
-		G_Printf("usage: Mute <clientname>.");
-		return;
-	}
-
-	cnum = G_refClientnumForName(NULL, cmd);
-
-	if (cnum != MAX_CLIENTS) {
-		if (level.clients[cnum].sess.referee != RL_RCON) {
-			trap_SendServerCommand(cnum, va("cpm \"^3You have been muted\""));
-			level.clients[cnum].sess.muted = qtrue;
-			G_Printf("%s^* has been muted\n", cmd);
-			ClientUserinfoChanged(cnum);
-		} else {
-			G_Printf("Cannot mute a referee.\n");
-		}
-	}
-}
-
-void G_UnMuteClient() {
-	char cmd[MAX_TOKEN_CHARS];
-	int  cnum;
-
-	trap_Argv(1, cmd, sizeof (cmd));
-
-	if (!*cmd) {
-		G_Printf("usage: Unmute <clientname>.\n");
-		return;
-	}
-
-	cnum = G_refClientnumForName(NULL, cmd);
-
-	if (cnum != MAX_CLIENTS) {
-		if (level.clients[cnum].sess.muted) {
-			trap_SendServerCommand(cnum, va("cpm \"^2You have been un-muted\""));
-			level.clients[cnum].sess.muted = qfalse;
-			G_Printf("%s has been un-muted\n", cmd);
-			ClientUserinfoChanged(cnum);
-		} else {
-			G_Printf("User is not muted.\n");
-		}
-	}
-}
-
-
 /////////////////
 //   Utility
 //

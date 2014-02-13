@@ -1448,10 +1448,6 @@ int CG_LimboPanel_GetClass(void) {
 	return cgs.ccSelectedClass;
 }
 
-bg_character_t *CG_LimboPanel_GetCharacter(void) {
-	return BG_GetCharacter(CG_LimboPanel_GetTeam(), CG_LimboPanel_GetClass());
-}
-
 bg_playerclass_t *CG_LimboPanel_GetPlayerClass(void) {
 	return BG_GetPlayerClassInfo(CG_LimboPanel_GetTeam(), CG_LimboPanel_GetClass());
 }
@@ -1465,7 +1461,7 @@ int CG_LimboPanel_WeaponCount_ForSlot(int number) {
 		bg_playerclass_t *classInfo = CG_LimboPanel_GetPlayerClass();
 		int              cnt        = 0, i;
 
-		for (i = 0; i < MAX_WEAPS_PER_CLASS; i++) {
+		for (i = 0; i < MAX_WEAPS_PER_CLASS; ++i) {
 			if (!classInfo->classWeapons[i]) {
 				break;
 			}
@@ -1475,26 +1471,6 @@ int CG_LimboPanel_WeaponCount_ForSlot(int number) {
 		return cnt;
 	}
 	return 1;
-}
-
-int CG_LimboPanel_GetWeaponNumberForPos(int pos) {
-	int i, cnt = 0;
-
-	if (cgs.ccSelectedWeaponNumber == 0) {
-		return pos;
-	}
-
-	if (pos < 0 || pos > CG_LimboPanel_WeaponCount()) {
-		return 0;
-	}
-
-	for (i = 0; i <= pos; i++) {
-		while (CG_LimboPanel_WeaponIsDisabled(i + cnt)) {
-			cnt++;
-		}
-	}
-
-	return pos + cnt;
 }
 
 weapon_t CG_LimboPanel_GetWeaponForNumber(int number, int slot, qboolean ignoreDisabled) {

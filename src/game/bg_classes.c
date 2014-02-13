@@ -189,10 +189,6 @@ bg_playerclass_t *BG_GetPlayerClassInfo(int team, int cls) {
 	return &teamList[cls];
 }
 
-bg_playerclass_t *BG_PlayerClassForPlayerState(playerState_t *ps) {
-	return BG_GetPlayerClassInfo(ps->persistant[PERS_TEAM], ps->stats[STAT_PLAYER_CLASS]);
-}
-
 qboolean BG_ClassHasWeapon(bg_playerclass_t *classInfo, weapon_t weap) {
 	int i;
 
@@ -277,22 +273,4 @@ const char *BG_ClassLetterForNumber(int classNum) {
 	default:
 		return "^1E";
 	}
-}
-
-int BG_ClassTextToClass(char *token) {
-	if (!Q_stricmp(token, "soldier")) {
-		return PC_SOLDIER;
-	} else if (!Q_stricmp(token, "medic")) {
-		return PC_MEDIC;
-	} else if (!Q_stricmp(token, "lieutenant")) {       // FIXME: remove from missionpack
-		return PC_FIELDOPS;
-	} else if (!Q_stricmp(token, "fieldops")) {
-		return PC_FIELDOPS;
-	} else if (!Q_stricmp(token, "engineer")) {
-		return PC_ENGINEER;
-	} else if (!Q_stricmp(token, "covertops")) {
-		return PC_COVERTOPS;
-	}
-
-	return -1;
 }

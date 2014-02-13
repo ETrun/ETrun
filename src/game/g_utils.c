@@ -629,49 +629,6 @@ gentity_t *G_PopupMessage(popupMessageType_t type) {
 	return e;
 }
 
-
-
-
-/*
-==============================================================================
-
-Kill box
-
-==============================================================================
-*/
-
-/*
-=================
-G_KillBox
-
-Kills all entities that would touch the proposed new positioning
-of ent.  Ent should be unlinked before calling this!
-=================
-*/
-void G_KillBox(gentity_t *ent) {
-	int       i, num;
-	int       touch[MAX_GENTITIES];
-	vec3_t    mins, maxs;
-
-	VectorAdd(ent->client->ps.origin, ent->r.mins, mins);
-	VectorAdd(ent->client->ps.origin, ent->r.maxs, maxs);
-	num = trap_EntitiesInBox(mins, maxs, touch, MAX_GENTITIES);
-
-	for (i = 0 ; i < num ; ++i) {
-		gentity_t *hit = &g_entities[touch[i]];
-
-		if (!hit->client) {
-			continue;
-		}
-		if (!hit->r.linked) {   // RF, inactive AI shouldn't be gibbed
-			continue;
-		}
-
-		// nail it
-		G_Damage(hit, ent, ent, NULL, NULL, 100000, DAMAGE_NO_PROTECTION, MOD_TELEFRAG);
-	}
-}
-
 //==============================================================================
 
 /*
@@ -699,8 +656,6 @@ Adds an event+parm and twiddles the event counter
 ===============
 */
 void G_AddEvent(gentity_t *ent, int event, int eventParm) {
-//	int		bits;
-
 	if (!event) {
 		G_Printf("G_AddEvent: zero event added for entity %i\n", ent->s.number);
 		return;

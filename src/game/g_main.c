@@ -1196,21 +1196,6 @@ void G_UpdateCvars(void) {
 	}
 }
 
-// Reset particular server variables back to defaults if a config is voted in.
-void G_wipeCvars(void) {
-	int         i;
-	cvarTable_t *pCvars;
-
-	for (i = 0, pCvars = gameCvarTable; i < gameCvarTableSize; i++, pCvars++) {
-		if (pCvars->vmCvar && pCvars->fConfigReset) {
-			G_Printf("set %s %s\n", pCvars->cvarName, pCvars->defaultString);
-			trap_Cvar_Set(pCvars->cvarName, pCvars->defaultString);
-		}
-	}
-
-	G_UpdateCvars();
-}
-
 // Nico, this function is called when map doesn't have a game_manager (i.e. no script_multiplayer)
 // this is the case with q3 maps
 static void G_loadFakeGameManager(void) {
@@ -1724,24 +1709,6 @@ MAP CHANGING
 
 ========================================================================
 */
-
-/*
-========================
-SendScoreboardMessageToAllClients
-
-Do this at BeginIntermission time and whenever ranks are recalculated
-due to enters/exits/forced team changes
-========================
-*/
-void SendScoreboardMessageToAllClients(void) {
-	int i;
-
-	for (i = 0; i < level.numConnectedClients; i++) {
-		if (level.clients[level.sortedClients[i]].pers.connected == CON_CONNECTED) {
-			level.clients[level.sortedClients[i]].wantsscore = qtrue;
-		}
-	}
-}
 
 /*
 ==================

@@ -35,7 +35,6 @@ extern void gas_think(gentity_t *gas);
 extern void gas_touch(gentity_t *gas, gentity_t *other, trace_t *trace);
 extern void SP_target_smoke(gentity_t *ent);
 
-void M_think(gentity_t *ent);
 void G_ExplodeMissile(gentity_t *ent);
 
 /*
@@ -224,48 +223,6 @@ void G_MissileImpact(gentity_t *ent, trace_t *trace, int impactDamage) {
 }
 
 /*
-==============
-Concussive_think
-==============
-*/
-
-/*
-==============
-M_think
-==============
-*/
-void M_think(gentity_t *ent) {
-	gentity_t *tent;
-
-	ent->count++;
-
-	if (ent->count == ent->health) {
-		ent->think = G_FreeEntity;
-	}
-
-	tent = G_TempEntity(ent->s.origin, EV_SMOKE);
-	VectorCopy(ent->s.origin, tent->s.origin);
-
-	// Note to self Maxx said to lower the spawn loc for the smoke 16 units
-	tent->s.origin[2] += 16;
-
-	tent->s.time    = 3000;
-	tent->s.time2   = 100;
-	tent->s.density = 0;
-	if (ent->s.density == 1) {
-		tent->s.angles2[0] = 16;
-	} else {
-		// Note to self Maxx changed this to 24
-		tent->s.angles2[0] = 24;
-	}
-	tent->s.angles2[1] = 96;
-	tent->s.angles2[2] = 50;
-
-	ent->nextthink = level.time + FRAMETIME;
-
-}
-
-/*
 ================
 G_ExplodeMissile
 
@@ -400,18 +357,6 @@ void G_ExplodeMissile(gentity_t *ent) {
 		}
 	}
 }
-
-/*
-================
-G_RunBomb
-================
-*/
-
-// just sits about doing nothing but tracing
-void G_RunBomb(gentity_t *ent) {
-	G_RunThink(ent);
-}
-
 
 /*
 ================
@@ -637,75 +582,6 @@ void G_PredictBounceMissile(gentity_t *ent, trajectory_t *pos, trace_t *trace, i
 
 	VectorAdd(origin, trace->plane.normal, pos->trBase);
 	pos->trTime = time;
-}
-
-/*
-================
-G_PredictMissile
-
-  selfNum is the character that is checking to see what the missile is going to do
-
-  returns qfalse if the missile won't explode, otherwise it'll return the time is it expected to explode
-================
-*/
-int G_PredictMissile(gentity_t *ent, int duration, vec3_t endPos, qboolean allowBounce) {
-	vec3_t       origin;
-	trace_t      tr;
-	int          time;
-	trajectory_t pos;
-	vec3_t       org;
-	gentity_t    backupEnt;
-
-	pos = ent->s.pos;
-	BG_EvaluateTrajectory(&pos, level.time, org, qfalse, ent->s.effect2Time);
-
-	backupEnt = *ent;
-
-	for (time = level.time + FRAMETIME; time < level.time + duration; time += FRAMETIME) {
-
-		// get current position
-		BG_EvaluateTrajectory(&pos, time, origin, qfalse, ent->s.effect2Time);
-
-		// trace a line from the previous position to the current position,
-		// ignoring interactions with the missile owner
-		trap_Trace(&tr, org, ent->r.mins, ent->r.maxs, origin,
-		           ent->r.ownerNum, ent->clipmask);
-
-		VectorCopy(tr.endpos, org);
-
-		if (tr.startsolid) {
-			*ent = backupEnt;
-			return qfalse;
-		}
-
-		if (tr.fraction != 1) {
-			// never explode or bounce on sky
-			if  (tr.surfaceFlags & SURF_NOIMPACT) {
-				*ent = backupEnt;
-				return qfalse;
-			}
-
-			if (allowBounce && (ent->s.eFlags & (EF_BOUNCE | EF_BOUNCE_HALF))) {
-				G_PredictBounceMissile(ent, &pos, &tr, time - FRAMETIME + (int)((float)FRAMETIME * tr.fraction));
-				pos.trTime = time;
-				continue;
-			}
-
-			// exploded, so drop out of loop
-			break;
-		}
-	}
-
-	// get current position
-	VectorCopy(org, endPos);
-	// set the entity data back
-	*ent = backupEnt;
-	//
-	if (allowBounce && (ent->s.eFlags & (EF_BOUNCE | EF_BOUNCE_HALF))) {
-		return ent->nextthink;
-	}
-	// it will probably explode before it times out
-	return time;
 }
 
 //=============================================================================
@@ -1071,39 +947,6 @@ void G_FadeItems(gentity_t *ent, int modType) {
 
 		G_FreeEntity(e);
 	}
-}
-
-/*
-==========
-G_FindDroppedItem
-==========
-*/
-
-qboolean G_HasDroppedItem(gentity_t *ent, int modType) {
-	gentity_t *e;
-	int       i;
-
-	e = &g_entities[MAX_CLIENTS];
-	for (i = MAX_CLIENTS ; i < level.num_entities ; i++, e++) {
-		if (!e->inuse) {
-			continue;
-		}
-
-		if (e->s.eType != ET_MISSILE) {
-			continue;
-		}
-
-		if (e->methodOfDeath != modType) {
-			continue;
-		}
-
-		if (e->parent != ent) {
-			continue;
-		}
-
-		return qtrue;
-	}
-	return qfalse;
 }
 
 /*
@@ -1483,70 +1326,6 @@ gentity_t *fire_flamebarrel(gentity_t *self, vec3_t start, vec3_t dir) {
 
 	return bolt;
 }
-
-// Rafael sniper
-/*
-=================
-fire_lead
-=================
-*/
-
-void fire_lead(gentity_t *self, vec3_t start, vec3_t dir, int damage) {
-
-	trace_t   tr;
-	vec3_t    end;
-	gentity_t *tent;
-	gentity_t *traceEnt;
-	vec3_t    forward, right, up;
-	vec3_t    angles;
-	float     r, u;
-
-	r = crandom() * self->random;
-	u = crandom() * self->random;
-
-	vectoangles(dir, angles);
-	AngleVectors(angles, forward, right, up);
-
-	VectorMA(start, 8192, forward, end);
-	VectorMA(end, r, right, end);
-	VectorMA(end, u, up, end);
-
-	trap_Trace(&tr, start, NULL, NULL, end, self->s.number, MASK_SHOT);
-	if (tr.surfaceFlags & SURF_NOIMPACT) {
-		return;
-	}
-
-	traceEnt = &g_entities[tr.entityNum];
-
-	// snap the endpos to integers, but nudged towards the line
-	SnapVectorTowards(tr.endpos, start);
-
-	// send bullet impact
-	if (traceEnt->takedamage && traceEnt->client) {
-		tent              = G_TempEntity(tr.endpos, EV_BULLET_HIT_FLESH);
-		tent->s.eventParm = traceEnt->s.number;
-	} else {
-		// Ridah, bullet impact should reflect off surface
-		vec3_t reflect;
-		float  dot;
-
-		tent = G_TempEntity(tr.endpos, EV_BULLET_HIT_WALL);
-
-		dot = DotProduct(forward, tr.plane.normal);
-		VectorMA(forward, -2 * dot, tr.plane.normal, reflect);
-		VectorNormalize(reflect);
-
-		tent->s.eventParm = DirToByte(reflect);
-		// done.
-	}
-	tent->s.otherEntityNum = self->s.number;
-
-	if (traceEnt->takedamage) {
-		G_Damage(traceEnt, self, self, forward, tr.endpos,
-		         damage, 0, MOD_MACHINEGUN);
-	}
-}
-
 
 // Rafael sniper
 // visible

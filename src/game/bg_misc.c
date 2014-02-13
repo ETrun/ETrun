@@ -3992,26 +3992,6 @@ int BG_simpleWeaponState(int ws) {
 	return WSTATE_IDLE;
 }
 
-// strip colors and control codes, copying up to dwMaxLength-1 "good" chars and nul-terminating
-// returns the length of the cleaned string
-int BG_cleanName(const char *pszIn, char *pszOut, int dwMaxLength, qboolean fCRLF) {
-	const char *pInCopy     = pszIn;
-	const char *pszOutStart = pszOut;
-
-	while (*pInCopy && (pszOut - pszOutStart < dwMaxLength - 1)) {
-		if (*pInCopy == '^') {
-			pInCopy += ((pInCopy[1] == 0) ? 1 : 2);
-		} else if ((*pInCopy < 32 && (!fCRLF || *pInCopy != '\n')) || (*pInCopy > 126)) {
-			pInCopy++;
-		} else {
-			*pszOut++ = *pInCopy++;
-		}
-	}
-
-	*pszOut = 0;
-	return pszOut - pszOutStart;
-}
-
 // Only used locally
 typedef struct {
 	char *colorname;

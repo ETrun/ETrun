@@ -161,10 +161,6 @@ int CG_LoadCamera(const char *name) {
 	return -1;
 }
 
-void CG_FreeCamera(int camNum) {
-	cameraInuse[camNum] = qfalse;
-}
-
 // @TEST.  See if we can get an initial camera started at the first frame.
 char     g_initialCamera[256]      = "";
 qboolean g_initialCameraStartBlack = qfalse;
@@ -207,24 +203,6 @@ void CG_StartCamera(const char *name, qboolean startBlack) {
 		CG_Fade(0, cg.time, 0);          // ensure fadeup
 		trap_Cvar_Set("cg_letterbox", "0");
 		CG_Printf("Unable to load camera %s\n", lname);
-	}
-}
-
-/*
-==============
-CG_StartInitialCamera
-==============
-*/
-void CG_StartInitialCamera() {
-	// See if we've got a camera name
-	if (g_initialCamera[0] != 0) {
-		// Start a camera with the initial data we stored.
-		CG_StartCamera(g_initialCamera, g_initialCameraStartBlack);
-
-		// Clear it now so we don't get re-entrance problems
-		g_initialCamera[0]        = 0;
-		g_initialCameraStartBlack = qfalse;
-
 	}
 }
 

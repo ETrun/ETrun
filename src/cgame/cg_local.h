@@ -1842,7 +1842,6 @@ void CG_UpdateCvars(void);
 
 int CG_CrosshairPlayer(void);
 int CG_LastAttacker(void);
-void CG_LoadMenus(const char *menuFile);
 void CG_KeyEvent(int key, qboolean down);
 void CG_MouseEvent(int x, int y);
 void CG_EventHandling(int type, qboolean fForced);
@@ -1883,10 +1882,8 @@ int CG_CalcViewValues(void);
 //
 void CG_AdjustFrom640(float *x, float *y, float *w, float *h);
 void CG_FillRect(float x, float y, float width, float height, const float *color);
-void CG_HorizontalPercentBar(float x, float y, float width, float height, float percent);
 void CG_DrawPic(float x, float y, float width, float height, qhandle_t hShader);
 void CG_DrawPicST(float x, float y, float width, float height, float s0, float t0, float s1, float t1, qhandle_t hShader);
-void CG_DrawRotatedPic(float x, float y, float width, float height, qhandle_t hShader, float angle);        // NERVE - SMF
 void CG_DrawChar(int x, int y, int width, int height, int ch);
 void CG_FilledBar(float x, float y, float w, float h, float *startColor, float *endColor, const float *bgColor, float frac, int flags);
 // JOSEPH 10-26-99
@@ -1905,22 +1902,11 @@ void CG_DrawStringExt_Shadow(int x, int y, const char *string, const float *setC
                              qboolean forceColor, int shadow, int charWidth, int charHeight, int maxChars);
 // END JOSEPH
 void CG_DrawBigString(int x, int y, const char *s, float alpha);
-void CG_DrawBigStringColor(int x, int y, const char *s, vec4_t color);
-void CG_DrawSmallString(int x, int y, const char *s, float alpha);
-void CG_DrawSmallStringColor(int x, int y, const char *s, vec4_t color);
-// JOSEPH 4-25-00
-void CG_DrawBigString2(int x, int y, const char *s, float alpha);
-void CG_DrawBigStringColor2(int x, int y, const char *s, vec4_t color);
-// END JOSEPH
 int CG_DrawStrlen(const char *str);
 
 float *CG_FadeColor(int startMsec, int totalMsec);
-float *CG_TeamColor(int team);
 void CG_TileClear(void);
 void CG_ColorForHealth(vec4_t hcolor);
-void CG_GetColorForHealth(int health, vec4_t hcolor);
-
-void UI_DrawProportionalString(int x, int y, const char *str, int style, vec4_t color);
 
 // new hud stuff
 void CG_DrawRect(float x, float y, float width, float height, float size, const float *color);
@@ -1958,9 +1944,7 @@ int CG_Text_Height_Ext(const char *text, float scale, int limit, fontInfo_t *fon
 int CG_Text_Height(const char *text, float scale, int limit);
 qboolean CG_OwnerDrawVisible(int flags);
 void CG_RunMenuScript(char **args);
-void CG_Draw3DModel(float x, float y, float w, float h, qhandle_t model, qhandle_t skin, vec3_t origin, vec3_t angles);
 void CG_Text_PaintChar_Ext(float x, float y, float w, float h, float scalex, float scaley, float s, float t, float s2, float t2, qhandle_t hShader);
-void CG_Text_PaintChar(float x, float y, float width, float height, float scale, float s, float t, float s2, float t2, qhandle_t hShader);
 void CG_DrawCursorhint(rectDef_t *rect);
 void CG_DrawWeapStability(rectDef_t *rect);
 void CG_DrawWeapHeat(rectDef_t *rect, int align);
@@ -1993,7 +1977,6 @@ sfxHandle_t CG_CustomSound(const char *soundName);
 
 // Rafael particles
 extern qboolean initparticles;
-int CG_NewParticleArea(int num);
 
 //
 // cg_predict.c
@@ -2001,7 +1984,6 @@ int CG_NewParticleArea(int num);
 void CG_BuildSolidList(void);
 int CG_PointContents(const vec3_t point, int passEntityNum);
 void CG_Trace(trace_t *result, const vec3_t start, const vec3_t mins, const vec3_t maxs, const vec3_t end, int skipNumber, int mask);
-void CG_FTTrace(trace_t *result, const vec3_t start, const vec3_t mins, const vec3_t maxs, const vec3_t end, int skipNumber, int mask);
 void CG_PredictPlayerState(void);
 
 //
@@ -2101,7 +2083,6 @@ void    CG_ParticleSnow(qhandle_t pshader, vec3_t origin, vec3_t origin2, int tu
 void    CG_ParticleSmoke(qhandle_t pshader, centity_t *cent);
 void    CG_ParticleSnowFlurry(qhandle_t pshader, centity_t *cent);
 void    CG_ParticleBulletDebris(vec3_t org, vec3_t vel, int duration);
-void    CG_ParticleDirtBulletDebris(vec3_t org, vec3_t vel, int duration);       // DHM - Nerve
 void    CG_ParticleDirtBulletDebris_Core(vec3_t org, vec3_t vel, int duration, float width, float height, float alpha, qhandle_t shader);
 void    CG_ParticleSparks(vec3_t org, vec3_t vel, int duration, float x, float y, float speed);
 
@@ -2577,19 +2558,15 @@ void        trap_stopCamera(int camNum);
 qboolean    trap_getCameraInfo(int camNum, int time, vec3_t *origin, vec3_t *angles, float *fov);
 void        CG_SetInitialCamera(const char *name, qboolean startBlack);
 void        CG_StartCamera(const char *name, qboolean startBlack);
-void        CG_StartInitialCamera();
 void        CG_StopCamera(void);
 
 //----(SA)	added
 int         CG_LoadCamera(const char *name);
-void        CG_FreeCamera(int camNum);
 //----(SA)	end
 
 void CG_LocateArena(void);
 void CG_CloseMenus();
 void CG_LimboMenu_f(void);
-
-animation_t *CG_GetLimboAnimation(playerInfo_t *pi, const char *name);
 
 typedef struct {
 	weapon_t weapindex;
@@ -2598,8 +2575,6 @@ typedef struct {
 
 extern weaponType_t weaponTypes[];
 weaponType_t *WM_FindWeaponTypeForWeapon(weapon_t weapon);
-
-
 
 // Gordon: Fireteam stuff
 #define CG_IsOnFireteam(clientNum) cgs.clientinfo[clientNum].fireteamData
@@ -2614,8 +2589,6 @@ qboolean CG_FireteamHasClass(int classnum, qboolean selectedonly);
 const char *CG_BuildSelectedFirteamString(void);
 
 // cg_window.c
-qboolean CG_addString(cg_window_t *w, char *buf);
-
 void CG_initStrings(void);
 void CG_removeStrings(cg_window_t *w);
 void CG_windowDraw(void);
@@ -2692,7 +2665,6 @@ void                CG_LimboPanel_GetWeaponCardIconData(weapon_t weap, qhandle_t
 qboolean            CG_LimboPanel_Draw(void);
 team_t              CG_LimboPanel_GetTeam(void);
 team_t              CG_LimboPanel_GetRealTeam(void);
-bg_character_t *CG_LimboPanel_GetCharacter(void);
 int                 CG_LimboPanel_GetClass(void);
 int                 CG_LimboPanel_WeaponCount(void);
 int                 CG_LimboPanel_WeaponCount_ForSlot(int number);
@@ -2703,7 +2675,6 @@ weapon_t            CG_LimboPanel_GetSelectedWeapon(void);
 weapon_t            CG_LimboPanel_GetWeaponForNumber(int number, int slot, qboolean ignoreDisabled);
 qboolean            CG_LimboPanel_WeaponIsDisabled(int weap);
 qboolean            CG_LimboPanel_RealWeaponIsDisabled(weapon_t weap);
-int                 CG_LimboPanel_GetWeaponNumberForPos(int pos);
 void                CG_LimboPanel_SetSelectedWeaponNumForSlot(int index, int number);
 weapon_t            CG_LimboPanel_GetSelectedWeaponForSlot(int index);
 
@@ -2733,7 +2704,6 @@ void CG_LoadPanel_RenderPercentageMeter(panel_button_t *button);
 void CG_LoadPanel_RenderContinueButton(panel_button_t *button);
 void CG_LoadPanel_RenderLoadingBar(panel_button_t *button);
 void CG_LoadPanel_KeyHandling(int key, qboolean down);
-qboolean CG_LoadPanel_ContinueButtonKeyDown(panel_button_t *button, int key);
 void CG_DrawConnectScreen(qboolean interactive, qboolean forcerefresh);
 
 //

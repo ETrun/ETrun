@@ -1015,8 +1015,6 @@ qboolean SetTeam(gentity_t *ent, char *s, weapon_t w1, weapon_t w2, qboolean set
 void G_SetClientWeapons(gentity_t *ent, weapon_t w1, weapon_t w2, qboolean updateclient);
 void Cmd_FollowCycle_f(gentity_t *ent, int dir);
 void Cmd_Kill_f(gentity_t *ent);
-void G_EntitySound(gentity_t *ent, const char *soundId, int volume);
-void G_EntitySoundNoCut(gentity_t *ent, const char *soundId, int volume);
 int ClientNumbersFromString(char *s, int *plist);
 int ClientNumberFromString(gentity_t *to, char *s);
 void SanitizeString(char *in, char *out, qboolean fToLower);
@@ -1061,7 +1059,6 @@ qboolean ClientIsFlooding(gentity_t *ent);
 //
 void G_RunItem(gentity_t *ent);
 void RespawnItem(gentity_t *ent);
-void UseHoldableItem(gentity_t *ent, int item);
 void PrecacheItem(gitem_t *it);
 gentity_t *Drop_Item(gentity_t *ent, gitem_t *item, float angle, qboolean novelocity);
 gentity_t *LaunchItem(gitem_t *item, vec3_t origin, vec3_t velocity, int ownerNum);
@@ -1098,7 +1095,6 @@ int     G_StringIndex(const char *string);
 qboolean G_AllowTeamsAllowed(gentity_t *ent, gentity_t *activator);
 void    G_UseEntity(gentity_t *ent, gentity_t *other, gentity_t *activator);
 void    G_TeamCommand(team_t team, char *cmd);
-void    G_KillBox(gentity_t *ent);
 gentity_t *G_Find(gentity_t *from, int fieldofs, const char *match);
 gentity_t *G_FindByTargetname(gentity_t *from, const char *match);
 gentity_t *G_FindByTarget(gentity_t *from, const char *match);  // Nico, find by target
@@ -1161,10 +1157,6 @@ gentity_t *G_BuildLeg(gentity_t *ent);
 // g_missile.c
 //
 void G_RunMissile(gentity_t *ent);
-void G_RunBomb(gentity_t *ent);
-int G_PredictMissile(gentity_t *ent, int duration, vec3_t endPos, qboolean allowBounce);
-
-qboolean G_HasDroppedItem(gentity_t *ent, int modType);
 
 // Rafael zombiespit
 void G_RunDebris(gentity_t *ent);
@@ -1180,7 +1172,6 @@ gentity_t *fire_rocket(gentity_t *self, vec3_t start, vec3_t dir);
 
 #define Fire_Lead(ent, activator, spread, damage, muzzle, forward, right, up) Fire_Lead_Ext(ent, activator, spread, damage, muzzle, forward, right, up, MOD_MACHINEGUN)
 void Fire_Lead_Ext(gentity_t *ent, gentity_t *activator, float spread, int damage, vec3_t muzzle, vec3_t forward, vec3_t right, vec3_t up, int mod);
-void fire_lead(gentity_t *self, vec3_t start, vec3_t dir, int damage);
 qboolean visible(gentity_t *self, gentity_t *other);
 
 gentity_t *fire_mortar(gentity_t *self, vec3_t start, vec3_t dir);
@@ -1194,7 +1185,6 @@ gentity_t *G_TestEntityPosition(gentity_t *ent);
 void G_RunMover(gentity_t *ent);
 qboolean G_MoverPush(gentity_t *pusher, vec3_t move, vec3_t amove, gentity_t **obstacle);
 void Use_BinaryMover(gentity_t *ent, gentity_t *other, gentity_t *activator);
-void G_Activate(gentity_t *ent, gentity_t *activator);
 
 void G_TryDoor(gentity_t *ent, gentity_t *activator);   //----(SA)	added
 
@@ -1303,7 +1293,6 @@ void FindIntermissionPoint(void); // Nico, note: this function is needed
 void G_RunThink(gentity_t *ent);
 void QDECL G_LogPrintf(const char *fmt, ...) _attribute((format(printf, 1, 2)));
 void QDECL G_LogDebug(const char *functionName, const char *severity, const char *fmt, ...) _attribute((format(printf, 3, 4)));
-void SendScoreboardMessageToAllClients(void);
 void QDECL G_Printf(const char *fmt, ...) _attribute((format(printf, 1, 2)));
 void QDECL G_DPrintf(const char *fmt, ...) _attribute((format(printf, 1, 2)));
 void QDECL G_Error(const char *fmt, ...) _attribute((format(printf, 1, 2)));
@@ -1340,8 +1329,6 @@ qboolean ReadyToConstruct(gentity_t *ent, gentity_t *constructible, qboolean upd
 // g_team.c
 //
 qboolean OnSameTeam(gentity_t *ent1, gentity_t *ent2);
-int Team_ClassForString(char *string);
-
 
 //
 // g_mem.c
@@ -1714,20 +1701,12 @@ struct g_serverEntity_s {
 
 // clear out all the sp entities
 void InitServerEntities(void);
-// get the server entity with the passed in number
-g_serverEntity_t *GetServerEntity(int num);
-// Give a gentity_t, create a sp entity, copy all pertinent data, and return it
-g_serverEntity_t *CreateServerEntity(gentity_t *ent);
 // These server entities don't get to update every frame, but some of them have to set themselves up
 //		after they've all been created
 //		So we want to give each entity the chance to set itself up after it has been created
 void InitialServerEntitySetup();
-// Like G_Find, but for server entities
-g_serverEntity_t *FindServerEntity(g_serverEntity_t *from, int fieldofs, char *match);
-
 
 #define SE_FOFS(x) ((int)&(((g_serverEntity_t *)0)->x))
-
 
 // Match settings
 #define PAUSE_NONE      0x00    // Match is NOT paused.
@@ -1776,15 +1755,10 @@ typedef struct {
 	int team_score;
 } team_info;
 
-
-
 ///////////////////////
 // g_main.c
 //
 void G_UpdateCvars(void);
-void G_wipeCvars(void);
-
-
 
 ///////////////////////
 // g_cmds_ext.c
@@ -1826,10 +1800,6 @@ void G_refPrintf(gentity_t *ent, const char *fmt, ...) _attribute((format(printf
 void G_PlayerBan(void);
 void G_MakeReferee(void);
 void G_RemoveReferee(void);
-void G_MuteClient(void);
-void G_UnMuteClient(void);
-
-
 
 ///////////////////////
 // g_team.c
@@ -1885,7 +1855,6 @@ gentity_t *G_IsConstructible(team_t team, gentity_t *toi);
 qboolean G_EmplacedGunIsRepairable(gentity_t *ent, gentity_t *other);
 qboolean G_EmplacedGunIsMountable(gentity_t *ent, gentity_t *other);
 void G_CheckForCursorHints(gentity_t *ent);
-int G_TeamCount(gentity_t *ent, weapon_t weap);
 
 qboolean G_IsFireteamLeader(int entityNum, fireteamData_t **teamNum);
 void G_RegisterFireteam(int entityNum, qboolean priv);
@@ -1894,9 +1863,7 @@ void SetPlayerSpawn(gentity_t *ent, int spawn, qboolean update);
 void G_UpdateSpawnCounts(void);
 
 void G_SetConfigStringValue(int num, const char *key, const char *value);
-void G_GlobalClientEvent(int event, int param, int client);
 
-void G_InitTempTraceIgnoreEnts(void);
 void G_ResetTempTraceIgnoreEnts(void);
 void G_TempTraceIgnoreEntity(gentity_t *ent);
 void G_TempTraceIgnorePlayersAndBodies(void);

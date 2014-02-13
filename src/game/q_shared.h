@@ -408,23 +408,8 @@ void ByteToDir(int b, vec3_t dir);
 
 #define SnapVector(v) { v[0] = ((int)(v[0])); v[1] = ((int)(v[1])); v[2] = ((int)(v[2])); }
 
-// just in case you do't want to use the macros
-vec_t _DotProduct(const vec3_t v1, const vec3_t v2);
-void _VectorSubtract(const vec3_t veca, const vec3_t vecb, vec3_t out);
-void _VectorAdd(const vec3_t veca, const vec3_t vecb, vec3_t out);
-void _VectorCopy(const vec3_t in, vec3_t out);
-void _VectorScale(const vec3_t in, float scale, vec3_t out);
-void _VectorMA(const vec3_t veca, float scale, const vec3_t vecb, vec3_t vecc);
-
-unsigned ColorBytes3(float r, float g, float b);
-unsigned ColorBytes4(float r, float g, float b, float a);
-
-float NormalizeColor(const vec3_t in, vec3_t out);
-
 float RadiusFromBounds(const vec3_t mins, const vec3_t maxs);
-void ClearBounds(vec3_t mins, vec3_t maxs);
 void AddPointToBounds(const vec3_t v, vec3_t mins, vec3_t maxs);
-qboolean PointInBounds(const vec3_t v, const vec3_t mins, const vec3_t maxs);
 int VectorCompare(const vec3_t v1, const vec3_t v2);
 vec_t VectorLength(const vec3_t v);
 vec_t VectorLengthSquared(const vec3_t v);
@@ -459,7 +444,6 @@ void    LerpPosition(vec3_t start, vec3_t end, float frac, vec3_t out);
 float   AngleSubtract(float a1, float a2);
 void    AnglesSubtract(vec3_t v1, vec3_t v2, vec3_t v3);
 
-float AngleNormalize2Pi(float angle);
 float AngleNormalize360(float angle);
 float AngleNormalize180(float angle);
 float AngleDelta(float angle1, float angle2);
@@ -492,7 +476,6 @@ char *COM_Parse(char **data_p);
 char *COM_ParseExt(char **data_p, qboolean allowLineBreak);
 int     COM_Compress(char *data_p);
 void    COM_ParseError(char *format, ...) _attribute((format(printf, 1, 2)));
-int Com_ParseInfos(char *buf, int max, char infos[][MAX_INFO_STRING]);
 
 qboolean COM_BitCheck(const int array[], int bitNum);
 void COM_BitSet(int array[], int bitNum);
@@ -540,7 +523,6 @@ void SkipBracedSection(char **program);
 void SkipRestOfLine(char **data);
 
 void Parse1DMatrix(char **buf_p, int x, float *m);
-void Parse2DMatrix(char **buf_p, int y, int x, float *m);
 
 extern void trap_Error(const char *fmt);
 extern void QDECL CG_Error(const char *msg, ...);
@@ -571,7 +553,6 @@ typedef enum {
 int Q_isupper(int c);
 int Q_isalpha(int c);
 int Q_isnumeric(int c);
-int Q_isalphanumeric(int c);
 
 // portable case insensitive compare
 int     Q_stricmp(const char *s1, const char *s2);

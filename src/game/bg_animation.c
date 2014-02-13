@@ -402,29 +402,6 @@ static int BG_AnimationIndexForString(char *string, animModelInfo_t *animModelIn
 
 /*
 =================
-BG_AnimationForString
-=================
-*/
-animation_t *BG_AnimationForString(char *string, animModelInfo_t *animModelInfo) {
-	int         i, hash;
-
-	hash = BG_StringHashValue(string);
-
-	for (i = 0; i < animModelInfo->numAnimations; ++i) {
-		animation_t *anim = animModelInfo->animations[i];
-
-		if ((hash == anim->nameHash) && !Q_stricmp(string, anim->name)) {
-			// found a match
-			return anim;
-		}
-	}
-	// no match found
-	Com_Error(ERR_DROP, "BG_AnimationForString: unknown animation '%s' for animation group '%s'", string, animModelInfo->animationGroup);
-	return NULL;    // shutup compiler
-}
-
-/*
-=================
 BG_IndexForString
 
   errors out if no match found
@@ -1192,31 +1169,6 @@ animScriptItem_t *BG_FirstValidItem(int client, animScript_t *script) {
 }
 
 /*
-=====================
-BG_ClearAnimTimer: clears the animation timer.
-    this is useful when we want to break a animscriptevent
-=====================
-*/
-void BG_ClearAnimTimer(playerState_t *ps, animBodyPart_t bodyPart) {
-	switch (bodyPart) {
-	case ANIM_BP_LEGS:
-
-		ps->legsTimer = 0;
-		break;
-
-	case ANIM_BP_TORSO:
-		ps->torsoTimer = 0;
-		break;
-
-	case ANIM_BP_BOTH:
-	default:
-		ps->legsTimer  = 0;
-		ps->torsoTimer = 0;
-		break;
-	}
-}
-
-/*
 ===============
 BG_PlayAnim
 ===============
@@ -1274,15 +1226,6 @@ int BG_PlayAnim(playerState_t *ps, animModelInfo_t *animModelInfo, int animNum, 
 	}
 
 	return duration;
-}
-
-/*
-===============
-BG_PlayAnimName
-===============
-*/
-int BG_PlayAnimName(playerState_t *ps, animModelInfo_t *animModelInfo, char *animName, animBodyPart_t bodyPart, qboolean setTimer, qboolean isContinue, qboolean force) {
-	return BG_PlayAnim(ps, animModelInfo, BG_AnimationIndexForString(animName, animModelInfo), bodyPart, 0, setTimer, isContinue, force);
 }
 
 /*
@@ -1374,45 +1317,6 @@ int BG_AnimScriptAnimation(playerState_t *ps, animModelInfo_t *animModelInfo, sc
 
 	// run it
 	return BG_ExecuteCommand(ps, animModelInfo, scriptCommand, qfalse, isContinue, qfalse) != -1;
-}
-
-/*
-================
-BG_AnimScriptCannedAnimation
-
-  uses the current movetype for this client to play a canned animation
-
-  returns the duration in milliseconds that this model should be paused. -1 if no anim found
-================
-*/
-int BG_AnimScriptCannedAnimation(playerState_t *ps, animModelInfo_t *animModelInfo) {
-	animScript_t          *script;
-	animScriptItem_t      *scriptItem;
-	animScriptCommand_t   *scriptCommand;
-	scriptAnimMoveTypes_t movetype;
-
-	if (ps->eFlags & EF_DEAD) {
-		return -1;
-	}
-
-	movetype = globalScriptData->clientConditions[ps->clientNum][ANIM_COND_MOVETYPE][0];
-	if (!movetype) {      // no valid movetype yet for this client
-		return -1;
-	}
-	//
-	script = &animModelInfo->scriptCannedAnims[movetype];
-	if (!script->numItems) {
-		return -1;
-	}
-	// find the first script item, that passes all the conditions for this event
-	scriptItem = BG_FirstValidItem(ps->clientNum, script);
-	if (!scriptItem) {
-		return -1;
-	}
-	// pick a random command
-	scriptCommand = &scriptItem->commands[rand() % scriptItem->numCommands];
-	// run it
-	return BG_ExecuteCommand(ps, animModelInfo, scriptCommand, qtrue, qfalse, qfalse);
 }
 
 /*
@@ -1582,40 +1486,6 @@ int BG_GetAnimScriptAnimation(int client, animModelInfo_t *animModelInfo, aistat
 	if (!scriptCommand->bodyPart[0]) {
 		return -1;
 	}
-	// return the animation
-	return scriptCommand->animIndex[0];
-}
-
-/*
-================
-BG_GetAnimScriptEvent
-
-  returns the animation index for this event
-================
-*/
-int BG_GetAnimScriptEvent(playerState_t *ps, scriptAnimEventTypes_t event) {
-	animModelInfo_t     *animModelInfo;
-	animScript_t        *script;
-	animScriptItem_t    *scriptItem;
-	animScriptCommand_t *scriptCommand;
-
-	if (event != ANIM_ET_DEATH && ps->eFlags & EF_DEAD) {
-		return -1;
-	}
-
-	animModelInfo = BG_GetCharacterForPlayerstate(ps)->animModelInfo;
-	script        = &animModelInfo->scriptEvents[event];
-	if (!script->numItems) {
-		return -1;
-	}
-	// find the first script item, that passes all the conditions for this event
-	scriptItem = BG_FirstValidItem(ps->clientNum, script);
-	if (!scriptItem) {
-		return -1;
-	}
-	// pick a random command
-	scriptCommand = &scriptItem->commands[rand() % scriptItem->numCommands];
-
 	// return the animation
 	return scriptCommand->animIndex[0];
 }

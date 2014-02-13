@@ -53,17 +53,6 @@ void InitServerEntities(void) {
 	numServerEntities = 0;
 }
 
-// get the server entity with the passed in number
-g_serverEntity_t *GetServerEntity(int num) {
-	// if it's an invalid number, return null
-	if ((num < MAX_GENTITIES) || (num >= MAX_GENTITIES + numServerEntities)) {
-		return NULL;
-	}
-
-	return &g_serverEntities[num - MAX_GENTITIES];
-
-}
-
 g_serverEntity_t *GetFreeServerEntity() {
 	// NOTE:  this is simplistic because we can't currently free these entities
 	//		if we change this, then we need to be more careful when allocating the entities
@@ -75,42 +64,6 @@ g_serverEntity_t *GetFreeServerEntity() {
 	g_serverEntities[numServerEntities].number = MAX_GENTITIES + numServerEntities;
 	g_serverEntities[numServerEntities].inuse  = qtrue;
 	return &g_serverEntities[numServerEntities++];
-}
-
-// Give a gentity_t, create a sp entity, copy all pertinent data, and return it
-g_serverEntity_t *CreateServerEntity(gentity_t *ent) {
-	// get the entity out of our pool
-	g_serverEntity_t *newEnt = GetFreeServerEntity();
-
-	// if we managed to get one, copy over data
-	if (newEnt) {
-		// G_NewString crashes if you pass in NULL, so let's check...
-		if (ent->classname) {
-			newEnt->classname = G_NewString(ent->classname);
-		}
-
-		if (ent->targetname) {
-			newEnt->name = G_NewString(ent->targetname);
-		}
-
-		if (ent->target) {
-			newEnt->target = G_NewString(ent->target);
-		}
-
-		newEnt->spawnflags = ent->spawnflags;
-		newEnt->team       = ent->aiTeam;
-		VectorCopy(ent->s.origin, newEnt->origin);
-		VectorCopy(ent->s.angles, newEnt->angles);
-		// DON'T set the number - that should have been set when it was spawned
-
-		// set the areanum to -1, which means we haven't calculated it yet
-		//		these don't move, so we should only have to calc it once, the first
-		//		time someone asks for it
-		newEnt->areaNum = -1;
-
-	}
-
-	return newEnt;
 }
 
 // TAT - create the server entities for the current map
@@ -142,31 +95,4 @@ void InitialServerEntitySetup() {
 			ent->setup(ent);
 		}
 	}
-}
-
-// Like G_Find, but for server entities
-g_serverEntity_t *FindServerEntity(g_serverEntity_t *from, int fieldofs, char *match) {
-	char             *s;
-	g_serverEntity_t *max = &g_serverEntities[numServerEntities];
-
-	if (!from) {
-		from = g_serverEntities;
-	} else {
-		from++;
-	}
-
-	for ( ; from < max ; from++) {
-		if (!from->inuse) {
-			continue;
-		}
-		s = *( char ** )((byte *)from + fieldofs);
-		if (!s) {
-			continue;
-		}
-		if (!Q_stricmp(s, match)) {
-			return from;
-		}
-	}
-
-	return NULL;
 }

@@ -309,39 +309,6 @@ void CG_initStrings(void) {
 	}
 }
 
-qboolean CG_addString(cg_window_t *w, char *buf) {
-	int i;
-
-	// Check if we're reusing the current buf
-	if (w->lineText[w->lineCount] != NULL) {
-		for (i = 0; i < MAX_STRINGS; i++) {
-			if (!cg.aStringPool[i].fActive) {
-				continue;
-			}
-
-			if (w->lineText[w->lineCount] == (char *)&cg.aStringPool[i].str) {
-				w->lineCount++;
-				cg.aStringPool[i].fActive = qtrue;
-				strcpy(cg.aStringPool[i].str, buf);
-
-				return qtrue;
-			}
-		}
-	}
-
-	for (i = 0; i < MAX_STRINGS; i++) {
-		if (!cg.aStringPool[i].fActive) {
-			cg.aStringPool[i].fActive = qtrue;
-			strcpy(cg.aStringPool[i].str, buf);
-			w->lineText[w->lineCount++] = (char *)&cg.aStringPool[i].str;
-
-			return qtrue;
-		}
-	}
-
-	return qfalse;
-}
-
 void CG_removeStrings(cg_window_t *w) {
 	int i, j;
 

@@ -1712,10 +1712,8 @@ static void PM_Footsteps(void) {
 		if (pm->ps->pm_flags & PMF_LADDER) {               // on ladder
 			if (pm->ps->velocity[2] >= 0) {
 				animResult = BG_AnimScriptAnimation(pm->ps, pm->character->animModelInfo, ANIM_MT_CLIMBUP, qtrue);
-				//BG_PlayAnimName( pm->ps, "BOTH_CLIMB", ANIM_BP_BOTH, qfalse, qtrue, qfalse );
 			} else if (pm->ps->velocity[2] < 0) {
 				animResult = BG_AnimScriptAnimation(pm->ps, pm->character->animModelInfo, ANIM_MT_CLIMBDOWN, qtrue);
-				//BG_PlayAnimName( pm->ps, "BOTH_CLIMB_DOWN", ANIM_BP_BOTH, qfalse, qtrue, qfalse );
 			}
 		}
 

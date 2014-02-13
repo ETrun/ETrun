@@ -1004,14 +1004,6 @@ menuDef_t *Menus_FindByName(const char *p) {
 	return NULL;
 }
 
-void Menus_ShowByName(const char *p) {
-	menuDef_t *menu = Menus_FindByName(p);
-
-	if (menu) {
-		Menus_Activate(menu);
-	}
-}
-
 void Menus_OpenByName(const char *p) {
 	Menus_ActivateByName(p, qtrue);
 }
@@ -4913,18 +4905,6 @@ menuDef_t *Menu_GetFocused() {
 	return NULL;
 }
 
-void Menu_ScrollFeeder(menuDef_t *menu, int feeder, qboolean down) {
-	if (menu) {
-		int i;
-		for (i = 0; i < menu->itemCount; i++) {
-			if (menu->items[i]->special == feeder) {
-				Item_ListBox_HandleKey(menu->items[i], (down) ? K_DOWNARROW : K_UPARROW, qtrue);
-				return;
-			}
-		}
-	}
-}
-
 void Menu_SetFeederSelection(menuDef_t *menu, int feeder, int index, const char *name) {
 	if (menu == NULL) {
 		if (name == NULL) {
@@ -6927,10 +6907,6 @@ void Menu_Reset() {
 	menuCount = 0;
 }
 
-displayContextDef_t *Display_GetContext() {
-	return DC;
-}
-
 void *Display_CaptureItem(int x, int y) {
 	int i;
 
@@ -6963,32 +6939,6 @@ qboolean Display_MouseMove(void *p, int x, int y) {
 		Menu_UpdatePosition(menu);
 	}
 	return qtrue;
-}
-
-int Display_CursorType(int x, int y) {
-	int i;
-
-	for (i = 0; i < menuCount; ++i) {
-		rectDef_t r2;
-		r2.x = Menus[i].window.rect.x - 3;
-		r2.y = Menus[i].window.rect.y - 3;
-		r2.w = r2.h = 7;
-		if (Rect_ContainsPoint(&r2, x, y)) {
-			return CURSOR_SIZER;
-		}
-	}
-	return CURSOR_ARROW;
-}
-
-void Display_HandleKey(int key, qboolean down, int x, int y) {
-	menuDef_t *menu = Display_CaptureItem(x, y);
-
-	if (menu == NULL) {
-		menu = Menu_GetFocused();
-	}
-	if (menu) {
-		Menu_HandleKey(menu, key, down);
-	}
 }
 
 static void Menu_CacheContents(menuDef_t *menu) {

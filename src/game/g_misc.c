@@ -1875,15 +1875,10 @@ void SP_misc_commandmap_marker(gentity_t *ent) {
 
 
 // Gordon: system to temporarily ignore certain ents during traces
-
-void G_InitTempTraceIgnoreEnts(void) {
-	memset(level.tempTraceIgnoreEnts, 0, sizeof (level.tempTraceIgnoreEnts));
-}
-
 void G_ResetTempTraceIgnoreEnts(void) {
 	int i;
 
-	for (i = 0; i < MAX_GENTITIES; i++) {
+	for (i = 0; i < MAX_GENTITIES; ++i) {
 		if (level.tempTraceIgnoreEnts[i]) {
 			g_entities[i].r.linked = qtrue;
 

@@ -40,54 +40,6 @@ If you have questions concerning this license or the applicable additional terms
 
 #include "g_local.h"
 
-/*
-==============
-UseHoldableItem
-    server side handling of holdable item use
-==============
-*/
-void UseHoldableItem(gentity_t *ent, int item) {
-	switch (item) {
-	case HI_MEDKIT:
-		ent->health = ent->client->ps.stats[STAT_MAX_HEALTH];
-		break;
-
-	case HI_WINE:           // 1921 Chateu Lafite - gives 25 pts health up to max health
-		ent->health += 25;
-		if (ent->health > ent->client->ps.stats[STAT_MAX_HEALTH]) {
-			ent->health = ent->client->ps.stats[STAT_MAX_HEALTH];
-		}
-		break;
-
-	case HI_SKULL:          // skull of invulnerable - 30 sec invincible
-		ent->client->ps.powerups[PW_INVULNERABLE] = level.time + 30000;
-		break;
-
-	case HI_WATER:          // protection from drowning - 30 sec underwater breathing time
-		ent->client->ps.powerups[PW_BREATHER] = 30000;
-		break;
-
-	case HI_ELECTRIC:       // protection from electric attacks - absorbs 500 points of electric damage
-		ent->client->ps.powerups[PW_ELECTRIC] = 500;
-		break;
-
-	case HI_FIRE:           // protection from fire attacks - absorbs 500 points of fire damage
-		ent->client->ps.powerups[PW_FIRE] = 500;
-		break;
-
-	case HI_STAMINA:        // restores fatigue bar and sets "nofatigue" for a time period (currently forced to 60 sec)
-		//----(SA)	NOTE:	currently only gives free nofatigue time, doesn't reset fatigue bar.
-		//					(this is because I'd like the restore to be visually gradual (on the HUD item representing
-		//					current status of your fatigue) rather than snapping back to 'full')
-		break;
-
-	case HI_BOOK1:
-	case HI_BOOK2:
-	case HI_BOOK3:
-		break;
-	}
-}
-
 // xkan, 10/26/2002
 // extracted from Fill_Clip: add the specified ammount of ammo into the clip
 // returns whether ammo was added to the clip

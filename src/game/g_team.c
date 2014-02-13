@@ -1032,28 +1032,6 @@ void SP_team_WOLF_checkpoint(gentity_t *ent) {
 	trap_LinkEntity(ent);
 }
 
-/*
-===================
-Team_ClassForString
-===================
-*/
-int Team_ClassForString(char *string) {
-	if (!Q_stricmp(string, "soldier")) {
-		return PC_SOLDIER;
-	} else if (!Q_stricmp(string, "medic")) {
-		return PC_MEDIC;
-	} else if (!Q_stricmp(string, "engineer")) {
-		return PC_ENGINEER;
-	} else if (!Q_stricmp(string, "lieutenant")) {       // FIXME: remove from missionpack
-		return PC_FIELDOPS;
-	} else if (!Q_stricmp(string, "fieldops")) {
-		return PC_FIELDOPS;
-	} else if (!Q_stricmp(string, "covertops")) {
-		return PC_COVERTOPS;
-	}
-	return -1;
-}
-
 // OSP
 char      *aTeams[TEAM_NUM_TEAMS] = { "FFA", "^1Axis^7", "^4Allies^7", "Spectators" };
 team_info teamInfo[TEAM_NUM_TEAMS];

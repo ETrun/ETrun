@@ -1974,27 +1974,6 @@ qboolean CG_GetWeaponTag(int clientNum, char *tagname, orientation_t *or) {
 	return qtrue;
 }
 
-// =============
-// Menu Versions
-// =============
-
-animation_t *CG_GetLimboAnimation(playerInfo_t *pi, const char *name) {
-	int            i;
-	bg_character_t *character = BG_GetCharacter(pi->teamNum, pi->classNum);
-
-	if (!character) {
-		return NULL;
-	}
-
-	for (i = 0; i < character->animModelInfo->numAnimations; i++) {
-		if (!Q_stricmp(character->animModelInfo->animations[i]->name, name)) {
-			return character->animModelInfo->animations[i];
-		}
-	}
-
-	return character->animModelInfo->animations[0]; // safe fallback so we never end up without an animation (which will crash the game)
-}
-
 weaponType_t weaponTypes[] =
 {
 	{ WP_MP40,                 "MP 40"    },

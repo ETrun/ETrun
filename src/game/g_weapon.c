@@ -1610,14 +1610,6 @@ extern void G_ExplodeMissile(gentity_t *ent);
 #define BOMBSPREAD 150
 extern void G_SayTo(gentity_t *ent, gentity_t *other, int mode, int color, const char *name, const char *message, qboolean localize, qboolean encoded);
 
-void G_GlobalClientEvent(int event, int param, int client) {
-	gentity_t *tent = G_TempEntity(vec3_origin, event);
-
-	tent->s.density      = param;
-	tent->r.singleClient = client;
-	tent->r.svFlags      = SVF_SINGLECLIENT | SVF_BROADCAST;
-}
-
 #define SMOKEBOMB_GROWTIME 1000
 #define SMOKEBOMB_SMOKETIME 15000
 #define SMOKEBOMB_POSTSMOKETIME 2000

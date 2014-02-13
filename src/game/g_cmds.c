@@ -549,38 +549,6 @@ void StopFollowing(gentity_t *ent) {
 	}
 }
 
-int G_TeamCount(gentity_t *ent, weapon_t weap) {
-	int i, cnt;
-
-	if ((int)weap == -1) {   // we aint checking for a weapon, so always include ourselves
-		cnt = 1;
-	} else {   // we ARE checking for a weapon, so ignore ourselves
-		cnt = 0;
-	}
-
-	for (i = 0; i < level.numConnectedClients; ++i) {
-		int j = level.sortedClients[i];
-
-		if (j == ent - g_entities) {
-			continue;
-		}
-
-		if (level.clients[j].sess.sessionTeam != ent->client->sess.sessionTeam) {
-			continue;
-		}
-
-		if ((int)weap != -1 &&
-		    level.clients[j].sess.playerWeapon != (int)weap &&
-		    level.clients[j].sess.latchPlayerWeapon != (int)weap) {
-			continue;
-		}
-
-		cnt++;
-	}
-
-	return cnt;
-}
-
 void G_SetClientWeapons(gentity_t *ent, weapon_t w1, weapon_t w2, qboolean updateclient) {
 	qboolean changed = qfalse;
 
@@ -908,44 +876,6 @@ void Cmd_FollowCycle_f(gentity_t *ent, int dir) {
 
 	// leave it where it was
 }
-
-
-/*======================
-G_EntitySound
-    Mad Doc xkan, 11/06/2002 -
-
-    Plays a sound (wav file or sound script) on this entity
-
-    Note that calling G_AddEvent(..., EV_GENERAL_SOUND, ...) has the danger of
-    the event never getting through to the client because the entity might not
-    be visible (unless it has the SVF_BROADCAST flag), so if you want to make sure
-    the sound is heard, call this function instead.
-======================*/
-void G_EntitySound(
-    gentity_t *ent,         // entity to play the sound on
-    const char *soundId,    // sound file name or sound script ID
-    int volume) {            // sound volume, only applies to sound file name call
-	                         //   for sound script, volume is currently always 127.
-	trap_SendServerCommand(-1, va("entitySound %d %s %d %i %i %i normal", ent->s.number, soundId, volume,
-	                              (int)ent->s.pos.trBase[0], (int)ent->s.pos.trBase[1], (int)ent->s.pos.trBase[2]));
-}
-
-/*======================
-G_EntitySoundNoCut
-    Mad Doc xkan, 1/16/2003 -
-
-    Similar to G_EntitySound, but do not cut this sound off
-
-======================*/
-void G_EntitySoundNoCut(
-    gentity_t *ent,         // entity to play the sound on
-    const char *soundId,    // sound file name or sound script ID
-    int volume) {            // sound volume, only applies to sound file name call
-	                         //   for sound script, volume is currently always 127.
-	trap_SendServerCommand(-1, va("entitySound %d %s %d %i %i %i noCut", ent->s.number, soundId, volume,
-	                              (int)ent->s.pos.trBase[0], (int)ent->s.pos.trBase[1], (int)ent->s.pos.trBase[2]));
-}
-
 
 /*
 ==================

@@ -35,21 +35,6 @@ If you have questions concerning this license or the applicable additional terms
 
 uiStatic_t uis;
 
-/*
-=================
-UI_ClampCvar
-=================
-*/
-float UI_ClampCvar(float min, float max, float value) {
-	if (value < min) {
-		return min;
-	}
-	if (value > max) {
-		return max;
-	}
-	return value;
-}
-
 char *UI_Argv(int arg) {
 	static char buffer[MAX_STRING_CHARS];
 
@@ -133,14 +118,6 @@ void UI_AdjustFrom640(float *x, float *y, float *w, float *h) {
 	*h *= uiInfo.uiDC.yscale;
 }
 
-void UI_DrawNamedPic(float x, float y, float width, float height, const char *picname) {
-	qhandle_t hShader;
-
-	hShader = trap_R_RegisterShaderNoMip(picname);
-	UI_AdjustFrom640(&x, &y, &width, &height);
-	trap_R_DrawStretchPic(x, y, width, height, 0, 0, 1, 1, hShader);
-}
-
 void UI_DrawHandlePic(float x, float y, float w, float h, qhandle_t hShader) {
 	float s0;
 	float s1;
@@ -214,25 +191,4 @@ void UI_DrawRect(float x, float y, float width, float height, const float *color
 
 void UI_SetColor(const float *rgba) {
 	trap_R_SetColor(rgba);
-}
-
-void UI_UpdateScreen(void) {
-	trap_UpdateScreen();
-}
-
-
-void UI_DrawTextBox(int x, int y, int width, int lines) {
-	UI_FillRect(x + BIGCHAR_WIDTH / 2, y + BIGCHAR_HEIGHT / 2, (width + 1) * BIGCHAR_WIDTH, (lines + 1) * BIGCHAR_HEIGHT, colorBlack);
-	UI_DrawRect(x + BIGCHAR_WIDTH / 2, y + BIGCHAR_HEIGHT / 2, (width + 1) * BIGCHAR_WIDTH, (lines + 1) * BIGCHAR_HEIGHT, colorWhite);
-}
-
-qboolean UI_CursorInRect(int x, int y, int width, int height) {
-	if (uiInfo.uiDC.cursorx < x ||
-	    uiInfo.uiDC.cursory < y ||
-	    uiInfo.uiDC.cursorx > x + width ||
-	    uiInfo.uiDC.cursory > y + height) {
-		return qfalse;
-	}
-
-	return qtrue;
 }
