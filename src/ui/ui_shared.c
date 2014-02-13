@@ -3122,7 +3122,7 @@ qboolean Item_Slider_HandleKey(itemDef_t *item, int key) {
 		editFieldDef_t *editDef = item->typeData;
 		if (editDef) {
 			rectDef_t testRect;
-			float x, value, width, work;
+			float x, value, width;
 
 			width = SLIDER_WIDTH;
 			if (item->text) {
@@ -3137,7 +3137,8 @@ qboolean Item_Slider_HandleKey(itemDef_t *item, int key) {
 			testRect.x -= value;
 			testRect.w  = (SLIDER_WIDTH + (float)SLIDER_THUMB_WIDTH / 2);
 			if (Rect_ContainsPoint(&testRect, DC->cursorx, DC->cursory)) {
-				work   = DC->cursorx - x;
+				float work = DC->cursorx - x;
+
 				value  = work / width;
 				value *= (editDef->maxVal - editDef->minVal);
 				value += editDef->minVal;
@@ -7214,10 +7215,8 @@ panel_button_t *BG_PanelButtonsGetHighlightButton(panel_button_t **buttons) {
 }
 
 void BG_PanelButtonsRender(panel_button_t **buttons) {
-	panel_button_t *button;
-
 	for ( ; *buttons; ++buttons) {
-		button = (*buttons);
+		panel_button_t *button = *buttons;
 
 		if (button->onDraw) {
 			button->onDraw(button);

@@ -2457,7 +2457,6 @@ void UI_RunMenuScript(char **args) {
 			uiClientState_t cstate;
 			char            name[MAX_NAME_LENGTH];
 			char            addr[MAX_NAME_LENGTH];
-			int             res;
 
 			trap_GetClientState(&cstate);
 
@@ -2466,6 +2465,8 @@ void UI_RunMenuScript(char **args) {
 			Q_strncpyz(addr, cstate.servername, MAX_NAME_LENGTH);
 			Q_strncpyz(name, cstate.servername, MAX_NAME_LENGTH);
 			if (*name && *addr && Q_stricmp(addr, "localhost")) {
+				int res;
+
 				res = trap_LAN_AddServer(AS_FAVORITES, name, addr);
 				if (res == 0) {
 					// server already in the list
@@ -3299,7 +3300,7 @@ UI_GetServerStatusInfo
 ==================
 */
 static int UI_GetServerStatusInfo(const char *serverAddress, serverStatusInfo_t *info) {
-	char *p, *score, *ping, *name, *p_name = NULL;
+	char *p, *score, *ping, *name;
 
 	if (!info) {
 		trap_LAN_ServerStatus(serverAddress, NULL, 0);
@@ -3325,7 +3326,7 @@ static int UI_GetServerStatusInfo(const char *serverAddress, serverStatusInfo_t 
 		trap_Cvar_Set("ui_modURL", "");
 		// get the cvars
 		while (p && *p) {
-			char *p_val = NULL;
+			char *p_val = NULL, *p_name = NULL;
 
 			p = strchr(p, '\\');
 			if (!p) {
@@ -3736,7 +3737,6 @@ const char *UI_FeederItemText(float feederID, int index, int column, qhandle_t *
 		if (index >= 0 && index < uiInfo.serverStatus.numDisplayServers) {
 			int ping, antilag, needpass, serverload;
 			static char info[MAX_STRING_CHARS];
-			static char hostname[1024];
 			static char clientBuff[32];
 			static char pingstr[10];
 			static int  lastColumn = -1;
@@ -3754,6 +3754,8 @@ const char *UI_FeederItemText(float feederID, int index, int column, qhandle_t *
 					return Info_ValueForKey(info, "addr");
 				}
 				if (ui_netSource.integer == AS_LOCAL) {
+					static char hostname[1024];
+
 					Com_sprintf(hostname, sizeof (hostname), "%s [%s]",
 					            Info_ValueForKey(info, "hostname"),
 					            netnames[atoi(Info_ValueForKey(info, "nettype"))]);
