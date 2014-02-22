@@ -759,7 +759,7 @@ int CG_ParseVoiceChats(const char *filename, voiceChatList_t *voiceChatList, int
 	int          len, i;
 	fileHandle_t f;
 	char         buf[MAX_VOICEFILESIZE];
-	char         **p, *ptr;
+	char         *ptr;
 	char         *token;
 	voiceChat_t  *voiceChats;
 
@@ -779,14 +779,13 @@ int CG_ParseVoiceChats(const char *filename, voiceChatList_t *voiceChatList, int
 	trap_FS_FCloseFile(f);
 
 	ptr = buf;
-	p   = &ptr;
 
 	Com_sprintf(voiceChatList->name, sizeof (voiceChatList->name), "%s", filename);
 	voiceChats = voiceChatList->voiceChats;
-	for (i = 0; i < maxVoiceChats; i++) {
+	for (i = 0; i < maxVoiceChats; ++i) {
 		voiceChats[i].id[0] = 0;
 	}
-	token = COM_ParseExt(p, qtrue);
+	token = COM_ParseExt(&ptr, qtrue);
 	if (!token || token[0] == 0) {
 		return qtrue;
 	}
@@ -799,13 +798,13 @@ int CG_ParseVoiceChats(const char *filename, voiceChatList_t *voiceChatList, int
 	for (;; ) {
 		int current;
 
-		token = COM_ParseExt(p, qtrue);
+		token = COM_ParseExt(&ptr, qtrue);
 		if (!token || token[0] == 0) {
 			return qtrue;
 		}
 
 		Com_sprintf(voiceChats[voiceChatList->numVoiceChats].id, sizeof (voiceChats[voiceChatList->numVoiceChats].id), "%s", token);
-		token = COM_ParseExt(p, qtrue);
+		token = COM_ParseExt(&ptr, qtrue);
 		if (Q_stricmp(token, "{")) {
 			trap_Print(va(S_COLOR_RED "expected { found %s in voice chat file: %s\n", token, filename));
 			return qfalse;
@@ -814,7 +813,7 @@ int CG_ParseVoiceChats(const char *filename, voiceChatList_t *voiceChatList, int
 		current                                            = voiceChats[voiceChatList->numVoiceChats].numSounds;
 
 		for (;; ) {
-			token = COM_ParseExt(p, qtrue);
+			token = COM_ParseExt(&ptr, qtrue);
 			if (!token || token[0] == 0) {
 				return qtrue;
 			}
@@ -822,17 +821,17 @@ int CG_ParseVoiceChats(const char *filename, voiceChatList_t *voiceChatList, int
 				break;
 			}
 			voiceChats[voiceChatList->numVoiceChats].sounds[current] = trap_S_RegisterSound(token);
-			token                                                    = COM_ParseExt(p, qtrue);
+			token                                                    = COM_ParseExt(&ptr, qtrue);
 			if (!token || token[0] == 0) {
 				return qtrue;
 			}
 			Com_sprintf(voiceChats[voiceChatList->numVoiceChats].chats[current], MAX_CHATSIZE, "%s", token);
 
 			// DHM - Nerve :: Specify sprite shader to show above player's head
-			token = COM_ParseExt(p, qfalse);
+			token = COM_ParseExt(&ptr, qfalse);
 			if (!Q_stricmp(token, "}") || !token || token[0] == 0) {
 				voiceChats[voiceChatList->numVoiceChats].sprite[current] = trap_R_RegisterShader("sprites/voiceChat");
-				COM_RestoreParseSession(p);
+				COM_RestoreParseSession(&ptr);
 			} else {
 				voiceChats[voiceChatList->numVoiceChats].sprite[current] = trap_R_RegisterShader(token);
 				if (voiceChats[voiceChatList->numVoiceChats].sprite[current] == 0) {
