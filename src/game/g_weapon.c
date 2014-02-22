@@ -98,8 +98,6 @@ int G_GetWeaponClassForMOD(meansOfDeath_t mod) {
 	}
 }
 
-#define NUM_NAILSHOTS 10
-
 /*
 ======================================================================
 
@@ -109,9 +107,6 @@ KNIFE/GAUNTLET (NOTE: gauntlet is now the Zombie melee)
 */
 
 #define KNIFE_DIST 48
-
-// Let's use the same angle between function we've used before
-extern float sAngleBetweenVectors(vec3_t a, vec3_t b);
 
 /*
 ==============
@@ -331,9 +326,6 @@ void Weapon_MagicAmmo(gentity_t *ent) {
 }
 // jpw
 
-void G_ExplodeMissile(gentity_t *ent);
-void DynaSink(gentity_t *self);
-
 // Arnout: crude version of G_RadiusDamage to see if the dynamite can damage a func_constructible
 int EntsThatRadiusCanDamage(vec3_t origin, float radius, int *damagedList) {
 	int       entityList[MAX_GENTITIES];
@@ -403,8 +395,6 @@ int EntsThatRadiusCanDamage(vec3_t origin, float radius, int *damagedList) {
 
 	return numDamaged;
 }
-
-extern void explosive_indicator_think(gentity_t *ent);
 
 #define MIN_BLOCKINGWARNING_INTERVAL 5000
 
@@ -1604,12 +1594,8 @@ void Weapon_Engineer(gentity_t *ent) {
 
 // JPW NERVE -- launch airstrike as line of bombs mostly-perpendicular to line of grenade travel
 // (close air support should *always* drop parallel to friendly lines, tho accidents do happen)
-extern void G_ExplodeMissile(gentity_t *ent);
-
 #define NUMBOMBS 10
 #define BOMBSPREAD 150
-extern void G_SayTo(gentity_t *ent, gentity_t *other, int mode, int color, const char *name, const char *message, qboolean localize, qboolean encoded);
-
 #define SMOKEBOMB_GROWTIME 1000
 #define SMOKEBOMB_SMOKETIME 15000
 #define SMOKEBOMB_POSTSMOKETIME 2000
@@ -2056,8 +2042,6 @@ GRENADE LAUNCHER
 
 ======================================================================
 */
-extern void G_ExplodeMissilePoisonGas(gentity_t *ent);
-
 gentity_t *weapon_gpg40_fire(gentity_t *ent, int grenType) {
 	gentity_t *m /*, *te*/;   // JPW NERVE
 	trace_t   tr;

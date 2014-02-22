@@ -36,8 +36,6 @@ If you have questions concerning this license or the applicable additional terms
 
 #include "g_local.h"
 
-extern void AimAtTarget(gentity_t *self);
-
 /*QUAKED func_group (0 0 0) ?
 Used to group brushes together just for editor convenience.  They are turned into normal brushes by the utilities.
 */
@@ -589,8 +587,6 @@ Fires at either the target or the current direction.
 void SP_shooter_grenade(gentity_t *ent) {
 	InitShooter(ent, WP_GRENADE_LAUNCHER);
 }
-
-extern void InitTrigger(gentity_t *self);
 
 /*QUAKED corona (0 1 0) (-4 -4 -4) (4 4 4) START_OFF
 Use color picker to set color or key "color".  values are 0.0-1.0 for each color (rgb).
@@ -1857,7 +1853,6 @@ than 10 left.
 
 "angle"		landmine orientation
 */
-extern int G_GetWeaponDamage(int weapon);
 
 /*QUAKED misc_commandmap_marker (0 0.85 .85) (-16 -16 0) (16 16 16) ONLY_AXIS ONLY_ALLIED ISOBJECTIVE ISHEALTHAMMOCABINET ISCOMMANDPOST
 Command map marker entity. When set to state default it shows, any other state and it isn't visible.
@@ -1872,7 +1867,6 @@ void SP_misc_commandmap_marker(gentity_t *ent) {
 
 	G_SetOrigin(ent, ent->s.origin);
 }
-
 
 // Gordon: system to temporarily ignore certain ents during traces
 void G_ResetTempTraceIgnoreEnts(void) {

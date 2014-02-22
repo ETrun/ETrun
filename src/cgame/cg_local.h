@@ -1831,6 +1831,7 @@ float CG_Cvar_Get(const char *cvar);
 char *CG_generateFilename(void);
 
 void CG_LoadObjectiveData(void);
+void CG_SetupDlightstyles(void);
 
 void QDECL CG_Printf(const char *msg, ...);
 void QDECL CG_Error(const char *msg, ...);
@@ -1951,6 +1952,7 @@ void CG_DrawWeapHeat(rectDef_t *rect, int align);
 void CG_DrawPlayerWeaponIcon(rectDef_t *rect, int align, vec4_t *refcolor);
 void CG_Fade(int a, int time, int duration);
 const char *CG_PickupItemText(int item);
+void CG_StartShakeCamera(float p);
 
 // Nico
 // cg_timerun_draw.c
@@ -1973,6 +1975,7 @@ void CG_Player(centity_t *cent);
 void CG_ResetPlayerEntity(centity_t *cent);
 void CG_AddRefEntityWithPowerups(refEntity_t *ent, entityState_t *es, const vec3_t fireRiseDir);
 void CG_NewClientInfo(int clientNum);
+void CG_RunLerpFrame(centity_t *cent, clientInfo_t *ci, lerpFrame_t *lf, int newAnimation, float speedScale);
 sfxHandle_t CG_CustomSound(const char *soundName);
 
 // Rafael particles
@@ -2012,6 +2015,7 @@ void CG_PositionRotatedEntityOnTag(refEntity_t *entity, const refEntity_t *paren
 //
 // cg_weapons.c
 //
+void CG_RocketTrail(centity_t *ent);
 void CG_GetWindVector(vec3_t dir);
 void CG_LastWeaponUsed_f(void);       //----(SA)	added
 void CG_NextWeaponInBank_f(void);     //----(SA)	added
@@ -2022,6 +2026,7 @@ void CG_PrevWeapon_f(void);
 void CG_Weapon_f(void);
 void CG_WeaponBank_f(void);
 qboolean CG_WeaponSelectable(int i);
+int CG_WeaponIndex(int weapnum, int *bank, int *cycle);
 
 void CG_FinishWeaponChange(int lastweap, int newweap);
 
@@ -2029,6 +2034,7 @@ void CG_RegisterWeapon(int weaponNum, qboolean force);
 void CG_RegisterItemVisuals(int itemNum);
 
 void CG_FireWeapon(centity_t *cent);     //----(SA)	modified.
+void CG_AddBulletParticles(vec3_t origin, vec3_t dir, int speed, int count, float randScale);
 void CG_MissileHitWall(int weapon, int clientNum, vec3_t origin, vec3_t dir, int surfaceFlags);     //	(SA) modified to send missilehitwall surface parameters
 
 void CG_MissileHitWallSmall(vec3_t origin, vec3_t dir);
@@ -2049,6 +2055,7 @@ void CG_MissileHitWall2(int weapon, int clientNum, vec3_t origin, vec3_t dir);
 // done
 
 void CG_MissileHitPlayer(int weapon, vec3_t origin, vec3_t dir);
+void CG_Tracer(vec3_t source, vec3_t dest, int sparks);
 void CG_CalcMuzzlePoint(int entityNum, vec3_t muzzle);
 void CG_Bullet(vec3_t end, int sourceEntityNum, qboolean flesh, int fleshEntityNum, int otherEntNum2, float waterfraction, int seed);
 

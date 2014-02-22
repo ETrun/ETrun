@@ -1329,8 +1329,6 @@ qboolean CG_CullPointAndRadius(const vec3_t pt, vec_t radius) {
 
 //=========================================================================
 
-extern void CG_SetupDlightstyles(void);
-
 /*
 =================
 CG_DrawActiveFrame

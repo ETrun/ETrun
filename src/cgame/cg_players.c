@@ -1837,8 +1837,6 @@ void CG_Player(centity_t *cent) {
 
 //=====================================================================
 
-extern void CG_ClearWeapLerpFrame(clientInfo_t *ci, lerpFrame_t *lf, int animationNumber);
-
 /*
 ===============
 CG_ResetPlayerEntity

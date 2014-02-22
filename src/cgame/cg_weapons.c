@@ -37,17 +37,6 @@ If you have questions concerning this license or the applicable additional terms
 
 vec3_t ejectBrassCasingOrigin;
 
-//----(SA)
-// forward decs
-static int getAltWeapon(int weapnum);
-int getEquivWeapon(int weapnum);
-int CG_WeaponIndex(int weapnum, int *bank, int *cycle);
-static qboolean CG_WeaponHasAmmo(int i);
-extern int weapBanksMultiPlayer[MAX_WEAP_BANKS_MP][MAX_WEAPS_IN_BANK_MP]; // JPW NERVE moved to bg_misc.c so I can get a droplist
-// jpw
-
-//----(SA)	end
-
 /*
 ==============
 CG_StartWeaponAnim
@@ -2793,7 +2782,7 @@ getEquivWeapon
     No equivalent available will return the weapnum passed in.
 ==============
 */
-int getEquivWeapon(int weapnum) {
+static int getEquivWeapon(int weapnum) {
 	int num = weapnum;
 
 	switch (weapnum) {

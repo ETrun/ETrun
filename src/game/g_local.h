@@ -1009,6 +1009,7 @@ void G_ParseField(const char *key, const char *value, gentity_t *ent);
 // g_cmds.c
 //
 void Cmd_Score_f(gentity_t *ent);
+char *ConcatArgs(int start);
 void StopFollowing(gentity_t *ent);
 void G_TeamDataForString(const char *teamstr, int clientNum, team_t *team, spectatorState_t *sState, int *specClient);
 qboolean SetTeam(gentity_t *ent, char *s, weapon_t w1, weapon_t w2, qboolean setweapons);
@@ -1024,6 +1025,7 @@ void Cmd_SpecLock_f(gentity_t *ent, unsigned int dwCommand, qboolean lock);
 void Cmd_SpecInvite_f(gentity_t *ent, unsigned int dwCommand, qboolean invite);
 void G_SayTo(gentity_t *ent, gentity_t *other, int mode, int color, const char *name, const char *message, qboolean localize, qboolean encoded);
 qboolean Cmd_CallVote_f(gentity_t *ent, unsigned int dwCommand, qboolean fValue);
+void Cmd_StartCamera_f(gentity_t *ent);
 void Cmd_Follow_f(gentity_t *ent, unsigned int dwCommand, qboolean fValue);
 void Cmd_Say_f(gentity_t *ent, int mode, qboolean arg0, qboolean encoded);
 void Cmd_Team_f(gentity_t *ent);
@@ -1203,6 +1205,9 @@ void Reached_Tramcar(gentity_t *ent);
 //
 // g_trigger.c
 //
+void InitTrigger(gentity_t *self);
+void AimAtTarget(gentity_t *self);
+void explosive_indicator_think(gentity_t *ent);
 void Think_SetupObjectiveInfo(gentity_t *ent);
 
 //

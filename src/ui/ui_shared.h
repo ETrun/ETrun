@@ -481,6 +481,7 @@ void Init_Display(displayContextDef_t *dc);
 void Display_ExpandMacros(char *buff);
 void Menu_Init(menuDef_t *menu);
 void Item_Init(itemDef_t *item);
+void Item_ListBox_MouseEnter(itemDef_t *item, float x, float y, qboolean click);
 void Menu_PostParse(menuDef_t *menu);
 menuDef_t *Menu_GetFocused();
 void Menu_HandleKey(menuDef_t *menu, int key, qboolean down);
@@ -603,5 +604,7 @@ qboolean BG_CursorInRect(rectDef_t *rect);
 void BG_FitTextToWidth_Ext(char *instr, float scale, float w, int size, fontInfo_t *font);
 
 void AdjustFrom640(float *x, float *y, float *w, float *h);
+char *BindingFromName(const char *cvar);
+
 
 #endif

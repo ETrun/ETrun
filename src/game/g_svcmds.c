@@ -719,8 +719,6 @@ static void Svcmd_CheckAPI_f(void) {
 	}
 }
 
-extern char *ConcatArgs(int start);
-
 /*
 =================
 ConsoleCommand

@@ -3269,9 +3269,6 @@ qboolean G_ScriptAction_SetState(gentity_t *ent, char *params) {
 	return qtrue;
 }
 
-extern void Cmd_StartCamera_f(gentity_t *ent);
-extern void Cmd_StopCamera_f(gentity_t *ent);
-
 /*
 ===================
 G_ScriptAction_StartCam
@@ -3333,8 +3330,6 @@ qboolean G_ScriptAction_SetInitialCamera(gentity_t *ent, char *params) {
 	if (!token[0]) {
 		G_Error("G_ScriptAction_SetInitialCamera: black parameter required\n");
 	}
-
-//	Cmd_StartCamera_f( ent );
 
 	// issue a start camera command to the client
 	trap_SendServerCommand(ent - g_entities, va("SetInitialCamera %s %d", camfile, (int)atoi(token)));

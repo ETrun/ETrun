@@ -4401,8 +4401,6 @@ void func_constructible_underconstructionthink(gentity_t *ent) {
 	ent->nextthink = level.time + FRAMETIME;
 }
 
-extern void explosive_indicator_think(gentity_t *ent);
-
 void func_constructiblespawn(gentity_t *ent) {
 	// count2: the number of construction stages
 	// grenadeFired: the current stage (Starting at 1, 0 when destroyed)

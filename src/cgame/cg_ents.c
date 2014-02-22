@@ -912,8 +912,6 @@ static void CG_DrawMineMarkerFlag(centity_t *cent, refEntity_t *ent, const weapo
 	ent->backlerp = cent->lerpFrame.backlerp;
 }
 
-extern void CG_RocketTrail(centity_t *ent, const weaponInfo_t *wi);
-
 static void CG_Missile(centity_t *cent) {
 	refEntity_t        ent;
 	entityState_t      *s1;
@@ -943,15 +941,13 @@ static void CG_Missile(centity_t *cent) {
 	    || cent->currentState.eType == ET_FIRE_COLUMN
 	    || cent->currentState.eType == ET_FIRE_COLUMN_SMOKE
 	    || cent->currentState.eType == ET_RAMJET) {
-		CG_RocketTrail(cent, NULL);
+		CG_RocketTrail(cent);
 	} else if (weapon->missileTrailFunc) {
 		weapon->missileTrailFunc(cent);
 	}
 
 	// add dynamic light
 	if (weapon->missileDlight) {
-		//%	trap_R_AddLightToScene(cent->lerpOrigin, weapon->missileDlight,
-		//%		weapon->missileDlightColor[0], weapon->missileDlightColor[1], weapon->missileDlightColor[2], 0 );
 		trap_R_AddLightToScene(cent->lerpOrigin, weapon->missileDlight, 1.0,
 		                       weapon->missileDlightColor[0], weapon->missileDlightColor[1], weapon->missileDlightColor[2], 0, 0);
 	}
@@ -1106,9 +1102,6 @@ static animation_t multi_flagpoleAnims[] =
 };
 
 // dhm - end
-
-extern void CG_RunLerpFrame(centity_t *cent, clientInfo_t *ci, lerpFrame_t *lf, int newAnimation, float speedScale);
-
 
 /*
 ==============
@@ -2384,8 +2377,6 @@ qboolean CG_AddEntityToTag(centity_t *cent) {
 	return qtrue;
 }
 
-extern int       cg_numSolidEntities;
-extern centity_t *cg_solidEntities[];
 /*
 ===============
 CG_AddPacketEntities

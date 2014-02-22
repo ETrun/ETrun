@@ -30,13 +30,6 @@ If you have questions concerning this license or the applicable additional terms
 
 #define MISSILE_PRESTEP_TIME    50
 
-
-extern void gas_think(gentity_t *gas);
-extern void gas_touch(gentity_t *gas, gentity_t *other, trace_t *trace);
-extern void SP_target_smoke(gentity_t *ent);
-
-void G_ExplodeMissile(gentity_t *ent);
-
 /*
 ================
 G_BounceMissile

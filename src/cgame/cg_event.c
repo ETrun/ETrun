@@ -30,8 +30,6 @@ If you have questions concerning this license or the applicable additional terms
 
 #include "cg_local.h"
 
-extern void CG_StartShakeCamera(float param);
-extern void CG_Tracer(vec3_t source, vec3_t dest, int sparks);
 //==========================================================================
 
 /*
@@ -61,10 +59,6 @@ static void CG_Obituary(entityState_t *ent) {
 }
 
 //==========================================================================
-
-// from cg_weapons.c
-extern int CG_WeaponIndex(int weapnum, int *bank, int *cycle);
-
 
 /*
 ================
@@ -1235,11 +1229,6 @@ An entity has an event value
 also called by CG_CheckPlayerstateEvents
 ==============
 */
-extern void CG_AddBulletParticles(vec3_t origin, vec3_t dir, int speed, int count, float randScale);
-// JPW NERVE
-void CG_MachineGunEjectBrass(centity_t *cent);
-void CG_MachineGunEjectBrassNew(centity_t *cent);
-// jpw
 #define DEBUGNAME(x) if (cg_debugEvents.integer) { CG_Printf(x "\n"); }
 void CG_EntityEvent(centity_t *cent, vec3_t position) {
 	entityState_t  *es;
