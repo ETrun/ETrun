@@ -108,15 +108,15 @@ void CG_ParseFireteams() {
 
 		s = Info_ValueForKey(p, "c");
 		Q_strncpyz(hexbuffer + 2, s, 9);
-		sscanf(hexbuffer, "%x", &clnts[1]);
+		sscanf(hexbuffer, "%10x", &clnts[1]);
 		Q_strncpyz(hexbuffer + 2, s + 8, 9);
-		sscanf(hexbuffer, "%x", &clnts[0]);
+		sscanf(hexbuffer, "%10x", &clnts[0]);
 
 		// Nico, private (1) or public (0)
 		s                    = Info_ValueForKey(p, "p");
 		cg.fireTeams[i].priv = atoi(s) == 0 ? qfalse : qtrue;
 
-		for (j = 0; j < MAX_CLIENTS; j++) {
+		for (j = 0; j < MAX_CLIENTS; ++j) {
 			if (COM_BitCheck(clnts, j)) {
 				cg.fireTeams[i].joinOrder[j]   = qtrue;
 				cgs.clientinfo[j].fireteamData = &cg.fireTeams[i];
