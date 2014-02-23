@@ -861,6 +861,8 @@ qboolean G_API_getConfig(void) {
 	sprintf(cphysics, "%d", physics.integer);
 
 	if (url_encode(level.rawmapname, encodedMapName) == qfalse) {
+		free(buf);
+
 		return qfalse;
 	}
 
