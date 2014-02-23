@@ -766,7 +766,7 @@ static void *getConfigHandler(void *data) {
 		G_Error("%s: error #1 while getting config from API!\n", GAME_VERSION);
 	}
 
-	code = sscanf(queryStruct->result, "%d %d %d %d %d %d %*s", // Nico, last field is ignored for the moment
+	code = sscanf(queryStruct->result, "%10d %10d %10d %10d %10d %10d %*s", // Nico, last field is ignored for the moment
 	              &config_strictSaveLoad,
 	              &config_physics,
 	              &config_disableDrowning,
