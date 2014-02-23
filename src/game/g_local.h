@@ -1870,3 +1870,15 @@ qboolean G_CanPickupWeapon(weapon_t weapon, gentity_t *ent);
 #define MAP_VELOCITY_JUMPPADS       8
 #define MAP_LOCATION_JUMPPADS       16
 #define MAP_DISABLE_HURT_ENTITIES   32
+
+// Nico, some limits for some cvars & client settings
+#define MIN_PLAYER_FPS_VALUE			40
+#define MAX_PLAYER_FPS_VALUE			999
+#define MAX_PLAYER_PING					400
+#define MIN_PLAYER_MAX_PACKETS_VALUE	30
+#define MAX_PLAYER_MAX_PACKETS_VALUE	100
+#define FORCED_PLAYER_TIMENUDGE_VALUE	0
+#define MIN_PLAYER_RATE_VALUE			5000
+#define MAX_PLAYER_RATE_VALUE			32000
+#define MIN_PLAYER_SNAPS_VALUE			0
+#define MAX_PLAYER_SNAPS_VALUE			20

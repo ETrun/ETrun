@@ -682,14 +682,13 @@ static void ClientCleanName(const char *in, char *out, int outSize) {
 // @source: http://bytes.com/forum/thread212174.html
 qboolean getParsedIp(const char *ipadd, char *parsedIp) {
 	unsigned      b1, b2, b3, b4, port = 0;
-	unsigned char c;
 	int           rc;
 
 	if (!Q_strncmp(ipadd, "localhost", strlen("localhost"))) {
 		return qtrue;
 	}
 
-	rc = sscanf(ipadd, "%3u.%3u.%3u.%3u:%u%c", &b1, &b2, &b3, &b4, &port, &c);
+	rc = sscanf(ipadd, "%3u.%3u.%3u.%3u:%5u", &b1, &b2, &b3, &b4, &port);
 	if (rc < 4 || rc > 5) {
 		return qfalse;
 	}
@@ -892,7 +891,7 @@ void ClientUserinfoChanged(int clientNum) {
 	Q_strncpyz(oldAuthToken, client->pers.authToken, sizeof (oldAuthToken));
 
 	s = Info_ValueForKey(userinfo, "cg_uinfo");
-	sscanf(s, "%u %u %u %i %s %i %i %i %i %i %i %i %i %i",
+	sscanf(s, "%10u %3u %3u %3i %64s %1i %1i %1i %1i %1i %1i %1i %1i %1i",
 	       &client->pers.clientFlags,
 	       &client->pers.clientTimeNudge,
 	       &client->pers.clientMaxPackets,
@@ -943,7 +942,7 @@ void ClientUserinfoChanged(int clientNum) {
 	}
 
 	client->pers.autoActivate      = (client->pers.clientFlags & CGF_AUTOACTIVATE) ? PICKUP_TOUCH : PICKUP_ACTIVATE;
-	client->pers.predictItemPickup = ((client->pers.clientFlags & CGF_PREDICTITEMS) != 0);
+	client->pers.predictItemPickup = (client->pers.clientFlags & CGF_PREDICTITEMS) != 0;
 
 	if (client->pers.clientFlags & CGF_AUTORELOAD) {
 		client->pers.bAutoReloadAux = qtrue;

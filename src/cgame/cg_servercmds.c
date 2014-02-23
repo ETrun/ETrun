@@ -1550,6 +1550,34 @@ static void CG_ServerCommand(void) {
 		return;
 	}
 
+	// Nico, force max packets
+	if (!Q_stricmp(cmd, "resetMaxPackets")) {
+		trap_SendConsoleCommand("set cl_maxpackets 100\n");
+		CG_AddPMItem(PM_MESSAGE, va("%s^w: cl_maxpackets has been set to 100\n", GAME_VERSION_COLORED), cgs.media.voiceChatShader);
+		return;
+	}
+
+	// Nico, force timernudge
+	if (!Q_stricmp(cmd, "resetTimeNudge")) {
+		trap_SendConsoleCommand("set cl_timenudge 0\n");
+		CG_AddPMItem(PM_MESSAGE, va("%s^w: cl_timenudge has been set to 0\n", GAME_VERSION_COLORED), cgs.media.voiceChatShader);
+		return;
+	}
+
+	// Nico, force rate
+	if (!Q_stricmp(cmd, "resetRate")) {
+		trap_SendConsoleCommand("set rate 25000\n");
+		CG_AddPMItem(PM_MESSAGE, va("%s^w: rate has been set to 25000\n", GAME_VERSION_COLORED), cgs.media.voiceChatShader);
+		return;
+	}
+
+	// Nico, force snaps
+	if (!Q_stricmp(cmd, "resetSnaps")) {
+		trap_SendConsoleCommand("set snaps 0\n");
+		CG_AddPMItem(PM_MESSAGE, va("%s^w: snaps has been set to 0\n", GAME_VERSION_COLORED), cgs.media.voiceChatShader);
+		return;
+	}
+
 	// Nico, force auto demo record
 	if (!Q_stricmp(cmd, "autoDemoOn")) {
 		trap_SendConsoleCommand("set cg_autoDemo 1\n");
