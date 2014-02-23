@@ -990,11 +990,15 @@ int CG_CalcViewValues(void) {
 
 	// add error decay
 	if (cg_errorDecay.value > 0) {
-		int   t;
-		float f;
+		int   t = cg.time - cg.predictedErrorTime;
+		float f, errorDecay = cg_errorDecay.value;
 
-		t = cg.time - cg.predictedErrorTime;
-		f = (cg_errorDecay.value - t) / cg_errorDecay.value;
+		// Nico, limit errorDecay to 500ms to prevent camera exploit
+		if (errorDecay > 500) {
+			errorDecay = 500;
+		}
+
+		f = (errorDecay - t) / errorDecay;
 		if (f > 0 && f < 1) {
 			VectorMA(cg.refdef_current->vieworg, f, cg.predictedError, cg.refdef_current->vieworg);
 		} else {
@@ -1019,7 +1023,6 @@ int CG_CalcViewValues(void) {
 		// back away from character
 		CG_OffsetThirdPersonView();
 	} else {
-
 		// offset for local bobbing and kicks
 		CG_OffsetFirstPersonView();
 
