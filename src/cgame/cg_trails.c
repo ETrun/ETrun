@@ -64,6 +64,8 @@ trailJunc_t *headTrails;
 
 qboolean initTrails = qfalse;
 
+void CG_KillTrail(trailJunc_t *t);
+
 /*
 ===============
 CG_ClearTrails
@@ -359,8 +361,6 @@ int CG_AddSmokeJunc(int headJuncIndex, void *usedby, qhandle_t shader, vec3_t po
 	return (int)(j - trailJuncs) + 1;
 }
 
-void CG_KillTrail(trailJunc_t *t);
-
 /*
 ===========
 CG_FreeTrailJunc
@@ -423,10 +423,10 @@ void CG_KillTrail(trailJunc_t *t) {
 		next = NULL;
 	}
 	t->nextJunc = NULL;
-	if (next->nextJunc && next->nextJunc == t) {
-		next->nextJunc = NULL;
-	}
 	if (next) {
+		if (next->nextJunc && next->nextJunc == t) {
+			next->nextJunc = NULL;
+		}
 		CG_FreeTrailJunc(next);
 	}
 }
