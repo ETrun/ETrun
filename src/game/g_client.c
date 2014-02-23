@@ -892,7 +892,7 @@ void ClientUserinfoChanged(int clientNum) {
 	Q_strncpyz(oldAuthToken, client->pers.authToken, sizeof (oldAuthToken));
 
 	s = Info_ValueForKey(userinfo, "cg_uinfo");
-	sscanf(s, "%i %i %i %i %s %i %i %i %i %i %i %i %i %i",
+	sscanf(s, "%u %u %u %i %s %i %i %i %i %i %i %i %i %i",
 	       &client->pers.clientFlags,
 	       &client->pers.clientTimeNudge,
 	       &client->pers.clientMaxPackets,
