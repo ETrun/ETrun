@@ -1801,180 +1801,6 @@ void CG_QueueMusic(void) {
 	trap_S_StartBackgroundTrack(parm, "", -2);    // '-2' for 'queue looping track' (QUEUED_PLAY_LOOPED)
 }
 
-//
-// ==============================
-// new hud stuff ( mission pack )
-// ==============================
-//
-qboolean CG_Asset_Parse(int handle) {
-	pc_token_t token;
-	const char *tempStr;
-
-	if (!trap_PC_ReadToken(handle, &token)) {
-		return qfalse;
-	}
-	if (Q_stricmp(token.string, "{") != 0) {
-		return qfalse;
-	}
-
-	for (;; ) {
-		if (!trap_PC_ReadToken(handle, &token)) {
-			return qfalse;
-		}
-
-		if (Q_stricmp(token.string, "}") == 0) {
-			return qtrue;
-		}
-
-		// font
-		if (Q_stricmp(token.string, "font") == 0) {
-			int pointSize, fontIndex;
-			if (!PC_Int_Parse(handle, &fontIndex) || !PC_String_Parse(handle, &tempStr) || !PC_Int_Parse(handle, &pointSize)) {
-				return qfalse;
-			}
-			if (fontIndex < 0 || fontIndex >= 6) {
-				return qfalse;
-			}
-			cgDC.registerFont(tempStr, pointSize, &cgDC.Assets.fonts[fontIndex]);
-			continue;
-		}
-
-		// gradientbar
-		if (Q_stricmp(token.string, "gradientbar") == 0) {
-			if (!PC_String_Parse(handle, &tempStr)) {
-				return qfalse;
-			}
-			cgDC.Assets.gradientBar = trap_R_RegisterShaderNoMip(tempStr);
-			continue;
-		}
-
-		// enterMenuSound
-		if (Q_stricmp(token.string, "menuEnterSound") == 0) {
-			if (!PC_String_Parse(handle, &tempStr)) {
-				return qfalse;
-			}
-			cgDC.Assets.menuEnterSound = trap_S_RegisterSound(tempStr);
-			continue;
-		}
-
-		// exitMenuSound
-		if (Q_stricmp(token.string, "menuExitSound") == 0) {
-			if (!PC_String_Parse(handle, &tempStr)) {
-				return qfalse;
-			}
-			cgDC.Assets.menuExitSound = trap_S_RegisterSound(tempStr);
-			continue;
-		}
-
-		// itemFocusSound
-		if (Q_stricmp(token.string, "itemFocusSound") == 0) {
-			if (!PC_String_Parse(handle, &tempStr)) {
-				return qfalse;
-			}
-			cgDC.Assets.itemFocusSound = trap_S_RegisterSound(tempStr);
-			continue;
-		}
-
-		// menuBuzzSound
-		if (Q_stricmp(token.string, "menuBuzzSound") == 0) {
-			if (!PC_String_Parse(handle, &tempStr)) {
-				return qfalse;
-			}
-			cgDC.Assets.menuBuzzSound = trap_S_RegisterSound(tempStr);
-			continue;
-		}
-
-		if (Q_stricmp(token.string, "cursor") == 0) {
-			if (!PC_String_Parse(handle, &cgDC.Assets.cursorStr)) {
-				return qfalse;
-			}
-			cgDC.Assets.cursor = trap_R_RegisterShaderNoMip(cgDC.Assets.cursorStr);
-			continue;
-		}
-
-		if (Q_stricmp(token.string, "fadeClamp") == 0) {
-			if (!PC_Float_Parse(handle, &cgDC.Assets.fadeClamp)) {
-				return qfalse;
-			}
-			continue;
-		}
-
-		if (Q_stricmp(token.string, "fadeCycle") == 0) {
-			if (!PC_Int_Parse(handle, &cgDC.Assets.fadeCycle)) {
-				return qfalse;
-			}
-			continue;
-		}
-
-		if (Q_stricmp(token.string, "fadeAmount") == 0) {
-			if (!PC_Float_Parse(handle, &cgDC.Assets.fadeAmount)) {
-				return qfalse;
-			}
-			continue;
-		}
-
-		if (Q_stricmp(token.string, "shadowX") == 0) {
-			if (!PC_Float_Parse(handle, &cgDC.Assets.shadowX)) {
-				return qfalse;
-			}
-			continue;
-		}
-
-		if (Q_stricmp(token.string, "shadowY") == 0) {
-			if (!PC_Float_Parse(handle, &cgDC.Assets.shadowY)) {
-				return qfalse;
-			}
-			continue;
-		}
-
-		if (Q_stricmp(token.string, "shadowColor") == 0) {
-			if (!PC_Color_Parse(handle, &cgDC.Assets.shadowColor)) {
-				return qfalse;
-			}
-			cgDC.Assets.shadowFadeClamp = cgDC.Assets.shadowColor[3];
-			continue;
-		}
-	}
-}
-
-void CG_ParseMenu(const char *menuFile) {
-	pc_token_t token;
-	int        handle;
-
-	handle = trap_PC_LoadSource(menuFile);
-	if (!handle) {
-		handle = trap_PC_LoadSource("ui/testhud.menu");
-	}
-	if (!handle) {
-		return;
-	}
-
-	for (;; ) {
-		if (!trap_PC_ReadToken(handle, &token)) {
-			break;
-		}
-
-		if (token.string[0] == '}') {
-			break;
-		}
-
-		if (Q_stricmp(token.string, "assetGlobalDef") == 0) {
-			if (CG_Asset_Parse(handle)) {
-				continue;
-			} else {
-				break;
-			}
-		}
-
-
-		if (Q_stricmp(token.string, "menudef") == 0) {
-			// start a new menu
-			Menu_New(handle);
-		}
-	}
-	trap_PC_FreeSource(handle);
-}
-
 static int CG_FeederCount(float feederID) {
 	int i, count;
 
@@ -2004,7 +1830,7 @@ static clientInfo_t *CG_InfoFromScoreIndex(int index, int team, int *scoreIndex)
 	int i, count;
 
 	count = 0;
-	for (i = 0; i < cg.numScores; i++) {
+	for (i = 0; i < cg.numScores; ++i) {
 		if (cg.scores[i].team == team) {
 			if (count == index) {
 				*scoreIndex = i;
@@ -2065,7 +1891,7 @@ static void CG_FeederSelection(float feederID, int index) {
 	int team = (feederID == FEEDER_REDTEAM_LIST) ? TEAM_AXIS : TEAM_ALLIES;
 
 	count = 0;
-	for (i = 0; i < cg.numScores; i++) {
+	for (i = 0; i < cg.numScores; ++i) {
 		if (cg.scores[i].team == team) {
 			if (index == count) {
 				cg.selectedScore = i;
