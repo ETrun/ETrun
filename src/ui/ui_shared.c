@@ -281,7 +281,7 @@ String_Init
 void String_Init() {
 	int i;
 
-	for (i = 0; i < HASH_TABLE_SIZE; i++) {
+	for (i = 0; i < HASH_TABLE_SIZE; ++i) {
 		strHandle[i] = 0;
 	}
 	strHandleCount = 0;
@@ -305,7 +305,7 @@ LerpColor
 void LerpColor(vec4_t a, vec4_t b, vec4_t c, float t) {
 	int i;
 
-	for (i = 0; i < 4; i++) {
+	for (i = 0; i < 4; ++i) {
 		c[i] = a[i] + t * (b[i] - a[i]);
 		if (c[i] < 0) {
 			c[i] = 0;
@@ -340,7 +340,7 @@ qboolean Color_Parse(char **p, vec4_t *c) {
 	int   i;
 	float f = 0.0f;
 
-	for (i = 0; i < 4; i++) {
+	for (i = 0; i < 4; ++i) {
 		if (!Float_Parse(p, &f)) {
 			return qfalse;
 		}
@@ -660,7 +660,7 @@ void Menu_UpdatePosition(menuDef_t *menu) {
 	x = menu->window.rect.x;
 	y = menu->window.rect.y;
 
-	for (i = 0; i < menu->itemCount; i++) {
+	for (i = 0; i < menu->itemCount; ++i) {
 		Item_SetScreenCoords(menu->items[i], x, y);
 	}
 }
@@ -686,7 +686,7 @@ itemDef_t *Menu_ClearFocus(menuDef_t *menu) {
 		return NULL;
 	}
 
-	for (i = 0; i < menu->itemCount; i++) {
+	for (i = 0; i < menu->itemCount; ++i) {
 		if (menu->items[i]->window.flags & WINDOW_HASFOCUS) {
 			ret                           = menu->items[i];
 			menu->items[i]->window.flags &= ~WINDOW_HASFOCUS;
@@ -957,7 +957,7 @@ void Menu_ShowItemByName(menuDef_t *menu, const char *p, qboolean bShow) {
 	int       i;
 	int       count = Menu_ItemsMatchingGroup(menu, p);
 
-	for (i = 0; i < count; i++) {
+	for (i = 0; i < count; ++i) {
 		item = Menu_GetMatchingItemByNumber(menu, i, p);
 		if (item != NULL) {
 			if (bShow) {
@@ -979,7 +979,7 @@ void Menu_FadeItemByName(menuDef_t *menu, const char *p, qboolean fadeOut) {
 	int       i;
 	int       count = Menu_ItemsMatchingGroup(menu, p);
 
-	for (i = 0; i < count; i++) {
+	for (i = 0; i < count; ++i) {
 		item = Menu_GetMatchingItemByNumber(menu, i, p);
 		if (item != NULL) {
 			if (fadeOut) {
@@ -1453,7 +1453,7 @@ void Script_CloseAllOtherMenus(itemDef_t *item, qboolean *bAbort, char **args) {
 	(void)bAbort;
 	(void)args;
 
-	for (i = 0; i < menuCount; i++) {
+	for (i = 0; i < menuCount; ++i) {
 		if (&Menus[i] == item->parent) {
 			continue;
 		}
@@ -1496,7 +1496,7 @@ void Menu_TransitionItemByName(menuDef_t *menu, const char *p, rectDef_t rectFro
 	int       i;
 	int       count = Menu_ItemsMatchingGroup(menu, p);
 
-	for (i = 0; i < count; i++) {
+	for (i = 0; i < count; ++i) {
 		item = Menu_GetMatchingItemByNumber(menu, i, p);
 		if (item != NULL) {
 			item->window.flags     |= (WINDOW_INTRANSITION | WINDOW_VISIBLE);
@@ -1535,7 +1535,7 @@ void Menu_OrbitItemByName(menuDef_t *menu, const char *p, float x, float y, floa
 	int       i;
 	int       count = Menu_ItemsMatchingGroup(menu, p);
 
-	for (i = 0; i < count; i++) {
+	for (i = 0; i < count; ++i) {
 		item = Menu_GetMatchingItemByNumber(menu, i, p);
 		if (item != NULL) {
 			item->window.flags        |= (WINDOW_ORBITING | WINDOW_VISIBLE);
@@ -2119,7 +2119,7 @@ qboolean Item_SetFocus(itemDef_t *item, float x, float y) {
 		DC->startLocalSound(*sfx, CHAN_LOCAL_SOUND);
 	}
 
-	for (i = 0; i < parent->itemCount; i++) {
+	for (i = 0; i < parent->itemCount; ++i) {
 		if (parent->items[i] == item) {
 			parent->cursorItem = i;
 			break;
@@ -3122,9 +3122,8 @@ qboolean Item_Slider_HandleKey(itemDef_t *item, int key) {
 		editFieldDef_t *editDef = item->typeData;
 		if (editDef) {
 			rectDef_t testRect;
-			float x, value, width;
+			float x, value;
 
-			width = SLIDER_WIDTH;
 			if (item->text) {
 				x = item->textRect.x + item->textRect.w + 8;
 			} else {
@@ -3139,7 +3138,7 @@ qboolean Item_Slider_HandleKey(itemDef_t *item, int key) {
 			if (Rect_ContainsPoint(&testRect, DC->cursorx, DC->cursory)) {
 				float work = DC->cursorx - x;
 
-				value  = work / width;
+				value  = work / SLIDER_WIDTH;
 				value *= (editDef->maxVal - editDef->minVal);
 				value += editDef->minVal;
 				DC->setCVar(item->cvar, va("%f", value));
@@ -3292,7 +3291,7 @@ itemDef_t *Menu_SetNextCursorItem(menuDef_t *menu) {
 void  Menus_Activate(menuDef_t *menu) {
 	int i;
 
-	for (i = 0; i < menuCount; i++) {
+	for (i = 0; i < menuCount; ++i) {
 		Menus[i].window.flags &= ~(WINDOW_HASFOCUS | WINDOW_MOUSEOVER);
 	}
 
@@ -3323,7 +3322,7 @@ int Display_VisibleMenuCount() {
 	int i, count;
 
 	count = 0;
-	for (i = 0; i < menuCount; i++) {
+	for (i = 0; i < menuCount; ++i) {
 		if (Menus[i].window.flags & (WINDOW_FORCED | WINDOW_VISIBLE)) {
 			count++;
 		}
@@ -3342,7 +3341,7 @@ void Menus_HandleOOBClick(menuDef_t *menu, int key, qboolean down) {
 			menu->window.flags &= ~(WINDOW_HASFOCUS | WINDOW_VISIBLE | WINDOW_MOUSEOVER);
 		}
 
-		for (i = 0; i < menuCount; i++) {
+		for (i = 0; i < menuCount; ++i) {
 			if (Menu_OverActiveItem(&Menus[i], DC->cursorx, DC->cursory)) {
 				menu->window.flags    &= ~(WINDOW_HASFOCUS | WINDOW_MOUSEOVER);
 				Menus[i].window.flags |= (WINDOW_HASFOCUS | WINDOW_VISIBLE);
@@ -4525,7 +4524,7 @@ void Item_ListBox_Paint(itemDef_t *item) {
 			// fit = 0;
 			x = fillRect.x + 1;
 			y = fillRect.y + 1;
-			for (i = listPtr->startPos; i < count; i++) {
+			for (i = listPtr->startPos; i < count; ++i) {
 				// always draw at least one
 				// which may overdraw the box if it is too small for the element
 				image = DC->feederItemImage(item->special, i);
@@ -4898,7 +4897,7 @@ void Menu_Init(menuDef_t *menu) {
 menuDef_t *Menu_GetFocused() {
 	int i;
 
-	for (i = 0; i < menuCount; i++) {
+	for (i = 0; i < menuCount; ++i) {
 		if (Menus[i].window.flags & WINDOW_HASFOCUS && Menus[i].window.flags & WINDOW_VISIBLE) {
 			return &Menus[i];
 		}
@@ -4917,7 +4916,7 @@ void Menu_SetFeederSelection(menuDef_t *menu, int feeder, int index, const char 
 
 	if (menu) {
 		int i;
-		for (i = 0; i < menu->itemCount; i++) {
+		for (i = 0; i < menu->itemCount; ++i) {
 			if (menu->items[i]->special == feeder) {
 				if (index == 0) {
 					listBoxDef_t *listPtr = (listBoxDef_t *)menu->items[i]->typeData;
@@ -4935,7 +4934,7 @@ void Menu_SetFeederSelection(menuDef_t *menu, int feeder, int index, const char 
 qboolean Menus_AnyFullScreenVisible() {
 	int i;
 
-	for (i = 0; i < menuCount; i++) {
+	for (i = 0; i < menuCount; ++i) {
 		if (Menus[i].window.flags & WINDOW_VISIBLE && Menus[i].fullScreen) {
 			return qtrue;
 		}
@@ -4948,7 +4947,7 @@ menuDef_t *Menus_ActivateByName(const char *p, qboolean modalStack) {
 	menuDef_t *m     = NULL;
 	menuDef_t *focus = Menu_GetFocused();
 
-	for (i = 0; i < menuCount; i++) {
+	for (i = 0; i < menuCount; ++i) {
 		if (Q_stricmp(Menus[i].window.name, p) == 0) {
 			m = &Menus[i];
 			Menus_Activate(m);
@@ -5006,8 +5005,8 @@ void Menu_HandleMouseMove(menuDef_t *menu, float x, float y) {
 
 	// FIXME: this is the whole issue of focus vs. mouse over..
 	// need a better overall solution as i don't like going through everything twice
-	for (pass = 0; pass < 2; pass++) {
-		for (i = 0; i < menu->itemCount; i++) {
+	for (pass = 0; pass < 2; ++pass) {
+		for (i = 0; i < menu->itemCount; ++i) {
 			if (!(menu->items[i]->window.flags & (WINDOW_VISIBLE | WINDOW_FORCED))) {
 				continue;
 			}
@@ -5088,7 +5087,7 @@ void Menu_Paint(menuDef_t *menu, qboolean forcePaint) {
 	// paint the background and or border
 	Window_Paint(&menu->window, menu->fadeAmount, menu->fadeClamp, menu->fadeCycle);
 
-	for (i = 0; i < menu->itemCount; i++) {
+	for (i = 0; i < menu->itemCount; ++i) {
 		Item_Paint(menu->items[i]);
 		if (menu->items[i]->window.flags & WINDOW_MOUSEOVER) {
 			item = menu->items[i];
@@ -5190,7 +5189,7 @@ int KeywordHash_Key(char *keyword) {
 	register int hash, i;
 
 	hash = 0;
-	for (i = 0; keyword[i] != '\0'; i++) {
+	for (i = 0; keyword[i] != '\0'; ++i) {
 		if (keyword[i] >= 'A' && keyword[i] <= 'Z') {
 			hash += (keyword[i] + ('a' - 'A')) * (119 + i);
 		} else {
@@ -5693,7 +5692,7 @@ qboolean ItemParse_backcolor(itemDef_t *item, int handle) {
 	int   i;
 	float f = 0.0f;
 
-	for (i = 0; i < 4; i++) {
+	for (i = 0; i < 4; ++i) {
 		if (!PC_Float_Parse(handle, &f)) {
 			return qfalse;
 		}
@@ -5706,7 +5705,7 @@ qboolean ItemParse_forecolor(itemDef_t *item, int handle) {
 	int   i;
 	float f = 0.0f;
 
-	for (i = 0; i < 4; i++) {
+	for (i = 0; i < 4; ++i) {
 		if (!PC_Float_Parse(handle, &f)) {
 			return qfalse;
 		}
@@ -5720,7 +5719,7 @@ qboolean ItemParse_bordercolor(itemDef_t *item, int handle) {
 	int   i;
 	float f = 0.0f;
 
-	for (i = 0; i < 4; i++) {
+	for (i = 0; i < 4; ++i) {
 		if (!PC_Float_Parse(handle, &f)) {
 			return qfalse;
 		}
@@ -6480,7 +6479,7 @@ qboolean MenuParse_backcolor(itemDef_t *item, int handle) {
 	float     f     = 0.0f;
 	menuDef_t *menu = (menuDef_t *)item;
 
-	for (i = 0; i < 4; i++) {
+	for (i = 0; i < 4; ++i) {
 		if (!PC_Float_Parse(handle, &f)) {
 			return qfalse;
 		}
@@ -6494,7 +6493,7 @@ qboolean MenuParse_forecolor(itemDef_t *item, int handle) {
 	float     f     = 0.0f;
 	menuDef_t *menu = (menuDef_t *)item;
 
-	for (i = 0; i < 4; i++) {
+	for (i = 0; i < 4; ++i) {
 		if (!PC_Float_Parse(handle, &f)) {
 			return qfalse;
 		}
@@ -6509,7 +6508,7 @@ qboolean MenuParse_bordercolor(itemDef_t *item, int handle) {
 	float     f     = 0.0f;
 	menuDef_t *menu = (menuDef_t *)item;
 
-	for (i = 0; i < 4; i++) {
+	for (i = 0; i < 4; ++i) {
 		if (!PC_Float_Parse(handle, &f)) {
 			return qfalse;
 		}
@@ -6523,7 +6522,7 @@ qboolean MenuParse_focuscolor(itemDef_t *item, int handle) {
 	float     f     = 0.0f;
 	menuDef_t *menu = (menuDef_t *)item;
 
-	for (i = 0; i < 4; i++) {
+	for (i = 0; i < 4; ++i) {
 		if (!PC_Float_Parse(handle, &f)) {
 			return qfalse;
 		}
@@ -6538,7 +6537,7 @@ qboolean MenuParse_disablecolor(itemDef_t *item, int handle) {
 	float     f     = 0.0f;
 	menuDef_t *menu = (menuDef_t *)item;
 
-	for (i = 0; i < 4; i++) {
+	for (i = 0; i < 4; ++i) {
 		if (!PC_Float_Parse(handle, &f)) {
 			return qfalse;
 		}
@@ -6803,7 +6802,7 @@ void Menu_SetupKeywordHash(void) {
 	int i;
 
 	memset(menuParseKeywordHash, 0, sizeof (menuParseKeywordHash));
-	for (i = 0; menuParseKeywords[i].keyword; i++) {
+	for (i = 0; menuParseKeywords[i].keyword; ++i) {
 		KeywordHash_Add(menuParseKeywordHash, &menuParseKeywords[i]);
 	}
 }
@@ -6940,7 +6939,7 @@ static void Menu_CacheContents(menuDef_t *menu) {
 void Display_CacheAll() {
 	int i;
 
-	for (i = 0; i < menuCount; i++) {
+	for (i = 0; i < menuCount; ++i) {
 		Menu_CacheContents(&Menus[i]);
 	}
 }
@@ -6949,7 +6948,7 @@ static qboolean Menu_OverActiveItem(menuDef_t *menu, float x, float y) {
 	if (menu && menu->window.flags & (WINDOW_VISIBLE | WINDOW_FORCED) &&
 	    Rect_ContainsPoint(&menu->window.rect, x, y)) {
 		int i;
-		for (i = 0; i < menu->itemCount; i++) {
+		for (i = 0; i < menu->itemCount; ++i) {
 			if (!(menu->items[i]->window.flags & (WINDOW_VISIBLE | WINDOW_FORCED))) {
 				continue;
 			}
@@ -7141,7 +7140,7 @@ qboolean BG_PanelButtonsKeyEvent(int key, qboolean down, panel_button_t **button
 	panel_button_t *button;
 
 	if (BG_PanelButtons_GetFocusButton()) {
-		for ( ; *buttons; buttons++) {
+		for ( ; *buttons; ++buttons) {
 			button = (*buttons);
 
 			if (button == BG_PanelButtons_GetFocusButton()) {
@@ -7168,7 +7167,7 @@ qboolean BG_PanelButtonsKeyEvent(int key, qboolean down, panel_button_t **button
 	}
 
 	if (down) {
-		for ( ; *buttons; buttons++) {
+		for ( ; *buttons; ++buttons) {
 			button = (*buttons);
 
 			if (button->onKeyDown &&
