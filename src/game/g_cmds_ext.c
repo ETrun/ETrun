@@ -239,7 +239,7 @@ void G_players_cmd(gentity_t *ent, unsigned int dwCommand, qboolean fValue) {
 			s          = Info_ValueForKey(userinfo, "snaps");
 			user_snaps = atoi(s);
 			s          = Info_ValueForKey(userinfo, "ip");
-			sscanf(s, "%i.%i.%i", &ip1, &ip2, &ip3);
+			sscanf(s, "%3i.%3i.%3i", &ip1, &ip2, &ip3);
 
 			strcpy(rate, va("%5d%6d%9d%7d", cl->pers.clientTimeNudge, user_rate, cl->pers.clientMaxPackets, user_snaps));
 		}
