@@ -48,10 +48,9 @@ Called on game shutdown
 ================
 */
 void G_WriteClientSessionData(gclient_t *client, qboolean restart) {
-	int        mvc = 0;
 	const char *s;
 
-	s = va("%i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %u",
+	s = va("%i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %u",
 	       client->sess.sessionTeam,
 	       client->sess.spectatorTime,
 	       client->sess.spectatorState,
@@ -64,8 +63,6 @@ void G_WriteClientSessionData(gclient_t *client, qboolean restart) {
 	       client->sess.latchPlayerWeapon2,
 	       client->sess.referee,
 	       client->sess.spec_team,
-	       (mvc & 0xFFFF),
-	       ((mvc >> 16) & 0xFFFF),
 	       client->sess.muted,
 	       client->sess.ignoreClients[0],
 	       client->sess.ignoreClients[1],
@@ -88,12 +85,11 @@ Called on a reconnect
 ================
 */
 void G_ReadSessionData(gclient_t *client) {
-	int  mvc_l, mvc_h;
 	char s[MAX_STRING_CHARS];
 
 	trap_Cvar_VariableStringBuffer(va("session%d", (int)(client - level.clients)), s, sizeof (s));
 
-	sscanf(s, "%i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %u",
+	sscanf(s, "%1i %10i %1i %2i %1i %2i %2i %1i %2i %2i %1i %1i %1i %10i %10i %10i %10i %1i %10i %10i %3u",
 	       (int *)&client->sess.sessionTeam,
 	       &client->sess.spectatorTime,
 	       (int *)&client->sess.spectatorState,
@@ -106,8 +102,6 @@ void G_ReadSessionData(gclient_t *client) {
 	       &client->sess.latchPlayerWeapon2,
 	       &client->sess.referee,
 	       &client->sess.spec_team,
-	       &mvc_l,
-	       &mvc_h,
 	       (int *)&client->sess.muted,
 	       &client->sess.ignoreClients[0],
 	       &client->sess.ignoreClients[1],
