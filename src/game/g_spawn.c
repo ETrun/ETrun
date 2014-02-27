@@ -44,7 +44,7 @@ qboolean G_SpawnStringExt(const char *key, const char *defaultString, char **out
 		G_Error("G_SpawnString() called while not spawning, file %s, line %i", file, line);
 	}
 
-	for (i = 0 ; i < level.numSpawnVars ; i++) {
+	for (i = 0 ; i < level.numSpawnVars ; ++i) {
 		if (!strcmp(key, level.spawnVars[i][0])) {
 			*out = level.spawnVars[i][1];
 			return qtrue;
@@ -90,8 +90,6 @@ qboolean    G_SpawnVector2DExt(const char *key, const char *defaultString, float
 	sscanf(s, "%f %f", &out[0], &out[1]);
 	return present;
 }
-
-
 
 //
 // fields are needed for spawning from the entity string
@@ -664,7 +662,7 @@ qboolean G_CallSpawn(gentity_t *ent) {
 	}
 
 	// check item spawn functions
-	for (item = bg_itemlist + 1 ; item->classname ; item++) {
+	for (item = bg_itemlist + 1 ; item->classname ; ++item) {
 		if (!strcmp(item->classname, ent->classname)) {
 			// found it
 			G_SpawnItem(ent, item);
@@ -676,7 +674,7 @@ qboolean G_CallSpawn(gentity_t *ent) {
 	}
 
 	// check normal spawn functions
-	for (s = spawns ; s->name ; s++) {
+	for (s = spawns ; s->name ; ++s) {
 		if (!strcmp(s->name, ent->classname)) {
 			// found it
 			s->spawn(ent);
@@ -713,7 +711,7 @@ char *G_NewString(const char *string) {
 	new_p = newb;
 
 	// turn \n into a real linefeed
-	for (i = 0 ; i < l ; i++) {
+	for (i = 0 ; i < l ; ++i) {
 		if (i < l - 1 && string[i] == '\\') {
 			i++;
 			if (string[i] == 'n') {
@@ -746,7 +744,7 @@ void G_ParseField(const char *key, const char *value, gentity_t *ent) {
 	float   v;
 	vec3_t  vec;
 
-	for (f = fields ; f->name ; f++) {
+	for (f = fields ; f->name ; ++f) {
 		if (!Q_stricmp(f->name, key)) {
 			// found it
 			b = (byte *)ent;
@@ -782,9 +780,6 @@ void G_ParseField(const char *key, const char *value, gentity_t *ent) {
 	}
 }
 
-
-
-
 /*
 ===================
 G_SpawnGEntityFromSpawnVars
@@ -801,7 +796,7 @@ void G_SpawnGEntityFromSpawnVars(void) {
 	// get the next free entity
 	ent = G_Spawn();
 
-	for (i = 0 ; i < level.numSpawnVars ; i++) {
+	for (i = 0 ; i < level.numSpawnVars ; ++i) {
 		G_ParseField(level.spawnVars[i][0], level.spawnVars[i][1], ent);
 	}
 
