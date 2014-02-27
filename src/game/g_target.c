@@ -376,7 +376,7 @@ void misc_beam_think(gentity_t *self) {
 		VectorCopy(self->s.pos.trBase, self->r.mins);
 		VectorCopy(self->s.apos.trBase, self->r.maxs);
 
-		for (i = 0; i < 3; i++) {
+		for (i = 0; i < 3; ++i) {
 			if (self->r.maxs[i] < self->r.mins[i]) {
 				float bleh = self->r.mins[i];
 				self->r.mins[i] = self->r.maxs[i];
@@ -1411,7 +1411,7 @@ static void Cmd_SendRecord_f(gentity_t *ent, char *runName, char *authToken, int
 		G_Error("Cmd_SendRecord_f: malloc failed\n");
 	}
 
-	sprintf(data, "%d/%d/%d/%d/%d/%s/%d/%d/%d/%d/%d/%d/%d/%d/%d/O", time, startSpeed, stopSpeed, maxSpeed, jumpsCount, ip, maxFPS, timenudge, rate, maxPackets, snaps, strictSaveLoad, disableDrowning, holdDoorsOpen, enableMapEntities);
+	sprintf(data, "%d/%d/%d/%d/%d/%s/%d/%u/%u/%u/%u/%d/%d/%d/%d/O", time, startSpeed, stopSpeed, maxSpeed, jumpsCount, ip, maxFPS, timenudge, rate, maxPackets, snaps, strictSaveLoad, disableDrowning, holdDoorsOpen, enableMapEntities);
 
 	while (i < MAX_TIMERUN_CHECKPOINTS && ent->client->sess.timerunCheckpointTimes[i] != 0) {
 		sprintf(temp, "%dO", ent->client->sess.timerunCheckpointTimes[i]);
