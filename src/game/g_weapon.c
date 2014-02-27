@@ -495,7 +495,7 @@ static void HandleEntsThatBlockConstructible(gentity_t *constructor, gentity_t *
 		// make our constructible entities solid so we can check against them
 		//trap_LinkEntity( constructible );
 		MakeTemporarySolid(constructible);
-		for (e = 0; e < constructibleEntities; e++) {
+		for (e = 0; e < constructibleEntities; ++e) {
 			check = &g_entities[constructibleList[e]];
 
 			//trap_LinkEntity( check );
@@ -511,7 +511,7 @@ static void HandleEntsThatBlockConstructible(gentity_t *constructor, gentity_t *
 		MakeTemporarySolid(constructible);
 	}
 
-	for (e = 0; e < listedEntities; e++) {
+	for (e = 0; e < listedEntities; ++e) {
 		check = &g_entities[entityList[e]];
 
 		// ignore everything but items, players and missiles (grenades too)
@@ -546,7 +546,7 @@ static void HandleEntsThatBlockConstructible(gentity_t *constructor, gentity_t *
 	// undo the temporary solid for our entities
 	UndoTemporarySolid(constructible);
 	if (constructible->track && constructible->track[0]) {
-		for (e = 0; e < constructibleEntities; e++) {
+		for (e = 0; e < constructibleEntities; ++e) {
 			check = &g_entities[constructibleList[e]];
 
 			//trap_UnlinkEntity( check );
@@ -555,7 +555,7 @@ static void HandleEntsThatBlockConstructible(gentity_t *constructor, gentity_t *
 	}
 
 	if (handleBlockingEnts) {
-		for (e = 0; e < blockingEntities; e++) {
+		for (e = 0; e < blockingEntities; ++e) {
 			block = &g_entities[blockingList[e]];
 
 			if (block->client || block->s.eType == ET_CORPSE) {
@@ -1370,7 +1370,7 @@ void Weapon_Engineer(gentity_t *ent) {
 					numListedEntities = EntsThatRadiusCanDamage(org, traceEnt->splashRadius, entityList);
 					G_ResetTempTraceIgnoreEnts();
 
-					for (e = 0; e < numListedEntities; e++) {
+					for (e = 0; e < numListedEntities; ++e) {
 						hit = &g_entities[entityList[e]];
 
 						if (hit->s.eType != ET_CONSTRUCTIBLE) {
@@ -1456,7 +1456,7 @@ void Weapon_Engineer(gentity_t *ent) {
 						return;
 					}
 
-					for (i = 0 ; i < num ; i++) {
+					for (i = 0 ; i < num ; ++i) {
 						hit = &g_entities[touch[i]];
 
 						if (!(hit->r.contents & CONTENTS_TRIGGER)) {
@@ -1531,7 +1531,7 @@ void Weapon_Engineer(gentity_t *ent) {
 
 						numListedEntities = EntsThatRadiusCanDamage(org, traceEnt->splashRadius, entityList);
 
-						for (e = 0; e < numListedEntities; e++) {
+						for (e = 0; e < numListedEntities; ++e) {
 							hit = &g_entities[entityList[e]];
 
 							if (hit->s.eType != ET_CONSTRUCTIBLE) {
@@ -1661,7 +1661,7 @@ into a wall.
 void SnapVectorTowards(vec3_t v, vec3_t to) {
 	int i;
 
-	for (i = 0 ; i < 3 ; i++) {
+	for (i = 0 ; i < 3 ; ++i) {
 		if (to[i] <= v[i]) {
 			v[i] = floor(v[i]);
 		} else {
