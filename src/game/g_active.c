@@ -885,8 +885,8 @@ void ClientThink_real(gentity_t *ent) {
 		SetTeam(ent, "s", -1, -1, qfalse);
 	}
 
-	// Nico, check snaps
-	if (client->pers.snaps < MIN_PLAYER_SNAPS_VALUE || client->pers.snaps > MAX_PLAYER_SNAPS_VALUE) {
+	// Nico, check snaps (unsigned int)
+	if (client->pers.snaps > MAX_PLAYER_SNAPS_VALUE) {
 		CP(va("cpm \"%s^w: ^1you were removed from teams because you must use %d <= snaps <= %d\n\"", GAME_VERSION_COLORED, MIN_PLAYER_SNAPS_VALUE, MAX_PLAYER_SNAPS_VALUE));
 		trap_SendServerCommand(ent - g_entities, "resetSnaps");
 		SetTeam(ent, "s", -1, -1, qfalse);
