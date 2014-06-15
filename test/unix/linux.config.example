@@ -97,6 +97,11 @@ etl_binary_path='/usr/local/bin/etl'
 # APImodule name
 #
 APImodule_name='timeruns.mod'
+
+#
+# APImodule dir
+#
+APImodule_dir=''
 #################################################
 
 

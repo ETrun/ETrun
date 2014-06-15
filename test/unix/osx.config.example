@@ -97,6 +97,11 @@ etl_binary_path="/Users/$USER/etlegacy/bin/etl"
 # APImodule name
 #
 APImodule_name='timeruns.mod'
+
+#
+# APImodule dir
+#
+APImodule_dir="/Users/$USER/Documents/ETrun_api_module/build"
 #################################################
 
 

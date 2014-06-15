@@ -1,0 +1,10 @@
+---
+- hosts: all
+  sudo: true
+  tasks:
+    - name: Install packages needed for compilation
+      apt: update_cache=yes name={{ item }} state=latest
+      with_items:
+        - cmake
+        - build-essential
+        - zip

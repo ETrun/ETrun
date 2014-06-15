@@ -180,10 +180,10 @@ function install() {
 # Install API
 #
 function install_API() {
-	cp -f "build/$mod_name/$APImodule_name" "$HOMEPATH/$mod_name" 2> /dev/null
+	cp -f "$APImodule_dir/$APImodule_name" "$HOMEPATH/$mod_name" 2> /dev/null
 	if [ $? -ne 0 ]; then
 		echo '[ko]'
-		echo "Error: failed to copy build/$mod_name/$APImodule_name to $HOMEPATH/$mod_name"
+		echo "Error: failed to copy $APImodule_dir/$APImodule_name to $HOMEPATH/$mod_name"
 		exit 1
 	fi
 }
@@ -239,7 +239,7 @@ function print_summary() {
 function start_game() {
 	# Prepare game args for et/etded
 	if [ $CLIENT_MODE -eq 0 ]; then
-		GAME_ARGS="+set fs_game $mod_name +set fs_basePath '$BASEPATH' +set fs_homePath '$HOMEPATH' +set g_useAPI $USE_API +set g_APImoduleName $APImodule_name +set developer $DEVELOPER +map $default_map"
+		GAME_ARGS="+set fs_game $mod_name +set fs_basePath '$BASEPATH' +set fs_homePath '$HOMEPATH' +set g_useAPI $USE_API +set g_APImoduleName $APImodule_name +set developer $DEVELOPER +set g_debugLog 1 +map $default_map"
 	else
 		GAME_ARGS="+set fs_game $mod_name +set fs_basePath '$BASEPATH' +set fs_homePath '$HOMEPATH' +set developer $DEVELOPER +set com_hunkMegs 128"
 	fi
