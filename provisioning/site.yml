@@ -2,6 +2,9 @@
 - hosts: all
   sudo: true
   tasks:
+    - name: Upgrade system
+      apt: update_cache=yes upgrade=full
+
     - name: Install packages needed for compilation
       apt: update_cache=yes name={{ item }} state=latest
       with_items:
