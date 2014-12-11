@@ -1804,6 +1804,7 @@ void CG_Player(centity_t *cent) {
 				if (cent->currentState.eFlags & EF_HEADSHOT) {
 					continue;
 				}
+				break;
 			case ACC_MOUTH2:            // hat2
 			case ACC_MOUTH3:            // hat3
 
