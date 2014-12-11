@@ -5124,7 +5124,7 @@ Renders bullet effects.
 */
 void CG_Bullet(vec3_t end, int sourceEntityNum, qboolean flesh, int fleshEntityNum, int otherEntNum2, float waterfraction, int seed) {
 	trace_t   trace, trace2;
-	vec3_t    start;
+	vec3_t    start = {0};
 	centity_t *cent;
 
 	cent = &cg_entities[fleshEntityNum];
