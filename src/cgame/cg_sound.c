@@ -259,6 +259,7 @@ static void CG_SoundParseSounds(char *filename, char *buffer) {
 
 	// Nico, init vars
 	sound.soundList = NULL;
+	sound.index = 0;
 
 	for (;; ) {
 		char *token;
@@ -283,7 +284,7 @@ static void CG_SoundParseSounds(char *filename, char *buffer) {
 			// grab a free scriptSound
 			scriptSound = &soundScriptSounds[numSoundScriptSounds++];
 
-			if (numSoundScripts == MAX_SOUND_SCRIPT_SOUNDS) {
+			if (numSoundScriptSounds == MAX_SOUND_SCRIPT_SOUNDS) {
 				CG_Error("MAX_SOUND_SCRIPT_SOUNDS exceeded.\nReduce number of sound scripts.\n");
 			}
 
@@ -475,10 +476,10 @@ void CG_SoundInit(void) {
 		// keep all the information, just reset the vars
 		int i, j;
 
-		for (i = 0; i < numSoundScriptSounds; i++) {
+		for (i = 0; i < numSoundScriptSounds; ++i) {
 			soundScriptSounds[i].lastPlayed = 0;
 
-			for (j = 0; j < soundScriptSounds[i].numsounds; j++) {
+			for (j = 0; j < soundScriptSounds[i].numsounds; ++j) {
 				soundScriptSounds[i].sounds[j].sfxHandle = 0;
 			}
 		}
