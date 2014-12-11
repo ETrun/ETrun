@@ -1871,7 +1871,6 @@ void CG_EntityEvent(centity_t *cent, vec3_t position) {
 			// try with .wav
 			Q_strncpyz(tempStr, s, sizeof (tempStr));
 			Q_strcat(tempStr, sizeof (tempStr), ".wav");
-			s = tempStr;
 		}
 		// done.
 		if (cgs.gameSounds[sound]) {
