@@ -203,7 +203,7 @@ void AssetCache() {
 	uiInfo.uiDC.Assets.checkboxCheckNot    = trap_R_RegisterShaderNoMip(ASSET_CHECKBOX_CHECK_NOT);
 	uiInfo.uiDC.Assets.checkboxCheckNo     = trap_R_RegisterShaderNoMip(ASSET_CHECKBOX_CHECK_NO);
 
-	for (n = 0; n < NUM_CROSSHAIRS; n++) {
+	for (n = 0; n < NUM_CROSSHAIRS; ++n) {
 		uiInfo.uiDC.Assets.crosshairShader[n]    = trap_R_RegisterShaderNoMip(va("gfx/2d/crosshair%c", 'a' + n));
 		uiInfo.uiDC.Assets.crosshairAltShader[n] = trap_R_RegisterShaderNoMip(va("gfx/2d/crosshair%c_alt", 'a' + n));
 	}
@@ -669,7 +669,7 @@ void _UI_Refresh(int realtime) {
 		int i, total;
 		// average multiple frames together to smooth changes out a bit
 		total = 0;
-		for (i = 0 ; i < UI_FPS_FRAMES ; i++) {
+		for (i = 0 ; i < UI_FPS_FRAMES ; ++i) {
 			total += previousTimes[i];
 		}
 		if (!total) {
@@ -1357,7 +1357,7 @@ static void UI_BuildPlayerList() {
 	uiInfo.playerCount = 0;
 	uiInfo.myTeamCount = 0;
 	playerTeamNumber   = 0;
-	for (n = 0; n < count; n++) {
+	for (n = 0; n < count; ++n) {
 		trap_GetConfigString(CS_PLAYERS + n, info, MAX_INFO_STRING);
 
 		if (info[0]) {
@@ -1942,7 +1942,7 @@ static void UI_LoadProfiles() {
 					trap_Cvar_Set("ui_profile", uiInfo.profileList[0].name);
 					trap_Cvar_Update(&ui_profile);
 
-					for (j = 0; j < Menu_Count(); j++) {
+					for (j = 0; j < Menu_Count(); ++j) {
 						Menu_SetFeederSelection(Menu_Get(j), FEEDER_PROFILES, uiInfo.profileIndex, NULL);
 					}
 				}
@@ -1963,7 +1963,7 @@ static void UI_LoadProfiles() {
 		trap_Cvar_Set("ui_profile", uiInfo.profileList[0].name);
 		trap_Cvar_Update(&ui_profile);
 
-		for (j = 0; j < Menu_Count(); j++) {
+		for (j = 0; j < Menu_Count(); ++j) {
 			Menu_SetFeederSelection(Menu_Get(j), FEEDER_PROFILES, 0, NULL);
 		}
 	}
@@ -2049,7 +2049,7 @@ qboolean UI_CheckExecKey(int key) {
 		return qtrue;
 	}
 
-	if (key > 256) {
+	if (key > 254) {
 		return qfalse;
 	}
 
@@ -2490,7 +2490,7 @@ void UI_RunMenuScript(char **args) {
 					trap_Cmd_ExecuteText(EXEC_APPEND, "\n");
 				} else {
 					int i;
-					for (i = 0; i < uiInfo.myTeamCount; i++) {
+					for (i = 0; i < uiInfo.myTeamCount; ++i) {
 						if (Q_stricmp(UI_Cvar_VariableString("name"), uiInfo.teamNames[i]) == 0) {
 							continue;
 						}
@@ -3015,7 +3015,7 @@ static int UI_MapCountByGameType(qboolean singlePlayer) {
 	int i, c; // Nico, unused, game;
 
 	c = 0;
-	for (i = 0; i < uiInfo.mapCount; i++) {
+	for (i = 0; i < uiInfo.mapCount; ++i) {
 		uiInfo.mapList[i].active = qfalse;
 		if (singlePlayer) {
 			continue;
@@ -3053,10 +3053,10 @@ UI_RemoveServerFromDisplayList
 static void UI_RemoveServerFromDisplayList(int num) {
 	int i, j;
 
-	for (i = 0; i < uiInfo.serverStatus.numDisplayServers; i++) {
+	for (i = 0; i < uiInfo.serverStatus.numDisplayServers; ++i) {
 		if (uiInfo.serverStatus.displayServers[i] == num) {
 			uiInfo.serverStatus.numDisplayServers--;
-			for (j = i; j < uiInfo.serverStatus.numDisplayServers; j++) {
+			for (j = i; j < uiInfo.serverStatus.numDisplayServers; ++j) {
 				uiInfo.serverStatus.displayServers[j] = uiInfo.serverStatus.displayServers[j + 1];
 			}
 			return;
@@ -3160,7 +3160,7 @@ static void UI_BuildServerDisplayList(int force) {
 		uiInfo.serverStatus.currentServerPreview = 0;
 	}
 
-	for (i = 0; i < count; i++) {
+	for (i = 0; i < count; ++i) {
 		// if we already got info for this server
 		if (!trap_LAN_ServerIsVisible(ui_netSource.integer, i)) {
 			continue;
@@ -3442,7 +3442,7 @@ static char *stristr(char *str, char *charset) {
 	int i;
 
 	while (*str) {
-		for (i = 0; charset[i] && str[i]; i++) {
+		for (i = 0; charset[i] && str[i]; ++i) {
 			if (toupper(charset[i]) != toupper(str[i])) {
 				break;
 			}
@@ -4592,7 +4592,7 @@ void UI_RegisterCvars(void) {
 	int         i;
 	cvarTable_t *cv;
 
-	for (i = 0, cv = cvarTable ; i < cvarTableSize ; i++, cv++) {
+	for (i = 0, cv = cvarTable ; i < cvarTableSize ; ++i, ++cv) {
 		trap_Cvar_Register(cv->vmCvar, cv->cvarName, cv->defaultString, cv->cvarFlags);
 		if (cv->vmCvar != NULL) {
 			cv->modificationCount = cv->vmCvar->modificationCount;
