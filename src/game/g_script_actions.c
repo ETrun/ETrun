@@ -71,7 +71,7 @@ qboolean G_ScriptAction_SetModelFromBrushmodel(gentity_t *ent, char *params) {
 		token = COM_ParseExt(&pString, qfalse);
 	}
 
-	for (i = 0; i < level.numBrushModels; i++) {
+	for (i = 0; i < level.numBrushModels; ++i) {
 		if (!Q_stricmp(level.brushModelInfo[i].modelname, modelname)) {
 			trap_SetBrushModel(ent, va("*%i", level.brushModelInfo[i].model));
 
@@ -477,7 +477,7 @@ qboolean G_ScriptAction_SetSpeed(gentity_t *ent, char *params) {
 	VectorCopy(ent->r.currentOrigin, ent->s.pos.trBase);
 
 	pString = params;
-	for (i = 0; i < 3; i++) {
+	for (i = 0; i < 3; ++i) {
 		token = COM_Parse(&pString);
 		if (!token || !*token) {
 			G_Error("G_Scripting: syntax: setspeed <x> <y> <z> [gravity|lowgravity]\n");
@@ -892,7 +892,7 @@ qboolean G_ScriptAction_SpawnRubble(gentity_t *ent, char *params) {
 	// Nico, silent GCC
 	(void)ent;
 
-	for (i = 0; i < MAX_DEBRISCHUNKS; i++) {
+	for (i = 0; i < MAX_DEBRISCHUNKS; ++i) {
 		if (!Q_stricmp(level.debrisChunks[i].targetname, params)) {
 			gentity_t *temp = G_TempEntity(level.debrisChunks[i].origin, EV_DEBRIS);
 			VectorCopy(level.debrisChunks[i].velocity, temp->s.origin2);
@@ -1261,7 +1261,7 @@ qboolean G_ScriptAction_GotoMarker(gentity_t *ent, char *params) {
 				duration = ent->s.pos.trDuration;
 				VectorCopy(target->s.angles, angles);
 
-				for (i = 0; i < 3; i++) {
+				for (i = 0; i < 3; ++i) {
 					diff[i] = AngleSubtract(angles[i], ent->s.angles[i]);
 					while (diff[i] > 180)
 						diff[i] -= 360;
@@ -1296,7 +1296,7 @@ qboolean G_ScriptAction_GotoMarker(gentity_t *ent, char *params) {
 				duration = ent->s.pos.trDuration;
 				VectorCopy(target->s.angles, angles);
 
-				for (i = 0; i < 3; i++) {
+				for (i = 0; i < 3; ++i) {
 					diff[i] = AngleSubtract(angles[i], ent->s.angles[i]);
 					while (diff[i] > 180)
 						diff[i] -= 360;
@@ -1432,7 +1432,7 @@ qboolean G_ScriptAction_Trigger(gentity_t *ent, char *params) {
 		found     = qfalse;
 		// for all entities/bots with this scriptName
 		trent = g_entities;
-		for (i = 0; i < level.num_entities; i++, trent++) {
+		for (i = 0; i < level.num_entities; ++i, ++trent) {
 			if (!trent->inuse) {
 				continue;
 			}
@@ -1460,7 +1460,7 @@ qboolean G_ScriptAction_Trigger(gentity_t *ent, char *params) {
 			}
 		}
 	} else if (!Q_stricmp(name, "player")) {
-		for (i = 0; i < MAX_CLIENTS; i++) {
+		for (i = 0; i < MAX_CLIENTS; ++i) {
 			if (level.clients[i].pers.connected != CON_CONNECTED) {
 				continue;
 			}
@@ -1764,7 +1764,7 @@ qboolean G_ScriptAction_PlayAnim(gentity_t *ent, char *params) {
 
 	pString = params;
 
-	for (i = 0; i < 2; i++) {
+	for (i = 0; i < 2; ++i) {
 		token = COM_ParseExt(&pString, qfalse);
 		if (!token || !token[0]) {
 			G_Printf("G_Scripting: syntax error\n\nplayanim <startframe> <endframe> [LOOPING <duration>]\n");
@@ -2477,7 +2477,7 @@ qboolean G_ScriptAction_FaceAngles(gentity_t *ent, char *params) {
 			}
 		}
 
-		for (i = 0; i < 3; i++) {
+		for (i = 0; i < 3; ++i) {
 			diff[i] = AngleSubtract(angles[i], ent->s.angles[i]);
 			while (diff[i] > 180)
 				diff[i] -= 360;
@@ -2957,13 +2957,13 @@ qboolean G_ScriptAction_AddTeamVoiceAnnounce(gentity_t *ent, char *params) {
 
 	index = G_SoundIndex(token);
 
-	for (i = 0; i < MAX_COMMANDER_TEAM_SOUNDS; i++) {
+	for (i = 0; i < MAX_COMMANDER_TEAM_SOUNDS; ++i) {
 		if (level.commanderSounds[team][i].index == index + 1) {
 			return qtrue; // already exists
 		}
 	}
 
-	for (i = 0; i < MAX_COMMANDER_TEAM_SOUNDS; i++) {
+	for (i = 0; i < MAX_COMMANDER_TEAM_SOUNDS; ++i) {
 		if (!level.commanderSounds[team][i].index) {
 			level.commanderSounds[team][i].index = index + 1;
 			break;
@@ -3001,7 +3001,7 @@ qboolean G_ScriptAction_RemoveTeamVoiceAnnounce(gentity_t *ent, char *params) {
 
 	index = G_SoundIndex(token);
 
-	for (i = 0; i < MAX_COMMANDER_TEAM_SOUNDS; i++) {
+	for (i = 0; i < MAX_COMMANDER_TEAM_SOUNDS; ++i) {
 		if (index + 1 == level.commanderSounds[team][i].index) {
 			level.commanderSounds[team][i].index = 0;
 		}
@@ -3495,7 +3495,7 @@ qboolean G_ScriptAction_ConstructibleClass(gentity_t *ent, char *params) {
 
 	value = atoi(token);
 
-	if (value <= 0 || value > NUM_CONSTRUCTIBLE_CLASSES) {
+	if (value <= 0 || value >= NUM_CONSTRUCTIBLE_CLASSES) {
 		G_Error("G_Scripting: \"constructible_class\" has a bad value %i\n", value);
 	}
 
@@ -3941,7 +3941,7 @@ static void G_SpawnGEntityFromSpawnVars(void) {
 	// get the next free entity
 	ent = G_Spawn();
 
-	for (i = 0 ; i < level.numSpawnVars ; i++) {
+	for (i = 0 ; i < level.numSpawnVars ; ++i) {
 		G_ParseField(level.spawnVars[i][0], level.spawnVars[i][1], ent);
 	}
 
