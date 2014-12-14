@@ -2409,7 +2409,7 @@ BG_FindItemForWeapon
 gitem_t *BG_FindItemForWeapon(weapon_t weapon) {
 	gitem_t *it;
 
-	for (it = bg_itemlist + 1 ; it->classname ; it++) {
+	for (it = bg_itemlist + 1 ; it->classname ; ++it) {
 		if (it->giType == IT_WEAPON && it->giTag == (int)weapon) {
 			return it;
 		}
@@ -2429,7 +2429,7 @@ BG_FindClipForWeapon
 weapon_t BG_FindClipForWeapon(weapon_t weapon) {
 	gitem_t *it;
 
-	for (it = bg_itemlist + 1 ; it->classname ; it++) {
+	for (it = bg_itemlist + 1 ; it->classname ; ++it) {
 		if (it->giType == IT_WEAPON && it->giTag == (int)weapon) {
 			return it->giClipIndex;
 		}
@@ -2448,7 +2448,7 @@ BG_FindAmmoForWeapon
 weapon_t BG_FindAmmoForWeapon(weapon_t weapon) {
 	gitem_t *it;
 
-	for (it = bg_itemlist + 1 ; it->classname ; it++) {
+	for (it = bg_itemlist + 1 ; it->classname ; ++it) {
 		if (it->giType == IT_WEAPON && it->giTag == (int)weapon) {
 			return it->giAmmoIndex;
 		}
@@ -2524,7 +2524,7 @@ BG_FindItem
 gitem_t *BG_FindItem(const char *pickupName) {
 	gitem_t *it;
 
-	for (it = bg_itemlist + 1 ; it->classname ; it++) {
+	for (it = bg_itemlist + 1 ; it->classname ; ++it) {
 		if (!Q_stricmp(it->pickup_name, pickupName)) {
 			return it;
 		}
@@ -2536,7 +2536,7 @@ gitem_t *BG_FindItem(const char *pickupName) {
 gitem_t *BG_FindItemForClassName(const char *className) {
 	gitem_t *it;
 
-	for (it = bg_itemlist + 1 ; it->classname ; it++) {
+	for (it = bg_itemlist + 1 ; it->classname ; ++it) {
 		if (!Q_stricmp(it->classname, className)) {
 			return it;
 		}
@@ -2578,7 +2578,7 @@ void BG_CalculateSpline_r(splinePath_t *spline, vec3_t out1, vec3_t out2, float 
 	vec3_t dist;
 
 	VectorCopy(spline->point.origin, points[0]);
-	for (i = 0; i < spline->numControls; i++) {
+	for (i = 0; i < spline->numControls; ++i) {
 		VectorCopy(spline->controls[i].origin, points[i + 1]);
 	}
 	if (!spline->next) {
@@ -2588,7 +2588,7 @@ void BG_CalculateSpline_r(splinePath_t *spline, vec3_t out1, vec3_t out2, float 
 
 
 	while (count > 2) {
-		for (i = 0; i < count - 1; i++) {
+		for (i = 0; i < count - 1; ++i) {
 			VectorSubtract(points[i + 1], points[i], dist);
 			VectorMA(points[i], tension, dist, points[i]);
 		}
@@ -2760,7 +2760,7 @@ void BG_ComputeSegments(splinePath_t *pSpline) {
 	float  granularity = 1 / ((float)(MAX_SPLINE_SEGMENTS));
 	vec3_t vec[4];
 
-	for (i = 0; i < MAX_SPLINE_SEGMENTS; i++) {
+	for (i = 0; i < MAX_SPLINE_SEGMENTS; ++i) {
 		BG_CalculateSpline_r(pSpline, vec[0], vec[1], i * granularity);
 		VectorSubtract(vec[1], vec[0], pSpline->segments[i].start);
 		VectorMA(vec[0], i * granularity, pSpline->segments[i].start, pSpline->segments[i].start);
@@ -3412,7 +3412,7 @@ void BG_PlayerStateToEntityState(playerState_t *ps, entityState_t *s, qboolean s
 	// Ridah, now using a circular list of events for all entities
 	// add any new events that have been added to the playerState_t
 	// (possibly overwriting entityState_t events)
-	for (i = ps->oldEventSequence; i != ps->eventSequence; i++) {
+	for (i = ps->oldEventSequence; i != ps->eventSequence; ++i) {
 		s->events[s->eventSequence & (MAX_EVENTS - 1)]     = ps->events[i & (MAX_EVENTS - 1)];
 		s->eventParms[s->eventSequence & (MAX_EVENTS - 1)] = ps->eventParms[i & (MAX_EVENTS - 1)];
 		s->eventSequence++;
@@ -3423,7 +3423,7 @@ void BG_PlayerStateToEntityState(playerState_t *ps, entityState_t *s, qboolean s
 	s->groundEntityNum = ps->groundEntityNum;
 
 	s->powerups = 0;
-	for (i = 0 ; i < MAX_POWERUPS ; i++) {
+	for (i = 0 ; i < MAX_POWERUPS ; ++i) {
 		if (ps->powerups[i]) {
 			s->powerups |= 1 << i;
 		}
@@ -3511,7 +3511,7 @@ void BG_PlayerStateToEntityStateExtraPolate(playerState_t *ps, entityState_t *s,
 	// Ridah, now using a circular list of events for all entities
 	// add any new events that have been added to the playerState_t
 	// (possibly overwriting entityState_t events)
-	for (i = ps->oldEventSequence; i != ps->eventSequence; i++) {
+	for (i = ps->oldEventSequence; i != ps->eventSequence; ++i) {
 		s->events[s->eventSequence & (MAX_EVENTS - 1)]     = ps->events[i & (MAX_EVENTS - 1)];
 		s->eventParms[s->eventSequence & (MAX_EVENTS - 1)] = ps->eventParms[i & (MAX_EVENTS - 1)];
 		s->eventSequence++;
@@ -3522,7 +3522,7 @@ void BG_PlayerStateToEntityStateExtraPolate(playerState_t *ps, entityState_t *s,
 	s->groundEntityNum = ps->groundEntityNum;
 
 	s->powerups = 0;
-	for (i = 0 ; i < MAX_POWERUPS ; i++) {
+	for (i = 0 ; i < MAX_POWERUPS ; ++i) {
 		if (ps->powerups[i]) {
 			s->powerups |= 1 << i;
 		}
@@ -3541,7 +3541,7 @@ BG_Find_PathCorner
 pathCorner_t *BG_Find_PathCorner(const char *match) {
 	int i;
 
-	for (i = 0 ; i < numPathCorners; i++) {
+	for (i = 0 ; i < numPathCorners; ++i) {
 		if (!Q_stricmp(pathCorners[i].name, match)) {
 			return &pathCorners[i];
 		}
@@ -3573,7 +3573,7 @@ BG_Find_Spline
 splinePath_t *BG_Find_Spline(const char *match) {
 	int i;
 
-	for (i = 0 ; i < numSplinePaths; i++) {
+	for (i = 0 ; i < numSplinePaths; ++i) {
 		if (!Q_stricmp(splinePaths[i].point.name, match)) {
 			return &splinePaths[i];
 		}
@@ -3644,11 +3644,11 @@ void BG_BuildSplinePaths() {
 	pathCorner_t *pnt;
 	splinePath_t *spline, *st;
 
-	for (i = 0; i < numSplinePaths; i++) {
+	for (i = 0; i < numSplinePaths; ++i) {
 		spline = &splinePaths[i];
 
 		if (*spline->strTarget) {
-			for (j = 0; j < spline->numControls; j++) {
+			for (j = 0; j < spline->numControls; ++j) {
 				pnt = BG_Find_PathCorner(spline->controls[j].name);
 
 				if (!pnt) {
@@ -3675,7 +3675,7 @@ void BG_BuildSplinePaths() {
 		}
 	}
 
-	for (i = 0; i < numSplinePaths; i++) {
+	for (i = 0; i < numSplinePaths; ++i) {
 		spline = &splinePaths[i];
 
 		if (spline->next) {
@@ -3722,8 +3722,8 @@ BG_TransposeMatrix
 void BG_TransposeMatrix(const vec3_t matrix[3], vec3_t transpose[3]) {
 	int i, j;
 
-	for (i = 0; i < 3; i++) {
-		for (j = 0; j < 3; j++) {
+	for (i = 0; i < 3; ++i) {
+		for (j = 0; j < 3; ++j) {
 			transpose[i][j] = matrix[j][i];
 		}
 	}
@@ -3840,7 +3840,7 @@ qboolean PC_Color_Parse(int handle, vec4_t *c) {
 	int   i;
 	float f;
 
-	for (i = 0; i < 4; i++) {
+	for (i = 0; i < 4; ++i) {
 		if (!PC_Float_Parse(handle, &f)) {
 			return qfalse;
 		}
@@ -3858,7 +3858,7 @@ qboolean PC_Vec_Parse(int handle, vec3_t *c) {
 	int   i;
 	float f;
 
-	for (i = 0; i < 3; i++) {
+	for (i = 0; i < 3; ++i) {
 		if (!PC_Float_Parse(handle, &f)) {
 			return qfalse;
 		}
@@ -4114,7 +4114,7 @@ char *BG_GetLocationString(vec_t *pos) {
 qboolean BG_BBoxCollision(vec3_t min1, vec3_t max1, vec3_t min2, vec3_t max2) {
 	int i;
 
-	for (i = 0; i < 3; i++) {
+	for (i = 0; i < 3; ++i) {
 		if (min1[i] > max2[i]) {
 			return qfalse;
 		}

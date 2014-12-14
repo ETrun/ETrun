@@ -42,7 +42,7 @@ qboolean CG_SpawnString(const char *key, const char *defaultString, char **out) 
 		CG_Error("CG_SpawnString() called while not spawning");
 	}
 
-	for (i = 0 ; i < cg.numSpawnVars ; i++) {
+	for (i = 0 ; i < cg.numSpawnVars ; ++i) {
 		if (!strcmp(key, cg.spawnVars[i][0])) {
 			*out = cg.spawnVars[i][1];
 			return qtrue;
@@ -158,7 +158,7 @@ void SP_info_train_spline_main(void) {
 		spline->isStart = qtrue;
 	}
 
-	for (i = 1;; i++) {
+	for (i = 1;; ++i) {
 		if (!CG_SpawnString(i == 1 ? va("control") : va("control%i", i), "", &control)) {
 			break;
 		}
@@ -209,7 +209,7 @@ void SP_misc_gamemodel(void) {
 	gamemodel        = &cgs.miscGameModels[cg.numMiscGameModels++];
 	gamemodel->model = trap_R_RegisterModel(model);
 	AnglesToAxis(angles, gamemodel->axes);
-	for (i = 0; i < 3; i++) {
+	for (i = 0; i < 3; ++i) {
 		VectorScale(gamemodel->axes[i], vScale[i], gamemodel->axes[i]);
 	}
 	VectorCopy(org, gamemodel->org);
@@ -219,7 +219,7 @@ void SP_misc_gamemodel(void) {
 
 		trap_R_ModelBounds(gamemodel->model, mins, maxs);
 
-		for (i = 0; i < 3; i++) {
+		for (i = 0; i < 3; ++i) {
 			mins[i] *= vScale[i];
 			maxs[i] *= vScale[i];
 		}
@@ -271,7 +271,7 @@ void CG_ParseEntityFromSpawnVars(void) {
 	}
 
 	if (CG_SpawnString("classname", "", &classname)) {
-		for (i = 0; i < NUMSPAWNS; i++) {
+		for (i = 0; i < NUMSPAWNS; ++i) {
 			if (!Q_stricmp(spawns[i].name, classname)) {
 				spawns[i].spawn();
 				break;

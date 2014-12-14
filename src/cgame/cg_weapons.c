@@ -1132,7 +1132,7 @@ static qboolean CG_RW_ParseClient(int handle, weaponInfo_t *weaponInfo) {
 			if (!PC_String_ParseNoAlloc(handle, filename, sizeof (filename))) {
 				return CG_RW_ParseError(handle, "expected flashSound filename");
 			}
-			for (i = 0; i < 4; i++) {
+			for (i = 0; i < 4; ++i) {
 				if (!weaponInfo->flashSound[i]) {
 					weaponInfo->flashSound[i] = trap_S_RegisterSound(filename);
 					break;
@@ -1145,7 +1145,7 @@ static qboolean CG_RW_ParseClient(int handle, weaponInfo_t *weaponInfo) {
 			if (!PC_String_ParseNoAlloc(handle, filename, sizeof (filename))) {
 				return CG_RW_ParseError(handle, "expected flashEchoSound filename");
 			}
-			for (i = 0; i < 4; i++) {
+			for (i = 0; i < 4; ++i) {
 				if (!weaponInfo->flashEchoSound[i]) {
 					weaponInfo->flashEchoSound[i] = trap_S_RegisterSound(filename);
 					break;
@@ -1158,7 +1158,7 @@ static qboolean CG_RW_ParseClient(int handle, weaponInfo_t *weaponInfo) {
 			if (!PC_String_ParseNoAlloc(handle, filename, sizeof (filename))) {
 				return CG_RW_ParseError(handle, "expected lastShotSound filename");
 			}
-			for (i = 0; i < 4; i++) {
+			for (i = 0; i < 4; ++i) {
 				if (!weaponInfo->lastShotSound[i]) {
 					weaponInfo->lastShotSound[i] = trap_S_RegisterSound(filename);
 					break;
@@ -1434,7 +1434,7 @@ void CG_RegisterItemVisuals(int itemNum) {
 		return;
 	}
 
-	for (i = 0; i < MAX_ITEM_MODELS; i++) {
+	for (i = 0; i < MAX_ITEM_MODELS; ++i) {
 		itemInfo->models[i] = trap_R_RegisterModel(item->world_model[i]);
 	}
 
@@ -1442,7 +1442,7 @@ void CG_RegisterItemVisuals(int itemNum) {
 		itemInfo->icons[0] = trap_R_RegisterShader(item->icon);
 		if (item->giType == IT_HOLDABLE) {
 			// (SA) register alternate icons (since holdables can have multiple uses, they might have different icons to represent how many uses are left)
-			for (i = 1; i < MAX_ITEM_ICONS; i++)
+			for (i = 1; i < MAX_ITEM_ICONS; ++i)
 				itemInfo->icons[i] = trap_R_RegisterShader(va("%s%i", item->icon, i + 1));
 		}
 	}
@@ -1488,7 +1488,7 @@ qboolean CG_GetPartFramesFromWeap(centity_t *cent, refEntity_t *part, refEntity_
 
 	// find part's start frame for this animation sequence
 	// rain - & out ANIM_TOGGLEBIT or we'll go way out of bounds
-	for (i = 0; i < (cent->pe.weap.animationNumber & ~ANIM_TOGGLEBIT); i++) {
+	for (i = 0; i < (cent->pe.weap.animationNumber & ~ANIM_TOGGLEBIT); ++i) {
 		if (wi->weapAnimations[i].moveSpeed & (1 << partid)) {       // this part has animation for this sequence
 			frameoffset += wi->weapAnimations[i].numFrames;
 		}
@@ -2614,8 +2614,8 @@ int CG_WeaponIndex(int weapnum, int *bank, int *cycle) {
 		return 0;
 	}
 
-	for (bnk = 0; bnk < MAX_WEAP_BANKS_MP; bnk++) {
-		for (cyc = 0; cyc < MAX_WEAPS_IN_BANK_MP; cyc++) {
+	for (bnk = 0; bnk < MAX_WEAP_BANKS_MP; ++bnk) {
+		for (cyc = 0; cyc < MAX_WEAPS_IN_BANK_MP; ++cyc) {
 
 			if (!weapBanksMultiPlayer[bnk][cyc]) {
 				break;
@@ -3718,7 +3718,7 @@ void CG_WeaponBank_f(void) {
 
 	bank = atoi(CG_Argv(1));
 
-	if (bank <= 0 || bank > MAX_WEAP_BANKS_MP) {
+	if (bank <= 0 || bank >= MAX_WEAP_BANKS_MP) {
 		return;
 	}
 
@@ -3736,7 +3736,7 @@ void CG_WeaponBank_f(void) {
 		}
 	}
 
-	for (i = 0; i < MAX_WEAPS_IN_BANK_MP; i++) {
+	for (i = 0; i < MAX_WEAPS_IN_BANK_MP; ++i) {
 		num = getNextWeapInBank(bank, cycle + i);
 
 		if (CG_WeaponSelectable(num)) {
@@ -3876,14 +3876,14 @@ void CG_OutOfAmmoChange(qboolean allowforceswitch) {
 
 		// JPW NERVE -- early out if we just fired Panzerfaust, go to pistola, then grenades
 		if (cg.weaponSelect == WP_PANZERFAUST) {
-			for (i = 0; i < MAX_WEAPS_IN_BANK_MP; i++) {
+			for (i = 0; i < MAX_WEAPS_IN_BANK_MP; ++i) {
 				if (CG_WeaponSelectable(weapBanksMultiPlayer[2][i])) {     // find a pistol
 					cg.weaponSelect = weapBanksMultiPlayer[2][i];
 					CG_FinishWeaponChange(cg.predictedPlayerState.weapon, cg.weaponSelect);
 					return;
 				}
 			}
-			for (i = 0; i < MAX_WEAPS_IN_BANK_MP; i++) {
+			for (i = 0; i < MAX_WEAPS_IN_BANK_MP; ++i) {
 				if (CG_WeaponSelectable(weapBanksMultiPlayer[4][i])) {     // find a grenade
 					cg.weaponSelect = weapBanksMultiPlayer[4][i];
 					CG_FinishWeaponChange(cg.predictedPlayerState.weapon, cg.weaponSelect);
@@ -3921,14 +3921,14 @@ void CG_OutOfAmmoChange(qboolean allowforceswitch) {
 	CG_WeaponIndex(cg.weaponSelect, &bank, &cycle);       // get bank/cycle of current weapon
 
 	// JPW NERVE -- more useful weapon changes -- check if rifle or pistol is still working, and use that if available
-	for (i = 0; i < MAX_WEAPS_IN_BANK_MP; i++) {
+	for (i = 0; i < MAX_WEAPS_IN_BANK_MP; ++i) {
 		if (CG_WeaponSelectable(weapBanksMultiPlayer[3][i])) {     // find a rifle
 			cg.weaponSelect = weapBanksMultiPlayer[3][i];
 			CG_FinishWeaponChange(cg.predictedPlayerState.weapon, cg.weaponSelect);
 			return;
 		}
 	}
-	for (i = 0; i < MAX_WEAPS_IN_BANK_MP; i++) {
+	for (i = 0; i < MAX_WEAPS_IN_BANK_MP; ++i) {
 		if (CG_WeaponSelectable(weapBanksMultiPlayer[2][i])) {     // find a pistol
 			cg.weaponSelect = weapBanksMultiPlayer[2][i];
 			CG_FinishWeaponChange(cg.predictedPlayerState.weapon, cg.weaponSelect);
@@ -3937,7 +3937,7 @@ void CG_OutOfAmmoChange(qboolean allowforceswitch) {
 	}
 
 	// otherwise just do something
-	for (i = cycle; i < MAX_WEAPS_IN_BANK_MP; i++) {
+	for (i = cycle; i < MAX_WEAPS_IN_BANK_MP; ++i) {
 		equiv = getNextWeapInBank(bank, i);
 		if (CG_WeaponSelectable(equiv)) {      // found a reasonable replacement
 			cg.weaponSelect = equiv;
@@ -3968,7 +3968,7 @@ void CG_MG42EFX(centity_t *cent) {
 	refEntity_t flash;
 
 	// find the mg42 we're attached to
-	for (num = 0 ; num < cg.snap->numEntities ; num++) {
+	for (num = 0 ; num < cg.snap->numEntities ; ++num) {
 		centity_t *mg42 = &cg_entities[cg.snap->entities[num].number];
 
 		if (mg42->currentState.eType == ET_MG42_BARREL &&
@@ -4197,7 +4197,7 @@ void CG_FireWeapon(centity_t *cent) {
 		// try to use the lastShotSound, but don't assume it's there.
 		// if a weapon without the sound calls it, drop back to regular fire sound
 
-		for (c = 0; c < 4; c++) {
+		for (c = 0; c < 4; ++c) {
 			if (!firesound[c]) {
 				break;
 			}
@@ -4213,7 +4213,7 @@ void CG_FireWeapon(centity_t *cent) {
 
 	if (!(cent->currentState.eFlags & EF_ZOOMING)) {     // JPW NERVE -- don't play sounds or eject brass if zoomed in
 		// play a sound
-		for (c = 0 ; c < 4 ; c++) {
+		for (c = 0 ; c < 4 ; ++c) {
 			if (!firesound[c]) {
 				break;
 			}
@@ -4299,7 +4299,7 @@ void CG_AddBulletParticles(vec3_t origin, vec3_t dir, int speed, int count, floa
 	int    i;
 
 	// add the falling particles
-	for (i = 0; i < count; i++) {
+	for (i = 0; i < count; ++i) {
 
 		VectorSet(velocity, dir[0] + crandom() * randScale, dir[1] + crandom() * randScale, dir[2] + crandom() * randScale);
 		VectorScale(velocity, (float)speed, velocity);
@@ -4326,7 +4326,7 @@ void CG_AddDirtBulletParticles(vec3_t origin, vec3_t dir, int speed, int duratio
 	VectorCopy(origin, pos);
 
 	CG_ParticleDirtBulletDebris_Core(pos, velocity, duration, width, height, alpha, shader);  //600 + rand()%300 ); // keep central one
-	for (i = 0; i < count; i++) {
+	for (i = 0; i < count; ++i) {
 		VectorSet(velocity, dir[0] * crandom() * speed * randScale, dir[1] * crandom() * speed * randScale, dir[2] * random() * speed);
 		CG_ParticleDirtBulletDebris_Core(pos, velocity, duration + (rand() % (duration >> 1)), width, height, alpha, shader);
 	}
@@ -4577,8 +4577,8 @@ void CG_MissileHitWall(int weapon, int clientNum, vec3_t origin, vec3_t dir, int
 				CG_AddDirtBulletParticles(origin, dir, 600, 2000, 10, 0.5, 275, 125, 0.25, cgs.media.dirtParticle1Shader);
 			}
 
-			for (i = 0; i < 5; i++) {
-				for (j = 0; j < 3; j++) {
+			for (i = 0; i < 5; ++i) {
+				for (j = 0; j < 3; ++j) {
 					sprOrg[j] = origin[j] + 64 * dir[j] + 24 * crandom();
 				}
 				sprVel[2] += rand() % 50;
@@ -4625,8 +4625,8 @@ void CG_MissileHitWall(int weapon, int clientNum, vec3_t origin, vec3_t dir, int
 			if (trace.surfaceFlags & SURF_GRASS || trace.surfaceFlags & SURF_GRAVEL) {
 				CG_AddDirtBulletParticles(origin, dir, 400 + random() * 200, 3000, 10, 0.5, 400, 256, 0.25, cgs.media.dirtParticle1Shader);
 			}
-			for (i = 0; i < 3; i++) {
-				for (j = 0; j < 3; j++) {
+			for (i = 0; i < 3; ++i) {
+				for (j = 0; j < 3; ++j) {
 					sprOrg[j] = origin[j] + 150 * crandom();
 					sprVel[j] = 0.35 * crandom();
 				}
@@ -4634,8 +4634,8 @@ void CG_MissileHitWall(int weapon, int clientNum, vec3_t origin, vec3_t dir, int
 				VectorScale(sprVel, 130, sprVel);
 				CG_ParticleExplosion("blacksmokeanim", sprOrg, sprVel, 6000 + random() * 2000, 40, 400 + random() * 200, qfalse);   // JPW NERVE was blacksmokeanimb
 			}
-			for (i = 0; i < 4; i++) {   // JPW random vector based on plane normal so explosions move away from walls/dirt/etc
-				for (j = 0; j < 3; j++) {
+			for (i = 0; i < 4; ++i) {   // JPW random vector based on plane normal so explosions move away from walls/dirt/etc
+				for (j = 0; j < 3; ++j) {
 					sprOrg[j] = origin[j] + 100 * crandom();
 					sprVel[j] = 0.65 * crandom(); // wider fireball spread
 				}
@@ -5107,7 +5107,7 @@ void CG_CalcMuzzlePoint(int entityNum, vec3_t muzzle) {
 void SnapVectorTowards(vec3_t v, vec3_t to) {
 	int i;
 
-	for (i = 0 ; i < 3 ; i++) {
+	for (i = 0 ; i < 3 ; ++i) {
 		if (to[i] <= v[i]) {
 			v[i] = floor(v[i]);
 		} else {
