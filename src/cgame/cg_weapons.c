@@ -160,7 +160,7 @@ void CG_MachineGunEjectBrass(centity_t *cent) {
 	localEntity_t *le;
 	refEntity_t   *re;
 	vec3_t        velocity, xvelocity;
-	vec3_t        offset, xoffset;
+	vec3_t        offset = {0}, xoffset;
 	float         waterScale = 1.0f;
 	vec3_t        v[3];
 
