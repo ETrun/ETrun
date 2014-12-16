@@ -2017,7 +2017,7 @@ qboolean G_PositionEntityOnTag(gentity_t *entity, gentity_t *parent, char *tagNa
 void G_TagLinkEntity(gentity_t *ent, int msec) {
 	gentity_t *parent = &g_entities[ent->s.torsoAnim];
 	gentity_t *obstacle;
-	vec3_t    origin, angles;
+	vec3_t    origin, angles = {0};
 	vec3_t    v;
 
 	if (ent->linkTagTime >= level.time) {
