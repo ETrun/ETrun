@@ -260,6 +260,7 @@ static void CG_SoundParseSounds(char *filename, char *buffer) {
 	// Nico, init vars
 	sound.soundList = NULL;
 	sound.index = 0;
+	sound.channel = 0;
 
 	for (;; ) {
 		char *token;
