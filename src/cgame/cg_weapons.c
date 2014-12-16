@@ -5131,7 +5131,8 @@ void CG_Bullet(vec3_t end, int sourceEntityNum, qboolean flesh, int fleshEntityN
 	cent = &cg_entities[fleshEntityNum];
 
 	// JPW NERVE -- don't ever shoot if we're binoced in
-	if (cg_entities[sourceEntityNum].currentState.eFlags & EF_ZOOMING) {
+	// Nico, check sourceEntityNum instead of checking it after using it as an array index
+	if (sourceEntityNum < 0 || cg_entities[sourceEntityNum].currentState.eFlags & EF_ZOOMING) {
 		return;
 	}
 
@@ -5162,7 +5163,7 @@ void CG_Bullet(vec3_t end, int sourceEntityNum, qboolean flesh, int fleshEntityN
 
 	// if the shooter is currently valid, calc a source point and possibly
 	// do trail effects
-	if (sourceEntityNum >= 0 && cg_tracerChance.value > 0) {
+	if (cg_tracerChance.value > 0) {
 		int       sourceContentType, destContentType;
 
 		CG_CalcMuzzlePoint(sourceEntityNum, start);
