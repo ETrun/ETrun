@@ -625,6 +625,12 @@ qboolean BG_ParseConditions(char **text_pp, animScriptItem_t *scriptItem) {
 
 		conditionIndex = BG_IndexForString(token, animConditionsStr, qfalse);
 
+		// Nico, check conditionIndex value
+		if (conditionIndex <= 0) {
+			BG_AnimParseError("BG_ParseConditions: negative array index found");
+			break;
+		}
+
 		switch (animConditionsTable[conditionIndex].type) {
 		case ANIM_CONDTYPE_BITFLAGS:
 			BG_ParseConditionBits(text_pp, animConditionsTable[conditionIndex].values, conditionIndex, conditionValue);
@@ -633,7 +639,7 @@ qboolean BG_ParseConditions(char **text_pp, animScriptItem_t *scriptItem) {
 			if (animConditionsTable[conditionIndex].values) {
 				token = COM_ParseExt(text_pp, qfalse);
 				if (!token || !token[0]) {
-					BG_AnimParseError("BG_AnimParseAnimScript: expected condition value, found end of line");    // RF modification
+					BG_AnimParseError("BG_ParseConditions: expected condition value, found end of line");    // RF modification
 				}
 				// check for a comma (condition divider)
 				if (token[strlen(token) - 1] == ',') {
