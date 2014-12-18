@@ -628,7 +628,6 @@ qboolean BG_ParseConditions(char **text_pp, animScriptItem_t *scriptItem) {
 		// Nico, check conditionIndex value
 		if (conditionIndex <= 0) {
 			BG_AnimParseError("BG_ParseConditions: negative array index found");
-			break;
 		}
 
 		switch (animConditionsTable[conditionIndex].type) {
@@ -880,6 +879,11 @@ void BG_AnimParseAnimScript(animModelInfo_t *animModelInfo, animScriptData_t *sc
 				token = COM_ParseExt(&text_p, qfalse);
 				if (!token || !*token) {
 					BG_AnimParseError("BG_AnimParseAnimScript: expected condition define string");   // RF mod
+				}
+
+				// Nico, check defineType
+				if (defineType < 0) {
+					BG_AnimParseError("BG_AnimParseAnimScript: negative array index found");
 				}
 
 				// copy the define to the strings list

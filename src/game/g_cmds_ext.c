@@ -79,7 +79,7 @@ qboolean G_commandCheck(gentity_t *ent, char *cmd) {
 	unsigned int          i, cCommands = sizeof (aCommandInfo) / sizeof (aCommandInfo[0]);
 	const cmd_reference_t *pCR;
 
-	for (i = 0; i < cCommands; i++) {
+	for (i = 0; i < cCommands; ++i) {
 		pCR = &aCommandInfo[i];
 		if (NULL != pCR->pCommand && 0 == Q_stricmp(cmd, pCR->pszCommandName)) {
 			if (!G_commandHelp(ent, cmd, i)) {
@@ -160,7 +160,7 @@ void G_commands_cmd(gentity_t *ent, unsigned int dwCommand, qboolean fValue) {
 	// Nico, replaced cpm by print
 	// http://games.chruker.dk/enemy_territory/modding_project_bugfix.php?bug_id=046
 	CP("print \"^5\nAvailable OSP Game-Commands:\n----------------------------\n\"");
-	for (i = 0; i < rows; i++) {
+	for (i = 0; i < rows; ++i) {
 		if (i + rows * 3 + 1 <= num_cmds) {
 			CP(va("print \"^3%-17s%-17s%-17s%-17s\n\"", aCommandInfo[i].pszCommandName,
 			      aCommandInfo[i + rows].pszCommandName,
