@@ -1892,15 +1892,8 @@ void CG_EntityEvent(centity_t *cent, vec3_t position) {
 		DEBUGNAME("EV_GLOBAL_SOUND");
 		// Ridah, check for a sound script
 		s = CG_ConfigString(CS_SOUNDS + es->eventParm);
-		if (!strstr(s, ".wav")) {
-			if (CG_SoundPlaySoundScript(s, NULL, -1, qtrue)) {
-				break;
-			}
-
-			// try with .wav
-			Q_strncpyz(tempStr, s, sizeof (tempStr));
-			Q_strcat(tempStr, sizeof (tempStr), ".wav");
-			s = tempStr;
+		if (!strstr(s, ".wav") && CG_SoundPlaySoundScript(s, NULL, -1, qtrue)) {
+			break;
 		}
 
 		if (cgs.gameSounds[es->eventParm]) {
