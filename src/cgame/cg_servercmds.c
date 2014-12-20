@@ -1473,8 +1473,7 @@ static void CG_ServerCommand(void) {
 		int fadeTime = 0;   // default to instant start
 
 		Q_strncpyz(text, CG_Argv(2), MAX_SAY_TEXT);
-		// Nico, always true warning fix
-		if (text != NULL && strlen(text)) {
+		if (*text) {
 			fadeTime = atoi(text);
 		}
 
@@ -1486,8 +1485,7 @@ static void CG_ServerCommand(void) {
 		int fadeTime = 0;   // default to instant stop
 
 		Q_strncpyz(text, CG_Argv(1), MAX_SAY_TEXT);
-		// Nico, always true warning fix
-		if (text != NULL && strlen(text)) {
+		if (*text) {
 			fadeTime = atoi(text);
 		}
 
