@@ -785,9 +785,6 @@ G_ProcessTagConnect
 ==================
 */
 void G_ProcessTagConnect(gentity_t *ent, qboolean clearAngles) {
-	if (!ent->tagName) {
-		G_Error("G_ProcessTagConnect: NULL ent->tagName\n");
-	}
 	if (!ent->tagParent) {
 		G_Error("G_ProcessTagConnect: NULL ent->tagParent\n");
 	}
