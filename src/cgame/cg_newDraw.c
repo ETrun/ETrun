@@ -181,7 +181,7 @@ CG_DrawCursorHints
 */
 void CG_DrawCursorhint(rectDef_t *rect) {
 	float     *color;
-	qhandle_t icon = 0, icon2 = 0;
+	qhandle_t icon = 0;
 	float     scale, halfscale;
 	qboolean  yellowbar = qfalse;
 
@@ -360,10 +360,6 @@ void CG_DrawCursorhint(rectDef_t *rect) {
 	// set color and draw the hint
 	trap_R_SetColor(color);
 	CG_DrawPic(rect->x - halfscale, rect->y - halfscale, rect->w + scale, rect->h + scale, icon);
-
-	if (icon2) {
-		CG_DrawPic(rect->x - halfscale, rect->y - halfscale, rect->w + scale, rect->h + scale, icon2);
-	}
 
 	trap_R_SetColor(NULL);
 
