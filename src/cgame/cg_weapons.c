@@ -4417,7 +4417,7 @@ ClientNum is a dummy field used to define what sort of effect to spawn
 */
 #define MAX_IMPACT_SOUNDS 5
 void CG_MissileHitWall(int weapon, int clientNum, vec3_t origin, vec3_t dir, int surfFlags) {   //	(SA) modified to send missilehitwall surface parameters
-	qhandle_t     mod = 0, mark = 0, shader = 0;
+	qhandle_t     mark = 0, shader = 0;
 	sfxHandle_t   sfx = 0, sfx2 = 0;
 	qboolean      isSprite = qfalse;
 	int           duration = 600, i, j, markDuration = -1, volume = 127;
@@ -4733,15 +4733,6 @@ void CG_MissileHitWall(int weapon, int clientNum, vec3_t origin, vec3_t dir, int
 			// sfx2range is variable to give us minimum volume control different explosion sizes (see mortar, panzerfaust, and grenade)
 			trap_S_StartSoundEx(gorg, -1, CHAN_WEAPON, sfx2, SND_NOCUT);
 		}
-	}
-
-	if (mod) {
-		localEntity_t *le;
-
-		le                = CG_MakeExplosion(origin, dir, mod, shader, duration, isSprite);
-		le->light         = light;
-		le->lightOverdraw = 0;
-		VectorCopy(lightColor, le->lightColor);
 	}
 
 	// ydnar: omnidirectional explosion marks
