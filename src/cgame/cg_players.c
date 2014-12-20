@@ -109,7 +109,7 @@ static void CG_LoadClientInfo(int clientNum) {
 
 	// reset any existing players and bodies, because they might be in bad
 	// frames for this new model
-	for (i = 0 ; i < MAX_GENTITIES ; i++) {
+	for (i = 0 ; i < MAX_GENTITIES ; ++i) {
 		if (cg_entities[i].currentState.clientNum == clientNum && cg_entities[i].currentState.eType == ET_PLAYER) {
 			CG_ResetPlayerEntity(&cg_entities[i]);
 		}
@@ -1275,7 +1275,7 @@ static qboolean CG_PlayerShadow(centity_t *cent, float *shadowPlane) {
 			vec3_t axis[3];
 
 			// grab each tag with this name
-			for (subIndex = 0; (subIndex = CG_GetOriginForTag(&cent->pe.bodyRefEnt, shadowParts[tagIndex].tagname, subIndex, origin, axis)) >= 0; subIndex++) {
+			for (subIndex = 0; (subIndex = CG_GetOriginForTag(&cent->pe.bodyRefEnt, shadowParts[tagIndex].tagname, subIndex, origin, axis)) >= 0; ++subIndex) {
 				vec3_t angles;
 
 				// project it onto the shadow plane
@@ -1775,7 +1775,7 @@ void CG_Player(centity_t *cent) {
 	//
 	// add accessories
 	//
-	for (i = ACC_BELT_LEFT; i < ACC_MAX; i++) {
+	for (i = ACC_BELT_LEFT; i < ACC_MAX; ++i) {
 		if (!(character->accModels[i])) {
 			continue;
 		}
@@ -1807,13 +1807,6 @@ void CG_Player(centity_t *cent) {
 				break;
 			case ACC_MOUTH2:            // hat2
 			case ACC_MOUTH3:            // hat3
-
-				if (i == ACC_RANK) {
-					if (ci->rank == 0) {
-						continue;
-					}
-				}
-
 				CG_PositionEntityOnTag(&acc, &head, "tag_mouth", 0, NULL);
 				break;
 
@@ -1911,7 +1904,7 @@ qboolean CG_GetTag(int clientNum, char *tagname, orientation_t *or) {
 
 	VectorCopy(refent->origin, org);
 
-	for (i = 0 ; i < 3 ; i++) {
+	for (i = 0 ; i < 3 ; ++i) {
 		VectorMA(org, or->origin[i], refent->axis[i], org);
 	}
 
@@ -1960,7 +1953,7 @@ qboolean CG_GetWeaponTag(int clientNum, char *tagname, orientation_t *or) {
 
 	VectorCopy(refent->origin, org);
 
-	for (i = 0 ; i < 3 ; i++) {
+	for (i = 0 ; i < 3 ; ++i) {
 		VectorMA(org, or->origin[i], refent->axis[i], org);
 	}
 
