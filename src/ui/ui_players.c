@@ -422,7 +422,6 @@ void UI_DrawPlayer(float x, float y, float w, float h, playerInfo_t *pi, int tim
 	float       len;
 	float       xx;
 	vec4_t      hcolor      = { 1, 0, 0, 0.5 };
-	const char  *torso_anim = NULL;
 
 	if (!pi->legsModel || !pi->torsoModel || !pi->headModel || !pi->animations[0].numFrames) {
 		return;
@@ -491,10 +490,6 @@ void UI_DrawPlayer(float x, float y, float w, float h, playerInfo_t *pi, int tim
 	VectorCopy(origin, legs.lightingOrigin);
 	VectorCopy(legs.origin, legs.oldorigin);
 
-	if (torso_anim) {
-		legs.torsoFrame    = 0;
-		legs.oldTorsoFrame = 0;
-	}
 	legs.torsoBacklerp = 0;
 	legs.backlerp = 0;
 
