@@ -4762,7 +4762,6 @@ CG_MissileHitWallSmall
 ==============
 */
 void CG_MissileHitWallSmall(vec3_t origin, vec3_t dir) {
-	qhandle_t     mod    = 0;
 	qhandle_t     mark   = 0;
 	qhandle_t     shader = 0;
 	sfxHandle_t   sfx    = 0;
@@ -4792,20 +4791,6 @@ void CG_MissileHitWallSmall(vec3_t origin, vec3_t dir) {
 
 	if (sfx) {
 		trap_S_StartSound(origin, -1, CHAN_AUTO, sfx);
-	}
-
-	//
-	// create the explosion
-	//
-	if (mod) {
-		localEntity_t *le;
-		qboolean      isSprite      = qtrue;
-
-		le        = CG_MakeExplosion(origin, dir, mod, shader, 1000, isSprite);
-		le->light = 300;
-		// Ridah
-		le->lightOverdraw = 0;
-		VectorCopy(lightColor, le->lightColor);
 	}
 
 	//
