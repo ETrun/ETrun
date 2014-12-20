@@ -75,7 +75,7 @@ tryagain:
 	}
 	// -NERVE - SMF
 
-	for (item = bg_itemlist + 1; item->classname ; item++) {
+	for (item = bg_itemlist + 1; item->classname ; ++item) {
 		if (item->giType != IT_WEAPON) {
 			continue;
 		}
@@ -162,7 +162,7 @@ static void UI_PositionEntityOnTag(refEntity_t *entity, const refEntity_t *paren
 
 	// FIXME: allow origin offsets along tag?
 	VectorCopy(parent->origin, entity->origin);
-	for (i = 0 ; i < 3 ; i++) {
+	for (i = 0 ; i < 3 ; ++i) {
 		VectorMA(entity->origin, lerped.origin[i], parent->axis[i], entity->origin);
 	}
 
@@ -187,7 +187,7 @@ static void UI_PositionRotatedEntityOnTag(refEntity_t *entity, const refEntity_t
 
 	// FIXME: allow origin offsets along tag?
 	VectorCopy(parent->origin, entity->origin);
-	for (i = 0 ; i < 3 ; i++) {
+	for (i = 0 ; i < 3 ; ++i) {
 		VectorMA(entity->origin, lerped.origin[i], parent->axis[i], entity->origin);
 	}
 
@@ -380,24 +380,6 @@ static void UI_PlayerFloatSprite(vec3_t origin, qhandle_t shader) {
 	ent.radius       = 10;
 	ent.renderfx     = 0;
 	trap_R_AddRefEntityToScene(&ent);
-}
-
-// NERVE - SMF
-/*
-===============
-UI_GetAnimation
-===============
-*/
-static int UI_GetAnimation(playerInfo_t *pi, const char *name) {
-	int i;
-
-	for (i = 0; i < pi->numAnimations; i++) {
-		if (!Q_stricmp(pi->animations[i].name, name)) {
-			return pi->animations[i].firstFrame;
-		}
-	}
-
-	return 0;
 }
 
 /*
@@ -697,7 +679,7 @@ static qboolean AnimParseAnimConfig(playerInfo_t *animModelInfo, const char *inp
 			}
 			continue;
 		} else if (!Q_stricmp(token, "headoffset")) {
-			for (i = 0 ; i < 3 ; i++) {
+			for (i = 0 ; i < 3 ; ++i) {
 				token = COM_Parse(&text_p);
 				if (!token) {
 					break;
