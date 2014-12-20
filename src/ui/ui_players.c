@@ -422,7 +422,7 @@ void UI_DrawPlayer(float x, float y, float w, float h, playerInfo_t *pi, int tim
 	float       len;
 	float       xx;
 	vec4_t      hcolor      = { 1, 0, 0, 0.5 };
-	const char  *torso_anim = NULL, *legs_anim = NULL;
+	const char  *torso_anim = NULL;
 
 	if (!pi->legsModel || !pi->torsoModel || !pi->headModel || !pi->animations[0].numFrames) {
 		return;
@@ -496,11 +496,6 @@ void UI_DrawPlayer(float x, float y, float w, float h, playerInfo_t *pi, int tim
 		legs.oldTorsoFrame = 0;
 	}
 	legs.torsoBacklerp = 0;
-
-	if (legs_anim) {
-		legs.frame    = UI_GetAnimation(pi, legs_anim);
-		legs.oldframe = UI_GetAnimation(pi, legs_anim);
-	}
 	legs.backlerp = 0;
 
 	memcpy(legs.torsoAxis, torso.axis, sizeof (torso.axis));
