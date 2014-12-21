@@ -3495,7 +3495,7 @@ qboolean G_ScriptAction_ConstructibleClass(gentity_t *ent, char *params) {
 
 	value = atoi(token);
 
-	if (value <= 0 || value >= NUM_CONSTRUCTIBLE_CLASSES) {
+	if (value <= 0 || value > NUM_CONSTRUCTIBLE_CLASSES) {
 		G_Error("G_Scripting: \"constructible_class\" has a bad value %i\n", value);
 	}
 
