@@ -808,9 +808,6 @@ typedef struct {
 	vec4_t fadeColor1;
 	vec4_t fadeColor2;
 
-	// low ammo warning state
-	int lowAmmoWarning;             // 1 = low, 2 = empty
-
 	// crosshair client ID
 	int crosshairClientNum;
 	int crosshairClientTime;
