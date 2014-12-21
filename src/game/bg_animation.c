@@ -626,7 +626,7 @@ qboolean BG_ParseConditions(char **text_pp, animScriptItem_t *scriptItem) {
 		conditionIndex = BG_IndexForString(token, animConditionsStr, qfalse);
 
 		// Nico, check conditionIndex value
-		if (conditionIndex <= 0) {
+		if (conditionIndex < 0) {
 			BG_AnimParseError("BG_ParseConditions: negative array index found");
 		}
 
