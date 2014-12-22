@@ -991,7 +991,7 @@ void UI_Load() {
 	char      *menuSet = UI_Cvar_VariableString("ui_menuFiles");
 
 	if (menu && menu->window.name) {
-		strcpy(lastName, menu->window.name);
+		Q_strncpyz(lastName, menu->window.name, sizeof (lastName));
 	}
 	if (menuSet == NULL || menuSet[0] == '\0') {
 		menuSet = "ui/menus.txt";
@@ -2385,7 +2385,7 @@ void UI_RunMenuScript(char **args) {
 			if (String_Parse(args, &orders)) {
 				int selectedPlayer = trap_Cvar_VariableValue("cg_selectedPlayer");
 				if (selectedPlayer < uiInfo.myTeamCount) {
-					strcpy(buff, orders);
+					Q_strncpyz(buff, orders, sizeof (buff));
 					trap_Cmd_ExecuteText(EXEC_APPEND, va(buff, uiInfo.teamClientNums[selectedPlayer]));
 					trap_Cmd_ExecuteText(EXEC_APPEND, "\n");
 				} else {
@@ -2394,7 +2394,7 @@ void UI_RunMenuScript(char **args) {
 						if (Q_stricmp(UI_Cvar_VariableString("name"), uiInfo.teamNames[i]) == 0) {
 							continue;
 						}
-						strcpy(buff, orders);
+						Q_strncpyz(buff, orders, sizeof (buff));
 						trap_Cmd_ExecuteText(EXEC_APPEND, va(buff, uiInfo.teamNames[i]));
 						trap_Cmd_ExecuteText(EXEC_APPEND, "\n");
 					}
@@ -2422,7 +2422,7 @@ void UI_RunMenuScript(char **args) {
 			if (String_Parse(args, &orders)) {
 				int selectedPlayer = trap_Cvar_VariableValue("cg_selectedPlayer");
 				if (selectedPlayer < uiInfo.myTeamCount) {
-					strcpy(buff, orders);
+					Q_strncpyz(buff, orders, sizeof (buff));
 					trap_Cmd_ExecuteText(EXEC_APPEND, va(buff, uiInfo.teamClientNums[selectedPlayer]));
 					trap_Cmd_ExecuteText(EXEC_APPEND, "\n");
 				}
@@ -3027,7 +3027,7 @@ static void UI_BuildServerDisplayList(int force) {
 	trap_Cvar_VariableStringBuffer("cl_motdString", uiInfo.serverStatus.motd, sizeof (uiInfo.serverStatus.motd));
 	len = strlen(uiInfo.serverStatus.motd);
 	if (len == 0) {
-		strcpy(uiInfo.serverStatus.motd, va("Enemy Territory - Mod: %s", GAME_VERSION));
+		Q_strncpyz(uiInfo.serverStatus.motd, va("Enemy Territory - Mod: %s", GAME_VERSION), sizeof (uiInfo.serverStatus.motd));
 		len = strlen(uiInfo.serverStatus.motd);
 	}
 	if (len != uiInfo.serverStatus.motdLen) {
