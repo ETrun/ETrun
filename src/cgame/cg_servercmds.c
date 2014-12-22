@@ -1125,7 +1125,7 @@ const char *CG_LocalizeServerCommand(const char *buf) {
 			if (togloc) {
 				memset(temp, 0, sizeof (temp));
 				strncpy(temp, buf + prev, i - prev);
-				strcat(token, CG_TranslateString(temp));
+				Q_strcat(token, sizeof (token), CG_TranslateString(temp));
 			} else {
 				strncat(token, buf + prev, i - prev);
 			}
@@ -1145,7 +1145,7 @@ const char *CG_LocalizeServerCommand(const char *buf) {
 	if (togloc) {
 		memset(temp, 0, sizeof (temp));
 		strncpy(temp, buf + prev, i - prev);
-		strcat(token, CG_TranslateString(temp));
+		Q_strcat(token, sizeof (token), CG_TranslateString(temp));
 	} else {
 		strncat(token, buf + prev, i - prev);
 	}
