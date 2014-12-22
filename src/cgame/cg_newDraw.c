@@ -527,11 +527,6 @@ void CG_EventHandling(int type, qboolean fForced) {
 		CG_ScoresUp_f();
 		break;
 
-	case CGAME_EVENT_SPEAKEREDITOR:
-	case CGAME_EVENT_GAMEVIEW:
-	case CGAME_EVENT_NONE:
-	case CGAME_EVENT_CAMPAIGNBREIFING:
-	case CGAME_EVENT_FIRETEAMMSG:
 	default:
 		// default handling (cleanup mostly)
 		if ((int)cgs.eventHandling == CGAME_EVENT_GAMEVIEW) {

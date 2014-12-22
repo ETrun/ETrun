@@ -98,7 +98,7 @@ int CG_SoundScriptPrecache(const char *name) {
 			scriptSound = sound->soundList;
 			if (!sound->streaming) {
 				for ( ; scriptSound; scriptSound = scriptSound->next) {
-					for (i = 0; i < scriptSound->numsounds; i++) {
+					for (i = 0; i < scriptSound->numsounds; ++i) {
 						scriptSound->sounds[i].sfxHandle = 0;
 					}
 				}
@@ -448,7 +448,7 @@ static void CG_SoundLoadSoundFiles(void) {
 	}
 
 	// load and parse sound files
-	for (i = 0; i < numSounds; i++) {
+	for (i = 0; i < numSounds; ++i) {
 		Com_sprintf(filename, sizeof (filename), "sound/scripts/%s", soundFiles[i]);
 		CG_Printf("...loading '%s'\n", filename);
 		len = trap_FS_FOpenFile(filename, &f, FS_READ);
@@ -487,12 +487,10 @@ void CG_SoundInit(void) {
 			}
 		}
 	} else {
-		CG_Printf("\n.........................\n"
-		          "Initializing Sound Scripts\n");
+		CG_Printf("Initializing Sound Scripts...\n");
 		CG_SoundLoadSoundFiles();
 		CG_Printf("done.\n");
 	}
-
 }
 
 //
@@ -544,7 +542,7 @@ qboolean CG_SaveSpeakersToScript(void) {
 	s = "speakerScript\n{";
 	trap_FS_Write(s, strlen(s), fh);
 
-	for (i = 0; i < BG_NumScriptSpeakers(); i++) {
+	for (i = 0; i < BG_NumScriptSpeakers(); ++i) {
 		char filenameStr[96] = "";
 		char originStr[96];
 		char targetnameStr[56] = "";
@@ -657,7 +655,7 @@ static void CG_RenderScriptSpeakers(void) {
 
 		if (editSpeakerActive && editSpeaker == speaker) {
 			vec4_t colour;
-			for (j = 0; j < 3; j++) {
+			for (j = 0; j < 3; ++j) {
 				VectorClear(colour);
 				colour[3] = 1.f;
 				if (editSpeakerHandle.activeAxis >= 0) {
@@ -859,7 +857,7 @@ void CG_SpeakerInfo_Text(panel_button_t *button) {
 
 	y = button->rect.y + 8;
 
-	for (strptr = ptr = s; *ptr; ptr++) {
+	for (strptr = ptr = s; *ptr; ++ptr) {
 		if (*ptr == '\n') {
 			*ptr = '\0';
 			CG_Text_Paint_Ext(button->rect.x, y, button->font->scalex, button->font->scaley, button->font->colour, strptr, 0, 0, button->font->style, button->font->font);
@@ -1206,7 +1204,7 @@ qboolean CG_SpeakerEditor_Looped_KeyUp(panel_button_t *button, int key) {
 
 		memcpy(&rect, &button->rect, sizeof (rect));
 
-		for (i = 0; i < 3; i++) {
+		for (i = 0; i < 3; ++i) {
 			if (i == (int)editSpeaker->loop) {
 				continue;
 			}
@@ -1240,7 +1238,7 @@ qboolean CG_SpeakerEditor_Broadcast_KeyUp(panel_button_t *button, int key) {
 
 		memcpy(&rect, &button->rect, sizeof (rect));
 
-		for (i = 0; i < 3; i++) {
+		for (i = 0; i < 3; ++i) {
 			if (i == (int)editSpeaker->broadcast) {
 				continue;
 			}
@@ -1839,7 +1837,7 @@ void CG_SpeakerEditor_KeyHandling(int key, qboolean down) {
 				r = -(cg.refdef_current->fov_x / 90.f) * (float)(cgs.cursorX - 320) / 320;
 				u = -(cg.refdef_current->fov_y / 90.f) * (float)(cgs.cursorY - 240) / 240;
 
-				for (i = 0; i < 3; i++) {
+				for (i = 0; i < 3; ++i) {
 					dir[i] = cg.refdef_current->viewaxis[0][i] * 1.f +
 					         cg.refdef_current->viewaxis[1][i] * r +
 					         cg.refdef_current->viewaxis[2][i] * u;
@@ -1869,7 +1867,6 @@ void CG_SpeakerEditor_KeyHandling(int key, qboolean down) {
 				if (editSpeakerHandle.activeAxis >= 0) {
 					VectorCopy(editSpeakerHandle.origin, editSpeakerHandle.oldOrigin);
 				}
-				;
 		}
 			break;
 		case K_ESCAPE:  BG_PanelButtons_SetFocusButton(NULL);
