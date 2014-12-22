@@ -2,10 +2,7 @@
 
 cmake_minimum_required(VERSION 2.6)
 project(ETrun C)
-
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake")
-
-set(ETrun_VERSION "1.1.1-DEV")
+set(ETrun_VERSION "1.1.0")
 
 configure_file(
 	"${PROJECT_SOURCE_DIR}/src/game/bg_version.h.in"
@@ -153,6 +150,7 @@ if(UNIX)
 		set(OS_LIBRARIES dl m rt pthread)
 		set(LIB_SUFFIX ".mp.")
 	endif()
+	target_link_libraries(qagame ${OS_LIBRARIES})
 elseif(WIN32)
 	if(MSVC)
 		# Link with pthreads-win32
@@ -181,7 +179,7 @@ set_target_properties(qagame PROPERTIES OUTPUT_NAME qagame${LIB_SUFFIX}${ARCH})
 set_target_properties(ui PROPERTIES OUTPUT_NAME ui${LIB_SUFFIX}${ARCH})
 
 #-----------------------------------------------------------------
-# Pk3 (from etlegacy)
+# Pk3 (inspired from etlegacy https://github.com/etlegacy/etlegacy)
 #-----------------------------------------------------------------
 find_program(ZIP_EXECUTABLE zip PATHS ${CMAKE_BINARY_DIR})
 if(NOT ZIP_EXECUTABLE AND WIN32)
@@ -189,19 +187,22 @@ if(NOT ZIP_EXECUTABLE AND WIN32)
 	file(DOWNLOAD http://stahlworks.com/dev/zip.exe ${CMAKE_BINARY_DIR}/zip.exe SHOW_PROGRESS TIMEOUT 10)
 	find_program(ZIP_EXECUTABLE zip PATHS ${CMAKE_BINARY_DIR})
 endif()
+
 find_program(UNZIP_EXECUTABLE unzip PATHS ${CMAKE_BINARY_DIR})
 if(NOT UNZIP_EXECUTABLE AND WIN32)
 	message(STATUS "Downloading unzip.exe to " ${CMAKE_BINARY_DIR}/unzip.exe)
 	file(DOWNLOAD http://stahlworks.com/dev/unzip.exe ${CMAKE_BINARY_DIR}/unzip.exe SHOW_PROGRESS TIMEOUT 10)
 	find_program(UNZIP_EXECUTABLE unzip PATHS ${CMAKE_BINARY_DIR})
 endif()
-add_custom_target(pk3 ALL DEPENDS etrun/ETrun-${ETrun_VERSION}.pk3)
-add_custom_command(
-	OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/etrun/ETrun-${ETrun_VERSION}.pk3
-	COMMAND ${ZIP_EXECUTABLE} ETrun-${ETrun_VERSION}.pk3 cgame${LIB_SUFFIX}${ARCH}* ui${LIB_SUFFIX}${ARCH}*
-	DEPENDS cgame ui
+
+add_custom_target(pk3 ALL DEPENDS cgame ui)
+set_target_properties(pk3 PROPERTIES OUTPUT_NAME ETrun-${ETrun_VERSION}.pk3)
+SET(CLIENT_ASSETS_PATH etrun/)
+add_custom_command(TARGET pk3
+	COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/${CLIENT_ASSETS_PATH} ${CMAKE_CURRENT_BINARY_DIR}/etrun/)
+add_custom_command(TARGET pk3
+	COMMAND ${CMAKE_COMMAND} -E remove_directory ${CMAKE_CURRENT_BINARY_DIR}/etrun/custommapscripts)
+add_custom_command(TARGET pk3
+	COMMAND ${ZIP_EXECUTABLE} -q -r ETrun-${ETrun_VERSION}.pk3 *
 	WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/etrun/
-)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/etrun/ETrun-${ETrun_VERSION}.pk3
-	DESTINATION "${INSTALL_DEFAULT_MODDIR}/etrun"
 )
