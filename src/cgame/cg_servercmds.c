@@ -1381,7 +1381,6 @@ static void CG_ServerCommand(void) {
 	}
 
 	if (!Q_stricmp(cmd, "SetInitialCamera")) {
-		CG_SetInitialCamera(CG_Argv(1), atoi(CG_Argv(2)));
 		return;
 	}
 

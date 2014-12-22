@@ -109,7 +109,7 @@ void CG_ScoresUp_f(void) {
 static void CG_LoadWeapons_f(void) {
 	int i;
 
-	for (i = WP_KNIFE; i < WP_NUM_WEAPONS; i++) {
+	for (i = WP_KNIFE; i < WP_NUM_WEAPONS; ++i) {
 		CG_RegisterWeapon(i, qtrue);
 	}
 }
@@ -152,7 +152,7 @@ qboolean cameraInuse[MAX_CAMERAS];
 int CG_LoadCamera(const char *name) {
 	int i;
 
-	for (i = 1; i < MAX_CAMERAS; i++) {      // start at '1' since '0' is always taken by the cutscene camera
+	for (i = 1; i < MAX_CAMERAS; ++i) {      // start at '1' since '0' is always taken by the cutscene camera
 		if (!cameraInuse[i] && trap_loadCamera(i, name)) {
 			cameraInuse[i] = qtrue;
 			return i;
@@ -160,22 +160,6 @@ int CG_LoadCamera(const char *name) {
 	}
 	return -1;
 }
-
-// @TEST.  See if we can get an initial camera started at the first frame.
-char     g_initialCamera[256]      = "";
-qboolean g_initialCameraStartBlack = qfalse;
-
-/*
-==============
-CG_SetInitialCamera
-==============
-*/
-void CG_SetInitialCamera(const char *name, qboolean startBlack) {
-	// Store this info to get reset after first snapshot inited
-	strcpy(g_initialCamera, name);
-	g_initialCameraStartBlack = startBlack;
-}
-
 
 /*
 ==============
@@ -474,7 +458,7 @@ static void CG_SelectBuddy_f(void) {
 			break;     // Gordon: we aren't a leader, so dont allow selection
 		}
 
-		for (i = 0; i < 6; i++) {
+		for (i = 0; i < 6; ++i) {
 			ci = CG_SortedFireTeamPlayerForPosition(i, 6);
 			if (!ci) {
 				break;     // there was no-one in this position
@@ -489,7 +473,7 @@ static void CG_SelectBuddy_f(void) {
 			break;     // Gordon: we aren't a leader, so dont allow selection
 		}
 
-		for (i = 0; i < 6; i++) {
+		for (i = 0; i < 6; ++i) {
 			ci = CG_SortedFireTeamPlayerForPosition(i, 6);
 			if (!ci) {
 				break;     // there was no-one in this position
@@ -765,7 +749,7 @@ so it can perform tab completion
 void CG_InitConsoleCommands(void) {
 	int i;
 
-	for (i = 0 ; i < (int)(sizeof (commands) / sizeof (commands[0])) ; i++) {
+	for (i = 0 ; i < (int)(sizeof (commands) / sizeof (commands[0])) ; ++i) {
 		trap_AddCommand(commands[i].cmd);
 	}
 

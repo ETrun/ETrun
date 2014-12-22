@@ -2508,7 +2508,6 @@ qboolean    trap_loadCamera(int camNum, const char *name);
 void        trap_startCamera(int camNum, int time);
 void        trap_stopCamera(int camNum);
 qboolean    trap_getCameraInfo(int camNum, int time, vec3_t *origin, vec3_t *angles, float *fov);
-void        CG_SetInitialCamera(const char *name, qboolean startBlack);
 void        CG_StartCamera(const char *name, qboolean startBlack);
 void        CG_StopCamera(void);
 
