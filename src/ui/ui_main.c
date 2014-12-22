@@ -584,7 +584,6 @@ void Text_PaintWithCursor(float x, float y, float scale, vec4_t color, const cha
 	}
 }
 
-
 static void Text_Paint_Limit(float *maxX, float x, float y, float scale, vec4_t color, const char *text, float adjust, int limit) {
 	if (text) {
 		const char *s  = text;
@@ -638,14 +637,6 @@ static void Text_Paint_Limit(float *maxX, float x, float y, float scale, vec4_t 
 
 }
 
-
-void UI_ShowPostGame(qboolean newHigh) {
-	trap_Cvar_Set("cg_cameraOrbit", "0");
-	trap_Cvar_Set("cg_thirdPerson", "0");
-	trap_Cvar_Set("sv_killserver", "1");
-	uiInfo.soundHighScore = newHigh;
-	_UI_SetActiveMenu(UIMENU_POSTGAME);
-}
 /*
 =================
 _UI_Refresh
@@ -1214,70 +1205,6 @@ static void UI_DrawMissionBriefingObjectives(rectDef_t *rect, float scale, vec4_
 	}
 }
 
-static qboolean updateModel = qtrue;
-
-static void UI_DrawPlayerModel(rectDef_t *rect) {
-	static playerInfo_t info;
-	char                model[MAX_QPATH];
-	static vec3_t       moveangles = { 0, 0, 0 };
-
-	// NERVE - SMF
-	int teamval;
-
-	teamval = trap_Cvar_VariableValue("mp_team");
-
-	if (teamval == ALLIES_TEAM) {
-		strcpy(model, "multi");
-	} else {
-		strcpy(model, "multi_axis");
-	}
-	// -NERVE - SMF
-
-	moveangles[YAW] += 1;       // NERVE - SMF - TEMPORARY
-
-	// compare new cvars to old cvars and see if we need to update
-	{
-		int v1, v2;
-
-		v1 = trap_Cvar_VariableValue("mp_team");
-		v2 = trap_Cvar_VariableValue("ui_prevTeam");
-		if (v1 != v2) {
-			trap_Cvar_Set("ui_prevTeam", va("%i", v1));
-			updateModel = qtrue;
-		}
-
-		v1 = trap_Cvar_VariableValue("mp_playerType");
-		v2 = trap_Cvar_VariableValue("ui_prevClass");
-		if (v1 != v2) {
-			trap_Cvar_Set("ui_prevClass", va("%i", v1));
-			updateModel = qtrue;
-		}
-
-		v1 = trap_Cvar_VariableValue("mp_weapon");
-		v2 = trap_Cvar_VariableValue("ui_prevWeapon");
-		if (v1 != v2) {
-			trap_Cvar_Set("ui_prevWeapon", va("%i", v1));
-			updateModel = qtrue;
-		}
-	}
-
-	if (updateModel) {      // NERVE - SMF - TEMPORARY
-		vec3_t viewangles;
-
-		memset(&info, 0, sizeof (playerInfo_t));
-		viewangles[YAW]   = 180 - 10;
-		viewangles[PITCH] = 0;
-		viewangles[ROLL]  = 0;
-		UI_PlayerInfo_SetModel(&info, model);
-		UI_PlayerInfo_SetInfo(&info, LEGS_IDLE, TORSO_STAND, viewangles, moveangles, -1, qfalse);
-		updateModel = qfalse;
-	} else {
-		VectorCopy(moveangles, info.moveAngles);
-	}
-
-	UI_DrawPlayer(rect->x, rect->y, rect->w, rect->h, &info, uiInfo.uiDC.realTime / 2);
-}
-
 static void UI_DrawNetFilter(rectDef_t *rect, float scale, vec4_t color, int textStyle) {
 	if (ui_serverFilterType.integer < 0 || ui_serverFilterType.integer > numServerFilters) {
 		ui_serverFilterType.integer = 0;
@@ -1543,11 +1470,6 @@ static void UI_OwnerDraw(float x, float y, float w, float h, float text_x, float
 	case UI_EFFECTS:
 		UI_DrawEffects(&rect);
 		break;
-	case UI_PLAYERMODEL:
-		UI_DrawPlayerModel(&rect);
-		break;
-	case UI_GAMETYPE:
-		break;
 	case UI_MAPPREVIEW:
 		UI_DrawMapPreview(&rect, scale, qtrue);
 		break;
@@ -1565,9 +1487,6 @@ static void UI_OwnerDraw(float x, float y, float w, float h, float text_x, float
 		break;
 	case UI_NETFILTER:
 		UI_DrawNetFilter(&rect, scale, color, textStyle);
-		break;
-	case UI_ALLMAPS_SELECTION:
-	case UI_MAPS_SELECTION:
 		break;
 	case UI_REDBLUE:
 		UI_DrawRedBlue(&rect, scale, color, textStyle);
@@ -1658,25 +1577,6 @@ qboolean UI_OwnerDrawVisible(int flags) {
 			vis    = qfalse;
 			flags &= ~UI_SHOW_NETANYNONTEAMGAME;
 		}
-		if (flags & UI_SHOW_NEWHIGHSCORE) {
-			if (uiInfo.newHighScoreTime < uiInfo.uiDC.realTime) {
-				vis = qfalse;
-			} else {
-				if (uiInfo.soundHighScore && trap_Cvar_VariableValue("sv_killserver") == 0) {
-					// wait on server to go down before playing sound
-					trap_S_StartLocalSound(uiInfo.newHighScoreSound, CHAN_ANNOUNCER);
-					uiInfo.soundHighScore = qfalse;
-				}
-			}
-			flags &= ~UI_SHOW_NEWHIGHSCORE;
-		}
-		if (flags & UI_SHOW_NEWBESTTIME) {
-			if (uiInfo.newBestTime < uiInfo.uiDC.realTime) {
-				vis = qfalse;
-			}
-			flags &= ~UI_SHOW_NEWBESTTIME;
-		}
-
 		if (flags & UI_SHOW_PLAYERMUTED) {
 			if (!uiInfo.playerMuted[uiInfo.playerIndex]) {
 				vis = qfalse;
@@ -2765,6 +2665,7 @@ void UI_RunMenuScript(char **args) {
 
 			trap_Cvar_Set("ui_profile", ui_renameprofileto);
 			trap_Cvar_Set("ui_profile_renameto", "");
+		} else if (Q_stricmp(name, "initHostGameFeatures") == 0) {
 		} else if (Q_stricmp(name, "togglePbSvStatus") == 0) {
 		} else if (Q_stricmp(name, "openModURL") == 0) {
 			trap_Cvar_Set("ui_finalURL", UI_Cvar_VariableString("ui_modURL"));
@@ -4109,8 +4010,6 @@ void _UI_Init(void) {
 	trap_Milliseconds();
 
 	uiInfo.teamCount      = 0;
-	uiInfo.characterCount = 0;
-	uiInfo.aliasCount     = 0;
 
 	UI_LoadMenus("ui/menus.txt", qfalse);
 

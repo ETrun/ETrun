@@ -122,12 +122,6 @@ If you have questions concerning this license or the applicable additional terms
 #define SLIDER_THUMB_HEIGHT 12.0    // 20.0
 #define NUM_CROSSHAIRS      10
 
-typedef struct scriptDef_s {
-	const char *command;
-	const char *args[MAX_SCRIPT_ARGS];
-} scriptDef_t;
-
-
 typedef struct rectDef_s {
 	float x;    // horiz position
 	float y;    // vert position
@@ -160,7 +154,6 @@ typedef struct {
 } windowDef_t;
 
 typedef windowDef_t Window;
-
 
 typedef struct {
 	vec4_t color;
@@ -605,6 +598,5 @@ void BG_FitTextToWidth_Ext(char *instr, float scale, float w, int size, fontInfo
 
 void AdjustFrom640(float *x, float *y, float *w, float *h);
 char *BindingFromName(const char *cvar);
-
 
 #endif

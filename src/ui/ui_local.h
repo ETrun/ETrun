@@ -77,170 +77,12 @@ extern vmCvar_t cl_bypassMouseInput;
 extern vmCvar_t ui_autoredirect;
 
 //
-// ui_qmenu.c
-//
-
-#define RCOLUMN_OFFSET          (BIGCHAR_WIDTH)
-#define LCOLUMN_OFFSET          (-BIGCHAR_WIDTH)
-
-#define SLIDER_RANGE            10
-#define MAX_EDIT_LINE           256
-
-#define MAX_MENUDEPTH           8
-#define MAX_MENUITEMS           128 // JPW NERVE put this back for MP
-
-#define MTYPE_NULL              0
-#define MTYPE_SLIDER            1
-#define MTYPE_ACTION            2
-#define MTYPE_SPINCONTROL       3
-#define MTYPE_FIELD             4
-#define MTYPE_RADIOBUTTON       5
-#define MTYPE_BITMAP            6
-#define MTYPE_TEXT              7
-#define MTYPE_SCROLLLIST        8
-#define MTYPE_PTEXT             9
-#define MTYPE_BTEXT             10
-
-#define QMF_BLINK               0x00000001
-#define QMF_SMALLFONT           0x00000002
-#define QMF_LEFT_JUSTIFY        0x00000004
-#define QMF_CENTER_JUSTIFY      0x00000008
-#define QMF_RIGHT_JUSTIFY       0x00000010
-#define QMF_NUMBERSONLY         0x00000020  // edit field is only numbers
-#define QMF_HIGHLIGHT           0x00000040
-#define QMF_HIGHLIGHT_IF_FOCUS  0x00000080  // steady focus
-#define QMF_PULSEIFFOCUS        0x00000100  // pulse if focus
-#define QMF_HASMOUSEFOCUS       0x00000200
-#define QMF_NOONOFFTEXT         0x00000400
-#define QMF_MOUSEONLY           0x00000800  // only mouse input allowed
-#define QMF_HIDDEN              0x00001000  // skips drawing
-#define QMF_GRAYED              0x00002000  // grays and disables
-#define QMF_INACTIVE            0x00004000  // disables any input
-#define QMF_NODEFAULTINIT       0x00008000  // skip default initialization
-#define QMF_OWNERDRAW           0x00010000
-#define QMF_PULSE               0x00020000
-#define QMF_LOWERCASE           0x00040000  // edit field is all lower case
-#define QMF_UPPERCASE           0x00080000  // edit field is all upper case
-#define QMF_SILENT              0x00100000
-
-// callback notifications
-#define QM_GOTFOCUS             1
-#define QM_LOSTFOCUS            2
-#define QM_ACTIVATED            3
-
-typedef struct _tag_menuframework {
-	int cursor;
-	int cursor_prev;
-
-	int nitems;
-	void *items[MAX_MENUITEMS];
-
-	void (*draw)(void);
-	sfxHandle_t (*key)(int key);
-
-	qboolean wrapAround;
-	qboolean fullscreen;
-	qboolean showlogo;
-
-	// JOSEPH 11-9-99
-	int specialmenutype;
-	// END JOSEPH
-} menuframework_s;
-
-typedef struct {
-	int type;
-	const char *name;
-	int id;
-	int x, y;
-	int left;
-	int top;
-	int right;
-	int bottom;
-	menuframework_s *parent;
-	int menuPosition;
-	unsigned flags;
-
-	void (*callback)(void *self, int event);
-	void (*statusbar)(void *self);
-	void (*ownerdraw)(void *self);
-} menucommon_s;
-
-typedef struct {
-	int cursor;
-	int scroll;
-	int widthInChars;
-	char buffer[MAX_EDIT_LINE];
-	int maxchars;
-} mfield_t;
-
-typedef struct {
-	menucommon_s generic;
-	mfield_t field;
-} menufield_s;
-
-typedef struct {
-	menucommon_s generic;
-
-	float minvalue;
-	float maxvalue;
-	float curvalue;
-
-	float range;
-} menuslider_s;
-
-typedef struct {
-	menucommon_s generic;
-
-	int oldvalue;
-	int curvalue;
-	int numitems;
-	int top;
-
-	const char **itemnames;
-
-	int width;
-	int height;
-	int columns;
-	int seperation;
-} menulist_s;
-
-typedef struct {
-	menucommon_s generic;
-} menuaction_s;
-
-typedef struct {
-	menucommon_s generic;
-	int curvalue;
-} menuradiobutton_s;
-
-typedef struct {
-	menucommon_s generic;
-	char *focuspic;
-	char *errorpic;
-	qhandle_t shader;
-	qhandle_t focusshader;
-	int width;
-	int height;
-	float *focuscolor;
-} menubitmap_s;
-
-typedef struct {
-	menucommon_s generic;
-	char *string;
-	int style;
-	float *color;
-} menutext_s;
-
-
-//
 // ui_main.c
 //
 void            UI_Load();
 void            UI_LoadMenus(const char *menuFile, qboolean reset);
 void            _UI_SetActiveMenu(uiMenuCommand_t menu);
 uiMenuCommand_t _UI_GetActiveMenu(void);
-int             UI_AdjustTimeByGame(int time);
-void            UI_ShowPostGame(qboolean newHigh);
 void            UI_LoadArenas(void);
 mapInfo *UI_FindMapInfoByMapname(const char *name);
 void            UI_ReadableSize(char *buf, int bufsize, int value);
@@ -262,139 +104,13 @@ extern void UI_UpdateCvars(void);
 extern void UI_DrawLoadPanel(qboolean ownerdraw, qboolean uihack);
 
 //
-// ui_players.c
-//
-
-//FIXME ripped from cg_local.h
-typedef struct {
-	int oldFrame;
-	int oldFrameTime;               // time when ->oldFrame was exactly on
-
-	int frame;
-	int frameTime;                  // time when ->frame will be exactly on
-
-	float backlerp;
-
-	float yawAngle;
-	qboolean yawing;
-	float pitchAngle;
-	qboolean pitching;
-
-	int animationNumber;            // may include ANIM_TOGGLEBIT
-	animation_t *animation;
-	int animationTime;              // time when the first frame of the animation will be exact
-} lerpFrame_t;
-
-typedef struct {
-	// model info
-	qhandle_t legsModel;
-	qhandle_t legsSkin;
-	lerpFrame_t legs;
-
-	qhandle_t torsoModel;
-	qhandle_t torsoSkin;
-	lerpFrame_t torso;
-
-	qhandle_t headModel;
-	qhandle_t headSkin;
-
-	animation_t animations[MAX_ANIMATIONS];
-
-	qhandle_t weaponModel;
-	qhandle_t barrelModel;
-	qhandle_t flashModel;
-	vec3_t flashDlightColor;
-	int muzzleFlashTime;
-
-	// currently in use drawing parms
-	vec3_t viewAngles;
-	vec3_t moveAngles;
-	weapon_t currentWeapon;
-	int legsAnim;
-	int torsoAnim;
-
-	// animation vars
-	weapon_t weapon;
-	weapon_t lastWeapon;
-	weapon_t pendingWeapon;
-	int weaponTimer;
-	int pendingLegsAnim;
-	int torsoAnimationTimer;
-
-	int pendingTorsoAnim;
-	int legsAnimationTimer;
-
-	qboolean chat;
-	qboolean newModel;
-
-	qboolean barrelSpinning;
-	float barrelAngle;
-	int barrelTime;
-
-	int realWeapon;
-
-	// NERVE - SMF - added fields so it will work with wolf's skeletal animation system
-	// parsed from the start of the cfg file
-	footstep_t footsteps;
-	vec3_t headOffset;
-	int version;
-	qboolean isSkeletal;
-	int numAnimations;
-
-	qhandle_t backpackModel;
-	qhandle_t helmetModel;
-	// -NERVE - SMF
-} playerInfo_t;
-
-void UI_DrawPlayer(float x, float y, float w, float h, playerInfo_t *pi, int time);
-void UI_PlayerInfo_SetModel(playerInfo_t *pi, const char *model);
-void UI_PlayerInfo_SetInfo(playerInfo_t *pi, int legsAnim, int torsoAnim, vec3_t viewAngles, vec3_t moveAngles, weapon_t weaponNum, qboolean chat);
-qboolean UI_RegisterClientModelname(playerInfo_t *pi, const char *modelSkinName);
-
-//
 // ui_atoms.c
 //
-typedef struct {
-	int frametime;
-	int realtime;
-	int cursorx;
-	int cursory;
-	int menusp;
-	menuframework_s *activemenu;
-	menuframework_s *stack[MAX_MENUDEPTH];
-	glconfig_t glconfig;
-	qboolean debug;
-	qhandle_t whiteShader;
-	qhandle_t menuBackShader;
-	qhandle_t menuBackNoLogoShader;
-	qhandle_t charset;
-	qhandle_t charsetProp;
-	qhandle_t charsetPropGlow;
-	qhandle_t charsetPropB;
-	qhandle_t cursor;
-	qhandle_t rb_on;
-	qhandle_t rb_off;
-	// JOSEPH 11-9-99
-	qhandle_t menu;
-	qhandle_t menu1a;
-	qhandle_t menu1b;
-	qhandle_t menu2a;
-	qhandle_t menu2b;
-	qhandle_t menuchars;
-	// END JOSEPH
-	float scale;
-	float bias;
-	qboolean demoversion;
-	qboolean firstdraw;
-} uiStatic_t;
 
 // new ui stuff
-#define MAX_HEADS 64
-#define MAX_ALIASES 64
 #define MAX_TEAMS 64
 #define MAX_MAPS 128
 #define MAX_ADDRESSLENGTH       64
-#define MAX_MAPNAMELENGTH       16
 #define MAX_DISPLAY_SERVERS     2048
 #define MAX_SERVERSTATUS_LINES  128
 #define MAX_SERVERSTATUS_TEXT   2048
@@ -402,26 +118,7 @@ typedef struct {
 #define MAX_MODS 64
 #define MAX_DEMOS 256 // Nico, #todo: increase?
 #define MAX_MOVIES 256
-#define MAX_PLAYERMODELS 256
-#define MAX_SPAWNPOINTS 128     // NERVE - SMF
-#define MAX_SPAWNDESC   128     // NERVE - SMF
-#define MAX_PBLINES     128     // DHM - Nerve
-#define MAX_PBWIDTH     42      // DHM - Nerve
-
 #define MAX_PROFILES 64
-
-typedef struct {
-	const char *name;
-	const char *imageName;
-	qhandle_t headImage;
-	qboolean female;
-} characterInfo;
-
-typedef struct {
-	const char *name;
-	const char *ai;
-	const char *action;
-} aliasInfo;
 
 typedef struct {
 	const char *teamName;
@@ -440,11 +137,6 @@ typedef struct serverFilter_s {
 	const char *description;
 	const char *basedir;
 } serverFilter_t;
-
-typedef struct {
-	char adrstr[MAX_ADDRESSLENGTH];
-	int start;
-} pinglist_t;
 
 typedef struct serverStatus_s {
 	int refreshtime;
@@ -465,7 +157,6 @@ typedef struct serverStatus_s {
 	int motdTime;
 	char motd[MAX_STRING_CHARS];
 } serverStatus_t;
-
 
 typedef struct {
 	char adrstr[MAX_ADDRESSLENGTH];
@@ -495,16 +186,6 @@ typedef struct {
 
 typedef struct {
 	displayContextDef_t uiDC;
-	int newHighScoreTime;
-	int newBestTime;
-	qboolean newHighScore;
-	qboolean soundHighScore;
-
-	int characterCount;
-	characterInfo characterList[MAX_HEADS];
-
-	int aliasCount;
-	aliasInfo aliasList[MAX_ALIASES];
 
 	int teamCount;
 	teamInfo teamList[MAX_TEAMS];
@@ -540,8 +221,6 @@ typedef struct {
 
 	const char *movieList[MAX_MOVIES];
 	int movieCount;
-	int movieIndex;
-	int previewMovie;
 
 	serverStatus_t serverStatus;
 
@@ -560,8 +239,6 @@ typedef struct {
 	int nextFindPlayerRefresh;
 
 	int currentCrosshair;
-	int startPostGameTime;
-	sfxHandle_t newHighScoreSound;
 
 	int effectsColor;
 
@@ -584,25 +261,17 @@ extern uiInfo_t uiInfo;
 extern void         UI_Init(void);
 extern void         UI_KeyEvent(int key);
 extern void         UI_MouseEvent(int dx, int dy);
-extern void         UI_Refresh(int realtime);
 extern qboolean     UI_ConsoleCommand(int realTime);
 extern void         UI_DrawHandlePic(float x, float y, float w, float h, qhandle_t hShader);
 extern void         UI_FillRect(float x, float y, float width, float height, const float *color);
 extern void         UI_SetColor(const float *rgba);
-extern void         UI_LerpColor(vec4_t a, vec4_t b, vec4_t c, float t);
-extern void         UI_DrawString(int x, int y, const char *str, int style, vec4_t color);
-extern void         UI_DrawChar(int x, int y, int ch, int style, vec4_t color);
 extern void         UI_AdjustFrom640(float *x, float *y, float *w, float *h);
 extern qboolean     UI_IsFullscreen(void);
 extern void         UI_SetActiveMenu(uiMenuCommand_t menu);
-extern void         UI_PushMenu(menuframework_s *menu);
-extern void         UI_PopMenu(void);
-extern void         UI_ForceMenuOff(void);
 extern char *UI_Argv(int arg);
 extern char *UI_Cvar_VariableString(const char *var_name);
 extern void         UI_Refresh(int time);
 extern void         UI_KeyEvent(int key);
-extern uiStatic_t uis;
 
 //
 // ui_syscalls.c

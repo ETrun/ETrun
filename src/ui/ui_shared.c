@@ -812,13 +812,6 @@ void Script_SetColor(itemDef_t *item, qboolean *bAbort, char **args) {
 	}
 }
 
-void Script_SetAsset(itemDef_t *item, qboolean *bAbort, char **args) {
-	// Nico, silent GCC
-	(void)item;
-	(void)bAbort;
-	(void)args;
-}
-
 void Script_SetBackground(itemDef_t *item, qboolean *bAbort, char **args) {
 	const char *name = NULL;
 
@@ -1462,35 +1455,6 @@ void Script_CloseAllOtherMenus(itemDef_t *item, qboolean *bAbort, char **args) {
 	}
 }
 
-/*
-==============
-Script_Clipboard
-==============
-*/
-void Script_Clipboard(itemDef_t *item, qboolean *bAbort, char **args) {
-	// Nico, silent GCC
-	(void)item;
-	(void)bAbort;
-	(void)args;
-}
-
-/*
-==============
-Script_NotebookShowpage
-    hide all notebook pages and show just the active one
-
-    inc == 0	- show current page
-    inc == val	- turn inc pages in the notebook (negative numbers are backwards)
-    inc == 999	- key number.  +999 is jump to last page, -999 is jump to cover page
-==============
-*/
-void Script_NotebookShowpage(itemDef_t *item, qboolean *bAbort, char **args) {
-	// Nico, silent GCC
-	(void)item;
-	(void)bAbort;
-	(void)args;
-}
-
 void Menu_TransitionItemByName(menuDef_t *menu, const char *p, rectDef_t rectFrom, rectDef_t rectTo, int time, float amt) {
 	itemDef_t *item;
 	int       i;
@@ -1910,9 +1874,6 @@ commandDef_t commandList[] =
 	{ "closeall",           &Script_CloseAll           },
 	{ "closeallothermenus", &Script_CloseAllOtherMenus },
 
-	{ "clipboard",          &Script_Clipboard          }, // show the current clipboard group by name
-	{ "showpage",           &Script_NotebookShowpage   }, //
-	{ "setasset",           &Script_SetAsset           }, // works on this
 	{ "setbackground",      &Script_SetBackground      }, // works on this
 	{ "setitemcolor",       &Script_SetItemColor       }, // group/name
 	{ "setmenuitemcolor",   &Script_SetMenuItemColor   }, // group/name
@@ -3847,8 +3808,6 @@ void Item_Text_Paint(itemDef_t *item) {
 	DC->drawText(item->textRect.x, item->textRect.y, item->textscale, color, textPtr, 0, 0, item->textStyle);
 }
 
-
-
 void Item_TextField_Paint(itemDef_t *item) {
 	char           buff[1024];
 	vec4_t         newColor;
@@ -4362,8 +4321,6 @@ qboolean Item_Bind_HandleKey(itemDef_t *item, int key, qboolean down) {
 
 	return qtrue;
 }
-
-
 
 void AdjustFrom640(float *x, float *y, float *w, float *h) {
 	*x *= DC->xscale;
@@ -6448,8 +6405,6 @@ qboolean MenuParse_onTimeout(itemDef_t *item, int handle) {
 	return qtrue;
 }
 
-
-
 qboolean MenuParse_border(itemDef_t *item, int handle) {
 	menuDef_t *menu = (menuDef_t *)item;
 
@@ -6589,7 +6544,6 @@ qboolean MenuParse_ownerdraw(itemDef_t *item, int handle) {
 	return qtrue;
 }
 
-
 // decoration
 qboolean MenuParse_popup(itemDef_t *item, int handle) {
 	menuDef_t *menu = (menuDef_t *)item;
@@ -6600,7 +6554,6 @@ qboolean MenuParse_popup(itemDef_t *item, int handle) {
 	menu->window.flags |= WINDOW_POPUP;
 	return qtrue;
 }
-
 
 qboolean MenuParse_outOfBounds(itemDef_t *item, int handle) {
 	menuDef_t *menu = (menuDef_t *)item;

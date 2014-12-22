@@ -33,8 +33,6 @@ If you have questions concerning this license or the applicable additional terms
 **********************************************************************/
 #include "ui_local.h"
 
-uiStatic_t uis;
-
 char *UI_Argv(int arg) {
 	static char buffer[MAX_STRING_CHARS];
 
@@ -71,10 +69,6 @@ qboolean UI_ConsoleCommand(int realTime) {
 	uiInfo.uiDC.realTime  = realTime;
 
 	cmd = UI_Argv(0);
-
-	if (Q_stricmp(cmd, "ui_test") == 0) {
-		UI_ShowPostGame(qtrue);
-	}
 
 	if (Q_stricmp(cmd, "ui_report") == 0) {
 		String_Report();

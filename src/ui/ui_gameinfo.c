@@ -161,7 +161,7 @@ void UI_LoadArenas(void) {
 	// get all arenas from .arena files
 	numdirs = trap_FS_GetFileList("scripts", ".arena", dirlist, 1024);
 	dirptr  = dirlist;
-	for (i = 0; i < numdirs; i++, dirptr += dirlen + 1) {
+	for (i = 0; i < numdirs; ++i, dirptr += dirlen + 1) {
 		dirlen = strlen(dirptr);
 		strcpy(filename, "scripts/");
 		strcat(filename, dirptr);
@@ -180,7 +180,7 @@ mapInfo *UI_FindMapInfoByMapname(const char *name) {
 		UI_LoadArenas();
 	}
 
-	for (i = 0; i < uiInfo.mapCount; i++) {
+	for (i = 0; i < uiInfo.mapCount; ++i) {
 		if (!Q_stricmp(uiInfo.mapList[i].mapLoadName, name)) {
 			return &uiInfo.mapList[i];
 		}
