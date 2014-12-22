@@ -49,17 +49,17 @@ shaderRemap_t remappedShaders[MAX_SHADER_REMAPS];
 void AddRemap(const char *oldShader, const char *newShader, float timeOffset) {
 	int i;
 
-	for (i = 0; i < remapCount; i++) {
+	for (i = 0; i < remapCount; ++i) {
 		if (Q_stricmp(oldShader, remappedShaders[i].oldShader) == 0) {
 			// found it, just update this one
-			strcpy(remappedShaders[i].newShader, newShader);
+			Q_strncpyz(remappedShaders[i].newShader, newShader, sizeof (remappedShaders[i].newShader));
 			remappedShaders[i].timeOffset = timeOffset;
 			return;
 		}
 	}
 	if (remapCount < MAX_SHADER_REMAPS) {
-		strcpy(remappedShaders[remapCount].newShader, newShader);
-		strcpy(remappedShaders[remapCount].oldShader, oldShader);
+		Q_strncpyz(remappedShaders[remapCount].newShader, newShader, sizeof (remappedShaders[remapCount].newShader));
+		Q_strncpyz(remappedShaders[remapCount].oldShader, oldShader, sizeof (remappedShaders[remapCount].oldShader));
 		remappedShaders[remapCount].timeOffset = timeOffset;
 		remapCount++;
 	}
@@ -71,7 +71,7 @@ const char *BuildShaderStateConfig() {
 	int         i;
 
 	memset(buff, 0, MAX_STRING_CHARS * 4);
-	for (i = 0; i < remapCount; i++) {
+	for (i = 0; i < remapCount; ++i) {
 		int i1, i2;
 
 		i1 = G_ShaderIndex(remappedShaders[i].oldShader);
@@ -105,7 +105,7 @@ int G_FindConfigstringIndex(const char *name, int start, int max, qboolean creat
 		return 0;
 	}
 
-	for (i = 1 ; i < max ; i++) {
+	for (i = 1 ; i < max ; ++i) {
 		trap_GetConfigstring(start + i, s, sizeof (s));
 		if (!s[0]) {
 			break;
@@ -166,7 +166,7 @@ Broadcasts a command to only a specific team
 void G_TeamCommand(team_t team, char *cmd) {
 	int i;
 
-	for (i = 0 ; i < level.maxclients ; i++) {
+	for (i = 0 ; i < level.maxclients ; ++i) {
 		if (level.clients[i].pers.connected == CON_CONNECTED && level.clients[i].sess.sessionTeam == team) {
 			trap_SendServerCommand(i, va("%s", cmd));
 		}
@@ -197,7 +197,7 @@ gentity_t *G_Find(gentity_t *from, int fieldofs, const char *match) {
 	}
 
 
-	for ( ; from < max ; from++) {
+	for ( ; from < max ; ++from) {
 		if (!from->inuse) {
 			continue;
 		}
@@ -228,7 +228,7 @@ gentity_t *G_FindByTargetname(gentity_t *from, const char *match) {
 		from++;
 	}
 
-	for ( ; from < max ; from++) {
+	for ( ; from < max ; ++from) {
 		if (!from->inuse) {
 			continue;
 		}
@@ -251,7 +251,7 @@ gentity_t *G_FindByTargetnameFast(gentity_t *from, const char *match, int hash) 
 		from++;
 	}
 
-	for ( ; from < max ; from++) {
+	for ( ; from < max ; ++from) {
 		if (!from->inuse) {
 			continue;
 		}
@@ -279,7 +279,7 @@ gentity_t *G_FindByTarget(gentity_t *from, const char *match) {
 		from++;
 	}
 
-	for ( ; from < max ; from++) {
+	for ( ; from < max ; ++from) {
 		if (!from->inuse) {
 			continue;
 		}
@@ -510,11 +510,11 @@ gentity_t *G_Spawn(void) {
 
 	e = NULL;   // shut up warning
 	i = 0;      // shut up warning
-	for (force = 0 ; force < 2 ; force++) {
+	for (force = 0 ; force < 2 ; ++force) {
 		// if we go through all entities and can't find one to free,
 		// override the normal minimum times before use
 		e = &g_entities[MAX_CLIENTS];
-		for (i = MAX_CLIENTS ; i < level.num_entities ; i++, e++) {
+		for (i = MAX_CLIENTS ; i < level.num_entities ; ++i, ++e) {
 			if (e->inuse) {
 				continue;
 			}
@@ -534,7 +534,7 @@ gentity_t *G_Spawn(void) {
 		}
 	}
 	if (i == ENTITYNUM_MAX_NORMAL) {
-		for (i = 0; i < MAX_GENTITIES; i++) {
+		for (i = 0; i < MAX_GENTITIES; ++i) {
 			G_Printf("%4i: %s\n", i, g_entities[i].classname);
 		}
 		G_Error("G_Spawn: no free entities");
