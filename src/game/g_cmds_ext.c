@@ -231,7 +231,7 @@ void G_players_cmd(gentity_t *ent, unsigned int dwCommand, qboolean fValue) {
 
 		// Rate info
 		if (cl->pers.connected == CON_CONNECTING) {
-			strcpy(rate, va("%s", "^3>>> CONNECTING <<<"));
+			Q_strncpyz(rate, va("%s", "^3>>> CONNECTING <<<"), sizeof (rate));
 		} else {
 			trap_GetUserinfo(idnum, userinfo, sizeof (userinfo));
 			s          = Info_ValueForKey(userinfo, "rate");
@@ -241,16 +241,16 @@ void G_players_cmd(gentity_t *ent, unsigned int dwCommand, qboolean fValue) {
 			s          = Info_ValueForKey(userinfo, "ip");
 			sscanf(s, "%3i.%3i.%3i", &ip1, &ip2, &ip3);
 
-			strcpy(rate, va("%5d%6d%9d%7d", cl->pers.clientTimeNudge, user_rate, cl->pers.clientMaxPackets, user_snaps));
+			Q_strncpyz(rate, va("%5d%6d%9d%7d", cl->pers.clientTimeNudge, user_rate, cl->pers.clientMaxPackets, user_snaps), sizeof (rate));
 		}
 
 		if (g_gamestate.integer != GS_PLAYING &&
 		    (cl->sess.sessionTeam == TEAM_SPECTATOR || cl->pers.connected == CON_CONNECTING)) {
-			strcpy(ready, ((ent) ? "^5--------^1 :" : "-------- :"));
+			Q_strncpyz(ready, (ent ? "^5--------^1 :" : "-------- :"), sizeof (ready));
 		}
 
 		if (cl->sess.referee) {
-			strcpy(ref, "REF");
+			Q_strncpyz(ref, "REF", sizeof (ref));
 		}
 
 		tteam = cl->sess.sessionTeam;
