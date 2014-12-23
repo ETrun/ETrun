@@ -248,7 +248,7 @@ static float CG_DrawFPS(float y) {
 
 		// average multiple frames together to smooth changes out a bit
 		total = 0;
-		for (i = 0 ; i < FPS_FRAMES ; i++) {
+		for (i = 0 ; i < FPS_FRAMES ; ++i) {
 			total += previousTimes[i];
 		}
 		if (!total) {
@@ -331,7 +331,7 @@ static void CG_DrawTeamInfo(void) {
 			cgs.teamLastChatPos++;
 		}
 
-		for (i = cgs.teamLastChatPos; i < cgs.teamChatPos; i++) {
+		for (i = cgs.teamLastChatPos; i < cgs.teamChatPos; ++i) {
 			CG_Text_Width_Ext(cgs.teamChatMsgs[i % chatHeight], 0.2f, 0, &cgs.media.limboFont2);
 		}
 
@@ -397,7 +397,6 @@ LAGOMETER
 */
 
 #define LAG_SAMPLES     128
-
 
 typedef struct {
 	int frameSamples[LAG_SAMPLES];
@@ -539,7 +538,7 @@ static void CG_DrawLagometer(void) {
 	vscale = range / MAX_LAGOMETER_RANGE;
 
 	// draw the frame interpoalte / extrapolate graph
-	for (a = 0 ; a < aw ; a++) {
+	for (a = 0 ; a < aw ; ++a) {
 		i  = (lagometer.frameCount - 1 - a) & (LAG_SAMPLES - 1);
 		v  = lagometer.frameSamples[i];
 		v *= vscale;
@@ -569,7 +568,7 @@ static void CG_DrawLagometer(void) {
 	range  = ah / 2;
 	vscale = range / MAX_LAGOMETER_PING;
 
-	for (a = 0 ; a < aw ; a++) {
+	for (a = 0 ; a < aw ; ++a) {
 		i = (lagometer.snapshotCount - 1 - a) & (LAG_SAMPLES - 1);
 		v = lagometer.snapshotSamples[i];
 		if (v > 0) {
@@ -641,7 +640,7 @@ void CG_CenterPrint(const char *str, int y, int charWidth) {
 
 	// NERVE - SMF - turn spaces into newlines, if we've run over the linewidth
 	len = strlen(cg.centerPrint);
-	for (i = 0; i < len; i++) {
+	for (i = 0; i < len; ++i) {
 
 		// NOTE: subtract a few chars here so long words still get displayed properly
 		if (i % (CP_LINEWIDTH - 20) == 0 && i > 0) {
@@ -693,7 +692,7 @@ void CG_PriorityCenterPrint(const char *str, int y, int charWidth, int priority)
 
 	// NERVE - SMF - turn spaces into newlines, if we've run over the linewidth
 	len = strlen(cg.centerPrint);
-	for (i = 0; i < len; i++) {
+	for (i = 0; i < len; ++i) {
 
 		// NOTE: subtract a few chars here so long words still get displayed properly
 		if (i % (CP_LINEWIDTH - 20) == 0 && i > 0) {
@@ -754,7 +753,7 @@ static void CG_DrawCenterString(void) {
 		float x, w;
 		char linebuffer[1024];
 
-		for (l = 0; l < CP_LINEWIDTH; l++) {            // NERVE - SMF - added CP_LINEWIDTH
+		for (l = 0; l < CP_LINEWIDTH; ++l) {            // NERVE - SMF - added CP_LINEWIDTH
 			if (!start[l] || start[l] == '\n') {
 				break;
 			}
@@ -1088,8 +1087,6 @@ static float CG_ScanForCrosshairEntity(float *zChange, qboolean *hitClient) {
 	return dist;
 }
 
-
-
 #define CH_KNIFE_DIST       48  // from g_weapon.c
 #define CH_LADDER_DIST      100
 #define CH_WATER_DIST       100
@@ -1172,8 +1169,6 @@ void CG_CheckForCursorHints(void) {
 		}
 	}
 }
-
-
 
 /*
 =====================
@@ -1295,7 +1290,7 @@ static void CG_DrawVote(void) {
 			Q_strncpyz(buffer, cgs.voteString + 5, sizeof (buffer));
 			Q_CleanStr(buffer);
 
-			for (nameindex = 0; nameindex < MAX_CLIENTS; nameindex++) {
+			for (nameindex = 0; nameindex < MAX_CLIENTS; ++nameindex) {
 				if (!cgs.clientinfo[nameindex].infoValid) {
 					continue;
 				}
@@ -1441,8 +1436,6 @@ static void CG_DrawSpectatorMessage(void) {
 	CG_Text_Paint_Ext(INFOTEXT_STARTX, INFOTEXT_STARTY + 18, textScale, textScale, colorWhite, va("Press %s to follow next player", str2), 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
 }
 
-
-
 /*
 =================
 CG_DrawFollow
@@ -1490,8 +1483,6 @@ static void CG_DrawFlashFade(void) {
 		}
 	}
 }
-
-
 
 /*
 ==============
@@ -1588,8 +1579,6 @@ static void CG_DrawFlashFire(void) {
 	}
 }
 
-
-
 /*
 ==============
 CG_DrawFlashBlendBehindHUD
@@ -1600,7 +1589,6 @@ static void CG_DrawFlashBlendBehindHUD(void) {
 	CG_DrawFlashZoomTransition();
 	CG_DrawFlashFade();
 }
-
 
 /*
 =================
@@ -1641,7 +1629,7 @@ void CG_ObjectivePrint(const char *str, int charWidth) {
 
 	// NERVE - SMF - turn spaces into newlines, if we've run over the linewidth
 	len = strlen(cg.oidPrint);
-	for (i = 0; i < len; i++) {
+	for (i = 0; i < len; ++i) {
 
 		// NOTE: subtract a few chars here so long words still get displayed properly
 		if (i % (CP_LINEWIDTH - 20) == 0 && i > 0) {
@@ -1705,7 +1693,7 @@ static void CG_DrawObjectiveInfo(void) {
 	for (;; ) {
 		char linebuffer[1024];
 
-		for (l = 0; l < CP_LINEWIDTH; l++) {
+		for (l = 0; l < CP_LINEWIDTH; ++l) {
 			if (!start[l] || start[l] == '\n') {
 				break;
 			}
@@ -1752,7 +1740,7 @@ static void CG_DrawObjectiveInfo(void) {
 	for (;; ) {
 		char linebuffer[1024];
 
-		for (l = 0; l < CP_LINEWIDTH; l++) {
+		for (l = 0; l < CP_LINEWIDTH; ++l) {
 			if (!start[l] || start[l] == '\n') {
 				break;
 			}
@@ -1850,7 +1838,7 @@ static void CG_ScreenFade(void) {
 		t    = (float)msec * cg.fadeRate;
 		invt = 1.0f - t;
 
-		for (i = 0; i < 4; i++) {
+		for (i = 0; i < 4; ++i) {
 			color[i] = cg.fadeColor1[i] * t + cg.fadeColor2[i] * invt;
 		}
 
@@ -2294,7 +2282,7 @@ void CG_DrawMiscGamemodels(void) {
 	// ydnar: static gamemodels don't project shadows
 	ent.renderfx = RF_NOSHADOW;
 
-	for (i = 0; i < cg.numMiscGameModels; i++) {
+	for (i = 0; i < cg.numMiscGameModels; ++i) {
 		if (cgs.miscGameModels[i].radius && CG_CullPointAndRadius(cgs.miscGameModels[i].org, cgs.miscGameModels[i].radius)) {
 			continue;
 		}
@@ -2307,7 +2295,7 @@ void CG_DrawMiscGamemodels(void) {
 		VectorCopy(cgs.miscGameModels[i].org, ent.oldorigin);
 		VectorCopy(cgs.miscGameModels[i].org, ent.lightingOrigin);
 
-		for (j = 0; j < 3; j++) {
+		for (j = 0; j < 3; ++j) {
 			VectorCopy(cgs.miscGameModels[i].axes[j], ent.axis[j]);
 		}
 		ent.hModel = cgs.miscGameModels[i].model;
@@ -2368,7 +2356,11 @@ static void CG_Autodemo() {
 			len = trap_FS_FOpenFile(va("demos/temp_%i.dm_84", cg.currentdemo), &temp, FS_READ);
 			name = va("demos/%s_%s.dm_84", cgs.rawmapname, cg.runsavename);
 
-			trap_FS_FOpenFile(name, &demo, FS_WRITE);
+			if (trap_FS_FOpenFile(name, &demo, FS_WRITE) < 0) {
+				CG_Printf("^1Error^3: unable to save demo:^7 %s\n", name);
+				trap_FS_FCloseFile(temp);
+				return;
+			}
 
 			for (i = 0; i < len; ++i) {
 				byte b = 0;
