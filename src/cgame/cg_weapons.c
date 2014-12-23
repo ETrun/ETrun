@@ -285,7 +285,6 @@ void CG_MachineGunEjectBrass(centity_t *cent) {
 	le->leMarkType = LEMT_NONE;
 }
 
-
 //----(SA)	added
 /*
 ==============
@@ -753,7 +752,6 @@ void CG_RailTrail(vec3_t start, vec3_t end, int type) {    //----(SA)	added 'typ
 	CG_RailTrail2(v2, v4);
 	CG_RailTrail2(v4, v3);
 	CG_RailTrail2(v3, v5);
-
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -813,7 +811,6 @@ static qboolean CG_ParseWeaponConfig(const char *filename, weaponInfo_t *wi) {
 		Com_Printf("unknown token in weapon cfg '%s' is %s\n", token, filename);
 	}
 
-
 	for (i = 0 ; i < MAX_WP_ANIMATIONS  ; ++i) {
 		float  fps;
 
@@ -851,7 +848,6 @@ static qboolean CG_ParseWeaponConfig(const char *filename, weaponInfo_t *wi) {
 		} else if (wi->weapAnimations[i].loopFrames < 0) {
 			wi->weapAnimations[i].loopFrames = 0;
 		}
-
 
 		// store animation/draw bits in '.moveSpeed'
 
@@ -4417,16 +4413,13 @@ ClientNum is a dummy field used to define what sort of effect to spawn
 */
 #define MAX_IMPACT_SOUNDS 5
 void CG_MissileHitWall(int weapon, int clientNum, vec3_t origin, vec3_t dir, int surfFlags) {   //	(SA) modified to send missilehitwall surface parameters
-	qhandle_t     mark = 0, shader = 0;
+	qhandle_t     mark = 0;
 	sfxHandle_t   sfx = 0, sfx2 = 0;
-	qboolean      isSprite = qfalse;
-	int           duration = 600, i, j, markDuration = -1, volume = 127;
+	int           i, j, markDuration = -1, volume = 127;
 	trace_t       trace;
-	vec3_t        lightColor, tmpv, tmpv2, sprOrg, sprVel;
-	float         radius = 32, light = 0, sfx2range = 0;
+	vec3_t        tmpv, tmpv2, sprOrg, sprVel;
+	float         radius = 32, sfx2range = 0;
 	vec4_t        projection, markOrigin;
-
-	VectorSet(lightColor, 1, 1, 0);
 
 	if (surfFlags & SURF_SKY) {
 		return;
@@ -4552,12 +4545,6 @@ void CG_MissileHitWall(int weapon, int clientNum, vec3_t origin, vec3_t dir, int
 		mark          = cgs.media.burnMarkShader;
 		markDuration  = cg_markTime.integer * 3;
 		radius        = 96; // ydnar: bigger mark radius
-		light         = 300;
-		isSprite      = qtrue;
-		duration      = 1000;
-		lightColor[0] = 0.75;
-		lightColor[1] = 0.5;
-		lightColor[2] = 0.1f;
 
 		VectorScale(dir, 16, sprVel);
 		if (CG_PointContents(origin, 0) & CONTENTS_WATER) {
@@ -4592,19 +4579,12 @@ void CG_MissileHitWall(int weapon, int clientNum, vec3_t origin, vec3_t dir, int
 
 	case WP_DYNAMITE:
 	case WP_TRIPMINE:
-		shader        = cgs.media.rocketExplosionShader;
 		sfx           = cgs.media.sfx_dynamiteexp;
 		sfx2          = cgs.media.sfx_dynamiteexpDist;
 		sfx2range     = 400;
 		mark          = cgs.media.burnMarkShader;
 		markDuration  = cg_markTime.integer * 3;
 		radius        = 128; // ydnar: bigger mark radius
-		light         = 300;
-		isSprite      = qtrue;
-		duration      = 1000;
-		lightColor[0] = 0.75;
-		lightColor[1] = 0.5;
-		lightColor[2] = 0.1f;
 
 // JPW NERVE
 // biggie dynamite explosions that mean it -- dynamite is biggest explode, so it gets extra crap thrown on
@@ -4665,17 +4645,10 @@ void CG_MissileHitWall(int weapon, int clientNum, vec3_t origin, vec3_t dir, int
 			sfx  = cgs.media.sfx_rockexp;
 			sfx2 = cgs.media.sfx_rockexpDist;
 		}
-		shader        = cgs.media.rocketExplosionShader;    // copied from RL
 		sfx2range     = 400;
 		mark          = cgs.media.burnMarkShader;
 		markDuration  = cg_markTime.integer * 3;
 		radius        = 64;
-		light         = 300;
-		isSprite      = qtrue;
-		duration      = 1000;
-		lightColor[0] = 0.75;
-		lightColor[1] = 0.5;
-		lightColor[2] = 0.1f;
 
 		// Ridah, explosion sprite animation
 		VectorMA(origin, 16, dir, sprOrg);
@@ -4763,19 +4736,13 @@ CG_MissileHitWallSmall
 */
 void CG_MissileHitWallSmall(vec3_t origin, vec3_t dir) {
 	qhandle_t     mark   = 0;
-	qhandle_t     shader = 0;
 	sfxHandle_t   sfx    = 0;
 	float         radius = 80;
-	vec3_t        lightColor;
 	vec3_t        sprOrg, sprVel;
 	vec4_t        projection, color;
 
-	shader        = cgs.media.rocketExplosionShader; // copied from RL
 	sfx           = cgs.media.sfx_rockexp;
 	mark          = cgs.media.burnMarkShader;
-	lightColor[0] = 0.75;
-	lightColor[1] = 0.5;
-	lightColor[2] = 0.1f;
 
 	// Ridah, explosion sprite animation
 	VectorMA(origin, 16, dir, sprOrg);
