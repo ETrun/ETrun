@@ -601,7 +601,7 @@ void CG_RegisterCvars(void) {
 	trap_Cvar_Set("r_drawfoliage", "0");
 	trap_Cvar_Set("r_wolffog", "0");
 
-	for (i = 0, cv = cvarTable ; i < cvarTableSize ; i++, cv++) {
+	for (i = 0, cv = cvarTable ; i < cvarTableSize ; ++i, ++cv) {
 		trap_Cvar_Register(cv->vmCvar, cv->cvarName, cv->defaultString, cv->cvarFlags);
 		if (cv->vmCvar != NULL) {
 			// rain - force the update to range check this cvar on first run
@@ -639,7 +639,7 @@ void CG_UpdateCvars(void) {
 		return;
 	}
 
-	for (i = 0, cv = cvarTable ; i < cvarTableSize ; i++, cv++) {
+	for (i = 0, cv = cvarTable ; i < cvarTableSize ; ++i, ++cv) {
 		if (cv->vmCvar) {
 			trap_Cvar_Update(cv->vmCvar);
 			if (cv->modificationCount != cv->vmCvar->modificationCount) {
@@ -724,7 +724,7 @@ void CG_setClientFlags(void) {
 	if (cg_authToken.string[0] == '\0') {
 		Q_strncpyz(hash, "undefined", sizeof (hash));
 	} else if (CG_hash(hash, cg_authToken.string)) {
-		CG_Error("ETrun: error setting client auth token\n");
+		CG_Error("%s: error setting client auth token\n", GAME_VERSION);
 	}
 
 	cg.pmext.bAutoReload = (cg_autoReload.integer > 0);
@@ -974,7 +974,6 @@ void CG_SetupDlightstyles(void) {
 		cent->dl_backlerp = 0.0;
 		cent->dl_time     = cg.time;
 	}
-
 }
 
 //========================================================================
@@ -1076,7 +1075,7 @@ static void CG_RegisterSounds(void) {
 	cgs.media.watrGaspSound   = trap_S_RegisterSound("sound/player/gasp.wav");
 	cgs.media.underWaterSound = trap_S_RegisterSound("sound/player/underwater.wav");
 
-	for (i = 0; i < 2; i++) {
+	for (i = 0; i < 2; ++i) {
 		cgs.media.grenadebounce[FOOTSTEP_NORMAL][i]         = \
 		    cgs.media.grenadebounce[FOOTSTEP_GRAVEL][i]     = \
 		        cgs.media.grenadebounce[FOOTSTEP_SPLASH][i] = trap_S_RegisterSound(va("sound/weapons/grenade/bounce_hard%i.wav", i + 1));
@@ -1102,7 +1101,7 @@ static void CG_RegisterSounds(void) {
 	cgs.media.landSound[FOOTSTEP_SNOW]   = trap_S_RegisterSound("sound/player/footsteps/snow_jump.wav");
 	cgs.media.landSound[FOOTSTEP_CARPET] = trap_S_RegisterSound("sound/player/footsteps/carpet_jump.wav");
 
-	for (i = 0; i < 4; i++) {
+	for (i = 0; i < 4; ++i) {
 		Com_sprintf(name, sizeof (name), "sound/player/footsteps/stone%i.wav", i + 1);
 		cgs.media.footsteps[FOOTSTEP_NORMAL][i] = trap_S_RegisterSound(name);
 
@@ -1185,7 +1184,7 @@ static void CG_RegisterSounds(void) {
 	cgs.media.sfx_rockexpWater   = trap_S_RegisterSound("sound/weapons/grenade/gren_expl_water.wav");
 
 
-	for (i = 0; i < 3; i++) {
+	for (i = 0; i < 3; ++i) {
 		// Gordon: bouncy shell sounds \o/
 		cgs.media.sfx_brassSound[BRASSSOUND_METAL][i] = trap_S_RegisterSound(va("sound/weapons/misc/shell_metal%i.wav", i + 1));
 		cgs.media.sfx_brassSound[BRASSSOUND_SOFT][i]  = trap_S_RegisterSound(va("sound/weapons/misc/shell_soft%i.wav", i + 1));
@@ -1199,7 +1198,7 @@ static void CG_RegisterSounds(void) {
 	cgs.media.sfx_knifehit[3] = trap_S_RegisterSound("sound/weapons/knife/knife_hit4.wav");
 	cgs.media.sfx_knifehit[4] = trap_S_RegisterSound("sound/weapons/knife/knife_hitwall1.wav");
 
-	for (i = 0; i < 5; i++) {
+	for (i = 0; i < 5; ++i) {
 		cgs.media.sfx_bullet_metalhit[i] = trap_S_RegisterSound(va("sound/weapons/impact/metal%i.wav", i + 1));
 		cgs.media.sfx_bullet_woodhit[i]  = trap_S_RegisterSound(va("sound/weapons/impact/wood%i.wav", i + 1));
 		cgs.media.sfx_bullet_glasshit[i] = trap_S_RegisterSound(va("sound/weapons/impact/glass%i.wav", i + 1));
@@ -1228,11 +1227,6 @@ CG_RegisterGraphics
 This function may execute for a couple of minutes with a slow disk.
 =================
 */
-
-qboolean CG_RegisterClientSkin(bg_playerclass_t *classInfo);
-qboolean CG_RegisterClientModelname(bg_playerclass_t *classInfo);
-void WM_RegisterWeaponTypeShaders();
-
 static void CG_RegisterGraphics(void) {
 	char        name[1024];
 	int         i;
@@ -1275,7 +1269,7 @@ static void CG_RegisterGraphics(void) {
 
 	CG_LoadingString(" - textures");
 
-	for (i = 0 ; i < 11 ; i++) {
+	for (i = 0 ; i < 11 ; ++i) {
 		cgs.media.numberShaders[i] = trap_R_RegisterShader(sb_nums[i]);
 	}
 
@@ -1292,7 +1286,7 @@ static void CG_RegisterGraphics(void) {
 	cgs.media.smokePuffShaderb5    = trap_R_RegisterShader("smokePuffblack5");
 	// done
 
-	for (i = 0; i < 16; i++) {
+	for (i = 0; i < 16; ++i) {
 		cgs.media.viewFlashFire[i] = trap_R_RegisterShader(va("viewFlashFire%i", i + 1));
 	}
 
@@ -1346,7 +1340,7 @@ static void CG_RegisterGraphics(void) {
 
 	cgs.media.uniformHintShader = trap_R_RegisterShaderNoMip("gfx/2d/uniformHint");
 
-	for (i = 0 ; i < NUM_CROSSHAIRS ; i++) {
+	for (i = 0 ; i < NUM_CROSSHAIRS ; ++i) {
 		cgs.media.crosshairShader[i] = trap_R_RegisterShader(va("gfx/2d/crosshair%c", 'a' + i));
 		cg.crosshairShaderAlt[i]     = trap_R_RegisterShader(va("gfx/2d/crosshair%c_alt", 'a' + i));
 	}
@@ -1420,8 +1414,6 @@ static void CG_RegisterGraphics(void) {
 
 	cgs.media.genericConstructionShader = trap_R_RegisterShader("textures/sfx/construction");
 
-	WM_RegisterWeaponTypeShaders();
-
 	// Gordon: limbo menu setup
 	CG_LimboPanel_Init();
 
@@ -1447,7 +1439,7 @@ static void CG_RegisterGraphics(void) {
 	cgs.media.shardRubble2 = trap_R_RegisterModel("models/mapobjects/debris/brick001.md3");
 	cgs.media.shardRubble3 = trap_R_RegisterModel("models/mapobjects/debris/brick002.md3");
 
-	for (i = 0; i < MAX_LOCKER_DEBRIS; i++) {
+	for (i = 0; i < MAX_LOCKER_DEBRIS; ++i) {
 		Com_sprintf(name, sizeof (name), "models/mapobjects/debris/personal%i.md3", i + 1);
 		cgs.media.shardJunk[i] = trap_R_RegisterModel(name);
 	}
@@ -1462,12 +1454,12 @@ static void CG_RegisterGraphics(void) {
 	//			sometimes and want it to work for sure for this demo)
 
 	CG_LoadingString(" - weapons");
-	for (i = WP_KNIFE; i < WP_NUM_WEAPONS; i++) {
+	for (i = WP_KNIFE; i < WP_NUM_WEAPONS; ++i) {
 		CG_RegisterWeapon(i, qfalse);
 	}
 
 	CG_LoadingString(" - items");
-	for (i = 1 ; i < bg_numItems ; i++) {
+	for (i = 1 ; i < bg_numItems ; ++i) {
 		CG_RegisterItemVisuals(i);
 	}
 
@@ -1505,7 +1497,7 @@ static void CG_RegisterGraphics(void) {
 		CG_Error("CG_RegisterGraphics: Too many inline models: %i\n", cgs.numInlineModels);
 	}
 
-	for (i = 1 ; i < cgs.numInlineModels ; i++) {
+	for (i = 1 ; i < cgs.numInlineModels ; ++i) {
 		char   name[10];
 		vec3_t mins, maxs;
 		int    j;
@@ -1513,7 +1505,7 @@ static void CG_RegisterGraphics(void) {
 		Com_sprintf(name, sizeof (name), "*%i", i);
 		cgs.inlineDrawModel[i] = trap_R_RegisterModel(name);
 		trap_R_ModelBounds(cgs.inlineDrawModel[i], mins, maxs);
-		for (j = 0 ; j < 3 ; j++) {
+		for (j = 0 ; j < 3 ; ++j) {
 			cgs.inlineModelMidpoints[i][j] = mins[j] + 0.5 * (maxs[j] - mins[j]);
 		}
 	}
@@ -1521,7 +1513,7 @@ static void CG_RegisterGraphics(void) {
 	CG_LoadingString(" - server models");
 
 	// register all the server specified models
-	for (i = 1 ; i < MAX_MODELS ; i++) {
+	for (i = 1 ; i < MAX_MODELS ; ++i) {
 		const char *modelName;
 
 		modelName = CG_ConfigString(CS_MODELS + i);
@@ -1531,7 +1523,7 @@ static void CG_RegisterGraphics(void) {
 		cgs.gameModels[i] = trap_R_RegisterModel(modelName);
 	}
 
-	for (i = 1 ; i < MAX_MODELS ; i++) {
+	for (i = 1 ; i < MAX_MODELS ; ++i) {
 		const char *skinName;
 
 		skinName = CG_ConfigString(CS_SKINS + i);
@@ -1541,7 +1533,7 @@ static void CG_RegisterGraphics(void) {
 		cgs.gameModelSkins[i] = trap_R_RegisterSkin(skinName);
 	}
 
-	for (i = 1 ; i < MAX_CS_SHADERS ; i++) {
+	for (i = 1 ; i < MAX_CS_SHADERS ; ++i) {
 		const char *shaderName;
 
 		shaderName = CG_ConfigString(CS_SHADERS + i);
@@ -1552,7 +1544,7 @@ static void CG_RegisterGraphics(void) {
 		Q_strncpyz(cgs.gameShaderNames[i], shaderName[0] == '*' ? shaderName + 1 : shaderName, MAX_QPATH);
 	}
 
-	for (i = 1 ; i < MAX_CHARACTERS ; i++) {
+	for (i = 1 ; i < MAX_CHARACTERS ; ++i) {
 		const char *characterName;
 
 		characterName = CG_ConfigString(CS_CHARACTERS + i);
@@ -1666,7 +1658,7 @@ static void CG_RegisterGraphics(void) {
 
 	cgs.media.disconnectIcon = trap_R_RegisterShaderNoMip("gfx/2d/net");
 
-	for (i = 0; i < 6; i++) {
+	for (i = 0; i < 6; ++i) {
 		cgs.media.fireteamicons[i] = trap_R_RegisterShaderNoMip(va("gfx/hud/fireteam/fireteam%i", i + 1));
 	}
 
@@ -1727,7 +1719,7 @@ CG_RegisterClients
 static void CG_RegisterClients(void) {
 	int i;
 
-	for (i = 0 ; i < MAX_CLIENTS ; i++) {
+	for (i = 0 ; i < MAX_CLIENTS ; ++i) {
 		const char *clientInfo;
 
 		clientInfo = CG_ConfigString(CS_PLAYERS + i);
@@ -1806,13 +1798,13 @@ static int CG_FeederCount(float feederID) {
 
 	count = 0;
 	if (feederID == FEEDER_REDTEAM_LIST) {
-		for (i = 0; i < cg.numScores; i++) {
+		for (i = 0; i < cg.numScores; ++i) {
 			if (cg.scores[i].team == TEAM_AXIS) {
 				count++;
 			}
 		}
 	} else if (feederID == FEEDER_BLUETEAM_LIST) {
-		for (i = 0; i < cg.numScores; i++) {
+		for (i = 0; i < cg.numScores; ++i) {
 			if (cg.scores[i].team == TEAM_ALLIES) {
 				count++;
 			}
@@ -1874,7 +1866,6 @@ static const char *CG_FeederItemText(float feederID, int index, int column, qhan
 			return va("%i", info->score);
 		case 5:
 			return va("%4i", sp->time);
-			break;
 		case 6:
 			if (sp->ping == -1) {
 				return "connecting";
@@ -2002,10 +1993,7 @@ void CG_AssetCache() {
 	cgDC.Assets.sliderThumb         = trap_R_RegisterShaderNoMip(ASSET_SLIDER_THUMB);
 }
 
-
-extern qboolean initTrails;
 void CG_ClearTrails(void);
-extern qboolean initparticles;
 void CG_ClearParticles(void);
 
 /*

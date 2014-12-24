@@ -116,8 +116,6 @@ static void CG_LoadClientInfo(int clientNum) {
 	}
 }
 
-void CG_LimboPanel_SendSetupMsg(qboolean forceteam);
-
 /*
 ======================
 CG_NewClientInfo
@@ -364,7 +362,6 @@ void CG_RunLerpFrame(centity_t *cent, clientInfo_t *ci, lerpFrame_t *lf, int new
 	}
 }
 
-
 /*
 ===============
 CG_ClearLerpFrame
@@ -431,7 +428,7 @@ void CG_SetLerpFrameAnimationRate(centity_t *cent, clientInfo_t *ci, lerpFrame_t
 			transitionMin = lf->frameTime + 170;    // always do some lerping (?)
 
 		}
-		if (oldanim && oldanim->animBlend) {   //transitionMin < lf->frameTime + oldanim->animBlend) {
+		if (oldanim && oldanim->animBlend) {
 			transitionMin     = lf->frameTime + oldanim->animBlend;
 			lf->animationTime = transitionMin;
 		} else {
@@ -473,7 +470,6 @@ void CG_RunLerpFrameRate(clientInfo_t *ci, lerpFrame_t *lf, int newAnimation, ce
 
 #define ANIM_SCALEMAX_LOW   1.1f
 #define ANIM_SCALEMAX_HIGH  1.6f
-
 #define ANIM_SPEEDMAX_LOW   100
 #define ANIM_SPEEDMAX_HIGH  20
 
@@ -559,7 +555,6 @@ void CG_RunLerpFrameRate(clientInfo_t *ci, lerpFrame_t *lf, int newAnimation, ce
 				lf->animSpeedScale = 0.25;
 			}
 		} else if (lf->animSpeedScale > ANIM_SCALEMAX_LOW) {
-
 			if (!(anim->flags & ANIMFL_LADDERANIM)) {
 				// allow slower anims to speed up more than faster anims
 				if (anim->moveSpeed > ANIM_SPEEDMAX_LOW) {
@@ -574,7 +569,6 @@ void CG_RunLerpFrameRate(clientInfo_t *ci, lerpFrame_t *lf, int newAnimation, ce
 			} else if (lf->animSpeedScale > 4.0) {
 				lf->animSpeedScale = 4.0;
 			}
-
 		}
 
 		if (lf == &cent->pe.legs) {
@@ -638,7 +632,6 @@ void CG_RunLerpFrameRate(clientInfo_t *ci, lerpFrame_t *lf, int newAnimation, ce
 				f = 0;
 			}
 		}
-		//f = ( lf->frameTime - lf->animationTime ) / anim->frameLerp;
 		if (f >= anim->numFrames) {
 			f -= anim->numFrames;
 			if (anim->loopFrames) {
@@ -662,7 +655,7 @@ void CG_RunLerpFrameRate(clientInfo_t *ci, lerpFrame_t *lf, int newAnimation, ce
 		if (cg.time > lf->frameTime) {
 
 			// Ridah, run the frame again until we move ahead of the current time, fixes walking speeds for zombie
-			if (/*!anim->moveSpeed ||*/ recursion > 4) {
+			if (recursion > 4) {
 				lf->frameTime = cg.time;
 			} else {
 				CG_RunLerpFrameRate(ci, lf, newAnimation, cent, recursion + 1);
@@ -675,7 +668,7 @@ void CG_RunLerpFrameRate(clientInfo_t *ci, lerpFrame_t *lf, int newAnimation, ce
 		lf->oldAnimationNumber = lf->animationNumber;
 	}
 
-	// Gordon: BIG hack, occaisionaly (VERY occaisionally), the frametime gets totally wacked
+	// Gordon: BIG hack, occaisionaly (VERY occasionally), the frametime gets totally wacked
 	if (lf->frameTime > cg.time + 5000) {
 		lf->frameTime = cg.time;
 	}
@@ -717,7 +710,6 @@ static void CG_PlayerAnimation(centity_t *cent, refEntity_t *body) {
 	bg_character_t *character;
 
 	clientNum = cent->currentState.clientNum;
-
 	ci        = &cgs.clientinfo[clientNum];
 	character = CG_CharacterForClientinfo(ci, cent);
 
@@ -738,7 +730,6 @@ static void CG_PlayerAnimation(centity_t *cent, refEntity_t *body) {
 	if (!(cent->currentState.eFlags & EF_DEAD) && cent->pe.legs.yawing) {
 		int tempIndex;
 
-		//CG_Printf("turn: %i\n", cg.time );
 		tempIndex = BG_GetAnimScriptAnimation(clientNum, character->animModelInfo, cent->currentState.aiState, (cent->pe.legs.yawing == SWING_RIGHT ? ANIM_MT_TURNRIGHT : ANIM_MT_TURNLEFT));
 		if (tempIndex > -1) {
 			animIndex = tempIndex;
@@ -899,7 +890,6 @@ static void CG_PlayerAngles(centity_t *cent, vec3_t legs[3], vec3_t torso[3], ve
 	bg_character_t *character;
 
 	ci = &cgs.clientinfo[cent->currentState.clientNum];
-
 	character = CG_CharacterForClientinfo(ci, cent);
 
 	if (!character) {
@@ -1118,8 +1108,6 @@ static void CG_PlayerFloatSprite(centity_t *cent, qhandle_t shader, int height) 
 	trap_R_AddRefEntityToScene(&ent);
 }
 
-
-
 /*
 ===============
 CG_PlayerSprites
@@ -1128,7 +1116,8 @@ Float sprites over the player's head
 ===============
 */
 static void CG_PlayerSprites(centity_t *cent) {
-	int team;
+	int 			team;
+	fireteamData_t 	*ft;
 
 	if (cent->currentState.powerups & (1 << PW_REDFLAG) ||
 	    cent->currentState.powerups & (1 << PW_BLUEFLAG)) {
@@ -1160,13 +1149,9 @@ static void CG_PlayerSprites(centity_t *cent) {
 		return;
 	}
 
-	{
-		fireteamData_t *ft = CG_IsOnFireteam(cent->currentState.number);
-		if (ft) {
-			if (ft == CG_IsOnFireteam(cg.clientNum) && cgs.clientinfo[cent->currentState.number].selected) {
-				CG_PlayerFloatSprite(cent, cgs.media.fireteamicons[ft->ident], 56);
-			}
-		}
+	ft = CG_IsOnFireteam(cent->currentState.number);
+	if (ft && ft == CG_IsOnFireteam(cg.clientNum) && cgs.clientinfo[cent->currentState.number].selected) {
+		CG_PlayerFloatSprite(cent, cgs.media.fireteamicons[ft->ident], 56);
 	}
 }
 
@@ -1233,7 +1218,7 @@ static qboolean CG_PlayerShadow(centity_t *cent, float *shadowPlane) {
 
 	// add the mark as a temporary, so it goes directly to the renderer
 	// without taking a spot in the cg_marks array
-	dist     = VectorDistance(cent->lerpOrigin, cg.refdef_current->vieworg); //%	cg.snap->ps.origin );
+	dist     = VectorDistance(cent->lerpOrigin, cg.refdef_current->vieworg);
 	distFade = 1.0f;
 	if (!(cent->currentState.eFlags & EF_ZOOMING) && (dist > SHADOW_MIN_DIST)) {
 		if (dist > SHADOW_MAX_DIST) {
@@ -1512,9 +1497,7 @@ void CG_AnimPlayerConditions(bg_character_t *character, centity_t *cent) {
 	if (character->animModelInfo->animations[legsAnim]->movetype) {
 		BG_UpdateConditionValue(es->clientNum, ANIM_COND_MOVETYPE, character->animModelInfo->animations[legsAnim]->movetype, qfalse);
 	}
-
 }
-
 
 /*
 ===============
@@ -1586,7 +1569,6 @@ void CG_Player(centity_t *cent) {
 				// found it, clamp behind gun
 				vec3_t forward, right, up;
 
-				//AngleVectors (mg42->s.apos.trBase, forward, right, up);
 				AngleVectors(cent->lerpAngles, forward, right, up);
 				VectorMA(mg42->currentState.pos.trBase, -36, forward, playerOrigin);
 				playerOrigin[2] = cent->lerpOrigin[2];
@@ -1759,7 +1741,7 @@ void CG_Player(centity_t *cent) {
 	//
 	// add the gun / barrel / flash
 	//
-	if (!(cent->currentState.eFlags & EF_DEAD) /*&& !usingBinocs*/) {              // NERVE - SMF
+	if (!(cent->currentState.eFlags & EF_DEAD)) {              // NERVE - SMF
 		CG_AddPlayerWeapon(&body, NULL, cent);
 	}
 
@@ -1819,7 +1801,6 @@ void CG_Player(centity_t *cent) {
 				CG_PositionEntityOnTag(&acc, &body, "tag_weapon2", 0, NULL);
 				break;
 
-
 			default:
 				continue;
 			}
@@ -1869,7 +1850,6 @@ void CG_ResetPlayerEntity(centity_t *cent) {
 	cent->pe.painAnimLegs  = -1;
 	cent->pe.painAnimTorso = -1;
 	cent->pe.animSpeed     = 1.0;
-
 }
 
 /*
@@ -2006,12 +1986,4 @@ weaponType_t *WM_FindWeaponTypeForWeapon(weapon_t weapon) {
 		w++;
 	}
 	return NULL;
-}
-
-void WM_RegisterWeaponTypeShaders() {
-	weaponType_t *w = weaponTypes;
-
-	while (w->weapindex) {
-		w++;
-	}
 }
