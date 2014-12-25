@@ -211,7 +211,7 @@ void CG_ParseOIDInfo(int num) {
 void CG_ParseOIDInfos(void) {
 	int i;
 
-	for (i = 0; i < MAX_OID_TRIGGERS; i++) {
+	for (i = 0; i < MAX_OID_TRIGGERS; ++i) {
 		CG_ParseOIDInfo(CS_OID_DATA + i);
 	}
 }
@@ -730,9 +730,7 @@ void CG_AddToNotify(const char *str) {
 // TAT - NOTE: If we're worried about space - do we really need 96 possible sounds for any one chat?
 //			I think this is used to allow multiple sound clips for one command, so do we need 96 available selection sounds?
 #define MAX_VOICESOUNDS     32
-
 #define MAX_CHATSIZE        64
-#define MAX_HEADMODELS      64
 
 typedef struct voiceChat_s {
 	char id[64];
@@ -881,7 +879,7 @@ CG_GetVoiceChat
 int CG_GetVoiceChat(voiceChatList_t *voiceChatList, const char *id, sfxHandle_t *snd, qhandle_t *sprite, char **chat) {
 	int i, rnd;
 
-	for (i = 0; i < voiceChatList->numVoiceChats; i++) {
+	for (i = 0; i < voiceChatList->numVoiceChats; ++i) {
 		if (!Q_stricmp(id, voiceChatList->voiceChats[i].id)) {
 			rnd     = random() * voiceChatList->voiceChats[i].numSounds;
 			*snd    = voiceChatList->voiceChats[i].sounds[rnd];
@@ -1088,7 +1086,7 @@ static void CG_RemoveChatEscapeChar(char *text) {
 	int i, l;
 
 	l = 0;
-	for (i = 0; text[i]; i++) {
+	for (i = 0; text[i]; ++i) {
 		if (text[i] == '\x19') {
 			continue;
 		}
@@ -1119,7 +1117,7 @@ const char *CG_LocalizeServerCommand(const char *buf) {
 	s    = buf;
 	prev = 0;
 
-	for (i = 0; *s; i++, s++) {
+	for (i = 0; *s; ++i, ++s) {
 		if (*s == '[' && (!Q_strncmp(s, "[lon]", 5) || !Q_strncmp(s, "[lof]", 5))) {
 
 			if (togloc) {
@@ -1459,8 +1457,7 @@ static void CG_ServerCommand(void) {
 		int fadeTime = 0;   // default to instant start
 
 		Q_strncpyz(text, CG_Argv(2), MAX_SAY_TEXT);
-		// Nico, always true warning fix
-		if (text != NULL && strlen(text)) {
+		if (*text) {
 			fadeTime = atoi(text);
 		}
 
@@ -1782,7 +1779,6 @@ static void CG_ServerCommand(void) {
 
 	CG_Printf("Unknown client game command: %s\n", cmd);
 }
-
 
 /*
 ====================
