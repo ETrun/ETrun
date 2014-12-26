@@ -168,7 +168,6 @@ typedef enum {
 	UI_FLOOR,
 	UI_CEIL,
 	UI_GETHUNKDATA
-
 } uiImport_t;
 
 #define SORT_HOST           0
@@ -217,7 +216,6 @@ typedef enum {
 	UI_CHECKEXECKEY,        // NERVE - SMF
 
 	UI_WANTSBINDKEYS,
-
 } uiExport_t;
 
 #endif

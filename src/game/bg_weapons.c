@@ -171,7 +171,6 @@ void PM_ClipVelocity(vec3_t in, vec3_t normal, vec3_t out, float overbounce) {
 	}
 }
 
-
 static void PM_ReloadClip(int weapon);
 
 /*
@@ -363,7 +362,6 @@ void PM_BeginWeaponChange(int oldweapon, int newweapon, qboolean reload) {      
 
 	pm->ps->weaponTime += switchtime;
 }
-
 
 /*
 ===============
@@ -558,7 +556,6 @@ static void PM_FinishWeaponChange(void) {
 	}
 }
 
-
 /*
 ==============
 PM_ReloadClip
@@ -598,7 +595,6 @@ static void PM_FinishWeaponReload(void) {
 	pm->ps->weaponstate = WEAPON_READY;     // ready to fire
 	PM_StartWeaponAnim(PM_IdleAnimForWeapon(pm->ps->weapon));
 }
-
 
 /*
 ==============
@@ -678,9 +674,6 @@ void PM_CheckForReload(int weapon) {
 			PM_BeginWeaponReload(weapon);
 		}
 	}
-
-
-
 }
 
 /*
@@ -722,7 +715,6 @@ static void PM_SwitchIfEmpty(void) {
 	PM_AddEvent(EV_NOAMMO);
 }
 
-
 /*
 ==============
 PM_WeaponUseAmmo
@@ -744,7 +736,6 @@ void PM_WeaponUseAmmo(int wp, int amount) {
 		pm->ps->ammoclip[takeweapon] -= amount;
 	}
 }
-
 
 /*
 ==============
@@ -787,7 +778,6 @@ int PM_WeaponClipEmpty(int wp) {
 	return 0;
 }
 
-
 /*
 ==============
 PM_CoolWeapons
@@ -828,7 +818,6 @@ void PM_CoolWeapons(void) {
 			}
 		}
 	}
-
 }
 
 /*
@@ -1137,7 +1126,7 @@ void PM_Weapon(void) {
 		}
 
 		// set the delta angle
-		for (i = 0; i < 3; i++) {
+		for (i = 0; i < 3; ++i) {
 			int cmdAngle;
 
 			cmdAngle                = ANGLE2SHORT(muzzlebounce[i]);
@@ -1303,11 +1292,9 @@ void PM_Weapon(void) {
 		return;
 	}
 
-
 	if (pm->ps->weapon == WP_NONE) {   // this is possible since the player starts with nothing
 		return;
 	}
-
 
 	// JPW NERVE -- in multiplayer, don't allow panzerfaust or dynamite to fire if charge bar isn't full
 	if (pm->ps->weapon == WP_PANZERFAUST) {
@@ -1688,7 +1675,6 @@ void PM_Weapon(void) {
 		PM_WeaponUseAmmo(pm->ps->weapon, ammoNeeded);
 	}
 
-
 	// fire weapon
 
 	// add weapon heat
@@ -2057,7 +2043,6 @@ void PM_BeginWeaponReload(int weapon) {
 	if (weapon != WP_MORTAR && weapon != WP_MORTAR_SET) {
 		PM_ContinueWeaponAnim(PM_ReloadAnimForWeapon(pm->ps->weapon));
 	}
-
 
 	// okay to reload while overheating without tacking the reload time onto the end of the
 	// current weaponTime (the reload time is partially absorbed into the overheat time)

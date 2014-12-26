@@ -49,7 +49,7 @@ static animation_t * BG_RAG_FindFreeAnimation(const char *mdxFileName, const cha
 {
 	int i;
 
-	for (i = 0; i < MAX_ANIMPOOL_SIZE; i++) {
+	for (i = 0; i < MAX_ANIMPOOL_SIZE; ++i) {
 #ifdef CGAMEDLL
 		if (animationPool[i].mdxFile == mdxFile && !Q_stricmp(animationPool[i].name, name)) {
 #else
@@ -59,7 +59,7 @@ static animation_t * BG_RAG_FindFreeAnimation(const char *mdxFileName, const cha
 		}
 	}
 
-	for (i = 0; i < MAX_ANIMPOOL_SIZE; i++) {
+	for (i = 0; i < MAX_ANIMPOOL_SIZE; ++i) {
 #ifdef CGAMEDLL
 		if (!animationPool[i].mdxFile) {
 			animationPool[i].mdxFile = mdxFile;

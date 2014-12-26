@@ -315,7 +315,6 @@ static void CG_ParseScreenFade(void) {
 	}
 }
 
-
 /*
 ==============
 CG_ParseFog

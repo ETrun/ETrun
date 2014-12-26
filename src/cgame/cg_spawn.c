@@ -231,7 +231,6 @@ void SP_misc_gamemodel(void) {
 }
 
 void SP_trigger_objective_info(void) {
-
 }
 
 typedef struct {
@@ -278,7 +277,6 @@ void CG_ParseEntityFromSpawnVars(void) {
 			}
 		}
 	}
-
 }
 
 /*

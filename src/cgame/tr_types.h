@@ -29,7 +29,6 @@ If you have questions concerning this license or the applicable additional terms
 #ifndef __TR_TYPES_H
 #define __TR_TYPES_H
 
-
 #define MAX_CORONAS     32          //----(SA)	not really a reason to limit this other than trying to keep a reasonable count
 #define MAX_DLIGHTS     32          // can't be increased, because bit flags are used on surfaces
 #define MAX_ENTITIES    1023        // can't be increased without changing drawsurf bit packing
@@ -63,7 +62,6 @@ If you have questions concerning this license or the applicable additional terms
 #define RDF_UNDERWATER      (1 << 4)    // so the renderer knows to use underwater fog when the player is underwater
 #define RDF_DRAWINGSKY      (1 << 5)
 #define RDF_SNOOPERVIEW     (1 << 6)    //----(SA)	added
-
 
 typedef struct {
 	vec3_t xyz;
@@ -152,7 +150,6 @@ typedef struct {
 	int reFlags;
 
 	int entityNum;                  // currentState.number, so we can attach rendering effects to specific entities (Zombie)
-
 } refEntity_t;
 
 //----(SA)
@@ -182,7 +179,6 @@ typedef enum {
 	NUM_FOGS
 } glfogType_t;
 
-
 typedef struct {
 	int mode;                   // GL_LINEAR, GL_EXP
 	int hint;                   // GL_DONT_CARE
@@ -200,7 +196,6 @@ typedef struct {
 
 //----(SA)	end
 
-
 #define MAX_RENDER_STRINGS          8
 #define MAX_RENDER_STRING_LENGTH    32
 
@@ -216,26 +211,19 @@ typedef struct {
 	// 1 bits will prevent the associated area from rendering at all
 	byte areamask[MAX_MAP_AREA_BYTES];
 
-
-
-
 	// text messages for deform text shaders
 	char text[MAX_RENDER_STRINGS][MAX_RENDER_STRING_LENGTH];
-
 
 //----(SA)	added (needed to pass fog infos into the portal sky scene)
 	glfog_t glfog;
 //----(SA)	end
-
 } refdef_t;
-
 
 typedef enum {
 	STEREO_CENTER,
 	STEREO_LEFT,
 	STEREO_RIGHT
 } stereoFrame_t;
-
 
 /*
 ** glconfig_t
@@ -315,7 +303,6 @@ typedef struct {
 	qboolean smpActive;                     // dual processor
 } glconfig_t;
 
-
 #if !defined _WIN32
 
 # define _3DFX_DRIVER_NAME   "libMesaVoodooGL.so.3.1"
@@ -329,7 +316,6 @@ typedef struct {
 # define WICKED3D_V3_DRIVER_NAME "gl/openglv3.dll"
 
 #endif  // !defined _WIN32
-
 
 // =========================================
 // Gordon, these MUST NOT exceed the values for SHADER_MAX_VERTEXES/SHADER_MAX_INDEXES

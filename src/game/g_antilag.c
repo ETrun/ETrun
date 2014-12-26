@@ -123,7 +123,7 @@ void G_AdjustClientPositions(gentity_t *ent, int time, qboolean forward) {
 	int       i;
 	gentity_t *list;
 
-	for (i = 0; i < level.numConnectedClients; i++, list++) {
+	for (i = 0; i < level.numConnectedClients; ++i, ++list) {
 		list = g_entities + level.sortedClients[i];
 		// Gordon: ok lets test everything under the sun
 		if (list->client &&
@@ -171,7 +171,7 @@ void G_AttachBodyParts(gentity_t *ent) {
 	int       i;
 	gentity_t *list;
 
-	for (i = 0; i < level.numConnectedClients; i++, list++) {
+	for (i = 0; i < level.numConnectedClients; ++i, ++list) {
 		list = g_entities + level.sortedClients[i];
 		// Gordon: ok lets test everything under the sun
 		if (list->inuse &&
@@ -195,7 +195,7 @@ void G_DettachBodyParts() {
 	int       i;
 	gentity_t *list;
 
-	for (i = 0; i < level.numConnectedClients; i++, list++) {
+	for (i = 0; i < level.numConnectedClients; ++i, ++list) {
 		list = g_entities + level.sortedClients[i];
 		if (list->client->tempHead) {
 			G_FreeEntity(list->client->tempHead);

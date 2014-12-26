@@ -26,9 +26,6 @@ If you have questions concerning this license or the applicable additional terms
 ===========================================================================
 */
 
-
-
-
 // this file holds commands that can be executed by the server console, but not remote clients
 
 #include "g_local.h"
@@ -38,7 +35,6 @@ If you have questions concerning this license or the applicable additional terms
 ==============================================================================
 
 PACKET FILTERING
-
 
 You can add or remove addresses from the filter list with:
 
@@ -91,12 +87,12 @@ qboolean StringToFilter(const char *s, ipFilter_t *f) {
 	byte b[4];
 	byte m[4];
 
-	for (i = 0 ; i < 4 ; i++) {
+	for (i = 0 ; i < 4 ; ++i) {
 		b[i] = 0;
 		m[i] = 0;
 	}
 
-	for (i = 0 ; i < 4 ; i++) {
+	for (i = 0 ; i < 4 ; ++i) {
 		if (*s < '0' || *s > '9') {
 			if (*s == '*') {   // 'match any'
 				// b[i] and m[i] to 0
@@ -147,7 +143,7 @@ static void UpdateIPBans(ipFilterList_t *ipFilterList) {
 	char ip[64];
 
 	*iplist_final = 0;
-	for (i = 0 ; i < ipFilterList->numIPFilters ; i++) {
+	for (i = 0 ; i < ipFilterList->numIPFilters ; ++i) {
 		if (ipFilterList->ipFilters[i].compare == 0xffffffff) {
 			continue;
 		}
@@ -161,11 +157,9 @@ static void UpdateIPBans(ipFilterList_t *ipFilterList) {
 		m[1] = (ipFilterList->ipFilters[i].mask >> 16) & 0xFF;
 		m[2] = (ipFilterList->ipFilters[i].mask >> 8) & 0xFF;
 		m[3] = ipFilterList->ipFilters[i].mask & 0xFF;
-		//*(unsigned *)b = ipFilterList->ipFilters[i].compare;
-		//*(unsigned *)m = ipFilterList->ipFilters[i].mask;
 
 		*ip = 0;
-		for (j = 0; j < 4 ; j++) {
+		for (j = 0; j < 4 ; ++j) {
 			if (m[j] != 255) {
 				Q_strcat(ip, sizeof (ip), "*");
 			} else {
@@ -213,7 +207,7 @@ qboolean G_FilterPacket(ipFilterList_t *ipFilterList, char *from) {
 	in = ((m[0] << 24) | (m[1] << 16) | (m[2] << 8) | (m[3]));
 	//in = *(unsigned *)m;
 
-	for (i = 0; i < ipFilterList->numIPFilters; i++)
+	for (i = 0; i < ipFilterList->numIPFilters; ++i)
 		if ((in & ipFilterList->ipFilters[i].mask) == ipFilterList->ipFilters[i].compare) {
 			return g_filterBan.integer != 0;
 		}
@@ -233,7 +227,7 @@ AddIP
 void AddIP(ipFilterList_t *ipFilterList, const char *str) {
 	int i;
 
-	for (i = 0; i < ipFilterList->numIPFilters; i++) {
+	for (i = 0; i < ipFilterList->numIPFilters; ++i) {
 		if (ipFilterList->ipFilters[i].compare == 0xffffffff) {
 			break;      // free spot
 		}
@@ -302,7 +296,6 @@ void Svcmd_AddIP_f(void) {
 	trap_Argv(1, str, sizeof (str));
 
 	AddIP(&ipFilters, str);
-
 }
 
 /*
@@ -326,7 +319,7 @@ void Svcmd_RemoveIP_f(void) {
 		return;
 	}
 
-	for (i = 0 ; i < ipFilters.numIPFilters ; i++) {
+	for (i = 0 ; i < ipFilters.numIPFilters ; ++i) {
 		if (ipFilters.ipFilters[i].mask == f.mask   &&
 		    ipFilters.ipFilters[i].compare == f.compare) {
 			ipFilters.ipFilters[i].compare = 0xffffffffu;
@@ -350,7 +343,7 @@ void    Svcmd_EntityList_f(void) {
 	gentity_t *check;
 
 	check = g_entities + 1;
-	for (e = 1; e < level.num_entities ; e++, check++) {
+	for (e = 1; e < level.num_entities ; ++e, ++check) {
 		if (!check->inuse) {
 			continue;
 		}

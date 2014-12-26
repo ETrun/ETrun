@@ -28,7 +28,6 @@ If you have questions concerning this license or the applicable additional terms
 
 #include "g_local.h"
 
-
 void InitTrigger(gentity_t *self) {
 	if (!VectorCompare(self->s.angles, vec3_origin)) {
 		G_SetMovedir(self->s.angles, self->movedir);
@@ -124,7 +123,6 @@ void Touch_Multi(gentity_t *self, gentity_t *other, trace_t *trace) {
 	multi_trigger(self, other);
 }
 
-
 /*QUAKED trigger_multiple (.5 .5 .5) ? AXIS_ONLY ALLIED_ONLY NOBOT BOTONLY SOLDIERONLY LTONLY MEDICONLY ENGINEERONLY COVERTOPSONLY
 "wait" : Seconds between triggerings, 0.5 default, -1 = one time only.
 "random"	wait variance, default is 0
@@ -164,8 +162,6 @@ void SP_trigger_multiple(gentity_t *ent) {
 	trap_LinkEntity(ent);
 }
 
-
-
 /*
 ==============================================================================
 
@@ -188,7 +184,6 @@ void SP_trigger_always(gentity_t *ent) {
 	ent->think     = trigger_always_think;
 }
 
-
 /*
 ==============================================================================
 
@@ -208,7 +203,6 @@ void trigger_push_touch(gentity_t *self, gentity_t *other, trace_t *trace) {
 
 	BG_TouchJumpPad(&other->client->ps, &self->s);
 }
-
 
 /*
 =================
@@ -270,7 +264,6 @@ void SP_trigger_push(gentity_t *self) {
 	self->nextthink = level.time + FRAMETIME;
 	trap_LinkEntity(self);
 }
-
 
 void Use_target_push(gentity_t *self, gentity_t *other, gentity_t *activator) {
 	// Nico, silent GCC
@@ -349,7 +342,6 @@ void trigger_teleporter_touch(gentity_t *self, gentity_t *other, trace_t *trace)
 	TeleportPlayer(other, dest->s.origin, dest->s.angles);
 }
 
-
 /*QUAKED trigger_teleport (.5 .5 .5) ?
 Allows client side prediction of teleportation events.
 Must point at a target_position, which will be the teleport destination.
@@ -368,8 +360,6 @@ void SP_trigger_teleport(gentity_t *self) {
 
 	trap_LinkEntity(self);
 }
-
-
 
 /*
 ==============================================================================
@@ -440,7 +430,6 @@ void hurt_think(gentity_t *ent) {
 	if (ent->wait < level.time) {
 		G_FreeEntity(ent);
 	}
-
 }
 
 void hurt_use(gentity_t *self, gentity_t *other, gentity_t *activator) {
@@ -721,7 +710,7 @@ void ammo_touch(gentity_t *self, gentity_t *other, trace_t *trace) {
 	}
 	self->timestamp = level.time + 1000;
 
-	for (i = 0; i < level.numConnectedClients; i++) {
+	for (i = 0; i < level.numConnectedClients; ++i) {
 		int j = level.sortedClients[i];
 
 		if (trap_EntityContactCapsule(g_entities[j].r.absmin, g_entities[j].r.absmax, self) && G_IsAllowedAmmo(&g_entities[j])) {
@@ -818,7 +807,6 @@ void SP_trigger_ammo(gentity_t *self) {
 	ammovalue = atoi(spawnstr);
 	// store the rate of ammo addition in damage
 	self->damage = ammovalue;
-
 }
 // END		xkan, 9/17/2002
 
@@ -829,7 +817,6 @@ timer
 
 ==============================================================================
 */
-
 
 /*QUAKED func_timer (0.3 0.1 0.6) (-8 -8 -8) (8 8 8) START_ON
 This should be renamed trigger_timer...
@@ -884,11 +871,7 @@ void SP_func_timer(gentity_t *self) {
 	self->r.svFlags = SVF_NOCLIENT;
 }
 
-
-
-
 //---- (SA) Wolf triggers
-
 
 /*QUAKED trigger_once (.5 .5 .5) ? AI_Touch
 Must be targeted at one or more entities.
@@ -913,7 +896,6 @@ void SP_gas(gentity_t *self) {
 	(void)self;
 }
 
-
 // DHM - Nerve :: Multiplayer triggers
 
 #define RED_FLAG 1
@@ -928,7 +910,6 @@ void Touch_flagonly(gentity_t *ent, gentity_t *other, trace_t *trace) {
 	if (!other->client) {
 		return;
 	}
-
 
 	if (ent->spawnflags & RED_FLAG && other->client->ps.powerups[PW_REDFLAG]) {
 
@@ -1138,7 +1119,6 @@ void constructible_indicator_think(gentity_t *ent) {
 				}
 			}
 		}
-
 
 		parent->count2 = 0;
 

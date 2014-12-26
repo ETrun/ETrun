@@ -97,7 +97,7 @@ qboolean    PM_SlideMove(qboolean gravity) {
 	VectorNormalize2(pm->ps->velocity, planes[numplanes]);
 	numplanes++;
 
-	for (bumpcount = 0 ; bumpcount < numbumps ; bumpcount++) {
+	for (bumpcount = 0 ; bumpcount < numbumps ; ++bumpcount) {
 
 		// calculate position we are trying to move to
 		VectorMA(pm->ps->origin, time_left, pm->ps->velocity, end);
@@ -144,7 +144,7 @@ qboolean    PM_SlideMove(qboolean gravity) {
 		// out along it, which fixes some epsilon issues with
 		// non-axial planes
 		//
-		for (i = 0 ; i < numplanes ; i++) {
+		for (i = 0 ; i < numplanes ; ++i) {
 			if (DotProduct(trace.plane.normal, planes[i]) > 0.99) {
 				if (extrabumps <= 0) {
 					VectorAdd(trace.plane.normal, pm->ps->velocity, pm->ps->velocity);
@@ -180,7 +180,7 @@ qboolean    PM_SlideMove(qboolean gravity) {
 		//
 
 		// find a plane that it enters
-		for (i = 0 ; i < numplanes ; i++) {
+		for (i = 0 ; i < numplanes ; ++i) {
 			into = DotProduct(pm->ps->velocity, planes[i]);
 			if (into >= 0.1) {
 				continue;       // move doesn't interact with the plane
@@ -198,7 +198,7 @@ qboolean    PM_SlideMove(qboolean gravity) {
 			PM_ClipVelocity(endVelocity, planes[i], endClipVelocity, OVERCLIP);
 
 			// see if there is a second plane that the new move enters
-			for (j = 0 ; j < numplanes ; j++) {
+			for (j = 0 ; j < numplanes ; ++j) {
 				if (j == i) {
 					continue;
 				}
@@ -227,7 +227,7 @@ qboolean    PM_SlideMove(qboolean gravity) {
 				VectorScale(dir, d, endClipVelocity);
 
 				// see if there is a third plane the the new move enters
-				for (k = 0 ; k < numplanes ; k++) {
+				for (k = 0 ; k < numplanes ; ++k) {
 					if (k == i || k == j) {
 						continue;
 					}

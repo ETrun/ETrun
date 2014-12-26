@@ -26,8 +26,6 @@ If you have questions concerning this license or the applicable additional terms
 ===========================================================================
 */
 
-
-
 // cg_predict.c -- this file generates cg.predictedPlayerState by either
 // interpolating between snapshots from the server or locally predicting
 // ahead the client's movement.
@@ -133,7 +131,7 @@ static void CG_ClipMoveToEntities(const vec3_t start, const vec3_t mins, const v
 	vec3_t        origin, angles;
 	centity_t     *cent;
 
-	for (i = 0 ; i < cg_numSolidEntities ; i++) {
+	for (i = 0 ; i < cg_numSolidEntities ; ++i) {
 		cent = cg_solidEntities[i];
 		ent  = &cent->currentState;
 
@@ -276,7 +274,6 @@ int     CG_PointContents(const vec3_t point, int passEntityNum) {
 	return contents;
 }
 
-
 /*
 ========================
 CG_InterpolatePlayerState
@@ -326,7 +323,7 @@ static void CG_InterpolatePlayerState(qboolean grabAngles) {
 	}
 	out->bobCycle = prev->ps.bobCycle + f * (i - prev->ps.bobCycle);
 
-	for (i = 0 ; i < 3 ; i++) {
+	for (i = 0 ; i < 3 ; ++i) {
 		out->origin[i] = prev->ps.origin[i] + f * (next->ps.origin[i] - prev->ps.origin[i]);
 		if (!grabAngles) {
 			out->viewangles[i] = LerpAngle(
@@ -439,7 +436,6 @@ static void CG_TouchTriggerPrediction(void) {
 
 #define RESET_PREDICTION                        \
 	useCommand = current - CMD_BACKUP + 1;
-
 
 /*
 =================
@@ -626,7 +622,7 @@ void CG_PredictPlayerState(void) {
 
 	// run cmds
 	moved = qfalse;
-	for (cmdNum = current - CMD_BACKUP + 1 ; cmdNum <= current ; cmdNum++) {
+	for (cmdNum = current - CMD_BACKUP + 1 ; cmdNum <= current ; ++cmdNum) {
 		// get the command
 		trap_GetUserCmd(cmdNum, &cg_pmove.cmd);
 		// get the previous command
@@ -763,7 +759,6 @@ void CG_PredictPlayerState(void) {
 		cg.cameraShakeScale = 0;
 	} else {
 		float x;
-
 
 		// starts at 1, approaches 0 over time
 		x = (cg.cameraShakeTime - cg.time) / cg.cameraShakeLength;

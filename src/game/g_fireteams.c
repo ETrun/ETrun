@@ -79,7 +79,7 @@ If you have questions concerning this license or the applicable additional terms
 fireteamData_t *G_FindFreeFireteam() {
 	int i;
 
-	for (i = 0; i < MAX_FIRETEAMS; i++) {
+	for (i = 0; i < MAX_FIRETEAMS; ++i) {
 		if (!level.fireTeams[i].inuse) {
 			return &level.fireTeams[i];
 		}
@@ -104,7 +104,7 @@ qboolean G_GetFireteam(fireteamData_t *ft) {
 int G_CountFireteams() {
 	int i, cnt = 0;
 
-	for (i = 0; i < MAX_FIRETEAMS; i++) {
+	for (i = 0; i < MAX_FIRETEAMS; ++i) {
 		if (G_GetFireteam(&level.fireTeams[i])) {
 			cnt++;
 		}
@@ -139,12 +139,12 @@ qboolean G_IsOnFireteam(int entityNum, fireteamData_t **teamNum) {
 		G_Error("G_IsOnFireteam: invalid client");
 	}
 
-	for (i = 0; i < MAX_FIRETEAMS; i++) {
+	for (i = 0; i < MAX_FIRETEAMS; ++i) {
 		if (!level.fireTeams[i].inuse) {
 			continue;
 		}
 
-		for (j = 0; j < MAX_CLIENTS; j++) {
+		for (j = 0; j < MAX_CLIENTS; ++j) {
 			if (level.fireTeams[i].joinOrder[j] == -1) {
 				break;
 			}
@@ -171,7 +171,7 @@ qboolean G_IsFireteamLeader(int entityNum, fireteamData_t **teamNum) {
 		G_Error("G_IsFireteamLeader: invalid client");
 	}
 
-	for (i = 0; i < MAX_FIRETEAMS; i++) {
+	for (i = 0; i < MAX_FIRETEAMS; ++i) {
 		if (!level.fireTeams[i].inuse) {
 			continue;
 		}
@@ -196,7 +196,7 @@ int G_FindFreeFireteamIdent() {
 
 	memset(freeIdent, qtrue, sizeof (freeIdent));
 
-	for (i = 0; i < MAX_FIRETEAMS; i++) {
+	for (i = 0; i < MAX_FIRETEAMS; ++i) {
 		if (!level.fireTeams[i].inuse) {
 			continue;
 		}
@@ -206,7 +206,7 @@ int G_FindFreeFireteamIdent() {
 		}
 	}
 
-	for (i = 0; i < MAX_FIRETEAMS; i++) {
+	for (i = 0; i < MAX_FIRETEAMS; ++i) {
 		if (freeIdent[i]) {
 			return i;
 		}
@@ -282,7 +282,7 @@ void G_AddClientToFireteam(int entityNum, int leaderNum) {
 		G_ClientPrintAndReturn(entityNum, "You are already on a fireteam");
 	}
 
-	for (i = 0; i < MAX_CLIENTS; i++) {
+	for (i = 0; i < MAX_CLIENTS; ++i) {
 
 		if (i >= 6) {
 			G_ClientPrintAndReturn(entityNum, "Too many players already on this Fireteam");
@@ -332,7 +332,7 @@ void G_RemoveClientFromFireteams(int entityNum, qboolean update, qboolean print)
 	}
 
 	if (print) {
-		for (i = 0; i < MAX_CLIENTS; i++) {
+		for (i = 0; i < MAX_CLIENTS; ++i) {
 			if (ft->joinOrder[i] == -1) {
 				break;
 			}
@@ -443,7 +443,6 @@ void G_KickFireTeamPlayer(int entityNum, int otherEntityNum) {
 		G_ClientPrintAndReturn(entityNum, "You are not on the same Fireteam as the other player");
 	}
 
-
 	G_RemoveClientFromFireteams(otherEntityNum, qtrue, qfalse);
 
 	G_ClientPrintAndReturn(otherEntityNum, "You have been kicked from the fireteam");
@@ -529,11 +528,10 @@ void G_ProposeFireTeamPlayer(int entityNum, int otherEntityNum) {
 	leader->client->pers.propositionEndTime = level.time + 20000;
 }
 
-
 int G_FireteamNumberForString(const char *name) {
 	int i, fireteam = 0;
 
-	for (i = 0; i < MAX_FIRETEAMS; i++) {
+	for (i = 0; i < MAX_FIRETEAMS; ++i) {
 		if (!level.fireTeams[i].inuse) {
 			continue;
 		}
@@ -605,7 +603,7 @@ void Cmd_FireTeam_MP_f(gentity_t *ent) {
 		}
 
 		trap_Argv(2, namebuffer, 32);
-		for (i = 0; i < MAX_CLIENTS; i++) {
+		for (i = 0; i < MAX_CLIENTS; ++i) {
 			if (!g_entities[i].inuse || !g_entities[i].client) {
 				continue;
 			}
@@ -637,7 +635,7 @@ void Cmd_FireTeam_MP_f(gentity_t *ent) {
 		}
 
 		trap_Argv(2, namebuffer, 32);
-		for (i = 0; i < MAX_CLIENTS; i++) {
+		for (i = 0; i < MAX_CLIENTS; ++i) {
 			if (!g_entities[i].inuse || !g_entities[i].client) {
 				continue;
 			}
@@ -669,7 +667,7 @@ void Cmd_FireTeam_MP_f(gentity_t *ent) {
 		}
 
 		trap_Argv(2, namebuffer, 32);
-		for (i = 0; i < MAX_CLIENTS; i++) {
+		for (i = 0; i < MAX_CLIENTS; ++i) {
 			if (!g_entities[i].inuse || !g_entities[i].client) {
 				continue;
 			}
@@ -701,7 +699,7 @@ void Cmd_FireTeam_MP_f(gentity_t *ent) {
 		}
 
 		trap_Argv(2, namebuffer, 32);
-		for (i = 0; i < MAX_CLIENTS; i++) {
+		for (i = 0; i < MAX_CLIENTS; ++i) {
 			if (!g_entities[i].inuse || !g_entities[i].client) {
 				continue;
 			}

@@ -26,8 +26,6 @@ If you have questions concerning this license or the applicable additional terms
 ===========================================================================
 */
 
-
-
 // g_local.h -- local definitions for game module
 
 #include "q_shared.h"
@@ -343,7 +341,6 @@ struct gentity_s {
 	char *dl_shader;
 	int dl_atten;
 
-
 	int key;                    // used by:  target_speaker->nopvs,
 
 	qboolean active;
@@ -566,7 +563,6 @@ typedef struct {
 
 	// Nico, country code (GeoIP)
 	unsigned int countryCode;
-
 } clientSession_t;
 
 #define PICKUP_ACTIVATE 0   // pickup items only when using "+activate"
@@ -670,7 +666,6 @@ typedef struct {
 
 	// Nico, autoload checkpoints
 	int autoLoadCheckpoints;
-
 } clientPersistant_t;
 
 typedef struct {
@@ -681,7 +676,6 @@ typedef struct {
 
 	int time;
 } clientMarker_t;
-
 
 #define MAX_CLIENT_MARKERS 10
 
@@ -798,7 +792,6 @@ typedef struct limbo_cam_s {
 } limbo_cam_t;
 
 #define MAX_LIMBO_CAMS 32
-
 
 // this structure is cleared as each map is entered
 #define MAX_SPAWN_VARS          64
@@ -1135,7 +1128,6 @@ team_t G_GetTeamFromEntity(gentity_t *ent);
 void strtolower(char *in, char *out, int size);
 void my_sleep(unsigned milliseconds);
 
-
 //
 // g_combat.c
 //
@@ -1218,7 +1210,6 @@ void mg42_fire(gentity_t *other);
 void mg42_stopusing(gentity_t *self);
 void aagun_fire(gentity_t *other);
 
-
 //
 // g_weapon.c
 //
@@ -1281,16 +1272,6 @@ void FireWeapon(gentity_t *ent);
 void G_BurnMeGood(gentity_t *self, gentity_t *body);
 
 //
-// p_hud.c
-//
-
-
-//
-// g_pweapon.c
-//
-
-
-//
 // g_main.c
 //
 
@@ -1328,8 +1309,6 @@ qboolean ReadyToThrowSmoke(gentity_t *ent);
 // Are we ready to construct?  Optionally, will also update the time while we are constructing
 qboolean ReadyToConstruct(gentity_t *ent, gentity_t *constructible, qboolean updateState);
 
-
-
 //
 // g_team.c
 //
@@ -1359,7 +1338,6 @@ void Cmd_Activate_f(gentity_t *ent);
 void Cmd_Activate2_f(gentity_t *ent);
 qboolean Do_Activate_f(gentity_t *ent, gentity_t *traceEnt);
 void G_LeaveTank(gentity_t *ent, qboolean position);
-
 
 // Ridah
 
@@ -1710,7 +1688,6 @@ void InitialServerEntitySetup();
 #define G_INVALID       -1
 #define G_NOTFOUND  -2
 
-
 #define AP(x) trap_SendServerCommand(-1, x)                     // Print to all
 #define CP(x) trap_SendServerCommand(ent - g_entities, x)         // Print to an ent
 #define CPx(x, y) trap_SendServerCommand(x, y)                  // Print to id = x
@@ -1738,7 +1715,6 @@ typedef enum {
 	DP_CONNECTINFO,     // Display OSP info on connect
 } enum_t_dp;
 
-
 // Remember: Axis = RED, Allies = BLUE ... right?!
 
 // Team extras
@@ -1762,7 +1738,6 @@ qboolean G_cmdDebounce(gentity_t *ent, const char *pszCommand);
 void G_commands_cmd(gentity_t *ent, unsigned int dwCommand, qboolean fValue);
 void G_players_cmd(gentity_t *ent, unsigned int dwCommand, qboolean fDump);
 void G_VoiceTo(gentity_t *ent, gentity_t *other, int mode, const char *id, qboolean voiceonly);
-
 
 ///////////////////////
 // g_match.c
@@ -1804,7 +1779,6 @@ qboolean G_AllowFollow(gentity_t *ent, gentity_t *other);
 qboolean G_DesiredFollow(gentity_t *ent, gentity_t *other);
 qboolean G_teamJoinCheck(int team_num, gentity_t *ent);
 void G_teamReset(int team_num);
-
 
 ///////////////////////
 // g_vote.c

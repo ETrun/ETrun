@@ -78,7 +78,6 @@ flags:
 ==============
 */
 
-
 // TODO: these flags will be shared, but it was easier to work on stuff if I wasn't changing header files a lot
 #define BAR_LEFT        0x0001
 #define BAR_CENTER      0x0002
@@ -135,7 +134,6 @@ void CG_FilledBar(float x, float y, float w, float h, float *startColor, float *
 		}
 	}
 
-
 	// adjust for horiz/vertical and draw the fractional box
 	if (flags & BAR_VERT) {
 		if (flags & BAR_LEFT) {      // TODO: remember to swap colors on the ends here
@@ -164,7 +162,6 @@ void CG_FilledBar(float x, float y, float w, float h, float *startColor, float *
 			CG_FillRect(x, y, w * frac, h, startColor);
 		}
 	}
-
 }
 
 /*
@@ -224,7 +221,6 @@ void CG_DrawRect_FixedBorder(float x, float y, float width, float height, int bo
 
 	trap_R_SetColor(NULL);
 }
-
 
 /*
 ================
@@ -550,8 +546,6 @@ static void CG_TileClearBox(int x, int y, int w, int h, qhandle_t hShader) {
 	trap_R_DrawStretchPic(x, y, w, h, s1, t1, s2, t2, hShader);
 }
 
-
-
 /*
 ==============
 CG_TileClear
@@ -588,8 +582,6 @@ void CG_TileClear(void) {
 	// clear right of view screen
 	CG_TileClearBox(right, top, w - right, bottom - top + 1, cgs.media.backTileShader);
 }
-
-
 
 /*
 ================

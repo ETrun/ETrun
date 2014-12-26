@@ -495,7 +495,6 @@ static void CG_DrawDisconnect(void) {
 	CG_DrawPic(x, y, 48, 48, cgs.media.disconnectIcon);
 }
 
-
 #define MAX_LAGOMETER_PING  900
 #define MAX_LAGOMETER_RANGE 300
 
@@ -612,7 +611,6 @@ CENTER PRINTING
 
 ===============================================================================
 */
-
 
 /*
 ==============
@@ -781,8 +779,6 @@ static void CG_DrawCenterString(void) {
 	trap_R_SetColor(NULL);
 }
 
-
-
 /*
 ================================================================================
 
@@ -824,7 +820,6 @@ static void CG_DrawWeapReticle(void) {
 		CG_FillRect(84, 239, 150, 3, colorBlack);     // left
 		CG_FillRect(234, 240, 173, 1, colorBlack);    // horiz center
 		CG_FillRect(407, 239, 150, 3, colorBlack);    // right
-
 
 		CG_FillRect(319, 2, 3, 151, colorBlack);      // top center top
 		CG_FillRect(320, 153, 1, 114, colorBlack);    // top center bot
@@ -1092,7 +1087,6 @@ static float CG_ScanForCrosshairEntity(float *zChange, qboolean *hitClient) {
 #define CH_WATER_DIST       100
 #define CH_BREAKABLE_DIST   64
 #define CH_DOOR_DIST        96
-
 #define CH_DIST             100 //128		// use the largest value from above
 
 /*
@@ -1106,7 +1100,6 @@ void CG_CheckForCursorHints(void) {
 	vec3_t    start, end;
 	centity_t *tracent;
 	float     dist;
-
 
 	if (cg.renderingThirdPerson) {
 		return;
@@ -1951,7 +1944,6 @@ static void CG_DrawPlayerHealthBar(rectDef_t *rect) {
 		frac = cg.snap->ps.stats[STAT_HEALTH] / (float) cg.snap->ps.stats[STAT_MAX_HEALTH];
 	}
 
-
 	CG_FilledBar(rect->x, rect->y + (rect->h * 0.1f), rect->w, rect->h * 0.84f, colour, NULL, bgcolour, frac, flags);
 
 	trap_R_SetColor(NULL);
@@ -2413,7 +2405,6 @@ void CG_DrawActive(stereoFrame_t stereoView) {
 		separation = 0;
 		CG_Error("CG_DrawActive: Undefined stereoView");
 	}
-
 
 	// clear around the rendered view if sized down
 	CG_TileClear();

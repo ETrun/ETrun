@@ -73,7 +73,6 @@ static char *netnames[] =
 static int gamecodetoui[] = { 4, 2, 3, 0, 5, 1, 6 };
 static int uitogamecode[] = { 4, 6, 2, 3, 1, 5, 7 };
 
-
 // NERVE - SMF - enabled for multiplayer
 static void UI_StartServerRefresh(qboolean full);
 static void UI_StopServerRefresh(void);
@@ -237,8 +236,6 @@ void _UI_DrawRect(float x, float y, float width, float height, float size, const
 
 	trap_R_SetColor(NULL);
 }
-
-
 
 // NERVE - SMF
 void Text_SetActiveFont(int font) {
@@ -634,7 +631,6 @@ static void Text_Paint_Limit(float *maxX, float x, float y, float scale, vec4_t 
 		}
 		trap_R_SetColor(NULL);
 	}
-
 }
 
 /*
@@ -704,7 +700,6 @@ void _UI_Refresh(int realtime) {
 			UI_DrawHandlePic(uiInfo.uiDC.cursorx, uiInfo.uiDC.cursory, 32, 32, uiInfo.uiDC.Assets.cursor);
 		}
 	}
-
 }
 
 /*
@@ -1744,7 +1739,6 @@ static int QDECL UI_ServersQsortCompare(const void *arg1, const void *arg2) {
 	return trap_LAN_CompareServers(ui_netSource.integer, uiInfo.serverStatus.sortKey, uiInfo.serverStatus.sortDir, *(int *)arg1, *(int *)arg2);
 }
 
-
 /*
 =================
 UI_ServersSort
@@ -1899,7 +1893,6 @@ static void UI_LoadMovies() {
 			moviename          += len + 1;
 		}
 	}
-
 }
 
 /*
@@ -1939,7 +1932,6 @@ static void UI_LoadDemos() {
 			demoname          += len + 1;
 		}
 	}
-
 }
 
 qboolean UI_CheckExecKey(int key) {
@@ -2940,7 +2932,7 @@ static void UI_InsertServerIntoDisplayList(int num, int position) {
 	}
 	//
 	uiInfo.serverStatus.numDisplayServers++;
-	for (i = uiInfo.serverStatus.numDisplayServers; i > position; i--) {
+	for (i = uiInfo.serverStatus.numDisplayServers; i > position; --i) {
 		uiInfo.serverStatus.displayServers[i] = uiInfo.serverStatus.displayServers[i - 1];
 	}
 	uiInfo.serverStatus.displayServers[position] = num;
@@ -3616,7 +3608,6 @@ static const char *UI_FileText(char *fileName) {
 }
 //----(SA)	end
 
-
 const char *UI_FeederItemText(float feederID, int index, int column, qhandle_t *handles, int *numhandles) {
 	*numhandles = 0;
 	if (feederID == FEEDER_MAPS || feederID == FEEDER_ALLMAPS) {
@@ -4041,7 +4032,6 @@ void _UI_Init(void) {
 	Q_strncpyz(translated_no, DC->translateString("NO"), sizeof (translated_no));
 }
 
-
 /*
 =================
 UI_KeyEvent
@@ -4101,7 +4091,6 @@ void _UI_MouseEvent(int dx, int dy) {
 	if (Menu_Count() > 0) {
 		Display_MouseMove(NULL, uiInfo.uiDC.cursorx, uiInfo.uiDC.cursory);
 	}
-
 }
 
 //----(SA)	added
@@ -4316,7 +4305,6 @@ void UI_DrawConnectScreen(qboolean overlay) {
 	}
 }
 
-
 /*
 ================
 cvars
@@ -4481,7 +4469,6 @@ cvarTable_t cvarTable[] =
 
 int cvarTableSize = sizeof (cvarTable) / sizeof (cvarTable[0]);
 
-
 /*
 =================
 UI_RegisterCvars
@@ -4555,7 +4542,6 @@ static void UI_StopServerRefresh(void) {
 		Com_Printf("%d servers not listed (filtered out by game browser settings)\n",
 		           count - uiInfo.serverStatus.numDisplayServers);
 	}
-
 }
 
 /*

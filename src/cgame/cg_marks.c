@@ -38,7 +38,6 @@ MARK POLYS
 ===================================================================
 */
 
-
 markPoly_t cg_activeMarkPolys;          // double linked list
 markPoly_t *cg_freeMarkPolys;           // single linked list
 markPoly_t cg_markPolys[MAX_MARK_POLYS];
@@ -59,12 +58,11 @@ void CG_InitMarkPolys(void) {
 	cg_activeMarkPolys.nextMark = &cg_activeMarkPolys;
 	cg_activeMarkPolys.prevMark = &cg_activeMarkPolys;
 	cg_freeMarkPolys            = cg_markPolys;
-	for (i = 0, trav = cg_markPolys + 1, lasttrav = cg_markPolys ; i < MAX_MARK_POLYS - 1 ; i++, trav++) {
+	for (i = 0, trav = cg_markPolys + 1, lasttrav = cg_markPolys ; i < MAX_MARK_POLYS - 1 ; ++i, ++trav) {
 		lasttrav->nextMark = trav;
 		lasttrav           = trav;
 	}
 }
-
 
 /*
 ==================
@@ -107,7 +105,7 @@ void CG_ImpactMark(qhandle_t markShader, vec3_t origin, vec4_t projection, float
 	VectorMA(origin, -1.0f, axis[0], pushedOrigin);
 
 	/* create the full polygon */
-	for (i = 0; i < 3; i++) {
+	for (i = 0; i < 3; ++i) {
 		/* new */
 		points[0][i] = pushedOrigin[i] - radius * axis[1][i] - radius * axis[2][i];
 		points[1][i] = pushedOrigin[i] - radius * axis[1][i] + radius * axis[2][i];
@@ -161,11 +159,11 @@ void CG_AddMarks(void) {
 		if (t < (float)mp->duration / 2.0) {
 			fade = (int)(255.0 * (float)t / ((float)mp->duration / 2.0));
 			if (mp->alphaFade) {
-				for (j = 0 ; j < mp->poly.numVerts ; j++) {
+				for (j = 0 ; j < mp->poly.numVerts ; ++j) {
 					mp->verts[j].modulate[3] = fade;
 				}
 			} else {
-				for (j = 0 ; j < mp->poly.numVerts ; j++) {
+				for (j = 0 ; j < mp->poly.numVerts ; ++j) {
 					mp->verts[j].modulate[0] = mp->color[0] * fade;
 					mp->verts[j].modulate[1] = mp->color[1] * fade;
 					mp->verts[j].modulate[2] = mp->color[2] * fade;

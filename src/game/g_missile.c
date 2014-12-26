@@ -658,7 +658,7 @@ void G_FlameDamage(gentity_t *self, gentity_t *ignoreent) {
 	radius    = self->speed;
 	boxradius = 1.41421356 * radius; // radius * sqrt(2) for bounding box enlargement
 
-	for (i = 0 ; i < 3 ; i++) {
+	for (i = 0 ; i < 3 ; ++i) {
 		mins[i] = self->r.currentOrigin[i] - boxradius;
 		maxs[i] = self->r.currentOrigin[i] + boxradius;
 	}
@@ -881,7 +881,7 @@ void G_FadeItems(gentity_t *ent, int modType) {
 	int       i;
 
 	e = &g_entities[MAX_CLIENTS];
-	for (i = MAX_CLIENTS ; i < level.num_entities ; i++, e++) {
+	for (i = MAX_CLIENTS ; i < level.num_entities ; ++i, ++e) {
 		if (!e->inuse) {
 			continue;
 		}
@@ -917,7 +917,7 @@ qboolean G_ExplodeSatchels(gentity_t *ent) {
 	qboolean  blown = qfalse;
 
 	e = &g_entities[MAX_CLIENTS];
-	for (i = MAX_CLIENTS ; i < level.num_entities; i++, e++) {
+	for (i = MAX_CLIENTS ; i < level.num_entities; ++i, ++e) {
 		if (!e->inuse) {
 			continue;
 		}
@@ -1304,7 +1304,6 @@ qboolean visible(gentity_t *self, gentity_t *other) {
 	}
 
 	return qfalse;
-
 }
 
 /*

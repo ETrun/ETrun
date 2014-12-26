@@ -41,7 +41,6 @@ char *UI_Argv(int arg) {
 	return buffer;
 }
 
-
 char *UI_Cvar_VariableString(const char *var_name) {
 	static char buffer[2][MAX_STRING_CHARS];
 	static int  toggle;
@@ -88,7 +87,6 @@ qboolean UI_ConsoleCommand(int realTime) {
 	if (Q_stricmp(cmd, "ui_teamOrders") == 0) {
 		return qtrue;
 	}
-
 
 	if (Q_stricmp(cmd, "ui_cdkey") == 0) {
 		return qtrue;

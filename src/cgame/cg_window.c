@@ -42,13 +42,12 @@ If you have questions concerning this license or the applicable additional terms
 //////////////////////////////////////////////
 //////////////////////////////////////////////
 
-
 // Windowing system setup
 void CG_windowInit(void) {
 	int i;
 
 	cg.winHandler.numActiveWindows = 0;
-	for (i = 0; i < MAX_WINDOW_COUNT; i++) {
+	for (i = 0; i < MAX_WINDOW_COUNT; ++i) {
 		cg.winHandler.window[i].inuse = qfalse;
 	}
 }
@@ -68,9 +67,9 @@ void CG_windowFree(cg_window_t *w) {
 		return;
 	}
 
-	for (i = 0; i < wh->numActiveWindows; i++) {
+	for (i = 0; i < wh->numActiveWindows; ++i) {
 		if (w == &wh->window[wh->activeWindows[i]]) {
-			for (j = i; j < wh->numActiveWindows; j++) {
+			for (j = i; j < wh->numActiveWindows; ++j) {
 				if (j + 1 < wh->numActiveWindows) {
 					// Nico, #fixme: GCC 4.8.2 with optimization says
 					// warning: array subscript is above array bounds
@@ -126,7 +125,6 @@ void CG_demoTimescaleDraw(void) {
 	}
 }
 
-
 // Main window-drawing handler
 void CG_windowDraw(void) {
 	int         h, x, y, i, j, milli, t_offset, tmp;
@@ -148,7 +146,7 @@ void CG_windowDraw(void) {
 
 	// Mouse cursor position for MV highlighting (offset for cursor pointer position)
 	// Also allow for swingcam toggling
-	for (i = 0; i < cg.winHandler.numActiveWindows; i++) {
+	for (i = 0; i < cg.winHandler.numActiveWindows; ++i) {
 		w = &cg.winHandler.window[cg.winHandler.activeWindows[i]];
 
 		if (!w->inuse || w->state == WSTATE_OFF) {
@@ -221,7 +219,7 @@ void CG_windowDraw(void) {
 		x += 5;
 		y -= (w->effects & WFX_TRUETYPE) ? 3 : 0;
 
-		for (j = w->lineCount - 1; j >= 0; j--) {
+		for (j = w->lineCount - 1; j >= 0; --j) {
 			if (w->effects & WFX_TRUETYPE) {
 				CG_Text_Paint_Ext(x, y + h, w->fontScaleX, w->fontScaleY, textColor,
 				                  (char *)w->lineText[j], 0.0f, 0, 0, &cgs.media.limboFont2);
@@ -245,7 +243,6 @@ void CG_windowDraw(void) {
 	}
 }
 
-
 // Set the window width and height based on the windows text/font parameters
 void CG_windowNormalizeOnText(cg_window_t *w) {
 	int i, tmp;
@@ -262,7 +259,7 @@ void CG_windowNormalizeOnText(cg_window_t *w) {
 		w->fontHeight = w->fontScaleY * WINDOW_FONTHEIGHT;
 	}
 
-	for (i = 0; i < w->lineCount; i++) {
+	for (i = 0; i < w->lineCount; ++i) {
 		if (w->effects & WFX_TRUETYPE) {
 			tmp = CG_Text_Width_Ext((char *)w->lineText[i], w->fontScaleX, 0, &cgs.media.limboFont2);
 		} else {
@@ -274,7 +271,7 @@ void CG_windowNormalizeOnText(cg_window_t *w) {
 		}
 	}
 
-	for (i = 0; i < w->lineCount; i++) {
+	for (i = 0; i < w->lineCount; ++i) {
 		if (w->effects & WFX_TRUETYPE) {
 			w->lineHeight[i] = CG_Text_Height_Ext((char *)w->lineText[i], w->fontScaleY, 0, &cgs.media.limboFont2);
 		} else {
@@ -303,7 +300,7 @@ void CG_windowNormalizeOnText(cg_window_t *w) {
 void CG_initStrings(void) {
 	int i;
 
-	for (i = 0; i < MAX_STRINGS; i++) {
+	for (i = 0; i < MAX_STRINGS; ++i) {
 		cg.aStringPool[i].fActive = qfalse;
 		cg.aStringPool[i].str[0]  = 0;
 	}
@@ -312,10 +309,10 @@ void CG_initStrings(void) {
 void CG_removeStrings(cg_window_t *w) {
 	int i, j;
 
-	for (i = 0; i < w->lineCount; i++) {
+	for (i = 0; i < w->lineCount; ++i) {
 		char *ref = w->lineText[i];
 
-		for (j = 0; j < MAX_STRINGS; j++) {
+		for (j = 0; j < MAX_STRINGS; ++j) {
 			if (!cg.aStringPool[j].fActive) {
 				continue;
 			}

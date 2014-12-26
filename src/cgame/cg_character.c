@@ -63,7 +63,7 @@ static qboolean CG_ParseHudHeadConfig(const char *filename, animation_t *hha) {
 	// parse the text
 	text_p = bigTextBuffer;
 
-	for (i = 0 ; i < MAX_HD_ANIMATIONS ; i++) {
+	for (i = 0 ; i < MAX_HD_ANIMATIONS ; ++i) {
 		float        fps;
 		char         *token;
 
@@ -132,7 +132,7 @@ static void CG_CalcMoveSpeeds(bg_character_t *character) {
 
 	refent.hModel = character->mesh;
 
-	for (i = 0; i < character->animModelInfo->numAnimations; i++) {
+	for (i = 0; i < character->animModelInfo->numAnimations; ++i) {
 		anim = character->animModelInfo->animations[i];
 
 		if (anim->moveSpeed >= 0) {
@@ -143,14 +143,14 @@ static void CG_CalcMoveSpeeds(bg_character_t *character) {
 		numSpeed   = 0;
 
 		// for each frame
-		for (j = 0; j < anim->numFrames; j++) {
+		for (j = 0; j < anim->numFrames; ++j) {
 
 			refent.frame           = anim->firstFrame + j;
 			refent.oldframe        = refent.frame;
 			refent.torsoFrameModel = refent.oldTorsoFrameModel = refent.frameModel = refent.oldframeModel = anim->mdxFile;
 
 			// for each foot
-			for (k = 0; k < 2; k++) {
+			for (k = 0; k < 2; ++k) {
 				if (trap_R_LerpTag(&o[k], &refent, tags[k], 0) < 0) {
 					CG_Error("CG_CalcMoveSpeeds: unable to find tag %s, cannot calculate movespeed", tags[k]);
 				}
@@ -176,7 +176,7 @@ static void CG_CalcMoveSpeeds(bg_character_t *character) {
 			numSpeed++;
 
 			// save the positions
-			for (k = 0; k < 2; k++) {
+			for (k = 0; k < 2; ++k) {
 				VectorCopy(o[k].origin, oldPos[k]);
 			}
 		}
@@ -239,7 +239,7 @@ static qboolean CG_CheckForExistingAnimModelInfo(const char *animationGroup, con
 	int             i;
 	animModelInfo_t *trav, *firstFree = NULL;
 
-	for (i = 0, trav = cgs.animScriptData.modelInfo; i < MAX_ANIMSCRIPT_MODELS; i++, trav++) {
+	for (i = 0, trav = cgs.animScriptData.modelInfo; i < MAX_ANIMSCRIPT_MODELS; ++i, ++trav) {
 		if (*trav->animationGroup && *trav->animationScript) {
 			if (!Q_stricmp(trav->animationGroup, animationGroup) && !Q_stricmp(trav->animationScript, animationScript)) {
 				// found a match, use this animModelInfo
@@ -343,7 +343,7 @@ qboolean CG_RegisterCharacter(const char *characterFile, bg_character_t *charact
 		char              accessoryname[MAX_QPATH];
 		int               i;
 
-		for (i = 0; i < cg_numAccessories; i++) {
+		for (i = 0; i < cg_numAccessories; ++i) {
 			if (trap_R_GetSkinModel(character->skin, cg_accessories[i].type, accessoryname)) {
 				if (!CG_RegisterAcc(accessoryname, &character->accModels[cg_accessories[i].index], characterDef.skin, &character->accSkins[cg_accessories[i].index])) {
 					CG_Printf(S_COLOR_YELLOW "WARNING: failed to register accessory '%s' referenced from '%s'->'%s'\n", accessoryname, characterFile, filename);
@@ -351,7 +351,7 @@ qboolean CG_RegisterCharacter(const char *characterFile, bg_character_t *charact
 			}
 		}
 
-		for (i = 0; i < cg_numHeadAccessories; i++) {
+		for (i = 0; i < cg_numHeadAccessories; ++i) {
 			if (trap_R_GetSkinModel(character->skin, cg_headAccessories[i].type, accessoryname)) {
 				if (!CG_RegisterAcc(accessoryname, &character->accModels[cg_headAccessories[i].index], characterDef.skin, &character->accSkins[cg_headAccessories[i].index])) {
 					CG_Printf(S_COLOR_YELLOW "WARNING: failed to register accessory '%s' referenced from '%s'->'%s'\n", accessoryname, characterFile, filename);
@@ -442,8 +442,8 @@ void CG_RegisterPlayerClasses(void) {
 	bg_character_t   *character;
 	int              team, cls;
 
-	for (team = TEAM_AXIS; team <= TEAM_ALLIES; team++) {
-		for (cls = PC_SOLDIER; cls < NUM_PLAYER_CLASSES; cls++) {
+	for (team = TEAM_AXIS; team <= TEAM_ALLIES; ++team) {
+		for (cls = PC_SOLDIER; cls < NUM_PLAYER_CLASSES; ++cls) {
 			classInfo = BG_GetPlayerClassInfo(team, cls);
 			character = BG_GetCharacter(team, cls);
 

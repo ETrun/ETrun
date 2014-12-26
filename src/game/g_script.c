@@ -325,7 +325,7 @@ int G_Script_EventForString(const char *string) {
 
 	hash = BG_StringHashValue_Lwr(string);
 
-	for (i = 0; gScriptEvents[i].eventStr; i++) {
+	for (i = 0; gScriptEvents[i].eventStr; ++i) {
 		if (gScriptEvents[i].hash == hash && !Q_stricmp(string, gScriptEvents[i].eventStr)) {
 			return i;
 		}
@@ -344,7 +344,7 @@ g_script_stack_action_t *G_Script_ActionForString(char *string) {
 
 	hash = BG_StringHashValue_Lwr(string);
 
-	for (i = 0; gScriptActions[i].actionString; i++) {
+	for (i = 0; gScriptActions[i].actionString; ++i) {
 		if (gScriptActions[i].hash == hash && !Q_stricmp(string, gScriptActions[i].actionString)) {
 			return &gScriptActions[i];
 		}
@@ -655,7 +655,7 @@ void G_Script_ScriptParse(gentity_t *ent) {
 					G_Script_ParseSpawnbot(&pScript, params, MAX_INFO_STRING);
 				} else {
 					token = COM_ParseExt(&pScript, qfalse);
-					for (i = 0; token[0]; i++) {
+					for (i = 0; token[0]; ++i) {
 						if (strlen(params)) {     // add a space between each param
 							Q_strcat(params, sizeof (params), " ");
 						}
@@ -762,11 +762,11 @@ void G_Script_ScriptChange(gentity_t *ent, int newScriptNum) {
 void G_Script_EventStringInit(void) {
 	int i;
 
-	for (i = 0; gScriptEvents[i].eventStr; i++) {
+	for (i = 0; gScriptEvents[i].eventStr; ++i) {
 		gScriptEvents[i].hash = BG_StringHashValue_Lwr(gScriptEvents[i].eventStr);
 	}
 
-	for (i = 0; gScriptActions[i].actionString; i++) {
+	for (i = 0; gScriptActions[i].actionString; ++i) {
 		gScriptActions[i].hash = BG_StringHashValue_Lwr(gScriptActions[i].actionString);
 	}
 }
@@ -785,7 +785,7 @@ int G_Script_GetEventIndex(gentity_t *ent, char *eventStr, char *params) {
 	int hash = BG_StringHashValue_Lwr(eventStr);
 
 	// find out which event this is
-	for (i = 0; gScriptEvents[i].eventStr; i++) {
+	for (i = 0; gScriptEvents[i].eventStr; ++i) {
 		if (gScriptEvents[i].hash == hash && !Q_stricmp(eventStr, gScriptEvents[i].eventStr)) {     // match found
 			eventNum = i;
 			break;
@@ -802,7 +802,7 @@ int G_Script_GetEventIndex(gentity_t *ent, char *eventStr, char *params) {
 	}
 
 	// see if this entity has this event
-	for (i = 0; i < ent->numScriptEvents; i++) {
+	for (i = 0; i < ent->numScriptEvents; ++i) {
 		if (ent->scriptEvents[i].eventNum == eventNum &&
 		    (!ent->scriptEvents[i].params ||
 		     (!gScriptEvents[eventNum].eventMatch ||

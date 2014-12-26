@@ -26,8 +26,6 @@ If you have questions concerning this license or the applicable additional terms
 ===========================================================================
 */
 
-
-
 #include "cg_local.h"
 
 #define MAX_PB_BUFFERS  128
@@ -39,7 +37,7 @@ polyBuffer_t *CG_PB_FindFreePolyBuffer(qhandle_t shader, int numVerts, int numIn
 	int i;
 
 	// Gordon: first find one with the same shader if possible
-	for (i = 0; i < MAX_PB_BUFFERS; i++) {
+	for (i = 0; i < MAX_PB_BUFFERS; ++i) {
 		if (cg_polyBuffers[i].shader != shader) {
 			continue;
 		}
@@ -63,7 +61,7 @@ polyBuffer_t *CG_PB_FindFreePolyBuffer(qhandle_t shader, int numVerts, int numIn
 	}
 
 	// Gordon: or just find a free one
-	for (i = 0; i < MAX_PB_BUFFERS; i++) {
+	for (i = 0; i < MAX_PB_BUFFERS; ++i) {
 		if (!cg_polyBuffersInuse[i]) {
 			cg_polyBuffersInuse[i]        = qtrue;
 			cg_polyBuffers[i].shader      = shader;
@@ -85,7 +83,7 @@ void CG_PB_ClearPolyBuffers(void) {
 void CG_PB_RenderPolyBuffers(void) {
 	int i;
 
-	for (i = 0; i < MAX_PB_BUFFERS; i++) {
+	for (i = 0; i < MAX_PB_BUFFERS; ++i) {
 		if (cg_polyBuffersInuse[i]) {
 			trap_R_AddPolyBufferToScene(&cg_polyBuffers[i]);
 		}

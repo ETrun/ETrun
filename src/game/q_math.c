@@ -29,10 +29,8 @@ If you have questions concerning this license or the applicable additional terms
 // q_math.c -- stateless support routines that are included in each code module
 #include "q_shared.h"
 
-
 vec3_t vec3_origin = { 0, 0, 0 };
 vec3_t axisDefault[3] = { { 1, 0, 0 }, { 0, 1, 0 }, { 0, 0, 1 } };
-
 
 vec4_t colorBlack = { 0, 0, 0, 1 };
 vec4_t colorRed = { 1, 0, 0, 1 };
@@ -201,7 +199,6 @@ float   Q_crandom(int *seed) {
 	return 2.0 * (Q_random(seed) - 0.5);
 }
 
-
 //=======================================================
 
 // this isn't a real cheap function to call!
@@ -294,11 +291,10 @@ void RotatePointAroundVector(vec3_t dst, const vec3_t dir, const vec3_t point,
 	MatrixMultiply(m, zrot, tmpmat);
 	MatrixMultiply(tmpmat, im, rot);
 
-	for (i = 0; i < 3; i++) {
+	for (i = 0; i < 3; ++i) {
 		dst[i] = rot[i][0] * point[0] + rot[i][1] * point[1] + rot[i][2] * point[2];
 	}
 }
-
 
 /*
 ===============
@@ -321,8 +317,6 @@ void RotateAroundDirection(vec3_t axis[3], float yaw) {
 	// cross to get axis[2]
 	CrossProduct(axis[0], axis[1], axis[2]);
 }
-
-
 
 void vectoangles(const vec3_t value1, vec3_t angles) {
 	float yaw, pitch;
@@ -359,7 +353,6 @@ void vectoangles(const vec3_t value1, vec3_t angles) {
 	angles[YAW]   = yaw;
 	angles[ROLL]  = 0;
 }
-
 
 /*
 =================
@@ -505,13 +498,11 @@ float AngleSubtract(float a1, float a2) {
 	return a;
 }
 
-
 void AnglesSubtract(vec3_t v1, vec3_t v2, vec3_t v3) {
 	v3[0] = AngleSubtract(v1[0], v2[0]);
 	v3[1] = AngleSubtract(v1[1], v2[1]);
 	v3[2] = AngleSubtract(v1[2], v2[2]);
 }
-
 
 float AngleMod(float a) {
 	return (360.0 / 65536) * ((int)(a * (65536 / 360.0)) & 65535);
@@ -528,7 +519,6 @@ float AngleNormalize360(float angle) {
 	return (360.0 / 65536) * ((int)(angle * (65536 / 360.0)) & 65535);
 }
 
-
 /*
 =================
 AngleNormalize180
@@ -544,7 +534,6 @@ float AngleNormalize180(float angle) {
 	return angle;
 }
 
-
 /*
 =================
 AngleDelta
@@ -555,7 +544,6 @@ returns the normalized delta from angle1 to angle2
 float AngleDelta(float angle1, float angle2) {
 	return AngleNormalize180(angle1 - angle2);
 }
-
 
 //============================================================
 
@@ -610,7 +598,6 @@ int VectorCompare(const vec3_t v1, const vec3_t v2) {
 	return 1;
 }
 
-
 vec_t VectorNormalize(vec3_t v) {
 	float length = v[0] * v[0] + v[1] * v[1] + v[2] * v[2];
 
@@ -657,7 +644,6 @@ vec_t VectorNormalize2(const vec3_t v, vec3_t out) {
 	}
 
 	return length;
-
 }
 
 void CrossProduct(const vec3_t v1, const vec3_t v2, vec3_t cross) {
@@ -711,7 +697,6 @@ void MatrixMultiply(float in1[3][3], float in2[3][3], float out[3][3]) {
 	out[2][2] = in1[2][0] * in2[0][2] + in1[2][1] * in2[1][2] + in1[2][2] * in2[2][2];
 }
 
-
 void AngleVectors(const vec3_t angles, vec3_t forward, vec3_t right, vec3_t up) {
 	float        angle;
 	static float sr, sp, sy, cr, cp, cy;
@@ -759,7 +744,7 @@ void PerpendicularVector(vec3_t dst, const vec3_t src) {
 	/*
 	** find the smallest magnitude axially aligned vector
 	*/
-	for (pos = 0, i = 0; i < 3; i++) {
+	for (pos = 0, i = 0; i < 3; ++i) {
 		if (Q_fabs(src[i]) < minelem) {
 			pos     = i;
 			minelem = Q_fabs(src[i]);

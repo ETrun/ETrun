@@ -31,7 +31,6 @@ If you have questions concerning this license or the applicable additional terms
 
 #include "cg_local.h"
 
-
 /*
 ==================
 CG_BubbleTrail
@@ -139,7 +138,6 @@ localEntity_t *CG_SmokePuff(const vec3_t p, const vec3_t vel,
 	le->color[1] = g;
 	le->color[2] = b;
 	le->color[3] = a;
-
 
 	le->pos.trType = TR_LINEAR;
 	le->pos.trTime = startTime;
@@ -278,7 +276,7 @@ int CG_GetOriginForTag(refEntity_t *parent, char *tagName, int startIndex, vec3_
 
 	VectorCopy(parent->origin, org);
 
-	for (i = 0 ; i < 3 ; i++) {
+	for (i = 0 ; i < 3 ; ++i) {
 		VectorMA(org, lerped.origin[i], parent->axis[i], org);
 	}
 
@@ -309,11 +307,6 @@ CG_Spotlight
     SL_NOIMPACT			- don't draw the impact mark on hit surfaces
     SL_LOCKUV			- lock the texture coordinates at the 'true' length of the requested beam.
     SL_NOCORE			- don't draw the center 'core' beam
-
-
-
-
-
 
   I know, this is a bit kooky right now.  It evolved big, but now that I know what it should do, it'll get
   crunched down to a bunch of table driven stuff.  once it works, I'll make it work well...
@@ -351,7 +344,7 @@ void CG_Spotlight(centity_t *cent, float *color, vec3_t realstart, vec3_t lightD
 
 	// normalize color
 	colorNorm[3] = 0;   // store normalize multiplier in alpha index
-	for (i = 0; i < 3; i++) {
+	for (i = 0; i < 3; ++i) {
 		if (color[i] > colorNorm[3]) {
 			colorNorm[3] = color[i];    // find largest color value in RGB
 		}
@@ -363,7 +356,6 @@ void CG_Spotlight(centity_t *cent, float *color, vec3_t realstart, vec3_t lightD
 		VectorCopy(color, colorNorm);
 	}
 	colorNorm[3] = color[3];
-
 
 	if (flags & SL_NOSTARTCAP) {
 		capStart = qfalse;
@@ -390,7 +382,6 @@ void CG_Spotlight(centity_t *cent, float *color, vec3_t realstart, vec3_t lightD
 		}
 	}
 
-
 	if (tr.fraction < 1.0) {
 		hitDist = beamLen = MAX_SPOT_RANGE * tr.fraction;
 		if (beamLen > range) {
@@ -401,11 +392,9 @@ void CG_Spotlight(centity_t *cent, float *color, vec3_t realstart, vec3_t lightD
 		beamLen = range;
 	}
 
-
 	if (flags & SL_LOCKUV && beamLen < range) {
 		endAlpha = 255.0f * (color[3] - (color[3] * beamLen / range));
 	}
-
 
 	if (segs >= MAX_SPOT_SEGS) {
 		segs = MAX_SPOT_SEGS - 1;
@@ -413,7 +402,6 @@ void CG_Spotlight(centity_t *cent, float *color, vec3_t realstart, vec3_t lightD
 
 	// TODO: adjust segs based on r_lodbias
 	// TODO: move much of this to renderer
-
 
 // model at base
 	if (cent->currentState.modelindex) {
@@ -473,7 +461,7 @@ void CG_Spotlight(centity_t *cent, float *color, vec3_t realstart, vec3_t lightD
 		VectorMA(endCenter, coreEndRadius * CORESCALE, coreright, coreverts[3].xyz);
 		VectorAdd(start, coreverts[3].xyz, coreverts[3].xyz);
 
-		for (i = 0; i < 4; i++) {
+		for (i = 0; i < 4; ++i) {
 			coreverts[i].modulate[0] = color[0] * 200.0f;
 			coreverts[i].modulate[1] = color[1] * 200.0f;
 			coreverts[i].modulate[2] = color[2] * 200.0f;
@@ -486,12 +474,11 @@ void CG_Spotlight(centity_t *cent, float *color, vec3_t realstart, vec3_t lightD
 		trap_R_AddPolyToScene(cgs.media.spotLightBeamShader, 4, &coreverts[0]);
 	}
 
-
 //
 // generate the beam cylinder
 //
 
-	for (i = 0; i <= segs; i++) {
+	for (i = 0; i <= segs; ++i) {
 		RotatePointAroundVector(start_points[i], lightDir, startvec, (360.0f / (float)segs) * i);
 		VectorAdd(start_points[i], start, start_points[i]);
 
@@ -499,7 +486,7 @@ void CG_Spotlight(centity_t *cent, float *color, vec3_t realstart, vec3_t lightD
 		VectorAdd(end_points[i], start, end_points[i]);
 	}
 
-	for (i = 0; i < segs; i++) {
+	for (i = 0; i < segs; ++i) {
 		int j;
 
 		j = (i * 4);
@@ -622,10 +609,7 @@ void CG_Spotlight(centity_t *cent, float *color, vec3_t realstart, vec3_t lightD
 			trap_R_AddCoronaToScene(start, colorNorm[0], colorNorm[1], colorNorm[2], 0, cent->currentState.number, qfalse);
 		}
 	}
-
 }
-
-
 
 /*
 ==============
@@ -711,7 +695,7 @@ void InitSmokeSprites(void) {
 	int i;
 
 	memset(&SmokeSprites, 0, sizeof (SmokeSprites));
-	for (i = 0; i < MAX_SMOKESPRITES - 1; i++) {
+	for (i = 0; i < MAX_SMOKESPRITES - 1; ++i) {
 		SmokeSprites[i].next = &SmokeSprites[i + 1];
 	}
 

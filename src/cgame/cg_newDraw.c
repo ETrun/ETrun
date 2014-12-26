@@ -26,7 +26,6 @@ If you have questions concerning this license or the applicable additional terms
 ===========================================================================
 */
 
-
 #include "cg_local.h"
 
 /*
@@ -61,7 +60,6 @@ static int weapIconDrawSize(int weap) {
 
 	return 1;
 }
-
 
 /*
 ==============
@@ -159,7 +157,6 @@ void CG_DrawPlayerWeaponIcon(rectDef_t *rect, int align, vec4_t *refcolor) {
 			w = rect->w + scale;
 			h = rect->h + scale;
 		}
-
 
 		trap_R_SetColor(hcolor);   // JPW NERVE
 		CG_DrawPic(x, y, w, h, icon);
@@ -420,7 +417,6 @@ void CG_DrawWeapStability(rectDef_t *rect) {
 	CG_FilledBar(rect->x, rect->y, rect->w, rect->h, goodColor, badColor, NULL, (float)cg.snap->ps.aimSpreadScale / 255.0f, 2 | 4 | 256);   // flags (BAR_CENTER|BAR_VERT|BAR_LERP_COLOR)
 }
 
-
 /*
 ==============
 CG_DrawWeapHeat
@@ -490,7 +486,6 @@ void CG_MouseEvent(int x, int y) {
 		}
 		break;
 
-
 	default:
 		// default handling
 		if ((cg.predictedPlayerState.pm_type == PM_NORMAL ||
@@ -554,7 +549,6 @@ void CG_EventHandling(int type, qboolean fForced) {
 		}
 		break;
 	}
-
 
 	cgs.eventHandling = type;
 

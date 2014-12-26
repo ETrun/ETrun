@@ -84,7 +84,7 @@ static qboolean G_CheckForExistingAnimModelInfo(const char *animationGroup, cons
 	int             i;
 	animModelInfo_t *trav, *firstFree = NULL;
 
-	for (i = 0, trav = level.animScriptData.modelInfo; i < MAX_ANIMSCRIPT_MODELS; i++, trav++) {
+	for (i = 0, trav = level.animScriptData.modelInfo; i < MAX_ANIMSCRIPT_MODELS; ++i, ++trav) {
 		if (*trav->animationGroup && *trav->animationScript) {
 			if (!Q_stricmp(trav->animationGroup, animationGroup) && !Q_stricmp(trav->animationScript, animationScript)) {
 				// found a match, use this animModelInfo
@@ -142,8 +142,8 @@ void G_RegisterPlayerClasses(void) {
 	bg_character_t   *character;
 	int              team, cls;
 
-	for (team = TEAM_AXIS; team <= TEAM_ALLIES; team++) {
-		for (cls = PC_SOLDIER; cls < NUM_PLAYER_CLASSES; cls++) {
+	for (team = TEAM_AXIS; team <= TEAM_ALLIES; ++team) {
+		for (cls = PC_SOLDIER; cls < NUM_PLAYER_CLASSES; ++cls) {
 			classInfo = BG_GetPlayerClassInfo(team, cls);
 			character = BG_GetCharacter(team, cls);
 

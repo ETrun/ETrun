@@ -386,7 +386,6 @@ static void CG_SoundParseSounds(char *filename, char *buffer) {
 
 			token = COM_ParseExt(text, qtrue);
 
-
 			Q_strncpyz(scriptSound->sounds[scriptSound->numsounds].filename, token, sizeof (scriptSound->sounds[0].filename));
 			scriptSound->numsounds++;
 
@@ -894,7 +893,6 @@ static panel_button_t *speakerInfoButtons[] =
 	&speakerInfo,
 	NULL
 };
-
 
 void CG_SpeakerEditor_RenderEdit(panel_button_t *button) {
 	vec4_t colour;
@@ -1803,7 +1801,6 @@ void CG_SpeakerEditorDraw(void) {
 			                      y + 0.5 * (cg.refdef_current->height - h),
 			                      w, h, 0, 0, 1, 1, cg.crosshairShaderAlt[cg_drawCrosshair.integer % NUM_CROSSHAIRS]);
 		}
-
 
 		if (editSpeaker) {
 			// render interface

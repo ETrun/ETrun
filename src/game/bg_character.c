@@ -156,7 +156,7 @@ bg_character_t *BG_FindFreeCharacter(const char *characterFile) {
 	int i;
 
 	// see if we already got it
-	for (i = 0; i < MAX_CHARACTERS; i++) {
+	for (i = 0; i < MAX_CHARACTERS; ++i) {
 		if (!bg_characterPoolInuse[i]) {
 			continue;
 		}
@@ -167,7 +167,7 @@ bg_character_t *BG_FindFreeCharacter(const char *characterFile) {
 	}
 
 	// else get a free one
-	for (i = 0; i < MAX_CHARACTERS; i++) {
+	for (i = 0; i < MAX_CHARACTERS; ++i) {
 		if (!bg_characterPoolInuse[i]) {
 			bg_characterPoolInuse[i] = qtrue;
 			Q_strncpyz(bg_characterPool[i].characterFile, characterFile, sizeof (bg_characterPool[i].characterFile));
@@ -183,7 +183,7 @@ bg_character_t *BG_FindCharacter(const char *characterFile) {
 	int i;
 
 	// see if we already got it
-	for (i = 0; i < MAX_CHARACTERS; i++) {
+	for (i = 0; i < MAX_CHARACTERS; ++i) {
 		if (!bg_characterPoolInuse[i]) {
 			continue;
 		}

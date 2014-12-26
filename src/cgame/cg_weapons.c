@@ -133,7 +133,6 @@ void CG_MachineGunEjectBrassNew(centity_t *cent) {
 
 	le->leFlags = LEF_TUMBLE;
 
-
 	{
 		int    contents;
 		vec3_t end;
@@ -478,7 +477,6 @@ void CG_PyroSmokeTrail(centity_t *ent) {
 	}
 }
 // jpw
-
 
 // Ridah, new trail effects
 /*
@@ -884,7 +882,6 @@ static qboolean CG_ParseWeaponConfig(const char *filename, weaponInfo_t *wi) {
 
 	return qtrue;
 }
-
 
 static qboolean CG_RW_ParseError(int handle, char *format, ...) {
 	int         line;
@@ -1446,7 +1443,6 @@ void CG_RegisterItemVisuals(int itemNum) {
 	itemInfo->registered = qtrue;   //----(SA)	moved this down after the registerweapon()
 }
 
-
 /*
 ========================================================================================
 
@@ -1454,7 +1450,6 @@ VIEW WEAPON
 
 ========================================================================================
 */
-
 
 //
 // weapon animations
@@ -1527,7 +1522,6 @@ static void CG_SetWeapLerpFrameAnimation(weaponInfo_t *wi, lerpFrame_t *lf, int 
 	}
 }
 
-
 /*
 ===============
 CG_ClearWeapLerpFrame
@@ -1539,7 +1533,6 @@ void CG_ClearWeapLerpFrame(weaponInfo_t *wi, lerpFrame_t *lf, int animationNumbe
 	lf->oldFrame      = lf->frame = lf->animation->firstFrame;
 	lf->oldFrameModel = lf->frameModel = lf->animation->mdxFile;
 }
-
 
 /*
 ===============
@@ -1627,8 +1620,6 @@ static void CG_RunWeapLerpFrame(weaponInfo_t *wi, lerpFrame_t *lf, int newAnimat
 	}
 }
 
-
-
 /*
 ==============
 CG_WeaponAnimation
@@ -1659,9 +1650,7 @@ static void CG_WeaponAnimation(playerState_t *ps, weaponInfo_t *weapon, int *wea
 ////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////
 
-
 // (SA) it wasn't used anyway
-
 
 /*
 ==============
@@ -1735,7 +1724,6 @@ static void CG_CalculateWeaponPosition(vec3_t origin, vec3_t angles) {
 		VectorMA(origin, -cg.predictedPlayerState.leanf / 4.0f, right, origin);
 	}
 
-
 	// on odd legs, invert some angles
 	if (cg.bobcycle & 1) {
 		scale = -cg.xyspeed;
@@ -1772,7 +1760,6 @@ static void CG_CalculateWeaponPosition(vec3_t origin, vec3_t angles) {
 	// RF, subtract the kickAngles
 	VectorMA(angles, -1.0, cg.kickAngles, angles);
 }
-
 
 // Ridah
 /*
@@ -1895,7 +1882,6 @@ void CG_AddPlayerWeapon(refEntity_t *parent, playerState_t *ps, centity_t *cent)
 		}
 		// Gordon: FIXME: alternate for other clients, store flip-flop on cent or smuffin
 	}
-
 
 	// add the weapon
 	memset(&gun, 0, sizeof (gun));
@@ -2519,7 +2505,6 @@ void CG_AddViewWeapon(playerState_t *ps) {
 			CG_WeaponAnimation(ps, weapon, &hand.oldframe, &hand.frame, &hand.backlerp);     //----(SA)	changed
 		}
 
-
 		hand.hModel   = weapon->handsModel;
 		hand.renderfx = RF_DEPTHHACK | RF_FIRST_PERSON | RF_MINLIGHT;   //----(SA)
 
@@ -2681,7 +2666,6 @@ static int getPrevWeapInBank(int bank, int cycle) {
 		cycle = MAX_WEAPS_IN_BANK_MP - 1;
 	}
 
-
 	while (!weapBanksMultiPlayer[bank][cycle]) {
 		cycle--;
 
@@ -2692,7 +2676,6 @@ static int getPrevWeapInBank(int bank, int cycle) {
 	return weapBanksMultiPlayer[bank][cycle];
 }
 
-
 static int getPrevWeapInBankBynum(int weapnum) {
 	int bank, cycle;
 
@@ -2702,8 +2685,6 @@ static int getPrevWeapInBankBynum(int weapnum) {
 
 	return getPrevWeapInBank(bank, cycle);
 }
-
-
 
 /*
 ==============
@@ -2747,7 +2728,7 @@ static int getPrevBankWeap(int bank, int cycle, qboolean sameBankPosition) {
 		return weapBanksMultiPlayer[bank][cycle];
 	}
 	// find highest weap in bank
-	for (i = MAX_WEAPS_IN_BANK_MP - 1; i >= 0; i--) {
+	for (i = MAX_WEAPS_IN_BANK_MP - 1; i >= 0; --i) {
 		if (weapBanksMultiPlayer[bank][i]) {
 			return weapBanksMultiPlayer[bank][i];
 		}
@@ -3103,7 +3084,6 @@ void CG_AltWeapon_f(void) {
 	}
 }
 
-
 /*
 ==============
 CG_NextWeap
@@ -3332,7 +3312,7 @@ void CG_PrevWeap(qboolean switchBanks) {
 
 	// initially, just try to find a lower weapon in the current bank
 	if (cg_cycleAllWeaps.integer || !switchBanks) {
-		for (i = cycle; i >= 0; i--) {
+		for (i = cycle; i >= 0; --i) {
 			num = getPrevWeapInBankBynum(num);
 
 			CG_WeaponIndex(num, NULL, &newcycle);         // get cycle of new weapon.  if it's greater than the original, then it cycled around
@@ -3460,7 +3440,6 @@ void CG_PrevWeap(qboolean switchBanks) {
 	CG_FinishWeaponChange(curweap, num);   //----(SA)
 }
 
-
 /*
 ==============
 CG_LastWeaponUsed_f
@@ -3498,7 +3477,6 @@ void CG_LastWeaponUsed_f(void) {
 	} else {      // switchback no longer selectable, reset cycle
 		cg.switchbackWeapon = 0;
 	}
-
 }
 
 /*
@@ -3569,7 +3547,6 @@ void CG_PrevWeaponInBank_f(void) {
 	CG_PrevWeap(qfalse);
 }
 
-
 /*
 ==============
 CG_NextWeapon_f
@@ -3624,7 +3601,6 @@ void CG_NextWeapon_f(void) {
 	CG_NextWeap(qtrue);
 }
 
-
 /*
 ==============
 CG_PrevWeapon_f
@@ -3670,7 +3646,6 @@ void CG_PrevWeapon_f(void) {
 
 	CG_PrevWeap(qtrue);
 }
-
 
 /*
 ==============
@@ -3773,7 +3748,6 @@ void CG_WeaponBank_f(void) {
 	}
 
 	CG_FinishWeaponChange(curweap, num);
-
 }
 
 /*
@@ -3898,7 +3872,6 @@ void CG_OutOfAmmoChange(qboolean allowforceswitch) {
 			}
 		}
 
-
 		// now try the opposite team's equivalent weap
 		equiv = getEquivWeapon(cg.weaponSelect);
 
@@ -3942,11 +3915,9 @@ void CG_OutOfAmmoChange(qboolean allowforceswitch) {
 		}
 	}
 
-
 	// still nothing available, just go to the next
 	// available weap using the regular selection scheme
 	CG_NextWeap(qtrue);
-
 }
 
 /*
@@ -3992,7 +3963,6 @@ void CG_MG42EFX(centity_t *cent) {
 			return;
 		}
 	}
-
 }
 
 //----(SA)
@@ -4025,7 +3995,6 @@ void CG_MortarEFX(centity_t *cent) {
 }
 
 //----(SA)	end
-
 
 // RF
 /*
@@ -4094,7 +4063,6 @@ void CG_WeaponFireRecoil(int weapon) {
 	// set the recoil
 	cg.recoilPitch -= pitchRecoilAdd;
 }
-
 
 /*
 ================
@@ -4245,7 +4213,6 @@ void CG_FireWeapon(centity_t *cent) {
 	} // jpw
 }
 
-
 // Ridah
 /*
 =================
@@ -4370,7 +4337,6 @@ void CG_AddDebris(vec3_t origin, vec3_t dir, int speed, int duration, int count)
 	}
 }
 // done.
-
 
 /*
 ==============
@@ -4728,7 +4694,6 @@ void CG_MissileHitWall(int weapon, int clientNum, vec3_t origin, vec3_t dir, int
 	}
 }
 
-
 /*
 ==============
 CG_MissileHitWallSmall
@@ -4936,7 +4901,6 @@ void CG_Tracer(vec3_t source, vec3_t dest, int sparks) {
 
 	CG_DrawTracer(start, finish);
 }
-
 
 /*
 ======================

@@ -73,7 +73,6 @@ typedef struct particle_s {
 	int roll;
 
 	int accumroll;
-
 } cparticle_t;
 
 typedef enum {
@@ -156,7 +155,7 @@ void CG_ClearParticles(void) {
 	free_particles   = &particles[0];
 	active_particles = NULL;
 
-	for (i = 0 ; i < cl_numparticles ; i++) {
+	for (i = 0 ; i < cl_numparticles ; ++i) {
 		particles[i].next = &particles[i + 1];
 		particles[i].type = 0;
 	}
@@ -165,10 +164,10 @@ void CG_ClearParticles(void) {
 	oldtime = cg.time;
 
 	// Ridah, init the shaderAnims
-	for (i = 0; shaderAnimNames[i]; i++) {
+	for (i = 0; shaderAnimNames[i]; ++i) {
 		int j;
 
-		for (j = 0; j < shaderAnimCounts[i]; j++) {
+		for (j = 0; j < shaderAnimCounts[i]; ++j) {
 			shaderAnims[i][j] = trap_R_RegisterShader(va("%s%i", shaderAnimNames[i], j + 1));
 		}
 	}
@@ -177,7 +176,6 @@ void CG_ClearParticles(void) {
 
 	initparticles = qtrue;
 }
-
 
 /*
 =====================
@@ -207,7 +205,6 @@ void CG_AddParticleToScene(cparticle_t *p, vec3_t org) {
 
 					p->org[2] = (p->start + crandom() * 4);
 
-
 					if (p->type == P_BUBBLE_TURBULENT) {
 						p->vel[0] = crandom() * 4;
 						p->vel[1] = crandom() * 4;
@@ -223,7 +220,6 @@ void CG_AddParticleToScene(cparticle_t *p, vec3_t org) {
 						p->org[2] += (p->start - p->end);
 					}
 
-
 					if (p->type == P_WEATHER_TURBULENT) {
 						p->vel[0] = crandom() * 16;
 						p->vel[1] = crandom() * 16;
@@ -231,7 +227,6 @@ void CG_AddParticleToScene(cparticle_t *p, vec3_t org) {
 
 				}
 			}
-
 
 			// Rafael snow pvs check
 			if (!p->link) {
@@ -753,7 +748,6 @@ void CG_AddParticleToScene(cparticle_t *p, vec3_t org) {
 	} else {
 		trap_R_AddPolyToScene(p->pshader, 4, verts);
 	}
-
 }
 
 // Ridah, made this static so it doesn't interfere with other files
@@ -821,7 +815,6 @@ void CG_AddParticles(void) {
 			p->alpha       = 0;
 			continue;
 		}
-
 
 		if (p->type == P_FLAT_SCALEUP_FADE && cg.time > p->endtime) {
 			p->next        = free_particles;
@@ -1021,7 +1014,6 @@ void CG_ParticleSmoke(qhandle_t pshader, centity_t *cent) {
 		}
 	}
 
-
 	p->type = P_SMOKE;
 
 	//VectorCopy(cent->currentState.origin, p->org);
@@ -1057,7 +1049,6 @@ void CG_ParticleSmoke(qhandle_t pshader, centity_t *cent) {
 
 	p->roll = 8 + (crandom() * 4);
 }
-
 
 void CG_ParticleBulletDebris(vec3_t org, vec3_t vel, int duration) {
 
@@ -1097,7 +1088,6 @@ void CG_ParticleBulletDebris(vec3_t org, vec3_t vel, int duration) {
 
 	p->accel[2] = -60;
 	p->vel[2]  += -20;
-
 }
 
 // NERVE - SMF :: the core of the dirt explosion
@@ -1155,7 +1145,7 @@ void CG_ParticleExplosion(char *animStr, vec3_t origin, vec3_t vel, int duration
 	int         anim;
 
 	// find the animation string
-	for (anim = 0; shaderAnimNames[anim]; anim++) {
+	for (anim = 0; shaderAnimNames[anim]; ++anim) {
 		if (!Q_stricmp(animStr, shaderAnimNames[anim])) {
 			break;
 		}
@@ -1203,7 +1193,6 @@ void CG_ParticleExplosion(char *animStr, vec3_t origin, vec3_t vel, int duration
 	VectorCopy(origin, p->org);
 	VectorCopy(vel, p->vel);
 	VectorClear(p->accel);
-
 }
 
 void    CG_SnowLink(centity_t *cent, qboolean particleOn) {
@@ -1334,9 +1323,7 @@ void CG_Particle_OilParticle(qhandle_t pshader, vec3_t origin, vec3_t dir, int p
 	p->alpha = 0.5;
 
 	p->color = BLOODRED;
-
 }
-
 
 void CG_Particle_OilSlick(qhandle_t pshader, centity_t *cent) {
 	cparticle_t *p;
@@ -1400,7 +1387,6 @@ void CG_Particle_OilSlick(qhandle_t pshader, centity_t *cent) {
 	p->roll = rand() % 179;
 
 	p->alpha = 0.75;
-
 }
 
 void CG_OilSlickRemove(centity_t *cent) {
@@ -1469,5 +1455,4 @@ void CG_ParticleSparks(vec3_t org, vec3_t vel, int duration, float x, float y, f
 
 	p->accel[0] = crandom() * 4;
 	p->accel[1] = crandom() * 4;
-
 }

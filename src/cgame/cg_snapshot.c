@@ -29,8 +29,6 @@ If you have questions concerning this license or the applicable additional terms
 // cg_snapshot.c -- things that happen on snapshot transition,
 // not necessarily every single rendered frame
 
-
-
 #include "cg_local.h"
 
 // rain - minor optimization - we only want to reset ents that were valid
@@ -81,8 +79,6 @@ static void CG_ResetEntity(centity_t *cent) {
 	cent->akimboFire = qfalse;
 }
 
-
-
 /*
 ===============
 CG_TransitionEntity
@@ -130,7 +126,6 @@ static void CG_TransitionEntity(centity_t *cent) {
 	CG_CheckEvents(cent);
 }
 
-
 /*
 ==================
 CG_SetInitialSnapshot
@@ -174,7 +169,6 @@ void CG_SetInitialSnapshot(snapshot_t *snap) {
 
 	cg_fxflags = 0;
 
-
 	trap_Cvar_VariableStringBuffer("r_oldMode", buff, sizeof (buff));
 	if (atoi(buff)) {
 		// Arnout: confirmation screen
@@ -209,7 +203,6 @@ void CG_SetInitialSnapshot(snapshot_t *snap) {
 		}
 	}
 }
-
 
 /*
 ===================
@@ -287,9 +280,7 @@ static void CG_TransitionSnapshot(void) {
 			CG_TransitionPlayerState(ps, ops);
 		}
 	}
-
 }
-
 
 /*
 ===================
@@ -308,7 +299,7 @@ static void CG_SetNextSnap(snapshot_t *snap) {
 	cg_entities[cg.snap->ps.clientNum].interpolate = qtrue;
 
 	// check for extrapolation errors
-	for (num = 0 ; num < snap->numEntities ; num++) {
+	for (num = 0 ; num < snap->numEntities ; ++num) {
 		entityState_t *es   = &snap->entities[num];
 		cent = &cg_entities[es->number];
 
@@ -344,7 +335,6 @@ static void CG_SetNextSnap(snapshot_t *snap) {
 	// sort out solid entities
 	CG_BuildSolidList();
 }
-
 
 /*
 ========================
@@ -406,7 +396,6 @@ static snapshot_t *CG_ReadNextSnapshot(void) {
 	// nothing left to read
 	return NULL;
 }
-
 
 /*
 ============
@@ -473,7 +462,6 @@ void CG_ProcessSnapshots(void) {
 			}
 
 			CG_SetNextSnap(snap);
-
 
 			// if time went backwards, we have a level restart
 			if (cg.nextSnap->serverTime < cg.snap->serverTime) {

@@ -46,7 +46,6 @@ typedef struct {
 	int modificationCount;          // for tracking changes
 	qboolean trackChange;           // track this variable, and announce if changed
 	qboolean fConfigReset;          // OSP: set this var to the default on a config reset
-	qboolean teamShader;            // track and if changed, update shader state
 } cvarTable_t;
 
 gentity_t g_entities[MAX_GENTITIES];
@@ -183,149 +182,149 @@ vmCvar_t g_strictSaveLoad;
 cvarTable_t gameCvarTable[] =
 {
 	// noset vars
-	{ NULL,                    "gamename",               GAME_VERSION,                 CVAR_SERVERINFO | CVAR_ROM,                                    0,      qfalse, qfalse, qfalse },
-	{ NULL,                    "gamedate",               __DATE__,                     CVAR_ROM,                                                      0,      qfalse, qfalse, qfalse },
-	{ &g_restarted,            "g_restarted",            "0",                          CVAR_ROM,                                                      0,      qfalse, qfalse, qfalse },
-	{ NULL,                    "sv_mapname",             "",                           CVAR_SERVERINFO | CVAR_ROM,                                    0,      qfalse, qfalse, qfalse },
+	{ NULL,                    "gamename",               GAME_VERSION,                 CVAR_SERVERINFO | CVAR_ROM,                                    0,      qfalse, qfalse},
+	{ NULL,                    "gamedate",               __DATE__,                     CVAR_ROM,                                                      0,      qfalse, qfalse},
+	{ &g_restarted,            "g_restarted",            "0",                          CVAR_ROM,                                                      0,      qfalse, qfalse},
+	{ NULL,                    "sv_mapname",             "",                           CVAR_SERVERINFO | CVAR_ROM,                                    0,      qfalse, qfalse},
 
 	// latched vars
 
-	{ &g_medicChargeTime,      "g_medicChargeTime",      "45000",                      CVAR_SERVERINFO | CVAR_LATCH,                                  0,      qfalse, qtrue,  qfalse },
-	{ &g_engineerChargeTime,   "g_engineerChargeTime",   "30000",                      CVAR_SERVERINFO | CVAR_LATCH,                                  0,      qfalse, qtrue,  qfalse },
-	{ &g_LTChargeTime,         "g_LTChargeTime",         "40000",                      CVAR_SERVERINFO | CVAR_LATCH,                                  0,      qfalse, qtrue,  qfalse },
-	{ &g_soldierChargeTime,    "g_soldierChargeTime",    "20000",                      CVAR_SERVERINFO | CVAR_LATCH,                                  0,      qfalse, qtrue,  qfalse },
+	{ &g_medicChargeTime,      "g_medicChargeTime",      "45000",                      CVAR_SERVERINFO | CVAR_LATCH,                                  0,      qfalse, qtrue},
+	{ &g_engineerChargeTime,   "g_engineerChargeTime",   "30000",                      CVAR_SERVERINFO | CVAR_LATCH,                                  0,      qfalse, qtrue},
+	{ &g_LTChargeTime,         "g_LTChargeTime",         "40000",                      CVAR_SERVERINFO | CVAR_LATCH,                                  0,      qfalse, qtrue},
+	{ &g_soldierChargeTime,    "g_soldierChargeTime",    "20000",                      CVAR_SERVERINFO | CVAR_LATCH,                                  0,      qfalse, qtrue},
 
-	{ &g_covertopsChargeTime,  "g_covertopsChargeTime",  "30000",                      CVAR_SERVERINFO | CVAR_LATCH,                                  0,      qfalse, qtrue,  qfalse },
-	{ &g_maxclients,           "sv_maxclients",          "20",                         CVAR_SERVERINFO | CVAR_LATCH | CVAR_ARCHIVE,                   0,      qfalse, qfalse, qfalse }, // NERVE - SMF - made 20 from 8
+	{ &g_covertopsChargeTime,  "g_covertopsChargeTime",  "30000",                      CVAR_SERVERINFO | CVAR_LATCH,                                  0,      qfalse, qtrue},
+	{ &g_maxclients,           "sv_maxclients",          "20",                         CVAR_SERVERINFO | CVAR_LATCH | CVAR_ARCHIVE,                   0,      qfalse, qfalse }, // NERVE - SMF - made 20 from 8
 
-	{ &g_gamestate,            "gamestate",              "-1",                         CVAR_WOLFINFO | CVAR_ROM,                                      0,      qfalse, qfalse, qfalse },
-	{ &g_gametype,             "g_gametype",             "2",                          CVAR_SERVERINFO | CVAR_ROM,                                    0,      qfalse, qfalse, qfalse },
+	{ &g_gamestate,            "gamestate",              "-1",                         CVAR_WOLFINFO | CVAR_ROM,                                      0,      qfalse, qfalse },
+	{ &g_gametype,             "g_gametype",             "2",                          CVAR_SERVERINFO | CVAR_ROM,                                    0,      qfalse, qfalse },
 	// -NERVE - SMF
 
-	{ &g_log,                  "g_log",                  "",                           CVAR_ARCHIVE,                                                  0,      qfalse, qfalse, qfalse },
-	{ &g_logSync,              "g_logSync",              "0",                          CVAR_ARCHIVE,                                                  0,      qfalse, qfalse, qfalse },
+	{ &g_log,                  "g_log",                  "",                           CVAR_ARCHIVE,                                                  0,      qfalse, qfalse },
+	{ &g_logSync,              "g_logSync",              "0",                          CVAR_ARCHIVE,                                                  0,      qfalse, qfalse },
 
-	{ &g_password,             "g_password",             "none",                       CVAR_USERINFO,                                                 0,      qfalse, qfalse, qfalse },
-	{ &sv_privatepassword,     "sv_privatepassword",     "",                           CVAR_TEMP,                                                     0,      qfalse, qfalse, qfalse },
-	{ &g_banIPs,               "g_banIPs",               "",                           CVAR_ARCHIVE,                                                  0,      qfalse, qfalse, qfalse },
+	{ &g_password,             "g_password",             "none",                       CVAR_USERINFO,                                                 0,      qfalse, qfalse },
+	{ &sv_privatepassword,     "sv_privatepassword",     "",                           CVAR_TEMP,                                                     0,      qfalse, qfalse },
+	{ &g_banIPs,               "g_banIPs",               "",                           CVAR_ARCHIVE,                                                  0,      qfalse, qfalse },
 	// show_bug.cgi?id=500
-	{ &g_filterBan,            "g_filterBan",            "1",                          CVAR_ARCHIVE,                                                  0,      qfalse, qfalse, qfalse },
+	{ &g_filterBan,            "g_filterBan",            "1",                          CVAR_ARCHIVE,                                                  0,      qfalse, qfalse },
 
-	{ &g_dedicated,            "dedicated",              "0",                          0,                                                             0,      qfalse, qfalse, qfalse },
+	{ &g_dedicated,            "dedicated",              "0",                          0,                                                             0,      qfalse, qfalse },
 
-	{ &g_needpass,             "g_needpass",             "0",                          CVAR_SERVERINFO | CVAR_ROM,                                    0,      qtrue,  qfalse, qfalse },
+	{ &g_needpass,             "g_needpass",             "0",                          CVAR_SERVERINFO | CVAR_ROM,                                    0,      qtrue,  qfalse },
 
-	{ &g_inactivity,           "g_inactivity",           "120",                        0,                                                             0,      qtrue,  qfalse, qfalse }, // Nico, set to 120 secs (default was 0)
-	{ &g_debugMove,            "g_debugMove",            "0",                          0,                                                             0,      qfalse, qfalse, qfalse },
-	{ &g_motd,                 "g_motd",                 "",                           CVAR_ARCHIVE,                                                  0,      qfalse, qfalse, qfalse },
-	{ &voteFlags,              "voteFlags",              "0",                          CVAR_TEMP | CVAR_ROM | CVAR_SERVERINFO,                        0,      qfalse, qfalse, qfalse },
-	{ &g_filtercams,           "g_filtercams",           "0",                          CVAR_ARCHIVE,                                                  0,      qfalse, qfalse, qfalse },
-	{ &g_voiceChatsAllowed,    "g_voiceChatsAllowed",    "4",                          CVAR_ARCHIVE,                                                  0,      qfalse, qfalse, qfalse }, // DHM - Nerve
-	{ &g_developer,            "developer",              "0",                          CVAR_TEMP,                                                     0,      qfalse, qfalse, qfalse },
-	{ &g_smoothClients,        "g_smoothClients",        "1",                          0,                                                             0,      qfalse, qfalse, qfalse },
-	{ &pmove_fixed,            "pmove_fixed",            "0",                          0,                                                             0,      qfalse, qfalse, qfalse }, // Nico, removed CVAR_SYSTEMINFO
-	{ &pmove_msec,             "pmove_msec",             "8",                          CVAR_SYSTEMINFO,                                               0,      qfalse, qfalse, qfalse },
+	{ &g_inactivity,           "g_inactivity",           "120",                        0,                                                             0,      qtrue,  qfalse }, // Nico, set to 120 secs (default was 0)
+	{ &g_debugMove,            "g_debugMove",            "0",                          0,                                                             0,      qfalse, qfalse },
+	{ &g_motd,                 "g_motd",                 "",                           CVAR_ARCHIVE,                                                  0,      qfalse, qfalse },
+	{ &voteFlags,              "voteFlags",              "0",                          CVAR_TEMP | CVAR_ROM | CVAR_SERVERINFO,                        0,      qfalse, qfalse },
+	{ &g_filtercams,           "g_filtercams",           "0",                          CVAR_ARCHIVE,                                                  0,      qfalse, qfalse },
+	{ &g_voiceChatsAllowed,    "g_voiceChatsAllowed",    "4",                          CVAR_ARCHIVE,                                                  0,      qfalse, qfalse }, // DHM - Nerve
+	{ &g_developer,            "developer",              "0",                          CVAR_TEMP,                                                     0,      qfalse, qfalse },
+	{ &g_smoothClients,        "g_smoothClients",        "1",                          0,                                                             0,      qfalse, qfalse },
+	{ &pmove_fixed,            "pmove_fixed",            "0",                          0,                                                             0,      qfalse, qfalse }, // Nico, removed CVAR_SYSTEMINFO
+	{ &pmove_msec,             "pmove_msec",             "8",                          CVAR_SYSTEMINFO,                                               0,      qfalse, qfalse },
 
-	{ &g_footstepAudibleRange, "g_footstepAudibleRange", "256",                        CVAR_CHEAT,                                                    0,      qfalse, qfalse, qfalse },
+	{ &g_footstepAudibleRange, "g_footstepAudibleRange", "256",                        CVAR_CHEAT,                                                    0,      qfalse, qfalse },
 
-	{ &g_scriptName,           "g_scriptName",           "",                           CVAR_CHEAT,                                                    0,      qfalse, qfalse, qfalse },
+	{ &g_scriptName,           "g_scriptName",           "",                           CVAR_CHEAT,                                                    0,      qfalse, qfalse },
 
-	{ &g_antilag,              "g_antilag",              "1",                          CVAR_SERVERINFO | CVAR_ARCHIVE,                                0,      qfalse, qfalse, qfalse },
+	{ &g_antilag,              "g_antilag",              "1",                          CVAR_SERVERINFO | CVAR_ARCHIVE,                                0,      qfalse, qfalse },
 
 	//bani - #184
-	{ NULL,                    "P",                      "",                           CVAR_SERVERINFO_NOUPDATE,                                      0,      qfalse, qfalse, qfalse },
+	{ NULL,                    "P",                      "",                           CVAR_SERVERINFO_NOUPDATE,                                      0,      qfalse, qfalse },
 
-	{ &refereePassword,        "refereePassword",        "none",                       0,                                                             0,      qfalse, qfalse, qfalse },
-	{ &g_spectatorInactivity,  "g_spectatorInactivity",  "0",                          0,                                                             0,      qfalse, qfalse, qfalse },
+	{ &refereePassword,        "refereePassword",        "none",                       0,                                                             0,      qfalse, qfalse },
+	{ &g_spectatorInactivity,  "g_spectatorInactivity",  "0",                          0,                                                             0,      qfalse, qfalse },
 
-	{ &server_motd0,           "server_motd0",           " ^NEnemy Territory ^7MOTD ", 0,                                                             0,      qfalse, qfalse, qfalse },
-	{ &server_motd1,           "server_motd1",           "",                           0,                                                             0,      qfalse, qfalse, qfalse },
-	{ &server_motd2,           "server_motd2",           "",                           0,                                                             0,      qfalse, qfalse, qfalse },
-	{ &server_motd3,           "server_motd3",           "",                           0,                                                             0,      qfalse, qfalse, qfalse },
-	{ &server_motd4,           "server_motd4",           "",                           0,                                                             0,      qfalse, qfalse, qfalse },
-	{ &server_motd5,           "server_motd5",           "",                           0,                                                             0,      qfalse, qfalse, qfalse },
-	{ &team_maxPanzers,        "team_maxPanzers",        "-1",                         0,                                                             0,      qfalse, qfalse, qfalse },
-	{ &team_maxplayers,        "team_maxplayers",        "0",                          0,                                                             0,      qfalse, qfalse, qfalse },
-	{ &team_nocontrols,        "team_nocontrols",        "1",                          0,                                                             0,      qfalse, qfalse, qfalse },
+	{ &server_motd0,           "server_motd0",           " ^NEnemy Territory ^7MOTD ", 0,                                                             0,      qfalse, qfalse },
+	{ &server_motd1,           "server_motd1",           "",                           0,                                                             0,      qfalse, qfalse },
+	{ &server_motd2,           "server_motd2",           "",                           0,                                                             0,      qfalse, qfalse },
+	{ &server_motd3,           "server_motd3",           "",                           0,                                                             0,      qfalse, qfalse },
+	{ &server_motd4,           "server_motd4",           "",                           0,                                                             0,      qfalse, qfalse },
+	{ &server_motd5,           "server_motd5",           "",                           0,                                                             0,      qfalse, qfalse },
+	{ &team_maxPanzers,        "team_maxPanzers",        "-1",                         0,                                                             0,      qfalse, qfalse },
+	{ &team_maxplayers,        "team_maxplayers",        "0",                          0,                                                             0,      qfalse, qfalse },
+	{ &team_nocontrols,        "team_nocontrols",        "1",                          0,                                                             0,      qfalse, qfalse },
 
-	{ &vote_allow_kick,        "vote_allow_kick",        "0",                          0,                                                             0,      qfalse, qfalse, qfalse },
-	{ &vote_allow_map,         "vote_allow_map",         "1",                          0,                                                             0,      qfalse, qfalse, qfalse },
-	{ &vote_allow_randommap,   "vote_allow_randommap",   "1",                          0,                                                             0,      qfalse, qfalse, qfalse },
-	{ &vote_allow_referee,     "vote_allow_referee",     "0",                          0,                                                             0,      qfalse, qfalse, qfalse },
-	{ &vote_allow_antilag,     "vote_allow_antilag",     "0",                          0,                                                             0,      qfalse, qfalse, qfalse },
-	{ &vote_allow_muting,      "vote_allow_muting",      "0",                          0,                                                             0,      qfalse, qfalse, qfalse },
-	{ &vote_limit,             "vote_limit",             "5",                          0,                                                             0,      qfalse, qfalse, qfalse },
-	{ &vote_percent,           "vote_percent",           "50",                         0,                                                             0,      qfalse, qfalse, qfalse },
+	{ &vote_allow_kick,        "vote_allow_kick",        "0",                          0,                                                             0,      qfalse, qfalse },
+	{ &vote_allow_map,         "vote_allow_map",         "1",                          0,                                                             0,      qfalse, qfalse },
+	{ &vote_allow_randommap,   "vote_allow_randommap",   "1",                          0,                                                             0,      qfalse, qfalse },
+	{ &vote_allow_referee,     "vote_allow_referee",     "0",                          0,                                                             0,      qfalse, qfalse },
+	{ &vote_allow_antilag,     "vote_allow_antilag",     "0",                          0,                                                             0,      qfalse, qfalse },
+	{ &vote_allow_muting,      "vote_allow_muting",      "0",                          0,                                                             0,      qfalse, qfalse },
+	{ &vote_limit,             "vote_limit",             "5",                          0,                                                             0,      qfalse, qfalse },
+	{ &vote_percent,           "vote_percent",           "50",                         0,                                                             0,      qfalse, qfalse },
 
 	// state vars
-	{ &g_scriptDebug,          "g_scriptDebug",          "0",                          CVAR_CHEAT,                                                    0,      qfalse, qfalse, qfalse },
+	{ &g_scriptDebug,          "g_scriptDebug",          "0",                          CVAR_CHEAT,                                                    0,      qfalse, qfalse },
 
 	// What level of detail do we want script printing to go to.
-	{ &g_scriptDebugLevel,     "g_scriptDebugLevel",     "0",                          CVAR_CHEAT,                                                    0,      qfalse, qfalse, qfalse },
+	{ &g_scriptDebugLevel,     "g_scriptDebugLevel",     "0",                          CVAR_CHEAT,                                                    0,      qfalse, qfalse },
 
 	// points to the URL for mod information, should not be modified by server admin
-	{ NULL,                    "mod_url",                SHORT_MOD_URL,                CVAR_SERVERINFO | CVAR_ROM,                                    0,      qfalse, qfalse, qfalse },
+	{ NULL,                    "mod_url",                SHORT_MOD_URL,                CVAR_SERVERINFO | CVAR_ROM,                                    0,      qfalse, qfalse },
 
-	{ NULL,                    "mod_version",            MOD_VERSION,                  CVAR_SERVERINFO | CVAR_ROM,                                    0,      qfalse, qfalse, qfalse },
+	{ NULL,                    "mod_version",            MOD_VERSION,                  CVAR_SERVERINFO | CVAR_ROM,                                    0,      qfalse, qfalse },
 
 	// configured by the server admin, points to the web pages for the server
-	{ NULL,                    "URL",                    SHORT_MOD_URL,                CVAR_SERVERINFO | CVAR_ARCHIVE,                                0,      qfalse, qfalse, qfalse },
+	{ NULL,                    "URL",                    SHORT_MOD_URL,                CVAR_SERVERINFO | CVAR_ARCHIVE,                                0,      qfalse, qfalse },
 
 	// Nico, beginning of ETrun server cvars
 
 	// Max connections per IP
-	{ &g_maxConnsPerIP,        "g_maxConnsPerIP",        "3",                          CVAR_ARCHIVE,                                                  qfalse, qfalse, qfalse, qfalse },
+	{ &g_maxConnsPerIP,        "g_maxConnsPerIP",        "3",                          CVAR_ARCHIVE,                                                  qfalse, qfalse, qfalse },
 
 	// Game physics (set serverside but sent to client for prediction)
-	{ &physics,                "physics",                "255",                        CVAR_SERVERINFO | CVAR_ARCHIVE | CVAR_LATCH | CVAR_SYSTEMINFO, qfalse, qfalse, qfalse, qfalse },
+	{ &physics,                "physics",                "255",                        CVAR_SERVERINFO | CVAR_ARCHIVE | CVAR_LATCH | CVAR_SYSTEMINFO, qfalse, qfalse, qfalse },
 
 	// Enable certain map entities
 	// 3 enabled both kill entities and hurt entities
-	{ &g_enableMapEntities,    "g_enableMapEntities",    "31",                         CVAR_ARCHIVE | CVAR_LATCH,                                     qfalse, qfalse, qfalse, qfalse },
+	{ &g_enableMapEntities,    "g_enableMapEntities",    "31",                         CVAR_ARCHIVE | CVAR_LATCH,                                     qfalse, qfalse, qfalse },
 
 	// Force timer reset, i.e. bypass "wait 9999" on start triggers
-	{ &g_forceTimerReset,      "g_forceTimerReset",      "1",                          CVAR_ARCHIVE | CVAR_LATCH,                                     qfalse, qfalse, qfalse, qfalse },
+	{ &g_forceTimerReset,      "g_forceTimerReset",      "1",                          CVAR_ARCHIVE | CVAR_LATCH,                                     qfalse, qfalse, qfalse },
 
 	// Is level a timerun?
-	{ &isTimerun,              "isTimerun",              "0",                          CVAR_ROM | CVAR_SYSTEMINFO,                                    qfalse, qfalse, qfalse, qfalse },
+	{ &isTimerun,              "isTimerun",              "0",                          CVAR_ROM | CVAR_SYSTEMINFO,                                    qfalse, qfalse, qfalse },
 
 	// Flood protection
-	{ &g_floodProtect,         "g_floodProtect",         "1",                          CVAR_ARCHIVE | CVAR_LATCH,                                     qfalse, qfalse, qfalse, qfalse },
-	{ &g_floodThreshold,       "g_floodThreshold",       "8",                          CVAR_ARCHIVE | CVAR_LATCH,                                     qfalse, qfalse, qfalse, qfalse },
-	{ &g_floodWait,            "g_floodWait",            "768",                        CVAR_ARCHIVE | CVAR_LATCH,                                     qfalse, qfalse, qfalse, qfalse },
+	{ &g_floodProtect,         "g_floodProtect",         "1",                          CVAR_ARCHIVE | CVAR_LATCH,                                     qfalse, qfalse, qfalse },
+	{ &g_floodThreshold,       "g_floodThreshold",       "8",                          CVAR_ARCHIVE | CVAR_LATCH,                                     qfalse, qfalse, qfalse },
+	{ &g_floodWait,            "g_floodWait",            "768",                        CVAR_ARCHIVE | CVAR_LATCH,                                     qfalse, qfalse, qfalse },
 
 	// Name changes limit
-	{ &g_maxNameChanges,       "g_maxNameChanges",       "3",                          CVAR_ARCHIVE | CVAR_LATCH,                                     qfalse, qfalse, qfalse, qfalse },
+	{ &g_maxNameChanges,       "g_maxNameChanges",       "3",                          CVAR_ARCHIVE | CVAR_LATCH,                                     qfalse, qfalse, qfalse },
 
 	// API module
-	{ &g_useAPI,               "g_useAPI",               "0",                          CVAR_ARCHIVE | CVAR_LATCH,                                     qfalse, qfalse, qfalse, qfalse },
-	{ &g_APImoduleName,        "g_APImoduleName",        "timeruns.mod",               CVAR_ARCHIVE | CVAR_LATCH,                                     qfalse, qfalse, qfalse, qfalse },
+	{ &g_useAPI,               "g_useAPI",               "0",                          CVAR_ARCHIVE | CVAR_LATCH,                                     qfalse, qfalse, qfalse },
+	{ &g_APImoduleName,        "g_APImoduleName",        "timeruns.mod",               CVAR_ARCHIVE | CVAR_LATCH,                                     qfalse, qfalse, qfalse },
 
 	// Hold doors open
-	{ &g_holdDoorsOpen,        "g_holdDoorsOpen",        "1",                          CVAR_ARCHIVE | CVAR_LATCH,                                     qfalse, qfalse, qfalse, qfalse },
+	{ &g_holdDoorsOpen,        "g_holdDoorsOpen",        "1",                          CVAR_ARCHIVE | CVAR_LATCH,                                     qfalse, qfalse, qfalse },
 
 	// Disable drowning
-	{ &g_disableDrowning,      "g_disableDrowning",      "1",                          CVAR_ARCHIVE | CVAR_LATCH,                                     qfalse, qfalse, qfalse, qfalse },
+	{ &g_disableDrowning,      "g_disableDrowning",      "1",                          CVAR_ARCHIVE | CVAR_LATCH,                                     qfalse, qfalse, qfalse },
 
 	// Mapscript support
-	{ &g_mapScriptDirectory,   "g_mapScriptDirectory",   "custommapscripts",           CVAR_ARCHIVE | CVAR_LATCH,                                     qfalse, qfalse, qfalse, qfalse },
+	{ &g_mapScriptDirectory,   "g_mapScriptDirectory",   "custommapscripts",           CVAR_ARCHIVE | CVAR_LATCH,                                     qfalse, qfalse, qfalse },
 
 	// Cup mode
-	{ &g_cupMode,              "g_cupMode",              "0",                          CVAR_ARCHIVE,                                                  qfalse, qfalse, qfalse, qfalse },
-	{ &g_cupKey,               "g_cupKey",               "",                           CVAR_ARCHIVE,                                                  qfalse, qfalse, qfalse, qfalse },
+	{ &g_cupMode,              "g_cupMode",              "0",                          CVAR_ARCHIVE,                                                  qfalse, qfalse, qfalse },
+	{ &g_cupKey,               "g_cupKey",               "",                           CVAR_ARCHIVE,                                                  qfalse, qfalse, qfalse },
 
 	// Timelimit mode
-	{ &g_timelimit,            "timelimit",              "0",                          CVAR_SERVERINFO | CVAR_ARCHIVE | CVAR_LATCH,                   qfalse, qfalse, qfalse, qfalse },
+	{ &g_timelimit,            "timelimit",              "0",                          CVAR_SERVERINFO | CVAR_ARCHIVE | CVAR_LATCH,                   qfalse, qfalse, qfalse },
 
 	// Debug log
-	{ &g_debugLog,             "g_debugLog",             "0",                          CVAR_ARCHIVE | CVAR_LATCH,                                     qfalse, qfalse, qfalse, qfalse },
+	{ &g_debugLog,             "g_debugLog",             "0",                          CVAR_ARCHIVE | CVAR_LATCH,                                     qfalse, qfalse, qfalse },
 
 	// GeoIP
-	{ &g_useGeoIP,             "g_useGeoIP",             "1",                          CVAR_ARCHIVE | CVAR_LATCH,                                     qfalse, qfalse, qfalse, qfalse },
-	{ &g_geoIPDbPath,          "g_geoIPDbPath",          "GeoIP.dat",                  CVAR_ARCHIVE | CVAR_LATCH,                                     qfalse, qfalse, qfalse, qfalse },
+	{ &g_useGeoIP,             "g_useGeoIP",             "1",                          CVAR_ARCHIVE | CVAR_LATCH,                                     qfalse, qfalse, qfalse },
+	{ &g_geoIPDbPath,          "g_geoIPDbPath",          "GeoIP.dat",                  CVAR_ARCHIVE | CVAR_LATCH,                                     qfalse, qfalse, qfalse },
 
 	// Strict save/load
-	{ &g_strictSaveLoad,       "g_strictSaveLoad",       "0",                          CVAR_ARCHIVE | CVAR_LATCH,                                     qfalse, qfalse, qfalse, qfalse }
+	{ &g_strictSaveLoad,       "g_strictSaveLoad",       "0",                          CVAR_ARCHIVE | CVAR_LATCH,                                     qfalse, qfalse, qfalse }
 
 	// Nico, end of ETrun cvars
 };
@@ -671,7 +670,6 @@ void G_CheckForCursorHints(gentity_t *ent) {
 			}
 		}
 
-
 		if (checkEnt) {
 
 			// TDF This entire function could be the poster boy for converting to OO programming!!!
@@ -907,7 +905,6 @@ void G_CheckForCursorHints(gentity_t *ent) {
 					}
 				}
 
-
 				// hint icon specified in entity (and proper contact was made, so hintType was set)
 				// first try the checkent...
 				if (checkEnt->s.dmgFlags && hintType) {
@@ -953,7 +950,6 @@ void G_CheckForCursorHints(gentity_t *ent) {
 		ps->serverCursorHint    = hintType;
 		ps->serverCursorHintVal = hintVal;
 	}
-
 }
 
 void G_SetTargetName(gentity_t *ent, char *targetname) {
@@ -983,7 +979,7 @@ void G_FindTeams(void) {
 
 	c  = 0;
 	c2 = 0;
-	for (i = 1, e = g_entities + i ; i < level.num_entities ; i++, e++) {
+	for (i = 1, e = g_entities + i ; i < level.num_entities ; ++i, ++e) {
 		if (!e->inuse) {
 			continue;
 		}
@@ -1006,7 +1002,7 @@ void G_FindTeams(void) {
 
 		c++;
 		c2++;
-		for (j = i + 1, e2 = e + 1 ; j < level.num_entities ; j++, e2++) {
+		for (j = i + 1, e2 = e + 1 ; j < level.num_entities ; ++j, ++e2) {
 			if (!e2->inuse) {
 				continue;
 			}
@@ -1045,16 +1041,6 @@ void G_FindTeams(void) {
 	G_Printf("%i teams with %i entities\n", c, c2);
 }
 
-
-/*
-==============
-G_RemapTeamShaders
-==============
-*/
-void G_RemapTeamShaders() {
-}
-
-
 /*
 =================
 G_RegisterCvars
@@ -1063,23 +1049,16 @@ G_RegisterCvars
 void G_RegisterCvars(void) {
 	int         i;
 	cvarTable_t *cv;
-	qboolean    remapped = qfalse;
 
 	level.server_settings = 0;
 
-	for (i = 0, cv = gameCvarTable; i < gameCvarTableSize; i++, cv++) {
+	for (i = 0, cv = gameCvarTable; i < gameCvarTableSize; ++i, ++cv) {
 		trap_Cvar_Register(cv->vmCvar, cv->cvarName, cv->defaultString, cv->cvarFlags);
 		if (cv->vmCvar) {
 			cv->modificationCount = cv->vmCvar->modificationCount;
 			// OSP - Update vote info for clients, if necessary
 			G_checkServerToggle(cv->vmCvar);
 		}
-
-		remapped = (remapped || cv->teamShader);
-	}
-
-	if (remapped) {
-		G_RemapTeamShaders();
 	}
 
 	// OSP
@@ -1090,7 +1069,6 @@ void G_RegisterCvars(void) {
 	} else if (pmove_msec.integer > 33) {
 		trap_Cvar_Set("pmove_msec", "33");
 	}
-
 }
 
 /*
@@ -1103,10 +1081,9 @@ void G_UpdateCvars(void) {
 	cvarTable_t *cv;
 	qboolean    fToggles          = qfalse;
 	qboolean    fVoteFlags        = qfalse;
-	qboolean    remapped          = qfalse;
 	qboolean    chargetimechanged = qfalse;
 
-	for (i = 0, cv = gameCvarTable ; i < gameCvarTableSize ; i++, cv++) {
+	for (i = 0, cv = gameCvarTable ; i < gameCvarTableSize ; ++i, ++cv) {
 		if (cv->vmCvar) {
 			trap_Cvar_Update(cv->vmCvar);
 
@@ -1115,10 +1092,6 @@ void G_UpdateCvars(void) {
 
 				if (cv->trackChange && !(cv->cvarFlags & CVAR_LATCH)) {
 					trap_SendServerCommand(-1, va("print \"Server:[lof] %s [lon]changed to[lof] %s\n\"", cv->cvarName, cv->vmCvar->string));
-				}
-
-				if (cv->teamShader) {
-					remapped = qtrue;
 				}
 
 				if (cv->vmCvar == &g_filtercams) {
@@ -1173,10 +1146,6 @@ void G_UpdateCvars(void) {
 
 	if (fToggles) {
 		trap_SetConfigstring(CS_SERVERTOGGLES, va("%d", level.server_settings));
-	}
-
-	if (remapped) {
-		G_RemapTeamShaders();
 	}
 
 	if (chargetimechanged) {
@@ -1265,7 +1234,7 @@ void G_InitGame(int levelTime, int randomSeed) {
 	level.startTime       = levelTime;
 	level.server_settings = i;
 
-	for (i = 0; i < level.numConnectedClients; i++) {
+	for (i = 0; i < level.numConnectedClients; ++i) {
 		level.clients[level.sortedClients[i]].sess.spawnObjectiveIndex = 0;
 	}
 
@@ -1357,7 +1326,7 @@ void G_InitGame(int levelTime, int randomSeed) {
 	Info_SetValueForKey(cs, "numspawntargets", "0");
 	trap_SetConfigstring(CS_MULTI_INFO, cs);
 
-	for (i = CS_MULTI_SPAWNTARGETS; i < CS_MULTI_SPAWNTARGETS + MAX_MULTI_SPAWNTARGETS; i++) {
+	for (i = CS_MULTI_SPAWNTARGETS; i < CS_MULTI_SPAWNTARGETS + MAX_MULTI_SPAWNTARGETS; ++i) {
 		trap_SetConfigstring(i, "");
 	}
 
@@ -1373,7 +1342,7 @@ void G_InitGame(int levelTime, int randomSeed) {
 	level.clients = g_clients;
 
 	// set client fields on player ents
-	for (i = 0 ; i < level.maxclients ; i++) {
+	for (i = 0 ; i < level.maxclients ; ++i) {
 		g_entities[i].client = level.clients + i;
 	}
 
@@ -1429,8 +1398,6 @@ void G_InitGame(int levelTime, int randomSeed) {
 
 	G_Printf("-----------------------------------\n");
 
-	G_RemapTeamShaders();
-
 	BG_ClearAnimationPool();
 
 	BG_ClearCharacterPool();
@@ -1471,8 +1438,6 @@ void G_InitGame(int levelTime, int randomSeed) {
 		G_Error("Error while installing delayed map change watcher\n");
 	}
 }
-
-
 
 /*
 =================
@@ -1552,7 +1517,6 @@ int QDECL SortRanks(const void *a, const void *b) {
 		return -1;
 	}
 
-
 	// then spectators
 	if (ca->sess.sessionTeam == TEAM_SPECTATOR && cb->sess.sessionTeam == TEAM_SPECTATOR) {
 		if (ca->sess.spectatorTime < cb->sess.spectatorTime) {
@@ -1594,7 +1558,7 @@ void etpro_PlayerInfo(void) {
 
 	lastclient = -1;
 	e          = &g_entities[0];
-	for (i = 0; i < MAX_CLIENTS; i++, e++) {
+	for (i = 0; i < MAX_CLIENTS; ++i, ++e) {
 		if (e->client == NULL || e->client->pers.connected == CON_DISCONNECTED) {
 			playerinfo[i] = '-';
 			continue;
@@ -1642,14 +1606,14 @@ void CalculateRanks(void) {
 	level.voteInfo.numVotingTeamClients[0] = 0;
 	level.voteInfo.numVotingTeamClients[1] = 0;
 
-	for (i = 0; i < TEAM_NUM_TEAMS; i++) {
+	for (i = 0; i < TEAM_NUM_TEAMS; ++i) {
 		if (i < 2) {
 			level.numTeamClients[i] = 0;
 		}
 		teaminfo[i][0] = 0;         // OSP
 	}
 
-	for (i = 0 ; i < level.maxclients ; i++) {
+	for (i = 0 ; i < level.maxclients ; ++i) {
 		if (level.clients[i].pers.connected != CON_DISCONNECTED) {
 			int team = level.clients[i].sess.sessionTeam;
 
@@ -1689,7 +1653,7 @@ void CalculateRanks(void) {
 	}
 
 	// OSP
-	for (i = 0; i < TEAM_NUM_TEAMS; i++) {
+	for (i = 0; i < TEAM_NUM_TEAMS; ++i) {
 		if (0 == teaminfo[i][0]) {
 			Q_strncpyz(teaminfo[i], "(None)", sizeof (teaminfo[i]));
 		}
@@ -1700,7 +1664,6 @@ void CalculateRanks(void) {
 	//bani - #184
 	etpro_PlayerInfo();
 }
-
 
 /*
 ========================================================================
@@ -1759,7 +1722,6 @@ void FindIntermissionPoint(void) {
 			}
 		}
 	}
-
 }
 
 /*
@@ -1984,7 +1946,7 @@ qboolean G_PositionEntityOnTag(gentity_t *entity, gentity_t *parent, char *tagNa
 		return qfalse;
 	}
 
-	for (i = 0 ; i < 3 ; i++) {
+	for (i = 0 ; i < 3 ; ++i) {
 		VectorMA(entity->r.currentOrigin, tag.origin[i], axis[i], entity->r.currentOrigin);
 	}
 
@@ -2054,7 +2016,6 @@ void G_TagLinkEntity(gentity_t *ent, int msec) {
 			} else {
 				frac = ((ent->backdelta * (MAX_SPLINE_SEGMENTS)) - pos) * ent->backspline->segments[pos].length;
 			}
-
 
 			VectorMA(ent->backspline->segments[pos].start, frac, ent->backspline->segments[pos].v_norm, v);
 			if (parent->s.apos.trBase[0]) {
@@ -2178,7 +2139,6 @@ void G_RunEntity(gentity_t *ent, int msec) {
 			ent->s.eFlags &= ~EF_NODRAW;
 		}
 	}
-
 
 	// clear events that are too old
 	if (level.time - ent->eventTime > EVENT_VALID_MSEC) {
@@ -2336,17 +2296,16 @@ void G_RunFrame(int levelTime) {
 	// get any cvar changes
 	G_UpdateCvars();
 
-	for (i = 0; i < level.num_entities; i++) {
+	for (i = 0; i < level.num_entities; ++i) {
 		g_entities[i].runthisframe = qfalse;
 	}
 
 	// go through all allocated objects
-	for (i = 0; i < level.num_entities; i++) {
+	for (i = 0; i < level.num_entities; ++i) {
 		G_RunEntity(&g_entities[i], msec);
 	}
 
-
-	for (i = 0; i < level.numConnectedClients; i++) {
+	for (i = 0; i < level.numConnectedClients; ++i) {
 		ClientEndFrame(&g_entities[level.sortedClients[i]]);
 	}
 

@@ -67,7 +67,7 @@ void G_SendScore(gentity_t *ent) {
 		}
 		size  = strlen(startbuffer) + 1;
 
-		for (; i < numSorted ; i++) {
+		for (; i < numSorted ; ++i) {
 			int ping;
 
 			cl = &level.clients[level.sortedClients[i]];
@@ -274,7 +274,7 @@ int ClientNumberFromString(gentity_t *to, char *s) {
 
 	// See if its a number or string
 	len = strlen(s);
-	for (idnum = 0; idnum < len && s[idnum] != 0; idnum++) {
+	for (idnum = 0; idnum < len && s[idnum] != 0; ++idnum) {
 		if (s[idnum] < '0' || s[idnum] > '9') {
 			fIsNumber = qfalse;
 			break;
@@ -283,7 +283,7 @@ int ClientNumberFromString(gentity_t *to, char *s) {
 
 	// check for a name match
 	SanitizeString(s, s2, qtrue);
-	for (idnum = 0, cl = level.clients; idnum < level.maxclients; idnum++, cl++) {
+	for (idnum = 0, cl = level.clients; idnum < level.maxclients; ++idnum, ++cl) {
 		if (cl->pers.connected != CON_CONNECTED) {
 			continue;
 		}
@@ -507,7 +507,7 @@ qboolean SetTeam(gentity_t *ent, char *s, weapon_t w1, weapon_t w2, qboolean set
 		int i;
 		int x = client->sess.sessionTeam - TEAM_AXIS;
 
-		for (i = 0; i < MAX_COMMANDER_TEAM_SOUNDS; i++) {
+		for (i = 0; i < MAX_COMMANDER_TEAM_SOUNDS; ++i) {
 			if (level.commanderSounds[x][i].index) {
 				gentity_t *tent = G_TempEntity(client->ps.origin, EV_GLOBAL_CLIENT_SOUND);
 				tent->s.eventParm = level.commanderSounds[x][i].index - 1;
@@ -566,7 +566,6 @@ void G_SetClientWeapons(gentity_t *ent, weapon_t w1, weapon_t w2, qboolean updat
 		ClientUserinfoChanged(ent - g_entities);
 	}
 }
-
 
 /*
 =================
@@ -982,7 +981,6 @@ void G_Say(gentity_t *ent, gentity_t *target, int mode, qboolean encoded, const 
 	}
 }
 
-
 /*
 ==================
 Cmd_Say_f
@@ -1201,7 +1199,6 @@ qboolean Cmd_CallVote_f(gentity_t *ent, unsigned int dwCommand, qboolean fRefCom
 	trap_Argv(1, arg1, sizeof (arg1));
 	trap_Argv(2, arg2, sizeof (arg2));
 
-
 	// Nico, bugfix: callvote exploit fixed
 	// http://aluigi.freeforums.org/quake3-engine-callvote-bug-t686.html
 	if (strchr(arg1, ';') || strchr(arg2, ';') ||
@@ -1300,7 +1297,7 @@ qboolean Cmd_CallVote_f(gentity_t *ent, unsigned int dwCommand, qboolean fRefCom
 
 	// Don't send the vote info if a ref initiates (as it will automatically pass)
 	if (!fRefCommand) {
-		for (i = 0; i < level.numConnectedClients; i++) {
+		for (i = 0; i < level.numConnectedClients; ++i) {
 			level.clients[level.sortedClients[i]].ps.eFlags &= ~EF_VOTED;
 		}
 
@@ -1531,7 +1528,7 @@ void Cmd_SetCameraOrigin_f(gentity_t *ent) {
 		return;
 	}
 
-	for (i = 0 ; i < 3 ; i++) {
+	for (i = 0 ; i < 3 ; ++i) {
 		trap_Argv(i + 1, buffer, sizeof (buffer));
 		origin[i] = atof(buffer);
 	}
@@ -1795,7 +1792,7 @@ void Cmd_Activate_f(gentity_t *ent) {
 			ent->client->ps.persistant[PERS_HWEAPON_USE] = 0;
 			ent->active                                  = qfalse;
 
-			for (i = 0; i < level.num_entities; i++) {
+			for (i = 0; i < level.num_entities; ++i) {
 				if (g_entities[i].s.eType == ET_MG42_BARREL && g_entities[i].r.ownerNum == ent->s.number) {
 					g_entities[i].mg42weapHeat     = ent->client->ps.weapHeat[WP_DUMMY_MG42];
 					g_entities[i].backupWeaponTime = ent->client->ps.weaponTime;
@@ -1849,7 +1846,6 @@ tryagain:
 	}
 }
 
-
 void Cmd_Activate2_f(gentity_t *ent) {
 	trace_t  tr;
 	vec3_t   end;
@@ -1896,7 +1892,7 @@ void G_UpdateSpawnCounts(void) {
 		current = atoi(Info_ValueForKey(cs, "c"));
 		team    = atoi(Info_ValueForKey(cs, "t")) & ~256;
 
-		for (j = 0; j < level.numConnectedClients; j++) {
+		for (j = 0; j < level.numConnectedClients; ++j) {
 			gclient_t *client = &level.clients[level.sortedClients[j]];
 
 			if (client->sess.sessionTeam != TEAM_AXIS && client->sess.sessionTeam != TEAM_ALLIES) {
@@ -1963,7 +1959,7 @@ void Cmd_SetSpawnPoint_f(gentity_t *ent) {
 		SetPlayerSpawn(ent, val, qtrue);
 	}
 
-	for (i = 0; i < level.numLimboCams; i++) {
+	for (i = 0; i < level.numLimboCams; ++i) {
 		int x = (g_entities[level.limboCams[i].targetEnt].count - CS_MULTI_SPAWNTARGETS) + 1;
 		if (level.limboCams[i].spawn && x == val) {
 			VectorCopy(level.limboCams[i].origin, ent->s.origin2);

@@ -26,11 +26,8 @@ If you have questions concerning this license or the applicable additional terms
 ===========================================================================
 */
 
-
-
 // bg_pmove.c -- both games player movement code
 // takes a playerstate and a usercmd as input and returns a modifed playerstate
-
 
 #ifdef CGAMEDLL
 # include "../cgame/cg_local.h"
@@ -87,7 +84,6 @@ void ClientStoreSurfaceFlags(int clientNum, int surfaceFlags);
 
 #endif
 
-
 /*
 ===============
 PM_AddEvent
@@ -118,7 +114,7 @@ void PM_AddTouchEnt(int entityNum) {
 	}
 
 	// see if it is already added
-	for (i = 0 ; i < pm->numtouch ; i++) {
+	for (i = 0 ; i < pm->numtouch ; ++i) {
 		if (pm->touchents[i] == entityNum) {
 			return;
 		}
@@ -299,7 +295,6 @@ static void PM_Friction(void) {
 	VectorScale(vel, newspeed, vel);
 }
 
-
 /*
 ==============
 PM_Accelerate
@@ -330,7 +325,7 @@ static void PM_Accelerate(vec3_t wishdir, float wishspeed, float accel) {
 		accelspeed = addspeed;
 	}
 
-	for (i = 0 ; i < 3 ; i++) {
+	for (i = 0 ; i < 3 ; ++i) {
 		pm->ps->velocity[i] += accelspeed * wishdir[i];
 	}
 }
@@ -410,7 +405,6 @@ static float PM_CmdScale(usercmd_t *cmd, qboolean horizontalOnly) {
 	return scale;
 }
 
-
 /*
 ================
 PM_SetMovementDir
@@ -455,7 +449,6 @@ static void PM_SetMovementDir(void) {
 		pm->ps->movementDir = 0;
 	}
 }
-
 
 /*
 =============
@@ -785,7 +778,6 @@ static void PM_WaterMove(void) {
 		PM_Accelerate(wishdir, wishspeed, pm_wateraccelerate);
 	}
 
-
 	// make sure we can go up slopes easily under water
 	if (pml.groundPlane && DotProduct(pm->ps->velocity, pml.groundTrace.plane.normal) < 0) {
 		float  vel;
@@ -872,18 +864,17 @@ static void PM_Aircontrol(pmove_t *pm, vec3_t wishdir, float wishspeed) {
 
 	if (dot > 0) {
 		// we can't change direction while slowing down
-		for (i = 0; i < 2; i++) {
+		for (i = 0; i < 2; ++i) {
 			pm->ps->velocity[i] = pm->ps->velocity[i] * speed + wishdir[i] * k;
 		}
 		VectorNormalize(pm->ps->velocity);
 	}
 
-	for (i = 0; i < 2; i++) {
+	for (i = 0; i < 2; ++i) {
 		pm->ps->velocity[i] *= speed;
 	}
 	pm->ps->velocity[2] = zspeed;
 }
-
 
 /*
 ===================
@@ -924,7 +915,7 @@ static void PM_AirMove(void) {
 	VectorNormalize(pml.forward);
 	VectorNormalize(pml.right);
 
-	for (i = 0 ; i < 2 ; i++) {
+	for (i = 0 ; i < 2 ; ++i) {
 		wishvel[i] = pml.forward[i] * fmove + pml.right[i] * smove;
 	}
 	wishvel[2] = 0;
@@ -975,8 +966,6 @@ static void PM_AirMove(void) {
 	// set the movementDir so clients can rotate the legs for strafing
 	PM_SetMovementDir();
 }
-
-
 
 /*
 ===================
@@ -1042,7 +1031,7 @@ static void PM_WalkMove(void) {
 	VectorNormalize(pml.forward);
 	VectorNormalize(pml.right);
 
-	for (i = 0 ; i < 3 ; i++) {
+	for (i = 0 ; i < 3 ; ++i) {
 		wishvel[i] = pml.forward[i] * fmove + pml.right[i] * smove;
 	}
 
@@ -1133,7 +1122,6 @@ static void PM_WalkMove(void) {
 	PM_SetMovementDir();
 }
 
-
 /*
 ==============
 PM_DeadMove
@@ -1157,7 +1145,6 @@ static void PM_DeadMove(void) {
 		VectorScale(pm->ps->velocity, forward, pm->ps->velocity);
 	}
 }
-
 
 /*
 ===============
@@ -1200,7 +1187,7 @@ static void PM_NoclipMove(void) {
 	fmove = pm->cmd.forwardmove;
 	smove = pm->cmd.rightmove;
 
-	for (i = 0 ; i < 3 ; i++)
+	for (i = 0 ; i < 3 ; ++i)
 		wishvel[i] = pml.forward[i] * fmove + pml.right[i] * smove;
 	wishvel[2] += pm->cmd.upmove;
 
@@ -1347,8 +1334,6 @@ static void PM_CrashLand(void) {
 	pm->ps->bobCycle = 0;
 }
 
-
-
 /*
 =============
 PM_CorrectAllSolid
@@ -1363,9 +1348,9 @@ static int PM_CorrectAllSolid(trace_t *trace) {
 	}
 
 	// jitter around
-	for (i = -1; i <= 1; i++) {
-		for (j = -1; j <= 1; j++) {
-			for (k = -1; k <= 1; k++) {
+	for (i = -1; i <= 1; ++i) {
+		for (j = -1; j <= 1; ++j) {
+			for (k = -1; k <= 1; ++k) {
 				VectorCopy(pm->ps->origin, point);
 				point[0] += (float) i;
 				point[1] += (float) j;
@@ -1390,7 +1375,6 @@ static int PM_CorrectAllSolid(trace_t *trace) {
 
 	return qfalse;
 }
-
 
 /*
 =============
@@ -1437,7 +1421,6 @@ static void PM_GroundTraceMissed(void) {
 	pml.walking     = qfalse;
 }
 
-
 /*
 =============
 PM_GroundTrace
@@ -1449,7 +1432,6 @@ static void PM_GroundTrace(void) {
 
 	point[0] = pm->ps->origin[0];
 	point[1] = pm->ps->origin[1];
-
 
 	if (pm->ps->eFlags & EF_MG42_ACTIVE || pm->ps->eFlags & EF_AAGUN_ACTIVE) {
 		point[2] = pm->ps->origin[2] - 1.f;
@@ -1547,7 +1529,6 @@ static void PM_GroundTrace(void) {
 	PM_AddTouchEnt(trace.entityNum);
 }
 
-
 /*
 =============
 PM_SetWaterLevel	FIXME: avoid this twice?  certainly if not moving
@@ -1640,10 +1621,7 @@ static void PM_CheckDuck(void) {
 	// done.
 }
 
-
-
 //===================================================================
-
 
 /*
 ===============
@@ -1658,7 +1636,6 @@ static void PM_Footsteps(void) {
 	int      animResult = -1;
 
 	if (pm->ps->eFlags & EF_DEAD) {
-
 
 		//if ( pm->ps->groundEntityNum == ENTITYNUM_NONE )
 		if (pm->ps->pm_flags & PMF_FLAILING) {
@@ -1743,7 +1720,6 @@ static void PM_Footsteps(void) {
 	}
 
 	footstep = qfalse;
-
 
 	if (pm->ps->eFlags & EF_PRONE) {
 		bobmove = 0.2f;  // prone characters bob slower
@@ -1907,14 +1883,6 @@ static void PM_WaterEvents(void) {          // FIXME?
 
 /*
 ================
-PM_Animate
-================
-*/
-#define MYTIMER_SALUTE   1133   // 17 frames, 15 fps
-#define MYTIMER_DISMOUNT 667    // 10 frames, 15 fps
-
-/*
-================
 PM_DropTimers
 ================
 */
@@ -1952,8 +1920,6 @@ static void PM_DropTimers(void) {
 		}
 	}
 }
-
-
 
 #define LEAN_MAX    28.0f
 #define LEAN_TIME_TO    200.0f  // time to get to/from full lean
@@ -2000,7 +1966,6 @@ void PM_UpdateLean(playerState_t *ps, usercmd_t *cmd, pmove_t *tpm) {
 
 	}
 	leanofs = ps->leanf;
-
 
 	if (!leaning) {    // go back to center position
 		if (leanofs > 0) {          // right
@@ -2065,14 +2030,11 @@ void PM_UpdateLean(playerState_t *ps, usercmd_t *cmd, pmove_t *tpm) {
 		ps->leanf *= trace.fraction;
 	}
 
-
 	if (ps->leanf) {
 		cmd->rightmove = 0;     // also disallowed in cl_input ~391
 
 	}
 }
-
-
 
 /*
 ================
@@ -2111,7 +2073,7 @@ void PM_UpdateViewAngles(playerState_t *ps, pmoveExt_t *pmext, usercmd_t *cmd, v
 	VectorCopy(ps->viewangles, oldViewAngles);
 
 	// circularly clamp the angles with deltas
-	for (i = 0 ; i < 3 ; i++) {
+	for (i = 0 ; i < 3 ; ++i) {
 		temp = cmd->angles[i] + ps->delta_angles[i];
 		if (i == PITCH) {
 			// don't let the player look up or down more than 90 degrees
@@ -2848,7 +2810,6 @@ void PmoveSingle(pmove_t *pmove) {
 	// snap some parts of playerstate to save network bandwidth
 	trap_SnapVector(pm->ps->velocity);
 }
-
 
 /*
 ================

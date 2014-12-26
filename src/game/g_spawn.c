@@ -515,7 +515,6 @@ spawn_t spawns[] =
 
 	{ "target_rumble",             SP_target_rumble             },
 
-
 	{ "light",                     SP_light                     },
 
 	{ "lightJunior",               SP_lightJunior               },
@@ -539,7 +538,6 @@ spawn_t spawns[] =
 	{ "misc_vis_dummy_multiple",   SP_misc_vis_dummy_multiple   },
 	{ "misc_light_surface",        SP_misc_light_surface        },
 	{ "misc_spotlight",            SP_misc_spotlight            },
-
 
 	{ "misc_mg42",                 SP_mg42                      },
 	{ "misc_aagun",                SP_aagun                     },
@@ -727,9 +725,6 @@ char *G_NewString(const char *string) {
 	return newb;
 }
 
-
-
-
 /*
 ===============
 G_ParseField
@@ -835,8 +830,6 @@ void G_SpawnGEntityFromSpawnVars(void) {
 	}
 }
 
-
-
 /*
 ====================
 G_AddSpawnVarToken
@@ -915,7 +908,6 @@ qboolean G_ParseSpawnVars(void) {
 	return qtrue;
 }
 
-
 /*QUAKED worldspawn (0 0 0) ? NO_GT_WOLF NO_GT_STOPWATCH NO_GT_CHECKPOINT NO_LMS
 
 Every map should have exactly one worldspawn.
@@ -975,7 +967,6 @@ void SP_worldspawn(void) {
 		G_initMatch();
 	}
 }
-
 
 /*
 ==============

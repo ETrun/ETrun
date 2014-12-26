@@ -148,7 +148,6 @@ typedef enum {
 	// add commands to the console as if they were typed in
 	// for map changing, etc
 
-
 	//=========== server specific functionality =============
 
 	G_LOCATE_GAME_DATA,     // ( gentity_t *gEnts, int numGEntities, int sizeofGEntity_t,
@@ -344,7 +343,6 @@ typedef enum {
 	BOTLIB_EA_GET_INPUT,
 	BOTLIB_EA_RESET_INPUT,
 
-
 	BOTLIB_AI_LOAD_CHARACTER = 500,
 	BOTLIB_AI_FREE_CHARACTER,
 	BOTLIB_AI_CHARACTERISTIC_FLOAT,
@@ -446,7 +444,6 @@ typedef enum {
 	G_MESSAGESTATUS,
 	// -zinx
 } gameImport_t;
-
 
 //
 // functions exported by the game subsystem

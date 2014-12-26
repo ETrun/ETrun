@@ -39,17 +39,12 @@ If you have questions concerning this license or the applicable additional terms
 #include "cg_local.h"
 
 #define MAX_ATMOSPHERIC_HEIGHT          MAX_MAP_SIZE    // maximum world height
-#define MIN_ATMOSPHERIC_HEIGHT          -MAX_MAP_SIZE   // minimum world height
-
 #define MAX_ATMOSPHERIC_PARTICLES       4000    // maximum # of particles
 #define MAX_ATMOSPHERIC_DISTANCE        1000    // maximum distance from refdef origin that particles are visible
 #define MAX_ATMOSPHERIC_EFFECTSHADERS   6       // maximum different effectshaders for an atmospheric effect
 #define ATMOSPHERIC_DROPDELAY           1000
-#define ATMOSPHERIC_CUTHEIGHT           800
-
 #define ATMOSPHERIC_RAIN_SPEED      (1.1f * DEFAULT_GRAVITY)
 #define ATMOSPHERIC_RAIN_HEIGHT     150
-
 #define ATMOSPHERIC_SNOW_SPEED      (0.1f * DEFAULT_GRAVITY)
 #define ATMOSPHERIC_SNOW_HEIGHT     3
 
@@ -73,7 +68,7 @@ static void CG_AddPolyToPool(qhandle_t shader, const polyVert_t *verts) {
 	firstIndex  = pPolyBuffer->numIndicies;
 	firstVertex = pPolyBuffer->numVerts;
 
-	for (i = 0; i < 3; i++) {
+	for (i = 0; i < 3; ++i) {
 		VectorCopy(verts[i].xyz, pPolyBuffer->xyz[firstVertex + i]);
 
 		pPolyBuffer->st[firstVertex + i][0]    = verts[i].st[0];
@@ -135,7 +130,6 @@ static qboolean CG_SetParticleActive(cg_atmosphericParticle_t *particle, active_
 	particle->active = active;
 	return active ? qtrue : qfalse;
 }
-
 
 /*
 **	Raindrop management functions
@@ -529,7 +523,7 @@ static void CG_EP_ParseFloats(char *floatstr, float *f1, float *f2) {
 	char buff[64];
 
 	Q_strncpyz(buff, floatstr, sizeof (buff));
-	for (middleptr = buff; *middleptr && *middleptr != ' '; middleptr++)
+	for (middleptr = buff; *middleptr && *middleptr != ' '; ++middleptr)
 		;
 	if (*middleptr) {
 		*middleptr++ = 0;
@@ -547,7 +541,7 @@ static void CG_EP_ParseInts(char *intstr, int *i1, int *i2) {
 	char buff[64];
 
 	Q_strncpyz(buff, intstr, sizeof (buff));
-	for (middleptr = buff; *middleptr && *middleptr != ' '; middleptr++)
+	for (middleptr = buff; *middleptr && *middleptr != ' '; ++middleptr)
 		;
 	if (*middleptr) {
 		*middleptr++ = 0;
@@ -584,7 +578,7 @@ void CG_EffectParse(const char *effectstr) {
 	// Parse the parameter string
 	Q_strncpyz(workbuff, effectstr, sizeof (workbuff));
 	for (startptr = workbuff; *startptr; ) {
-		for (eqptr = startptr; *eqptr && *eqptr != '=' && *eqptr != ','; eqptr++)
+		for (eqptr = startptr; *eqptr && *eqptr != '=' && *eqptr != ','; ++eqptr)
 			;
 		if (!*eqptr) {
 			break;          // No more string
@@ -594,7 +588,7 @@ void CG_EffectParse(const char *effectstr) {
 			continue;
 		}
 		*eqptr++ = 0;
-		for (endptr = eqptr; *endptr && *endptr != ','; endptr++)
+		for (endptr = eqptr; *endptr && *endptr != ','; ++endptr)
 			;
 		if (*endptr) {
 			*endptr++ = 0;
@@ -695,7 +689,7 @@ void CG_EffectParse(const char *effectstr) {
 	}
 
 	// Initialise atmospheric effect to prevent all particles falling at the start
-	for (count = 0; count < cg_atmFx.numDrops; count++)
+	for (count = 0; count < cg_atmFx.numDrops; ++count)
 		cg_atmFx.particles[count].nextDropTime = ATMOSPHERIC_DROPDELAY + (rand() % ATMOSPHERIC_DROPDELAY);
 
 	CG_EffectGust();
@@ -729,7 +723,7 @@ void CG_AddAtmosphericEffects() {
 
 	VectorSet(cg_atmFx.viewDir, cg.refdef_current->viewaxis[0][0], cg.refdef_current->viewaxis[0][1], 0.f);
 
-	for (curr = 0; curr < max; curr++) {
+	for (curr = 0; curr < max; ++curr) {
 		cg_atmosphericParticle_t *particle;
 
 		particle = &cg_atmFx.particles[curr];

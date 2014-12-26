@@ -71,7 +71,7 @@ static void insert_sort(s_timerunScores *tab, int size) {
 
 	for (i = 1; i < size; ++i) {
 		s_timerunScores elem = tab[i];
-		for (j = i; j > 0 && tab[j - 1].timerunBestTime > elem.timerunBestTime; j--)
+		for (j = i; j > 0 && tab[j - 1].timerunBestTime > elem.timerunBestTime; --j)
 			tab[j] = tab[j - 1];
 		tab[j] = elem;
 	}

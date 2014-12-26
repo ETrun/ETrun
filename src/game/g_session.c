@@ -29,7 +29,6 @@ If you have questions concerning this license or the applicable additional terms
 #include "g_local.h"
 #include "../../etrun/ui/menudef.h"
 
-
 /*
 =======================================================================
 
@@ -114,7 +113,6 @@ void G_ReadSessionData(gclient_t *client) {
 	       );
 }
 
-
 /*
 ================
 G_InitSessionData
@@ -154,7 +152,6 @@ void G_InitSessionData(gclient_t *client) {
 
 	G_WriteClientSessionData(client, qfalse);
 }
-
 
 /*
 ==================
@@ -233,7 +230,7 @@ void G_WriteSessionData(qboolean restart) {
 		}
 	}
 
-	for (i = 0; i < MAX_FIRETEAMS; i++) {
+	for (i = 0; i < MAX_FIRETEAMS; ++i) {
 		char buffer[MAX_STRING_CHARS];
 		if (!level.fireTeams[i].inuse) {
 			Com_sprintf(buffer, MAX_STRING_CHARS, "\\id\\-1");
@@ -241,7 +238,7 @@ void G_WriteSessionData(qboolean restart) {
 			char buffer2[MAX_STRING_CHARS];
 
 			*buffer2 = '\0';
-			for (j = 0; j < MAX_CLIENTS; j++) {
+			for (j = 0; j < MAX_CLIENTS; ++j) {
 				char p[8];
 				Com_sprintf(p, 8, " %i", level.fireTeams[i].joinOrder[j]);
 				Q_strcat(buffer2, MAX_STRING_CHARS, p);

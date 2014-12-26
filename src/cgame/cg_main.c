@@ -33,7 +33,6 @@ If you have questions concerning this license or the applicable additional terms
  *
 */
 
-
 #include "cg_local.h"
 #include "../../libs/sha-1/sha1.h"
 
@@ -584,7 +583,6 @@ int      cvarTableSize = sizeof (cvarTable) / sizeof (cvarTable[0]);
 qboolean cvarsLoaded   = qfalse;
 void CG_setClientFlags(void);
 
-
 /*
 =================
 CG_RegisterCvars
@@ -958,7 +956,7 @@ void CG_SetupDlightstyles(void) {
 		token          = COM_Parse(&str); // attenuation
 		cent->dl_atten = atoi(token);
 
-		for (j = 0; j < (int)strlen(cent->dl_stylestring); j++) {
+		for (j = 0; j < (int)strlen(cent->dl_stylestring); ++j) {
 
 			cent->dl_stylestring[j] += cent->dl_atten;  // adjust character for attenuation/amplification
 
@@ -1027,7 +1025,6 @@ static void CG_RegisterItemSounds(int itemNum) {
 		}
 	}
 }
-
 
 /*
 =================
@@ -1163,7 +1160,6 @@ static void CG_RegisterSounds(void) {
 	cgs.media.grenadePulseSound2 = trap_S_RegisterSound("sound/weapons/grenade/gren_timer2.wav");
 	cgs.media.grenadePulseSound1 = trap_S_RegisterSound("sound/weapons/grenade/gren_timer1.wav");
 
-
 	cgs.media.boneBounceSound = trap_S_RegisterSound("sound/world/boardbreak.wav");          // TODO: need a real sound for this
 
 	cgs.media.sfx_rockexp     = trap_S_RegisterSound("sound/weapons/rocket/rocket_expl.wav");
@@ -1182,7 +1178,6 @@ static void CG_RegisterSounds(void) {
 	cgs.media.sfx_grenexp        = trap_S_RegisterSound("sound/weapons/grenade/gren_expl.wav");
 	cgs.media.sfx_grenexpDist    = trap_S_RegisterSound("sound/weapons/grenade/gren_expl_far.wav");
 	cgs.media.sfx_rockexpWater   = trap_S_RegisterSound("sound/weapons/grenade/gren_expl_water.wav");
-
 
 	for (i = 0; i < 3; ++i) {
 		// Gordon: bouncy shell sounds \o/
@@ -1216,7 +1211,6 @@ static void CG_RegisterSounds(void) {
 		CG_PrecacheFXSounds();
 	}
 }
-
 
 //===================================================================================
 
@@ -1370,7 +1364,6 @@ static void CG_RegisterGraphics(void) {
 	cgs.media.debRock[0] = trap_R_RegisterModel("models/mapobjects/debris/rubble1.md3");
 	cgs.media.debRock[1] = trap_R_RegisterModel("models/mapobjects/debris/rubble2.md3");
 	cgs.media.debRock[2] = trap_R_RegisterModel("models/mapobjects/debris/rubble3.md3");
-
 
 	cgs.media.debWood[0] = trap_R_RegisterModel("models/gibs/wood/wood1.md3");
 	cgs.media.debWood[1] = trap_R_RegisterModel("models/gibs/wood/wood2.md3");
@@ -1622,7 +1615,6 @@ static void CG_RegisterGraphics(void) {
 	cgs.media.limboClassButtons2[PC_FIELDOPS]  = trap_R_RegisterShaderNoMip("gfx/limbo/skill_fieldops");
 	cgs.media.limboClassButtons2[PC_MEDIC]     = trap_R_RegisterShaderNoMip("gfx/limbo/skill_medic");
 
-
 	cgs.media.limboTeamButtonBack_on  = trap_R_RegisterShaderNoMip("gfx/limbo/but_team_on");
 	cgs.media.limboTeamButtonBack_off = trap_R_RegisterShaderNoMip("gfx/limbo/but_team_off");
 	cgs.media.limboTeamButtonAllies   = trap_R_RegisterShaderNoMip("gfx/limbo/but_team_allied");
@@ -1639,7 +1631,6 @@ static void CG_RegisterGraphics(void) {
 	cgs.media.limboWeaponCard1     = trap_R_RegisterShaderNoMip("gfx/limbo/weaponcard01");
 	cgs.media.limboWeaponCard2     = trap_R_RegisterShaderNoMip("gfx/limbo/weaponcard02");
 	cgs.media.limboWeaponCardArrow = trap_R_RegisterShaderNoMip("gfx/limbo/weap_dnarrow.tga");
-
 
 	cgs.media.limboObjectiveBack[0] = trap_R_RegisterShaderNoMip("gfx/limbo/objective_back_axis");
 	cgs.media.limboObjectiveBack[1] = trap_R_RegisterShaderNoMip("gfx/limbo/objective_back_allied");
@@ -1749,7 +1740,6 @@ int CG_ConfigStringCopy(int index, char *buff, int buffsize) {
 	Q_strncpyz(buff, CG_ConfigString(index), buffsize);
 	return strlen(buff);
 }
-
 
 //==================================================================
 

@@ -70,7 +70,7 @@ int QDECL CG_SortFireTeam(const void *a, const void *b) {
 void CG_SortClientFireteam() {
 	int i;
 
-	for (i = 0; i < MAX_CLIENTS; i++) {
+	for (i = 0; i < MAX_CLIENTS; ++i) {
 		sortedFireTeamClients[i] = i;
 	}
 
@@ -163,7 +163,7 @@ clientInfo_t *CG_SortedFireTeamPlayerForPosition(int pos, int max) {
 		return NULL;
 	}
 
-	for (i = 0; i < MAX_CLIENTS && cnt < max; i++) {
+	for (i = 0; i < MAX_CLIENTS && cnt < max; ++i) {
 		if (!(f == CG_IsOnFireteam(sortedFireTeamClients[i]))) {
 			return NULL;
 		}
@@ -203,7 +203,7 @@ void CG_DrawFireTeamOverlay(rectDef_t *rect) {
 	}
 
 	h = 12 + 2 + 2;
-	for (i = 0; i < 6; i++) {
+	for (i = 0; i < 6; ++i) {
 		ci = CG_SortedFireTeamPlayerForPosition(i, 6);
 		if (!ci) {
 			break;
@@ -231,7 +231,7 @@ void CG_DrawFireTeamOverlay(rectDef_t *rect) {
 
 	x += 2;
 
-	for (i = 0; i < 6; i++) {
+	for (i = 0; i < 6; ++i) {
 		y += FT_BAR_HEIGHT + FT_BAR_YSPACING;
 		x  = rect->x + 2;
 
@@ -331,7 +331,7 @@ qboolean CG_FireteamHasClass(int classnum, qboolean selectedonly) {
 		return qfalse;
 	}
 
-	for (i = 0; i < MAX_CLIENTS; i++) {
+	for (i = 0; i < MAX_CLIENTS; ++i) {
 		if (!cgs.clientinfo[i].infoValid) {
 			continue;
 		}

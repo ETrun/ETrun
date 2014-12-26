@@ -28,7 +28,6 @@ If you have questions concerning this license or the applicable additional terms
 
 #include "g_local.h"
 
-
 void propExplosion(gentity_t *ent);
 
 /*
@@ -119,7 +118,6 @@ void alarmbox_use(gentity_t *ent, gentity_t *other, gentity_t *foo) {
 	}
 }
 
-
 /*
 ==============
 alarmbox_die
@@ -139,9 +137,6 @@ void alarmbox_die(gentity_t *ent, gentity_t *inflictor, gentity_t *attacker, int
 	alarmbox_updateparts(ent, qtrue);
 }
 
-
-
-
 /*
 ==============
 alarmbox_finishspawning
@@ -157,7 +152,6 @@ void alarmbox_finishspawning(gentity_t *ent) {
 	// find lights and set their state
 	alarmbox_updateparts(ent, qtrue);
 }
-
 
 /*QUAKED alarm_box (1 0 1) START_ON
 You need to have an origin brush as part of this entity
@@ -193,7 +187,6 @@ void SP_alarm_box(gentity_t *ent) {
 	}
 
 	ent->soundPos3 = G_SoundIndex("sound/world/alarmswitch.wav");
-
 
 	G_SetOrigin(ent, ent->s.origin);
 	G_SetAngle(ent, ent->s.angles);

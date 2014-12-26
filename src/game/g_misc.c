@@ -33,13 +33,11 @@ If you have questions concerning this license or the applicable additional terms
  *
 */
 
-
 #include "g_local.h"
 
 /*QUAKED func_group (0 0 0) ?
 Used to group brushes together just for editor convenience.  They are turned into normal brushes by the utilities.
 */
-
 
 /*QUAKED info_camp (0 0.5 0) (-4 -4 -4) (4 4 4)
 Used as a positional target for calculations in the utilities (spotlights, etc), but removed during gameplay.
@@ -47,7 +45,6 @@ Used as a positional target for calculations in the utilities (spotlights, etc),
 void SP_info_camp(gentity_t *self) {
 	G_SetOrigin(self, self->s.origin);
 }
-
 
 /*QUAKED info_null (0 0.5 0) (-4 -4 -4) (4 4 4)
 Used as a positional target for calculations in the utilities (spotlights, etc), but removed during gameplay.
@@ -62,7 +59,6 @@ void SP_info_null(gentity_t *self) {
 	self->nextthink = level.time + (FRAMETIME * 2);
 }
 
-
 /*QUAKED info_notnull (0 0.5 0) (-4 -4 -4) (4 4 4)
 Used as a positional target for in-game calculation, like jumppad targets.
 target_position does the same thing
@@ -70,7 +66,6 @@ target_position does the same thing
 void SP_info_notnull(gentity_t *self) {
 	G_SetOrigin(self, self->s.origin);
 }
-
 
 /*QUAKED light (0 1 0) (-8 -8 -8) (8 8 8) nonlinear angle negative_spot negative_point q3map_non-dynamic
 Non-displayed light.
@@ -98,8 +93,6 @@ Lights pointed at a target will be spotlights.
 void SP_lightJunior(gentity_t *self) {
 	G_FreeEntity(self);
 }
-
-
 
 /*
 =================================================================================
@@ -137,7 +130,6 @@ void TeleportPlayer(gentity_t *player, vec3_t origin, vec3_t angles) {
 	}
 }
 
-
 /*QUAKED misc_teleporter_dest (1 0 0) (-32 -32 -24) (32 32 -16)
 Point teleporters at these.
 Now that we don't have teleport destination pads, this is just
@@ -166,7 +158,6 @@ void use_spotlight(gentity_t *ent, gentity_t *other, gentity_t *activator) {
 	}
 }
 
-
 void spotlight_finish_spawning(gentity_t *ent) {
 	if (ent->spawnflags & 1) {     // START_ON
 		ent->active = 0;
@@ -177,7 +168,6 @@ void spotlight_finish_spawning(gentity_t *ent) {
 	ent->think     = 0;
 	ent->nextthink = 0;
 }
-
 
 //----(SA)	added
 /*QUAKED misc_spotlight (1 0 0) (-16 -16 -16) (16 16 16) START_ON BACK_AND_FORTH
@@ -203,7 +193,6 @@ void SP_misc_spotlight(gentity_t *ent) {
 	if (ent->target) {
 		ent->s.density = G_FindConfigstringIndex(ent->target, CS_SPLINES, MAX_SPLINE_CONFIGSTRINGS, qtrue);
 	}
-
 }
 
 //----(SA)	end
@@ -325,9 +314,6 @@ void SP_misc_gamemodel(gentity_t *ent) {
 	trap_LinkEntity(ent);
 }
 
-
-
-
 //----(SA)
 
 void locateMaster(gentity_t *ent) {
@@ -359,7 +345,6 @@ void SP_misc_vis_dummy(gentity_t *ent) {
 
 	ent->think     = locateMaster;
 	ent->nextthink = level.time + 1000;
-
 }
 
 //----(SA) end
@@ -379,9 +364,7 @@ void SP_misc_vis_dummy_multiple(gentity_t *ent) {
 	ent->r.svFlags |= SVF_VISDUMMY_MULTIPLE;
 	G_SetOrigin(ent, ent->s.origin);
 	trap_LinkEntity(ent);
-
 }
-
 
 //===========================================================
 
@@ -612,7 +595,6 @@ void use_corona(gentity_t *ent, gentity_t *other, gentity_t *activator) {
 	}
 }
 
-
 /*
 ==============
 SP_corona
@@ -645,7 +627,6 @@ void SP_corona(gentity_t *ent) {
 	}
 }
 
-
 // (SA) dlights and dlightstyles
 // TTimo gcc: lots of braces around scalar initializer
 // char* predef_lightstyles[] = {
@@ -674,7 +655,6 @@ char *predef_lightstyles[] =
 	"aaaaaaaaaaaaaaaazzzzzzzz"
 };
 
-
 /*
 ==============
 dlight_finish_spawning
@@ -687,7 +667,6 @@ void dlight_finish_spawning(gentity_t *ent) {
 }
 
 static int dlightstarttime = 0;
-
 
 /*QUAKED dlight (0 1 0) (-12 -12 -12) (12 12 12) FORCEACTIVE STARTOFF ONETIME
 "style": value is an int from 1-19 that contains a pre-defined 'flicker' string.
@@ -724,7 +703,6 @@ styles:
 19 - "aaaaaaaaaaaaaaaazzzzzzzz"
 */
 
-
 /*
 ==============
 shutoff_dlight
@@ -740,7 +718,6 @@ void shutoff_dlight(gentity_t *ent) {
 	ent->think     = 0;
 	ent->nextthink = 0;
 }
-
 
 /*
 ==============
@@ -764,8 +741,6 @@ void use_dlight(gentity_t *ent, gentity_t *other, gentity_t *activator) {
 		}
 	}
 }
-
-
 
 /*
 ==============
@@ -835,7 +810,6 @@ void SP_dlight(gentity_t *ent) {
 	if (!(ent->spawnflags & 2)) {
 		trap_LinkEntity(ent);
 	}
-
 }
 // done (SA)
 
@@ -1014,7 +988,7 @@ void aagun_track(gentity_t *self, gentity_t *other) {
 
 		// move to the position over the next frame
 		VectorSubtract(other->client->ps.viewangles, self->s.apos.trBase, self->s.apos.trDelta);
-		for (i = 0; i < 3; i++) {
+		for (i = 0; i < 3; ++i) {
 			self->s.apos.trDelta[i] = AngleNormalize180(self->s.apos.trDelta[i]);
 		}
 		VectorScale(self->s.apos.trDelta, 1000 / 50, self->s.apos.trDelta);
@@ -1423,7 +1397,6 @@ void mg42_die(gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int da
 		gun->active  = qfalse;
 	}
 
-
 	trap_LinkEntity(self);
 }
 
@@ -1521,7 +1494,6 @@ void mg42_spawn(gentity_t *ent) {
 	VectorCopy(gun->s.angles, gun->s.apos.trDelta);
 
 	VectorCopy(ent->s.angles, gun->s.angles2);
-
 
 	gun->touch = mg42_touch;
 	gun->think = mg42_think;
@@ -1646,7 +1618,6 @@ void flak_spawn(gentity_t *ent) {
 	gun->mg42BaseEnt = ent->s.number;
 
 	trap_LinkEntity(gun);
-
 }
 
 /*QUAKED misc_flak (1 0 0) (-32 -32 0) (32 32 100)
@@ -1694,7 +1665,6 @@ void misc_spawner_think(gentity_t *ent) {
 		G_Printf("-----> WARNING <-------\n");
 		G_Printf("misc_spawner used at %s failed to drop!\n", vtos(ent->r.currentOrigin));
 	}
-
 }
 
 void misc_spawner_use(gentity_t *ent, gentity_t *other, gentity_t *activator) {
@@ -1718,7 +1688,6 @@ void SP_misc_spawner(gentity_t *ent) {
 	ent->use = misc_spawner_use;
 
 	trap_LinkEntity(ent);
-
 }
 
 void firetrail_die(gentity_t *ent) {
@@ -1737,7 +1706,6 @@ void firetrail_use(gentity_t *ent, gentity_t *other, gentity_t *activator) {
 	}
 
 	trap_LinkEntity(ent);
-
 }
 
 /*QUAKED misc_firetrails (.4 .9 .7) (-16 -16 -16) (16 16 16)
@@ -1783,13 +1751,11 @@ void misc_firetrails_think(gentity_t *ent) {
 	G_SetTargetName(right, ent->targetname);
 	G_ProcessTagConnect(right, qtrue);
 	trap_LinkEntity(right);
-
 }
 
 void SP_misc_firetrails(gentity_t *ent) {
 	ent->think     = misc_firetrails_think;
 	ent->nextthink = level.time + 100;
-
 }
 
 /*QUAKED misc_constructiblemarker (1 0.85 0) ?
@@ -1893,11 +1859,10 @@ void G_TempTraceIgnoreEntity(gentity_t *ent) {
 void G_TempTraceIgnorePlayersAndBodies(void) {
 	int i;
 
-	for (i = 0; i < MAX_CLIENTS; i++) {
+	for (i = 0; i < MAX_CLIENTS; ++i) {
 		G_TempTraceIgnoreEntity(&g_entities[i]);
 	}
 }
-
 
 //QUAKED func_fakebrush (1 0 0) ?
 /**

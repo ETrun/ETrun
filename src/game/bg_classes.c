@@ -196,7 +196,7 @@ qboolean BG_ClassHasWeapon(bg_playerclass_t *classInfo, weapon_t weap) {
 		return qfalse;
 	}
 
-	for (i = 0; i < MAX_WEAPS_PER_CLASS; i++) {
+	for (i = 0; i < MAX_WEAPS_PER_CLASS; ++i) {
 		if (classInfo->classWeapons[i] == weap) {
 			return qtrue;
 		}

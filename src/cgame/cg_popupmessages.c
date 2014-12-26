@@ -174,7 +174,7 @@ pmListItem_t *CG_FindFreePMItem(void) {
 
 	int i = 0;
 
-	for ( ; i < NUM_PM_STACK_ITEMS; i++) {
+	for ( ; i < NUM_PM_STACK_ITEMS; ++i) {
 		if (!cg_pmStack[i].inuse) {
 			return &cg_pmStack[i];
 		}
@@ -338,7 +338,6 @@ void CG_DrawPMItemsBig(void) {
 	trap_R_SetColor(colourText);
 	CG_DrawPic(640 - 56, y, 48, 48, cg_pmWaitingListBig->shader);
 	trap_R_SetColor(NULL);
-
 
 	w = CG_Text_Width_Ext(cg_pmWaitingListBig->message, 0.22f, 0, &cgs.media.limboFont2);
 	CG_Text_Paint_Ext(640 - 4 - w, y + 56, 0.22f, 0.24f, colourText, cg_pmWaitingListBig->message, 0, 0, 0, &cgs.media.limboFont2);

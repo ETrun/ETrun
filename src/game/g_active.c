@@ -26,7 +26,6 @@ If you have questions concerning this license or the applicable additional terms
 ===========================================================================
 */
 
-
 #include "g_local.h"
 
 /*
@@ -90,7 +89,6 @@ void P_DamageFeedback(gentity_t *player) {
 	client->damage_blood     = 0;
 	client->damage_knockback = 0;
 }
-
 
 #define MIN_BURN_INTERVAL 399 // JPW NERVE set burn timeinterval so we can do more precise damage (was 199 old model)
 
@@ -180,8 +178,6 @@ void P_WorldEffects(gentity_t *ent) {
 	// jpw
 }
 
-
-
 /*
 ===============
 G_SetClientSound
@@ -190,8 +186,6 @@ G_SetClientSound
 void G_SetClientSound(gentity_t *ent) {
 	ent->s.loopSound = 0;
 }
-
-
 
 // Are we ready to construct?  Optionally, will also update the time while we are constructing
 qboolean ReadyToConstruct(gentity_t *ent, gentity_t *constructible, qboolean updateState) {
@@ -230,8 +224,8 @@ void ClientImpacts(gentity_t *ent, pmove_t *pm) {
 	trace_t   trace;
 
 	memset(&trace, 0, sizeof (trace));
-	for (i = 0 ; i < pm->numtouch ; i++) {
-		for (j = 0 ; j < i ; j++) {
+	for (i = 0 ; i < pm->numtouch ; ++i) {
+		for (j = 0 ; j < i ; ++j) {
 			if (pm->touchents[j] == pm->touchents[i]) {
 				break;
 			}
@@ -247,7 +241,6 @@ void ClientImpacts(gentity_t *ent, pmove_t *pm) {
 
 		other->touch(other, ent, &trace);
 	}
-
 }
 
 /*
@@ -287,7 +280,7 @@ void    G_TouchTriggers(gentity_t *ent) {
 	VectorAdd(ent->client->ps.origin, ent->r.mins, mins);
 	VectorAdd(ent->client->ps.origin, ent->r.maxs, maxs);
 
-	for (i = 0 ; i < num ; i++) {
+	for (i = 0 ; i < num ; ++i) {
 		hit = &g_entities[touch[i]];
 
 		if (!hit->touch && !ent->touch) {
@@ -400,7 +393,6 @@ void SpectatorThink(gentity_t *ent, usercmd_t *ucmd) {
 		StopFollowing(ent);
 	}
 }
-
 
 /*
 =================
@@ -577,7 +569,6 @@ void ClientEvents(gentity_t *ent, int oldEventSequence) {
 			break;
 		}
 	}
-
 }
 
 /*
@@ -596,7 +587,6 @@ void ClientThink_real(gentity_t *ent) {
 	pmove_t   pm;
 	usercmd_t *ucmd;
 	gclient_t *client = ent->client;
-
 
 	// don't think if the client is not yet connected (and thus not yet spawned in)
 	if (client->pers.connected != CON_CONNECTED) {
@@ -956,7 +946,6 @@ void ClientThink(int clientNum) {
 	ClientThink_real(ent);
 }
 
-
 void G_RunClient(gentity_t *ent) {
 	// Gordon: special case for uniform grabbing
 	if (ent->client->pers.cmd.buttons & BUTTON_ACTIVATE) {
@@ -1087,7 +1076,7 @@ void ClientEndFrame(gentity_t *ent) {
 
 	// turn off any expired powerups
 	// OSP -- range changed for MV
-	for (i = 0 ; i < PW_NUM_POWERUPS ; i++) {
+	for (i = 0 ; i < PW_NUM_POWERUPS ; ++i) {
 
 		if (i == PW_FIRE ||                 // these aren't dependant on level.time
 		    i == PW_ELECTRIC ||
@@ -1107,7 +1096,6 @@ void ClientEndFrame(gentity_t *ent) {
 		    ent->client->ps.powerups[i] != INT_MAX) {
 			ent->client->ps.powerups[i] += level.time - level.previousTime;
 		}
-
 
 		if (ent->client->ps.powerups[i] < level.time) {
 			ent->client->ps.powerups[i] = 0;

@@ -235,7 +235,6 @@ void CG_DrawConnectScreen(qboolean interactive, qboolean forcerefresh) {
 		str = Info_ValueForKey(buffer, "sv_hostname");
 		CG_Text_Paint_Centred_Ext(540, y, 0.2f, 0.2f, colorWhite, str && *str ? str : "ETHost", 0, 26, 0, &bg_loadscreenfont2);
 
-
 		y += 14;
 		for (i = 0; i < MAX_MOTDLINES; ++i) {
 			str = CG_ConfigString(CS_CUSTMOTD + i);

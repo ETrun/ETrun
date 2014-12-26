@@ -26,7 +26,6 @@ If you have questions concerning this license or the applicable additional terms
 ===========================================================================
 */
 
-
 #include "cg_local.h"
 
 panel_button_text_t fireteamTitleFont =
@@ -115,7 +114,6 @@ panel_button_t fireteamMenuItemText =
 	0
 };
 
-
 panel_button_t *fireteamButtons[] =
 {
 	&fireteamTopBorderBack, &fireteamTopBorder, &fireteamTopBorderInner, &fireteamTopBorderInnerText,
@@ -164,8 +162,6 @@ const char *ftMenuRootStringsAlphachars[] =
 	NULL
 };
 
-
-
 const char *ftMenuSoliderStrings[] =
 {
 	"Cover Me",
@@ -189,8 +185,6 @@ const char *ftMenuSoliderStringsMsg[] =
 	"FTMortar",
 	NULL
 };
-
-
 
 const char *ftMenuMedicStrings[] =
 {
@@ -218,7 +212,6 @@ const char *ftMenuMedicStringsMsg[] =
 	"FTReviveMe",
 	NULL
 };
-
 
 const char *ftMenuEngineerStrings[] =
 {
@@ -253,7 +246,6 @@ const char *ftMenuEngineerStringsMsg[] =
 	NULL
 };
 
-
 const char *ftMenuFieldOpsStrings[] =
 {
 	"Call Air-Strike",
@@ -280,7 +272,6 @@ const char *ftMenuFieldOpsStringsMsg[] =
 	"FTResupplyMe",
 	NULL
 };
-
 
 const char *ftMenuCovertOpsStrings[] =
 {
@@ -422,7 +413,7 @@ int CG_CountFireteams() {
 	int cnt = 0;
 	int i;
 
-	for (i = 0; i < MAX_FIRETEAMS; i++) {
+	for (i = 0; i < MAX_FIRETEAMS; ++i) {
 		if (!cg.fireTeams[i].inuse) {
 			continue;
 		}
@@ -437,7 +428,7 @@ void CG_DrawFireteams(panel_button_t *button) {
 	const char *str;
 	int        i;
 
-	for (i = 0; i < MAX_FIRETEAMS; i++) {
+	for (i = 0; i < MAX_FIRETEAMS; ++i) {
 		if (!cg.fireTeams[i].inuse) {
 			continue;
 		}
@@ -457,7 +448,7 @@ void CG_DrawFireteams(panel_button_t *button) {
 int CG_CountPlayersSF(void) {
 	int i, cnt = 0;
 
-	for (i = 0; i < MAX_CLIENTS; i++) {
+	for (i = 0; i < MAX_CLIENTS; ++i) {
 		if (i == cg.clientNum) {
 			continue;
 		}
@@ -476,11 +467,10 @@ int CG_CountPlayersSF(void) {
 	return cnt;
 }
 
-
 int CG_CountPlayersNF(void) {
 	int i, cnt = 0;
 
-	for (i = 0; i < MAX_CLIENTS; i++) {
+	for (i = 0; i < MAX_CLIENTS; ++i) {
 		if (i == cg.clientNum) {
 			continue;
 		}
@@ -513,7 +503,7 @@ int CG_PlayerSFFromPos(int pos, int *pageofs) {
 	}
 
 	x = 0;
-	for (i = 0; i < MAX_CLIENTS; i++) {
+	for (i = 0; i < MAX_CLIENTS; ++i) {
 		if (i == cg.clientNum) {
 			continue;
 		}
@@ -554,7 +544,7 @@ int CG_PlayerNFFromPos(int pos, int *pageofs) {
 	}
 
 	x = 0;
-	for (i = 0; i < MAX_CLIENTS; i++) {
+	for (i = 0; i < MAX_CLIENTS; ++i) {
 		if (i == cg.clientNum) {
 			continue;
 		}
@@ -613,7 +603,6 @@ void CG_DrawPlayerSF(panel_button_t *button, int *pageofs) {
 		}
 		CG_Text_Paint_Ext(button->rect.x, y, button->font->scalex, button->font->scaley, button->font->colour, str, 0, 0, button->font->style, button->font->font);
 
-
 		y += button->rect.h;
 	}
 
@@ -659,7 +648,6 @@ void CG_DrawPlayerNF(panel_button_t *button, int *pageofs) {
 		}
 		CG_Text_Paint_Ext(button->rect.x, y, button->font->scalex, button->font->scaley, button->font->colour, str, 0, 0, button->font->style, button->font->font);
 
-
 		y += button->rect.h;
 	}
 
@@ -680,7 +668,7 @@ void CG_Fireteams_MenuText_Draw(panel_button_t *button) {
 	switch (cgs.ftMenuMode) {
 	case 0:
 		if (cgs.ftMenuPos == -1) {
-			for (i = 0; ftMenuRootStrings[i]; i++) {
+			for (i = 0; ftMenuRootStrings[i]; ++i) {
 				const char *str;
 
 				if (i < 5 && !CG_FireteamHasClass(i, qtrue)) {
@@ -704,7 +692,7 @@ void CG_Fireteams_MenuText_Draw(panel_button_t *button) {
 				return;
 			}
 
-			for (i = 0; strings[i]; i++) {
+			for (i = 0; strings[i]; ++i) {
 				const char *str;
 
 				if (cg_quickMessageAlt.integer) {
@@ -721,7 +709,7 @@ void CG_Fireteams_MenuText_Draw(panel_button_t *button) {
 		break;
 	case 1:
 		if (!CG_IsOnFireteam(cg.clientNum)) {
-			for (i = 0; ftOffMenuList[i]; i++) {
+			for (i = 0; ftOffMenuList[i]; ++i) {
 				const char *str;
 
 				if (i == 0 && !CG_CountFireteams()) {
@@ -740,7 +728,7 @@ void CG_Fireteams_MenuText_Draw(panel_button_t *button) {
 			}
 		} else {
 			if (!CG_IsFireTeamLeader(cg.clientNum)) {
-				for (i = 0; ftOnMenuList[i]; i++) {
+				for (i = 0; ftOnMenuList[i]; ++i) {
 					const char *str;
 
 					if (i == 0 && !CG_CountPlayersNF()) {
@@ -758,7 +746,7 @@ void CG_Fireteams_MenuText_Draw(panel_button_t *button) {
 					y += button->rect.h;
 				}
 			} else {
-				for (i = 0; ftLeaderMenuList[i]; i++) {
+				for (i = 0; ftLeaderMenuList[i]; ++i) {
 					const char *str;
 
 					if (i == 2 && !CG_CountPlayersNF()) {
@@ -884,7 +872,7 @@ qboolean CG_FireteamCheckExecKey(int key, qboolean doaction) {
 				if (key >= 'a' || key <= 'z') {
 					int i;
 
-					for (i = 0; ftMenuRootStrings[i]; i++) {
+					for (i = 0; ftMenuRootStrings[i]; ++i) {
 						if (key == tolower(*ftMenuRootStringsAlphachars[i])) {
 							if (i < 5 && !CG_FireteamHasClass(i, qtrue)) {
 								return qfalse;
@@ -917,7 +905,7 @@ qboolean CG_FireteamCheckExecKey(int key, qboolean doaction) {
 
 					const char **strings = ftMenuStrings[cgs.ftMenuPos];
 
-					for (x = 0; strings[x]; x++) {
+					for (x = 0; strings[x]; ++x) {
 						if (x == i) {
 							if (doaction) {
 								trap_SendClientCommand(va("vsay_buddy %i %s %s", cgs.ftMenuPos, CG_BuildSelectedFirteamString(), (ftMenuStringsMsg[cgs.ftMenuPos])[i]));
@@ -934,7 +922,7 @@ qboolean CG_FireteamCheckExecKey(int key, qboolean doaction) {
 				if (key >= 'a' || key <= 'z') {
 					int        i;
 
-					for (i = 0; strings[i]; i++) {
+					for (i = 0; strings[i]; ++i) {
 						if (key == tolower(*ftMenuStringsAlphachars[cgs.ftMenuPos][i])) {
 
 							if (doaction) {
@@ -973,7 +961,7 @@ qboolean CG_FireteamCheckExecKey(int key, qboolean doaction) {
 			if (key >= 'a' || key <= 'z') {
 				int x;
 
-				for (x = 0; strings[x]; x++) {
+				for (x = 0; strings[x]; ++x) {
 					if (key == tolower(*strings[x])) {
 						i = x;
 						break;
@@ -1066,7 +1054,7 @@ qboolean CG_FireteamCheckExecKey(int key, qboolean doaction) {
 	{
 		int i;
 
-		for (i = 0; i < MAX_FIRETEAMS; i++) {
+		for (i = 0; i < MAX_FIRETEAMS; ++i) {
 			if (!cg.fireTeams[i].inuse) {
 				continue;
 			}

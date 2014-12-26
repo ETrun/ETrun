@@ -323,7 +323,7 @@ void player_die(gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int 
 
 	// send updated scores to any clients that are following this one,
 	// or they would get stale scoreboards
-	for (i = 0; i < level.numConnectedClients; i++) {
+	for (i = 0; i < level.numConnectedClients; ++i) {
 		gclient_t *client = &level.clients[level.sortedClients[i]];
 
 		if (client->pers.connected != CON_CONNECTED) {
@@ -491,8 +491,6 @@ gentity_t *G_BuildHead(gentity_t *ent) {
 gentity_t *G_BuildLeg(gentity_t *ent) {
 	gentity_t *leg;
 	vec3_t    flatforward, org;
-
-	//orientation_t or;			// DHM - Nerve
 
 	if (!(ent->client->ps.eFlags & EF_PRONE)) {
 		return NULL;
@@ -704,7 +702,6 @@ void G_Damage(gentity_t *targ, gentity_t *inflictor, gentity_t *attacker, vec3_t
 		}
 		return;
 	}
-
 
 	// TAT 11/22/2002
 	//		In the old code, this check wasn't done for props, so I put that check back in to make props_statue properly work
@@ -1013,7 +1010,6 @@ void G_Damage(gentity_t *targ, gentity_t *inflictor, gentity_t *attacker, vec3_t
 	}
 }
 
-
 /*
 ============
 CanDamage
@@ -1186,18 +1182,18 @@ qboolean G_RadiusDamage(vec3_t origin, gentity_t *inflictor, gentity_t *attacker
 
 	boxradius = 1.41421356 * radius; // radius * sqrt(2) for bounding box enlargement --
 	// bounding box was checking against radius / sqrt(2) if collision is along box plane
-	for (i = 0 ; i < 3 ; i++) {
+	for (i = 0 ; i < 3 ; ++i) {
 		mins[i] = origin[i] - boxradius;
 		maxs[i] = origin[i] + boxradius;
 	}
 
 	numListedEntities = trap_EntitiesInBox(mins, maxs, entityList, MAX_GENTITIES);
 
-	for (e = 0 ; e < level.num_entities ; e++) {
+	for (e = 0 ; e < level.num_entities ; ++e) {
 		g_entities[e].dmginloop = qfalse;
 	}
 
-	for (e = 0 ; e < numListedEntities ; e++) {
+	for (e = 0 ; e < numListedEntities ; ++e) {
 		ent = &g_entities[entityList[e]];
 
 		if (ent == ignore) {
@@ -1232,7 +1228,6 @@ qboolean G_RadiusDamage(vec3_t origin, gentity_t *inflictor, gentity_t *attacker
 			// push the center of mass higher than the origin so players
 			// get knocked into the air more
 			dir[2] += 24;
-
 
 			G_Damage(ent, inflictor, attacker, dir, origin, (int)points, flags, mod);
 		} else {
@@ -1298,18 +1293,18 @@ qboolean etpro_RadiusDamage(vec3_t origin, gentity_t *inflictor, gentity_t *atta
 
 	boxradius = 1.41421356 * radius; // radius * sqrt(2) for bounding box enlargement --
 	// bounding box was checking against radius / sqrt(2) if collision is along box plane
-	for (i = 0 ; i < 3 ; i++) {
+	for (i = 0 ; i < 3 ; ++i) {
 		mins[i] = origin[i] - boxradius;
 		maxs[i] = origin[i] + boxradius;
 	}
 
 	numListedEntities = trap_EntitiesInBox(mins, maxs, entityList, MAX_GENTITIES);
 
-	for (e = 0 ; e < level.num_entities ; e++) {
+	for (e = 0 ; e < level.num_entities ; ++e) {
 		g_entities[e].dmginloop = qfalse;
 	}
 
-	for (e = 0 ; e < numListedEntities ; e++) {
+	for (e = 0 ; e < numListedEntities ; ++e) {
 		ent = &g_entities[entityList[e]];
 
 		if (ent == ignore) {

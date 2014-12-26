@@ -257,7 +257,6 @@ typedef struct {
 
 extern uiInfo_t uiInfo;
 
-
 extern void         UI_Init(void);
 extern void         UI_KeyEvent(int key);
 extern void         UI_MouseEvent(int dx, int dy);
@@ -358,7 +357,6 @@ void            trap_GetAutoUpdate(void);                               // DHM -
 
 void            trap_openURL(const char *url);   // TTimo
 void            trap_GetHunkData(int *hunkused, int *hunkexpected);
-
 
 char *trap_TranslateString(const char *string);                         // NERVE - SMF - localization
 

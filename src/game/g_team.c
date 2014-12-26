@@ -26,7 +26,6 @@ If you have questions concerning this license or the applicable additional terms
 ===========================================================================
 */
 
-
 #include <limits.h>
 #include "../../etrun/ui/menudef.h"
 #include "g_local.h"
@@ -378,7 +377,6 @@ gentity_t *SelectRandomTeamSpawnPoint(team_t team, int spawnObjective) {
 	return spots[closest];
 }
 
-
 /*---------------------------------------------------------------------------*/
 
 /*
@@ -406,7 +404,7 @@ void TeamplayInfoMessage(team_t team) {
 	string[0]    = 0;
 	stringlength = 0;
 
-	for (i = 0, cnt = 0; i < level.numConnectedClients; i++) {
+	for (i = 0, cnt = 0; i < level.numConnectedClients; ++i) {
 		player = g_entities + level.sortedClients[i];
 		if (player->inuse && player->client->sess.sessionTeam == team) {
 
@@ -444,7 +442,7 @@ void TeamplayInfoMessage(team_t team) {
 
 	Q_strncpyz(bufferedData, tinfo, 1400);
 
-	for (i = 0; i < level.numConnectedClients; i++) {
+	for (i = 0; i < level.numConnectedClients; ++i) {
 		player = g_entities + level.sortedClients[i];
 		if (player->inuse && player->client->sess.sessionTeam == team && player->client->pers.connected == CON_CONNECTED) {
 			trap_SendServerCommand(player - g_entities, tinfo);
@@ -585,7 +583,6 @@ void SP_team_CTF_bluespawn(gentity_t *ent) {
 	ent->think = DropToFloor;
 }
 
-
 // JPW NERVE
 /*QUAKED team_WOLF_objective (1 1 0.3) (-16 -16 -24) (16 16 32) DEFAULT_AXIS DEFAULT_ALLIES
 marker for objective
@@ -664,8 +661,6 @@ void SP_team_WOLF_objective(gentity_t *ent) {
 	char *desc;
 
 	G_SpawnString("description", "WARNING: No objective description set", &desc);
-
-
 
 	// Gordon: wtf is this g_alloced? just use a static buffer fgs...
 	ent->message = G_Alloc(strlen(desc) + 1);
@@ -959,7 +954,6 @@ void checkpoint_spawntouch(gentity_t *self, gentity_t *other, trace_t *trace) {
 			}
 		}
 	}
-
 }
 // jpw
 /*QUAKED team_WOLF_checkpoint (.9 .3 .9) (-16 -16 0) (16 16 128) SPAWNPOINT CP_HOLD AXIS_ONLY ALLIED_ONLY
@@ -1036,7 +1030,6 @@ void SP_team_WOLF_checkpoint(gentity_t *ent) {
 char      *aTeams[TEAM_NUM_TEAMS] = { "FFA", "^1Axis^7", "^4Allies^7", "Spectators" };
 team_info teamInfo[TEAM_NUM_TEAMS];
 
-
 // Resets a team's settings
 void G_teamReset(int team_num) {
 	teamInfo[team_num].team_lock    = qfalse;
@@ -1086,7 +1079,6 @@ qboolean G_AllowFollow(gentity_t *ent, gentity_t *other) {
 	       COM_BitCheck(other->client->sess.specInvitedClients, ent - g_entities) ||
 	       ent->client->sess.referee == RL_REFEREE;
 }
-
 
 // Figure out if we are allowed/want to follow a given player
 qboolean G_DesiredFollow(gentity_t *ent, gentity_t *other) {

@@ -43,7 +43,6 @@ If you have questions concerning this license or the applicable additional terms
 #include "cg_public.h"
 #include "../ui/ui_shared.h"
 
-
 #define STATS_FADE_TIME     200.0f
 #define FADE_TIME           200
 #define DAMAGE_DEFLECT_TIME 100
@@ -189,13 +188,11 @@ typedef struct {
 	animation_t *animation;
 	int animationTime;              // time when the first frame of the animation will be exact
 
-
 	// Ridah, variable speed anims
 	vec3_t oldFramePos;
 	float animSpeedScale;
 	int oldFrameSnapshotTime;
 	// done.
-
 } lerpFrame_t;
 
 typedef struct {
@@ -227,7 +224,6 @@ typedef struct tag_s {
 	vec3_t origin;
 	vec3_t axis[3];
 } tag_t;
-
 
 // centity_t have a direct corespondence with gentity_t in the game, but
 // only the entityState_t is directly communicated to the cgame
@@ -298,7 +294,6 @@ typedef struct centity_s {
 	qboolean back;
 	qboolean moving;
 
-
 	int tankframe;
 	int tankparent;
 	tag_t mountedMG42Base;
@@ -313,7 +308,6 @@ typedef struct centity_s {
 	int tagParent;
 	char tagName[MAX_QPATH];
 } centity_t;
-
 
 //======================================================================
 
@@ -436,11 +430,9 @@ typedef struct localEntity_s {
 	int breakCount;                     // break-up this many times before we can break no more
 	float sizeScale;
 	// done.
-
 } localEntity_t;
 
 //======================================================================
-
 
 typedef struct {
 	int client;
@@ -468,7 +460,6 @@ typedef struct {
 
 	// Nico, speclock status
 	int speclocked;
-
 } score_t;
 
 // each client has an associated clientInfo_t
@@ -538,7 +529,6 @@ typedef struct clientInfo_s {
 
 	// Nico, country code (GeoIP)
 	unsigned int countryCode;
-
 } clientInfo_t;
 
 typedef enum {
@@ -619,7 +609,6 @@ typedef struct weaponInfo_s {
 	sfxHandle_t switchSound;
 } weaponInfo_t;
 
-
 // each IT_* item has an associated itemInfo_t
 // that constains media references necessary to present the
 // item and its effects
@@ -628,7 +617,6 @@ typedef struct {
 	qhandle_t models[MAX_ITEM_MODELS];
 	qhandle_t icons[MAX_ITEM_ICONS];
 } itemInfo_t;
-
 
 typedef struct {
 	int itemNum;
@@ -1138,7 +1126,6 @@ typedef struct {
 	qhandle_t dynamiteHintShader;
 	// dhm - end
 
-
 	qhandle_t tankHintShader;
 	qhandle_t satchelchargeHintShader;
 	qhandle_t uniformHintShader;
@@ -1173,7 +1160,6 @@ typedef struct {
 	qhandle_t shardRubble1;
 	qhandle_t shardRubble2;
 	qhandle_t shardRubble3;
-
 
 	qhandle_t shardJunk[MAX_LOCKER_DEBRIS];
 
@@ -1890,7 +1876,6 @@ void CG_DrawStretchPic(float x, float y, float width, float height, qhandle_t hS
 void CG_DrawString(float x, float y, const char *string,
                    float charWidth, float charHeight, const float *modulate);
 
-
 void CG_DrawStringExt(int x, int y, const char *string, float *setColor,
                       qboolean forceColor, qboolean shadow, int charWidth, int charHeight, int maxChars);
 // JOSEPH 4-17-00
@@ -1994,7 +1979,6 @@ void CG_EntityEvent(centity_t *cent, vec3_t position);
 void CG_PainEvent(centity_t *cent, int health);
 void CG_PrecacheFXSounds(void);
 
-
 //
 // cg_ents.c
 //
@@ -2007,7 +1991,6 @@ qboolean CG_AddCEntity_Filter(centity_t *cent);
 qboolean CG_AddLinkedEntity(centity_t *cent, qboolean ignoreframe, int atTime);
 void CG_PositionEntityOnTag(refEntity_t *entity, const refEntity_t *parent, const char *tagName, int startIndex, vec3_t *offset);
 void CG_PositionRotatedEntityOnTag(refEntity_t *entity, const refEntity_t *parent, const char *tagName);
-
 
 //
 // cg_weapons.c
@@ -2576,7 +2559,6 @@ void CG_RegisterPlayerClasses(void);
 polyBuffer_t *CG_PB_FindFreePolyBuffer(qhandle_t shader, int numVerts, int numIndicies);
 void CG_PB_ClearPolyBuffers(void);
 void CG_PB_RenderPolyBuffers(void);
-
 
 //
 // cg_limbopanel.c

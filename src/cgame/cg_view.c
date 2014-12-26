@@ -171,8 +171,6 @@ static void CG_AddTestModel(void) {
 	trap_R_AddRefEntityToScene(&cg.testModelEntity);
 }
 
-
-
 //============================================================================
 
 void CG_Letterbox(float xsize, float ysize, qboolean center) {
@@ -275,7 +273,6 @@ void CG_OffsetThirdPersonView(void) {
 		VectorCopy(trace.endpos, view);
 	}
 
-
 	VectorCopy(view, cg.refdef_current->vieworg);
 
 	// select pitch to look at focus point from vieword
@@ -287,7 +284,6 @@ void CG_OffsetThirdPersonView(void) {
 	cg.refdefViewAngles[PITCH] = -180 / M_PI * atan2(focusPoint[2], focusDist);
 	cg.refdefViewAngles[YAW]  -= cg_thirdPersonAngle.value;
 }
-
 
 // this causes a compiler bug on mac MrC compiler
 static void CG_StepOffset(void) {
@@ -337,7 +333,7 @@ void CG_KickAngles(void) {
 		ft = ((float)frametime / 1000);
 
 		// kickAngles is spring-centered
-		for (i = 0; i < 3; i++) {
+		for (i = 0; i < 3; ++i) {
 			if (cg.kickAVel[i] || cg.kickAngles[i]) {
 				// apply centering forces to kickAvel
 				if (cg.kickAngles[i] && frametime) {
@@ -403,7 +399,6 @@ void CG_KickAngles(void) {
 	}
 }
 
-
 /*
 CG_Concussive
 */
@@ -441,7 +436,6 @@ void CG_Concussive(centity_t *cent) {
 	}
 }
 
-
 /*
 ==============
 CG_ZoomSway
@@ -468,10 +462,7 @@ static void CG_ZoomSway(void) {
 
 	phase                     = cg.time / 1000.0 * ZOOM_YAW_FREQUENCY * M_PI * 2;
 	cg.refdefViewAngles[YAW] += ZOOM_YAW_AMPLITUDE * sin(phase) * (spreadfrac + ZOOM_YAW_MIN_AMPLITUDE);
-
 }
-
-
 
 /*
 ===============
@@ -629,7 +620,6 @@ static void CG_OffsetFirstPersonView(void) {
 
 	origin[2] += bob;
 
-
 	// add fall height
 	delta = cg.time - cg.landTime;
 	if (delta < 0) {   // Ridah
@@ -668,7 +658,6 @@ static void CG_OffsetFirstPersonView(void) {
 //
 // Zoom controls
 //
-
 
 // probably move to server variables
 float zoomTable[ZOOM_MAX_ZOOMS][2] =
@@ -714,7 +703,6 @@ void CG_ZoomOut_f(void) {
 		CG_AdjustZoomVal(cg_zoomStepSniper.value, ZOOM_SNIPER);   // JPW NERVE per atvi request BINOC);
 	}
 }
-
 
 /*
 ==============
@@ -778,7 +766,6 @@ void CG_Zoom(void) {
 		}
 	}
 }
-
 
 /*
 ====================
@@ -902,7 +889,6 @@ static int CG_CalcFov(void) {
 
 	return inwater;
 }
-
 
 /*
 ==============
@@ -1070,7 +1056,6 @@ int CG_CalcViewValues(void) {
 	return CG_CalcFov();
 }
 
-
 //=========================================================================
 
 char *CG_MustParse(char **pString, const char *pErrorMsg) {
@@ -1142,11 +1127,10 @@ void CG_ParseSkyBox(void) {
 CG_ParseTagConnects
 ==============
 */
-
 void CG_ParseTagConnects(void) {
 	int i;
 
-	for (i = CS_TAGCONNECTS; i < CS_TAGCONNECTS + MAX_TAGCONNECTS; i++) {
+	for (i = CS_TAGCONNECTS; i < CS_TAGCONNECTS + MAX_TAGCONNECTS; ++i) {
 		CG_ParseTagConnect(i);
 	}
 }
@@ -1292,7 +1276,7 @@ void CG_SetupFrustum(void) {
 	VectorScale(cg.refdef_current->viewaxis[0], xs, frustum[3].normal);
 	VectorMA(frustum[3].normal, -xc, cg.refdef_current->viewaxis[2], frustum[3].normal);
 
-	for (i = 0 ; i < 4 ; i++) {
+	for (i = 0 ; i < 4 ; ++i) {
 		frustum[i].dist = DotProduct(cg.refdef_current->vieworg, frustum[i].normal);
 	}
 }

@@ -509,7 +509,6 @@ qboolean G_ScriptAction_SetSpeed(gentity_t *ent, char *params) {
 	return qtrue;
 }
 
-
 qboolean G_ScriptAction_SetRotation(gentity_t *ent, char *params) {
 	vec3_t angles;
 	char   *pString;
@@ -743,7 +742,6 @@ qboolean G_ScriptAction_FollowSpline(gentity_t *ent, char *params) {
 			ent->scriptStatus.scriptFlags |= SCFL_GOING_TO_MARKER;
 			return qtrue;   // continue to next command
 		}
-
 	}
 
 	BG_EvaluateTrajectory(&ent->s.pos, level.time, ent->r.currentOrigin, qfalse, ent->s.effect2Time);
@@ -1313,7 +1311,6 @@ qboolean G_ScriptAction_GotoMarker(gentity_t *ent, char *params) {
 				ent->s.apos.trTime     = level.time;
 				ent->s.apos.trType     = TR_LINEAR_STOP;
 			}
-
 		}
 
 		if (!wait) {
@@ -1332,7 +1329,6 @@ qboolean G_ScriptAction_GotoMarker(gentity_t *ent, char *params) {
 			ent->scriptStatus.scriptFlags |= SCFL_GOING_TO_MARKER;
 			return qtrue;   // continue to next command
 		}
-
 	}
 
 	BG_EvaluateTrajectory(&ent->s.pos, level.time, ent->r.currentOrigin, qfalse, ent->s.effect2Time);
@@ -1451,7 +1447,6 @@ qboolean G_ScriptAction_Trigger(gentity_t *ent, char *params) {
 				terminate = qtrue;
 			}
 
-			//
 			if (terminate) {
 				return qfalse;
 			}
@@ -1483,7 +1478,6 @@ qboolean G_ScriptAction_Trigger(gentity_t *ent, char *params) {
 				terminate = qtrue;
 			}
 		}
-		//
 		if (terminate) {
 			return qfalse;
 		}
@@ -1492,7 +1486,6 @@ qboolean G_ScriptAction_Trigger(gentity_t *ent, char *params) {
 		}
 	}
 
-//	G_Error( "G_Scripting: trigger has unknown name: %s\n", name );
 	G_Printf("G_Scripting: trigger has unknown name: %s\n", name);
 	return qtrue;   // shutup the compiler
 }
@@ -1551,7 +1544,6 @@ qboolean G_ScriptAction_PlaySound(gentity_t *ent, char *params) {
 
 	return qtrue;
 }
-
 
 // START Mad Doc - TDF
 /*
@@ -1656,7 +1648,6 @@ qboolean G_ScriptAction_MusicPlay(gentity_t *ent, char *params) {
 
 	return qtrue;
 }
-
 
 /*
 ==================
@@ -2661,7 +2652,6 @@ qboolean G_ScriptAction_EntityScriptName(gentity_t *ent, char *params) {
 	return qtrue;
 }
 
-
 /*
 =================
 G_ScriptAction_AIScriptName
@@ -2789,7 +2779,7 @@ qboolean G_ScriptAction_ObjectiveStatus(gentity_t *ent, char *params) {
 
 	num = atoi(token);
 	if (num < 1 || num > MAX_OBJECTIVES) {
-		G_Error("G_ScriptAction_ObjectiveImage: Invalid objective number\n");
+		G_Error("G_ScriptAction_ObjectiveImage: invalid objective number\n");
 	}
 
 	token = COM_Parse(&pString);
@@ -2813,7 +2803,6 @@ qboolean G_ScriptAction_ObjectiveStatus(gentity_t *ent, char *params) {
 
 	return qtrue;
 }
-
 
 qboolean G_ScriptAction_SetDebugLevel(gentity_t *ent, char *params) {
 	char *pString, *token;
@@ -2841,7 +2830,6 @@ qboolean G_ScriptAction_SetDebugLevel(gentity_t *ent, char *params) {
 
 	return qtrue;
 }
-
 
 qboolean G_ScriptAction_VoiceAnnounce(gentity_t *ent, char *params) {
 	char *pString, *token;

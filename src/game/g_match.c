@@ -32,15 +32,13 @@ If you have questions concerning this license or the applicable additional terms
 #include "g_local.h"
 #include "../../etrun/ui/menudef.h"
 
-
 void G_initMatch(void) {
 	int i;
 
-	for (i = TEAM_AXIS; i <= TEAM_ALLIES; i++) {
+	for (i = TEAM_AXIS; i <= TEAM_ALLIES; ++i) {
 		G_teamReset(i);
 	}
 }
-
 
 // Setting initialization
 void G_loadMatchGame(void) {
@@ -55,7 +53,6 @@ void G_loadMatchGame(void) {
 	// Voting flags
 	G_voteFlags();
 }
-
 
 // Simple alias for sure-fire print :)
 void G_printFull(char *str, gentity_t *ent) {
@@ -75,7 +72,6 @@ void G_globalSound(char *sound) {
 	te->s.eventParm = G_SoundIndex(sound);
 	te->r.svFlags  |= SVF_BROADCAST;
 }
-
 
 void G_delayPrint(gentity_t *dpent) {
 	int      think_next = 0;

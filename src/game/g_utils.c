@@ -128,7 +128,6 @@ int G_FindConfigstringIndex(const char *name, int start, int max, qboolean creat
 	return i;
 }
 
-
 int G_ModelIndex(char *name) {
 	return G_FindConfigstringIndex(name, CS_MODELS, MAX_MODELS, qtrue);
 }
@@ -155,7 +154,6 @@ int G_StringIndex(const char *string) {
 
 //=====================================================================
 
-
 /*
 ================
 G_TeamCommand
@@ -172,7 +170,6 @@ void G_TeamCommand(team_t team, char *cmd) {
 		}
 	}
 }
-
 
 /*
 =============
@@ -195,7 +192,6 @@ gentity_t *G_Find(gentity_t *from, int fieldofs, const char *match) {
 	} else {
 		from++;
 	}
-
 
 	for ( ; from < max ; ++from) {
 		if (!from->inuse) {
@@ -442,7 +438,6 @@ char *vtos(const vec3_t v) {
 	return s;
 }
 
-
 /*
 ===============
 G_SetMovedir
@@ -470,8 +465,6 @@ void G_SetMovedir(vec3_t angles, vec3_t movedir) {
 	}
 	VectorClear(angles);
 }
-
-
 
 void G_InitGentity(gentity_t *e) {
 	e->inuse      = qtrue;
@@ -647,7 +640,6 @@ void G_AddPredictableEvent(gentity_t *ent, int event, int eventParm) {
 	BG_AddPredictableEventToPlayerstate(event, eventParm, &ent->client->ps);
 }
 
-
 /*
 ===============
 G_AddEvent
@@ -678,7 +670,6 @@ void G_AddEvent(gentity_t *ent, int event, int eventParm) {
 	ent->eventTime   = level.time;
 	ent->r.eventTime = level.time;
 }
-
 
 /*
 =============
@@ -711,7 +702,6 @@ void G_AnimScriptSound(int soundIndex, vec3_t org, int client) {
 
 //==============================================================================
 
-
 /*
 ================
 G_SetOrigin
@@ -736,7 +726,6 @@ void G_SetOrigin(gentity_t *ent, vec3_t origin) {
 	}
 }
 
-
 /*
 ==============
 G_SetAngle
@@ -751,9 +740,6 @@ void G_SetAngle(gentity_t *ent, vec3_t angle) {
 	VectorClear(ent->s.apos.trDelta);
 
 	VectorCopy(angle, ent->r.currentAngles);
-
-//	VectorCopy (ent->s.angles, ent->s.apos.trDelta );
-
 }
 
 /*

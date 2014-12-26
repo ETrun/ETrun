@@ -120,7 +120,6 @@ static void CG_ItemPickup(int itemNum) {
 	}   // end bg_itemlist[itemNum].giType == IT_WEAPON
 }
 
-
 /*
 ================
 CG_PainEvent
@@ -180,8 +179,8 @@ static fxSound_t fxSounds[POSSIBLE_PIECES] =
 void CG_PrecacheFXSounds(void) {
 	int i, j;
 
-	for (i = 0; i < POSSIBLE_PIECES; i++) {
-		for (j = 0; j < fxSounds[i].max; j++) {
+	for (i = 0; i < POSSIBLE_PIECES; ++i) {
+		for (j = 0; j < fxSounds[i].max; ++j) {
 			fxSounds[i].sound[j] = trap_S_RegisterSound(fxSounds[i].soundfile[j]);
 		}
 	}
@@ -245,7 +244,6 @@ void CG_Explode(centity_t *cent, vec3_t origin, vec3_t dir, qhandle_t shader) {
 		            shader
 		            );
 	}
-
 }
 
 /*
@@ -309,7 +307,6 @@ void CG_Rubble(centity_t *cent, vec3_t origin, vec3_t dir, qhandle_t shader) {
 	}
 }
 
-
 /*
 ==============
 CG_RubbleFx
@@ -366,12 +363,12 @@ void CG_RubbleFx(vec3_t origin, vec3_t dir, int mass, int type, sfxHandle_t soun
 		modelshader = shader;
 	}
 
-	for (i = 0; i < POSSIBLE_PIECES; i++) {
+	for (i = 0; i < POSSIBLE_PIECES; ++i) {
 		leBounceSoundType_t snd    = LEBS_NONE;
 		int                 hmodel = 0;
 		float               scale;
 		int                 endtime;
-		for (howmany = 0; howmany < pieces[i]; howmany++) {
+		for (howmany = 0; howmany < pieces[i]; ++howmany) {
 
 			scale   = 1.0f;
 			endtime = 0;    // set endtime offset for faster/slower fadeouts
@@ -578,7 +575,6 @@ void CG_RubbleFx(vec3_t origin, vec3_t dir, int mass, int type, sfxHandle_t soun
 pass:
 		continue;
 	}
-
 }
 
 /*
@@ -638,12 +634,12 @@ void CG_Explodef(vec3_t origin, vec3_t dir, int mass, int type, qhandle_t sound,
 		modelshader = shader;
 	}
 
-	for (i = 0; i < POSSIBLE_PIECES; i++) {
+	for (i = 0; i < POSSIBLE_PIECES; ++i) {
 		leBounceSoundType_t snd    = LEBS_NONE;
 		int                 hmodel = 0;
 		float               scale;
 		int                 endtime;
-		for (howmany = 0; howmany < pieces[i]; howmany++) {
+		for (howmany = 0; howmany < pieces[i]; ++howmany) {
 
 			scale   = 1.0f;
 			endtime = 0;    // set endtime offset for faster/slower fadeouts
@@ -848,9 +844,7 @@ void CG_Explodef(vec3_t origin, vec3_t dir, int mass, int type, qhandle_t sound,
 pass:
 		continue;
 	}
-
 }
-
 
 /*
 ==============
@@ -874,8 +868,8 @@ void CG_Effect(centity_t *cent, vec3_t origin, vec3_t dir) {
 		vec3_t sprVel, sprOrg;
 		// explosion sprite animation
 		VectorScale(dir, 16, sprVel);
-		for (i = 0; i < 5; i++) {
-			for (j = 0; j < 3; j++)
+		for (i = 0; i < 5; ++i) {
+			for (j = 0; j < 3; ++j)
 				sprOrg[j] = origin[j] + 64 * dir[j] + 24 * crandom();
 			sprVel[2] += rand() % 50;
 			CG_ParticleExplosion("blacksmokeanim", sprOrg, sprVel, 3500 + rand() % 250, 10, 250 + rand() % 60, qfalse);   // JPW NERVE was smokeanimb
@@ -902,7 +896,6 @@ void CG_Effect(centity_t *cent, vec3_t origin, vec3_t dir) {
 		trap_R_ProjectDecal(cgs.media.burnMarkShader, 1, (vec3_t *) origin, projection, color, cg_markTime.integer, (cg_markTime.integer >> 4));
 	}
 
-
 	if (cent->currentState.eventParm & 8) {   // rubble
 		// share the cg_explode code with func_explosives
 		const char *s;
@@ -923,7 +916,6 @@ void CG_Effect(centity_t *cent, vec3_t origin, vec3_t dir) {
 		cent->currentState.dl_intensity = 0;        // no sound
 		CG_Explode(cent, origin, newdir, sh);
 	}
-
 
 	if (cent->currentState.eventParm & 16) {   // gore
 		refEntity_t   *re;
@@ -955,7 +947,6 @@ void CG_Effect(centity_t *cent, vec3_t origin, vec3_t dir) {
 		le->leMarkType        = LEMT_BLOOD;
 	}
 
-
 	if (cent->currentState.eventParm & 64) {   // debris trails (the black strip that Ryan did)
 		CG_AddDebris(origin, dir,
 		             280,       // speed
@@ -964,7 +955,6 @@ void CG_Effect(centity_t *cent, vec3_t origin, vec3_t dir) {
 		             7 + rand() % 2);   // count
 	}
 }
-
 
 /*
 CG_Shard
@@ -1012,7 +1002,6 @@ void CG_Shard(centity_t *cent, vec3_t origin, vec3_t dir) {
 
 			isflyingdebris = qtrue;
 		}
-
 
 		le->lifeRate     = 1.0 / (le->endTime - le->startTime);
 		le->leFlags      = LEF_TUMBLE;
@@ -1100,11 +1089,8 @@ void CG_Shard(centity_t *cent, vec3_t origin, vec3_t dir) {
 		le->angles.trDelta[0] = (100 + (rand() & 500)) - 300;
 		le->angles.trDelta[1] = (100 + (rand() & 500)) - 300;
 		le->angles.trDelta[2] = (100 + (rand() & 500)) - 300;
-
 	}
-
 }
-
 
 void CG_ShardJunk(vec3_t origin, vec3_t dir) {
 	localEntity_t *le;
@@ -1146,7 +1132,6 @@ void CG_ShardJunk(vec3_t origin, vec3_t dir) {
 	le->angles.trTime     = cg.time;
 	le->angles.trBase[2]  = rand() & 31;
 	le->angles.trDelta[2] = (100 + (rand() & 500)) - 300;
-
 }
 
 // Gordon: debris test
@@ -1882,7 +1867,6 @@ void CG_EntityEvent(centity_t *cent, vec3_t position) {
 	}
 	break;
 
-
 	case EV_GLOBAL_TEAM_SOUND:
 		DEBUGNAME("EV_GLOBAL_TEAM_SOUND");
 		if ((int)cgs.clientinfo[cg.snap->ps.clientNum].team != es->teamNum) {
@@ -1956,7 +1940,6 @@ void CG_EntityEvent(centity_t *cent, vec3_t position) {
 		trap_S_StartSound(NULL, es->number, CHAN_VOICE,
 		                  CG_CustomSound(va("*death%i.wav", event - EV_DEATH1 + 1)));
 		break;
-
 
 	case EV_OBITUARY:
 		DEBUGNAME("EV_OBITUARY");
@@ -2065,7 +2048,7 @@ void CG_EntityEvent(centity_t *cent, vec3_t position) {
 		if (!numsparks) {
 			numsparks = 1;
 		}
-		for (i = 0; i < numsparks; i++) {
+		for (i = 0; i < numsparks; ++i) {
 
 			if (event == EV_SPARKS_ELECTRIC) {
 				VectorCopy(cent->currentState.origin, source);
@@ -2079,9 +2062,7 @@ void CG_EntityEvent(centity_t *cent, vec3_t position) {
 			} else {
 				CG_ParticleSparks(cent->currentState.origin, cent->currentState.angles, duration, x, y, speed);
 			}
-
 		}
-
 	}
 	break;
 
@@ -2106,7 +2087,6 @@ void CG_EntityEvent(centity_t *cent, vec3_t position) {
 	case EV_SNOW_OFF:
 		CG_SnowLink(cent, qfalse);
 		break;
-
 
 	case EV_SNOWFLURRY:
 		CG_ParticleSnowFlurry(cgs.media.snowShader, cent);
@@ -2150,7 +2130,7 @@ void CG_EntityEvent(centity_t *cent, vec3_t position) {
 
 			rval = rand() % 3 + 3;
 
-			for (i = 0; i < rval; i++)
+			for (i = 0; i < rval; ++i)
 				CG_ShardJunk(position, dir);
 		}
 		break;
@@ -2287,7 +2267,6 @@ void CG_EntityEvent(centity_t *cent, vec3_t position) {
 		break;
 	}
 
-
 	{
 		int rval;
 
@@ -2303,7 +2282,6 @@ void CG_EntityEvent(centity_t *cent, vec3_t position) {
 			splashfootstepcnt = 0;
 		}
 
-
 		if (footstepcnt != rval) {
 			footstepcnt = rval;
 		} else {
@@ -2315,7 +2293,6 @@ void CG_EntityEvent(centity_t *cent, vec3_t position) {
 		}
 	}
 }
-
 
 /*
 ==============
@@ -2365,7 +2342,7 @@ skipEvent:
 	if (cent->currentState.eventSequence - cent->previousEventSequence > MAX_EVENTS) {
 		cent->previousEventSequence = cent->currentState.eventSequence - MAX_EVENTS;
 	}
-	for (i = cent->previousEventSequence ; i != cent->currentState.eventSequence; i++) {
+	for (i = cent->previousEventSequence ; i != cent->currentState.eventSequence; ++i) {
 		event = cent->currentState.events[i & (MAX_EVENTS - 1)];
 
 		cent->currentState.event     = event;

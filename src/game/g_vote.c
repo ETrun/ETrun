@@ -64,12 +64,11 @@ static const vote_reference_t aVoteInfo[] =
 	{ 0,           NULL,          0,                 NULL                                                                }
 };
 
-
 // Checks for valid custom callvote requests from the client.
 int G_voteCmdCheck(gentity_t *ent, char *arg, char *arg2, qboolean fRefereeCmd) {
 	unsigned int i, cVoteCommands = sizeof (aVoteInfo) / sizeof (aVoteInfo[0]);
 
-	for (i = 0; i < cVoteCommands; i++) {
+	for (i = 0; i < cVoteCommands; ++i) {
 		if (!Q_stricmp(arg, aVoteInfo[i].pszVoteName)) {
 			int hResult = aVoteInfo[i].pVoteCommand(ent, i, arg, arg2, fRefereeCmd);
 
@@ -88,18 +87,16 @@ int G_voteCmdCheck(gentity_t *ent, char *arg, char *arg2, qboolean fRefereeCmd) 
 	return G_NOTFOUND;
 }
 
-
 // Voting help summary.
 void G_voteHelp(gentity_t *ent, qboolean fShowVote) {
 	int i, rows = 0, num_cmds = sizeof (aVoteInfo) / sizeof (aVoteInfo[0]) - 1;     // Remove terminator;
 	int vi[100];            // Just make it large static.
 
-
 	if (fShowVote) {
 		CP("print \"\nValid ^3callvote^7 commands are:\n^3----------------------------\n\"");
 	}
 
-	for (i = 0; i < num_cmds; i++) {
+	for (i = 0; i < num_cmds; ++i) {
 		vi[rows++] = i;
 	}
 
@@ -113,7 +110,7 @@ void G_voteHelp(gentity_t *ent, qboolean fShowVote) {
 		return;
 	}
 
-	for (i = 0; i < rows; i++) {
+	for (i = 0; i < rows; ++i) {
 		if (i + rows * 3 + 1 <= num_cmds) {
 			G_refPrintf(ent, "^5%-17s%-17s%-17s%-17s", aVoteInfo[vi[i]].pszVoteName,
 			            aVoteInfo[vi[i + rows]].pszVoteName,
@@ -142,7 +139,7 @@ void G_voteHelp(gentity_t *ent, qboolean fShowVote) {
 void G_voteFlags(void) {
 	int i, flags = 0;
 
-	for (i = 0; i < numVotesAvailable; i++) {
+	for (i = 0; i < numVotesAvailable; ++i) {
 		if (trap_Cvar_VariableIntegerValue(voteToggles[i].pszCvar) == 0) {
 			flags |= voteToggles[i].flag;
 		}
@@ -172,24 +169,20 @@ qboolean G_voteDescription(gentity_t *ent, qboolean fRefereeCmd, int cmd) {
 	return qfalse;
 }
 
-
 // Localize disable message info.
 void G_voteDisableMessage(gentity_t *ent, const char *cmd) {
 	G_refPrintf(ent, "Sorry, [lof]^3%s^7 [lon]voting has been disabled", cmd);
 }
-
 
 // Player ID message stub.
 void G_playersMessage(gentity_t *ent) {
 	G_refPrintf(ent, "Use the ^3players^7 command to find a valid player ID.");
 }
 
-
 // Localize current parameter setting.
 void G_voteCurrentSetting(gentity_t *ent, const char *cmd, const char *setting) {
 	G_refPrintf(ent, "^2%s^7 is currently ^3%s\n", cmd, setting);
 }
-
 
 // Vote toggling
 int G_voteProcessOnOff(gentity_t *ent, char *arg2, qboolean fRefereeCmd, int curr_setting, int vote_allow, int vote_type) {
@@ -213,7 +206,6 @@ int G_voteProcessOnOff(gentity_t *ent, char *arg2, qboolean fRefereeCmd, int cur
 
 	return G_OK;
 }
-
 
 //
 // Several commands to help with cvar setting

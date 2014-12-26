@@ -28,11 +28,6 @@ If you have questions concerning this license or the applicable additional terms
 
 // This file must be identical in the quake and utils directories
 
-
-
-
-
-
 // contents flags are seperate bits
 // a given brush can contribute multiple content bits
 

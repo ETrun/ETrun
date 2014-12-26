@@ -61,7 +61,6 @@ void SP_info_player_deathmatch(gentity_t *ent) {
 		VectorSubtract(ent->enemy->s.origin, ent->s.origin, dir);
 		vectoangles(dir, ent->s.angles);
 	}
-
 }
 
 //----(SA) added
@@ -75,7 +74,6 @@ void SP_info_player_checkpoint(gentity_t *ent) {
 }
 
 //----(SA) end
-
 
 /*QUAKED info_player_start (1 0 0) (-18 -18 -24) (18 18 48)
 equivelant to info_player_deathmatch
@@ -161,7 +159,6 @@ gentity_t *SelectNearestDeathmatchSpawnPoint(vec3_t from) {
 	return nearestSpot;
 }
 
-
 /*
 ================
 SelectRandomDeathmatchSpawnPoint
@@ -194,7 +191,6 @@ gentity_t *SelectRandomDeathmatchSpawnPoint(void) {
 	selection = rand() % count;
 	return spots[selection];
 }
-
 
 /*
 ===========
@@ -264,7 +260,7 @@ void SetClientViewAngle(gentity_t *ent, vec3_t angle) {
 	int i;
 
 	// set the delta angle
-	for (i = 0 ; i < 3 ; i++) {
+	for (i = 0 ; i < 3 ; ++i) {
 		int cmdAngle;
 
 		cmdAngle                        = ANGLE2SHORT(angle[i]);
@@ -329,7 +325,7 @@ void reinforce(gentity_t *ent) {
 
 	// DHM - Nerve :: restore persistant data now that we're out of Limbo
 	rclient = ent->client;
-	for (p = 0; p < MAX_PERSISTANT; p++)
+	for (p = 0; p < MAX_PERSISTANT; ++p)
 		rclient->ps.persistant[p] = rclient->saved_persistant[p];
 	// dhm
 
@@ -1039,7 +1035,6 @@ void ClientUserinfoChanged(int clientNum) {
 	G_DPrintf("ClientUserinfoChanged: %i :: %s\n", clientNum, s);
 }
 
-
 /*
 ===========
 ClientConnect
@@ -1274,7 +1269,6 @@ void ClientBegin(int clientNum) {
 	// locate ent at a spawn point
 	ClientSpawn(ent);
 
-
 	// DHM - Nerve :: Start players in limbo mode if they change teams during the match
 	if (client->sess.sessionTeam != TEAM_SPECTATOR && (level.time - level.startTime > FRAMETIME * GAME_INIT_FRAMES)) {
 		ent->health     = 0;
@@ -1388,7 +1382,7 @@ void ClientSpawn(gentity_t *ent) {
 	savedPing = client->ps.ping;
 	savedTeam = client->ps.teamNum;
 
-	for (i = 0 ; i < MAX_PERSISTANT ; i++) {
+	for (i = 0 ; i < MAX_PERSISTANT ; ++i) {
 		persistant[i] = client->ps.persistant[i];
 	}
 
@@ -1399,7 +1393,7 @@ void ClientSpawn(gentity_t *ent) {
 	client->ps.ping    = savedPing;
 	client->ps.teamNum = savedTeam;
 
-	for (i = 0 ; i < MAX_PERSISTANT ; i++) {
+	for (i = 0 ; i < MAX_PERSISTANT ; ++i) {
 		client->ps.persistant[i] = persistant[i];
 	}
 
@@ -1577,7 +1571,7 @@ void ClientSpawn(gentity_t *ent) {
 static void G_RemoveFromAllIgnoreLists(int clientNum) {
 	int i;
 
-	for (i = 0; i < MAX_CLIENTS; i++) {
+	for (i = 0; i < MAX_CLIENTS; ++i) {
 		COM_BitClear(level.clients[i].sess.ignoreClients, clientNum);
 	}
 }
@@ -1614,7 +1608,7 @@ void ClientDisconnect(int clientNum) {
 	}
 
 	// stop any following clients
-	for (i = 0 ; i < level.numConnectedClients ; i++) {
+	for (i = 0 ; i < level.numConnectedClients ; ++i) {
 		flag = g_entities + level.sortedClients[i];
 		if (flag->client->sess.sessionTeam == TEAM_SPECTATOR
 		    && flag->client->sess.spectatorState == SPECTATOR_FOLLOW
@@ -1716,5 +1710,4 @@ void ClientStoreSurfaceFlags
 ) {
 	// Store the surface flags
 	g_entities[clientNum].surfaceFlags = surfaceFlags;
-
 }

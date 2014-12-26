@@ -32,7 +32,6 @@ If you have questions concerning this license or the applicable additional terms
 #include "ui_shared.h"
 #include "ui_local.h"    // For CS settings/retrieval
 
-
 #define SCROLL_TIME_START                   500
 #define SCROLL_TIME_ADJUST              150
 #define SCROLL_TIME_ADJUSTOFFSET    40
@@ -96,8 +95,7 @@ static qboolean Menu_OverActiveItem(menuDef_t *menu, float x, float y);
 #endif
 
 static char memoryPool[MEM_POOL_SIZE];
-static int  allocPoint, outOfMemory;
-
+static int  allocPoint;
 
 void Tooltip_Initialize(itemDef_t *item) {
 	item->text              = NULL;
@@ -135,7 +133,6 @@ void Tooltip_ComputePosition(itemDef_t *item) {
 	item->toolTipData->window.flags |= WINDOW_VISIBLE;
 }
 
-
 /*
 ===============
 UI_Alloc
@@ -145,11 +142,9 @@ void *UI_Alloc(int size) {
 	char *p;
 
 	if (allocPoint + size > MEM_POOL_SIZE) {
-		outOfMemory = qtrue;
 		if (DC->Print) {
 			DC->Print("UI_Alloc: Failure. Out of memory!\n");
 		}
-		//DC->trap_Print(S_COLOR_YELLOW"WARNING: UI Out of Memory!\n");
 		return NULL;
 	}
 
@@ -167,7 +162,6 @@ UI_InitMemory
 */
 void UI_InitMemory(void) {
 	allocPoint  = 0;
-	outOfMemory = qfalse;
 }
 
 #define HASH_TABLE_SIZE 2048
@@ -203,7 +197,6 @@ static char strPool[STRING_POOL_SIZE];
 
 static int         strHandleCount = 0;
 static stringDef_t *strHandle[HASH_TABLE_SIZE];
-
 
 const char *String_Alloc(const char *p) {
 	int               len;
@@ -468,8 +461,6 @@ void Init_Display(displayContextDef_t *dc) {
 	DC = dc;
 }
 
-
-
 // type and style painting
 
 void GradientBar_Paint(rectDef_t *rect, vec4_t color) {
@@ -478,7 +469,6 @@ void GradientBar_Paint(rectDef_t *rect, vec4_t color) {
 	DC->drawHandlePic(rect->x, rect->y, rect->w, rect->h, DC->Assets.gradientBar);
 	DC->setColor(NULL);
 }
-
 
 /*
 ==================
@@ -598,9 +588,7 @@ void Window_Paint(Window *w, float fadeAmount, float fadeClamp, float fadeCycle)
 		r.y = w->rect.y + w->rect.h - 1;
 		GradientBar_Paint(&r, w->borderColor);
 	}
-
 }
-
 
 void Item_SetScreenCoords(itemDef_t *item, float x, float y) {
 
@@ -645,7 +633,6 @@ void Item_UpdatePosition(itemDef_t *item) {
 	y = menu->window.rect.y;
 
 	Item_SetScreenCoords(item, x, y);
-
 }
 
 // menus
@@ -725,7 +712,6 @@ int Menu_ItemsMatchingGroup(menuDef_t *menu, const char *name) {
 	int  count = 0;
 	char *pdest;
 	int  wildcard = -1; // if wildcard is set, it's value is the number of characters to compare
-
 
 	pdest = strstr(name, "*");   // allow wildcard strings (ex.  "hide nb_*" would translate to "hide nb_pg1; hide nb_extra" etc)
 	if (pdest) {
@@ -944,7 +930,6 @@ void Script_SetMenuItemColor(itemDef_t *item, qboolean *bAbort, char **args) {
 	}
 }
 
-
 void Menu_ShowItemByName(menuDef_t *menu, const char *p, qboolean bShow) {
 	itemDef_t *item;
 	int       i;
@@ -1023,7 +1008,6 @@ void Menus_CloseByName(const char *p) {
 			}
 		}
 
-
 		menu->cursorItem = -1;
 		Menu_ClearFocus(menu);
 		Menu_RunCloseScript(menu);
@@ -1050,7 +1034,6 @@ void Menus_CloseAll() {
 		Menus[i].window.flags &= ~(WINDOW_HASFOCUS | WINDOW_VISIBLE | WINDOW_MOUSEOVER);
 	}
 }
-
 
 void Script_Show(itemDef_t *item, qboolean *bAbort, char **args) {
 	const char *name = NULL;
@@ -1854,7 +1837,6 @@ void Script_Abort(itemDef_t *item, qboolean *bAbort, char **args) {
 	*bAbort = qtrue;
 }
 
-
 commandDef_t commandList[] =
 {
 	{ "fadein",             &Script_FadeIn             }, // group/name
@@ -1902,7 +1884,6 @@ commandDef_t commandList[] =
 
 int scriptCommandCount = sizeof (commandList) / sizeof (commandDef_t);
 
-
 void Item_RunScript(itemDef_t *item, qboolean *bAbort, const char *s) {
 	char     script[4096], *p;
 	qboolean b_localAbort = qfalse;
@@ -1947,7 +1928,6 @@ void Item_RunScript(itemDef_t *item, qboolean *bAbort, const char *s) {
 	}
 }
 
-
 qboolean Item_EnableShowViaCvar(itemDef_t *item, int flag) {
 	char script[1024], *p;
 
@@ -1986,7 +1966,6 @@ qboolean Item_EnableShowViaCvar(itemDef_t *item, int flag) {
 	return qtrue;
 }
 
-
 // OSP - display if we poll on a server toggle setting
 // We want *current* settings, so this is a bit of a perf hit,
 // but this is only during UI display
@@ -2010,7 +1989,6 @@ qboolean Item_SettingShow(itemDef_t *item, qboolean fVoteTest) {
 
 	return qtrue;
 }
-
 
 // will optionaly set focus to this item
 qboolean Item_SetFocus(itemDef_t *item, float x, float y) {
@@ -2777,7 +2755,6 @@ qboolean Item_TextField_HandleKey(itemDef_t *item, int key) {
 		DC->getCVarString(item->cvar, buff, sizeof (buff));
 		len = strlen(buff);
 
-
 		if (editPtr->maxChars && len > editPtr->maxChars) {
 			len = editPtr->maxChars;
 		}
@@ -2789,7 +2766,6 @@ qboolean Item_TextField_HandleKey(itemDef_t *item, int key) {
 
 		if (key & K_CHAR_FLAG) {
 			key &= ~K_CHAR_FLAG;
-
 
 			if (key == 'h' - 'a' + 1) {        // ctrl-h is backspace
 				if (item->cursorPos > 0) {
@@ -2803,7 +2779,6 @@ qboolean Item_TextField_HandleKey(itemDef_t *item, int key) {
 				DC->setCVar(item->cvar, buff);
 				return qtrue;
 			}
-
 
 			//
 			// ignore any non printable chars
@@ -2919,7 +2894,6 @@ qboolean Item_TextField_HandleKey(itemDef_t *item, int key) {
 		return qtrue;
 	}
 	return qfalse;
-
 }
 
 static void Scroll_ListBox_AutoFunc(void *p) {
@@ -3207,7 +3181,6 @@ itemDef_t *Menu_SetPrevCursorItem(menuDef_t *menu) {
 	}
 	menu->cursorItem = oldCursor;
 	return NULL;
-
 }
 
 itemDef_t *Menu_SetNextCursorItem(menuDef_t *menu) {
@@ -3220,7 +3193,6 @@ itemDef_t *Menu_SetNextCursorItem(menuDef_t *menu) {
 	}
 
 	oldCursor = menu->cursorItem;
-
 
 	if (menu->cursorItem == -1) {
 		menu->cursorItem = 0;
@@ -3453,7 +3425,6 @@ void Menu_HandleKey(menuDef_t *menu, int key, qboolean down) {
 		}
 		break;
 
-
 	case K_ENTER:
 	case K_KP_ENTER:
 	case K_MOUSE3:
@@ -3501,9 +3472,6 @@ void Menu_HandleKey(menuDef_t *menu, int key, qboolean down) {
 					item->cursorPos = 0;
 					g_editingField  = qtrue;
 					g_editItem      = item;
-
-					// see elsewhere for venomous comment about this particular piece of "functionality"
-					//%	DC->setOverstrikeMode(qtrue);
 				}
 			} else {
 				if (Rect_ContainsPoint(&item->window.rect, DC->cursorx, DC->cursory)) {
@@ -4061,7 +4029,6 @@ static bind_t g_bindings[] =
 	{ "selectbuddy -2",   -1,  K_KP_MINUS,      -1,  -1, -1, -1 },
 };
 
-
 static const int g_bindCount = sizeof (g_bindings) / sizeof (bind_t);
 
 /*
@@ -4290,7 +4257,6 @@ qboolean Item_Bind_HandleKey(itemDef_t *item, int key, qboolean down) {
 		}
 	}
 
-
 	id = BindingIDFromName(item->cvar);
 
 	if (id != -1) {
@@ -4394,7 +4360,6 @@ void Item_Model_Paint(itemDef_t *item) {
 
 	ent.hModel = hModel;
 
-
 	if (modelPtr->frameTime) {   // don't advance on the first frame
 		modelPtr->backlerp += (((DC->realTime - modelPtr->frameTime) / 1000.0f) * (float)modelPtr->fps);
 	}
@@ -4430,7 +4395,6 @@ void Item_Model_Paint(itemDef_t *item) {
 
 	DC->addRefEntityToScene(&ent);
 	DC->renderScene(&refdef);
-
 }
 
 void Item_ListBox_Paint(itemDef_t *item) {
@@ -4913,7 +4877,6 @@ menuDef_t *Menus_ActivateByName(const char *p, qboolean modalStack) {
 	return m;
 }
 
-
 void Item_Init(itemDef_t *item) {
 	memset(item, 0, sizeof (itemDef_t));
 	item->textscale = 0.55f;
@@ -4976,7 +4939,6 @@ void Menu_HandleMouseMove(menuDef_t *menu, float x, float y) {
 				continue;
 			}
 
-
 			if (Rect_ContainsPoint(&menu->items[i]->window.rect, x, y)) {
 				if (pass == 1) {
 					overItem = menu->items[i];
@@ -5007,7 +4969,6 @@ void Menu_HandleMouseMove(menuDef_t *menu, float x, float y) {
 void Menu_Paint(menuDef_t *menu, qboolean forcePaint) {
 	int       i;
 	itemDef_t *item = NULL;
-
 
 	if (menu == NULL) {
 		return;
@@ -5194,7 +5155,6 @@ qboolean ItemParse_focusSound(itemDef_t *item, int handle) {
 	return qtrue;
 }
 
-
 // text <string>
 qboolean ItemParse_text(itemDef_t *item, int handle) {
 	if (!PC_String_Parse(handle, &item->text)) {
@@ -5229,7 +5189,6 @@ qboolean ItemParse_group(itemDef_t *item, int handle) {
 	}
 	return qtrue;
 }
-
 
 // asset_model <string>
 qboolean ItemParse_asset_model(itemDef_t *item, int handle) {
@@ -5353,7 +5312,6 @@ qboolean ItemParse_model_animplay(itemDef_t *item, int handle) {
 	return qtrue;
 }
 
-
 // rect <rectangle>
 qboolean ItemParse_rect(itemDef_t *item, int handle) {
 	return PC_Rect_Parse(handle, &item->window.rectClient);
@@ -5404,7 +5362,6 @@ qboolean ItemParse_textasint(itemDef_t *item, int handle) {
 	return qtrue;
 }
 
-
 // textasfloat
 qboolean ItemParse_textasfloat(itemDef_t *item, int handle) {
 	// Nico, silent GCC
@@ -5413,7 +5370,6 @@ qboolean ItemParse_textasfloat(itemDef_t *item, int handle) {
 	item->window.flags |= WINDOW_TEXTASFLOAT;
 	return qtrue;
 }
-
 
 // notselectable
 qboolean ItemParse_notselectable(itemDef_t *item, int handle) {
@@ -5447,7 +5403,6 @@ qboolean ItemParse_autowrapped(itemDef_t *item, int handle) {
 	item->window.flags |= WINDOW_AUTOWRAPPED;
 	return qtrue;
 }
-
 
 // horizontalscroll
 qboolean ItemParse_horizontalscroll(itemDef_t *item, int handle) {
@@ -6282,7 +6237,6 @@ qboolean Item_Parse(int handle, itemDef_t *item) {
 	}
 }
 
-
 // Item_InitControls
 // init's special control types
 void Item_InitControls(itemDef_t *item) {
@@ -6494,7 +6448,6 @@ qboolean MenuParse_disablecolor(itemDef_t *item, int handle) {
 	}
 	return qtrue;
 }
-
 
 qboolean MenuParse_outlinecolor(itemDef_t *item, int handle) {
 	menuDef_t *menu = (menuDef_t *)item;

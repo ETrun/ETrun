@@ -71,7 +71,6 @@ qboolean G_refCommandCheck(gentity_t *ent, char *cmd) {
 	return qtrue;
 }
 
-
 // Lists ref commands.
 // Nico, removed non-existing restart command, fixed remove missing parameter
 // http://games.chruker.dk/enemy_territory/modding_project_bugfix.php?bug_id=038
@@ -100,7 +99,6 @@ void G_refHelp_cmd(gentity_t *ent) {
 		G_Printf("Usage: <cmd> [params]\n\n");
 	}
 }
-
 
 // Request for ref status or lists ref commands.
 void G_ref_cmd(gentity_t *ent, unsigned int dwCommand, qboolean fValue) {
@@ -179,7 +177,6 @@ void G_refLockTeams_cmd(gentity_t *ent, qboolean fLock) {
 	trap_SetConfigstring(CS_SERVERTOGGLES, va("%d", level.server_settings));
 }
 
-
 // Pause/unpause a match.
 void G_refPause_cmd(gentity_t *ent, qboolean fPause) {
 	char *referee   = (ent) ? "Referee" : "ref";
@@ -216,7 +213,6 @@ void G_refPause_cmd(gentity_t *ent, qboolean fPause) {
 		return;
 	}
 }
-
 
 // Puts a player on a team.
 void G_refPlayerPut_cmd(gentity_t *ent, int team_id) {
@@ -255,7 +251,6 @@ void G_refPlayerPut_cmd(gentity_t *ent, int team_id) {
 		SetTeam(player, "blue", -1, -1, qfalse);
 	}
 }
-
 
 // Removes a player from a team.
 void G_refRemove_cmd(gentity_t *ent) {
@@ -366,7 +361,6 @@ void Cmd_AuthRcon_f(gentity_t *ent) {
 	}
 }
 
-
 //////////////////////////////
 //  Console admin commands
 //
@@ -452,7 +446,7 @@ int G_refClientnumForName(gentity_t *ent, const char *name) {
 		return MAX_CLIENTS;
 	}
 
-	for (i = 0; i < level.numConnectedClients; i++) {
+	for (i = 0; i < level.numConnectedClients; ++i) {
 		Q_strncpyz(cleanName, level.clients[level.sortedClients[i]].pers.netname, sizeof (cleanName));
 		Q_CleanStr(cleanName);
 		if (!Q_stricmp(cleanName, name)) {

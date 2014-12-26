@@ -26,7 +26,6 @@ If you have questions concerning this license or the applicable additional terms
 ===========================================================================
 */
 
-
 // cg_flamethrower.c - special code for the flamethrower effects
 //
 //	the flameChunks behave similarly to the trailJunc's, except they are rendered differently, and
@@ -378,7 +377,7 @@ void CG_ClearFlameChunks(void) {
 	activeFlameChunks = NULL;
 	headFlameChunks   = NULL;
 
-	for (i = 0 ; i < MAX_FLAME_CHUNKS ; i++) {
+	for (i = 0 ; i < MAX_FLAME_CHUNKS ; ++i) {
 		// Nico, possible overflow fix
 		if (i == MAX_FLAME_CHUNKS - 1) {
 			flameChunks[i].nextGlobal = NULL;
@@ -709,7 +708,6 @@ void CG_AddFlameSpriteToScene(flameChunk_t *f, float lifeFrac, float alpha) {
 		return;
 	}
 
-
 	if ((rotatingFlames) && (!(cg_fxflags & 1))) {         // JPW NERVE no rotate for alt flame shaders
 		vectoangles(cg.refdef_current->viewaxis[0], rotate_ang);
 		rotate_ang[ROLL] += f->rollAngle;
@@ -754,7 +752,6 @@ void CG_AddFlameSpriteToScene(flameChunk_t *f, float lifeFrac, float alpha) {
 
 static int nextFlameLight = 0;
 static int lastFlameOwner = -1;
-
 
 #define FLAME_SOUND_RANGE   1024.0
 
@@ -855,7 +852,6 @@ void CG_AddFlameToScene(flameChunk_t *fHead) {
 					centFlameStatus[f->ownerCent].streamVolume = 1.0;
 				}
 			}
-
 
 			if (!skip) {
 				lastBlueChunk = f;
@@ -1014,11 +1010,11 @@ void CG_InitFlameChunks(void) {
 
 	CG_ClearFlameChunks();
 
-	for (i = 0; i < NUM_FLAME_SPRITES; i++) {
+	for (i = 0; i < NUM_FLAME_SPRITES; ++i) {
 		Com_sprintf(filename, MAX_QPATH, "flamethrowerFire%i", i + 1);
 		flameShaders[i] = trap_R_RegisterShader(filename);
 	}
-	for (i = 0; i < NUM_NOZZLE_SPRITES; i++) {
+	for (i = 0; i < NUM_NOZZLE_SPRITES; ++i) {
 		Com_sprintf(filename, MAX_QPATH, "nozzleFlame%i", i + 1);
 		nozzleShaders[i] = trap_R_RegisterShader(filename);
 	}

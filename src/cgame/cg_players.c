@@ -222,7 +222,6 @@ void CG_NewClientInfo(int clientNum) {
 		}
 	}
 
-
 	// rain - passing the clientNum since that's all we need, and we
 	// can't calculate it properly from the clientinfo
 	CG_LoadClientInfo(clientNum);
@@ -978,9 +977,7 @@ static void CG_PlayerAngles(centity_t *cent, vec3_t legs[3], vec3_t torso[3], ve
 		torsoAngles[PITCH] = cent->pe.torso.pitchAngle;
 	}
 
-
 	// --------- roll -------------
-
 
 	// lean towards the direction of travel
 	VectorCopy(cent->currentState.pos.trDelta, velocity);

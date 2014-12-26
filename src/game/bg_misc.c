@@ -33,7 +33,6 @@ If you have questions concerning this license or the applicable additional terms
  *
 */
 
-
 #include "q_shared.h"
 #include "bg_public.h"
 #include "../../etrun/ui/menudef.h"
@@ -227,7 +226,6 @@ int weapAlts[] =
 	WP_MOBILE_MG42,     // 49 WP_MOBILE_MG42_SET
 };
 
-
 // new (10/18/00)
 char *animStrings[] =
 {
@@ -386,7 +384,6 @@ char *animStrings[] =
 	"LEGS_EXTRA10",
 };
 
-
 // old
 char *animStringsOld[] =
 {
@@ -538,8 +535,6 @@ gitem_t bg_itemlist[] =
 		"",          // sounds
 	},  // leave index 0 alone
 
-
-
 /*QUAKED item_treasure (1 1 0) (-8 -8 -8) (8 8 8) suspended
 Items the player picks up that are just used to tally a score at end-level
 "model" defaults to 'models/powerups/treasure/goldbar.md3'
@@ -571,11 +566,9 @@ model="models/powerups/treasure/goldbar.md3"
 		"",
 	},
 
-
 	//
 	// ARMOR/HEALTH/STAMINA
 	//
-
 
 /*QUAKED item_health_small (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
 -------- MODEL FOR RADIANT ONLY - DO NOT SET THIS AS A KEY --------
@@ -751,11 +744,6 @@ model="models/powerups/health/health_w.md3"
 	},
 
 	//
-	// STAMINA
-	//
-
-
-	//
 	// WEAPONS
 	//
 	// wolf weapons (SA)
@@ -905,7 +893,6 @@ model="models/weapons2/thompson/thompson.md3"
 		"",                      // precache
 		"",                      // sounds
 	},
-
 
 /*QUAKED weapon_sten (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
 -------- MODEL FOR RADIANT ONLY - DO NOT SET THIS AS A KEY --------
@@ -1257,7 +1244,6 @@ weapon_mortar (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
 		"sound/weapons/mortar/mortarf1.wav",             // sounds
 	},
 
-
 // JPW NERVE -- class-specific multiplayer weapon, can't be picked up, dropped, or placed in map
 /*
 weapon_class_special (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
@@ -1472,7 +1458,6 @@ model=""
 		"",                      // precache
 		"",                      // sounds
 	},
-
 
 /*QUAKED weapon_kar98Rifle (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
 -------- MODEL FOR RADIANT ONLY - DO NOT SET THIS AS A KEY --------
@@ -1950,7 +1935,6 @@ weapon_medic_heal
 	},
 // dhm
 
-
 /*QUAKED ammo_syringe (.3 .3 1) (-16 -16 -16) (16 16 16) SUSPENDED SPIN - RESPAWN
 used by: medic
 
@@ -1973,8 +1957,6 @@ model="models/ammo/syringe/syringe.md3
 		"",                  // precache
 		"",                  // sounds
 	},
-
-
 
 /*QUAKED ammo_smoke_grenade (.3 .3 1) (-16 -16 -16) (16 16 16) SUSPENDED SPIN - RESPAWN
 used by: engineer
@@ -2021,7 +2003,6 @@ model="models/ammo/dynamite/dynamite.md3"
 		"",                  // precache
 		"",                  // sounds
 	},
-
 
 /*QUAKED ammo_disguise (.3 .3 1) (-16 -16 -16) (16 16 16) SUSPENDED SPIN - RESPAWN
 used by: covertops
@@ -2119,8 +2100,6 @@ model="models/ammo/satchel/satchel.md3"
 	// AMMO ITEMS
 	//
 
-
-
 /*QUAKED ammo_9mm_small (.3 .3 1) (-16 -16 -16) (16 16 16) SUSPENDED SPIN - RESPAWN
 used by: Luger pistol, MP40 machinegun
 
@@ -2187,7 +2166,6 @@ model="models/powerups/ammo/am9mm_l.md3"
 		"",                  // precache
 		"",                  // sounds
 	},
-
 
 /*QUAKED ammo_45cal_small (.3 .3 1) (-16 -16 -16) (16 16 16) SUSPENDED SPIN - RESPAWN
 used by: Thompson, Colt
@@ -2323,11 +2301,9 @@ model="models/powerups/ammo/am30cal_l.md3"
 		"",                          // sounds
 	},
 
-
 	//
 	// POWERUP ITEMS
 	//
-
 
 /*QUAKED team_CTF_redflag (1 0 0) (-16 -16 -16) (16 16 16)
 Only in CTF games
@@ -2437,8 +2413,6 @@ weapon_t BG_FindClipForWeapon(weapon_t weapon) {
 
 	return 0;
 }
-
-
 
 /*
 ==============
@@ -2585,7 +2559,6 @@ void BG_CalculateSpline_r(splinePath_t *spline, vec3_t out1, vec3_t out2, float 
 		return;
 	}
 	VectorCopy(spline->next->point.origin, points[i + 1]);
-
 
 	while (count > 2) {
 		for (i = 0; i < count - 1; ++i) {
@@ -3020,7 +2993,6 @@ void BG_EvaluateTrajectory(const trajectory_t *tr, int atTime, vec3_t result, qb
 	}
 }
 
-
 /*
 ================
 BG_EvaluateTrajectoryDelta
@@ -3150,7 +3122,6 @@ void BG_GetMarkDir(const vec3_t dir, const vec3_t normal, vec3_t out) {
 
 	VectorCopy(ndir, out);
 }
-
 
 char *eventnames[] =
 {
@@ -3742,8 +3713,6 @@ void BG_RotatePoint(vec3_t point, const vec3_t matrix[3]) {
 	point[1] = DotProduct(matrix[1], tvec);
 	point[2] = DotProduct(matrix[2], tvec);
 }
-
-
 
 /*
 ================

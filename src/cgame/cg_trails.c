@@ -53,7 +53,6 @@ typedef struct trailJunc_s {
 	float alpha;
 	float width;
 	vec3_t color;
-
 } trailJunc_t;
 
 #define MAX_TRAILJUNCS  4096
@@ -80,7 +79,7 @@ void CG_ClearTrails(void) {
 	activeTrails = NULL;
 	headTrails   = NULL;
 
-	for (i = 0 ; i < MAX_TRAILJUNCS ; i++) {
+	for (i = 0 ; i < MAX_TRAILJUNCS ; ++i) {
 		// Nico, possible overflow fix
 		if (i  == MAX_TRAILJUNCS - 1) {
 			trailJuncs[i].nextGlobal = NULL;
@@ -164,7 +163,6 @@ trailJunc_t *CG_SpawnTrailJunc(trailJunc_t *headJunc) {
 
 	return j;
 }
-
 
 /*
 ===============
@@ -493,7 +491,7 @@ void CG_AddTrailToScene(trailJunc_t *trail, int iteration, int numJuncs) {
 			pPolyBuffer->st[pos][1] = 0;
 			pos++;
 
-			for (i = 0; i < 4; i++) {
+			for (i = 0; i < 4; ++i) {
 				pPolyBuffer->color[pPolyBuffer->numVerts + i][0] = 255;
 				pPolyBuffer->color[pPolyBuffer->numVerts + i][1] = 255;
 				pPolyBuffer->color[pPolyBuffer->numVerts + i][2] = 255;
@@ -598,7 +596,7 @@ void CG_AddTrailToScene(trailJunc_t *trail, int iteration, int numJuncs) {
 		VectorCopy(p, verts[i].xyz);
 		verts[i].st[0] = s;
 		verts[i].st[1] = 1.0;
-		for (k = 0; k < 3; k++)
+		for (k = 0; k < 3; ++k)
 			verts[i].modulate[k] = ( unsigned char )(j->color[k] * 255.0);
 		verts[i].modulate[3] = ( unsigned char )(j->alpha * 255.0);
 
@@ -618,7 +616,7 @@ void CG_AddTrailToScene(trailJunc_t *trail, int iteration, int numJuncs) {
 		VectorCopy(p, verts[i].xyz);
 		verts[i].st[0] = s;
 		verts[i].st[1] = 0.0;
-		for (k = 0; k < 3; k++)
+		for (k = 0; k < 3; ++k)
 			verts[i].modulate[k] = ( unsigned char )(j->color[k] * 255.0);
 		verts[i].modulate[3] = ( unsigned char )(j->alpha * 255.0);
 
@@ -647,7 +645,7 @@ void CG_AddTrailToScene(trailJunc_t *trail, int iteration, int numJuncs) {
 		VectorCopy(p, verts[i].xyz);
 		verts[i].st[0] = s;
 		verts[i].st[1] = 0.0;
-		for (k = 0; k < 3; k++)
+		for (k = 0; k < 3; ++k)
 			verts[i].modulate[k] = ( unsigned char )(jNext->color[k] * 255.0);
 		verts[i].modulate[3] = ( unsigned char )(jNext->alpha * 255.0);
 		i++;
@@ -657,7 +655,7 @@ void CG_AddTrailToScene(trailJunc_t *trail, int iteration, int numJuncs) {
 		VectorCopy(p, verts[i].xyz);
 		verts[i].st[0] = s;
 		verts[i].st[1] = 1.0;
-		for (k = 0; k < 3; k++)
+		for (k = 0; k < 3; ++k)
 			verts[i].modulate[k] = ( unsigned char )(jNext->color[k] * 255.0);
 		verts[i].modulate[3] = ( unsigned char )(jNext->alpha * 255.0);
 		i++;
@@ -681,14 +679,14 @@ void CG_AddTrailToScene(trailJunc_t *trail, int iteration, int numJuncs) {
 			VectorCopy(verts[k].xyz, mid.xyz);
 			mid.st[0] = verts[k].st[0];
 			mid.st[1] = verts[k].st[1];
-			for (l = 0; l < 4; l++) {
+			for (l = 0; l < 4; ++l) {
 				mod[l] = (float)verts[k].modulate[l];
 			}
 			for (n = 1; n < 4; ++n) {
 				VectorAdd(verts[k + n].xyz, mid.xyz, mid.xyz);
 				mid.st[0] += verts[k + n].st[0];
 				mid.st[1] += verts[k + n].st[1];
-				for (l = 0; l < 4; l++) {
+				for (l = 0; l < 4; ++l) {
 					mod[l] += (float)verts[k + n].modulate[l];
 				}
 			}
@@ -716,7 +714,7 @@ void CG_AddTrailToScene(trailJunc_t *trail, int iteration, int numJuncs) {
 			trap_R_AddPolysToScene(trail->shader, 3, &outVerts[0], numOutVerts / 3);
 		} else {
 			int k;
-			for (k = 0; k < numOutVerts / 3; k++) {
+			for (k = 0; k < numOutVerts / 3; ++k) {
 				trap_R_AddPolyToScene(trail->shader, 3, &outVerts[k * 3]);
 			}
 		}
@@ -727,7 +725,7 @@ void CG_AddTrailToScene(trailJunc_t *trail, int iteration, int numJuncs) {
 			trap_R_AddPolysToScene(trail->shader, 4, &verts[0], i / 4);
 		} else {
 			int k;
-			for (k = 0; k < i / 4; k++) {
+			for (k = 0; k < i / 4; ++k) {
 				trap_R_AddPolyToScene(trail->shader, 4, &verts[k * 4]);
 			}
 		}
@@ -737,7 +735,6 @@ void CG_AddTrailToScene(trailJunc_t *trail, int iteration, int numJuncs) {
 	if (trail->flags & TJFL_CROSSOVER && iteration < 2) {
 		CG_AddTrailToScene(trail, iteration + 1, numJuncs);
 	}
-
 }
 
 /*

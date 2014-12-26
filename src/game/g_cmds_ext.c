@@ -102,7 +102,6 @@ qboolean G_commandCheck(gentity_t *ent, char *cmd) {
 	return qfalse;
 }
 
-
 // Prints specific command help info.
 qboolean G_commandHelp(gentity_t *ent, char *pszCommand, unsigned int dwCommand) {
 	char arg[MAX_TOKEN_CHARS];
@@ -118,7 +117,6 @@ qboolean G_commandHelp(gentity_t *ent, char *pszCommand, unsigned int dwCommand)
 
 	return qfalse;
 }
-
 
 // Debounces cmd request as necessary.
 qboolean G_cmdDebounce(gentity_t *ent, const char *pszCommandName) {
@@ -137,7 +135,6 @@ qboolean G_cmdDebounce(gentity_t *ent, const char *pszCommandName) {
 /////			Match Commands
 /////
 /////
-
 
 // ************** COMMANDS / ?
 //

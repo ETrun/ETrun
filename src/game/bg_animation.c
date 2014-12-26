@@ -26,7 +26,6 @@ If you have questions concerning this license or the applicable additional terms
 ===========================================================================
 */
 
-
 //===========================================================================
 // bg_animation.c
 //
@@ -413,7 +412,7 @@ int BG_IndexForString(char *token, animStringItem_t *strings, qboolean allowFail
 
 	hash = BG_StringHashValue(token);
 
-	for (i = 0, strav = strings; strav->string; strav++, i++) {
+	for (i = 0, strav = strings; strav->string; ++strav, ++i) {
 		if (strav->hash == -1) {
 			strav->hash = BG_StringHashValue(strav->string);
 		}
@@ -468,9 +467,9 @@ void BG_InitWeaponStrings(void) {
 
 	memset(weaponStrings, 0, sizeof (weaponStrings));
 
-	for (i = 0; i < WP_NUM_WEAPONS; i++) {
+	for (i = 0; i < WP_NUM_WEAPONS; ++i) {
 		// find this weapon in the itemslist, and extract the name
-		for (item = bg_itemlist + 1; item->classname; item++) {
+		for (item = bg_itemlist + 1; item->classname; ++item) {
 			if (item->giType == IT_WEAPON && item->giTag == i) {
 				// found a match
 				weaponStrings[i].string = item->pickup_name;
@@ -595,7 +594,6 @@ void BG_ParseConditionBits(char **text_pp, animStringItem_t *stringTable, int co
 				minus = qtrue;
 			}
 		}
-
 	}
 }
 
@@ -1113,7 +1111,6 @@ void BG_AnimParseAnimScript(animModelInfo_t *animModelInfo, animScriptData_t *sc
 	}
 
 	globalFilename = NULL;
-
 }
 
 //------------------------------------------------------------------------
@@ -1133,7 +1130,7 @@ qboolean BG_EvaluateConditions(int client, animScriptItem_t *scriptItem) {
 	int                   i;
 	animScriptCondition_t *cond;
 
-	for (i = 0, cond = scriptItem->conditions; i < scriptItem->numConditions; i++, cond++) {
+	for (i = 0, cond = scriptItem->conditions; i < scriptItem->numConditions; ++i, ++cond) {
 		switch (animConditionsTable[cond->index].type) {
 		case ANIM_CONDTYPE_BITFLAGS:
 			if (!(globalScriptData->clientConditions[client][cond->index][0] & cond->value[0]) &&
@@ -1169,7 +1166,7 @@ animScriptItem_t *BG_FirstValidItem(int client, animScript_t *script) {
 
 	int i;
 
-	for (i = 0, ppScriptItem = script->items; i < script->numItems; i++, ppScriptItem++) {
+	for (i = 0, ppScriptItem = script->items; i < script->numItems; ++i, ++ppScriptItem) {
 		if (BG_EvaluateConditions(client, *ppScriptItem)) {
 			return *ppScriptItem;
 		}

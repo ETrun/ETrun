@@ -33,7 +33,6 @@ If you have questions concerning this license or the applicable additional terms
  *
 */
 
-
 #include "g_local.h"
 
 vec3_t forward, right, up;
@@ -1591,7 +1590,6 @@ void Weapon_Engineer(gentity_t *ent) {
 	}
 }
 
-
 // JPW NERVE -- launch airstrike as line of bombs mostly-perpendicular to line of grenade travel
 // (close air support should *always* drop parallel to friendly lines, tho accidents do happen)
 #define NUMBOMBS 10
@@ -1729,7 +1727,6 @@ int G_GetWeaponDamage(int weapon) {
 	}
 }
 
-
 float G_GetWeaponSpread(int weapon) {
 	switch (weapon) {
 	case WP_LUGER:
@@ -1854,7 +1851,6 @@ void EmitterCheck(gentity_t *ent, gentity_t *attacker, trace_t *tr) {
 	}
 }
 
-
 /*
 ==============
 Bullet_Endpos
@@ -1912,7 +1908,6 @@ void Bullet_Fire(gentity_t *ent, float spread, int damage, qboolean distance_fal
 
 	G_HistoricalTraceEnd(ent);
 }
-
 
 /*
 ==============
@@ -2030,8 +2025,6 @@ qboolean Bullet_Fire_Extended(gentity_t *source, gentity_t *attacker, vec3_t sta
 	}
 	return hitClient;
 }
-
-
 
 /*
 ======================================================================
@@ -2324,7 +2317,6 @@ void Weapon_FlamethrowerFire(gentity_t *ent) {
 
 //======================================================================
 
-
 /*
 ==============
 AddLean
@@ -2375,7 +2367,6 @@ qboolean AccuracyHit(gentity_t *target, gentity_t *attacker) {
 
 	return qtrue;
 }
-
 
 /*
 ===============

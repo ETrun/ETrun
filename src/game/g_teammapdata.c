@@ -43,7 +43,7 @@ void G_InitMapEntityData(mapEntityData_Team_t *teamList) {
 	teamList->activeMapEntityData.prev = &teamList->activeMapEntityData;
 	teamList->freeMapEntityData        = teamList->mapEntityData_Team;
 
-	for (i = 0, trav = teamList->mapEntityData_Team + 1, lasttrav = teamList->mapEntityData_Team ; i < MAX_GENTITIES - 1 ; i++, trav++) {
+	for (i = 0, trav = teamList->mapEntityData_Team + 1, lasttrav = teamList->mapEntityData_Team ; i < MAX_GENTITIES - 1 ; ++i, ++trav) {
 		lasttrav->next = trav;
 		lasttrav       = trav;
 	}
@@ -201,7 +201,7 @@ void G_SetupFrustum(gentity_t *ent) {
 	VectorCopy(ent->client->ps.origin, vieworg);
 	vieworg[2] += ent->client->ps.viewheight;
 
-	for (i = 0 ; i < 4 ; i++) {
+	for (i = 0 ; i < 4 ; ++i) {
 		frustum[i].dist = DotProduct(vieworg, frustum[i].normal);
 	}
 }
@@ -242,7 +242,7 @@ void G_SetupFrustum_ForBinoculars(gentity_t *ent) {
 	VectorCopy(ent->client->ps.origin, vieworg);
 	vieworg[2] += ent->client->ps.viewheight;
 
-	for (i = 0 ; i < 4 ; i++) {
+	for (i = 0 ; i < 4 ; ++i) {
 		frustum[i].dist = DotProduct(vieworg, frustum[i].normal);
 	}
 }
@@ -581,7 +581,7 @@ void G_UpdateTeamMapData(void) {
 	}
 	level.lastMapEntityUpdate = level.time;
 
-	for (i = 0, ent = g_entities; i < level.num_entities; i++, ent++) {
+	for (i = 0, ent = g_entities; i < level.num_entities; ++i, ++ent) {
 		if (!ent->inuse) {
 			continue;
 		}
@@ -589,7 +589,7 @@ void G_UpdateTeamMapData(void) {
 		switch (ent->s.eType) {
 		case ET_PLAYER:
 			G_UpdateTeamMapData_Player(ent, qfalse, qfalse);
-			for (j = 0; j < 2; j++) {
+			for (j = 0; j < 2; ++j) {
 				mapEntityData_Team_t *teamList = &mapEntityData[j];
 
 				mEnt = G_FindMapEntityDataSingleClient(teamList, NULL, ent->s.number, -1);
@@ -659,7 +659,7 @@ void G_UpdateTeamMapData(void) {
 							case TEAM_AXIS:
 								mEnt = G_FindMapEntityData(&mapEntityData[0], ent2 - g_entities);
 								if (mEnt && level.time - mEnt->startTime > 5000) {
-									for (k = 0; k < MAX_CLIENTS; k++) {
+									for (k = 0; k < MAX_CLIENTS; ++k) {
 										if (g_entities[k].inuse && g_entities[k].client && g_entities[k].client->sess.sessionTeam == ent->client->sess.sessionTeam) {
 											trap_SendServerCommand(k, va("tt \"ENEMY SPOTTED <STOP> CHECK COMMAND MAP FOR DETAILS <STOP>\"\n"));
 										}
@@ -670,7 +670,7 @@ void G_UpdateTeamMapData(void) {
 							case TEAM_ALLIES:
 								mEnt = G_FindMapEntityData(&mapEntityData[1], ent2 - g_entities);
 								if (mEnt && level.time - mEnt->startTime > 5000) {
-									for (k = 0; k < MAX_CLIENTS; k++) {
+									for (k = 0; k < MAX_CLIENTS; ++k) {
 										if (g_entities[k].inuse && g_entities[k].client && g_entities[k].client->sess.sessionTeam == ent->client->sess.sessionTeam) {
 											trap_SendServerCommand(k, va("tt \"ENEMY SPOTTED <STOP> CHECK COMMAND MAP FOR DETAILS <STOP>\"\n"));
 										}

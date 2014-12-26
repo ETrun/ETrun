@@ -217,7 +217,6 @@ const char *UI_DownloadInfo(const char *downloadName) {
 		                                    60,  60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60 };
 		static int  tleIndex = 0;
 
-
 		// We do it in K (/1024) because we'd overflow around 4MB
 		tleEstimates[tleIndex] = (n - (((downloadCount / 1024) * n) / (downloadSize / 1024)));
 		tleIndex++;

@@ -74,7 +74,6 @@ void SP_target_give(gentity_t *ent) {
 	ent->use = Use_Target_Give;
 }
 
-
 //==========================================================
 
 /*QUAKED target_remove_powerups (1 0 0) (-8 -8 -8) (8 8 8)
@@ -100,7 +99,6 @@ void Use_target_remove_powerups(gentity_t *ent, gentity_t *other, gentity_t *act
 void SP_target_remove_powerups(gentity_t *ent) {
 	ent->use = Use_target_remove_powerups;
 }
-
 
 //==========================================================
 
@@ -133,7 +131,6 @@ void SP_target_delay(gentity_t *ent) {
 	ent->use = Use_Target_Delay;
 }
 
-
 //==========================================================
 
 /*QUAKED target_score (1 0 0) (-8 -8 -8) (8 8 8)
@@ -154,8 +151,6 @@ void SP_target_score(gentity_t *ent) {
 	}
 	ent->use = Use_Target_Score;
 }
-
-
 
 //==========================================================
 
@@ -195,9 +190,7 @@ void SP_target_print(gentity_t *ent) {
 	ent->use = Use_Target_Print;
 }
 
-
 //==========================================================
-
 
 /*QUAKED target_speaker (1 0 0) (-8 -8 -8) (8 8 8) LOOPED_ON LOOPED_OFF GLOBAL ACTIVATOR VIS_MULTIPLE NO_PVS
 "noise"		wav file to play
@@ -246,7 +239,6 @@ void target_speaker_multiple(gentity_t *ent) {
 	} else {
 		G_Error("target_speaker cant find vis_dummy_multiple %s", vtos(ent->s.origin));
 	}
-
 }
 
 void SP_target_speaker(gentity_t *ent) {
@@ -281,7 +273,6 @@ void SP_target_speaker(gentity_t *ent) {
 	ent->s.eventParm = ent->noise_index;
 	ent->s.frame     = ent->wait * 10;
 	ent->s.clientNum = ent->random * 10;
-
 
 	// check for prestarted looping sound
 	if (ent->spawnflags & 1) {
@@ -326,8 +317,6 @@ void SP_target_speaker(gentity_t *ent) {
 	trap_LinkEntity(ent);
 }
 
-
-
 /*QUAKED misc_beam (0 .5 .8) (-8 -8 -8) (8 8 8)
 When on, displays a electric beam from target to target2.
 "target"	start of beam
@@ -336,7 +325,6 @@ When on, displays a electric beam from target to target2.
 "color"		colour of beam		*NOT WORKIN YET*
 "scale"		width of beam		*NOT WORKIN YET*
 */
-
 
 void misc_beam_think(gentity_t *self) {
 //	trace_t	trace;
@@ -558,7 +546,6 @@ void SP_target_laser(gentity_t *self) {
 	self->nextthink = level.time + FRAMETIME;
 }
 
-
 //==========================================================
 
 void target_teleporter_use(gentity_t *self, gentity_t *other, gentity_t *activator) {
@@ -591,7 +578,6 @@ void SP_target_teleporter(gentity_t *self) {
 }
 
 //==========================================================
-
 
 /*QUAKED target_relay (1 1 0) (-8 -8 -8) (8 8 8) RED_ONLY BLUE_ONLY RANDOM NOKEY_ONLY TAKE_KEY NO_LOCKED_NOISE
 This doesn't perform any actions except fire its targets.
@@ -656,9 +642,7 @@ void SP_target_relay(gentity_t *self) {
 			self->soundPos1 = G_SoundIndex("sound/movers/doors/default_door_locked.wav");
 		}
 	}
-
 }
-
 
 //==========================================================
 
@@ -832,8 +816,6 @@ void SP_target_counter(gentity_t *ent) {
 	ent->use = Use_Target_Counter;
 }
 
-
-
 /*QUAKED target_autosave (1 1 0) (-8 -8 -8) (8 8 8)
 saves game to 'autosave.sav' when triggered then dies.
 */
@@ -855,8 +837,6 @@ key:n  means the door now requires key n
 void SP_target_lock(gentity_t *ent) {
 	ent->use = Use_Target_Lock;
 }
-
-
 
 void Use_Target_Alarm(gentity_t *ent, gentity_t *other, gentity_t *activator) {
 	// Nico, silent GCC
@@ -1011,9 +991,7 @@ void SP_target_smoke(gentity_t *ent) {
 	if (ent->spawnflags & 4) {
 		trap_LinkEntity(ent);
 	}
-
 }
-
 
 /*QUAKED target_script_trigger (1 .7 .2) (-8 -8 -8) (8 8 8)
 must have an aiName
@@ -1061,7 +1039,6 @@ void SP_target_script_trigger(gentity_t *ent) {
 	ent->s.eType   = ET_GENERAL;
 	ent->use       = target_script_trigger_use;
 }
-
 
 /*QUAKED target_rumble (0 0.75 0.8) (-8 -8 -8) (8 8 8) STARTOFF
 wait = default is 2 seconds = time the entity will enable rumble effect
@@ -1135,7 +1112,6 @@ void target_rumble_think(gentity_t *ent) {
 	} else {
 		ent->nextthink = level.time + 50;
 	}
-
 }
 
 void target_rumble_use(gentity_t *ent, gentity_t *other, gentity_t *activator) {
@@ -1718,7 +1694,6 @@ void SP_target_checkpoint(gentity_t *ent) {
 
 	level.isTimerun = qtrue;
 }
-
 
 void SP_rocketrun(gentity_t *ent) {
 	int count;

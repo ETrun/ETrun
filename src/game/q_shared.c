@@ -346,9 +346,6 @@ char *COM_ParseExt(char **data_p, qboolean allowLineBreaks) {
 	return com_token;
 }
 
-
-
-
 /*
 ==================
 COM_MatchToken
@@ -409,7 +406,6 @@ void SkipRestOfLine(char **data) {
 
 	*data = p;
 }
-
 
 void Parse1DMatrix(char **buf_p, int x, float *m) {
 	int  i;
@@ -538,7 +534,6 @@ char *Q_strupr(char *s1) {
 	return s1;
 }
 
-
 // never goes past bounds or leaves without a terminating 0
 void Q_strcat(char *dest, int size, const char *src) {
 	int l1;
@@ -575,7 +570,7 @@ qboolean Q_isBadDirChar(char c) {
 	char badchars[] = { ';', '&', '(', ')', '|', '<', '>', '*', '?', '[', ']', '~', '+', '@', '!', '\\', '/', ' ', '\'', '\"', '\0' };
 	int  i;
 
-	for (i = 0; badchars[i] != '\0'; i++) {
+	for (i = 0; badchars[i] != '\0'; ++i) {
 		if (c == badchars[i]) {
 			return qtrue;
 		}
@@ -824,7 +819,6 @@ void Info_RemoveKey(char *s, const char *key) {
 			return;
 		}
 	}
-
 }
 
 /*

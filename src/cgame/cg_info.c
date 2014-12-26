@@ -67,7 +67,6 @@ void CG_DrawInformation(qboolean forcerefresh) {
 	CG_DrawConnectScreen(qfalse, forcerefresh);
 }
 
-
 void CG_ShowHelp_On(int *status) {
 	int milli = trap_Milliseconds();
 
@@ -93,7 +92,6 @@ void CG_ShowHelp_Off(int *status) {
 		*status = SHOW_SHUTDOWN;
 	}
 }
-
 
 // Demo playback key catcher support
 void CG_DemoClick(int key, qboolean down) {
@@ -414,7 +412,7 @@ void CG_DemoHelpDraw() {
 	y += 3;
 
 	// Control info
-	for (i = 0; i < (int)(sizeof (help) / sizeof (char *)); i++) {
+	for (i = 0; i < (int)(sizeof (help) / sizeof (char *)); ++i) {
 		y += tSpacing;
 		if (help[i] != NULL) {
 			CG_Text_Paint_Ext(x, y, tScale, tScale, tColor, (char *)help[i], 0.0f, 0, tStyle, tFont);

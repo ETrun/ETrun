@@ -26,7 +26,6 @@ If you have questions concerning this license or the applicable additional terms
 ===========================================================================
 */
 
-
 // cg_localents.c -- every frame, generate renderer commands for locally
 // processed entities, like smoke puffs, gibs, shells, etc.
 
@@ -54,11 +53,10 @@ void    CG_InitLocalEntities(void) {
 	cg_activeLocalEntities.next = &cg_activeLocalEntities;
 	cg_activeLocalEntities.prev = &cg_activeLocalEntities;
 	cg_freeLocalEntities        = cg_localEntities;
-	for (i = 0 ; i < MAX_LOCAL_ENTITIES - 1 ; i++) {
+	for (i = 0 ; i < MAX_LOCAL_ENTITIES - 1 ; ++i) {
 		cg_localEntities[i].next = &cg_localEntities[i + 1];
 	}
 }
-
 
 /*
 ==================
@@ -149,7 +147,6 @@ void CG_FragmentBounceSound(localEntity_t *le, trace_t *trace) {
 	le->leBounceSoundType = LEBS_NONE;
 }
 
-
 /*
 ================
 CG_ReflectVelocity
@@ -171,7 +168,6 @@ void CG_ReflectVelocity(localEntity_t *le, trace_t *trace) {
 	VectorCopy(trace->endpos, le->pos.trBase);
 	le->pos.trTime = cg.time;
 
-
 	// check for stop, making sure that even on low FPS systems it doesn't bobble
 	if (le->leMarkType == LEMT_BLOOD && trace->startsolid) {
 		return;
@@ -184,7 +180,6 @@ void CG_ReflectVelocity(localEntity_t *le, trace_t *trace) {
 		}
 	}
 }
-
 
 //----(SA)	added
 
@@ -207,7 +202,6 @@ void CG_AddEmitter(localEntity_t *le) {
 }
 
 //----(SA)	end
-
 
 void CG_Explodef(vec3_t origin, vec3_t dir, int mass, int type, qhandle_t sound, int forceLowGrav, qhandle_t shader);
 
@@ -317,7 +311,6 @@ void CG_AddFragment(localEntity_t *le) {
 		// t = le->endTime - cg.time;
 		trap_R_AddRefEntityToScene(&le->refEntity);
 
-
 		// trace a line from previous position down, to see if I should start falling again
 
 		VectorCopy(le->refEntity.origin, newOrigin);
@@ -349,7 +342,6 @@ void CG_AddFragment(localEntity_t *le) {
 			trap_S_AddLoopingSound(newOrigin, vec3_origin, cgs.media.flameBlowSound, (int)(0.3 * 255.0 * flameAlpha), 0);
 		}
 	}
-
 
 	// trace a line from previous position to new position
 	CG_Trace(&trace, le->refEntity.origin, NULL, NULL, newOrigin, -1, CONTENTS_SOLID);
@@ -536,7 +528,6 @@ void CG_AddSparkElements(localEntity_t *le) {
 			return;
 		}
 	}
-
 }
 
 /*
@@ -569,7 +560,6 @@ void CG_AddFuseSparkElements(localEntity_t *le) {
 
 		le->lastTrailTime = time;
 	}
-
 }
 
 /*
@@ -629,7 +619,6 @@ void CG_AddDebrisElements(localEntity_t *le) {
 
 		le->lastTrailTime = t;
 	}
-
 }
 
 /*
@@ -710,7 +699,6 @@ static void CG_AddMoveScaleFade(localEntity_t *le) {
 	trap_R_AddRefEntityToScene(re);
 }
 
-
 /*
 ===================
 CG_AddScaleFade
@@ -747,7 +735,6 @@ static void CG_AddScaleFade(localEntity_t *le) {
 
 	trap_R_AddRefEntityToScene(re);
 }
-
 
 /*
 =================
@@ -787,8 +774,6 @@ static void CG_AddFallScaleFade(localEntity_t *le) {
 
 	trap_R_AddRefEntityToScene(re);
 }
-
-
 
 /*
 ================
@@ -863,7 +848,6 @@ static void CG_AddSpriteExplosion(localEntity_t *le) {
 	trap_R_AddLightToScene(re.origin, 320, light, le->lightColor[0], le->lightColor[1], le->lightColor[2], 0, 0);
 	// done.
 }
-
 
 //==============================================================================
 

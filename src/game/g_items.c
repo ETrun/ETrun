@@ -164,7 +164,7 @@ weapon_t G_GetPrimaryWeaponForClient(gclient_t *client) {
 	}
 
 	classInfo = &bg_allies_playerclasses[client->sess.playerType];
-	for (i = 0; i < MAX_WEAPS_PER_CLASS; i++) {
+	for (i = 0; i < MAX_WEAPS_PER_CLASS; ++i) {
 		if (classInfo->classWeapons[i] == WP_MP40 || classInfo->classWeapons[i] == WP_THOMPSON) {
 			continue;
 		}
@@ -175,7 +175,7 @@ weapon_t G_GetPrimaryWeaponForClient(gclient_t *client) {
 	}
 
 	classInfo = &bg_axis_playerclasses[client->sess.playerType];
-	for (i = 0; i < MAX_WEAPS_PER_CLASS; i++) {
+	for (i = 0; i < MAX_WEAPS_PER_CLASS; ++i) {
 		if (classInfo->classWeapons[i] == WP_MP40 || classInfo->classWeapons[i] == WP_THOMPSON) {
 			continue;
 		}
@@ -386,7 +386,6 @@ int Pickup_Weapon(gentity_t *ent, gentity_t *other) {
 	return -1;
 }
 
-
 //======================================================================
 
 int Pickup_Health(gentity_t *ent, gentity_t *other) {
@@ -436,12 +435,12 @@ void RespawnItem(gentity_t *ent) {
 		}
 		master = ent->teammaster;
 
-		for (count = 0, ent = master; ent; ent = ent->teamchain, count++)
+		for (count = 0, ent = master; ent; ent = ent->teamchain, ++count)
 			;
 
 		choice = rand() % count;
 
-		for (count = 0, ent = master; count < choice; ent = ent->teamchain, count++)
+		for (count = 0, ent = master; count < choice; ent = ent->teamchain, ++count)
 			;
 	}
 
@@ -456,7 +455,6 @@ void RespawnItem(gentity_t *ent) {
 
 	ent->nextthink = 0;
 }
-
 
 /*
 ==============
@@ -554,7 +552,6 @@ void Touch_Item(gentity_t *ent, gentity_t *other, trace_t *trace) {
 		G_AddEvent(other, EV_GENERAL_SOUND, ent->noise_index);
 	}
 
-
 	G_AddEvent(other, makenoise, ent->s.modelindex);
 
 	// powerup pickups are global broadcasts
@@ -594,7 +591,6 @@ void Touch_Item(gentity_t *ent, gentity_t *other, trace_t *trace) {
 	}
 	trap_LinkEntity(ent);
 }
-
 
 //======================================================================
 
@@ -710,7 +706,6 @@ gentity_t *Drop_Item(gentity_t *ent, gitem_t *item, float angle, qboolean novelo
 	return LaunchItem(item, ent->s.pos.trBase, velocity, ent->s.number);
 }
 
-
 /*
 ================
 Use_Item
@@ -810,7 +805,6 @@ void FinishSpawningItem(gentity_t *ent) {
 		ent->s.eFlags |= EF_SPINNING;
 	}
 
-
 	// team slaves and targeted items aren't present at start
 	if ((ent->flags & FL_TEAMSLAVE) || ent->targetname) {
 		ent->flags |= FL_NODRAW;
@@ -827,7 +821,7 @@ void FinishSpawningItem(gentity_t *ent) {
 		// TTimo left-hand operand of comma expression has no effect
 		// initial line: for(i=0;i<4,ent->item->world_model[i];i++) {}
 		// Nico, replaced 4 by MAX_ITEM_MODELS to prevent array index outbound
-		for (i = 0; i < MAX_ITEM_MODELS && ent->item->world_model[i] ; i++) {
+		for (i = 0; i < MAX_ITEM_MODELS && ent->item->world_model[i] ; ++i) {
 		}
 
 		ent->s.density = i - 1;   // store number of stages in 'density' for client (most will have '1')
@@ -835,7 +829,6 @@ void FinishSpawningItem(gentity_t *ent) {
 
 	trap_LinkEntity(ent);
 }
-
 
 /*
 ============
@@ -877,7 +870,6 @@ void G_SpawnItem(gentity_t *ent, gitem_t *item) {
 		}
 	}
 }
-
 
 /*
 ================

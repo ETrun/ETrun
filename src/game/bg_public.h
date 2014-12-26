@@ -136,7 +136,6 @@ typedef enum {
 	SELECT_BUDDY_6,
 
 	SELECT_BUDDY_LAST // must be the last one in the enum
-
 } SelectBuddyFlag;
 
 // RF
@@ -421,7 +420,6 @@ typedef struct {
 	int isLogged;        // Nico, is client logged in?
 } pmove_t;
 
-
 // if a full pmove isn't done on the client, you can just update the angles
 void PM_UpdateViewAngles(playerState_t * ps, pmoveExt_t * pmext, usercmd_t * cmd, void (trace) (trace_t *results, const vec3_t start, const vec3_t mins, const vec3_t maxs, const vec3_t end, int passEntityNum, int contentMask), int tracemask);
 int Pmove(pmove_t *pmove);
@@ -564,7 +562,6 @@ typedef enum {
 	//----(SA)	These will probably all change to INV_n to get the word 'key' out of the game.
 	//			id and DM don't want references to 'keys' in the game.
 	//			I'll change to 'INV' as the item becomes 'permanent' and not a test item.
-
 
 	KEY_NONE,
 	KEY_1,      // skull
@@ -711,12 +708,10 @@ typedef struct ammotable_s {
 	int mod;                // means of death
 } ammotable_t;
 
-
 // Lookup table to find ammo table entry
 extern ammotable_t *GetAmmoTableData(int ammoIndex);
 
 extern int weapAlts[];  // defined in bg_misc.c
-
 
 //----(SA)
 // for routines that need to check if a WP_ is </=/> a given set of weapons
@@ -883,7 +878,6 @@ typedef enum {
 	EV_MAX_EVENTS   // just added as an 'endcap'
 } entity_event_t;
 
-
 // new (10/18/00)
 typedef enum {
 	BOTH_DEATH1,
@@ -1046,7 +1040,6 @@ typedef enum {
 // text represenation for scripting
 extern char *animStrings[];     // defined in bg_misc.c
 extern char *animStringsOld[];      // defined in bg_misc.c
-
 
 typedef enum {
 	WEAP_IDLE1,
@@ -1242,9 +1235,7 @@ typedef enum {
 	MOD_SWITCHTEAM,
 
 	MOD_NUM_MODS
-
 } meansOfDeath_t;
-
 
 //---------------------------------------------------------
 
@@ -1599,7 +1590,6 @@ typedef struct {
 	// global list of script items for this model
 	animScriptItem_t scriptItems[MAX_ANIMSCRIPT_ITEMS_PER_MODEL];
 	int numScriptItems;
-
 } animModelInfo_t;
 
 // this is the main structure that is duplicated on the client and server
@@ -1699,7 +1689,6 @@ typedef struct {
 
 	qhandle_t icon;
 	qhandle_t arrow;
-
 } bg_playerclass_t;
 
 typedef struct bg_character_s {
@@ -2064,7 +2053,6 @@ void PM_TraceAll(trace_t *trace, vec3_t start, vec3_t end);
 #define PHYSICS_MODE_VQ3_NO_OB      19
 #define PHYSICS_MODE_VQ3_OB         3
 #define PHYSICS_MODE_VET            0
-
 
 // Nico, IP max length
 #define IP_MAX_LENGTH               46

@@ -347,7 +347,7 @@ static void DrawLine(float x1, float y1, float x2, float y2, vec4_t color) {
 	len   = sqrt(len);
 	stepx = (x2 - x1) / len;
 	stepy = (y2 - y1) / len;
-	for (i = 0; i < len; i++) {
+	for (i = 0; i < len; ++i) {
 		PutPixel(x1, y1);
 		x1 += stepx;
 		y1 += stepy;

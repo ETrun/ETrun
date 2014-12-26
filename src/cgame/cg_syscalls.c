@@ -42,7 +42,6 @@ void trap_PumpEventLoop(void) {
 	syscall(CG_PUMPEVENTLOOP);
 }
 
-
 void    trap_Print(const char *fmt) {
 	syscall(CG_PRINT, fmt);
 }
@@ -314,7 +313,6 @@ void    trap_R_DrawStretchPic(float x, float y, float w, float h,
 void trap_R_Add2dPolys(polyVert_t *verts, int numverts, qhandle_t hShader) {
 	syscall(CG_R_DRAW2DPOLYS, verts, numverts, hShader);
 }
-
 
 void    trap_R_ModelBounds(clipHandle_t model, vec3_t mins, vec3_t maxs) {
 	syscall(CG_R_MODELBOUNDS, model, mins, maxs);

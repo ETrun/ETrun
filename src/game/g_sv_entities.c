@@ -46,7 +46,6 @@ If you have questions concerning this license or the applicable additional terms
 g_serverEntity_t g_serverEntities[MAX_SERVER_ENTITIES];
 int              numServerEntities;
 
-
 // clear out all the sp entities
 void InitServerEntities(void) {
 	memset(g_serverEntities, 0, sizeof (g_serverEntities));

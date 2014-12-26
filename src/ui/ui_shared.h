@@ -29,7 +29,6 @@ If you have questions concerning this license or the applicable additional terms
 #ifndef __UI_SHARED_H
 #define __UI_SHARED_H
 
-
 #include "../game/q_shared.h"
 #include "../cgame/tr_types.h"
 #include "keycodes.h"
@@ -299,7 +298,6 @@ typedef struct itemDef_s {
 	const char *onEnter;
 
 	struct itemDef_s *toolTipData;  // OSP - Tag an item to this item for auto-help popups
-
 } itemDef_t;
 
 typedef struct {
@@ -374,7 +372,6 @@ typedef struct {
 	qhandle_t fxPic[7];
 	qhandle_t crosshairShader[NUM_CROSSHAIRS];
 	qhandle_t crosshairAltShader[NUM_CROSSHAIRS];
-
 } cachedAssets_t;
 
 typedef struct {

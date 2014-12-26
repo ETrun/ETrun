@@ -33,7 +33,6 @@ If you have questions concerning this license or the applicable additional terms
  *
 */
 
-
 #include "cg_local.h"
 
 #if defined _WIN32
@@ -736,7 +735,6 @@ qboolean CG_ConsoleCommand(void) {
 
 	return qfalse;
 }
-
 
 /*
 =================
