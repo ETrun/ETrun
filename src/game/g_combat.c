@@ -177,7 +177,6 @@ player_die
 void player_die(gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int damage, int meansOfDeath) {
 	int       contents    = 0, i, killer = ENTITYNUM_WORLD;
 	char      *killerName = "<world>";
-	qboolean  nogib       = qtrue;
 	gitem_t   *item       = NULL;
 	gentity_t *ent;
 	qboolean  killedintank = qfalse;
@@ -365,17 +364,6 @@ void player_die(gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int 
 	// FIXME: contents is always 0 here
 	if (!(contents & CONTENTS_NODROP)) {
 		GibEntity(self, killer);
-		nogib = qfalse;
-	}
-
-	if (nogib) {
-		self->client->ps.pm_time = BG_AnimScriptEvent(&self->client->ps, self->client->pers.character->animModelInfo, ANIM_ET_DEATH, qfalse, qtrue);
-
-		// record the death animation to be used later on by the corpse
-		self->client->torsoDeathAnim = self->client->ps.torsoAnim;
-		self->client->legsDeathAnim  = self->client->ps.legsAnim;
-
-		G_AddEvent(self, EV_DEATH1 + 1, killer);
 	}
 
 	if (meansOfDeath == MOD_MACHINEGUN) {
