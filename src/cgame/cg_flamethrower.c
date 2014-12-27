@@ -123,9 +123,7 @@ static vec3_t flameChunkMaxs = { 0, 0, 0 };
 // these define how the flame looks
 #define FLAME_START_SIZE        1.0
 #define FLAME_START_MAX_SIZE    140.0   // when the flame is spawned, it should endevour to reach this size
-#define FLAME_START_MAX_SIZE_RAND   60.0
 #define FLAME_MAX_SIZE          200.0   // flame sprites cannot be larger than this
-#define FLAME_MIN_MAXSIZE       40.0    // don't ever let the sizeMax go less than this
 #define FLAME_START_SPEED       1200.0 //1200.0	// speed of flame as it leaves the nozzle
 #define FLAME_MIN_SPEED         60.0 //200.0
 #define FLAME_CHUNK_DIST        8.0     // space in between chunks when fired
@@ -134,8 +132,6 @@ static vec3_t flameChunkMaxs = { 0, 0, 0 };
 #define FLAME_BLUE_MAX_ALPHA    1.0
 
 #define FLAME_FUEL_LENGTH       48.0
-#define FLAME_FUEL_MAX_ALPHA    0.35
-#define FLAME_FUEL_MIN_WIDTH    1.0
 
 // these are calculated (don't change)
 #define FLAME_LENGTH            (FLAMETHROWER_RANGE + 50.0)   // NOTE: only modify the range, since this should always reflect that range
@@ -144,15 +140,11 @@ static vec3_t flameChunkMaxs = { 0, 0, 0 };
 #define FLAME_FRICTION_PER_SEC  (2.0 * FLAME_START_SPEED)
 #define FLAME_BLUE_LIFE         (int)((FLAME_BLUE_LENGTH / FLAME_START_SPEED) * 1000)
 #define FLAME_FUEL_LIFE         (int)((FLAME_FUEL_LENGTH / FLAME_START_SPEED) * 1000)
-#define FLAME_FUEL_FADEIN_TIME  (0.2 * FLAME_FUEL_LIFE)
 
 #define FLAME_BLUE_FADEIN_TIME(x)       (0.2 * x)
 #define FLAME_BLUE_FADEOUT_TIME(x)      (0.05 * x)
 #define GET_FLAME_BLUE_SIZE_SPEED(x)    (((float)x / FLAME_LIFETIME) / 1.0)       // x is the current sizeMax
 #define GET_FLAME_SIZE_SPEED(x)         (((float)x / FLAME_LIFETIME) / 0.3)       // x is the current sizeMax
-
-// disable this to stop rotating flames (this is variable so we can change it at run-time)
-int rotatingFlames = qtrue;
 
 /*
 ===============
@@ -550,7 +542,6 @@ CG_FlameCalcOrg
 */
 void CG_FlameCalcOrg(flameChunk_t *f, int time, vec3_t outOrg) {
 	VectorMA(f->baseOrg, f->velSpeed * ((float)(time - f->baseOrgTime) / 1000), f->velDir, outOrg);
-	//outOrg[2] -= f->gravity * ((float)(time - f->timeStart)/1000.0) * ((float)(time - f->timeStart)/1000.0);
 }
 
 /*
@@ -637,20 +628,11 @@ CG_AddFlameSpriteToScene
 static vec3_t vright, vup;
 static vec3_t rright, rup;
 
-#define FLAME_BLEND_SRC     "GL_ONE"
-#define FLAME_BLEND_DST     "GL_ONE_MINUS_SRC_COLOR"
-
 #define NUM_FLAME_SPRITES       45
-#define FLAME_SPRITE_DIR        "twiltb2"
-
 #define NUM_NOZZLE_SPRITES  8
 
 static qhandle_t flameShaders[NUM_FLAME_SPRITES];
 static qhandle_t nozzleShaders[NUM_NOZZLE_SPRITES];
-static qboolean  initFlameShaders = qtrue;
-
-#define MAX_CLIPPED_FLAMES  8       // dont draw more than this many per frame
-static int numClippedFlames;
 
 void CG_AddFlameSpriteToScene(flameChunk_t *f, float lifeFrac, float alpha) {
 	vec3_t        point, p2, sProj;
@@ -708,7 +690,7 @@ void CG_AddFlameSpriteToScene(flameChunk_t *f, float lifeFrac, float alpha) {
 		return;
 	}
 
-	if ((rotatingFlames) && (!(cg_fxflags & 1))) {         // JPW NERVE no rotate for alt flame shaders
+	if (!(cg_fxflags & 1)) {         // JPW NERVE no rotate for alt flame shaders
 		vectoangles(cg.refdef_current->viewaxis[0], rotate_ang);
 		rotate_ang[ROLL] += f->rollAngle;
 		AngleVectors(rotate_ang, NULL, rright, rup);
@@ -939,13 +921,8 @@ void CG_AddFlameToScene(flameChunk_t *fHead) {
 				    &&  (fabs(f->timeStart - fNext->timeStart) < 100)
 				    &&  (DotProduct(f->velDir, fNext->velDir) > 0.99)
 				    ) {
-					if (!droppedTrail) {
-						CG_MergeFlameChunks(f, fNext);
-						fNext = f->nextFlameChunk;      // it may have changed
-					} else {
-						skip = qtrue;
-						break;
-					}
+					CG_MergeFlameChunks(f, fNext);
+					fNext = f->nextFlameChunk;      // it may have changed
 				} else {
 					break;
 				}
@@ -1018,7 +995,6 @@ void CG_InitFlameChunks(void) {
 		Com_sprintf(filename, MAX_QPATH, "nozzleFlame%i", i + 1);
 		nozzleShaders[i] = trap_R_RegisterShader(filename);
 	}
-	initFlameShaders = qfalse;
 }
 
 /*
@@ -1029,14 +1005,11 @@ CG_AddFlameChunks
 void CG_AddFlameChunks(void) {
 	flameChunk_t *f, *fNext;
 
-	//AngleVectors( cg.refdef.viewangles, NULL, vright, vup );
 	VectorCopy(cg.refdef_current->viewaxis[1], vright);
 	VectorCopy(cg.refdef_current->viewaxis[2], vup);
 
 	// clear out the volumes so we can rebuild them
 	memset(centFlameStatus, 0, sizeof (centFlameStatus));
-
-	numClippedFlames = 0;
 
 	// age them
 	f = activeFlameChunks;
