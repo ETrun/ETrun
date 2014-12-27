@@ -1898,10 +1898,6 @@ void CG_EntityEvent(centity_t *cent, vec3_t position) {
 				if (CG_SoundPlaySoundScript(s, NULL, -1, (es->effect1Time ? qfalse : qtrue))) {
 					break;
 				}
-				// try with .wav
-				Q_strncpyz(tempStr, s, sizeof (tempStr));
-				Q_strcat(tempStr, sizeof (tempStr), ".wav");
-				s = tempStr;
 			}
 			// done.
 			if (cgs.gameSounds[es->eventParm]) {
