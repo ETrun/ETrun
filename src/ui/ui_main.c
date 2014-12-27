@@ -3192,7 +3192,7 @@ UI_GetServerStatusInfo
 ==================
 */
 static int UI_GetServerStatusInfo(const char *serverAddress, serverStatusInfo_t *info) {
-	char *p, *score, *ping, *name;
+	char *p, *score, *ping, *name, *p_val = NULL, *p_name = NULL;
 
 	if (!info) {
 		trap_LAN_ServerStatus(serverAddress, NULL, 0);
@@ -3218,8 +3218,6 @@ static int UI_GetServerStatusInfo(const char *serverAddress, serverStatusInfo_t 
 		trap_Cvar_Set("ui_modURL", "");
 		// get the cvars
 		while (p && *p) {
-			char *p_val = NULL, *p_name = NULL;
-
 			p = strchr(p, '\\');
 			if (!p) {
 				break;
