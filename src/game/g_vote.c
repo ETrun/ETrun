@@ -106,9 +106,6 @@ void G_voteHelp(gentity_t *ent, qboolean fShowVote) {
 	if (num_cmds % HELP_COLUMNS) {
 		rows++;
 	}
-	if (rows < 0) {
-		return;
-	}
 
 	for (i = 0; i < rows; ++i) {
 		if (i + rows * 3 + 1 <= num_cmds) {
