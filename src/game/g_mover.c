@@ -85,7 +85,7 @@ char *hintStrings[HINT_NUM_HINTS] =
 	"HINT_TANK",
 	"HINT_SATCHELCHARGE",
 	// START Mad Doc - TDF
-	"HINT_LOCKPICK"
+	"HINT_LOCKPICK",
 	// END Mad Doc - TDF
 
 	"",                         // HINT_BAD_USER
