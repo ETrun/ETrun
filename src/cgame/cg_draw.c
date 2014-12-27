@@ -1954,7 +1954,6 @@ static void CG_DrawPlayerHealthBar(rectDef_t *rect) {
 static void CG_DrawWeapRecharge(rectDef_t *rect) {
 	float    barFrac, chargeTime;
 	int      flags;
-	qboolean fade = qfalse;
 
 	vec4_t bgcolor = { 1.0f, 1.0f, 1.0f, 0.25f };
 	vec4_t color;
@@ -1982,11 +1981,6 @@ static void CG_DrawWeapRecharge(rectDef_t *rect) {
 	color[0] = 1.0f;
 	color[1] = color[2] = barFrac;
 	color[3] = 0.25 + barFrac * 0.5;
-
-	if (fade) {
-		bgcolor[3] *= 0.4f;
-		color[3]   *= 0.4f;
-	}
 
 	CG_FilledBar(rect->x, rect->y + (rect->h * 0.1f), rect->w, rect->h * 0.84f, color, NULL, bgcolor, barFrac, flags);
 
