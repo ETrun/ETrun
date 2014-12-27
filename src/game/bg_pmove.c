@@ -578,8 +578,6 @@ Sets mins, maxs, and pm->ps->viewheight
 ==============
 */
 static qboolean PM_CheckProne(void) {
-	//Com_Printf( "%i: PM_CheckProne (%i)\n", pm->cmd.serverTime, pm->pmext->proneGroundTime );
-
 	if (!(pm->ps->eFlags & EF_PRONE)) {
 
 		// can't go prone on ladders
@@ -904,11 +902,6 @@ static void PM_AirMove(void) {
 	} else {
 		cmd   = pm->cmd;
 		scale = PM_CmdScale(&cmd, qtrue);
-
-		// Ridah, moved this down, so we use the actual movement direction
-		// set the movementDir so clients can rotate the legs for strafing
-		//	PM_SetMovementDir();
-
 		pml.forward[2] = 0;
 		pml.right[2]   = 0;
 	}
@@ -1015,10 +1008,6 @@ static void PM_WalkMove(void) {
 
 	cmd   = pm->cmd;
 	scale = PM_CmdScale(&cmd, qtrue);
-
-// Ridah, moved this down, so we use the actual movement direction
-	// set the movementDir so clients can rotate the legs for strafing
-//	PM_SetMovementDir();
 
 	// project moves down to flat plane
 	pml.forward[2] = 0;
@@ -1436,7 +1425,6 @@ static void PM_GroundTrace(void) {
 	if (pm->ps->eFlags & EF_MG42_ACTIVE || pm->ps->eFlags & EF_AAGUN_ACTIVE) {
 		point[2] = pm->ps->origin[2] - 1.f;
 	} else {
-		//point[2] = pm->ps->origin[2] - 0.01f;
 		point[2] = pm->ps->origin[2] - 0.25f;
 	}
 
@@ -2460,7 +2448,6 @@ void PM_LadderMove(void) {
 	if (pm->cmd.forwardmove) {
 		wishvel[2] = 0.9 * upscale * scale * (float)pm->cmd.forwardmove;
 	}
-//Com_Printf("wishvel[2] = %i, fwdmove = %i\n", (int)wishvel[2], (int)pm->cmd.forwardmove );
 
 	if (pm->cmd.rightmove) {
 		// strafe, so we can jump off ladder
@@ -2473,7 +2460,6 @@ void PM_LadderMove(void) {
 			VectorInverse(ladder_right);
 		}
 
-		//VectorMA( wishvel, 0.5 * scale * (float)pm->cmd.rightmove, pml.right, wishvel );
 		VectorMA(wishvel, 0.5 * scale * (float)pm->cmd.rightmove, ladder_right, wishvel);
 	}
 

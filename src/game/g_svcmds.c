@@ -595,7 +595,7 @@ static void Svcmd_Kick_f(void) {
 	}
 
 	trap_Argv(1, name, sizeof (name));
-	cl = G_GetPlayerByName(name);   //ClientForString( name );
+	cl = G_GetPlayerByName(name);
 
 	if (!cl) {
 		if (!Q_stricmp(name, "all")) {

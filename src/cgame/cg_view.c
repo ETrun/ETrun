@@ -319,7 +319,6 @@ void CG_KickAngles(void) {
 	char buf[32];               // NERVE - SMF
 
 	// this code is frametime-dependant, so split it up into small chunks
-	//cg.kickAngles[PITCH] = 0;
 	cg.recoilPitchAngle = 0;
 	for (t = cg.frametime; t > 0; t -= STEP) {
 		float        ft;

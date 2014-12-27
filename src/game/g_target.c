@@ -258,14 +258,7 @@ void SP_target_speaker(gentity_t *ent) {
 		ent->spawnflags |= 8;
 	}
 
-	// Ridah, had to disable this so we can use sound scripts
-	// don't worry, if the script isn't found, it'll default back to
-	// .wav on the client-side
-	//if (!strstr( s, ".wav" )) {
-	//	Com_sprintf (buffer, sizeof(buffer), "%s.wav", s );
-	//} else {
 	Q_strncpyz(buffer, s, sizeof (buffer));
-	//}
 	ent->noise_index = G_SoundIndex(buffer);
 
 	// a repeating speaker can be done completely client side
@@ -327,11 +320,8 @@ When on, displays a electric beam from target to target2.
 */
 
 void misc_beam_think(gentity_t *self) {
-//	trace_t	trace;
-
 	if (self->enemy) {
 		if (self->enemy != self) {
-			//VectorCopy ( self->enemy->s.origin, self->s.origin2 );
 			self->s.apos.trType     = self->enemy->s.pos.trType;
 			self->s.apos.trTime     = self->enemy->s.pos.trTime;
 			self->s.apos.trDuration = self->enemy->s.pos.trDuration;
@@ -812,7 +802,6 @@ Increments the counter pointed to.
 "count" is the key for the count value
 */
 void SP_target_counter(gentity_t *ent) {
-//	G_Printf("target counter created with val of: %d\n", ent->count);
 	ent->use = Use_Target_Counter;
 }
 
@@ -820,7 +809,6 @@ void SP_target_counter(gentity_t *ent) {
 saves game to 'autosave.sav' when triggered then dies.
 */
 void SP_target_autosave(gentity_t *ent) {
-//	ent->use = Use_Target_Autosave;
 	G_FreeEntity(ent);
 }
 

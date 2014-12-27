@@ -1063,7 +1063,7 @@ void Reached_TrinaryMover(gentity_t *ent) {
 
 		// goto pos 3
 		ent->think     = GotoPos3;
-		ent->nextthink = level.time + 1000; //FRAMETIME;
+		ent->nextthink = level.time + 1000;
 
 		// play sound
 		G_AddEvent(ent, EV_GENERAL_SOUND, ent->soundPos2);
@@ -1102,7 +1102,7 @@ void Reached_TrinaryMover(gentity_t *ent) {
 
 		// return to pos1
 		ent->think     = ReturnToPos1;
-		ent->nextthink = level.time + 1000; //FRAMETIME;
+		ent->nextthink = level.time + 1000;
 
 		// play sound
 		G_AddEvent(ent, EV_GENERAL_SOUND, ent->soundPos3);
@@ -1257,8 +1257,6 @@ Use_BinaryMover
 ================
 */
 void Use_BinaryMover(gentity_t *ent, gentity_t *other, gentity_t *activator) {
-//	int		total;
-//	int		partial;
 	qboolean isblocked = qfalse;
 	qboolean nosound   = qfalse;
 
@@ -1287,10 +1285,8 @@ void Use_BinaryMover(gentity_t *ent, gentity_t *other, gentity_t *activator) {
 	}
 
 	if (isblocked) {
-		// start moving 50 msec later, becase if this was player
+		// start moving 50 msec later, because if this was player
 		// triggered, level.time hasn't been advanced yet
-		// ent->angle *= -1;
-		// MatchTeam( ent, MOVER_1TO2ROTATE, level.time + 50 );
 		MatchTeamReverseAngleOnSlaves(ent, MOVER_1TO2ROTATE, level.time + 50);
 
 		// starting sound
@@ -3978,7 +3974,6 @@ void SP_func_invisible_user(gentity_t *ent) {
 	VectorCopy(ent->s.origin, ent->pos1);
 	trap_SetBrushModel(ent, ent->model);
 
-	// InitMover (ent);
 	VectorCopy(ent->pos1, ent->r.currentOrigin);
 	trap_LinkEntity(ent);
 
@@ -4446,7 +4441,6 @@ void func_constructiblespawn(gentity_t *ent) {
 		trap_UnlinkEntity(ent);
 	} else {
 		ent->use = func_constructible_use;
-		//ent->s.angles2[0] = 255;	// it's fully constructed
 
 		if (!ent->count2) {
 			trap_SetBrushModel(ent, ent->model);

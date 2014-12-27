@@ -1275,7 +1275,7 @@ void CG_LimboPanel_Setup(void) {
 	if (CG_LimboPanel_WeaponIsDisabled(cgs.ccSelectedWeapon)) {
 		// set weapon to default if disabled
 		// NOTE classWeapons[0] must NEVER be disabled
-		cgs.ccSelectedWeapon = 0; //classinfo->classWeapons[0];
+		cgs.ccSelectedWeapon = 0;
 	}
 }
 

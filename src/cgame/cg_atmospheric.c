@@ -271,8 +271,6 @@ static void CG_RainParticleRender(cg_atmosphericParticle_t *particle) {
 	VectorMA(right, -line[0], cg.refdef_current->viewaxis[2], right);
 	VectorNormalize(right);
 
-	// dist = 1.0;
-
 	VectorCopy(finish, verts[0].xyz);
 	verts[0].st[0]       = 0.5f;
 	verts[0].st[1]       = 0;

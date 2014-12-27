@@ -492,12 +492,10 @@ static void HandleEntsThatBlockConstructible(gentity_t *constructor, gentity_t *
 		listedEntities = trap_EntitiesInBox(mins, maxs, entityList, MAX_GENTITIES);
 
 		// make our constructible entities solid so we can check against them
-		//trap_LinkEntity( constructible );
 		MakeTemporarySolid(constructible);
 		for (e = 0; e < constructibleEntities; ++e) {
 			check = &g_entities[constructibleList[e]];
 
-			//trap_LinkEntity( check );
 			MakeTemporarySolid(check);
 		}
 
@@ -506,7 +504,6 @@ static void HandleEntsThatBlockConstructible(gentity_t *constructor, gentity_t *
 		listedEntities = trap_EntitiesInBox(constructible->r.absmin, constructible->r.absmax, entityList, MAX_GENTITIES);
 
 		// make our constructible solid so we can check against it
-		//trap_LinkEntity( constructible );
 		MakeTemporarySolid(constructible);
 	}
 
@@ -548,7 +545,6 @@ static void HandleEntsThatBlockConstructible(gentity_t *constructor, gentity_t *
 		for (e = 0; e < constructibleEntities; ++e) {
 			check = &g_entities[constructibleList[e]];
 
-			//trap_UnlinkEntity( check );
 			UndoTemporarySolid(check);
 		}
 	}
@@ -1348,8 +1344,6 @@ void Weapon_Engineer(gentity_t *ent) {
 							//bani - fix #238
 							traceEnt->etpro_misc_1 |= 1;
 						}
-//bani
-//						i = num;
 						return; //bani - bail out here because primary obj's take precendence over constructibles
 					}
 				}
@@ -1387,10 +1381,6 @@ void Weapon_Engineer(gentity_t *ent) {
 
 						// is it a friendly constructible
 						if (hit->s.teamNum == traceEnt->s.teamNum) {
-//bani - er, didnt we just pass this check earlier?
-//							G_FreeEntity( traceEnt );
-//							trap_SendServerCommand( ent-g_entities, "cp \"You cannot arm dynamite near a friendly construction!\" 1");
-//							return;
 							continue;
 						}
 
@@ -1950,7 +1940,6 @@ qboolean Bullet_Fire_Extended(gentity_t *source, gentity_t *attacker, vec3_t sta
 		vec3_t shotvec;
 		float  scale;
 
-		//VectorSubtract( tr.endpos, start, shotvec );
 		VectorSubtract(tr.endpos, muzzleTrace, shotvec);
 		dist = VectorLengthSquared(shotvec);
 
@@ -1966,9 +1955,8 @@ qboolean Bullet_Fire_Extended(gentity_t *source, gentity_t *attacker, vec3_t sta
 		scale = 1.0f - scale;
 
 		// And, finally, cap it.
-		// reducedDamage = qtrue;
 		if (scale >= 1.0f) {
-			scale = 1.0f; // reducedDamage = qfalse;
+			scale = 1.0f;
 		} else if (scale < 0.5f) {
 			scale = 0.5f;
 		}
@@ -2406,12 +2394,6 @@ void CalcMuzzlePoint(gentity_t *ent, int weapon, vec3_t right, vec3_t up, vec3_t
 	}
 
 	// done.
-
-	// (SA) actually, this is sort of moot right now since
-	// you're not allowed to fire when leaning.  Leave in
-	// in case we decide to enable some lean-firing.
-	// (SA) works with gl now
-	//AddLean(ent, muzzlePoint);
 
 	// snap to integer coordinates for more efficient network bandwidth usage
 	SnapVector(muzzlePoint);

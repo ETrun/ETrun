@@ -984,7 +984,6 @@ static void CG_Missile(centity_t *cent) {
 		ent.hModel = 0;
 	} else if (cent->currentState.eType == ET_RAMJET) {
 		ent.hModel = 0;
-		// ent.hModel = cgs.gameModels[cent->currentState.modelindex];
 	} else {
 		team_t missileTeam = cent->currentState.weapon == WP_LANDMINE ? cent->currentState.teamNum % 4 : cent->currentState.teamNum;
 
@@ -1323,7 +1322,6 @@ static void CG_Constructible(centity_t *cent) {
 	// add the secondary model
 	if (s1->modelindex2) {
 		if (cent->currentState.powerups == STATE_UNDERCONSTRUCTION) {
-			//ent.customShader = cgs.media.genericConstructionShaderBrush;
 			ent.customShader = cgs.media.genericConstructionShader;
 		}
 
@@ -1667,8 +1665,6 @@ static void CG_Prop(centity_t *cent) {
 			ent.oldframe = ent.frame - 1;
 			ent.backlerp = 1 - cg.frameInterpolation;
 			ent.renderfx = RF_DEPTHHACK | RF_FIRST_PERSON;
-
-			//CG_Printf ("frame %d oldframe %d\n", ent.frame, ent.oldframe);
 		} else if (ent.frame) {
 			ent.oldframe -= 1;
 			ent.backlerp  = 1 - cg.frameInterpolation;
@@ -1928,8 +1924,6 @@ static void CG_InterpolateEntityPosition(centity_t *cent) {
 	if (cg.nextSnap == NULL) {
 		// DHM - Nerve :: FIXME? There are some cases when in Limbo mode during a map restart
 		//					that were tripping this error.
-		//CG_Error( "CG_InterpolateEntityPosition: cg.nextSnap == NULL" );
-		//CG_Printf("CG_InterpolateEntityPosition: cg.nextSnap == NULL");
 		return;
 	}
 

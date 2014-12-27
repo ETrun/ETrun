@@ -303,7 +303,6 @@ gentity_t *G_PickTarget(char *targetname) {
 	gentity_t *choice[MAXCHOICES];
 
 	if (!targetname) {
-		//G_Printf("G_PickTarget called with NULL targetname\n");
 		return NULL;
 	}
 
@@ -388,8 +387,6 @@ void G_UseTargets(gentity_t *ent, gentity_t *activator) {
 			G_Printf("WARNING: Entity used itself.\n");
 		} else {
 			if (t->use) {
-				// G_Printf("ent->classname %s ent->targetname %s t->targetname %s t->s.number %d\n", ent->classname, ent->targetname, t->targetname, t->s.number);
-
 				t->flags |= (ent->flags & FL_KICKACTIVATE);   // (SA) If 'ent' was kicked to activate, pass this along to it's targets.
 				                                              //		It may become handy to put a "KICKABLE" flag in ents so that it knows whether to pass this along or not
 				                                              //		Right now, the only situation where it would be weird would be an invisible_user that is a 'button' near
@@ -757,7 +754,6 @@ qboolean infront(gentity_t *self, gentity_t *other) {
 	VectorSubtract(other->r.currentOrigin, self->r.currentOrigin, vec);
 	VectorNormalize(vec);
 	dot = DotProduct(vec, forward);
-	// G_Printf( "other %5.2f\n",	dot);
 	if (dot > 0.0) {
 		return qtrue;
 	}
@@ -807,7 +803,6 @@ G_SetEntState
 */
 void G_SetEntState(gentity_t *ent, entState_t state) {
 	if (ent->entstate == state) {
-		// G_DPrintf("entity %i already in desired state [%i]\n", ent->s.number, state);
 		return;
 	}
 

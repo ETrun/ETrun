@@ -1062,7 +1062,6 @@ static void CG_RegisterSounds(void) {
 	cgs.media.landHurt         = trap_S_RegisterSound("sound/player/land_hurt.wav");
 
 	// Nico, new gib sound
-	// cgs.media.gibSound =			trap_S_RegisterSound("sound/player/gib.wav");
 	cgs.media.gibSound        = trap_S_RegisterSound("sound/teleport1.wav");
 	cgs.media.dynamitebounce1 = trap_S_RegisterSound("sound/weapons/dynamite/dynamite_bounce.wav");
 	cgs.media.satchelbounce1  = trap_S_RegisterSound("sound/weapons/satchel/satchel_bounce.wav");

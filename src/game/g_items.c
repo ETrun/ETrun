@@ -131,13 +131,13 @@ int Add_Ammo(gentity_t *ent, int weapon, int count, qboolean fillClip) {
 		ent->client->ps.ammoclip[ammoweap] += count;
 
 		if (ent->client->ps.ammoclip[ammoweap] > maxammo) {
-			ent->client->ps.ammoclip[ammoweap] = maxammo;   // - ent->client->ps.ammoclip[BG_FindClipForWeapon(weapon)];
+			ent->client->ps.ammoclip[ammoweap] = maxammo;
 		}
 	} else {
 		ent->client->ps.ammo[ammoweap] += count;
 
 		if (ent->client->ps.ammo[ammoweap] > maxammo) {
-			ent->client->ps.ammo[ammoweap] = maxammo;   // - ent->client->ps.ammoclip[BG_FindClipForWeapon(weapon)];
+			ent->client->ps.ammo[ammoweap] = maxammo;
 		}
 	}
 
@@ -445,7 +445,6 @@ void RespawnItem(gentity_t *ent) {
 	}
 
 	ent->r.contents = CONTENTS_TRIGGER;
-	//ent->s.eFlags &= ~EF_NODRAW;
 	ent->flags     &= ~FL_NODRAW;
 	ent->r.svFlags &= ~SVF_NOCLIENT;
 	trap_LinkEntity(ent);
@@ -537,8 +536,6 @@ void Touch_Item(gentity_t *ent, gentity_t *other, trace_t *trace) {
 		return;
 	}
 
-//	G_LogPrintf( "Finished pickup function\n" );
-
 	if (!respawn) {
 		return;
 	}
@@ -560,8 +557,6 @@ void Touch_Item(gentity_t *ent, gentity_t *other, trace_t *trace) {
 		te->s.eventParm = ent->s.modelindex;
 		te->r.svFlags  |= SVF_BROADCAST;
 	}
-
-//	G_LogPrintf( "Firing item targets\n" );
 
 	// fire item targets
 	G_UseTargets(ent, other);
@@ -808,7 +803,6 @@ void FinishSpawningItem(gentity_t *ent) {
 	// team slaves and targeted items aren't present at start
 	if ((ent->flags & FL_TEAMSLAVE) || ent->targetname) {
 		ent->flags |= FL_NODRAW;
-		//ent->s.eFlags |= EF_NODRAW;
 		ent->r.contents = 0;
 		return;
 	}

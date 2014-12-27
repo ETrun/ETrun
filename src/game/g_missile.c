@@ -695,7 +695,6 @@ void G_RunFlamechunk(gentity_t *ent) {
 
 	// Adust the current speed of the chunk
 	if (level.time - ent->timestamp > 50) {
-		// speed = VectorNormalize( vel );
 		speed -= (50.f / 1000.f) * FLAME_FRICTION_PER_SEC;
 
 		if (speed < FLAME_MIN_SPEED) {
@@ -1217,7 +1216,7 @@ gentity_t *fire_rocket(gentity_t *self, vec3_t start, vec3_t dir) {
 	bolt->parent              = self;
 	bolt->damage              = G_GetWeaponDamage(WP_PANZERFAUST); // JPW NERVE
 	bolt->splashDamage        = G_GetWeaponDamage(WP_PANZERFAUST); // JPW NERVE
-	bolt->splashRadius        = 300; //G_GetWeaponDamage(WP_PANZERFAUST);	// Arnout : hardcoded bleh hack
+	bolt->splashRadius        = 300;
 	bolt->methodOfDeath       = MOD_PANZERFAUST;
 	bolt->splashMethodOfDeath = MOD_PANZERFAUST;
 	bolt->clipmask            = MASK_MISSILESHOT;
@@ -1314,8 +1313,6 @@ fire_mortar
 */
 gentity_t *fire_mortar(gentity_t *self, vec3_t start, vec3_t dir) {
 	gentity_t *bolt;
-
-//	VectorNormalize (dir);
 
 	if (self->spawnflags) {
 		gentity_t *tent;

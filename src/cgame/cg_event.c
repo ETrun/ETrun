@@ -387,7 +387,6 @@ void CG_RubbleFx(vec3_t origin, vec3_t dir, int mass, int type, sfxHandle_t soun
 				} else if (i == 3) {
 					scale = 0.5f;
 				}
-				//					else goto pass;
 
 				if (i < 3) {
 					endtime = -3000;    // small bits live 3 sec shorter than normal
@@ -658,7 +657,6 @@ void CG_Explodef(vec3_t origin, vec3_t dir, int mass, int type, qhandle_t sound,
 				} else if (i == 3) {
 					scale = 0.5f;
 				}
-				//					else goto pass;
 
 				if (i < 3) {
 					endtime = -3000;    // small bits live 3 sec shorter than normal
@@ -951,7 +949,6 @@ void CG_Effect(centity_t *cent, vec3_t origin, vec3_t dir) {
 		CG_AddDebris(origin, dir,
 		             280,       // speed
 		             1400,      // duration
-		             // 15 + rand()%5 );	// count
 		             7 + rand() % 2);   // count
 	}
 }
@@ -1006,7 +1003,6 @@ void CG_Shard(centity_t *cent, vec3_t origin, vec3_t dir) {
 		le->lifeRate     = 1.0 / (le->endTime - le->startTime);
 		le->leFlags      = LEF_TUMBLE;
 		le->bounceFactor = 0.4f;
-		// le->leBounceSoundType	= LEBS_WOOD;
 		le->leMarkType = 0;
 
 		VectorCopy(origin, re->origin);
@@ -1891,7 +1887,6 @@ void CG_EntityEvent(centity_t *cent, vec3_t position) {
 	// DHM - Nerve
 	case EV_GLOBAL_CLIENT_SOUND:
 		DEBUGNAME("EV_GLOBAL_CLIENT_SOUND");
-
 		if (cg.snap->ps.clientNum == es->teamNum) {
 			s = CG_ConfigString(CS_SOUNDS + es->eventParm);
 			if (!strstr(s, ".wav")) {
@@ -1907,7 +1902,6 @@ void CG_EntityEvent(centity_t *cent, vec3_t position) {
 				trap_S_StartSound(NULL, cg.snap->ps.clientNum, CHAN_AUTO, CG_CustomSound(s));
 			}
 		}
-
 		break;
 	// dhm - end
 

@@ -1016,7 +1016,6 @@ void CG_ParticleSmoke(qhandle_t pshader, centity_t *cent) {
 
 	p->type = P_SMOKE;
 
-	//VectorCopy(cent->currentState.origin, p->org);
 	VectorCopy(cent->lerpOrigin, p->org);
 
 	p->vel[0]   = p->vel[1] = 0;
@@ -1242,8 +1241,8 @@ void CG_ParticleImpactSmokePuffExtended(qhandle_t pshader, vec3_t origin, int li
 	p->startfade = cg.time + 100;
 
 	// xkan, 1/10/2003 - changed calculation to prevent division by 0 for small size
-	p->width  = size * (1.0 + random() * 0.5);  // rand()%(int)(size * .5f) + size;
-	p->height = size * (1.0 + random() * 0.5);   // rand()%(int)(size * .5f) + size;
+	p->width  = size * (1.0 + random() * 0.5);
+	p->height = size * (1.0 + random() * 0.5);
 
 	p->endheight = p->height * 2;
 	p->endwidth  = p->width * 2;

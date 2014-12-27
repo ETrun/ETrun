@@ -174,7 +174,7 @@ void CG_windowDraw(void) {
 			tmp = w->targetTime - t_offset;
 			if (w->effects & WFX_SCROLLUP) {
 				if (tmp > 0) {
-					y += (480 - y) * tmp / w->targetTime;   //(100 * tmp / w->targetTime) / 100;
+					y += (480 - y) * tmp / w->targetTime;
 				} else {
 					w->state = WSTATE_COMPLETE;
 				}
@@ -192,7 +192,7 @@ void CG_windowDraw(void) {
 			tmp = w->targetTime - t_offset;
 			if (w->effects & WFX_SCROLLUP) {
 				if (tmp > 0) {
-					y = w->curY + (480 - w->y) * t_offset / w->targetTime;        //(100 * t_offset / w->targetTime) / 100;
+					y = w->curY + (480 - w->y) * t_offset / w->targetTime;
 				}
 				if (tmp < 0 || y >= 480) {
 					w->state = WSTATE_OFF;

@@ -101,7 +101,6 @@ typedef struct centFlameInfo_s {
 static centFlameInfo_t centFlameInfo[MAX_GENTITIES];
 
 typedef struct {
-//	float fireVolume;	// not needed, since we add individual loop sources for the flame, so it gets spacialized
 	float blowVolume;
 	float streamVolume;
 } flameSoundStatus_t;

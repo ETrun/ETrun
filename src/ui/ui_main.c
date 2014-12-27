@@ -2905,7 +2905,7 @@ UI_MapCountByGameType
 ==================
 */
 static int UI_MapCountByGameType(qboolean singlePlayer) {
-	int i, c; // Nico, unused, game;
+	int i, c;
 
 	c = 0;
 	for (i = 0; i < uiInfo.mapCount; ++i) {
@@ -3709,7 +3709,6 @@ const char *UI_FeederItemText(float feederID, int index, int column, qhandle_t *
 		}
 	} else if (feederID == FEEDER_FINDPLAYER) {
 		if (index >= 0 && index < uiInfo.numFoundPlayerServers) {
-			//return uiInfo.foundPlayerServerAddresses[index];
 			return uiInfo.foundPlayerServerNames[index];
 		}
 	} else if (feederID == FEEDER_PLAYER_LIST) {
@@ -4120,7 +4119,6 @@ void _UI_SetActiveMenu(uiMenuCommand_t menu) {
 		case UIMENU_MAIN:
 			trap_Key_SetCatcher(KEYCATCH_UI);
 			Menus_CloseAll();
-			//Menus_ActivateByName( "background_1", qtrue );
 			Menus_ActivateByName("backgroundmusic", qtrue);      // Arnout: not nice, but best way to do it - putting the music in it's own menudef
 			                                                     // makes sure it doesn't get restarted every time you reach the main menu
 			Menus_ActivateByName("main_opener", qtrue);
@@ -4276,8 +4274,6 @@ void UI_ReadableSize(char *buf, int bufsize, int value) {
 
 // Assumes time is in sec
 void UI_PrintTime(char *buf, int bufsize, int time) {
-	//time /= 1000;  // change to seconds
-
 	if (time > 3600) {   // in the hours range
 		Com_sprintf(buf, bufsize, "%d hr %d min", time / 3600, (time % 3600) / 60);
 	} else if (time > 60) {     // mins

@@ -1946,7 +1946,6 @@ void flippy_table_use(gentity_t *ent, gentity_t *other, gentity_t *activator) {
 
 	// it would be odd to flip a table if your standing on it
 	if (other && other->s.groundEntityNum == ent->s.number) {
-		// G_Printf ("can't push table over while standing on it\n");
 		return;
 	}
 
@@ -2049,7 +2048,6 @@ void SP_Props_Flipping_Table(gentity_t *ent) {
 	ent->speed = 500;
 	ent->angle = 90;
 
-	// ent->spawnflags |= 8;
 	if (!(ent->spawnflags & 4) && !(ent->spawnflags & 8)) {
 		G_Printf("you forgot to select the X or Y Axis\n");
 	}

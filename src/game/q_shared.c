@@ -809,8 +809,6 @@ void Info_RemoveKey(char *s, const char *key) {
 		*o = 0;
 
 		if (!Q_stricmp(key, pkey)) {
-			// rain - arguments to strcpy must not overlap
-			//strcpy (start, s);	// remove this part
 			memmove(start, s, strlen(s) + 1);     // remove this part
 			return;
 		}

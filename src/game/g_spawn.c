@@ -335,7 +335,6 @@ void SP_mg42(gentity_t *ent);
 void SP_aagun(gentity_t *ent);
 
 //----(SA)
-//void SP_shooter_zombiespit (gentity_t *ent);
 void SP_shooter_mortar(gentity_t *ent);
 
 // alarm

@@ -463,7 +463,6 @@ void SP_trigger_hurt(gentity_t *self) {
 	InitTrigger(self);
 
 	// Nico, new sound
-	// G_SpawnString( "sound", "sound/player/hurt_barbwire.wav", &sound );
 	G_SpawnString("sound", "sound/weapons/grenade/gren_throw.wav", &sound);
 
 	self->noise_index = G_SoundIndex(sound);
@@ -506,8 +505,6 @@ maximum.
 */
 
 qboolean G_IsAllowedHeal(gentity_t *ent) {
-//	int i;
-
 	if (!ent || !ent->client) {
 		return qfalse;
 	}
@@ -678,8 +675,6 @@ specified maximum.
 */
 
 qboolean G_IsAllowedAmmo(gentity_t *ent) {
-//	int i;
-
 	if (!ent || !ent->client) {
 		return qfalse;
 	}
@@ -1071,8 +1066,6 @@ void explosive_indicator_think(gentity_t *ent) {
 			}
 		}
 
-		//ent->think = G_FreeEntity;
-		//ent->nextthink = level.time + FRAMETIME;
 		G_FreeEntity(ent);
 		return;
 	}

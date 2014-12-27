@@ -1162,8 +1162,6 @@ void mg42_fire(gentity_t *other) {
 	AngleVectors(other->client->ps.viewangles, forward, right, up);
 	VectorCopy(self->s.pos.trBase, muzzle);
 
-	// VectorMA (muzzle, 16, forward, muzzle); // JPW NERVE unnecessary and makes it so close-range enemies get missed
-
 	// Arnout: disabled this as it was causing troubles with murderholes. Why was it there? Maybe
 	// for beach to let the mg42 point down and still shoot over teh concrete?
 	// FIX: make the HIGH spawnflag actually work
@@ -1263,14 +1261,13 @@ void mg42_think(gentity_t *self) {
 		owner->client->ps.persistant[PERS_HWEAPON_USE] = 0;
 		owner->client->ps.viewlocked                   = 0; // let them look around
 		owner->active                                  = qfalse;
-		//owner->client->ps.gunfx = 0;
 
 		// need this here for players that get killed while on the MG42
 		self->backupWeaponTime = owner->client->ps.weaponTime;
 	}
 
 	if (self->mg42weapHeat) {
-		self->mg42weapHeat -= (300.f * FRAMETIME * 0.001);    //%	-= (300.f * 50 * 0.001);
+		self->mg42weapHeat -= (300.f * FRAMETIME * 0.001);
 
 		if (self->mg42weapHeat < 0) {
 			self->mg42weapHeat = 0;
@@ -1319,9 +1316,6 @@ void mg42_stopusing(gentity_t *self) {
 		self->r.ownerNum                               = self->s.number;
 		owner->client->ps.viewlocked                   = 0; // let them look around
 		owner->active                                  = qfalse;
-		//owner->client->ps.gunfx = 0;
-
-		//owner->client->ps.weapHeat[WP_DUMMY_MG42] = 0;
 		self->mg42weapHeat           = owner->client->ps.weapHeat[WP_DUMMY_MG42];
 		self->backupWeaponTime       = owner->client->ps.weaponTime;
 		owner->client->ps.weaponTime = owner->backupWeaponTime;
@@ -1385,8 +1379,6 @@ void mg42_die(gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int da
 		self->r.ownerNum             = self->s.number;
 		self->s.otherEntityNum       = self->s.number;
 		owner->client->ps.viewlocked = 0;   // let them look around
-
-		//owner->client->ps.gunfx = 0;
 
 		gun->mg42weapHeat     = 0;
 		gun->backupWeaponTime = 0;

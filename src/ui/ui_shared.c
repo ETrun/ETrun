@@ -1996,7 +1996,7 @@ qboolean Item_SetFocus(itemDef_t *item, float x, float y) {
 	itemDef_t   *oldFocus;
 	sfxHandle_t *sfx      = &DC->Assets.itemFocusSound;
 	qboolean    playSound = qfalse;
-	menuDef_t   *parent; // bk001206: = (menuDef_t*)item->parent;
+	menuDef_t   *parent;
 
 	// sanity check, non-null, not a decoration and does not already have the focus
 	if (item == NULL || item->window.flags & WINDOW_DECORATION || item->window.flags & WINDOW_HASFOCUS || !(item->window.flags & WINDOW_VISIBLE)) {
@@ -2502,7 +2502,6 @@ qboolean Item_ListBox_HandleKey(itemDef_t *item, int key, qboolean force) {
 					listPtr->startPos = max;
 				}
 			} else if (item->window.flags & WINDOW_LB_THUMB) {
-				// Display_SetCaptureItem(item);
 			} else if (item->window.flags & WINDOW_LB_SOMEWHERE) {
 				// do nowt
 			} else {
@@ -3525,7 +3524,6 @@ void Item_SetTextExtents(itemDef_t *item, int *width, int *height, const char *t
 	    (item->type == ITEM_TYPE_OWNERDRAW && item->textalignment == ITEM_ALIGN_CENTER) ||
 	    item->textalignment == ITEM_ALIGN_CENTER2 ||
 	    item->type == ITEM_TYPE_TIMEOUT_COUNTER) {   // ydnar
-		//%	int originalWidth = DC->textWidth(item->text, item->textscale, 0);
 		int originalWidth = DC->textWidth(textPtr, item->textscale, 0);
 
 		if (item->type == ITEM_TYPE_OWNERDRAW && (item->textalignment == ITEM_ALIGN_CENTER || item->textalignment == ITEM_ALIGN_RIGHT)) {
@@ -4433,7 +4431,6 @@ void Item_ListBox_Paint(itemDef_t *item) {
 		// items
 		// size contains max available space
 		if (listPtr->elementStyle == LISTBOX_IMAGE) {
-			// fit = 0;
 			x = fillRect.x + 1;
 			y = fillRect.y + 1;
 			for (i = listPtr->startPos; i < count; ++i) {

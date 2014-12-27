@@ -1819,7 +1819,6 @@ void Cmd_Activate_f(gentity_t *ent) {
 		VectorMA(offset, ent->client->ps.leanf, right, offset);
 	}
 
-	//VectorMA( offset, 256, forward, end );
 	VectorMA(offset, 96, forward, end);
 
 	trap_Trace(&tr, offset, NULL, NULL, end, ent->s.number, (CONTENTS_SOLID | CONTENTS_MISSILECLIP | CONTENTS_BODY | CONTENTS_CORPSE));

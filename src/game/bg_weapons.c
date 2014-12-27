@@ -285,7 +285,6 @@ void PM_BeginWeaponChange(int oldweapon, int newweapon, qboolean reload) {      
 	case WP_SILENCER:
 		if (newweapon == weapAlts[oldweapon]) {
 			switchtime = 1000;
-			//switchtime = 0;
 			altSwitchAnim = qtrue;
 		}
 		break;
@@ -297,8 +296,6 @@ void PM_BeginWeaponChange(int oldweapon, int newweapon, qboolean reload) {      
 	case WP_SILENCED_COLT:
 		if (newweapon == weapAlts[oldweapon]) {
 			switchtime = 1000;
-			//switchtime = 1300;
-			//switchtime = 0;
 			altSwitchAnim = qtrue;
 		}
 		break;
@@ -1842,8 +1839,6 @@ void PM_Weapon(void) {
 			addTime = 2 * GetAmmoTableData(pm->ps->weapon)->nextShotTime;
 		}
 
-// rain - colt and luger are supposed to be balanced
-//		aimSpreadScaleAdd = 35;
 		aimSpreadScaleAdd = 20;
 		break;
 
@@ -1954,7 +1949,7 @@ void PM_Weapon(void) {
 		pm->pmext->weapRecoilTime     = pm->cmd.serverTime;
 		pm->pmext->weapRecoilDuration = 100;
 
-		pm->pmext->weapRecoilYaw   = 0.f; //crandom() * .1f;
+		pm->pmext->weapRecoilYaw   = 0.f;
 		pm->pmext->weapRecoilPitch = .45f * random() * .15f;
 
 		break;

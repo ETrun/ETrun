@@ -1594,7 +1594,6 @@ typedef struct {
 
 // this is the main structure that is duplicated on the client and server
 typedef struct {
-//	int					clientModels[MAX_CLIENTS];		// so we know which model each client is using
 	animModelInfo_t modelInfo[MAX_ANIMSCRIPT_MODELS];
 	int clientConditions[MAX_CLIENTS][NUM_ANIM_CONDITIONS][2];
 	//

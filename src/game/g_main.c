@@ -653,8 +653,6 @@ void G_CheckForCursorHints(gentity_t *ent) {
 			}
 
 			if (!Q_stricmp(traceEnt->classname, "func_invisible_user")) {
-				// indirectHit = qtrue;
-
 				// DHM - Nerve :: Put this back in only in multiplayer
 				if (traceEnt->s.dmgFlags) {    // hint icon specified in entity
 					hintType = traceEnt->s.dmgFlags;

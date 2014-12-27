@@ -395,8 +395,6 @@ void *G_delayed_map_change_watcher(void *arg) {
 			// There is a delayed change
 
 			if (level.time >= level.delayedMapChange.timeChange) {
-				// Nico, useless: level.delayedMapChange.pendingChange = qfalse;
-
 				// Nico, do we have to wait for some threads to finish their work?
 				while (activeThreadsCounter > 0 && count < limit) {
 					G_DPrintf("%s: waiting for %d thread%s before changing map\n", GAME_VERSION, activeThreadsCounter, activeThreadsCounter > 1 ? "s" : "");

@@ -282,8 +282,6 @@ void CG_AddFragment(localEntity_t *le) {
 
 			le->refEntity = backupEnt;
 		}
-
-		// t = le->endTime - cg.time;
 		trap_R_AddRefEntityToScene(&le->refEntity);
 
 		return;
@@ -307,8 +305,6 @@ void CG_AddFragment(localEntity_t *le) {
 
 			le->refEntity = backupEnt;
 		}
-
-		// t = le->endTime - cg.time;
 		trap_R_AddRefEntityToScene(&le->refEntity);
 
 		// trace a line from previous position down, to see if I should start falling again

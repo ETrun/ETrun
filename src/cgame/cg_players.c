@@ -1377,7 +1377,7 @@ Also called by CG_Missile for quad rockets, but nobody can tell...
 */
 void CG_AddRefEntityWithPowerups(refEntity_t *ent, entityState_t *es, const vec3_t fireRiseDir) {
 	centity_t   *cent;
-	refEntity_t backupRefEnt; //, parentEnt;
+	refEntity_t backupRefEnt;
 	qboolean    onFire = qfalse;
 	float       alpha  = 0.0;
 

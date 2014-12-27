@@ -758,11 +758,6 @@ static void BG_ParseCommands(char **input, animScriptItem_t *scriptItem, animMod
 				if (strstr(token, ".wav")) {
 					BG_AnimParseError("BG_ParseCommands: wav files not supported, only sound scripts");      // RF mod
 				}
-				// ydnar: this was crashing because soundIndex wasn't initialized
-				// FIXME: find the reason
-				// Gordon: hmmm, soundindex is setup on both client and server :/
-				//	cgs.animScriptData.soundIndex = CG_SoundScriptPrecache;
-				//	level.animScriptData.soundIndex = G_SoundIndex;
 				command->soundIndex = globalScriptData->soundIndex != NULL ? globalScriptData->soundIndex(token) : 0;
 
 			} else {

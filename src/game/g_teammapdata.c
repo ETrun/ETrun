@@ -317,7 +317,7 @@ void G_UpdateTeamMapData_Construct(gentity_t *ent) {
 			mEnt->entNum = num;
 		}
 		VectorCopy(ent->s.pos.trBase, mEnt->org);
-		mEnt->data      = mEnt->entNum; //ent->s.modelindex2;
+		mEnt->data      = mEnt->entNum;
 		mEnt->type      = ME_CONSTRUCT;
 		mEnt->startTime = level.time;
 		mEnt->yaw       = 0;
@@ -329,7 +329,7 @@ void G_UpdateTeamMapData_Construct(gentity_t *ent) {
 			mEnt->entNum = num;
 		}
 		VectorCopy(ent->s.pos.trBase, mEnt->org);
-		mEnt->data      = mEnt->entNum; //ent->s.modelindex2;
+		mEnt->data      = mEnt->entNum;
 		mEnt->type      = ME_CONSTRUCT;
 		mEnt->startTime = level.time;
 		mEnt->yaw       = 0;
@@ -345,7 +345,7 @@ void G_UpdateTeamMapData_Construct(gentity_t *ent) {
 			mEnt->entNum = num;
 		}
 		VectorCopy(ent->s.pos.trBase, mEnt->org);
-		mEnt->data      = mEnt->entNum; //ent->s.modelindex2;
+		mEnt->data      = mEnt->entNum;
 		mEnt->type      = ME_CONSTRUCT;
 		mEnt->startTime = level.time;
 		mEnt->yaw       = 0;
@@ -359,7 +359,7 @@ void G_UpdateTeamMapData_Construct(gentity_t *ent) {
 			mEnt->entNum = num;
 		}
 		VectorCopy(ent->s.pos.trBase, mEnt->org);
-		mEnt->data      = mEnt->entNum; //ent->s.modelindex2;
+		mEnt->data      = mEnt->entNum;
 		mEnt->type      = ME_CONSTRUCT;
 		mEnt->startTime = level.time;
 		mEnt->yaw       = 0;
@@ -417,7 +417,7 @@ void G_UpdateTeamMapData_Destruct(gentity_t *ent) {
 			mEnt->entNum = num;
 		}
 		VectorCopy(ent->s.pos.trBase, mEnt->org);
-		mEnt->data      = mEnt->entNum; //ent->s.modelindex2;
+		mEnt->data      = mEnt->entNum;
 		mEnt->startTime = level.time;
 		mEnt->type      = ME_DESTRUCT;
 		mEnt->yaw       = 0;
@@ -432,7 +432,7 @@ void G_UpdateTeamMapData_Destruct(gentity_t *ent) {
 				mEnt->entNum = num;
 			}
 			VectorCopy(ent->s.pos.trBase, mEnt->org);
-			mEnt->data      = mEnt->entNum; //ent->s.modelindex2;
+			mEnt->data      = mEnt->entNum;
 			mEnt->startTime = level.time;
 			mEnt->type      = ME_DESTRUCT_2;
 			mEnt->yaw       = 0;
@@ -447,7 +447,7 @@ void G_UpdateTeamMapData_Destruct(gentity_t *ent) {
 			mEnt->entNum = num;
 		}
 		VectorCopy(ent->s.pos.trBase, mEnt->org);
-		mEnt->data      = mEnt->entNum; //ent->s.modelindex2;
+		mEnt->data      = mEnt->entNum;
 		mEnt->startTime = level.time;
 		mEnt->type      = ME_DESTRUCT;
 		mEnt->yaw       = 0;
@@ -462,7 +462,7 @@ void G_UpdateTeamMapData_Destruct(gentity_t *ent) {
 				mEnt->entNum = num;
 			}
 			VectorCopy(ent->s.pos.trBase, mEnt->org);
-			mEnt->data      = mEnt->entNum; //ent->s.modelindex2;
+			mEnt->data      = mEnt->entNum;
 			mEnt->startTime = level.time;
 			mEnt->type      = ME_DESTRUCT_2;
 			mEnt->yaw       = 0;

@@ -193,7 +193,7 @@ void CG_MachineGunEjectBrass(centity_t *cent) {
 		velocity[1]           = -150 + 40 * crandom(); // JPW NERVE
 		velocity[2]           = 100 + 50 * crandom(); // JPW NERVE
 		re->hModel            = cgs.media.machinegunBrassModel;
-		le->angles.trBase[0]  = 90; //rand()&31; // JPW NERVE belt-fed rounds should come out horizontal
+		le->angles.trBase[0]  = 90; // JPW NERVE belt-fed rounds should come out horizontal
 		le->angles.trBase[1]  = rand() & 255;
 		le->angles.trBase[2]  = rand() & 31;
 		le->angles.trDelta[0] = 2;
@@ -554,8 +554,6 @@ void CG_RocketTrail(centity_t *ent) {
 			int duration;
 			int sizeStart;
 			int sizeEnd;
-
-			//VectorCopy (ent->lerpOrigin, lastPos);
 
 			if (ent->currentState.density) {   // corkscrew effect
 				vec3_t right;
@@ -3943,7 +3941,6 @@ void CG_MG42EFX(centity_t *cent) {
 			// found it, clamp behind gun
 
 			VectorCopy(mg42->currentState.pos.trBase, point);
-			//AngleVectors (mg42->s.apos.trBase, forward, NULL, NULL);
 			AngleVectors(cent->lerpAngles, forward, NULL, NULL);
 			VectorMA(point, 40, forward, point);
 
@@ -4288,7 +4285,7 @@ void CG_AddDirtBulletParticles(vec3_t origin, vec3_t dir, int speed, int duratio
 	VectorSet(velocity, 0, 0, (float)speed);
 	VectorCopy(origin, pos);
 
-	CG_ParticleDirtBulletDebris_Core(pos, velocity, duration, width, height, alpha, shader);  //600 + rand()%300 ); // keep central one
+	CG_ParticleDirtBulletDebris_Core(pos, velocity, duration, width, height, alpha, shader); // keep central one
 	for (i = 0; i < count; ++i) {
 		VectorSet(velocity, dir[0] * crandom() * speed * randScale, dir[1] * crandom() * speed * randScale, dir[2] * random() * speed);
 		CG_ParticleDirtBulletDebris_Core(pos, velocity, duration + (rand() % (duration >> 1)), width, height, alpha, shader);

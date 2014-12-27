@@ -701,8 +701,6 @@ void CG_AddToNotify(const char *str) {
 			ls = p;
 		}
 		while (*str == '\n') {
-			// TTimo gcc warning: value computed is not used
-			// was *str++;
 			str++;
 		}
 
