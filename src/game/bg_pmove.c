@@ -1632,12 +1632,9 @@ static void PM_Footsteps(void) {
 	float    bobmove;
 	int      old;
 	qboolean footstep;
-	qboolean iswalking;
 	int      animResult = -1;
 
 	if (pm->ps->eFlags & EF_DEAD) {
-
-		//if ( pm->ps->groundEntityNum == ENTITYNUM_NONE )
 		if (pm->ps->pm_flags & PMF_FLAILING) {
 			animResult = BG_AnimScriptAnimation(pm->ps, pm->character->animModelInfo, ANIM_MT_FLAILING, qtrue);
 
@@ -1656,8 +1653,6 @@ static void PM_Footsteps(void) {
 
 		return;
 	}
-
-	iswalking = qfalse;
 
 	//
 	// calculate speed and cycle to be used for
@@ -1808,22 +1803,7 @@ static void PM_Footsteps(void) {
 	pm->ps->bobCycle = (int)(old + bobmove * pml.msec) & 255;
 
 	// if we just crossed a cycle boundary, play an apropriate footstep event
-	if (iswalking) {
-		// sounds much more natural this way
-		if (old > pm->ps->bobCycle) {
-			if (pm->waterlevel == 0) {
-				if (footstep && !pm->noFootsteps) {
-					PM_AddEventExt(EV_FOOTSTEP, PM_FootstepForSurface());
-				}
-			} else if (pm->waterlevel == 1) {
-				// splashing
-				PM_AddEvent(EV_FOOTSPLASH);
-			} else if (pm->waterlevel == 2) {
-				// wading / swimming at surface
-				PM_AddEvent(EV_SWIM);
-			}
-		}
-	} else if (((old + 64) ^ (pm->ps->bobCycle + 64)) & 128) {
+	if (((old + 64) ^ (pm->ps->bobCycle + 64)) & 128) {
 
 		if (pm->waterlevel == 0) {
 			// on ground will only play sounds if running
