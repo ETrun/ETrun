@@ -164,7 +164,7 @@ void Use_Target_Print(gentity_t *ent, gentity_t *other, gentity_t *activator) {
 
 	if (ent->spawnflags & 4) {
 		if (!activator) {
-			G_Error("G_scripting: call to client only target_print with no activator\n");
+			G_Error("Use_Target_Print: call to client only target_print with no activator\n");
 		}
 
 		if (activator->client) {
@@ -427,7 +427,10 @@ void SP_misc_beam(gentity_t *self) {
 	}
 
 	G_SpawnInt("scale", "1", &self->s.torsoAnim);
-	G_SpawnVector("color", "1 1 1", self->s.angles2);
+
+	if (!G_SpawnVector("color", "1 1 1", self->s.angles2)) {
+		G_Error("SP_misc_beam does not have angles2\n");
+	}
 
 	// let everything else get spawned before we start firing
 	self->accuracy  = 0;
