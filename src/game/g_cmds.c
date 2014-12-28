@@ -1252,9 +1252,6 @@ qboolean Cmd_CallVote_f(gentity_t *ent, unsigned int dwCommand, qboolean fRefCom
 
 	if (trap_Argc() > 1 && (i = G_voteCmdCheck(ent, arg1, arg2, fRefCommand)) != G_NOTFOUND) {         //  --OSP
 		if (i != G_OK) {
-			if (i == G_NOTFOUND) {
-				return qfalse;                 // Command error
-			}
 			return qtrue;
 		}
 	} else {
