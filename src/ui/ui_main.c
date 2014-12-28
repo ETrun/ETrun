@@ -3283,9 +3283,6 @@ static int UI_GetServerStatusInfo(const char *serverAddress, serverStatusInfo_t 
 				if (*p == '\\') {
 					*p++ = '\0';
 				}
-				if (!p) {
-					break;
-				}
 				score = p;
 				p     = strchr(p, ' ');
 				if (!p) {
@@ -3314,7 +3311,6 @@ static int UI_GetServerStatusInfo(const char *serverAddress, serverStatusInfo_t 
 					break;
 				}
 				*p++ = '\0';
-				//
 				i++;
 			}
 		}
