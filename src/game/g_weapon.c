@@ -1582,8 +1582,6 @@ void Weapon_Engineer(gentity_t *ent) {
 
 // JPW NERVE -- launch airstrike as line of bombs mostly-perpendicular to line of grenade travel
 // (close air support should *always* drop parallel to friendly lines, tho accidents do happen)
-#define NUMBOMBS 10
-#define BOMBSPREAD 150
 #define SMOKEBOMB_GROWTIME 1000
 #define SMOKEBOMB_SMOKETIME 15000
 #define SMOKEBOMB_POSTSMOKETIME 2000

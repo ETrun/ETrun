@@ -941,8 +941,6 @@ void PM_AdjustAimSpreadScale(void) {
 
 #define weaponstateFiring (pm->ps->weaponstate == WEAPON_FIRING || pm->ps->weaponstate == WEAPON_FIRINGALT)
 
-#define GRENADE_DELAY   250
-
 /*
 ==============
 PM_Weapon

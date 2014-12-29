@@ -1313,8 +1313,6 @@ qboolean Cmd_CallVote_f(gentity_t *ent, unsigned int dwCommand, qboolean fRefCom
 	return qtrue;
 }
 
-qboolean StringToFilter(const char *s, ipFilter_t *f);
-
 /*
 ==================
 Cmd_Vote_f
