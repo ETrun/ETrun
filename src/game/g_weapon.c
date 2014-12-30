@@ -1538,7 +1538,7 @@ void Weapon_Engineer(gentity_t *ent) {
 							}
 
 							// we got somthing to destroy
-							if (ent && ent->client && ent->client->sess.sessionTeam == TEAM_AXIS) {
+							if (ent->client && ent->client->sess.sessionTeam == TEAM_AXIS) {
 								if (hit->s.teamNum == TEAM_AXIS && (!scored)) {
 									G_LogPrintf("Dynamite_Diffuse: %d\n", (int)(ent - g_entities));
 									scored++;
@@ -1554,7 +1554,7 @@ void Weapon_Engineer(gentity_t *ent) {
 
 							} else {   // TEAM_ALLIES
 								if (hit->s.teamNum == TEAM_ALLIES && (!scored)) {
-									if (ent && ent->client) {
+									if (ent->client) {
 										G_LogPrintf("Dynamite_Diffuse: %d\n", (int)(ent - g_entities));                    // OSP
 									}
 
