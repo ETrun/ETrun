@@ -202,7 +202,7 @@ void player_die(gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int 
 	}
 
 	// if we got killed by a landmine, update our map
-	if (self->client && meansOfDeath == MOD_LANDMINE) {
+	if (meansOfDeath == MOD_LANDMINE) {
 		// if it's an enemy mine, update both teamlists
 		mapEntityData_t *mEnt;
 
