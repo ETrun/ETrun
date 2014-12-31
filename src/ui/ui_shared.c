@@ -3747,7 +3747,7 @@ void Item_Text_Paint(itemDef_t *item) {
 	}
 
 	// ydnar: handle counters
-	if (item->type == ITEM_TYPE_TIMEOUT_COUNTER && menu != NULL && menu->openTime > 0) {
+	if (item->type == ITEM_TYPE_TIMEOUT_COUNTER && menu != NULL && menu->openTime > 0 && item->text) {
 		// calc seconds remaining
 		int seconds = (menu->openTime + menu->timeout - DC->realTime + 999) / 1000;
 
