@@ -2153,9 +2153,7 @@ localEntity_t *CG_SmokePuff(const vec3_t p,
                             qhandle_t hShader);
 
 void CG_BubbleTrail(vec3_t start, vec3_t end, float size, float spacing);
-localEntity_t *CG_MakeExplosion(vec3_t origin, vec3_t dir,
-                                qhandle_t hModel, qhandle_t shader, int msec,
-                                qboolean isSprite);
+
 // Ridah
 void CG_ClearFlameChunks(void);
 // done.
