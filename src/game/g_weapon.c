@@ -250,7 +250,12 @@ void Weapon_Medic(gentity_t *ent) {
 		SnapVectorTowards(tosspos, viewpos);
 	}
 
-	ent2            = LaunchItem(item, tosspos, velocity, ent->s.number);
+	ent2 = LaunchItem(item, tosspos, velocity, ent->s.number);
+
+	if (!ent2) {
+		G_Error("Weapon_Medic failed\n");
+	}
+
 	ent2->think     = MagicSink;
 	ent2->nextthink = level.time + 30000;
 
@@ -315,7 +320,12 @@ void Weapon_MagicAmmo(gentity_t *ent) {
 		SnapVectorTowards(tosspos, viewpos);
 	}
 
-	ent2            = LaunchItem(item, tosspos, velocity, ent->s.number);
+	ent2 = LaunchItem(item, tosspos, velocity, ent->s.number);
+
+	if (!ent2) {
+		G_Error("Weapon_MagicAmmo failed\n");
+	}
+
 	ent2->think     = MagicSink;
 	ent2->nextthink = level.time + 30000;
 
