@@ -1218,7 +1218,6 @@ void CG_EntityEvent(centity_t *cent, vec3_t position) {
 	const char     *s;
 	int            clientNum;
 	clientInfo_t   *ci;
-	char           tempStr[MAX_QPATH];
 	bg_character_t *character;
 
 // JPW NERVE copied here for mg42 SFX event
@@ -1803,10 +1802,6 @@ void CG_EntityEvent(centity_t *cent, vec3_t position) {
 			if (CG_SoundPlaySoundScript(s, NULL, es->number, qfalse)) {
 				break;
 			}
-			// try with .wav
-			Q_strncpyz(tempStr, s, sizeof (tempStr));
-			Q_strcat(tempStr, sizeof (tempStr), ".wav");
-			s = tempStr;
 		}
 
 		// done.
@@ -1849,9 +1844,6 @@ void CG_EntityEvent(centity_t *cent, vec3_t position) {
 			if (CG_SoundPlaySoundScript(s, NULL, es->number, qfalse)) {
 				break;
 			}
-			// try with .wav
-			Q_strncpyz(tempStr, s, sizeof (tempStr));
-			Q_strcat(tempStr, sizeof (tempStr), ".wav");
 		}
 		// done.
 		if (cgs.gameSounds[sound]) {
