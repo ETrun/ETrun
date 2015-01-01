@@ -1766,7 +1766,6 @@ CG_FlamethrowerFlame
 ===============
 */
 static void CG_FlamethrowerFlame(centity_t *cent, vec3_t origin) {
-
 	if (cent->currentState.weapon != WP_FLAMETHROWER) {
 		return;
 	}
@@ -1796,7 +1795,6 @@ The main player will have this called for BOTH cases, so effects like light and
 sound should only be done on the world model case.
 =============
 */
-static qboolean debuggingweapon = qfalse;
 #define BARREL_SMOKE_TIME 1000
 void CG_AddPlayerWeapon(refEntity_t *parent, playerState_t *ps, centity_t *cent) {
 	refEntity_t  gun;
@@ -1916,16 +1914,10 @@ void CG_AddPlayerWeapon(refEntity_t *parent, playerState_t *ps, centity_t *cent)
 	}
 
 	if (!gun.hModel) {
-		if (debuggingweapon) {
-			CG_Printf("returning due to: !gun.hModel\n");
-		}
 		return;
 	}
 
 	if (!ps && cg.snap->ps.pm_flags & PMF_LADDER && isPlayer) {        //----(SA) player on ladder
-		if (debuggingweapon) {
-			CG_Printf("returning due to: !ps && cg.snap->ps.pm_flags & PMF_LADDER\n");
-		}
 		return;
 	}
 
@@ -2628,7 +2620,6 @@ getNextWeapInBank
 ==============
 */
 static int getNextWeapInBank(int bank, int cycle) {
-
 	cycle++;
 
 	cycle = cycle % MAX_WEAPS_IN_BANK_MP;

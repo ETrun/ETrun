@@ -319,8 +319,8 @@ static void CG_EntityEffects(centity_t *cent) {
 				dir[2] += 50;
 			}
 
-			CG_SmokePuff(cent->lerpOrigin, dir, 40 + random() * 70,  //40+(rnd*40),
-			             rnd * 0.1, rnd * 0.1, rnd * 0.1, 1, 2800 + (rand() % 4000),    //2500+(random()*1500),
+			CG_SmokePuff(cent->lerpOrigin, dir, 40 + random() * 70,
+			             rnd * 0.1, rnd * 0.1, rnd * 0.1, 1, 2800 + (rand() % 4000),
 			             cg.time, 0, 0, cgs.media.smokePuffShader);
 		}
 	}
