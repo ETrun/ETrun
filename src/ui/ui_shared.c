@@ -88,7 +88,7 @@ itemDef_t *Menu_SetPrevCursorItem(menuDef_t *menu);
 itemDef_t *Menu_SetNextCursorItem(menuDef_t *menu);
 static qboolean Menu_OverActiveItem(menuDef_t *menu, float x, float y);
 
-#ifdef CGAME
+#ifdef CGAMEDLL
 # define MEM_POOL_SIZE  128 * 1024
 #else
 # define MEM_POOL_SIZE  1536 * 1024 // Arnout: was 1024
