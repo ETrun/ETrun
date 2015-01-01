@@ -391,19 +391,9 @@ void G_Script_ScriptLoad(void) {
 		len = trap_FS_FOpenFile(filename, &f, FS_READ);
 		if (len > 0) {
 			found = qtrue;
-			G_Printf("%s: loaded local custom mapscript!\n", GAME_VERSION);
-		}
-
-		// Nico, try to load lowercased script name
-		if (!found) {
-			char toLowerFilename[MAX_QPATH];
-
-			strtolower(filename, toLowerFilename, sizeof (toLowerFilename));
-			// #fixme: some code seems to be missing here
-			if (len > 0) {
-				found = qtrue;
-				G_Printf("%s: loaded local custom mapscript!\n", GAME_VERSION);
-			}
+			G_Printf("%s: found local file '%s'!\n", GAME_VERSION, filename);
+		} else {
+			G_Printf("%s: no local file found!\n", GAME_VERSION);
 		}
 	}
 

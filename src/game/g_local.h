@@ -1125,7 +1125,6 @@ void G_ProcessTagConnect(gentity_t *ent, qboolean clearAngles);
 void G_SetEntState(gentity_t *ent, entState_t state);
 
 team_t G_GetTeamFromEntity(gentity_t *ent);
-void strtolower(char *in, char *out, int size);
 void my_sleep(unsigned milliseconds);
 
 //
