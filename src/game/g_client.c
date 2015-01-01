@@ -1692,7 +1692,6 @@ void ClientDisconnect(int clientNum) {
 	ent->classname                        = "disconnected";
 	ent->client->pers.connected           = CON_DISCONNECTED;
 	ent->client->ps.persistant[PERS_TEAM] = TEAM_FREE;
-	i                                     = ent->client->sess.sessionTeam;
 	ent->client->sess.sessionTeam         = TEAM_FREE;
 	ent->active                           = 0;
 
