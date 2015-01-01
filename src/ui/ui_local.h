@@ -308,7 +308,6 @@ void            trap_R_Add2dPolys(polyVert_t *verts, int numverts, qhandle_t hSh
 void            trap_R_DrawStretchPic(float x, float y, float w, float h, float s1, float t1, float s2, float t2, qhandle_t hShader);
 void            trap_R_ModelBounds(clipHandle_t model, vec3_t mins, vec3_t maxs);
 void            trap_UpdateScreen(void);
-int             trap_CM_LerpTag(orientation_t *tag, const refEntity_t *refent, const char *tagName);
 void            trap_S_StartLocalSound(sfxHandle_t sfx, int channelNum);
 sfxHandle_t     trap_S_RegisterSound(const char *sample);
 void            trap_Key_KeynumToStringBuf(int keynum, char *buf, int buflen);

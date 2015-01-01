@@ -177,10 +177,6 @@ void trap_UpdateScreen(void) {
 	syscall(UI_UPDATESCREEN);
 }
 
-int trap_CM_LerpTag(orientation_t *tag, const refEntity_t *refent, const char *tagName) {
-	return syscall(UI_CM_LERPTAG, tag, refent, tagName, 0);             // NEFVE - SMF - fixed
-}
-
 void trap_S_StartLocalSound(sfxHandle_t sfx, int channelNum) {
 	syscall(UI_S_STARTLOCALSOUND, sfx, channelNum, 127 /* Gordon: default volume always for the moment*/);
 }
