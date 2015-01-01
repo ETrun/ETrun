@@ -1743,10 +1743,7 @@ bg_playerclass_t *BG_GetPlayerClassInfo(int team, int cls);
 qboolean BG_ClassHasWeapon(bg_playerclass_t *classInfo, weapon_t weap);
 qboolean BG_WeaponIsPrimaryForClassAndTeam(int classnum, team_t team, weapon_t weapon);
 int BG_ClassWeaponCount(bg_playerclass_t *classInfo, team_t team);
-const char *BG_ShortClassnameForNumber(int classNum);
 const char *BG_ClassnameForNumber(int classNum);
-const char *BG_ClassLetterForNumber(int classNum);
-
 void BG_DisableClassWeapon(bg_playerclass_t *classinfo, int weapon);
 void BG_DisableWeaponForAllClasses(int weapon);
 
@@ -1762,8 +1759,6 @@ typedef struct {
 
 extern int          numPathCorners;
 extern pathCorner_t pathCorners[MAX_PATH_CORNERS];
-
-# define NUM_EXPERIENCE_LEVELS 11
 
 typedef enum {
 	ME_PLAYER,

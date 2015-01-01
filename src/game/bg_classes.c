@@ -224,23 +224,6 @@ qboolean BG_WeaponIsPrimaryForClassAndTeam(int classnum, team_t team, weapon_t w
 	return qfalse;
 }
 
-const char *BG_ShortClassnameForNumber(int classNum) {
-	switch (classNum) {
-	case PC_SOLDIER:
-		return "Soldr";
-	case PC_MEDIC:
-		return "Medic";
-	case PC_ENGINEER:
-		return "Engr";
-	case PC_FIELDOPS:
-		return "FdOps";
-	case PC_COVERTOPS:
-		return "CvOps";
-	default:
-		return "^1ERROR";
-	}
-}
-
 const char *BG_ClassnameForNumber(int classNum) {
 	switch (classNum) {
 	case PC_SOLDIER:
@@ -255,22 +238,5 @@ const char *BG_ClassnameForNumber(int classNum) {
 		return "Covert Ops";
 	default:
 		return "^1ERROR";
-	}
-}
-
-const char *BG_ClassLetterForNumber(int classNum) {
-	switch (classNum) {
-	case PC_SOLDIER:
-		return "S";
-	case PC_MEDIC:
-		return "M";
-	case PC_ENGINEER:
-		return "E";
-	case PC_FIELDOPS:
-		return "F";
-	case PC_COVERTOPS:
-		return "C";
-	default:
-		return "^1E";
 	}
 }
