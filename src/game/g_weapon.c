@@ -283,6 +283,10 @@ void Weapon_MagicAmmo(gentity_t *ent) {
 
 	item = BG_FindItem("Ammo Pack");
 
+	if (!item) {
+		G_Error("Weapon_MagicAmmo: BG_FindItem failed\n");
+	}
+
 	VectorCopy(ent->client->ps.viewangles, angles);
 
 	// clamp pitch
@@ -323,7 +327,7 @@ void Weapon_MagicAmmo(gentity_t *ent) {
 	ent2 = LaunchItem(item, tosspos, velocity, ent->s.number);
 
 	if (!ent2) {
-		G_Error("Weapon_MagicAmmo failed\n");
+		G_Error("Weapon_MagicAmmo: LaunchItem failed\n");
 	}
 
 	ent2->think     = MagicSink;
