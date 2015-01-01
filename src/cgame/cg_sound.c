@@ -441,11 +441,6 @@ static void CG_SoundLoadSoundFiles(void) {
 	// add the map specific soundfile
 	Com_sprintf(soundFiles[numSounds++], MAX_QPATH, "%s.sounds", cgs.rawmapname);
 
-	if (!numSounds) {
-		CG_Printf(S_COLOR_RED "WARNING: no sound files found\n");
-		return;
-	}
-
 	// load and parse sound files
 	for (i = 0; i < numSounds; ++i) {
 		Com_sprintf(filename, sizeof (filename), "sound/scripts/%s", soundFiles[i]);
