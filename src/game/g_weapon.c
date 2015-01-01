@@ -1551,8 +1551,8 @@ void Weapon_Engineer(gentity_t *ent) {
 								continue;
 							}
 
-							// we got somthing to destroy
-							if (ent->client && ent->client->sess.sessionTeam == TEAM_AXIS) {
+							// we got something to destroy
+							if (ent->client->sess.sessionTeam == TEAM_AXIS) {
 								if (hit->s.teamNum == TEAM_AXIS && (!scored)) {
 									G_LogPrintf("Dynamite_Diffuse: %d\n", (int)(ent - g_entities));
 									scored++;
