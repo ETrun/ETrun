@@ -591,7 +591,6 @@ void Window_Paint(Window *w, float fadeAmount, float fadeClamp, float fadeCycle)
 }
 
 void Item_SetScreenCoords(itemDef_t *item, float x, float y) {
-
 	if (item == NULL) {
 		return;
 	}

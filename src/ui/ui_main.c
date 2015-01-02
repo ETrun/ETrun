@@ -743,7 +743,6 @@ qboolean Asset_Parse(int handle) {
 				return qfalse;
 			}
 			trap_R_RegisterFont(tempStr, pointSize, &uiInfo.uiDC.Assets.fonts[fontIndex]);
-			uiInfo.uiDC.Assets.fontRegistered = qtrue;
 			continue;
 		}
 
@@ -839,7 +838,6 @@ qboolean Asset_Parse(int handle) {
 			if (!PC_Color_Parse(handle, &uiInfo.uiDC.Assets.shadowColor)) {
 				return qfalse;
 			}
-			uiInfo.uiDC.Assets.shadowFadeClamp = uiInfo.uiDC.Assets.shadowColor[3];
 			continue;
 		}
 

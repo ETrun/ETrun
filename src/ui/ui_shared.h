@@ -35,11 +35,7 @@ If you have questions concerning this license or the applicable additional terms
 
 #include "../../etrun/ui/menudef.h"
 
-#define MAX_MENUNAME 32
-#define MAX_ITEMTEXT 64
-#define MAX_ITEMACTION 64
 #define MAX_MENUDEFFILE 4096
-#define MAX_MENUFILE 32768
 #define MAX_MENUS 128
 #define MAX_MENUITEMS 128 // JPW NERVE q3ta was 96
 #define MAX_COLOR_RANGES 10
@@ -77,19 +73,12 @@ If you have questions concerning this license or the applicable additional terms
 #define WINDOW_TEXTASFLOAT      0x20000000
 #define WINDOW_LB_SOMEWHERE     0x40000000
 
-// CGAME cursor type bits
-#define CURSOR_NONE             0x00000001
-#define CURSOR_ARROW            0x00000002
-#define CURSOR_SIZER            0x00000004
-
 #ifdef CGAMEDLL
 # define STRING_POOL_SIZE    128 * 1024
 #else
 # define STRING_POOL_SIZE    384 * 1024
 #endif
 
-#define MAX_STRING_HANDLES  4096
-#define MAX_SCRIPT_ARGS     12
 #define MAX_EDITFIELD       256
 
 #define ART_FX_BASE         "menu/art/fx_base"
@@ -334,9 +323,7 @@ typedef struct {
 } menuDef_t;
 
 typedef struct {
-	const char *fontStr;
 	const char *cursorStr;
-	const char *gradientStr;
 	fontInfo_t fonts[6];
 	qhandle_t cursor;
 	qhandle_t gradientBar;
@@ -346,9 +333,6 @@ typedef struct {
 	qhandle_t scrollBarArrowRight;
 	qhandle_t scrollBar;
 	qhandle_t scrollBarThumb;
-	qhandle_t buttonMiddle;
-	qhandle_t buttonInside;
-	qhandle_t solidBox;
 	qhandle_t sliderBar;
 	qhandle_t sliderThumb;
 	qhandle_t checkboxCheck;
@@ -364,8 +348,6 @@ typedef struct {
 	float shadowX;
 	float shadowY;
 	vec4_t shadowColor;
-	float shadowFadeClamp;
-	qboolean fontRegistered;
 
 	// player settings
 	qhandle_t fxBasePic;
