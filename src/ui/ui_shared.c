@@ -161,7 +161,7 @@ UI_InitMemory
 ===============
 */
 void UI_InitMemory(void) {
-	allocPoint  = 0;
+	allocPoint = 0;
 }
 
 #define HASH_TABLE_SIZE 2048
@@ -199,9 +199,9 @@ static int         strHandleCount = 0;
 static stringDef_t *strHandle[HASH_TABLE_SIZE];
 
 const char *String_Alloc(const char *p) {
-	int               len;
-	long              hash;
-	stringDef_t       *str;
+	int         len;
+	long        hash;
+	stringDef_t *str;
 
 	if (p == NULL) {
 		return NULL;
@@ -765,7 +765,7 @@ itemDef_t *Menu_GetMatchingItemByNumber(menuDef_t *menu, int index, const char *
 
 void Script_SetColor(itemDef_t *item, qboolean *bAbort, char **args) {
 	const char *name = NULL;
-	float      f = 0.0f;
+	float      f     = 0.0f;
 	vec4_t     *out;
 
 	// Nico, silent GCC
@@ -1192,8 +1192,8 @@ void Script_ConditionalScript(itemDef_t *item, qboolean *bAbort, char **args) {
 	    String_Parse(args, &token) && (token && *token == '(') &&
 	    String_Parse(args, &script2) &&
 	    String_Parse(args, &token) && (token && *token == ')')) {
-		float      val;
-		char       buff[1024];
+		float val;
+		char  buff[1024];
 
 		switch (testtype) {
 		default:
@@ -1763,7 +1763,7 @@ qboolean Script_WriteProfile(char *profile_path) {
 }
 
 void Script_ExecWolfConfig(itemDef_t *item, qboolean *bAbort, char **args) {
-	int  useprofile = 1;
+	int useprofile = 1;
 
 	// Nico, silent GCC
 	(void)item;
@@ -1893,8 +1893,8 @@ void Item_RunScript(itemDef_t *item, qboolean *bAbort, const char *s) {
 		p = script;
 		for (;; ) {
 			const char *command = NULL;
-			int i;
-			qboolean bRan = qfalse;
+			int        i;
+			qboolean   bRan = qfalse;
 
 			// expect command then arguments, ; ends command, NULL ends script
 			if (!String_Parse(&p, &command)) {
@@ -2649,9 +2649,9 @@ int Item_Multi_FindCvarByValue(itemDef_t *item) {
 	multiDef_t *multiPtr = (multiDef_t *)item->typeData;
 
 	if (multiPtr) {
-		char       buff[1024];
-		float      value = 0;
-		int        i;
+		char  buff[1024];
+		float value = 0;
+		int   i;
 
 		if (multiPtr->strDef) {
 			DC->getCVarString(item->cvar, buff, sizeof (buff));
@@ -2677,9 +2677,9 @@ const char *Item_Multi_Setting(itemDef_t *item) {
 	multiDef_t *multiPtr = (multiDef_t *)item->typeData;
 
 	if (multiPtr) {
-		char       buff[1024];
-		float      value = 0;
-		int        i;
+		char  buff[1024];
+		float value = 0;
+		int   i;
 
 		if (multiPtr->strDef) {
 			DC->getCVarString(item->cvar, buff, sizeof (buff));
@@ -3055,7 +3055,7 @@ qboolean Item_Slider_HandleKey(itemDef_t *item, int key) {
 		editFieldDef_t *editDef = item->typeData;
 		if (editDef) {
 			rectDef_t testRect;
-			float x, value;
+			float     x, value;
 
 			if (item->text) {
 				x = item->textRect.x + item->textRect.w + 8;
@@ -6201,7 +6201,7 @@ Item_Parse
 ===============
 */
 qboolean Item_Parse(int handle, itemDef_t *item) {
-	pc_token_t    token;
+	pc_token_t token;
 
 	if (!trap_PC_ReadToken(handle, &token)) {
 		return qfalse;
@@ -6709,7 +6709,7 @@ Menu_Parse
 ===============
 */
 qboolean Menu_Parse(int handle, menuDef_t *menu) {
-	pc_token_t    token;
+	pc_token_t token;
 
 	if (!trap_PC_ReadToken(handle, &token)) {
 		return qfalse;

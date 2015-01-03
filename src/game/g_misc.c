@@ -1316,9 +1316,9 @@ void mg42_stopusing(gentity_t *self) {
 		self->r.ownerNum                               = self->s.number;
 		owner->client->ps.viewlocked                   = 0; // let them look around
 		owner->active                                  = qfalse;
-		self->mg42weapHeat           = owner->client->ps.weapHeat[WP_DUMMY_MG42];
-		self->backupWeaponTime       = owner->client->ps.weaponTime;
-		owner->client->ps.weaponTime = owner->backupWeaponTime;
+		self->mg42weapHeat                             = owner->client->ps.weapHeat[WP_DUMMY_MG42];
+		self->backupWeaponTime                         = owner->client->ps.weaponTime;
+		owner->client->ps.weaponTime                   = owner->backupWeaponTime;
 
 		self->active = qfalse;
 

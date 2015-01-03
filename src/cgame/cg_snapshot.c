@@ -136,9 +136,9 @@ CG_TransitionSnapshot instead.
 ==================
 */
 void CG_SetInitialSnapshot(snapshot_t *snap) {
-	int           i;
-	centity_t     *cent;
-	char          buff[16];
+	int       i;
+	centity_t *cent;
+	char      buff[16];
 
 	cg.snap = snap;
 
@@ -155,7 +155,7 @@ void CG_SetInitialSnapshot(snapshot_t *snap) {
 
 	for (i = 0 ; i < cg.snap->numEntities ; ++i) {
 		entityState_t *state = &cg.snap->entities[i];
-		cent  = &cg_entities[state->number];
+		cent = &cg_entities[state->number];
 
 		memcpy(&cent->currentState, state, sizeof (entityState_t));
 		cent->interpolate  = qfalse;
@@ -236,7 +236,7 @@ static void CG_TransitionSnapshot(void) {
 
 	// clear the currentValid flag for all entities in the existing snapshot
 	for (i = 0 ; i < cg.snap->numEntities ; ++i) {
-		centity_t  *cent                      = &cg_entities[cg.snap->entities[i].number];
+		centity_t *cent = &cg_entities[cg.snap->entities[i].number];
 		cent->currentValid                    = qfalse;
 		oldValid[cg.snap->entities[i].number] = qtrue;
 	}
@@ -290,8 +290,8 @@ A new snapshot has just been read in from the client system.
 ===================
 */
 static void CG_SetNextSnap(snapshot_t *snap) {
-	int           num;
-	centity_t     *cent;
+	int       num;
+	centity_t *cent;
 
 	cg.nextSnap = snap;
 
@@ -300,7 +300,7 @@ static void CG_SetNextSnap(snapshot_t *snap) {
 
 	// check for extrapolation errors
 	for (num = 0 ; num < snap->numEntities ; ++num) {
-		entityState_t *es   = &snap->entities[num];
+		entityState_t *es = &snap->entities[num];
 		cent = &cg_entities[es->number];
 
 		memcpy(&cent->nextState, es, sizeof (entityState_t));
@@ -355,7 +355,7 @@ static snapshot_t *CG_ReadNextSnapshot(void) {
 	}
 
 	while (cgs.processedSnapshotNum < cg.latestSnapshotNum) {
-		qboolean   r;
+		qboolean r;
 
 		// decide which of the two slots to load it into
 		if (cg.snap == &cg.activeSnapshots[0]) {

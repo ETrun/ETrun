@@ -57,15 +57,15 @@ void G_SendScore(gentity_t *ent) {
 	i = 0;
 	// Gordon: team doesnt actually mean team, ignore...
 	for (team = 0; team < 2; ++team) {
-		int size, count = 0;
-		char      buffer[1024] = {0}, startbuffer[32] = {0};
+		int  size, count = 0;
+		char buffer[1024] = { 0 }, startbuffer[32] = { 0 };
 
 		if (team == 0) {
 			Q_strncpyz(startbuffer, "sc0", 32);
 		} else {
 			Q_strncpyz(startbuffer, "sc1", 32);
 		}
-		size  = strlen(startbuffer) + 1;
+		size = strlen(startbuffer) + 1;
 
 		for (; i < numSorted ; ++i) {
 			int ping;
@@ -457,8 +457,8 @@ qboolean SetTeam(gentity_t *ent, char *s, weapon_t w1, weapon_t w2, qboolean set
 
 	// remove ourself from teamlists
 	{
-		int                  i;
-		mapEntityData_t      *mEnt;
+		int             i;
+		mapEntityData_t *mEnt;
 
 		for (i = 0; i < 2; ++i) {
 			mapEntityData_Team_t *teamList = &mapEntityData[i];
@@ -921,9 +921,9 @@ void G_SayTo(gentity_t *ent, gentity_t *other, int mode, int color, const char *
 }
 
 void G_Say(gentity_t *ent, gentity_t *target, int mode, qboolean encoded, const char *chatText) {
-	int       j;
-	int       color;
-	char      name[64];
+	int  j;
+	int  color;
+	char name[64];
 	// don't let text be too long for malicious reasons
 	char     text[MAX_SAY_TEXT];
 	qboolean localize = qfalse;
@@ -1212,7 +1212,7 @@ qboolean Cmd_CallVote_f(gentity_t *ent, unsigned int dwCommand, qboolean fRefCom
 
 	// Nico, perform common checks here
 	if (!Q_stricmp(arg1, "map") || !Q_stricmp(arg1, "randommap")) {
-		int  waitTime;
+		int waitTime;
 
 		// Check if there is a pending map vote
 		if (level.delayedMapChange.pendingChange) {
@@ -1698,7 +1698,7 @@ qboolean Do_Activate_f(gentity_t *ent, gentity_t *traceEnt) {
 
 void G_LeaveTank(gentity_t *ent, qboolean position) {
 	gentity_t *tank;
-	trace_t tr;
+	trace_t   tr;
 
 	tank = ent->tankLink;
 	if (!tank) {
@@ -1706,7 +1706,7 @@ void G_LeaveTank(gentity_t *ent, qboolean position) {
 	}
 
 	if (position) {
-		vec3_t  axis[3], pos;
+		vec3_t axis[3], pos;
 
 		AnglesToAxis(tank->s.angles, axis);
 		VectorMA(ent->client->ps.origin, 128, axis[1], pos);
@@ -1879,7 +1879,7 @@ void G_UpdateSpawnCounts(void) {
 	char cs[MAX_STRING_CHARS];
 
 	for (i = 0; i < level.numspawntargets; ++i) {
-		int  current, count = 0, team;
+		int current, count = 0, team;
 
 		trap_GetConfigstring(CS_MULTI_SPAWNTARGETS + i, cs, sizeof (cs));
 
@@ -2342,7 +2342,7 @@ qboolean ClientIsFlooding(gentity_t *ent) {
  * @source: TJMod
  */
 void Cmd_SpecLock_f(gentity_t *ent, unsigned int dwCommand, qboolean lock) {
-	int       i      = 0;
+	int i = 0;
 
 	// Nico, silent GCC
 	(void)dwCommand;
@@ -2478,14 +2478,14 @@ static char *Q_SayConcatArgs(int start) {
  * @source: TJMod
  */
 void Cmd_PrivateMessage_f(gentity_t *ent) {
-	int       pids[MAX_CLIENTS]        = { 0 };
-	char      name[MAX_NAME_LENGTH]    = { 0 };
-	char      netname[MAX_NAME_LENGTH] = { 0 };
-	char      cmd[12]                  = { 0 };
-	char      str[MAX_STRING_CHARS]    = { 0 };
-	char      *msg                     = NULL;
-	int       pcount                   = 0;
-	int       i                        = 0;
+	int  pids[MAX_CLIENTS]        = { 0 };
+	char name[MAX_NAME_LENGTH]    = { 0 };
+	char netname[MAX_NAME_LENGTH] = { 0 };
+	char cmd[12]                  = { 0 };
+	char str[MAX_STRING_CHARS]    = { 0 };
+	char *msg                     = NULL;
+	int  pcount                   = 0;
+	int  i                        = 0;
 
 	trap_Argv(0, cmd, sizeof (cmd));
 
@@ -2541,8 +2541,8 @@ void Cmd_PrivateMessage_f(gentity_t *ent) {
 
 // Nico, help command
 void Cmd_Help_f(gentity_t *ent) {
-	int  argc              = 0;
-	int  i                 = 0;
+	int argc = 0;
+	int i    = 0;
 
 	// Parse options
 	argc = trap_Argc();

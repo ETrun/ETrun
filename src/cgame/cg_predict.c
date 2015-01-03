@@ -52,9 +52,9 @@ efficient collision detection
 ====================
 */
 void CG_BuildSolidList(void) {
-	int           i;
-	centity_t     *cent;
-	snapshot_t    *snap;
+	int        i;
+	centity_t  *cent;
+	snapshot_t *snap;
 
 	cg_numSolidEntities   = 0;
 	cg_numSolidFTEntities = 0;
@@ -240,10 +240,10 @@ CG_PointContents
 ================
 */
 int     CG_PointContents(const vec3_t point, int passEntityNum) {
-	int           i;
-	centity_t     *cent;
-	clipHandle_t  cmodel;
-	int           contents;
+	int          i;
+	centity_t    *cent;
+	clipHandle_t cmodel;
+	int          contents;
 
 	contents = trap_CM_PointContents(point, 0);
 
@@ -341,11 +341,11 @@ Predict push triggers and items
 =========================
 */
 static void CG_TouchTriggerPrediction(void) {
-	int           i;
-	clipHandle_t  cmodel;
-	centity_t     *cent;
-	qboolean      spectator;
-	const char    *cs;
+	int          i;
+	clipHandle_t cmodel;
+	centity_t    *cent;
+	qboolean     spectator;
+	const char   *cs;
 
 	// dead clients don't activate triggers
 	if (cg.predictedPlayerState.stats[STAT_HEALTH] <= 0) {

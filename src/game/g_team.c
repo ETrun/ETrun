@@ -283,7 +283,7 @@ gentity_t *SelectRandomTeamSpawnPoint(team_t team, int spawnObjective) {
 	gentity_t *spot = NULL;
 	gentity_t *spots[MAX_TEAM_SPAWN_POINTS];
 	int       count = 0, closest;
-	int       i = 0;
+	int       i     = 0;
 	char      *classname;
 	float     shortest;
 	vec3_t    target;

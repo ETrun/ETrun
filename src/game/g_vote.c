@@ -357,8 +357,8 @@ int G_UnMute_v(gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, 
  *
  */
 void G_delay_map_change(char *mapName, int delay) {
-	int       i               = 0;
-	int       activeRunsCount = 0;
+	int i               = 0;
+	int activeRunsCount = 0;
 
 	Q_strncpyz(level.delayedMapChange.passedVote, mapName, VOTE_MAXSTRING);
 

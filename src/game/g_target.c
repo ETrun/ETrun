@@ -1048,9 +1048,9 @@ wait = default is 2 seconds = time the entity will enable rumble effect
 int rumble_snd;
 
 void target_rumble_think(gentity_t *ent) {
-	float     ratio;
-	float     dapitch, dayaw;
-	qboolean  validrumble = qtrue;
+	float    ratio;
+	float    dapitch, dayaw;
+	qboolean validrumble = qtrue;
 
 	if (!(ent->count)) {
 		ent->timestamp = level.time;
@@ -1087,7 +1087,7 @@ void target_rumble_think(gentity_t *ent) {
 	if (validrumble) {
 		gentity_t *tent;
 
-		tent = G_TempEntity(ent->r.currentOrigin, EV_RUMBLE_EFX);
+		tent              = G_TempEntity(ent->r.currentOrigin, EV_RUMBLE_EFX);
 		tent->s.angles[0] = dapitch * ratio;
 		tent->s.angles[1] = dayaw * ratio;
 	}
@@ -1211,7 +1211,7 @@ int GetTimerunNum(char *name) {
 
 // Nico, function used to notify the client his timerun has started and also the spectators of this client
 static void notify_timerun_start(gentity_t *activator) {
-	int       timerunNum = activator->client->sess.currentTimerunNum;
+	int timerunNum = activator->client->sess.currentTimerunNum;
 
 	// Nico, notify the client itself first
 	trap_SendServerCommand(activator - g_entities, va("timerun_start %i %i %i", timerunNum, activator->client->sess.timerunStartTime + 500, (int)activator->client->sess.startSpeed));
@@ -1328,7 +1328,7 @@ void SP_target_starttimer(gentity_t *ent) {
 // Nico, function used to notify the client his timerun has stopped and also the spectators of this client
 // note: it is called when client loads a position, or gets killed
 void notify_timerun_stop(gentity_t *activator, int finishTime) {
-	int       timerunNum = activator->client->sess.currentTimerunNum;
+	int timerunNum = activator->client->sess.currentTimerunNum;
 
 	// Nico, check if timerun is active
 	if (!activator->client->sess.timerunActive) {

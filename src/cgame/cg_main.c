@@ -928,8 +928,8 @@ void CG_SetupDlightstyles(void) {
 	cg.lightstylesInited = qtrue;
 
 	for (i = 1; i < MAX_DLIGHT_CONFIGSTRINGS; ++i) {
-		char      *token;
-		int       entnum;
+		char *token;
+		int  entnum;
 
 		str = (char *) CG_ConfigString(CS_DLIGHTS + i);
 		if (!strlen(str)) {
@@ -1034,8 +1034,8 @@ called during a precache command
 =================
 */
 static void CG_RegisterSounds(void) {
-	int          i;
-	char         name[MAX_QPATH];
+	int  i;
+	char name[MAX_QPATH];
 
 	// NERVE - SMF - voice commands
 	CG_LoadVoiceChats();
@@ -1131,7 +1131,7 @@ static void CG_RegisterSounds(void) {
 	}
 
 	for (i = 1 ; i < MAX_SOUNDS ; ++i) {
-		const char   *soundName;
+		const char *soundName;
 
 		soundName = CG_ConfigString(CS_SOUNDS + i);
 		if (!soundName[0]) {

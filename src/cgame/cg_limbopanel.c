@@ -463,10 +463,10 @@ qboolean CG_LimboPanel_CancelButton_KeyDown(panel_button_t *button, int key) {
 }
 
 void CG_LimboPanel_SendSetupMsg(qboolean forceteam) {
-	weapon_t   		weap1, weap2;
-	const char 		*str;
-	team_t     		team;
-	weaponType_t 	*wt;
+	weapon_t     weap1, weap2;
+	const char   *str;
+	team_t       team;
+	weaponType_t *wt;
 
 	if (forceteam) {
 		team = CG_LimboPanel_GetTeam();
@@ -659,7 +659,7 @@ void CG_LimboPanel_RenderClassButton(panel_button_t *button) {
 		if (button->data[1] == CG_LimboPanel_GetClass()) {
 			CG_DrawPic(button->rect.x, button->rect.y, button->rect.w, button->rect.h, cgs.media.limboClassButton2Back_on);
 		} else if (BG_CursorInRect(&button->rect)) {
-			vec4_t clr  = { 1.f, 1.f, 1.f, 0.4f };
+			vec4_t clr = { 1.f, 1.f, 1.f, 0.4f };
 
 			trap_R_SetColor(clr);
 			CG_DrawPic(button->rect.x, button->rect.y, button->rect.w, button->rect.h, cgs.media.limboClassButton2Back_on);
@@ -748,7 +748,7 @@ qboolean CG_LimboPanel_WeaponPanel_KeyUp(panel_button_t *button, int key) {
 	}
 
 	if (key == K_MOUSE1 && BG_PanelButtons_GetFocusButton() == button) {
-		int       cnt, i;
+		int cnt, i;
 
 		memcpy(&rect, &button->rect, sizeof (rect));
 		rect.y -= rect.h;
@@ -845,7 +845,7 @@ void CG_DrawBorder(float x, float y, float w, float h, qboolean fill, qboolean d
 	CG_DrawPicST(x - BRDRSIZE, y + h, BRDRSIZE, BRDRSIZE, 0.f, 1.f, 1.f, 0.f, cgs.media.limboWeaponCardSurroundC);
 
 	if (fill) {
-		vec4_t clrBack  = { 0.1f, 0.1f, 0.1f, 1.f };
+		vec4_t clrBack = { 0.1f, 0.1f, 0.1f, 1.f };
 
 		if (drawMouseOver) {
 			rectDef_t rect;
@@ -924,7 +924,7 @@ void CG_LimboPanel_WeaponPanel(panel_button_t *button) {
 
 		CG_DrawBorder(button->rect.x, button->rect.y - ((cnt - 1) * button->rect.h), button->rect.w, button->rect.h * cnt, qfalse, qfalse);
 	} else {
-		vec4_t clr  = { 0.f, 0.f, 0.f, 0.4f };
+		vec4_t clr = { 0.f, 0.f, 0.f, 0.4f };
 
 		// render in normal mode
 		CG_LimboPanel_WeaponPanel_DrawWeapon(&button->rect, weap, cnt > 1 ? qtrue : qfalse, va("%iof%i", CG_LimboPanel_GetSelectedWeaponNum() + 1, cnt), CG_LimboPanel_RealWeaponIsDisabled(weap));

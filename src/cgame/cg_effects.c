@@ -335,7 +335,7 @@ void CG_Spotlight(centity_t *cent, float *color, vec3_t realstart, vec3_t lightD
 
 // model at base
 	if (cent->currentState.modelindex) {
-		vec3_t      angles;
+		vec3_t angles;
 
 		memset(&ent, 0, sizeof (ent));
 		ent.frame    = 0;
@@ -373,8 +373,8 @@ void CG_Spotlight(centity_t *cent, float *color, vec3_t realstart, vec3_t lightD
 //	generate the flat beam 'core'
 //
 	if (!(flags & SL_NOCORE)) {
-		vec3_t      v1, v2;
-		vec3_t      coreright;
+		vec3_t v1, v2;
+		vec3_t coreright;
 
 		VectorSubtract(start, cg.refdef_current->vieworg, v1);
 		VectorNormalize(v1);
@@ -477,7 +477,7 @@ void CG_Spotlight(centity_t *cent, float *color, vec3_t realstart, vec3_t lightD
 	// show the endpoint
 
 	if (!(flags & SL_NOIMPACT) && hitDist) {
-		vec4_t      projection;
+		vec4_t projection;
 
 		VectorMA(startvec, hitDist, conevec, endvec);
 
@@ -743,9 +743,9 @@ void CG_RenderSmokeGrenadeSmoke(centity_t *cent, const weaponInfo_t *weapon) {
 	}
 
 	if (cent->currentState.effect1Time > 16) {
-		int           spritesNeeded = 0;
-		int volume = 16 + ((cent->currentState.effect1Time / 640.f) * (100 - 16));
-		float         spawnrate = (1.f / SMOKEBOMB_SPAWNRATE) * 1000.f;
+		int   spritesNeeded = 0;
+		int   volume        = 16 + ((cent->currentState.effect1Time / 640.f) * (100 - 16));
+		float spawnrate     = (1.f / SMOKEBOMB_SPAWNRATE) * 1000.f;
 
 		if (!cent->dl_atten ||
 		    cent->currentState.pos.trType != TR_STATIONARY ||

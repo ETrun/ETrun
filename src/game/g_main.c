@@ -182,19 +182,19 @@ vmCvar_t g_strictSaveLoad;
 cvarTable_t gameCvarTable[] =
 {
 	// noset vars
-	{ NULL,                    "gamename",               GAME_VERSION,                 CVAR_SERVERINFO | CVAR_ROM,                                    0,      qfalse, qfalse},
-	{ NULL,                    "gamedate",               __DATE__,                     CVAR_ROM,                                                      0,      qfalse, qfalse},
-	{ &g_restarted,            "g_restarted",            "0",                          CVAR_ROM,                                                      0,      qfalse, qfalse},
-	{ NULL,                    "sv_mapname",             "",                           CVAR_SERVERINFO | CVAR_ROM,                                    0,      qfalse, qfalse},
+	{ NULL,                    "gamename",               GAME_VERSION,                 CVAR_SERVERINFO | CVAR_ROM,                                    0,      qfalse, qfalse },
+	{ NULL,                    "gamedate",               __DATE__,                     CVAR_ROM,                                                      0,      qfalse, qfalse },
+	{ &g_restarted,            "g_restarted",            "0",                          CVAR_ROM,                                                      0,      qfalse, qfalse },
+	{ NULL,                    "sv_mapname",             "",                           CVAR_SERVERINFO | CVAR_ROM,                                    0,      qfalse, qfalse },
 
 	// latched vars
 
-	{ &g_medicChargeTime,      "g_medicChargeTime",      "45000",                      CVAR_SERVERINFO | CVAR_LATCH,                                  0,      qfalse, qtrue},
-	{ &g_engineerChargeTime,   "g_engineerChargeTime",   "30000",                      CVAR_SERVERINFO | CVAR_LATCH,                                  0,      qfalse, qtrue},
-	{ &g_LTChargeTime,         "g_LTChargeTime",         "40000",                      CVAR_SERVERINFO | CVAR_LATCH,                                  0,      qfalse, qtrue},
-	{ &g_soldierChargeTime,    "g_soldierChargeTime",    "20000",                      CVAR_SERVERINFO | CVAR_LATCH,                                  0,      qfalse, qtrue},
+	{ &g_medicChargeTime,      "g_medicChargeTime",      "45000",                      CVAR_SERVERINFO | CVAR_LATCH,                                  0,      qfalse, qtrue  },
+	{ &g_engineerChargeTime,   "g_engineerChargeTime",   "30000",                      CVAR_SERVERINFO | CVAR_LATCH,                                  0,      qfalse, qtrue  },
+	{ &g_LTChargeTime,         "g_LTChargeTime",         "40000",                      CVAR_SERVERINFO | CVAR_LATCH,                                  0,      qfalse, qtrue  },
+	{ &g_soldierChargeTime,    "g_soldierChargeTime",    "20000",                      CVAR_SERVERINFO | CVAR_LATCH,                                  0,      qfalse, qtrue  },
 
-	{ &g_covertopsChargeTime,  "g_covertopsChargeTime",  "30000",                      CVAR_SERVERINFO | CVAR_LATCH,                                  0,      qfalse, qtrue},
+	{ &g_covertopsChargeTime,  "g_covertopsChargeTime",  "30000",                      CVAR_SERVERINFO | CVAR_LATCH,                                  0,      qfalse, qtrue  },
 	{ &g_maxclients,           "sv_maxclients",          "20",                         CVAR_SERVERINFO | CVAR_LATCH | CVAR_ARCHIVE,                   0,      qfalse, qfalse }, // NERVE - SMF - made 20 from 8
 
 	{ &g_gamestate,            "gamestate",              "-1",                         CVAR_WOLFINFO | CVAR_ROM,                                      0,      qfalse, qfalse },
@@ -1713,7 +1713,7 @@ void FindIntermissionPoint(void) {
 
 			target = G_PickTarget(ent->target);
 			if (target) {
-				vec3_t    dir;
+				vec3_t dir;
 
 				VectorSubtract(target->s.origin, level.intermission_origin, dir);
 				vectoangles(dir, level.intermission_angle);
@@ -1977,7 +1977,7 @@ qboolean G_PositionEntityOnTag(gentity_t *entity, gentity_t *parent, char *tagNa
 void G_TagLinkEntity(gentity_t *ent, int msec) {
 	gentity_t *parent = &g_entities[ent->s.torsoAnim];
 	gentity_t *obstacle;
-	vec3_t    origin, angles = {0};
+	vec3_t    origin, angles = { 0 };
 	vec3_t    v;
 
 	if (ent->linkTagTime >= level.time) {

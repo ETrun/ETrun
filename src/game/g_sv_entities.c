@@ -66,7 +66,7 @@ static void CreateMapServerEntities() {
 //		after they've all been created
 //		So we want to give each entity the chance to set itself up after it has been created
 void InitialServerEntitySetup() {
-	int              i;
+	int i;
 
 	// TAT - create the server entities for the current map
 	//		these are read from an additional file

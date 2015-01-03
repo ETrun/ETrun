@@ -606,9 +606,9 @@ vec_t VectorNormalize(vec3_t v) {
 	if (length) {
 		float ilength = 1 / length;
 
-		v[0]   *= ilength;
-		v[1]   *= ilength;
-		v[2]   *= ilength;
+		v[0] *= ilength;
+		v[1] *= ilength;
+		v[2] *= ilength;
 	}
 
 	return length;
@@ -636,9 +636,9 @@ vec_t VectorNormalize2(const vec3_t v, vec3_t out) {
 	if (length) {
 		float ilength = 1 / length;
 
-		out[0]  = v[0] * ilength;
-		out[1]  = v[1] * ilength;
-		out[2]  = v[2] * ilength;
+		out[0] = v[0] * ilength;
+		out[1] = v[1] * ilength;
+		out[2] = v[2] * ilength;
 	} else {
 		VectorClear(out);
 	}

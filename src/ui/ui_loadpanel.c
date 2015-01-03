@@ -172,13 +172,13 @@ void UI_LoadPanel_RenderHeaderText(panel_button_t *button) {
 
 #define ESTIMATES 80
 const char *UI_DownloadInfo(const char *downloadName) {
-	static char dlText[]                = "Downloading:";
-	static char etaText[]               = "Estimated time left:";
-	static char xferText[]              = "Transfer rate:";
-	char       dlSizeBuf[64], totalSizeBuf[64], xferRateBuf[64], dlTimeBuf[64];
-	int        downloadSize, downloadCount, downloadTime;
-	int        xferRate;
-	const char *s, *ds;
+	static char dlText[]   = "Downloading:";
+	static char etaText[]  = "Estimated time left:";
+	static char xferText[] = "Transfer rate:";
+	char        dlSizeBuf[64], totalSizeBuf[64], xferRateBuf[64], dlTimeBuf[64];
+	int         downloadSize, downloadCount, downloadTime;
+	int         xferRate;
+	const char  *s, *ds;
 
 	downloadSize  = trap_Cvar_VariableValue("cl_downloadSize");
 	downloadCount = trap_Cvar_VariableValue("cl_downloadCount");
@@ -209,13 +209,13 @@ const char *UI_DownloadInfo(const char *downloadName) {
 
 	// Extrapolate estimated completion time
 	if (downloadSize && xferRate) {
-		int n        = downloadSize / xferRate; // estimated time for entire d/l in secs
-		int timeleft = 0, i;
-		static int  tleEstimates[ESTIMATES] = { 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60,
-		                                    60,  60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60,
-		                                    60,  60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60,
-		                                    60,  60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60 };
-		static int  tleIndex = 0;
+		int        n                       = downloadSize / xferRate; // estimated time for entire d/l in secs
+		int        timeleft                = 0, i;
+		static int tleEstimates[ESTIMATES] = { 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60,
+			                                   60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60,
+			                                   60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60,
+			                                   60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60 };
+		static int tleIndex = 0;
 
 		// We do it in K (/1024) because we'd overflow around 4MB
 		tleEstimates[tleIndex] = (n - (((downloadCount / 1024) * n) / (downloadSize / 1024)));

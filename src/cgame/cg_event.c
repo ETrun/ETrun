@@ -875,7 +875,7 @@ void CG_Effect(centity_t *cent, vec3_t origin, vec3_t dir) {
 	}
 
 	if (cent->currentState.eventParm & 2) {    // explode
-		vec4_t        projection, color;
+		vec4_t projection, color;
 		vec3_t sprVel, sprOrg;
 
 		trap_S_StartSound(origin, -1, CHAN_AUTO, cgs.media.sfx_rockexp);
@@ -916,7 +916,7 @@ void CG_Effect(centity_t *cent, vec3_t origin, vec3_t dir) {
 	}
 
 	if (cent->currentState.eventParm & 16) {   // gore
-		refEntity_t   *re;
+		refEntity_t *re;
 
 		le = CG_AllocLocalEntity();
 		re = &le->refEntity;
@@ -976,7 +976,7 @@ void CG_Shard(centity_t *cent, vec3_t origin, vec3_t dir) {
 	howmany = cent->currentState.frame;
 
 	for (i = 0; i < howmany; ++i) {
-		refEntity_t   *re;
+		refEntity_t *re;
 
 		le = CG_AllocLocalEntity();
 		re = &le->refEntity;
@@ -1003,7 +1003,7 @@ void CG_Shard(centity_t *cent, vec3_t origin, vec3_t dir) {
 		le->lifeRate     = 1.0 / (le->endTime - le->startTime);
 		le->leFlags      = LEF_TUMBLE;
 		le->bounceFactor = 0.4f;
-		le->leMarkType = 0;
+		le->leMarkType   = 0;
 
 		VectorCopy(origin, re->origin);
 		AxisCopy(axisDefault, re->axis);

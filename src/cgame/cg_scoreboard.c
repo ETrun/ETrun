@@ -102,15 +102,15 @@ static char *WM_ETrun_coloredPing(int ping) {
  * @source: ETpub
  */
 static qboolean WM_ETrun_drawCountryFlag(float x, float y, unsigned int countryCode) {
-	float        alpha[4];
+	float alpha[4];
 
 	if (countryCode < 255) {
-		float flag_step = 32;
+		float        flag_step = 32;
 		unsigned int flag_sd   = 512;
-		float x1 = (float)((countryCode * (unsigned int)flag_step) % flag_sd);
-		float y1 = (float)(floor((countryCode * flag_step) / flag_sd) * flag_step);
-		float x2 = x1 + flag_step;
-		float y2 = y1 + flag_step;
+		float        x1        = (float)((countryCode * (unsigned int)flag_step) % flag_sd);
+		float        y1        = (float)(floor((countryCode * flag_step) / flag_sd) * flag_step);
+		float        x2        = x1 + flag_step;
+		float        y2        = y1 + flag_step;
 		alpha[0] = alpha[1] = alpha[2] = alpha[3] = 1.0;
 
 		trap_R_SetColor(alpha);
@@ -439,9 +439,9 @@ qboolean CG_DrawScoreboard(void) {
 	int             x = 0;
 	int             y = 0;
 	s_timerunScores orderedScores[MAX_CLIENTS];
-	int             i                  = 0;
-	int             j                  = 0;
-	int             numScores          = cg.numScores;
+	int             i         = 0;
+	int             j         = 0;
+	int             numScores = cg.numScores;
 	int             teamPlayers[TEAM_NUM_TEAMS];
 
 	// don't draw anything if the menu or console is up
@@ -550,8 +550,8 @@ qboolean CG_DrawScoreboard(void) {
 		if (teamPlayers[TEAM_SPECTATOR] != 0) {
 			WM_ETrun_DrawSpectators(&x, &y, &cgs.media.limboFont1, orderedScores, numScores);
 		}
-	} else {// Nico, 2-columns scoreboard
-		qboolean        thereArePlayers    = qfalse, thereAreSpectators = qfalse;
+	} else { // Nico, 2-columns scoreboard
+		qboolean thereArePlayers = qfalse, thereAreSpectators = qfalse;
 
 		if (teamPlayers[TEAM_ALLIES] != 0 || teamPlayers[TEAM_AXIS] != 0) {
 			thereArePlayers = qtrue;
@@ -561,11 +561,11 @@ qboolean CG_DrawScoreboard(void) {
 			thereAreSpectators = qtrue;
 		}
 
-		if (thereArePlayers && thereAreSpectators) {// Nico, 2-columns
+		if (thereArePlayers && thereAreSpectators) { // Nico, 2-columns
 			int yCopy = y;
 
 			// Nico, draw players on a first column
-			x     = (SCREEN_WIDTH / 2 - INFO_TOTAL_WIDTH) / 2; // Nico, center horizontally
+			x = (SCREEN_WIDTH / 2 - INFO_TOTAL_WIDTH) / 2;     // Nico, center horizontally
 			WM_ETrun_DrawPlayers(&x, &y, &cgs.media.limboFont1, orderedScores, numScores);
 
 			// Nico, draw spectators on a second column

@@ -991,11 +991,11 @@ IsBinaryMoverBlocked
 ================
 */
 qboolean IsBinaryMoverBlocked(gentity_t *ent, gentity_t *other, gentity_t *activator) {
-	vec3_t   angles;
+	vec3_t angles;
 
 	if (Q_stricmp(ent->classname, "func_door_rotating") == 0) {
-		vec3_t dir, pos, vec, forward;
-		float  dot;
+		vec3_t   dir, pos, vec, forward;
+		float    dot;
 		qboolean is_relay = qfalse;
 
 		if (ent->spawnflags & 32) {
@@ -1902,13 +1902,13 @@ DoorSetSounds
 ==============
 */
 void DoorSetSounds(gentity_t *ent, int doortype) {
-	ent->sound1to2 = G_SoundIndex(va("sound/movers/doors/door%i_open.wav", doortype));           // opening
-	ent->soundPos2 = G_SoundIndex(va("sound/movers/doors/door%i_endo.wav", doortype));           // open
-	ent->sound2to1 = G_SoundIndex(va("sound/movers/doors/door%i_close.wav", doortype));          // closing
-	ent->soundPos1 = G_SoundIndex(va("sound/movers/doors/door%i_endc.wav", doortype));           // closed
-	ent->sound2to3 = G_SoundIndex(va("sound/movers/doors/door%i_loopo.wav", doortype));          // loopopen
-	ent->sound3to2 = G_SoundIndex(va("sound/movers/doors/door%i_loopc.wav", doortype));          // loopclosed
-	ent->soundPos3 = G_SoundIndex(va("sound/movers/doors/door%i_locked.wav", doortype));     // locked
+	ent->sound1to2      = G_SoundIndex(va("sound/movers/doors/door%i_open.wav", doortype));      // opening
+	ent->soundPos2      = G_SoundIndex(va("sound/movers/doors/door%i_endo.wav", doortype));      // open
+	ent->sound2to1      = G_SoundIndex(va("sound/movers/doors/door%i_close.wav", doortype));     // closing
+	ent->soundPos1      = G_SoundIndex(va("sound/movers/doors/door%i_endc.wav", doortype));      // closed
+	ent->sound2to3      = G_SoundIndex(va("sound/movers/doors/door%i_loopo.wav", doortype));     // loopopen
+	ent->sound3to2      = G_SoundIndex(va("sound/movers/doors/door%i_loopc.wav", doortype));     // loopclosed
+	ent->soundPos3      = G_SoundIndex(va("sound/movers/doors/door%i_locked.wav", doortype)); // locked
 	ent->soundSoftopen  = G_SoundIndex(va("sound/movers/doors/door%i_openq.wav", doortype));     // opening quietly
 	ent->soundSoftendo  = G_SoundIndex(va("sound/movers/doors/door%i_endoq.wav", doortype));     // open quietly
 	ent->soundSoftclose = G_SoundIndex(va("sound/movers/doors/door%i_closeq.wav", doortype));        // closing quietly
@@ -4665,7 +4665,7 @@ void G_LinkDamageParents(void) {
 }
 
 void G_LinkDebris(void) {
-	int       i;
+	int i;
 
 	for (i = 0; i < level.numDebrisChunks; ++i) {
 		gentity_t *target;

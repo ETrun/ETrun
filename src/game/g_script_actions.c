@@ -227,7 +227,7 @@ qboolean G_ScriptAction_ShaderRemapFlush(gentity_t *ent, char *params) {
 }
 
 qboolean G_ScriptAction_FollowPath(gentity_t *ent, char *params) {
-	char     *pString;
+	char *pString;
 
 	if (params && (ent->scriptStatus.scriptFlags & SCFL_GOING_TO_MARKER)) {
 		// we can't process a new movement until the last one has finished
@@ -563,8 +563,8 @@ G_ScriptAction_FollowSpline
 */
 
 qboolean G_ScriptAction_FollowSpline(gentity_t *ent, char *params) {
-	char     *pString;
-	float    roll[2] = { 0, 0 };
+	char  *pString;
+	float roll[2] = { 0, 0 };
 
 	if (params && (ent->scriptStatus.scriptFlags & SCFL_GOING_TO_MARKER)) {
 		// we can't process a new movement until the last one has finished
@@ -599,10 +599,10 @@ qboolean G_ScriptAction_FollowSpline(gentity_t *ent, char *params) {
 		}
 	} else {      // we have just started this command
 		splinePath_t *pSpline;
-		char     *token;
-		float    speed, length = 0;
-		qboolean wait = qfalse;
-		int      backward;
+		char         *token;
+		float        speed, length = 0;
+		qboolean     wait = qfalse;
+		int          backward;
 
 		pString = params;
 
@@ -1130,8 +1130,8 @@ G_ScriptAction_GotoMarker
 ===============
 */
 qboolean G_ScriptAction_GotoMarker(gentity_t *ent, char *params) {
-	char      *pString;
-	vec3_t    diff;
+	char   *pString;
+	vec3_t diff;
 
 	if (params && (ent->scriptStatus.scriptFlags & SCFL_GOING_TO_MARKER)) {
 		// we can't process a new movement until the last one has finished
@@ -1166,12 +1166,12 @@ qboolean G_ScriptAction_GotoMarker(gentity_t *ent, char *params) {
 		}
 	} else {      // we have just started this command
 		pathCorner_t *pPathCorner;
-		char      *token;
-		gentity_t *target = NULL;
-		vec3_t    vec, angles;
-		float     speed, dist;
-		qboolean  wait = qfalse, turntotarget = qfalse;
-		int       trType, duration, i;
+		char         *token;
+		gentity_t    *target = NULL;
+		vec3_t       vec, angles;
+		float        speed, dist;
+		qboolean     wait = qfalse, turntotarget = qfalse;
+		int          trType, duration, i;
 
 		pString = params;
 		token   = COM_ParseExt(&pString, qfalse);
@@ -1887,9 +1887,9 @@ G_ScriptAction_ToggleSpeaker
 =================
 */
 qboolean G_ScriptAction_ToggleSpeaker(gentity_t *ent, char *params) {
-	int          i;
-	long         hash;
-	gentity_t    *tent;
+	int       i;
+	long      hash;
+	gentity_t *tent;
 
 	// Nico, silent GCC
 	(void)ent;
@@ -1927,9 +1927,9 @@ G_ScriptAction_DisableSpeaker
 =================
 */
 qboolean G_ScriptAction_DisableSpeaker(gentity_t *ent, char *params) {
-	int          i;
-	long         hash;
-	gentity_t    *tent;
+	int       i;
+	long      hash;
+	gentity_t *tent;
 
 	// Nico, silent GCC
 	(void)ent;
@@ -1967,9 +1967,9 @@ G_ScriptAction_EnableSpeaker
 =================
 */
 qboolean G_ScriptAction_EnableSpeaker(gentity_t *ent, char *params) {
-	int          i;
-	long         hash;
-	gentity_t    *tent;
+	int       i;
+	long      hash;
+	gentity_t *tent;
 
 	// Nico, silent GCC
 	(void)ent;
@@ -2028,8 +2028,8 @@ G_ScriptAction_Accum
 */
 
 qboolean G_ScriptAction_Accum(gentity_t *ent, char *params) {
-	char     *pString = params, *token, lastToken[MAX_QPATH];
-	int      bufferIndex;
+	char *pString = params, *token, lastToken[MAX_QPATH];
+	int  bufferIndex;
 
 	token = COM_ParseExt(&pString, qfalse);
 	if (!token[0]) {
@@ -2220,8 +2220,8 @@ G_ScriptAction_GlobalAccum
 // http://games.chruker.dk/enemy_territory/modding_project_bugfix.php?bug_id=056
 */
 qboolean G_ScriptAction_GlobalAccum(gentity_t *ent, char *params) {
-	char     *pString = params, *token, lastToken[MAX_QPATH];
-	int      bufferIndex;
+	char *pString = params, *token, lastToken[MAX_QPATH];
+	int  bufferIndex;
 
 	token = COM_ParseExt(&pString, qfalse);
 	if (!token[0]) {
@@ -2435,8 +2435,8 @@ qboolean G_ScriptAction_FaceAngles(gentity_t *ent, char *params) {
 	}
 
 	if (ent->scriptStatus.scriptStackChangeTime == level.time) {
-		char *token;
-		int  duration, i, trType = TR_LINEAR_STOP;
+		char   *token;
+		int    duration, i, trType = TR_LINEAR_STOP;
 		vec3_t angles;
 
 		pString = params;
@@ -2819,7 +2819,7 @@ qboolean G_ScriptAction_SetDebugLevel(gentity_t *ent, char *params) {
 
 	// See if the first parameter is a /N, where N is a number
 	if ((token = COM_ParseExt(&pString, qfalse)) != NULL && token[0]) {
-		int  debugLevel;
+		int debugLevel;
 
 		// Get the integer version of the debug level
 		debugLevel = atoi(token);
@@ -3646,8 +3646,8 @@ G_ScriptAction_Cvar
 ===================
 */
 qboolean G_ScriptAction_Cvar(gentity_t *ent, char *params) {
-	char     *pString = params, *token, lastToken[MAX_QPATH], cvarName[MAX_QPATH];
-	int      cvarValue;
+	char *pString = params, *token, lastToken[MAX_QPATH], cvarName[MAX_QPATH];
+	int  cvarValue;
 
 	token = COM_ParseExt(&pString, qfalse);
 	if (!token[0]) {

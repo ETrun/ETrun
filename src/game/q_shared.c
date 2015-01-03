@@ -370,7 +370,7 @@ Internal brace depths are properly skipped.
 =================
 */
 void SkipBracedSection(char **program) {
-	int  depth;
+	int depth;
 
 	depth = 0;
 	do {
@@ -408,7 +408,7 @@ void SkipRestOfLine(char **data) {
 }
 
 void Parse1DMatrix(char **buf_p, int x, float *m) {
-	int  i;
+	int i;
 
 	COM_MatchToken(buf_p, "(");
 

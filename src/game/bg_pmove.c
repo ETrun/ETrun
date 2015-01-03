@@ -133,7 +133,7 @@ finds worst trace of body/legs, for collision.
 ==================
 */
 
-void PM_TraceLegs(trace_t *trace, float *legsOffset, vec3_t start, vec3_t end, trace_t *bodytrace, vec3_t viewangles, void (tracefunc) (trace_t *results, const vec3_t start, const vec3_t mins, const vec3_t maxs, const vec3_t end, int passEntityNum, int contentMask), int ignoreent, int tracemask) {
+void PM_TraceLegs(trace_t *trace, float *legsOffset, vec3_t start, vec3_t end, trace_t *bodytrace, vec3_t viewangles, void(tracefunc) (trace_t * results, const vec3_t start, const vec3_t mins, const vec3_t maxs, const vec3_t end, int passEntityNum, int contentMask), int ignoreent, int tracemask) {
 	trace_t steptrace;
 	vec3_t  ofs, org, point;
 	vec3_t  flatforward;
@@ -256,7 +256,7 @@ static void PM_Friction(void) {
 	    !(pm->ps->pm_flags & PMF_TIME_KNOCKBACK)) {
 		float control = speed < pm_stopspeed ? pm_stopspeed : speed;
 
-		drop   += control * pm_friction * pml.frametime;
+		drop += control * pm_friction * pml.frametime;
 	}
 
 	// apply water friction even if just wading
@@ -751,7 +751,7 @@ static void PM_WaterMove(void) {
 		wishvel[1] = 0;
 		wishvel[2] = -60;       // sink towards bottom
 	} else {
-		int    i;
+		int i;
 
 		for (i = 0 ; i < 3 ; ++i)
 			wishvel[i] = scale * pml.forward[i] * pm->cmd.forwardmove + scale * pml.right[i] * pm->cmd.rightmove;
@@ -778,7 +778,7 @@ static void PM_WaterMove(void) {
 
 	// make sure we can go up slopes easily under water
 	if (pml.groundPlane && DotProduct(pm->ps->velocity, pml.groundTrace.plane.normal) < 0) {
-		float  vel;
+		float vel;
 
 		vel = VectorLength(pm->ps->velocity);
 		// slide along the ground plane
@@ -818,7 +818,7 @@ static void PM_FlyMove(void) {
 		wishvel[1] = 0;
 		wishvel[2] = 0;
 	} else {
-		int    i;
+		int i;
 
 		for (i = 0 ; i < 3 ; ++i) {
 			wishvel[i] = scale * pml.forward[i] * pm->cmd.forwardmove + scale * pml.right[i] * pm->cmd.rightmove;
@@ -900,8 +900,8 @@ static void PM_AirMove(void) {
 		smove          = pm->pmext->dtmove == DT_MOVELEFT ? -2070 : 2070;
 		scale          = 1.f;
 	} else {
-		cmd   = pm->cmd;
-		scale = PM_CmdScale(&cmd, qtrue);
+		cmd            = pm->cmd;
+		scale          = PM_CmdScale(&cmd, qtrue);
 		pml.forward[2] = 0;
 		pml.right[2]   = 0;
 	}
@@ -1160,7 +1160,7 @@ static void PM_NoclipMove(void) {
 		float friction = pm_friction * 1.5; // extra friction
 		float control  = speed < pm_stopspeed ? pm_stopspeed : speed;
 		float drop     = control * friction * pml.frametime;
-		float newspeed = speed - drop;// scale the velocity
+		float newspeed = speed - drop; // scale the velocity
 
 		if (newspeed < 0) {
 			newspeed = 0;
@@ -2015,7 +2015,7 @@ are being updated isntead of a full move
 ================
 */
 // rain - take a tracemask as well - we can't use anything out of pm
-void PM_UpdateViewAngles(playerState_t *ps, pmoveExt_t *pmext, usercmd_t *cmd, void (trace) (trace_t *results, const vec3_t start, const vec3_t mins, const vec3_t maxs, const vec3_t end, int passEntityNum, int contentMask), int tracemask) {      //----(SA)	modified
+void PM_UpdateViewAngles(playerState_t *ps, pmoveExt_t *pmext, usercmd_t *cmd, void(trace) (trace_t * results, const vec3_t start, const vec3_t mins, const vec3_t maxs, const vec3_t end, int passEntityNum, int contentMask), int tracemask) {      //----(SA)	modified
 	short   temp;
 	int     i;
 	pmove_t tpm;

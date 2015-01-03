@@ -44,12 +44,12 @@ void CG_Text_SetActiveFont(int font) {
 }
 
 int CG_Text_Width_Ext(const char *text, float scale, int limit, fontInfo_t *font) {
-	const char  *s = text;
-	float       out, useScale = scale * font->glyphScale;
+	const char *s = text;
+	float      out, useScale = scale * font->glyphScale;
 
 	out = 0;
 	if (text) {
-		int         count, len;
+		int count, len;
 
 		len = strlen(text);
 		if (limit > 0 && len > limit) {
@@ -81,14 +81,14 @@ int CG_Text_Width(const char *text, float scale, int limit) {
 }
 
 int CG_Text_Height_Ext(const char *text, float scale, int limit, fontInfo_t *font) {
-	float       max;
-	float       useScale;
-	const char  *s = text;
+	float      max;
+	float      useScale;
+	const char *s = text;
 
 	useScale = scale * font->glyphScale;
 	max      = 0;
 	if (text) {
-		int         len, count;
+		int len, count;
 
 		len = strlen(text);
 		if (limit > 0 && len > limit) {
@@ -134,14 +134,14 @@ void CG_Text_Paint_Centred_Ext(float x, float y, float scalex, float scaley, vec
 }
 
 void CG_Text_Paint_Ext(float x, float y, float scalex, float scaley, vec4_t color, const char *text, float adjust, int limit, int style, fontInfo_t *font) {
-	vec4_t      newColor;
+	vec4_t newColor;
 
 	scalex *= font->glyphScale;
 	scaley *= font->glyphScale;
 
 	if (text) {
-		int         len, count;
-		const char 	*s = text;
+		int        len, count;
+		const char *s = text;
 
 		trap_R_SetColor(color);
 		memcpy(&newColor[0], &color[0], sizeof (vec4_t));
@@ -238,13 +238,13 @@ static float CG_DrawFPS(float y) {
 	previousTimes[index % FPS_FRAMES] = frameTime;
 	index++;
 	if (index > FPS_FRAMES) {
-		char       *s;
-		int        w;
-		int        i, total;
-		int        fps;
-		vec4_t     timerBackground = { 0.16f, 0.2f, 0.17f, 0.8f };
-		vec4_t     timerBorder     = { 0.5f, 0.5f, 0.5f, 0.5f };
-		vec4_t     tclr            = { 0.625f, 0.625f, 0.6f, 1.0f };
+		char   *s;
+		int    w;
+		int    i, total;
+		int    fps;
+		vec4_t timerBackground = { 0.16f, 0.2f, 0.17f, 0.8f };
+		vec4_t timerBorder     = { 0.5f, 0.5f, 0.5f, 0.5f };
+		vec4_t tclr            = { 0.625f, 0.625f, 0.6f, 1.0f };
 
 		// average multiple frames together to smooth changes out a bit
 		total = 0;
@@ -323,9 +323,9 @@ static void CG_DrawTeamInfo(void) {
 	}
 
 	if (cgs.teamLastChatPos != cgs.teamChatPos) {
-		int    i;
-		float  lineHeight = 9.f;
-		int chatWidth = 640 - CHATLOC_X - 100;
+		int   i;
+		float lineHeight = 9.f;
+		int   chatWidth  = 640 - CHATLOC_X - 100;
 
 		if (cg.time - cgs.teamChatMsgTimes[cgs.teamLastChatPos % chatHeight] > cg_teamChatTime.integer) {
 			cgs.teamLastChatPos++;
@@ -749,7 +749,7 @@ static void CG_DrawCenterString(void) {
 
 	for (;; ) {
 		float x, w;
-		char linebuffer[1024];
+		char  linebuffer[1024];
 
 		for (l = 0; l < CP_LINEWIDTH; ++l) {            // NERVE - SMF - added CP_LINEWIDTH
 			if (!start[l] || start[l] == '\n') {
@@ -1149,7 +1149,7 @@ void CG_CheckForCursorHints(void) {
 			cg.cursorHintValue = 0;
 		}
 	} else if (trace.entityNum < MAX_CLIENTS && cg.snap->ps.weapon == WP_KNIFE && dist <= CH_KNIFE_DIST) {
-		vec3_t    pforward, eforward;
+		vec3_t pforward, eforward;
 
 		AngleVectors(cg.snap->ps.viewangles, pforward, NULL, NULL);
 		AngleVectors(tracent->lerpAngles, eforward, NULL, NULL);
@@ -1197,7 +1197,7 @@ static void CG_DrawCrosshairNames(void) {
 
 	// Nico, don't draw if hiding others is enabled and distance to the player is < cg_hideRange
 	if (cg_hideOthers.integer && clientNum != cg.clientNum) {
-		float    dist;
+		float dist;
 
 		dist = Distance((&cg_entities[cg.clientNum])->lerpOrigin, (&cg_entities[clientNum])->lerpOrigin);
 		if (dist < cg_hideRange.integer) {
@@ -1262,7 +1262,7 @@ static void CG_DrawVote(void) {
 	}
 
 	if (cgs.voteTime) {
-		int  sec;
+		int sec;
 
 		Q_strncpyz(str1, BindingFromName("vote yes"), 32);
 		Q_strncpyz(str2, BindingFromName("vote no"), 32);
@@ -1486,8 +1486,8 @@ CG_DrawFlashZoomTransition
 ==============
 */
 static void CG_DrawFlashZoomTransition(void) {
-	float  frac;
-	int    fadeTime;
+	float frac;
+	int   fadeTime;
 
 	if (!cg.snap) {
 		return;
@@ -1523,7 +1523,7 @@ CG_DrawFlashFire
 =================
 */
 static void CG_DrawFlashFire(void) {
-	float  alpha;
+	float alpha;
 
 	if (!cg.snap) {
 		return;
@@ -1803,7 +1803,7 @@ CG_ScreenFade
 =================
 */
 static void CG_ScreenFade(void) {
-	int    msec;
+	int msec;
 
 	if (!cg.fadeRate) {
 		return;
@@ -1952,8 +1952,8 @@ static void CG_DrawPlayerHealthBar(rectDef_t *rect) {
 }
 
 static void CG_DrawWeapRecharge(rectDef_t *rect) {
-	float    barFrac, chargeTime;
-	int      flags;
+	float barFrac, chargeTime;
+	int   flags;
 
 	vec4_t bgcolor = { 1.0f, 1.0f, 1.0f, 0.25f };
 	vec4_t color;
@@ -2333,13 +2333,13 @@ static void CG_Autodemo() {
 
 		// Nico, #fixme: GCC 4.8.2 with optimization says
 		// warning: assuming signed overflow does not occur when assuming that (X + c) < X is always false
-		if (cg.time > cg.rs_time + AUTODEMO_RUN_SAVE_DELAY + 500) {// Nico, wait 500ms to be sure demo recording is finished
+		if (cg.time > cg.rs_time + AUTODEMO_RUN_SAVE_DELAY + 500) { // Nico, wait 500ms to be sure demo recording is finished
 			int          len = 0;
 			fileHandle_t temp, demo;
 			char         *name;
 			int          i = 0;
 
-			len = trap_FS_FOpenFile(va("demos/temp_%i.dm_84", cg.currentdemo), &temp, FS_READ);
+			len  = trap_FS_FOpenFile(va("demos/temp_%i.dm_84", cg.currentdemo), &temp, FS_READ);
 			name = va("demos/%s_%s.dm_84", cgs.rawmapname, cg.runsavename);
 
 			if (trap_FS_FOpenFile(name, &demo, FS_WRITE) < 0) {

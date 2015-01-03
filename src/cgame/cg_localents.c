@@ -252,7 +252,7 @@ void CG_AddFragment(localEntity_t *le) {
 		//	TODO: FIXME: this is not quite right, because it'll become fps dependant - in a bad way.
 		//		the slower the fps, the /more/ smoke there'll be, probably driving the fps lower.
 		if (!(rand() % 5)) {
-			float       alpha;
+			float alpha;
 
 			alpha  = 1.0 - ((float)(cg.time - le->startTime) / (float)(le->endTime - le->startTime));
 			alpha *= 0.25f;
@@ -342,7 +342,7 @@ void CG_AddFragment(localEntity_t *le) {
 	// trace a line from previous position to new position
 	CG_Trace(&trace, le->refEntity.origin, NULL, NULL, newOrigin, -1, CONTENTS_SOLID);
 	if (trace.fraction == 1.0) {
-		int         i;
+		int i;
 
 		// still in free fall
 		VectorCopy(newOrigin, le->refEntity.origin);
@@ -481,7 +481,7 @@ void CG_AddSparkElements(localEntity_t *le) {
 	time = (float)(cg.time - cg.frametime);
 
 	for (;; ) {
-		float   lifeFrac;
+		float lifeFrac;
 
 		// calculate new position
 		BG_EvaluateTrajectory(&le->pos, cg.time, newOrigin, qfalse, -1);
@@ -532,15 +532,15 @@ CG_AddFuseSparkElements
 ================
 */
 void CG_AddFuseSparkElements(localEntity_t *le) {
-	float FUSE_SPARK_WIDTH = 1.0;
-	int           step = 10;
+	float         FUSE_SPARK_WIDTH = 1.0;
+	int           step             = 10;
 	float         time;
 	static vec3_t whiteColor = { 1, 1, 1 };
 
 	time = (float)(le->lastTrailTime);
 
 	while (time < cg.time) {
-		float         lifeFrac;
+		float lifeFrac;
 
 		// calculate new position
 		BG_EvaluateTrajectory(&le->pos, time, le->refEntity.origin, qfalse, -1);
@@ -569,7 +569,7 @@ void CG_AddDebrisElements(localEntity_t *le) {
 	int     t, step = 50;
 
 	for (t = le->lastTrailTime + step; t < cg.time; t += step) {
-		float   lifeFrac;
+		float lifeFrac;
 
 		// calculate new position
 		BG_EvaluateTrajectory(&le->pos, t, newOrigin, qfalse, -1);

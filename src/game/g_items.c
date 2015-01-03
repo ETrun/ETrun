@@ -769,7 +769,7 @@ void FinishSpawningItem(gentity_t *ent) {
 	if (ent->spawnflags & 1) {      // suspended
 		G_SetOrigin(ent, ent->s.origin);
 	} else {
-		vec3_t  dest;
+		vec3_t dest;
 
 		VectorSet(dest, ent->s.origin[0], ent->s.origin[1], ent->s.origin[2] - 4096);
 		trap_Trace(&tr, ent->s.origin, ent->r.mins, maxs, dest, ent->s.number, MASK_SOLID);
@@ -802,7 +802,7 @@ void FinishSpawningItem(gentity_t *ent) {
 
 	// team slaves and targeted items aren't present at start
 	if ((ent->flags & FL_TEAMSLAVE) || ent->targetname) {
-		ent->flags |= FL_NODRAW;
+		ent->flags     |= FL_NODRAW;
 		ent->r.contents = 0;
 		return;
 	}

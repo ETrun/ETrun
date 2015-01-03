@@ -42,8 +42,8 @@ USER INTERFACE MAIN
 #define SPECT_TEAM      2
 // -NERVE - SMF
 
-extern qboolean  g_waitingForKey;
-extern qboolean  g_editingField;
+extern qboolean g_waitingForKey;
+extern qboolean g_editingField;
 
 uiInfo_t uiInfo;
 
@@ -243,8 +243,8 @@ void Text_SetActiveFont(int font) {
 }
 
 int Text_Width_Ext(const char *text, float scale, int limit, fontInfo_t *font) {
-	float       out = 0;
-	const char  *s = text;
+	float      out = 0;
+	const char *s  = text;
 
 	if (text) {
 		int count, len;
@@ -261,7 +261,7 @@ int Text_Width_Ext(const char *text, float scale, int limit, fontInfo_t *font) {
 			} else {
 				glyphInfo_t *glyph = &font->glyphs[(unsigned char)*s];
 
-				out  += glyph->xSkip;
+				out += glyph->xSkip;
 				s++;
 				count++;
 			}
@@ -277,10 +277,10 @@ int Text_Width(const char *text, float scale, int limit) {
 }
 
 int Multiline_Text_Width(const char *text, float scale, int limit) {
-	float       out = 0;
-	float       width, widest = 0;
-	const char  *s    = text;
-	fontInfo_t  *font = &uiInfo.uiDC.Assets.fonts[uiInfo.activeFont];
+	float      out = 0;
+	float      width, widest = 0;
+	const char *s    = text;
+	fontInfo_t *font = &uiInfo.uiDC.Assets.fonts[uiInfo.activeFont];
 
 	if (text) {
 		int count, len;
@@ -304,7 +304,7 @@ int Multiline_Text_Width(const char *text, float scale, int limit) {
 				} else {
 					glyphInfo_t *glyph = &font->glyphs[(unsigned char)*s];
 
-					out  += glyph->xSkip;
+					out += glyph->xSkip;
 				}
 				s++;
 				count++;
@@ -425,7 +425,7 @@ void Text_PaintChar(float x, float y, float w, float h, float scale, float s, fl
 }
 
 void Text_Paint_Ext(float x, float y, float scalex, float scaley, vec4_t color, const char *text, float adjust, int limit, int style, fontInfo_t *font) {
-	vec4_t      newColor;
+	vec4_t newColor;
 
 	scalex *= font->glyphScale;
 	scaley *= font->glyphScale;
@@ -493,9 +493,9 @@ void Text_Paint(float x, float y, float scale, vec4_t color, const char *text, f
 }
 
 void Text_PaintWithCursor(float x, float y, float scale, vec4_t color, const char *text, int cursorPos, char cursor, int limit, int style) {
-	vec4_t      newColor;
-	float       useScale;
-	fontInfo_t  *font = &uiInfo.uiDC.Assets.fonts[uiInfo.activeFont];
+	vec4_t     newColor;
+	float      useScale;
+	fontInfo_t *font = &uiInfo.uiDC.Assets.fonts[uiInfo.activeFont];
 
 	useScale = scale * font->glyphScale;
 
@@ -583,9 +583,9 @@ void Text_PaintWithCursor(float x, float y, float scale, vec4_t color, const cha
 
 static void Text_Paint_Limit(float *maxX, float x, float y, float scale, vec4_t color, const char *text, float adjust, int limit) {
 	if (text) {
-		const char *s  = text;
-		float      max = *maxX;
-		fontInfo_t *font = &uiInfo.uiDC.Assets.fonts[uiInfo.activeFont];
+		const char *s       = text;
+		float      max      = *maxX;
+		fontInfo_t *font    = &uiInfo.uiDC.Assets.fonts[uiInfo.activeFont];
 		float      useScale = scale * font->glyphScale;
 		int        len, count = 0;
 		vec4_t     newColor;
@@ -1799,7 +1799,7 @@ static void UI_LoadProfiles() {
 	dirptr              = dirlist;
 
 	for (i = 0; i < numdirs; ++i) {
-		int  dirlen;
+		int dirlen;
 
 		dirlen = strlen(dirptr) + 1;
 
@@ -1873,7 +1873,7 @@ static void UI_LoadMovies() {
 	uiInfo.movieCount = trap_FS_GetFileList("video", "roq", movielist, 4096);
 
 	if (uiInfo.movieCount) {
-		int  i;
+		int i;
 
 		if (uiInfo.movieCount > MAX_MOVIES) {
 			uiInfo.movieCount = MAX_MOVIES;
@@ -2041,9 +2041,9 @@ void UI_RunMenuScript(char **args) {
 	const char *name, *name2;
 
 	if (String_Parse(args, &name)) {
-		char       *s;
-		char       buff[1024];
-		menuDef_t  *menu;
+		char      *s;
+		char      buff[1024];
+		menuDef_t *menu;
 
 		if (Q_stricmp(name, "StartServer") == 0) {
 			trap_Cvar_Set("ui_connecting", "1");
@@ -2289,7 +2289,7 @@ void UI_RunMenuScript(char **args) {
 				Q_strncpyz(name, Info_ValueForKey(buff, "hostname"), MAX_NAME_LENGTH);
 				Q_strncpyz(addr, Info_ValueForKey(buff, "addr"), MAX_NAME_LENGTH);
 				if (name[0] != '\0' && addr[0] != '\0') {
-					int  res;
+					int res;
 
 					res = trap_LAN_AddServer(AS_FAVORITES, name, addr);
 					if (res == 0) {
@@ -2325,7 +2325,7 @@ void UI_RunMenuScript(char **args) {
 				Q_strncpyz(name, UI_Cvar_VariableString("ui_favoriteName"), MAX_NAME_LENGTH);
 				Q_strncpyz(addr, UI_Cvar_VariableString("ui_favoriteAddress"), MAX_NAME_LENGTH);
 				if (name[0] != '\0' && addr[0] != '\0') {
-					int  res;
+					int res;
 
 					res = trap_LAN_AddServer(AS_FAVORITES, name, addr);
 					if (res == 0) {
@@ -3620,7 +3620,7 @@ const char *UI_FeederItemText(float feederID, int index, int column, qhandle_t *
 		return "";
 	} else if (feederID == FEEDER_SERVERS) {
 		if (index >= 0 && index < uiInfo.serverStatus.numDisplayServers) {
-			int ping, antilag, needpass, serverload;
+			int         ping, antilag, needpass, serverload;
 			static char info[MAX_STRING_CHARS];
 			static char clientBuff[32];
 			static char pingstr[10];
@@ -3788,7 +3788,7 @@ void UI_FeederSelection(float feederID, int index) {
 			trap_Cvar_Set("ui_currentNetMap", va("%d", actual));
 		}
 	} else if (feederID == FEEDER_SERVERS) {
-		const char *mapName;
+		const char  *mapName;
 		static char info[MAX_STRING_CHARS];
 
 		uiInfo.serverStatus.currentServer = index;
@@ -3993,7 +3993,7 @@ void _UI_Init(void) {
 
 	trap_Milliseconds();
 
-	uiInfo.teamCount      = 0;
+	uiInfo.teamCount = 0;
 
 	UI_LoadMenus("ui/menus.txt", qfalse);
 
@@ -4032,7 +4032,7 @@ UI_KeyEvent
 */
 void _UI_KeyEvent(int key, qboolean down) {
 	if (Menu_Count() > 0) {
-		menuDef_t       *menu = Menu_GetFocused();
+		menuDef_t       *menu          = Menu_GetFocused();
 		static qboolean bypassKeyClear = qfalse;
 
 		if (menu) {

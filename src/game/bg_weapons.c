@@ -284,7 +284,7 @@ void PM_BeginWeaponChange(int oldweapon, int newweapon, qboolean reload) {      
 		break;
 	case WP_SILENCER:
 		if (newweapon == weapAlts[oldweapon]) {
-			switchtime = 1000;
+			switchtime    = 1000;
 			altSwitchAnim = qtrue;
 		}
 		break;
@@ -295,7 +295,7 @@ void PM_BeginWeaponChange(int oldweapon, int newweapon, qboolean reload) {      
 		break;
 	case WP_SILENCED_COLT:
 		if (newweapon == weapAlts[oldweapon]) {
-			switchtime = 1000;
+			switchtime    = 1000;
 			altSwitchAnim = qtrue;
 		}
 		break;
@@ -887,7 +887,7 @@ void PM_AdjustAimSpreadScale(void) {
 	}
 
 	if (wpnScale) {
-		int i;
+		int   i;
 		float viewchange = 0;
 
 		// JPW NERVE crouched players recover faster (mostly useful for snipers)
@@ -1576,7 +1576,7 @@ void PM_Weapon(void) {
 	ammoNeeded = GetAmmoTableData(pm->ps->weapon)->uses;
 
 	if (pm->ps->weapon) {
-		int      ammoAvailable;
+		int ammoAvailable;
 
 		ammoAvailable = PM_WeaponAmmoAvailable(pm->ps->weapon);
 

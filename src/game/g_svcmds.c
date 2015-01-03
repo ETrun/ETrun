@@ -496,8 +496,8 @@ G_GetPlayerByName
 ==================
 */
 gclient_t *G_GetPlayerByName(char *name) {
-	int       i;
-	char      cleanName[64];
+	int  i;
+	char cleanName[64];
 
 	// make sure server is running
 	if (!G_Is_SV_Running()) {

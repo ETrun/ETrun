@@ -253,7 +253,7 @@ G_CullPointAndRadius - returns true if not culled
 ========================
 */
 static qboolean G_CullPointAndRadius(vec3_t pt, float radius) {
-	int     i;
+	int i;
 
 	// check against frustum planes
 	for (i = 0 ; i < 4 ; ++i) {

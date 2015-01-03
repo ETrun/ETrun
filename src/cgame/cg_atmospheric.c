@@ -700,9 +700,9 @@ void CG_EffectParse(const char *effectstr) {
 void CG_AddAtmosphericEffects() {
 	// Add atmospheric effects (e.g. rain, snow etc.) to view
 
-	int                      curr, max, currnum;
-	vec3_t                   currvec;
-	float                    currweight;
+	int    curr, max, currnum;
+	vec3_t currvec;
+	float  currweight;
 
 	if (cg_atmFx.numDrops <= 0 || cg_atmFx.numEffectShaders == 0 || cg_atmosphericEffects.value <= 0) {
 		return;

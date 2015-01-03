@@ -258,11 +258,11 @@ static void CG_SoundParseSounds(char *filename, char *buffer) {
 	text          = &buffer;
 
 	// Nico, init vars
-	sound.soundList = NULL;
-	sound.index = 0;
-	sound.channel = 0;
+	sound.soundList   = NULL;
+	sound.index       = 0;
+	sound.channel     = 0;
 	sound.attenuation = 0;
-	sound.numSounds = 0;
+	sound.numSounds   = 0;
 
 	for (;; ) {
 		char *token;
@@ -537,15 +537,15 @@ qboolean CG_SaveSpeakersToScript(void) {
 	trap_FS_Write(s, strlen(s), fh);
 
 	for (i = 0; i < BG_NumScriptSpeakers(); ++i) {
-		char filenameStr[96] = "";
-		char originStr[96];
-		char targetnameStr[56] = "";
-		char loopedStr[32];
-		char broadcastStr[32];
-		char waitStr[32]   = "";
-		char randomStr[32] = "";
-		char volumeStr[32] = "";
-		char rangeStr[32]  = "";
+		char         filenameStr[96] = "";
+		char         originStr[96];
+		char         targetnameStr[56] = "";
+		char         loopedStr[32];
+		char         broadcastStr[32];
+		char         waitStr[32]   = "";
+		char         randomStr[32] = "";
+		char         volumeStr[32] = "";
+		char         rangeStr[32]  = "";
 		bg_speaker_t *speaker;
 
 		speaker = BG_GetScriptSpeaker(i);
@@ -632,10 +632,10 @@ void CG_SetViewanglesForSpeakerEditor(void) {
 }
 
 static void CG_RenderScriptSpeakers(void) {
-	int          i, j, closest;
-	float        dist, minDist;
-	vec3_t       vec;
-	refEntity_t  re;
+	int         i, j, closest;
+	float       dist, minDist;
+	vec3_t      vec;
+	refEntity_t re;
 
 	closest = -1;
 	minDist = Square(8.f);
@@ -1020,7 +1020,7 @@ void CG_SpeakerEditor_RenderDropdown(panel_button_t *button) {
 	                  button->font->font);
 
 	if (button == BG_PanelButtons_GetFocusButton()) {
-		int       i;
+		int i;
 
 		memcpy(&rect, &button->rect, sizeof (rect));
 
@@ -2023,7 +2023,7 @@ static void CG_PlayScriptSpeaker(bg_speaker_t *speaker, qboolean global) {
 }
 
 void CG_AddScriptSpeakers(void) {
-	int          i;
+	int i;
 
 	if (cg.editingSpeakers) {
 		CG_RenderScriptSpeakers();

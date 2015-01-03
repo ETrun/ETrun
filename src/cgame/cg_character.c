@@ -64,8 +64,8 @@ static qboolean CG_ParseHudHeadConfig(const char *filename, animation_t *hha) {
 	text_p = bigTextBuffer;
 
 	for (i = 0 ; i < MAX_HD_ANIMATIONS ; ++i) {
-		float        fps;
-		char         *token;
+		float fps;
+		char  *token;
 
 		token = COM_Parse(&text_p);     // first frame
 		if (!token) {
@@ -340,8 +340,8 @@ qboolean CG_RegisterCharacter(const char *characterFile, bg_character_t *charact
 	if (!character->skin) {
 		CG_Printf(S_COLOR_YELLOW "WARNING: failed to register skin '%s' referenced from '%s'\n", filename, characterFile);
 	} else {
-		char              accessoryname[MAX_QPATH];
-		int               i;
+		char accessoryname[MAX_QPATH];
+		int  i;
 
 		for (i = 0; i < cg_numAccessories; ++i) {
 			if (trap_R_GetSkinModel(character->skin, cg_accessories[i].type, accessoryname)) {

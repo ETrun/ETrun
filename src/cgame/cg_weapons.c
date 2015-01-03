@@ -159,7 +159,7 @@ void CG_MachineGunEjectBrass(centity_t *cent) {
 	localEntity_t *le;
 	refEntity_t   *re;
 	vec3_t        velocity, xvelocity;
-	vec3_t        offset = {0}, xoffset;
+	vec3_t        offset     = { 0 }, xoffset;
 	float         waterScale = 1.0f;
 	vec3_t        v[3];
 
@@ -428,7 +428,7 @@ void CG_PyroSmokeTrail(centity_t *ent) {
 
 	// drop fire trail sprites
 	for ( ; t <= ent->trailTime ; t += step) {
-		float         rnd;
+		float rnd;
 
 		BG_EvaluateTrajectory(&es->pos, t, lastPos, qfalse, es->effect2Time);
 
@@ -808,7 +808,7 @@ static qboolean CG_ParseWeaponConfig(const char *filename, weaponInfo_t *wi) {
 	}
 
 	for (i = 0 ; i < MAX_WP_ANIMATIONS  ; ++i) {
-		float  fps;
+		float fps;
 
 		token = COM_Parse(&text_p);     // first frame
 		if (!token) {
@@ -1563,7 +1563,7 @@ static void CG_RunWeapLerpFrame(weaponInfo_t *wi, lerpFrame_t *lf, int newAnimat
 	// if we have passed the current frame, move it to
 	// oldFrame and calculate a new frame
 	if (cg.time >= lf->frameTime) {
-		int         f;
+		int f;
 
 		lf->oldFrame      = lf->frame;
 		lf->oldFrameTime  = lf->frameTime;
@@ -1748,7 +1748,7 @@ static void CG_CalculateWeaponPosition(vec3_t origin, vec3_t angles) {
 	if ((!(cg.predictedPlayerState.eFlags & EF_MOUNTEDTANK)) && (cg.predictedPlayerState.weapon != WP_MORTAR_SET) && (cg.predictedPlayerState.weapon != WP_MOBILE_MG42_SET)) {
 		float fracsin;
 
-		scale = 80;
+		scale          = 80;
 		fracsin        = sin(cg.time * 0.001);
 		angles[ROLL]  += scale * fracsin * 0.01;
 		angles[YAW]   += scale * fracsin * 0.01;
@@ -1806,8 +1806,8 @@ void CG_AddPlayerWeapon(refEntity_t *parent, playerState_t *ps, centity_t *cent)
 	centity_t    *nonPredictedCent;
 	qboolean     firing; // Ridah
 	qboolean     akimboFire = qfalse;
-	qboolean drawpart;
-	qboolean isPlayer;
+	qboolean     drawpart;
+	qboolean     isPlayer;
 
 	BG_GetPlayerClassInfo(cgs.clientinfo[cent->currentState.clientNum].team, cgs.clientinfo[cent->currentState.clientNum].cls);
 
@@ -1991,7 +1991,7 @@ void CG_AddPlayerWeapon(refEntity_t *parent, playerState_t *ps, centity_t *cent)
 
 	if (ps) {
 		qboolean spunpart;
-		int i;
+		int      i;
 
 		for (i = W_PART_1; i < W_MAX_PARTS; ++i) {
 			if ((weaponNum == WP_MORTAR_SET && (i == W_PART_4 || i == W_PART_5)) &&
@@ -4213,7 +4213,7 @@ void CG_AddSparks(vec3_t origin, vec3_t dir, int speed, int duration, int count,
 	int           i;
 
 	for (i = 0; i < count; ++i) {
-		refEntity_t   *re;
+		refEntity_t *re;
 
 		le = CG_AllocLocalEntity();
 		re = &le->refEntity;
@@ -4294,8 +4294,8 @@ void CG_AddDebris(vec3_t origin, vec3_t dir, int speed, int duration, int count)
 	int           i;
 
 	for (i = 0; i < count; ++i) {
-		refEntity_t   *re;
-		float         timeAdd;
+		refEntity_t *re;
+		float       timeAdd;
 
 		le = CG_AllocLocalEntity();
 		re = &le->refEntity;
@@ -4367,13 +4367,13 @@ ClientNum is a dummy field used to define what sort of effect to spawn
 */
 #define MAX_IMPACT_SOUNDS 5
 void CG_MissileHitWall(int weapon, int clientNum, vec3_t origin, vec3_t dir, int surfFlags) {   //	(SA) modified to send missilehitwall surface parameters
-	qhandle_t     mark = 0;
-	sfxHandle_t   sfx = 0, sfx2 = 0;
-	int           i, j, markDuration = -1, volume = 127;
-	trace_t       trace;
-	vec3_t        tmpv, tmpv2, sprOrg, sprVel;
-	float         radius = 32, sfx2range = 0;
-	vec4_t        projection, markOrigin;
+	qhandle_t   mark = 0;
+	sfxHandle_t sfx  = 0, sfx2 = 0;
+	int         i, j, markDuration = -1, volume = 127;
+	trace_t     trace;
+	vec3_t      tmpv, tmpv2, sprOrg, sprVel;
+	float       radius = 32, sfx2range = 0;
+	vec4_t      projection, markOrigin;
 
 	if (surfFlags & SURF_SKY) {
 		return;
@@ -4488,12 +4488,12 @@ void CG_MissileHitWall(int weapon, int clientNum, vec3_t origin, vec3_t dir, int
 		break;
 
 	case WP_MAPMORTAR:
-		sfx           = cgs.media.sfx_rockexp;
-		sfx2          = cgs.media.sfx_rockexpDist;
-		sfx2range     = 1200;
-		mark          = cgs.media.burnMarkShader;
-		markDuration  = cg_markTime.integer * 3;
-		radius        = 96; // ydnar: bigger mark radius
+		sfx          = cgs.media.sfx_rockexp;
+		sfx2         = cgs.media.sfx_rockexpDist;
+		sfx2range    = 1200;
+		mark         = cgs.media.burnMarkShader;
+		markDuration = cg_markTime.integer * 3;
+		radius       = 96;  // ydnar: bigger mark radius
 
 		VectorScale(dir, 16, sprVel);
 		if (CG_PointContents(origin, 0) & CONTENTS_WATER) {
@@ -4528,12 +4528,12 @@ void CG_MissileHitWall(int weapon, int clientNum, vec3_t origin, vec3_t dir, int
 
 	case WP_DYNAMITE:
 	case WP_TRIPMINE:
-		sfx           = cgs.media.sfx_dynamiteexp;
-		sfx2          = cgs.media.sfx_dynamiteexpDist;
-		sfx2range     = 400;
-		mark          = cgs.media.burnMarkShader;
-		markDuration  = cg_markTime.integer * 3;
-		radius        = 128; // ydnar: bigger mark radius
+		sfx          = cgs.media.sfx_dynamiteexp;
+		sfx2         = cgs.media.sfx_dynamiteexpDist;
+		sfx2range    = 400;
+		mark         = cgs.media.burnMarkShader;
+		markDuration = cg_markTime.integer * 3;
+		radius       = 128;  // ydnar: bigger mark radius
 
 // JPW NERVE
 // biggie dynamite explosions that mean it -- dynamite is biggest explode, so it gets extra crap thrown on
@@ -4594,10 +4594,10 @@ void CG_MissileHitWall(int weapon, int clientNum, vec3_t origin, vec3_t dir, int
 			sfx  = cgs.media.sfx_rockexp;
 			sfx2 = cgs.media.sfx_rockexpDist;
 		}
-		sfx2range     = 400;
-		mark          = cgs.media.burnMarkShader;
-		markDuration  = cg_markTime.integer * 3;
-		radius        = 64;
+		sfx2range    = 400;
+		mark         = cgs.media.burnMarkShader;
+		markDuration = cg_markTime.integer * 3;
+		radius       = 64;
 
 		// Ridah, explosion sprite animation
 		VectorMA(origin, 16, dir, sprOrg);
@@ -4683,14 +4683,14 @@ CG_MissileHitWallSmall
 ==============
 */
 void CG_MissileHitWallSmall(vec3_t origin, vec3_t dir) {
-	qhandle_t     mark   = 0;
-	sfxHandle_t   sfx    = 0;
-	float         radius = 80;
-	vec3_t        sprOrg, sprVel;
-	vec4_t        projection, color;
+	qhandle_t   mark   = 0;
+	sfxHandle_t sfx    = 0;
+	float       radius = 80;
+	vec3_t      sprOrg, sprVel;
+	vec4_t      projection, color;
 
-	sfx           = cgs.media.sfx_rockexp;
-	mark          = cgs.media.burnMarkShader;
+	sfx  = cgs.media.sfx_rockexp;
+	mark = cgs.media.burnMarkShader;
 
 	// Ridah, explosion sprite animation
 	VectorMA(origin, 16, dir, sprOrg);
@@ -4959,7 +4959,7 @@ void CG_CalcMuzzlePoint(int entityNum, vec3_t muzzle) {
 
 		VectorCopy(tank->mountedMG42Flash.origin, muzzle);
 	} else if (cent->currentState.eFlags & EF_AAGUN_ACTIVE) {
-		int       num;
+		int num;
 
 		// find the mg42 we're attached to
 		for (num = 0; num < cg.snap->numEntities; ++num) {
@@ -5015,7 +5015,7 @@ Renders bullet effects.
 */
 void CG_Bullet(vec3_t end, int sourceEntityNum, qboolean flesh, int fleshEntityNum, int otherEntNum2, float waterfraction, int seed) {
 	trace_t   trace, trace2;
-	vec3_t    start = {0};
+	vec3_t    start = { 0 };
 	centity_t *cent;
 
 	cent = &cg_entities[fleshEntityNum];
@@ -5054,7 +5054,7 @@ void CG_Bullet(vec3_t end, int sourceEntityNum, qboolean flesh, int fleshEntityN
 	// if the shooter is currently valid, calc a source point and possibly
 	// do trail effects
 	if (cg_tracerChance.value > 0) {
-		int       sourceContentType, destContentType;
+		int sourceContentType, destContentType;
 
 		CG_CalcMuzzlePoint(sourceEntityNum, start);
 
@@ -5112,7 +5112,7 @@ void CG_Bullet(vec3_t end, int sourceEntityNum, qboolean flesh, int fleshEntityN
 
 		// puff out the front (more dust no blood)
 		for (i = 0; i < 10; ++i) {
-			float  rnd;
+			float rnd;
 
 			rnd = random();
 			VectorScale(smokedir, -35.0 + random() * 25, tmpv);
@@ -5159,7 +5159,7 @@ void CG_Bullet(vec3_t end, int sourceEntityNum, qboolean flesh, int fleshEntityN
 				CG_MissileHitWall(fromweap, 2, end2, dir, 0);
 				CG_MissileHitWall(fromweap, 1, end, trace.plane.normal, 0);
 			} else {
-				vec3_t    dir;
+				vec3_t dir;
 
 				// Arnout: but this does!
 				VectorSubtract(end, start, dir);

@@ -116,7 +116,7 @@ void Weapon_Knife(gentity_t *ent) {
 	trace_t   tr;
 	gentity_t *traceEnt, *tent;
 	int       damage, mod = MOD_KNIFE;
-	vec3_t end;
+	vec3_t    end;
 
 	AngleVectors(ent->client->ps.viewangles, forward, right, up);
 	CalcMuzzlePoint(ent, ent->s.weapon, right, up, muzzleTrace);
@@ -341,16 +341,16 @@ void Weapon_MagicAmmo(gentity_t *ent) {
 
 // Arnout: crude version of G_RadiusDamage to see if the dynamite can damage a func_constructible
 int EntsThatRadiusCanDamage(vec3_t origin, float radius, int *damagedList) {
-	int       entityList[MAX_GENTITIES];
-	int       numListedEntities;
-	vec3_t    mins, maxs;
-	vec3_t    v;
-	int       i, e;
-	float     boxradius;
-	vec3_t    dest;
-	trace_t   tr;
-	vec3_t    midpoint;
-	int       numDamaged = 0;
+	int     entityList[MAX_GENTITIES];
+	int     numListedEntities;
+	vec3_t  mins, maxs;
+	vec3_t  v;
+	int     i, e;
+	float   boxradius;
+	vec3_t  dest;
+	trace_t tr;
+	vec3_t  midpoint;
+	int     numDamaged = 0;
 
 	if (radius < 1) {
 		radius = 1;
@@ -1439,7 +1439,7 @@ void Weapon_Engineer(gentity_t *ent) {
 				G_PrintClientSpammyCenterPrint(ent - g_entities, "Defusing dynamite...");
 
 				if (traceEnt->health >= 248) {
-					int      scored = 0;
+					int      scored     = 0;
 					qboolean defusedObj = qfalse;
 
 					traceEnt->health = 255;
@@ -1834,7 +1834,7 @@ EmitterCheck
 ==============
 */
 void EmitterCheck(gentity_t *ent, gentity_t *attacker, trace_t *tr) {
-	vec3_t    origin;
+	vec3_t origin;
 
 	VectorCopy(tr->endpos, origin);
 	SnapVectorTowards(tr->endpos, attacker->s.origin);

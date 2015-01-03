@@ -295,8 +295,8 @@ void G_ExplodeMissile(gentity_t *ent) {
 //bani - #238
 		} else if (ent->s.weapon == WP_DYNAMITE && (ent->etpro_misc_1 & 1)) {       // do some scoring
 			// check if dynamite is in trigger_objective_info field
-			vec3_t    mins, maxs;
-			int       i, num, touch[MAX_GENTITIES];
+			vec3_t mins, maxs;
+			int    i, num, touch[MAX_GENTITIES];
 
 			ent->free = NULL; // Gordon: no defused tidy up if we exploded
 
@@ -487,7 +487,7 @@ void G_RunMissile(gentity_t *ent) {
 	trap_LinkEntity(ent);
 
 	if (tr.fraction != 1) {
-		int     impactDamage;
+		int impactDamage;
 
 		if (level.tracemapLoaded &&
 		    (ent->s.weapon == WP_MORTAR_SET ||
@@ -650,10 +650,10 @@ void G_BurnTarget(gentity_t *self, gentity_t *body, qboolean directhit) {
 }
 
 void G_FlameDamage(gentity_t *self, gentity_t *ignoreent) {
-	int       entityList[MAX_GENTITIES];
-	int       i, e, numListedEntities;
-	float     radius, boxradius;
-	vec3_t    mins, maxs;
+	int    entityList[MAX_GENTITIES];
+	int    i, e, numListedEntities;
+	float  radius, boxradius;
+	vec3_t mins, maxs;
 
 	radius    = self->speed;
 	boxradius = 1.41421356 * radius; // radius * sqrt(2) for bounding box enlargement
@@ -830,10 +830,10 @@ void DynaSink(gentity_t *self) {
 
 void DynaFree(gentity_t *self) {
 	// Gordon - see if the dynamite was planted near a constructable object that would have been destroyed
-	int       entityList[MAX_GENTITIES];
-	int       numListedEntities;
-	int       e;
-	vec3_t    org;
+	int    entityList[MAX_GENTITIES];
+	int    numListedEntities;
+	int    e;
+	vec3_t org;
 
 	self->free = NULL;
 

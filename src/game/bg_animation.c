@@ -382,7 +382,7 @@ BG_AnimationIndexForString
 =================
 */
 static int BG_AnimationIndexForString(char *string, animModelInfo_t *animModelInfo) {
-	int         i, hash;
+	int i, hash;
 
 	hash = BG_StringHashValue(string);
 
@@ -505,7 +505,7 @@ void BG_ParseConditionBits(char **text_pp, animStringItem_t *stringTable, int co
 	memset(tempBits, 0, sizeof (tempBits));
 
 	while (!endFlag) {
-		char     *token;
+		char *token;
 
 		token = COM_ParseExt(text_pp, qfalse);
 		if (!token || !token[0]) {
@@ -605,10 +605,10 @@ BG_ParseConditions
 =================
 */
 qboolean BG_ParseConditions(char **text_pp, animScriptItem_t *scriptItem) {
-	int  conditionValue[2] = {0};
+	int conditionValue[2] = { 0 };
 
 	for (;; ) {
-		int conditionIndex;
+		int  conditionIndex;
 		char *token;
 
 		token = COM_ParseExt(text_pp, qfalse);
@@ -832,7 +832,7 @@ void BG_AnimParseAnimScript(animModelInfo_t *animModelInfo, animScriptData_t *sc
 	// read in the weapon defines
 	for (;; ) {
 		char *token;
-		int newParseMode;
+		int  newParseMode;
 
 		token = COM_Parse(&text_p);
 		if (!token || !*token) {

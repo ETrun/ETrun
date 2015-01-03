@@ -206,7 +206,7 @@ void CG_FireFlameChunks(centity_t *cent, vec3_t origin, vec3_t angles, float spe
 	    (centInfo->lastFlameChunk && centInfo->lastFiring == firing)) {
 		vec3_t lastFwd, lastUp, lastRight, lastOrg;
 		double timeInc, backLerp, fracInc, ft;
-		int t, numFrameChunks;
+		int    t, numFrameChunks;
 
 		AngleVectors(centInfo->lastAngles, lastFwd, lastRight, lastUp);
 		VectorCopy(centInfo->lastOrigin, lastOrg);
@@ -574,7 +574,7 @@ void CG_MoveFlameChunk(flameChunk_t *f) {
 
 	VectorCopy(f->baseOrg, sOrg);
 	while (f->velSpeed > 1 && f->baseOrgTime != cg.time) {
-		float   dot;
+		float dot;
 
 		CG_FlameCalcOrg(f, cg.time, newOrigin);
 

@@ -386,8 +386,8 @@ void CG_AddParticleToScene(cparticle_t *p, vec3_t org) {
 		verts[3].modulate[2] = 255;
 		verts[3].modulate[3] = 255;
 	} else if (p->type == P_SMOKE || p->type == P_SMOKE_IMPACT) {         // create a front rotating facing polygon
-		float      invratio;
-		vec3_t     rright2, rup2;
+		float  invratio;
+		vec3_t rright2, rup2;
 
 		if (p->type == P_SMOKE_IMPACT && VectorDistanceSquared(cg.snap->ps.origin, org) > SQR(1024)) {
 			return;
@@ -786,8 +786,8 @@ void CG_AddParticles(void) {
 	for (p = active_particles ; p ; p = next) {
 		float alpha, time;
 
-		next = p->next;
-		time = (cg.time - p->time) * 0.001;
+		next  = p->next;
+		time  = (cg.time - p->time) * 0.001;
 		alpha = p->alpha + time * p->alphavel;
 		if (alpha <= 0) {   // faded out
 			p->next        = free_particles;

@@ -84,8 +84,8 @@ void CG_DamageFeedback(int yawByte, int pitchByte, int damage) {
 		cg.v_dmg_roll  = 0;
 		cg.v_dmg_pitch = -kick;
 	} else {
-		float        left, front, up, dist, yaw, pitch;
-		vec3_t       dir, angles;
+		float  left, front, up, dist, yaw, pitch;
+		vec3_t dir, angles;
 
 		// positional
 		pitch = pitchByte / 255.0 * 360;

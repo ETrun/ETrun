@@ -112,7 +112,7 @@ void CG_FilledBar(float x, float y, float w, float h, float *startColor, float *
 
 	// background
 	if (flags & BAR_BG) {
-		int    indent          = BAR_BORDERSIZE;
+		int indent = BAR_BORDERSIZE;
 
 		// draw background at full size and shrink the remaining box to fit inside with a border.  (alternate border may be specified by a BAR_BGSPACING_xx)
 		CG_FillRect(x,

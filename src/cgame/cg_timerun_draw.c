@@ -6,7 +6,7 @@
  * @author Nico
  */
 void CG_DrawCheckpoints(void) {
-	int    x = 0, y = 0;
+	int x = 0, y = 0;
 
 	if (!cg_drawCheckPoints.integer) {
 		return;
@@ -442,7 +442,7 @@ void CG_DrawCGaz(void) {
 			// if getting knocked back, no friction
 			if (!(ps->pm_flags & PMF_TIME_KNOCKBACK)) {
 				float control = speed < pm_stopspeed ? pm_stopspeed : speed;
-				drop   += control * pm_friction * pmove_msec.integer / 1000;
+				drop += control * pm_friction * pmove_msec.integer / 1000;
 			}
 			newspeed = speed - drop;
 			if (newspeed < 0) {
@@ -760,9 +760,9 @@ void CG_DrawClock(float x, float y, float scale, qboolean shadowed) {
  * @author Nico
  */
 void CG_DrawBannerPrint(void) {
-	char  *start    = cg.bannerPrint;
-	int   l         = 0;
-	int   y         = 20;
+	char  *start = cg.bannerPrint;
+	int   l      = 0;
+	int   y      = 20;
 	float *color;
 	float sizex     = 0.2f, sizey = 0.2f;
 	char  lastcolor = COLOR_WHITE;

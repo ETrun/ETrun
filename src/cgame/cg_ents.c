@@ -707,7 +707,7 @@ static void CG_Item(centity_t *cent) {
 
 	// highlighting items the player looks at
 	if (cg_drawCrosshairPickups.integer) {
-		float         highlightFadeScale = 1.0f;
+		float highlightFadeScale = 1.0f;
 
 		if (cg_drawCrosshairPickups.integer == 2) {    // '2' is 'force highlights'
 			highlight = qtrue;
@@ -1157,7 +1157,7 @@ static void CG_Corona(centity_t *cent) {
 	trace_t  tr;
 	int      r, g, b;
 	int      dli;
-	qboolean behind  = qfalse, toofar  = qfalse;
+	qboolean behind = qfalse, toofar = qfalse;
 
 	float  dot, dist;
 	vec3_t dir;
@@ -1220,7 +1220,7 @@ static void CG_SpotlightEfx(centity_t *cent) {
 	splinetarget = cent->overheatTime;
 
 	if (!splinetarget) {
-		char   *cs;
+		char *cs;
 
 		cs                 = (char *)CG_ConfigString(CS_SPLINES + cent->currentState.density);
 		cent->overheatTime = splinetarget = CG_LoadCamera(va("cameras/%s.camera", cs));
@@ -1638,7 +1638,7 @@ static void CG_Prop(centity_t *cent) {
 		ent.oldframe = ent.frame;
 		ent.backlerp = 0;
 	} else {
-		float         scale;
+		float scale;
 
 		VectorCopy(cg.refdef_current->vieworg, ent.origin);
 		VectorCopy(cg.refdefViewAngles, angles);
@@ -2460,7 +2460,7 @@ void CG_AttachBitsToTank(centity_t *tank, refEntity_t *mg42base, refEntity_t *mg
 	}
 
 	if (tank->tankframe != cg.clientFrame) {
-		int         i;
+		int i;
 
 		tank->tankframe = cg.clientFrame;
 

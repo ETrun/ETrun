@@ -529,8 +529,8 @@ qboolean G_API_getPlayerCheckpoints(char *result, gentity_t *ent, char *userName
  */
 static void *randommapHandler(void *data) {
 	int            code;
-	struct query_s *queryStruct       = (struct query_s *)data;
-	gentity_t      *ent               = queryStruct->ent; // Nico, note: this is NULL is randomMap was asked by server (timelimit)
+	struct query_s *queryStruct = (struct query_s *)data;
+	gentity_t      *ent         = queryStruct->ent;       // Nico, note: this is NULL is randomMap was asked by server (timelimit)
 	fileHandle_t   f;
 
 	code = API_query(queryStruct->cmd, queryStruct->result, queryStruct->query, sizeof (queryStruct->query));
@@ -887,7 +887,7 @@ static const api_glue_t APICommands[] =
  * Takes a command string as argument and returns the associated handler if any, NULL otherwise
  */
 static handler_t getHandlerForCommand(char *cmd) {
-	unsigned int     i, cCommands = sizeof (APICommands) / sizeof (APICommands[0]);
+	unsigned int i, cCommands = sizeof (APICommands) / sizeof (APICommands[0]);
 
 	if (!cmd) {
 		return NULL;
@@ -918,7 +918,7 @@ qboolean G_AsyncAPICall(char *command, char *result, gentity_t *ent, int count, 
 	int            returnCode = 0;
 	void           *(*handler)(void *) = NULL;
 	va_list        ap;
-	int            i    = 0;
+	int            i = 0;
 
 	if (api_module == NULL || API_query == NULL) {
 		LDE("%s\n", "API module is not loaded");
@@ -1032,7 +1032,7 @@ qboolean G_SyncAPICall(char *command, char *result, gentity_t *ent, int count, .
 	struct query_s *queryStruct;
 	void           *(*handler)(void *) = NULL;
 	va_list        ap;
-	int            i    = 0;
+	int            i = 0;
 
 	if (api_module == NULL || API_query == NULL) {
 		LDE("%s\n", "API module is not loaded");

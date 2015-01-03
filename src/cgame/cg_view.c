@@ -321,7 +321,7 @@ void CG_KickAngles(void) {
 	// this code is frametime-dependant, so split it up into small chunks
 	cg.recoilPitchAngle = 0;
 	for (t = cg.frametime; t > 0; t -= STEP) {
-		float        ft;
+		float ft;
 
 		if (t > STEP) {
 			frametime = STEP;
@@ -777,10 +777,10 @@ Fixed fov at intermissions, otherwise account for fov variable and zooms.
 #define WAVE_FREQUENCY  0.4
 
 static int CG_CalcFov(void) {
-	float        x;
-	int          contents;
-	float        fov_x, fov_y;
-	int          inwater;
+	float x;
+	int   contents;
+	float fov_x, fov_y;
+	int   inwater;
 
 	CG_Zoom();
 
@@ -801,7 +801,7 @@ static int CG_CalcFov(void) {
 
 	if (!cg.renderingThirdPerson || developer.integer) {
 		static float lastfov = 90;      // for transitions back from zoomed in modes
-		float zoomFov, f;
+		float        zoomFov, f;
 
 		// account for zooms
 		if (cg.zoomval) {
@@ -920,7 +920,7 @@ int CG_CalcViewValues(void) {
 		float  fov = 90;
 
 		if (trap_getCameraInfo(CAM_PRIMARY, cg.time, &origin, &angles, &fov)) {
-			float  x;
+			float x;
 
 			VectorCopy(origin, cg.refdef_current->vieworg);
 			angles[ROLL]  = 0;
@@ -1067,7 +1067,7 @@ char *CG_MustParse(char **pString, const char *pErrorMsg) {
 }
 
 void CG_ParseSkyBox(void) {
-	char   *cstr, *token;
+	char *cstr, *token;
 
 	cstr = (char *)CG_ConfigString(CS_SKYBOXORG);
 
@@ -1095,7 +1095,7 @@ void CG_ParseSkyBox(void) {
 	// setup fog the first time, ignore this part of the configstring after that
 	token = CG_MustParse(&cstr, "CG_ParseSkyBox: error parsing skybox configstring.  No fog state\n");
 	if (atoi(token)) {       // this camera has fog
-		int fogStart, fogEnd;
+		int    fogStart, fogEnd;
 		vec4_t fogColor;
 
 		token       = CG_MustParse(&cstr, "CG_DrawSkyBoxPortal: error parsing skybox configstring.  No fog[0]\n");
@@ -1166,7 +1166,7 @@ CG_DrawSkyBoxPortal
 ==============
 */
 void CG_DrawSkyBoxPortal(qboolean fLocalView) {
-	refdef_t     rd;
+	refdef_t rd;
 
 	if (!cg_skybox.integer || !cg.skyboxEnabled) {
 		return;
@@ -1176,7 +1176,7 @@ void CG_DrawSkyBoxPortal(qboolean fLocalView) {
 	VectorCopy(cg.skyboxViewOrg, rd.vieworg);
 
 	if (fLocalView) {
-		float fov_x, fov_y, x, zoomFov, f;
+		float        fov_x, fov_y, x, zoomFov, f;
 		static float lastfov = 90;      // for transitions back from zoomed in modes
 
 		// user selectable
@@ -1284,7 +1284,7 @@ void CG_SetupFrustum(void) {
 //	CG_CullPoint - returns true if culled
 //
 qboolean CG_CullPoint(vec3_t pt) {
-	int     i;
+	int i;
 
 	// check against frustum planes
 	for (i = 0 ; i < 4 ; ++i) {
@@ -1299,7 +1299,7 @@ qboolean CG_CullPoint(vec3_t pt) {
 }
 
 qboolean CG_CullPointAndRadius(const vec3_t pt, vec_t radius) {
-	int     i;
+	int i;
 
 	// check against frustum planes
 	for (i = 0 ; i < 4 ; ++i) {

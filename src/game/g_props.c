@@ -326,8 +326,8 @@ health = how many pieces 16 is default
 */
 
 void smokedust_use(gentity_t *ent, gentity_t *self, gentity_t *activator) {
-	int       i;
-	vec3_t    forward;
+	int    i;
+	vec3_t forward;
 
 	// Nico, silent GCC
 	(void)self;
@@ -784,10 +784,10 @@ void Props_TurnLightsOff(gentity_t *self) {
 }
 
 void Props_Activated(gentity_t *self) {
-	vec3_t angles;
-	vec3_t dest;
-	vec3_t forward, right;
-	vec3_t velocity;
+	vec3_t    angles;
+	vec3_t    dest;
+	vec3_t    forward, right;
+	vec3_t    velocity;
 	gentity_t *owner = &g_entities[self->r.ownerNum];
 
 	self->nextthink = level.time + 50;
@@ -799,7 +799,7 @@ void Props_Activated(gentity_t *self) {
 	Props_TurnLightsOff(self);
 
 	if (owner->active == qfalse) {
-		vec3_t 	  prop_ang;
+		vec3_t    prop_ang;
 		gentity_t *prop;
 
 		owner->melee = NULL;
@@ -1570,7 +1570,7 @@ void Props_Barrel_Animate(gentity_t *ent) {
 	ent->s.frame++;
 
 	if (!(ent->spawnflags & 1)) {
-		float ratio = 2.5;
+		float  ratio = 2.5;
 		vec3_t v;
 
 		VectorSubtract(ent->r.currentOrigin, ent->enemy->r.currentOrigin, v);
@@ -2161,9 +2161,9 @@ duration is how long the effect will last 1 is 1 second
 */
 
 void props_snowGenerator_think(gentity_t *ent) {
-	float     high, wide, deep;
-	int       i;
-	vec3_t    point;
+	float  high, wide, deep;
+	int    i;
+	vec3_t point;
 
 	if (!(ent->spawnflags & 1)) {
 		return;
@@ -3169,7 +3169,7 @@ void props_flamethrower_think(gentity_t *ent) {
 			if (ent->random) {
 				int rval = ent->random * 1000;
 
-				rnd  = rand() % rval;
+				rnd = rand() % rval;
 			} else {
 				rnd = 0;
 			}
@@ -3198,7 +3198,7 @@ void props_flamethrower_use(gentity_t *ent, gentity_t *other, gentity_t *activat
 	if (ent->random) {
 		int rval = ent->random * 1000;
 
-		rnd  = rand() % rval;
+		rnd = rand() % rval;
 	} else {
 		rnd = 0;
 	}

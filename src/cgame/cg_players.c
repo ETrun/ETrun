@@ -305,7 +305,7 @@ void CG_RunLerpFrame(centity_t *cent, clientInfo_t *ci, lerpFrame_t *lf, int new
 	// if we have passed the current frame, move it to
 	// oldFrame and calculate a new frame
 	if (cg.time >= lf->frameTime) {
-		int         f;
+		int f;
 
 		lf->oldFrame      = lf->frame;
 		lf->oldFrameTime  = lf->frameTime;
@@ -413,7 +413,7 @@ void CG_SetLerpFrameAnimationRate(centity_t *cent, clientInfo_t *ci, lerpFrame_t
 	lf->animationTime = lf->frameTime + anim->initialLerp;
 
 	if (!(anim->flags & ANIMFL_FIRINGANIM) || (lf != &cent->pe.torso)) {
-		int         transitionMin = -1;
+		int transitionMin = -1;
 
 		if ((lf == &cent->pe.legs) && (CG_IsCrouchingAnim(character->animModelInfo, newAnimation) != CG_IsCrouchingAnim(character->animModelInfo, oldAnimNum))) {
 			if (anim->moveSpeed || (anim->movetype & ((1 << ANIM_MT_TURNLEFT) | (1 << ANIM_MT_TURNRIGHT)))) {           // if unknown movetype, go there faster
@@ -888,7 +888,7 @@ static void CG_PlayerAngles(centity_t *cent, vec3_t legs[3], vec3_t torso[3], ve
 	clientInfo_t   *ci;
 	bg_character_t *character;
 
-	ci = &cgs.clientinfo[cent->currentState.clientNum];
+	ci        = &cgs.clientinfo[cent->currentState.clientNum];
 	character = CG_CharacterForClientinfo(ci, cent);
 
 	if (!character) {
@@ -924,7 +924,7 @@ static void CG_PlayerAngles(centity_t *cent, vec3_t legs[3], vec3_t torso[3], ve
 		// don't let dead bodies twitch
 		legsAngles[YAW] = headAngles[YAW];
 	} else {
-		float          clampTolerance;
+		float clampTolerance;
 
 		legsAngles[YAW] = headAngles[YAW] + cent->currentState.angles2[YAW];
 
@@ -1113,8 +1113,8 @@ Float sprites over the player's head
 ===============
 */
 static void CG_PlayerSprites(centity_t *cent) {
-	int 			team;
-	fireteamData_t 	*ft;
+	int            team;
+	fireteamData_t *ft;
 
 	if (cent->currentState.powerups & (1 << PW_REDFLAG) ||
 	    cent->currentState.powerups & (1 << PW_BLUEFLAG)) {
@@ -1249,11 +1249,11 @@ static qboolean CG_PlayerShadow(centity_t *cent, float *shadowPlane) {
 	}
 
 	if (dist < SHADOW_MAX_DIST) {     // show more detail
-		int          tagIndex;
+		int tagIndex;
 
 		// now add shadows for the various body parts
 		for (tagIndex = 0; shadowParts[tagIndex].tagname; ++tagIndex) {
-			int subIndex;
+			int    subIndex;
 			vec3_t axis[3];
 
 			// grab each tag with this name
@@ -1394,7 +1394,7 @@ void CG_AddRefEntityWithPowerups(refEntity_t *ent, entityState_t *es, const vec3
 	trap_R_AddRefEntityToScene(ent);
 
 	if (CG_EntOnFire(&cg_entities[es->number])) {
-		float       fireStart, fireEnd;
+		float fireStart, fireEnd;
 
 		onFire = qtrue;
 		// set the alpha
@@ -1555,7 +1555,7 @@ void CG_Player(centity_t *cent) {
 	if (cent->currentState.eFlags & EF_MOUNTEDTANK) {
 		VectorCopy(cg_entities[cg_entities[cent->currentState.clientNum].tagParent].mountedMG42Player.origin, playerOrigin);
 	} else if (cent->currentState.eFlags & EF_MG42_ACTIVE || cent->currentState.eFlags & EF_AAGUN_ACTIVE) {        // Arnout: see if we're attached to a gun
-		int       num;
+		int num;
 
 		// find the mg42 we're attached to
 		for (num = 0 ; num < cg.snap->numEntities ; ++num) {

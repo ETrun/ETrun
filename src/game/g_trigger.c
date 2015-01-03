@@ -1084,7 +1084,7 @@ void explosive_indicator_think(gentity_t *ent) {
 
 // Arnout: spawn a constructible indicator
 void constructible_indicator_think(gentity_t *ent) {
-	gentity_t *parent = &g_entities[ent->r.ownerNum];
+	gentity_t *parent        = &g_entities[ent->r.ownerNum];
 	gentity_t *constructible = parent->target_ent;
 
 	if (parent->chain && constructible->s.teamNum != ent->s.teamNum) {
@@ -1096,7 +1096,7 @@ void constructible_indicator_think(gentity_t *ent) {
 	if (!parent->inuse || !parent->r.linked || (constructible && constructible->s.angles2[1] != 0)) {
 		// update our map
 		{
-			mapEntityData_t      *mEnt;
+			mapEntityData_t *mEnt;
 
 			if (parent->spawnflags & 8) {
 				if ((mEnt = G_FindMapEntityData(&mapEntityData[0], ent - g_entities)) != NULL) {

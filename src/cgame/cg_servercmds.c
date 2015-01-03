@@ -105,7 +105,7 @@ static void CG_ParseTeamInfo(void) {
 	for (i = 0 ; i < numSortedTeamPlayers ; ++i) {
 		int client;
 
-		client = atoi(CG_Argv(i * NUMARGS + 2));
+		client                             = atoi(CG_Argv(i * NUMARGS + 2));
 		cgs.clientinfo[client].location[0] = atoi(CG_Argv(i * NUMARGS + 3));
 		cgs.clientinfo[client].location[1] = atoi(CG_Argv(i * NUMARGS + 4));
 		cgs.clientinfo[client].health      = atoi(CG_Argv(i * NUMARGS + 5));
@@ -258,7 +258,7 @@ void CG_ParseSpawns(void) {
 	cg.spawnCount = atoi(s) + 1;
 
 	for (i = 1; i < cg.spawnCount; ++i) {
-		int        newteam;
+		int newteam;
 
 		info = CG_ConfigString(CS_MULTI_SPAWNTARGETS + i - 1);
 
@@ -411,7 +411,7 @@ void CG_ShaderStateChanged(void) {
 
 	o = CG_ConfigString(CS_SHADERSTATE);
 	while (o && *o) {
-		char       *n;
+		char *n;
 
 		n = strstr(o, "=");
 		if (n && *n) {
@@ -1006,7 +1006,7 @@ void CG_VoiceChatLocal(int mode, qboolean voiceOnly, int clientNum, int color, c
 
 	if (CG_GetVoiceChat(voiceChatList, cmd, &snd, &sprite, &chat)) {
 		if (mode == SAY_TEAM || !cg_teamChatsOnly.integer) {
-			const char          *loc = " ";
+			const char *loc = " ";
 
 			vchat.clientNum = clientNum;
 			vchat.snd       = snd;
@@ -1245,7 +1245,7 @@ Cmd_Argc() / Cmd_Argv()
 static void CG_ServerCommand(void) {
 	const char *cmd;
 	char       text[MAX_SAY_TEXT];
-	qboolean   enc         = qfalse; // used for enc_chat, enc_tchat
+	qboolean   enc = qfalse;         // used for enc_chat, enc_tchat
 
 	cmd = CG_Argv(0);
 
@@ -1273,7 +1273,7 @@ static void CG_ServerCommand(void) {
 
 	if (!Q_stricmp(cmd, "cp")) {
 		// NERVE - SMF
-		int  args = trap_Argc();
+		int args = trap_Argc();
 
 		if (args >= 3) {
 			char *s;
@@ -1733,8 +1733,8 @@ static void CG_ServerCommand(void) {
 		// Sent from stoptimer, do a 1 sec delay.
 		if (trap_Argc() > 1) {
 			cg.currentdemo++;
-			cg.startedNewDemo = cg.currentdemo + 1;
-			cg.ignoreNextStart   = qtrue;
+			cg.startedNewDemo  = cg.currentdemo + 1;
+			cg.ignoreNextStart = qtrue;
 		} else if (!cg.ignoreNextStart) {
 			cg.currentdemo++;
 			cg.startedNewDemo = 1;

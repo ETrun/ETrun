@@ -337,8 +337,8 @@ void player_die(gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int 
 		}
 	}
 
-	self->takedamage = qtrue;   // can still be gibbed
-	self->r.contents = CONTENTS_CORPSE;
+	self->takedamage  = qtrue;  // can still be gibbed
+	self->r.contents  = CONTENTS_CORPSE;
 	self->s.powerups  = 0;
 	self->s.loopSound = 0;
 
@@ -904,8 +904,8 @@ void G_Damage(gentity_t *targ, gentity_t *inflictor, gentity_t *attacker, vec3_t
 	// at the end of the frame
 	if (client) {
 		client->ps.persistant[PERS_ATTACKER] = attacker->s.number;
-		client->damage_blood     += take;
-		client->damage_knockback += knockback;
+		client->damage_blood                += take;
+		client->damage_knockback            += knockback;
 
 		if (dir) {
 			VectorCopy(dir, client->damage_from);

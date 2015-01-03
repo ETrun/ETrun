@@ -920,7 +920,7 @@ qboolean CG_FireteamCheckExecKey(int key, qboolean doaction) {
 				const char **strings = ftMenuStrings[cgs.ftMenuPos];
 
 				if (key >= 'a' || key <= 'z') {
-					int        i;
+					int i;
 
 					for (i = 0; strings[i]; ++i) {
 						if (key == tolower(*ftMenuStringsAlphachars[cgs.ftMenuPos][i])) {

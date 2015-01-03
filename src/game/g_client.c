@@ -43,7 +43,7 @@ Targets will be fired when someone spawns in on them.
 If the start position is targeting an entity, the players camera will start out facing that ent (like an info_notnull)
 */
 void SP_info_player_deathmatch(gentity_t *ent) {
-	int    i;
+	int i;
 
 	G_SpawnInt("nobots", "0", &i);
 	if (i) {
@@ -107,9 +107,9 @@ SpotWouldTelefrag
 ================
 */
 qboolean SpotWouldTelefrag(gentity_t *spot) {
-	int       i, num;
-	int       touch[MAX_GENTITIES];
-	vec3_t    mins, maxs;
+	int    i, num;
+	int    touch[MAX_GENTITIES];
+	vec3_t mins, maxs;
 
 	VectorAdd(spot->r.currentOrigin, playerMins, mins);
 	VectorAdd(spot->r.currentOrigin, playerMaxs, maxs);
@@ -677,8 +677,8 @@ static void ClientCleanName(const char *in, char *out, int outSize) {
 // Nico, returns the IP is it's well-formed, NULL otherwise (from ETpub)
 // @source: http://bytes.com/forum/thread212174.html
 qboolean getParsedIp(const char *ipadd, char *parsedIp) {
-	unsigned      b1, b2, b3, b4, port = 0;
-	int           rc;
+	unsigned b1, b2, b3, b4, port = 0;
+	int      rc;
 
 	if (!Q_strncmp(ipadd, "localhost", strlen("localhost"))) {
 		return qtrue;
@@ -1061,7 +1061,7 @@ char *ClientConnect(int clientNum, qboolean firstTime) {
 	char      userinfo[MAX_INFO_STRING];
 	gentity_t *ent;
 	char      userinfo2[MAX_INFO_STRING]; // Nico, used in connections limit check
-	int       i = 0;
+	int       i           = 0;
 	int       conn_per_ip = 1; // Nico, connections per IP counter
 	char      ip[20], ip2[20]; // Nico, used in connections limit check
 	char      parsedIp[20], parsedIp2[20]; // Nico, used in connections limit check
@@ -1625,7 +1625,7 @@ void ClientDisconnect(int clientNum) {
 
 	// remove ourself from teamlists
 	{
-		mapEntityData_t      *mEnt;
+		mapEntityData_t *mEnt;
 
 		for (i = 0; i < 2; ++i) {
 			mapEntityData_Team_t *teamList = &mapEntityData[i];
@@ -1650,7 +1650,7 @@ void ClientDisconnect(int clientNum) {
 	if (ent->client->pers.connected == CON_CONNECTED
 	    && ent->client->sess.sessionTeam != TEAM_SPECTATOR
 	    && !(ent->client->ps.pm_flags & PMF_LIMBO)) {
-		gitem_t   *item = NULL;
+		gitem_t *item = NULL;
 
 		// They don't get to take powerups with them!
 		// Especially important for stuff like CTF flags
@@ -1673,7 +1673,7 @@ void ClientDisconnect(int clientNum) {
 		}
 
 		if (item) {
-			vec3_t    launchvel = {0};
+			vec3_t launchvel = { 0 };
 
 			flag                = LaunchItem(item, ent->r.currentOrigin, launchvel, ent - g_entities);
 			flag->s.modelindex2 = ent->s.otherEntityNum2;    // JPW NERVE FIXME set player->otherentitynum2 with old modelindex2 from flag and restore here
