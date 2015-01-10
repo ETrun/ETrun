@@ -1503,8 +1503,6 @@ typedef struct {
 
 	int minclients;
 	gamestate_t gamestate;
-	char *currentCampaign;
-	int currentCampaignMap;
 
 	float smokeWindDir; // JPW NERVE for smoke puffs & wind (arty, airstrikes, bullet impacts)
 
