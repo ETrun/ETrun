@@ -362,7 +362,7 @@ Cmd_Kill_f
 void Cmd_Kill_f(gentity_t *ent) {
 	if (ent->client->sess.sessionTeam == TEAM_SPECTATOR ||
 	    (ent->client->ps.pm_flags & PMF_LIMBO) ||
-	    ent->health <= 0 || level.match_pause != PAUSE_NONE) {
+	    ent->health <= 0) {
 		return;
 	}
 

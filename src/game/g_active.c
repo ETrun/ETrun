@@ -343,7 +343,7 @@ void SpectatorThink(gentity_t *ent, usercmd_t *ucmd) {
 		}
 
 		// OSP - dead players are frozen too, in a timeout
-		if ((client->ps.pm_flags & PMF_LIMBO) && level.match_pause != PAUSE_NONE) {
+		if (client->ps.pm_flags & PMF_LIMBO) {
 			client->ps.pm_type = PM_FREEZE;
 		} else if (client->noclip) {
 			client->ps.pm_type = PM_NOCLIP;
@@ -647,7 +647,7 @@ void ClientThink_real(gentity_t *ent) {
 		return;
 	}
 
-	if ((client->ps.eFlags & EF_VIEWING_CAMERA) || level.match_pause != PAUSE_NONE) {
+	if (client->ps.eFlags & EF_VIEWING_CAMERA) {
 		ucmd->buttons     = 0;
 		ucmd->forwardmove = 0;
 		ucmd->rightmove   = 0;
@@ -656,12 +656,7 @@ void ClientThink_real(gentity_t *ent) {
 		ucmd->doubleTap   = 0;
 
 		// freeze player
-		if (level.match_pause != PAUSE_NONE) {
-			client->ps.pm_type = PM_FREEZE;
-		} else if (client->ps.eFlags & EF_VIEWING_CAMERA) {
-			VectorClear(client->ps.velocity);
-			client->ps.pm_type = PM_FREEZE;
-		}
+		client->ps.pm_type = PM_FREEZE;
 	} else if (client->noclip) {
 		client->ps.pm_type = PM_NOCLIP;
 	} else if (client->ps.stats[STAT_HEALTH] <= 0) {
@@ -797,9 +792,7 @@ void ClientThink_real(gentity_t *ent) {
 	ent->watertype  = pm.watertype;
 
 	// execute client events
-	if (level.match_pause == PAUSE_NONE) {
-		ClientEvents(ent, oldEventSequence);
-	}
+	ClientEvents(ent, oldEventSequence);
 
 	// link entity now, after any personal teleporters have been used
 	trap_LinkEntity(ent);
@@ -848,9 +841,7 @@ void ClientThink_real(gentity_t *ent) {
 	}
 
 	// perform once-a-second actions
-	if (level.match_pause == PAUSE_NONE) {
-		ClientTimerActions(ent, msec);
-	}
+	ClientTimerActions(ent, msec);
 
 	// Nico, check ping
 	if (client->sess.timerunActive && client->ps.ping > MAX_PLAYER_PING) {
@@ -1091,29 +1082,9 @@ void ClientEndFrame(gentity_t *ent) {
 		}
 		// OSP -- If we're paused, update powerup timers accordingly.
 		// Make sure we dont let stuff like CTF flags expire.
-		if (level.match_pause != PAUSE_NONE &&
-		    ent->client->ps.powerups[i] != INT_MAX) {
-			ent->client->ps.powerups[i] += level.time - level.previousTime;
-		}
-
 		if (ent->client->ps.powerups[i] < level.time) {
 			ent->client->ps.powerups[i] = 0;
 		}
-	}
-
-	// OSP - If we're paused, make sure other timers stay in sync
-	//		--> Any new things in ET we should worry about?
-	if (level.match_pause != PAUSE_NONE) {
-		int time_delta = level.time - level.previousTime;
-
-		ent->client->airOutTime         += time_delta;
-		ent->client->inactivityTime     += time_delta;
-		ent->client->lastBurnTime       += time_delta;
-		ent->client->pers.enterTime     += time_delta;
-		ent->client->ps.classWeaponTime += time_delta;
-		ent->lastHintCheckTime          += time_delta;
-		ent->pain_debounce_time         += time_delta;
-		ent->s.onFireEnd                += time_delta;
 	}
 
 	//

@@ -1898,12 +1898,6 @@ Runs thinking code for this frame if necessary
 void G_RunThink(gentity_t *ent) {
 	float thinktime;
 
-	// OSP - If paused, push nextthink
-	if (level.match_pause != PAUSE_NONE && (ent - g_entities) >= g_maxclients.integer &&
-	    ent->nextthink > level.time && strstr(ent->classname, "DPRINTF_") == NULL) {
-		ent->nextthink += level.time - level.previousTime;
-	}
-
 	// RF, run scripting
 	if (ent->s.number >= MAX_CLIENTS) {
 		G_Script_ScriptRun(ent);
@@ -2181,19 +2175,7 @@ void G_RunEntity(gentity_t *ent, int msec) {
 	    || ent->s.eType == ET_EXPLO_PART
 	    || ent->s.eType == ET_RAMJET) {
 
-		// OSP - pausing
-		if (level.match_pause == PAUSE_NONE) {
-			G_RunMissile(ent);
-		} else {
-			// During a pause, gotta keep track of stuff in the air
-			ent->s.pos.trTime += level.time - level.previousTime;
-			// Keep pulsing right for dynmamite
-			if (ent->methodOfDeath == MOD_DYNAMITE) {
-				ent->s.effect1Time += level.time - level.previousTime;
-			}
-			G_RunThink(ent);
-		}
-		// OSP
+		G_RunMissile(ent);
 
 		return;
 	}
@@ -2261,18 +2243,7 @@ Advances the non-player objects in the world
 void G_RunFrame(int levelTime) {
 	int i, msec;
 
-	// Handling of pause offsets
-	if (level.match_pause == PAUSE_NONE) {
-		level.timeCurrent = levelTime - level.timeDelta;
-	} else {
-		level.timeDelta = levelTime - level.timeCurrent;
-		if ((level.time % 500) == 0) {
-			// FIXME: set a PAUSE cs and let the client adjust their local starttimes
-			//        instead of this spam
-			trap_SetConfigstring(CS_LEVEL_START_TIME, va("%i", level.startTime + level.timeDelta));
-		}
-	}
-
+	level.timeCurrent = levelTime - level.timeDelta;
 	level.frameTime = trap_Milliseconds();
 
 	level.framenum++;

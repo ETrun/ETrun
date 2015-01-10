@@ -912,7 +912,6 @@ typedef struct {
 
 	// OSP
 	qboolean fLocalHost;
-	int match_pause;                        // Paused state of the match
 
 	int server_settings;
 	int timeCurrent;                        // Real game clock
@@ -1668,10 +1667,6 @@ void InitialServerEntitySetup();
 
 #define SE_FOFS(x) ((int)&(((g_serverEntity_t *)0)->x))
 
-// Match settings
-#define PAUSE_NONE      0x00    // Match is NOT paused.
-#define PAUSE_UNPAUSING 0x01    // Pause is about to expire
-
 // HRESULTS
 #define G_OK            0
 #define G_INVALID       -1
@@ -1687,22 +1682,12 @@ void InitialServerEntitySetup();
 #define LDI(format, ...) G_LogDebug(__FUNCTION__, "INFO", format, __VA_ARGS__)
 #define LDE(format, ...) G_LogDebug(__FUNCTION__, "ERROR", format, __VA_ARGS__)
 
-#define PAUSE_NONE      0x00    // Match is NOT paused.
-#define PAUSE_UNPAUSING 0x01    // Pause is about to expire
-
 #define HELP_COLUMNS    4
 
 #define CMD_DEBOUNCE    5000    // 5s between cmds
 
 #define EOM_WEAPONSTATS 0x01    // Dump of player weapon stats at end of match.
 #define EOM_MATCHINFO   0x02    // Dump of match stats at end of match.
-
-// "Delayed Print" ent enumerations
-typedef enum {
-	DP_PAUSEINFO,       // Print current pause info
-	DP_UNPAUSING,       // Print unpause countdown + unpause
-	DP_CONNECTINFO,     // Display OSP info on connect
-} enum_t_dp;
 
 // Remember: Axis = RED, Allies = BLUE ... right?!
 
@@ -1737,7 +1722,6 @@ void G_globalSound(char *sound);
 void G_initMatch(void);
 void G_loadMatchGame(void);
 void G_printFull(char *str, gentity_t *ent);
-void G_spawnPrintf(int print_type, int print_time, gentity_t *owner);
 
 ///////////////////////
 // g_referee.c
@@ -1747,7 +1731,6 @@ void G_ref_cmd(gentity_t *ent, unsigned int dwCommand, qboolean fValue);
 qboolean G_refCommandCheck(gentity_t *ent, char *cmd);
 void G_refHelp_cmd(gentity_t *ent);
 void G_refLockTeams_cmd(gentity_t *ent, qboolean fLock);
-void G_refPause_cmd(gentity_t *ent, qboolean fPause);
 void G_refPlayerPut_cmd(gentity_t *ent, int team_id);
 void G_refRemove_cmd(gentity_t *ent);
 void G_refWarning_cmd(gentity_t *ent);

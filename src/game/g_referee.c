@@ -46,8 +46,6 @@ qboolean G_refCommandCheck(gentity_t *ent, char *cmd) {
 		G_refLockTeams_cmd(ent, qtrue);
 	} else if (!Q_stricmp(cmd, "help")) {
 		G_refHelp_cmd(ent);
-	} else if (!Q_stricmp(cmd, "pause")) {
-		G_refPause_cmd(ent, qtrue);
 	} else if (!Q_stricmp(cmd, "putallies")) {
 		G_refPlayerPut_cmd(ent, TEAM_ALLIES);
 	} else if (!Q_stricmp(cmd, "putaxis")) {
@@ -56,8 +54,6 @@ qboolean G_refCommandCheck(gentity_t *ent, char *cmd) {
 		G_refRemove_cmd(ent);
 	} else if (!Q_stricmp(cmd, "unlock")) {
 		G_refLockTeams_cmd(ent, qfalse);
-	} else if (!Q_stricmp(cmd, "unpause")) {
-		G_refPause_cmd(ent, qfalse);
 	} else if (!Q_stricmp(cmd, "warn")) {
 		G_refWarning_cmd(ent);
 	} else if (!Q_stricmp(cmd, "mute")) {
@@ -85,7 +81,6 @@ void G_refHelp_cmd(gentity_t *ent) {
 
 		CP("print \"\n^5help             putallies^7 <pid>  ^5warn ^7<pid>       ^5putaxis^7 <pid>\n\"");
 		CP("print \"^5unlock           ^5mute ^7<pid>       ^5remove^7 <pid>     ^5unmute ^7<pid>\n\"");
-		CP("print \"^5pause            ^5unpause\n\"");
 		CP("print \"Usage: ^3\\ref <cmd> [params]\n\n\"");
 
 		// Help for the console
@@ -93,8 +88,7 @@ void G_refHelp_cmd(gentity_t *ent) {
 		G_Printf("\nAdditional console commands:\n");
 		G_Printf("----------------------------------------------\n");
 		G_Printf("help     remove <pid>      warn <pid>    lock\n");
-		G_Printf("pause    putallies <pid>   unlock	 putaxis <pid>\n");
-		G_Printf("unpause\n\n");
+		G_Printf("putallies <pid>   unlock	 putaxis <pid>\n\n");
 
 		G_Printf("Usage: <cmd> [params]\n\n");
 	}
@@ -175,43 +169,6 @@ void G_refLockTeams_cmd(gentity_t *ent, qboolean fLock) {
 		level.server_settings &= ~CV_SVS_LOCKTEAMS;
 	}
 	trap_SetConfigstring(CS_SERVERTOGGLES, va("%d", level.server_settings));
-}
-
-// Pause/unpause a match.
-void G_refPause_cmd(gentity_t *ent, qboolean fPause) {
-	char *referee = (ent) ? "Referee" : "ref";
-
-	if ((PAUSE_UNPAUSING >= level.match_pause && !fPause) || (PAUSE_NONE != level.match_pause && fPause)) {
-		char *status[2] = { "^5UN", "^1" };
-
-		// Nico, removed unneeded linebreak
-		// http://games.chruker.dk/enemy_territory/modding_project_bugfix.php?bug_id=047
-		G_refPrintf(ent, "The match is already %sPAUSED!", status[fPause]);
-		return;
-	}
-
-	if (ent && !G_cmdDebounce(ent, ((fPause) ? "pause" : "unpause"))) {
-		return;
-	}
-
-	// Trigger the auto-handling of pauses
-	if (fPause) {
-		level.match_pause = 100 + ((ent) ? (1 + ent - g_entities) : 0);
-		G_globalSound("sound/misc/referee.wav");
-		G_spawnPrintf(DP_PAUSEINFO, level.time + 15000, NULL);
-		AP(va("print \"^3%s ^1PAUSED^3 the match^3!\n", referee));
-		CP(va("cp \"^3Match is ^1PAUSED^3! (^7%s^3)\n\"", referee));
-		level.server_settings |= CV_SVS_PAUSE;
-		trap_SetConfigstring(CS_SERVERTOGGLES, va("%d", level.server_settings));
-	} else {
-		// Nico, removed unneeded linebreak
-		// http://games.chruker.dk/enemy_territory/modding_project_bugfix.php?bug_id=047
-		AP(va("print \"^3%s ^5UNPAUSES^3 the match ... resuming in 10 seconds!\n\"", referee));
-		level.match_pause = PAUSE_UNPAUSING;
-		G_globalSound("sound/osp/prepare.wav");
-		G_spawnPrintf(DP_UNPAUSING, level.time + 10, NULL);
-		return;
-	}
 }
 
 // Puts a player on a team.
