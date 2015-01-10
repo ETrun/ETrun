@@ -56,16 +56,7 @@ int G_GetSysMessageNumber(const char *sysMsg) {
 }
 
 void G_SendSystemMessage(sysMsg_t message, int team) {
-	int *time;
 	int j;
-
-	time = team == TEAM_AXIS ? &level.lastSystemMsgTime[0] : &level.lastSystemMsgTime[1];
-
-	if (*time && (level.time - *time) < 15000) {
-		return;
-	}
-
-	*time = level.time;
 
 	for (j = 0; j < level.maxclients; ++j) {
 		gentity_t *other = &g_entities[j];

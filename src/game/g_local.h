@@ -833,7 +833,7 @@ typedef struct {
 
 	fileHandle_t logFile; // Nico, note: this is for g_log
 	fileHandle_t debugLogFile; // Nico, debug log
-	fileHandle_t crashLog; // Nico, creash log
+	fileHandle_t crashLog; // Nico, crash log
 
 	char rawmapname[MAX_QPATH];
 
@@ -894,7 +894,6 @@ typedef struct {
 	int covertopsChargeTime[2];
 
 	int lastMapEntityUpdate;
-	int lastSystemMsgTime[2];
 
 	float soldierChargeTimeModifier[2];
 	float medicChargeTimeModifier[2];
@@ -902,13 +901,9 @@ typedef struct {
 	float lieutenantChargeTimeModifier[2];
 	float covertopsChargeTimeModifier[2];
 
-	int currentCampaign;
-
 	brushmodelInfo_t brushModelInfo[128];
 	int numBrushModels;
 	gentity_t *gameManager;
-
-	qboolean doorAllowTeams;    // used by bots to decide whether or not to use team travel flags
 
 	// Gordon: for multiplayer fireteams
 	fireteamData_t fireTeams[MAX_FIRETEAMS];
@@ -927,9 +922,6 @@ typedef struct {
 	qboolean mapcoordsValid, tracemapLoaded;
 	vec2_t mapcoordsMins, mapcoordsMaxs;
 
-	char tinfoAxis[1400];
-	char tinfoAllies[1400];
-
 // Gordon: debris test
 	int numDebrisChunks;
 	debrisChunk_t debrisChunks[MAX_DEBRISCHUNKS];
@@ -938,9 +930,7 @@ typedef struct {
 	qboolean disableTankExit;
 	qboolean disableTankEnter;
 
-	int axisBombCounter, alliedBombCounter;
 	int axisAutoSpawn, alliesAutoSpawn;
-	int axisMG42Counter, alliesMG42Counter;
 
 	limbo_cam_t limboCams[MAX_LIMBO_CAMS];
 	int numLimboCams;

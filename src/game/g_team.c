@@ -397,7 +397,6 @@ void TeamplayInfoMessage(team_t team) {
 	gentity_t *player;
 	int       cnt;
 	int       h;
-	char      *bufferedData;
 	char      *tinfo;
 
 	// send the latest information on all clients
@@ -433,14 +432,7 @@ void TeamplayInfoMessage(team_t team) {
 		}
 	}
 
-	bufferedData = team == TEAM_AXIS ? level.tinfoAxis : level.tinfoAllies;
-
 	tinfo = va("tinfo %i%s", cnt, string);
-	if (!Q_stricmp(bufferedData, tinfo)) {     // Gordon: no change so just return
-		return;
-	}
-
-	Q_strncpyz(bufferedData, tinfo, 1400);
 
 	for (i = 0; i < level.numConnectedClients; ++i) {
 		player = g_entities + level.sortedClients[i];

@@ -2281,16 +2281,6 @@ void G_RunFrame(int levelTime) {
 
 	msec = level.time - level.previousTime;
 
-	level.axisBombCounter   -= msec;
-	level.alliedBombCounter -= msec;
-
-	if (level.axisBombCounter < 0) {
-		level.axisBombCounter = 0;
-	}
-	if (level.alliedBombCounter < 0) {
-		level.alliedBombCounter = 0;
-	}
-
 	// get any cvar changes
 	G_UpdateCvars();
 

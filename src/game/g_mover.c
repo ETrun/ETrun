@@ -1822,9 +1822,6 @@ void finishSpawningKeyedMover(gentity_t *ent) {
 
 	// all ents should be spawned, so it's okay to check for special door triggers now
 
-	// update level.doorAllowTeams
-	level.doorAllowTeams |= ent->allowteams;
-
 //----(SA)	modified
 	if (ent->key == -2) {      // the key was not set in the spawn
 		if (ent->targetname && findNonAIBrushTargeter(ent)) {
