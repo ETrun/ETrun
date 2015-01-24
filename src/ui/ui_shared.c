@@ -1650,14 +1650,10 @@ void Script_playLooped(itemDef_t *item, qboolean *bAbort, char **args) {
 
 // NERVE - SMF
 void Script_AddListItem(itemDef_t *item, qboolean *bAbort, char **args) {
-	const char *itemname = NULL, *val = NULL, *name = NULL;
-
 	// Nico, silent GCC
+	(void)item;
 	(void)bAbort;
-
-	if (String_Parse(args, &itemname) && String_Parse(args, &val) && String_Parse(args, &name)) {
-		Menu_FindItemByName(item->parent, itemname);
-	}
+	(void)args;
 }
 // -NERVE - SMF
 // DHM - Nerve
