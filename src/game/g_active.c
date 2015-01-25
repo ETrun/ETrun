@@ -888,7 +888,7 @@ void ClientThink_real(gentity_t *ent) {
 
 	// Nico, check max FPS
 	if (client->pers.maxFPS < MIN_PLAYER_FPS_VALUE || client->pers.maxFPS > MAX_PLAYER_FPS_VALUE) {
-		CP(va("cpm \"%s^w: ^1you were removed from teams because you must use  %d <= com_maxfps <= %d\n\"", GAME_VERSION_COLORED, MIN_PLAYER_FPS_VALUE, MAX_PLAYER_FPS_VALUE));
+		CP(va("cpm \"%s^w: ^1you were removed from teams because you must use %d <= com_maxfps <= %d\n\"", GAME_VERSION_COLORED, MIN_PLAYER_FPS_VALUE, MAX_PLAYER_FPS_VALUE));
 		trap_SendServerCommand(ent - g_entities, "resetMaxFPS");
 		SetTeam(ent, "s", -1, -1, qfalse);
 	}
