@@ -408,18 +408,14 @@ SetTeam
 */
 qboolean SetTeam(gentity_t *ent, char *s, weapon_t w1, weapon_t w2, qboolean setweapons) {
 	team_t           team, oldTeam;
-	gclient_t        *client;
-	int              clientNum;
+	gclient_t        *client = ent->client;
+	int              clientNum = client - level.clients;
 	spectatorState_t specState;
-	int              specClient;
+	int              specClient = 0;
 
 	//
 	// see what change is requested
 	//
-	client = ent->client;
-
-	clientNum  = client - level.clients;
-	specClient = 0;
 
 	G_TeamDataForString(s, client - level.clients, &team, &specState, &specClient);
 
@@ -825,6 +821,21 @@ void Cmd_FollowCycle_f(gentity_t *ent, int dir) {
 
 	if (dir != 1 && dir != -1) {
 		G_Error("Cmd_FollowCycle_f: bad dir %i", dir);
+	}
+
+	// Nico, fix from etlegacy for team follow1/2 crash
+	// if dedicated follow client, just switch between the two auto clients
+	if (ent->client->sess.spectatorClient < 0)
+	{
+		if (ent->client->sess.spectatorClient == -1)
+		{
+			ent->client->sess.spectatorClient = -2;
+		}
+		else if (ent->client->sess.spectatorClient == -2)
+		{
+			ent->client->sess.spectatorClient = -1;
+		}
+		return;
 	}
 
 	clientnum = ent->client->sess.spectatorClient;
