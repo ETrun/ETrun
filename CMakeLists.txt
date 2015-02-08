@@ -81,7 +81,8 @@ elseif(CMAKE_SIZEOF_VOID_P EQUAL 4)
     set(ETRUN_ARCH_32 ON)
     message(STATUS "Current architecture: x86")
 else()
-    message(FATAL_ERROR "Unsupported architecture")
+	set(ETRUN_ARCH_32 ON)
+    message(STATUS "Unsupported architecture")
 endif()
 
 # Check if we should build OSX universal binaries
@@ -154,11 +155,13 @@ if(UNIX)
 elseif(WIN32)
 	if(MSVC)
 		# Link with pthreads-win32
-		# Fixme: qagame compilation should be dependant on pthreads-win32 compilation
+		set(PTHREADS_BUILD_STATIC 1)
 		add_subdirectory("${PROJECT_SOURCE_DIR}/libs/pthreads-win32")
 		include_directories("${PROJECT_SOURCE_DIR}/libs/pthreads-win32/pthreads.2")
 		target_link_libraries(qagame debug "${CMAKE_BINARY_DIR}/libs/pthreads-win32/Debug/pthreadsVC2d.lib")
 		target_link_libraries(qagame optimized "${CMAKE_BINARY_DIR}/libs/pthreads-win32/Release/pthreadsVC2.lib")
+		add_definitions(-DPTW32_STATIC_LIB)
+		add_dependencies(qagame pthreadsVC2)
 
 		add_definitions(-D_CRT_SECURE_NO_WARNINGS)
 		set(OS_LIBRARIES ws2_32 psapi winmm)
@@ -181,18 +184,11 @@ set_target_properties(ui PROPERTIES OUTPUT_NAME ui${LIB_SUFFIX}${ARCH})
 #-----------------------------------------------------------------
 # Pk3 (inspired from etlegacy https://github.com/etlegacy/etlegacy)
 #-----------------------------------------------------------------
-find_program(ZIP_EXECUTABLE zip PATHS ${CMAKE_BINARY_DIR})
+find_program(ZIP_EXECUTABLE zip PATHS ${CMAKE_CURRENT_BINARY_DIR})
 if(NOT ZIP_EXECUTABLE AND WIN32)
-	message(STATUS "Downloading zip.exe to " ${CMAKE_BINARY_DIR}/zip.exe)
-	file(DOWNLOAD http://stahlworks.com/dev/zip.exe ${CMAKE_BINARY_DIR}/zip.exe SHOW_PROGRESS TIMEOUT 10)
-	find_program(ZIP_EXECUTABLE zip PATHS ${CMAKE_BINARY_DIR})
-endif()
-
-find_program(UNZIP_EXECUTABLE unzip PATHS ${CMAKE_BINARY_DIR})
-if(NOT UNZIP_EXECUTABLE AND WIN32)
-	message(STATUS "Downloading unzip.exe to " ${CMAKE_BINARY_DIR}/unzip.exe)
-	file(DOWNLOAD http://stahlworks.com/dev/unzip.exe ${CMAKE_BINARY_DIR}/unzip.exe SHOW_PROGRESS TIMEOUT 10)
-	find_program(UNZIP_EXECUTABLE unzip PATHS ${CMAKE_BINARY_DIR})
+	message(STATUS "Downloading zip.exe to " ${CMAKE_CURRENT_BINARY_DIR}/zip.exe)
+	file(DOWNLOAD http://stahlworks.com/dev/zip.exe ${CMAKE_CURRENT_BINARY_DIR}/zip.exe SHOW_PROGRESS TIMEOUT 10)
+	find_program(ZIP_EXECUTABLE zip PATHS ${CMAKE_CURRENT_BINARY_DIR})
 endif()
 
 add_custom_target(pk3 ALL DEPENDS cgame ui)
@@ -203,6 +199,15 @@ add_custom_command(TARGET pk3
 add_custom_command(TARGET pk3
 	COMMAND ${CMAKE_COMMAND} -E remove_directory ${CMAKE_CURRENT_BINARY_DIR}/etrun/custommapscripts)
 add_custom_command(TARGET pk3
-	COMMAND ${ZIP_EXECUTABLE} -q -r ETrun-${ETrun_VERSION}.pk3 *
-	WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/etrun/
-)
+	COMMAND ${CMAKE_COMMAND} -E remove ${CMAKE_CURRENT_BINARY_DIR}/etrun/ETrun-${ETrun_VERSION}.pk3)
+if (WIN32)
+	add_custom_command(TARGET pk3
+		COMMAND ${ZIP_EXECUTABLE} -q -r ETrun-${ETrun_VERSION}.pk3 * -x qagame${LIB_SUFFIX}${ARCH}* -x *.pdb -x *.ilk
+		WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/etrun
+	)
+else()
+	add_custom_command(TARGET pk3
+		COMMAND ${ZIP_EXECUTABLE} -q -r ETrun-${ETrun_VERSION}.pk3 *
+		WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/etrun
+	)
+endif(WIN32)
