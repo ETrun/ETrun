@@ -101,20 +101,21 @@ static char *WM_ETrun_coloredPing(int ping) {
  *
  * @source: ETpub
  */
+#define COUNTRY_FLAG_RENDER_SIZE 16
+#define COUNTRY_FLAG_INDIVIDUAL_SIZE 32
+#define COUNTRY_FLAG_WIDTH 512
 static qboolean WM_ETrun_drawCountryFlag(float x, float y, unsigned int countryCode) {
 	float alpha[4];
 
 	if (countryCode < 255) {
-		float        flag_step = 32;
-		unsigned int flag_sd   = 512;
-		float        x1        = (float)((countryCode * (unsigned int)flag_step) % flag_sd);
-		float        y1        = (float)(floor((countryCode * flag_step) / flag_sd) * flag_step);
-		float        x2        = x1 + flag_step;
-		float        y2        = y1 + flag_step;
+		float        x1        = (float)((countryCode * (unsigned int)COUNTRY_FLAG_INDIVIDUAL_SIZE) % COUNTRY_FLAG_WIDTH);
+		float        y1        = (float)(floor((countryCode * COUNTRY_FLAG_INDIVIDUAL_SIZE) / COUNTRY_FLAG_WIDTH) * COUNTRY_FLAG_INDIVIDUAL_SIZE);
+		float        x2        = x1 + COUNTRY_FLAG_INDIVIDUAL_SIZE;
+		float        y2        = y1 + COUNTRY_FLAG_INDIVIDUAL_SIZE;
 		alpha[0] = alpha[1] = alpha[2] = alpha[3] = 1.0;
 
 		trap_R_SetColor(alpha);
-		CG_DrawPicST(x - 8, y - 19, flag_step, flag_step, x1 / flag_sd, y1 / flag_sd, x2 / flag_sd, y2 / flag_sd, cgs.media.worldFlags);
+		CG_DrawPicST(x, y - 12, COUNTRY_FLAG_RENDER_SIZE, COUNTRY_FLAG_RENDER_SIZE, x1 / COUNTRY_FLAG_WIDTH, y1 / COUNTRY_FLAG_WIDTH, x2 / COUNTRY_FLAG_WIDTH, y2 / COUNTRY_FLAG_WIDTH, cgs.media.worldFlags);
 		trap_R_SetColor(NULL);
 		return qtrue;
 	}
@@ -490,7 +491,7 @@ qboolean CG_DrawScoreboard(void) {
 		orderedScores[j].clientNum = j;
 		Q_strncpyz(orderedScores[j].name, "Fake client", MAX_QPATH);
 		orderedScores[j].team             = rand() % 3 + 1;
-		orderedScores[j].timerunBestTime  = rand(); // Best time
+		orderedScores[j].timerunBestTime  = rand() % 90000; // Best time
 		orderedScores[j].timerunBestSpeed = rand() % 3000; // Best speed
 		orderedScores[j].timerunStatus    = rand() % 2; // Timerun status
 		orderedScores[i].clientLogged     = 0; // Client login status

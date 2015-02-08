@@ -1695,7 +1695,7 @@ static void CG_RegisterGraphics(void) {
 	cgs.media.modLogo = trap_R_RegisterShaderNoMip("gfx/2d/ETrun_logo_256");
 
 	// Nico, world flags for GeoIP
-	cgs.media.worldFlags = trap_R_RegisterShaderNoMip("gfx/2d/world_flags");
+	cgs.media.worldFlags = trap_R_RegisterShaderNoMip("gfx/2d/ETrun_world_flags");
 
 	CG_LoadingString(" - game media done");
 }
