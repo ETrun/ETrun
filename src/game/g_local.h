@@ -833,7 +833,6 @@ typedef struct {
 
 	fileHandle_t logFile; // Nico, note: this is for g_log
 	fileHandle_t debugLogFile; // Nico, debug log
-	fileHandle_t crashLog; // Nico, crash log
 
 	char rawmapname[MAX_QPATH];
 
@@ -1260,13 +1259,18 @@ void FireWeapon(gentity_t *ent);
 void G_BurnMeGood(gentity_t *self, gentity_t *body);
 
 //
+// g_log.c
+//
+void G_LogCrash(const char *s, qboolean printIt);
+void QDECL G_LogPrintf(qboolean printIt, const char *fmt, ...) _attribute((format(printf, 1, 2)));
+void QDECL G_LogDebug(const char *functionName, const char *severity, const char *fmt, ...) _attribute((format(printf, 3, 4)));
+
+//
 // g_main.c
 //
 
 void FindIntermissionPoint(void); // Nico, note: this function is needed
 void G_RunThink(gentity_t *ent);
-void QDECL G_LogPrintf(const char *fmt, ...) _attribute((format(printf, 1, 2)));
-void QDECL G_LogDebug(const char *functionName, const char *severity, const char *fmt, ...) _attribute((format(printf, 3, 4)));
 void QDECL G_Printf(const char *fmt, ...) _attribute((format(printf, 1, 2)));
 void QDECL G_DPrintf(const char *fmt, ...) _attribute((format(printf, 1, 2)));
 void QDECL G_Error(const char *fmt, ...) _attribute((format(printf, 1, 2)));
@@ -1349,8 +1353,10 @@ void notify_timerun_stop(gentity_t *activator, int finishTime);
 void saveDemo(gentity_t *ent);
 
 // Nico, g_crash.c
-void EnableStackTrace();
-void DisableStackTrace();
+#if defined _WIN32
+void win32_initialize_handler();
+void win32_deinitialize_handler();
+#endif
 
 #include "g_team.h" // teamplay specific stuff
 
@@ -1701,6 +1707,9 @@ typedef struct {
 ///////////////////////
 // g_main.c
 //
+void G_InitGame(int levelTime, int randomSeed);
+void G_RunFrame(int levelTime);
+void G_ShutdownGame(int restart);
 void G_UpdateCvars(void);
 
 ///////////////////////

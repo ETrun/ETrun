@@ -68,7 +68,7 @@ void alarmbox_updateparts(gentity_t *ent, qboolean matestoo) {
 	t = NULL;
 	while ((t = G_FindByTargetname(t, ent->target)) != NULL) {
 		if (t == ent) {
-			G_Printf("WARNING: Entity used itself.\n");
+			G_DPrintf("WARNING: Entity used itself.\n");
 		} else {
 			// give the dlight the sound
 			if (!Q_stricmp(t->classname, "dlight")) {

@@ -294,7 +294,7 @@ int Pickup_Weapon(gentity_t *ent, gentity_t *other) {
 		    ent->parent->client &&
 		    other->client->sess.sessionTeam == ent->parent->client->sess.sessionTeam) {
 			if (!(ent->parent->client->PCSpecialPickedUpCount % LT_SPECIAL_PICKUP_MOD)) {
-				G_LogPrintf("Ammo_Pack: %d %d\n", (int)(ent->parent - g_entities), (int)(other - g_entities));
+				G_LogPrintf(qtrue, "Ammo_Pack: %d %d\n", (int)(ent->parent - g_entities), (int)(other - g_entities));
 			}
 			ent->parent->client->PCSpecialPickedUpCount++;
 
@@ -396,7 +396,7 @@ int Pickup_Health(gentity_t *ent, gentity_t *other) {
 	    ent->parent && ent->parent->client &&
 	    other->client->sess.sessionTeam == ent->parent->client->sess.sessionTeam) {
 		if (!(ent->parent->client->PCSpecialPickedUpCount % MEDIC_SPECIAL_PICKUP_MOD)) {
-			G_LogPrintf("Health_Pack: %d %d\n", (int)(ent->parent - g_entities), (int)(other - g_entities));      // OSP
+			G_LogPrintf(qtrue, "Health_Pack: %d %d\n", (int)(ent->parent - g_entities), (int)(other - g_entities));      // OSP
 		}
 
 		ent->parent->client->PCSpecialPickedUpCount++;
@@ -511,7 +511,7 @@ void Touch_Item(gentity_t *ent, gentity_t *other, trace_t *trace) {
 	}
 
 	if (g_gamestate.integer == GS_PLAYING) {
-		G_LogPrintf("Item: %i %s\n", other->s.number, ent->item->classname);
+		G_LogPrintf(qtrue, "Item: %i %s\n", other->s.number, ent->item->classname);
 	} else {
 		// OSP - Don't let them pickup winning stuff in warmup
 		if (ent->item->giType != IT_WEAPON &&

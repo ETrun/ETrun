@@ -42,7 +42,7 @@ void G_initMatch(void) {
 
 // Setting initialization
 void G_loadMatchGame(void) {
-	G_Printf("Setting MOTD...\n");
+	G_DPrintf("Setting MOTD...\n");
 	trap_SetConfigstring(CS_CUSTMOTD + 0, server_motd0.string);
 	trap_SetConfigstring(CS_CUSTMOTD + 1, server_motd1.string);
 	trap_SetConfigstring(CS_CUSTMOTD + 2, server_motd2.string);

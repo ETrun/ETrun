@@ -1115,7 +1115,7 @@ void Weapon_Engineer(gentity_t *ent) {
 				traceEnt->health = MG42_MULTIPLAYER_HEALTH;
 			}
 
-			G_LogPrintf("Repair: %d\n", (int)(ent - g_entities));      // OSP
+			G_LogPrintf(qtrue, "Repair: %d\n", (int)(ent - g_entities));      // OSP
 
 			traceEnt->takedamage = qtrue;
 			traceEnt->s.eFlags  &= ~EF_SMOKING;
@@ -1351,7 +1351,7 @@ void Weapon_Engineer(gentity_t *ent) {
 
 							if (!(hit->spawnflags & OBJECTIVE_DESTROYED)) {
 								if (traceEnt->parent && traceEnt->parent->client) {
-									G_LogPrintf("Dynamite_Plant: %d\n", (int)(traceEnt->parent - g_entities));     // OSP
+									G_LogPrintf(qtrue, "Dynamite_Plant: %d\n", (int)(traceEnt->parent - g_entities));     // OSP
 								}
 								traceEnt->parent = ent; // give explode score to guy who armed it
 							}
@@ -1414,7 +1414,7 @@ void Weapon_Engineer(gentity_t *ent) {
 							if ((!(hit->parent->spawnflags & OBJECTIVE_DESTROYED)) &&
 							    hit->s.teamNum && (hit->s.teamNum == (int)ent->client->sess.sessionTeam)) {     // ==, as it's inverse
 								if (traceEnt->parent && traceEnt->parent->client) {
-									G_LogPrintf("Dynamite_Plant: %d\n", (int)(traceEnt->parent - g_entities));     // OSP
+									G_LogPrintf(qtrue, "Dynamite_Plant: %d\n", (int)(traceEnt->parent - g_entities));     // OSP
 								}
 								traceEnt->parent = ent; // give explode score to guy who armed it
 							}
@@ -1554,7 +1554,7 @@ void Weapon_Engineer(gentity_t *ent) {
 							// we got something to destroy
 							if (ent->client->sess.sessionTeam == TEAM_AXIS) {
 								if (hit->s.teamNum == TEAM_AXIS && (!scored)) {
-									G_LogPrintf("Dynamite_Diffuse: %d\n", (int)(ent - g_entities));
+									G_LogPrintf(qtrue, "Dynamite_Diffuse: %d\n", (int)(ent - g_entities));
 									scored++;
 								}
 								G_Script_ScriptEvent(hit, "defused", "");
@@ -1569,7 +1569,7 @@ void Weapon_Engineer(gentity_t *ent) {
 							} else {   // TEAM_ALLIES
 								if (hit->s.teamNum == TEAM_ALLIES && (!scored)) {
 									if (ent->client) {
-										G_LogPrintf("Dynamite_Diffuse: %d\n", (int)(ent - g_entities));                    // OSP
+										G_LogPrintf(qtrue, "Dynamite_Diffuse: %d\n", (int)(ent - g_entities));                    // OSP
 									}
 
 									scored++;

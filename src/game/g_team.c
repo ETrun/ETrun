@@ -109,7 +109,7 @@ void Team_ReturnFlagSound(gentity_t *ent, int team) {
 	gentity_t *pm;
 
 	if (ent == NULL) {
-		G_Printf("Warning:  NULL passed to Team_ReturnFlagSound\n");
+		G_DPrintf("Warning:  NULL passed to Team_ReturnFlagSound\n");
 		return;
 	}
 

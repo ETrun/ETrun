@@ -332,10 +332,6 @@ cvarTable_t gameCvarTable[] =
 // bk001129 - made static to avoid aliasing
 static int gameCvarTableSize = sizeof (gameCvarTable) / sizeof (gameCvarTable[0]);
 
-void G_InitGame(int levelTime, int randomSeed);
-void G_RunFrame(int levelTime);
-void G_ShutdownGame(int restart);
-
 /*
 ================
 vmMain
@@ -353,14 +349,10 @@ Q_EXPORT int vmMain(int command, int arg0, int arg1, int arg2, int arg3, int arg
 
 	switch (command) {
 	case GAME_INIT:
-		// Nico, init crash handler
-		EnableStackTrace();
 		G_InitGame(arg0, arg1);
 		return 0;
 	case GAME_SHUTDOWN:
 		G_ShutdownGame(arg0);
-		// Nico, disable crash handler
-		DisableStackTrace();
 		return 0;
 	case GAME_CLIENT_CONNECT:
 		return (int)ClientConnect(arg0, arg1);
@@ -1036,7 +1028,7 @@ void G_FindTeams(void) {
 		}
 	}
 
-	G_Printf("%i teams with %i entities\n", c, c2);
+	G_DPrintf("%i teams with %i entities\n", c, c2);
 }
 
 /*
@@ -1191,8 +1183,13 @@ void G_InitGame(int levelTime, int randomSeed) {
 
 	srand(randomSeed);
 
-	// Nico, load pthread (win32 ony)
+	// Nico, windows specific actions
 #if defined _WIN32
+
+	// Nico, init crash handler
+	win32_initialize_handler();
+
+	// Nico, load pthread
 	if (pthread_win32_process_attach_np() != TRUE) {
 		G_Error("G_InitGame: failed to load pthread library!\n");
 	}
@@ -1286,8 +1283,7 @@ void G_InitGame(int levelTime, int randomSeed) {
 		if (!level.logFile) {
 			G_Printf("WARNING: Couldn't open logfile: %s\n", g_log.string);
 		} else {
-			G_LogPrintf("------------------------------------------------------------\n");
-			G_LogPrintf("InitGame: %s\n", cs);
+			G_LogPrintf(qfalse, "InitGame: %s\n", cs);
 		}
 	} else {
 		G_Printf("Not logging to disk.\n");
@@ -1299,12 +1295,6 @@ void G_InitGame(int levelTime, int randomSeed) {
 		if (!level.debugLogFile) {
 			G_Printf("WARNING: Couldn't open debug.log\n");
 		}
-	}
-
-	// Nico, crash logging
-	trap_FS_FOpenFile("crash.log", &level.crashLog, FS_APPEND_SYNC);
-	if (!level.crashLog) {
-		G_Printf("WARNING: Couldn't open crash.log\n");
 	}
 
 	// Nico, load API
@@ -1394,8 +1384,6 @@ void G_InitGame(int levelTime, int randomSeed) {
 	// general initialization
 	G_FindTeams();
 
-	G_Printf("-----------------------------------\n");
-
 	BG_ClearAnimationPool();
 
 	BG_ClearCharacterPool();
@@ -1418,7 +1406,7 @@ void G_InitGame(int levelTime, int randomSeed) {
 	// Nico, is level a timerun?
 	if (!level.isTimerun) {
 		trap_Cvar_Set("isTimerun", "0");
-		G_Printf("%s: No timerun found in map\n", GAME_VERSION);
+		G_Printf("%s: no timerun found in map\n", GAME_VERSION);
 	} else {
 		trap_Cvar_Set("isTimerun", "1");
 	}
@@ -1433,7 +1421,7 @@ void G_InitGame(int levelTime, int randomSeed) {
 
 	// Nico, enabled delayed map change watcher
 	if (!G_enable_delayed_map_change_watcher()) {
-		G_Error("Error while installing delayed map change watcher\n");
+		G_Error("%s: error while installing delayed map change watcher\n", GAME_VERSION);
 	}
 }
 
@@ -1449,8 +1437,7 @@ void G_ShutdownGame(int restart) {
 	G_disable_delayed_map_change_watcher();
 
 	if (level.logFile) {
-		G_LogPrintf("ShutdownGame:\n");
-		G_LogPrintf("------------------------------------------------------------\n");
+		G_LogPrintf(qtrue, "ShutdownGame:\n");
 		trap_FS_FCloseFile(level.logFile);
 		level.logFile = 0;
 	}
@@ -1459,12 +1446,6 @@ void G_ShutdownGame(int restart) {
 	if (level.debugLogFile) {
 		trap_FS_FCloseFile(level.debugLogFile);
 		level.debugLogFile = 0;
-	}
-
-	// Nico, close crash log
-	if (level.crashLog) {
-		trap_FS_FCloseFile(level.crashLog);
-		level.crashLog = 0;
 	}
 
 	// Nico, unload API
@@ -1480,8 +1461,13 @@ void G_ShutdownGame(int restart) {
 	// write all the client session data so we can get it back
 	G_WriteSessionData(restart);
 
-	// Nico, unload pthread (win32 ony)
+	// Nico, windows specific actions
 #if defined _WIN32
+
+	// Nico, unload sig handler
+	win32_deinitialize_handler();
+
+	// Nico, unload pthread
 	pthread_win32_process_detach_np();
 	pthread_win32_thread_detach_np();
 #endif
@@ -1723,80 +1709,6 @@ void FindIntermissionPoint(void) {
 }
 
 /*
-=================
-G_LogPrintf
-
-Print to the logfile with a time stamp if it is open
-=================
-*/
-void QDECL G_LogPrintf(const char *fmt, ...) {
-	va_list argptr;
-	char    string[1024];
-	int     min, tens, sec, l;
-
-	sec = level.time / 1000;
-
-	min  = sec / 60;
-	sec -= min * 60;
-	tens = sec / 10;
-	sec -= tens * 10;
-
-	Com_sprintf(string, sizeof (string), "%i:%i%i ", min, tens, sec);
-
-	l = strlen(string);
-
-	va_start(argptr, fmt);
-	Q_vsnprintf(string + l, sizeof (string) - l, fmt, argptr);
-	va_end(argptr);
-
-	if (g_dedicated.integer) {
-		G_Printf("%s", string + l);
-	}
-
-	if (!level.logFile) {
-		return;
-	}
-
-	trap_FS_Write(string, strlen(string), level.logFile);
-}
-
-/*
-=================
-G_LogPrintf
-
-Print to the logfile with a time stamp if it is open
-=================
-*/
-void QDECL G_LogDebug(const char *functionName, const char *severity, const char *fmt, ...) {
-	va_list    argptr;
-	char       string[1024] = { 0 };
-	const char *aMonths[12] =
-	{
-		"Jan", "Feb", "Mar", "Apr", "May", "Jun",
-		"Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
-	};
-	qtime_t ct;
-	int     l = 0;
-
-	trap_RealTime(&ct);
-
-	Com_sprintf(string, sizeof (string), "[%s%02d-%02d %02d:%02d:%02d] [%s] [%s] ",
-	            aMonths[ct.tm_mon], ct.tm_mday, 1900 + ct.tm_year, ct.tm_hour, ct.tm_min, ct.tm_sec, functionName, severity);
-
-	l = strlen(string);
-
-	va_start(argptr, fmt);
-	Q_vsnprintf(string + l, sizeof (string) - l, fmt, argptr);
-	va_end(argptr);
-
-	if (!level.debugLogFile) {
-		return;
-	}
-
-	trap_FS_Write(string, strlen(string), level.debugLogFile);
-}
-
-/*
 ==================
 CheckVote
 ==================
@@ -1812,10 +1724,10 @@ void CheckVote(void) {
 	other = g_entities + level.voteInfo.voter_cn;
 	if (level.voteInfo.voter_team != (int)other->client->sess.sessionTeam) {
 		AP("cpm \"^5Vote canceled^z: voter switched teams\n\"");
-		G_LogPrintf("Vote Failed: %s (voter %s switched teams)\n", level.voteInfo.voteString, other->client->pers.netname);
+		G_LogPrintf(qtrue, "Vote Failed: %s (voter %s switched teams)\n", level.voteInfo.voteString, other->client->pers.netname);
 	} else if (level.time - level.voteInfo.voteTime >= VOTE_TIME) {
 		AP(va("cpm \"^2Vote FAILED! ^3(%s)\n\"", level.voteInfo.voteString));
-		G_LogPrintf("Vote Failed: %s\n", level.voteInfo.voteString);
+		G_LogPrintf(qtrue, "Vote Failed: %s\n", level.voteInfo.voteString);
 	} else {
 		int pcnt = vote_percent.integer;
 		int total;
@@ -1847,10 +1759,10 @@ void CheckVote(void) {
 				if (level.voteInfo.vote_fn != G_Kick_v) {
 					AP(va("cpm \"^5Referee changed setting! ^7(%s)\n\"", level.voteInfo.voteString));
 				}
-				G_LogPrintf("Referee Setting: %s\n", level.voteInfo.voteString);
+				G_LogPrintf(qtrue, "Referee Setting: %s\n", level.voteInfo.voteString);
 			} else {
 				AP("cpm \"^5Vote passed!\n\"");
-				G_LogPrintf("Vote Passed: %s\n", level.voteInfo.voteString);
+				G_LogPrintf(qtrue, "Vote Passed: %s\n", level.voteInfo.voteString);
 			}
 
 			// Perform the passed vote
@@ -1859,7 +1771,7 @@ void CheckVote(void) {
 		} else if (level.voteInfo.voteNo && level.voteInfo.voteNo >= (100 - pcnt) * total / 100) {
 			// same behavior as a no response vote
 			AP(va("cpm \"^2Vote FAILED! ^3(%s)\n\"", level.voteInfo.voteString));
-			G_LogPrintf("Vote Failed: %s\n", level.voteInfo.voteString);
+			G_LogPrintf(qtrue, "Vote Failed: %s\n", level.voteInfo.voteString);
 		} else {
 			// still waiting for a majority
 			return;

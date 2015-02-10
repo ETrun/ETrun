@@ -1,36 +1,9 @@
 #include "g_local.h"
 
 /*
- Crash handler for Windows only, on coredump
+ Crash handler for Windows only, on Linux coredump
  should be enabled and used to track any bug.
 */
-
-/**
- * Log (and print) a crash message
- */
-void CrashLog(const char *s, qboolean printIt) {
-	char       string[1024] = { 0 };
-	const char *aMonths[12] =
-	{
-		"Jan", "Feb", "Mar", "Apr", "May", "Jun",
-		"Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
-	};
-	qtime_t ct;
-
-	trap_RealTime(&ct);
-
-	if (printIt) {
-		G_Printf("%s", s);
-	}
-
-	Com_sprintf(string, sizeof (string), "[%s%02d-%02d %02d:%02d:%02d] %s", aMonths[ct.tm_mon], ct.tm_mday, 1900 + ct.tm_year, ct.tm_hour, ct.tm_min, ct.tm_sec, s);
-
-	if (level.crashLog) {
-		trap_FS_Write(string, strlen(string), level.crashLog);
-	} else {
-		G_Printf("CrashLog: error while logging\n");
-	}
-}
 
 #if defined WIN32
 # include <windows.h>
@@ -68,7 +41,7 @@ BOOL CALLBACK EnumModules(LPSTR ModuleName, DWORD BaseOfDll, PVOID UserContext) 
 	// Nico, unused variable trick fix
 	(void)UserContext;
 
-	CrashLog(va("0x%08x\t%s\n", BaseOfDll, ModuleName), qtrue);
+	G_LogCrash(va("0x%08x\t%s\n", BaseOfDll, ModuleName), qtrue);
 	return TRUE;
 }
 
@@ -102,12 +75,12 @@ char *ExceptionName(DWORD exceptioncode) {
 }
 
 void win32_exceptioninfo(LPEXCEPTION_POINTERS e) {
-	CrashLog(va("Exception: %s (0x%08x)\n", ExceptionName(e->ExceptionRecord->ExceptionCode), e->ExceptionRecord->ExceptionCode), qtrue);
-	CrashLog(va("Exception Address: 0x%08x\n", e->ExceptionRecord->ExceptionAddress), qtrue);
+	G_LogCrash(va("Exception: %s (0x%08x)\n", ExceptionName(e->ExceptionRecord->ExceptionCode), e->ExceptionRecord->ExceptionCode), qtrue);
+	G_LogCrash(va("Exception Address: 0x%08x\n", e->ExceptionRecord->ExceptionAddress), qtrue);
 }
 
 void win32_dllinfo() {
-	CrashLog("DLL Information:\n", qtrue);
+	G_LogCrash("DLL Information:\n", qtrue);
 	pfnSymEnumerateModules(GetCurrentProcess(), (PSYM_ENUMMODULES_CALLBACK)EnumModules, NULL);
 }
 
@@ -133,7 +106,7 @@ void win32_backtrace(LPEXCEPTION_POINTERS e) {
 	process = GetCurrentProcess();
 	thread  = GetCurrentThread();
 
-	CrashLog("Backtrace:\n", qtrue);
+	G_LogCrash("Backtrace:\n", qtrue);
 
 	for (;; ) {
 		more = pfnStackWalk(
@@ -164,9 +137,9 @@ void win32_backtrace(LPEXCEPTION_POINTERS e) {
 		pSym->MaxNameLength = MAX_PATH;
 
 		if (pfnSymGetSymFromAddr(process, sf.AddrPC.Offset, &Disp, pSym)) {
-			CrashLog(va("(%d) %s(%s+%#0x) [0x%08x]\n", cnt, modname, pSym->Name, Disp, sf.AddrPC.Offset), qtrue);
+			G_LogCrash(va("(%d) %s(%s+%#0x) [0x%08x]\n", cnt, modname, pSym->Name, Disp, sf.AddrPC.Offset), qtrue);
 		} else {
-			CrashLog(va("(%d) %s [0x%08x]\n", cnt, modname, sf.AddrPC.Offset), qtrue);
+			G_LogCrash(va("(%d) %s [0x%08x]\n", cnt, modname, sf.AddrPC.Offset), qtrue);
 		}
 
 		cnt++;
@@ -183,15 +156,15 @@ LONG CALLBACK win32_exception_handler(LPEXCEPTION_POINTERS e) {
 	trap_Cvar_VariableStringBuffer("fs_basepath", basepath, sizeof (basepath));
 	trap_Cvar_VariableStringBuffer("fs_game", gamepath, sizeof (gamepath));
 	pfnSymInitialize(GetCurrentProcess(), va("%s\\%s", basepath, gamepath), TRUE);
-	CrashLog("-8<------- Crash Information ------->8-\n", qtrue);
-	CrashLog("---------------------------------------\n", qtrue);
-	CrashLog(va("Version: %s %s Win32\n", GAME_VERSION, MOD_VERSION), qtrue);
-	CrashLog(va("Map: %s\n", level.rawmapname), qtrue);
+	G_LogCrash("-8<------- Crash Information ------->8-\n", qtrue);
+	G_LogCrash("---------------------------------------\n", qtrue);
+	G_LogCrash(va("Version: %s %s Win32\n", GAME_VERSION, MOD_VERSION), qtrue);
+	G_LogCrash(va("Map: %s\n", level.rawmapname), qtrue);
 	win32_exceptioninfo(e);
 	win32_dllinfo();
 	win32_backtrace(e);
-	CrashLog("-8<--------------------------------->8-\n\n", qtrue);
-	CrashLog("Attempting to clean up.\n", qtrue);
+	G_LogCrash("-8<--------------------------------->8-\n\n", qtrue);
+	G_LogCrash("Attempting to clean up.\n", qtrue);
 	G_ShutdownGame(0);
 	pfnSymCleanup(GetCurrentProcess());
 	return 1;
@@ -201,7 +174,7 @@ void win32_initialize_handler(void) {
 
 	imagehlp = LoadLibrary("IMAGEHLP.DLL");
 	if (!imagehlp) {
-		CrashLog("imagehlp.dll unavailable\n", qtrue);
+		G_LogCrash("imagehlp.dll unavailable\n", qtrue);
 		return;
 	}
 
@@ -223,7 +196,7 @@ void win32_initialize_handler(void) {
 	    !pfnSymFunctionTableAccess
 	    ) {
 		FreeLibrary(imagehlp);
-		CrashLog("imagehlp.dll missing exports.\n", qtrue);
+		G_LogCrash("imagehlp.dll missing exports.\n", qtrue);
 		return;
 	}
 
@@ -244,15 +217,3 @@ void win32_deinitialize_handler(void) {
 	FreeLibrary(imagehlp);
 }
 #endif
-
-void EnableStackTrace() {
-#if defined WIN32
-	win32_initialize_handler();
-#endif
-}
-
-void DisableStackTrace() {
-#if defined WIN32
-	win32_deinitialize_handler();
-#endif
-}

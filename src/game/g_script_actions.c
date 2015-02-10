@@ -2662,7 +2662,7 @@ qboolean G_ScriptAction_AIScriptName(gentity_t *ent, char *params) {
 	(void)ent;
 	(void)params;
 
-	G_Printf("Warning: G_ScriptAction_AIScriptName ignored\n");
+	G_DPrintf("Warning: G_ScriptAction_AIScriptName ignored\n");
 
 	return qtrue;
 }
@@ -2681,7 +2681,7 @@ qboolean G_ScriptAction_AxisRespawntime(gentity_t *ent, char *params) {
 	(void)ent;
 	(void)params;
 
-	G_Printf("Warning: G_ScriptAction_AxisRespawntime ignored\n");
+	G_DPrintf("Warning: G_ScriptAction_AxisRespawntime ignored\n");
 
 	return qtrue;
 }
@@ -2698,7 +2698,7 @@ qboolean G_ScriptAction_AlliedRespawntime(gentity_t *ent, char *params) {
 	(void)ent;
 	(void)params;
 
-	G_Printf("Warning: G_ScriptAction_AlliedRespawntime ignored\n");
+	G_DPrintf("Warning: G_ScriptAction_AlliedRespawntime ignored\n");
 
 	return qtrue;
 }
@@ -2750,7 +2750,7 @@ qboolean G_ScriptAction_SetMainObjective(gentity_t *ent, char *params) {
 	(void)ent;
 	(void)params;
 
-	G_Printf("Warning: G_ScriptAction_SetMainObjective ignored\n");
+	G_DPrintf("Warning: G_ScriptAction_SetMainObjective ignored\n");
 
 	return qtrue;
 }
@@ -2881,7 +2881,7 @@ qboolean G_ScriptAction_SetWinner(gentity_t *ent, char *params) {
 	(void)ent;
 	(void)params;
 
-	G_Printf("Warning: G_ScriptAction_SetWinner ignored\n");
+	G_DPrintf("Warning: G_ScriptAction_SetWinner ignored\n");
 
 	return qtrue;
 }
@@ -2902,7 +2902,7 @@ qboolean G_ScriptAction_SetDefendingTeam(gentity_t *ent, char *params) {
 	(void)ent;
 	(void)params;
 
-	G_Printf("Warning: G_ScriptAction_SetDefendingTeam ignored\n");
+	G_DPrintf("Warning: G_ScriptAction_SetDefendingTeam ignored\n");
 
 	return qtrue;
 }
@@ -3115,7 +3115,7 @@ qboolean G_ScriptAction_EndRound(gentity_t *ent, char *params) {
 	(void)ent;
 	(void)params;
 
-	G_Printf("Warning: G_ScriptAction_EndRound ignored\n");
+	G_DPrintf("Warning: G_ScriptAction_EndRound ignored\n");
 
 	return qtrue;
 }
@@ -3132,7 +3132,7 @@ qboolean G_ScriptAction_SetRoundTimelimit(gentity_t *ent, char *params) {
 	(void)ent;
 	(void)params;
 
-	G_Printf("Warning: G_ScriptAction_SetRoundTimelimit ignored\n");
+	G_DPrintf("Warning: G_ScriptAction_SetRoundTimelimit ignored\n");
 
 	return qtrue;
 }
@@ -3244,7 +3244,7 @@ qboolean G_ScriptAction_SetState(gentity_t *ent, char *params) {
 		if (!target) {
 			if (!found) {
 				// Nico, improved error message
-				G_Printf("^1Warning: setstate (%s) called and no entities found\n", name);
+				G_DPrintf("^1Warning: setstate (%s) called and no entities found\n", name);
 			}
 			break;
 		}
@@ -3535,7 +3535,7 @@ qboolean G_ScriptAction_ConstructibleConstructXPBonus(gentity_t *ent, char *para
 	(void)ent;
 	(void)params;
 
-	G_Printf("Warning: G_ScriptAction_ConstructibleConstructXPBonus ignored\n");
+	G_DPrintf("Warning: G_ScriptAction_ConstructibleConstructXPBonus ignored\n");
 	return qtrue;
 }
 
@@ -3551,7 +3551,7 @@ qboolean G_ScriptAction_ConstructibleDestructXPBonus(gentity_t *ent, char *param
 	(void)ent;
 	(void)params;
 
-	G_Printf("Warning: G_ScriptAction_ConstructibleDestructXPBonus ignored\n");
+	G_DPrintf("Warning: G_ScriptAction_ConstructibleDestructXPBonus ignored\n");
 	return qtrue;
 }
 
@@ -3806,7 +3806,7 @@ qboolean G_ScriptAction_AbortIfWarmup(gentity_t *ent, char *params) {
 	(void)ent;
 	(void)params;
 
-	G_Printf("Warning: G_ScriptAction_AbortIfWarmup ignored\n");
+	G_DPrintf("Warning: G_ScriptAction_AbortIfWarmup ignored\n");
 	return qtrue;
 }
 

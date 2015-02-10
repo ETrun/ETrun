@@ -384,7 +384,7 @@ void G_UseTargets(gentity_t *ent, gentity_t *activator) {
 	hash = BG_StringHashValue(ent->target);
 	while ((t = G_FindByTargetnameFast(t, ent->target, hash)) != NULL) {
 		if (t == ent) {
-			G_Printf("WARNING: Entity used itself.\n");
+			G_DPrintf("WARNING: Entity used itself.\n");
 		} else {
 			if (t->use) {
 				t->flags |= (ent->flags & FL_KICKACTIVATE);   // (SA) If 'ent' was kicked to activate, pass this along to it's targets.

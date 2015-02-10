@@ -114,8 +114,8 @@ void trap_SendServerCommand(int clientNum, const char *text) {
 	// Nico, truncate the command before logging it
 	// http://games.chruker.dk/enemy_territory/modding_project_bugfix.php?bug_id=001
 	if (strlen(text) > 1022) {
-		G_LogPrintf("\n%s: trap_SendServerCommand( %d, ... ) length exceeds 1022.\n", GAME_VERSION, clientNum);
-		G_LogPrintf("%s: text [%.950s]... truncated\n", GAME_VERSION, text);
+		G_LogPrintf(qtrue, "\n%s: trap_SendServerCommand( %d, ... ) length exceeds 1022.\n", GAME_VERSION, clientNum);
+		G_LogPrintf(qtrue, "%s: text [%.950s]... truncated\n", GAME_VERSION, text);
 		return;
 	}
 	syscall(G_SEND_SERVER_COMMAND, clientNum, text);

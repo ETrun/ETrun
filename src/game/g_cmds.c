@@ -947,26 +947,26 @@ void G_Say(gentity_t *ent, gentity_t *target, int mode, qboolean encoded, const 
 	switch (mode) {
 	default:
 	case SAY_ALL:
-		G_LogPrintf("say: %s: %s\n", ent->client->pers.netname, chatText);
+		G_LogPrintf(qtrue, "say: %s: %s\n", ent->client->pers.netname, chatText);
 		Com_sprintf(name, sizeof (name), "%s%c%c: ", ent->client->pers.netname, Q_COLOR_ESCAPE, COLOR_WHITE);
 		color = COLOR_GREEN;
 		break;
 	case SAY_BUDDY:
 		localize = qtrue;
-		G_LogPrintf("saybuddy: %s: %s\n", ent->client->pers.netname, chatText);
+		G_LogPrintf(qtrue, "saybuddy: %s: %s\n", ent->client->pers.netname, chatText);
 		loc = BG_GetLocationString(ent->r.currentOrigin);
 		Com_sprintf(name, sizeof (name), "[lof](%s%c%c) (%s): ", ent->client->pers.netname, Q_COLOR_ESCAPE, COLOR_WHITE, loc);
 		color = COLOR_YELLOW;
 		break;
 	case SAY_TEAM:
 		localize = qtrue;
-		G_LogPrintf("sayteam: %s: %s\n", ent->client->pers.netname, chatText);
+		G_LogPrintf(qtrue, "sayteam: %s: %s\n", ent->client->pers.netname, chatText);
 		loc = BG_GetLocationString(ent->r.currentOrigin);
 		Com_sprintf(name, sizeof (name), "[lof](%s%c%c) (%s): ", ent->client->pers.netname, Q_COLOR_ESCAPE, COLOR_WHITE, loc);
 		color = COLOR_CYAN;
 		break;
 	case SAY_TEAMNL:
-		G_LogPrintf("sayteamnl: %s: %s\n", ent->client->pers.netname, chatText);
+		G_LogPrintf(qtrue, "sayteamnl: %s: %s\n", ent->client->pers.netname, chatText);
 		Com_sprintf(name, sizeof (name), "(%s^7): ", ent->client->pers.netname);
 		color = COLOR_CYAN;
 		break;
@@ -2550,7 +2550,7 @@ void Cmd_PrivateMessage_f(gentity_t *ent) {
 		CP(va("print \"^3Private message: ^7%s\n\"", msg));
 		CP(va("print \"%s\n\"", str));
 
-		G_LogPrintf("privmsg: %s: %s: %s\n", netname, name, msg);
+		G_LogPrintf(qtrue, "privmsg: %s: %s: %s\n", netname, name, msg);
 	}
 }
 

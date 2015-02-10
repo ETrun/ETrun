@@ -714,28 +714,28 @@ static qboolean checkUserinfoString(int clientNum, char *userinfo) {
 	// check for malformed or illegal info strings
 	if (!Info_Validate(userinfo)) {
 		// Nico, drop the client
-		G_LogPrintf("Dropping client %d: forbidden character in userinfo\n", clientNum);
+		G_LogPrintf(qtrue, "Dropping client %d: forbidden character in userinfo\n", clientNum);
 		trap_DropClient(clientNum, "^1You were kicked because of forbidden character in userinfo", 0);
 		return qfalse;
 	}
 	// Nico, check userinfo length (from combinedfixes)
 	len = strlen(userinfo);
 	if (len > MAX_INFO_STRING - 44) {
-		G_LogPrintf("Dropping client %d: oversized userinfo\n", clientNum);
+		G_LogPrintf(qtrue, "Dropping client %d: oversized userinfo\n", clientNum);
 		trap_DropClient(clientNum, "^1You were kicked because of oversized userinfo", 0);
 		return qfalse;
 	}
 
 	// Nico, check userinfo leading backslash (from combinedfixes)
 	if (userinfo[0] != '\\') {
-		G_LogPrintf("Dropping client %d: malformed userinfo (missing leading backslash)\n", clientNum);
+		G_LogPrintf(qtrue, "Dropping client %d: malformed userinfo (missing leading backslash)\n", clientNum);
 		trap_DropClient(clientNum, "^1You were kicked because of malformed userinfo", 0);
 		return qfalse;
 	}
 
 	// Nico, check userinfo trailing backslash (from combinedfixes)
 	if (len > 0 && userinfo[len - 1] == '\\') {
-		G_LogPrintf("Dropping client %d: malformed userinfo (trailing backslash)\n", clientNum);
+		G_LogPrintf(qtrue, "Dropping client %d: malformed userinfo (trailing backslash)\n", clientNum);
 		trap_DropClient(clientNum, "^1You were kicked because of malformed userinfo", 0);
 		return qfalse;
 	}
@@ -747,7 +747,7 @@ static qboolean checkUserinfoString(int clientNum, char *userinfo) {
 		}
 	}
 	if (count % 2 != 0) {
-		G_LogPrintf("Dropping client %d: malformed userinfo (odd number of backslash)\n", clientNum);
+		G_LogPrintf(qtrue, "Dropping client %d: malformed userinfo (odd number of backslash)\n", clientNum);
 		trap_DropClient(clientNum, "^1You were kicked because of malformed userinfo", 0);
 		return qfalse;
 	}
@@ -755,7 +755,7 @@ static qboolean checkUserinfoString(int clientNum, char *userinfo) {
 	// Nico, make sure client ip is not empty or malformed (from combinedfixes)
 	ip = Info_ValueForKey(userinfo, "ip");
 	if (!strcmp(ip, "") || !getParsedIp(ip, parsedIp)) {
-		G_LogPrintf("Dropping client %d: malformed userinfo (empty or malformed ip)\n", clientNum);
+		G_LogPrintf(qtrue, "Dropping client %d: malformed userinfo (empty or malformed ip)\n", clientNum);
 		trap_DropClient(clientNum, "^1You were kicked because of malformed userinfo", 0);
 		return qfalse;
 	}
@@ -763,7 +763,7 @@ static qboolean checkUserinfoString(int clientNum, char *userinfo) {
 	// Nico, make sure client name is not empty (from combinedfixes)
 	name = Info_ValueForKey(userinfo, "name");
 	if (!strcmp(name, "")) {
-		G_LogPrintf("Dropping client %d: malformed userinfo (empty name)\n", clientNum);
+		G_LogPrintf(qtrue, "Dropping client %d: malformed userinfo (empty name)\n", clientNum);
 		trap_DropClient(clientNum, "^1You were kicked because of malformed userinfo", 0);
 		return qfalse;
 	}
@@ -779,7 +779,7 @@ static qboolean checkUserinfoString(int clientNum, char *userinfo) {
 		}
 	}
 	if (count > 1) {
-		G_LogPrintf("Dropping client %d: malformed userinfo (too many IP fields)\n", clientNum);
+		G_LogPrintf(qtrue, "Dropping client %d: malformed userinfo (too many IP fields)\n", clientNum);
 		trap_DropClient(clientNum, "^1You were kicked because of malformed userinfo", 0);
 		return qfalse;
 	}
@@ -798,7 +798,7 @@ static qboolean checkUserinfoString(int clientNum, char *userinfo) {
 		}
 	}
 	if (count > 1) {
-		G_LogPrintf("Dropping client %d: malformed userinfo (too many cl_guid fields)\n", clientNum);
+		G_LogPrintf(qtrue, "Dropping client %d: malformed userinfo (too many cl_guid fields)\n", clientNum);
 		trap_DropClient(clientNum, "^1You were kicked because of malformed userinfo", 0);
 		return qfalse;
 	}
@@ -815,7 +815,7 @@ static qboolean checkUserinfoString(int clientNum, char *userinfo) {
 		}
 	}
 	if (count > 1) {
-		G_LogPrintf("Dropping client %d: malformed userinfo (too many name fields)\n", clientNum);
+		G_LogPrintf(qtrue, "Dropping client %d: malformed userinfo (too many name fields)\n", clientNum);
 		trap_DropClient(clientNum, "^1You were kicked because of malformed userinfo", 0);
 		return qfalse;
 	}
@@ -852,7 +852,7 @@ void ClientUserinfoChanged(int clientNum) {
 
 	// Nico, flood protection
 	if (ClientIsFlooding(ent)) {
-		G_LogPrintf("Dropping client %d: flooded userinfo\n", clientNum);
+		G_LogPrintf(qtrue, "Dropping client %d: flooded userinfo\n", clientNum);
 		trap_DropClient(clientNum, "^1You were kicked because of flooded userinfo", 0);
 		return;
 	}
@@ -933,7 +933,7 @@ void ClientUserinfoChanged(int clientNum) {
 	    client->sess.logged) {
 		// Nico, auth token was changed => logout player if he was logged in
 		CP("cp \"You are no longer logged in!\n\"");
-		G_LogPrintf("ClientUserinfoChanged: authToken changed for client %d, forcing logout\n", clientNum);
+		G_LogPrintf(qtrue, "ClientUserinfoChanged: authToken changed for client %d, forcing logout\n", clientNum);
 		ent->client->sess.logged = qfalse;
 	}
 
@@ -974,7 +974,7 @@ void ClientUserinfoChanged(int clientNum) {
 		Info_SetValueForKey(userinfo, "name", oldname);
 		trap_SetUserinfo(clientNum, userinfo);
 		CPx(clientNum, "print \"^1Invalid name, name change refused\n\"");
-		G_LogPrintf("Client %d name change refused\n", clientNum);
+		G_LogPrintf(qtrue, "Client %d name change refused\n", clientNum);
 	} else {
 		// Name is valid
 		// Now, check if name was changed or not
@@ -987,7 +987,7 @@ void ClientUserinfoChanged(int clientNum) {
 				Info_SetValueForKey(userinfo, "name", oldname);
 				trap_SetUserinfo(clientNum, userinfo);
 				CPx(clientNum, "print \"^1You had too many namechanges\n\"");
-				G_LogPrintf("Client %d name change refused\n", clientNum);
+				G_LogPrintf(qtrue, "Client %d name change refused\n", clientNum);
 				return;
 			}
 			client->pers.nameChanges++;
@@ -1031,7 +1031,7 @@ void ClientUserinfoChanged(int clientNum) {
 		return;
 	}
 
-	G_LogPrintf("ClientUserinfoChanged: %i %s\n", clientNum, s);
+	G_LogPrintf(qtrue, "ClientUserinfoChanged: %i %s\n", clientNum, s);
 	G_DPrintf("ClientUserinfoChanged: %i :: %s\n", clientNum, s);
 }
 
@@ -1104,7 +1104,7 @@ char *ClientConnect(int clientNum, qboolean firstTime) {
 		}
 	}
 	if (conn_per_ip > g_maxConnsPerIP.integer) {
-		G_LogPrintf("%s: possible DoS attack, rejecting client from %s (%d connections already)\n", GAME_VERSION, ip, g_maxConnsPerIP.integer);
+		G_LogPrintf(qtrue, "%s: possible DoS attack, rejecting client from %s (%d connections already)\n", GAME_VERSION, ip, g_maxConnsPerIP.integer);
 		return "Too many connections from your IP.";
 	}
 	// Nico, end of check maximum connections per IP
@@ -1133,7 +1133,7 @@ char *ClientConnect(int clientNum, qboolean firstTime) {
 	// Gordon: porting q3f flag bug fix
 	// If a player reconnects quickly after a disconnect, the client disconnect may never be called, thus flag can get lost in the ether
 	if (ent->inuse) {
-		G_LogPrintf("Forcing disconnect on active client: %d\n", (int)(ent - g_entities));
+		G_LogPrintf(qtrue, "Forcing disconnect on active client: %d\n", (int)(ent - g_entities));
 		// so lets just fix up anything that should happen on a disconnect
 		ClientDisconnect(ent - g_entities);
 	}
@@ -1191,7 +1191,7 @@ char *ClientConnect(int clientNum, qboolean firstTime) {
 					client->sess.countryCode = ret;
 				} else {
 					client->sess.countryCode = 246;
-					G_LogPrintf("GeoIP: This IP:%s cannot be located\n", realIP);
+					G_LogPrintf(qtrue, "GeoIP: This IP:%s cannot be located\n", realIP);
 				}
 			}
 		}
@@ -1201,7 +1201,7 @@ char *ClientConnect(int clientNum, qboolean firstTime) {
 	// Nico, end of GeoIP
 
 	// get and distribute relevent paramters
-	G_LogPrintf("ClientConnect: %i\n", clientNum);
+	G_LogPrintf(qtrue, "ClientConnect: %i\n", clientNum);
 	G_UpdateCharacter(client);
 	ClientUserinfoChanged(clientNum);
 
@@ -1292,18 +1292,18 @@ void ClientBegin(int clientNum) {
 
 	// Nico, check for autologin
 	if (g_useAPI.integer && client->pers.autoLogin && !client->sess.logged) {
-		G_LogPrintf("ClientBegin: login client %d via autoLogin\n", clientNum);
+		G_LogPrintf(qtrue, "ClientBegin: login client %d via autoLogin\n", clientNum);
 		Cmd_Login_f(ent);
 	}
 
 	// Nico, check for checkpoints auto loading
 	// if client is not spectator and if we are not in cupMode
 	if (g_useAPI.integer && g_cupMode.integer == 0 && client->pers.autoLoadCheckpoints && client->sess.sessionTeam != TEAM_SPECTATOR) {
-		G_LogPrintf("ClientBegin: loading checkpoints for client %d via autoLoadCheckpoints\n", clientNum);
+		G_LogPrintf(qtrue, "ClientBegin: loading checkpoints for client %d via autoLoadCheckpoints\n", clientNum);
 		Cmd_LoadCheckpoints_real(ent, "0", 0); // "0" as ignore vlaue, because we load player checkpoints
 	}
 
-	G_LogPrintf("ClientBegin: %i\n", clientNum);
+	G_LogPrintf(qtrue, "ClientBegin: %i\n", clientNum);
 }
 
 /*
@@ -1684,7 +1684,7 @@ void ClientDisconnect(int clientNum) {
 		}
 	}
 
-	G_LogPrintf("ClientDisconnect: %i\n", clientNum);
+	G_LogPrintf(qtrue, "ClientDisconnect: %i\n", clientNum);
 
 	trap_UnlinkEntity(ent);
 	ent->s.modelindex                     = 0;
