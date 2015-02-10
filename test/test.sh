@@ -18,6 +18,7 @@ USE_ETL=0
 USE_VALGRIND=0
 USE_DEBUGGER=0
 INSTALL_FILES=''
+OS=''
 
 #
 # Parse options
@@ -143,7 +144,7 @@ function install() {
 	# Clean homepath and basepath
 	if [ $USE_ETL -eq 1 ]; then
 		rm -rf "$etl_base_path/$mod_name"
-		rm -r "$etl_home_path/$mod_name"
+		rm -rf "$etl_home_path/$mod_name"
 	else
 		rm -rf "$et_base_path/$mod_name"
 		rm -rf "$et_home_path/$mod_name"
@@ -239,9 +240,9 @@ function print_summary() {
 function start_game() {
 	# Prepare game args for et/etded
 	if [ $CLIENT_MODE -eq 0 ]; then
-		GAME_ARGS="+set fs_game $mod_name +set fs_basePath '$BASEPATH' +set fs_homePath '$HOMEPATH' +set g_useAPI $USE_API +set g_APImoduleName $APImodule_name +set developer $DEVELOPER +set g_debugLog 1 +map $default_map"
+		GAME_ARGS="+set fs_game $mod_name +set fs_basePath \"$BASEPATH\" +set fs_homePath \"$HOMEPATH\" +set g_useAPI $USE_API +set g_APImoduleName $APImodule_name +set developer $DEVELOPER +set g_debugLog 1 +map $default_map"
 	else
-		GAME_ARGS="+set fs_game $mod_name +set fs_basePath '$BASEPATH' +set fs_homePath '$HOMEPATH' +set developer $DEVELOPER +set com_hunkMegs 128"
+		GAME_ARGS="+set fs_game $mod_name +set fs_basePath \"$BASEPATH\" +set fs_homePath \"$HOMEPATH\" +set developer $DEVELOPER +set com_hunkMegs 128"
 	fi
 
 	# Workaround for OSX where there isn't ETDED binary
@@ -254,9 +255,16 @@ function start_game() {
 	elif [ $USE_DEBUGGER -eq 1 ]; then
 		$debugger_command_line $GAME_PATH $GAME_ARGS
 	else
-		echo $GAME_PATH $GAME_ARGS
+		echo "Game binary path: $GAME_PATH"
+		echo "Args: $GAME_ARGS"
 		read -p 'Press ENTER to start game...'
-		eval "$GAME_PATH $GAME_ARGS"
+		if [[ $OS == "Darwin" || $OS == "Linux" ]]; then
+			eval "$GAME_PATH $GAME_ARGS"
+		else
+			echo \""$GAME_PATH\"" $GAME_ARGS > start.bat
+			start.bat
+			rm start.bat
+		fi
 	fi
 }
 
