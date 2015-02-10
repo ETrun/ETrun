@@ -881,6 +881,10 @@ void Cmd_FollowCycle_f(gentity_t *ent, int dir) {
 		// this is good, we can use it
 		ent->client->sess.spectatorClient = clientnum;
 		ent->client->sess.spectatorState  = SPECTATOR_FOLLOW;
+
+		// Nico, send an event to the client
+		trap_SendServerCommand(ent - g_entities, "followedClientUpdate");
+
 		return;
 	} while (clientnum != original);
 

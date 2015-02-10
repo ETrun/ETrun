@@ -1774,6 +1774,15 @@ static void CG_ServerCommand(void) {
 	}
 	// Nico, end of detect wepaon change asked by the server
 
+	// Nico, detect followed client change
+	if (!Q_stricmp(cmd, "followedClientUpdate")) {
+		// Nico, reset checkpoints count to prevent exceeding
+		// max value while cycling between players
+		cg.timerunCheckPointChecked = 0;
+		return;
+	}
+	// Nico, end of detect followed client change
+
 	CG_Printf("Unknown client game command: %s\n", cmd);
 }
 
