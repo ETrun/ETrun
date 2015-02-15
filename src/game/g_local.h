@@ -1263,9 +1263,9 @@ void G_BurnMeGood(gentity_t *self, gentity_t *body);
 // g_log.c
 //
 void G_LogCrash(const char *s, qboolean printIt);
-void QDECL G_LogPrintf(qboolean printIt, const char *fmt, ...) _attribute((format(printf, 1, 2)));
+void QDECL G_LogPrintf(qboolean printIt, const char *fmt, ...) _attribute((format(printf, 2, 3)));
 void QDECL G_LogDebug(const char *functionName, const char *severity, const char *fmt, ...) _attribute((format(printf, 3, 4)));
-void QDECL G_LogChat(const char *type, const char *fmt, ...) _attribute((format(printf, 1, 2)));
+void QDECL G_LogChat(const char *type, const char *fmt, ...) _attribute((format(printf, 2, 3)));
 
 //
 // g_main.c
