@@ -167,8 +167,9 @@ vmCvar_t g_cupKey;
 // Timelimit mode
 vmCvar_t g_timelimit;
 
-// Debug log
+// Logging
 vmCvar_t g_debugLog;
+vmCvar_t g_chatLog;
 
 // GeoIP
 vmCvar_t g_useGeoIP;
@@ -316,8 +317,9 @@ cvarTable_t gameCvarTable[] =
 	// Timelimit mode
 	{ &g_timelimit,            "timelimit",              "0",                          CVAR_SERVERINFO | CVAR_ARCHIVE | CVAR_LATCH,                   qfalse, qfalse, qfalse },
 
-	// Debug log
+	// Logging
 	{ &g_debugLog,             "g_debugLog",             "0",                          CVAR_ARCHIVE | CVAR_LATCH,                                     qfalse, qfalse, qfalse },
+	{ &g_chatLog,              "g_chatLog",              "1",                          CVAR_ARCHIVE | CVAR_LATCH,                                     qfalse, qfalse, qfalse },
 
 	// GeoIP
 	{ &g_useGeoIP,             "g_useGeoIP",             "1",                          CVAR_ARCHIVE | CVAR_LATCH,                                     qfalse, qfalse, qfalse },
@@ -1297,6 +1299,14 @@ void G_InitGame(int levelTime, int randomSeed) {
 		}
 	}
 
+	// Nico, chat logging
+	if (g_chatLog.integer) {
+		trap_FS_FOpenFile("chat.log", &level.chatLogFile, FS_APPEND_SYNC);
+		if (!level.chatLogFile) {
+			G_Printf("WARNING: Couldn't open chat.log\n");
+		}
+	}
+
 	// Nico, load API
 	// Note: do not check API here, it could crash
 	if (g_useAPI.integer) {
@@ -1446,6 +1456,12 @@ void G_ShutdownGame(int restart) {
 	if (level.debugLogFile) {
 		trap_FS_FCloseFile(level.debugLogFile);
 		level.debugLogFile = 0;
+	}
+
+	// Nico, close chat log
+	if (level.chatLogFile) {
+		trap_FS_FCloseFile(level.chatLogFile);
+		level.chatLogFile = 0;
 	}
 
 	// Nico, unload API

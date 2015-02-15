@@ -94,3 +94,34 @@ void QDECL G_LogDebug(const char *functionName, const char *severity, const char
 
 	trap_FS_Write(string, strlen(string), level.debugLogFile);
 }
+
+/*
+=================
+G_LogChat
+
+Print to the chat logfile with a date if it is open
+=================
+*/
+void QDECL G_LogChat(const char *type, const char *fmt, ...) {
+	va_list    argptr;
+	char       string[1024] = { 0 };
+	qtime_t ct;
+	int     l = 0;
+
+	trap_RealTime(&ct);
+
+	Com_sprintf(string, sizeof(string), "[%04d-%02d-%02d %02d:%02d:%02d] [%s] ",
+		1900 + ct.tm_year, 1 + ct.tm_mon, ct.tm_mday, ct.tm_hour, ct.tm_min, ct.tm_sec, type);
+
+	l = strlen(string);
+
+	va_start(argptr, fmt);
+	Q_vsnprintf(string + l, sizeof(string) - l, fmt, argptr);
+	va_end(argptr);
+
+	if (!level.chatLogFile) {
+		return;
+	}
+
+	trap_FS_Write(string, strlen(string), level.chatLogFile);
+}

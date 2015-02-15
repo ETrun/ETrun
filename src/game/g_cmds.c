@@ -947,12 +947,18 @@ void G_Say(gentity_t *ent, gentity_t *target, int mode, qboolean encoded, const 
 	switch (mode) {
 	default:
 	case SAY_ALL:
+		if (g_chatLog.integer) {
+			G_LogChat("say", "%s: %s\n", ent->client->pers.netname, chatText);
+		}
 		G_LogPrintf(qtrue, "say: %s: %s\n", ent->client->pers.netname, chatText);
 		Com_sprintf(name, sizeof (name), "%s%c%c: ", ent->client->pers.netname, Q_COLOR_ESCAPE, COLOR_WHITE);
 		color = COLOR_GREEN;
 		break;
 	case SAY_BUDDY:
 		localize = qtrue;
+		if (g_chatLog.integer) {
+			G_LogChat("saybuddy", "%s: %s\n", ent->client->pers.netname, chatText);
+		}
 		G_LogPrintf(qtrue, "saybuddy: %s: %s\n", ent->client->pers.netname, chatText);
 		loc = BG_GetLocationString(ent->r.currentOrigin);
 		Com_sprintf(name, sizeof (name), "[lof](%s%c%c) (%s): ", ent->client->pers.netname, Q_COLOR_ESCAPE, COLOR_WHITE, loc);
@@ -960,12 +966,18 @@ void G_Say(gentity_t *ent, gentity_t *target, int mode, qboolean encoded, const 
 		break;
 	case SAY_TEAM:
 		localize = qtrue;
+		if (g_chatLog.integer) {
+			G_LogChat("sayteam", "%s: %s\n", ent->client->pers.netname, chatText);
+		}
 		G_LogPrintf(qtrue, "sayteam: %s: %s\n", ent->client->pers.netname, chatText);
 		loc = BG_GetLocationString(ent->r.currentOrigin);
 		Com_sprintf(name, sizeof (name), "[lof](%s%c%c) (%s): ", ent->client->pers.netname, Q_COLOR_ESCAPE, COLOR_WHITE, loc);
 		color = COLOR_CYAN;
 		break;
 	case SAY_TEAMNL:
+		if (g_chatLog.integer) {
+			G_LogChat("sayteamnl", "%s: %s\n", ent->client->pers.netname, chatText);
+		}
 		G_LogPrintf(qtrue, "sayteamnl: %s: %s\n", ent->client->pers.netname, chatText);
 		Com_sprintf(name, sizeof (name), "(%s^7): ", ent->client->pers.netname);
 		color = COLOR_CYAN;
@@ -1092,6 +1104,11 @@ void G_Voice(gentity_t *ent, gentity_t *target, int mode, const char *id, qboole
 	// echo the text to the console
 	if (g_dedicated.integer) {
 		G_Printf("voice: %s %s\n", ent->client->pers.netname, id);
+	}
+
+	// Nico, log to chat log
+	if (g_chatLog.integer) {
+		G_LogChat("voice", "%s: %s\n", ent->client->pers.netname, id);
 	}
 
 	if (mode == SAY_BUDDY) {

@@ -833,6 +833,7 @@ typedef struct {
 
 	fileHandle_t logFile; // Nico, note: this is for g_log
 	fileHandle_t debugLogFile; // Nico, debug log
+	fileHandle_t chatLogFile; // Nico, chat log
 
 	char rawmapname[MAX_QPATH];
 
@@ -1264,6 +1265,7 @@ void G_BurnMeGood(gentity_t *self, gentity_t *body);
 void G_LogCrash(const char *s, qboolean printIt);
 void QDECL G_LogPrintf(qboolean printIt, const char *fmt, ...) _attribute((format(printf, 1, 2)));
 void QDECL G_LogDebug(const char *functionName, const char *severity, const char *fmt, ...) _attribute((format(printf, 3, 4)));
+void QDECL G_LogChat(const char *type, const char *fmt, ...) _attribute((format(printf, 1, 2)));
 
 //
 // g_main.c
@@ -1487,8 +1489,9 @@ extern vmCvar_t g_cupKey;
 // Timelimit mode
 extern vmCvar_t g_timelimit;
 
-// Debug log
+// Logging
 extern vmCvar_t g_debugLog;
+extern vmCvar_t g_chatLog;
 
 // GeoIP
 extern vmCvar_t g_useGeoIP;
