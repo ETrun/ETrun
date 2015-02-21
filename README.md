@@ -51,17 +51,7 @@ Alternatively you can point the CMake GUI tool to the CMakeLists.txt file and ge
 Testing
 =======
 
-There are test scripts for Windows and Linux / OSX.
-
-Windows
--------
-
-Windows test scripts are located in `test/win32`, you may have to edit some paths according to your ET directory location.
-
-Linux / OSX
------------
-
-Linux and OSX got a dedicated script located in `test/unix`.
+There are test scripts for Windows and Linux / OSX located in `test` directory.
 Before using them you need to setup your config file. Make a copy of the `*.config.example` file corresponding to your OS and run the following command to know all available opions:
 
 	$ ./test/unix/test.sh -h
