@@ -108,10 +108,10 @@ static qboolean WM_ETrun_drawCountryFlag(float x, float y, unsigned int countryC
 	float alpha[4];
 
 	if (countryCode < 255) {
-		float        x1        = (float)((countryCode * (unsigned int)COUNTRY_FLAG_INDIVIDUAL_SIZE) % COUNTRY_FLAG_WIDTH);
-		float        y1        = (float)(floor((countryCode * COUNTRY_FLAG_INDIVIDUAL_SIZE) / COUNTRY_FLAG_WIDTH) * COUNTRY_FLAG_INDIVIDUAL_SIZE);
-		float        x2        = x1 + COUNTRY_FLAG_INDIVIDUAL_SIZE;
-		float        y2        = y1 + COUNTRY_FLAG_INDIVIDUAL_SIZE;
+		float x1 = (float)((countryCode * (unsigned int)COUNTRY_FLAG_INDIVIDUAL_SIZE) % COUNTRY_FLAG_WIDTH);
+		float y1 = (float)(floor((countryCode * COUNTRY_FLAG_INDIVIDUAL_SIZE) / COUNTRY_FLAG_WIDTH) * COUNTRY_FLAG_INDIVIDUAL_SIZE);
+		float x2 = x1 + COUNTRY_FLAG_INDIVIDUAL_SIZE;
+		float y2 = y1 + COUNTRY_FLAG_INDIVIDUAL_SIZE;
 		alpha[0] = alpha[1] = alpha[2] = alpha[3] = 1.0;
 
 		trap_R_SetColor(alpha);

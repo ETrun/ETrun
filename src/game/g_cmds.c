@@ -408,7 +408,7 @@ SetTeam
 */
 qboolean SetTeam(gentity_t *ent, char *s, weapon_t w1, weapon_t w2, qboolean setweapons) {
 	team_t           team, oldTeam;
-	gclient_t        *client = ent->client;
+	gclient_t        *client   = ent->client;
 	int              clientNum = client - level.clients;
 	spectatorState_t specState;
 	int              specClient = 0;
@@ -825,14 +825,10 @@ void Cmd_FollowCycle_f(gentity_t *ent, int dir) {
 
 	// Nico, fix from etlegacy for team follow1/2 crash
 	// if dedicated follow client, just switch between the two auto clients
-	if (ent->client->sess.spectatorClient < 0)
-	{
-		if (ent->client->sess.spectatorClient == -1)
-		{
+	if (ent->client->sess.spectatorClient < 0) {
+		if (ent->client->sess.spectatorClient == -1) {
 			ent->client->sess.spectatorClient = -2;
-		}
-		else if (ent->client->sess.spectatorClient == -2)
-		{
+		} else if (ent->client->sess.spectatorClient == -2)   {
 			ent->client->sess.spectatorClient = -1;
 		}
 		return;
