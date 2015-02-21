@@ -4168,14 +4168,14 @@ void Item_Bind_Paint(itemDef_t *item) {
 			lowLight[2] = 0.8f * parent->focusColor[2];
 			lowLight[3] = 0.8f * parent->focusColor[3];
 		}
-		LerpColor(parent->focusColor, lowLight, newColor, 0.5 + 0.5 * sin(DC->realTime / PULSE_DIVISOR));
+		LerpColor(parent->focusColor, lowLight, newColor, 0.5 + 0.5 * sin((float)(DC->realTime / PULSE_DIVISOR)));
 	} else {
 		if (g_bindItem == item) {
 			lowLight[0] = 0.8f * 1.0f;
 			lowLight[1] = 0.8f * 0.0f;
 			lowLight[2] = 0.8f * 0.0f;
 			lowLight[3] = 0.8f * 1.0f;
-			LerpColor(item->window.foreColor, lowLight, newColor, 0.5 + 0.5 * sin(DC->realTime / PULSE_DIVISOR));
+			LerpColor(item->window.foreColor, lowLight, newColor, 0.5 + 0.5 * sin((float)(DC->realTime / PULSE_DIVISOR)));
 		} else {
 			memcpy(&newColor, &item->window.foreColor, sizeof (vec4_t));
 		}
