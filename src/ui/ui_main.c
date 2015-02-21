@@ -662,7 +662,7 @@ void _UI_Refresh(int realtime) {
 		if (!total) {
 			total = 1;
 		}
-		uiInfo.uiDC.FPS = (float)(1000 * UI_FPS_FRAMES / total);
+		uiInfo.uiDC.FPS = (int)(1000 * UI_FPS_FRAMES / total);
 	}
 
 	UI_UpdateCvars();
