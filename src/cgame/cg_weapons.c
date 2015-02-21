@@ -3943,7 +3943,7 @@ void CG_MG42EFX(centity_t *cent) {
 			trap_R_AddRefEntityToScene(&flash);
 
 			// ydnar: add dynamic light
-			trap_R_AddLightToScene(flash.origin, 320, 1.25f + (rand() & 31) / 128,
+			trap_R_AddLightToScene(flash.origin, 320, 1.25f + (float)((rand() & 31) / 128),
 			                       1.0f, 0.6f, 0.23f, 0, 0);
 
 			return;
