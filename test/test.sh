@@ -171,7 +171,7 @@ function install() {
 
 	# Install custom mapscripts into homepath
 	mkdir -p "$HOMEPATH/$mod_name/custommapscripts"
-	cp -f "$mod_name/custommapscripts"/* "$HOMEPATH/$mod_name/custommapscripts"
+	cp -f "$mapscripts_dir"/* "$HOMEPATH/$mod_name/custommapscripts"
 
 	# Install GeoIP
 	cp libs/geoip/GeoIP.dat "$HOMEPATH/$mod_name/"

@@ -107,6 +107,17 @@ APImodule_dir="/Users/$USER/Documents/ETrun_api_module/build"
 
 
 #################################################
+###            Mapscripts settings            ###
+#################################################
+#
+# MapScripts dir
+#
+mapscripts_dir=''
+#################################################
+
+
+
+#################################################
 ###             Debugging options             ###
 ###     (ignore if you don't use Valgrind)    ###
 #################################################
