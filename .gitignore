@@ -5,7 +5,7 @@ build/*
 src/game/bg_version.h
 
 # Test config files
-test/unix/*.config
+test/*.config
 
 # VS related
 ipch/

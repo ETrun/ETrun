@@ -53,12 +53,12 @@ et_home_path="/Users/$USER/.etwolf"
 #
 # Path to your ET dedicated binary
 #
-et_dedicated_binary_path="$et_base_path/Wolfenstein\ ET.app/Contents/MacOS/Wolfenstein\ ET"
+et_dedicated_binary_path="$et_base_path/Wolfenstein ET.app/Contents/MacOS/Wolfenstein\ ET"
 
 #
 # Path to your ET binary
 #
-et_binary_path="$et_base_path/Wolfenstein\ ET.app/Contents/MacOS/Wolfenstein\ ET"
+et_binary_path="$et_base_path/Wolfenstein ET.app/Contents/MacOS/Wolfenstein\ ET"
 #################################################
 
 
@@ -75,7 +75,7 @@ etl_base_path="/Users/$USER/etlegacy"
 #
 # Path to your ET: Legacy game directory in your home
 #
-etl_home_path="/Users/$USER/Library/Application\ Support/etlegacy"
+etl_home_path="/Users/$USER/Library/Application Support/etlegacy"
 
 #
 # Path to your ET: Legacy dedicated binary
