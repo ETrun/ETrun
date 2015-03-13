@@ -931,6 +931,12 @@ qboolean G_AsyncAPICall(char *command, char *result, gentity_t *ent, int count, 
 		return qfalse;
 	}
 
+	// Check if we are allowed to start a new thread
+	if (!threadingAllowed) {
+		LDE("%s\n", "starting new threads is forbidden");
+		return qfalse;
+	}
+
 	// Check number of arguments in ... (=count)
 	if (count <= 0) {
 		LDE("invalid argument count %d\n", count);

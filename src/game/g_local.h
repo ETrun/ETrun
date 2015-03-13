@@ -1368,6 +1368,9 @@ extern int activeThreadsCounter;
 // Nico, global threads
 extern pthread_t globalThreads[];
 
+// Nico, threading enabled/disabled
+extern qboolean threadingAllowed;
+
 extern level_locals_t   level;
 extern gentity_t        g_entities[];   //DAJ was explicit set to MAX_ENTITIES
 extern g_campaignInfo_t g_campaigns[];

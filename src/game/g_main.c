@@ -36,6 +36,10 @@ int activeThreadsCounter;
 #define DELAYED_MAP_CHANGE_THREAD_ID 0
 pthread_t globalThreads[4];
 
+// Nico, this var help to prevent new thread from being spawned
+// when we don't want too. i.e. when we are changing map
+qboolean threadingAllowed;
+
 level_locals_t level;
 
 typedef struct {
@@ -1407,6 +1411,9 @@ void G_InitGame(int levelTime, int randomSeed) {
 
 	// Nico, init global active threads counter
 	activeThreadsCounter = 0;
+
+	// Nico, enable threading
+	threadingAllowed = qtrue;
 
 	// Nico, flood protection
 	if (g_floodProtect.integer && trap_Cvar_VariableIntegerValue("sv_floodprotect")) {

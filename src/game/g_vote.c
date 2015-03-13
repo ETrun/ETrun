@@ -397,6 +397,7 @@ void *G_delayed_map_change_watcher(void *arg) {
 			if (level.time >= level.delayedMapChange.timeChange) {
 				// Nico, do we have to wait for some threads to finish their work?
 				while (activeThreadsCounter > 0 && count < limit) {
+					threadingAllowed = qfalse;
 					G_DPrintf("%s: waiting for %d thread%s before changing map\n", GAME_VERSION, activeThreadsCounter, activeThreadsCounter > 1 ? "s" : "");
 					my_sleep(1000); // Nico, sleep for 1sec
 					count++;
