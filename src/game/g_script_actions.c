@@ -446,7 +446,7 @@ qboolean G_ScriptAction_StartAnimation(gentity_t *ent, char *params) {
 		}
 	}
 
-	if (norandom) {
+	if (norandom || ent->s.torsoAnim == 0) {
 		ent->s.frame = 0;
 	} else {
 		ent->s.frame = rand() % ent->s.torsoAnim;
