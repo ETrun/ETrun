@@ -400,13 +400,12 @@ qboolean G_ScriptAction_UnFreezeAnimation(gentity_t *ent, char *params) {
 }
 
 qboolean G_ScriptAction_StartAnimation(gentity_t *ent, char *params) {
-	char     *pString;
+	char     *pString = params;
 	char     *token;
 	qboolean norandom = qfalse;
 	qboolean nolerp   = qfalse;
 	qboolean noloop   = qfalse;
-
-	pString = params;
+	int 	 value;
 
 	token = COM_ParseExt(&pString, qfalse);
 	if (!token[0]) {
@@ -427,7 +426,12 @@ qboolean G_ScriptAction_StartAnimation(gentity_t *ent, char *params) {
 		G_Error("G_Scripting: startanimation must have an fps count\n");
 	}
 
-	ent->s.weapon = 1000.f / atoi(token);
+	value = atoi(token);
+	if (value) {
+		ent->s.weapon = 1000.f / value;
+	} else {
+		ent->s.weapon = 1000.f;
+	}
 
 	while (token[0]) {
 		token = COM_ParseExt(&pString, qfalse);
