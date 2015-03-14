@@ -490,6 +490,11 @@ void CG_RunLerpFrameRate(clientInfo_t *ci, lerpFrame_t *lf, int newAnimation, ce
 	// Ridah, make sure the animation speed is updated when possible
 	anim = lf->animation;
 
+	// Nico, check anim
+	if (!anim) {
+		return;
+	}
+
 	// check for forcing last frame
 	if (cent->currentState.eFlags & EF_FORCE_END_FRAME
 	    // xkan, 12/27/2002 - In SP, corpse also stays at the last frame (of the death animation)
