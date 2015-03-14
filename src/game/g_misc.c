@@ -1651,11 +1651,15 @@ void misc_spawner_think(gentity_t *ent) {
 
 	item = BG_FindItem(ent->spawnitem);
 
+	if (!item) {
+		G_DPrintf("WARNING: misc_spawner item not found!\n");
+		return;
+	}
+
 	drop = Drop_Item(ent, item, 0, qfalse);
 
 	if (!drop) {
-		G_Printf("-----> WARNING <-------\n");
-		G_Printf("misc_spawner used at %s failed to drop!\n", vtos(ent->r.currentOrigin));
+		G_DPrintf("WARNING: misc_spawner used at %s failed to drop!\n", vtos(ent->r.currentOrigin));
 	}
 }
 

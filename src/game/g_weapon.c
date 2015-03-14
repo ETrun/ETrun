@@ -1630,8 +1630,6 @@ void weapon_smokeBombExplode(gentity_t *ent) {
 		G_FreeEntity(ent);
 	}
 }
-
-gentity_t *LaunchItem(gitem_t *item, vec3_t origin, vec3_t velocity, int ownerNum);
 // jpw
 
 /*
