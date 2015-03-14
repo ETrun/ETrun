@@ -1455,14 +1455,13 @@ void SP_Props_ChairChatArm(gentity_t *ent) {
 //----(SA)	end
 
 void Use_DamageInflictor(gentity_t *ent, gentity_t *other, gentity_t *activator) {
-	gentity_t *daent;
+	gentity_t *daent = NULL;
 
 	// Nico, silent GCC
 	(void)other;
 	(void)activator;
 
-	daent = NULL;
-	while ((daent = G_FindByTargetname(daent, daent->target)) != NULL) {
+	while ((daent = G_FindByTargetname(daent, daent ? daent->target : NULL)) != NULL) {
 		if (daent == ent) {
 			G_Printf("Use_DamageInflictor damaging self.\n");
 		} else {
