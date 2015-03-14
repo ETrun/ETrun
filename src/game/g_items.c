@@ -438,7 +438,11 @@ void RespawnItem(gentity_t *ent) {
 		for (count = 0, ent = master; ent; ent = ent->teamchain, ++count)
 			;
 
-		choice = rand() % count;
+		if (count != 0) {
+			choice = rand() % count;
+		} else {
+			choice = rand();
+		}
 
 		for (count = 0, ent = master; count < choice; ent = ent->teamchain, ++count)
 			;
