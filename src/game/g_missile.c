@@ -1026,7 +1026,7 @@ gentity_t *fire_grenade(gentity_t *self, vec3_t start, vec3_t dir, int grenadeWP
 	// no self->client for shooter_grenade's
 	if (self->client) {
 		self->client->ps.grenadeTimeLeft = 0;       // reset grenade timer
-
+		bolt->s.teamNum  = self->client->sess.sessionTeam;
 	}
 	if (!noExplode) {
 		bolt->think = G_ExplodeMissile;
@@ -1037,7 +1037,6 @@ gentity_t *fire_grenade(gentity_t *self, vec3_t start, vec3_t dir, int grenadeWP
 	bolt->s.weapon   = grenadeWPID;
 	bolt->r.ownerNum = self->s.number;
 	bolt->parent     = self;
-	bolt->s.teamNum  = self->client->sess.sessionTeam;
 
 // JPW NERVE -- commented out bolt->damage and bolt->splashdamage, override with G_GetWeaponDamage()
 // so it works with different netgame balance.  didn't uncomment bolt->damage on dynamite 'cause its so *special*
