@@ -1944,7 +1944,7 @@ void flippy_table_use(gentity_t *ent, gentity_t *other, gentity_t *activator) {
 	(void)activator;
 
 	// it would be odd to flip a table if your standing on it
-	if (other && other->s.groundEntityNum == ent->s.number) {
+	if (!other || other->s.groundEntityNum == ent->s.number) {
 		return;
 	}
 
