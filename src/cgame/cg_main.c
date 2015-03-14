@@ -580,7 +580,7 @@ cvarTable_t cvarTable[] =
 	{ &cg_countryFlags,         "cg_countryFlags",         "0",     CVAR_ARCHIVE,             0 },
 
 	// Minimum start speed
-	{ &cg_minStartSpeed,        "cg_minStartSpeed",         "0",     CVAR_ARCHIVE,             0 },
+	{ &cg_minStartSpeed,        "cg_minStartSpeed",        "0",     CVAR_ARCHIVE,             0 },
 
 	// Nico, end of ETrun cvars
 };

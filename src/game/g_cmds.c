@@ -828,7 +828,7 @@ void Cmd_FollowCycle_f(gentity_t *ent, int dir) {
 	if (ent->client->sess.spectatorClient < 0) {
 		if (ent->client->sess.spectatorClient == -1) {
 			ent->client->sess.spectatorClient = -2;
-		} else if (ent->client->sess.spectatorClient == -2)   {
+		} else if (ent->client->sess.spectatorClient == -2) {
 			ent->client->sess.spectatorClient = -1;
 		}
 		return;

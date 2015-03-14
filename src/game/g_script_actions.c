@@ -405,7 +405,7 @@ qboolean G_ScriptAction_StartAnimation(gentity_t *ent, char *params) {
 	qboolean norandom = qfalse;
 	qboolean nolerp   = qfalse;
 	qboolean noloop   = qfalse;
-	int 	 value;
+	int      value;
 
 	token = COM_ParseExt(&pString, qfalse);
 	if (!token[0]) {

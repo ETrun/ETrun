@@ -3774,7 +3774,7 @@ void Item_TextField_Paint(itemDef_t *item) {
 	char           buff[1024];
 	vec4_t         newColor;
 	int            offset;
-	int            text_len = 0; // screen length of the editfield text that will be printed
+	int            text_len     = 0; // screen length of the editfield text that will be printed
 	int            field_offset = -1; // character offset in the editfield string
 	int            screen_offset; // offset on screen for precise placement
 	menuDef_t      *parent  = (menuDef_t *)item->parent;

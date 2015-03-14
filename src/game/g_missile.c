@@ -1026,7 +1026,7 @@ gentity_t *fire_grenade(gentity_t *self, vec3_t start, vec3_t dir, int grenadeWP
 	// no self->client for shooter_grenade's
 	if (self->client) {
 		self->client->ps.grenadeTimeLeft = 0;       // reset grenade timer
-		bolt->s.teamNum  = self->client->sess.sessionTeam;
+		bolt->s.teamNum                  = self->client->sess.sessionTeam;
 	}
 	if (!noExplode) {
 		bolt->think = G_ExplodeMissile;
