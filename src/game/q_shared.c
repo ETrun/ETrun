@@ -851,6 +851,11 @@ void Info_SetValueForKey(char *s, const char *key, const char *value) {
 		Com_Error(ERR_DROP, "Info_SetValueForKey: oversize infostring [%s] [%s] [%s]", s, key, value);
 	}
 
+	if (!value || !strlen(value)) {
+		Com_Printf("Info_SetValueForKey: invalid or empty value\n");
+		return;
+	}
+
 	if (strchr(key, '\\') || strchr(value, '\\')) {
 		Com_Printf("Can't use keys or values with a \\\n");
 		return;
@@ -867,9 +872,6 @@ void Info_SetValueForKey(char *s, const char *key, const char *value) {
 	}
 
 	Info_RemoveKey(s, key);
-	if (!value || !strlen(value)) {
-		return;
-	}
 
 	Com_sprintf(newi, sizeof (newi), "\\%s\\%s", key, value);
 
