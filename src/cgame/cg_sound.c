@@ -1087,11 +1087,12 @@ qboolean CG_SpeakerEditor_NoiseEdit_KeyDown(panel_button_t *button, int key) {
 			char dirname[MAX_QPATH];
 			char filename[MAX_QPATH];
 			char match[MAX_QPATH];
-			int  i, numfiles, filelen;
+			int  i, numfiles, filelen, filenamelen;
 			char *fileptr;
 
 			COM_StripFilename((char *)button->text, dirname);
 			Q_strncpyz(filename, COM_SkipPath((char *)button->text), sizeof (filename));
+			filenamelen = strlen(filename);
 
 			if (!Q_stricmp(button->text, dirname)) {
 				return qtrue;
@@ -1109,7 +1110,7 @@ qboolean CG_SpeakerEditor_NoiseEdit_KeyDown(panel_button_t *button, int key) {
 
 				for (i = 0; i < numfiles; i++, fileptr += filelen + 1) {
 					filelen = strlen(fileptr);
-					if (Q_stricmpn(fileptr, filename, strlen(filename))) {
+					if (Q_stricmpn(fileptr, filename, filenamelen)) {
 						continue;
 					}
 
