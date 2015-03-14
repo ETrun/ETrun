@@ -1798,6 +1798,9 @@ extern vmCvar_t cg_infoPanelY;
 // Country flags
 extern vmCvar_t cg_countryFlags;
 
+// Minimum start speed
+extern vmCvar_t cg_minStartSpeed;
+
 // Nico, end of ETrun cvars
 
 //

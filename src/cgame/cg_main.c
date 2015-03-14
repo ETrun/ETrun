@@ -324,6 +324,9 @@ vmCvar_t cg_infoPanelY;
 // Country flags
 vmCvar_t cg_countryFlags;
 
+// Minimum start speed
+vmCvar_t cg_minStartSpeed;
+
 // Nico, end of ETrun cvars
 
 typedef struct {
@@ -575,6 +578,9 @@ cvarTable_t cvarTable[] =
 
 	// Country flags
 	{ &cg_countryFlags,         "cg_countryFlags",         "0",     CVAR_ARCHIVE,             0 },
+
+	// Minimum start speed
+	{ &cg_minStartSpeed,        "cg_minStartSpeed",         "0",     CVAR_ARCHIVE,             0 },
 
 	// Nico, end of ETrun cvars
 };
