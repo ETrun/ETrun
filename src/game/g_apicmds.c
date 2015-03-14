@@ -61,7 +61,7 @@ void Cmd_Login_f(gentity_t *ent) {
 // Nico, ETrun logout command
 void Cmd_Logout_f(gentity_t *ent) {
 	if (!ent || !ent->client) {
-		G_DPrintf("%s: Cmd_Logout_f, invalid ent: %d\n", GAME_VERSION, (int)ent);
+		G_DPrintf("%s: Cmd_Logout_f, invalid ent!\n", GAME_VERSION);
 		return;
 	}
 

@@ -176,9 +176,6 @@ int G_GetWeaponClassForMOD(meansOfDeath_t mod);
 //====================================================================
 
 #define MAX_NETNAME         36
-
-#define CFOFS(x) ((int)&(((gclient_t *)0)->x))
-
 #define MAX_COMMANDER_TEAM_SOUNDS 16
 
 typedef struct commanderTeamChat_s {
@@ -1375,7 +1372,7 @@ extern level_locals_t   level;
 extern gentity_t        g_entities[];   //DAJ was explicit set to MAX_ENTITIES
 extern g_campaignInfo_t g_campaigns[];
 
-#define FOFS(x) ((int)&(((gentity_t *)0)->x))
+#define FOFS(x) ((size_t)&(((gentity_t *)0)->x))
 
 extern vmCvar_t g_log;
 extern vmCvar_t g_dedicated;

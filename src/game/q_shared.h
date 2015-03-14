@@ -76,6 +76,9 @@ If you have questions concerning this license or the applicable additional terms
 #include <sys/stat.h> // rain
 #include <float.h>
 
+// Nico, use stdint for portability
+#include <stdint.h>
+
 // use MSVC inline asm version of C functions
 #if defined _M_IX86
 # define id386   1

@@ -345,7 +345,7 @@ vmMain
 This is the only way control passes into the module.
 ================
 */
-Q_EXPORT int vmMain(int command, int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6) {
+Q_EXPORT intptr_t vmMain(intptr_t command, intptr_t arg0, intptr_t arg1, intptr_t arg2, intptr_t arg3, intptr_t arg4, intptr_t arg5, intptr_t arg6) {
 	// Nico, silent GCC
 	(void)arg2;
 	(void)arg3;
@@ -361,7 +361,7 @@ Q_EXPORT int vmMain(int command, int arg0, int arg1, int arg2, int arg3, int arg
 		G_ShutdownGame(arg0);
 		return 0;
 	case GAME_CLIENT_CONNECT:
-		return (int)ClientConnect(arg0, arg1);
+		return (intptr_t)ClientConnect(arg0, arg1);
 	case GAME_CLIENT_THINK:
 		ClientThink(arg0);
 		return 0;
