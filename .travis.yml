@@ -24,5 +24,6 @@ addons:
     project:
       name: "ETrun/ETrun"
       description: "Build submitted via Travis CI"
+    notification_email: false
     build_command: "./make.sh"
     branch_pattern: master
