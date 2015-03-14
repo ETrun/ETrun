@@ -6916,9 +6916,6 @@ void BG_PanelButton_RenderEdit(panel_button_t *button) {
 
 		do {
 			offset++;
-			if (buffer + offset  == '\0') {
-				break;
-			}
 		} while (DC->textWidthExt(buffer + offset, button->font->scalex, 0, button->font->font) > button->rect.w);
 
 		DC->drawTextExt(button->rect.x, button->rect.y + button->rect.h, button->font->scalex, button->font->scaley, button->font->colour, va("^7%s", buffer + offset), 0, 0, button->font->style, button->font->font);
@@ -6937,9 +6934,6 @@ void BG_PanelButton_RenderEdit(panel_button_t *button) {
 
 		do {
 			offset++;
-			if (s + offset  == '\0') {
-				break;
-			}
 		} while (DC->textWidthExt(s + offset, button->font->scalex, 0, button->font->font) > button->rect.w);
 
 		DC->drawTextExt(button->rect.x, button->rect.y + button->rect.h, button->font->scalex, button->font->scaley, button->font->colour, s + offset, 0, 0, button->font->style, button->font->font);
