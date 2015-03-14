@@ -108,9 +108,9 @@ void CG_ParseFireteams() {
 
 		s = Info_ValueForKey(p, "c");
 		Q_strncpyz(hexbuffer + 2, s, 9);
-		sscanf(hexbuffer, "%10x", &clnts[1]);
+		sscanf(hexbuffer, "%10x", (unsigned int*)&clnts[1]);
 		Q_strncpyz(hexbuffer + 2, s + 8, 9);
-		sscanf(hexbuffer, "%10x", &clnts[0]);
+		sscanf(hexbuffer, "%10x", (unsigned int*)&clnts[0]);
 
 		// Nico, private (1) or public (0)
 		s                    = Info_ValueForKey(p, "p");
