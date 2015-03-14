@@ -852,7 +852,6 @@ void Info_SetValueForKey(char *s, const char *key, const char *value) {
 	}
 
 	if (!value || !strlen(value)) {
-		Com_Printf("Info_SetValueForKey: invalid or empty value\n");
 		return;
 	}
 
