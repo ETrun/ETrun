@@ -3774,7 +3774,7 @@ void Item_TextField_Paint(itemDef_t *item) {
 	vec4_t         newColor;
 	int            offset;
 	int            text_len = 0; // screen length of the editfield text that will be printed
-	int            field_offset; // character offset in the editfield string
+	int            field_offset = -1; // character offset in the editfield string
 	int            screen_offset; // offset on screen for precise placement
 	menuDef_t      *parent  = (menuDef_t *)item->parent;
 	editFieldDef_t *editPtr = (editFieldDef_t *)item->typeData;
@@ -3811,12 +3811,8 @@ void Item_TextField_Paint(itemDef_t *item) {
 	// FIXME: this won't handle going back into the line of the editfield to the hidden area
 	// start of text painting: item->textRect.x + item->textRect.w + offset
 	// our window limit: item->window.rect.x + item->window.rect.w
-	field_offset = -1;
 	do {
 		field_offset++;
-		if (buff + editPtr->paintOffset + field_offset == '\0') {
-			break; // keep it safe
-		}
 		text_len = DC->textWidth(buff + editPtr->paintOffset + field_offset, item->textscale, 0);
 	} while (text_len + item->textRect.x + item->textRect.w + offset > item->window.rect.x + item->window.rect.w);
 
