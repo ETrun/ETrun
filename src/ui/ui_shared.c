@@ -2693,11 +2693,12 @@ const char *Item_Multi_Setting(itemDef_t *item) {
 				}
 			}
 		}
+		if (multiPtr->undefinedStr) {
+			return multiPtr->undefinedStr;
+		}
+		return (multiPtr->count == 0) ? "None Defined" : "Custom";
 	}
-	if (multiPtr->undefinedStr) {
-		return multiPtr->undefinedStr;
-	}
-	return (multiPtr->count == 0) ? "None Defined" : "Custom";
+	return "undefined";
 }
 
 qboolean Item_Multi_HandleKey(itemDef_t *item, int key) {
