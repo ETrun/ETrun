@@ -1568,10 +1568,7 @@ void Weapon_Engineer(gentity_t *ent) {
 
 							} else {   // TEAM_ALLIES
 								if (hit->s.teamNum == TEAM_ALLIES && (!scored)) {
-									if (ent->client) {
-										G_LogPrintf(qtrue, "Dynamite_Diffuse: %d\n", (int)(ent - g_entities));                    // OSP
-									}
-
+									G_LogPrintf(qtrue, "Dynamite_Diffuse: %d\n", (int)(ent - g_entities));
 									scored++;
 								}
 								G_Script_ScriptEvent(hit, "defused", "");
