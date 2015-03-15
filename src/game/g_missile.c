@@ -1050,7 +1050,7 @@ gentity_t *fire_grenade(gentity_t *self, vec3_t start, vec3_t dir, int grenadeWP
 		bolt->splashRadius        = 300;
 		bolt->methodOfDeath       = MOD_GPG40;
 		bolt->splashMethodOfDeath = MOD_GPG40;
-		bolt->s.eFlags            = /*0;*/ EF_BOUNCE_HALF | EF_BOUNCE;
+		bolt->s.eFlags            = EF_BOUNCE_HALF | EF_BOUNCE;
 		bolt->nextthink           = level.time + 4000;
 		break;
 	case WP_M7:
@@ -1058,7 +1058,7 @@ gentity_t *fire_grenade(gentity_t *self, vec3_t start, vec3_t dir, int grenadeWP
 		bolt->splashRadius        = 300;
 		bolt->methodOfDeath       = MOD_M7;
 		bolt->splashMethodOfDeath = MOD_M7;
-		bolt->s.eFlags            = /*0;*/ EF_BOUNCE_HALF | EF_BOUNCE;
+		bolt->s.eFlags            = EF_BOUNCE_HALF | EF_BOUNCE;
 		bolt->nextthink           = level.time + 4000;
 		break;
 	case WP_SMOKE_BOMB:
@@ -1099,8 +1099,10 @@ gentity_t *fire_grenade(gentity_t *self, vec3_t start, vec3_t dir, int grenadeWP
 		bolt->s.eFlags            = 0;
 		break;
 	case WP_LANDMINE:
+		if (self->client) {
+			bolt->s.teamNum           = self->client->sess.sessionTeam + 4;
+		}
 		bolt->accuracy            = 0;
-		bolt->s.teamNum           = self->client->sess.sessionTeam + 4;
 		bolt->classname           = "landmine";
 		bolt->damage              = 0;
 		bolt->splashRadius        = 225;        // was: 400
@@ -1136,11 +1138,12 @@ gentity_t *fire_grenade(gentity_t *self, vec3_t start, vec3_t dir, int grenadeWP
 		VectorCopy(bolt->r.maxs, bolt->r.absmax);
 		break;
 	case WP_DYNAMITE:
-
+		if (self->client) {
+			bolt->s.teamNum           = self->client->sess.sessionTeam + 4;
+		}
 		bolt->accuracy = 0;     // JPW NERVE sets to score below if dynamite is in trigger_objective_info & it's an objective
 		trap_SendServerCommand(self - g_entities, "cp \"Dynamite is set, but NOT armed!\"");
 		// differentiate non-armed dynamite with non-pulsing dlight
-		bolt->s.teamNum           = self->client->sess.sessionTeam + 4;
 		bolt->classname           = "dynamite";
 		bolt->damage              = 0;
 		bolt->splashRadius        = 400;
