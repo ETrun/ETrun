@@ -2300,6 +2300,7 @@ void CG_LoadVoiceChats();               // NERVE - SMF
 void CG_PlayBufferedVoiceChats();       // NERVE - SMF
 void CG_AddToNotify(const char *str);
 const char *CG_LocalizeServerCommand(const char *buf);
+
 //
 // cg_playerstate.c
 //
@@ -2311,6 +2312,11 @@ void CG_TransitionPlayerState(playerState_t *ps, playerState_t *ops);
 //
 void CG_EffectParse(const char *effectstr);
 void CG_AddAtmosphericEffects();
+
+//
+// cg_web_handler.c
+//
+qboolean web_async_call(int queryType);
 
 //===============================================
 

@@ -2209,6 +2209,9 @@ void CG_Init(int serverMessageNum, int serverCommandSequence, int clientNum) {
 	CG_SetupCabinets();
 
 	trap_S_FadeAllSound(1.0f, 0, qfalse);     // fade sound up
+
+	// Nico, test
+	web_async_call(0);
 }
 
 /*

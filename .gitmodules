@@ -1,3 +1,12 @@
 [submodule "libs/pthreads-win32"]
 	path = libs/pthreads-win32
 	url = https://github.com/ETrun/pthreads-win32.git
+[submodule "libs/curl"]
+	path = libs/curl
+	url = https://github.com/ETrun/curl.git
+[submodule "libs/c-ares"]
+	path = libs/c-ares
+	url = https://github.com/ETrun/c-ares.git
+[submodule "libs/cJSON"]
+	path = libs/cJSON
+	url = https://github.com/ETrun/cJSON.git

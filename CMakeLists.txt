@@ -1,8 +1,9 @@
 # CMake build script for the ETrun project
 
-cmake_minimum_required(VERSION 2.6)
+cmake_minimum_required(VERSION 2.8)
 project(ETrun C)
 set(ETrun_VERSION "1.3.0")
+include(ExternalProject)
 
 configure_file(
 	"${PROJECT_SOURCE_DIR}/src/game/bg_version.h.in"
@@ -138,20 +139,24 @@ if(UNIX)
 	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Wextra -std=c99 -pedantic")
 
 	if(CMAKE_SYSTEM MATCHES "OpenBSD*")
-		set(OS_LIBRARIES m pthread)
+		set(QAGAME_LIBRARIES m pthread)
 		set(LIB_SUFFIX ".mp.obsd.")
 	elseif(CMAKE_SYSTEM MATCHES "FreeBSD")
-		set(OS_LIBRARIES m pthread)
+		set(QAGAME_LIBRARIES m pthread)
 		set(LIB_SUFFIX ".mp.fbsd.")
 	elseif(APPLE)
-		set(OS_LIBRARIES dl m)
+		set(QAGAME_LIBRARIES dl m)
 		set(LIB_SUFFIX "_mac")
 		set(CMAKE_SHARED_MODULE_SUFFIX "")
 	else()
-		set(OS_LIBRARIES dl m rt pthread)
+		set(QAGAME_LIBRARIES dl m rt pthread)
 		set(LIB_SUFFIX ".mp.")
 	endif()
-	target_link_libraries(qagame ${OS_LIBRARIES})
+	target_link_libraries(qagame ${QAGAME_LIBRARIES})
+	set(CGAME_LIBRARIES pthread)
+	add_dependencies(cgame libcurl)
+	target_link_libraries(cgame ${CGAME_LIBRARIES})
+	target_link_libraries(cgame "${CMAKE_BINARY_DIR}/curl/lib/libcurl.a")
 elseif(WIN32)
 	if(MSVC)
 		# Link with pthreads-win32
@@ -180,6 +185,13 @@ endif()
 set_target_properties(cgame PROPERTIES OUTPUT_NAME cgame${LIB_SUFFIX}${ARCH})
 set_target_properties(qagame PROPERTIES OUTPUT_NAME qagame${LIB_SUFFIX}${ARCH})
 set_target_properties(ui PROPERTIES OUTPUT_NAME ui${LIB_SUFFIX}${ARCH})
+
+# Curl
+ExternalProject_Add(libcurl
+	SOURCE_DIR	${PROJECT_SOURCE_DIR}/libs/curl
+	BINARY_DIR	${CMAKE_BINARY_DIR}/curl
+	CMAKE_ARGS	-DBUILD_CURL_EXE=0 -DBUILD_CURL_TESTS=0 -DCURL_STATICLIB=1 -DENABLE_ARES=0 -DHTTP_ONLY=1 -DCURL_ZLIB=0 -DCMAKE_USE_OPENSSL=0 -DENABLE_IPV6=0 -DCMAKE_INSTALL_PREFIX=${PROJECT_BINARY_DIR}/curl
+)
 
 #-----------------------------------------------------------------
 # Pk3 (inspired from etlegacy https://github.com/etlegacy/etlegacy)
