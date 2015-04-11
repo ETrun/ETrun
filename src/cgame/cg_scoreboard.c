@@ -2,7 +2,6 @@
 #include "cg_local.h"
 
 // Colors
-// #todo: move this elsewhere
 vec4_t clrUiBack = { 0.f, 0.f, 0.f, .5f };
 vec4_t clrUiYou = { 0.2f, 0.1f, 0.1f, .5f };
 
@@ -387,42 +386,17 @@ static void WM_ETrun_DrawSpectators(int *x, int *y, fontInfo_t *font, s_timerunS
 static void WM_ETrun_DrawInfo() {
 	int   x                      = SB_INFO_X;
 	int   y                      = SB_INFO_Y;
-	char  physicsName[MAX_QPATH] = { 0 };
+	char  physicsDesc[MAX_QPATH] = { 0 };
 	float textScale              = 0.12f;
 
 	// Nico, draw time
 	CG_DrawClock(x, y, textScale, qtrue);
 
 	// Nico, draw physics
-	// #todo: move this elsewhere
-	switch (physics.integer) {
-	case PHYSICS_MODE_AP_OB:
-		sprintf(physicsName, "AP (with OB)");
-		break;
-
-	case PHYSICS_MODE_AP_NO_OB:
-		sprintf(physicsName, "AP (no OB)");
-		break;
-
-	case PHYSICS_MODE_VQ3_OB:
-		sprintf(physicsName, "VQ3 (with OB)");
-		break;
-
-	case PHYSICS_MODE_VQ3_NO_OB:
-		sprintf(physicsName, "VQ3 (no OB)");
-		break;
-
-	case PHYSICS_MODE_VET:
-		sprintf(physicsName, "VET");
-		break;
-
-	default:
-		sprintf(physicsName, "^1Unknown!");
-		break;
-	}
+	getPhysicsDesc(physicsDesc, physics.integer);
 
 	y += 10;
-	WM_ETrun_print(va("Physics: %s", physicsName), &cgs.media.limboFont1, textScale, x, y, qtrue, 0);
+	WM_ETrun_print(va("Physics: %s", physicsDesc), &cgs.media.limboFont1, textScale, x, y, qtrue, 0);
 #include "../game/bg_version.h"
 	y += 10;
 	// Nico, print mod version
