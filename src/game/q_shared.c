@@ -882,4 +882,58 @@ void Info_SetValueForKey(char *s, const char *key, const char *value) {
 	strcat(s, newi);
 }
 
+char *getPhysicsName(char *physicsName, int physicsValue) {
+	switch (physicsValue) {
+	case PHYSICS_MODE_AP_OB:
+	case PHYSICS_MODE_AP_NO_OB:
+		sprintf(physicsName, "AP");
+		break;
+
+	case PHYSICS_MODE_VQ3_OB:
+	case PHYSICS_MODE_VQ3_NO_OB:
+		sprintf(physicsName, "VQ3");
+		break;
+
+	case PHYSICS_MODE_VET:
+		sprintf(physicsName, "VET");
+		break;
+
+	default:
+		sprintf(physicsName, "Unknown");
+		break;
+	}
+
+	return physicsName;
+}
+
+char *getPhysicsDesc(char *physicsName, int physicsValue) {
+	switch (physicsValue) {
+	case PHYSICS_MODE_AP_OB:
+		sprintf(physicsName, "AP (with OB)");
+		break;
+
+	case PHYSICS_MODE_AP_NO_OB:
+		sprintf(physicsName, "AP (no OB)");
+		break;
+
+	case PHYSICS_MODE_VQ3_OB:
+		sprintf(physicsName, "VQ3 (with OB)");
+		break;
+
+	case PHYSICS_MODE_VQ3_NO_OB:
+		sprintf(physicsName, "VQ3 (no OB)");
+		break;
+
+	case PHYSICS_MODE_VET:
+		sprintf(physicsName, "VET");
+		break;
+
+	default:
+		sprintf(physicsName, "^1Unknown!");
+		break;
+	}
+
+	return physicsName;
+}
+
 //====================================================================

@@ -462,6 +462,9 @@ void GetPerpendicularViewVector(const vec3_t point, const vec3_t p1, const vec3_
 void ProjectPointOntoVector(vec3_t point, vec3_t vStart, vec3_t vEnd, vec3_t vProj);
 // done.
 
+char *getPhysicsName(char *physicsName, int physicsValue);
+char *getPhysicsDesc(char *physicsName, int physicsValue);
+
 //=============================================
 
 float Com_Clamp(float min, float max, float value);
@@ -1317,5 +1320,26 @@ typedef enum {
 } gamestate_t;
 
 #define SQR(a) ((a) * (a))
+
+// Nico, flags for physics
+#define PHYSICS_NORMAL              0
+#define PHYSICS_FLAT_JUMPING        1
+#define PHYSICS_NO_FALLDAMAGE       2
+#define PHYSICS_RAMPBOUNCE          4
+#define PHYSICS_AIRCONTROL          8
+#define PHYSICS_NO_OVERBOUNCE       16
+#define PHYSICS_UPMOVE_BUG_FIX      32
+#define PHYSICS_DOUBLEJUMP          64
+#define PHYSICS_SLICK_CONTROL       128
+
+// Nico, physics mode
+#define PHYSICS_MODE_AP_NO_OB       255
+#define PHYSICS_MODE_AP_OB          239
+#define PHYSICS_MODE_VQ3_NO_OB      19
+#define PHYSICS_MODE_VQ3_OB         3
+#define PHYSICS_MODE_VET            0
+
+// Nico, IP max length
+#define IP_MAX_LENGTH               46
 
 #endif  // __Q_SHARED_H

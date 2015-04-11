@@ -1424,25 +1424,8 @@ void saveDemo(gentity_t *ent) {
 			cleanRunName[i] = '_';
 		}
 	}
-	switch (physics.integer) {
-	case PHYSICS_MODE_AP_OB:
-	case PHYSICS_MODE_AP_NO_OB:
-		sprintf(physicsName, "AP");
-		break;
 
-	case PHYSICS_MODE_VQ3_OB:
-	case PHYSICS_MODE_VQ3_NO_OB:
-		sprintf(physicsName, "VQ3");
-		break;
-
-	case PHYSICS_MODE_VET:
-		sprintf(physicsName, "VET");
-		break;
-
-	default:
-		sprintf(physicsName, "Unknown");
-		break;
-	}
+	getPhysicsName(physicsName, physics.integer);
 
 	time = ent->client->sess.timerunLastTime[ent->client->sess.currentTimerunNum];
 
