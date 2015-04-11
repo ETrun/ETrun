@@ -478,7 +478,7 @@ int G_Randommap_v(gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg
 
 	// Nico, check if API is used
 	if (!g_useAPI.integer) {
-		G_Printf("API is disabled on this server.\n");
+		CP(va("print \"%s^w: random map voting is disabled on this server.\n\"", GAME_VERSION_COLORED));
 		return G_INVALID;
 	}
 
@@ -505,7 +505,8 @@ int G_Randommap_v(gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg
 		}
 
 		if (!G_API_randommap(result, ent, level.rawmapname)) {
-			// #todo: inform somebody it failed
+			CP(va("print \"%s^w: random map vote failed!\n\"", GAME_VERSION_COLORED));
+			return G_INVALID;
 		}
 	}
 	return G_OK;

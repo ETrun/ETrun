@@ -2302,7 +2302,8 @@ int G_randommap() {
 	}
 
 	if (!G_API_randommap(result, NULL, level.rawmapname)) {
-		// #todo: inform somebody it failed
+		G_Printf("Random map vote failed!\n");
+		return G_INVALID;
 	}
 
 	return G_OK;
