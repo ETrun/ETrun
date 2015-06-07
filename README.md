@@ -7,7 +7,7 @@ ETrun - The W:ET timerun mod
 ETrun is a Wolfenstein: Enemy Territory game modification based on ET-GPL.
 The objective of this mod is to bring timeruns support to it.
 
-**Visit www.timeruns.net for more information.**
+**Visit http://timeruns.net for more information.**
 
 Video
 =====
