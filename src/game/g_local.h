@@ -1685,11 +1685,15 @@ void InitialServerEntitySetup();
 #define CP(x) trap_SendServerCommand(ent - g_entities, x)         // Print to an ent
 #define CPx(x, y) trap_SendServerCommand(x, y)                  // Print to id = x
 
+#if defined _WIN32
+# define __func__ __FUNCTION__
+#endif
+
 // Nico, log macros with function name
 // LDI -> Log Debug Info
 // LDE -> Log Debug Error
-#define LDI(format, ...) G_LogDebug(__FUNCTION__, "INFO", format, __VA_ARGS__)
-#define LDE(format, ...) G_LogDebug(__FUNCTION__, "ERROR", format, __VA_ARGS__)
+#define LDI(format, ...) G_LogDebug(__func__, "INFO", format, __VA_ARGS__)
+#define LDE(format, ...) G_LogDebug(__func__, "ERROR", format, __VA_ARGS__)
 
 #define HELP_COLUMNS    4
 
