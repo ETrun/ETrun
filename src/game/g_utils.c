@@ -1018,6 +1018,6 @@ void my_sleep(unsigned milliseconds) {
 #else
 # include <unistd.h>
 void my_sleep(unsigned milliseconds) {
-	sleep(milliseconds / 1000);
+	usleep(milliseconds * 1000);
 }
 #endif
