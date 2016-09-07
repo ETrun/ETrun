@@ -304,7 +304,7 @@ void CG_LoadPanel_RenderLoadingBar(panel_button_t *button) {
 void CG_LoadPanel_RenderMissionDescriptionText(panel_button_t *button) {
 	const char *cs;
 	char       *s, *p;
-	char       buffer[1024];
+	char       buffer[2048];// Nico, enlarged to 2048 because of possible overflow
 	float      y;
 
 	if (!cgs.arenaInfoLoaded) {
@@ -320,8 +320,8 @@ void CG_LoadPanel_RenderMissionDescriptionText(panel_button_t *button) {
 		s  = strchr(buffer, '*');
 	}
 
-	BG_FitTextToWidth_Ext(buffer, button->font->scalex, button->rect.w - 16, sizeof (buffer), button->font->font);
-
+	BG_FitTextToWidth_Ext(buffer, button->font->scalex, button->rect.w - 16, 1024, button->font->font);
+	buffer[1023] = '\0';
 	y = button->rect.y + 12;
 
 	s = p = buffer;
