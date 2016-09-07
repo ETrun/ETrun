@@ -429,7 +429,7 @@ void SP_misc_beam(gentity_t *self) {
 	G_SpawnInt("scale", "1", &self->s.torsoAnim);
 
 	if (!G_SpawnVector("color", "1 1 1", self->s.angles2)) {
-		G_Error("SP_misc_beam does not have angles2\n");
+		G_DPrintf("Warning: SP_misc_beam does not have angles2\n");
 	}
 
 	// let everything else get spawned before we start firing
