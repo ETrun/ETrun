@@ -2300,7 +2300,7 @@ void CG_DrawMiscGamemodels(void) {
 #define AUTODEMO_NEW_DEMO_DELAY 1000
 #define AUTODEMO_RUN_SAVE_DELAY 1500
 static void CG_Autodemo() {
-	if (cg_autoDemo.integer && !cg.demoPlayback) {
+	if (!cg_autoDemo.integer || cg.demoPlayback) {
 		return;
 	}
 
