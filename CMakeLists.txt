@@ -2,7 +2,7 @@
 
 cmake_minimum_required(VERSION 2.6)
 project(ETrun C)
-set(ETrun_VERSION "1.2.0")
+set(ETrun_VERSION "1.2.1")
 
 configure_file(
 	"${PROJECT_SOURCE_DIR}/src/game/bg_version.h.in"
@@ -22,9 +22,9 @@ FILE(GLOB CGAME_SRC
 	"src/game/bg_character.c"
 	"src/game/bg_classes.c"
 	"src/game/bg_misc.c"
-  	"src/game/bg_pmove.c"
-  	"src/game/bg_slidemove.c"
-  	"src/game/bg_sscript.c"
+  "src/game/bg_pmove.c"
+  "src/game/bg_slidemove.c"
+  "src/game/bg_sscript.c"
 	"src/game/bg_tracemap.c"
 	"src/game/bg_weapons.c"
 	"src/game/bg_version.h"
