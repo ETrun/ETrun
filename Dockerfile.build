@@ -1,0 +1,7 @@
+FROM debian:wheezy
+
+RUN apt-get update && \
+    apt-get install -y cmake build-essential libc6-dev-i386 zip
+
+VOLUME /code
+WORKDIR /code

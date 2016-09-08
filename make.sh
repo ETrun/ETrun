@@ -130,34 +130,20 @@ function build() {
   fi
 }
 
-#
-# Function used to strip modules
-#
-function strip_modules() {
-  # Check debug mode is OFF
-  if [ $DEBUG -eq 1 ]; then
-    return
-  fi
+function check_dependency() {
+  hash $1 &> /dev/null
 
-  echo -n 'Stripping modules...'
-  if [ $OS == "Darwin" ]; then
-    strip -x -S $MOD_NAME/cgame_mac
-    strip -x -S $MOD_NAME/qagame_mac
-    strip -x -S $MOD_NAME/ui_mac
-  else
-    strip -s $MOD_NAME/cgame*
-    strip -s $MOD_NAME/qagame*
-    strip -s $MOD_NAME/ui*
+  if [ $? -ne 0 ]; then
+    echo "Warning: dependency unmet '$1'"
   fi
-  echo '[done]'
 }
 
 #
 # Main
 #
+detect_os
+check_dependency $CMAKE
+check_dependency "zip"
 parse_options "$@"
 clean
-detect_os
 build
-# Useless to strip after pk3 creation, should be done before
-#strip_modules

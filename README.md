@@ -35,8 +35,8 @@ OSX
 Not compatible with `ET 2.60d`.
 Works (tested) on `OSX 10.8` with `ET: Legacy`.
 
-Building ETrun - Using CMake
-============================
+Building ETrun
+==============
 
 Get ETrun source code with its submodule:
 
@@ -44,9 +44,18 @@ Get ETrun source code with its submodule:
 
 Then run the build script:
 
-	$ ./make.sh
+  $ ./make.sh -h
+	$ ./make.sh [OPTIONS]
 
 Alternatively you can point the CMake GUI tool to the CMakeLists.txt file and generate platform specific build project or IDE workspace.
+
+Docker
+------
+
+Docker can be used to build the mod for Linux:
+
+	$ docker build -f Dockerfile.build -t etrun-build .
+	$ docker run --rm -v "$PWD":/code -w /code etrun-build ./make.sh [OPTIONS]
 
 Testing
 =======
