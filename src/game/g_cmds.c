@@ -28,6 +28,7 @@ If you have questions concerning this license or the applicable additional terms
 
 #include "g_local.h"
 #include "g_api.h"
+#include <time.h>
 
 qboolean G_IsOnFireteam(int entityNum, fireteamData_t **teamNum);
 
@@ -2031,6 +2032,7 @@ void Cmd_Load_f(gentity_t *ent) {
 	int             argc;
 	int             posNum;
 	save_position_t *pos;
+	long now;
 
 	// get save slot (do this first so players can get usage message even if
 	// they are not allowed to use this command)
@@ -2088,6 +2090,23 @@ void Cmd_Load_f(gentity_t *ent) {
 			// Nico, inform client the need to change weapon
 			trap_SendServerCommand(ent - g_entities, va("weaponUpdate %d", pos->weapon));
 		}
+				// enable in vet double load click under 16000 clockunits reset time
+		// clockunits 32bit->1 000 000 clockunits = 1 second
+		now = clock();
+		if( physics.integer == PHYSICS_MODE_VET &&
+		    ent->client->sess.timerunActive == qtrue &&
+		    ent->client->sess.lastLoadTime != 0 && //first init long is 0
+		    now - ent->client->sess.lastLoadTime < 16000 &&
+		    g_strictSaveLoad.integer == 0){
+		        // notify the client and its spectators the timerun has stopped
+			notify_timerun_stop(ent, 0);
+			ent->client->sess.timerunActive = qfalse;
+			
+			CP("cp \"Time reset!\n\"");
+			return;
+		}
+		ent->client->sess.lastLoadTime = now;
+
 
 		VectorClear(ent->client->ps.velocity);
 
