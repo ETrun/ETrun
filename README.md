@@ -44,7 +44,7 @@ Get ETrun source code with its submodule:
 
 Then run the build script:
 
-  $ ./make.sh -h
+	$ ./make.sh -h
 	$ ./make.sh [OPTIONS]
 
 Alternatively you can point the CMake GUI tool to the CMakeLists.txt file and generate platform specific build project or IDE workspace.
