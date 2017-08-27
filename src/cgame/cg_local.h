@@ -1739,6 +1739,9 @@ extern vmCvar_t cg_checkPointsX;
 extern vmCvar_t cg_checkPointsY;
 extern vmCvar_t cg_maxCheckPoints;
 
+// Slick detector
+extern vmCvar_t cg_drawslick;
+
 // OB detector
 extern vmCvar_t cg_drawOB;
 
@@ -1943,6 +1946,7 @@ void CG_StartShakeCamera(float p);
 void CG_DrawCheckpoints(void);
 void CG_DrawSpeedMeter(void);
 void CG_DrawOB(void);
+void CG_DrawSlick(void);
 void CG_DrawTimer(void);
 void CG_DrawCGaz(void);
 void CG_DrawKeys(void);

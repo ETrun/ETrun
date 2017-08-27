@@ -96,9 +96,9 @@ void win32_backtrace(LPEXCEPTION_POINTERS e) {
 	pSym = (PIMAGEHLP_SYMBOL)GlobalAlloc(GMEM_FIXED, 16384);
 
 	ZeroMemory(&sf, sizeof (sf));
-	sf.AddrPC.Offset    = e->ContextRecord->Eip;
+	/*sf.AddrPC.Offset    = e->ContextRecord->Eip;
 	sf.AddrStack.Offset = e->ContextRecord->Esp;
-	sf.AddrFrame.Offset = e->ContextRecord->Ebp;
+	sf.AddrFrame.Offset = e->ContextRecord->Ebp; */
 	sf.AddrPC.Mode      = AddrModeFlat;
 	sf.AddrStack.Mode   = AddrModeFlat;
 	sf.AddrFrame.Mode   = AddrModeFlat;

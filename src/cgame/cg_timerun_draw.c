@@ -204,6 +204,32 @@ void CG_DrawOB(void) {
 }
 
 /**
+ * Slick detector
+ *
+ * @author suburb
+ */
+void CG_DrawSlick (void) {
+	static trace_t trace;
+	vec3_t start, end;
+	float x = 350, y = 220, sizex, sizey;
+	char *text = "S";
+
+	if (!cg_drawslick.integer || cg_thirdPerson.integer) {
+		return;
+	}
+
+	sizex = sizey = 0.2f;
+
+	VectorCopy(cg.refdef.vieworg, start);
+	VectorMA(start, 131072, cg.refdef.viewaxis[0], end);
+	CG_Trace(&trace, start, vec3_origin, vec3_origin, end, cg.predictedPlayerState.clientNum, CONTENTS_SOLID);
+	
+	if (trace.surfaceFlags & SURF_SLICK) {
+		CG_Text_Paint_Ext(x, y, sizex, sizey, colorWhite, text, 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
+	}
+}
+
+/**
  * Draw timer
  *
  * @author Nico

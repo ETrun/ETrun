@@ -2181,6 +2181,9 @@ static void CG_Draw2D(void) {
 		// Nico, draw OB
 		CG_DrawOB();
 
+		// suburb, draw slick
+		CG_DrawSlick();
+
 		// Nico, draw timer
 		CG_DrawTimer();
 
