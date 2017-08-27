@@ -2307,6 +2307,8 @@ static void CG_Autodemo() {
 		return;
 	}
 
+	//test
+
 	if (cg.startedNewDemo > 1) {
 		if (!cg.nd_keep) {
 			cg.nd_time = cg.time;
