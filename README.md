@@ -61,12 +61,12 @@ Testing
 =======
 
 There are test scripts for Windows and Linux / OSX located in `test` directory.
-Before using them you need to setup your config file. Make a copy of the `*.config.example` file corresponding to your OS and run the following command to know all available opions:
+Before using them you need to setup your config file. Make a copy of the `*.config.example` file corresponding to your OS and run the following command to know all available options:
 
 	$ ./test/unix/test.sh -h
 
 Credits
 =======
 
-* TJMod developpers
+* TJMod developers
 * Racesow project
