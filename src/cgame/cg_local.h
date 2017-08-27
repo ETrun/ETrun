@@ -1740,7 +1740,7 @@ extern vmCvar_t cg_checkPointsY;
 extern vmCvar_t cg_maxCheckPoints;
 
 // Slick detector
-extern vmCvar_t cg_drawslick;
+extern vmCvar_t cg_drawSlick;
 
 // OB detector
 extern vmCvar_t cg_drawOB;

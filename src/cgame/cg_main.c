@@ -266,7 +266,7 @@ vmCvar_t cg_maxCheckPoints;
 vmCvar_t com_maxfps;
 
 // Slick detector
-vmCvar_t cg_drawslick;
+vmCvar_t cg_drawSlick;
 
 // OB detector
 vmCvar_t cg_drawOB;
@@ -524,7 +524,7 @@ cvarTable_t cvarTable[] =
 	{ &com_maxfps,              "com_maxfps",              "125",   CVAR_ARCHIVE,             0 },
 
 	// Slick detector
-	{ &cg_drawslick,			"cg_drawslick",			   "0",		CVAR_ARCHIVE,			  0 },
+	{ &cg_drawSlick,            "cg_drawSlick",            "0",     CVAR_ARCHIVE,             0 },
 
 	// OB detector
 	{ &cg_drawOB,               "cg_drawOB",               "0",     CVAR_ARCHIVE,             0 },

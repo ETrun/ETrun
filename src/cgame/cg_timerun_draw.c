@@ -208,20 +208,21 @@ void CG_DrawOB(void) {
  *
  * @author suburb
  */
+#define DRAWSLICK_MAX_DISTANCE 131072
 void CG_DrawSlick (void) {
 	static trace_t trace;
 	vec3_t start, end;
 	float x = 350, y = 220, sizex, sizey;
 	char *text = "S";
 
-	if (!cg_drawslick.integer || cg_thirdPerson.integer) {
+	if (!cg_drawSlick.integer || cg_thirdPerson.integer) {
 		return;
 	}
 
 	sizex = sizey = 0.2f;
 
 	VectorCopy(cg.refdef.vieworg, start);
-	VectorMA(start, 131072, cg.refdef.viewaxis[0], end);
+	VectorMA(start, DRAWSLICK_MAX_DISTANCE, cg.refdef.viewaxis[0], end);
 	CG_Trace(&trace, start, vec3_origin, vec3_origin, end, cg.predictedPlayerState.clientNum, CONTENTS_SOLID);
 	
 	if (trace.surfaceFlags & SURF_SLICK) {
