@@ -2307,8 +2307,6 @@ static void CG_Autodemo() {
 		return;
 	}
 
-	//test
-
 	if (cg.startedNewDemo > 1) {
 		if (!cg.nd_keep) {
 			cg.nd_time = cg.time;
@@ -2344,7 +2342,7 @@ static void CG_Autodemo() {
 			char         *name;
 			int          i = 0;
 
-			len  = trap_FS_FOpenFile(va("demos/temp_%i.dm_84", cg.currentdemo), &temp, FS_READ);
+			len  = trap_FS_FOpenFile(va("demos/temp_%i.dm_84", cg.currentdemo - 1), &temp, FS_READ);
 			name = va("demos/%s_%s.dm_84", cgs.rawmapname, cg.runsavename);
 
 			if (trap_FS_FOpenFile(name, &demo, FS_WRITE) < 0) {
@@ -2359,7 +2357,7 @@ static void CG_Autodemo() {
 				trap_FS_Read(&b, 1, temp);
 				trap_FS_Write(&b, 1, demo);
 			}
-
+			
 			trap_FS_FCloseFile(temp);
 			trap_FS_FCloseFile(demo);
 
