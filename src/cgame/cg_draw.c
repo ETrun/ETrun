@@ -2340,11 +2340,17 @@ static void CG_Autodemo() {
 			int          len = 0;
 			fileHandle_t temp, demo;
 			char         *name;
-			int          i = 0;
+			int          i = 0, currentdemofix;	 
 
-			len  = trap_FS_FOpenFile(va("demos/temp_%i.dm_84", cg.currentdemo), &temp, FS_READ);
+			if (cg.currentDemoReset){
+				currentdemofix = cg.currentdemobuffer;
+			} else {
+				currentdemofix = cg.currentdemo - 1;
+			}
+
+			len  = trap_FS_FOpenFile(va("demos/temp_%i.dm_84", currentdemofix), &temp, FS_READ);
 			name = va("demos/%s_%s.dm_84", cgs.rawmapname, cg.runsavename);
-
+			
 			if (trap_FS_FOpenFile(name, &demo, FS_WRITE) < 0) {
 				CG_Printf("^1Error^3: unable to save demo:^7 %s\n", name);
 				trap_FS_FCloseFile(temp);
@@ -2357,13 +2363,14 @@ static void CG_Autodemo() {
 				trap_FS_Read(&b, 1, temp);
 				trap_FS_Write(&b, 1, demo);
 			}
-
+			
 			trap_FS_FCloseFile(temp);
 			trap_FS_FCloseFile(demo);
 
 			CG_Printf("^3Demo saved as:^7 %s\n", name);
 			CG_AddPMItem(PM_MESSAGE, va("%s^w: demo saved!\n", GAME_VERSION_COLORED), cgs.media.voiceChatShader);
 
+			cg.currentDemoReset = qfalse;
 			cg.runsave = cg.rs_keep = 0;
 		}
 	} else {

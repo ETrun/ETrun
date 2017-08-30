@@ -980,6 +980,8 @@ typedef struct {
 	int currentdemo;
 	int startedNewDemo;
 	qboolean ignoreNextStart;
+	qboolean currentDemoReset;
+	int currentdemobuffer;
 	int rs_time;
 	int rs_keep;
 	int nd_time;
