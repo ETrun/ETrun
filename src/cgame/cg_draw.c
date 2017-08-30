@@ -2340,8 +2340,7 @@ static void CG_Autodemo() {
 			int          len = 0;
 			fileHandle_t temp, demo;
 			char         *name;
-			int          i = 0;
-			int			 currentdemofix;
+			int          i = 0, currentdemofix;	 
 
 			if (cg.currentDemoReset){
 				currentdemofix = cg.currentdemobuffer;
