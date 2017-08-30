@@ -1727,6 +1727,8 @@ static void CG_ServerCommand(void) {
 		}
 
 		if (cg.currentdemo > 20) {
+			cg.currentDemoReset = qtrue;
+			cg.currentdemobuffer = cg.currentdemo;
 			cg.currentdemo = 1;
 		}
 
