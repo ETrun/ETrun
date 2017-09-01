@@ -2158,6 +2158,18 @@ void Cmd_Save_f(gentity_t *ent) {
 		return;
 	}
 
+	// suburb, forbid save while proning for VET before starting a run
+	if (physics.integer == PHYSICS_MODE_VET && (ent->client->ps.eFlags & EF_PRONE || ent->client->ps.eFlags & EF_PRONE_MOVING) && !ent->client->sess.timerunActive) {
+		CP("cp \"You can not save while proning before starting a run!\n\"");
+		return;
+	}
+
+	// suburb, forbid save while crouching for VET before starting a run
+	if (physics.integer == PHYSICS_MODE_VET && ent->client->ps.eFlags & EF_CROUCHING && !ent->client->sess.timerunActive) {
+		CP("cp \"You can not save while crouching before starting a run!\n\"");
+		return;
+	}
+
 	// Nico, strict save/load restrictions: you can not save while timer is active
 	if (g_strictSaveLoad.integer != 0 && ent->client->sess.timerunActive) {
 		CP("cp \"Strict save mode prevents you from saving while your timer is active!\n\"");
