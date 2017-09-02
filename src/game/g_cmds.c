@@ -337,6 +337,12 @@ void Cmd_Noclip_f(gentity_t *ent) {
 		return;
 	}
 
+	// suburb, only available while standing upright
+	if ((ent->client->ps.eFlags & EF_CROUCHING) || ent->client->ps.eFlags & EF_PRONE || ent->client->ps.eFlags & EF_PRONE_MOVING) {
+		trap_SendServerCommand(ent - g_entities, va("print \"You must stand up to use this command.\n\""));
+		return;
+	}
+
 	if (!Q_stricmp(name, "on") || atoi(name)) {
 		ent->client->noclip = qtrue;
 	} else if (!Q_stricmp(name, "off") || !Q_stricmp(name, "0")) {
