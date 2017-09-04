@@ -1727,7 +1727,7 @@ static void CG_ServerCommand(void) {
 		}
 
 		if (cg.currentdemo > 20) {
-			cg.currentdemo = 1;
+			cg.currentdemo = 0;
 		}
 
 		// Sent from stoptimer, do a 1 sec delay.
