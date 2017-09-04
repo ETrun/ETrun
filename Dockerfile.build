@@ -1,7 +1,17 @@
-FROM debian:wheezy
+FROM debian:stretch
 
-RUN apt-get update && \
-    apt-get install -y cmake build-essential libc6-dev-i386 zip
+RUN dpkg --add-architecture i386 \
+    && apt-get update \
+    && apt-get install -y cmake \
+    zip \
+    build-essential \
+    libc6-dev-i386 \
+    libssl-dev:i386 \
+    libtool-bin \
+    m4 \
+    automake \
+    autoconf \
+    && rm -r /var/lib/apt/lists/*
 
 VOLUME /code
 WORKDIR /code
