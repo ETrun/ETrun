@@ -2300,8 +2300,6 @@ void CG_DrawMiscGamemodels(void) {
  *
  * @source: TJMod (modified by Nico)
  */
-#define AUTODEMO_NEW_DEMO_DELAY 1000
-#define AUTODEMO_RUN_SAVE_DELAY 1500
 static void CG_Autodemo() {
 	if (!cg_autoDemo.integer || cg.demoPlayback) {
 		return;
@@ -2315,7 +2313,7 @@ static void CG_Autodemo() {
 
 		if (cg.time > cg.nd_time + AUTODEMO_NEW_DEMO_DELAY) {
 			trap_SendConsoleCommand("stoprecord\n");
-			trap_SendConsoleCommand(va("record temp_%i\n", cg.startedNewDemo - 1));
+			trap_SendConsoleCommand(va("record temp_%i\n", (cg.startedNewDemo - 1) % AUTODEMO_MAX_DEMOS));
 			cg.startedNewDemo = 1;
 		}
 	} else {
@@ -2342,7 +2340,7 @@ static void CG_Autodemo() {
 			char         *name;
 			int          i = 0;
 
-			len  = trap_FS_FOpenFile(va("demos/temp_%i.dm_84", cg.currentdemo - 1), &temp, FS_READ);
+			len  = trap_FS_FOpenFile(va("demos/temp_%i.dm_84", (cg.currentdemo - 1) % AUTODEMO_MAX_DEMOS), &temp, FS_READ);
 			name = va("demos/%s_%s.dm_84", cgs.rawmapname, cg.runsavename);
 
 			if (trap_FS_FOpenFile(name, &demo, FS_WRITE) < 0) {

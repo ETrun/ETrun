@@ -112,6 +112,11 @@ If you have questions concerning this license or the applicable additional terms
 #define WSTATE_SHUTDOWN     0x02    // Window is shutting down with effects
 #define WSTATE_OFF          0x04    // Window is completely shutdown
 
+// Nico, autodemo
+#define AUTODEMO_NEW_DEMO_DELAY 1000
+#define AUTODEMO_RUN_SAVE_DELAY 1500
+#define AUTODEMO_MAX_DEMOS      20
+
 typedef struct {
 	vec4_t colorBorder;         // Window border color
 	vec4_t colorBackground;     // Window fill color
