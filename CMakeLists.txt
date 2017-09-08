@@ -2,7 +2,7 @@
 
 cmake_minimum_required(VERSION 2.6)
 project(ETrun C)
-set(ETrun_VERSION "1.2.1")
+set(ETrun_VERSION "1.3.0")
 
 configure_file(
 	"${PROJECT_SOURCE_DIR}/src/game/bg_version.h.in"
