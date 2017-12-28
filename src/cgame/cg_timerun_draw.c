@@ -858,7 +858,7 @@ void CG_DrawBannerPrint(void) {
 #define INFO_PANEL_X_PADDING                82
 #define INFO_PANEL_MAX_COLUMNS              5 // Nico, INFO_PANEL_MAX_COLUMNS * INFO_PANEL_MAX_JUMPS_PER_COLUMN must
 #define INFO_PANEL_MAX_JUMPS_PER_COLUMN     9 // stay < size of cg.timerunJumpSpeeds array
-#define INFO_PANEL_FONT_ADJUST_NEEDED	    10000
+#define INFO_PANEL_FONT_ADJUST_NEEDED       10000
 void CG_DrawInfoPanel(void) {
 	int    x                = 0;
 	int    y                = 0;
