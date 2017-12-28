@@ -2216,6 +2216,7 @@ void CG_DrawOverlays(void);
 // cg_scoreboard.c
 //
 qboolean CG_DrawScoreboard(void);
+void CG_UpdateJumpSpeeds();
 
 typedef struct {
 	lerpFrame_t legs;

@@ -849,6 +849,24 @@ void CG_DrawBannerPrint(void) {
 }
 
 /**
+* Update jump speeds
+*
+* @author suburb (taken from the CG_DrawInfoPanel function)
+*/
+void CG_UpdateJumpSpeeds(void){
+	int speed = 0;
+
+	if (cg.timerunJumpCounter < cg.predictedPlayerState.identifyClientHealth && cg.timerunJumpCounter < (int)(sizeof(cg.timerunJumpSpeeds) / sizeof(cg.timerunJumpSpeeds[0]))) {
+		speed = sqrt(cg.predictedPlayerState.velocity[0] * cg.predictedPlayerState.velocity[0] + cg.predictedPlayerState.velocity[1] * cg.predictedPlayerState.velocity[1]);
+		if (speed != speed) {
+			speed = 0;
+		}
+		cg.timerunJumpSpeeds[cg.timerunJumpCounter] = speed;
+		cg.timerunJumpCounter = cg.predictedPlayerState.identifyClientHealth;
+	}
+}
+
+/**
  * Print info panel
  *
  * @author Nico
@@ -887,12 +905,6 @@ void CG_DrawInfoPanel(void) {
 
 	if (speed > cg.overallMaxSpeed) {
 		cg.overallMaxSpeed = speed;
-	}
-
-	// Update jump speeds
-	if (cg.timerunJumpCounter < cg.predictedPlayerState.identifyClientHealth && cg.timerunJumpCounter < (int)(sizeof (cg.timerunJumpSpeeds) / sizeof (cg.timerunJumpSpeeds[0]))) {
-		cg.timerunJumpSpeeds[cg.timerunJumpCounter] = speed; // Store current speed
-		cg.timerunJumpCounter                       = cg.predictedPlayerState.identifyClientHealth;
 	}
 
 	x = cg_infoPanelX.value;
