@@ -1958,6 +1958,7 @@ void CG_DrawKeys(void);
 void CG_DrawClock(float x, float y, float scale, qboolean shadowed);
 void CG_DrawBannerPrint(void);
 void CG_DrawInfoPanel(void);
+void CG_UpdateJumpSpeeds(void);
 
 //
 // cg_players.c
@@ -2216,7 +2217,6 @@ void CG_DrawOverlays(void);
 // cg_scoreboard.c
 //
 qboolean CG_DrawScoreboard(void);
-void CG_UpdateJumpSpeeds();
 
 typedef struct {
 	lerpFrame_t legs;
