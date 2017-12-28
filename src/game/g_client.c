@@ -1373,10 +1373,6 @@ void ClientSpawn(gentity_t *ent) {
 
 	ent->s.eFlags &= ~EF_MOUNTEDTANK;
 
-	// Nico, notify timerun_stop
-	notify_timerun_stop(ent, 0);
-	ent->client->sess.timerunActive = qfalse;
-
 	saved     = client->pers;
 	savedSess = client->sess;
 	savedPing = client->ps.ping;
@@ -1566,6 +1562,11 @@ void ClientSpawn(gentity_t *ent) {
 			}
 		}
 	}
+
+	// Nico, notify timerun_stop
+	// suburb, stop the run after autoloading to not start a new run between the short gap of being killed and autoloading
+	notify_timerun_stop(ent, 0);
+	ent->client->sess.timerunActive = qfalse;
 }
 
 static void G_RemoveFromAllIgnoreLists(int clientNum) {
