@@ -939,7 +939,7 @@ void CG_DrawInfoPanel(void) {
 		// suburb, decrease font size for higher speeds
 		textScale = 0.12f;
 
-		if (cg.timerunJumpSpeeds[i] > INFO_PANEL_FONT_ADJUST_NEEDED){
+		if (cg.timerunJumpSpeeds[i] >= INFO_PANEL_FONT_ADJUST_NEEDED){
 			textScaleFactor = 0.02f * GetDigits(cg.timerunJumpSpeeds[i]) - 0.08f;
 			textScale -= textScaleFactor;
 		}
