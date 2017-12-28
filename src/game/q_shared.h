@@ -460,7 +460,9 @@ void PerpendicularVector(vec3_t dst, const vec3_t src);
 // Ridah
 void GetPerpendicularViewVector(const vec3_t point, const vec3_t p1, const vec3_t p2, vec3_t up);
 void ProjectPointOntoVector(vec3_t point, vec3_t vStart, vec3_t vEnd, vec3_t vProj);
-// done.
+
+// suburb
+int GetDigits(float number);
 
 char *getPhysicsName(char *physicsName, int physicsValue);
 char *getPhysicsDesc(char *physicsName, int physicsValue);

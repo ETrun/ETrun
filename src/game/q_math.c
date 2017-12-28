@@ -870,4 +870,23 @@ float VectorDistanceSquared(vec3_t v1, vec3_t v2) {
 	VectorSubtract(v2, v1, dir);
 	return VectorLengthSquared(dir);
 }
-// done.
+
+/*
+=================
+GetDigits
+
+Returns the amount of digits a float has
+
+@author suburb
+=================
+*/
+
+int GetDigits(float number){
+	int count = 0;
+	number = fabs(number);
+
+	if (number >= 1){
+		count = floor(log10(number)) + 1;
+	}
+	return count;
+}
