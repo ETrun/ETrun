@@ -2414,8 +2414,14 @@ void Cmd_SpecLock_f(gentity_t *ent, unsigned int dwCommand, qboolean lock) {
 	CP("cpm \"Use ^3specinvite^7 to invite people to spectate.\n\"");
 
 	// update following players
-	for (i = 0; i < level.numConnectedClients; ++i) {
-		gentity_t *other = g_entities + level.sortedClients[i];
+	// suburb, don't use the level.sortedClients[] array for looping because the StopFollowing() function  
+	// will indirectly cause this array to be resorted, thus causing some clients not to unfollow
+	for (i = 0; i < level.maxclients; ++i) {
+		if (level.clients[i].pers.connected == CON_DISCONNECTED){
+			continue;
+		}
+
+		gentity_t *other = g_entities + i;
 
 		if (other->client->sess.referee) {
 			continue;
