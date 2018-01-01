@@ -617,6 +617,9 @@ void CG_PredictPlayerState(void) {
 	cg_pmove.timerunActive    = cg.timerunActive;
 	cg_pmove.timerunStartTime = cg.timerunStartTime;
 
+	// suburb, for noclip speed scale
+	cg_pmove.noclipSpeed = cg_noclipSpeed.integer;
+
 	// Nico, store login status in pmove
 	cg_pmove.isLogged = cg.isLogged;
 

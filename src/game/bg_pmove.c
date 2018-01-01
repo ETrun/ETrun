@@ -797,6 +797,7 @@ static void PM_WaterMove(void) {
 PM_FlyMove
 
 Only with the flight powerup
+// suburb, this function is used for spectator movement instead, etrun has no flight powerup
 ===================
 */
 static void PM_FlyMove(void) {
@@ -1140,6 +1141,8 @@ static void PM_DeadMove(void) {
 PM_NoclipMove
 ===============
 */
+#define NOCLIP_SPEED_CORRECTION_FACTOR         768
+#define NOCLIP_SPEED_CORRECTION_FACTOR_SPRINT  1056
 static void PM_NoclipMove(void) {
 	float  speed;
 	int    i;
@@ -1148,8 +1151,17 @@ static void PM_NoclipMove(void) {
 	vec3_t wishdir;
 	float  wishspeed;
 	float  scale;
+	float  sprintScale;
 
 	pm->ps->viewheight = DEFAULT_VIEWHEIGHT;
+
+	// suburb, take sprint into account not to interfere with the cg_noclipSpeed cvar
+	if (pm->cmd.buttons & BUTTON_SPRINT) {
+		sprintScale = NOCLIP_SPEED_CORRECTION_FACTOR_SPRINT;
+	}
+	else {
+		sprintScale = NOCLIP_SPEED_CORRECTION_FACTOR;
+	}
 
 	// friction
 
@@ -1181,8 +1193,9 @@ static void PM_NoclipMove(void) {
 	wishvel[2] += pm->cmd.upmove;
 
 	VectorCopy(wishvel, wishdir);
-	wishspeed  = VectorNormalize(wishdir);
-	wishspeed *= scale;
+	wishspeed = VectorNormalize(wishdir);
+	//Com_Printf("Noclipspeed: %d, ", pm->noclipSpeed);
+	wishspeed *= scale * pm->noclipSpeed / sprintScale;
 
 	// Nico, AP or stock accel?
 	if (pm->physics == PHYSICS_MODE_AP_NO_OB || pm->physics == PHYSICS_MODE_AP_OB) {

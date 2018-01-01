@@ -707,6 +707,10 @@ void ClientThink_real(gentity_t *ent) {
 	pm.pmove_fixed = client->pers.pmoveFixed;
 	pm.pmove_msec  = pmove_msec.integer;
 
+	// suburb, Noclip speed scale
+	pm.noclipSpeed = client->pers.noclipSpeed;
+	//Com_Printf("Noclipspeed: %d, ", client->pers.noclipSpeed);
+
 	// Nico, game physics
 	pm.physics = physics.integer;
 

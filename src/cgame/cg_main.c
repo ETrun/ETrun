@@ -262,6 +262,9 @@ vmCvar_t cg_checkPointsX;
 vmCvar_t cg_checkPointsY;
 vmCvar_t cg_maxCheckPoints;
 
+// Noclip speed scale
+vmCvar_t cg_noclipSpeed;
+
 // Max FPS
 vmCvar_t com_maxfps;
 
@@ -523,6 +526,9 @@ cvarTable_t cvarTable[] =
 	// Com_maxFPS
 	{ &com_maxfps,              "com_maxfps",              "125",   CVAR_ARCHIVE,             0 },
 
+	// Noclip speed scale
+	{ &cg_noclipSpeed,          "cg_noclipSpeed",          "1000",  CVAR_ARCHIVE,             0 },
+
 	// Slick detector
 	{ &cg_drawSlick,            "cg_drawSlick",            "0",     CVAR_ARCHIVE,             0 },
 
@@ -665,7 +671,7 @@ void CG_UpdateCvars(void) {
 				    cv->vmCvar == &cg_drawCGaz || cv->vmCvar == &cg_hideMe ||
 				    cv->vmCvar == &cg_autoDemo || cv->vmCvar == &cg_autoLoadCheckpoints ||
 				    cv->vmCvar == &cg_specLock || cv->vmCvar == &cg_keepAllDemos ||
-				    cv->vmCvar == &cg_loadWeapon) {
+					cv->vmCvar == &cg_loadWeapon || cv->vmCvar == &cg_noclipSpeed) {
 					fSetFlags = qtrue;
 				} else if (cv->vmCvar == &cg_crosshairColor || cv->vmCvar == &cg_crosshairAlpha) {
 					BG_setCrosshair(cg_crosshairColor.string, cg.xhairColor, cg_crosshairAlpha.value, "cg_crosshairColor");
@@ -738,14 +744,14 @@ void CG_setClientFlags(void) {
 	}
 
 	cg.pmext.bAutoReload = (cg_autoReload.integer > 0);
-	trap_Cvar_Set("cg_uinfo", va("%d %d %d %d %s %d %d %d %d %d %d %d %d %d",
+	trap_Cvar_Set("cg_uinfo", va("%d %d %d %d %s %d %d %d %d %d %d %d %d %d &d",
 	                             // Client Flags
 	                             (
 	                                 ((cg_autoReload.integer > 0) ? CGF_AUTORELOAD : 0) |
 	                                 ((cg_autoactivate.integer > 0) ? CGF_AUTOACTIVATE : 0) |
 	                                 ((cg_predictItems.integer > 0) ? CGF_PREDICTITEMS : 0) |
 	                                 ((pmove_fixed.integer > 0) ? CGF_PMOVEFIXED : 0) |
-	                                 ((cg_autoLogin.integer > 0) ? CGF_AUTOLOGIN : 0)
+									 ((cg_autoLogin.integer > 0) ? CGF_AUTOLOGIN : 0)
 	                                 // Add more in here, as needed
 	                             ),
 
@@ -785,7 +791,10 @@ void CG_setClientFlags(void) {
 	                             cg_specLock.integer,
 
 	                             // Nico, keep all demos
-	                             cg_keepAllDemos.integer
+	                             cg_keepAllDemos.integer,
+
+								 // suburb, noclip speed scale
+								 cg_noclipSpeed.integer
 	                             ));
 }
 
