@@ -342,7 +342,7 @@ void Cmd_Noclip_f(gentity_t *ent) {
 		trap_SendServerCommand(ent - g_entities, va("print \"You must stand up to use this command.\n\""));
 		return;
 	}
-
+	
 	if (!Q_stricmp(name, "on") || atoi(name)) {
 		ent->client->noclip = qtrue;
 	} else if (!Q_stricmp(name, "off") || !Q_stricmp(name, "0")) {

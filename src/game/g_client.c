@@ -887,7 +887,7 @@ void ClientUserinfoChanged(int clientNum) {
 	Q_strncpyz(oldAuthToken, client->pers.authToken, sizeof (oldAuthToken));
 
 	s = Info_ValueForKey(userinfo, "cg_uinfo");
-	sscanf(s, "%10u %3u %3u %3i %64s %1i %1i %1i %1i %1i %1i %1i %1i %1i %1i",
+	sscanf(s, "%10u %3u %3u %3i %64s %1i %1i %1i %1i %1i %1i %1i %1i %1i %d",
 	       &client->pers.clientFlags,
 	       &client->pers.clientTimeNudge,
 	       &client->pers.clientMaxPackets,
@@ -925,8 +925,8 @@ void ClientUserinfoChanged(int clientNum) {
 	       // Nico, keep all demos
 	       &client->pers.keepAllDemos,
 
-		   // suburb, noclip speed scale
-		   &client->pers.noclipSpeed
+	       // suburb, noclip speed scale
+	       &client->pers.noclipSpeed
 	       );
 
 	// Nico, check if auth token was changed
