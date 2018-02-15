@@ -20,7 +20,7 @@ Compatibility
 Windows
 -------
 
-Windows server module `qagame_mp_x86.dll` requires [Microsoft Visual C++ 2010 Redistributable Package](http://www.microsoft.com/en-us/download/details.aspx?id=5555) to run properly.
+`cgame` and `qagame` modules require [Microsoft Visual C++ 2010 Redistributable Package](http://www.microsoft.com/en-us/download/details.aspx?id=5555) to run properly.
 Works (tested) on `XP/7` with `ET 2.60b`.
 
 Linux
