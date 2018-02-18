@@ -882,11 +882,6 @@ void CG_DrawInfoPanel(void) {
 	// Update overall max speed
 	speed = sqrt(cg.predictedPlayerState.velocity[0] * cg.predictedPlayerState.velocity[0] + cg.predictedPlayerState.velocity[1] * cg.predictedPlayerState.velocity[1]);
 
-	// Nico, as cg.predictedPlayerState.velocity is sometimes NaN, sanatize speed value
-	if (speed != speed) {
-		speed = 0;
-	}
-
 	if (speed > cg.overallMaxSpeed) {
 		cg.overallMaxSpeed = speed;
 	}
