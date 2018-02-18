@@ -858,9 +858,6 @@ void CG_UpdateJumpSpeeds(void){
 
 	if (cg.timerunJumpCounter < cg.predictedPlayerState.identifyClientHealth && cg.timerunJumpCounter < (int)(sizeof(cg.timerunJumpSpeeds) / sizeof(cg.timerunJumpSpeeds[0]))) {
 		speed = sqrt(cg.predictedPlayerState.velocity[0] * cg.predictedPlayerState.velocity[0] + cg.predictedPlayerState.velocity[1] * cg.predictedPlayerState.velocity[1]);
-		if (speed != speed) {
-			speed = 0;
-		}
 		cg.timerunJumpSpeeds[cg.timerunJumpCounter] = speed;
 		cg.timerunJumpCounter = cg.predictedPlayerState.identifyClientHealth;
 	}

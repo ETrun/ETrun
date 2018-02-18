@@ -2138,9 +2138,6 @@ static void CG_Draw2D(void) {
 		}
 	}
 
-	// suburb, updating jump speeds should happen even if the scoreboard is not showing
-	CG_UpdateJumpSpeeds();
-
 	// don't draw center string if scoreboard is up
 	if (!CG_DrawScoreboard()) {
 		if (cg.snap->ps.persistant[PERS_TEAM] != TEAM_SPECTATOR) {
@@ -2429,6 +2426,9 @@ void CG_DrawActive(stereoFrame_t stereoView) {
 	if (separation != 0) {
 		VectorCopy(baseOrg, cg.refdef_current->vieworg);
 	}
+
+	// suburb, update jump speeds even if nothing is drawn
+	CG_UpdateJumpSpeeds();
 
 	// Nico, render while in limbo
 	CG_Draw2D();
