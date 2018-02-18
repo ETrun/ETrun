@@ -751,7 +751,7 @@ void CG_setClientFlags(void) {
 	                                 ((cg_autoactivate.integer > 0) ? CGF_AUTOACTIVATE : 0) |
 	                                 ((cg_predictItems.integer > 0) ? CGF_PREDICTITEMS : 0) |
 	                                 ((pmove_fixed.integer > 0) ? CGF_PMOVEFIXED : 0) |
-                                     ((cg_autoLogin.integer > 0) ? CGF_AUTOLOGIN : 0)
+	                                 ((cg_autoLogin.integer > 0) ? CGF_AUTOLOGIN : 0)
 	                                 // Add more in here, as needed
 	                             ),
 
@@ -794,8 +794,8 @@ void CG_setClientFlags(void) {
 	                             // Nico, keep all demos
 	                             cg_keepAllDemos.integer,
 
-                                 // suburb, noclip speed scale
-                                 cg_noclipSpeed.integer
+	                             // suburb, noclip speed scale
+	                             cg_noclipSpeed.integer
 	                             ));
 }
 

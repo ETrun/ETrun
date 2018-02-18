@@ -805,7 +805,7 @@ static void PM_FlyMove(void) {
 	float  wishspeed;
 	vec3_t wishdir;
 	float  scale;
-	
+
 	// normal slowdown
 	PM_Friction();
 
@@ -1154,7 +1154,7 @@ static void PM_NoclipMove(void) {
 	float  wishspeed;
 	float  scale;
 	float  scaleCorrection;
-	
+
 	pm->ps->viewheight = DEFAULT_VIEWHEIGHT;
 
 	// suburb, take sprint into account not to interfere with the cg_noclipSpeed cvar
@@ -1202,7 +1202,7 @@ static void PM_NoclipMove(void) {
 	VectorCopy(wishvel, wishdir);
 	wishspeed = VectorNormalize(wishdir);
 	wishspeed *= scale * pm->noclipSpeed / scaleCorrection;
-	
+
 	// Nico, AP or stock accel?
 	if (pm->physics == PHYSICS_MODE_AP_NO_OB || pm->physics == PHYSICS_MODE_AP_OB) {
 		PM_Accelerate(wishdir, wishspeed, pm_accelerate_AP);

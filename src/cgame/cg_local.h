@@ -1004,7 +1004,7 @@ typedef struct {
 	int overallMaxSpeed;
 	int timerunJumpCounter;
 	int timerunJumpSpeeds[256];
-	
+
 	// Nico, end of ETrun client variables
 } cg_t;
 
