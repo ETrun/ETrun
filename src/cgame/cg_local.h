@@ -1958,6 +1958,7 @@ void CG_DrawKeys(void);
 void CG_DrawClock(float x, float y, float scale, qboolean shadowed);
 void CG_DrawBannerPrint(void);
 void CG_DrawInfoPanel(void);
+void CG_UpdateJumpSpeeds(void);
 
 //
 // cg_players.c

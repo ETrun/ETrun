@@ -2427,6 +2427,9 @@ void CG_DrawActive(stereoFrame_t stereoView) {
 		VectorCopy(baseOrg, cg.refdef_current->vieworg);
 	}
 
+	// suburb, update jump speeds even if nothing is drawn
+	CG_UpdateJumpSpeeds();
+
 	// Nico, render while in limbo
 	CG_Draw2D();
 
