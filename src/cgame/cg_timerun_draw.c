@@ -873,15 +873,17 @@ void CG_UpdateJumpSpeeds(void){
 #define INFO_PANEL_X_PADDING                82
 #define INFO_PANEL_MAX_COLUMNS              5 // Nico, INFO_PANEL_MAX_COLUMNS * INFO_PANEL_MAX_JUMPS_PER_COLUMN must
 #define INFO_PANEL_MAX_JUMPS_PER_COLUMN     9 // stay < size of cg.timerunJumpSpeeds array
+#define INFO_PANEL_FONT_ADJUST_NEEDED       10000
 void CG_DrawInfoPanel(void) {
-	int    x            = 0;
-	int    y            = 0;
-	int    starty       = 0;
-	vec4_t panelBgColor = { 0.f, 0.f, 0.f, .5f };
-	vec4_t textColor    = { 1.0f, 1.0f, 1.0f, 0.8f };
-	float  textScale    = 0.12f;
-	int    speed        = 0;
-	int    i            = 0;
+	int    x                = 0;
+	int    y                = 0;
+	int    starty           = 0;
+	vec4_t panelBgColor     = { 0.f, 0.f, 0.f, .5f };
+	vec4_t textColor        = { 1.0f, 1.0f, 1.0f, 0.8f };
+	float  textScale        = 0.12f;
+	float  textScaleFactor  = 0;
+	int    speed            = 0;
+	int    i                = 0;
 
 	if (!cg_drawInfoPanel.integer) {
 		return;
@@ -894,11 +896,6 @@ void CG_DrawInfoPanel(void) {
 
 	// Update overall max speed
 	speed = sqrt(cg.predictedPlayerState.velocity[0] * cg.predictedPlayerState.velocity[0] + cg.predictedPlayerState.velocity[1] * cg.predictedPlayerState.velocity[1]);
-
-	// Nico, as cg.predictedPlayerState.velocity is sometimes NaN, sanatize speed value
-	if (speed < 0 || speed >= 10000) {
-		speed = 0;
-	}
 
 	if (speed > cg.overallMaxSpeed) {
 		cg.overallMaxSpeed = speed;
@@ -941,6 +938,14 @@ void CG_DrawInfoPanel(void) {
 		if (i > 0 && i % INFO_PANEL_MAX_JUMPS_PER_COLUMN == 0) {
 			y  = starty;
 			x += 20;
+		}
+
+		// suburb, decrease font size for higher speeds
+		textScale = 0.12f;
+
+		if (cg.timerunJumpSpeeds[i] >= INFO_PANEL_FONT_ADJUST_NEEDED){
+			textScaleFactor = 0.02f * GetDigits(cg.timerunJumpSpeeds[i]) - 0.08f;
+			textScale -= textScaleFactor;
 		}
 
 		// If speed at jump n is slower than speed at jump n - 1, use red color
