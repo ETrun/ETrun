@@ -642,7 +642,8 @@ void ClientThink_real(gentity_t *ent) {
 
 	// spectators don't do much
 	// DHM - Nerve :: In limbo use SpectatorThink
-	if (client->sess.sessionTeam == TEAM_SPECTATOR || client->ps.pm_flags & PMF_LIMBO) {
+	// suburb, check for noclip not to override client->ps.speed
+	if ((client->sess.sessionTeam == TEAM_SPECTATOR || client->ps.pm_flags & PMF_LIMBO) && !client->noclip) {
 		SpectatorThink(ent, ucmd);
 		return;
 	}
@@ -706,6 +707,9 @@ void ClientThink_real(gentity_t *ent) {
 	// pm.pmove_fixed = pmove_fixed.integer | client->pers.pmoveFixed;
 	pm.pmove_fixed = client->pers.pmoveFixed;
 	pm.pmove_msec  = pmove_msec.integer;
+
+	// suburb, Noclip speed scale
+	pm.noclipSpeed = client->pers.noclipSpeed;
 
 	// Nico, game physics
 	pm.physics = physics.integer;

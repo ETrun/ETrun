@@ -418,6 +418,10 @@ typedef struct {
 	int timerunActive;
 	int timerunStartTime;
 	int isLogged;        // Nico, is client logged in?
+
+	// suburb, variable for noclip speed scale
+	int noclipSpeed;
+
 } pmove_t;
 
 // if a full pmove isn't done on the client, you can just update the angles

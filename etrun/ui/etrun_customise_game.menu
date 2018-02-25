@@ -5,7 +5,7 @@
 #define WINDOW_X		16
 #define WINDOW_Y		16
 #define WINDOW_WIDTH	510
-#define WINDOW_HEIGHT	230
+#define WINDOW_HEIGHT	270
 #define GROUP_NAME		"grpEtrunCustomiseGame"
 
 // Macros //
@@ -45,6 +45,9 @@ menuDef {
 	YESNO( 8, 150, (SUBWINDOW_WIDTH)-4, 10, "Load view angles on load:", .2, 8, "cg_loadViewAngles", "" )
 	YESNO( 8, 166, (SUBWINDOW_WIDTH)-4, 10, "Load weapon on load:", .2, 8, "cg_loadWeapon", "" )
 	YESNO( 8, 182, (SUBWINDOW_WIDTH)-4, 10, "Automatically load when you get killed:", .2, 8, "cg_autoLoad", "" )
+
+	SUBWINDOW( 6, 204, (SUBWINDOW_WIDTH), 30, "Movement" )
+	MULTI( 8, 220, (SUBWINDOW_WIDTH)-4, 10, "Noclip speed:", .2, 8, "cg_noclipSpeed", cvarFloatList { "100" 100 "1000" 1000 "10000" 10000 "100000" 100000 "1000000" 1000000 }, "Noclip speed in units per second" )
 
 // Buttons //
 	
