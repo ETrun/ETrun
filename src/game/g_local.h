@@ -663,6 +663,10 @@ typedef struct {
 
 	// Nico, autoload checkpoints
 	int autoLoadCheckpoints;
+
+	// suburb, noclip speed scale
+	int noclipSpeed;
+
 } clientPersistant_t;
 
 typedef struct {

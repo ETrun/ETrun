@@ -797,6 +797,7 @@ static void PM_WaterMove(void) {
 PM_FlyMove
 
 Only with the flight powerup
+// suburb, this function is used for spectator movement instead, etrun has no flight powerup
 ===================
 */
 static void PM_FlyMove(void) {
@@ -1140,6 +1141,10 @@ static void PM_DeadMove(void) {
 PM_NoclipMove
 ===============
 */
+#define NOCLIP_SPEED_CORRECTION         768
+#define NOCLIP_SPEED_CORRECTION_SPRINT  1056
+#define NOCLIP_SPEED_MAX_VALUE          1000000
+#define NOCLIP_SPEED_MIN_VALUE          100
 static void PM_NoclipMove(void) {
 	float  speed;
 	int    i;
@@ -1148,11 +1153,25 @@ static void PM_NoclipMove(void) {
 	vec3_t wishdir;
 	float  wishspeed;
 	float  scale;
+	float  scaleCorrection;
 
 	pm->ps->viewheight = DEFAULT_VIEWHEIGHT;
 
-	// friction
+	// suburb, take sprint into account not to interfere with the cg_noclipSpeed cvar
+	if (pm->cmd.buttons & BUTTON_SPRINT) {
+		scaleCorrection = NOCLIP_SPEED_CORRECTION_SPRINT;
+	} else {
+		scaleCorrection = NOCLIP_SPEED_CORRECTION;
+	}
 
+	// suburb, check if pm->noclipSpeed is in a useful range
+	if (pm->noclipSpeed > NOCLIP_SPEED_MAX_VALUE) {
+		pm->noclipSpeed = NOCLIP_SPEED_MAX_VALUE;
+	} else if (pm->noclipSpeed < NOCLIP_SPEED_MIN_VALUE){
+		pm->noclipSpeed = NOCLIP_SPEED_MIN_VALUE;
+	}
+
+	// friction
 	speed = VectorLength(pm->ps->velocity);
 	if (speed < 1) {
 		VectorCopy(vec3_origin, pm->ps->velocity);
@@ -1181,8 +1200,8 @@ static void PM_NoclipMove(void) {
 	wishvel[2] += pm->cmd.upmove;
 
 	VectorCopy(wishvel, wishdir);
-	wishspeed  = VectorNormalize(wishdir);
-	wishspeed *= scale;
+	wishspeed = VectorNormalize(wishdir);
+	wishspeed *= scale * pm->noclipSpeed / scaleCorrection;
 
 	// Nico, AP or stock accel?
 	if (pm->physics == PHYSICS_MODE_AP_NO_OB || pm->physics == PHYSICS_MODE_AP_OB) {
@@ -2676,15 +2695,15 @@ void PmoveSingle(pmove_t *pmove) {
 		pm->cmd.upmove      = 0;
 	}
 
-	if (pm->ps->pm_type == PM_SPECTATOR) {
-		PM_CheckDuck();
-		PM_FlyMove();
+	if (pm->ps->pm_type == PM_NOCLIP) {
+		PM_NoclipMove();
 		PM_DropTimers();
 		return;
 	}
 
-	if (pm->ps->pm_type == PM_NOCLIP) {
-		PM_NoclipMove();
+	if (pm->ps->pm_type == PM_SPECTATOR) {
+		PM_CheckDuck();
+		PM_FlyMove();
 		PM_DropTimers();
 		return;
 	}
