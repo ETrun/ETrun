@@ -3,7 +3,7 @@
 
 // Colors
 vec4_t clrUiBack = { 0.f, 0.f, 0.f, .5f };
-vec4_t clrUiYou = { 0.2f, 0.1f, 0.1f, .5f };
+vec4_t clrUiYou  = { 0.2f, 0.1f, 0.1f, .5f };
 
 #define INFO_PLAYER_WIDTH               75
 #define INFO_TEAM_WIDTH                 40
@@ -147,9 +147,9 @@ static void WM_ETrun_DrawHeader(int *y, fontInfo_t *font) {
  */
 static void WM_ETrun_DrawPlayers(int *x, int *y, fontInfo_t *font, s_timerunScores *orderedScores, int numScores) {
 	char  *s;
-	int   tempx    = 0;
+	int   tempx = 0;
 	float fontsize = 0.16f;
-	int   i        = 0;
+	int   i = 0;
 	int   mil, min, sec;
 	char  status[MAX_QPATH] = { 0 };
 
@@ -281,9 +281,9 @@ static void WM_ETrun_DrawPlayers(int *x, int *y, fontInfo_t *font, s_timerunScor
  */
 static void WM_ETrun_DrawSpectators(int *x, int *y, fontInfo_t *font, s_timerunScores *orderedScores, int numScores) {
 	char  *s;
-	int   tempx    = 0;
+	int   tempx = 0;
 	float fontsize = 0.16f;
-	int   i        = 0;
+	int   i = 0;
 	int   mil, min, sec;
 
 	// Draw "Spectators"

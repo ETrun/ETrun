@@ -29,38 +29,38 @@ If you have questions concerning this license or the applicable additional terms
 // q_math.c -- stateless support routines that are included in each code module
 #include "q_shared.h"
 
-vec3_t vec3_origin = { 0, 0, 0 };
+vec3_t vec3_origin    = { 0, 0, 0 };
 vec3_t axisDefault[3] = { { 1, 0, 0 }, { 0, 1, 0 }, { 0, 0, 1 } };
 
-vec4_t colorBlack = { 0, 0, 0, 1 };
-vec4_t colorRed = { 1, 0, 0, 1 };
-vec4_t colorGreen = { 0, 1, 0, 1 };
-vec4_t colorBlue = { 0, 0, 1, 1 };
-vec4_t colorYellow = { 1, 1, 0, 1 };
-vec4_t colorOrange = { 1, 0.5, 0, 1 };
-vec4_t colorMagenta = { 1, 0, 1, 1 };
-vec4_t colorCyan = { 0, 1, 1, 1 };
-vec4_t colorWhite = { 1, 1, 1, 1 };
-vec4_t colorLtGrey = { 0.75, 0.75, 0.75, 1 };
-vec4_t colorMdGrey = { 0.5, 0.5, 0.5, 1 };
-vec4_t colorDkGrey = { 0.25, 0.25, 0.25, 1 };
-vec4_t colorMdRed = { 0.5, 0, 0, 1 };
-vec4_t colorMdGreen = { 0, 0.5, 0, 1 };
-vec4_t colorDkGreen = { 0, 0.20f, 0, 1 };
-vec4_t colorMdCyan = { 0, 0.5, 0.5, 1 };
+vec4_t colorBlack    = { 0, 0, 0, 1 };
+vec4_t colorRed      = { 1, 0, 0, 1 };
+vec4_t colorGreen    = { 0, 1, 0, 1 };
+vec4_t colorBlue     = { 0, 0, 1, 1 };
+vec4_t colorYellow   = { 1, 1, 0, 1 };
+vec4_t colorOrange   = { 1, 0.5, 0, 1 };
+vec4_t colorMagenta  = { 1, 0, 1, 1 };
+vec4_t colorCyan     = { 0, 1, 1, 1 };
+vec4_t colorWhite    = { 1, 1, 1, 1 };
+vec4_t colorLtGrey   = { 0.75, 0.75, 0.75, 1 };
+vec4_t colorMdGrey   = { 0.5, 0.5, 0.5, 1 };
+vec4_t colorDkGrey   = { 0.25, 0.25, 0.25, 1 };
+vec4_t colorMdRed    = { 0.5, 0, 0, 1 };
+vec4_t colorMdGreen  = { 0, 0.5, 0, 1 };
+vec4_t colorDkGreen  = { 0, 0.20f, 0, 1 };
+vec4_t colorMdCyan   = { 0, 0.5, 0.5, 1 };
 vec4_t colorMdYellow = { 0.5, 0.5, 0, 1 };
 vec4_t colorMdOrange = { 0.5, 0.25, 0, 1 };
-vec4_t colorMdBlue = { 0, 0, 0.5, 1 };
+vec4_t colorMdBlue   = { 0, 0, 0.5, 1 };
 
-vec4_t clrBrown = { 0.68f, 0.68f, 0.56f, 1.f };
-vec4_t clrBrownDk = { 0.58f * 0.75f, 0.58f * 0.75f, 0.46f * 0.75f, 1.f };
-vec4_t clrBrownLine = { 0.0525f, 0.05f, 0.025f, 0.2f };
+vec4_t clrBrown         = { 0.68f, 0.68f, 0.56f, 1.f };
+vec4_t clrBrownDk       = { 0.58f * 0.75f, 0.58f * 0.75f, 0.46f * 0.75f, 1.f };
+vec4_t clrBrownLine     = { 0.0525f, 0.05f, 0.025f, 0.2f };
 vec4_t clrBrownLineFull = { 0.0525f, 0.05f, 0.025f, 1.f };
 
 vec4_t clrBrownTextLt2 = { 108 * 1.8f / 255.f, 88 * 1.8f / 255.f, 62 * 1.8f / 255.f, 1.f };
-vec4_t clrBrownTextLt = { 108 * 1.3f / 255.f, 88 * 1.3f / 255.f, 62 * 1.3f / 255.f, 1.f };
-vec4_t clrBrownText = { 108 / 255.f, 88 / 255.f, 62 / 255.f, 1.f };
-vec4_t clrBrownTextDk = { 20 / 255.f, 2 / 255.f, 0 / 255.f, 1.f };
+vec4_t clrBrownTextLt  = { 108 * 1.3f / 255.f, 88 * 1.3f / 255.f, 62 * 1.3f / 255.f, 1.f };
+vec4_t clrBrownText    = { 108 / 255.f, 88 / 255.f, 62 / 255.f, 1.f };
+vec4_t clrBrownTextDk  = { 20 / 255.f, 2 / 255.f, 0 / 255.f, 1.f };
 vec4_t clrBrownTextDk2 = { 108 * 0.75f / 255.f, 88 * 0.75f / 255.f, 62 * 0.75f / 255.f, 1.f };
 
 vec4_t g_color_table[32] =
@@ -881,52 +881,53 @@ Returns the amount of digits a float has
 =================
 */
 
-int GetDigits(float number){
+int GetDigits(float number) {
 	int count = 0;
+
 	number = fabs(number);
 
 	// more elegant but slower in performance
 	/*if (number >= 1){
-		count = floor(log10(number)) + 1;
+	    count = floor(log10(number)) + 1;
 	}*/
 
-	if (number >= 1000000000000000000){
+	if (number >= 1000000000000000000) {
 		count = 19;
-	} else if (number >= 100000000000000000){
+	} else if (number >= 100000000000000000) {
 		count = 18;
-	} else if (number >= 10000000000000000){
+	} else if (number >= 10000000000000000) {
 		count = 17;
-	} else if (number >= 1000000000000000){
+	} else if (number >= 1000000000000000) {
 		count = 16;
-	} else if (number >= 100000000000000){
+	} else if (number >= 100000000000000) {
 		count = 15;
-	} else if (number >= 10000000000000){
+	} else if (number >= 10000000000000) {
 		count = 14;
-	} else if (number >= 1000000000000){
+	} else if (number >= 1000000000000) {
 		count = 13;
-	} else if (number >= 100000000000){
+	} else if (number >= 100000000000) {
 		count = 12;
-	} else if (number >= 10000000000){
+	} else if (number >= 10000000000) {
 		count = 11;
-	} else if (number >= 1000000000){
+	} else if (number >= 1000000000) {
 		count = 10;
-	} else if (number >= 100000000){
+	} else if (number >= 100000000) {
 		count = 9;
-	} else if (number >= 10000000){
+	} else if (number >= 10000000) {
 		count = 8;
-	} else if (number >= 1000000){
+	} else if (number >= 1000000) {
 		count = 7;
-	} else if (number >= 100000){
+	} else if (number >= 100000) {
 		count = 6;
-	} else if (number >= 10000){
+	} else if (number >= 10000) {
 		count = 5;
-	} else if (number >= 1000){
+	} else if (number >= 1000) {
 		count = 4;
-	} else if (number >= 100){
+	} else if (number >= 100) {
 		count = 3;
-	} else if (number >= 10){
+	} else if (number >= 10) {
 		count = 2;
-	} else if (number >= 1){
+	} else if (number >= 1) {
 		count = 1;
 	}
 	return count;

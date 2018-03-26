@@ -327,7 +327,7 @@ static void CG_InterpolatePlayerState(qboolean grabAngles) {
 		out->origin[i] = prev->ps.origin[i] + f * (next->ps.origin[i] - prev->ps.origin[i]);
 		if (!grabAngles) {
 			out->viewangles[i] = LerpAngle(
-			    prev->ps.viewangles[i], next->ps.viewangles[i], f);
+				prev->ps.viewangles[i], next->ps.viewangles[i], f);
 		}
 		out->velocity[i] = prev->ps.velocity[i] + f * (next->ps.velocity[i] - prev->ps.velocity[i]);
 	}
@@ -768,12 +768,12 @@ void CG_PredictPlayerState(void) {
 
 		// move
 		cg.predictedPlayerState.origin[2] +=
-		    sin(M_PI * 8 * 13 + cg.cameraShakePhase) * x * 6.0f * cg.cameraShakeScale;
+			sin(M_PI * 8 * 13 + cg.cameraShakePhase) * x * 6.0f * cg.cameraShakeScale;
 
 		cg.predictedPlayerState.origin[1] +=
-		    sin(M_PI * 17 * x + cg.cameraShakePhase) * x * 6.0f * cg.cameraShakeScale;
+			sin(M_PI * 17 * x + cg.cameraShakePhase) * x * 6.0f * cg.cameraShakeScale;
 
 		cg.predictedPlayerState.origin[0] +=
-		    cos(M_PI * 7 * x + cg.cameraShakePhase) * x * 6.0f * cg.cameraShakeScale;
+			cos(M_PI * 7 * x + cg.cameraShakePhase) * x * 6.0f * cg.cameraShakeScale;
 	}
 }

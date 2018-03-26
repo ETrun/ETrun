@@ -37,85 +37,85 @@ If you have questions concerning this license or the applicable additional terms
 // second version that must match between game and cgame
 
 #ifndef __BG_PUBLIC_H__
-# define __BG_PUBLIC_H__
+#define __BG_PUBLIC_H__
 
-# include "bg_version.h"
+#include "bg_version.h"
 
 // Nico, game version
-# define GAME_VERSION           "ETrun"
-# define GAME_VERSION_COLORED   "^ZET^Drun"
-# define MOD_URL                "http://www.timeruns.net"
-# define SHORT_MOD_URL          "www.timeruns.net"
+#define GAME_VERSION           "ETrun"
+#define GAME_VERSION_COLORED   "^ZET^Drun"
+#define MOD_URL                "http://www.timeruns.net"
+#define SHORT_MOD_URL          "www.timeruns.net"
 
-# define GAME_VERSION_DATED     GAME_VERSION "_"MOD_VERSION
+#define GAME_VERSION_DATED     GAME_VERSION "_"MOD_VERSION
 
 //bani
-# ifdef __GNUC__
-#  define _attribute(x) __attribute__(x)
-# else
-#  define _attribute(x)
-# endif
+#ifdef __GNUC__
+# define _attribute(x) __attribute__(x)
+#else
+# define _attribute(x)
+#endif
 
-# define DEFAULT_GRAVITY     800
+#define DEFAULT_GRAVITY     800
 
 // Nico, g_speed is now hardcoded as DEFAULT_SPEED
-# define DEFAULT_SPEED       320
+#define DEFAULT_SPEED       320
 
 // Nico, spectator speed
-# define SPECTATOR_SPEED     1000
+#define SPECTATOR_SPEED     1000
 
-# define FORCE_LIMBO_HEALTH  -75 // JPW NERVE
+#define FORCE_LIMBO_HEALTH  -75  // JPW NERVE
 
-# define GIB_HEALTH          -175 // JPW NERVE
+#define GIB_HEALTH          -175  // JPW NERVE
 
-# define HOLDBREATHTIME      12000
+#define HOLDBREATHTIME      12000
 
-# define MAX_ITEMS           256
+#define MAX_ITEMS           256
 
-# define ITEM_RADIUS     10 // Rafael changed the radius so that the items would fit in the 3 new containers
+#define ITEM_RADIUS     10  // Rafael changed the radius so that the items would fit in the 3 new containers
 
-# define FLAMETHROWER_RANGE  2500       // DHM - Nerve :: multiplayer range, was 850 in SP
+#define FLAMETHROWER_RANGE  2500        // DHM - Nerve :: multiplayer range, was 850 in SP
 
-# define VOTE_TIME           30000  // 30 seconds before vote times out
+#define VOTE_TIME           30000   // 30 seconds before vote times out
 
-# define DEFAULT_VIEWHEIGHT  40
-# define CROUCH_VIEWHEIGHT   16
-# define DEAD_VIEWHEIGHT     -16
+#define DEFAULT_VIEWHEIGHT  40
+#define CROUCH_VIEWHEIGHT   16
+#define DEAD_VIEWHEIGHT     -16
 
-# define PRONE_VIEWHEIGHT    -8
+#define PRONE_VIEWHEIGHT    -8
 
 extern vec3_t playerlegsProneMins;
 extern vec3_t playerlegsProneMaxs;
 
-# define DEFAULT_MODEL       "multi"
-# define DEFAULT_HEAD        "default"   // technically the default head skin.  this means "head_default.skin" for the head
+#define DEFAULT_MODEL       "multi"
+#define DEFAULT_HEAD        "default"    // technically the default head skin.  this means "head_default.skin" for the head
 
 // RF, on fire effects
-# define FIRE_FLASH_TIME         2000
-# define FIRE_FLASH_FADEIN_TIME  1000
+#define FIRE_FLASH_TIME         2000
+#define FIRE_FLASH_FADEIN_TIME  1000
 
-# define LIGHTNING_FLASH_TIME    150
+#define LIGHTNING_FLASH_TIME    150
 
-# define AAGUN_DAMAGE        25
-# define AAGUN_SPREAD        10
+#define AAGUN_DAMAGE        25
+#define AAGUN_SPREAD        10
 
 // NOTE: use this value, and THEN the cl_input.c scales to tweak the feel
-# define MG42_IDLEYAWSPEED   80.0   // degrees per second (while returning to base)
-# define MG42_SPREAD_MP      100
+#define MG42_IDLEYAWSPEED   80.0    // degrees per second (while returning to base)
+#define MG42_SPREAD_MP      100
 
-# define MG42_DAMAGE_MP      20
-# define MG42_RATE_OF_FIRE_MP    66
+#define MG42_DAMAGE_MP      20
+#define MG42_RATE_OF_FIRE_MP    66
 
-# define MG42_DAMAGE_SP      40
-# define MG42_RATE_OF_FIRE_SP    100
+#define MG42_DAMAGE_SP      40
+#define MG42_RATE_OF_FIRE_SP    100
 
-# define AAGUN_RATE_OF_FIRE  100
-# define MG42_YAWSPEED       300.f      // degrees per second
+#define AAGUN_RATE_OF_FIRE  100
+#define MG42_YAWSPEED       300.f       // degrees per second
 
-# define SAY_ALL     0
-# define SAY_TEAM    1
-# define SAY_BUDDY   2
-# define SAY_TEAMNL  3
+#define SAY_ALL     0
+#define SAY_TEAM    1
+#define SAY_BUDDY   2
+#define SAY_TEAMNL  3
 
 // RF, client damage identifiers
 
@@ -139,20 +139,20 @@ typedef enum {
 } SelectBuddyFlag;
 
 // RF
-# define MAX_TAGCONNECTS     64
+#define MAX_TAGCONNECTS     64
 
 // (SA) zoom sway values
-# define ZOOM_PITCH_AMPLITUDE        0.13f
-# define ZOOM_PITCH_FREQUENCY        0.24f
-# define ZOOM_PITCH_MIN_AMPLITUDE    0.1f       // minimum amount of sway even if completely settled on target
+#define ZOOM_PITCH_AMPLITUDE        0.13f
+#define ZOOM_PITCH_FREQUENCY        0.24f
+#define ZOOM_PITCH_MIN_AMPLITUDE    0.1f        // minimum amount of sway even if completely settled on target
 
-# define ZOOM_YAW_AMPLITUDE          0.7f
-# define ZOOM_YAW_FREQUENCY          0.12f
-# define ZOOM_YAW_MIN_AMPLITUDE      0.2f
+#define ZOOM_YAW_AMPLITUDE          0.7f
+#define ZOOM_YAW_FREQUENCY          0.12f
+#define ZOOM_YAW_MIN_AMPLITUDE      0.2f
 
 // DHM - Nerve
-# define MAX_OBJECTIVES      8
-# define MAX_OID_TRIGGERS    18
+#define MAX_OBJECTIVES      8
+#define MAX_OID_TRIGGERS    18
 // dhm
 
 typedef struct {
@@ -173,28 +173,28 @@ typedef struct {
 
 // Campaign saves
 // rain - 128 -> 512, campaigns are commonplace
-# define MAX_CAMPAIGNS           512
+#define MAX_CAMPAIGNS           512
 
 // START Mad Doc - TDF
 // changed this from 6 to 10
-# define MAX_MAPS_PER_CAMPAIGN   10
+#define MAX_MAPS_PER_CAMPAIGN   10
 // END Mad Doc - TDF
 
 // Client flags for server processing
-# define CGF_AUTORELOAD      0x01
-# define CGF_STATSDUMP       0x02   // Nico, note: unused
-# define CGF_AUTOACTIVATE    0x04
-# define CGF_PREDICTITEMS    0x08
-# define CGF_PMOVEFIXED      0x10   // Nico, pmove_fixed
-# define CGF_AUTOLOGIN       0x20   // Nico, autologin
+#define CGF_AUTORELOAD      0x01
+#define CGF_STATSDUMP       0x02    // Nico, note: unused
+#define CGF_AUTOACTIVATE    0x04
+#define CGF_PREDICTITEMS    0x08
+#define CGF_PMOVEFIXED      0x10    // Nico, pmove_fixed
+#define CGF_AUTOLOGIN       0x20    // Nico, autologin
 
-# define MAX_MOTDLINES   6
+#define MAX_MOTDLINES   6
 
-# define MAX_CHARACTERS  16
+#define MAX_CHARACTERS  16
 
 // Nico, some timerun limit defines
-# define MAX_TIMERUNS    32
-# define MAX_TIMERUN_CHECKPOINTS 16
+#define MAX_TIMERUNS    32
+#define MAX_TIMERUN_CHECKPOINTS 16
 
 //
 // config strings are a general means of communicating variable length strings
@@ -202,78 +202,78 @@ typedef struct {
 //
 
 // CS_SERVERINFO and CS_SYSTEMINFO are defined in q_shared.h
-# define CS_MUSIC                        2
-# define CS_MESSAGE                      3      // from the map worldspawn's message field
-# define CS_MOTD                         4      // g_motd string for server message of the day
-# define CS_WARMUP                       5      // server time when the match will be restarted
-# define CS_VOTE_TIME                    6
-# define CS_VOTE_STRING                  7
-# define CS_VOTE_YES                     8
-# define CS_VOTE_NO                      9
-# define CS_GAME_VERSION                 10
+#define CS_MUSIC                        2
+#define CS_MESSAGE                      3       // from the map worldspawn's message field
+#define CS_MOTD                         4       // g_motd string for server message of the day
+#define CS_WARMUP                       5       // server time when the match will be restarted
+#define CS_VOTE_TIME                    6
+#define CS_VOTE_STRING                  7
+#define CS_VOTE_YES                     8
+#define CS_VOTE_NO                      9
+#define CS_GAME_VERSION                 10
 
-# define CS_LEVEL_START_TIME             11     // so the timer only shows the current level
+#define CS_LEVEL_START_TIME             11      // so the timer only shows the current level
 
-# define CS_INTERMISSION                 12     // when 1, intermission will start in a second or two
+#define CS_INTERMISSION                 12      // when 1, intermission will start in a second or two
 
-# define CS_MULTI_INFO                   13
-# define CS_MULTI_MAPWINNER              14
-# define CS_MULTI_OBJECTIVE              15
+#define CS_MULTI_INFO                   13
+#define CS_MULTI_MAPWINNER              14
+#define CS_MULTI_OBJECTIVE              15
 //
-# define CS_SCREENFADE                   17     // Ridah, used to tell clients to fade their screen to black/normal
-# define CS_FOGVARS                      18     //----(SA) used for saving the current state/settings of the fog
-# define CS_SKYBOXORG                    19     // this is where we should view the skybox from
+#define CS_SCREENFADE                   17      // Ridah, used to tell clients to fade their screen to black/normal
+#define CS_FOGVARS                      18      //----(SA) used for saving the current state/settings of the fog
+#define CS_SKYBOXORG                    19      // this is where we should view the skybox from
 
-# define CS_TARGETEFFECT                 20     //----(SA)
-# define CS_WOLFINFO                     21     // NERVE - SMF
+#define CS_TARGETEFFECT                 20      //----(SA)
+#define CS_WOLFINFO                     21      // NERVE - SMF
 
-# define CS_FIRSTBLOOD                   22     // Team that has first blood
+#define CS_FIRSTBLOOD                   22      // Team that has first blood
 
-# define CS_ROUNDSCORES1                 23     // Axis round wins
-# define CS_ROUNDSCORES2                 24     // Allied round wins
+#define CS_ROUNDSCORES1                 23      // Axis round wins
+#define CS_ROUNDSCORES2                 24      // Allied round wins
 
-# define CS_MAIN_AXIS_OBJECTIVE          25     // Most important current objective
-# define CS_MAIN_ALLIES_OBJECTIVE        26     // Most important current objective
-# define CS_MUSIC_QUEUE                  27
-# define CS_SCRIPT_MOVER_NAMES           28
-# define CS_CONSTRUCTION_NAMES           29
+#define CS_MAIN_AXIS_OBJECTIVE          25      // Most important current objective
+#define CS_MAIN_ALLIES_OBJECTIVE        26      // Most important current objective
+#define CS_MUSIC_QUEUE                  27
+#define CS_SCRIPT_MOVER_NAMES           28
+#define CS_CONSTRUCTION_NAMES           29
 
-# define CS_VERSIONINFO                  30     // Versioning info for demo playback compatibility
-# define CS_SERVERTOGGLES                32     // Shows current enable/disabled settings (for voting UI)
-# define CS_GLOBALFOGVARS                33
+#define CS_VERSIONINFO                  30      // Versioning info for demo playback compatibility
+#define CS_SERVERTOGGLES                32      // Shows current enable/disabled settings (for voting UI)
+#define CS_GLOBALFOGVARS                33
 
-# define CS_AXIS_MAPS_XP                 34
-# define CS_ALLIED_MAPS_XP               35
+#define CS_AXIS_MAPS_XP                 34
+#define CS_ALLIED_MAPS_XP               35
 
-# define CS_INTERMISSION_START_TIME      36
+#define CS_INTERMISSION_START_TIME      36
 
-# define CS_ENDGAME_STATS                37
+#define CS_ENDGAME_STATS                37
 
-# define CS_CHARGETIMES                  38
-# define CS_FILTERCAMS                   39
+#define CS_CHARGETIMES                  38
+#define CS_FILTERCAMS                   39
 
-# define CS_MODELS                       64
-# define CS_SOUNDS                       (CS_MODELS +               MAX_MODELS)
-# define CS_SHADERS                      (CS_SOUNDS +               MAX_SOUNDS)
-# define CS_SHADERSTATE                  (CS_SHADERS +              MAX_CS_SHADERS)               // Gordon: this MUST be after CS_SHADERS
-# define CS_SKINS                        (CS_SHADERSTATE +          1)
-# define CS_CHARACTERS                   (CS_SKINS +                MAX_CS_SKINS)
-# define CS_PLAYERS                      (CS_CHARACTERS +           MAX_CHARACTERS)
-# define CS_MULTI_SPAWNTARGETS           (CS_PLAYERS +              MAX_CLIENTS)
-# define CS_OID_TRIGGERS                 (CS_MULTI_SPAWNTARGETS +   MAX_MULTI_SPAWNTARGETS)
-# define CS_OID_DATA                     (CS_OID_TRIGGERS +         MAX_OID_TRIGGERS)
-# define CS_DLIGHTS                      (CS_OID_DATA +             MAX_OID_TRIGGERS)
-# define CS_SPLINES                      (CS_DLIGHTS +              MAX_DLIGHT_CONFIGSTRINGS)
-# define CS_TAGCONNECTS                  (CS_SPLINES +              MAX_SPLINE_CONFIGSTRINGS)
-# define CS_FIRETEAMS                    (CS_TAGCONNECTS +          MAX_TAGCONNECTS)
-# define CS_CUSTMOTD                     (CS_FIRETEAMS +            MAX_FIRETEAMS)
-# define CS_STRINGS                      (CS_CUSTMOTD +             MAX_MOTDLINES)
-# define CS_TIMERUNS                     (CS_STRINGS +              MAX_CSSTRINGS)               // Nico, timerun configstring
-# define CS_MAX                          (CS_TIMERUNS +             MAX_CSSTRINGS)
+#define CS_MODELS                       64
+#define CS_SOUNDS                       (CS_MODELS +               MAX_MODELS)
+#define CS_SHADERS                      (CS_SOUNDS +               MAX_SOUNDS)
+#define CS_SHADERSTATE                  (CS_SHADERS +              MAX_CS_SHADERS)                // Gordon: this MUST be after CS_SHADERS
+#define CS_SKINS                        (CS_SHADERSTATE +          1)
+#define CS_CHARACTERS                   (CS_SKINS +                MAX_CS_SKINS)
+#define CS_PLAYERS                      (CS_CHARACTERS +           MAX_CHARACTERS)
+#define CS_MULTI_SPAWNTARGETS           (CS_PLAYERS +              MAX_CLIENTS)
+#define CS_OID_TRIGGERS                 (CS_MULTI_SPAWNTARGETS +   MAX_MULTI_SPAWNTARGETS)
+#define CS_OID_DATA                     (CS_OID_TRIGGERS +         MAX_OID_TRIGGERS)
+#define CS_DLIGHTS                      (CS_OID_DATA +             MAX_OID_TRIGGERS)
+#define CS_SPLINES                      (CS_DLIGHTS +              MAX_DLIGHT_CONFIGSTRINGS)
+#define CS_TAGCONNECTS                  (CS_SPLINES +              MAX_SPLINE_CONFIGSTRINGS)
+#define CS_FIRETEAMS                    (CS_TAGCONNECTS +          MAX_TAGCONNECTS)
+#define CS_CUSTMOTD                     (CS_FIRETEAMS +            MAX_FIRETEAMS)
+#define CS_STRINGS                      (CS_CUSTMOTD +             MAX_MOTDLINES)
+#define CS_TIMERUNS                     (CS_STRINGS +              MAX_CSSTRINGS)                // Nico, timerun configstring
+#define CS_MAX                          (CS_TIMERUNS +             MAX_CSSTRINGS)
 
-# if (CS_MAX) > MAX_CONFIGSTRINGS
-#  error overflow: (CS_MAX) > MAX_CONFIGSTRINGS
-# endif
+#if (CS_MAX) > MAX_CONFIGSTRINGS
+# error overflow: (CS_MAX) > MAX_CONFIGSTRINGS
+#endif
 
 /*
 ===================================================================================
@@ -316,21 +316,21 @@ typedef enum {
 } weaponstateCompact_t;
 
 // pmove->pm_flags	(sent as max 16 bits in msg.c)
-# define PMF_DUCKED          1
-# define PMF_JUMP_HELD       2
-# define PMF_LADDER          4      // player is on a ladder
-# define PMF_BACKWARDS_JUMP  8      // go into backwards land
-# define PMF_BACKWARDS_RUN   16     // coast down to backwards run
-# define PMF_TIME_LAND       32     // pm_time is time before rejump
-# define PMF_TIME_KNOCKBACK  64     // pm_time is an air-accelerate only time
-# define PMF_TIME_WATERJUMP  256    // pm_time is waterjump
-# define PMF_RESPAWNED       512    // clear after attack and jump buttons come up
-# define PMF_FLAILING        2048
-# define PMF_FOLLOW          4096   // spectate following another player
-# define PMF_LIMBO           16384  // JPW NERVE limbo state, pm_time is time until reinforce
-# define PMF_TIME_LOCKPLAYER 32768  // DHM - Nerve :: Lock all movement and view changes
+#define PMF_DUCKED          1
+#define PMF_JUMP_HELD       2
+#define PMF_LADDER          4       // player is on a ladder
+#define PMF_BACKWARDS_JUMP  8       // go into backwards land
+#define PMF_BACKWARDS_RUN   16      // coast down to backwards run
+#define PMF_TIME_LAND       32      // pm_time is time before rejump
+#define PMF_TIME_KNOCKBACK  64      // pm_time is an air-accelerate only time
+#define PMF_TIME_WATERJUMP  256     // pm_time is waterjump
+#define PMF_RESPAWNED       512     // clear after attack and jump buttons come up
+#define PMF_FLAILING        2048
+#define PMF_FOLLOW          4096    // spectate following another player
+#define PMF_LIMBO           16384   // JPW NERVE limbo state, pm_time is time until reinforce
+#define PMF_TIME_LOCKPLAYER 32768   // DHM - Nerve :: Lock all movement and view changes
 
-# define PMF_ALL_TIMES   (PMF_TIME_WATERJUMP | PMF_TIME_LAND | PMF_TIME_KNOCKBACK | PMF_TIME_LOCKPLAYER)
+#define PMF_ALL_TIMES   (PMF_TIME_WATERJUMP | PMF_TIME_LAND | PMF_TIME_KNOCKBACK | PMF_TIME_LOCKPLAYER)
 
 typedef struct {
 	qboolean bAutoReload;           // do we predict autoreload of weapons
@@ -365,7 +365,7 @@ typedef struct {
 } pmoveExt_t;   // data used both in client and server - store it here
                 // instead of playerstate to prevent different engine versions of playerstate between XP and MP
 
-# define MAXTOUCH    32
+#define MAXTOUCH    32
 typedef struct {
 	// state (in / out)
 	playerState_t *ps;
@@ -407,7 +407,7 @@ typedef struct {
 
 	// callbacks to test the world
 	// these will be different functions during game and cgame
-	void (*trace)(trace_t *results, const vec3_t start, const vec3_t mins, const vec3_t maxs, const vec3_t end, int passEntityNum, int contentMask);
+	void (*trace)(trace_t * results, const vec3_t start, const vec3_t mins, const vec3_t maxs, const vec3_t end, int passEntityNum, int contentMask);
 	int (*pointcontents)(const vec3_t point, int passEntityNum);
 
 	// Nico, game physics
@@ -425,22 +425,22 @@ typedef struct {
 } pmove_t;
 
 // if a full pmove isn't done on the client, you can just update the angles
-void PM_UpdateViewAngles(playerState_t * ps, pmoveExt_t * pmext, usercmd_t * cmd, void(trace) (trace_t * results, const vec3_t start, const vec3_t mins, const vec3_t maxs, const vec3_t end, int passEntityNum, int contentMask), int tracemask);
+void PM_UpdateViewAngles(playerState_t *ps, pmoveExt_t *pmext, usercmd_t *cmd, void (trace) (trace_t *results, const vec3_t start, const vec3_t mins, const vec3_t maxs, const vec3_t end, int passEntityNum, int contentMask), int tracemask);
 int Pmove(pmove_t *pmove);
 
 //===================================================================================
 
-# define PC_SOLDIER              0  //	shoot stuff
-# define PC_MEDIC                1  //	heal stuff
-# define PC_ENGINEER             2  //	build stuff
-# define PC_FIELDOPS             3  //	bomb stuff
-# define PC_COVERTOPS            4  //	sneak about ;o
+#define PC_SOLDIER              0   //	shoot stuff
+#define PC_MEDIC                1   //	heal stuff
+#define PC_ENGINEER             2   //	build stuff
+#define PC_FIELDOPS             3   //	bomb stuff
+#define PC_COVERTOPS            4   //	sneak about ;o
 
-# define NUM_PLAYER_CLASSES      5
+#define NUM_PLAYER_CLASSES      5
 
 // JPW NERVE
-# define MAX_WEAPS_IN_BANK_MP    12
-# define MAX_WEAP_BANKS_MP       10
+#define MAX_WEAPS_IN_BANK_MP    12
+#define MAX_WEAP_BANKS_MP       10
 // jpw
 
 // player_state->stats[] indexes
@@ -459,12 +459,12 @@ typedef enum {
 } statIndex_t;
 
 // Nico, keys pressed
-# define UMOVE_FORWARD   0x0001
-# define UMOVE_BACKWARD  0x0002
-# define UMOVE_LEFT      0x0004
-# define UMOVE_RIGHT     0x0008
-# define UMOVE_UP        0x0010
-# define UMOVE_DOWN      0x0020
+#define UMOVE_FORWARD   0x0001
+#define UMOVE_BACKWARD  0x0002
+#define UMOVE_LEFT      0x0004
+#define UMOVE_RIGHT     0x0008
+#define UMOVE_UP        0x0010
+#define UMOVE_DOWN      0x0020
 
 // player_state->persistant[] indexes
 // these fields are the only part of player_state that isn't
@@ -495,50 +495,50 @@ typedef enum {
 } persEnum_t;
 
 // entityState_t->eFlags
-# define EF_DEAD             0x00000001     // don't draw a foe marker over players with EF_DEAD
-# define EF_NONSOLID_BMODEL  0x00000002     // bmodel is visible, but not solid
-# define EF_FORCE_END_FRAME  EF_NONSOLID_BMODEL // force client to end of current animation
-# define EF_TELEPORT_BIT     0x00000004     // toggled every time the origin abruptly changes
-# define EF_READY            0x00000008     // player is ready
+#define EF_DEAD             0x00000001      // don't draw a foe marker over players with EF_DEAD
+#define EF_NONSOLID_BMODEL  0x00000002      // bmodel is visible, but not solid
+#define EF_FORCE_END_FRAME  EF_NONSOLID_BMODEL  // force client to end of current animation
+#define EF_TELEPORT_BIT     0x00000004      // toggled every time the origin abruptly changes
+#define EF_READY            0x00000008      // player is ready
 
-# define EF_CROUCHING        0x00000010     // player is crouching
-# define EF_MG42_ACTIVE      0x00000020     // currently using an MG42
-# define EF_NODRAW           0x00000040     // may have an event, but no model (unspawned items)
-# define EF_FIRING           0x00000080     // for lightning gun
-# define EF_INHERITSHADER    EF_FIRING      // some ents will never use EF_FIRING, hijack it for "USESHADER"
+#define EF_CROUCHING        0x00000010      // player is crouching
+#define EF_MG42_ACTIVE      0x00000020      // currently using an MG42
+#define EF_NODRAW           0x00000040      // may have an event, but no model (unspawned items)
+#define EF_FIRING           0x00000080      // for lightning gun
+#define EF_INHERITSHADER    EF_FIRING       // some ents will never use EF_FIRING, hijack it for "USESHADER"
 
-# define EF_SPINNING         0x00000100     // (SA) added for level editor control of spinning pickup items
-# define EF_BREATH           EF_SPINNING    // Characters will not have EF_SPINNING set, hijack for drawing character breath
-# define EF_TALK             0x00000200     // draw a talk balloon
-# define EF_CONNECTION       0x00000400     // draw a connection trouble sprite
-# define EF_SMOKINGBLACK     0x00000800     // JPW NERVE -- like EF_SMOKING only darker & bigger
+#define EF_SPINNING         0x00000100      // (SA) added for level editor control of spinning pickup items
+#define EF_BREATH           EF_SPINNING     // Characters will not have EF_SPINNING set, hijack for drawing character breath
+#define EF_TALK             0x00000200      // draw a talk balloon
+#define EF_CONNECTION       0x00000400      // draw a connection trouble sprite
+#define EF_SMOKINGBLACK     0x00000800      // JPW NERVE -- like EF_SMOKING only darker & bigger
 
-# define EF_HEADSHOT         0x00001000     // last hit to player was head shot (Gordon: NOTE: not last hit, but has BEEN shot in the head since respawn)
-# define EF_SMOKING          0x00002000     // DHM - Nerve :: ET_GENERAL ents will emit smoke if set // JPW switched to this after my code change
-# define EF_OVERHEATING      (EF_SMOKING | EF_SMOKINGBLACK)   // ydnar: light smoke/steam effect
-# define EF_VOTED            0x00004000     // already cast a vote
-# define EF_TAGCONNECT       0x00008000     // connected to another entity via tag
-# define EF_MOUNTEDTANK      EF_TAGCONNECT  // Gordon: duplicated for clarity
+#define EF_HEADSHOT         0x00001000      // last hit to player was head shot (Gordon: NOTE: not last hit, but has BEEN shot in the head since respawn)
+#define EF_SMOKING          0x00002000      // DHM - Nerve :: ET_GENERAL ents will emit smoke if set // JPW switched to this after my code change
+#define EF_OVERHEATING      (EF_SMOKING | EF_SMOKINGBLACK)    // ydnar: light smoke/steam effect
+#define EF_VOTED            0x00004000      // already cast a vote
+#define EF_TAGCONNECT       0x00008000      // connected to another entity via tag
+#define EF_MOUNTEDTANK      EF_TAGCONNECT   // Gordon: duplicated for clarity
 
-# define EF_FAKEBMODEL       0x00010000     // Nico, replaced unused EF_SPARE3 with EF_FAKEBMODEL
-# define EF_PATH_LINK        0x00020000     // Gordon: linking trains together
-# define EF_ZOOMING          0x00040000     // client is zooming
-# define EF_PRONE            0x00080000     // player is prone
+#define EF_FAKEBMODEL       0x00010000      // Nico, replaced unused EF_SPARE3 with EF_FAKEBMODEL
+#define EF_PATH_LINK        0x00020000      // Gordon: linking trains together
+#define EF_ZOOMING          0x00040000      // client is zooming
+#define EF_PRONE            0x00080000      // player is prone
 
-# define EF_PRONE_MOVING     0x00100000     // player is prone and moving
-# define EF_VIEWING_CAMERA   0x00200000     // player is viewing a camera
-# define EF_AAGUN_ACTIVE     0x00400000     // Gordon: player is manning an AA gun
-# define EF_SPARE0           0x00800000     // Gordon: freed
+#define EF_PRONE_MOVING     0x00100000      // player is prone and moving
+#define EF_VIEWING_CAMERA   0x00200000      // player is viewing a camera
+#define EF_AAGUN_ACTIVE     0x00400000      // Gordon: player is manning an AA gun
+#define EF_SPARE0           0x00800000      // Gordon: freed
 
 // !! NOTE: only place flags that don't need to go to the client beyond 0x00800000
-# define EF_SPARE1           0x01000000     // Gordon: freed
-# define EF_SPARE2           0x02000000     // Gordon: freed
-# define EF_BOUNCE           0x04000000     // for missiles
-# define EF_BOUNCE_HALF      0x08000000     // for missiles
-# define EF_MOVER_STOP       0x10000000     // will push otherwise	// (SA) moved down to make space for one more client flag
-# define EF_MOVER_BLOCKED    0x20000000     // mover was blocked dont lerp on the client // xkan, moved down to make space for client flag
+#define EF_SPARE1           0x01000000      // Gordon: freed
+#define EF_SPARE2           0x02000000      // Gordon: freed
+#define EF_BOUNCE           0x04000000      // for missiles
+#define EF_BOUNCE_HALF      0x08000000      // for missiles
+#define EF_MOVER_STOP       0x10000000      // will push otherwise	// (SA) moved down to make space for one more client flag
+#define EF_MOVER_BLOCKED    0x20000000      // mover was blocked dont lerp on the client // xkan, moved down to make space for client flag
 
-# define BG_PlayerMounted(eFlags) ((eFlags & EF_MG42_ACTIVE) || (eFlags & EF_MOUNTEDTANK) || (eFlags & EF_AAGUN_ACTIVE))
+#define BG_PlayerMounted(eFlags) ((eFlags & EF_MG42_ACTIVE) || (eFlags & EF_MOUNTEDTANK) || (eFlags & EF_AAGUN_ACTIVE))
 
 // !! NOTE: only place flags that don't need to go to the client beyond 0x00800000
 typedef enum {
@@ -719,20 +719,20 @@ extern int weapAlts[];  // defined in bg_misc.c
 
 //----(SA)
 // for routines that need to check if a WP_ is </=/> a given set of weapons
-# define WP_BEGINSECONDARY   WP_GPG40
-# define WP_LASTSECONDARY    WP_SILENCED_COLT
-# define WEAPS_ONE_HANDED    ((1 << WP_KNIFE) | (1 << WP_LUGER) | (1 << WP_COLT) | (1 << WP_SILENCER) | (1 << WP_SILENCED_COLT) | (1 << WP_GRENADE_LAUNCHER) | (1 << WP_GRENADE_PINEAPPLE))
+#define WP_BEGINSECONDARY   WP_GPG40
+#define WP_LASTSECONDARY    WP_SILENCED_COLT
+#define WEAPS_ONE_HANDED    ((1 << WP_KNIFE) | (1 << WP_LUGER) | (1 << WP_COLT) | (1 << WP_SILENCER) | (1 << WP_SILENCED_COLT) | (1 << WP_GRENADE_LAUNCHER) | (1 << WP_GRENADE_PINEAPPLE))
 
 // rain - #81 - added added akimbo weapons and deployed MG42
-# define IS_AUTORELOAD_WEAPON(weapon) \
+#define IS_AUTORELOAD_WEAPON(weapon) \
 	(   \
-	    weapon == WP_LUGER    || weapon == WP_COLT          || weapon == WP_MP40          || \
-	    weapon == WP_THOMPSON || weapon == WP_STEN      || \
-	    weapon == WP_KAR98    || weapon == WP_CARBINE       || weapon == WP_GARAND_SCOPE  || \
-	    weapon == WP_FG42     || weapon == WP_K43           || weapon == WP_MOBILE_MG42   || \
-	    weapon == WP_SILENCED_COLT    || weapon == WP_SILENCER      || \
-	    weapon == WP_GARAND   || weapon == WP_K43_SCOPE     || weapon == WP_FG42SCOPE     || \
-	    BG_IsAkimboWeapon(weapon) || weapon == WP_MOBILE_MG42_SET \
+		weapon == WP_LUGER    || weapon == WP_COLT          || weapon == WP_MP40          || \
+		weapon == WP_THOMPSON || weapon == WP_STEN      || \
+		weapon == WP_KAR98    || weapon == WP_CARBINE       || weapon == WP_GARAND_SCOPE  || \
+		weapon == WP_FG42     || weapon == WP_K43           || weapon == WP_MOBILE_MG42   || \
+		weapon == WP_SILENCED_COLT    || weapon == WP_SILENCER      || \
+		weapon == WP_GARAND   || weapon == WP_K43_SCOPE     || weapon == WP_FG42SCOPE     || \
+		BG_IsAkimboWeapon(weapon) || weapon == WP_MOBILE_MG42_SET \
 	)
 
 // entityState_t->event values
@@ -744,9 +744,9 @@ extern int weapAlts[];  // defined in bg_misc.c
 // that an identical event started twice in a row can
 // be distinguished.  And off the value with ~EV_EVENT_BITS
 // to retrieve the actual event number
-# define EV_EVENT_BIT1       0x00000100
-# define EV_EVENT_BIT2       0x00000200
-# define EV_EVENT_BITS       (EV_EVENT_BIT1 | EV_EVENT_BIT2)
+#define EV_EVENT_BIT1       0x00000100
+#define EV_EVENT_BIT2       0x00000200
+#define EV_EVENT_BITS       (EV_EVENT_BIT1 | EV_EVENT_BIT2)
 
 typedef enum {
 	EV_NONE,
@@ -1082,16 +1082,16 @@ typedef enum hudHeadAnimNumber_s {
 	MAX_HD_ANIMATIONS
 } hudHeadAnimNumber_t;
 
-# define ANIMFL_LADDERANIM   0x1
-# define ANIMFL_FIRINGANIM   0x2
-# define ANIMFL_REVERSED     0x4
+#define ANIMFL_LADDERANIM   0x1
+#define ANIMFL_FIRINGANIM   0x2
+#define ANIMFL_REVERSED     0x4
 
 typedef struct animation_s {
-# ifdef CGAMEDLL
+#ifdef CGAMEDLL
 	qhandle_t mdxFile;
-# else
+#else
 	char mdxFileName[MAX_QPATH];
-# endif // CGAMEDLL
+#endif  // CGAMEDLL
 	char name[MAX_QPATH];
 	int firstFrame;
 	int numFrames;
@@ -1139,7 +1139,7 @@ typedef struct headAnimation_s {
 
 // flip the togglebit every time an animation
 // changes so a restart of the same anim can be detected
-# define ANIM_TOGGLEBIT      (1 << (ANIM_BITS - 1))
+#define ANIM_TOGGLEBIT      (1 << (ANIM_BITS - 1))
 
 // Gordon: renamed these to team_axis/allies, it really was awful....
 typedef enum {
@@ -1152,7 +1152,7 @@ typedef enum {
 } team_t;
 
 // Time between location updates
-# define TEAM_LOCATION_UPDATE_TIME       1000
+#define TEAM_LOCATION_UPDATE_TIME       1000
 
 // means of death
 typedef enum {
@@ -1258,8 +1258,8 @@ typedef enum {
 	IT_TEAM,
 } itemType_t;
 
-# define MAX_ITEM_MODELS 3
-# define MAX_ITEM_ICONS 4
+#define MAX_ITEM_MODELS 3
+#define MAX_ITEM_ICONS 4
 
 // JOSEPH 4-17-00
 typedef struct gitem_s {
@@ -1299,14 +1299,14 @@ qboolean BG_IsAkimboWeapon(int weaponNum);
 int BG_AkimboSidearm(int weaponNum);
 
 // content masks
-# define MASK_ALL                (-1)
-# define MASK_SOLID              (CONTENTS_SOLID)
-# define MASK_PLAYERSOLID        (CONTENTS_SOLID | CONTENTS_PLAYERCLIP | CONTENTS_BODY)
-# define MASK_DEADSOLID          (CONTENTS_SOLID | CONTENTS_PLAYERCLIP)
-# define MASK_WATER              (CONTENTS_WATER | CONTENTS_LAVA | CONTENTS_SLIME)
-# define MASK_OPAQUE             (CONTENTS_SOLID | CONTENTS_LAVA)       //----(SA)	modified since slime is no longer deadly
-# define MASK_SHOT               (CONTENTS_SOLID | CONTENTS_BODY | CONTENTS_CORPSE)
-# define MASK_MISSILESHOT        (MASK_SHOT | CONTENTS_MISSILECLIP)
+#define MASK_ALL                (-1)
+#define MASK_SOLID              (CONTENTS_SOLID)
+#define MASK_PLAYERSOLID        (CONTENTS_SOLID | CONTENTS_PLAYERCLIP | CONTENTS_BODY)
+#define MASK_DEADSOLID          (CONTENTS_SOLID | CONTENTS_PLAYERCLIP)
+#define MASK_WATER              (CONTENTS_WATER | CONTENTS_LAVA | CONTENTS_SLIME)
+#define MASK_OPAQUE             (CONTENTS_SOLID | CONTENTS_LAVA)        //----(SA)	modified since slime is no longer deadly
+#define MASK_SHOT               (CONTENTS_SOLID | CONTENTS_BODY | CONTENTS_CORPSE)
+#define MASK_MISSILESHOT        (MASK_SHOT | CONTENTS_MISSILECLIP)
 
 //
 // entityState_t->eType
@@ -1386,13 +1386,13 @@ void    BG_PlayerStateToEntityStateExtraPolate(playerState_t *ps, entityState_t 
 qboolean    BG_PlayerTouchesItem(playerState_t *ps, entityState_t *item, int atTime);
 qboolean    BG_PlayerSeesItem(playerState_t *ps, entityState_t *item, int atTime);
 
-# define OVERCLIP        1.001f
+#define OVERCLIP        1.001f
 
 //----(SA)	removed PM_ammoNeeded 11/27/00
 void PM_ClipVelocity(vec3_t in, vec3_t normal, vec3_t out, float overbounce);
 
-# define MAX_ARENAS          64
-# define MAX_ARENAS_TEXT     8192
+#define MAX_ARENAS          64
+#define MAX_ARENAS_TEXT     8192
 
 typedef enum {
 	FOOTSTEP_NORMAL,
@@ -1428,11 +1428,11 @@ typedef enum {
 //==================================================================
 // New Animation Scripting Defines
 
-# define MAX_ANIMSCRIPT_MODELS               32
-# define MAX_ANIMSCRIPT_ITEMS_PER_MODEL      2048
-# define MAX_MODEL_ANIMATIONS                512    // animations per model
-# define MAX_ANIMSCRIPT_ANIMCOMMANDS         8
-# define MAX_ANIMSCRIPT_ITEMS                128
+#define MAX_ANIMSCRIPT_MODELS               32
+#define MAX_ANIMSCRIPT_ITEMS_PER_MODEL      2048
+#define MAX_MODEL_ANIMATIONS                512     // animations per model
+#define MAX_ANIMSCRIPT_ANIMCOMMANDS         8
+#define MAX_ANIMSCRIPT_ITEMS                128
 // NOTE: these must all be in sync with string tables in bg_animation.c
 
 typedef enum {
@@ -1680,7 +1680,7 @@ typedef enum {
 	ACC_MAX         // this is bound by network limits, must change network stream to increase this
 } accType_t;
 
-# define MAX_WEAPS_PER_CLASS 10
+#define MAX_WEAPS_PER_CLASS 10
 
 typedef struct {
 	int classNum;
@@ -1697,7 +1697,7 @@ typedef struct {
 typedef struct bg_character_s {
 	char characterFile[MAX_QPATH];
 
-# ifdef CGAMEDLL
+#ifdef CGAMEDLL
 	qhandle_t mesh;
 	qhandle_t skin;
 
@@ -1713,7 +1713,7 @@ typedef struct bg_character_s {
 	qhandle_t hudhead;
 	qhandle_t hudheadskin;
 	animation_t hudheadanimations[MAX_HD_ANIMATIONS];
-# endif // CGAMEDLL
+#endif  // CGAMEDLL
 
 	animModelInfo_t *animModelInfo;
 } bg_character_t;
@@ -1754,7 +1754,7 @@ void BG_DisableWeaponForAllClasses(int weapon);
 extern bg_playerclass_t bg_allies_playerclasses[NUM_PLAYER_CLASSES];
 extern bg_playerclass_t bg_axis_playerclasses[NUM_PLAYER_CLASSES];
 
-# define MAX_PATH_CORNERS        512
+#define MAX_PATH_CORNERS        512
 
 typedef struct {
 	char name[64];
@@ -1777,9 +1777,9 @@ typedef enum {
 	ME_COMMANDMAP_MARKER,
 } mapEntityType_t;
 
-# define MAX_SPLINE_PATHS        512
-# define MAX_SPLINE_CONTROLS     4
-# define MAX_SPLINE_SEGMENTS     16
+#define MAX_SPLINE_PATHS        512
+#define MAX_SPLINE_CONTROLS     4
+#define MAX_SPLINE_SEGMENTS     16
 
 typedef struct splinePath_s splinePath_t;
 
@@ -1825,7 +1825,7 @@ int BG_MaxAmmoForWeapon(weapon_t weaponNum);
 void BG_InitLocations(vec2_t world_mins, vec2_t world_maxs);
 char *BG_GetLocationString(vec_t *pos);
 
-# define MAX_FIRETEAMS       6
+#define MAX_FIRETEAMS       6
 
 extern const char *bg_fireteamNames[MAX_FIRETEAMS];
 
@@ -1852,13 +1852,13 @@ int trap_PC_SourceFileAndLine(int handle, char *filename, int *line);
 
 void PC_SourceError(int handle, char *format, ...);
 
-# ifdef GAMEDLL
+#ifdef GAMEDLL
 const char *PC_String_Parse(int handle);
 const char *PC_Line_Parse(int handle);
-# else
+#else
 const char *String_Alloc(const char *p);
 qboolean PC_String_Parse(int handle, const char **out);
-# endif
+#endif
 qboolean PC_String_ParseNoAlloc(int handle, char *out, size_t size);
 qboolean PC_Int_Parse(int handle, int *i);
 qboolean PC_Color_Parse(int handle, vec4_t *c);
@@ -1903,7 +1903,7 @@ int BG_simpleWeaponState(int ws);
 void BG_setCrosshair(char *colString, float *col, float alpha, char *cvarName);
 
 // Voting
-# define VOTING_DISABLED     ((1 << numVotesAvailable) - 1)
+#define VOTING_DISABLED     ((1 << numVotesAvailable) - 1)
 
 typedef struct {
 	const char *pszCvar;
@@ -1991,9 +1991,9 @@ qboolean BG_LoadSpeakerScript(const char *filename);
 
 // Lookup table to find ammo table entry
 extern ammotable_t ammoTableMP[WP_NUM_WEAPONS];
-# define GetAmmoTableData(ammoIndex) ((ammotable_t *)(&ammoTableMP[ammoIndex]))
+#define GetAmmoTableData(ammoIndex) ((ammotable_t *)(&ammoTableMP[ammoIndex]))
 
-# define MAX_MAP_SIZE 65536
+#define MAX_MAP_SIZE 65536
 
 qboolean BG_BBoxCollision(vec3_t min1, vec3_t max1, vec3_t min2, vec3_t max2);
 
@@ -2022,13 +2022,13 @@ typedef enum popupMessageBigType_e {
 	PM_BIG_NUM_TYPES
 } popupMessageBigType_t;
 
-# define NUM_HEAVY_WEAPONS 6
+#define NUM_HEAVY_WEAPONS 6
 extern weapon_t bg_heavyWeapons[NUM_HEAVY_WEAPONS];
 
 int PM_AltSwitchFromForWeapon(int weapon);
 int PM_AltSwitchToForWeapon(int weapon);
 
-void PM_TraceLegs(trace_t * trace, float *legsOffset, vec3_t start, vec3_t end, trace_t * bodytrace, vec3_t viewangles, void(tracefunc) (trace_t * results, const vec3_t start, const vec3_t mins, const vec3_t maxs, const vec3_t end, int passEntityNum, int contentMask), int ignoreent, int tracemask);
+void PM_TraceLegs(trace_t *trace, float *legsOffset, vec3_t start, vec3_t end, trace_t *bodytrace, vec3_t viewangles, void(tracefunc) (trace_t *results, const vec3_t start, const vec3_t mins, const vec3_t maxs, const vec3_t end, int passEntityNum, int contentMask), int ignoreent, int tracemask);
 void PM_TraceAllLegs(trace_t *trace, float *legsOffset, vec3_t start, vec3_t end);
 void PM_TraceAll(trace_t *trace, vec3_t start, vec3_t end);
 

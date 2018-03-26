@@ -3598,7 +3598,7 @@ void func_explosive_explode(gentity_t *self, gentity_t *inflictor, gentity_t *at
 
 		// since the explosive might need to fire the target rather than
 		// aim at it, only aim at 'info_notnull' ents
-		for (;; ) {
+		for (;;) {
 			tent = G_FindByTargetname(tent, self->target);
 			if (!tent) {
 				break;

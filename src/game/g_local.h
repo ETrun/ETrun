@@ -1545,7 +1545,7 @@ int     trap_EntitiesInBox(const vec3_t mins, const vec3_t maxs, int *entityList
 qboolean trap_EntityContactCapsule(const vec3_t mins, const vec3_t maxs, const gentity_t *ent);
 void    trap_GetUsercmd(int clientNum, usercmd_t *cmd);
 qboolean    trap_GetEntityToken(char *buffer, int bufferSize);
-qboolean trap_GetTag(int clientNum, int tagFileNumber, char *tagName, orientation_t *or);
+qboolean trap_GetTag(int clientNum, int tagFileNumber, char *tagName, orientation_t * or);
 qboolean trap_LoadTag(const char *filename);
 int     trap_RealTime(qtime_t *qtime);
 void    trap_SnapVector(float *v);

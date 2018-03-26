@@ -385,10 +385,10 @@ void SpectatorThink(gentity_t *ent, usercmd_t *ucmd) {
 	if ((client->buttons & BUTTON_ATTACK) && !(client->oldbuttons & BUTTON_ATTACK)) {
 		Cmd_FollowCycle_f(ent, 1);
 	} else if (
-	    (client->sess.sessionTeam == TEAM_SPECTATOR) &&   // don't let dead team players do free fly
-	    (client->sess.spectatorState == SPECTATOR_FOLLOW) &&
-	    (((client->buttons & BUTTON_ACTIVATE) &&
-	      !(client->oldbuttons & BUTTON_ACTIVATE)) || ucmd->upmove > 0)) {
+		(client->sess.sessionTeam == TEAM_SPECTATOR) &&   // don't let dead team players do free fly
+		(client->sess.spectatorState == SPECTATOR_FOLLOW) &&
+		(((client->buttons & BUTTON_ACTIVATE) &&
+		  !(client->oldbuttons & BUTTON_ACTIVATE)) || ucmd->upmove > 0)) {
 		// code moved to StopFollowing
 		StopFollowing(ent);
 	}
@@ -421,8 +421,8 @@ qboolean ClientInactivityTimer(gclient_t *client) {
 		client->inactivityWarning = qfalse;
 		client->inactivityTime    = level.time + 1000 *
 		                            ((client->sess.sessionTeam != TEAM_SPECTATOR) ?
-		                          g_inactivity.integer :
-		                          g_spectatorInactivity.integer);
+		                             g_inactivity.integer :
+		                             g_spectatorInactivity.integer);
 
 	} else if (!client->pers.localClient) {
 		if (level.time > client->inactivityTime && client->inactivityWarning) {

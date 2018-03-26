@@ -224,7 +224,7 @@ static char *SkipWhitespace(char *data, qboolean *hasNewLines) {
 }
 
 char *COM_ParseExt(char **data_p, qboolean allowLineBreaks) {
-	int      c           = 0, len;
+	int      c = 0, len;
 	qboolean hasNewLines = qfalse;
 	char     *data;
 
@@ -241,7 +241,7 @@ char *COM_ParseExt(char **data_p, qboolean allowLineBreaks) {
 	// RF, backup the session data so we can unget easily
 	COM_BackupParseSession(data_p);
 
-	for (;; ) {
+	for (;;) {
 		// skip whitespace
 		data = SkipWhitespace(data, &hasNewLines);
 		if (!data) {
@@ -279,7 +279,7 @@ char *COM_ParseExt(char **data_p, qboolean allowLineBreaks) {
 	// handle quoted strings
 	if (c == '\"') {
 		data++;
-		for (;; ) {
+		for (;;) {
 			c = *data++;
 			if (c == '\\' && *(data) == '\"') {
 				// Arnout: string-in-string
@@ -289,7 +289,7 @@ char *COM_ParseExt(char **data_p, qboolean allowLineBreaks) {
 				}
 				data++;
 
-				for (;; ) {
+				for (;;) {
 					c = *data++;
 
 					if (!c) {
@@ -734,7 +734,7 @@ char *Info_ValueForKey(const char *s, const char *key) {
 	if (*s == '\\') {
 		s++;
 	}
-	for (;; ) {
+	for (;;) {
 		char *o = pkey;
 
 		while (*s != '\\') {
@@ -783,7 +783,7 @@ void Info_RemoveKey(char *s, const char *key) {
 		return;
 	}
 
-	for (;; ) {
+	for (;;) {
 		char *start = s, *o;
 
 		if (*s == '\\') {

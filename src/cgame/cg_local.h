@@ -1840,8 +1840,8 @@ void CG_KeyEvent(int key, qboolean down);
 void CG_MouseEvent(int x, int y);
 void CG_EventHandling(int type, qboolean fForced);
 
-qboolean CG_GetTag(int clientNum, char *tagname, orientation_t *or);
-qboolean CG_GetWeaponTag(int clientNum, char *tagname, orientation_t *or);
+qboolean CG_GetTag(int clientNum, char *tagname, orientation_t * or);
+qboolean CG_GetWeaponTag(int clientNum, char *tagname, orientation_t * or);
 
 void CG_EncodeQP(const char *in, char *out, int maxlen);
 void CG_DecodeQP(char *line);
@@ -2153,7 +2153,7 @@ void    CG_AddLocalEntities(void);
 //
 // cg_effects.c
 //
-int CG_GetOriginForTag(refEntity_t * parent, char *tagName, int startIndex, vec3_t org, vec3_t axis[3]);
+int CG_GetOriginForTag(refEntity_t *parent, char *tagName, int startIndex, vec3_t org, vec3_t axis[3]);
 localEntity_t *CG_SmokePuff(const vec3_t p,
                             const vec3_t vel,
                             float radius,

@@ -1406,10 +1406,10 @@ static void Cmd_SendRecord_f(gentity_t *ent, char *runName, char *authToken, int
 
 // Nico, save demo
 void saveDemo(gentity_t *ent) {
-	char cleanRunName[256]      = { 0 };
+	char cleanRunName[256] = { 0 };
 	char physicsName[MAX_QPATH] = { 0 };
-	int  i                      = 0;
-	int  len                    = 0;
+	int  i = 0;
+	int  len = 0;
 	int  time, min, sec, milli;
 
 	// Nico, save run after replacing spaces in run name (in any) by underscores

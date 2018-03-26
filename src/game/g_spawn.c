@@ -202,7 +202,7 @@ field_t fields[] =
 
 typedef struct {
 	char *name;
-	void (*spawn)(gentity_t *ent);
+	void (*spawn)(gentity_t * ent);
 } spawn_t;
 
 void SP_info_player_start(gentity_t *ent);
@@ -878,7 +878,7 @@ qboolean G_ParseSpawnVars(void) {
 	}
 
 	// go through all the key / value pairs
-	for (;; ) {
+	for (;;) {
 		// parse key
 		if (!trap_GetEntityToken(keyname, sizeof (keyname))) {
 			G_Error("G_ParseSpawnVars: EOF without closing brace");

@@ -607,7 +607,7 @@ BG_ParseConditions
 qboolean BG_ParseConditions(char **text_pp, animScriptItem_t *scriptItem) {
 	int conditionValue[2] = { 0 };
 
-	for (;; ) {
+	for (;;) {
 		int  conditionIndex;
 		char *token;
 
@@ -674,7 +674,7 @@ static void BG_ParseCommands(char **input, animScriptItem_t *scriptItem, animMod
 	animScriptCommand_t *command  = NULL;
 	int                 partIndex = 0;
 
-	for (;; ) {
+	for (;;) {
 		char *token;
 
 		// parse the body part
@@ -742,7 +742,7 @@ static void BG_ParseCommands(char **input, animScriptItem_t *scriptItem, animMod
 		}
 
 		// parse optional parameters (sounds, etc)
-		for (;; ) {
+		for (;;) {
 			token = COM_ParseExt(input, qfalse);
 			if (!token || !token[0]) {
 				break;
@@ -830,7 +830,7 @@ void BG_AnimParseAnimScript(animModelInfo_t *animModelInfo, animScriptData_t *sc
 	COM_BeginParseSession("BG_AnimParseAnimScript");
 
 	// read in the weapon defines
-	for (;; ) {
+	for (;;) {
 		char *token;
 		int  newParseMode;
 

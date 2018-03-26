@@ -187,7 +187,7 @@ void G_InitWorldSession(void) {
 		if (p && *p) {
 			char *c = p;
 
-			for (c = strchr(c, ' ') + 1; c && *c; ) {
+			for (c = strchr(c, ' ') + 1; c && *c;) {
 				char str[8];
 				char *l = strchr(c, ' ');
 				if (!l) {

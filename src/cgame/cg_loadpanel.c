@@ -111,7 +111,7 @@ panel_button_t missiondescriptionPanelHeaderText =
 	"***TOP SECRET***",
 	{ 440,                     72, 200, 32 },
 	{ 0,                       0,  0,   0, 0, 0, 0, 0},
-	&missiondescriptionHeaderTxt, /* font		*/
+	&missiondescriptionHeaderTxt,/* font		*/
 	NULL,                      /* keyDown	*/
 	NULL,                      /* keyUp	*/
 	BG_PanelButtonsRender_Text,
@@ -322,7 +322,7 @@ void CG_LoadPanel_RenderMissionDescriptionText(panel_button_t *button) {
 
 	BG_FitTextToWidth_Ext(buffer, button->font->scalex, button->rect.w - 16, 1024, button->font->font);
 	buffer[1023] = '\0';
-	y = button->rect.y + 12;
+	y            = button->rect.y + 12;
 
 	s = p = buffer;
 	while (*p) {
