@@ -583,9 +583,9 @@ void Text_PaintWithCursor(float x, float y, float scale, vec4_t color, const cha
 
 static void Text_Paint_Limit(float *maxX, float x, float y, float scale, vec4_t color, const char *text, float adjust, int limit) {
 	if (text) {
-		const char *s       = text;
-		float      max      = *maxX;
-		fontInfo_t *font    = &uiInfo.uiDC.Assets.fonts[uiInfo.activeFont];
+		const char *s = text;
+		float      max = *maxX;
+		fontInfo_t *font = &uiInfo.uiDC.Assets.fonts[uiInfo.activeFont];
 		float      useScale = scale * font->glyphScale;
 		int        len, count = 0;
 		vec4_t     newColor;
@@ -722,7 +722,7 @@ qboolean Asset_Parse(int handle) {
 		return qfalse;
 	}
 
-	for (;; ) {
+	for (;;) {
 		memset(&token, 0, sizeof (pc_token_t));
 
 		if (!trap_PC_ReadToken(handle, &token)) {
@@ -872,7 +872,7 @@ qboolean UI_ParseMenu(const char *menuFile) {
 		return qfalse;
 	}
 
-	for (;; ) {
+	for (;;) {
 		memset(&token, 0, sizeof (pc_token_t));
 		if (!trap_PC_ReadToken(handle, &token)) {
 			break;
@@ -909,7 +909,7 @@ qboolean Load_Menu(int handle) {
 		return qfalse;
 	}
 
-	for (;; ) {
+	for (;;) {
 		if (!trap_PC_ReadToken(handle, &token)) {
 			return qfalse;
 		}
@@ -952,7 +952,7 @@ void UI_LoadMenus(const char *menuFile, qboolean reset) {
 		Menu_Reset();
 	}
 
-	for (;; ) {
+	for (;;) {
 		if (!trap_PC_ReadToken(handle, &token)) {
 			break;
 		}
@@ -3071,15 +3071,15 @@ static void UI_BuildServerDisplayList(int force) {
 				maxClients = atoi(Info_ValueForKey(info, "sv_maxclients"));
 
 				if (clients != maxClients && (
-				        (!clients && ui_browserShowEmptyOrFull.integer == 2) ||
-				        (clients && ui_browserShowEmptyOrFull.integer == 1))) {
+						(!clients && ui_browserShowEmptyOrFull.integer == 2) ||
+						(clients && ui_browserShowEmptyOrFull.integer == 1))) {
 					trap_LAN_MarkServerVisible(ui_netSource.integer, i, qfalse);
 					continue;
 				}
 
 				if (clients && (
-				        (clients == maxClients && ui_browserShowEmptyOrFull.integer == 2) ||
-				        (clients != maxClients && ui_browserShowEmptyOrFull.integer == 1))) {
+						(clients == maxClients && ui_browserShowEmptyOrFull.integer == 2) ||
+						(clients != maxClients && ui_browserShowEmptyOrFull.integer == 1))) {
 					trap_LAN_MarkServerVisible(ui_netSource.integer, i, qfalse);
 					continue;
 				}

@@ -1111,12 +1111,12 @@ void PM_Weapon(void) {
 
 		for (i = pm->pmext->lastRecoilDeltaTime; i < deltaTime; i += 15) {
 			if (pm->pmext->weapRecoilPitch > 0.f) {
-				muzzlebounce[PITCH] -= 2 *pm->pmext->weapRecoilPitch *cos(2.5 *(i) / pm->pmext->weapRecoilDuration);
+				muzzlebounce[PITCH] -= 2 * pm->pmext->weapRecoilPitch * cos(2.5 * (i) / pm->pmext->weapRecoilDuration);
 				muzzlebounce[PITCH] -= 0.25 * random() * (1.0f - (i) / (float)pm->pmext->weapRecoilDuration);
 			}
 
 			if (pm->pmext->weapRecoilYaw > 0.f) {
-				muzzlebounce[YAW] += 0.5 *pm->pmext->weapRecoilYaw *cos(1.0 - (i) *3 / pm->pmext->weapRecoilDuration);
+				muzzlebounce[YAW] += 0.5 * pm->pmext->weapRecoilYaw * cos(1.0 - (i) * 3 / pm->pmext->weapRecoilDuration);
 				muzzlebounce[YAW] += 0.5 * crandom() * (1.0f - (i) / (float)pm->pmext->weapRecoilDuration);
 			}
 		}

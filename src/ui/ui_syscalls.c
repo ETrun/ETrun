@@ -30,7 +30,7 @@ If you have questions concerning this license or the applicable additional terms
 
 // this file is only included when building a dll
 
-static intptr_t (QDECL *syscall)(intptr_t arg, ...) = (intptr_t (QDECL *)(intptr_t, ...)) - 1;
+static intptr_t(QDECL * syscall)(intptr_t arg, ...) = (intptr_t(QDECL *)(intptr_t, ...)) - 1;
 
 Q_EXPORT void dllEntry(intptr_t (QDECL *syscallptr)(intptr_t arg, ...)) {
 	syscall = syscallptr;

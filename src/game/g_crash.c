@@ -108,18 +108,18 @@ void win32_backtrace(LPEXCEPTION_POINTERS e) {
 
 	G_LogCrash("Backtrace:\n", qtrue);
 
-	for (;; ) {
+	for (;;) {
 		more = pfnStackWalk(
-		    IMAGE_FILE_MACHINE_I386,
-		    process,
-		    thread,
-		    &sf,
-		    e->ContextRecord,
-		    NULL,
-		    pfnSymFunctionTableAccess,
-		    pfnSymGetModuleBase,
-		    NULL
-		    );
+			IMAGE_FILE_MACHINE_I386,
+			process,
+			thread,
+			&sf,
+			e->ContextRecord,
+			NULL,
+			pfnSymFunctionTableAccess,
+			pfnSymGetModuleBase,
+			NULL
+			);
 
 		if (!more || sf.AddrFrame.Offset == 0) {
 			break;
@@ -187,14 +187,14 @@ void win32_initialize_handler(void) {
 	pfnSymFunctionTableAccess = (PFNSYMFUNCTIONTABLEACCESS) GetProcAddress(imagehlp, "SymFunctionTableAccess");
 
 	if (
-	    !pfnSymInitialize ||
-	    !pfnSymCleanup ||
-	    !pfnSymGetModuleBase ||
-	    !pfnStackWalk ||
-	    !pfnSymGetSymFromAddr ||
-	    !pfnSymEnumerateModules ||
-	    !pfnSymFunctionTableAccess
-	    ) {
+		!pfnSymInitialize ||
+		!pfnSymCleanup ||
+		!pfnSymGetModuleBase ||
+		!pfnStackWalk ||
+		!pfnSymGetSymFromAddr ||
+		!pfnSymEnumerateModules ||
+		!pfnSymFunctionTableAccess
+		) {
 		FreeLibrary(imagehlp);
 		G_LogCrash("imagehlp.dll missing exports.\n", qtrue);
 		return;

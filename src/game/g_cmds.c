@@ -2414,10 +2414,10 @@ void Cmd_SpecLock_f(gentity_t *ent, unsigned int dwCommand, qboolean lock) {
 	CP("cpm \"Use ^3specinvite^7 to invite people to spectate.\n\"");
 
 	// update following players
-	// suburb, don't use the level.sortedClients[] array for looping because the StopFollowing() function  
+	// suburb, don't use the level.sortedClients[] array for looping because the StopFollowing() function
 	// will indirectly cause this array to be resorted, thus causing some clients not to unfollow
 	for (i = 0; i < level.maxclients; ++i) {
-		if (level.clients[i].pers.connected == CON_DISCONNECTED){
+		if (level.clients[i].pers.connected == CON_DISCONNECTED) {
 			continue;
 		}
 
@@ -2571,13 +2571,13 @@ void Cmd_PrivateMessage_f(gentity_t *ent) {
 			continue;
 		}
 		CPx(pids[i], va(
-		        "chat \"%s^3 -> ^7%s^7: (%d recipient%s): ^3%s^7\" %d",
-		        netname,
-		        name,
-		        pcount,
-		        pcount == 1 ? "" : "s",
-		        msg,
-		        ent ? (int)(ent - g_entities) : -1));
+				"chat \"%s^3 -> ^7%s^7: (%d recipient%s): ^3%s^7\" %d",
+				netname,
+				name,
+				pcount,
+				pcount == 1 ? "" : "s",
+				msg,
+				ent ? (int)(ent - g_entities) : -1));
 		CPx(pids[i], va("cp \"^3private message from ^7%s^7\"", netname));
 	}
 

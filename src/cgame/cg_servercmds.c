@@ -790,7 +790,7 @@ int CG_ParseVoiceChats(const char *filename, voiceChatList_t *voiceChatList, int
 	//		above that clears out all the commands "voiceChats[i].id[0] = 0;"
 	//		We don't even want the MP voice chats in SP, so no need anyway
 	voiceChatList->numVoiceChats = 0;
-	for (;; ) {
+	for (;;) {
 		int current;
 
 		token = COM_ParseExt(&ptr, qtrue);
@@ -807,7 +807,7 @@ int CG_ParseVoiceChats(const char *filename, voiceChatList_t *voiceChatList, int
 		voiceChats[voiceChatList->numVoiceChats].numSounds = 0;
 		current                                            = voiceChats[voiceChatList->numVoiceChats].numSounds;
 
-		for (;; ) {
+		for (;;) {
 			token = COM_ParseExt(&ptr, qtrue);
 			if (!token || token[0] == 0) {
 				return qtrue;

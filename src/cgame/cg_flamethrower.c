@@ -744,7 +744,7 @@ CG_AddFlameToScene
 void CG_AddFlameToScene(flameChunk_t *fHead) {
 	flameChunk_t  *f, *fNext;
 	int           blueTrailHead = 0, fuelTrailHead = 0;
-	static vec3_t whiteColor    = { 1, 1, 1 };
+	static vec3_t whiteColor = { 1, 1, 1 };
 	vec3_t        c;
 	float         alpha;
 	int           headTimeStart;

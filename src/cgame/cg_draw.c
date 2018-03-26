@@ -747,7 +747,7 @@ static void CG_DrawCenterString(void) {
 
 	y = cg.centerPrintY - cg.centerPrintLines * BIGCHAR_HEIGHT / 2;
 
-	for (;; ) {
+	for (;;) {
 		float x, w;
 		char  linebuffer[1024];
 
@@ -1683,7 +1683,7 @@ static void CG_DrawObjectiveInfo(void) {
 	x2 = 321;
 
 	// first just find the bounding rect
-	for (;; ) {
+	for (;;) {
 		char linebuffer[1024];
 
 		for (l = 0; l < CP_LINEWIDTH; ++l) {
@@ -1730,7 +1730,7 @@ static void CG_DrawObjectiveInfo(void) {
 	start = cg.oidPrint;
 	y     = 400 - cg.oidPrintLines * BIGCHAR_HEIGHT / 2; // JPW NERVE
 
-	for (;; ) {
+	for (;;) {
 		char linebuffer[1024];
 
 		for (l = 0; l < CP_LINEWIDTH; ++l) {

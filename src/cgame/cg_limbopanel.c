@@ -224,7 +224,7 @@ TEAM_COUNTER(2);
 		{ CLASS_COUNTER_X + CLASS_COUNTER_GAP + (number * (CLASS_COUNTER_GAP + CLASS_COUNTER_WIDTH)) + (CLASS_COUNTER_BUTTON_DIFF / 2.f),266,                                                                                                                             CLASS_COUNTER_WIDTH - CLASS_COUNTER_BUTTON_DIFF, 34 },   \
 		{ 0,                             number,                                                                                                                          0,                                               0, 0, 0, 0, 0},        \
 		NULL,                            /* font		*/              \
-		CG_LimboPanel_ClassButton_KeyDown, /* keyDown	*/  \
+		CG_LimboPanel_ClassButton_KeyDown,/* keyDown	*/  \
 		NULL,                            /* keyUp	*/                  \
 		CG_LimboPanel_RenderClassButton,        \
 		NULL,                                   \
@@ -274,8 +274,8 @@ panel_button_t weaponPanel =
 	{ 455,                    353,   140, 56 },
 	{ 0,                      0,     0,   0, 0, 0, 0, 0},
 	NULL,                     /* font		*/
-	CG_LimboPanel_WeaponPanel_KeyDown, /* keyDown	*/
-	CG_LimboPanel_WeaponPanel_KeyUp, /* keyUp	*/
+	CG_LimboPanel_WeaponPanel_KeyDown,/* keyDown	*/
+	CG_LimboPanel_WeaponPanel_KeyUp,/* keyUp	*/
 	CG_LimboPanel_WeaponPanel,
 	NULL,
 	0
@@ -288,7 +288,7 @@ panel_button_t weaponLight1 =
 	{ 605,                     362,   20, 20 },
 	{ 0,                       0,     0,  0, 0, 0, 0, 0},
 	NULL,                      /* font		*/
-	CG_LimboPanel_WeaponLights_KeyDown, /* keyDown	*/
+	CG_LimboPanel_WeaponLights_KeyDown,/* keyDown	*/
 	NULL,                      /* keyUp	*/
 	CG_LimboPanel_WeaponLights,
 	NULL,
@@ -316,7 +316,7 @@ panel_button_t weaponLight2 =
 	{ 605,                     386,   20, 20 },
 	{ 1,                       0,     0,  0, 0, 0, 0, 0},
 	NULL,                      /* font		*/
-	CG_LimboPanel_WeaponLights_KeyDown, /* keyDown	*/
+	CG_LimboPanel_WeaponLights_KeyDown,/* keyDown	*/
 	NULL,                      /* keyUp	*/
 	CG_LimboPanel_WeaponLights,
 	NULL,
@@ -359,7 +359,7 @@ panel_button_t okButton =
 	{ 454 + 2,                454 + 2,       82 - 4, 18 - 4 },
 	{ 0,                      0,             0,      0, 0, 0, 0, 0},
 	NULL,                     /* font		*/
-	CG_LimboPanel_OkButton_KeyDown, /* keyDown	*/
+	CG_LimboPanel_OkButton_KeyDown,/* keyDown	*/
 	NULL,                     /* keyUp	*/
 	CG_LimboPanel_Border_Draw,
 	NULL,
@@ -387,7 +387,7 @@ panel_button_t cancelButton =
 	{ 543 + 2,                454 + 2,       82 - 4, 18 - 4 },
 	{ 0,                      0,             0,      0, 0, 0, 0, 0},
 	NULL,                     /* font		*/
-	CG_LimboPanel_CancelButton_KeyDown, /* keyDown	*/
+	CG_LimboPanel_CancelButton_KeyDown,/* keyDown	*/
 	NULL,                     /* keyUp	*/
 	CG_LimboPanel_Border_Draw,
 	NULL,
@@ -1452,7 +1452,7 @@ int CG_LimboPanel_WeaponCount(void) {
 int CG_LimboPanel_WeaponCount_ForSlot(int number) {
 	if (number == 1) {
 		bg_playerclass_t *classInfo = CG_LimboPanel_GetPlayerClass();
-		int              cnt        = 0, i;
+		int              cnt = 0, i;
 
 		for (i = 0; i < MAX_WEAPS_PER_CLASS; ++i) {
 			if (!classInfo->classWeapons[i]) {

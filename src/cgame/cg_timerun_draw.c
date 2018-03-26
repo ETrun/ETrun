@@ -209,11 +209,11 @@ void CG_DrawOB(void) {
  * @author suburb
  */
 #define DRAWSLICK_MAX_DISTANCE 131072
-void CG_DrawSlick (void) {
+void CG_DrawSlick(void) {
 	static trace_t trace;
-	vec3_t start, end;
-	float x = 350, y = 220, sizex, sizey;
-	char *text = "S";
+	vec3_t         start, end;
+	float          x = 350, y = 220, sizex, sizey;
+	char           *text = "S";
 
 	if (!cg_drawSlick.integer || cg_thirdPerson.integer) {
 		return;
@@ -224,7 +224,7 @@ void CG_DrawSlick (void) {
 	VectorCopy(cg.refdef.vieworg, start);
 	VectorMA(start, DRAWSLICK_MAX_DISTANCE, cg.refdef.viewaxis[0], end);
 	CG_Trace(&trace, start, vec3_origin, vec3_origin, end, cg.predictedPlayerState.clientNum, CONTENTS_SOLID);
-	
+
 	if (trace.surfaceFlags & SURF_SLICK) {
 		CG_Text_Paint_Ext(x, y, sizex, sizey, colorWhite, text, 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
 	}
@@ -237,12 +237,12 @@ void CG_DrawSlick (void) {
  */
 void CG_DrawTimer(void) {
 	char       status[128];
-	int        min                = 0, sec = 0, milli = 0;
-	int        x                  = 0, y = 0, w = 0;
-	int        timerunNum         = cg.currentTimerun;
-	int        startTime          = 0;
+	int        min = 0, sec = 0, milli = 0;
+	int        x = 0, y = 0, w = 0;
+	int        timerunNum = cg.currentTimerun;
+	int        startTime = 0;
 	int        currentTimerunTime = 0;
-	float      sizex              = 0.25f, sizey = 0.25f;
+	float      sizex = 0.25f, sizey = 0.25f;
 	vec4_t     color;
 	int        runBestTime;
 	int        runLastTime;
@@ -791,7 +791,7 @@ void CG_DrawBannerPrint(void) {
 	int   l      = 0;
 	int   y      = 20;
 	float *color;
-	float sizex     = 0.2f, sizey = 0.2f;
+	float sizex = 0.2f, sizey = 0.2f;
 	char  lastcolor = COLOR_WHITE;
 	int   charHeight;
 	int   bannerShowTime = 10000;
@@ -813,7 +813,7 @@ void CG_DrawBannerPrint(void) {
 
 	len = strlen(cg.bannerPrint);
 
-	for (;; ) {
+	for (;;) {
 		char linebuffer[1024];
 		char colorchar = lastcolor;
 		int  x, w;
@@ -853,13 +853,13 @@ void CG_DrawBannerPrint(void) {
 *
 * @author suburb (taken from the CG_DrawInfoPanel function)
 */
-void CG_UpdateJumpSpeeds(void){
+void CG_UpdateJumpSpeeds(void) {
 	int speed = 0;
 
-	if (cg.timerunJumpCounter < cg.predictedPlayerState.identifyClientHealth && cg.timerunJumpCounter < (int)(sizeof(cg.timerunJumpSpeeds) / sizeof(cg.timerunJumpSpeeds[0]))) {
-		speed = sqrt(cg.predictedPlayerState.velocity[0] * cg.predictedPlayerState.velocity[0] + cg.predictedPlayerState.velocity[1] * cg.predictedPlayerState.velocity[1]);
+	if (cg.timerunJumpCounter < cg.predictedPlayerState.identifyClientHealth && cg.timerunJumpCounter < (int)(sizeof (cg.timerunJumpSpeeds) / sizeof (cg.timerunJumpSpeeds[0]))) {
+		speed                                       = sqrt(cg.predictedPlayerState.velocity[0] * cg.predictedPlayerState.velocity[0] + cg.predictedPlayerState.velocity[1] * cg.predictedPlayerState.velocity[1]);
 		cg.timerunJumpSpeeds[cg.timerunJumpCounter] = speed;
-		cg.timerunJumpCounter = cg.predictedPlayerState.identifyClientHealth;
+		cg.timerunJumpCounter                       = cg.predictedPlayerState.identifyClientHealth;
 	}
 }
 
@@ -875,15 +875,15 @@ void CG_UpdateJumpSpeeds(void){
 #define INFO_PANEL_MAX_JUMPS_PER_COLUMN     9 // stay < size of cg.timerunJumpSpeeds array
 #define INFO_PANEL_FONT_ADJUST_NEEDED       10000
 void CG_DrawInfoPanel(void) {
-	int    x                = 0;
-	int    y                = 0;
-	int    starty           = 0;
-	vec4_t panelBgColor     = { 0.f, 0.f, 0.f, .5f };
-	vec4_t textColor        = { 1.0f, 1.0f, 1.0f, 0.8f };
-	float  textScale        = 0.12f;
-	float  textScaleFactor  = 0;
-	int    speed            = 0;
-	int    i                = 0;
+	int    x               = 0;
+	int    y               = 0;
+	int    starty          = 0;
+	vec4_t panelBgColor    = { 0.f, 0.f, 0.f, .5f };
+	vec4_t textColor       = { 1.0f, 1.0f, 1.0f, 0.8f };
+	float  textScale       = 0.12f;
+	float  textScaleFactor = 0;
+	int    speed           = 0;
+	int    i               = 0;
 
 	if (!cg_drawInfoPanel.integer) {
 		return;
@@ -943,9 +943,9 @@ void CG_DrawInfoPanel(void) {
 		// suburb, decrease font size for higher speeds
 		textScale = 0.12f;
 
-		if (cg.timerunJumpSpeeds[i] >= INFO_PANEL_FONT_ADJUST_NEEDED){
+		if (cg.timerunJumpSpeeds[i] >= INFO_PANEL_FONT_ADJUST_NEEDED) {
 			textScaleFactor = 0.02f * GetDigits(cg.timerunJumpSpeeds[i]) - 0.08f;
-			textScale -= textScaleFactor;
+			textScale      -= textScaleFactor;
 		}
 
 		// If speed at jump n is slower than speed at jump n - 1, use red color

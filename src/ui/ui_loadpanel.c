@@ -172,8 +172,8 @@ void UI_LoadPanel_RenderHeaderText(panel_button_t *button) {
 
 #define ESTIMATES 80
 const char *UI_DownloadInfo(const char *downloadName) {
-	static char dlText[]   = "Downloading:";
-	static char etaText[]  = "Estimated time left:";
+	static char dlText[] = "Downloading:";
+	static char etaText[] = "Estimated time left:";
 	static char xferText[] = "Transfer rate:";
 	char        dlSizeBuf[64], totalSizeBuf[64], xferRateBuf[64], dlTimeBuf[64];
 	int         downloadSize, downloadCount, downloadTime;
@@ -209,8 +209,8 @@ const char *UI_DownloadInfo(const char *downloadName) {
 
 	// Extrapolate estimated completion time
 	if (downloadSize && xferRate) {
-		int        n                       = downloadSize / xferRate; // estimated time for entire d/l in secs
-		int        timeleft                = 0, i;
+		int        n = downloadSize / xferRate;                       // estimated time for entire d/l in secs
+		int        timeleft = 0, i;
 		static int tleEstimates[ESTIMATES] = { 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60,
 			                                   60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60,
 			                                   60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60,

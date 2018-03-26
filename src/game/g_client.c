@@ -618,7 +618,7 @@ static void ClientCleanName(const char *in, char *out, int outSize) {
 	*p           = 0;
 	spaces       = 0;
 
-	for (;; ) {
+	for (;;) {
 		char ch = *in++;
 
 		if (!ch) {
@@ -1063,7 +1063,7 @@ char *ClientConnect(int clientNum, qboolean firstTime) {
 	char      userinfo[MAX_INFO_STRING];
 	gentity_t *ent;
 	char      userinfo2[MAX_INFO_STRING]; // Nico, used in connections limit check
-	int       i           = 0;
+	int       i = 0;
 	int       conn_per_ip = 1; // Nico, connections per IP counter
 	char      ip[20], ip2[20]; // Nico, used in connections limit check
 	char      parsedIp[20], parsedIp2[20]; // Nico, used in connections limit check
@@ -1707,8 +1707,8 @@ void ClientDisconnect(int clientNum) {
 // so we don't have to keep tracing.
 void ClientStoreSurfaceFlags
 (
-    int clientNum,
-    int surfaceFlags
+	int clientNum,
+	int surfaceFlags
 ) {
 	// Store the surface flags
 	g_entities[clientNum].surfaceFlags = surfaceFlags;

@@ -283,7 +283,7 @@ gentity_t *SelectRandomTeamSpawnPoint(team_t team, int spawnObjective) {
 	gentity_t *spot = NULL;
 	gentity_t *spots[MAX_TEAM_SPAWN_POINTS];
 	int       count = 0, closest;
-	int       i     = 0;
+	int       i = 0;
 	char      *classname;
 	float     shortest;
 	vec3_t    target;
@@ -926,7 +926,7 @@ void checkpoint_spawntouch(gentity_t *self, gentity_t *other, trace_t *trace) {
 	// Arnout - updated this to allow toggling of initial spawnpoints as well, plus now it only
 	// toggles spawnflags 2 for spawnpoint entities
 	if (self->target) {
-		for (;; ) {
+		for (;;) {
 			ent = G_FindByTargetname(ent, self->target);
 			if (!ent) {
 				break;

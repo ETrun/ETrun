@@ -1100,7 +1100,7 @@ gentity_t *fire_grenade(gentity_t *self, vec3_t start, vec3_t dir, int grenadeWP
 		break;
 	case WP_LANDMINE:
 		if (self->client) {
-			bolt->s.teamNum           = self->client->sess.sessionTeam + 4;
+			bolt->s.teamNum = self->client->sess.sessionTeam + 4;
 		}
 		bolt->accuracy            = 0;
 		bolt->classname           = "landmine";
@@ -1139,7 +1139,7 @@ gentity_t *fire_grenade(gentity_t *self, vec3_t start, vec3_t dir, int grenadeWP
 		break;
 	case WP_DYNAMITE:
 		if (self->client) {
-			bolt->s.teamNum           = self->client->sess.sessionTeam + 4;
+			bolt->s.teamNum = self->client->sess.sessionTeam + 4;
 		}
 		bolt->accuracy = 0;     // JPW NERVE sets to score below if dynamite is in trigger_objective_info & it's an objective
 		trap_SendServerCommand(self - g_entities, "cp \"Dynamite is set, but NOT armed!\"");

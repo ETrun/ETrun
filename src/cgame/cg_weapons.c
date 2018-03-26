@@ -159,7 +159,7 @@ void CG_MachineGunEjectBrass(centity_t *cent) {
 	localEntity_t *le;
 	refEntity_t   *re;
 	vec3_t        velocity, xvelocity;
-	vec3_t        offset     = { 0 }, xoffset;
+	vec3_t        offset = { 0 }, xoffset;
 	float         waterScale = 1.0f;
 	vec3_t        v[3];
 
@@ -787,7 +787,7 @@ static qboolean CG_ParseWeaponConfig(const char *filename, weaponInfo_t *wi) {
 	text_p = text;
 
 	// read optional parameters
-	for (;; ) {
+	for (;;) {
 		prev  = text_p; // so we can unget
 		token = COM_Parse(&text_p);
 		if (!token) {                       // get the variable
@@ -924,7 +924,7 @@ static qboolean CG_RW_ParseWeaponLinkPart(int handle, weaponInfo_t *weaponInfo, 
 		return CG_RW_ParseError(handle, "expected '{'");
 	}
 
-	for (;; ) {
+	for (;;) {
 		if (!trap_PC_ReadToken(handle, &token)) {
 			break;
 		}
@@ -972,7 +972,7 @@ static qboolean CG_RW_ParseWeaponLink(int handle, weaponInfo_t *weaponInfo, mode
 		return CG_RW_ParseError(handle, "expected '{'");
 	}
 
-	for (;; ) {
+	for (;;) {
 		if (!trap_PC_ReadToken(handle, &token)) {
 			break;
 		}
@@ -1001,7 +1001,7 @@ static qboolean CG_RW_ParseViewType(int handle, weaponInfo_t *weaponInfo, modelV
 		return CG_RW_ParseError(handle, "expected '{'");
 	}
 
-	for (;; ) {
+	for (;;) {
 		if (!trap_PC_ReadToken(handle, &token)) {
 			break;
 		}
@@ -1080,7 +1080,7 @@ static qboolean CG_RW_ParseClient(int handle, weaponInfo_t *weaponInfo) {
 		return CG_RW_ParseError(handle, "expected '{'");
 	}
 
-	for (;; ) {
+	for (;;) {
 		if (!trap_PC_ReadToken(handle, &token)) {
 			break;
 		}
@@ -1296,7 +1296,7 @@ static qboolean CG_RegisterWeaponFromWeaponFile(const char *filename, weaponInfo
 		return CG_RW_ParseError(handle, "expected '{'");
 	}
 
-	for (;; ) {
+	for (;;) {
 		if (!trap_PC_ReadToken(handle, &token)) {
 			break;
 		}
@@ -3783,7 +3783,7 @@ The current weapon has just run out of ammo
 */
 void CG_OutOfAmmoChange(qboolean allowforceswitch) {
 	int i;
-	int bank  = 0, cycle = 0;
+	int bank = 0, cycle = 0;
 	int equiv = WP_NONE;
 
 	//
@@ -4366,7 +4366,7 @@ ClientNum is a dummy field used to define what sort of effect to spawn
 #define MAX_IMPACT_SOUNDS 5
 void CG_MissileHitWall(int weapon, int clientNum, vec3_t origin, vec3_t dir, int surfFlags) {   //	(SA) modified to send missilehitwall surface parameters
 	qhandle_t   mark = 0;
-	sfxHandle_t sfx  = 0, sfx2 = 0;
+	sfxHandle_t sfx = 0, sfx2 = 0;
 	int         i, j, markDuration = -1, volume = 127;
 	trace_t     trace;
 	vec3_t      tmpv, tmpv2, sprOrg, sprVel;
@@ -4681,8 +4681,8 @@ CG_MissileHitWallSmall
 ==============
 */
 void CG_MissileHitWallSmall(vec3_t origin, vec3_t dir) {
-	qhandle_t   mark   = 0;
-	sfxHandle_t sfx    = 0;
+	qhandle_t   mark = 0;
+	sfxHandle_t sfx = 0;
 	float       radius = 80;
 	vec3_t      sprOrg, sprVel;
 	vec4_t      projection, color;

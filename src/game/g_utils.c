@@ -306,7 +306,7 @@ gentity_t *G_PickTarget(char *targetname) {
 		return NULL;
 	}
 
-	for (;; ) {
+	for (;;) {
 		ent = G_FindByTargetname(ent, targetname);
 		if (!ent) {
 			break;
