@@ -175,7 +175,7 @@ player_die
 ==================
 */
 void player_die(gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int damage, int meansOfDeath) {
-	int       contents    = 0, i, killer = ENTITYNUM_WORLD;
+	int       contents = 0, i, killer = ENTITYNUM_WORLD;
 	char      *killerName = "<world>";
 	gitem_t   *item       = NULL;
 	gentity_t *ent;

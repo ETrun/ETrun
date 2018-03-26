@@ -110,7 +110,7 @@ static qboolean BG_SS_ParseSpeaker(int handle) {
 		return BG_SS_ParseError(handle, "expected '{'");
 	}
 
-	for (;; ) {
+	for (;;) {
 		if (!trap_PC_ReadToken(handle, &token)) {
 			break;
 		}
@@ -213,7 +213,7 @@ qboolean BG_LoadSpeakerScript(const char *filename) {
 		return BG_SS_ParseError(handle, "expected '{'");
 	}
 
-	for (;; ) {
+	for (;;) {
 		if (!trap_PC_ReadToken(handle, &token)) {
 			break;
 		}

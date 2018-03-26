@@ -480,7 +480,7 @@ void CG_AddSparkElements(localEntity_t *le) {
 
 	time = (float)(cg.time - cg.frametime);
 
-	for (;; ) {
+	for (;;) {
 		float lifeFrac;
 
 		// calculate new position

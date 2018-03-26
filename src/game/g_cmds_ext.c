@@ -42,7 +42,7 @@ char *lock_status[2] = { "unlock", "lock" };
 typedef struct {
 	char *pszCommandName;
 	qboolean fValue;
-	void (*pCommand)(gentity_t *ent, unsigned int dwCommand, qboolean fValue);
+	void (*pCommand)(gentity_t * ent, unsigned int dwCommand, qboolean fValue);
 	const char *pszHelpInfo;
 } cmd_reference_t;
 

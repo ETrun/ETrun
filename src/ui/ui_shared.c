@@ -428,7 +428,7 @@ qboolean PC_Script_Parse(int handle, const char **out) {
 		return qfalse;
 	}
 
-	for (;; ) {
+	for (;;) {
 		if (!trap_PC_ReadToken(handle, &token)) {
 			return qfalse;
 		}
@@ -1497,8 +1497,8 @@ void Menu_OrbitItemByName(menuDef_t *menu, const char *p, float x, float y, floa
 
 void Script_Orbit(itemDef_t *item, qboolean *bAbort, char **args) {
 	const char *name = NULL;
-	float      cx    = 0.0f, cy = 0.0f, x = 0.0f, y = 0.0f;
-	int        time  = 0;
+	float      cx = 0.0f, cy = 0.0f, x = 0.0f, y = 0.0f;
+	int        time = 0;
 
 	// Nico, silent GCC
 	(void)bAbort;
@@ -1844,7 +1844,7 @@ commandDef_t commandList[] =
 	{ "fadeoutmenu",        &Script_FadeOutMenu        }, // menu
 
 	{ "conditionalopen",    &Script_ConditionalOpen    }, // DHM - Nerve:: cvar menu menu
-	                                                     // opens first menu if cvar is true[non-zero], second if false
+	                                                      // opens first menu if cvar is true[non-zero], second if false
 	{ "conditionalscript",  &Script_ConditionalScript  }, // as conditonalopen, but then executes scripts
 
 	{ "close",              &Script_Close              }, // menu
@@ -1887,7 +1887,7 @@ void Item_RunScript(itemDef_t *item, qboolean *bAbort, const char *s) {
 	if (item && s && s[0]) {
 		Q_strcat(script, 4096, s);
 		p = script;
-		for (;; ) {
+		for (;;) {
 			const char *command = NULL;
 			int        i;
 			qboolean   bRan = qfalse;
@@ -1933,7 +1933,7 @@ qboolean Item_EnableShowViaCvar(itemDef_t *item, int flag) {
 
 		Q_strcat(script, 1024, item->enableCvar);
 		p = script;
-		for (;; ) {
+		for (;;) {
 			const char *val = NULL;
 			// expect value then ; or NULL, NULL ends list
 			if (!String_Parse(&p, &val)) {
@@ -5851,7 +5851,7 @@ qboolean ItemParse_cvarStrList(itemDef_t *item, int handle) {
 	}
 
 	pass = 0;
-	for (;; ) {
+	for (;;) {
 		if (!trap_PC_ReadToken(handle, &token)) {
 			PC_SourceError(handle, "end of file inside menu item\n");
 			return qfalse;
@@ -5898,7 +5898,7 @@ qboolean ItemParse_cvarFloatList(itemDef_t *item, int handle) {
 		return qfalse;
 	}
 
-	for (;; ) {
+	for (;;) {
 		if (!trap_PC_ReadToken(handle, &token)) {
 			PC_SourceError(handle, "end of file inside menu item\n");
 			return qfalse;
@@ -6202,7 +6202,7 @@ qboolean Item_Parse(int handle, itemDef_t *item) {
 	if (*token.string != '{') {
 		return qfalse;
 	}
-	for (;; ) {
+	for (;;) {
 		keywordHash_t *key;
 
 		if (!trap_PC_ReadToken(handle, &token)) {
@@ -6711,7 +6711,7 @@ qboolean Menu_Parse(int handle, menuDef_t *menu) {
 		return qfalse;
 	}
 
-	for (;; ) {
+	for (;;) {
 		keywordHash_t *key;
 
 		memset(&token, 0, sizeof (pc_token_t));
@@ -7175,8 +7175,8 @@ void BG_FitTextToWidth_Ext(char *instr, float scale, float w, int size, fontInfo
 	Q_strncpyz(buffer, instr, 1024);
 	memset(instr, 0, size);
 
-	c  = s = instr;
-	p  = buffer;
+	c = s = instr;
+	p = buffer;
 
 	while (*p) {
 		*c = *p++;

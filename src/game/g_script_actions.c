@@ -1854,7 +1854,7 @@ qboolean G_ScriptAction_AlertEntity(gentity_t *ent, char *params) {
 	hash = BG_StringHashValue(params);
 
 	// find this targetname
-	for (;; ) {
+	for (;;) {
 		alertent = G_FindByTargetnameFast(alertent, params, hash);
 		if (!alertent) {
 			if (!foundalertent) {
@@ -3242,7 +3242,7 @@ qboolean G_ScriptAction_SetState(gentity_t *ent, char *params) {
 	// look for an entities
 	target = &g_entities[MAX_CLIENTS - 1];
 	hash   = BG_StringHashValue(name);
-	for (;; ) {
+	for (;;) {
 		target = G_FindByTargetnameFast(target, name, hash);
 
 		if (!target) {
@@ -3856,7 +3856,7 @@ qboolean etpro_ScriptAction_SetValues(gentity_t *ent, char *params) {
 	p = params;
 
 	// Get each key/value pair
-	for (;; ) {
+	for (;;) {
 		char *token;
 
 		token = COM_ParseExt(&p, qfalse);
@@ -3990,7 +3990,7 @@ qboolean G_ScriptAction_Create(gentity_t *ent, char *params) {
 	level.numSpawnVarChars = 0;
 
 	// get each key/value pair
-	for (;; ) {
+	for (;;) {
 		char *token;
 
 		token = COM_ParseExt(&p, qfalse);
@@ -4033,7 +4033,7 @@ qboolean G_ScriptAction_Delete(gentity_t *ent, char *params) {
 	(void)ent;
 
 	// get each key/value pair
-	for (;; ) {
+	for (;;) {
 		char *token;
 
 		token = COM_ParseExt(&p, qfalse);

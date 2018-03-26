@@ -45,7 +45,7 @@ static const char *DISABLED    = "DISABLED";
 //
 typedef struct {
 	const char *pszVoteName;
-	int (*pVoteCommand)(gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd);
+	int (*pVoteCommand)(gentity_t * ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd);
 	const char *pszVoteMessage;
 	const char *pszVoteHelp;
 } vote_reference_t;

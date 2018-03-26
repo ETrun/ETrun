@@ -2642,10 +2642,10 @@ void BG_LinearPathOrigin2(float radius, splinePath_t **pSpline, float *deltaTime
 		frac = (((*deltaTime) * (MAX_SPLINE_SEGMENTS)) - i);
 	}
 
-	for (;; ) {
+	for (;;) {
 		float t0, t1;
 
-		for (;; ) {
+		for (;;) {
 			if (BG_RaySphereIntersection(radius, result, &(*pSpline)->segments[i], &t0, &t1)) {
 				qboolean found = qfalse;
 

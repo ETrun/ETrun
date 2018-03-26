@@ -307,11 +307,11 @@ CG_KickAngles
 ================
 */
 void CG_KickAngles(void) {
-	const vec3_t centerSpeed        = { 2400, 2400, 2400 };
-	const float  recoilCenterSpeed  = 200;
+	const vec3_t centerSpeed = { 2400, 2400, 2400 };
+	const float  recoilCenterSpeed = 200;
 	const float  recoilIgnoreCutoff = 15;
-	const float  recoilMaxSpeed     = 50;
-	const vec3_t maxKickAngles      = { 10, 10, 10 };
+	const float  recoilMaxSpeed = 50;
+	const vec3_t maxKickAngles = { 10, 10, 10 };
 	float        idealCenterSpeed, kickChange;
 	int          i, frametime, t;
 

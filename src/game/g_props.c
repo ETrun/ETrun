@@ -1097,11 +1097,11 @@ void Props_Chair_Animate(gentity_t *ent) {
 		}
 		ent->nextthink = level.time + (FRAMETIME / 2);
 	} else if (
-	    (!Q_stricmp(ent->classname, "props_chair_side")) ||
-	    (!Q_stricmp(ent->classname, "props_chair_chat")) ||
-	    (!Q_stricmp(ent->classname, "props_chair_chatarm")) ||
-	    (!Q_stricmp(ent->classname, "props_chair_hiback"))
-	    ) {
+		(!Q_stricmp(ent->classname, "props_chair_side")) ||
+		(!Q_stricmp(ent->classname, "props_chair_chat")) ||
+		(!Q_stricmp(ent->classname, "props_chair_chatarm")) ||
+		(!Q_stricmp(ent->classname, "props_chair_hiback"))
+		) {
 		if (ent->s.frame >= 20) {
 			ent->s.frame = 20;
 			G_UseTargets(ent, NULL);

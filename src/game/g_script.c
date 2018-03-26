@@ -523,7 +523,7 @@ void G_Script_ScriptParse(gentity_t *ent) {
 
 	memset(events, 0, sizeof (events));
 
-	for (;; ) {
+	for (;;) {
 		char *token;
 
 		token = COM_Parse(&pScript);

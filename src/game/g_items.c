@@ -44,10 +44,10 @@ If you have questions concerning this license or the applicable additional terms
 // extracted from Fill_Clip: add the specified ammount of ammo into the clip
 // returns whether ammo was added to the clip
 int AddToClip(
-    playerState_t *ps,          // which player
-    int weapon,                 // weapon to add ammo for
-    int ammomove,               // ammount to add. 0 means fill the clip if possible
-    int outOfReserve) {         // is the amount to be added out of reserve
+	playerState_t *ps,          // which player
+	int weapon,                 // weapon to add ammo for
+	int ammomove,               // ammount to add. 0 means fill the clip if possible
+	int outOfReserve) {         // is the amount to be added out of reserve
 	int inclip, maxclip;
 	int ammoweap = BG_FindAmmoForWeapon(weapon);
 
