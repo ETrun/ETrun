@@ -46,3 +46,10 @@ build_script:
   - cd build
   - cmake ..
   - cmake --build .
+
+#---------------------------------#
+#      artifacts configuration    #
+#---------------------------------#
+
+artifacts:
+  - path: build/etrun
