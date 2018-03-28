@@ -44,8 +44,8 @@ build:
 build_script:
   - mkdir build
   - cd build
-  - cmake -D CMAKE_BUILD_TYPE=%CONFIGURATION% ..
-  - cmake --build .
+  - cmake ..
+  - cmake --build -D CMAKE_BUILD_TYPE=%CONFIGURATION% .
 
 #---------------------------------#
 #      artifacts configuration    #
