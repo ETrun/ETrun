@@ -23,6 +23,17 @@ init:
 environment:
   VisualStudioVersion: '10.0'
 
+  matrix:
+    - CMAKE_BUILD_TYPE: Release
+    - CMAKE_BUILD_TYPE: Debug
+
+matrix:
+  exclude:
+    - configuration: Debug
+      CMAKE_BUILD_TYPE: Release
+    - configuration: Release
+      CMAKE_BUILD_TYPE: Debug
+
 # scripts that run after cloning repository
 install:
   - cmd: git submodule update --init
