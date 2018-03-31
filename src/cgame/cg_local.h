@@ -1005,6 +1005,11 @@ typedef struct {
 	int timerunJumpCounter;
 	int timerunJumpSpeeds[256];
 
+	// suburb, Velocity Snapping
+	float snapZones[128]; // 128 being the max amount of drawn snapzones
+	float snapSpeed;
+	int snapCount;
+
 	// Nico, end of ETrun client variables
 } cg_t;
 
@@ -1762,6 +1767,12 @@ extern vmCvar_t cg_autoLogin;
 // CGaz
 extern vmCvar_t cg_drawCGaz;
 
+// Velocity Snapping
+extern vmCvar_t cg_drawVelocitySnapping;
+extern vmCvar_t cg_velocitySnappingH;
+extern vmCvar_t cg_velocitySnappingY;
+extern vmCvar_t cg_velocitySnappingFov;
+
 // Load view angles on load
 extern vmCvar_t cg_loadViewAngles;
 
@@ -1908,6 +1919,9 @@ void CG_DrawSides(float x, float y, float w, float h, float size);
 void CG_DrawTopBottom(float x, float y, float w, float h, float size);
 void CG_DrawTopBottom_NoScale(float x, float y, float w, float h, float size);
 
+// suburb, for velocity snapping
+void CG_FillAngleYaw(float start, float end, float viewangle, float y, float height, int fov, const float *color);
+
 // NERVE - SMF - localization functions
 void CG_InitTranslation();
 char *CG_TranslateString(const char *string);
@@ -1955,6 +1969,7 @@ void CG_DrawOB(void);
 void CG_DrawSlick(void);
 void CG_DrawTimer(void);
 void CG_DrawCGaz(void);
+void CG_DrawVelocitySnapping(void);
 void CG_DrawKeys(void);
 void CG_DrawClock(float x, float y, float scale, qboolean shadowed);
 void CG_DrawBannerPrint(void);

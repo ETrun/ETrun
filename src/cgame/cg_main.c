@@ -285,6 +285,12 @@ vmCvar_t cg_autoLogin;
 // CGaz
 vmCvar_t cg_drawCGaz;
 
+// Velocity Snapping
+vmCvar_t cg_drawVelocitySnapping;
+vmCvar_t cg_velocitySnappingH;
+vmCvar_t cg_velocitySnappingY;
+vmCvar_t cg_velocitySnappingFov;
+
 // Load view angles on load
 vmCvar_t cg_loadViewAngles;
 
@@ -546,6 +552,12 @@ cvarTable_t cvarTable[] =
 	// CGaz
 	{ &cg_drawCGaz,             "cg_drawCGaz",             "0",     CVAR_ARCHIVE,             0 },
 
+	// Velocity Snapping
+	{ &cg_drawVelocitySnapping,   "cg_drawVelocitySnapping",    "0",     CVAR_ARCHIVE,        0 },
+	{ &cg_velocitySnappingH,      "cg_velocitySnappingH",       "8",     CVAR_ARCHIVE,        0 },
+	{ &cg_velocitySnappingY,      "cg_velocitySnappingY",       "248",   CVAR_ARCHIVE,        0 },
+	{ &cg_velocitySnappingFov,    "cg_velocitySnappingFov",     "120",   CVAR_ARCHIVE,        0 },
+
 	// Load view angles on load
 	{ &cg_loadViewAngles,       "cg_loadViewAngles",       "1",     CVAR_ARCHIVE,             0 },
 
@@ -746,13 +758,13 @@ void CG_setClientFlags(void) {
 	cg.pmext.bAutoReload = (cg_autoReload.integer > 0);
 	trap_Cvar_Set("cg_uinfo", va("%d %d %d %d %s %d %d %d %d %d %d %d %d %d %d",
 	                             // Client Flags
-								 (
-									 ((cg_autoReload.integer > 0) ? CGF_AUTORELOAD : 0) |
-									 ((cg_autoactivate.integer > 0) ? CGF_AUTOACTIVATE : 0) |
-									 ((cg_predictItems.integer > 0) ? CGF_PREDICTITEMS : 0) |
-									 ((pmove_fixed.integer > 0) ? CGF_PMOVEFIXED : 0) |
-									 ((cg_autoLogin.integer > 0) ? CGF_AUTOLOGIN : 0)
-									 // Add more in here, as needed
+	                             (
+	                                 ((cg_autoReload.integer > 0) ? CGF_AUTORELOAD : 0) |
+	                                 ((cg_autoactivate.integer > 0) ? CGF_AUTOACTIVATE : 0) |
+	                                 ((cg_predictItems.integer > 0) ? CGF_PREDICTITEMS : 0) |
+	                                 ((pmove_fixed.integer > 0) ? CGF_PMOVEFIXED : 0) |
+	                                 ((cg_autoLogin.integer > 0) ? CGF_AUTOLOGIN : 0)
+	                                 // Add more in here, as needed
 	                             ),
 
 	                             // Timenudge
@@ -1095,17 +1107,17 @@ static void CG_RegisterSounds(void) {
 
 	for (i = 0; i < 2; ++i) {
 		cgs.media.grenadebounce[FOOTSTEP_NORMAL][i]         = \
-			cgs.media.grenadebounce[FOOTSTEP_GRAVEL][i]     = \
-				cgs.media.grenadebounce[FOOTSTEP_SPLASH][i] = trap_S_RegisterSound(va("sound/weapons/grenade/bounce_hard%i.wav", i + 1));
+		    cgs.media.grenadebounce[FOOTSTEP_GRAVEL][i]     = \
+		        cgs.media.grenadebounce[FOOTSTEP_SPLASH][i] = trap_S_RegisterSound(va("sound/weapons/grenade/bounce_hard%i.wav", i + 1));
 
 		cgs.media.grenadebounce[FOOTSTEP_METAL][i]    = \
-			cgs.media.grenadebounce[FOOTSTEP_ROOF][i] = trap_S_RegisterSound(va("sound/weapons/grenade/bounce_metal%i.wav", i + 1));
+		    cgs.media.grenadebounce[FOOTSTEP_ROOF][i] = trap_S_RegisterSound(va("sound/weapons/grenade/bounce_metal%i.wav", i + 1));
 
 		cgs.media.grenadebounce[FOOTSTEP_WOOD][i] = trap_S_RegisterSound(va("sound/weapons/grenade/bounce_wood%i.wav", i + 1));
 
 		cgs.media.grenadebounce[FOOTSTEP_GRASS][i]          = \
-			cgs.media.grenadebounce[FOOTSTEP_SNOW][i]       = \
-				cgs.media.grenadebounce[FOOTSTEP_CARPET][i] = trap_S_RegisterSound(va("sound/weapons/grenade/bounce_soft%i.wav", i + 1));
+		    cgs.media.grenadebounce[FOOTSTEP_SNOW][i]       = \
+		        cgs.media.grenadebounce[FOOTSTEP_CARPET][i] = trap_S_RegisterSound(va("sound/weapons/grenade/bounce_soft%i.wav", i + 1));
 
 	}
 
