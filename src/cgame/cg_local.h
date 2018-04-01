@@ -1005,6 +1005,9 @@ typedef struct {
 	int timerunJumpCounter;
 	int timerunJumpSpeeds[256];
 
+	// Accel HUD
+	float oldSpeed;
+
 	// Nico, end of ETrun client variables
 } cg_t;
 
@@ -1733,6 +1736,10 @@ extern vmCvar_t isTimerun;
 extern vmCvar_t cg_drawSpeedMeter;
 extern vmCvar_t cg_speedMeterX;
 extern vmCvar_t cg_speedMeterY;
+
+// Accel HUD
+extern vmCvar_t cg_drawAccel;
+extern vmCvar_t cg_accelSmoothness;
 
 // Timer
 extern vmCvar_t cg_drawTimer;
