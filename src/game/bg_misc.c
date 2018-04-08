@@ -4046,10 +4046,10 @@ float BG_GetZoomTableValues(int weaponType, int index){
 		    // {out,  in, scope}
 		        {  0,  0,   0 },  // default
 		        { 60,  1,   0 },  // binoc
-				{ 20,  4, 900 },  // sniper
-				{ 60, 20,   0 },  // snooper
-				{ 55, 55,   1 },  // fg42
-				{ 55, 55,   0 }   // mg42
+		        { 20,  4, 900 },  // sniper
+		        { 60,  20,  0 },  // snooper
+		        { 55,  55,  1 },  // fg42
+		        { 55,  55,  0 }   // mg42
 	};
 	return zoomTable[weaponType][index];
 }
