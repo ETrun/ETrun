@@ -860,26 +860,6 @@ static void CG_DrawWeapReticle(void) {
 }
 
 /*
-==============
-CG_DrawBinocReticle
-==============
-*/
-static void CG_DrawBinocReticle(void) {
-	if (cgs.media.binocShaderSimple) {
-		CG_DrawPic(0, 0, 640, 480, cgs.media.binocShaderSimple);
-	}
-
-	CG_FillRect(146, 239, 348, 1, colorBlack);
-	CG_FillRect(188, 234, 1, 13, colorBlack);     // ll
-	CG_FillRect(234, 226, 1, 29, colorBlack);     // l
-	CG_FillRect(274, 234, 1, 13, colorBlack);     // lr
-	CG_FillRect(320, 213, 1, 55, colorBlack);     // center
-	CG_FillRect(360, 234, 1, 13, colorBlack);     // rl
-	CG_FillRect(406, 226, 1, 29, colorBlack);     // r
-	CG_FillRect(452, 234, 1, 13, colorBlack);     // rr
-}
-
-/*
 =================
 CG_DrawCrosshair
 =================
@@ -900,12 +880,6 @@ static void CG_DrawCrosshair(void) {
 		return;
 	}
 
-	// suburb, disable the annoying things blocking binoc view
-	/*if (cg.zoomedBinoc) {
-		CG_DrawBinocReticle();
-		return;
-	}*/
-
 	// DHM - Nerve :: show reticle in limbo and spectator
 	if ((cg.snap->ps.pm_flags & PMF_FOLLOW) || cg.demoPlayback) {
 		weapnum = cg.snap->ps.weapon;
@@ -917,10 +891,6 @@ static void CG_DrawCrosshair(void) {
 
 	// weapons that get no reticle
 	case WP_NONE:       // no weapon, no crosshair
-		if (cg.zoomedBinoc) {
-			CG_DrawBinocReticle();
-		}
-
 		if (cg.snap->ps.persistant[PERS_TEAM] != TEAM_SPECTATOR) {
 			return;
 		}

@@ -339,15 +339,13 @@ typedef enum {
 	ZOOM_SNOOPER,
 	ZOOM_FG42SCOPE,
 	ZOOM_MG42,
-	ZOOM_MAX_ZOOMS
 } EZoom_t;
 
 typedef enum {
 	ZOOM_OUT,   // widest angle
-	ZOOM_IN // tightest angle (approaching 0)
+	ZOOM_IN,    // tightest angle (approaching 0)
+	ZOOM_SCOPE  // suburb, for zoomed scope
 } EZoomInOut_t;
-
-extern float zoomTable[ZOOM_MAX_ZOOMS][2];
 
 //----(SA)	end
 
@@ -1643,6 +1641,7 @@ extern vmCvar_t cg_ignore;
 extern vmCvar_t cg_fov;
 extern vmCvar_t cg_zoomDefaultSniper;
 extern vmCvar_t cg_zoomStepSniper;
+extern vmCvar_t cg_zoomStepBinoc;
 extern vmCvar_t cg_thirdPersonRange;
 extern vmCvar_t cg_thirdPersonAngle;
 extern vmCvar_t cg_thirdPerson;

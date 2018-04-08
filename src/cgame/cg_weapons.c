@@ -2794,27 +2794,27 @@ void CG_SetSniperZoom(int lastweap, int newweap) {
 
 	case WP_FG42SCOPE:
 		cg.zoomval     = cg_zoomDefaultSniper.value; // JPW NERVE changed from defaultFG per atvi req
-		cg.zoomedScope = 1;         // TODO: add to zoomTable
-		zoomindex      = ZOOM_SNIPER; // JPW NERVE was FG42SCOPE
+		zoomindex      = ZOOM_FG42SCOPE;
+		cg.zoomedScope = BG_GetZoomTableValues(zoomindex, ZOOM_SCOPE);
 		break;
 	case WP_GARAND_SCOPE:
 		cg.zoomval     = cg_zoomDefaultSniper.value;
-		cg.zoomedScope = 900;       // TODO: add to zoomTable
 		zoomindex      = ZOOM_SNIPER;
+		cg.zoomedScope = BG_GetZoomTableValues(zoomindex, ZOOM_SCOPE);
 		break;
 	case WP_K43_SCOPE:
 		cg.zoomval     = cg_zoomDefaultSniper.value;
-		cg.zoomedScope = 900;       // TODO: add to zoomTable
 		zoomindex      = ZOOM_SNIPER;
+		cg.zoomedScope = BG_GetZoomTableValues(zoomindex, ZOOM_SCOPE);
 		break;
 	}
 
 	// constrain user preferred fov to weapon limitations
-	if (cg.zoomval > zoomTable[zoomindex][ZOOM_OUT]) {
-		cg.zoomval = zoomTable[zoomindex][ZOOM_OUT];
+	if (cg.zoomval > BG_GetZoomTableValues(zoomindex, ZOOM_OUT)) {
+		cg.zoomval = BG_GetZoomTableValues(zoomindex, ZOOM_OUT);
 	}
-	if (cg.zoomval < zoomTable[zoomindex][ZOOM_IN]) {
-		cg.zoomval = zoomTable[zoomindex][ZOOM_IN];
+	if (cg.zoomval < BG_GetZoomTableValues(zoomindex, ZOOM_IN)) {
+		cg.zoomval = BG_GetZoomTableValues(zoomindex, ZOOM_IN);
 	}
 
 	cg.zoomTime = cg.time;
