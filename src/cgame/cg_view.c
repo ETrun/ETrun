@@ -446,7 +446,8 @@ static void CG_ZoomSway(void) {
 	float spreadfrac;
 	float phase;
 
-	if (!cg.zoomval) {   // not zoomed
+	// suburb, don't want this for binocs in etrun
+	if (!cg.zoomval || cg.zoomedBinoc) {
 		return;
 	}
 
@@ -661,14 +662,13 @@ static void CG_OffsetFirstPersonView(void) {
 // probably move to server variables
 float zoomTable[ZOOM_MAX_ZOOMS][2] =
 {
-// max {out,in}
-	{ 0,  0  },
-
-	{ 36, 8  }, //	binoc
-	{ 20, 4  }, //	sniper
-	{ 60, 20 }, //	snooper
-	{ 55, 55 }, //	fg42
-	{ 55, 55 }    //	mg42
+// max	{out, in}
+		{ 0,  0  },
+		{ 60, 1  }, //	binoc
+		{ 20, 4  }, //	sniper
+		{ 60, 20 }, //	snooper
+		{ 55, 55 }, //	fg42
+		{ 55, 55 }  //	mg42
 };
 
 void CG_AdjustZoomVal(float val, int type) {
@@ -689,7 +689,7 @@ void CG_ZoomIn_f(void) {
 	} else if (cg_entities[cg.snap->ps.clientNum].currentState.weapon == WP_K43_SCOPE) {
 		CG_AdjustZoomVal(-(cg_zoomStepSniper.value), ZOOM_SNIPER);
 	} else if (cg.zoomedBinoc) {
-		CG_AdjustZoomVal(-(cg_zoomStepSniper.value), ZOOM_SNIPER);     // JPW NERVE per atvi request all use same vals to match menu (was zoomStepBinoc, ZOOM_BINOC);
+		CG_AdjustZoomVal(-(cg_zoomStepSniper.value), ZOOM_BINOC);     // JPW NERVE per atvi request all use same vals to match menu (was zoomStepBinoc, ZOOM_BINOC);
 	}
 }
 
@@ -699,7 +699,7 @@ void CG_ZoomOut_f(void) {
 	} else if (cg_entities[cg.snap->ps.clientNum].currentState.weapon == WP_K43_SCOPE) {
 		CG_AdjustZoomVal(cg_zoomStepSniper.value, ZOOM_SNIPER);
 	} else if (cg.zoomedBinoc) {
-		CG_AdjustZoomVal(cg_zoomStepSniper.value, ZOOM_SNIPER);   // JPW NERVE per atvi request BINOC);
+		CG_AdjustZoomVal(cg_zoomStepSniper.value, ZOOM_BINOC);   // JPW NERVE per atvi request BINOC);
 	}
 }
 

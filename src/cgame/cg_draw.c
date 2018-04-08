@@ -900,11 +900,11 @@ static void CG_DrawCrosshair(void) {
 		return;
 	}
 
-	// using binoculars
-	if (cg.zoomedBinoc) {
+	// suburb, disable the annoying things blocking binoc view
+	/*if (cg.zoomedBinoc) {
 		CG_DrawBinocReticle();
 		return;
-	}
+	}*/
 
 	// DHM - Nerve :: show reticle in limbo and spectator
 	if ((cg.snap->ps.pm_flags & PMF_FOLLOW) || cg.demoPlayback) {
