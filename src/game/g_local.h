@@ -815,6 +815,10 @@ typedef struct voteInfo_s {
 	// Nico, used to check if voter switches team
 	char voter_team;
 	int voter_cn;
+	// suburb, check if first 10 seconds are over
+	qboolean voteIsNotTooSoon;
+	// suburb, time passed since the last callvote
+	int lastVoteTime;
 } voteInfo_t;
 
 // Nico, delayed map change
@@ -1446,6 +1450,7 @@ extern vmCvar_t vote_allow_referee;
 extern vmCvar_t vote_allow_antilag;
 extern vmCvar_t vote_allow_muting;
 extern vmCvar_t vote_limit;
+extern vmCvar_t vote_delay;
 extern vmCvar_t vote_percent;
 
 // Nico, beginning of ETrun server cvars
