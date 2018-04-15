@@ -1073,6 +1073,11 @@ char *ClientConnect(int clientNum, qboolean firstTime) {
 
 	trap_GetUserinfo(clientNum, userinfo, sizeof (userinfo));
 
+	// suburb, prevent config load error
+	if (level.delayedMapChange.pendingChange) {
+		return "You cannot connect during a pending map change.";
+	}
+
 	// IP filtering
 	// show_bug.cgi?id=500
 	// recommanding PB based IP / GUID banning, the builtin system is pretty limited
