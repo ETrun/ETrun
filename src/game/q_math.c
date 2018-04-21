@@ -880,7 +880,6 @@ Returns the amount of digits a float has
 @author suburb
 =================
 */
-
 int GetDigits(float number) {
 	int count = 0;
 

@@ -84,11 +84,9 @@ void CG_BuildSolidList(void) {
 		    ent->eType == ET_TELEPORT_TRIGGER ||
 		    ent->eType == ET_CONCUSSIVE_TRIGGER ||
 		    ent->eType == ET_OID_TRIGGER
-#ifdef VISIBLE_TRIGGERS
 		    || ent->eType == ET_TRIGGER_MULTIPLE
 		    || ent->eType == ET_TRIGGER_FLAGONLY
 		    || ent->eType == ET_TRIGGER_FLAGONLY_MULTIPLE
-#endif
 		    ) {
 
 			cg_triggerEntities[cg_numTriggerEntities] = cent;
@@ -335,26 +333,17 @@ static void CG_InterpolatePlayerState(qboolean grabAngles) {
 
 /*
 =========================
-CG_TouchTriggerPrediction
+CG_DrawTriggers
 
-Predict push triggers and items
+@author suburb, modified CG_TouchTriggerPrediction function to draw triggers
 =========================
 */
-static void CG_TouchTriggerPrediction(void) {
+static void CG_DrawTriggers(void) {
 	int          i;
-	clipHandle_t cmodel;
 	centity_t    *cent;
-	qboolean     spectator;
-	const char   *cs;
-
-	// dead clients don't activate triggers
-	if (cg.predictedPlayerState.stats[STAT_HEALTH] <= 0) {
-		return;
-	}
-
-	spectator = ((cg.predictedPlayerState.pm_type == PM_SPECTATOR) || (cg.predictedPlayerState.pm_flags & PMF_LIMBO));       // JPW NERVE
-
-	if (cg.predictedPlayerState.pm_type != PM_NORMAL && !spectator) {
+	clipHandle_t cmodel;
+	
+	if (!cg_drawTriggers.integer) {
 		return;
 	}
 
@@ -364,7 +353,7 @@ static void CG_TouchTriggerPrediction(void) {
 		cent = cg_triggerEntities[i];
 		ent  = &cent->currentState;
 
-		if (ent->eType == ET_ITEM && !spectator && (cg.predictedPlayerState.groundEntityNum == ENTITYNUM_WORLD)) {
+		if (ent->eType == ET_ITEM && (cg.predictedPlayerState.groundEntityNum == ENTITYNUM_WORLD)) {
 			continue;
 		}
 
@@ -372,19 +361,21 @@ static void CG_TouchTriggerPrediction(void) {
 			continue;
 		}
 
-		// Gordon: er, this lookup was wrong...
 		cmodel = cgs.inlineDrawModel[ent->modelindex];
 		if (!cmodel) {
 			continue;
 		}
 
 		if (ent->eType == ET_CONSTRUCTIBLE ||
-		    ent->eType == ET_OID_TRIGGER
-#ifdef VISIBLE_TRIGGERS
-		    || ent->eType == ET_TRIGGER_MULTIPLE
-		    || ent->eType == ET_TRIGGER_FLAGONLY
-		    || ent->eType == ET_TRIGGER_FLAGONLY_MULTIPLE
-#endif
+		    ent->eType == ET_OID_TRIGGER ||
+			ent->eType == ET_TRIGGER_MULTIPLE ||
+			ent->eType == ET_TRIGGER_FLAGONLY ||
+			ent->eType == ET_TRIGGER_FLAGONLY_MULTIPLE ||
+			(ent->eType == ET_PUSH_TRIGGER &&
+			cg_drawTriggers.integer >= 2) ||
+			(ent->eType == ET_TELEPORT_TRIGGER &&
+			cg_drawTriggers.integer >= 3) ||
+			cg_drawTriggers.integer >= 4
 		    ) {
 			vec3_t mins, maxs, pmins, pmaxs;
 
@@ -397,45 +388,16 @@ static void CG_TouchTriggerPrediction(void) {
 			VectorAdd(cent->lerpOrigin, mins, mins);
 			VectorAdd(cent->lerpOrigin, maxs, maxs);
 
-#ifdef VISIBLE_TRIGGERS
-			if (ent->eType == ET_TRIGGER_MULTIPLE || ent->eType == ET_TRIGGER_FLAGONLY || ent->eType == ET_TRIGGER_FLAGONLY_MULTIPLE) {
-			} else
-#endif
-			{
-				// expand the bbox a bit
-				VectorSet(mins, mins[0] - 48, mins[1] - 48, mins[2] - 48);
-				VectorSet(maxs, maxs[0] + 48, maxs[1] + 48, maxs[2] + 48);
-			}
+			VectorSet(mins, mins[0] - cg_triggerOffset.value, mins[1] - cg_triggerOffset.value, mins[2] - cg_triggerOffset.value);
+			VectorSet(maxs, maxs[0] + cg_triggerOffset.value, maxs[1] + cg_triggerOffset.value, maxs[2] + cg_triggerOffset.value);
 
 			VectorAdd(cg.predictedPlayerState.origin, cg_pmove.mins, pmins);
 			VectorAdd(cg.predictedPlayerState.origin, cg_pmove.maxs, pmaxs);
 
-#ifdef VISIBLE_TRIGGERS
 			CG_RailTrail(mins, maxs, 1);
-#endif
-
-			if (!BG_BBoxCollision(pmins, pmaxs, mins, maxs)) {
-				continue;
-			}
-
-			cs = NULL;
-			if (ent->eType == ET_OID_TRIGGER) {
-				cs = CG_ConfigString(CS_OID_TRIGGERS + ent->teamNum);
-			} else if (ent->eType == ET_CONSTRUCTIBLE) {
-				cs = CG_ConfigString(CS_OID_TRIGGERS + ent->otherEntityNum2);
-			}
-
-			if (cs) {
-				CG_ObjectivePrint(va("You are near %s\n", cs), SMALLCHAR_WIDTH);
-			}
-
-			continue;
 		}
 	}
 }
-
-#define RESET_PREDICTION                        \
-	useCommand = current - CMD_BACKUP + 1;
 
 /*
 =================
@@ -734,8 +696,8 @@ void CG_PredictPlayerState(void) {
 
 		moved = qtrue;
 
-		// add push trigger movement effects
-		CG_TouchTriggerPrediction();
+		// Draw Triggers
+		CG_DrawTriggers();
 	}
 
 	if (cg_showmiss.integer > 1) {
