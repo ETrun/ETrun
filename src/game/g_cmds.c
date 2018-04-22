@@ -2066,6 +2066,13 @@ void Cmd_Load_f(gentity_t *ent) {
 		return;
 	}
 
+	// suburb, prevent trigger bug
+	if (level.time - ent->client->pers.lastLoadedTime < 550) {
+		CP("cp \"Loading aborted\n\"");
+		return;
+	}
+	ent->client->pers.lastLoadedTime = 0;
+
 	if (ent->client->sess.sessionTeam == TEAM_ALLIES) {
 		pos = ent->client->sess.alliesSaves + posNum;
 	} else {
@@ -2179,6 +2186,12 @@ void Cmd_Save_f(gentity_t *ent) {
 	// Nico, strict save/load restrictions: you can not save while timer is active
 	if (g_strictSaveLoad.integer != 0 && ent->client->sess.timerunActive) {
 		CP("cp \"Strict save mode prevents you from saving while your timer is active!\n\"");
+		return;
+	}
+
+	// suburb, prevent trigger bug
+	if (ent->client->pers.isTouchingTrigger == qtrue && ent->client->sess.timerunActive) {
+		CP("cp \"You can not save in triggers during a run!\n\"");
 		return;
 	}
 

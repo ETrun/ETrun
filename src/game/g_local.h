@@ -667,6 +667,9 @@ typedef struct {
 	// suburb, noclip speed scale
 	int noclipSpeed;
 
+	// suburb, prevent trigger bug
+	int lastLoadedTime;
+	qboolean isTouchingTrigger;
 } clientPersistant_t;
 
 typedef struct {
