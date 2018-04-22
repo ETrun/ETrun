@@ -582,10 +582,11 @@ once for each server frame, which makes for smooth demo recording.
 ==============
 */
 void ClientThink_real(gentity_t *ent) {
-	int       msec, oldEventSequence;
+	int       msec, oldEventSequence, speed, i, counter;
 	pmove_t   pm;
 	usercmd_t *ucmd;
 	gclient_t *client = ent->client;
+	qboolean  notMovingWithSpeed;
 
 	// don't think if the client is not yet connected (and thus not yet spawned in)
 	if (client->pers.connected != CON_CONNECTED) {
@@ -916,6 +917,33 @@ void ClientThink_real(gentity_t *ent) {
 		CP(va("cpm \"%s^w: ^1you were removed from teams because you must use cg_drawCGaz 0\n\"", GAME_VERSION_COLORED));
 		trap_SendServerCommand(ent - g_entities, "CGazOff");
 		SetTeam(ent, "s", -1, -1, qfalse);
+	}
+
+	// suburb, prevent pronebug & wallbug
+	counter = 0;
+	notMovingWithSpeed = qfalse;
+
+	for (i = 0; i < 3; ++i) {
+		if (client->pers.oldPosition[i] == (int) pm.ps->origin[i]) {
+			counter++;
+		}
+	}
+	if (counter == 3) {
+		notMovingWithSpeed = qtrue;
+	}
+
+	speed = sqrt(pm.ps->velocity[0] * pm.ps->velocity[0] + pm.ps->velocity[1] * pm.ps->velocity[1]);
+	if (client->sess.logged && !client->sess.timerunActive && speed > MAX_BUGGING_SPEED && notMovingWithSpeed) {
+		CP(va("cpm \"%s^w: ^1Bugging detected, player killed.\n\"", GAME_VERSION_COLORED));
+		Cmd_Kill_f(ent);
+	}
+
+	// checking every frame would break corner skimming
+	if (level.time - client->pers.lastBuggingCheck > BUGGING_CHECK_FREQUENCY) {
+		for (i = 0; i < 3; ++i) {
+			client->pers.oldPosition[i] = (int) pm.ps->origin[i];
+			client->pers.lastBuggingCheck = level.time;
+		}
 	}
 }
 

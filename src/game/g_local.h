@@ -667,6 +667,9 @@ typedef struct {
 	// suburb, noclip speed scale
 	int noclipSpeed;
 
+	// suburb, prevent pronebug & wallbug
+	vec3_t oldPosition;
+	int lastBuggingCheck;
 } clientPersistant_t;
 
 typedef struct {
