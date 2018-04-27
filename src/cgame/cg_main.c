@@ -174,7 +174,9 @@ vmCvar_t cg_thirdPersonAngle;
 vmCvar_t cg_stereoSeparation;
 vmCvar_t cg_lagometer;
 vmCvar_t cg_teamChatTime;
-vmCvar_t cg_teamChatHeight;
+vmCvar_t cg_chatHeight;
+vmCvar_t cg_chatX;
+vmCvar_t cg_chatY;
 vmCvar_t cg_stats;
 vmCvar_t cg_buildScript;
 vmCvar_t cg_coronafardist;
@@ -416,7 +418,9 @@ cvarTable_t cvarTable[] =
 	{ &cg_thirdPersonAngle,     "cg_thirdPersonAngle",     "0",     CVAR_CHEAT,               0 },
 	{ &cg_thirdPerson,          "cg_thirdPerson",          "0",     CVAR_CHEAT,               0 }, // JPW NERVE per atvi req
 	{ &cg_teamChatTime,         "cg_teamChatTime",         "8000",  CVAR_ARCHIVE,             0 },
-	{ &cg_teamChatHeight,       "cg_teamChatHeight",       "8",     CVAR_ARCHIVE,             0 },
+	{ &cg_chatHeight,           "cg_chatHeight",           "8",     CVAR_ARCHIVE,             0 },
+	{ &cg_chatX,                "cg_chatX",                "160",   CVAR_ARCHIVE,             0 },
+	{ &cg_chatY,                "cg_chatY",                "478",   CVAR_ARCHIVE,             0 },
 	{ &cg_coronafardist,        "cg_coronafardist",        "1536",  CVAR_ARCHIVE,             0 },
 	{ &cg_coronas,              "cg_coronas",              "1",     CVAR_ARCHIVE,             0 },
 	{ &cg_predictItems,         "cg_predictItems",         "1",     CVAR_ARCHIVE,             0 },

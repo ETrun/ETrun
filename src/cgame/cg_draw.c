@@ -299,10 +299,6 @@ static void CG_DrawUpperRight(void) {
 ===========================================================================================
 */
 
-#define CHATLOC_X 160
-#define CHATLOC_Y 478
-#define CHATLOC_TEXT_X (CHATLOC_X + 0.25f * TINYCHAR_WIDTH)
-
 /*
 =================
 CG_DrawTeamInfo
@@ -311,9 +307,12 @@ CG_DrawTeamInfo
 static void CG_DrawTeamInfo(void) {
 	vec4_t hcolor;
 	int    chatHeight;
+	int    chatX;
+	int    chatY;
+	int    chatTextX;
 
-	if (cg_teamChatHeight.integer < TEAMCHAT_HEIGHT) {
-		chatHeight = cg_teamChatHeight.integer;
+	if (cg_chatHeight.integer < TEAMCHAT_HEIGHT) {
+		chatHeight = cg_chatHeight.integer;
 	} else {
 		chatHeight = TEAMCHAT_HEIGHT;
 	}
@@ -322,10 +321,13 @@ static void CG_DrawTeamInfo(void) {
 		return; // disabled
 	}
 
+	chatX = cg_chatX.integer;
+	chatY = cg_chatY.integer;
+	chatTextX = chatX + 0.25f * TINYCHAR_WIDTH;
+
 	if (cgs.teamLastChatPos != cgs.teamChatPos) {
 		int   i;
 		float lineHeight = 9.f;
-		int   chatWidth  = 640 - CHATLOC_X - 100;
 
 		if (cg.time - cgs.teamChatMsgTimes[cgs.teamLastChatPos % chatHeight] > cg_teamChatTime.integer) {
 			cgs.teamLastChatPos++;
@@ -361,13 +363,13 @@ static void CG_DrawTeamInfo(void) {
 			hcolor[3] = 0.33f * alphapercent;
 
 			trap_R_SetColor(hcolor);
-			CG_DrawPic(CHATLOC_X, CHATLOC_Y - (cgs.teamChatPos - i) * lineHeight, chatWidth, lineHeight, cgs.media.teamStatusBar);
+			CG_DrawPic(chatX, chatY - (cgs.teamChatPos - i) * lineHeight, CHAT_WIDTH, lineHeight, cgs.media.teamStatusBar);
 
 			hcolor[0] = hcolor[1] = hcolor[2] = 1.0;
 			hcolor[3] = alphapercent;
 			trap_R_SetColor(hcolor);
 
-			CG_Text_Paint_Ext(CHATLOC_TEXT_X, CHATLOC_Y - (cgs.teamChatPos - i - 1) * lineHeight - 1, 0.2f, 0.2f, hcolor, cgs.teamChatMsgs[i % chatHeight], 0, 0, 0, &cgs.media.limboFont2);
+			CG_Text_Paint_Ext(chatTextX, chatY - (cgs.teamChatPos - i - 1) * lineHeight - 1, 0.2f, 0.2f, hcolor, cgs.teamChatMsgs[i % chatHeight], 0, 0, 0, &cgs.media.limboFont2);
 		}
 	}
 }

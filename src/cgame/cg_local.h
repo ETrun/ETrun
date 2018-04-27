@@ -64,6 +64,7 @@ If you have questions concerning this license or the applicable additional terms
 
 #define TEAMCHAT_WIDTH      70
 #define TEAMCHAT_HEIGHT     8
+#define CHAT_WIDTH          428
 
 #define NOTIFY_WIDTH        80
 #define NOTIFY_HEIGHT       5
@@ -1649,7 +1650,9 @@ extern vmCvar_t cg_thirdPerson;
 extern vmCvar_t cg_stereoSeparation;
 extern vmCvar_t cg_lagometer;
 extern vmCvar_t cg_teamChatTime;
-extern vmCvar_t cg_teamChatHeight;
+extern vmCvar_t cg_chatHeight;
+extern vmCvar_t cg_chatX;
+extern vmCvar_t cg_chatY;
 extern vmCvar_t cg_stats;
 extern vmCvar_t cg_coronafardist;
 extern vmCvar_t cg_coronas;

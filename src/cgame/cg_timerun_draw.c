@@ -754,7 +754,7 @@ void CG_DrawKeys(void) {
 /**
  * Draw clock from TJMod
  *
- * @author Nico
+ * @author Nico, modified by suburb
  */
 void CG_DrawClock(float x, float y, float scale, qboolean shadowed) {
 	char    displayTime[18] = { 0 };
@@ -764,14 +764,8 @@ void CG_DrawClock(float x, float y, float scale, qboolean shadowed) {
 	trap_RealTime(&tm);
 	displayTime[0] = '\0';
 
-	Q_strcat(displayTime, sizeof (displayTime),
-	         va("Time: %d:%02d",
-	            ((tm.tm_hour == 0 || tm.tm_hour == 12) ? 12 : tm.tm_hour % 12),
-	            tm.tm_min));
-	Q_strcat(displayTime, sizeof (displayTime),
-	         va(":%02d", tm.tm_sec));
-	Q_strcat(displayTime, sizeof (displayTime),
-	         (tm.tm_hour < 12) ? " am" : " pm");
+	Q_strcat(displayTime, sizeof (displayTime), va("Time: %d:%02d", tm.tm_hour, tm.tm_min));
+	Q_strcat(displayTime, sizeof (displayTime), va(":%02d", tm.tm_sec));
 
 	if (shadowed == qtrue) {
 		CG_Text_Paint_Ext(x, y, scale, scale, clr, displayTime, 0, 24, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);

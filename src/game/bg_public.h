@@ -115,7 +115,6 @@ extern vec3_t playerlegsProneMaxs;
 #define SAY_ALL     0
 #define SAY_TEAM    1
 #define SAY_BUDDY   2
-#define SAY_TEAMNL  3
 
 // RF, client damage identifiers
 
