@@ -271,15 +271,7 @@ void CG_DrawPMItems(void) {
 	pmListItem_t *listItem = cg_pmOldList;
 	float        y         = 360;
 	int          numPopups = 0;
-	// suburb, add timestamps
-	char    displayTime[18] = { 0 };
-	qtime_t tm;
-
-	trap_RealTime(&tm);
-	displayTime[0] = '\0';
-	Q_strcat(displayTime, sizeof(displayTime), va("[%d:%02d", tm.tm_hour, tm.tm_min));
-	Q_strcat(displayTime, sizeof(displayTime), va(":%02d] ", tm.tm_sec));
-
+	
 	if (cg_drawSmallPopupIcons.integer) {
 		size = PM_ICON_SIZE_SMALL;
 		y   += 4;
