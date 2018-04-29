@@ -260,7 +260,7 @@ cvarTable_t gameCvarTable[] =
 	{ &vote_allow_antilag,     "vote_allow_antilag",     "0",                          0,                                                             0,      qfalse, qfalse },
 	{ &vote_allow_muting,      "vote_allow_muting",      "0",                          0,                                                             0,      qfalse, qfalse },
 	{ &vote_limit,             "vote_limit",             "5",                          0,                                                             0,      qfalse, qfalse },
-	{ &vote_delay,             "vote_delay",             "10000",                      0,                                                             0,      qfalse, qfalse },
+	{ &vote_delay,             "vote_delay",             "20000",                      0,                                                             0,      qfalse, qfalse },
 	{ &vote_percent,           "vote_percent",           "50",                         0,                                                             0,      qfalse, qfalse },
 
 	// state vars
