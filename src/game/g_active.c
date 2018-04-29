@@ -402,6 +402,16 @@ Returns qfalse if the client is dropped
 =================
 */
 qboolean ClientInactivityTimer(gclient_t *client) {
+	int i;
+	int counter = 0;
+
+	// suburb, take viewangles for inactivity drop instead of buttons
+	for (i = 0; i < 3; ++i) {
+		if (client->ps.viewangles[i] == client->pers.oldViewangles[i]) {
+			counter++;
+		}
+	}
+
 	// OSP - modified
 	if ((g_inactivity.integer == 0 && client->sess.sessionTeam != TEAM_SPECTATOR) || (g_spectatorInactivity.integer == 0 && client->sess.sessionTeam == TEAM_SPECTATOR)) {
 
@@ -409,21 +419,9 @@ qboolean ClientInactivityTimer(gclient_t *client) {
 		// gameplay, everyone isn't kicked
 		client->inactivityTime    = level.time + 60 * 1000;
 		client->inactivityWarning = qfalse;
-	} else if (client->pers.cmd.forwardmove ||
-	           client->pers.cmd.rightmove ||
-	           client->pers.cmd.upmove ||
-	           (client->pers.cmd.wbuttons & WBUTTON_ATTACK2) ||
-	           (client->pers.cmd.buttons & BUTTON_ATTACK) ||
-	           (client->pers.cmd.wbuttons & WBUTTON_LEANLEFT) ||
-	           (client->pers.cmd.wbuttons & WBUTTON_LEANRIGHT)
-	           || client->ps.pm_type == PM_DEAD) {
-
+	} else if (counter != 3) {
 		client->inactivityWarning = qfalse;
-		client->inactivityTime    = level.time + 1000 *
-		                            ((client->sess.sessionTeam != TEAM_SPECTATOR) ?
-		                             g_inactivity.integer :
-		                             g_spectatorInactivity.integer);
-
+		client->inactivityTime    = level.time + 1000 * ((client->sess.sessionTeam != TEAM_SPECTATOR) ? g_inactivity.integer :g_spectatorInactivity.integer);
 	} else if (!client->pers.localClient) {
 		if (level.time > client->inactivityTime && client->inactivityWarning) {
 			client->inactivityWarning = qfalse;
@@ -447,6 +445,14 @@ qboolean ClientInactivityTimer(gclient_t *client) {
 			client->inactivityTime    = level.time + 10000; // Just for safety
 		}
 	}
+
+	// suburb, update viewangles
+	if (counter != 3) {
+		for (i = 0; i < 3; ++i) {
+			client->pers.oldViewangles[i] = client->ps.viewangles[i];
+		}
+	}
+
 	return qtrue;
 }
 

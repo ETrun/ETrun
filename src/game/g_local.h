@@ -667,6 +667,8 @@ typedef struct {
 	// suburb, noclip speed scale
 	int noclipSpeed;
 
+	// suburb, inactivity drop
+	vec3_t oldViewangles;
 } clientPersistant_t;
 
 typedef struct {
