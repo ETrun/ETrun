@@ -486,8 +486,9 @@ void CG_DrawCGaz(void) {
 			// suburb, CGaz 2 on ground fix
 			if (cg_drawCGaz.integer == 2) {
 				accel = pm_accelerate_AP - 10.0f;
+			} else {
+				accel = pm_accelerate_AP;
 			}
-			accel = pm_accelerate_AP;
 		} else {
 			accel = pm_accelerate;
 		}
