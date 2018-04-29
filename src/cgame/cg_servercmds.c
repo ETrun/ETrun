@@ -1619,6 +1619,9 @@ static void CG_ServerCommand(void) {
 			cg.timerunBestTime[cg.clientNum][cg.currentTimerun] = cg.timerunLastTime[cg.clientNum][cg.currentTimerun];
 		}
 
+		// suburb, execute commands in cg_onRunStart cvar
+		trap_SendConsoleCommand(va("%s\n", cg_onRunStart.string));
+
 		return;
 	}
 
@@ -1687,6 +1690,10 @@ static void CG_ServerCommand(void) {
 			cg.timerunStopSpeed                                = atoi(CG_Argv(3)); // Stop speed
 			cg.runMaxSpeed                                     = atoi(CG_Argv(4)); // Run max speed
 		}
+
+		// suburb, execute commands in cg_onRunStop cvar
+		trap_SendConsoleCommand(va("%s\n", cg_onRunStop.string));
+
 		return;
 	}
 

@@ -333,6 +333,10 @@ vmCvar_t cg_countryFlags;
 // Minimum start speed
 vmCvar_t cg_minStartSpeed;
 
+// suburb, event cvars
+vmCvar_t cg_onRunStart;
+vmCvar_t cg_onRunStop;
+
 // Nico, end of ETrun cvars
 
 typedef struct {
@@ -593,6 +597,10 @@ cvarTable_t cvarTable[] =
 
 	// Minimum start speed
 	{ &cg_minStartSpeed,        "cg_minStartSpeed",        "0",     CVAR_ARCHIVE,             0 },
+
+	// suburb, event cvars
+	{ &cg_onRunStart,           "cg_onRunStart",           "",      CVAR_ARCHIVE,             0 },
+	{ &cg_onRunStop,            "cg_onRunStop",            "",      CVAR_ARCHIVE,             0 },
 
 	// Nico, end of ETrun cvars
 };

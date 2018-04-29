@@ -1810,6 +1810,10 @@ extern vmCvar_t cg_countryFlags;
 // Minimum start speed
 extern vmCvar_t cg_minStartSpeed;
 
+// suburb, event cvars
+extern vmCvar_t cg_onRunStart;
+extern vmCvar_t cg_onRunStop;
+
 // Nico, end of ETrun cvars
 
 //
