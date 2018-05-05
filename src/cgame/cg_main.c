@@ -125,6 +125,7 @@ vmCvar_t cg_swingSpeed;
 vmCvar_t cg_shadows;
 vmCvar_t cg_draw2D;
 vmCvar_t cg_drawFPS;
+vmCvar_t cg_drawClock;
 vmCvar_t cg_drawSnapshot;
 vmCvar_t cg_drawCrosshair;
 vmCvar_t cg_drawCrosshairNames;
@@ -361,7 +362,8 @@ cvarTable_t cvarTable[] =
 	{ &cg_draw2D,               "cg_draw2D",               "1",     CVAR_ARCHIVE,             0 },
 	{ &cg_drawSpreadScale,      "cg_drawSpreadScale",      "1",     CVAR_ARCHIVE,             0 },
 	{ &cg_drawStatus,           "cg_drawStatus",           "1",     CVAR_ARCHIVE,             0 },
-	{ &cg_drawFPS,              "cg_drawFPS",              "0",     CVAR_ARCHIVE,             0 },
+	{ &cg_drawFPS,              "cg_drawFPS",              "1",     CVAR_ARCHIVE,             0 },
+	{ &cg_drawClock,            "cg_drawClock",            "1",     CVAR_ARCHIVE,             0 },
 	{ &cg_drawSnapshot,         "cg_drawSnapshot",         "0",     CVAR_ARCHIVE,             0 },
 	{ &cg_drawCrosshair,        "cg_drawCrosshair",        "1",     CVAR_ARCHIVE,             0 },
 	{ &cg_drawCrosshairNames,   "cg_drawCrosshairNames",   "1",     CVAR_ARCHIVE,             0 },

@@ -949,8 +949,7 @@ void G_Say(gentity_t *ent, gentity_t *target, int mode, qboolean encoded, const 
 
 	trap_RealTime(&tm);
 	displayTime[0] = '\0';
-	Q_strcat(displayTime, sizeof(displayTime), va("[%d:%02d", tm.tm_hour ,tm.tm_min));
-	Q_strcat(displayTime, sizeof(displayTime), va(":%02d] ", tm.tm_sec));
+	Q_strcat(displayTime, sizeof(displayTime), va("[%d:%02d:%02d] ", tm.tm_hour, tm.tm_min, tm.tm_sec));
 
 	switch (mode) {
 	default:

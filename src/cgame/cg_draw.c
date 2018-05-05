@@ -242,9 +242,7 @@ static float CG_DrawFPS(float y) {
 		int    w;
 		int    i, total;
 		int    fps;
-		vec4_t timerBackground = { 0.16f, 0.2f, 0.17f, 0.8f };
-		vec4_t timerBorder     = { 0.5f, 0.5f, 0.5f, 0.5f };
-		vec4_t tclr            = { 0.625f, 0.625f, 0.6f, 1.0f };
+		float  scale = 0.19f;
 
 		// average multiple frames together to smooth changes out a bit
 		total = 0;
@@ -257,21 +255,46 @@ static float CG_DrawFPS(float y) {
 		fps = 1000 * FPS_FRAMES / total;
 
 		s = va("%i FPS", fps);
-		w = CG_Text_Width_Ext(s, 0.19f, 0, &cgs.media.limboFont1);
+		w = CG_Text_Width_Ext(s, scale, 0, &cgs.media.limboFont1);
 
-		CG_FillRect(UPPERRIGHT_X - w - 2, y, w + 5, 12 + 2, timerBackground);
-		CG_DrawRect_FixedBorder(UPPERRIGHT_X - w - 2, y, w + 5, 12 + 2, 1, timerBorder);
+		CG_DrawRect_FixedBorder(UPPERRIGHT_X - w - 2, y, w + 5, 12 + 2, 1, colorWhite);
 
-		CG_Text_Paint_Ext(UPPERRIGHT_X - w, y + 11, 0.19f, 0.19f, tclr, s, 0, 0, 0, &cgs.media.limboFont1);
+		CG_Text_Paint_Ext(UPPERRIGHT_X - w, y + 11, scale, scale, colorWhite, s, 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
 	}
 
-	return y + 12 + 4;
+	return y + 19;
+}
+
+/*
+==================
+CG_DrawClock
+
+original drawclock from TJMod
+
+@author suburb
+==================
+*/
+static float CG_DrawClock(float y) {
+	int     w;
+	float   scale = 0.19f;
+	char    displayTime[18] = { 0 };
+	qtime_t tm;
+
+	trap_RealTime(&tm);
+	displayTime[0] = '\0';
+	Q_strcat(displayTime, sizeof(displayTime), va("%d:%02d:%02d", tm.tm_hour, tm.tm_min, tm.tm_sec));
+
+	w = CG_Text_Width_Ext(displayTime, scale, 0, &cgs.media.limboFont1);
+
+	CG_DrawRect_FixedBorder(UPPERRIGHT_X - w - 2, y, w + 5, 12 + 2, 1, colorWhite);
+	CG_Text_Paint_Ext(UPPERRIGHT_X - w, y + 11, scale, scale, colorWhite, displayTime, 0, 24, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
+
+	return y + 19;
 }
 
 /*
 =====================
 CG_DrawUpperRight
-
 =====================
 */
 static void CG_DrawUpperRight(void) {
@@ -284,6 +307,10 @@ static void CG_DrawUpperRight(void) {
 
 	if (cg_drawFPS.integer) {
 		y = CG_DrawFPS(y);
+	}
+
+	if (cg_drawClock.integer) {
+		y = CG_DrawClock(y);
 	}
 
 	if (cg_drawSnapshot.integer) {
