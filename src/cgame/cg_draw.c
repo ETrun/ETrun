@@ -2190,11 +2190,11 @@ static void CG_Draw2D(void) {
 		// Nico, draw check points
 		CG_DrawCheckpoints();
 
-		// Nico, draw CGaz
-		CG_DrawCGaz();
-
 		// Nico, draw keys pressed
 		CG_DrawKeys();
+
+		// Nico, draw CGaz
+		CG_DrawCGaz();
 
 		// Nico, draw banners
 		CG_DrawBannerPrint();

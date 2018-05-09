@@ -1005,6 +1005,10 @@ typedef struct {
 	int timerunJumpCounter;
 	int timerunJumpSpeeds[256];
 
+	// suburb, keycatcher causing CGaz & drawkeys flickering fix
+	int keyTimes[8];
+	qboolean keyDown[8];
+	qboolean consoleIsUp;
 	// Nico, end of ETrun client variables
 } cg_t;
 
@@ -1655,6 +1659,8 @@ extern vmCvar_t cg_coronafardist;
 extern vmCvar_t cg_coronas;
 extern vmCvar_t cg_buildScript;
 extern vmCvar_t cg_paused;
+extern vmCvar_t cg_anyMenuIsUp;
+extern vmCvar_t cg_lastClosedMenuTime;
 extern vmCvar_t cg_predictItems;
 extern vmCvar_t cg_teamChatsOnly;
 extern vmCvar_t cg_noVoiceChats;                    // NERVE - SMF
