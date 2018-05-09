@@ -558,7 +558,6 @@ void CG_EventHandling(int type, qboolean fForced) {
 		if (cg.demoPlayback && cg.demohelpWindow != SHOW_OFF) {
 			CG_ShowHelp_Off(&cg.demohelpWindow);
 		}
-		return;
 	} else if (type == CGAME_EVENT_GAMEVIEW) {
 		cg.showGameView = qtrue;
 		CG_LimboPanel_Setup();
