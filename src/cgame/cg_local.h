@@ -698,7 +698,9 @@ typedef enum {
 } showView_t;
 
 #define MAX_BACKUP_STATES (CMD_BACKUP + 2)
-
+// Nico, used to show pressed keys
+#define NUM_KEYS_SETS       3
+#define KEYS_AMOUNT         8
 typedef struct {
 	int clientFrame;                // incremented each frame
 
@@ -1006,9 +1008,12 @@ typedef struct {
 	int timerunJumpSpeeds[256];
 
 	// suburb, keycatcher causing CGaz & drawkeys flickering fix
-	int keyTimes[8];
-	qboolean keyDown[8];
+	int keyTimes[KEYS_AMOUNT];
+	qboolean keyDown[KEYS_AMOUNT];
+	int lastClosedMenuTime;
 	qboolean consoleIsUp;
+	qboolean UIisUp;
+	qboolean limboIsUp;
 	// Nico, end of ETrun client variables
 } cg_t;
 
@@ -1016,8 +1021,6 @@ typedef struct {
 
 #define MAX_LOCKER_DEBRIS   5
 
-// Nico, used to show pressed keys
-#define NUM_KEYS_SETS       3
 typedef struct {
 	qhandle_t ForwardPressedShader;
 	qhandle_t ForwardNotPressedShader;
@@ -1659,8 +1662,6 @@ extern vmCvar_t cg_coronafardist;
 extern vmCvar_t cg_coronas;
 extern vmCvar_t cg_buildScript;
 extern vmCvar_t cg_paused;
-extern vmCvar_t cg_anyMenuIsUp;
-extern vmCvar_t cg_lastClosedMenuTime;
 extern vmCvar_t cg_predictItems;
 extern vmCvar_t cg_teamChatsOnly;
 extern vmCvar_t cg_noVoiceChats;                    // NERVE - SMF

@@ -180,8 +180,6 @@ vmCvar_t cg_buildScript;
 vmCvar_t cg_coronafardist;
 vmCvar_t cg_coronas;
 vmCvar_t cg_paused;
-vmCvar_t cg_anyMenuIsUp;
-vmCvar_t cg_lastClosedMenuTime;
 vmCvar_t cg_predictItems;
 vmCvar_t cg_enableBreath;
 vmCvar_t cg_autoactivate;
@@ -442,10 +440,6 @@ cvarTable_t cvarTable[] =
 
 	{ &cg_buildScript,          "com_buildScript",         "0",     0,                        0 }, // force loading of all possible data amd error on failures
 	{ &cg_paused,               "cl_paused",               "0",     CVAR_ROM,                 0 },
-
-	// suburb, flickering fix
-	{ &cg_anyMenuIsUp,          "cg_anyMenuIsUp",          "0",     CVAR_ROM,                 0 },
-	{ &cg_lastClosedMenuTime,   "cg_lastClosedMenuTime",   "0",     CVAR_ROM,                 0 },
 
 	// Rafael - particle switch
 	{ &cg_wolfparticles,        "cg_wolfparticles",        "1",     CVAR_ARCHIVE,             0 },

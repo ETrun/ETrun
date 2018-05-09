@@ -558,10 +558,6 @@ void CG_EventHandling(int type, qboolean fForced) {
 		if (cg.demoPlayback && cg.demohelpWindow != SHOW_OFF) {
 			CG_ShowHelp_Off(&cg.demohelpWindow);
 		}
-
-		// suburb, flickering fix
-		trap_Cvar_Set("cg_anyMenuIsUp", "0");
-		trap_Cvar_Set("cg_lastClosedMenuTime", va("%i", cg.time));
 		return;
 	} else if (type == CGAME_EVENT_GAMEVIEW) {
 		cg.showGameView = qtrue;
@@ -576,8 +572,6 @@ void CG_EventHandling(int type, qboolean fForced) {
 	} else {
 		trap_Key_SetCatcher(KEYCATCH_CGAME);
 	}
-	// suburb, flickering fix
-	trap_Cvar_Set("cg_anyMenuIsUp", "1");
 }
 
 void CG_KeyEvent(int key, qboolean down) {

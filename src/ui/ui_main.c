@@ -681,10 +681,6 @@ void _UI_Refresh(int realtime) {
 	}
 
 	if (Menu_Count() > 0) {
-		// suburb, flickering fix
-		if (!((int)trap_Cvar_VariableValue("cg_anyMenuIsUp"))) {
-			trap_Cvar_Set("cg_anyMenuIsUp", "1");
-		}
 		// paint all the menus
 		Menu_PaintAll();
 		// refresh server browser list
@@ -4058,10 +4054,6 @@ void _UI_KeyEvent(int key, qboolean down) {
 			bypassKeyClear = qfalse;
 
 			trap_Cvar_Set("cl_paused", "0");
-
-			// suburb, flickering fix
-			trap_Cvar_Set("cg_anyMenuIsUp", "0");
-			trap_Cvar_Set("cg_lastClosedMenuTime", va("%i", uiInfo.uiDC.realTime));
 		}
 	}
 }

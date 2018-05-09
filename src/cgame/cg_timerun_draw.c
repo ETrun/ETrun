@@ -651,10 +651,11 @@ void CG_DrawCGaz(void) {
  *
  * @author Nico
  */
-#define KEYS_AMOUNT 8
+#define DRAWKEYS_DEBOUNCE_VALUE        100
+#define DRAWKEYS_MENU_CLOSING_DELAY    50
 void CG_DrawKeys(void) {
 	playerState_t *ps;
-	qboolean      downNow[8];
+	qboolean      downNow[KEYS_AMOUNT];
 	qboolean      anyMenuClosedRecently = qfalse;
 	float         x, y, size;
 	int           i, j;
@@ -683,7 +684,7 @@ void CG_DrawKeys(void) {
 	size = cg_keysSize.value / 3;
 	i    = (cg_drawKeys.integer - 1) % NUM_KEYS_SETS;
 
-	// suburb, flickering fix
+	// suburb, UI flickering fix
 	downNow[0] = ps->stats[STAT_USERCMD_BUTTONS] & (BUTTON_SPRINT << 8);
 	downNow[1] = ps->stats[STAT_USERCMD_MOVE] & UMOVE_FORWARD;
 	downNow[2] = ps->stats[STAT_USERCMD_MOVE] & UMOVE_UP;
@@ -697,22 +698,39 @@ void CG_DrawKeys(void) {
 	if (!cg.consoleIsUp && trap_Key_GetCatcher() & KEYCATCH_CONSOLE) {
 		cg.consoleIsUp = qtrue;
 	} else if (cg.consoleIsUp && !(trap_Key_GetCatcher() & KEYCATCH_CONSOLE)) {
-		trap_Cvar_Set("cg_lastClosedMenuTime", va("%i", cg.time));
+		cg.lastClosedMenuTime = cg.time;
 		cg.consoleIsUp = qfalse;
 	}
 
-	// check whether flickering is even possible
-	if (!cg_anyMenuIsUp.integer && !cg.consoleIsUp && (cg.time - cg_lastClosedMenuTime.integer < 50)) {
+	// check whether any UI menu is up
+	if (!cg.UIisUp && trap_Key_GetCatcher() & KEYCATCH_UI) {
+		cg.UIisUp = qtrue;
+	} else if (cg.UIisUp && !(trap_Key_GetCatcher() & KEYCATCH_UI)) {
+		cg.lastClosedMenuTime = cg.time;
+		cg.UIisUp = qfalse;
+	}
+
+	// check whether limbo menu is up
+	if (!cg.limboIsUp && trap_Key_GetCatcher() & KEYCATCH_CGAME) {
+		cg.limboIsUp = qtrue;
+	} else if (cg.limboIsUp && !(trap_Key_GetCatcher() & KEYCATCH_CGAME)) {
+		cg.lastClosedMenuTime = cg.time;
+		cg.limboIsUp = qfalse;
+	}
+
+	// check whether any menu has closed within the last 50ms
+	if (!cg.consoleIsUp && !cg.UIisUp && !cg.limboIsUp && (cg.time - cg.lastClosedMenuTime < DRAWKEYS_MENU_CLOSING_DELAY)) {
 		anyMenuClosedRecently = qtrue;
 	}
 
+	// check whether flickering is even possible
 	for (j = 0; j < KEYS_AMOUNT; ++j) {
-		if (cg_anyMenuIsUp.integer || cg.consoleIsUp || anyMenuClosedRecently) {
+		if (cg.consoleIsUp || cg.UIisUp || cg.limboIsUp || anyMenuClosedRecently) {
 			if (cg.keyDown[j] != downNow[j]) {
 				if (cg.keyTimes[j] == 0) {
 					cg.keyTimes[j] = cg.time;
-				} else if (cg.time - cg.keyTimes[j] > 50) {
-					// Require it to be unchanged for 50ms before we care
+				} else if (cg.time - cg.keyTimes[j] > DRAWKEYS_DEBOUNCE_VALUE) {
+					// Require it to be unchanged for 100ms before we care
 					cg.keyTimes[j] = 0;
 					cg.keyDown[j] = downNow[j];
 				}
