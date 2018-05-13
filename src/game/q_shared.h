@@ -48,6 +48,10 @@ If you have questions concerning this license or the applicable additional terms
 # define Q_EXPORT
 #endif
 
+// suburb, widescreen support
+#define RATIO43      (4.0f / 3.0f)
+#define RPRATIO43    (1 / RATIO43)
+
 /**********************************************************************
   VM Considerations
 

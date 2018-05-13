@@ -336,11 +336,11 @@ void CG_DrawPMItemsBig(void) {
 	}
 
 	trap_R_SetColor(colourText);
-	CG_DrawPic(640 - 56, y, 48, 48, cg_pmWaitingListBig->shader);
+	CG_DrawPic(CG_WideX(SCREEN_WIDTH) - 56, y, 48, 48, cg_pmWaitingListBig->shader);
 	trap_R_SetColor(NULL);
 
 	w = CG_Text_Width_Ext(cg_pmWaitingListBig->message, 0.22f, 0, &cgs.media.limboFont2);
-	CG_Text_Paint_Ext(640 - 4 - w, y + 56, 0.22f, 0.24f, colourText, cg_pmWaitingListBig->message, 0, 0, 0, &cgs.media.limboFont2);
+	CG_Text_Paint_Ext(CG_WideX(SCREEN_WIDTH) - 4 - w, y + 56, 0.22f, 0.24f, colourText, cg_pmWaitingListBig->message, 0, 0, 0, &cgs.media.limboFont2);
 }
 
 const char *CG_GetPMItemText(centity_t *cent) {

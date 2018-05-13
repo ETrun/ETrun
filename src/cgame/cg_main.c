@@ -87,6 +87,14 @@ Q_EXPORT intptr_t vmMain(intptr_t command, intptr_t arg0, intptr_t arg1, intptr_
 	case CG_MOUSE_EVENT:
 		cgDC.cursorx = cgs.cursorX;
 		cgDC.cursory = cgs.cursorY;
+
+		// suburb, widescreen support
+		if (cg.showGameView || cgs.dbShowing) {
+			if (!CG_Is43Screen()) {
+				cgDC.cursorx *= cgs.adr43;
+			}
+		}
+
 		CG_MouseEvent(arg0, arg1);
 		return 0;
 	case CG_EVENT_HANDLING:
@@ -293,8 +301,8 @@ vmCvar_t cg_loadWeapon;
 
 // Show pressed keys
 vmCvar_t cg_drawKeys;
-vmCvar_t cg_keysX;
-vmCvar_t cg_keysY;
+vmCvar_t cg_keysXoffset;
+vmCvar_t cg_keysYoffset;
 vmCvar_t cg_keysSize;
 
 // Automatically load player position when he gets killed (except /kill)
@@ -324,8 +332,8 @@ vmCvar_t cg_specLock;
 
 // Info panel
 vmCvar_t cg_drawInfoPanel;
-vmCvar_t cg_infoPanelX;
-vmCvar_t cg_infoPanelY;
+vmCvar_t cg_infoPanelXoffset;
+vmCvar_t cg_infoPanelYoffset;
 
 // Country flags
 vmCvar_t cg_countryFlags;
@@ -333,6 +341,8 @@ vmCvar_t cg_countryFlags;
 // Minimum start speed
 vmCvar_t cg_minStartSpeed;
 
+// suburb, widescreen support
+vmCvar_t cg_widescreenSupport;
 // Nico, end of ETrun cvars
 
 typedef struct {
@@ -554,8 +564,8 @@ cvarTable_t cvarTable[] =
 
 	// Show pressed keys
 	{ &cg_drawKeys,             "cg_drawKeys",             "1",     CVAR_ARCHIVE,             0 },
-	{ &cg_keysX,                "cg_keysX",                "550",   CVAR_ARCHIVE,             0 },
-	{ &cg_keysY,                "cg_keysY",                "210",   CVAR_ARCHIVE,             0 },
+	{ &cg_keysXoffset,          "cg_keysXoffset",          "0",     CVAR_ARCHIVE,             0 },
+	{ &cg_keysYoffset,          "cg_keysYoffset",          "0",     CVAR_ARCHIVE,             0 },
 	{ &cg_keysSize,             "cg_keysSize",             "64",    CVAR_ARCHIVE,             0 },
 
 	// Automatically load player position when he gets killed (except /kill)
@@ -585,8 +595,8 @@ cvarTable_t cvarTable[] =
 
 	// Info panel
 	{ &cg_drawInfoPanel,        "cg_drawInfoPanel",        "1",     CVAR_ARCHIVE,             0 },
-	{ &cg_infoPanelX,           "cg_infoPanelX",           "537",   CVAR_ARCHIVE,             0 },
-	{ &cg_infoPanelY,           "cg_infoPanelY",           "2",     CVAR_ARCHIVE,             0 },
+	{ &cg_infoPanelXoffset,     "cg_infoPanelXoffset",     "0",     CVAR_ARCHIVE,             0 },
+	{ &cg_infoPanelYoffset,     "cg_infoPanelYoffset",     "0",     CVAR_ARCHIVE,             0 },
 
 	// Country flags
 	{ &cg_countryFlags,         "cg_countryFlags",         "0",     CVAR_ARCHIVE,             0 },
@@ -594,6 +604,8 @@ cvarTable_t cvarTable[] =
 	// Minimum start speed
 	{ &cg_minStartSpeed,        "cg_minStartSpeed",        "0",     CVAR_ARCHIVE,             0 },
 
+	// suburb, widescreen support
+	{ &cg_widescreenSupport,    "cg_widescreenSupport",    "1",     CVAR_ARCHIVE,             0 },
 	// Nico, end of ETrun cvars
 };
 
@@ -2059,6 +2071,14 @@ void CG_Init(int serverMessageNum, int serverCommandSequence, int clientNum) {
 	cgs.media.charsetPropB    = trap_R_RegisterShaderNoMip("menu/art/font2_prop.tga");
 
 	CG_RegisterCvars();
+
+	// suburb, widescreen support
+	if (cg_widescreenSupport.integer) {
+		cgs.glconfig.windowAspect = (float) cgs.glconfig.vidWidth / (float) cgs.glconfig.vidHeight;
+	}
+	cgs.adr43 = cgs.glconfig.windowAspect * RPRATIO43;
+	cgs.r43da = RATIO43 * 1.0f / cgs.glconfig.windowAspect;
+	cgs.wideXoffset = (cgs.glconfig.windowAspect > RATIO43) ? (640.0f * cgs.adr43 - 640.0f) * 0.5f : 0.0f;
 
 	CG_InitConsoleCommands();
 

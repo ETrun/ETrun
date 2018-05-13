@@ -117,11 +117,12 @@ void CG_demoTimescaleDraw(void) {
 	if (cg.demoPlayback && cgs.timescaleUpdate > cg.time && demo_drawTimeScale.integer != 0) {
 		char *s = va("^3TimeScale: ^7%.1f", cg_timescale.value);
 		int  w  = CG_DrawStrlen(s) * SMALLCHAR_WIDTH;
+		int  x = (int)(CG_WideX(SCREEN_WIDTH) - w - 108);
 
-		CG_FillRect(42 - 2, 400, w + 5, SMALLCHAR_HEIGHT + 3, colorDkGreen);
-		CG_DrawRect(42 - 2, 400, w + 5, SMALLCHAR_HEIGHT + 3, 1, colorMdYellow);
+		CG_FillRect(x, SCREEN_HEIGHT - 80, w + 5, SMALLCHAR_HEIGHT + 3, colorDkGreen);
+		CG_DrawRect(x, SCREEN_HEIGHT - 80, w + 5, SMALLCHAR_HEIGHT + 3, 1, colorMdYellow);
 
-		CG_DrawStringExt(42, 400, s, colorWhite, qfalse, qtrue, SMALLCHAR_WIDTH, SMALLCHAR_HEIGHT, 0);
+		CG_DrawStringExt(x + 2, SCREEN_HEIGHT - 80, s, colorWhite, qfalse, qtrue, SMALLCHAR_WIDTH, SMALLCHAR_HEIGHT, 0);
 	}
 }
 
@@ -287,10 +288,10 @@ void CG_windowNormalizeOnText(cg_window_t *w) {
 
 	// Set up bottom alignment
 	if (w->x < 0) {
-		w->x += 640 - w->w;
+		w->x += CG_WideX(SCREEN_WIDTH) - w->w;
 	}
 	if (w->y < 0) {
-		w->y += 480 - w->h;
+		w->y += CG_WideX(SCREEN_WIDTH) - w->h;
 	}
 }
 

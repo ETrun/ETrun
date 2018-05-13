@@ -198,7 +198,7 @@ void CG_Text_Paint(float x, float y, float scale, vec4_t color, const char *text
 ===========================================================================================
 */
 
-#define UPPERRIGHT_X 634
+#define UPPERRIGHT_X CG_WideX(SCREEN_WIDTH - 6)
 /*
 ==================
 CG_DrawSnapshot
@@ -299,7 +299,7 @@ static void CG_DrawUpperRight(void) {
 ===========================================================================================
 */
 
-#define CHATLOC_X 160
+#define CHATLOC_X CG_WideX(160)
 #define CHATLOC_Y 478
 #define CHATLOC_TEXT_X (CHATLOC_X + 0.25f * TINYCHAR_WIDTH)
 
@@ -325,7 +325,7 @@ static void CG_DrawTeamInfo(void) {
 	if (cgs.teamLastChatPos != cgs.teamChatPos) {
 		int   i;
 		float lineHeight = 9.f;
-		int   chatWidth  = 640 - CHATLOC_X - 100;
+		int   chatWidth  = CG_WideX(SCREEN_WIDTH) - CHATLOC_X - 100;
 
 		if (cg.time - cgs.teamChatMsgTimes[cgs.teamLastChatPos % chatHeight] > cg_teamChatTime.integer) {
 			cgs.teamLastChatPos++;
@@ -482,15 +482,15 @@ static void CG_DrawDisconnect(void) {
 	// also add text in center of screen
 	s = CG_TranslateString("Connection Interrupted");   // bk 010215 - FIXME
 	w = CG_DrawStrlen(s) * BIGCHAR_WIDTH;
-	CG_DrawBigString(320 - w / 2, 100, s, 1.0F);
+	CG_DrawBigString((CG_WideX(SCREEN_WIDTH) - w) / 2, 100, s, 1.0F);
 
 	// blink the icon
 	if ((cg.time >> 9) & 1) {
 		return;
 	}
 
-	x = 640 - 48;
-	y = 480 - 200;
+	x = CG_WideX(SCREEN_WIDTH) - 48;
+	y = SCREEN_HEIGHT - 200;
 
 	CG_DrawPic(x, y, 48, 48, cgs.media.disconnectIcon);
 }
@@ -518,8 +518,8 @@ static void CG_DrawLagometer(void) {
 	//
 	// draw the graph
 	//
-	x = 640 - 48;
-	y = 480 - 200;
+	x = CG_WideX(SCREEN_WIDTH) - 48;
+	y = SCREEN_HEIGHT - 200;
 
 	trap_R_SetColor(NULL);
 	CG_DrawPic(x, y, 48, 48, cgs.media.lagometerShader);
@@ -620,7 +620,7 @@ Called for important messages that should stay in the center of the screen
 for a few moments
 ==============
 */
-#define CP_LINEWIDTH 56         // NERVE - SMF
+#define CP_LINEWIDTH (int)(CG_WideX(56)) // NERVE - SMF
 
 void CG_CenterPrint(const char *str, int y, int charWidth) {
 	char     *s;
@@ -760,8 +760,7 @@ static void CG_DrawCenterString(void) {
 		linebuffer[l] = 0;
 
 		w = cg.centerPrintCharWidth * CG_DrawStrlen(linebuffer);
-
-		x = (SCREEN_WIDTH - w) / 2;
+		x = (CG_WideX(SCREEN_WIDTH) - w) / 2;
 
 		CG_DrawStringExt(x, y, linebuffer, color, qfalse, qtrue, cg.centerPrintCharWidth, (int)(cg.centerPrintCharWidth * 1.5), 0);
 
@@ -794,7 +793,6 @@ CG_DrawWeapReticle
 */
 static void CG_DrawWeapReticle(void) {
 	qboolean fg, garand, k43;
-
 	// DHM - Nerve :: So that we will draw reticle
 	if ((cg.snap->ps.pm_flags & PMF_FOLLOW) || cg.demoPlayback) {
 		garand = (qboolean)(cg.snap->ps.weapon == WP_GARAND_SCOPE);
@@ -806,56 +804,38 @@ static void CG_DrawWeapReticle(void) {
 		k43    = (qboolean)(cg.weaponSelect == WP_K43_SCOPE);
 	}
 
+	// sides
+	CG_FillRect(0, 0, 80 + cgs.wideXoffset, SCREEN_HEIGHT, colorBlack);
+	CG_FillRect(560 + cgs.wideXoffset, 0, 80 + cgs.wideXoffset, SCREEN_HEIGHT, colorBlack);
+
+	// center
+	if (cgs.media.reticleShaderSimple) {
+		CG_DrawPic(80 + cgs.wideXoffset, 0, SCREEN_HEIGHT, SCREEN_HEIGHT, cgs.media.reticleShaderSimple);
+	}
+
 	if (fg) {
-		// sides
-		CG_FillRect(0, 0, 80, 480, colorBlack);
-		CG_FillRect(560, 0, 80, 480, colorBlack);
-
-		// center
-		if (cgs.media.reticleShaderSimple) {
-			CG_DrawPic(80, 0, 480, 480, cgs.media.reticleShaderSimple);
-		}
-
 		// hairs
-		CG_FillRect(84, 239, 150, 3, colorBlack);     // left
-		CG_FillRect(234, 240, 173, 1, colorBlack);    // horiz center
-		CG_FillRect(407, 239, 150, 3, colorBlack);    // right
+		CG_FillRect(84 + cgs.wideXoffset, 239, 150, 3, colorBlack);     // left
+		CG_FillRect(234 + cgs.wideXoffset, 240, 173, 1, colorBlack);    // horiz center
+		CG_FillRect(407 + cgs.wideXoffset, 239, 150, 3, colorBlack);    // right
 
-		CG_FillRect(319, 2, 3, 151, colorBlack);      // top center top
-		CG_FillRect(320, 153, 1, 114, colorBlack);    // top center bot
+		CG_FillRect(319 + cgs.wideXoffset, 2, 3, 151, colorBlack);      // top center top
+		CG_FillRect(320 + cgs.wideXoffset, 153, 1, 114, colorBlack);    // top center bot
 
-		CG_FillRect(320, 241, 1, 87, colorBlack);     // bot center top
-		CG_FillRect(319, 327, 3, 151, colorBlack);    // bot center bot
+		CG_FillRect(320 + cgs.wideXoffset, 241, 1, 87, colorBlack);     // bot center top
+		CG_FillRect(319 + cgs.wideXoffset, 327, 3, 151, colorBlack);    // bot center bot
 	} else if (garand) {
-		// sides
-		CG_FillRect(0, 0, 80, 480, colorBlack);
-		CG_FillRect(560, 0, 80, 480, colorBlack);
-
-		// center
-		if (cgs.media.reticleShaderSimple) {
-			CG_DrawPic(80, 0, 480, 480, cgs.media.reticleShaderSimple);
-		}
-
 		// hairs
-		CG_FillRect(84, 239, 177, 2, colorBlack);     // left
-		CG_FillRect(320, 242, 1, 58, colorBlack);     // center top
-		CG_FillRect(319, 300, 2, 178, colorBlack);    // center bot
-		CG_FillRect(380, 239, 177, 2, colorBlack);    // right
+		CG_FillRect(84 + cgs.wideXoffset, 239, 177, 2, colorBlack);     // left
+		CG_FillRect(320 + cgs.wideXoffset, 242, 1, 58, colorBlack);     // center top
+		CG_FillRect(319 + cgs.wideXoffset, 300, 2, 178, colorBlack);    // center bot
+		CG_FillRect(380 + cgs.wideXoffset, 239, 177, 2, colorBlack);    // right
 	} else if (k43) {
-		// sides
-		CG_FillRect(0, 0, 80, 480, colorBlack);
-		CG_FillRect(560, 0, 80, 480, colorBlack);
-
-		// center
-		if (cgs.media.reticleShaderSimple) {
-			CG_DrawPic(80, 0, 480, 480, cgs.media.reticleShaderSimple);
-		}
-
 		// hairs
-		CG_FillRect(84, 239, 177, 2, colorBlack);     // left
-		CG_FillRect(320, 242, 1, 58, colorBlack);     // center top
-		CG_FillRect(319, 300, 2, 178, colorBlack);    // center bot
-		CG_FillRect(380, 239, 177, 2, colorBlack);    // right
+		CG_FillRect(84 + cgs.wideXoffset, 239, 177, 2, colorBlack);     // left
+		CG_FillRect(320 + cgs.wideXoffset, 242, 1, 58, colorBlack);     // center top
+		CG_FillRect(319 + cgs.wideXoffset, 300, 2, 178, colorBlack);    // center bot
+		CG_FillRect(380 + cgs.wideXoffset, 239, 177, 2, colorBlack);    // right
 	}
 }
 
@@ -866,17 +846,17 @@ CG_DrawBinocReticle
 */
 static void CG_DrawBinocReticle(void) {
 	if (cgs.media.binocShaderSimple) {
-		CG_DrawPic(0, 0, 640, 480, cgs.media.binocShaderSimple);
+		CG_DrawPic(0, 0, CG_WideX(SCREEN_WIDTH), SCREEN_HEIGHT, cgs.media.binocShaderSimple);
 	}
 
-	CG_FillRect(146, 239, 348, 1, colorBlack);
-	CG_FillRect(188, 234, 1, 13, colorBlack);     // ll
-	CG_FillRect(234, 226, 1, 29, colorBlack);     // l
-	CG_FillRect(274, 234, 1, 13, colorBlack);     // lr
-	CG_FillRect(320, 213, 1, 55, colorBlack);     // center
-	CG_FillRect(360, 234, 1, 13, colorBlack);     // rl
-	CG_FillRect(406, 226, 1, 29, colorBlack);     // r
-	CG_FillRect(452, 234, 1, 13, colorBlack);     // rr
+	CG_FillRect(146 + cgs.wideXoffset, 239, 348, 1, colorBlack);
+	CG_FillRect(188 + cgs.wideXoffset, 234, 1, 13, colorBlack);     // ll
+	CG_FillRect(234 + cgs.wideXoffset, 226, 1, 29, colorBlack);     // l
+	CG_FillRect(274 + cgs.wideXoffset, 234, 1, 13, colorBlack);     // lr
+	CG_FillRect(320 + cgs.wideXoffset, 213, 1, 55, colorBlack);     // center
+	CG_FillRect(360 + cgs.wideXoffset, 234, 1, 13, colorBlack);     // rl
+	CG_FillRect(406 + cgs.wideXoffset, 226, 1, 29, colorBlack);     // r
+	CG_FillRect(452 + cgs.wideXoffset, 234, 1, 13, colorBlack);     // rr
 }
 
 /*
@@ -1177,6 +1157,8 @@ static void CG_DrawCrosshairNames(void) {
 	float    zChange;
 	qboolean hitClient = qfalse;
 	int      clientNum = cg.crosshairClientNum;
+	// suburb, widescreen support
+	float    middle = CG_WideX(SCREEN_WIDTH) / 2;
 
 	if (clientNum < 0 || clientNum >= MAX_CLIENTS || !cg_drawCrosshair.integer ||
 	    !cg_drawCrosshairNames.integer || cg.showScores || cg.renderingThirdPerson ||
@@ -1209,7 +1191,7 @@ static void CG_DrawCrosshairNames(void) {
 
 	w = (float)CG_Text_Width_Ext(s, 0.2f, 0, &cgs.media.limboFont1) / 2;
 
-	CG_Text_Paint_Ext(320 - w, 200, 0.2f, 0.2f, colorWhite, s, 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
+	CG_Text_Paint_Ext(middle - w, 200, 0.2f, 0.2f, colorWhite, s, 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
 
 	trap_R_SetColor(NULL);
 }
@@ -1513,7 +1495,7 @@ static void CG_DrawFlashZoomTransition(void) {
 
 		frac = frac / (float)fadeTime;
 		Vector4Set(color, 0, 0, 0, 1.0f - frac);
-		CG_FillRect(-10, -10, 650, 490, color);
+		CG_FillRect(-10, -10, CG_WideX(SCREEN_WIDTH) + 10, SCREEN_HEIGHT + 10, color);
 	}
 }
 
@@ -1562,7 +1544,7 @@ static void CG_DrawFlashFire(void) {
 		col[2] = alpha;
 		col[3] = alpha;
 		trap_R_SetColor(col);
-		CG_DrawPic(-10, -10, 650, 490, cgs.media.viewFlashFire[(cg.time / 50) % 16]);
+		CG_DrawPic(-10, -10, CG_WideX(SCREEN_WIDTH) + 10, SCREEN_HEIGHT + 10, cgs.media.viewFlashFire[(cg.time / 50) % 16]);
 		trap_R_SetColor(NULL);
 
 		trap_S_AddLoopingSound(cg.snap->ps.origin, vec3_origin, cgs.media.flameSound, (int)(255.0 * alpha), 0);
@@ -1719,10 +1701,10 @@ static void CG_DrawObjectiveInfo(void) {
 	backColor[3] = 0.5 * color[3];
 	trap_R_SetColor(backColor);
 
-	CG_DrawPic(x1, y1, x2 - x1, y2 - y1, cgs.media.teamStatusBar);
+	CG_DrawPic(x1 + cgs.wideXoffset, y1, x2 - x1, y2 - y1, cgs.media.teamStatusBar);
 
 	VectorSet(backColor, 0, 0, 0);
-	CG_DrawRect(x1, y1, x2 - x1, y2 - y1, 1, backColor);
+	CG_DrawRect(x1 + cgs.wideXoffset, y1, x2 - x1, y2 - y1, 1, backColor);
 
 	trap_R_SetColor(color);
 
@@ -1748,7 +1730,7 @@ static void CG_DrawObjectiveInfo(void) {
 
 		x = 320 - w / 2; // JPW NERVE
 
-		CG_DrawStringExt(x, y, linebuffer, color, qfalse, qtrue,
+		CG_DrawStringExt(x + cgs.wideXoffset, y, linebuffer, color, qfalse, qtrue,
 		                 cg.oidPrintCharWidth, (int)(cg.oidPrintCharWidth * 1.5), 0);
 
 		y += cg.oidPrintCharWidth * 1.5;
@@ -1821,7 +1803,7 @@ static void CG_ScreenFade(void) {
 			return;
 		}
 
-		CG_FillRect(0, 0, 640, 480, cg.fadeColor1);
+		CG_FillRect(0, 0, CG_WideX(SCREEN_WIDTH), SCREEN_HEIGHT, cg.fadeColor1);
 
 	} else {
 		int    i;
@@ -1836,7 +1818,7 @@ static void CG_ScreenFade(void) {
 		}
 
 		if (color[3]) {
-			CG_FillRect(0, 0, 640, 480, color);
+			CG_FillRect(0, 0, CG_WideX(SCREEN_WIDTH), SCREEN_HEIGHT, color);
 		}
 	}
 }
@@ -1995,8 +1977,8 @@ static void CG_DrawPlayerStatus(void) {
 	rectDef_t rect;
 
 	// Draw weapon icon and overheat bar
-	rect.x = 640 - 82;
-	rect.y = 480 - 56;
+	rect.x = CG_WideX(SCREEN_WIDTH) - 82;
+	rect.y = SCREEN_HEIGHT - 56;
 	rect.w = 60;
 	rect.h = 32;
 	CG_DrawWeapHeat(&rect, HUD_HORIZONTAL);
@@ -2012,23 +1994,23 @@ static void CG_DrawPlayerStatus(void) {
 	CG_PlayerAmmoValue(&value, &value2, &value3);
 	if (value3 >= 0) {
 		Com_sprintf(buffer, sizeof (buffer), "%i|%i/%i", value3, value, value2);
-		CG_Text_Paint_Ext(640 - 22 - CG_Text_Width_Ext(buffer, .25f, 0, &cgs.media.limboFont1), 480 - 1 * (16 + 2) + 12 - 4, .25f, .25f, colorWhite, buffer, 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
+		CG_Text_Paint_Ext(CG_WideX(SCREEN_WIDTH) - 22 - CG_Text_Width_Ext(buffer, .25f, 0, &cgs.media.limboFont1), 480 - 1 * (16 + 2) + 12 - 4, .25f, .25f, colorWhite, buffer, 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
 	} else if (value2 >= 0) {
 		Com_sprintf(buffer, sizeof (buffer), "%i/%i", value, value2);
-		CG_Text_Paint_Ext(640 - 22 - CG_Text_Width_Ext(buffer, .25f, 0, &cgs.media.limboFont1), 480 - 1 * (16 + 2) + 12 - 4, .25f, .25f, colorWhite, buffer, 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
+		CG_Text_Paint_Ext(CG_WideX(SCREEN_WIDTH) - 22 - CG_Text_Width_Ext(buffer, .25f, 0, &cgs.media.limboFont1), 480 - 1 * (16 + 2) + 12 - 4, .25f, .25f, colorWhite, buffer, 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
 	} else if (value >= 0) {
 		Com_sprintf(buffer, sizeof (buffer), "%i", value);
-		CG_Text_Paint_Ext(640 - 22 - CG_Text_Width_Ext(buffer, .25f, 0, &cgs.media.limboFont1), 480 - 1 * (16 + 2) + 12 - 4, .25f, .25f, colorWhite, buffer, 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
+		CG_Text_Paint_Ext(CG_WideX(SCREEN_WIDTH) - 22 - CG_Text_Width_Ext(buffer, .25f, 0, &cgs.media.limboFont1), 480 - 1 * (16 + 2) + 12 - 4, .25f, .25f, colorWhite, buffer, 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
 	}
 
 	rect.x = 4; // Nico, 24 -> 4
-	rect.y = 480 - 92;
+	rect.y = SCREEN_HEIGHT - 92;
 	rect.w = 12;
 	rect.h = 72;
 	CG_DrawPlayerHealthBar(&rect);
 
-	rect.x = 640 - 16;
-	rect.y = 480 - 92;
+	rect.x = CG_WideX(SCREEN_WIDTH) - 16;
+	rect.y = SCREEN_HEIGHT - 92;
 	rect.w = 12;
 	rect.h = 72;
 	CG_DrawWeapRecharge(&rect);

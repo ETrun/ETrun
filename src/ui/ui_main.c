@@ -3904,14 +3904,19 @@ void _UI_Init(void) {
 	UI_ParseGLConfig();
 
 	// for 640x480 virtualized screen
-	uiInfo.uiDC.yscale = uiInfo.uiDC.glconfig.vidHeight * (1.0 / 480.0);
-	uiInfo.uiDC.xscale = uiInfo.uiDC.glconfig.vidWidth * (1.0 / 640.0);
-	if (uiInfo.uiDC.glconfig.vidWidth * 480 > uiInfo.uiDC.glconfig.vidHeight * 640) {
+	uiInfo.uiDC.yscale = uiInfo.uiDC.glconfig.vidHeight * (1.0 / 480.0f);
+	uiInfo.uiDC.xscale = uiInfo.uiDC.glconfig.vidWidth * (1.0 / 640.0f);
+	if (uiInfo.uiDC.glconfig.vidWidth * SCREEN_HEIGHT > uiInfo.uiDC.glconfig.vidHeight * SCREEN_WIDTH) {
 		// wide screen
-		uiInfo.uiDC.bias = 0.5 * (uiInfo.uiDC.glconfig.vidWidth - (uiInfo.uiDC.glconfig.vidHeight * (640.0 / 480.0)));
+		uiInfo.uiDC.bias = 0.5 * (uiInfo.uiDC.glconfig.vidWidth - (uiInfo.uiDC.glconfig.vidHeight * (640.0f / 480.0f)));
 	} else {
 		// no wide screen
 		uiInfo.uiDC.bias = 0;
+	}
+
+	// suburb, widescreen support
+	if (ui_widescreenSupport.integer) {
+		uiInfo.uiDC.glconfig.windowAspect = (float)uiInfo.uiDC.glconfig.vidWidth / (float)uiInfo.uiDC.glconfig.vidHeight;
 	}
 
 	uiInfo.uiDC.registerShaderNoMip  = &trap_R_RegisterShaderNoMip;
@@ -4068,8 +4073,8 @@ void _UI_MouseEvent(int dx, int dy) {
 	uiInfo.uiDC.cursorx += dx;
 	if (uiInfo.uiDC.cursorx < 0) {
 		uiInfo.uiDC.cursorx = 0;
-	} else if (uiInfo.uiDC.cursorx > SCREEN_WIDTH) {
-		uiInfo.uiDC.cursorx = SCREEN_WIDTH;
+	} else if (uiInfo.uiDC.cursorx > UI_WideX(SCREEN_WIDTH)) {
+		uiInfo.uiDC.cursorx = (int)(UI_WideX(SCREEN_WIDTH));
 	}
 
 	uiInfo.uiDC.cursory += dy;
@@ -4332,6 +4337,7 @@ vmCvar_t ui_prevTeam;
 vmCvar_t ui_prevClass;
 vmCvar_t ui_prevWeapon;
 vmCvar_t ui_isSpectator;
+vmCvar_t ui_widescreenSupport;
 vmCvar_t ui_glCustom;    // JPW NERVE missing from q3ta
 vmCvar_t cl_profile;
 vmCvar_t cl_defaultProfile;
@@ -4385,6 +4391,10 @@ cvarTable_t cvarTable[] =
 	{ &ui_prevWeapon,                   "ui_prevWeapon",                   "-1",                         0,                              0 },
 
 	{ &ui_isSpectator,                  "ui_isSpectator",                  "1",                          0,                              0 },
+
+	// suburb, widescreen support
+	{ &ui_widescreenSupport,            "cg_widescreenSupport",            "1",                          CVAR_ARCHIVE,                   0 },
+
 	// -NERVE - SMF
 
 	{ NULL,                             "cg_drawBuddies",                  "1",                          CVAR_ARCHIVE,                   0 },

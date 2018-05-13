@@ -135,6 +135,28 @@ void Tooltip_ComputePosition(itemDef_t *item) {
 
 /*
 ===============
+UI_WideX
+
+@author suburb, widescreen support
+===============
+*/
+float UI_WideX(float x) {
+	return (DC->glconfig.windowAspect <= RATIO43) ? x : x * (DC->glconfig.windowAspect * RPRATIO43); // aspectratio / (4/3)
+}
+
+/*
+===============
+UI_WideXoffset
+
+@author suburb, widescreen support
+===============
+*/
+float UI_WideXoffset(void) {
+	return (DC->glconfig.windowAspect <= RATIO43) ? 0.0f : ((640.0f * (DC->glconfig.windowAspect * RPRATIO43)) - 640.0f) * 0.5f;
+}
+
+/*
+===============
 UI_Alloc
 ===============
 */
@@ -638,16 +660,63 @@ void Item_UpdatePosition(itemDef_t *item) {
 void Menu_UpdatePosition(menuDef_t *menu) {
 	int   i;
 	float x, y;
+	float xoffset = UI_WideXoffset();
+	rectDef_t  *r;
+	qboolean fullscreenItem = qfalse;
+	qboolean fullscreenMenu = qfalse;
+	qboolean centered = qfalse;
+	const char *menuName = NULL;
+	const char *itemName = NULL;
 
 	if (menu == NULL) {
 		return;
 	}
 
-	x = menu->window.rect.x;
-	y = menu->window.rect.y;
+	r = &menu->window.rect;
+	fullscreenMenu = (r->x == 0 && r->y == 0 && r->w == SCREEN_WIDTH && r->h == SCREEN_HEIGHT) ? qtrue : qfalse;
+	centered = (r->x == 16 && r->w == 608) ? qtrue : qfalse;
+	menuName = menu->window.name;
 
-	for (i = 0; i < menu->itemCount; ++i) {
-		Item_SetScreenCoords(menu->items[i], x, y);
+	x = r->x;
+	y = r->y;
+
+	for (i = 0; i < menu->itemCount; i++) {
+
+		itemName = menu->items[i]->window.name;
+		r = &menu->items[i]->window.rectClient;
+		fullscreenItem = (x == 0 && y == 0 && r->w == SCREEN_WIDTH && r->h == SCREEN_HEIGHT) ? qtrue : qfalse;
+
+		if (!Q_stricmp(itemName, "clouds")) {
+			r->w = r->w + 2 * xoffset;
+		} else if (fullscreenItem) {
+			r->w = UI_WideX(SCREEN_WIDTH);
+		}
+
+		// etlegacy menu alignment
+		if ((fullscreenMenu && !fullscreenItem) || !Q_stricmp(menuName, "main") || !Q_stricmp(menuName, "ingame_main") || centered)	{
+			if (!Q_stricmp(itemName, "atvi_logo") ||
+				!Q_stricmp(itemName, "id_logo")) {
+				// align to right of screen
+				Item_SetScreenCoords(menu->items[i], x + 2 * xoffset, y);
+			} else if (!Q_stricmp(itemName, "et_logo")) {
+				// horizontally centered
+				Item_SetScreenCoords(menu->items[i], x + xoffset, y);
+			} else if (!Q_stricmp(menuName, "main") || !Q_stricmp(menuName, "ingame_main")) {
+				// normal (left aligned)
+				Item_SetScreenCoords(menu->items[i], x, y);
+			} else {
+				// horizontally centered
+				Item_SetScreenCoords(menu->items[i], x + xoffset, y);
+			}
+		} else {
+			// normal (left aligned)
+			Item_SetScreenCoords(menu->items[i], x, y);
+		}
+
+	}
+
+	if (centered) {
+		menu->window.rect.x += xoffset;
 	}
 }
 
@@ -658,8 +727,8 @@ void Menu_PostParse(menuDef_t *menu) {
 	if (menu->fullScreen) {
 		menu->window.rect.x = 0;
 		menu->window.rect.y = 0;
-		menu->window.rect.w = 640;
-		menu->window.rect.h = 480;
+		menu->window.rect.w = SCREEN_WIDTH;
+		menu->window.rect.h = SCREEN_HEIGHT;
 	}
 	Menu_UpdatePosition(menu);
 }
@@ -696,12 +765,16 @@ qboolean IsVisible(int flags) {
 }
 
 qboolean Rect_ContainsPoint(rectDef_t *rect, float x, float y) {
-	if (rect &&
-	    x > rect->x &&
-	    x < rect->x + rect->w &&
-	    y > rect->y &&
-	    y < rect->y + rect->h) {
-		return qtrue;
+	if (rect) {
+		// suburb, widescreen support
+		x = UI_WideX(x);
+
+		if (x > UI_WideX(rect->x) &&
+			x < UI_WideX(rect->x + rect->w) &&
+			y > rect->y &&
+			y < rect->y + rect->h) {
+			return qtrue;
+		}
 	}
 	return qfalse;
 }
@@ -4283,6 +4356,12 @@ void AdjustFrom640(float *x, float *y, float *w, float *h) {
 	*y *= DC->yscale;
 	*w *= DC->xscale;
 	*h *= DC->yscale;
+
+	// suburb, widescreen support
+	if (DC->glconfig.windowAspect > RATIO43) {
+		*x *= RATIO43 / DC->glconfig.windowAspect;
+		*w *= RATIO43 / DC->glconfig.windowAspect;
+	}
 }
 
 void Item_Model_Paint(itemDef_t *item) {
@@ -7081,6 +7160,20 @@ void BG_PanelButtonsSetup(panel_button_t **buttons) {
 		if (button->shaderNormal) {
 			button->hShaderNormal = trap_R_RegisterShaderNoMip(button->shaderNormal);
 		}
+	}
+}
+
+// suburb, widescreen support
+void BG_PanelButtonsSetupWide(panel_button_t **buttons, float xoffset) {
+	panel_button_t *button;
+
+	if (xoffset == 0.0f) {
+		return;
+	}
+
+	for (; *buttons; buttons++) {
+		button = (*buttons);
+		button->rect.x += xoffset;
 	}
 }
 

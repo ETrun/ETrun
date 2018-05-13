@@ -57,7 +57,7 @@ static void WM_ETrun_print(const char *s, fontInfo_t *font, float scale, int x, 
  * @author Nico
  */
 static void WM_ETrun_center_print(const char *s, fontInfo_t *font, float scale, int y, qboolean shadowed) {
-	WM_ETrun_print(s, font, scale, SCREEN_WIDTH / 2 - CG_Text_Width_Ext(s, scale, 0, font) / 2, y, shadowed, 0);
+	WM_ETrun_print(s, font, scale, CG_WideX(SCREEN_WIDTH) / 2 - CG_Text_Width_Ext(s, scale, 0, font) / 2, y, shadowed, 0);
 }
 
 /* Insert sort
@@ -130,7 +130,7 @@ static void WM_ETrun_DrawHeader(int *y, fontInfo_t *font) {
 	const char *s;
 
 	// ETrun x.x
-	CG_DrawPic(SCREEN_WIDTH / 2 - MOD_LOGO_SIZE / 2, *y - MOD_LOGO_SIZE / 2, MOD_LOGO_SIZE, MOD_LOGO_SIZE, cgs.media.modLogo);
+	CG_DrawPic(CG_WideX(SCREEN_WIDTH) / 2 - MOD_LOGO_SIZE / 2, *y - MOD_LOGO_SIZE / 2, MOD_LOGO_SIZE, MOD_LOGO_SIZE, cgs.media.modLogo);
 
 	WM_ETrun_newlines(4, y, SMALLCHAR_HEIGHT);
 
@@ -155,6 +155,7 @@ static void WM_ETrun_DrawPlayers(int *x, int *y, fontInfo_t *font, s_timerunScor
 
 	// Draw "Players"
 	s     = "Players";
+	*x    += cgs.wideXoffset;
 	tempx = *x + INFO_TOTAL_WIDTH / 2  - CG_Text_Width_Ext(s, 0.25f, 0, &cgs.media.limboFont1) / 2;
 	WM_ETrun_print(s, font, 0.25f, tempx, *y, qtrue, 0);
 
@@ -288,6 +289,7 @@ static void WM_ETrun_DrawSpectators(int *x, int *y, fontInfo_t *font, s_timerunS
 
 	// Draw "Spectators"
 	s     = "Spectators";
+	*x    += cgs.wideXoffset;
 	tempx = *x + INFO_SPEC_TOTAL_WIDTH / 2  - CG_Text_Width_Ext(s, 0.25f, 0, &cgs.media.limboFont1) / 2;
 	WM_ETrun_print(s, font, 0.25f, tempx, *y, qtrue, 0);
 
@@ -381,7 +383,7 @@ static void WM_ETrun_DrawSpectators(int *x, int *y, fontInfo_t *font, s_timerunS
  *
  * @author Nico
  */
-#define SB_INFO_X       550
+#define SB_INFO_X       CG_WideX(SCREEN_WIDTH) - 90
 #define SB_INFO_Y       9
 static void WM_ETrun_DrawInfo() {
 	int   x                      = SB_INFO_X;
@@ -544,7 +546,7 @@ qboolean CG_DrawScoreboard(void) {
 			WM_ETrun_DrawPlayers(&x, &y, &cgs.media.limboFont1, orderedScores, numScores);
 
 			// Nico, draw spectators on a second column
-			x = SCREEN_WIDTH - INFO_SPEC_TOTAL_WIDTH - (SCREEN_WIDTH / 2 - INFO_SPEC_TOTAL_WIDTH) / 2; // Nico, center horizontally
+			x = (SCREEN_WIDTH - INFO_SPEC_TOTAL_WIDTH - SCREEN_WIDTH / 2 - INFO_SPEC_TOTAL_WIDTH) / 2; // Nico, center horizontally
 			y = yCopy;
 			WM_ETrun_DrawSpectators(&x, &y, &cgs.media.limboFont1, orderedScores, numScores);
 

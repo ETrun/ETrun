@@ -59,6 +59,8 @@ extern vmCvar_t ui_browserShowPasswordProtected;
 extern vmCvar_t ui_browserShowAntilag;
 extern vmCvar_t ui_serverStatusTimeOut;
 extern vmCvar_t ui_isSpectator;
+
+extern vmCvar_t ui_widescreenSupport;
 // -NERVE - SMF
 
 extern vmCvar_t cl_profile;
