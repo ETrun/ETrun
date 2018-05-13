@@ -1817,6 +1817,7 @@ extern vmCvar_t cg_minStartSpeed;
 
 // suburb, widescreen support
 extern vmCvar_t cg_widescreenSupport;
+extern vmCvar_t cg_realFov;
 // Nico, end of ETrun cvars
 
 //

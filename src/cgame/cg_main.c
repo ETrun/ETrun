@@ -343,6 +343,7 @@ vmCvar_t cg_minStartSpeed;
 
 // suburb, widescreen support
 vmCvar_t cg_widescreenSupport;
+vmCvar_t cg_realFov;
 // Nico, end of ETrun cvars
 
 typedef struct {
@@ -606,6 +607,7 @@ cvarTable_t cvarTable[] =
 
 	// suburb, widescreen support
 	{ &cg_widescreenSupport,    "cg_widescreenSupport",    "1",     CVAR_ARCHIVE,             0 },
+	{ &cg_realFov,              "cg_realFov",              "0",     CVAR_ARCHIVE,             0 },
 	// Nico, end of ETrun cvars
 };
 
