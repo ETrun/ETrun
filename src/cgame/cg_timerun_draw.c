@@ -1,5 +1,4 @@
 #include "cg_local.h"
-#include "..\game\q_shared.h"
 
 /**
  * Draw checkpoints times
@@ -931,7 +930,7 @@ void CG_DrawBannerPrint(void) {
 void CG_UpdateJumpSpeeds(void) {
 	int speed = 0;
 
-	if (cg.timerunJumpCounter < cg.predictedPlayerState.identifyClientHealth && cg.timerunJumpCounter < (int)(sizeof(cg.timerunJumpSpeeds) / sizeof(cg.timerunJumpSpeeds[0]))) {
+	if (cg.timerunJumpCounter < cg.predictedPlayerState.identifyClientHealth && cg.timerunJumpCounter < (int)(sizeof (cg.timerunJumpSpeeds) / sizeof (cg.timerunJumpSpeeds[0]))) {
 		speed                                       = sqrt(cg.predictedPlayerState.velocity[0] * cg.predictedPlayerState.velocity[0] + cg.predictedPlayerState.velocity[1] * cg.predictedPlayerState.velocity[1]);
 		cg.timerunJumpSpeeds[cg.timerunJumpCounter] = speed;
 		cg.timerunJumpCounter                       = cg.predictedPlayerState.identifyClientHealth;
