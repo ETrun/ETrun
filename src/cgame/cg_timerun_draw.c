@@ -949,8 +949,7 @@ void CG_DrawInfoPanel(void) {
 			x += 20;
 		}
 
-		textScale = 0.12f;
-		textScale = CG_AdjustFontSize(textScale, cg.timerunJumpSpeeds[i], INFO_PANEL_FONT_ADJUST_NEEDED);
+		textScale = CG_AdjustFontSize(0.12f, cg.timerunJumpSpeeds[i], INFO_PANEL_FONT_ADJUST_NEEDED);
 
 		// If speed at jump n is slower than speed at jump n - 1, use red color
 		if (i > 0 && cg.timerunJumpSpeeds[i] < cg.timerunJumpSpeeds[i - 1]) {
