@@ -35,14 +35,15 @@ menuDef {
 #define SUBWINDOW_WIDTH		WINDOW_WIDTH-12
 
 	SUBWINDOW( 6, 32, (SUBWINDOW_WIDTH), 100, "Scoreboard legend" )
-	LABELWHITE( 6, 48, .5*(WINDOW_WIDTH-24), 10, "^2R^w:player is in a timerun", .2, ITEM_ALIGN_RIGHT, .5*(WINDOW_WIDTH-24), 8 )
-	LABELWHITE( 6, 64, .5*(WINDOW_WIDTH-24), 10, "^7L^w: player is logged-in", .2, ITEM_ALIGN_RIGHT, .5*(WINDOW_WIDTH-24), 8 )
-	LABELWHITE( 6, 80, .5*(WINDOW_WIDTH-24), 10, "^8C^w: player is using CGaz", .2, ITEM_ALIGN_RIGHT, .5*(WINDOW_WIDTH-24), 8 )
-	LABELWHITE( 6, 96, .5*(WINDOW_WIDTH-24), 10, "^9H^w: player is hidden", .2, ITEM_ALIGN_RIGHT, .5*(WINDOW_WIDTH-24), 8 )
-	LABELWHITE( 6, 112, .5*(WINDOW_WIDTH-24), 10, "^bS^w:player is speclocked", .2, ITEM_ALIGN_RIGHT, .5*(WINDOW_WIDTH-24), 8 )
+	LABELWHITE( 6, 48, .5*(WINDOW_WIDTH-24), 10, "^2R^w: player is in a timerun", .2, ITEM_ALIGN_LEFT, 6, 8 )
+	LABELWHITE( 6, 64, .5*(WINDOW_WIDTH-24), 10, "^7L^w: player is logged-in", .2, ITEM_ALIGN_LEFT, 6, 8 )
+	LABELWHITE( 6, 80, .5*(WINDOW_WIDTH-24), 10, "^8C^w: player is using CGaz", .2, ITEM_ALIGN_LEFT, 6, 8 )
+	LABELWHITE( 6, 96, .5*(WINDOW_WIDTH-24), 10, "^9H^w: player is hidden", .2, ITEM_ALIGN_LEFT, 6, 8 )
+	LABELWHITE( 6, 112, .5*(WINDOW_WIDTH-24), 10, "^bS^w: player is speclocked", .2, ITEM_ALIGN_LEFT, 6, 8 )
 
 	SUBWINDOW( 6, 134, (SUBWINDOW_WIDTH), 50, "Commands" )
-	LABELWHITE( 6, 150, .5*(WINDOW_WIDTH-24), 10, "Type /h in console", .2, ITEM_ALIGN_RIGHT, .5*(WINDOW_WIDTH-24), 8 )
+	LABELWHITE( 6, 150, WINDOW_WIDTH-24, 10, "/tutorial : Displays an ETrun introduction", .2, ITEM_ALIGN_LEFT, 6, 8 )
+	LABELWHITE( 6, 166, .5*(WINDOW_WIDTH-24), 10, "/h : Displays an ETrun commands list", .2, ITEM_ALIGN_LEFT, 6, 8 )
 
 // Buttons //
 	
