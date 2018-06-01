@@ -650,8 +650,12 @@ void CG_ColorForHealth(vec4_t hcolor) {
 	}
 }
 
+/*
+=================
+CG_TranslateString
+=================
+*/
 #define MAX_VA_STRING       32000
-
 char *CG_TranslateString(const char *string) {
 	static char staticbuf[2][MAX_VA_STRING];
 	static int  bufcount = 0;
@@ -666,4 +670,22 @@ char *CG_TranslateString(const char *string) {
 	trap_TranslateString(string, buf);
 
 	return buf;
+}
+
+/*
+=================
+CG_AdjustFontSize
+
+Returns a modified textScale value, the bigger the inserted
+value, the smaller is the output
+
+@author suburb
+=================
+*/
+float CG_AdjustFontSize(float textScale, int valueToPrint, int border){
+	if (valueToPrint >= border) {
+		float textScaleFactor = 0.02f * GetDigits(valueToPrint) - 0.08f;
+		textScale -= textScaleFactor;
+	}
+	return textScale;
 }
