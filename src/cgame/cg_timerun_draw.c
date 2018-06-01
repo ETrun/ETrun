@@ -113,7 +113,15 @@ void CG_DrawSpeedMeter(void) {
 
 	w = CG_Text_Width_Ext(status, sizex, sizey, &cgs.media.limboFont1) / 2;
 
-	CG_Text_Paint_Ext(x - w, y, sizex, sizey, colorWhite, status, 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
+	if (cg_drawAccel.integer && speed > cg.oldSpeed + 0.001f * cg_accelSmoothness.integer) {
+		CG_Text_Paint_Ext(x - w, y, sizex, sizey, colorGreen, status, 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
+	} else if (cg_drawAccel.integer && speed < cg.oldSpeed - 0.001f * cg_accelSmoothness.integer) {
+		CG_Text_Paint_Ext(x - w, y, sizex, sizey, colorRed, status, 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
+	} else {
+		CG_Text_Paint_Ext(x - w, y, sizex, sizey, colorWhite, status, 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
+	}
+	
+	cg.oldSpeed = speed;
 }
 
 /**
