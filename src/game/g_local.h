@@ -543,10 +543,13 @@ typedef struct {
 	int numReliableCmds;
 	int thresholdTime;
 
+	// enable double load click to reset time in vet
+        long lastLoadTime;
+  
 	// Nico, save/load
 	save_position_t alliesSaves[MAX_SAVED_POSITIONS];
 	save_position_t axisSaves[MAX_SAVED_POSITIONS];
-
+	
 	// Nico, was it a selfkill last time you died?
 	qboolean lastDieWasASelfkill;
 
