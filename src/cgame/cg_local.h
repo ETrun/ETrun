@@ -1010,6 +1010,9 @@ typedef struct {
 	float snapSpeed;
 	int snapCount;
 
+	// Accel HUD
+	float oldSpeed;
+
 	// Nico, end of ETrun client variables
 } cg_t;
 
@@ -1739,6 +1742,10 @@ extern vmCvar_t cg_drawSpeedMeter;
 extern vmCvar_t cg_speedMeterX;
 extern vmCvar_t cg_speedMeterY;
 
+// Accel HUD
+extern vmCvar_t cg_drawAccel;
+extern vmCvar_t cg_accelSmoothness;
+
 // Timer
 extern vmCvar_t cg_drawTimer;
 extern vmCvar_t cg_timerX;
@@ -1923,11 +1930,13 @@ void CG_DrawTopBottom_NoScale(float x, float y, float w, float h, float size);
 void CG_FillAngleYaw(float start, float end, float viewangle, float y, float height, int fov, const float *color);
 
 // NERVE - SMF - localization functions
-void CG_InitTranslation();
+void CG_InitTranslation(void);
 char *CG_TranslateString(const char *string);
-void CG_SaveTransTable();
-void CG_ReloadTranslation();
-// -NERVE - SMF
+void CG_SaveTransTable(void);
+void CG_ReloadTranslation(void);
+
+// suburb
+float CG_AdjustFontSize(float textScale, int valueToPrint, int border);
 
 //
 // cg_draw.c, cg_newDraw.c

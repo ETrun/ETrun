@@ -251,6 +251,10 @@ vmCvar_t cg_drawSpeedMeter;
 vmCvar_t cg_speedMeterX;
 vmCvar_t cg_speedMeterY;
 
+// Accel HUD
+vmCvar_t cg_drawAccel;
+vmCvar_t cg_accelSmoothness;
+
 // Timer
 vmCvar_t cg_drawTimer;
 vmCvar_t cg_timerX;
@@ -517,6 +521,10 @@ cvarTable_t cvarTable[] =
 	{ &cg_drawSpeedMeter,       "cg_drawSpeedMeter",       "1",     CVAR_ARCHIVE,             0 },
 	{ &cg_speedMeterX,          "cg_speedMeterX",          "320",   CVAR_ARCHIVE,             0 },
 	{ &cg_speedMeterY,          "cg_speedMeterY",          "220",   CVAR_ARCHIVE,             0 },
+
+	// Accel HUD
+	{ &cg_drawAccel,            "cg_drawAccel",            "0",     CVAR_ARCHIVE,             0 },
+	{ &cg_accelSmoothness,      "cg_accelSmoothness",      "100",   CVAR_ARCHIVE,             0 },
 
 	// Timer
 	{ &cg_drawTimer,            "cg_drawTimer",            "1",     CVAR_ARCHIVE,             0 },

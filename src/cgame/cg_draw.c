@@ -1427,6 +1427,8 @@ static void CG_DrawSpectatorMessage(void) {
 
 	str2 = BindingFromName("+attack");
 	CG_Text_Paint_Ext(INFOTEXT_STARTX, INFOTEXT_STARTY + 18, textScale, textScale, colorWhite, va("Press %s to follow next player", str2), 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
+
+	CG_Text_Paint_Ext(INFOTEXT_STARTX, INFOTEXT_STARTY + 36, textScale, textScale, colorWhite, "Type /tutorial into console for a quick introduction", 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
 }
 
 /*
@@ -2175,9 +2177,6 @@ static void CG_Draw2D(void) {
 
 		CG_DrawObjectiveInfo();
 
-		// Nico, draw speed meter
-		CG_DrawSpeedMeter();
-
 		// Nico, draw OB
 		CG_DrawOB();
 
@@ -2195,6 +2194,9 @@ static void CG_Draw2D(void) {
 
 		// suburb, draw velocity snapping
 		CG_DrawVelocitySnapping();
+
+		// Nico, draw speed meter
+		CG_DrawSpeedMeter();
 
 		// Nico, draw keys pressed
 		CG_DrawKeys();

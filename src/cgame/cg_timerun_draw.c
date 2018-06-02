@@ -113,7 +113,15 @@ void CG_DrawSpeedMeter(void) {
 
 	w = CG_Text_Width_Ext(status, sizex, sizey, &cgs.media.limboFont1) / 2;
 
-	CG_Text_Paint_Ext(x - w, y, sizex, sizey, colorWhite, status, 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
+	if (cg_drawAccel.integer && speed > cg.oldSpeed + 0.001f * cg_accelSmoothness.integer) {
+		CG_Text_Paint_Ext(x - w, y, sizex, sizey, colorGreen, status, 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
+	} else if (cg_drawAccel.integer && speed < cg.oldSpeed - 0.001f * cg_accelSmoothness.integer) {
+		CG_Text_Paint_Ext(x - w, y, sizex, sizey, colorRed, status, 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
+	} else {
+		CG_Text_Paint_Ext(x - w, y, sizex, sizey, colorWhite, status, 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
+	}
+	
+	cg.oldSpeed = speed;
 }
 
 /**
@@ -955,7 +963,6 @@ void CG_DrawInfoPanel(void) {
 	vec4_t panelBgColor    = { 0.f, 0.f, 0.f, .5f };
 	vec4_t textColor       = { 1.0f, 1.0f, 1.0f, 0.8f };
 	float  textScale       = 0.12f;
-	float  textScaleFactor = 0;
 	int    speed           = 0;
 	int    i               = 0;
 
@@ -983,27 +990,37 @@ void CG_DrawInfoPanel(void) {
 
 	// Print start speed
 	CG_Text_Paint_Ext(x, y += 10, textScale, textScale, textColor, " Start speed:", 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
-	// Colored start speed
+	textScale = CG_AdjustFontSize(textScale, cg.timerunStartSpeed, INFO_PANEL_FONT_ADJUST_NEEDED);
+
+	// Colour start speed
 	if (cg_minStartSpeed.value <= 0 || cg.timerunStartSpeed == 0 || cg.timerunStartSpeed >= cg_minStartSpeed.value) {
 		CG_Text_Paint_Ext(x + INFO_PANEL_X_PADDING, y, textScale, textScale, textColor, va("%d", cg.timerunStartSpeed), 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
 	} else {
 		CG_Text_Paint_Ext(x + INFO_PANEL_X_PADDING, y, textScale, textScale, textColor, va("^1%d", cg.timerunStartSpeed), 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
 	}
+	textScale = 0.12f;
 
 	// Print stop speed
 	CG_Text_Paint_Ext(x, y += 10, textScale, textScale, textColor, " Stop speed:", 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
+	textScale = CG_AdjustFontSize(textScale, cg.timerunStopSpeed, INFO_PANEL_FONT_ADJUST_NEEDED);
 	CG_Text_Paint_Ext(x + INFO_PANEL_X_PADDING, y, textScale, textScale, textColor, va("%d", cg.timerunStopSpeed), 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
+	textScale = 0.12f;
 
-	// Print run top speed
+	// Print run max speed
 	CG_Text_Paint_Ext(x, y += 10, textScale, textScale, textColor, " Run max speed:", 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
+	textScale = CG_AdjustFontSize(textScale, cg.runMaxSpeed, INFO_PANEL_FONT_ADJUST_NEEDED);
 	CG_Text_Paint_Ext(x + INFO_PANEL_X_PADDING, y, textScale, textScale, textColor, va("%d", cg.runMaxSpeed), 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
+	textScale = 0.12f;
 
 	// Print overall max speed
 	CG_Text_Paint_Ext(x, y += 10, textScale, textScale, textColor, " Overall max speed:", 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
+	textScale = CG_AdjustFontSize(textScale, cg.overallMaxSpeed, INFO_PANEL_FONT_ADJUST_NEEDED);
 	CG_Text_Paint_Ext(x + INFO_PANEL_X_PADDING, y, textScale, textScale, textColor, va("%d", cg.overallMaxSpeed), 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
+	textScale = 0.12f;
 
 	// Print jumps count
 	CG_Text_Paint_Ext(x, y += 10, textScale, textScale, textColor, " Jumps:", 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
+	textScale = CG_AdjustFontSize(textScale, cg.timerunJumpCounter, INFO_PANEL_FONT_ADJUST_NEEDED);
 	CG_Text_Paint_Ext(x + INFO_PANEL_X_PADDING, y, textScale, textScale, textColor, va("%d", cg.timerunJumpCounter), 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
 
 	// Print jump speeds
@@ -1014,13 +1031,7 @@ void CG_DrawInfoPanel(void) {
 			x += 20;
 		}
 
-		// suburb, decrease font size for higher speeds
-		textScale = 0.12f;
-
-		if (cg.timerunJumpSpeeds[i] >= INFO_PANEL_FONT_ADJUST_NEEDED) {
-			textScaleFactor = 0.02f * GetDigits(cg.timerunJumpSpeeds[i]) - 0.08f;
-			textScale      -= textScaleFactor;
-		}
+		textScale = CG_AdjustFontSize(0.12f, cg.timerunJumpSpeeds[i], INFO_PANEL_FONT_ADJUST_NEEDED);
 
 		// If speed at jump n is slower than speed at jump n - 1, use red color
 		if (i > 0 && cg.timerunJumpSpeeds[i] < cg.timerunJumpSpeeds[i - 1]) {

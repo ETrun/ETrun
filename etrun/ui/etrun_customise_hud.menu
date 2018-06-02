@@ -37,46 +37,48 @@ menuDef {
 	//
 	// Speed meter
 	//
-	SUBWINDOW( 6, 32, (SUBWINDOW_WIDTH), 60, "Speed meter" )
+	SUBWINDOW( 6, 32, (SUBWINDOW_WIDTH), 92, "Speed meter" )
 	YESNO( 8, 48, (SUBWINDOW_WIDTH)-4, 10, "Show speed meter:", .2, 8, "cg_drawSpeedMeter", "" )
 	SLIDER( 8, 64, (SUBWINDOW_WIDTH)-4, 10, "Speed meter X-position:", .2, 8, "cg_speedMeterX" 320 0 640, "Use the slider to move the speed meter" )
 	CVARFLOATLABEL( 8, 64, (SUBWINDOW_WIDTH)-4, 10, "cg_speedMeterX", .2, ITEM_ALIGN_RIGHT, $evalfloat((SUBWINDOW_WIDTH)-4), 8 )
 	SLIDER( 8, 78, (SUBWINDOW_WIDTH)-4, 10, "Speed meter Y-position:", .2, 8, "cg_speedMeterY" 240 0 480, "Use the slider to move the speed meter" )
 	CVARFLOATLABEL( 8, 78, (SUBWINDOW_WIDTH)-4, 10, "cg_speedMeterY", .2, ITEM_ALIGN_RIGHT, $evalfloat((SUBWINDOW_WIDTH)-4), 8 )
+	YESNO( 8, 94, (SUBWINDOW_WIDTH)-4, 10, "Show Accel:", .2, 8, "cg_drawAccel", "Draw Accel on speed meter" )
+	MULTI( 8, 110, (SUBWINDOW_WIDTH)-4, 10, "Accel smoothness:", .2, 8, "cg_accelSmoothness", cvarFloatList { "10" 10 "50" 50 "100" 100 "500" 500 "1000" 1000}, "How sensitive the accel reacts" )
 
 	//
 	// CGaz
 	//
-	SUBWINDOW( 6, 96, (SUBWINDOW_WIDTH), 30, "CGaz" )
-	MULTI( 8, 112, (SUBWINDOW_WIDTH)-4, 10, "Show CGaz:", .2, 8, "cg_drawCGaz", cvarFloatList { "No" 0 "Type 1" 1 "Type 2" 2 "Type 3" 3 "Type 4" 4}, "Show CGaz on HUD" )
+	SUBWINDOW( 6, 128, (SUBWINDOW_WIDTH), 30, "CGaz" )
+	MULTI( 8, 144, (SUBWINDOW_WIDTH)-4, 10, "Show CGaz:", .2, 8, "cg_drawCGaz", cvarFloatList { "No" 0 "Type 1" 1 "Type 2" 2 "Type 3" 3 "Type 4" 4}, "Show CGaz on HUD" )
 
 	//
 	// Timer
 	//
-	SUBWINDOW( 6, 130, (SUBWINDOW_WIDTH), 60, "Timer" )
-	YESNO( 8, 146, (SUBWINDOW_WIDTH)-4, 10, "Show timer:", .2, 8, "cg_drawTimer", "" )
-	SLIDER( 8, 162, (SUBWINDOW_WIDTH)-4, 10, "Timer X-position:", .2, 8, "cg_timerX" 320 0 640, "Use the slider to move the timer" )
-	CVARFLOATLABEL( 8, 162, (SUBWINDOW_WIDTH)-4, 10, "cg_timerX", .2, ITEM_ALIGN_RIGHT, $evalfloat((SUBWINDOW_WIDTH)-4), 8 )
-	SLIDER( 8, 178, (SUBWINDOW_WIDTH)-4, 10, "Timer Y-position:", .2, 8, "cg_timerY" 420 0 480, "Use the slider to move the timer" )
-	CVARFLOATLABEL( 8, 178, (SUBWINDOW_WIDTH)-4, 10, "cg_timerY", .2, ITEM_ALIGN_RIGHT, $evalfloat((SUBWINDOW_WIDTH)-4), 8 )
+	SUBWINDOW( 6, 162, (SUBWINDOW_WIDTH), 60, "Timer" )
+	YESNO( 8, 178, (SUBWINDOW_WIDTH)-4, 10, "Show timer:", .2, 8, "cg_drawTimer", "" )
+	SLIDER( 8, 195, (SUBWINDOW_WIDTH)-4, 10, "Timer X-position:", .2, 8, "cg_timerX" 320 0 640, "Use the slider to move the timer" )
+	CVARFLOATLABEL( 8, 195, (SUBWINDOW_WIDTH)-4, 10, "cg_timerX", .2, ITEM_ALIGN_RIGHT, $evalfloat((SUBWINDOW_WIDTH)-4), 8 )
+	SLIDER( 8, 210, (SUBWINDOW_WIDTH)-4, 10, "Timer Y-position:", .2, 8, "cg_timerY" 420 0 480, "Use the slider to move the timer" )
+	CVARFLOATLABEL( 8, 210, (SUBWINDOW_WIDTH)-4, 10, "cg_timerY", .2, ITEM_ALIGN_RIGHT, $evalfloat((SUBWINDOW_WIDTH)-4), 8 )
 
 	//
 	// Checkpoints
 	//
-	SUBWINDOW( 6, 196, (SUBWINDOW_WIDTH), 80, "Checkpoints" )
-	YESNO( 8, 212, (SUBWINDOW_WIDTH)-4, 10, "Show checkpoints:", .2, 8, "cg_drawCheckPoints", "" )
-	SLIDER( 8, 228, (SUBWINDOW_WIDTH)-4, 10, "Checkpoints X-position:", .2, 8, "cg_checkPointsX" 320 0 640, "Use the slider to move checkpoints" )
-	CVARFLOATLABEL( 8, 228, (SUBWINDOW_WIDTH)-4, 10, "cg_checkPointsX", .2, ITEM_ALIGN_RIGHT, $evalfloat((SUBWINDOW_WIDTH)-4), 8 )
-	SLIDER( 8, 244, (SUBWINDOW_WIDTH)-4, 10, "Checkpoints Y-position:", .2, 8, "cg_checkPointsY" 435 0 480, "Use the slider to move checkpoints" )
-	CVARFLOATLABEL( 8, 244, (SUBWINDOW_WIDTH)-4, 10, "cg_checkPointsY", .2, ITEM_ALIGN_RIGHT, $evalfloat((SUBWINDOW_WIDTH)-4), 8 )
-	MULTI( 8, 260, (SUBWINDOW_WIDTH)-4, 10, "Max checkpoints:", .2, 8, "cg_maxCheckPoints", cvarFloatList { "1" 1 "2" 2 "3" 3 "4" 4 "5" 5 }, "Maxium checkpoints to display" )
+	SUBWINDOW( 6, 228, (SUBWINDOW_WIDTH), 80, "Checkpoints" )
+	YESNO( 8, 244, (SUBWINDOW_WIDTH)-4, 10, "Show checkpoints:", .2, 8, "cg_drawCheckPoints", "" )
+	SLIDER( 8, 260, (SUBWINDOW_WIDTH)-4, 10, "Checkpoints X-position:", .2, 8, "cg_checkPointsX" 320 0 640, "Use the slider to move checkpoints" )
+	CVARFLOATLABEL( 8, 260, (SUBWINDOW_WIDTH)-4, 10, "cg_checkPointsX", .2, ITEM_ALIGN_RIGHT, $evalfloat((SUBWINDOW_WIDTH)-4), 8 )
+	SLIDER( 8, 276, (SUBWINDOW_WIDTH)-4, 10, "Checkpoints Y-position:", .2, 8, "cg_checkPointsY" 435 0 480, "Use the slider to move checkpoints" )
+	CVARFLOATLABEL( 8, 276, (SUBWINDOW_WIDTH)-4, 10, "cg_checkPointsY", .2, ITEM_ALIGN_RIGHT, $evalfloat((SUBWINDOW_WIDTH)-4), 8 )
+	MULTI( 8, 292, (SUBWINDOW_WIDTH)-4, 10, "Max checkpoints:", .2, 8, "cg_maxCheckPoints", cvarFloatList { "1" 1 "2" 2 "3" 3 "4" 4 "5" 5 }, "Maxium checkpoints to display" )
 
 	//
 	// Detector
 	//
-	SUBWINDOW( 6, 280, (SUBWINDOW_WIDTH), 50, "Detectors" )
-	YESNO( 8, 296, (SUBWINDOW_WIDTH)-4, 10, "Overbounce detector:", .2, 8, "cg_drawOB", "" )
-	YESNO( 8, 312, (SUBWINDOW_WIDTH)-4, 10, "Slick detector:", .2, 8, "cg_drawSlick", "" )
+	SUBWINDOW( 6, 312, (SUBWINDOW_WIDTH), 50, "Detectors" )
+	YESNO( 8, 328, (SUBWINDOW_WIDTH)-4, 10, "Overbounce detector:", .2, 8, "cg_drawOB", "" )
+	YESNO( 8, 344, (SUBWINDOW_WIDTH)-4, 10, "Slick detector:", .2, 8, "cg_drawSlick", "" )
 
 	//
 	// Popups
