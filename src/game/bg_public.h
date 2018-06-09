@@ -1893,7 +1893,9 @@ typedef enum {
 
 void BG_AdjustAAGunMuzzleForBarrel(vec_t *origin, vec_t *forward, vec_t *right, vec_t *up, int barrel);
 
+// suburb, zoom related
 qboolean BG_IsScopedWeapon(int weapon);
+float BG_GetZoomTableValues(int weaponType, int index);
 
 int BG_FootstepForSurface(int surfaceFlags);
 
