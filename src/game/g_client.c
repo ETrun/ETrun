@@ -1074,7 +1074,7 @@ char *ClientConnect(int clientNum, qboolean firstTime) {
 	trap_GetUserinfo(clientNum, userinfo, sizeof (userinfo));
 
 	// suburb, prevent config load error
-	if (level.delayedMapChange.pendingChange) {
+	if (level.delayedMapChange.pendingChange && level.delayedMapChange.timeChange - level.time < 5000) {
 		return "You cannot connect during a pending map change.";
 	}
 

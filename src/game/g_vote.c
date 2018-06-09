@@ -371,13 +371,13 @@ void G_delay_map_change(char *mapName, int delay) {
 			activeRunsCount++;
 		}
 	}
+	// suburb, g_timelimit 0 but needs delay
 	if (delay == 0 && level.numConnectedClients > 1 && activeRunsCount > 0) {
 		level.delayedMapChange.timeChange = level.time + MAP_CHANGE_DELAY * 1000;
 		AP(va("cpm \"^5Map will be changed in %d secs to: %s\n\"", MAP_CHANGE_DELAY, mapName));
 	} else {
 		level.delayedMapChange.timeChange = level.time + (delay * 60 * 1000) + 1000;
 	}
-
 	level.delayedMapChange.pendingChange = qtrue;
 }
 
