@@ -52,33 +52,34 @@ menuDef {
 	YESNO( 8, 140, (SUBWINDOW_WIDTH)-4, 10, "Autoswitch:", .2, 8, "cg_noAmmoAutoSwitch", "Automatically switch to a new weapon when out of ammunition" )
 	YESNO( 8, 152, (SUBWINDOW_WIDTH)-4, 10, "Weapon Icon Flash:", .2, 8, "cg_drawWeaponIconFlash", "Flash weapon icon when firing, reloading, or switching" )
 	
-// Binoculars //	FIXME - isn't this really a 'scopes' section?
+// Zoom //
 
-	SUBWINDOW( 6, 170, (SUBWINDOW_WIDTH), 52, "SCOPE" )
+	SUBWINDOW( 6, 170, (SUBWINDOW_WIDTH), 64, "ZOOM" )
 	MULTI( 8, 186, (SUBWINDOW_WIDTH)-4, 10, "Use Weapon Cycle for Zoom:", .2, 8, "cg_useWeapsForZoom", cvarFloatList { "Off" 0 "On (normal)" 1 "On (reverse)" 2 }, "Weapon switch will zoom in and out while scoped, rather than switch weapons" )
-	MULTI( 8, 198, (SUBWINDOW_WIDTH)-4, 10, "Default Zoom Level:", .2, 8, "cg_zoomdefaultsniper", cvarFloatList { "All the way Out" 20 "Near" 16 "Far" 8 "All the Way In" 4 }, "Set the default zoom level for scopes" )
-	MULTI( 8, 210, (SUBWINDOW_WIDTH)-4, 10, "Zoom Levels:", .2, 8, "cg_zoomstepsniper", cvarFloatList { "4 Levels of Zoom" 4 "8 Levels of Zoom" 2 }, "Specifies the increments you zoom by" )
-	
+	MULTI( 8, 198, (SUBWINDOW_WIDTH)-4, 10, "Default Zoom Level:", .2, 8, "cg_zoomDefaultSniper", cvarFloatList { "All the way Out" 20 "Near" 16 "Far" 8 "All the Way In" 4 }, "Set the default zoom level for scopes" )
+	MULTI( 8, 210, (SUBWINDOW_WIDTH)-4, 10, "Scoped Zoom Levels:", .2, 8, "cg_zoomStepSniper", cvarFloatList { "4 Levels of Zoom" 4 "8 Levels of Zoom" 2 }, "Specifies the increments you zoom by while scoped" )
+	MULTI( 8, 222, (SUBWINDOW_WIDTH)-4, 10, "Binoc Zoom Levels:", .2, 8, "cg_zoomStepBinoc", cvarFloatList { "1" 1 "2" 2 "5" 5 "10" 10}, "Specifies the increments you zoom by while using binocs" )
+
 // Chat //
 
-	SUBWINDOW( 6, 228, (SUBWINDOW_WIDTH), 40, "CHAT" )
-	MULTI( 8, 244, (SUBWINDOW_WIDTH)-4, 10, "Quick Chat Mode:", .2, 8, "cg_quickMessageAlt", cvarFloatList { "Alpha" 0 "Numeric" 1 }, "Use alpha or numeric keys to send radio messages" )
-	MULTI( 8, 256, (SUBWINDOW_WIDTH)-4, 10, "Chat Icon Time:", .2, 8, "cg_voicespritetime", cvarFloatList { "Short" 3000 "Normal" 6000 "Long" 12000 "Really Long" 24000 }, "Specify how long the chat icon appears above other players' heads" )
+	SUBWINDOW( 6, 240, (SUBWINDOW_WIDTH), 40, "CHAT" )
+	MULTI( 8, 256, (SUBWINDOW_WIDTH)-4, 10, "Quick Chat Mode:", .2, 8, "cg_quickMessageAlt", cvarFloatList { "Alpha" 0 "Numeric" 1 }, "Use alpha or numeric keys to send radio messages" )
+	MULTI( 8, 268, (SUBWINDOW_WIDTH)-4, 10, "Chat Icon Time:", .2, 8, "cg_voicespritetime", cvarFloatList { "Short" 3000 "Normal" 6000 "Long" 12000 "Really Long" 24000 }, "Specify how long the chat icon appears above other players' heads" )
 
 // Downloads //
 
-	SUBWINDOW( 6, 274, (SUBWINDOW_WIDTH), 52, "DOWNLOADS" )
-	YESNO( 8, 290, (SUBWINDOW_WIDTH)-4, 10, "Check for Updates on Start-Up:", .2, 8, "cl_autoupdate", "" )
-	YESNO( 8, 302, (SUBWINDOW_WIDTH)-4, 10, "Get Missing Files from Server:", .2, 8, "cl_allowDownload", "" )
-	YESNO( 8, 314, (SUBWINDOW_WIDTH)-4, 10, "Use HTTP/FTP Downloads:", .2, 8, "cl_wwwDownload", "" )
+	SUBWINDOW( 6, 286, (SUBWINDOW_WIDTH), 52, "DOWNLOADS" )
+	YESNO( 8, 302, (SUBWINDOW_WIDTH)-4, 10, "Check for Updates on Start-Up:", .2, 8, "cl_autoupdate", "" )
+	YESNO( 8, 314, (SUBWINDOW_WIDTH)-4, 10, "Get Missing Files from Server:", .2, 8, "cl_allowDownload", "" )
+	YESNO( 8, 326, (SUBWINDOW_WIDTH)-4, 10, "Use HTTP/FTP Downloads:", .2, 8, "cl_wwwDownload", "" )
 	
 // Miscellaneous //
 
-	SUBWINDOW( 6, 332, (SUBWINDOW_WIDTH), 76, "MISCELLANEOUS" )
-	YESNO( 8, 348, (SUBWINDOW_WIDTH)-4, 10, "Log Important Messages:", .2, 8, "cg_printObjectiveInfo", "Prints important game messages to the console" )
-	MULTI( 8, 360, (SUBWINDOW_WIDTH)-4, 10, "Auto-Action:", .2, 8, "cg_autoAction", cvarFloatList { "None" 0 "Demo" 1 "Screenshot" 2 "Stats Dump" 4 "Demo + SS" 3 "Demo + Stats" 5 "SS + Stats" 6 "Demo + SS + Stats" 7 }, "Automatically performs actions at the start or end of a round" )
-	YESNO( 8, 372, (SUBWINDOW_WIDTH)-4, 10, "Use JPEG for AutoScreenshots:", .2, 8, "cg_useScreenshotJPEG", "Switches between .tga and .jpg picture types for the \"autoscreenshot\" command" )
-	YESNO( 8, 384, (SUBWINDOW_WIDTH)-4, 10, "Show Tool Tips :", .2, 8, "ui_showtooltips", "Display Tool Tips in the UI" )
+	SUBWINDOW( 6, 344, (SUBWINDOW_WIDTH), 64, "MISCELLANEOUS" )
+	YESNO( 8, 360, (SUBWINDOW_WIDTH)-4, 10, "Log Important Messages:", .2, 8, "cg_printObjectiveInfo", "Prints important game messages to the console" )
+	MULTI( 8, 372, (SUBWINDOW_WIDTH)-4, 10, "Auto-Action:", .2, 8, "cg_autoAction", cvarFloatList { "None" 0 "Demo" 1 "Screenshot" 2 "Stats Dump" 4 "Demo + SS" 3 "Demo + Stats" 5 "SS + Stats" 6 "Demo + SS + Stats" 7 }, "Automatically performs actions at the start or end of a round" )
+	YESNO( 8, 384, (SUBWINDOW_WIDTH)-4, 10, "Use JPEG for AutoScreenshots:", .2, 8, "cg_useScreenshotJPEG", "Switches between .tga and .jpg picture types for the \"autoscreenshot\" command" )
+	YESNO( 8, 396, (SUBWINDOW_WIDTH)-4, 10, "Show Tool Tips :", .2, 8, "ui_showtooltips", "Display Tool Tips in the UI" )
 
 // Buttons //
 	
