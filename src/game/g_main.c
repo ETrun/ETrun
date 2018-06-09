@@ -1442,6 +1442,9 @@ void G_InitGame(int levelTime, int randomSeed) {
 	if (!G_enable_delayed_map_change_watcher()) {
 		G_Error("%s: error while installing delayed map change watcher\n", GAME_VERSION);
 	}
+
+	// suburb, initiate vote delay
+	level.voteInfo.lastVoteTime = level.startTime;
 }
 
 /*

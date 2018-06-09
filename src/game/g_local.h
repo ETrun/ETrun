@@ -815,9 +815,7 @@ typedef struct voteInfo_s {
 	// Nico, used to check if voter switches team
 	char voter_team;
 	int voter_cn;
-	// suburb, check if first 10 seconds are over
-	qboolean voteIsNotTooSoon;
-	// suburb, time passed since the last callvote
+	// suburb, used for vote_delay
 	int lastVoteTime;
 } voteInfo_t;
 
