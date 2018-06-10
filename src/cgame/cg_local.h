@@ -339,15 +339,13 @@ typedef enum {
 	ZOOM_SNOOPER,
 	ZOOM_FG42SCOPE,
 	ZOOM_MG42,
-	ZOOM_MAX_ZOOMS
 } EZoom_t;
 
 typedef enum {
 	ZOOM_OUT,   // widest angle
-	ZOOM_IN // tightest angle (approaching 0)
+	ZOOM_IN,    // tightest angle (approaching 0)
+	ZOOM_SCOPE  // suburb, for zoomed scope
 } EZoomInOut_t;
-
-extern float zoomTable[ZOOM_MAX_ZOOMS][2];
 
 //----(SA)	end
 
@@ -1005,6 +1003,9 @@ typedef struct {
 	int timerunJumpCounter;
 	int timerunJumpSpeeds[256];
 
+	// Accel HUD
+	float oldSpeed;
+
 	// Nico, end of ETrun client variables
 } cg_t;
 
@@ -1643,6 +1644,7 @@ extern vmCvar_t cg_ignore;
 extern vmCvar_t cg_fov;
 extern vmCvar_t cg_zoomDefaultSniper;
 extern vmCvar_t cg_zoomStepSniper;
+extern vmCvar_t cg_zoomStepBinoc;
 extern vmCvar_t cg_thirdPersonRange;
 extern vmCvar_t cg_thirdPersonAngle;
 extern vmCvar_t cg_thirdPerson;
@@ -1704,7 +1706,10 @@ extern vmCvar_t demo_infoWindow;
 // engine mappings
 extern vmCvar_t int_cl_maxpackets;
 extern vmCvar_t int_cl_timenudge;
-// -OSP
+
+// suburb, yawspeed & pitchspeed
+extern vmCvar_t int_cl_yawspeed;
+extern vmCvar_t int_cl_pitchspeed;
 
 extern vmCvar_t cg_rconPassword;
 extern vmCvar_t cg_refereePassword;
@@ -1733,6 +1738,10 @@ extern vmCvar_t isTimerun;
 extern vmCvar_t cg_drawSpeedMeter;
 extern vmCvar_t cg_speedMeterX;
 extern vmCvar_t cg_speedMeterY;
+
+// Accel HUD
+extern vmCvar_t cg_drawAccel;
+extern vmCvar_t cg_accelSmoothness;
 
 // Timer
 extern vmCvar_t cg_drawTimer;
@@ -1855,10 +1864,8 @@ void CG_TestModelNextFrame_f(void);
 void CG_TestModelPrevFrame_f(void);
 void CG_TestModelNextSkin_f(void);
 void CG_TestModelPrevSkin_f(void);
-void CG_ZoomDown_f(void);
 void CG_ZoomIn_f(void);
 void CG_ZoomOut_f(void);
-void CG_ZoomUp_f(void);
 
 void CG_SetupFrustum(void);
 qboolean CG_CullPoint(vec3_t pt);
@@ -1909,11 +1916,13 @@ void CG_DrawTopBottom(float x, float y, float w, float h, float size);
 void CG_DrawTopBottom_NoScale(float x, float y, float w, float h, float size);
 
 // NERVE - SMF - localization functions
-void CG_InitTranslation();
+void CG_InitTranslation(void);
 char *CG_TranslateString(const char *string);
-void CG_SaveTransTable();
-void CG_ReloadTranslation();
-// -NERVE - SMF
+void CG_SaveTransTable(void);
+void CG_ReloadTranslation(void);
+
+// suburb
+float CG_AdjustFontSize(float textScale, int valueToPrint, int border);
 
 //
 // cg_draw.c, cg_newDraw.c

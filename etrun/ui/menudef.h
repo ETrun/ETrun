@@ -406,9 +406,10 @@ If you have questions concerning this license or the applicable additional terms
 #define CV_SVF_KICK             1
 #define CV_SVF_MAP              2
 #define CV_SVF_RANDOMMAP        4
-#define CV_SVF_REFEREE          8
-#define CV_SVF_ANTILAG          16
-#define CV_SVF_MUTING           32
+#define CV_SVF_MAPRESTART       8
+#define CV_SVF_REFEREE          16
+#define CV_SVF_ANTILAG          32
+#define CV_SVF_MUTING           64
 
 // referee level
 #define RL_NONE                 0

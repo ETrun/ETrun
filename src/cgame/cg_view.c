@@ -446,7 +446,8 @@ static void CG_ZoomSway(void) {
 	float spreadfrac;
 	float phase;
 
-	if (!cg.zoomval) {   // not zoomed
+	// suburb, don't want this for binocs in etrun
+	if (!cg.zoomval || cg.zoomedBinoc) {
 		return;
 	}
 
@@ -658,48 +659,33 @@ static void CG_OffsetFirstPersonView(void) {
 // Zoom controls
 //
 
-// probably move to server variables
-float zoomTable[ZOOM_MAX_ZOOMS][2] =
-{
-// max {out,in}
-	{ 0,  0  },
-
-	{ 36, 8  }, //	binoc
-	{ 20, 4  }, //	sniper
-	{ 60, 20 }, //	snooper
-	{ 55, 55 }, //	fg42
-	{ 55, 55 }    //	mg42
-};
-
 void CG_AdjustZoomVal(float val, int type) {
 	cg.zoomval += val;
-	if (cg.zoomval > zoomTable[type][ZOOM_OUT]) {
-		cg.zoomval = zoomTable[type][ZOOM_OUT];
+	if (cg.zoomval > BG_GetZoomTableValues(type, ZOOM_OUT)) {
+		cg.zoomval = BG_GetZoomTableValues(type, ZOOM_OUT);
 	}
-	if (cg.zoomval < zoomTable[type][ZOOM_IN]) {
-		cg.zoomval = zoomTable[type][ZOOM_IN];
+	if (cg.zoomval < BG_GetZoomTableValues(type, ZOOM_IN)) {
+		cg.zoomval = BG_GetZoomTableValues(type, ZOOM_IN);
 	}
 }
 
 void CG_ZoomIn_f(void) {
 	// Gordon: fixed being able to "latch" your zoom by weaponcheck + quick zoomin
 	// OSP - change for zoom view in demos
-	if (cg_entities[cg.snap->ps.clientNum].currentState.weapon == WP_GARAND_SCOPE) {
-		CG_AdjustZoomVal(-(cg_zoomStepSniper.value), ZOOM_SNIPER);
-	} else if (cg_entities[cg.snap->ps.clientNum].currentState.weapon == WP_K43_SCOPE) {
+	if (cg_entities[cg.snap->ps.clientNum].currentState.weapon == WP_GARAND_SCOPE ||
+		cg_entities[cg.snap->ps.clientNum].currentState.weapon == WP_K43_SCOPE) {
 		CG_AdjustZoomVal(-(cg_zoomStepSniper.value), ZOOM_SNIPER);
 	} else if (cg.zoomedBinoc) {
-		CG_AdjustZoomVal(-(cg_zoomStepSniper.value), ZOOM_SNIPER);     // JPW NERVE per atvi request all use same vals to match menu (was zoomStepBinoc, ZOOM_BINOC);
+		CG_AdjustZoomVal(-(cg_zoomStepBinoc.value), ZOOM_BINOC);
 	}
 }
 
 void CG_ZoomOut_f(void) {
-	if (cg_entities[cg.snap->ps.clientNum].currentState.weapon == WP_GARAND_SCOPE) {
-		CG_AdjustZoomVal(cg_zoomStepSniper.value, ZOOM_SNIPER);
-	} else if (cg_entities[cg.snap->ps.clientNum].currentState.weapon == WP_K43_SCOPE) {
+	if (cg_entities[cg.snap->ps.clientNum].currentState.weapon == WP_GARAND_SCOPE ||
+		cg_entities[cg.snap->ps.clientNum].currentState.weapon == WP_K43_SCOPE) {
 		CG_AdjustZoomVal(cg_zoomStepSniper.value, ZOOM_SNIPER);
 	} else if (cg.zoomedBinoc) {
-		CG_AdjustZoomVal(cg_zoomStepSniper.value, ZOOM_SNIPER);   // JPW NERVE per atvi request BINOC);
+		CG_AdjustZoomVal(cg_zoomStepBinoc.value, ZOOM_BINOC);
 	}
 }
 

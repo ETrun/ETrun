@@ -326,6 +326,12 @@ void Cmd_Noclip_f(gentity_t *ent) {
 
 	char *name = ConcatArgs(1);
 
+	// suburb, only available while unfollowed to avoid playermodel duplication
+	if (ent->client->ps.pm_flags & PMF_FOLLOW) {
+		trap_SendServerCommand(ent - g_entities, va("print \"You must unfollow to use this command.\n\""));
+		return;
+	}
+
 	// Nico, only available if client is not logged in
 	if (ent->client->sess.logged) {
 		trap_SendServerCommand(ent - g_entities, va("print \"You must /logout to use this command.\n\""));
@@ -1202,6 +1208,7 @@ Cmd_CallVote_f
 */
 qboolean Cmd_CallVote_f(gentity_t *ent, unsigned int dwCommand, qboolean fRefCommand) {
 	int  i;
+	int  waitTime = 0;
 	char arg1[MAX_STRING_TOKENS];
 	char arg2[MAX_STRING_TOKENS];
 
@@ -1211,19 +1218,28 @@ qboolean Cmd_CallVote_f(gentity_t *ent, unsigned int dwCommand, qboolean fRefCom
 	// Normal checks, if its not being issued as a referee command
 	// Nico, moved 'callvote' command erros from popup messages to center print and console
 	// http://games.chruker.dk/enemy_territory/modding_project_bugfix.php?bug_id=067
+
+	waitTime = (vote_delay.integer - (level.time - level.voteInfo.lastVoteTime)) / 1000;
+
 	if (!fRefCommand) {
 		if (level.voteInfo.voteTime) {
-			G_printFull("A vote is already in progress.", ent);
+			G_printFull("^1Callvote:^7 A vote is already in progress.\n\"", ent);
 			return qfalse;
 		} else if (!ent->client->sess.referee) {
 			if (voteFlags.integer == VOTING_DISABLED) {
-				G_printFull("Voting not enabled on this server.", ent);
+				G_printFull("^1Callvote:^7 Voting is not enabled on this server.\n\"", ent);
 				return qfalse;
 			} else if (g_cupMode.integer != 0) {   // Nico, disable voting in cup mode
-				G_printFull("Voting is disabled in cup mode.", ent);
+				G_printFull("^1Callvote:^7 Voting is disabled in cup mode.\n\"", ent);
 				return qfalse;
 			} else if (vote_limit.integer > 0 && ent->client->pers.voteCount >= vote_limit.integer) {
-				G_printFull(va("You have already called the maximum number of votes (%d).", vote_limit.integer), ent);
+				G_printFull(va("^1Callvote:^7 You have already called the maximum number of votes (%d).\n\"", vote_limit.integer), ent);
+				return qfalse;
+			} else if (level.delayedMapChange.pendingChange) { 	// suburb, block all votes during a pending map change
+				G_printFull("^1Callvote:^7 There is a pending map change.\n\"", ent);
+				return qfalse;
+			} else if (waitTime > 0) { 	// suburb, block all votes until vote_delay has passed
+				G_printFull(va("^1Callvote:^7 Please wait %d second%s before voting.\n\"", waitTime, waitTime > 1 ? "s" : ""), ent);
 				return qfalse;
 			}
 		}
@@ -1244,31 +1260,13 @@ qboolean Cmd_CallVote_f(gentity_t *ent, unsigned int dwCommand, qboolean fRefCom
 		return qfalse;
 	}
 
-	// Nico, perform common checks here
-	if (!Q_stricmp(arg1, "map") || !Q_stricmp(arg1, "randommap")) {
-		int waitTime;
-
-		// Check if there is a pending map vote
-		if (level.delayedMapChange.pendingChange) {
-			CP("print \"^1Callvote:^7 there is a pending map change.\n\"");
-			return qfalse;
-		}
-
-		// Check level has started more than 10 secs ago
-		waitTime = 10 - (level.time - level.startTime) / 1000;
-		if (waitTime > 0) {
-			CP(va("print \"^1Callvote:^7 please wait %d sec%s before voting.\n\"", waitTime, waitTime > 1 ? "s" : ""));
-			return qfalse;
-		}
-	}
-
 	// Nico, if it's a map vote, do these checks
 	if (!Q_stricmp(arg1, "map")) {
 		char         mapfile[MAX_QPATH];
 		fileHandle_t f;
 
 		if (arg2[0] == '\0' || trap_Argc() == 1) {
-			CP("print \"^1Callvote:^7 no map specified.\n\"");
+			G_printFull("^1Callvote:^7 No map specified.\n\"", ent);
 			return qfalse;
 		}
 
@@ -1279,7 +1277,7 @@ qboolean Cmd_CallVote_f(gentity_t *ent, unsigned int dwCommand, qboolean fRefCom
 		trap_FS_FCloseFile(f);
 
 		if (!f) {
-			CP(va("print \"^1Callvote:^7 the map ^3%s^7 is not on the server.\n\"", arg2));
+			G_printFull(va("^1Callvote:^7 The map ^3%s^7 is not on the server.\n\"", arg2), ent);
 			return qfalse;
 		}
 	}
@@ -1290,7 +1288,7 @@ qboolean Cmd_CallVote_f(gentity_t *ent, unsigned int dwCommand, qboolean fRefCom
 		}
 	} else {
 		if (!fRefCommand) {
-			CP(va("print \"\n^3>>> Unknown vote command: ^7%s %s\n\"", arg1, arg2));
+			G_printFull(va("^1Callvote:^7 Unknown vote command: ^3%s %s\n\"", arg1, arg2), ent);
 			G_voteHelp(ent, qtrue);
 		}
 		return qfalse;
@@ -1320,6 +1318,7 @@ qboolean Cmd_CallVote_f(gentity_t *ent, unsigned int dwCommand, qboolean fRefCom
 	}
 
 	level.voteInfo.voteTime = level.time;
+	level.voteInfo.lastVoteTime = level.time;
 	level.voteInfo.voteNo   = 0;
 
 	// Nico, used to check if voter switches team
@@ -2066,6 +2065,13 @@ void Cmd_Load_f(gentity_t *ent) {
 		return;
 	}
 
+	// suburb, prevent trigger bug
+	if (level.time - ent->client->pers.lastLoadedTime < 550) {
+		CP("cp \"Loading aborted\n\"");
+		return;
+	}
+	ent->client->pers.lastLoadedTime = 0;
+
 	if (ent->client->sess.sessionTeam == TEAM_ALLIES) {
 		pos = ent->client->sess.alliesSaves + posNum;
 	} else {
@@ -2182,6 +2188,12 @@ void Cmd_Save_f(gentity_t *ent) {
 		return;
 	}
 
+	// suburb, prevent trigger bug
+	if (ent->client->pers.isTouchingTrigger == qtrue && ent->client->sess.timerunActive) {
+		CP("cp \"You can not save in triggers during a run!\n\"");
+		return;
+	}
+
 	if (ent->client->sess.sessionTeam == TEAM_ALLIES) {
 		pos = ent->client->sess.alliesSaves + posNum;
 	} else {
@@ -2234,6 +2246,8 @@ static command_t floodProtectedCommands[] =
 	{ "rank",            qtrue,  Cmd_Rank_f,            qtrue,  "Shows rankings for given options",         "[userName] [mapName] [runName] [physicsName]" },
 	{ "loadCheckpoints", qtrue,  Cmd_LoadCheckpoints_f, qtrue,  "Loads checkpoints from your PB",           "[userName] [run name or id]"                  },
 	{ "h",               qtrue,  Cmd_Help_f,            qtrue,  "Shows help message",                       "[command]"                                    },
+	{ "abort",           qtrue,  Cmd_Abort_f,           qtrue,  "Aborts the current run",                   NULL                                           },
+	{ "tutorial",        qtrue,  Cmd_Tutorial_f,        qtrue,  "Shows an introduction for beginners",      NULL                                           },
 };
 // Nico, end of defines commands that are flood protected or not
 
@@ -2331,6 +2345,9 @@ void ClientCommand(int clientNum) {
 		Cmd_FollowCycle_f(ent, 1);
 	} else if (!Q_stricmp(cmd, "followprev")) {
 		Cmd_FollowCycle_f(ent, -1);
+	} else if (!Q_stricmp(cmd, "mod_information")) { // suburb, added mod info printout
+		CP(va("print \"%s %s\n\"", GAME_VERSION " " MOD_VERSION, BUILD_TIME));
+		return;
 	}
 
 	// Nico, flood protection
@@ -2631,3 +2648,40 @@ void Cmd_Help_f(gentity_t *ent) {
 		}
 	}
 }
+
+// suburb, abort run command
+void Cmd_Abort_f(gentity_t *ent) {
+	notify_timerun_stop(ent, 0);
+	ent->client->sess.timerunActive = qfalse;
+}
+
+/**
+* Tutorial command for beginners
+* @author: suburb
+*/
+void Cmd_Tutorial_f(gentity_t *ent) {
+	CP("print \"^9-----------------------------------------------------------------------------\n\"");
+	CP(va("print \"Welcome to %s^7, an Enemy Territory game modification with timeruns\n\"", GAME_VERSION_COLORED));
+	CP("print \"support. In order to permanently save records, you need to create an\n\"");
+	CP(va("print \"account on ^fhttps://timeruns.net/^7, the official %s^7 website, and\n\"", GAME_VERSION_COLORED));
+	CP("print \"link it to your game. Here is a step-by-step tutorial:\n\"");
+	CP("print \"\n\"");
+	CP("print \"^51. ^7Go to ^fhttps://timeruns.net/ ^7and open the Signup tab.\n\"");
+	CP("print \"^52. ^7Follow the instructions and wait for the account activation email.\n\"");
+	CP(va("print \"^53. ^7Once your account has been activated, login on the %s^7 forum,\n\"", GAME_VERSION_COLORED));
+	CP("print \"   which is located here: ^fhttps://forum.timeruns.net/\n\"");
+	CP("print \"^54. ^7In the top right corner, click on your nickname and follow this path:\n\"");
+	CP("print \"   User Control Panel -> Profile -> Edit account settings\n\"");
+	CP("print \"   Now you can see your Timeruns token. This is your password which\n\"");
+	CP("print \"   links your game to your own website account. Never share it!\n\"");
+	CP("print \"^55. ^7Copy your Timeruns token.\n\"");
+	CP("print \"^56. ^7Insert your Timeruns token ingame into the ^b/cg_timerunsToken ^7cvar.\n\"");
+	CP("print \"^57. ^7Type ^b/login ^7into the console.\n\"");
+	CP("print \"\n\"");
+	CP("print \"Congratulations! You are now logged in and able to set records. You can\n\"");
+	CP(va("print \"now find your stats on the %s^7 website and share them with your friends.\n\"", GAME_VERSION_COLORED));
+	CP("print \"\n\"");
+	CP("print \"Have fun.\n\"");
+	CP("print \"^9-----------------------------------------------------------------------------\n\"");
+}
+
