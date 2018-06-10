@@ -671,6 +671,9 @@ typedef struct {
 	int lastLoadedTime;
 	qboolean isTouchingTrigger;
 
+	// suburb, inactivity drop
+	vec3_t oldViewangles;
+
 	// suburb, yawspeed
 	int yawspeed;
 
@@ -1025,6 +1028,7 @@ void Cmd_Say_f(gentity_t *ent, int mode, qboolean arg0, qboolean encoded);
 void Cmd_Team_f(gentity_t *ent);
 void Cmd_PrivateMessage_f(gentity_t *ent);
 void Cmd_Help_f(gentity_t *ent);
+void Cmd_Abort_f(gentity_t *ent);
 void Cmd_Tutorial_f(gentity_t *ent);
 void G_SendScore(gentity_t *client);
 

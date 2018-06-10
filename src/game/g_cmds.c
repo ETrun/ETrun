@@ -2246,6 +2246,7 @@ static command_t floodProtectedCommands[] =
 	{ "rank",            qtrue,  Cmd_Rank_f,            qtrue,  "Shows rankings for given options",         "[userName] [mapName] [runName] [physicsName]" },
 	{ "loadCheckpoints", qtrue,  Cmd_LoadCheckpoints_f, qtrue,  "Loads checkpoints from your PB",           "[userName] [run name or id]"                  },
 	{ "h",               qtrue,  Cmd_Help_f,            qtrue,  "Shows help message",                       "[command]"                                    },
+	{ "abort",           qtrue,  Cmd_Abort_f,           qtrue,  "Aborts the current run",                   NULL                                           },
 	{ "tutorial",        qtrue,  Cmd_Tutorial_f,        qtrue,  "Shows an introduction for beginners",      NULL                                           },
 };
 // Nico, end of defines commands that are flood protected or not
@@ -2646,6 +2647,12 @@ void Cmd_Help_f(gentity_t *ent) {
 			}
 		}
 	}
+}
+
+// suburb, abort run command
+void Cmd_Abort_f(gentity_t *ent) {
+	notify_timerun_stop(ent, 0);
+	ent->client->sess.timerunActive = qfalse;
 }
 
 /**
