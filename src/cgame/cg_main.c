@@ -222,6 +222,8 @@ vmCvar_t demo_drawTimeScale;
 vmCvar_t demo_infoWindow;
 vmCvar_t int_cl_maxpackets;
 vmCvar_t int_cl_timenudge;
+vmCvar_t int_cl_yawspeed;
+vmCvar_t int_cl_pitchspeed;
 vmCvar_t int_timescale;
 vmCvar_t cg_rconPassword;
 vmCvar_t cg_refereePassword;
@@ -483,7 +485,10 @@ cvarTable_t cvarTable[] =
 	// Engine mappings
 	{ &int_cl_maxpackets,       "cl_maxpackets",           "30",    CVAR_ARCHIVE,             0 },
 	{ &int_cl_timenudge,        "cl_timenudge",            "0",     CVAR_ARCHIVE,             0 },
-	// -OSP
+	
+	// suburb, yawspeed & pitchspeed
+	{ &int_cl_yawspeed,         "cl_yawspeed",             "140",   CVAR_ARCHIVE,             0 },
+	{ &int_cl_pitchspeed,       "cl_pitchspeed",           "140",   CVAR_ARCHIVE,             0 },
 
 	{ &cg_atmosphericEffects,   "cg_atmosphericEffects",   "1",     CVAR_ARCHIVE,             0 },
 	{ &authLevel,               "authLevel",               "0",     CVAR_TEMP | CVAR_ROM,     0 },
@@ -681,7 +686,8 @@ void CG_UpdateCvars(void) {
 				    cv->vmCvar == &cg_drawCGaz || cv->vmCvar == &cg_hideMe ||
 				    cv->vmCvar == &cg_autoDemo || cv->vmCvar == &cg_autoLoadCheckpoints ||
 				    cv->vmCvar == &cg_specLock || cv->vmCvar == &cg_keepAllDemos ||
-				    cv->vmCvar == &cg_loadWeapon || cv->vmCvar == &cg_noclipSpeed) {
+				    cv->vmCvar == &cg_loadWeapon || cv->vmCvar == &cg_noclipSpeed ||
+				    cv->vmCvar == &int_cl_yawspeed || cv->vmCvar == &int_cl_pitchspeed) {
 					fSetFlags = qtrue;
 				} else if (cv->vmCvar == &cg_crosshairColor || cv->vmCvar == &cg_crosshairAlpha) {
 					BG_setCrosshair(cg_crosshairColor.string, cg.xhairColor, cg_crosshairAlpha.value, "cg_crosshairColor");
@@ -754,7 +760,7 @@ void CG_setClientFlags(void) {
 	}
 
 	cg.pmext.bAutoReload = (cg_autoReload.integer > 0);
-	trap_Cvar_Set("cg_uinfo", va("%d %d %d %d %s %d %d %d %d %d %d %d %d %d %d",
+	trap_Cvar_Set("cg_uinfo", va("%d %d %d %d %s %d %d %d %d %d %d %d %d %d %d %d %d",
 	                             // Client Flags
 								 (
 									 ((cg_autoReload.integer > 0) ? CGF_AUTORELOAD : 0) |
@@ -805,7 +811,13 @@ void CG_setClientFlags(void) {
 	                             cg_keepAllDemos.integer,
 
 	                             // suburb, noclip speed scale
-	                             cg_noclipSpeed.integer
+	                             cg_noclipSpeed.integer,
+
+	                             // suburb, yawspeed
+	                             int_cl_yawspeed.integer,
+
+	                             // suburb, pitchspeed
+	                             int_cl_pitchspeed.integer
 	                             ));
 }
 

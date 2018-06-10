@@ -897,6 +897,20 @@ void ClientThink_real(gentity_t *ent) {
 		SetTeam(ent, "s", -1, -1, qfalse);
 	}
 
+	// suburb, force yawspeed 0
+	if (client->pers.yawspeed != 0) {
+		CP(va("cpm \"%s^w: ^1You were removed from teams because you must use cl_yawspeed 0.\n\"", GAME_VERSION_COLORED));
+		trap_SendServerCommand(ent - g_entities, "resetYawspeed");
+		SetTeam(ent, "s", -1, -1, qfalse);
+	}
+
+	// suburb, force pitchspeed 0
+	if (client->pers.pitchspeed != 0) {
+		CP(va("cpm \"%s^w: ^1You were removed from teams because you must use cl_pitchspeed 0.\n\"", GAME_VERSION_COLORED));
+		trap_SendServerCommand(ent - g_entities, "resetPitchspeed");
+		SetTeam(ent, "s", -1, -1, qfalse);
+	}
+
 	// Nico, force auto demo record in cup mode
 	if (g_cupMode.integer != 0 && client->pers.autoDemo == 0) {
 		CP(va("cpm \"%s^w: ^1you were removed from teams because you must use cg_autoDemo 1\n\"", GAME_VERSION_COLORED));

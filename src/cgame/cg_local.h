@@ -1706,7 +1706,10 @@ extern vmCvar_t demo_infoWindow;
 // engine mappings
 extern vmCvar_t int_cl_maxpackets;
 extern vmCvar_t int_cl_timenudge;
-// -OSP
+
+// suburb, yawspeed & pitchspeed
+extern vmCvar_t int_cl_yawspeed;
+extern vmCvar_t int_cl_pitchspeed;
 
 extern vmCvar_t cg_rconPassword;
 extern vmCvar_t cg_refereePassword;
