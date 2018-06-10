@@ -491,7 +491,12 @@ void CG_DrawCGaz(void) {
 
 		// Nico, AP or stock accel?
 		if (physics.integer == PHYSICS_MODE_AP_NO_OB || physics.integer == PHYSICS_MODE_AP_OB) {
-			accel = pm_accelerate_AP;
+			// suburb, CGaz 2 on ground fix
+			if (cg_drawCGaz.integer == 2) {
+				accel = pm_accelerate_AP - 10.0f;
+			} else {
+				accel = pm_accelerate_AP;
+			}
 		} else {
 			accel = pm_accelerate;
 		}
