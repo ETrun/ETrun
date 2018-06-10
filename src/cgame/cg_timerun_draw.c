@@ -350,7 +350,7 @@ void CG_DrawTimer(void) {
 		// Nico, timerun not finished yet
 
 		// Nico, you won't beat the rec this time, turn timer to red color
-		if (runBestTime > 0 && currentTimerunTime > runBestTime) {
+		if (runBestTime > 0 && currentTimerunTime > runBestTime + 16) {
 			Vector4Set(color, colorRed[0], colorRed[1], colorRed[2], colorRed[3]);
 		}
 
