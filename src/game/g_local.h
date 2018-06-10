@@ -667,6 +667,10 @@ typedef struct {
 	// suburb, noclip speed scale
 	int noclipSpeed;
 
+	// suburb, prevent trigger bug
+	int lastLoadedTime;
+	qboolean isTouchingTrigger;
+
 	// suburb, inactivity drop
 	vec3_t oldViewangles;
 
