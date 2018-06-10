@@ -326,6 +326,12 @@ void Cmd_Noclip_f(gentity_t *ent) {
 
 	char *name = ConcatArgs(1);
 
+	// suburb, only available while unfollowed to avoid playermodel duplication
+	if (ent->client->ps.pm_flags & PMF_FOLLOW) {
+		trap_SendServerCommand(ent - g_entities, va("print \"You must unfollow to use this command.\n\""));
+		return;
+	}
+
 	// Nico, only available if client is not logged in
 	if (ent->client->sess.logged) {
 		trap_SendServerCommand(ent - g_entities, va("print \"You must /logout to use this command.\n\""));
