@@ -860,26 +860,6 @@ static void CG_DrawWeapReticle(void) {
 }
 
 /*
-==============
-CG_DrawBinocReticle
-==============
-*/
-static void CG_DrawBinocReticle(void) {
-	if (cgs.media.binocShaderSimple) {
-		CG_DrawPic(0, 0, 640, 480, cgs.media.binocShaderSimple);
-	}
-
-	CG_FillRect(146, 239, 348, 1, colorBlack);
-	CG_FillRect(188, 234, 1, 13, colorBlack);     // ll
-	CG_FillRect(234, 226, 1, 29, colorBlack);     // l
-	CG_FillRect(274, 234, 1, 13, colorBlack);     // lr
-	CG_FillRect(320, 213, 1, 55, colorBlack);     // center
-	CG_FillRect(360, 234, 1, 13, colorBlack);     // rl
-	CG_FillRect(406, 226, 1, 29, colorBlack);     // r
-	CG_FillRect(452, 234, 1, 13, colorBlack);     // rr
-}
-
-/*
 =================
 CG_DrawCrosshair
 =================
@@ -900,12 +880,6 @@ static void CG_DrawCrosshair(void) {
 		return;
 	}
 
-	// using binoculars
-	if (cg.zoomedBinoc) {
-		CG_DrawBinocReticle();
-		return;
-	}
-
 	// DHM - Nerve :: show reticle in limbo and spectator
 	if ((cg.snap->ps.pm_flags & PMF_FOLLOW) || cg.demoPlayback) {
 		weapnum = cg.snap->ps.weapon;
@@ -917,10 +891,6 @@ static void CG_DrawCrosshair(void) {
 
 	// weapons that get no reticle
 	case WP_NONE:       // no weapon, no crosshair
-		if (cg.zoomedBinoc) {
-			CG_DrawBinocReticle();
-		}
-
 		if (cg.snap->ps.persistant[PERS_TEAM] != TEAM_SPECTATOR) {
 			return;
 		}
@@ -1427,6 +1397,8 @@ static void CG_DrawSpectatorMessage(void) {
 
 	str2 = BindingFromName("+attack");
 	CG_Text_Paint_Ext(INFOTEXT_STARTX, INFOTEXT_STARTY + 18, textScale, textScale, colorWhite, va("Press %s to follow next player", str2), 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
+
+	CG_Text_Paint_Ext(INFOTEXT_STARTX, INFOTEXT_STARTY + 36, textScale, textScale, colorWhite, "Type /tutorial into console for a quick introduction", 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
 }
 
 /*
@@ -2175,9 +2147,6 @@ static void CG_Draw2D(void) {
 
 		CG_DrawObjectiveInfo();
 
-		// Nico, draw speed meter
-		CG_DrawSpeedMeter();
-
 		// Nico, draw OB
 		CG_DrawOB();
 
@@ -2192,6 +2161,9 @@ static void CG_Draw2D(void) {
 
 		// Nico, draw CGaz
 		CG_DrawCGaz();
+
+		// Nico, draw speed meter
+		CG_DrawSpeedMeter();
 
 		// Nico, draw keys pressed
 		CG_DrawKeys();
