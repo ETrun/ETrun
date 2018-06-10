@@ -117,6 +117,7 @@ vmCvar_t vote_allow_referee;
 vmCvar_t vote_allow_antilag;
 vmCvar_t vote_allow_muting;
 vmCvar_t vote_limit;
+vmCvar_t vote_delay;
 vmCvar_t vote_percent;
 vmCvar_t g_covertopsChargeTime;
 vmCvar_t refereePassword;
@@ -259,6 +260,7 @@ cvarTable_t gameCvarTable[] =
 	{ &vote_allow_antilag,     "vote_allow_antilag",     "0",                          0,                                                             0,      qfalse, qfalse },
 	{ &vote_allow_muting,      "vote_allow_muting",      "0",                          0,                                                             0,      qfalse, qfalse },
 	{ &vote_limit,             "vote_limit",             "5",                          0,                                                             0,      qfalse, qfalse },
+	{ &vote_delay,             "vote_delay",             "20000",                      0,                                                             0,      qfalse, qfalse },
 	{ &vote_percent,           "vote_percent",           "50",                         0,                                                             0,      qfalse, qfalse },
 
 	// state vars
@@ -1440,6 +1442,9 @@ void G_InitGame(int levelTime, int randomSeed) {
 	if (!G_enable_delayed_map_change_watcher()) {
 		G_Error("%s: error while installing delayed map change watcher\n", GAME_VERSION);
 	}
+
+	// suburb, initiate vote delay
+	level.voteInfo.lastVoteTime = level.startTime;
 }
 
 /*

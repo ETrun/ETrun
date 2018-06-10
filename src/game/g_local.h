@@ -667,6 +667,11 @@ typedef struct {
 	// suburb, noclip speed scale
 	int noclipSpeed;
 
+	// suburb, yawspeed
+	int yawspeed;
+
+	// suburb, pitchspeed
+	int pitchspeed;
 } clientPersistant_t;
 
 typedef struct {
@@ -815,6 +820,8 @@ typedef struct voteInfo_s {
 	// Nico, used to check if voter switches team
 	char voter_team;
 	int voter_cn;
+	// suburb, used for vote_delay
+	int lastVoteTime;
 } voteInfo_t;
 
 // Nico, delayed map change
@@ -1015,6 +1022,7 @@ void Cmd_Team_f(gentity_t *ent);
 void Cmd_PrivateMessage_f(gentity_t *ent);
 void Cmd_Help_f(gentity_t *ent);
 void Cmd_Abort_f(gentity_t *ent);
+void Cmd_Tutorial_f(gentity_t *ent);
 void G_SendScore(gentity_t *client);
 
 //
@@ -1447,6 +1455,7 @@ extern vmCvar_t vote_allow_referee;
 extern vmCvar_t vote_allow_antilag;
 extern vmCvar_t vote_allow_muting;
 extern vmCvar_t vote_limit;
+extern vmCvar_t vote_delay;
 extern vmCvar_t vote_percent;
 
 // Nico, beginning of ETrun server cvars
@@ -1788,6 +1797,7 @@ void G_delay_map_change(char *mapName, int delay); // Nico, function to delay a 
 void *G_delayed_map_change_watcher(void *arg); // Nico, thread used to check map changes
 int G_Map_v(gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd);
 int G_Randommap_v(gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd);
+int G_MapRestart_v(gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd);
 int G_Referee_v(gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd);
 int G_Unreferee_v(gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd);
 int G_AntiLag_v(gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd);

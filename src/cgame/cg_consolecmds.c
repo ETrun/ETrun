@@ -809,4 +809,10 @@ void CG_InitConsoleCommands(void) {
 
 	// suburb, abort run command
 	trap_AddCommand("abort");
+
+	// suburb, tutorial
+	trap_AddCommand("tutorial");
+
+	// suburb, mod info
+	trap_AddCommand("mod_information");
 }
