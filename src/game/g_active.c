@@ -252,7 +252,7 @@ Spectators will only interact with teleporters.
 ============
 */
 void    G_TouchTriggers(gentity_t *ent) {
-	int           i, num;
+	int           i, num, triggerMultiples;
 	int           touch[MAX_GENTITIES];
 	gentity_t     *hit;
 	trace_t       trace;
@@ -280,6 +280,7 @@ void    G_TouchTriggers(gentity_t *ent) {
 	VectorAdd(ent->client->ps.origin, ent->r.mins, mins);
 	VectorAdd(ent->client->ps.origin, ent->r.maxs, maxs);
 
+	triggerMultiples = 0;
 	for (i = 0 ; i < num ; ++i) {
 		hit = &g_entities[touch[i]];
 
@@ -315,11 +316,25 @@ void    G_TouchTriggers(gentity_t *ent) {
 			}
 		}
 
+		// suburb, prevent trigger bug
+		if (hit->s.eType == ET_TRIGGER_MULTIPLE) {
+			triggerMultiples++;
+			if (level.time - ent->client->sess.timerunStartTime < 550) {
+				ent->client->pers.lastLoadedTime = level.time;
+			}
+		}
+
 		memset(&trace, 0, sizeof (trace));
 
 		if (hit->touch) {
 			hit->touch(hit, ent, &trace);
 		}
+	}
+
+	if (triggerMultiples == 0) {
+		ent->client->pers.isTouchingTrigger = qfalse;
+	} else {
+		ent->client->pers.isTouchingTrigger = qtrue;
 	}
 }
 
@@ -854,51 +869,55 @@ void ClientThink_real(gentity_t *ent) {
 	ClientTimerActions(ent, msec);
 
 	// Nico, check ping
-	if (client->sess.timerunActive && client->ps.ping > MAX_PLAYER_PING) {
-		CP(va("cpm \"%s^w: ^1too high ping detected, timerun stopped\n\"", GAME_VERSION_COLORED));
-		// Nico, notify the client and its spectators the timerun has stopped
-		notify_timerun_stop(ent, 0);
-		client->sess.timerunActive = qfalse;
+	if (client->ps.ping > MAX_PLAYER_PING) {
+		if (client->sess.timerunActive) {
+			// Nico, notify the client and its spectators the timerun has stopped
+			notify_timerun_stop(ent, 0);
+			client->sess.timerunActive = qfalse;
+		}
+		CP(va("cpm \"%s^w: ^1Too high ping detected, player killed.\n\"", GAME_VERSION_COLORED));
+		// suburb, prevent trigger bug
+		Cmd_Kill_f(ent);
 	}
 
 	// Nico, pmove_fixed
 	if (!client->pers.pmoveFixed) {
-		CP(va("cpm \"%s^w: ^1you were removed from teams because you can not use pmove_fixed 0\n\"", GAME_VERSION_COLORED));
+		CP(va("cpm \"%s^w: ^1You were removed from teams because you can not use pmove_fixed 0.\n\"", GAME_VERSION_COLORED));
 		trap_SendServerCommand(ent - g_entities, "pmoveon");
 		SetTeam(ent, "s", -1, -1, qfalse);
 	}
 
 	// Nico, check rate
 	if (client->pers.rate < MIN_PLAYER_RATE_VALUE || client->pers.rate > MAX_PLAYER_RATE_VALUE) {
-		CP(va("cpm \"%s^w: ^1you were removed from teams because you must use %d <= rate <= %d\n\"", GAME_VERSION_COLORED, MIN_PLAYER_RATE_VALUE, MAX_PLAYER_RATE_VALUE));
+		CP(va("cpm \"%s^w: ^1You were removed from teams because you must use %d <= rate <= %d.\n\"", GAME_VERSION_COLORED, MIN_PLAYER_RATE_VALUE, MAX_PLAYER_RATE_VALUE));
 		trap_SendServerCommand(ent - g_entities, "resetRate");
 		SetTeam(ent, "s", -1, -1, qfalse);
 	}
 
 	// Nico, check snaps (unsigned int)
 	if (client->pers.snaps > MAX_PLAYER_SNAPS_VALUE) {
-		CP(va("cpm \"%s^w: ^1you were removed from teams because you must use %d <= snaps <= %d\n\"", GAME_VERSION_COLORED, MIN_PLAYER_SNAPS_VALUE, MAX_PLAYER_SNAPS_VALUE));
+		CP(va("cpm \"%s^w: ^1You were removed from teams because you must use %d <= snaps <= %d.\n\"", GAME_VERSION_COLORED, MIN_PLAYER_SNAPS_VALUE, MAX_PLAYER_SNAPS_VALUE));
 		trap_SendServerCommand(ent - g_entities, "resetSnaps");
 		SetTeam(ent, "s", -1, -1, qfalse);
 	}
 
 	// Nico, check timenudge
 	if (client->pers.clientTimeNudge != FORCED_PLAYER_TIMENUDGE_VALUE) {
-		CP(va("cpm \"%s^w: ^1you were removed from teams because you must use cl_timenudge %d\n\"", GAME_VERSION_COLORED, FORCED_PLAYER_TIMENUDGE_VALUE));
+		CP(va("cpm \"%s^w: ^1You were removed from teams because you must use cl_timenudge %d.\n\"", GAME_VERSION_COLORED, FORCED_PLAYER_TIMENUDGE_VALUE));
 		trap_SendServerCommand(ent - g_entities, "resetTimeNudge");
 		SetTeam(ent, "s", -1, -1, qfalse);
 	}
 
 	// Nico, check maxpackets
 	if (client->pers.clientMaxPackets < MIN_PLAYER_MAX_PACKETS_VALUE || client->pers.clientMaxPackets > MAX_PLAYER_MAX_PACKETS_VALUE) {
-		CP(va("cpm \"%s^w: ^1you were removed from teams because you must use %d <= cl_maxpackets <= %d\n\"", GAME_VERSION_COLORED, MIN_PLAYER_MAX_PACKETS_VALUE, MAX_PLAYER_MAX_PACKETS_VALUE));
+		CP(va("cpm \"%s^w: ^1You were removed from teams because you must use %d <= cl_maxpackets <= %d.\n\"", GAME_VERSION_COLORED, MIN_PLAYER_MAX_PACKETS_VALUE, MAX_PLAYER_MAX_PACKETS_VALUE));
 		trap_SendServerCommand(ent - g_entities, "resetMaxPackets");
 		SetTeam(ent, "s", -1, -1, qfalse);
 	}
 
 	// Nico, check max FPS
 	if (client->pers.maxFPS < MIN_PLAYER_FPS_VALUE || client->pers.maxFPS > MAX_PLAYER_FPS_VALUE) {
-		CP(va("cpm \"%s^w: ^1you were removed from teams because you must use %d <= com_maxfps <= %d\n\"", GAME_VERSION_COLORED, MIN_PLAYER_FPS_VALUE, MAX_PLAYER_FPS_VALUE));
+		CP(va("cpm \"%s^w: ^1You were removed from teams because you must use %d <= com_maxfps <= %d.\n\"", GAME_VERSION_COLORED, MIN_PLAYER_FPS_VALUE, MAX_PLAYER_FPS_VALUE));
 		trap_SendServerCommand(ent - g_entities, "resetMaxFPS");
 		SetTeam(ent, "s", -1, -1, qfalse);
 	}
@@ -919,21 +938,21 @@ void ClientThink_real(gentity_t *ent) {
 
 	// Nico, force auto demo record in cup mode
 	if (g_cupMode.integer != 0 && client->pers.autoDemo == 0) {
-		CP(va("cpm \"%s^w: ^1you were removed from teams because you must use cg_autoDemo 1\n\"", GAME_VERSION_COLORED));
+		CP(va("cpm \"%s^w: ^1You were removed from teams because you must use cg_autoDemo 1.\n\"", GAME_VERSION_COLORED));
 		trap_SendServerCommand(ent - g_entities, "autoDemoOn");
 		SetTeam(ent, "s", -1, -1, qfalse);
 	}
 
 	// Nico, force hide me in cup mode
 	if (g_cupMode.integer != 0 && client->pers.hideme == 0) {
-		CP(va("cpm \"%s^w: ^1you were removed from teams because you must use cg_hideMe 1\n\"", GAME_VERSION_COLORED));
+		CP(va("cpm \"%s^w: ^1You were removed from teams because you must use cg_hideMe 1.\n\"", GAME_VERSION_COLORED));
 		trap_SendServerCommand(ent - g_entities, "hideMeOn");
 		SetTeam(ent, "s", -1, -1, qfalse);
 	}
 
 	// Nico, force CGaz 0 in cup mode
 	if (g_cupMode.integer != 0 && client->pers.cgaz != 0) {
-		CP(va("cpm \"%s^w: ^1you were removed from teams because you must use cg_drawCGaz 0\n\"", GAME_VERSION_COLORED));
+		CP(va("cpm \"%s^w: ^1You were removed from teams because you must use cg_drawCGaz 0.\n\"", GAME_VERSION_COLORED));
 		trap_SendServerCommand(ent - g_entities, "CGazOff");
 		SetTeam(ent, "s", -1, -1, qfalse);
 	}
