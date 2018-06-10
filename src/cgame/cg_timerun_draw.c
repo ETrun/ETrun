@@ -696,7 +696,7 @@ void CG_DrawVelocitySnapping(void) {
 		cg.snapSpeed /= 125;
 		cg.snapCount = 0;
 
-		for (step = floor(cg.snapSpeed + 0.5) - 0.5; step > 0 && cg.snapCount < sizeof(cg.snapZones) - 2; step--) {
+		for (step = floor(cg.snapSpeed + 0.5) - 0.5; step > 0 && cg.snapCount < (int) (sizeof (cg.snapZones) - 2); step--) {
 			cg.snapZones[cg.snapCount] = RAD2DEG(acos(step / cg.snapSpeed));
 			cg.snapCount++;
 			cg.snapZones[cg.snapCount] = RAD2DEG(asin(step / cg.snapSpeed));
