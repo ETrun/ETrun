@@ -47,7 +47,10 @@ If you have questions concerning this license or the applicable additional terms
 #define MOD_URL                "http://www.timeruns.net"
 #define SHORT_MOD_URL          "www.timeruns.net"
 
-#define GAME_VERSION_DATED     GAME_VERSION "_"MOD_VERSION
+#define GAME_VERSION_DATED     GAME_VERSION "_" MOD_VERSION
+
+// suburb, build time if ever needed
+#define BUILD_TIME __DATE__ " " __TIME__
 
 //bani
 #ifdef __GNUC__

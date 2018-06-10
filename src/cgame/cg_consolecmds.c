@@ -809,4 +809,7 @@ void CG_InitConsoleCommands(void) {
 
 	// suburb, tutorial
 	trap_AddCommand("tutorial");
+
+	// suburb, mod info
+	trap_AddCommand("mod_information");
 }
