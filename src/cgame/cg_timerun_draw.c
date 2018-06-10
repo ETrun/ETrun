@@ -350,7 +350,7 @@ void CG_DrawTimer(void) {
 		// Nico, timerun not finished yet
 
 		// Nico, you won't beat the rec this time, turn timer to red color
-		if (runBestTime > 0 && currentTimerunTime > runBestTime) {
+		if (runBestTime > 0 && currentTimerunTime > runBestTime + 16) {
 			Vector4Set(color, colorRed[0], colorRed[1], colorRed[2], colorRed[3]);
 		}
 
@@ -491,7 +491,12 @@ void CG_DrawCGaz(void) {
 
 		// Nico, AP or stock accel?
 		if (physics.integer == PHYSICS_MODE_AP_NO_OB || physics.integer == PHYSICS_MODE_AP_OB) {
-			accel = pm_accelerate_AP;
+			// suburb, CGaz 2 on ground fix
+			if (cg_drawCGaz.integer == 2) {
+				accel = pm_accelerate_AP - 10.0f;
+			} else {
+				accel = pm_accelerate_AP;
+			}
 		} else {
 			accel = pm_accelerate;
 		}

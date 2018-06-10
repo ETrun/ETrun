@@ -2589,11 +2589,10 @@ void PmoveSingle(pmove_t *pmove) {
 	}
 
 	// set the firing flag for continuous beam weapons
-
 	pm->ps->eFlags &= ~(EF_FIRING | EF_ZOOMING);
-
 	if (pm->cmd.wbuttons & WBUTTON_ZOOM && pm->ps->stats[STAT_HEALTH] >= 0 && !(pm->ps->weaponDelay)) {
-		if (pm->ps->stats[STAT_KEYS] & (1 << INV_BINOCS) &&        // (SA) binoculars are an inventory item (inventory==keys)
+		if ((pm->ps->stats[STAT_KEYS] & (1 << INV_BINOCS) ||         // (SA) binoculars are an inventory item (inventory==keys)
+			pm->ps->persistant[PERS_TEAM] == TEAM_SPECTATOR) &&      // suburb, added spec team check to enable binoc zoom in spec
 		    !BG_IsScopedWeapon(pm->ps->weapon) &&          // don't allow binocs if using the sniper scope
 		    !BG_PlayerMounted(pm->ps->eFlags) &&        // or if mounted on a weapon
 		    // rain - #215 - don't allow binocs w/ mounted mob. MG42 or mortar either.
