@@ -667,6 +667,9 @@ typedef struct {
 	// suburb, noclip speed scale
 	int noclipSpeed;
 
+	// suburb, inactivity drop
+	vec3_t oldViewangles;
+
 	// suburb, yawspeed
 	int yawspeed;
 
