@@ -699,7 +699,8 @@ void CG_UpdateCvars(void) {
 				    cv->vmCvar == &cg_hideMe || cv->vmCvar == &cg_autoDemo ||
 				    cv->vmCvar == &cg_autoLoadCheckpoints || cv->vmCvar == &cg_specLock ||
 				    cv->vmCvar == &cg_keepAllDemos || cv->vmCvar == &cg_loadWeapon ||
-				    cv->vmCvar == &cg_noclipSpeed) {
+				    cv->vmCvar == &cg_noclipSpeed || cv->vmCvar == &int_cl_yawspeed || 
+				    cv->vmCvar == &int_cl_pitchspeed) {
 					fSetFlags = qtrue;
 				} else if (cv->vmCvar == &cg_crosshairColor || cv->vmCvar == &cg_crosshairAlpha) {
 					BG_setCrosshair(cg_crosshairColor.string, cg.xhairColor, cg_crosshairAlpha.value, "cg_crosshairColor");
