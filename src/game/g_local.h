@@ -667,6 +667,11 @@ typedef struct {
 	// suburb, noclip speed scale
 	int noclipSpeed;
 
+	// suburb, yawspeed
+	int yawspeed;
+
+	// suburb, pitchspeed
+	int pitchspeed;
 } clientPersistant_t;
 
 typedef struct {
