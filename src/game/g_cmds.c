@@ -2332,6 +2332,9 @@ void ClientCommand(int clientNum) {
 		Cmd_FollowCycle_f(ent, 1);
 	} else if (!Q_stricmp(cmd, "followprev")) {
 		Cmd_FollowCycle_f(ent, -1);
+	} else if (!Q_stricmp(cmd, "mod_information")) { // suburb, added mod info printout
+		CP(va("print \"%s %s\n\"", GAME_VERSION " " MOD_VERSION, BUILD_TIME));
+		return;
 	}
 
 	// Nico, flood protection

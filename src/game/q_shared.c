@@ -656,18 +656,31 @@ void QDECL Com_sprintf(char *dest, int size, const char *fmt, ...) {
 }
 
 // Nico, secured version from etlegacy
-char *QDECL va(char *format, ...) {
-	va_list     argptr;
-	static char string[2][32000]; // in case va is called by nested functions
-	static int  index = 0;
-	char        *buf;
-
-	buf = string[index & 1];
-	index++;
+// suburb, updated to latest etlegacy version, fixes nested calls
+char *QDECL va(const char *format, ...) {
+	va_list       argptr;
+	static char   temp_buffer[MAX_VA_STRING];
+	static char   string[MAX_VA_STRING];  // in case va is called by nested functions
+	static size_t index = 0;
+	char          *buf;
+	size_t        len;
 
 	va_start(argptr, format);
-	Q_vsnprintf(buf, sizeof (*string), format, argptr);
+	vsprintf(temp_buffer, format, argptr); // Q_vsnprintf ???
 	va_end(argptr);
+
+	if ((len = strlen(temp_buffer)) >= MAX_VA_STRING) {
+		Com_Error(ERR_DROP, "Attempted to overrun string in call to va()");
+	}
+
+	if (len + index >= MAX_VA_STRING - 1) {
+		index = 0;
+	}
+
+	buf = &string[index];
+	memcpy(buf, temp_buffer, len + 1);
+
+	index += len + 1;
 
 	return buf;
 }
