@@ -2190,11 +2190,11 @@ static void CG_Draw2D(void) {
 		// Nico, draw check points
 		CG_DrawCheckpoints();
 
-		// Nico, draw keys pressed
-		CG_DrawKeys();
-
 		// Nico, draw CGaz
 		CG_DrawCGaz();
+
+		// Nico, draw keys pressed
+		CG_DrawKeys();
 
 		// Nico, draw banners
 		CG_DrawBannerPrint();
@@ -2429,6 +2429,9 @@ void CG_DrawActive(stereoFrame_t stereoView) {
 
 	// suburb, update jump speeds even if nothing is drawn
 	CG_UpdateJumpSpeeds();
+
+	// suburb, update keys & menus
+	CG_UpdateKeysAndMenus();
 
 	// Nico, render while in limbo
 	CG_Draw2D();

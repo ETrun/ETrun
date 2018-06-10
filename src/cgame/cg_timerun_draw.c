@@ -655,10 +655,8 @@ void CG_DrawCGaz(void) {
 #define DRAWKEYS_MENU_CLOSING_DELAY    50
 void CG_DrawKeys(void) {
 	playerState_t *ps;
-	qboolean      downNow[KEYS_AMOUNT];
-	qboolean      anyMenuClosedRecently = qfalse;
 	float         x, y, size;
-	int           i, j;
+	int           i;
 	int           skew;
 
 	if (!cg_drawKeys.integer) {
@@ -683,65 +681,6 @@ void CG_DrawKeys(void) {
 
 	size = cg_keysSize.value / 3;
 	i    = (cg_drawKeys.integer - 1) % NUM_KEYS_SETS;
-
-	// suburb, UI flickering fix
-	downNow[0] = ps->stats[STAT_USERCMD_BUTTONS] & (BUTTON_SPRINT << 8);
-	downNow[1] = ps->stats[STAT_USERCMD_MOVE] & UMOVE_FORWARD;
-	downNow[2] = ps->stats[STAT_USERCMD_MOVE] & UMOVE_UP;
-	downNow[3] = ps->stats[STAT_USERCMD_MOVE] & UMOVE_LEFT;
-	downNow[4] = ps->stats[STAT_USERCMD_MOVE] & UMOVE_RIGHT;
-	downNow[5] = ps->stats[STAT_USERCMD_BUTTONS] & WBUTTON_PRONE;
-	downNow[6] = ps->stats[STAT_USERCMD_MOVE] & UMOVE_BACKWARD;
-	downNow[7] = ps->stats[STAT_USERCMD_MOVE] & UMOVE_DOWN;
-
-	// check whether console is up
-	if (!cg.consoleIsUp && trap_Key_GetCatcher() & KEYCATCH_CONSOLE) {
-		cg.consoleIsUp = qtrue;
-	} else if (cg.consoleIsUp && !(trap_Key_GetCatcher() & KEYCATCH_CONSOLE)) {
-		cg.lastClosedMenuTime = cg.time;
-		cg.consoleIsUp = qfalse;
-	}
-
-	// check whether any UI menu is up
-	if (!cg.UIisUp && trap_Key_GetCatcher() & KEYCATCH_UI) {
-		cg.UIisUp = qtrue;
-	} else if (cg.UIisUp && !(trap_Key_GetCatcher() & KEYCATCH_UI)) {
-		cg.lastClosedMenuTime = cg.time;
-		cg.UIisUp = qfalse;
-	}
-
-	// check whether limbo menu is up
-	if (!cg.limboIsUp && trap_Key_GetCatcher() & KEYCATCH_CGAME) {
-		cg.limboIsUp = qtrue;
-	} else if (cg.limboIsUp && !(trap_Key_GetCatcher() & KEYCATCH_CGAME)) {
-		cg.lastClosedMenuTime = cg.time;
-		cg.limboIsUp = qfalse;
-	}
-
-	// check whether any menu has closed within the last 50ms
-	if (!cg.consoleIsUp && !cg.UIisUp && !cg.limboIsUp && (cg.time - cg.lastClosedMenuTime < DRAWKEYS_MENU_CLOSING_DELAY)) {
-		anyMenuClosedRecently = qtrue;
-	}
-
-	// check whether flickering is even possible
-	for (j = 0; j < KEYS_AMOUNT; ++j) {
-		if (cg.consoleIsUp || cg.UIisUp || cg.limboIsUp || anyMenuClosedRecently) {
-			if (cg.keyDown[j] != downNow[j]) {
-				if (cg.keyTimes[j] == 0) {
-					cg.keyTimes[j] = cg.time;
-				} else if (cg.time - cg.keyTimes[j] > DRAWKEYS_DEBOUNCE_VALUE) {
-					// Require it to be unchanged for 100ms before we care
-					cg.keyTimes[j] = 0;
-					cg.keyDown[j] = downNow[j];
-				}
-			} else if (cg.keyTimes[j] != 0) {
-				// So if it needs a new full 50ms
-				cg.keyTimes[j] = 0;
-			}
-		} else {
-			cg.keyDown[j] = downNow[j];
-		}
-	}
 
 	// first (upper) row
 	// sprint (upper left)
@@ -811,6 +750,77 @@ void CG_DrawKeys(void) {
 		CG_DrawPic(x, y, size, size, cgs.media.keys[i].CrouchPressedShader);
 	} else {
 		CG_DrawPic(x, y, size, size, cgs.media.keys[i].CrouchNotPressedShader);
+	}
+}
+
+/**
+* Update keys & menus
+*
+* @author suburb, used for UI flickering fix
+*/
+void CG_UpdateKeysAndMenus(void) {
+	playerState_t *ps = &cg.predictedPlayerState;
+	qboolean      downNow[KEYS_AMOUNT];
+	qboolean      anyMenuClosedRecently = qfalse;
+	int           i;
+
+	// get the current buttons
+	downNow[0] = ps->stats[STAT_USERCMD_BUTTONS] & (BUTTON_SPRINT << 8);
+	downNow[1] = ps->stats[STAT_USERCMD_MOVE] & UMOVE_FORWARD;
+	downNow[2] = ps->stats[STAT_USERCMD_MOVE] & UMOVE_UP;
+	downNow[3] = ps->stats[STAT_USERCMD_MOVE] & UMOVE_LEFT;
+	downNow[4] = ps->stats[STAT_USERCMD_MOVE] & UMOVE_RIGHT;
+	downNow[5] = ps->stats[STAT_USERCMD_BUTTONS] & WBUTTON_PRONE;
+	downNow[6] = ps->stats[STAT_USERCMD_MOVE] & UMOVE_BACKWARD;
+	downNow[7] = ps->stats[STAT_USERCMD_MOVE] & UMOVE_DOWN;
+
+	// check whether console is up
+	if (!cg.consoleIsUp && trap_Key_GetCatcher() & KEYCATCH_CONSOLE) {
+		cg.consoleIsUp = qtrue;
+	} else if (cg.consoleIsUp && !(trap_Key_GetCatcher() & KEYCATCH_CONSOLE)) {
+		cg.lastClosedMenuTime = cg.time;
+		cg.consoleIsUp = qfalse;
+	}
+
+	// check whether any UI menu is up
+	if (!cg.UIisUp && trap_Key_GetCatcher() & KEYCATCH_UI) {
+		cg.UIisUp = qtrue;
+	} else if (cg.UIisUp && !(trap_Key_GetCatcher() & KEYCATCH_UI)) {
+		cg.lastClosedMenuTime = cg.time;
+		cg.UIisUp = qfalse;
+	}
+
+	// check whether limbo menu is up
+	if (!cg.limboIsUp && trap_Key_GetCatcher() & KEYCATCH_CGAME) {
+		cg.limboIsUp = qtrue;
+	} else if (cg.limboIsUp && !(trap_Key_GetCatcher() & KEYCATCH_CGAME)) {
+		cg.lastClosedMenuTime = cg.time;
+		cg.limboIsUp = qfalse;
+	}
+
+	// check whether any menu has closed within the last 50ms
+	if (!cg.consoleIsUp && !cg.UIisUp && !cg.limboIsUp && (cg.time - cg.lastClosedMenuTime < DRAWKEYS_MENU_CLOSING_DELAY)) {
+		anyMenuClosedRecently = qtrue;
+	}
+
+	// check whether flickering is even possible
+	for (i = 0; i < KEYS_AMOUNT; ++i) {
+		if (cg.consoleIsUp || cg.UIisUp || cg.limboIsUp || anyMenuClosedRecently) {
+			if (cg.keyDown[i] != downNow[i]) {
+				if (cg.keyTimes[i] == 0) {
+					cg.keyTimes[i] = cg.time;
+				} else if (cg.time - cg.keyTimes[i] > DRAWKEYS_DEBOUNCE_VALUE) {
+					// require it to be unchanged for 100ms before we care
+					cg.keyTimes[i] = 0;
+					cg.keyDown[i] = downNow[i];
+				}
+			} else if (cg.keyTimes[i] != 0) {
+				// so if it needs a new full 50ms
+				cg.keyTimes[i] = 0;
+			}
+		} else {
+			cg.keyDown[i] = downNow[i];
+		}
 	}
 }
 
