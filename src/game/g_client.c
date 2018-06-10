@@ -910,8 +910,8 @@ void ClientUserinfoChanged(int clientNum) {
 	       // Nico, cgaz
 	       &client->pers.cgaz,
 
-		   // suburb, velocity snapping
-		   &client->pers.snapping,
+	       // suburb, velocity snapping
+	       &client->pers.snapping,
 
 	       // Nico, hideme
 	       &client->pers.hideme,

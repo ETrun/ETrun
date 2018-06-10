@@ -800,8 +800,8 @@ void CG_setClientFlags(void) {
 	                             // Nico, cgaz
 	                             cg_drawCGaz.integer,
 
-								 // suburb, velocity snapping
-								 cg_drawVelocitySnapping.integer,
+	                             // suburb, velocity snapping
+	                             cg_drawVelocitySnapping.integer,
 
 	                             // Nico, hideme
 	                             cg_hideMe.integer,
