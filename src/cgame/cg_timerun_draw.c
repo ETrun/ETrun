@@ -245,12 +245,12 @@ void CG_DrawSlick(void) {
  */
 void CG_DrawTimer(void) {
 	char       status[128];
-	int        min = 0, sec = 0, milli = 0;
-	int        x = 0, y = 0, w = 0;
-	int        timerunNum = cg.currentTimerun;
-	int        startTime = 0;
+	int        min                = 0, sec = 0, milli = 0;
+	int        x                  = 0, y = 0, w = 0;
+	int        timerunNum         = cg.currentTimerun;
+	int        startTime          = 0;
 	int        currentTimerunTime = 0;
-	float      sizex = 0.25f, sizey = 0.25f;
+	float      sizex              = 0.25f, sizey = 0.25f;
 	vec4_t     color;
 	int        runBestTime;
 	int        runLastTime;
@@ -660,6 +660,80 @@ void CG_DrawCGaz(void) {
 }
 
 /**
+* Detached function to sort velocity snapping zones (taken from iodfengine)
+*
+* @author suburb
+*/
+static int QDECL sortSnapZones(const void *a, const void *b) {
+	return *(float *)a - *(float *)b;
+}
+
+/**
+* Draw velocity snapping zones (core math taken from iodfengine)
+*
+* @author suburb
+*/
+#define DF_TO_ET_GROUNDSPEED (352.0f / 320.0f)
+void CG_DrawVelocitySnapping(void) {
+	vec4_t color[3];
+	float rgba1[4]        = { 0.4f, 0, 0, 0.5f };
+	float rgba2[4]        = { 0, 0.4f, 0.4f, 0.5f };
+	float step            = 0;
+	float yaw             = 0;
+	int snapHud_H         = 0;
+	int snapHud_Y         = 0;
+	int colorID           = 0;
+	int fov               = 0;
+	int i                 = 0;
+
+	if (!cg_drawVelocitySnapping.integer || cg.isLogged || (cg.snap->ps.persistant[PERS_TEAM] == TEAM_SPECTATOR)) {
+		return;
+	}
+
+	// check whether snapSpeed needs to be updated
+	if (cg.snapSpeed != cg.snap->ps.speed * DF_TO_ET_GROUNDSPEED) {
+		cg.snapSpeed = cg.snap->ps.speed * DF_TO_ET_GROUNDSPEED;
+		cg.snapSpeed /= 125;
+		cg.snapCount = 0;
+
+		for (step = floor(cg.snapSpeed + 0.5) - 0.5; step > 0 && cg.snapCount < (int) (sizeof (cg.snapZones) - 2); step--) {
+			cg.snapZones[cg.snapCount] = RAD2DEG(acos(step / cg.snapSpeed));
+			cg.snapCount++;
+			cg.snapZones[cg.snapCount] = RAD2DEG(asin(step / cg.snapSpeed));
+			cg.snapCount++;
+		}
+
+		qsort(cg.snapZones, cg.snapCount, sizeof(cg.snapZones[0]), sortSnapZones);
+		cg.snapZones[cg.snapCount] = cg.snapZones[0] + 90;
+	}
+
+	// draw snapping
+	yaw = cg.predictedPlayerState.viewangles[YAW] + 45;
+
+	snapHud_H = cg_velocitySnappingH.integer;
+	snapHud_Y = cg_velocitySnappingY.integer;
+	fov = cg_velocitySnappingFov.integer;
+
+	if (cg_drawVelocitySnapping.integer == 2) {
+		for (int i = 0; i < 3; i++) {
+			color[0][i] = 1;
+			color[1][i] = 1;
+		}
+	} else {
+		for (int i = 0; i < 4; i++) {
+			color[0][i] = rgba1[i];
+			color[1][i] = rgba2[i];
+		}
+	}
+
+	for (i = 0; i < cg.snapCount; i++) {
+		CG_FillAngleYaw(cg.snapZones[i], cg.snapZones[i + 1], yaw, snapHud_Y, snapHud_H, fov, color[colorID]);
+		CG_FillAngleYaw(cg.snapZones[i] + 90, cg.snapZones[i + 1] + 90, yaw, snapHud_Y, snapHud_H, fov, color[colorID]);
+		colorID ^= 1;
+	}
+}
+
+/**
  * Draw keys from TJMod
  *
  * @author Nico
@@ -804,7 +878,7 @@ void CG_DrawBannerPrint(void) {
 	int   l      = 0;
 	int   y      = 20;
 	float *color;
-	float sizex = 0.2f, sizey = 0.2f;
+	float sizex     = 0.2f, sizey = 0.2f;
 	char  lastcolor = COLOR_WHITE;
 	int   charHeight;
 	int   bannerShowTime = 10000;

@@ -1604,6 +1604,13 @@ static void CG_ServerCommand(void) {
 		return;
 	}
 
+	// suburb, force velocity snapping off
+	if (!Q_stricmp(cmd, "SnappingOff")) {
+		trap_SendConsoleCommand("set cg_drawVelocitySnapping 0\n");
+		CG_AddPMItem(PM_MESSAGE, va("%s^w: cg_drawVelocitySnapping has been set to 0.\n", GAME_VERSION_COLORED), cgs.media.voiceChatShader);
+		return;
+	}
+
 	// Nico, update specLock
 	if (!Q_stricmp(cmd, "updateSpecLockStatus")) {
 		trap_SendConsoleCommand(va("set cg_specLock %d\n", atoi(CG_Argv(1))));
