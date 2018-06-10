@@ -4026,6 +4026,7 @@ void BG_setCrosshair(char *colString, float *col, float alpha, char *cvarName) {
 	trap_Cvar_Set(cvarName, "White");
 }
 
+// suburb, zoom related
 qboolean BG_IsScopedWeapon(int weapon) {
 	switch (weapon) {
 	case WP_GARAND_SCOPE:
@@ -4036,7 +4037,23 @@ qboolean BG_IsScopedWeapon(int weapon) {
 	return qfalse;
 }
 
-///////////////////////////////////////////////////////////////////////////////
+#define ZOOM_MAX_WEAPONS     6
+#define SCOPE_MAX_WEAPONS    2
+#define ZOOMTABLE_MAX_INDEX  3
+float BG_GetZoomTableValues(int weaponType, int index){
+	float zoomTable[ZOOM_MAX_WEAPONS][ZOOMTABLE_MAX_INDEX] =
+	{
+		    // {out,  in, scope}
+		        {  0,  0,   0 },  // default
+		        { 60,  1,   0 },  // binoc
+		        { 20,  4, 900 },  // sniper
+		        { 60,  20,  0 },  // snooper
+		        { 55,  55,  1 },  // fg42
+		        { 55,  55,  0 }   // mg42
+	};
+	return zoomTable[weaponType][index];
+}
+
 typedef struct locInfo_s {
 	vec2_t gridStartCoord;
 	vec2_t gridStep;

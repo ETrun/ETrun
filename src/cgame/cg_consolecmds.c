@@ -806,4 +806,10 @@ void CG_InitConsoleCommands(void) {
 
 	// Nico, help
 	trap_AddCommand("h");
+
+	// suburb, tutorial
+	trap_AddCommand("tutorial");
+
+	// suburb, mod info
+	trap_AddCommand("mod_information");
 }
