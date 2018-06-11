@@ -443,6 +443,9 @@ struct gentity_s {
 
 	// Nico, run name used by target_starttimer, target_stoptimer and target_checkpoint
 	char *timerunName;
+
+	// suburb, flood protection
+	qboolean isBeingDropped;
 };
 
 typedef enum {
