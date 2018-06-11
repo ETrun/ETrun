@@ -64,6 +64,7 @@ If you have questions concerning this license or the applicable additional terms
 
 #define TEAMCHAT_WIDTH      70
 #define TEAMCHAT_HEIGHT     8
+#define CHAT_WIDTH          428
 
 #define NOTIFY_WIDTH        80
 #define NOTIFY_HEIGHT       5
@@ -1608,6 +1609,7 @@ extern vmCvar_t cg_swingSpeed;
 extern vmCvar_t cg_shadows;
 extern vmCvar_t cg_draw2D;
 extern vmCvar_t cg_drawFPS;
+extern vmCvar_t cg_drawClock;
 extern vmCvar_t cg_drawSnapshot;
 extern vmCvar_t cg_drawCrosshair;
 extern vmCvar_t cg_drawCrosshairNames;
@@ -1656,7 +1658,9 @@ extern vmCvar_t cg_thirdPerson;
 extern vmCvar_t cg_stereoSeparation;
 extern vmCvar_t cg_lagometer;
 extern vmCvar_t cg_teamChatTime;
-extern vmCvar_t cg_teamChatHeight;
+extern vmCvar_t cg_chatHeight;
+extern vmCvar_t cg_chatX;
+extern vmCvar_t cg_chatY;
 extern vmCvar_t cg_stats;
 extern vmCvar_t cg_coronafardist;
 extern vmCvar_t cg_coronas;
@@ -1985,7 +1989,7 @@ void CG_DrawTimer(void);
 void CG_DrawCGaz(void);
 void CG_DrawVelocitySnapping(void);
 void CG_DrawKeys(void);
-void CG_DrawClock(float x, float y, float scale, qboolean shadowed);
+void CG_DrawScoresClock(float x, float y, float scale);
 void CG_DrawBannerPrint(void);
 void CG_DrawInfoPanel(void);
 void CG_UpdateJumpSpeeds(void);

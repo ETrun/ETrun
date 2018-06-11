@@ -574,8 +574,8 @@ static void CG_AddToTeamChat(const char *str, int clientnum) {
 	int  lastcolor;
 	int  chatHeight;
 
-	if (cg_teamChatHeight.integer < TEAMCHAT_HEIGHT) {
-		chatHeight = cg_teamChatHeight.integer;
+	if (cg_chatHeight.integer < TEAMCHAT_HEIGHT) {
+		chatHeight = cg_chatHeight.integer;
 	} else {
 		chatHeight = TEAMCHAT_HEIGHT;
 	}

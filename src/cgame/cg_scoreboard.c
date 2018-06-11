@@ -390,7 +390,7 @@ static void WM_ETrun_DrawInfo() {
 	float textScale              = 0.12f;
 
 	// Nico, draw time
-	CG_DrawClock(x, y, textScale, qtrue);
+	CG_DrawScoresClock(x, y, textScale);
 
 	// Nico, draw physics
 	getPhysicsDesc(physicsDesc, physics.integer);
