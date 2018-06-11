@@ -64,6 +64,7 @@ If you have questions concerning this license or the applicable additional terms
 
 #define TEAMCHAT_WIDTH      70
 #define TEAMCHAT_HEIGHT     8
+#define CHAT_WIDTH          428
 
 #define NOTIFY_WIDTH        80
 #define NOTIFY_HEIGHT       5
@@ -339,15 +340,13 @@ typedef enum {
 	ZOOM_SNOOPER,
 	ZOOM_FG42SCOPE,
 	ZOOM_MG42,
-	ZOOM_MAX_ZOOMS
 } EZoom_t;
 
 typedef enum {
 	ZOOM_OUT,   // widest angle
-	ZOOM_IN // tightest angle (approaching 0)
+	ZOOM_IN,    // tightest angle (approaching 0)
+	ZOOM_SCOPE  // suburb, for zoomed scope
 } EZoomInOut_t;
-
-extern float zoomTable[ZOOM_MAX_ZOOMS][2];
 
 //----(SA)	end
 
@@ -698,7 +697,9 @@ typedef enum {
 } showView_t;
 
 #define MAX_BACKUP_STATES (CMD_BACKUP + 2)
-
+// Nico, used to show pressed keys
+#define NUM_KEYS_SETS       3
+#define KEYS_AMOUNT         8
 typedef struct {
 	int clientFrame;                // incremented each frame
 
@@ -1005,6 +1006,22 @@ typedef struct {
 	int timerunJumpCounter;
 	int timerunJumpSpeeds[256];
 
+	// suburb, keycatcher causing CGaz & drawkeys flickering fix
+	int keyTimes[KEYS_AMOUNT];
+	qboolean keyDown[KEYS_AMOUNT];
+	int lastClosedMenuTime;
+	qboolean consoleIsUp;
+	qboolean UIisUp;
+	qboolean limboIsUp;
+
+	// suburb, Velocity Snapping
+	float snapZones[128]; // 128 being the max amount of drawn snapzones
+	float snapSpeed;
+	int snapCount;
+
+	// suburb, Accel HUD
+	float oldSpeed;
+  
 	// Nico, end of ETrun client variables
 } cg_t;
 
@@ -1012,8 +1029,6 @@ typedef struct {
 
 #define MAX_LOCKER_DEBRIS   5
 
-// Nico, used to show pressed keys
-#define NUM_KEYS_SETS       3
 typedef struct {
 	qhandle_t ForwardPressedShader;
 	qhandle_t ForwardNotPressedShader;
@@ -1607,6 +1622,7 @@ extern vmCvar_t cg_swingSpeed;
 extern vmCvar_t cg_shadows;
 extern vmCvar_t cg_draw2D;
 extern vmCvar_t cg_drawFPS;
+extern vmCvar_t cg_drawClock;
 extern vmCvar_t cg_drawSnapshot;
 extern vmCvar_t cg_drawCrosshair;
 extern vmCvar_t cg_drawCrosshairNames;
@@ -1648,13 +1664,16 @@ extern vmCvar_t cg_ignore;
 extern vmCvar_t cg_fov;
 extern vmCvar_t cg_zoomDefaultSniper;
 extern vmCvar_t cg_zoomStepSniper;
+extern vmCvar_t cg_zoomStepBinoc;
 extern vmCvar_t cg_thirdPersonRange;
 extern vmCvar_t cg_thirdPersonAngle;
 extern vmCvar_t cg_thirdPerson;
 extern vmCvar_t cg_stereoSeparation;
 extern vmCvar_t cg_lagometer;
 extern vmCvar_t cg_teamChatTime;
-extern vmCvar_t cg_teamChatHeight;
+extern vmCvar_t cg_chatHeight;
+extern vmCvar_t cg_chatX;
+extern vmCvar_t cg_chatY;
 extern vmCvar_t cg_stats;
 extern vmCvar_t cg_coronafardist;
 extern vmCvar_t cg_coronas;
@@ -1709,7 +1728,10 @@ extern vmCvar_t demo_infoWindow;
 // engine mappings
 extern vmCvar_t int_cl_maxpackets;
 extern vmCvar_t int_cl_timenudge;
-// -OSP
+
+// suburb, yawspeed & pitchspeed
+extern vmCvar_t int_cl_yawspeed;
+extern vmCvar_t int_cl_pitchspeed;
 
 extern vmCvar_t cg_rconPassword;
 extern vmCvar_t cg_refereePassword;
@@ -1739,6 +1761,10 @@ extern vmCvar_t cg_drawSpeedMeter;
 extern vmCvar_t cg_speedMeterX;
 extern vmCvar_t cg_speedMeterY;
 
+// Accel HUD
+extern vmCvar_t cg_drawAccel;
+extern vmCvar_t cg_accelSmoothness;
+
 // Timer
 extern vmCvar_t cg_drawTimer;
 extern vmCvar_t cg_timerX;
@@ -1766,6 +1792,12 @@ extern vmCvar_t cg_autoLogin;
 
 // CGaz
 extern vmCvar_t cg_drawCGaz;
+
+// Velocity Snapping
+extern vmCvar_t cg_drawVelocitySnapping;
+extern vmCvar_t cg_velocitySnappingH;
+extern vmCvar_t cg_velocitySnappingY;
+extern vmCvar_t cg_velocitySnappingFov;
 
 // Load view angles on load
 extern vmCvar_t cg_loadViewAngles;
@@ -1818,6 +1850,16 @@ extern vmCvar_t cg_minStartSpeed;
 // suburb, widescreen support
 extern vmCvar_t cg_widescreenSupport;
 extern vmCvar_t cg_realFov;
+
+// suburb, event cvars
+extern vmCvar_t cg_onRunStart;
+extern vmCvar_t cg_onRunStop;
+
+// Draw triggers
+extern vmCvar_t cg_drawTriggers;
+extern vmCvar_t cg_triggerOffset;
+extern vmCvar_t cg_triggerColor;
+
 // Nico, end of ETrun cvars
 
 //
@@ -1863,10 +1905,8 @@ void CG_TestModelNextFrame_f(void);
 void CG_TestModelPrevFrame_f(void);
 void CG_TestModelNextSkin_f(void);
 void CG_TestModelPrevSkin_f(void);
-void CG_ZoomDown_f(void);
 void CG_ZoomIn_f(void);
 void CG_ZoomOut_f(void);
-void CG_ZoomUp_f(void);
 
 void CG_SetupFrustum(void);
 qboolean CG_CullPoint(vec3_t pt);
@@ -1922,12 +1962,17 @@ void CG_DrawSides(float x, float y, float w, float h, float size);
 void CG_DrawTopBottom(float x, float y, float w, float h, float size);
 void CG_DrawTopBottom_NoScale(float x, float y, float w, float h, float size);
 
+// suburb, for velocity snapping
+void CG_FillAngleYaw(float start, float end, float viewangle, float y, float height, int fov, const float *color);
+
 // NERVE - SMF - localization functions
-void CG_InitTranslation();
+void CG_InitTranslation(void);
 char *CG_TranslateString(const char *string);
-void CG_SaveTransTable();
-void CG_ReloadTranslation();
-// -NERVE - SMF
+void CG_SaveTransTable(void);
+void CG_ReloadTranslation(void);
+
+// suburb
+float CG_AdjustFontSize(float textScale, int valueToPrint, int border);
 
 //
 // cg_draw.c, cg_newDraw.c
@@ -1969,11 +2014,13 @@ void CG_DrawOB(void);
 void CG_DrawSlick(void);
 void CG_DrawTimer(void);
 void CG_DrawCGaz(void);
+void CG_DrawVelocitySnapping(void);
 void CG_DrawKeys(void);
-void CG_DrawClock(float x, float y, float scale, qboolean shadowed);
+void CG_DrawScoresClock(float x, float y, float scale);
 void CG_DrawBannerPrint(void);
 void CG_DrawInfoPanel(void);
 void CG_UpdateJumpSpeeds(void);
+void CG_UpdateKeysAndMenus(void);
 
 //
 // cg_players.c
@@ -2065,8 +2112,8 @@ void CG_Tracer(vec3_t source, vec3_t dest, int sparks);
 void CG_CalcMuzzlePoint(int entityNum, vec3_t muzzle);
 void CG_Bullet(vec3_t end, int sourceEntityNum, qboolean flesh, int fleshEntityNum, int otherEntNum2, float waterfraction, int seed);
 
-void CG_RailTrail(vec3_t start, vec3_t end, int type);     //----(SA)	added 'type'
-void CG_RailTrail2(vec3_t start, vec3_t end);
+void CG_RailTrail(vec3_t start, vec3_t end, int box);     //----(SA)	added 'type'
+void CG_RailTrail2(vec3_t start, vec3_t end, int box);
 void CG_GrappleTrail(centity_t *ent, const weaponInfo_t *wi);
 void CG_AddViewWeapon(playerState_t *ps);
 void CG_AddPlayerWeapon(refEntity_t *parent, playerState_t *ps, centity_t *cent);

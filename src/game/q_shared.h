@@ -165,6 +165,7 @@ typedef int clipHandle_t;
 
 #define MAX_SAY_TEXT        150
 
+#define MAX_VA_STRING       32000
 typedef enum {
 	MESSAGE_EMPTY = 0,
 	MESSAGE_WAITING,        // rate/packet limited
@@ -580,7 +581,7 @@ int Q_vsnprintf(char *str, size_t size, const char *format, va_list ap);
 
 //=============================================
 
-char *QDECL va(char *format, ...) _attribute((format(printf, 1, 2)));
+char *QDECL va(const char *format, ...) _attribute((format(printf, 1, 2)));
 float *tv(float x, float y, float z);
 
 //=============================================
@@ -703,7 +704,9 @@ typedef struct {
 
 // in order from highest priority to lowest
 // if none of the catchers are active, bound key strings will be executed
+#define KEYCATCH_CONSOLE        0x0001
 #define KEYCATCH_UI             0x0002
+#define KEYCATCH_MESSAGE        0x0004
 #define KEYCATCH_CGAME          0x0008
 
 // sound channels

@@ -4485,8 +4485,8 @@ void UI_RegisterCvars(void) {
 
 	// OSP - Always force this to 0 on init
 	trap_Cvar_Set("ui_blackout", "0");
-	BG_setCrosshair(cg_crosshairColor.string, uiInfo.xhairColor, cg_crosshairAlpha.value, "cg_crosshairColor");
-	BG_setCrosshair(cg_crosshairColorAlt.string, uiInfo.xhairColorAlt, cg_crosshairAlphaAlt.value, "cg_crosshairColorAlt");
+	BG_SetRGBACvar(cg_crosshairColor.string, uiInfo.xhairColor, cg_crosshairAlpha.value, "cg_crosshairColor");
+	BG_SetRGBACvar(cg_crosshairColorAlt.string, uiInfo.xhairColorAlt, cg_crosshairAlphaAlt.value, "cg_crosshairColorAlt");
 }
 
 /*
@@ -4506,11 +4506,11 @@ void UI_UpdateCvars(void) {
 
 				// OSP
 				if (cv->vmCvar == &cg_crosshairColor || cv->vmCvar == &cg_crosshairAlpha) {
-					BG_setCrosshair(cg_crosshairColor.string, uiInfo.xhairColor, cg_crosshairAlpha.value, "cg_crosshairColor");
+					BG_SetRGBACvar(cg_crosshairColor.string, uiInfo.xhairColor, cg_crosshairAlpha.value, "cg_crosshairColor");
 				}
 
 				if (cv->vmCvar == &cg_crosshairColorAlt || cv->vmCvar == &cg_crosshairAlphaAlt) {
-					BG_setCrosshair(cg_crosshairColorAlt.string, uiInfo.xhairColorAlt, cg_crosshairAlphaAlt.value, "cg_crosshairColorAlt");
+					BG_SetRGBACvar(cg_crosshairColorAlt.string, uiInfo.xhairColorAlt, cg_crosshairAlphaAlt.value, "cg_crosshairColorAlt");
 				}
 			}
 		}
