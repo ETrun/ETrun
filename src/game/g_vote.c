@@ -53,15 +53,16 @@ typedef struct {
 // VC optimizes for dup strings :)
 static const vote_reference_t aVoteInfo[] =
 {
-	{ "kick",      G_Kick_v,      "KICK",            " <player_id>^7\n  Attempts to kick player from server"             },
-	{ "mute",      G_Mute_v,      "MUTE",            " <player_id>^7\n  Removes the chat capabilities of a player"       },
-	{ "unmute",    G_UnMute_v,    "UN-MUTE",         " <player_id>^7\n  Restores the chat capabilities of a player"      },
-	{ "map",       G_Map_v,       "Change map to",   " <mapname>^7\n  Votes for a new map to be loaded"                  },
-	{ "randommap", G_Randommap_v, "Load Random Map", "^7\n  Loads a random map"                                          },
-	{ "referee",   G_Referee_v,   "Referee",         " <player_id>^7\n  Elects a player to have admin abilities"         },
-	{ "unreferee", G_Unreferee_v, "UNReferee",       " <player_id>^7\n  Elects a player to have admin abilities removed" },
-	{ "antilag",   G_AntiLag_v,   "Anti-Lag",        " <0|1>^7\n  Toggles Anit-Lag on the server"                        },
-	{ 0,           NULL,          0,                 NULL                                                                }
+	{ "kick",       G_Kick_v,       "KICK",            " <player_id>^7\n  Attempts to kick player from server"             },
+	{ "mute",       G_Mute_v,       "MUTE",            " <player_id>^7\n  Removes the chat capabilities of a player"       },
+	{ "unmute",     G_UnMute_v,     "UN-MUTE",         " <player_id>^7\n  Restores the chat capabilities of a player"      },
+	{ "map",        G_Map_v,        "Change map to",   " <mapname>^7\n  Votes for a new map to be loaded"                  },
+	{ "randommap",  G_Randommap_v,  "Load Random Map", "^7\n  Loads a random map"                                          },
+	{ "maprestart", G_MapRestart_v, "Map Restart",     "^7\n  Restarts the current map in progress"                        },
+	{ "referee",    G_Referee_v,    "Referee",         " <player_id>^7\n  Elects a player to have admin abilities"         },
+	{ "unreferee",  G_Unreferee_v,  "UNReferee",       " <player_id>^7\n  Elects a player to have admin abilities removed" },
+	{ "antilag",    G_AntiLag_v,    "Anti-Lag",        " <0|1>^7\n  Toggles Anit-Lag on the server"                        },
+	{ 0,            NULL,           0,                 NULL                                                                }
 };
 
 // Checks for valid custom callvote requests from the client.
@@ -371,13 +372,13 @@ void G_delay_map_change(char *mapName, int delay) {
 			activeRunsCount++;
 		}
 	}
+	// suburb, g_timelimit 0 but needs delay
 	if (delay == 0 && level.numConnectedClients > 1 && activeRunsCount > 0) {
 		level.delayedMapChange.timeChange = level.time + MAP_CHANGE_DELAY * 1000;
 		AP(va("cpm \"^5Map will be changed in %d secs to: %s\n\"", MAP_CHANGE_DELAY, mapName));
 	} else {
 		level.delayedMapChange.timeChange = level.time + (delay * 60 * 1000) + 1000;
 	}
-
 	level.delayedMapChange.pendingChange = qtrue;
 }
 
@@ -510,6 +511,33 @@ int G_Randommap_v(gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg
 		}
 	}
 	return G_OK;
+}
+
+// *** Map Restart ***
+int G_MapRestart_v(gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd) {
+	char serverinfo[MAX_INFO_STRING];
+	trap_GetServerinfo(serverinfo, sizeof(serverinfo));
+
+	// Vote request (vote is being initiated)
+	if (arg) {
+		// suburb, if map voting disabled, also disable maprestart
+		if (!vote_allow_map.integer && ent && !ent->client->sess.referee) {
+			G_voteDisableMessage(ent, arg);
+			G_voteCurrentSetting(ent, arg, Info_ValueForKey(serverinfo, "mapname"));
+			return G_INVALID;
+		}
+
+		if (trap_Argc() > 2) {
+			if (!Q_stricmp(arg2, "?")) {
+				G_refPrintf(ent, "Usage: ^3%s %s%s\n", ((fRefereeCmd) ? "\\ref" : "\\callvote"), arg, aVoteInfo[dwVoteIndex].pszVoteHelp);
+				return(G_INVALID);
+			}
+		}
+	} else {
+		// Restart the map
+		G_delay_map_change(Info_ValueForKey(serverinfo, "mapname"), 0);
+	}
+	return(G_OK);
 }
 
 // *** Referee voting ***

@@ -768,7 +768,6 @@ void CG_InitConsoleCommands(void) {
 	trap_AddCommand("commands");
 	trap_AddCommand("players");
 	trap_AddCommand("ref");
-	trap_AddCommand("say_teamnl");
 	trap_AddCommand("say_team");
 	trap_AddCommand("specinvite");
 	trap_AddCommand("specuninvite");
@@ -807,6 +806,12 @@ void CG_InitConsoleCommands(void) {
 	// Nico, help
 	trap_AddCommand("h");
 
+	// suburb, abort run command
+	trap_AddCommand("abort");
+
 	// suburb, tutorial
 	trap_AddCommand("tutorial");
+
+	// suburb, mod info
+	trap_AddCommand("mod_information");
 }

@@ -3993,7 +3993,7 @@ colorTable_t OSP_Colortable[] =
 };
 
 extern void trap_Cvar_Set(const char *var_name, const char *value);
-void BG_setCrosshair(char *colString, float *col, float alpha, char *cvarName) {
+void BG_SetRGBACvar(char *colString, float *col, float alpha, char *cvarName) {
 	char *s = colString;
 
 	col[0] = 1.0f;
@@ -4095,21 +4095,6 @@ char *BG_GetLocationString(vec_t *pos) {
 	Com_sprintf(coord, sizeof (coord), "%c,%i", 'A' + x, y);
 
 	return coord;
-}
-
-qboolean BG_BBoxCollision(vec3_t min1, vec3_t max1, vec3_t min2, vec3_t max2) {
-	int i;
-
-	for (i = 0; i < 3; ++i) {
-		if (min1[i] > max2[i]) {
-			return qfalse;
-		}
-		if (min2[i] > max1[i]) {
-			return qfalse;
-		}
-	}
-
-	return qtrue;
 }
 
 weapon_t bg_heavyWeapons[NUM_HEAVY_WEAPONS] =

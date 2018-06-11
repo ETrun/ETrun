@@ -242,9 +242,7 @@ static float CG_DrawFPS(float y) {
 		int    w;
 		int    i, total;
 		int    fps;
-		vec4_t timerBackground = { 0.16f, 0.2f, 0.17f, 0.8f };
-		vec4_t timerBorder     = { 0.5f, 0.5f, 0.5f, 0.5f };
-		vec4_t tclr            = { 0.625f, 0.625f, 0.6f, 1.0f };
+		float  scale = 0.19f;
 
 		// average multiple frames together to smooth changes out a bit
 		total = 0;
@@ -257,21 +255,46 @@ static float CG_DrawFPS(float y) {
 		fps = 1000 * FPS_FRAMES / total;
 
 		s = va("%i FPS", fps);
-		w = CG_Text_Width_Ext(s, 0.19f, 0, &cgs.media.limboFont1);
+		w = CG_Text_Width_Ext(s, scale, 0, &cgs.media.limboFont1);
 
-		CG_FillRect(UPPERRIGHT_X - w - 2, y, w + 5, 12 + 2, timerBackground);
-		CG_DrawRect_FixedBorder(UPPERRIGHT_X - w - 2, y, w + 5, 12 + 2, 1, timerBorder);
+		//CG_DrawRect_FixedBorder(UPPERRIGHT_X - w - 2, y, w + 5, 12 + 2, 1, colorWhite);
 
-		CG_Text_Paint_Ext(UPPERRIGHT_X - w, y + 11, 0.19f, 0.19f, tclr, s, 0, 0, 0, &cgs.media.limboFont1);
+		CG_Text_Paint_Ext(UPPERRIGHT_X - w, y + 11, scale, scale, colorWhite, s, 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
 	}
 
-	return y + 12 + 4;
+	return y + 19;
+}
+
+/*
+==================
+CG_DrawClock
+
+original drawclock from TJMod
+
+@author suburb
+==================
+*/
+static float CG_DrawClock(float y) {
+	int     w;
+	float   scale = 0.19f;
+	char    displayTime[18] = { 0 };
+	qtime_t tm;
+
+	trap_RealTime(&tm);
+	displayTime[0] = '\0';
+	Q_strcat(displayTime, sizeof (displayTime), va("%d:%02d:%02d", tm.tm_hour, tm.tm_min, tm.tm_sec));
+
+	w = CG_Text_Width_Ext(displayTime, scale, 0, &cgs.media.limboFont1);
+
+	//CG_DrawRect_FixedBorder(UPPERRIGHT_X - w - 2, y, w + 5, 12 + 2, 1, colorWhite);
+	CG_Text_Paint_Ext(UPPERRIGHT_X - w, y + 11, scale, scale, colorWhite, displayTime, 0, 24, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
+
+	return y + 19;
 }
 
 /*
 =====================
 CG_DrawUpperRight
-
 =====================
 */
 static void CG_DrawUpperRight(void) {
@@ -284,6 +307,10 @@ static void CG_DrawUpperRight(void) {
 
 	if (cg_drawFPS.integer) {
 		y = CG_DrawFPS(y);
+	}
+
+	if (cg_drawClock.integer) {
+		y = CG_DrawClock(y);
 	}
 
 	if (cg_drawSnapshot.integer) {
@@ -299,10 +326,6 @@ static void CG_DrawUpperRight(void) {
 ===========================================================================================
 */
 
-#define CHATLOC_X 160
-#define CHATLOC_Y 478
-#define CHATLOC_TEXT_X (CHATLOC_X + 0.25f * TINYCHAR_WIDTH)
-
 /*
 =================
 CG_DrawTeamInfo
@@ -311,9 +334,12 @@ CG_DrawTeamInfo
 static void CG_DrawTeamInfo(void) {
 	vec4_t hcolor;
 	int    chatHeight;
+	int    chatX;
+	int    chatY;
+	int    chatTextX;
 
-	if (cg_teamChatHeight.integer < TEAMCHAT_HEIGHT) {
-		chatHeight = cg_teamChatHeight.integer;
+	if (cg_chatHeight.integer < TEAMCHAT_HEIGHT) {
+		chatHeight = cg_chatHeight.integer;
 	} else {
 		chatHeight = TEAMCHAT_HEIGHT;
 	}
@@ -322,10 +348,13 @@ static void CG_DrawTeamInfo(void) {
 		return; // disabled
 	}
 
+	chatX = cg_chatX.integer;
+	chatY = cg_chatY.integer;
+	chatTextX = chatX + 0.25f * TINYCHAR_WIDTH;
+
 	if (cgs.teamLastChatPos != cgs.teamChatPos) {
 		int   i;
 		float lineHeight = 9.f;
-		int   chatWidth  = 640 - CHATLOC_X - 100;
 
 		if (cg.time - cgs.teamChatMsgTimes[cgs.teamLastChatPos % chatHeight] > cg_teamChatTime.integer) {
 			cgs.teamLastChatPos++;
@@ -361,13 +390,13 @@ static void CG_DrawTeamInfo(void) {
 			hcolor[3] = 0.33f * alphapercent;
 
 			trap_R_SetColor(hcolor);
-			CG_DrawPic(CHATLOC_X, CHATLOC_Y - (cgs.teamChatPos - i) * lineHeight, chatWidth, lineHeight, cgs.media.teamStatusBar);
+			CG_DrawPic(chatX, chatY - (cgs.teamChatPos - i) * lineHeight, CHAT_WIDTH, lineHeight, cgs.media.teamStatusBar);
 
 			hcolor[0] = hcolor[1] = hcolor[2] = 1.0;
 			hcolor[3] = alphapercent;
 			trap_R_SetColor(hcolor);
 
-			CG_Text_Paint_Ext(CHATLOC_TEXT_X, CHATLOC_Y - (cgs.teamChatPos - i - 1) * lineHeight - 1, 0.2f, 0.2f, hcolor, cgs.teamChatMsgs[i % chatHeight], 0, 0, 0, &cgs.media.limboFont2);
+			CG_Text_Paint_Ext(chatTextX, chatY - (cgs.teamChatPos - i - 1) * lineHeight - 1, 0.2f, 0.2f, hcolor, cgs.teamChatMsgs[i % chatHeight], 0, 0, 0, &cgs.media.limboFont2);
 		}
 	}
 }
@@ -518,7 +547,7 @@ static void CG_DrawLagometer(void) {
 	//
 	// draw the graph
 	//
-	x = 640 - 48;
+	x = 640 - 48 - 4;
 	y = 480 - 200;
 
 	trap_R_SetColor(NULL);
@@ -2022,8 +2051,6 @@ void CG_DrawDemoRecording(void) {
 	char   status[1024];
 	char   demostatus[128];
 	char   wavestatus[128];
-	vec4_t clrUiWhite = { 1.0f, 1.0f, 1.0f, 0.8f };
-	vec4_t clrUiRed   = { 1.0f, 0.0f, 0.0f, 0.8f };
 
 	if (!cl_demorecording.integer && !cl_waverecording.integer) {
 		return;
@@ -2034,22 +2061,22 @@ void CG_DrawDemoRecording(void) {
 	}
 
 	if (cl_demorecording.integer) {
-		Com_sprintf(demostatus, sizeof (demostatus), " demo %s: %ik ", cl_demofilename.string, cl_demooffset.integer / 1024);
+		Com_sprintf(demostatus, sizeof (demostatus), " Demo: %s [%iKB] ", cl_demofilename.string, cl_demooffset.integer / 1024);
 	} else {
 		strncpy(demostatus, "", sizeof (demostatus));
 	}
 
 	if (cl_waverecording.integer) {
-		Com_sprintf(wavestatus, sizeof (demostatus), " audio %s: %ik ", cl_wavefilename.string, cl_waveoffset.integer / 1024);
+		Com_sprintf(wavestatus, sizeof (demostatus), " Audio: %s [%iKB] ", cl_wavefilename.string, cl_waveoffset.integer / 1024);
 	} else {
 		strncpy(wavestatus, "", sizeof (wavestatus));
 	}
 
-	Com_sprintf(status, sizeof (status), "recording%s%s", demostatus, wavestatus);
+	Com_sprintf(status, sizeof (status), "Recording%s%s", demostatus, wavestatus);
 
 	// Nico, add recording red dot
-	CG_Text_Paint_Ext(0, cg_recording_statusline.integer, 0.5f, 0.5f, clrUiRed, ".", 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont2);
-	CG_Text_Paint_Ext(14, cg_recording_statusline.integer, 0.14f, 0.14f, clrUiWhite, status, 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
+	CG_Text_Paint_Ext(0, cg_recording_statusline.integer, 0.5f, 0.5f, colorRed, ".", 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont2);
+	CG_Text_Paint_Ext(14, cg_recording_statusline.integer, 0.14f, 0.14f, colorWhite, status, 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
 }
 
 /*
@@ -2147,6 +2174,12 @@ static void CG_Draw2D(void) {
 
 		CG_DrawObjectiveInfo();
 
+		// Nico, draw speed meter
+		CG_DrawSpeedMeter();
+
+		// Nico, draw CGaz
+		CG_DrawCGaz();
+    
 		// Nico, draw OB
 		CG_DrawOB();
 
@@ -2159,11 +2192,8 @@ static void CG_Draw2D(void) {
 		// Nico, draw check points
 		CG_DrawCheckpoints();
 
-		// Nico, draw CGaz
-		CG_DrawCGaz();
-
-		// Nico, draw speed meter
-		CG_DrawSpeedMeter();
+		// suburb, draw velocity snapping
+		CG_DrawVelocitySnapping();
 
 		// Nico, draw keys pressed
 		CG_DrawKeys();

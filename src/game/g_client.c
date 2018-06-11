@@ -851,8 +851,9 @@ void ClientUserinfoChanged(int clientNum) {
 	client->ps.clientNum = clientNum;
 
 	// Nico, flood protection
-	if (ClientIsFlooding(ent)) {
+	if (!ent->isBeingDropped && ClientIsFlooding(ent)) {
 		G_LogPrintf(qtrue, "Dropping client %d: flooded userinfo\n", clientNum);
+		ent->isBeingDropped = qtrue;
 		trap_DropClient(clientNum, "^1You were kicked because of flooded userinfo", 0);
 		return;
 	}
@@ -887,7 +888,7 @@ void ClientUserinfoChanged(int clientNum) {
 	Q_strncpyz(oldAuthToken, client->pers.authToken, sizeof (oldAuthToken));
 
 	s = Info_ValueForKey(userinfo, "cg_uinfo");
-	sscanf(s, "%10u %3u %3u %3i %64s %1i %1i %1i %1i %1i %1i %1i %1i %1i %d",
+	sscanf(s, "%10u %3u %3u %3i %64s %1i %1i %1i %1i %1i %1i %1i %1i %1i %1i %d %d %d",
 	       &client->pers.clientFlags,
 	       &client->pers.clientTimeNudge,
 	       &client->pers.clientMaxPackets,
@@ -910,6 +911,9 @@ void ClientUserinfoChanged(int clientNum) {
 	       // Nico, cgaz
 	       &client->pers.cgaz,
 
+	       // suburb, velocity snapping
+	       &client->pers.snapping,
+
 	       // Nico, hideme
 	       &client->pers.hideme,
 
@@ -926,7 +930,13 @@ void ClientUserinfoChanged(int clientNum) {
 	       &client->pers.keepAllDemos,
 
 	       // suburb, noclip speed scale
-	       &client->pers.noclipSpeed
+	       &client->pers.noclipSpeed,
+
+	       // suburb, yawspeed
+	       &client->pers.yawspeed,
+
+	       // suburb, pitchspeed
+	       &client->pers.pitchspeed
 	       );
 
 	// Nico, check if auth token was changed
@@ -1071,7 +1081,15 @@ char *ClientConnect(int clientNum, qboolean firstTime) {
 
 	ent = &g_entities[clientNum];
 
+	// suburb, flood protection reset
+	ent->isBeingDropped = qfalse;
+
 	trap_GetUserinfo(clientNum, userinfo, sizeof (userinfo));
+
+	// suburb, prevent config load error
+	if (level.delayedMapChange.pendingChange && level.delayedMapChange.timeChange - level.time < 5000) {
+		return "You cannot connect during a pending map change.";
+	}
 
 	// IP filtering
 	// show_bug.cgi?id=500
@@ -1238,6 +1256,11 @@ void ClientBegin(int clientNum) {
 	ent = g_entities + clientNum;
 
 	client = level.clients + clientNum;
+	
+	// suburb, flood protection fix
+	if (ent->isBeingDropped) {
+		return;
+	}
 
 	if (ent->r.linked) {
 		trap_UnlinkEntity(ent);
