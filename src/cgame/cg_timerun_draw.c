@@ -841,9 +841,9 @@ void CG_DrawKeys(void) {
 /**
  * Draw clock from TJMod
  *
- * @author Nico
+ * @author Nico, modified by suburb
  */
-void CG_DrawClock(float x, float y, float scale, qboolean shadowed) {
+void CG_DrawScoresClock(float x, float y, float scale) {
 	char    displayTime[18] = { 0 };
 	qtime_t tm;
 	vec4_t  clr = { 1.0f, 1.0f, 1.0f, 0.8f };
@@ -851,20 +851,9 @@ void CG_DrawClock(float x, float y, float scale, qboolean shadowed) {
 	trap_RealTime(&tm);
 	displayTime[0] = '\0';
 
-	Q_strcat(displayTime, sizeof (displayTime),
-	         va("Time: %d:%02d",
-	            ((tm.tm_hour == 0 || tm.tm_hour == 12) ? 12 : tm.tm_hour % 12),
-	            tm.tm_min));
-	Q_strcat(displayTime, sizeof (displayTime),
-	         va(":%02d", tm.tm_sec));
-	Q_strcat(displayTime, sizeof (displayTime),
-	         (tm.tm_hour < 12) ? " am" : " pm");
+	Q_strcat(displayTime, sizeof (displayTime), va("Time: %d:%02d:%02d", tm.tm_hour, tm.tm_min, tm.tm_sec));
 
-	if (shadowed == qtrue) {
-		CG_Text_Paint_Ext(x, y, scale, scale, clr, displayTime, 0, 24, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
-	} else {
-		CG_Text_Paint_Ext(x, y, scale, scale, clr, displayTime, 0, 24, 0, &cgs.media.limboFont1);
-	}
+	CG_Text_Paint_Ext(x, y, scale, scale, clr, displayTime, 0, 24, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
 }
 
 /**
@@ -965,8 +954,7 @@ void CG_DrawInfoPanel(void) {
 	int    x               = 0;
 	int    y               = 0;
 	int    starty          = 0;
-	vec4_t panelBgColor    = { 0.f, 0.f, 0.f, .5f };
-	vec4_t textColor       = { 1.0f, 1.0f, 1.0f, 0.8f };
+	vec4_t textColor       = { 1.0f, 1.0f, 1.0f, 1.0f };
 	float  textScale       = 0.12f;
 	int    speed           = 0;
 	int    i               = 0;
@@ -990,8 +978,7 @@ void CG_DrawInfoPanel(void) {
 	x = cg_infoPanelX.value;
 	y = cg_infoPanelY.value;
 
-	CG_FillRect(x, y, INFO_PANEL_WIDTH, INFO_PANEL_HEIGHT, panelBgColor);
-	CG_DrawRect_FixedBorder(x, y, INFO_PANEL_WIDTH, INFO_PANEL_HEIGHT, 1, colorBlack);
+	//CG_DrawRect_FixedBorder(x, y, INFO_PANEL_WIDTH, INFO_PANEL_HEIGHT, 1, colorWhite);
 
 	// Print start speed
 	CG_Text_Paint_Ext(x, y += 10, textScale, textScale, textColor, " Start speed:", 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);

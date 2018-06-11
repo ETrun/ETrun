@@ -912,7 +912,7 @@ void G_SayTo(gentity_t *ent, gentity_t *other, int mode, int color, const char *
 	if (!other || !other->inuse || !other->client) {
 		return;
 	}
-	if ((mode == SAY_TEAM || mode == SAY_TEAMNL) && !OnSameTeam(ent, other)) {
+	if (mode == SAY_TEAM && !OnSameTeam(ent, other)) {
 		return;
 	}
 
@@ -949,8 +949,13 @@ void G_Say(gentity_t *ent, gentity_t *target, int mode, qboolean encoded, const 
 	char name[64];
 	// don't let text be too long for malicious reasons
 	char     text[MAX_SAY_TEXT];
-	qboolean localize = qfalse;
-	char     *loc;
+	// suburb, add timestamps
+	char    displayTime[18] = { 0 };
+	qtime_t tm;
+
+	trap_RealTime(&tm);
+	displayTime[0] = '\0';
+	Q_strcat(displayTime, sizeof (displayTime), va("[%d:%02d:%02d] ", tm.tm_hour, tm.tm_min, tm.tm_sec));
 
 	switch (mode) {
 	default:
@@ -959,44 +964,30 @@ void G_Say(gentity_t *ent, gentity_t *target, int mode, qboolean encoded, const 
 			G_LogChat("say", "%s: %s\n", ent->client->pers.netname, chatText);
 		}
 		G_LogPrintf(qtrue, "say: %s: %s\n", ent->client->pers.netname, chatText);
-		Com_sprintf(name, sizeof (name), "%s%c%c: ", ent->client->pers.netname, Q_COLOR_ESCAPE, COLOR_WHITE);
 		color = COLOR_GREEN;
 		break;
 	case SAY_BUDDY:
-		localize = qtrue;
 		if (g_chatLog.integer) {
 			G_LogChat("saybuddy", "%s: %s\n", ent->client->pers.netname, chatText);
 		}
 		G_LogPrintf(qtrue, "saybuddy: %s: %s\n", ent->client->pers.netname, chatText);
-		loc = BG_GetLocationString(ent->r.currentOrigin);
-		Com_sprintf(name, sizeof (name), "[lof](%s%c%c) (%s): ", ent->client->pers.netname, Q_COLOR_ESCAPE, COLOR_WHITE, loc);
 		color = COLOR_YELLOW;
 		break;
 	case SAY_TEAM:
-		localize = qtrue;
 		if (g_chatLog.integer) {
 			G_LogChat("sayteam", "%s: %s\n", ent->client->pers.netname, chatText);
 		}
 		G_LogPrintf(qtrue, "sayteam: %s: %s\n", ent->client->pers.netname, chatText);
-		loc = BG_GetLocationString(ent->r.currentOrigin);
-		Com_sprintf(name, sizeof (name), "[lof](%s%c%c) (%s): ", ent->client->pers.netname, Q_COLOR_ESCAPE, COLOR_WHITE, loc);
-		color = COLOR_CYAN;
-		break;
-	case SAY_TEAMNL:
-		if (g_chatLog.integer) {
-			G_LogChat("sayteamnl", "%s: %s\n", ent->client->pers.netname, chatText);
-		}
-		G_LogPrintf(qtrue, "sayteamnl: %s: %s\n", ent->client->pers.netname, chatText);
-		Com_sprintf(name, sizeof (name), "(%s^7): ", ent->client->pers.netname);
 		color = COLOR_CYAN;
 		break;
 	}
 
+	Com_sprintf(name, sizeof(name), "^g%s^7%s%c%c: ", displayTime, ent->client->pers.netname, Q_COLOR_ESCAPE, COLOR_WHITE);
 	Q_strncpyz(text, chatText, sizeof (text));
 
 	if (target) {
 		if (!COM_BitCheck(target->client->sess.ignoreClients, ent - g_entities)) {
-			G_SayTo(ent, target, mode, color, name, text, localize, encoded);
+			G_SayTo(ent, target, mode, color, name, text, qfalse, encoded);
 		}
 		return;
 	}
@@ -1011,7 +1002,7 @@ void G_Say(gentity_t *ent, gentity_t *target, int mode, qboolean encoded, const 
 		gentity_t *other = &g_entities[level.sortedClients[j]];
 
 		if (!COM_BitCheck(other->client->sess.ignoreClients, ent - g_entities)) {
-			G_SayTo(ent, other, mode, color, name, text, localize, encoded);
+			G_SayTo(ent, other, mode, color, name, text, qfalse, encoded);
 		}
 	}
 }
