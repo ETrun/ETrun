@@ -958,7 +958,7 @@ void ClientThink_real(gentity_t *ent) {
 		SetTeam(ent, "s", -1, -1, qfalse);
 	}
 
-  // suburb, force snapping hud 0 in cup mode
+	// suburb, force snapping hud 0 in cup mode
 	if (g_cupMode.integer != 0 && client->pers.snapping != 0) {
 		CP(va("cpm \"%s^w: ^1You were removed from teams because you must use cg_drawVelocitySnapping 0.\n\"", GAME_VERSION_COLORED));
 		trap_SendServerCommand(ent - g_entities, "SnappingOff");
