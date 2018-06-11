@@ -1904,8 +1904,8 @@ int BG_FootstepForSurface(int surfaceFlags);
 
 int BG_simpleWeaponState(int ws);
 
-// Crosshair support
-void BG_setCrosshair(char *colString, float *col, float alpha, char *cvarName);
+// RGBA cvars support
+void BG_SetRGBACvar(char *colString, float *col, float alpha, char *cvarName);
 
 // Voting
 #define VOTING_DISABLED     ((1 << numVotesAvailable) - 1)
@@ -1999,10 +1999,6 @@ extern ammotable_t ammoTableMP[WP_NUM_WEAPONS];
 #define GetAmmoTableData(ammoIndex) ((ammotable_t *)(&ammoTableMP[ammoIndex]))
 
 #define MAX_MAP_SIZE 65536
-
-qboolean BG_BBoxCollision(vec3_t min1, vec3_t max1, vec3_t min2, vec3_t max2);
-
-//#define VISIBLE_TRIGGERS
 
 //
 // bg_stats.c
