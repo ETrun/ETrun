@@ -1842,6 +1842,10 @@ extern vmCvar_t cg_countryFlags;
 // Minimum start speed
 extern vmCvar_t cg_minStartSpeed;
 
+// suburb, event cvars
+extern vmCvar_t cg_onRunStart;
+extern vmCvar_t cg_onRunStop;
+
 // Draw triggers
 extern vmCvar_t cg_drawTriggers;
 extern vmCvar_t cg_triggerOffset;
