@@ -697,7 +697,9 @@ typedef enum {
 } showView_t;
 
 #define MAX_BACKUP_STATES (CMD_BACKUP + 2)
-
+// Nico, used to show pressed keys
+#define NUM_KEYS_SETS       3
+#define KEYS_AMOUNT         8
 typedef struct {
 	int clientFrame;                // incremented each frame
 
@@ -1004,14 +1006,22 @@ typedef struct {
 	int timerunJumpCounter;
 	int timerunJumpSpeeds[256];
 
+	// suburb, keycatcher causing CGaz & drawkeys flickering fix
+	int keyTimes[KEYS_AMOUNT];
+	qboolean keyDown[KEYS_AMOUNT];
+	int lastClosedMenuTime;
+	qboolean consoleIsUp;
+	qboolean UIisUp;
+	qboolean limboIsUp;
+
 	// suburb, Velocity Snapping
 	float snapZones[128]; // 128 being the max amount of drawn snapzones
 	float snapSpeed;
 	int snapCount;
 
-	// Accel HUD
+	// suburb, Accel HUD
 	float oldSpeed;
-
+  
 	// Nico, end of ETrun client variables
 } cg_t;
 
@@ -1019,8 +1029,6 @@ typedef struct {
 
 #define MAX_LOCKER_DEBRIS   5
 
-// Nico, used to show pressed keys
-#define NUM_KEYS_SETS       3
 typedef struct {
 	qhandle_t ForwardPressedShader;
 	qhandle_t ForwardNotPressedShader;
@@ -1993,6 +2001,7 @@ void CG_DrawScoresClock(float x, float y, float scale);
 void CG_DrawBannerPrint(void);
 void CG_DrawInfoPanel(void);
 void CG_UpdateJumpSpeeds(void);
+void CG_UpdateKeysAndMenus(void);
 
 //
 // cg_players.c
