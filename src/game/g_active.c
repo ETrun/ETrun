@@ -847,6 +847,11 @@ void ClientThink_real(gentity_t *ent) {
 	client->wbuttons         = ucmd->wbuttons;
 	client->latched_wbuttons = client->wbuttons & ~client->oldwbuttons;
 
+	// suburb, return here for noclippers in spec to avoid following checks
+	if (client->sess.sessionTeam == TEAM_SPECTATOR && client->noclip) {
+		return;
+	}
+
 	// Rafael - Activate
 	// Ridah, made it a latched event (occurs on keydown only)
 	if (client->latched_buttons & BUTTON_ACTIVATE) {
