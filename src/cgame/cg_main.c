@@ -125,6 +125,7 @@ vmCvar_t cg_swingSpeed;
 vmCvar_t cg_shadows;
 vmCvar_t cg_draw2D;
 vmCvar_t cg_drawFPS;
+vmCvar_t cg_drawClock;
 vmCvar_t cg_drawSnapshot;
 vmCvar_t cg_drawCrosshair;
 vmCvar_t cg_drawCrosshairNames;
@@ -175,7 +176,9 @@ vmCvar_t cg_thirdPersonAngle;
 vmCvar_t cg_stereoSeparation;
 vmCvar_t cg_lagometer;
 vmCvar_t cg_teamChatTime;
-vmCvar_t cg_teamChatHeight;
+vmCvar_t cg_chatHeight;
+vmCvar_t cg_chatX;
+vmCvar_t cg_chatY;
 vmCvar_t cg_stats;
 vmCvar_t cg_buildScript;
 vmCvar_t cg_coronafardist;
@@ -378,7 +381,8 @@ cvarTable_t cvarTable[] =
 	{ &cg_draw2D,               "cg_draw2D",               "1",     CVAR_ARCHIVE,             0 },
 	{ &cg_drawSpreadScale,      "cg_drawSpreadScale",      "1",     CVAR_ARCHIVE,             0 },
 	{ &cg_drawStatus,           "cg_drawStatus",           "1",     CVAR_ARCHIVE,             0 },
-	{ &cg_drawFPS,              "cg_drawFPS",              "0",     CVAR_ARCHIVE,             0 },
+	{ &cg_drawFPS,              "cg_drawFPS",              "1",     CVAR_ARCHIVE,             0 },
+	{ &cg_drawClock,            "cg_drawClock",            "1",     CVAR_ARCHIVE,             0 },
 	{ &cg_drawSnapshot,         "cg_drawSnapshot",         "0",     CVAR_ARCHIVE,             0 },
 	{ &cg_drawCrosshair,        "cg_drawCrosshair",        "1",     CVAR_ARCHIVE,             0 },
 	{ &cg_drawCrosshairNames,   "cg_drawCrosshairNames",   "1",     CVAR_ARCHIVE,             0 },
@@ -435,7 +439,9 @@ cvarTable_t cvarTable[] =
 	{ &cg_thirdPersonAngle,     "cg_thirdPersonAngle",     "0",     CVAR_CHEAT,               0 },
 	{ &cg_thirdPerson,          "cg_thirdPerson",          "0",     CVAR_CHEAT,               0 }, // JPW NERVE per atvi req
 	{ &cg_teamChatTime,         "cg_teamChatTime",         "8000",  CVAR_ARCHIVE,             0 },
-	{ &cg_teamChatHeight,       "cg_teamChatHeight",       "8",     CVAR_ARCHIVE,             0 },
+	{ &cg_chatHeight,           "cg_chatHeight",           "8",     CVAR_ARCHIVE,             0 },
+	{ &cg_chatX,                "cg_chatX",                "160",   CVAR_ARCHIVE,             0 },
+	{ &cg_chatY,                "cg_chatY",                "478",   CVAR_ARCHIVE,             0 },
 	{ &cg_coronafardist,        "cg_coronafardist",        "1536",  CVAR_ARCHIVE,             0 },
 	{ &cg_coronas,              "cg_coronas",              "1",     CVAR_ARCHIVE,             0 },
 	{ &cg_predictItems,         "cg_predictItems",         "1",     CVAR_ARCHIVE,             0 },
@@ -585,9 +591,9 @@ cvarTable_t cvarTable[] =
 	{ &cg_loadWeapon,           "cg_loadWeapon",           "1",     CVAR_ARCHIVE,             0 },
 
 	// Show pressed keys
-	{ &cg_drawKeys,             "cg_drawKeys",             "1",     CVAR_ARCHIVE,             0 },
-	{ &cg_keysX,                "cg_keysX",                "550",   CVAR_ARCHIVE,             0 },
-	{ &cg_keysY,                "cg_keysY",                "210",   CVAR_ARCHIVE,             0 },
+	{ &cg_drawKeys,             "cg_drawKeys",             "4",     CVAR_ARCHIVE,             0 },
+	{ &cg_keysX,                "cg_keysX",                "571",   CVAR_ARCHIVE,             0 },
+	{ &cg_keysY,                "cg_keysY",                "200",   CVAR_ARCHIVE,             0 },
 	{ &cg_keysSize,             "cg_keysSize",             "64",    CVAR_ARCHIVE,             0 },
 
 	// Automatically load player position when he gets killed (except /kill)

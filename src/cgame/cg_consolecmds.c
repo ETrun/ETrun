@@ -768,7 +768,6 @@ void CG_InitConsoleCommands(void) {
 	trap_AddCommand("commands");
 	trap_AddCommand("players");
 	trap_AddCommand("ref");
-	trap_AddCommand("say_teamnl");
 	trap_AddCommand("say_team");
 	trap_AddCommand("specinvite");
 	trap_AddCommand("specuninvite");
