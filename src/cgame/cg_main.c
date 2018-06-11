@@ -349,6 +349,10 @@ vmCvar_t cg_countryFlags;
 // Minimum start speed
 vmCvar_t cg_minStartSpeed;
 
+// suburb, event cvars
+vmCvar_t cg_onRunStart;
+vmCvar_t cg_onRunStop;
+
 // Draw triggers
 vmCvar_t cg_drawTriggers;
 vmCvar_t cg_triggerOffset;
@@ -631,6 +635,10 @@ cvarTable_t cvarTable[] =
 
 	// Minimum start speed
 	{ &cg_minStartSpeed,        "cg_minStartSpeed",        "0",     CVAR_ARCHIVE,             0 },
+
+	// suburb, event cvars
+	{ &cg_onRunStart,           "cg_onRunStart",           "",      CVAR_ARCHIVE,             0 },
+	{ &cg_onRunStop,            "cg_onRunStop",            "",      CVAR_ARCHIVE,             0 },
 
 	// Draw Triggers
 	{ &cg_drawTriggers,         "cg_drawTriggers",         "1",     CVAR_ARCHIVE,             0 },
