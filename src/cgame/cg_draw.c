@@ -2432,6 +2432,9 @@ void CG_DrawActive(stereoFrame_t stereoView) {
 	// suburb, update jump speeds even if nothing is drawn
 	CG_UpdateJumpSpeeds();
 
+	// suburb, update keys & menus
+	CG_UpdateKeysAndMenus();
+
 	// Nico, render while in limbo
 	CG_Draw2D();
 
