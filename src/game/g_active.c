@@ -990,6 +990,7 @@ void ClientThink_real(gentity_t *ent) {
 			client->pers.oldPosition[i] = (int) pm.ps->origin[i];
 			client->pers.lastBuggingCheck = level.time;
 		}
+	}
 }
 
 /*
