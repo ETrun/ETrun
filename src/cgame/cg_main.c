@@ -346,6 +346,11 @@ vmCvar_t cg_countryFlags;
 // Minimum start speed
 vmCvar_t cg_minStartSpeed;
 
+// Draw triggers
+vmCvar_t cg_drawTriggers;
+vmCvar_t cg_triggerOffset;
+vmCvar_t cg_triggerColor;
+
 // Nico, end of ETrun cvars
 
 typedef struct {
@@ -621,6 +626,11 @@ cvarTable_t cvarTable[] =
 	// Minimum start speed
 	{ &cg_minStartSpeed,        "cg_minStartSpeed",        "0",     CVAR_ARCHIVE,             0 },
 
+	// Draw Triggers
+	{ &cg_drawTriggers,         "cg_drawTriggers",         "1",     CVAR_ARCHIVE,             0 },
+	{ &cg_triggerOffset,        "cg_triggerOffset",        "0",     CVAR_ARCHIVE,             0 },
+	{ &cg_triggerColor,         "cg_triggerColor",         "White", CVAR_ARCHIVE,             0 },
+
 	// Nico, end of ETrun cvars
 };
 
@@ -662,8 +672,8 @@ void CG_RegisterCvars(void) {
 
 	// Gordon: um, here, why?
 	CG_setClientFlags();
-	BG_setCrosshair(cg_crosshairColor.string, cg.xhairColor, cg_crosshairAlpha.value, "cg_crosshairColor");
-	BG_setCrosshair(cg_crosshairColorAlt.string, cg.xhairColorAlt, cg_crosshairAlphaAlt.value, "cg_crosshairColorAlt");
+	BG_SetRGBACvar(cg_crosshairColor.string, cg.xhairColor, cg_crosshairAlpha.value, "cg_crosshairColor");
+	BG_SetRGBACvar(cg_crosshairColorAlt.string, cg.xhairColorAlt, cg_crosshairAlphaAlt.value, "cg_crosshairColorAlt");
 
 	cvarsLoaded = qtrue;
 }
@@ -703,9 +713,9 @@ void CG_UpdateCvars(void) {
 				    cv->vmCvar == &int_cl_pitchspeed) {
 					fSetFlags = qtrue;
 				} else if (cv->vmCvar == &cg_crosshairColor || cv->vmCvar == &cg_crosshairAlpha) {
-					BG_setCrosshair(cg_crosshairColor.string, cg.xhairColor, cg_crosshairAlpha.value, "cg_crosshairColor");
+					BG_SetRGBACvar(cg_crosshairColor.string, cg.xhairColor, cg_crosshairAlpha.value, "cg_crosshairColor");
 				} else if (cv->vmCvar == &cg_crosshairColorAlt || cv->vmCvar == &cg_crosshairAlphaAlt) {
-					BG_setCrosshair(cg_crosshairColorAlt.string, cg.xhairColorAlt, cg_crosshairAlphaAlt.value, "cg_crosshairColorAlt");
+					BG_SetRGBACvar(cg_crosshairColorAlt.string, cg.xhairColorAlt, cg_crosshairAlphaAlt.value, "cg_crosshairColorAlt");
 				} else if (cv->vmCvar == &cg_rconPassword && *cg_rconPassword.string) {
 					trap_SendConsoleCommand(va("rconAuth %s", cg_rconPassword.string));
 				} else if (cv->vmCvar == &cg_refereePassword && *cg_refereePassword.string) {

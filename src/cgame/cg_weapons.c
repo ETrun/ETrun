@@ -668,57 +668,24 @@ static void CG_GrenadeTrail(centity_t *ent) {
 	}
 //----(SA)	end
 }
-// done.
 
 /*
 ==========================
 CG_RailTrail
-    SA: re-inserted this as a debug mechanism for bullets
+
+@author suburb, modified CG_RailTrail function
 ==========================
 */
-void CG_RailTrail2(vec3_t start, vec3_t end) {
-	localEntity_t *le;
-	refEntity_t   *re;
-
-	le = CG_AllocLocalEntity();
-	re = &le->refEntity;
-
-	le->leType    = LE_FADE_RGB;
-	le->startTime = cg.time;
-	le->endTime   = cg.time + cg_railTrailTime.value;
-	le->lifeRate  = 1.0 / (le->endTime - le->startTime);
-
-	re->shaderTime   = cg.time / 1000.0f;
-	re->reType       = RT_RAIL_CORE;
-	re->customShader = cgs.media.railCoreShader;
-
-	VectorCopy(start, re->origin);
-	VectorCopy(end, re->oldorigin);
-
-	le->color[0] = 1;
-	le->color[1] = 0;
-	le->color[2] = 0;
-	le->color[3] = 1.0f;
-
-	AxisClear(re->axis);
-}
-
-/*
-==============
-CG_RailTrail
-    modified so we could draw boxes for debugging as well
-==============
-*/
-void CG_RailTrail(vec3_t start, vec3_t end, int type) {    //----(SA)	added 'type'
+void CG_RailTrail(vec3_t start, vec3_t end, int box) {    //----(SA)	added 'type'
 	vec3_t diff, v1, v2, v3, v4, v5, v6;
 
-	if (!type) {   // just a line
-		CG_RailTrail2(start, end);
+	// draw one line
+	if (!box) {
+		CG_RailTrail2(start, end, box);
 		return;
 	}
 
-	// type '1' (box)
-
+	// draw a box, used for draw triggers
 	VectorSubtract(start, end, diff);
 
 	VectorCopy(start, v1);
@@ -727,9 +694,9 @@ void CG_RailTrail(vec3_t start, vec3_t end, int type) {    //----(SA)	added 'typ
 	v1[0] -= diff[0];
 	v2[1] -= diff[1];
 	v3[2] -= diff[2];
-	CG_RailTrail2(start, v1);
-	CG_RailTrail2(start, v2);
-	CG_RailTrail2(start, v3);
+	CG_RailTrail2(start, v1, box);
+	CG_RailTrail2(start, v2, box);
+	CG_RailTrail2(start, v3, box);
 
 	VectorCopy(end, v4);
 	VectorCopy(end, v5);
@@ -737,17 +704,64 @@ void CG_RailTrail(vec3_t start, vec3_t end, int type) {    //----(SA)	added 'typ
 	v4[0] += diff[0];
 	v5[1] += diff[1];
 	v6[2] += diff[2];
-	CG_RailTrail2(end, v4);
-	CG_RailTrail2(end, v5);
-	CG_RailTrail2(end, v6);
+	CG_RailTrail2(end, v4, box);
+	CG_RailTrail2(end, v5, box);
+	CG_RailTrail2(end, v6, box);
 
-	CG_RailTrail2(v2, v6);
-	CG_RailTrail2(v6, v1);
-	CG_RailTrail2(v1, v5);
+	CG_RailTrail2(v2, v6, box);
+	CG_RailTrail2(v6, v1, box);
+	CG_RailTrail2(v1, v5, box);
 
-	CG_RailTrail2(v2, v4);
-	CG_RailTrail2(v4, v3);
-	CG_RailTrail2(v3, v5);
+	CG_RailTrail2(v2, v4, box);
+	CG_RailTrail2(v4, v3, box);
+	CG_RailTrail2(v3, v5, box);
+}
+
+/*
+==========================
+CG_RailTrail2
+
+@author suburb, modified CG_RailTrail2 function
+==========================
+*/
+#define TRIGGERS_DRAW_FREQUENCY 40
+void CG_RailTrail2(vec3_t start, vec3_t end, int box) {
+	localEntity_t *le;
+	refEntity_t   *re;
+	// railtrails ignore alpha, we simply set it to 1.0 either way
+	const float   railTrailAlpha = 1.0f;
+	int           time           = 0;
+
+	le = CG_AllocLocalEntity();
+	re = &le->refEntity;
+
+	le->leType = LE_FADE_RGB;
+	le->startTime = cg.time;
+	if (!box) {
+		time = cg_railTrailTime.value;
+	} else {
+		time = TRIGGERS_DRAW_FREQUENCY;
+	}
+	le->endTime = cg.time + time;
+	le->lifeRate = 1.0 / (le->endTime - le->startTime);
+
+	re->shaderTime = cg.time / 1000.0f;
+	re->reType = RT_RAIL_CORE;
+	re->customShader = cgs.media.railCoreShader;
+
+	VectorCopy(start, re->origin);
+	VectorCopy(end, re->oldorigin);
+
+	if (!box) {
+		le->color[0] = 1.0f;
+		le->color[1] = 0;
+		le->color[2] = 0;
+		le->color[3] = railTrailAlpha;
+	} else {
+		BG_SetRGBACvar(cg_triggerColor.string, le->color, railTrailAlpha, "cg_triggerColor");
+	}
+
+	AxisClear(re->axis);
 }
 
 ///////////////////////////////////////////////////////////////////////////////

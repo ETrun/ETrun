@@ -155,9 +155,7 @@ void SP_trigger_multiple(gentity_t *ent) {
 		}
 	}
 
-#ifdef VISIBLE_TRIGGERS
 	ent->r.svFlags &= ~SVF_NOCLIENT;
-#endif
 
 	trap_LinkEntity(ent);
 }
@@ -1010,9 +1008,7 @@ void SP_trigger_flagonly(gentity_t *ent) {
 	G_SpawnString("score", "20", &scorestring);
 	ent->accuracy = atof(scorestring);
 	ent->s.eType  = ET_TRIGGER_FLAGONLY;
-#ifdef VISIBLE_TRIGGERS
 	ent->r.svFlags &= ~SVF_NOCLIENT;
-#endif
 
 	trap_LinkEntity(ent);
 }
@@ -1039,9 +1035,7 @@ void SP_trigger_flagonly_multiple(gentity_t *ent) {
 	G_SpawnString("score", "20", &scorestring);
 	ent->accuracy = atof(scorestring);
 	ent->s.eType  = ET_TRIGGER_FLAGONLY_MULTIPLE;
-#ifdef VISIBLE_TRIGGERS
 	ent->r.svFlags &= ~SVF_NOCLIENT;
-#endif
 
 	trap_LinkEntity(ent);
 }
