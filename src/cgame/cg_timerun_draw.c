@@ -509,7 +509,7 @@ void CG_DrawCGaz(void) {
 	accel    = accel * ps->speed * pmove_msec.integer / 1000;
 
 	// based on PM_CmdScale from bg_pmove.c
-	scale     = ps->stats[STAT_USERCMD_BUTTONS] & (BUTTON_SPRINT << 8) ? ps->sprintSpeedScale : ps->runSpeedScale;
+	scale     = cg.keyDown[0] ? ps->sprintSpeedScale : ps->runSpeedScale;
 	per_angle = (ps->speed - accel) / vel_size * scale;
 	if (per_angle < 1) {
 		per_angle = RAD2DEG(acos(per_angle));
@@ -521,15 +521,15 @@ void CG_DrawCGaz(void) {
 	vel_relang = AngleNormalize180(ps->viewangles[YAW] - vel_angle);
 
 	// parse usercmd
-	if (ps->stats[STAT_USERCMD_MOVE] & UMOVE_FORWARD) {
+	if (cg.keyDown[1]) {
 		forward = 127;
-	} else if (ps->stats[STAT_USERCMD_MOVE] & UMOVE_BACKWARD) {
+	} else if (cg.keyDown[6]) {
 		forward = -128;
 	}
 
-	if (ps->stats[STAT_USERCMD_MOVE] & UMOVE_RIGHT) {
+	if (cg.keyDown[4]) {
 		right = 127;
-	} else if (ps->stats[STAT_USERCMD_MOVE] & UMOVE_LEFT) {
+	} else if (cg.keyDown[3]) {
 		right = -128;
 	}
 
@@ -738,13 +738,15 @@ void CG_DrawVelocitySnapping(void) {
  *
  * @author Nico
  */
+#define DRAWKEYS_DEBOUNCE_VALUE        100
+#define DRAWKEYS_MENU_CLOSING_DELAY    50
 void CG_DrawKeys(void) {
 	playerState_t *ps;
 	float         x, y, size;
 	int           i;
 	int           skew;
 
-	if (cg_drawKeys.integer <= 0) {
+	if (!cg_drawKeys.integer) {
 		return;
 	}
 
@@ -771,7 +773,7 @@ void CG_DrawKeys(void) {
 	// sprint (upper left)
 	x = cg_keysX.value + 2 * skew;
 	y = cg_keysY.value;
-	if (ps->stats[STAT_USERCMD_BUTTONS] & (BUTTON_SPRINT << 8)) {
+	if (cg.keyDown[0]) {
 		CG_DrawPic(x, y, size, size, cgs.media.keys[i].SprintPressedShader);
 	} else {
 		CG_DrawPic(x, y, size, size, cgs.media.keys[i].SprintNotPressedShader);
@@ -779,7 +781,7 @@ void CG_DrawKeys(void) {
 
 	// forward
 	x += size;
-	if (ps->stats[STAT_USERCMD_MOVE] & UMOVE_FORWARD) {
+	if (cg.keyDown[1]) {
 		CG_DrawPic(x, y, size, size, cgs.media.keys[i].ForwardPressedShader);
 	} else {
 		CG_DrawPic(x, y, size, size, cgs.media.keys[i].ForwardNotPressedShader);
@@ -787,7 +789,7 @@ void CG_DrawKeys(void) {
 
 	// jump (upper right)
 	x += size;
-	if (ps->stats[STAT_USERCMD_MOVE] & UMOVE_UP) {
+	if (cg.keyDown[2]) {
 		CG_DrawPic(x, y, size, size, cgs.media.keys[i].JumpPressedShader);
 	} else {
 		CG_DrawPic(x, y, size, size, cgs.media.keys[i].JumpNotPressedShader);
@@ -797,7 +799,7 @@ void CG_DrawKeys(void) {
 	// left
 	x  = cg_keysX.value + skew;
 	y += size;
-	if (ps->stats[STAT_USERCMD_MOVE] & UMOVE_LEFT) {
+	if (cg.keyDown[3]) {
 		CG_DrawPic(x, y, size, size, cgs.media.keys[i].LeftPressedShader);
 	} else {
 		CG_DrawPic(x, y, size, size, cgs.media.keys[i].LeftNotPressedShader);
@@ -805,7 +807,7 @@ void CG_DrawKeys(void) {
 
 	// right
 	x += 2 * size;
-	if (ps->stats[STAT_USERCMD_MOVE] & UMOVE_RIGHT) {
+	if (cg.keyDown[4]) {
 		CG_DrawPic(x, y, size, size, cgs.media.keys[i].RightPressedShader);
 	} else {
 		CG_DrawPic(x, y, size, size, cgs.media.keys[i].RightNotPressedShader);
@@ -815,7 +817,7 @@ void CG_DrawKeys(void) {
 	x  = cg_keysX.value;
 	y += size;
 	// prone (bottom left)
-	if (ps->stats[STAT_USERCMD_BUTTONS] & WBUTTON_PRONE) {
+	if (cg.keyDown[5]) {
 		CG_DrawPic(x, y, size, size, cgs.media.keys[i].PronePressedShader);
 	} else {
 		CG_DrawPic(x, y, size, size, cgs.media.keys[i].ProneNotPressedShader);
@@ -823,7 +825,7 @@ void CG_DrawKeys(void) {
 
 	// backward
 	x += size;
-	if (ps->stats[STAT_USERCMD_MOVE] & UMOVE_BACKWARD) {
+	if (cg.keyDown[6]) {
 		CG_DrawPic(x, y, size, size, cgs.media.keys[i].BackwardPressedShader);
 	} else {
 		CG_DrawPic(x, y, size, size, cgs.media.keys[i].BackwardNotPressedShader);
@@ -831,10 +833,81 @@ void CG_DrawKeys(void) {
 
 	// crouch (bottom right)
 	x += size;
-	if (ps->stats[STAT_USERCMD_MOVE] & UMOVE_DOWN) {
+	if (cg.keyDown[7]) {
 		CG_DrawPic(x, y, size, size, cgs.media.keys[i].CrouchPressedShader);
 	} else {
 		CG_DrawPic(x, y, size, size, cgs.media.keys[i].CrouchNotPressedShader);
+	}
+}
+
+/**
+* Update keys & menus
+*
+* @author suburb, used for UI flickering fix
+*/
+void CG_UpdateKeysAndMenus(void) {
+	playerState_t *ps = &cg.predictedPlayerState;
+	qboolean      downNow[KEYS_AMOUNT];
+	qboolean      anyMenuClosedRecently = qfalse;
+	int           i;
+
+	// get the current buttons
+	downNow[0] = ps->stats[STAT_USERCMD_BUTTONS] & (BUTTON_SPRINT << 8);
+	downNow[1] = ps->stats[STAT_USERCMD_MOVE] & UMOVE_FORWARD;
+	downNow[2] = ps->stats[STAT_USERCMD_MOVE] & UMOVE_UP;
+	downNow[3] = ps->stats[STAT_USERCMD_MOVE] & UMOVE_LEFT;
+	downNow[4] = ps->stats[STAT_USERCMD_MOVE] & UMOVE_RIGHT;
+	downNow[5] = ps->stats[STAT_USERCMD_BUTTONS] & WBUTTON_PRONE;
+	downNow[6] = ps->stats[STAT_USERCMD_MOVE] & UMOVE_BACKWARD;
+	downNow[7] = ps->stats[STAT_USERCMD_MOVE] & UMOVE_DOWN;
+
+	// check whether console is up
+	if (!cg.consoleIsUp && trap_Key_GetCatcher() & KEYCATCH_CONSOLE) {
+		cg.consoleIsUp = qtrue;
+	} else if (cg.consoleIsUp && !(trap_Key_GetCatcher() & KEYCATCH_CONSOLE)) {
+		cg.lastClosedMenuTime = cg.time;
+		cg.consoleIsUp = qfalse;
+	}
+
+	// check whether any UI menu is up
+	if (!cg.UIisUp && trap_Key_GetCatcher() & KEYCATCH_UI) {
+		cg.UIisUp = qtrue;
+	} else if (cg.UIisUp && !(trap_Key_GetCatcher() & KEYCATCH_UI)) {
+		cg.lastClosedMenuTime = cg.time;
+		cg.UIisUp = qfalse;
+	}
+
+	// check whether limbo menu is up
+	if (!cg.limboIsUp && trap_Key_GetCatcher() & KEYCATCH_CGAME) {
+		cg.limboIsUp = qtrue;
+	} else if (cg.limboIsUp && !(trap_Key_GetCatcher() & KEYCATCH_CGAME)) {
+		cg.lastClosedMenuTime = cg.time;
+		cg.limboIsUp = qfalse;
+	}
+
+	// check whether any menu has closed within the last 50ms
+	if (!cg.consoleIsUp && !cg.UIisUp && !cg.limboIsUp && (cg.time - cg.lastClosedMenuTime < DRAWKEYS_MENU_CLOSING_DELAY)) {
+		anyMenuClosedRecently = qtrue;
+	}
+
+	// check whether flickering is even possible
+	for (i = 0; i < KEYS_AMOUNT; ++i) {
+		if (cg.consoleIsUp || cg.UIisUp || cg.limboIsUp || anyMenuClosedRecently) {
+			if (cg.keyDown[i] != downNow[i]) {
+				if (cg.keyTimes[i] == 0) {
+					cg.keyTimes[i] = cg.time;
+				} else if (cg.time - cg.keyTimes[i] > DRAWKEYS_DEBOUNCE_VALUE) {
+					// require it to be unchanged for 100ms before we care
+					cg.keyTimes[i] = 0;
+					cg.keyDown[i] = downNow[i];
+				}
+			} else if (cg.keyTimes[i] != 0) {
+				// so if it needs a new full 50ms
+				cg.keyTimes[i] = 0;
+			}
+		} else {
+			cg.keyDown[i] = downNow[i];
+		}
 	}
 }
 
