@@ -2162,6 +2162,9 @@ static void CG_Draw2D(void) {
 		// Nico, draw CGaz
 		CG_DrawCGaz();
 
+		// suburb, draw velocity snapping
+		CG_DrawVelocitySnapping();
+
 		// Nico, draw speed meter
 		CG_DrawSpeedMeter();
 

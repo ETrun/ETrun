@@ -654,6 +654,9 @@ typedef struct {
 	// Nico, client draw cgaz setting
 	int cgaz;
 
+	// suburb, velocity snapping
+	int snapping;
+
 	// Nico, hideme
 	int hideme;
 

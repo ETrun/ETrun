@@ -292,6 +292,12 @@ vmCvar_t cg_autoLogin;
 // CGaz
 vmCvar_t cg_drawCGaz;
 
+// Velocity Snapping
+vmCvar_t cg_drawVelocitySnapping;
+vmCvar_t cg_velocitySnappingH;
+vmCvar_t cg_velocitySnappingY;
+vmCvar_t cg_velocitySnappingFov;
+
 // Load view angles on load
 vmCvar_t cg_loadViewAngles;
 
@@ -339,6 +345,11 @@ vmCvar_t cg_countryFlags;
 
 // Minimum start speed
 vmCvar_t cg_minStartSpeed;
+
+// Draw triggers
+vmCvar_t cg_drawTriggers;
+vmCvar_t cg_triggerOffset;
+vmCvar_t cg_triggerColor;
 
 // Nico, end of ETrun cvars
 
@@ -561,6 +572,12 @@ cvarTable_t cvarTable[] =
 	// CGaz
 	{ &cg_drawCGaz,             "cg_drawCGaz",             "0",     CVAR_ARCHIVE,             0 },
 
+	// Velocity Snapping
+	{ &cg_drawVelocitySnapping,   "cg_drawVelocitySnapping",    "0",     CVAR_ARCHIVE,        0 },
+	{ &cg_velocitySnappingH,      "cg_velocitySnappingH",       "8",     CVAR_ARCHIVE,        0 },
+	{ &cg_velocitySnappingY,      "cg_velocitySnappingY",       "248",   CVAR_ARCHIVE,        0 },
+	{ &cg_velocitySnappingFov,    "cg_velocitySnappingFov",     "120",   CVAR_ARCHIVE,        0 },
+
 	// Load view angles on load
 	{ &cg_loadViewAngles,       "cg_loadViewAngles",       "1",     CVAR_ARCHIVE,             0 },
 
@@ -609,6 +626,11 @@ cvarTable_t cvarTable[] =
 	// Minimum start speed
 	{ &cg_minStartSpeed,        "cg_minStartSpeed",        "0",     CVAR_ARCHIVE,             0 },
 
+	// Draw Triggers
+	{ &cg_drawTriggers,         "cg_drawTriggers",         "1",     CVAR_ARCHIVE,             0 },
+	{ &cg_triggerOffset,        "cg_triggerOffset",        "0",     CVAR_ARCHIVE,             0 },
+	{ &cg_triggerColor,         "cg_triggerColor",         "White", CVAR_ARCHIVE,             0 },
+
 	// Nico, end of ETrun cvars
 };
 
@@ -650,8 +672,8 @@ void CG_RegisterCvars(void) {
 
 	// Gordon: um, here, why?
 	CG_setClientFlags();
-	BG_setCrosshair(cg_crosshairColor.string, cg.xhairColor, cg_crosshairAlpha.value, "cg_crosshairColor");
-	BG_setCrosshair(cg_crosshairColorAlt.string, cg.xhairColorAlt, cg_crosshairAlphaAlt.value, "cg_crosshairColorAlt");
+	BG_SetRGBACvar(cg_crosshairColor.string, cg.xhairColor, cg_crosshairAlpha.value, "cg_crosshairColor");
+	BG_SetRGBACvar(cg_crosshairColorAlt.string, cg.xhairColorAlt, cg_crosshairAlphaAlt.value, "cg_crosshairColorAlt");
 
 	cvarsLoaded = qtrue;
 }
@@ -683,16 +705,17 @@ void CG_UpdateCvars(void) {
 				    cv->vmCvar == &pmove_fixed || cv->vmCvar == &com_maxfps ||
 				    cv->vmCvar == &cg_authToken || cv->vmCvar == &cg_autoLogin ||
 				    cv->vmCvar == &cg_loadViewAngles || cv->vmCvar == &cg_autoLoad ||
-				    cv->vmCvar == &cg_drawCGaz || cv->vmCvar == &cg_hideMe ||
-				    cv->vmCvar == &cg_autoDemo || cv->vmCvar == &cg_autoLoadCheckpoints ||
-				    cv->vmCvar == &cg_specLock || cv->vmCvar == &cg_keepAllDemos ||
-				    cv->vmCvar == &cg_loadWeapon || cv->vmCvar == &cg_noclipSpeed ||
-				    cv->vmCvar == &int_cl_yawspeed || cv->vmCvar == &int_cl_pitchspeed) {
+				    cv->vmCvar == &cg_drawCGaz || cv->vmCvar == &cg_drawVelocitySnapping ||
+				    cv->vmCvar == &cg_hideMe || cv->vmCvar == &cg_autoDemo ||
+				    cv->vmCvar == &cg_autoLoadCheckpoints || cv->vmCvar == &cg_specLock ||
+				    cv->vmCvar == &cg_keepAllDemos || cv->vmCvar == &cg_loadWeapon ||
+				    cv->vmCvar == &cg_noclipSpeed || cv->vmCvar == &int_cl_yawspeed || 
+				    cv->vmCvar == &int_cl_pitchspeed) {
 					fSetFlags = qtrue;
 				} else if (cv->vmCvar == &cg_crosshairColor || cv->vmCvar == &cg_crosshairAlpha) {
-					BG_setCrosshair(cg_crosshairColor.string, cg.xhairColor, cg_crosshairAlpha.value, "cg_crosshairColor");
+					BG_SetRGBACvar(cg_crosshairColor.string, cg.xhairColor, cg_crosshairAlpha.value, "cg_crosshairColor");
 				} else if (cv->vmCvar == &cg_crosshairColorAlt || cv->vmCvar == &cg_crosshairAlphaAlt) {
-					BG_setCrosshair(cg_crosshairColorAlt.string, cg.xhairColorAlt, cg_crosshairAlphaAlt.value, "cg_crosshairColorAlt");
+					BG_SetRGBACvar(cg_crosshairColorAlt.string, cg.xhairColorAlt, cg_crosshairAlphaAlt.value, "cg_crosshairColorAlt");
 				} else if (cv->vmCvar == &cg_rconPassword && *cg_rconPassword.string) {
 					trap_SendConsoleCommand(va("rconAuth %s", cg_rconPassword.string));
 				} else if (cv->vmCvar == &cg_refereePassword && *cg_refereePassword.string) {
@@ -760,15 +783,15 @@ void CG_setClientFlags(void) {
 	}
 
 	cg.pmext.bAutoReload = (cg_autoReload.integer > 0);
-	trap_Cvar_Set("cg_uinfo", va("%d %d %d %d %s %d %d %d %d %d %d %d %d %d %d %d %d",
+	trap_Cvar_Set("cg_uinfo", va("%d %d %d %d %s %d %d %d %d %d %d %d %d %d %d %d %d %d",
 	                             // Client Flags
-								 (
-									 ((cg_autoReload.integer > 0) ? CGF_AUTORELOAD : 0) |
-									 ((cg_autoactivate.integer > 0) ? CGF_AUTOACTIVATE : 0) |
-									 ((cg_predictItems.integer > 0) ? CGF_PREDICTITEMS : 0) |
-									 ((pmove_fixed.integer > 0) ? CGF_PMOVEFIXED : 0) |
-									 ((cg_autoLogin.integer > 0) ? CGF_AUTOLOGIN : 0)
-									 // Add more in here, as needed
+	                             (
+	                                 ((cg_autoReload.integer > 0) ? CGF_AUTORELOAD : 0) |
+	                                 ((cg_autoactivate.integer > 0) ? CGF_AUTOACTIVATE : 0) |
+	                                 ((cg_predictItems.integer > 0) ? CGF_PREDICTITEMS : 0) |
+	                                 ((pmove_fixed.integer > 0) ? CGF_PMOVEFIXED : 0) |
+	                                 ((cg_autoLogin.integer > 0) ? CGF_AUTOLOGIN : 0)
+	                                 // Add more in here, as needed
 	                             ),
 
 	                             // Timenudge
@@ -794,6 +817,9 @@ void CG_setClientFlags(void) {
 
 	                             // Nico, cgaz
 	                             cg_drawCGaz.integer,
+
+	                             // suburb, velocity snapping
+	                             cg_drawVelocitySnapping.integer,
 
 	                             // Nico, hideme
 	                             cg_hideMe.integer,
@@ -1117,17 +1143,17 @@ static void CG_RegisterSounds(void) {
 
 	for (i = 0; i < 2; ++i) {
 		cgs.media.grenadebounce[FOOTSTEP_NORMAL][i]         = \
-			cgs.media.grenadebounce[FOOTSTEP_GRAVEL][i]     = \
-				cgs.media.grenadebounce[FOOTSTEP_SPLASH][i] = trap_S_RegisterSound(va("sound/weapons/grenade/bounce_hard%i.wav", i + 1));
+		    cgs.media.grenadebounce[FOOTSTEP_GRAVEL][i]     = \
+		        cgs.media.grenadebounce[FOOTSTEP_SPLASH][i] = trap_S_RegisterSound(va("sound/weapons/grenade/bounce_hard%i.wav", i + 1));
 
 		cgs.media.grenadebounce[FOOTSTEP_METAL][i]    = \
-			cgs.media.grenadebounce[FOOTSTEP_ROOF][i] = trap_S_RegisterSound(va("sound/weapons/grenade/bounce_metal%i.wav", i + 1));
+		    cgs.media.grenadebounce[FOOTSTEP_ROOF][i] = trap_S_RegisterSound(va("sound/weapons/grenade/bounce_metal%i.wav", i + 1));
 
 		cgs.media.grenadebounce[FOOTSTEP_WOOD][i] = trap_S_RegisterSound(va("sound/weapons/grenade/bounce_wood%i.wav", i + 1));
 
 		cgs.media.grenadebounce[FOOTSTEP_GRASS][i]          = \
-			cgs.media.grenadebounce[FOOTSTEP_SNOW][i]       = \
-				cgs.media.grenadebounce[FOOTSTEP_CARPET][i] = trap_S_RegisterSound(va("sound/weapons/grenade/bounce_soft%i.wav", i + 1));
+		    cgs.media.grenadebounce[FOOTSTEP_SNOW][i]       = \
+		        cgs.media.grenadebounce[FOOTSTEP_CARPET][i] = trap_S_RegisterSound(va("sound/weapons/grenade/bounce_soft%i.wav", i + 1));
 
 	}
 
