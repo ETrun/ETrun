@@ -1830,6 +1830,11 @@ extern vmCvar_t cg_countryFlags;
 // Minimum start speed
 extern vmCvar_t cg_minStartSpeed;
 
+// Draw triggers
+extern vmCvar_t cg_drawTriggers;
+extern vmCvar_t cg_triggerOffset;
+extern vmCvar_t cg_triggerColor;
+
 // Nico, end of ETrun cvars
 
 //
@@ -2075,8 +2080,8 @@ void CG_Tracer(vec3_t source, vec3_t dest, int sparks);
 void CG_CalcMuzzlePoint(int entityNum, vec3_t muzzle);
 void CG_Bullet(vec3_t end, int sourceEntityNum, qboolean flesh, int fleshEntityNum, int otherEntNum2, float waterfraction, int seed);
 
-void CG_RailTrail(vec3_t start, vec3_t end, int type);     //----(SA)	added 'type'
-void CG_RailTrail2(vec3_t start, vec3_t end);
+void CG_RailTrail(vec3_t start, vec3_t end, int box);     //----(SA)	added 'type'
+void CG_RailTrail2(vec3_t start, vec3_t end, int box);
 void CG_GrappleTrail(centity_t *ent, const weaponInfo_t *wi);
 void CG_AddViewWeapon(playerState_t *ps);
 void CG_AddPlayerWeapon(refEntity_t *parent, playerState_t *ps, centity_t *cent);
