@@ -2010,11 +2010,9 @@ static void CG_ProcessEntity(centity_t *cent) {
 	case ET_TANK_INDICATOR:
 	case ET_TANK_INDICATOR_DEAD:
 	case ET_COMMANDMAP_MARKER:  // this one should _never_ reach the client
-#ifdef VISIBLE_TRIGGERS
 	case ET_TRIGGER_MULTIPLE:
 	case ET_TRIGGER_FLAGONLY:
 	case ET_TRIGGER_FLAGONLY_MULTIPLE:
-#endif
 		break;
 	case ET_SPEAKER:
 		CG_Speaker(cent);

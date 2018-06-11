@@ -3993,7 +3993,7 @@ colorTable_t OSP_Colortable[] =
 };
 
 extern void trap_Cvar_Set(const char *var_name, const char *value);
-void BG_setCrosshair(char *colString, float *col, float alpha, char *cvarName) {
+void BG_SetRGBACvar(char *colString, float *col, float alpha, char *cvarName) {
 	char *s = colString;
 
 	col[0] = 1.0f;
@@ -4026,6 +4026,7 @@ void BG_setCrosshair(char *colString, float *col, float alpha, char *cvarName) {
 	trap_Cvar_Set(cvarName, "White");
 }
 
+// suburb, zoom related
 qboolean BG_IsScopedWeapon(int weapon) {
 	switch (weapon) {
 	case WP_GARAND_SCOPE:
@@ -4036,7 +4037,23 @@ qboolean BG_IsScopedWeapon(int weapon) {
 	return qfalse;
 }
 
-///////////////////////////////////////////////////////////////////////////////
+#define ZOOM_MAX_WEAPONS     6
+#define SCOPE_MAX_WEAPONS    2
+#define ZOOMTABLE_MAX_INDEX  3
+float BG_GetZoomTableValues(int weaponType, int index){
+	float zoomTable[ZOOM_MAX_WEAPONS][ZOOMTABLE_MAX_INDEX] =
+	{
+		    // {out,  in, scope}
+		        {  0,  0,   0 },  // default
+		        { 60,  1,   0 },  // binoc
+		        { 20,  4, 900 },  // sniper
+		        { 60,  20,  0 },  // snooper
+		        { 55,  55,  1 },  // fg42
+		        { 55,  55,  0 }   // mg42
+	};
+	return zoomTable[weaponType][index];
+}
+
 typedef struct locInfo_s {
 	vec2_t gridStartCoord;
 	vec2_t gridStep;
@@ -4078,21 +4095,6 @@ char *BG_GetLocationString(vec_t *pos) {
 	Com_sprintf(coord, sizeof (coord), "%c,%i", 'A' + x, y);
 
 	return coord;
-}
-
-qboolean BG_BBoxCollision(vec3_t min1, vec3_t max1, vec3_t min2, vec3_t max2) {
-	int i;
-
-	for (i = 0; i < 3; ++i) {
-		if (min1[i] > max2[i]) {
-			return qfalse;
-		}
-		if (min2[i] > max1[i]) {
-			return qfalse;
-		}
-	}
-
-	return qtrue;
 }
 
 weapon_t bg_heavyWeapons[NUM_HEAVY_WEAPONS] =

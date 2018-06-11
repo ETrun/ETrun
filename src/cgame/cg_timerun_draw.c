@@ -113,7 +113,15 @@ void CG_DrawSpeedMeter(void) {
 
 	w = CG_Text_Width_Ext(status, sizex, sizey, &cgs.media.limboFont1) / 2;
 
-	CG_Text_Paint_Ext(x - w, y, sizex, sizey, colorWhite, status, 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
+	if (cg_drawAccel.integer && speed > cg.oldSpeed + 0.001f * cg_accelSmoothness.integer) {
+		CG_Text_Paint_Ext(x - w, y, sizex, sizey, colorGreen, status, 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
+	} else if (cg_drawAccel.integer && speed < cg.oldSpeed - 0.001f * cg_accelSmoothness.integer) {
+		CG_Text_Paint_Ext(x - w, y, sizex, sizey, colorRed, status, 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
+	} else {
+		CG_Text_Paint_Ext(x - w, y, sizex, sizey, colorWhite, status, 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
+	}
+	
+	cg.oldSpeed = speed;
 }
 
 /**
@@ -237,12 +245,12 @@ void CG_DrawSlick(void) {
  */
 void CG_DrawTimer(void) {
 	char       status[128];
-	int        min = 0, sec = 0, milli = 0;
-	int        x = 0, y = 0, w = 0;
-	int        timerunNum = cg.currentTimerun;
-	int        startTime = 0;
+	int        min                = 0, sec = 0, milli = 0;
+	int        x                  = 0, y = 0, w = 0;
+	int        timerunNum         = cg.currentTimerun;
+	int        startTime          = 0;
 	int        currentTimerunTime = 0;
-	float      sizex = 0.25f, sizey = 0.25f;
+	float      sizex              = 0.25f, sizey = 0.25f;
 	vec4_t     color;
 	int        runBestTime;
 	int        runLastTime;
@@ -342,7 +350,7 @@ void CG_DrawTimer(void) {
 		// Nico, timerun not finished yet
 
 		// Nico, you won't beat the rec this time, turn timer to red color
-		if (runBestTime > 0 && currentTimerunTime > runBestTime) {
+		if (runBestTime > 0 && currentTimerunTime > runBestTime + 16) {
 			Vector4Set(color, colorRed[0], colorRed[1], colorRed[2], colorRed[3]);
 		}
 
@@ -483,7 +491,12 @@ void CG_DrawCGaz(void) {
 
 		// Nico, AP or stock accel?
 		if (physics.integer == PHYSICS_MODE_AP_NO_OB || physics.integer == PHYSICS_MODE_AP_OB) {
-			accel = pm_accelerate_AP;
+			// suburb, CGaz 2 on ground fix
+			if (cg_drawCGaz.integer == 2) {
+				accel = pm_accelerate_AP - 10.0f;
+			} else {
+				accel = pm_accelerate_AP;
+			}
 		} else {
 			accel = pm_accelerate;
 		}
@@ -647,6 +660,80 @@ void CG_DrawCGaz(void) {
 }
 
 /**
+* Detached function to sort velocity snapping zones (taken from iodfengine)
+*
+* @author suburb
+*/
+static int QDECL sortSnapZones(const void *a, const void *b) {
+	return *(float *)a - *(float *)b;
+}
+
+/**
+* Draw velocity snapping zones (core math taken from iodfengine)
+*
+* @author suburb
+*/
+#define DF_TO_ET_GROUNDSPEED (352.0f / 320.0f)
+void CG_DrawVelocitySnapping(void) {
+	vec4_t color[3];
+	float rgba1[4]        = { 0.4f, 0, 0, 0.5f };
+	float rgba2[4]        = { 0, 0.4f, 0.4f, 0.5f };
+	float step            = 0;
+	float yaw             = 0;
+	int snapHud_H         = 0;
+	int snapHud_Y         = 0;
+	int colorID           = 0;
+	int fov               = 0;
+	int i                 = 0;
+
+	if (!cg_drawVelocitySnapping.integer || cg.isLogged || (cg.snap->ps.persistant[PERS_TEAM] == TEAM_SPECTATOR)) {
+		return;
+	}
+
+	// check whether snapSpeed needs to be updated
+	if (cg.snapSpeed != cg.snap->ps.speed * DF_TO_ET_GROUNDSPEED) {
+		cg.snapSpeed = cg.snap->ps.speed * DF_TO_ET_GROUNDSPEED;
+		cg.snapSpeed /= 125;
+		cg.snapCount = 0;
+
+		for (step = floor(cg.snapSpeed + 0.5) - 0.5; step > 0 && cg.snapCount < (int) (sizeof (cg.snapZones) - 2); step--) {
+			cg.snapZones[cg.snapCount] = RAD2DEG(acos(step / cg.snapSpeed));
+			cg.snapCount++;
+			cg.snapZones[cg.snapCount] = RAD2DEG(asin(step / cg.snapSpeed));
+			cg.snapCount++;
+		}
+
+		qsort(cg.snapZones, cg.snapCount, sizeof(cg.snapZones[0]), sortSnapZones);
+		cg.snapZones[cg.snapCount] = cg.snapZones[0] + 90;
+	}
+
+	// draw snapping
+	yaw = cg.predictedPlayerState.viewangles[YAW] + 45;
+
+	snapHud_H = cg_velocitySnappingH.integer;
+	snapHud_Y = cg_velocitySnappingY.integer;
+	fov = cg_velocitySnappingFov.integer;
+
+	if (cg_drawVelocitySnapping.integer == 2) {
+		for (int i = 0; i < 3; i++) {
+			color[0][i] = 1;
+			color[1][i] = 1;
+		}
+	} else {
+		for (int i = 0; i < 4; i++) {
+			color[0][i] = rgba1[i];
+			color[1][i] = rgba2[i];
+		}
+	}
+
+	for (i = 0; i < cg.snapCount; i++) {
+		CG_FillAngleYaw(cg.snapZones[i], cg.snapZones[i + 1], yaw, snapHud_Y, snapHud_H, fov, color[colorID]);
+		CG_FillAngleYaw(cg.snapZones[i] + 90, cg.snapZones[i + 1] + 90, yaw, snapHud_Y, snapHud_H, fov, color[colorID]);
+		colorID ^= 1;
+	}
+}
+
+/**
  * Draw keys from TJMod
  *
  * @author Nico
@@ -754,9 +841,9 @@ void CG_DrawKeys(void) {
 /**
  * Draw clock from TJMod
  *
- * @author Nico
+ * @author Nico, modified by suburb
  */
-void CG_DrawClock(float x, float y, float scale, qboolean shadowed) {
+void CG_DrawScoresClock(float x, float y, float scale) {
 	char    displayTime[18] = { 0 };
 	qtime_t tm;
 	vec4_t  clr = { 1.0f, 1.0f, 1.0f, 0.8f };
@@ -764,20 +851,9 @@ void CG_DrawClock(float x, float y, float scale, qboolean shadowed) {
 	trap_RealTime(&tm);
 	displayTime[0] = '\0';
 
-	Q_strcat(displayTime, sizeof (displayTime),
-	         va("Time: %d:%02d",
-	            ((tm.tm_hour == 0 || tm.tm_hour == 12) ? 12 : tm.tm_hour % 12),
-	            tm.tm_min));
-	Q_strcat(displayTime, sizeof (displayTime),
-	         va(":%02d", tm.tm_sec));
-	Q_strcat(displayTime, sizeof (displayTime),
-	         (tm.tm_hour < 12) ? " am" : " pm");
+	Q_strcat(displayTime, sizeof (displayTime), va("Time: %d:%02d:%02d", tm.tm_hour, tm.tm_min, tm.tm_sec));
 
-	if (shadowed == qtrue) {
-		CG_Text_Paint_Ext(x, y, scale, scale, clr, displayTime, 0, 24, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
-	} else {
-		CG_Text_Paint_Ext(x, y, scale, scale, clr, displayTime, 0, 24, 0, &cgs.media.limboFont1);
-	}
+	CG_Text_Paint_Ext(x, y, scale, scale, clr, displayTime, 0, 24, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
 }
 
 /**
@@ -791,7 +867,7 @@ void CG_DrawBannerPrint(void) {
 	int   l      = 0;
 	int   y      = 20;
 	float *color;
-	float sizex = 0.2f, sizey = 0.2f;
+	float sizex     = 0.2f, sizey = 0.2f;
 	char  lastcolor = COLOR_WHITE;
 	int   charHeight;
 	int   bannerShowTime = 10000;
@@ -878,10 +954,8 @@ void CG_DrawInfoPanel(void) {
 	int    x               = 0;
 	int    y               = 0;
 	int    starty          = 0;
-	vec4_t panelBgColor    = { 0.f, 0.f, 0.f, .5f };
-	vec4_t textColor       = { 1.0f, 1.0f, 1.0f, 0.8f };
+	vec4_t textColor       = { 1.0f, 1.0f, 1.0f, 1.0f };
 	float  textScale       = 0.12f;
-	float  textScaleFactor = 0;
 	int    speed           = 0;
 	int    i               = 0;
 
@@ -904,32 +978,41 @@ void CG_DrawInfoPanel(void) {
 	x = cg_infoPanelX.value;
 	y = cg_infoPanelY.value;
 
-	CG_FillRect(x, y, INFO_PANEL_WIDTH, INFO_PANEL_HEIGHT, panelBgColor);
-	CG_DrawRect_FixedBorder(x, y, INFO_PANEL_WIDTH, INFO_PANEL_HEIGHT, 1, colorBlack);
+	//CG_DrawRect_FixedBorder(x, y, INFO_PANEL_WIDTH, INFO_PANEL_HEIGHT, 1, colorWhite);
 
 	// Print start speed
 	CG_Text_Paint_Ext(x, y += 10, textScale, textScale, textColor, " Start speed:", 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
-	// Colored start speed
+	textScale = CG_AdjustFontSize(textScale, cg.timerunStartSpeed, INFO_PANEL_FONT_ADJUST_NEEDED);
+
+	// Colour start speed
 	if (cg_minStartSpeed.value <= 0 || cg.timerunStartSpeed == 0 || cg.timerunStartSpeed >= cg_minStartSpeed.value) {
 		CG_Text_Paint_Ext(x + INFO_PANEL_X_PADDING, y, textScale, textScale, textColor, va("%d", cg.timerunStartSpeed), 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
 	} else {
 		CG_Text_Paint_Ext(x + INFO_PANEL_X_PADDING, y, textScale, textScale, textColor, va("^1%d", cg.timerunStartSpeed), 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
 	}
+	textScale = 0.12f;
 
 	// Print stop speed
 	CG_Text_Paint_Ext(x, y += 10, textScale, textScale, textColor, " Stop speed:", 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
+	textScale = CG_AdjustFontSize(textScale, cg.timerunStopSpeed, INFO_PANEL_FONT_ADJUST_NEEDED);
 	CG_Text_Paint_Ext(x + INFO_PANEL_X_PADDING, y, textScale, textScale, textColor, va("%d", cg.timerunStopSpeed), 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
+	textScale = 0.12f;
 
-	// Print run top speed
+	// Print run max speed
 	CG_Text_Paint_Ext(x, y += 10, textScale, textScale, textColor, " Run max speed:", 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
+	textScale = CG_AdjustFontSize(textScale, cg.runMaxSpeed, INFO_PANEL_FONT_ADJUST_NEEDED);
 	CG_Text_Paint_Ext(x + INFO_PANEL_X_PADDING, y, textScale, textScale, textColor, va("%d", cg.runMaxSpeed), 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
+	textScale = 0.12f;
 
 	// Print overall max speed
 	CG_Text_Paint_Ext(x, y += 10, textScale, textScale, textColor, " Overall max speed:", 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
+	textScale = CG_AdjustFontSize(textScale, cg.overallMaxSpeed, INFO_PANEL_FONT_ADJUST_NEEDED);
 	CG_Text_Paint_Ext(x + INFO_PANEL_X_PADDING, y, textScale, textScale, textColor, va("%d", cg.overallMaxSpeed), 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
+	textScale = 0.12f;
 
 	// Print jumps count
 	CG_Text_Paint_Ext(x, y += 10, textScale, textScale, textColor, " Jumps:", 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
+	textScale = CG_AdjustFontSize(textScale, cg.timerunJumpCounter, INFO_PANEL_FONT_ADJUST_NEEDED);
 	CG_Text_Paint_Ext(x + INFO_PANEL_X_PADDING, y, textScale, textScale, textColor, va("%d", cg.timerunJumpCounter), 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
 
 	// Print jump speeds
@@ -940,13 +1023,7 @@ void CG_DrawInfoPanel(void) {
 			x += 20;
 		}
 
-		// suburb, decrease font size for higher speeds
-		textScale = 0.12f;
-
-		if (cg.timerunJumpSpeeds[i] >= INFO_PANEL_FONT_ADJUST_NEEDED) {
-			textScaleFactor = 0.02f * GetDigits(cg.timerunJumpSpeeds[i]) - 0.08f;
-			textScale      -= textScaleFactor;
-		}
+		textScale = CG_AdjustFontSize(0.12f, cg.timerunJumpSpeeds[i], INFO_PANEL_FONT_ADJUST_NEEDED);
 
 		// If speed at jump n is slower than speed at jump n - 1, use red color
 		if (i > 0 && cg.timerunJumpSpeeds[i] < cg.timerunJumpSpeeds[i - 1]) {

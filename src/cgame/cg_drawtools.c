@@ -61,6 +61,29 @@ void CG_FillRect(float x, float y, float width, float height, const float *color
 }
 
 /*
+================
+CG_FillAngleYaw (taken from iodfengine)
+
+modified by @suburb
+=================
+*/
+void CG_FillAngleYaw(float start, float end, float viewangle, float y, float height, int fov, const float *color) {
+	float x, width, fovscale;
+
+	fovscale = tan(DEG2RAD(fov / 2));
+	x = SCREEN_WIDTH / 2 + tan(DEG2RAD(viewangle + start)) / fovscale*SCREEN_WIDTH / 2;
+	width = fabs(SCREEN_WIDTH*(tan(DEG2RAD(viewangle + end)) - tan(DEG2RAD(viewangle + start))) / (fovscale * 2)) + 1;
+	if (cg_drawVelocitySnapping.integer == 2) {
+		width /= 2;
+	}
+
+	trap_R_SetColor(color);
+	CG_AdjustFrom640(&x, &y, &width, &height);
+	trap_R_DrawStretchPic(x, y, width, height, 0, 0, 0, 0, cgs.media.whiteShader);
+	trap_R_SetColor(NULL);
+}
+
+/*
 ==============
 CG_HorizontalPercentBar
     Generic routine for pretty much all status indicators that show a fractional
@@ -650,8 +673,12 @@ void CG_ColorForHealth(vec4_t hcolor) {
 	}
 }
 
+/*
+=================
+CG_TranslateString
+=================
+*/
 #define MAX_VA_STRING       32000
-
 char *CG_TranslateString(const char *string) {
 	static char staticbuf[2][MAX_VA_STRING];
 	static int  bufcount = 0;
@@ -666,4 +693,22 @@ char *CG_TranslateString(const char *string) {
 	trap_TranslateString(string, buf);
 
 	return buf;
+}
+
+/*
+=================
+CG_AdjustFontSize
+
+Returns a modified textScale value, the bigger the inserted
+value, the smaller is the output
+
+@author suburb
+=================
+*/
+float CG_AdjustFontSize(float textScale, int valueToPrint, int border){
+	if (valueToPrint >= border) {
+		float textScaleFactor = 0.02f * GetDigits(valueToPrint) - 0.08f;
+		textScale -= textScaleFactor;
+	}
+	return textScale;
 }
