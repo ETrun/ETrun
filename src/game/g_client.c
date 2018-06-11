@@ -887,7 +887,7 @@ void ClientUserinfoChanged(int clientNum) {
 	Q_strncpyz(oldAuthToken, client->pers.authToken, sizeof (oldAuthToken));
 
 	s = Info_ValueForKey(userinfo, "cg_uinfo");
-	sscanf(s, "%10u %3u %3u %3i %64s %1i %1i %1i %1i %1i %1i %1i %1i %1i %d",
+	sscanf(s, "%10u %3u %3u %3i %64s %1i %1i %1i %1i %1i %1i %1i %1i %1i %1i %d %d %d",
 	       &client->pers.clientFlags,
 	       &client->pers.clientTimeNudge,
 	       &client->pers.clientMaxPackets,
@@ -910,6 +910,9 @@ void ClientUserinfoChanged(int clientNum) {
 	       // Nico, cgaz
 	       &client->pers.cgaz,
 
+	       // suburb, velocity snapping
+	       &client->pers.snapping,
+
 	       // Nico, hideme
 	       &client->pers.hideme,
 
@@ -926,7 +929,13 @@ void ClientUserinfoChanged(int clientNum) {
 	       &client->pers.keepAllDemos,
 
 	       // suburb, noclip speed scale
-	       &client->pers.noclipSpeed
+	       &client->pers.noclipSpeed,
+
+	       // suburb, yawspeed
+	       &client->pers.yawspeed,
+
+	       // suburb, pitchspeed
+	       &client->pers.pitchspeed
 	       );
 
 	// Nico, check if auth token was changed
@@ -1072,6 +1081,11 @@ char *ClientConnect(int clientNum, qboolean firstTime) {
 	ent = &g_entities[clientNum];
 
 	trap_GetUserinfo(clientNum, userinfo, sizeof (userinfo));
+
+	// suburb, prevent config load error
+	if (level.delayedMapChange.pendingChange && level.delayedMapChange.timeChange - level.time < 5000) {
+		return "You cannot connect during a pending map change.";
+	}
 
 	// IP filtering
 	// show_bug.cgi?id=500
