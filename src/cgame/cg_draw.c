@@ -2161,12 +2161,12 @@ static void CG_Draw2D(void) {
 
 		CG_DrawObjectiveInfo();
 
-		// Nico, draw speed meter
-		CG_DrawSpeedMeter();
-
 		// Nico, draw CGaz
 		CG_DrawCGaz();
     
+		// Nico, draw speed meter
+		CG_DrawSpeedMeter();
+
 		// Nico, draw OB
 		CG_DrawOB();
 

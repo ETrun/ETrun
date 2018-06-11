@@ -703,7 +703,7 @@ void CG_DrawVelocitySnapping(void) {
 			cg.snapCount++;
 		}
 
-		qsort(cg.snapZones, cg.snapCount, sizeof(cg.snapZones[0]), sortSnapZones);
+		qsort(cg.snapZones, cg.snapCount, sizeof (cg.snapZones[0]), sortSnapZones);
 		cg.snapZones[cg.snapCount] = cg.snapZones[0] + 90;
 	}
 

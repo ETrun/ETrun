@@ -597,7 +597,7 @@ cvarTable_t cvarTable[] =
 	// Velocity Snapping
 	{ &cg_drawVelocitySnapping,   "cg_drawVelocitySnapping",    "0",     CVAR_ARCHIVE,        0 },
 	{ &cg_velocitySnappingH,      "cg_velocitySnappingH",       "8",     CVAR_ARCHIVE,        0 },
-	{ &cg_velocitySnappingY,      "cg_velocitySnappingY",       "248",   CVAR_ARCHIVE,        0 },
+	{ &cg_velocitySnappingY,      "cg_velocitySnappingY",       "240",   CVAR_ARCHIVE,        0 },
 	{ &cg_velocitySnappingFov,    "cg_velocitySnappingFov",     "120",   CVAR_ARCHIVE,        0 },
 
 	// Load view angles on load
