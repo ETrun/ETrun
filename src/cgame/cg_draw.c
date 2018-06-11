@@ -257,7 +257,7 @@ static float CG_DrawFPS(float y) {
 		s = va("%i FPS", fps);
 		w = CG_Text_Width_Ext(s, scale, 0, &cgs.media.limboFont1);
 
-		CG_DrawRect_FixedBorder(UPPERRIGHT_X - w - 2, y, w + 5, 12 + 2, 1, colorWhite);
+		//CG_DrawRect_FixedBorder(UPPERRIGHT_X - w - 2, y, w + 5, 12 + 2, 1, colorWhite);
 
 		CG_Text_Paint_Ext(UPPERRIGHT_X - w, y + 11, scale, scale, colorWhite, s, 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
 	}
@@ -282,11 +282,11 @@ static float CG_DrawClock(float y) {
 
 	trap_RealTime(&tm);
 	displayTime[0] = '\0';
-	Q_strcat(displayTime, sizeof(displayTime), va("%d:%02d:%02d", tm.tm_hour, tm.tm_min, tm.tm_sec));
+	Q_strcat(displayTime, sizeof (displayTime), va("%d:%02d:%02d", tm.tm_hour, tm.tm_min, tm.tm_sec));
 
 	w = CG_Text_Width_Ext(displayTime, scale, 0, &cgs.media.limboFont1);
 
-	CG_DrawRect_FixedBorder(UPPERRIGHT_X - w - 2, y, w + 5, 12 + 2, 1, colorWhite);
+	//CG_DrawRect_FixedBorder(UPPERRIGHT_X - w - 2, y, w + 5, 12 + 2, 1, colorWhite);
 	CG_Text_Paint_Ext(UPPERRIGHT_X - w, y + 11, scale, scale, colorWhite, displayTime, 0, 24, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
 
 	return y + 19;
@@ -547,7 +547,7 @@ static void CG_DrawLagometer(void) {
 	//
 	// draw the graph
 	//
-	x = 640 - 48;
+	x = 640 - 48 - 4;
 	y = 480 - 200;
 
 	trap_R_SetColor(NULL);
@@ -2079,8 +2079,6 @@ void CG_DrawDemoRecording(void) {
 	char   status[1024];
 	char   demostatus[128];
 	char   wavestatus[128];
-	vec4_t clrUiWhite = { 1.0f, 1.0f, 1.0f, 0.8f };
-	vec4_t clrUiRed   = { 1.0f, 0.0f, 0.0f, 0.8f };
 
 	if (!cl_demorecording.integer && !cl_waverecording.integer) {
 		return;
@@ -2091,22 +2089,22 @@ void CG_DrawDemoRecording(void) {
 	}
 
 	if (cl_demorecording.integer) {
-		Com_sprintf(demostatus, sizeof (demostatus), " demo %s: %ik ", cl_demofilename.string, cl_demooffset.integer / 1024);
+		Com_sprintf(demostatus, sizeof (demostatus), " Demo: %s [%iKB] ", cl_demofilename.string, cl_demooffset.integer / 1024);
 	} else {
 		strncpy(demostatus, "", sizeof (demostatus));
 	}
 
 	if (cl_waverecording.integer) {
-		Com_sprintf(wavestatus, sizeof (demostatus), " audio %s: %ik ", cl_wavefilename.string, cl_waveoffset.integer / 1024);
+		Com_sprintf(wavestatus, sizeof (demostatus), " Audio: %s [%iKB] ", cl_wavefilename.string, cl_waveoffset.integer / 1024);
 	} else {
 		strncpy(wavestatus, "", sizeof (wavestatus));
 	}
 
-	Com_sprintf(status, sizeof (status), "recording%s%s", demostatus, wavestatus);
+	Com_sprintf(status, sizeof (status), "Recording%s%s", demostatus, wavestatus);
 
 	// Nico, add recording red dot
-	CG_Text_Paint_Ext(0, cg_recording_statusline.integer, 0.5f, 0.5f, clrUiRed, ".", 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont2);
-	CG_Text_Paint_Ext(14, cg_recording_statusline.integer, 0.14f, 0.14f, clrUiWhite, status, 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
+	CG_Text_Paint_Ext(0, cg_recording_statusline.integer, 0.5f, 0.5f, colorRed, ".", 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont2);
+	CG_Text_Paint_Ext(14, cg_recording_statusline.integer, 0.14f, 0.14f, colorWhite, status, 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
 }
 
 /*
@@ -2204,6 +2202,9 @@ static void CG_Draw2D(void) {
 
 		CG_DrawObjectiveInfo();
 
+		// Nico, draw CGaz
+		CG_DrawCGaz();
+
 		// Nico, draw speed meter
 		CG_DrawSpeedMeter();
 
@@ -2218,9 +2219,6 @@ static void CG_Draw2D(void) {
 
 		// Nico, draw check points
 		CG_DrawCheckpoints();
-
-		// Nico, draw CGaz
-		CG_DrawCGaz();
 
 		// Nico, draw keys pressed
 		CG_DrawKeys();

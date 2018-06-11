@@ -764,7 +764,7 @@ void CG_DrawScoresClock(float x, float y, float scale) {
 	trap_RealTime(&tm);
 	displayTime[0] = '\0';
 
-	Q_strcat(displayTime, sizeof(displayTime), va("Time: %d:%02d:%02d", tm.tm_hour, tm.tm_min, tm.tm_sec));
+	Q_strcat(displayTime, sizeof (displayTime), va("Time: %d:%02d:%02d", tm.tm_hour, tm.tm_min, tm.tm_sec));
 
 	CG_Text_Paint_Ext(x, y, scale, scale, clr, displayTime, 0, 24, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
 }
@@ -892,7 +892,7 @@ void CG_DrawInfoPanel(void) {
 	x = cg_infoPanelX.value;
 	y = cg_infoPanelY.value;
 
-	CG_DrawRect_FixedBorder(x, y, INFO_PANEL_WIDTH, INFO_PANEL_HEIGHT, 1, colorWhite);
+	//CG_DrawRect_FixedBorder(x, y, INFO_PANEL_WIDTH, INFO_PANEL_HEIGHT, 1, colorWhite);
 
 	// Print start speed
 	CG_Text_Paint_Ext(x, y += 10, textScale, textScale, textColor, " Start speed:", 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
