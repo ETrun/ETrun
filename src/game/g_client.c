@@ -851,8 +851,9 @@ void ClientUserinfoChanged(int clientNum) {
 	client->ps.clientNum = clientNum;
 
 	// Nico, flood protection
-	if (ClientIsFlooding(ent)) {
+	if (!ent->isBeingDropped && ClientIsFlooding(ent)) {
 		G_LogPrintf(qtrue, "Dropping client %d: flooded userinfo\n", clientNum);
+		ent->isBeingDropped = qtrue;
 		trap_DropClient(clientNum, "^1You were kicked because of flooded userinfo", 0);
 		return;
 	}
@@ -1080,6 +1081,9 @@ char *ClientConnect(int clientNum, qboolean firstTime) {
 
 	ent = &g_entities[clientNum];
 
+	// suburb, flood protection reset
+	ent->isBeingDropped = qfalse;
+
 	trap_GetUserinfo(clientNum, userinfo, sizeof (userinfo));
 
 	// suburb, prevent config load error
@@ -1252,6 +1256,11 @@ void ClientBegin(int clientNum) {
 	ent = g_entities + clientNum;
 
 	client = level.clients + clientNum;
+	
+	// suburb, flood protection fix
+	if (ent->isBeingDropped) {
+		return;
+	}
 
 	if (ent->r.linked) {
 		trap_UnlinkEntity(ent);
