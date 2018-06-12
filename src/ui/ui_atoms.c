@@ -110,7 +110,7 @@ void UI_AdjustFrom640(float *x, float *y, float *w, float *h) {
 	*h *= uiInfo.uiDC.yscale;
 
 	// suburb, widescreen support
-	if (uiInfo.uiDC.glconfig.windowAspect > RATIO43) {
+	if (!UI_Is43Screen()) {
 		*x *= RATIO43 / uiInfo.uiDC.glconfig.windowAspect;
 		*w *= RATIO43 / uiInfo.uiDC.glconfig.windowAspect;
 	}

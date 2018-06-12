@@ -3915,9 +3915,13 @@ void _UI_Init(void) {
 	}
 
 	// suburb, widescreen support
+	uiInfo.uiDC.glconfig.windowAspect = (float) uiInfo.uiDC.glconfig.vidWidth / (float) uiInfo.uiDC.glconfig.vidHeight;
 	if (ui_widescreenSupport.integer) {
-		uiInfo.uiDC.glconfig.windowAspect = (float)uiInfo.uiDC.glconfig.vidWidth / (float)uiInfo.uiDC.glconfig.vidHeight;
+		uiInfo.uiDC.glconfig.widescreenWanted = qtrue;
+	} else {
+		uiInfo.uiDC.glconfig.widescreenWanted = qfalse;
 	}
+
 
 	uiInfo.uiDC.registerShaderNoMip  = &trap_R_RegisterShaderNoMip;
 	uiInfo.uiDC.setColor             = &UI_SetColor;

@@ -141,7 +141,7 @@ UI_WideX
 ===============
 */
 float UI_WideX(float x) {
-	return (DC->glconfig.windowAspect <= RATIO43) ? x : x * (DC->glconfig.windowAspect * RPRATIO43); // aspectratio / (4/3)
+	return (UI_Is43Screen()) ? x : x * (DC->glconfig.windowAspect * RPRATIO43); // aspectratio / (4/3)
 }
 
 /*
@@ -152,7 +152,21 @@ UI_WideXoffset
 ===============
 */
 float UI_WideXoffset(void) {
-	return (DC->glconfig.windowAspect <= RATIO43) ? 0.0f : ((640.0f * (DC->glconfig.windowAspect * RPRATIO43)) - 640.0f) * 0.5f;
+	return (UI_Is43Screen()) ? 0.0f : ((640.0f * (DC->glconfig.windowAspect * RPRATIO43)) - 640.0f) * 0.5f;
+}
+
+/*
+================
+UI_Is43Screen
+
+@author suburb, widescreen support
+================
+*/
+qboolean UI_Is43Screen(void) {
+	if (DC->glconfig.windowAspect <= RATIO43 || !DC->glconfig.widescreenWanted) {
+		return qtrue;
+	}
+	return qfalse;
 }
 
 /*
@@ -4358,7 +4372,7 @@ void AdjustFrom640(float *x, float *y, float *w, float *h) {
 	*h *= DC->yscale;
 
 	// suburb, widescreen support
-	if (DC->glconfig.windowAspect > RATIO43) {
+	if (!UI_Is43Screen()) {
 		*x *= RATIO43 / DC->glconfig.windowAspect;
 		*w *= RATIO43 / DC->glconfig.windowAspect;
 	}

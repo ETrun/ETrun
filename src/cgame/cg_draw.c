@@ -1399,6 +1399,11 @@ static void CG_DrawSpectatorMessage(void) {
 		return;
 	}
 
+	// suburb, don't draw if esc menu is up because of readability
+	if (cg.UIisUp) {
+		return;
+	}
+
 	if (cg.time - lastconfigGet > 1000) {
 		Controls_GetConfig();
 		lastconfigGet = cg.time;

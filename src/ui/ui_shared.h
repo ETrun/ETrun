@@ -581,6 +581,7 @@ char *BindingFromName(const char *cvar);
 // suburb, widescreen support
 float UI_WideX(float x);
 float UI_WideXoffset(void);
+qboolean UI_Is43Screen(void);
 void BG_PanelButtonsSetupWide(panel_button_t **buttons, float xoffset);
 
 #endif

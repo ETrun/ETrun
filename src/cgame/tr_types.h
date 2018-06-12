@@ -292,6 +292,7 @@ typedef struct {
 	// than scrWidth / scrHeight if the pixels are non-square
 	// normal screens should be 4/3, but wide aspect monitors may be 16/9
 	float windowAspect;
+	qboolean widescreenWanted;
 
 	int displayFrequency;
 

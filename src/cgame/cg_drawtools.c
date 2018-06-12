@@ -58,7 +58,7 @@ CG_Is43Screen
 ================
 */
 qboolean CG_Is43Screen(void) {
-	if (cgs.glconfig.windowAspect <= RATIO43) {
+	if (cgs.glconfig.windowAspect <= RATIO43 || !cg_widescreenSupport.integer) {
 		return qtrue;
 	}
 	return qfalse;
