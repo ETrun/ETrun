@@ -181,6 +181,8 @@ void CG_DrawCursorhint(rectDef_t *rect) {
 	qhandle_t icon = 0;
 	float     scale, halfscale;
 	qboolean  yellowbar = qfalse;
+	// suburb, widescreen support
+	float middle = rect->x + cgs.wideXoffset;
 
 	if (!cg_cursorHints.integer) {
 		return;
@@ -356,7 +358,7 @@ void CG_DrawCursorhint(rectDef_t *rect) {
 
 	// set color and draw the hint
 	trap_R_SetColor(color);
-	CG_DrawPic(rect->x - halfscale, rect->y - halfscale, rect->w + scale, rect->h + scale, icon);
+	CG_DrawPic(middle - halfscale, rect->y - halfscale, rect->w + scale, rect->h + scale, icon);
 
 	trap_R_SetColor(NULL);
 
@@ -367,7 +369,7 @@ void CG_DrawCursorhint(rectDef_t *rect) {
 		} else {
 			Vector4Set(color, 0, 0, 1, 0.5f);
 		}
-		CG_FilledBar(rect->x, rect->y + rect->h + 4, rect->w, 8, color, NULL, NULL, (float)cg.cursorHintValue / 255.0f, 0);
+		CG_FilledBar(middle, rect->y + rect->h + 4, rect->w, 8, color, NULL, NULL, (float)cg.cursorHintValue / 255.0f, 0);
 	}
 }
 
@@ -450,15 +452,15 @@ void CG_MouseEvent(int x, int y) {
 		cgs.cursorX += x;
 		if (cgs.cursorX < 0) {
 			cgs.cursorX = 0;
-		} else if (cgs.cursorX > 640) {
-			cgs.cursorX = 640;
+		} else if (cgs.cursorX > CG_WideX(SCREEN_WIDTH)) {
+			cgs.cursorX = CG_WideX(SCREEN_WIDTH);
 		}
 
 		cgs.cursorY += y;
 		if (cgs.cursorY < 0) {
 			cgs.cursorY = 0;
-		} else if (cgs.cursorY > 480) {
-			cgs.cursorY = 480;
+		} else if (cgs.cursorY > SCREEN_HEIGHT) {
+			cgs.cursorY = SCREEN_HEIGHT;
 		}
 
 		if ((int)cgs.eventHandling == CGAME_EVENT_SPEAKEREDITOR) {
@@ -470,15 +472,15 @@ void CG_MouseEvent(int x, int y) {
 		cgs.cursorX += x;
 		if (cgs.cursorX < 0) {
 			cgs.cursorX = 0;
-		} else if (cgs.cursorX > 640) {
-			cgs.cursorX = 640;
+		} else if (cgs.cursorX > CG_WideX(SCREEN_WIDTH)) {
+			cgs.cursorX = CG_WideX(SCREEN_WIDTH);
 		}
 
 		cgs.cursorY += y;
 		if (cgs.cursorY < 0) {
 			cgs.cursorY = 0;
-		} else if (cgs.cursorY > 480) {
-			cgs.cursorY = 480;
+		} else if (cgs.cursorY > SCREEN_HEIGHT) {
+			cgs.cursorY = SCREEN_HEIGHT;
 		}
 
 		if (x != 0 || y != 0) {

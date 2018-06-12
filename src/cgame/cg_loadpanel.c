@@ -211,6 +211,8 @@ void CG_DrawConnectScreen(qboolean interactive, qboolean forcerefresh) {
 		bg_mappic = 0;
 
 		BG_PanelButtonsSetup(loadpanelButtons);
+		// suburb, widescreen support
+		BG_PanelButtonsSetupWide(loadpanelButtons, cgs.wideXoffset);
 
 		bg_loadscreeninited = qtrue;
 	}
@@ -224,16 +226,17 @@ void CG_DrawConnectScreen(qboolean interactive, qboolean forcerefresh) {
 	DC->getConfigString(CS_SERVERINFO, buffer, sizeof (buffer));
 	if (*buffer) {
 		const char *str;
+		float      x = 540.0f + cgs.wideXoffset;
 		float      y;
 		int        i;
 		vec4_t     clr3 = { 1.f, 1.f, 1.f, .6f };
 
 		y = 322;
-		CG_Text_Paint_Centred_Ext(540, y, 0.22f, 0.22f, clr3, GAME_VERSION_COLORED " ^Z"MOD_VERSION, 0, 0, 0, &bg_loadscreenfont1);
+		CG_Text_Paint_Centred_Ext(x, y, 0.22f, 0.22f, clr3, GAME_VERSION_COLORED " ^Z"MOD_VERSION, 0, 0, 0, &bg_loadscreenfont1);
 
 		y   = 340;
 		str = Info_ValueForKey(buffer, "sv_hostname");
-		CG_Text_Paint_Centred_Ext(540, y, 0.2f, 0.2f, colorWhite, str && *str ? str : "ETHost", 0, 26, 0, &bg_loadscreenfont2);
+		CG_Text_Paint_Centred_Ext(x, y, 0.2f, 0.2f, colorWhite, str && *str ? str : "ETHost", 0, 26, 0, &bg_loadscreenfont2);
 
 		y += 14;
 		for (i = 0; i < MAX_MOTDLINES; ++i) {
@@ -242,7 +245,7 @@ void CG_DrawConnectScreen(qboolean interactive, qboolean forcerefresh) {
 				break;
 			}
 
-			CG_Text_Paint_Centred_Ext(540, y, 0.2f, 0.2f, colorWhite, str, 0, 26, 0, &bg_loadscreenfont2);
+			CG_Text_Paint_Centred_Ext(x, y, 0.2f, 0.2f, colorWhite, str, 0, 26, 0, &bg_loadscreenfont2);
 
 			y += 10;
 		}
@@ -251,11 +254,14 @@ void CG_DrawConnectScreen(qboolean interactive, qboolean forcerefresh) {
 
 		str = Info_ValueForKey(buffer, "g_antilag");
 		if (str && *str && atoi(str)) {
-			CG_DrawPic(575, y, 16, 16, bg_filter_al);
+			x = 575 + cgs.wideXoffset;
+			CG_DrawPic(x, y, 16, 16, bg_filter_al);
 		}
 	}
 
 	if (*cgs.rawmapname) {
+		float x = 16 + cgs.wideXoffset;
+
 		if (!bg_mappic) {
 			bg_mappic = DC->registerShaderNoMip(va("levelshots/%s", cgs.rawmapname));
 
@@ -265,12 +271,12 @@ void CG_DrawConnectScreen(qboolean interactive, qboolean forcerefresh) {
 		}
 
 		trap_R_SetColor(colorBlack);
-		CG_DrawPic(16 + 1, 2 + 1, 192, 144, bg_mappic);
+		CG_DrawPic(x + 1, 2 + 1, 192, 144, bg_mappic);
 
 		trap_R_SetColor(NULL);
-		CG_DrawPic(16, 2, 192, 144, bg_mappic);
+		CG_DrawPic(x, 2, 192, 144, bg_mappic);
 
-		CG_DrawPic(16 + 80, 2 + 6, 20, 20, bg_pin);
+		CG_DrawPic(x + 80, 2 + 6, 20, 20, bg_pin);
 	}
 
 	if (forcerefresh) {
@@ -344,6 +350,8 @@ void CG_LoadPanel_KeyHandling(int key, qboolean down) {
 void CG_LoadPanel_DrawPin(const char *text, float px, float py, float sx, float sy, qhandle_t shader, float pinsize, float backheight) {
 	float  x, y, w, h;
 	vec4_t colourFadedBlack = { 0.f, 0.f, 0.f, 0.4f };
+
+	px += cgs.wideXoffset;
 
 	w = DC->textWidthExt(text, sx, 0, &bg_loadscreenfont2);
 	if (px + 30 + w > 440) {

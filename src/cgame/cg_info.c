@@ -64,6 +64,22 @@ void CG_DrawInformation(qboolean forcerefresh) {
 		return;     // we are in the world, no need to draw information
 	}
 
+	// suburb, widescreen support
+	// loadpanel: erase the screen now, because otherwise the "awaiting challenge"-UI-screen is still visible behind the client-version of it
+	// and we do not want a flickering screen on widescreens
+	// debriefing screen: no need to erase the screen
+	if (!cgs.dbShowing) {
+		if (!cgs.media.backTileShader) {
+			cgs.media.backTileShader = trap_R_RegisterShaderNoMip("gfx/2d/backtile");
+		}
+		if (cgs.glconfig.windowAspect != RATIO43) {
+			float xoffset = CG_WideXoffset() * cgs.screenXScale;
+
+			trap_R_DrawStretchPic(0, 0, xoffset, cgs.glconfig.vidHeight, 0, 0, 1, 1, cgs.media.backTileShader);                                     // left side
+			trap_R_DrawStretchPic(cgs.glconfig.vidWidth - xoffset, 0, xoffset, cgs.glconfig.vidHeight, 0, 0, 1, 1, cgs.media.backTileShader);       // right side
+		}
+	}
+
 	CG_DrawConnectScreen(qfalse, forcerefresh);
 }
 
@@ -368,7 +384,7 @@ void CG_DemoHelpDraw() {
 
 	// FIXME: Should compute this beforehand
 	w = DH_W;
-	x = 640 + DH_X - w;
+	x = CG_WideX(SCREEN_WIDTH) + DH_X - w;
 	h = 2 + tSpacing + 2 +                                  // Header
 	    2 + 1 +
 	    tSpacing * (2 + (sizeof (help)) / sizeof (char *)) +
