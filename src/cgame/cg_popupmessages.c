@@ -271,7 +271,7 @@ void CG_DrawPMItems(void) {
 	pmListItem_t *listItem = cg_pmOldList;
 	float        y         = 360;
 	int          numPopups = 0;
-	
+
 	if (cg_drawSmallPopupIcons.integer) {
 		size = PM_ICON_SIZE_SMALL;
 		y   += 4;

@@ -729,24 +729,24 @@ void CG_RailTrail2(vec3_t start, vec3_t end, int box) {
 	localEntity_t *le;
 	refEntity_t   *re;
 	// railtrails ignore alpha, we simply set it to 1.0 either way
-	const float   railTrailAlpha = 1.0f;
-	int           time           = 0;
+	const float railTrailAlpha = 1.0f;
+	int         time           = 0;
 
 	le = CG_AllocLocalEntity();
 	re = &le->refEntity;
 
-	le->leType = LE_FADE_RGB;
+	le->leType    = LE_FADE_RGB;
 	le->startTime = cg.time;
 	if (!box) {
 		time = cg_railTrailTime.value;
 	} else {
 		time = TRIGGERS_DRAW_FREQUENCY;
 	}
-	le->endTime = cg.time + time;
+	le->endTime  = cg.time + time;
 	le->lifeRate = 1.0 / (le->endTime - le->startTime);
 
-	re->shaderTime = cg.time / 1000.0f;
-	re->reType = RT_RAIL_CORE;
+	re->shaderTime   = cg.time / 1000.0f;
+	re->reType       = RT_RAIL_CORE;
 	re->customShader = cgs.media.railCoreShader;
 
 	VectorCopy(start, re->origin);

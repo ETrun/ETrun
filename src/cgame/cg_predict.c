@@ -342,7 +342,7 @@ static void CG_DrawTriggers(void) {
 	int          i;
 	centity_t    *cent;
 	clipHandle_t cmodel;
-	
+
 	if (!cg_drawTriggers.integer) {
 		return;
 	}
@@ -368,14 +368,14 @@ static void CG_DrawTriggers(void) {
 
 		if (ent->eType == ET_CONSTRUCTIBLE ||
 		    ent->eType == ET_OID_TRIGGER ||
-			ent->eType == ET_TRIGGER_MULTIPLE ||
-			ent->eType == ET_TRIGGER_FLAGONLY ||
-			ent->eType == ET_TRIGGER_FLAGONLY_MULTIPLE ||
-			(ent->eType == ET_PUSH_TRIGGER &&
-			cg_drawTriggers.integer >= 2) ||
-			(ent->eType == ET_TELEPORT_TRIGGER &&
-			cg_drawTriggers.integer >= 3) ||
-			cg_drawTriggers.integer >= 4
+		    ent->eType == ET_TRIGGER_MULTIPLE ||
+		    ent->eType == ET_TRIGGER_FLAGONLY ||
+		    ent->eType == ET_TRIGGER_FLAGONLY_MULTIPLE ||
+		    (ent->eType == ET_PUSH_TRIGGER &&
+		     cg_drawTriggers.integer >= 2) ||
+		    (ent->eType == ET_TELEPORT_TRIGGER &&
+		     cg_drawTriggers.integer >= 3) ||
+		    cg_drawTriggers.integer >= 4
 		    ) {
 			vec3_t mins, maxs, pmins, pmaxs;
 

@@ -45,7 +45,7 @@ static const char *DISABLED    = "DISABLED";
 //
 typedef struct {
 	const char *pszVoteName;
-	int (*pVoteCommand)(gentity_t * ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd);
+	int (*pVoteCommand)(gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd);
 	const char *pszVoteMessage;
 	const char *pszVoteHelp;
 } vote_reference_t;
@@ -516,7 +516,8 @@ int G_Randommap_v(gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg
 // *** Map Restart ***
 int G_MapRestart_v(gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg2, qboolean fRefereeCmd) {
 	char serverinfo[MAX_INFO_STRING];
-	trap_GetServerinfo(serverinfo, sizeof(serverinfo));
+
+	trap_GetServerinfo(serverinfo, sizeof (serverinfo));
 
 	// Vote request (vote is being initiated)
 	if (arg) {

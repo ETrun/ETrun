@@ -1281,7 +1281,7 @@ void CG_LimboPanel_Setup(void) {
 void CG_LimboPanel_Init(void) {
 	BG_PanelButtonsSetup(limboPanelButtons);
 	// suburb, widescreen support
-	BG_PanelButtonsSetupWide(limboPanelButtons, 2*cgs.wideXoffset);
+	BG_PanelButtonsSetupWide(limboPanelButtons, 2 * cgs.wideXoffset);
 }
 
 qboolean CG_LimboPanel_Draw(void) {

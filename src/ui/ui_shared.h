@@ -397,7 +397,7 @@ typedef struct {
 	void (*startLocalSound)(sfxHandle_t sfx, int channelNum);
 	qboolean (*ownerDrawHandleKey)(int ownerDraw, int flags, float *special, int key);
 	int (*feederCount)(float feederID);
-	const char *(*feederItemText)(float feederID, int index, int column, qhandle_t * handles, int *numhandles);
+	const char *(*feederItemText)(float feederID, int index, int column, qhandle_t *handles, int *numhandles);
 	const char *(*fileText)(char *flieName);
 	qhandle_t (*feederItemImage)(float feederID, int index);
 	void (*feederSelection)(float feederID, int index);

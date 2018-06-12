@@ -1021,7 +1021,7 @@ typedef struct {
 
 	// suburb, Accel HUD
 	float oldSpeed;
-  
+
 	// Nico, end of ETrun client variables
 } cg_t;
 
@@ -1890,8 +1890,8 @@ void CG_KeyEvent(int key, qboolean down);
 void CG_MouseEvent(int x, int y);
 void CG_EventHandling(int type, qboolean fForced);
 
-qboolean CG_GetTag(int clientNum, char *tagname, orientation_t * or);
-qboolean CG_GetWeaponTag(int clientNum, char *tagname, orientation_t * or);
+qboolean CG_GetTag(int clientNum, char *tagname, orientation_t *or);
+qboolean CG_GetWeaponTag(int clientNum, char *tagname, orientation_t *or);
 
 void CG_EncodeQP(const char *in, char *out, int maxlen);
 void CG_DecodeQP(char *line);
@@ -2582,7 +2582,7 @@ extern weaponType_t weaponTypes[];
 weaponType_t *WM_FindWeaponTypeForWeapon(weapon_t weapon);
 
 // Gordon: Fireteam stuff
-#define CG_IsOnFireteam(clientNum) cgs.clientinfo[clientNum].fireteamData
+#define CG_IsOnFireteam(clientNum) cgs.clientinfo [clientNum].fireteamData
 fireteamData_t *CG_IsOnSameFireteam(int clientNum, int clientNum2);
 fireteamData_t *CG_IsFireTeamLeader(int clientNum);
 

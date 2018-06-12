@@ -44,7 +44,7 @@ void BG_ClearAnimationPool(void) {
 #ifdef CGAMEDLL
 static animation_t *BG_RAG_FindFreeAnimation(qhandle_t mdxFile, const char *name)
 #else
-static animation_t * BG_RAG_FindFreeAnimation(const char *mdxFileName, const char *name)
+static animation_t *BG_RAG_FindFreeAnimation(const char *mdxFileName, const char *name)
 #endif // CGAMEDLL
 {
 	int i;

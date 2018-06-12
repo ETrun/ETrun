@@ -202,7 +202,7 @@ field_t fields[] =
 
 typedef struct {
 	char *name;
-	void (*spawn)(gentity_t * ent);
+	void (*spawn)(gentity_t *ent);
 } spawn_t;
 
 void SP_info_player_start(gentity_t *ent);

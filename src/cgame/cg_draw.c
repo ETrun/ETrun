@@ -238,11 +238,11 @@ static float CG_DrawFPS(float y) {
 	previousTimes[index % FPS_FRAMES] = frameTime;
 	index++;
 	if (index > FPS_FRAMES) {
-		char   *s;
-		int    w;
-		int    i, total;
-		int    fps;
-		float  scale = 0.19f;
+		char  *s;
+		int   w;
+		int   i, total;
+		int   fps;
+		float scale = 0.19f;
 
 		// average multiple frames together to smooth changes out a bit
 		total = 0;
@@ -276,7 +276,7 @@ original drawclock from TJMod
 */
 static float CG_DrawClock(float y) {
 	int     w;
-	float   scale = 0.19f;
+	float   scale           = 0.19f;
 	char    displayTime[18] = { 0 };
 	qtime_t tm;
 
@@ -352,8 +352,8 @@ static void CG_DrawTeamInfo(void) {
 		return; // disabled
 	}
 
-	chatX = cg_chatX.integer;
-	chatY = cg_chatY.integer;
+	chatX     = cg_chatX.integer;
+	chatY     = cg_chatY.integer;
 	chatTextX = chatX + 0.25f * TINYCHAR_WIDTH;
 
 	if (cgs.teamLastChatPos != cgs.teamChatPos) {
@@ -826,6 +826,7 @@ CG_DrawWeapReticle
 */
 static void CG_DrawWeapReticle(void) {
 	qboolean fg, garand, k43;
+
 	// DHM - Nerve :: So that we will draw reticle
 	if ((cg.snap->ps.pm_flags & PMF_FOLLOW) || cg.demoPlayback) {
 		garand = (qboolean)(cg.snap->ps.weapon == WP_GARAND_SCOPE);
@@ -1161,7 +1162,7 @@ static void CG_DrawCrosshairNames(void) {
 	qboolean hitClient = qfalse;
 	int      clientNum = cg.crosshairClientNum;
 	// suburb, widescreen support
-	float    middle = CG_WideX(SCREEN_WIDTH) / 2;
+	float middle = CG_WideX(SCREEN_WIDTH) / 2;
 
 	if (clientNum < 0 || clientNum >= MAX_CLIENTS || !cg_drawCrosshair.integer ||
 	    !cg_drawCrosshairNames.integer || cg.showScores || cg.renderingThirdPerson ||
@@ -2039,9 +2040,9 @@ static void CG_DrawPlayerStats(void) {
 
 //bani
 void CG_DrawDemoRecording(void) {
-	char   status[1024];
-	char   demostatus[128];
-	char   wavestatus[128];
+	char status[1024];
+	char demostatus[128];
+	char wavestatus[128];
 
 	if (!cl_demorecording.integer && !cl_waverecording.integer) {
 		return;
@@ -2167,7 +2168,7 @@ static void CG_Draw2D(void) {
 
 		// Nico, draw CGaz
 		CG_DrawCGaz();
-    
+
 		// Nico, draw speed meter
 		CG_DrawSpeedMeter();
 
