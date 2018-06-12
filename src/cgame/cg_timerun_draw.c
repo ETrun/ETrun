@@ -13,7 +13,7 @@ void CG_DrawCheckpoints(void) {
 	}
 
 	// Nico, printing position
-	x = cg_checkPointsX.value;
+	x = CG_WideX(cg_checkPointsX.value);
 	y = cg_checkPointsY.value;
 
 	// Nico, check cg_maxCheckPoints
@@ -106,7 +106,7 @@ void CG_DrawSpeedMeter(void) {
 
 	sizex = sizey = 0.25f;
 
-	x = cg_speedMeterX.integer;
+	x = CG_WideX(cg_speedMeterX.integer);
 	y = cg_speedMeterY.integer;
 
 	Com_sprintf(status, sizeof (status), "%.0f", speed);
@@ -189,7 +189,7 @@ void CG_DrawOB(void) {
 	hn = h0 + psec * n * (v0 - gravity * psec / 2 - (n - 1) * rintv / 2);
 	//CG_Printf("h0: %f, v0: %f, n: %d, hn: %f, t: %f\n", h0, v0, n, hn, t);
 	if (n && hn < t + 0.25 && hn > t) {
-		CG_DrawStringExt(320, 220, "F", colorWhite, qfalse, qtrue,
+		CG_DrawStringExt(CG_WideX(SCREEN_WIDTH)/2, 220, "F", colorWhite, qfalse, qtrue,
 		                 TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 0);
 	}
 
@@ -205,7 +205,7 @@ void CG_DrawOB(void) {
 		hn = h0 + psec * n * (v0 - gravity * psec / 2 - (n - 1) * rintv / 2);
 		//CG_Printf("h0: %f, v0: %f, n: %d, hn: %f, t: %f\n", h0, v0, n, hn, t);
 		if (hn < t + 0.25 && hn > t) {
-			CG_DrawStringExt(330, 220, "J", colorWhite, qfalse, qtrue,
+			CG_DrawStringExt(CG_WideX(SCREEN_WIDTH) / 2 + 10, 220, "J", colorWhite, qfalse, qtrue,
 			                 TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 0);
 		}
 	}
@@ -220,7 +220,7 @@ void CG_DrawOB(void) {
 void CG_DrawSlick(void) {
 	static trace_t trace;
 	vec3_t         start, end;
-	float          x = 350, y = 220, sizex, sizey;
+	float          x = CG_WideX(350), y = 220, sizex, sizey;
 	char           *text = "S";
 
 	if (!cg_drawSlick.integer || cg_thirdPerson.integer) {
@@ -290,7 +290,7 @@ void CG_DrawTimer(void) {
 	//
 
 	// Nico, set timer position
-	x = cg_timerX.integer;
+	x = CG_WideX(cg_timerX.integer);
 	y = cg_timerY.integer;
 
 	// Nico, get fixed timerun start time
@@ -363,12 +363,12 @@ void CG_DrawTimer(void) {
 }
 
 // Dzikie CGaz 3rd party functions
-#define SCREEN_CENTER_X ((SCREEN_WIDTH / 2) - 1)
+#define SCREEN_CENTER_X ((CG_WideX(SCREEN_WIDTH) / 2) - 1)
 #define SCREEN_CENTER_Y ((SCREEN_HEIGHT / 2) - 1)
 #define CGAZ3_ANG 20
 
 static void PutPixel(float x, float y) {
-	if (x > 0 && x < SCREEN_WIDTH && y > 0 && y < SCREEN_HEIGHT) {
+	if (x > 0 && x < CG_WideX(SCREEN_WIDTH) && y > 0 && y < SCREEN_HEIGHT) {
 		CG_DrawPic(x, y, 1, 1, cgs.media.whiteShader);
 	}
 }
@@ -703,7 +703,7 @@ void CG_DrawVelocitySnapping(void) {
 			cg.snapCount++;
 		}
 
-		qsort(cg.snapZones, cg.snapCount, sizeof(cg.snapZones[0]), sortSnapZones);
+		qsort(cg.snapZones, cg.snapCount, sizeof (cg.snapZones[0]), sortSnapZones);
 		cg.snapZones[cg.snapCount] = cg.snapZones[0] + 90;
 	}
 
@@ -738,6 +738,8 @@ void CG_DrawVelocitySnapping(void) {
  *
  * @author Nico
  */
+#define KEYS_X   (CG_WideX(SCREEN_WIDTH) - 90)
+#define KEYS_Y   210
 #define DRAWKEYS_DEBOUNCE_VALUE        100
 #define DRAWKEYS_MENU_CLOSING_DELAY    50
 void CG_DrawKeys(void) {
@@ -747,11 +749,6 @@ void CG_DrawKeys(void) {
 	int           skew;
 
 	if (!cg_drawKeys.integer) {
-		return;
-	}
-
-	// some checks
-	if (cg_keysX.value < 0 || cg_keysY.value < 0 || cg_keysX.value > SCREEN_WIDTH || cg_keysY.value > SCREEN_HEIGHT) {
 		return;
 	}
 
@@ -771,8 +768,10 @@ void CG_DrawKeys(void) {
 
 	// first (upper) row
 	// sprint (upper left)
-	x = cg_keysX.value + 2 * skew;
-	y = cg_keysY.value;
+
+	x = KEYS_X + cg_keysXoffset.value + 2 * skew;
+	y = KEYS_Y + cg_keysYoffset.value;
+
 	if (cg.keyDown[0]) {
 		CG_DrawPic(x, y, size, size, cgs.media.keys[i].SprintPressedShader);
 	} else {
@@ -797,7 +796,7 @@ void CG_DrawKeys(void) {
 
 	// second (middle) row
 	// left
-	x  = cg_keysX.value + skew;
+	x = KEYS_X + cg_keysXoffset.value + skew;
 	y += size;
 	if (cg.keyDown[3]) {
 		CG_DrawPic(x, y, size, size, cgs.media.keys[i].LeftPressedShader);
@@ -814,7 +813,7 @@ void CG_DrawKeys(void) {
 	}
 
 	// third (bottom) row
-	x  = cg_keysX.value;
+	x = KEYS_X + cg_keysXoffset.value;
 	y += size;
 	// prone (bottom left)
 	if (cg.keyDown[5]) {
@@ -980,7 +979,7 @@ void CG_DrawBannerPrint(void) {
 
 		w = CG_Text_Width_Ext(linebuffer, sizex, 0, &cgs.media.limboFont2);
 
-		x = (SCREEN_WIDTH - w) / 2;
+		x = (CG_WideX(SCREEN_WIDTH) - w) / 2;
 
 		CG_Text_Paint_Ext(x, y, sizex, sizey, color, va("^%c%s", colorchar, linebuffer), 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont2);
 
@@ -1023,6 +1022,9 @@ void CG_UpdateJumpSpeeds(void) {
 #define INFO_PANEL_MAX_COLUMNS              5 // Nico, INFO_PANEL_MAX_COLUMNS * INFO_PANEL_MAX_JUMPS_PER_COLUMN must
 #define INFO_PANEL_MAX_JUMPS_PER_COLUMN     9 // stay < size of cg.timerunJumpSpeeds array
 #define INFO_PANEL_FONT_ADJUST_NEEDED       10000
+#define UPPERRIGHT_X                        CG_WideX(SCREEN_WIDTH - 6)
+#define INFO_PANEL_X                        (UPPERRIGHT_X - INFO_PANEL_WIDTH + 3)
+#define INFO_PANEL_Y                        2
 void CG_DrawInfoPanel(void) {
 	int    x               = 0;
 	int    y               = 0;
@@ -1036,11 +1038,6 @@ void CG_DrawInfoPanel(void) {
 		return;
 	}
 
-	// Perform some checks
-	if (cg_infoPanelX.value < 0 || cg_infoPanelY.value < 0 || cg_infoPanelX.value > SCREEN_WIDTH || cg_infoPanelY.value > SCREEN_HEIGHT) {
-		return;
-	}
-
 	// Update overall max speed
 	speed = sqrt(cg.predictedPlayerState.velocity[0] * cg.predictedPlayerState.velocity[0] + cg.predictedPlayerState.velocity[1] * cg.predictedPlayerState.velocity[1]);
 
@@ -1048,8 +1045,8 @@ void CG_DrawInfoPanel(void) {
 		cg.overallMaxSpeed = speed;
 	}
 
-	x = cg_infoPanelX.value;
-	y = cg_infoPanelY.value;
+	x = INFO_PANEL_X + cg_infoPanelXoffset.value;
+	y = INFO_PANEL_Y + cg_infoPanelYoffset.value;
 
 	//CG_DrawRect_FixedBorder(x, y, INFO_PANEL_WIDTH, INFO_PANEL_HEIGHT, 1, colorWhite);
 

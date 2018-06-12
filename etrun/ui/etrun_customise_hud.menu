@@ -95,10 +95,10 @@ menuDef {
 	//
 	SUBWINDOW( 6+(SUBWINDOW_WIDTH)+6, 118, (SUBWINDOW_WIDTH), 70, "Info panel" )
 	YESNO( 6+(SUBWINDOW_WIDTH)+6+2, 134, (SUBWINDOW_WIDTH)-4, 10, "Show info panel:", .2, 8, "cg_drawInfoPanel", "" )
-	SLIDER( 6+(SUBWINDOW_WIDTH)+6+2, 146, (SUBWINDOW_WIDTH)-4, 10, "Panel X-position:", .2, 8, "cg_infoPanelX" 535 0 640, "Use the slider to move the info panel" )
-	CVARFLOATLABEL( 6+(SUBWINDOW_WIDTH)+6+2, 146, (SUBWINDOW_WIDTH)-4, 10, "cg_infoPanelX", .2, ITEM_ALIGN_RIGHT, $evalfloat((SUBWINDOW_WIDTH)-4), 8 )
-	SLIDER( 6+(SUBWINDOW_WIDTH)+6+2, 158, (SUBWINDOW_WIDTH)-4, 10, "Panel Y-position:", .2, 8, "cg_infoPanelY" 20 0 480, "Use the slider to move the info panel" )
-	CVARFLOATLABEL( 6+(SUBWINDOW_WIDTH)+6+2, 158, (SUBWINDOW_WIDTH)-4, 10, "cg_infoPanelY", .2, ITEM_ALIGN_RIGHT, $evalfloat((SUBWINDOW_WIDTH)-4), 8 )
+	SLIDER( 6+(SUBWINDOW_WIDTH)+6+2, 146, (SUBWINDOW_WIDTH)-4, 10, "Panel X-position:", .2, 8, "cg_infoPanelXoffset" 0 -640 120, "Use the slider to move the info panel" )
+	CVARFLOATLABEL( 6+(SUBWINDOW_WIDTH)+6+2, 146, (SUBWINDOW_WIDTH)-4, 10, "cg_infoPanelXoffset", .2, ITEM_ALIGN_RIGHT, $evalfloat((SUBWINDOW_WIDTH)-4), 8 )
+	SLIDER( 6+(SUBWINDOW_WIDTH)+6+2, 158, (SUBWINDOW_WIDTH)-4, 10, "Panel Y-position:", .2, 8, "cg_infoPanelYoffset" 0 -150 480, "Use the slider to move the info panel" )
+	CVARFLOATLABEL( 6+(SUBWINDOW_WIDTH)+6+2, 158, (SUBWINDOW_WIDTH)-4, 10, "cg_infoPanelYoffset", .2, ITEM_ALIGN_RIGHT, $evalfloat((SUBWINDOW_WIDTH)-4), 8 )
 	CVARFLOATLABEL( 6+(SUBWINDOW_WIDTH)+6+2, 170, (SUBWINDOW_WIDTH)-4, 10, "cg_minStartSpeed", .2, ITEM_ALIGN_RIGHT, $evalfloat((SUBWINDOW_WIDTH)-4), 8 )
 	SLIDER( 6+(SUBWINDOW_WIDTH)+6+2, 170, (SUBWINDOW_WIDTH)-4, 10, "Minimum start speed:", .2, 8, "cg_minStartSpeed" 0 0 1000, "Use the slider to adjust the desired minimum start speed" )
 

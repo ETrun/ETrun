@@ -87,6 +87,14 @@ Q_EXPORT intptr_t vmMain(intptr_t command, intptr_t arg0, intptr_t arg1, intptr_
 	case CG_MOUSE_EVENT:
 		cgDC.cursorx = cgs.cursorX;
 		cgDC.cursory = cgs.cursorY;
+
+		// suburb, widescreen support
+		if (cg.showGameView || cgs.dbShowing) {
+			if (!CG_Is43Screen()) {
+				cgDC.cursorx *= cgs.adr43;
+			}
+		}
+
 		CG_MouseEvent(arg0, arg1);
 		return 0;
 	case CG_EVENT_HANDLING:
@@ -309,8 +317,8 @@ vmCvar_t cg_loadWeapon;
 
 // Show pressed keys
 vmCvar_t cg_drawKeys;
-vmCvar_t cg_keysX;
-vmCvar_t cg_keysY;
+vmCvar_t cg_keysXoffset;
+vmCvar_t cg_keysYoffset;
 vmCvar_t cg_keysSize;
 
 // Automatically load player position when he gets killed (except /kill)
@@ -340,14 +348,18 @@ vmCvar_t cg_specLock;
 
 // Info panel
 vmCvar_t cg_drawInfoPanel;
-vmCvar_t cg_infoPanelX;
-vmCvar_t cg_infoPanelY;
+vmCvar_t cg_infoPanelXoffset;
+vmCvar_t cg_infoPanelYoffset;
 
 // Country flags
 vmCvar_t cg_countryFlags;
 
 // Minimum start speed
 vmCvar_t cg_minStartSpeed;
+
+// suburb, widescreen support
+vmCvar_t cg_widescreenSupport;
+vmCvar_t cg_realFov;
 
 // suburb, event cvars
 vmCvar_t cg_onRunStart;
@@ -370,280 +382,284 @@ typedef struct {
 
 cvarTable_t cvarTable[] =
 {
-	{ &cg_ignore,               "cg_ignore",               "0",     0,                        0 }, // used for debugging
-	{ &cg_autoswitch,           "cg_autoswitch",           "2",     CVAR_ARCHIVE,             0 },
-	{ &cg_drawGun,              "cg_drawGun",              "1",     CVAR_ARCHIVE,             0 },
-	{ &cg_gun_frame,            "cg_gun_frame",            "0",     CVAR_TEMP,                0 },
-	{ &cg_cursorHints,          "cg_cursorHints",          "1",     CVAR_ARCHIVE,             0 },
-	{ &cg_zoomDefaultSniper,    "cg_zoomDefaultSniper",    "20",    CVAR_ARCHIVE,             0 }, // JPW NERVE changed per atvi req
-	{ &cg_zoomStepSniper,       "cg_zoomStepSniper",       "2",     CVAR_ARCHIVE,             0 },
-	{ &cg_zoomStepBinoc,        "cg_zoomStepBinoc",        "2",     CVAR_ARCHIVE,             0 },
-	{ &cg_fov,                  "cg_fov",                  "90",    CVAR_ARCHIVE,             0 },
-	{ &cg_letterbox,            "cg_letterbox",            "0",     CVAR_TEMP,                0 }, //----(SA)	added
-	{ &cg_stereoSeparation,     "cg_stereoSeparation",     "0.4",   CVAR_ARCHIVE,             0 },
-	{ &cg_shadows,              "cg_shadows",              "1",     CVAR_ARCHIVE,             0 },
-	{ &cg_draw2D,               "cg_draw2D",               "1",     CVAR_ARCHIVE,             0 },
-	{ &cg_drawSpreadScale,      "cg_drawSpreadScale",      "1",     CVAR_ARCHIVE,             0 },
-	{ &cg_drawStatus,           "cg_drawStatus",           "1",     CVAR_ARCHIVE,             0 },
-	{ &cg_drawFPS,              "cg_drawFPS",              "1",     CVAR_ARCHIVE,             0 },
-	{ &cg_drawClock,            "cg_drawClock",            "1",     CVAR_ARCHIVE,             0 },
-	{ &cg_drawSnapshot,         "cg_drawSnapshot",         "0",     CVAR_ARCHIVE,             0 },
-	{ &cg_drawCrosshair,        "cg_drawCrosshair",        "1",     CVAR_ARCHIVE,             0 },
-	{ &cg_drawCrosshairNames,   "cg_drawCrosshairNames",   "1",     CVAR_ARCHIVE,             0 },
-	{ &cg_drawCrosshairPickups, "cg_drawCrosshairPickups", "1",     CVAR_ARCHIVE,             0 },
-	{ &cg_useWeapsForZoom,      "cg_useWeapsForZoom",      "1",     CVAR_ARCHIVE,             0 },
-	{ &cg_weaponCycleDelay,     "cg_weaponCycleDelay",     "150",   CVAR_ARCHIVE,             0 }, //----(SA)	added
-	{ &cg_cycleAllWeaps,        "cg_cycleAllWeaps",        "1",     CVAR_ARCHIVE,             0 },
-	{ &cg_crosshairSize,        "cg_crosshairSize",        "48",    CVAR_ARCHIVE,             0 },
-	{ &cg_crosshairHealth,      "cg_crosshairHealth",      "0",     CVAR_ARCHIVE,             0 },
-	{ &cg_crosshairX,           "cg_crosshairX",           "0",     CVAR_ARCHIVE,             0 },
-	{ &cg_crosshairY,           "cg_crosshairY",           "0",     CVAR_ARCHIVE,             0 },
-	{ &cg_brassTime,            "cg_brassTime",            "2500",  CVAR_ARCHIVE,             0 }, // JPW NERVE
-	{ &cg_markTime,             "cg_marktime",             "20000", CVAR_ARCHIVE,             0 },
-	{ &cg_lagometer,            "cg_lagometer",            "0",     CVAR_ARCHIVE,             0 },
-	{ &cg_railTrailTime,        "cg_railTrailTime",        "400",   CVAR_ARCHIVE,             0 },
-	{ &cg_gun_x,                "cg_gunX",                 "0",     CVAR_CHEAT,               0 },
-	{ &cg_gun_y,                "cg_gunY",                 "0",     CVAR_CHEAT,               0 },
-	{ &cg_gun_z,                "cg_gunZ",                 "0",     CVAR_CHEAT,               0 },
-	{ &cg_centertime,           "cg_centertime",           "5",     CVAR_CHEAT,               0 }, // DHM - Nerve :: changed from 3 to 5
-	{ &cg_runpitch,             "cg_runpitch",             "0.002", CVAR_ARCHIVE,             0 },
-	{ &cg_runroll,              "cg_runroll",              "0.005", CVAR_ARCHIVE,             0 },
-	{ &cg_bobup,                "cg_bobup",                "0.005", CVAR_ARCHIVE,             0 },
-	{ &cg_bobpitch,             "cg_bobpitch",             "0.002", CVAR_ARCHIVE,             0 },
-	{ &cg_bobroll,              "cg_bobroll",              "0.002", CVAR_ARCHIVE,             0 },
-	{ &cg_bobyaw,               "cg_bobyaw",               "0.002", CVAR_ARCHIVE,             0 },
+	{ &cg_ignore,               "cg_ignore",               "0",     0,                         0 }, // used for debugging
+	{ &cg_autoswitch,           "cg_autoswitch",           "2",     CVAR_ARCHIVE,              0 },
+	{ &cg_drawGun,              "cg_drawGun",              "1",     CVAR_ARCHIVE,              0 },
+	{ &cg_gun_frame,            "cg_gun_frame",            "0",     CVAR_TEMP,                 0 },
+	{ &cg_cursorHints,          "cg_cursorHints",          "1",     CVAR_ARCHIVE,              0 },
+	{ &cg_zoomDefaultSniper,    "cg_zoomDefaultSniper",    "20",    CVAR_ARCHIVE,              0 }, // JPW NERVE changed per atvi req
+	{ &cg_zoomStepSniper,       "cg_zoomStepSniper",       "2",     CVAR_ARCHIVE,              0 },
+	{ &cg_zoomStepBinoc,        "cg_zoomStepBinoc",        "2",     CVAR_ARCHIVE,              0 },
+	{ &cg_fov,                  "cg_fov",                  "90",    CVAR_ARCHIVE,              0 },
+	{ &cg_letterbox,            "cg_letterbox",            "0",     CVAR_TEMP,                 0 }, //----(SA)	added
+	{ &cg_stereoSeparation,     "cg_stereoSeparation",     "0.4",   CVAR_ARCHIVE,              0 },
+	{ &cg_shadows,              "cg_shadows",              "1",     CVAR_ARCHIVE,              0 },
+	{ &cg_draw2D,               "cg_draw2D",               "1",     CVAR_ARCHIVE,              0 },
+	{ &cg_drawSpreadScale,      "cg_drawSpreadScale",      "1",     CVAR_ARCHIVE,              0 },
+	{ &cg_drawStatus,           "cg_drawStatus",           "1",     CVAR_ARCHIVE,              0 },
+	{ &cg_drawFPS,              "cg_drawFPS",              "1",     CVAR_ARCHIVE,              0 },
+	{ &cg_drawClock,            "cg_drawClock",            "1",     CVAR_ARCHIVE,              0 },
+	{ &cg_drawSnapshot,         "cg_drawSnapshot",         "0",     CVAR_ARCHIVE,              0 },
+	{ &cg_drawCrosshair,        "cg_drawCrosshair",        "1",     CVAR_ARCHIVE,              0 },
+	{ &cg_drawCrosshairNames,   "cg_drawCrosshairNames",   "1",     CVAR_ARCHIVE,              0 },
+	{ &cg_drawCrosshairPickups, "cg_drawCrosshairPickups", "1",     CVAR_ARCHIVE,              0 },
+	{ &cg_useWeapsForZoom,      "cg_useWeapsForZoom",      "1",     CVAR_ARCHIVE,              0 },
+	{ &cg_weaponCycleDelay,     "cg_weaponCycleDelay",     "150",   CVAR_ARCHIVE,              0 }, //----(SA)	added
+	{ &cg_cycleAllWeaps,        "cg_cycleAllWeaps",        "1",     CVAR_ARCHIVE,              0 },
+	{ &cg_crosshairSize,        "cg_crosshairSize",        "48",    CVAR_ARCHIVE,              0 },
+	{ &cg_crosshairHealth,      "cg_crosshairHealth",      "0",     CVAR_ARCHIVE,              0 },
+	{ &cg_crosshairX,           "cg_crosshairX",           "0",     CVAR_ARCHIVE,              0 },
+	{ &cg_crosshairY,           "cg_crosshairY",           "0",     CVAR_ARCHIVE,              0 },
+	{ &cg_brassTime,            "cg_brassTime",            "2500",  CVAR_ARCHIVE,              0 }, // JPW NERVE
+	{ &cg_markTime,             "cg_marktime",             "20000", CVAR_ARCHIVE,              0 },
+	{ &cg_lagometer,            "cg_lagometer",            "0",     CVAR_ARCHIVE,              0 },
+	{ &cg_railTrailTime,        "cg_railTrailTime",        "400",   CVAR_ARCHIVE,              0 },
+	{ &cg_gun_x,                "cg_gunX",                 "0",     CVAR_CHEAT,                0 },
+	{ &cg_gun_y,                "cg_gunY",                 "0",     CVAR_CHEAT,                0 },
+	{ &cg_gun_z,                "cg_gunZ",                 "0",     CVAR_CHEAT,                0 },
+	{ &cg_centertime,           "cg_centertime",           "5",     CVAR_CHEAT,                0 }, // DHM - Nerve :: changed from 3 to 5
+	{ &cg_runpitch,             "cg_runpitch",             "0.002", CVAR_ARCHIVE,              0 },
+	{ &cg_runroll,              "cg_runroll",              "0.005", CVAR_ARCHIVE,              0 },
+	{ &cg_bobup,                "cg_bobup",                "0.005", CVAR_ARCHIVE,              0 },
+	{ &cg_bobpitch,             "cg_bobpitch",             "0.002", CVAR_ARCHIVE,              0 },
+	{ &cg_bobroll,              "cg_bobroll",              "0.002", CVAR_ARCHIVE,              0 },
+	{ &cg_bobyaw,               "cg_bobyaw",               "0.002", CVAR_ARCHIVE,              0 },
 
 	// JOSEPH 10-27-99
-	{ &cg_autoactivate,         "cg_autoactivate",         "1",     CVAR_ARCHIVE,             0 },
+	{ &cg_autoactivate,         "cg_autoactivate",         "1",     CVAR_ARCHIVE,              0 },
 	// END JOSEPH
 
 	// Ridah, more fluid rotations
-	{ &cg_swingSpeed,           "cg_swingSpeed",           "0.1",   CVAR_CHEAT,               0 }, // was 0.3 for Q3
-	{ &cg_skybox,               "cg_skybox",               "1",     CVAR_CHEAT,               0 },
+	{ &cg_swingSpeed,           "cg_swingSpeed",           "0.1",   CVAR_CHEAT,                0 }, // was 0.3 for Q3
+	{ &cg_skybox,               "cg_skybox",               "1",     CVAR_CHEAT,                0 },
 	// done.
 
 	// ydnar: say, team say, etc.
-	{ &cg_messageType,          "cg_messageType",          "1",     CVAR_TEMP,                0 },
-	{ &cg_messagePlayer,        "cg_messagePlayer",        "",      CVAR_TEMP,                0 },
+	{ &cg_messageType,          "cg_messageType",          "1",     CVAR_TEMP,                 0 },
+	{ &cg_messagePlayer,        "cg_messagePlayer",        "",      CVAR_TEMP,                 0 },
 
-	{ &cg_animSpeed,            "cg_animspeed",            "1",     CVAR_CHEAT,               0 },
-	{ &cg_debugAnim,            "cg_debuganim",            "0",     CVAR_CHEAT,               0 },
-	{ &cg_debugPosition,        "cg_debugposition",        "0",     CVAR_CHEAT,               0 },
-	{ &cg_debugEvents,          "cg_debugevents",          "0",     CVAR_CHEAT,               0 },
-	{ &cg_errorDecay,           "cg_errordecay",           "100",   0,                        0 },
-	{ &cg_nopredict,            "cg_nopredict",            "0",     CVAR_CHEAT,               0 },
-	{ &cg_noPlayerAnims,        "cg_noplayeranims",        "0",     CVAR_CHEAT,               0 },
-	{ &cg_showmiss,             "cg_showmiss",             "0",     0,                        0 },
-	{ &cg_footsteps,            "cg_footsteps",            "1",     CVAR_ARCHIVE,             0 }, // Nico, removed CVAR_CHEAT flag
-	{ &cg_tracerChance,         "cg_tracerchance",         "0.4",   CVAR_CHEAT,               0 },
-	{ &cg_tracerWidth,          "cg_tracerwidth",          "0.8",   CVAR_CHEAT,               0 },
-	{ &cg_tracerSpeed,          "cg_tracerSpeed",          "4500",  CVAR_CHEAT,               0 },
-	{ &cg_tracerLength,         "cg_tracerlength",         "160",   CVAR_CHEAT,               0 },
-	{ &cg_thirdPersonRange,     "cg_thirdPersonRange",     "80",    CVAR_CHEAT,               0 }, // JPW NERVE per atvi req
-	{ &cg_thirdPersonAngle,     "cg_thirdPersonAngle",     "0",     CVAR_CHEAT,               0 },
-	{ &cg_thirdPerson,          "cg_thirdPerson",          "0",     CVAR_CHEAT,               0 }, // JPW NERVE per atvi req
-	{ &cg_teamChatTime,         "cg_teamChatTime",         "8000",  CVAR_ARCHIVE,             0 },
-	{ &cg_chatHeight,           "cg_chatHeight",           "8",     CVAR_ARCHIVE,             0 },
-	{ &cg_chatX,                "cg_chatX",                "160",   CVAR_ARCHIVE,             0 },
-	{ &cg_chatY,                "cg_chatY",                "478",   CVAR_ARCHIVE,             0 },
-	{ &cg_coronafardist,        "cg_coronafardist",        "1536",  CVAR_ARCHIVE,             0 },
-	{ &cg_coronas,              "cg_coronas",              "1",     CVAR_ARCHIVE,             0 },
-	{ &cg_predictItems,         "cg_predictItems",         "1",     CVAR_ARCHIVE,             0 },
-	{ &cg_stats,                "cg_stats",                "0",     0,                        0 },
+	{ &cg_animSpeed,            "cg_animspeed",            "1",     CVAR_CHEAT,                0 },
+	{ &cg_debugAnim,            "cg_debuganim",            "0",     CVAR_CHEAT,                0 },
+	{ &cg_debugPosition,        "cg_debugposition",        "0",     CVAR_CHEAT,                0 },
+	{ &cg_debugEvents,          "cg_debugevents",          "0",     CVAR_CHEAT,                0 },
+	{ &cg_errorDecay,           "cg_errordecay",           "100",   0,                         0 },
+	{ &cg_nopredict,            "cg_nopredict",            "0",     CVAR_CHEAT,                0 },
+	{ &cg_noPlayerAnims,        "cg_noplayeranims",        "0",     CVAR_CHEAT,                0 },
+	{ &cg_showmiss,             "cg_showmiss",             "0",     0,                         0 },
+	{ &cg_footsteps,            "cg_footsteps",            "1",     CVAR_ARCHIVE,              0 }, // Nico, removed CVAR_CHEAT flag
+	{ &cg_tracerChance,         "cg_tracerchance",         "0.4",   CVAR_CHEAT,                0 },
+	{ &cg_tracerWidth,          "cg_tracerwidth",          "0.8",   CVAR_CHEAT,                0 },
+	{ &cg_tracerSpeed,          "cg_tracerSpeed",          "4500",  CVAR_CHEAT,                0 },
+	{ &cg_tracerLength,         "cg_tracerlength",         "160",   CVAR_CHEAT,                0 },
+	{ &cg_thirdPersonRange,     "cg_thirdPersonRange",     "80",    CVAR_CHEAT,                0 }, // JPW NERVE per atvi req
+	{ &cg_thirdPersonAngle,     "cg_thirdPersonAngle",     "0",     CVAR_CHEAT,                0 },
+	{ &cg_thirdPerson,          "cg_thirdPerson",          "0",     CVAR_CHEAT,                0 }, // JPW NERVE per atvi req
+	{ &cg_teamChatTime,         "cg_teamChatTime",         "8000",  CVAR_ARCHIVE,              0 },
+	{ &cg_chatHeight,           "cg_chatHeight",           "8",     CVAR_ARCHIVE,              0 },
+	{ &cg_chatX,                "cg_chatX",                "160",   CVAR_ARCHIVE,              0 },
+	{ &cg_chatY,                "cg_chatY",                "478",   CVAR_ARCHIVE,              0 },
+	{ &cg_coronafardist,        "cg_coronafardist",        "1536",  CVAR_ARCHIVE,              0 },
+	{ &cg_coronas,              "cg_coronas",              "1",     CVAR_ARCHIVE,              0 },
+	{ &cg_predictItems,         "cg_predictItems",         "1",     CVAR_ARCHIVE,              0 },
+	{ &cg_stats,                "cg_stats",                "0",     0,                         0 },
 
-	{ &cg_enableBreath,         "cg_enableBreath",         "1",     CVAR_SERVERINFO,          0 },
-	{ &cg_timescale,            "timescale",               "1",     0,                        0 },
+	{ &cg_enableBreath,         "cg_enableBreath",         "1",     CVAR_SERVERINFO,           0 },
+	{ &cg_timescale,            "timescale",               "1",     0,                         0 },
 
-	{ &pmove_fixed,             "pmove_fixed",             "1",     0,                        0 },
-	{ &pmove_msec,              "pmove_msec",              "8",     CVAR_CHEAT,               0 },
+	{ &pmove_fixed,             "pmove_fixed",             "1",     0,                         0 },
+	{ &pmove_msec,              "pmove_msec",              "8",     CVAR_CHEAT,                0 },
 
-	{ &cg_noTaunt,              "cg_noTaunt",              "0",     CVAR_ARCHIVE,             0 }, // NERVE - SMF
-	{ &cg_voiceSpriteTime,      "cg_voiceSpriteTime",      "6000",  CVAR_ARCHIVE,             0 }, // DHM - Nerve
+	{ &cg_noTaunt,              "cg_noTaunt",              "0",     CVAR_ARCHIVE,              0 }, // NERVE - SMF
+	{ &cg_voiceSpriteTime,      "cg_voiceSpriteTime",      "6000",  CVAR_ARCHIVE,              0 }, // DHM - Nerve
 
-	{ &cg_teamChatsOnly,        "cg_teamChatsOnly",        "0",     CVAR_ARCHIVE,             0 },
-	{ &cg_noVoiceChats,         "cg_noVoiceChats",         "0",     CVAR_ARCHIVE,             0 }, // NERVE - SMF
-	{ &cg_noVoiceText,          "cg_noVoiceText",          "0",     CVAR_ARCHIVE,             0 }, // NERVE - SMF
+	{ &cg_teamChatsOnly,        "cg_teamChatsOnly",        "0",     CVAR_ARCHIVE,              0 },
+	{ &cg_noVoiceChats,         "cg_noVoiceChats",         "0",     CVAR_ARCHIVE,              0 }, // NERVE - SMF
+	{ &cg_noVoiceText,          "cg_noVoiceText",          "0",     CVAR_ARCHIVE,              0 }, // NERVE - SMF
 
 	// the following variables are created in other parts of the system,
 	// but we also reference them here
 
-	{ &cg_buildScript,          "com_buildScript",         "0",     0,                        0 }, // force loading of all possible data amd error on failures
-	{ &cg_paused,               "cl_paused",               "0",     CVAR_ROM,                 0 },
+	{ &cg_buildScript,          "com_buildScript",         "0",     0,                         0 }, // force loading of all possible data amd error on failures
+	{ &cg_paused,               "cl_paused",               "0",     CVAR_ROM,                  0 },
 	// Rafael - particle switch
-	{ &cg_wolfparticles,        "cg_wolfparticles",        "1",     CVAR_ARCHIVE,             0 },
+	{ &cg_wolfparticles,        "cg_wolfparticles",        "1",     CVAR_ARCHIVE,              0 },
 
-	{ &cg_norender,             "cg_norender",             "0",     0,                        0 }, // only used during single player, to suppress rendering until the server is ready
+	{ &cg_norender,             "cg_norender",             "0",     0,                         0 }, // only used during single player, to suppress rendering until the server is ready
 
-	{ &cg_drawNotifyText,       "cg_drawNotifyText",       "1",     CVAR_ARCHIVE,             0 },
-	{ &cg_quickMessageAlt,      "cg_quickMessageAlt",      "0",     CVAR_ARCHIVE,             0 },
-	{ &cg_descriptiveText,      "cg_descriptiveText",      "1",     CVAR_ARCHIVE,             0 },
-	{ &cg_antilag,              "g_antilag",               "1",     0,                        0 },
-	{ &developer,               "developer",               "0",     CVAR_CHEAT,               0 },
+	{ &cg_drawNotifyText,       "cg_drawNotifyText",       "1",     CVAR_ARCHIVE,              0 },
+	{ &cg_quickMessageAlt,      "cg_quickMessageAlt",      "0",     CVAR_ARCHIVE,              0 },
+	{ &cg_descriptiveText,      "cg_descriptiveText",      "1",     CVAR_ARCHIVE,              0 },
+	{ &cg_antilag,              "g_antilag",               "1",     0,                         0 },
+	{ &developer,               "developer",               "0",     CVAR_CHEAT,                0 },
 
-	{ &cg_autoAction,           "cg_autoAction",           "0",     CVAR_ARCHIVE,             0 },
-	{ &cg_autoReload,           "cg_autoReload",           "1",     CVAR_ARCHIVE,             0 },
+	{ &cg_autoAction,           "cg_autoAction",           "0",     CVAR_ARCHIVE,              0 },
+	{ &cg_autoReload,           "cg_autoReload",           "1",     CVAR_ARCHIVE,              0 },
 
-	{ &cg_crosshairAlpha,       "cg_crosshairAlpha",       "1.0",   CVAR_ARCHIVE,             0 },
-	{ &cg_crosshairAlphaAlt,    "cg_crosshairAlphaAlt",    "1.0",   CVAR_ARCHIVE,             0 },
-	{ &cg_crosshairColor,       "cg_crosshairColor",       "White", CVAR_ARCHIVE,             0 },
-	{ &cg_crosshairColorAlt,    "cg_crosshairColorAlt",    "White", CVAR_ARCHIVE,             0 },
-	{ &cg_crosshairPulse,       "cg_crosshairPulse",       "1",     CVAR_ARCHIVE,             0 },
-	{ &cg_drawWeaponIconFlash,  "cg_drawWeaponIconFlash",  "0",     CVAR_ARCHIVE,             0 },
-	{ &cg_noAmmoAutoSwitch,     "cg_noAmmoAutoSwitch",     "1",     CVAR_ARCHIVE,             0 },
-	{ &cg_printObjectiveInfo,   "cg_printObjectiveInfo",   "1",     CVAR_ARCHIVE,             0 },
-	{ &cg_specHelp,             "cg_specHelp",             "1",     CVAR_ARCHIVE,             0 },
-	{ &cg_uinfo,                "cg_uinfo",                "0",     CVAR_ROM | CVAR_USERINFO, 0 },
-	{ &cg_useScreenshotJPEG,    "cg_useScreenshotJPEG",    "1",     CVAR_ARCHIVE,             0 },
+	{ &cg_crosshairAlpha,       "cg_crosshairAlpha",       "1.0",   CVAR_ARCHIVE,              0 },
+	{ &cg_crosshairAlphaAlt,    "cg_crosshairAlphaAlt",    "1.0",   CVAR_ARCHIVE,              0 },
+	{ &cg_crosshairColor,       "cg_crosshairColor",       "White", CVAR_ARCHIVE,              0 },
+	{ &cg_crosshairColorAlt,    "cg_crosshairColorAlt",    "White", CVAR_ARCHIVE,              0 },
+	{ &cg_crosshairPulse,       "cg_crosshairPulse",       "1",     CVAR_ARCHIVE,              0 },
+	{ &cg_drawWeaponIconFlash,  "cg_drawWeaponIconFlash",  "0",     CVAR_ARCHIVE,              0 },
+	{ &cg_noAmmoAutoSwitch,     "cg_noAmmoAutoSwitch",     "1",     CVAR_ARCHIVE,              0 },
+	{ &cg_printObjectiveInfo,   "cg_printObjectiveInfo",   "1",     CVAR_ARCHIVE,              0 },
+	{ &cg_specHelp,             "cg_specHelp",             "1",     CVAR_ARCHIVE,              0 },
+	{ &cg_uinfo,                "cg_uinfo",                "0",     CVAR_ROM | CVAR_USERINFO,  0 },
+	{ &cg_useScreenshotJPEG,    "cg_useScreenshotJPEG",    "1",     CVAR_ARCHIVE,              0 },
 
-	{ &demo_avifpsF1,           "demo_avifpsF1",           "0",     CVAR_ARCHIVE,             0 },
-	{ &demo_avifpsF2,           "demo_avifpsF2",           "10",    CVAR_ARCHIVE,             0 },
-	{ &demo_avifpsF3,           "demo_avifpsF3",           "15",    CVAR_ARCHIVE,             0 },
-	{ &demo_avifpsF4,           "demo_avifpsF4",           "20",    CVAR_ARCHIVE,             0 },
-	{ &demo_avifpsF5,           "demo_avifpsF5",           "24",    CVAR_ARCHIVE,             0 },
-	{ &demo_drawTimeScale,      "demo_drawTimeScale",      "1",     CVAR_ARCHIVE,             0 },
-	{ &demo_infoWindow,         "demo_infoWindow",         "1",     CVAR_ARCHIVE,             0 },
+	{ &demo_avifpsF1,           "demo_avifpsF1",           "0",     CVAR_ARCHIVE,              0 },
+	{ &demo_avifpsF2,           "demo_avifpsF2",           "10",    CVAR_ARCHIVE,              0 },
+	{ &demo_avifpsF3,           "demo_avifpsF3",           "15",    CVAR_ARCHIVE,              0 },
+	{ &demo_avifpsF4,           "demo_avifpsF4",           "20",    CVAR_ARCHIVE,              0 },
+	{ &demo_avifpsF5,           "demo_avifpsF5",           "24",    CVAR_ARCHIVE,              0 },
+	{ &demo_drawTimeScale,      "demo_drawTimeScale",      "1",     CVAR_ARCHIVE,              0 },
+	{ &demo_infoWindow,         "demo_infoWindow",         "1",     CVAR_ARCHIVE,              0 },
 
 	// Engine mappings
-	{ &int_cl_maxpackets,       "cl_maxpackets",           "30",    CVAR_ARCHIVE,             0 },
-	{ &int_cl_timenudge,        "cl_timenudge",            "0",     CVAR_ARCHIVE,             0 },
+	{ &int_cl_maxpackets,       "cl_maxpackets",           "30",    CVAR_ARCHIVE,              0 },
+	{ &int_cl_timenudge,        "cl_timenudge",            "0",     CVAR_ARCHIVE,              0 },
 	
 	// suburb, yawspeed & pitchspeed
-	{ &int_cl_yawspeed,         "cl_yawspeed",             "140",   CVAR_ARCHIVE,             0 },
-	{ &int_cl_pitchspeed,       "cl_pitchspeed",           "140",   CVAR_ARCHIVE,             0 },
+	{ &int_cl_yawspeed,         "cl_yawspeed",             "140",   CVAR_ARCHIVE,              0 },
+	{ &int_cl_pitchspeed,       "cl_pitchspeed",           "140",   CVAR_ARCHIVE,              0 },
 
-	{ &cg_atmosphericEffects,   "cg_atmosphericEffects",   "1",     CVAR_ARCHIVE,             0 },
-	{ &authLevel,               "authLevel",               "0",     CVAR_TEMP | CVAR_ROM,     0 },
+	{ &cg_atmosphericEffects,   "cg_atmosphericEffects",   "1",     CVAR_ARCHIVE,              0 },
+	{ &authLevel,               "authLevel",               "0",     CVAR_TEMP | CVAR_ROM,      0 },
 
-	{ &cg_rconPassword,         "auth_rconPassword",       "",      CVAR_TEMP,                0 },
-	{ &cg_refereePassword,      "auth_refereePassword",    "",      CVAR_TEMP,                0 },
+	{ &cg_rconPassword,         "auth_rconPassword",       "",      CVAR_TEMP,                 0 },
+	{ &cg_refereePassword,      "auth_refereePassword",    "",      CVAR_TEMP,                 0 },
 
-	{ NULL,                     "cg_etVersion",            "",      CVAR_USERINFO | CVAR_ROM, 0 },
-	{ &cg_drawFireteamOverlay,  "cg_drawFireteamOverlay",  "1",     CVAR_ARCHIVE,             0 },
-	{ &cg_drawSmallPopupIcons,  "cg_drawSmallPopupIcons",  "0",     CVAR_ARCHIVE,             0 },
+	{ NULL,                     "cg_etVersion",            "",      CVAR_USERINFO | CVAR_ROM,  0 },
+	{ &cg_drawFireteamOverlay,  "cg_drawFireteamOverlay",  "1",     CVAR_ARCHIVE,              0 },
+	{ &cg_drawSmallPopupIcons,  "cg_drawSmallPopupIcons",  "0",     CVAR_ARCHIVE,              0 },
 
 	//bani - demo recording cvars
-	{ &cl_demorecording,        "cl_demorecording",        "0",     CVAR_ROM,                 0 },
-	{ &cl_demofilename,         "cl_demofilename",         "",      CVAR_ROM,                 0 },
-	{ &cl_demooffset,           "cl_demooffset",           "0",     CVAR_ROM,                 0 },
+	{ &cl_demorecording,        "cl_demorecording",        "0",     CVAR_ROM,                  0 },
+	{ &cl_demofilename,         "cl_demofilename",         "",      CVAR_ROM,                  0 },
+	{ &cl_demooffset,           "cl_demooffset",           "0",     CVAR_ROM,                  0 },
 	//bani - wav recording cvars
-	{ &cl_waverecording,        "cl_waverecording",        "0",     CVAR_ROM,                 0 },
-	{ &cl_wavefilename,         "cl_wavefilename",         "",      CVAR_ROM,                 0 },
-	{ &cl_waveoffset,           "cl_waveoffset",           "0",     CVAR_ROM,                 0 },
-	{ &cg_recording_statusline, "cg_recording_statusline", "9",     CVAR_ARCHIVE,             0 },
+	{ &cl_waverecording,        "cl_waverecording",        "0",     CVAR_ROM,                  0 },
+	{ &cl_wavefilename,         "cl_wavefilename",         "",      CVAR_ROM,                  0 },
+	{ &cl_waveoffset,           "cl_waveoffset",           "0",     CVAR_ROM,                  0 },
+	{ &cg_recording_statusline, "cg_recording_statusline", "9",     CVAR_ARCHIVE,              0 },
 
 	// Nico, beginning of ETrun client cvars
 
 	// Game physics
-	{ &physics,                 "physics",                 "0",     CVAR_ROM,                 0 },
+	{ &physics,                 "physics",                 "0",     CVAR_ROM,                  0 },
 
 	// Is level a timerun?
-	{ &isTimerun,               "isTimerun",               "0",     CVAR_ROM | CVAR_CHEAT,    0 },
+	{ &isTimerun,               "isTimerun",               "0",     CVAR_ROM | CVAR_CHEAT,     0 },
 
 	// Speed meter
-	{ &cg_drawSpeedMeter,       "cg_drawSpeedMeter",       "1",     CVAR_ARCHIVE,             0 },
-	{ &cg_speedMeterX,          "cg_speedMeterX",          "320",   CVAR_ARCHIVE,             0 },
-	{ &cg_speedMeterY,          "cg_speedMeterY",          "220",   CVAR_ARCHIVE,             0 },
+	{ &cg_drawSpeedMeter,       "cg_drawSpeedMeter",       "1",     CVAR_ARCHIVE,              0 },
+	{ &cg_speedMeterX,          "cg_speedMeterX",          "320",   CVAR_ARCHIVE,              0 },
+	{ &cg_speedMeterY,          "cg_speedMeterY",          "220",   CVAR_ARCHIVE,              0 },
 
 	// Accel HUD
-	{ &cg_drawAccel,            "cg_drawAccel",            "0",     CVAR_ARCHIVE,             0 },
-	{ &cg_accelSmoothness,      "cg_accelSmoothness",      "100",   CVAR_ARCHIVE,             0 },
+	{ &cg_drawAccel,            "cg_drawAccel",            "0",     CVAR_ARCHIVE,              0 },
+	{ &cg_accelSmoothness,      "cg_accelSmoothness",      "100",   CVAR_ARCHIVE,              0 },
 
 	// Timer
-	{ &cg_drawTimer,            "cg_drawTimer",            "1",     CVAR_ARCHIVE,             0 },
-	{ &cg_timerX,               "cg_timerX",               "320",   CVAR_ARCHIVE,             0 },
-	{ &cg_timerY,               "cg_timerY",               "420",   CVAR_ARCHIVE,             0 },
+	{ &cg_drawTimer,            "cg_drawTimer",            "1",     CVAR_ARCHIVE,              0 },
+	{ &cg_timerX,               "cg_timerX",               "320",   CVAR_ARCHIVE,              0 },
+	{ &cg_timerY,               "cg_timerY",               "420",   CVAR_ARCHIVE,              0 },
 
 	// Check points
-	{ &cg_drawCheckPoints,      "cg_drawCheckPoints",      "1",     CVAR_ARCHIVE,             0 },
-	{ &cg_checkPointsX,         "cg_checkPointsX",         "320",   CVAR_ARCHIVE,             0 },
-	{ &cg_checkPointsY,         "cg_checkPointsY",         "435",   CVAR_ARCHIVE,             0 },
-	{ &cg_maxCheckPoints,       "cg_maxCheckPoints",       "5",     CVAR_ARCHIVE,             0 },
+	{ &cg_drawCheckPoints,      "cg_drawCheckPoints",      "1",     CVAR_ARCHIVE,              0 },
+	{ &cg_checkPointsX,         "cg_checkPointsX",         "320",   CVAR_ARCHIVE,              0 },
+	{ &cg_checkPointsY,         "cg_checkPointsY",         "435",   CVAR_ARCHIVE,              0 },
+	{ &cg_maxCheckPoints,       "cg_maxCheckPoints",       "5",     CVAR_ARCHIVE,              0 },
 
 	// Com_maxFPS
-	{ &com_maxfps,              "com_maxfps",              "125",   CVAR_ARCHIVE,             0 },
+	{ &com_maxfps,              "com_maxfps",              "125",   CVAR_ARCHIVE,              0 },
 
 	// Noclip speed scale
-	{ &cg_noclipSpeed,          "cg_noclipSpeed",          "1000",  CVAR_ARCHIVE,             0 },
+	{ &cg_noclipSpeed,          "cg_noclipSpeed",          "1000",  CVAR_ARCHIVE,              0 },
 
 	// Slick detector
-	{ &cg_drawSlick,            "cg_drawSlick",            "0",     CVAR_ARCHIVE,             0 },
+	{ &cg_drawSlick,            "cg_drawSlick",            "0",     CVAR_ARCHIVE,              0 },
 
 	// OB detector
-	{ &cg_drawOB,               "cg_drawOB",               "0",     CVAR_ARCHIVE,             0 },
+	{ &cg_drawOB,               "cg_drawOB",               "0",     CVAR_ARCHIVE,              0 },
 
 	// Hide other players
-	{ &cg_hideOthers,           "cg_hideOthers",           "1",     CVAR_ARCHIVE,             0 },
-	{ &cg_hideRange,            "cg_hideRange",            "128",   CVAR_ARCHIVE,             0 },
+	{ &cg_hideOthers,           "cg_hideOthers",           "1",     CVAR_ARCHIVE,              0 },
+	{ &cg_hideRange,            "cg_hideRange",            "128",   CVAR_ARCHIVE,              0 },
 
 	// Auth related
-	{ &cg_authToken,            "cg_timerunsToken",        "",      CVAR_ARCHIVE,             0 },
-	{ &cg_autoLogin,            "cg_autoLogin",            "0",     CVAR_ARCHIVE,             0 },
+	{ &cg_authToken,            "cg_timerunsToken",        "",      CVAR_ARCHIVE,              0 },
+	{ &cg_autoLogin,            "cg_autoLogin",            "0",     CVAR_ARCHIVE,              0 },
 
 	// CGaz
-	{ &cg_drawCGaz,             "cg_drawCGaz",             "0",     CVAR_ARCHIVE,             0 },
+	{ &cg_drawCGaz,             "cg_drawCGaz",             "0",     CVAR_ARCHIVE,              0 },
 
 	// Velocity Snapping
-	{ &cg_drawVelocitySnapping,   "cg_drawVelocitySnapping",    "0",     CVAR_ARCHIVE,        0 },
-	{ &cg_velocitySnappingH,      "cg_velocitySnappingH",       "8",     CVAR_ARCHIVE,        0 },
-	{ &cg_velocitySnappingY,      "cg_velocitySnappingY",       "248",   CVAR_ARCHIVE,        0 },
-	{ &cg_velocitySnappingFov,    "cg_velocitySnappingFov",     "120",   CVAR_ARCHIVE,        0 },
+	{ &cg_drawVelocitySnapping,   "cg_drawVelocitySnapping",    "0",     CVAR_ARCHIVE,         0 },
+	{ &cg_velocitySnappingH,      "cg_velocitySnappingH",       "8",     CVAR_ARCHIVE,         0 },
+	{ &cg_velocitySnappingY,      "cg_velocitySnappingY",       "240",   CVAR_ARCHIVE,         0 },
+	{ &cg_velocitySnappingFov,    "cg_velocitySnappingFov",     "120",   CVAR_ARCHIVE,         0 },
 
 	// Load view angles on load
-	{ &cg_loadViewAngles,       "cg_loadViewAngles",       "1",     CVAR_ARCHIVE,             0 },
+	{ &cg_loadViewAngles,       "cg_loadViewAngles",       "1",     CVAR_ARCHIVE,              0 },
 
 	// Load weapon on load
-	{ &cg_loadWeapon,           "cg_loadWeapon",           "1",     CVAR_ARCHIVE,             0 },
+	{ &cg_loadWeapon,           "cg_loadWeapon",           "1",     CVAR_ARCHIVE,              0 },
 
 	// Show pressed keys
-	{ &cg_drawKeys,             "cg_drawKeys",             "4",     CVAR_ARCHIVE,             0 },
-	{ &cg_keysX,                "cg_keysX",                "571",   CVAR_ARCHIVE,             0 },
-	{ &cg_keysY,                "cg_keysY",                "200",   CVAR_ARCHIVE,             0 },
-	{ &cg_keysSize,             "cg_keysSize",             "64",    CVAR_ARCHIVE,             0 },
+	{ &cg_drawKeys,             "cg_drawKeys",             "4",     CVAR_ARCHIVE,              0 },
+	{ &cg_keysXoffset,          "cg_keysXoffset",          "0",     CVAR_ARCHIVE,              0 },
+	{ &cg_keysYoffset,          "cg_keysYoffset",          "0",     CVAR_ARCHIVE,              0 },
+	{ &cg_keysSize,             "cg_keysSize",             "64",    CVAR_ARCHIVE,              0 },
 
 	// Automatically load player position when he gets killed (except /kill)
-	{ &cg_autoLoad,             "cg_autoLoad",             "1",     CVAR_ARCHIVE,             0 },
+	{ &cg_autoLoad,             "cg_autoLoad",             "1",     CVAR_ARCHIVE,              0 },
 
 	// View log (ET Console)
-	{ &cg_viewLog,              "cg_viewLog",              "0",     CVAR_ARCHIVE,             0 },
+	{ &cg_viewLog,              "cg_viewLog",              "0",     CVAR_ARCHIVE,              0 },
 
 	// Hide me
-	{ &cg_hideMe,               "cg_hideMe",               "0",     CVAR_ARCHIVE,             0 },
+	{ &cg_hideMe,               "cg_hideMe",               "0",     CVAR_ARCHIVE,              0 },
 
 	// Auto demo
-	{ &cg_autoDemo,             "cg_autoDemo",             "0",     CVAR_ARCHIVE,             0 },
-	{ &cg_keepAllDemos,         "cg_keepAllDemos",         "1",     CVAR_ARCHIVE,             0 },
+	{ &cg_autoDemo,             "cg_autoDemo",             "0",     CVAR_ARCHIVE,              0 },
+	{ &cg_keepAllDemos,         "cg_keepAllDemos",         "1",     CVAR_ARCHIVE,              0 },
 
 	// Popups
-	{ &cg_numPopups,            "cg_numPopups",            "5",     CVAR_ARCHIVE,             0 },
-	{ &cg_popupTime,            "cg_popupTime",            "1000",  CVAR_ARCHIVE,             0 },
-	{ &cg_popupStayTime,        "cg_popupStayTime",        "2000",  CVAR_ARCHIVE,             0 },
-	{ &cg_popupFadeTime,        "cg_popupFadeTime",        "2500",  CVAR_ARCHIVE,             0 },
+	{ &cg_numPopups,            "cg_numPopups",            "5",     CVAR_ARCHIVE,              0 },
+	{ &cg_popupTime,            "cg_popupTime",            "1000",  CVAR_ARCHIVE,              0 },
+	{ &cg_popupStayTime,        "cg_popupStayTime",        "2000",  CVAR_ARCHIVE,              0 },
+	{ &cg_popupFadeTime,        "cg_popupFadeTime",        "2500",  CVAR_ARCHIVE,              0 },
 
 	// Automatically load checkpoints
-	{ &cg_autoLoadCheckpoints,  "cg_autoLoadCheckpoints",  "0",     CVAR_ARCHIVE,             0 },
+	{ &cg_autoLoadCheckpoints,  "cg_autoLoadCheckpoints",  "0",     CVAR_ARCHIVE,              0 },
 
 	// Persistant speclock
-	{ &cg_specLock,             "cg_specLock",             "0",     CVAR_ARCHIVE,             0 },
+	{ &cg_specLock,             "cg_specLock",             "0",     CVAR_ARCHIVE,              0 },
 
 	// Info panel
-	{ &cg_drawInfoPanel,        "cg_drawInfoPanel",        "1",     CVAR_ARCHIVE,             0 },
-	{ &cg_infoPanelX,           "cg_infoPanelX",           "537",   CVAR_ARCHIVE,             0 },
-	{ &cg_infoPanelY,           "cg_infoPanelY",           "2",     CVAR_ARCHIVE,             0 },
+	{ &cg_drawInfoPanel,        "cg_drawInfoPanel",        "1",     CVAR_ARCHIVE,              0 },
+	{ &cg_infoPanelXoffset,     "cg_infoPanelXoffset",     "0",     CVAR_ARCHIVE,              0 },
+	{ &cg_infoPanelYoffset,     "cg_infoPanelYoffset",     "0",     CVAR_ARCHIVE,              0 },
 
 	// Country flags
-	{ &cg_countryFlags,         "cg_countryFlags",         "0",     CVAR_ARCHIVE,             0 },
+	{ &cg_countryFlags,         "cg_countryFlags",         "0",     CVAR_ARCHIVE,              0 },
 
 	// Minimum start speed
-	{ &cg_minStartSpeed,        "cg_minStartSpeed",        "0",     CVAR_ARCHIVE,             0 },
+	{ &cg_minStartSpeed,        "cg_minStartSpeed",        "0",     CVAR_ARCHIVE,              0 },
+
+	// suburb, widescreen support
+	{ &cg_widescreenSupport,    "cg_widescreenSupport",    "1",     CVAR_ARCHIVE | CVAR_LATCH, 0 },
+	{ &cg_realFov,              "cg_realFov",              "0",     CVAR_ARCHIVE,              0 },
 
 	// suburb, event cvars
-	{ &cg_onRunStart,           "cg_onRunStart",           "",      CVAR_ARCHIVE,             0 },
-	{ &cg_onRunStop,            "cg_onRunStop",            "",      CVAR_ARCHIVE,             0 },
+	{ &cg_onRunStart,           "cg_onRunStart",           "",      CVAR_ARCHIVE,              0 },
+	{ &cg_onRunStop,            "cg_onRunStop",            "",      CVAR_ARCHIVE,              0 },
 
 	// Draw Triggers
-	{ &cg_drawTriggers,         "cg_drawTriggers",         "1",     CVAR_ARCHIVE,             0 },
-	{ &cg_triggerOffset,        "cg_triggerOffset",        "0",     CVAR_ARCHIVE,             0 },
-	{ &cg_triggerColor,         "cg_triggerColor",         "White", CVAR_ARCHIVE,             0 },
+	{ &cg_drawTriggers,         "cg_drawTriggers",         "1",     CVAR_ARCHIVE,              0 },
+	{ &cg_triggerOffset,        "cg_triggerOffset",        "0",     CVAR_ARCHIVE,              0 },
+	{ &cg_triggerColor,         "cg_triggerColor",         "White", CVAR_ARCHIVE,              0 },
 
 	// Nico, end of ETrun cvars
 };
@@ -2122,6 +2138,12 @@ void CG_Init(int serverMessageNum, int serverCommandSequence, int clientNum) {
 
 	CG_RegisterCvars();
 
+	// suburb, widescreen support
+	cgs.glconfig.windowAspect = (float) cgs.glconfig.vidWidth / (float) cgs.glconfig.vidHeight;
+	cgs.adr43 = cgs.glconfig.windowAspect * RPRATIO43;
+	cgs.r43da = RATIO43 * 1.0f / cgs.glconfig.windowAspect;
+	cgs.wideXoffset = (!CG_Is43Screen()) ? (640.0f * cgs.adr43 - 640.0f) * 0.5f : 0.0f;
+	
 	CG_InitConsoleCommands();
 
 	// Gordon: moved this up so it's initialized for the loading screen

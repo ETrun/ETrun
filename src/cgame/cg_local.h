@@ -1576,6 +1576,11 @@ typedef struct {
 	oidInfo_t oidInfo[MAX_OID_TRIGGERS];
 
 	qboolean initing;
+
+	// suburb, widescreen support
+	float adr43;
+	float r43da;
+	float wideXoffset;
 } cgs_t;
 
 // Nico, score structure for scoreboard
@@ -1802,8 +1807,8 @@ extern vmCvar_t cg_loadWeapon;
 
 // Show pressed keys
 extern vmCvar_t cg_drawKeys;
-extern vmCvar_t cg_keysX;
-extern vmCvar_t cg_keysY;
+extern vmCvar_t cg_keysXoffset;
+extern vmCvar_t cg_keysYoffset;
 extern vmCvar_t cg_keysSize;
 
 // Automatically load player position when he gets killed (except /kill)
@@ -1833,14 +1838,18 @@ extern vmCvar_t cg_specLock;
 
 // Info panel
 extern vmCvar_t cg_drawInfoPanel;
-extern vmCvar_t cg_infoPanelX;
-extern vmCvar_t cg_infoPanelY;
+extern vmCvar_t cg_infoPanelXoffset;
+extern vmCvar_t cg_infoPanelYoffset;
 
 // Country flags
 extern vmCvar_t cg_countryFlags;
 
 // Minimum start speed
 extern vmCvar_t cg_minStartSpeed;
+
+// suburb, widescreen support
+extern vmCvar_t cg_widescreenSupport;
+extern vmCvar_t cg_realFov;
 
 // suburb, event cvars
 extern vmCvar_t cg_onRunStart;
@@ -1913,6 +1922,12 @@ int CG_CalcViewValues(void);
 //
 // cg_drawtools.c
 //
+
+// suburb, widescreen support
+qboolean CG_Is43Screen(void);
+float CG_WideX(float x);
+float CG_WideXoffset(void);
+
 void CG_AdjustFrom640(float *x, float *y, float *w, float *h);
 void CG_FillRect(float x, float y, float width, float height, const float *color);
 void CG_DrawPic(float x, float y, float width, float height, qhandle_t hShader);

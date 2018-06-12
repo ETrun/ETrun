@@ -124,6 +124,16 @@ static qboolean connect_ownerdraw;
 void UI_DrawLoadPanel(qboolean ownerdraw, qboolean uihack) {
 	static qboolean inside = qfalse;
 
+	// suburb, widescreen support
+	// to avoid a flickering screen on widescreens, we erase it before drawing onto it
+	if (((float)(uiInfo.uiDC.glconfig.vidWidth) / (float)(uiInfo.uiDC.glconfig.vidHeight)) != RATIO43)
+	{
+		float xoffset = UI_WideXoffset() * uiInfo.uiDC.xscale;
+		
+		trap_R_DrawStretchPic(0, 0, xoffset, uiInfo.uiDC.glconfig.vidHeight, 0, 0, 1, 1, uiInfo.uiDC.registerShaderNoMip("gfx/2d/backtile"));
+		trap_R_DrawStretchPic(uiInfo.uiDC.glconfig.vidWidth - xoffset, 0, xoffset, uiInfo.uiDC.glconfig.vidHeight, 0, 0, 1, 1, uiInfo.uiDC.registerShaderNoMip("gfx/2d/backtile"));
+	}
+
 	if (inside) {
 		if (!uihack && trap_Cvar_VariableValue("ui_connecting")) {
 			trap_Cvar_Set("ui_connecting", "0");
@@ -140,6 +150,8 @@ void UI_DrawLoadPanel(qboolean ownerdraw, qboolean uihack) {
 		trap_R_RegisterFont("courbd", 30, &bg_loadscreenfont2);
 
 		BG_PanelButtonsSetup(loadpanelButtons);
+		// suburb, widescreen support
+		BG_PanelButtonsSetupWide(loadpanelButtons, UI_WideXoffset());
 
 		bg_loadscreeninited = qtrue;
 	}

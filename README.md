@@ -71,3 +71,5 @@ Credits
 
 * TJMod developers
 * Racesow project
+* ETLegacy project
+* iodfe project
