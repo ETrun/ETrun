@@ -5,7 +5,7 @@
 #define WINDOW_X		16
 #define WINDOW_Y		16
 #define WINDOW_WIDTH	520
-#define WINDOW_HEIGHT	284
+#define WINDOW_HEIGHT	288
 #define GROUP_NAME		"grpEtrunCustomiseMisc"
 
 // Macros //
