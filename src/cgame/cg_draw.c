@@ -359,7 +359,6 @@ static void CG_DrawTeamInfo(void) {
 	if (cgs.teamLastChatPos != cgs.teamChatPos) {
 		int   i;
 		float lineHeight = 9.f;
-		int   chatWidth  = CG_WideX(SCREEN_WIDTH) - CHATLOC_X - 100;
 
 		if (cg.time - cgs.teamChatMsgTimes[cgs.teamLastChatPos % chatHeight] > cg_teamChatTime.integer) {
 			cgs.teamLastChatPos++;
