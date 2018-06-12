@@ -518,7 +518,7 @@ cvarTable_t cvarTable[] =
 	// Engine mappings
 	{ &int_cl_maxpackets,       "cl_maxpackets",           "30",    CVAR_ARCHIVE,              0 },
 	{ &int_cl_timenudge,        "cl_timenudge",            "0",     CVAR_ARCHIVE,              0 },
-	
+
 	// suburb, yawspeed & pitchspeed
 	{ &int_cl_yawspeed,         "cl_yawspeed",             "140",   CVAR_ARCHIVE,              0 },
 	{ &int_cl_pitchspeed,       "cl_pitchspeed",           "140",   CVAR_ARCHIVE,              0 },
@@ -595,10 +595,10 @@ cvarTable_t cvarTable[] =
 	{ &cg_drawCGaz,             "cg_drawCGaz",             "0",     CVAR_ARCHIVE,              0 },
 
 	// Velocity Snapping
-	{ &cg_drawVelocitySnapping,   "cg_drawVelocitySnapping",    "0",     CVAR_ARCHIVE,         0 },
-	{ &cg_velocitySnappingH,      "cg_velocitySnappingH",       "8",     CVAR_ARCHIVE,         0 },
-	{ &cg_velocitySnappingY,      "cg_velocitySnappingY",       "240",   CVAR_ARCHIVE,         0 },
-	{ &cg_velocitySnappingFov,    "cg_velocitySnappingFov",     "120",   CVAR_ARCHIVE,         0 },
+	{ &cg_drawVelocitySnapping, "cg_drawVelocitySnapping", "0",     CVAR_ARCHIVE,              0 },
+	{ &cg_velocitySnappingH,    "cg_velocitySnappingH",    "8",     CVAR_ARCHIVE,              0 },
+	{ &cg_velocitySnappingY,    "cg_velocitySnappingY",    "240",   CVAR_ARCHIVE,              0 },
+	{ &cg_velocitySnappingFov,  "cg_velocitySnappingFov",  "120",   CVAR_ARCHIVE,              0 },
 
 	// Load view angles on load
 	{ &cg_loadViewAngles,       "cg_loadViewAngles",       "1",     CVAR_ARCHIVE,              0 },
@@ -739,7 +739,7 @@ void CG_UpdateCvars(void) {
 				    cv->vmCvar == &cg_hideMe || cv->vmCvar == &cg_autoDemo ||
 				    cv->vmCvar == &cg_autoLoadCheckpoints || cv->vmCvar == &cg_specLock ||
 				    cv->vmCvar == &cg_keepAllDemos || cv->vmCvar == &cg_loadWeapon ||
-				    cv->vmCvar == &cg_noclipSpeed || cv->vmCvar == &int_cl_yawspeed || 
+				    cv->vmCvar == &cg_noclipSpeed || cv->vmCvar == &int_cl_yawspeed ||
 				    cv->vmCvar == &int_cl_pitchspeed) {
 					fSetFlags = qtrue;
 				} else if (cv->vmCvar == &cg_crosshairColor || cv->vmCvar == &cg_crosshairAlpha) {
@@ -815,13 +815,13 @@ void CG_setClientFlags(void) {
 	cg.pmext.bAutoReload = (cg_autoReload.integer > 0);
 	trap_Cvar_Set("cg_uinfo", va("%d %d %d %d %s %d %d %d %d %d %d %d %d %d %d %d %d %d",
 	                             // Client Flags
-	                             (
-	                                 ((cg_autoReload.integer > 0) ? CGF_AUTORELOAD : 0) |
-	                                 ((cg_autoactivate.integer > 0) ? CGF_AUTOACTIVATE : 0) |
-	                                 ((cg_predictItems.integer > 0) ? CGF_PREDICTITEMS : 0) |
-	                                 ((pmove_fixed.integer > 0) ? CGF_PMOVEFIXED : 0) |
-	                                 ((cg_autoLogin.integer > 0) ? CGF_AUTOLOGIN : 0)
-	                                 // Add more in here, as needed
+								 (
+									 ((cg_autoReload.integer > 0) ? CGF_AUTORELOAD : 0) |
+									 ((cg_autoactivate.integer > 0) ? CGF_AUTOACTIVATE : 0) |
+									 ((cg_predictItems.integer > 0) ? CGF_PREDICTITEMS : 0) |
+									 ((pmove_fixed.integer > 0) ? CGF_PMOVEFIXED : 0) |
+									 ((cg_autoLogin.integer > 0) ? CGF_AUTOLOGIN : 0)
+									 // Add more in here, as needed
 	                             ),
 
 	                             // Timenudge
@@ -1173,17 +1173,17 @@ static void CG_RegisterSounds(void) {
 
 	for (i = 0; i < 2; ++i) {
 		cgs.media.grenadebounce[FOOTSTEP_NORMAL][i]         = \
-		    cgs.media.grenadebounce[FOOTSTEP_GRAVEL][i]     = \
-		        cgs.media.grenadebounce[FOOTSTEP_SPLASH][i] = trap_S_RegisterSound(va("sound/weapons/grenade/bounce_hard%i.wav", i + 1));
+			cgs.media.grenadebounce[FOOTSTEP_GRAVEL][i]     = \
+				cgs.media.grenadebounce[FOOTSTEP_SPLASH][i] = trap_S_RegisterSound(va("sound/weapons/grenade/bounce_hard%i.wav", i + 1));
 
 		cgs.media.grenadebounce[FOOTSTEP_METAL][i]    = \
-		    cgs.media.grenadebounce[FOOTSTEP_ROOF][i] = trap_S_RegisterSound(va("sound/weapons/grenade/bounce_metal%i.wav", i + 1));
+			cgs.media.grenadebounce[FOOTSTEP_ROOF][i] = trap_S_RegisterSound(va("sound/weapons/grenade/bounce_metal%i.wav", i + 1));
 
 		cgs.media.grenadebounce[FOOTSTEP_WOOD][i] = trap_S_RegisterSound(va("sound/weapons/grenade/bounce_wood%i.wav", i + 1));
 
 		cgs.media.grenadebounce[FOOTSTEP_GRASS][i]          = \
-		    cgs.media.grenadebounce[FOOTSTEP_SNOW][i]       = \
-		        cgs.media.grenadebounce[FOOTSTEP_CARPET][i] = trap_S_RegisterSound(va("sound/weapons/grenade/bounce_soft%i.wav", i + 1));
+			cgs.media.grenadebounce[FOOTSTEP_SNOW][i]       = \
+				cgs.media.grenadebounce[FOOTSTEP_CARPET][i] = trap_S_RegisterSound(va("sound/weapons/grenade/bounce_soft%i.wav", i + 1));
 
 	}
 
@@ -2140,10 +2140,10 @@ void CG_Init(int serverMessageNum, int serverCommandSequence, int clientNum) {
 
 	// suburb, widescreen support
 	cgs.glconfig.windowAspect = (float) cgs.glconfig.vidWidth / (float) cgs.glconfig.vidHeight;
-	cgs.adr43 = cgs.glconfig.windowAspect * RPRATIO43;
-	cgs.r43da = RATIO43 * 1.0f / cgs.glconfig.windowAspect;
-	cgs.wideXoffset = (!CG_Is43Screen()) ? (640.0f * cgs.adr43 - 640.0f) * 0.5f : 0.0f;
-	
+	cgs.adr43                 = cgs.glconfig.windowAspect * RPRATIO43;
+	cgs.r43da                 = RATIO43 * 1.0f / cgs.glconfig.windowAspect;
+	cgs.wideXoffset           = (!CG_Is43Screen()) ? (640.0f * cgs.adr43 - 640.0f) * 0.5f : 0.0f;
+
 	CG_InitConsoleCommands();
 
 	// Gordon: moved this up so it's initialized for the loading screen

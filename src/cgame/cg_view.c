@@ -673,7 +673,7 @@ void CG_ZoomIn_f(void) {
 	// Gordon: fixed being able to "latch" your zoom by weaponcheck + quick zoomin
 	// OSP - change for zoom view in demos
 	if (cg_entities[cg.snap->ps.clientNum].currentState.weapon == WP_GARAND_SCOPE ||
-		cg_entities[cg.snap->ps.clientNum].currentState.weapon == WP_K43_SCOPE) {
+	    cg_entities[cg.snap->ps.clientNum].currentState.weapon == WP_K43_SCOPE) {
 		CG_AdjustZoomVal(-(cg_zoomStepSniper.value), ZOOM_SNIPER);
 	} else if (cg.zoomedBinoc) {
 		CG_AdjustZoomVal(-(cg_zoomStepBinoc.value), ZOOM_BINOC);
@@ -682,7 +682,7 @@ void CG_ZoomIn_f(void) {
 
 void CG_ZoomOut_f(void) {
 	if (cg_entities[cg.snap->ps.clientNum].currentState.weapon == WP_GARAND_SCOPE ||
-		cg_entities[cg.snap->ps.clientNum].currentState.weapon == WP_K43_SCOPE) {
+	    cg_entities[cg.snap->ps.clientNum].currentState.weapon == WP_K43_SCOPE) {
 		CG_AdjustZoomVal(cg_zoomStepSniper.value, ZOOM_SNIPER);
 	} else if (cg.zoomedBinoc) {
 		CG_AdjustZoomVal(cg_zoomStepBinoc.value, ZOOM_BINOC);

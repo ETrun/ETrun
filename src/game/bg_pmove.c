@@ -133,7 +133,7 @@ finds worst trace of body/legs, for collision.
 ==================
 */
 
-void PM_TraceLegs(trace_t *trace, float *legsOffset, vec3_t start, vec3_t end, trace_t *bodytrace, vec3_t viewangles, void (tracefunc) (trace_t *results, const vec3_t start, const vec3_t mins, const vec3_t maxs, const vec3_t end, int passEntityNum, int contentMask), int ignoreent, int tracemask) {
+void PM_TraceLegs(trace_t *trace, float *legsOffset, vec3_t start, vec3_t end, trace_t *bodytrace, vec3_t viewangles, void(tracefunc) (trace_t *results, const vec3_t start, const vec3_t mins, const vec3_t maxs, const vec3_t end, int passEntityNum, int contentMask), int ignoreent, int tracemask) {
 	trace_t steptrace;
 	vec3_t  ofs, org, point;
 	vec3_t  flatforward;
@@ -2034,7 +2034,7 @@ are being updated isntead of a full move
 ================
 */
 // rain - take a tracemask as well - we can't use anything out of pm
-void PM_UpdateViewAngles(playerState_t *ps, pmoveExt_t *pmext, usercmd_t *cmd, void (trace) (trace_t *results, const vec3_t start, const vec3_t mins, const vec3_t maxs, const vec3_t end, int passEntityNum, int contentMask), int tracemask) {      //----(SA)	modified
+void PM_UpdateViewAngles(playerState_t *ps, pmoveExt_t *pmext, usercmd_t *cmd, void(trace) (trace_t *results, const vec3_t start, const vec3_t mins, const vec3_t maxs, const vec3_t end, int passEntityNum, int contentMask), int tracemask) {       //----(SA)	modified
 	short   temp;
 	int     i;
 	pmove_t tpm;
@@ -2592,7 +2592,7 @@ void PmoveSingle(pmove_t *pmove) {
 	pm->ps->eFlags &= ~(EF_FIRING | EF_ZOOMING);
 	if (pm->cmd.wbuttons & WBUTTON_ZOOM && pm->ps->stats[STAT_HEALTH] >= 0 && !(pm->ps->weaponDelay)) {
 		if ((pm->ps->stats[STAT_KEYS] & (1 << INV_BINOCS) ||         // (SA) binoculars are an inventory item (inventory==keys)
-			pm->ps->persistant[PERS_TEAM] == TEAM_SPECTATOR) &&      // suburb, added spec team check to enable binoc zoom in spec
+		     pm->ps->persistant[PERS_TEAM] == TEAM_SPECTATOR) &&     // suburb, added spec team check to enable binoc zoom in spec
 		    !BG_IsScopedWeapon(pm->ps->weapon) &&          // don't allow binocs if using the sniper scope
 		    !BG_PlayerMounted(pm->ps->eFlags) &&        // or if mounted on a weapon
 		    // rain - #215 - don't allow binocs w/ mounted mob. MG42 or mortar either.

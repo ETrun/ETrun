@@ -126,10 +126,9 @@ void UI_DrawLoadPanel(qboolean ownerdraw, qboolean uihack) {
 
 	// suburb, widescreen support
 	// to avoid a flickering screen on widescreens, we erase it before drawing onto it
-	if (((float)(uiInfo.uiDC.glconfig.vidWidth) / (float)(uiInfo.uiDC.glconfig.vidHeight)) != RATIO43)
-	{
+	if (((float)(uiInfo.uiDC.glconfig.vidWidth) / (float)(uiInfo.uiDC.glconfig.vidHeight)) != RATIO43) {
 		float xoffset = UI_WideXoffset() * uiInfo.uiDC.xscale;
-		
+
 		trap_R_DrawStretchPic(0, 0, xoffset, uiInfo.uiDC.glconfig.vidHeight, 0, 0, 1, 1, uiInfo.uiDC.registerShaderNoMip("gfx/2d/backtile"));
 		trap_R_DrawStretchPic(uiInfo.uiDC.glconfig.vidWidth - xoffset, 0, xoffset, uiInfo.uiDC.glconfig.vidHeight, 0, 0, 1, 1, uiInfo.uiDC.registerShaderNoMip("gfx/2d/backtile"));
 	}

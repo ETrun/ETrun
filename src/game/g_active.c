@@ -436,7 +436,7 @@ qboolean ClientInactivityTimer(gclient_t *client) {
 		client->inactivityWarning = qfalse;
 	} else if (counter != 3) {
 		client->inactivityWarning = qfalse;
-		client->inactivityTime    = level.time + 1000 * ((client->sess.sessionTeam != TEAM_SPECTATOR) ? g_inactivity.integer :g_spectatorInactivity.integer);
+		client->inactivityTime    = level.time + 1000 * ((client->sess.sessionTeam != TEAM_SPECTATOR) ? g_inactivity.integer : g_spectatorInactivity.integer);
 	} else if (!client->pers.localClient) {
 		if (level.time > client->inactivityTime && client->inactivityWarning) {
 			client->inactivityWarning = qfalse;
@@ -971,7 +971,7 @@ void ClientThink_real(gentity_t *ent) {
 	}
 
 	// suburb, prevent pronebug & wallbug
-	counter = 0;
+	counter            = 0;
 	notMovingWithSpeed = qfalse;
 
 	for (i = 0; i < 3; ++i) {
@@ -992,7 +992,7 @@ void ClientThink_real(gentity_t *ent) {
 	// checking every frame would break corner skimming
 	if (level.time - client->pers.lastBuggingCheck > BUGGING_CHECK_FREQUENCY) {
 		for (i = 0; i < 3; ++i) {
-			client->pers.oldPosition[i] = (int) pm.ps->origin[i];
+			client->pers.oldPosition[i]   = (int) pm.ps->origin[i];
 			client->pers.lastBuggingCheck = level.time;
 		}
 	}

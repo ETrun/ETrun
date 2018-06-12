@@ -948,7 +948,7 @@ void G_Say(gentity_t *ent, gentity_t *target, int mode, qboolean encoded, const 
 	int  color;
 	char name[64];
 	// don't let text be too long for malicious reasons
-	char     text[MAX_SAY_TEXT];
+	char text[MAX_SAY_TEXT];
 	// suburb, add timestamps
 	char    displayTime[18] = { 0 };
 	qtime_t tm;
@@ -982,7 +982,7 @@ void G_Say(gentity_t *ent, gentity_t *target, int mode, qboolean encoded, const 
 		break;
 	}
 
-	Com_sprintf(name, sizeof(name), "^g%s^7%s%c%c: ", displayTime, ent->client->pers.netname, Q_COLOR_ESCAPE, COLOR_WHITE);
+	Com_sprintf(name, sizeof (name), "^g%s^7%s%c%c: ", displayTime, ent->client->pers.netname, Q_COLOR_ESCAPE, COLOR_WHITE);
 	Q_strncpyz(text, chatText, sizeof (text));
 
 	if (target) {
@@ -1226,10 +1226,10 @@ qboolean Cmd_CallVote_f(gentity_t *ent, unsigned int dwCommand, qboolean fRefCom
 			} else if (vote_limit.integer > 0 && ent->client->pers.voteCount >= vote_limit.integer) {
 				G_printFull(va("^1Callvote:^7 You have already called the maximum number of votes (%d).\n\"", vote_limit.integer), ent);
 				return qfalse;
-			} else if (level.delayedMapChange.pendingChange) { 	// suburb, block all votes during a pending map change
+			} else if (level.delayedMapChange.pendingChange) {  // suburb, block all votes during a pending map change
 				G_printFull("^1Callvote:^7 There is a pending map change.\n\"", ent);
 				return qfalse;
-			} else if (waitTime > 0) { 	// suburb, block all votes until vote_delay has passed
+			} else if (waitTime > 0) {  // suburb, block all votes until vote_delay has passed
 				G_printFull(va("^1Callvote:^7 Please wait %d second%s before voting.\n\"", waitTime, waitTime > 1 ? "s" : ""), ent);
 				return qfalse;
 			}
@@ -1308,9 +1308,9 @@ qboolean Cmd_CallVote_f(gentity_t *ent, unsigned int dwCommand, qboolean fRefCom
 		G_globalSound("sound/misc/vote.wav");
 	}
 
-	level.voteInfo.voteTime = level.time;
+	level.voteInfo.voteTime     = level.time;
 	level.voteInfo.lastVoteTime = level.time;
-	level.voteInfo.voteNo   = 0;
+	level.voteInfo.voteNo       = 0;
 
 	// Nico, used to check if voter switches team
 	level.voteInfo.voter_team = ent->client->sess.sessionTeam;
@@ -2685,4 +2685,3 @@ void Cmd_Tutorial_f(gentity_t *ent) {
 	CP("print \"Have fun.\n\"");
 	CP("print \"^9-----------------------------------------------------------------------------\n\"");
 }
-

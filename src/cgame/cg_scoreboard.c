@@ -155,7 +155,7 @@ static void WM_ETrun_DrawPlayers(int *x, int *y, fontInfo_t *font, s_timerunScor
 
 	// Draw "Players"
 	s     = "Players";
-	*x    += cgs.wideXoffset;
+	*x   += cgs.wideXoffset;
 	tempx = *x + INFO_TOTAL_WIDTH / 2  - CG_Text_Width_Ext(s, 0.25f, 0, &cgs.media.limboFont1) / 2;
 	WM_ETrun_print(s, font, 0.25f, tempx, *y, qtrue, 0);
 
@@ -289,7 +289,7 @@ static void WM_ETrun_DrawSpectators(int *x, int *y, fontInfo_t *font, s_timerunS
 
 	// Draw "Spectators"
 	s     = "Spectators";
-	*x    += cgs.wideXoffset;
+	*x   += cgs.wideXoffset;
 	tempx = *x + INFO_SPEC_TOTAL_WIDTH / 2  - CG_Text_Width_Ext(s, 0.25f, 0, &cgs.media.limboFont1) / 2;
 	WM_ETrun_print(s, font, 0.25f, tempx, *y, qtrue, 0);
 

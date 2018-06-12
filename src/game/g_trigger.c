@@ -1006,8 +1006,8 @@ void SP_trigger_flagonly(gentity_t *ent) {
 	//  inside of this field will add "score" to the right player team.  storing this
 	//  in ent->accuracy since that's unused.
 	G_SpawnString("score", "20", &scorestring);
-	ent->accuracy = atof(scorestring);
-	ent->s.eType  = ET_TRIGGER_FLAGONLY;
+	ent->accuracy   = atof(scorestring);
+	ent->s.eType    = ET_TRIGGER_FLAGONLY;
 	ent->r.svFlags &= ~SVF_NOCLIENT;
 
 	trap_LinkEntity(ent);
@@ -1033,8 +1033,8 @@ void SP_trigger_flagonly_multiple(gentity_t *ent) {
 	//  inside of this field will add "score" to the right player team.  storing this
 	//  in ent->accuracy since that's unused.
 	G_SpawnString("score", "20", &scorestring);
-	ent->accuracy = atof(scorestring);
-	ent->s.eType  = ET_TRIGGER_FLAGONLY_MULTIPLE;
+	ent->accuracy   = atof(scorestring);
+	ent->s.eType    = ET_TRIGGER_FLAGONLY_MULTIPLE;
 	ent->r.svFlags &= ~SVF_NOCLIENT;
 
 	trap_LinkEntity(ent);
