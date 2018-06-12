@@ -42,6 +42,48 @@ void CG_AdjustFrom640(float *x, float *y, float *w, float *h) {
 	*y *= cgs.screenYScale;
 	*w *= cgs.screenXScale;
 	*h *= cgs.screenYScale;
+
+	// suburb, widescreen support
+	if (!CG_Is43Screen()) {
+		*x *= cgs.r43da;
+		*w *= cgs.r43da;
+	}
+}
+
+/*
+================
+CG_Is43Screen
+
+@author suburb, widescreen support
+================
+*/
+qboolean CG_Is43Screen(void) {
+	if (cgs.glconfig.windowAspect <= RATIO43 || !cg_widescreenSupport.integer) {
+		return qtrue;
+	}
+	return qfalse;
+}
+
+/*
+================
+CG_WideX
+
+@author suburb, widescreen support
+================
+*/
+float CG_WideX(float x) {
+	return (CG_Is43Screen()) ? x : x *cgs.adr43;
+}
+
+/*
+================
+CG_WideXoffset
+
+@author suburb, widescreen support
+================
+*/
+float CG_WideXoffset(void) {
+	return (CG_Is43Screen()) ? 0.0f : ((640.0f * cgs.adr43) - 640.0f) * 0.5f;
 }
 
 /*
@@ -71,8 +113,8 @@ void CG_FillAngleYaw(float start, float end, float viewangle, float y, float hei
 	float x, width, fovscale;
 
 	fovscale = tan(DEG2RAD(fov / 2));
-	x = SCREEN_WIDTH / 2 + tan(DEG2RAD(viewangle + start)) / fovscale*SCREEN_WIDTH / 2;
-	width = fabs(SCREEN_WIDTH*(tan(DEG2RAD(viewangle + end)) - tan(DEG2RAD(viewangle + start))) / (fovscale * 2)) + 1;
+	x = CG_WideX(SCREEN_WIDTH) / 2 + tan(DEG2RAD(viewangle + start)) / fovscale*CG_WideX(SCREEN_WIDTH) / 2;
+	width = fabs(CG_WideX(SCREEN_WIDTH)*(tan(DEG2RAD(viewangle + end)) - tan(DEG2RAD(viewangle + start))) / (fovscale * 2)) + 1;
 	if (cg_drawVelocitySnapping.integer == 2) {
 		width /= 2;
 	}

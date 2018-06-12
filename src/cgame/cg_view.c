@@ -833,6 +833,11 @@ static int CG_CalcFov(void) {
 		fov_x = 75;
 	}
 
+	// suburb, widescreen support
+	if (cg_realFov.integer) {
+		fov_x = atan(tan(fov_x * M_PI / 360.0f) * 0.75f * (float) cgs.glconfig.vidWidth / (float) cgs.glconfig.vidHeight) * 360.0f / M_PI;
+	}
+
 	// Arnout: this is weird... (but ensures square pixel ratio!)
 	x     = cg.refdef_current->width / tan(fov_x / 360 * M_PI);
 	fov_y = atan2(cg.refdef_current->height, x);
@@ -1202,6 +1207,11 @@ void CG_DrawSkyBoxPortal(qboolean fLocalView) {
 
 		if (BG_PlayerMounted(cg.snap->ps.eFlags) || cg.predictedPlayerState.weapon == WP_MOBILE_MG42_SET) {
 			fov_x = 55;
+		}
+
+		// suburb, widescreen support
+		if (cg_realFov.integer) {
+			fov_x = atan(tan(fov_x * M_PI / 360.0f) * 0.75f * (float) cgs.glconfig.vidWidth / (float) cgs.glconfig.vidHeight) * 360.0f / M_PI;
 		}
 
 		x     = rd.width / tan(fov_x / 360 * M_PI);
