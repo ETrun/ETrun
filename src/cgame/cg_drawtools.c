@@ -113,8 +113,8 @@ void CG_FillAngleYaw(float start, float end, float viewangle, float y, float hei
 	float x, width, fovscale;
 
 	fovscale = tan(DEG2RAD(fov / 2));
-	x = CG_WideX(SCREEN_WIDTH) / 2 + tan(DEG2RAD(viewangle + start)) / fovscale*CG_WideX(SCREEN_WIDTH) / 2;
-	width = fabs(CG_WideX(SCREEN_WIDTH)*(tan(DEG2RAD(viewangle + end)) - tan(DEG2RAD(viewangle + start))) / (fovscale * 2)) + 1;
+	x        = CG_WideX(SCREEN_WIDTH) / 2 + tan(DEG2RAD(viewangle + start)) / fovscale * CG_WideX(SCREEN_WIDTH) / 2;
+	width    = fabs(CG_WideX(SCREEN_WIDTH) * (tan(DEG2RAD(viewangle + end)) - tan(DEG2RAD(viewangle + start))) / (fovscale * 2)) + 1;
 	if (cg_drawVelocitySnapping.integer == 2) {
 		width /= 2;
 	}
@@ -747,7 +747,7 @@ value, the smaller is the output
 @author suburb
 =================
 */
-float CG_AdjustFontSize(float textScale, int valueToPrint, int border){
+float CG_AdjustFontSize(float textScale, int valueToPrint, int border) {
 	if (valueToPrint >= border) {
 		float textScaleFactor = 0.02f * GetDigits(valueToPrint) - 0.08f;
 		textScale -= textScaleFactor;

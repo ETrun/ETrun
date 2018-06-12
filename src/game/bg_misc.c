@@ -4040,17 +4040,18 @@ qboolean BG_IsScopedWeapon(int weapon) {
 #define ZOOM_MAX_WEAPONS     6
 #define SCOPE_MAX_WEAPONS    2
 #define ZOOMTABLE_MAX_INDEX  3
-float BG_GetZoomTableValues(int weaponType, int index){
+float BG_GetZoomTableValues(int weaponType, int index) {
 	float zoomTable[ZOOM_MAX_WEAPONS][ZOOMTABLE_MAX_INDEX] =
 	{
-		    // {out,  in, scope}
-		        {  0,  0,   0 },  // default
-		        { 60,  1,   0 },  // binoc
-		        { 20,  4, 900 },  // sniper
-		        { 60,  20,  0 },  // snooper
-		        { 55,  55,  1 },  // fg42
-		        { 55,  55,  0 }   // mg42
+		// {out,  in, scope}
+		{ 0,  0,  0   },          // default
+		{ 60, 1,  0   },          // binoc
+		{ 20, 4,  900 },          // sniper
+		{ 60, 20, 0   },          // snooper
+		{ 55, 55, 1   },          // fg42
+		{ 55, 55, 0   }           // mg42
 	};
+
 	return zoomTable[weaponType][index];
 }
 

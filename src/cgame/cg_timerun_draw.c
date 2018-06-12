@@ -120,7 +120,7 @@ void CG_DrawSpeedMeter(void) {
 	} else {
 		CG_Text_Paint_Ext(x - w, y, sizex, sizey, colorWhite, status, 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
 	}
-	
+
 	cg.oldSpeed = speed;
 }
 
@@ -189,7 +189,7 @@ void CG_DrawOB(void) {
 	hn = h0 + psec * n * (v0 - gravity * psec / 2 - (n - 1) * rintv / 2);
 	//CG_Printf("h0: %f, v0: %f, n: %d, hn: %f, t: %f\n", h0, v0, n, hn, t);
 	if (n && hn < t + 0.25 && hn > t) {
-		CG_DrawStringExt(CG_WideX(SCREEN_WIDTH)/2, 220, "F", colorWhite, qfalse, qtrue,
+		CG_DrawStringExt(CG_WideX(SCREEN_WIDTH) / 2, 220, "F", colorWhite, qfalse, qtrue,
 		                 TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 0);
 	}
 
@@ -245,12 +245,12 @@ void CG_DrawSlick(void) {
  */
 void CG_DrawTimer(void) {
 	char       status[128];
-	int        min                = 0, sec = 0, milli = 0;
-	int        x                  = 0, y = 0, w = 0;
-	int        timerunNum         = cg.currentTimerun;
-	int        startTime          = 0;
+	int        min = 0, sec = 0, milli = 0;
+	int        x = 0, y = 0, w = 0;
+	int        timerunNum = cg.currentTimerun;
+	int        startTime = 0;
 	int        currentTimerunTime = 0;
-	float      sizex              = 0.25f, sizey = 0.25f;
+	float      sizex = 0.25f, sizey = 0.25f;
 	vec4_t     color;
 	int        runBestTime;
 	int        runLastTime;
@@ -676,15 +676,15 @@ static int QDECL sortSnapZones(const void *a, const void *b) {
 #define DF_TO_ET_GROUNDSPEED (352.0f / 320.0f)
 void CG_DrawVelocitySnapping(void) {
 	vec4_t color[3];
-	float rgba1[4]        = { 0.4f, 0, 0, 0.5f };
-	float rgba2[4]        = { 0, 0.4f, 0.4f, 0.5f };
-	float step            = 0;
-	float yaw             = 0;
-	int snapHud_H         = 0;
-	int snapHud_Y         = 0;
-	int colorID           = 0;
-	int fov               = 0;
-	int i                 = 0;
+	float  rgba1[4]  = { 0.4f, 0, 0, 0.5f };
+	float  rgba2[4]  = { 0, 0.4f, 0.4f, 0.5f };
+	float  step      = 0;
+	float  yaw       = 0;
+	int    snapHud_H = 0;
+	int    snapHud_Y = 0;
+	int    colorID   = 0;
+	int    fov       = 0;
+	int    i         = 0;
 
 	if (!cg_drawVelocitySnapping.integer || cg.isLogged || (cg.snap->ps.persistant[PERS_TEAM] == TEAM_SPECTATOR)) {
 		return;
@@ -692,9 +692,9 @@ void CG_DrawVelocitySnapping(void) {
 
 	// check whether snapSpeed needs to be updated
 	if (cg.snapSpeed != cg.snap->ps.speed * DF_TO_ET_GROUNDSPEED) {
-		cg.snapSpeed = cg.snap->ps.speed * DF_TO_ET_GROUNDSPEED;
+		cg.snapSpeed  = cg.snap->ps.speed * DF_TO_ET_GROUNDSPEED;
 		cg.snapSpeed /= 125;
-		cg.snapCount = 0;
+		cg.snapCount  = 0;
 
 		for (step = floor(cg.snapSpeed + 0.5) - 0.5; step > 0 && cg.snapCount < (int) (sizeof (cg.snapZones) - 2); step--) {
 			cg.snapZones[cg.snapCount] = RAD2DEG(acos(step / cg.snapSpeed));
@@ -712,7 +712,7 @@ void CG_DrawVelocitySnapping(void) {
 
 	snapHud_H = cg_velocitySnappingH.integer;
 	snapHud_Y = cg_velocitySnappingY.integer;
-	fov = cg_velocitySnappingFov.integer;
+	fov       = cg_velocitySnappingFov.integer;
 
 	if (cg_drawVelocitySnapping.integer == 2) {
 		for (int i = 0; i < 3; i++) {
@@ -796,7 +796,7 @@ void CG_DrawKeys(void) {
 
 	// second (middle) row
 	// left
-	x = KEYS_X + cg_keysXoffset.value + skew;
+	x  = KEYS_X + cg_keysXoffset.value + skew;
 	y += size;
 	if (cg.keyDown[3]) {
 		CG_DrawPic(x, y, size, size, cgs.media.keys[i].LeftPressedShader);
@@ -813,7 +813,7 @@ void CG_DrawKeys(void) {
 	}
 
 	// third (bottom) row
-	x = KEYS_X + cg_keysXoffset.value;
+	x  = KEYS_X + cg_keysXoffset.value;
 	y += size;
 	// prone (bottom left)
 	if (cg.keyDown[5]) {
@@ -865,7 +865,7 @@ void CG_UpdateKeysAndMenus(void) {
 		cg.consoleIsUp = qtrue;
 	} else if (cg.consoleIsUp && !(trap_Key_GetCatcher() & KEYCATCH_CONSOLE)) {
 		cg.lastClosedMenuTime = cg.time;
-		cg.consoleIsUp = qfalse;
+		cg.consoleIsUp        = qfalse;
 	}
 
 	// check whether any UI menu is up
@@ -873,7 +873,7 @@ void CG_UpdateKeysAndMenus(void) {
 		cg.UIisUp = qtrue;
 	} else if (cg.UIisUp && !(trap_Key_GetCatcher() & KEYCATCH_UI)) {
 		cg.lastClosedMenuTime = cg.time;
-		cg.UIisUp = qfalse;
+		cg.UIisUp             = qfalse;
 	}
 
 	// check whether limbo menu is up
@@ -881,7 +881,7 @@ void CG_UpdateKeysAndMenus(void) {
 		cg.limboIsUp = qtrue;
 	} else if (cg.limboIsUp && !(trap_Key_GetCatcher() & KEYCATCH_CGAME)) {
 		cg.lastClosedMenuTime = cg.time;
-		cg.limboIsUp = qfalse;
+		cg.limboIsUp          = qfalse;
 	}
 
 	// check whether any menu has closed within the last 50ms
@@ -898,7 +898,7 @@ void CG_UpdateKeysAndMenus(void) {
 				} else if (cg.time - cg.keyTimes[i] > DRAWKEYS_DEBOUNCE_VALUE) {
 					// require it to be unchanged for 100ms before we care
 					cg.keyTimes[i] = 0;
-					cg.keyDown[i] = downNow[i];
+					cg.keyDown[i]  = downNow[i];
 				}
 			} else if (cg.keyTimes[i] != 0) {
 				// so if it needs a new full 50ms
@@ -939,7 +939,7 @@ void CG_DrawBannerPrint(void) {
 	int   l      = 0;
 	int   y      = 20;
 	float *color;
-	float sizex     = 0.2f, sizey = 0.2f;
+	float sizex = 0.2f, sizey = 0.2f;
 	char  lastcolor = COLOR_WHITE;
 	int   charHeight;
 	int   bannerShowTime = 10000;
@@ -1026,13 +1026,13 @@ void CG_UpdateJumpSpeeds(void) {
 #define INFO_PANEL_X                        (UPPERRIGHT_X - INFO_PANEL_WIDTH + 3)
 #define INFO_PANEL_Y                        2
 void CG_DrawInfoPanel(void) {
-	int    x               = 0;
-	int    y               = 0;
-	int    starty          = 0;
-	vec4_t textColor       = { 1.0f, 1.0f, 1.0f, 1.0f };
-	float  textScale       = 0.12f;
-	int    speed           = 0;
-	int    i               = 0;
+	int    x         = 0;
+	int    y         = 0;
+	int    starty    = 0;
+	vec4_t textColor = { 1.0f, 1.0f, 1.0f, 1.0f };
+	float  textScale = 0.12f;
+	int    speed     = 0;
+	int    i         = 0;
 
 	if (!cg_drawInfoPanel.integer) {
 		return;
@@ -1052,7 +1052,7 @@ void CG_DrawInfoPanel(void) {
 
 	// Print start speed
 	CG_Text_Paint_Ext(x, y += 10, textScale, textScale, textColor, " Start speed:", 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
-	textScale = CG_AdjustFontSize(textScale, cg.timerunStartSpeed, INFO_PANEL_FONT_ADJUST_NEEDED);
+	textScale               = CG_AdjustFontSize(textScale, cg.timerunStartSpeed, INFO_PANEL_FONT_ADJUST_NEEDED);
 
 	// Colour start speed
 	if (cg_minStartSpeed.value <= 0 || cg.timerunStartSpeed == 0 || cg.timerunStartSpeed >= cg_minStartSpeed.value) {
@@ -1064,25 +1064,25 @@ void CG_DrawInfoPanel(void) {
 
 	// Print stop speed
 	CG_Text_Paint_Ext(x, y += 10, textScale, textScale, textColor, " Stop speed:", 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
-	textScale = CG_AdjustFontSize(textScale, cg.timerunStopSpeed, INFO_PANEL_FONT_ADJUST_NEEDED);
+	textScale               = CG_AdjustFontSize(textScale, cg.timerunStopSpeed, INFO_PANEL_FONT_ADJUST_NEEDED);
 	CG_Text_Paint_Ext(x + INFO_PANEL_X_PADDING, y, textScale, textScale, textColor, va("%d", cg.timerunStopSpeed), 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
 	textScale = 0.12f;
 
 	// Print run max speed
 	CG_Text_Paint_Ext(x, y += 10, textScale, textScale, textColor, " Run max speed:", 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
-	textScale = CG_AdjustFontSize(textScale, cg.runMaxSpeed, INFO_PANEL_FONT_ADJUST_NEEDED);
+	textScale               = CG_AdjustFontSize(textScale, cg.runMaxSpeed, INFO_PANEL_FONT_ADJUST_NEEDED);
 	CG_Text_Paint_Ext(x + INFO_PANEL_X_PADDING, y, textScale, textScale, textColor, va("%d", cg.runMaxSpeed), 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
 	textScale = 0.12f;
 
 	// Print overall max speed
 	CG_Text_Paint_Ext(x, y += 10, textScale, textScale, textColor, " Overall max speed:", 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
-	textScale = CG_AdjustFontSize(textScale, cg.overallMaxSpeed, INFO_PANEL_FONT_ADJUST_NEEDED);
+	textScale               = CG_AdjustFontSize(textScale, cg.overallMaxSpeed, INFO_PANEL_FONT_ADJUST_NEEDED);
 	CG_Text_Paint_Ext(x + INFO_PANEL_X_PADDING, y, textScale, textScale, textColor, va("%d", cg.overallMaxSpeed), 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
 	textScale = 0.12f;
 
 	// Print jumps count
 	CG_Text_Paint_Ext(x, y += 10, textScale, textScale, textColor, " Jumps:", 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
-	textScale = CG_AdjustFontSize(textScale, cg.timerunJumpCounter, INFO_PANEL_FONT_ADJUST_NEEDED);
+	textScale               = CG_AdjustFontSize(textScale, cg.timerunJumpCounter, INFO_PANEL_FONT_ADJUST_NEEDED);
 	CG_Text_Paint_Ext(x + INFO_PANEL_X_PADDING, y, textScale, textScale, textColor, va("%d", cg.timerunJumpCounter), 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
 
 	// Print jump speeds

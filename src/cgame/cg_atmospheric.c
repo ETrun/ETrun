@@ -118,7 +118,7 @@ typedef struct cg_atmosphericEffect_s {
 
 	qboolean (*ParticleCheckVisible)(cg_atmosphericParticle_t *particle);
 	qboolean (*ParticleGenerate)(cg_atmosphericParticle_t *particle, vec3_t currvec, float currweight);
-	void (*ParticleRender)(cg_atmosphericParticle_t * particle);
+	void (*ParticleRender)(cg_atmosphericParticle_t *particle);
 
 	int dropsActive, oldDropsActive;
 	int dropsRendered, dropsCreated, dropsSkipped;

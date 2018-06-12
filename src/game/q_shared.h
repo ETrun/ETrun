@@ -478,7 +478,7 @@ float Com_Clamp(float min, float max, float value);
 
 char *COM_SkipPath(char *pathname);
 void    COM_StripExtension(const char *in, char *out);
-void    COM_StripFilename(char *in, char *out);
+void COM_StripFilename(char *in, char *out);
 void    COM_BeginParseSession(const char *name);
 void    COM_RestoreParseSession(char **data_p);
 int     COM_GetCurrentParseLine(void);

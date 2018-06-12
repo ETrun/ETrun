@@ -1256,7 +1256,7 @@ void ClientBegin(int clientNum) {
 	ent = g_entities + clientNum;
 
 	client = level.clients + clientNum;
-	
+
 	// suburb, flood protection fix
 	if (ent->isBeingDropped) {
 		return;

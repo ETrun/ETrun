@@ -67,7 +67,7 @@ If you have questions concerning this license or the applicable additional terms
 // Nico, spectator speed
 #define SPECTATOR_SPEED     1000
 
-// suburb, prevent pronebug & wallbug 
+// suburb, prevent pronebug & wallbug
 #define MAX_BUGGING_SPEED         400
 #define BUGGING_CHECK_FREQUENCY   500
 
@@ -413,7 +413,7 @@ typedef struct {
 
 	// callbacks to test the world
 	// these will be different functions during game and cgame
-	void (*trace)(trace_t * results, const vec3_t start, const vec3_t mins, const vec3_t maxs, const vec3_t end, int passEntityNum, int contentMask);
+	void (*trace)(trace_t *results, const vec3_t start, const vec3_t mins, const vec3_t maxs, const vec3_t end, int passEntityNum, int contentMask);
 	int (*pointcontents)(const vec3_t point, int passEntityNum);
 
 	// Nico, game physics
@@ -431,7 +431,7 @@ typedef struct {
 } pmove_t;
 
 // if a full pmove isn't done on the client, you can just update the angles
-void PM_UpdateViewAngles(playerState_t *ps, pmoveExt_t *pmext, usercmd_t *cmd, void (trace) (trace_t *results, const vec3_t start, const vec3_t mins, const vec3_t maxs, const vec3_t end, int passEntityNum, int contentMask), int tracemask);
+void PM_UpdateViewAngles(playerState_t * ps, pmoveExt_t *pmext, usercmd_t *cmd, void(trace) (trace_t *results, const vec3_t start, const vec3_t mins, const vec3_t maxs, const vec3_t end, int passEntityNum, int contentMask), int tracemask);
 int Pmove(pmove_t *pmove);
 
 //===================================================================================
@@ -2032,7 +2032,7 @@ extern weapon_t bg_heavyWeapons[NUM_HEAVY_WEAPONS];
 int PM_AltSwitchFromForWeapon(int weapon);
 int PM_AltSwitchToForWeapon(int weapon);
 
-void PM_TraceLegs(trace_t *trace, float *legsOffset, vec3_t start, vec3_t end, trace_t *bodytrace, vec3_t viewangles, void(tracefunc) (trace_t *results, const vec3_t start, const vec3_t mins, const vec3_t maxs, const vec3_t end, int passEntityNum, int contentMask), int ignoreent, int tracemask);
+void PM_TraceLegs(trace_t * trace, float *legsOffset, vec3_t start, vec3_t end, trace_t *bodytrace, vec3_t viewangles, void(tracefunc) (trace_t *results, const vec3_t start, const vec3_t mins, const vec3_t maxs, const vec3_t end, int passEntityNum, int contentMask), int ignoreent, int tracemask);
 void PM_TraceAllLegs(trace_t *trace, float *legsOffset, vec3_t start, vec3_t end);
 void PM_TraceAll(trace_t *trace, vec3_t start, vec3_t end);
 

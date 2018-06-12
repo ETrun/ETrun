@@ -672,32 +672,32 @@ void Item_UpdatePosition(itemDef_t *item) {
 
 // menus
 void Menu_UpdatePosition(menuDef_t *menu) {
-	int   i;
-	float x, y;
-	float xoffset = UI_WideXoffset();
+	int        i;
+	float      x, y;
+	float      xoffset = UI_WideXoffset();
 	rectDef_t  *r;
-	qboolean fullscreenItem = qfalse;
-	qboolean fullscreenMenu = qfalse;
-	qboolean centered = qfalse;
-	const char *menuName = NULL;
-	const char *itemName = NULL;
+	qboolean   fullscreenItem = qfalse;
+	qboolean   fullscreenMenu = qfalse;
+	qboolean   centered       = qfalse;
+	const char *menuName      = NULL;
+	const char *itemName      = NULL;
 
 	if (menu == NULL) {
 		return;
 	}
 
-	r = &menu->window.rect;
+	r              = &menu->window.rect;
 	fullscreenMenu = (r->x == 0 && r->y == 0 && r->w == SCREEN_WIDTH && r->h == SCREEN_HEIGHT) ? qtrue : qfalse;
-	centered = (r->x == 16 && r->w == 608) ? qtrue : qfalse;
-	menuName = menu->window.name;
+	centered       = (r->x == 16 && r->w == 608) ? qtrue : qfalse;
+	menuName       = menu->window.name;
 
 	x = r->x;
 	y = r->y;
 
 	for (i = 0; i < menu->itemCount; i++) {
 
-		itemName = menu->items[i]->window.name;
-		r = &menu->items[i]->window.rectClient;
+		itemName       = menu->items[i]->window.name;
+		r              = &menu->items[i]->window.rectClient;
 		fullscreenItem = (x == 0 && y == 0 && r->w == SCREEN_WIDTH && r->h == SCREEN_HEIGHT) ? qtrue : qfalse;
 
 		if (!Q_stricmp(itemName, "clouds")) {
@@ -707,9 +707,9 @@ void Menu_UpdatePosition(menuDef_t *menu) {
 		}
 
 		// etlegacy menu alignment
-		if ((fullscreenMenu && !fullscreenItem) || !Q_stricmp(menuName, "main") || !Q_stricmp(menuName, "ingame_main") || centered)	{
+		if ((fullscreenMenu && !fullscreenItem) || !Q_stricmp(menuName, "main") || !Q_stricmp(menuName, "ingame_main") || centered) {
 			if (!Q_stricmp(itemName, "atvi_logo") ||
-				!Q_stricmp(itemName, "id_logo")) {
+			    !Q_stricmp(itemName, "id_logo")) {
 				// align to right of screen
 				Item_SetScreenCoords(menu->items[i], x + 2 * xoffset, y);
 			} else if (!Q_stricmp(itemName, "et_logo")) {
@@ -784,9 +784,9 @@ qboolean Rect_ContainsPoint(rectDef_t *rect, float x, float y) {
 		x = UI_WideX(x);
 
 		if (x > UI_WideX(rect->x) &&
-			x < UI_WideX(rect->x + rect->w) &&
-			y > rect->y &&
-			y < rect->y + rect->h) {
+		    x < UI_WideX(rect->x + rect->w) &&
+		    y > rect->y &&
+		    y < rect->y + rect->h) {
 			return qtrue;
 		}
 	}
@@ -7186,7 +7186,7 @@ void BG_PanelButtonsSetupWide(panel_button_t **buttons, float xoffset) {
 	}
 
 	for (; *buttons; buttons++) {
-		button = (*buttons);
+		button          = (*buttons);
 		button->rect.x += xoffset;
 	}
 }
