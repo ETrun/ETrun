@@ -1399,7 +1399,7 @@ static void CG_DrawSpectatorMessage(void) {
 		return;
 	}
 
-	// suburb, don't draw any menu is up because of readability
+	// suburb, don't draw if any menu is up because of readability
 	if (cg.UIisUp) {
 		return;
 	}
