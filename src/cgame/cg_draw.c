@@ -1430,7 +1430,7 @@ CG_DrawFollow
 static void CG_DrawFollow(void) {
 	float scale = 0.18f;
 
-	// suburb, don't draw any menu is up because of readability
+	// suburb, don't draw if any menu is up because of readability
 	if (!(cg.snap->ps.pm_flags & PMF_FOLLOW) || cg.UIisUp) {
 		return;
 	}
