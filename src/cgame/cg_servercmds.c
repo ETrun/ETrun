@@ -1621,6 +1621,11 @@ static void CG_ServerCommand(void) {
 	// Nico, timer start/stop/check related
 
 	if (!Q_stricmp(cmd, "timerun_start")) {
+		// suburb, kill if min start speed not reached
+		if (atoi(CG_Argv(3)) < cg_minStartSpeed.integer) {
+			trap_SendConsoleCommand("kill\n");
+			CG_CenterPrint(va("^1%i ^7/ ^2%i", atoi(CG_Argv(3)), cg_minStartSpeed.integer), 400, SMALLCHAR_WIDTH);
+		}
 		cg.timerunActive            = 1;
 		cg.timerunCheckPointChecked = 0;
 		cg.currentTimerun           = atoi(CG_Argv(1)); // Timerun num
