@@ -743,7 +743,6 @@ void CG_DrawVelocitySnapping(void) {
 #define DRAWKEYS_DEBOUNCE_VALUE        100
 #define DRAWKEYS_MENU_CLOSING_DELAY    50
 void CG_DrawKeys(void) {
-	playerState_t *ps;
 	float         x, y, size;
 	int           i;
 	int           skew;
@@ -758,8 +757,6 @@ void CG_DrawKeys(void) {
 	} else {
 		skew = 0;
 	}
-
-	ps = &cg.predictedPlayerState;
 
 	trap_R_SetColor(colorWhite);
 
