@@ -1,7 +1,7 @@
 ETrun Contributors
 ============================================
 
-* **[Nico Boutet](https://github.com/boutetnico)**
+* **[boutetnico](https://github.com/boutetnico)**
 
   * ETrun author and main developer
 
