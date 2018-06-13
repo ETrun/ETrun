@@ -1229,7 +1229,7 @@ static void CG_BannerPrint(const char *str) {
 	}
 	buff[len] = 0;
 
-	CG_Printf("^9banner: ^7%s\n", buff);
+	CG_Printf("^9Banner: ^7%s\n", buff);
 
 	cg.bannerPrintTime = cg.time;
 }

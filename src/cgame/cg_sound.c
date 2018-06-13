@@ -483,7 +483,7 @@ void CG_SoundInit(void) {
 	} else {
 		CG_Printf("Initializing Sound Scripts...\n");
 		CG_SoundLoadSoundFiles();
-		CG_Printf("done.\n");
+		CG_Printf("Done.\n");
 	}
 }
 

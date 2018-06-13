@@ -1439,7 +1439,7 @@ void saveDemo(gentity_t *ent) {
 	trap_SendServerCommand(ent - g_entities, va("runSave %s[%s]_%02d-%02d-%03d", cleanRunName, physicsName, min, sec, milli));
 
 	// Start recording a new temp demo.
-	trap_SendServerCommand(ent - g_entities, "tempDemoStart 1");
+	trap_SendServerCommand(ent - g_entities, "tempDemoStart");
 }
 
 /* QUAKED target_stopTimer (1 0 0) (-8 -8 -8) (8 8 8)
