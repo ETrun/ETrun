@@ -1016,7 +1016,6 @@ void my_sleep(unsigned milliseconds) {
 	Sleep(milliseconds);
 }
 #else
-# define _BSD_SOURCE
 # include <unistd.h>
 void my_sleep(unsigned milliseconds) {
 	usleep(milliseconds * 1000);
