@@ -43,12 +43,10 @@ static void WM_ETrun_newlines(int n, int *y, int newlineSize) {
  * @author Nico
  */
 static void WM_ETrun_print(const char *s, fontInfo_t *font, float scale, int x, int y, qboolean shadowed, int maxlen) {
-	vec4_t clrUiWhite = { 1.0f, 1.0f, 1.0f, 0.8f };
-
 	if (shadowed == qtrue) {
-		CG_Text_Paint_Ext(x, y, scale, scale, clrUiWhite, s, 0, maxlen, ITEM_TEXTSTYLE_SHADOWED, font);
+		CG_Text_Paint_Ext(x, y, scale, scale, colorWhite, s, 0, maxlen, ITEM_TEXTSTYLE_SHADOWED, font);
 	} else {
-		CG_Text_Paint_Ext(x, y, scale, scale, clrUiWhite, s, 0, maxlen, 0, font);
+		CG_Text_Paint_Ext(x, y, scale, scale, colorWhite, s, 0, maxlen, 0, font);
 	}
 }
 
