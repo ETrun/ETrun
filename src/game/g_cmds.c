@@ -524,9 +524,6 @@ qboolean SetTeam(gentity_t *ent, char *s, weapon_t w1, weapon_t w2, qboolean set
 		}
 	}
 
-	// suburb, start autodemo
-	trap_SendServerCommand(ent - g_entities, "tempDemoStart");
-
 	return qtrue;
 }
 
@@ -895,9 +892,6 @@ void Cmd_FollowCycle_f(gentity_t *ent, int dir) {
 
 		// Nico, send an event to the client
 		trap_SendServerCommand(ent - g_entities, "followedClientUpdate");
-
-		// suburb, start autodemo
-		trap_SendServerCommand(ent - g_entities, "tempDemoStart");
 
 		return;
 	} while (clientnum != original);
