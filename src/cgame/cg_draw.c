@@ -1471,46 +1471,6 @@ static void CG_DrawFlashFade(void) {
 }
 
 /*
-==============
-CG_DrawFlashZoomTransition
-    hide the snap transition from regular view to/from zoomed
-
-  FIXME: TODO: use cg_fade?
-==============
-*/
-static void CG_DrawFlashZoomTransition(void) {
-	float frac;
-	int   fadeTime;
-
-	if (!cg.snap) {
-		return;
-	}
-
-	if (BG_PlayerMounted(cg.snap->ps.eFlags)) {
-		// don't draw when on mg_42
-		// keep the timer fresh so when you remove yourself from the mg42, it'll fade
-		cg.zoomTime = cg.time;
-		return;
-	}
-
-	if (cg.renderingThirdPerson) {
-		return;
-	}
-
-	fadeTime = 400;
-
-	frac = cg.time - cg.zoomTime;
-
-	if (frac < fadeTime) {
-		vec4_t color;
-
-		frac = frac / (float)fadeTime;
-		Vector4Set(color, 0, 0, 0, 1.0f - frac);
-		CG_FillRect(-10, -10, CG_WideX(SCREEN_WIDTH) + 10, SCREEN_HEIGHT + 10, color);
-	}
-}
-
-/*
 =================
 CG_DrawFlashFire
 =================
@@ -1563,17 +1523,6 @@ static void CG_DrawFlashFire(void) {
 	} else {
 		cg.v_noFireTime = cg.time;
 	}
-}
-
-/*
-==============
-CG_DrawFlashBlendBehindHUD
-    screen flash stuff drawn first (on top of world, behind HUD)
-==============
-*/
-static void CG_DrawFlashBlendBehindHUD(void) {
-	CG_DrawFlashZoomTransition();
-	CG_DrawFlashFade();
 }
 
 /*
@@ -2095,7 +2044,7 @@ static void CG_Draw2D(void) {
 	}
 
 	if (!cg.cameraMode) {
-		CG_DrawFlashBlendBehindHUD();
+		CG_DrawFlashFade();
 
 		if (cg.snap->ps.persistant[PERS_TEAM] == TEAM_SPECTATOR) {
 
