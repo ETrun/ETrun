@@ -905,7 +905,7 @@ G_Say
 ==================
 */
 #define MAX_SAY_TEXT    150
-void G_SayTo(gentity_t *ent, gentity_t *other, int mode, int color, const char *name, const char *message, qboolean localize, qboolean encoded) {
+void G_SayTo(gentity_t *ent, gentity_t *other, int mode, int color, const char *name, const char *message, qboolean encoded) {
 	char *cmd = NULL;
 
 	if (!other || !other->inuse || !other->client) {
@@ -984,7 +984,7 @@ void G_Say(gentity_t *ent, gentity_t *target, int mode, qboolean encoded, const 
 
 	if (target) {
 		if (!COM_BitCheck(target->client->sess.ignoreClients, ent - g_entities)) {
-			G_SayTo(ent, target, mode, color, name, text, qfalse, encoded);
+			G_SayTo(ent, target, mode, color, name, text, encoded);
 		}
 		return;
 	}
@@ -999,7 +999,7 @@ void G_Say(gentity_t *ent, gentity_t *target, int mode, qboolean encoded, const 
 		gentity_t *other = &g_entities[level.sortedClients[j]];
 
 		if (!COM_BitCheck(other->client->sess.ignoreClients, ent - g_entities)) {
-			G_SayTo(ent, other, mode, color, name, text, qfalse, encoded);
+			G_SayTo(ent, other, mode, color, name, text, encoded);
 		}
 	}
 }
