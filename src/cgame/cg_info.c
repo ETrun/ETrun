@@ -54,6 +54,7 @@ Draw all the status / pacifier stuff during level loading
 */
 void CG_DrawInformation(qboolean forcerefresh) {
 	static int lastcalled = 0;
+	vec4_t backgroundColor = { 0.16f, 0.2f, 0.17f, 1.0f };
 
 	if (lastcalled && (trap_Milliseconds() - lastcalled < 500)) {
 		return;
@@ -69,14 +70,9 @@ void CG_DrawInformation(qboolean forcerefresh) {
 	// and we do not want a flickering screen on widescreens
 	// debriefing screen: no need to erase the screen
 	if (!cgs.dbShowing) {
-		if (!cgs.media.backTileShader) {
-			cgs.media.backTileShader = trap_R_RegisterShaderNoMip("gfx/2d/backtile");
-		}
-		if (cgs.glconfig.windowAspect != RATIO43) {
-			float xoffset = CG_WideXoffset() * cgs.screenXScale;
-
-			trap_R_DrawStretchPic(0, 0, xoffset, cgs.glconfig.vidHeight, 0, 0, 1, 1, cgs.media.backTileShader);                                     // left side
-			trap_R_DrawStretchPic(cgs.glconfig.vidWidth - xoffset, 0, xoffset, cgs.glconfig.vidHeight, 0, 0, 1, 1, cgs.media.backTileShader);       // right side
+		if (!CG_Is43Screen()) {
+			// connect screen doesn't fill the whole screen, draw additional background
+			CG_FillRect(0, 0, CG_WideX(SCREEN_WIDTH), SCREEN_HEIGHT, backgroundColor);
 		}
 	}
 

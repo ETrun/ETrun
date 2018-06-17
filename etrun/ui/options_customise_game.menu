@@ -5,7 +5,7 @@
 #define WINDOW_X		16
 #define WINDOW_Y		16
 #define WINDOW_WIDTH	400
-#define WINDOW_HEIGHT	450
+#define WINDOW_HEIGHT	438
 #define GROUP_NAME		"grpOptionsCustomiseGame"
 
 // Macros //

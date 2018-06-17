@@ -335,7 +335,7 @@ static void CG_InterpolatePlayerState(qboolean grabAngles) {
 =========================
 CG_DrawTriggers
 
-@author suburb, modified CG_TouchTriggerPrediction function to draw triggers
+@author suburb, modified CG_TouchTriggerPrediction() function to draw triggers
 =========================
 */
 static void CG_DrawTriggers(void) {
@@ -366,18 +366,13 @@ static void CG_DrawTriggers(void) {
 			continue;
 		}
 
-		if (ent->eType == ET_CONSTRUCTIBLE ||
-		    ent->eType == ET_OID_TRIGGER ||
-		    ent->eType == ET_TRIGGER_MULTIPLE ||
-		    ent->eType == ET_TRIGGER_FLAGONLY ||
-		    ent->eType == ET_TRIGGER_FLAGONLY_MULTIPLE ||
-		    (ent->eType == ET_PUSH_TRIGGER &&
-		     cg_drawTriggers.integer >= 2) ||
-		    (ent->eType == ET_TELEPORT_TRIGGER &&
-		     cg_drawTriggers.integer >= 3) ||
-		    cg_drawTriggers.integer >= 4
-		    ) {
-			vec3_t mins, maxs, pmins, pmaxs;
+		if (ent->eType == ET_CONSTRUCTIBLE || ent->eType == ET_OID_TRIGGER ||
+		    ent->eType == ET_TRIGGER_MULTIPLE || ent->eType == ET_TRIGGER_FLAGONLY ||
+		    ent->eType == ET_TRIGGER_FLAGONLY_MULTIPLE || (ent->eType == ET_PUSH_TRIGGER &&
+		    cg_drawTriggers.integer >= 2) || (ent->eType == ET_TELEPORT_TRIGGER &&
+		    cg_drawTriggers.integer >= 3) || cg_drawTriggers.integer >= 4) {
+
+			vec3_t mins, maxs;
 
 			if (ent->eType == ET_CONSTRUCTIBLE && ent->aiState) {
 				continue;
@@ -390,9 +385,6 @@ static void CG_DrawTriggers(void) {
 
 			VectorSet(mins, mins[0] - cg_triggerOffset.value, mins[1] - cg_triggerOffset.value, mins[2] - cg_triggerOffset.value);
 			VectorSet(maxs, maxs[0] + cg_triggerOffset.value, maxs[1] + cg_triggerOffset.value, maxs[2] + cg_triggerOffset.value);
-
-			VectorAdd(cg.predictedPlayerState.origin, cg_pmove.mins, pmins);
-			VectorAdd(cg.predictedPlayerState.origin, cg_pmove.maxs, pmaxs);
 
 			CG_RailTrail(mins, maxs, 1);
 		}
