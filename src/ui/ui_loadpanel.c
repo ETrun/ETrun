@@ -123,14 +123,13 @@ CG_DrawConnectScreen
 static qboolean connect_ownerdraw;
 void UI_DrawLoadPanel(qboolean ownerdraw, qboolean uihack) {
 	static qboolean inside = qfalse;
+	vec4_t backgroundColor = { 0.16f, 0.2f, 0.17f, 1.0f };
 
 	// suburb, widescreen support
 	// to avoid a flickering screen on widescreens, we erase it before drawing onto it
-	if (((float)(uiInfo.uiDC.glconfig.vidWidth) / (float)(uiInfo.uiDC.glconfig.vidHeight)) != RATIO43) {
-		float xoffset = UI_WideXoffset() * uiInfo.uiDC.xscale;
-
-		trap_R_DrawStretchPic(0, 0, xoffset, uiInfo.uiDC.glconfig.vidHeight, 0, 0, 1, 1, uiInfo.uiDC.registerShaderNoMip("gfx/2d/backtile"));
-		trap_R_DrawStretchPic(uiInfo.uiDC.glconfig.vidWidth - xoffset, 0, xoffset, uiInfo.uiDC.glconfig.vidHeight, 0, 0, 1, 1, uiInfo.uiDC.registerShaderNoMip("gfx/2d/backtile"));
+	if (!UI_Is43Screen()) {
+		// connect screen doesn't fill the whole screen, draw additional background
+		UI_FillRect(0, 0, UI_WideX(SCREEN_WIDTH), SCREEN_HEIGHT, backgroundColor);
 	}
 
 	if (inside) {
