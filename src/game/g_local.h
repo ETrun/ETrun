@@ -1142,6 +1142,7 @@ void G_SetEntState(gentity_t *ent, entState_t state);
 
 team_t G_GetTeamFromEntity(gentity_t *ent);
 void my_sleep(unsigned milliseconds);
+char *G_GetClock(void);
 
 //
 // g_combat.c

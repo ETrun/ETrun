@@ -259,6 +259,8 @@ extern vec3_t bytedirs[NUMVERTEXNORMALS];
 // and will be automatically scaled to the real resolution
 #define SCREEN_WIDTH        640
 #define SCREEN_HEIGHT       480
+#define SCREEN_CENTER_X     ((CG_WideX(SCREEN_WIDTH) / 2) - 1)
+#define SCREEN_CENTER_Y     ((SCREEN_HEIGHT / 2) - 1)
 
 #define TINYCHAR_WIDTH      6
 #define TINYCHAR_HEIGHT     12
@@ -1351,4 +1353,8 @@ typedef enum {
 // Nico, IP max length
 #define IP_MAX_LENGTH               46
 
+// suburb, groundspeeds
+#define ET_GROUNDSPEED              352.0f  // note: while sprinting
+#define DF_GROUNDSPEED              320.0f
+#define DF_TO_ET_GROUNDSPEED        ( ET_GROUNDSPEED / DF_GROUNDSPEED )
 #endif  // __Q_SHARED_H

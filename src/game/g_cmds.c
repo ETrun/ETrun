@@ -905,7 +905,6 @@ G_Say
 ==================
 */
 #define MAX_SAY_TEXT    150
-
 void G_SayTo(gentity_t *ent, gentity_t *other, int mode, int color, const char *name, const char *message, qboolean localize, qboolean encoded) {
 	char *cmd = NULL;
 
@@ -940,23 +939,21 @@ void G_SayTo(gentity_t *ent, gentity_t *other, int mode, int color, const char *
 	} else {
 		cmd = mode == SAY_TEAM || mode == SAY_BUDDY ? "tchat" : "chat";
 	}
-	trap_SendServerCommand(other - g_entities, va("%s \"%s%c%c%s\" %d %i", cmd, name, Q_COLOR_ESCAPE, color, message, (int)(ent - g_entities), localize));
+	trap_SendServerCommand(other - g_entities, va("%s \"%s%c%c%s\" %d %s", cmd, name, Q_COLOR_ESCAPE, color, message, (int)(ent - g_entities), G_GetClock()));
 }
 
+/*
+=================
+G_Say
+=================
+*/
 void G_Say(gentity_t *ent, gentity_t *target, int mode, qboolean encoded, const char *chatText) {
 	int  j;
 	int  color;
 	char name[64];
 	// don't let text be too long for malicious reasons
 	char text[MAX_SAY_TEXT];
-	// suburb, add timestamps
-	char    displayTime[18] = { 0 };
-	qtime_t tm;
-
-	trap_RealTime(&tm);
-	displayTime[0] = '\0';
-	Q_strcat(displayTime, sizeof (displayTime), va("[%d:%02d:%02d] ", tm.tm_hour, tm.tm_min, tm.tm_sec));
-
+	
 	switch (mode) {
 	default:
 	case SAY_ALL:
@@ -982,7 +979,7 @@ void G_Say(gentity_t *ent, gentity_t *target, int mode, qboolean encoded, const 
 		break;
 	}
 
-	Com_sprintf(name, sizeof (name), "^g%s^7%s%c%c: ", displayTime, ent->client->pers.netname, Q_COLOR_ESCAPE, COLOR_WHITE);
+	Com_sprintf(name, sizeof (name), "%s%c%c: ", ent->client->pers.netname, Q_COLOR_ESCAPE, COLOR_WHITE);
 	Q_strncpyz(text, chatText, sizeof (text));
 
 	if (target) {
@@ -1062,11 +1059,7 @@ void G_VoiceTo(gentity_t *ent, gentity_t *other, int mode, const char *id, qbool
 		cmd   = "vchat";
 	}
 
-	if (mode == SAY_TEAM || mode == SAY_BUDDY) {
-		CPx(other - g_entities, va("%s %d %d %d %s %i %i %i", cmd, voiceonly, (int)(ent - g_entities), color, id, (int)ent->s.pos.trBase[0], (int)ent->s.pos.trBase[1], (int)ent->s.pos.trBase[2]));
-	} else {
-		CPx(other - g_entities, va("%s %d %d %d %s", cmd, voiceonly, (int)(ent - g_entities), color, id));
-	}
+	trap_SendServerCommand(other - g_entities, va("%s %d %d %d %s %s", cmd, voiceonly, (int)(ent - g_entities), color, id, G_GetClock()));
 }
 
 void G_Voice(gentity_t *ent, gentity_t *target, int mode, const char *id, qboolean voiceonly) {
@@ -2264,7 +2257,7 @@ void ClientCommand(int clientNum) {
 
 		// Nico, flood protection
 		if (ClientIsFlooding(ent)) {
-			CP("print \"^1Spam Protection: ^7dropping say\n\"");
+			CP("print \"^1Spam Protection: ^7Dropping say.\n\"");
 			return;
 		}
 
@@ -2277,7 +2270,7 @@ void ClientCommand(int clientNum) {
 	if (!Q_stricmp(cmd, "say_team") || (enc = !Q_stricmp(cmd, "enc_say_team")) != 0) {
 		// Nico, flood protection
 		if (ClientIsFlooding(ent)) {
-			CP("print \"^1Spam Protection: ^7dropping say_team\n\"");
+			CP("print \"^1Spam Protection: ^7Dropping say_team.\n\"");
 			return;
 		}
 
@@ -2289,7 +2282,7 @@ void ClientCommand(int clientNum) {
 
 		// Nico, flood protection
 		if (ClientIsFlooding(ent)) {
-			CP("print \"^1Spam Protection: ^7dropping vsay\n\"");
+			CP("print \"^1Spam Protection: ^7Dropping vsay.\n\"");
 			return;
 		}
 
@@ -2300,7 +2293,7 @@ void ClientCommand(int clientNum) {
 	} else if (!Q_stricmp(cmd, "vsay_team")) {
 		// Nico, flood protection
 		if (ClientIsFlooding(ent)) {
-			CP("print \"^1Spam Protection: ^7dropping vsay_team\n\"");
+			CP("print \"^1Spam Protection: ^7Dropping vsay_team.\n\"");
 			return;
 		}
 
@@ -2312,7 +2305,7 @@ void ClientCommand(int clientNum) {
 
 		// Nico, flood protection
 		if (ClientIsFlooding(ent)) {
-			CP("print \"^1Spam Protection: ^7dropping say_buddy\n\"");
+			CP("print \"^1Spam Protection: ^7Dropping say_buddy.\n\"");
 			return;
 		}
 
@@ -2324,7 +2317,7 @@ void ClientCommand(int clientNum) {
 
 		// Nico, flood protection
 		if (ClientIsFlooding(ent)) {
-			CP("print \"^1Spam Protection: ^7dropping vsay_buddy\n\"");
+			CP("print \"^1Spam Protection: ^7Dropping vsay_buddy.\n\"");
 			return;
 		}
 
@@ -2345,7 +2338,7 @@ void ClientCommand(int clientNum) {
 	for (i = 0 ; i < (int)(sizeof (floodProtectedCommands) / sizeof (floodProtectedCommands[0])) ; ++i) {
 		if (!Q_stricmp(cmd, floodProtectedCommands[i].cmd)) {
 			if (floodProtectedCommands[i].isProtected && ClientIsFlooding(ent)) {
-				CP(va("print \"^1Spam Protection: ^7dropping %s\n\"", cmd));
+				CP(va("print \"^1Spam Protection: ^7Dropping %s.\n\"", cmd));
 			} else {
 				floodProtectedCommands[i].function(ent);
 			}
@@ -2460,7 +2453,7 @@ void Cmd_SpecInvite_f(gentity_t *ent, unsigned int dwCommand, qboolean invite) {
 	(void)dwCommand;
 
 	if (ClientIsFlooding(ent)) {
-		CP("print \"^1Spam Protection:^7 Specinvite ignored\n\"");
+		CP("print \"^1Spam Protection:^7 Specinvite ignored.\n\"");
 		return;
 	}
 
@@ -2474,7 +2467,7 @@ void Cmd_SpecInvite_f(gentity_t *ent, unsigned int dwCommand, qboolean invite) {
 
 	// can't invite self
 	if (other == ent) {
-		CP(va("print \"You can not spec%sinvite yourself!\n\"", invite ? "" : "un"));
+		CP(va("print \"You can not spec%sinvite yourself.\n\"", invite ? "" : "un"));
 		return;
 	}
 
@@ -2500,7 +2493,7 @@ void Cmd_SpecInvite_f(gentity_t *ent, unsigned int dwCommand, qboolean invite) {
 			StopFollowing(other);
 		}
 
-		CP(va("print \"%s^7 was removed from invited spectators.\n\"", other->client->pers.netname));
+		CP(va("print \"%s^7 has been removed from invited spectators.\n\"", other->client->pers.netname));
 		CPx(other - g_entities, va("cpm \"You have been uninvited to spectate %s^7.\n\"", ent->client->pers.netname));
 	}
 }
