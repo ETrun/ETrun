@@ -1385,7 +1385,7 @@ CG_DrawSpectatorMessage
 =================
 */
 #define INFOTEXT_STARTX 8
-#define INFOTEXT_STARTY 100
+#define INFOTEXT_STARTY 80
 static void CG_DrawSpectatorMessage(void) {
 	const char *str2;
 	static int lastconfigGet = 0;
@@ -1399,7 +1399,7 @@ static void CG_DrawSpectatorMessage(void) {
 		return;
 	}
 
-	// suburb, don't draw if esc menu is up because of readability
+	// suburb, don't draw if any menu is up because of readability
 	if (cg.UIisUp) {
 		return;
 	}
@@ -1427,16 +1427,15 @@ static void CG_DrawSpectatorMessage(void) {
 CG_DrawFollow
 =================
 */
-static qboolean CG_DrawFollow(void) {
+static void CG_DrawFollow(void) {
 	float scale = 0.18f;
 
-	if (!(cg.snap->ps.pm_flags & PMF_FOLLOW)) {
-		return qfalse;
+	// suburb, don't draw if any menu is up because of readability
+	if (!(cg.snap->ps.pm_flags & PMF_FOLLOW) || cg.UIisUp) {
+		return;
 	}
 
 	CG_Text_Paint_Ext(INFOTEXT_STARTX, INFOTEXT_STARTY, scale, scale, colorWhite, va("^Z>> ^w%s", cgs.clientinfo[cg.snap->ps.clientNum].name), 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
-
-	return qtrue;
 }
 //==================================================================================
 
@@ -2265,7 +2264,7 @@ static void CG_Autodemo() {
 
 	if (cg.runsave) {
 		if (!cg.rs_keep) {
-			CG_AddPMItem(PM_MESSAGE, va("%s^w: stopping and saving demo...\n", GAME_VERSION_COLORED), cgs.media.voiceChatShader);
+			CG_AddPMItem(PM_MESSAGE, va("%s^w: Stopping and saving demo...\n", GAME_VERSION_COLORED), cgs.media.voiceChatShader);
 			cg.rs_time = cg.time;
 			cg.rs_keep = 1;
 		}
@@ -2287,7 +2286,7 @@ static void CG_Autodemo() {
 			name = va("demos/%s_%s.dm_84", cgs.rawmapname, cg.runsavename);
 
 			if (trap_FS_FOpenFile(name, &demo, FS_WRITE) < 0) {
-				CG_Printf("^1Error^3: unable to save demo:^7 %s\n", name);
+				CG_Printf("^1Error^3: Unable to save demo:^7 %s\n", name);
 				trap_FS_FCloseFile(temp);
 				return;
 			}
@@ -2303,7 +2302,7 @@ static void CG_Autodemo() {
 			trap_FS_FCloseFile(demo);
 
 			CG_Printf("^3Demo saved as:^7 %s\n", name);
-			CG_AddPMItem(PM_MESSAGE, va("%s^w: demo saved!\n", GAME_VERSION_COLORED), cgs.media.voiceChatShader);
+			CG_AddPMItem(PM_MESSAGE, va("%s^w: Demo saved!\n", GAME_VERSION_COLORED), cgs.media.voiceChatShader);
 
 			cg.runsave = cg.rs_keep = 0;
 		}
