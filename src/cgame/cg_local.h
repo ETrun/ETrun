@@ -2019,6 +2019,7 @@ void CG_DrawKeys(void);
 void CG_DrawScoresClock(float x, float y, float scale);
 void CG_DrawBannerPrint(void);
 void CG_DrawInfoPanel(void);
+void CG_DrawSpectatorState(void);
 void CG_UpdateJumpSpeeds(void);
 void CG_UpdateKeysAndMenus(void);
 

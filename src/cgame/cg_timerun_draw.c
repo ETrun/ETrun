@@ -1100,3 +1100,35 @@ void CG_DrawInfoPanel(void) {
 		}
 	}
 }
+
+/*
+=================
+CG_DrawSpectatorState
+
+Draws text on hud if noclipping / in free spectator
+
+@author suburb
+=================
+*/
+void CG_DrawSpectatorState(void) {
+	char  *text = NULL;
+	float textScale;
+	int   x, y, w;
+
+	if (cg.predictedPlayerState.pm_type == PM_NOCLIP) {
+		text = "NOCLIP";
+	} else if (cg.snap->ps.persistant[PERS_TEAM] == TEAM_SPECTATOR) {
+		text = "SPECTATOR";
+	} else {
+		return;
+	}
+
+	textScale = 0.3f;
+
+	x = CG_WideX(SCREEN_WIDTH) / 2;
+	y = SCREEN_HEIGHT / 6;
+
+	w = CG_Text_Width_Ext(text, textScale, textScale, &cgs.media.limboFont1) / 2;
+
+	CG_Text_Paint_Ext(x - w, y, textScale, textScale, colorWhite, text, 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
+}
