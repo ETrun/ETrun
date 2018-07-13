@@ -252,7 +252,7 @@ Spectators will only interact with teleporters.
 ============
 */
 void G_TouchTriggers(gentity_t *ent) {
-	int           i, num, triggerMultiples;
+	int           i, num, triggerMultiples, pushTriggers;
 	int           touch[MAX_GENTITIES];
 	gentity_t     *hit;
 	trace_t       trace;
