@@ -322,8 +322,6 @@ argv(0) noclip
 ==================
 */
 void Cmd_Noclip_f(gentity_t *ent) {
-	char *msg;
-
 	char *name = ConcatArgs(1);
 
 	// suburb, only available while unfollowed to avoid playermodel duplication
@@ -356,14 +354,6 @@ void Cmd_Noclip_f(gentity_t *ent) {
 	} else {
 		ent->client->noclip = !ent->client->noclip;
 	}
-
-	if (ent->client->noclip) {
-		msg = "noclip ON\n";
-	} else {
-		msg = "noclip OFF\n";
-	}
-
-	trap_SendServerCommand(ent - g_entities, va("print \"%s\"", msg));
 }
 
 /*

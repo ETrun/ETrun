@@ -2138,7 +2138,11 @@ static void CG_Draw2D(void) {
 		// Nico, draw info panel
 		CG_DrawInfoPanel();
 
+		// Nico, draw spectator message
 		CG_DrawSpectatorMessage();
+
+		// suburb, draw spectator state
+		CG_DrawSpectatorState();
 	} else {
 		if ((int)cgs.eventHandling != (int)CGAME_EVENT_NONE) {
 			trap_R_SetColor(NULL);
