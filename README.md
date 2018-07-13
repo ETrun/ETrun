@@ -21,7 +21,7 @@ Compatibility
 Windows
 -------
 
-`cgame` and `qagame` modules require [Microsoft Visual C++ 2010 Redistributable Package](http://www.microsoft.com/en-us/download/details.aspx?id=5555) to run properly.
+Game modules require [Microsoft Visual C++ 2013 Redistributable Package](https://www.microsoft.com/en-us/download/details.aspx?id=40784) to run properly.
 Works (tested) on `XP/7` with `ET 2.60b`.
 
 Linux

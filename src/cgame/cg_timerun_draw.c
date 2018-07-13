@@ -1,10 +1,14 @@
 #include "cg_local.h"
 
-/**
- * Draw checkpoints times
- *
- * @author Nico
- */
+/*
+==================
+CG_DrawCheckpoints
+
+Draw checkpoints times
+
+@author Nico
+==================
+*/
 void CG_DrawCheckpoints(void) {
 	int x = 0, y = 0;
 
@@ -81,11 +85,15 @@ void CG_DrawCheckpoints(void) {
 	}
 }
 
-/**
- * Draw speed meter
- *
- * @author Nico
- */
+/*
+==================
+CG_DrawSpeedMeter
+
+Draw speed meter
+
+@author Nico
+==================
+*/
 void CG_DrawSpeedMeter(void) {
 	char         status[128];
 	float        sizex, sizey;
@@ -124,11 +132,15 @@ void CG_DrawSpeedMeter(void) {
 	cg.oldSpeed = speed;
 }
 
-/**
- * OB detector from TJMod
- *
- * @author Nico
- */
+/*
+==================
+CG_DrawOB
+
+OB detector from TJMod
+
+@author Nico
+==================
+*/
 void CG_DrawOB(void) {
 	double  a, b, c;
 	float   psec;
@@ -211,11 +223,15 @@ void CG_DrawOB(void) {
 	}
 }
 
-/**
- * Slick detector
- *
- * @author suburb
- */
+/*
+==================
+CG_DrawSlick
+
+Slick detector
+
+@author suburb
+==================
+*/
 #define DRAWSLICK_MAX_DISTANCE 131072
 void CG_DrawSlick(void) {
 	static trace_t trace;
@@ -238,11 +254,15 @@ void CG_DrawSlick(void) {
 	}
 }
 
-/**
- * Draw timer
- *
- * @author Nico
- */
+/*
+==================
+CG_DrawTimer
+
+Draw timer
+
+@author Nico
+==================
+*/
 void CG_DrawTimer(void) {
 	char       status[128];
 	int        min = 0, sec = 0, milli = 0;
@@ -362,34 +382,6 @@ void CG_DrawTimer(void) {
 	CG_Text_Paint_Ext(x - w, y, sizex, sizey, color, status, 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
 }
 
-// Dzikie CGaz 3rd party functions
-#define SCREEN_CENTER_X ((CG_WideX(SCREEN_WIDTH) / 2) - 1)
-#define SCREEN_CENTER_Y ((SCREEN_HEIGHT / 2) - 1)
-#define CGAZ3_ANG 20
-
-static void PutPixel(float x, float y) {
-	if (x > 0 && x < CG_WideX(SCREEN_WIDTH) && y > 0 && y < SCREEN_HEIGHT) {
-		CG_DrawPic(x, y, 1, 1, cgs.media.whiteShader);
-	}
-}
-
-static void DrawLine(float x1, float y1, float x2, float y2, vec4_t color) {
-	float len, stepx, stepy;
-	float i;
-
-	trap_R_SetColor(color);
-	len   = (x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1);
-	len   = sqrt(len);
-	stepx = (x2 - x1) / len;
-	stepy = (y2 - y1) / len;
-	for (i = 0; i < len; ++i) {
-		PutPixel(x1, y1);
-		x1 += stepx;
-		y1 += stepy;
-	}
-	trap_R_SetColor(NULL);
-}
-
 extern float pm_stopspeed;
 extern float pm_accelerate;
 extern float pm_airaccelerate;
@@ -419,11 +411,16 @@ typedef struct {
 } pml_t;
 extern pml_t pml;
 
-/**
- * Draw CGaz from TJMod
- *
- * @author Nico
- */
+/*
+==================
+CG_DrawCGaz
+
+Draw CGaz from TJMod
+
+@author Nico
+==================
+*/
+#define CGAZ3_ANG 20
 void CG_DrawCGaz(void) {
 	float vel_angle; // absolute velocity angle
 	float vel_relang; // relative velocity angle to viewangles[1]
@@ -568,21 +565,21 @@ void CG_DrawCGaz(void) {
 		vel_relang = DEG2RAD(vel_relang);
 		per_angle  = DEG2RAD(per_angle);
 
-		DrawLine(SCREEN_CENTER_X, SCREEN_CENTER_Y,
+		CG_DrawLine(SCREEN_CENTER_X, SCREEN_CENTER_Y,
 		         SCREEN_CENTER_X + right, SCREEN_CENTER_Y - forward, colorCyan);
 
 		vel_size /= 5;
-		DrawLine(SCREEN_CENTER_X, SCREEN_CENTER_Y,
+		CG_DrawLine(SCREEN_CENTER_X, SCREEN_CENTER_Y,
 		         SCREEN_CENTER_X + vel_size * sin(vel_relang),
 		         SCREEN_CENTER_Y - vel_size * cos(vel_relang), colorRed);
 		if (vel_size > SCREEN_HEIGHT / 2) {
 			vel_size = SCREEN_HEIGHT / 2;
 		}
 		vel_size /= 2;
-		DrawLine(SCREEN_CENTER_X, SCREEN_CENTER_Y,
+		CG_DrawLine(SCREEN_CENTER_X, SCREEN_CENTER_Y,
 		         SCREEN_CENTER_X + vel_size * sin(vel_relang + per_angle),
 		         SCREEN_CENTER_Y - vel_size * cos(vel_relang + per_angle), colorRed);
-		DrawLine(SCREEN_CENTER_X, SCREEN_CENTER_Y,
+		CG_DrawLine(SCREEN_CENTER_X, SCREEN_CENTER_Y,
 		         SCREEN_CENTER_X + vel_size * sin(vel_relang - per_angle),
 		         SCREEN_CENTER_Y - vel_size * cos(vel_relang - per_angle), colorRed);
 	} else if (cg_drawCGaz.integer == 3) {
@@ -659,21 +656,28 @@ void CG_DrawCGaz(void) {
 	}
 }
 
-/**
-* Detached function to sort velocity snapping zones (taken from iodfengine)
-*
-* @author suburb
+/*
+==================
+sortSnapZones
+
+Detached function to sort velocity snapping zones (taken from iodfengine)
+
+@author suburb
+==================
 */
 static int QDECL sortSnapZones(const void *a, const void *b) {
 	return *(float *)a - *(float *)b;
 }
 
-/**
-* Draw velocity snapping zones (core math taken from iodfengine)
-*
-* @author suburb
+/*
+==================
+CG_DrawVelocitySnapping
+
+Draw velocity snapping zones (core math taken from iodfengine)
+
+@author suburb
+==================
 */
-#define DF_TO_ET_GROUNDSPEED (352.0f / 320.0f)
 void CG_DrawVelocitySnapping(void) {
 	vec4_t color[3];
 	float  rgba1[4]  = { 0.4f, 0, 0, 0.5f };
@@ -733,11 +737,15 @@ void CG_DrawVelocitySnapping(void) {
 	}
 }
 
-/**
- * Draw keys from TJMod
- *
- * @author Nico
- */
+/*
+==================
+CG_DrawKeys
+
+Draw keys from TJMod
+
+@author Nico
+==================
+*/
 #define KEYS_X   (CG_WideX(SCREEN_WIDTH) - 90)
 #define KEYS_Y   210
 #define DRAWKEYS_DEBOUNCE_VALUE        100
@@ -836,10 +844,14 @@ void CG_DrawKeys(void) {
 	}
 }
 
-/**
-* Update keys & menus
-*
-* @author suburb, used for UI flickering fix
+/*
+==================
+CG_UpdateKeysAndMenus
+
+Used for UI flickering fix
+
+@author suburb
+==================
 */
 void CG_UpdateKeysAndMenus(void) {
 	playerState_t *ps = &cg.predictedPlayerState;
@@ -907,30 +919,52 @@ void CG_UpdateKeysAndMenus(void) {
 	}
 }
 
-/**
- * Draw clock from TJMod
- *
- * @author Nico, modified by suburb
- */
+/*
+==================
+CG_DrawScoresClock
+
+Draw clock from TJMod
+
+@author Nico
+==================
+*/
 void CG_DrawScoresClock(float x, float y, float scale) {
-	char    displayTime[18] = { 0 };
-	qtime_t tm;
-	vec4_t  clr = { 1.0f, 1.0f, 1.0f, 0.8f };
+	char displayTime[18] = { 0 };
+
+	Q_strcat(displayTime, sizeof (displayTime), va("Time: %s", CG_GetClock()));
+
+	CG_Text_Paint_Ext(x, y, scale, scale, colorWhite, displayTime, 0, 24, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
+}
+
+/*
+==================
+CG_GetClock
+
+Returns realtime in the format "hh:mm:ss"
+
+@author suburb
+==================
+*/
+char *CG_GetClock(void) {
+	static char displayTime[18] = { 0 };
+	qtime_t     tm;
 
 	trap_RealTime(&tm);
 	displayTime[0] = '\0';
+	Q_strcat(displayTime, sizeof (displayTime), va("%d:%02d:%02d", tm.tm_hour, tm.tm_min, tm.tm_sec));
 
-	Q_strcat(displayTime, sizeof (displayTime), va("Time: %d:%02d:%02d", tm.tm_hour, tm.tm_min, tm.tm_sec));
-
-	CG_Text_Paint_Ext(x, y, scale, scale, clr, displayTime, 0, 24, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
+	return displayTime;
 }
 
-/**
- * Print banner
- * @source: TJMod
- *
- * @author Nico
- */
+/*
+==================
+CG_DrawBannerPrint
+
+Print banner from TJmod
+
+@author Nico
+==================
+*/
 void CG_DrawBannerPrint(void) {
 	char  *start = cg.bannerPrint;
 	int   l      = 0;
@@ -993,10 +1027,14 @@ void CG_DrawBannerPrint(void) {
 	trap_R_SetColor(NULL);
 }
 
-/**
-* Update jump speeds
-*
-* @author suburb (taken from the CG_DrawInfoPanel function)
+/*
+==================
+CG_UpdateJumpSpeeds
+
+Update jump speeds, taken from the CG_DrawInfoPanel function
+
+@author suburb
+==================
 */
 void CG_UpdateJumpSpeeds(void) {
 	int speed = 0;
@@ -1008,11 +1046,15 @@ void CG_UpdateJumpSpeeds(void) {
 	}
 }
 
-/**
- * Print info panel
- *
- * @author Nico
- */
+/*
+==================
+CG_DrawInfoPanel
+
+Print info panel
+
+@author Nico
+==================
+*/
 #define INFO_PANEL_WIDTH                    100
 #define INFO_PANEL_HEIGHT                   145
 #define INFO_PANEL_X_PADDING                82
@@ -1026,7 +1068,6 @@ void CG_DrawInfoPanel(void) {
 	int    x         = 0;
 	int    y         = 0;
 	int    starty    = 0;
-	vec4_t textColor = { 1.0f, 1.0f, 1.0f, 1.0f };
 	float  textScale = 0.12f;
 	int    speed     = 0;
 	int    i         = 0;
@@ -1048,39 +1089,39 @@ void CG_DrawInfoPanel(void) {
 	//CG_DrawRect_FixedBorder(x, y, INFO_PANEL_WIDTH, INFO_PANEL_HEIGHT, 1, colorWhite);
 
 	// Print start speed
-	CG_Text_Paint_Ext(x, y += 10, textScale, textScale, textColor, " Start speed:", 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
+	CG_Text_Paint_Ext(x, y += 10, textScale, textScale, colorWhite, " Start speed:", 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
 	textScale               = CG_AdjustFontSize(textScale, cg.timerunStartSpeed, INFO_PANEL_FONT_ADJUST_NEEDED);
 
 	// Colour start speed
 	if (cg_minStartSpeed.value <= 0 || cg.timerunStartSpeed == 0 || cg.timerunStartSpeed >= cg_minStartSpeed.value) {
-		CG_Text_Paint_Ext(x + INFO_PANEL_X_PADDING, y, textScale, textScale, textColor, va("%d", cg.timerunStartSpeed), 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
+		CG_Text_Paint_Ext(x + INFO_PANEL_X_PADDING, y, textScale, textScale, colorWhite, va("%d", cg.timerunStartSpeed), 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
 	} else {
-		CG_Text_Paint_Ext(x + INFO_PANEL_X_PADDING, y, textScale, textScale, textColor, va("^1%d", cg.timerunStartSpeed), 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
+		CG_Text_Paint_Ext(x + INFO_PANEL_X_PADDING, y, textScale, textScale, colorWhite, va("^1%d", cg.timerunStartSpeed), 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
 	}
 	textScale = 0.12f;
 
 	// Print stop speed
-	CG_Text_Paint_Ext(x, y += 10, textScale, textScale, textColor, " Stop speed:", 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
+	CG_Text_Paint_Ext(x, y += 10, textScale, textScale, colorWhite, " Stop speed:", 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
 	textScale               = CG_AdjustFontSize(textScale, cg.timerunStopSpeed, INFO_PANEL_FONT_ADJUST_NEEDED);
-	CG_Text_Paint_Ext(x + INFO_PANEL_X_PADDING, y, textScale, textScale, textColor, va("%d", cg.timerunStopSpeed), 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
+	CG_Text_Paint_Ext(x + INFO_PANEL_X_PADDING, y, textScale, textScale, colorWhite, va("%d", cg.timerunStopSpeed), 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
 	textScale = 0.12f;
 
 	// Print run max speed
-	CG_Text_Paint_Ext(x, y += 10, textScale, textScale, textColor, " Run max speed:", 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
+	CG_Text_Paint_Ext(x, y += 10, textScale, textScale, colorWhite, " Run max speed:", 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
 	textScale               = CG_AdjustFontSize(textScale, cg.runMaxSpeed, INFO_PANEL_FONT_ADJUST_NEEDED);
-	CG_Text_Paint_Ext(x + INFO_PANEL_X_PADDING, y, textScale, textScale, textColor, va("%d", cg.runMaxSpeed), 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
+	CG_Text_Paint_Ext(x + INFO_PANEL_X_PADDING, y, textScale, textScale, colorWhite, va("%d", cg.runMaxSpeed), 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
 	textScale = 0.12f;
 
 	// Print overall max speed
-	CG_Text_Paint_Ext(x, y += 10, textScale, textScale, textColor, " Overall max speed:", 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
+	CG_Text_Paint_Ext(x, y += 10, textScale, textScale, colorWhite, " Overall max speed:", 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
 	textScale               = CG_AdjustFontSize(textScale, cg.overallMaxSpeed, INFO_PANEL_FONT_ADJUST_NEEDED);
-	CG_Text_Paint_Ext(x + INFO_PANEL_X_PADDING, y, textScale, textScale, textColor, va("%d", cg.overallMaxSpeed), 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
+	CG_Text_Paint_Ext(x + INFO_PANEL_X_PADDING, y, textScale, textScale, colorWhite, va("%d", cg.overallMaxSpeed), 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
 	textScale = 0.12f;
 
 	// Print jumps count
-	CG_Text_Paint_Ext(x, y += 10, textScale, textScale, textColor, " Jumps:", 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
+	CG_Text_Paint_Ext(x, y += 10, textScale, textScale, colorWhite, " Jumps:", 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
 	textScale               = CG_AdjustFontSize(textScale, cg.timerunJumpCounter, INFO_PANEL_FONT_ADJUST_NEEDED);
-	CG_Text_Paint_Ext(x + INFO_PANEL_X_PADDING, y, textScale, textScale, textColor, va("%d", cg.timerunJumpCounter), 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
+	CG_Text_Paint_Ext(x + INFO_PANEL_X_PADDING, y, textScale, textScale, colorWhite, va("%d", cg.timerunJumpCounter), 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
 
 	// Print jump speeds
 	starty = y;
@@ -1094,9 +1135,41 @@ void CG_DrawInfoPanel(void) {
 
 		// If speed at jump n is slower than speed at jump n - 1, use red color
 		if (i > 0 && cg.timerunJumpSpeeds[i] < cg.timerunJumpSpeeds[i - 1]) {
-			CG_Text_Paint_Ext(x, y += 10, textScale, textScale, textColor, va(" ^1%d", cg.timerunJumpSpeeds[i]), 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
+			CG_Text_Paint_Ext(x, y += 10, textScale, textScale, colorWhite, va(" ^1%d", cg.timerunJumpSpeeds[i]), 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
 		} else {
-			CG_Text_Paint_Ext(x, y += 10, textScale, textScale, textColor, va(" %d", cg.timerunJumpSpeeds[i]), 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
+			CG_Text_Paint_Ext(x, y += 10, textScale, textScale, colorWhite, va(" %d", cg.timerunJumpSpeeds[i]), 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
 		}
 	}
+}
+
+/*
+=================
+CG_DrawSpectatorState
+
+Draws text on hud if noclipping / in free spectator
+
+@author suburb
+=================
+*/
+void CG_DrawSpectatorState(void) {
+	char  *text = NULL;
+	float textScale;
+	int   x, y, w;
+
+	if (cg.predictedPlayerState.pm_type == PM_NOCLIP) {
+		text = "NOCLIP";
+	} else if (cg.snap->ps.persistant[PERS_TEAM] == TEAM_SPECTATOR) {
+		text = "SPECTATOR";
+	} else {
+		return;
+	}
+
+	textScale = 0.3f;
+
+	x = CG_WideX(SCREEN_WIDTH) / 2;
+	y = SCREEN_HEIGHT / 6;
+
+	w = CG_Text_Width_Ext(text, textScale, textScale, &cgs.media.limboFont1) / 2;
+
+	CG_Text_Paint_Ext(x - w, y, textScale, textScale, colorWhite, text, 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
 }

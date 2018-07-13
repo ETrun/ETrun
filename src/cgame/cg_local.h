@@ -1973,6 +1973,8 @@ void CG_ReloadTranslation(void);
 
 // suburb
 float CG_AdjustFontSize(float textScale, int valueToPrint, int border);
+void CG_PutPixel(float x, float y);
+void CG_DrawLine(float x1, float y1, float x2, float y2, vec4_t color);
 
 //
 // cg_draw.c, cg_newDraw.c
@@ -2017,8 +2019,10 @@ void CG_DrawCGaz(void);
 void CG_DrawVelocitySnapping(void);
 void CG_DrawKeys(void);
 void CG_DrawScoresClock(float x, float y, float scale);
+char *CG_GetClock(void);
 void CG_DrawBannerPrint(void);
 void CG_DrawInfoPanel(void);
+void CG_DrawSpectatorState(void);
 void CG_UpdateJumpSpeeds(void);
 void CG_UpdateKeysAndMenus(void);
 

@@ -251,8 +251,8 @@ Find all trigger entities that ent's current position touches.
 Spectators will only interact with teleporters.
 ============
 */
-void    G_TouchTriggers(gentity_t *ent) {
-	int           i, num, triggerMultiples, pushTriggers;
+void G_TouchTriggers(gentity_t *ent) {
+	int           i, num, triggerMultiples;
 	int           touch[MAX_GENTITIES];
 	gentity_t     *hit;
 	trace_t       trace;

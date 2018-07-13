@@ -881,53 +881,53 @@ Returns the amount of digits a float has
 =================
 */
 int GetDigits(float number) {
-	int count = 0;
-
 	number = fabs(number);
 
 	// more elegant but slower in performance
-	/*if (number >= 1){
+	/*if (number >= 1) {
 	    count = floor(log10(number)) + 1;
-	}*/
-
-	if (number >= 1000000000000000000) {
-		count = 19;
-	} else if (number >= 100000000000000000) {
-		count = 18;
-	} else if (number >= 10000000000000000) {
-		count = 17;
-	} else if (number >= 1000000000000000) {
-		count = 16;
-	} else if (number >= 100000000000000) {
-		count = 15;
-	} else if (number >= 10000000000000) {
-		count = 14;
-	} else if (number >= 1000000000000) {
-		count = 13;
-	} else if (number >= 100000000000) {
-		count = 12;
-	} else if (number >= 10000000000) {
-		count = 11;
-	} else if (number >= 1000000000) {
-		count = 10;
-	} else if (number >= 100000000) {
-		count = 9;
-	} else if (number >= 10000000) {
-		count = 8;
-	} else if (number >= 1000000) {
-		count = 7;
-	} else if (number >= 100000) {
-		count = 6;
-	} else if (number >= 10000) {
-		count = 5;
-	} else if (number >= 1000) {
-		count = 4;
-	} else if (number >= 100) {
-		count = 3;
-	} else if (number >= 10) {
-		count = 2;
-	} else if (number >= 1) {
-		count = 1;
 	}
 	return count;
+	*/
+
+	if (number >= 1000000000000000000) {
+		return 19;
+	} else if (number >= 100000000000000000) {
+		return 18;
+	} else if (number >= 10000000000000000) {
+		return 17;
+	} else if (number >= 1000000000000000) {
+		return 16;
+	} else if (number >= 100000000000000) {
+		return 15;
+	} else if (number >= 10000000000000) {
+		return 14;
+	} else if (number >= 1000000000000) {
+		return 13;
+	} else if (number >= 100000000000) {
+		return 12;
+	} else if (number >= 10000000000) {
+		return 11;
+	} else if (number >= 1000000000) {
+		return 10;
+	} else if (number >= 100000000) {
+		return 9;
+	} else if (number >= 10000000) {
+		return 8;
+	} else if (number >= 1000000) {
+		return 7;
+	} else if (number >= 100000) {
+		return 6;
+	} else if (number >= 10000) {
+		return 5;
+	} else if (number >= 1000) {
+		return 4;
+	} else if (number >= 100) {
+		return 3;
+	} else if (number >= 10) {
+		return 2;
+	} else if (number >= 1) {
+		return 1;
+	}
+	return 0;
 }
