@@ -335,7 +335,9 @@ static void CG_InterpolatePlayerState(qboolean grabAngles) {
 =========================
 CG_DrawTriggers
 
-@author suburb, modified CG_TouchTriggerPrediction() function to draw triggers
+Modified CG_TouchTriggerPrediction() function to draw triggers
+
+@author suburb
 =========================
 */
 static void CG_DrawTriggers(void) {

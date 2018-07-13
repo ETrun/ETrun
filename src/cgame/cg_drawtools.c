@@ -54,7 +54,9 @@ void CG_AdjustFrom640(float *x, float *y, float *w, float *h) {
 ================
 CG_Is43Screen
 
-@author suburb, widescreen support
+Widescreen support
+
+@author suburb
 ================
 */
 qboolean CG_Is43Screen(void) {
@@ -68,7 +70,9 @@ qboolean CG_Is43Screen(void) {
 ================
 CG_WideX
 
-@author suburb, widescreen support
+Widescreen support
+
+@author suburb
 ================
 */
 float CG_WideX(float x) {
@@ -79,7 +83,9 @@ float CG_WideX(float x) {
 ================
 CG_WideXoffset
 
-@author suburb, widescreen support
+Widescreen support
+
+@author suburb
 ================
 */
 float CG_WideXoffset(void) {
@@ -753,4 +759,45 @@ float CG_AdjustFontSize(float textScale, int valueToPrint, int border) {
 		textScale -= textScaleFactor;
 	}
 	return textScale;
+}
+
+/*
+==================
+CG_PutPixel
+
+Dzikie CGaz 3rd party function
+
+@author Nico
+==================
+*/
+void CG_PutPixel(float x, float y) {
+	if (x > 0 && x < CG_WideX(SCREEN_WIDTH) && y > 0 && y < SCREEN_HEIGHT) {
+		CG_DrawPic(x, y, 1, 1, cgs.media.whiteShader);
+	}
+}
+
+/*
+==================
+CG_DrawLine
+
+Dzikie CGaz 3rd party function
+
+@author Nico
+==================
+*/
+void CG_DrawLine(float x1, float y1, float x2, float y2, vec4_t color) {
+	float len, stepx, stepy;
+	float i;
+
+	trap_R_SetColor(color);
+	len = (x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1);
+	len = sqrt(len);
+	stepx = (x2 - x1) / len;
+	stepy = (y2 - y1) / len;
+	for (i = 0; i < len; ++i) {
+		CG_PutPixel(x1, y1);
+		x1 += stepx;
+		y1 += stepy;
+	}
+	trap_R_SetColor(NULL);
 }

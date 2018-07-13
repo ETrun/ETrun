@@ -895,6 +895,11 @@ void Info_SetValueForKey(char *s, const char *key, const char *value) {
 	strcat(s, newi);
 }
 
+/*
+==================
+getPhysicsName
+==================
+*/
 char *getPhysicsName(char *physicsName, int physicsValue) {
 	switch (physicsValue) {
 	case PHYSICS_MODE_AP_OB:
@@ -919,6 +924,11 @@ char *getPhysicsName(char *physicsName, int physicsValue) {
 	return physicsName;
 }
 
+/*
+==================
+getPhysicsDesc
+==================
+*/
 char *getPhysicsDesc(char *physicsName, int physicsValue) {
 	switch (physicsValue) {
 	case PHYSICS_MODE_AP_OB:

@@ -277,17 +277,11 @@ original drawclock from TJMod
 static float CG_DrawClock(float y) {
 	int     w;
 	float   scale           = 0.19f;
-	char    displayTime[18] = { 0 };
-	qtime_t tm;
 
-	trap_RealTime(&tm);
-	displayTime[0] = '\0';
-	Q_strcat(displayTime, sizeof (displayTime), va("%d:%02d:%02d", tm.tm_hour, tm.tm_min, tm.tm_sec));
-
-	w = CG_Text_Width_Ext(displayTime, scale, 0, &cgs.media.limboFont1);
+	w = CG_Text_Width_Ext(CG_GetClock(), scale, 0, &cgs.media.limboFont1);
 
 	//CG_DrawRect_FixedBorder(UPPERRIGHT_X - w - 2, y, w + 5, 12 + 2, 1, colorWhite);
-	CG_Text_Paint_Ext(UPPERRIGHT_X - w, y + 11, scale, scale, colorWhite, displayTime, 0, 24, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
+	CG_Text_Paint_Ext(UPPERRIGHT_X - w, y + 11, scale, scale, colorWhite, CG_GetClock(), 0, 24, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
 
 	return y + 19;
 }
