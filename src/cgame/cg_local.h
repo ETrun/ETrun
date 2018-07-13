@@ -2022,6 +2022,7 @@ void CG_DrawScoresClock(float x, float y, float scale);
 char *CG_GetClock(void);
 void CG_DrawBannerPrint(void);
 void CG_DrawInfoPanel(void);
+void CG_DrawSpectatorState(void);
 void CG_UpdateJumpSpeeds(void);
 void CG_UpdateKeysAndMenus(void);
 
