@@ -516,7 +516,7 @@ static void CG_DrawDisconnect(void) {
 		return;
 	}
 
-	x = CG_WideX(SCREEN_WIDTH) - 48;
+	x = CG_WideX(SCREEN_WIDTH) - 52;
 	y = SCREEN_HEIGHT - 200;
 
 	CG_DrawPic(x, y, 48, 48, cgs.media.disconnectIcon);
