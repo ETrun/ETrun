@@ -865,7 +865,7 @@ void CG_LoadVoiceChats(void) {
 	CG_ParseVoiceChats("scripts/wm_axis_chat.voice", &voiceChatLists[0], MAX_VOICECHATS);
 	CG_ParseVoiceChats("scripts/wm_allies_chat.voice", &voiceChatLists[1], MAX_VOICECHATS);
 
-	CG_Printf("voice chat memory size = %d\n", size - trap_MemoryRemaining());
+	CG_Printf("Voice chat memory size = %d\n", size - trap_MemoryRemaining());
 }
 
 /*
@@ -909,7 +909,6 @@ typedef struct bufferedVoiceChat_s {
 	int voiceOnly;
 	char cmd[MAX_SAY_TEXT];
 	char message[MAX_SAY_TEXT];
-	vec3_t origin;          // NERVE - SMF
 } bufferedVoiceChat_t;
 
 bufferedVoiceChat_t voiceChatBuffer[MAX_VOICECHATBUFFER];
@@ -935,7 +934,6 @@ void CG_PlayVoiceChat(bufferedVoiceChat_t *vchat) {
 				}
 			} else {
 				cg_entities[vchat->clientNum].voiceChatSprite = vchat->sprite;
-				VectorCopy(vchat->origin, cg_entities[vchat->clientNum].lerpOrigin);                // NERVE - SMF
 				if (vchat->sprite == cgs.media.voiceChatShader) {
 					cg_entities[vchat->clientNum].voiceChatSpriteTime = cg.time + cg_voiceSpriteTime.integer;
 				} else {
@@ -948,7 +946,7 @@ void CG_PlayVoiceChat(bufferedVoiceChat_t *vchat) {
 	}
 	if (!vchat->voiceOnly && !cg_noVoiceText.integer) {
 		CG_AddToTeamChat(vchat->message, vchat->clientNum);
-		CG_Printf(va("[skipnotify]: %s\n", vchat->message));     // JPW NERVE
+		CG_Printf(va("%s\n", vchat->message));
 	}
 	voiceChatBuffer[cg.voiceChatBufferOut].snd = 0;
 }
@@ -987,7 +985,7 @@ void CG_AddBufferedVoiceChat(bufferedVoiceChat_t *vchat) {
 CG_VoiceChatLocal
 =================
 */
-void CG_VoiceChatLocal(int mode, qboolean voiceOnly, int clientNum, int color, const char *cmd, vec3_t origin) {
+void CG_VoiceChatLocal(int mode, qboolean voiceOnly, int clientNum, int color, const char *cmd) {
 	char                *chat;
 	voiceChatList_t     *voiceChatList;
 	clientInfo_t        *ci;
@@ -1003,36 +1001,15 @@ void CG_VoiceChatLocal(int mode, qboolean voiceOnly, int clientNum, int color, c
 	cgs.currentVoiceClient = clientNum;
 
 	voiceChatList = CG_VoiceChatListForClient(clientNum);
-
 	if (CG_GetVoiceChat(voiceChatList, cmd, &snd, &sprite, &chat)) {
 		if (mode == SAY_TEAM || !cg_teamChatsOnly.integer) {
-			const char *loc = " ";
-
 			vchat.clientNum = clientNum;
 			vchat.snd       = snd;
 			vchat.sprite    = sprite;
 			vchat.voiceOnly = voiceOnly;
-			VectorCopy(origin, vchat.origin);       // NERVE - SMF
 			Q_strncpyz(vchat.cmd, cmd, sizeof (vchat.cmd));
 
-			if (mode != SAY_ALL) {
-				// NERVE - SMF - get location
-				loc = BG_GetLocationString(origin);
-				if (!loc || !*loc) {
-					loc = " ";
-				}
-			}
-
-			if (mode == SAY_TEAM) {
-				Com_sprintf(vchat.message, sizeof (vchat.message), "(%s)%c%c(%s): %c%c%s",
-				            ci->name, Q_COLOR_ESCAPE, COLOR_YELLOW, loc, Q_COLOR_ESCAPE, color, CG_TranslateString(chat));
-			} else if (mode == SAY_BUDDY) {
-				Com_sprintf(vchat.message, sizeof (vchat.message), "<%s>%c%c<%s>: %c%c%s",
-				            ci->name, Q_COLOR_ESCAPE, COLOR_YELLOW, loc, Q_COLOR_ESCAPE, color, CG_TranslateString(chat));
-			} else {
-				Com_sprintf(vchat.message, sizeof (vchat.message), "%s%c%c: %c%c%s",
-				            ci->name, Q_COLOR_ESCAPE, COLOR_YELLOW, Q_COLOR_ESCAPE, color, CG_TranslateString(chat));
-			}
+			Com_sprintf(vchat.message, sizeof(vchat.message), va("^g[%s] ^7%s%c%c: %c%c%s", CG_Argv(5), ci->name, Q_COLOR_ESCAPE, COLOR_YELLOW, Q_COLOR_ESCAPE, color, CG_TranslateString(chat)));
 			CG_AddBufferedVoiceChat(&vchat);
 		}
 	}
@@ -1047,18 +1024,10 @@ void CG_VoiceChat(int mode) {
 	const char *cmd;
 	int        clientNum, color;
 	qboolean   voiceOnly;
-	vec3_t     origin;      // NERVE - SMF
 
 	voiceOnly = atoi(CG_Argv(1));
 	clientNum = atoi(CG_Argv(2));
 	color     = atoi(CG_Argv(3));
-
-	if (mode != SAY_ALL) {
-		// NERVE - SMF - added origin
-		origin[0] = atoi(CG_Argv(5));
-		origin[1] = atoi(CG_Argv(6));
-		origin[2] = atoi(CG_Argv(7));
-	}
 
 	cmd = CG_Argv(4);
 
@@ -1069,8 +1038,7 @@ void CG_VoiceChat(int mode) {
 			return;
 		}
 	}
-
-	CG_VoiceChatLocal(mode, voiceOnly, clientNum, color, cmd, origin);
+	CG_VoiceChatLocal(mode, voiceOnly, clientNum, color, cmd);
 }
 // -NERVE - SMF
 
@@ -1328,8 +1296,8 @@ static void CG_ServerCommand(void) {
 		if (enc) {
 			CG_DecodeQP(text);
 		}
-		CG_AddToTeamChat(text, atoi(CG_Argv(2)));
-		CG_Printf("%s\n", text);
+		CG_AddToTeamChat(va("^g[%s] ^7%s", CG_Argv(3), text), atoi(CG_Argv(2)));
+		CG_Printf(va("^g[%s] ^7%s\n", CG_Argv(3), text));
 
 		return;
 	}
@@ -1349,8 +1317,8 @@ static void CG_ServerCommand(void) {
 		if (enc) {
 			CG_DecodeQP(text);
 		}
-		CG_AddToTeamChat(text, atoi(CG_Argv(2)));
-		CG_Printf("%s\n", text);   // JPW NERVE
+		CG_AddToTeamChat(va("^g[%s] ^7%s", CG_Argv(3), text), atoi(CG_Argv(2)));
+		CG_Printf(va("^g[%s] ^7%s\n", CG_Argv(3), text));
 
 		return;
 	}

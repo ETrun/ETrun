@@ -1030,7 +1030,7 @@ void Cmd_Load_f(gentity_t *ent);
 void Cmd_Save_f(gentity_t *ent);
 void Cmd_SpecLock_f(gentity_t *ent, unsigned int dwCommand, qboolean lock);
 void Cmd_SpecInvite_f(gentity_t *ent, unsigned int dwCommand, qboolean invite);
-void G_SayTo(gentity_t *ent, gentity_t *other, int mode, int color, const char *name, const char *message, qboolean localize, qboolean encoded);
+void G_SayTo(gentity_t *ent, gentity_t *other, int mode, int color, const char *name, const char *message, qboolean encoded);
 qboolean Cmd_CallVote_f(gentity_t *ent, unsigned int dwCommand, qboolean fValue);
 void Cmd_StartCamera_f(gentity_t *ent);
 void Cmd_Follow_f(gentity_t *ent, unsigned int dwCommand, qboolean fValue);
@@ -1142,6 +1142,7 @@ void G_SetEntState(gentity_t *ent, entState_t state);
 
 team_t G_GetTeamFromEntity(gentity_t *ent);
 void my_sleep(unsigned milliseconds);
+char *G_GetClock(void);
 
 //
 // g_combat.c
