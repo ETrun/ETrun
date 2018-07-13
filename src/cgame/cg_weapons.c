@@ -673,7 +673,9 @@ static void CG_GrenadeTrail(centity_t *ent) {
 ==========================
 CG_RailTrail
 
-@author suburb, modified CG_RailTrail function
+Modified CG_RailTrail function
+
+@author suburb
 ==========================
 */
 void CG_RailTrail(vec3_t start, vec3_t end, int box) {    //----(SA)	added 'type'
@@ -721,7 +723,9 @@ void CG_RailTrail(vec3_t start, vec3_t end, int box) {    //----(SA)	added 'type
 ==========================
 CG_RailTrail2
 
-@author suburb, modified CG_RailTrail2 function
+Modified CG_RailTrail2 function
+
+@author suburb
 ==========================
 */
 #define TRIGGERS_DRAW_FREQUENCY 40

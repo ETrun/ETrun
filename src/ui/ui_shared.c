@@ -137,7 +137,9 @@ void Tooltip_ComputePosition(itemDef_t *item) {
 ===============
 UI_WideX
 
-@author suburb, widescreen support
+Widescreen support
+
+@author suburb
 ===============
 */
 float UI_WideX(float x) {
@@ -148,7 +150,9 @@ float UI_WideX(float x) {
 ===============
 UI_WideXoffset
 
-@author suburb, widescreen support
+Widescreen support
+
+@author suburb
 ===============
 */
 float UI_WideXoffset(void) {
@@ -159,7 +163,9 @@ float UI_WideXoffset(void) {
 ================
 UI_Is43Screen
 
-@author suburb, widescreen support
+Widescreen support
+
+@author suburb
 ================
 */
 qboolean UI_Is43Screen(void) {
