@@ -252,7 +252,7 @@ Spectators will only interact with teleporters.
 ============
 */
 void G_TouchTriggers(gentity_t *ent) {
-	int           i, num, triggerMultiples;
+	int           i, num, triggerMultiples, pushTriggers;
 	int           touch[MAX_GENTITIES];
 	gentity_t     *hit;
 	trace_t       trace;
@@ -281,6 +281,7 @@ void G_TouchTriggers(gentity_t *ent) {
 	VectorAdd(ent->client->ps.origin, ent->r.maxs, maxs);
 
 	triggerMultiples = 0;
+	pushTriggers = 0;
 	for (i = 0 ; i < num ; ++i) {
 		hit = &g_entities[touch[i]];
 
@@ -324,6 +325,10 @@ void G_TouchTriggers(gentity_t *ent) {
 			}
 		}
 
+		if (hit->s.eType == ET_PUSH_TRIGGER) {
+			pushTriggers++;
+		}
+
 		memset(&trace, 0, sizeof (trace));
 
 		if (hit->touch) {
@@ -335,6 +340,12 @@ void G_TouchTriggers(gentity_t *ent) {
 		ent->client->pers.isTouchingTrigger = qfalse;
 	} else {
 		ent->client->pers.isTouchingTrigger = qtrue;
+	}
+
+	if (pushTriggers == 0) {
+		ent->client->pers.isTouchingJumppad = qfalse;
+	} else {
+		ent->client->pers.isTouchingJumppad = qtrue;
 	}
 }
 
@@ -603,11 +614,10 @@ once for each server frame, which makes for smooth demo recording.
 ==============
 */
 void ClientThink_real(gentity_t *ent) {
-	int       msec, oldEventSequence, speed, i, counter;
+	int       msec, oldEventSequence, speed, i, counter, Zaccel;
 	pmove_t   pm;
 	usercmd_t *ucmd;
 	gclient_t *client = ent->client;
-	qboolean  notMovingWithSpeed;
 
 	// don't think if the client is not yet connected (and thus not yet spawned in)
 	if (client->pers.connected != CON_CONNECTED) {
@@ -971,31 +981,37 @@ void ClientThink_real(gentity_t *ent) {
 	}
 
 	// suburb, prevent pronebug & wallbug
-	counter            = 0;
-	notMovingWithSpeed = qfalse;
+	counter = 0;
 
 	for (i = 0; i < 3; ++i) {
 		if (client->pers.oldPosition[i] == (int) pm.ps->origin[i]) {
 			counter++;
 		}
 	}
-	if (counter == 3) {
-		notMovingWithSpeed = qtrue;
-	}
 
-	speed = sqrt(pm.ps->velocity[0] * pm.ps->velocity[0] + pm.ps->velocity[1] * pm.ps->velocity[1]);
-	if (client->sess.logged && !client->sess.timerunActive && speed > MAX_BUGGING_SPEED && notMovingWithSpeed) {
+	Zaccel = (int) pm.ps->velocity[2] - client->pers.oldZvelocity;
+	speed = sqrt(pm.ps ->velocity[0] * pm.ps->velocity[0] + pm.ps->velocity[1] * pm.ps->velocity[1]);
+
+	if (client->sess.logged && ((!client->sess.timerunActive && speed > MAX_BUGGING_SPEED && counter == 3) || // prevent accelerating in brushes
+		(pm.ps->eFlags & EF_PRONE && Zaccel > -6 && Zaccel < 0 && client->ps.groundEntityNum == ENTITYNUM_NONE && !client->pers.isTouchingJumppad))) { // prevent accelerating on steep slopes
+		if (!client->pers.buggedLastFrame) { // only do something the second frame not to break jumppads
+			client->pers.buggedLastFrame = qtrue;
+			return;
+		}
 		CP(va("cpm \"%s^w: ^1Bugging detected, player killed.\n\"", GAME_VERSION_COLORED));
 		Cmd_Kill_f(ent);
 	}
 
-	// checking every frame would break corner skimming
+	// checking acceleration in brushes every frame would break corner skimming
 	if (level.time - client->pers.lastBuggingCheck > BUGGING_CHECK_FREQUENCY) {
 		for (i = 0; i < 3; ++i) {
 			client->pers.oldPosition[i]   = (int) pm.ps->origin[i];
 			client->pers.lastBuggingCheck = level.time;
 		}
 	}
+
+	client->pers.oldZvelocity = (int) pm.ps->velocity[2];
+	client->pers.buggedLastFrame = qfalse;
 }
 
 /*
