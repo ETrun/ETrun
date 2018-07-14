@@ -1009,7 +1009,7 @@ void CG_VoiceChatLocal(int mode, qboolean voiceOnly, int clientNum, int color, c
 			vchat.voiceOnly = voiceOnly;
 			Q_strncpyz(vchat.cmd, cmd, sizeof (vchat.cmd));
 
-			Com_sprintf(vchat.message, sizeof(vchat.message), va("^g[%s] ^7%s%c%c: %c%c%s", CG_Argv(5), ci->name, Q_COLOR_ESCAPE, COLOR_YELLOW, Q_COLOR_ESCAPE, color, CG_TranslateString(chat)));
+			Com_sprintf(vchat.message, sizeof(vchat.message), "^g[%s] ^7%s%c%c: %c%c%s", CG_Argv(5), ci->name, Q_COLOR_ESCAPE, COLOR_YELLOW, Q_COLOR_ESCAPE, color, CG_TranslateString(chat));
 			CG_AddBufferedVoiceChat(&vchat);
 		}
 	}
