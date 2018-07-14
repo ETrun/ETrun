@@ -275,8 +275,8 @@ original drawclock from TJMod
 ==================
 */
 static float CG_DrawClock(float y) {
-	int     w;
-	float   scale           = 0.19f;
+	int   w;
+	float scale = 0.19f;
 
 	w = CG_Text_Width_Ext(CG_GetClock(), scale, 0, &cgs.media.limboFont1);
 

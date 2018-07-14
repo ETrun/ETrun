@@ -790,8 +790,8 @@ void CG_DrawLine(float x1, float y1, float x2, float y2, vec4_t color) {
 	float i;
 
 	trap_R_SetColor(color);
-	len = (x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1);
-	len = sqrt(len);
+	len   = (x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1);
+	len   = sqrt(len);
 	stepx = (x2 - x1) / len;
 	stepy = (y2 - y1) / len;
 	for (i = 0; i < len; ++i) {
