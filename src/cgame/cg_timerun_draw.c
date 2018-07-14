@@ -566,22 +566,22 @@ void CG_DrawCGaz(void) {
 		per_angle  = DEG2RAD(per_angle);
 
 		CG_DrawLine(SCREEN_CENTER_X, SCREEN_CENTER_Y,
-		         SCREEN_CENTER_X + right, SCREEN_CENTER_Y - forward, colorCyan);
+		            SCREEN_CENTER_X + right, SCREEN_CENTER_Y - forward, colorCyan);
 
 		vel_size /= 5;
 		CG_DrawLine(SCREEN_CENTER_X, SCREEN_CENTER_Y,
-		         SCREEN_CENTER_X + vel_size * sin(vel_relang),
-		         SCREEN_CENTER_Y - vel_size * cos(vel_relang), colorRed);
+		            SCREEN_CENTER_X + vel_size * sin(vel_relang),
+		            SCREEN_CENTER_Y - vel_size * cos(vel_relang), colorRed);
 		if (vel_size > SCREEN_HEIGHT / 2) {
 			vel_size = SCREEN_HEIGHT / 2;
 		}
 		vel_size /= 2;
 		CG_DrawLine(SCREEN_CENTER_X, SCREEN_CENTER_Y,
-		         SCREEN_CENTER_X + vel_size * sin(vel_relang + per_angle),
-		         SCREEN_CENTER_Y - vel_size * cos(vel_relang + per_angle), colorRed);
+		            SCREEN_CENTER_X + vel_size * sin(vel_relang + per_angle),
+		            SCREEN_CENTER_Y - vel_size * cos(vel_relang + per_angle), colorRed);
 		CG_DrawLine(SCREEN_CENTER_X, SCREEN_CENTER_Y,
-		         SCREEN_CENTER_X + vel_size * sin(vel_relang - per_angle),
-		         SCREEN_CENTER_Y - vel_size * cos(vel_relang - per_angle), colorRed);
+		            SCREEN_CENTER_X + vel_size * sin(vel_relang - per_angle),
+		            SCREEN_CENTER_Y - vel_size * cos(vel_relang - per_angle), colorRed);
 	} else if (cg_drawCGaz.integer == 3) {
 		accel_angle = atan2(-right, forward);
 		accel_angle = AngleNormalize180(ps->viewangles[YAW] + RAD2DEG(accel_angle));
@@ -751,9 +751,9 @@ Draw keys from TJMod
 #define DRAWKEYS_DEBOUNCE_VALUE        100
 #define DRAWKEYS_MENU_CLOSING_DELAY    50
 void CG_DrawKeys(void) {
-	float         x, y, size;
-	int           i;
-	int           skew;
+	float x, y, size;
+	int   i;
+	int   skew;
 
 	if (!cg_drawKeys.integer) {
 		return;
@@ -1065,12 +1065,12 @@ Print info panel
 #define INFO_PANEL_X                        (UPPERRIGHT_X - INFO_PANEL_WIDTH + 3)
 #define INFO_PANEL_Y                        2
 void CG_DrawInfoPanel(void) {
-	int    x         = 0;
-	int    y         = 0;
-	int    starty    = 0;
-	float  textScale = 0.12f;
-	int    speed     = 0;
-	int    i         = 0;
+	int   x         = 0;
+	int   y         = 0;
+	int   starty    = 0;
+	float textScale = 0.12f;
+	int   speed     = 0;
+	int   i         = 0;
 
 	if (!cg_drawInfoPanel.integer) {
 		return;

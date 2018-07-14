@@ -122,8 +122,8 @@ CG_DrawConnectScreen
 */
 static qboolean connect_ownerdraw;
 void UI_DrawLoadPanel(qboolean ownerdraw, qboolean uihack) {
-	static qboolean inside = qfalse;
-	vec4_t backgroundColor = { 0.16f, 0.2f, 0.17f, 1.0f };
+	static qboolean inside          = qfalse;
+	vec4_t          backgroundColor = { 0.16f, 0.2f, 0.17f, 1.0f };
 
 	// suburb, widescreen support
 	// to avoid a flickering screen on widescreens, we erase it before drawing onto it
