@@ -676,10 +676,13 @@ typedef struct {
 	// suburb, prevent pronebug & wallbug
 	vec3_t oldPosition;
 	int lastBuggingCheck;
+	int oldZvelocity;
+	qboolean buggedLastFrame;
 
 	// suburb, prevent trigger bug
 	int lastLoadedTime;
 	qboolean isTouchingTrigger;
+	qboolean isTouchingJumppad;
 
 	// suburb, inactivity drop
 	vec3_t oldViewangles;
