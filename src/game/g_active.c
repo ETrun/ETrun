@@ -281,7 +281,7 @@ void G_TouchTriggers(gentity_t *ent) {
 	VectorAdd(ent->client->ps.origin, ent->r.maxs, maxs);
 
 	triggerMultiples = 0;
-	pushTriggers = 0;
+	pushTriggers     = 0;
 	for (i = 0 ; i < num ; ++i) {
 		hit = &g_entities[touch[i]];
 
@@ -990,10 +990,10 @@ void ClientThink_real(gentity_t *ent) {
 	}
 
 	Zaccel = (int) pm.ps->velocity[2] - client->pers.oldZvelocity;
-	speed = sqrt(pm.ps ->velocity[0] * pm.ps->velocity[0] + pm.ps->velocity[1] * pm.ps->velocity[1]);
+	speed  = sqrt(pm.ps->velocity[0] * pm.ps->velocity[0] + pm.ps->velocity[1] * pm.ps->velocity[1]);
 
 	if (client->sess.logged && ((!client->sess.timerunActive && speed > MAX_BUGGING_SPEED && counter == 3) || // prevent accelerating in brushes
-		(pm.ps->eFlags & EF_PRONE && Zaccel > -6 && Zaccel < 0 && client->ps.groundEntityNum == ENTITYNUM_NONE && !client->pers.isTouchingJumppad))) { // prevent accelerating on steep slopes
+	                            (pm.ps->eFlags & EF_PRONE && Zaccel > -6 && Zaccel < 0 && client->ps.groundEntityNum == ENTITYNUM_NONE && !client->pers.isTouchingJumppad))) { // prevent accelerating on steep slopes
 		if (!client->pers.buggedLastFrame) { // only do something the second frame not to break jumppads
 			client->pers.buggedLastFrame = qtrue;
 			return;
@@ -1010,7 +1010,7 @@ void ClientThink_real(gentity_t *ent) {
 		}
 	}
 
-	client->pers.oldZvelocity = (int) pm.ps->velocity[2];
+	client->pers.oldZvelocity    = (int) pm.ps->velocity[2];
 	client->pers.buggedLastFrame = qfalse;
 }
 

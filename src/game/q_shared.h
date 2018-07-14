@@ -1356,5 +1356,5 @@ typedef enum {
 // suburb, groundspeeds
 #define ET_GROUNDSPEED              352.0f  // note: while sprinting
 #define DF_GROUNDSPEED              320.0f
-#define DF_TO_ET_GROUNDSPEED        ( ET_GROUNDSPEED / DF_GROUNDSPEED )
+#define DF_TO_ET_GROUNDSPEED        (ET_GROUNDSPEED / DF_GROUNDSPEED)
 #endif  // __Q_SHARED_H

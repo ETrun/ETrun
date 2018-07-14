@@ -53,8 +53,8 @@ Draw all the status / pacifier stuff during level loading
 ====================
 */
 void CG_DrawInformation(qboolean forcerefresh) {
-	static int lastcalled = 0;
-	vec4_t backgroundColor = { 0.16f, 0.2f, 0.17f, 1.0f };
+	static int lastcalled      = 0;
+	vec4_t     backgroundColor = { 0.16f, 0.2f, 0.17f, 1.0f };
 
 	if (lastcalled && (trap_Milliseconds() - lastcalled < 500)) {
 		return;
