@@ -1176,10 +1176,10 @@ void CG_BannerPrint(const char *str) {
 
 		// suburb, if still too long, just cut it at BP_LINEWIDTH
 		if (textlen % BP_LINEWIDTH == 0 && textlen > 0) {
-			Q_strncpyz(buff, &cg.bannerPrint[i], sizeof(buff));
+			Q_strncpyz(buff, &cg.bannerPrint[i], sizeof (buff));
 			cg.bannerPrint[i] = '\n';
 			cg.bannerPrint[i + 1] = 0;
-			Q_strcat(cg.bannerPrint, sizeof(cg.bannerPrint), buff);
+			Q_strcat(cg.bannerPrint, sizeof (cg.bannerPrint), buff);
 			cleanCut[lines - 2] = 0;
 			textlen = 0;
 			needNewLine = qfalse;
