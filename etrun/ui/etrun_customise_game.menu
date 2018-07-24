@@ -50,8 +50,8 @@ menuDef {
 	MULTI( 8, 208, (SUBWINDOW_WIDTH)-4, 10, "Noclip speed:", .2, 8, "cg_noclipSpeed", cvarFloatList { "100" 100 "1000" 1000 "10000" 10000 "100000" 100000 "1000000" 1000000 }, "Noclip speed in units per second" )
 
 	SUBWINDOW( 6, 226, (SUBWINDOW_WIDTH), 60, "Visible Triggers" )
-	MULTI( 8, 242, (SUBWINDOW_WIDTH)-4, 10, "Toggle visible triggers:", .2, 8, "cg_drawTriggers", cvarFloatList { "No" 0 "Triggers" 1 "Trigger, Jumppads" 2 "Triggers, Jumppads, Teleporters" 3 "All" 4}, "Toggle trigger types to draw" )
-	MULTI( 8, 258, (SUBWINDOW_WIDTH)-4, 10, "Triggers draw offset:", .2, 8, "cg_triggerOffset", cvarFloatList { "0" 0 "+0.01" 0.01 "-0.01" -0.01 "+0.1" 0.1 "-0.1" -0.1 "1" 1 "-1" -1 "10" 10 "-10" -10}, "Triggers drawing size offset" )
+	MULTI( 8, 242, (SUBWINDOW_WIDTH)-4, 10, "Toggle visible triggers:", .2, 8, "cg_drawTriggers", cvarFloatList { "No" 0 "Triggers" 1 "Triggers, Jumppads" 2 "Triggers, Jumppads, Teleporters" 3 "All" 4}, "Toggle trigger types to draw" )
+	MULTI( 8, 258, (SUBWINDOW_WIDTH)-4, 10, "Triggers draw offset:", .2, 8, "cg_triggerOffset", cvarFloatList { "0" 0 "0.01" 0.01 "-0.01" -0.01 "0.1" 0.1 "-0.1" -0.1 "1" 1 "-1" -1 "10" 10 "-10" -10}, "Triggers drawing size offset" )
 	MULTI( 8, 274, (SUBWINDOW_WIDTH)-4, 10, "Triggers color:", .2, 8, "cg_triggerColor", cvarStrList { "White"; "white"; "Yellow"; "yellow"; "Red"; "red"; "Green"; "green"; "Blue"; "blue"; "Magenta"; "magenta"; "Cyan"; "cyan"; "Orange"; "orange"; }, "Set the color for visible triggers" )
 
 // Buttons //
