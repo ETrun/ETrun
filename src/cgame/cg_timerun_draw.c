@@ -575,6 +575,9 @@ void CG_DrawCGaz(void) {
 		CG_DrawLine(SCREEN_CENTER_X, SCREEN_CENTER_Y,
 		            SCREEN_CENTER_X + vel_size * sin(vel_relang),
 		            SCREEN_CENTER_Y - vel_size * cos(vel_relang), colorRed);
+		if (vel_size > SCREEN_HEIGHT / 2) {
+			vel_size = SCREEN_HEIGHT / 2;
+		}
 		vel_size /= 2;
 		CG_DrawLine(SCREEN_CENTER_X, SCREEN_CENTER_Y,
 		            SCREEN_CENTER_X + vel_size * sin(vel_relang + per_angle),
