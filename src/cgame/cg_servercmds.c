@@ -1131,13 +1131,13 @@ Create banner to be printed, from TJMod
 void CG_BannerPrint(const char *str) {
 	char     buff[MAX_STRING_CHARS] = { 0 };
 	int      cleanCut[BP_LINES_MAX];
-	int      i                      = 0;
-	int      len                    = 0;
-	int      textlen                = 0;
-	int      lines                  = 1;
-	int      index                  = -1;
-	qboolean needNewLine            = qfalse;
-	
+	int      i           = 0;
+	int      len         = 0;
+	int      textlen     = 0;
+	int      lines       = 1;
+	int      index       = -1;
+	qboolean needNewLine = qfalse;
+
 	Q_strncpyz(cg.bannerPrint, str, sizeof (cg.bannerPrint));
 	memset(cleanCut, 1, sizeof (cleanCut));
 
@@ -1177,12 +1177,12 @@ void CG_BannerPrint(const char *str) {
 		// suburb, if still too long, just cut it at BP_LINEWIDTH
 		if (textlen % BP_LINEWIDTH == 0 && textlen > 0) {
 			Q_strncpyz(buff, &cg.bannerPrint[i], sizeof (buff));
-			cg.bannerPrint[i] = '\n';
+			cg.bannerPrint[i]     = '\n';
 			cg.bannerPrint[i + 1] = 0;
 			Q_strcat(cg.bannerPrint, sizeof (cg.bannerPrint), buff);
 			cleanCut[lines - 2] = 0;
-			textlen = 0;
-			needNewLine = qfalse;
+			textlen             = 0;
+			needNewLine         = qfalse;
 		}
 	}
 
