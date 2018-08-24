@@ -2335,6 +2335,7 @@ void CG_ChargeTimesChanged(void);
 void CG_LoadVoiceChats();               // NERVE - SMF
 void CG_PlayBufferedVoiceChats();       // NERVE - SMF
 void CG_AddToNotify(const char *str);
+void CG_BannerPrint(const char *str);
 const char *CG_LocalizeServerCommand(const char *buf);
 //
 // cg_playerstate.c
