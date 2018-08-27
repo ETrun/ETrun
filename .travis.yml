@@ -62,7 +62,7 @@ deploy:
   skip_cleanup: true
   on:
     repo: ETrun/ETrun
-    branch: master
+    all_branches: true
   overwrite: true
   name: ETrun-$COMMIT
   prerelease: true
