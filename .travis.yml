@@ -13,6 +13,10 @@ git:
   quiet: true
   submodules: false
 
+branches:
+  only:
+  - master
+
 env:
   global:
   - secure: nvn/kowNi9+ji+I3gYBUAv3xy1KFZQztXXtYjfdblwxgUK5vmEze/RcuHzamLQXtHHxsoDMma4F+9iqyMY3HgPGtXJYY8KHU1HVUdJA6mK0Cexbb+yJ5MIKfPPdqta4CUqBsKBcOZDnihymYRSnmLe1jk+jgxPa0efc6xF+UJow=
@@ -62,7 +66,7 @@ deploy:
   skip_cleanup: true
   on:
     repo: ETrun/ETrun
-    all_branches: true
+    branch: master
   overwrite: true
   name: ETrun-$COMMIT
   prerelease: true
