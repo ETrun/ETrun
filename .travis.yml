@@ -1,17 +1,30 @@
 language: c
-compiler:
-- gcc
-- clang
+
+dist: trusty
+
 script:
 - "./make.sh"
+
 git:
+  quiet: true
   submodules: false
+
 env:
   global:
   - secure: nvn/kowNi9+ji+I3gYBUAv3xy1KFZQztXXtYjfdblwxgUK5vmEze/RcuHzamLQXtHHxsoDMma4F+9iqyMY3HgPGtXJYY8KHU1HVUdJA6mK0Cexbb+yJ5MIKfPPdqta4CUqBsKBcOZDnihymYRSnmLe1jk+jgxPa0efc6xF+UJow=
   - COMMIT=${TRAVIS_COMMIT::6}
+
+matrix:
+  include:
+  - os: linux
+    compiler: gcc
+    addons:
+      sources:
+      - ubuntu-toolchain-r-test
+
 notifications:
   email: false
+
 addons:
   coverity_scan:
     project:
@@ -20,6 +33,7 @@ addons:
     notification_email: false
     build_command: "./make.sh"
     branch_pattern: master
+
 deploy:
   provider: releases
   api_key:
