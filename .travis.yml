@@ -1,29 +1,31 @@
 language: c
-
 compiler:
-  - gcc
-  - clang
-
+- gcc
+- clang
 script:
-  - ./make.sh
-
+- "./make.sh"
 git:
   submodules: false
-
 env:
   global:
-   # The next declaration is the encrypted COVERITY_SCAN_TOKEN, created
-   #   via the "travis encrypt" command using the project repo's public key
-   - secure: "nvn/kowNi9+ji+I3gYBUAv3xy1KFZQztXXtYjfdblwxgUK5vmEze/RcuHzamLQXtHHxsoDMma4F+9iqyMY3HgPGtXJYY8KHU1HVUdJA6mK0Cexbb+yJ5MIKfPPdqta4CUqBsKBcOZDnihymYRSnmLe1jk+jgxPa0efc6xF+UJow="
-
+  - secure: nvn/kowNi9+ji+I3gYBUAv3xy1KFZQztXXtYjfdblwxgUK5vmEze/RcuHzamLQXtHHxsoDMma4F+9iqyMY3HgPGtXJYY8KHU1HVUdJA6mK0Cexbb+yJ5MIKfPPdqta4CUqBsKBcOZDnihymYRSnmLe1jk+jgxPa0efc6xF+UJow=
 notifications:
   email: false
-
 addons:
   coverity_scan:
     project:
-      name: "ETrun/ETrun"
-      description: "Build submitted via Travis CI"
+      name: ETrun/ETrun
+      description: Build submitted via Travis CI
     notification_email: false
     build_command: "./make.sh"
     branch_pattern: master
+deploy:
+  provider: releases
+  api_key:
+    secure: DM7HcrsVutkJIC1NZziOs3Ez7wb97YxBwOW24MY+oeP2gzB5yg0OVBSTKG5r8tyZ0V2WN++91rPJI5ypKuoIN4fGOv1Nls/wIDv/byu6PCUiNTrKpo4urVyOno/5fsmuLNWeXuPyGKpenbnPevdNV30e6UnXk8PoC8iFe8qDVDI=
+  file_glob: true
+  file: etrun/*.so
+  skip_cleanup: true
+  on:
+    repo: ETrun/ETrun
+  prerelease: true
