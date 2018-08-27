@@ -2,7 +2,11 @@ language: c
 
 dist: trusty
 
+before_install:
+- test $TRAVIS_BRANCH != coverity_scan -o ${TRAVIS_JOB_NUMBER##*.} = 1 || exit 0
+
 script:
+- test $TRAVIS_BRANCH != coverity_scan || exit 0
 - $BUILD_SCRIPT
 
 git:
@@ -45,14 +49,16 @@ addons:
       description: Build submitted via Travis CI
     notification_email: false
     build_command: "./make.sh"
-    branch_pattern: master
+    branch_pattern: coverity_scan
 
 deploy:
   provider: releases
   api_key:
     secure: DM7HcrsVutkJIC1NZziOs3Ez7wb97YxBwOW24MY+oeP2gzB5yg0OVBSTKG5r8tyZ0V2WN++91rPJI5ypKuoIN4fGOv1Nls/wIDv/byu6PCUiNTrKpo4urVyOno/5fsmuLNWeXuPyGKpenbnPevdNV30e6UnXk8PoC8iFe8qDVDI=
   file_glob: true
-  file: build/etrun/*.so
+  file:
+  - " build/etrun/*.so"
+  - " build/etrun/*_mac"
   skip_cleanup: true
   on:
     repo: ETrun/ETrun
