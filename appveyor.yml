@@ -2,7 +2,7 @@
 #      general configuration      #
 #---------------------------------#
 
-version: 1.4.0-{build}
+version: ETrun-{build}
 
 branches:
   only:
@@ -18,6 +18,15 @@ image: Visual Studio 2013
 # scripts that are called at very beginning, before repo cloning
 init:
   - git config --global core.autocrlf input
+  - ps: |
+    if ($env:APPVEYOR_REPO_TAG -eq "true")
+    {
+      Update-AppveyorBuild -Version "ETrun-$($env:APPVEYOR_REPO_TAG_NAME.TrimStart("v"))"
+    }
+    else
+    {
+      Update-AppveyorBuild -Version "ETrun-$($env:APPVEYOR_REPO_COMMIT.Substring(0, 7))"
+    }
 
 environment:
   VisualStudioVersion: '10.0'
@@ -31,10 +40,11 @@ install:
 #---------------------------------#
 
 # build platform, i.e. x86, x64, Any CPU. This setting is optional.
-platform: x86
+platform:
+  - x86
+  - x64
 
 configuration:
- - Debug
  - Release
 
 build:
@@ -51,4 +61,20 @@ build_script:
 #---------------------------------#
 
 artifacts:
-  - path: build/etrun
+  - path: 'build/etrun/*.dll'
+
+#---------------------------------#
+#       deploy configuration      #
+#---------------------------------#
+
+deploy:
+  release: "ETrun-$($env:APPVEYOR_REPO_COMMIT.Substring(0, 7))"
+  description: ''
+  provider: GitHub
+  auth_token:
+    secure: LtoQ1zCxiNyJeftnsIJlGyGhlIsuFvzCkn9Om+4bSaG9YmDkisxTY5tKl/dJJ/+R # your encrypted token from GitHub
+  draft: false
+  prerelease: true
+  on:
+    branch: master                 # release from master branch only
+    appveyor_repo_tag: true        # deploy on tag push only
