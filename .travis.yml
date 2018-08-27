@@ -16,6 +16,7 @@ git:
 branches:
   only:
   - master
+  - coverity_scan
 
 env:
   global:
@@ -54,6 +55,9 @@ addons:
     notification_email: false
     build_command: "./make.sh"
     branch_pattern: coverity_scan
+
+before_deploy:
+  - git tag "$COMMIT"
 
 deploy:
   provider: releases
