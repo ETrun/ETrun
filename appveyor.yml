@@ -18,15 +18,6 @@ image: Visual Studio 2013
 # scripts that are called at very beginning, before repo cloning
 init:
   - git config --global core.autocrlf input
-  - ps: |
-    if ($env:APPVEYOR_REPO_TAG -eq "true")
-    {
-      Update-AppveyorBuild -Version "ETrun-$($env:APPVEYOR_REPO_TAG_NAME.TrimStart("v"))"
-    }
-    else
-    {
-      Update-AppveyorBuild -Version "ETrun-$($env:APPVEYOR_REPO_COMMIT.Substring(0, 7))"
-    }
 
 environment:
   VisualStudioVersion: '10.0'
