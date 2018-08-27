@@ -44,5 +44,6 @@ deploy:
   on:
     repo: ETrun/ETrun
     branch: master
+  overwrite: true
   name: ETrun-$COMMIT
   prerelease: true
