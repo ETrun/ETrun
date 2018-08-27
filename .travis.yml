@@ -27,6 +27,9 @@ matrix:
     addons:
       sources:
       - ubuntu-toolchain-r-test
+      apt:
+        packages:
+          - gcc-multilib
     env: BUILD_SCRIPT="./make.sh -t x86"
 
 notifications:
