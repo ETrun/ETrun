@@ -3,7 +3,7 @@ language: c
 dist: trusty
 
 script:
-- "./make.sh"
+- $BUILD_SCRIPT
 
 git:
   quiet: true
@@ -21,6 +21,13 @@ matrix:
     addons:
       sources:
       - ubuntu-toolchain-r-test
+    env: BUILD_SCRIPT="./make.sh"
+  - os: linux
+    compiler: gcc
+    addons:
+      sources:
+      - ubuntu-toolchain-r-test
+    env: BUILD_SCRIPT="./make.sh -t x86"
 
 notifications:
   email: false
