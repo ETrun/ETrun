@@ -31,6 +31,9 @@ matrix:
         packages:
           - gcc-multilib
     env: BUILD_SCRIPT="./make.sh -t x86"
+  - os: osx
+    osx_image: xcode9.4
+    env: BUILD_SCRIPT="./make.sh -u"
 
 notifications:
   email: false
