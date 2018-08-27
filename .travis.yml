@@ -57,7 +57,8 @@ addons:
     branch_pattern: coverity_scan
 
 before_deploy:
-  - git tag "$COMMIT"
+  - git tag -f -a "$COMMIT" -m "Created by Travis-ci"
+  - git push origin --tags
 
 deploy:
   provider: releases
