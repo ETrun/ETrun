@@ -56,10 +56,6 @@ addons:
     build_command: "./make.sh"
     branch_pattern: coverity_scan
 
-before_deploy:
-  - git tag -f -a "$COMMIT" -m "Created by Travis-ci"
-  - git push origin --tags
-
 deploy:
   provider: releases
   api_key:
@@ -71,7 +67,7 @@ deploy:
   skip_cleanup: true
   on:
     repo: ETrun/ETrun
-    branch: master
+    tags: true
   overwrite: true
   name: ETrun-$COMMIT
   prerelease: true
