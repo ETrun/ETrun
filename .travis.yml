@@ -25,7 +25,7 @@ deploy:
   api_key:
     secure: DM7HcrsVutkJIC1NZziOs3Ez7wb97YxBwOW24MY+oeP2gzB5yg0OVBSTKG5r8tyZ0V2WN++91rPJI5ypKuoIN4fGOv1Nls/wIDv/byu6PCUiNTrKpo4urVyOno/5fsmuLNWeXuPyGKpenbnPevdNV30e6UnXk8PoC8iFe8qDVDI=
   file_glob: true
-  file: etrun/*.so
+  file: build/etrun/*.so
   skip_cleanup: true
   on:
     repo: ETrun/ETrun
