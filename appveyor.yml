@@ -21,12 +21,10 @@ init:
 
 environment:
   matrix:
-    - platform: vs
-      vsversion: 2010
-      arch: x86
-    - platform: vs
-      vsversion: 2010
-      arch: x64
+    - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2013
+      CMAKE_GENERATOR: 'Visual Studio 10 2010'
+    - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2013
+      CMAKE_GENERATOR: 'Visual Studio 10 2010 Win64'
 
 # scripts that run after cloning repository
 install:
