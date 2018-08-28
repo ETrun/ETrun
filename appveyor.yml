@@ -43,7 +43,7 @@ build:
 build_script:
   - mkdir build
   - cd build
-  - cmake -G %CMAKE_GENERATOR% ..
+  - cmake -G "%CMAKE_GENERATOR%" ..
   - cmake --build . --config %CONFIGURATION%
 
 #---------------------------------#
