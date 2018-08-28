@@ -1494,8 +1494,10 @@ void G_ShutdownGame(int restart) {
 	// Nico, windows specific actions
 #if defined _WIN32
 
+# if !defined _WIN64
 	// Nico, unload sig handler
 	win32_deinitialize_handler();
+# endif
 
 	// Nico, unload pthread
 	pthread_win32_process_detach_np();
