@@ -1194,8 +1194,10 @@ void G_InitGame(int levelTime, int randomSeed) {
 	// Nico, windows specific actions
 #if defined _WIN32
 
+# if !defined _WIN64
 	// Nico, init crash handler
 	win32_initialize_handler();
+# endif
 
 	// Nico, load pthread
 	if (pthread_win32_process_attach_np() != TRUE) {
