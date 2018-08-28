@@ -20,7 +20,13 @@ init:
   - git config --global core.autocrlf input
 
 environment:
-  VisualStudioVersion: '10.0'
+  matrix:
+    - platform: vs
+      vsversion: 2010
+      arch: x86
+    - platform: vs
+      vsversion: 2010
+      arch: x64
 
 # scripts that run after cloning repository
 install:
@@ -29,11 +35,6 @@ install:
 #---------------------------------#
 #       build configuration       #
 #---------------------------------#
-
-# build platform, i.e. x86, x64, Any CPU. This setting is optional.
-platform:
-  - x86
-  - x64
 
 configuration:
  - Release
