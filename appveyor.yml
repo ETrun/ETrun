@@ -58,6 +58,7 @@ artifacts:
 #---------------------------------#
 
 deploy:
+  tag: $(APPVEYOR_REPO_TAG_NAME)
   release: "ETrun-latest"
   description: ''
   provider: GitHub
