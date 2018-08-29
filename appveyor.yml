@@ -58,7 +58,7 @@ artifacts:
 #---------------------------------#
 
 deploy:
-  release: "ETrun-$($env:APPVEYOR_REPO_COMMIT.Substring(0, 7))"
+  release: "ETrun-latest"
   description: ''
   provider: GitHub
   auth_token:
