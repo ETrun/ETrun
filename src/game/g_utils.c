@@ -1009,26 +1009,6 @@ team_t G_GetTeamFromEntity(gentity_t *ent) {
 	return TEAM_FREE;
 }
 
-/*
-==================
-G_GetClock
-
-Returns realtime in the format "hh:mm:ss"
-
-@author suburb
-==================
-*/
-char *G_GetClock(void) {
-	static char displayTime[18] = { 0 };
-	qtime_t     tm;
-
-	trap_RealTime(&tm);
-	displayTime[0] = '\0';
-	Q_strcat(displayTime, sizeof (displayTime), va("%d:%02d:%02d", tm.tm_hour, tm.tm_min, tm.tm_sec));
-
-	return displayTime;
-}
-
 // Nico, wait functions
 #ifdef _WIN32
 # include <windows.h>
