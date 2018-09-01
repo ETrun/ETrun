@@ -1388,6 +1388,9 @@ void CG_DrawActiveFrame(int serverTime, stereoFrame_t stereoView, qboolean demoP
 	// update cg.predictedPlayerState
 	CG_PredictPlayerState();
 
+	// suburb, draw triggers
+	CG_DrawTriggers();
+
 	// clear all the render lists
 	trap_R_ClearScene();
 

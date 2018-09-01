@@ -340,7 +340,7 @@ Modified CG_TouchTriggerPrediction() function to draw triggers
 @author suburb
 =========================
 */
-static void CG_DrawTriggers(void) {
+void CG_DrawTriggers(void) {
 	int          i;
 	centity_t    *cent;
 	clipHandle_t cmodel;
@@ -689,9 +689,6 @@ void CG_PredictPlayerState(void) {
 		Pmove(&cg_pmove);
 
 		moved = qtrue;
-
-		// Draw Triggers
-		CG_DrawTriggers();
 	}
 
 	if (cg_showmiss.integer > 1) {
