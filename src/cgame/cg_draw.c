@@ -2235,11 +2235,15 @@ void CG_DrawMiscGamemodels(void) {
 	}
 }
 
-/**
- * Autodemo function
- *
- * @source: TJMod (modified by Nico)
- */
+/*
+=================
+CG_Autodemo
+
+Autodemo function from TJMod
+
+@author Nico
+=================
+*/
 static void CG_Autodemo() {
 	if (!cg_autoDemo.integer || cg.demoPlayback) {
 		return;

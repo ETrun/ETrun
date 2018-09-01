@@ -2,7 +2,7 @@
 #      general configuration      #
 #---------------------------------#
 
-version: 1.4.0-{build}
+version: ETrun-{build}
 
 branches:
   only:
@@ -20,7 +20,11 @@ init:
   - git config --global core.autocrlf input
 
 environment:
-  VisualStudioVersion: '10.0'
+  matrix:
+    - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2013
+      CMAKE_GENERATOR: 'Visual Studio 12 2013'
+    - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2013
+      CMAKE_GENERATOR: 'Visual Studio 12 2013 Win64'
 
 # scripts that run after cloning repository
 install:
@@ -30,11 +34,7 @@ install:
 #       build configuration       #
 #---------------------------------#
 
-# build platform, i.e. x86, x64, Any CPU. This setting is optional.
-platform: x86
-
 configuration:
- - Debug
  - Release
 
 build:
@@ -43,7 +43,7 @@ build:
 build_script:
   - mkdir build
   - cd build
-  - cmake ..
+  - cmake -G "%CMAKE_GENERATOR%" ..
   - cmake --build . --config %CONFIGURATION%
 
 #---------------------------------#
@@ -51,4 +51,21 @@ build_script:
 #---------------------------------#
 
 artifacts:
-  - path: build/etrun
+  - path: 'build/etrun/*.dll'
+
+#---------------------------------#
+#       deploy configuration      #
+#---------------------------------#
+
+deploy:
+  tag: $(APPVEYOR_REPO_TAG_NAME)
+  release: "ETrun-latest"
+  description: ''
+  provider: GitHub
+  auth_token:
+    secure: LtoQ1zCxiNyJeftnsIJlGyGhlIsuFvzCkn9Om+4bSaG9YmDkisxTY5tKl/dJJ/+R # your encrypted token from GitHub
+  draft: false
+  prerelease: true
+  on:
+    branch: master                 # release from master branch only
+    appveyor_repo_tag: true        # deploy on tag push only

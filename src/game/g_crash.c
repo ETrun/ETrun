@@ -1,11 +1,11 @@
 #include "g_local.h"
 
 /*
- Crash handler for Windows only, on Linux coredump
+ Crash handler for Windows 32-bit only, on Linux coredump
  should be enabled and used to track any bug.
 */
 
-#if defined WIN32
+#if defined _WIN32 && !defined _WIN64
 # include <windows.h>
 # include <process.h>
 # include <imagehlp.h>
