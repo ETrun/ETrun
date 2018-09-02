@@ -595,7 +595,7 @@ static void CG_AddToTeamChat(const char *str, int clientnum) {
 
 	ls = NULL;
 	while (*str) {
-		if (len > TEAMCHAT_WIDTH - 1) {
+		if (len > (int) CG_WideX(TEAMCHAT_WIDTH) - 1) {
 			if (ls) {
 				str -= (p - ls);
 				str++;
