@@ -456,7 +456,7 @@ cvarTable_t cvarTable[] =
 	{ &cg_thirdPerson,          "cg_thirdPerson",          "0",     CVAR_CHEAT,                0 }, // JPW NERVE per atvi req
 	{ &cg_teamChatTime,         "cg_teamChatTime",         "8000",  CVAR_ARCHIVE,              0 },
 	{ &cg_chatHeight,           "cg_chatHeight",           "8",     CVAR_ARCHIVE,              0 },
-	{ &cg_chatX,                "cg_chatX",                "160",   CVAR_ARCHIVE,              0 },
+	{ &cg_chatX,                "cg_chatX",                "130",   CVAR_ARCHIVE,              0 },
 	{ &cg_chatY,                "cg_chatY",                "478",   CVAR_ARCHIVE,              0 },
 	{ &cg_coronafardist,        "cg_coronafardist",        "1536",  CVAR_ARCHIVE,              0 },
 	{ &cg_coronas,              "cg_coronas",              "1",     CVAR_ARCHIVE,              0 },
