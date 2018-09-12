@@ -722,9 +722,9 @@ void CG_DrawVelocitySnapping(void) {
 	fov       = cg_velocitySnappingFov.integer;
 
 	if (cg_drawVelocitySnapping.integer == 2) {
-		for (int i = 0; i < 3; i++) {
-			color[0][i] = 1;
-			color[1][i] = 1;
+		for (int i = 0; i < 4; i++) {
+			color[0][i] = 1.0f;
+			color[1][i] = 1.0f;
 		}
 	} else {
 		for (int i = 0; i < 4; i++) {
