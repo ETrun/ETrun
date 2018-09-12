@@ -929,7 +929,7 @@ void G_SayTo(gentity_t *ent, gentity_t *other, int mode, int color, const char *
 	} else {
 		cmd = mode == SAY_TEAM || mode == SAY_BUDDY ? "tchat" : "chat";
 	}
-	trap_SendServerCommand(other - g_entities, va("%s \"%s%c%c%s\" %d %s", cmd, name, Q_COLOR_ESCAPE, color, message, (int)(ent - g_entities), G_GetClock()));
+	trap_SendServerCommand(other - g_entities, va("%s \"%s%c%c%s\" %d", cmd, name, Q_COLOR_ESCAPE, color, message, (int)(ent - g_entities)));
 }
 
 /*
@@ -1049,7 +1049,7 @@ void G_VoiceTo(gentity_t *ent, gentity_t *other, int mode, const char *id, qbool
 		cmd   = "vchat";
 	}
 
-	trap_SendServerCommand(other - g_entities, va("%s %d %d %d %s %s", cmd, voiceonly, (int)(ent - g_entities), color, id, G_GetClock()));
+	trap_SendServerCommand(other - g_entities, va("%s %d %d %d %s", cmd, voiceonly, (int)(ent - g_entities), color, id));
 }
 
 void G_Voice(gentity_t *ent, gentity_t *target, int mode, const char *id, qboolean voiceonly) {
@@ -2533,7 +2533,7 @@ void Cmd_PrivateMessage_f(gentity_t *ent) {
 	trap_Argv(0, cmd, sizeof (cmd));
 
 	if (trap_Argc() < 3) {
-		CP(va("print \"usage: %s [name|slot#] [message]\n\"", cmd));
+		CP(va("print \"Usage: %s [name|slot#] [message]\n\"", cmd));
 		return;
 	}
 
@@ -2547,7 +2547,7 @@ void Cmd_PrivateMessage_f(gentity_t *ent) {
 		Q_strncpyz(netname, "console", sizeof (name));
 	}
 
-	Q_strncpyz(str, va("^3sent to %i player%s: ^7", pcount, pcount == 1 ? "" : "s"), sizeof (str));
+	Q_strncpyz(str, va("^3Sent to %i player%s: ^7", pcount, pcount == 1 ? "" : "s"), sizeof (str));
 
 	for (i = 0; i < pcount; ++i) {
 		gentity_t *tmpent = &g_entities[pids[i]];
@@ -2569,7 +2569,7 @@ void Cmd_PrivateMessage_f(gentity_t *ent) {
 				pcount == 1 ? "" : "s",
 				msg,
 				ent ? (int)(ent - g_entities) : -1));
-		CPx(pids[i], va("cp \"^3private message from ^7%s^7\"", netname));
+		CPx(pids[i], va("cp \"^3Private message from ^7%s^7\"", netname));
 	}
 
 	if (!pcount) {

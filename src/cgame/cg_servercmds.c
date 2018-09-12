@@ -1009,7 +1009,7 @@ void CG_VoiceChatLocal(int mode, qboolean voiceOnly, int clientNum, int color, c
 			vchat.voiceOnly = voiceOnly;
 			Q_strncpyz(vchat.cmd, cmd, sizeof (vchat.cmd));
 
-			Com_sprintf(vchat.message, sizeof (vchat.message), "^g[%s] ^7%s%c%c: %c%c%s", CG_Argv(5), ci->name, Q_COLOR_ESCAPE, COLOR_YELLOW, Q_COLOR_ESCAPE, color, CG_TranslateString(chat));
+			Com_sprintf(vchat.message, sizeof (vchat.message), "^g[%s] ^7%s%c%c: %c%c%s", CG_GetClock(), ci->name, Q_COLOR_ESCAPE, COLOR_YELLOW, Q_COLOR_ESCAPE, color, CG_TranslateString(chat));
 			CG_AddBufferedVoiceChat(&vchat);
 		}
 	}
@@ -1308,8 +1308,8 @@ static void CG_ServerCommand(void) {
 		if (enc) {
 			CG_DecodeQP(text);
 		}
-		CG_AddToTeamChat(va("^g[%s] ^7%s", CG_Argv(3), text), atoi(CG_Argv(2)));
-		CG_Printf(va("^g[%s] ^7%s\n", CG_Argv(3), text));
+		CG_AddToTeamChat(va("^g[%s] ^7%s", CG_GetClock(), text), atoi(CG_Argv(2)));
+		CG_Printf(va("^g[%s] ^7%s\n", CG_GetClock(), text));
 
 		return;
 	}
@@ -1329,8 +1329,8 @@ static void CG_ServerCommand(void) {
 		if (enc) {
 			CG_DecodeQP(text);
 		}
-		CG_AddToTeamChat(va("^g[%s] ^7%s", CG_Argv(3), text), atoi(CG_Argv(2)));
-		CG_Printf(va("^g[%s] ^7%s\n", CG_Argv(3), text));
+		CG_AddToTeamChat(va("^g[%s] ^7%s", CG_GetClock(), text), atoi(CG_Argv(2)));
+		CG_Printf(va("^g[%s] ^7%s\n", CG_GetClock(), text));
 
 		return;
 	}
