@@ -388,7 +388,7 @@ static void CG_DrawTeamInfo(void) {
 			hcolor[3] = 0.33f * alphapercent;
 
 			trap_R_SetColor(hcolor);
-			CG_DrawPic(chatX, chatY - (cgs.teamChatPos - i) * lineHeight, CHAT_WIDTH, lineHeight, cgs.media.teamStatusBar);
+			CG_DrawPic(chatX, chatY - (cgs.teamChatPos - i) * lineHeight, CG_WideX(CHAT_WIDTH), lineHeight, cgs.media.teamStatusBar);
 
 			hcolor[0] = hcolor[1] = hcolor[2] = 1.0;
 			hcolor[3] = alphapercent;
