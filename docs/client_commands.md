@@ -1,8 +1,6 @@
 There are various client commands available in ETrun. They are described below.
 
-# Player position control
-
-## save
+# save
 
 ```
 /save [slotId]
@@ -10,7 +8,7 @@ There are various client commands available in ETrun. They are described below.
 
 Save current position into the given `slotId`. If `slotId` is omitted, default to slot 0.
 
-## load
+# load
 
 ```
 /load [slotId]
@@ -21,9 +19,7 @@ Load a previously saved position from saved slots. If `slotId` is omitted, defau
 - View angles are also loaded if `cg_loadViewAngles = 1`.
 - Weapon is also loaded if `cg_loadWeapon = 1`.
 
-# Timeruns.net API
-
-## login
+# login
 
 ```
 /login
@@ -31,7 +27,7 @@ Load a previously saved position from saved slots. If `slotId` is omitted, defau
 
 Attempt to login the player on timeruns.net API using `cg_timerunsToken` value.
 
-## logout
+# logout
 
 ```
 /logout
@@ -39,7 +35,7 @@ Attempt to login the player on timeruns.net API using `cg_timerunsToken` value.
 
 Logout a player from timeruns.net API.
 
-## records
+# records
 
 ```
 /records
@@ -47,7 +43,7 @@ Logout a player from timeruns.net API.
 
 Request timeruns.net API for records of every runs in the current map and print them.
 
-## loadCheckpoints
+# loadCheckpoints
 
 ```
 /loadCheckpoints [userName] [runName]
@@ -70,7 +66,7 @@ Request timeruns.net API for the run checkpoints of a user and load them.
 /loadCheckpoints other_player run2
 ```
 
-## h (help)
+# h (help)
 
 ```
 /h [command]
@@ -78,7 +74,7 @@ Request timeruns.net API for the run checkpoints of a user and load them.
 
 Provide help about ETrun commands. If `command` is omitted, list all available commands. If provided, display usage of `command`.
 
-## rank
+# rank
 
 ```
 /rank [userName] [mapName] [runName] [physicsName]
@@ -101,9 +97,7 @@ When no option provided, this command will requires player to be logged in and w
 /rank other_player shorties "Shorties 2" AP
 ```
 
-# Class selection
-
-## class
+# class
 
 ```
 /class class [weapon1] [weapon2]
@@ -122,9 +116,7 @@ Change player class to `class`. Possible classes are described below.
 | Covert ops  | c       |
 | Soldier     | s       |
 
-# Speclock
-
-## speclock
+# speclock
 
 ```
 /speclock
@@ -132,7 +124,7 @@ Change player class to `class`. Possible classes are described below.
 
 Prevent spectators to spectate you.
 
-## specunclock
+# specunclock
 
 ```
 /specunclock
@@ -140,7 +132,7 @@ Prevent spectators to spectate you.
 
 Allow spectators to spectate you.
 
-## specinvite
+# specinvite
 
 ```
 /specinvite playerId
@@ -148,7 +140,7 @@ Allow spectators to spectate you.
 
 Allow `playerId` to spectate you.
 
-## specuninvite
+# specuninvite
 
 ```
 /specuninvite playerId
@@ -156,9 +148,7 @@ Allow `playerId` to spectate you.
 
 Prevent a previously invited spectator to spectate you.
 
-# Chat
-
-## m (private messaging)
+# m (private messaging)
 
 ```
 /m playerName message
@@ -166,4 +156,3 @@ Prevent a previously invited spectator to spectate you.
 ```
 
 Send a private message containing text  `message` to player name `playerName`. If `playerName` is not found, numeric player id `playerId` will be used instead.
-
