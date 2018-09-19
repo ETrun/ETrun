@@ -36,6 +36,11 @@ MacOS
 Not compatible with `ET 2.60d`.
 Works (tested) on `MacOS 10.13` with `ET: Legacy`.
 
+Documentation
+=============
+
+[ETrun documentation](https://etrun.readthedocs.io/en/latest/).
+
 Building ETrun
 ==============
 
