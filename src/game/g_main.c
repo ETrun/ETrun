@@ -183,6 +183,10 @@ vmCvar_t g_geoIPDbPath;
 // Strict save/load
 vmCvar_t g_strictSaveLoad;
 
+// suburb, additional cvars to force client settings
+vmCvar_t g_disableCGaz;
+vmCvar_t g_disableSnappingHUD;
+
 // Nico, end of ETrun cvars
 
 cvarTable_t gameCvarTable[] =
@@ -332,7 +336,10 @@ cvarTable_t gameCvarTable[] =
 	{ &g_geoIPDbPath,          "g_geoIPDbPath",          "GeoIP.dat",                  CVAR_ARCHIVE | CVAR_LATCH,                                     qfalse, qfalse, qfalse },
 
 	// Strict save/load
-	{ &g_strictSaveLoad,       "g_strictSaveLoad",       "0",                          CVAR_ARCHIVE | CVAR_LATCH,                                     qfalse, qfalse, qfalse }
+	{ &g_strictSaveLoad,       "g_strictSaveLoad",       "0",                          CVAR_ARCHIVE | CVAR_LATCH,                                     qfalse, qfalse, qfalse },
+
+	{ &g_disableCGaz,          "g_disableCGaz",          "0",                          CVAR_ARCHIVE | CVAR_LATCH,                                     qfalse, qfalse, qfalse },
+	{ &g_disableSnappingHUD,   "g_disableSnappingHUD",   "0",                          CVAR_ARCHIVE | CVAR_LATCH,                                     qfalse, qfalse, qfalse }
 
 	// Nico, end of ETrun cvars
 };
