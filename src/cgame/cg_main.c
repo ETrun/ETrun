@@ -302,6 +302,7 @@ vmCvar_t cg_autoLogin;
 
 // CGaz
 vmCvar_t cg_drawCGaz;
+vmCvar_t cg_realCGaz2;
 
 // Velocity Snapping
 vmCvar_t cg_drawVelocitySnapping;
@@ -593,6 +594,7 @@ cvarTable_t cvarTable[] =
 
 	// CGaz
 	{ &cg_drawCGaz,             "cg_drawCGaz",             "0",     CVAR_ARCHIVE,              0 },
+	{ &cg_realCGaz2,            "cg_realCGaz2",            "0",     CVAR_ARCHIVE,              0 },
 
 	// Velocity Snapping
 	{ &cg_drawVelocitySnapping, "cg_drawVelocitySnapping", "0",     CVAR_ARCHIVE,              0 },

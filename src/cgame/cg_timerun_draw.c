@@ -565,26 +565,43 @@ void CG_DrawCGaz(void) {
 		vel_relang = DEG2RAD(vel_relang);
 		per_angle  = DEG2RAD(per_angle);
 
-		CG_DrawLine(SCREEN_CENTER_X, SCREEN_CENTER_Y,
-		            SCREEN_CENTER_X + right, SCREEN_CENTER_Y - forward, colorCyan);
+		if (!cg_realCGaz2.integer && cg_widescreenSupport.integer) {
+			CG_DrawLine(SCREEN_CENTER_X, SCREEN_CENTER_Y,
+				SCREEN_CENTER_X + CG_WideX(right), SCREEN_CENTER_Y - forward, colorCyan);
+		} else {
+			CG_DrawLine(SCREEN_CENTER_X, SCREEN_CENTER_Y,
+				SCREEN_CENTER_X + right, SCREEN_CENTER_Y - forward, colorCyan);
+		}
 
 		vel_size /= 5;
 		if (vel_size > CG_WideX(SCREEN_WIDTH) / 2) {
 			vel_size = CG_WideX(SCREEN_WIDTH) / 2;
 		}
+
 		CG_DrawLine(SCREEN_CENTER_X, SCREEN_CENTER_Y,
-		            SCREEN_CENTER_X + vel_size * sin(vel_relang),
-		            SCREEN_CENTER_Y - vel_size * cos(vel_relang), colorRed);
+			SCREEN_CENTER_X + vel_size * sin(vel_relang),
+			SCREEN_CENTER_Y - vel_size * cos(vel_relang), colorRed);
+
 		if (vel_size > SCREEN_HEIGHT / 2) {
 			vel_size = SCREEN_HEIGHT / 2;
 		}
 		vel_size /= 2;
-		CG_DrawLine(SCREEN_CENTER_X, SCREEN_CENTER_Y,
-		            SCREEN_CENTER_X + vel_size * sin(vel_relang + per_angle),
-		            SCREEN_CENTER_Y - vel_size * cos(vel_relang + per_angle), colorRed);
-		CG_DrawLine(SCREEN_CENTER_X, SCREEN_CENTER_Y,
-		            SCREEN_CENTER_X + vel_size * sin(vel_relang - per_angle),
-		            SCREEN_CENTER_Y - vel_size * cos(vel_relang - per_angle), colorRed);
+
+		if (!cg_realCGaz2.integer && cg_widescreenSupport.integer) {
+			CG_DrawLine(SCREEN_CENTER_X, SCREEN_CENTER_Y,
+				SCREEN_CENTER_X + vel_size * CG_WideX(sin(vel_relang + per_angle)),
+				SCREEN_CENTER_Y - vel_size * cos(vel_relang + per_angle), colorRed);
+			CG_DrawLine(SCREEN_CENTER_X, SCREEN_CENTER_Y,
+				SCREEN_CENTER_X + vel_size * CG_WideX(sin(vel_relang - per_angle)),
+				SCREEN_CENTER_Y - vel_size * cos(vel_relang - per_angle), colorRed);
+		} else {
+			CG_DrawLine(SCREEN_CENTER_X, SCREEN_CENTER_Y,
+				SCREEN_CENTER_X + vel_size * sin(vel_relang + per_angle),
+				SCREEN_CENTER_Y - vel_size * cos(vel_relang + per_angle), colorRed);
+			CG_DrawLine(SCREEN_CENTER_X, SCREEN_CENTER_Y,
+				SCREEN_CENTER_X + vel_size * sin(vel_relang - per_angle),
+				SCREEN_CENTER_Y - vel_size * cos(vel_relang - per_angle), colorRed);
+		}
 	} else if (cg_drawCGaz.integer == 3) {
 		accel_angle = atan2(-right, forward);
 		accel_angle = AngleNormalize180(ps->viewangles[YAW] + RAD2DEG(accel_angle));
