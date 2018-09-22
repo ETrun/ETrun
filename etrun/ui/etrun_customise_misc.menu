@@ -5,7 +5,7 @@
 #define WINDOW_X		16
 #define WINDOW_Y		16
 #define WINDOW_WIDTH	520
-#define WINDOW_HEIGHT	288
+#define WINDOW_HEIGHT	302
 #define GROUP_NAME		"grpEtrunCustomiseMisc"
 
 // Macros //
@@ -50,9 +50,10 @@ menuDef {
 	SUBWINDOW( 6, 182, (SUBWINDOW_WIDTH), 30, "Speclock" )
 	YESNO( 8, 198, (SUBWINDOW_WIDTH)-4, 10, "Enable persistant speclock:", .2, 8, "cg_specLock", "" )
 
-	SUBWINDOW( 6, 216, (SUBWINDOW_WIDTH), 44, "Widescreen" )
+	SUBWINDOW( 6, 216, (SUBWINDOW_WIDTH), 58, "Widescreen" )
 	YESNO( 8, 232, (SUBWINDOW_WIDTH)-4, 10, "Enable widescreen support:", .2, 8, "cg_widescreenSupport", "" )
 	YESNO( 8, 246, (SUBWINDOW_WIDTH)-4, 10, "Toggle real fov:", .2, 8, "cg_realFov", "" )
+	YESNO( 8, 260, (SUBWINDOW_WIDTH)-4, 10, "Toggle real CGaz 2:", .2, 8, "cg_realCGaz2", "" )
 
 // Buttons //
 	
