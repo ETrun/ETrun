@@ -1534,6 +1534,10 @@ extern vmCvar_t g_geoIPDbPath;
 // Strict save/load
 extern vmCvar_t g_strictSaveLoad;
 
+// suburb, additional cvars to force client settings
+extern vmCvar_t g_disableCGaz;
+extern vmCvar_t g_disableSnappingHUD;
+
 // Nico, end of ETrun cvars
 
 void    trap_Printf(const char *fmt);
