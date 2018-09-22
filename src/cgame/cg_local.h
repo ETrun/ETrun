@@ -1792,6 +1792,7 @@ extern vmCvar_t cg_autoLogin;
 
 // CGaz
 extern vmCvar_t cg_drawCGaz;
+extern vmCvar_t cg_realCGaz2;
 
 // Velocity Snapping
 extern vmCvar_t cg_drawVelocitySnapping;
