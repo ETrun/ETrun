@@ -973,8 +973,8 @@ void ClientThink_real(gentity_t *ent) {
 		SetTeam(ent, "s", -1, -1, qfalse);
 	}
 
-	// suburb, force snapping hud if disabled on server
-	if (g_disableSnappingHUD.integer != 0 && client->pers.snapping != 0) {
+	// suburb, force snapping hud if disabled on server or logged in
+	if ((g_disableSnappingHUD.integer != 0 || (client->sess.logged && (client->sess.sessionTeam == TEAM_AXIS || client->sess.sessionTeam == TEAM_ALLIES))) && client->pers.snapping != 0) {
 		CP(va("cpm \"%s^w: ^1You were removed from teams because you must use cg_drawVelocitySnapping 0.\n\"", GAME_VERSION_COLORED));
 		trap_SendServerCommand(ent - g_entities, "SnappingOff");
 		SetTeam(ent, "s", -1, -1, qfalse);
