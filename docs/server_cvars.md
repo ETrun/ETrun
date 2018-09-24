@@ -6,7 +6,7 @@ Some cvars use bitflagged value, it means you can combine options by making the 
 | ----- | ----- | ------- | ----------- |
 | physics | *integer* | 255 | Set game physics according to the given **bitflagged** value. |
 
-Availabe flags for `physics` are listed below.
+Available flags for `physics` are listed below.
 
 | Flag | Value |
 | ---- | ----- |
@@ -39,7 +39,7 @@ Sticky values for physics used on official timeruns.net game servers are listed 
 | g_holdDoorsOpen | 0,1 | 1 | Hold the doors open. |
 | g_disableDrowning | 0,1 | 1 | Prevent player from drowning. |
 
-Availabe flags for `g_enableMapEntities` are listed below.
+Available flags for `g_enableMapEntities` are listed below.
 
 | Flag | Value |
 | ---- | ----- |
@@ -59,6 +59,7 @@ Availabe flags for `g_enableMapEntities` are listed below.
 | g_floodThreshold | *integer* | 8 | Limit the number of commands a client can send in an interval of 30 seconds. |
 | g_floodWait | *integer* | 768 | Delay (msec) required between two commands from a client. |
 | g_maxNameChanges | *integer* | 3 | Maximum name changes allowed per map. Use -1 to disable. |
+| vote_delay | *integer* | 20000 | Force a delay (msec) between two votes. Introduced in 1.4.0. |
 
 # Firewall
 
@@ -106,3 +107,10 @@ Availabe flags for `g_enableMapEntities` are listed below.
 | Name  | Value | Default | Description |
 | ----- | ----- | ------- | ----------- |
 | g_strictSaveLoad | 0,1 | 0 | Enable [strict save/load mode](https://github.com/ETrun/ETrun/issues/41). |
+
+# Enable/disable client features
+
+| Name  | Value | Default | Description |
+| ----- | ----- | ------- | ----------- |
+| g_disableCGaz | 0,1 | 0 | Disable usage of CGaz. Introduced in 1.4.0. |
+| g_disableSnappingHUD | 0,1 | 0 | Disable usage of Velocity Snapping HUD. Introduced in 1.4.0. |
