@@ -1126,8 +1126,8 @@ Create banner to be printed, from TJMod
 @author Nico
 ==================
 */
-#define BP_LINEWIDTH   64
-#define BP_LINES_MAX   (int) (MAX_STRING_CHARS / BP_LINEWIDTH)
+#define BP_LINEWIDTH   (int) CG_WideX(64) // suburb, make it scale with widescreens
+#define BP_LINES_MAX   16 // suburb, 16 is the worst case according (MAX_STRING_CHARS / BP_LINEWIDTH) if no widescreen
 void CG_BannerPrint(const char *str) {
 	char     buff[MAX_STRING_CHARS] = { 0 };
 	int      cleanCut[BP_LINES_MAX];
