@@ -74,6 +74,14 @@ Request timeruns.net API for the run checkpoints of a user and load them.
 
 Provide help about ETrun commands. If `command` is omitted, list all available commands. If provided, display usage of `command`.
 
+# tutorial
+
+```
+/tutorial
+```
+
+Show an introduction for beginners into the console.
+
 # rank
 
 ```
@@ -156,3 +164,19 @@ Prevent a previously invited spectator to spectate you.
 ```
 
 Send a private message containing text  `message` to player name `playerName`. If `playerName` is not found, numeric player id `playerId` will be used instead.
+
+# abort
+
+```
+/abort
+```
+
+Abort an active run.
+
+# mod_information
+
+```
+/mod_information
+```
+
+Displays informations about mod.

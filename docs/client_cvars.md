@@ -7,12 +7,24 @@ List of ETrun cvars.
 | cg_drawSpeedMeter | 0,1 | 1 | Display a speed meter. |
 | cg_speedMeterX | 0-640 | 320 | Speed meter horizontal position. |
 | cg_speedMeterY | 0-480 | 220 | Speed meter vertical position. |
+| cg_drawAccel | 0,1 | 0 | Color speed meter according to player acceleration. Introduced in ETrun 1.4.0. |
+| cg_accelSmoothness | *integer* | 100 | Sensitivity of the `cg_drawAccel` cvar. Introduced in ETrun 1.4.0. |
 
 # CGaz
 
 | Name  | Value | Default | Description |
 | ----- | ----- | ------- | ----------- |
 | cg_drawCGaz | 0,1,2,3,4 | 0 | Draw CGaz. Various types are available. Use 0 to disable. |
+| cg_realCGaz2 | 0,1 | 0 | Adjust CGaz 2 for widescreen display. Introduced in ETrun 1.4.0. |
+
+# Velocity Snapping HUD
+
+| Name  | Value | Default | Description |
+| ----- | ----- | ------- | ----------- |
+| cg_drawVelocitySnapping | 0,1,2 | 0 | Draw Velocity Snapping HUD. Various types are available. Use 0 to disable. Introduced in ETrun 1.4.0. |
+| cg_velocitySnappingH | *integer* | 8 | Velocity Snapping HUD height. Introduced in ETrun 1.4.0. |
+| cg_velocitySnappingY | 0-480 | 240 | Velocity Snapping HUD vertical position. Introduced in ETrun 1.4.0. |
+| cg_velocitySnappingFov | *integer* | 120 | Velocity Snapping Field Of View. Introduced in ETrun 1.4.0. |
 
 # Run timer
 
@@ -78,7 +90,27 @@ List of ETrun cvars.
 | cg_drawInfoPanel | 0,1 | 1 | Display info panel. |
 | cg_infoPanelX | 0-640 | 537 | Info panel horizontal position. |
 | cg_infoPanelY | 0-480 | 2 | Info panel vertical position. |
-| cg_minStartSpeed | *integer* | 0 | Minimum start speed to trigger red color in info panel. Default value is 0. Use 0 to disable. Introduced in ETrun 1.2.0. |
+| cg_minStartSpeed | *integer* | 0 | Minimum start speed desired. If unmet, player is killed (new in ETrun 1.4.0). Use 0 to disable. Introduced in ETrun 1.2.0. |
+
+Note: `cg_minStartSpeed` is reset to 0 at every new game session.
+
+# Triggers visibility
+
+| Name  | Value | Default | Description |
+| ----- | ----- | ------- | ----------- |
+| cg_drawTriggers | 0,1,2,3,4 | 1 | Make triggers visible. Use 0 to disable. Introduced in ETrun 1.4.0. |
+| cg_triggerOffset | *float* | 0 | Apply a factor to the size of triggers. Introduced in ETrun 1.4.0. |
+| cg_triggerColor | white,yellow,red,green,blue,magenta,cyan,orange | white | Set color of triggers. Introduced in ETrun 1.4.0. |
+
+Possibles values for `cg_drawTriggers` are listed below.
+
+| Value | What is displayed |
+| ----- | ----------------- |
+| 0 | None |
+| 1 | Triggers |
+| 2 | Triggers, Jumppads |
+| 3 | Triggers, Jumppads, Teleporters |
+| 4 | All types of triggers |
 
 # Demos
 
@@ -119,3 +151,31 @@ List of ETrun cvars.
 | Name  | Value | Default | Description |
 | ----- | ----- | ------- | ----------- |
 | cg_countryFlags | 0,1 | 0 | Display country flags on scoreboard (server needs to support GeoIP). |
+
+# Clock
+
+| Name  | Value | Default | Description |
+| ----- | ----- | ------- | ----------- |
+| cg_drawClock | 0,1 | 1 | Display a clock. |
+
+# Chat
+
+| Name  | Value | Default | Description |
+| ----- | ----- | ------- | ----------- |
+| cg_chatX | 0-640 | 130 | Chat horizontal position. Introduced in ETrun 1.4.0. |
+| cg_chatY | 0-480 | 478 | Chat vertical position. Introduced in ETrun 1.4.0. |
+| cg_chatHeight | 0-8 | 8 | Height of the chat. Introduced in ETrun 1.4.0. |
+
+# Events
+
+| Name  | Value | Default | Description |
+| ----- | ----- | ------- | ----------- |
+| cg_onRunStart | *string* | "" | Command(s) to trigger when a run starts . Introduced in ETrun 1.4.0. |
+| cg_onRunStop | *string* | "" | Command(s) to trigger when a run stops . Introduced in ETrun 1.4.0. |
+
+# Widescreen
+
+| Name  | Value | Default | Description |
+| ----- | ----- | ------- | ----------- |
+| cg_widescreenSupport | 0,1 | 1 | Enable widescreen display. Introduced in ETrun 1.4.0. |
+| cg_realFov | 0,1 | 0 | Enable widescreen Field Of View. Introduced in ETrun 1.4.0. |
