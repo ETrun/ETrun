@@ -710,7 +710,7 @@ void CG_DrawVelocitySnapping(void) {
 	int    fov       = 0;
 	int    i         = 0;
 
-	if (!cg_drawVelocitySnapping.integer || cg.isLogged || (cg.snap->ps.persistant[PERS_TEAM] == TEAM_SPECTATOR)) {
+	if (!cg_drawVelocitySnapping.integer || (cg.snap->ps.persistant[PERS_TEAM] == TEAM_SPECTATOR)) {
 		return;
 	}
 
