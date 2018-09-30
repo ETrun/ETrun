@@ -97,7 +97,7 @@ void CG_UpdatePMLists(void) {
 
 	listItem = cg_pmWaitingList;
 	if (listItem) {
-		int t = listItem->time + cg_popupTime.integer;
+		int t = listItem->time + etr_popupTime.integer;
 		if (cg.time > t) {
 			if (listItem->next) {
 				// there's another item waiting to come on, so move to old list
@@ -106,7 +106,7 @@ void CG_UpdatePMLists(void) {
 
 				CG_AddToListFront(&cg_pmOldList, listItem);
 			} else {
-				if (cg.time > t + cg_popupStayTime.integer + cg_popupFadeTime.integer) {
+				if (cg.time > t + etr_popupStayTime.integer + etr_popupFadeTime.integer) {
 					// we're gone completely
 					cg_pmWaitingList = NULL;
 					listItem->inuse  = qfalse;
@@ -119,7 +119,7 @@ void CG_UpdatePMLists(void) {
 	listItem = cg_pmOldList;
 	lastItem = NULL;
 	while (listItem) {
-		int t = listItem->time + cg_popupTime.integer + cg_popupStayTime.integer + cg_popupFadeTime.integer;
+		int t = listItem->time + etr_popupTime.integer + etr_popupStayTime.integer + etr_popupFadeTime.integer;
 		if (cg.time > t) {
 			// nuke this, and everything below it (though there shouldn't BE anything below us anyway)
 			pmListItem_t *next;
@@ -147,7 +147,7 @@ void CG_UpdatePMLists(void) {
 
 	listItem2 = cg_pmWaitingListBig;
 	if (listItem2) {
-		int t = listItem2->time + cg_popupTime.integer;
+		int t = listItem2->time + etr_popupTime.integer;
 		if (cg.time > t) {
 			if (listItem2->next) {
 				// there's another item waiting to come on, so kill us and shove the next one to the front
@@ -157,7 +157,7 @@ void CG_UpdatePMLists(void) {
 				listItem2->inuse = qfalse;
 				listItem2->next  = NULL;
 			} else {
-				if (cg.time > t + cg_popupStayTime.integer + cg_popupFadeTime.integer) {
+				if (cg.time > t + etr_popupStayTime.integer + etr_popupFadeTime.integer) {
 					// we're gone completely
 					cg_pmWaitingListBig = NULL;
 					listItem2->inuse    = qfalse;
@@ -283,13 +283,13 @@ void CG_DrawPMItems(void) {
 		return;
 	}
 
-	if (cg_numPopups.integer <= 0) {
+	if (etr_numPopups.integer <= 0) {
 		return;
 	}
 
-	t = cg_pmWaitingList->time + cg_popupTime.integer + cg_popupStayTime.integer;
+	t = cg_pmWaitingList->time + etr_popupTime.integer + etr_popupStayTime.integer;
 	if (cg.time > t) {
-		colourText[3] = colour[3] = 1 - ((cg.time - t) / (float)cg_popupFadeTime.integer);
+		colourText[3] = colour[3] = 1 - ((cg.time - t) / (float)etr_popupFadeTime.integer);
 	}
 
 	trap_R_SetColor(colourText);
@@ -297,8 +297,8 @@ void CG_DrawPMItems(void) {
 	trap_R_SetColor(NULL);
 	CG_Text_Paint_Ext(4 + size + 2, y + 12, 0.2f, 0.2f, colourText, cg_pmWaitingList->message, 0, 0, 0, &cgs.media.limboFont2);
 
-	if (cg_numPopups.integer >= 1 && cg_numPopups.integer <= 16) {
-		numPopups = cg_numPopups.integer - 1;
+	if (etr_numPopups.integer >= 1 && etr_numPopups.integer <= 16) {
+		numPopups = etr_numPopups.integer - 1;
 	} else {
 		numPopups = 4;
 	}
@@ -306,9 +306,9 @@ void CG_DrawPMItems(void) {
 	for (i = 0; i < numPopups && listItem; i++, listItem = listItem->next) {
 		y -= size + 2;
 
-		t = listItem->time + cg_popupTime.integer + cg_popupStayTime.integer;
+		t = listItem->time + etr_popupTime.integer + etr_popupStayTime.integer;
 		if (cg.time > t) {
-			colourText[3] = colour[3] = 1 - ((cg.time - t) / (float)cg_popupFadeTime.integer);
+			colourText[3] = colour[3] = 1 - ((cg.time - t) / (float)etr_popupFadeTime.integer);
 		} else {
 			colourText[3] = colour[3] = 1.f;
 		}
@@ -330,9 +330,9 @@ void CG_DrawPMItemsBig(void) {
 		return;
 	}
 
-	t = cg_pmWaitingListBig->time + cg_popupTime.integer + cg_popupStayTime.integer;
+	t = cg_pmWaitingListBig->time + etr_popupTime.integer + etr_popupStayTime.integer;
 	if (cg.time > t) {
-		colourText[3] = 1 - ((cg.time - t) / (float)cg_popupFadeTime.integer);
+		colourText[3] = 1 - ((cg.time - t) / (float)etr_popupFadeTime.integer);
 	}
 
 	trap_R_SetColor(colourText);

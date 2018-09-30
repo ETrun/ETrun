@@ -60,7 +60,7 @@ Widescreen support
 ================
 */
 qboolean CG_Is43Screen(void) {
-	if (cgs.glconfig.windowAspect <= RATIO43 || !cg_widescreenSupport.integer) {
+	if (cgs.glconfig.windowAspect <= RATIO43 || !etr_widescreenSupport.integer) {
 		return qtrue;
 	}
 	return qfalse;
@@ -121,7 +121,7 @@ void CG_FillAngleYaw(float start, float end, float viewangle, float y, float hei
 	fovscale = tan(DEG2RAD(fov / 2));
 	x        = CG_WideX(SCREEN_WIDTH) / 2 + tan(DEG2RAD(viewangle + start)) / fovscale * CG_WideX(SCREEN_WIDTH) / 2;
 	width    = fabs(CG_WideX(SCREEN_WIDTH) * (tan(DEG2RAD(viewangle + end)) - tan(DEG2RAD(viewangle + start))) / (fovscale * 2)) + 1;
-	if (cg_drawVelocitySnapping.integer == 2) {
+	if (etr_drawVelocitySnapping.integer == 2) {
 		width /= 2;
 	}
 

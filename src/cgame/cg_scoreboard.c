@@ -202,7 +202,7 @@ static void WM_ETrun_DrawPlayers(int *x, int *y, fontInfo_t *font, s_timerunScor
 		*y += INFO_LINE_HEIGHT - 2;
 
 		// Nico, draw country flag
-		if (cg_countryFlags.integer) {
+		if (etr_countryFlags.integer) {
 			if (WM_ETrun_drawCountryFlag(tempx, *y, orderedScores[i].countryCode)) {
 				tempx   += 16;
 				drawFlag = qtrue;
@@ -332,7 +332,7 @@ static void WM_ETrun_DrawSpectators(int *x, int *y, fontInfo_t *font, s_timerunS
 		*y += INFO_LINE_HEIGHT - 2;
 
 		// Nico, draw country flag
-		if (cg_countryFlags.integer) {
+		if (etr_countryFlags.integer) {
 			if (WM_ETrun_drawCountryFlag(tempx, *y, orderedScores[i].countryCode)) {
 				tempx   += 16;
 				drawFlag = qtrue;

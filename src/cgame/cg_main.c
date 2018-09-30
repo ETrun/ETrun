@@ -261,115 +261,115 @@ vmCvar_t physics;
 vmCvar_t isTimerun;
 
 // Speed meter
-vmCvar_t cg_drawSpeedMeter;
-vmCvar_t cg_speedMeterX;
-vmCvar_t cg_speedMeterY;
+vmCvar_t etr_drawSpeedMeter;
+vmCvar_t etr_speedMeterX;
+vmCvar_t etr_speedMeterY;
 
 // Accel HUD
-vmCvar_t cg_drawAccel;
-vmCvar_t cg_accelSmoothness;
+vmCvar_t etr_drawAccel;
+vmCvar_t etr_accelSmoothness;
 
 // Timer
-vmCvar_t cg_drawTimer;
-vmCvar_t cg_timerX;
-vmCvar_t cg_timerY;
+vmCvar_t etr_drawTimer;
+vmCvar_t etr_timerX;
+vmCvar_t etr_timerY;
 
 // Check points
-vmCvar_t cg_drawCheckPoints;
-vmCvar_t cg_checkPointsX;
-vmCvar_t cg_checkPointsY;
-vmCvar_t cg_maxCheckPoints;
+vmCvar_t etr_drawCheckPoints;
+vmCvar_t etr_checkPointsX;
+vmCvar_t etr_checkPointsY;
+vmCvar_t etr_maxCheckPoints;
 
 // Noclip speed scale
-vmCvar_t cg_noclipSpeed;
+vmCvar_t etr_noclipSpeed;
 
 // Max FPS
 vmCvar_t com_maxfps;
 
 // Slick detector
-vmCvar_t cg_drawSlick;
+vmCvar_t etr_drawSlick;
 
 // OB detector
-vmCvar_t cg_drawOB;
+vmCvar_t etr_drawOB;
 
 // Hide other players
-vmCvar_t cg_hideOthers;
-vmCvar_t cg_hideRange;
+vmCvar_t etr_hideOthers;
+vmCvar_t etr_hideRange;
 
 // Auth related
-vmCvar_t cg_authToken;
-vmCvar_t cg_autoLogin;
+vmCvar_t etr_authToken;
+vmCvar_t etr_autoLogin;
 
 // CGaz
-vmCvar_t cg_drawCGaz;
-vmCvar_t cg_realCGaz2;
+vmCvar_t etr_drawCGaz;
+vmCvar_t etr_realCGaz2;
 
 // Velocity Snapping
-vmCvar_t cg_drawVelocitySnapping;
-vmCvar_t cg_velocitySnappingH;
-vmCvar_t cg_velocitySnappingY;
-vmCvar_t cg_velocitySnappingFov;
+vmCvar_t etr_drawVelocitySnapping;
+vmCvar_t etr_velocitySnappingH;
+vmCvar_t etr_velocitySnappingY;
+vmCvar_t etr_velocitySnappingFov;
 
 // Load view angles on load
-vmCvar_t cg_loadViewAngles;
+vmCvar_t etr_loadViewAngles;
 
 // Load weapon on load
-vmCvar_t cg_loadWeapon;
+vmCvar_t etr_loadWeapon;
 
 // Show pressed keys
-vmCvar_t cg_drawKeys;
-vmCvar_t cg_keysXoffset;
-vmCvar_t cg_keysYoffset;
-vmCvar_t cg_keysSize;
+vmCvar_t etr_drawKeys;
+vmCvar_t etr_keysXoffset;
+vmCvar_t etr_keysYoffset;
+vmCvar_t etr_keysSize;
 
 // Automatically load player position when he gets killed (except /kill)
-vmCvar_t cg_autoLoad;
+vmCvar_t etr_autoLoad;
 
 // View log (ET Console)
-vmCvar_t cg_viewLog;
+vmCvar_t etr_viewLog;
 
 // Hide me
-vmCvar_t cg_hideMe;
+vmCvar_t etr_hideMe;
 
 // Auto demo
-vmCvar_t cg_autoDemo;
-vmCvar_t cg_keepAllDemos;
+vmCvar_t etr_autoDemo;
+vmCvar_t etr_keepAllDemos;
 
 // Popups
-vmCvar_t cg_numPopups;
-vmCvar_t cg_popupTime;
-vmCvar_t cg_popupStayTime;
-vmCvar_t cg_popupFadeTime;
+vmCvar_t etr_numPopups;
+vmCvar_t etr_popupTime;
+vmCvar_t etr_popupStayTime;
+vmCvar_t etr_popupFadeTime;
 
 // Automatically load checkpoints
-vmCvar_t cg_autoLoadCheckpoints;
+vmCvar_t etr_autoLoadCheckpoints;
 
 // Persistant speclock
-vmCvar_t cg_specLock;
+vmCvar_t etr_specLock;
 
 // Info panel
-vmCvar_t cg_drawInfoPanel;
-vmCvar_t cg_infoPanelXoffset;
-vmCvar_t cg_infoPanelYoffset;
+vmCvar_t etr_drawInfoPanel;
+vmCvar_t etr_infoPanelXoffset;
+vmCvar_t etr_infoPanelYoffset;
 
 // Country flags
-vmCvar_t cg_countryFlags;
+vmCvar_t etr_countryFlags;
 
 // Minimum start speed
-vmCvar_t cg_minStartSpeed;
+vmCvar_t etr_minStartSpeed;
 
 // suburb, widescreen support
-vmCvar_t cg_widescreenSupport;
-vmCvar_t cg_realFov;
+vmCvar_t etr_widescreenSupport;
+vmCvar_t etr_realFov;
 
 // suburb, event cvars
-vmCvar_t cg_onRunStart;
-vmCvar_t cg_onRunStop;
+vmCvar_t etr_onRunStart;
+vmCvar_t etr_onRunStop;
 
 // Draw triggers
-vmCvar_t cg_drawTriggers;
-vmCvar_t cg_triggerOffset;
-vmCvar_t cg_triggerColor;
+vmCvar_t etr_drawTriggers;
+vmCvar_t etr_triggerOffset;
+vmCvar_t etr_triggerColor;
 
 // Nico, end of ETrun cvars
 
@@ -553,115 +553,115 @@ cvarTable_t cvarTable[] =
 	{ &isTimerun,               "isTimerun",               "0",     CVAR_ROM | CVAR_CHEAT,     0 },
 
 	// Speed meter
-	{ &cg_drawSpeedMeter,       "cg_drawSpeedMeter",       "1",     CVAR_ARCHIVE,              0 },
-	{ &cg_speedMeterX,          "cg_speedMeterX",          "320",   CVAR_ARCHIVE,              0 },
-	{ &cg_speedMeterY,          "cg_speedMeterY",          "220",   CVAR_ARCHIVE,              0 },
+	{ &etr_drawSpeedMeter,      "etr_drawSpeedMeter",      "1",     CVAR_ARCHIVE,              0 },
+	{ &etr_speedMeterX,         "etr_speedMeterX",         "320",   CVAR_ARCHIVE,              0 },
+	{ &etr_speedMeterY,         "etr_speedMeterY",         "220",   CVAR_ARCHIVE,              0 },
 
 	// Accel HUD
-	{ &cg_drawAccel,            "cg_drawAccel",            "0",     CVAR_ARCHIVE,              0 },
-	{ &cg_accelSmoothness,      "cg_accelSmoothness",      "100",   CVAR_ARCHIVE,              0 },
+	{ &etr_drawAccel,           "etr_drawAccel",           "0",     CVAR_ARCHIVE,              0 },
+	{ &etr_accelSmoothness,     "etr_accelSmoothness",     "100",   CVAR_ARCHIVE,              0 },
 
 	// Timer
-	{ &cg_drawTimer,            "cg_drawTimer",            "1",     CVAR_ARCHIVE,              0 },
-	{ &cg_timerX,               "cg_timerX",               "320",   CVAR_ARCHIVE,              0 },
-	{ &cg_timerY,               "cg_timerY",               "420",   CVAR_ARCHIVE,              0 },
+	{ &etr_drawTimer,           "etr_drawTimer",           "1",     CVAR_ARCHIVE,              0 },
+	{ &etr_timerX,              "etr_timerX",              "320",   CVAR_ARCHIVE,              0 },
+	{ &etr_timerY,              "etr_timerY",              "420",   CVAR_ARCHIVE,              0 },
 
 	// Check points
-	{ &cg_drawCheckPoints,      "cg_drawCheckPoints",      "1",     CVAR_ARCHIVE,              0 },
-	{ &cg_checkPointsX,         "cg_checkPointsX",         "320",   CVAR_ARCHIVE,              0 },
-	{ &cg_checkPointsY,         "cg_checkPointsY",         "435",   CVAR_ARCHIVE,              0 },
-	{ &cg_maxCheckPoints,       "cg_maxCheckPoints",       "5",     CVAR_ARCHIVE,              0 },
+	{ &etr_drawCheckPoints,     "etr_drawCheckPoints",     "1",     CVAR_ARCHIVE,              0 },
+	{ &etr_checkPointsX,        "etr_checkPointsX",        "320",   CVAR_ARCHIVE,              0 },
+	{ &etr_checkPointsY,        "etr_checkPointsY",        "435",   CVAR_ARCHIVE,              0 },
+	{ &etr_maxCheckPoints,      "etr_maxCheckPoints",      "5",     CVAR_ARCHIVE,              0 },
 
 	// Com_maxFPS
 	{ &com_maxfps,              "com_maxfps",              "125",   CVAR_ARCHIVE,              0 },
 
 	// Noclip speed scale
-	{ &cg_noclipSpeed,          "cg_noclipSpeed",          "1000",  CVAR_ARCHIVE,              0 },
+	{ &etr_noclipSpeed,         "etr_noclipSpeed",         "1000",  CVAR_ARCHIVE,              0 },
 
 	// Slick detector
-	{ &cg_drawSlick,            "cg_drawSlick",            "0",     CVAR_ARCHIVE,              0 },
+	{ &etr_drawSlick,           "etr_drawSlick",           "0",     CVAR_ARCHIVE,              0 },
 
 	// OB detector
-	{ &cg_drawOB,               "cg_drawOB",               "0",     CVAR_ARCHIVE,              0 },
+	{ &etr_drawOB,              "etr_drawOB",              "0",     CVAR_ARCHIVE,              0 },
 
 	// Hide other players
-	{ &cg_hideOthers,           "cg_hideOthers",           "1",     CVAR_ARCHIVE,              0 },
-	{ &cg_hideRange,            "cg_hideRange",            "128",   CVAR_ARCHIVE,              0 },
+	{ &etr_hideOthers,          "etr_hideOthers",          "1",     CVAR_ARCHIVE,              0 },
+	{ &etr_hideRange,           "etr_hideRange",           "128",   CVAR_ARCHIVE,              0 },
 
 	// Auth related
-	{ &cg_authToken,            "cg_timerunsToken",        "",      CVAR_ARCHIVE,              0 },
-	{ &cg_autoLogin,            "cg_autoLogin",            "0",     CVAR_ARCHIVE,              0 },
+	{ &etr_authToken,           "etr_authToken",           "",      CVAR_ARCHIVE,              0 },
+	{ &etr_autoLogin,           "etr_autoLogin",           "0",     CVAR_ARCHIVE,              0 },
 
 	// CGaz
-	{ &cg_drawCGaz,             "cg_drawCGaz",             "0",     CVAR_ARCHIVE,              0 },
-	{ &cg_realCGaz2,            "cg_realCGaz2",            "0",     CVAR_ARCHIVE,              0 },
+	{ &etr_drawCGaz,            "etr_drawCGaz",            "0",     CVAR_ARCHIVE,              0 },
+	{ &etr_realCGaz2,           "etr_realCGaz2",           "0",     CVAR_ARCHIVE,              0 },
 
 	// Velocity Snapping
-	{ &cg_drawVelocitySnapping, "cg_drawVelocitySnapping", "0",     CVAR_ARCHIVE,              0 },
-	{ &cg_velocitySnappingH,    "cg_velocitySnappingH",    "8",     CVAR_ARCHIVE,              0 },
-	{ &cg_velocitySnappingY,    "cg_velocitySnappingY",    "240",   CVAR_ARCHIVE,              0 },
-	{ &cg_velocitySnappingFov,  "cg_velocitySnappingFov",  "120",   CVAR_ARCHIVE,              0 },
+	{ &etr_drawVelocitySnapping, "etr_drawVelocitySnapping", "0",     CVAR_ARCHIVE,            0 },
+	{ &etr_velocitySnappingH,    "etr_velocitySnappingH",    "8",     CVAR_ARCHIVE,            0 },
+	{ &etr_velocitySnappingY,    "etr_velocitySnappingY",    "240",   CVAR_ARCHIVE,            0 },
+	{ &etr_velocitySnappingFov,  "etr_velocitySnappingFov",  "120",   CVAR_ARCHIVE,            0 },
 
 	// Load view angles on load
-	{ &cg_loadViewAngles,       "cg_loadViewAngles",       "1",     CVAR_ARCHIVE,              0 },
+	{ &etr_loadViewAngles,      "etr_loadViewAngles",      "1",     CVAR_ARCHIVE,              0 },
 
 	// Load weapon on load
-	{ &cg_loadWeapon,           "cg_loadWeapon",           "1",     CVAR_ARCHIVE,              0 },
+	{ &etr_loadWeapon,          "etr_loadWeapon",          "1",     CVAR_ARCHIVE,              0 },
 
 	// Show pressed keys
-	{ &cg_drawKeys,             "cg_drawKeys",             "4",     CVAR_ARCHIVE,              0 },
-	{ &cg_keysXoffset,          "cg_keysXoffset",          "0",     CVAR_ARCHIVE,              0 },
-	{ &cg_keysYoffset,          "cg_keysYoffset",          "0",     CVAR_ARCHIVE,              0 },
-	{ &cg_keysSize,             "cg_keysSize",             "64",    CVAR_ARCHIVE,              0 },
+	{ &etr_drawKeys,            "etr_drawKeys",            "4",     CVAR_ARCHIVE,              0 },
+	{ &etr_keysXoffset,         "etr_keysXoffset",         "0",     CVAR_ARCHIVE,              0 },
+	{ &etr_keysYoffset,         "etr_keysYoffset",         "0",     CVAR_ARCHIVE,              0 },
+	{ &etr_keysSize,            "etr_keysSize",            "64",    CVAR_ARCHIVE,              0 },
 
 	// Automatically load player position when he gets killed (except /kill)
-	{ &cg_autoLoad,             "cg_autoLoad",             "1",     CVAR_ARCHIVE,              0 },
+	{ &etr_autoLoad,            "etr_autoLoad",            "1",     CVAR_ARCHIVE,              0 },
 
 	// View log (ET Console)
-	{ &cg_viewLog,              "cg_viewLog",              "0",     CVAR_ARCHIVE,              0 },
+	{ &etr_viewLog,             "etr_viewLog",             "0",     CVAR_ARCHIVE,              0 },
 
 	// Hide me
-	{ &cg_hideMe,               "cg_hideMe",               "0",     CVAR_ARCHIVE,              0 },
+	{ &etr_hideMe,              "etr_hideMe",              "0",     CVAR_ARCHIVE,              0 },
 
 	// Auto demo
-	{ &cg_autoDemo,             "cg_autoDemo",             "0",     CVAR_ARCHIVE,              0 },
-	{ &cg_keepAllDemos,         "cg_keepAllDemos",         "1",     CVAR_ARCHIVE,              0 },
+	{ &etr_autoDemo,            "etr_autoDemo",            "0",     CVAR_ARCHIVE,              0 },
+	{ &etr_keepAllDemos,        "etr_keepAllDemos",        "1",     CVAR_ARCHIVE,              0 },
 
 	// Popups
-	{ &cg_numPopups,            "cg_numPopups",            "5",     CVAR_ARCHIVE,              0 },
-	{ &cg_popupTime,            "cg_popupTime",            "1000",  CVAR_ARCHIVE,              0 },
-	{ &cg_popupStayTime,        "cg_popupStayTime",        "2000",  CVAR_ARCHIVE,              0 },
-	{ &cg_popupFadeTime,        "cg_popupFadeTime",        "2500",  CVAR_ARCHIVE,              0 },
+	{ &etr_numPopups,           "etr_numPopups",           "5",     CVAR_ARCHIVE,              0 },
+	{ &etr_popupTime,           "etr_popupTime",           "1000",  CVAR_ARCHIVE,              0 },
+	{ &etr_popupStayTime,       "etr_popupStayTime",       "2000",  CVAR_ARCHIVE,              0 },
+	{ &etr_popupFadeTime,       "etr_popupFadeTime",       "2500",  CVAR_ARCHIVE,              0 },
 
 	// Automatically load checkpoints
-	{ &cg_autoLoadCheckpoints,  "cg_autoLoadCheckpoints",  "0",     CVAR_ARCHIVE,              0 },
+	{ &etr_autoLoadCheckpoints, "etr_autoLoadCheckpoints", "0",     CVAR_ARCHIVE,              0 },
 
 	// Persistant speclock
-	{ &cg_specLock,             "cg_specLock",             "0",     CVAR_ARCHIVE,              0 },
+	{ &etr_specLock,            "etr_specLock",            "0",     CVAR_ARCHIVE,              0 },
 
 	// Info panel
-	{ &cg_drawInfoPanel,        "cg_drawInfoPanel",        "1",     CVAR_ARCHIVE,              0 },
-	{ &cg_infoPanelXoffset,     "cg_infoPanelXoffset",     "0",     CVAR_ARCHIVE,              0 },
-	{ &cg_infoPanelYoffset,     "cg_infoPanelYoffset",     "0",     CVAR_ARCHIVE,              0 },
+	{ &etr_drawInfoPanel,       "etr_drawInfoPanel",       "1",     CVAR_ARCHIVE,              0 },
+	{ &etr_infoPanelXoffset,    "etr_infoPanelXoffset",    "0",     CVAR_ARCHIVE,              0 },
+	{ &etr_infoPanelYoffset,    "etr_infoPanelYoffset",    "0",     CVAR_ARCHIVE,              0 },
 
 	// Country flags
-	{ &cg_countryFlags,         "cg_countryFlags",         "0",     CVAR_ARCHIVE,              0 },
+	{ &etr_countryFlags,        "etr_countryFlags",        "0",     CVAR_ARCHIVE,              0 },
 
 	// Minimum start speed
-	{ &cg_minStartSpeed,        "cg_minStartSpeed",        "0",     CVAR_ARCHIVE,              0 },
+	{ &etr_minStartSpeed,       "etr_minStartSpeed",       "0",     CVAR_ARCHIVE,              0 },
 
 	// suburb, widescreen support
-	{ &cg_widescreenSupport,    "cg_widescreenSupport",    "1",     CVAR_ARCHIVE | CVAR_LATCH, 0 },
-	{ &cg_realFov,              "cg_realFov",              "0",     CVAR_ARCHIVE,              0 },
+	{ &etr_widescreenSupport,   "etr_widescreenSupport",   "1",     CVAR_ARCHIVE | CVAR_LATCH, 0 },
+	{ &etr_realFov,             "etr_realFov",             "0",     CVAR_ARCHIVE,              0 },
 
 	// suburb, event cvars
-	{ &cg_onRunStart,           "cg_onRunStart",           "",      CVAR_ARCHIVE,              0 },
-	{ &cg_onRunStop,            "cg_onRunStop",            "",      CVAR_ARCHIVE,              0 },
+	{ &etr_onRunStart,          "etr_onRunStart",          "",      CVAR_ARCHIVE,              0 },
+	{ &etr_onRunStop,           "etr_onRunStop",           "",      CVAR_ARCHIVE,              0 },
 
 	// Draw Triggers
-	{ &cg_drawTriggers,         "cg_drawTriggers",         "1",     CVAR_ARCHIVE,              0 },
-	{ &cg_triggerOffset,        "cg_triggerOffset",        "0",     CVAR_ARCHIVE,              0 },
-	{ &cg_triggerColor,         "cg_triggerColor",         "White", CVAR_ARCHIVE,              0 },
+	{ &etr_drawTriggers,        "etr_drawTriggers",        "1",     CVAR_ARCHIVE,              0 },
+	{ &etr_triggerOffset,       "etr_triggerOffset",       "0",     CVAR_ARCHIVE,              0 },
+	{ &etr_triggerColor,        "etr_triggerColor",        "White", CVAR_ARCHIVE,              0 },
 
 	// Nico, end of ETrun cvars
 };
@@ -738,13 +738,13 @@ void CG_UpdateCvars(void) {
 				    cv->vmCvar == &int_cl_timenudge || cv->vmCvar == &int_cl_maxpackets ||
 				    cv->vmCvar == &cg_autoactivate || cv->vmCvar == &cg_predictItems ||
 				    cv->vmCvar == &pmove_fixed || cv->vmCvar == &com_maxfps ||
-				    cv->vmCvar == &cg_authToken || cv->vmCvar == &cg_autoLogin ||
-				    cv->vmCvar == &cg_loadViewAngles || cv->vmCvar == &cg_autoLoad ||
-				    cv->vmCvar == &cg_drawCGaz || cv->vmCvar == &cg_drawVelocitySnapping ||
-				    cv->vmCvar == &cg_hideMe || cv->vmCvar == &cg_autoDemo ||
-				    cv->vmCvar == &cg_autoLoadCheckpoints || cv->vmCvar == &cg_specLock ||
-				    cv->vmCvar == &cg_keepAllDemos || cv->vmCvar == &cg_loadWeapon ||
-				    cv->vmCvar == &cg_noclipSpeed || cv->vmCvar == &int_cl_yawspeed ||
+				    cv->vmCvar == &etr_authToken || cv->vmCvar == &etr_autoLogin ||
+				    cv->vmCvar == &etr_loadViewAngles || cv->vmCvar == &etr_autoLoad ||
+				    cv->vmCvar == &etr_drawCGaz || cv->vmCvar == &etr_drawVelocitySnapping ||
+				    cv->vmCvar == &etr_hideMe || cv->vmCvar == &etr_autoDemo ||
+				    cv->vmCvar == &etr_autoLoadCheckpoints || cv->vmCvar == &etr_specLock ||
+				    cv->vmCvar == &etr_keepAllDemos || cv->vmCvar == &etr_loadWeapon ||
+				    cv->vmCvar == &etr_noclipSpeed || cv->vmCvar == &int_cl_yawspeed ||
 				    cv->vmCvar == &int_cl_pitchspeed) {
 					fSetFlags = qtrue;
 				} else if (cv->vmCvar == &cg_crosshairColor || cv->vmCvar == &cg_crosshairAlpha) {
@@ -770,8 +770,8 @@ void CG_UpdateCvars(void) {
 					} else if (cg_errorDecay.value > 500.0) {
 						trap_Cvar_Set("cg_errorDecay", "500");
 					}
-				} else if (cv->vmCvar == &cg_viewLog) {
-					trap_Cvar_Set("viewlog", cg_viewLog.string);
+				} else if (cv->vmCvar == &etr_viewLog) {
+					trap_Cvar_Set("viewlog", etr_viewLog.string);
 				}
 			}
 		}
@@ -811,9 +811,9 @@ void CG_setClientFlags(void) {
 		return;
 	}
 
-	if (cg_authToken.string[0] == '\0') {
+	if (etr_authToken.string[0] == '\0') {
 		Q_strncpyz(hash, "undefined", sizeof (hash));
-	} else if (CG_hash(hash, cg_authToken.string)) {
+	} else if (CG_hash(hash, etr_authToken.string)) {
 		CG_Error("%s: error setting client auth token\n", GAME_VERSION);
 	}
 
@@ -825,7 +825,7 @@ void CG_setClientFlags(void) {
 									 ((cg_autoactivate.integer > 0) ? CGF_AUTOACTIVATE : 0) |
 									 ((cg_predictItems.integer > 0) ? CGF_PREDICTITEMS : 0) |
 									 ((pmove_fixed.integer > 0) ? CGF_PMOVEFIXED : 0) |
-									 ((cg_autoLogin.integer > 0) ? CGF_AUTOLOGIN : 0)
+									 ((etr_autoLogin.integer > 0) ? CGF_AUTOLOGIN : 0)
 									 // Add more in here, as needed
 	                             ),
 
@@ -842,37 +842,37 @@ void CG_setClientFlags(void) {
 	                             hash,
 
 	                             // Nico, load view angles on load
-	                             cg_loadViewAngles.integer,
+	                             etr_loadViewAngles.integer,
 
 	                             // Nico, load weapon on load
-	                             cg_loadWeapon.integer,
+	                             etr_loadWeapon.integer,
 
 	                             // Nico, automatically load player position when he gets killed (except /kill)
-	                             cg_autoLoad.integer,
+	                             etr_autoLoad.integer,
 
 	                             // Nico, cgaz
-	                             cg_drawCGaz.integer,
+	                             etr_drawCGaz.integer,
 
 	                             // suburb, velocity snapping
-	                             cg_drawVelocitySnapping.integer,
+	                             etr_drawVelocitySnapping.integer,
 
 	                             // Nico, hideme
-	                             cg_hideMe.integer,
+	                             etr_hideMe.integer,
 
 	                             // Nico, client auto demo record setting
-	                             cg_autoDemo.integer,
+	                             etr_autoDemo.integer,
 
 	                             // Nico, automatically load checkpoints
-	                             cg_autoLoadCheckpoints.integer,
+	                             etr_autoLoadCheckpoints.integer,
 
 	                             // Nico, persistant speclock
-	                             cg_specLock.integer,
+	                             etr_specLock.integer,
 
 	                             // Nico, keep all demos
-	                             cg_keepAllDemos.integer,
+	                             etr_keepAllDemos.integer,
 
 	                             // suburb, noclip speed scale
-	                             cg_noclipSpeed.integer,
+	                             etr_noclipSpeed.integer,
 
 	                             // suburb, yawspeed
 	                             int_cl_yawspeed.integer,

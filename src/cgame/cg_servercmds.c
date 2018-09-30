@@ -1602,9 +1602,9 @@ static void CG_ServerCommand(void) {
 
 	if (!Q_stricmp(cmd, "timerun_start")) {
 		// suburb, kill if min start speed not reached
-		if (atoi(CG_Argv(3)) < cg_minStartSpeed.integer) {
+		if (atoi(CG_Argv(3)) < etr_minStartSpeed.integer) {
 			trap_SendConsoleCommand("kill\n");
-			CG_CenterPrint(va("^1%i ^7/ ^2%i", atoi(CG_Argv(3)), cg_minStartSpeed.integer), 400, SMALLCHAR_WIDTH);
+			CG_CenterPrint(va("^1%i ^7/ ^2%i", atoi(CG_Argv(3)), etr_minStartSpeed.integer), 400, SMALLCHAR_WIDTH);
 		}
 		cg.timerunActive            = 1;
 		cg.timerunCheckPointChecked = 0;
@@ -1626,7 +1626,7 @@ static void CG_ServerCommand(void) {
 		}
 
 		// suburb, execute commands in cg_onRunStart cvar
-		trap_SendConsoleCommand(va("%s\n", cg_onRunStart.string));
+		trap_SendConsoleCommand(va("%s\n", etr_onRunStart.string));
 
 		return;
 	}
@@ -1698,7 +1698,7 @@ static void CG_ServerCommand(void) {
 		}
 
 		// suburb, execute commands in cg_onRunStop cvar
-		trap_SendConsoleCommand(va("%s\n", cg_onRunStop.string));
+		trap_SendConsoleCommand(va("%s\n", etr_onRunStop.string));
 
 		return;
 	}
@@ -1724,7 +1724,7 @@ static void CG_ServerCommand(void) {
 
 	// Nico, auto demo related
 	if (!Q_stricmp(cmd, "runSave")) {
-		if (!cg_autoDemo.integer || cg.demoPlayback) {
+		if (!etr_autoDemo.integer || cg.demoPlayback) {
 			return;
 		}
 
@@ -1735,7 +1735,7 @@ static void CG_ServerCommand(void) {
 	}
 
 	if (!Q_stricmp(cmd, "tempDemoStart")) {
-		if (!cg_autoDemo.integer || cg.demoPlayback) {
+		if (!etr_autoDemo.integer || cg.demoPlayback) {
 			return;
 		}
 
