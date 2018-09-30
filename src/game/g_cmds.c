@@ -2659,7 +2659,7 @@ void Cmd_Tutorial_f(gentity_t *ent) {
 	CP("print \"   Now you can see your Timeruns token. This is your password which\n\"");
 	CP("print \"   links your game to your own website account. Never share it!\n\"");
 	CP("print \"^55. ^7Copy your Timeruns token.\n\"");
-	CP("print \"^56. ^7Insert your Timeruns token ingame into the ^b/cg_timerunsToken ^7cvar.\n\"");
+	CP("print \"^56. ^7Insert your Timeruns token ingame into the ^b/etr_authToken ^7cvar.\n\"");
 	CP("print \"^57. ^7Type ^b/login ^7into the console.\n\"");
 	CP("print \"\n\"");
 	CP("print \"Congratulations! You are now logged in and able to set records. You can\n\"");
