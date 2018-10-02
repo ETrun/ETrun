@@ -332,8 +332,8 @@ cvarTable_t gameCvarTable[] =
 	{ &g_chatLog,              "g_chatLog",              "1",                          CVAR_ARCHIVE | CVAR_LATCH,                                     qfalse, qfalse, qfalse },
 
 	// GeoIP
-	{ &g_useGeoIP,             "g_useGeoIP",             "1",                          CVAR_ARCHIVE | CVAR_LATCH,                                     qfalse, qfalse, qfalse },
-	{ &g_geoIPDbPath,          "g_geoIPDbPath",          "GeoIP.dat",                  CVAR_ARCHIVE | CVAR_LATCH,                                     qfalse, qfalse, qfalse },
+	{ &g_useGeoIP,             "g_useGeoIP",             "0",                          CVAR_ARCHIVE | CVAR_LATCH,                                     qfalse, qfalse, qfalse },
+	{ &g_geoIPDbPath,          "g_geoIPDbPath",          "",                           CVAR_ARCHIVE | CVAR_LATCH,                                     qfalse, qfalse, qfalse },
 
 	// Strict save/load
 	{ &g_strictSaveLoad,       "g_strictSaveLoad",       "0",                          CVAR_ARCHIVE | CVAR_LATCH,                                     qfalse, qfalse, qfalse },
