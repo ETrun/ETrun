@@ -34,7 +34,7 @@ Sticky values for physics used on official timeruns.net game servers are listed 
 
 | Name  | Value | Default | Description |
 | ----- | ----- | ------- | ----------- |
-| g_enableMapEntities | *integer* | 131 | Change game map entities behaviour according to the given **bitflagged** value. |
+| g_enableMapEntities | *integer* | 31 | Change game map entities behaviour according to the given **bitflagged** value. |
 | g_forceTimerReset | 0,1 | 1 | Make sure start triggers are not prevented to reset run timer.
 | g_holdDoorsOpen | 0,1 | 1 | Hold the doors open. |
 | g_disableDrowning | 0,1 | 1 | Prevent player from drowning. |
@@ -100,7 +100,7 @@ Available flags for `g_enableMapEntities` are listed below.
 | Name  | Value | Default | Description |
 | ----- | ----- | ------- | ----------- |
 | g_chatLog | 0,1 | 1 | Enable logging player chat to a separate `chat.log` file. Introduced in 1.2.0. |
-| g_debugLog | 0,1 | 1 | Enable debug logging to a `debug.log` file. |
+| g_debugLog | 0,1 | 0 | Enable debug logging to a `debug.log` file. |
 
 # Strict save/load
 
