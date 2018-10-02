@@ -92,8 +92,8 @@ Available flags for `g_enableMapEntities` are listed below.
 
 | Name  | Value | Default | Description |
 | ----- | ----- | ------- | ----------- |
-| g_useGeoIP | 0,1 | 1 | Enable use of GeoIP to geolocate and display country flags of players based on their IP addresses. |
-| g_geoIPDbPath | *string* | "GeoIP.dat" | Path to GeoIP database inside etrun directory. Compatible with [Maxmind Geolite Legacy](https://dev.maxmind.com/geoip/legacy/geolite/). |
+| g_useGeoIP | 0,1 | 0 | Enable use of GeoIP to geolocate and display country flags of players based on their IP addresses. |
+| g_geoIPDbPath | *string* | "" | Path to GeoIP database inside etrun directory. Compatible with [Maxmind Geolite Legacy](https://dev.maxmind.com/geoip/legacy/geolite/). |
 
 # Logging
 
