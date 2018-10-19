@@ -2634,6 +2634,10 @@ void Cmd_Abort_f(gentity_t *ent) {
 			trap_SendServerCommand(ent - g_entities, va("print \"You can not abort in triggers.\n\""));
 			return;
 		}
+
+		// Nico, reset client speed to prevent abusing in prejump
+		VectorClear(ent->client->ps.velocity);
+
 		notify_timerun_stop(ent, 0);
 		ent->client->sess.timerunActive = qfalse;
 	}
