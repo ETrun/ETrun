@@ -1309,7 +1309,7 @@ static void CG_ServerCommand(void) {
 			CG_DecodeQP(text);
 		}
 		CG_AddToTeamChat(va("^g[%s] ^7%s", CG_GetClock(), text), atoi(CG_Argv(2)));
-		CG_Printf(va("^g[%s] ^7%s\n", CG_GetClock(), text));
+		CG_Printf("^g[%s] ^7%s\n", CG_GetClock(), text);
 
 		return;
 	}
@@ -1330,7 +1330,7 @@ static void CG_ServerCommand(void) {
 			CG_DecodeQP(text);
 		}
 		CG_AddToTeamChat(va("^g[%s] ^7%s", CG_GetClock(), text), atoi(CG_Argv(2)));
-		CG_Printf(va("^g[%s] ^7%s\n", CG_GetClock(), text));
+		CG_Printf("^g[%s] ^7%s\n", CG_GetClock(), text);
 
 		return;
 	}
