@@ -544,7 +544,7 @@ qboolean CG_DrawScoreboard(void) {
 			WM_ETrun_DrawPlayers(&x, &y, &cgs.media.limboFont1, orderedScores, numScores);
 
 			// Nico, draw spectators on a second column
-			x = (SCREEN_WIDTH - INFO_SPEC_TOTAL_WIDTH - SCREEN_WIDTH / 2 - INFO_SPEC_TOTAL_WIDTH) / 2; // Nico, center horizontally
+			x = SCREEN_WIDTH - INFO_SPEC_TOTAL_WIDTH - (SCREEN_WIDTH / 2 - INFO_SPEC_TOTAL_WIDTH) / 2; // Nico, center horizontally
 			y = yCopy;
 			WM_ETrun_DrawSpectators(&x, &y, &cgs.media.limboFont1, orderedScores, numScores);
 
