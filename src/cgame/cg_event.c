@@ -1247,6 +1247,11 @@ void CG_EntityEvent(centity_t *cent, vec3_t position) {
 	ci        = &cgs.clientinfo[clientNum];
 	character = CG_CharacterForClientinfo(ci, cent);
 
+	// suburb, if not following, it's not yourself making sounds and you want to hide others or others want to be hidden
+	if (!(cg.snap->ps.pm_flags & PMF_FOLLOW) && (ci->clientNum != cg.clientNum && (cg_hideOthers.integer || cgs.clientinfo[clientNum].hideme))) {
+		return; // mute others entirely
+	}
+
 	switch (event) {
 	//
 	// movement generated events
