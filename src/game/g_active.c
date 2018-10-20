@@ -672,6 +672,12 @@ void ClientThink_real(gentity_t *ent) {
 		ent->r.svFlags &= ~(SVF_SELF_PORTAL_EXCLUSIVE | SVF_SELF_PORTAL);
 	}
 
+	// suburb, tutorial cmd
+	if (client->pers.wantsTutorial) {
+		trap_SendServerCommand(ent - g_entities, "tutorial");
+		client->pers.wantsTutorial = qfalse;
+	}
+
 	// spectators don't do much
 	// DHM - Nerve :: In limbo use SpectatorThink
 	// suburb, check for noclip not to override client->ps.speed

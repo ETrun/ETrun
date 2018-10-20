@@ -692,6 +692,9 @@ typedef struct {
 
 	// suburb, pitchspeed
 	int pitchspeed;
+
+	// suburb, tutorial cmd
+	qboolean wantsTutorial;
 } clientPersistant_t;
 
 typedef struct {
