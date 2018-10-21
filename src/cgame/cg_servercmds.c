@@ -1127,19 +1127,17 @@ Create banner to be printed, from TJMod
 ==================
 */
 #define BP_LINEWIDTH   (int) CG_WideX(64) // suburb, make it scale with widescreens
-#define BP_LINES_MAX   16 // suburb, 16 is the worst case according (MAX_STRING_CHARS / BP_LINEWIDTH) if no widescreen
 void CG_BannerPrint(const char *str) {
 	char     buff[MAX_STRING_CHARS] = { 0 };
-	int      cleanCut[BP_LINES_MAX];
 	int      i           = 0;
 	int      len         = 0;
 	int      textlen     = 0;
-	int      lines       = 1;
-	int      index       = -1;
 	qboolean needNewLine = qfalse;
 
+	// suburb, banner console printout, do that here instead of cutting str into multiple lines and fail to re-unite them afterwards
+	CG_Printf("^9Banner: ^7%s\n", str);
+
 	Q_strncpyz(cg.bannerPrint, str, sizeof (cg.bannerPrint));
-	memset(cleanCut, 1, sizeof (cleanCut));
 
 	// turn spaces into newlines, if we've run over the linewidth
 	len = strlen(cg.bannerPrint);
@@ -1163,53 +1161,28 @@ void CG_BannerPrint(const char *str) {
 		}
 
 		// NOTE: subtracted a few chars here so long words still get displayed properly
+		// suburb, check whether new line is needed
 		if (textlen % (BP_LINEWIDTH - 10) == 0 && textlen > 0) {
 			needNewLine = qtrue;
-			lines++;
 		}
 
+		// suburb, take the next space within the next 10 chars
 		if (cg.bannerPrint[i] == ' ' && needNewLine) {
 			cg.bannerPrint[i] = '\n';
 			textlen           = 0;
 			needNewLine       = qfalse;
 		}
 
-		// suburb, if still too long, just cut it at BP_LINEWIDTH
+		// suburb, if no space found, just cut it at BP_LINEWIDTH
 		if (textlen % BP_LINEWIDTH == 0 && textlen > 0) {
 			Q_strncpyz(buff, &cg.bannerPrint[i], sizeof (buff));
 			cg.bannerPrint[i]     = '\n';
 			cg.bannerPrint[i + 1] = 0;
 			Q_strcat(cg.bannerPrint, sizeof (cg.bannerPrint), buff);
-			cleanCut[lines - 2] = 0;
 			textlen             = 0;
 			needNewLine         = qfalse;
 		}
 	}
-
-	// post-editing to print text correctly into the console
-	textlen = strlen(cg.bannerPrint);
-	for (i = 0, len = 0; i < textlen; ++i) {
-		// suburb, replace newlines with spaces ONLY if clean cut
-		if (cg.bannerPrint[i] == '\n') {
-			index++;
-			if (len != 0 && buff[len - 1] != ' ' && cleanCut[index]) {
-				buff[len] = ' ';
-				len++;
-			}
-			continue;
-		}
-
-		// no spaces at the beginning of the string
-		if (len == 0 && cg.bannerPrint[i] == ' ') {
-			continue;
-		}
-
-		buff[len] = cg.bannerPrint[i];
-		len++;
-	}
-	buff[len] = 0;
-
-	CG_Printf("^9Banner: ^7%s\n", buff);
 
 	cg.bannerPrintTime = cg.time;
 }
