@@ -38,99 +38,99 @@ menuDef {
 	// Speed meter
 	//
 	SUBWINDOW( 6, 32, (SUBWINDOW_WIDTH), 92, "Speed Meter" )
-	YESNO( 8, 48, (SUBWINDOW_WIDTH)-4, 10, "Show speed meter:", .2, 8, "cg_drawSpeedMeter", "" )
-	SLIDER( 8, 64, (SUBWINDOW_WIDTH)-4, 10, "Speed meter X-position:", .2, 8, "cg_speedMeterX" 320 0 640, "Use the slider to move the speed meter" )
-	CVARFLOATLABEL( 8, 64, (SUBWINDOW_WIDTH)-4, 10, "cg_speedMeterX", .2, ITEM_ALIGN_RIGHT, $evalfloat((SUBWINDOW_WIDTH)-4), 8 )
-	SLIDER( 8, 78, (SUBWINDOW_WIDTH)-4, 10, "Speed meter Y-position:", .2, 8, "cg_speedMeterY" 240 0 480, "Use the slider to move the speed meter" )
-	CVARFLOATLABEL( 8, 78, (SUBWINDOW_WIDTH)-4, 10, "cg_speedMeterY", .2, ITEM_ALIGN_RIGHT, $evalfloat((SUBWINDOW_WIDTH)-4), 8 )
-	YESNO( 8, 94, (SUBWINDOW_WIDTH)-4, 10, "Show Accel:", .2, 8, "cg_drawAccel", "Draw Accel on speed meter" )
-	MULTI( 8, 110, (SUBWINDOW_WIDTH)-4, 10, "Accel smoothness:", .2, 8, "cg_accelSmoothness", cvarFloatList { "10" 10 "50" 50 "100" 100 "500" 500 "1000" 1000}, "How sensitive the accel reacts" )
+	YESNO( 8, 48, (SUBWINDOW_WIDTH)-4, 10, "Show speed meter:", .2, 8, "etr_drawSpeedMeter", "" )
+	SLIDER( 8, 64, (SUBWINDOW_WIDTH)-4, 10, "Speed meter X-position:", .2, 8, "etr_speedMeterX" 320 0 640, "Use the slider to move the speed meter" )
+	CVARFLOATLABEL( 8, 64, (SUBWINDOW_WIDTH)-4, 10, "etr_speedMeterX", .2, ITEM_ALIGN_RIGHT, $evalfloat((SUBWINDOW_WIDTH)-4), 8 )
+	SLIDER( 8, 78, (SUBWINDOW_WIDTH)-4, 10, "Speed meter Y-position:", .2, 8, "etr_speedMeterY" 240 0 480, "Use the slider to move the speed meter" )
+	CVARFLOATLABEL( 8, 78, (SUBWINDOW_WIDTH)-4, 10, "etr_speedMeterY", .2, ITEM_ALIGN_RIGHT, $evalfloat((SUBWINDOW_WIDTH)-4), 8 )
+	YESNO( 8, 94, (SUBWINDOW_WIDTH)-4, 10, "Show Accel:", .2, 8, "etr_drawAccel", "Draw Accel on speed meter" )
+	MULTI( 8, 110, (SUBWINDOW_WIDTH)-4, 10, "Accel smoothness:", .2, 8, "etr_accelSmoothness", cvarFloatList { "10" 10 "50" 50 "100" 100 "500" 500 "1000" 1000}, "How sensitive the accel reacts" )
 
 	//
 	// CGaz
 	//
 	SUBWINDOW( 6, 128, (SUBWINDOW_WIDTH), 30, "CGaz" )
-	MULTI( 8, 144, (SUBWINDOW_WIDTH)-4, 10, "Show CGaz:", .2, 8, "cg_drawCGaz", cvarFloatList { "No" 0 "Type 1" 1 "Type 2" 2 "Type 3" 3 "Type 4" 4}, "Show CGaz on HUD" )
+	MULTI( 8, 144, (SUBWINDOW_WIDTH)-4, 10, "Show CGaz:", .2, 8, "etr_drawCGaz", cvarFloatList { "No" 0 "Type 1" 1 "Type 2" 2 "Type 3" 3 "Type 4" 4}, "Show CGaz on HUD" )
 
 	//
 	// Timer
 	//
 	SUBWINDOW( 6, 162, (SUBWINDOW_WIDTH), 60, "Timer" )
-	YESNO( 8, 178, (SUBWINDOW_WIDTH)-4, 10, "Show timer:", .2, 8, "cg_drawTimer", "" )
-	SLIDER( 8, 195, (SUBWINDOW_WIDTH)-4, 10, "Timer X-position:", .2, 8, "cg_timerX" 320 0 640, "Use the slider to move the timer" )
-	CVARFLOATLABEL( 8, 195, (SUBWINDOW_WIDTH)-4, 10, "cg_timerX", .2, ITEM_ALIGN_RIGHT, $evalfloat((SUBWINDOW_WIDTH)-4), 8 )
-	SLIDER( 8, 210, (SUBWINDOW_WIDTH)-4, 10, "Timer Y-position:", .2, 8, "cg_timerY" 420 0 480, "Use the slider to move the timer" )
-	CVARFLOATLABEL( 8, 210, (SUBWINDOW_WIDTH)-4, 10, "cg_timerY", .2, ITEM_ALIGN_RIGHT, $evalfloat((SUBWINDOW_WIDTH)-4), 8 )
+	YESNO( 8, 178, (SUBWINDOW_WIDTH)-4, 10, "Show timer:", .2, 8, "etr_drawTimer", "" )
+	SLIDER( 8, 195, (SUBWINDOW_WIDTH)-4, 10, "Timer X-position:", .2, 8, "etr_timerX" 320 0 640, "Use the slider to move the timer" )
+	CVARFLOATLABEL( 8, 195, (SUBWINDOW_WIDTH)-4, 10, "etr_timerX", .2, ITEM_ALIGN_RIGHT, $evalfloat((SUBWINDOW_WIDTH)-4), 8 )
+	SLIDER( 8, 210, (SUBWINDOW_WIDTH)-4, 10, "Timer Y-position:", .2, 8, "etr_timerY" 420 0 480, "Use the slider to move the timer" )
+	CVARFLOATLABEL( 8, 210, (SUBWINDOW_WIDTH)-4, 10, "etr_timerY", .2, ITEM_ALIGN_RIGHT, $evalfloat((SUBWINDOW_WIDTH)-4), 8 )
 
 	//
 	// Checkpoints
 	//
 	SUBWINDOW( 6, 228, (SUBWINDOW_WIDTH), 80, "Checkpoints" )
-	YESNO( 8, 244, (SUBWINDOW_WIDTH)-4, 10, "Show checkpoints:", .2, 8, "cg_drawCheckPoints", "" )
-	SLIDER( 8, 260, (SUBWINDOW_WIDTH)-4, 10, "Checkpoints X-position:", .2, 8, "cg_checkPointsX" 320 0 640, "Use the slider to move checkpoints" )
-	CVARFLOATLABEL( 8, 260, (SUBWINDOW_WIDTH)-4, 10, "cg_checkPointsX", .2, ITEM_ALIGN_RIGHT, $evalfloat((SUBWINDOW_WIDTH)-4), 8 )
-	SLIDER( 8, 276, (SUBWINDOW_WIDTH)-4, 10, "Checkpoints Y-position:", .2, 8, "cg_checkPointsY" 435 0 480, "Use the slider to move checkpoints" )
-	CVARFLOATLABEL( 8, 276, (SUBWINDOW_WIDTH)-4, 10, "cg_checkPointsY", .2, ITEM_ALIGN_RIGHT, $evalfloat((SUBWINDOW_WIDTH)-4), 8 )
-	MULTI( 8, 292, (SUBWINDOW_WIDTH)-4, 10, "Max checkpoints:", .2, 8, "cg_maxCheckPoints", cvarFloatList { "1" 1 "2" 2 "3" 3 "4" 4 "5" 5 }, "Maxium checkpoints to display" )
+	YESNO( 8, 244, (SUBWINDOW_WIDTH)-4, 10, "Show checkpoints:", .2, 8, "etr_drawCheckPoints", "" )
+	SLIDER( 8, 260, (SUBWINDOW_WIDTH)-4, 10, "Checkpoints X-position:", .2, 8, "etr_checkPointsX" 320 0 640, "Use the slider to move checkpoints" )
+	CVARFLOATLABEL( 8, 260, (SUBWINDOW_WIDTH)-4, 10, "etr_checkPointsX", .2, ITEM_ALIGN_RIGHT, $evalfloat((SUBWINDOW_WIDTH)-4), 8 )
+	SLIDER( 8, 276, (SUBWINDOW_WIDTH)-4, 10, "Checkpoints Y-position:", .2, 8, "etr_checkPointsY" 435 0 480, "Use the slider to move checkpoints" )
+	CVARFLOATLABEL( 8, 276, (SUBWINDOW_WIDTH)-4, 10, "etr_checkPointsY", .2, ITEM_ALIGN_RIGHT, $evalfloat((SUBWINDOW_WIDTH)-4), 8 )
+	MULTI( 8, 292, (SUBWINDOW_WIDTH)-4, 10, "Max checkpoints:", .2, 8, "etr_maxCheckPoints", cvarFloatList { "1" 1 "2" 2 "3" 3 "4" 4 "5" 5 }, "Maxium checkpoints to display" )
 
 	//
 	// Detector
 	//
 	SUBWINDOW( 6, 312, (SUBWINDOW_WIDTH), 50, "Detectors" )
-	YESNO( 8, 328, (SUBWINDOW_WIDTH)-4, 10, "Overbounce detector:", .2, 8, "cg_drawOB", "" )
-	YESNO( 8, 344, (SUBWINDOW_WIDTH)-4, 10, "Slick detector:", .2, 8, "cg_drawSlick", "" )
+	YESNO( 8, 328, (SUBWINDOW_WIDTH)-4, 10, "Overbounce detector:", .2, 8, "etr_drawOB", "" )
+	YESNO( 8, 344, (SUBWINDOW_WIDTH)-4, 10, "Slick detector:", .2, 8, "etr_drawSlick", "" )
 
 	//
 	// Popups
 	//
 	SUBWINDOW( 6+(SUBWINDOW_WIDTH)+6, 32, (SUBWINDOW_WIDTH), 80, "Popups" )
-	MULTI( 6+(SUBWINDOW_WIDTH)+6+2, 48, (SUBWINDOW_WIDTH)-4, 10, "Number of popups:", .2, 8, "cg_numPopups", cvarFloatList { "None" 0 "1" 1 "2" 2 "3" 3 "4" 4 "5" 5 "6" 6 "7" 7 "8" 8 "9" 9 "10" 10 "11" 11 "12" 12 "13" 13 "14" 14 "15" 15 "16" 16}, "Number of popups displayed" )
-	MULTI( 6+(SUBWINDOW_WIDTH)+6+2, 60, (SUBWINDOW_WIDTH)-4, 10, "Popup time:", .2, 8, "cg_popupTime", cvarFloatList { "0 sec" 0 "1 sec" 1000 "2 secs" 2000 "3 secs" 3000 "4 secs" 4000 "5 secssec" 5000}, "Delay between popups" )
-	MULTI( 6+(SUBWINDOW_WIDTH)+6+2, 72, (SUBWINDOW_WIDTH)-4, 10, "Popup stay time:", .2, 8, "cg_popupStayTime", cvarFloatList { "0 sec" 0 "5 secs" 5000 "10 secs" 10000 "30 secs" 30000 "1 min" 60000}, "Time that popups will stay before fading" )
-	MULTI( 6+(SUBWINDOW_WIDTH)+6+2, 84, (SUBWINDOW_WIDTH)-4, 10, "Popup fade time:", .2, 8, "cg_popupFadeTime", cvarFloatList { "0 sec" 0 "1 sec" 1000 "2 secs" 2000 "3 secs" 3000 "4 secs" 4000 "5 secs" 5000}, "Time that popups take to fade out" )
-	YESNO( 6+(SUBWINDOW_WIDTH)+6+2, 96, (SUBWINDOW_WIDTH)-4, 10, "Small popup icons:", .2, 8, "cg_drawSmallPopupIcons", "" )
+	MULTI( 6+(SUBWINDOW_WIDTH)+6+2, 48, (SUBWINDOW_WIDTH)-4, 10, "Number of popups:", .2, 8, "etr_numPopups", cvarFloatList { "None" 0 "1" 1 "2" 2 "3" 3 "4" 4 "5" 5 "6" 6 "7" 7 "8" 8 "9" 9 "10" 10 "11" 11 "12" 12 "13" 13 "14" 14 "15" 15 "16" 16}, "Number of popups displayed" )
+	MULTI( 6+(SUBWINDOW_WIDTH)+6+2, 60, (SUBWINDOW_WIDTH)-4, 10, "Popup time:", .2, 8, "etr_popupTime", cvarFloatList { "0 sec" 0 "1 sec" 1000 "2 secs" 2000 "3 secs" 3000 "4 secs" 4000 "5 secssec" 5000}, "Delay between popups" )
+	MULTI( 6+(SUBWINDOW_WIDTH)+6+2, 72, (SUBWINDOW_WIDTH)-4, 10, "Popup stay time:", .2, 8, "etr_popupStayTime", cvarFloatList { "0 sec" 0 "5 secs" 5000 "10 secs" 10000 "30 secs" 30000 "1 min" 60000}, "Time that popups will stay before fading" )
+	MULTI( 6+(SUBWINDOW_WIDTH)+6+2, 84, (SUBWINDOW_WIDTH)-4, 10, "Popup fade time:", .2, 8, "etr_popupFadeTime", cvarFloatList { "0 sec" 0 "1 sec" 1000 "2 secs" 2000 "3 secs" 3000 "4 secs" 4000 "5 secs" 5000}, "Time that popups take to fade out" )
+	YESNO( 6+(SUBWINDOW_WIDTH)+6+2, 96, (SUBWINDOW_WIDTH)-4, 10, "Small popup icons:", .2, 8, "etr_drawSmallPopupIcons", "" )
 
 	//
 	// Info panel
 	//
 	SUBWINDOW( 6+(SUBWINDOW_WIDTH)+6, 118, (SUBWINDOW_WIDTH), 70, "Info Panel" )
-	YESNO( 6+(SUBWINDOW_WIDTH)+6+2, 134, (SUBWINDOW_WIDTH)-4, 10, "Show info panel:", .2, 8, "cg_drawInfoPanel", "" )
-	SLIDER( 6+(SUBWINDOW_WIDTH)+6+2, 146, (SUBWINDOW_WIDTH)-4, 10, "Panel X-offset:", .2, 8, "cg_infoPanelXoffset" 0 -640 120, "Use the slider to move the info panel" )
-	CVARFLOATLABEL( 6+(SUBWINDOW_WIDTH)+6+2, 146, (SUBWINDOW_WIDTH)-4, 10, "cg_infoPanelXoffset", .2, ITEM_ALIGN_RIGHT, $evalfloat((SUBWINDOW_WIDTH)-4), 8 )
-	SLIDER( 6+(SUBWINDOW_WIDTH)+6+2, 158, (SUBWINDOW_WIDTH)-4, 10, "Panel Y-offset:", .2, 8, "cg_infoPanelYoffset" 0 -60 480, "Use the slider to move the info panel" )
-	CVARFLOATLABEL( 6+(SUBWINDOW_WIDTH)+6+2, 158, (SUBWINDOW_WIDTH)-4, 10, "cg_infoPanelYoffset", .2, ITEM_ALIGN_RIGHT, $evalfloat((SUBWINDOW_WIDTH)-4), 8 )
-	CVARFLOATLABEL( 6+(SUBWINDOW_WIDTH)+6+2, 170, (SUBWINDOW_WIDTH)-4, 10, "cg_minStartSpeed", .2, ITEM_ALIGN_RIGHT, $evalfloat((SUBWINDOW_WIDTH)-4), 8 )
-	SLIDER( 6+(SUBWINDOW_WIDTH)+6+2, 170, (SUBWINDOW_WIDTH)-4, 10, "Minimum start speed:", .2, 8, "cg_minStartSpeed" 0 0 1000, "Use the slider to adjust the desired minimum start speed" )
+	YESNO( 6+(SUBWINDOW_WIDTH)+6+2, 134, (SUBWINDOW_WIDTH)-4, 10, "Show info panel:", .2, 8, "etr_drawInfoPanel", "" )
+	SLIDER( 6+(SUBWINDOW_WIDTH)+6+2, 146, (SUBWINDOW_WIDTH)-4, 10, "Panel X-offset:", .2, 8, "etr_infoPanelXoffset" 0 -640 120, "Use the slider to move the info panel" )
+	CVARFLOATLABEL( 6+(SUBWINDOW_WIDTH)+6+2, 146, (SUBWINDOW_WIDTH)-4, 10, "etr_infoPanelXoffset", .2, ITEM_ALIGN_RIGHT, $evalfloat((SUBWINDOW_WIDTH)-4), 8 )
+	SLIDER( 6+(SUBWINDOW_WIDTH)+6+2, 158, (SUBWINDOW_WIDTH)-4, 10, "Panel Y-offset:", .2, 8, "etr_infoPanelYoffset" 0 -60 480, "Use the slider to move the info panel" )
+	CVARFLOATLABEL( 6+(SUBWINDOW_WIDTH)+6+2, 158, (SUBWINDOW_WIDTH)-4, 10, "etr_infoPanelYoffset", .2, ITEM_ALIGN_RIGHT, $evalfloat((SUBWINDOW_WIDTH)-4), 8 )
+	CVARFLOATLABEL( 6+(SUBWINDOW_WIDTH)+6+2, 170, (SUBWINDOW_WIDTH)-4, 10, "etr_minStartSpeed", .2, ITEM_ALIGN_RIGHT, $evalfloat((SUBWINDOW_WIDTH)-4), 8 )
+	SLIDER( 6+(SUBWINDOW_WIDTH)+6+2, 170, (SUBWINDOW_WIDTH)-4, 10, "Minimum start speed:", .2, 8, "etr_minStartSpeed" 0 0 1000, "Use the slider to adjust the desired minimum start speed" )
 
 	//
 	// Scoreboard
 	//
 	SUBWINDOW( 6+(SUBWINDOW_WIDTH)+6, 192, (SUBWINDOW_WIDTH), 30, "Scoreboard" )
-	YESNO( 6+(SUBWINDOW_WIDTH)+6+2, 208, (SUBWINDOW_WIDTH)-4, 10, "Draw country flags:", .2, 8, "cg_countryFlags", "" )
+	YESNO( 6+(SUBWINDOW_WIDTH)+6+2, 208, (SUBWINDOW_WIDTH)-4, 10, "Draw country flags:", .2, 8, "etr_countryFlags", "" )
 
 	//
 	// Pressed keys
 	//
 	SUBWINDOW( 6+(SUBWINDOW_WIDTH)+6, 228, (SUBWINDOW_WIDTH), 80, "Pressed Keys" )
-	MULTI( 6+(SUBWINDOW_WIDTH)+6+2, 244, (SUBWINDOW_WIDTH)-4, 10, "Show pressed keys:", .2, 8, "cg_drawKeys", cvarFloatList { "No" 0 "Type 1" 1 "Type 2" 2 "Type 3" 3}, "Show pressed keys" )
-	SLIDER( 6+(SUBWINDOW_WIDTH)+6+2, 260, (SUBWINDOW_WIDTH)-4, 10, "Keys X-position:", .2, 8, "cg_keysX" 550 0 640, "Use the slider to move keys" )
-	CVARFLOATLABEL( 6+(SUBWINDOW_WIDTH)+6+2, 260, (SUBWINDOW_WIDTH)-4, 10, "cg_keysX", .2, ITEM_ALIGN_RIGHT, $evalfloat((SUBWINDOW_WIDTH)-4), 8 )
-	SLIDER( 6+(SUBWINDOW_WIDTH)+6+2, 276, (SUBWINDOW_WIDTH)-4, 10, "Keys Y-position:", .2, 8, "cg_keysY" 300 0 480, "Use the slider to move keys" )
-	CVARFLOATLABEL( 6+(SUBWINDOW_WIDTH)+6+2, 276, (SUBWINDOW_WIDTH)-4, 10, "cg_keysY", .2, ITEM_ALIGN_RIGHT, $evalfloat((SUBWINDOW_WIDTH)-4), 8 )
-	SLIDER( 6+(SUBWINDOW_WIDTH)+6+2, 292, (SUBWINDOW_WIDTH)-4, 10, "Keys size:", .2, 8, "cg_keysSize" 64 0 128, "Use the slider to adjust keys size" )
-	CVARFLOATLABEL( 6+(SUBWINDOW_WIDTH)+6+2, 292, (SUBWINDOW_WIDTH)-4, 10, "cg_keysSize", .2, ITEM_ALIGN_RIGHT, $evalfloat((SUBWINDOW_WIDTH)-4), 8 )
+	MULTI( 6+(SUBWINDOW_WIDTH)+6+2, 244, (SUBWINDOW_WIDTH)-4, 10, "Show pressed keys:", .2, 8, "etr_drawKeys", cvarFloatList { "No" 0 "Type 1" 1 "Type 2" 2 "Type 3" 3}, "Show pressed keys" )
+	SLIDER( 6+(SUBWINDOW_WIDTH)+6+2, 260, (SUBWINDOW_WIDTH)-4, 10, "Keys X-position:", .2, 8, "etr_keysX" 550 0 640, "Use the slider to move keys" )
+	CVARFLOATLABEL( 6+(SUBWINDOW_WIDTH)+6+2, 260, (SUBWINDOW_WIDTH)-4, 10, "etr_keysX", .2, ITEM_ALIGN_RIGHT, $evalfloat((SUBWINDOW_WIDTH)-4), 8 )
+	SLIDER( 6+(SUBWINDOW_WIDTH)+6+2, 276, (SUBWINDOW_WIDTH)-4, 10, "Keys Y-position:", .2, 8, "etr_keysY" 300 0 480, "Use the slider to move keys" )
+	CVARFLOATLABEL( 6+(SUBWINDOW_WIDTH)+6+2, 276, (SUBWINDOW_WIDTH)-4, 10, "etr_keysY", .2, ITEM_ALIGN_RIGHT, $evalfloat((SUBWINDOW_WIDTH)-4), 8 )
+	SLIDER( 6+(SUBWINDOW_WIDTH)+6+2, 292, (SUBWINDOW_WIDTH)-4, 10, "Keys size:", .2, 8, "etr_keysSize" 64 0 128, "Use the slider to adjust keys size" )
+	CVARFLOATLABEL( 6+(SUBWINDOW_WIDTH)+6+2, 292, (SUBWINDOW_WIDTH)-4, 10, "etr_keysSize", .2, ITEM_ALIGN_RIGHT, $evalfloat((SUBWINDOW_WIDTH)-4), 8 )
 
 	//
 	// Velocity Snapping
 	//
 	SUBWINDOW( 6+(SUBWINDOW_WIDTH)+6, 312, (SUBWINDOW_WIDTH), 80, "Velocity Snapping" )
-	MULTI( 6+(SUBWINDOW_WIDTH)+6+2, 328, (SUBWINDOW_WIDTH)-4, 10, "Show velocity snapping:", .2, 8, "cg_drawVelocitySnapping", cvarFloatList { "No" 0 "Type 1" 1 "Type 2" 2}, "Show velocity snapping" )
-	SLIDER( 6+(SUBWINDOW_WIDTH)+6+2, 344, (SUBWINDOW_WIDTH)-4, 10, "Vel. snapping height:", .2, 8, "cg_velocitySnappingH" 8 5 25, "Use the slider to adjust the height" )
-	CVARFLOATLABEL( 6+(SUBWINDOW_WIDTH)+6+2, 344, (SUBWINDOW_WIDTH)-4, 10, "cg_velocitySnappingH", .2, ITEM_ALIGN_RIGHT, $evalfloat((SUBWINDOW_WIDTH)-4), 8 )
-	SLIDER( 6+(SUBWINDOW_WIDTH)+6+2, 360, (SUBWINDOW_WIDTH)-4, 10, "Vel. snap. Y-position:", .2, 8, "cg_velocitySnappingY" 248 0 640, "Use the slider to adjust the Y-position" )
-	CVARFLOATLABEL( 6+(SUBWINDOW_WIDTH)+6+2, 360, (SUBWINDOW_WIDTH)-4, 10, "cg_velocitySnappingY", .2, ITEM_ALIGN_RIGHT, $evalfloat((SUBWINDOW_WIDTH)-4), 8 )
-	SLIDER( 6+(SUBWINDOW_WIDTH)+6+2, 376, (SUBWINDOW_WIDTH)-4, 10, "Velocity snapping fov:", .2, 8, "cg_velocitySnappingFov" 120 90 150, "Use the slider to set a custom fov" )
-	CVARFLOATLABEL( 6+(SUBWINDOW_WIDTH)+6+2, 376, (SUBWINDOW_WIDTH)-4, 10, "cg_velocitySnappingFov", .2, ITEM_ALIGN_RIGHT, $evalfloat((SUBWINDOW_WIDTH)-4), 8 )
+	MULTI( 6+(SUBWINDOW_WIDTH)+6+2, 328, (SUBWINDOW_WIDTH)-4, 10, "Show velocity snapping:", .2, 8, "etr_drawVelocitySnapping", cvarFloatList { "No" 0 "Type 1" 1 "Type 2" 2}, "Show velocity snapping" )
+	SLIDER( 6+(SUBWINDOW_WIDTH)+6+2, 344, (SUBWINDOW_WIDTH)-4, 10, "Vel. snapping height:", .2, 8, "etr_velocitySnappingH" 8 5 25, "Use the slider to adjust the height" )
+	CVARFLOATLABEL( 6+(SUBWINDOW_WIDTH)+6+2, 344, (SUBWINDOW_WIDTH)-4, 10, "etr_velocitySnappingH", .2, ITEM_ALIGN_RIGHT, $evalfloat((SUBWINDOW_WIDTH)-4), 8 )
+	SLIDER( 6+(SUBWINDOW_WIDTH)+6+2, 360, (SUBWINDOW_WIDTH)-4, 10, "Vel. snap. Y-position:", .2, 8, "etr_velocitySnappingY" 248 0 640, "Use the slider to adjust the Y-position" )
+	CVARFLOATLABEL( 6+(SUBWINDOW_WIDTH)+6+2, 360, (SUBWINDOW_WIDTH)-4, 10, "etr_velocitySnappingY", .2, ITEM_ALIGN_RIGHT, $evalfloat((SUBWINDOW_WIDTH)-4), 8 )
+	SLIDER( 6+(SUBWINDOW_WIDTH)+6+2, 376, (SUBWINDOW_WIDTH)-4, 10, "Velocity snapping fov:", .2, 8, "etr_velocitySnappingFov" 120 90 150, "Use the slider to set a custom fov" )
+	CVARFLOATLABEL( 6+(SUBWINDOW_WIDTH)+6+2, 376, (SUBWINDOW_WIDTH)-4, 10, "etr_velocitySnappingFov", .2, ITEM_ALIGN_RIGHT, $evalfloat((SUBWINDOW_WIDTH)-4), 8 )
 
 	// Buttons //
 	BUTTON( 6, WINDOW_HEIGHT-24, WINDOW_WIDTH-12, 18, "Back", .3, 14, close etrun_customise_hud ; open etrun )
