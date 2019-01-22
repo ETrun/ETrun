@@ -700,7 +700,6 @@ Draw velocity snapping zones (core math taken from iodfengine)
 */
 void CG_DrawVelocitySnapping(void) {
 	vec4_t color[3];
-	qboolean AP = (physics.integer == PHYSICS_MODE_AP_NO_OB || physics.integer == PHYSICS_MODE_AP_OB);
 	float  rgba1[4]  = { 0.4f, 0, 0, 0.5f };
 	float  rgba2[4]  = { 0, 0.4f, 0.4f, 0.5f };
 	float  step      = 0;
@@ -735,7 +734,7 @@ void CG_DrawVelocitySnapping(void) {
 	// draw snapping
 	yaw = cg.predictedPlayerState.viewangles[YAW];
 	
-	if (AP) { // only shift for AP physics
+	if (physics.integer == PHYSICS_MODE_AP_NO_OB || physics.integer == PHYSICS_MODE_AP_OB) { // only shift for AP physics
 		yaw += 45;
 	}
 	
