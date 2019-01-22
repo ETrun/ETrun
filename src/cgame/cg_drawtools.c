@@ -123,6 +123,9 @@ void CG_FillAngleYaw(float start, float end, float viewangle, float y, float hei
 	width    = fabs(CG_WideX(SCREEN_WIDTH) * (tan(DEG2RAD(viewangle + end)) - tan(DEG2RAD(viewangle + start))) / (fovscale * 2)) + 1;
 	if (cg_drawVelocitySnapping.integer == 2) {
 		width /= 2;
+		if (cg.predictedPlayerState.stats[STAT_USERCMD_MOVE] & UMOVE_RIGHT) {
+			x += width; // invert white bars if moving to the right
+		}
 	}
 
 	trap_R_SetColor(color);
