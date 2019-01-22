@@ -732,8 +732,12 @@ void CG_DrawVelocitySnapping(void) {
 	}
 
 	// draw snapping
-	yaw = cg.predictedPlayerState.viewangles[YAW] + 45;
-
+	yaw = cg.predictedPlayerState.viewangles[YAW];
+	
+	if (physics.integer == PHYSICS_MODE_AP_NO_OB || physics.integer == PHYSICS_MODE_AP_OB) { // only shift for AP physics
+		yaw += 45;
+	}
+	
 	snapHud_H = cg_velocitySnappingH.integer;
 	snapHud_Y = cg_velocitySnappingY.integer;
 	fov       = cg_velocitySnappingFov.integer;
