@@ -117,14 +117,13 @@ modified by @suburb
 */
 void CG_FillAngleYaw(float start, float end, float viewangle, float y, float height, int fov, const float *color) {
 	float x, width, fovscale;
-	int rightmove = cg.predictedPlayerState.stats[STAT_USERCMD_MOVE] & UMOVE_RIGHT;
 	
 	fovscale = tan(DEG2RAD(fov / 2));
 	x        = CG_WideX(SCREEN_WIDTH) / 2 + tan(DEG2RAD(viewangle + start)) / fovscale * CG_WideX(SCREEN_WIDTH) / 2;
 	width    = fabs(CG_WideX(SCREEN_WIDTH) * (tan(DEG2RAD(viewangle + end)) - tan(DEG2RAD(viewangle + start))) / (fovscale * 2)) + 1;
 	if (cg_drawVelocitySnapping.integer == 2) {
 		width /= 2;
-		if (rightmove) {
+		if (cg.predictedPlayerState.stats[STAT_USERCMD_MOVE] & UMOVE_RIGHT;) {
 			x += width; // invert white bars if moving to the right
 		}
 	}
