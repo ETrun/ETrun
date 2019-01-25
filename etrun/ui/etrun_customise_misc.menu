@@ -35,25 +35,25 @@ menuDef {
 #define SUBWINDOW_WIDTH		WINDOW_WIDTH-12
 
 	SUBWINDOW( 6, 32, (SUBWINDOW_WIDTH), 30, "LOGIN" )
-	YESNO( 8, 48, (SUBWINDOW_WIDTH)-4, 10, "Automatically login:", .2, 8, "cg_autoLogin", "" )
+	YESNO( 8, 48, (SUBWINDOW_WIDTH)-4, 10, "Automatically login:", .2, 8, "etr_autoLogin", "" )
 
 	SUBWINDOW( 6, 66, (SUBWINDOW_WIDTH), 44, "DEMOS" )
-	YESNO( 8, 82, (SUBWINDOW_WIDTH)-4, 10, "Automatically record demos:", .2, 8, "cg_autoDemo", "" )
-	YESNO( 8, 96, (SUBWINDOW_WIDTH)-4, 10, "Keep all demos:", .2, 8, "cg_keepAllDemos", "Do you want all your demos to be kept or only PB/SB?" )
+	YESNO( 8, 82, (SUBWINDOW_WIDTH)-4, 10, "Automatically record demos:", .2, 8, "etr_autoDemo", "" )
+	YESNO( 8, 96, (SUBWINDOW_WIDTH)-4, 10, "Keep all demos:", .2, 8, "etr_keepAllDemos", "Do you want all your demos to be kept or only PB/SB?" )
 
 	SUBWINDOW( 6, 114, (SUBWINDOW_WIDTH), 30, "MINIMIZER" )
 	BIND( 8, 130, (SUBWINDOW_WIDTH)-5, 10, "Minimize button:", .2, 8, minimize, "Minimize game" )
 
 	SUBWINDOW( 6, 148, (SUBWINDOW_WIDTH), 30, "CHECKPOINTS" )
-	YESNO( 8, 164, (SUBWINDOW_WIDTH)-4, 10, "Automatically load your PB checkpoints:", .2, 8, "cg_autoloadCheckpoints", "" )
+	YESNO( 8, 164, (SUBWINDOW_WIDTH)-4, 10, "Automatically load your PB checkpoints:", .2, 8, "etr_autoloadCheckpoints", "" )
 
 	SUBWINDOW( 6, 182, (SUBWINDOW_WIDTH), 30, "SPECLOCK" )
-	YESNO( 8, 198, (SUBWINDOW_WIDTH)-4, 10, "Enable persistant speclock:", .2, 8, "cg_specLock", "" )
+	YESNO( 8, 198, (SUBWINDOW_WIDTH)-4, 10, "Enable persistant speclock:", .2, 8, "etr_specLock", "" )
 
 	SUBWINDOW( 6, 216, (SUBWINDOW_WIDTH), 58, "WIDESCREEN" )
-	YESNO( 8, 232, (SUBWINDOW_WIDTH)-4, 10, "Enable widescreen support:", .2, 8, "cg_widescreenSupport", "" )
-	YESNO( 8, 246, (SUBWINDOW_WIDTH)-4, 10, "Toggle real fov:", .2, 8, "cg_realFov", "" )
-	YESNO( 8, 260, (SUBWINDOW_WIDTH)-4, 10, "Toggle real CGaz 2:", .2, 8, "cg_realCGaz2", "" )
+	YESNO( 8, 232, (SUBWINDOW_WIDTH)-4, 10, "Enable widescreen support:", .2, 8, "etr_widescreenSupport", "" )
+	YESNO( 8, 246, (SUBWINDOW_WIDTH)-4, 10, "Toggle real fov:", .2, 8, "etr_realFov", "" )
+	YESNO( 8, 260, (SUBWINDOW_WIDTH)-4, 10, "Toggle real CGaz 2:", .2, 8, "etr_realCGaz2", "" )
 
 // Buttons //
 	

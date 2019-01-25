@@ -1176,11 +1176,11 @@ static void CG_DrawCrosshairNames(void) {
 	}
 
 	// Nico, don't draw if hiding others is enabled and distance to the player is < cg_hideRange
-	if (cg_hideOthers.integer && clientNum != cg.clientNum) {
+	if (etr_hideOthers.integer && clientNum != cg.clientNum) {
 		float dist;
 
 		dist = Distance((&cg_entities[cg.clientNum])->lerpOrigin, (&cg_entities[clientNum])->lerpOrigin);
-		if (dist < cg_hideRange.integer) {
+		if (dist < etr_hideRange.integer) {
 			return;
 		}
 	}
@@ -2245,7 +2245,7 @@ Autodemo function from TJMod
 =================
 */
 static void CG_Autodemo() {
-	if (!cg_autoDemo.integer || cg.demoPlayback) {
+	if (!etr_autoDemo.integer || cg.demoPlayback) {
 		return;
 	}
 

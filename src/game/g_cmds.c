@@ -2126,46 +2126,49 @@ void Cmd_Save_f(gentity_t *ent) {
 		return;
 	}
 
-	// Nico, allow save in the air for VET
-	if (physics.integer != PHYSICS_MODE_VET && ent->client->ps.groundEntityNum == ENTITYNUM_NONE) {
-		CP("cp \"You can not save while in the air!\n\"");
-		return;
-	}
+	// suburb, only do these checks if logged in, making logged out state more convenient
+	if (ent->client->sess.logged) {
+		// Nico, allow save in the air for VET
+		if (physics.integer != PHYSICS_MODE_VET && ent->client->ps.groundEntityNum == ENTITYNUM_NONE) {
+			CP("cp \"You can not save while in the air!\n\"");
+			return;
+		}
 
-	// Nico, allow save while proning for VET
-	if (physics.integer != PHYSICS_MODE_VET && (ent->client->ps.eFlags & EF_PRONE || ent->client->ps.eFlags & EF_PRONE_MOVING)) {
-		CP("cp \"You can not save while proning!\n\"");
-		return;
-	}
+		// Nico, allow save while proning for VET
+		if (physics.integer != PHYSICS_MODE_VET && (ent->client->ps.eFlags & EF_PRONE || ent->client->ps.eFlags & EF_PRONE_MOVING)) {
+			CP("cp \"You can not save while proning!\n\"");
+			return;
+		}
 
-	// Nico, allow save while crouching for VET
-	if (physics.integer != PHYSICS_MODE_VET && ent->client->ps.eFlags & EF_CROUCHING) {
-		CP("cp \"You can not save while crouching!\n\"");
-		return;
-	}
+		// Nico, allow save while crouching for VET
+		if (physics.integer != PHYSICS_MODE_VET && ent->client->ps.eFlags & EF_CROUCHING) {
+			CP("cp \"You can not save while crouching!\n\"");
+			return;
+		}
 
-	// suburb, forbid save while proning for VET before starting a run
-	if (physics.integer == PHYSICS_MODE_VET && (ent->client->ps.eFlags & EF_PRONE || ent->client->ps.eFlags & EF_PRONE_MOVING) && !ent->client->sess.timerunActive) {
-		CP("cp \"You can not save while proning before starting a run!\n\"");
-		return;
-	}
+		// suburb, forbid save while proning for VET before starting a run
+		if (physics.integer == PHYSICS_MODE_VET && (ent->client->ps.eFlags & EF_PRONE || ent->client->ps.eFlags & EF_PRONE_MOVING) && !ent->client->sess.timerunActive) {
+			CP("cp \"You can not save while proning before starting a run!\n\"");
+			return;
+		}
 
-	// suburb, forbid save while crouching for VET before starting a run
-	if (physics.integer == PHYSICS_MODE_VET && ent->client->ps.eFlags & EF_CROUCHING && !ent->client->sess.timerunActive) {
-		CP("cp \"You can not save while crouching before starting a run!\n\"");
-		return;
-	}
+		// suburb, forbid save while crouching for VET before starting a run
+		if (physics.integer == PHYSICS_MODE_VET && ent->client->ps.eFlags & EF_CROUCHING && !ent->client->sess.timerunActive) {
+			CP("cp \"You can not save while crouching before starting a run!\n\"");
+			return;
+		}
 
-	// Nico, strict save/load restrictions: you can not save while timer is active
-	if (g_strictSaveLoad.integer != 0 && ent->client->sess.timerunActive) {
-		CP("cp \"Strict save mode prevents you from saving while your timer is active!\n\"");
-		return;
-	}
+		// Nico, strict save/load restrictions: you can not save while timer is active
+		if (g_strictSaveLoad.integer != 0 && ent->client->sess.timerunActive) {
+			CP("cp \"Strict save mode prevents you from saving while your timer is active!\n\"");
+			return;
+		}
 
-	// suburb, prevent trigger bug
-	if (ent->client->pers.isTouchingTrigger == qtrue && ent->client->sess.timerunActive) {
-		CP("cp \"You can not save in triggers during a run!\n\"");
-		return;
+		// suburb, prevent trigger bug
+		if (ent->client->pers.isTouchingTrigger && ent->client->sess.timerunActive) {
+			CP("cp \"You can not save in triggers during a run!\n\"");
+			return;
+		}
 	}
 
 	if (ent->client->sess.sessionTeam == TEAM_ALLIES) {
@@ -2634,6 +2637,10 @@ void Cmd_Abort_f(gentity_t *ent) {
 			trap_SendServerCommand(ent - g_entities, va("print \"You can not abort in triggers.\n\""));
 			return;
 		}
+
+		// Nico, reset client speed to prevent abusing in prejump
+		VectorClear(ent->client->ps.velocity);
+
 		notify_timerun_stop(ent, 0);
 		ent->client->sess.timerunActive = qfalse;
 	}
@@ -2659,7 +2666,7 @@ void Cmd_Tutorial_f(gentity_t *ent) {
 	CP("print \"   Now you can see your Timeruns token. This is your password which\n\"");
 	CP("print \"   links your game to your own website account. Never share it!\n\"");
 	CP("print \"^55. ^7Copy your Timeruns token.\n\"");
-	CP("print \"^56. ^7Insert your Timeruns token ingame into the ^b/cg_timerunsToken ^7cvar.\n\"");
+	CP("print \"^56. ^7Insert your Timeruns token ingame into the ^b/etr_authToken ^7cvar.\n\"");
 	CP("print \"^57. ^7Type ^b/login ^7into the console.\n\"");
 	CP("print \"\n\"");
 	CP("print \"Congratulations! You are now logged in and able to set records. You can\n\"");

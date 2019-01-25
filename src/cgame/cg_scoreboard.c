@@ -202,7 +202,7 @@ static void WM_ETrun_DrawPlayers(int *x, int *y, fontInfo_t *font, s_timerunScor
 		*y += INFO_LINE_HEIGHT - 2;
 
 		// Nico, draw country flag
-		if (cg_countryFlags.integer) {
+		if (etr_countryFlags.integer) {
 			if (WM_ETrun_drawCountryFlag(tempx, *y, orderedScores[i].countryCode)) {
 				tempx   += 16;
 				drawFlag = qtrue;
@@ -332,7 +332,7 @@ static void WM_ETrun_DrawSpectators(int *x, int *y, fontInfo_t *font, s_timerunS
 		*y += INFO_LINE_HEIGHT - 2;
 
 		// Nico, draw country flag
-		if (cg_countryFlags.integer) {
+		if (etr_countryFlags.integer) {
 			if (WM_ETrun_drawCountryFlag(tempx, *y, orderedScores[i].countryCode)) {
 				tempx   += 16;
 				drawFlag = qtrue;
@@ -544,7 +544,7 @@ qboolean CG_DrawScoreboard(void) {
 			WM_ETrun_DrawPlayers(&x, &y, &cgs.media.limboFont1, orderedScores, numScores);
 
 			// Nico, draw spectators on a second column
-			x = (SCREEN_WIDTH - INFO_SPEC_TOTAL_WIDTH - SCREEN_WIDTH / 2 - INFO_SPEC_TOTAL_WIDTH) / 2; // Nico, center horizontally
+			x = SCREEN_WIDTH - INFO_SPEC_TOTAL_WIDTH - (SCREEN_WIDTH / 2 - INFO_SPEC_TOTAL_WIDTH) / 2; // Nico, center horizontally
 			y = yCopy;
 			WM_ETrun_DrawSpectators(&x, &y, &cgs.media.limboFont1, orderedScores, numScores);
 
