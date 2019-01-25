@@ -834,7 +834,7 @@ static int CG_CalcFov(void) {
 	}
 
 	// suburb, widescreen support
-	if (cg_realFov.integer) {
+	if (etr_realFov.integer) {
 		fov_x = atan(tan(fov_x * M_PI / 360.0f) * 0.75f * (float) cgs.glconfig.vidWidth / (float) cgs.glconfig.vidHeight) * 360.0f / M_PI;
 	}
 
@@ -1210,7 +1210,7 @@ void CG_DrawSkyBoxPortal(qboolean fLocalView) {
 		}
 
 		// suburb, widescreen support
-		if (cg_realFov.integer) {
+		if (etr_realFov.integer) {
 			fov_x = atan(tan(fov_x * M_PI / 360.0f) * 0.75f * (float) cgs.glconfig.vidWidth / (float) cgs.glconfig.vidHeight) * 360.0f / M_PI;
 		}
 
