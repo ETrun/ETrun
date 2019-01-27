@@ -3916,7 +3916,7 @@ void _UI_Init(void) {
 
 	// suburb, widescreen support
 	uiInfo.uiDC.glconfig.windowAspect = (float) uiInfo.uiDC.glconfig.vidWidth / (float) uiInfo.uiDC.glconfig.vidHeight;
-	if (ui_widescreenSupport.integer) {
+	if (etr_widescreenSupport.integer) {
 		uiInfo.uiDC.glconfig.widescreenWanted = qtrue;
 	} else {
 		uiInfo.uiDC.glconfig.widescreenWanted = qfalse;
@@ -4341,7 +4341,6 @@ vmCvar_t ui_prevTeam;
 vmCvar_t ui_prevClass;
 vmCvar_t ui_prevWeapon;
 vmCvar_t ui_isSpectator;
-vmCvar_t ui_widescreenSupport;
 vmCvar_t ui_glCustom;    // JPW NERVE missing from q3ta
 vmCvar_t cl_profile;
 vmCvar_t cl_defaultProfile;
@@ -4360,6 +4359,9 @@ vmCvar_t cl_bypassMouseInput;
 
 //bani
 vmCvar_t ui_autoredirect;
+
+// suburb, widescreen support
+vmCvar_t etr_widescreenSupport;
 
 cvarTable_t cvarTable[] =
 {
@@ -4397,7 +4399,7 @@ cvarTable_t cvarTable[] =
 	{ &ui_isSpectator,                  "ui_isSpectator",                  "1",                          0,                              0 },
 
 	// suburb, widescreen support
-	{ &ui_widescreenSupport,            "cg_widescreenSupport",            "1",                          CVAR_ARCHIVE,                   0 },
+	{ &etr_widescreenSupport,           "etr_widescreenSupport",           "1",                          CVAR_ARCHIVE,                   0 },
 
 	// -NERVE - SMF
 

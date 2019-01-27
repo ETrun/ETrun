@@ -28,33 +28,33 @@ menuDef {
 
 // Window //
 
-	WINDOW( "Game", 94 )
+	WINDOW( "GAME", 94 )
 	
 // Subwindows //
 
 #define SUBWINDOW_WIDTH		WINDOW_WIDTH-12
 
-	SUBWINDOW( 6, 32, (SUBWINDOW_WIDTH), 60, "Hide" )
-	YESNO( 8, 48, (SUBWINDOW_WIDTH)-4, 10, "Hide me from others:", .2, 8, "cg_hideMe", "" )
-	YESNO( 8, 64, (SUBWINDOW_WIDTH)-4, 10, "Hide other players:", .2, 8, "cg_hideOthers", "" )
-	MULTI( 8, 80, (SUBWINDOW_WIDTH)-4, 10, "Hide range:", .2, 8, "cg_hideRange", cvarFloatList { "Very close" 64 "Close" 128 "Normal" 256 "Far" 512 "Very Far" 1024 }, "Distance range in units which to hide other players" )
+	SUBWINDOW( 6, 32, (SUBWINDOW_WIDTH), 60, "HIDE" )
+	YESNO( 8, 48, (SUBWINDOW_WIDTH)-4, 10, "Hide me from others:", .2, 8, "etr_hideMe", "" )
+	YESNO( 8, 64, (SUBWINDOW_WIDTH)-4, 10, "Hide other players:", .2, 8, "etr_hideOthers", "" )
+	MULTI( 8, 80, (SUBWINDOW_WIDTH)-4, 10, "Hide range:", .2, 8, "etr_hideRange", cvarFloatList { "Very close" 64 "Close" 128 "Normal" 256 "Far" 512 "Very Far" 1024 }, "Distance range in units which to hide other players" )
 
-	SUBWINDOW( 6, 96, (SUBWINDOW_WIDTH), 92, "Position Control" )
+	SUBWINDOW( 6, 96, (SUBWINDOW_WIDTH), 92, "POSITION CONTROL" )
 	BIND( 8, 112, (SUBWINDOW_WIDTH)-5, 10, "Save button:", .2, 8, save, "Saves your position (save, save 1, save 2...)" )
 	BIND( 8, 128, (SUBWINDOW_WIDTH)-5, 10, "Load button:", .2, 8, load, "Loads your position (load, load 1, load 2...)" )
-	YESNO( 8, 144, (SUBWINDOW_WIDTH)-4, 10, "Load view angles on load:", .2, 8, "cg_loadViewAngles", "" )
-	YESNO( 8, 160, (SUBWINDOW_WIDTH)-4, 10, "Load weapon on load:", .2, 8, "cg_loadWeapon", "" )
-	YESNO( 8, 176, (SUBWINDOW_WIDTH)-4, 10, "Automatically load when you get killed:", .2, 8, "cg_autoLoad", "" )
+	YESNO( 8, 144, (SUBWINDOW_WIDTH)-4, 10, "Load view angles on load:", .2, 8, "etr_loadViewAngles", "" )
+	YESNO( 8, 160, (SUBWINDOW_WIDTH)-4, 10, "Load weapon on load:", .2, 8, "etr_loadWeapon", "" )
+	YESNO( 8, 176, (SUBWINDOW_WIDTH)-4, 10, "Automatically load when you get killed:", .2, 8, "etr_autoLoad", "" )
 
-	SUBWINDOW( 6, 192, (SUBWINDOW_WIDTH), 30, "Movement" )
-	MULTI( 8, 208, (SUBWINDOW_WIDTH)-4, 10, "Noclip speed:", .2, 8, "cg_noclipSpeed", cvarFloatList { "100" 100 "1000" 1000 "10000" 10000 "100000" 100000 "1000000" 1000000 }, "Noclip speed in units per second" )
+	SUBWINDOW( 6, 192, (SUBWINDOW_WIDTH), 30, "MOVEMENT" )
+	MULTI( 8, 208, (SUBWINDOW_WIDTH)-4, 10, "Noclip speed:", .2, 8, "etr_noclipSpeed", cvarFloatList { "100" 100 "1000" 1000 "10000" 10000 "100000" 100000 "1000000" 1000000 }, "Noclip speed in units per second" )
 
-	SUBWINDOW( 6, 226, (SUBWINDOW_WIDTH), 60, "Visible Triggers" )
-	MULTI( 8, 242, (SUBWINDOW_WIDTH)-4, 10, "Toggle visible triggers:", .2, 8, "cg_drawTriggers", cvarFloatList { "No" 0 "Triggers" 1 "Triggers, Jumppads" 2 "Triggers, Jumppads, Teleporters" 3 "All" 4}, "Toggle trigger types to draw" )
-	MULTI( 8, 258, (SUBWINDOW_WIDTH)-4, 10, "Triggers draw offset:", .2, 8, "cg_triggerOffset", cvarFloatList { "0" 0 "0.01" 0.01 "-0.01" -0.01 "0.1" 0.1 "-0.1" -0.1 "1" 1 "-1" -1 "10" 10 "-10" -10}, "Triggers drawing size offset" )
-	MULTI( 8, 274, (SUBWINDOW_WIDTH)-4, 10, "Triggers color:", .2, 8, "cg_triggerColor", cvarStrList { "White"; "white"; "Yellow"; "yellow"; "Red"; "red"; "Green"; "green"; "Blue"; "blue"; "Magenta"; "magenta"; "Cyan"; "cyan"; "Orange"; "orange"; }, "Set the color for visible triggers" )
+	SUBWINDOW( 6, 226, (SUBWINDOW_WIDTH), 60, "VISIBLE TRIGGERS" )
+	MULTI( 8, 242, (SUBWINDOW_WIDTH)-4, 10, "Toggle visible triggers:", .2, 8, "etr_drawTriggers", cvarFloatList { "No" 0 "Triggers" 1 "Triggers, Jumppads" 2 "Triggers, Jumppads, Teleporters" 3 "All" 4}, "Toggle trigger types to draw" )
+	MULTI( 8, 258, (SUBWINDOW_WIDTH)-4, 10, "Triggers draw offset:", .2, 8, "etr_triggerOffset", cvarFloatList { "0" 0 "0.01" 0.01 "-0.01" -0.01 "0.1" 0.1 "-0.1" -0.1 "1" 1 "-1" -1 "10" 10 "-10" -10}, "Triggers drawing size offset" )
+	MULTI( 8, 274, (SUBWINDOW_WIDTH)-4, 10, "Triggers color:", .2, 8, "etr_triggerColor", cvarStrList { "White"; "white"; "Yellow"; "yellow"; "Red"; "red"; "Green"; "green"; "Blue"; "blue"; "Magenta"; "magenta"; "Cyan"; "cyan"; "Orange"; "orange"; }, "Set the color for visible triggers" )
 
 // Buttons //
 	
-	BUTTON( 6, WINDOW_HEIGHT-24, WINDOW_WIDTH-12, 18, "Back", .3, 14, close etrun_customise_game ; open etrun )
+	BUTTON( 6, WINDOW_HEIGHT-24, WINDOW_WIDTH-12, 18, "BACK", .3, 14, close etrun_customise_game ; open etrun )
 }

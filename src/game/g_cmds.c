@@ -2126,46 +2126,49 @@ void Cmd_Save_f(gentity_t *ent) {
 		return;
 	}
 
-	// Nico, allow save in the air for VET
-	if (physics.integer != PHYSICS_MODE_VET && ent->client->ps.groundEntityNum == ENTITYNUM_NONE) {
-		CP("cp \"You can not save while in the air!\n\"");
-		return;
-	}
+	// suburb, only do these checks if logged in, making logged out state more convenient
+	if (ent->client->sess.logged) {
+		// Nico, allow save in the air for VET
+		if (physics.integer != PHYSICS_MODE_VET && ent->client->ps.groundEntityNum == ENTITYNUM_NONE) {
+			CP("cp \"You can not save while in the air!\n\"");
+			return;
+		}
 
-	// Nico, allow save while proning for VET
-	if (physics.integer != PHYSICS_MODE_VET && (ent->client->ps.eFlags & EF_PRONE || ent->client->ps.eFlags & EF_PRONE_MOVING)) {
-		CP("cp \"You can not save while proning!\n\"");
-		return;
-	}
+		// Nico, allow save while proning for VET
+		if (physics.integer != PHYSICS_MODE_VET && (ent->client->ps.eFlags & EF_PRONE || ent->client->ps.eFlags & EF_PRONE_MOVING)) {
+			CP("cp \"You can not save while proning!\n\"");
+			return;
+		}
 
-	// Nico, allow save while crouching for VET
-	if (physics.integer != PHYSICS_MODE_VET && ent->client->ps.eFlags & EF_CROUCHING) {
-		CP("cp \"You can not save while crouching!\n\"");
-		return;
-	}
+		// Nico, allow save while crouching for VET
+		if (physics.integer != PHYSICS_MODE_VET && ent->client->ps.eFlags & EF_CROUCHING) {
+			CP("cp \"You can not save while crouching!\n\"");
+			return;
+		}
 
-	// suburb, forbid save while proning for VET before starting a run
-	if (physics.integer == PHYSICS_MODE_VET && (ent->client->ps.eFlags & EF_PRONE || ent->client->ps.eFlags & EF_PRONE_MOVING) && !ent->client->sess.timerunActive) {
-		CP("cp \"You can not save while proning before starting a run!\n\"");
-		return;
-	}
+		// suburb, forbid save while proning for VET before starting a run
+		if (physics.integer == PHYSICS_MODE_VET && (ent->client->ps.eFlags & EF_PRONE || ent->client->ps.eFlags & EF_PRONE_MOVING) && !ent->client->sess.timerunActive) {
+			CP("cp \"You can not save while proning before starting a run!\n\"");
+			return;
+		}
 
-	// suburb, forbid save while crouching for VET before starting a run
-	if (physics.integer == PHYSICS_MODE_VET && ent->client->ps.eFlags & EF_CROUCHING && !ent->client->sess.timerunActive) {
-		CP("cp \"You can not save while crouching before starting a run!\n\"");
-		return;
-	}
+		// suburb, forbid save while crouching for VET before starting a run
+		if (physics.integer == PHYSICS_MODE_VET && ent->client->ps.eFlags & EF_CROUCHING && !ent->client->sess.timerunActive) {
+			CP("cp \"You can not save while crouching before starting a run!\n\"");
+			return;
+		}
 
-	// Nico, strict save/load restrictions: you can not save while timer is active
-	if (g_strictSaveLoad.integer != 0 && ent->client->sess.timerunActive) {
-		CP("cp \"Strict save mode prevents you from saving while your timer is active!\n\"");
-		return;
-	}
+		// Nico, strict save/load restrictions: you can not save while timer is active
+		if (g_strictSaveLoad.integer != 0 && ent->client->sess.timerunActive) {
+			CP("cp \"Strict save mode prevents you from saving while your timer is active!\n\"");
+			return;
+		}
 
-	// suburb, prevent trigger bug
-	if (ent->client->pers.isTouchingTrigger == qtrue && ent->client->sess.timerunActive) {
-		CP("cp \"You can not save in triggers during a run!\n\"");
-		return;
+		// suburb, prevent trigger bug
+		if (ent->client->pers.isTouchingTrigger && ent->client->sess.timerunActive) {
+			CP("cp \"You can not save in triggers during a run!\n\"");
+			return;
+		}
 	}
 
 	if (ent->client->sess.sessionTeam == TEAM_ALLIES) {
@@ -2221,7 +2224,6 @@ static command_t floodProtectedCommands[] =
 	{ "loadCheckpoints", qtrue,  Cmd_LoadCheckpoints_f, qtrue,  "Loads checkpoints from your PB",           "[userName] [run name or id]"                  },
 	{ "h",               qtrue,  Cmd_Help_f,            qtrue,  "Shows help message",                       "[command]"                                    },
 	{ "abort",           qtrue,  Cmd_Abort_f,           qtrue,  "Aborts the current run",                   NULL                                           },
-	{ "tutorial",        qtrue,  Cmd_Tutorial_f,        qtrue,  "Shows an introduction for beginners",      NULL                                           },
 };
 // Nico, end of defines commands that are flood protected or not
 
@@ -2641,34 +2643,4 @@ void Cmd_Abort_f(gentity_t *ent) {
 		notify_timerun_stop(ent, 0);
 		ent->client->sess.timerunActive = qfalse;
 	}
-}
-
-/**
-* Tutorial command for beginners
-* @author: suburb
-*/
-void Cmd_Tutorial_f(gentity_t *ent) {
-	CP("print \"^9-----------------------------------------------------------------------------\n\"");
-	CP(va("print \"Welcome to %s^7, an Enemy Territory game modification with timeruns\n\"", GAME_VERSION_COLORED));
-	CP("print \"support. In order to permanently save records, you need to create an\n\"");
-	CP(va("print \"account on ^fhttps://timeruns.net/^7, the official %s^7 website, and\n\"", GAME_VERSION_COLORED));
-	CP("print \"link it to your game. Here is a step-by-step tutorial:\n\"");
-	CP("print \"\n\"");
-	CP("print \"^51. ^7Go to ^fhttps://timeruns.net/ ^7and open the Signup tab.\n\"");
-	CP("print \"^52. ^7Follow the instructions and wait for the account activation email.\n\"");
-	CP(va("print \"^53. ^7Once your account has been activated, login on the %s^7 forum,\n\"", GAME_VERSION_COLORED));
-	CP("print \"   which is located here: ^fhttps://forum.timeruns.net/\n\"");
-	CP("print \"^54. ^7In the top right corner, click on your nickname and follow this path:\n\"");
-	CP("print \"   User Control Panel -> Profile -> Edit account settings\n\"");
-	CP("print \"   Now you can see your Timeruns token. This is your password which\n\"");
-	CP("print \"   links your game to your own website account. Never share it!\n\"");
-	CP("print \"^55. ^7Copy your Timeruns token.\n\"");
-	CP("print \"^56. ^7Insert your Timeruns token ingame into the ^b/cg_timerunsToken ^7cvar.\n\"");
-	CP("print \"^57. ^7Type ^b/login ^7into the console.\n\"");
-	CP("print \"\n\"");
-	CP("print \"Congratulations! You are now logged in and able to set records. You can\n\"");
-	CP(va("print \"now find your stats on the %s^7 website and share them with your friends.\n\"", GAME_VERSION_COLORED));
-	CP("print \"\n\"");
-	CP("print \"Have fun.\n\"");
-	CP("print \"^9-----------------------------------------------------------------------------\n\"");
 }
