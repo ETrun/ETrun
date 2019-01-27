@@ -12,24 +12,24 @@ Draw checkpoints times
 void CG_DrawCheckpoints(void) {
 	int x = 0, y = 0;
 
-	if (!cg_drawCheckPoints.integer) {
+	if (!etr_drawCheckPoints.integer) {
 		return;
 	}
 
 	// Nico, printing position
-	x = CG_WideX(cg_checkPointsX.value);
-	y = cg_checkPointsY.value;
+	x = CG_WideX(etr_checkPointsX.value);
+	y = etr_checkPointsY.value;
 
 	// Nico, check cg_maxCheckPoints
-	if (!cg_maxCheckPoints.integer || cg_maxCheckPoints.integer < 0) {
-		cg_maxCheckPoints.integer = 5;
+	if (!etr_maxCheckPoints.integer || etr_maxCheckPoints.integer < 0) {
+		etr_maxCheckPoints.integer = 5;
 	}
 
 	// Nico, print check points if any and respect the printing limit (cg_maxCheckPoints)
 	if (cg.timerunCheckPointChecked > 0) {
 		int i, j;
 
-		for (i = cg.timerunCheckPointChecked - 1, j = 0; i >= 0 && j < cg_maxCheckPoints.integer; --i, ++j) {
+		for (i = cg.timerunCheckPointChecked - 1, j = 0; i >= 0 && j < etr_maxCheckPoints.integer; --i, ++j) {
 			char   status[128];
 			int    cmin, csec, cmil;
 			int    cdmin, cdsec, cdmil;
@@ -100,7 +100,7 @@ void CG_DrawSpeedMeter(void) {
 	int          x, y, w;
 	static vec_t speed;
 
-	if (!cg_drawSpeedMeter.integer) {
+	if (!etr_drawSpeedMeter.integer) {
 		return;
 	}
 
@@ -114,16 +114,16 @@ void CG_DrawSpeedMeter(void) {
 
 	sizex = sizey = 0.25f;
 
-	x = CG_WideX(cg_speedMeterX.integer);
-	y = cg_speedMeterY.integer;
+	x = CG_WideX(etr_speedMeterX.integer);
+	y = etr_speedMeterY.integer;
 
 	Com_sprintf(status, sizeof (status), "%.0f", speed);
 
 	w = CG_Text_Width_Ext(status, sizex, sizey, &cgs.media.limboFont1) / 2;
 
-	if (cg_drawAccel.integer && speed > cg.oldSpeed + 0.001f * cg_accelSmoothness.integer) {
+	if (etr_drawAccel.integer && speed > cg.oldSpeed + 0.001f * etr_accelSmoothness.integer) {
 		CG_Text_Paint_Ext(x - w, y, sizex, sizey, colorGreen, status, 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
-	} else if (cg_drawAccel.integer && speed < cg.oldSpeed - 0.001f * cg_accelSmoothness.integer) {
+	} else if (etr_drawAccel.integer && speed < cg.oldSpeed - 0.001f * etr_accelSmoothness.integer) {
 		CG_Text_Paint_Ext(x - w, y, sizex, sizey, colorRed, status, 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
 	} else {
 		CG_Text_Paint_Ext(x - w, y, sizex, sizey, colorWhite, status, 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
@@ -155,7 +155,7 @@ void CG_DrawOB(void) {
 	float   n2;
 	int     n;
 
-	if (!cg_drawOB.integer || cg_thirdPerson.integer || physics.integer & PHYSICS_NO_OVERBOUNCE) {
+	if (!etr_drawOB.integer || cg_thirdPerson.integer || physics.integer & PHYSICS_NO_OVERBOUNCE) {
 		return;
 	}
 
@@ -239,7 +239,7 @@ void CG_DrawSlick(void) {
 	float          x = CG_WideX(350), y = 220, sizex, sizey;
 	char           *text = "S";
 
-	if (!cg_drawSlick.integer || cg_thirdPerson.integer) {
+	if (!etr_drawSlick.integer || cg_thirdPerson.integer) {
 		return;
 	}
 
@@ -283,7 +283,7 @@ void CG_DrawTimer(void) {
 	}
 
 	// Nico, if cg_drawTimer is 0
-	if (!cg_drawTimer.integer) {
+	if (!etr_drawTimer.integer) {
 		return;
 	}
 
@@ -310,8 +310,8 @@ void CG_DrawTimer(void) {
 	//
 
 	// Nico, set timer position
-	x = CG_WideX(cg_timerX.integer);
-	y = cg_timerY.integer;
+	x = CG_WideX(etr_timerX.integer);
+	y = etr_timerY.integer;
 
 	// Nico, get fixed timerun start time
 	startTime = cg.timerunStartTime - 500;
@@ -444,7 +444,7 @@ void CG_DrawCGaz(void) {
 	playerState_t *ps;
 
 	// Nico, if cg_drawCGaz is 0
-	if (!cg_drawCGaz.integer) {
+	if (!etr_drawCGaz.integer) {
 		return;
 	}
 
@@ -489,7 +489,7 @@ void CG_DrawCGaz(void) {
 		// Nico, AP or stock accel?
 		if (physics.integer == PHYSICS_MODE_AP_NO_OB || physics.integer == PHYSICS_MODE_AP_OB) {
 			// suburb, CGaz 2 on ground fix
-			if (cg_drawCGaz.integer == 2) {
+			if (etr_drawCGaz.integer == 2) {
 				accel = pm_accelerate_AP - 10.0f;
 			} else {
 				accel = pm_accelerate_AP;
@@ -530,7 +530,7 @@ void CG_DrawCGaz(void) {
 		right = -128;
 	}
 
-	if (cg_drawCGaz.integer == 1) {
+	if (etr_drawCGaz.integer == 1) {
 		VectorCopy(colorBlue, color);
 		CG_FillRect(SCREEN_CENTER_X - w / 2, y, w, h, color);
 		CG_FillRect(SCREEN_CENTER_X - w / 2, y, 1, h, colorWhite);
@@ -560,12 +560,12 @@ void CG_DrawCGaz(void) {
 				CG_FillRect(SCREEN_CENTER_X + w * ang / 180, y, 1, h, colorGreen);
 			}
 		}
-	} else if (cg_drawCGaz.integer == 2) {
+	} else if (etr_drawCGaz.integer == 2) {
 		// CGaz 2
 		vel_relang = DEG2RAD(vel_relang);
 		per_angle  = DEG2RAD(per_angle);
 
-		if (!cg_realCGaz2.integer && cg_widescreenSupport.integer) {
+		if (!etr_realCGaz2.integer && etr_widescreenSupport.integer) {
 			CG_DrawLine(SCREEN_CENTER_X, SCREEN_CENTER_Y,
 				SCREEN_CENTER_X + CG_WideX(right), SCREEN_CENTER_Y - forward, colorCyan);
 		} else {
@@ -587,7 +587,7 @@ void CG_DrawCGaz(void) {
 		}
 		vel_size /= 2;
 
-		if (!cg_realCGaz2.integer && cg_widescreenSupport.integer) {
+		if (!etr_realCGaz2.integer && etr_widescreenSupport.integer) {
 			CG_DrawLine(SCREEN_CENTER_X, SCREEN_CENTER_Y,
 				SCREEN_CENTER_X + vel_size * CG_WideX(sin(vel_relang + per_angle)),
 				SCREEN_CENTER_Y - vel_size * cos(vel_relang + per_angle), colorRed);
@@ -602,7 +602,7 @@ void CG_DrawCGaz(void) {
 				SCREEN_CENTER_X + vel_size * sin(vel_relang - per_angle),
 				SCREEN_CENTER_Y - vel_size * cos(vel_relang - per_angle), colorRed);
 		}
-	} else if (cg_drawCGaz.integer == 3) {
+	} else if (etr_drawCGaz.integer == 3) {
 		accel_angle = atan2(-right, forward);
 		accel_angle = AngleNormalize180(ps->viewangles[YAW] + RAD2DEG(accel_angle));
 
@@ -640,7 +640,7 @@ void CG_DrawCGaz(void) {
 			}
 			return;
 		}
-	} else if (cg_drawCGaz.integer == 4) {
+	} else if (etr_drawCGaz.integer == 4) {
 		accel_angle = atan2(-right, forward);
 		accel_angle = AngleNormalize180(ps->viewangles[YAW] + RAD2DEG(accel_angle));
 
@@ -710,7 +710,7 @@ void CG_DrawVelocitySnapping(void) {
 	int    fov       = 0;
 	int    i         = 0;
 
-	if (!cg_drawVelocitySnapping.integer || (cg.snap->ps.persistant[PERS_TEAM] == TEAM_SPECTATOR)) {
+	if (!etr_drawVelocitySnapping.integer || (cg.snap->ps.persistant[PERS_TEAM] == TEAM_SPECTATOR)) {
 		return;
 	}
 
@@ -738,11 +738,11 @@ void CG_DrawVelocitySnapping(void) {
 		yaw += 45;
 	}
 	
-	snapHud_H = cg_velocitySnappingH.integer;
-	snapHud_Y = cg_velocitySnappingY.integer;
-	fov       = cg_velocitySnappingFov.integer;
+	snapHud_H = etr_velocitySnappingH.integer;
+	snapHud_Y = etr_velocitySnappingY.integer;
+	fov       = etr_velocitySnappingFov.integer;
 
-	if (cg_drawVelocitySnapping.integer == 2) {
+	if (etr_drawVelocitySnapping.integer == 2) {
 		for (int i = 0; i < 4; i++) {
 			color[0][i] = 1.0f;
 			color[1][i] = 1.0f;
@@ -779,27 +779,27 @@ void CG_DrawKeys(void) {
 	int   i;
 	int   skew;
 
-	if (!cg_drawKeys.integer) {
+	if (!etr_drawKeys.integer) {
 		return;
 	}
 
 	// Dini, add in here for any other keysets with skew effect or related.
-	if (cg_drawKeys.value == 1) {
-		skew = cg_keysSize.value / 18;
+	if (etr_drawKeys.value == 1) {
+		skew = etr_keysSize.value / 18;
 	} else {
 		skew = 0;
 	}
 
 	trap_R_SetColor(colorWhite);
 
-	size = cg_keysSize.value / 3;
-	i    = (cg_drawKeys.integer - 1) % NUM_KEYS_SETS;
+	size = etr_keysSize.value / 3;
+	i    = (etr_drawKeys.integer - 1) % NUM_KEYS_SETS;
 
 	// first (upper) row
 	// sprint (upper left)
 
-	x = KEYS_X + cg_keysXoffset.value + 2 * skew;
-	y = KEYS_Y + cg_keysYoffset.value;
+	x = KEYS_X + etr_keysXoffset.value + 2 * skew;
+	y = KEYS_Y + etr_keysYoffset.value;
 
 	if (cg.keyDown[0]) {
 		CG_DrawPic(x, y, size, size, cgs.media.keys[i].SprintPressedShader);
@@ -825,7 +825,7 @@ void CG_DrawKeys(void) {
 
 	// second (middle) row
 	// left
-	x  = KEYS_X + cg_keysXoffset.value + skew;
+	x  = KEYS_X + etr_keysXoffset.value + skew;
 	y += size;
 	if (cg.keyDown[3]) {
 		CG_DrawPic(x, y, size, size, cgs.media.keys[i].LeftPressedShader);
@@ -842,7 +842,7 @@ void CG_DrawKeys(void) {
 	}
 
 	// third (bottom) row
-	x  = KEYS_X + cg_keysXoffset.value;
+	x  = KEYS_X + etr_keysXoffset.value;
 	y += size;
 	// prone (bottom left)
 	if (cg.keyDown[5]) {
@@ -1096,7 +1096,7 @@ void CG_DrawInfoPanel(void) {
 	int   speed     = 0;
 	int   i         = 0;
 
-	if (!cg_drawInfoPanel.integer) {
+	if (!etr_drawInfoPanel.integer) {
 		return;
 	}
 
@@ -1107,8 +1107,8 @@ void CG_DrawInfoPanel(void) {
 		cg.overallMaxSpeed = speed;
 	}
 
-	x = INFO_PANEL_X + cg_infoPanelXoffset.value;
-	y = INFO_PANEL_Y + cg_infoPanelYoffset.value;
+	x = INFO_PANEL_X + etr_infoPanelXoffset.value;
+	y = INFO_PANEL_Y + etr_infoPanelYoffset.value;
 
 	//CG_DrawRect_FixedBorder(x, y, INFO_PANEL_WIDTH, INFO_PANEL_HEIGHT, 1, colorWhite);
 
@@ -1117,7 +1117,7 @@ void CG_DrawInfoPanel(void) {
 	textScale               = CG_AdjustFontSize(textScale, cg.timerunStartSpeed, INFO_PANEL_FONT_ADJUST_NEEDED);
 
 	// Colour start speed
-	if (cg_minStartSpeed.value <= 0 || cg.timerunStartSpeed == 0 || cg.timerunStartSpeed >= cg_minStartSpeed.value) {
+	if (etr_minStartSpeed.value <= 0 || cg.timerunStartSpeed == 0 || cg.timerunStartSpeed >= etr_minStartSpeed.value) {
 		CG_Text_Paint_Ext(x + INFO_PANEL_X_PADDING, y, textScale, textScale, colorWhite, va("%d", cg.timerunStartSpeed), 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
 	} else {
 		CG_Text_Paint_Ext(x + INFO_PANEL_X_PADDING, y, textScale, textScale, colorWhite, va("^1%d", cg.timerunStartSpeed), 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);

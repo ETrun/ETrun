@@ -625,6 +625,41 @@ static void CG_Minimize_f(void) {
 #endif
 }
 
+/*
+==================
+CG_Tutorial_f
+
+Tutorial command
+
+@author suburb
+==================
+*/
+static void CG_Tutorial_f(void) {
+	CG_Printf("^9-----------------------------------------------------------------------------\n");
+	CG_Printf(va("Welcome to %s^7, an Enemy Territory game modification with timeruns\n", GAME_VERSION_COLORED));
+	CG_Printf("support. In order to permanently save records, you need to create an\n");
+	CG_Printf(va("account on ^fhttps://timeruns.net/^7, the official %s^7 website, and\n", GAME_VERSION_COLORED));
+	CG_Printf("link it to your game. Here is a step-by-step tutorial:\n");
+	CG_Printf("\n");
+	CG_Printf("^51. ^7Go to ^fhttps://timeruns.net/ ^7and open the Signup tab.\n");
+	CG_Printf("^52. ^7Follow the instructions and wait for the account activation email.\n");
+	CG_Printf(va("^53. ^7Once your account has been activated, login on the %s^7 forum,\n", GAME_VERSION_COLORED));
+	CG_Printf("   which is located here: ^fhttps://forum.timeruns.net/\n");
+	CG_Printf("^54. ^7In the top right corner, click on your nickname and follow this path:\n");
+	CG_Printf("   User Control Panel -> Profile -> Edit account settings\n");
+	CG_Printf("   Now you can see your Timeruns token. This is your password which\n");
+	CG_Printf("   links your game to your own website account. Never share it!\n");
+	CG_Printf("^55. ^7Copy your Timeruns token.\n");
+	CG_Printf("^56. ^7Insert your Timeruns token ingame into the ^b/cg_timerunsToken ^7cvar.\n");
+	CG_Printf("^57. ^7Type ^b/login ^7into the console.\n");
+	CG_Printf("\n");
+	CG_Printf("Congratulations! You are now logged in and able to set records. You can\n");
+	CG_Printf(va("now find your stats on the %s^7 website and share them with your friends.\n", GAME_VERSION_COLORED));
+	CG_Printf("\n");
+	CG_Printf("Have fun.\n");
+	CG_Printf("^9-----------------------------------------------------------------------------\n");
+}
+
 typedef struct {
 	char *cmd;
 	void (*function)(void);
@@ -686,6 +721,9 @@ static consoleCommand_t commands[] =
 
 	// Nico, minimize command
 	{ "minimize",            CG_Minimize_f           },
+
+	// suburb, tutorial command
+	{ "tutorial",            CG_Tutorial_f           },
 };
 
 // Nico, here are ignored commands, (no warning issued for them)

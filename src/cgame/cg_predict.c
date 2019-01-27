@@ -345,7 +345,7 @@ void CG_DrawTriggers(void) {
 	centity_t    *cent;
 	clipHandle_t cmodel;
 
-	if (!cg_drawTriggers.integer) {
+	if (!etr_drawTriggers.integer) {
 		return;
 	}
 
@@ -371,8 +371,8 @@ void CG_DrawTriggers(void) {
 		if (ent->eType == ET_CONSTRUCTIBLE || ent->eType == ET_OID_TRIGGER ||
 		    ent->eType == ET_TRIGGER_MULTIPLE || ent->eType == ET_TRIGGER_FLAGONLY ||
 		    ent->eType == ET_TRIGGER_FLAGONLY_MULTIPLE || (ent->eType == ET_PUSH_TRIGGER &&
-		                                                   cg_drawTriggers.integer >= 2) || (ent->eType == ET_TELEPORT_TRIGGER &&
-		                                                                                     cg_drawTriggers.integer >= 3) || cg_drawTriggers.integer >= 4) {
+		                                                   etr_drawTriggers.integer >= 2) || (ent->eType == ET_TELEPORT_TRIGGER &&
+		                                                                                     etr_drawTriggers.integer >= 3) || etr_drawTriggers.integer >= 4) {
 
 			vec3_t mins, maxs;
 
@@ -385,8 +385,8 @@ void CG_DrawTriggers(void) {
 			VectorAdd(cent->lerpOrigin, mins, mins);
 			VectorAdd(cent->lerpOrigin, maxs, maxs);
 
-			VectorSet(mins, mins[0] - cg_triggerOffset.value, mins[1] - cg_triggerOffset.value, mins[2] - cg_triggerOffset.value);
-			VectorSet(maxs, maxs[0] + cg_triggerOffset.value, maxs[1] + cg_triggerOffset.value, maxs[2] + cg_triggerOffset.value);
+			VectorSet(mins, mins[0] - etr_triggerOffset.value, mins[1] - etr_triggerOffset.value, mins[2] - etr_triggerOffset.value);
+			VectorSet(maxs, maxs[0] + etr_triggerOffset.value, maxs[1] + etr_triggerOffset.value, maxs[2] + etr_triggerOffset.value);
 
 			CG_RailTrail(mins, maxs, 1);
 		}
@@ -574,7 +574,7 @@ void CG_PredictPlayerState(void) {
 	cg_pmove.timerunStartTime = cg.timerunStartTime;
 
 	// suburb, for noclip speed scale
-	cg_pmove.noclipSpeed = cg_noclipSpeed.integer;
+	cg_pmove.noclipSpeed = etr_noclipSpeed.integer;
 
 	// Nico, store login status in pmove
 	cg_pmove.isLogged = cg.isLogged;

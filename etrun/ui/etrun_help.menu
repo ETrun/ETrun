@@ -28,24 +28,24 @@ menuDef {
 
 // Window //
 
-	WINDOW( "Help", 94 )
+	WINDOW( "HELP", 94 )
 	
 // Subwindows //
 
 #define SUBWINDOW_WIDTH		WINDOW_WIDTH-12
 
-	SUBWINDOW( 6, 32, (SUBWINDOW_WIDTH), 92, "Scoreboard Legend" )
+	SUBWINDOW( 6, 32, (SUBWINDOW_WIDTH), 92, "SCOREBOARD LEGEND" )
 	LABELWHITE( 6, 48, .5*(WINDOW_WIDTH-24), 10, "^2R^w: Player is in a timerun", .2, ITEM_ALIGN_LEFT, 6, 8 )
 	LABELWHITE( 6, 64, .5*(WINDOW_WIDTH-24), 10, "^7L^w: Player is logged-in", .2, ITEM_ALIGN_LEFT, 6, 8 )
 	LABELWHITE( 6, 80, .5*(WINDOW_WIDTH-24), 10, "^8C^w: Player is using CGaz", .2, ITEM_ALIGN_LEFT, 6, 8 )
 	LABELWHITE( 6, 96, .5*(WINDOW_WIDTH-24), 10, "^9H^w: Player is hidden", .2, ITEM_ALIGN_LEFT, 6, 8 )
 	LABELWHITE( 6, 112, .5*(WINDOW_WIDTH-24), 10, "^bS^w: Player is speclocked", .2, ITEM_ALIGN_LEFT, 6, 8 )
 
-	SUBWINDOW( 6, 128, (SUBWINDOW_WIDTH), 46, "Commands" )
+	SUBWINDOW( 6, 128, (SUBWINDOW_WIDTH), 46, "COMMANDS" )
 	LABELWHITE( 6, 144, WINDOW_WIDTH-24, 10, "/tutorial : Displays an ETrun introduction", .2, ITEM_ALIGN_LEFT, 6, 8 )
 	LABELWHITE( 6, 160, WINDOW_WIDTH-24, 10, "/h : Displays an ETrun commands list", .2, ITEM_ALIGN_LEFT, 6, 8 )
 
 // Buttons //
 
-	BUTTON( 6, WINDOW_HEIGHT-24, WINDOW_WIDTH-12, 18, "Back", .3, 14, close etrun_help ; open etrun )
+	BUTTON( 6, WINDOW_HEIGHT-24, WINDOW_WIDTH-12, 18, "BACK", .3, 14, close etrun_help ; open etrun )
 }

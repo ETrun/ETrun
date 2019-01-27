@@ -60,7 +60,7 @@ extern vmCvar_t ui_browserShowAntilag;
 extern vmCvar_t ui_serverStatusTimeOut;
 extern vmCvar_t ui_isSpectator;
 
-extern vmCvar_t ui_widescreenSupport;
+extern vmCvar_t etr_widescreenSupport;
 // -NERVE - SMF
 
 extern vmCvar_t cl_profile;
