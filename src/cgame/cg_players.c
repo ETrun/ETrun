@@ -1545,8 +1545,8 @@ void CG_Player(centity_t *cent) {
 		return;
 	}
 
-	// Nico, don't draw if hiding others is enabled and distance to the player is < cg_hideRange
-	if (etr_hideOthers.integer && ci->clientNum != cg.clientNum && Distance(cgsnap->lerpOrigin, cent->lerpOrigin) < etr_hideRange.integer) {
+	// Nico, don't draw if hiding others is enabled or distance to the player is < etr_hideRange
+	if ((etr_hideOthers.integer && ci->clientNum != cg.clientNum) || Distance(cgsnap->lerpOrigin, cent->lerpOrigin) < etr_hideRange.integer) {
 		return;
 	}
 
