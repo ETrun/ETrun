@@ -683,6 +683,7 @@ typedef struct {
 	int lastLoadedTime;
 	qboolean isTouchingTrigger;
 	qboolean isTouchingJumppad;
+	qboolean loadKillNeeded;
 
 	// suburb, inactivity drop
 	vec3_t oldViewangles;

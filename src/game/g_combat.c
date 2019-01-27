@@ -194,6 +194,9 @@ void player_die(gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int 
 		self->client->sess.lastDieWasASelfkill = qfalse;
 	}
 
+	// suburb, reset anti-bugging variable
+	self->client->pers.loadKillNeeded = qfalse;
+
 	// RF, record this death in AAS system so that bots avoid areas which have high death rates
 	if (!OnSameTeam(self, attacker)) {
 		self->isProp = qfalse;  // were we teamkilled or not?
