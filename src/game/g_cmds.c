@@ -2040,7 +2040,7 @@ void Cmd_Load_f(gentity_t *ent) {
 	}
 
 	// suburb, prevent trigger bug
-	if (level.time - ent->client->pers.lastLoadedTime < 550) {
+	if (level.time - ent->client->pers.lastLoadedTime < BUGGING_LOADING_DELAY) {
 		CP("cp \"Loading aborted\n\"");
 		return;
 	}
@@ -2093,6 +2093,9 @@ void Cmd_Load_f(gentity_t *ent) {
 
 		// Start recording a new temp demo.
 		trap_SendServerCommand(ent - g_entities, "tempDemoStart");
+
+		// suburb, reset anti-bugging variable
+		ent->client->pers.loadKillNeeded = qfalse;
 	} else {
 		CP("cp \"Use save first!\n\"");
 	}

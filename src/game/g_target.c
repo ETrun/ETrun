@@ -1268,6 +1268,12 @@ void target_starttimer_use(gentity_t *self, gentity_t *other, gentity_t *activat
 		return;
 	}
 
+	// suburb, prevent trigger bug
+	if (client->pers.loadKillNeeded) {
+		CPx(activator - g_entities, "cpm \"^1Timerun not started, load or kill required!\n\"");
+		return;
+	}
+
 	client->sess.currentTimerun    = self->timerunName;
 	client->sess.currentTimerunNum = GetTimerunNum(activator->client->sess.currentTimerun);
 
