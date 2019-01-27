@@ -1129,10 +1129,10 @@ Create banner to be printed, from TJMod
 #define BP_LINEWIDTH   (int) CG_WideX(64) // suburb, make it scale with widescreens
 void CG_BannerPrint(const char *str) {
 	char     buff[MAX_STRING_CHARS] = { 0 };
-	int      i           = 0;
-	int      len         = 0;
-	int      textlen     = 0;
-	qboolean needNewLine = qfalse;
+	int      i                      = 0;
+	int      len                    = 0;
+	int      textlen                = 0;
+	qboolean needNewLine            = qfalse;
 
 	// suburb, banner console printout, do that here instead of cutting str into multiple lines and fail to re-unite them afterwards
 	CG_Printf("^9Banner: ^7%s\n", str);
@@ -1179,8 +1179,8 @@ void CG_BannerPrint(const char *str) {
 			cg.bannerPrint[i]     = '\n';
 			cg.bannerPrint[i + 1] = 0;
 			Q_strcat(cg.bannerPrint, sizeof (cg.bannerPrint), buff);
-			textlen             = 0;
-			needNewLine         = qfalse;
+			textlen     = 0;
+			needNewLine = qfalse;
 		}
 	}
 

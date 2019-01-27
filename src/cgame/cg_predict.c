@@ -372,7 +372,7 @@ void CG_DrawTriggers(void) {
 		    ent->eType == ET_TRIGGER_MULTIPLE || ent->eType == ET_TRIGGER_FLAGONLY ||
 		    ent->eType == ET_TRIGGER_FLAGONLY_MULTIPLE || (ent->eType == ET_PUSH_TRIGGER &&
 		                                                   etr_drawTriggers.integer >= 2) || (ent->eType == ET_TELEPORT_TRIGGER &&
-		                                                                                     etr_drawTriggers.integer >= 3) || etr_drawTriggers.integer >= 4) {
+		                                                                                      etr_drawTriggers.integer >= 3) || etr_drawTriggers.integer >= 4) {
 
 			vec3_t mins, maxs;
 
