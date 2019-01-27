@@ -567,10 +567,10 @@ void CG_DrawCGaz(void) {
 
 		if (!etr_realCGaz2.integer && etr_widescreenSupport.integer) {
 			CG_DrawLine(SCREEN_CENTER_X, SCREEN_CENTER_Y,
-				SCREEN_CENTER_X + CG_WideX(right), SCREEN_CENTER_Y - forward, colorCyan);
+			            SCREEN_CENTER_X + CG_WideX(right), SCREEN_CENTER_Y - forward, colorCyan);
 		} else {
 			CG_DrawLine(SCREEN_CENTER_X, SCREEN_CENTER_Y,
-				SCREEN_CENTER_X + right, SCREEN_CENTER_Y - forward, colorCyan);
+			            SCREEN_CENTER_X + right, SCREEN_CENTER_Y - forward, colorCyan);
 		}
 
 		vel_size /= 5;
@@ -579,8 +579,8 @@ void CG_DrawCGaz(void) {
 		}
 
 		CG_DrawLine(SCREEN_CENTER_X, SCREEN_CENTER_Y,
-			SCREEN_CENTER_X + vel_size * sin(vel_relang),
-			SCREEN_CENTER_Y - vel_size * cos(vel_relang), colorRed);
+		            SCREEN_CENTER_X + vel_size * sin(vel_relang),
+		            SCREEN_CENTER_Y - vel_size * cos(vel_relang), colorRed);
 
 		if (vel_size > SCREEN_HEIGHT / 2) {
 			vel_size = SCREEN_HEIGHT / 2;
@@ -589,18 +589,18 @@ void CG_DrawCGaz(void) {
 
 		if (!etr_realCGaz2.integer && etr_widescreenSupport.integer) {
 			CG_DrawLine(SCREEN_CENTER_X, SCREEN_CENTER_Y,
-				SCREEN_CENTER_X + vel_size * CG_WideX(sin(vel_relang + per_angle)),
-				SCREEN_CENTER_Y - vel_size * cos(vel_relang + per_angle), colorRed);
+			            SCREEN_CENTER_X + vel_size * CG_WideX(sin(vel_relang + per_angle)),
+			            SCREEN_CENTER_Y - vel_size * cos(vel_relang + per_angle), colorRed);
 			CG_DrawLine(SCREEN_CENTER_X, SCREEN_CENTER_Y,
-				SCREEN_CENTER_X + vel_size * CG_WideX(sin(vel_relang - per_angle)),
-				SCREEN_CENTER_Y - vel_size * cos(vel_relang - per_angle), colorRed);
+			            SCREEN_CENTER_X + vel_size * CG_WideX(sin(vel_relang - per_angle)),
+			            SCREEN_CENTER_Y - vel_size * cos(vel_relang - per_angle), colorRed);
 		} else {
 			CG_DrawLine(SCREEN_CENTER_X, SCREEN_CENTER_Y,
-				SCREEN_CENTER_X + vel_size * sin(vel_relang + per_angle),
-				SCREEN_CENTER_Y - vel_size * cos(vel_relang + per_angle), colorRed);
+			            SCREEN_CENTER_X + vel_size * sin(vel_relang + per_angle),
+			            SCREEN_CENTER_Y - vel_size * cos(vel_relang + per_angle), colorRed);
 			CG_DrawLine(SCREEN_CENTER_X, SCREEN_CENTER_Y,
-				SCREEN_CENTER_X + vel_size * sin(vel_relang - per_angle),
-				SCREEN_CENTER_Y - vel_size * cos(vel_relang - per_angle), colorRed);
+			            SCREEN_CENTER_X + vel_size * sin(vel_relang - per_angle),
+			            SCREEN_CENTER_Y - vel_size * cos(vel_relang - per_angle), colorRed);
 		}
 	} else if (etr_drawCGaz.integer == 3) {
 		accel_angle = atan2(-right, forward);
@@ -733,11 +733,11 @@ void CG_DrawVelocitySnapping(void) {
 
 	// draw snapping
 	yaw = cg.predictedPlayerState.viewangles[YAW];
-	
+
 	if (physics.integer == PHYSICS_MODE_AP_NO_OB || physics.integer == PHYSICS_MODE_AP_OB) { // only shift for AP physics
 		yaw += 45;
 	}
-	
+
 	snapHud_H = etr_velocitySnappingH.integer;
 	snapHud_Y = etr_velocitySnappingY.integer;
 	fov       = etr_velocitySnappingFov.integer;

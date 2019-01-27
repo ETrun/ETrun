@@ -1176,8 +1176,8 @@ static void CG_DrawCrosshairNames(void) {
 	}
 
 	// Nico, don't draw if hiding others is enabled or distance to the player is < etr_hideRange
-	if (Distance((&cg_entities[cg.clientNum])->lerpOrigin, (&cg_entities[clientNum])->lerpOrigin) < etr_hideRange.integer || 
-		(clientNum != cg.clientNum && (etr_hideOthers.integer || cgs.clientinfo[clientNum].hideme))) {
+	if (Distance((&cg_entities[cg.clientNum])->lerpOrigin, (&cg_entities[clientNum])->lerpOrigin) < etr_hideRange.integer ||
+	    (clientNum != cg.clientNum && (etr_hideOthers.integer || cgs.clientinfo[clientNum].hideme))) {
 		return;
 	}
 
