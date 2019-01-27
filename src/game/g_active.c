@@ -320,7 +320,7 @@ void G_TouchTriggers(gentity_t *ent) {
 		// suburb, prevent trigger bug
 		if (hit->s.eType == ET_TRIGGER_MULTIPLE) {
 			triggerMultiples++;
-			if (level.time - ent->client->sess.timerunStartTime < 550) {
+			if (level.time - ent->client->sess.timerunStartTime < BUGGING_LOADING_DELAY) {
 				ent->client->pers.lastLoadedTime = level.time;
 			}
 		}
@@ -891,9 +891,9 @@ void ClientThink_real(gentity_t *ent) {
 			notify_timerun_stop(ent, 0);
 			client->sess.timerunActive = qfalse;
 		}
-		CP(va("cpm \"%s^w: ^1Too high ping detected, player killed.\n\"", GAME_VERSION_COLORED));
+		CP(va("cpm \"%s^w: ^1Too high ping detected, load or kill required.\n\"", GAME_VERSION_COLORED));
 		// suburb, prevent trigger bug
-		Cmd_Kill_f(ent);
+		client->pers.loadKillNeeded = qtrue;
 	}
 
 	// Nico, pmove_fixed
@@ -992,14 +992,14 @@ void ClientThink_real(gentity_t *ent) {
 	Zaccel = (int) pm.ps->velocity[2] - client->pers.oldZvelocity;
 	speed  = sqrt(pm.ps->velocity[0] * pm.ps->velocity[0] + pm.ps->velocity[1] * pm.ps->velocity[1]);
 
-	if (client->sess.logged && ((!client->sess.timerunActive && speed > MAX_BUGGING_SPEED && counter == 3) || // prevent accelerating in brushes
+	if (client->sess.logged && ((!client->sess.timerunActive && speed > BUGGING_MAX_SPEED && counter == 3) || // prevent accelerating in brushes
 	                            (pm.ps->eFlags & EF_PRONE && Zaccel > -6 && Zaccel < 0 && client->ps.groundEntityNum == ENTITYNUM_NONE && !client->pers.isTouchingJumppad))) { // prevent accelerating on steep slopes
 		if (!client->pers.buggedLastFrame) { // only do something the second frame not to break jumppads
 			client->pers.buggedLastFrame = qtrue;
 			return;
 		}
-		CP(va("cpm \"%s^w: ^1Bugging detected, player killed.\n\"", GAME_VERSION_COLORED));
-		Cmd_Kill_f(ent);
+		CP(va("cpm \"%s^w: ^1Bugging detected, load or kill required.\n\"", GAME_VERSION_COLORED));
+		client->pers.loadKillNeeded = qtrue;
 	}
 
 	// checking acceleration in brushes every frame would break corner skimming

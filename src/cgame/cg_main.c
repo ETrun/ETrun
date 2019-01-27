@@ -708,7 +708,7 @@ void CG_RegisterCvars(void) {
 	BG_SetRGBACvar(cg_crosshairColorAlt.string, cg.xhairColorAlt, cg_crosshairAlphaAlt.value, "cg_crosshairColorAlt");
 
 	// suburb, reset min start speed value
-	trap_Cvar_Set("cg_minStartSpeed", 0);
+	trap_Cvar_Set("etr_minStartSpeed", 0);
 
 	cvarsLoaded = qtrue;
 }

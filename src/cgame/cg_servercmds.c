@@ -1576,7 +1576,6 @@ static void CG_ServerCommand(void) {
 	if (!Q_stricmp(cmd, "timerun_start")) {
 		// suburb, kill if min start speed not reached
 		if (atoi(CG_Argv(3)) < etr_minStartSpeed.integer) {
-			trap_SendConsoleCommand("kill\n");
 			CG_CenterPrint(va("^1%i ^7/ ^2%i", atoi(CG_Argv(3)), etr_minStartSpeed.integer), 400, SMALLCHAR_WIDTH);
 		}
 		cg.timerunActive            = 1;

@@ -67,9 +67,10 @@ If you have questions concerning this license or the applicable additional terms
 // Nico, spectator speed
 #define SPECTATOR_SPEED     1000
 
-// suburb, prevent pronebug & wallbug
-#define MAX_BUGGING_SPEED         400
+// suburb, prevent bugging
+#define BUGGING_MAX_SPEED         400
 #define BUGGING_CHECK_FREQUENCY   500
+#define BUGGING_LOADING_DELAY     550
 
 #define FORCE_LIMBO_HEALTH  -75  // JPW NERVE
 
