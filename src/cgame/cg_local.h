@@ -1687,7 +1687,7 @@ extern vmCvar_t cg_enableBreath;
 extern vmCvar_t cg_autoactivate;
 extern vmCvar_t pmove_fixed;
 extern vmCvar_t pmove_msec;
-extern vmCvar_t cg_noclipSpeed;
+extern vmCvar_t etr_noclipSpeed;
 extern vmCvar_t cg_timescale;
 extern vmCvar_t cg_noTaunt;             // NERVE - SMF
 extern vmCvar_t cg_voiceSpriteTime;             // DHM - Nerve
@@ -1757,109 +1757,109 @@ extern vmCvar_t physics;
 extern vmCvar_t isTimerun;
 
 // Speed meter
-extern vmCvar_t cg_drawSpeedMeter;
-extern vmCvar_t cg_speedMeterX;
-extern vmCvar_t cg_speedMeterY;
+extern vmCvar_t etr_drawSpeedMeter;
+extern vmCvar_t etr_speedMeterX;
+extern vmCvar_t etr_speedMeterY;
 
 // Accel HUD
-extern vmCvar_t cg_drawAccel;
-extern vmCvar_t cg_accelSmoothness;
+extern vmCvar_t etr_drawAccel;
+extern vmCvar_t etr_accelSmoothness;
 
 // Timer
-extern vmCvar_t cg_drawTimer;
-extern vmCvar_t cg_timerX;
-extern vmCvar_t cg_timerY;
+extern vmCvar_t etr_drawTimer;
+extern vmCvar_t etr_timerX;
+extern vmCvar_t etr_timerY;
 
 // Check points
-extern vmCvar_t cg_drawCheckPoints;
-extern vmCvar_t cg_checkPointsX;
-extern vmCvar_t cg_checkPointsY;
-extern vmCvar_t cg_maxCheckPoints;
+extern vmCvar_t etr_drawCheckPoints;
+extern vmCvar_t etr_checkPointsX;
+extern vmCvar_t etr_checkPointsY;
+extern vmCvar_t etr_maxCheckPoints;
 
 // Slick detector
-extern vmCvar_t cg_drawSlick;
+extern vmCvar_t etr_drawSlick;
 
 // OB detector
-extern vmCvar_t cg_drawOB;
+extern vmCvar_t etr_drawOB;
 
 // Hide other players
-extern vmCvar_t cg_hideOthers;
-extern vmCvar_t cg_hideRange;
+extern vmCvar_t etr_hideOthers;
+extern vmCvar_t etr_hideRange;
 
 // Auth related
-extern vmCvar_t cg_authToken;
-extern vmCvar_t cg_autoLogin;
+extern vmCvar_t etr_authToken;
+extern vmCvar_t etr_autoLogin;
 
 // CGaz
-extern vmCvar_t cg_drawCGaz;
-extern vmCvar_t cg_realCGaz2;
+extern vmCvar_t etr_drawCGaz;
+extern vmCvar_t etr_realCGaz2;
 
 // Velocity Snapping
-extern vmCvar_t cg_drawVelocitySnapping;
-extern vmCvar_t cg_velocitySnappingH;
-extern vmCvar_t cg_velocitySnappingY;
-extern vmCvar_t cg_velocitySnappingFov;
+extern vmCvar_t etr_drawVelocitySnapping;
+extern vmCvar_t etr_velocitySnappingH;
+extern vmCvar_t etr_velocitySnappingY;
+extern vmCvar_t etr_velocitySnappingFov;
 
 // Load view angles on load
-extern vmCvar_t cg_loadViewAngles;
+extern vmCvar_t etr_loadViewAngles;
 
 // Load weapon on load
-extern vmCvar_t cg_loadWeapon;
+extern vmCvar_t etr_loadWeapon;
 
 // Show pressed keys
-extern vmCvar_t cg_drawKeys;
-extern vmCvar_t cg_keysXoffset;
-extern vmCvar_t cg_keysYoffset;
-extern vmCvar_t cg_keysSize;
+extern vmCvar_t etr_drawKeys;
+extern vmCvar_t etr_keysXoffset;
+extern vmCvar_t etr_keysYoffset;
+extern vmCvar_t etr_keysSize;
 
 // Automatically load player position when he gets killed (except /kill)
-extern vmCvar_t cg_autoLoad;
+extern vmCvar_t etr_autoLoad;
 
 // View log (ET Console)
-extern vmCvar_t cg_viewLog;
+extern vmCvar_t etr_viewLog;
 
 // Hide me
-extern vmCvar_t cg_hideMe;
+extern vmCvar_t etr_hideMe;
 
 // Auto demo
-extern vmCvar_t cg_autoDemo;
-extern vmCvar_t cg_keepAllDemos;
+extern vmCvar_t etr_autoDemo;
+extern vmCvar_t etr_keepAllDemos;
 
 // Popups
-extern vmCvar_t cg_numPopups;
-extern vmCvar_t cg_popupTime;
-extern vmCvar_t cg_popupStayTime;
-extern vmCvar_t cg_popupFadeTime;
+extern vmCvar_t etr_numPopups;
+extern vmCvar_t etr_popupTime;
+extern vmCvar_t etr_popupStayTime;
+extern vmCvar_t etr_popupFadeTime;
 
 // Automatically load checkpoints
-extern vmCvar_t cg_autoLoadCheckpoints;
+extern vmCvar_t etr_autoLoadCheckpoints;
 
 // Persistant speclock
-extern vmCvar_t cg_specLock;
+extern vmCvar_t etr_specLock;
 
 // Info panel
-extern vmCvar_t cg_drawInfoPanel;
-extern vmCvar_t cg_infoPanelXoffset;
-extern vmCvar_t cg_infoPanelYoffset;
+extern vmCvar_t etr_drawInfoPanel;
+extern vmCvar_t etr_infoPanelXoffset;
+extern vmCvar_t etr_infoPanelYoffset;
 
 // Country flags
-extern vmCvar_t cg_countryFlags;
+extern vmCvar_t etr_countryFlags;
 
 // Minimum start speed
-extern vmCvar_t cg_minStartSpeed;
+extern vmCvar_t etr_minStartSpeed;
 
 // suburb, widescreen support
-extern vmCvar_t cg_widescreenSupport;
-extern vmCvar_t cg_realFov;
+extern vmCvar_t etr_widescreenSupport;
+extern vmCvar_t etr_realFov;
 
 // suburb, event cvars
-extern vmCvar_t cg_onRunStart;
-extern vmCvar_t cg_onRunStop;
+extern vmCvar_t etr_onRunStart;
+extern vmCvar_t etr_onRunStop;
 
 // Draw triggers
-extern vmCvar_t cg_drawTriggers;
-extern vmCvar_t cg_triggerOffset;
-extern vmCvar_t cg_triggerColor;
+extern vmCvar_t etr_drawTriggers;
+extern vmCvar_t etr_triggerOffset;
+extern vmCvar_t etr_triggerColor;
 
 // Nico, end of ETrun cvars
 

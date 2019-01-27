@@ -762,7 +762,7 @@ void CG_RailTrail2(vec3_t start, vec3_t end, int box) {
 		le->color[2] = 0;
 		le->color[3] = railTrailAlpha;
 	} else {
-		BG_SetRGBACvar(cg_triggerColor.string, le->color, railTrailAlpha, "cg_triggerColor");
+		BG_SetRGBACvar(etr_triggerColor.string, le->color, railTrailAlpha, "cg_triggerColor");
 	}
 
 	AxisClear(re->axis);
