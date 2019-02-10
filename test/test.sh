@@ -72,7 +72,7 @@ function show_usage() {
 	echo ' -d 		Enable DEVELOPER mode'
 	echo ' -g 		Start game with a debugger'
 	echo ' -h		Show this help'
-	echo ' -i PK3NAME	Install the pk3 given in argument, qagame and custommapscripts into homepath'
+	echo ' -i PK3NAME	Install the pk3 given in argument, qagame and custommapscripts into basepath'
 	echo ' -l		Use ET: Legacy'
 	echo ' -m MAPNAME	Set map'
 	echo ' -v 		Use Valgrind to check memory leaks'
@@ -150,44 +150,56 @@ function install() {
 		rm -rf "$et_home_path/$mod_name"
 	fi
 
-	# Make etrun/ dir in homepath
+	# Make etrun/ dir in basepath and homepath
+	mkdir -p "$BASEPATH/$mod_name"
 	mkdir -p "$HOMEPATH/$mod_name"
 
-	# Install pk3 into homepath
-	cp -f "build/$mod_name/$INSTALL_FILES" "$HOMEPATH/$mod_name"
+	# Install pk3 into basepath
+	cp -f "build/$mod_name/$INSTALL_FILES" "$BASEPATH/$mod_name"
 	if [ $? -ne 0 ]; then
 		echo '[ko]'
-		echo "Error: failed to install build/$mod_name/$INSTALL_FILES into $HOMEPATH/$mod_name"
+		echo "Error: failed to install build/$mod_name/$INSTALL_FILES into $BASEPATH/$mod_name"
 		exit 1
 	fi
 
-	# Install qagame into homepath
-	cp -f "build/$mod_name/$qagame_name" "$HOMEPATH/$mod_name"
+	# Install qagame into basepath
+	cp -f "build/$mod_name/$qagame_name" "$BASEPATH/$mod_name"
 	if [ $? -ne 0 ]; then
 		echo '[ko]'
-		echo "Error: failed to install build/$mod_name/$qagame_name into $HOMEPATH/$mod_name"
+		echo "Error: failed to install build/$mod_name/$qagame_name into $BASEPATH/$mod_name"
 		exit 1
 	fi
 
-	# Install custom mapscripts into homepath
+	# Install custom mapscripts into basepath
 	if [ ! -z "$mapscripts_dir" ]; then
-		mkdir -p "$HOMEPATH/$mod_name/custommapscripts"
-		cp -f "$mapscripts_dir"/* "$HOMEPATH/$mod_name/custommapscripts"
+		mkdir -p "$BASEPATH/$mod_name/custommapscripts"
+		cp -f "$mapscripts_dir"/* "$BASEPATH/$mod_name/custommapscripts"
 	fi
-
-	# Install GeoIP
-	cp libs/geoip/GeoIP.dat "$HOMEPATH/$mod_name/"
 }
 
 #
 # Install API
 #
 function install_API() {
-	cp -f "$APImodule_dir/$APImodule_name" "$HOMEPATH/$mod_name" 2> /dev/null
+	cp -f "$APImodule_dir/$APImodule_name" "$BASEPATH/$mod_name" 2> /dev/null
 	if [ $? -ne 0 ]; then
 		echo '[ko]'
-		echo "Error: failed to copy $APImodule_dir/$APImodule_name to $HOMEPATH/$mod_name"
+		echo "Error: failed to copy $APImodule_dir/$APImodule_name to $BASEPATH/$mod_name"
 		exit 1
+	fi
+}
+
+#
+# Install Maxmind GeoIP
+#
+function install_maxmind_geoip() {
+	if [ ! -z "$maxmind_geoip_path" ]; then
+		cp -f "$maxmind_geoip_path" "$BASEPATH/$mod_name" 2> /dev/null
+		if [ $? -ne 0 ]; then
+			echo '[ko]'
+			echo "Error: failed to copy $APImodule_dir/$APImodule_name to $BASEPATH/$mod_name"
+			exit 1
+		fi
 	fi
 }
 
@@ -252,6 +264,11 @@ function start_game() {
 		GAME_ARGS="$GAME_ARGS +set dedicated 1"
 	fi
 
+	# GeoIP
+	if [ ! -z "$maxmind_geoip_path" ]; then
+		GAME_ARGS="$GAME_ARGS +set g_geoIPDbPath $(basename $maxmind_geoip_path) +set g_useGeoIP 1"
+	fi
+
 	if [ $USE_VALGRIND -eq 1 ]; then
 		$valgrind_command_line $GAME_PATH $GAME_ARGS
 	elif [ $USE_DEBUGGER -eq 1 ]; then
@@ -290,6 +307,8 @@ if [ $USE_API -eq 1 ]; then
 	install_API
 	echo '[ok]'
 fi
+
+install_maxmind_geoip
 
 print_summary
 
