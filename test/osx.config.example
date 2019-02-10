@@ -101,7 +101,7 @@ APImodule_name='timeruns.mod'
 #
 # APImodule dir
 #
-APImodule_dir="/Users/$USER/Documents/ETrun_api_module/build"
+APImodule_dir="/Users/$USER/Code/et/etrun/APImodule/build"
 #################################################
 
 
@@ -113,6 +113,17 @@ APImodule_dir="/Users/$USER/Documents/ETrun_api_module/build"
 # MapScripts dir
 #
 mapscripts_dir=''
+#################################################
+
+
+
+#################################################
+###          Maxmind GeoIP settings           ###
+#################################################
+#
+# Path to Maxmind Geolite2 country database
+#
+maxmind_geoip_path=""
 #################################################
 
 
