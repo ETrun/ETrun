@@ -1440,9 +1440,7 @@ void G_InitGame(int levelTime, int randomSeed) {
 	}
 
 	// Nico, load GeoIP databse
-	if (g_useGeoIP.integer) {
-		GeoIP_open(g_geoIPDbPath.string);
-	}
+	G_Geoip_LoadMmdb();
 
 	// Nico, install timelimit
 	G_install_timelimit();
@@ -1493,10 +1491,8 @@ void G_ShutdownGame(int restart) {
 		G_unloadAPI();
 	}
 
-	// Nico, unload GeoIP databse
-	if (g_useGeoIP.integer) {
-		GeoIP_close();
-	}
+	// Nico, unload GeoIP database
+	G_Geoip_UnloadMmdb();
 
 	// write all the client session data so we can get it back
 	G_WriteSessionData(restart);

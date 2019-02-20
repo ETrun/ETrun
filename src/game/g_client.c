@@ -708,12 +708,12 @@ qboolean getParsedIp(const char *ipadd, char *parsedIp) {
  * @autor: Nico
  */
 static qboolean checkUserinfoString(int clientNum, char *userinfo) {
-	size_t len                 = 0;
-	int    count               = 0;
-	int    i                   = 0;
-	char   *ip                 = NULL;
-	char   parsedIp[MAX_QPATH] = { 0 };
-	char   *name               = NULL;
+	size_t len                     = 0;
+	int    count                   = 0;
+	int    i                       = 0;
+	char   *ip                     = NULL;
+	char   parsedIp[IP_MAX_LENGTH] = { 0 };
+	char   *name                   = NULL;
 
 	// check for malformed or illegal info strings
 	if (!Info_Validate(userinfo)) {
@@ -1079,8 +1079,8 @@ char *ClientConnect(int clientNum, qboolean firstTime) {
 	char      userinfo2[MAX_INFO_STRING]; // Nico, used in connections limit check
 	int       i = 0;
 	int       conn_per_ip = 1; // Nico, connections per IP counter
-	char      ip[20], ip2[20]; // Nico, used in connections limit check
-	char      parsedIp[20], parsedIp2[20]; // Nico, used in connections limit check
+	char      ip[IP_MAX_LENGTH], ip2[IP_MAX_LENGTH]; // Nico, used in connections limit check
+	char      parsedIp[IP_MAX_LENGTH], parsedIp2[IP_MAX_LENGTH]; // Nico, used in connections limit check
 	char      cs_name[MAX_NETNAME];
 
 	ent = &g_entities[clientNum];
@@ -1190,39 +1190,8 @@ char *ClientConnect(int clientNum, qboolean firstTime) {
 		trap_UnlinkEntity(ent);
 	}
 
-	// Nico, GeoIP
-	if (gidb != NULL) {
-		value = Info_ValueForKey(userinfo, "ip");
-		if (!strcmp(value, "localhost")) {
-			client->sess.countryCode = 0;
-		} else {
-			char          realIP[IP_MAX_LENGTH] = { 0 }; // Nico, used to store IP without :port
-			unsigned long ip;
-
-			// Nico, remove :port from IP
-			sscanf(value, "%15[0-9.]:%*d", realIP);
-
-			ip = GeoIP_addr_to_num(realIP);
-
-			if (((ip & 0xFF000000) == 0x0A000000) ||
-			    ((ip & 0xFFF00000) == 0xAC100000) ||
-			    ((ip & 0xFFFF0000) == 0xC0A80000) ||
-			    (ip == 0x7F000001)) {
-				client->sess.countryCode = 246;
-			} else {
-				unsigned int ret = GeoIP_seek_record(gidb, ip);
-				if (ret > 0) {
-					client->sess.countryCode = ret;
-				} else {
-					client->sess.countryCode = 246;
-					G_LogPrintf(qtrue, "GeoIP: This IP:%s cannot be located.\n", realIP);
-				}
-			}
-		}
-	} else {
-		client->sess.countryCode = 255;
-	}
-	// Nico, end of GeoIP
+	// Nico, geolocate client IP
+	client->sess.countryCode = G_Geoip_GetCountryCodeFromIp(parsedIp);
 
 	// get and distribute relevent paramters
 	G_LogPrintf(qtrue, "ClientConnect: %i\n", clientNum);

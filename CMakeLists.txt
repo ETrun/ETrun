@@ -3,6 +3,7 @@
 cmake_minimum_required(VERSION 2.6)
 project(ETrun C)
 set(ETrun_VERSION "2.0.0")
+include(${CMAKE_ROOT}/Modules/ExternalProject.cmake)
 
 configure_file(
     "${PROJECT_SOURCE_DIR}/src/game/bg_version.h.in"
@@ -37,7 +38,6 @@ FILE(GLOB CGAME_SRC
 FILE(GLOB QAGAME_SRC
     "src/game/*.c"
     "src/game/*.h"
-    "libs/geoip/geoip.c"
 )
 
 FILE(GLOB UI_SRC
@@ -87,7 +87,8 @@ endif()
 
 # Check if we should build OSX universal binaries
 if(OSX_UNIVERSAL_BINARIES)
-    set(ARCH "")
+    set(ARCH_NAME "")
+    set(GEOIP_ARCH_BUILD_LIST "-arch i386 -arch x86_64")
     set_target_properties(cgame PROPERTIES OSX_ARCHITECTURES "i386;x86_64")
     set_target_properties(qagame PROPERTIES OSX_ARCHITECTURES "i386;x86_64")
     set_target_properties(ui PROPERTIES OSX_ARCHITECTURES "i386;x86_64")
@@ -102,25 +103,27 @@ else()
 
     if(ETRUN_ARCH_32)
         # x86 build
+        set(GEOIP_ARCH_BUILD_LIST "-arch i386")
         if(WIN32)
-            set(ARCH "x86")
+            set(ARCH_NAME "x86")
         elseif(APPLE)
-            set(ARCH "")
+            set(ARCH_NAME "")
             set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -arch i386")
         else()
-            set(ARCH "i386")
+            set(ARCH_NAME "i386")
             set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -m32")
         endif()
         message(STATUS "Target architecture: x86")
     else()
         # x86_64 build
+        set(GEOIP_ARCH_BUILD_LIST "-arch x86_64")
         if(WIN32)
-            set(ARCH "x64")
+            set(ARCH_NAME "x64")
         elseif(APPLE)
-            set(ARCH "")
+            set(ARCH_NAME "")
             set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -arch x86_64")
         else()
-            set(ARCH "x64")
+            set(ARCH_NAME "x64")
             set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -m64")
         endif()
         message(STATUS "Target architecture: x86_64")
@@ -177,9 +180,29 @@ elseif(WIN32)
     endif()
 endif()
 
-set_target_properties(cgame PROPERTIES OUTPUT_NAME cgame${LIB_SUFFIX}${ARCH})
-set_target_properties(qagame PROPERTIES OUTPUT_NAME qagame${LIB_SUFFIX}${ARCH})
-set_target_properties(ui PROPERTIES OUTPUT_NAME ui${LIB_SUFFIX}${ARCH})
+set_target_properties(cgame PROPERTIES OUTPUT_NAME cgame${LIB_SUFFIX}${ARCH_NAME})
+set_target_properties(qagame PROPERTIES OUTPUT_NAME qagame${LIB_SUFFIX}${ARCH_NAME})
+set_target_properties(ui PROPERTIES OUTPUT_NAME ui${LIB_SUFFIX}${ARCH_NAME})
+
+#--------------
+# Maxmind GeoIP
+#--------------
+
+FILE(COPY libs/libmaxminddb/ DESTINATION mmdb)
+ExternalProject_Add(project_mmdb
+    SOURCE_DIR "${CMAKE_CURRENT_BINARY_DIR}/mmdb"
+    PREFIX "${CMAKE_CURRENT_BINARY_DIR}/mmdb"
+    BINARY_DIR "${CMAKE_CURRENT_BINARY_DIR}/mmdb"
+    CONFIGURE_COMMAND ./bootstrap
+    COMMAND ./configure --disable-shared --prefix=${CMAKE_CURRENT_BINARY_DIR}/mmdb/build "CFLAGS=${GEOIP_ARCH_BUILD_LIST}"
+    BUILD_COMMAND make
+    INSTALL_COMMAND make install
+)
+add_library(mmdb STATIC IMPORTED)
+set_property(TARGET mmdb PROPERTY IMPORTED_LOCATION ${CMAKE_CURRENT_BINARY_DIR}/mmdb/build/lib/libmaxminddb.a)
+add_dependencies(mmdb project_mmdb)
+include_directories(${CMAKE_CURRENT_BINARY_DIR}/mmdb/include)
+target_link_libraries(qagame mmdb)
 
 #-----------------------------------------------------------------
 # Pk3 (inspired from etlegacy https://github.com/etlegacy/etlegacy)
@@ -202,7 +225,7 @@ add_custom_command(TARGET pk3
     COMMAND ${CMAKE_COMMAND} -E remove ${CMAKE_CURRENT_BINARY_DIR}/etrun/ETrun-${ETrun_VERSION}.pk3)
 if (WIN32)
     add_custom_command(TARGET pk3
-        COMMAND ${ZIP_EXECUTABLE} -q -r ETrun-${ETrun_VERSION}.pk3 * -x qagame${LIB_SUFFIX}${ARCH}* -x *.pdb -x *.ilk
+        COMMAND ${ZIP_EXECUTABLE} -q -r ETrun-${ETrun_VERSION}.pk3 * -x qagame${LIB_SUFFIX}${ARCH_NAME}* -x *.pdb -x *.ilk
         WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/etrun
     )
 else()
