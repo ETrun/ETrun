@@ -109,6 +109,12 @@ If you have questions concerning this license or the applicable additional terms
 # undef QDECL
 # define QDECL   __cdecl
 
+# define PATH_SEP '\\'
+
+#else
+
+# define PATH_SEP '/'
+
 #endif
 
 typedef unsigned char byte;
