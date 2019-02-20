@@ -32,7 +32,7 @@ If you have questions concerning this license or the applicable additional terms
 #include "bg_public.h"
 #include "g_public.h"
 #include <pthread.h>
-#include "../../libs/geoip/geoip.h"
+#include <maxminddb.h>
 
 //==================================================================
 
@@ -993,6 +993,11 @@ typedef struct {
 
 	int rocketRun;
 	// Nico, end of timerun level vars
+
+	// Nico, Maxmind GeoIP vars
+	MMDB_s mmdb;
+	qboolean geoipDatabaseLoaded;
+	// Nico, end of Maxmind GeoIP vars
 } level_locals_t;
 
 typedef struct {
@@ -1397,6 +1402,12 @@ void Props_Chair_Skyboxtouch(gentity_t *ent);
 int GetTimerunNum(char *name);
 void notify_timerun_stop(gentity_t *activator, int finishTime);
 void saveDemo(gentity_t *ent);
+
+// Nico, g_geoip.c
+void G_Geoip_LoadMmdb();
+void G_Geoip_UnloadMmdb();
+unsigned int G_Geoip_GetCountryIdFromIsoCode(const char *isoCode);
+unsigned int G_Geoip_GetCountryCodeFromIp(const char *ip);
 
 // Nico, g_crash.c
 #if defined _WIN32 && !defined _WIN64
