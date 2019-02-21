@@ -11,7 +11,7 @@ script:
 
 git:
   quiet: true
-  submodules: false
+  submodules: true
 
 env:
   global:
