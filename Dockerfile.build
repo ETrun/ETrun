@@ -1,16 +1,15 @@
 FROM debian:stretch-slim
 
-RUN dpkg --add-architecture i386 \
-    && apt-get update \
-    && apt-get install -y cmake \
-    zip \
+RUN apt-get update \
+    && apt-get install --no-install-recommends -y \
+    autoconf \
+    automake \
     build-essential \
-    libc6-dev-i386 \
-    libssl-dev:i386 \
+    cmake \
+    gcc-multilib \
     libtool-bin \
     m4 \
-    automake \
-    autoconf \
+    zip \
     && rm -r /var/lib/apt/lists/*
 
 VOLUME /code
