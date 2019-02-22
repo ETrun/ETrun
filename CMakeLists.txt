@@ -103,7 +103,7 @@ else()
 
     if(ETRUN_ARCH_32)
         # x86 build
-        set(GEOIP_ARCH_BUILD_LIST "-arch i386")
+        set(GEOIP_ARCH_BUILD_LIST "-m32")
         if(WIN32)
             set(ARCH_NAME "x86")
         elseif(APPLE)
@@ -116,7 +116,7 @@ else()
         message(STATUS "Target architecture: x86")
     else()
         # x86_64 build
-        set(GEOIP_ARCH_BUILD_LIST "-arch x86_64")
+        set(GEOIP_ARCH_BUILD_LIST "-m64 -fPIC")
         if(WIN32)
             set(ARCH_NAME "x64")
         elseif(APPLE)
