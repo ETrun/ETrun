@@ -88,7 +88,6 @@ endif()
 # Check if we should build OSX universal binaries
 if(OSX_UNIVERSAL_BINARIES)
     set(ARCH_NAME "")
-    set(GEOIP_ARCH_BUILD_LIST "-arch i386 -arch x86_64")
     set_target_properties(cgame PROPERTIES OSX_ARCHITECTURES "i386;x86_64")
     set_target_properties(qagame PROPERTIES OSX_ARCHITECTURES "i386;x86_64")
     set_target_properties(ui PROPERTIES OSX_ARCHITECTURES "i386;x86_64")
@@ -103,7 +102,6 @@ else()
 
     if(ETRUN_ARCH_32)
         # x86 build
-        set(GEOIP_ARCH_BUILD_LIST "-m32")
         if(WIN32)
             set(ARCH_NAME "x86")
         elseif(APPLE)
@@ -116,7 +114,6 @@ else()
         message(STATUS "Target architecture: x86")
     else()
         # x86_64 build
-        set(GEOIP_ARCH_BUILD_LIST "-m64 -fPIC")
         if(WIN32)
             set(ARCH_NAME "x64")
         elseif(APPLE)
@@ -187,22 +184,12 @@ set_target_properties(ui PROPERTIES OUTPUT_NAME ui${LIB_SUFFIX}${ARCH_NAME})
 #--------------
 # Maxmind GeoIP
 #--------------
-
-FILE(COPY libs/libmaxminddb/ DESTINATION mmdb)
-ExternalProject_Add(project_mmdb
-    SOURCE_DIR "${CMAKE_CURRENT_BINARY_DIR}/mmdb"
-    PREFIX "${CMAKE_CURRENT_BINARY_DIR}/mmdb"
-    BINARY_DIR "${CMAKE_CURRENT_BINARY_DIR}/mmdb"
-    CONFIGURE_COMMAND ./bootstrap
-    COMMAND ./configure --disable-shared --prefix=${CMAKE_CURRENT_BINARY_DIR}/mmdb/build "CFLAGS=${GEOIP_ARCH_BUILD_LIST}"
-    BUILD_COMMAND make
-    INSTALL_COMMAND make install
-)
-add_library(mmdb STATIC IMPORTED)
-set_property(TARGET mmdb PROPERTY IMPORTED_LOCATION ${CMAKE_CURRENT_BINARY_DIR}/mmdb/build/lib/libmaxminddb.a)
-add_dependencies(mmdb project_mmdb)
-include_directories(${CMAKE_CURRENT_BINARY_DIR}/mmdb/include)
+set(MMDB_BUILD_STATIC 1)
+add_subdirectory("${PROJECT_SOURCE_DIR}/libs/libmaxminddb")
+include_directories("${PROJECT_SOURCE_DIR}/libs/libmaxminddb/include")
 target_link_libraries(qagame mmdb)
+add_definitions(-DMMDB_UINT128_IS_BYTE_ARRAY=1)
+add_dependencies(qagame mmdb)
 
 #-----------------------------------------------------------------
 # Pk3 (inspired from etlegacy https://github.com/etlegacy/etlegacy)
