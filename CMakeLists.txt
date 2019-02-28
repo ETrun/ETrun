@@ -186,7 +186,6 @@ set_target_properties(ui PROPERTIES OUTPUT_NAME ui${LIB_SUFFIX}${ARCH_NAME})
 #--------------
 set(MMDB_BUILD_STATIC 1)
 add_subdirectory("${PROJECT_SOURCE_DIR}/libs/libmaxminddb")
-include_directories("${PROJECT_SOURCE_DIR}/libs/libmaxminddb/include")
 target_link_libraries(qagame mmdb)
 add_definitions(-DMMDB_UINT128_IS_BYTE_ARRAY=1)
 add_dependencies(qagame mmdb)
