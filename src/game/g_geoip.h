@@ -1,7 +1,7 @@
 #ifndef G_GEOIP_H_
 #define G_GEOIP_H_
 
-#define GEOIP_MAX_COUNTRIES 255
+#define GEOIP_MAX_COUNTRIES 256
 #define GEOIP_COUNTRY_NAME_MAX_LEN 255
 
 typedef struct {
