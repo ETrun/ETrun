@@ -66,7 +66,7 @@ Sticky values for physics used on official timeruns.net game servers are listed 
 | Name  | Value | Default | Description |
 | ----- | ----- | ------- | ----------- |
 | g_useGeoIP | 0,1 | 0 | Enable use of GeoIP to geolocate and display country flags of players based on their IP addresses. |
-| g_geoIPDbPath | *string* | "" | Path to GeoIP database inside etrun directory. Compatible with [Maxmind Geolite Legacy](https://dev.maxmind.com/geoip/legacy/geolite/). |
+| g_geoIPDbPath | *string* | "" | Path to GeoIP database inside `<fs_basepath>/etrun` directory. Compatible with [Maxmind Geolite2 Country](https://dev.maxmind.com/geoip/geoip2/geolite2/). |
 
 # Logging
 
