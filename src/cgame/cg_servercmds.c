@@ -1574,7 +1574,7 @@ static void CG_ServerCommand(void) {
 	// Nico, timer start/stop/check related
 
 	if (!Q_stricmp(cmd, "timerun_start")) {
-		// suburb, kill if min start speed not reached
+		// suburb, do a printout if min start speed not reached
 		if (atoi(CG_Argv(3)) < etr_minStartSpeed.integer) {
 			CG_CenterPrint(va("^1%i ^7/ ^2%i", atoi(CG_Argv(3)), etr_minStartSpeed.integer), 400, SMALLCHAR_WIDTH);
 		}

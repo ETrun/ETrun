@@ -317,12 +317,9 @@ void G_TouchTriggers(gentity_t *ent) {
 			}
 		}
 
-		// suburb, prevent trigger bug
+		// suburb, check which triggers we hit
 		if (hit->s.eType == ET_TRIGGER_MULTIPLE) {
 			triggerMultiples++;
-			if (level.time - ent->client->sess.timerunStartTime < BUGGING_LOADING_DELAY) {
-				ent->client->pers.lastLoadedTime = level.time;
-			}
 		}
 
 		if (hit->s.eType == ET_PUSH_TRIGGER) {
@@ -886,14 +883,11 @@ void ClientThink_real(gentity_t *ent) {
 
 	// Nico, check ping
 	if (client->ps.ping > MAX_PLAYER_PING) {
-		if (client->sess.timerunActive) {
-			// Nico, notify the client and its spectators the timerun has stopped
-			notify_timerun_stop(ent, 0);
-			client->sess.timerunActive = qfalse;
+		if (!client->pers.loadKillNeeded) {
+			CP(va("cpm \"%s^w: ^1Too high ping detected, load or kill required.\n\"", GAME_VERSION_COLORED));
+			// suburb, prevent trigger bug
+			client->pers.loadKillNeeded = qtrue;
 		}
-		CP(va("cpm \"%s^w: ^1Too high ping detected, load or kill required.\n\"", GAME_VERSION_COLORED));
-		// suburb, prevent trigger bug
-		client->pers.loadKillNeeded = qtrue;
 	}
 
 	// Nico, pmove_fixed
@@ -998,8 +992,10 @@ void ClientThink_real(gentity_t *ent) {
 			client->pers.buggedLastFrame = qtrue;
 			return;
 		}
-		CP(va("cpm \"%s^w: ^1Bugging detected, load or kill required.\n\"", GAME_VERSION_COLORED));
-		client->pers.loadKillNeeded = qtrue;
+		if (!client->pers.loadKillNeeded) {
+			CP(va("cpm \"%s^w: ^1Bugging detected, load or kill required.\n\"", GAME_VERSION_COLORED));
+			client->pers.loadKillNeeded = qtrue;
+		}
 	}
 
 	// checking acceleration in brushes every frame would break corner skimming
