@@ -2041,10 +2041,9 @@ void Cmd_Load_f(gentity_t *ent) {
 
 	// suburb, prevent trigger bug
 	if (level.time - ent->client->pers.lastLoadedTime < BUGGING_LOADING_DELAY) {
-		CP("cp \"Loading aborted\n\"");
 		return;
 	}
-	ent->client->pers.lastLoadedTime = 0;
+	ent->client->pers.lastLoadedTime = level.time;
 
 	if (ent->client->sess.sessionTeam == TEAM_ALLIES) {
 		pos = ent->client->sess.alliesSaves + posNum;

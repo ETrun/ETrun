@@ -1471,6 +1471,12 @@ void target_stoptimer_use(gentity_t *self, gentity_t *other, gentity_t *activato
 		return;
 	}
 
+	// suburb, prevent trigger bug
+	if (activator->client->pers.loadKillNeeded) {
+		CPx(activator - g_entities, "cpm \"^1Timerun not stopped, load or kill required!\n\"");
+		return;
+	}
+
 	timerunNum = client->sess.currentTimerunNum;
 
 	// required number of checkpoints passed?
