@@ -72,6 +72,9 @@ If you have questions concerning this license or the applicable additional terms
 #define BUGGING_CHECK_FREQUENCY   500
 #define BUGGING_LOADING_DELAY     550
 
+// suburb, spec cvars check
+#define SPEC_CVARS_CHECK_FREQUENCY    1000
+
 #define FORCE_LIMBO_HEALTH  -75  // JPW NERVE
 
 #define GIB_HEALTH          -175  // JPW NERVE

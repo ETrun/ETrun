@@ -545,7 +545,7 @@ static void HandleEntsThatBlockConstructible(gentity_t *constructor, gentity_t *
 		if (warnBlockingPlayers &&
 		    check->s.eType == ET_PLAYER &&
 		    (level.time - check->client->lastConstructibleBlockingWarnTime) >= MIN_BLOCKINGWARNING_INTERVAL) {
-			trap_SendServerCommand(check->s.number, "cp \"Warning, leave the construction area...\" 1");
+			trap_SendServerCommand(check->s.number, "cp \"^nWarning, ^dleave the construction area\" 1");
 			// Gordon: store the entity num to warn the bot
 			check->client->lastConstructibleBlockingWarnTime = level.time;
 		}
@@ -1120,7 +1120,7 @@ void Weapon_Engineer(gentity_t *ent) {
 			traceEnt->takedamage = qtrue;
 			traceEnt->s.eFlags  &= ~EF_SMOKING;
 
-			trap_SendServerCommand(ent - g_entities, "cp \"You have repaired the MG!\n\"");
+			trap_SendServerCommand(ent - g_entities, "cp \"^dYou have repaired the ^nMG\n\"");
 			G_AddEvent(ent, EV_MG42_FIXED, 0);
 		} else {
 			traceEnt->health += 3;
@@ -1148,7 +1148,7 @@ void Weapon_Engineer(gentity_t *ent) {
 			trap_EngineerTrace(&tr2, traceEnt->s.pos.trBase, NULL, NULL, base, traceEnt->s.number, MASK_SHOT);
 
 			if (!(tr2.surfaceFlags & SURF_LANDMINE) || (tr2.entityNum != ENTITYNUM_WORLD && (!g_entities[tr2.entityNum].inuse || g_entities[tr2.entityNum].s.eType != ET_CONSTRUCTIBLE))) {
-				trap_SendServerCommand(ent - g_entities, "cp \"Landmine cannot be armed here...\" 1");
+				trap_SendServerCommand(ent - g_entities, "cp \"^nLandmine ^dcannot be armed here\" 1");
 
 				G_FreeEntity(traceEnt);
 
@@ -1277,7 +1277,7 @@ void Weapon_Engineer(gentity_t *ent) {
 				//bani
 				if (friendlyObj && !enemyObj) {
 					G_FreeEntity(traceEnt);
-					trap_SendServerCommand(ent - g_entities, "cp \"You cannot arm dynamite near a friendly objective!\" 1");
+					trap_SendServerCommand(ent - g_entities, "cp \"^dYou cannot arm ^ndynamite ^dnear a friendly objective\" 1");
 					return;
 				}
 
@@ -1302,7 +1302,7 @@ void Weapon_Engineer(gentity_t *ent) {
 
 				// Gordon: moved down here to prevent two prints when dynamite IS near objective
 
-				trap_SendServerCommand(ent - g_entities, "cp \"Dynamite is now armed with a 30 second timer!\" 1");
+				trap_SendServerCommand(ent - g_entities, "cp \"^dDynamite is now armed with a ^n30 ^dsecond timer\" 1");
 
 				// check if player is in trigger objective field
 				// NERVE - SMF - made this the actual bounding box of dynamite instead of range, also must snap origin to line up properly

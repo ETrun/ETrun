@@ -650,8 +650,8 @@ static void CG_Tutorial_f(void) {
 	CG_Printf("   Now you can see your Timeruns token. This is your password which\n");
 	CG_Printf("   links your game to your own website account. Never share it!\n");
 	CG_Printf("^55. ^7Copy your Timeruns token.\n");
-	CG_Printf("^56. ^7Insert your Timeruns token ingame into the ^b/cg_timerunsToken ^7cvar.\n");
-	CG_Printf("^57. ^7Type ^b/login ^7into the console.\n");
+	CG_Printf("^56. ^7Insert your Timeruns token ingame into the ^n/cg_timerunsToken ^7cvar.\n");
+	CG_Printf("^57. ^7Type ^n/login ^7into the console.\n");
 	CG_Printf("\n");
 	CG_Printf("Congratulations! You are now logged in and able to set records. You can\n");
 	CG_Printf(va("now find your stats on the %s^7 website and share them with your friends.\n", GAME_VERSION_COLORED));

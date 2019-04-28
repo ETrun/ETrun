@@ -1977,6 +1977,7 @@ static void CG_DrawPlayerStats(void) {
 }
 
 //bani
+#define SHOW_DEMO_SAVED 5000
 void CG_DrawDemoRecording(void) {
 	char status[1024];
 	char demostatus[128];
@@ -2007,6 +2008,18 @@ void CG_DrawDemoRecording(void) {
 	// Nico, add recording red dot
 	CG_Text_Paint_Ext(0, cg_recording_statusline.integer, 0.5f, 0.5f, colorRed, ".", 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont2);
 	CG_Text_Paint_Ext(14, cg_recording_statusline.integer, 0.14f, 0.14f, colorWhite, status, 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
+
+	// suburb, additional UI to replace console printouts
+	if (cg.stoppingAndSavingDemo) {
+		CG_Text_Paint_Ext(0, cg_recording_statusline.integer + 10, 0.5f, 0.5f, colorYellow, ".", 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont2);
+		CG_Text_Paint_Ext(14, cg_recording_statusline.integer + 10, 0.14f, 0.14f, colorWhite, "Saving demo", 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
+	} else if (cg.time - cg.lastUnableToSaveDemoTime < SHOW_DEMO_SAVED) {
+		CG_Text_Paint_Ext(0, cg_recording_statusline.integer + 10, 0.5f, 0.5f, colorRed, ".", 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont2);
+		CG_Text_Paint_Ext(14, cg_recording_statusline.integer + 10, 0.14f, 0.14f, colorWhite, "Unable to save demo", 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
+	} else if (cg.time - cg.lastSavingDemoTime < SHOW_DEMO_SAVED) {
+		CG_Text_Paint_Ext(0, cg_recording_statusline.integer + 10, 0.5f, 0.5f, colorGreen, ".", 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont2);
+		CG_Text_Paint_Ext(14, cg_recording_statusline.integer + 10, 0.14f, 0.14f, colorWhite, "Demo saved", 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
+	}
 }
 
 /*
@@ -2262,7 +2275,10 @@ static void CG_Autodemo() {
 
 	if (cg.runsave) {
 		if (!cg.rs_keep) {
-			CG_AddPMItem(PM_MESSAGE, va("%s^w: Stopping and saving demo...\n", GAME_VERSION_COLORED), cgs.media.voiceChatShader);
+			if (etr_printAutodemo.integer) {
+				CG_Printf("%s^w: ^dStopping and saving demo...\n", GAME_VERSION_COLORED);
+			}
+			cg.stoppingAndSavingDemo = qtrue;
 			cg.rs_time = cg.time;
 			cg.rs_keep = 1;
 		}
@@ -2284,8 +2300,12 @@ static void CG_Autodemo() {
 			name = va("demos/%s_%s.dm_84", cgs.rawmapname, cg.runsavename);
 
 			if (trap_FS_FOpenFile(name, &demo, FS_WRITE) < 0) {
-				CG_Printf("^1Error^3: Unable to save demo:^7 %s\n", name);
+				if (etr_printAutodemo.integer) {
+					CG_Printf("^nError: ^dUnable to save demo:^n %s\n", name);
+				}
 				trap_FS_FCloseFile(temp);
+
+				cg.lastUnableToSaveDemoTime = cg.time;
 				return;
 			}
 
@@ -2299,8 +2319,12 @@ static void CG_Autodemo() {
 			trap_FS_FCloseFile(temp);
 			trap_FS_FCloseFile(demo);
 
-			CG_Printf("^3Demo saved as:^7 %s\n", name);
-			CG_AddPMItem(PM_MESSAGE, va("%s^w: Demo saved!\n", GAME_VERSION_COLORED), cgs.media.voiceChatShader);
+			if (etr_printAutodemo.integer) {
+				CG_Printf(va("%s^w: ^dDemo saved as: ^n%s\n", GAME_VERSION_COLORED), name);
+			}
+
+			cg.stoppingAndSavingDemo = qfalse;
+			cg.lastSavingDemoTime = cg.time;
 
 			cg.runsave = cg.rs_keep = 0;
 		}

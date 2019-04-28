@@ -443,7 +443,7 @@ void CG_DrawCGaz(void) {
 
 	playerState_t *ps;
 
-	// Nico, if cg_drawCGaz is 0
+	// Nico, if etr_drawCGaz is 0
 	if (!etr_drawCGaz.integer) {
 		return;
 	}

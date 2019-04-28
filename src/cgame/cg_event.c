@@ -73,7 +73,9 @@ static void CG_ItemPickup(int itemNum) {
 
 	itemid = bg_itemlist[itemNum].giTag;
 
-	CG_AddPMItem(PM_MESSAGE, va("Picked up %s", CG_PickupItemText(itemNum)), cgs.media.pmImages[PM_MESSAGE]);
+	if (etr_printPickups.integer) {
+		CG_AddPMItem(PM_MESSAGE, va("Picked up %s", CG_PickupItemText(itemNum)), cgs.media.pmImages[PM_MESSAGE]);
+	}
 
 	// see if it should be the grabbed weapon
 	if (bg_itemlist[itemNum].giType == IT_WEAPON &&
