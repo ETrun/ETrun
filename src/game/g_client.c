@@ -944,7 +944,7 @@ void ClientUserinfoChanged(int clientNum) {
 	    Q_stricmp(oldAuthToken, client->pers.authToken) &&
 	    client->sess.logged) {
 		// Nico, auth token was changed => logout player if he was logged in
-		CP("cp \"You are no longer logged in!\n\"");
+		CP("cp \"^dYou are ^nno longer logged ^din\n\"");
 		G_LogPrintf(qtrue, "ClientUserinfoChanged: authToken changed for client %d, forcing logout\n", clientNum);
 		ent->client->sess.logged = qfalse;
 	}
@@ -1104,7 +1104,7 @@ char *ClientConnect(int clientNum, qboolean firstTime) {
 	// (prevents fakeplayers DOS http://aluigi.altervista.org/fakep.htm )
 	// note: value is the client ip
 	if (!getParsedIp(value, parsedIp)) {
-		return "Invalid IP address";
+		return "Invalid IP address.";
 	}
 	Q_strncpyz(ip, parsedIp, sizeof (ip));
 	for (i = 0; i < level.numConnectedClients; ++i) {
@@ -1146,7 +1146,7 @@ char *ClientConnect(int clientNum, qboolean firstTime) {
 		    Q_stricmp(g_password.string, "none") &&
 		    strcmp(g_password.string, value) != 0 &&
 		    (!sv_privatepassword.string[0] || strcmp(sv_privatepassword.string, value) != 0)) {
-			return "Invalid password";
+			return "Invalid password.";
 		}
 	}
 
@@ -1211,7 +1211,7 @@ char *ClientConnect(int clientNum, qboolean firstTime) {
 					client->sess.countryCode = ret;
 				} else {
 					client->sess.countryCode = 246;
-					G_LogPrintf(qtrue, "GeoIP: This IP:%s cannot be located\n", realIP);
+					G_LogPrintf(qtrue, "GeoIP: This IP:%s cannot be located.\n", realIP);
 				}
 			}
 		}
@@ -1305,9 +1305,10 @@ void ClientBegin(int clientNum) {
 		limbo(ent);
 	}
 
-	if (client->sess.sessionTeam != TEAM_SPECTATOR) {
+	// suburb, pretty useless printout
+	/*if (client->sess.sessionTeam != TEAM_SPECTATOR) {
 		trap_SendServerCommand(-1, va("print \"[lof]%s" S_COLOR_WHITE " [lon]entered the game\n\"", client->pers.netname));
-	}
+	}*/
 
 	// count current clients and rank for scoreboard
 	CalculateRanks();

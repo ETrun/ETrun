@@ -1259,18 +1259,27 @@ void target_starttimer_use(gentity_t *self, gentity_t *other, gentity_t *activat
 
 	if ((self->spawnflags & 1) && VectorLength(client->ps.velocity) > 600) {
 		// Server or clientside? cvar to toggle whether or not to reset speed in these cases?
-		CPx(activator - g_entities, "cpm \"^1Timerun not started, no prejump allowed!\n\"");
+		if (!client->pers.triggerUsePreventedPrinted) {
+			CPx(activator - g_entities, va("cpm \"%s^w: ^dTimerun not started, no prejump allowed.\n\"", GAME_VERSION_COLORED));
+			client->pers.triggerUsePreventedPrinted = qtrue;
+		}
 		return;
 	}
 
 	if (client->ps.pm_type != PM_NORMAL || client->ps.stats[STAT_HEALTH] <= 0) {
-		CPx(activator - g_entities, "cpm \"^1Timerun not started, invalid playerstate!\n\"");
+		if (!client->pers.triggerUsePreventedPrinted) {
+			CPx(activator - g_entities, va("cpm \"%s^w: ^dTimerun not started, invalid playerstate.\n\"", GAME_VERSION_COLORED));
+			client->pers.triggerUsePreventedPrinted = qtrue;
+		}
 		return;
 	}
 
 	// suburb, prevent trigger bug
 	if (client->pers.loadKillNeeded) {
-		CPx(activator - g_entities, "cpm \"^1Timerun not started, load or kill required!\n\"");
+		if (!client->pers.triggerUsePreventedPrinted) {
+			CPx(activator - g_entities, va("cpm \"%s^w: ^dTimerun not started, ^nload ^dor ^nkill ^drequired.\n\"", GAME_VERSION_COLORED));
+			client->pers.triggerUsePreventedPrinted = qtrue;
+		}
 		return;
 	}
 
@@ -1471,9 +1480,20 @@ void target_stoptimer_use(gentity_t *self, gentity_t *other, gentity_t *activato
 		return;
 	}
 
+	if (client->ps.pm_type != PM_NORMAL || client->ps.stats[STAT_HEALTH] <= 0) {
+		if (!client->pers.triggerUsePreventedPrinted) {
+			CPx(activator - g_entities, va("cpm \"%s^w: ^dTimerun not stopped, invalid playerstate.\n\"", GAME_VERSION_COLORED));
+			client->pers.triggerUsePreventedPrinted = qtrue;
+		}
+		return;
+	}
+
 	// suburb, prevent trigger bug
 	if (activator->client->pers.loadKillNeeded) {
-		CPx(activator - g_entities, "cpm \"^1Timerun not stopped, load or kill required!\n\"");
+		if (!client->pers.triggerUsePreventedPrinted) {
+			CPx(activator - g_entities, va("cpm \"%s^w: ^dTimerun not stopped, ^nload ^dor ^nkill ^drequired.\n\"", GAME_VERSION_COLORED));
+			client->pers.triggerUsePreventedPrinted = qtrue;
+		}
 		return;
 	}
 
@@ -1481,7 +1501,7 @@ void target_stoptimer_use(gentity_t *self, gentity_t *other, gentity_t *activato
 
 	// required number of checkpoints passed?
 	if (client->sess.timerunCheckpointsPassed < self->count) {
-		CPx(activator - g_entities, va("cpm \"^d%s^f:^1 Minimum checkpoints not passed (%d/%d)\n\"", client->sess.currentTimerun, client->sess.timerunCheckpointsPassed, self->count));
+		CPx(activator - g_entities, va("cpm \"^d%s^f:^d Minimum checkpoints not passed (^n%d^d/^n%d^d).\n\"", client->sess.currentTimerun, client->sess.timerunCheckpointsPassed, self->count));
 		notify_timerun_stop(activator, 0);
 		client->sess.timerunActive = qfalse;
 

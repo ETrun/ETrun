@@ -127,24 +127,24 @@ void G_ref_cmd(gentity_t *ent, unsigned int dwCommand, qboolean fValue) {
 		// Nico, replaced cpm by print (x3)
 		// http://games.chruker.dk/enemy_territory/modding_project_bugfix.php?bug_id=046
 		if (!Q_stricmp(refereePassword.string, "none") || !refereePassword.string[0]) {
-			CP("print \"Sorry, referee status disabled on this server.\n\"");
+			CP("print \"^dSorry, referee status ^ndisabled ^don this server\n\"");
 			return;
 		}
 
 		if (trap_Argc() < 2) {
-			CP("print \"Usage: ref [password]\n\"");
+			CP("print \"^dUsage: ^nref [password]\n\"");
 			return;
 		}
 
 		trap_Argv(1, arg, sizeof (arg));
 
 		if (Q_stricmp(arg, refereePassword.string)) {
-			CP("print \"Invalid referee password!\n\"");
+			CP("print \"^nInvalid ^dreferee password\n\"");
 			return;
 		}
 
 		ent->client->sess.referee = 1;
-		AP(va("cp \"%s\n^3has become a referee\n\"", ent->client->pers.netname));
+		AP(va("cp \"%s\n^dhas become a ^nreferee\n\"", ent->client->pers.netname));
 		ClientUserinfoChanged(ent - g_entities);
 	}
 }
@@ -231,7 +231,7 @@ void G_refRemove_cmd(gentity_t *ent) {
 
 	// Announce the removal
 	AP(va("cp \"%s\n^7removed from team %s\n\"", player->client->pers.netname, aTeams[player->client->sess.sessionTeam]));
-	CPx(pid, va("print \"^5You've been removed from the %s team\n\"", aTeams[player->client->sess.sessionTeam]));
+	CPx(pid, va("print \"^dYou've been removed from the ^n%s ^dteam\n\"", aTeams[player->client->sess.sessionTeam]));
 
 	SetTeam(player, "s", -1, -1, qfalse);
 }
@@ -361,7 +361,7 @@ void G_MakeReferee() {
 	if (cnum != MAX_CLIENTS) {
 		if (level.clients[cnum].sess.referee == RL_NONE) {
 			level.clients[cnum].sess.referee = RL_REFEREE;
-			AP(va("cp \"%s\n^3has been made a referee\n\"", cmd));
+			AP(va("cp \"%s\n^dhas been made a ^nreferee\n\"", cmd));
 			G_Printf("%s has been made a referee.\n", cmd);
 		} else {
 			G_Printf("User is already authed.\n");
