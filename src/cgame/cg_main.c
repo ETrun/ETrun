@@ -371,6 +371,10 @@ vmCvar_t etr_drawTriggers;
 vmCvar_t etr_triggerOffset;
 vmCvar_t etr_triggerColor;
 
+// Print pickups
+vmCvar_t etr_printPickups;
+vmCvar_t etr_printAutodemo;
+
 // Nico, end of ETrun cvars
 
 typedef struct {
@@ -662,6 +666,10 @@ cvarTable_t cvarTable[] =
 	{ &etr_drawTriggers,         "etr_drawTriggers",         "1",     CVAR_ARCHIVE,              0 },
 	{ &etr_triggerOffset,        "etr_triggerOffset",        "0",     CVAR_ARCHIVE,              0 },
 	{ &etr_triggerColor,         "etr_triggerColor",         "White", CVAR_ARCHIVE,              0 },
+
+	// Print pickups
+	{ &etr_printPickups,         "etr_printPickups",         "1",     CVAR_ARCHIVE,              0 },
+	{ &etr_printAutodemo,        "etr_printAutodemo",        "1",     CVAR_ARCHIVE,              0 },
 
 	// Nico, end of ETrun cvars
 };

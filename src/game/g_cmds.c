@@ -298,19 +298,19 @@ int ClientNumberFromString(gentity_t *to, char *s) {
 	if (fIsNumber) {
 		idnum = atoi(s);
 		if (idnum < 0 || idnum >= level.maxclients) {
-			CPx(to - g_entities, va("print \"Bad client slot: [lof]%i\n\"", idnum));
+			CPx(to - g_entities, va("print \"Bad client slot: [lof]%i.\n\"", idnum));
 			return -1;
 		}
 
 		cl = &level.clients[idnum];
 		if (cl->pers.connected != CON_CONNECTED) {
-			CPx(to - g_entities, va("print \"Client[lof] %i [lon]is not active\n\"", idnum));
+			CPx(to - g_entities, va("print \"Client[lof] %i [lon]is not active.\n\"", idnum));
 			return -1;
 		}
 		return idnum;
 	}
 
-	CPx(to - g_entities, va("print \"User [lof]%s [lon]is not on the server\n\"", s));
+	CPx(to - g_entities, va("print \"User [lof]%s [lon]is not on the server.\n\"", s));
 	return -1;
 }
 
@@ -326,24 +326,24 @@ void Cmd_Noclip_f(gentity_t *ent) {
 
 	// suburb, only available while unfollowed to avoid playermodel duplication
 	if (ent->client->ps.pm_flags & PMF_FOLLOW) {
-		trap_SendServerCommand(ent - g_entities, va("print \"You must unfollow to use this command.\n\""));
+		CP("cp \"^dYou must ^nunfollow ^dto use this command\n\"");
 		return;
 	}
 
 	// Nico, only available if client is not logged in
 	if (ent->client->sess.logged) {
-		trap_SendServerCommand(ent - g_entities, va("print \"You must /logout to use this command.\n\""));
+		CP("cp \"^dYou must ^nlogout ^dto use this command\n\"");
 		return;
 	}
 
 	if (ent->health <= 0) {
-		trap_SendServerCommand(ent - g_entities, va("print \"You must be alive to use this command.\n\""));
+		CP("cp \"^dYou must be ^nalive ^dto use this command\n\"");
 		return;
 	}
 
 	// suburb, only available while standing upright
 	if ((ent->client->ps.eFlags & EF_CROUCHING) || ent->client->ps.eFlags & EF_PRONE || ent->client->ps.eFlags & EF_PRONE_MOVING) {
-		trap_SendServerCommand(ent - g_entities, va("print \"You must stand up to use this command.\n\""));
+		CP("cp \"^dYou must ^nstand up ^dto use this command\n\"");
 		return;
 	}
 
@@ -1067,7 +1067,7 @@ void G_Voice(gentity_t *ent, gentity_t *target, int mode, const char *id, qboole
 	if (ent->voiceChatSquelch >= 30000) {
 		// Nico, voicechat spam protection was cluttering the popups message
 		// http://games.chruker.dk/enemy_territory/modding_project_bugfix.php?bug_id=066
-		trap_SendServerCommand(ent - g_entities, "cp \"^1Spam Protection^7: VoiceChat ignored\"");
+		trap_SendServerCommand(ent - g_entities, "cp \"^dSpam Protection: ^nVoiceChat ^dignored\"");
 		return;
 	}
 
@@ -1277,7 +1277,7 @@ qboolean Cmd_CallVote_f(gentity_t *ent, unsigned int dwCommand, qboolean fRefCom
 		// who is policing people who shouldn't be joining and players don't want
 		// this sort of spam in the console
 		if (level.voteInfo.vote_fn != G_Kick_v && level.voteInfo.vote_fn != G_Mute_v) {
-			AP("cp \"^1** Referee Server Setting Change **\n\"");
+			AP("cp \"^d** ^nReferee ^dServer Setting Change **\n\"");
 		}
 
 		// Gordon: just call the stupid thing.... don't bother with the voting faff
@@ -1286,8 +1286,8 @@ qboolean Cmd_CallVote_f(gentity_t *ent, unsigned int dwCommand, qboolean fRefCom
 		G_globalSound("sound/misc/referee.wav");
 	} else {
 		level.voteInfo.voteYes = 1;
-		AP(va("print \"[lof]%s^7 [lon]called a vote.[lof]  Voting for: %s\n\"", ent->client->pers.netname, level.voteInfo.voteString));
-		AP(va("cp \"[lof]%s\n^7[lon]called a vote.\n\"", ent->client->pers.netname));
+		AP(va("print \"[lof]%s^7 [lon]called a vote.[lof]  Voting for: %s.\n\"", ent->client->pers.netname, level.voteInfo.voteString));
+		AP(va("cp \"[lof]%s\n^7[lon]called a vote\n\"", ent->client->pers.netname));
 		G_globalSound("sound/misc/vote.wav");
 	}
 
@@ -2021,21 +2021,21 @@ void Cmd_Load_f(gentity_t *ent) {
 
 		trap_Argv(1, cmd, sizeof (cmd));
 		if ((posNum = atoi(cmd)) < 0 || posNum >= MAX_SAVED_POSITIONS) {
-			CP("print \"Invalid position!\n\"");
+			CP("print \"^nInvalid ^dposition\n\"");
 			return;
 		}
 	} else {
-		CP("print \"usage: load [position]\n\"");
+		CP("print \"^nUsage: ^nload ^d[position]\n\"");
 		return;
 	}
 
 	if (ent->client->sess.sessionTeam == TEAM_SPECTATOR) {
-		CP("cp \"You can not load as a spectator!\n\"");
+		CP("cp \"^dYou can not ^nload ^das a spectator\n\"");
 		return;
 	}
 
-	if (ent->client->ps.eFlags & EF_PRONE) {
-		CP("cp \"You can not load while proning!\n\"");
+	if (ent->client->ps.eFlags & EF_PRONE && ent->client->sess.logged) {
+		CP("cp \"^dYou can not ^nload ^dwhile proning!\n\"");
 		return;
 	}
 
@@ -2085,9 +2085,9 @@ void Cmd_Load_f(gentity_t *ent) {
 		}
 
 		if (posNum == 0) {
-			CP("cp \"Loaded\n\"");
+			CP("cp \"^dLoaded\n\"");
 		} else {
-			CP(va("cp \"Loaded ^z%d\n\"", posNum));
+			CP(va("cp \"^dLoaded ^n%d\n\"", posNum));
 		}
 
 		// Start recording a new temp demo.
@@ -2095,8 +2095,9 @@ void Cmd_Load_f(gentity_t *ent) {
 
 		// suburb, reset anti-bugging variable
 		ent->client->pers.loadKillNeeded = qfalse;
+		ent->client->pers.triggerUsePreventedPrinted = qfalse;
 	} else {
-		CP("cp \"Use save first!\n\"");
+		CP("cp \"^dUse ^nsave ^dfirst\n\"");
 	}
 }
 
@@ -2115,16 +2116,16 @@ void Cmd_Save_f(gentity_t *ent) {
 
 		trap_Argv(1, cmd, sizeof (cmd));
 		if ((posNum = atoi(cmd)) < 0 || posNum >= MAX_SAVED_POSITIONS) {
-			CP("print \"Invalid position!\n\"");
+			CP("print \"^nInvalid ^dposition\n\"");
 			return;
 		}
 	} else {
-		CP("print \"usage: save [position]\n\"");
+		CP("print \"^nUsage: ^nsave ^d[position]\n\"");
 		return;
 	}
 
 	if (ent->client->sess.sessionTeam == TEAM_SPECTATOR) {
-		CP("cp \"You can not save as a spectator!\n\"");
+		CP("cp \"^dYou can not ^nsave ^das a spectator\n\"");
 		return;
 	}
 
@@ -2132,43 +2133,43 @@ void Cmd_Save_f(gentity_t *ent) {
 	if (ent->client->sess.logged) {
 		// Nico, allow save in the air for VET
 		if (physics.integer != PHYSICS_MODE_VET && ent->client->ps.groundEntityNum == ENTITYNUM_NONE) {
-			CP("cp \"You can not save while in the air!\n\"");
+			CP("cp \"^dYou can not ^nsave ^dwhile in the air\n\"");
 			return;
 		}
 
 		// Nico, allow save while proning for VET
 		if (physics.integer != PHYSICS_MODE_VET && (ent->client->ps.eFlags & EF_PRONE || ent->client->ps.eFlags & EF_PRONE_MOVING)) {
-			CP("cp \"You can not save while proning!\n\"");
+			CP("cp \"^dYou can not ^nsave ^dwhile proning\n\"");
 			return;
 		}
 
 		// Nico, allow save while crouching for VET
 		if (physics.integer != PHYSICS_MODE_VET && ent->client->ps.eFlags & EF_CROUCHING) {
-			CP("cp \"You can not save while crouching!\n\"");
+			CP("cp \"^dYou can not ^nsave ^dwhile crouching\n\"");
 			return;
 		}
 
 		// suburb, forbid save while proning for VET before starting a run
 		if (physics.integer == PHYSICS_MODE_VET && (ent->client->ps.eFlags & EF_PRONE || ent->client->ps.eFlags & EF_PRONE_MOVING) && !ent->client->sess.timerunActive) {
-			CP("cp \"You can not save while proning before starting a run!\n\"");
+			CP("cp \"^dYou can not ^nsave ^dwhile proning before starting a run\n\"");
 			return;
 		}
 
 		// suburb, forbid save while crouching for VET before starting a run
 		if (physics.integer == PHYSICS_MODE_VET && ent->client->ps.eFlags & EF_CROUCHING && !ent->client->sess.timerunActive) {
-			CP("cp \"You can not save while crouching before starting a run!\n\"");
+			CP("cp \"^dYou can not ^nsave ^dwhile crouching before starting a run\n\"");
 			return;
 		}
 
 		// Nico, strict save/load restrictions: you can not save while timer is active
 		if (g_strictSaveLoad.integer != 0 && ent->client->sess.timerunActive) {
-			CP("cp \"Strict save mode prevents you from saving while your timer is active!\n\"");
+			CP("cp \"^dStrict save mode prevents you from ^nsaving ^dwhile your timer is active\n\"");
 			return;
 		}
 
 		// suburb, prevent trigger bug
 		if (ent->client->pers.isTouchingTrigger && ent->client->sess.timerunActive) {
-			CP("cp \"You can not save in triggers during a run!\n\"");
+			CP("cp \"^dYou can not ^nsave ^din triggers during a run\n\"");
 			return;
 		}
 	}
@@ -2187,9 +2188,9 @@ void Cmd_Save_f(gentity_t *ent) {
 	pos->weapon = ent->client->ps.weapon;
 
 	if (posNum == 0) {
-		CP("cp \"Saved\n\"");
+		CP("cp \"^dSaved\n\"");
 	} else {
-		CP(va("cp \"Saved ^z%d\n\"", posNum));
+		CP(va("cp \"^dSaved ^n%d\n\"", posNum));
 	}
 }
 
@@ -2251,7 +2252,7 @@ void ClientCommand(int clientNum) {
 
 		// Nico, flood protection
 		if (ClientIsFlooding(ent)) {
-			CP("print \"^1Spam Protection: ^7Dropping say.\n\"");
+			//CP("print \"^1Spam Protection: ^7Dropping say.\n\"");
 			return;
 		}
 
@@ -2264,7 +2265,7 @@ void ClientCommand(int clientNum) {
 	if (!Q_stricmp(cmd, "say_team") || (enc = !Q_stricmp(cmd, "enc_say_team")) != 0) {
 		// Nico, flood protection
 		if (ClientIsFlooding(ent)) {
-			CP("print \"^1Spam Protection: ^7Dropping say_team.\n\"");
+			//CP("print \"^1Spam Protection: ^7Dropping say_team.\n\"");
 			return;
 		}
 
@@ -2276,7 +2277,7 @@ void ClientCommand(int clientNum) {
 
 		// Nico, flood protection
 		if (ClientIsFlooding(ent)) {
-			CP("print \"^1Spam Protection: ^7Dropping vsay.\n\"");
+			//CP("print \"^1Spam Protection: ^7Dropping vsay.\n\"");
 			return;
 		}
 
@@ -2287,7 +2288,7 @@ void ClientCommand(int clientNum) {
 	} else if (!Q_stricmp(cmd, "vsay_team")) {
 		// Nico, flood protection
 		if (ClientIsFlooding(ent)) {
-			CP("print \"^1Spam Protection: ^7Dropping vsay_team.\n\"");
+			//CP("print \"^1Spam Protection: ^7Dropping vsay_team.\n\"");
 			return;
 		}
 
@@ -2299,7 +2300,7 @@ void ClientCommand(int clientNum) {
 
 		// Nico, flood protection
 		if (ClientIsFlooding(ent)) {
-			CP("print \"^1Spam Protection: ^7Dropping say_buddy.\n\"");
+			//CP("print \"^1Spam Protection: ^7Dropping say_buddy.\n\"");
 			return;
 		}
 
@@ -2311,7 +2312,7 @@ void ClientCommand(int clientNum) {
 
 		// Nico, flood protection
 		if (ClientIsFlooding(ent)) {
-			CP("print \"^1Spam Protection: ^7Dropping vsay_buddy.\n\"");
+			//CP("print \"^1Spam Protection: ^7Dropping vsay_buddy.\n\"");
 			return;
 		}
 
@@ -2389,23 +2390,23 @@ void Cmd_SpecLock_f(gentity_t *ent, unsigned int dwCommand, qboolean lock) {
 	(void)dwCommand;
 
 	if (ent->client->sess.specLocked == lock) {
-		CP(va("print \"You are already %slocked from spectators!\n\"", lock ? "" : "un"));
+		CP(va("print \"You are already %slocked from spectators.\n\"", lock ? "" : "un"));
 		return;
 	}
 
 	ent->client->sess.specLocked = lock;
 
-	// Nico, update cg_specLock client-side
+	// Nico, update etr_specLock client-side
 	trap_SendServerCommand(ent - g_entities, va("updateSpecLockStatus %d", lock));
 
 	// unlocked
 	if (!ent->client->sess.specLocked) {
-		CP("cpm \"You are now unlocked from spectators!\n\"");
+		CP("cpm \"You are now unlocked from spectators.\n\"");
 		return;
 	}
 
 	// locked
-	CP("cpm \"You are now locked from spectators!\n\"");
+	CP("cpm \"You are now locked from spectators.\n\"");
 	CP("cpm \"Use ^3specinvite^7 to invite people to spectate.\n\"");
 
 	// update following players
@@ -2447,7 +2448,7 @@ void Cmd_SpecInvite_f(gentity_t *ent, unsigned int dwCommand, qboolean invite) {
 	(void)dwCommand;
 
 	if (ClientIsFlooding(ent)) {
-		CP("print \"^1Spam Protection:^7 Specinvite ignored.\n\"");
+		//CP("print \"^1Spam Protection:^7 Specinvite ignored.\n\"");
 		return;
 	}
 
@@ -2537,7 +2538,7 @@ void Cmd_PrivateMessage_f(gentity_t *ent) {
 	trap_Argv(0, cmd, sizeof (cmd));
 
 	if (trap_Argc() < 3) {
-		CP(va("print \"Usage: %s [name|slot#] [message]\n\"", cmd));
+		CP(va("print \"^dUsage: %s ^n[name|slot#] [message]\n\"", cmd));
 		return;
 	}
 
@@ -2551,7 +2552,7 @@ void Cmd_PrivateMessage_f(gentity_t *ent) {
 		Q_strncpyz(netname, "console", sizeof (name));
 	}
 
-	Q_strncpyz(str, va("^3Sent to %i player%s: ^7", pcount, pcount == 1 ? "" : "s"), sizeof (str));
+	Q_strncpyz(str, va("^dSent to ^n%i ^dplayer%s: ^7", pcount, pcount == 1 ? "" : "s"), sizeof (str));
 
 	for (i = 0; i < pcount; ++i) {
 		gentity_t *tmpent = &g_entities[pids[i]];
@@ -2562,24 +2563,24 @@ void Cmd_PrivateMessage_f(gentity_t *ent) {
 		Q_strcat(str, sizeof (str), tmpent->client->pers.netname);
 
 		if (ent && COM_BitCheck(tmpent->client->sess.ignoreClients, ent - g_entities)) {
-			CP(va("print \"%s^1 is ignoring you\n\"", tmpent->client->pers.netname));
+			CP(va("print \"%s^d is ^nignoring ^dyou\n\"", tmpent->client->pers.netname));
 			continue;
 		}
 		CPx(pids[i], va(
-				"chat \"%s^3 -> ^7%s^7: (%d recipient%s): ^3%s^7\" %d",
+				"chat \"%s^n -> ^7%s^n: ^d(^n%d ^drecipient%s): ^n%s^7\" %d",
 				netname,
 				name,
 				pcount,
 				pcount == 1 ? "" : "s",
 				msg,
 				ent ? (int)(ent - g_entities) : -1));
-		CPx(pids[i], va("cp \"^3Private message from ^7%s^7\"", netname));
+		CPx(pids[i], va("cp \"^dPrivate message from ^7%s^7\"", netname));
 	}
 
 	if (!pcount) {
-		CP(va("print \"^3No player matching ^7\'%s^7\' ^3to send message to.\n\"", name));
+		CP(va("print \"^dNo player matching ^7\'%s^7\' ^dto send message to.\n\"", name));
 	} else {
-		CP(va("print \"^3Private message: ^7%s\n\"", msg));
+		CP(va("print \"^dPrivate message: ^n%s\n\"", msg));
 		CP(va("print \"%s\n\"", str));
 
 		G_LogPrintf(qtrue, "privmsg: %s: %s: %s\n", netname, name, msg);

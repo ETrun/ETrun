@@ -377,9 +377,9 @@ const char *CG_GetPMItemText(centity_t *cent) {
 	case PM_OBJECTIVE:
 		switch (cent->currentState.density) {
 		case 0:
-			return va("%s have stolen %s!", cent->currentState.effect2Time == TEAM_ALLIES ? "Allies" : "Axis", CG_ConfigString(CS_STRINGS + cent->currentState.effect3Time));
+			return va("%s have stolen %s.", cent->currentState.effect2Time == TEAM_ALLIES ? "Allies" : "Axis", CG_ConfigString(CS_STRINGS + cent->currentState.effect3Time));
 		case 1:
-			return va("%s have returned %s!", cent->currentState.effect2Time == TEAM_ALLIES ? "Allies" : "Axis", CG_ConfigString(CS_STRINGS + cent->currentState.effect3Time));
+			return va("%s have returned %s.", cent->currentState.effect2Time == TEAM_ALLIES ? "Allies" : "Axis", CG_ConfigString(CS_STRINGS + cent->currentState.effect3Time));
 		}
 		break;
 	case PM_TEAM:
@@ -399,7 +399,7 @@ const char *CG_GetPMItemText(centity_t *cent) {
 				break;
 			}
 
-			return va("%s^7 has joined the %s^7!", cgs.clientinfo[cent->currentState.effect3Time].name, teamstr);
+			return va("%s^7 has joined the %s^7.", cgs.clientinfo[cent->currentState.effect3Time].name, teamstr);
 		}
 		case 1:
 			return va("%s^7 disconnected", cgs.clientinfo[cent->currentState.effect3Time].name);

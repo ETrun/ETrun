@@ -9,7 +9,7 @@ void Cmd_Login_f(gentity_t *ent) {
 
 	// Check if API is used
 	if (!g_useAPI.integer) {
-		CP("cp \"Login is disabled on this server.\n\"");
+		CP("cp \"^nLogin ^dis disabled on this server\n\"");
 		return;
 	}
 
@@ -20,7 +20,7 @@ void Cmd_Login_f(gentity_t *ent) {
 
 	// Check if already logged in
 	if (ent->client->sess.logged) {
-		CP("cp \"You are already logged in!\n\"");
+		CP("cp \"^dYou are ^nalready logged ^din\n\"");
 		G_DPrintf("%s: Cmd_Login_f, client is already logged in\n", GAME_VERSION);
 		return;
 	}
@@ -47,12 +47,12 @@ void Cmd_Login_f(gentity_t *ent) {
 	Q_strncpyz(token, ent->client->pers.authToken, MAX_QPATH);
 
 	if (token[0] == '\0') {
-		CP("cp \"Empty auth token!\n\"");
+		CP("cp \"^dEmpty ^nauth token\n\"");
 		G_DPrintf("%s: Cmd_Login_f, empty_token\n", GAME_VERSION);
 		free(result);
 	} else {
 		if (!G_API_login(result, ent, token)) {
-			CP(va("print \"%s^w: error while login\n\"", GAME_VERSION_COLORED));
+			CP(va("print \"%s^w: ^dError while ^nlogin^d.\n\"", GAME_VERSION_COLORED));
 		}
 		// Do not free result here!
 	}
@@ -67,11 +67,11 @@ void Cmd_Logout_f(gentity_t *ent) {
 
 	// Check if already logged in
 	if (!ent->client->sess.logged) {
-		CP("cp \"You are not logged in!\n\"");
+		CP("cp \"^dYou are ^dnot logged ^nin.\n\"");
 		return;
 	}
 
-	CP("cp \"You are no longer logged in!\n\"");
+	CP("cp \"^dYou are ^nno longer logged ^din\n\"");
 	ent->client->sess.logged = qfalse;
 	ClientUserinfoChanged(ent->client->ps.clientNum);
 
@@ -85,13 +85,13 @@ void Cmd_Records_f(gentity_t *ent) {
 
 	// Check if API is used
 	if (!g_useAPI.integer) {
-		CP("cp \"This command is disabled on this server.\n\"");
+		CP("cp \"^dThis command is ^ndisabled ^don this server\n\"");
 		return;
 	}
 
 	// Check cup mode
 	if (g_cupMode.integer != 0) {
-		CP("cp \"This command is disabled in cup mode.\n\"");
+		CP("cp \"^dThis command is ^ndisabled ^din cup mode\n\"");
 		return;
 	}
 
@@ -120,25 +120,25 @@ void Cmd_LoadCheckpoints_f(gentity_t *ent) {
 
 	// Check if level is timerun
 	if (!level.isTimerun) {
-		CP("cp \"There is no timerun on this map.\n\"");
+		CP("cp \"^dThere is ^nno timerun ^don this map\n\"");
 		return;
 	}
 
 	// Check if API is used
 	if (!g_useAPI.integer) {
-		CP("cp \"This command is disabled on this server.\n\"");
+		CP("cp \"^dThis command is ^ndisabled ^don this server\n\"");
 		return;
 	}
 
 	// Check if client is logged in
 	if (!ent->client->sess.logged) {
-		CP("cp \"You must login to use this command.\n\"");
+		CP("cp \"^dYou must ^nlogin ^dto use this command\n\"");
 		return;
 	}
 
 	// Check cup mode
 	if (g_cupMode.integer != 0) {
-		CP("cp \"This command is disabled in cup mode.\n\"");
+		CP("cp \"^dThis command is ^ndisabled ^din cup mode\n\"");
 		return;
 	}
 
@@ -146,8 +146,8 @@ void Cmd_LoadCheckpoints_f(gentity_t *ent) {
 	argc = trap_Argc();
 
 	if (argc == 1 || argc > 2) {
-		CP("print \"\n  ^8Usage: loadCheckpoints [userName] [run name or id]\n\"");
-		CP("print \"  ^8Available runs:\n\"");
+		CP("print \"\n  ^dUsage: ^nloadCheckpoints [userName] [run name or id]\n\"");
+		CP("print \"  ^dAvailable runs:\n\"");
 		for (i = 0; i < MAX_TIMERUNS; ++i) {
 			if (level.timerunsNames[i]) {
 				CP(va("print \"  ^8#%d => %s\n\"", i, level.timerunsNames[i]));
@@ -219,13 +219,13 @@ void Cmd_Rank_f(gentity_t *ent) {
 
 	// Check if API is used
 	if (!g_useAPI.integer) {
-		CP("cp \"This command is disabled on this server.\n\"");
+		CP("cp \"^dThis command is ^ndisabled ^don this server\n\"");
 		return;
 	}
 
 	// Check cup mode
 	if (g_cupMode.integer != 0) {
-		CP("cp \"This command is disabled in cup mode.\n\"");
+		CP("cp \"^dThis command is ^ndisabled ^din cup mode\n\"");
 		return;
 	}
 

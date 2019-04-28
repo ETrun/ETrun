@@ -357,6 +357,11 @@ void SpectatorThink(gentity_t *ent, usercmd_t *ucmd) {
 
 	client = ent->client;
 
+	// suburb, check vars even in spec
+	if (level.time - client->pers.lastSpecVarsCheck > SPEC_CVARS_CHECK_FREQUENCY) {
+		G_CheckVars(ent);
+	}
+
 	if (client->sess.spectatorState != SPECTATOR_FOLLOW) {
 		client->ps.pm_type = PM_SPECTATOR;
 		client->ps.speed   = SPECTATOR_SPEED; // was: 400 // faster than normal
@@ -453,15 +458,15 @@ qboolean ClientInactivityTimer(gclient_t *client) {
 			// Nico, move inactive player to spec instead of kicking them
 			// trap_DropClient( client - level.clients, "Dropped due to inactivity", 0 );
 
-			AP(va("cpm \"%s ^7removed from teams due to inactivity! ^z(%i seconds) \n\"", client->pers.netname, g_inactivity.integer));
+			AP(va("cpm \"%s^w: %s ^dremoved from teams due to inactivity. ^d(^n%i seconds^d) \n\"", GAME_VERSION_COLORED, client->pers.netname, g_inactivity.integer));
 			SetTeam(g_entities + (client - level.clients), "s", -1, -1, qfalse);
 
 			return qfalse;
 		}
 
 		if (!client->inactivityWarning && level.time > client->inactivityTime - 10000) {
-			CPx(client - level.clients, "cp \"^310 seconds until inactivity drop!\n\"");
-			CPx(client - level.clients, "print \"^310 seconds until inactivity drop!\n\"");
+			CPx(client - level.clients, "cp \"^n10 seconds ^duntil inactivity drop\n\"");
+			CPx(client - level.clients, va("print \"%s^w: ^n10 seconds ^duntil inactivity drop.\n\"", GAME_VERSION_COLORED));
 			G_Printf("10s inactivity warning issued to: %s\n", client->pers.netname);
 
 			client->inactivityWarning = qtrue;
@@ -881,97 +886,16 @@ void ClientThink_real(gentity_t *ent) {
 	// perform once-a-second actions
 	ClientTimerActions(ent, msec);
 
+	// suburb, check vars
+	G_CheckVars(ent);
+
 	// Nico, check ping
 	if (client->ps.ping > MAX_PLAYER_PING) {
 		if (!client->pers.loadKillNeeded) {
-			CP(va("cpm \"%s^w: ^1Too high ping detected, load or kill required.\n\"", GAME_VERSION_COLORED));
+			CP(va("cpm \"%s^w: ^dToo high ping detected, ^nload ^dor ^nkill ^drequired.\n\"", GAME_VERSION_COLORED));
 			// suburb, prevent trigger bug
 			client->pers.loadKillNeeded = qtrue;
 		}
-	}
-
-	// Nico, pmove_fixed
-	if (!client->pers.pmoveFixed) {
-		CP(va("cpm \"%s^w: ^1You were removed from teams because you can not use pmove_fixed 0.\n\"", GAME_VERSION_COLORED));
-		trap_SendServerCommand(ent - g_entities, "pmoveon");
-		SetTeam(ent, "s", -1, -1, qfalse);
-	}
-
-	// Nico, check rate
-	if (client->pers.rate < MIN_PLAYER_RATE_VALUE || client->pers.rate > MAX_PLAYER_RATE_VALUE) {
-		CP(va("cpm \"%s^w: ^1You were removed from teams because you must use %d <= rate <= %d.\n\"", GAME_VERSION_COLORED, MIN_PLAYER_RATE_VALUE, MAX_PLAYER_RATE_VALUE));
-		trap_SendServerCommand(ent - g_entities, "resetRate");
-		SetTeam(ent, "s", -1, -1, qfalse);
-	}
-
-	// Nico, check snaps (unsigned int)
-	if (client->pers.snaps > MAX_PLAYER_SNAPS_VALUE) {
-		CP(va("cpm \"%s^w: ^1You were removed from teams because you must use %d <= snaps <= %d.\n\"", GAME_VERSION_COLORED, MIN_PLAYER_SNAPS_VALUE, MAX_PLAYER_SNAPS_VALUE));
-		trap_SendServerCommand(ent - g_entities, "resetSnaps");
-		SetTeam(ent, "s", -1, -1, qfalse);
-	}
-
-	// Nico, check timenudge
-	if (client->pers.clientTimeNudge != FORCED_PLAYER_TIMENUDGE_VALUE) {
-		CP(va("cpm \"%s^w: ^1You were removed from teams because you must use cl_timenudge %d.\n\"", GAME_VERSION_COLORED, FORCED_PLAYER_TIMENUDGE_VALUE));
-		trap_SendServerCommand(ent - g_entities, "resetTimeNudge");
-		SetTeam(ent, "s", -1, -1, qfalse);
-	}
-
-	// Nico, check maxpackets
-	if (client->pers.clientMaxPackets < MIN_PLAYER_MAX_PACKETS_VALUE || client->pers.clientMaxPackets > MAX_PLAYER_MAX_PACKETS_VALUE) {
-		CP(va("cpm \"%s^w: ^1You were removed from teams because you must use %d <= cl_maxpackets <= %d.\n\"", GAME_VERSION_COLORED, MIN_PLAYER_MAX_PACKETS_VALUE, MAX_PLAYER_MAX_PACKETS_VALUE));
-		trap_SendServerCommand(ent - g_entities, "resetMaxPackets");
-		SetTeam(ent, "s", -1, -1, qfalse);
-	}
-
-	// Nico, check max FPS
-	if (client->pers.maxFPS < MIN_PLAYER_FPS_VALUE || client->pers.maxFPS > MAX_PLAYER_FPS_VALUE) {
-		CP(va("cpm \"%s^w: ^1You were removed from teams because you must use %d <= com_maxfps <= %d.\n\"", GAME_VERSION_COLORED, MIN_PLAYER_FPS_VALUE, MAX_PLAYER_FPS_VALUE));
-		trap_SendServerCommand(ent - g_entities, "resetMaxFPS");
-		SetTeam(ent, "s", -1, -1, qfalse);
-	}
-
-	// suburb, force yawspeed 0
-	if (client->pers.yawspeed != 0) {
-		CP(va("cpm \"%s^w: ^1You were removed from teams because you must use cl_yawspeed 0.\n\"", GAME_VERSION_COLORED));
-		trap_SendServerCommand(ent - g_entities, "resetYawspeed");
-		SetTeam(ent, "s", -1, -1, qfalse);
-	}
-
-	// suburb, force pitchspeed 0
-	if (client->pers.pitchspeed != 0) {
-		CP(va("cpm \"%s^w: ^1You were removed from teams because you must use cl_pitchspeed 0.\n\"", GAME_VERSION_COLORED));
-		trap_SendServerCommand(ent - g_entities, "resetPitchspeed");
-		SetTeam(ent, "s", -1, -1, qfalse);
-	}
-
-	// Nico, force auto demo record in cup mode
-	if (g_cupMode.integer != 0 && client->pers.autoDemo == 0) {
-		CP(va("cpm \"%s^w: ^1You were removed from teams because you must use cg_autoDemo 1.\n\"", GAME_VERSION_COLORED));
-		trap_SendServerCommand(ent - g_entities, "autoDemoOn");
-		SetTeam(ent, "s", -1, -1, qfalse);
-	}
-
-	// Nico, force hide me in cup mode
-	if (g_cupMode.integer != 0 && client->pers.hideme == 0) {
-		CP(va("cpm \"%s^w: ^1You were removed from teams because you must use cg_hideMe 1.\n\"", GAME_VERSION_COLORED));
-		trap_SendServerCommand(ent - g_entities, "hideMeOn");
-		SetTeam(ent, "s", -1, -1, qfalse);
-	}
-
-	// suburb, force CGaz if disabled on server
-	if (g_disableCGaz.integer != 0 && client->pers.cgaz != 0) {
-		CP(va("cpm \"%s^w: ^1You were removed from teams because you must use cg_drawCGaz 0.\n\"", GAME_VERSION_COLORED));
-		trap_SendServerCommand(ent - g_entities, "CGazOff");
-		SetTeam(ent, "s", -1, -1, qfalse);
-	}
-
-	// suburb, force snapping hud if disabled on server or logged in
-	if ((g_disableSnappingHUD.integer != 0 || (client->sess.logged && (client->sess.sessionTeam == TEAM_AXIS || client->sess.sessionTeam == TEAM_ALLIES))) && client->pers.snapping != 0) {
-		CP(va("cpm \"%s^w: ^1You were removed from teams because you must use cg_drawVelocitySnapping 0.\n\"", GAME_VERSION_COLORED));
-		trap_SendServerCommand(ent - g_entities, "SnappingOff");
-		SetTeam(ent, "s", -1, -1, qfalse);
 	}
 
 	// suburb, prevent pronebug & wallbug
@@ -993,7 +917,7 @@ void ClientThink_real(gentity_t *ent) {
 			return;
 		}
 		if (!client->pers.loadKillNeeded) {
-			CP(va("cpm \"%s^w: ^1Bugging detected, load or kill required.\n\"", GAME_VERSION_COLORED));
+			CP(va("cpm \"%s^w: ^dBugging detected, ^nload ^dor ^nkill ^drequired.\n\"", GAME_VERSION_COLORED));
 			client->pers.loadKillNeeded = qtrue;
 		}
 	}
@@ -1008,6 +932,111 @@ void ClientThink_real(gentity_t *ent) {
 
 	client->pers.oldZvelocity    = (int) pm.ps->velocity[2];
 	client->pers.buggedLastFrame = qfalse;
+}
+
+/*
+==================
+G_CheckVars
+
+Collection of checks for invalid cvar values
+
+@author suburb
+==================
+*/
+void G_CheckVars(gentity_t *ent) {
+	gclient_t *client = ent->client;
+	int varsSet = 0;
+
+	// Nico, pmove_fixed
+	if (!client->pers.pmoveFixed) {
+		CP(va("cpm \"%s^w: ^dYou must use ^npmove_fixed 1^d.\n\"", GAME_VERSION_COLORED));
+		trap_SendServerCommand(ent - g_entities, "pmoveon");
+		varsSet++;
+	}
+
+	// Nico, check rate
+	if (client->pers.rate < MIN_PLAYER_RATE_VALUE || client->pers.rate > MAX_PLAYER_RATE_VALUE) {
+		CP(va("cpm \"%s^w: ^dYou must use ^n%d <= rate <= %d^d.\n\"", GAME_VERSION_COLORED, MIN_PLAYER_RATE_VALUE, MAX_PLAYER_RATE_VALUE));
+		trap_SendServerCommand(ent - g_entities, "resetRate");
+		varsSet++;
+	}
+
+	// Nico, check snaps (unsigned int)
+	if (client->pers.snaps > MAX_PLAYER_SNAPS_VALUE) {
+		CP(va("cpm \"%s^w: ^dYou must use %d ^n<= snaps <= %d^d.\n\"", GAME_VERSION_COLORED, MIN_PLAYER_SNAPS_VALUE, MAX_PLAYER_SNAPS_VALUE));
+		trap_SendServerCommand(ent - g_entities, "resetSnaps");
+		varsSet++;
+	}
+
+	// Nico, check timenudge
+	if (client->pers.clientTimeNudge != FORCED_PLAYER_TIMENUDGE_VALUE) {
+		CP(va("cpm \"%s^w: ^dYou must use ^ncl_timenudge %d^d.\n\"", GAME_VERSION_COLORED, FORCED_PLAYER_TIMENUDGE_VALUE));
+		trap_SendServerCommand(ent - g_entities, "resetTimeNudge");
+		varsSet++;
+	}
+
+	// Nico, check maxpackets
+	if (client->pers.clientMaxPackets < MIN_PLAYER_MAX_PACKETS_VALUE || client->pers.clientMaxPackets > MAX_PLAYER_MAX_PACKETS_VALUE) {
+		CP(va("cpm \"%s^w: ^dYou must use ^n%d <= cl_maxpackets <= %d^d.\n\"", GAME_VERSION_COLORED, MIN_PLAYER_MAX_PACKETS_VALUE, MAX_PLAYER_MAX_PACKETS_VALUE));
+		trap_SendServerCommand(ent - g_entities, "resetMaxPackets");
+		varsSet++;
+	}
+
+	// Nico, check max FPS
+	if (client->pers.maxFPS < MIN_PLAYER_FPS_VALUE || client->pers.maxFPS > MAX_PLAYER_FPS_VALUE) {
+		CP(va("cpm \"%s^w: ^dYou must use ^n%d <= com_maxfps <= %d^d.\n\"", GAME_VERSION_COLORED, MIN_PLAYER_FPS_VALUE, MAX_PLAYER_FPS_VALUE));
+		trap_SendServerCommand(ent - g_entities, "resetMaxFPS");
+		varsSet++;
+	}
+
+	// suburb, force yawspeed 0
+	if (client->pers.yawspeed != 0) {
+		CP(va("cpm \"%s^w: ^dYou must use ^ncl_yawspeed 0^d.\n\"", GAME_VERSION_COLORED));
+		trap_SendServerCommand(ent - g_entities, "resetYawspeed");
+		varsSet++;
+	}
+
+	// suburb, force pitchspeed 0
+	if (client->pers.pitchspeed != 0) {
+		CP(va("cpm \"%s^w: ^dYou must use ^ncl_pitchspeed 0^d.\n\"", GAME_VERSION_COLORED));
+		trap_SendServerCommand(ent - g_entities, "resetPitchspeed");
+		varsSet++;
+	}
+
+	// Nico, force auto demo record in cup mode
+	if (g_cupMode.integer != 0 && client->pers.autoDemo == 0) {
+		CP(va("cpm \"%s^w: ^dYou must use ^netr_autoDemo 1^d.\n\"", GAME_VERSION_COLORED));
+		trap_SendServerCommand(ent - g_entities, "autoDemoOn");
+		varsSet++;
+	}
+
+	// Nico, force hide me in cup mode
+	if (g_cupMode.integer != 0 && client->pers.hideme == 0) {
+		CP(va("cpm \"%s^w: ^dYou must use ^netr_hideMe 1^d.\n\"", GAME_VERSION_COLORED));
+		trap_SendServerCommand(ent - g_entities, "hideMeOn");
+		varsSet++;
+	}
+
+	// suburb, force CGaz if disabled on server
+	if (g_disableCGaz.integer != 0 && client->pers.cgaz != 0) {
+		CP(va("cpm \"%s^w: ^dYou must use ^netr_drawCGaz 0^d.\n\"", GAME_VERSION_COLORED));
+		trap_SendServerCommand(ent - g_entities, "CGazOff");
+		varsSet++;
+	}
+
+	// suburb, force snapping hud if disabled on server or logged in
+	if ((g_disableSnappingHUD.integer != 0 || (client->sess.logged && (client->sess.sessionTeam == TEAM_AXIS || client->sess.sessionTeam == TEAM_ALLIES))) && client->pers.snapping != 0) {
+		CP(va("cpm \"%s^w: ^dYou must use ^netr_drawVelocitySnapping 0^d.\n\"", GAME_VERSION_COLORED));
+		trap_SendServerCommand(ent - g_entities, "SnappingOff");
+		varsSet++;
+	}
+
+	if (varsSet > 0 && (client->sess.sessionTeam == TEAM_AXIS || client->sess.sessionTeam == TEAM_ALLIES)) {
+		SetTeam(ent, "s", -1, -1, qfalse);
+	}
+
+	// suburb, always update this in case we join spec right afterwards
+	client->pers.lastSpecVarsCheck = level.time;
 }
 
 /*

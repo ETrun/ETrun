@@ -1022,6 +1022,11 @@ typedef struct {
 	// suburb, Accel HUD
 	float oldSpeed;
 
+	// suburb, autodemo UI
+	qboolean stoppingAndSavingDemo;
+	int lastUnableToSaveDemoTime;
+	int lastSavingDemoTime;
+
 	// Nico, end of ETrun client variables
 } cg_t;
 
@@ -1860,6 +1865,10 @@ extern vmCvar_t etr_onRunStop;
 extern vmCvar_t etr_drawTriggers;
 extern vmCvar_t etr_triggerOffset;
 extern vmCvar_t etr_triggerColor;
+
+// Print pickups
+extern vmCvar_t etr_printPickups;
+extern vmCvar_t etr_printAutodemo;
 
 // Nico, end of ETrun cvars
 

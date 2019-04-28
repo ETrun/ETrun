@@ -563,6 +563,7 @@ typedef struct {
 
 	// Nico, country code (GeoIP)
 	unsigned int countryCode;
+
 } clientSession_t;
 
 #define PICKUP_ACTIVATE 0   // pickup items only when using "+activate"
@@ -684,6 +685,7 @@ typedef struct {
 	qboolean isTouchingTrigger;
 	qboolean isTouchingJumppad;
 	qboolean loadKillNeeded;
+	qboolean triggerUsePreventedPrinted;
 
 	// suburb, inactivity drop
 	vec3_t oldViewangles;
@@ -693,6 +695,10 @@ typedef struct {
 
 	// suburb, pitchspeed
 	int pitchspeed;
+
+	// suburb, cvars check delay
+	int lastSpecVarsCheck;
+
 } clientPersistant_t;
 
 typedef struct {
@@ -1324,6 +1330,7 @@ void ClientCommand(int clientNum);
 //
 // g_active.c
 //
+void G_CheckVars(gentity_t *ent);
 void ClientThink(int clientNum);
 void ClientEndFrame(gentity_t *ent);
 void G_RunClient(gentity_t *ent);

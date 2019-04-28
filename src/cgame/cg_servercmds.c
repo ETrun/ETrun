@@ -1483,91 +1483,91 @@ static void CG_ServerCommand(void) {
 	// Nico, pmove_fixed
 	if (!Q_stricmp(cmd, "pmoveon")) {
 		trap_SendConsoleCommand("set pmove_fixed 1\n");
-		CG_AddPMItem(PM_MESSAGE, va("%s^w: pmove_fixed has been set to 1.\n", GAME_VERSION_COLORED), cgs.media.voiceChatShader);
+		CG_AddPMItem(PM_MESSAGE, va("%s^w: ^npmove_fixed ^dhas been set to ^n1^d.\n", GAME_VERSION_COLORED), cgs.media.voiceChatShader);
 		return;
 	}
 
 	// Nico, force max FPS
 	if (!Q_stricmp(cmd, "resetMaxFPS")) {
 		trap_SendConsoleCommand("set com_maxfps 125\n");
-		CG_AddPMItem(PM_MESSAGE, va("%s^w: com_maxfps has been set to 125.\n", GAME_VERSION_COLORED), cgs.media.voiceChatShader);
+		CG_AddPMItem(PM_MESSAGE, va("%s^w: ^ncom_maxfps ^dhas been set to ^n125^d.\n", GAME_VERSION_COLORED), cgs.media.voiceChatShader);
 		return;
 	}
 
 	// Nico, force max packets
 	if (!Q_stricmp(cmd, "resetMaxPackets")) {
 		trap_SendConsoleCommand("set cl_maxpackets 100\n");
-		CG_AddPMItem(PM_MESSAGE, va("%s^w: cl_maxpackets has been set to 100.\n", GAME_VERSION_COLORED), cgs.media.voiceChatShader);
+		CG_AddPMItem(PM_MESSAGE, va("%s^w: ^ncl_maxpackets ^dhas been set to ^n100^d.\n", GAME_VERSION_COLORED), cgs.media.voiceChatShader);
 		return;
 	}
 
 	// Nico, force timernudge
 	if (!Q_stricmp(cmd, "resetTimeNudge")) {
 		trap_SendConsoleCommand("set cl_timenudge 0\n");
-		CG_AddPMItem(PM_MESSAGE, va("%s^w: cl_timenudge has been set to 0.\n", GAME_VERSION_COLORED), cgs.media.voiceChatShader);
+		CG_AddPMItem(PM_MESSAGE, va("%s^w: ^ncl_timenudge ^dhas been set to ^n0^d.\n", GAME_VERSION_COLORED), cgs.media.voiceChatShader);
 		return;
 	}
 
 	// Nico, force rate
 	if (!Q_stricmp(cmd, "resetRate")) {
 		trap_SendConsoleCommand("set rate 25000\n");
-		CG_AddPMItem(PM_MESSAGE, va("%s^w: rate has been set to 25000.\n", GAME_VERSION_COLORED), cgs.media.voiceChatShader);
+		CG_AddPMItem(PM_MESSAGE, va("%s^w: ^nrate ^dhas been set to ^n25000^d.\n", GAME_VERSION_COLORED), cgs.media.voiceChatShader);
 		return;
 	}
 
 	// Nico, force snaps
 	if (!Q_stricmp(cmd, "resetSnaps")) {
 		trap_SendConsoleCommand("set snaps 0\n");
-		CG_AddPMItem(PM_MESSAGE, va("%s^w: snaps has been set to 0.\n", GAME_VERSION_COLORED), cgs.media.voiceChatShader);
+		CG_AddPMItem(PM_MESSAGE, va("%s^w: ^nsnaps ^dhas been set to ^n0^d.\n", GAME_VERSION_COLORED), cgs.media.voiceChatShader);
 		return;
 	}
 
 	// suburb, force yawspeed 0
 	if (!Q_stricmp(cmd, "resetYawspeed")) {
 		trap_SendConsoleCommand("set cl_yawspeed 0\n");
-		CG_AddPMItem(PM_MESSAGE, va("%s^w: cl_yawspeed has been set to 0.\n", GAME_VERSION_COLORED), cgs.media.voiceChatShader);
+		CG_AddPMItem(PM_MESSAGE, va("%s^w: ^ncl_yawspeed ^dhas been set to ^n0^d.\n", GAME_VERSION_COLORED), cgs.media.voiceChatShader);
 		return;
 	}
 
 	// suburb, force pitchspeed 0
 	if (!Q_stricmp(cmd, "resetPitchspeed")) {
 		trap_SendConsoleCommand("set cl_pitchspeed 0\n");
-		CG_AddPMItem(PM_MESSAGE, va("%s^w: cl_pitchspeed has been set to 0.\n", GAME_VERSION_COLORED), cgs.media.voiceChatShader);
+		CG_AddPMItem(PM_MESSAGE, va("%s^w: ^ncl_pitchspeed ^dhas been set to ^n0^d.\n", GAME_VERSION_COLORED), cgs.media.voiceChatShader);
 		return;
 	}
 
 	// Nico, force auto demo record
 	if (!Q_stricmp(cmd, "autoDemoOn")) {
-		trap_SendConsoleCommand("set cg_autoDemo 1\n");
-		CG_AddPMItem(PM_MESSAGE, va("%s^w: cg_autoDemo has been set to 1.\n", GAME_VERSION_COLORED), cgs.media.voiceChatShader);
+		trap_SendConsoleCommand("set etr_autoDemo 1\n");
+		CG_AddPMItem(PM_MESSAGE, va("%s^w: ^netr_autoDemo ^dhas been set to ^n1^d.\n", GAME_VERSION_COLORED), cgs.media.voiceChatShader);
 		return;
 	}
 
 	// Nico, force hideMe ON
 	if (!Q_stricmp(cmd, "hideMeOn")) {
-		trap_SendConsoleCommand("set cg_hideMe 1\n");
-		CG_AddPMItem(PM_MESSAGE, va("%s^w: cg_hideMe has been set to 1.\n", GAME_VERSION_COLORED), cgs.media.voiceChatShader);
+		trap_SendConsoleCommand("set etr_hideMe 1\n");
+		CG_AddPMItem(PM_MESSAGE, va("%s^w: ^netr_hideMe ^dhas been set to ^n1^d.\n", GAME_VERSION_COLORED), cgs.media.voiceChatShader);
 		return;
 	}
 
 	// Nico, force CGaz off
 	if (!Q_stricmp(cmd, "CGazOff")) {
-		trap_SendConsoleCommand("set cg_drawCGaz 0\n");
-		CG_AddPMItem(PM_MESSAGE, va("%s^w: cg_drawCGaz has been set to 0.\n", GAME_VERSION_COLORED), cgs.media.voiceChatShader);
+		trap_SendConsoleCommand("set etr_drawCGaz 0\n");
+		CG_AddPMItem(PM_MESSAGE, va("%s^w: ^netr_drawCGaz ^dhas been set to ^n0^d.\n", GAME_VERSION_COLORED), cgs.media.voiceChatShader);
 		return;
 	}
 
 	// suburb, force velocity snapping off
 	if (!Q_stricmp(cmd, "SnappingOff")) {
-		trap_SendConsoleCommand("set cg_drawVelocitySnapping 0\n");
-		CG_AddPMItem(PM_MESSAGE, va("%s^w: cg_drawVelocitySnapping has been set to 0.\n", GAME_VERSION_COLORED), cgs.media.voiceChatShader);
+		trap_SendConsoleCommand("set etr_drawVelocitySnapping 0\n");
+		CG_AddPMItem(PM_MESSAGE, va("%s^w: ^netr_drawVelocitySnapping ^dhas been set to ^n0^d.\n", GAME_VERSION_COLORED), cgs.media.voiceChatShader);
 		return;
 	}
 
 	// Nico, update specLock
 	if (!Q_stricmp(cmd, "updateSpecLockStatus")) {
-		trap_SendConsoleCommand(va("set cg_specLock %d\n", atoi(CG_Argv(1))));
-		CG_AddPMItem(PM_MESSAGE, va("%s^w: cg_specLock has been set to %d.\n", GAME_VERSION_COLORED, atoi(CG_Argv(1))), cgs.media.voiceChatShader);
+		trap_SendConsoleCommand(va("set etr_specLock %d\n", atoi(CG_Argv(1))));
+		CG_AddPMItem(PM_MESSAGE, va("%s^w: ^netr_specLock ^dhas been set to ^n%d^d.\n", GAME_VERSION_COLORED, atoi(CG_Argv(1))), cgs.media.voiceChatShader);
 		return;
 	}
 
@@ -1597,7 +1597,7 @@ static void CG_ServerCommand(void) {
 			cg.timerunBestTime[cg.clientNum][cg.currentTimerun] = cg.timerunLastTime[cg.clientNum][cg.currentTimerun];
 		}
 
-		// suburb, execute commands in cg_onRunStart cvar
+		// suburb, execute commands in etr_onRunStart cvar
 		trap_SendConsoleCommand(va("%s\n", etr_onRunStart.string));
 
 		return;
@@ -1669,7 +1669,7 @@ static void CG_ServerCommand(void) {
 			cg.runMaxSpeed                                     = atoi(CG_Argv(4)); // Run max speed
 		}
 
-		// suburb, execute commands in cg_onRunStop cvar
+		// suburb, execute commands in etr_onRunStop cvar
 		trap_SendConsoleCommand(va("%s\n", etr_onRunStop.string));
 
 		return;
