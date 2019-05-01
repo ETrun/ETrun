@@ -1195,9 +1195,10 @@ static void Cmd_Voice_f(gentity_t *ent, int mode, qboolean arg0, qboolean voiceo
 Cmd_CallVote_f
 ==================
 */
+#define VOTE_DELAY_MIN_VALUE 5000
 qboolean Cmd_CallVote_f(gentity_t *ent, unsigned int dwCommand, qboolean fRefCommand) {
 	int  i;
-	int  waitTime = 0;
+	int  waitTime = level.voteInfo.lastVoteTime - level.time;
 	char arg1[MAX_STRING_TOKENS];
 	char arg2[MAX_STRING_TOKENS];
 
@@ -1205,10 +1206,20 @@ qboolean Cmd_CallVote_f(gentity_t *ent, unsigned int dwCommand, qboolean fRefCom
 	(void)dwCommand;
 
 	// Normal checks, if its not being issued as a referee command
-	// Nico, moved 'callvote' command erros from popup messages to center print and console
+	// Nico, moved 'callvote' command erros from popup messages to center print
 	// http://games.chruker.dk/enemy_territory/modding_project_bugfix.php?bug_id=067
 
-	waitTime = (vote_delay.integer - (level.time - level.voteInfo.lastVoteTime)) / 1000;
+	// suburb, add spam protection check and fast map change if alone
+	if (vote_delay.integer >= VOTE_DELAY_MIN_VALUE) {
+		if (level.numConnectedClients > 1) {
+			waitTime += vote_delay.integer;
+		} else {
+			waitTime += VOTE_DELAY_MIN_VALUE;
+		}
+	} else {
+		waitTime += VOTE_DELAY_MIN_VALUE;
+	}
+	waitTime /= 1000;
 
 	if (!fRefCommand) {
 		if (level.voteInfo.voteTime) {
@@ -1301,7 +1312,7 @@ qboolean Cmd_CallVote_f(gentity_t *ent, unsigned int dwCommand, qboolean fRefCom
 		G_globalSound("sound/misc/referee.wav");
 	} else {
 		level.voteInfo.voteYes = 1;
-		AP(va("print \"[lof]%s^7 [lon]called a vote.[lof]  Voting for: %s.\n\"", ent->client->pers.netname, level.voteInfo.voteString));
+		AP(va("print \"[lof]%s^7 [lon]called a vote.[lof]  Voting for: %s\n\"", ent->client->pers.netname, level.voteInfo.voteString));
 		AP(va("cp \"[lof]%s\n^7[lon]called a vote\n\"", ent->client->pers.netname));
 		G_globalSound("sound/misc/vote.wav");
 	}
