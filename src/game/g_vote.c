@@ -479,7 +479,7 @@ int G_Randommap_v(gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg
 
 	// Nico, check if API is used
 	if (!g_useAPI.integer) {
-		CP(va("print \"%s^w: random map voting is disabled on this server.\n\"", GAME_VERSION_COLORED));
+		CP(va("cp \"%s^w: ^nRandom map ^dvoting is disabled on this server\n\"", GAME_VERSION_COLORED));
 		return G_INVALID;
 	}
 
@@ -497,7 +497,7 @@ int G_Randommap_v(gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg
 	} else {
 		char *result = NULL;
 
-		AP("cp \"Loading a random map!\n\"");
+		AP("cp \"^dLoading a random map\n\"");
 
 		result = malloc(RESPONSE_MAX_SIZE * sizeof (char));
 
@@ -506,7 +506,7 @@ int G_Randommap_v(gentity_t *ent, unsigned int dwVoteIndex, char *arg, char *arg
 		}
 
 		if (!G_API_randommap(result, ent, level.rawmapname)) {
-			CP(va("print \"%s^w: random map vote failed!\n\"", GAME_VERSION_COLORED));
+			CP(va("cp \"%s^w: ^nRandom map ^dvote failed\n\"", GAME_VERSION_COLORED));
 			return G_INVALID;
 		}
 	}
