@@ -1082,7 +1082,7 @@ void G_Voice(gentity_t *ent, gentity_t *target, int mode, const char *id, qboole
 	if (ent->voiceChatSquelch >= 30000) {
 		// Nico, voicechat spam protection was cluttering the popups message
 		// http://games.chruker.dk/enemy_territory/modding_project_bugfix.php?bug_id=066
-		trap_SendServerCommand(ent - g_entities, "cp \"^dSpam Protection: ^nVoiceChat ^dignored\"");
+		trap_SendServerCommand(ent - g_entities, "cp \"^dSpam Protection: ^nVoiceChat ^dignored\n\"");
 		return;
 	}
 
@@ -1212,23 +1212,23 @@ qboolean Cmd_CallVote_f(gentity_t *ent, unsigned int dwCommand, qboolean fRefCom
 
 	if (!fRefCommand) {
 		if (level.voteInfo.voteTime) {
-			G_printFull("^1Callvote:^7 A vote is already in progress.\n\"", ent);
+			trap_SendServerCommand(ent - g_entities, "cp \"^nCallvote: ^dA vote is already in progress\n\"");
 			return qfalse;
 		} else if (!ent->client->sess.referee) {
 			if (voteFlags.integer == VOTING_DISABLED) {
-				G_printFull("^1Callvote:^7 Voting is not enabled on this server.\n\"", ent);
+				trap_SendServerCommand(ent - g_entities, "cp \"^nCallvote: ^dVoting is not enabled on this server\n\"");
 				return qfalse;
 			} else if (g_cupMode.integer != 0) {   // Nico, disable voting in cup mode
-				G_printFull("^1Callvote:^7 Voting is disabled in cup mode.\n\"", ent);
+				trap_SendServerCommand(ent - g_entities, "cp \"^nCallvote: ^dVoting is disabled in cup mode\n\"");
 				return qfalse;
 			} else if (vote_limit.integer > 0 && ent->client->pers.voteCount >= vote_limit.integer) {
-				G_printFull(va("^1Callvote:^7 You have already called the maximum number of votes (%d).\n\"", vote_limit.integer), ent);
+				trap_SendServerCommand(ent - g_entities, va("cp \"^nCallvote: ^dYou have already called the maximum number of votes ^n(%d)\n\"", vote_limit.integer));
 				return qfalse;
 			} else if (level.delayedMapChange.pendingChange) {  // suburb, block all votes during a pending map change
-				G_printFull("^1Callvote:^7 There is a pending map change.\n\"", ent);
+				trap_SendServerCommand(ent - g_entities, "cp \"^nCallvote: ^dThere is a pending map change\n\"");
 				return qfalse;
 			} else if (waitTime > 0) {  // suburb, block all votes until vote_delay has passed
-				G_printFull(va("^1Callvote:^7 Please wait %d second%s before voting.\n\"", waitTime, waitTime > 1 ? "s" : ""), ent);
+				trap_SendServerCommand(ent - g_entities, va("cp \"^nCallvote: ^dPlease wait ^n%d second%s ^dbefore voting\n\"", waitTime, waitTime > 1 ? "s" : ""));
 				return qfalse;
 			}
 		}
@@ -1255,7 +1255,7 @@ qboolean Cmd_CallVote_f(gentity_t *ent, unsigned int dwCommand, qboolean fRefCom
 		fileHandle_t f;
 
 		if (arg2[0] == '\0' || trap_Argc() == 1) {
-			G_printFull("^1Callvote:^7 No map specified.\n\"", ent);
+			trap_SendServerCommand(ent - g_entities, "cp \"^nCallvote: ^dNo map specified\n\"");
 			return qfalse;
 		}
 
@@ -1266,7 +1266,7 @@ qboolean Cmd_CallVote_f(gentity_t *ent, unsigned int dwCommand, qboolean fRefCom
 		trap_FS_FCloseFile(f);
 
 		if (!f) {
-			G_printFull(va("^1Callvote:^7 The map ^3%s^7 is not on the server.\n\"", arg2), ent);
+			trap_SendServerCommand(ent - g_entities, va("cp \"^nCallvote: ^dThe map ^n%s ^dis not on the server\n\"", arg2));
 			return qfalse;
 		}
 	}
@@ -1277,7 +1277,7 @@ qboolean Cmd_CallVote_f(gentity_t *ent, unsigned int dwCommand, qboolean fRefCom
 		}
 	} else {
 		if (!fRefCommand) {
-			G_printFull(va("^1Callvote:^7 Unknown vote command: ^3%s %s\n\"", arg1, arg2), ent);
+			trap_SendServerCommand(ent - g_entities, va("cp \"^nCallvote: ^dUnknown vote command: ^n%s %s\n\"", arg1, arg2));
 			G_voteHelp(ent, qtrue);
 		}
 		return qfalse;
@@ -2353,7 +2353,8 @@ void ClientCommand(int clientNum) {
 	for (i = 0 ; i < (int)(sizeof (floodProtectedCommands) / sizeof (floodProtectedCommands[0])) ; ++i) {
 		if (!Q_stricmp(cmd, floodProtectedCommands[i].cmd)) {
 			if (floodProtectedCommands[i].isProtected && ClientIsFlooding(ent)) {
-				CP(va("print \"^1Spam Protection: ^7Dropping %s.\n\"", cmd));
+				//CP(va("print \"^1Spam Protection: ^7Dropping %s.\n\"", cmd));
+				trap_SendServerCommand(ent - g_entities, va("cp \"^nSpam Protection: ^dDropping ^n%s\n\"", cmd));
 			} else {
 				floodProtectedCommands[i].function(ent);
 			}
@@ -2365,7 +2366,7 @@ void ClientCommand(int clientNum) {
 		return;
 	}
 
-	CP(va("print \"Unknown command %s^7.\n\"", cmd));
+	CP(va("print \"Unknown command: %s^7\n\"", cmd));
 }
 
 /*

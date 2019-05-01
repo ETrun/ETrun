@@ -2012,11 +2012,11 @@ void CG_DrawDemoRecording(void) {
 	// suburb, additional UI to replace console printouts
 	if (cg.stoppingAndSavingDemo) {
 		CG_Text_Paint_Ext(0, cg_recording_statusline.integer + 10, 0.5f, 0.5f, colorYellow, ".", 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont2);
-		CG_Text_Paint_Ext(14, cg_recording_statusline.integer + 10, 0.14f, 0.14f, colorWhite, "Saving demo", 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
-	} else if (cg.time - cg.lastUnableToSaveDemoTime < SHOW_DEMO_SAVED) {
+		CG_Text_Paint_Ext(14, cg_recording_statusline.integer + 10, 0.14f, 0.14f, colorWhite, "Stopping demo", 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
+	} else if (cg.time - cg.lastUnableToSaveDemoTime < SHOW_DEMO_SAVED && cg.lastUnableToSaveDemoTime != 0) {
 		CG_Text_Paint_Ext(0, cg_recording_statusline.integer + 10, 0.5f, 0.5f, colorRed, ".", 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont2);
 		CG_Text_Paint_Ext(14, cg_recording_statusline.integer + 10, 0.14f, 0.14f, colorWhite, "Unable to save demo", 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
-	} else if (cg.time - cg.lastSavingDemoTime < SHOW_DEMO_SAVED) {
+	} else if (cg.time - cg.lastSavingDemoTime < SHOW_DEMO_SAVED && cg.lastSavingDemoTime != 0) {
 		CG_Text_Paint_Ext(0, cg_recording_statusline.integer + 10, 0.5f, 0.5f, colorGreen, ".", 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont2);
 		CG_Text_Paint_Ext(14, cg_recording_statusline.integer + 10, 0.14f, 0.14f, colorWhite, "Demo saved", 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
 	}
