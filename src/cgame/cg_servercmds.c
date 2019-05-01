@@ -1719,8 +1719,17 @@ static void CG_ServerCommand(void) {
 		} else if (!cg.ignoreNextStart) {
 			cg.currentdemo++;
 			cg.startedNewDemo = 1;
-			trap_SendConsoleCommand(va("stoprecord\n"));
-			trap_SendConsoleCommand(va("record temp_%i\n", cg.currentdemo % AUTODEMO_MAX_DEMOS));
+
+			if (etr_autoDemoPrints.integer) {
+				trap_SendConsoleCommand(va("stoprecord\n"));
+				trap_SendConsoleCommand(va("record temp_%i\n", cg.currentdemo % AUTODEMO_MAX_DEMOS));
+			} else {
+				trap_SendConsoleCommand("set cl_noprint 1\n");
+				trap_SendConsoleCommand(va("stoprecord\n"));
+				trap_SendConsoleCommand(va("record temp_%i\n", cg.currentdemo % AUTODEMO_MAX_DEMOS));
+				trap_SendConsoleCommand("set cl_noprint 0\n");
+			}
+
 			cg.ignoreNextStart = qtrue;
 		} else {
 			cg.ignoreNextStart = qfalse;

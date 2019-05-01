@@ -2264,9 +2264,17 @@ static void CG_Autodemo() {
 			cg.nd_keep = 1;
 		}
 
-		if (cg.time > cg.nd_time + AUTODEMO_NEW_DEMO_DELAY) {
-			trap_SendConsoleCommand("stoprecord\n");
-			trap_SendConsoleCommand(va("record temp_%i\n", (cg.startedNewDemo - 1) % AUTODEMO_MAX_DEMOS));
+		if (cg.time > cg.nd_time + etr_autoDemoStopDelay.integer) {
+			if (etr_autoDemoPrints.integer) {
+				trap_SendConsoleCommand("stoprecord\n");
+				trap_SendConsoleCommand(va("record temp_%i\n", (cg.startedNewDemo - 1) % AUTODEMO_MAX_DEMOS));
+			} else {
+				trap_SendConsoleCommand("set cl_noprint 1\n");
+				trap_SendConsoleCommand("stoprecord\n");
+				trap_SendConsoleCommand(va("record temp_%i\n", (cg.startedNewDemo - 1) % AUTODEMO_MAX_DEMOS));
+				trap_SendConsoleCommand("set cl_noprint 0\n");
+			}
+
 			cg.startedNewDemo = 1;
 		}
 	} else {
@@ -2275,7 +2283,7 @@ static void CG_Autodemo() {
 
 	if (cg.runsave) {
 		if (!cg.rs_keep) {
-			if (etr_printAutodemo.integer) {
+			if (etr_autoDemoPrints.integer) {
 				CG_Printf("%s^w: ^dStopping and saving demo...\n", GAME_VERSION_COLORED);
 			}
 			cg.stoppingAndSavingDemo = qtrue;
@@ -2283,14 +2291,14 @@ static void CG_Autodemo() {
 			cg.rs_keep = 1;
 		}
 
-		if (cg.time > cg.rs_time + AUTODEMO_RUN_SAVE_DELAY && cg.rs_keep == 1 && !cg.startedNewDemo) {
+		if (cg.time > cg.rs_time + AUTODEMO_RUN_SAVE_DELAY + etr_autoDemoStopDelay.integer && cg.rs_keep == 1 && !cg.startedNewDemo) {
 			trap_SendConsoleCommand("stoprecord\n");
 			cg.rs_keep = 2;
 		}
 
 		// Nico, #fixme: GCC 4.8.2 with optimization says
 		// warning: assuming signed overflow does not occur when assuming that (X + c) < X is always false
-		if (cg.time > cg.rs_time + AUTODEMO_RUN_SAVE_DELAY + 500) { // Nico, wait 500ms to be sure demo recording is finished
+		if (cg.time > cg.rs_time + AUTODEMO_RUN_SAVE_DELAY + etr_autoDemoStopDelay.integer + 500) { // Nico, wait 500ms to be sure demo recording is finished
 			int          len = 0;
 			fileHandle_t temp, demo;
 			char         *name;
@@ -2300,7 +2308,7 @@ static void CG_Autodemo() {
 			name = va("demos/%s_%s.dm_84", cgs.rawmapname, cg.runsavename);
 
 			if (trap_FS_FOpenFile(name, &demo, FS_WRITE) < 0) {
-				if (etr_printAutodemo.integer) {
+				if (etr_autoDemoPrints.integer) {
 					CG_Printf("^nError: ^dUnable to save demo:^n %s\n", name);
 				}
 				trap_FS_FCloseFile(temp);
@@ -2319,7 +2327,7 @@ static void CG_Autodemo() {
 			trap_FS_FCloseFile(temp);
 			trap_FS_FCloseFile(demo);
 
-			if (etr_printAutodemo.integer) {
+			if (etr_autoDemoPrints.integer) {
 				CG_Printf(va("%s^w: ^dDemo saved as: ^n%s\n", GAME_VERSION_COLORED), name);
 			}
 

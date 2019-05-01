@@ -114,7 +114,6 @@ If you have questions concerning this license or the applicable additional terms
 #define WSTATE_OFF          0x04    // Window is completely shutdown
 
 // Nico, autodemo
-#define AUTODEMO_NEW_DEMO_DELAY 1000
 #define AUTODEMO_RUN_SAVE_DELAY 1500
 #define AUTODEMO_MAX_DEMOS      20
 
@@ -1829,6 +1828,7 @@ extern vmCvar_t etr_hideMe;
 // Auto demo
 extern vmCvar_t etr_autoDemo;
 extern vmCvar_t etr_keepAllDemos;
+extern vmCvar_t etr_autoDemoStopDelay;
 
 // Popups
 extern vmCvar_t etr_numPopups;
@@ -1866,9 +1866,9 @@ extern vmCvar_t etr_drawTriggers;
 extern vmCvar_t etr_triggerOffset;
 extern vmCvar_t etr_triggerColor;
 
-// Print pickups
-extern vmCvar_t etr_printPickups;
-extern vmCvar_t etr_printAutodemo;
+// Prints
+extern vmCvar_t etr_pickupPrints;
+extern vmCvar_t etr_autoDemoPrints;
 
 // Nico, end of ETrun cvars
 
