@@ -1355,9 +1355,7 @@ void notify_timerun_stop(gentity_t *activator, int finishTime) {
 
 	// Nico, notify its spectators if cupmode is DISABLED
 	if (g_cupMode.integer == 0) {
-		int i;
-
-		for (i = 0; i < level.numConnectedClients; ++i) {
+		for (int i = 0; i < level.numConnectedClients; ++i) {
 			gentity_t *o = g_entities + level.sortedClients[i];
 
 			if (!o->client) {
@@ -1455,6 +1453,32 @@ void saveDemo(gentity_t *ent) {
 
 	// Start recording a new temp demo.
 	trap_SendServerCommand(ent - g_entities, "tempDemoStart 1");
+
+	// suburb, notify its spectators if cupmode is DISABLED
+	if (g_cupMode.integer == 0) {
+		for (int i = 0; i < level.numConnectedClients; ++i) {
+			gentity_t *o = g_entities + level.sortedClients[i];
+
+			if (!o->client) {
+				continue;
+			}
+
+			if (o == ent) {
+				continue;
+			}
+
+			if (o->client->sess.sessionTeam != TEAM_SPECTATOR) {
+				continue;
+			}
+
+			if (o->client->sess.spectatorClient == ent - g_entities) {
+				trap_SendServerCommand(o - g_entities, va("runSave %s[%s]_%02d-%02d-%03d", cleanRunName, physicsName, min, sec, milli));
+
+				// Start recording a new temp demo.
+				trap_SendServerCommand(o - g_entities, "tempDemoStart 1");
+			}
+		}
+	}
 }
 
 /* QUAKED target_stopTimer (1 0 0) (-8 -8 -8) (8 8 8)
