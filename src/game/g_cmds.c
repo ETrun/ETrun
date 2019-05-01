@@ -2067,12 +2067,17 @@ void Cmd_Load_f(gentity_t *ent) {
 	}
 
 	if (pos->valid) {
-		// Nico, don't stop timer on load for VET except if strict save/load mode is enabled
-		if (ent->client->sess.timerunActive && (physics.integer != PHYSICS_MODE_VET || g_strictSaveLoad.integer != 0)) {
+		// Nico, stop timer on load for VET except if strict save/load mode is disabled
+		if (ent->client->sess.timerunActive && (physics.integer != PHYSICS_MODE_VET || g_strictSaveLoad.integer)) {
 			// Nico, notify the client and its spectators the timerun has stopped
 			notify_timerun_stop(ent, 0);
 
 			ent->client->sess.timerunActive = qfalse;
+		}
+
+		// suburb, clear broken legs knockback state in vet for either strict save mode or while not in a run
+		if (physics.integer == PHYSICS_MODE_VET && (g_strictSaveLoad.integer || !ent->client->sess.timerunActive)) {
+			ent->client->ps.pm_time = 1;
 		}
 
 		VectorCopy(pos->origin, ent->client->ps.origin);
