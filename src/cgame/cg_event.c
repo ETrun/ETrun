@@ -73,7 +73,7 @@ static void CG_ItemPickup(int itemNum) {
 
 	itemid = bg_itemlist[itemNum].giTag;
 
-	if (etr_printPickups.integer) {
+	if (etr_pickupPrints.integer) {
 		CG_AddPMItem(PM_MESSAGE, va("Picked up %s", CG_PickupItemText(itemNum)), cgs.media.pmImages[PM_MESSAGE]);
 	}
 

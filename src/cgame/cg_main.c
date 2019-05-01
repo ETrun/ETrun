@@ -334,6 +334,7 @@ vmCvar_t etr_hideMe;
 // Auto demo
 vmCvar_t etr_autoDemo;
 vmCvar_t etr_keepAllDemos;
+vmCvar_t etr_autoDemoStopDelay;
 
 // Popups
 vmCvar_t etr_numPopups;
@@ -371,9 +372,9 @@ vmCvar_t etr_drawTriggers;
 vmCvar_t etr_triggerOffset;
 vmCvar_t etr_triggerColor;
 
-// Print pickups
-vmCvar_t etr_printPickups;
-vmCvar_t etr_printAutodemo;
+// Prints
+vmCvar_t etr_pickupPrints;
+vmCvar_t etr_autoDemoPrints;
 
 // Nico, end of ETrun cvars
 
@@ -630,6 +631,7 @@ cvarTable_t cvarTable[] =
 	// Auto demo
 	{ &etr_autoDemo,             "etr_autoDemo",             "0",     CVAR_ARCHIVE,              0 },
 	{ &etr_keepAllDemos,         "etr_keepAllDemos",         "1",     CVAR_ARCHIVE,              0 },
+	{ &etr_autoDemoStopDelay,    "etr_autoDemoStopDelay",    "1500",  CVAR_ARCHIVE,              0 },
 
 	// Popups
 	{ &etr_numPopups,            "etr_numPopups",            "5",     CVAR_ARCHIVE,              0 },
@@ -667,9 +669,9 @@ cvarTable_t cvarTable[] =
 	{ &etr_triggerOffset,        "etr_triggerOffset",        "0",     CVAR_ARCHIVE,              0 },
 	{ &etr_triggerColor,         "etr_triggerColor",         "White", CVAR_ARCHIVE,              0 },
 
-	// Print pickups
-	{ &etr_printPickups,         "etr_printPickups",         "1",     CVAR_ARCHIVE,              0 },
-	{ &etr_printAutodemo,        "etr_printAutodemo",        "1",     CVAR_ARCHIVE,              0 },
+	// Prints
+	{ &etr_pickupPrints,         "etr_pickupPrints",         "1",     CVAR_ARCHIVE,              0 },
+	{ &etr_autoDemoPrints,       "etr_autoDemoPrints",       "1",     CVAR_ARCHIVE,              0 },
 
 	// Nico, end of ETrun cvars
 };
