@@ -514,6 +514,11 @@ qboolean SetTeam(gentity_t *ent, char *s, weapon_t w1, weapon_t w2, qboolean set
 		}
 	}
 
+	// suburb, autodemo handling
+	if (client->pers.autoDemo != 0) {
+		trap_SendServerCommand(ent - g_entities, "tempDemoStart");
+	}
+
 	return qtrue;
 }
 
@@ -805,6 +810,11 @@ void Cmd_Follow_f(gentity_t *ent, unsigned int dwCommand, qboolean fValue) {
 
 	ent->client->sess.spectatorState  = SPECTATOR_FOLLOW;
 	ent->client->sess.spectatorClient = i;
+
+	// suburb, autodemo handling
+	if (ent->client->pers.autoDemo != 0) {
+		trap_SendServerCommand(ent - g_entities, "tempDemoStart");
+	}
 }
 
 /*
@@ -882,6 +892,11 @@ void Cmd_FollowCycle_f(gentity_t *ent, int dir) {
 
 		// Nico, send an event to the client
 		trap_SendServerCommand(ent - g_entities, "followedClientUpdate");
+
+		// suburb, autodemo handling
+		if (ent->client->pers.autoDemo != 0 && clientnum != original) {
+			trap_SendServerCommand(ent - g_entities, "tempDemoStart");
+		}
 
 		return;
 	} while (clientnum != original);
