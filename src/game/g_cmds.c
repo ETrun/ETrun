@@ -2636,12 +2636,12 @@ void Cmd_Abort_f(gentity_t *ent) {
 	if (ent->client->sess.timerunActive) {
 		// triggerbug fix
 		if (ent->client->pers.isTouchingTrigger) {
-			trap_SendServerCommand(ent - g_entities, va("print \"You can not abort in triggers.\n\""));
+			CP("cp \"^dYou cannot ^nabort ^din triggers\n\"");
 			return;
 		}
 
-		// Nico, reset client speed to prevent abusing in prejump
-		VectorClear(ent->client->ps.velocity);
+		// prevent abusing in prejump
+		ent->client->pers.loadKillNeeded = qtrue;
 
 		notify_timerun_stop(ent, 0);
 		ent->client->sess.timerunActive = qfalse;
