@@ -94,7 +94,7 @@ void G_voteHelp(gentity_t *ent, qboolean fShowVote) {
 	int vi[100];            // Just make it large static.
 
 	if (fShowVote) {
-		CP("print \"\nValid ^3callvote^7 commands are:\n^3----------------------------\n\"");
+		CP("print \"Valid ^3callvote^7 commands are:\n^3----------------------------\n\"");
 	}
 
 	for (i = 0; i < num_cmds; ++i) {
@@ -127,7 +127,7 @@ void G_voteHelp(gentity_t *ent, qboolean fShowVote) {
 	}
 
 	if (fShowVote) {
-		CP("print \"\nUsage: ^3\\callvote <command> <params>\n^7For current settings/help, use: ^3\\callvote <command> ?\n\n\"");
+		CP("print \"\nUsage: ^3\\callvote <command> <params>\n^7For current settings/help, use: ^3\\callvote <command> ?\n\"");
 	}
 
 	return;
