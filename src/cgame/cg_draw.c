@@ -2265,16 +2265,17 @@ static void CG_Autodemo() {
 		}
 
 		if (cg.time > cg.nd_time + etr_autoDemoStopDelay.integer) {
+			int tempNum = (cg.startedNewDemo - 1) % AUTODEMO_MAX_DEMOS;
 			if (etr_autoDemoPrints.integer) {
 				trap_SendConsoleCommand("stoprecord\n");
-				trap_SendConsoleCommand(va("record temp_%i\n", (cg.startedNewDemo - 1) % AUTODEMO_MAX_DEMOS));
+				trap_SendConsoleCommand(va("record temp_%s%i\n", tempNum >= 10 ? "" : "0", tempNum));
 			} else {
 				trap_SendConsoleCommand("set cl_noprint 1\n");
 				trap_SendConsoleCommand("stoprecord\n");
-				trap_SendConsoleCommand(va("record temp_%i\n", (cg.startedNewDemo - 1) % AUTODEMO_MAX_DEMOS));
+				trap_SendConsoleCommand(va("record temp_%s%i\n", tempNum >= 10 ? "" : "0", tempNum));
 				trap_SendConsoleCommand("set cl_noprint 0\n");
 			}
-
+			CG_Printf("%i \n", tempNum);
 			cg.startedNewDemo = 1;
 		}
 	} else {
@@ -2303,8 +2304,9 @@ static void CG_Autodemo() {
 			fileHandle_t temp, demo;
 			char         *name;
 			int          i = 0;
+			int tempNum = (cg.currentdemo - 1) % AUTODEMO_MAX_DEMOS;
 
-			len  = trap_FS_FOpenFile(va("demos/temp_%i.dm_84", (cg.currentdemo - 1) % AUTODEMO_MAX_DEMOS), &temp, FS_READ);
+			len  = trap_FS_FOpenFile(va("demos/temp_%s%i.dm_84", tempNum >= 10 ? "" : "0", tempNum), &temp, FS_READ);
 			name = va("demos/%s_%s.dm_84", cgs.rawmapname, cg.runsavename);
 
 			if (trap_FS_FOpenFile(name, &demo, FS_WRITE) < 0) {
