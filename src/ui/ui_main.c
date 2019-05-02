@@ -1899,8 +1899,9 @@ UI_LoadDemos
 ===============
 */
 static void UI_LoadDemos() {
-	char demolist[30000];
-	char demoExt[32];
+	char demolist[MAX_DEMOS * MAX_DEMOS_NAME_LENGTH];
+	char tempDemoList[MAX_DEMOS][MAX_DEMOS_NAME_LENGTH];
+	char demoExt[MAX_DEMOS_NAME_LENGTH];
 	char *demoname;
 	int  demoExtLen = 0;
 
@@ -1913,21 +1914,35 @@ static void UI_LoadDemos() {
 	demoExtLen = strlen(demoExt);
 
 	if (uiInfo.demoCount) {
-		int i;
-
 		if (uiInfo.demoCount > MAX_DEMOS) {
 			uiInfo.demoCount = MAX_DEMOS;
 		}
-		demoname = demolist;
-		for (i = 0; i < uiInfo.demoCount; ++i) {
-			int len;
 
-			len = strlen(demoname);
-			if (!Q_stricmp(demoname +  len - demoExtLen, demoExt)) {
+		demoname = demolist;
+
+		for (int i = 0; i < uiInfo.demoCount; ++i) {
+			int len = strlen(demoname);
+			if (!Q_stricmp(demoname + len - demoExtLen, demoExt)) {
 				demoname[len - demoExtLen] = '\0';
 			}
-			uiInfo.demoList[i] = String_Alloc(demoname);
-			demoname          += len + 1;
+
+			Q_strncpyz(tempDemoList[i], demoname, sizeof (tempDemoList[i]));
+
+			// suburb, do A-Z case-insensitive sorting
+			for (int j = i; j > 0; --j) {
+				if (Q_stricmp(tempDemoList[j - 1], tempDemoList[j]) > 0) {
+					char temp[MAX_DEMOS_NAME_LENGTH];
+					Q_strncpyz(temp, tempDemoList[j - 1], sizeof (temp));
+					Q_strncpyz(tempDemoList[j - 1], tempDemoList[j], sizeof (tempDemoList[j - 1]));
+					Q_strncpyz(tempDemoList[j], temp, sizeof (tempDemoList[j]));
+				}
+			}
+
+			demoname += len + 1;
+		}
+
+		for (int i = 0; i < uiInfo.demoCount; ++i) {
+			uiInfo.demoList[i] = String_Alloc(tempDemoList[i]);
 		}
 	}
 }

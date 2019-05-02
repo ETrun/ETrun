@@ -118,7 +118,8 @@ extern void UI_DrawLoadPanel(qboolean ownerdraw, qboolean uihack);
 #define MAX_SERVERSTATUS_TEXT   2048
 #define MAX_FOUNDPLAYER_SERVERS 16
 #define MAX_MODS 64
-#define MAX_DEMOS 256 // Nico, #todo: increase?
+#define MAX_DEMOS 32768 // suburb, increased from 256 to 32768
+#define MAX_DEMOS_NAME_LENGTH   81 // suburb, increased from 32 to 81, 81 is max in viewreplay
 #define MAX_MOVIES 256
 #define MAX_PROFILES 64
 
