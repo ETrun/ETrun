@@ -1754,7 +1754,7 @@ extern animStringItem_t animStateStr[];
 extern animStringItem_t animBodyPartsStr[];
 
 bg_playerclass_t *BG_GetPlayerClassInfo(int team, int cls);
-qboolean BG_ClassHasWeapon(bg_playerclass_t *classInfo, weapon_t weap);
+qboolean BG_ClassHasWeapon(int classnum, team_t team, weapon_t weapon);
 qboolean BG_WeaponIsPrimaryForClassAndTeam(int classnum, team_t team, weapon_t weapon);
 int BG_ClassWeaponCount(bg_playerclass_t *classInfo, team_t team);
 const char *BG_ClassnameForNumber(int classNum);

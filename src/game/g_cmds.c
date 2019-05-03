@@ -2093,13 +2093,14 @@ void Cmd_Load_f(gentity_t *ent) {
 
 		VectorCopy(pos->origin, ent->client->ps.origin);
 
-		// Nico, load angles if cg_loadViewAngles = 1
+		// Nico, load angles if etr_loadViewAngles = 1
 		if (ent->client->pers.loadViewAngles) {
 			SetClientViewAngle(ent, pos->vangles);
 		}
 
-		// Nico, load saved weapon if cg_loadWeapon = 1
-		if (ent->client->pers.loadWeapon) {
+		// Nico, load saved weapon if etr_loadWeapon = 1
+		// suburb, check whether current class has the weapon
+		if (ent->client->pers.loadWeapon && BG_ClassHasWeapon(ent->client->ps.stats[STAT_PLAYER_CLASS], ent->client->sess.sessionTeam, pos->weapon)) {
 			ent->client->ps.weapon = pos->weapon;
 			// Nico, inform client the need to change weapon
 			trap_SendServerCommand(ent - g_entities, va("weaponUpdate %d", pos->weapon));
