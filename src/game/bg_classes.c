@@ -189,15 +189,42 @@ bg_playerclass_t *BG_GetPlayerClassInfo(int team, int cls) {
 	return &teamList[cls];
 }
 
-qboolean BG_ClassHasWeapon(bg_playerclass_t *classInfo, weapon_t weap) {
-	int i;
+// suburb, extended function to handle non-primary weapons too
+// note: only the ones actually obtainable in etrun being handled
+qboolean BG_ClassHasWeapon(int classnum, team_t team, weapon_t weapon) {
+	bg_playerclass_t *classInfo;
 
-	if (!weap) {
+	if (!weapon) {
 		return qfalse;
 	}
 
-	for (i = 0; i < MAX_WEAPS_PER_CLASS; ++i) {
-		if (classInfo->classWeapons[i] == weap) {
+	if (team == TEAM_ALLIES) {
+		classInfo = &bg_allies_playerclasses[classnum];
+	} else if (team == TEAM_AXIS) {
+		classInfo = &bg_axis_playerclasses[classnum];
+	} else {
+		return qfalse;
+	}
+
+	// suburb, all classes got these
+	if (weapon == WP_KNIFE || weapon == WP_BINOCULARS) {
+		return qtrue;
+	}
+
+	// suburb, check pistols
+	if ((weapon == WP_COLT && team == TEAM_ALLIES) || (weapon == WP_LUGER && team == TEAM_AXIS) ||
+		(((weapon == WP_SILENCED_COLT && team == TEAM_ALLIES) || (weapon == WP_SILENCER && team == TEAM_AXIS)) && classnum == PC_COVERTOPS)) {
+		return qtrue;
+	}
+
+	// suburb, check special weapons
+	if ((weapon == WP_MEDKIT && classnum == PC_MEDIC) || (weapon == WP_PLIERS && classnum == PC_ENGINEER)) {
+		return qtrue;
+	}
+
+	// suburb, check primary weapons
+	for (int i = 0; i < MAX_WEAPS_PER_CLASS; ++i) {
+		if (classInfo->classWeapons[i] == weapon) {
 			return qtrue;
 		}
 	}
@@ -205,22 +232,29 @@ qboolean BG_ClassHasWeapon(bg_playerclass_t *classInfo, weapon_t weap) {
 }
 
 qboolean BG_WeaponIsPrimaryForClassAndTeam(int classnum, team_t team, weapon_t weapon) {
-	bg_playerclass_t *classInfo;
-
-	if (team == TEAM_ALLIES) {
-		classInfo = &bg_allies_playerclasses[classnum];
-
-		if (BG_ClassHasWeapon(classInfo, weapon)) {
-			return qtrue;
-		}
-	} else if (team == TEAM_AXIS) {
-		classInfo = &bg_axis_playerclasses[classnum];
-
-		if (BG_ClassHasWeapon(classInfo, weapon)) {
-			return qtrue;
-		}
+	if (BG_ClassHasWeapon(classnum, team, weapon) && BG_WeaponIsPrimary(weapon)) {
+		return qtrue;
 	}
+	return qfalse;
+}
 
+// suburb, added check to be able to extend class weapons without breaking anything
+qboolean BG_WeaponIsPrimary(weapon_t weapon) {
+	switch (weapon) {
+	case WP_MP40:
+	case WP_THOMPSON:
+	case WP_MOBILE_MG42:
+	case WP_FLAMETHROWER:
+	case WP_PANZERFAUST:
+	case WP_MORTAR:
+	case WP_CARBINE:
+	case WP_KAR98:
+	case WP_STEN:
+	case WP_FG42:
+	case WP_GARAND:
+	case WP_K43:
+		return qtrue;
+	}
 	return qfalse;
 }
 
