@@ -474,43 +474,47 @@ void SetWolfSpawnWeapons(gclient_t *client) {
 			AddWeaponToPlayer(client, WP_THOMPSON, 0, GetAmmoTableData(WP_THOMPSON)->defaultStartingClip, qtrue);
 		}
 	} else if (pc == PC_SOLDIER) {
-
-		switch (client->sess.sessionTeam) {
+		if (client->sess.sessionTeam == TEAM_AXIS) {
+			AddWeaponToPlayer(client, WP_MP40, GetAmmoTableData(WP_MP40)->defaultStartingAmmo, GetAmmoTableData(WP_MP40)->defaultStartingClip, qtrue);
+		} else {
+			AddWeaponToPlayer(client, WP_THOMPSON, GetAmmoTableData(WP_THOMPSON)->defaultStartingAmmo, GetAmmoTableData(WP_THOMPSON)->defaultStartingClip, qtrue);
+		}
+		/*switch (client->sess.sessionTeam) {
 		case TEAM_AXIS:
-			/* Nico, #todo rocket runs support
+			// Nico, #todo rocket runs support
 			switch ( client->sess.playerWeapon ) {
 			default:
 			case WP_FLAMETHROWER:
 			case WP_MOBILE_MG42:
 			case WP_MORTAR:
-			case WP_MP40:*/
+			case WP_MP40:
 			AddWeaponToPlayer(client, WP_MP40, GetAmmoTableData(WP_MP40)->defaultStartingAmmo, GetAmmoTableData(WP_MP40)->defaultStartingClip, qtrue);
-		/*break;
+		break;
 
 		case WP_PANZERFAUST:
 		AddWeaponToPlayer( client, WP_PANZERFAUST, GetAmmoTableData( WP_PANZERFAUST )->defaultStartingAmmo, GetAmmoTableData( WP_PANZERFAUST )->defaultStartingClip, qtrue );
 		break;
 		}
-		break;*/
+		break;
 		case TEAM_ALLIES:
-			/* Nico, #todo rocket runs support
+			 Nico, #todo rocket runs support
 			switch ( client->sess.playerWeapon ) {
 			default:
 			// Nico, replaced weapons
 			case WP_FLAMETHROWER:
 			case WP_MOBILE_MG42:
 			case WP_MORTAR:
-			case WP_THOMPSON:*/
+			case WP_THOMPSON:
 			AddWeaponToPlayer(client, WP_THOMPSON, GetAmmoTableData(WP_THOMPSON)->defaultStartingAmmo, GetAmmoTableData(WP_THOMPSON)->defaultStartingClip, qtrue);
-		/*break;
+		break;
 		case WP_PANZERFAUST:
 		AddWeaponToPlayer( client, WP_PANZERFAUST, GetAmmoTableData( WP_PANZERFAUST )->defaultStartingAmmo, GetAmmoTableData( WP_PANZERFAUST )->defaultStartingClip, qtrue );
 		break;
 		}
-		break;*/
+		break;
 		default:
 			break;
-		}
+		}*/
 	} else if (pc == PC_COVERTOPS) {
 		switch (client->sess.playerWeapon) {
 		case WP_K43:
@@ -1571,13 +1575,14 @@ void ClientSpawn(gentity_t *ent) {
 		if (pos->valid) {
 			VectorCopy(pos->origin, ent->client->ps.origin);
 
-			// Nico, load angles if cg_loadViewAngles = 1
+			// Nico, load angles if etr_loadViewAngles = 1
 			if (ent->client->pers.loadViewAngles) {
 				SetClientViewAngle(ent, pos->vangles);
 			}
 
-			// Nico, load saved weapon if cg_loadWeapon = 1
-			if (ent->client->pers.loadWeapon) {
+			// Nico, load saved weapon if etr_loadWeapon = 1
+			// suburb, check whether current class has the weapon
+			if (ent->client->pers.loadWeapon && BG_ClassHasWeapon(ent->client->ps.stats[STAT_PLAYER_CLASS], ent->client->sess.sessionTeam, pos->weapon)) {
 				ent->client->ps.weapon = pos->weapon;
 			}
 
