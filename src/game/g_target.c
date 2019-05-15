@@ -1318,18 +1318,6 @@ void target_starttimer_use(gentity_t *self, gentity_t *other, gentity_t *activat
 void SP_target_starttimer(gentity_t *ent) {
 	char *t = NULL;
 
-	// Nico, used to look for parent
-	gentity_t *parent = NULL;
-
-	// Nico, override wait -1 or wait 9999 on trigger_multiple where target is start timer
-	if (g_forceTimerReset.integer) {
-		parent = G_FindByTarget(NULL, ent->targetname);
-		if (parent && parent->wait != 0.5 && !Q_stricmp(parent->classname, "trigger_multiple")) {
-			G_DPrintf("%s: SP_target_starttimer, wait found = %f, overrided to 0.5\n", GAME_VERSION, parent->wait);
-			G_SpawnFloat("wait", "0.5", &parent->wait);
-		}
-	}
-
 	// Nico, create a timerun with this name if it doesn't exist yet
 	G_SpawnString("name", "default", &t);
 	ent->timerunName = G_NewString(t);
@@ -1581,18 +1569,6 @@ void target_stoptimer_use(gentity_t *self, gentity_t *other, gentity_t *activato
 void SP_target_stoptimer(gentity_t *ent) {
 	char *t = NULL;
 
-	// Nico, used to look for parent
-	gentity_t *parent = NULL;
-
-	// Nico, override wait -1 or wait 9999 on stop timer entities
-	if (g_forceTimerReset.integer) {
-		parent = G_FindByTarget(NULL, ent->targetname);
-		if (parent && parent->wait != 0.5 && !Q_stricmp(parent->classname, "trigger_multiple")) {
-			G_DPrintf("%s: SP_target_stoptimer, wait found = %f, overrided to 0.5\n", GAME_VERSION, parent->wait);
-			G_SpawnFloat("wait", "0.5", &parent->wait);
-		}
-	}
-
 	G_SpawnString("name", "default", &t);
 	ent->timerunName = G_NewString(t);
 	// create a timerun with this name if it doesn't exit yet
@@ -1694,18 +1670,6 @@ void target_checkpoint_use(gentity_t *self, gentity_t *other, gentity_t *activat
 void SP_target_checkpoint(gentity_t *ent) {
 	char *t         = NULL;
 	int  timerunNum = 0;
-
-	// Nico, used to look for parent
-	gentity_t *parent = NULL;
-
-	// Nico, override wait -1 or wait 9999 on timer check entities
-	if (g_forceTimerReset.integer) {
-		parent = G_FindByTarget(NULL, ent->targetname);
-		if (parent && parent->wait != 0.5 && !Q_stricmp(parent->classname, "trigger_multiple")) {
-			G_DPrintf("%s: SP_target_checkpoint, wait found = %f, overrided to 0.5\n", GAME_VERSION, parent->wait);
-			G_SpawnFloat("wait", "0.5", &parent->wait);
-		}
-	}
 
 	G_SpawnString("name", "default", &t);
 	ent->timerunName = G_NewString(t);

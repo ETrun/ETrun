@@ -332,68 +332,6 @@ static void CG_InterpolatePlayerState(qboolean grabAngles) {
 }
 
 /*
-=========================
-CG_DrawTriggers
-
-Modified CG_TouchTriggerPrediction() function to draw triggers
-
-@author suburb
-=========================
-*/
-void CG_DrawTriggers(void) {
-	int          i;
-	centity_t    *cent;
-	clipHandle_t cmodel;
-
-	if (!etr_drawTriggers.integer) {
-		return;
-	}
-
-	for (i = 0 ; i < cg_numTriggerEntities ; ++i) {
-		entityState_t *ent;
-
-		cent = cg_triggerEntities[i];
-		ent  = &cent->currentState;
-
-		if (ent->eType == ET_ITEM && (cg.predictedPlayerState.groundEntityNum == ENTITYNUM_WORLD)) {
-			continue;
-		}
-
-		if (ent->solid != SOLID_BMODEL) {
-			continue;
-		}
-
-		cmodel = cgs.inlineDrawModel[ent->modelindex];
-		if (!cmodel) {
-			continue;
-		}
-
-		if (ent->eType == ET_CONSTRUCTIBLE || ent->eType == ET_OID_TRIGGER ||
-		    ent->eType == ET_TRIGGER_MULTIPLE || ent->eType == ET_TRIGGER_FLAGONLY ||
-		    ent->eType == ET_TRIGGER_FLAGONLY_MULTIPLE || (ent->eType == ET_PUSH_TRIGGER &&
-		                                                   etr_drawTriggers.integer >= 2) || (ent->eType == ET_TELEPORT_TRIGGER &&
-		                                                                                      etr_drawTriggers.integer >= 3) || etr_drawTriggers.integer >= 4) {
-
-			vec3_t mins, maxs;
-
-			if (ent->eType == ET_CONSTRUCTIBLE && ent->aiState) {
-				continue;
-			}
-
-			trap_R_ModelBounds(cmodel, mins, maxs);
-
-			VectorAdd(cent->lerpOrigin, mins, mins);
-			VectorAdd(cent->lerpOrigin, maxs, maxs);
-
-			VectorSet(mins, mins[0] - etr_triggerOffset.value, mins[1] - etr_triggerOffset.value, mins[2] - etr_triggerOffset.value);
-			VectorSet(maxs, maxs[0] + etr_triggerOffset.value, maxs[1] + etr_triggerOffset.value, maxs[2] + etr_triggerOffset.value);
-
-			CG_RailTrail(mins, maxs, 1);
-		}
-	}
-}
-
-/*
 =================
 CG_PredictPlayerState
 

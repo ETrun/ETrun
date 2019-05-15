@@ -2275,7 +2275,6 @@ static void CG_Autodemo() {
 				trap_SendConsoleCommand(va("record temp_%s%i\n", tempNum >= 10 ? "" : "0", tempNum));
 				trap_SendConsoleCommand("set cl_noprint 0\n");
 			}
-			CG_Printf("%i \n", tempNum);
 			cg.startedNewDemo = 1;
 		}
 	} else {
@@ -2393,6 +2392,9 @@ void CG_DrawActive(stereoFrame_t stereoView) {
 
 	// Gordon
 	CG_DrawMiscGamemodels();
+
+	// suburb, draw triggers
+	CG_DrawTriggers();
 
 	trap_R_RenderScene(cg.refdef_current);
 
