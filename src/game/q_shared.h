@@ -1226,7 +1226,7 @@ typedef struct entityState_s {
 	// Ridah
 	int onFireStart, onFireEnd;
 
-	int nextWeapon;
+	int nextWeapon;         // suburb, hijacked for trigger multiple ent types, triggers certainly won't ever need to switch weapons
 	int teamNum;
 
 	int effect1Time, effect2Time, effect3Time;

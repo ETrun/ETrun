@@ -1720,7 +1720,7 @@ void CG_EntityEvent(centity_t *cent, vec3_t position) {
 		break;
 
 	case EV_RAILTRAIL:
-		CG_RailTrail(es->origin2, es->pos.trBase, es->dmgFlags);     //----(SA)	added 'type' field
+		CG_RailTrail(es->origin2, es->pos.trBase);
 		break;
 
 	//

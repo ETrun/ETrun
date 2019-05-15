@@ -1316,6 +1316,7 @@ void G_ShutdownGame(int restart);
 qboolean G_enable_delayed_map_change_watcher();
 void G_disable_delayed_map_change_watcher();
 void G_install_timelimit();
+void G_PostEditEnts(void);
 int G_randommap(void);
 
 //

@@ -131,6 +131,7 @@ so, the basic time between firing is a random time between
 (wait - random) and (wait + random)
 */
 void SP_trigger_multiple(gentity_t *ent) {
+	gentity_t *target;
 	G_SpawnFloat("wait", "0.5", &ent->wait);
 
 	ent->touch   = Touch_Multi;
@@ -139,24 +140,7 @@ void SP_trigger_multiple(gentity_t *ent) {
 
 	InitTrigger(ent);
 
-	// Nico, override wait -1 or wait 9999 on trigger_multiple where target is start timer
-	// Note, this test is in case the start/stop timer or checkpoint entity was defined before the trigger multiple
-	if (g_forceTimerReset.integer) {
-		gentity_t *target;
-
-		target = G_FindByTargetname(NULL, ent->target);
-		if (target &&
-		    ent->wait != 0.5 &&
-		    (!Q_stricmp(target->classname, "target_startTimer")
-		     || !Q_stricmp(target->classname, "target_stopTimer")
-		     || !Q_stricmp(target->classname, "target_checkpoint"))) {
-			G_DPrintf("%s: SP_trigger_multiple linked to %s, wait found = %f, overrided to 0.5\n", GAME_VERSION, target->classname, ent->wait);
-			ent->wait = 0.5;
-		}
-	}
-
 	ent->r.svFlags &= ~SVF_NOCLIENT;
-
 	trap_LinkEntity(ent);
 }
 

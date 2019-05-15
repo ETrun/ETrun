@@ -1026,6 +1026,12 @@ typedef struct {
 	int lastUnableToSaveDemoTime;
 	int lastSavingDemoTime;
 
+	// suburb, draw triggers
+	int drawTriggersCount;
+	int lastGetTriggerDistancesTime;
+	int drawTriggerEntIndexes[MAX_ENTITIES + 1];
+	float drawTriggerDistances[MAX_ENTITIES + 1];
+
 	// Nico, end of ETrun client variables
 } cg_t;
 
@@ -1392,6 +1398,20 @@ typedef struct {
 
 	// Nico, world flags
 	qhandle_t worldFlags;
+
+	// suburb, draw triggers
+	qhandle_t checkpointTrigger;
+	qhandle_t customTrigger;
+	qhandle_t pushTrigger;
+	qhandle_t startTrigger;
+	qhandle_t stopTrigger;
+	qhandle_t teleportTrigger;
+	qhandle_t checkpointTriggerEdges;
+	qhandle_t customTriggerEdges;
+	qhandle_t pushTriggerEdges;
+	qhandle_t startTriggerEdges;
+	qhandle_t stopTriggerEdges;
+	qhandle_t teleportTriggerEdges;
 } cgMedia_t;
 
 typedef struct {
@@ -1863,8 +1883,8 @@ extern vmCvar_t etr_onRunStop;
 
 // Draw triggers
 extern vmCvar_t etr_drawTriggers;
-extern vmCvar_t etr_triggerOffset;
-extern vmCvar_t etr_triggerColor;
+extern vmCvar_t etr_triggersDrawScale;
+extern vmCvar_t etr_triggersDrawEdges;
 
 // Prints
 extern vmCvar_t etr_pickupPrints;
@@ -2035,6 +2055,8 @@ void CG_DrawInfoPanel(void);
 void CG_DrawSpectatorState(void);
 void CG_UpdateJumpSpeeds(void);
 void CG_UpdateKeysAndMenus(void);
+void CG_DrawTriggers(void);
+void CG_AddShaderToBox(vec3_t mins, vec3_t maxs, qhandle_t boxShader, qhandle_t edgesShader, int addEdges);
 
 //
 // cg_players.c
@@ -2057,7 +2079,6 @@ void CG_BuildSolidList(void);
 int CG_PointContents(const vec3_t point, int passEntityNum);
 void CG_Trace(trace_t *result, const vec3_t start, const vec3_t mins, const vec3_t maxs, const vec3_t end, int skipNumber, int mask);
 void CG_PredictPlayerState(void);
-void CG_DrawTriggers(void);
 
 //
 // cg_events.c
@@ -2127,8 +2148,7 @@ void CG_Tracer(vec3_t source, vec3_t dest, int sparks);
 void CG_CalcMuzzlePoint(int entityNum, vec3_t muzzle);
 void CG_Bullet(vec3_t end, int sourceEntityNum, qboolean flesh, int fleshEntityNum, int otherEntNum2, float waterfraction, int seed);
 
-void CG_RailTrail(vec3_t start, vec3_t end, int box);     //----(SA)	added 'type'
-void CG_RailTrail2(vec3_t start, vec3_t end, int box);
+void CG_RailTrail(vec3_t start, vec3_t end);
 void CG_GrappleTrail(centity_t *ent, const weaponInfo_t *wi);
 void CG_AddViewWeapon(playerState_t *ps);
 void CG_AddPlayerWeapon(refEntity_t *parent, playerState_t *ps, centity_t *cent);

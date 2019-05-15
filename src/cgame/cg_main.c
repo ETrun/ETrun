@@ -369,8 +369,8 @@ vmCvar_t etr_onRunStop;
 
 // Draw triggers
 vmCvar_t etr_drawTriggers;
-vmCvar_t etr_triggerOffset;
-vmCvar_t etr_triggerColor;
+vmCvar_t etr_triggersDrawScale;
+vmCvar_t etr_triggersDrawEdges;
 
 // Prints
 vmCvar_t etr_pickupPrints;
@@ -666,8 +666,8 @@ cvarTable_t cvarTable[] =
 
 	// Draw Triggers
 	{ &etr_drawTriggers,         "etr_drawTriggers",         "1",     CVAR_ARCHIVE,              0 },
-	{ &etr_triggerOffset,        "etr_triggerOffset",        "0",     CVAR_ARCHIVE,              0 },
-	{ &etr_triggerColor,         "etr_triggerColor",         "White", CVAR_ARCHIVE,              0 },
+	{ &etr_triggersDrawScale,    "etr_triggersDrawScale",    "-0.5",  CVAR_ARCHIVE,              0 },
+	{ &etr_triggersDrawEdges,    "etr_triggersDrawEdges",    "1",     CVAR_ARCHIVE,              0 },
 
 	// Prints
 	{ &etr_pickupPrints,         "etr_pickupPrints",         "1",     CVAR_ARCHIVE,              0 },
@@ -1811,6 +1811,20 @@ static void CG_RegisterGraphics(void) {
 
 	// Nico, world flags for GeoIP
 	cgs.media.worldFlags = trap_R_RegisterShaderNoMip("gfx/2d/ETrun_world_flags");
+
+	// suburb, draw triggers
+	cgs.media.checkpointTrigger = trap_R_RegisterShaderNoMip("gfx/2d/checkpointTrigger");
+	cgs.media.customTrigger = trap_R_RegisterShaderNoMip("gfx/2d/customTrigger");
+	cgs.media.pushTrigger = trap_R_RegisterShaderNoMip("gfx/2d/pushTrigger");
+	cgs.media.startTrigger = trap_R_RegisterShaderNoMip("gfx/2d/startTrigger");
+	cgs.media.stopTrigger = trap_R_RegisterShaderNoMip("gfx/2d/stopTrigger");
+	cgs.media.teleportTrigger = trap_R_RegisterShaderNoMip("gfx/2d/teleportTrigger");
+	cgs.media.checkpointTriggerEdges = trap_R_RegisterShaderNoMip("gfx/2d/checkpointTriggerEdges");
+	cgs.media.customTriggerEdges = trap_R_RegisterShaderNoMip("gfx/2d/customTriggerEdges");
+	cgs.media.pushTriggerEdges = trap_R_RegisterShaderNoMip("gfx/2d/pushTriggerEdges");
+	cgs.media.startTriggerEdges = trap_R_RegisterShaderNoMip("gfx/2d/startTriggerEdges");
+	cgs.media.stopTriggerEdges = trap_R_RegisterShaderNoMip("gfx/2d/stopTriggerEdges");
+	cgs.media.teleportTriggerEdges = trap_R_RegisterShaderNoMip("gfx/2d/teleportTriggerEdges");
 
 	CG_LoadingString(" - game media done");
 }
