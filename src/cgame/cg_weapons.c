@@ -673,63 +673,12 @@ static void CG_GrenadeTrail(centity_t *ent) {
 ==========================
 CG_RailTrail
 
-Modified CG_RailTrail function
+Modified CG_RailTrail function, drawtriggers > railtrails box
 
 @author suburb
 ==========================
 */
-void CG_RailTrail(vec3_t start, vec3_t end, int box) {    //----(SA)	added 'type'
-	vec3_t diff, v1, v2, v3, v4, v5, v6;
-
-	// draw one line
-	if (!box) {
-		CG_RailTrail2(start, end, box);
-		return;
-	}
-
-	// draw a box, used for draw triggers
-	VectorSubtract(start, end, diff);
-
-	VectorCopy(start, v1);
-	VectorCopy(start, v2);
-	VectorCopy(start, v3);
-	v1[0] -= diff[0];
-	v2[1] -= diff[1];
-	v3[2] -= diff[2];
-	CG_RailTrail2(start, v1, box);
-	CG_RailTrail2(start, v2, box);
-	CG_RailTrail2(start, v3, box);
-
-	VectorCopy(end, v4);
-	VectorCopy(end, v5);
-	VectorCopy(end, v6);
-	v4[0] += diff[0];
-	v5[1] += diff[1];
-	v6[2] += diff[2];
-	CG_RailTrail2(end, v4, box);
-	CG_RailTrail2(end, v5, box);
-	CG_RailTrail2(end, v6, box);
-
-	CG_RailTrail2(v2, v6, box);
-	CG_RailTrail2(v6, v1, box);
-	CG_RailTrail2(v1, v5, box);
-
-	CG_RailTrail2(v2, v4, box);
-	CG_RailTrail2(v4, v3, box);
-	CG_RailTrail2(v3, v5, box);
-}
-
-/*
-==========================
-CG_RailTrail2
-
-Modified CG_RailTrail2 function
-
-@author suburb
-==========================
-*/
-#define TRIGGERS_DRAW_FREQUENCY 40
-void CG_RailTrail2(vec3_t start, vec3_t end, int box) {
+void CG_RailTrail(vec3_t start, vec3_t end) {
 	localEntity_t *le;
 	refEntity_t   *re;
 	// railtrails ignore alpha, we simply set it to 1.0 either way
@@ -741,11 +690,9 @@ void CG_RailTrail2(vec3_t start, vec3_t end, int box) {
 
 	le->leType    = LE_FADE_RGB;
 	le->startTime = cg.time;
-	if (!box) {
-		time = cg_railTrailTime.value;
-	} else {
-		time = TRIGGERS_DRAW_FREQUENCY;
-	}
+
+	time = cg_railTrailTime.value;
+
 	le->endTime  = cg.time + time;
 	le->lifeRate = 1.0 / (le->endTime - le->startTime);
 
@@ -756,14 +703,10 @@ void CG_RailTrail2(vec3_t start, vec3_t end, int box) {
 	VectorCopy(start, re->origin);
 	VectorCopy(end, re->oldorigin);
 
-	if (!box) {
-		le->color[0] = 1.0f;
-		le->color[1] = 0;
-		le->color[2] = 0;
-		le->color[3] = railTrailAlpha;
-	} else {
-		BG_SetRGBACvar(etr_triggerColor.string, le->color, railTrailAlpha, "cg_triggerColor");
-	}
+	le->color[0] = 1.0f;
+	le->color[1] = 0;
+	le->color[2] = 0;
+	le->color[3] = railTrailAlpha;
 
 	AxisClear(re->axis);
 }

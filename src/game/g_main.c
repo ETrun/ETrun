@@ -1452,6 +1452,9 @@ void G_InitGame(int levelTime, int randomSeed) {
 		G_Error("%s: error while installing delayed map change watcher\n", GAME_VERSION);
 	}
 
+	// suburb, post-edit gentities here, otherwise they wouldn't be all loaded
+	G_PostEditEnts();
+
 	// suburb, initiate vote delay
 	level.voteInfo.lastVoteTime = level.startTime;
 }
@@ -2297,6 +2300,49 @@ void G_install_timelimit() {
 
 	G_DPrintf("%s: timelimit set to %d min%s (timelimit = %d)\n", GAME_VERSION, g_timelimit.integer, g_timelimit.integer > 1 ? "s" : "", g_timelimit.integer);
 	G_randommap();
+}
+
+/*
+===============
+G_PostEditEnts()
+
+Edit ents here once they all have been initialized
+
+@author suburb
+===============
+*/
+void G_PostEditEnts() {
+	gentity_t *ent;
+
+	for (int i = 0; i < 1024; ++i) { // loop through all entities
+		ent = &g_entities[i];
+
+		if (ent->s.eType == ET_TRIGGER_MULTIPLE) {
+			gentity_t *target = G_FindByTargetnameFast(NULL, ent->target, BG_StringHashValue(ent->target));
+
+			if (target) {
+				qboolean runTrigger = qfalse;
+
+				// suburb, get trigger multiple type and store it in a hijacked var
+				if (!Q_stricmp(target->classname, "target_startTimer")) {
+					ent->s.nextWeapon = 1;
+					runTrigger = qtrue;
+				} else if (!Q_stricmp(target->classname, "target_stopTimer")) {
+					ent->s.nextWeapon = 2;
+					runTrigger = qtrue;
+				} else if (!Q_stricmp(target->classname, "target_checkpoint")) {
+					ent->s.nextWeapon = 3;
+					runTrigger = qtrue;
+				}
+				
+				// Nico, override wait -1 or wait 9999 on trigger_multiple where target is start timer
+				if (g_forceTimerReset.integer && ent->wait != 0.5 && runTrigger) {
+					G_DPrintf("%s: SP_trigger_multiple linked to %s, wait found = %f, overriden to 0.5\n", GAME_VERSION, target->classname, ent->wait);
+					ent->wait = 0.5;
+				}
+			}
+		}
+	}
 }
 
 /**
