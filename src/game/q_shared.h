@@ -1357,4 +1357,6 @@ typedef enum {
 #define ET_GROUNDSPEED              352.0f  // note: while sprinting
 #define DF_GROUNDSPEED              320.0f
 #define DF_TO_ET_GROUNDSPEED        (ET_GROUNDSPEED / DF_GROUNDSPEED)
+
+#define TRACE_MAX_DISTANCE          131072
 #endif  // __Q_SHARED_H

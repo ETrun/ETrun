@@ -66,12 +66,19 @@ static int weapIconDrawSize(int weap) {
 CG_DrawPlayerWeaponIcon
 ==============
 */
-void CG_DrawPlayerWeaponIcon(rectDef_t *rect, int align, vec4_t *refcolor) {
-	int       size;
-	int       realweap;             // DHM - Nerve
-	qhandle_t icon;
+void CG_DrawPlayerWeaponIcon(int align, vec4_t *refcolor) {
+	int       size, realweap;
+	int       rx = CG_WideX(SCREEN_WIDTH + cg_playerWeaponIconXoffset.value) - 82;
+	int       ry = SCREEN_HEIGHT - 56 + cg_playerWeaponIconYoffset.value;
+	int       rw = 60;
+	int       rh = 32;
 	float     scale, halfScale;
+	qhandle_t icon;
 	vec4_t    hcolor;
+
+	if (!cg_drawPlayerWeaponIcon.integer) {
+		return;
+	}
 
 	VectorCopy(*refcolor, hcolor);
 	hcolor[3] = 1.f;
@@ -134,17 +141,17 @@ void CG_DrawPlayerWeaponIcon(rectDef_t *rect, int align, vec4_t *refcolor) {
 
 		if (size == 1) {   // draw half width to match the icon asset
 			// start at left
-			x = rect->x - halfScale;
-			y = rect->y - halfScale;
-			w = rect->w / 2 + scale;
-			h = rect->h + scale;
+			x = rx - halfScale;
+			y = ry - halfScale;
+			w = rw / 2 + scale;
+			h = rh + scale;
 
 			switch (align) {
 			case ITEM_ALIGN_CENTER:
-				x += rect->w / 4;
+				x += rw / 4;
 				break;
 			case ITEM_ALIGN_RIGHT:
-				x += rect->w / 2;
+				x += rw / 2;
 				break;
 			case ITEM_ALIGN_LEFT:
 			default:
@@ -152,10 +159,10 @@ void CG_DrawPlayerWeaponIcon(rectDef_t *rect, int align, vec4_t *refcolor) {
 			}
 
 		} else {
-			x = rect->x - halfScale;
-			y = rect->y - halfScale;
-			w = rect->w + scale;
-			h = rect->h + scale;
+			x = rx - halfScale;
+			y = ry - halfScale;
+			w = rw + scale;
+			h = rh + scale;
 		}
 
 		trap_R_SetColor(hcolor);   // JPW NERVE
@@ -176,15 +183,18 @@ CG_DrawCursorHints
 
 ==============
 */
-void CG_DrawCursorhint(rectDef_t *rect) {
+void CG_DrawCursorhint(void) {
+	int       h = 48;
+	int       w = 48;
+	int       x = 0.5f * SCREEN_WIDTH - 0.5f * w;
+	int       y = 260;
+	float     middle = x + cgs.wideXoffset;
 	float     *color;
-	qhandle_t icon = 0;
 	float     scale, halfscale;
 	qboolean  yellowbar = qfalse;
-	// suburb, widescreen support
-	float middle = rect->x + cgs.wideXoffset;
+	qhandle_t icon = 0;
 
-	if (!cg_cursorHints.integer) {
+	if (!cg_cursorHints.integer || cg.snap->ps.persistant[PERS_TEAM] == TEAM_SPECTATOR) {
 		return;
 	}
 
@@ -358,7 +368,7 @@ void CG_DrawCursorhint(rectDef_t *rect) {
 
 	// set color and draw the hint
 	trap_R_SetColor(color);
-	CG_DrawPic(middle - halfscale, rect->y - halfscale, rect->w + scale, rect->h + scale, icon);
+	CG_DrawPic(middle - halfscale, y - halfscale, w + scale, h + scale, icon);
 
 	trap_R_SetColor(NULL);
 
@@ -369,7 +379,7 @@ void CG_DrawCursorhint(rectDef_t *rect) {
 		} else {
 			Vector4Set(color, 0, 0, 1, 0.5f);
 		}
-		CG_FilledBar(middle, rect->y + rect->h + 4, rect->w, 8, color, NULL, NULL, (float)cg.cursorHintValue / 255.0f, 0);
+		CG_FilledBar(middle, y + h + 4, w, 8, color, NULL, NULL, (float)cg.cursorHintValue / 255.0f, 0);
 	}
 }
 
@@ -392,10 +402,14 @@ CG_DrawWeapStability
     probably only drawn for scoped weapons
 ==============
 */
-void CG_DrawWeapStability(rectDef_t *rect) {
+void CG_DrawWeapStability(void) {
+	int x = 50;
+	int y = 208;
+	int w = 10;
+	int h = 64;
 	vec4_t goodColor = { 0, 1, 0, 0.5f }, badColor = { 1, 0, 0, 0.5f };
 
-	if (!cg_drawSpreadScale.integer) {
+	if (!cg_drawSpreadScale.integer || cg.snap->ps.persistant[PERS_TEAM] == TEAM_SPECTATOR) {
 		return;
 	}
 
@@ -416,7 +430,7 @@ void CG_DrawWeapStability(rectDef_t *rect) {
 		return;
 	}
 
-	CG_FilledBar(rect->x, rect->y, rect->w, rect->h, goodColor, badColor, NULL, (float)cg.snap->ps.aimSpreadScale / 255.0f, 2 | 4 | 256);   // flags (BAR_CENTER|BAR_VERT|BAR_LERP_COLOR)
+	CG_FilledBar(x, y, w, h, goodColor, badColor, NULL, (float)cg.snap->ps.aimSpreadScale / 255.0f, 2 | 4 | 256);   // flags (BAR_CENTER|BAR_VERT|BAR_LERP_COLOR)
 }
 
 /*
@@ -424,9 +438,10 @@ void CG_DrawWeapStability(rectDef_t *rect) {
 CG_DrawWeapHeat
 ==============
 */
-void CG_DrawWeapHeat(rectDef_t *rect, int align) {
+void CG_DrawWeapHeat(int align) {
 	vec4_t color = { 1, 0, 0, 0.2f }, color2 = { 1, 0, 0, 0.5f };
 	int    flags = 0;
+	float  x, y;
 
 	if (!(cg.snap->ps.curWeapHeat)) {
 		return;
@@ -440,7 +455,10 @@ void CG_DrawWeapHeat(rectDef_t *rect, int align) {
 	flags |= 16;      // BAR_BG			- draw the filled contrast box
 	flags |= 256;     // BAR_COLOR_LERP
 
-	CG_FilledBar(rect->x, rect->y, rect->w, rect->h, color, color2, NULL, (float)cg.snap->ps.curWeapHeat / 255.0f, flags);
+	x = CG_WideX(cg_weaponHeatX.value);
+	y = cg_weaponHeatX.value;
+
+	CG_FilledBar(x, y, 60, 32, color, color2, NULL, (float)cg.snap->ps.curWeapHeat / 255.0f, flags);
 }
 
 void CG_MouseEvent(int x, int y) {

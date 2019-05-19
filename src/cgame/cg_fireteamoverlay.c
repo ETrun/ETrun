@@ -184,9 +184,9 @@ clientInfo_t *CG_SortedFireTeamPlayerForPosition(int pos, int max) {
 #define FT_BAR_YSPACING 2.f
 #define FT_BAR_HEIGHT 10.f
 #define FT_WIDTH 115 // Nico
-void CG_DrawFireTeamOverlay(rectDef_t *rect) {
-	int            x = rect->x;
-	int            y = rect->y + 1; // +1, jitter it into place in 1024 :)
+void CG_DrawFireTeamOverlay(void) {
+	float          x = CG_WideX(cg_fireteamOverlayX.value);
+	float          y = cg_fireteamOverlayY.value;
 	float          h;
 	clientInfo_t   *ci = NULL;
 	char           buffer[64];
@@ -196,6 +196,11 @@ void CG_DrawFireTeamOverlay(rectDef_t *rect) {
 	vec4_t         tclr        = { 0.6f, 0.6f, 0.6f, 1.0f };
 	vec4_t         bgColor     = { 0.0f, 0.0f, 0.0f, 0.5f }; // window
 	vec4_t         borderColor = { 0.5f, 0.5f, 0.5f, 0.5f }; // window
+
+	// suburb, don't draw if any menu is up because of readability
+	if (!cg_drawFireteamOverlay.integer || cg.UIisUp) {
+		return;
+	}
 
 	f = CG_IsOnFireteam(cg.clientNum);
 	if (!f) {
@@ -233,7 +238,7 @@ void CG_DrawFireTeamOverlay(rectDef_t *rect) {
 
 	for (i = 0; i < 6; ++i) {
 		y += FT_BAR_HEIGHT + FT_BAR_YSPACING;
-		x  = rect->x + 2;
+		x  = cg_fireteamOverlayX.value + 2;
 
 		ci = CG_SortedFireTeamPlayerForPosition(i, 6);
 		if (!ci) {

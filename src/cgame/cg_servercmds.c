@@ -580,7 +580,7 @@ static void CG_AddToTeamChat(const char *str, int clientnum) {
 		chatHeight = TEAMCHAT_HEIGHT;
 	}
 
-	if (chatHeight <= 0 || cg_teamChatTime.integer <= 0) {
+	if (chatHeight <= 0 || cg_chatTime.integer <= 0) {
 		// team chat disabled, dump into normal chat
 		cgs.teamChatPos = cgs.teamLastChatPos = 0;
 		return;

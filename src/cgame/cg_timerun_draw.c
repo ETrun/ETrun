@@ -10,7 +10,7 @@ Draw checkpoints times
 ==================
 */
 void CG_DrawCheckpoints(void) {
-	int x = 0, y = 0;
+	float x = 0, y = 0;
 
 	if (!etr_drawCheckPoints.integer) {
 		return;
@@ -25,7 +25,7 @@ void CG_DrawCheckpoints(void) {
 		etr_maxCheckPoints.integer = 5;
 	}
 
-	// Nico, print check points if any and respect the printing limit (cg_maxCheckPoints)
+	// Nico, print check points if any and respect the printing limit (etr_maxCheckPoints)
 	if (cg.timerunCheckPointChecked > 0) {
 		int i, j;
 
@@ -50,7 +50,7 @@ void CG_DrawCheckpoints(void) {
 			cdmil -= cdsec * 1000;
 
 			// Nico, set checkpoint default color
-			Vector4Set(color, colorWhite[0], colorWhite[1], colorWhite[2], colorWhite[3]);
+			BG_ParseRGBACvar(etr_checkPointsColor1.string, color);
 
 			// Nico, print checkpoints
 			switch (cg.timerunCheckStatus[i]) {
@@ -64,13 +64,13 @@ void CG_DrawCheckpoints(void) {
 
 			case 2:
 				// Nico, faster check point time
-				Vector4Set(color, colorGreen[0], colorGreen[1], colorGreen[2], colorGreen[3]);
+				BG_ParseRGBACvar(etr_checkPointsColor2.string, color);
 				Com_sprintf(status, sizeof (status), "%s", va("-%02d:%02d.%03d", cdmin, cdsec, cdmil));
 				break;
 
 			case 3:
 				// Nico, slower check point time
-				Vector4Set(color, colorRed[0], colorRed[1], colorRed[2], colorRed[3]);
+				BG_ParseRGBACvar(etr_checkPointsColor3.string, color);
 				Com_sprintf(status, sizeof (status), "%s", va("+%02d:%02d.%03d", cdmin, cdsec, cdmil));
 				break;
 			}
@@ -96,9 +96,10 @@ Draw speed meter
 */
 void CG_DrawSpeedMeter(void) {
 	char         status[128];
-	float        sizex, sizey;
-	int          x, y, w;
+	float        sizex, sizey, x, y;
+	int          w;
 	static vec_t speed;
+	vec4_t       color;
 
 	if (!etr_drawSpeedMeter.integer) {
 		return;
@@ -114,19 +115,22 @@ void CG_DrawSpeedMeter(void) {
 
 	sizex = sizey = 0.25f;
 
-	x = CG_WideX(etr_speedMeterX.integer);
-	y = etr_speedMeterY.integer;
+	x = CG_WideX(etr_speedMeterX.value);
+	y = etr_speedMeterY.value;
 
 	Com_sprintf(status, sizeof (status), "%.0f", speed);
 
 	w = CG_Text_Width_Ext(status, sizex, sizey, &cgs.media.limboFont1) / 2;
+	BG_ParseRGBACvar(etr_speedMeterColor1.string, color);
 
 	if (etr_drawAccel.integer && speed > cg.oldSpeed + 0.001f * etr_accelSmoothness.integer) {
-		CG_Text_Paint_Ext(x - w, y, sizex, sizey, colorGreen, status, 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
+		BG_ParseRGBACvar(etr_speedMeterColor2.string, color);
+		CG_Text_Paint_Ext(x - w, y, sizex, sizey, color, status, 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
 	} else if (etr_drawAccel.integer && speed < cg.oldSpeed - 0.001f * etr_accelSmoothness.integer) {
-		CG_Text_Paint_Ext(x - w, y, sizex, sizey, colorRed, status, 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
+		BG_ParseRGBACvar(etr_speedMeterColor3.string, color);
+		CG_Text_Paint_Ext(x - w, y, sizex, sizey, color, status, 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
 	} else {
-		CG_Text_Paint_Ext(x - w, y, sizex, sizey, colorWhite, status, 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
+		CG_Text_Paint_Ext(x - w, y, sizex, sizey, color, status, 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
 	}
 
 	cg.oldSpeed = speed;
@@ -143,17 +147,11 @@ OB detector from TJMod
 */
 void CG_DrawOB(void) {
 	double  a, b, c;
-	float   psec;
-	int     gravity;
-	vec3_t  snap;
-	float   rintv;
-	float   v0;
-	float   h0, hn;
-	float   t;
+	float   psec, rintv, v0, h0, hn, t, n2, scale, x, y;
+	int     gravity, n;
 	trace_t trace;
-	vec3_t  start, end;
-	float   n2;
-	int     n;
+	vec3_t  start, end, snap;
+	vec4_t  color;
 
 	if (!etr_drawOB.integer || cg_thirdPerson.integer || physics.integer & PHYSICS_NO_OVERBOUNCE) {
 		return;
@@ -163,7 +161,6 @@ void CG_DrawOB(void) {
 	gravity = cg.predictedPlayerState.gravity;
 	v0      = cg.predictedPlayerState.velocity[2];
 	h0      = cg.predictedPlayerState.origin[2] + cg.predictedPlayerState.mins[2];
-	//CG_Printf("psec: %f, gravity: %d\n", psec, gravity);
 
 	VectorSet(snap, 0, 0, gravity * psec);
 	trap_SnapVector(snap);
@@ -171,10 +168,9 @@ void CG_DrawOB(void) {
 
 	// use origin from playerState?
 	VectorCopy(cg.refdef.vieworg, start);
-	VectorMA(start, 131072, cg.refdef.viewaxis[0], end);
+	VectorMA(start, TRACE_MAX_DISTANCE, cg.refdef.viewaxis[0], end);
 
-	CG_Trace(&trace, start, vec3_origin, vec3_origin, end,
-	         cg.predictedPlayerState.clientNum, CONTENTS_SOLID);
+	CG_Trace(&trace, start, vec3_origin, vec3_origin, end, cg.predictedPlayerState.clientNum, CONTENTS_SOLID);
 
 	// we didn't hit anything
 	if (trace.fraction == 1.0) {
@@ -187,38 +183,36 @@ void CG_DrawOB(void) {
 	}
 
 	t = trace.endpos[2];
-	//CG_Printf("h0: %f, t: %f\n", h0, t);
+
+	
+	x = CG_WideX(etr_OBX.value);
+	y = etr_OBY.value;
+	BG_ParseRGBACvar(etr_OBColor.string, color);
+	scale = 0.15f;
 
 	// fall ob
 	a = -psec * rintv / 2;
 	b = psec * (v0 - gravity * psec / 2 + rintv / 2);
 	c = h0 - t;
-	// n1 = (-b + sqrt(b * b - 4 * a * c)) / (2 * a);
 	n2 = (-b - sqrt(b * b - 4 * a * c)) / (2 * a);
-	//CG_Printf("%f, %f\n", n1, n2);
 
 	n  = floor(n2);
 	hn = h0 + psec * n * (v0 - gravity * psec / 2 - (n - 1) * rintv / 2);
-	//CG_Printf("h0: %f, v0: %f, n: %d, hn: %f, t: %f\n", h0, v0, n, hn, t);
 	if (n && hn < t + 0.25 && hn > t) {
-		CG_DrawStringExt(CG_WideX(SCREEN_WIDTH) / 2, 220, "F", colorWhite, qfalse, qtrue,
-		                 TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 0);
+		CG_Text_Paint_Ext(x, y, scale, scale, color, "F", 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
 	}
 
 	if (cg.predictedPlayerState.groundEntityNum != ENTITYNUM_NONE) {
 		// jump ob
 		v0 += 270; // JUMP_VELOCITY
 		b   = psec * (v0 - gravity * psec / 2 + rintv / 2);
-		// n1 = (-b + sqrt(b * b - 4 * a * c ) ) / (2 * a);
 		n2 = (-b - sqrt(b * b - 4 * a * c)) / (2 * a);
-		//CG_Printf("%f, %f\n", n1, n2);
 
 		n  = floor(n2);
 		hn = h0 + psec * n * (v0 - gravity * psec / 2 - (n - 1) * rintv / 2);
-		//CG_Printf("h0: %f, v0: %f, n: %d, hn: %f, t: %f\n", h0, v0, n, hn, t);
+
 		if (hn < t + 0.25 && hn > t) {
-			CG_DrawStringExt(CG_WideX(SCREEN_WIDTH) / 2 + 10, 220, "J", colorWhite, qfalse, qtrue,
-			                 TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 0);
+			CG_Text_Paint_Ext(x + 10, y, scale, scale, color, "J", 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
 		}
 	}
 }
@@ -232,25 +226,28 @@ Slick detector
 @author suburb
 ==================
 */
-#define DRAWSLICK_MAX_DISTANCE 131072
 void CG_DrawSlick(void) {
 	static trace_t trace;
 	vec3_t         start, end;
-	float          x = CG_WideX(350), y = 220, sizex, sizey;
-	char           *text = "S";
+	float          scale;
+	float          x, y;
+	vec4_t         color;
 
 	if (!etr_drawSlick.integer || cg_thirdPerson.integer) {
 		return;
 	}
 
-	sizex = sizey = 0.2f;
+	x = CG_WideX(etr_slickX.value);
+	y = etr_slickY.value;
+	BG_ParseRGBACvar(etr_slickColor.string, color);
+	scale = 0.15f;
 
 	VectorCopy(cg.refdef.vieworg, start);
-	VectorMA(start, DRAWSLICK_MAX_DISTANCE, cg.refdef.viewaxis[0], end);
+	VectorMA(start, TRACE_MAX_DISTANCE, cg.refdef.viewaxis[0], end);
 	CG_Trace(&trace, start, vec3_origin, vec3_origin, end, cg.predictedPlayerState.clientNum, CONTENTS_SOLID);
 
 	if (trace.surfaceFlags & SURF_SLICK) {
-		CG_Text_Paint_Ext(x, y, sizex, sizey, colorWhite, text, 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
+		CG_Text_Paint_Ext(x, y, scale, scale, color, "S", 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
 	}
 }
 
@@ -266,11 +263,11 @@ Draw timer
 void CG_DrawTimer(void) {
 	char       status[128];
 	int        min = 0, sec = 0, milli = 0;
-	int        x = 0, y = 0, w = 0;
+	int        w = 0;
 	int        timerunNum = cg.currentTimerun;
 	int        startTime = 0;
 	int        currentTimerunTime = 0;
-	float      sizex = 0.25f, sizey = 0.25f;
+	float      sizex = 0.25f, sizey = 0.25f, x, y;
 	vec4_t     color;
 	int        runBestTime;
 	int        runLastTime;
@@ -278,12 +275,7 @@ void CG_DrawTimer(void) {
 	static int needsReset = 0;
 
 	// Nico, if level is not a timer
-	if (!isTimerun.integer) {
-		return;
-	}
-
-	// Nico, if cg_drawTimer is 0
-	if (!etr_drawTimer.integer) {
+	if (!isTimerun.integer || !etr_drawTimer.integer) {
 		return;
 	}
 
@@ -310,8 +302,8 @@ void CG_DrawTimer(void) {
 	//
 
 	// Nico, set timer position
-	x = CG_WideX(etr_timerX.integer);
-	y = etr_timerY.integer;
+	x = CG_WideX(etr_timerX.value);
+	y = etr_timerY.value;
 
 	// Nico, get fixed timerun start time
 	startTime = cg.timerunStartTime - 500;
@@ -334,7 +326,7 @@ void CG_DrawTimer(void) {
 	milli -= sec * 1000;
 
 	// Nico, set timer default color
-	Vector4Set(color, colorWhite[0], colorWhite[1], colorWhite[2], colorWhite[3]);
+	BG_ParseRGBACvar(etr_timerColor1.string, color);
 
 	if (cg.timerunFinishedTime[clientNum]) {
 		// Nico, timerun finished
@@ -352,11 +344,11 @@ void CG_DrawTimer(void) {
 
 			if (runLastTime < runBestTime) {
 				// Nico, did a better time
-				Vector4Set(color, colorGreen[0], colorGreen[1], colorGreen[2], colorGreen[3]);
+				BG_ParseRGBACvar(etr_timerColor2.string, color);
 				Com_sprintf(status, sizeof (status), "%s", va("%02d:%02d.%03d (-%02d:%02d.%03d)", min, sec, milli, dmin, dsec, dmilli));
 			} else {
 				// Nico, did a slower time
-				Vector4Set(color, colorRed[0], colorRed[1], colorRed[2], colorRed[3]);
+				BG_ParseRGBACvar(etr_timerColor3.string, color);
 				Com_sprintf(status, sizeof (status), "%s", va("%02d:%02d.%03d (+%02d:%02d.%03d)", min, sec, milli, dmin, dsec, dmilli));
 			}
 		} else if (runBestTime > 0) {
@@ -371,7 +363,7 @@ void CG_DrawTimer(void) {
 
 		// Nico, you won't beat the rec this time, turn timer to red color
 		if (runBestTime > 0 && currentTimerunTime > runBestTime + 16) {
-			Vector4Set(color, colorRed[0], colorRed[1], colorRed[2], colorRed[3]);
+			BG_ParseRGBACvar(etr_timerColor3.string, color);
 		}
 
 		Com_sprintf(status, sizeof (status), "%s", va("%02d:%02d.%03d", min, sec, milli));
@@ -430,9 +422,9 @@ void CG_DrawCGaz(void) {
 	float accel;
 	float scale;
 	float ang;
-	float y = 260; // Y pos
 	float h = 20; // CGaz height
 	float w = 300; // CGaz width
+	float x, y;
 
 	int forward = 0;
 	int right   = 0;
@@ -530,14 +522,17 @@ void CG_DrawCGaz(void) {
 		right = -128;
 	}
 
+	x = CG_WideX(etr_CGazX.value) - 0.5f;
+	y = etr_CGazY.value - 0.5f;
+
 	if (etr_drawCGaz.integer == 1) {
-		VectorCopy(colorBlue, color);
-		CG_FillRect(SCREEN_CENTER_X - w / 2, y, w, h, color);
-		CG_FillRect(SCREEN_CENTER_X - w / 2, y, 1, h, colorWhite);
-		CG_FillRect(SCREEN_CENTER_X - w / 4, y, 1, h, colorWhite);
-		CG_FillRect(SCREEN_CENTER_X, y, 1, h, colorWhite);
-		CG_FillRect(SCREEN_CENTER_X + w / 4, y, 1, h, colorWhite);
-		CG_FillRect(SCREEN_CENTER_X + w / 2, y, 1, h, colorWhite);
+		y += 20;
+		CG_FillRect(x - w / 2, y, w, h, colorBlue);
+		CG_FillRect(x - w / 2, y, 1, h, colorWhite);
+		CG_FillRect(x - w / 4, y, 1, h, colorWhite);
+		CG_FillRect(x, y, 1, h, colorWhite);
+		CG_FillRect(x + w / 4, y, 1, h, colorWhite);
+		CG_FillRect(x + w / 2, y, 1, h, colorWhite);
 
 		if (vel_size < ps->speed * scale) {
 			return;
@@ -545,19 +540,19 @@ void CG_DrawCGaz(void) {
 
 		// velocity
 		if (vel_relang > -90 && vel_relang < 90) {
-			CG_FillRect(SCREEN_CENTER_X + w * vel_relang / 180, y, 1, h, colorOrange);
+			CG_FillRect(x + w * vel_relang / 180, y, 1, h, colorOrange);
 		}
 
 		// left/right perfect strafe
 		if (vel_relang > 0) {
 			ang = AngleNormalize180(vel_relang - per_angle);
 			if (ang > -90 && ang < 90) {
-				CG_FillRect(SCREEN_CENTER_X + w * ang / 180, y, 1, h, colorGreen);
+				CG_FillRect(x + w * ang / 180, y, 1, h, colorGreen);
 			}
 		} else {
 			ang = AngleNormalize180(vel_relang + per_angle);
 			if (ang > -90 && ang < 90) {
-				CG_FillRect(SCREEN_CENTER_X + w * ang / 180, y, 1, h, colorGreen);
+				CG_FillRect(x + w * ang / 180, y, 1, h, colorGreen);
 			}
 		}
 	} else if (etr_drawCGaz.integer == 2) {
@@ -565,12 +560,12 @@ void CG_DrawCGaz(void) {
 		vel_relang = DEG2RAD(vel_relang);
 		per_angle  = DEG2RAD(per_angle);
 
+		BG_ParseRGBACvar(etr_CGaz2Color2.string, color);
+
 		if (!etr_realCGaz2.integer && etr_widescreenSupport.integer) {
-			CG_DrawLine(SCREEN_CENTER_X, SCREEN_CENTER_Y,
-			            SCREEN_CENTER_X + CG_WideX(right), SCREEN_CENTER_Y - forward, colorCyan);
+			CG_DrawLine(x, y, x + CG_WideX(right), y - forward, color);
 		} else {
-			CG_DrawLine(SCREEN_CENTER_X, SCREEN_CENTER_Y,
-			            SCREEN_CENTER_X + right, SCREEN_CENTER_Y - forward, colorCyan);
+			CG_DrawLine(x, y, x + right, y - forward, color);
 		}
 
 		vel_size /= 5;
@@ -578,9 +573,9 @@ void CG_DrawCGaz(void) {
 			vel_size = CG_WideX(SCREEN_WIDTH) / 2;
 		}
 
-		CG_DrawLine(SCREEN_CENTER_X, SCREEN_CENTER_Y,
-		            SCREEN_CENTER_X + vel_size * sin(vel_relang),
-		            SCREEN_CENTER_Y - vel_size * cos(vel_relang), colorRed);
+		BG_ParseRGBACvar(etr_CGaz2Color1.string, color);
+
+		CG_DrawLine(x, y, x + vel_size * sin(vel_relang), y - vel_size * cos(vel_relang), color);
 
 		if (vel_size > SCREEN_HEIGHT / 2) {
 			vel_size = SCREEN_HEIGHT / 2;
@@ -588,27 +583,20 @@ void CG_DrawCGaz(void) {
 		vel_size /= 2;
 
 		if (!etr_realCGaz2.integer && etr_widescreenSupport.integer) {
-			CG_DrawLine(SCREEN_CENTER_X, SCREEN_CENTER_Y,
-			            SCREEN_CENTER_X + vel_size * CG_WideX(sin(vel_relang + per_angle)),
-			            SCREEN_CENTER_Y - vel_size * cos(vel_relang + per_angle), colorRed);
-			CG_DrawLine(SCREEN_CENTER_X, SCREEN_CENTER_Y,
-			            SCREEN_CENTER_X + vel_size * CG_WideX(sin(vel_relang - per_angle)),
-			            SCREEN_CENTER_Y - vel_size * cos(vel_relang - per_angle), colorRed);
+			CG_DrawLine(x, y, x + vel_size * CG_WideX(sin(vel_relang + per_angle)), y - vel_size * cos(vel_relang + per_angle), color);
+			CG_DrawLine(x, y, x + vel_size * CG_WideX(sin(vel_relang - per_angle)), y - vel_size * cos(vel_relang - per_angle), color);
 		} else {
-			CG_DrawLine(SCREEN_CENTER_X, SCREEN_CENTER_Y,
-			            SCREEN_CENTER_X + vel_size * sin(vel_relang + per_angle),
-			            SCREEN_CENTER_Y - vel_size * cos(vel_relang + per_angle), colorRed);
-			CG_DrawLine(SCREEN_CENTER_X, SCREEN_CENTER_Y,
-			            SCREEN_CENTER_X + vel_size * sin(vel_relang - per_angle),
-			            SCREEN_CENTER_Y - vel_size * cos(vel_relang - per_angle), colorRed);
+			CG_DrawLine(x, y, x + vel_size * sin(vel_relang + per_angle), y - vel_size * cos(vel_relang + per_angle), color);
+			CG_DrawLine(x, y, x + vel_size * sin(vel_relang - per_angle), y - vel_size * cos(vel_relang - per_angle), color);
 		}
 	} else if (etr_drawCGaz.integer == 3) {
+		y += 20;
 		accel_angle = atan2(-right, forward);
 		accel_angle = AngleNormalize180(ps->viewangles[YAW] + RAD2DEG(accel_angle));
 
-		CG_FillRect(SCREEN_CENTER_X - w / 2, y, 1, h, colorWhite);
-		CG_FillRect(SCREEN_CENTER_X, y, 1, h, colorWhite);
-		CG_FillRect(SCREEN_CENTER_X + w / 2, y, 1, h, colorWhite);
+		CG_FillRect(x - w / 2, y, 1, h, colorWhite);
+		CG_FillRect(x, y, 1, h, colorWhite);
+		CG_FillRect(x + w / 2, y, 1, h, colorWhite);
 
 		if (vel_size < ps->speed * scale) {
 			return;
@@ -620,10 +608,10 @@ void CG_DrawCGaz(void) {
 			// acceleration "should be on the left side" from velocity
 			if (ang < 0) {
 				VectorCopy(colorGreen, color);
-				CG_FillRect(SCREEN_CENTER_X + w * ang / (2 * CGAZ3_ANG), y, -w * ang / (2 * CGAZ3_ANG), h, color);
+				CG_FillRect(x + w * ang / (2 * CGAZ3_ANG), y, -w * ang / (2 * CGAZ3_ANG), h, color);
 			} else {
 				VectorCopy(colorRed, color);
-				CG_FillRect(SCREEN_CENTER_X, y, w * ang / (2 * CGAZ3_ANG), h, color);
+				CG_FillRect(x, y, w * ang / (2 * CGAZ3_ANG), h, color);
 			}
 			return;
 		}
@@ -633,10 +621,10 @@ void CG_DrawCGaz(void) {
 			// acceleration "should be on the right side" from velocity
 			if (ang > 0) {
 				VectorCopy(colorGreen, color);
-				CG_FillRect(SCREEN_CENTER_X, y, w * ang / (2 * CGAZ3_ANG), h, color);
+				CG_FillRect(x, y, w * ang / (2 * CGAZ3_ANG), h, color);
 			} else {
 				VectorCopy(colorRed, color);
-				CG_FillRect(SCREEN_CENTER_X + w * ang / (2 * CGAZ3_ANG), y, -w * ang / (2 * CGAZ3_ANG), h, color);
+				CG_FillRect(x + w * ang / (2 * CGAZ3_ANG), y, -w * ang / (2 * CGAZ3_ANG), h, color);
 			}
 			return;
 		}
@@ -652,16 +640,16 @@ void CG_DrawCGaz(void) {
 
 		// Speed direction
 		// FIXME: Shows @side of screen when going backward
-		//CG_FillRect(SCREEN_CENTER_X + w * vel_relang / 180, y+20, 1, h/2, colorCyan);
-		CG_DrawPic(SCREEN_CENTER_X + w * vel_relang / 180, y + h, 16, 16, cgs.media.CGazArrow);
+		//CG_FillRect(x + w * vel_relang / 180, y+20, 1, h/2, colorCyan);
+		CG_DrawPic(x + w * vel_relang / 180, y + h, 16, 16, cgs.media.CGazArrow);
 
 		// FIXME show proper outside border where you stop accelerating
 		// first case (consider left strafe)
 		ang = AngleNormalize180(vel_angle + per_angle - accel_angle);
 		if (ang < 90 && ang > -90) {
 			// acceleration "should be on the left side" from velocity
-			CG_FillRect(SCREEN_CENTER_X + w * ang / 180, y, w / 2, h, color);
-			CG_FillRect(SCREEN_CENTER_X + w * ang / 180, y, 1, h, colorGreen);
+			CG_FillRect(x + w * ang / 180, y, w / 2, h, color);
+			CG_FillRect(x + w * ang / 180, y, 1, h, colorGreen);
 			return;
 
 		}
@@ -669,8 +657,8 @@ void CG_DrawCGaz(void) {
 		ang = AngleNormalize180(vel_angle - per_angle - accel_angle);
 		if (ang < 90 && ang > -90) {
 			// acceleration "should be on the right side" from velocity
-			CG_FillRect(SCREEN_CENTER_X + w * ang / 180 - w / 2, y, w / 2, h, color);
-			CG_FillRect(SCREEN_CENTER_X + w * ang / 180, y, 1, h, colorGreen);
+			CG_FillRect(x + w * ang / 180 - w / 2, y, w / 2, h, color);
+			CG_FillRect(x + w * ang / 180, y, 1, h, colorGreen);
 			return;
 		}
 	}
@@ -699,13 +687,13 @@ Draw velocity snapping zones (core math taken from iodfengine)
 ==================
 */
 void CG_DrawVelocitySnapping(void) {
-	vec4_t color[3];
+	vec4_t color[2];
 	float  rgba1[4]  = { 0.4f, 0, 0, 0.5f };
 	float  rgba2[4]  = { 0, 0.4f, 0.4f, 0.5f };
 	float  step      = 0;
 	float  yaw       = 0;
-	int    snapHud_H = 0;
-	int    snapHud_Y = 0;
+	float  snapHud_H = 0;
+	float  snapHud_Y = 0;
 	int    colorID   = 0;
 	int    fov       = 0;
 	int    i         = 0;
@@ -738,20 +726,16 @@ void CG_DrawVelocitySnapping(void) {
 		yaw += 45;
 	}
 
-	snapHud_H = etr_velocitySnappingH.integer;
-	snapHud_Y = etr_velocitySnappingY.integer;
+	snapHud_H = etr_velocitySnappingH.value;
+	snapHud_Y = etr_velocitySnappingY.value;
 	fov       = etr_velocitySnappingFov.integer;
 
 	if (etr_drawVelocitySnapping.integer == 2) {
-		for (int i = 0; i < 4; i++) {
-			color[0][i] = 1.0f;
-			color[1][i] = 1.0f;
-		}
+		BG_ParseRGBACvar(etr_velocitySnapping2Color.string, color[0]);
+		BG_ParseRGBACvar(etr_velocitySnapping2Color.string, color[1]);
 	} else {
-		for (int i = 0; i < 4; i++) {
-			color[0][i] = rgba1[i];
-			color[1][i] = rgba2[i];
-		}
+		BG_ParseRGBACvar(etr_velocitySnapping1Color1.string, color[0]);
+		BG_ParseRGBACvar(etr_velocitySnapping1Color2.string, color[1]);
 	}
 
 	for (i = 0; i < cg.snapCount; i++) {
@@ -770,10 +754,6 @@ Draw keys from TJMod
 @author Nico
 ==================
 */
-#define KEYS_X   (CG_WideX(SCREEN_WIDTH) - 90)
-#define KEYS_Y   210
-#define DRAWKEYS_DEBOUNCE_VALUE        100
-#define DRAWKEYS_MENU_CLOSING_DELAY    50
 void CG_DrawKeys(void) {
 	float x, y, size;
 	int   i;
@@ -784,7 +764,7 @@ void CG_DrawKeys(void) {
 	}
 
 	// Dini, add in here for any other keysets with skew effect or related.
-	if (etr_drawKeys.value == 1) {
+	if (etr_drawKeys.integer == 1) {
 		skew = etr_keysSize.value / 18;
 	} else {
 		skew = 0;
@@ -798,8 +778,8 @@ void CG_DrawKeys(void) {
 	// first (upper) row
 	// sprint (upper left)
 
-	x = KEYS_X + etr_keysXoffset.value + 2 * skew;
-	y = KEYS_Y + etr_keysYoffset.value;
+	x = CG_WideX(etr_keysX.value) + 2 * skew;
+	y = etr_keysY.value;
 
 	if (cg.keyDown[0]) {
 		CG_DrawPic(x, y, size, size, cgs.media.keys[i].SprintPressedShader);
@@ -825,7 +805,7 @@ void CG_DrawKeys(void) {
 
 	// second (middle) row
 	// left
-	x  = KEYS_X + etr_keysXoffset.value + skew;
+	x = CG_WideX(etr_keysX.value) + skew;
 	y += size;
 	if (cg.keyDown[3]) {
 		CG_DrawPic(x, y, size, size, cgs.media.keys[i].LeftPressedShader);
@@ -842,7 +822,7 @@ void CG_DrawKeys(void) {
 	}
 
 	// third (bottom) row
-	x  = KEYS_X + etr_keysXoffset.value;
+	x = CG_WideX(etr_keysX.value);
 	y += size;
 	// prone (bottom left)
 	if (cg.keyDown[5]) {
@@ -877,6 +857,8 @@ Used for UI flickering fix
 @author suburb
 ==================
 */
+#define DRAWKEYS_DEBOUNCE_VALUE        100
+#define DRAWKEYS_MENU_CLOSING_DELAY    50
 void CG_UpdateKeysAndMenus(void) {
 	playerState_t *ps = &cg.predictedPlayerState;
 	qboolean      downNow[KEYS_AMOUNT];
@@ -970,12 +952,12 @@ Returns realtime in the format "hh:mm:ss"
 ==================
 */
 char *CG_GetClock(void) {
-	static char displayTime[18] = { 0 };
+	static char displayTime[19] = { 0 };
 	qtime_t     tm;
 
 	trap_RealTime(&tm);
 	displayTime[0] = '\0';
-	Q_strcat(displayTime, sizeof (displayTime), va("%d:%02d:%02d", tm.tm_hour, tm.tm_min, tm.tm_sec));
+	Q_strcat(displayTime, sizeof (displayTime), va("%02d:%02d:%02d", tm.tm_hour, tm.tm_min, tm.tm_sec));
 
 	return displayTime;
 }
@@ -992,15 +974,14 @@ Print banner from TJmod
 void CG_DrawBannerPrint(void) {
 	char  *start = cg.bannerPrint;
 	int   l      = 0;
-	int   y      = 20;
 	float *color;
-	float sizex = 0.2f, sizey = 0.2f;
+	float sizex = 0.2f, sizey = 0.2f, x, y;
 	char  lastcolor = COLOR_WHITE;
 	int   charHeight;
 	int   bannerShowTime = 10000;
-	int   len;
+	int   len, w;
 
-	if (!cg.bannerPrintTime) {
+	if (!etr_drawBannerPrint.integer || !cg.bannerPrintTime) {
 		return;
 	}
 
@@ -1015,11 +996,11 @@ void CG_DrawBannerPrint(void) {
 	charHeight = CG_Text_Height_Ext("A", sizey, 0, &cgs.media.limboFont2);
 
 	len = strlen(cg.bannerPrint);
+	y = etr_bannerPrintY.value;
 
 	for (;;) {
 		char linebuffer[1024];
 		char colorchar = lastcolor;
-		int  x, w;
 
 		for (l = 0; l < len; ++l) {
 			if (!start[l] || start[l] == '\n') {
@@ -1034,7 +1015,7 @@ void CG_DrawBannerPrint(void) {
 
 		w = CG_Text_Width_Ext(linebuffer, sizex, 0, &cgs.media.limboFont2);
 
-		x = (CG_WideX(SCREEN_WIDTH) - w) / 2;
+		x = (CG_WideX(etr_bannerPrintX.value * 2) - w) / 2;
 
 		CG_Text_Paint_Ext(x, y, sizex, sizey, color, va("^%c%s", colorchar, linebuffer), 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont2);
 
@@ -1049,6 +1030,61 @@ void CG_DrawBannerPrint(void) {
 		start++;
 	}
 	trap_R_SetColor(NULL);
+}
+
+/*
+==================
+CG_DrawDemoRecording
+
+Draw statusline while recording
+
+@author suburb
+==================
+*/
+#define SHOW_DEMO_SAVED 5000
+void CG_DrawDemoRecording(void) {
+	char   status[1024];
+	char   demostatus[128];
+	char   wavestatus[128];
+	vec4_t color;
+
+	if ((!cl_demorecording.integer && !cl_waverecording.integer) || !etr_drawStatusline.integer) {
+		return;
+	}
+
+	if (cl_demorecording.integer) {
+		Com_sprintf(demostatus, sizeof (demostatus), " Demo: %s [%iKB] ", cl_demofilename.string, cl_demooffset.integer / 1024);
+	} else {
+		strncpy(demostatus, "", sizeof (demostatus));
+	}
+
+	if (cl_waverecording.integer) {
+		Com_sprintf(wavestatus, sizeof (demostatus), " Audio: %s [%iKB] ", cl_wavefilename.string, cl_waveoffset.integer / 1024);
+	} else {
+		strncpy(wavestatus, "", sizeof (wavestatus));
+	}
+
+	Com_sprintf(status, sizeof (status), "Recording%s%s", demostatus, wavestatus);
+
+	BG_ParseRGBACvar(etr_statuslineColor.string, color);
+
+	// Nico, add recording red dot
+	CG_Text_Paint_Ext(etr_statuslineX.value, etr_statuslineY.value, 0.5f, 0.5f, colorRed, ".", 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont2);
+	CG_Text_Paint_Ext(etr_statuslineX.value + 14, etr_statuslineY.value, 0.14f, 0.14f, color, status, 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
+
+	// suburb, additional UI to replace console printouts
+	if (!cg.UIisUp) {
+		if (cg.stoppingAndSavingDemo) {
+			CG_Text_Paint_Ext(etr_statuslineX.value, etr_statuslineY.value + 10, 0.5f, 0.5f, colorYellow, ".", 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont2);
+			CG_Text_Paint_Ext(etr_statuslineX.value + 14, etr_statuslineY.value + 10, 0.14f, 0.14f, color, "Stopping demo", 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
+		} else if (cg.time - cg.lastUnableToSaveDemoTime < SHOW_DEMO_SAVED && cg.lastUnableToSaveDemoTime != 0) {
+			CG_Text_Paint_Ext(etr_statuslineX.value, etr_statuslineY.value + 10, 0.5f, 0.5f, colorRed, ".", 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont2);
+			CG_Text_Paint_Ext(etr_statuslineX.value + 14, etr_statuslineY.value + 10, 0.14f, 0.14f, color, "Unable to save demo", 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
+		} else if (cg.time - cg.lastSavingDemoTime < SHOW_DEMO_SAVED && cg.lastSavingDemoTime != 0) {
+			CG_Text_Paint_Ext(etr_statuslineX.value, etr_statuslineY.value + 10, 0.5f, 0.5f, colorGreen, ".", 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont2);
+			CG_Text_Paint_Ext(etr_statuslineX.value + 14, etr_statuslineY.value + 10, 0.14f, 0.14f, color, "Demo saved", 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
+		}
+	}
 }
 
 /*
@@ -1089,12 +1125,13 @@ Print info panel
 #define INFO_PANEL_X                        (UPPERRIGHT_X - INFO_PANEL_WIDTH + 3)
 #define INFO_PANEL_Y                        2
 void CG_DrawInfoPanel(void) {
-	int   x         = 0;
-	int   y         = 0;
-	int   starty    = 0;
-	float textScale = 0.12f;
-	int   speed     = 0;
-	int   i         = 0;
+	float  x         = 0;
+	float  y         = 0;
+	float  textScale = 0.12f;
+	int    starty    = 0;
+	int    speed     = 0;
+	int    i         = 0;
+	vec4_t color;
 
 	if (!etr_drawInfoPanel.integer) {
 		return;
@@ -1109,43 +1146,42 @@ void CG_DrawInfoPanel(void) {
 
 	x = INFO_PANEL_X + etr_infoPanelXoffset.value;
 	y = INFO_PANEL_Y + etr_infoPanelYoffset.value;
-
-	//CG_DrawRect_FixedBorder(x, y, INFO_PANEL_WIDTH, INFO_PANEL_HEIGHT, 1, colorWhite);
+	BG_ParseRGBACvar(etr_infoPanelColor1.string, color);
 
 	// Print start speed
-	CG_Text_Paint_Ext(x, y += 10, textScale, textScale, colorWhite, " Start speed:", 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
+	CG_Text_Paint_Ext(x, y += 10, textScale, textScale, color, " Start speed:", 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
 	textScale               = CG_AdjustFontSize(textScale, cg.timerunStartSpeed, INFO_PANEL_FONT_ADJUST_NEEDED);
 
 	// Colour start speed
 	if (etr_minStartSpeed.value <= 0 || cg.timerunStartSpeed == 0 || cg.timerunStartSpeed >= etr_minStartSpeed.value) {
-		CG_Text_Paint_Ext(x + INFO_PANEL_X_PADDING, y, textScale, textScale, colorWhite, va("%d", cg.timerunStartSpeed), 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
+		CG_Text_Paint_Ext(x + INFO_PANEL_X_PADDING, y, textScale, textScale, color, va("%d", cg.timerunStartSpeed), 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
 	} else {
-		CG_Text_Paint_Ext(x + INFO_PANEL_X_PADDING, y, textScale, textScale, colorWhite, va("^1%d", cg.timerunStartSpeed), 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
+		CG_Text_Paint_Ext(x + INFO_PANEL_X_PADDING, y, textScale, textScale, color, va("^1%d", cg.timerunStartSpeed), 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
 	}
 	textScale = 0.12f;
 
 	// Print stop speed
-	CG_Text_Paint_Ext(x, y += 10, textScale, textScale, colorWhite, " Stop speed:", 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
+	CG_Text_Paint_Ext(x, y += 10, textScale, textScale, color, " Stop speed:", 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
 	textScale               = CG_AdjustFontSize(textScale, cg.timerunStopSpeed, INFO_PANEL_FONT_ADJUST_NEEDED);
-	CG_Text_Paint_Ext(x + INFO_PANEL_X_PADDING, y, textScale, textScale, colorWhite, va("%d", cg.timerunStopSpeed), 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
+	CG_Text_Paint_Ext(x + INFO_PANEL_X_PADDING, y, textScale, textScale, color, va("%d", cg.timerunStopSpeed), 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
 	textScale = 0.12f;
 
 	// Print run max speed
-	CG_Text_Paint_Ext(x, y += 10, textScale, textScale, colorWhite, " Run max speed:", 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
+	CG_Text_Paint_Ext(x, y += 10, textScale, textScale, color, " Run max speed:", 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
 	textScale               = CG_AdjustFontSize(textScale, cg.runMaxSpeed, INFO_PANEL_FONT_ADJUST_NEEDED);
-	CG_Text_Paint_Ext(x + INFO_PANEL_X_PADDING, y, textScale, textScale, colorWhite, va("%d", cg.runMaxSpeed), 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
+	CG_Text_Paint_Ext(x + INFO_PANEL_X_PADDING, y, textScale, textScale, color, va("%d", cg.runMaxSpeed), 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
 	textScale = 0.12f;
 
 	// Print overall max speed
-	CG_Text_Paint_Ext(x, y += 10, textScale, textScale, colorWhite, " Overall max speed:", 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
+	CG_Text_Paint_Ext(x, y += 10, textScale, textScale, color, " Overall max speed:", 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
 	textScale               = CG_AdjustFontSize(textScale, cg.overallMaxSpeed, INFO_PANEL_FONT_ADJUST_NEEDED);
-	CG_Text_Paint_Ext(x + INFO_PANEL_X_PADDING, y, textScale, textScale, colorWhite, va("%d", cg.overallMaxSpeed), 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
+	CG_Text_Paint_Ext(x + INFO_PANEL_X_PADDING, y, textScale, textScale, color, va("%d", cg.overallMaxSpeed), 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
 	textScale = 0.12f;
 
 	// Print jumps count
-	CG_Text_Paint_Ext(x, y += 10, textScale, textScale, colorWhite, " Jumps:", 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
+	CG_Text_Paint_Ext(x, y += 10, textScale, textScale, color, " Jumps:", 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
 	textScale               = CG_AdjustFontSize(textScale, cg.timerunJumpCounter, INFO_PANEL_FONT_ADJUST_NEEDED);
-	CG_Text_Paint_Ext(x + INFO_PANEL_X_PADDING, y, textScale, textScale, colorWhite, va("%d", cg.timerunJumpCounter), 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
+	CG_Text_Paint_Ext(x + INFO_PANEL_X_PADDING, y, textScale, textScale, color, va("%d", cg.timerunJumpCounter), 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
 
 	// Print jump speeds
 	starty = y;
@@ -1159,9 +1195,11 @@ void CG_DrawInfoPanel(void) {
 
 		// If speed at jump n is slower than speed at jump n - 1, use red color
 		if (i > 0 && cg.timerunJumpSpeeds[i] < cg.timerunJumpSpeeds[i - 1]) {
-			CG_Text_Paint_Ext(x, y += 10, textScale, textScale, colorWhite, va(" ^1%d", cg.timerunJumpSpeeds[i]), 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
+			BG_ParseRGBACvar(etr_infoPanelColor2.string, color);
+			CG_Text_Paint_Ext(x, y += 10, textScale, textScale, color, va(" %d", cg.timerunJumpSpeeds[i]), 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
 		} else {
-			CG_Text_Paint_Ext(x, y += 10, textScale, textScale, colorWhite, va(" %d", cg.timerunJumpSpeeds[i]), 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
+			BG_ParseRGBACvar(etr_infoPanelColor1.string, color);
+			CG_Text_Paint_Ext(x, y += 10, textScale, textScale, color, va(" %d", cg.timerunJumpSpeeds[i]), 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
 		}
 	}
 }
@@ -1176,9 +1214,15 @@ Draws text on hud if noclipping / in free spectator
 =================
 */
 void CG_DrawSpectatorState(void) {
-	char  *text = NULL;
-	float textScale;
-	int   x, y, w;
+	char   *text = NULL;
+	float  textScale;
+	float  x, y;
+	int    w;
+	vec4_t color;
+
+	if (!etr_drawSpectatorState.integer) {
+		return;
+	}
 
 	if (cg.predictedPlayerState.pm_type == PM_NOCLIP) {
 		text = "NOCLIP";
@@ -1190,12 +1234,12 @@ void CG_DrawSpectatorState(void) {
 
 	textScale = 0.3f;
 
-	x = CG_WideX(SCREEN_WIDTH) / 2;
-	y = SCREEN_HEIGHT / 6;
+	w = CG_Text_Width_Ext(text, textScale, textScale, &cgs.media.limboFont1);
+	x = (CG_WideX(etr_spectatorStateX.value * 2) - w) / 2;
+	y = etr_spectatorStateY.value;
+	BG_ParseRGBACvar(etr_spectatorStateColor.string, color);
 
-	w = CG_Text_Width_Ext(text, textScale, textScale, &cgs.media.limboFont1) / 2;
-
-	CG_Text_Paint_Ext(x - w, y, textScale, textScale, colorWhite, text, 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
+	CG_Text_Paint_Ext(x, y, textScale, textScale, color, text, 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
 }
 
 /*
