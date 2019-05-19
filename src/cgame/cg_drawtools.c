@@ -123,8 +123,13 @@ void CG_FillAngleYaw(float start, float end, float viewangle, float y, float hei
 	width    = fabs(CG_WideX(SCREEN_WIDTH) * (tan(DEG2RAD(viewangle + end)) - tan(DEG2RAD(viewangle + start))) / (fovscale * 2)) + 1;
 	if (etr_drawVelocitySnapping.integer == 2) {
 		width /= 2;
-		if (cg.predictedPlayerState.stats[STAT_USERCMD_MOVE] & UMOVE_RIGHT) {
+		if (cg.predictedPlayerState.stats[STAT_USERCMD_MOVE] & UMOVE_LEFT) {
+			cg.lastSnapShifted = qfalse; // keep track of last shifting to draw correctly even for w only
+		} else if (cg.predictedPlayerState.stats[STAT_USERCMD_MOVE] & UMOVE_RIGHT || cg.lastSnapShifted) {
 			x += width; // invert white bars if moving to the right
+			if (!cg.lastSnapShifted) {
+				cg.lastSnapShifted = qtrue;
+			}
 		}
 	}
 

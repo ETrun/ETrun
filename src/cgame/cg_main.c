@@ -133,8 +133,17 @@ vmCvar_t cg_swingSpeed;
 vmCvar_t cg_shadows;
 vmCvar_t cg_draw2D;
 vmCvar_t cg_drawFPS;
+vmCvar_t cg_FPSXoffset;
+vmCvar_t cg_FPSYoffset;
+vmCvar_t cg_FPSColor;
 vmCvar_t cg_drawClock;
+vmCvar_t cg_clockXoffset;
+vmCvar_t cg_clockYoffset;
+vmCvar_t cg_clockColor;
 vmCvar_t cg_drawSnapshot;
+vmCvar_t cg_snapshotXoffset;
+vmCvar_t cg_snapshotYoffset;
+vmCvar_t cg_snapshotColor;
 vmCvar_t cg_drawCrosshair;
 vmCvar_t cg_drawCrosshairNames;
 vmCvar_t cg_drawCrosshairPickups;
@@ -163,6 +172,9 @@ vmCvar_t cg_markTime;
 vmCvar_t cg_brassTime;
 vmCvar_t cg_letterbox;   //----(SA)	added
 vmCvar_t cg_drawGun;
+vmCvar_t cg_drawPlayerWeaponIcon;
+vmCvar_t cg_playerWeaponIconXoffset;
+vmCvar_t cg_playerWeaponIconYoffset;
 vmCvar_t cg_cursorHints;    //----(SA)	added
 vmCvar_t cg_gun_frame;
 vmCvar_t cg_gun_x;
@@ -182,8 +194,15 @@ vmCvar_t cg_thirdPerson;
 vmCvar_t cg_thirdPersonRange;
 vmCvar_t cg_thirdPersonAngle;
 vmCvar_t cg_stereoSeparation;
-vmCvar_t cg_lagometer;
-vmCvar_t cg_teamChatTime;
+vmCvar_t cg_drawLagometer;
+vmCvar_t cg_lagometerXoffset;
+vmCvar_t cg_lagometerYoffset;
+vmCvar_t cg_drawConnectionIssues;
+vmCvar_t cg_connectionInterruptedX;
+vmCvar_t cg_connectionInterruptedY;
+vmCvar_t cg_connectionInterruptedColor;
+vmCvar_t cg_drawChat;
+vmCvar_t cg_chatTime;
 vmCvar_t cg_chatHeight;
 vmCvar_t cg_chatX;
 vmCvar_t cg_chatY;
@@ -207,7 +226,10 @@ vmCvar_t cg_noTaunt;                // NERVE - SMF
 vmCvar_t cg_voiceSpriteTime;    // DHM - Nerve
 vmCvar_t cg_drawNotifyText;
 vmCvar_t cg_quickMessageAlt;
-vmCvar_t cg_descriptiveText;
+vmCvar_t cg_drawSpectatorMessage;
+vmCvar_t cg_spectatorMessageX;
+vmCvar_t cg_spectatorMessageY;
+vmCvar_t cg_spectatorMessageColor;
 vmCvar_t cg_antilag;
 vmCvar_t developer;
 vmCvar_t authLevel;
@@ -218,7 +240,25 @@ vmCvar_t cg_crosshairAlphaAlt;
 vmCvar_t cg_crosshairColor;
 vmCvar_t cg_crosshairColorAlt;
 vmCvar_t cg_crosshairPulse;
+vmCvar_t cg_drawPlayerStatus;
+vmCvar_t cg_drawWeaponHeat;
+vmCvar_t cg_weaponHeatX;
+vmCvar_t cg_weaponHeatY;
+vmCvar_t cg_drawPlayerAmmo;
+vmCvar_t cg_playerAmmoXoffset;
+vmCvar_t cg_playerAmmoYoffset;
+vmCvar_t cg_playerAmmoColor;
+vmCvar_t cg_drawPlayerHealthBar;
+vmCvar_t cg_playerHealthBarXoffset;
+vmCvar_t cg_playerHealthBarYoffset;
+vmCvar_t cg_drawWeaponRechargeBar;
+vmCvar_t cg_weaponRechargeBarXoffset;
+vmCvar_t cg_weaponRechargeBarYoffset;
 vmCvar_t cg_drawWeaponIconFlash;
+vmCvar_t cg_drawPlayerStats;
+vmCvar_t cg_playerStatsXoffset;
+vmCvar_t cg_playerStatsYoffset;
+vmCvar_t cg_playerStatsColor;
 vmCvar_t cg_noAmmoAutoSwitch;
 vmCvar_t cg_printObjectiveInfo;
 vmCvar_t cg_specHelp;
@@ -240,6 +280,10 @@ vmCvar_t cg_rconPassword;
 vmCvar_t cg_refereePassword;
 vmCvar_t cg_atmosphericEffects;
 vmCvar_t cg_drawFireteamOverlay;
+vmCvar_t cg_fireteamOverlayX;
+vmCvar_t cg_fireteamOverlayY;
+vmCvar_t cg_drawFireteamInvitaitons;
+vmCvar_t cg_drawVote;
 vmCvar_t cg_drawSmallPopupIcons;
 
 //bani - demo recording cvars
@@ -250,7 +294,6 @@ vmCvar_t cl_demooffset;
 vmCvar_t cl_waverecording;
 vmCvar_t cl_wavefilename;
 vmCvar_t cl_waveoffset;
-vmCvar_t cg_recording_statusline;
 
 // Nico, beginning of ETrun client cvars
 
@@ -264,6 +307,9 @@ vmCvar_t isTimerun;
 vmCvar_t etr_drawSpeedMeter;
 vmCvar_t etr_speedMeterX;
 vmCvar_t etr_speedMeterY;
+vmCvar_t etr_speedMeterColor1;
+vmCvar_t etr_speedMeterColor2;
+vmCvar_t etr_speedMeterColor3;
 
 // Accel HUD
 vmCvar_t etr_drawAccel;
@@ -273,12 +319,18 @@ vmCvar_t etr_accelSmoothness;
 vmCvar_t etr_drawTimer;
 vmCvar_t etr_timerX;
 vmCvar_t etr_timerY;
+vmCvar_t etr_timerColor1;
+vmCvar_t etr_timerColor2;
+vmCvar_t etr_timerColor3;
 
 // Check points
 vmCvar_t etr_drawCheckPoints;
 vmCvar_t etr_checkPointsX;
 vmCvar_t etr_checkPointsY;
 vmCvar_t etr_maxCheckPoints;
+vmCvar_t etr_checkPointsColor1;
+vmCvar_t etr_checkPointsColor2;
+vmCvar_t etr_checkPointsColor3;
 
 // Noclip speed scale
 vmCvar_t etr_noclipSpeed;
@@ -288,9 +340,15 @@ vmCvar_t com_maxfps;
 
 // Slick detector
 vmCvar_t etr_drawSlick;
+vmCvar_t etr_slickX;
+vmCvar_t etr_slickY;
+vmCvar_t etr_slickColor;
 
 // OB detector
 vmCvar_t etr_drawOB;
+vmCvar_t etr_OBColor;
+vmCvar_t etr_OBX;
+vmCvar_t etr_OBY;
 
 // Hide other players
 vmCvar_t etr_hideOthers;
@@ -303,12 +361,19 @@ vmCvar_t etr_autoLogin;
 // CGaz
 vmCvar_t etr_drawCGaz;
 vmCvar_t etr_realCGaz2;
+vmCvar_t etr_CGazX;
+vmCvar_t etr_CGazY;
+vmCvar_t etr_CGaz2Color1;
+vmCvar_t etr_CGaz2Color2;
 
 // Velocity Snapping
 vmCvar_t etr_drawVelocitySnapping;
 vmCvar_t etr_velocitySnappingH;
 vmCvar_t etr_velocitySnappingY;
 vmCvar_t etr_velocitySnappingFov;
+vmCvar_t etr_velocitySnapping1Color1;
+vmCvar_t etr_velocitySnapping1Color2;
+vmCvar_t etr_velocitySnapping2Color;
 
 // Load view angles on load
 vmCvar_t etr_loadViewAngles;
@@ -318,9 +383,14 @@ vmCvar_t etr_loadWeapon;
 
 // Show pressed keys
 vmCvar_t etr_drawKeys;
-vmCvar_t etr_keysXoffset;
-vmCvar_t etr_keysYoffset;
+vmCvar_t etr_keysX;
+vmCvar_t etr_keysY;
 vmCvar_t etr_keysSize;
+
+// Banner prints
+vmCvar_t etr_drawBannerPrint;
+vmCvar_t etr_bannerPrintX;
+vmCvar_t etr_bannerPrintY;
 
 // Automatically load player position when he gets killed (except /kill)
 vmCvar_t etr_autoLoad;
@@ -335,6 +405,11 @@ vmCvar_t etr_hideMe;
 vmCvar_t etr_autoDemo;
 vmCvar_t etr_keepAllDemos;
 vmCvar_t etr_autoDemoStopDelay;
+
+vmCvar_t etr_drawStatusline;
+vmCvar_t etr_statuslineX;
+vmCvar_t etr_statuslineY;
+vmCvar_t etr_statuslineColor;
 
 // Popups
 vmCvar_t etr_numPopups;
@@ -352,6 +427,14 @@ vmCvar_t etr_specLock;
 vmCvar_t etr_drawInfoPanel;
 vmCvar_t etr_infoPanelXoffset;
 vmCvar_t etr_infoPanelYoffset;
+vmCvar_t etr_infoPanelColor1;
+vmCvar_t etr_infoPanelColor2;
+
+// Spectator state
+vmCvar_t etr_drawSpectatorState;
+vmCvar_t etr_spectatorStateX;
+vmCvar_t etr_spectatorStateY;
+vmCvar_t etr_spectatorStateColor;
 
 // Country flags
 vmCvar_t etr_countryFlags;
@@ -392,6 +475,9 @@ cvarTable_t cvarTable[] =
 	{ &cg_autoswitch,            "cg_autoswitch",            "2",     CVAR_ARCHIVE,              0 },
 	{ &cg_drawGun,               "cg_drawGun",               "1",     CVAR_ARCHIVE,              0 },
 	{ &cg_gun_frame,             "cg_gun_frame",             "0",     CVAR_TEMP,                 0 },
+	{ &cg_drawPlayerWeaponIcon,  "cg_drawPlayerWeaponIcon",  "1",     CVAR_ARCHIVE,              0 },
+	{ &cg_playerWeaponIconXoffset, "cg_playerWeaponIconXoffset", "0", CVAR_ARCHIVE,              0 },
+	{ &cg_playerWeaponIconYoffset, "cg_playerWeaponIconYoffset", "0", CVAR_ARCHIVE,              0 },
 	{ &cg_cursorHints,           "cg_cursorHints",           "1",     CVAR_ARCHIVE,              0 },
 	{ &cg_zoomDefaultSniper,     "cg_zoomDefaultSniper",     "20",    CVAR_ARCHIVE,              0 }, // JPW NERVE changed per atvi req
 	{ &cg_zoomStepSniper,        "cg_zoomStepSniper",        "2",     CVAR_ARCHIVE,              0 },
@@ -404,8 +490,17 @@ cvarTable_t cvarTable[] =
 	{ &cg_drawSpreadScale,       "cg_drawSpreadScale",       "1",     CVAR_ARCHIVE,              0 },
 	{ &cg_drawStatus,            "cg_drawStatus",            "1",     CVAR_ARCHIVE,              0 },
 	{ &cg_drawFPS,               "cg_drawFPS",               "1",     CVAR_ARCHIVE,              0 },
+	{ &cg_FPSXoffset,            "cg_FPSXoffset",            "0",     CVAR_ARCHIVE,              0 },
+	{ &cg_FPSYoffset,            "cg_FPSYoffset",            "0",     CVAR_ARCHIVE,              0 },
+	{ &cg_FPSColor,              "cg_FPSColor",              "White", CVAR_ARCHIVE,              0 },
 	{ &cg_drawClock,             "cg_drawClock",             "1",     CVAR_ARCHIVE,              0 },
+	{ &cg_clockXoffset,          "cg_clockXoffset",          "0",     CVAR_ARCHIVE,              0 },
+	{ &cg_clockYoffset,          "cg_clockYoffset",          "0",     CVAR_ARCHIVE,              0 },
+	{ &cg_clockColor,            "cg_clockColor",            "White", CVAR_ARCHIVE,              0 },
 	{ &cg_drawSnapshot,          "cg_drawSnapshot",          "0",     CVAR_ARCHIVE,              0 },
+	{ &cg_snapshotXoffset,       "cg_snapshotXoffset",       "0",     CVAR_ARCHIVE,              0 },
+	{ &cg_snapshotYoffset,       "cg_snapshotYoffset",       "0",     CVAR_ARCHIVE,              0 },
+	{ &cg_snapshotColor,         "cg_snapshotColor",         "White", CVAR_ARCHIVE,              0 },
 	{ &cg_drawCrosshair,         "cg_drawCrosshair",         "1",     CVAR_ARCHIVE,              0 },
 	{ &cg_drawCrosshairNames,    "cg_drawCrosshairNames",    "1",     CVAR_ARCHIVE,              0 },
 	{ &cg_drawCrosshairPickups,  "cg_drawCrosshairPickups",  "1",     CVAR_ARCHIVE,              0 },
@@ -418,7 +513,13 @@ cvarTable_t cvarTable[] =
 	{ &cg_crosshairY,            "cg_crosshairY",            "0",     CVAR_ARCHIVE,              0 },
 	{ &cg_brassTime,             "cg_brassTime",             "2500",  CVAR_ARCHIVE,              0 }, // JPW NERVE
 	{ &cg_markTime,              "cg_marktime",              "20000", CVAR_ARCHIVE,              0 },
-	{ &cg_lagometer,             "cg_lagometer",             "0",     CVAR_ARCHIVE,              0 },
+	{ &cg_drawLagometer,         "cg_drawLagometer",         "0",     CVAR_ARCHIVE,              0 },
+	{ &cg_lagometerXoffset,      "cg_lagometerXoffset",      "0",     CVAR_ARCHIVE,              0 },
+	{ &cg_lagometerYoffset,      "cg_lagometerYoffset",      "0",     CVAR_ARCHIVE,              0 },
+	{ &cg_drawConnectionIssues,  "cg_drawConnectionIssues",  "1",     CVAR_ARCHIVE,              0 },
+	{ &cg_connectionInterruptedX, "cg_connectionInterruptedX", "320", CVAR_ARCHIVE,              0 },
+	{ &cg_connectionInterruptedY, "cg_connectionInterruptedY", "115", CVAR_ARCHIVE,              0 },
+	{ &cg_connectionInterruptedColor, "cg_connectionInterruptedColor", "Red", CVAR_ARCHIVE,      0 },
 	{ &cg_railTrailTime,         "cg_railTrailTime",         "400",   CVAR_ARCHIVE,              0 },
 	{ &cg_gun_x,                 "cg_gunX",                  "0",     CVAR_CHEAT,                0 },
 	{ &cg_gun_y,                 "cg_gunY",                  "0",     CVAR_CHEAT,                0 },
@@ -460,7 +561,8 @@ cvarTable_t cvarTable[] =
 	{ &cg_thirdPersonRange,      "cg_thirdPersonRange",      "80",    CVAR_CHEAT,                0 }, // JPW NERVE per atvi req
 	{ &cg_thirdPersonAngle,      "cg_thirdPersonAngle",      "0",     CVAR_CHEAT,                0 },
 	{ &cg_thirdPerson,           "cg_thirdPerson",           "0",     CVAR_CHEAT,                0 }, // JPW NERVE per atvi req
-	{ &cg_teamChatTime,          "cg_teamChatTime",          "8000",  CVAR_ARCHIVE,              0 },
+	{ &cg_drawChat,              "cg_drawChat",              "1",     CVAR_ARCHIVE,              0 },
+	{ &cg_chatTime,              "cg_chatTime",              "8000",  CVAR_ARCHIVE,              0 },
 	{ &cg_chatHeight,            "cg_chatHeight",            "8",     CVAR_ARCHIVE,              0 },
 	{ &cg_chatX,                 "cg_chatX",                 "130",   CVAR_ARCHIVE,              0 },
 	{ &cg_chatY,                 "cg_chatY",                 "478",   CVAR_ARCHIVE,              0 },
@@ -494,7 +596,10 @@ cvarTable_t cvarTable[] =
 
 	{ &cg_drawNotifyText,        "cg_drawNotifyText",        "1",     CVAR_ARCHIVE,              0 },
 	{ &cg_quickMessageAlt,       "cg_quickMessageAlt",       "0",     CVAR_ARCHIVE,              0 },
-	{ &cg_descriptiveText,       "cg_descriptiveText",       "1",     CVAR_ARCHIVE,              0 },
+	{ &cg_drawSpectatorMessage,  "cg_drawSpectatorMessage",  "1",     CVAR_ARCHIVE,              0 },
+	{ &cg_spectatorMessageX,     "cg_spectatorMessageX",     "8",     CVAR_ARCHIVE,              0 },
+	{ &cg_spectatorMessageY,     "cg_spectatorMessageY",     "80",    CVAR_ARCHIVE,              0 },
+	{ &cg_spectatorMessageColor, "cg_spectatorMessageColor", "White", CVAR_ARCHIVE,              0 },
 	{ &cg_antilag,               "g_antilag",                "1",     0,                         0 },
 	{ &developer,                "developer",                "0",     CVAR_CHEAT,                0 },
 
@@ -506,7 +611,25 @@ cvarTable_t cvarTable[] =
 	{ &cg_crosshairColor,        "cg_crosshairColor",        "White", CVAR_ARCHIVE,              0 },
 	{ &cg_crosshairColorAlt,     "cg_crosshairColorAlt",     "White", CVAR_ARCHIVE,              0 },
 	{ &cg_crosshairPulse,        "cg_crosshairPulse",        "1",     CVAR_ARCHIVE,              0 },
+	{ &cg_drawPlayerStatus,      "cg_drawPlayerStatus",      "1",     CVAR_ARCHIVE,              0 },
+	{ &cg_drawWeaponHeat,        "cg_drawWeaponHeat",        "1",     CVAR_ARCHIVE,              0 },
+	{ &cg_weaponHeatX,           "cg_weaponHeatX",           "558",   CVAR_ARCHIVE,              0 },
+	{ &cg_weaponHeatY,           "cg_weaponHeatY",           "424",   CVAR_ARCHIVE,              0 },
+	{ &cg_drawPlayerAmmo,        "cg_drawPlayerAmmo",        "1",     CVAR_ARCHIVE,              0 },
+	{ &cg_playerAmmoXoffset,     "cg_playerAmmoXoffset",     "0",     CVAR_ARCHIVE,              0 },
+	{ &cg_playerAmmoYoffset,     "cg_playerAmmoYoffset",     "0",     CVAR_ARCHIVE,              0 },
+	{ &cg_playerAmmoColor,       "cg_playerAmmoColor",       "White", CVAR_ARCHIVE,              0 },
+	{ &cg_drawPlayerHealthBar,   "cg_drawPlayerHealthBar",   "1",     CVAR_ARCHIVE,              0 },
+	{ &cg_playerHealthBarXoffset,"cg_playerHealthBarXoffset", "0",    CVAR_ARCHIVE,              0 },
+	{ &cg_playerHealthBarYoffset,"cg_playerHealthBarYoffset", "0",    CVAR_ARCHIVE,              0 },
+	{ &cg_drawWeaponRechargeBar, "cg_drawWeaponRechargeBar", "1",     CVAR_ARCHIVE,              0 },
+	{ &cg_weaponRechargeBarXoffset, "cg_weaponRechargeBarXoffset", "0", CVAR_ARCHIVE,            0 },
+	{ &cg_weaponRechargeBarYoffset, "cg_weaponRechargeBarYoffset", "0", CVAR_ARCHIVE,            0 },
 	{ &cg_drawWeaponIconFlash,   "cg_drawWeaponIconFlash",   "0",     CVAR_ARCHIVE,              0 },
+	{ &cg_drawPlayerStats,       "cg_drawPlayerStats",       "1",     CVAR_ARCHIVE,              0 },
+	{ &cg_playerStatsXoffset,    "cg_playerStatsXoffset",    "0",     CVAR_ARCHIVE,              0 },
+	{ &cg_playerStatsYoffset,    "cg_playerStatsYoffset",    "0",     CVAR_ARCHIVE,              0 },
+	{ &cg_playerStatsColor,     "cg_playerStatsColor",       "White", CVAR_ARCHIVE,              0 },
 	{ &cg_noAmmoAutoSwitch,      "cg_noAmmoAutoSwitch",      "1",     CVAR_ARCHIVE,              0 },
 	{ &cg_printObjectiveInfo,    "cg_printObjectiveInfo",    "1",     CVAR_ARCHIVE,              0 },
 	{ &cg_specHelp,              "cg_specHelp",              "1",     CVAR_ARCHIVE,              0 },
@@ -537,6 +660,10 @@ cvarTable_t cvarTable[] =
 
 	{ NULL,                      "cg_etVersion",             "",      CVAR_USERINFO | CVAR_ROM,  0 },
 	{ &cg_drawFireteamOverlay,   "cg_drawFireteamOverlay",   "1",     CVAR_ARCHIVE,              0 },
+	{ &cg_fireteamOverlayX,      "cg_fireteamOverlayX",      "10",    CVAR_ARCHIVE,              0 },
+	{ &cg_fireteamOverlayY,      "cg_fireteamOverlayY",      "10",    CVAR_ARCHIVE,              0 },
+	{ &cg_drawFireteamInvitaitons, "cg_drawFireteamInvitaitons", "1", CVAR_ARCHIVE,              0 },
+	{ &cg_drawVote,              "cg_drawVote",              "1",     CVAR_ARCHIVE,              0 },
 	{ &cg_drawSmallPopupIcons,   "cg_drawSmallPopupIcons",   "0",     CVAR_ARCHIVE,              0 },
 
 	//bani - demo recording cvars
@@ -547,7 +674,6 @@ cvarTable_t cvarTable[] =
 	{ &cl_waverecording,         "cl_waverecording",         "0",     CVAR_ROM,                  0 },
 	{ &cl_wavefilename,          "cl_wavefilename",          "",      CVAR_ROM,                  0 },
 	{ &cl_waveoffset,            "cl_waveoffset",            "0",     CVAR_ROM,                  0 },
-	{ &cg_recording_statusline,  "cg_recording_statusline",  "9",     CVAR_ARCHIVE,              0 },
 
 	// Nico, beginning of ETrun client cvars
 
@@ -561,6 +687,9 @@ cvarTable_t cvarTable[] =
 	{ &etr_drawSpeedMeter,       "etr_drawSpeedMeter",       "1",     CVAR_ARCHIVE,              0 },
 	{ &etr_speedMeterX,          "etr_speedMeterX",          "320",   CVAR_ARCHIVE,              0 },
 	{ &etr_speedMeterY,          "etr_speedMeterY",          "220",   CVAR_ARCHIVE,              0 },
+	{ &etr_speedMeterColor1,     "etr_speedMeterColor1",     "White", CVAR_ARCHIVE,              0 },
+	{ &etr_speedMeterColor2,     "etr_speedMeterColor2",     "Green", CVAR_ARCHIVE,              0 },
+	{ &etr_speedMeterColor3,     "etr_speedMeterColor3",     "Red",   CVAR_ARCHIVE,              0 },
 
 	// Accel HUD
 	{ &etr_drawAccel,            "etr_drawAccel",            "0",     CVAR_ARCHIVE,              0 },
@@ -570,12 +699,18 @@ cvarTable_t cvarTable[] =
 	{ &etr_drawTimer,            "etr_drawTimer",            "1",     CVAR_ARCHIVE,              0 },
 	{ &etr_timerX,               "etr_timerX",               "320",   CVAR_ARCHIVE,              0 },
 	{ &etr_timerY,               "etr_timerY",               "420",   CVAR_ARCHIVE,              0 },
+	{ &etr_timerColor1,          "etr_timerColor1",          "White", CVAR_ARCHIVE,              0 },
+	{ &etr_timerColor2,          "etr_timerColor2",          "Green", CVAR_ARCHIVE,              0 },
+	{ &etr_timerColor3,          "etr_timerColor3",          "Red",   CVAR_ARCHIVE,              0 },
 
 	// Check points
 	{ &etr_drawCheckPoints,      "etr_drawCheckPoints",      "1",     CVAR_ARCHIVE,              0 },
 	{ &etr_checkPointsX,         "etr_checkPointsX",         "320",   CVAR_ARCHIVE,              0 },
 	{ &etr_checkPointsY,         "etr_checkPointsY",         "435",   CVAR_ARCHIVE,              0 },
 	{ &etr_maxCheckPoints,       "etr_maxCheckPoints",       "5",     CVAR_ARCHIVE,              0 },
+	{ &etr_checkPointsColor1,    "etr_checkPointsColor1",    "White", CVAR_ARCHIVE,              0 },
+	{ &etr_checkPointsColor2,    "etr_checkPointsColor2",    "Green", CVAR_ARCHIVE,              0 },
+	{ &etr_checkPointsColor3,    "etr_checkPointsColor3",    "Red",   CVAR_ARCHIVE,              0 },
 
 	// Com_maxFPS
 	{ &com_maxfps,               "com_maxfps",               "125",   CVAR_ARCHIVE,              0 },
@@ -584,10 +719,16 @@ cvarTable_t cvarTable[] =
 	{ &etr_noclipSpeed,          "etr_noclipSpeed",          "1000",  CVAR_ARCHIVE,              0 },
 
 	// Slick detector
-	{ &etr_drawSlick,            "etr_drawSlick",            "0",     CVAR_ARCHIVE,              0 },
+	{ &etr_drawSlick,            "etr_drawSlick",            "1",     CVAR_ARCHIVE,              0 },
+	{ &etr_slickX,               "etr_slickX",               "309",   CVAR_ARCHIVE,              0 },
+	{ &etr_slickY,               "etr_slickY",               "230",   CVAR_ARCHIVE,              0 },
+	{ &etr_slickColor,           "etr_slickColor",           "White", CVAR_ARCHIVE,              0 },
 
 	// OB detector
-	{ &etr_drawOB,               "etr_drawOB",               "0",     CVAR_ARCHIVE,              0 },
+	{ &etr_drawOB,               "etr_drawOB",               "1",     CVAR_ARCHIVE,              0 },
+	{ &etr_OBColor,              "etr_OBColor",              "White", CVAR_ARCHIVE,              0 },
+	{ &etr_OBX,                  "etr_OBX",                  "318",   CVAR_ARCHIVE,              0 },
+	{ &etr_OBY,                  "etr_OBY",                  "230",   CVAR_ARCHIVE,              0 },
 
 	// Hide other players
 	{ &etr_hideOthers,           "etr_hideOthers",           "1",     CVAR_ARCHIVE,              0 },
@@ -600,12 +741,19 @@ cvarTable_t cvarTable[] =
 	// CGaz
 	{ &etr_drawCGaz,             "etr_drawCGaz",             "0",     CVAR_ARCHIVE,              0 },
 	{ &etr_realCGaz2,            "etr_realCGaz2",            "0",     CVAR_ARCHIVE,              0 },
+	{ &etr_CGazX,                "etr_CGazX",                "320",   CVAR_ARCHIVE,              0 },
+	{ &etr_CGazY,                "etr_CGazY",                "240",   CVAR_ARCHIVE,              0 },
+	{ &etr_CGaz2Color1,          "etr_CGaz2Color1",          "Red",   CVAR_ARCHIVE,              0 },
+	{ &etr_CGaz2Color2,          "etr_CGaz2Color2",          "Cyan",  CVAR_ARCHIVE,              0 },
 
 	// Velocity Snapping
 	{ &etr_drawVelocitySnapping, "etr_drawVelocitySnapping", "0",     CVAR_ARCHIVE,              0 },
 	{ &etr_velocitySnappingH,    "etr_velocitySnappingH",    "8",     CVAR_ARCHIVE,              0 },
 	{ &etr_velocitySnappingY,    "etr_velocitySnappingY",    "240",   CVAR_ARCHIVE,              0 },
 	{ &etr_velocitySnappingFov,  "etr_velocitySnappingFov",  "120",   CVAR_ARCHIVE,              0 },
+	{ &etr_velocitySnapping1Color1, "etr_velocitySnapping1Color1", "0.4 0 0 0.5", CVAR_ARCHIVE,  0 },
+	{ &etr_velocitySnapping1Color2, "etr_velocitySnapping1Color2", "0 0.4 0.4 0.5", CVAR_ARCHIVE, 0 },
+	{ &etr_velocitySnapping2Color, "etr_velocitySnapping2Color", "White", CVAR_ARCHIVE,          0 },
 
 	// Load view angles on load
 	{ &etr_loadViewAngles,       "etr_loadViewAngles",       "1",     CVAR_ARCHIVE,              0 },
@@ -615,9 +763,14 @@ cvarTable_t cvarTable[] =
 
 	// Show pressed keys
 	{ &etr_drawKeys,             "etr_drawKeys",             "4",     CVAR_ARCHIVE,              0 },
-	{ &etr_keysXoffset,          "etr_keysXoffset",          "0",     CVAR_ARCHIVE,              0 },
-	{ &etr_keysYoffset,          "etr_keysYoffset",          "0",     CVAR_ARCHIVE,              0 },
+	{ &etr_keysX,                "etr_keysX",                "572",   CVAR_ARCHIVE,              0 },
+	{ &etr_keysY,                "etr_keysY",                "210",   CVAR_ARCHIVE,              0 },
 	{ &etr_keysSize,             "etr_keysSize",             "64",    CVAR_ARCHIVE,              0 },
+
+	// Banner prints
+	{ &etr_drawBannerPrint,      "etr_drawBannerPrint",      "1",     CVAR_ARCHIVE,              0 },
+	{ &etr_bannerPrintX,         "etr_bannerPrintX",         "320",   CVAR_ARCHIVE,              0 },
+	{ &etr_bannerPrintY,         "etr_bannerPrintY",         "20",    CVAR_ARCHIVE,              0 },
 
 	// Automatically load player position when he gets killed (except /kill)
 	{ &etr_autoLoad,             "etr_autoLoad",             "1",     CVAR_ARCHIVE,              0 },
@@ -632,6 +785,11 @@ cvarTable_t cvarTable[] =
 	{ &etr_autoDemo,             "etr_autoDemo",             "0",     CVAR_ARCHIVE,              0 },
 	{ &etr_keepAllDemos,         "etr_keepAllDemos",         "1",     CVAR_ARCHIVE,              0 },
 	{ &etr_autoDemoStopDelay,    "etr_autoDemoStopDelay",    "1500",  CVAR_ARCHIVE,              0 },
+
+	{ &etr_drawStatusline,       "etr_drawStatusline",       "1",     CVAR_ARCHIVE,              0 },
+	{ &etr_statuslineX,          "etr_statuslineX",          "0",     CVAR_ARCHIVE,              0 },
+	{ &etr_statuslineY,          "etr_statuslineY",          "9",     CVAR_ARCHIVE,              0 },
+	{ &etr_statuslineColor,      "etr_statuslineColor",      "White", CVAR_ARCHIVE,              0 },
 
 	// Popups
 	{ &etr_numPopups,            "etr_numPopups",            "5",     CVAR_ARCHIVE,              0 },
@@ -649,6 +807,14 @@ cvarTable_t cvarTable[] =
 	{ &etr_drawInfoPanel,        "etr_drawInfoPanel",        "1",     CVAR_ARCHIVE,              0 },
 	{ &etr_infoPanelXoffset,     "etr_infoPanelXoffset",     "0",     CVAR_ARCHIVE,              0 },
 	{ &etr_infoPanelYoffset,     "etr_infoPanelYoffset",     "0",     CVAR_ARCHIVE,              0 },
+	{ &etr_infoPanelColor1,      "etr_infoPanelColor1",      "White", CVAR_ARCHIVE,              0 },
+	{ &etr_infoPanelColor2,      "etr_infoPanelColor2",      "Red",   CVAR_ARCHIVE,              0 },
+
+	// Spectator state
+	{ &etr_drawSpectatorState,   "etr_drawSpectatorState",   "1",     CVAR_ARCHIVE,              0 },
+	{ &etr_spectatorStateX,      "etr_spectatorStateX",      "320",   CVAR_ARCHIVE,              0 },
+	{ &etr_spectatorStateY,      "etr_spectatorStateY",      "80",     CVAR_ARCHIVE,              0 },
+	{ &etr_spectatorStateColor,  "etr_spectatorStateColor",  "White", CVAR_ARCHIVE,              0 },
 
 	// Country flags
 	{ &etr_countryFlags,         "etr_countryFlags",         "0",     CVAR_ARCHIVE,              0 },

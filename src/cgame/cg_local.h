@@ -1017,6 +1017,7 @@ typedef struct {
 	float snapZones[128]; // 128 being the max amount of drawn snapzones
 	float snapSpeed;
 	int snapCount;
+	qboolean lastSnapShifted;
 
 	// suburb, Accel HUD
 	float oldSpeed;
@@ -1646,8 +1647,17 @@ extern vmCvar_t cg_swingSpeed;
 extern vmCvar_t cg_shadows;
 extern vmCvar_t cg_draw2D;
 extern vmCvar_t cg_drawFPS;
+extern vmCvar_t cg_FPSXoffset;
+extern vmCvar_t cg_FPSYoffset;
+extern vmCvar_t cg_FPSColor;
 extern vmCvar_t cg_drawClock;
+extern vmCvar_t cg_clockXoffset;
+extern vmCvar_t cg_clockYoffset;
+extern vmCvar_t cg_clockColor;
 extern vmCvar_t cg_drawSnapshot;
+extern vmCvar_t cg_snapshotXoffset;
+extern vmCvar_t cg_snapshotYoffset;
+extern vmCvar_t cg_snapshotColor;
 extern vmCvar_t cg_drawCrosshair;
 extern vmCvar_t cg_drawCrosshairNames;
 extern vmCvar_t cg_drawCrosshairPickups;
@@ -1677,6 +1687,9 @@ extern vmCvar_t cg_gun_x;
 extern vmCvar_t cg_gun_y;
 extern vmCvar_t cg_gun_z;
 extern vmCvar_t cg_drawGun;
+extern vmCvar_t cg_drawPlayerWeaponIcon;
+extern vmCvar_t cg_playerWeaponIconXoffset;
+extern vmCvar_t cg_playerWeaponIconYoffset;
 extern vmCvar_t cg_cursorHints;
 extern vmCvar_t cg_letterbox;           //----(SA)	added
 extern vmCvar_t cg_tracerChance;
@@ -1693,8 +1706,15 @@ extern vmCvar_t cg_thirdPersonRange;
 extern vmCvar_t cg_thirdPersonAngle;
 extern vmCvar_t cg_thirdPerson;
 extern vmCvar_t cg_stereoSeparation;
-extern vmCvar_t cg_lagometer;
-extern vmCvar_t cg_teamChatTime;
+extern vmCvar_t cg_drawLagometer;
+extern vmCvar_t cg_lagometerXoffset;
+extern vmCvar_t cg_lagometerYoffset;
+extern vmCvar_t cg_drawConnectionIssues;
+extern vmCvar_t cg_connectionInterruptedX;
+extern vmCvar_t cg_connectionInterruptedY;
+extern vmCvar_t cg_connectionInterruptedColor;
+extern vmCvar_t cg_drawChat;
+extern vmCvar_t cg_chatTime;
 extern vmCvar_t cg_chatHeight;
 extern vmCvar_t cg_chatX;
 extern vmCvar_t cg_chatY;
@@ -1722,7 +1742,10 @@ extern vmCvar_t cg_norender;
 extern vmCvar_t cg_skybox;
 extern vmCvar_t cg_drawNotifyText;
 extern vmCvar_t cg_quickMessageAlt;
-extern vmCvar_t cg_descriptiveText;
+extern vmCvar_t cg_drawSpectatorMessage;
+extern vmCvar_t cg_spectatorMessageX;
+extern vmCvar_t cg_spectatorMessageY;
+extern vmCvar_t cg_spectatorMessageColor;
 extern vmCvar_t cg_antilag;
 extern vmCvar_t developer;
 
@@ -1735,7 +1758,25 @@ extern vmCvar_t cg_crosshairAlphaAlt;
 extern vmCvar_t cg_crosshairColor;
 extern vmCvar_t cg_crosshairColorAlt;
 extern vmCvar_t cg_crosshairPulse;
+extern vmCvar_t cg_drawPlayerStatus;
+extern vmCvar_t cg_drawWeaponHeat;
+extern vmCvar_t cg_weaponHeatX;
+extern vmCvar_t cg_weaponHeatY;
+extern vmCvar_t cg_drawPlayerAmmo;
+extern vmCvar_t cg_playerAmmoXoffset;
+extern vmCvar_t cg_playerAmmoYoffset;
+extern vmCvar_t cg_playerAmmoColor;
+extern vmCvar_t cg_drawPlayerHealthBar;
+extern vmCvar_t cg_playerHealthBarXoffset;
+extern vmCvar_t cg_playerHealthBarYoffset;
+extern vmCvar_t cg_drawWeaponRechargeBar;
+extern vmCvar_t cg_weaponRechargeBarXoffset;
+extern vmCvar_t cg_weaponRechargeBarYoffset;
 extern vmCvar_t cg_drawWeaponIconFlash;
+extern vmCvar_t cg_drawPlayerStats;
+extern vmCvar_t cg_playerStatsXoffset;
+extern vmCvar_t cg_playerStatsYoffset;
+extern vmCvar_t cg_playerStatsColor;
 extern vmCvar_t cg_noAmmoAutoSwitch;
 extern vmCvar_t cg_printObjectiveInfo;
 extern vmCvar_t cg_specHelp;
@@ -1761,6 +1802,10 @@ extern vmCvar_t cg_rconPassword;
 extern vmCvar_t cg_refereePassword;
 extern vmCvar_t cg_atmosphericEffects;
 extern vmCvar_t cg_drawFireteamOverlay;
+extern vmCvar_t cg_fireteamOverlayX;
+extern vmCvar_t cg_fireteamOverlayY;
+extern vmCvar_t cg_drawFireteamInvitaitons;
+extern vmCvar_t cg_drawVote;
 extern vmCvar_t cg_drawSmallPopupIcons;
 
 // bani - demo recording cvars
@@ -1770,7 +1815,6 @@ extern vmCvar_t cl_demooffset;
 extern vmCvar_t cl_waverecording;
 extern vmCvar_t cl_wavefilename;
 extern vmCvar_t cl_waveoffset;
-extern vmCvar_t cg_recording_statusline;
 
 // Nico, beginning of ETrun client cvars
 
@@ -1784,6 +1828,9 @@ extern vmCvar_t isTimerun;
 extern vmCvar_t etr_drawSpeedMeter;
 extern vmCvar_t etr_speedMeterX;
 extern vmCvar_t etr_speedMeterY;
+extern vmCvar_t etr_speedMeterColor1;
+extern vmCvar_t etr_speedMeterColor2;
+extern vmCvar_t etr_speedMeterColor3;
 
 // Accel HUD
 extern vmCvar_t etr_drawAccel;
@@ -1793,18 +1840,30 @@ extern vmCvar_t etr_accelSmoothness;
 extern vmCvar_t etr_drawTimer;
 extern vmCvar_t etr_timerX;
 extern vmCvar_t etr_timerY;
+extern vmCvar_t etr_timerColor1;
+extern vmCvar_t etr_timerColor2;
+extern vmCvar_t etr_timerColor3;
 
 // Check points
 extern vmCvar_t etr_drawCheckPoints;
 extern vmCvar_t etr_checkPointsX;
 extern vmCvar_t etr_checkPointsY;
 extern vmCvar_t etr_maxCheckPoints;
+extern vmCvar_t etr_checkPointsColor1;
+extern vmCvar_t etr_checkPointsColor2;
+extern vmCvar_t etr_checkPointsColor3;
 
 // Slick detector
 extern vmCvar_t etr_drawSlick;
+extern vmCvar_t etr_slickX;
+extern vmCvar_t etr_slickY;
+extern vmCvar_t etr_slickColor;
 
 // OB detector
 extern vmCvar_t etr_drawOB;
+extern vmCvar_t etr_OBColor;
+extern vmCvar_t etr_OBX;
+extern vmCvar_t etr_OBY;
 
 // Hide other players
 extern vmCvar_t etr_hideOthers;
@@ -1817,12 +1876,19 @@ extern vmCvar_t etr_autoLogin;
 // CGaz
 extern vmCvar_t etr_drawCGaz;
 extern vmCvar_t etr_realCGaz2;
+extern vmCvar_t etr_CGazX;
+extern vmCvar_t etr_CGazY;
+extern vmCvar_t etr_CGaz2Color1;
+extern vmCvar_t etr_CGaz2Color2;
 
 // Velocity Snapping
 extern vmCvar_t etr_drawVelocitySnapping;
 extern vmCvar_t etr_velocitySnappingH;
 extern vmCvar_t etr_velocitySnappingY;
 extern vmCvar_t etr_velocitySnappingFov;
+extern vmCvar_t etr_velocitySnapping1Color1;
+extern vmCvar_t etr_velocitySnapping1Color2;
+extern vmCvar_t etr_velocitySnapping2Color;
 
 // Load view angles on load
 extern vmCvar_t etr_loadViewAngles;
@@ -1832,9 +1898,14 @@ extern vmCvar_t etr_loadWeapon;
 
 // Show pressed keys
 extern vmCvar_t etr_drawKeys;
-extern vmCvar_t etr_keysXoffset;
-extern vmCvar_t etr_keysYoffset;
+extern vmCvar_t etr_keysX;
+extern vmCvar_t etr_keysY;
 extern vmCvar_t etr_keysSize;
+
+// Banner prints
+extern vmCvar_t etr_drawBannerPrint;
+extern vmCvar_t etr_bannerPrintX;
+extern vmCvar_t etr_bannerPrintY;
 
 // Automatically load player position when he gets killed (except /kill)
 extern vmCvar_t etr_autoLoad;
@@ -1849,6 +1920,11 @@ extern vmCvar_t etr_hideMe;
 extern vmCvar_t etr_autoDemo;
 extern vmCvar_t etr_keepAllDemos;
 extern vmCvar_t etr_autoDemoStopDelay;
+
+extern vmCvar_t etr_drawStatusline;
+extern vmCvar_t etr_statuslineX;
+extern vmCvar_t etr_statuslineY;
+extern vmCvar_t etr_statuslineColor;
 
 // Popups
 extern vmCvar_t etr_numPopups;
@@ -1866,6 +1942,14 @@ extern vmCvar_t etr_specLock;
 extern vmCvar_t etr_drawInfoPanel;
 extern vmCvar_t etr_infoPanelXoffset;
 extern vmCvar_t etr_infoPanelYoffset;
+extern vmCvar_t etr_infoPanelColor1;
+extern vmCvar_t etr_infoPanelColor2;
+
+// Spectator state
+extern vmCvar_t etr_drawSpectatorState;
+extern vmCvar_t etr_spectatorStateX;
+extern vmCvar_t etr_spectatorStateY;
+extern vmCvar_t etr_spectatorStateColor;
 
 // Country flags
 extern vmCvar_t etr_countryFlags;
@@ -2029,10 +2113,10 @@ int CG_Text_Height(const char *text, float scale, int limit);
 qboolean CG_OwnerDrawVisible(int flags);
 void CG_RunMenuScript(char **args);
 void CG_Text_PaintChar_Ext(float x, float y, float w, float h, float scalex, float scaley, float s, float t, float s2, float t2, qhandle_t hShader);
-void CG_DrawCursorhint(rectDef_t *rect);
-void CG_DrawWeapStability(rectDef_t *rect);
-void CG_DrawWeapHeat(rectDef_t *rect, int align);
-void CG_DrawPlayerWeaponIcon(rectDef_t *rect, int align, vec4_t *refcolor);
+void CG_DrawCursorhint(void);
+void CG_DrawWeapStability(void);
+void CG_DrawWeapHeat(int align);
+void CG_DrawPlayerWeaponIcon(int align, vec4_t *refcolor);
 void CG_Fade(int a, int time, int duration);
 const char *CG_PickupItemText(int item);
 void CG_StartShakeCamera(float p);
@@ -2051,6 +2135,7 @@ void CG_DrawKeys(void);
 void CG_DrawScoresClock(float x, float y, float scale);
 char *CG_GetClock(void);
 void CG_DrawBannerPrint(void);
+void CG_DrawDemoRecording(void);
 void CG_DrawInfoPanel(void);
 void CG_DrawSpectatorState(void);
 void CG_UpdateJumpSpeeds(void);
@@ -2624,7 +2709,7 @@ fireteamData_t *CG_IsFireTeamLeader(int clientNum);
 
 void CG_SortClientFireteam();
 
-void CG_DrawFireTeamOverlay(rectDef_t *rect);
+void CG_DrawFireTeamOverlay(void);
 clientInfo_t *CG_SortedFireTeamPlayerForPosition(int pos, int max);
 qboolean CG_FireteamHasClass(int classnum, qboolean selectedonly);
 const char *CG_BuildSelectedFirteamString(void);

@@ -1913,6 +1913,8 @@ int BG_simpleWeaponState(int ws);
 
 // RGBA cvars support
 void BG_SetRGBACvar(char *colString, float *col, float alpha, char *cvarName);
+// suburb
+void BG_ParseRGBACvar(char *cvarString, float *color);
 
 // Voting
 #define VOTING_DISABLED     ((1 << numVotesAvailable) - 1)

@@ -207,14 +207,26 @@ CG_DrawSnapshot
 static float CG_DrawSnapshot(float y) {
 	char *s;
 	int  w;
+	float scale = 0.19f;
+	vec4_t color;
 
-	s = va("time:%i snap:%i cmd:%i", cg.snap->serverTime,
-	       cg.latestSnapshotNum, cgs.serverCommandSequence);
-	w = CG_DrawStrlen(s) * BIGCHAR_WIDTH;
+	BG_ParseRGBACvar(cg_snapshotColor.string, color);
 
-	CG_DrawBigString(UPPERRIGHT_X - w, y + 2, s, 1.0F);
+	s = va("%i Time", cg.snap->serverTime);
+	w = CG_Text_Width_Ext(s, scale, 0, &cgs.media.limboFont1);
+	CG_Text_Paint_Ext(UPPERRIGHT_X - w + cg_snapshotXoffset.value, y + 11 + cg_snapshotXoffset.value, scale, scale, color, s, 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
+	y += 19;
 
-	return y + BIGCHAR_HEIGHT + 4;
+	s = va("%i Snap", cg.latestSnapshotNum);
+	w = CG_Text_Width_Ext(s, scale, 0, &cgs.media.limboFont1);
+	CG_Text_Paint_Ext(UPPERRIGHT_X - w + cg_snapshotXoffset.value, y + 11 + cg_snapshotXoffset.value, scale, scale, color, s, 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
+	y += 19;
+
+	s = va("%i Cmd", cgs.serverCommandSequence);
+	w = CG_Text_Width_Ext(s, scale, 0, &cgs.media.limboFont1);
+	CG_Text_Paint_Ext(UPPERRIGHT_X - w + cg_snapshotXoffset.value, y + 11 + cg_snapshotXoffset.value, scale, scale, color, s, 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
+
+	return y + 19;
 }
 
 /*
@@ -228,7 +240,7 @@ static float CG_DrawFPS(float y) {
 	static int index;
 	static int previous;
 	int        t, frameTime;
-
+	vec4_t     color;
 	// don't use serverTime, because that will be drifting to
 	// correct for internet lag changes, timescales, timedemos, etc
 	t         = trap_Milliseconds();
@@ -257,9 +269,9 @@ static float CG_DrawFPS(float y) {
 		s = va("%i FPS", fps);
 		w = CG_Text_Width_Ext(s, scale, 0, &cgs.media.limboFont1);
 
-		//CG_DrawRect_FixedBorder(UPPERRIGHT_X - w - 2, y, w + 5, 12 + 2, 1, colorWhite);
+		BG_ParseRGBACvar(cg_FPSColor.string, color);
 
-		CG_Text_Paint_Ext(UPPERRIGHT_X - w, y + 11, scale, scale, colorWhite, s, 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
+		CG_Text_Paint_Ext(UPPERRIGHT_X - w + cg_FPSXoffset.value, y + 11 + cg_FPSYoffset.value, scale, scale, color, s, 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
 	}
 
 	return y + 19;
@@ -269,19 +281,21 @@ static float CG_DrawFPS(float y) {
 ==================
 CG_DrawClock
 
-original drawclock from TJMod
+Modified drawclock from TJMod
 
 @author suburb
 ==================
 */
 static float CG_DrawClock(float y) {
-	int   w;
-	float scale = 0.19f;
+	int    w;
+	float  scale = 0.19f;
+	vec4_t color;
 
 	w = CG_Text_Width_Ext(CG_GetClock(), scale, 0, &cgs.media.limboFont1);
 
-	//CG_DrawRect_FixedBorder(UPPERRIGHT_X - w - 2, y, w + 5, 12 + 2, 1, colorWhite);
-	CG_Text_Paint_Ext(UPPERRIGHT_X - w, y + 11, scale, scale, colorWhite, CG_GetClock(), 0, 24, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
+	BG_ParseRGBACvar(cg_clockColor.string, color);
+
+	CG_Text_Paint_Ext(UPPERRIGHT_X - w + cg_clockXoffset.value, y + 11 + cg_clockYoffset.value, scale, scale, color, CG_GetClock(), 0, 24, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
 
 	return y + 19;
 }
@@ -291,12 +305,12 @@ static float CG_DrawClock(float y) {
 CG_DrawUpperRight
 =====================
 */
+#define UPPER_RIGHT_Y 152
 static void CG_DrawUpperRight(void) {
-	float y = 20 + 100 + 32;
+	float y = UPPER_RIGHT_Y;
 
-	if (cg_drawFireteamOverlay.integer && CG_IsOnFireteam(cg.clientNum)) {
-		rectDef_t rect = { 10, 10, 100, 100 };
-		CG_DrawFireTeamOverlay(&rect);
+	if (cg_paused.integer) {
+		return;
 	}
 
 	if (cg_drawFPS.integer) {
@@ -320,21 +334,19 @@ static void CG_DrawUpperRight(void) {
 ===========================================================================================
 */
 
-#define CHATLOC_X CG_WideX(160)
-#define CHATLOC_Y 478
-#define CHATLOC_TEXT_X (CHATLOC_X + 0.25f * TINYCHAR_WIDTH)
-
 /*
 =================
-CG_DrawTeamInfo
+CG_DrawChat
 =================
 */
-static void CG_DrawTeamInfo(void) {
+static void CG_DrawChat(void) {
 	vec4_t hcolor;
 	int    chatHeight;
-	int    chatX;
-	int    chatY;
-	int    chatTextX;
+	float  chatTextX, x, y;
+
+	if (!cg_drawChat.integer) {
+		return;
+	}
 
 	if (cg_chatHeight.integer < TEAMCHAT_HEIGHT) {
 		chatHeight = cg_chatHeight.integer;
@@ -346,15 +358,15 @@ static void CG_DrawTeamInfo(void) {
 		return; // disabled
 	}
 
-	chatX     = cg_chatX.integer;
-	chatY     = cg_chatY.integer;
-	chatTextX = chatX + 0.25f * TINYCHAR_WIDTH;
+	x     = CG_WideX(cg_chatX.value);
+	y     = cg_chatY.value;
+	chatTextX = x + 0.25f * TINYCHAR_WIDTH;
 
 	if (cgs.teamLastChatPos != cgs.teamChatPos) {
 		int   i;
 		float lineHeight = 9.f;
 
-		if (cg.time - cgs.teamChatMsgTimes[cgs.teamLastChatPos % chatHeight] > cg_teamChatTime.integer) {
+		if (cg.time - cgs.teamChatMsgTimes[cgs.teamLastChatPos % chatHeight] > cg_chatTime.integer) {
 			cgs.teamLastChatPos++;
 		}
 
@@ -363,7 +375,7 @@ static void CG_DrawTeamInfo(void) {
 		}
 
 		for (i = cgs.teamChatPos - 1; i >= cgs.teamLastChatPos; --i) {
-			float alphapercent = 1.0f - (cg.time - cgs.teamChatMsgTimes[i % chatHeight]) / (float)(cg_teamChatTime.integer);
+			float alphapercent = 1.0f - (cg.time - cgs.teamChatMsgTimes[i % chatHeight]) / (float)(cg_chatTime.integer);
 
 			if (alphapercent > 1.0f) {
 				alphapercent = 1.0f;
@@ -388,13 +400,13 @@ static void CG_DrawTeamInfo(void) {
 			hcolor[3] = 0.33f * alphapercent;
 
 			trap_R_SetColor(hcolor);
-			CG_DrawPic(chatX, chatY - (cgs.teamChatPos - i) * lineHeight, CG_WideX(CHAT_WIDTH), lineHeight, cgs.media.teamStatusBar);
+			CG_DrawPic(x, y - (cgs.teamChatPos - i) * lineHeight, CG_WideX(CHAT_WIDTH), lineHeight, cgs.media.teamStatusBar);
 
 			hcolor[0] = hcolor[1] = hcolor[2] = 1.0;
 			hcolor[3] = alphapercent;
 			trap_R_SetColor(hcolor);
 
-			CG_Text_Paint_Ext(chatTextX, chatY - (cgs.teamChatPos - i - 1) * lineHeight - 1, 0.2f, 0.2f, hcolor, cgs.teamChatMsgs[i % chatHeight], 0, 0, 0, &cgs.media.limboFont2);
+			CG_Text_Paint_Ext(chatTextX, y - (cgs.teamChatPos - i - 1) * lineHeight - 1, 0.2f, 0.2f, hcolor, cgs.teamChatMsgs[i % chatHeight], 0, 0, 0, &cgs.media.limboFont2);
 		}
 	}
 }
@@ -487,6 +499,12 @@ static void CG_DrawDisconnect(void) {
 	usercmd_t  cmd;
 	const char *s;
 	int        w;   // bk010215 - FIXME char message[1024];
+	float      scale = 0.4f;
+	vec4_t     color;
+
+	if (!cg_drawConnectionIssues.integer) {
+		return;
+	}
 
 	// OSP - dont draw if a demo and we're running at a different timescale
 	if (cg.demoPlayback && cg_timescale.value != 1.0f) {
@@ -501,23 +519,25 @@ static void CG_DrawDisconnect(void) {
 	// draw the phone jack if we are completely past our buffers
 	cmdNum = trap_GetCurrentCmdNumber() - CMD_BACKUP + 1;
 	trap_GetUserCmd(cmdNum, &cmd);
-	if (cmd.serverTime <= cg.snap->ps.commandTime
-	    || cmd.serverTime > cg.time) {   // special check for map_restart // bk 0102165 - FIXME
+	if (cmd.serverTime <= cg.snap->ps.commandTime || cmd.serverTime > cg.time) {   // special check for map_restart // bk 0102165 - FIXME
 		return;
 	}
 
-	// also add text in center of screen
-	s = CG_TranslateString("Connection Interrupted");   // bk 010215 - FIXME
-	w = CG_DrawStrlen(s) * BIGCHAR_WIDTH;
-	CG_DrawBigString((CG_WideX(SCREEN_WIDTH) - w) / 2, 100, s, 1.0F);
+	s = "Connection Interrupted";
+	w = CG_Text_Width_Ext(s, scale, 0, &cgs.media.limboFont1) / 2;
+	x = CG_WideX(cg_connectionInterruptedX.value);
+	y = cg_connectionInterruptedY.value;
+	BG_ParseRGBACvar(cg_connectionInterruptedColor.string, color);
+
+	CG_Text_Paint_Ext(x - w, y, scale, scale, color, s, 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
 
 	// blink the icon
 	if ((cg.time >> 9) & 1) {
 		return;
 	}
 
-	x = CG_WideX(SCREEN_WIDTH) - 52;
-	y = SCREEN_HEIGHT - 200;
+	x = CG_WideX(SCREEN_WIDTH) - 52 + cg_lagometerXoffset.value;
+	y = SCREEN_HEIGHT - 200 + cg_lagometerYoffset.value;
 
 	CG_DrawPic(x, y, 48, 48, cgs.media.disconnectIcon);
 }
@@ -537,7 +557,7 @@ static void CG_DrawLagometer(void) {
 	int   color;
 	float vscale;
 
-	if (!cg_lagometer.integer || cgs.localServer) {
+	if (!cg_drawLagometer.integer) {
 		CG_DrawDisconnect();
 		return;
 	}
@@ -545,8 +565,8 @@ static void CG_DrawLagometer(void) {
 	//
 	// draw the graph
 	//
-	x = CG_WideX(SCREEN_WIDTH) - 48 - 4;
-	y = SCREEN_HEIGHT - 200;
+	x = CG_WideX(SCREEN_WIDTH) - 52 + cg_lagometerXoffset.value;
+	y = SCREEN_HEIGHT - 200 + cg_lagometerYoffset.value;
 
 	trap_R_SetColor(NULL);
 	CG_DrawPic(x, y, 48, 48, cgs.media.lagometerShader);
@@ -1201,43 +1221,45 @@ static void CG_DrawVote(void) {
 	char *s;
 	char str1[32], str2[32];
 
-	if (cgs.applicationEndTime > cg.time && cgs.applicationClient >= 0) {
-		Q_strncpyz(str1, BindingFromName("vote yes"), 32);
-		Q_strncpyz(str2, BindingFromName("vote no"), 32);
+	if (cg_drawFireteamInvitaitons.integer) {
+		if (cgs.applicationEndTime > cg.time && cgs.applicationClient >= 0) {
+			Q_strncpyz(str1, BindingFromName("vote yes"), 32);
+			Q_strncpyz(str2, BindingFromName("vote no"), 32);
 
-		s = va(CG_TranslateString("Accept %s's application to join your fireteam?"), cgs.clientinfo[cgs.applicationClient].name);
-		CG_DrawStringExt(8, 200, s, colorYellow, qtrue, qtrue, TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 80);
+			s = va(CG_TranslateString("Accept %s's application to join your fireteam?"), cgs.clientinfo[cgs.applicationClient].name);
+			CG_DrawStringExt(8, 200, s, colorYellow, qtrue, qtrue, TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 80);
 
-		s = va(CG_TranslateString("Press '%s' for YES, or '%s' for No"), str1, str2);
-		CG_DrawStringExt(8, 214, s, colorYellow, qtrue, qtrue, TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 80);
-		return;
+			s = va(CG_TranslateString("Press '%s' for YES, or '%s' for No"), str1, str2);
+			CG_DrawStringExt(8, 214, s, colorYellow, qtrue, qtrue, TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 80);
+			return;
+		}
+
+		if (cgs.propositionEndTime > cg.time && cgs.propositionClient >= 0) {
+			Q_strncpyz(str1, BindingFromName("vote yes"), 32);
+			Q_strncpyz(str2, BindingFromName("vote no"), 32);
+
+			s = va(CG_TranslateString("Accept %s's proposition to invite %s to join your fireteam?"), cgs.clientinfo[cgs.propositionClient2].name, cgs.clientinfo[cgs.propositionClient].name);
+			CG_DrawStringExt(8, 200, s, colorYellow, qtrue, qtrue, TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 80);
+
+			s = va(CG_TranslateString("Press '%s' for YES, or '%s' for No"), str1, str2);
+			CG_DrawStringExt(8, 214, s, colorYellow, qtrue, qtrue, TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 80);
+			return;
+		}
+
+		if (cgs.invitationEndTime > cg.time && cgs.invitationClient >= 0) {
+			Q_strncpyz(str1, BindingFromName("vote yes"), 32);
+			Q_strncpyz(str2, BindingFromName("vote no"), 32);
+
+			s = va(CG_TranslateString("Accept %s's invitation to join their fireteam?"), cgs.clientinfo[cgs.invitationClient].name);
+			CG_DrawStringExt(8, 200, s, colorYellow, qtrue, qtrue, TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 80);
+
+			s = va(CG_TranslateString("Press '%s' for YES, or '%s' for No"), str1, str2);
+			CG_DrawStringExt(8, 214, s, colorYellow, qtrue, qtrue, TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 80);
+			return;
+		}
 	}
 
-	if (cgs.propositionEndTime > cg.time && cgs.propositionClient >= 0) {
-		Q_strncpyz(str1, BindingFromName("vote yes"), 32);
-		Q_strncpyz(str2, BindingFromName("vote no"), 32);
-
-		s = va(CG_TranslateString("Accept %s's proposition to invite %s to join your fireteam?"), cgs.clientinfo[cgs.propositionClient2].name, cgs.clientinfo[cgs.propositionClient].name);
-		CG_DrawStringExt(8, 200, s, colorYellow, qtrue, qtrue, TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 80);
-
-		s = va(CG_TranslateString("Press '%s' for YES, or '%s' for No"), str1, str2);
-		CG_DrawStringExt(8, 214, s, colorYellow, qtrue, qtrue, TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 80);
-		return;
-	}
-
-	if (cgs.invitationEndTime > cg.time && cgs.invitationClient >= 0) {
-		Q_strncpyz(str1, BindingFromName("vote yes"), 32);
-		Q_strncpyz(str2, BindingFromName("vote no"), 32);
-
-		s = va(CG_TranslateString("Accept %s's invitation to join their fireteam?"), cgs.clientinfo[cgs.invitationClient].name);
-		CG_DrawStringExt(8, 200, s, colorYellow, qtrue, qtrue, TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 80);
-
-		s = va(CG_TranslateString("Press '%s' for YES, or '%s' for No"), str1, str2);
-		CG_DrawStringExt(8, 214, s, colorYellow, qtrue, qtrue, TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 80);
-		return;
-	}
-
-	if (cgs.voteTime) {
+	if (cgs.voteTime && cg_drawVote.integer) {
 		int sec;
 
 		Q_strncpyz(str1, BindingFromName("vote yes"), 32);
@@ -1286,85 +1308,87 @@ static void CG_DrawVote(void) {
 		return;
 	}
 
-	if (cgs.applicationEndTime > cg.time && cgs.applicationClient < 0) {
-		if (cgs.applicationClient == -1) {
-			s = "Your application has been submitted";
-			CG_DrawStringExt(8, 200, CG_TranslateString(s), colorYellow, qtrue, qtrue, TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 80);
-			return;
+	if (cg_drawFireteamInvitaitons.integer) {
+		if (cgs.applicationEndTime > cg.time && cgs.applicationClient < 0) {
+			if (cgs.applicationClient == -1) {
+				s = "Your application has been submitted";
+				CG_DrawStringExt(8, 200, CG_TranslateString(s), colorYellow, qtrue, qtrue, TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 80);
+				return;
+			}
+
+			if (cgs.applicationClient == -2) {
+				s = "Your application failed";
+				CG_DrawStringExt(8, 200, CG_TranslateString(s), colorYellow, qtrue, qtrue, TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 80);
+				return;
+			}
+
+			if (cgs.applicationClient == -3) {
+				s = "Your application has been approved";
+				CG_DrawStringExt(8, 200, CG_TranslateString(s), colorYellow, qtrue, qtrue, TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 80);
+				return;
+			}
+
+			if (cgs.applicationClient == -4) {
+				s = "Your application reply has been sent";
+				CG_DrawStringExt(8, 200, CG_TranslateString(s), colorYellow, qtrue, qtrue, TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 80);
+				return;
+			}
 		}
 
-		if (cgs.applicationClient == -2) {
-			s = "Your application failed";
-			CG_DrawStringExt(8, 200, CG_TranslateString(s), colorYellow, qtrue, qtrue, TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 80);
-			return;
+		if (cgs.propositionEndTime > cg.time && cgs.propositionClient < 0) {
+			if (cgs.propositionClient == -1) {
+				s = "Your proposition has been submitted";
+				CG_DrawStringExt(8, 200, CG_TranslateString(s), colorYellow, qtrue, qtrue, TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 80);
+				return;
+			}
+
+			if (cgs.propositionClient == -2) {
+				s = "Your proposition was rejected";
+				CG_DrawStringExt(8, 200, CG_TranslateString(s), colorYellow, qtrue, qtrue, TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 80);
+				return;
+			}
+
+			if (cgs.propositionClient == -3) {
+				s = "Your proposition was accepted";
+				CG_DrawStringExt(8, 200, CG_TranslateString(s), colorYellow, qtrue, qtrue, TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 80);
+				return;
+			}
+
+			if (cgs.propositionClient == -4) {
+				s = "Your proposition reply has been sent";
+				CG_DrawStringExt(8, 200, CG_TranslateString(s), colorYellow, qtrue, qtrue, TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 80);
+				return;
+			}
 		}
 
-		if (cgs.applicationClient == -3) {
-			s = "Your application has been approved";
-			CG_DrawStringExt(8, 200, CG_TranslateString(s), colorYellow, qtrue, qtrue, TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 80);
-			return;
-		}
+		if (cgs.invitationEndTime > cg.time && cgs.invitationClient < 0) {
+			if (cgs.invitationClient == -1) {
+				s = "Your invitation has been submitted";
+				CG_DrawStringExt(8, 200, CG_TranslateString(s), colorYellow, qtrue, qfalse, TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 80);
+				return;
+			}
 
-		if (cgs.applicationClient == -4) {
-			s = "Your application reply has been sent";
-			CG_DrawStringExt(8, 200, CG_TranslateString(s), colorYellow, qtrue, qtrue, TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 80);
-			return;
-		}
-	}
+			if (cgs.invitationClient == -2) {
+				s = "Your invitation was rejected";
+				CG_DrawStringExt(8, 200, CG_TranslateString(s), colorYellow, qtrue, qfalse, TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 80);
+				return;
+			}
 
-	if (cgs.propositionEndTime > cg.time && cgs.propositionClient < 0) {
-		if (cgs.propositionClient == -1) {
-			s = "Your proposition has been submitted";
-			CG_DrawStringExt(8, 200, CG_TranslateString(s), colorYellow, qtrue, qtrue, TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 80);
-			return;
-		}
+			if (cgs.invitationClient == -3) {
+				s = "Your invitation was accepted";
+				CG_DrawStringExt(8, 200, CG_TranslateString(s), colorYellow, qtrue, qfalse, TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 80);
+				return;
+			}
 
-		if (cgs.propositionClient == -2) {
-			s = "Your proposition was rejected";
-			CG_DrawStringExt(8, 200, CG_TranslateString(s), colorYellow, qtrue, qtrue, TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 80);
-			return;
-		}
+			if (cgs.invitationClient == -4) {
+				s = "Your invitation reply has been sent";
+				CG_DrawStringExt(8, 200, CG_TranslateString(s), colorYellow, qtrue, qfalse, TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 80);
+				return;
+			}
 
-		if (cgs.propositionClient == -3) {
-			s = "Your proposition was accepted";
-			CG_DrawStringExt(8, 200, CG_TranslateString(s), colorYellow, qtrue, qtrue, TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 80);
-			return;
-		}
-
-		if (cgs.propositionClient == -4) {
-			s = "Your proposition reply has been sent";
-			CG_DrawStringExt(8, 200, CG_TranslateString(s), colorYellow, qtrue, qtrue, TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 80);
-			return;
-		}
-	}
-
-	if (cgs.invitationEndTime > cg.time && cgs.invitationClient < 0) {
-		if (cgs.invitationClient == -1) {
-			s = "Your invitation has been submitted";
-			CG_DrawStringExt(8, 200, CG_TranslateString(s), colorYellow, qtrue, qfalse, TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 80);
-			return;
-		}
-
-		if (cgs.invitationClient == -2) {
-			s = "Your invitation was rejected";
-			CG_DrawStringExt(8, 200, CG_TranslateString(s), colorYellow, qtrue, qfalse, TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 80);
-			return;
-		}
-
-		if (cgs.invitationClient == -3) {
-			s = "Your invitation was accepted";
-			CG_DrawStringExt(8, 200, CG_TranslateString(s), colorYellow, qtrue, qfalse, TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 80);
-			return;
-		}
-
-		if (cgs.invitationClient == -4) {
-			s = "Your invitation reply has been sent";
-			CG_DrawStringExt(8, 200, CG_TranslateString(s), colorYellow, qtrue, qfalse, TINYCHAR_WIDTH, TINYCHAR_HEIGHT, 80);
-			return;
-		}
-
-		if (cgs.invitationClient < 0) {
-			return;
+			if (cgs.invitationClient < 0) {
+				return;
+			}
 		}
 	}
 }
@@ -1374,14 +1398,13 @@ static void CG_DrawVote(void) {
 CG_DrawSpectatorMessage
 =================
 */
-#define INFOTEXT_STARTX 8
-#define INFOTEXT_STARTY 80
 static void CG_DrawSpectatorMessage(void) {
 	const char *str2;
 	static int lastconfigGet = 0;
-	float      textScale     = 0.14f;
+	float      scale     = 0.15f, x, y;
+	vec4_t     color;
 
-	if (!cg_descriptiveText.integer) {
+	if (!cg_drawSpectatorMessage.integer) {
 		return;
 	}
 
@@ -1404,12 +1427,16 @@ static void CG_DrawSpectatorMessage(void) {
 		str2 = "ESCAPE";
 	}
 
-	CG_Text_Paint_Ext(INFOTEXT_STARTX, INFOTEXT_STARTY, textScale, textScale, colorWhite, va("Press %s to open Limbo Menu", str2), 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
+	x = CG_WideX(cg_spectatorMessageX.value);
+	y = cg_spectatorMessageY.value;
+	BG_ParseRGBACvar(cg_spectatorMessageColor.string, color);
+
+	CG_Text_Paint_Ext(x, y, scale, scale, color, va("Press %s to open Limbo Menu", str2), 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
 
 	str2 = BindingFromName("+attack");
-	CG_Text_Paint_Ext(INFOTEXT_STARTX, INFOTEXT_STARTY + 18, textScale, textScale, colorWhite, va("Press %s to follow next player", str2), 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
+	CG_Text_Paint_Ext(x, y + 18, scale, scale, color, va("Press %s to follow next player", str2), 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
 
-	CG_Text_Paint_Ext(INFOTEXT_STARTX, INFOTEXT_STARTY + 36, textScale, textScale, colorWhite, "Type /tutorial into console for a quick introduction", 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
+	CG_Text_Paint_Ext(x, y + 36, scale, scale, color, "Type /tutorial into console for a quick introduction", 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
 }
 
 /*
@@ -1418,14 +1445,18 @@ CG_DrawFollow
 =================
 */
 static void CG_DrawFollow(void) {
-	float scale = 0.18f;
+	float  scale = 0.19f, x, y;
+	vec4_t color;
 
 	// suburb, don't draw if any menu is up because of readability
-	if (!(cg.snap->ps.pm_flags & PMF_FOLLOW) || cg.UIisUp) {
+	if (!(cg.snap->ps.pm_flags & PMF_FOLLOW) || cg.UIisUp || !cg_drawSpectatorMessage.integer) {
 		return;
 	}
 
-	CG_Text_Paint_Ext(INFOTEXT_STARTX, INFOTEXT_STARTY, scale, scale, colorWhite, va("^Z>> ^w%s", cgs.clientinfo[cg.snap->ps.clientNum].name), 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
+	BG_ParseRGBACvar(cg_spectatorMessageColor.string, color);
+	x = CG_WideX(cg_spectatorMessageX.integer);
+	y = cg_spectatorMessageY.integer;
+	CG_Text_Paint_Ext(x, y, scale, scale, color, va(">> %s", cgs.clientinfo[cg.snap->ps.clientNum].name), 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
 }
 //==================================================================================
 
@@ -1859,12 +1890,53 @@ static int CG_PlayerAmmoValue(int *ammo, int *clips, int *akimboammo) {
 	return weap;
 }
 
-static void CG_DrawPlayerHealthBar(rectDef_t *rect) {
+static void CG_DrawPlayerAmmo(void) {
+	int       value, value2, value3, w;
+	float     scale;
+	float     x = CG_WideX(SCREEN_WIDTH) - 22;
+	float     y = 474;
+	char      buffer[32];
+	vec4_t    color;
+
+	if (!cg_drawPlayerAmmo.integer) {
+		return;
+	}
+
+	BG_ParseRGBACvar(cg_playerAmmoColor.string, color);
+	CG_PlayerAmmoValue(&value, &value2, &value3);
+	
+	x += CG_WideX(cg_playerAmmoXoffset.value);
+	y += cg_playerAmmoYoffset.value;
+	scale = 0.25f;
+
+	if (value3 >= 0) {
+		Com_sprintf(buffer, sizeof(buffer), "%i|%i/%i", value3, value, value2);
+		w = CG_Text_Width_Ext(buffer, scale, 0, &cgs.media.limboFont1);
+		CG_Text_Paint_Ext(x - w, y, scale, scale, color, buffer, 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
+	} else if (value2 >= 0) {
+		Com_sprintf(buffer, sizeof(buffer), "%i/%i", value, value2);
+		w = CG_Text_Width_Ext(buffer, scale, 0, &cgs.media.limboFont1);
+		CG_Text_Paint_Ext(x - w, y, scale, scale, color, buffer, 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
+	} else if (value >= 0) {
+		Com_sprintf(buffer, sizeof(buffer), "%i", value);
+		w = CG_Text_Width_Ext(buffer, scale, 0, &cgs.media.limboFont1);
+		CG_Text_Paint_Ext(x - w, y, scale, scale, color, buffer, 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
+	}
+}
+
+static void CG_DrawPlayerHealthBar(void) {
 	vec4_t bgcolour = { 1.f, 1.f, 1.f, 0.3f };
 	vec4_t colour;
+	float  x = 4; // Nico, 24 -> 4
+	float  y = SCREEN_HEIGHT - 92;
+	int    w = 12;
+	int    h = 72;
+	int    flags = 1 | 4 | 16 | 64;
+	float  frac;
 
-	int   flags = 1 | 4 | 16 | 64;
-	float frac;
+	if (!cg_drawPlayerHealthBar.integer) {
+		return;
+	}
 
 	CG_ColorForHealth(colour);
 	colour[3] = 0.5f;
@@ -1875,21 +1947,29 @@ static void CG_DrawPlayerHealthBar(rectDef_t *rect) {
 		frac = cg.snap->ps.stats[STAT_HEALTH] / (float) cg.snap->ps.stats[STAT_MAX_HEALTH];
 	}
 
-	CG_FilledBar(rect->x, rect->y + (rect->h * 0.1f), rect->w, rect->h * 0.84f, colour, NULL, bgcolour, frac, flags);
+	x += CG_WideX(cg_playerHealthBarXoffset.value);
+	y += cg_playerHealthBarYoffset.value;
+
+	CG_FilledBar(x, y + (h * 0.1f), w, h * 0.84f, colour, NULL, bgcolour, frac, flags);
 
 	trap_R_SetColor(NULL);
-	CG_DrawPic(rect->x, rect->y, rect->w, rect->h, cgs.media.hudSprintBar);
-	CG_DrawPic(rect->x, rect->y + rect->h + 4, rect->w, rect->w, cgs.media.hudHealthIcon);
+	CG_DrawPic(x, y, w, h, cgs.media.hudSprintBar);
+	CG_DrawPic(x, y + h + 4, w, w, cgs.media.hudHealthIcon);
 }
 
-static void CG_DrawWeapRecharge(rectDef_t *rect) {
-	float barFrac, chargeTime;
-	int   flags;
-
+static void CG_DrawWeapRecharge(void) {
+	float  barFrac, chargeTime;
+	int    flags = 1 | 4 | 16;
+	float  x = CG_WideX(SCREEN_WIDTH) - 16;
+	float  y = SCREEN_HEIGHT - 92;
+	int    w = 12;
+	int    h = 72;
 	vec4_t bgcolor = { 1.0f, 1.0f, 1.0f, 0.25f };
 	vec4_t color;
 
-	flags = 1 | 4 | 16;
+	if (!cg_drawWeaponRechargeBar.integer) {
+		return;
+	}
 
 	// Draw power bar
 	if (cg.snap->ps.stats[STAT_PLAYER_CLASS] == PC_ENGINEER) {
@@ -1909,117 +1989,61 @@ static void CG_DrawWeapRecharge(rectDef_t *rect) {
 		barFrac = 1.0;
 	}
 
+	x += CG_WideX(cg_weaponRechargeBarXoffset.value);
+	y += cg_weaponRechargeBarYoffset.value;
+
 	color[0] = 1.0f;
 	color[1] = color[2] = barFrac;
 	color[3] = 0.25 + barFrac * 0.5;
 
-	CG_FilledBar(rect->x, rect->y + (rect->h * 0.1f), rect->w, rect->h * 0.84f, color, NULL, bgcolor, barFrac, flags);
+	CG_FilledBar(x, y + (h * 0.1f), w, h * 0.84f, color, NULL, bgcolor, barFrac, flags);
 
 	trap_R_SetColor(NULL);
-	CG_DrawPic(rect->x, rect->y, rect->w, rect->h, cgs.media.hudSprintBar);
-	CG_DrawPic(rect->x + (rect->w * 0.25f) - 1, rect->y + rect->h + 4, (rect->w * 0.5f) + 2, rect->w + 2, cgs.media.hudPowerIcon);
+	CG_DrawPic(x, y, w, h, cgs.media.hudSprintBar);
+	CG_DrawPic(x + (w * 0.25f) - 1, y + h + 4, (w * 0.5f) + 2, w + 2, cgs.media.hudPowerIcon);
 }
 
 static void CG_DrawPlayerStatus(void) {
-	int       value, value2, value3;
-	char      buffer[32];
-	rectDef_t rect;
+	if (!cg_drawPlayerStatus.integer || cg.snap->ps.stats[STAT_HEALTH] <= 0 || cg.snap->ps.persistant[PERS_TEAM] == TEAM_SPECTATOR) {
+		return;
+	}
 
 	// Draw weapon icon and overheat bar
-	rect.x = CG_WideX(SCREEN_WIDTH) - 82;
-	rect.y = SCREEN_HEIGHT - 56;
-	rect.w = 60;
-	rect.h = 32;
-	CG_DrawWeapHeat(&rect, HUD_HORIZONTAL);
+	CG_DrawWeapHeat(HUD_HORIZONTAL);
 
-	if (cg_drawWeaponIconFlash.integer == 0) {
-		CG_DrawPlayerWeaponIcon(&rect, ITEM_ALIGN_RIGHT, &colorWhite);
+	if (!cg_drawWeaponIconFlash.integer) {
+		CG_DrawPlayerWeaponIcon(ITEM_ALIGN_RIGHT, &colorWhite);
 	} else {
 		int ws = BG_simpleWeaponState(cg.snap->ps.weaponstate);
-		CG_DrawPlayerWeaponIcon(&rect, ITEM_ALIGN_RIGHT, ((ws == WSTATE_SWITCH) ? &colorWhite : (ws == WSTATE_FIRE) ? &colorRed : &colorYellow));
+		CG_DrawPlayerWeaponIcon(ITEM_ALIGN_RIGHT, ((ws == WSTATE_SWITCH) ? &colorWhite : (ws == WSTATE_FIRE) ? &colorRed : &colorYellow));
 	}
 
-	// Draw ammo
-	CG_PlayerAmmoValue(&value, &value2, &value3);
-	if (value3 >= 0) {
-		Com_sprintf(buffer, sizeof (buffer), "%i|%i/%i", value3, value, value2);
-		CG_Text_Paint_Ext(CG_WideX(SCREEN_WIDTH) - 22 - CG_Text_Width_Ext(buffer, .25f, 0, &cgs.media.limboFont1), 480 - 1 * (16 + 2) + 12 - 4, .25f, .25f, colorWhite, buffer, 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
-	} else if (value2 >= 0) {
-		Com_sprintf(buffer, sizeof (buffer), "%i/%i", value, value2);
-		CG_Text_Paint_Ext(CG_WideX(SCREEN_WIDTH) - 22 - CG_Text_Width_Ext(buffer, .25f, 0, &cgs.media.limboFont1), 480 - 1 * (16 + 2) + 12 - 4, .25f, .25f, colorWhite, buffer, 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
-	} else if (value >= 0) {
-		Com_sprintf(buffer, sizeof (buffer), "%i", value);
-		CG_Text_Paint_Ext(CG_WideX(SCREEN_WIDTH) - 22 - CG_Text_Width_Ext(buffer, .25f, 0, &cgs.media.limboFont1), 480 - 1 * (16 + 2) + 12 - 4, .25f, .25f, colorWhite, buffer, 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
-	}
-
-	rect.x = 4; // Nico, 24 -> 4
-	rect.y = SCREEN_HEIGHT - 92;
-	rect.w = 12;
-	rect.h = 72;
-	CG_DrawPlayerHealthBar(&rect);
-
-	rect.x = CG_WideX(SCREEN_WIDTH) - 16;
-	rect.y = SCREEN_HEIGHT - 92;
-	rect.w = 12;
-	rect.h = 72;
-	CG_DrawWeapRecharge(&rect);
+	CG_DrawPlayerAmmo();
+	CG_DrawPlayerHealthBar();
+	CG_DrawWeapRecharge();
 }
 
 // Nico, heavilly modified
 static void CG_DrawPlayerStats(void) {
 	const char *str;
-	float      w;
+	int        w;
+	float      x = 44;
+	float      y = 474;
+	vec4_t     color;
 
+	if (!cg_drawPlayerStats.integer || cg.snap->ps.stats[STAT_HEALTH] <= 0 || cg.snap->ps.persistant[PERS_TEAM] == TEAM_SPECTATOR) {
+		return;
+	}
+
+	x += CG_WideX(cg_playerStatsXoffset.value);
+	y += cg_playerStatsYoffset.value;
 	str = va("%i", cg.snap->ps.stats[STAT_HEALTH]);
 	w   = CG_Text_Width_Ext(str, 0.25f, 0, &cgs.media.limboFont1);
-	CG_Text_Paint_Ext(42 - w, 474, 0.25f, 0.25f, colorWhite, str, 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
-	CG_Text_Paint_Ext(44, 474, 0.2f, 0.2f, colorWhite, "HP", 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
-}
 
-//bani
-#define SHOW_DEMO_SAVED 5000
-void CG_DrawDemoRecording(void) {
-	char status[1024];
-	char demostatus[128];
-	char wavestatus[128];
+	BG_ParseRGBACvar(cg_playerStatsColor.string, color);
 
-	if (!cl_demorecording.integer && !cl_waverecording.integer) {
-		return;
-	}
-
-	if (!cg_recording_statusline.integer) {
-		return;
-	}
-
-	if (cl_demorecording.integer) {
-		Com_sprintf(demostatus, sizeof (demostatus), " Demo: %s [%iKB] ", cl_demofilename.string, cl_demooffset.integer / 1024);
-	} else {
-		strncpy(demostatus, "", sizeof (demostatus));
-	}
-
-	if (cl_waverecording.integer) {
-		Com_sprintf(wavestatus, sizeof (demostatus), " Audio: %s [%iKB] ", cl_wavefilename.string, cl_waveoffset.integer / 1024);
-	} else {
-		strncpy(wavestatus, "", sizeof (wavestatus));
-	}
-
-	Com_sprintf(status, sizeof (status), "Recording%s%s", demostatus, wavestatus);
-
-	// Nico, add recording red dot
-	CG_Text_Paint_Ext(0, cg_recording_statusline.integer, 0.5f, 0.5f, colorRed, ".", 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont2);
-	CG_Text_Paint_Ext(14, cg_recording_statusline.integer, 0.14f, 0.14f, colorWhite, status, 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
-
-	// suburb, additional UI to replace console printouts
-	if (cg.stoppingAndSavingDemo) {
-		CG_Text_Paint_Ext(0, cg_recording_statusline.integer + 10, 0.5f, 0.5f, colorYellow, ".", 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont2);
-		CG_Text_Paint_Ext(14, cg_recording_statusline.integer + 10, 0.14f, 0.14f, colorWhite, "Stopping demo", 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
-	} else if (cg.time - cg.lastUnableToSaveDemoTime < SHOW_DEMO_SAVED && cg.lastUnableToSaveDemoTime != 0) {
-		CG_Text_Paint_Ext(0, cg_recording_statusline.integer + 10, 0.5f, 0.5f, colorRed, ".", 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont2);
-		CG_Text_Paint_Ext(14, cg_recording_statusline.integer + 10, 0.14f, 0.14f, colorWhite, "Unable to save demo", 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
-	} else if (cg.time - cg.lastSavingDemoTime < SHOW_DEMO_SAVED && cg.lastSavingDemoTime != 0) {
-		CG_Text_Paint_Ext(0, cg_recording_statusline.integer + 10, 0.5f, 0.5f, colorGreen, ".", 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont2);
-		CG_Text_Paint_Ext(14, cg_recording_statusline.integer + 10, 0.14f, 0.14f, colorWhite, "Demo saved", 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
-	}
+	CG_Text_Paint_Ext(x - w, y, 0.25f, 0.25f, color, str, 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
+	CG_Text_Paint_Ext(x + 2, y, 0.2f, 0.2f, color, "HP", 0, 0, ITEM_TEXTSTYLE_SHADOWED, &cgs.media.limboFont1);
 }
 
 /*
@@ -2036,7 +2060,7 @@ static void CG_Draw2D(void) {
 	}
 
 	//bani - #127 - no longer cheat protected, we draw crosshair/reticle in non demoplayback
-	if (cg_draw2D.integer == 0) {
+	if (!cg_draw2D.integer) {
 		if (cg.demoPlayback) {
 			return;
 		}
@@ -2047,24 +2071,17 @@ static void CG_Draw2D(void) {
 
 	if (!cg.cameraMode) {
 		CG_DrawFlashFade();
+		CG_DrawChat();
 
 		if (cg.snap->ps.persistant[PERS_TEAM] == TEAM_SPECTATOR) {
-
 			CG_DrawCrosshair();
 			CG_DrawCrosshairNames();
-
-			// NERVE - SMF - we need to do this for spectators as well
-			CG_DrawTeamInfo();
 		} else {
 			// don't draw any status if dead
 			if (cg.snap->ps.stats[STAT_HEALTH] > 0 || (cg.snap->ps.pm_flags & PMF_FOLLOW)) {
-
 				CG_DrawCrosshair();
-
 				CG_DrawCrosshairNames();
 			}
-
-			CG_DrawTeamInfo();
 
 			if (cg_drawStatus.integer) {
 				Menu_PaintAll();
@@ -2082,32 +2099,13 @@ static void CG_Draw2D(void) {
 
 	// don't draw center string if scoreboard is up
 	if (!CG_DrawScoreboard()) {
-		if (cg.snap->ps.persistant[PERS_TEAM] != TEAM_SPECTATOR) {
-			rectDef_t rect;
+		CG_DrawPlayerStatus();
+		CG_DrawPlayerStats();
 
-			if (cg.snap->ps.stats[STAT_HEALTH] > 0) {
+		CG_DrawCursorhint();
+		CG_DrawWeapStability();
 
-				CG_DrawPlayerStatus();
-				CG_DrawPlayerStats();
-			}
-
-			// Cursor hint
-			rect.w = rect.h = 48;
-			rect.x = .5f * SCREEN_WIDTH - .5f * rect.w;
-			rect.y = 260;
-			CG_DrawCursorhint(&rect);
-
-			// Stability bar
-			rect.x = 50;
-			rect.y = 208;
-			rect.w = 10;
-			rect.h = 64;
-			CG_DrawWeapStability(&rect);
-		}
-
-		if (!cg_paused.integer) {
-			CG_DrawUpperRight();
-		}
+		CG_DrawUpperRight();
 
 		CG_DrawCenterString();
 		CG_DrawPMItems();
@@ -2116,6 +2114,9 @@ static void CG_Draw2D(void) {
 		CG_DrawFollow();
 
 		CG_DrawObjectiveInfo();
+
+		// suburb, moved here
+		CG_DrawFireTeamOverlay();
 
 		// Nico, draw CGaz
 		CG_DrawCGaz();
