@@ -1155,7 +1155,12 @@ static void PM_NoclipMove(void) {
 	float  scale;
 	float  scaleCorrection;
 
-	pm->ps->viewheight = DEFAULT_VIEWHEIGHT;
+	// suburb, adjust viewheight in case we were proning, crouching not needed because it isn't toggleable
+	if (pm->ps->eFlags & EF_PRONE) {
+		pm->ps->viewheight = PRONE_VIEWHEIGHT;
+	} else {
+		pm->ps->viewheight = DEFAULT_VIEWHEIGHT;
+	}
 
 	// suburb, take sprint into account not to interfere with the cg_noclipSpeed cvar
 	if (pm->cmd.buttons & BUTTON_SPRINT) {
@@ -2314,7 +2319,8 @@ void PM_UpdateViewAngles(playerState_t *ps, pmoveExt_t *pmext, usercmd_t *cmd, v
 			// rain - bugfix - use supplied trace - pm may not be set
 			PM_TraceLegs(&traceres, &pmext->proneLegsOffset, ps->origin, ps->origin, NULL, ps->viewangles, pm->trace, ps->clientNum, tracemask);
 
-			if (traceres.allsolid /* && trace.entityNum >= MAX_CLIENTS */) {
+			// suburb, don't undo yaw if noclipping to get free movement in brushes
+			if (traceres.allsolid && ps->pm_type != PM_NOCLIP/* && trace.entityNum >= MAX_CLIENTS */) {
 				// starting in a solid, no space
 				ps->viewangles[YAW]   = oldYaw;
 				ps->delta_angles[YAW] = ANGLE2SHORT(ps->viewangles[YAW]) - cmd->angles[YAW];
