@@ -1239,6 +1239,11 @@ char *ClientConnect(int clientNum, qboolean firstTime) {
 	// count current clients and rank for scoreboard
 	CalculateRanks();
 
+	// suburb, check for autodemo
+	if (client->pers.autoDemo && client->sess.sessionTeam != TEAM_SPECTATOR) {
+		trap_SendServerCommand(ent - g_entities, "tempDemoStart");
+	}
+
 	return NULL;
 }
 
