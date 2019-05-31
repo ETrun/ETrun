@@ -50,7 +50,7 @@ menuDef {
 	MULTI( 8, 208, (SUBWINDOW_WIDTH)-4, 10, "Noclip speed:", .2, 8, "etr_noclipSpeed", cvarFloatList { "100" 100 "1000" 1000 "10000" 10000 "100000" 100000 "1000000" 1000000 }, "Noclip speed in units per second" )
 
 	SUBWINDOW( 6, 226, (SUBWINDOW_WIDTH), 60, "VISIBLE TRIGGERS" )
-	MULTI( 8, 242, (SUBWINDOW_WIDTH)-4, 10, "Toggle visible triggers:", .2, 8, "etr_drawTriggers", cvarFloatList { "No" 0 "Triggers" 1 "Triggers, Jumppads" 2 "Triggers, Jumppads, Teleporters" 3 "All" 4}, "Toggle trigger types to draw" )
+	MULTI( 8, 242, (SUBWINDOW_WIDTH)-4, 10, "Toggle visible triggers:", .2, 8, "etr_drawTriggers", cvarFloatList { "No" 0 "ETrun Triggers" 1 "Debug" 2}, "Toggle trigger types to draw" )
 	MULTI( 8, 258, (SUBWINDOW_WIDTH)-4, 10, "Triggers draw scale:", .2, 8, "etr_triggersDrawScale", cvarFloatList { "0" 0 "0.01" 0.01 "-0.01" -0.01 "0.1" 0.1 "-0.1" -0.1 "1" 1 "-1" -1 "10" 10 "-10" -10}, "Triggers drawing size offset" )
 	YESNO( 8, 274, (SUBWINDOW_WIDTH)-4, 10, "Toggle triggers edges:", .2, 8, "etr_triggersDrawEdges", "" )
 
