@@ -88,15 +88,18 @@ typedef enum {
 	MOVER_2TO1ROTATE
 } moverState_t;
 
-#define MAX_CONSTRUCT_STAGES 3
-#define ALLOW_AXIS_TEAM         1
-#define ALLOW_ALLIED_TEAM       2
+#define MAX_CONSTRUCT_STAGES          3
+#define ALLOW_AXIS_TEAM               1
+#define ALLOW_ALLIED_TEAM             2
 
 // Nico, knockback value at panzerfaust
-#define KNOCKBACK_VALUE         500
+#define KNOCKBACK_VALUE               500
 
 // Nico, map change delay
-#define MAP_CHANGE_DELAY        15
+#define MAP_CHANGE_DELAY              15
+
+// suburb, manual spam protection
+#define MANUAL_SPAM_PROTECTION_TIME   550
 
 //============================================================================
 
@@ -698,6 +701,9 @@ typedef struct {
 
 	// suburb, cvars check delay
 	int lastSpecVarsCheck;
+
+	// suburb, manual spam protection
+	int lastDeath;
 
 } clientPersistant_t;
 
