@@ -664,8 +664,8 @@ cvarTable_t cvarTable[] =
 
 	{ NULL,                      "cg_etVersion",             "",      CVAR_USERINFO | CVAR_ROM,  0 },
 	{ &cg_drawFireteamOverlay,   "cg_drawFireteamOverlay",   "1",     CVAR_ARCHIVE,              0 },
-	{ &cg_fireteamOverlayX,      "cg_fireteamOverlayX",      "10",    CVAR_ARCHIVE,              0 },
-	{ &cg_fireteamOverlayY,      "cg_fireteamOverlayY",      "10",    CVAR_ARCHIVE,              0 },
+	{ &cg_fireteamOverlayX,      "cg_fireteamOverlayX",      "12",    CVAR_ARCHIVE,              0 },
+	{ &cg_fireteamOverlayY,      "cg_fireteamOverlayY",      "25",    CVAR_ARCHIVE,              0 },
 	{ &cg_drawFireteamInvitaitons, "cg_drawFireteamInvitaitons", "1", CVAR_ARCHIVE,              0 },
 	{ &cg_drawVote,              "cg_drawVote",              "1",     CVAR_ARCHIVE,              0 },
 	{ &cg_drawSmallPopupIcons,   "cg_drawSmallPopupIcons",   "0",     CVAR_ARCHIVE,              0 },
