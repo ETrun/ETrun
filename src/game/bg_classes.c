@@ -254,6 +254,8 @@ qboolean BG_WeaponIsPrimary(weapon_t weapon) {
 	case WP_GARAND:
 	case WP_K43:
 		return qtrue;
+	default:
+		return qfalse;
 	}
 	return qfalse;
 }
