@@ -165,13 +165,13 @@ Prevent a previously invited spectator to spectate you.
 
 Send a private message containing text  `message` to player name `playerName`. If `playerName` is not found, numeric player id `playerId` will be used instead.
 
-# abort
+# interruptRun
 
 ```
-/abort
+/interruptRun
 ```
 
-Abort an active run.
+Stops an active timerun.
 
 # mod_information
 
