@@ -1,12 +1,39 @@
 There are various client commands available in ETrun. They are described below.
 
-# save
+# class
 
 ```
-/save [slotId]
+/class class [weapon1] [weapon2]
 ```
 
-Save current position into the given `slotId`. If `slotId` is omitted, default to slot 0.
+Change player class to `class`. Possible classes are described below.
+
+- `weapon1` is the numeric id of the weapon among `class`.
+- `weapon2` is the numeric id of alternate weapon among `class`.
+
+| Class name  | `class` |
+| ----------- | --------|
+| Medic       | m       |
+| Engineer    | e       |
+| Field ops   | f       |
+| Covert ops  | c       |
+| Soldier     | s       |
+
+# h (help)
+
+```
+/h [command]
+```
+
+Provide help about ETrun commands. If `command` is omitted, list all available commands. If provided, display usage of `command`.
+
+# interruptRun
+
+```
+/interruptRun
+```
+
+Stops an active timerun.
 
 # load
 
@@ -16,32 +43,8 @@ Save current position into the given `slotId`. If `slotId` is omitted, default t
 
 Load a previously saved position from saved slots. If `slotId` is omitted, default to slot 0.
 
-- View angles are also loaded if `cg_loadViewAngles = 1`.
-- Weapon is also loaded if `cg_loadWeapon = 1`.
-
-# login
-
-```
-/login
-```
-
-Attempt to login the player on timeruns.net API using `cg_timerunsToken` value.
-
-# logout
-
-```
-/logout
-```
-
-Logout a player from timeruns.net API.
-
-# records
-
-```
-/records
-```
-
-Request timeruns.net API for records of every runs in the current map and print them.
+- View angles are also loaded if `etr_loadViewAngles = 1`.
+- Weapon is also loaded if `etr_loadWeapon = 1`.
 
 # loadCheckpoints
 
@@ -66,21 +69,38 @@ Request timeruns.net API for the run checkpoints of a user and load them.
 /loadCheckpoints other_player run2
 ```
 
-# h (help)
+# login
 
 ```
-/h [command]
+/login
 ```
 
-Provide help about ETrun commands. If `command` is omitted, list all available commands. If provided, display usage of `command`.
+Attempt to login the player on timeruns.net API using `etr_authToken` value.
 
-# tutorial
+# logout
 
 ```
-/tutorial
+/logout
 ```
 
-Show an introduction for beginners into the console.
+Logout a player from timeruns.net API.
+
+# m (private messaging)
+
+```
+/m playerName message
+/m playerId message
+```
+
+Send a private message containing text  `message` to player name `playerName`. If `playerName` is not found, numeric player id `playerId` will be used instead.
+
+# mod_information
+
+```
+/mod_information
+```
+
+Displays informations about mod.
 
 # rank
 
@@ -105,40 +125,21 @@ When no option provided, this command will requires player to be logged in and w
 /rank other_player shorties "Shorties 2" AP
 ```
 
-# class
+# records
 
 ```
-/class class [weapon1] [weapon2]
+/records
 ```
 
-Change player class to `class`. Possible classes are described below.
+Request timeruns.net API for records of every runs in the current map and print them.
 
-- `weapon1` is the numeric id of the weapon among `class`.
-- `weapon2` is the numeric id of alternate weapon among `class`.
-
-| Class name  | `class` |
-| ----------- | --------|
-| Medic       | m       |
-| Engineer    | e       |
-| Field ops   | f       |
-| Covert ops  | c       |
-| Soldier     | s       |
-
-# speclock
+# save
 
 ```
-/speclock
+/save [slotId]
 ```
 
-Prevent spectators to spectate you.
-
-# specunclock
-
-```
-/specunclock
-```
-
-Allow spectators to spectate you.
+Save current position into the given `slotId`. If `slotId` is omitted, default to slot 0.
 
 # specinvite
 
@@ -148,6 +149,14 @@ Allow spectators to spectate you.
 
 Allow `playerId` to spectate you.
 
+# speclock
+
+```
+/speclock
+```
+
+Prevent spectators to spectate you.
+
 # specuninvite
 
 ```
@@ -156,27 +165,18 @@ Allow `playerId` to spectate you.
 
 Prevent a previously invited spectator to spectate you.
 
-# m (private messaging)
+# specunlock
 
 ```
-/m playerName message
-/m playerId message
+/specunlock
 ```
 
-Send a private message containing text  `message` to player name `playerName`. If `playerName` is not found, numeric player id `playerId` will be used instead.
+Allow spectators to spectate you.
 
-# interruptRun
-
-```
-/interruptRun
-```
-
-Stops an active timerun.
-
-# mod_information
+# tutorial
 
 ```
-/mod_information
+/tutorial
 ```
 
-Displays informations about mod.
+Show an introduction for beginners into the console.
