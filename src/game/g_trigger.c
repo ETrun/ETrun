@@ -131,7 +131,6 @@ so, the basic time between firing is a random time between
 (wait - random) and (wait + random)
 */
 void SP_trigger_multiple(gentity_t *ent) {
-	gentity_t *target;
 	G_SpawnFloat("wait", "0.5", &ent->wait);
 
 	ent->touch   = Touch_Multi;

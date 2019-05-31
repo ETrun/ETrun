@@ -688,8 +688,6 @@ Draw velocity snapping zones (core math taken from iodfengine)
 */
 void CG_DrawVelocitySnapping(void) {
 	vec4_t color[2];
-	float  rgba1[4]  = { 0.4f, 0, 0, 0.5f };
-	float  rgba2[4]  = { 0, 0.4f, 0.4f, 0.5f };
 	float  step      = 0;
 	float  yaw       = 0;
 	float  snapHud_H = 0;
