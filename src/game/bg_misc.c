@@ -4037,7 +4037,7 @@ Reads RBG(A) cvars and sets parsed color var components
 */
 void BG_ParseRGBACvar(char *cvarString, float *color) {
 	char *s = cvarString;
-	int i = 0;
+	unsigned int i = 0;
 
 	// white in case we have no good format
 	Vector4Copy(colorWhite, color);
@@ -4064,16 +4064,16 @@ void BG_ParseRGBACvar(char *cvarString, float *color) {
 		i++;
 	}
 
-	// get semicolon count
-	int semicolons = 0;
+	// get space count
+	int spaces = 0;
 	for (i = 0; i < strlen(s); ++i) {
 		if (s[i] == ' ') {
-			semicolons++;
+			spaces++;
 		}
 	}
 	
 	// "R G B( A)" format
-	if (semicolons >= 2) {
+	if (spaces >= 2) {
 		char temp[4][8];
 		int j = 0, k = 0;
 		for (i = 0; i < strlen(s) + 1; ++i) {

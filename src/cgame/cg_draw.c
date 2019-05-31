@@ -2328,7 +2328,7 @@ static void CG_Autodemo() {
 			trap_FS_FCloseFile(demo);
 
 			if (etr_autoDemoPrints.integer) {
-				CG_Printf(va("%s^w: ^dDemo saved as: ^n%s\n", GAME_VERSION_COLORED), name);
+				CG_Printf("%s^w: ^dDemo saved as: ^n%s\n", GAME_VERSION_COLORED, name);
 			}
 
 			cg.stoppingAndSavingDemo = qfalse;
