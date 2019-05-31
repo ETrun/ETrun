@@ -18,6 +18,7 @@ ETrun Contributors
 * **[Aciz](https://github.com/Aciz)**
 
   * Mapscripts
+  * Code advice
   
 * **[Zero](https://github.com/haapanen)**
 
