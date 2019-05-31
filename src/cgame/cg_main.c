@@ -803,7 +803,7 @@ cvarTable_t cvarTable[] =
 	{ &etr_popupGrouped,         "etr_popupGrouped",         "2",     CVAR_ARCHIVE,              0 },
 	{ &etr_drawPopups,           "etr_drawPopups",           "1",     CVAR_ARCHIVE,              0 },
 	{ &etr_popupX,               "etr_popupX",               "4",     CVAR_ARCHIVE,              0 },
-	{ &etr_popupY,               "etr_popupY",               "360",  CVAR_ARCHIVE,              0 },
+	{ &etr_popupY,               "etr_popupY",               "360",   CVAR_ARCHIVE,              0 },
 
 	// Automatically load checkpoints
 	{ &etr_autoLoadCheckpoints,  "etr_autoLoadCheckpoints",  "0",     CVAR_ARCHIVE,              0 },
