@@ -934,9 +934,23 @@ void G_SayTo(gentity_t *ent, gentity_t *other, int mode, int color, const char *
 	}
 
 	if (encoded) {
-		cmd = mode == SAY_TEAM || mode == SAY_BUDDY ? "enc_tchat" : "enc_chat";
+		if (mode == SAY_TEAM) {
+			cmd = "enc_tchat";
+		} else if (mode == SAY_BUDDY) {
+			cmd = "enc_ftchat";
+		} else {
+			cmd = "enc_chat";
+		}
+		//cmd = mode == SAY_TEAM || mode == SAY_BUDDY ? "enc_tchat" : "enc_chat";
 	} else {
-		cmd = mode == SAY_TEAM || mode == SAY_BUDDY ? "tchat" : "chat";
+		if (mode == SAY_TEAM) {
+			cmd = "tchat";
+		} else if (mode == SAY_BUDDY) {
+			cmd = "ftchat";
+		} else {
+			cmd = "chat";
+		}
+		//cmd = mode == SAY_TEAM || mode == SAY_BUDDY ? "tchat" : "chat";
 	}
 	trap_SendServerCommand(other - g_entities, va("%s \"%s%c%c%s\" %d", cmd, name, Q_COLOR_ESCAPE, color, message, (int)(ent - g_entities)));
 }
