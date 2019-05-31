@@ -1338,6 +1338,9 @@ void ClientBegin(int clientNum) {
 		Cmd_LoadCheckpoints_real(ent, "0", 0); // "0" as ignore vlaue, because we load player checkpoints
 	}
 
+	// suburb, manual spam protection
+	ent->client->pers.lastDeath = level.time;
+
 	G_LogPrintf(qtrue, "ClientBegin: %i\n", clientNum);
 }
 
