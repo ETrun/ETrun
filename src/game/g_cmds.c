@@ -2271,7 +2271,7 @@ static command_t floodProtectedCommands[] =
 	{ "rank",            qtrue,  Cmd_Rank_f,            qtrue,  "Shows rankings for given options",         "[userName] [mapName] [runName] [physicsName]" },
 	{ "loadCheckpoints", qtrue,  Cmd_LoadCheckpoints_f, qtrue,  "Loads checkpoints from your PB",           "[userName] [run name or id]"                  },
 	{ "h",               qtrue,  Cmd_Help_f,            qtrue,  "Shows help message",                       "[command]"                                    },
-	{ "abort",           qtrue,  Cmd_Abort_f,           qtrue,  "Aborts the current run",                   NULL                                           },
+	{ "interruptRun",    qtrue,  Cmd_InterruptRun_f,    qtrue,  "Stops the current run",                    NULL                                           },
 };
 // Nico, end of defines commands that are flood protected or not
 
@@ -2675,14 +2675,14 @@ void Cmd_Help_f(gentity_t *ent) {
 }
 
 /**
-* Abort current timerun command
+* Interrupt timerun command
 * @author: suburb
 */
-void Cmd_Abort_f(gentity_t *ent) {
+void Cmd_InterruptRun_f(gentity_t *ent) {
 	if (ent->client->sess.timerunActive) {
 		// triggerbug fix
 		if (ent->client->pers.isTouchingTrigger) {
-			CP("cp \"^dYou cannot ^nabort ^din triggers\n\"");
+			CP("cp \"^dYou cannot ^ninterrupt ^din triggers\n\"");
 			return;
 		}
 
