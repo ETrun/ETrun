@@ -844,8 +844,8 @@ void CG_InitConsoleCommands(void) {
 	// Nico, help
 	trap_AddCommand("h");
 
-	// suburb, abort run command
-	trap_AddCommand("abort");
+	// suburb, interrupt run command
+	trap_AddCommand("interruptRun");
 
 	// suburb, tutorial
 	trap_AddCommand("tutorial");
