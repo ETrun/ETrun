@@ -183,7 +183,7 @@ clientInfo_t *CG_SortedFireTeamPlayerForPosition(int pos, int max) {
 
 #define FT_BAR_YSPACING 2.f
 #define FT_BAR_HEIGHT 10.f
-#define FT_WIDTH 115 // Nico
+#define FT_WIDTH 160 // suburb, incremented to match ingame main menu
 void CG_DrawFireTeamOverlay(void) {
 	float          x = CG_WideX(cg_fireteamOverlayX.value);
 	float          y = cg_fireteamOverlayY.value;
