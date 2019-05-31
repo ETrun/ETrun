@@ -416,6 +416,10 @@ vmCvar_t etr_numPopups;
 vmCvar_t etr_popupTime;
 vmCvar_t etr_popupStayTime;
 vmCvar_t etr_popupFadeTime;
+vmCvar_t etr_popupGrouped;
+vmCvar_t etr_drawPopups;
+vmCvar_t etr_popupX;
+vmCvar_t etr_popupY;
 
 // Automatically load checkpoints
 vmCvar_t etr_autoLoadCheckpoints;
@@ -793,9 +797,13 @@ cvarTable_t cvarTable[] =
 
 	// Popups
 	{ &etr_numPopups,            "etr_numPopups",            "5",     CVAR_ARCHIVE,              0 },
-	{ &etr_popupTime,            "etr_popupTime",            "1000",  CVAR_ARCHIVE,              0 },
+	{ &etr_popupTime,            "etr_popupTime",            "0",     CVAR_ARCHIVE,              0 },
 	{ &etr_popupStayTime,        "etr_popupStayTime",        "2000",  CVAR_ARCHIVE,              0 },
 	{ &etr_popupFadeTime,        "etr_popupFadeTime",        "2500",  CVAR_ARCHIVE,              0 },
+	{ &etr_popupGrouped,         "etr_popupGrouped",         "2",     CVAR_ARCHIVE,              0 },
+	{ &etr_drawPopups,           "etr_drawPopups",           "1",     CVAR_ARCHIVE,              0 },
+	{ &etr_popupX,               "etr_popupX",               "4",     CVAR_ARCHIVE,              0 },
+	{ &etr_popupY,               "etr_popupY",               "360",  CVAR_ARCHIVE,              0 },
 
 	// Automatically load checkpoints
 	{ &etr_autoLoadCheckpoints,  "etr_autoLoadCheckpoints",  "0",     CVAR_ARCHIVE,              0 },
