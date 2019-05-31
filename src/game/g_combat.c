@@ -359,6 +359,9 @@ void player_die(gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int 
 	/* Nico, instant reswawn
 	self->client->respawnTime = level.timeCurrent + 800;*/
 
+	// suburb, manual spam protection
+	self->client->pers.lastDeath = level.time;
+
 	// remove powerups
 	memset(self->client->ps.powerups, 0, sizeof (self->client->ps.powerups));
 

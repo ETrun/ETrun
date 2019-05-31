@@ -356,9 +356,8 @@ Cmd_Kill_f
 =================
 */
 void Cmd_Kill_f(gentity_t *ent) {
-	if (ent->client->sess.sessionTeam == TEAM_SPECTATOR ||
-	    (ent->client->ps.pm_flags & PMF_LIMBO) ||
-	    ent->health <= 0) {
+	if (ent->client->sess.sessionTeam == TEAM_SPECTATOR || (ent->client->ps.pm_flags & PMF_LIMBO) ||
+	    ent->health <= 0 || (ent->client->pers.lastDeath + MANUAL_SPAM_PROTECTION_TIME > level.time)) {
 		return;
 	}
 
@@ -597,6 +596,12 @@ void Cmd_Team_f(gentity_t *ent) {
 		CP(va("print \"%s team\n\"", pszTeamName));
 		return;
 	}
+
+	// suburb, manual spam protection
+	if (ent->client->pers.lastDeath + MANUAL_SPAM_PROTECTION_TIME > level.time) {
+		return;
+	}
+	ent->client->pers.lastDeath = level.time;
 
 	trap_Argv(1, s, sizeof (s));
 	trap_Argv(2, ptype, sizeof (ptype));
@@ -2245,8 +2250,8 @@ static command_t floodProtectedCommands[] =
 	{ "unignore",        qfalse, Cmd_UnIgnore_f,        qfalse, NULL,                                       NULL                                           },
 	{ "rs",              qfalse, Cmd_ResetSetup_f,      qfalse, NULL,                                       NULL                                           },
 	{ "noclip",          qfalse, Cmd_Noclip_f,          qfalse, NULL,                                       NULL                                           },
-	{ "kill",            qtrue,  Cmd_Kill_f,            qfalse, NULL,                                       NULL                                           },
-	{ "team",            qtrue,  Cmd_Team_f,            qfalse, NULL,                                       NULL                                           },
+	{ "kill",            qfalse, Cmd_Kill_f,            qfalse, NULL,                                       NULL                                           },
+	{ "team",            qfalse, Cmd_Team_f,            qfalse, NULL,                                       NULL                                           },
 	{ "stopcamera",      qfalse, Cmd_StopCamera_f,      qfalse, NULL,                                       NULL                                           },
 	{ "setcameraorigin", qfalse, Cmd_SetCameraOrigin_f, qfalse, NULL,                                       NULL                                           },
 	{ "setspawnpt",      qfalse, Cmd_SetSpawnPoint_f,   qtrue,  "Allows you to choose a spawn point",       "spawnId"                                      },
