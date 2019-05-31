@@ -1,4 +1,35 @@
-Some cvars use bitflagged value, it means you can combine options by making the sum of their related flags.
+List of ETrun server cvars.
+
+Note: Some cvars use `bitflagged` value, it means you can combine options by making the sum of their related flags.
+
+# Custom mapscripts
+
+| Name  | Value | Default | Description |
+| ----- | ----- | ------- | ----------- |
+| g_mapScriptDirectory | *string* | "custommapscripts" | Name of the custom mapscripts directory. |
+
+# Enable/disable client features
+
+| Name  | Value | Default | Description |
+| ----- | ----- | ------- | ----------- |
+| g_disableCGaz | 0,1 | 0 | Disable usage of CGaz. Introduced in 1.4.0. |
+| g_disableSnappingHUD | 0,1 | 0 | Disable usage of Velocity Snapping HUD. Introduced in 1.4.0. |
+
+# Firewall
+
+| Name  | Value | Default | Description |
+| ----- | ----- | ------- | ----------- |
+| g_maxConnsPerIP | *integer* | 3 | Maximum clients allowed to connect from a same IP address. |
+
+# Flood protection
+
+| Name  | Value | Default | Description |
+| ----- | ----- | ------- | ----------- |
+| g_floodProtect | 0,1 | 1 | Enable flood protection. |
+| g_floodThreshold | *integer* | 8 | Limit the number of commands a client can send in an interval of 30 seconds. |
+| g_floodWait | *integer* | 768 | Delay (msec) required between two commands from a client. |
+| g_maxNameChanges | *integer* | 3 | Maximum name changes allowed per map. Use -1 to disable. |
+| vote_delay | *integer* | 20000 | Force a delay (msec) between two votes. Introduced in 1.4.0. |
 
 # Game physics
 
@@ -30,6 +61,20 @@ Sticky values for physics used on official timeruns.net game servers are listed 
 | AP with OB | 239 |
 | AP | 255 |
 
+# GeoIP
+
+| Name  | Value | Default | Description |
+| ----- | ----- | ------- | ----------- |
+| g_useGeoIP | 0,1 | 0 | Enable use of GeoIP to geolocate and display country flags of players based on their IP addresses. |
+| g_geoIPDbPath | *string* | "" | Path to GeoIP database inside etrun directory. Compatible with [Maxmind Geolite Legacy](https://dev.maxmind.com/geoip/legacy/geolite/). |
+
+# Logging
+
+| Name  | Value | Default | Description |
+| ----- | ----- | ------- | ----------- |
+| g_chatLog | 0,1 | 1 | Enable logging player chat to a separate `chat.log` file. Introduced in 1.2.0. |
+| g_debugLog | 0,1 | 0 | Enable debug logging to a `debug.log` file. |
+
 # Map entities
 
 | Name  | Value | Default | Description |
@@ -51,21 +96,17 @@ Available flags for `g_enableMapEntities` are listed below.
 | Enable location jumppads `target_location` | 16 |
 | Disable hurt entities | 32 |
 
-# Flood protection
+# Strict save/load
 
 | Name  | Value | Default | Description |
 | ----- | ----- | ------- | ----------- |
-| g_floodProtect | 0,1 | 1 | Enable flood protection. |
-| g_floodThreshold | *integer* | 8 | Limit the number of commands a client can send in an interval of 30 seconds. |
-| g_floodWait | *integer* | 768 | Delay (msec) required between two commands from a client. |
-| g_maxNameChanges | *integer* | 3 | Maximum name changes allowed per map. Use -1 to disable. |
-| vote_delay | *integer* | 20000 | Force a delay (msec) between two votes. Introduced in 1.4.0. |
+| g_strictSaveLoad | 0,1 | 0 | Enable [strict save/load mode](https://github.com/ETrun/ETrun/issues/41). |
 
-# Firewall
+# Timelimit
 
 | Name  | Value | Default | Description |
 | ----- | ----- | ------- | ----------- |
-| g_maxConnsPerIP | *integer* | 3 | Maximum clients allowed to connect from a same IP address. |
+| timelimit | *integer* | 0 | Amount of time before a random map gets loaded. 0 means no timelimit. Requires API. |
 
 # Timeruns.net API
 
@@ -75,42 +116,3 @@ Available flags for `g_enableMapEntities` are listed below.
 | g_APImoduleName | *string* | timeruns.mod | Name of API module file (must be located either in `fs_homepath` or `fs_basepath`). |
 | g_cupMode | 0,1 | 0 | Enable cup mode. |
 | g_cupKey | *string* | "" | Access key used while server is running in cup mode. |
-
-# Custom mapscripts
-
-| Name  | Value | Default | Description |
-| ----- | ----- | ------- | ----------- |
-| g_mapScriptDirectory | *string* | "custommapscripts" | Name of the custom mapscripts directory. |
-
-# Timelimit
-
-| Name  | Value | Default | Description |
-| ----- | ----- | ------- | ----------- |
-| timelimit | *integer* | 0 | Amount of time before a random map gets loaded. 0 means no timelimit. Requires API. |
-
-# GeoIP
-
-| Name  | Value | Default | Description |
-| ----- | ----- | ------- | ----------- |
-| g_useGeoIP | 0,1 | 0 | Enable use of GeoIP to geolocate and display country flags of players based on their IP addresses. |
-| g_geoIPDbPath | *string* | "" | Path to GeoIP database inside etrun directory. Compatible with [Maxmind Geolite Legacy](https://dev.maxmind.com/geoip/legacy/geolite/). |
-
-# Logging
-
-| Name  | Value | Default | Description |
-| ----- | ----- | ------- | ----------- |
-| g_chatLog | 0,1 | 1 | Enable logging player chat to a separate `chat.log` file. Introduced in 1.2.0. |
-| g_debugLog | 0,1 | 0 | Enable debug logging to a `debug.log` file. |
-
-# Strict save/load
-
-| Name  | Value | Default | Description |
-| ----- | ----- | ------- | ----------- |
-| g_strictSaveLoad | 0,1 | 0 | Enable [strict save/load mode](https://github.com/ETrun/ETrun/issues/41). |
-
-# Enable/disable client features
-
-| Name  | Value | Default | Description |
-| ----- | ----- | ------- | ----------- |
-| g_disableCGaz | 0,1 | 0 | Disable usage of CGaz. Introduced in 1.4.0. |
-| g_disableSnappingHUD | 0,1 | 0 | Disable usage of Velocity Snapping HUD. Introduced in 1.4.0. |
