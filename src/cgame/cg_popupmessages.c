@@ -40,6 +40,7 @@ struct pmStackItem_s {
 	popupMessageType_t type;
 	qboolean inuse;
 	int time;
+	int repeats; // suburb, for grouped popups
 	char message[128];
 	qhandle_t shader;
 	pmListItem_t *next;
@@ -203,8 +204,9 @@ pmListItem_t *CG_FindFreePMItem(void) {
 }
 
 void CG_AddPMItem(popupMessageType_t type, const char *message, qhandle_t shader) {
-	pmListItem_t *listItem;
+	pmListItem_t *listItem, *oldList;
 	char         *end;
+	int          numPopups = 0;
 
 	if (!message || !*message) {
 		return;
@@ -224,6 +226,87 @@ void CG_AddPMItem(popupMessageType_t type, const char *message, qhandle_t shader
 		listItem->shader = shader;
 	} else {
 		listItem->shader = cgs.media.pmImages[type];
+	}
+
+	// suburb, group popups, taken from etjump
+	listItem->repeats = 1;
+	oldList = cg_pmOldList;
+	// don't add repeats into stack, but count them
+	if (etr_popupGrouped.integer) {
+		// check waiting list
+		if (cg_pmWaitingList && !Q_stricmp(message, cg_pmWaitingList->message)) {
+			cg_pmWaitingList->time = cg.time;
+			cg_pmWaitingList->repeats++;
+			// print duplicates in console unless etr_popupGrouped is >=2
+			if (etr_popupGrouped.integer < 2) {
+				trap_Print(va("%s\n", message));
+			}
+			return;
+		}
+		
+		// get max popups count for the old list
+		if (etr_numPopups.integer >= 1 && etr_numPopups.integer <= 16) {
+			numPopups = etr_numPopups.integer - 1;
+		} else {
+			numPopups = 4;
+		}
+
+		// check old list
+		for (int i = 0; i < numPopups && oldList; i++, oldList = oldList->next) {
+			if (!Q_stricmp(message, oldList->message)) {
+				// backup newest item components in buffer vars
+				int timeBuffer = cg_pmWaitingList->time;
+				int repeatsBuffer = cg_pmWaitingList->repeats;
+				char msgBuffer[128];
+				Q_strncpyz(msgBuffer, cg_pmWaitingList->message, sizeof (msgBuffer));
+
+				// replace newest item with repeating item
+				cg_pmWaitingList->time = cg.time;
+				cg_pmWaitingList->repeats = oldList->repeats + 1;
+				Q_strncpyz(cg_pmWaitingList->message, oldList->message, sizeof (cg_pmWaitingList->message));
+
+				// move up all items left in oldList
+				oldList = cg_pmOldList;
+				int timeBuffer2 = oldList->time;
+				int repeatsBuffer2 = oldList->repeats;
+				char msgBuffer2[128];
+				Q_strncpyz(msgBuffer2, oldList->message, sizeof (msgBuffer2));
+				// parse buffered vars
+				oldList->time = timeBuffer;
+				oldList->repeats = repeatsBuffer;
+				Q_strncpyz(oldList->message, msgBuffer, sizeof (oldList->message));
+				if (Q_stricmp(message, msgBuffer2)) { // do only if repeating item isn't equal to the second newest one
+					for (int j = 0; j < numPopups && oldList; j++, oldList = oldList->next) {
+						qboolean upperLimit = qfalse;
+						// backup next item and parse current item vars
+						if (oldList->next) {
+							if (!Q_stricmp(message, oldList->next->message)) { // move up until here
+								upperLimit = qtrue;
+							}
+							timeBuffer = oldList->next->time;
+							repeatsBuffer = oldList->next->repeats;
+							Q_strncpyz(msgBuffer, oldList->next->message, sizeof (msgBuffer));
+							oldList->next->time = timeBuffer2;
+							oldList->next->repeats = repeatsBuffer2;
+							Q_strncpyz(oldList->next->message, msgBuffer2, sizeof (oldList->next->message));
+						}
+						// check for break
+						if (upperLimit) {
+							break;
+						}
+						// copy buffered vars
+						timeBuffer2 = timeBuffer;
+						repeatsBuffer2 = repeatsBuffer;
+						Q_strncpyz(msgBuffer2, msgBuffer, sizeof (msgBuffer2));
+					}
+				}
+				// print duplicates in console unless etr_popupGrouped is >=2
+				if (etr_popupGrouped.integer < 2) {
+					trap_Print(va("%s\n", message));
+				}
+				return;
+			}
+		}
 	}
 
 	listItem->inuse = qtrue;
@@ -269,21 +352,15 @@ void CG_DrawPMItems(void) {
 	float        t;
 	int          i, size;
 	pmListItem_t *listItem = cg_pmOldList;
-	float        y         = 360;
+	float        x, y;
 	int          numPopups = 0;
-
-	if (cg_drawSmallPopupIcons.integer) {
-		size = PM_ICON_SIZE_SMALL;
-		y   += 4;
-	} else {
-		size = PM_ICON_SIZE_NORMAL;
-	}
+	char         *s;
 
 	if (!cg_pmWaitingList) {
 		return;
 	}
 
-	if (etr_numPopups.integer <= 0) {
+	if (!etr_drawPopups.integer || etr_numPopups.integer <= 0) {
 		return;
 	}
 
@@ -292,10 +369,22 @@ void CG_DrawPMItems(void) {
 		colourText[3] = colour[3] = 1 - ((cg.time - t) / (float)etr_popupFadeTime.integer);
 	}
 
+	x = CG_WideX(etr_popupX.value);
+	y = etr_popupY.value;
+
+	if (cg_drawSmallPopupIcons.integer) {
+		size = PM_ICON_SIZE_SMALL;
+		y   += 4;
+	} else {
+		size = PM_ICON_SIZE_NORMAL;
+	}
+
 	trap_R_SetColor(colourText);
-	CG_DrawPic(4, y, size, size, cg_pmWaitingList->shader);
+	CG_DrawPic(x, y, size, size, cg_pmWaitingList->shader);
 	trap_R_SetColor(NULL);
-	CG_Text_Paint_Ext(4 + size + 2, y + 12, 0.2f, 0.2f, colourText, cg_pmWaitingList->message, 0, 0, 0, &cgs.media.limboFont2);
+
+	s = (cg_pmWaitingList->repeats == 1 ? cg_pmWaitingList->message : va("%s ^g(%ix)", cg_pmWaitingList->message, cg_pmWaitingList->repeats));
+	CG_Text_Paint_Ext(x + size + 2, y + 12, 0.2f, 0.2f, colourText, s, 0, 0, 0, &cgs.media.limboFont2);
 
 	if (etr_numPopups.integer >= 1 && etr_numPopups.integer <= 16) {
 		numPopups = etr_numPopups.integer - 1;
@@ -313,10 +402,12 @@ void CG_DrawPMItems(void) {
 			colourText[3] = colour[3] = 1.f;
 		}
 
+		s = (listItem->repeats == 1 ? listItem->message : va("%s ^g(%ix)", listItem->message, listItem->repeats));
+
 		trap_R_SetColor(colourText);
-		CG_DrawPic(4, y, size, size, listItem->shader);
+		CG_DrawPic(x, y, size, size, listItem->shader);
 		trap_R_SetColor(NULL);
-		CG_Text_Paint_Ext(4 + size + 2, y + 12, 0.2f, 0.2f, colourText, listItem->message, 0, 0, 0, &cgs.media.limboFont2);
+		CG_Text_Paint_Ext(x + size + 2, y + 12, 0.2f, 0.2f, colourText, s, 0, 0, 0, &cgs.media.limboFont2);
 	}
 }
 

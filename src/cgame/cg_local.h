@@ -1931,6 +1931,10 @@ extern vmCvar_t etr_numPopups;
 extern vmCvar_t etr_popupTime;
 extern vmCvar_t etr_popupStayTime;
 extern vmCvar_t etr_popupFadeTime;
+extern vmCvar_t etr_popupGrouped;
+extern vmCvar_t etr_drawPopups;
+extern vmCvar_t etr_popupX;
+extern vmCvar_t etr_popupY;
 
 // Automatically load checkpoints
 extern vmCvar_t etr_autoLoadCheckpoints;
