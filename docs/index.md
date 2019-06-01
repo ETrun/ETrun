@@ -22,9 +22,9 @@ The goal is to get from the start of the map to the end as fast as possible. The
 
 In order to permanently save records, you need to create an account on the official ETrun website, and link it to your game. Here is a step-by-step tutorial:
 
-* Go to the [website] (https://timeruns.net/) and open the Signup tab.
+* Go to the [website](https://timeruns.net/) and open the Signup tab.
 * Follow the instructions and wait for the account activation email.
-* Once your account has been activated, login on the ETrun [forum] (https://forum.timeruns.net/).
+* Once your account has been activated, login on the ETrun [forum](https://forum.timeruns.net/).
 * In the top right corner, click on your nickname and follow this path:
   * User Control Panel
   * Profile
