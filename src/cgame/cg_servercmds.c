@@ -1734,7 +1734,7 @@ static void CG_ServerCommand(void) {
 	}
 
 	if (!Q_stricmp(cmd, "tempDemoStart")) {
-		if (!etr_autoDemo.integer || cg.demoPlayback) {
+		if (!etr_autoDemo.integer || cg.demoPlayback || cg.stoppingAndSavingDemo) {
 			return;
 		}
 
