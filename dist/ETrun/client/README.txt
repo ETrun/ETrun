@@ -17,4 +17,4 @@ Installing
 
 Put ETrun-XXX.pk3 in etrun/ folder.
 
-Refer to https://github.com/ETrun/ETrun/wiki/ETrun-cvars to configure your settings.
+Refer to https://etrun.readthedocs.io/en/latest/client_cvars/ to configure your settings.

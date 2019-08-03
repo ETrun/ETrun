@@ -29,4 +29,4 @@ Don't forget to include ETrun client file package (.pk3) in your etrun folder as
 
 Start game with +set fs_game etrun.
 
-Refer to https://github.com/ETrun/ETrun/wiki/ETrun-cvars to setup your server.
+Refer to https://etrun.readthedocs.io/en/latest/server_cvars/ to setup your server.

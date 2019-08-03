@@ -13,8 +13,8 @@ GITHUB_MAIN_REPO=https://github.com/ETrun/ETrun
 GITHUB_MAPSCRIPTS_REPO=https://github.com/ETrun/mapscripts
 GITHUB_MAPSCRIPTS_BRANCH=master
 GITHUB_TAG=''
-GEOIP_DATABASE_URL=https://geolite.maxmind.com/download/geoip/database/GeoLiteCountry/GeoIP.dat.gz
-GEOIP_DATABASE_FILE=GeoIP.dat
+GEOIP_DATABASE_URL=https://geolite.maxmind.com/download/geoip/database/GeoLite2-Country.tar.gz
+GEOIP_DATABASE_FILE=GeoLite2-Country.mmdb
 DIST_DIR=dist
 VERBOSE=0
 RELEASE_NAME=ETrun-latest
@@ -27,7 +27,7 @@ MOD_ASSETS_PATH=../etrun
 WGET="wget --quiet"
 ZIP="zip"
 UNZIP="unzip"
-GUNZIP="gunzip"
+UNTAR="tar -xf"
 
 function parse_options() {
   while getopts ":ht:vn:" opt; do
@@ -102,10 +102,12 @@ function fetch_and_install_custom_mapscripts() {
 }
 
 function fetch_and_install_geoip_database() {
-  ARCHIVE="$GEOIP_DATABASE_FILE.gz"
+  ARCHIVE="${GEOIP_DATABASE_URL##*/}"
   $WGET $GEOIP_DATABASE_URL
-  $GUNZIP $ARCHIVE
-  mv $GEOIP_DATABASE_FILE "$RELEASE_NAME/server/"
+  $UNTAR $ARCHIVE
+  mv GeoLite2-Country_*/$GEOIP_DATABASE_FILE "$RELEASE_NAME/server/"
+  rm $ARCHIVE
+  rm -rf GeoLite2-Country_*
 }
 
 function create_pk3() {
