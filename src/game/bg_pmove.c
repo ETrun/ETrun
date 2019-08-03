@@ -2065,7 +2065,7 @@ void PM_UpdateViewAngles(playerState_t *ps, pmoveExt_t *pmext, usercmd_t *cmd, v
 	VectorCopy(ps->viewangles, oldViewAngles);
 
 	// circularly clamp the angles with deltas
-	for (i = 0 ; i < 3 ; ++i) {
+	for (i = 0 ; i < 2 ; ++i) { // suburb, not on z-axis, fixes rotation cheat
 		temp = cmd->angles[i] + ps->delta_angles[i];
 		if (i == PITCH) {
 			// don't let the player look up or down more than 90 degrees
@@ -2554,6 +2554,15 @@ void PmoveSingle(pmove_t *pmove) {
 		pm->ps->eFlags &= ~EF_ZOOMING;
 	}
 
+	// suburb, -128 cheat fix
+	if (pm->cmd.rightmove < -127) {
+		pm->cmd.rightmove = -127;
+	}
+
+	if (pm->cmd.forwardmove < -127) {
+		pm->cmd.forwardmove = -127;
+	}
+
 	// Nico, copy pressed keys into playerstate
 	// buttons, wbuttons
 	pm->ps->stats[STAT_USERCMD_BUTTONS]  = pm->cmd.buttons << 8;
@@ -2681,6 +2690,11 @@ void PmoveSingle(pmove_t *pmove) {
 		PM_UpdateViewAngles(pm->ps, pm->pmext, &pm->cmd, pm->trace, pm->tracemask);
 	}
 	AngleVectors(pm->ps->viewangles, pml.forward, pml.right, pml.up);
+
+	// suburb, upmove cheat fix
+	if (pm->cmd.upmove < 0) {
+		pm->cmd.upmove = 127;
+	}
 
 	if (pm->cmd.upmove < 10) {
 		// not holding jump
