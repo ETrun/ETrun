@@ -2691,14 +2691,14 @@ void PmoveSingle(pmove_t *pmove) {
 	}
 	AngleVectors(pm->ps->viewangles, pml.forward, pml.right, pml.up);
 
-	// suburb, upmove cheat fix
-	if (pm->cmd.upmove < 0) {
-		pm->cmd.upmove = 127;
-	}
-
 	if (pm->cmd.upmove < 10) {
 		// not holding jump
 		pm->ps->pm_flags &= ~PMF_JUMP_HELD;
+	}
+
+	// suburb, upmove cheat fix
+	if (pm->cmd.upmove > 0) {
+		pm->cmd.upmove = 127;
 	}
 
 	// decide if backpedaling animations should be used
