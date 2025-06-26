@@ -184,11 +184,9 @@ set_target_properties(ui PROPERTIES OUTPUT_NAME ui${LIB_SUFFIX}${ARCH_NAME})
 #--------------
 # Maxmind GeoIP
 #--------------
-set(MMDB_BUILD_STATIC 1)
 add_subdirectory("${PROJECT_SOURCE_DIR}/libs/libmaxminddb")
-target_link_libraries(qagame mmdb)
-add_definitions(-DMMDB_UINT128_IS_BYTE_ARRAY=1)
-add_dependencies(qagame mmdb)
+target_link_libraries(qagame maxminddb)
+add_dependencies(qagame maxminddb)
 
 #-----------------------------------------------------------------
 # Pk3 (inspired from etlegacy https://github.com/etlegacy/etlegacy)
