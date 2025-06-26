@@ -1,6 +1,6 @@
 # CMake build script for the ETrun project
 
-cmake_minimum_required(VERSION 2.6)
+cmake_minimum_required(VERSION 3.13)
 project(ETrun C)
 set(ETrun_VERSION "2.0.0")
 include(${CMAKE_ROOT}/Modules/ExternalProject.cmake)
