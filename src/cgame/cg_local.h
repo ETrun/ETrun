@@ -2452,22 +2452,22 @@ void CG_ParseSpawns(void);
 void CG_SetConfigValues(void);
 void CG_ShaderStateChanged(void);
 void CG_ChargeTimesChanged(void);
-void CG_LoadVoiceChats();               // NERVE - SMF
-void CG_PlayBufferedVoiceChats();       // NERVE - SMF
+void CG_LoadVoiceChats(void);               // NERVE - SMF
+void CG_PlayBufferedVoiceChats(void);       // NERVE - SMF
 void CG_AddToNotify(const char *str);
 void CG_BannerPrint(const char *str);
 const char *CG_LocalizeServerCommand(const char *buf);
 //
 // cg_playerstate.c
 //
-void CG_Respawn();
+void CG_Respawn(void);
 void CG_TransitionPlayerState(playerState_t *ps, playerState_t *ops);
 
 //
 // cg_atmospheric.c
 //
 void CG_EffectParse(const char *effectstr);
-void CG_AddAtmosphericEffects();
+void CG_AddAtmosphericEffects(void);
 
 //===============================================
 
@@ -2695,7 +2695,7 @@ int         CG_LoadCamera(const char *name);
 //----(SA)	end
 
 void CG_LocateArena(void);
-void CG_CloseMenus();
+void CG_CloseMenus(void);
 void CG_LimboMenu_f(void);
 
 typedef struct {
@@ -2711,7 +2711,7 @@ weaponType_t *WM_FindWeaponTypeForWeapon(weapon_t weapon);
 fireteamData_t *CG_IsOnSameFireteam(int clientNum, int clientNum2);
 fireteamData_t *CG_IsFireTeamLeader(int clientNum);
 
-void CG_SortClientFireteam();
+void CG_SortClientFireteam(void);
 
 void CG_DrawFireTeamOverlay(void);
 clientInfo_t *CG_SortedFireTeamPlayerForPosition(int pos, int max);

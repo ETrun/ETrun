@@ -381,7 +381,7 @@ typedef struct {
 	void (*drawRect)(float x, float y, float w, float h, float size, const vec4_t color);
 	void (*drawSides)(float x, float y, float w, float h, float size);
 	void (*drawTopBottom)(float x, float y, float w, float h, float size);
-	void (*clearScene)();
+	void (*clearScene)(void);
 	void (*addRefEntityToScene)(const refEntity_t *re);
 	void (*renderScene)(const refdef_t *fd);
 	void (*registerFont)(const char *pFontname, int pointSize, fontInfo_t *font);
@@ -393,7 +393,7 @@ typedef struct {
 	void (*setCVar)(const char *cvar, const char *value);
 	void (*drawTextWithCursor)(float x, float y, float scale, vec4_t color, const char *text, int cursorPos, char cursor, int limit, int style);
 	void (*setOverstrikeMode)(qboolean b);
-	qboolean (*getOverstrikeMode)();
+	qboolean (*getOverstrikeMode)(void);
 	void (*startLocalSound)(sfxHandle_t sfx, int channelNum);
 	qboolean (*ownerDrawHandleKey)(int ownerDraw, int flags, float *special, int key);
 	int (*feederCount)(float feederID);
@@ -403,8 +403,8 @@ typedef struct {
 	void (*feederSelection)(float feederID, int index);
 	qboolean (*feederSelectionClick)(itemDef_t *item);
 	char * (*translateString)(const char *string);                                    // NERVE - SMF
-	void (*checkAutoUpdate)();                                           // DHM - Nerve
-	void (*getAutoUpdate)();                                             // DHM - Nerve
+	void (*checkAutoUpdate)(void);                                           // DHM - Nerve
+	void (*getAutoUpdate)(void);                                             // DHM - Nerve
 
 	void (*keynumToStringBuf)(int keynum, char *buf, int buflen);
 	void (*getBindingBuf)(int keynum, char *buf, int buflen);
@@ -420,7 +420,7 @@ typedef struct {
 	int (*ownerDrawWidth)(int ownerDraw, float scale);
 	sfxHandle_t (*registerSound)(const char *name);
 	void (*startBackgroundTrack)(const char *intro, const char *loop, int fadeupTime);
-	void (*stopBackgroundTrack)();
+	void (*stopBackgroundTrack)(void);
 
 	// Gordon: campaign stuffs
 	void (*add2dPolys)(polyVert_t *verts, int numverts, qhandle_t hShader);
@@ -447,15 +447,15 @@ typedef struct {
 } displayContextDef_t;
 
 const char *String_Alloc(const char *p);
-void String_Init();
-void String_Report();
+void String_Init(void);
+void String_Report(void);
 void Init_Display(displayContextDef_t *dc);
 void Display_ExpandMacros(char *buff);
 void Menu_Init(menuDef_t *menu);
 void Item_Init(itemDef_t *item);
 void Item_ListBox_MouseEnter(itemDef_t *item, float x, float y, qboolean click);
 void Menu_PostParse(menuDef_t *menu);
-menuDef_t *Menu_GetFocused();
+menuDef_t *Menu_GetFocused(void);
 void Menu_HandleKey(menuDef_t *menu, int key, qboolean down);
 void Menu_HandleMouseMove(menuDef_t *menu, float x, float y);
 qboolean Float_Parse(char **p, float *f);
@@ -472,26 +472,26 @@ qboolean PC_Rect_Parse(int handle, rectDef_t *r);
 qboolean PC_String_Parse(int handle, const char **out);
 qboolean PC_Script_Parse(int handle, const char **out);
 qboolean PC_Char_Parse(int handle, char *out);                // NERVE - SMF
-int Menu_Count();
+int Menu_Count(void);
 menuDef_t *Menu_Get(int handle);
 void Menu_New(int handle);
-void Menu_PaintAll();
+void Menu_PaintAll(void);
 menuDef_t *Menus_ActivateByName(const char *p, qboolean modalStack);
-void Menu_Reset();
-qboolean Menus_AnyFullScreenVisible();
+void Menu_Reset(void);
+qboolean Menus_AnyFullScreenVisible(void);
 void  Menus_Activate(menuDef_t *menu);
 qboolean Menus_CaptureFuncActive(void);
 
 qboolean    Display_MouseMove(void *p, int x, int y);
-qboolean    Display_KeyBindPending();
+qboolean    Display_KeyBindPending(void);
 void        Menus_OpenByName(const char *p);
 menuDef_t *Menus_FindByName(const char *p);
 void        Menus_CloseByName(const char *p);
 void        LerpColor(vec4_t a, vec4_t b, vec4_t c, float t);
-void        Menus_CloseAll();
+void        Menus_CloseAll(void);
 void        Menu_Paint(menuDef_t *menu, qboolean forcePaint);
 void        Menu_SetFeederSelection(menuDef_t *menu, int feeder, int index, const char *name);
-void        Display_CacheAll();
+void        Display_CacheAll(void);
 
 // TTimo
 void Menu_ShowItemByName(menuDef_t *menu, const char *p, qboolean bShow);

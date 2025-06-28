@@ -299,7 +299,7 @@ qboolean G_VisibleFromBinoculars(gentity_t *viewer, gentity_t *ent, vec3_t origi
 	return qtrue;
 }
 
-void G_ResetTeamMapData() {
+void G_ResetTeamMapData(void) {
 	G_InitMapEntityData(&mapEntityData[0]);
 	G_InitMapEntityData(&mapEntityData[1]);
 }

@@ -409,7 +409,7 @@ const char *ftLeaderMenuListAlphachars[] =
 };
 
 // Nico, allow cross-team fireteams
-int CG_CountFireteams() {
+int CG_CountFireteams(void) {
 	int cnt = 0;
 	int i;
 

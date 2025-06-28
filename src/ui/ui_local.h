@@ -81,7 +81,7 @@ extern vmCvar_t ui_autoredirect;
 //
 // ui_main.c
 //
-void            UI_Load();
+void            UI_Load(void);
 void            UI_LoadMenus(const char *menuFile, qboolean reset);
 void            _UI_SetActiveMenu(uiMenuCommand_t menu);
 uiMenuCommand_t _UI_GetActiveMenu(void);
@@ -333,7 +333,7 @@ int             trap_MemoryRemaining(void);
 qboolean        trap_LAN_UpdateVisiblePings(int source);
 void            trap_LAN_MarkServerVisible(int source, int n, qboolean visible);
 void            trap_LAN_ResetPings(int n);
-void            trap_LAN_SaveCachedServers();
+void            trap_LAN_SaveCachedServers(void);
 int             trap_LAN_CompareServers(int source, int sortKey, int sortDir, int s1, int s2);
 void            trap_LAN_GetServerAddressString(int source, int n, char *buf, int buflen);
 void trap_LAN_GetServerInfo(int source, int n, char *buf, int buflen);
@@ -342,8 +342,8 @@ void            trap_LAN_RemoveServer(int source, const char *addr);
 int             trap_LAN_GetServerPing(int source, int n);
 int             trap_LAN_ServerIsVisible(int source, int n);
 int             trap_LAN_ServerStatus(const char *serverAddress, char *serverStatus, int maxLen);
-void            trap_LAN_SaveCachedServers();
-void            trap_LAN_LoadCachedServers();
+void            trap_LAN_SaveCachedServers(void);
+void            trap_LAN_LoadCachedServers(void);
 qboolean        trap_LAN_ServerIsInFavoriteList(int source, int n);
 
 // -NERVE - SMF

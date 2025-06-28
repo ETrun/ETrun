@@ -383,7 +383,7 @@ static void WM_ETrun_DrawSpectators(int *x, int *y, fontInfo_t *font, s_timerunS
  */
 #define SB_INFO_X       CG_WideX(SCREEN_WIDTH) - 90
 #define SB_INFO_Y       9
-static void WM_ETrun_DrawInfo() {
+static void WM_ETrun_DrawInfo(void) {
 	int   x                      = SB_INFO_X;
 	int   y                      = SB_INFO_Y;
 	char  physicsDesc[MAX_QPATH] = { 0 };

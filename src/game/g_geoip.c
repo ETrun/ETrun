@@ -1,7 +1,7 @@
 #include "g_local.h"
 #include "g_geoip.h"
 
-void G_Geoip_LoadMmdb() {
+void G_Geoip_LoadMmdb(void) {
 	char basePath[MAX_OSPATH];
 	char filePath[MAX_OSPATH];
 	int  status;
@@ -25,7 +25,7 @@ void G_Geoip_LoadMmdb() {
 	level.geoipDatabaseLoaded = qtrue;
 }
 
-void G_Geoip_UnloadMmdb() {
+void G_Geoip_UnloadMmdb(void) {
 	if (!g_useGeoIP.integer) {
 		return;
 	}

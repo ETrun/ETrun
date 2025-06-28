@@ -57,7 +57,7 @@ static qboolean loadModule(char *basepath, char *homepath) {
 /**
  * Module interface linking
  */
-static qboolean loadAPISymbols() {
+static qboolean loadAPISymbols(void) {
 #if defined _WIN32
 	API_query = (API_query_t)GetProcAddress(api_module, API_INTERFACE_NAME);
 	API_init  = (API_init_t)GetProcAddress(api_module, API_INIT_NAME);
@@ -77,7 +77,7 @@ static qboolean loadAPISymbols() {
 /**
  * Error printing
  */
-static void printError() {
+static void printError(void) {
 #if defined _WIN32
 	LPVOID error;
 
@@ -1106,7 +1106,7 @@ qboolean G_SyncAPICall(char *command, char *result, gentity_t *ent, int count, .
 	return qtrue;
 }
 
-void G_loadAPI() {
+void G_loadAPI(void) {
 	char homepath[512];
 	char basepath[512];
 
@@ -1132,7 +1132,7 @@ void G_loadAPI() {
 	G_Printf("%s: API module loaded!\n", GAME_VERSION);
 }
 
-void G_unloadAPI() {
+void G_unloadAPI(void) {
 	if (api_module == NULL) {
 		G_DPrintf("%s: API module is not loaded (G_unloadAPI).\n", GAME_VERSION);
 	} else {

@@ -1052,7 +1052,7 @@ void Cmd_Save_f(gentity_t *ent);
 void Cmd_SpecLock_f(gentity_t *ent, unsigned int dwCommand, qboolean lock);
 void Cmd_SpecInvite_f(gentity_t *ent, unsigned int dwCommand, qboolean invite);
 void G_SayTo(gentity_t *ent, gentity_t *other, int mode, int color, const char *name, const char *message, qboolean encoded);
-qboolean Cmd_CallVote_f(gentity_t *ent, unsigned int dwCommand, qboolean fValue);
+qboolean Cmd_CallVote_f(gentity_t *ent, unsigned int dwCommand, qboolean fRefCommand);
 void Cmd_StartCamera_f(gentity_t *ent);
 void Cmd_Follow_f(gentity_t *ent, unsigned int dwCommand, qboolean fValue);
 void Cmd_Say_f(gentity_t *ent, int mode, qboolean arg0, qboolean encoded);
@@ -1151,7 +1151,7 @@ void G_AddPredictableEvent(gentity_t *ent, int event, int eventParm);
 void G_AddEvent(gentity_t *ent, int event, int eventParm);
 void G_SetOrigin(gentity_t *ent, vec3_t origin);
 void AddRemap(const char *oldShader, const char *newShader, float timeOffset);
-const char *BuildShaderStateConfig();
+const char *BuildShaderStateConfig(void);
 void G_SetAngle(gentity_t *ent, vec3_t angle);
 
 qboolean infront(gentity_t *self, gentity_t *other);
@@ -1324,9 +1324,9 @@ void QDECL G_Printf(const char *fmt, ...) _attribute((format(printf, 1, 2)));
 void QDECL G_DPrintf(const char *fmt, ...) _attribute((format(printf, 1, 2)));
 void QDECL G_Error(const char *fmt, ...) _attribute((format(printf, 1, 2)));
 void G_ShutdownGame(int restart);
-qboolean G_enable_delayed_map_change_watcher();
-void G_disable_delayed_map_change_watcher();
-void G_install_timelimit();
+qboolean G_enable_delayed_map_change_watcher(void);
+void G_disable_delayed_map_change_watcher(void);
+void G_install_timelimit(void);
 void G_PostEditEnts(void);
 int G_randommap(void);
 
@@ -1404,15 +1404,15 @@ void notify_timerun_stop(gentity_t *activator, int finishTime);
 void saveDemo(gentity_t *ent);
 
 // Nico, g_geoip.c
-void G_Geoip_LoadMmdb();
-void G_Geoip_UnloadMmdb();
+void G_Geoip_LoadMmdb(void);
+void G_Geoip_UnloadMmdb(void);
 unsigned int G_Geoip_GetCountryIdFromIsoCode(const char *isoCode);
 unsigned int G_Geoip_GetCountryCodeFromIp(const char *ip);
 
 // Nico, g_crash.c
 #if defined _WIN32 && !defined _WIN64
-void win32_initialize_handler();
-void win32_deinitialize_handler();
+void win32_initialize_handler(void);
+void win32_deinitialize_handler(void);
 #endif
 
 #include "g_team.h" // teamplay specific stuff
@@ -1667,8 +1667,8 @@ mapEntityData_t *G_AllocMapEntityData(mapEntityData_Team_t *teamList);
 mapEntityData_t *G_FindMapEntityData(mapEntityData_Team_t *teamList, int entNum);
 mapEntityData_t *G_FindMapEntityDataSingleClient(mapEntityData_Team_t *teamList, mapEntityData_t *start, int entNum, int clientNum);
 
-void G_ResetTeamMapData();
-void G_UpdateTeamMapData();
+void G_ResetTeamMapData(void);
+void G_UpdateTeamMapData(void);
 
 void G_SetupFrustum(gentity_t *ent);
 void G_SetupFrustum_ForBinoculars(gentity_t *ent);
@@ -1735,7 +1735,7 @@ void InitServerEntities(void);
 // These server entities don't get to update every frame, but some of them have to set themselves up
 //		after they've all been created
 //		So we want to give each entity the chance to set itself up after it has been created
-void InitialServerEntitySetup();
+void InitialServerEntitySetup(void);
 
 #define SE_FOFS(x) ((int)&(((g_serverEntity_t *)0)->x))
 

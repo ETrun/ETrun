@@ -3610,7 +3610,7 @@ float BG_SplineLength(splinePath_t *pSpline) {
 	return dist;
 }
 
-void BG_BuildSplinePaths() {
+void BG_BuildSplinePaths(void) {
 	int          i, j;
 	pathCorner_t *pnt;
 	splinePath_t *spline, *st;

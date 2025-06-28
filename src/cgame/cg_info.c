@@ -333,7 +333,7 @@ void CG_DemoClick(int key, qboolean down) {
 #define DH_Y    -60     // spacing from bottom
 #define DH_W    148
 
-void CG_DemoHelpDraw() {
+void CG_DemoHelpDraw(void) {
 	const char *help[] =
 	{
 		"^nTAB       ^mscores",

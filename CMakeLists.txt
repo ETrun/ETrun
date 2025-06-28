@@ -184,6 +184,9 @@ set_target_properties(ui PROPERTIES OUTPUT_NAME ui${LIB_SUFFIX}${ARCH_NAME})
 #--------------
 # Maxmind GeoIP
 #--------------
+set(BUILD_TESTING OFF)
+set(MAXMINDDB_BUILD_BINARIES OFF)
+set(MAXMINDDB_INSTALL OFF)
 add_subdirectory("${PROJECT_SOURCE_DIR}/libs/libmaxminddb")
 target_link_libraries(qagame maxminddb)
 add_dependencies(qagame maxminddb)
@@ -201,19 +204,19 @@ endif()
 add_custom_target(pk3 ALL DEPENDS cgame ui)
 set_target_properties(pk3 PROPERTIES OUTPUT_NAME ETrun-${ETrun_VERSION}.pk3)
 SET(CLIENT_ASSETS_PATH etrun/)
-add_custom_command(TARGET pk3
+add_custom_command(TARGET pk3 POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/${CLIENT_ASSETS_PATH} ${CMAKE_CURRENT_BINARY_DIR}/etrun/)
-add_custom_command(TARGET pk3
+add_custom_command(TARGET pk3 POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E remove_directory ${CMAKE_CURRENT_BINARY_DIR}/etrun/custommapscripts)
-add_custom_command(TARGET pk3
+add_custom_command(TARGET pk3 POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E remove ${CMAKE_CURRENT_BINARY_DIR}/etrun/ETrun-${ETrun_VERSION}.pk3)
 if (WIN32)
-    add_custom_command(TARGET pk3
+    add_custom_command(TARGET pk3 POST_BUILD
         COMMAND ${ZIP_EXECUTABLE} -q -r ETrun-${ETrun_VERSION}.pk3 * -x qagame${LIB_SUFFIX}${ARCH_NAME}* -x *.pdb -x *.ilk
         WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/etrun
     )
 else()
-    add_custom_command(TARGET pk3
+    add_custom_command(TARGET pk3 POST_BUILD
         COMMAND ${ZIP_EXECUTABLE} -q -r ETrun-${ETrun_VERSION}.pk3 *
         WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/etrun
     )

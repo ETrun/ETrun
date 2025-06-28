@@ -67,7 +67,7 @@ int QDECL CG_SortFireTeam(const void *a, const void *b) {
 }
 
 // Sorts client's fireteam by leader then rank
-void CG_SortClientFireteam() {
+void CG_SortClientFireteam(void) {
 	int i;
 
 	for (i = 0; i < MAX_CLIENTS; ++i) {
@@ -78,7 +78,7 @@ void CG_SortClientFireteam() {
 }
 
 // Parses fireteam servercommand
-void CG_ParseFireteams() {
+void CG_ParseFireteams(void) {
 	int  i;
 	char *s;
 	int  clnts[2];

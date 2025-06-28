@@ -79,7 +79,7 @@ void win32_exceptioninfo(LPEXCEPTION_POINTERS e) {
 	G_LogCrash(va("Exception Address: 0x%08x\n", e->ExceptionRecord->ExceptionAddress), qtrue);
 }
 
-void win32_dllinfo() {
+void win32_dllinfo(void) {
 	G_LogCrash("DLL Information:\n", qtrue);
 	pfnSymEnumerateModules(GetCurrentProcess(), (PSYM_ENUMMODULES_CALLBACK)EnumModules, NULL);
 }

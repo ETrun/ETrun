@@ -53,7 +53,7 @@ void InitServerEntities(void) {
 }
 
 // TAT - create the server entities for the current map
-static void CreateMapServerEntities() {
+static void CreateMapServerEntities(void) {
 	char info[1024];
 	char mapname[128];
 
@@ -65,7 +65,7 @@ static void CreateMapServerEntities() {
 // These server entities don't get to update every frame, but some of them have to set themselves up
 //		after they've all been created
 //		So we want to give each entity the chance to set itself up after it has been created
-void InitialServerEntitySetup() {
+void InitialServerEntitySetup(void) {
 	int i;
 
 	// TAT - create the server entities for the current map

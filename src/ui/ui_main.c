@@ -178,7 +178,7 @@ Q_EXPORT intptr_t vmMain(intptr_t command, intptr_t arg0, intptr_t arg1, intptr_
 	return -1;
 }
 
-void AssetCache() {
+void AssetCache(void) {
 	int n;
 
 	uiInfo.uiDC.Assets.gradientBar         = trap_R_RegisterShaderNoMip(ASSET_GRADIENTBAR);
@@ -978,7 +978,7 @@ void UI_LoadMenus(const char *menuFile, qboolean reset) {
 	trap_PC_FreeSource(handle);
 }
 
-void UI_Load() {
+void UI_Load(void) {
 	char      lastName[1024];
 	menuDef_t *menu    = Menu_GetFocused();
 	char      *menuSet = UI_Cvar_VariableString("ui_menuFiles");
@@ -1261,7 +1261,7 @@ static void UI_DrawCrosshair(rectDef_t *rect) {
 UI_BuildPlayerList
 ===============
 */
-static void UI_BuildPlayerList() {
+static void UI_BuildPlayerList(void) {
 	uiClientState_t cs;
 	int             n, count, team, team2, playerTeamNumber, muted;
 	char            info[MAX_INFO_STRING];
@@ -1757,7 +1757,7 @@ void UI_ServersSort(int column, qboolean force) {
 UI_LoadMods
 ===============
 */
-static void UI_LoadMods() {
+static void UI_LoadMods(void) {
 	int  numdirs;
 	char dirlist[2048];
 	char *dirptr;
@@ -1787,7 +1787,7 @@ static void UI_LoadMods() {
 UI_LoadProfiles
 ===============
 */
-static void UI_LoadProfiles() {
+static void UI_LoadProfiles(void) {
 	int  numdirs;
 	char dirlist[2048];
 	char *dirptr;
@@ -1866,7 +1866,7 @@ static void UI_LoadProfiles() {
 UI_LoadMovies
 ===============
 */
-static void UI_LoadMovies() {
+static void UI_LoadMovies(void) {
 	char movielist[4096];
 	char *moviename;
 
@@ -1898,7 +1898,7 @@ static void UI_LoadMovies() {
 UI_LoadDemos
 ===============
 */
-static void UI_LoadDemos() {
+static void UI_LoadDemos(void) {
 	char demolist[MAX_DEMOS * MAX_DEMOS_NAME_LENGTH];
 	char tempDemoList[MAX_DEMOS][MAX_DEMOS_NAME_LENGTH];
 	char demoExt[MAX_DEMOS_NAME_LENGTH];
@@ -3017,7 +3017,6 @@ UI_BuildServerDisplayList
 static void UI_BuildServerDisplayList(int force) {
 	int        i, count, clients, maxClients, ping, len, antilag, password;
 	char       info[MAX_STRING_CHARS];
-	static int numinvisible;
 
 	if (!(force || uiInfo.uiDC.realTime > uiInfo.serverStatus.nextDisplayRefresh)) {
 		return;
@@ -3041,7 +3040,6 @@ static void UI_BuildServerDisplayList(int force) {
 	}
 
 	if (force) {
-		numinvisible = 0;
 		// clear number of displayed servers
 		uiInfo.serverStatus.numDisplayServers   = 0;
 		uiInfo.serverStatus.numPlayersOnServers = 0;
@@ -3140,7 +3138,6 @@ static void UI_BuildServerDisplayList(int force) {
 			// done with this server
 			if (ping > /*=*/ 0) {
 				trap_LAN_MarkServerVisible(ui_netSource.integer, i, qfalse);
-				numinvisible++;
 			}
 		}
 	}
@@ -3361,7 +3358,7 @@ UI_BuildFindPlayerList
 ==================
 */
 static void UI_BuildFindPlayerList(qboolean force) {
-	static int         numFound, numTimeOuts;
+	static int         numFound;
 	int                i, j;
 	serverStatusInfo_t info;
 	char               name[MAX_NAME_LENGTH + 2];
@@ -3398,7 +3395,6 @@ static void UI_BuildFindPlayerList(qboolean force) {
 		            sizeof (uiInfo.foundPlayerServerNames[uiInfo.numFoundPlayerServers - 1]),
 		            "searching %d...", uiInfo.pendingServerStatus.num);
 		numFound = 0;
-		numTimeOuts++;
 	}
 	for (i = 0; i < MAX_SERVERSTATUSREQUESTS; ++i) {
 		// if this pending server is valid
@@ -3440,9 +3436,6 @@ static void UI_BuildFindPlayerList(qboolean force) {
 		// if empty pending slot or timed out
 		if (!uiInfo.pendingServerStatus.server[i].valid ||
 		    uiInfo.pendingServerStatus.server[i].startTime < uiInfo.uiDC.realTime - ui_serverStatusTimeOut.integer) {
-			if (uiInfo.pendingServerStatus.server[i].valid) {
-				numTimeOuts++;
-			}
 			// reset server status request for this address
 			UI_GetServerStatusInfo(uiInfo.pendingServerStatus.server[i].adrstr, NULL);
 			// reuse pending slot
@@ -3591,7 +3584,7 @@ static const char *UI_SelectedMap(int index, int *actual) {
 	return "";
 }
 
-static void UI_UpdatePendingPings() {
+static void UI_UpdatePendingPings(void) {
 	trap_LAN_ResetPings(ui_netSource.integer);
 	uiInfo.serverStatus.refreshActive = qtrue;
 	uiInfo.serverStatus.refreshtime   = uiInfo.uiDC.realTime + 1000;

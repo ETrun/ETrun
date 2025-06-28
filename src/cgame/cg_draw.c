@@ -1729,7 +1729,7 @@ static void CG_DrawObjectiveInfo(void) {
 
 //==================================================================================
 
-void CG_DrawTimedMenus() {
+void CG_DrawTimedMenus(void) {
 	if (cg.voiceTime) {
 		int t = cg.time - cg.voiceTime;
 		if (t > 2500) {
@@ -2185,7 +2185,7 @@ void CG_StartShakeCamera(float p) {
 	cg.cameraShakePhase  = crandom() * M_PI; // start chain in random dir
 }
 
-void CG_ShakeCamera() {
+void CG_ShakeCamera(void) {
 	float x, val;
 
 	if (cg.time > cg.cameraShakeTime) {
@@ -2211,7 +2211,6 @@ void CG_ShakeCamera() {
 void CG_DrawMiscGamemodels(void) {
 	int         i, j;
 	refEntity_t ent;
-	int         drawn = 0;
 
 	memset(&ent, 0, sizeof (ent));
 
@@ -2240,8 +2239,6 @@ void CG_DrawMiscGamemodels(void) {
 		ent.hModel = cgs.miscGameModels[i].model;
 
 		trap_R_AddRefEntityToScene(&ent);
-
-		drawn++;
 	}
 }
 
@@ -2254,7 +2251,7 @@ Autodemo function from TJMod
 @author Nico
 =================
 */
-static void CG_Autodemo() {
+static void CG_Autodemo(void) {
 	if (!etr_autoDemo.integer || cg.demoPlayback) {
 		return;
 	}

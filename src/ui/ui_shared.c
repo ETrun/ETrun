@@ -293,7 +293,7 @@ const char *String_Alloc(const char *p) {
 	return NULL;
 }
 
-void String_Report() {
+void String_Report(void) {
 	float f;
 
 	Com_Printf("Memory/String Pool Info\n");
@@ -313,7 +313,7 @@ void String_Report() {
 String_Init
 =================
 */
-void String_Init() {
+void String_Init(void) {
 	int i;
 
 	for (i = 0; i < HASH_TABLE_SIZE; ++i) {
@@ -1118,7 +1118,7 @@ void Menus_CloseByName(const char *p) {
 	}
 }
 
-void Menus_CloseAll() {
+void Menus_CloseAll(void) {
 	int i;
 
 	for (i = 0; i < menuCount; ++i) {
@@ -3339,7 +3339,7 @@ qboolean Menus_CaptureFuncActive(void) {
 	return qfalse;
 }
 
-int Display_VisibleMenuCount() {
+int Display_VisibleMenuCount(void) {
 	int i, count;
 
 	count = 0;
@@ -4280,7 +4280,7 @@ void Item_Bind_Paint(itemDef_t *item) {
 	}
 }
 
-qboolean Display_KeyBindPending() {
+qboolean Display_KeyBindPending(void) {
 	return g_waitingForKey;
 }
 
@@ -4894,7 +4894,7 @@ void Menu_Init(menuDef_t *menu) {
 	Window_Init(&menu->window);
 }
 
-menuDef_t *Menu_GetFocused() {
+menuDef_t *Menu_GetFocused(void) {
 	int i;
 
 	for (i = 0; i < menuCount; ++i) {
@@ -4931,7 +4931,7 @@ void Menu_SetFeederSelection(menuDef_t *menu, int feeder, int index, const char 
 	}
 }
 
-qboolean Menus_AnyFullScreenVisible() {
+qboolean Menus_AnyFullScreenVisible(void) {
 	int i;
 
 	for (i = 0; i < menuCount; ++i) {
@@ -6852,7 +6852,7 @@ void Menu_New(int handle) {
 	}
 }
 
-int Menu_Count() {
+int Menu_Count(void) {
 	return menuCount;
 }
 
@@ -6863,7 +6863,7 @@ menuDef_t *Menu_Get(int handle) {
 	return NULL;
 }
 
-void Menu_PaintAll() {
+void Menu_PaintAll(void) {
 	int i;
 
 	if (captureFunc) {
@@ -6891,7 +6891,7 @@ void Menu_PaintAll() {
 	}
 }
 
-void Menu_Reset() {
+void Menu_Reset(void) {
 	menuCount = 0;
 }
 
@@ -6924,7 +6924,7 @@ static void Menu_CacheContents(menuDef_t *menu) {
 	}
 }
 
-void Display_CacheAll() {
+void Display_CacheAll(void) {
 	int i;
 
 	for (i = 0; i < menuCount; ++i) {

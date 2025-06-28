@@ -2231,7 +2231,7 @@ void G_RunFrame(int levelTime) {
 }
 
 // Nico, delayed map change watcher helper functions
-qboolean G_enable_delayed_map_change_watcher() {
+qboolean G_enable_delayed_map_change_watcher(void) {
 	int            rc = 0;
 	pthread_attr_t attr;
 
@@ -2259,7 +2259,7 @@ qboolean G_enable_delayed_map_change_watcher() {
 	return qtrue;
 }
 
-void G_disable_delayed_map_change_watcher() {
+void G_disable_delayed_map_change_watcher(void) {
 	level.delayedMapChange.disabledWatcher = qtrue;
 
 	G_DPrintf("%s: waiting for delayed map change watcher to end...\n", GAME_VERSION);
@@ -2268,7 +2268,7 @@ void G_disable_delayed_map_change_watcher() {
 // Nico, end of delayed map change watcher helper functions
 
 // Nico, timelimit function
-void G_install_timelimit() {
+void G_install_timelimit(void) {
 	// Nico, set default gametype to "map-voting"
 	trap_Cvar_Set("g_gametype", "6");
 
@@ -2307,7 +2307,7 @@ Edit ents here once they all have been initialized
 @author suburb
 ===============
 */
-void G_PostEditEnts() {
+void G_PostEditEnts(void) {
 	gentity_t *ent;
 
 	for (int i = 0; i < 1024; ++i) { // loop through all entities
@@ -2344,7 +2344,7 @@ void G_PostEditEnts() {
 /**
  * Get a random map
  */
-int G_randommap() {
+int G_randommap(void) {
 	char *result = NULL;
 
 	// Nico, check if API is used

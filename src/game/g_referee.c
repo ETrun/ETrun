@@ -321,7 +321,7 @@ void Cmd_AuthRcon_f(gentity_t *ent) {
 //////////////////////////////
 //  Console admin commands
 //
-void G_PlayerBan() {
+void G_PlayerBan(void) {
 	char cmd[MAX_TOKEN_CHARS];
 	int  bannum;
 
@@ -345,7 +345,7 @@ void G_PlayerBan() {
 	}
 }
 
-void G_MakeReferee() {
+void G_MakeReferee(void) {
 	char cmd[MAX_TOKEN_CHARS];
 	int  cnum;
 
@@ -369,7 +369,7 @@ void G_MakeReferee() {
 	}
 }
 
-void G_RemoveReferee() {
+void G_RemoveReferee(void) {
 	char cmd[MAX_TOKEN_CHARS];
 	int  cnum;
 

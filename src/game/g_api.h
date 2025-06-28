@@ -12,8 +12,8 @@
 
 qboolean G_AsyncAPICall(char *command, char *result, gentity_t *ent, int count, ...);
 qboolean G_SyncAPICall(char *command, char *result, gentity_t *ent, int count, ...);
-void G_loadAPI();
-void G_unloadAPI();
+void G_loadAPI(void);
+void G_unloadAPI(void);
 qboolean G_API_login(char *result, gentity_t *ent, char *authToken);
 qboolean G_API_mapRecords(char *result, gentity_t *ent, char *mapName);
 qboolean G_API_check(char *result, gentity_t *ent);

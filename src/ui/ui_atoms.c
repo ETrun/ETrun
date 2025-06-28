@@ -52,7 +52,7 @@ char *UI_Cvar_VariableString(const char *var_name) {
 	return buffer[toggle];
 }
 
-static void UI_Cache_f() {
+static void UI_Cache_f(void) {
 	Display_CacheAll();
 }
 
