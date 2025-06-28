@@ -10,7 +10,7 @@ on:
 
 jobs:
   coverity:
-  
+
     runs-on: ubuntu-latest
 
     steps:
@@ -23,3 +23,4 @@ jobs:
       with:
         email: ${{ secrets.COVERITY_SCAN_EMAIL }}
         token: ${{ secrets.COVERITY_SCAN_TOKEN }}
+        command: ./make.sh
