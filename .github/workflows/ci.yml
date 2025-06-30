@@ -71,7 +71,7 @@ jobs:
           submodules: recursive
 
       - name: Configure
-        run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -A Win32
+        run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DCROSS_COMPILE32=ON -A Win32
 
       - name: Build
         run: cmake --build build --config Release
