@@ -191,8 +191,9 @@ elseif(WIN32)
     if(MSVC)
         # Link with pthreads-win32
         add_subdirectory("${PROJECT_SOURCE_DIR}/libs/pthreads-win32")
-        target_link_libraries(qagame pthreads4w)
-        add_dependencies(qagame pthreads4w)
+        add_definitions(-DPTW32_STATIC_LIB)
+        target_link_libraries(qagame pthreadVC3)
+        add_dependencies(qagame pthreadVC3)
 
         add_definitions(-D_CRT_SECURE_NO_WARNINGS)
         set(OS_LIBRARIES ws2_32 psapi winmm)
