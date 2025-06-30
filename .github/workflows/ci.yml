@@ -21,7 +21,7 @@ jobs:
           submodules: recursive
 
       - name: Install dependencies
-        run: sudo apt-get update && sudo apt-get install -y build-essential
+        run: sudo apt-get update && sudo apt-get install -y build-essential gcc-multilib
 
       - name: Make script executable
         run: chmod +x ./make.sh
@@ -67,17 +67,20 @@ jobs:
       matrix:
         include:
           - arch: x86
-            runner: windows-2019
+            runner: windows-2022
           - arch: x64
-            runner: windows-2019
+            runner: windows-2022
 
     steps:
       - uses: actions/checkout@v4
         with:
           submodules: recursive
 
+      - name: Configure
+          run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+
       - name: Build
-        run: .\make.sh
+        run: cmake --build build --config Release
 
       - uses: actions/upload-artifact@v4
         with:
