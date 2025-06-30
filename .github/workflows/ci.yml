@@ -155,4 +155,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: etrun-release
-          path: ./build/*.zip
+          path: ./dist/ETrun-*.zip
