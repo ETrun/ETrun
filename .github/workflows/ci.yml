@@ -59,17 +59,33 @@ jobs:
           name: etrun-linux-x64
           path: ./build/etrun
 
-  windows:
-    name: Windows ${{ matrix.arch }}
-    runs-on: ${{ matrix.runner }}
+  windows-32:
+    name: Windows x86
+    runs-on: windows-2022
     strategy:
       fail-fast: false
-      matrix:
-        include:
-          - arch: x86
-            runner: windows-2022
-          - arch: x64
-            runner: windows-2022
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Configure
+        run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -A Win32
+
+      - name: Build
+        run: cmake --build build --config Release
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: etrun-windows-x86
+          path: ./build/etrun
+
+  windows-64:
+    name: Windows x64
+    runs-on: windows-2022
+    strategy:
+      fail-fast: false
 
     steps:
       - uses: actions/checkout@v4
@@ -84,7 +100,7 @@ jobs:
 
       - uses: actions/upload-artifact@v4
         with:
-          name: etrun-windows-${{ matrix.arch }}
+          name: etrun-windows-x64
           path: ./build/etrun
 
   macos:
@@ -113,7 +129,7 @@ jobs:
     # @todo uncomment
     # if: github.ref == 'refs/heads/master' || github.ref_type == 'tag'
     runs-on: ubuntu-22.04
-    needs: [windows, linux-32, linux-64, macos]
+    needs: [windows-32, windows-64, linux-32, linux-64, macos]
 
     steps:
       - uses: actions/checkout@v4

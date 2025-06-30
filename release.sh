@@ -15,10 +15,8 @@ GITHUB_MAPSCRIPTS_BRANCH=master
 VERBOSE=0
 RELEASE_NAME=ETrun-latest
 MOD_CLIENT_FILES=(cgame.mp.i386.so cgame.mp.x86_64.so cgame_mac cgame_mp_x64.dll cgame_mp_x86.dll ui.mp.i386.so ui.mp.x86_64.so ui_mac ui_mp_x64.dll ui_mp_x86.dll)
-MOD_SERVER_FILES_LINUX=(qagame.mp.i386.so qagame.mp.x86_64.so)
-MOD_SERVER_FILES_MAC=(qagame_mac)
-MOD_SERVER_FILES_WIN=(qagame_mp_x64.dll qagame_mp_x86.dll)
-MOD_ALL_FILES=(${MOD_CLIENT_FILES[@]} ${MOD_SERVER_FILES_LINUX[@]} ${MOD_SERVER_FILES_MAC[@]} ${MOD_SERVER_FILES_WIN[@]})
+MOD_SERVER_FILES=(qagame.mp.i386.so qagame.mp.x86_64.so qagame_mac qagame_mp_x64.dll qagame_mp_x86.dll)
+MOD_ALL_FILES=(${MOD_CLIENT_FILES[@]} ${MOD_SERVER_FILES[@]})
 MOD_ASSETS_PATH=./etrun
 WGET="wget --quiet"
 ZIP="zip"
@@ -45,7 +43,7 @@ function parse_options() {
 }
 
 function setup() {
-  cd ./dist
+  cd dist || exit 1
   rm -rf $RELEASE_NAME
   cp -r ETrun $RELEASE_NAME
 }
@@ -56,13 +54,13 @@ function debug_print() {
   fi
 }
 
-function move_files() {
+function copy_files() {
   DEST=$RELEASE_NAME/$1
-  FILES=$2
-  for f in "${FILES[@]}"
-  do
-    debug_print "Moving $f to $DEST"
-    mv $f $DEST/
+  shift
+  FILES=("$@")
+  for f in "${FILES[@]}"; do
+    debug_print "Copying $f to $DEST"
+    cp ../build/etrun/$f $DEST/
   done
 }
 
@@ -80,7 +78,7 @@ function create_pk3() {
   PK3_TEMP_DIRECTORY="$RELEASE_NAME/client/pk3"
   mkdir -p $PK3_TEMP_DIRECTORY
   cp -r $MOD_ASSETS_PATH/* $PK3_TEMP_DIRECTORY
-  move_files "client/pk3" "$(echo ${MOD_CLIENT_FILES[@]})"
+  copy_files "client/pk3" "${MOD_CLIENT_FILES[@]}"
   cd $PK3_TEMP_DIRECTORY
   $ZIP --exclude .DS_Store -r ../$RELEASE_NAME.pk3 .
   cd ../../..
@@ -93,9 +91,7 @@ function create_final_archive() {
 }
 
 function release() {
-  move_files "server/linux" "$(echo ${MOD_SERVER_FILES_LINUX[@]})"
-  move_files "server/mac" "${MOD_SERVER_FILES_MAC[@]}"
-  move_files "server/win" "$(echo ${MOD_SERVER_FILES_WIN[@]})"
+  copy_files "server" "${MOD_SERVER_FILES[@]}"
   fetch_and_install_custom_mapscripts
   create_pk3
   create_final_archive

@@ -4,7 +4,7 @@ ETrun server binaries
 Windows
 -------
 
-Put qagame_mp_x86.dll or qagame_mp_x64.dll in etrun/ folder.
+Put qagame_mp_x86.dll or qagame_mp_x86_64.dll in etrun/ folder.
 
 Linux
 -----
@@ -25,7 +25,7 @@ Refer to https://github.com/ETrun/ETrun/blob/master/README.md for more informati
 Starting a game server
 ----------------------
 
-Don't forget to include ETrun client file package (.pk3) in your etrun folder aswell.
+Don't forget to include ETrun client file package (.pk3) in your etrun folder as well.
 
 Start game with +set fs_game etrun.
 
