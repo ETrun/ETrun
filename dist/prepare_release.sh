@@ -13,8 +13,6 @@ GITHUB_MAIN_REPO=https://github.com/ETrun/ETrun
 GITHUB_MAPSCRIPTS_REPO=https://github.com/ETrun/mapscripts
 GITHUB_MAPSCRIPTS_BRANCH=master
 GITHUB_TAG=''
-GEOIP_DATABASE_URL=https://geolite.maxmind.com/download/geoip/database/GeoLite2-Country.tar.gz
-GEOIP_DATABASE_FILE=GeoLite2-Country.mmdb
 DIST_DIR=dist
 VERBOSE=0
 RELEASE_NAME=ETrun-latest
@@ -101,15 +99,6 @@ function fetch_and_install_custom_mapscripts() {
   mv "$RELEASE_NAME/server/mapscripts-$GITHUB_MAPSCRIPTS_BRANCH" "$RELEASE_NAME/server/custommapscripts"
 }
 
-function fetch_and_install_geoip_database() {
-  ARCHIVE="${GEOIP_DATABASE_URL##*/}"
-  $WGET $GEOIP_DATABASE_URL
-  $UNTAR $ARCHIVE
-  mv GeoLite2-Country_*/$GEOIP_DATABASE_FILE "$RELEASE_NAME/server/"
-  rm $ARCHIVE
-  rm -rf GeoLite2-Country_*
-}
-
 function create_pk3() {
   PK3_TEMP_DIRECTORY="$RELEASE_NAME/client/pk3"
   mkdir -p $PK3_TEMP_DIRECTORY
@@ -132,7 +121,6 @@ function release() {
   move_files "server/mac" "$(echo ${MOD_SERVER_FILES_MAC[@]})"
   move_files "server/win" "$(echo ${MOD_SERVER_FILES_WIN[@]})"
   fetch_and_install_custom_mapscripts
-  fetch_and_install_geoip_database
   create_pk3
   create_final_archive
 }

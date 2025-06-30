@@ -1,0 +1,107 @@
+name: CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+  workflow_dispatch:
+
+jobs:
+
+  linux-32:
+    name: Linux x86
+    runs-on: ubuntu-22.04
+    strategy:
+      fail-fast: false
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Install dependencies
+        run: sudo apt-get update && sudo apt-get install -y build-essential
+
+      - name: Make script executable
+        run: chmod +x ./make.sh
+
+      - name: Build (cross-compile)
+        run: ./make.sh -c
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: etrun-linux-32
+          path: ./build/
+
+  linux-64:
+    name: Linux x64
+    runs-on: ubuntu-22.04
+    strategy:
+      fail-fast: false
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Install dependencies
+        run: sudo apt-get update && sudo apt-get install -y build-essential
+
+      - name: Make script executable
+        run: chmod +x ./make.sh
+
+      - name: Build
+        run: ./make.sh
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: etrun-linux-64
+          path: ./build/
+
+  windows:
+    name: Windows ${{ matrix.arch }}
+    runs-on: ${{ matrix.runner }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - arch: x86
+            runner: windows-2019
+          - arch: x64
+            runner: windows-2019
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Build
+        run: .\make.sh
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: etrun-windows-${{ matrix.arch }}
+          path: ./build/
+
+  macos:
+    name: macOS
+    runs-on: macos-14
+    strategy:
+      fail-fast: false
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Make script executable
+        run: chmod +x ./make.sh
+
+      - name: Build
+        run: ./make.sh
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: etrun-macos
+          path: ./build/
