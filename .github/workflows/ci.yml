@@ -31,8 +31,8 @@ jobs:
 
       - uses: actions/upload-artifact@v4
         with:
-          name: etrun-linux-32
-          path: ./build/
+          name: etrun-linux-x86
+          path: ./build/etrun
 
   linux-64:
     name: Linux x64
@@ -56,8 +56,8 @@ jobs:
 
       - uses: actions/upload-artifact@v4
         with:
-          name: etrun-linux-64
-          path: ./build/
+          name: etrun-linux-x64
+          path: ./build/etrun
 
   windows:
     name: Windows ${{ matrix.arch }}
@@ -85,7 +85,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: etrun-windows-${{ matrix.arch }}
-          path: ./build/
+          path: ./build/etrun
 
   macos:
     name: macOS
@@ -107,4 +107,4 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: etrun-macos
-          path: ./build/
+          path: ./build/etrun
