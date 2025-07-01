@@ -154,7 +154,7 @@ jobs:
       - name: Upload the release artifact
         uses: actions/upload-artifact@v4
         with:
-          name: etrun-release
+          name: ETrun-${{ github.ref_name }}
           path: ./dist/ETrun-*.zip
 
       - name: Create a GitHub tagged release as a draft
@@ -164,11 +164,3 @@ jobs:
           name: ETrun v${{ github.ref_name }}
           files: ./dist/ETrun-*.zip
           draft: true
-
-      - name: Create a GitHub latest release
-        uses: softprops/action-gh-release@v2
-        if: github.ref_type == 'branch'
-        with:
-          name: ETrun latest build
-          files: ./dist/ETrun-*.zip
-          prerelease: true
