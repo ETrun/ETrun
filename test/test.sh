@@ -86,13 +86,13 @@ function read_config() {
 	WD="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 	if [ $OS == "Darwin" ]; then
-		echo -n " OSX detected, loading $OSX_CONFIG_FILE..."
+		echo -n " macOS detected, loading $OSX_CONFIG_FILE..."
 		CONFIG_FILE="$OSX_CONFIG_FILE"
 	elif [ $OS == "Linux" ]; then
 		echo -n " Linux detected, loading $LINUX_CONFIG_FILE..."
 		CONFIG_FILE="$LINUX_CONFIG_FILE"
 	else
-		echo -n " Unkown OS, loading $OTHER_CONFIG_FILE..."
+		echo -n " Unknown OS, loading $OTHER_CONFIG_FILE..."
 		CONFIG_FILE="$OTHER_CONFIG_FILE"
 	fi
 
@@ -190,20 +190,6 @@ function install_API() {
 }
 
 #
-# Install Maxmind GeoIP
-#
-function install_maxmind_geoip() {
-	if [ ! -z "$maxmind_geoip_path" ]; then
-		cp -f "$maxmind_geoip_path" "$BASEPATH/$mod_name" 2> /dev/null
-		if [ $? -ne 0 ]; then
-			echo '[ko]'
-			echo "Error: failed to copy $APImodule_dir/$APImodule_name to $BASEPATH/$mod_name"
-			exit 1
-		fi
-	fi
-}
-
-#
 # Print summary of all options before starting game
 #
 function print_summary() {
@@ -264,11 +250,6 @@ function start_game() {
 		GAME_ARGS="$GAME_ARGS +set dedicated 1"
 	fi
 
-	# GeoIP
-	if [ ! -z "$maxmind_geoip_path" ]; then
-		GAME_ARGS="$GAME_ARGS +set g_geoIPDbPath $(basename $maxmind_geoip_path) +set g_useGeoIP 1"
-	fi
-
 	if [ $USE_VALGRIND -eq 1 ]; then
 		$valgrind_command_line $GAME_PATH $GAME_ARGS
 	elif [ $USE_DEBUGGER -eq 1 ]; then
@@ -307,8 +288,6 @@ if [ $USE_API -eq 1 ]; then
 	install_API
 	echo '[ok]'
 fi
-
-install_maxmind_geoip
 
 print_summary
 

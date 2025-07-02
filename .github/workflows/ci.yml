@@ -1,0 +1,174 @@
+name: CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+  workflow_dispatch:
+
+jobs:
+
+  linux-32:
+    name: Linux x86
+    runs-on: ubuntu-22.04
+    strategy:
+      fail-fast: false
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Install dependencies
+        run: sudo apt-get update && sudo apt-get install -y build-essential gcc-multilib
+
+      - name: Make script executable
+        run: chmod +x ./make.sh
+
+      - name: Build (cross-compile)
+        run: ./make.sh -c
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: etrun-linux-x86
+          path: ./build/etrun
+
+  linux-64:
+    name: Linux x64
+    runs-on: ubuntu-22.04
+    strategy:
+      fail-fast: false
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Install dependencies
+        run: sudo apt-get update && sudo apt-get install -y build-essential
+
+      - name: Make script executable
+        run: chmod +x ./make.sh
+
+      - name: Build
+        run: ./make.sh
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: etrun-linux-x64
+          path: ./build/etrun
+
+  windows-32:
+    name: Windows x86
+    runs-on: windows-2022
+    strategy:
+      fail-fast: false
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Configure
+        run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DCROSS_COMPILE32=ON -A Win32
+
+      - name: Build
+        run: cmake --build build --config Release
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: etrun-windows-x86
+          path: ./build/etrun
+
+  windows-64:
+    name: Windows x64
+    runs-on: windows-2022
+    strategy:
+      fail-fast: false
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Configure
+        run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+
+      - name: Build
+        run: cmake --build build --config Release
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: etrun-windows-x64
+          path: ./build/etrun
+
+  macos:
+    name: macOS
+    runs-on: macos-14
+    strategy:
+      fail-fast: false
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Make script executable
+        run: chmod +x ./make.sh
+
+      - name: Build
+        run: ./make.sh
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: etrun-macos
+          path: ./build/etrun
+
+  release:
+    if: github.ref == 'refs/heads/master' || github.ref_type == 'tag'
+    runs-on: ubuntu-22.04
+    needs: [windows-32, windows-64, linux-32, linux-64, macos]
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Download artifacts from previous jobs
+        uses: actions/download-artifact@v4
+        with:
+          pattern: etrun-*
+          merge-multiple: true
+          path: ./build/etrun
+
+      - name: Package a tagged release zip
+        run: ./release.sh -n ETrun-${{ github.ref_name }}
+        if: github.ref_type == 'tag'
+
+      - name: Package a latest release zip
+        run: ./release.sh
+        if: github.ref_type == 'branch'
+
+      - name: Upload the release artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: etrun-release
+          path: ./dist/ETrun-*.zip
+
+      - name: Create a GitHub tagged release as a draft
+        uses: softprops/action-gh-release@v2
+        if: github.ref_type == 'tag'
+        with:
+          name: ETrun v${{ github.ref_name }}
+          files: ./dist/ETrun-*.zip
+          draft: true
+
+      - name: Create a GitHub latest release
+        uses: softprops/action-gh-release@v2
+        if: github.ref_type == 'branch'
+        with:
+          name: ETrun latest build
+          files: ./dist/ETrun-*.zip
+          prerelease: true
+          tag_name: latest

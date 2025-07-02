@@ -4,11 +4,11 @@ ETrun client files
 Compatibility
 -------------
 
-Supported OS (32-bit & 64-bit):
+Supported OS:
 
-* Windows 7 and newer
-* Linux
-* MacOS
+* Windows 7 and newer (32-bit & 64-bit)
+* Linux (32-bit & 64-bit)
+* macOS (Intel 64-bit and Apple Silicon arm64)
 
 Check https://github.com/ETrun/ETrun/blob/master/README.md for more information.
 

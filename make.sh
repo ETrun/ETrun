@@ -12,14 +12,13 @@ BUILD_DIR=build
 MOD_NAME='etrun'
 CMAKE=cmake
 VERBOSE=0
-TARGET_ARCHITECTURE=''
-UNIVERSAL_BINARIES=0
+CROSS_COMPILE32=0
 
 #
 # Parse options
 #
 function parse_options() {
-  while getopts ":hdt:vu" opt; do
+  while getopts ":hdcv" opt; do
     case $opt in
       h)
         show_usage
@@ -28,14 +27,11 @@ function parse_options() {
       d)
         DEBUG=1
         ;;
-      t)
-        TARGET_ARCHITECTURE=$OPTARG
+      c)
+        CROSS_COMPILE32=1
         ;;
       v)
         VERBOSE=1
-        ;;
-      u)
-        UNIVERSAL_BINARIES=1
         ;;
       \?)
         echo "Invalid option: -$OPTARG"
@@ -59,9 +55,8 @@ function show_usage() {
   echo 'Options:'
   echo '  -d               Turn ON debug mode'
   echo '  -h               Show this help'
-  echo '  -t ARCHITECTURE  Specify target architecture to build for (x86, x86_64)'
+  echo '  -c               Cross compile for x86'
   echo '  -v               Enable verbose build'
-  echo '  -u               Build universal binaries (OSX only)'
 }
 
 #
@@ -75,35 +70,24 @@ function detect_os() {
 # Build
 #
 function build() {
+  echo "Building in $([ $DEBUG -eq 1 ] && echo 'Debug' || echo 'Release') mode"
+
   # Build mod
   mkdir -p $BUILD_DIR
   cd $BUILD_DIR
 
   # Prepare CMake params
   if [ $DEBUG -eq 1 ]; then
-    CMAKE_PARAMS='-D CMAKE_BUILD_TYPE=Debug'
+    CMAKE_PARAMS='-DCMAKE_BUILD_TYPE=Debug'
   else
-    CMAKE_PARAMS='-D CMAKE_BUILD_TYPE=Release'
+    CMAKE_PARAMS='-DCMAKE_BUILD_TYPE=Release'
   fi
   if [ $VERBOSE -eq 1 ]; then
-    CMAKE_PARAMS="$CMAKE_PARAMS -D CMAKE_VERBOSE_MAKEFILE=TRUE"
+    CMAKE_PARAMS="$CMAKE_PARAMS -DCMAKE_VERBOSE_MAKEFILE=TRUE"
   fi
 
-  # Check -u and -t were not both provided
-  if [ ! $TARGET_ARCHITECTURE == '' ] && [ $UNIVERSAL_BINARIES -eq 1 ]; then
-    echo "-t and -u cannot be used at the same time"
-    exit 1
-  fi
-
-  # Check if we are running OSX if -u is provided
-  if [ $UNIVERSAL_BINARIES -eq 1 ]; then
-    if [ ! $OS == 'Darwin' ]; then
-      echo "-u is only available on OSX"
-      exit 1
-    fi
-    CMAKE_PARAMS="$CMAKE_PARAMS -D OSX_UNIVERSAL_BINARIES=ON"
-  else
-    CMAKE_PARAMS="$CMAKE_PARAMS -D TARGET_ARCHITECTURE=$TARGET_ARCHITECTURE"
+  if [ $CROSS_COMPILE32 -eq 1 ]; then
+    CMAKE_PARAMS="$CMAKE_PARAMS -DCROSS_COMPILE32=ON"
   fi
 
   # For Windows, specify Visual studio version to use
@@ -116,7 +100,7 @@ function build() {
   fi
 
   if [ $? -ne 0 ]; then
-    echo 'An error occured while running CMake'
+    echo 'An error occurred while running CMake'
     exit 1
   fi
 
@@ -124,16 +108,14 @@ function build() {
   if [[ ! $OS == MINGW* ]]; then
     make
     if [ $? -ne 0 ]; then
-      echo 'An error occured while running make'
+      echo 'An error occurred while running make'
       exit 1
     fi
   fi
 }
 
 function check_dependency() {
-  hash $1 &> /dev/null
-
-  if [ $? -ne 0 ]; then
+  if ! command -v "$1" &> /dev/null; then
     echo "Warning: dependency unmet '$1'"
   fi
 }

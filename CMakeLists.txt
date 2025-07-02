@@ -1,9 +1,9 @@
 # CMake build script for the ETrun project
 
-cmake_minimum_required(VERSION 3.13)
-project(ETrun C)
-set(ETrun_VERSION "2.0.0")
-include(${CMAKE_ROOT}/Modules/ExternalProject.cmake)
+cmake_minimum_required(VERSION 3.13 FATAL_ERROR)
+
+project(ETrun VERSION 2.0.0 HOMEPAGE_URL "timeruns.net/ETrun" LANGUAGES C)
+set(ETrun_VERSION ${PROJECT_VERSION})
 
 configure_file(
     "${PROJECT_SOURCE_DIR}/src/game/bg_version.h.in"
@@ -11,6 +11,80 @@ configure_file(
 )
 
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/etrun)
+
+option(CROSS_COMPILE32 "Compile 32-bit x86 version of ETrun" OFF)
+option(BUILD_PK3 "Pack the mod libraries and game scripts into mod pk3" OFF)
+
+#-----------------------------------------------------------------
+# Architecture stuff
+#-----------------------------------------------------------------
+# Determine architecture of the machine
+if(CMAKE_SIZEOF_VOID_P EQUAL 8)
+    set(ETRUN_ARCH_64 ON)
+elseif(CMAKE_SIZEOF_VOID_P EQUAL 4)
+    set(ETRUN_ARCH_32 ON)
+else()
+    message(FATAL_ERROR "Unknown target architecture detected. Pointer size: ${CMAKE_SIZEOF_VOID_P}")
+endif()
+
+# Determine CPU of the machine (source: ET:Legacy)
+string(TOLOWER "${CMAKE_SYSTEM_PROCESSOR}" system_name_lower)
+if(system_name_lower MATCHES "(i386)|(i686)|(x86)|(amd64)")
+	message(STATUS "x86 architecture detected")
+	set(ETRUN_X86 1)
+elseif(system_name_lower MATCHES "(arm)|(aarch64)")
+	message(STATUS "ARM architecture detected")
+	set(ETRUN_ARM 1)
+else()
+	message(WARNING "Unknown architecture detected: ${CMAKE_SYSTEM_PROCESSOR}")
+endif()
+
+# On Apple silicon, we can build for both arm64 and x86_64
+if (APPLE AND ETRUN_ARM)
+    set(CMAKE_OSX_ARCHITECTURES "arm64;x86_64")
+    message(STATUS "Target architecture: arm64 and x86_64 (Universal binaries)")
+endif()
+
+if(CROSS_COMPILE32)
+    if(ETRUN_ARM)
+        message(FATAL_ERROR "Cross compiling is not supported for ARM!")
+    endif()
+
+    if(WIN32)
+        set(ARCH_NAME "x86")
+    elseif(APPLE)
+        set(ARCH_NAME "")
+        add_compile_options(-arch i386)
+        add_link_options(-arch i386)
+    else()
+        set(ARCH_NAME "i386")
+        add_compile_options(-m32)
+        add_link_options(-m32)
+    endif()
+
+    add_compile_definitions(PRIVATE MMDB_UINT128_IS_BYTE_ARRAY=1)
+
+    message(STATUS "Target architecture: x86")
+else()
+    # x86_64 build
+    if (ETRUN_X86)
+        if(WIN32)
+            set(ARCH_NAME "x64")
+        elseif(APPLE)
+            set(ARCH_NAME "")
+        else()
+            set(ARCH_NAME "x86_64")
+        endif()
+    elseif(ETRUN_ARM)
+        if(WIN32)
+            message(FATAL_ERROR "Compiling for Windows ARM is not supported!")
+        elseif(APPLE)
+            set(ARCH_NAME "")
+        else()
+            set(ARCH_NAME "aarch64")
+        endif()
+    endif()
+endif()
 
 #-----------------------------------------------------------------
 # Sources
@@ -54,78 +128,26 @@ FILE(GLOB UI_SRC
 #-----------------------------------------------------------------
 add_library(cgame MODULE ${CGAME_SRC})
 set_target_properties(cgame
-    PROPERTIES COMPILE_DEFINITIONS "CGAMEDLL"
+    PROPERTIES
     PREFIX ""
+    C_STANDARD 99
 )
+target_compile_definitions(cgame PRIVATE CGAMEDLL=1)
 
 add_library(qagame MODULE ${QAGAME_SRC})
 set_target_properties(qagame
-    PROPERTIES COMPILE_DEFINITIONS "GAMEDLL"
+    PROPERTIES
     PREFIX ""
+    C_STANDARD 99
 )
+target_compile_definitions(qagame PRIVATE GAMEDLL=1)
 
 add_library(ui MODULE ${UI_SRC})
 set_target_properties(ui
     PROPERTIES
     PREFIX ""
+    C_STANDARD 99
 )
-
-#-----------------------------------------------------------------
-# Architecture stuff
-#-----------------------------------------------------------------
-# Determine architecture of the machine
-if(CMAKE_SIZEOF_VOID_P EQUAL 8)
-    set(ETRUN_ARCH_64 ON)
-    message(STATUS "Current architecture: x86_64")
-elseif(CMAKE_SIZEOF_VOID_P EQUAL 4)
-    set(ETRUN_ARCH_32 ON)
-    message(STATUS "Current architecture: x86")
-else()
-    set(ETRUN_ARCH_32 ON)
-    message(STATUS "Unsupported architecture")
-endif()
-
-# Check if we should build OSX universal binaries
-if(OSX_UNIVERSAL_BINARIES)
-    set(ARCH_NAME "")
-    set_target_properties(cgame PROPERTIES OSX_ARCHITECTURES "i386;x86_64")
-    set_target_properties(qagame PROPERTIES OSX_ARCHITECTURES "i386;x86_64")
-    set_target_properties(ui PROPERTIES OSX_ARCHITECTURES "i386;x86_64")
-    message(STATUS "Target architecture: x86 and x86_64 (Universal binaries)")
-else()
-    # Check if a target architecture was specified
-    if("${TARGET_ARCHITECTURE}" STREQUAL "x86")
-        set(ETRUN_ARCH_32 ON)
-    elseif("${TARGET_ARCHITECTURE}" STREQUAL "x86_64")
-        set(ETRUN_ARCH_64 ON)
-    endif()
-
-    if(ETRUN_ARCH_32)
-        # x86 build
-        if(WIN32)
-            set(ARCH_NAME "x86")
-        elseif(APPLE)
-            set(ARCH_NAME "")
-            set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -arch i386")
-        else()
-            set(ARCH_NAME "i386")
-            set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -m32")
-        endif()
-        message(STATUS "Target architecture: x86")
-    else()
-        # x86_64 build
-        if(WIN32)
-            set(ARCH_NAME "x64")
-        elseif(APPLE)
-            set(ARCH_NAME "")
-            set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -arch x86_64")
-        else()
-            set(ARCH_NAME "x64")
-            set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -m64")
-        endif()
-        message(STATUS "Target architecture: x86_64")
-    endif()
-endif()
 
 #-----------------------------------------------------------------
 # Platform-specific settings
@@ -135,7 +157,17 @@ if(UNIX)
     find_package(Threads)
 
     # Strict mode
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Wextra -std=c99 -pedantic")
+    add_compile_options(
+        -Wall
+        -Wextra
+        -Wpedantic
+        -Wno-unused-parameter
+        -Wshadow
+        -Wcast-align
+        -Wstrict-prototypes
+        -Wmissing-prototypes
+        -Wno-missing-field-initializers
+    )
 
     if(CMAKE_SYSTEM MATCHES "OpenBSD*")
         set(OS_LIBRARIES m pthread)
@@ -143,6 +175,9 @@ if(UNIX)
     elseif(CMAKE_SYSTEM MATCHES "FreeBSD")
         set(OS_LIBRARIES m pthread)
         set(LIB_SUFFIX ".mp.fbsd.")
+    elseif(CMAKE_SYSTEM MATCHES "NetBSD")
+        set(OS_LIBRARIES m pthread)
+        set(LIB_SUFFIX ".mp.nbsd.")
     elseif(APPLE)
         set(OS_LIBRARIES dl m)
         set(LIB_SUFFIX "_mac")
@@ -155,19 +190,16 @@ if(UNIX)
 elseif(WIN32)
     if(MSVC)
         # Link with pthreads-win32
-        set(PTHREADS_BUILD_STATIC 1)
         add_subdirectory("${PROJECT_SOURCE_DIR}/libs/pthreads-win32")
-        include_directories("${PROJECT_SOURCE_DIR}/libs/pthreads-win32/pthreads.2")
-        target_link_libraries(qagame debug "${CMAKE_BINARY_DIR}/libs/pthreads-win32/Debug/pthreadsVC2d.lib")
-        target_link_libraries(qagame optimized "${CMAKE_BINARY_DIR}/libs/pthreads-win32/Release/pthreadsVC2.lib")
         add_definitions(-DPTW32_STATIC_LIB)
-        add_dependencies(qagame pthreadsVC2)
+        target_link_libraries(qagame pthreadVC3)
+        add_dependencies(qagame pthreadVC3)
 
         add_definitions(-D_CRT_SECURE_NO_WARNINGS)
         set(OS_LIBRARIES ws2_32 psapi winmm)
         set(LIB_SUFFIX "_mp_")
 
-        # Set outpout path
+        # Set output path
         set_target_properties(cgame PROPERTIES LIBRARY_OUTPUT_DIRECTORY_DEBUG "${CMAKE_BINARY_DIR}/etrun")
         set_target_properties(cgame PROPERTIES LIBRARY_OUTPUT_DIRECTORY_RELEASE "${CMAKE_BINARY_DIR}/etrun")
         set_target_properties(qagame PROPERTIES LIBRARY_OUTPUT_DIRECTORY_DEBUG "${CMAKE_BINARY_DIR}/etrun")
@@ -194,30 +226,32 @@ add_dependencies(qagame maxminddb)
 #-----------------------------------------------------------------
 # Pk3 (inspired from etlegacy https://github.com/etlegacy/etlegacy)
 #-----------------------------------------------------------------
-find_program(ZIP_EXECUTABLE zip PATHS ${CMAKE_CURRENT_BINARY_DIR})
-if(NOT ZIP_EXECUTABLE AND WIN32)
-    message(STATUS "Downloading zip.exe to " ${CMAKE_CURRENT_BINARY_DIR}/zip.exe)
-    file(DOWNLOAD http://stahlworks.com/dev/zip.exe ${CMAKE_CURRENT_BINARY_DIR}/zip.exe SHOW_PROGRESS TIMEOUT 10)
+if(BUILD_PK3)
     find_program(ZIP_EXECUTABLE zip PATHS ${CMAKE_CURRENT_BINARY_DIR})
-endif()
+    if(NOT ZIP_EXECUTABLE AND WIN32)
+        message(STATUS "Downloading zip.exe to " ${CMAKE_CURRENT_BINARY_DIR}/zip.exe)
+        file(DOWNLOAD http://stahlworks.com/dev/zip.exe ${CMAKE_CURRENT_BINARY_DIR}/zip.exe SHOW_PROGRESS TIMEOUT 10)
+        find_program(ZIP_EXECUTABLE zip PATHS ${CMAKE_CURRENT_BINARY_DIR})
+    endif()
 
-add_custom_target(pk3 ALL DEPENDS cgame ui)
-set_target_properties(pk3 PROPERTIES OUTPUT_NAME ETrun-${ETrun_VERSION}.pk3)
-SET(CLIENT_ASSETS_PATH etrun/)
-add_custom_command(TARGET pk3 POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/${CLIENT_ASSETS_PATH} ${CMAKE_CURRENT_BINARY_DIR}/etrun/)
-add_custom_command(TARGET pk3 POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E remove_directory ${CMAKE_CURRENT_BINARY_DIR}/etrun/custommapscripts)
-add_custom_command(TARGET pk3 POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E remove ${CMAKE_CURRENT_BINARY_DIR}/etrun/ETrun-${ETrun_VERSION}.pk3)
-if (WIN32)
+    add_custom_target(pk3 ALL DEPENDS cgame ui)
+    set_target_properties(pk3 PROPERTIES OUTPUT_NAME ETrun-${ETrun_VERSION}.pk3)
+    SET(CLIENT_ASSETS_PATH etrun/)
     add_custom_command(TARGET pk3 POST_BUILD
-        COMMAND ${ZIP_EXECUTABLE} -q -r ETrun-${ETrun_VERSION}.pk3 * -x qagame${LIB_SUFFIX}${ARCH_NAME}* -x *.pdb -x *.ilk
-        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/etrun
-    )
-else()
+        COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/${CLIENT_ASSETS_PATH} ${CMAKE_CURRENT_BINARY_DIR}/etrun/)
     add_custom_command(TARGET pk3 POST_BUILD
-        COMMAND ${ZIP_EXECUTABLE} -q -r ETrun-${ETrun_VERSION}.pk3 *
-        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/etrun
-    )
-endif(WIN32)
+        COMMAND ${CMAKE_COMMAND} -E remove_directory ${CMAKE_CURRENT_BINARY_DIR}/etrun/custommapscripts)
+    add_custom_command(TARGET pk3 POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E remove ${CMAKE_CURRENT_BINARY_DIR}/etrun/ETrun-${ETrun_VERSION}.pk3)
+    if (WIN32)
+        add_custom_command(TARGET pk3 POST_BUILD
+            COMMAND ${ZIP_EXECUTABLE} -q -r ETrun-${ETrun_VERSION}.pk3 * -x qagame${LIB_SUFFIX}${ARCH_NAME}* -x *.pdb -x *.ilk
+            WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/etrun
+        )
+    else()
+        add_custom_command(TARGET pk3 POST_BUILD
+            COMMAND ${ZIP_EXECUTABLE} -q -r ETrun-${ETrun_VERSION}.pk3 *
+            WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/etrun
+        )
+    endif(WIN32)
+endif()

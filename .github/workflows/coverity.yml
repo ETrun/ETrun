@@ -1,12 +1,7 @@
 name: "Coverity Scan"
 
 on:
-  push:
-    branches: [ "master" ]
-  pull_request:
-    branches: [ "master" ]
-  schedule:
-    - cron: '42 2 * * 2'
+  workflow_dispatch:
 
 jobs:
   coverity:
