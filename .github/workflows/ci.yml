@@ -126,8 +126,7 @@ jobs:
           path: ./build/etrun
 
   release:
-    # @todo uncomment
-    # if: github.ref == 'refs/heads/master' || github.ref_type == 'tag'
+    if: github.ref == 'refs/heads/master' || github.ref_type == 'tag'
     runs-on: ubuntu-22.04
     needs: [windows-32, windows-64, linux-32, linux-64, macos]
 
