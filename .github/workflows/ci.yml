@@ -59,6 +59,31 @@ jobs:
           name: etrun-linux-x64
           path: ./build/etrun
 
+  linux-arm64:
+    name: Linux arm64
+    runs-on: ubuntu-22.04-arm
+    strategy:
+      fail-fast: false
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Install dependencies
+        run: sudo apt-get update && sudo apt-get install -y build-essential
+
+      - name: Make script executable
+        run: chmod +x ./make.sh
+
+      - name: Build
+        run: ./make.sh
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: etrun-linux-arm64
+          path: ./build/etrun
+
   windows-32:
     name: Windows x86
     runs-on: windows-2022
@@ -126,9 +151,9 @@ jobs:
           path: ./build/etrun
 
   release:
-    if: github.ref == 'refs/heads/master' || github.ref_type == 'tag'
+    # if: github.ref == 'refs/heads/master' || github.ref_type == 'tag'
     runs-on: ubuntu-22.04
-    needs: [windows-32, windows-64, linux-32, linux-64, macos]
+    needs: [windows-32, windows-64, linux-32, linux-64, linux-arm64, macos]
 
     steps:
       - uses: actions/checkout@v4
