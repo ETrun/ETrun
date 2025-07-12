@@ -21,8 +21,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     wget \
     unzip \
  && useradd -Ms /bin/bash legacy \
- && mkdir -p /basepath/etrun /homepath \
- && chown -R legacy:legacy /basepath /homepath \
+ && mkdir -p /basepath/etmain /basepath/etrun /homepath/etrun  \
  && ARCH="$(dpkg --print-architecture)" \
  && if [ "$ARCH" = "amd64" ]; then \
       ETLEGACY_URL="$ETLEGACY_URL_AMD64"; \
@@ -48,6 +47,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
  && unzip -q ETrun.zip \
  && cp ETrun-${ZIP_VERSION}/client/*.pk3 /basepath/etrun/ \
  && cp ETrun-${ZIP_VERSION}/server/$QAGAME /basepath/etrun/$QAGAME \
+ && cp -r ETrun-${ZIP_VERSION}/server/custommapscripts /homepath/etrun/ \
+ && chown -R legacy:legacy /basepath /homepath \
  && rm -rf ETrun* ETrun.zip \
  && apt-get purge -y --auto-remove wget unzip \
  && rm -rf /var/lib/apt/lists/*
