@@ -201,8 +201,8 @@ jobs:
   docker:
     name: Build and push Docker image
     runs-on: ubuntu-22.04
-    needs: [windows-32, windows-64, linux-32, linux-64, linux-arm64, macos]
-    # if: github.ref == 'refs/heads/master' || github.ref_type == 'tag'
+    needs: release
+    if: github.ref == 'refs/heads/master' || github.ref_type == 'tag'
     permissions:
       contents: read
       packages: write
