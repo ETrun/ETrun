@@ -230,7 +230,7 @@ jobs:
           else
             TAG="latest"
           fi
-          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+          echo "etrun_version=$TAG" >> "$GITHUB_OUTPUT"
 
       - name: Build and push Docker image (multi-arch)
         uses: docker/build-push-action@v5
@@ -239,4 +239,6 @@ jobs:
           file: ./docker/Dockerfile
           platforms: linux/amd64,linux/arm64,linux/386
           push: true
-          tags: etrun/server:${{ steps.meta.outputs.tag }}
+          tags: etrun/server:${{ steps.meta.outputs.etrun_version }}
+          build-args: |
+            ETRUN_VERSION=${{ steps.meta.outputs.etrun_version }}

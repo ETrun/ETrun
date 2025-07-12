@@ -8,12 +8,13 @@ LABEL org.opencontainers.image.url="https://github.com/ETrun/ETrun"
 LABEL org.opencontainers.image.source="https://github.com/ETrun/ETrun/docker"
 LABEL maintainer="Nicolas Boutet <amd3002@gmail.com>"
 
-ENV ETRUN_VERSION=latest \
-    ETRUN_ZIP_URL=https://github.com/ETrun/ETrun/releases/download/latest/ETrun-latest.zip \
-    ETLEGACY_URL_AMD64=https://www.etlegacy.com/download/file/700 \
-    ETLEGACY_URL_ARM64=https://www.etlegacy.com/download/file/710 \
-    ETLEGACY_URL_I386=https://www.etlegacy.com/download/file/702 \
-    ETDED_PATH=/basepath/etlded
+ARG ETRUN_VERSION=latest
+ENV ETRUN_VERSION=$ETRUN_VERSION
+ENV ZIP_VERSION=${ETRUN_VERSION#v}
+ENV ETLEGACY_URL_AMD64=https://www.etlegacy.com/download/file/700
+ENV ETLEGACY_URL_ARM64=https://www.etlegacy.com/download/file/710
+ENV ETLEGACY_URL_I386=https://www.etlegacy.com/download/file/702
+ENV ETDED_PATH=/basepath/etlded
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     ca-certificates \
@@ -43,10 +44,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
  && cp etlegacy-*/$BIN "$ETDED_PATH" \
  && chmod +x "$ETDED_PATH" \
  && rm -rf etlegacy* etlegacy.tar.gz \
- && wget -q "$ETRUN_ZIP_URL" -O ETrun.zip \
+ && wget -q "https://github.com/ETrun/ETrun/releases/download/${ETRUN_VERSION}/ETrun-${ZIP_VERSION}.zip" -O ETrun.zip \
  && unzip -q ETrun.zip \
- && cp ETrun-${ETRUN_VERSION}/client/*.pk3 /basepath/etrun/ \
- && cp ETrun-${ETRUN_VERSION}/server/$QAGAME /basepath/etrun/$QAGAME \
+ && cp ETrun-${ZIP_VERSION}/client/*.pk3 /basepath/etrun/ \
+ && cp ETrun-${ZIP_VERSION}/server/$QAGAME /basepath/etrun/$QAGAME \
  && rm -rf ETrun* ETrun.zip \
  && apt-get purge -y --auto-remove wget unzip \
  && rm -rf /var/lib/apt/lists/*
