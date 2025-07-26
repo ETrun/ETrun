@@ -22,19 +22,13 @@ The goal is to get from the start of the map to the end as fast as possible. The
 
 In order to permanently save records, you need to create an account on the official ETrun website, and link it to your game. Here is a step-by-step tutorial:
 
-* Go to the [website](https://timeruns.net/) and open the Signup tab.
-* Follow the instructions and wait for the account activation email.
-* Once your account has been activated, login on the ETrun [forum](https://forum.timeruns.net/).
-* In the top right corner, click on your nickname and follow this path:
-  * User Control Panel
-  * Profile
-  * Edit account settings
+* Go to the [website](https://timeruns.net/dashboard/register) and fill out the form.
 * Now you can see your Timeruns token. This is your password which links your game to your own website account. Never share it!
 * Copy your Timeruns token.
 * Insert your Timeruns token ingame into the `/etr_authToken` cvar.
-* Type `/login` into the console.
+* Type `/login` into the console (or `/signin` if you are using ET:Legacy).
 
-Congratulations! You are now logged in and able to set records. You cannow find your stats on the website and share them with your friends.
+Congratulations! You are now logged in and able to set records. You can now find your stats on the website and share them with your friends.
 
 ## Things to know
 
@@ -66,7 +60,7 @@ All HUD elements cvars accept float values to guarantee precise adjustments for 
 | etr_keysX | 553.2 |
 | etr_speedMeterY | 215.9 |
 
-Some HUD elements are meant to be aligned to the screen edge. Not to break compability with widescreens, those cvar values define an offset and thus are relative, in comparison to absolute coordinate cvars.
+Some HUD elements are meant to be aligned to the screen edge. Not to break compatibility with widescreens, those cvar values define an offset and thus are relative, in comparison to absolute coordinate cvars.
 
 | Cvar | Example Value |
 | ---- | ------------- |

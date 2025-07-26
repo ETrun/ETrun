@@ -85,6 +85,14 @@ Attempt to login the player on timeruns.net API using `etr_authToken` value.
 
 Logout a player from timeruns.net API.
 
+# signin
+
+Alias for `/login`. Useful when running ET: Legacy where `login` is a reserved command.
+
+# signout
+
+Alias for `/logout`. Useful on ET: Legacy where `logout` is a reserved command.
+
 # m (private messaging)
 
 ```
