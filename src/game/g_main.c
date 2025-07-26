@@ -1439,7 +1439,7 @@ void G_InitGame(int levelTime, int randomSeed) {
 		trap_Cvar_Set("isTimerun", "1");
 	}
 
-	// Nico, load GeoIP databse
+	// Nico, load GeoIP database
 	G_Geoip_LoadMmdb();
 
 	// Nico, install timelimit

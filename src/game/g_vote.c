@@ -363,7 +363,7 @@ void G_delay_map_change(char *mapName, int delay) {
 
 	Q_strncpyz(level.delayedMapChange.passedVote, mapName, VOTE_MAXSTRING);
 
-	// Nico, if no timerun is currenlty active or if player is alone on the server
+	// Nico, if no timerun is currently active or if player is alone on the server
 	// change the map in 1 sec, otherwise wait MAP_CHANGE_DELAY
 	for (i = 0; i < level.numConnectedClients; ++i) {
 		gclient_t *cl = &level.clients[level.sortedClients[i]];
@@ -413,12 +413,12 @@ void *G_delayed_map_change_watcher(void *arg) {
 			} else {
 				timeLeft = (level.delayedMapChange.timeChange - level.time) / 1000;
 
-				// Print incomming map change every 5 secs
+				// Print incoming map change every 5 secs
 				if (timeLeft % 5 == 0) {
 					G_DPrintf("%s: map change to %s in %d sec%s\n", GAME_VERSION, level.delayedMapChange.passedVote, timeLeft, timeLeft > 1 ? "s" : "");
 				}
 
-				// Announce incomming map to players
+				// Announce incoming map to players
 				switch (timeLeft) {
 				case 600:
 					AP(va("cpm \"%s^w: map will be changed to ^Z%s ^win ^D10 ^wmins\n\"", GAME_VERSION_COLORED, level.delayedMapChange.passedVote));
