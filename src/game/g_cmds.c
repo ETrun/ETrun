@@ -2267,6 +2267,8 @@ static command_t floodProtectedCommands[] =
 	// ETrun specific commands
 	{ "login",           qtrue,  Cmd_Login_f,           qtrue,  "Allows you to login via timeruns.net",     NULL                                           },
 	{ "logout",          qtrue,  Cmd_Logout_f,          qtrue,  "Allows you to logout",                     NULL                                           },
+	{ "signin",          qtrue,  Cmd_Login_f,           qtrue,  "Alias for /login, allows to login via timeruns.net",     NULL                                           },
+	{ "signout",         qtrue,  Cmd_Logout_f,          qtrue,  "Alias for /logout, allows you to logout",                     NULL                                           },
 	{ "records",         qtrue,  Cmd_Records_f,         qtrue,  "Displays current map #1 records",          NULL                                           },
 	{ "rank",            qtrue,  Cmd_Rank_f,            qtrue,  "Shows rankings for given options",         "[userName] [mapName] [runName] [physicsName]" },
 	{ "loadCheckpoints", qtrue,  Cmd_LoadCheckpoints_f, qtrue,  "Loads checkpoints from your PB",           "[userName] [run name or id]"                  },

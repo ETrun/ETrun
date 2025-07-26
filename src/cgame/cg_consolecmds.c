@@ -641,17 +641,12 @@ static void CG_Tutorial_f(void) {
 	CG_Printf(va("account on ^fhttps://timeruns.net/^7, the official %s^7 website, and\n", GAME_VERSION_COLORED));
 	CG_Printf("link it to your game. Here is a step-by-step tutorial:\n");
 	CG_Printf("\n");
-	CG_Printf("^51. ^7Go to ^fhttps://timeruns.net/ ^7and open the Signup tab.\n");
-	CG_Printf("^52. ^7Follow the instructions and wait for the account activation email.\n");
-	CG_Printf(va("^53. ^7Once your account has been activated, login on the %s^7 forum,\n", GAME_VERSION_COLORED));
-	CG_Printf("   which is located here: ^fhttps://forum.timeruns.net/\n");
-	CG_Printf("^54. ^7In the top right corner, click on your nickname and follow this path:\n");
-	CG_Printf("   User Control Panel -> Profile -> Edit account settings\n");
-	CG_Printf("   Now you can see your Timeruns token. This is your password which\n");
+	CG_Printf("^51. ^7Go to ^fhttps://timeruns.net/dashboard/register ^7and fill out the form.\n");
+	CG_Printf("^52. ^7Now you can see your Timeruns token. This is your password which\n");
 	CG_Printf("   links your game to your own website account. Never share it!\n");
-	CG_Printf("^55. ^7Copy your Timeruns token.\n");
-	CG_Printf("^56. ^7Insert your Timeruns token ingame into the ^n/etr_authToken ^7cvar.\n");
-	CG_Printf("^57. ^7Type ^n/login ^7into the console.\n");
+	CG_Printf("^53. ^7Copy your Timeruns token.\n");
+	CG_Printf("^54. ^7Insert your Timeruns token ingame into the ^n/etr_authToken ^7cvar.\n");
+	CG_Printf("^55. ^7Type ^n/login ^7into the console (^n/signin^7 if you're using ET:Legacy).\n");
 	CG_Printf("\n");
 	CG_Printf("Congratulations! You are now logged in and able to set records. You can\n");
 	CG_Printf(va("now find your stats on the %s^7 website and share them with your friends.\n", GAME_VERSION_COLORED));
@@ -827,6 +822,8 @@ void CG_InitConsoleCommands(void) {
 	// Nico, login/logout
 	trap_AddCommand("login");
 	trap_AddCommand("logout");
+	trap_AddCommand("signin");
+	trap_AddCommand("signout");
 
 	// Nico, records & rank
 	trap_AddCommand("records");
