@@ -2,7 +2,7 @@
 
 cmake_minimum_required(VERSION 3.13 FATAL_ERROR)
 
-project(ETrun VERSION 2.0.0 HOMEPAGE_URL "timeruns.net/ETrun" LANGUAGES C)
+project(ETrun VERSION 2.0.1 HOMEPAGE_URL "timeruns.net/ETrun" LANGUAGES C)
 set(ETrun_VERSION ${PROJECT_VERSION})
 
 configure_file(
