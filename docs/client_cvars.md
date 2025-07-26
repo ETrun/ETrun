@@ -230,7 +230,7 @@ Possibles values for `etr_drawTriggers` are listed below.
 | etr_drawVelocitySnapping | 0,1,2 | 0 | Draw Velocity Snapping HUD. Various types are available. Use 0 to disable. Introduced in ETrun 1.4.0. |
 | etr_velocitySnappingH | *integer* | 8 | Velocity Snapping HUD height. Introduced in ETrun 1.4.0. |
 | etr_velocitySnappingY | 0-480 | 240 | Velocity Snapping HUD vertical position. Introduced in ETrun 1.4.0. |
-| etr_velocitySnappingFov | *integer* | 120 | Velocity Snapping Field Of View. Introduced in ETrun 1.4.0. |
+| etr_velocitySnappingFov | *integer* | 120 | Velocity Snapping Field Of View. Introduced in ETrun 1.4.0. |
 | etr_velocitySnapping1Color1 | *string* | 0.4 0 0 0.5 | Velocity Snapping 1 primary color. Introduced in ETrun 2.0.0. |
 | etr_velocitySnapping1Color2 | *string* | 0 0.4 0.4 0.5 | Velocity Snapping 1 secondary color. Introduced in ETrun 2.0.0. |
 | etr_velocitySnapping2Color | *string* | White | Velocity Snapping 2 color. Introduced in ETrun 2.0.0. |
