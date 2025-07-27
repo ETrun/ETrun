@@ -225,23 +225,26 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Extract Docker tag
+      - name: Extract Docker tags
         id: meta
         run: |
           if [[ "${GITHUB_REF_TYPE}" == "tag" ]]; then
-            TAG="${GITHUB_REF_NAME#v}"
+            RAW_TAG="${GITHUB_REF_NAME}"
+            ZIP_TAG="${RAW_TAG#v}"
           else
-            TAG="latest"
+            RAW_TAG="latest"
+            ZIP_TAG="latest"
           fi
-          echo "etrun_version=$TAG" >> "$GITHUB_OUTPUT"
+          echo "zip_version=$ZIP_TAG" >> "$GITHUB_OUTPUT"
+          echo "etrun_version=$RAW_TAG" >> "$GITHUB_OUTPUT"
 
       - name: Build and push Docker image (multi-arch)
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: ./docker
           file: ./docker/Dockerfile
           platforms: linux/amd64,linux/arm64,linux/386
           push: true
-          tags: etrun/server:${{ steps.meta.outputs.etrun_version }}
+          tags: etrun/server:${{ steps.meta.outputs.zip_version }}
           build-args: |
             ETRUN_VERSION=${{ steps.meta.outputs.etrun_version }}
