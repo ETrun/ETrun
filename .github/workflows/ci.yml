@@ -190,7 +190,7 @@ jobs:
         with:
           name: ETrun ${{ github.ref_name }}
           files: ./dist/ETrun-*.zip
-          draft: true
+          prerelease: true
 
       - name: Create a GitHub latest release
         uses: softprops/action-gh-release@v2
