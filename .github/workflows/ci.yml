@@ -169,7 +169,9 @@ jobs:
           path: ./build/etrun
 
       - name: Package a tagged release zip
-        run: ./release.sh -n ETrun-${{ github.ref_name#v }}
+        run: |
+          version_name="${GITHUB_REF_NAME#v}"
+          ./release.sh -n ETrun-${version_name}
         if: github.ref_type == 'tag'
 
       - name: Package a latest release zip
