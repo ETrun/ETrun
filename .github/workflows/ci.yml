@@ -3,6 +3,7 @@ name: CI
 on:
   push:
     branches: [ master ]
+    tags: [ '*' ]
   pull_request:
     branches: [ master ]
   workflow_dispatch:
@@ -168,7 +169,7 @@ jobs:
           path: ./build/etrun
 
       - name: Package a tagged release zip
-        run: ./release.sh -n ETrun-${{ github.ref_name }}
+        run: ./release.sh -n ETrun-${{ github.ref_name#v }}
         if: github.ref_type == 'tag'
 
       - name: Package a latest release zip
@@ -185,7 +186,7 @@ jobs:
         uses: softprops/action-gh-release@v2
         if: github.ref_type == 'tag'
         with:
-          name: ETrun v${{ github.ref_name }}
+          name: ETrun ${{ github.ref_name }}
           files: ./dist/ETrun-*.zip
           draft: true
 
