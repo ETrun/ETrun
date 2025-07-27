@@ -229,7 +229,7 @@ jobs:
         id: meta
         run: |
           if [[ "${GITHUB_REF_TYPE}" == "tag" ]]; then
-            TAG="${GITHUB_REF_NAME}"
+            TAG="${GITHUB_REF_NAME#v}"
           else
             TAG="latest"
           fi
